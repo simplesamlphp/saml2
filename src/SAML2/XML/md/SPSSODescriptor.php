@@ -27,16 +27,16 @@ class SAML2_XML_md_SPSSODescriptor extends SAML2_XML_md_SSODescriptorType
      *
      * Array with IndexedEndpointType objects.
      *
-     * @var array
+     * @var SAML2_XML_md_IndexedEndpointType[]
      */
     public $AssertionConsumerService = array();
 
     /**
      * List of AttributeConsumingService descriptors for this SP.
      *
-     * Array with SAML2_XML_md_AttribteConsumingService objects.
+     * Array with SAML2_XML_md_AttributeConsumingService objects.
      *
-     * @var array
+     * @var SAML2_XML_md_AttributeConsumingService[]
      */
     public $AttributeConsumingService = array();
 
@@ -69,6 +69,7 @@ class SAML2_XML_md_SPSSODescriptor extends SAML2_XML_md_SSODescriptorType
      * Add this SPSSODescriptor to an EntityDescriptor.
      *
      * @param DOMElement $parent The EntityDescriptor we should append this SPSSODescriptor to.
+     * @return void
      */
     public function toXML(DOMElement $parent)
     {

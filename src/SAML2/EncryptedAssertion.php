@@ -19,6 +19,7 @@ class SAML2_EncryptedAssertion
      * Constructor for SAML 2 encrypted assertions.
      *
      * @param DOMElement|NULL $xml The encrypted assertion XML element.
+     * @throws Exception
      */
     public function __construct(DOMElement $xml = NULL)
     {
@@ -40,6 +41,7 @@ class SAML2_EncryptedAssertion
      *
      * @param SAML2_Assertion $assertion The assertion.
      * @param XMLSecurityKey  $key       The key we should use to encrypt the assertion.
+     * @throws Exception
      */
     public function setAssertion(SAML2_Assertion $assertion, XMLSecurityKey $key)
     {
@@ -78,7 +80,7 @@ class SAML2_EncryptedAssertion
     /**
      * Retrieve the assertion.
      *
-     * @param  XMLSecurityKey  $key       The key we should use to decrypt the assertion.
+     * @param  XMLSecurityKey  $inputKey  The key we should use to decrypt the assertion.
      * @param  array           $blacklist Blacklisted decryption algorithms.
      * @return SAML2_Assertion The decrypted assertion.
      */

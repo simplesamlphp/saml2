@@ -44,7 +44,7 @@ class SAML2_Response extends SAML2_StatusResponse
     /**
      * Retrieve the assertions in this response.
      *
-     * @return array Array of SAML2_Assertion and SAML2_EncryptedAssertion objects.
+     * @return SAML2_Assertion[]|SAML2_EncryptedAssertion[]
      */
     public function getAssertions()
     {
@@ -54,7 +54,7 @@ class SAML2_Response extends SAML2_StatusResponse
     /**
      * Set the assertions that should be included in this response.
      *
-     * @param array  The assertions.
+     * @param SAML2_Assertion[]|SAML2_EncryptedAssertion[] The assertions.
      */
     public function setAssertions(array $assertions)
     {
@@ -70,8 +70,10 @@ class SAML2_Response extends SAML2_StatusResponse
     {
         $root = parent::toUnsignedXML();
 
+        /** @var SAML2_Assertion|SAML2_EncryptedAssertion $assertion */
         foreach ($this->assertions as $assertion) {
-            $node = $assertion->toXML($root);
+
+            $assertion->toXML($root);
         }
 
         return $root;

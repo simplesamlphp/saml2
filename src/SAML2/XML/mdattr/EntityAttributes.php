@@ -19,7 +19,7 @@ class SAML2_XML_mdattr_EntityAttributes
      *
      * The elements can be SAML2_XML_saml_Attribute or SAML2_XML_Chunk elements.
      *
-     * @var array
+     * @var (SAML2_XML_saml_Attribute|SAML2_XML_Chunk)[]
      */
     public $children;
 
@@ -48,6 +48,7 @@ class SAML2_XML_mdattr_EntityAttributes
      * Convert this EntityAttributes to XML.
      *
      * @param DOMElement $parent The element we should append to.
+     * @return DOMElement
      */
     public function toXML(DOMElement $parent)
     {
@@ -58,10 +59,9 @@ class SAML2_XML_mdattr_EntityAttributes
         $e = $doc->createElementNS(SAML2_XML_mdattr_EntityAttributes::NS, 'mdattr:EntityAttributes');
         $parent->appendChild($e);
 
-        if (!empty($this->children)) {
-            foreach ($this->children as $child) {
-                $child->toXML($e);
-            }
+        /** @var SAML2_XML_saml_Attribute|SAML2_XML_Chunk $child */
+        foreach ($this->children as $child) {
+            $child->toXML($e);
         }
 
         return $e;

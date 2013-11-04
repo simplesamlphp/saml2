@@ -35,6 +35,7 @@ class SAML2_XML_md_RequestedAttribute extends SAML2_XML_saml_Attribute
      * Convert this RequestedAttribute to XML.
      *
      * @param DOMElement $parent The element we should append this RequestedAttribute to.
+     * @return DOMElement
      */
     public function toXML(DOMElement $parent)
     {

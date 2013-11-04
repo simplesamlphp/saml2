@@ -14,10 +14,11 @@ class SAML2_SOAPClient
     /**
      * This function sends the SOAP message to the service location and returns SOAP response
      *
-     * @param  SAML2_Message            $m           The request that should be sent.
+     * @param  SAML2_Message            $msg         The request that should be sent.
      * @param  SimpleSAML_Configuration $srcMetadata The metadata of the issuer of the message.
      * @param  SimpleSAML_Configuration $dstMetadata The metadata of the destination of the message.
      * @return SAML2_Message            The response we received.
+     * @throws Exception
      */
     public function send(SAML2_Message $msg, SimpleSAML_Configuration $srcMetadata, SimpleSAML_Configuration $dstMetadata = NULL)
     {
@@ -33,7 +34,9 @@ class SAML2_SOAPClient
         if ($srcMetadata->hasValue('saml.SOAPClient.certificate')) {
             $cert = $srcMetadata->getValue('saml.SOAPClient.certificate');
             if ($cert !== FALSE) {
-                $ctxOpts['ssl']['local_cert'] = SimpleSAML_Utilities::resolveCert($srcMetadata->getString('saml.SOAPClient.certificate'));
+                $ctxOpts['ssl']['local_cert'] = SimpleSAML_Utilities::resolveCert(
+                    $srcMetadata->getString('saml.SOAPClient.certificate')
+                );
                 if ($srcMetadata->hasValue('saml.SOAPClient.privatekey_pass')) {
                     $ctxOpts['ssl']['passphrase'] = $srcMetadata->getString('saml.SOAPClient.privatekey_pass');
                 }
@@ -119,7 +122,6 @@ class SAML2_SOAPClient
             throw new Exception($soapfault);
         }
         //Extract the message from the response
-        $xml = $dom->firstChild;    /* Soap Envelope */
         $samlresponse = SAML2_Utils::xpQuery($dom->firstChild, '/soap-env:Envelope/soap-env:Body/*[1]');
         $samlresponse = SAML2_Message::fromXML($samlresponse[0]);
 
@@ -176,6 +178,7 @@ class SAML2_SOAPClient
      *
      * @param string         $data The public key that was used on the connection.
      * @param XMLSecurityKey $key  The key we should validate the certificate against.
+     * @throws Exception
      */
     public static function validateSSL($data, XMLSecurityKey $key)
     {
@@ -193,7 +196,7 @@ class SAML2_SOAPClient
         if ($keyInfo['key'] !== $data) {
             SimpleSAML_Logger::debug('Key on SSL connection did not match key we validated against.');
 
-            return FALSE;
+            return;
         }
 
         SimpleSAML_Logger::debug('Message validated based on SSL certificate.');

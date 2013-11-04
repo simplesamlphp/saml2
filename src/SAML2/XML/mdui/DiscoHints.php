@@ -19,28 +19,28 @@ class SAML2_XML_mdui_DiscoHints
      *
      * The elements can be any of the other SAML2_XML_mdui_* elements.
      *
-     * @var array
+     * @var SAML2_XML_Chunk[]
      */
     public $children = array();
 
     /**
      * The IPHint, as an array of strings.
      *
-     * @var array
+     * @var string[]
      */
     public $IPHint = array();
 
     /**
      * The DomainHint, as an array of strings.
      *
-     * @var array
+     * @var string[]
      */
     public $DomainHint = array();
 
     /**
      * The GeolocationHint, as an array of strings.
      *
-     * @var array
+     * @var string[]
      */
     public $GeolocationHint = array();
 
@@ -68,6 +68,7 @@ class SAML2_XML_mdui_DiscoHints
      * Convert this DiscoHints to XML.
      *
      * @param DOMElement $parent The element we should append to.
+     * @return DOMElement|NULL
      */
     public function toXML(DOMElement $parent)
     {
@@ -97,6 +98,8 @@ class SAML2_XML_mdui_DiscoHints
 
             return $e;
         }
+
+        return NULL;
     }
 
 }

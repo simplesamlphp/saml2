@@ -20,7 +20,7 @@ class SAML2_XML_md_IDPSSODescriptor extends SAML2_XML_md_SSODescriptorType
      *
      * Array with EndpointType objects.
      *
-     * @var array
+     * @var SAML2_XML_md_EndpointType[]
      */
     public $SingleSignOnService = array();
 
@@ -29,7 +29,7 @@ class SAML2_XML_md_IDPSSODescriptor extends SAML2_XML_md_SSODescriptorType
      *
      * Array with EndpointType objects.
      *
-     * @var array
+     * @var SAML2_XML_md_EndpointType[]
      */
     public $NameIDMappingService = array();
 
@@ -38,7 +38,7 @@ class SAML2_XML_md_IDPSSODescriptor extends SAML2_XML_md_SSODescriptorType
      *
      * Array with EndpointType objects.
      *
-     * @var array
+     * @var SAML2_XML_md_EndpointType[]
      */
     public $AssertionIDRequestService = array();
 
@@ -56,7 +56,7 @@ class SAML2_XML_md_IDPSSODescriptor extends SAML2_XML_md_SSODescriptorType
      *
      * Array with SAML2_XML_saml_Attribute objects.
      *
-     * @var array
+     * @var SAML2_XML_saml_Attribute[]
      */
     public $Attribute = array();
 
@@ -98,6 +98,7 @@ class SAML2_XML_md_IDPSSODescriptor extends SAML2_XML_md_SSODescriptorType
      * Add this IDPSSODescriptor to an EntityDescriptor.
      *
      * @param DOMElement $parent The EntityDescriptor we should append this IDPSSODescriptor to.
+     * @return DOMElement
      */
     public function toXML(DOMElement $parent)
     {

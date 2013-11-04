@@ -33,6 +33,7 @@ class SAML2_XML_saml_SubjectConfirmation
      * Initialize (and parse? a SubjectConfirmation element.
      *
      * @param DOMElement|NULL $xml The XML element we should load.
+     * @throws Exception
      */
     public function __construct(DOMElement $xml = NULL)
     {

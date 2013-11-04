@@ -59,7 +59,7 @@ class SAML2_XML_md_AffiliationDescriptor extends SAML2_SignedElementHelper
      *
      * Array of SAML2_XML_md_KeyDescriptor elements.
      *
-     * @var array
+     * @var SAML2_XML_md_KeyDescriptor[]
      */
     public $KeyDescriptor = array();
 
@@ -67,6 +67,7 @@ class SAML2_XML_md_AffiliationDescriptor extends SAML2_SignedElementHelper
      * Initialize a AffiliationDescriptor.
      *
      * @param DOMElement|NULL $xml The XML element we should load.
+     * @throws Exception
      */
     public function __construct(DOMElement $xml = NULL)
     {
@@ -109,7 +110,7 @@ class SAML2_XML_md_AffiliationDescriptor extends SAML2_SignedElementHelper
      * Add this AffiliationDescriptor to an EntityDescriptor.
      *
      * @param DOMElement $parent The EntityDescriptor we should append this endpoint to.
-     * @param string     $name   The name of the element we should create.
+     * @return DOMElement
      */
     public function toXML(DOMElement $parent)
     {

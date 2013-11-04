@@ -9,6 +9,9 @@
  */
 class SAML2_HTTPArtifact extends SAML2_Binding
 {
+    /**
+     * @var SimpleSAML_Configuration
+     */
     private $spMetadata;
 
     /**
@@ -16,6 +19,7 @@ class SAML2_HTTPArtifact extends SAML2_Binding
      *
      * @param  SAML2_Message $message The message.
      * @return string        The URL the user should be redirected to in order to send a message.
+     * @throws Exception
      */
     public function getRedirectURL(SAML2_Message $message)
     {
@@ -61,6 +65,7 @@ class SAML2_HTTPArtifact extends SAML2_Binding
      * Throws an exception if it is unable receive the message.
      *
      * @return SAML2_Message The received message.
+     * @throws Exception
      */
     public function receive()
     {
@@ -75,14 +80,14 @@ class SAML2_HTTPArtifact extends SAML2_Binding
 
         $metadataHandler = SimpleSAML_Metadata_MetaDataStorageHandler::getMetadataHandler();
 
-        $idpmetadata = $metadataHandler->getMetaDataConfigForSha1($sourceId, 'saml20-idp-remote');
+        $idpMetadata = $metadataHandler->getMetaDataConfigForSha1($sourceId, 'saml20-idp-remote');
 
-        if ($idpmetadata === NULL) {
+        if ($idpMetadata === NULL) {
             throw new Exception('No metadata found for remote provider with SHA1 ID: ' . var_export($sourceId, TRUE));
         }
 
         $endpoint = NULL;
-        foreach ($idpmetadata->getEndpoints('ArtifactResolutionService') as $ep) {
+        foreach ($idpMetadata->getEndpoints('ArtifactResolutionService') as $ep) {
             if ($ep['index'] ===  hexdec($endpointIndex)) {
                 $endpoint = $ep;
                 break;
@@ -105,11 +110,12 @@ class SAML2_HTTPArtifact extends SAML2_Binding
         $ar->setDestination($endpoint['Location']);
 
         /* Sign the request */
-        sspmod_saml_Message::addSign($this->spMetadata, $idpmetadata, $ar); // Shoaib - moved from the SOAPClient.
+        sspmod_saml_Message::addSign($this->spMetadata, $idpMetadata, $ar); // Shoaib - moved from the SOAPClient.
 
         $soap = new SAML2_SOAPClient();
 
         // Send message through SoapClient
+        /** @var SAML2_ArtifactResponse $artifactResponse */
         $artifactResponse = $soap->send($ar, $this->spMetadata);
 
         if (!$artifactResponse->isSuccess()) {
@@ -133,7 +139,10 @@ class SAML2_HTTPArtifact extends SAML2_Binding
         return $samlresponse;
     }
 
-    public function setSPMetadata($sp)
+    /**
+     * @param SimpleSAML_Configuration $sp
+     */
+    public function setSPMetadata(SimpleSAML_Configuration $sp)
     {
         $this->spMetadata = $sp;
     }
@@ -141,7 +150,9 @@ class SAML2_HTTPArtifact extends SAML2_Binding
     /**
      * A validator which returns TRUE if the ArtifactResponse was signed with the given key
      *
-     * @return TRUE
+     * @param SAML2_ArtifactResponse $message
+     * @param XMLSecurityKey $key
+     * @return bool
      */
     public static function validateSignature(SAML2_ArtifactResponse $message, XMLSecurityKey $key)
     {

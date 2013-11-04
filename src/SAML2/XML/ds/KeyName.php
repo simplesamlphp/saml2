@@ -33,6 +33,7 @@ class SAML2_XML_ds_KeyName
      * Convert this KeyName element to XML.
      *
      * @param DOMElement $parent The element we should append this KeyName element to.
+     * @return DOMElement
      */
     public function toXML(DOMElement $parent)
     {

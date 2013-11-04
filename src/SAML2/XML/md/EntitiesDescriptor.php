@@ -48,7 +48,7 @@ class SAML2_XML_md_EntitiesDescriptor extends SAML2_SignedElementHelper
     /**
      * Child EntityDescriptor and EntitiesDescriptor elements.
      *
-     * @var array
+     * @var (SAML2_XML_md_EntityDescriptor|SAML2_XML_md_EntitiesDescriptor)[]
      */
     public $children = array();
 
@@ -93,6 +93,7 @@ class SAML2_XML_md_EntitiesDescriptor extends SAML2_SignedElementHelper
      * Convert this EntitiesDescriptor to XML.
      *
      * @param DOMElement|NULL $parent The EntitiesDescriptor we should append this EntitiesDescriptor to.
+     * @return DOMElement
      */
     public function toXML(DOMElement $parent = NULL)
     {
@@ -130,6 +131,7 @@ class SAML2_XML_md_EntitiesDescriptor extends SAML2_SignedElementHelper
 
         SAML2_XML_md_Extensions::addList($e, $this->Extensions);
 
+        /** @var SAML2_XML_md_EntityDescriptor|SAML2_XML_md_EntitiesDescriptor $node */
         foreach ($this->children as $node) {
             $node->toXML($e);
         }

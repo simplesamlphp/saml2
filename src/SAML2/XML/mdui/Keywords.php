@@ -27,6 +27,7 @@ class SAML2_XML_mdui_Keywords
      * Initialize a Keywords.
      *
      * @param DOMElement|NULL $xml The XML element we should load.
+     * @throws Exception
      */
     public function __construct(DOMElement $xml = NULL)
     {
@@ -51,6 +52,8 @@ class SAML2_XML_mdui_Keywords
      * Convert this Keywords to XML.
      *
      * @param DOMElement $parent The element we should append this Keywords to.
+     * @return DOMElement
+     * @throws Exception
      */
     public function toXML(DOMElement $parent)
     {

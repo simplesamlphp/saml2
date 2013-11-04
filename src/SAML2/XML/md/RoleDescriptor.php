@@ -64,7 +64,7 @@ class SAML2_XML_md_RoleDescriptor extends SAML2_SignedElementHelper
      *
      * Array of SAML2_XML_md_KeyDescriptor elements.
      *
-     * @var array
+     * @var SAML2_XML_md_KeyDescriptor[]
      */
     public $KeyDescriptor = array();
 
@@ -80,7 +80,7 @@ class SAML2_XML_md_RoleDescriptor extends SAML2_SignedElementHelper
      *
      * Array of SAML2_XML_md_ContactPerson objects.
      *
-     * @var array
+     * @var SAML2_XML_md_ContactPerson[]
      */
     public $ContactPerson = array();
 
@@ -89,6 +89,7 @@ class SAML2_XML_md_RoleDescriptor extends SAML2_SignedElementHelper
      *
      * @param string          $elementName The name of this element.
      * @param DOMElement|NULL $xml         The XML element we should load.
+     * @throws Exception
      */
     protected function __construct($elementName, DOMElement $xml = NULL)
     {
@@ -142,7 +143,7 @@ class SAML2_XML_md_RoleDescriptor extends SAML2_SignedElementHelper
      * Add this RoleDescriptor to an EntityDescriptor.
      *
      * @param DOMElement $parent The EntityDescriptor we should append this endpoint to.
-     * @param string     $name   The name of the element we should create.
+     * @return DOMElement
      */
     protected function toXML(DOMElement $parent)
     {

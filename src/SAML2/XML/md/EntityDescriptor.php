@@ -50,7 +50,7 @@ class SAML2_XML_md_EntityDescriptor extends SAML2_SignedElementHelper
      *
      * Array of SAML2_XML_md_RoleDescriptor objects (and subclasses of RoleDescriptor).
      *
-     * @var array
+     * @var (SAML2_XML_md_UnknownRoleDescriptor|SAML2_XML_md_IDPSSODescriptor|SAML2_XML_md_SPSSODescriptor|SAML2_XML_md_AuthnAuthorityDescriptor|SAML2_XML_md_AttributeAuthorityDescriptor|SAML2_XML_md_PDPDescriptor)[]
      */
     public $RoleDescriptor = array();
 
@@ -71,14 +71,14 @@ class SAML2_XML_md_EntityDescriptor extends SAML2_SignedElementHelper
     /**
      * ContactPerson elements for this entity.
      *
-     * @var array
+     * @var SAML2_XML_md_ContactPerson[]
      */
     public $ContactPerson = array();
 
     /**
      * AdditionalMetadataLocation elements for this entity.
      *
-     * @var array
+     * @var SAML2_XML_md_AdditionalMetadataLocation[]
      */
     public $AdditionalMetadataLocation = array();
 
@@ -86,6 +86,7 @@ class SAML2_XML_md_EntityDescriptor extends SAML2_SignedElementHelper
      * Initialize an EntitiyDescriptor.
      *
      * @param DOMElement|NULL $xml The XML element we should load.
+     * @throws Exception
      */
     public function __construct(DOMElement $xml = NULL)
     {
@@ -176,6 +177,7 @@ class SAML2_XML_md_EntityDescriptor extends SAML2_SignedElementHelper
      * Create this EntityDescriptor.
      *
      * @param DOMElement|NULL $parent The EntitiesDescriptor we should append this EntityDescriptor to.
+     * @return DOMElement
      */
     public function toXML(DOMElement $parent = NULL)
     {
@@ -215,6 +217,7 @@ class SAML2_XML_md_EntityDescriptor extends SAML2_SignedElementHelper
 
         SAML2_XML_md_Extensions::addList($e, $this->Extensions);
 
+        /** @var SAML2_XML_md_UnknownRoleDescriptor|SAML2_XML_md_IDPSSODescriptor|SAML2_XML_md_SPSSODescriptor|SAML2_XML_md_AuthnAuthorityDescriptor|SAML2_XML_md_AttributeAuthorityDescriptor|SAML2_XML_md_PDPDescriptor $n */
         foreach ($this->RoleDescriptor as $n) {
             $n->toXML($e);
         }

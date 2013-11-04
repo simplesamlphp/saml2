@@ -32,8 +32,6 @@ abstract class SAML2_SubjectQuery extends SAML2_Request
     {
         parent::__construct($tagName, $xml);
 
-        $nameId = array();
-
         if ($xml === NULL) {
             return;
         }
@@ -46,6 +44,7 @@ abstract class SAML2_SubjectQuery extends SAML2_Request
      * Parse subject in query.
      *
      * @param DOMElement $xml The SubjectQuery XML element.
+     * @throws Exception
      */
     private function parseSubject(DOMElement $xml)
     {

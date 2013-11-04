@@ -49,7 +49,7 @@ class SAML2_XML_saml_SubjectConfirmationData
      * Array with various elements describing this key.
      * Unknown elements will be represented by SAML2_XML_Chunk.
      *
-     * @var array
+     * @var (SAML2_XML_ds_KeyInfo|SAML2_XML_Chunk)[]
      */
     public $info = array();
 
@@ -88,12 +88,12 @@ class SAML2_XML_saml_SubjectConfirmationData
                 continue;
             }
             switch ($n->localName) {
-            case 'KeyInfo':
-                $this->info[] = new SAML2_XML_ds_KeyInfo($n);
-                break;
-            default:
-                $this->info[] = new SAML2_XML_Chunk($n);
-                break;
+                case 'KeyInfo':
+                    $this->info[] = new SAML2_XML_ds_KeyInfo($n);
+                    break;
+                default:
+                    $this->info[] = new SAML2_XML_Chunk($n);
+                    break;
             }
         }
     }
@@ -130,6 +130,7 @@ class SAML2_XML_saml_SubjectConfirmationData
         if (isset($this->Address)) {
             $e->setAttribute('Address', $this->Address);
         }
+        /** @var SAML2_XML_ds_KeyInfo|SAML2_XML_Chunk $n */
         foreach ($this->info as $n) {
             $n->toXML($e);
         }

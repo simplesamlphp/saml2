@@ -34,7 +34,7 @@ class SAML2_XML_saml_Attribute
      *
      * Array of SAML2_XML_saml_AttributeValue elements.
      *
-     * @var array
+     * @var SAML2_XML_saml_AttributeValue[]
      */
     public $AttributeValue = array();
 
@@ -42,6 +42,7 @@ class SAML2_XML_saml_Attribute
      * Initialize an Attribute.
      *
      * @param DOMElement|NULL $xml The XML element we should load.
+     * @throws Exception
      */
     public function __construct(DOMElement $xml = NULL)
     {
@@ -74,6 +75,7 @@ class SAML2_XML_saml_Attribute
      * @param DOMElement $parent    The element we should append this Attribute to.
      * @param string     $namespace The namespace the element should be created in.
      * @param string     $name      The name of the element.
+     * @return DOMElement
      */
     protected function toXMLInternal(DOMElement $parent, $namespace, $name)
     {
@@ -108,6 +110,7 @@ class SAML2_XML_saml_Attribute
      * Convert this Attribute to XML.
      *
      * @param DOMElement $parent The element we should append this Attribute to.
+     * @return DOMElement
      */
     public function toXML(DOMElement $parent)
     {

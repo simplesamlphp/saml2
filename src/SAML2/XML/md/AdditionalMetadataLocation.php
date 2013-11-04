@@ -26,6 +26,7 @@ class SAML2_XML_md_AdditionalMetadataLocation
      * Initialize an AdditionalMetadataLocation element.
      *
      * @param DOMElement|NULL $xml The XML element we should load.
+     * @throws Exception
      */
     public function __construct(DOMElement $xml = NULL)
     {

@@ -42,6 +42,7 @@ class SAML2_LogoutRequest extends SAML2_Request
      * Constructor for SAML 2 logout request messages.
      *
      * @param DOMElement|NULL $xml The input message.
+     * @throws Exception
      */
     public function __construct(DOMElement $xml = NULL)
     {
@@ -167,6 +168,7 @@ class SAML2_LogoutRequest extends SAML2_Request
      * Retrieve the name identifier of the session that should be terminated.
      *
      * @return array The name identifier of the session that should be terminated.
+     * @throws Exception
      */
     public function getNameId()
     {

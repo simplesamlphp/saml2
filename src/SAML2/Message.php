@@ -100,6 +100,7 @@ abstract class SAML2_Message implements SAML2_SignedElement
      *
      * @param string          $tagName The tag name of the root element.
      * @param DOMElement|NULL $xml     The input message.
+     * @throws Exception
      */
     protected function __construct($tagName, DOMElement $xml = NULL)
     {
@@ -182,6 +183,7 @@ abstract class SAML2_Message implements SAML2_SignedElement
      *
      * @param  XMLSecurityKey $key The key we should check against.
      * @return boolean        TRUE on success, FALSE when we don't have a signature.
+     * @throws Exception
      */
     public function validate(XMLSecurityKey $key)
     {
@@ -407,7 +409,7 @@ abstract class SAML2_Message implements SAML2_SignedElement
      *
      * If the key is NULL, the message will be sent unsigned.
      *
-     * @param XMLSecurityKey|NULL $key
+     * @param XMLSecurityKey|NULL $signatureKey
      */
     public function setSignatureKey(XMLsecurityKey $signatureKey = NULL)
     {
@@ -444,6 +446,7 @@ abstract class SAML2_Message implements SAML2_SignedElement
      *
      * @param  DOMElement    $xml The root XML element.
      * @return SAML2_Message The message.
+     * @throws Exception
      */
     public static function fromXML(DOMElement $xml)
     {

@@ -104,6 +104,7 @@ class SAML2_AuthnRequest extends SAML2_Request
      * Constructor for SAML 2 authentication request messages.
      *
      * @param DOMElement|NULL $xml The input message.
+     * @throws Exception
      */
     public function __construct(DOMElement $xml = NULL)
     {
@@ -293,7 +294,7 @@ class SAML2_AuthnRequest extends SAML2_Request
     /**
      * This function retrieves the list of providerIDs from this authentication request.
      * Currently we only support a list of ipd ientity id's.
-     * @return The list of idpidentityids from the request
+     * @return array List of idp EntityIDs from the request
      */
 
     public function getIDPList()

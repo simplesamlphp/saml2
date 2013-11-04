@@ -36,6 +36,7 @@ class SAML2_XML_mdrpi_RegistrationInfo
      * Create/parse a mdrpi:RegistrationInfo element.
      *
      * @param DOMElement|NULL $xml The XML element we should load.
+     * @throws Exception
      */
     public function __construct(DOMElement $xml = NULL)
     {
@@ -59,6 +60,7 @@ class SAML2_XML_mdrpi_RegistrationInfo
      * Convert this element to XML.
      *
      * @param DOMElement $parent The element we should append to.
+     * @return DOMElement
      */
     public function toXML(DOMElement $parent)
     {

@@ -91,6 +91,7 @@ class SAML2_SignedElementHelper implements SAML2_SignedElement
      *
      * @param  XMLSecurityKey $key The key we should check against.
      * @return boolean        TRUE on success, FALSE when we don't have a signature.
+     * @throws Exception
      */
     public function validate(XMLSecurityKey $key)
     {
@@ -133,7 +134,7 @@ class SAML2_SignedElementHelper implements SAML2_SignedElement
      *
      * If the key is NULL, the message will be sent unsigned.
      *
-     * @param XMLSecurityKey|NULL $key
+     * @param XMLSecurityKey|NULL $signatureKey
      */
     public function setSignatureKey(XMLsecurityKey $signatureKey = NULL)
     {
@@ -199,13 +200,14 @@ class SAML2_SignedElementHelper implements SAML2_SignedElement
      *
      * @param DOMElement      $root         The element we should sign.
      * @param DOMElement|NULL $insertBefore The element we should insert the signature node before.
+     * @return DOMElement|NULL
      */
     protected function signElement(DOMElement $root, DOMElement $insertBefore = NULL)
     {
         if ($this->signatureKey === NULL) {
             /* We cannot sign this element. */
 
-            return;
+            return NULL;
         }
 
         SAML2_Utils::insertSignature($this->signatureKey, $this->certificates, $root, $insertBefore);

@@ -13,7 +13,7 @@ class SAML2_XML_md_AttributeAuthorityDescriptor extends SAML2_XML_md_RoleDescrip
      *
      * Array with EndpointType objects.
      *
-     * @var array
+     * @var SAML2_XML_md_EndpointType[]
      */
     public $AttributeService = array();
 
@@ -22,7 +22,7 @@ class SAML2_XML_md_AttributeAuthorityDescriptor extends SAML2_XML_md_RoleDescrip
      *
      * Array with EndpointType objects.
      *
-     * @var array
+     * @var SAML2_XML_md_EndpointType[]
      */
     public $AssertionIDRequestService = array();
 
@@ -31,7 +31,7 @@ class SAML2_XML_md_AttributeAuthorityDescriptor extends SAML2_XML_md_RoleDescrip
      *
      * Array of strings.
      *
-     * @var array
+     * @var string[]
      */
     public $NameIDFormat = array();
 
@@ -49,7 +49,7 @@ class SAML2_XML_md_AttributeAuthorityDescriptor extends SAML2_XML_md_RoleDescrip
      *
      * Array with SAML2_XML_saml_Attribute objects.
      *
-     * @var array
+     * @var SAML2_XML_saml_Attribute[]
      */
     public $Attribute = array();
 
@@ -57,6 +57,7 @@ class SAML2_XML_md_AttributeAuthorityDescriptor extends SAML2_XML_md_RoleDescrip
      * Initialize an IDPSSODescriptor.
      *
      * @param DOMElement|NULL $xml The XML element we should load.
+     * @throws Exception
      */
     public function __construct(DOMElement $xml = NULL)
     {
@@ -90,6 +91,7 @@ class SAML2_XML_md_AttributeAuthorityDescriptor extends SAML2_XML_md_RoleDescrip
      * Add this AttributeAuthorityDescriptor to an EntityDescriptor.
      *
      * @param DOMElement $parent The EntityDescriptor we should append this IDPSSODescriptor to.
+     * @return DOMElement
      */
     public function toXML(DOMElement $parent)
     {

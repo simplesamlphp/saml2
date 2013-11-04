@@ -40,6 +40,7 @@ class SAML2_XML_md_EndpointType
      * Initialize an EndpointType.
      *
      * @param DOMElement|NULL $xml The XML element we should load.
+     * @throws Exception
      */
     public function __construct(DOMElement $xml = NULL)
     {
@@ -117,6 +118,7 @@ class SAML2_XML_md_EndpointType
      * @param string $namespaceURI  The namespace URI.
      * @param string $qualifiedName The local name.
      * @param string $value         The attribute value.
+     * @throws Exception
      */
     public function setAttributeNS($namespaceURI, $qualifiedName, $value)
     {
@@ -157,6 +159,7 @@ class SAML2_XML_md_EndpointType
      *
      * @param DOMElement $parent The element we should append this endpoint to.
      * @param string     $name   The name of the element we should create.
+     * @return DOMElement
      */
     public function toXML(DOMElement $parent, $name)
     {

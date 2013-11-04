@@ -27,8 +27,8 @@ class SAML2_XML_samlp_Extensions
     /**
      * Add a list of Extensions to the given element.
      *
-     * @param DOMElement $parent     The element we should add the extensions to.
-     * @param array      $extensions List of extension objects.
+     * @param DOMElement        $parent     The element we should add the extensions to.
+     * @param SAML2_XML_Chunk[] $extensions List of extension objects.
      */
     public static function addList(DOMElement $parent, array $extensions)
     {

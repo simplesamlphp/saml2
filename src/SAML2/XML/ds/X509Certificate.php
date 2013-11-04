@@ -33,6 +33,7 @@ class SAML2_XML_ds_X509Certificate
      * Convert this X509Certificate element to XML.
      *
      * @param DOMElement $parent The element we should append this X509Certificate element to.
+     * @return DOMElement
      */
     public function toXML(DOMElement $parent)
     {

@@ -44,6 +44,7 @@ abstract class SAML2_StatusResponse extends SAML2_Message
      *
      * @param string          $tagName The tag name of the root element.
      * @param DOMElement|NULL $xml     The input message.
+     * @throws Exception
      */
     protected function __construct($tagName, DOMElement $xml = NULL)
     {

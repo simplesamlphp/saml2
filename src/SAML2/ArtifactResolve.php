@@ -36,7 +36,7 @@ class SAML2_ArtifactResolve extends SAML2_Request
     /**
      * Set the artifact that should be included in this response.
      *
-     * @param String  The $artifact.
+     * @param string $artifact
      */
     public function setArtifact($artifact)
     {

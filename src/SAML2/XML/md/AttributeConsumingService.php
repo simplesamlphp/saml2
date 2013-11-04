@@ -45,7 +45,7 @@ class SAML2_XML_md_AttributeConsumingService
      *
      * This is an array of SAML_RequestedAttributeType elements.
      *
-     * @var array
+     * @var SAML2_XML_md_RequestedAttribute[]
      */
     public $RequestedAttribute = array();
 
@@ -53,6 +53,7 @@ class SAML2_XML_md_AttributeConsumingService
      * Initialize / parse an AttributeConsumingService.
      *
      * @param DOMElement|NULL $xml The XML element we should load.
+     * @throws Exception
      */
     public function __construct(DOMElement $xml = NULL)
     {
@@ -83,6 +84,7 @@ class SAML2_XML_md_AttributeConsumingService
      * Convert to DOMElement.
      *
      * @param DOMElement $parent The element we should append this AttributeConsumingService to.
+     * @return DOMElement
      */
     public function toXML(DOMElement $parent)
     {

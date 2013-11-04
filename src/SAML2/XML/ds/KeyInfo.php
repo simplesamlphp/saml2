@@ -21,7 +21,7 @@ class SAML2_XML_ds_KeyInfo
      * Array with various elements describing this key.
      * Unknown elements will be represented by SAML2_XML_Chunk.
      *
-     * @var array
+     * @var (SAML2_XML_Chunk|SAML2_XML_ds_KeyName|SAML2_XML_ds_X509Data)[]
      */
     public $info = array();
 
@@ -67,6 +67,7 @@ class SAML2_XML_ds_KeyInfo
      * Convert this KeyInfo to XML.
      *
      * @param DOMElement $parent The element we should append this KeyInfo to.
+     * @return DOMElement
      */
     public function toXML(DOMElement $parent)
     {
@@ -82,6 +83,7 @@ class SAML2_XML_ds_KeyInfo
             $e->setAttribute('Id', $this->Id);
         }
 
+        /** @var SAML2_XML_Chunk|SAML2_XML_ds_KeyName|SAML2_XML_ds_X509Data $n */
         foreach ($this->info as $n) {
             $n->toXML($e);
         }

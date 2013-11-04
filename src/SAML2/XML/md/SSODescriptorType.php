@@ -13,7 +13,7 @@ abstract class SAML2_XML_md_SSODescriptorType extends SAML2_XML_md_RoleDescripto
      *
      * Array with IndexedEndpointType objects.
      *
-     * @var array
+     * @var SAML2_XML_md_IndexedEndpointType[]
      */
     public $ArtifactResolutionService = array();
 
@@ -22,7 +22,7 @@ abstract class SAML2_XML_md_SSODescriptorType extends SAML2_XML_md_RoleDescripto
      *
      * Array with EndpointType objects.
      *
-     * @var array
+     * @var SAML2_XML_md_EndpointType[]
      */
     public $SingleLogoutService = array();
 
@@ -31,7 +31,7 @@ abstract class SAML2_XML_md_SSODescriptorType extends SAML2_XML_md_RoleDescripto
      *
      * Array with EndpointType objects.
      *
-     * @var array
+     * @var SAML2_XML_md_EndpointType[]
      */
     public $ManageNameIDService = array();
 
@@ -40,7 +40,7 @@ abstract class SAML2_XML_md_SSODescriptorType extends SAML2_XML_md_RoleDescripto
      *
      * Array of strings.
      *
-     * @var array
+     * @var string[]
      */
     public $NameIDFormat = array();
 
@@ -79,7 +79,6 @@ abstract class SAML2_XML_md_SSODescriptorType extends SAML2_XML_md_RoleDescripto
      * Add this SSODescriptorType to an EntityDescriptor.
      *
      * @param  DOMElement $parent The EntityDescriptor we should append this SSODescriptorType to.
-     * @param  string     $name   The name of the element we should create.
      * @return DOMElement The generated SSODescriptor DOMElement.
      */
     protected function toXML(DOMElement $parent)

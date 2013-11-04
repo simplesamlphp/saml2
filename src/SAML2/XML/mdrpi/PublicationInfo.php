@@ -43,6 +43,7 @@ class SAML2_XML_mdrpi_PublicationInfo
      * Create/parse a mdrpi:PublicationInfo element.
      *
      * @param DOMElement|NULL $xml The XML element we should load.
+     * @throws Exception
      */
     public function __construct(DOMElement $xml = NULL)
     {
@@ -70,6 +71,7 @@ class SAML2_XML_mdrpi_PublicationInfo
      * Convert this element to XML.
      *
      * @param DOMElement $parent The element we should append to.
+     * @return DOMElement
      */
     public function toXML(DOMElement $parent)
     {

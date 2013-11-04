@@ -24,7 +24,8 @@ class SAML2_Utils
      * check the signature against a public key.
      *
      * @param  DOMElement  $root The element which should be validated.
-     * @return array|FALSE An array with information about the Signature-element.
+     * @return array|bool An array with information about the Signature-element.
+     * @throws Exception
      */
     public static function validateElement(DOMElement $root)
     {
@@ -56,6 +57,7 @@ class SAML2_Utils
 
         /* Check that $root is one of the signed nodes. */
         $rootSigned = FALSE;
+        /** @var DOMNode $signedNode */
         foreach ($objXMLSecDSig->getValidatedNodes() as $signedNode) {
             if ($signedNode->isSameNode($root)) {
                 $rootSigned = TRUE;
@@ -92,8 +94,9 @@ class SAML2_Utils
      *
      * @param  XMLSecurityKey $key       The key.
      * @param  string         $algorithm The desired algorithm.
-     * @param  string         $types     Public or private key, defaults to public.
+     * @param  string         $type      Public or private key, defaults to public.
      * @return XMLSecurityKey The new key.
+     * @throws Exception
      */
     public static function castKey(XMLSecurityKey $key, $algorithm, $type = 'public')
     {
@@ -127,11 +130,13 @@ class SAML2_Utils
      *
      * @param array          $info The information returned by the validateElement()-function.
      * @param XMLSecurityKey $key  The publickey that should validate the Signature object.
+     * @throws Exception
      */
     public static function validateSignature(array $info, XMLSecurityKey $key)
     {
         assert('array_key_exists("Signature", $info)');
 
+        /** @var XMLSecurityDSig $objXMLSecDSig */
         $objXMLSecDSig = $info['Signature'];
 
         $sigMethod = self::xpQuery($objXMLSecDSig->sigNode, './ds:SignedInfo/ds:SignatureMethod');
@@ -160,7 +165,7 @@ class SAML2_Utils
      *
      * @param  DOMNode $node  The XML node.
      * @param  string  $query The query.
-     * @return array   Array with matching DOM nodes.
+     * @return DOMElement[]    Array with matching DOM nodes.
      */
     public static function xpQuery(DOMNode $node, $query)
     {
@@ -222,6 +227,7 @@ class SAML2_Utils
             }
         }
 
+        /** @var DOMElement $newElement */
         $newElement = $document->importNode($element, TRUE);
         if ($parent !== NULL) {
             /* We need to append the child to the parent before we add the namespaces. */
@@ -244,6 +250,7 @@ class SAML2_Utils
      * @param  string     $attributeName The name of the attribute.
      * @param  mixed      $default       The value that should be returned if the attribute doesn't exist.
      * @return bool|mixed The value of the attribute, or $default if the attribute doesn't exist.
+     * @throws Exception
      */
     public static function parseBoolean(DOMElement $node, $attributeName, $default = NULL)
     {
@@ -316,13 +323,17 @@ class SAML2_Utils
     /**
      * Insert a Signature-node.
      *
-     * @param XMLSecurityKey $key          The key we should use to sign the message.
-     * @param array          $certificates The certificates we should add to the signature node.
-     * @param DOMElement     $root         The XML node we should sign.
-     * @param DomElement     $insertBefore The XML element we should insert the signature element before.
+     * @param XMLSecurityKey $key           The key we should use to sign the message.
+     * @param array          $certificates  The certificates we should add to the signature node.
+     * @param DOMElement     $root          The XML node we should sign.
+     * @param DOMNode        $insertBefore  The XML element we should insert the signature element before.
      */
-    public static function insertSignature(XMLSecurityKey $key, array $certificates, DOMElement $root, DOMNode $insertBefore = NULL)
-    {
+    public static function insertSignature(
+        XMLSecurityKey $key,
+        array $certificates,
+        DOMElement $root,
+        DOMNode $insertBefore = NULL
+    ) {
         $objXMLSecDSig = new XMLSecurityDSig();
         $objXMLSecDSig->setCanonicalMethod(XMLSecurityDSig::EXC_C14N);
 
@@ -366,6 +377,7 @@ class SAML2_Utils
      * @param  XMLSecurityKey $inputKey      The decryption key.
      * @param  array          &$blacklist    Blacklisted decryption algorithms.
      * @return DOMElement     The decrypted element.
+     * @throws Exception
      */
     private static function _decryptElement(DOMElement $encryptedData, XMLSecurityKey $inputKey, array &$blacklist)
     {
@@ -410,6 +422,7 @@ class SAML2_Utils
                     var_export($symKeyInfoAlgo, TRUE));
             }
 
+            /** @var XMLSecEnc $encKey */
             $encKey = $symmetricKeyInfo->encryptedCtx;
             $symmetricKeyInfo->key = $inputKey->key;
 
@@ -465,6 +478,7 @@ class SAML2_Utils
             throw new Exception('Algorithm disabled: ' . var_export($algorithm, TRUE));
         }
 
+        /** @var string $decrypted */
         $decrypted = $enc->decryptNode($symmetricKey, FALSE);
 
         /*
@@ -472,7 +486,10 @@ class SAML2_Utils
          * tree was serialized for encryption. In that case, we may miss the
          * namespaces needed to parse the XML.
          */
-        $xml = '<root xmlns:saml="urn:oasis:names:tc:SAML:2.0:assertion" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">'.$decrypted.'</root>';
+        $xml = '<root xmlns:saml="urn:oasis:names:tc:SAML:2.0:assertion" '.
+                     'xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">' .
+            $decrypted .
+            '</root>';
         $newDoc = new DOMDocument();
         if (!@$newDoc->loadXML($xml)) {
             throw new Exception('Failed to parse decrypted XML. Maybe the wrong sharedkey was used?');
@@ -496,6 +513,7 @@ class SAML2_Utils
      * @param  XMLSecurityKey $inputKey      The decryption key.
      * @param  array          $blacklist     Blacklisted decryption algorithms.
      * @return DOMElement     The decrypted element.
+     * @throws Exception
      */
     public static function decryptElement(DOMElement $encryptedData, XMLSecurityKey $inputKey, array $blacklist = array())
     {

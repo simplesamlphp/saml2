@@ -31,6 +31,7 @@ class SAML2_XML_md_UnknownRoleDescriptor extends SAML2_XML_md_RoleDescriptor
      * Add this RoleDescriptor to an EntityDescriptor.
      *
      * @param DOMElement $parent The EntityDescriptor we should append this RoleDescriptor to.
+     * @return void
      */
     public function toXML(DOMElement $parent)
     {

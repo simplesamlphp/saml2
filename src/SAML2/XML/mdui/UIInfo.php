@@ -101,6 +101,7 @@ class SAML2_XML_mdui_UIInfo
      * Convert this UIInfo to XML.
      *
      * @param DOMElement $parent The element we should append to.
+     * @return DOMElement|NULL
      */
     public function toXML(DOMElement $parent)
     {
@@ -111,6 +112,7 @@ class SAML2_XML_mdui_UIInfo
         assert('is_array($this->Logo)');
         assert('is_array($this->children)');
 
+        $e = NULL;
         if (!empty($this->DisplayName)
          || !empty($this->Description)
          || !empty($this->InformationURL)

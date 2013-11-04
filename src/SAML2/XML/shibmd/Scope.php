@@ -47,6 +47,7 @@ class SAML2_XML_shibmd_Scope
      * Convert this Scope to XML.
      *
      * @param DOMElement $parent The element we should append this Scope to.
+     * @return DOMElement
      */
     public function toXML(DOMElement $parent)
     {

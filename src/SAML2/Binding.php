@@ -22,6 +22,7 @@ abstract class SAML2_Binding
      *
      * @param  string        $urn The URN of the binding.
      * @return SAML2_Binding The binding.
+     * @throws Exception
      */
     public static function getBinding($urn)
     {
@@ -50,6 +51,7 @@ abstract class SAML2_Binding
      * An exception will be thrown if it is unable to guess the binding.
      *
      * @return SAML2_Binding The binding.
+     * @throws Exception
      */
     public static function getCurrentBinding()
     {

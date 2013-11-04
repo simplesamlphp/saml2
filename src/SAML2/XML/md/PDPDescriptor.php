@@ -13,7 +13,7 @@ class SAML2_XML_md_PDPDescriptor extends SAML2_XML_md_RoleDescriptor
      *
      * Array with EndpointType objects.
      *
-     * @var array
+     * @var SAML2_XML_md_EndpointType[]
      */
     public $AuthzService = array();
 
@@ -22,7 +22,7 @@ class SAML2_XML_md_PDPDescriptor extends SAML2_XML_md_RoleDescriptor
      *
      * Array with EndpointType objects.
      *
-     * @var array
+     * @var SAML2_XML_md_EndpointType[]
      */
     public $AssertionIDRequestService = array();
 
@@ -31,7 +31,7 @@ class SAML2_XML_md_PDPDescriptor extends SAML2_XML_md_RoleDescriptor
      *
      * Array of strings.
      *
-     * @var array
+     * @var string[]
      */
     public $NameIDFormat = array();
 
@@ -39,6 +39,7 @@ class SAML2_XML_md_PDPDescriptor extends SAML2_XML_md_RoleDescriptor
      * Initialize an IDPSSODescriptor.
      *
      * @param DOMElement|NULL $xml The XML element we should load.
+     * @throws Exception
      */
     public function __construct(DOMElement $xml = NULL)
     {
@@ -66,6 +67,7 @@ class SAML2_XML_md_PDPDescriptor extends SAML2_XML_md_RoleDescriptor
      * Add this PDPDescriptor to an EntityDescriptor.
      *
      * @param DOMElement $parent The EntityDescriptor we should append this IDPSSODescriptor to.
+     * @return DOMElement
      */
     public function toXML(DOMElement $parent)
     {

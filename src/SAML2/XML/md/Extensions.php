@@ -12,7 +12,7 @@ class SAML2_XML_md_Extensions
      * Get a list of Extensions in the given element.
      *
      * @param  DOMElement $parent The element that may contain the md:Extensions element.
-     * @return array      Array of extensions.
+     * @return SAML2_XML_Chunk[]  Array of extensions.
      */
     public static function getList(DOMElement $parent)
     {
@@ -41,8 +41,8 @@ class SAML2_XML_md_Extensions
     /**
      * Add a list of Extensions to the given element.
      *
-     * @param DOMElement $parent     The element we should add the extensions to.
-     * @param array      $extensions List of extension objects.
+     * @param DOMElement        $parent     The element we should add the extensions to.
+     * @param SAML2_XML_Chunk[] $extensions List of extension objects.
      */
     public static function addList(DOMElement $parent, array $extensions)
     {

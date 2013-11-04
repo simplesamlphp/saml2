@@ -14,7 +14,7 @@ class SAML2_XML_ds_X509Data
      * Array with various elements describing this certificate.
      * Unknown elements will be represented by SAML2_XML_Chunk.
      *
-     * @var array
+     * @var (SAML2_XML_Chunk|SAML2_XML_ds_X509Certificate)[]
      */
     public $data = array();
 
@@ -53,6 +53,7 @@ class SAML2_XML_ds_X509Data
      * Convert this X509Data element to XML.
      *
      * @param DOMElement $parent The element we should append this X509Data element to.
+     * @return DOMElement
      */
     public function toXML(DOMElement $parent)
     {
@@ -63,6 +64,7 @@ class SAML2_XML_ds_X509Data
         $e = $doc->createElementNS(XMLSecurityDSig::XMLDSIGNS, 'ds:X509Data');
         $parent->appendChild($e);
 
+        /** @var SAML2_XML_Chunk|SAML2_XML_ds_X509Certificate $n */
         foreach ($this->data as $n) {
             $n->toXML($e);
         }

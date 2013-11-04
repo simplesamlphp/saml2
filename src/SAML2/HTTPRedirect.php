@@ -86,6 +86,7 @@ class SAML2_HTTPRedirect extends SAML2_Binding
      * Throws an exception if it is unable receive the message.
      *
      * @return SAML2_Message The received message.
+     * @throws Exception
      */
     public function receive()
     {
@@ -121,14 +122,6 @@ class SAML2_HTTPRedirect extends SAML2_Binding
         $xml = $document->firstChild;
 
         $msg = SAML2_Message::fromXML($xml);
-
-        if (array_key_exists('Signature', $data)) {
-            /* Save the signature validation data until we need it. */
-            $signatureValidationData = array(
-                'Signature' => $data['Signature'],
-                'Query' => $data['SignedQuery'],
-                );
-        }
 
         if (array_key_exists('RelayState', $data)) {
             $msg->setRelayState($data['RelayState']);
@@ -169,6 +162,7 @@ class SAML2_HTTPRedirect extends SAML2_Binding
         $data = array();
         $relayState = '';
         $sigAlg = '';
+        $sigQuery = '';
         foreach (explode('&', $_SERVER['QUERY_STRING']) as $e) {
             $tmp = explode('=', $e, 2);
             $name = $tmp[0];
@@ -182,16 +176,16 @@ class SAML2_HTTPRedirect extends SAML2_Binding
             $data[$name] = urldecode($value);
 
             switch ($name) {
-            case 'SAMLRequest':
-            case 'SAMLResponse':
-                $sigQuery = $name . '=' . $value;
-                break;
-            case 'RelayState':
-                $relayState = '&RelayState=' . $value;
-                break;
-            case 'SigAlg':
-                $sigAlg = '&SigAlg=' . $value;
-                break;
+                case 'SAMLRequest':
+                case 'SAMLResponse':
+                    $sigQuery = $name . '=' . $value;
+                    break;
+                case 'RelayState':
+                    $relayState = '&RelayState=' . $value;
+                    break;
+                case 'SigAlg':
+                    $sigAlg = '&SigAlg=' . $value;
+                    break;
             }
         }
 
@@ -207,6 +201,7 @@ class SAML2_HTTPRedirect extends SAML2_Binding
      *
      * @param array          $data The data we need to validate the query string.
      * @param XMLSecurityKey $key  The key we should validate the query against.
+     * @throws Exception
      */
     public static function validateSignature(array $data, XMLSecurityKey $key)
     {

@@ -41,6 +41,7 @@ class SAML2_XML_mdui_Logo
      * Initialize a Logo.
      *
      * @param DOMElement|NULL $xml The XML element we should load.
+     * @throws Exception
      */
     public function __construct(DOMElement $xml = NULL)
     {
@@ -67,6 +68,7 @@ class SAML2_XML_mdui_Logo
      * Convert this Logo to XML.
      *
      * @param DOMElement $parent The element we should append this Logo to.
+     * @return DOMElement
      */
     public function toXML(DOMElement $parent)
     {

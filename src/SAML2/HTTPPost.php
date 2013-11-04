@@ -53,6 +53,7 @@ class SAML2_HTTPPost extends SAML2_Binding
      * Throws an exception if it is unable receive the message.
      *
      * @return SAML2_Message The received message.
+     * @throws Exception
      */
     public function receive()
     {

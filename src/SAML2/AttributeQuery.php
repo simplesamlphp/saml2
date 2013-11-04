@@ -39,6 +39,7 @@ class SAML2_AttributeQuery extends SAML2_SubjectQuery
      * Constructor for SAML 2 attribute query messages.
      *
      * @param DOMElement|NULL $xml The input message.
+     * @throws Exception
      */
     public function __construct(DOMElement $xml = NULL)
     {

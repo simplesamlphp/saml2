@@ -63,6 +63,7 @@ class SAML2_XML_md_ContactPerson
      * Initialize a ContactPerson element.
      *
      * @param DOMElement|NULL $xml The XML element we should load.
+     * @throws Exception
      */
     public function __construct(DOMElement $xml = NULL)
     {
@@ -111,6 +112,7 @@ class SAML2_XML_md_ContactPerson
      * @param  DOMElement  $parent The parent element.
      * @param  string      $name   The name of the child element.
      * @return string|NULL The value of the child element.
+     * @throws Exception
      */
     private static function getStringElement(DOMElement $parent, $name)
     {

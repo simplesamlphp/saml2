@@ -29,7 +29,7 @@ class SAML2_XML_md_KeyDescriptor
      *
      * Array of SAML2_XML_Chunk objects.
      *
-     * @var array
+     * @var SAML2_XML_Chunk[]
      */
     public $EncryptionMethod = array();
 
@@ -37,6 +37,7 @@ class SAML2_XML_md_KeyDescriptor
      * Initialize an KeyDescriptor.
      *
      * @param DOMElement|NULL $xml The XML element we should load.
+     * @throws Exception
      */
     public function __construct(DOMElement $xml = NULL)
     {
@@ -66,6 +67,7 @@ class SAML2_XML_md_KeyDescriptor
      * Convert this KeyDescriptor to XML.
      *
      * @param DOMElement $parent The element we should append this KeyDescriptor to.
+     * @return DOMElement
      */
     public function toXML(DOMElement $parent)
     {

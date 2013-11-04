@@ -52,9 +52,16 @@ class SAML2_Assertion implements SAML2_SignedElement
      *
      * If this is not NULL, the Attributes needs decryption before it can be accessed.
      *
-     * @var array|NULL
+     * @var DOMElement[]|NULL
      */
-     private $encryptedAttribute;
+    private $encryptedAttribute;
+
+    /**
+     * Private key we should use to encrypt the attributes.
+     *
+     * @var XMLSecurityKey|NULL
+     */
+    private $encryptionKey;
 
      /**
      * The earliest time this assertion is valid, as an UNIX timestamp.
@@ -121,7 +128,7 @@ class SAML2_Assertion implements SAML2_SignedElement
     /**
      * The attributes, as an associative array.
      *
-     * @var array
+     * @var DOMElement[]
      */
     private $attributes;
 
@@ -169,7 +176,7 @@ class SAML2_Assertion implements SAML2_SignedElement
     /**
      * The SubjectConfirmation elements of the Subject in the assertion.
      *
-     * @var array  Array of SAML2_XML_saml_SubjectConfirmation elements.
+     * @var SAML2_XML_saml_SubjectConfirmation[].
      */
     private $SubjectConfirmation;
 
@@ -177,6 +184,7 @@ class SAML2_Assertion implements SAML2_SignedElement
      * Constructor for SAML 2 assertions.
      *
      * @param DOMElement|NULL $xml The input assertion.
+     * @throws Exception
      */
     public function __construct(DOMElement $xml = NULL)
     {
@@ -224,6 +232,7 @@ class SAML2_Assertion implements SAML2_SignedElement
      * Parse subject in assertion.
      *
      * @param DOMElement $xml The assertion XML element.
+     * @throws Exception
      */
     private function parseSubject(DOMElement $xml)
     {
@@ -265,6 +274,7 @@ class SAML2_Assertion implements SAML2_SignedElement
      * Parse conditions in assertion.
      *
      * @param DOMElement $xml The assertion XML element.
+     * @throws Exception
      */
     private function parseConditions(DOMElement $xml)
     {
@@ -330,6 +340,7 @@ class SAML2_Assertion implements SAML2_SignedElement
      * Parse AuthnStatement in assertion.
      *
      * @param DOMElement $xml The assertion XML element.
+     * @throws Exception
      */
     private function parseAuthnStatement(DOMElement $xml)
     {
@@ -342,7 +353,6 @@ class SAML2_Assertion implements SAML2_SignedElement
             throw new Exception('More that one <saml:AuthnStatement> in <saml:Assertion> not supported.');
         }
         $as = $as[0];
-        $this->authnStatement = array();
 
         if (!$as->hasAttribute('AuthnInstant')) {
             throw new Exception('Missing required AuthnInstant attribute on <saml:AuthnStatement>.');
@@ -387,6 +397,7 @@ class SAML2_Assertion implements SAML2_SignedElement
      * Parse attribute statements in assertion.
      *
      * @param DOMElement $xml The XML element with the assertion.
+     * @throws Exception
      */
     private function parseAttributes(DOMElement $xml)
     {
@@ -431,7 +442,10 @@ class SAML2_Assertion implements SAML2_SignedElement
      */
     private function parseEncryptedAttributes(DOMElement $xml)
     {
-        $this->encryptedAttribute = SAML2_Utils::xpQuery($xml, './saml_assertion:AttributeStatement/saml_assertion:EncryptedAttribute');
+        $this->encryptedAttribute = SAML2_Utils::xpQuery(
+            $xml,
+            './saml_assertion:AttributeStatement/saml_assertion:EncryptedAttribute'
+        );
     }
 
     /**
@@ -545,6 +559,7 @@ class SAML2_Assertion implements SAML2_SignedElement
      *
      * @see SAML2_Utils::addNameId()
      * @return array|NULL The name identifier of the assertion.
+     * @throws Exception
      */
     public function getNameId()
     {
@@ -636,15 +651,18 @@ class SAML2_Assertion implements SAML2_SignedElement
 
     public function decryptAttributes($key, array $blacklist = array())
     {
-        $firstAttribute = TRUE;
-
         if ($this->encryptedAttribute === null) {
             return;
         }
+        $firstAttribute = TRUE;
         $attributes = $this->encryptedAttribute;
         foreach ($attributes as $attributeEnc) {
             /*Decrypt node <EncryptedAttribute>*/
-            $attribute = SAML2_Utils::decryptElement($attributeEnc->getElementsByTagName('EncryptedData')->item(0), $key, $blacklist);
+            $attribute = SAML2_Utils::decryptElement(
+                $attributeEnc->getElementsByTagName('EncryptedData')->item(0),
+                $key,
+                $blacklist
+            );
 
             if (!$attribute->hasAttribute('Name')) {
                 throw new Exception('Missing name on <saml:Attribute> element.');
@@ -806,7 +824,7 @@ class SAML2_Assertion implements SAML2_SignedElement
      *
      * Set this to NULL if no limit is required.
      *
-     * @param int|NULL $sessionLifetime The latest timestamp this session is valid.
+     * @param int|NULL $sessionNotOnOrAfter The latest timestamp this session is valid.
      */
     public function setSessionNotOnOrAfter($sessionNotOnOrAfter)
     {
@@ -970,7 +988,7 @@ class SAML2_Assertion implements SAML2_SignedElement
      *
      * If the key is NULL, the assertion will be sent unsigned.
      *
-     * @param XMLSecurityKey|NULL $key
+     * @param XMLSecurityKey|NULL $signatureKey
      */
     public function setSignatureKey(XMLsecurityKey $signatureKey = NULL)
     {
@@ -983,7 +1001,6 @@ class SAML2_Assertion implements SAML2_SignedElement
      * @return XMLSecurityKey|NULL The key, or NULL if no key is specified..
      *
      */
-
     public function getEncryptionKey()
     {
         return $this->encryptionKey;
@@ -992,7 +1009,7 @@ class SAML2_Assertion implements SAML2_SignedElement
     /**
      * Set the private key we should use to encrypt the attributes.
      *
-     * @param XMLSecurityKey|NULL $key
+     * @param XMLSecurityKey|NULL $Key
      */
     public function setEncryptionKey(XMLSecurityKey $Key = NULL)
     {
