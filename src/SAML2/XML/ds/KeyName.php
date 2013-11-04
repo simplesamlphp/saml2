@@ -6,40 +6,39 @@
  * @package simpleSAMLphp
  * @version $Id$
  */
-class SAML2_XML_ds_KeyName {
+class SAML2_XML_ds_KeyName
+{
+    /**
+     * The key name.
+     *
+     * @var string
+     */
+    public $name;
 
-	/**
-	 * The key name.
-	 *
-	 * @var string
-	 */
-	public $name;
+    /**
+     * Initialize a KeyName element.
+     *
+     * @param DOMElement|NULL $xml The XML element we should load.
+     */
+    public function __construct(DOMElement $xml = NULL)
+    {
+        if ($xml === NULL) {
+            return;
+        }
 
+        $this->name = $xml->textContent;
+    }
 
-	/**
-	 * Initialize a KeyName element.
-	 *
-	 * @param DOMElement|NULL $xml  The XML element we should load.
-	 */
-	public function __construct(DOMElement $xml = NULL) {
+    /**
+     * Convert this KeyName element to XML.
+     *
+     * @param DOMElement $parent The element we should append this KeyName element to.
+     */
+    public function toXML(DOMElement $parent)
+    {
+        assert('is_string($this->name)');
 
-		if ($xml === NULL) {
-			return;
-		}
-
-		$this->name = $xml->textContent;
-	}
-
-
-	/**
-	 * Convert this KeyName element to XML.
-	 *
-	 * @param DOMElement $parent  The element we should append this KeyName element to.
-	 */
-	public function toXML(DOMElement $parent) {
-		assert('is_string($this->name)');
-
-		return SAML2_Utils::addString($parent, XMLSecurityDSig::XMLDSIGNS, 'ds:KeyName', $this->name);
-	}
+        return SAML2_Utils::addString($parent, XMLSecurityDSig::XMLDSIGNS, 'ds:KeyName', $this->name);
+    }
 
 }

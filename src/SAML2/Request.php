@@ -10,8 +10,6 @@
  * @package simpleSAMLphp
  * @version $Id$
  */
-abstract class SAML2_Request extends SAML2_Message {
-
+abstract class SAML2_Request extends SAML2_Message
+{
 }
-
-?>

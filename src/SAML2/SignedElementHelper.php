@@ -8,213 +8,209 @@
  * @package simpleSAMLphp
  * @version $Id$
  */
-class SAML2_SignedElementHelper implements SAML2_SignedElement {
+class SAML2_SignedElementHelper implements SAML2_SignedElement
+{
+    /**
+     * The private key we should use to sign the message.
+     *
+     * The private key can be NULL, in which case the message is sent unsigned.
+     *
+     * @var XMLSecurityKey|NULL
+     */
+    private $signatureKey;
 
-	/**
-	 * The private key we should use to sign the message.
-	 *
-	 * The private key can be NULL, in which case the message is sent unsigned.
-	 *
-	 * @var XMLSecurityKey|NULL
-	 */
-	private $signatureKey;
+    /**
+     * List of certificates that should be included in the message.
+     *
+     * @var array
+     */
+    private $certificates;
 
+    /**
+     * Available methods for validating this message.
+     *
+     * @var array
+     */
+    private $validators;
 
-	/**
-	 * List of certificates that should be included in the message.
-	 *
-	 * @var array
-	 */
-	private $certificates;
+    /**
+     * Initialize the helper class.
+     *
+     * @param DOMElement|NULL $xml The XML element which may be signed.
+     */
+    protected function __construct(DOMElement $xml = NULL)
+    {
+        $this->certificates = array();
+        $this->validators = array();
 
+        if ($xml === NULL) {
+            return;
+        }
 
-	/**
-	 * Available methods for validating this message.
-	 *
-	 * @var array
-	 */
-	private $validators;
+        /* Validate the signature element of the message. */
+        try {
+            $sig = SAML2_Utils::validateElement($xml);
 
+            if ($sig !== FALSE) {
+                $this->certificates = $sig['Certificates'];
+                $this->validators[] = array(
+                    'Function' => array('SAML2_Utils', 'validateSignature'),
+                    'Data' => $sig,
+                    );
+            }
 
-	/**
-	 * Initialize the helper class.
-	 *
-	 * @param DOMElement|NULL $xml  The XML element which may be signed.
-	 */
-	protected function __construct(DOMElement $xml = NULL) {
+        } catch (Exception $e) {
+            /* Ignore signature validation errors. */
+        }
+    }
 
-		$this->certificates = array();
-		$this->validators = array();
+    /**
+     * Add a method for validating this element.
+     *
+     * This function is used for custom validation extensions
+     *
+     * @param callback $function The function which should be called.
+     * @param mixed    $data     The data that should be included as the first parameter to the function.
+     */
+    public function addValidator($function, $data)
+    {
+        assert('is_callable($function)');
 
-		if ($xml === NULL) {
-			return;
-		}
+        $this->validators[] = array(
+            'Function' => $function,
+            'Data' => $data,
+            );
+    }
 
-		/* Validate the signature element of the message. */
-		try {
-			$sig = SAML2_Utils::validateElement($xml);
+    /**
+     * Validate this element against a public key.
+     *
+     * TRUE is returned on success, FALSE is returned if we don't have any
+     * signature we can validate. An exception is thrown if the signature
+     * validation fails.
+     *
+     * @param  XMLSecurityKey $key The key we should check against.
+     * @return boolean        TRUE on success, FALSE when we don't have a signature.
+     */
+    public function validate(XMLSecurityKey $key)
+    {
+        if (count($this->validators) === 0) {
+            return FALSE;
+        }
 
-			if ($sig !== FALSE) {
-				$this->certificates = $sig['Certificates'];
-				$this->validators[] = array(
-					'Function' => array('SAML2_Utils', 'validateSignature'),
-					'Data' => $sig,
-					);
-			}
+        $exceptions = array();
 
-		} catch (Exception $e) {
-			/* Ignore signature validation errors. */
-		}
-	}
+        foreach ($this->validators as $validator) {
+            $function = $validator['Function'];
+            $data = $validator['Data'];
 
+            try {
+                call_user_func($function, $data, $key);
+                /* We were able to validate the message with this validator. */
 
-	/**
-	 * Add a method for validating this element.
-	 *
-	 * This function is used for custom validation extensions
-	 *
-	 * @param callback $function  The function which should be called.
-	 * @param mixed $data  The data that should be included as the first parameter to the function.
-	 */
-	public function addValidator($function, $data) {
-		assert('is_callable($function)');
+                return TRUE;
+            } catch (Exception $e) {
+                $exceptions[] = $e;
+            }
+        }
 
-		$this->validators[] = array(
-			'Function' => $function,
-			'Data' => $data,
-			);
-	}
+        /* No validators were able to validate the message. */
+        throw $exceptions[0];
+    }
 
+    /**
+     * Retrieve the private key we should use to sign the message.
+     *
+     * @return XMLSecurityKey|NULL The key, or NULL if no key is specified.
+     */
+    public function getSignatureKey()
+    {
+        return $this->signatureKey;
+    }
 
-	/**
-	 * Validate this element against a public key.
-	 *
-	 * TRUE is returned on success, FALSE is returned if we don't have any
-	 * signature we can validate. An exception is thrown if the signature
-	 * validation fails.
-	 *
-	 * @param XMLSecurityKey $key  The key we should check against.
-	 * @return boolean  TRUE on success, FALSE when we don't have a signature.
-	 */
-	public function validate(XMLSecurityKey $key) {
+    /**
+     * Set the private key we should use to sign the message.
+     *
+     * If the key is NULL, the message will be sent unsigned.
+     *
+     * @param XMLSecurityKey|NULL $key
+     */
+    public function setSignatureKey(XMLsecurityKey $signatureKey = NULL)
+    {
+        $this->signatureKey = $signatureKey;
+    }
 
-		if (count($this->validators) === 0) {
-			return FALSE;
-		}
+    /**
+     * Set the certificates that should be included in the message.
+     *
+     * The certificates should be strings with the PEM encoded data.
+     *
+     * @param array $certificates An array of certificates.
+     */
+    public function setCertificates(array $certificates)
+    {
+        $this->certificates = $certificates;
+    }
 
-		$exceptions = array();
+    /**
+     * Retrieve the certificates that are included in the message.
+     *
+     * @return array An array of certificates.
+     */
+    public function getCertificates()
+    {
+        return $this->certificates;
+    }
 
-		foreach ($this->validators as $validator) {
-			$function = $validator['Function'];
-			$data = $validator['Data'];
+    /**
+     * Retrieve certificates that sign this element.
+     *
+     * @return array Array with certificates.
+     */
+    public function getValidatingCertificates()
+    {
+        $ret = array();
+        foreach ($this->certificates as $cert) {
 
-			try {
-				call_user_func($function, $data, $key);
-				/* We were able to validate the message with this validator. */
-				return TRUE;
-			} catch (Exception $e) {
-				$exceptions[] = $e;
-			}
-		}
+            /* We have found a matching fingerprint. */
+            $pemCert = "-----BEGIN CERTIFICATE-----\n" .
+                chunk_split($cert, 64) .
+                "-----END CERTIFICATE-----\n";
 
-		/* No validators were able to validate the message. */
-		throw $exceptions[0];
-	}
+            /* Extract the public key from the certificate for validation. */
+            $key = new XMLSecurityKey(XMLSecurityKey::RSA_SHA1, array('type'=>'public'));
+            $key->loadKey($pemCert);
 
+            try {
+                /* Check the signature. */
+                if ($this->validate($key)) {
+                    $ret[] = $cert;
+                }
+            } catch (Exception $e) {
+                /* This certificate does not sign this element. */
+            }
+        }
 
-	/**
-	 * Retrieve the private key we should use to sign the message.
-	 *
-	 * @return XMLSecurityKey|NULL The key, or NULL if no key is specified.
-	 */
-	public function getSignatureKey() {
-		return $this->signatureKey;
-	}
+        return $ret;
+    }
 
+    /**
+     * Sign the given XML element.
+     *
+     * @param DOMElement      $root         The element we should sign.
+     * @param DOMElement|NULL $insertBefore The element we should insert the signature node before.
+     */
+    protected function signElement(DOMElement $root, DOMElement $insertBefore = NULL)
+    {
+        if ($this->signatureKey === NULL) {
+            /* We cannot sign this element. */
 
-	/**
-	 * Set the private key we should use to sign the message.
-	 *
-	 * If the key is NULL, the message will be sent unsigned.
-	 *
-	 * @param XMLSecurityKey|NULL $key
-	 */
-	public function setSignatureKey(XMLsecurityKey $signatureKey = NULL) {
-		$this->signatureKey = $signatureKey;
-	}
+            return;
+        }
 
+        SAML2_Utils::insertSignature($this->signatureKey, $this->certificates, $root, $insertBefore);
 
-	/**
-	 * Set the certificates that should be included in the message.
-	 *
-	 * The certificates should be strings with the PEM encoded data.
-	 *
-	 * @param array $certificates  An array of certificates.
-	 */
-	public function setCertificates(array $certificates) {
-		$this->certificates = $certificates;
-	}
-
-
-	/**
-	 * Retrieve the certificates that are included in the message.
-	 *
-	 * @return array  An array of certificates.
-	 */
-	public function getCertificates() {
-		return $this->certificates;
-	}
-
-
-	/**
-	 * Retrieve certificates that sign this element.
-	 *
-	 * @return array  Array with certificates.
-	 */
-	public function getValidatingCertificates() {
-
-		$ret = array();
-		foreach ($this->certificates as $cert) {
-
-			/* We have found a matching fingerprint. */
-			$pemCert = "-----BEGIN CERTIFICATE-----\n" .
-				chunk_split($cert, 64) .
-				"-----END CERTIFICATE-----\n";
-
-			/* Extract the public key from the certificate for validation. */
-			$key = new XMLSecurityKey(XMLSecurityKey::RSA_SHA1, array('type'=>'public'));
-			$key->loadKey($pemCert);
-
-			try {
-				/* Check the signature. */
-				if ($this->validate($key)) {
-					$ret[] = $cert;
-				}
-			} catch (Exception $e) {
-				/* This certificate does not sign this element. */
-			}
-		}
-
-		return $ret;
-	}
-
-
-	/**
-	 * Sign the given XML element.
-	 *
-	 * @param DOMElement $root  The element we should sign.
-	 * @param DOMElement|NULL $insertBefore  The element we should insert the signature node before.
-	 */
-	protected function signElement(DOMElement $root, DOMElement $insertBefore = NULL) {
-
-		if ($this->signatureKey === NULL) {
-			/* We cannot sign this element. */
-			return;
-		}
-
-		SAML2_Utils::insertSignature($this->signatureKey, $this->certificates, $root, $insertBefore);
-
-		return $root;
-	}
+        return $root;
+    }
 
 }

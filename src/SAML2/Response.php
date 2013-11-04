@@ -6,79 +6,75 @@
  * @package simpleSAMLphp
  * @version $Id$
  */
-class SAML2_Response extends SAML2_StatusResponse {
+class SAML2_Response extends SAML2_StatusResponse
+{
+    /**
+     * The assertions in this response.
+     */
+    private $assertions;
 
-	/**
-	 * The assertions in this response.
-	 */
-	private $assertions;
+    /**
+     * Constructor for SAML 2 response messages.
+     *
+     * @param DOMElement|NULL $xml The input message.
+     */
+    public function __construct(DOMElement $xml = NULL)
+    {
+        parent::__construct('Response', $xml);
 
+        $this->assertions = array();
 
-	/**
-	 * Constructor for SAML 2 response messages.
-	 *
-	 * @param DOMElement|NULL $xml  The input message.
-	 */
-	public function __construct(DOMElement $xml = NULL) {
-		parent::__construct('Response', $xml);
+        if ($xml === NULL) {
+            return;
+        }
 
-		$this->assertions = array();
+        for ($node = $xml->firstChild; $node !== NULL; $node = $node->nextSibling) {
+            if ($node->namespaceURI !== SAML2_Const::NS_SAML) {
+                continue;
+            }
 
-		if ($xml === NULL) {
-			return;
-		}
+            if ($node->localName === 'Assertion') {
+                $this->assertions[] = new SAML2_Assertion($node);
+            } elseif ($node->localName === 'EncryptedAssertion') {
+                $this->assertions[] = new SAML2_EncryptedAssertion($node);
+            }
+        }
+    }
 
-		for ($node = $xml->firstChild; $node !== NULL; $node = $node->nextSibling) {
-			if ($node->namespaceURI !== SAML2_Const::NS_SAML) {
-				continue;
-			}
+    /**
+     * Retrieve the assertions in this response.
+     *
+     * @return array Array of SAML2_Assertion and SAML2_EncryptedAssertion objects.
+     */
+    public function getAssertions()
+    {
+        return $this->assertions;
+    }
 
-			if ($node->localName === 'Assertion') {
-				$this->assertions[] = new SAML2_Assertion($node);
-			} elseif($node->localName === 'EncryptedAssertion') {
-				$this->assertions[] = new SAML2_EncryptedAssertion($node);
-			}
-		}
-	}
+    /**
+     * Set the assertions that should be included in this response.
+     *
+     * @param array  The assertions.
+     */
+    public function setAssertions(array $assertions)
+    {
+        $this->assertions = $assertions;
+    }
 
+    /**
+     * Convert the response message to an XML element.
+     *
+     * @return DOMElement This response.
+     */
+    public function toUnsignedXML()
+    {
+        $root = parent::toUnsignedXML();
 
-	/**
-	 * Retrieve the assertions in this response.
-	 *
-	 * @return array  Array of SAML2_Assertion and SAML2_EncryptedAssertion objects.
-	 */
-	public function getAssertions() {
-		return $this->assertions;
-	}
+        foreach ($this->assertions as $assertion) {
+            $node = $assertion->toXML($root);
+        }
 
-
-	/**
-	 * Set the assertions that should be included in this response.
-	 *
-	 * @param array  The assertions.
-	 */
-	public function setAssertions(array $assertions) {
-
-		$this->assertions = $assertions;
-	}
-
-
-	/**
-	 * Convert the response message to an XML element.
-	 *
-	 * @return DOMElement  This response.
-	 */
-	public function toUnsignedXML() {
-
-		$root = parent::toUnsignedXML();
-
-		foreach ($this->assertions as $assertion) {
-			$node = $assertion->toXML($root);
-		}
-
-		return $root;
-	}
+        return $root;
+    }
 
 }
-
-?>

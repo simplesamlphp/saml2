@@ -7,80 +7,79 @@
  * @package simpleSAMLphp
  * @version $Id$
  */
-class SAML2_XML_mdrpi_RegistrationInfo {
+class SAML2_XML_mdrpi_RegistrationInfo
+{
+    /**
+     * The identifier of the metadata registration authority.
+     *
+     * @var string
+     */
+    public $registrationAuthority;
 
-	/**
-	 * The identifier of the metadata registration authority.
-	 *
-	 * @var string
-	 */
-	public $registrationAuthority;
+    /**
+     * The registration timestamp for the metadata, as a UNIX timestamp.
+     *
+     * @var int|NULL
+     */
+    public $registrationInstant;
 
-	/**
-	 * The registration timestamp for the metadata, as a UNIX timestamp.
-	 *
-	 * @var int|NULL
-	 */
-	public $registrationInstant;
+    /**
+     * Link to registration policy for this metadata.
+     *
+     * This is an associative array with language=>URL.
+     *
+     * @var array
+     */
+    public $RegistrationPolicy = array();
 
-	/**
-	 * Link to registration policy for this metadata.
-	 *
-	 * This is an associative array with language=>URL.
-	 *
-	 * @var array
-	 */
-	public $RegistrationPolicy = array();
+    /**
+     * Create/parse a mdrpi:RegistrationInfo element.
+     *
+     * @param DOMElement|NULL $xml The XML element we should load.
+     */
+    public function __construct(DOMElement $xml = NULL)
+    {
+        if ($xml === NULL) {
+            return;
+        }
 
+        if (!$xml->hasAttribute('registrationAuthority')) {
+            throw new Exception('Missing required attribute "registrationAuthority" in mdrpi:RegistrationInfo element.');
+        }
+        $this->registrationAuthority = $xml->getAttribute('registrationAuthority');
 
-	/**
-	 * Create/parse a mdrpi:RegistrationInfo element.
-	 *
-	 * @param DOMElement|NULL $xml  The XML element we should load.
-	 */
-	public function __construct(DOMElement $xml = NULL) {
+        if ($xml->hasAttribute('registrationInstant')) {
+            $this->registrationInstant = SimpleSAML_Utilities::parseSAML2Time($xml->getAttribute('registrationInstant'));
+        }
 
-		if ($xml === NULL) {
-			return;
-		}
+        $this->RegistrationPolicy = SAML2_Utils::extractLocalizedStrings($xml, SAML2_XML_mdrpi_Common::NS_MDRPI, 'RegistrationPolicy');
+    }
 
-		if (!$xml->hasAttribute('registrationAuthority')) {
-			throw new Exception('Missing required attribute "registrationAuthority" in mdrpi:RegistrationInfo element.');
-		}
-		$this->registrationAuthority = $xml->getAttribute('registrationAuthority');
+    /**
+     * Convert this element to XML.
+     *
+     * @param DOMElement $parent The element we should append to.
+     */
+    public function toXML(DOMElement $parent)
+    {
+        assert('is_string($this->registrationAuthority)');
+        assert('is_int($this->registrationInstant) || is_null($this->registrationInstant)');
+        assert('is_array($this->RegistrationPolicy)');
 
-		if ($xml->hasAttribute('registrationInstant')) {
-			$this->registrationInstant = SimpleSAML_Utilities::parseSAML2Time($xml->getAttribute('registrationInstant'));
-		}
+        $doc = $parent->ownerDocument;
 
-		$this->RegistrationPolicy = SAML2_Utils::extractLocalizedStrings($xml, SAML2_XML_mdrpi_Common::NS_MDRPI, 'RegistrationPolicy');
-	}
+        $e = $doc->createElementNS(SAML2_XML_mdrpi_Common::NS_MDRPI, 'mdrpi:RegistrationInfo');
+        $parent->appendChild($e);
 
+        $e->setAttribute('registrationAuthority', $this->registrationAuthority);
 
-	/**
-	 * Convert this element to XML.
-	 *
-	 * @param DOMElement $parent  The element we should append to.
-	 */
-	public function toXML(DOMElement $parent) {
-		assert('is_string($this->registrationAuthority)');
-		assert('is_int($this->registrationInstant) || is_null($this->registrationInstant)');
-		assert('is_array($this->RegistrationPolicy)');
+        if ($this->registrationInstant !== NULL) {
+            $e->setAttribute('registrationInstant', gmdate('Y-m-d\TH:i:s\Z', $this->registrationInstant));
+        }
 
-		$doc = $parent->ownerDocument;
+        SAML2_Utils::addStrings($e, SAML2_XML_mdrpi_Common::NS_MDRPI, 'mdrpi:RegistrationPolicy', TRUE, $this->RegistrationPolicy);
 
-		$e = $doc->createElementNS(SAML2_XML_mdrpi_Common::NS_MDRPI, 'mdrpi:RegistrationInfo');
-		$parent->appendChild($e);
-
-		$e->setAttribute('registrationAuthority', $this->registrationAuthority);
-
-		if ($this->registrationInstant !== NULL) {
-			$e->setAttribute('registrationInstant', gmdate('Y-m-d\TH:i:s\Z', $this->registrationInstant));
-		}
-
-		SAML2_Utils::addStrings($e, SAML2_XML_mdrpi_Common::NS_MDRPI, 'mdrpi:RegistrationPolicy', TRUE, $this->RegistrationPolicy);
-
-		return $e;
-	}
+        return $e;
+    }
 
 }

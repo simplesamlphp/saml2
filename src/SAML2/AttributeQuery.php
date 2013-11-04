@@ -16,161 +16,155 @@
  * @package simpleSAMLphp
  * @version $Id$
  */
-class SAML2_AttributeQuery extends SAML2_SubjectQuery {
+class SAML2_AttributeQuery extends SAML2_SubjectQuery
+{
+    /**
+     * The attributes, as an associative array.
+     *
+     * @var array
+     */
+    private $attributes;
 
+    /**
+     * The NameFormat used on all attributes.
+     *
+     * If more than one NameFormat is used, this will contain
+     * the unspecified nameformat.
+     *
+     * @var string
+     */
+    private $nameFormat;
 
-	/**
-	 * The attributes, as an associative array.
-	 *
-	 * @var array
-	 */
-	private $attributes;
+    /**
+     * Constructor for SAML 2 attribute query messages.
+     *
+     * @param DOMElement|NULL $xml The input message.
+     */
+    public function __construct(DOMElement $xml = NULL)
+    {
+        parent::__construct('AttributeQuery', $xml);
 
+        $this->attributes = array();
+        $this->nameFormat = SAML2_Const::NAMEFORMAT_UNSPECIFIED;
 
-	/**
-	 * The NameFormat used on all attributes.
-	 *
-	 * If more than one NameFormat is used, this will contain
-	 * the unspecified nameformat.
-	 *
-	 * @var string
-	 */
-	private $nameFormat;
+        if ($xml === NULL) {
+            return;
+        }
 
+        $firstAttribute = TRUE;
+        $attributes = SAML2_Utils::xpQuery($xml, './saml_assertion:Attribute');
+        foreach ($attributes as $attribute) {
+            if (!$attribute->hasAttribute('Name')) {
+                throw new Exception('Missing name on <saml:Attribute> element.');
+            }
+            $name = $attribute->getAttribute('Name');
 
-	/**
-	 * Constructor for SAML 2 attribute query messages.
-	 *
-	 * @param DOMElement|NULL $xml  The input message.
-	 */
-	public function __construct(DOMElement $xml = NULL) {
-		parent::__construct('AttributeQuery', $xml);
+            if ($attribute->hasAttribute('NameFormat')) {
+                $nameFormat = $attribute->getAttribute('NameFormat');
+            } else {
+                $nameFormat = SAML2_Const::NAMEFORMAT_UNSPECIFIED;
+            }
 
-		$this->attributes = array();
-		$this->nameFormat = SAML2_Const::NAMEFORMAT_UNSPECIFIED;
+            if ($firstAttribute) {
+                $this->nameFormat = $nameFormat;
+                $firstAttribute = FALSE;
+            } else {
+                if ($this->nameFormat !== $nameFormat) {
+                    $this->nameFormat = SAML2_Const::NAMEFORMAT_UNSPECIFIED;
+                }
+            }
 
-		if ($xml === NULL) {
-			return;
-		}
+            if (!array_key_exists($name, $this->attributes)) {
+                $this->attributes[$name] = array();
+            }
 
-		$firstAttribute = TRUE;
-		$attributes = SAML2_Utils::xpQuery($xml, './saml_assertion:Attribute');
-		foreach ($attributes as $attribute) {
-			if (!$attribute->hasAttribute('Name')) {
-				throw new Exception('Missing name on <saml:Attribute> element.');
-			}
-			$name = $attribute->getAttribute('Name');
+            $values = SAML2_Utils::xpQuery($attribute, './saml_assertion:AttributeValue');
+            foreach ($values as $value) {
+                $this->attributes[$name][] = trim($value->textContent);
+            }
+        }
+    }
 
-			if ($attribute->hasAttribute('NameFormat')) {
-				$nameFormat = $attribute->getAttribute('NameFormat');
-			} else {
-				$nameFormat = SAML2_Const::NAMEFORMAT_UNSPECIFIED;
-			}
+    /**
+     * Retrieve all requested attributes.
+     *
+     * @return array All requested attributes, as an associative array.
+     */
+    public function getAttributes()
+    {
+        return $this->attributes;
+    }
 
-			if ($firstAttribute) {
-				$this->nameFormat = $nameFormat;
-				$firstAttribute = FALSE;
-			} else {
-				if ($this->nameFormat !== $nameFormat) {
-					$this->nameFormat = SAML2_Const::NAMEFORMAT_UNSPECIFIED;
-				}
-			}
+    /**
+     * Set all requested attributes.
+     *
+     * @param array $attributes All requested attributes, as an associative array.
+     */
+    public function setAttributes(array $attributes)
+    {
+        $this->attributes = $attributes;
+    }
 
-			if (!array_key_exists($name, $this->attributes)) {
-				$this->attributes[$name] = array();
-			}
+    /**
+     * Retrieve the NameFormat used on all attributes.
+     *
+     * If more than one NameFormat is used in the received attributes, this
+     * returns the unspecified NameFormat.
+     *
+     * @return string The NameFormat used on all attributes.
+     */
+    public function getAttributeNameFormat()
+    {
+        return $this->nameFormat;
+    }
 
-			$values = SAML2_Utils::xpQuery($attribute, './saml_assertion:AttributeValue');
-			foreach ($values as $value) {
-				$this->attributes[$name][] = trim($value->textContent);
-			}
-		}
-	}
+    /**
+     * Set the NameFormat used on all attributes.
+     *
+     * @param string $nameFormat The NameFormat used on all attributes.
+     */
+    public function setAttributeNameFormat($nameFormat)
+    {
+        assert('is_string($nameFormat)');
 
+        $this->nameFormat = $nameFormat;
+    }
 
-	/**
-	 * Retrieve all requested attributes.
-	 *
-	 * @return array  All requested attributes, as an associative array.
-	 */
-	public function getAttributes() {
+    /**
+     * Convert the attribute query message to an XML element.
+     *
+     * @return DOMElement This attribute query.
+     */
+    public function toUnsignedXML()
+    {
+        $root = parent::toUnsignedXML();
 
-		return $this->attributes;
-	}
+        foreach ($this->attributes as $name => $values) {
+            $attribute = $root->ownerDocument->createElementNS(SAML2_Const::NS_SAML, 'saml:Attribute');
+            $root->appendChild($attribute);
+            $attribute->setAttribute('Name', $name);
 
+            if ($this->nameFormat !== SAML2_Const::NAMEFORMAT_UNSPECIFIED) {
+                $attribute->setAttribute('NameFormat', $this->nameFormat);
+            }
 
-	/**
-	 * Set all requested attributes.
-	 *
-	 * @param array $attributes  All requested attributes, as an associative array.
-	 */
-	public function setAttributes(array $attributes) {
+            foreach ($values as $value) {
+                if (is_string($value)) {
+                    $type = 'xs:string';
+                } elseif (is_int($value)) {
+                    $type = 'xs:integer';
+                } else {
+                    $type = NULL;
+                }
 
-		$this->attributes = $attributes;
-	}
+                $attributeValue = SAML2_Utils::addString($attribute, SAML2_Const::NS_SAML, 'saml:AttributeValue', $value);
+                if ($type !== NULL) {
+                    $attributeValue->setAttributeNS(SAML2_Const::NS_XSI, 'xsi:type', $type);
+                }
+            }
+        }
 
-
-	/**
-	 * Retrieve the NameFormat used on all attributes.
-	 *
-	 * If more than one NameFormat is used in the received attributes, this
-	 * returns the unspecified NameFormat.
-	 *
-	 * @return string  The NameFormat used on all attributes.
-	 */
-	public function getAttributeNameFormat() {
-		return $this->nameFormat;
-	}
-
-
-	/**
-	 * Set the NameFormat used on all attributes.
-	 *
-	 * @param string $nameFormat  The NameFormat used on all attributes.
-	 */
-	public function setAttributeNameFormat($nameFormat) {
-		assert('is_string($nameFormat)');
-
-		$this->nameFormat = $nameFormat;
-	}
-
-
-	/**
-	 * Convert the attribute query message to an XML element.
-	 *
-	 * @return DOMElement  This attribute query.
-	 */
-	public function toUnsignedXML() {
-
-		$root = parent::toUnsignedXML();
-
-		foreach ($this->attributes as $name => $values) {
-			$attribute = $root->ownerDocument->createElementNS(SAML2_Const::NS_SAML, 'saml:Attribute');
-			$root->appendChild($attribute);
-			$attribute->setAttribute('Name', $name);
-
-			if ($this->nameFormat !== SAML2_Const::NAMEFORMAT_UNSPECIFIED) {
-				$attribute->setAttribute('NameFormat', $this->nameFormat);
-			}
-
-			foreach ($values as $value) {
-				if (is_string($value)) {
-					$type = 'xs:string';
-				} elseif (is_int($value)) {
-					$type = 'xs:integer';
-				} else {
-					$type = NULL;
-				}
-
-				$attributeValue = SAML2_Utils::addString($attribute, SAML2_Const::NS_SAML, 'saml:AttributeValue', $value);
-				if ($type !== NULL) {
-					$attributeValue->setAttributeNS(SAML2_Const::NS_XSI, 'xsi:type', $type);
-				}
-			}
-		}
-
-		return $root;
-	}
-
+        return $root;
+    }
 
 }

@@ -7,8 +7,8 @@
  * @package simpleSAMLphp
  * @version $Id$
  */
-class SAML2_XML_mdrpi_Common {
-
-	const NS_MDRPI = 'urn:oasis:names:tc:SAML:metadata:rpi';
+class SAML2_XML_mdrpi_Common
+{
+    const NS_MDRPI = 'urn:oasis:names:tc:SAML:metadata:rpi';
 
 }

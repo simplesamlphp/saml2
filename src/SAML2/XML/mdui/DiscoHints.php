@@ -7,100 +7,96 @@
  * @package simpleSAMLphp
  * @version $Id$
  */
-class SAML2_XML_mdui_DiscoHints {
+class SAML2_XML_mdui_DiscoHints
+{
+    /**
+     * The namespace used for the DiscoHints extension.
+     */
+    const NS = 'urn:oasis:names:tc:SAML:metadata:ui';
 
-	/**
-	 * The namespace used for the DiscoHints extension.
-	 */
-	const NS = 'urn:oasis:names:tc:SAML:metadata:ui';
+    /**
+     * Array with child elements.
+     *
+     * The elements can be any of the other SAML2_XML_mdui_* elements.
+     *
+     * @var array
+     */
+    public $children = array();
 
+    /**
+     * The IPHint, as an array of strings.
+     *
+     * @var array
+     */
+    public $IPHint = array();
 
-	/**
-	 * Array with child elements.
-	 *
-	 * The elements can be any of the other SAML2_XML_mdui_* elements.
-	 *
-	 * @var array
-	 */
-	public $children = array();
+    /**
+     * The DomainHint, as an array of strings.
+     *
+     * @var array
+     */
+    public $DomainHint = array();
 
+    /**
+     * The GeolocationHint, as an array of strings.
+     *
+     * @var array
+     */
+    public $GeolocationHint = array();
 
-	/**
-	 * The IPHint, as an array of strings.
-	 *
-	 * @var array
-	 */
-	public $IPHint = array();
+    /**
+     * Create a DiscoHints element.
+     *
+     * @param DOMElement|NULL $xml The XML element we should load.
+     */
+    public function __construct(DOMElement $xml = NULL)
+    {
+        if ($xml === NULL) {
+            return;
+        }
 
+        $this->IPHint =          SAML2_Utils::extractStrings($xml, self::NS, 'IPHint');
+        $this->DomainHint =      SAML2_Utils::extractStrings($xml, self::NS, 'DomainHint');
+        $this->GeolocationHint = SAML2_Utils::extractStrings($xml, self::NS, 'GeolocationHint');
 
-	/**
-	 * The DomainHint, as an array of strings.
-	 *
-	 * @var array
-	 */
-	public $DomainHint = array();
+        foreach (SAML2_Utils::xpQuery($xml, "./*[namespace-uri()!='".self::NS."']") as $node) {
+            $this->children[] = new SAML2_XML_Chunk($node);
+        }
+    }
 
+    /**
+     * Convert this DiscoHints to XML.
+     *
+     * @param DOMElement $parent The element we should append to.
+     */
+    public function toXML(DOMElement $parent)
+    {
+        assert('is_array($this->IPHint)');
+        assert('is_array($this->DomainHint)');
+        assert('is_array($this->GeolocationHint)');
+        assert('is_array($this->children)');
 
-	/**
-	 * The GeolocationHint, as an array of strings.
-	 *
-	 * @var array
-	 */
-	public $GeolocationHint = array();
+        if (!empty($this->IPHint)
+         || !empty($this->DomainHint)
+         || !empty($this->GeolocationHint)
+         || !empty($this->children)) {
+            $doc = $parent->ownerDocument;
 
-	/**
-	 * Create a DiscoHints element.
-	 *
-	 * @param DOMElement|NULL $xml  The XML element we should load.
-	 */
-	public function __construct(DOMElement $xml = NULL) {
+            $e = $doc->createElementNS(self::NS, 'mdui:DiscoHints');
+            $parent->appendChild($e);
 
-		if ($xml === NULL) {
-			return;
-		}
+            if (!empty($this->children)) {
+                foreach ($this->children as $child) {
+                    $child->toXML($e);
+                }
+            }
 
-		$this->IPHint =          SAML2_Utils::extractStrings($xml, self::NS, 'IPHint');
-		$this->DomainHint =      SAML2_Utils::extractStrings($xml, self::NS, 'DomainHint');
-		$this->GeolocationHint = SAML2_Utils::extractStrings($xml, self::NS, 'GeolocationHint');
+            SAML2_Utils::addStrings($e, self::NS, 'mdui:IPHint',          FALSE, $this->IPHint);
+            SAML2_Utils::addStrings($e, self::NS, 'mdui:DomainHint',      FALSE, $this->DomainHint);
+            SAML2_Utils::addStrings($e, self::NS, 'mdui:GeolocationHint', FALSE, $this->GeolocationHint);
 
-		foreach (SAML2_Utils::xpQuery($xml, "./*[namespace-uri()!='".self::NS."']") as $node) {
-			$this->children[] = new SAML2_XML_Chunk($node);
-		}
-	}
-
-
-	/**
-	 * Convert this DiscoHints to XML.
-	 *
-	 * @param DOMElement $parent  The element we should append to.
-	 */
-	public function toXML(DOMElement $parent) {
-		assert('is_array($this->IPHint)');
-		assert('is_array($this->DomainHint)');
-		assert('is_array($this->GeolocationHint)');
-		assert('is_array($this->children)');
-
-		if (!empty($this->IPHint)
-		 || !empty($this->DomainHint)
-		 || !empty($this->GeolocationHint)
-		 || !empty($this->children)) {
-			$doc = $parent->ownerDocument;
-
-			$e = $doc->createElementNS(self::NS, 'mdui:DiscoHints');
-			$parent->appendChild($e);
-
-			if (!empty($this->children)) {
-				foreach ($this->children as $child) {
-					$child->toXML($e);
-				}
-			}
-
-			SAML2_Utils::addStrings($e, self::NS, 'mdui:IPHint',          FALSE, $this->IPHint);
-			SAML2_Utils::addStrings($e, self::NS, 'mdui:DomainHint',      FALSE, $this->DomainHint);
-			SAML2_Utils::addStrings($e, self::NS, 'mdui:GeolocationHint', FALSE, $this->GeolocationHint);
-
-			return $e;
-		}
-	}
+            return $e;
+        }
+    }
 
 }

@@ -6,120 +6,116 @@
  * @package simpleSAMLphp
  * @version $Id$
  */
-class SAML2_XML_saml_NameID {
+class SAML2_XML_saml_NameID
+{
+    /**
+     * The NameQualifier or the NameID.
+     *
+     * @var string|NULL
+     */
+    public $NameQualifier;
 
-	/**
-	 * The NameQualifier or the NameID.
-	 *
-	 * @var string|NULL
-	 */
-	public $NameQualifier;
+    /**
+     * The SPNameQualifier or the NameID.
+     *
+     * @var string|NULL
+     */
+    public $SPNameQualifier;
 
-	/**
-	 * The SPNameQualifier or the NameID.
-	 *
-	 * @var string|NULL
-	 */
-	public $SPNameQualifier;
+    /**
+     * The Format or the NameID.
+     *
+     * @var string|NULL
+     */
+    public $Format;
 
+    /**
+     * The SPProvidedID or the NameID.
+     *
+     * @var string|NULL
+     */
+    public $SPProvidedID;
 
-	/**
-	 * The Format or the NameID.
-	 *
-	 * @var string|NULL
-	 */
-	public $Format;
+    /**
+     * The value of this NameID.
+     *
+     * @var string
+     */
+    public $value;
 
+    /**
+     * Initialize a saml:NameID.
+     *
+     * @param DOMElement|NULL $xml The XML element we should load.
+     */
+    public function __construct(DOMElement $xml = NULL)
+    {
+        if ($xml === NULL) {
+            return;
+        }
 
-	/**
-	 * The SPProvidedID or the NameID.
-	 *
-	 * @var string|NULL
-	 */
-	public $SPProvidedID;
+        if ($xml->hasAttribute('SPNameQualifier')) {
+            $this->SPNameQualifier = $xml->getAttribute('SPNameQualifier');
+        }
 
+        if ($xml->hasAttribute('NameQualifier')) {
+            $this->NameQualifier = $xml->getAttribute('NameQualifier');
+        }
 
-	/**
-	 * The value of this NameID.
-	 *
-	 * @var string
-	 */
-	public $value;
+        if ($xml->hasAttribute('Format')) {
+            $this->Format = $xml->getAttribute('Format');
+        }
 
+        if ($xml->hasAttribute('SPProvidedID')) {
+            $this->SPProvidedID = $xml->getAttribute('SPProvidedID');
+        }
 
-	/**
-	 * Initialize a saml:NameID.
-	 *
-	 * @param DOMElement|NULL $xml  The XML element we should load.
-	 */
-	public function __construct(DOMElement $xml = NULL) {
+        $this->value = trim($xml->textContent);
+    }
 
-		if ($xml === NULL) {
-			return;
-		}
+    /**
+     * Convert this NameID to XML.
+     *
+     * @param  DOMElement|NULL $parent The element we should append to.
+     * @return DOMElement      This AdditionalMetadataLocation-element.
+     */
+    public function toXML(DOMElement $parent = NULL)
+    {
+        assert('is_string($this->NameQualifier) || is_null($this->NameQualifier)');
+        assert('is_string($this->SPNameQualifier) || is_null($this->SPNameQualifier)');
+        assert('is_string($this->Format) || is_null($this->Format)');
+        assert('is_string($this->SPProvidedID) || is_null($this->SPProvidedID)');
+        assert('is_string($this->value)');
 
-		if ($xml->hasAttribute('SPNameQualifier')) {
-			$this->SPNameQualifier = $xml->getAttribute('SPNameQualifier');
-		}
+        if ($parent === NULL) {
+            $parent = new DOMDocument();
+            $doc = $parent;
+        } else {
+            $doc = $parent->ownerDocument;
+        }
+        $e = $doc->createElementNS(SAML2_Const::NS_SAML, 'saml:NameID');
+        $parent->appendChild($e);
 
-		if ($xml->hasAttribute('NameQualifier')) {
-			$this->NameQualifier = $xml->getAttribute('NameQualifier');
-		}
+        if ($this->NameQualifier !== NULL) {
+            $e->setAttribute('NameQualifier', $this->NameQualifier);
+        }
 
-		if ($xml->hasAttribute('Format')) {
-			$this->Format = $xml->getAttribute('Format');
-		}
+        if ($this->SPNameQualifier !== NULL) {
+            $e->setAttribute('SPNameQualifier', $this->SPNameQualifier);
+        }
 
-		if ($xml->hasAttribute('SPProvidedID')) {
-			$this->SPProvidedID = $xml->getAttribute('SPProvidedID');
-		}
+        if ($this->Format !== NULL) {
+            $e->setAttribute('Format', $this->Format);
+        }
 
-		$this->value = trim($xml->textContent);
-	}
+        if ($this->SPProvidedID !== NULL) {
+            $e->setAttribute('SPProvidedID', $this->SPProvidedID);
+        }
 
+        $t = $doc->createTextNode($this->value);
+        $e->appendChild($t);
 
-	/**
-	 * Convert this NameID to XML.
-	 *
-	 * @param DOMElement|NULL $parent  The element we should append to.
-	 * @return DOMElement  This AdditionalMetadataLocation-element.
-	 */
-	public function toXML(DOMElement $parent = NULL) {
-		assert('is_string($this->NameQualifier) || is_null($this->NameQualifier)');
-		assert('is_string($this->SPNameQualifier) || is_null($this->SPNameQualifier)');
-		assert('is_string($this->Format) || is_null($this->Format)');
-		assert('is_string($this->SPProvidedID) || is_null($this->SPProvidedID)');
-		assert('is_string($this->value)');
-
-		if ($parent === NULL) {
-			$parent = new DOMDocument();
-			$doc = $parent;
-		} else {
-			$doc = $parent->ownerDocument;
-		}
-		$e = $doc->createElementNS(SAML2_Const::NS_SAML, 'saml:NameID');
-		$parent->appendChild($e);
-
-		if ($this->NameQualifier !== NULL) {
-			$e->setAttribute('NameQualifier', $this->NameQualifier);
-		}
-
-		if ($this->SPNameQualifier !== NULL) {
-			$e->setAttribute('SPNameQualifier', $this->SPNameQualifier);
-		}
-
-		if ($this->Format !== NULL) {
-			$e->setAttribute('Format', $this->Format);
-		}
-
-		if ($this->SPProvidedID !== NULL) {
-			$e->setAttribute('SPProvidedID', $this->SPProvidedID);
-		}
-
-		$t = $doc->createTextNode($this->value);
-		$e->appendChild($t);
-
-		return $e;
-	}
+        return $e;
+    }
 
 }
