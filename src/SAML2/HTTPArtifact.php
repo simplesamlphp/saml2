@@ -1,7 +1,11 @@
 <?php
 
+if (!class_exists('SimpleSAML_Utilities') || !class_exists('sspmod_saml_Message')) {
+    throw new Exception('Unable to use HTTP Artifact binding outside of SimpleSAMLphp for now...');
+}
+
 /**
- * Class which implements the HTTP-Redirect binding.
+ * Class which implements the HTTP-Artifact binding.
  *
  * @author  Danny Bollaert, UGent AS. <danny.bollaert@ugent.be>
  * @package simpleSAMLphp
@@ -56,7 +60,7 @@ class SAML2_HTTPArtifact extends SAML2_Binding
     public function send(SAML2_Message $message)
     {
         $destination = $this->getRedirectURL($message);
-        SimpleSAML_Utilities::redirect($destination);
+        SAML2_Utils::redirect($destination);
     }
 
     /**
@@ -71,8 +75,8 @@ class SAML2_HTTPArtifact extends SAML2_Binding
     {
         if (array_key_exists('SAMLart', $_REQUEST)) {
             $artifact = base64_decode($_REQUEST['SAMLart']);
-            $endpointIndex =  bin2hex(substr($artifact,2,2));
-            $sourceId = bin2hex(substr($artifact,4,20));
+            $endpointIndex =  bin2hex(substr($artifact, 2, 2));
+            $sourceId = bin2hex(substr($artifact, 4, 20));
 
         } else {
             throw new Exception('Missing SAMLArt parameter.');
@@ -98,7 +102,7 @@ class SAML2_HTTPArtifact extends SAML2_Binding
             throw new Exception('No ArtifactResolutionService with the correct index.');
         }
 
-        SimpleSAML_Logger::debug("ArtifactResolutionService endpoint being used is := " . $endpoint['Location']);
+        SAML2_Utils::getLogger()->debug("ArtifactResolutionService endpoint being used is := " . $endpoint['Location']);
 
         //Construct the ArtifactResolve Request
         $ar = new SAML2_ArtifactResolve();
@@ -129,14 +133,14 @@ class SAML2_HTTPArtifact extends SAML2_Binding
             return NULL;
         }
 
-        $samlresponse = SAML2_Message::fromXML($xml);
-        $samlresponse->addValidator(array(get_class($this), 'validateSignature'), $artifactResponse);
+        $samlResponse = SAML2_Message::fromXML($xml);
+        $samlResponse->addValidator(array(get_class($this), 'validateSignature'), $artifactResponse);
 
         if (isset($_REQUEST['RelayState'])) {
-            $samlresponse->setRelayState($_REQUEST['RelayState']);
+            $samlResponse->setRelayState($_REQUEST['RelayState']);
         }
 
-        return $samlresponse;
+        return $samlResponse;
     }
 
     /**

@@ -188,7 +188,7 @@ class SAML2_Assertion implements SAML2_SignedElement
      */
     public function __construct(DOMElement $xml = NULL)
     {
-        $this->id = SimpleSAML_Utilities::generateID();
+        $this->id = SAML2_Utils::generateID();
         $this->issueInstant = time();
         $this->issuer = '';
         $this->authnInstant = time();
@@ -212,7 +212,7 @@ class SAML2_Assertion implements SAML2_SignedElement
             throw new Exception('Unsupported version: ' . $xml->getAttribute('Version'));
         }
 
-        $this->issueInstant = SimpleSAML_Utilities::parseSAML2Time($xml->getAttribute('IssueInstant'));
+        $this->issueInstant = SAML2_Utils::xsDateTimeToTimestamp($xml->getAttribute('IssueInstant'));
 
         $issuer = SAML2_Utils::xpQuery($xml, './saml_assertion:Issuer');
         if (empty($issuer)) {
@@ -289,13 +289,13 @@ class SAML2_Assertion implements SAML2_SignedElement
         $conditions = $conditions[0];
 
         if ($conditions->hasAttribute('NotBefore')) {
-            $notBefore = SimpleSAML_Utilities::parseSAML2Time($conditions->getAttribute('NotBefore'));
+            $notBefore = SAML2_Utils::xsDateTimeToTimestamp($conditions->getAttribute('NotBefore'));
             if ($this->notBefore === NULL || $this->notBefore < $notBefore) {
                 $this->notBefore = $notBefore;
             }
         }
         if ($conditions->hasAttribute('NotOnOrAfter')) {
-            $notOnOrAfter = SimpleSAML_Utilities::parseSAML2Time($conditions->getAttribute('NotOnOrAfter'));
+            $notOnOrAfter = SAML2_Utils::xsDateTimeToTimestamp($conditions->getAttribute('NotOnOrAfter'));
             if ($this->notOnOrAfter === NULL || $this->notOnOrAfter > $notOnOrAfter) {
                 $this->notOnOrAfter = $notOnOrAfter;
             }
@@ -357,10 +357,10 @@ class SAML2_Assertion implements SAML2_SignedElement
         if (!$as->hasAttribute('AuthnInstant')) {
             throw new Exception('Missing required AuthnInstant attribute on <saml:AuthnStatement>.');
         }
-        $this->authnInstant = SimpleSAML_Utilities::parseSAML2Time($as->getAttribute('AuthnInstant'));
+        $this->authnInstant = SAML2_Utils::xsDateTimeToTimestamp($as->getAttribute('AuthnInstant'));
 
         if ($as->hasAttribute('SessionNotOnOrAfter')) {
-            $this->sessionNotOnOrAfter = SimpleSAML_Utilities::parseSAML2Time($as->getAttribute('SessionNotOnOrAfter'));
+            $this->sessionNotOnOrAfter = SAML2_Utils::xsDateTimeToTimestamp($as->getAttribute('SessionNotOnOrAfter'));
         }
 
         if ($as->hasAttribute('SessionIndex')) {
@@ -613,7 +613,7 @@ class SAML2_Assertion implements SAML2_SignedElement
         SAML2_Utils::addNameId($root, $this->nameId);
         $nameId = $root->firstChild;
 
-        SimpleSAML_Utilities::debugMessage($nameId, 'encrypt');
+        SAML2_Utils::debugMessage($nameId, 'encrypt');
 
         /* Encrypt the NameID. */
         $enc = new XMLSecEnc();
@@ -643,7 +643,7 @@ class SAML2_Assertion implements SAML2_SignedElement
         }
 
         $nameId = SAML2_Utils::decryptElement($this->encryptedNameId, $key, $blacklist);
-        SimpleSAML_Utilities::debugMessage($nameId, 'decrypt');
+        SAML2_Utils::debugMessage($nameId, 'decrypt');
         $this->nameId = SAML2_Utils::parseNameId($nameId);
 
         $this->encryptedNameId = NULL;

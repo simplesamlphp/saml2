@@ -55,7 +55,7 @@ class SAML2_LogoutRequest extends SAML2_Request
         }
 
         if ($xml->hasAttribute('NotOnOrAfter')) {
-            $this->notOnOrAfter = SimpleSAML_Utilities::parseSAML2Time($xml->getAttribute('NotOnOrAfter'));
+            $this->notOnOrAfter = SAML2_Utils::xsDateTimeToTimestamp($xml->getAttribute('NotOnOrAfter'));
         }
 
         $nameId = SAML2_Utils::xpQuery($xml, './saml_assertion:NameID | ./saml_assertion:EncryptedID/xenc:EncryptedData');
@@ -128,7 +128,7 @@ class SAML2_LogoutRequest extends SAML2_Request
         SAML2_Utils::addNameId($root, $this->nameId);
         $nameId = $root->firstChild;
 
-        SimpleSAML_Utilities::debugMessage($nameId, 'encrypt');
+        SAML2_Utils::debugMessage($nameId, 'encrypt');
 
         /* Encrypt the NameID. */
         $enc = new XMLSecEnc();
@@ -158,7 +158,7 @@ class SAML2_LogoutRequest extends SAML2_Request
         }
 
         $nameId = SAML2_Utils::decryptElement($this->encryptedNameId, $key, $blacklist);
-        SimpleSAML_Utilities::debugMessage($nameId, 'decrypt');
+        SAML2_Utils::debugMessage($nameId, 'decrypt');
         $this->nameId = SAML2_Utils::parseNameId($nameId);
 
         $this->encryptedNameId = NULL;

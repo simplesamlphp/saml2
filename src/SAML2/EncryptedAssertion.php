@@ -47,7 +47,7 @@ class SAML2_EncryptedAssertion
     {
         $xml = $assertion->toXML();
 
-        SimpleSAML_Utilities::debugMessage($xml, 'encrypt');
+        SAML2_Utils::debugMessage($xml, 'encrypt');
 
         $enc = new XMLSecEnc();
         $enc->setNode($xml);
@@ -88,7 +88,7 @@ class SAML2_EncryptedAssertion
     {
         $assertionXML = SAML2_Utils::decryptElement($this->encryptedData, $inputKey, $blacklist);
 
-        SimpleSAML_Utilities::debugMessage($assertionXML, 'decrypt');
+        SAML2_Utils::debugMessage($assertionXML, 'decrypt');
 
         return new SAML2_Assertion($assertionXML);
     }

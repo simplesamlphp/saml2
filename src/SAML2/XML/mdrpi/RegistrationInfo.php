@@ -50,7 +50,7 @@ class SAML2_XML_mdrpi_RegistrationInfo
         $this->registrationAuthority = $xml->getAttribute('registrationAuthority');
 
         if ($xml->hasAttribute('registrationInstant')) {
-            $this->registrationInstant = SimpleSAML_Utilities::parseSAML2Time($xml->getAttribute('registrationInstant'));
+            $this->registrationInstant = SAML2_Utils::xsDateTimeToTimestamp($xml->getAttribute('registrationInstant'));
         }
 
         $this->RegistrationPolicy = SAML2_Utils::extractLocalizedStrings($xml, SAML2_XML_mdrpi_Common::NS_MDRPI, 'RegistrationPolicy');

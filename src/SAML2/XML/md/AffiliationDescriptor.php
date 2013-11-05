@@ -87,7 +87,7 @@ class SAML2_XML_md_AffiliationDescriptor extends SAML2_SignedElementHelper
         }
 
         if ($xml->hasAttribute('validUntil')) {
-            $this->validUntil = SimpleSAML_Utilities::parseSAML2Time($xml->getAttribute('validUntil'));
+            $this->validUntil = SAML2_Utils::xsDateTimeToTimestamp($xml->getAttribute('validUntil'));
         }
 
         if ($xml->hasAttribute('cacheDuration')) {

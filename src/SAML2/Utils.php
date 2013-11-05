@@ -442,7 +442,7 @@ class SAML2_Utils
                 }
             } catch (Exception $e) {
                 /* We failed to decrypt this key. Log it, and substitute a "random" key. */
-                SimpleSAML_Logger::error('Failed to decrypt symmetric key: ' . $e->getMessage());
+                SAML2_Utils::getLogger()->error('Failed to decrypt symmetric key: ' . $e->getMessage());
                 /* Create a replacement key, so that it looks like we fail in the same way as if the key was correctly padded. */
 
                 /* We base the symmetric key on the encrypted key and private key, so that we always behave the
@@ -524,7 +524,7 @@ class SAML2_Utils
              * Something went wrong during decryption, but for security
              * reasons we cannot tell the user what failed.
              */
-            SimpleSAML_Logger::error('Decryption failed: ' . $e->getMessage());
+            SAML2_Utils::getLogger()->error('Decryption failed: ' . $e->getMessage());
             throw new Exception('Failed to decrypt XML element.');
         }
     }
@@ -659,4 +659,111 @@ class SAML2_Utils
         return $keyDescriptor;
     }
 
+    /**
+     * This function converts a SAML2 timestamp on the form
+     * yyyy-mm-ddThh:mm:ss(\.s+)?Z to a UNIX timestamp. The sub-second
+     * part is ignored.
+     *
+     * Andreas comments:
+     *  I got this timestamp from Shibboleth 1.3 IdP: 2008-01-17T11:28:03.577Z
+     *  Therefore I added to possibility to have microseconds to the format.
+     * Added: (\.\\d{1,3})? to the regex.
+     *
+     * @param string $time The time we should convert.
+     * @return int Converted to a unix timestamp.
+     * @throws Exception
+     */
+    public static function xsDateTimeToTimestamp($time)
+    {
+        $matches = array();
+
+        // We use a very strict regex to parse the timestamp.
+        $regex = '/^(\\d\\d\\d\\d)-(\\d\\d)-(\\d\\d)T(\\d\\d):(\\d\\d):(\\d\\d)(?:\\.\\d+)?Z$/D';
+        if (preg_match($regex, $time, $matches) == 0) {
+            throw new Exception(
+                'Invalid SAML2 timestamp passed to parseSAML2Time: ' . $time
+            );
+        }
+
+        // Extract the different components of the time from the  matches in the regex.
+        // intval will ignore leading zeroes in the string.
+        $year   = intval($matches[1]);
+        $month  = intval($matches[2]);
+        $day    = intval($matches[3]);
+        $hour   = intval($matches[4]);
+        $minute = intval($matches[5]);
+        $second = intval($matches[6]);
+
+        // We use gmmktime because the timestamp will always be given
+        //in UTC.
+        $ts = gmmktime($hour, $minute, $second, $month, $day, $year);
+
+        return $ts;
+    }
+
+    /**
+     * Get a PSR-3 compatible logger.
+     * @return Psr\Log\LoggerInterface
+     */
+    public static function getLogger()
+    {
+        return static::get('logger');
+    }
+
+    /**
+     * Generate a random identifier for identifying SAML2 documents.
+     */
+    public static function generateId()
+    {
+        /** @var callable $idGenerator */
+        $idGenerator = static::get('id_generator_fn');
+        return $idGenerator();
+    }
+
+    /**
+     * @param $message
+     * @param $type
+     * @return mixed
+     */
+    public static function debugMessage($message, $type)
+    {
+        /** @var callable $messageDebugger */
+        $messageDebugger = static::get('debug_message_fn');
+        return $messageDebugger($message, $type);
+    }
+
+    /**
+     * @param $url
+     * @param array $data
+     * @return mixed
+     */
+    public static function redirect($url, $data = array())
+    {
+        /** @var callable $redirectFn */
+        $redirectFn = static::get('redirect_fn');
+        return $redirectFn($url, $data);
+    }
+
+    /**
+     * @param $url
+     * @param array $data
+     * @return mixed
+     */
+    public static function postRedirect($url, $data = array())
+    {
+        /** @var callable $redirectFn */
+        $redirectFn = static::get('redirect_post_fn');
+        return $redirectFn($url, $data);
+    }
+
+    /**
+     * Get a service from the DI container
+     *
+     * @param $serviceId
+     * @return mixed
+     */
+    protected static function get($serviceId)
+    {
+        return SAML2_Compat_ContainerSingleton::getInstance()->offsetGet($serviceId);
+    }
 }

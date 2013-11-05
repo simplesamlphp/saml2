@@ -1,4 +1,9 @@
 <?php
+
+if (!class_exists('SimpleSAML_Configuration') || !class_exists('SimpleSAML_Utilities')) {
+    throw new Exception('Unable to use SOAP Client outside of SimpleSAMLphp for now...');
+}
+
 /**
  * Implementation of the SAML 2.0 SOAP binding.
  *
@@ -97,7 +102,7 @@ class SAML2_SOAPClient
         $request = $msg->toSignedXML();
         $request = self::START_SOAP_ENVELOPE . $request->ownerDocument->saveXML($request) . self::END_SOAP_ENVELOPE;
 
-        SimpleSAML_Utilities::debugMessage($request, 'out');
+        SAML2_Utils::debugMessage($request, 'out');
 
         $action = 'http://www.oasis-open.org/committees/security';
         $version = '1.1';
@@ -109,7 +114,7 @@ class SAML2_SOAPClient
             throw new Exception('Empty SOAP response, check peer certificate.');
         }
 
-        SimpleSAML_Utilities::debugMessage($soapresponsexml, 'in');
+        SAML2_Utils::debugMessage($soapresponsexml, 'in');
 
         // Convert to SAML2_Message (DOMElement)
         $dom = new DOMDocument();
@@ -128,7 +133,7 @@ class SAML2_SOAPClient
         /* Add validator to message which uses the SSL context. */
         self::addSSLValidator($samlresponse, $context);
 
-        SimpleSAML_Logger::debug("Valid ArtifactResponse received from IdP");
+        SAML2_Utils::getLogger()->debug("Valid ArtifactResponse received from IdP");
 
         return $samlresponse;
 
@@ -152,20 +157,20 @@ class SAML2_SOAPClient
 
         $key = openssl_pkey_get_public($options['ssl']['peer_certificate']);
         if ($key === FALSE) {
-            SimpleSAML_Logger::warning('Unable to get public key from peer certificate.');
+            SAML2_Utils::getLogger()->warning('Unable to get public key from peer certificate.');
 
             return;
         }
 
         $keyInfo = openssl_pkey_get_details($key);
         if ($keyInfo === FALSE) {
-            SimpleSAML_Logger::warning('Unable to get key details from public key.');
+            SAML2_Utils::getLogger()->warning('Unable to get key details from public key.');
 
             return;
         }
 
         if (!isset($keyInfo['key'])) {
-            SimpleSAML_Logger::warning('Missing key in public key details.');
+            SAML2_Utils::getLogger()->warning('Missing key in public key details.');
 
             return;
         }
@@ -194,12 +199,12 @@ class SAML2_SOAPClient
         }
 
         if ($keyInfo['key'] !== $data) {
-            SimpleSAML_Logger::debug('Key on SSL connection did not match key we validated against.');
+            SAML2_Utils::getLogger()->debug('Key on SSL connection did not match key we validated against.');
 
             return;
         }
 
-        SimpleSAML_Logger::debug('Message validated based on SSL certificate.');
+        SAML2_Utils::getLogger()->debug('Message validated based on SSL certificate.');
     }
 
     /*
@@ -207,24 +212,25 @@ class SAML2_SOAPClient
      * @param $soapmessage Soap response needs to be type DOMDocument
      * @return $soapfaultstring string|NULL
      */
-    private function getSOAPFault($soapmessage)
+    private function getSOAPFault($soapMessage)
     {
-        $soapfault = SAML2_Utils::xpQuery($soapmessage->firstChild, '/soap-env:Envelope/soap-env:Body/soap-env:Fault');
+        $soapFault = SAML2_Utils::xpQuery($soapMessage->firstChild, '/soap-env:Envelope/soap-env:Body/soap-env:Fault');
 
-        if (empty($soapfault)) {
+        if (empty($soapFault)) {
             /* No fault. */
 
             return NULL;
         }
-        $soapfaultelement = $soapfault[0];
-        $soapfaultstring = "Unknown fault string found"; // There is a fault element but we havn't found out what the fault string is
+        $soapFaultElement = $soapFault[0];
+        // There is a fault element but we haven't found out what the fault string is
+        $soapFaultString = "Unknown fault string found";
         // find out the fault string
-        $faultstringelement =   SAML2_Utils::xpQuery($soapfaultelement, './soap-env:faultstring') ;
-        if (!empty($faultstringelement)) {
-            return $faultstringelement[0]->textContent;
+        $faultStringElement =   SAML2_Utils::xpQuery($soapFaultElement, './soap-env:faultstring') ;
+        if (!empty($faultStringElement)) {
+            return $faultStringElement[0]->textContent;
         }
 
-        return $soapfaultstring;
+        return $soapFaultString;
     }
 
 }

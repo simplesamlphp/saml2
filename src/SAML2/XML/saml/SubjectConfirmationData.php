@@ -65,10 +65,10 @@ class SAML2_XML_saml_SubjectConfirmationData
         }
 
         if ($xml->hasAttribute('NotBefore')) {
-            $this->NotBefore = SimpleSAML_Utilities::parseSAML2Time($xml->getAttribute('NotBefore'));
+            $this->NotBefore = SAML2_Utils::xsDateTimeToTimestamp($xml->getAttribute('NotBefore'));
         }
         if ($xml->hasAttribute('NotOnOrAfter')) {
-            $this->NotOnOrAfter = SimpleSAML_Utilities::parseSAML2Time($xml->getAttribute('NotOnOrAfter'));
+            $this->NotOnOrAfter = SAML2_Utils::xsDateTimeToTimestamp($xml->getAttribute('NotOnOrAfter'));
         }
         if ($xml->hasAttribute('Recipient')) {
             $this->Recipient = $xml->getAttribute('Recipient');

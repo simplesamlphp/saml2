@@ -47,7 +47,7 @@ interface SAML2_SignedElement
      *
      * If the key is NULL, the message will be sent unsigned.
      *
-     * @param XMLSecurityKey|NULL $key
+     * @param XMLSecurityKey|NULL $signatureKey
      */
     public function setSignatureKey(XMLsecurityKey $signatureKey = NULL);
 }

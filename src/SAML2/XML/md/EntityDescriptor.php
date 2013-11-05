@@ -105,7 +105,7 @@ class SAML2_XML_md_EntityDescriptor extends SAML2_SignedElementHelper
             $this->ID = $xml->getAttribute('ID');
         }
         if ($xml->hasAttribute('validUntil')) {
-            $this->validUntil = SimpleSAML_Utilities::parseSAML2Time($xml->getAttribute('validUntil'));
+            $this->validUntil = SAML2_Utils::xsDateTimeToTimestamp($xml->getAttribute('validUntil'));
         }
         if ($xml->hasAttribute('cacheDuration')) {
             $this->cacheDuration = $xml->getAttribute('cacheDuration');

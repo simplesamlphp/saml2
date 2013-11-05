@@ -57,7 +57,7 @@ class SAML2_XML_mdrpi_PublicationInfo
         $this->publisher = $xml->getAttribute('publisher');
 
         if ($xml->hasAttribute('creationInstant')) {
-            $this->creationInstant = SimpleSAML_Utilities::parseSAML2Time($xml->getAttribute('creationInstant'));
+            $this->creationInstant = SAML2_Utils::xsDateTimeToTimestamp($xml->getAttribute('creationInstant'));
         }
 
         if ($xml->hasAttribute('publicationId')) {

@@ -107,7 +107,7 @@ abstract class SAML2_Message implements SAML2_SignedElement
         assert('is_string($tagName)');
         $this->tagName = $tagName;
 
-        $this->id = SimpleSAML_Utilities::generateID();
+        $this->id = SAML2_Utils::generateID();
         $this->issueInstant = time();
         $this->certificates = array();
         $this->validators = array();
@@ -126,7 +126,7 @@ abstract class SAML2_Message implements SAML2_SignedElement
             throw new Exception('Unsupported version: ' . $xml->getAttribute('Version'));
         }
 
-        $this->issueInstant = SimpleSAML_Utilities::parseSAML2Time($xml->getAttribute('IssueInstant'));
+        $this->issueInstant = SAML2_Utils::xsDateTimeToTimestamp($xml->getAttribute('IssueInstant'));
 
         if ($xml->hasAttribute('Destination')) {
             $this->destination = $xml->getAttribute('Destination');
