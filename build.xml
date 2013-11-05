@@ -59,7 +59,7 @@
     <target name="phpmd" description="Perform project mess detection using PHPMD and print human readable output. Intended for usage on the command line before committing.">
     <exec executable="vendor/bin/phpmd" failonerror="true">
         <arg value="text"/>
-        <arg value="phpmd.xml"/>
+        <arg value="tools/phpmd/ruleset.xml"/>
     </exec>
 </target>
 
@@ -68,7 +68,7 @@
         <exec executable="vendor/bin/phpmd" failonerror="true">
             <arg path="src"/>
             <arg value="xml"/>
-            <arg value="phpmd.xml"/>
+            <arg value="tools/phpmd/ruleset.xml"/>
             <arg value="--reportfile"/>
             <arg value="build/artifacts/logs/pmd.xml"/>
         </exec>
@@ -78,7 +78,7 @@
             description="Find coding standard violations using PHP_CodeSniffer creating a log file for the continuous integration server">
         <exec executable="vendor/bin/phpcs" output="/dev/null" failonerror="true">
             <arg value="--report-checkstyle=build/artifacts/logs/checkstyle-php.xml"/>
-            <arg value="--standard=phpcs.xml"/>
+            <arg value="--standard=tools/phpcs/ruleset.xml"/>
             <arg value="--extensions=php"/>
             <arg path="src"/>
         </exec>
