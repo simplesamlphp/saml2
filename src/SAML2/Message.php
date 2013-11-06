@@ -42,6 +42,13 @@ abstract class SAML2_Message implements SAML2_SignedElement
     private $destination;
 
     /**
+     * The destination URL of this message if it is known.
+     *
+     * @var string|NULL
+     */
+    private $consent = SAML2_Const::CONSENT_UNSPECIFIED;
+
+    /**
      * The entity id of the issuer of this message, or NULL if unknown.
      *
      * @var string|NULL
@@ -130,6 +137,10 @@ abstract class SAML2_Message implements SAML2_SignedElement
 
         if ($xml->hasAttribute('Destination')) {
             $this->destination = $xml->getAttribute('Destination');
+        }
+
+        if ($xml->hasAttribute('Consent')) {
+            $this->consent = $xml->getAttribute('Consent');
         }
 
         $issuer = SAML2_Utils::xpQuery($xml, './saml_assertion:Issuer');
@@ -278,6 +289,34 @@ abstract class SAML2_Message implements SAML2_SignedElement
     }
 
     /**
+     * Set the given consent for this message.
+     *
+     * Most likely (though not required) a value of rn:oasis:names:tc:SAML:2.0:consent.
+     * @see SAML2_Const
+     *
+     * @param string $consent
+     */
+    public function setConsent($consent)
+    {
+        assert('is_string($consent)');
+
+        $this->consent = $consent;
+    }
+
+    /**
+     * Set the given consent for this message.
+     *
+     * Most likely (though not required) a value of rn:oasis:names:tc:SAML:2.0:consent.
+     * @see SAML2_Const
+     *
+     * @return string Consent
+     */
+    public function getConsent()
+    {
+        return $this->consent;
+    }
+
+    /**
      * Retrieve the issuer if this message.
      *
      * @return string|NULL The issuer of this message, or NULL if no issuer is given.
@@ -345,6 +384,9 @@ abstract class SAML2_Message implements SAML2_SignedElement
 
         if ($this->destination !== NULL) {
             $root->setAttribute('Destination', $this->destination);
+        }
+        if ($this->consent !== NULL && $this->consent !== SAML2_Const::CONSENT_UNSPECIFIED) {
+            $root->setAttribute('Consent', $this->consent);
         }
 
         if ($this->issuer !== NULL) {

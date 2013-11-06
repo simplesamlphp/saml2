@@ -54,6 +54,47 @@ class SAML2_Const
     const CM_HOK = 'urn:oasis:names:tc:SAML:2.0:cm:holder-of-key';
 
     /**
+     * No claim as to principal consent is being made.
+     */
+    const CONSENT_UNSPECIFIED = 'urn:oasis:names:tc:SAML:2.0:consent:unspecified';
+
+    /**
+     * Indicates that a principal’s consent has been obtained by the issuer of the message.
+     */
+    const CONSENT_OBTAINED = 'urn:oasis:names:tc:SAML:2.0:consent:obtained';
+
+    /**
+     * Indicates that a principal’s consent has been obtained by the issuer of the message at some point prior to
+     * the action that initiated the message.
+     */
+    const CONSENT_PRIOR = 'urn:oasis:names:tc:SAML:2.0:consent:prior';
+
+    /**
+     * Indicates that a principal’s consent has been implicitly obtained by the issuer of the message during the
+     * action that initiated the message, as part of a broader indication of consent.
+     * Implicit consent is typically
+     * more proximal to the action in time and presentation than prior consent, such as part of a session of
+     * activities.
+     */
+    const CONSENT_IMPLICIT = 'urn:oasis:names:tc:SAML:2.0:consent:current-implicit';
+
+    /**
+     * Indicates that a principal’s consent has been explicitly obtained by the issuer of the message during the
+     * action that initiated the message.
+     */
+    const CONSENT_EXPLICIT = 'urn:oasis:names:tc:SAML:2.0:consent:current-explicit';
+
+    /**
+     * Indicates that the issuer of the message did not obtain consent.
+     */
+    const CONSENT_UNAVAILABLE = 'urn:oasis:names:tc:SAML:2.0:consent:unavailable';
+
+    /**
+     * Indicates that the issuer of the message does not believe that they need to obtain or report consent.
+     */
+    const CONSENT_INAPPLICABLE = 'urn:oasis:names:tc:SAML:2.0:consent:inapplicable';
+
+    /**
      * The URN for the unspecified attribute NameFormat.
      */
     const NAMEFORMAT_UNSPECIFIED = 'urn:oasis:names:tc:SAML:2.0:attrname-format:unspecified';
