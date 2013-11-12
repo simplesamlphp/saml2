@@ -102,7 +102,7 @@ class SAML2_SOAPClient
         $request = $msg->toSignedXML();
         $request = self::START_SOAP_ENVELOPE . $request->ownerDocument->saveXML($request) . self::END_SOAP_ENVELOPE;
 
-        SAML2_Utils::debugMessage($request, 'out');
+        SAML2_Utils::getContainer()->debugMessage($request, 'out');
 
         $action = 'http://www.oasis-open.org/committees/security';
         $version = '1.1';
@@ -114,7 +114,7 @@ class SAML2_SOAPClient
             throw new Exception('Empty SOAP response, check peer certificate.');
         }
 
-        SAML2_Utils::debugMessage($soapresponsexml, 'in');
+        SAML2_Utils::getContainer()->debugMessage($soapresponsexml, 'in');
 
         // Convert to SAML2_Message (DOMElement)
         $dom = new DOMDocument();
@@ -133,7 +133,7 @@ class SAML2_SOAPClient
         /* Add validator to message which uses the SSL context. */
         self::addSSLValidator($samlresponse, $context);
 
-        SAML2_Utils::getLogger()->debug("Valid ArtifactResponse received from IdP");
+        SAML2_Utils::getContainer()->getLogger()->debug("Valid ArtifactResponse received from IdP");
 
         return $samlresponse;
 
@@ -157,20 +157,20 @@ class SAML2_SOAPClient
 
         $key = openssl_pkey_get_public($options['ssl']['peer_certificate']);
         if ($key === FALSE) {
-            SAML2_Utils::getLogger()->warning('Unable to get public key from peer certificate.');
+            SAML2_Utils::getContainer()->getLogger()->warning('Unable to get public key from peer certificate.');
 
             return;
         }
 
         $keyInfo = openssl_pkey_get_details($key);
         if ($keyInfo === FALSE) {
-            SAML2_Utils::getLogger()->warning('Unable to get key details from public key.');
+            SAML2_Utils::getContainer()->getLogger()->warning('Unable to get key details from public key.');
 
             return;
         }
 
         if (!isset($keyInfo['key'])) {
-            SAML2_Utils::getLogger()->warning('Missing key in public key details.');
+            SAML2_Utils::getContainer()->getLogger()->warning('Missing key in public key details.');
 
             return;
         }
@@ -199,12 +199,12 @@ class SAML2_SOAPClient
         }
 
         if ($keyInfo['key'] !== $data) {
-            SAML2_Utils::getLogger()->debug('Key on SSL connection did not match key we validated against.');
+            SAML2_Utils::getContainer()->getLogger()->debug('Key on SSL connection did not match key we validated against.');
 
             return;
         }
 
-        SAML2_Utils::getLogger()->debug('Message validated based on SSL certificate.');
+        SAML2_Utils::getContainer()->getLogger()->debug('Message validated based on SSL certificate.');
     }
 
     /*

@@ -27,7 +27,7 @@ class SAML2_HTTPPost extends SAML2_Binding
         $msgStr = $message->toSignedXML();
         $msgStr = $msgStr->ownerDocument->saveXML($msgStr);
 
-        SAML2_Utils::debugMessage($msgStr, 'out');
+        SAML2_Utils::getContainer()->debugMessage($msgStr, 'out');
 
         $msgStr = base64_encode($msgStr);
 
@@ -44,7 +44,7 @@ class SAML2_HTTPPost extends SAML2_Binding
             $post['RelayState'] = $relayState;
         }
 
-        SAML2_Utils::postRedirect($destination, $post);
+        SAML2_Utils::getContainer()->postRedirect($destination, $post);
     }
 
     /**
@@ -67,7 +67,7 @@ class SAML2_HTTPPost extends SAML2_Binding
 
         $msg = base64_decode($msg);
 
-        SAML2_Utils::debugMessage($msg, 'in');
+        SAML2_Utils::getContainer()->debugMessage($msg, 'in');
 
         $document = new DOMDocument();
         $document->loadXML($msg);

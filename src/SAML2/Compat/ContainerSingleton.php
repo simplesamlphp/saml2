@@ -3,12 +3,12 @@
 class SAML2_Compat_ContainerSingleton
 {
     /**
-     * @var Pimple
+     * @var SAML2_Compat_Ssp_Container
      */
     protected static $container;
 
     /**
-     * @return Pimple
+     * @return SAML2_Compat_Ssp_Container
      */
     public static function getInstance()
     {
@@ -19,45 +19,22 @@ class SAML2_Compat_ContainerSingleton
     }
 
     /**
-     * @param Pimple $container
-     * @return Pimple
+     * Set a container to use.
+     *
+     * @param SAML2_Compat_AbstractContainer $container
+     * @return SAML2_Compat_AbstractContainer
      */
-    public function setContainer(Pimple $container)
+    public function setContainer(SAML2_Compat_AbstractContainer $container)
     {
         self::$container = $container;
         return $container;
     }
 
     /**
-     * @return Pimple
+     * @return SAML2_Compat_Ssp_Container
      */
-    protected static function initSspContainer()
+    public function initSspContainer()
     {
-        $container = new Pimple();
-
-        $container['logger'] = $container->share(function() {
-            return new SAML2_Compat_Ssp_Logger();
-        });
-        $container['id_generator_fn'] = $container->share(function () {
-            return function () {
-                return SimpleSAML_Utilities::generateID();
-            };
-        });
-        $container['debug_message_fn'] = $container->share(function() {
-            return function ($message, $type) {
-                SimpleSAML_Utilities::debugMessage($message, $type);
-            };
-        });
-        $container['redirect_fn'] = $container->share(function() {
-            return function ($url, $data = array()) {
-                SimpleSAML_Utilities:: redirect($url, $data);
-            };
-        });
-        $container['redirect_post_fn'] = $container->share(function () {
-            return function ($url, $data = array()) {
-                SimpleSAML_Utilities:: postRedirect($url, $data);
-            };
-        });
-        return $container;
+        return new SAML2_Compat_Ssp_Container();
     }
 }

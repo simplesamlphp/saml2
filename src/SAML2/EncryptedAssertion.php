@@ -47,31 +47,31 @@ class SAML2_EncryptedAssertion
     {
         $xml = $assertion->toXML();
 
-        SAML2_Utils::debugMessage($xml, 'encrypt');
+        SAML2_Utils::getContainer()->debugMessage($xml, 'encrypt');
 
         $enc = new XMLSecEnc();
         $enc->setNode($xml);
         $enc->type = XMLSecEnc::Element;
 
         switch ($key->type) {
-        case XMLSecurityKey::TRIPLEDES_CBC:
-        case XMLSecurityKey::AES128_CBC:
-        case XMLSecurityKey::AES192_CBC:
-        case XMLSecurityKey::AES256_CBC:
-            $symmetricKey = $key;
-            break;
+            case XMLSecurityKey::TRIPLEDES_CBC:
+            case XMLSecurityKey::AES128_CBC:
+            case XMLSecurityKey::AES192_CBC:
+            case XMLSecurityKey::AES256_CBC:
+                $symmetricKey = $key;
+                break;
 
-        case XMLSecurityKey::RSA_1_5:
-        case XMLSecurityKey::RSA_OAEP_MGF1P:
-            $symmetricKey = new XMLSecurityKey(XMLSecurityKey::AES128_CBC);
-            $symmetricKey->generateSessionKey();
+            case XMLSecurityKey::RSA_1_5:
+            case XMLSecurityKey::RSA_OAEP_MGF1P:
+                $symmetricKey = new XMLSecurityKey(XMLSecurityKey::AES128_CBC);
+                $symmetricKey->generateSessionKey();
 
-            $enc->encryptKey($key, $symmetricKey);
+                $enc->encryptKey($key, $symmetricKey);
 
-            break;
+                break;
 
-        default:
-            throw new Exception('Unknown key type for encryption: ' . $key->type);
+            default:
+                throw new Exception('Unknown key type for encryption: ' . $key->type);
         }
 
         $this->encryptedData = $enc->encryptNode($symmetricKey);
@@ -88,7 +88,7 @@ class SAML2_EncryptedAssertion
     {
         $assertionXML = SAML2_Utils::decryptElement($this->encryptedData, $inputKey, $blacklist);
 
-        SAML2_Utils::debugMessage($assertionXML, 'decrypt');
+        SAML2_Utils::getContainer()->debugMessage($assertionXML, 'decrypt');
 
         return new SAML2_Assertion($assertionXML);
     }
