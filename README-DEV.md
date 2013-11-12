@@ -12,4 +12,4 @@ Testing
 -------
 Use PHPUnit for Unit Testing.
 Test with the 2 known users: (SimpleSAMLphp)[http://www.simplesaml.org] and
-(OpenConext-engineblock)[http://www.openconext.org].
+(OpenConext-engineblock)[http://www.openconext.org] .
