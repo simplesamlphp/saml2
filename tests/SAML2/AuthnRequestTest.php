@@ -1,7 +1,15 @@
 <?php
 
+/**
+ * Class SAML2_AuthnRequestTest
+ */
 class SAML2_AuthnRequestTest extends PHPUnit_Framework_TestCase
 {
+    public function setUp()
+    {
+        SAML2_Compat_ContainerSingleton::setContainer(new SAML2_Compat_MockContainer());
+    }
+
     public function testMarshalling()
     {
         $fixtureRequestDom = new DOMDocument();

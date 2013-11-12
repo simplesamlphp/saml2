@@ -108,11 +108,11 @@ class SAML2_HTTPRedirect extends SAML2_Binding
 
         $msg = base64_decode($msg);
         switch ($encoding) {
-        case self::DEFLATE:
-            $msg = gzinflate($msg);
-            break;
-        default:
-            throw new Exception('Unknown SAMLEncoding: ' . var_export($encoding, TRUE));
+            case self::DEFLATE:
+                $msg = gzinflate($msg);
+                break;
+            default:
+                throw new Exception('Unknown SAMLEncoding: ' . var_export($encoding, TRUE));
         }
 
         SAML2_Utils::getContainer()->debugMessage($msg, 'in');
@@ -136,7 +136,7 @@ class SAML2_HTTPRedirect extends SAML2_Binding
                 'Signature' => $data['Signature'],
                 'SigAlg' => $data['SigAlg'],
                 'Query' => $data['SignedQuery'],
-                );
+            );
             $msg->addValidator(array(get_class($this), 'validateSignature'), $signData);
         }
 
@@ -222,7 +222,7 @@ class SAML2_HTTPRedirect extends SAML2_Binding
             $key = SAML2_Utils::castKey($key, $sigAlg);
         }
 
-        if (!$key->verifySignature($query,$signature)) {
+        if (!$key->verifySignature($query, $signature)) {
             throw new Exception('Unable to validate signature on query string.');
         }
     }

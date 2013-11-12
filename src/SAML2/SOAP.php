@@ -17,7 +17,7 @@ class SAML2_SOAP extends SAML2_Binding
      */
     public function send(SAML2_Message $message)
     {
-        header('Content-Type: text/xml',true);
+        header('Content-Type: text/xml', TRUE);
         $outputFromIdp = '<?xml version="1.0" encoding="UTF-8"?>';
         $outputFromIdp .= '<SOAP-ENV:Envelope xmlns:SOAP-ENV="http://schemas.xmlsoap.org/soap/envelope/">';
         $outputFromIdp .= '<SOAP-ENV:Body>';

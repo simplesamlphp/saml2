@@ -24,7 +24,7 @@ class SAML2_Compat_ContainerSingleton
      * @param SAML2_Compat_AbstractContainer $container
      * @return SAML2_Compat_AbstractContainer
      */
-    public function setContainer(SAML2_Compat_AbstractContainer $container)
+    public static function setContainer(SAML2_Compat_AbstractContainer $container)
     {
         self::$container = $container;
         return $container;
@@ -33,7 +33,7 @@ class SAML2_Compat_ContainerSingleton
     /**
      * @return SAML2_Compat_Ssp_Container
      */
-    public function initSspContainer()
+    public static function initSspContainer()
     {
         return new SAML2_Compat_Ssp_Container();
     }

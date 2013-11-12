@@ -1,9 +1,5 @@
 <?php
 
-if (!class_exists('SimpleSAML_Utilities') || !class_exists('sspmod_saml_Message')) {
-    throw new Exception('Unable to use HTTP Artifact binding outside of SimpleSAMLphp for now...');
-}
-
 /**
  * Class which implements the HTTP-Artifact binding.
  *
