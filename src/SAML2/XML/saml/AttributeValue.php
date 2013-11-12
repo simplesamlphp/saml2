@@ -69,7 +69,7 @@ class SAML2_XML_saml_AttributeValue
         return $v;
     }
 
-    /*
+    /**
      * Returns a plain text content of the attribute value.
      */
     public function getString()

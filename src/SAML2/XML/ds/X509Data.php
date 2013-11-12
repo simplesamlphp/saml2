@@ -39,12 +39,12 @@ class SAML2_XML_ds_X509Data
                 continue;
             }
             switch ($n->localName) {
-            case 'X509Certificate':
-                $this->data[] = new SAML2_XML_ds_X509Certificate($n);
-                break;
-            default:
-                $this->data[] = new SAML2_XML_Chunk($n);
-                break;
+                case 'X509Certificate':
+                    $this->data[] = new SAML2_XML_ds_X509Certificate($n);
+                    break;
+                default:
+                    $this->data[] = new SAML2_XML_Chunk($n);
+                    break;
             }
         }
     }

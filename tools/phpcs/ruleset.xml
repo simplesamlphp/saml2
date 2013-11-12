@@ -15,13 +15,30 @@
         <exclude name="Generic.PHP.LowerCaseConstant" />
     </rule>
 
+    <rule ref="PSR1.Classes.ClassDeclaration.MissingNamespace">
+        <exclude name="PSR1.Classes.ClassDeclaration.MissingNamespace" />
+    </rule>
+    <rule ref="PSR2.Classes.ClassDeclaration.CloseBraceAfterBody">
+        <exclude name="PSR2.Classes.ClassDeclaration.CloseBraceAfterBody" />
+    </rule>
+    <rule ref="Squiz.Classes.ValidClassName.NotCamelCaps">
+        <exclude name="Squiz.Classes.ValidClassName.NotCamelCaps" />
+    </rule>
+
+    <rule ref="Generic.NamingConventions.UpperCaseConstantName.ConstantNotUpperCase">
+        <exclude-pattern>**/Assertion.php</exclude-pattern>
+        <exclude-pattern>**/LogoutRequest.php</exclude-pattern>
+        <exclude-pattern>**/EncryptedAssertion.php</exclude-pattern>
+    </rule>
+
     <rule ref="Generic.PHP.UpperCaseConstant"/>
 
     <!-- Lines can be a little bit longer before they break the build -->
     <rule ref="Generic.Files.LineLength">
         <properties>
-            <property name="lineLimit" value="120"/>
+            <property name="lineLimit" value="150"/>
             <property name="absoluteLineLimit" value="150"/>
         </properties>
+        <exclude-pattern>**/EntityDescriptor.php</exclude-pattern>
     </rule>
 </ruleset>

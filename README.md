@@ -1,4 +1,4 @@
-SimpleSAMLphp SAML2 library
+SimpleSAMLphp SAML2 library [![Build Status](https://travis-ci.org/simplesamlphp/saml2.png?branch=feature/fix-build)](https://travis-ci.org/simplesamlphp/saml2)
 ===========================
 
 A PHP library for SAML2 related functionality. Extracted from [SimpleSAMLphp](http://www.simplesaml.org),

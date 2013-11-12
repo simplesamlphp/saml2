@@ -50,15 +50,15 @@ class SAML2_XML_ds_KeyInfo
                 continue;
             }
             switch ($n->localName) {
-            case 'KeyName':
-                $this->info[] = new SAML2_XML_ds_KeyName($n);
-                break;
-            case 'X509Data':
-                $this->info[] = new SAML2_XML_ds_X509Data($n);
-                break;
-            default:
-                $this->info[] = new SAML2_XML_Chunk($n);
-                break;
+                case 'KeyName':
+                    $this->info[] = new SAML2_XML_ds_KeyName($n);
+                    break;
+                case 'X509Data':
+                    $this->info[] = new SAML2_XML_ds_X509Data($n);
+                    break;
+                default:
+                    $this->info[] = new SAML2_XML_Chunk($n);
+                    break;
             }
         }
     }

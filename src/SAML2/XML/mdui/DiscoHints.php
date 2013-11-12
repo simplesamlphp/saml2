@@ -92,8 +92,8 @@ class SAML2_XML_mdui_DiscoHints
                 }
             }
 
-            SAML2_Utils::addStrings($e, self::NS, 'mdui:IPHint',          FALSE, $this->IPHint);
-            SAML2_Utils::addStrings($e, self::NS, 'mdui:DomainHint',      FALSE, $this->DomainHint);
+            SAML2_Utils::addStrings($e, self::NS, 'mdui:IPHint', FALSE, $this->IPHint);
+            SAML2_Utils::addStrings($e, self::NS, 'mdui:DomainHint', FALSE, $this->DomainHint);
             SAML2_Utils::addStrings($e, self::NS, 'mdui:GeolocationHint', FALSE, $this->GeolocationHint);
 
             return $e;

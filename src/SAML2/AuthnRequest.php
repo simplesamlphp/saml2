@@ -41,7 +41,7 @@ class SAML2_AuthnRequest extends SAML2_Request
      *
      * @var int
     */
-    private $ProxyCount = null;
+    private $ProxyCount = NULL;
 
     /**
      * The RequesterID list in this request's scoping element
@@ -517,10 +517,10 @@ class SAML2_AuthnRequest extends SAML2_Request
             SAML2_XML_samlp_Extensions::addList($root, $this->extensions);
         }
 
-        if ($this->ProxyCount !== null || count($this->IDPList) > 0 || count($this->RequesterID) > 0) {
+        if ($this->ProxyCount !== NULL || count($this->IDPList) > 0 || count($this->RequesterID) > 0) {
             $scoping = $this->document->createElementNS(SAML2_Const::NS_SAMLP, 'Scoping');
             $root->appendChild($scoping);
-            if ($this->ProxyCount !== null) {
+            if ($this->ProxyCount !== NULL) {
                 $scoping->setAttribute('ProxyCount', $this->ProxyCount);
             }
             if (count($this->IDPList) > 0) {

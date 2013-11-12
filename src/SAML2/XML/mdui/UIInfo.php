@@ -86,10 +86,10 @@ class SAML2_XML_mdui_UIInfo
                 switch ($node->localName) {
                     case 'Keywords':
                         $this->Keywords[] = new SAML2_XML_mdui_Keywords($node);
-                    break;
+                        break;
                     case 'Logo':
                         $this->Logo[] = new SAML2_XML_mdui_Logo($node);
-                    break;
+                        break;
                 }
             } else {
                 $this->children[] = new SAML2_XML_Chunk($node);
@@ -125,9 +125,9 @@ class SAML2_XML_mdui_UIInfo
             $e = $doc->createElementNS(self::NS, 'mdui:UIInfo');
             $parent->appendChild($e);
 
-            SAML2_Utils::addStrings($e, self::NS, 'mdui:DisplayName',         TRUE, $this->DisplayName);
-            SAML2_Utils::addStrings($e, self::NS, 'mdui:Description',         TRUE, $this->Description);
-            SAML2_Utils::addStrings($e, self::NS, 'mdui:InformationURL',      TRUE, $this->InformationURL);
+            SAML2_Utils::addStrings($e, self::NS, 'mdui:DisplayName', TRUE, $this->DisplayName);
+            SAML2_Utils::addStrings($e, self::NS, 'mdui:Description', TRUE, $this->Description);
+            SAML2_Utils::addStrings($e, self::NS, 'mdui:InformationURL', TRUE, $this->InformationURL);
             SAML2_Utils::addStrings($e, self::NS, 'mdui:PrivacyStatementURL', TRUE, $this->PrivacyStatementURL);
 
             if (!empty($this->Keywords)) {

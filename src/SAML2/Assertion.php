@@ -246,7 +246,10 @@ class SAML2_Assertion implements SAML2_SignedElement
         }
         $subject = $subject[0];
 
-        $nameId = SAML2_Utils::xpQuery($subject, './saml_assertion:NameID | ./saml_assertion:EncryptedID/xenc:EncryptedData');
+        $nameId = SAML2_Utils::xpQuery(
+            $subject,
+            './saml_assertion:NameID | ./saml_assertion:EncryptedID/xenc:EncryptedData'
+        );
         if (empty($nameId)) {
             throw new Exception('Missing <saml:NameID> or <saml:EncryptedID> in <saml:Subject>.');
         } elseif (count($nameId) > 1) {
@@ -309,28 +312,28 @@ class SAML2_Assertion implements SAML2_SignedElement
                 throw new Exception('Unknown namespace of condition: ' . var_export($node->namespaceURI, TRUE));
             }
             switch ($node->localName) {
-            case 'AudienceRestriction':
-                $audiences = SAML2_Utils::extractStrings($node, SAML2_Const::NS_SAML, 'Audience');
-                if ($this->validAudiences === NULL) {
-                    /* The first (and probably last) AudienceRestriction element. */
-                    $this->validAudiences = $audiences;
+                case 'AudienceRestriction':
+                    $audiences = SAML2_Utils::extractStrings($node, SAML2_Const::NS_SAML, 'Audience');
+                    if ($this->validAudiences === NULL) {
+                        /* The first (and probably last) AudienceRestriction element. */
+                        $this->validAudiences = $audiences;
 
-                } else {
-                    /*
-                     * The set of AudienceRestriction are ANDed together, so we need
-                     * the subset that are present in all of them.
-                     */
-                    $this->validAudiences = array_intersect($this->validAudiences, $audiences);
-                }
-                break;
-            case 'OneTimeUse':
-                /* Currently ignored. */
-                break;
-            case 'ProxyRestriction':
-                /* Currently ignored. */
-                break;
-            default:
-                throw new Exception('Unknown condition: ' . var_export($node->localName, TRUE));
+                    } else {
+                        /*
+                         * The set of AudienceRestriction are ANDed together, so we need
+                         * the subset that are present in all of them.
+                         */
+                        $this->validAudiences = array_intersect($this->validAudiences, $audiences);
+                    }
+                    break;
+                case 'OneTimeUse':
+                    /* Currently ignored. */
+                    break;
+                case 'ProxyRestriction':
+                    /* Currently ignored. */
+                    break;
+                default:
+                    throw new Exception('Unknown condition: ' . var_export($node->localName, TRUE));
             }
         }
 
@@ -379,7 +382,9 @@ class SAML2_Assertion implements SAML2_SignedElement
         if (empty($accr)) {
             $acdr = SAML2_Utils::xpQuery($ac, './saml_assertion:AuthnContextDeclRef');
             if (empty($acdr)) {
-                throw new Exception('Neither <saml:AuthnContextClassRef> nor <saml:AuthnContextDeclRef> found in <saml:AuthnContext>.');
+                throw new Exception(
+                    'Neither <saml:AuthnContextClassRef> nor <saml:AuthnContextDeclRef> found in <saml:AuthnContext>.'
+                );
             } elseif (count($accr) > 1) {
                 throw new Exception('More than one <saml:AuthnContextDeclRef> in <saml:AuthnContext>.');
             }
@@ -390,7 +395,11 @@ class SAML2_Assertion implements SAML2_SignedElement
             $this->authnContext = trim($accr[0]->textContent);
         }
 
-        $this->AuthenticatingAuthority = SAML2_Utils::extractStrings($ac, SAML2_Const::NS_SAML, 'AuthenticatingAuthority');
+        $this->AuthenticatingAuthority = SAML2_Utils::extractStrings(
+            $ac,
+            SAML2_Const::NS_SAML,
+            'AuthenticatingAuthority'
+        );
     }
 
     /**
@@ -618,7 +627,9 @@ class SAML2_Assertion implements SAML2_SignedElement
         /* Encrypt the NameID. */
         $enc = new XMLSecEnc();
         $enc->setNode($nameId);
+        // @codingStandardsIgnoreStart
         $enc->type = XMLSecEnc::Element;
+        // @codingStandardsIgnoreEnd
 
         $symmetricKey = new XMLSecurityKey(XMLSecurityKey::AES128_CBC);
         $symmetricKey->generateSessionKey();
@@ -649,9 +660,16 @@ class SAML2_Assertion implements SAML2_SignedElement
         $this->encryptedNameId = NULL;
     }
 
-    public function decryptAttributes($key, array $blacklist = array())
+    /**
+     * Decrypt the assertion attributes.
+     *
+     * @param XMLSecurityKey $key
+     * @param array $blacklist
+     * @throws Exception
+     */
+    public function decryptAttributes(XMLSecurityKey $key, array $blacklist = array())
     {
-        if ($this->encryptedAttribute === null) {
+        if ($this->encryptedAttribute === NULL) {
             return;
         }
         $firstAttribute = TRUE;
@@ -797,7 +815,7 @@ class SAML2_Assertion implements SAML2_SignedElement
     /**
      * Set the AuthnInstant of the assertion.
      *
-     * @param int|NULL $authnInstant The timestamp the user was authenticated, or NULL if we don't want an AuthnStatement.
+     * @param int|NULL $authnInstant Timestamp the user was authenticated, or NULL if we don't want an AuthnStatement.
      */
     public function setAuthnInstant($authnInstant)
     {
@@ -903,9 +921,9 @@ class SAML2_Assertion implements SAML2_SignedElement
      *
      * @param array.
      */
-    public function setAuthenticatingAuthority($AuthenticatingAuthority)
+    public function setAuthenticatingAuthority($authenticatingAuthority)
     {
-        $this->AuthenticatingAuthority = $AuthenticatingAuthority;
+        $this->AuthenticatingAuthority = $authenticatingAuthority;
     }
 
     /**
@@ -1073,10 +1091,11 @@ class SAML2_Assertion implements SAML2_SignedElement
         $this->addSubject($root);
         $this->addConditions($root);
         $this->addAuthnStatement($root);
-        if($this->requiredEncAttributes == false)
+        if ($this->requiredEncAttributes == FALSE) {
             $this->addAttributeStatement($root);
-        else
+        } else {
             $this->addEncryptedAttributeStatement($root);
+        }
 
         if ($this->signatureKey !== NULL) {
             SAML2_Utils::insertSignature($this->signatureKey, $this->certificates, $root, $issuer->nextSibling);
@@ -1174,7 +1193,13 @@ class SAML2_Assertion implements SAML2_SignedElement
         $as->appendChild($ac);
 
         SAML2_Utils::addString($ac, SAML2_Const::NS_SAML, 'saml:AuthnContextClassRef', $this->authnContext);
-        SAML2_Utils::addStrings($ac, SAML2_Const::NS_SAML, 'saml:AuthenticatingAuthority', false, $this->AuthenticatingAuthority);
+        SAML2_Utils::addStrings(
+            $ac,
+            SAML2_Const::NS_SAML,
+            'saml:AuthenticatingAuthority',
+            FALSE,
+            $this->AuthenticatingAuthority
+        );
     }
 
 
@@ -1238,8 +1263,9 @@ class SAML2_Assertion implements SAML2_SignedElement
      */
     private function addEncryptedAttributeStatement(DOMElement $root)
     {
-        if ($this->requiredEncAttributes == FALSE)
+        if ($this->requiredEncAttributes == FALSE) {
             return;
+        }
 
         $document = $root->ownerDocument;
 
@@ -1295,7 +1321,7 @@ class SAML2_Assertion implements SAML2_SignedElement
 
             $EncAttribute = $document->createElementNS(SAML2_Const::NS_SAML, 'saml:EncryptedAttribute');
             $attributeStatement->appendChild($EncAttribute);
-            $n = $document->importNode($EncrNode,true);
+            $n = $document->importNode($EncrNode, TRUE);
             $EncAttribute->appendChild($n);
         }
     }

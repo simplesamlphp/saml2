@@ -2,6 +2,11 @@
 
 class SAML2_ResponseTest extends PHPUnit_Framework_TestCase
 {
+    public function setUp()
+    {
+        SAML2_Compat_ContainerSingleton::setContainer(new SAML2_Compat_MockContainer());
+    }
+
     public function testMarshalling()
     {
         $fixtureResponseDom = new DOMDocument();

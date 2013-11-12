@@ -261,14 +261,14 @@ class SAML2_Utils
         }
         $value = $node->getAttribute($attributeName);
         switch (strtolower($value)) {
-        case '0':
-        case 'false':
-            return FALSE;
-        case '1':
-        case 'true':
-            return TRUE;
-        default:
-            throw new Exception('Invalid value of boolean attribute ' . var_export($attributeName, TRUE) . ': ' . var_export($value, TRUE));
+            case '0':
+            case 'false':
+                return FALSE;
+            case '1':
+            case 'true':
+                return TRUE;
+            default:
+                throw new Exception('Invalid value of boolean attribute ' . var_export($attributeName, TRUE) . ': ' . var_export($value, TRUE));
         }
     }
 
@@ -356,7 +356,7 @@ class SAML2_Utils
             $type,
             array('http://www.w3.org/2000/09/xmldsig#enveloped-signature', XMLSecurityDSig::EXC_C14N),
             array('id_name' => 'ID', 'overwrite' => FALSE)
-            );
+        );
 
         $objXMLSecDSig->sign($key);
 
@@ -379,7 +379,7 @@ class SAML2_Utils
      * @return DOMElement     The decrypted element.
      * @throws Exception
      */
-    private static function _decryptElement(DOMElement $encryptedData, XMLSecurityKey $inputKey, array &$blacklist)
+    private static function doDecryptElement(DOMElement $encryptedData, XMLSecurityKey $inputKey, array &$blacklist)
     {
         $enc = new XMLSecEnc();
 
@@ -416,10 +416,12 @@ class SAML2_Utils
 
             /* Make sure that the input key format is the same as the one used to encrypt the key. */
             if ($inputKeyAlgo !== $symKeyInfoAlgo) {
-                throw new Exception('Algorithm mismatch between input key and key used to encrypt ' .
+                throw new Exception(
+                    'Algorithm mismatch between input key and key used to encrypt ' .
                     ' the symmetric key for the message. Key was: ' .
                     var_export($inputKeyAlgo, TRUE) . '; message was: ' .
-                    var_export($symKeyInfoAlgo, TRUE));
+                    var_export($symKeyInfoAlgo, TRUE)
+                );
             }
 
             /** @var XMLSecEnc $encKey */
@@ -437,8 +439,10 @@ class SAML2_Utils
             try {
                 $key = $encKey->decryptKey($symmetricKeyInfo);
                 if (strlen($key) != $keySize) {
-                    throw new Exception('Unexpected key size (' . strlen($key) * 8 . 'bits) for encryption algorithm: ' .
-                                        var_export($symmetricKey->type, TRUE));
+                    throw new Exception(
+                        'Unexpected key size (' . strlen($key) * 8 . 'bits) for encryption algorithm: ' .
+                        var_export($symmetricKey->type, TRUE)
+                    );
                 }
             } catch (Exception $e) {
                 /* We failed to decrypt this key. Log it, and substitute a "random" key. */
@@ -466,9 +470,11 @@ class SAML2_Utils
             $symKeyAlgo = $symmetricKey->getAlgorith();
             /* Make sure that the input key has the correct format. */
             if ($inputKeyAlgo !== $symKeyAlgo) {
-                throw new Exception('Algorithm mismatch between input key and key in message. ' .
+                throw new Exception(
+                    'Algorithm mismatch between input key and key in message. ' .
                     'Key was: ' . var_export($inputKeyAlgo, TRUE) . '; message was: ' .
-                    var_export($symKeyAlgo, TRUE));
+                    var_export($symKeyAlgo, TRUE)
+                );
             }
             $symmetricKey = $inputKey;
         }
@@ -518,7 +524,7 @@ class SAML2_Utils
     public static function decryptElement(DOMElement $encryptedData, XMLSecurityKey $inputKey, array $blacklist = array())
     {
         try {
-            return self::_decryptElement($encryptedData, $inputKey, $blacklist);
+            return self::doDecryptElement($encryptedData, $inputKey, $blacklist);
         } catch (Exception $e) {
             /*
              * Something went wrong during decryption, but for security

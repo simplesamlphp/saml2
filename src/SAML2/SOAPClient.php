@@ -1,9 +1,5 @@
 <?php
 
-if (!class_exists('SimpleSAML_Configuration') || !class_exists('SimpleSAML_Utilities')) {
-    throw new Exception('Unable to use SOAP Client outside of SimpleSAMLphp for now...');
-}
-
 /**
  * Implementation of the SAML 2.0 SOAP binding.
  *

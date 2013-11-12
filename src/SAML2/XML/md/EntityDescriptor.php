@@ -123,24 +123,24 @@ class SAML2_XML_md_EntityDescriptor extends SAML2_SignedElementHelper
             }
 
             switch ($node->localName) {
-            case 'RoleDescriptor':
-                $this->RoleDescriptor[] = new SAML2_XML_md_UnknownRoleDescriptor($node);
-                break;
-            case 'IDPSSODescriptor':
-                $this->RoleDescriptor[] = new SAML2_XML_md_IDPSSODescriptor($node);
-                break;
-            case 'SPSSODescriptor':
-                $this->RoleDescriptor[] = new SAML2_XML_md_SPSSODescriptor($node);
-                break;
-            case 'AuthnAuthorityDescriptor':
-                $this->RoleDescriptor[] = new SAML2_XML_md_AuthnAuthorityDescriptor($node);
-                break;
-            case 'AttributeAuthorityDescriptor':
-                $this->RoleDescriptor[] = new SAML2_XML_md_AttributeAuthorityDescriptor($node);
-                break;
-            case 'PDPDescriptor':
-                $this->RoleDescriptor[] = new SAML2_XML_md_PDPDescriptor($node);
-                break;
+                case 'RoleDescriptor':
+                    $this->RoleDescriptor[] = new SAML2_XML_md_UnknownRoleDescriptor($node);
+                    break;
+                case 'IDPSSODescriptor':
+                    $this->RoleDescriptor[] = new SAML2_XML_md_IDPSSODescriptor($node);
+                    break;
+                case 'SPSSODescriptor':
+                    $this->RoleDescriptor[] = new SAML2_XML_md_SPSSODescriptor($node);
+                    break;
+                case 'AuthnAuthorityDescriptor':
+                    $this->RoleDescriptor[] = new SAML2_XML_md_AuthnAuthorityDescriptor($node);
+                    break;
+                case 'AttributeAuthorityDescriptor':
+                    $this->RoleDescriptor[] = new SAML2_XML_md_AttributeAuthorityDescriptor($node);
+                    break;
+                case 'PDPDescriptor':
+                    $this->RoleDescriptor[] = new SAML2_XML_md_PDPDescriptor($node);
+                    break;
             }
         }
 

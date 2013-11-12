@@ -66,7 +66,7 @@ class SAML2_XML_mdui_Keywords
         $e->setAttribute('xml:lang', $this->lang);
         $value = '';
         foreach ($this->Keywords as $keyword) {
-            if (strpos($keyword, "+") !== false) {
+            if (strpos($keyword, "+") !== FALSE) {
                 throw new Exception('Keywords may not contain a "+" character.');
             }
             $value .= str_replace(' ', '+', $keyword) . ' ';
