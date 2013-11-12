@@ -114,7 +114,7 @@ abstract class SAML2_Message implements SAML2_SignedElement
         assert('is_string($tagName)');
         $this->tagName = $tagName;
 
-        $this->id = SAML2_Utils::generateID();
+        $this->id = SAML2_Utils::getContainer()->generateId();
         $this->issueInstant = time();
         $this->certificates = array();
         $this->validators = array();

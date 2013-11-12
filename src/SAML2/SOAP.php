@@ -22,7 +22,7 @@ class SAML2_SOAP extends SAML2_Binding
         $outputFromIdp .= '<SOAP-ENV:Envelope xmlns:SOAP-ENV="http://schemas.xmlsoap.org/soap/envelope/">';
         $outputFromIdp .= '<SOAP-ENV:Body>';
         $xmlMessage = $message->toSignedXML();
-        SAML2_Utils::debugMessage($xmlMessage, 'out');
+        SAML2_Utils::getContainer()->debugMessage($xmlMessage, 'out');
         $tempOutputFromIdp = $xmlMessage->ownerDocument->saveXML($xmlMessage);
         $outputFromIdp .= $tempOutputFromIdp;
         $outputFromIdp .= '</SOAP-ENV:Body>';
@@ -50,7 +50,7 @@ class SAML2_SOAP extends SAML2_Binding
         $document = new DOMDocument();
         $document->loadXML($postText);
         $xml = $document->firstChild;
-        SAML2_Utils::debugMessage($xml, 'in');
+        SAML2_Utils::getContainer()->debugMessage($xml, 'in');
         $results = SAML2_Utils::xpQuery($xml, '/soap-env:Envelope/soap-env:Body/*[1]');
 
         return SAML2_Message::fromXML($results[0]);

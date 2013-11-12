@@ -442,7 +442,7 @@ class SAML2_Utils
                 }
             } catch (Exception $e) {
                 /* We failed to decrypt this key. Log it, and substitute a "random" key. */
-                SAML2_Utils::getLogger()->error('Failed to decrypt symmetric key: ' . $e->getMessage());
+                SAML2_Utils::getContainer()->getLogger()->error('Failed to decrypt symmetric key: ' . $e->getMessage());
                 /* Create a replacement key, so that it looks like we fail in the same way as if the key was correctly padded. */
 
                 /* We base the symmetric key on the encrypted key and private key, so that we always behave the
@@ -524,7 +524,7 @@ class SAML2_Utils
              * Something went wrong during decryption, but for security
              * reasons we cannot tell the user what failed.
              */
-            SAML2_Utils::getLogger()->error('Decryption failed: ' . $e->getMessage());
+            SAML2_Utils::getContainer()->getLogger()->error('Decryption failed: ' . $e->getMessage());
             throw new Exception('Failed to decrypt XML element.');
         }
     }
@@ -702,68 +702,10 @@ class SAML2_Utils
     }
 
     /**
-     * Get a PSR-3 compatible logger.
-     * @return Psr\Log\LoggerInterface
+     * @return SAML2_Compat_Ssp_Container
      */
-    public static function getLogger()
+    public static function getContainer()
     {
-        return static::get('logger');
-    }
-
-    /**
-     * Generate a random identifier for identifying SAML2 documents.
-     */
-    public static function generateId()
-    {
-        /** @var callable $idGenerator */
-        $idGenerator = static::get('id_generator_fn');
-        return $idGenerator();
-    }
-
-    /**
-     * @param $message
-     * @param $type
-     * @return mixed
-     */
-    public static function debugMessage($message, $type)
-    {
-        /** @var callable $messageDebugger */
-        $messageDebugger = static::get('debug_message_fn');
-        return $messageDebugger($message, $type);
-    }
-
-    /**
-     * @param $url
-     * @param array $data
-     * @return mixed
-     */
-    public static function redirect($url, $data = array())
-    {
-        /** @var callable $redirectFn */
-        $redirectFn = static::get('redirect_fn');
-        return $redirectFn($url, $data);
-    }
-
-    /**
-     * @param $url
-     * @param array $data
-     * @return mixed
-     */
-    public static function postRedirect($url, $data = array())
-    {
-        /** @var callable $redirectFn */
-        $redirectFn = static::get('redirect_post_fn');
-        return $redirectFn($url, $data);
-    }
-
-    /**
-     * Get a service from the DI container
-     *
-     * @param $serviceId
-     * @return mixed
-     */
-    protected static function get($serviceId)
-    {
-        return SAML2_Compat_ContainerSingleton::getInstance()->offsetGet($serviceId);
+        return SAML2_Compat_ContainerSingleton::getInstance();
     }
 }

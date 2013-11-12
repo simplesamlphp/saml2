@@ -35,7 +35,8 @@ Usage
 
 Then run ```composer update```.
 
-* Inject the required dependencies in the DI Container using [Pimple](http://pimple.sensiolabs.org).
+* Provide the required external dependencies by extending and implementing the ```SAML2_Compat_AbstractContainer```
+  then injecting it in the ContainerSingleton (see example below).
 
 * Use at will.
 Example:
@@ -43,7 +44,7 @@ Example:
     // Use Composers autoloading
     require 'vendor/autoload.php';
 
-    // Set up the container (out of scope for example)
+    // Implement the Container interface (out of scope for example)
     require 'container.php';
     SAML2_Compat_ContainerSingleton::setContainer($container);
 
@@ -58,51 +59,7 @@ Example:
     $binding->send($request);
 ```
 
-
-Dependencies
-------------
-
-### logger
-Type: Object
-
-[PSR-3](https://github.com/php-fig/fig-standards/blob/master/accepted/PSR-3-logger-interface.md) compatible Logger.
-
-### id_generator_fn
-Type: callable
-Arguments: None
-
-Must conform to SAML2 spec, generated values:
-
--  Must be between 128 and 160 bit in length
--  Must not collide with other identifiers generated (must be 'globally unique')
--  Must start with a letter or underscore
--  Can only contain letters, digits, underscores, hyphens, and periods.
-
-### debug_message_fn
-Type: callable
-Arguments: \(DOMElement|string xmlMessage, string type\)
-
-Hook to log an incoming message.
-Type can be either:
-
-- **in** XML received from third party
-- **out** XML that will be sent to third party
-- **encrypt** XML that is about to be encrypted
-- **decrypt** XML that was just decrypted
-
-### redirect_fn
-Type: callable
-Arguments: (string $url, array $data)
-
-Make the user send a GET request to the given URL, with the given data appended.
-
-### redirect_post_fn
-Type: callable
-Arguments: \(string $url, array $data\)
-
-Make the user send a POST request to the given URL, with the given data.
-
-
 License
 -------
-This library is licensed under the LGPL license version 2.1. For more details see [LICENSE](https://raw.github.com/simplesamlphp/saml2/master/LICENSE).
+This library is licensed under the LGPL license version 2.1.
+For more details see [LICENSE](https://raw.github.com/simplesamlphp/saml2/master/LICENSE).

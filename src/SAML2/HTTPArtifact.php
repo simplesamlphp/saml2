@@ -60,7 +60,7 @@ class SAML2_HTTPArtifact extends SAML2_Binding
     public function send(SAML2_Message $message)
     {
         $destination = $this->getRedirectURL($message);
-        SAML2_Utils::redirect($destination);
+        SAML2_Utils::getContainer()->redirect($destination);
     }
 
     /**
@@ -102,7 +102,7 @@ class SAML2_HTTPArtifact extends SAML2_Binding
             throw new Exception('No ArtifactResolutionService with the correct index.');
         }
 
-        SAML2_Utils::getLogger()->debug("ArtifactResolutionService endpoint being used is := " . $endpoint['Location']);
+        SAML2_Utils::getContainer()->getLogger()->debug("ArtifactResolutionService endpoint being used is := " . $endpoint['Location']);
 
         //Construct the ArtifactResolve Request
         $ar = new SAML2_ArtifactResolve();

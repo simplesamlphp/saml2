@@ -31,7 +31,7 @@ class SAML2_HTTPRedirect extends SAML2_Binding
         $msgStr = $message->toUnsignedXML();
         $msgStr = $msgStr->ownerDocument->saveXML($msgStr);
 
-        SAML2_Utils::debugMessage($msgStr, 'out');
+        SAML2_Utils::getContainer()->debugMessage($msgStr, 'out');
 
         $msgStr = gzdeflate($msgStr);
         $msgStr = base64_encode($msgStr);
@@ -76,8 +76,8 @@ class SAML2_HTTPRedirect extends SAML2_Binding
     public function send(SAML2_Message $message)
     {
         $destination = $this->getRedirectURL($message);
-        SAML2_Utils::getLogger()->debug('Redirect to ' . strlen($destination) . ' byte URL: ' . $destination);
-        SAML2_Utils::redirect($destination);
+        SAML2_Utils::getContainer()->getLogger()->debug('Redirect to ' . strlen($destination) . ' byte URL: ' . $destination);
+        SAML2_Utils::getContainer()->redirect($destination);
     }
 
     /**
@@ -115,7 +115,7 @@ class SAML2_HTTPRedirect extends SAML2_Binding
             throw new Exception('Unknown SAMLEncoding: ' . var_export($encoding, TRUE));
         }
 
-        SAML2_Utils::debugMessage($msg, 'in');
+        SAML2_Utils::getContainer()->debugMessage($msg, 'in');
 
         $document = new DOMDocument();
         $document->loadXML($msg);

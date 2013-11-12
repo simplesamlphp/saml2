@@ -188,7 +188,7 @@ class SAML2_Assertion implements SAML2_SignedElement
      */
     public function __construct(DOMElement $xml = NULL)
     {
-        $this->id = SAML2_Utils::generateID();
+        $this->id = SAML2_Utils::getContainer()->generateId();
         $this->issueInstant = time();
         $this->issuer = '';
         $this->authnInstant = time();
@@ -613,7 +613,7 @@ class SAML2_Assertion implements SAML2_SignedElement
         SAML2_Utils::addNameId($root, $this->nameId);
         $nameId = $root->firstChild;
 
-        SAML2_Utils::debugMessage($nameId, 'encrypt');
+        SAML2_Utils::getContainer()->debugMessage($nameId, 'encrypt');
 
         /* Encrypt the NameID. */
         $enc = new XMLSecEnc();
@@ -643,7 +643,7 @@ class SAML2_Assertion implements SAML2_SignedElement
         }
 
         $nameId = SAML2_Utils::decryptElement($this->encryptedNameId, $key, $blacklist);
-        SAML2_Utils::debugMessage($nameId, 'decrypt');
+        SAML2_Utils::getContainer()->debugMessage($nameId, 'decrypt');
         $this->nameId = SAML2_Utils::parseNameId($nameId);
 
         $this->encryptedNameId = NULL;
