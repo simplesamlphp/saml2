@@ -8,8 +8,12 @@ class SAML2_ResponseTest extends PHPUnit_Framework_TestCase
     public function testMarshalling()
     {
         $response = new SAML2_Response();
+        $response->setConsent(SAML2_Const::CONSENT_EXPLICIT);
         $response->setIssuer('SomeIssuer');
         $responseElement = $response->toUnsignedXML();
+
+        $this->assertTrue($responseElement->hasAttribute('Consent'));
+        $this->assertEquals($responseElement->getAttribute('Consent'), SAML2_Const::CONSENT_EXPLICIT);
 
         $issuerElements = SAML2_Utils::xpQuery($responseElement, './saml_assertion:Issuer');
         $this->assertCount(1, $issuerElements);
