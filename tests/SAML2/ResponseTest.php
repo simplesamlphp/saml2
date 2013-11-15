@@ -1,13 +1,26 @@
 <?php
 
+/**
+ * Class SAML2_ResponseTest
+ */
 class SAML2_ResponseTest extends PHPUnit_Framework_TestCase
 {
-    public function setUp()
+    public function testMarshalling()
     {
-        SAML2_Compat_ContainerSingleton::setContainer(new SAML2_Compat_MockContainer());
+        $response = new SAML2_Response();
+        $response->setConsent(SAML2_Const::CONSENT_EXPLICIT);
+        $response->setIssuer('SomeIssuer');
+        $responseElement = $response->toUnsignedXML();
+
+        $this->assertTrue($responseElement->hasAttribute('Consent'));
+        $this->assertEquals($responseElement->getAttribute('Consent'), SAML2_Const::CONSENT_EXPLICIT);
+
+        $issuerElements = SAML2_Utils::xpQuery($responseElement, './saml_assertion:Issuer');
+        $this->assertCount(1, $issuerElements);
+        $this->assertEquals('SomeIssuer', $issuerElements[0]->textContent);
     }
 
-    public function testMarshalling()
+    public function testLoop()
     {
         $fixtureResponseDom = new DOMDocument();
         $fixtureResponseDom->loadXML(<<<XML
@@ -96,28 +109,5 @@ XML
             $requestXml,
             'Response after Unmarshalling and re-marshalling remains the same'
         );
-    }
-
-    /**
-     * Asserts that two XML documents are equal.
-     *
-     * @param  string $expectedXml
-     * @param  string $actualXml
-     * @param  string $message
-     * @since  Method available since Release 3.1.0
-     */
-    public static function assertXmlStringEqualsXmlString($expectedXml, $actualXml, $message = '')
-    {
-        $expected = new DOMDocument;
-        $expected->preserveWhiteSpace = FALSE;
-        $expected->loadXML($expectedXml);
-
-        $actual = new DOMDocument;
-        $actual->preserveWhiteSpace = FALSE;
-        $actual->loadXML($actualXml);
-
-        $actual->formatOutput = true;
-
-        self::assertEquals($expected, $actual, $message);
     }
 }
