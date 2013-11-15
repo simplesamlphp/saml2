@@ -1,5 +1,8 @@
 <?php
 
+/**
+ * Class SAML2_XML_md_AttributeTest
+ */
 class SAML2_XML_md_AttributeTest extends \PHPUnit_Framework_TestCase
 {
     public function testMarshalling()
