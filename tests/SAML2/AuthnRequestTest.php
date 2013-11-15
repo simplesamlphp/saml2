@@ -7,8 +7,8 @@ class SAML2_AuthnRequestTest extends PHPUnit_Framework_TestCase
 {
     public function testUnmarshalling()
     {
-        $a = new SAML2_AuthnRequest();
-        $a->setRequestedAuthnContext(array(
+        $authnRequest = new SAML2_AuthnRequest();
+        $authnRequest->setRequestedAuthnContext(array(
             'AuthnContextClassRef' => array(
                 'accr1',
                 'accr2',
@@ -16,17 +16,23 @@ class SAML2_AuthnRequestTest extends PHPUnit_Framework_TestCase
             'Comparison' => 'better',
         ));
 
-        $xml = $a->toUnsignedXML();
+        $authnRequestElement = $authnRequest->toUnsignedXML();
 
-        $requestedAuthnContexts = SAML2_Utils::xpQuery($xml, './saml_protocol:RequestedAuthnContext');
-        $this->assertCount(1, $requestedAuthnContexts);
+        $requestedAuthnContextElements = SAML2_Utils::xpQuery(
+            $authnRequestElement,
+            './saml_protocol:RequestedAuthnContext'
+        );
+        $this->assertCount(1, $requestedAuthnContextElements);
 
-        $requestedAuthnConext = $requestedAuthnContexts[0];
-        $this->assertEquals('better', $requestedAuthnConext->getAttribute("Comparison"));
+        $requestedAuthnConextElement = $requestedAuthnContextElements[0];
+        $this->assertEquals('better', $requestedAuthnConextElement->getAttribute("Comparison"));
 
-        $authnContextClassRefs = SAML2_Utils::xpQuery($requestedAuthnConext, './saml_assertion:AuthnContextClassRef');
-        $this->assertCount(2, $authnContextClassRefs);
-        $this->assertEquals('accr1', $authnContextClassRefs[0]->textContent);
-        $this->assertEquals('accr2', $authnContextClassRefs[1]->textContent);
+        $authnContextClassRefElements = SAML2_Utils::xpQuery(
+            $requestedAuthnConextElement,
+            './saml_assertion:AuthnContextClassRef'
+        );
+        $this->assertCount(2, $authnContextClassRefElements);
+        $this->assertEquals('accr1', $authnContextClassRefElements[0]->textContent);
+        $this->assertEquals('accr2', $authnContextClassRefElements[1]->textContent);
     }
 }
