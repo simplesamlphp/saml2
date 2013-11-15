@@ -56,7 +56,7 @@ class SAML2_SignedElementHelper implements SAML2_SignedElement
                 $this->validators[] = array(
                     'Function' => array('SAML2_Utils', 'validateSignature'),
                     'Data' => $sig,
-                    );
+                );
             }
 
         } catch (Exception $e) {
@@ -79,7 +79,7 @@ class SAML2_SignedElementHelper implements SAML2_SignedElement
         $this->validators[] = array(
             'Function' => $function,
             'Data' => $data,
-            );
+        );
     }
 
     /**
