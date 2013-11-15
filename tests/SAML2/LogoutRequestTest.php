@@ -77,7 +77,6 @@ XML
 
     public function testUnmarshalling()
     {
-        return $this->markTestSkipped('FIXME');
         $logoutRequest = new SAML2_LogoutRequest($this->logoutRequestElement);
         $this->assertEquals('TheIssuer', $logoutRequest->getIssuer());
         $this->assertTrue($logoutRequest->isNameIdEncrypted());
@@ -95,7 +94,6 @@ XML
 
     public function testEncryptedNameId()
     {
-        return $this->markTestSkipped('FIXME');
         $logoutRequest = new SAML2_LogoutRequest();
         $logoutRequest->setNameID(array('Value' => 'NameIDValue'));
         $logoutRequest->encryptNameId(SAML2_CertificatesMock::getPublicKey());
@@ -109,12 +107,11 @@ XML
 
     public function testDecryptingNameId()
     {
-        return $this->markTestSkipped('FIXME');
         $logoutRequest = new SAML2_LogoutRequest($this->logoutRequestElement);
         $this->assertTrue($logoutRequest->isNameIdEncrypted());
 
         $logoutRequest->decryptNameId(SAML2_CertificatesMock::getPrivateKey());
         $nameId = $logoutRequest->getNameId();
-        $this->assertEquals('NameIDValue', $nameId['Value']);
+        $this->assertEquals('TheNameIDValue', $nameId['Value']);
     }
 }
