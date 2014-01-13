@@ -1,7 +1,7 @@
 SimpleSAMLphp SAML2 library [![Build Status](https://travis-ci.org/simplesamlphp/saml2.png?branch=feature/fix-build)](https://travis-ci.org/simplesamlphp/saml2)
 ===========================
 
-A PHP library for SAML2 related functionality. Extracted from [SimpleSAMLphp](http://www.simplesaml.org),
+A PHP library for SAML2 related functionality. Extracted from [SimpleSAMLphp](http://www.simplesamlphp.org),
 used by [OpenConext](http://www.openconext.org).
 This library is a collaboration between [UNINETT](http://uninett.no) and [SURFnet](http://surfnet.nl).
 
@@ -11,7 +11,7 @@ Before you use it
 **DO NOT USE THIS LIBRARY UNLESS YOU ARE INTIMATELY FAMILIAR WITH THE SAML2 SPECIFICATION.**
 
 If you are not familiar with the SAML2 specification and are simply looking to connect your application using SAML2,
-you should probably use [SimpleSAMLphp](http://www.simplesaml.org).
+you should probably use [SimpleSAMLphp](http://www.simplesamlphp.org).
 
 While this library is tagged as stable it is currently not very developer friendly and it's API is likely to change
 significantly in the future. It is however a starting point for collaboration between parties.
