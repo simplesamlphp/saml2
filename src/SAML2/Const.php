@@ -72,9 +72,8 @@ class SAML2_Const
     /**
      * Indicates that a principal’s consent has been implicitly obtained by the issuer of the message during the
      * action that initiated the message, as part of a broader indication of consent.
-     * Implicit consent is typically
-     * more proximal to the action in time and presentation than prior consent, such as part of a session of
-     * activities.
+     * Implicit consent is typically more proximal to the action in time and presentation than prior consent,
+     * such as part of a session of activities.
      */
     const CONSENT_IMPLICIT = 'urn:oasis:names:tc:SAML:2.0:consent:current-implicit';
 
@@ -95,9 +94,23 @@ class SAML2_Const
     const CONSENT_INAPPLICABLE = 'urn:oasis:names:tc:SAML:2.0:consent:inapplicable';
 
     /**
-     * The URN for the unspecified attribute NameFormat.
+     * The interpretation of the attribute name is left to individual implementations.
      */
     const NAMEFORMAT_UNSPECIFIED = 'urn:oasis:names:tc:SAML:2.0:attrname-format:unspecified';
+
+    /**
+     * The attribute name follows the convention for URI references [RFC 2396], for example as used in XACML
+     * [XACML] attribute identifiers. The interpretation of the URI content or naming scheme is application-
+     * specific. See [SAMLProf] for attribute profiles that make use of this identifier.
+     */
+    const NAMEFORMAT_URI = 'urn:oasis:names:tc:SAML:2.0:attrname-format:uri';
+
+    /**
+     * The class of strings acceptable as the attribute name MUST be drawn from the set of values belonging to
+     * the primitive type xs:Name as defined in [Schema2] Section 3.3.6. See [SAMLProf] for attribute profiles
+     * that make use of this identifier.
+     */
+    const NAMEFORMAT_BASIC = 'urn:oasis:names:tc:SAML:2.0:attrname-format:basic';
 
     /**
      * Unspecified NameID format.
