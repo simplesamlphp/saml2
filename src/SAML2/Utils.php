@@ -687,7 +687,7 @@ class SAML2_Utils
         $regex = '/^(\\d\\d\\d\\d)-(\\d\\d)-(\\d\\d)T(\\d\\d):(\\d\\d):(\\d\\d)(?:\\.\\d+)?Z$/D';
         if (preg_match($regex, $time, $matches) == 0) {
             throw new Exception(
-                'Invalid SAML2 timestamp passed to parseSAML2Time: ' . $time
+                'Invalid SAML2 timestamp passed to xsDateTimeToTimestamp: ' . $time
             );
         }
 
