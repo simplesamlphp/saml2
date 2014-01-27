@@ -44,7 +44,7 @@ class SAML2_Compat_Ssp_Container extends SAML2_Compat_AbstractContainer
      */
     public function redirect($url, $data = array())
     {
-        SimpleSAML_Utilities::redirect($url, $data);
+        SimpleSAML_Utilities::redirectTrustedURL($url, $data);
     }
 
     /**
