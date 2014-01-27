@@ -68,6 +68,10 @@ class SAML2_XML_mdrpi_RegistrationInfo
         assert('is_int($this->registrationInstant) || is_null($this->registrationInstant)');
         assert('is_array($this->RegistrationPolicy)');
 
+        if (empty($this->registrationAuthority)) {
+            throw new Exception('Missing required registration authority.');
+        }
+
         $doc = $parent->ownerDocument;
 
         $e = $doc->createElementNS(SAML2_XML_mdrpi_Common::NS_MDRPI, 'mdrpi:RegistrationInfo');
