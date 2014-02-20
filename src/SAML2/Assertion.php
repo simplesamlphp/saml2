@@ -112,11 +112,30 @@ class SAML2_Assertion implements SAML2_SignedElement
     private $authnInstant;
 
     /**
-     * The authentication context for this assertion.
+     * The authentication context reference for this assertion.
      *
      * @var string|NULL
      */
-    private $authnContext;
+    private $authnContextClassRef;
+
+    /**
+     * Authentication context declaration provided by value.
+     *
+     * See:
+     * @url http://docs.oasis-open.org/security/saml/v2.0/saml-authn-context-2.0-os.pdf
+     *
+     * @var \SAML2_XML_Chunk
+     */
+    private $authnContextDecl;
+
+    /**
+     * URI reference that identifies an authentication context declaration.
+     *
+     * The URI reference MAY directly resolve into an XML document containing the referenced declaration.
+     *
+     * @var \SAML2_XML_Chunk
+     */
+    private $authnContextDeclRef;
 
     /**
      * The list of AuthenticatingAuthorities for this assertion.
@@ -347,56 +366,86 @@ class SAML2_Assertion implements SAML2_SignedElement
      */
     private function parseAuthnStatement(DOMElement $xml)
     {
-        $as = SAML2_Utils::xpQuery($xml, './saml_assertion:AuthnStatement');
-        if (empty($as)) {
+        $authnStatements = SAML2_Utils::xpQuery($xml, './saml_assertion:AuthnStatement');
+        if (empty($authnStatements)) {
             $this->authnInstant = NULL;
 
             return;
-        } elseif (count($as) > 1) {
+        } elseif (count($authnStatements) > 1) {
             throw new Exception('More that one <saml:AuthnStatement> in <saml:Assertion> not supported.');
         }
-        $as = $as[0];
+        $authnStatement = $authnStatements[0];
 
-        if (!$as->hasAttribute('AuthnInstant')) {
+        if (!$authnStatement->hasAttribute('AuthnInstant')) {
             throw new Exception('Missing required AuthnInstant attribute on <saml:AuthnStatement>.');
         }
-        $this->authnInstant = SAML2_Utils::xsDateTimeToTimestamp($as->getAttribute('AuthnInstant'));
+        $this->authnInstant = SAML2_Utils::xsDateTimeToTimestamp($authnStatement->getAttribute('AuthnInstant'));
 
-        if ($as->hasAttribute('SessionNotOnOrAfter')) {
-            $this->sessionNotOnOrAfter = SAML2_Utils::xsDateTimeToTimestamp($as->getAttribute('SessionNotOnOrAfter'));
+        if ($authnStatement->hasAttribute('SessionNotOnOrAfter')) {
+            $this->sessionNotOnOrAfter = SAML2_Utils::xsDateTimeToTimestamp($authnStatement->getAttribute('SessionNotOnOrAfter'));
         }
 
-        if ($as->hasAttribute('SessionIndex')) {
-            $this->sessionIndex = $as->getAttribute('SessionIndex');
+        if ($authnStatement->hasAttribute('SessionIndex')) {
+            $this->sessionIndex = $authnStatement->getAttribute('SessionIndex');
         }
 
-        $ac = SAML2_Utils::xpQuery($as, './saml_assertion:AuthnContext');
-        if (empty($ac)) {
-            throw new Exception('Missing required <saml:AuthnContext> in <saml:AuthnStatement>.');
-        } elseif (count($ac) > 1) {
+        $this->parseAuthnContext($authnStatement);
+    }
+
+    /**
+     * Parse AuthnContext in AuthnStatement.
+     *
+     * @param DOMElement $authnStatementEl
+     * @throws Exception
+     */
+    private function parseAuthnContext(DOMElement $authnStatementEl)
+    {
+        // Get the AuthnContext element
+        $authnContexts = SAML2_Utils::xpQuery($authnStatementEl, './saml_assertion:AuthnContext');
+        if (count($authnContexts) > 1) {
             throw new Exception('More than one <saml:AuthnContext> in <saml:AuthnStatement>.');
+        } elseif (empty($authnContexts)) {
+            throw new Exception('Missing required <saml:AuthnContext> in <saml:AuthnStatement>.');
         }
-        $ac = $ac[0];
+        $authnContextEl = $authnContexts[0];
 
-        $accr = SAML2_Utils::xpQuery($ac, './saml_assertion:AuthnContextClassRef');
-        if (empty($accr)) {
-            $acdr = SAML2_Utils::xpQuery($ac, './saml_assertion:AuthnContextDeclRef');
-            if (empty($acdr)) {
-                throw new Exception(
-                    'Neither <saml:AuthnContextClassRef> nor <saml:AuthnContextDeclRef> found in <saml:AuthnContext>.'
-                );
-            } elseif (count($accr) > 1) {
-                throw new Exception('More than one <saml:AuthnContextDeclRef> in <saml:AuthnContext>.');
-            }
-            $this->authnContext = trim($acdr[0]->textContent);
-        } elseif (count($accr) > 1) {
+        // Get the AuthnContextDeclRef (if available)
+        $authnContextDeclRefs = SAML2_Utils::xpQuery($authnContextEl, './saml_assertion:AuthnContextDeclRef');
+        if (count($authnContextDeclRefs) > 1) {
+            throw new Exception(
+                'More than one <saml:AuthnContextDeclRef> found?'
+            );
+        } elseif (count($authnContextDeclRefs) === 1) {
+            $this->setAuthnContextDeclRef(trim($authnContextDeclRefs[0]->textContent));
+        }
+
+        // Get the AuthnContextDecl (if available)
+        $authnContextDecls = SAML2_Utils::xpQuery($authnContextEl, './saml_assertion:AuthnContextDecl');
+        if (count($authnContextDecls) > 1) {
+            throw new Exception(
+                'More than one <saml:AuthnContextDecl> found?'
+            );
+        } elseif (count($authnContextDecls) === 1) {
+            $this->setAuthnContextDecl(new SAML2_XML_Chunk($authnContextDecls[0]));
+        }
+
+        // Get the AuthnContextClassRef (if available)
+        $authnContextClassRefs = SAML2_Utils::xpQuery($authnContextEl, './saml_assertion:AuthnContextClassRef');
+        if (count($authnContextClassRefs) > 1) {
             throw new Exception('More than one <saml:AuthnContextClassRef> in <saml:AuthnContext>.');
-        } else {
-            $this->authnContext = trim($accr[0]->textContent);
+        } elseif (count($authnContextClassRefs) === 1) {
+            $this->setAuthnContextClassRef(trim($authnContextClassRefs[0]->textContent));
+        }
+
+        // Constraint from XSD: MUST have one of the three
+        if (empty($this->authnContextClassRef) && empty($this->authnContextDecl) && empty($this->authnContextDeclRef)) {
+            throw new Exception(
+                'Missing either <saml:AuthnContextClassRef> or <saml:AuthnContextDeclRef> or <saml:AuthnContextDecl>'
+            );
         }
 
         $this->AuthenticatingAuthority = SAML2_Utils::extractStrings(
-            $ac,
+            $authnContextEl,
             SAML2_Const::NS_SAML,
             'AuthenticatingAuthority'
         );
@@ -882,11 +931,23 @@ class SAML2_Assertion implements SAML2_SignedElement
      * This will return NULL if no authentication statement was
      * included in the assertion.
      *
+     * Note that this returns either the AuthnContextClassRef or the AuthnConextDeclRef, whose definition overlaps
+     * but is slightly different (consult the specification for more information).
+     * This was done to work around an old bug of Shibboleth ( https://bugs.internet2.edu/jira/browse/SIDP-187 ).
+     * Should no longer be required, please use either getAuthnConextClassRef or getAuthnContextDeclRef.
+     *
+     * @deprecated use getAuthnContextClassRef
      * @return string|NULL The authentication method.
      */
     public function getAuthnContext()
     {
-        return $this->authnContext;
+        if (!empty($this->authnContextClassRef)) {
+            return $this->authnContextClassRef;
+        }
+        if (!empty($this->authnContextDeclRef)) {
+            return $this->authnContextDeclRef;
+        }
+        return NULL;
     }
 
     /**
@@ -895,13 +956,100 @@ class SAML2_Assertion implements SAML2_SignedElement
      * If this is set to NULL, no authentication statement will be
      * included in the assertion. The default is NULL.
      *
+     * @deprecated use setAuthnContextClassRef
      * @param string|NULL $authnContext The authentication method.
      */
     public function setAuthnContext($authnContext)
     {
-        assert('is_string($authnContext) || is_null($authnContext)');
+        $this->setAuthnContextClassRef($authnContext);
+    }
 
-        $this->authnContext = $authnContext;
+    /**
+     * Retrieve the authentication method used to authenticate the user.
+     *
+     * This will return NULL if no authentication statement was
+     * included in the assertion.
+     *
+     * @return string|NULL The authentication method.
+     */
+    public function getAuthnContextClassRef()
+    {
+        return $this->authnContextClassRef;
+    }
+
+    /**
+     * Set the authentication method used to authenticate the user.
+     *
+     * If this is set to NULL, no authentication statement will be
+     * included in the assertion. The default is NULL.
+     *
+     * @param string|NULL $authnContextClassRef The authentication method.
+     */
+    public function setAuthnContextClassRef($authnContextClassRef)
+    {
+        assert('is_string($authnContextClassRef) || is_null($authnContextClassRef)');
+
+        $this->authnContextClassRef = $authnContextClassRef;
+    }
+
+    /**
+     * Set the authentication context declaration.
+     *
+     * @param \SAML2_XML_Chunk $authnContextDecl
+     * @throws Exception
+     */
+    public function setAuthnContextDecl(SAML2_XML_Chunk $authnContextDecl)
+    {
+        if (!empty($this->authnContextDeclRef)) {
+            throw new Exception(
+                'AuthnContextDeclRef is already registered! May only have either a Decl or a DeclRef, not both!'
+            );
+        }
+
+        $this->authnContextDecl = $authnContextDecl;
+    }
+
+    /**
+     * Get the authentication context declaration.
+     *
+     * See:
+     * @url http://docs.oasis-open.org/security/saml/v2.0/saml-authn-context-2.0-os.pdf
+     *
+     * @return \SAML2_XML_Chunk|NULL
+     */
+    public function getAuthnContextDecl()
+    {
+        return $this->authnContextDecl;
+    }
+
+    /**
+     * Set the authentication context declaration reference.
+     *
+     * @param string $authnContextDeclRef
+     * @throws Exception
+     */
+    public function setAuthnContextDeclRef($authnContextDeclRef)
+    {
+        if (!empty($this->authnContextDecl)) {
+            throw new Exception(
+                'AuthnContextDecl is already registered! May only have either a Decl or a DeclRef, not both!'
+            );
+        }
+
+        $this->authnContextDeclRef = $authnContextDeclRef;
+    }
+
+    /**
+     * Get the authentication context declaration reference.
+     * URI reference that identifies an authentication context declaration.
+     *
+     * The URI reference MAY directly resolve into an XML document containing the referenced declaration.
+     *
+     * @return string
+     */
+    public function getAuthnContextDeclRef()
+    {
+        return $this->authnContextDeclRef;
     }
 
     /**
@@ -1169,7 +1317,13 @@ class SAML2_Assertion implements SAML2_SignedElement
      */
     private function addAuthnStatement(DOMElement $root)
     {
-        if ($this->authnContext === NULL || $this->authnInstant === NULL) {
+        if ($this->authnInstant === NULL ||
+            (
+                $this->authnContextClassRef === NULL &&
+                $this->authnContextDecl === NULL &&
+                $this->authnContextDeclRef === NULL
+            )
+        ) {
             /* No authentication context or AuthnInstant => no authentication statement. */
 
             return;
@@ -1177,24 +1331,43 @@ class SAML2_Assertion implements SAML2_SignedElement
 
         $document = $root->ownerDocument;
 
-        $as = $document->createElementNS(SAML2_Const::NS_SAML, 'saml:AuthnStatement');
-        $root->appendChild($as);
+        $authnStatementEl = $document->createElementNS(SAML2_Const::NS_SAML, 'saml:AuthnStatement');
+        $root->appendChild($authnStatementEl);
 
-        $as->setAttribute('AuthnInstant', gmdate('Y-m-d\TH:i:s\Z', $this->authnInstant));
+        $authnStatementEl->setAttribute('AuthnInstant', gmdate('Y-m-d\TH:i:s\Z', $this->authnInstant));
 
         if ($this->sessionNotOnOrAfter !== NULL) {
-            $as->setAttribute('SessionNotOnOrAfter', gmdate('Y-m-d\TH:i:s\Z', $this->sessionNotOnOrAfter));
+            $authnStatementEl->setAttribute('SessionNotOnOrAfter', gmdate('Y-m-d\TH:i:s\Z', $this->sessionNotOnOrAfter));
         }
         if ($this->sessionIndex !== NULL) {
-            $as->setAttribute('SessionIndex', $this->sessionIndex);
+            $authnStatementEl->setAttribute('SessionIndex', $this->sessionIndex);
         }
 
-        $ac = $document->createElementNS(SAML2_Const::NS_SAML, 'saml:AuthnContext');
-        $as->appendChild($ac);
+        $authnContextEl = $document->createElementNS(SAML2_Const::NS_SAML, 'saml:AuthnContext');
+        $authnStatementEl->appendChild($authnContextEl);
 
-        SAML2_Utils::addString($ac, SAML2_Const::NS_SAML, 'saml:AuthnContextClassRef', $this->authnContext);
+        if (!empty($this->authnContextClassRef)) {
+            SAML2_Utils::addString(
+                $authnContextEl,
+                SAML2_Const::NS_SAML,
+                'saml:AuthnContextClassRef',
+                $this->authnContextClassRef
+            );
+        }
+        if (!empty($this->authnContextDecl)) {
+            $this->authnContextDecl->toXML($authnContextEl);
+        }
+        if (!empty($this->authnContextDeclRef)) {
+            SAML2_Utils::addString(
+                $authnContextEl,
+                SAML2_Const::NS_SAML,
+                'saml:AuthnContextDeclRef',
+                $this->authnContextDeclRef
+            );
+        }
+
         SAML2_Utils::addStrings(
-            $ac,
+            $authnContextEl,
             SAML2_Const::NS_SAML,
             'saml:AuthenticatingAuthority',
             FALSE,
