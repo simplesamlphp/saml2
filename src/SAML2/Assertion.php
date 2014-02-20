@@ -1242,9 +1242,9 @@ class SAML2_Assertion implements SAML2_SignedElement
                 if ($type !== NULL) {
                     $attributeValue->setAttributeNS(SAML2_Const::NS_XSI, 'xsi:type', $type);
                 }
-				if (is_null($value)) {
-					$attributeValue->setAttributeNS(SAML2_Const::NS_XSI, 'xsi:nil', 'true');
-				}
+                if (is_null($value)) {
+                    $attributeValue->setAttributeNS(SAML2_Const::NS_XSI, 'xsi:nil', 'true');
+                }
 
                 if ($value instanceof DOMNodeList) {
                     for ($i = 0; $i < $value->length; $i++) {
