@@ -77,7 +77,7 @@ XML
 </EntityDescriptor>
 XML
         );
-        $this->setExpectedException('Exception', 'Invalid SAML2 timestamp passed to parseSAML2Time: asdf');
+        $this->setExpectedException('Exception', 'Invalid SAML2 timestamp passed to xsDateTimeToTimestamp: asdf');
         new SAML2_XML_md_EntityDescriptor($document->firstChild);
     }
 
