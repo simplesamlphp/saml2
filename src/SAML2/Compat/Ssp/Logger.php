@@ -26,7 +26,7 @@ class SAML2_Compat_Ssp_Logger implements Psr\Log\LoggerInterface
      */
     public function alert($message, array $context = array())
     {
-        SimpleSAML_Logger::alert($message . var_dump($context, TRUE));
+        SimpleSAML_Logger::alert($message . var_export($context, TRUE));
     }
 
     /**
@@ -40,7 +40,7 @@ class SAML2_Compat_Ssp_Logger implements Psr\Log\LoggerInterface
      */
     public function critical($message, array $context = array())
     {
-        SimpleSAML_Logger::critical($message . var_dump($context, TRUE));
+        SimpleSAML_Logger::critical($message . var_export($context, TRUE));
     }
 
     /**
@@ -53,7 +53,7 @@ class SAML2_Compat_Ssp_Logger implements Psr\Log\LoggerInterface
      */
     public function error($message, array $context = array())
     {
-        SimpleSAML_Logger::error($message . var_dump($context, TRUE));
+        SimpleSAML_Logger::error($message . var_export($context, TRUE));
     }
 
     /**
@@ -68,7 +68,7 @@ class SAML2_Compat_Ssp_Logger implements Psr\Log\LoggerInterface
      */
     public function warning($message, array $context = array())
     {
-        SimpleSAML_Logger::warning($message . var_dump($context, TRUE));
+        SimpleSAML_Logger::warning($message . var_export($context, TRUE));
     }
 
     /**
@@ -80,7 +80,7 @@ class SAML2_Compat_Ssp_Logger implements Psr\Log\LoggerInterface
      */
     public function notice($message, array $context = array())
     {
-        SimpleSAML_Logger::notice($message . var_dump($context, TRUE));
+        SimpleSAML_Logger::notice($message . var_export($context, TRUE));
     }
 
     /**
@@ -94,7 +94,7 @@ class SAML2_Compat_Ssp_Logger implements Psr\Log\LoggerInterface
      */
     public function info($message, array $context = array())
     {
-        SimpleSAML_Logger::info($message . var_dump($context, TRUE));
+        SimpleSAML_Logger::info($message . var_export($context, TRUE));
     }
 
     /**
@@ -106,7 +106,7 @@ class SAML2_Compat_Ssp_Logger implements Psr\Log\LoggerInterface
      */
     public function debug($message, array $context = array())
     {
-        SimpleSAML_Logger::debug($message . var_dump($context, TRUE));
+        SimpleSAML_Logger::debug($message . var_export($context, TRUE));
     }
 
     /**
@@ -119,6 +119,6 @@ class SAML2_Compat_Ssp_Logger implements Psr\Log\LoggerInterface
      */
     public function log($level, $message, array $context = array())
     {
-        SimpleSAML_Logger::log_internal($level, $message . var_dump($context, TRUE));
+        SimpleSAML_Logger::log_internal($level, $message . var_export($context, TRUE));
     }
 }
