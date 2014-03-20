@@ -487,6 +487,11 @@ class SAML2_AuthnRequest extends SAML2_Request
             $root->setAttribute('AttributeConsumingServiceIndex', $this->attributeConsumingServiceIndex);
         }
 
+        // Extensions element must come before the NameIDPolicy element in order to conform to the AuthnRequest XML schema
+        if (!empty($this->extensions)) {
+            SAML2_XML_samlp_Extensions::addList($root, $this->extensions);
+        }
+
         if (!empty($this->nameIdPolicy)) {
             $nameIdPolicy = $this->document->createElementNS(SAML2_Const::NS_SAMLP, 'NameIDPolicy');
             if (array_key_exists('Format', $this->nameIdPolicy)) {
@@ -511,10 +516,6 @@ class SAML2_AuthnRequest extends SAML2_Request
             foreach ($rac['AuthnContextClassRef'] as $accr) {
                 SAML2_Utils::addString($e, SAML2_Const::NS_SAML, 'AuthnContextClassRef', $accr);
             }
-        }
-
-        if (!empty($this->extensions)) {
-            SAML2_XML_samlp_Extensions::addList($root, $this->extensions);
         }
 
         if ($this->ProxyCount !== NULL || count($this->IDPList) > 0 || count($this->RequesterID) > 0) {
