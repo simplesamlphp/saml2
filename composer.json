@@ -10,11 +10,12 @@
     ],
     "require": {
         "php": ">=5.3.3",
-        "robrichards/xmlseclibs": "1.3.*",
-        "psr/log": "1.0.0",
         "ext-openssl": "*",
         "ext-dom": "*",
-        "ext-mcrypt": "*"
+        "ext-mcrypt": "*",
+        
+        "simplesamlphp/xmlseclibs": "~1.3.1",
+        "psr/log": "1.0.0"
     },
     "require-dev": {
         "squizlabs/php_codesniffer": "~1.4",
@@ -27,22 +28,5 @@
         "psr-0": {
             "SAML2_": "src/"
         }
-    },
-    "repositories": [
-        {
-            "type": "package",
-            "package": {
-                "name": "robrichards/xmlseclibs",
-                "version": "1.3.1",
-                "source": {
-                    "type": "svn",
-                    "url": "http://xmlseclibs.googlecode.com/svn",
-                    "reference": "trunk@50"
-                },
-                "autoload": {
-                    "files": ["xmlseclibs.php"]
-                }
-            }
-        }
-    ]
+    }
 }
