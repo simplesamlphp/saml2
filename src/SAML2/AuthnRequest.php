@@ -22,6 +22,15 @@ class SAML2_AuthnRequest extends SAML2_Request
      */
     private $forceAuthn;
 
+
+    /**
+     * Optional ProviderID attribute
+     *
+     * @var string
+     */
+    private $ProviderName;
+
+
     /**
      * Set to TRUE if this request is passive.
      *
@@ -33,21 +42,21 @@ class SAML2_AuthnRequest extends SAML2_Request
      * The list of providerIDs in this request's scoping element
      *
      * @var array
-    */
+     */
     private $IDPList = array();
 
     /**
      * The ProxyCount in this request's scoping element
      *
      * @var int
-    */
+     */
     private $ProxyCount = NULL;
 
     /**
      * The RequesterID list in this request's scoping element
      *
      * @var array
-    */
+     */
 
     private $RequesterID = array();
 
@@ -249,6 +258,30 @@ class SAML2_AuthnRequest extends SAML2_Request
         assert('is_bool($forceAuthn)');
 
         $this->forceAuthn = $forceAuthn;
+    }
+
+
+    /**
+     * Retrieve the value of the ProviderName attribute.
+     *
+     * @return string The ProviderName attribute.
+     */
+    public function getProviderName()
+    {
+        return $this->ProviderName;
+    }
+
+
+    /**
+     * Set the value of the ProviderName attribute.
+     *
+     * @param string $ProviderName The ProviderName attribute.
+     */
+    public function setProviderName($ProviderName)
+    {
+        assert('is_string($ProviderName)');
+
+        $this->ProviderName = $ProviderName;
     }
 
 
@@ -466,6 +499,11 @@ class SAML2_AuthnRequest extends SAML2_Request
 
         if ($this->forceAuthn) {
             $root->setAttribute('ForceAuthn', 'true');
+        }
+
+
+        if ($this->ProviderName !== NULL) {
+            $root->setAttribute('ProviderName', $this->ProviderName);
         }
 
         if ($this->isPassive) {
