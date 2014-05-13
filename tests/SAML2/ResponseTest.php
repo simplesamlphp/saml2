@@ -32,6 +32,11 @@ class SAML2_ResponseTest extends PHPUnit_Framework_TestCase
                 IssueInstant="2007-12-10T11:39:48Z"
                 Destination="http://moodle.bridge.feide.no/simplesaml/saml2/sp/AssertionConsumerService.php">
     <saml:Issuer>max.feide.no</saml:Issuer>
+    <samlp:Extensions>
+        <myns:AttributeList xmlns:myns="urn:mynamespace">
+          <myns:Attribute name="UserName" value=""/>
+      </myns:AttributeList>
+    </samlp:Extensions>
     <samlp:Status>
         <samlp:StatusCode Value="urn:oasis:names:tc:SAML:2.0:status:Success"/>
     </samlp:Status>
