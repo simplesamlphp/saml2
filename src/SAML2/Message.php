@@ -8,9 +8,18 @@
  *
  * @package simpleSAMLphp
  * @version $Id$
+ *
+ * @SuppressWarnings(PHPMD.ExcessiveClassComplexity)
  */
 abstract class SAML2_Message implements SAML2_SignedElement
 {
+    /**
+     * Request extensions.
+     *
+     * @var array
+     */
+    protected $extensions;
+
     /**
      * The name of the root element of the DOM tree for the message.
      *
@@ -164,6 +173,7 @@ abstract class SAML2_Message implements SAML2_SignedElement
             /* Ignore signature validation errors. */
         }
 
+        $this->extensions = SAML2_XML_samlp_Extensions::getList($xml);
     }
 
     /**
@@ -393,6 +403,10 @@ abstract class SAML2_Message implements SAML2_SignedElement
             SAML2_Utils::addString($root, SAML2_Const::NS_SAML, 'saml:Issuer', $this->issuer);
         }
 
+        if (!empty($this->extensions)) {
+            SAML2_XML_samlp_Extensions::addList($root, $this->extensions);
+        }
+
         return $root;
     }
 
@@ -515,6 +529,28 @@ abstract class SAML2_Message implements SAML2_SignedElement
                 throw new Exception('Unknown SAML message: ' . var_export($xml->localName, TRUE));
         }
 
+    }
+
+    /**
+     * Retrieve the Extensions.
+     *
+     * @return SAML2_XML_samlp_Extensions.
+     */
+    public function getExtensions()
+    {
+        return $this->extensions;
+    }
+
+    /**
+     * Set the Extensions.
+     *
+     * @param array|NULL $extensions The Extensions.
+     */
+    public function setExtensions($extensions)
+    {
+        assert('is_array($extensions) || is_null($extensions)');
+
+        $this->extensions = $extensions;
     }
 
 }
