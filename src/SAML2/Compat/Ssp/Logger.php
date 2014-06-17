@@ -119,6 +119,30 @@ class SAML2_Compat_Ssp_Logger implements Psr\Log\LoggerInterface
      */
     public function log($level, $message, array $context = array())
     {
-        SimpleSAML_Logger::log_internal($level, $message . var_export($context, TRUE));
+        switch ($level) {
+            case SimpleSAML_Logger::ALERT:
+                SimpleSAML_Logger::alert($message);
+                break;
+            case SimpleSAML_Logger::CRIT:
+                SimpleSAML_Logger::critical($message);
+                break;
+            case SimpleSAML_Logger::DEBUG:
+                SimpleSAML_Logger::debug($message);
+                break;
+            case SimpleSAML_Logger::EMERG:
+                SimpleSAML_Logger::emergency($message);
+                break;
+            case SimpleSAML_Logger::ERR:
+                SimpleSAML_Logger::error($message);
+                break;
+            case SimpleSAML_Logger::INFO:
+                SimpleSAML_Logger::info($message);
+                break;
+            case SimpleSAML_Logger::NOTICE:
+                SimpleSAML_Logger::notice($message);
+                break;
+            case SimpleSAML_Logger::WARNING:
+                SimpleSAML_Logger::warning($message);
+        }
     }
 }
