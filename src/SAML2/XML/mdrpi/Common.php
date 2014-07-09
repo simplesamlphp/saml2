@@ -5,7 +5,6 @@
  *
  * @link: http://docs.oasis-open.org/security/saml/Post2.0/saml-metadata-rpi/v1.0/saml-metadata-rpi-v1.0.pdf
  * @package simpleSAMLphp
- * @version $Id$
  */
 class SAML2_XML_mdrpi_Common
 {

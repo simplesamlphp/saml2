@@ -4,7 +4,6 @@
  * Base class for SAML 2 bindings.
  *
  * @package simpleSAMLphp
- * @version $Id$
  */
 abstract class SAML2_Binding
 {

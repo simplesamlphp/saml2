@@ -5,7 +5,6 @@
  *
  * @link: http://docs.oasis-open.org/security/saml/Post2.0/sstc-saml-metadata-ui/v1.0/sstc-saml-metadata-ui-v1.0.pdf
  * @package simpleSAMLphp
- * @version $Id$
  */
 class SAML2_XML_mdui_UIInfo
 {

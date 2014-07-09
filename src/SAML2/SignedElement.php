@@ -4,7 +4,6 @@
  * Interface to a SAML 2 element which may be signed.
  *
  * @package simpleSAMLphp
- * @version $Id$
  */
 interface SAML2_SignedElement
 {

@@ -4,7 +4,6 @@
  * Class representing an AttributeValue.
  *
  * @package simpleSAMLphp
- * @version $Id$
  */
 class SAML2_XML_saml_AttributeValue
 {

@@ -4,7 +4,6 @@
  * Helper functions for the SAML2 library.
  *
  * @package simpleSAMLphp
- * @version $Id$
  */
 class SAML2_Utils
 {

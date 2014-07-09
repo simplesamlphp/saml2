@@ -4,7 +4,6 @@
  * Class representing SAML 2 SubjectConfirmation element.
  *
  * @package simpleSAMLphp
- * @version $Id$
  */
 class SAML2_XML_saml_SubjectConfirmation
 {

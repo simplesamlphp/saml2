@@ -10,7 +10,6 @@
  * subject doesn't contain any sort of subject confirmation requirements.
  *
  * @package simpleSAMLphp
- * @version $Id$
  */
 abstract class SAML2_SubjectQuery extends SAML2_Request
 {

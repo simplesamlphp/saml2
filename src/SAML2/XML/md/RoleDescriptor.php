@@ -4,7 +4,6 @@
  * Class representing SAML 2 RoleDescriptor element.
  *
  * @package simpleSAMLphp
- * @version $Id$
  */
 class SAML2_XML_md_RoleDescriptor extends SAML2_SignedElementHelper
 {

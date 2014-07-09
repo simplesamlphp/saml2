@@ -7,7 +7,6 @@
  * samlp:StatusResponseType element types.
  *
  * @package simpleSAMLphp
- * @version $Id$
  *
  * @SuppressWarnings(PHPMD.ExcessiveClassComplexity)
  */

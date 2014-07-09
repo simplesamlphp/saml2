@@ -5,7 +5,6 @@
  *
  * @author Danny Bollaert, UGent AS. <danny.bollaert@ugent.be>
  * @package simpleSAMLphp
- * @version $Id$
  */
 class SAML2_ArtifactResponse extends SAML2_StatusResponse
 {

@@ -4,7 +4,6 @@
  * Class for SAML 2 LogoutResponse messages.
  *
  * @package simpleSAMLphp
- * @version $Id$
  */
 class SAML2_LogoutResponse extends SAML2_StatusResponse
 {

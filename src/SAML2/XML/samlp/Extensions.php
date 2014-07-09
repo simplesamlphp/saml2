@@ -4,7 +4,6 @@
  * Class for handling SAML2 extensions.
  *
  * @package simpleSAMLphp
- * @version $Id$
  */
 class SAML2_XML_samlp_Extensions
 {

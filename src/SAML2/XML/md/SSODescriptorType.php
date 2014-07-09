@@ -4,7 +4,6 @@
  * Class representing SAML 2 SSODescriptorType.
  *
  * @package simpleSAMLphp
- * @version $Id$
  */
 abstract class SAML2_XML_md_SSODescriptorType extends SAML2_XML_md_RoleDescriptor
 {
