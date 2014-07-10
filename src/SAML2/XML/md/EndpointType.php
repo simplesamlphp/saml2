@@ -4,7 +4,6 @@
  * Class representing SAML 2 EndpointType.
  *
  * @package simpleSAMLphp
- * @version $Id$
  */
 class SAML2_XML_md_EndpointType
 {

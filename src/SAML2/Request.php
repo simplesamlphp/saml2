@@ -8,7 +8,6 @@
  * is included mainly to make it easy to separate requests from responses.
  *
  * @package simpleSAMLphp
- * @version $Id$
  */
 abstract class SAML2_Request extends SAML2_Message
 {

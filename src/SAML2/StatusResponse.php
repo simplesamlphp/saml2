@@ -19,7 +19,6 @@
  * aren't present.
  *
  * @package simpleSAMLphp
- * @version $Id$
  */
 abstract class SAML2_StatusResponse extends SAML2_Message
 {

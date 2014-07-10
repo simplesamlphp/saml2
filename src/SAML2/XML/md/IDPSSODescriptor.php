@@ -4,7 +4,6 @@
  * Class representing SAML 2 IDPSSODescriptor.
  *
  * @package simpleSAMLphp
- * @version $Id$
  */
 class SAML2_XML_md_IDPSSODescriptor extends SAML2_XML_md_SSODescriptorType
 {

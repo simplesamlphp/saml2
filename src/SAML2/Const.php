@@ -4,7 +4,6 @@
  * Various SAML 2 constants.
  *
  * @package simpleSAMLphp
- * @version $Id$
  */
 class SAML2_Const
 {

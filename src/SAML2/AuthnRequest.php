@@ -4,7 +4,6 @@
  * Class for SAML 2 authentication request messages.
  *
  * @package simpleSAMLphp
- * @version $Id$
  */
 class SAML2_AuthnRequest extends SAML2_Request
 {

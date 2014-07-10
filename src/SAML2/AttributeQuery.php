@@ -14,7 +14,6 @@
  *   which match those in the query should be returned.
  *
  * @package simpleSAMLphp
- * @version $Id$
  */
 class SAML2_AttributeQuery extends SAML2_SubjectQuery
 {

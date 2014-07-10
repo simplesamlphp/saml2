@@ -5,7 +5,6 @@
  *
  * @author Shoaib Ali
  * @package simpleSAMLphp
- * @version $Id$
  */
 class SAML2_SOAPClient
 {

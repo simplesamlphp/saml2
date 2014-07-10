@@ -4,7 +4,6 @@
  * Class representing SAML 2 metadata PDPDescriptor.
  *
  * @package simpleSAMLphp
- * @version $Id$
  */
 class SAML2_XML_md_PDPDescriptor extends SAML2_XML_md_RoleDescriptor
 {

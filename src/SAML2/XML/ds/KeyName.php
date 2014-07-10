@@ -4,7 +4,6 @@
  * Class representing a ds:KeyName element.
  *
  * @package simpleSAMLphp
- * @version $Id$
  */
 class SAML2_XML_ds_KeyName
 {

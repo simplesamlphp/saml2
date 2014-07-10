@@ -4,7 +4,6 @@
  * Class representing SAML 2 metadata RequestedAttribute.
  *
  * @package simpleSAMLphp
- * @version $Id$
  */
 class SAML2_XML_md_RequestedAttribute extends SAML2_XML_saml_Attribute
 {
