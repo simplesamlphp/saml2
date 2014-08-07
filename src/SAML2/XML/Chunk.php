@@ -1,11 +1,10 @@
 <?php
-
 /**
  * Serializable class used to hold an XML element.
  *
  * @package simpleSAMLphp
  */
-class SAML2_XML_Chunk
+class SAML2_XML_Chunk implements Serializable
 {
     /**
      * The localName of the element.
@@ -26,14 +25,7 @@ class SAML2_XML_Chunk
      *
      * @var DOMElement
      */
-    private $xml;
-
-    /**
-     * The DOMElement as a text string. Used during serialization.
-     *
-     * @var string|NULL
-     */
-    private $xmlString;
+    public $xml;
 
     /**
      * Create a XMLChunk from a copy of the given DOMElement.
@@ -52,17 +44,10 @@ class SAML2_XML_Chunk
      * Get this DOMElement.
      *
      * @return DOMElement This element.
+     * @deprecated
      */
     public function getXML()
     {
-        assert('$this->xml instanceof DOMElement || is_string($this->xmlString)');
-
-        if ($this->xml === NULL) {
-            $doc = new DOMDocument();
-            $doc->loadXML($this->xmlString);
-            $this->xml = $doc->firstChild;
-        }
-
         return $this->xml;
     }
 
@@ -74,25 +59,31 @@ class SAML2_XML_Chunk
      */
     public function toXML(DOMElement $parent)
     {
-        return SAML2_Utils::copyElement($this->getXML(), $parent);
+        return SAML2_Utils::copyElement($this->xml, $parent);
     }
 
     /**
-     * Serialization handler.
+     * Serialize this XML chunk.
      *
-     * Converts the XML data to a string that can be serialized
-     *
-     * @return array List of properties that should be serialized.
+     * @return string The serialized chunk.
      */
-    public function __sleep()
+    public function serialize()
     {
-        assert('$this->xml instanceof DOMElement || is_string($this->xmlString)');
-
-        if ($this->xmlString === NULL) {
-            $this->xmlString = $this->xml->ownerDocument->saveXML($this->xml);
-        }
-
-        return array('xmlString', 'localName', 'namespaceURI');
+        return serialize($this->xml->ownerDocument->saveXML($this->xml));
     }
 
+    /**
+     * Un-serialize this XML chunk.
+     *
+     * @param  string          $serialized The serialized chunk.
+     * @return SAML2_XML_Chunk The chunk object represented by the serialized string.
+     */
+    public function unserialize($serialized)
+    {
+        $doc = new DOMDocument();
+        $doc->loadXML(unserialize($serialized));
+        $this->xml = $doc->documentElement;
+        $this->localName = $this->xml->localName;
+        $this->namespaceURI = $this->xml->namespaceURI;
+    }
 }
