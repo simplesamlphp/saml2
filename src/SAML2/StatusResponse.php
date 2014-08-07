@@ -18,7 +18,7 @@
  * Only the 'Code' field is required. The others will be set to NULL if they
  * aren't present.
  *
- * @package simpleSAMLphp
+ * @package SimpleSAMLphp
  */
 abstract class SAML2_StatusResponse extends SAML2_Message
 {

@@ -3,7 +3,7 @@
 /**
  * Class representing SAML 2 metadata AuthnAuthorityDescriptor.
  *
- * @package simpleSAMLphp
+ * @package SimpleSAMLphp
  */
 class SAML2_XML_md_AuthnAuthorityDescriptor extends SAML2_XML_md_RoleDescriptor
 {

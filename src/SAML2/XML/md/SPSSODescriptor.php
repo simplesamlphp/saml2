@@ -3,7 +3,7 @@
 /**
  * Class representing SAML 2 SPSSODescriptor.
  *
- * @package simpleSAMLphp
+ * @package SimpleSAMLphp
  */
 class SAML2_XML_md_SPSSODescriptor extends SAML2_XML_md_SSODescriptorType
 {

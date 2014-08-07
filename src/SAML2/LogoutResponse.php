@@ -3,7 +3,7 @@
 /**
  * Class for SAML 2 LogoutResponse messages.
  *
- * @package simpleSAMLphp
+ * @package SimpleSAMLphp
  */
 class SAML2_LogoutResponse extends SAML2_StatusResponse
 {

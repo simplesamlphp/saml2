@@ -3,7 +3,7 @@
 /**
  * Various SAML 2 constants.
  *
- * @package simpleSAMLphp
+ * @package SimpleSAMLphp
  */
 class SAML2_Const
 {

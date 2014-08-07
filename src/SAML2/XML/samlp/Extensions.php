@@ -3,7 +3,7 @@
 /**
  * Class for handling SAML2 extensions.
  *
- * @package simpleSAMLphp
+ * @package SimpleSAMLphp
  */
 class SAML2_XML_samlp_Extensions
 {

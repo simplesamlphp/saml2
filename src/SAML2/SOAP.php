@@ -3,7 +3,7 @@
 /**
  * Class which implements the SOAP binding.
  *
- * @package simpleSAMLphp
+ * @package SimpleSAMLphp
  */
 class SAML2_SOAP extends SAML2_Binding
 {

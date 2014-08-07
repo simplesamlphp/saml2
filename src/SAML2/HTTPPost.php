@@ -3,7 +3,7 @@
 /**
  * Class which implements the HTTP-POST binding.
  *
- * @package simpleSAMLphp
+ * @package SimpleSAMLphp
  */
 class SAML2_HTTPPost extends SAML2_Binding
 {

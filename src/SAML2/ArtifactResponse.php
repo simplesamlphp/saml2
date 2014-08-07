@@ -4,7 +4,7 @@
  * The SAML2_ArtifactResponse, is the response to the SAML2_ArtifactResolve.
  *
  * @author Danny Bollaert, UGent AS. <danny.bollaert@ugent.be>
- * @package simpleSAMLphp
+ * @package SimpleSAMLphp
  */
 class SAML2_ArtifactResponse extends SAML2_StatusResponse
 {

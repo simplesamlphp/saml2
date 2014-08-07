@@ -7,7 +7,7 @@
  * stored in the SAML2_Message class, and this class is therefore empty. It
  * is included mainly to make it easy to separate requests from responses.
  *
- * @package simpleSAMLphp
+ * @package SimpleSAMLphp
  */
 abstract class SAML2_Request extends SAML2_Message
 {

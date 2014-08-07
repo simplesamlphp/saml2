@@ -3,7 +3,7 @@
 /**
  * Class for SAML 2 logout request messages.
  *
- * @package simpleSAMLphp
+ * @package SimpleSAMLphp
  */
 class SAML2_LogoutRequest extends SAML2_Request
 {

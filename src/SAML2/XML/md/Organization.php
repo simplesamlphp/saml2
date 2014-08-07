@@ -3,7 +3,7 @@
 /**
  * Class representing SAML 2 Organization element.
  *
- * @package simpleSAMLphp
+ * @package SimpleSAMLphp
  */
 class SAML2_XML_md_Organization
 {

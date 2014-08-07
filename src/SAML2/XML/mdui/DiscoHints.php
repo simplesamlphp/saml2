@@ -4,7 +4,7 @@
  * Class for handling the metadata extensions for login and discovery user interface
  *
  * @link: http://docs.oasis-open.org/security/saml/Post2.0/sstc-saml-metadata-ui/v1.0/sstc-saml-metadata-ui-v1.0.pdf
- * @package simpleSAMLphp
+ * @package SimpleSAMLphp
  */
 class SAML2_XML_mdui_DiscoHints
 {

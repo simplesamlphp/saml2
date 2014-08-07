@@ -3,7 +3,7 @@
 /**
  * Class representing SAML 2 EndpointType.
  *
- * @package simpleSAMLphp
+ * @package SimpleSAMLphp
  */
 class SAML2_XML_md_EndpointType
 {

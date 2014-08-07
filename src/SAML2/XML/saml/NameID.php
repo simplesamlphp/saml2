@@ -3,7 +3,7 @@
 /**
  * Class representing the saml:NameID element.
  *
- * @package simpleSAMLphp
+ * @package SimpleSAMLphp
  */
 class SAML2_XML_saml_NameID
 {

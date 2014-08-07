@@ -2,7 +2,7 @@
 /**
  * Serializable class used to hold an XML element.
  *
- * @package simpleSAMLphp
+ * @package SimpleSAMLphp
  */
 class SAML2_XML_Chunk implements Serializable
 {

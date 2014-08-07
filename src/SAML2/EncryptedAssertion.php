@@ -3,7 +3,7 @@
 /**
  * Class handling encrypted assertions.
  *
- * @package simpleSAMLphp
+ * @package SimpleSAMLphp
  */
 class SAML2_EncryptedAssertion
 {

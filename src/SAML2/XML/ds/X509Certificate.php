@@ -3,7 +3,7 @@
 /**
  * Class representing a ds:X509Certificate element.
  *
- * @package simpleSAMLphp
+ * @package SimpleSAMLphp
  */
 class SAML2_XML_ds_X509Certificate
 {

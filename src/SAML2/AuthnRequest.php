@@ -3,7 +3,7 @@
 /**
  * Class for SAML 2 authentication request messages.
  *
- * @package simpleSAMLphp
+ * @package SimpleSAMLphp
  */
 class SAML2_AuthnRequest extends SAML2_Request
 {

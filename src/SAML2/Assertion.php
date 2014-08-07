@@ -3,7 +3,7 @@
 /**
  * Class representing a SAML 2 assertion.
  *
- * @package simpleSAMLphp
+ * @package SimpleSAMLphp
  */
 class SAML2_Assertion implements SAML2_SignedElement
 {

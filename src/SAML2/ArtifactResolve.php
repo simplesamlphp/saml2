@@ -5,7 +5,7 @@
  * I want to use this, to be consistent with the other saml2_requests
  *
  * @author Danny Bollaert, UGent AS. <danny.bollaert@ugent.be>
- * @package simpleSAMLphp
+ * @package SimpleSAMLphp
  */
 class SAML2_ArtifactResolve extends SAML2_Request
 {

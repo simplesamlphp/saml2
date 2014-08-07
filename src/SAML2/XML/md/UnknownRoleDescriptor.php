@@ -3,7 +3,7 @@
 /**
  * Class representing unknown RoleDescriptors.
  *
- * @package simpleSAMLphp
+ * @package SimpleSAMLphp
  */
 class SAML2_XML_md_UnknownRoleDescriptor extends SAML2_XML_md_RoleDescriptor
 {

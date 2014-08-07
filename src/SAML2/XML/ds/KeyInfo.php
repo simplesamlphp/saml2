@@ -3,7 +3,7 @@
 /**
  * Class representing a ds:KeyInfo element.
  *
- * @package simpleSAMLphp
+ * @package SimpleSAMLphp
  */
 class SAML2_XML_ds_KeyInfo
 {

@@ -3,7 +3,7 @@
 /**
  * Class representing a KeyDescriptor element.
  *
- * @package simpleSAMLphp
+ * @package SimpleSAMLphp
  */
 class SAML2_XML_md_KeyDescriptor
 {

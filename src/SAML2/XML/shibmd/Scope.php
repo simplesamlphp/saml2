@@ -4,7 +4,7 @@
  * Class which represents the Scope element found in Shibboleth metadata.
  *
  * @link https://wiki.shibboleth.net/confluence/display/SHIB/ShibbolethMetadataProfile
- * @package simpleSAMLphp
+ * @package SimpleSAMLphp
  */
 class SAML2_XML_shibmd_Scope
 {

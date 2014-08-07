@@ -3,7 +3,7 @@
 /**
  * Class which implements the HTTP-Redirect binding.
  *
- * @package simpleSAMLphp
+ * @package SimpleSAMLphp
  */
 class SAML2_HTTPRedirect extends SAML2_Binding
 {

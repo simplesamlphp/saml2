@@ -6,7 +6,7 @@
  * Implements what is common between the samlp:RequestAbstractType and
  * samlp:StatusResponseType element types.
  *
- * @package simpleSAMLphp
+ * @package SimpleSAMLphp
  *
  * @SuppressWarnings(PHPMD.ExcessiveClassComplexity)
  */

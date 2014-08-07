@@ -3,7 +3,7 @@
 /**
  * Class representing SAML 2 Attribute.
  *
- * @package simpleSAMLphp
+ * @package SimpleSAMLphp
  */
 class SAML2_XML_saml_Attribute
 {

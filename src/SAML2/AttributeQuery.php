@@ -13,7 +13,7 @@
  * - If an attribute contains any attribute values, only the attribute values
  *   which match those in the query should be returned.
  *
- * @package simpleSAMLphp
+ * @package SimpleSAMLphp
  */
 class SAML2_AttributeQuery extends SAML2_SubjectQuery
 {
