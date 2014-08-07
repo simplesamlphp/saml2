@@ -1,11 +1,11 @@
 <?php
 
 /**
- * Class representing an AttributeValue.
+ * Serializable class representing an AttributeValue.
  *
- * @package simpleSAMLphp
+ * @package SimpleSAMLphp
  */
-class SAML2_XML_saml_AttributeValue
+class SAML2_XML_saml_AttributeValue implements Serializable
 {
     /**
      * The raw DOMElement representing this value.
@@ -17,9 +17,7 @@ class SAML2_XML_saml_AttributeValue
     /**
      * Create an AttributeValue.
      *
-     * @param mixed $value
-     * The value of this element.
-     * Can be one of:
+     * @param mixed $value The value of this element. Can be one of:
      *  - string                      Create an attribute value with a simple string.
      *  - DOMElement(AttributeValue)  Create an attribute value of the given DOMElement.
      *  - DOMElement                  Create an attribute value with the given DOMElement as a child.
@@ -79,7 +77,7 @@ class SAML2_XML_saml_AttributeValue
     /**
      * Convert this attribute value to a string.
      *
-     * If this element contains XML data, that data vil be encoded as a string and returned.
+     * If this element contains XML data, that data will be encoded as a string and returned.
      *
      * @return string This attribute value.
      */
@@ -97,4 +95,27 @@ class SAML2_XML_saml_AttributeValue
         return $ret;
     }
 
+
+    /**
+     * Serialize this AttributeValue.
+     *
+     * @return string The AttributeValue serialized.
+     */
+    public function serialize()
+    {
+        return serialize($this->element->ownerDocument->saveXML($this->element));
+    }
+
+
+    /**
+     * Un-serialize this AttributeValue.
+     *
+     * @param string $serialized The serialized AttributeValue.
+     */
+    public function unserialize($serialized)
+    {
+        $doc = new DOMDocument();
+        $doc->loadXML(unserialize($serialized));
+        $this->element = $doc->documentElement;
+    }
 }
