@@ -17,3 +17,12 @@ Test with the 2 known users: (SimpleSAMLphp)[http://www.simplesaml.org] and
 ### Using Tests in Development
 
 In order to run the unittests, use `vendor/bin/phpunit -c tools/phpunit`
+
+Contributing
+------------
+Prior to contributing, please read the following documentation:
+- [Background][2]
+- [Technical Design][1]
+
+[1]: https://github.com/simplesamlphp/saml2/wiki/SAML2-v1.0-Technical-Design
+[2]: https://github.com/simplesamlphp/saml2/wiki/Background
