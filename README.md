@@ -33,7 +33,7 @@ Usage
 }
 ```
 
-Then run ```composer update```.
+Then run ```composer install```.
 
 * Provide the required external dependencies by extending and implementing the ```SAML2_Compat_AbstractContainer```
   then injecting it in the ContainerSingleton (see example below).
