@@ -13,3 +13,7 @@ Testing
 Use PHPUnit for Unit Testing.
 Test with the 2 known users: (SimpleSAMLphp)[http://www.simplesaml.org] and
 (OpenConext-engineblock)[http://www.openconext.org] .
+
+### Using Tests in Development
+
+In order to run the unittests, use `vendor/bin/phpunit -c tools/phpunit`
