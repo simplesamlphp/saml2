@@ -28,8 +28,8 @@ class SAML2_Certificate_KeyLoader
      */
     public static function extractPublicKeys(
         SAML2_Configuration_IdentityProvider $config,
-        $usage = null,
-        $required = false,
+        $usage = NULL,
+        $required = FALSE,
         $prefix = ''
     ) {
         $keyLoader = new self();
@@ -99,7 +99,7 @@ class SAML2_Certificate_KeyLoader
         }
 
         $certificate = file_get_contents($certificateFile);
-        if ($certificate === false) {
+        if ($certificate === FALSE) {
             throw new SAML2_Exception_RuntimeException(sprintf(
                 'Could not read from existing and readable file "%s"',
                 $certificateFile

@@ -28,7 +28,7 @@ class SAML2_Certificate_KeyCollection implements Countable, IteratorAggregate
     public function get($index)
     {
         if (!isset($this->keys[$index])) {
-            return null;
+            return NULL;
         }
 
         return $this->keys[$index];

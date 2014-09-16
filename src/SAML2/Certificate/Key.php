@@ -36,8 +36,8 @@ class SAML2_Certificate_Key implements ArrayAccess
     public static function createX509key($certificate)
     {
         $keyData = array(
-            'encryption' => true,
-            'signing' => true,
+            'encryption' => TRUE,
+            'signing' => TRUE,
             'type' => 'X509Certificate',
             'X509Certificate' => $certificate
         );
