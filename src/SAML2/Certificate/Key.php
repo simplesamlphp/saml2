@@ -103,10 +103,16 @@ class SAML2_Certificate_Key implements ArrayAccess
         unset($this->keyData[$offset]);
     }
 
+    /**
+     * Asserts that the parameter is of type string
+     * @param mixed $test
+     *
+     * @throws Exception
+     */
     private function assertIsString($test)
     {
         if (!is_string($test)) {
-            throw new SAML2_Exception_InvalidArgumentException('string', $test);
+            throw SAML2_Exception_InvalidArgumentException::invalidType('string', $test);
         }
     }
 }
