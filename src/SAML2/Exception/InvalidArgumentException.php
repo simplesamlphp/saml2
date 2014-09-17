@@ -10,6 +10,6 @@ class SAML2_Exception_InvalidArgumentException extends InvalidArgumentException 
             is_object($parameter) ? get_class($parameter) : gettype($parameter)
         );
 
-        return parent::__construct($message);
+        return new self($message);
     }
 }
