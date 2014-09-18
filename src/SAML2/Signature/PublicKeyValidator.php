@@ -8,15 +8,6 @@ class SAML2_Signature_PublicKeyValidator extends SAML2_Signature_AbstractChained
     private $configuredKeys;
 
     /**
-     * @var \Psr\Log\LoggerInterface
-     */
-    private $logger;
-
-    public function __construct(\Psr\Log\LoggerInterface $logger)
-    {
-        $this->logger = $logger;
-    }
-    /**
      * @param SAML2_SignedElement             $signedElement
      * @param SAML2_Configuration_Certifiable $configuration
      *
