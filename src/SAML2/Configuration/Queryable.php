@@ -22,5 +22,5 @@ interface SAML2_Configuration_Queryable
      *
      * @return mixed
      */
-    public function get($key, $default = null);
+    public function get($key, $default = NULL);
 }
