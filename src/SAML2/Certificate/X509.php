@@ -5,6 +5,11 @@
  */
 class SAML2_Certificate_X509 extends SAML2_Certificate_Key
 {
+    /**
+     * @var SAML2_Certificate_Fingerprint
+     */
+    private $fingerprint;
+
     public function __construct($certificateContents)
     {
         $data = array(
@@ -36,5 +41,19 @@ class SAML2_Certificate_X509 extends SAML2_Certificate_Key
         return "-----BEGIN CERTIFICATE-----\n"
                 . chunk_split($this->keyData['X509Certificate'], 64)
                 . "-----END CERTIFICATE-----\n";
+    }
+
+    /**
+     * @return SAML2_Certificate_Fingerprint
+     */
+    public function getFingerprint()
+    {
+        if (isset($this->fingerprint)) {
+            return $this->fingerprint;
+        }
+
+        $fingerprint = strtolower(sha1(base64_decode($this->keyData['X509Certificate'])));
+
+        return $this->fingerprint = new SAML2_Certificate_Fingerprint($fingerprint);
     }
 }
