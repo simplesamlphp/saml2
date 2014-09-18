@@ -6,25 +6,6 @@ class SAML2_Certificate_KeyTest extends \PHPUnit_Framework_TestCase
      * @group certificate
      *
      * @test
-     */
-    public function x509_certificate_contents_must_be_stripped_of_whitespace()
-    {
-        $toTest = array(
-            'X509Certificate' => ' Should   No Longer  Have Whitespaces'
-        );
-
-        $viaConstructor = new SAML2_Certificate_Key($toTest);
-        $viaSetting = new SAML2_Certificate_Key(array());
-        $viaSetting['X509Certificate'] = $toTest['X509Certificate'];
-
-        $this->assertEquals($viaConstructor['X509Certificate'], 'ShouldNoLongerHaveWhitespaces');
-        $this->assertEquals($viaSetting['X509Certificate'], 'ShouldNoLongerHaveWhitespaces');
-    }
-
-    /**
-     * @group certificate
-     *
-     * @test
      * @expectedException SAML2_Certificate_Exception_InvalidKeyUsageException
      */
     public function invalid_key_usage_should_throw_an_exception()

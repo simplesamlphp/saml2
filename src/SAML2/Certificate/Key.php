@@ -13,7 +13,7 @@ class SAML2_Certificate_Key implements ArrayAccess
     /**
      * @var array
      */
-    private $keyData = array();
+    protected $keyData = array();
 
     /**
      * @param array $keyData
@@ -35,14 +35,7 @@ class SAML2_Certificate_Key implements ArrayAccess
      */
     public static function createX509key($certificate)
     {
-        $keyData = array(
-            'encryption' => TRUE,
-            'signing' => TRUE,
-            'type' => 'X509Certificate',
-            'X509Certificate' => $certificate
-        );
-
-        return new self($keyData);
+        return new SAML2_Certificate_X509($certificate);
     }
 
     /**
@@ -88,11 +81,6 @@ class SAML2_Certificate_Key implements ArrayAccess
     {
         $this->assertIsString($offset);
 
-        // will reconsider once the scope of usage and expectation is clear
-        if ($offset === 'X509Certificate') {
-            $value = preg_replace('~\s+~', '', $value);
-        }
-
         $this->keyData[$offset] = $value;
     }
 
@@ -109,7 +97,7 @@ class SAML2_Certificate_Key implements ArrayAccess
      *
      * @throws Exception
      */
-    private function assertIsString($test)
+    protected function assertIsString($test)
     {
         if (!is_string($test)) {
             throw SAML2_Exception_InvalidArgumentException::invalidType('string', $test);
