@@ -22,7 +22,7 @@ class SAML2_Utilities_ArrayCollection implements SAML2_Utilities_Collection
 
     public function get($key)
     {
-        return isset($this->elements[$key]) ? $this->elements[$key] : null;
+        return isset($this->elements[$key]) ? $this->elements[$key] : NULL;
     }
 
     public function filter(Closure $f)
@@ -39,8 +39,8 @@ class SAML2_Utilities_ArrayCollection implements SAML2_Utilities_Collection
     {
         $key = array_search($element, $this->elements);
 
-        if ($key === false) {
-            return false;
+        if ($key === FALSE) {
+            return FALSE;
         }
 
         $removed = $this->elements[$key];
