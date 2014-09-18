@@ -37,14 +37,43 @@
         </exec>
     </target>
 
-    <target name="php-lint-ci" description="Perform syntax check of sourcecode files">
-        <apply executable="php" failonerror="true">
-            <arg value="-l"/>
+    <target name="get-changeset.php.raw"
+            description="creates a list of changed php files separated by newline">
+        <pathconvert property="changeset.php.raw" pathsep="${line.separator}">
             <fileset dir="src">
                 <include name="**/*.php"/>
                 <modified/>
             </fileset>
-        </apply>
+        </pathconvert>
+
+        <!--Check if files are modified-->
+        <condition property="changeset.php.notempty">
+            <not>
+                <equals arg1="${changeset.php.raw}" arg2="" trim="true"/>
+            </not>
+        </condition>
+    </target>
+
+    <target name="get-changeset.php.spacesep" depends="get-changeset.php.raw" if="changeset.php.notempty"
+            description="Creates a quoted list of changed php files separated by spaces">
+        <loadresource property="changeset.php.spacesep">
+            <propertyresource name="changeset.php.raw"/>
+            <filterchain>
+                <tokenfilter delimoutput=" ">
+                    <linetokenizer/>
+                    <replaceregex pattern="^" replace='"'/>
+                    <replaceregex pattern="$" replace='"'/>
+                </tokenfilter>
+            </filterchain>
+        </loadresource>
+    </target>
+
+    <target name="php-lint-ci" depends="get-changeset.php.spacesep" if="changeset.php.notempty"
+            description="Perform syntax check of sourcecode files in parallel">
+        <exec executable="sh" failonerror="true">
+            <arg value="-c"/>
+            <arg value="echo '${changeset.php.spacesep}' | xargs -n 1 -P 4 php -l 1>/dev/null"/>
+        </exec>
     </target>
 
     <target name="php-security-checker" description="Check your composer dependencies for insecure components">
@@ -68,7 +97,7 @@
 
     <target name="phpmd-ci"
             description="Perform project mess detection using PHPMD creating a log file for the continuous integration server">
-        <exec executable="vendor/bin/phpmd"failonerror="true">
+        <exec executable="vendor/bin/phpmd" failonerror="true">
             <arg path="src"/>
             <arg value="text"/>
             <arg value="tools/phpmd/ruleset.xml"/>
@@ -89,7 +118,7 @@
 
     <target name="phpcs-ci"
             description="Find coding standard violations using PHP_CodeSniffer creating a log file for the continuous integration server">
-        <exec executable="vendor/bin/phpcs" output="/dev/null" failonerror="true">
+        <exec executable="vendor/bin/phpcs" failonerror="true">
             <arg value="--report=full"/>
             <arg value="--standard=tools/phpcs/ruleset.xml"/>
             <arg value="--warning-severity=0"/>
