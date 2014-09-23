@@ -1,5 +1,8 @@
 <?php
 
+/**
+ * Validates the signature based on the fingerprint of the certificate
+ */
 class SAML2_Signature_FingerprintValidator extends SAML2_Signature_AbstractChainedValidator
 {
     /**

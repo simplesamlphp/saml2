@@ -22,6 +22,9 @@ class SAML2_Certificate_X509 extends SAML2_Certificate_Key
         return new self($data);
     }
 
+    /**
+     * {@inheritdoc} Best place to ensure the logic is encapsulated in a single place
+     */
     public function offsetSet($offset, $value)
     {
         if ($offset === 'X509Certificate') {

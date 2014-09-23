@@ -5,6 +5,9 @@
  */
 class SAML2_Signature_Validator
 {
+    /**
+     * @var \Psr\Log\LoggerInterface
+     */
     private $logger;
 
     public function __construct(\Psr\Log\LoggerInterface $logger)

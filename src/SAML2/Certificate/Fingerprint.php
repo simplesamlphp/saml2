@@ -1,5 +1,8 @@
 <?php
 
+/**
+ * Simple representation of the fingerprint of a certificate
+ */
 class SAML2_Certificate_Fingerprint
 {
     /**
