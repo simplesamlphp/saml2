@@ -13,8 +13,8 @@ class SAML2_Certificate_X509 extends SAML2_Certificate_Key
     public static function createFromCertificateData($certificateContents)
     {
         $data = array(
-            'encryption'      => true,
-            'signing'         => true,
+            'encryption'      => TRUE,
+            'signing'         => TRUE,
             'type'            => 'X509Certificate',
             'X509Certificate' => $certificateContents
         );

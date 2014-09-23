@@ -46,8 +46,8 @@ class SAML2_Certificate_KeyLoader
      */
     public function loadKeysFromConfiguration(
         SAML2_Configuration_Certifiable $config,
-        $usage = null,
-        $required = false,
+        $usage = NULL,
+        $required = FALSE,
         $prefix = ''
     ) {
         if ($config->has($prefix . 'keys')) {
