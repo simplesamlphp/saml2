@@ -7,6 +7,20 @@ class SAML2_Signature_FingerprintValidator extends SAML2_Signature_AbstractChain
      */
     private $certificates;
 
+    /**
+     * @var SAML2_Certificate_FingerprintLoader
+     */
+    private $fingerprintLoader;
+
+    public function __construct(
+        \Psr\Log\LoggerInterface $logger,
+        SAML2_Certificate_FingerprintLoader $fingerprintLoader
+    ) {
+        $this->fingerprintLoader = $fingerprintLoader;
+
+        parent::__construct($logger);
+    }
+
     public function canValidate(
         SAML2_SignedElement $signedElement,
         SAML2_Configuration_Certifiable $configuration
@@ -44,7 +58,7 @@ class SAML2_Signature_FingerprintValidator extends SAML2_Signature_AbstractChain
             return new SAML2_Certificate_X509($cert);
         }, $this->certificates);
 
-        $fingerprintCollection = SAML2_Certificate_FingerprintLoader::loadFingerprintsFromConfiguration($configuration);
+        $fingerprintCollection = $this->fingerprintLoader->loadFingerprintsFromConfiguration($configuration);
 
         foreach ($this->certificates as $certificate) {
             /** @var SAML2_Certificate_X509 $certificate */

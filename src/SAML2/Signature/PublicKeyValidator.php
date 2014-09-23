@@ -8,6 +8,18 @@ class SAML2_Signature_PublicKeyValidator extends SAML2_Signature_AbstractChained
     private $configuredKeys;
 
     /**
+     * @var SAML2_Certificate_KeyLoader
+     */
+    private $keyLoader;
+
+    public function __construct(\Psr\Log\LoggerInterface $logger, SAML2_Certificate_KeyLoader $keyLoader)
+    {
+        $this->keyLoader = $keyLoader;
+
+        parent::__construct($logger);
+    }
+
+    /**
      * @param SAML2_SignedElement             $signedElement
      * @param SAML2_Configuration_Certifiable $configuration
      *
@@ -17,7 +29,7 @@ class SAML2_Signature_PublicKeyValidator extends SAML2_Signature_AbstractChained
         SAML2_SignedElement $signedElement,
         SAML2_Configuration_Certifiable $configuration
     ) {
-        $this->configuredKeys = SAML2_Certificate_KeyLoader::extractPublicKeys($configuration);
+        $this->configuredKeys = $this->keyLoader->extractPublicKeys($configuration);
 
         return !!count($this->configuredKeys);
     }
@@ -38,11 +50,10 @@ class SAML2_Signature_PublicKeyValidator extends SAML2_Signature_AbstractChained
                 $logger->debug(sprintf('Skipping unknown key type: "%s"', $key['type']));
                 return FALSE;
             }
-
             return TRUE;
         });
 
-        if (empty($pemCandidates)) {
+        if (!count($pemCandidates)) {
             $this->logger->debug('No configured X509 certificate found to verify the signature with');
 
             return FALSE;

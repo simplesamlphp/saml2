@@ -25,7 +25,7 @@ abstract class SAML2_Signature_AbstractChainedValidator implements SAML2_Signatu
      *
      * @return bool
      */
-    protected function validateElementWithKeys(SAML2_SignedElement $element, array $pemCandidates)
+    protected function validateElementWithKeys(SAML2_SignedElement $element, $pemCandidates)
     {
         $lastException = NULL;
         foreach ($pemCandidates as $index => $candidateKey) {

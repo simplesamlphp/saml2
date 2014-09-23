@@ -42,11 +42,11 @@ class SAML2_Certificate_KeyLoaderTest extends \PHPUnit_Framework_TestCase
      * @group certificate
      *
      * @test
-     * @expectedException SAML2_Certificate_Exception_InvalidCertificateStructureException
+     * @expectedException SAML2_Exception_InvalidArgumentException
      */
     public function certificate_data_with_invalid_format_throws_an_exception()
     {
-        $this->keyLoader->loadCertificateData('This Most certainly aint correctly formatted PEM certificate data...');
+        $this->keyLoader->loadCertificateData(array());
     }
 
     /**
@@ -103,7 +103,8 @@ class SAML2_Certificate_KeyLoaderTest extends \PHPUnit_Framework_TestCase
         $loadedKeys = $this->keyLoader->getKeys();
         $loadedKey = $loadedKeys->get(0);
         $fileContents = file_get_contents($file);
-        $expected = preg_replace('~\s+~', '', $fileContents);
+        preg_match(SAML2_Utilities_Certificate::CERTIFICATE_PATTERN, $fileContents, $matches);
+        $expected = preg_replace('~\s+~', '', $matches[1]);
 
         $this->assertTrue($this->keyLoader->hasKeys());
         $this->assertCount(1, $loadedKeys);

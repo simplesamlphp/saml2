@@ -20,8 +20,8 @@ class SAML2_Signature_Validator
         $validator = new SAML2_Signature_ValidatorChain(
             $this->logger,
             array(
-                new SAML2_Signature_PublicKeyValidator($this->logger),
-                new SAML2_Signature_FingerprintValidator($this->logger)
+                new SAML2_Signature_PublicKeyValidator($this->logger, new SAML2_Certificate_KeyLoader()),
+                new SAML2_Signature_FingerprintValidator($this->logger, new SAML2_Certificate_FingerprintLoader())
             )
         );
 

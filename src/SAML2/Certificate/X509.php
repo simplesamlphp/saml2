@@ -10,16 +10,16 @@ class SAML2_Certificate_X509 extends SAML2_Certificate_Key
      */
     private $fingerprint;
 
-    public function __construct($certificateContents)
+    public static function createFromCertificateData($certificateContents)
     {
         $data = array(
-            'encryption'      => TRUE,
-            'signing'         => TRUE,
+            'encryption'      => true,
+            'signing'         => true,
             'type'            => 'X509Certificate',
-            'X509Certificate' => preg_replace('~\s+~', '', $certificateContents)
+            'X509Certificate' => $certificateContents
         );
 
-        parent::__construct($data);
+        return new self($data);
     }
 
     public function offsetSet($offset, $value)

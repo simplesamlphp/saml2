@@ -35,7 +35,7 @@ class SAML2_Certificate_Key implements ArrayAccess
      */
     public static function createX509key($certificate)
     {
-        return new SAML2_Certificate_X509($certificate);
+        return SAML2_Certificate_X509::createFromCertificateData($certificate);
     }
 
     /**
