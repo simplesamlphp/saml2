@@ -61,7 +61,7 @@ class SAML2_Signature_PublicKeyValidatorTest extends \PHPUnit_Framework_TestCase
      * @test
      * @group signature
      */
-    public function signed_message_with_valid_message_and_cert_is_validated_correctly()
+    public function signed_message_with_valid_signature_is_validated_correctly()
     {
         $pattern = SAML2_Utilities_Certificate::CERTIFICATE_PATTERN;
         preg_match($pattern, SAML2_CertificatesMock::PUBLIC_KEY_PEM, $matches);

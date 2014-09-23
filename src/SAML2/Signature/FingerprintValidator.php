@@ -54,12 +54,13 @@ class SAML2_Signature_FingerprintValidator extends SAML2_Signature_AbstractChain
         SAML2_SignedElement $signedElement,
         SAML2_Configuration_Certifiable $configuration
     ) {
-        $this->certificates = array_map(function ($cert) {
-            return new SAML2_Certificate_X509($cert);
+        $this->certificates = array_map(function ($certificate) {
+            return SAML2_Certificate_X509::createFromCertificateData($certificate);
         }, $this->certificates);
 
         $fingerprintCollection = $this->fingerprintLoader->loadFingerprintsFromConfiguration($configuration);
 
+        $pemCandidates = array();
         foreach ($this->certificates as $certificate) {
             /** @var SAML2_Certificate_X509 $certificate */
             $certificateFingerprint = $certificate->getFingerprint();
