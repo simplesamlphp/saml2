@@ -27,18 +27,6 @@ class SAML2_Certificate_Key implements ArrayAccess
     }
 
     /**
-     * Factory method to reduce boilerplate for entering X509 keys
-     *
-     * @param  string $certificate
-     *
-     * @return SAML2_Certificate_Key
-     */
-    public static function createX509key($certificate)
-    {
-        return SAML2_Certificate_X509::createFromCertificateData($certificate);
-    }
-
-    /**
      * Whether or not the key is configured to be used for usage given
      *
      * @param  string $usage
