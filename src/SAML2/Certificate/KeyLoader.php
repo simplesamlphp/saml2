@@ -17,7 +17,7 @@ class SAML2_Certificate_KeyLoader
 
     /**
      * Extracts the public keys given by the configuration. Mainly exists for BC purposes.
-     * Prioritisation order is keys > certDaa > certificate
+     * Prioritisation order is keys > certData > certificate
      *
      * @param SAML2_Configuration_Certifiable $config
      * @param null                            $usage
