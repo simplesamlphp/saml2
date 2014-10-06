@@ -32,14 +32,14 @@ class SAML2_Signature_MockChainedValidator extends SAML2_Signature_AbstractChain
 
     public function canValidate(
         SAML2_SignedElement $signedElement,
-        SAML2_Configuration_Certifiable $configuration
+        SAML2_Configuration_CertificateProvider $configuration
     ) {
         return $this->canValidate;
     }
 
     public function hasValidSignature(
         SAML2_SignedElement $signedElement,
-        SAML2_Configuration_Certifiable $configuration
+        SAML2_Configuration_CertificateProvider $configuration
     ) {
         return $this->isValid;
     }

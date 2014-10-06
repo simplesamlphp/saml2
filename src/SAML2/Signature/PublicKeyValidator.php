@@ -21,13 +21,13 @@ class SAML2_Signature_PublicKeyValidator extends SAML2_Signature_AbstractChained
 
     /**
      * @param SAML2_SignedElement             $signedElement
-     * @param SAML2_Configuration_Certifiable $configuration
+     * @param SAML2_Configuration_CertificateProvider $configuration
      *
      * @return bool
      */
     public function canValidate(
         SAML2_SignedElement $signedElement,
-        SAML2_Configuration_Certifiable $configuration
+        SAML2_Configuration_CertificateProvider $configuration
     ) {
         $this->configuredKeys = $this->keyLoader->extractPublicKeys($configuration);
 
@@ -36,13 +36,13 @@ class SAML2_Signature_PublicKeyValidator extends SAML2_Signature_AbstractChained
 
     /**
      * @param SAML2_SignedElement             $signedElement
-     * @param SAML2_Configuration_Certifiable $configuration
+     * @param SAML2_Configuration_CertificateProvider $configuration
      *
      * @return bool
      */
     public function hasValidSignature(
         SAML2_SignedElement $signedElement,
-        SAML2_Configuration_Certifiable $configuration
+        SAML2_Configuration_CertificateProvider $configuration
     ) {
         $logger = $this->logger;
         $pemCandidates = $this->configuredKeys->filter(function (SAML2_Certificate_Key $key) use ($logger) {

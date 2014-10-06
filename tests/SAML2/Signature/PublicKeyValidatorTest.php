@@ -7,7 +7,7 @@ class SAML2_Signature_PublicKeyValidatorTest extends \PHPUnit_Framework_TestCase
 
     public function setUp()
     {
-        $this->mockConfiguration = \Mockery::mock('SAML2_Configuration_Certifiable');
+        $this->mockConfiguration = \Mockery::mock('SAML2_Configuration_CertificateProvider');
         $this->mockSignedElement = \Mockery::mock('SAML2_SignedElement');
     }
 

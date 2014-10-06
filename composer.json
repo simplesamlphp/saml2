@@ -29,5 +29,10 @@
         "psr-0": {
             "SAML2_": "src/"
         }
+    },
+    "autoload-dev": {
+        "psr-0": {
+            "SAML2_": "tests/"
+        }
     }
 }

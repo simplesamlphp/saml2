@@ -42,13 +42,13 @@ class SAML2_Signature_ValidatorChain implements SAML2_Signature_ValidatorInterfa
 
     /**
      * @param SAML2_SignedElement             $signedElement
-     * @param SAML2_Configuration_Certifiable $configuration
+     * @param SAML2_Configuration_CertificateProvider $configuration
      *
      * @return bool
      */
     public function hasValidSignature(
         SAML2_SignedElement $signedElement,
-        SAML2_Configuration_Certifiable $configuration
+        SAML2_Configuration_CertificateProvider $configuration
     ) {
         foreach ($this->validators as $validator) {
             if ($validator->canValidate($signedElement, $configuration)) {
