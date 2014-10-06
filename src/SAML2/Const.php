@@ -167,6 +167,11 @@ class SAML2_Const
     const NS_HOK = 'urn:oasis:names:tc:SAML:2.0:profiles:holder-of-key:SSO:browser';
 
     /**
+     * The status namespace
+     */
+    const STATUS_PREFIX = 'urn:oasis:names:tc:SAML:2.0:status:';
+
+    /**
      * Top-level status code indicating successful processing of the request.
      */
     const STATUS_SUCCESS = 'urn:oasis:names:tc:SAML:2.0:status:Success';
