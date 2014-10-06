@@ -28,7 +28,7 @@ class SAML2_Signature_FingerprintValidator extends SAML2_Signature_AbstractChain
         SAML2_SignedElement $signedElement,
         SAML2_Configuration_CertificateProvider $configuration
     ) {
-        if ($configuration->getCertificateFingerprints() === null) {
+        if ($configuration->getCertificateFingerprints() === NULL) {
             $this->logger->debug(
                 'Configuration does not have "certFingerprint" value, cannot validate signature with fingerprint'
             );
