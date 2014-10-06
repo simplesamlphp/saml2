@@ -19,15 +19,15 @@ class SAML2_Certificate_KeyLoader
      * Extracts the public keys given by the configuration. Mainly exists for BC purposes.
      * Prioritisation order is keys > certData > certificate
      *
-     * @param SAML2_Configuration_Certifiable $config
-     * @param null                            $usage
-     * @param bool                            $required
-     * @param string                          $prefix
+     * @param SAML2_Configuration_CertificateProvider $config
+     * @param null                                    $usage
+     * @param bool                                    $required
+     * @param string                                  $prefix
      *
      * @return SAML2_Certificate_KeyCollection
      */
     public static function extractPublicKeys(
-        SAML2_Configuration_Certifiable $config,
+        SAML2_Configuration_CertificateProvider $config,
         $usage = NULL,
         $required = FALSE,
         $prefix = ''
@@ -38,14 +38,15 @@ class SAML2_Certificate_KeyLoader
     }
 
     /**
-     * @param SAML2_Configuration_Certifiable $config
-     * @param NULL|string                     $usage
-     * @param bool                            $required
-     * @param string                          $prefix
+     * @param SAML2_Configuration_CertificateProvider $config
+     * @param NULL|string                             $usage
+     * @param bool                                    $required
+     * @param string                                  $prefix
+     *
      * @return SAML2_Certificate_KeyCollection
      */
     public function loadKeysFromConfiguration(
-        SAML2_Configuration_Certifiable $config,
+        SAML2_Configuration_CertificateProvider $config,
         $usage = NULL,
         $required = FALSE,
         $prefix = ''

@@ -4,11 +4,25 @@
  * Basic Configuration Wrapper
  */
 class SAML2_Configuration_ServiceProvider extends SAML2_Configuration_ArrayAdapter implements
-    SAML2_Configuration_Certifiable
+    SAML2_Configuration_CertificateProvider
 {
-    public static function load(array $config)
+    public function getKeys()
     {
-        // validate
-        return new self($config);
+        return $this->get('keys');
+    }
+
+    public function getCertificateData()
+    {
+        return $this->get('certificateData');
+    }
+
+    public function getCertificateFile()
+    {
+        return $this->get('certificateFile');
+    }
+
+    public function getCertificateFingerprints()
+    {
+        return $this->get('certificateFingerprints');
     }
 }

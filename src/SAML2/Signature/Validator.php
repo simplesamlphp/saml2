@@ -17,7 +17,7 @@ class SAML2_Signature_Validator
 
     public function hasValidSignature(
         SAML2_SignedElement $signedElement,
-        SAML2_Configuration_Certifiable $configuration
+        SAML2_Configuration_CertificateProvider $configuration
     ) {
         // should be DI
         $validator = new SAML2_Signature_ValidatorChain(

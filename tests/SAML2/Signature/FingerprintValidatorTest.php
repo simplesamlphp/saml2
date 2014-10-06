@@ -14,7 +14,7 @@ class SAML2_Signature_FingerprintValidatorTest extends \PHPUnit_Framework_TestCa
 
     public function setUp()
     {
-        $this->mockConfiguration = \Mockery::mock('SAML2_Configuration_Certifiable');
+        $this->mockConfiguration = \Mockery::mock('SAML2_Configuration_CertificateProvider');
         $this->mockSignedElement = \Mockery::mock('SAML2_SignedElement');
     }
 
@@ -24,7 +24,7 @@ class SAML2_Signature_FingerprintValidatorTest extends \PHPUnit_Framework_TestCa
      */
     public function it_cannot_validate_when_no_fingerprint_is_configured()
     {
-        $this->mockConfiguration->shouldReceive('has')->once()->with('certFingerprint')->andReturn(false);
+        $this->mockConfiguration->shouldReceive('getCertificateFingerprints')->once()->andReturn(null);
 
         $validator = new SAML2_Signature_FingerprintValidator(
             new SAML2_SimpleTestLogger(),
@@ -40,7 +40,7 @@ class SAML2_Signature_FingerprintValidatorTest extends \PHPUnit_Framework_TestCa
      */
     public function it_cannot_validate_when_no_certificates_are_found()
     {
-        $this->mockConfiguration->shouldReceive('has')->once()->with('certFingerprint')->andReturn(true);
+        $this->mockConfiguration->shouldReceive('getCertificateFingerprints')->once()->andReturn(array());
         $this->mockSignedElement->shouldReceive('getCertificates')->once()->andReturn(array());
 
         $validator = new SAML2_Signature_FingerprintValidator(
@@ -61,7 +61,7 @@ class SAML2_Signature_FingerprintValidatorTest extends \PHPUnit_Framework_TestCa
         preg_match($pattern, SAML2_CertificatesMock::PUBLIC_KEY_PEM, $matches);
         $fingerprint = SAML2_Certificate_X509::createFromCertificateData($matches[1])->getFingerprint();
 
-        $config    = new SAML2_Configuration_IdentityProvider(array('certFingerprint' => $fingerprint->getRaw()));
+        $config    = new SAML2_Configuration_IdentityProvider(array('certificateFingerprints' => array($fingerprint->getRaw())));
         $validator = new SAML2_Signature_FingerprintValidator(
             new SAML2_SimpleTestLogger(),
             new SAML2_Certificate_FingerprintLoader()
