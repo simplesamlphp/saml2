@@ -167,38 +167,173 @@ class SAML2_Const
     const NS_HOK = 'urn:oasis:names:tc:SAML:2.0:profiles:holder-of-key:SSO:browser';
 
     /**
-     * Top-level status code indicating successful processing of the request.
+     * The request succeeded. Additional information MAY be returned in the <StatusMessage>
+     * and/or <StatusDetail> elements.
+     *
+     * Top-level status code.
      */
     const STATUS_SUCCESS = 'urn:oasis:names:tc:SAML:2.0:status:Success';
 
     /**
-     * Top-level status code indicating that there was a problem with the request.
+     * The request could not be performed due to an error on the part of the requester.
+     *
+     * Top-level status code.
      */
     const STATUS_REQUESTER = 'urn:oasis:names:tc:SAML:2.0:status:Requester';
 
     /**
-     * Top-level status code indicating that there was a problem generating the response.
+     * The request could not be performed due to an error on the part of the SAML responder or SAML authority.
+     *
+     * Top-level status code.
      */
     const STATUS_RESPONDER = 'urn:oasis:names:tc:SAML:2.0:status:Responder';
 
     /**
-     * Top-level status code indicating that the request was from an unsupported version of the SAML protocol.
+     * The SAML responder could not process the request because the version of the request message was incorrect.
+     *
+     * Top-level status code.
      */
     const STATUS_VERSION_MISMATCH = 'urn:oasis:names:tc:SAML:2.0:status:VersionMismatch';
 
     /**
-     * Second-level status code for NoPassive errors.
+     * The responding provider was unable to successfully authenticate the principal.
+     *
+     * Second-level status code.
+     */
+    const STATUS_AUTHN_FAILED = 'urn:oasis:names:tc:SAML:2.0:status:AuthnFailed';
+
+    /**
+     * Unexpected or invalid content was encountered within a <saml:Attribute> or <saml:AttributeValue> element.
+     *
+     * Second-level status code.
+     */
+    const STATUS_INVALID_ATTR = 'urn:oasis:names:tc:SAML:2.0:status:InvalidAttrNameOrValue';
+
+    /**
+     * The responding provider cannot or will not support the requested name identifier policy.
+     *
+     * Second-level status code.
+     */
+    const STATUS_INVALID_NAMEID_POLICY = 'urn:oasis:names:tc:SAML:2.0:status:InvalidNameIDPolicy';
+
+    /**
+     * The specified authentication context requirements cannot be met by the responder.
+     *
+     * Second-level status code.
+     */
+    const STATUS_NO_AUTHN_CONTEXT = 'urn:oasis:names:tc:SAML:2.0:status:NoAuthnContext';
+
+    /**
+     * Used by an intermediary to indicate that none of the supported identity provider <Loc> elements in an
+     * <IDPList> can be resolved or that none of the supported identity providers are available.
+     *
+     * Second-level status code.
+     */
+    const STATUS_NO_AVAILABLE_IDP = 'urn:oasis:names:tc:SAML:2.0:status:NoAvailableIDP';
+
+    /**
+     * Indicates the responding provider cannot authenticate the principal passively, as has been requested.
+     *
+     * Second-level status code.
      */
     const STATUS_NO_PASSIVE = 'urn:oasis:names:tc:SAML:2.0:status:NoPassive';
 
     /**
-     * Second-level status code for PartialLogout.
+     * Used by an intermediary to indicate that none of the identity providers in an <IDPList> are
+     * supported by the intermediary.
+     *
+     * Second-level status code.
+     */
+    const STATUS_NO_SUPPORTED_IDP = 'urn:oasis:names:tc:SAML:2.0:status:NoSupportedIDP';
+
+    /**
+     * Used by a session authority to indicate to a session participant that it was not able to propagate logout
+     * to all other session participants.
+     *
+     * Second-level status code.
      */
     const STATUS_PARTIAL_LOGOUT = 'urn:oasis:names:tc:SAML:2.0:status:PartialLogout';
 
     /**
-     * Second-level status code for ProxyCountExceeded.
+     * Indicates that a responding provider cannot authenticate the principal directly and is not permitted
+     * to proxy the request further.
+     *
+     * Second-level status code.
      */
     const STATUS_PROXY_COUNT_EXCEEDED = 'urn:oasis:names:tc:SAML:2.0:status:ProxyCountExceeded';
 
+    /**
+     * The SAML responder or SAML authority is able to process the request but has chosen not to respond.
+     * This status code MAY be used when there is concern about the security context of the request message or
+     * the sequence of request messages received from a particular requester.
+     *
+     * Second-level status code.
+     */
+    const STATUS_REQUEST_DENIED = 'urn:oasis:names:tc:SAML:2.0:status:RequestDenied';
+
+    /**
+     * The SAML responder or SAML authority does not support the request.
+     *
+     * Second-level status code.
+     */
+    const STATUS_REQUEST_UNSUPPORTED = 'urn:oasis:names:tc:SAML:2.0:status:RequestUnsupported';
+
+    /**
+     * The SAML responder cannot process any requests with the protocol version specified in the request.
+     *
+     * Second-level status code.
+     */
+    const STATUS_REQUEST_VERSION_DEPRECATED = 'urn:oasis:names:tc:SAML:2.0:status:RequestVersionDeprecated';
+
+    /**
+     * The SAML responder cannot process the request because the protocol version specified in the request message
+     * is a major upgrade from the highest protocol version supported by the responder.
+     *
+     * Second-level status code.
+     */
+    const STATUS_REQUEST_VERSION_TOO_HIGH = 'urn:oasis:names:tc:SAML:2.0:status:RequestVersionTooHigh';
+
+    /**
+     * The SAML responder cannot process the request because the protocol version specified in the request message
+     * is too low.
+     *
+     * Second-level status code.
+     */
+    const STATUS_REQUEST_VERSION_TOO_LOW = 'urn:oasis:names:tc:SAML:2.0:status:RequestVersionTooLow';
+
+    /**
+     * The resource value provided in the request message is invalid or unrecognized.
+     *
+     * Second-level status code.
+     */
+    const STATUS_RESOURCE_NOT_RECOGNIZED = 'urn:oasis:names:tc:SAML:2.0:status:ResourceNotRecognized';
+
+    /**
+     * The response message would contain more elements than the SAML responder is able to return.
+     *
+     * Second-level status code.
+     */
+    const STATUS_TOO_MANY_RESPONSES = 'urn:oasis:names:tc:SAML:2.0:status:TooManyResponses';
+
+    /**
+     * An entity that has no knowledge of a particular attribute profile has been presented with an attribute
+     * drawn from that profile.
+     *
+     * Second-level status code.
+     */
+    const STATUS_UNKNOWN_ATTR_PROFILE = 'urn:oasis:names:tc:SAML:2.0:status:UnknownAttrProfile';
+
+    /**
+     * The responding provider does not recognize the principal specified or implied by the request.
+     *
+     * Second-level status code.
+     */
+    const STATUS_UNKNOWN_PRINCIPAL = 'urn:oasis:names:tc:SAML:2.0:status:UnknownPrincipal';
+
+    /**
+     * The SAML responder cannot properly fulfill the request using the protocol binding specified in the request.
+     *
+     * Second-level status code.
+     */
+    const STATUS_UNSUPPORTED_BINDING = 'urn:oasis:names:tc:SAML:2.0:status:UnsupportedBinding';
 }
