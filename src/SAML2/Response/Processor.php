@@ -63,8 +63,6 @@ class SAML2_Response_Processor
     /**
      * @param SAML2_Response                       $response
      * @param SAML2_Configuration_IdentityProvider $identityProviderConfiguration
-     *
-     * @return bool
      */
     private function verifySignature(
         SAML2_Response $response,
