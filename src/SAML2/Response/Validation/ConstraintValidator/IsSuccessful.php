@@ -12,22 +12,34 @@ class SAML2_Response_Validation_ConstraintValidator_IsSuccessful implements
         }
     }
 
+    /**
+     * @param array $responseStatus
+     *
+     * @return string
+     */
     private function buildMessage(array $responseStatus)
     {
-        $prefixLength   = strlen(SAML2_Const::STATUS_PREFIX);
-        $truncateStatus = function ($status) use ($prefixLength) {
-            if (strpos($status, SAML2_Const::STATUS_PREFIX) !== 0) {
-                return $status;
-            }
-
-            return substr($status, $prefixLength);
-        };
-
         return sprintf(
             '%s%s%s',
-            $truncateStatus($responseStatus['Code']),
-            $responseStatus['SubCode'] ? '/' . $truncateStatus($responseStatus['SubCode']) : '',
-            $responseStatus['Message'] ?: ''
+            $this->truncateStatus($responseStatus['Code']),
+            $responseStatus['SubCode'] ? '/' . $this->truncateStatus($responseStatus['SubCode']) : '',
+            $responseStatus['Message'] ? ' ' . $responseStatus['Message'] : ''
         );
+    }
+
+    /**
+     * Truncate the status if it is prefixed by its urn.
+     * @param string $status
+     *
+     * @return string
+     */
+    private function truncateStatus($status)
+    {
+        $prefixLength = strlen(SAML2_Const::STATUS_PREFIX);
+        if (strpos($status, SAML2_Const::STATUS_PREFIX) !== 0) {
+            return $status;
+        }
+
+        return substr($status, $prefixLength);
     }
 }
