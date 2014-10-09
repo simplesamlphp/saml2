@@ -24,7 +24,10 @@ class SAML2_Configuration_SimpleSAMLConverter
      */
     public static function convertToIdentityProvider(SimpleSAML_Configuration $configuration, $prefix = '')
     {
-        return new SAML2_Configuration_ServiceProvider(static::pluckConfiguration($configuration, $prefix));
+        $pluckedConfiguration = static::pluckConfiguration($configuration, $prefix);
+        static::enrichForServiceProvider($configuration, $pluckedConfiguration);
+
+        return new SAML2_Configuration_ServiceProvider($pluckedConfiguration);
     }
 
     /**
@@ -57,6 +60,13 @@ class SAML2_Configuration_SimpleSAMLConverter
             $extracted['certificateFingerprint'] = $configuration->getArrayizeString('certFingerprint');
         }
 
+        $extracted['assertionEncryptionEnabled'] = $configuration->getBoolean('assertion.encryption', FALSE);
+
         return $extracted;
+    }
+
+    private static function enrichForServiceProvider(SimpleSAML_Configuration $configuration, &$baseConfiguration)
+    {
+        $baseConfiguration['entityId'] = $configuration->getString('entityid');
     }
 }

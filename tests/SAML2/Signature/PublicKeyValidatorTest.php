@@ -66,7 +66,7 @@ class SAML2_Signature_PublicKeyValidatorTest extends \PHPUnit_Framework_TestCase
         $pattern = SAML2_Utilities_Certificate::CERTIFICATE_PATTERN;
         preg_match($pattern, SAML2_CertificatesMock::PUBLIC_KEY_PEM, $matches);
 
-        $config = new SAML2_Configuration_IdentityProvider(array('certData' => $matches[1]));
+        $config = new SAML2_Configuration_IdentityProvider(array('certificateData' => $matches[1]));
         $validator = new SAML2_Signature_PublicKeyValidator(new SAML2_SimpleTestLogger(), new SAML2_Certificate_KeyLoader());
 
         $doc = new DOMDocument();

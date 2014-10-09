@@ -4,7 +4,8 @@
  * Basic configuration wrapper
  */
 class SAML2_Configuration_IdentityProvider extends SAML2_Configuration_ArrayAdapter implements
-    SAML2_Configuration_CertificateProvider
+    SAML2_Configuration_CertificateProvider,
+    SAML2_Configuration_DecryptionProvider
 {
     public function getKeys()
     {
@@ -24,5 +25,10 @@ class SAML2_Configuration_IdentityProvider extends SAML2_Configuration_ArrayAdap
     public function getCertificateFingerprints()
     {
         return $this->get('certificateFingerprints');
+    }
+
+    public function isAssertionEncrypted()
+    {
+        return $this->get('assertionEncryptionEnabled');
     }
 }
