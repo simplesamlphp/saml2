@@ -13,7 +13,8 @@ class SAML2_Assertion_ProcessorBuilder
         Psr\Log\LoggerInterface $logger,
         SAML2_Configuration_Destination $currentDestination,
         SAML2_Configuration_IdentityProvider $identityProvider,
-        SAML2_Configuration_ServiceProvider $serviceProvider
+        SAML2_Configuration_ServiceProvider $serviceProvider,
+        SAML2_Response $response
     ) {
         $keyloader = new SAML2_Certificate_PrivateKeyLoader();
         $decrypter = new SAML2_Assertion_Decrypter($logger, $identityProvider, $serviceProvider, $keyloader);
@@ -21,7 +22,8 @@ class SAML2_Assertion_ProcessorBuilder
         $subjectConfirmationValidator = self::createSubjectConfirmationValidator(
             $identityProvider,
             $serviceProvider,
-            $currentDestination
+            $currentDestination,
+            $response
         );
 
         $transformerChain = self::createAssertionTransformerChain(
@@ -55,7 +57,8 @@ class SAML2_Assertion_ProcessorBuilder
     private static function createSubjectConfirmationValidator(
         SAML2_Configuration_IdentityProvider $identityProvider,
         SAML2_Configuration_ServiceProvider $serviceProvider,
-        SAML2_Configuration_Destination $currentDestination
+        SAML2_Configuration_Destination $currentDestination,
+        SAML2_Response $response
     ) {
         $validator = new SAML2_Assertion_Validation_SubjectConfirmationValidator($identityProvider, $serviceProvider);
         $validator->addConstraintValidator(
@@ -73,7 +76,9 @@ class SAML2_Assertion_ProcessorBuilder
             )
         );
         $validator->addConstraintValidator(
-            new SAML2_Assertion_Validation_ConstraintValidator_SubjectConfirmationResponseToMatches()
+            new SAML2_Assertion_Validation_ConstraintValidator_SubjectConfirmationResponseToMatches(
+                $response
+            )
         );
 
         return $validator;

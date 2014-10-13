@@ -60,7 +60,8 @@ class SAML2_Response_Processor
             $this->logger,
             $this->currentDestination,
             $identityProviderConfiguration,
-            $serviceProviderConfiguration
+            $serviceProviderConfiguration,
+            $response
         );
 
         $this->enforcePreconditions($response);
