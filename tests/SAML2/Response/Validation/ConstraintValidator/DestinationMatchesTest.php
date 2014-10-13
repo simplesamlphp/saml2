@@ -18,8 +18,9 @@ class SAML2_Response_Validation_ConstraintValidator_DestinationMatchesTest exten
      */
     public function a_response_is_valid_when_the_destinations_match()
     {
+        $expectedDestination = new SAML2_Configuration_Destination('VALID DESTINATION');
         $this->response->shouldReceive('getDestination')->once()->andReturn('VALID DESTINATION');
-        $validator = new SAML2_Response_Validation_ConstraintValidator_DestinationMatches('VALID DESTINATION');
+        $validator = new SAML2_Response_Validation_ConstraintValidator_DestinationMatches($expectedDestination);
         $result    = new SAML2_Response_Validation_Result();
 
         $validator->validate($this->response, $result);
@@ -34,7 +35,9 @@ class SAML2_Response_Validation_ConstraintValidator_DestinationMatchesTest exten
     public function a_response_is_not_valid_when_the_destinations_are_not_equal()
     {
         $this->response->shouldReceive('getDestination')->once()->andReturn('FOO');
-        $validator = new SAML2_Response_Validation_ConstraintValidator_DestinationMatches('BAR');
+        $validator = new SAML2_Response_Validation_ConstraintValidator_DestinationMatches(
+            new SAML2_Configuration_Destination('BAR')
+        );
         $result = new SAML2_Response_Validation_Result();
 
         $validator->validate($this->response, $result);

@@ -11,13 +11,19 @@ class SAML2_Assertion_ProcessorBuilder
 {
     public static function build(
         Psr\Log\LoggerInterface $logger,
+        SAML2_Configuration_Destination $currentDestination,
         SAML2_Configuration_IdentityProvider $identityProvider,
         SAML2_Configuration_ServiceProvider $serviceProvider
     ) {
         $keyloader = new SAML2_Certificate_PrivateKeyLoader();
         $decrypter = new SAML2_Assertion_Decrypter($logger, $identityProvider, $serviceProvider, $keyloader);
         $assertionValidator = self::createAssertionValidator($identityProvider, $serviceProvider);
-        $subjectConfirmationValidator = self::createSubjectConfirmationValidator($identityProvider, $serviceProvider);
+        $subjectConfirmationValidator = self::createSubjectConfirmationValidator(
+            $identityProvider,
+            $serviceProvider,
+            $currentDestination
+        );
+
         $transformerChain = self::createAssertionTransformerChain(
             $logger,
             $keyloader,
@@ -48,7 +54,8 @@ class SAML2_Assertion_ProcessorBuilder
 
     private static function createSubjectConfirmationValidator(
         SAML2_Configuration_IdentityProvider $identityProvider,
-        SAML2_Configuration_ServiceProvider $serviceProvider
+        SAML2_Configuration_ServiceProvider $serviceProvider,
+        SAML2_Configuration_Destination $currentDestination
     ) {
         $validator = new SAML2_Assertion_Validation_SubjectConfirmationValidator($identityProvider, $serviceProvider);
         $validator->addConstraintValidator(
@@ -61,7 +68,9 @@ class SAML2_Assertion_ProcessorBuilder
             new SAML2_Assertion_Validation_ConstraintValidator_SubjectConfirmationNotOnOrAfter()
         );
         $validator->addConstraintValidator(
-            new SAML2_Assertion_Validation_ConstraintValidator_SubjectConfirmationRecipientMatches()
+            new SAML2_Assertion_Validation_ConstraintValidator_SubjectConfirmationRecipientMatches(
+                $currentDestination
+            )
         );
         $validator->addConstraintValidator(
             new SAML2_Assertion_Validation_ConstraintValidator_SubjectConfirmationResponseToMatches()

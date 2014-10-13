@@ -5,7 +5,7 @@
  */
 class SAML2_Response_Validation_PreconditionValidator extends SAML2_Response_Validation_Validator
 {
-    public function __construct($destination)
+    public function __construct(SAML2_Configuration_Destination $destination)
     {
         // move to DI
         $this->addConstraintValidator(new SAML2_Response_Validation_ConstraintValidator_IsSuccessful());
