@@ -24,7 +24,7 @@ class SAML2_Utilities_File
         }
 
         $contents = file_get_contents($file);
-        if ($contents === false) {
+        if ($contents === FALSE) {
             throw new SAML2_Exception_RuntimeException(sprintf(
                 'Could not read from existing and readable file "%s"',
                 $file

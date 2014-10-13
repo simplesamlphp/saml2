@@ -13,9 +13,15 @@ interface SAML2_Configuration_DecryptionProvider
     public function getSharedKey();
 
     /**
-     * @param null|string $name
+     * @param string  $name     the name of the private key
+     * @param boolean $required whether or not the private key must exist
      *
      * @return mixed
      */
-    public function getPrivateKey($name = null);
+    public function getPrivateKey($name, $required = false);
+
+    /**
+     * @return array
+     */
+    public function getBlacklistedAlgorithms();
 }

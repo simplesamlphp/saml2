@@ -38,18 +38,15 @@ class SAML2_Configuration_ServiceProvider extends SAML2_Configuration_ArrayAdapt
         return $this->get('assertionEncryptionEnabled');
     }
 
-    /**
-     * @return null|string
-     */
     public function getSharedKey()
     {
         return $this->get('sharedKey');
     }
 
-    public function getPrivateKey($name = null, $required = false)
+    public function getPrivateKey($name, $required = false)
     {
         $privateKeys = $this->get('privateKeys');
-        $key = array_filter($privateKeys, function (SAML2_Configuration_PrivateKey $key) use ($name) {
+        $key         = array_filter($privateKeys, function (SAML2_Configuration_PrivateKey $key) use ($name) {
             return $key->getName() === $name;
         });
 
@@ -58,7 +55,7 @@ class SAML2_Configuration_ServiceProvider extends SAML2_Configuration_ArrayAdapt
             throw new \RuntimeException(sprintf(
                 'Attempted to get privateKey by name "%s", found "%d" keys, where only one was expected. Please '
                 . 'verify that your configuration is correct',
-                $name === null ? 'null (default)' : $name,
+                $name,
                 $keyCount
             ));
         }
@@ -68,5 +65,10 @@ class SAML2_Configuration_ServiceProvider extends SAML2_Configuration_ArrayAdapt
         }
 
         return array_pop($key);
+    }
+
+    public function getBlacklistedAlgorithms()
+    {
+        return $this->get('blacklistedEncryptionAlgorithms', array(XMLSecurityKey::RSA_1_5));
     }
 }

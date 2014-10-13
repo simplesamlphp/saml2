@@ -71,17 +71,6 @@ class SAML2_Certificate_KeyLoaderTest extends \PHPUnit_Framework_TestCase
      * @group certificate
      *
      * @test
-     * @expectedException SAML2_Exception_InvalidArgumentException
-     */
-    public function attempting_to_load_a_not_readable_file_throws_an_exception()
-    {
-        $this->keyLoader->loadCertificateFile('/foo/bar/baz/quuz/quux');
-    }
-
-    /**
-     * @group certificate
-     *
-     * @test
      * @expectedException SAML2_Certificate_Exception_InvalidCertificateStructureException
      */
     public function loading_a_file_with_the_wrong_format_throws_an_exception()

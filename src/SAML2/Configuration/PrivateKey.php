@@ -3,8 +3,11 @@
 /**
  * Configuration of a private key.
  */
-class SAML2_Configuration_PrivateKey extends  SAML2_Configuration_ArrayAdapter
+class SAML2_Configuration_PrivateKey extends SAML2_Configuration_ArrayAdapter
 {
+    const NAME_NEW     = 'new';
+    const NAME_DEFAULT = 'default';
+
     /**
      * @var string
      */
@@ -20,18 +23,18 @@ class SAML2_Configuration_PrivateKey extends  SAML2_Configuration_ArrayAdapter
      */
     private $name;
 
-    public function __construct($filePath, $passphrase = null, $name = null)
+    public function __construct($filePath, $name, $passphrase = NULL)
     {
         if (!is_string($filePath)) {
             throw SAML2_Exception_InvalidArgumentException::invalidType('string', $filePath);
         }
 
-        if ($passphrase && !is_string($passphrase)) {
-            throw SAML2_Exception_InvalidArgumentException::invalidType('string', $passphrase);
+        if (!is_string($name)) {
+            throw SAML2_Exception_InvalidArgumentException::invalidType('string', $name);
         }
 
-        if ($name && !is_string($name)) {
-            throw SAML2_Exception_InvalidArgumentException::invalidType('string', $name);
+        if ($passphrase && !is_string($passphrase)) {
+            throw SAML2_Exception_InvalidArgumentException::invalidType('string', $passphrase);
         }
 
         $this->filePath = $filePath;

@@ -116,20 +116,7 @@ class SAML2_Certificate_KeyLoader
      */
     public function loadCertificateFile($certificateFile)
     {
-        if (!is_readable($certificateFile)) {
-            throw new SAML2_Exception_InvalidArgumentException(sprintf(
-                'Certificate file "%s" does not exist or is not readable',
-                $certificateFile
-            ));
-        }
-
-        $certificate = file_get_contents($certificateFile);
-        if ($certificate === FALSE) {
-            throw new SAML2_Exception_RuntimeException(sprintf(
-                'Could not read from existing and readable file "%s"',
-                $certificateFile
-            ));
-        }
+        $certificate = SAML2_Utilities_File::getFileContents($certificateFile);
 
         if (!SAML2_Utilities_Certificate::hasValidStructure($certificate)) {
             throw new SAML2_Certificate_Exception_InvalidCertificateStructureException(sprintf(
