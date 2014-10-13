@@ -17,6 +17,7 @@ class SAML2_Configuration_SimpleSAMLConverter
     ) {
         $pluckedConfiguration = static::pluckConfiguration($configuration, $certificatePrefix);
         static::enrichForDecryptionProvider($configuration, $pluckedConfiguration);
+        static::enrichForIdentityProvider($configuration, $pluckedConfiguration);
 
         return new SAML2_Configuration_IdentityProvider($pluckedConfiguration);
     }
@@ -75,6 +76,11 @@ class SAML2_Configuration_SimpleSAMLConverter
         }
 
         return $extracted;
+    }
+
+    private static function enrichForIdentityProvider(SimpleSAML_Configuration $configuration, &$baseConfiguration)
+    {
+        $baseConfiguration['base64EncodedAttributes'] = $configuration->getBoolean('base64attributes', FALSE);
     }
 
     private static function enrichForServiceProvider(SimpleSAML_Configuration $configuration, &$baseConfiguration)

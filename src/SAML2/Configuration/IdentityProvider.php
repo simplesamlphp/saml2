@@ -37,6 +37,11 @@ class SAML2_Configuration_IdentityProvider extends SAML2_Configuration_ArrayAdap
         return $this->get('sharedKey');
     }
 
+    public function hasBase64EncodedAttributes()
+    {
+        return $this->get('base64EncodedAttributes');
+    }
+
     public function getPrivateKey($name, $required = FALSE)
     {
         $privateKeys = $this->get('privateKeys');
