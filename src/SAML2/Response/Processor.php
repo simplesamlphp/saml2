@@ -23,30 +23,20 @@ class SAML2_Response_Processor
     private $assertionProcessor;
 
     /**
-     * @var SAML2_Configuration_Destination
-     */
-    private $currentDestination;
-
-    /**
      * @param \Psr\Log\LoggerInterface        $logger
-     * @param SAML2_Signature_Validator       $signatureValidator
-     * @param SAML2_Configuration_Destination $currentDestination
+     *
      */
-    public function __construct(
-        \Psr\Log\LoggerInterface $logger,
-        SAML2_Signature_Validator $signatureValidator,
-        SAML2_Configuration_Destination $currentDestination
-    ) {
+    public function __construct(\Psr\Log\LoggerInterface $logger)
+    {
         $this->logger = $logger;
-        $this->signatureValidator = $signatureValidator;
-        $this->currentDestination = $currentDestination;
 
-        $this->preconditionValidator = new SAML2_Response_Validation_PreconditionValidator($currentDestination);
+        $this->signatureValidator = new SAML2_Signature_Validator($logger);
     }
 
     /**
      * @param SAML2_Configuration_ServiceProvider  $serviceProviderConfiguration
      * @param SAML2_Configuration_IdentityProvider $identityProviderConfiguration
+     * @param SAML2_Configuration_Destination      $currentDestination
      * @param SAML2_Response                       $response
      *
      * @return SAML2_Assertion[] Collection (SAML2_Utilities_ArrayCollection) of SAML2_Assertion objects
@@ -54,11 +44,13 @@ class SAML2_Response_Processor
     public function process(
         SAML2_Configuration_ServiceProvider $serviceProviderConfiguration,
         SAML2_Configuration_IdentityProvider $identityProviderConfiguration,
+        SAML2_Configuration_Destination $currentDestination,
         SAML2_Response $response
     ) {
+        $this->preconditionValidator = new SAML2_Response_Validation_PreconditionValidator($currentDestination);
         $this->assertionProcessor = SAML2_Assertion_ProcessorBuilder::build(
             $this->logger,
-            $this->currentDestination,
+            $currentDestination,
             $identityProviderConfiguration,
             $serviceProviderConfiguration,
             $response
@@ -96,6 +88,11 @@ class SAML2_Response_Processor
         }
     }
 
+    /**
+     * @param SAML2_Response $response
+     *
+     * @return SAML2_Assertion[]
+     */
     private function processAssertions(SAML2_Response $response)
     {
         $assertions = $response->getAssertions();
