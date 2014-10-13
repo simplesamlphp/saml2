@@ -7,25 +7,33 @@ class SAML2_Configuration_SimpleSAMLConverter
 {
     /**
      * @param SimpleSAML_Configuration $configuration
-     * @param string                   $prefix
+     * @param string                   $certificatePrefix
      *
      * @return SAML2_Configuration_IdentityProvider
      */
-    public static function convertToServiceProvider(SimpleSAML_Configuration $configuration, $prefix = '')
-    {
-        return new SAML2_Configuration_IdentityProvider(static::pluckConfiguration($configuration, $prefix));
+    public static function convertToIdentityProvider(
+        SimpleSAML_Configuration $configuration,
+        $certificatePrefix = ''
+    ) {
+        $pluckedConfiguration = static::pluckConfiguration($configuration, $certificatePrefix);
+        static::enrichForDecryptionProvider($configuration, $pluckedConfiguration);
+
+        return new SAML2_Configuration_IdentityProvider($pluckedConfiguration);
     }
 
     /**
      * @param SimpleSAML_Configuration $configuration
-     * @param string                   $prefix
+     * @param string                   $certificatePrefix
      *
      * @return SAML2_Configuration_ServiceProvider
      */
-    public static function convertToIdentityProvider(SimpleSAML_Configuration $configuration, $prefix = '')
-    {
-        $pluckedConfiguration = static::pluckConfiguration($configuration, $prefix);
+    public static function convertToServiceProvider(
+        SimpleSAML_Configuration $configuration,
+        $certificatePrefix = ''
+    ) {
+        $pluckedConfiguration = static::pluckConfiguration($configuration, $certificatePrefix);
         static::enrichForServiceProvider($configuration, $pluckedConfiguration);
+        static::enrichForDecryptionProvider($configuration, $pluckedConfiguration);
 
         return new SAML2_Configuration_ServiceProvider($pluckedConfiguration);
     }
@@ -62,11 +70,37 @@ class SAML2_Configuration_SimpleSAMLConverter
 
         $extracted['assertionEncryptionEnabled'] = $configuration->getBoolean('assertion.encryption', FALSE);
 
+        if ($configuration->has('sharedKey')) {
+            $extracted['sharedKey'] = $configuration->getString('sharedKey');
+        }
+
         return $extracted;
     }
 
     private static function enrichForServiceProvider(SimpleSAML_Configuration $configuration, &$baseConfiguration)
     {
         $baseConfiguration['entityId'] = $configuration->getString('entityid');
+    }
+
+    private static function enrichForDecryptionProvider(
+        SimpleSAML_Configuration $configuration,
+        array &$baseConfiguration
+    ) {
+        if ($configuration->has('sharedKey')) {
+            $baseConfiguration['sharedKey'] = $configuration->getString('sharedKey');
+        }
+
+        if ($configuration->has('new_privatekey')) {
+            $baseConfiguration['privateKeys'][] = new SAML2_Configuration_PrivateKey(
+                $configuration->getString('new_privatekey'),
+                $configuration->getString('new_privatekey_pass', null),
+                'new'
+            );
+        }
+
+        $baseConfiguration['privateKeys'][] = new SAML2_Configuration_PrivateKey(
+            $configuration->getString('privatekey'),
+            $configuration->getString('privatekey_pass', null)
+        );
     }
 }
