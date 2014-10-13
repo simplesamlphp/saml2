@@ -41,22 +41,24 @@ class SAML2_Certificate_KeyLoader
      * @param SAML2_Configuration_CertificateProvider $config
      * @param NULL|string                             $usage
      * @param bool                                    $required
-     * @param string                                  $prefix
      *
      * @return SAML2_Certificate_KeyCollection
      */
     public function loadKeysFromConfiguration(
         SAML2_Configuration_CertificateProvider $config,
         $usage = NULL,
-        $required = FALSE,
-        $prefix = ''
+        $required = FALSE
     ) {
-        if ($config->has($prefix . 'keys')) {
-            $this->loadKeys($config->get($prefix . 'keys'), $usage);
-        } elseif ($config->has($prefix . 'certData')) {
-            $this->loadCertificateData($config->get($prefix . 'certData'));
-        } elseif ($config->has($prefix . 'certificate')) {
-            $this->loadCertificateFile($config->get($prefix . 'certificate'));
+        $keys = $config->getKeys();
+        $certificateData = $config->getCertificateData();
+        $certificateFingerprints = $config->getCertificateFingerprints();
+
+        if ($keys) {
+            $this->loadKeys($keys, $usage);
+        } elseif ($certificateData) {
+            $this->loadCertificateData($certificateData);
+        } elseif ($certificateFingerprints) {
+            $this->loadCertificateFile($certificateFingerprints);
         }
 
         if ($required && !$this->hasKeys()) {
