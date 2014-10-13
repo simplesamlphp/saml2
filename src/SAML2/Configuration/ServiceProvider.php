@@ -43,7 +43,7 @@ class SAML2_Configuration_ServiceProvider extends SAML2_Configuration_ArrayAdapt
         return $this->get('sharedKey');
     }
 
-    public function getPrivateKey($name, $required = false)
+    public function getPrivateKey($name, $required = FALSE)
     {
         $privateKeys = $this->get('privateKeys');
         $key         = array_filter($privateKeys, function (SAML2_Configuration_PrivateKey $key) use ($name) {
@@ -61,7 +61,7 @@ class SAML2_Configuration_ServiceProvider extends SAML2_Configuration_ArrayAdapt
         }
 
         if (!$keyCount) {
-            return null;
+            return NULL;
         }
 
         return array_pop($key);

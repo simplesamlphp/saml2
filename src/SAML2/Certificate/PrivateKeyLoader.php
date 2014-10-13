@@ -44,7 +44,7 @@ class SAML2_Certificate_PrivateKeyLoader
             $decryptionKeys->add($this->convertPrivateKeyToRsaKey($loadedKey));
         }
 
-        $privateKey = $serviceProvider->getPrivateKey(SAML2_Configuration_PrivateKey::NAME_DEFAULT, true);
+        $privateKey = $serviceProvider->getPrivateKey(SAML2_Configuration_PrivateKey::NAME_DEFAULT, TRUE);
         $loadedKey  = $this->loadPrivateKey($privateKey);
         $decryptionKeys->add($this->convertPrivateKeyToRsaKey($loadedKey));
 

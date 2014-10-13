@@ -18,7 +18,7 @@ interface SAML2_Configuration_DecryptionProvider
      *
      * @return mixed
      */
-    public function getPrivateKey($name, $required = false);
+    public function getPrivateKey($name, $required = FALSE);
 
     /**
      * @return array
