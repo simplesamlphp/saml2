@@ -49,6 +49,32 @@ class SAML2_Utilities_ArrayCollection implements SAML2_Utilities_Collection
         return $removed;
     }
 
+    public function getOnlyElement()
+    {
+        if ($this->count() !== 1) {
+            throw new SAML2_Exception_RuntimeException(sprintf(
+                'SAML2_Utilities_ArrayCollection::getOnlyElement requires that the collection has exactly one element, '
+                . '"%d" elements found',
+                $this->count()
+            ));
+        }
+    }
+
+    public function first()
+    {
+        return reset($this->elements);
+    }
+
+    public function last()
+    {
+        return end($this->elements);
+    }
+
+    public function map(Closure $function)
+    {
+        return new self(array_map($function, $this->elements));
+    }
+
     public function count()
     {
         return count($this->elements);
