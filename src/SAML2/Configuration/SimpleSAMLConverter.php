@@ -104,15 +104,17 @@ class SAML2_Configuration_SimpleSAMLConverter
             );
         }
 
-        $baseConfiguration['privateKeys'][] = new SAML2_Configuration_PrivateKey(
-            $configuration->getString('privatekey'),
-            SAML2_Configuration_PrivateKey::NAME_DEFAULT,
-            $configuration->getString('privatekey_pass', NULL)
-        );
+        if ($configuration->getBoolean('assertion.encryption', FALSE)) {
+            $baseConfiguration['privateKeys'][] = new SAML2_Configuration_PrivateKey(
+                $configuration->getString('privatekey'),
+                SAML2_Configuration_PrivateKey::NAME_DEFAULT,
+                $configuration->getString('privatekey_pass', NULL)
+            );
 
-        if ($configuration->has('encryption.blacklisted-algorithms')) {
-            $baseConfiguration['blacklistedEncryptionAlgorithms'] = $configuration
-                ->get('encryption.blacklisted-algorithms');
+            if ($configuration->has('encryption.blacklisted-algorithms')) {
+                $baseConfiguration['blacklistedEncryptionAlgorithms'] = $configuration
+                    ->get('encryption.blacklisted-algorithms');
+            }
         }
     }
 }
