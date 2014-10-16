@@ -123,7 +123,7 @@ abstract class SAML2_Message implements SAML2_SignedElement
         $this->tagName = $tagName;
 
         $this->id = SAML2_Utils::getContainer()->generateId();
-        $this->issueInstant = time();
+        $this->issueInstant = SAML2_Utilities_Temporal::getTime();
         $this->certificates = array();
         $this->validators = array();
 

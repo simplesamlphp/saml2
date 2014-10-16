@@ -32,7 +32,7 @@ class SAML2_HTTPArtifact extends SAML2_Binding
         $artifactData = $message->toUnsignedXML();
         $artifactDataString = $artifactData->ownerDocument->saveXML($artifactData);
 
-        $store->set('artifact', $artifact, $artifactDataString, time() + 15*60);
+        $store->set('artifact', $artifact, $artifactDataString, SAML2_Utilities_Temporal::getTime() + 15*60);
 
         $params = array(
             'SAMLart' => $artifact,
