@@ -5,7 +5,7 @@ interface SAML2_Configuration_DecryptionProvider
     /**
      * @return null|bool
      */
-    public function isAssertionEncrypted();
+    public function isAssertionEncryptionRequired();
 
     /**
      * @return null|string

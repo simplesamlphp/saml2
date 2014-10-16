@@ -27,7 +27,7 @@ class SAML2_Configuration_IdentityProvider extends SAML2_Configuration_ArrayAdap
         return $this->get('certificateFingerprints');
     }
 
-    public function isAssertionEncrypted()
+    public function isAssertionEncryptionRequired()
     {
         return $this->get('assertionEncryptionEnabled');
     }

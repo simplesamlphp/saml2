@@ -33,7 +33,7 @@ class SAML2_Configuration_ServiceProvider extends SAML2_Configuration_ArrayAdapt
         return $this->get('entityId');
     }
 
-    public function isAssertionEncrypted()
+    public function isAssertionEncryptionRequired()
     {
         return $this->get('assertionEncryptionEnabled');
     }

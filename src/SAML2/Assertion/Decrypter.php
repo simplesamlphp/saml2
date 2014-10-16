@@ -39,8 +39,8 @@ class SAML2_Assertion_Decrypter
      */
     public function isEncryptionEnforced()
     {
-        return $this->identityProvider->isAssertionEncrypted()
-            || $this->serviceProvider->isAssertionEncrypted();
+        return $this->identityProvider->isAssertionEncryptionRequired()
+            || $this->serviceProvider->isAssertionEncryptionRequired();
     }
 
     /**
