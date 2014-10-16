@@ -8,7 +8,7 @@ class SAML2_Assertion_Validation_ConstraintValidator_SubjectConfirmationNotOnOrA
         SAML2_Assertion_Validation_Result $result
     ) {
         $notOnOrAfter = $subjectConfirmation->SubjectConfirmationData->NotOnOrAfter;
-        if ($notOnOrAfter && $notOnOrAfter <= time() + 60) {
+        if ($notOnOrAfter && $notOnOrAfter <= SAML2_Utilities_Temporal::getTime() - 60) {
             $result->addError('NotOnOrAfter in SubjectConfirmationData is in the past');
         }
     }

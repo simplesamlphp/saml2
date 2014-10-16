@@ -14,7 +14,7 @@ class SAML2_Assertion_Validation_ConstraintValidator_SpIsValidAudience implement
         $this->serviceProvider = $serviceProvider;
     }
 
-    public function validate(SAML2_Assertion $assertion, SAML2_Response_Validation_Result $result)
+    public function validate(SAML2_Assertion $assertion, SAML2_Assertion_Validation_Result $result)
     {
         $intendedAudiences = $assertion->getValidAudiences();
         if ($intendedAudiences === NULL) {

@@ -2,6 +2,8 @@
 
 /**
  * Simple Array implementation of Collection.
+ *
+ * @SuppressWarnings(PHPMD.TooManyMethods) - it just has a large api.
  */
 class SAML2_Utilities_ArrayCollection implements SAML2_Utilities_Collection
 {

@@ -41,7 +41,7 @@ class SAML2_Assertion_Validation_SubjectConfirmationValidator
 
     public function validate(SAML2_XML_saml_SubjectConfirmation $subjectConfirmation)
     {
-        $result = new SAML2_Response_Validation_Result();
+        $result = new SAML2_Assertion_Validation_Result();
         foreach ($this->constraints as $validator) {
             $validator->validate($subjectConfirmation, $result);
         }

@@ -5,6 +5,8 @@
  *
  * @author  Danny Bollaert, UGent AS. <danny.bollaert@ugent.be>
  * @package SimpleSAMLphp
+ *
+ * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
  */
 class SAML2_HTTPArtifact extends SAML2_Binding
 {

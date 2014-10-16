@@ -44,7 +44,7 @@ class SAML2_Assertion_Validation_AssertionValidator
 
     public function validate(SAML2_Assertion $assertion)
     {
-        $result = new SAML2_Response_Validation_Result();
+        $result = new SAML2_Assertion_Validation_Result();
         foreach ($this->constraints as $validator) {
             $validator->validate($assertion, $result);
         }
