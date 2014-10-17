@@ -56,7 +56,8 @@ class SAML2_Assertion_Decrypter
             $blacklistedKeys = $this->serviceProvider->getBlacklistedAlgorithms();
         }
 
-        // reflects the simplesamlphp behaviour for BC. (sspmod_saml_Message::362-372
+        // reflects the simplesamlphp behaviour for BC, see
+        // https://github.com/simplesamlphp/simplesamlphp/blob/3d735912342767d391297cc5e13272a76730aca0/modules/saml/lib/Message.php#L369
         foreach ($decryptionKeys as $index => $key) {
             try {
                 $decryptedAssertion = $assertion->getAssertion($key, $blacklistedKeys);

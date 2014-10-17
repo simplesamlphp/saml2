@@ -49,22 +49,26 @@ class SAML2_Configuration_SimpleSAMLConverter
     {
         $extracted = array();
 
-        // ported from simplesamlphp/lib/SimpleSAML/Configuration.php lines 1092-1094
+        // ported from
+        // https://github.com/simplesamlphp/simplesamlphp/blob/3d735912342767d391297cc5e13272a76730aca0/lib/SimpleSAML/Configuration.php#L1092
         if ($configuration->hasValue($prefix . 'keys')) {
             $extracted['keys'] = $configuration->getArray($prefix . 'keys');
         }
 
-        // ported from simplesamlphp/lib/SimpleSAML/Configuration.php lines 1108-1109
+        // ported from
+        // https://github.com/simplesamlphp/simplesamlphp/blob/3d735912342767d391297cc5e13272a76730aca0/lib/SimpleSAML/Configuration.php#L1108
         if ($configuration->hasValue($prefix . 'certData')) {
             $extracted['certificateData'] = $configuration->getString($prefix . 'certData');
         }
 
-        // ported from simplesamlphp/lib/SimpleSAML/Configuration.php lines 1119-1120
+        // ported from
+        // https://github.com/simplesamlphp/simplesamlphp/blob/3d735912342767d391297cc5e13272a76730aca0/lib/SimpleSAML/Configuration.php#L1119
         if ($configuration->hasValue($prefix . 'certificate')) {
             $extracted['certificateData'] = $configuration->getString($prefix . 'certificate');
         }
 
-        // ported from simplesamlphp/modules/lib/Message.php lines 154-155
+        // ported from
+        // https://github.com/simplesamlphp/simplesamlphp/blob/3d735912342767d391297cc5e13272a76730aca0/modules/saml/lib/Message.php#L161
         if ($configuration->hasValue($prefix . 'certFingerprint')) {
             $extracted['certificateFingerprint'] = $configuration->getArrayizeString('certFingerprint');
         }
