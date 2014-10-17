@@ -60,6 +60,8 @@ class SAML2_Utilities_ArrayCollection implements SAML2_Utilities_Collection
                 $this->count()
             ));
         }
+
+        return reset($this->elements);
     }
 
     public function first()
