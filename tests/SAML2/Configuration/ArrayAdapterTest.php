@@ -4,7 +4,6 @@ class SAML2_Configuration_ArrayAdapterTest extends PHPUnit_Framework_TestCase
 {
     /**
      * @group configuration
-     *
      * @test
      */
     public function set_configuration_can_be_queried()
@@ -18,7 +17,6 @@ class SAML2_Configuration_ArrayAdapterTest extends PHPUnit_Framework_TestCase
 
     /**
      * @group configuration
-     *
      * @test
      */
     public function default_values_are_returned_for_unavailable_configuration()
