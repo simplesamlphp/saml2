@@ -35,9 +35,9 @@ class SAML2_Assertion_Decrypter
     }
 
     /**
-     *
+     * Allows for checking whether either the SP or the IdP requires assertion encryption
      */
-    public function isEncryptionEnforced()
+    public function isEncryptionRequired()
     {
         return $this->identityProvider->isAssertionEncryptionRequired()
             || $this->serviceProvider->isAssertionEncryptionRequired();

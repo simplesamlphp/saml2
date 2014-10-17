@@ -72,7 +72,7 @@ class SAML2_Assertion_Processor
      */
     private function decryptAssertion($assertion)
     {
-        if ($this->decrypter->isEncryptionEnforced() && $assertion instanceof SAML2_Assertion) {
+        if ($this->decrypter->isEncryptionRequired() && $assertion instanceof SAML2_Assertion) {
             throw new SAML2_Response_Exception_UnencryptedAssertionFoundException();
         }
 
