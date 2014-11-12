@@ -83,6 +83,11 @@ class SAML2_Response_Processor
         SAML2_Response $response,
         SAML2_Configuration_IdentityProvider $identityProviderConfiguration
     ) {
+        if (!$response->getSignatureKey()) {
+            $this->logger->notice('SAMLResponse with id "%s" has no signature key, not verifying the signature');
+            return;
+        }
+
         if (!$this->signatureValidator->hasValidSignature($response, $identityProviderConfiguration)) {
             throw new SAML2_Response_Exception_InvalidResponseException();
         }
