@@ -92,7 +92,7 @@ abstract class SAML2_Message implements SAML2_SignedElement
     /**
      * @var bool
      */
-    private $messageContainedSignatureUponConstruction = false;
+    private $messageContainedSignatureUponConstruction = FALSE;
 
     /**
      * List of certificates that should be included in the message.
@@ -166,7 +166,7 @@ abstract class SAML2_Message implements SAML2_SignedElement
             $sig = SAML2_Utils::validateElement($xml);
 
             if ($sig !== FALSE) {
-                $this->messageContainedSignatureUponConstruction = true;
+                $this->messageContainedSignatureUponConstruction = TRUE;
                 $this->certificates = $sig['Certificates'];
                 $this->validators[] = array(
                     'Function' => array('SAML2_Utils', 'validateSignature'),
