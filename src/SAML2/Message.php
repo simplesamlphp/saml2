@@ -90,6 +90,11 @@ abstract class SAML2_Message implements SAML2_SignedElement
     private $signatureKey;
 
     /**
+     * @var bool
+     */
+    private $messageContainedSignatureUponConstruction = false;
+
+    /**
      * List of certificates that should be included in the message.
      *
      * @var array
@@ -161,6 +166,7 @@ abstract class SAML2_Message implements SAML2_SignedElement
             $sig = SAML2_Utils::validateElement($xml);
 
             if ($sig !== FALSE) {
+                $this->messageContainedSignatureUponConstruction = true;
                 $this->certificates = $sig['Certificates'];
                 $this->validators[] = array(
                     'Function' => array('SAML2_Utils', 'validateSignature'),
@@ -345,6 +351,16 @@ abstract class SAML2_Message implements SAML2_SignedElement
         assert('is_string($issuer) || is_null($issuer)');
 
         $this->issuer = $issuer;
+    }
+
+    /**
+     * Query whether or not the message contained a signature at the root level when the object was constructed.
+     *
+     * @return bool
+     */
+    public function isMessageConstructedWithSignature()
+    {
+        return $this->messageContainedSignatureUponConstruction;
     }
 
     /**
