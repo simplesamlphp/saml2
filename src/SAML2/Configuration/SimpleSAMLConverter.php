@@ -85,6 +85,7 @@ class SAML2_Configuration_SimpleSAMLConverter
     private static function enrichForIdentityProvider(SimpleSAML_Configuration $configuration, &$baseConfiguration)
     {
         $baseConfiguration['base64EncodedAttributes'] = $configuration->getBoolean('base64attributes', FALSE);
+        $baseConfiguration['entityId'] = $configuration->getString('entityid');
     }
 
     private static function enrichForServiceProvider(SimpleSAML_Configuration $configuration, &$baseConfiguration)

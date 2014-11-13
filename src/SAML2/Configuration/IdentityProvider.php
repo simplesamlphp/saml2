@@ -5,7 +5,8 @@
  */
 class SAML2_Configuration_IdentityProvider extends SAML2_Configuration_ArrayAdapter implements
     SAML2_Configuration_CertificateProvider,
-    SAML2_Configuration_DecryptionProvider
+    SAML2_Configuration_DecryptionProvider,
+    SAML2_Configuration_EntityIdProvider
 {
     public function getKeys()
     {
@@ -69,5 +70,13 @@ class SAML2_Configuration_IdentityProvider extends SAML2_Configuration_ArrayAdap
     public function getBlacklistedAlgorithms()
     {
         return $this->get('blacklistedEncryptionAlgorithms');
+    }
+
+    /**
+     * @return null|string
+     */
+    public function getEntityId()
+    {
+        return $this->get('entityId');
     }
 }
