@@ -122,5 +122,5 @@
             <arg line="--coverage-clover=build/artifacts/logs/clover.xml"/>
         </exec>
     </target>
-
+    
 </project>
