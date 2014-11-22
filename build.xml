@@ -2,7 +2,7 @@
 
 <project name="Simplesamlphp Saml2" default="build">
     <target name="build"
-            depends="prepare,composer-run-install,php-lint-ci,phpmd-ci,phpcs-ci,phpcpd-ci,php-security-checker,phpunit-ci,coveralls-ci"/>
+            depends="prepare,composer-run-install,php-lint-ci,phpmd-ci,phpcs-ci,phpcpd-ci,php-security-checker,phpunit-ci"/>
 
     <target name="clean" description="Cleanup build artifacts">
         <delete dir="build/artifacts/coverage"/>
@@ -123,10 +123,4 @@
         </exec>
     </target>
 
-    <target name="coveralls-ci" description="Publish coverage results to coveralls.io">
-        <exec executable="vendor/bin/coveralls" failonerror="true">
-            <arg line="-v"/>
-        </exec>
-    </target>
-    
 </project>
