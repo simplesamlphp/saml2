@@ -2,7 +2,7 @@
 
 <project name="Simplesamlphp Saml2" default="build">
     <target name="build"
-            depends="prepare,composer-run-install,php-lint-ci,phpmd-ci,phpcs-ci,phpcpd-ci,php-security-checker,phpunit-ci"/>
+            depends="prepare,composer-run-install,php-lint-ci,phpmd-ci,phpcs-ci,phpcpd-ci,php-security-checker,phpunit-ci,coveralls-ci"/>
 
     <target name="clean" description="Cleanup build artifacts">
         <delete dir="build/artifacts/coverage"/>
@@ -121,6 +121,10 @@
             <arg line="--log-junit=build/artifacts/logs/junit.xml"/>
             <arg line="--coverage-clover=build/artifacts/logs/clover.xml"/>
         </exec>
+    </target>
+
+    <target name="coveralls-ci" description="Publish coverage results to coveralls.io">
+        <exec executable="vendor/bin/coveralls" failonerror="true">
     </target>
     
 </project>
