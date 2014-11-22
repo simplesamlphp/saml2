@@ -125,6 +125,8 @@
 
     <target name="coveralls-ci" description="Publish coverage results to coveralls.io">
         <exec executable="vendor/bin/coveralls" failonerror="true">
+            <arg line="-v"/>
+        </exec>
     </target>
     
 </project>
