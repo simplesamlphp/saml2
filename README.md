@@ -27,17 +27,11 @@ Note that the **HTTP Artifact Binding and SOAP client not work** outside of Simp
 Usage
 -----
 
-* Install with [Composer](http://getcomposer.org/doc/00-intro.md), add the following in your composer.json:
+* Install with [Composer](http://getcomposer.org/doc/00-intro.md), run the following command in your project:
 
-```json
-{
-    "require": {
-        "simplesamlphp/saml2": "0.1.*"
-    }
-}
+```bash
+composer require simplesamlphp/saml2 ~0.4.2
 ```
-
-Then run ```composer update```.
 
 * Provide the required external dependencies by extending and implementing the ```SAML2_Compat_AbstractContainer```
   then injecting it in the ContainerSingleton (see example below).
