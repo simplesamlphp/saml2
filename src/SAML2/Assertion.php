@@ -207,9 +207,9 @@ class SAML2_Assertion implements SAML2_SignedElement
     public function __construct(DOMElement $xml = NULL)
     {
         $this->id = SAML2_Utils::getContainer()->generateId();
-        $this->issueInstant = time();
+        $this->issueInstant = SAML2_Utilities_Temporal::getTime();
         $this->issuer = '';
-        $this->authnInstant = time();
+        $this->authnInstant = SAML2_Utilities_Temporal::getTime();
         $this->attributes = array();
         $this->nameFormat = SAML2_Const::NAMEFORMAT_UNSPECIFIED;
         $this->certificates = array();
