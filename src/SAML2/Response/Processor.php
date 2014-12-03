@@ -1,5 +1,8 @@
 <?php
 
+/**
+ * @SuppressWarnings(PHPMD.CouplingBetweenObjects) - due to specific exceptions
+ */
 class SAML2_Response_Processor
 {
     /**

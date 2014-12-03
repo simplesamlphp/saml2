@@ -85,7 +85,7 @@ class SAML2_Assertion_Processor
                 $assertion->getId()
             ));
         } else {
-            $this->logger->notice(sprintf('Verifying signature of Assertion with id "%s"',$assertion->getId()));
+            $this->logger->notice(sprintf('Verifying signature of Assertion with id "%s"', $assertion->getId()));
 
             $this->signatureValidator->hasValidSignature($assertion, $this->identityProviderConfiguration);
         }
