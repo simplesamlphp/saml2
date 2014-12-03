@@ -92,7 +92,7 @@ abstract class SAML2_Message implements SAML2_SignedElement
     /**
      * @var bool
      */
-    private $messageContainedSignatureUponConstruction = FALSE;
+    protected $messageContainedSignatureUponConstruction = FALSE;
 
     /**
      * List of certificates that should be included in the message.

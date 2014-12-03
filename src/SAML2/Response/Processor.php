@@ -23,6 +23,14 @@ class SAML2_Response_Processor
     private $assertionProcessor;
 
     /**
+     * Indicates whether or not the response was signed. This is required in order to be able to check whether either
+     * the reponse or one of its assertions was signed
+     *
+     * @var bool
+     */
+    private $responseIsSigned = FALSE;
+
+    /**
      * @param \Psr\Log\LoggerInterface        $logger
      *
      */
@@ -50,6 +58,7 @@ class SAML2_Response_Processor
         $this->preconditionValidator = new SAML2_Response_Validation_PreconditionValidator($currentDestination);
         $this->assertionProcessor = SAML2_Assertion_ProcessorBuilder::build(
             $this->logger,
+            $this->signatureValidator,
             $currentDestination,
             $identityProviderConfiguration,
             $serviceProviderConfiguration,
@@ -84,12 +93,21 @@ class SAML2_Response_Processor
         SAML2_Configuration_IdentityProvider $identityProviderConfiguration
     ) {
         if (!$response->isMessageConstructedWithSignature()) {
-            $this->logger->notice(
-                'SAMLResponse with id "%s" was not signed at root level, not attempting to verify the signature'
-            );
+            $this->logger->info(sprintf(
+                'SAMLResponse with id "%s" was not signed at root level, not attempting to verify the signature of the'
+                . ' reponse itself',
+                $response->getId()
+            ));
 
             return;
         }
+
+        $this->logger->info(sprintf(
+            'Attempting to verify the signature of SAMLResponse with id "%s"',
+            $response->getId()
+        ));
+
+        $this->responseIsSigned = TRUE;
 
         if (!$this->signatureValidator->hasValidSignature($response, $identityProviderConfiguration)) {
             throw new SAML2_Response_Exception_InvalidResponseException();
@@ -106,6 +124,22 @@ class SAML2_Response_Processor
         $assertions = $response->getAssertions();
         if (empty($assertions)) {
             throw new SAML2_Response_Exception_NoAssertionsFoundException('No assertions found in response from IdP.');
+        }
+
+        if (!$this->responseIsSigned) {
+            $containsSignedAssertion = FALSE;
+            foreach ($assertions as $assertion) {
+                if ($assertion->getWasSignedAtConstruction()) {
+                    $containsSignedAssertion = TRUE;
+                    break;
+                }
+            }
+
+            if (!$containsSignedAssertion) {
+                throw new SAML2_Response_Exception_UnsignedResponseException(
+                    'Both the response and the assertions it containes are not signed.'
+                );
+            }
         }
 
         return $this->assertionProcessor->processAssertions($assertions);
