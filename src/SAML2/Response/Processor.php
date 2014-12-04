@@ -130,18 +130,12 @@ class SAML2_Response_Processor
         }
 
         if (!$this->responseIsSigned) {
-            $containsSignedAssertion = FALSE;
             foreach ($assertions as $assertion) {
-                if ($assertion->getWasSignedAtConstruction()) {
-                    $containsSignedAssertion = TRUE;
-                    break;
+                if (!$assertion->getWasSignedAtConstruction()) {
+                    throw new SAML2_Response_Exception_UnsignedResponseException(
+                        'Both the response and the assertion it containes are not signed.'
+                    );
                 }
-            }
-
-            if (!$containsSignedAssertion) {
-                throw new SAML2_Response_Exception_UnsignedResponseException(
-                    'Both the response and the assertions it containes are not signed.'
-                );
             }
         }
 
