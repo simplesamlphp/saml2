@@ -1,5 +1,8 @@
 <?php
 
+/**
+ * @SuppressWarnings(PHPMD.CouplingBetweenObjects) - due to all the named exceptions
+ */
 class SAML2_Assertion_Processor
 {
     /**
@@ -87,7 +90,9 @@ class SAML2_Assertion_Processor
         } else {
             $this->logger->info(sprintf('Verifying signature of Assertion with id "%s"', $assertion->getId()));
 
-            $this->signatureValidator->hasValidSignature($assertion, $this->identityProviderConfiguration);
+            if (!$this->signatureValidator->hasValidSignature($assertion, $this->identityProviderConfiguration)) {
+                throw new SAML2_Response_Exception_InvalidSignatureException();
+            }
         }
 
         $this->validateAssertion($assertion);
