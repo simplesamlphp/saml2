@@ -11,6 +11,7 @@ class SAML2_Assertion_ProcessorBuilder
 {
     public static function build(
         Psr\Log\LoggerInterface $logger,
+        SAML2_Signature_Validator $signatureValidator,
         SAML2_Configuration_Destination $currentDestination,
         SAML2_Configuration_IdentityProvider $identityProvider,
         SAML2_Configuration_ServiceProvider $serviceProvider,
@@ -35,9 +36,12 @@ class SAML2_Assertion_ProcessorBuilder
 
         return new SAML2_Assertion_Processor(
             $decrypter,
+            $signatureValidator,
             $assertionValidator,
             $subjectConfirmationValidator,
-            $transformerChain
+            $transformerChain,
+            $identityProvider,
+            $logger
         );
     }
 
