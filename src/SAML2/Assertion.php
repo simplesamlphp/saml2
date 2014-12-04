@@ -199,6 +199,11 @@ class SAML2_Assertion implements SAML2_SignedElement
     private $SubjectConfirmation;
 
     /**
+     * @var bool
+     */
+    protected $wasSignedAtConstruction = FALSE;
+
+    /**
      * Constructor for SAML 2 assertions.
      *
      * @param DOMElement|NULL $xml The input assertion.
@@ -515,6 +520,7 @@ class SAML2_Assertion implements SAML2_SignedElement
         /* Validate the signature element of the message. */
         $sig = SAML2_Utils::validateElement($xml);
         if ($sig !== FALSE) {
+            $this->wasSignedAtConstruction = TRUE;
             $this->certificates = $sig['Certificates'];
             $this->signatureData = $sig;
         }
@@ -1201,6 +1207,14 @@ class SAML2_Assertion implements SAML2_SignedElement
     public function getCertificates()
     {
         return $this->certificates;
+    }
+
+    /**
+     * @return bool
+     */
+    public function getWasSignedAtConstruction()
+    {
+        return $this->wasSignedAtConstruction;
     }
 
     /**

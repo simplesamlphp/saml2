@@ -22,16 +22,37 @@ class SAML2_Assertion_Processor
      */
     private $transformer;
 
+    /**
+     * @var SAML2_Signature_Validator
+     */
+    private $signatureValidator;
+
+    /**
+     * @var SAML2_Configuration_IdentityProvider
+     */
+    private $identityProviderConfiguration;
+
+    /**
+     * @var \Psr\Log\LoggerInterface
+     */
+    private $logger;
+
     public function __construct(
         SAML2_Assertion_Decrypter $decrypter,
+        SAML2_Signature_Validator $signatureValidator,
         SAML2_Assertion_Validation_AssertionValidator $assertionValidator,
         SAML2_Assertion_Validation_SubjectConfirmationValidator $subjectConfirmationValidator,
-        SAML2_Assertion_Transformer_Transformer $transformer
+        SAML2_Assertion_Transformer_Transformer $transformer,
+        SAML2_Configuration_IdentityProvider $identityProviderConfiguration,
+        \Psr\Log\LoggerInterface $logger
     ) {
-        $this->assertionValidator           = $assertionValidator;
-        $this->decrypter                    = $decrypter;
-        $this->subjectConfirmationValidator = $subjectConfirmationValidator;
-        $this->transformer                  = $transformer;
+        $this->assertionValidator            = $assertionValidator;
+        $this->signatureValidator            = $signatureValidator;
+        $this->decrypter                     = $decrypter;
+        $this->subjectConfirmationValidator  = $subjectConfirmationValidator;
+        $this->transformer                   = $transformer;
+        $this->identityProviderConfiguration = $identityProviderConfiguration;
+        $this->logger                        = $logger;
     }
 
     /**
@@ -57,6 +78,17 @@ class SAML2_Assertion_Processor
     public function process($assertion)
     {
         $assertion = $this->decryptAssertion($assertion);
+
+        if (!$assertion->getWasSignedAtConstruction()) {
+            $this->logger->notice(sprintf(
+                'Assertion with id "%s" was not signed at construction, not verifying the signature',
+                $assertion->getId()
+            ));
+        } else {
+            $this->logger->notice(sprintf('Verifying signature of Assertion with id "%s"', $assertion->getId()));
+
+            $this->signatureValidator->hasValidSignature($assertion, $this->identityProviderConfiguration);
+        }
 
         $this->validateAssertion($assertion);
 
