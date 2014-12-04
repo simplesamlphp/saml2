@@ -80,12 +80,12 @@ class SAML2_Assertion_Processor
         $assertion = $this->decryptAssertion($assertion);
 
         if (!$assertion->getWasSignedAtConstruction()) {
-            $this->logger->notice(sprintf(
+            $this->logger->info(sprintf(
                 'Assertion with id "%s" was not signed at construction, not verifying the signature',
                 $assertion->getId()
             ));
         } else {
-            $this->logger->notice(sprintf('Verifying signature of Assertion with id "%s"', $assertion->getId()));
+            $this->logger->info(sprintf('Verifying signature of Assertion with id "%s"', $assertion->getId()));
 
             $this->signatureValidator->hasValidSignature($assertion, $this->identityProviderConfiguration);
         }
