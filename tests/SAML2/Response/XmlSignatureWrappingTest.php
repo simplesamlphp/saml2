@@ -1,7 +1,5 @@
 <?php
 
-use Mockery as m;
-
 /**
  * @runTestsInSeparateProcesses
  */
