@@ -51,14 +51,14 @@ class SAML2_Certificate_KeyLoader
     ) {
         $keys = $config->getKeys();
         $certificateData = $config->getCertificateData();
-        $certificateFingerprints = $config->getCertificateFingerprints();
+        $certificateFile = $config->getCertificateFile();
 
         if ($keys) {
             $this->loadKeys($keys, $usage);
         } elseif ($certificateData) {
             $this->loadCertificateData($certificateData);
-        } elseif ($certificateFingerprints) {
-            $this->loadCertificateFile($certificateFingerprints);
+        } elseif ($certificateFile) {
+            $this->loadCertificateFile($certificateFile);
         }
 
         if ($required && !$this->hasKeys()) {
