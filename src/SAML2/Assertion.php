@@ -49,11 +49,11 @@ class SAML2_Assertion implements SAML2_SignedElement
     /**
      * The encrypted Attributes.
      *
-     * If this is not NULL, the Attributes needs decryption before it can be accessed.
+     * If this is not NULL, these Attributes need decryption before they can be accessed.
      *
      * @var DOMElement[]|NULL
      */
-    private $encryptedAttribute;
+    private $encryptedAttributes;
 
     /**
      * Private key we should use to encrypt the attributes.
@@ -504,7 +504,7 @@ class SAML2_Assertion implements SAML2_SignedElement
      */
     private function parseEncryptedAttributes(DOMElement $xml)
     {
-        $this->encryptedAttribute = SAML2_Utils::xpQuery(
+        $this->encryptedAttributes = SAML2_Utils::xpQuery(
             $xml,
             './saml_assertion:AttributeStatement/saml_assertion:EncryptedAttribute'
         );
@@ -655,11 +655,7 @@ class SAML2_Assertion implements SAML2_SignedElement
      */
     public function isNameIdEncrypted()
     {
-        if ($this->encryptedNameId !== NULL) {
-            return TRUE;
-        }
-
-        return FALSE;
+        return $this->encryptedNameId !== NULL;
     }
 
     /**
@@ -715,6 +711,16 @@ class SAML2_Assertion implements SAML2_SignedElement
     }
 
     /**
+     * Did this Assertion contain encrypted Attributes?
+     *
+     * @return bool
+     */
+    public function hasEncryptedAttributes()
+    {
+        return $this->encryptedAttributes !== NULL;
+    }
+
+    /**
      * Decrypt the assertion attributes.
      *
      * @param XMLSecurityKey $key
@@ -723,11 +729,11 @@ class SAML2_Assertion implements SAML2_SignedElement
      */
     public function decryptAttributes(XMLSecurityKey $key, array $blacklist = array())
     {
-        if ($this->encryptedAttribute === NULL) {
+        if ($this->encryptedAttributes === NULL) {
             return;
         }
         $firstAttribute = TRUE;
-        $attributes = $this->encryptedAttribute;
+        $attributes = $this->encryptedAttributes;
         foreach ($attributes as $attributeEnc) {
             /*Decrypt node <EncryptedAttribute>*/
             $attribute = SAML2_Utils::decryptElement(
