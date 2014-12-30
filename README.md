@@ -30,7 +30,7 @@ Usage
 * Install with [Composer](http://getcomposer.org/doc/00-intro.md), run the following command in your project:
 
 ```bash
-composer require simplesamlphp/saml2 ~0.6.1
+composer require simplesamlphp/saml2 ~1.5
 ```
 
 * Provide the required external dependencies by extending and implementing the ```SAML2_Compat_AbstractContainer```
