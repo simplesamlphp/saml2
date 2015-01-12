@@ -59,7 +59,10 @@ class SAML2_Signature_FingerprintValidatorTest extends \PHPUnit_Framework_TestCa
     {
         $pattern = SAML2_Utilities_Certificate::CERTIFICATE_PATTERN;
         preg_match($pattern, SAML2_CertificatesMock::PUBLIC_KEY_PEM, $matches);
-        $fingerprint = SAML2_Certificate_X509::createFromCertificateData($matches[1])->getFingerprint();
+        $certdata = SAML2_Certificate_X509::createFromCertificateData($matches[1]);
+        $fingerprint = $certdata->getFingerprint();
+        $fingerprint_retry = $certdata->getFingerprint();
+        $this->assertTrue($fingerprint->equals($fingerprint_retry), 'Cached fingerprint does not match original');
 
         $config    = new SAML2_Configuration_IdentityProvider(array('certificateFingerprints' => array($fingerprint->getRaw())));
         $validator = new SAML2_Signature_FingerprintValidator(

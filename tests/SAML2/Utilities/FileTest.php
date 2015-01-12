@@ -13,6 +13,17 @@ class SAML2_Utilities_FileTest extends \PHPUnit_Framework_TestCase
         SAML2_Utilities_File::getFileContents('/foo/bar/baz/quux');
     }
 
+   /**
+     * @group utilities
+     * @test
+     *
+     * @expectedException SAML2_Exception_InvalidArgumentException
+     */
+    public function passing_nonstring_filename_throws_exception()
+    {
+        SAML2_Utilities_File::getFileContents(NULL);
+    }
+
     /**
      * @group utilities
      * @test
