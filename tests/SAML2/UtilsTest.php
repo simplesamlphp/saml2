@@ -179,4 +179,34 @@ class SAML2_UtilsTest extends PHPUnit_Framework_TestCase
         $this->assertEquals('value (en)', $localizedStringValues["en"]);
         $this->assertEquals('value (no)', $localizedStringValues["no"]);
     }
+
+    /**
+     * Test xsDateTime format validity
+     *
+     * @dataProvider xsDateTimes
+     */
+    public function testXsDateTimeToTimestamp($shouldPass, $time, $expectedTs = null)
+    {
+        try {
+            $ts = SAML2_Utils::xsDateTimeToTimestamp($time);
+            $this->assertTrue($shouldPass);
+            $this->assertEquals($expectedTs, $ts);
+        } catch (Exception $e) {
+            $this->assertFalse($shouldPass);
+        }
+    }
+
+    public function xsDateTimes()
+    {
+        return array(
+            array(true, '2015-01-01T00:00:00Z', 1420070400),
+            array(true, '2015-01-01T00:00:00.0Z', 1420070400),
+            array(true, '2015-01-01T00:00:00.1Z', 1420070400),
+            array(false, '2015-01-01T00:00:00', 1420070400),
+            array(false, '2015-01-01T00:00:00.0', 1420070400),
+            array(false, 'junk'),
+            array(false, '2015-01-01T00:00:00-04:00'),
+            array(false, '2015-01-01T00:00:00.0-04:00'),
+        );
+    }
 }
