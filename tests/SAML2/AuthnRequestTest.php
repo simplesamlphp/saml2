@@ -58,6 +58,9 @@ class SAML2_AuthnRequestTest extends PHPUnit_Framework_TestCase
           <myns:Attribute name="UserName" value=""/>
       </myns:AttributeList>
   </samlp:Extensions>
+  <saml:Subject>
+        <saml:NameID Format="urn:oasis:names:tc:SAML:1.1:nameid-format:unspecified">user@example.org</saml:NameID>
+  </saml:Subject>
   <samlp:NameIDPolicy
     AllowCreate="true"
     Format="urn:oasis:names:tc:SAML:1.1:nameid-format:emailAddress"/>
@@ -67,5 +70,43 @@ AUTHNREQUEST
         $authnRequest = new SAML2_AuthnRequest($document->documentElement);
 
         $this->assertXmlStringEqualsXmlString($document->C14N(), $authnRequest->toUnsignedXML()->C14N());
+    }
+
+    public function testThatTheSubjectIsCorrectlyRead()
+    {
+        $document = new DOMDocument();
+        $document->loadXML(<<<AUTHNREQUEST
+<samlp:AuthnRequest
+    xmlns:samlp="urn:oasis:names:tc:SAML:2.0:protocol"
+    xmlns:saml="urn:oasis:names:tc:SAML:2.0:assertion"
+    AssertionConsumerServiceIndex="1"
+    Destination="https://tiqr.stepup.org/idp/profile/saml2/Redirect/SSO"
+    ID="_2b0226190ca1c22de6f66e85f5c95158"
+    IssueInstant="2014-09-22T13:42:00Z"
+    Version="2.0">
+  <saml:Issuer>https://gateway.stepup.org/saml20/sp/metadata</saml:Issuer>
+  <saml:Subject>
+        <saml:NameID Format="urn:oasis:names:tc:SAML:1.1:nameid-format:unspecified">user@example.org</saml:NameID>
+  </saml:Subject>
+</samlp:AuthnRequest>
+AUTHNREQUEST
+);
+        $authnRequest = new SAML2_AuthnRequest($document->documentElement);
+
+        $expectedNameId = array(
+            'Value'  => "user@example.org",
+            'Format' => "urn:oasis:names:tc:SAML:1.1:nameid-format:unspecified"
+        );
+        $this->assertEquals($expectedNameId, $authnRequest->getNameId());
+    }
+
+    public function testThatTheSubjectCanBeSetBySettingTheNameId()
+    {
+        $request = new SAML2_AuthnRequest();
+        $request->setNameId(array('Value' => 'user@example.org', 'Format' => SAML2_Const::NAMEID_UNSPECIFIED));
+
+        $requestAsXML = $request->toUnsignedXML()->ownerDocument->saveXML();
+        $expected = '<saml:Subject><saml:NameID Format="urn:oasis:names:tc:SAML:1.1:nameid-format:unspecified">user@example.org</saml:NameID></saml:Subject>';
+        $this->assertContains($expected, $requestAsXML);
     }
 }
