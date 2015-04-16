@@ -683,7 +683,7 @@ class SAML2_Utils
         $matches = array();
 
         // We use a very strict regex to parse the timestamp.
-        $regex = '/^(\\d\\d\\d\\d)-(\\d\\d)-(\\d\\d)T(\\d\\d):(\\d\\d):(\\d\\d)(?:\\.\\d+)?Z$/D';
+        $regex = '/^(\\d\\d\\d\\d)-(\\d\\d)-(\\d\\d)T(\\d\\d):(\\d\\d):(\\d\\d)(?:\\.\\d+)?(Z|(?:\\+|\\-)\\d+)$/D';
         if (preg_match($regex, $time, $matches) == 0) {
             throw new Exception(
                 'Invalid SAML2 timestamp passed to xsDateTimeToTimestamp: ' . $time
@@ -698,6 +698,13 @@ class SAML2_Utils
         $hour   = intval($matches[4]);
         $minute = intval($matches[5]);
         $second = intval($matches[6]);
+        $suffix = $matches[7];
+        if ($suffix != 'Z') {
+            $sign = substr($suffix, 0, 1);
+            $coef = $sign == '+' ? -1 : 1;
+            $hour += $coef * intval(substr($suffix, 1, 2));
+            $minute += $coef * intval(substr($suffix, 3, 2));
+        }
 
         // We use gmmktime because the timestamp will always be given
         //in UTC.
