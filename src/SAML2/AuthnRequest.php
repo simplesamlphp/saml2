@@ -237,7 +237,7 @@ class SAML2_AuthnRequest extends SAML2_Request
 
         $rac = array(
             'AuthnContextClassRef' => array(),
-            'Comparison'           => 'exact',
+            'Comparison'           => SAML2_Const::COMPARISON_EXACT,
         );
 
         $accr = SAML2_Utils::xpQuery($requestedAuthnContext, './saml_assertion:AuthnContextClassRef');
@@ -713,7 +713,7 @@ class SAML2_AuthnRequest extends SAML2_Request
         if (!empty($rac) && !empty($rac['AuthnContextClassRef'])) {
             $e = $this->document->createElementNS(SAML2_Const::NS_SAMLP, 'RequestedAuthnContext');
             $root->appendChild($e);
-            if (isset($rac['Comparison']) && $rac['Comparison'] !== 'exact') {
+            if (isset($rac['Comparison']) && $rac['Comparison'] !== SAML2_Const::COMPARISON_EXACT) {
                 $e->setAttribute('Comparison', $rac['Comparison']);
             }
             foreach ($rac['AuthnContextClassRef'] as $accr) {

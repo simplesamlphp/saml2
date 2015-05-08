@@ -53,6 +53,33 @@ class SAML2_Const
     const CM_HOK = 'urn:oasis:names:tc:SAML:2.0:cm:holder-of-key';
 
     /**
+     * Request Authentication Context Comparison indicating that  the resulting authentication context in the
+     * authentication statement MUST be stronger (as deemed by the responder) than any one of the authentication
+     * contexts specified
+     */
+    const COMPARISON_BETTER = 'better';
+
+    /**
+     * Request Authentication Context Comparison indicating that the resulting authentication context in the
+     * authentication statement MUST be the exact match of at least one of the authentication contexts specified
+     */
+    const COMPARISON_EXACT = 'exact';
+
+    /**
+     * Request Authentication Context Comparison indicating that the resulting authentication context in the
+     * authentication statement MUST be as strong as possible (as deemed by the responder) without exceeding the
+     * strength of at least one of the authentication contexts specified.
+     */
+    const COMPARISON_MAXIMUM = 'maximum';
+
+    /**
+     * Request Authentication Context Comparison indicating that he resulting authentication context in the
+     * authentication statement MUST be at least as strong (as deemed by the responder) as one of the authentication
+     * contexts specified.
+     */
+    const COMPARISON_MINIMUM = 'minimum';
+
+    /**
      * No claim as to principal consent is being made.
      */
     const CONSENT_UNSPECIFIED = 'urn:oasis:names:tc:SAML:2.0:consent:unspecified';
