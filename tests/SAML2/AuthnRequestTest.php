@@ -36,6 +36,37 @@ class SAML2_AuthnRequestTest extends PHPUnit_Framework_TestCase
         $this->assertEquals('accr2', $authnContextClassRefElements[1]->textContent);
     }
 
+    public function testMarshallingOfSimpleRequest()
+    {
+        $document = new DOMDocument();
+        $document->loadXML(<<<AUTHNREQUEST
+<samlp:AuthnRequest
+  xmlns:samlp="urn:oasis:names:tc:SAML:2.0:protocol"
+  xmlns:saml="urn:oasis:names:tc:SAML:2.0:assertion"
+  ID="_306f8ec5b618f361c70b6ffb1480eade"
+  Version="2.0"
+  IssueInstant="2004-12-05T09:21:59Z"
+  Destination="https://idp.example.org/SAML2/SSO/Artifact"
+  ProtocolBinding="urn:oasis:names:tc:SAML:2.0:bindings:HTTP-Artifact"
+  AssertionConsumerServiceURL="https://sp.example.com/SAML2/SSO/Artifact">
+    <saml:Issuer>https://sp.example.com/SAML2</saml:Issuer>
+</samlp:AuthnRequest>
+AUTHNREQUEST
+        );
+
+        $authnRequest = new SAML2_AuthnRequest($document->documentElement);
+
+        $expectedIssueInstant = SAML2_Utils::xsDateTimeToTimestamp('2004-12-05T09:21:59Z');
+        $this->assertEquals($expectedIssueInstant, $authnRequest->getIssueInstant());
+        $this->assertEquals('https://idp.example.org/SAML2/SSO/Artifact', $authnRequest->getDestination());
+        $this->assertEquals('urn:oasis:names:tc:SAML:2.0:bindings:HTTP-Artifact', $authnRequest->getProtocolBinding());
+        $this->assertEquals(
+            'https://sp.example.com/SAML2/SSO/Artifact',
+            $authnRequest->getAssertionConsumerServiceURL()
+        );
+        $this->assertEquals('https://sp.example.com/SAML2', $authnRequest->getIssuer());
+    }
+
     /**
      * Test unmarshalling / marshalling of XML with Extensions element
      */
