@@ -53,9 +53,9 @@ class SAML2_Const
     const CM_HOK = 'urn:oasis:names:tc:SAML:2.0:cm:holder-of-key';
     
     /**
-	 * Vouches subject confirmation method.
-	 */
-	const CM_VOUCHES = 'urn:oasis:names:tc:SAML:2.0:cm:sender-vouches';
+     * Vouches subject confirmation method.
+     */
+    const CM_VOUCHES = 'urn:oasis:names:tc:SAML:2.0:cm:sender-vouches';
 
     /**
      * No claim as to principal consent is being made.
