@@ -104,7 +104,7 @@ class SAML2_AuthnRequest extends SAML2_Request
     /**
      * @var SAML2_XML_saml_SubjectConfirmation[]
      */
-    private $SubjectConfirmation = array();
+    private $subjectConfirmation = array();
 
     /**
      * @var string
@@ -183,7 +183,7 @@ class SAML2_AuthnRequest extends SAML2_Request
         if (empty($nameId)) {
             throw new Exception('Missing <saml:NameID> or <saml:EncryptedID> in <saml:Subject>.');
         } elseif (count($nameId) > 1) {
-            throw new Exception('More than one <saml:NameID> or <saml:EncryptedD> in <saml:Subject>.');
+            throw new Exception('More than one <saml:NameID> or <saml:EncryptedID> in <saml:Subject>.');
         }
         $nameId = $nameId[0];
         if ($nameId->localName === 'EncryptedData') {
@@ -195,7 +195,7 @@ class SAML2_AuthnRequest extends SAML2_Request
 
         $subjectConfirmation = SAML2_Utils::xpQuery($subject, './saml_assertion:SubjectConfirmation');
         foreach ($subjectConfirmation as $sc) {
-            $this->SubjectConfirmation[] = new SAML2_XML_saml_SubjectConfirmation($sc);
+            $this->subjectConfirmation[] = new SAML2_XML_saml_SubjectConfirmation($sc);
         }
     }
 
@@ -207,17 +207,19 @@ class SAML2_AuthnRequest extends SAML2_Request
     protected function parseNameIdPolicy(DOMElement $xml)
     {
         $nameIdPolicy = SAML2_Utils::xpQuery($xml, './saml_protocol:NameIDPolicy');
-        if (!empty($nameIdPolicy)) {
-            $nameIdPolicy = $nameIdPolicy[0];
-            if ($nameIdPolicy->hasAttribute('Format')) {
-                $this->nameIdPolicy['Format'] = $nameIdPolicy->getAttribute('Format');
-            }
-            if ($nameIdPolicy->hasAttribute('SPNameQualifier')) {
-                $this->nameIdPolicy['SPNameQualifier'] = $nameIdPolicy->getAttribute('SPNameQualifier');
-            }
-            if ($nameIdPolicy->hasAttribute('AllowCreate')) {
-                $this->nameIdPolicy['AllowCreate'] = SAML2_Utils::parseBoolean($nameIdPolicy, 'AllowCreate', FALSE);
-            }
+        if (empty($nameIdPolicy)) {
+            return;
+        }
+
+        $nameIdPolicy = $nameIdPolicy[0];
+        if ($nameIdPolicy->hasAttribute('Format')) {
+            $this->nameIdPolicy['Format'] = $nameIdPolicy->getAttribute('Format');
+        }
+        if ($nameIdPolicy->hasAttribute('SPNameQualifier')) {
+            $this->nameIdPolicy['SPNameQualifier'] = $nameIdPolicy->getAttribute('SPNameQualifier');
+        }
+        if ($nameIdPolicy->hasAttribute('AllowCreate')) {
+            $this->nameIdPolicy['AllowCreate'] = SAML2_Utils::parseBoolean($nameIdPolicy, 'AllowCreate', FALSE);
         }
     }
 
@@ -227,25 +229,27 @@ class SAML2_AuthnRequest extends SAML2_Request
     protected function parseRequestedAuthnContext(DOMElement $xml)
     {
         $requestedAuthnContext = SAML2_Utils::xpQuery($xml, './saml_protocol:RequestedAuthnContext');
-        if (!empty($requestedAuthnContext)) {
-            $requestedAuthnContext = $requestedAuthnContext[0];
-
-            $rac = array(
-                'AuthnContextClassRef' => array(),
-                'Comparison'           => 'exact',
-            );
-
-            $accr = SAML2_Utils::xpQuery($requestedAuthnContext, './saml_assertion:AuthnContextClassRef');
-            foreach ($accr as $i) {
-                $rac['AuthnContextClassRef'][] = trim($i->textContent);
-            }
-
-            if ($requestedAuthnContext->hasAttribute('Comparison')) {
-                $rac['Comparison'] = $requestedAuthnContext->getAttribute('Comparison');
-            }
-
-            $this->requestedAuthnContext = $rac;
+        if (empty($requestedAuthnContext)) {
+            return;
         }
+
+        $requestedAuthnContext = $requestedAuthnContext[0];
+
+        $rac = array(
+            'AuthnContextClassRef' => array(),
+            'Comparison'           => SAML2_Const::COMPARISON_EXACT,
+        );
+
+        $accr = SAML2_Utils::xpQuery($requestedAuthnContext, './saml_assertion:AuthnContextClassRef');
+        foreach ($accr as $i) {
+            $rac['AuthnContextClassRef'][] = trim($i->textContent);
+        }
+
+        if ($requestedAuthnContext->hasAttribute('Comparison')) {
+            $rac['Comparison'] = $requestedAuthnContext->getAttribute('Comparison');
+        }
+
+        $this->requestedAuthnContext = $rac;
     }
 
     /**
@@ -256,26 +260,27 @@ class SAML2_AuthnRequest extends SAML2_Request
     protected function parseScoping(DOMElement $xml)
     {
         $scoping = SAML2_Utils::xpQuery($xml, './saml_protocol:Scoping');
-        if (!empty($scoping)) {
-            $scoping = $scoping[0];
+        if (empty($scoping)) {
+            return;
+        }
 
-            if ($scoping->hasAttribute('ProxyCount')) {
-                $this->ProxyCount = (int)$scoping->getAttribute('ProxyCount');
+        $scoping = $scoping[0];
+
+        if ($scoping->hasAttribute('ProxyCount')) {
+            $this->ProxyCount = (int) $scoping->getAttribute('ProxyCount');
+        }
+        $idpEntries = SAML2_Utils::xpQuery($scoping, './saml_protocol:IDPList/saml_protocol:IDPEntry');
+
+        foreach ($idpEntries as $idpEntry) {
+            if (!$idpEntry->hasAttribute('ProviderID')) {
+                throw new Exception("Could not get ProviderID from Scoping/IDPEntry element in AuthnRequest object");
             }
-            $idpEntries = SAML2_Utils::xpQuery($scoping, './saml_protocol:IDPList/saml_protocol:IDPEntry');
+            $this->IDPList[] = $idpEntry->getAttribute('ProviderID');
+        }
 
-            foreach ($idpEntries as $idpEntry) {
-                if (!$idpEntry->hasAttribute('ProviderID')) {
-                    throw new Exception("Could not get ProviderID from Scoping/IDPEntry element in AuthnRequest object");
-                }
-                $this->IDPList[] = $idpEntry->getAttribute('ProviderID');
-            }
-
-            $requesterIDs = SAML2_Utils::xpQuery($scoping, './saml_protocol:RequesterID');
-            foreach ($requesterIDs as $requesterID) {
-                $this->RequesterID[] = trim($requesterID->textContent);
-            }
-
+        $requesterIDs = SAML2_Utils::xpQuery($scoping, './saml_protocol:RequesterID');
+        foreach ($requesterIDs as $requesterID) {
+            $this->RequesterID[] = trim($requesterID->textContent);
         }
     }
 
@@ -399,28 +404,39 @@ class SAML2_AuthnRequest extends SAML2_Request
      * Currently we only support a list of ipd ientity id's.
      * @return array List of idp EntityIDs from the request
      */
-
     public function getIDPList()
     {
         return $this->IDPList;
     }
 
+    /**
+     * @param int $ProxyCount
+     */
     public function setProxyCount($ProxyCount)
     {
         assert('is_int($ProxyCount)');
         $this->ProxyCount = $ProxyCount;
     }
 
+    /**
+     * @return int
+     */
     public function getProxyCount()
     {
         return $this->ProxyCount;
     }
 
+    /**
+     * @param array $RequesterID
+     */
     public function setRequesterID(array $RequesterID)
     {
         $this->RequesterID = $RequesterID;
     }
 
+    /**
+     * @return array
+     */
     public function getRequesterID()
     {
         return $this->RequesterID;
@@ -571,7 +587,7 @@ class SAML2_AuthnRequest extends SAML2_Request
     }
 
     /**
-     * Encrypt the NameID in the Assertion.
+     * Encrypt the NameID in the AuthnRequest.
      *
      * @param XMLSecurityKey $key The encryption key.
      */
@@ -611,7 +627,6 @@ class SAML2_AuthnRequest extends SAML2_Request
     {
         if ($this->encryptedNameId === NULL) {
             /* No NameID to decrypt. */
-
             return;
         }
 
@@ -629,7 +644,7 @@ class SAML2_AuthnRequest extends SAML2_Request
      */
     public function getSubjectConfirmation()
     {
-        return $this->SubjectConfirmation;
+        return $this->subjectConfirmation;
     }
 
     /**
@@ -637,9 +652,9 @@ class SAML2_AuthnRequest extends SAML2_Request
      *
      * @param array SAML2_XML_saml_SubjectConfirmation[]
      */
-    public function setSubjectConfirmation(array $SubjectConfirmation)
+    public function setSubjectConfirmation(array $subjectConfirmation)
     {
-        $this->SubjectConfirmation = $SubjectConfirmation;
+        $this->subjectConfirmation = $subjectConfirmation;
     }
 
     /**
@@ -654,7 +669,6 @@ class SAML2_AuthnRequest extends SAML2_Request
         if ($this->forceAuthn) {
             $root->setAttribute('ForceAuthn', 'true');
         }
-
 
         if ($this->ProviderName !== NULL) {
             $root->setAttribute('ProviderName', $this->ProviderName);
@@ -699,7 +713,7 @@ class SAML2_AuthnRequest extends SAML2_Request
         if (!empty($rac) && !empty($rac['AuthnContextClassRef'])) {
             $e = $this->document->createElementNS(SAML2_Const::NS_SAMLP, 'RequestedAuthnContext');
             $root->appendChild($e);
-            if (isset($rac['Comparison']) && $rac['Comparison'] !== 'exact') {
+            if (isset($rac['Comparison']) && $rac['Comparison'] !== SAML2_Const::COMPARISON_EXACT) {
                 $e->setAttribute('Comparison', $rac['Comparison']);
             }
             foreach ($rac['AuthnContextClassRef'] as $accr) {
@@ -749,11 +763,11 @@ class SAML2_AuthnRequest extends SAML2_Request
             SAML2_Utils::addNameId($subject, $this->nameId);
         } else {
             $eid = $subject->ownerDocument->createElementNS(SAML2_Const::NS_SAML, 'saml:EncryptedID');
-            $subject->appendChild($eid);
             $eid->appendChild($subject->ownerDocument->importNode($this->encryptedNameId, TRUE));
+            $subject->appendChild($eid);
         }
 
-        foreach ($this->SubjectConfirmation as $sc) {
+        foreach ($this->subjectConfirmation as $sc) {
             $sc->toXML($subject);
         }
     }
