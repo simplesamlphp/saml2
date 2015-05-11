@@ -183,7 +183,7 @@ class SAML2_AuthnRequest extends SAML2_Request
         if (empty($nameId)) {
             throw new Exception('Missing <saml:NameID> or <saml:EncryptedID> in <saml:Subject>.');
         } elseif (count($nameId) > 1) {
-            throw new Exception('More than one <saml:NameID> or <saml:EncryptedD> in <saml:Subject>.');
+            throw new Exception('More than one <saml:NameID> or <saml:EncryptedID> in <saml:Subject>.');
         }
         $nameId = $nameId[0];
         if ($nameId->localName === 'EncryptedData') {
@@ -763,8 +763,8 @@ class SAML2_AuthnRequest extends SAML2_Request
             SAML2_Utils::addNameId($subject, $this->nameId);
         } else {
             $eid = $subject->ownerDocument->createElementNS(SAML2_Const::NS_SAML, 'saml:EncryptedID');
-            $subject->appendChild($eid);
             $eid->appendChild($subject->ownerDocument->importNode($this->encryptedNameId, TRUE));
+            $subject->appendChild($eid);
         }
 
         foreach ($this->subjectConfirmation as $sc) {
