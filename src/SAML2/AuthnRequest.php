@@ -172,7 +172,7 @@ class SAML2_AuthnRequest extends SAML2_Request
         }
 
         if (count($subject) > 1) {
-            throw new Exception('More than one <saml:Subject> in <saml:Assertion>.');
+            throw new Exception('More than one <saml:Subject> in <saml:AuthnRequest>.');
         }
         $subject = $subject[0];
 
