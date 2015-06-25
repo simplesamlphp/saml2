@@ -731,7 +731,14 @@ class SAML2_AuthnRequest extends SAML2_Request
                 $idplist = $this->document->createElementNS(SAML2_Const::NS_SAMLP, 'IDPList');
                 foreach ($this->IDPList as $provider) {
                     $idpEntry = $this->document->createElementNS(SAML2_Const::NS_SAMLP, 'IDPEntry');
-                    $idpEntry->setAttribute('ProviderID', $provider);
+                    if (is_string($provider)) {
+                        $idpEntry->setAttribute('ProviderID', $provider);
+                    }
+                    elseif (is_array($provider)) {
+                        foreach ($provider as $attribute => $value) {
+                            $idpEntry->setAttribute($attribute, $value);
+                        }
+                    }
                     $idplist->appendChild($idpEntry);
                 }
                 $scoping->appendChild($idplist);
