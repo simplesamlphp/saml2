@@ -733,8 +733,7 @@ class SAML2_AuthnRequest extends SAML2_Request
                     $idpEntry = $this->document->createElementNS(SAML2_Const::NS_SAMLP, 'IDPEntry');
                     if (is_string($provider)) {
                         $idpEntry->setAttribute('ProviderID', $provider);
-                    }
-                    elseif (is_array($provider)) {
+                    } elseif (is_array($provider)) {
                         foreach ($provider as $attribute => $value) {
                             $idpEntry->setAttribute($attribute, $value);
                         }
