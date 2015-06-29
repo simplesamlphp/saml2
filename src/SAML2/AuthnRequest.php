@@ -385,12 +385,15 @@ class SAML2_AuthnRequest extends SAML2_Request
 
 
     /**
-     * This function sets the scoping for the request
-     * See Core 3.4.1.2 for the definition of scoping
-     * Currently we only support an IDPList of idpEntries
-     * and only the required ProviderID in an IDPEntry
-     * $providerIDs is an array of Entity Identifiers
+     * This function sets the scoping for the request.
+     * See Core 3.4.1.2 for the definition of scoping.
+     * Currently we support an IDPList of idpEntries.
      *
+     * Each idpEntries consists of an array, containing
+     * keys (mapped to attributes) and corresponding values.
+     * For backwards compatibility, an idpEntries can also
+     * be a string instead of an array, where each string
+     * is mapped to the value of attribute ProviderID.
      */
     public function setIDPList($IDPList)
     {
