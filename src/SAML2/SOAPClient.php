@@ -116,7 +116,7 @@ class SAML2_SOAPClient
             $dom = SAML2_DOMDocumentFactory::fromString($soapresponsexml);
         } catch (SAML2_Exception_RuntimeException $e) {
             throw new Exception('Not a SOAP response.', 0, $e);
-       }
+        }
 
         $soapfault = $this->getSOAPFault($dom);
         if (isset($soapfault)) {
