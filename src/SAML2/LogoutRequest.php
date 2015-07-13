@@ -121,7 +121,7 @@ class SAML2_LogoutRequest extends SAML2_Request
     public function encryptNameId(XMLSecurityKey $key)
     {
         /* First create a XML representation of the NameID. */
-        $doc = new DOMDocument();
+        $doc = SAML2_DOMDocumentFactory::create();
         $root = $doc->createElement('root');
         $doc->appendChild($root);
         SAML2_Utils::addNameId($root, $this->nameId);

@@ -22,8 +22,7 @@ class SAML2_ResponseTest extends PHPUnit_Framework_TestCase
 
     public function testLoop()
     {
-        $fixtureResponseDom = new DOMDocument();
-        $fixtureResponseDom->loadXML(<<<XML
+        $xml = <<<XML
 <samlp:Response xmlns:samlp="urn:oasis:names:tc:SAML:2.0:protocol"
                 xmlns:saml="urn:oasis:names:tc:SAML:2.0:assertion"
                 ID="s2a0da3504aff978b0f8c80f6a62c713c4a2f64c5b"
@@ -102,10 +101,11 @@ class SAML2_ResponseTest extends PHPUnit_Framework_TestCase
         </saml:AttributeStatement>
     </saml:Assertion>
 </samlp:Response>
-XML
-);
+XML;
 
-        $request = new SAML2_Response($fixtureResponseDom->firstChild);
+        $fixtureResponseDom = SAML2_DOMDocumentFactory::fromString($xml);
+        $request            = new SAML2_Response($fixtureResponseDom->firstChild);
+
         $requestXml = $requestDocument = $request->toUnsignedXML()->ownerDocument->C14N();
         $fixtureXml = $fixtureResponseDom->C14N();
 

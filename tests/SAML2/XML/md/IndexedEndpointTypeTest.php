@@ -13,8 +13,7 @@ class SAML2_XML_md_IndexedEndpointTypeTest extends \PHPUnit_Framework_TestCase
         $indexedEndpointType->index = 42;
         $indexedEndpointType->isDefault = FALSE;
 
-        $document = new DOMDocument();
-        $document->loadXML('<root />');
+        $document = SAML2_DOMDocumentFactory::fromString('<root />');
         $indexedEndpointTypeElement = $indexedEndpointType->toXML($document->firstChild, 'md:Test');
 
         $indexedEndpointElements = SAML2_Utils::xpQuery($indexedEndpointTypeElement, '/root/saml_metadata:Test');

@@ -72,8 +72,7 @@ AUTHNREQUEST
      */
     public function testExtensionOrdering()
     {
-        $document = new DOMDocument();
-        $document->loadXML(<<<AUTHNREQUEST
+        $xml = <<<AUTHNREQUEST
 <samlp:AuthnRequest
   xmlns:samlp="urn:oasis:names:tc:SAML:2.0:protocol"
   xmlns:saml="urn:oasis:names:tc:SAML:2.0:assertion"
@@ -96,8 +95,9 @@ AUTHNREQUEST
     AllowCreate="true"
     Format="urn:oasis:names:tc:SAML:1.1:nameid-format:emailAddress"/>
 </samlp:AuthnRequest>
-AUTHNREQUEST
-        );
+AUTHNREQUEST;
+
+        $document     = SAML2_DOMDocumentFactory::fromString($xml);
         $authnRequest = new SAML2_AuthnRequest($document->documentElement);
 
         $this->assertXmlStringEqualsXmlString($document->C14N(), $authnRequest->toUnsignedXML()->C14N());

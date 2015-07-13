@@ -394,7 +394,7 @@ abstract class SAML2_Message implements SAML2_SignedElement
      */
     public function toUnsignedXML()
     {
-        $this->document = new DOMDocument();
+        $this->document = SAML2_DOMDocumentFactory::create();
 
         $root = $this->document->createElementNS(SAML2_Const::NS_SAMLP, 'samlp:' . $this->tagName);
         $this->document->appendChild($root);

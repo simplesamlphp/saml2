@@ -16,8 +16,7 @@ class SAML2_XML_mdrpi_PublicationInfoTest extends \PHPUnit_Framework_TestCase
             'no' => 'http://NorwegianUsagePolicy',
         );
 
-        $document = new DOMDocument();
-        $document->loadXML('<root />');
+        $document = SAML2_DOMDocumentFactory::fromString('<root />');
         $xml = $publicationInfo->toXML($document->firstChild);
 
         $publicationInfoElements = SAML2_Utils::xpQuery(
@@ -45,8 +44,7 @@ class SAML2_XML_mdrpi_PublicationInfoTest extends \PHPUnit_Framework_TestCase
 
     public function testUnmarshalling()
     {
-        $document = new DOMDocument();
-        $document->loadXML(<<<XML
+        $document = SAML2_DOMDocumentFactory::fromString(<<<XML
 <mdrpi:PublicationInfo xmlns:mdrpi="urn:oasis:names:tc:SAML:metadata:rpi"
                        publisher="SomePublisher"
                        creationInstant="2011-01-01T00:00:00Z"

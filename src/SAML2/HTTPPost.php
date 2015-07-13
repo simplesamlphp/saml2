@@ -68,8 +68,7 @@ class SAML2_HTTPPost extends SAML2_Binding
 
         SAML2_Utils::getContainer()->debugMessage($msg, 'in');
 
-        $document = new DOMDocument();
-        $document->loadXML($msg);
+        $document = SAML2_DOMDocumentFactory::fromString($msg);
         $xml = $document->firstChild;
 
         $msg = SAML2_Message::fromXML($xml);

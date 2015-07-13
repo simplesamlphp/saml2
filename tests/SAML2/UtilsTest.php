@@ -33,9 +33,8 @@ class SAML2_UtilsTest extends PHPUnit_Framework_TestCase
      */
     public function testAddString()
     {
-        $document = new DOMDocument();
+        $document = SAML2_DOMDocumentFactory::fromString('<root/>');
 
-        $document->loadXML('<root/>');
         SAML2_Utils::addString(
             $document->firstChild,
             'testns',
@@ -65,9 +64,7 @@ class SAML2_UtilsTest extends PHPUnit_Framework_TestCase
      */
     public function testGetAddStrings()
     {
-        $document = new DOMDocument();
-
-        $document->loadXML('<root/>');
+        $document = SAML2_DOMDocumentFactory::fromString('<root/>');
         SAML2_Utils::addStrings(
             $document->firstChild,
             'testns',
@@ -137,8 +134,7 @@ class SAML2_UtilsTest extends PHPUnit_Framework_TestCase
      */
     public function testExtractString()
     {
-        $document = new DOMDocument();
-        $document->loadXML(
+        $document = SAML2_DOMDocumentFactory::fromString(
             '<root xmlns="' . SAML2_Const::NS_MD . '">'.
             '<somenode>value1</somenode>'.
             '<somenode>value2</somenode>'.
@@ -161,8 +157,7 @@ class SAML2_UtilsTest extends PHPUnit_Framework_TestCase
      */
     public function testExtractLocalizedString()
     {
-        $document = new DOMDocument();
-        $document->loadXML(
+        $document = SAML2_DOMDocumentFactory::fromString(
             '<root xmlns="' . SAML2_Const::NS_MD . '">'.
             '<somenode xml:lang="en">value (en)</somenode>'.
             '<somenode xml:lang="no">value (no)</somenode>'.

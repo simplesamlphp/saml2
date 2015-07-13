@@ -80,8 +80,7 @@ class SAML2_XML_Chunk implements Serializable
      */
     public function unserialize($serialized)
     {
-        $doc = new DOMDocument();
-        $doc->loadXML(unserialize($serialized));
+        $doc = SAML2_DOMDocumentFactory::fromString(unserialize($serialized));
         $this->xml = $doc->documentElement;
         $this->localName = $this->xml->localName;
         $this->namespaceURI = $this->xml->namespaceURI;

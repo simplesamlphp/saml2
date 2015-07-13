@@ -70,8 +70,7 @@ class SAML2_Signature_FingerprintValidatorTest extends \PHPUnit_Framework_TestCa
             new SAML2_Certificate_FingerprintLoader()
         );
 
-        $doc = new DOMDocument();
-        $doc->load(__DIR__ . '/response.xml');
+        $doc = SAML2_DOMDocumentFactory::fromFile(__DIR__ . '/response.xml');
         $response = new SAML2_Response($doc->firstChild);
         $response->setSignatureKey(SAML2_CertificatesMock::getPrivateKey());
         $response->setCertificates(array(SAML2_CertificatesMock::PUBLIC_KEY_PEM));

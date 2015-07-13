@@ -25,12 +25,11 @@ class SAML2_XML_md_NameIDTest extends \PHPUnit_Framework_TestCase
         $this->assertEquals('TheSPProvidedID', $nameIdElement->getAttribute("SPProvidedID"));
         $this->assertEquals('TheNameIDValue', $nameIdElement->textContent);
     }
-    
+
     public function testUnmarshalling()
     {
         $samlNamespace = SAML2_Const::NS_SAML;
-        $document = new DOMDocument();
-        $document->loadXML(<<<XML
+        $document = SAML2_DOMDocumentFactory::fromString(<<<XML
 <saml:NameID xmlns:saml="{$samlNamespace}" NameQualifier="TheNameQualifier" SPNameQualifier="TheSPNameQualifier" Format="TheFormat" SPProvidedID="TheSPProvidedID">TheNameIDValue</saml:NameID>
 XML
         );

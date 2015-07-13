@@ -43,8 +43,7 @@ class SAML2_AssertionTest extends \PHPUnit_Framework_TestCase
     public function testUnmarshalling()
     {
         // Unmarshall an assertion
-        $document = new \DOMDocument();
-        $document->loadXML(<<<XML
+        $xml = <<<XML
 <saml:Assertion xmlns:saml="urn:oasis:names:tc:SAML:2.0:assertion"
                 ID="_593e33ddf86449ce4d4c22b60ac48e067d98a0b2bf"
                 Version="2.0"
@@ -65,8 +64,8 @@ class SAML2_AssertionTest extends \PHPUnit_Framework_TestCase
     </saml:AuthnContext>
   </saml:AuthnStatement>
 </saml:Assertion>
-XML
-        );
+XML;
+        $document  = SAML2_DOMDocumentFactory::fromString($xml);
         $assertion = new \SAML2_Assertion($document->firstChild);
 
         // Test for valid audiences
@@ -84,9 +83,7 @@ XML
 
     public function testAuthnContextDeclAndClassRef()
     {
-        // Try with unmarshalling
-        $document = new DOMDocument();
-        $document->loadXML(<<<XML
+        $xml = <<<XML
 <saml:Assertion xmlns:saml="urn:oasis:names:tc:SAML:2.0:assertion"
                 xmlns:samlp="urn:oasis:names:tc:SAML:2.0:protocol"
                 ID="_593e33ddf86449ce4d4c22b60ac48e067d98a0b2bf"
@@ -104,9 +101,10 @@ XML
     </saml:AuthnContext>
   </saml:AuthnStatement>
 </saml:Assertion>
-XML
-        );
+XML;
 
+        // Try with unmarshalling
+        $document = SAML2_DOMDocumentFactory::fromString($xml);
 
         $assertion = new \SAML2_Assertion($document->documentElement);
         $authnContextDecl = $assertion->getAuthnContextDecl();
@@ -121,8 +119,7 @@ XML
     public function testAuthnContextDeclRefAndClassRef()
     {
         // Try with unmarshalling
-        $document = new DOMDocument();
-        $document->loadXML(<<<XML
+        $xml = <<<XML
 <saml:Assertion xmlns:saml="urn:oasis:names:tc:SAML:2.0:assertion"
                 xmlns:samlp="urn:oasis:names:tc:SAML:2.0:protocol"
                 ID="_593e33ddf86449ce4d4c22b60ac48e067d98a0b2bf"
@@ -137,9 +134,9 @@ XML
     </saml:AuthnContext>
   </saml:AuthnStatement>
 </saml:Assertion>
-XML
-        );
+XML;
 
+        $document = SAML2_DOMDocumentFactory::fromString($xml);
 
         $assertion = new \SAML2_Assertion($document->documentElement);
         $this->assertEquals('/relative/path/to/document.xml', $assertion->getAuthnContextDeclRef());
@@ -148,13 +145,12 @@ XML
 
     public function testAuthnContextDeclAndRefConstraint()
     {
-        $document = new DOMDocument();
-        $document->loadXML(<<<XML
+        $xml = <<<XML
 <samlac:AuthenticationContextDeclaration xmlns:samlac="urn:oasis:names:tc:SAML:2.0:ac">
 </samlac:AuthenticationContextDeclaration>
-XML
-    );
+XML;
 
+        $document  = SAML2_DOMDocumentFactory::fromString($xml);
         $assertion = new \SAML2_Assertion();
 
         $e = null;
@@ -177,8 +173,7 @@ XML
         $this->assertNotEmpty($e);
 
         // Try with unmarshalling
-        $document = new DOMDocument();
-        $document->loadXML(<<<XML
+        $xml = <<<XML
 <saml:Assertion xmlns:saml="urn:oasis:names:tc:SAML:2.0:assertion"
                 xmlns:samlp="urn:oasis:names:tc:SAML:2.0:protocol"
                 ID="_593e33ddf86449ce4d4c22b60ac48e067d98a0b2bf"
@@ -196,8 +191,9 @@ XML
     </saml:AuthnContext>
   </saml:AuthnStatement>
 </saml:Assertion>
-XML
-        );
+XML;
+
+        $document = SAML2_DOMDocumentFactory::fromString($xml);
 
         $e = null;
         try {
@@ -210,8 +206,7 @@ XML
     public function testMustHaveClassRefOrDeclOrDeclRef()
     {
         // Unmarshall an assertion
-        $document = new \DOMDocument();
-        $document->loadXML(<<<XML
+        $document = SAML2_DOMDocumentFactory::fromString(<<<XML
 <saml:Assertion xmlns:saml="urn:oasis:names:tc:SAML:2.0:assertion"
                 ID="_593e33ddf86449ce4d4c22b60ac48e067d98a0b2bf"
                 Version="2.0"
@@ -246,8 +241,7 @@ XML
         $authnContextDeclRef = 'relative/url/to/authcontext.xml';
 
         // Unmarshall an assertion
-        $document = new \DOMDocument();
-        $document->loadXML(<<<XML
+        $document = SAML2_DOMDocumentFactory::fromString(<<<XML
 <saml:Assertion xmlns:saml="urn:oasis:names:tc:SAML:2.0:assertion"
                 xmlns:samlp="urn:oasis:names:tc:SAML:2.0:protocol"
                 ID="_593e33ddf86449ce4d4c22b60ac48e067d98a0b2bf"

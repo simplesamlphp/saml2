@@ -7,8 +7,7 @@ class SAML2_XML_md_AdditionalMetadataLocationTest extends PHPUnit_Framework_Test
 {
     public function testMarshalling()
     {
-        $document = new DOMDocument();
-        $document->loadXML('<root/>');
+        $document = SAML2_DOMDocumentFactory::fromString('<root/>');
 
         $additionalMetadataLocation = new SAML2_XML_md_AdditionalMetadataLocation();
         $additionalMetadataLocation->namespace = 'NamespaceAttribute';
@@ -28,8 +27,7 @@ class SAML2_XML_md_AdditionalMetadataLocationTest extends PHPUnit_Framework_Test
 
     public function testUnmarshalling()
     {
-        $document = new DOMDocument();
-        $document->loadXML(
+        $document = SAML2_DOMDocumentFactory::fromString(
             '<md:AdditionalMetadataLocation xmlns:md="' . SAML2_Const::NS_MD . '"'.
             ' namespace="TheNamespaceAttribute">LocationText</md:AdditionalMetadataLocation>'
         );

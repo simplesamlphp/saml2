@@ -17,8 +17,7 @@ class LogoutRequestTest extends \PHPUnit_Framework_TestCase
      */
     public function setUp()
     {
-        $document = new DOMDocument();
-        $document->loadXML(<<<XML
+        $xml = <<<XML
 <samlp:LogoutRequest xmlns:samlp="urn:oasis:names:tc:SAML:2.0:protocol" xmlns:saml="urn:oasis:names:tc:SAML:2.0:assertion" ID="SomeIDValue" Version="2.0" IssueInstant="2010-07-22T11:30:19Z">
   <saml:Issuer>TheIssuer</saml:Issuer>
   <saml:EncryptedID>
@@ -40,8 +39,8 @@ class LogoutRequestTest extends \PHPUnit_Framework_TestCase
   <samlp:SessionIndex>SomeSessionIndex1</samlp:SessionIndex>
   <samlp:SessionIndex>SomeSessionIndex2</samlp:SessionIndex>
 </samlp:LogoutRequest>
-XML
-);
+XML;
+        $document = SAML2_DOMDocumentFactory::fromString($xml);
         $this->logoutRequestElement = $document->firstChild;
     }
 

@@ -16,8 +16,7 @@ class SAML2_XML_md_RoleDescriptorTest extends \PHPUnit_Framework_TestCase
         );
         $roleDescriptor->errorURL = 'https://example.org/error';
 
-        $document = new DOMDocument();
-        $document->loadXML('<root />');
+        $document = SAML2_DOMDocumentFactory::fromString('<root />');
         $roleDescriptorElement = $roleDescriptor->toXML($document->firstChild);
 
         $roleDescriptorElement = SAML2_Utils::xpQuery($roleDescriptorElement, '/root/md:RoleDescriptor');

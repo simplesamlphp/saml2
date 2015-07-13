@@ -192,7 +192,7 @@ class SAML2_XML_md_EntityDescriptor extends SAML2_SignedElementHelper
         assert('is_array($this->AdditionalMetadataLocation)');
 
         if ($parent === NULL) {
-            $doc = new DOMDocument();
+            $doc = SAML2_DOMDocumentFactory::create();
             $e = $doc->createElementNS(SAML2_Const::NS_MD, 'md:EntityDescriptor');
             $doc->appendChild($e);
         } else {
