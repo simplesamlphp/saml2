@@ -46,8 +46,7 @@ class SAML2_SOAP extends SAML2_Binding
             throw new Exception('Invalid message received to AssertionConsumerService endpoint.');
         }
 
-        $document = new DOMDocument();
-        $document->loadXML($postText);
+        $document = SAML2_DOMDocumentFactory::fromString($postText);
         $xml = $document->firstChild;
         SAML2_Utils::getContainer()->debugMessage($xml, 'in');
         $results = SAML2_Utils::xpQuery($xml, '/soap-env:Envelope/soap-env:Body/*[1]');

@@ -13,8 +13,7 @@ class SAML2_XML_saml_SubjectConfirmationTest extends \PHPUnit_Framework_TestCase
         $subjectConfirmation->NameID->value = 'SomeNameIDValue';
         $subjectConfirmation->SubjectConfirmationData = new SAML2_XML_saml_SubjectConfirmationData();
 
-        $document = new DOMDocument();
-        $document->loadXML('<root />');
+        $document = SAML2_DOMDocumentFactory::fromString('<root />');
         $subjectConfirmationElement = $subjectConfirmation->toXML($document->firstChild);
         $subjectConfirmationElements = SAML2_Utils::xpQuery($subjectConfirmationElement, '//saml_assertion:SubjectConfirmation');
         $this->assertCount(1, $subjectConfirmationElements);
@@ -28,8 +27,7 @@ class SAML2_XML_saml_SubjectConfirmationTest extends \PHPUnit_Framework_TestCase
     public function testUnmarshalling()
     {
         $samlNamespace = SAML2_Const::NS_SAML;
-        $document = new DOMDocument();
-        $document->loadXML(
+        $document = SAML2_DOMDocumentFactory::fromString(
 <<<XML
 <saml:SubjectConfirmation xmlns:saml="{$samlNamespace}" Method="SomeMethod">
   <saml:NameID>SomeNameIDValue</saml:NameID>

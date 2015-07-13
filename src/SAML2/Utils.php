@@ -207,7 +207,7 @@ class SAML2_Utils
     public static function copyElement(DOMElement $element, DOMElement $parent = NULL)
     {
         if ($parent === NULL) {
-            $document = new DOMDocument();
+            $document = SAML2_DOMDocumentFactory::create();
         } else {
             $document = $parent->ownerDocument;
         }
@@ -495,10 +495,13 @@ class SAML2_Utils
                      'xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">' .
             $decrypted .
             '</root>';
-        $newDoc = new DOMDocument();
-        if (!@$newDoc->loadXML($xml)) {
-            throw new Exception('Failed to parse decrypted XML. Maybe the wrong sharedkey was used?');
+
+        try {
+            $newDoc = SAML2_DOMDocumentFactory::fromString($xml);
+        } catch (SAML2_Exception_RuntimeException $e) {
+            throw new Exception('Failed to parse decrypted XML. Maybe the wrong sharedkey was used?', 0, $e);
         }
+
         $decryptedElement = $newDoc->firstChild->firstChild;
         if ($decryptedElement === NULL) {
             throw new Exception('Missing encrypted element.');

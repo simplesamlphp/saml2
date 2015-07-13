@@ -18,7 +18,7 @@ class SAML2_SignedElementHelperMock extends SAML2_SignedElementHelper
      */
     public function toSignedXML()
     {
-        $doc = new DOMDocument();
+        $doc = SAML2_DOMDocumentFactory::create();
         $root = $doc->createElement('root');
         $doc->appendChild($root);
 

@@ -7,8 +7,7 @@ class SAML2_XML_md_EntityDescriptorTest extends \PHPUnit_Framework_TestCase
 {
     public function testMissingAffiliationId()
     {
-        $document = new DOMDocument();
-        $document->loadXML(
+        $document = SAML2_DOMDocumentFactory::fromString(
         <<<XML
 <EntityDescriptor entityID="theEntityID" xmlns="urn:oasis:names:tc:SAML:2.0:metadata">
     <AffiliationDescriptor>
@@ -23,8 +22,7 @@ XML
 
     public function testMissingEntityId()
     {
-        $document = new DOMDocument();
-        $document->loadXML(
+        $document = SAML2_DOMDocumentFactory::fromString(
         <<<XML
 <EntityDescriptor xmlns="urn:oasis:names:tc:SAML:2.0:metadata">
     <AffiliationDescriptor affiliationOwnerID="asdf">
@@ -39,8 +37,7 @@ XML
 
     public function testMissingAffiliateMember()
     {
-        $document = new DOMDocument();
-        $document->loadXML(
+        $document = SAML2_DOMDocumentFactory::fromString(
         <<<XML
 <EntityDescriptor entityID="theEntityID" xmlns="urn:oasis:names:tc:SAML:2.0:metadata">
     <AffiliationDescriptor affiliationOwnerID="asdf">
@@ -54,8 +51,7 @@ XML
 
     public function testMissingDescriptor()
     {
-        $document = new DOMDocument();
-        $document->loadXML(
+        $document = SAML2_DOMDocumentFactory::fromString(
         <<<XML
 <EntityDescriptor entityID="theEntityID" xmlns="urn:oasis:names:tc:SAML:2.0:metadata">
 </EntityDescriptor>
@@ -67,8 +63,7 @@ XML
 
     public function testInvalidValidUntil()
     {
-        $document = new DOMDocument();
-        $document->loadXML(
+        $document = SAML2_DOMDocumentFactory::fromString(
         <<<XML
 <EntityDescriptor validUntil="asdf" entityID="theEntityID" xmlns="urn:oasis:names:tc:SAML:2.0:metadata">
     <AffiliationDescriptor affiliationOwnerID="asd">
@@ -83,8 +78,7 @@ XML
 
     public function testUnmarshalling()
     {
-        $document = new DOMDocument();
-        $document->loadXML(
+        $document = SAML2_DOMDocumentFactory::fromString(
         <<<XML
 <EntityDescriptor entityID="theEntityID" xmlns="urn:oasis:names:tc:SAML:2.0:metadata">
     <AffiliationDescriptor affiliationOwnerID="asdf" ID="theAffiliationDescriptorID" validUntil="2010-02-01T12:34:56Z" cacheDuration="PT9000S" >
@@ -114,8 +108,7 @@ XML
 
     public function testUnmarshalling2()
     {
-        $document = new DOMDocument();
-        $document->loadXML(<<<XML
+        $document = SAML2_DOMDocumentFactory::fromString(<<<XML
 <EntityDescriptor entityID="theEntityID" ID="theID" validUntil="2010-01-01T12:34:56Z" cacheDuration="PT5000S" xmlns="urn:oasis:names:tc:SAML:2.0:metadata">
 
     <AttributeAuthorityDescriptor protocolSupportEnumeration="urn:oasis:names:tc:SAML:2.0:protocol">

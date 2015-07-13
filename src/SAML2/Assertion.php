@@ -670,7 +670,7 @@ class SAML2_Assertion implements SAML2_SignedElement
     public function encryptNameId(XMLSecurityKey $key)
     {
         /* First create a XML representation of the NameID. */
-        $doc = new DOMDocument();
+        $doc = SAML2_DOMDocumentFactory::create();
         $root = $doc->createElement('root');
         $doc->appendChild($root);
         SAML2_Utils::addNameId($root, $this->nameId);
@@ -1226,7 +1226,7 @@ class SAML2_Assertion implements SAML2_SignedElement
     public function toXML(DOMNode $parentElement = NULL)
     {
         if ($parentElement === NULL) {
-            $document = new DOMDocument();
+            $document = SAML2_DOMDocumentFactory::create();
             $parentElement = $document;
         } else {
             $document = $parentElement->ownerDocument;
@@ -1462,7 +1462,7 @@ class SAML2_Assertion implements SAML2_SignedElement
         $root->appendChild($attributeStatement);
 
         foreach ($this->attributes as $name => $values) {
-            $document2 = new DOMDocument();
+            $document2 = SAML2_DOMDocumentFactory::create();
             $attribute = $document2->createElementNS(SAML2_Const::NS_SAML, 'saml:Attribute');
             $attribute->setAttribute('Name', $name);
             $document2->appendChild($attribute);

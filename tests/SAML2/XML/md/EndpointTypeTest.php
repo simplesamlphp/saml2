@@ -11,8 +11,7 @@ class SAML2_XML_md_EndpointTypeTest extends PHPUnit_Framework_TestCase
         $endpointType->Binding = 'TestBinding';
         $endpointType->Location = 'TestLocation';
 
-        $document = new DOMDocument();
-        $document->loadXml('<root />');
+        $document = SAML2_DOMDocumentFactory::fromString('<root />');
         $endpointTypeElement = $endpointType->toXML($document->firstChild, 'md:Test');
 
         $endpointTypeElements = SAML2_Utils::xpQuery($endpointTypeElement, '/root/saml_metadata:Test');
@@ -38,8 +37,7 @@ class SAML2_XML_md_EndpointTypeTest extends PHPUnit_Framework_TestCase
     public function testUnmarshalling()
     {
         $mdNamespace = SAML2_Const::NS_MD;
-        $document = new DOMDocument();
-        $document->loadXML(
+        $document = SAML2_DOMDocumentFactory::fromString(
 <<<XML
 <md:Test xmlns:md="{$mdNamespace}" Binding="urn:something" Location="https://whatever/" xmlns:test="urn:test" test:attr="value" />
 XML

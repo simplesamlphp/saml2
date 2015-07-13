@@ -87,7 +87,7 @@ class SAML2_XML_saml_NameID
         assert('is_string($this->value)');
 
         if ($parent === NULL) {
-            $parent = new DOMDocument();
+            $parent = SAML2_DOMDocumentFactory::create();
             $doc = $parent;
         } else {
             $doc = $parent->ownerDocument;

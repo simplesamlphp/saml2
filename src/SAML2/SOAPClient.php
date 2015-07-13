@@ -112,9 +112,10 @@ class SAML2_SOAPClient
         SAML2_Utils::getContainer()->debugMessage($soapresponsexml, 'in');
 
         // Convert to SAML2_Message (DOMElement)
-        $dom = new DOMDocument();
-        if (!$dom->loadXML($soapresponsexml)) {
-            throw new Exception('Not a SOAP response.');
+        try {
+            $dom = SAML2_DOMDocumentFactory::fromString($soapresponsexml);
+        } catch (SAML2_Exception_RuntimeException $e) {
+            throw new Exception('Not a SOAP response.', 0, $e);
         }
 
         $soapfault = $this->getSOAPFault($dom);

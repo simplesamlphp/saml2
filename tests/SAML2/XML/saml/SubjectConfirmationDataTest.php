@@ -14,8 +14,7 @@ class SAML2_XML_saml_SubjectConfirmationDataTest extends \PHPUnit_Framework_Test
         $subjectConfirmationData->InResponseTo = 'SomeRequestID';
         $subjectConfirmationData->Address = '127.0.0.1';
 
-        $document = new DOMDocument();
-        $document->loadXML('<root />');
+        $document = SAML2_DOMDocumentFactory::fromString('<root />');
         $subjectConfirmationDataElement = $subjectConfirmationData->toXML($document->firstChild);
 
         $subjectConfirmationDataElements = SAML2_Utils::xpQuery(
@@ -31,12 +30,11 @@ class SAML2_XML_saml_SubjectConfirmationDataTest extends \PHPUnit_Framework_Test
         $this->assertEquals('SomeRequestID', $subjectConfirmationDataElement->getAttribute("InResponseTo"));
         $this->assertEquals('127.0.0.1', $subjectConfirmationDataElement->getAttribute("Address"));
     }
-    
+
     public function testUnmarshalling()
     {
         $samlNamespace = SAML2_Const::NS_SAML;
-        $document = new DOMDocument();
-        $document->loadXML(<<<XML
+        $document = SAML2_DOMDocumentFactory::fromString(<<<XML
 <saml:SubjectConfirmationData
     xmlns:saml="{$samlNamespace}"
     NotBefore="2001-04-19T04:25:21Z"

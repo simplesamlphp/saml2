@@ -4,8 +4,7 @@ class SAML2_XML_md_AffiliationDescriptorTest extends PHPUnit_Framework_TestCase
 {
     public function testMarshalling()
     {
-        $document = new DOMDocument();
-        $document->loadXML('<root />');
+        $document = SAML2_DOMDocumentFactory::fromString('<root />');
 
         $affiliationDescriptorElement = new SAML2_XML_md_AffiliationDescriptor();
         $affiliationDescriptorElement->affiliationOwnerID = 'TheOwner';
@@ -40,8 +39,7 @@ class SAML2_XML_md_AffiliationDescriptorTest extends PHPUnit_Framework_TestCase
     public function testUnmarshalling()
     {
         $mdNamespace = SAML2_Const::NS_MD;
-        $document = new DOMDocument();
-        $document->loadXML(<<<XML
+        $document = SAML2_DOMDocumentFactory::fromString(<<<XML
 <md:AffiliationDescriptor xmlns:md="{$mdNamespace}" affiliationOwnerID="TheOwner" ID="TheID" validUntil="2009-02-13T23:31:30Z" cacheDuration="PT5000S">
     <md:AffiliateMember>Member</md:AffiliateMember>
     <md:AffiliateMember>OtherMember</md:AffiliateMember>
@@ -62,8 +60,7 @@ XML
     public function testUnmarshallingWithoutMembers()
     {
         $mdNamespace = SAML2_Const::NS_MD;
-        $document = new DOMDocument();
-        $document->loadXML(
+        $document = SAML2_DOMDocumentFactory::fromString(
 <<<XML
 <md:AffiliationDescriptor xmlns:md="{$mdNamespace}" affiliationOwnerID="TheOwner" ID="TheID" validUntil="2009-02-13T23:31:30Z" cacheDuration="PT5000S">
 </md:AffiliationDescriptor>
@@ -76,9 +73,7 @@ XML
     public function testUnmarshallingWithoutOwner()
     {
         $mdNamespace = SAML2_Const::NS_MD;
-        $document = new DOMDocument();
-
-        $document->loadXML(
+        $document = SAML2_DOMDocumentFactory::fromString(
             <<<XML
     <md:AffiliationDescriptor xmlns:md="{$mdNamespace}" ID="TheID" validUntil="2009-02-13T23:31:30Z" cacheDuration="PT5000S">
     <md:AffiliateMember>Member</md:AffiliateMember>

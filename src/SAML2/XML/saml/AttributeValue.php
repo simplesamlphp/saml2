@@ -27,7 +27,7 @@ class SAML2_XML_saml_AttributeValue implements Serializable
         assert('is_string($value) || $value instanceof DOMElement');
 
         if (is_string($value)) {
-            $doc = new DOMDocument();
+            $doc = SAML2_DOMDocumentFactory::create();
             $this->element = $doc->createElementNS(SAML2_Const::NS_SAML, 'saml:AttributeValue');
             $this->element->setAttributeNS(SAML2_Const::NS_XSI, 'xsi:type', 'xs:string');
             $this->element->appendChild($doc->createTextNode($value));
@@ -45,7 +45,7 @@ class SAML2_XML_saml_AttributeValue implements Serializable
             return;
         }
 
-        $doc = new DOMDocument();
+        $doc = SAML2_DOMDocumentFactory::create();
         $this->element = $doc->createElementNS(SAML2_Const::NS_SAML, 'saml:AttributeValue');
         SAML2_Utils::copyElement($value, $this->element);
     }
@@ -114,8 +114,7 @@ class SAML2_XML_saml_AttributeValue implements Serializable
      */
     public function unserialize($serialized)
     {
-        $doc = new DOMDocument();
-        $doc->loadXML(unserialize($serialized));
+        $doc = SAML2_DOMDocumentFactory::fromString(unserialize($serialized));
         $this->element = $doc->documentElement;
     }
 }

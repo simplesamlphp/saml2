@@ -16,8 +16,7 @@ class SAML2_XML_md_AttributeTest extends \PHPUnit_Framework_TestCase
             new SAML2_XML_saml_AttributeValue('SecondValue'),
         );
 
-        $document = new DOMDocument();
-        $document->loadXML('<root />');
+        $document = SAML2_DOMDocumentFactory::fromString('<root />');
         $attributeElement = $attribute->toXML($document->firstChild);
 
         $attributeElements = SAML2_Utils::xpQuery($attributeElement, '/root/saml_assertion:Attribute');
@@ -32,8 +31,7 @@ class SAML2_XML_md_AttributeTest extends \PHPUnit_Framework_TestCase
     public function testUnmarshalling()
     {
         $samlNamespace = SAML2_Const::NS_SAML;
-        $document = new DOMDocument();
-        $document->loadXML(<<<XML
+        $document = SAML2_DOMDocumentFactory::fromString(<<<XML
 <saml:Attribute xmlns:saml="{$samlNamespace}" Name="TheName" NameFormat="TheNameFormat" FriendlyName="TheFriendlyName">
     <saml:AttributeValue>FirstValue</saml:AttributeValue>
     <saml:AttributeValue>SecondValue</saml:AttributeValue>
@@ -54,8 +52,7 @@ XML
     public function testUnmarshallingFailure()
     {
         $samlNamespace = SAML2_Const::NS_SAML;
-        $document = new DOMDocument();
-        $document->loadXML(<<<XML
+        $document = SAML2_DOMDocumentFactory::fromString(<<<XML
 <saml:Attribute xmlns:saml="{$samlNamespace}" NameFormat="TheNameFormat" FriendlyName="TheFriendlyName">
     <saml:AttributeValue>FirstValue</saml:AttributeValue>
     <saml:AttributeValue>SecondValue</saml:AttributeValue>

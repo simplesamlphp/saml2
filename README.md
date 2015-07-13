@@ -23,7 +23,6 @@ So let us know what you would like to see in a PHP SAML2 library.
 
 Note that the **HTTP Artifact Binding and SOAP client not work** outside of SimpleSAMLphp.
 
-
 Usage
 -----
 
@@ -35,6 +34,8 @@ composer require simplesamlphp/saml2
 
 * Provide the required external dependencies by extending and implementing the ```SAML2_Compat_AbstractContainer```
   then injecting it in the ContainerSingleton (see example below).
+
+* **Make sure you've read the security section below**
 
 * Use at will.
 Example:
@@ -56,6 +57,17 @@ Example:
     $binding = new SAML2_HTTPRedirect();
     $binding->send($request);
 ```
+
+Security
+--------
+
+* **Ensure that before calling any code from this library you have called** `libxml_disable_entity_loader(true);`
+  this is required to prevent the [XXE Processing Vulnerability](https://www.owasp.org/index.php/XML_External_Entity_(XXE)_Processing),
+  see also [this websec.io page](http://websec.io/2012/08/27/Preventing-XEE-in-PHP.html)
+
+* Should you need to create a DOMDocument instance, use the `SAML2_DOMDocumentFactory` to create DOMDocuments from
+  either a string (`SAML2_DOMDocumentFactory::fromString($theXmlAsString)`), a file (`SAML2_DOMDocumentFactory::fromFile($pathToTheFile)`)
+  or just a new instance (`SAML2_DOMDocumentFactory::create()`)
 
 License
 -------

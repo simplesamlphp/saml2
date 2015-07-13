@@ -101,7 +101,7 @@ class SAML2_EncryptedAssertion
     public function toXML(DOMNode $parentElement = NULL)
     {
         if ($parentElement === NULL) {
-            $document = new DOMDocument();
+            $document = SAML2_DOMDocumentFactory::create();
             $parentElement = $document;
         } else {
             $document = $parentElement->ownerDocument;
