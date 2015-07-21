@@ -12,7 +12,6 @@
         "php": ">=5.3.3",
         "ext-openssl": "*",
         "ext-dom": "*",
-        "ext-mcrypt": "*",
 
         "robrichards/xmlseclibs": "^1.3",
         "psr/log": "~1.0"
