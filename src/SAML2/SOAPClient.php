@@ -11,6 +11,38 @@ class SAML2_SOAPClient
     const START_SOAP_ENVELOPE = '<soap-env:Envelope xmlns:soap-env="http://schemas.xmlsoap.org/soap/envelope/"><soap-env:Header/><soap-env:Body>';
     const END_SOAP_ENVELOPE = '</soap-env:Body></soap-env:Envelope>';
 
+ 
+    /**
+     * The username to use for HTTP authentication.
+     *
+     * @var string
+     */
+    private $username;
+ 
+    /**
+     * The password to use for HTTP authentication.
+     *
+     * @var string
+     */
+    private $password;
+ 
+ 
+    /**
+     * Set username & password for HTTP Basic Auth.
+     *
+     * @param string $username  The username.
+     * @param string $passwort  The password.
+     */
+    public function setBasicAuth($username, $password) {
+        assert('is_string($username)');
+        assert('is_string($password)');
+ 
+        $this->username = $username;
+        $this->password = $password;
+    }
+ 
+ 
+
     /**
      * This function sends the SOAP message to the service location and returns SOAP response
      *
@@ -80,6 +112,7 @@ class SAML2_SOAPClient
             $ctxOpts['ssl']['cafile'] = $peerCertFile;
         }
 
+        /*
         $context = stream_context_create($ctxOpts);
         if ($context === NULL) {
             throw new Exception('Unable to create SSL stream context');
@@ -90,8 +123,16 @@ class SAML2_SOAPClient
             'location' => $msg->getDestination(),
             'stream_context' => $context,
         );
+        */
+        $ctxOpts['http']['header'] = 'SOAPAction: "http://www.oasis-open.org/committees/security"' . "\n";
 
-        $x = new SoapClient(NULL, $options);
+        if ($this->username !== NULL && $this->password !== NULL) {
+            /* Add HTTP Basic authentication header. */
+            $authData = $this->username . ':' . $this->password;
+            $authData = base64_encode($authData);
+            $ctxOpts['http']['header'] .= 'Authorization: Basic ' . $authData . "\n";
+        }
+        //$x = new SoapClient(NULL, $options);
 
         // Add soap-envelopes
         $request = $msg->toSignedXML();
@@ -99,14 +140,25 @@ class SAML2_SOAPClient
 
         SAML2_Utils::getContainer()->debugMessage($request, 'out');
 
-        $action = 'http://www.oasis-open.org/committees/security';
-        $version = '1.1';
+        //$action = 'http://www.oasis-open.org/committees/security';
+        //$version = '1.1';
+        $ctxOpts['http']['content'] = $request;
+        $ctxOpts['http']['header'] .= 'Content-Type: text/xml; charset=utf-8' . "\n";
+        $ctxOpts['http']['method'] = 'POST';
         $destination = $msg->getDestination();
 
         /* Perform SOAP Request over HTTP */
-        $soapresponsexml = $x->__doRequest($request, $destination, $action, $version);
-        if ($soapresponsexml === NULL || $soapresponsexml === "") {
-            throw new Exception('Empty SOAP response, check peer certificate.');
+        //$soapresponsexml = $x->__doRequest($request, $destination, $action, $version);
+        //if ($soapresponsexml === NULL || $soapresponsexml === "") {
+        //    throw new Exception('Empty SOAP response, check peer certificate.');
+        //}
+        $context = stream_context_create($ctxOpts);
+        if ($context === NULL) {
+            throw new Exception('Unable to create stream context');
+        }
+        $soapresponsexml = @file_get_contents($destination, FALSE, $context);
+        if ($soapresponsexml === FALSE) {
+           throw new Exception('Error processing SOAP call: ' . SimpleSAML_Utilities::getLastError());
         }
 
         SAML2_Utils::getContainer()->debugMessage($soapresponsexml, 'in');

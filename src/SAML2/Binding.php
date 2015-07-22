@@ -34,6 +34,8 @@ abstract class SAML2_Binding
                 return new SAML2_HTTPRedirect();
             case SAML2_Const::BINDING_HTTP_ARTIFACT:
                 return new SAML2_HTTPArtifact();
+            case SAML2_Const::BINDING_SOAP_RESPONSE:
+                return new SAML2_SOAP();
             case SAML2_Const::BINDING_HOK_SSO:
                 return new SAML2_HTTPPost();
             default:

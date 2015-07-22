@@ -7,6 +7,9 @@
  */
 class SAML2_SOAP extends SAML2_Binding
 {
+
+    public $AssertionConsumerServiceURL;
+
     /**
      * Send a SAML 2 message using the SOAP binding.
      *
@@ -16,9 +19,15 @@ class SAML2_SOAP extends SAML2_Binding
      */
     public function send(SAML2_Message $message)
     {
+        assert('!empty($this->AssertionConsumerServiceURL)');
         header('Content-Type: text/xml', TRUE);
         $outputFromIdp = '<?xml version="1.0" encoding="UTF-8"?>';
         $outputFromIdp .= '<SOAP-ENV:Envelope xmlns:SOAP-ENV="http://schemas.xmlsoap.org/soap/envelope/">';
+        $outputFromIdp .= '<SOAP-ENV:Header>';
+        $outputFromIdp .= '<ecp:Response xmlns:ecp="urn:oasis:names:tc:SAML:2.0:profiles:SSO:ecp" ';
+        $outputFromIdp .= '  SOAP-ENV:mustUnderstand="1" SOAP-ENV:actor="http://schemas.xmlsoap.org/soap/actor/next" ';
+        $outputFromIdp .= '  AssertionConsumerServiceURL="' . $this->AssertionConsumerServiceURL . '"/>';
+        $outputFromIdp .= '</SOAP-ENV:Header>';
         $outputFromIdp .= '<SOAP-ENV:Body>';
         $xmlMessage = $message->toSignedXML();
         SAML2_Utils::getContainer()->debugMessage($xmlMessage, 'out');
