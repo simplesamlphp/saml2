@@ -77,7 +77,7 @@ abstract class SAML2_Binding
                     return new SAML2_HTTPPost();
                 } elseif (array_key_exists('SAMLart', $_POST)) {
                     return new SAML2_HTTPArtifact();
-                } elseif ($contentType === 'text/xml') {
+                } elseif ($contentType === 'text/xml' || $contentType === 'application/soap+xml') {
                     return new SAML2_SOAP();
                 }
                 break;
