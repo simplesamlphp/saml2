@@ -21,7 +21,7 @@ While this library is tagged as stable it is currently not very developer friend
 significantly in the future. It is however a starting point for collaboration between parties.
 So let us know what you would like to see in a PHP SAML2 library.
 
-Note that the **HTTP Artifact Binding and SOAP client not work** outside of SimpleSAMLphp.
+Note that the **HTTP Artifact Binding and SOAP client do not work** outside of SimpleSAMLphp.
 
 Usage
 -----
