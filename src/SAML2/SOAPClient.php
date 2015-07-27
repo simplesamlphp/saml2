@@ -11,37 +11,38 @@ class SAML2_SOAPClient
     const START_SOAP_ENVELOPE = '<soap-env:Envelope xmlns:soap-env="http://schemas.xmlsoap.org/soap/envelope/"><soap-env:Header/><soap-env:Body>';
     const END_SOAP_ENVELOPE = '</soap-env:Body></soap-env:Envelope>';
 
- 
+
     /**
      * The username to use for HTTP authentication.
      *
      * @var string
      */
     private $username;
- 
+
     /**
      * The password to use for HTTP authentication.
      *
      * @var string
      */
     private $password;
- 
- 
+
+
     /**
      * Set username & password for HTTP Basic Auth.
      *
      * @param string $username  The username.
      * @param string $passwort  The password.
      */
-    public function setBasicAuth($username, $password) {
+    public function setBasicAuth($username, $password)
+    {
         assert('is_string($username)');
         assert('is_string($password)');
- 
+
         $this->username = $username;
         $this->password = $password;
     }
- 
- 
+
+
 
     /**
      * This function sends the SOAP message to the service location and returns SOAP response
@@ -158,7 +159,7 @@ class SAML2_SOAPClient
         }
         $soapresponsexml = @file_get_contents($destination, FALSE, $context);
         if ($soapresponsexml === FALSE) {
-           throw new Exception('Error processing SOAP call: ' . SimpleSAML_Utilities::getLastError());
+            throw new Exception('Error processing SOAP call: ' . SimpleSAML_Utilities::getLastError());
         }
 
         SAML2_Utils::getContainer()->debugMessage($soapresponsexml, 'in');
