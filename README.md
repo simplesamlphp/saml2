@@ -49,7 +49,7 @@ Example:
 
     // Set up an AuthnRequest
     $request = new SAML2_AuthnRequest();
-    $request->setId(SAML2_Utils::generateId());
+    $request->setId($container->generateId());
     $request->setIssuer('https://sp.example.edu');
     $request->setDestination('https://idp.example.edu');
 
