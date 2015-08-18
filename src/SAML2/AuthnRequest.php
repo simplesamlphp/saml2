@@ -391,7 +391,9 @@ class SAML2_AuthnRequest extends SAML2_Request
      *
      * Each idpEntries consists of an array, containing
      * keys (mapped to attributes) and corresponding values.
-     * For backwards compatibility, an idpEntries can also
+     * Allowed attributes: Loc, Name, ProviderID.
+     *
+     * For backward compatibility, an idpEntries can also
      * be a string instead of an array, where each string
      * is mapped to the value of attribute ProviderID.
      */
@@ -737,7 +739,13 @@ class SAML2_AuthnRequest extends SAML2_Request
                         $idpEntry->setAttribute('ProviderID', $provider);
                     } elseif (is_array($provider)) {
                         foreach ($provider as $attribute => $value) {
-                            $idpEntry->setAttribute($attribute, $value);
+                            if (in_array($attribute, array(
+                                'ProviderID',
+                                'Loc',
+                                'Name'
+                            ))) {
+                                $idpEntry->setAttribute($attribute, $value);
+                            }
                         }
                     }
                     $idplist->appendChild($idpEntry);
