@@ -13,10 +13,7 @@ final class SAML2_DOMDocumentFactory
     public static function fromString($xml)
     {
         if (!is_string($xml)) {
-            throw new SAML2_Exception_InvalidArgumentException(sprintf(
-                'SAML2_DomDocumentFactory::fromString expects a string as argument, got "%s"',
-                (is_object($xml) ? 'instance of ' . get_class($xml) : gettype($xml) )
-            ));
+            throw SAML2_Exception_InvalidArgumentException::invalidType('string', $xml);
         }
 
         if ('' === trim($xml)) {
@@ -60,10 +57,7 @@ final class SAML2_DOMDocumentFactory
     public static function fromFile($file)
     {
         if (!is_string($file)) {
-            throw new SAML2_Exception_InvalidArgumentException(sprintf(
-                'SAML2_DomDocumentFactory::fromFile expects a string as argument, got "%s"',
-                (is_object($file) ? 'instance of ' . get_class($file) : gettype($file))
-            ));
+            throw SAML2_Exception_InvalidArgumentException::invalidType('string', $file);
         }
 
         if (!is_file($file)) {
