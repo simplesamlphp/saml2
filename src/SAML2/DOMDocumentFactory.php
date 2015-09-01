@@ -22,10 +22,10 @@ final class SAML2_DOMDocumentFactory
             );
         }
 
-        $entityLoader = libxml_disable_entity_loader(true);
+        $entityLoader = libxml_disable_entity_loader(TRUE);
         // some parts of the library rely on error-suppression to be able to throw an exception. We do the same here
         // to ensure backwards compatibility
-        $internalErrors = libxml_use_internal_errors(true);
+        $internalErrors = libxml_use_internal_errors(TRUE);
         libxml_clear_errors();
 
         $domDocument = new DOMDocument();
@@ -67,7 +67,7 @@ final class SAML2_DOMDocumentFactory
             ));
         }
 
-        // libxml_disable_entity_loader(true) disables DOMDocument::load() method, so we need to read the content
+        // libxml_disable_entity_loader(TRUE) disables DOMDocument::load() method, so we need to read the content
         // and use DOMDocument::loadXML()
         $xml = @file_get_contents($file);
         if ('' === trim($xml)) {
@@ -91,7 +91,7 @@ final class SAML2_DOMDocumentFactory
     protected static function parseXmlErrors($internalErrors)
     {
         $errors = array();
-        foreach(libxml_get_errors() as $error) {
+        foreach (libxml_get_errors() as $error) {
             $errors[] = sprintf(
                 'SAML2_DomDocumentFactory::parseXmlErrors error: [%s %s] "%s" in "%s"[%s]',
                 $error->level === LIBXML_ERR_WARNING ? 'WARNING' : 'ERROR',
