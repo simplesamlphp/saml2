@@ -19,19 +19,35 @@ final class SAML2_DOMDocumentFactory
             ));
         }
 
-        $domDocument = new DOMDocument();
+        if (empty($xml)) {
+            throw new SAML2_Exception_InvalidArgumentException(
+                'SAML2_DomDocumentFactory::fromString error: Empty string supplied as input'
+            );
+        }
+
+        $entityLoader = libxml_disable_entity_loader(true);
         // some parts of the library rely on error-suppression to be able to throw an exception. We do the same here
         // to ensure backwards compatibility
-        $loaded = @$domDocument->loadXML($xml, LIBXML_DTDLOAD | LIBXML_DTDATTR);
+        $internalErrors = libxml_use_internal_errors(true);
+        libxml_clear_errors();
+
+        $domDocument = new DOMDocument();
+        $loaded = $domDocument->loadXML($xml, LIBXML_DTDLOAD | LIBXML_DTDATTR | LIBXML_NONET | (defined(LIBXML_COMPACT) ? LIBXML_COMPACT : 0));
         if (!$loaded) {
-            $error = error_get_last();
-            throw new SAML2_Exception_RuntimeException(sprintf(
-                'Could not load given string as XML into DOMDocument, error: [%s] "%s" in "%s"[%s]',
-                $error['type'],
-                $error['message'],
-                $error['file'],
-                $error['line']
-            ));
+            libxml_disable_entity_loader($entityLoader);
+
+            throw new SAML2_Exception_RuntimeException(implode("\n", static::parseXmlErrors($internalErrors)));
+        }
+
+        libxml_use_internal_errors($internalErrors);
+        libxml_disable_entity_loader($entityLoader);
+
+        foreach ($domDocument->childNodes as $child) {
+            if ($child->nodeType === XML_DOCUMENT_TYPE_NODE) {
+                throw new SAML2_Exception_RuntimeException(
+                    'SAML2_DomDocumentFactory::fromString error: Document type is not allowed'
+                );
+            }
         }
 
         return $domDocument;
@@ -57,19 +73,39 @@ final class SAML2_DOMDocumentFactory
             ));
         }
 
-        $domDocument = new DOMDocument();
+        // libxml_disable_entity_loader(true) disables DOMDocument::load() method, so we need to read the content
+        // and use DOMDocument::loadXML()
+        $xml = @file_get_contents($file);
+        if (empty($xml)) {
+            throw new SAML2_Exception_InvalidArgumentException(sprintf(
+                'SAML2_DomDocumentFactory::fromFile error: Empty file supplied as input: "%s"',
+                $file
+            ));
+        }
+
+        $entityLoader = libxml_disable_entity_loader(true);
         // some parts of the library rely on error-suppression to be able to throw an exception. We do the same here
         // to ensure backwards compatibility
-        $loaded = @$domDocument->load($file, LIBXML_DTDLOAD | LIBXML_DTDATTR);
+        $internalErrors = libxml_use_internal_errors(true);
+        libxml_clear_errors();
+
+        $domDocument = new DOMDocument();
+        $loaded = $domDocument->loadXML($xml, LIBXML_DTDLOAD | LIBXML_DTDATTR | LIBXML_NONET | (defined(LIBXML_COMPACT) ? LIBXML_COMPACT : 0));
         if (!$loaded) {
-            $error = error_get_last();
-            throw new SAML2_Exception_RuntimeException(sprintf(
-                'Could not load given string as XML into DOMDocument, error: [%s] "%s" in "%s"[%s]',
-                $error['type'],
-                $error['message'],
-                $error['file'],
-                $error['line']
-            ));
+            libxml_disable_entity_loader($entityLoader);
+
+            throw new SAML2_Exception_RuntimeException(implode("\n", static::parseXmlErrors($internalErrors, $file)));
+        }
+
+        libxml_use_internal_errors($internalErrors);
+        libxml_disable_entity_loader($entityLoader);
+
+        foreach ($domDocument->childNodes as $child) {
+            if ($child->nodeType === XML_DOCUMENT_TYPE_NODE) {
+                throw new SAML2_Exception_RuntimeException(
+                    'SAML2_DomDocumentFactory::fromFile error: Document type is not allowed'
+                );
+            }
         }
 
         return $domDocument;
@@ -82,4 +118,25 @@ final class SAML2_DOMDocumentFactory
     {
         return new DOMDocument();
     }
+
+    protected static function parseXmlErrors($internalErrors, $file = null)
+    {
+        $errors = array();
+        foreach(libxml_get_errors() as $error) {
+            $errors[] = sprintf(
+                'SAML2_DomDocumentFactory::parseXmlErrors error: [%s %s] "%s" in "%s"[%s]',
+                $error->level === LIBXML_ERR_WARNING ? 'WARNING' : 'ERROR',
+                $error->code,
+                trim($error->message),
+                $file ?: '(string)',
+                $error->line
+            );
+        }
+
+        libxml_clear_errors();
+        libxml_use_internal_errors($internalErrors);
+
+        return $errors;
+    }
+
 }

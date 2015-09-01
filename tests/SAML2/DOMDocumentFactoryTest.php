@@ -9,7 +9,7 @@ class SAML2_DOMDocumentFactoryTest extends PHPUnit_Framework_TestCase
      * @dataProvider nonStringProvider
      * @expectedException SAML2_Exception_InvalidArgumentException
      */
-    public function testOnlyAStringIsAcceptedByFronString($argument)
+    public function testOnlyAStringIsAcceptedByFromString($argument)
     {
         SAML2_DOMDocumentFactory::fromString($argument);
     }
@@ -80,6 +80,52 @@ class SAML2_DOMDocumentFactoryTest extends PHPUnit_Framework_TestCase
         $document = SAML2_DOMDocumentFactory::fromFile($file);
 
         $this->assertXmlStringEqualsXmlFile($file, $document->saveXML());
+    }
+
+    /**
+     * @group domdocument
+     * @expectedException SAML2_Exception_RuntimeException
+     * @expectedExceptionMessage Document type is not allowed
+     */
+    public function testFileThatContainsDocTypeIsNotAccepted()
+    {
+        $file = realpath(dirname(__FILE__)) . DIRECTORY_SEPARATOR . 'domdocument_doctype.xml';
+
+        SAML2_DOMDocumentFactory::fromFile($file);
+    }
+
+    /**
+     * @group domdocument
+     * @expectedException SAML2_Exception_RuntimeException
+     * @expectedExceptionMessage Document type is not allowed
+     */
+    public function testStringThatContainsDocTypeIsNotAccepted()
+    {
+        $xml = '<!DOCTYPE foo [<!ELEMENT foo ANY > <!ENTITY xxe SYSTEM "file:///dev/random" >]><foo />';
+
+        SAML2_DOMDocumentFactory::fromString($xml);
+    }
+
+    /**
+     * @group domdocument
+     * @expectedException SAML2_Exception_InvalidArgumentException
+     * @expectedExceptionMessage Empty file supplied as input
+     */
+    public function testEmptyFileIsNotValid()
+    {
+        $file = realpath(dirname(__FILE__)) . DIRECTORY_SEPARATOR . 'domdocument_empty.xml';
+
+        SAML2_DOMDocumentFactory::fromFile($file);
+    }
+
+    /**
+     * @group domdocument
+     * @expectedException SAML2_Exception_InvalidArgumentException
+     * @expectedExceptionMessage Empty string supplied as input
+     */
+    public function testEmptyStringIsNotValid()
+    {
+        SAML2_DOMDocumentFactory::fromString("");
     }
 
     /**
