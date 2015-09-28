@@ -91,6 +91,14 @@ class SAML2_SOAPClient
             'stream_context' => $context,
         );
 
+        if ($srcMetadata->hasValue('saml.SOAPClient.proxyhost')) {
+            $options['proxy_host'] = $srcMetadata->getValue('saml.SOAPClient.proxyhost');
+        }
+
+        if ($srcMetadata->hasValue('saml.SOAPClient.proxyport')) {
+            $options['proxy_port'] = $srcMetadata->getValue('saml.SOAPClient.proxyport');
+        }
+
         $x = new SoapClient(NULL, $options);
 
         // Add soap-envelopes
