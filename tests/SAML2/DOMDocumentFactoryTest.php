@@ -83,6 +83,49 @@ class SAML2_DOMDocumentFactoryTest extends PHPUnit_Framework_TestCase
     }
 
     /**
+     * @group                    domdocument
+     * @expectedException        SAML2_Exception_RuntimeException
+     * @expectedExceptionMessage Dangerous XML detected, DOCTYPE nodes are not allowed in the XML body
+     */
+    public function testFileThatContainsDocTypeIsNotAccepted()
+    {
+        $file = realpath(dirname(__FILE__)) . DIRECTORY_SEPARATOR . 'domdocument_doctype.xml';
+        SAML2_DOMDocumentFactory::fromFile($file);
+    }
+
+    /**
+     * @group                    domdocument
+     * @expectedException        SAML2_Exception_RuntimeException
+     * @expectedExceptionMessage Dangerous XML detected, DOCTYPE nodes are not allowed in the XML body
+     */
+    public function testStringThatContainsDocTypeIsNotAccepted()
+    {
+        $xml = '<!DOCTYPE foo [<!ELEMENT foo ANY > <!ENTITY xxe SYSTEM "file:///dev/random" >]><foo />';
+        SAML2_DOMDocumentFactory::fromString($xml);
+    }
+
+    /**
+     * @group                    domdocument
+     * @expectedException        SAML2_Exception_RuntimeException
+     * @expectedExceptionMessage does not have content
+     */
+    public function testEmptyFileIsNotValid()
+    {
+        $file = realpath(dirname(__FILE__)) . DIRECTORY_SEPARATOR . 'domdocument_empty.xml';
+        SAML2_DOMDocumentFactory::fromFile($file);
+    }
+
+    /**
+     * @group                    domdocument
+     * @expectedException        SAML2_Exception_InvalidArgumentException
+     * @expectedExceptionMessage Invalid Argument type: "non-empty string" expected, "string" given
+     */
+    public function testEmptyStringIsNotValid()
+    {
+        SAML2_DOMDocumentFactory::fromString("");
+    }
+
+    /**
      * @return array
      */
     public function nonStringProvider()
