@@ -74,7 +74,7 @@ final class SAML2_DOMDocumentFactory
         // libxml_disable_entity_loader(true) disables DOMDocument::load() method
         // so we need to read the content and use DOMDocument::loadXML()
         $xml = file_get_contents($file);
-        if ($xml === false) {
+        if ($xml === FALSE) {
             throw new SAML2_Exception_RuntimeException(sprintf(
                 'Contents of readable file "%s" could not be gotten',
                 $file
