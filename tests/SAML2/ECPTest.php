@@ -38,7 +38,7 @@ class SAML2_ECPTest extends PHPUnit_Framework_TestCase
 XML;
 
         $fixtureResponseDom = SAML2_DOMDocumentFactory::fromString($xml);
-        $request            = new SAML2_XML_paos_Request($fixtureResponseDom->getElementsByTagNameNS('urn:liberty:paos:2003-08','Request')[0]);
+        $request            = new SAML2_XML_paos_Request($fixtureResponseDom->getElementsByTagNameNS('urn:liberty:paos:2003-08','Request')->item(0));
 
         $requestXml = $request->toXML( $fixtureResponseDom->firstChild )->ownerDocument->C14N();
         $fixtureXml = $fixtureResponseDom->C14N();
@@ -93,7 +93,7 @@ XML;
 
 
         $fixtureResponseDom = SAML2_DOMDocumentFactory::fromString($xml);
-        $request            = new SAML2_XML_ecp_Request($fixtureResponseDom->getElementsByTagNameNS('urn:oasis:names:tc:SAML:2.0:profiles:SSO:ecp','Request')[0]);
+        $request            = new SAML2_XML_ecp_Request($fixtureResponseDom->getElementsByTagNameNS('urn:oasis:names:tc:SAML:2.0:profiles:SSO:ecp','Request')->item(0));
 
         $requestXml = $request->toXML( $fixtureResponseDom->firstChild )->ownerDocument->C14N();
         $fixtureXml = $fixtureResponseDom->C14N();
