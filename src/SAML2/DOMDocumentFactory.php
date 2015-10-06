@@ -8,30 +8,45 @@ final class SAML2_DOMDocumentFactory
 
     /**
      * @param string $xml
+     *
      * @return DOMDocument
      */
     public static function fromString($xml)
     {
-        if (!is_string($xml)) {
-            throw new SAML2_Exception_InvalidArgumentException(sprintf(
-                'SAML2_DomDocumentFactory::fromString expects a string as argument, got "%s"',
-                (is_object($xml) ? 'instance of ' . get_class($xml) : gettype($xml) )
-            ));
+        if (!is_string($xml) || trim($xml) === '') {
+            throw SAML2_Exception_InvalidArgumentException::invalidType('non-empty string', $xml);
         }
 
-        $domDocument = new DOMDocument();
-        // some parts of the library rely on error-suppression to be able to throw an exception. We do the same here
-        // to ensure backwards compatibility
-        $loaded = @$domDocument->loadXML($xml, LIBXML_DTDLOAD | LIBXML_DTDATTR);
+        $entityLoader   = libxml_disable_entity_loader(TRUE);
+        $internalErrors = libxml_use_internal_errors(TRUE);
+        libxml_clear_errors();
+
+        $domDocument = self::create();
+        $options     = LIBXML_DTDLOAD | LIBXML_DTDATTR | LIBXML_NONET;
+        if (defined(LIBXML_COMPACT)) {
+            $options |= LIBXML_COMPACT;
+        }
+
+        $loaded = $domDocument->loadXML($xml, $options);
+
+        libxml_use_internal_errors($internalErrors);
+        libxml_disable_entity_loader($entityLoader);
+
         if (!$loaded) {
-            $error = error_get_last();
-            throw new SAML2_Exception_RuntimeException(sprintf(
-                'Could not load given string as XML into DOMDocument, error: [%s] "%s" in "%s"[%s]',
-                $error['type'],
-                $error['message'],
-                $error['file'],
-                $error['line']
-            ));
+            $error = libxml_get_last_error();
+            libxml_clear_errors();
+
+            throw new SAML2_Exception_UnparseableXmlException($error);
+        }
+
+        libxml_clear_errors();
+
+        foreach ($domDocument->childNodes as $child) {
+            if ($child->nodeType === XML_DOCUMENT_TYPE_NODE) {
+                throw new SAML2_Exception_RuntimeException(
+                    'Dangerous XML detected, DOCTYPE nodes are not allowed in the XML body'
+                );
+            }
         }
 
         return $domDocument;
@@ -39,40 +54,38 @@ final class SAML2_DOMDocumentFactory
 
     /**
      * @param $file
+     *
      * @return DOMDocument
      */
     public static function fromFile($file)
     {
         if (!is_string($file)) {
-            throw new SAML2_Exception_InvalidArgumentException(sprintf(
-                'SAML2_DomDocumentFactory::fromFile expects a string as argument, got "%s"',
-                (is_object($file) ? 'instance of ' . get_class($file) : gettype($file))
-            ));
+            throw SAML2_Exception_InvalidArgumentException::invalidType('string', $file);
         }
 
         if (!is_file($file)) {
-            throw new SAML2_Exception_InvalidArgumentException(sprintf(
-                'the argument given to SAML2_DomDocumentFactory::fromFile is not a file, got "%s"',
+            throw new SAML2_Exception_InvalidArgumentException(sprintf('Path "%s" is not a file', $file));
+        }
+
+        if (!is_readable($file)) {
+            throw new SAML2_Exception_InvalidArgumentException(sprintf('File "%s" is not readable', $file));
+        }
+
+        // libxml_disable_entity_loader(true) disables DOMDocument::load() method
+        // so we need to read the content and use DOMDocument::loadXML()
+        $xml = file_get_contents($file);
+        if ($xml === FALSE) {
+            throw new SAML2_Exception_RuntimeException(sprintf(
+                'Contents of readable file "%s" could not be gotten',
                 $file
             ));
         }
 
-        $domDocument = new DOMDocument();
-        // some parts of the library rely on error-suppression to be able to throw an exception. We do the same here
-        // to ensure backwards compatibility
-        $loaded = @$domDocument->load($file, LIBXML_DTDLOAD | LIBXML_DTDATTR);
-        if (!$loaded) {
-            $error = error_get_last();
-            throw new SAML2_Exception_RuntimeException(sprintf(
-                'Could not load given string as XML into DOMDocument, error: [%s] "%s" in "%s"[%s]',
-                $error['type'],
-                $error['message'],
-                $error['file'],
-                $error['line']
-            ));
+        if (trim($xml) === '') {
+            throw new SAML2_Exception_RuntimeException(sprintf('File "%s" does not have content', $file));
         }
 
-        return $domDocument;
+        return static::fromString($xml);
     }
 
     /**

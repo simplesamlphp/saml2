@@ -60,14 +60,11 @@ Example:
 
 Security
 --------
-
-* **Ensure that before calling any code from this library you have called** `libxml_disable_entity_loader(true);`
-  this is required to prevent the [XXE Processing Vulnerability](https://www.owasp.org/index.php/XML_External_Entity_(XXE)_Processing),
-  see also [this websec.io page](http://websec.io/2012/08/27/Preventing-XEE-in-PHP.html)
-
 * Should you need to create a DOMDocument instance, use the `SAML2_DOMDocumentFactory` to create DOMDocuments from
   either a string (`SAML2_DOMDocumentFactory::fromString($theXmlAsString)`), a file (`SAML2_DOMDocumentFactory::fromFile($pathToTheFile)`)
-  or just a new instance (`SAML2_DOMDocumentFactory::create()`)
+  or just a new instance (`SAML2_DOMDocumentFactory::create()`). This in order to protect yourself against the
+  [XXE Processing Vulnerability](https://www.owasp.org/index.php/XML_External_Entity_(XXE)_Processing), as well as
+  [XML Entity Expansion](http://phpsecurity.readthedocs.org/en/latest/Injection-Attacks.html#defenses-against-xml-entity-expansion) attacks
 
 License
 -------
