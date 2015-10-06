@@ -677,6 +677,11 @@ class SAML2_Utils
      *  Therefore I added to possibility to have microseconds to the format.
      * Added: (\.\\d{1,3})? to the regex.
      *
+     * Note that we always require a 'Z' timezone for the dateTime to be valid.
+     * This is not in the SAML spec but that's considered to be a bug in the
+     * spec. See https://github.com/simplesamlphp/saml2/pull/36 for some
+     * background.
+     *
      * @param string $time The time we should convert.
      * @return int Converted to a unix timestamp.
      * @throws Exception
