@@ -533,7 +533,7 @@ class SAML2_Utils
              * reasons we cannot tell the user what failed.
              */
             SAML2_Utils::getContainer()->getLogger()->error('Decryption failed: ' . $e->getMessage());
-            throw new Exception('Failed to decrypt XML element.');
+            throw new Exception('Failed to decrypt XML element.', 0, $e);
         }
     }
 
