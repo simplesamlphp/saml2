@@ -43,11 +43,6 @@ class SAML2_Const
     const BINDING_SOAP = 'urn:oasis:names:tc:SAML:2.0:bindings:SOAP';
 
     /**
-     * An internal binding that indicates that we should send a response by SOAP.
-     */
-    const BINDING_SOAP_RESPONSE = 'http://simplesamlphp.org/ns/bindings/SOAP-Response';
-
-    /**
      * The URN for the Holder-of-Key Web Browser SSO Profile binding
      */
     const BINDING_HOK_SSO = 'urn:oasis:names:tc:SAML:2.0:profiles:holder-of-key:SSO:browser';
