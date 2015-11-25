@@ -31,7 +31,7 @@
         <exclude-pattern>**/EncryptedAssertion.php</exclude-pattern>
     </rule>
 
-    <rule ref="Generic.PHP.UpperCaseConstant"/>
+    <rule ref="Generic.PHP.LowerCaseConstant"/>
 
     <!-- Lines can be a little bit longer before they break the build -->
     <rule ref="Generic.Files.LineLength">
