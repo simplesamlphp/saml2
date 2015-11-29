@@ -2,6 +2,7 @@
 
 namespace SAML2\Certificate;
 
+use RobRichards\XMLSecLibs\XMLSecurityKey;
 use SAML2\Configuration\PrivateKey;
 use SAML2\Utilities\File;
 use SAML2\Configuration\DecryptionProvider;

@@ -2,6 +2,7 @@
 
 namespace SAML2\Signature;
 
+use RobRichards\XMLSecLibs\XMLSecurityKey;
 use SAML2\SignedElement;
 
 abstract class AbstractChainedValidator implements ChainedValidator

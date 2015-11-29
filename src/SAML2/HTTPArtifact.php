@@ -2,6 +2,7 @@
 
 namespace SAML2;
 
+use RobRichards\XMLSecLibs\XMLSecurityKey;
 use SAML2\Utilities\Temporal;
 
 /**
