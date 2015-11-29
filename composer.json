@@ -27,12 +27,12 @@
     },
     "autoload": {
         "psr-0": {
-            "SAML2_": "src/"
+            "SAML2\\": "src/"
         }
     },
     "autoload-dev": {
         "psr-0": {
-            "SAML2_": "tests/"
+            "SAML2\\": "tests/"
         }
     }
 }
