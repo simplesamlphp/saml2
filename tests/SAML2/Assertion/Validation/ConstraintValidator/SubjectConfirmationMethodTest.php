@@ -2,12 +2,11 @@
 
 namespace SAML2\Assertion\Validation\ConstraintValidator;
 
-use SAML2\Constants;
+use Mockery as m;
 use SAML2\Assertion\Validation\Result;
+use SAML2\Constants;
 
-use \Mockery as m;
-
-class SubjectConfirmationTest extends \PHPUnit_Framework_TestCase
+class SubjectConfirmationMethodTest extends \PHPUnit_Framework_TestCase
 {
     /**
      * @var \Mockery\MockInterface

@@ -4,7 +4,6 @@ namespace SAML2\XML\md;
 
 use SAML2\Constants;
 
-
 class RoleDescriptorMock extends RoleDescriptor {
     public function __construct(\DOMElement $xml = NULL) {
         parent::__construct('md:RoleDescriptor', $xml);

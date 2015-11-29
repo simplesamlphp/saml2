@@ -2,8 +2,8 @@
 
 namespace SAML2\Assertion\Validation\ConstraintValidator;
 
-use SAML2\Assertion\Validation\AssertionConstraintValidator;
 use SAML2\Assertion;
+use SAML2\Assertion\Validation\AssertionConstraintValidator;
 use SAML2\Assertion\Validation\Result;
 use SAML2\Utilities\Temporal;
 

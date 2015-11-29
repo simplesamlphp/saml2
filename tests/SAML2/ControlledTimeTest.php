@@ -2,7 +2,7 @@
 
 namespace SAML2;
 
-use \Mockery as m;
+use Mockery as m;
 
 /**
  * Because we're mocking a static call, we have to run it in separate processes so as to no contaminate the other

@@ -1,6 +1,7 @@
 <?php
 
 namespace SAML2;
+
 /**
  * The Artifact is part of the SAML 2.0 IdP code, and it builds an artifact object.
  * I am using strings, because I find them easier to work with.

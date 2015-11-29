@@ -2,8 +2,8 @@
 
 namespace SAML2\Certificate;
 
-use SAML2\Configuration\ArrayAdapter;
 use SAML2\Certificate\Stub\ImplementsToString;
+use SAML2\Configuration\ArrayAdapter;
 
 class FingerprintLoaderTest extends \PHPUnit_Framework_TestCase
 {

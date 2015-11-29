@@ -2,10 +2,10 @@
 
 namespace SAML2\XML\md;
 
-use SAML2\Utils;
-use SAML2\XML\ds\KeyInfo;
-use SAML2\XML\Chunk;
 use SAML2\Constants;
+use SAML2\Utils;
+use SAML2\XML\Chunk;
+use SAML2\XML\ds\KeyInfo;
 
 /**
  * Class representing a KeyDescriptor element.

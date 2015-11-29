@@ -2,11 +2,11 @@
 
 namespace SAML2\XML\md;
 
-use SAML2\XML\saml\Attribute;
-use SAML2\XML\saml\AttributeValue;
+use SAML2\Constants;
 use SAML2\DOMDocumentFactory;
 use SAML2\Utils;
-use SAML2\Constants;
+use SAML2\XML\saml\Attribute;
+use SAML2\XML\saml\AttributeValue;
 
 /**
  * Class \SAML2\XML\md\AttributeTest

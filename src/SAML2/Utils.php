@@ -5,12 +5,12 @@ namespace SAML2;
 use RobRichards\XMLSecLibs\XMLSecEnc;
 use RobRichards\XMLSecLibs\XMLSecurityDSig;
 use RobRichards\XMLSecLibs\XMLSecurityKey;
+use SAML2\Compat\ContainerSingleton;
 use SAML2\Exception\RuntimeException;
+use SAML2\XML\ds\KeyInfo;
 use SAML2\XML\ds\X509Certificate;
 use SAML2\XML\ds\X509Data;
-use SAML2\XML\ds\KeyInfo;
 use SAML2\XML\md\KeyDescriptor;
-use SAML2\Compat\ContainerSingleton;
 
 /**
  * Helper functions for the SAML2 library.

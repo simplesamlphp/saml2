@@ -2,15 +2,15 @@
 
 namespace SAML2\Signature;
 
-use SAML2\Certificate\KeyCollection;
 use SAML2\Certificate\Key;
-use SAML2\SimpleTestLogger;
-use SAML2\Utilities\Certificate;
+use SAML2\Certificate\KeyCollection;
+use SAML2\Certificate\KeyLoader;
 use SAML2\CertificatesMock;
 use SAML2\Configuration\IdentityProvider;
-use SAML2\Certificate\KeyLoader;
 use SAML2\DOMDocumentFactory;
 use SAML2\Response;
+use SAML2\SimpleTestLogger;
+use SAML2\Utilities\Certificate;
 
 class PublicKeyValidatorTest extends \PHPUnit_Framework_TestCase
 {

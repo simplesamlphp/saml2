@@ -2,8 +2,8 @@
 
 namespace SAML2\Certificate;
 
-use SAML2\Utilities\ArrayCollection;
 use SAML2\Exception\InvalidArgumentException;
+use SAML2\Utilities\ArrayCollection;
 
 /**
  * Simple collection object for transporting keys

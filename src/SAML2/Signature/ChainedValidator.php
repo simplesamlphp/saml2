@@ -2,8 +2,8 @@
 
 namespace SAML2\Signature;
 
-use SAML2\SignedElement;
 use SAML2\Configuration\CertificateProvider;
+use SAML2\SignedElement;
 
 /**
  * Interface \SAML2\Validator\Responsible

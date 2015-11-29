@@ -2,13 +2,13 @@
 
 namespace SAML2\Assertion\Transformer;
 
-use SAML2\Configuration\IdentityProviderAware;
-use SAML2\Configuration\ServiceProviderAware;
-use SAML2\Certificate\PrivateKeyLoader;
 use SAML2\Assertion;
 use SAML2\Assertion\Exception\NotDecryptedException;
+use SAML2\Certificate\PrivateKeyLoader;
 use SAML2\Configuration\IdentityProvider;
+use SAML2\Configuration\IdentityProviderAware;
 use SAML2\Configuration\ServiceProvider;
+use SAML2\Configuration\ServiceProviderAware;
 
 class NameIdDecryptionTransformer implements
     Transformer,

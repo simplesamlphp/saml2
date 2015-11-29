@@ -2,8 +2,8 @@
 
 namespace SAML2\Certificate\Exception;
 
-use SAML2\Exception\Throwable;
 use SAML2\Certificate\Key;
+use SAML2\Exception\Throwable;
 
 /**
  * Named exception for when a non-existent key-usage is given

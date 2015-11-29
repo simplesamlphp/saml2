@@ -3,10 +3,10 @@
 namespace SAML2\XML\saml;
 
 use RobRichards\XMLSecLibs\XMLSecurityDSig;
+use SAML2\Constants;
 use SAML2\Utils;
 use SAML2\XML\Chunk;
 use SAML2\XML\ds\KeyInfo;
-use SAML2\Constants;
 
 /**
  * Class representing SAML 2 SubjectConfirmationData element.

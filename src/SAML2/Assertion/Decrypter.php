@@ -2,11 +2,11 @@
 
 namespace SAML2\Assertion;
 
+use SAML2\Assertion\Exception\NotDecryptedException;
+use SAML2\Certificate\PrivateKeyLoader;
 use SAML2\Configuration\IdentityProvider;
 use SAML2\Configuration\ServiceProvider;
-use SAML2\Certificate\PrivateKeyLoader;
 use SAML2\EncryptedAssertion;
-use SAML2\Assertion\Exception\NotDecryptedException;
 
 class Decrypter
 {

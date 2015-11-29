@@ -3,8 +3,8 @@
 namespace SAML2\XML\mdattr;
 
 use SAML2\Utils;
-use SAML2\XML\saml\Attribute;
 use SAML2\XML\Chunk;
+use SAML2\XML\saml\Attribute;
 
 /**
  * Class for handling the EntityAttributes metadata extension.

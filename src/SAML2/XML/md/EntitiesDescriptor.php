@@ -2,10 +2,10 @@
 
 namespace SAML2\XML\md;
 
+use SAML2\Constants;
+use SAML2\DOMDocumentFactory;
 use SAML2\SignedElementHelper;
 use SAML2\Utils;
-use SAML2\DOMDocumentFactory;
-use SAML2\Constants;
 
 /**
  * Class representing SAML 2 EntitiesDescriptor element.

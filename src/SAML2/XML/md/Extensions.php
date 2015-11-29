@@ -2,16 +2,16 @@
 
 namespace SAML2\XML\md;
 
+use SAML2\Constants;
 use SAML2\Utils;
-use SAML2\XML\shibmd\Scope;
+use SAML2\XML\Chunk;
 use SAML2\XML\mdattr\EntityAttributes;
 use SAML2\XML\mdrpi\Common;
-use SAML2\XML\mdrpi\RegistrationInfo;
 use SAML2\XML\mdrpi\PublicationInfo;
-use SAML2\XML\mdui\UIInfo;
+use SAML2\XML\mdrpi\RegistrationInfo;
 use SAML2\XML\mdui\DiscoHints;
-use SAML2\XML\Chunk;
-use SAML2\Constants;
+use SAML2\XML\mdui\UIInfo;
+use SAML2\XML\shibmd\Scope;
 
 /**
  * Class for handling SAML2 metadata extensions.

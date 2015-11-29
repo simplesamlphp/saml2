@@ -3,9 +3,9 @@
 namespace SAML2\Signature;
 
 use SAML2\Certificate\FingerprintLoader;
-use SAML2\SignedElement;
-use SAML2\Configuration\CertificateProvider;
 use SAML2\Certificate\X509;
+use SAML2\Configuration\CertificateProvider;
+use SAML2\SignedElement;
 
 /**
  * Validates the signature based on the fingerprint of the certificate

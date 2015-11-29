@@ -2,13 +2,13 @@
 
 namespace SAML2\Response;
 
-use SAML2\Utilities\Certificate;
+use SAML2\Assertion;
 use SAML2\CertificatesMock;
+use SAML2\Configuration\Destination;
 use SAML2\Configuration\IdentityProvider;
 use SAML2\Configuration\ServiceProvider;
-use SAML2\Configuration\Destination;
 use SAML2\Response;
-use SAML2\Assertion;
+use SAML2\Utilities\Certificate;
 
 /**
  * Test that ensures that either the response or the assertion(s) or both must be signed.

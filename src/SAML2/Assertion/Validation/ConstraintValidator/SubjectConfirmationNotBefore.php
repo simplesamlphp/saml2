@@ -2,10 +2,10 @@
 
 namespace SAML2\Assertion\Validation\ConstraintValidator;
 
-use SAML2\Assertion\Validation\SubjectConfirmationConstraintValidator;
-use SAML2\XML\saml\SubjectConfirmation;
 use SAML2\Assertion\Validation\Result;
+use SAML2\Assertion\Validation\SubjectConfirmationConstraintValidator;
 use SAML2\Utilities\Temporal;
+use SAML2\XML\saml\SubjectConfirmation;
 
 class SubjectConfirmationNotBefore implements
     SubjectConfirmationConstraintValidator

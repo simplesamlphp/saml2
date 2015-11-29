@@ -2,10 +2,10 @@
 
 namespace SAML2\Signature;
 
-use SAML2\SignedElement;
-use SAML2\Configuration\CertificateProvider;
-use SAML2\Certificate\KeyLoader;
 use SAML2\Certificate\FingerprintLoader;
+use SAML2\Certificate\KeyLoader;
+use SAML2\Configuration\CertificateProvider;
+use SAML2\SignedElement;
 
 /**
  * Signature Validator.
