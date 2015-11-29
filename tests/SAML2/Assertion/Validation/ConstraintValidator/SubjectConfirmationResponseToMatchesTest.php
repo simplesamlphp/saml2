@@ -2,9 +2,8 @@
 
 namespace SAML2\Assertion\Validation\ConstraintValidator;
 
+use Mockery as m;
 use SAML2\Assertion\Validation\Result;
-
-use \Mockery as m;
 
 class SubjectConfirmationResponseToMatchesTest extends
     \PHPUnit_Framework_TestCase

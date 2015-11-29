@@ -2,17 +2,17 @@
 
 namespace SAML2\Assertion;
 
-use SAML2\Signature\Validator;
-use SAML2\Assertion\Validation\AssertionValidator;
-use SAML2\Assertion\Validation\SubjectConfirmationValidator;
-use SAML2\Assertion\Transformer\Transformer;
-use SAML2\Configuration\IdentityProvider;
-use SAML2\Utilities\ArrayCollection;
-use SAML2\Response\Exception\InvalidSignatureException;
 use SAML2\Assertion;
-use SAML2\Response\Exception\UnencryptedAssertionFoundException;
 use SAML2\Assertion\Exception\InvalidAssertionException;
 use SAML2\Assertion\Exception\InvalidSubjectConfirmationException;
+use SAML2\Assertion\Transformer\Transformer;
+use SAML2\Assertion\Validation\AssertionValidator;
+use SAML2\Assertion\Validation\SubjectConfirmationValidator;
+use SAML2\Configuration\IdentityProvider;
+use SAML2\Response\Exception\InvalidSignatureException;
+use SAML2\Response\Exception\UnencryptedAssertionFoundException;
+use SAML2\Signature\Validator;
+use SAML2\Utilities\ArrayCollection;
 
 /**
  * @SuppressWarnings(PHPMD.CouplingBetweenObjects) - due to all the named exceptions

@@ -3,10 +3,10 @@
 namespace SAML2\Certificate;
 
 use RobRichards\XMLSecLibs\XMLSecurityKey;
-use SAML2\Configuration\PrivateKey as PrivateKeyConfiguration;
-use SAML2\Utilities\File;
 use SAML2\Configuration\DecryptionProvider;
+use SAML2\Configuration\PrivateKey as PrivateKeyConfiguration;
 use SAML2\Utilities\ArrayCollection;
+use SAML2\Utilities\File;
 
 class PrivateKeyLoader
 {

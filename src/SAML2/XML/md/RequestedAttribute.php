@@ -2,9 +2,9 @@
 
 namespace SAML2\XML\md;
 
-use SAML2\XML\saml\Attribute;
-use SAML2\Utils;
 use SAML2\Constants;
+use SAML2\Utils;
+use SAML2\XML\saml\Attribute;
 
 /**
  * Class representing SAML 2 metadata RequestedAttribute.

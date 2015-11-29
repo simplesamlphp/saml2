@@ -2,9 +2,9 @@
 
 namespace SAML2\XML\samlp;
 
+use SAML2\Constants;
 use SAML2\Utils;
 use SAML2\XML\Chunk;
-use SAML2\Constants;
 
 /**
  * Class for handling SAML2 extensions.

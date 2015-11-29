@@ -2,10 +2,9 @@
 
 namespace SAML2\Assertion\Validation\ConstraintValidator;
 
-use SAML2\ControlledTimeTest;
+use Mockery as m;
 use SAML2\Assertion\Validation\Result;
-
-use \Mockery as m;
+use SAML2\ControlledTimeTest;
 
 /**
  * Because we're mocking a static call, we have to run it in separate processes so as to no contaminate the other

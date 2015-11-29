@@ -5,8 +5,8 @@ namespace SAML2;
 use RobRichards\XMLSecLibs\XMLSecEnc;
 use RobRichards\XMLSecLibs\XMLSecurityKey;
 use SAML2\Utilities\Temporal;
-use SAML2\XML\saml\SubjectConfirmation;
 use SAML2\XML\Chunk;
+use SAML2\XML\saml\SubjectConfirmation;
 
 /**
  * Class representing a SAML 2 assertion.

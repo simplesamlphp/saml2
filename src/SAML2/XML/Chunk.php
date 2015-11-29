@@ -2,8 +2,9 @@
 
 namespace SAML2\XML;
 
-use SAML2\Utils;
 use SAML2\DOMDocumentFactory;
+use SAML2\Utils;
+
 /**
  * Serializable class used to hold an XML element.
  *

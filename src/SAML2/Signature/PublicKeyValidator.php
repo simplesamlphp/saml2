@@ -2,11 +2,11 @@
 
 namespace SAML2\Signature;
 
-use SAML2\Certificate\KeyLoader;
-use SAML2\SignedElement;
-use SAML2\Configuration\CertificateProvider;
 use SAML2\Certificate\Key;
+use SAML2\Certificate\KeyLoader;
 use SAML2\Certificate\X509;
+use SAML2\Configuration\CertificateProvider;
+use SAML2\SignedElement;
 
 class PublicKeyValidator extends AbstractChainedValidator
 {

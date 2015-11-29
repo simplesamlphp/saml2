@@ -2,17 +2,17 @@
 
 namespace SAML2\Response;
 
-use SAML2\Signature\Validator;
-use SAML2\Configuration\ServiceProvider;
-use SAML2\Configuration\IdentityProvider;
-use SAML2\Configuration\Destination;
-use SAML2\Response;
-use SAML2\Response\Validation\PreconditionValidator;
 use SAML2\Assertion\ProcessorBuilder;
-use SAML2\Response\Exception\PreconditionNotMetException;
+use SAML2\Configuration\Destination;
+use SAML2\Configuration\IdentityProvider;
+use SAML2\Configuration\ServiceProvider;
+use SAML2\Response;
 use SAML2\Response\Exception\InvalidResponseException;
 use SAML2\Response\Exception\NoAssertionsFoundException;
+use SAML2\Response\Exception\PreconditionNotMetException;
 use SAML2\Response\Exception\UnsignedResponseException;
+use SAML2\Response\Validation\PreconditionValidator;
+use SAML2\Signature\Validator;
 
 /**
  * @SuppressWarnings(PHPMD.CouplingBetweenObjects) - due to specific exceptions

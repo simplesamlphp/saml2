@@ -3,8 +3,8 @@
 namespace SAML2;
 
 use SAML2\Exception\InvalidArgumentException;
-use SAML2\Exception\UnparseableXmlException;
 use SAML2\Exception\RuntimeException;
+use SAML2\Exception\UnparseableXmlException;
 
 final class DOMDocumentFactory
 {

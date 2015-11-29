@@ -3,8 +3,8 @@
 namespace SAML2\Assertion\Validation;
 
 use SAML2\Configuration\IdentityProvider;
-use SAML2\Configuration\ServiceProvider;
 use SAML2\Configuration\IdentityProviderAware;
+use SAML2\Configuration\ServiceProvider;
 use SAML2\Configuration\ServiceProviderAware;
 use SAML2\XML\saml\SubjectConfirmation;
 

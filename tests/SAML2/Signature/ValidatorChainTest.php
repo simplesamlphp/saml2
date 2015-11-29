@@ -2,8 +2,8 @@
 
 namespace SAML2\Signature;
 
-use SAML2\Response;
 use SAML2\Configuration\IdentityProvider;
+use SAML2\Response;
 
 class ValidatorChainTest extends \PHPUnit_Framework_TestCase
 {

@@ -2,12 +2,11 @@
 
 namespace SAML2\Assertion\Validation\ConstraintValidator;
 
-use SAML2\Configuration\Destination;
+use Mockery as m;
 use SAML2\Assertion\Validation\Result;
+use SAML2\Configuration\Destination;
 
-use \Mockery as m;
-
-class SubjectConfirmationRecipientMatchesTest extends
+class SubjectConfirmationRecipientMathchesTest extends
     \PHPUnit_Framework_TestCase
 {
     /**

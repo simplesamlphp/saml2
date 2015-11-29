@@ -2,8 +2,8 @@
 
 namespace SAML2\Signature;
 
-use SAML2\SignedElement;
 use SAML2\Configuration\CertificateProvider;
+use SAML2\SignedElement;
 
 /**
  * Allows for validation of a signature trying different validators till a validator is found
