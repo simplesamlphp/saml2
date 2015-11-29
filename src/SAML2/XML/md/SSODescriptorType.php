@@ -52,9 +52,9 @@ abstract class SSODescriptorType extends RoleDescriptor
      * Initialize a SSODescriptor.
      *
      * @param string          $elementName The name of this element.
-     * @param DOMElement|NULL $xml         The XML element we should load.
+     * @param \DOMElement|NULL $xml         The XML element we should load.
      */
-    protected function __construct($elementName, DOMElement $xml = NULL)
+    protected function __construct($elementName, \DOMElement $xml = NULL)
     {
         assert('is_string($elementName)');
 
@@ -82,10 +82,10 @@ abstract class SSODescriptorType extends RoleDescriptor
     /**
      * Add this SSODescriptorType to an EntityDescriptor.
      *
-     * @param  DOMElement $parent The EntityDescriptor we should append this SSODescriptorType to.
-     * @return DOMElement The generated SSODescriptor DOMElement.
+     * @param  \DOMElement $parent The EntityDescriptor we should append this SSODescriptorType to.
+     * @return \DOMElement The generated SSODescriptor DOMElement.
      */
-    protected function toXML(DOMElement $parent)
+    protected function toXML(\DOMElement $parent)
     {
         assert('is_array($this->ArtifactResolutionService)');
         assert('is_array($this->SingleLogoutService)');

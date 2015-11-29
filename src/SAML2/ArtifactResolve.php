@@ -13,7 +13,7 @@ class ArtifactResolve extends Request
 {
     private $artifact;
 
-    public function __construct(DOMElement $xml = NULL)
+    public function __construct(\DOMElement $xml = NULL)
     {
         parent::__construct('ArtifactResolve', $xml);
 
@@ -48,7 +48,7 @@ class ArtifactResolve extends Request
     /**
      * Convert the response message to an XML element.
      *
-     * @return DOMElement This response.
+     * @return \DOMElement This response.
      */
     public function toUnsignedXML()
     {

@@ -22,9 +22,9 @@ class KeyName
     /**
      * Initialize a KeyName element.
      *
-     * @param DOMElement|NULL $xml The XML element we should load.
+     * @param \DOMElement|NULL $xml The XML element we should load.
      */
-    public function __construct(DOMElement $xml = NULL)
+    public function __construct(\DOMElement $xml = NULL)
     {
         if ($xml === NULL) {
             return;
@@ -36,10 +36,10 @@ class KeyName
     /**
      * Convert this KeyName element to XML.
      *
-     * @param DOMElement $parent The element we should append this KeyName element to.
-     * @return DOMElement
+     * @param \DOMElement $parent The element we should append this KeyName element to.
+     * @return \DOMElement
      */
-    public function toXML(DOMElement $parent)
+    public function toXML(\DOMElement $parent)
     {
         assert('is_string($this->name)');
 

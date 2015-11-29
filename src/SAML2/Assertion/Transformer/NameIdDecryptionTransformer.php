@@ -58,7 +58,7 @@ class NameIdDecryptionTransformer implements
             try {
                 $assertion->decryptNameId($key, $blacklistedKeys);
                 $this->logger->debug(sprintf('Decrypted assertion NameId with key "#%d"', $index));
-            } catch (Exception $e) {
+            } catch (\Exception $e) {
                 $this->logger->debug(sprintf(
                     'Decrypting assertion NameId with key "#%d" failed, "%s" thrown: "%s"',
                     $index,

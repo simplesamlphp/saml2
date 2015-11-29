@@ -46,9 +46,9 @@ class SPSSODescriptor extends SSODescriptorType
     /**
      * Initialize a SPSSODescriptor.
      *
-     * @param DOMElement|NULL $xml The XML element we should load.
+     * @param \DOMElement|NULL $xml The XML element we should load.
      */
-    public function __construct(DOMElement $xml = NULL)
+    public function __construct(\DOMElement $xml = NULL)
     {
         parent::__construct('md:SPSSODescriptor', $xml);
 
@@ -71,10 +71,10 @@ class SPSSODescriptor extends SSODescriptorType
     /**
      * Add this SPSSODescriptor to an EntityDescriptor.
      *
-     * @param DOMElement $parent The EntityDescriptor we should append this SPSSODescriptor to.
+     * @param \DOMElement $parent The EntityDescriptor we should append this SPSSODescriptor to.
      * @return void
      */
-    public function toXML(DOMElement $parent)
+    public function toXML(\DOMElement $parent)
     {
         assert('is_null($this->AuthnRequestsSigned) || is_bool($this->AuthnRequestsSigned)');
         assert('is_null($this->WantAssertionsSigned) || is_bool($this->WantAssertionsSigned)');

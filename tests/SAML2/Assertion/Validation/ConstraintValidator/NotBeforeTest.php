@@ -28,7 +28,7 @@ class NotBeforeTest extends ControlledTimeTest
     public function setUp()
     {
         parent::setUp();
-        $this->assertion = m::mock('SAML2_Assertion');
+        $this->assertion = m::mock('SAML2\Assertion');
     }
 
     /**

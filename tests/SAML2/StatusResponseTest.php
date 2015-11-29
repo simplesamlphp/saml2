@@ -5,7 +5,7 @@ namespace SAML2;
 /**
  * Class \SAML2\StatusResponseTest
  */
-class StatusResponseTest extends PHPUnit_Framework_TestCase
+class StatusResponseTest extends \PHPUnit_Framework_TestCase
 {
     public function testMarshalling()
     {

@@ -41,23 +41,23 @@ class Logo
     /**
      * Initialize a Logo.
      *
-     * @param DOMElement|NULL $xml The XML element we should load.
-     * @throws Exception
+     * @param \DOMElement|NULL $xml The XML element we should load.
+     * @throws \Exception
      */
-    public function __construct(DOMElement $xml = NULL)
+    public function __construct(\DOMElement $xml = NULL)
     {
         if ($xml === NULL) {
             return;
         }
 
         if (!$xml->hasAttribute('width')) {
-            throw new Exception('Missing width of Logo.');
+            throw new \Exception('Missing width of Logo.');
         }
         if (!$xml->hasAttribute('height')) {
-            throw new Exception('Missing height of Logo.');
+            throw new \Exception('Missing height of Logo.');
         }
         if (!is_string($xml->textContent) || !strlen($xml->textContent)) {
-            throw new Exception('Missing url value for Logo.');
+            throw new \Exception('Missing url value for Logo.');
         }
         $this->url = $xml->textContent;
         $this->width = (int) $xml->getAttribute('width');
@@ -68,10 +68,10 @@ class Logo
     /**
      * Convert this Logo to XML.
      *
-     * @param DOMElement $parent The element we should append this Logo to.
-     * @return DOMElement
+     * @param \DOMElement $parent The element we should append this Logo to.
+     * @return \DOMElement
      */
-    public function toXML(DOMElement $parent)
+    public function toXML(\DOMElement $parent)
     {
         assert('is_int($this->width)');
         assert('is_int($this->height)');

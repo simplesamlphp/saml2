@@ -42,10 +42,10 @@ class KeyDescriptor
     /**
      * Initialize an KeyDescriptor.
      *
-     * @param DOMElement|NULL $xml The XML element we should load.
-     * @throws Exception
+     * @param \DOMElement|NULL $xml The XML element we should load.
+     * @throws \Exception
      */
-    public function __construct(DOMElement $xml = NULL)
+    public function __construct(\DOMElement $xml = NULL)
     {
         if ($xml === NULL) {
             return;
@@ -57,9 +57,9 @@ class KeyDescriptor
 
         $keyInfo = Utils::xpQuery($xml, './ds:KeyInfo');
         if (count($keyInfo) > 1) {
-            throw new Exception('More than one ds:KeyInfo in the KeyDescriptor.');
+            throw new \Exception('More than one ds:KeyInfo in the KeyDescriptor.');
         } elseif (empty($keyInfo)) {
-            throw new Exception('No ds:KeyInfo in the KeyDescriptor.');
+            throw new \Exception('No ds:KeyInfo in the KeyDescriptor.');
         }
         $this->KeyInfo = new KeyInfo($keyInfo[0]);
 
@@ -72,13 +72,13 @@ class KeyDescriptor
     /**
      * Convert this KeyDescriptor to XML.
      *
-     * @param DOMElement $parent The element we should append this KeyDescriptor to.
-     * @return DOMElement
+     * @param \DOMElement $parent The element we should append this KeyDescriptor to.
+     * @return \DOMElement
      */
-    public function toXML(DOMElement $parent)
+    public function toXML(\DOMElement $parent)
     {
         assert('is_null($this->use) || is_string($this->use)');
-        assert('$this->KeyInfo instanceof SAML2_XML_ds_KeyInfo');
+        assert('$this->KeyInfo instanceof \SAML2\XML\ds\KeyInfo');
         assert('is_array($this->EncryptionMethod)');
 
         $doc = $parent->ownerDocument;

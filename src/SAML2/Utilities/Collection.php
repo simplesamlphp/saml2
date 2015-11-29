@@ -2,7 +2,7 @@
 
 namespace SAML2\Utilities;
 
-interface Collection extends ArrayAccess, Countable, IteratorAggregate
+interface Collection extends \ArrayAccess, \Countable, \IteratorAggregate
 {
     /**
      * Add an element to the collection
@@ -43,14 +43,14 @@ interface Collection extends ArrayAccess, Countable, IteratorAggregate
      *
      * @return mixed
      */
-    public function map(Closure $function);
+    public function map(\Closure $function);
 
     /**
      * @param callable $filterFunction
      *
      * @return \SAML2\Utilities\Collection
      */
-    public function filter(Closure $filterFunction);
+    public function filter(\Closure $filterFunction);
 
     /**
      * Get the element at index

@@ -89,7 +89,7 @@ class HTTPRedirect extends Binding
      * Throws an exception if it is unable receive the message.
      *
      * @return \SAML2\Message The received message.
-     * @throws Exception
+     * @throws \Exception
      *
      * NPath is currently too high but solving that just moves code around.
      * @SuppressWarnings(PHPMD.NPathComplexity)
@@ -102,21 +102,21 @@ class HTTPRedirect extends Binding
         } elseif (array_key_exists('SAMLResponse', $data)) {
             $message = $data['SAMLResponse'];
         } else {
-            throw new Exception('Missing SAMLRequest or SAMLResponse parameter.');
+            throw new \Exception('Missing SAMLRequest or SAMLResponse parameter.');
         }
 
         if (isset($data['SAMLEncoding']) && $data['SAMLEncoding'] !== self::DEFLATE) {
-            throw new Exception('Unknown SAMLEncoding: ' . var_export($data['SAMLEncoding'], TRUE));
+            throw new \Exception('Unknown SAMLEncoding: ' . var_export($data['SAMLEncoding'], TRUE));
         }
 
         $message = base64_decode($message);
         if ($message === FALSE) {
-            throw new Exception('Error while base64 decoding SAML message.');
+            throw new \Exception('Error while base64 decoding SAML message.');
         }
 
         $message = gzinflate($message);
         if ($message === FALSE) {
-            throw new Exception('Error while inflating SAML message.');
+            throw new \Exception('Error while inflating SAML message.');
         }
 
         Utils::getContainer()->debugMessage($message, 'in');
@@ -133,7 +133,7 @@ class HTTPRedirect extends Binding
         }
 
         if (!array_key_exists('SigAlg', $data)) {
-            throw new Exception('Missing signature algorithm.');
+            throw new \Exception('Missing signature algorithm.');
         }
 
         $signData = array(
@@ -205,7 +205,7 @@ class HTTPRedirect extends Binding
      *
      * @param array          $data The data we need to validate the query string.
      * @param XMLSecurityKey $key  The key we should validate the query against.
-     * @throws Exception
+     * @throws \Exception
      */
     public static function validateSignature(array $data, XMLSecurityKey $key)
     {
@@ -220,14 +220,14 @@ class HTTPRedirect extends Binding
         $signature = base64_decode($signature);
 
         if ($key->type !== XMLSecurityKey::RSA_SHA1) {
-            throw new Exception('Invalid key type for validating signature on query string.');
+            throw new \Exception('Invalid key type for validating signature on query string.');
         }
         if ($key->type !== $sigAlg) {
             $key = Utils::castKey($key, $sigAlg);
         }
 
         if (!$key->verifySignature($query, $signature)) {
-            throw new Exception('Unable to validate signature on query string.');
+            throw new \Exception('Unable to validate signature on query string.');
         }
     }
 

@@ -125,10 +125,10 @@ class AuthnRequest extends Request
     /**
      * Constructor for SAML 2 authentication request messages.
      *
-     * @param DOMElement|NULL $xml The input message.
-     * @throws Exception
+     * @param \DOMElement|NULL $xml The input message.
+     * @throws \Exception
      */
-    public function __construct(DOMElement $xml = NULL)
+    public function __construct(\DOMElement $xml = NULL)
     {
         parent::__construct('AuthnRequest', $xml);
 
@@ -168,9 +168,9 @@ class AuthnRequest extends Request
     /**
      * @param $xml
      *
-     * @throws Exception
+     * @throws \Exception
      */
-    private function parseSubject(DOMElement $xml)
+    private function parseSubject(\DOMElement $xml)
     {
         $subject = Utils::xpQuery($xml, './saml_assertion:Subject');
         if (empty($subject)) {
@@ -178,7 +178,7 @@ class AuthnRequest extends Request
         }
 
         if (count($subject) > 1) {
-            throw new Exception('More than one <saml:Subject> in <saml:AuthnRequest>.');
+            throw new \Exception('More than one <saml:Subject> in <saml:AuthnRequest>.');
         }
         $subject = $subject[0];
 
@@ -187,9 +187,9 @@ class AuthnRequest extends Request
             './saml_assertion:NameID | ./saml_assertion:EncryptedID/xenc:EncryptedData'
         );
         if (empty($nameId)) {
-            throw new Exception('Missing <saml:NameID> or <saml:EncryptedID> in <saml:Subject>.');
+            throw new \Exception('Missing <saml:NameID> or <saml:EncryptedID> in <saml:Subject>.');
         } elseif (count($nameId) > 1) {
-            throw new Exception('More than one <saml:NameID> or <saml:EncryptedID> in <saml:Subject>.');
+            throw new \Exception('More than one <saml:NameID> or <saml:EncryptedID> in <saml:Subject>.');
         }
         $nameId = $nameId[0];
         if ($nameId->localName === 'EncryptedData') {
@@ -206,11 +206,11 @@ class AuthnRequest extends Request
     }
 
     /**
-     * @param DOMElement $xml
+     * @param \DOMElement $xml
      *
-     * @throws Exception
+     * @throws \Exception
      */
-    protected function parseNameIdPolicy(DOMElement $xml)
+    protected function parseNameIdPolicy(\DOMElement $xml)
     {
         $nameIdPolicy = Utils::xpQuery($xml, './saml_protocol:NameIDPolicy');
         if (empty($nameIdPolicy)) {
@@ -230,9 +230,9 @@ class AuthnRequest extends Request
     }
 
     /**
-     * @param DOMElement $xml
+     * @param \DOMElement $xml
      */
-    protected function parseRequestedAuthnContext(DOMElement $xml)
+    protected function parseRequestedAuthnContext(\DOMElement $xml)
     {
         $requestedAuthnContext = Utils::xpQuery($xml, './saml_protocol:RequestedAuthnContext');
         if (empty($requestedAuthnContext)) {
@@ -259,11 +259,11 @@ class AuthnRequest extends Request
     }
 
     /**
-     * @param DOMElement $xml
+     * @param \DOMElement $xml
      *
-     * @throws Exception
+     * @throws \Exception
      */
-    protected function parseScoping(DOMElement $xml)
+    protected function parseScoping(\DOMElement $xml)
     {
         $scoping = Utils::xpQuery($xml, './saml_protocol:Scoping');
         if (empty($scoping)) {
@@ -279,7 +279,7 @@ class AuthnRequest extends Request
 
         foreach ($idpEntries as $idpEntry) {
             if (!$idpEntry->hasAttribute('ProviderID')) {
-                throw new Exception("Could not get ProviderID from Scoping/IDPEntry element in AuthnRequest object");
+                throw new \Exception("Could not get ProviderID from Scoping/IDPEntry element in AuthnRequest object");
             }
             $this->IDPList[] = $idpEntry->getAttribute('ProviderID');
         }
@@ -570,12 +570,12 @@ class AuthnRequest extends Request
      *
      * @see \SAML2\Utils::addNameId()
      * @return array|NULL The name identifier of the assertion.
-     * @throws Exception
+     * @throws \Exception
      */
     public function getNameId()
     {
         if ($this->encryptedNameId !== NULL) {
-            throw new Exception('Attempted to retrieve encrypted NameID without decrypting it first.');
+            throw new \Exception('Attempted to retrieve encrypted NameID without decrypting it first.');
         }
 
         return $this->nameId;
@@ -605,7 +605,7 @@ class AuthnRequest extends Request
     public function encryptNameId(XMLSecurityKey $key)
     {
         /* First create a XML representation of the NameID. */
-        $doc  = new DOMDocument();
+        $doc  = new \DOMDocument();
         $root = $doc->createElement('root');
         $doc->appendChild($root);
         Utils::addNameId($root, $this->nameId);
@@ -671,7 +671,7 @@ class AuthnRequest extends Request
     /**
      * Convert this authentication request to an XML element.
      *
-     * @return DOMElement This authentication request.
+     * @return \DOMElement This authentication request.
      */
     public function toUnsignedXML()
     {
@@ -770,9 +770,9 @@ class AuthnRequest extends Request
     /**
      * Add a Subject-node to the assertion.
      *
-     * @param DOMElement $root The assertion element we should add the subject to.
+     * @param \DOMElement $root The assertion element we should add the subject to.
      */
-    private function addSubject(DOMElement $root)
+    private function addSubject(\DOMElement $root)
     {
         // If there is no nameId (encrypted or not) there is nothing to create a subject for
         if ($this->nameId === NULL && $this->encryptedNameId === NULL) {

@@ -15,17 +15,17 @@ class EncryptedAssertion
     /**
      * The current encrypted assertion.
      *
-     * @var DOMElement
+     * @var \DOMElement
      */
     private $encryptedData;
 
     /**
      * Constructor for SAML 2 encrypted assertions.
      *
-     * @param DOMElement|NULL $xml The encrypted assertion XML element.
-     * @throws Exception
+     * @param \DOMElement|NULL $xml The encrypted assertion XML element.
+     * @throws \Exception
      */
-    public function __construct(DOMElement $xml = NULL)
+    public function __construct(\DOMElement $xml = NULL)
     {
         if ($xml === NULL) {
             return;
@@ -33,9 +33,9 @@ class EncryptedAssertion
 
         $data = Utils::xpQuery($xml, './xenc:EncryptedData');
         if (count($data) === 0) {
-            throw new Exception('Missing encrypted data in <saml:EncryptedAssertion>.');
+            throw new \Exception('Missing encrypted data in <saml:EncryptedAssertion>.');
         } elseif (count($data) > 1) {
-            throw new Exception('More than one encrypted data element in <saml:EncryptedAssertion>.');
+            throw new \Exception('More than one encrypted data element in <saml:EncryptedAssertion>.');
         }
         $this->encryptedData = $data[0];
     }
@@ -45,7 +45,7 @@ class EncryptedAssertion
      *
      * @param \SAML2\Assertion $assertion The assertion.
      * @param XMLSecurityKey  $key       The key we should use to encrypt the assertion.
-     * @throws Exception
+     * @throws \Exception
      */
     public function setAssertion(Assertion $assertion, XMLSecurityKey $key)
     {
@@ -75,7 +75,7 @@ class EncryptedAssertion
                 break;
 
             default:
-                throw new Exception('Unknown key type for encryption: ' . $key->type);
+                throw new \Exception('Unknown key type for encryption: ' . $key->type);
         }
 
         $this->encryptedData = $enc->encryptNode($symmetricKey);
@@ -100,10 +100,10 @@ class EncryptedAssertion
     /**
      * Convert this encrypted assertion to an XML element.
      *
-     * @param  DOMNode|NULL $parentElement The DOM node the assertion should be created in.
-     * @return DOMElement   This encrypted assertion.
+     * @param  \DOMNode|NULL $parentElement The DOM node the assertion should be created in.
+     * @return \DOMElement   This encrypted assertion.
      */
-    public function toXML(DOMNode $parentElement = NULL)
+    public function toXML(\DOMNode $parentElement = NULL)
     {
         if ($parentElement === NULL) {
             $document = DOMDocumentFactory::create();

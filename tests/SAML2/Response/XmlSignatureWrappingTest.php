@@ -9,7 +9,7 @@ use SAML2\Configuration\IdentityProvider;
 use SAML2\DOMDocumentFactory;
 use SAML2\Assertion;
 
-class XmlSignatureWrappingTest extends PHPUnit_Framework_TestCase
+class XmlSignatureWrappingTest extends \PHPUnit_Framework_TestCase
 {
     /**
      * @var \SAML2\Signature\Validator

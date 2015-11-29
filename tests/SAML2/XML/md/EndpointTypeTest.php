@@ -9,7 +9,7 @@ use SAML2\Constants;
 /**
  * Class \SAML2\XML\md\EndpointType
  */
-class EndpointTypeTest extends PHPUnit_Framework_TestCase
+class EndpointTypeTest extends \PHPUnit_Framework_TestCase
 {
     public function testMarshalling()
     {

@@ -9,7 +9,7 @@ use SAML2\Constants;
 /**
  * Class \SAML2\XML\md\AdditionalMetadataLocationTest
  */
-class AdditionalMetadataLocationTest extends PHPUnit_Framework_TestCase
+class AdditionalMetadataLocationTest extends \PHPUnit_Framework_TestCase
 {
     public function testMarshalling()
     {

@@ -61,10 +61,10 @@ class AttributeAuthorityDescriptor extends RoleDescriptor
     /**
      * Initialize an IDPSSODescriptor.
      *
-     * @param DOMElement|NULL $xml The XML element we should load.
-     * @throws Exception
+     * @param \DOMElement|NULL $xml The XML element we should load.
+     * @throws \Exception
      */
-    public function __construct(DOMElement $xml = NULL)
+    public function __construct(\DOMElement $xml = NULL)
     {
         parent::__construct('md:AttributeAuthorityDescriptor', $xml);
 
@@ -76,7 +76,7 @@ class AttributeAuthorityDescriptor extends RoleDescriptor
             $this->AttributeService[] = new EndpointType($ep);
         }
         if (empty($this->AttributeService)) {
-            throw new Exception('Must have at least one AttributeService in AttributeAuthorityDescriptor.');
+            throw new \Exception('Must have at least one AttributeService in AttributeAuthorityDescriptor.');
         }
 
         foreach (Utils::xpQuery($xml, './saml_metadata:AssertionIDRequestService') as $ep) {
@@ -95,10 +95,10 @@ class AttributeAuthorityDescriptor extends RoleDescriptor
     /**
      * Add this AttributeAuthorityDescriptor to an EntityDescriptor.
      *
-     * @param DOMElement $parent The EntityDescriptor we should append this IDPSSODescriptor to.
-     * @return DOMElement
+     * @param \DOMElement $parent The EntityDescriptor we should append this IDPSSODescriptor to.
+     * @return \DOMElement
      */
-    public function toXML(DOMElement $parent)
+    public function toXML(\DOMElement $parent)
     {
         assert('is_array($this->AttributeService)');
         assert('!empty($this->AttributeService)');

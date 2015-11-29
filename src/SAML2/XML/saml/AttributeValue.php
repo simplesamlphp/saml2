@@ -11,12 +11,12 @@ use SAML2\Utils;
  *
  * @package SimpleSAMLphp
  */
-class AttributeValue implements Serializable
+class AttributeValue implements \Serializable
 {
     /**
-     * The raw DOMElement representing this value.
+     * The raw \DOMElement representing this value.
      *
-     * @var DOMElement
+     * @var \DOMElement
      */
     public $element;
 
@@ -25,12 +25,12 @@ class AttributeValue implements Serializable
      *
      * @param mixed $value The value of this element. Can be one of:
      *  - string                      Create an attribute value with a simple string.
-     *  - DOMElement(AttributeValue)  Create an attribute value of the given DOMElement.
-     *  - DOMElement                  Create an attribute value with the given DOMElement as a child.
+     *  - \DOMElement(AttributeValue)  Create an attribute value of the given DOMElement.
+     *  - \DOMElement                  Create an attribute value with the given DOMElement as a child.
      */
     public function __construct($value)
     {
-        assert('is_string($value) || $value instanceof DOMElement');
+        assert('is_string($value) || $value instanceof \DOMElement');
 
         if (is_string($value)) {
             $doc = DOMDocumentFactory::create();
@@ -59,13 +59,13 @@ class AttributeValue implements Serializable
     /**
      * Append this attribute value to an element.
      *
-     * @param  DOMElement $parent The element we should append this attribute value to.
-     * @return DOMElement The generated AttributeValue element.
+     * @param  \DOMElement $parent The element we should append this attribute value to.
+     * @return \DOMElement The generated AttributeValue element.
      */
-    public function toXML(DOMElement $parent)
+    public function toXML(\DOMElement $parent)
     {
-        assert('$this->element instanceof DOMElement');
-        assert('$this->element->namespaceURI === SAML2_Constants::NS_SAML && $this->element->localName === "AttributeValue"');
+        assert('$this->element instanceof \DOMElement');
+        assert('$this->element->namespaceURI === \SAML2\Constants::NS_SAML && $this->element->localName === "AttributeValue"');
 
         $v = Utils::copyElement($this->element, $parent);
 
@@ -89,7 +89,7 @@ class AttributeValue implements Serializable
      */
     public function __toString()
     {
-        assert('$this->element instanceof DOMElement');
+        assert('$this->element instanceof \DOMElement');
 
         $doc = $this->element->ownerDocument;
 

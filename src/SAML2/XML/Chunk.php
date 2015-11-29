@@ -9,7 +9,7 @@ use SAML2\DOMDocumentFactory;
  *
  * @package SimpleSAMLphp
  */
-class Chunk implements Serializable
+class Chunk implements \Serializable
 {
     /**
      * The localName of the element.
@@ -26,18 +26,18 @@ class Chunk implements Serializable
     public $namespaceURI;
 
     /**
-     * The DOMElement we contain.
+     * The \DOMElement we contain.
      *
-     * @var DOMElement
+     * @var \DOMElement
      */
     public $xml;
 
     /**
-     * Create a XMLChunk from a copy of the given DOMElement.
+     * Create a XMLChunk from a copy of the given \DOMElement.
      *
-     * @param DOMElement $xml The element we should copy.
+     * @param \DOMElement $xml The element we should copy.
      */
-    public function __construct(DOMElement $xml)
+    public function __construct(\DOMElement $xml)
     {
         $this->localName = $xml->localName;
         $this->namespaceURI = $xml->namespaceURI;
@@ -46,9 +46,9 @@ class Chunk implements Serializable
     }
 
     /**
-     * Get this DOMElement.
+     * Get this \DOMElement.
      *
-     * @return DOMElement This element.
+     * @return \DOMElement This element.
      * @deprecated
      */
     public function getXML()
@@ -59,10 +59,10 @@ class Chunk implements Serializable
     /**
      * Append this XML element to a different XML element.
      *
-     * @param  DOMElement $parent The element we should append this element to.
-     * @return DOMElement The new element.
+     * @param  \DOMElement $parent The element we should append this element to.
+     * @return \DOMElement The new element.
      */
-    public function toXML(DOMElement $parent)
+    public function toXML(\DOMElement $parent)
     {
         return Utils::copyElement($this->xml, $parent);
     }

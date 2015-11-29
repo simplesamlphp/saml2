@@ -44,10 +44,10 @@ abstract class StatusResponse extends Message
      * Constructor for SAML 2 response messages.
      *
      * @param string          $tagName The tag name of the root element.
-     * @param DOMElement|NULL $xml     The input message.
-     * @throws Exception
+     * @param \DOMElement|NULL $xml     The input message.
+     * @throws \Exception
      */
-    protected function __construct($tagName, DOMElement $xml = NULL)
+    protected function __construct($tagName, \DOMElement $xml = NULL)
     {
         parent::__construct($tagName, $xml);
 
@@ -67,13 +67,13 @@ abstract class StatusResponse extends Message
 
         $status = Utils::xpQuery($xml, './saml_protocol:Status');
         if (empty($status)) {
-            throw new Exception('Missing status code on response.');
+            throw new \Exception('Missing status code on response.');
         }
         $status = $status[0];
 
         $statusCode = Utils::xpQuery($status, './saml_protocol:StatusCode');
         if (empty($statusCode)) {
-            throw new Exception('Missing status code in status element.');
+            throw new \Exception('Missing status code in status element.');
         }
         $statusCode = $statusCode[0];
 
@@ -165,7 +165,7 @@ abstract class StatusResponse extends Message
     /**
      * Convert status response message to an XML element.
      *
-     * @return DOMElement This status response.
+     * @return \DOMElement This status response.
      */
     public function toUnsignedXML()
     {

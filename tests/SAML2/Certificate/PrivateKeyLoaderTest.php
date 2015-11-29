@@ -28,7 +28,7 @@ class PrivateKeyLoaderTest extends \PHPUnit_Framework_TestCase
     ) {
         $resultingKey = $this->privateKeyLoader->loadPrivateKey($configuredKey);
 
-        $this->assertInstanceOf('SAML2_Certificate_PrivateKey', $resultingKey);
+        $this->assertInstanceOf('\SAML2\Certificate\PrivateKey', $resultingKey);
         $this->assertEquals($resultingKey->getKeyAsString(), "This would normally contain the private key data.\n");
         $this->assertEquals($resultingKey->getPassphrase(), $configuredKey->getPassPhrase());
     }

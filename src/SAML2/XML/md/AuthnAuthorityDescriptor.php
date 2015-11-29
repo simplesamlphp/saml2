@@ -42,10 +42,10 @@ class AuthnAuthorityDescriptor extends RoleDescriptor
     /**
      * Initialize an IDPSSODescriptor.
      *
-     * @param DOMElement|NULL $xml The XML element we should load.
-     * @throws Exception
+     * @param \DOMElement|NULL $xml The XML element we should load.
+     * @throws \Exception
      */
-    public function __construct(DOMElement $xml = NULL)
+    public function __construct(\DOMElement $xml = NULL)
     {
         parent::__construct('md:AuthnAuthorityDescriptor', $xml);
 
@@ -57,7 +57,7 @@ class AuthnAuthorityDescriptor extends RoleDescriptor
             $this->AuthnQueryService[] = new EndpointType($ep);
         }
         if (empty($this->AuthnQueryService)) {
-            throw new Exception('Must have at least one AuthnQueryService in AuthnAuthorityDescriptor.');
+            throw new \Exception('Must have at least one AuthnQueryService in AuthnAuthorityDescriptor.');
         }
 
         foreach (Utils::xpQuery($xml, './saml_metadata:AssertionIDRequestService') as $ep) {
@@ -70,10 +70,10 @@ class AuthnAuthorityDescriptor extends RoleDescriptor
     /**
      * Add this IDPSSODescriptor to an EntityDescriptor.
      *
-     * @param DOMElement $parent The EntityDescriptor we should append this AuthnAuthorityDescriptor to.
-     * @return DOMElement
+     * @param \DOMElement $parent The EntityDescriptor we should append this AuthnAuthorityDescriptor to.
+     * @return \DOMElement
      */
-    public function toXML(DOMElement $parent)
+    public function toXML(\DOMElement $parent)
     {
         assert('is_array($this->AuthnQueryService)');
         assert('!empty($this->AuthnQueryService)');

@@ -56,17 +56,17 @@ class AttributeConsumingService
     /**
      * Initialize / parse an AttributeConsumingService.
      *
-     * @param DOMElement|NULL $xml The XML element we should load.
-     * @throws Exception
+     * @param \DOMElement|NULL $xml The XML element we should load.
+     * @throws \Exception
      */
-    public function __construct(DOMElement $xml = NULL)
+    public function __construct(\DOMElement $xml = NULL)
     {
         if ($xml === NULL) {
             return;
         }
 
         if (!$xml->hasAttribute('index')) {
-            throw new Exception('Missing index on AttributeConsumingService.');
+            throw new \Exception('Missing index on AttributeConsumingService.');
         }
         $this->index = (int) $xml->getAttribute('index');
 
@@ -74,7 +74,7 @@ class AttributeConsumingService
 
         $this->ServiceName = Utils::extractLocalizedStrings($xml, Constants::NS_MD, 'ServiceName');
         if (empty($this->ServiceName)) {
-            throw new Exception('Missing ServiceName in AttributeConsumingService.');
+            throw new \Exception('Missing ServiceName in AttributeConsumingService.');
         }
 
         $this->ServiceDescription = Utils::extractLocalizedStrings($xml, Constants::NS_MD, 'ServiceDescription');
@@ -85,12 +85,12 @@ class AttributeConsumingService
     }
 
     /**
-     * Convert to DOMElement.
+     * Convert to \DOMElement.
      *
-     * @param DOMElement $parent The element we should append this AttributeConsumingService to.
-     * @return DOMElement
+     * @param \DOMElement $parent The element we should append this AttributeConsumingService to.
+     * @return \DOMElement
      */
-    public function toXML(DOMElement $parent)
+    public function toXML(\DOMElement $parent)
     {
         assert('is_int($this->index)');
         assert('is_null($this->isDefault) || is_bool($this->isDefault)');

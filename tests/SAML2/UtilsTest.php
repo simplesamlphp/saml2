@@ -5,7 +5,7 @@ namespace SAML2;
 /**
  * Class \SAML2\UtilsTest
  */
-class UtilsTest extends PHPUnit_Framework_TestCase
+class UtilsTest extends \PHPUnit_Framework_TestCase
 {
     /**
      * Test querying a SAML XML document.
@@ -188,7 +188,7 @@ class UtilsTest extends PHPUnit_Framework_TestCase
             $ts = Utils::xsDateTimeToTimestamp($time);
             $this->assertTrue($shouldPass);
             $this->assertEquals($expectedTs, $ts);
-        } catch (Exception $e) {
+        } catch (\Exception $e) {
             $this->assertFalse($shouldPass);
         }
     }

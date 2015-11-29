@@ -5,7 +5,7 @@ namespace SAML2\Certificate;
 use SAML2\Configuration\ArrayAdapter;
 use SAML2\Certificate\Stub\ImplementsToString;
 
-class FingerprintLoaderTest extends PHPUnit_Framework_TestCase
+class FingerprintLoaderTest extends \PHPUnit_Framework_TestCase
 {
     /**
      * @var \SAML2\Certificate\FingerprintLoader
@@ -20,7 +20,7 @@ class FingerprintLoaderTest extends PHPUnit_Framework_TestCase
     public function setUp()
     {
         $this->fingerprintLoader = new FingerprintLoader();
-        $this->configurationMock = \Mockery::mock('SAML2_Configuration_CertificateProvider');
+        $this->configurationMock = \Mockery::mock('SAML2\Configuration\CertificateProvider');
     }
 
     /**
@@ -55,7 +55,7 @@ class FingerprintLoaderTest extends PHPUnit_Framework_TestCase
             ->andReturn($configurationValue);
 
         $result = $this->fingerprintLoader->loadFingerprints($this->configurationMock);
-        $this->assertInstanceOf('SAML2_Certificate_FingerprintCollection', $result);
+        $this->assertInstanceOf('\SAML2\Certificate\FingerprintCollection', $result);
         $this->assertCount(count($configurationValue), $result);
     }
 

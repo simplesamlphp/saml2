@@ -91,10 +91,10 @@ class EntityDescriptor extends SignedElementHelper
     /**
      * Initialize an EntitiyDescriptor.
      *
-     * @param DOMElement|NULL $xml The XML element we should load.
-     * @throws Exception
+     * @param \DOMElement|NULL $xml The XML element we should load.
+     * @throws \Exception
      */
-    public function __construct(DOMElement $xml = NULL)
+    public function __construct(\DOMElement $xml = NULL)
     {
         parent::__construct($xml);
 
@@ -103,7 +103,7 @@ class EntityDescriptor extends SignedElementHelper
         }
 
         if (!$xml->hasAttribute('entityID')) {
-            throw new Exception('Missing required attribute entityID on EntityDescriptor.');
+            throw new \Exception('Missing required attribute entityID on EntityDescriptor.');
         }
         $this->entityID = $xml->getAttribute('entityID');
 
@@ -120,7 +120,7 @@ class EntityDescriptor extends SignedElementHelper
         $this->Extensions = Extensions::getList($xml);
 
         for ($node = $xml->firstChild; $node !== NULL; $node = $node->nextSibling) {
-            if (!($node instanceof DOMElement)) {
+            if (!($node instanceof \DOMElement)) {
                 continue;
             }
 
@@ -152,20 +152,20 @@ class EntityDescriptor extends SignedElementHelper
 
         $affiliationDescriptor = Utils::xpQuery($xml, './saml_metadata:AffiliationDescriptor');
         if (count($affiliationDescriptor) > 1) {
-            throw new Exception('More than one AffiliationDescriptor in the entity.');
+            throw new \Exception('More than one AffiliationDescriptor in the entity.');
         } elseif (!empty($affiliationDescriptor)) {
             $this->AffiliationDescriptor = new AffiliationDescriptor($affiliationDescriptor[0]);
         }
 
         if (empty($this->RoleDescriptor) && is_null($this->AffiliationDescriptor)) {
-            throw new Exception('Must have either one of the RoleDescriptors or an AffiliationDescriptor in EntityDescriptor.');
+            throw new \Exception('Must have either one of the RoleDescriptors or an AffiliationDescriptor in EntityDescriptor.');
         } elseif (!empty($this->RoleDescriptor) && !is_null($this->AffiliationDescriptor)) {
-            throw new Exception('AffiliationDescriptor cannot be combined with other RoleDescriptor elements in EntityDescriptor.');
+            throw new \Exception('AffiliationDescriptor cannot be combined with other RoleDescriptor elements in EntityDescriptor.');
         }
 
         $organization = Utils::xpQuery($xml, './saml_metadata:Organization');
         if (count($organization) > 1) {
-            throw new Exception('More than one Organization in the entity.');
+            throw new \Exception('More than one Organization in the entity.');
         } elseif (!empty($organization)) {
             $this->Organization = new Organization($organization[0]);
         }
@@ -182,10 +182,10 @@ class EntityDescriptor extends SignedElementHelper
     /**
      * Create this EntityDescriptor.
      *
-     * @param DOMElement|NULL $parent The EntitiesDescriptor we should append this EntityDescriptor to.
-     * @return DOMElement
+     * @param \DOMElement|NULL $parent The EntitiesDescriptor we should append this EntityDescriptor to.
+     * @return \DOMElement
      */
-    public function toXML(DOMElement $parent = NULL)
+    public function toXML(\DOMElement $parent = NULL)
     {
         assert('is_string($this->entityID)');
         assert('is_null($this->ID) || is_string($this->ID)');
@@ -193,8 +193,8 @@ class EntityDescriptor extends SignedElementHelper
         assert('is_null($this->cacheDuration) || is_string($this->cacheDuration)');
         assert('is_array($this->Extensions)');
         assert('is_array($this->RoleDescriptor)');
-        assert('is_null($this->AffiliationDescriptor) || $this->AffiliationDescriptor instanceof SAML2_XML_md_AffiliationDescriptor');
-        assert('is_null($this->Organization) || $this->Organization instanceof SAML2_XML_md_Organization');
+        assert('is_null($this->AffiliationDescriptor) || $this->AffiliationDescriptor instanceof \SAML2\XML\md\AffiliationDescriptor');
+        assert('is_null($this->Organization) || $this->Organization instanceof \SAML2\XML\md\Organization');
         assert('is_array($this->ContactPerson)');
         assert('is_array($this->AdditionalMetadataLocation)');
 

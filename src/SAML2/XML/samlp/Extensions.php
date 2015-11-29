@@ -16,10 +16,10 @@ class Extensions
     /**
      * Get a list of Extensions in the given element.
      *
-     * @param  DOMElement $parent The element that may contain the samlp:Extensions element.
+     * @param  \DOMElement $parent The element that may contain the samlp:Extensions element.
      * @return array      Array of extensions.
      */
-    public static function getList(DOMElement $parent)
+    public static function getList(\DOMElement $parent)
     {
         $ret = array();
         foreach (Utils::xpQuery($parent, './saml_protocol:Extensions/*') as $node) {
@@ -32,10 +32,10 @@ class Extensions
     /**
      * Add a list of Extensions to the given element.
      *
-     * @param DOMElement        $parent     The element we should add the extensions to.
+     * @param \DOMElement        $parent     The element we should add the extensions to.
      * @param \SAML2\XML\Chunk[] $extensions List of extension objects.
      */
-    public static function addList(DOMElement $parent, array $extensions)
+    public static function addList(\DOMElement $parent, array $extensions)
     {
         if (empty($extensions)) {
             return;

@@ -15,7 +15,7 @@ final class DOMDocumentFactory
     /**
      * @param string $xml
      *
-     * @return DOMDocument
+     * @return \DOMDocument
      */
     public static function fromString($xml)
     {
@@ -61,7 +61,7 @@ final class DOMDocumentFactory
     /**
      * @param $file
      *
-     * @return DOMDocument
+     * @return \DOMDocument
      */
     public static function fromFile($file)
     {
@@ -77,8 +77,8 @@ final class DOMDocumentFactory
             throw new InvalidArgumentException(sprintf('File "%s" is not readable', $file));
         }
 
-        // libxml_disable_entity_loader(true) disables DOMDocument::load() method
-        // so we need to read the content and use DOMDocument::loadXML()
+        // libxml_disable_entity_loader(true) disables \DOMDocument::load() method
+        // so we need to read the content and use \DOMDocument::loadXML()
         $xml = file_get_contents($file);
         if ($xml === FALSE) {
             throw new RuntimeException(sprintf(
@@ -95,10 +95,10 @@ final class DOMDocumentFactory
     }
 
     /**
-     * @return DOMDocument
+     * @return \DOMDocument
      */
     public static function create()
     {
-        return new DOMDocument();
+        return new \DOMDocument();
     }
 }

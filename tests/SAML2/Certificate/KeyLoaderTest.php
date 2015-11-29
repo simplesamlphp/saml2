@@ -26,7 +26,7 @@ class KeyLoaderTest extends \PHPUnit_Framework_TestCase
     public function setUp()
     {
         $this->keyLoader = new KeyLoader();
-        $this->configurationMock = \Mockery::mock('SAML2_Configuration_CertificateProvider');
+        $this->configurationMock = \Mockery::mock('SAML2\Configuration\CertificateProvider');
     }
 
     /**

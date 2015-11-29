@@ -5,6 +5,6 @@ namespace SAML2\Exception;
 /**
  * Named exception
  */
-class RuntimeException extends RuntimeException implements Throwable
+class RuntimeException extends \RuntimeException implements Throwable
 {
 }

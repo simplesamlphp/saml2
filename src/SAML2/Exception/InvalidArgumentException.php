@@ -2,7 +2,7 @@
 
 namespace SAML2\Exception;
 
-class InvalidArgumentException extends InvalidArgumentException implements Throwable
+class InvalidArgumentException extends \InvalidArgumentException implements Throwable
 {
     /**
      * @param string $expected description of expected type

@@ -27,20 +27,20 @@ class Keywords
     /**
      * Initialize a Keywords.
      *
-     * @param DOMElement|NULL $xml The XML element we should load.
-     * @throws Exception
+     * @param \DOMElement|NULL $xml The XML element we should load.
+     * @throws \Exception
      */
-    public function __construct(DOMElement $xml = NULL)
+    public function __construct(\DOMElement $xml = NULL)
     {
         if ($xml === NULL) {
             return;
         }
 
         if (!$xml->hasAttribute('xml:lang')) {
-            throw new Exception('Missing lang on Keywords.');
+            throw new \Exception('Missing lang on Keywords.');
         }
         if (!is_string($xml->textContent) || !strlen($xml->textContent)) {
-            throw new Exception('Missing value for Keywords.');
+            throw new \Exception('Missing value for Keywords.');
         }
         $this->Keywords = array();
         foreach (explode(' ', $xml->textContent) as $keyword) {
@@ -52,11 +52,11 @@ class Keywords
     /**
      * Convert this Keywords to XML.
      *
-     * @param DOMElement $parent The element we should append this Keywords to.
-     * @return DOMElement
-     * @throws Exception
+     * @param \DOMElement $parent The element we should append this Keywords to.
+     * @return \DOMElement
+     * @throws \Exception
      */
-    public function toXML(DOMElement $parent)
+    public function toXML(\DOMElement $parent)
     {
         assert('is_string($this->lang)');
         assert('is_array($this->Keywords)');
@@ -68,7 +68,7 @@ class Keywords
         $value = '';
         foreach ($this->Keywords as $keyword) {
             if (strpos($keyword, "+") !== FALSE) {
-                throw new Exception('Keywords may not contain a "+" character.');
+                throw new \Exception('Keywords may not contain a "+" character.');
             }
             $value .= str_replace(' ', '+', $keyword) . ' ';
         }

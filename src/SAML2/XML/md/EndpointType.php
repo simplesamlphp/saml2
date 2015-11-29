@@ -42,22 +42,22 @@ class EndpointType
     /**
      * Initialize an EndpointType.
      *
-     * @param DOMElement|NULL $xml The XML element we should load.
-     * @throws Exception
+     * @param \DOMElement|NULL $xml The XML element we should load.
+     * @throws \Exception
      */
-    public function __construct(DOMElement $xml = NULL)
+    public function __construct(\DOMElement $xml = NULL)
     {
         if ($xml === NULL) {
             return;
         }
 
         if (!$xml->hasAttribute('Binding')) {
-            throw new Exception('Missing Binding on ' . $xml->tagName);
+            throw new \Exception('Missing Binding on ' . $xml->tagName);
         }
         $this->Binding = $xml->getAttribute('Binding');
 
         if (!$xml->hasAttribute('Location')) {
-            throw new Exception('Missing Location on ' . $xml->tagName);
+            throw new \Exception('Missing Location on ' . $xml->tagName);
         }
         $this->Location = $xml->getAttribute('Location');
 
@@ -121,7 +121,7 @@ class EndpointType
      * @param string $namespaceURI  The namespace URI.
      * @param string $qualifiedName The local name.
      * @param string $value         The attribute value.
-     * @throws Exception
+     * @throws \Exception
      */
     public function setAttributeNS($namespaceURI, $qualifiedName, $value)
     {
@@ -130,7 +130,7 @@ class EndpointType
 
         $name = explode(':', $qualifiedName, 2);
         if (count($name) < 2) {
-            throw new Exception('Not a qualified name.');
+            throw new \Exception('Not a qualified name.');
         }
         $localName = $name[1];
 
@@ -160,11 +160,11 @@ class EndpointType
     /**
      * Add this endpoint to an XML element.
      *
-     * @param DOMElement $parent The element we should append this endpoint to.
+     * @param \DOMElement $parent The element we should append this endpoint to.
      * @param string     $name   The name of the element we should create.
-     * @return DOMElement
+     * @return \DOMElement
      */
-    public function toXML(DOMElement $parent, $name)
+    public function toXML(\DOMElement $parent, $name)
     {
         assert('is_string($name)');
         assert('is_string($this->Binding)');

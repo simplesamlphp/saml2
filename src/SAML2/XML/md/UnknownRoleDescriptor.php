@@ -21,9 +21,9 @@ class UnknownRoleDescriptor extends RoleDescriptor
     /**
      * Initialize an unknown RoleDescriptor.
      *
-     * @param DOMElement $xml The XML element we should load.
+     * @param \DOMElement $xml The XML element we should load.
      */
-    public function __construct(DOMElement $xml)
+    public function __construct(\DOMElement $xml)
     {
         parent::__construct('md:RoleDescriptor', $xml);
 
@@ -33,10 +33,10 @@ class UnknownRoleDescriptor extends RoleDescriptor
     /**
      * Add this RoleDescriptor to an EntityDescriptor.
      *
-     * @param DOMElement $parent The EntityDescriptor we should append this RoleDescriptor to.
+     * @param \DOMElement $parent The EntityDescriptor we should append this RoleDescriptor to.
      * @return void
      */
-    public function toXML(DOMElement $parent)
+    public function toXML(\DOMElement $parent)
     {
         $this->xml->toXML($parent);
     }

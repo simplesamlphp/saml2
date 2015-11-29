@@ -32,9 +32,9 @@ class KeyInfo
     /**
      * Initialize a KeyInfo element.
      *
-     * @param DOMElement|NULL $xml The XML element we should load.
+     * @param \DOMElement|NULL $xml The XML element we should load.
      */
-    public function __construct(DOMElement $xml = NULL)
+    public function __construct(\DOMElement $xml = NULL)
     {
         if ($xml === NULL) {
             return;
@@ -45,7 +45,7 @@ class KeyInfo
         }
 
         for ($n = $xml->firstChild; $n !== NULL; $n = $n->nextSibling) {
-            if (!($n instanceof DOMElement)) {
+            if (!($n instanceof \DOMElement)) {
                 continue;
             }
 
@@ -70,10 +70,10 @@ class KeyInfo
     /**
      * Convert this KeyInfo to XML.
      *
-     * @param DOMElement $parent The element we should append this KeyInfo to.
-     * @return DOMElement
+     * @param \DOMElement $parent The element we should append this KeyInfo to.
+     * @return \DOMElement
      */
-    public function toXML(DOMElement $parent)
+    public function toXML(\DOMElement $parent)
     {
         assert('is_null($this->Id) || is_string($this->Id)');
         assert('is_array($this->info)');

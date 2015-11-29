@@ -13,7 +13,7 @@ use SAML2\Assertion;
 /**
  * Test that ensures that either the response or the assertion(s) or both must be signed.
  */
-class SignatureValidationTest extends PHPUnit_Framework_TestCase
+class SignatureValidationTest extends \PHPUnit_Framework_TestCase
 {
     /**
      * @var \SAML2\Configuration\IdentityProvider
@@ -26,12 +26,12 @@ class SignatureValidationTest extends PHPUnit_Framework_TestCase
     private $serviceProviderConfiguration;
 
     /**
-     * @var Mockery\MockInterface Mock of \SAML2\Assertion\ProcessorBuilder
+     * @var \Mockery\MockInterface Mock of \SAML2\Assertion\ProcessorBuilder
      */
     private $assertionProcessorBuilder;
 
     /**
-     * @var Mockery\MockInterface Mock of \SAML2\Assertion\Processor
+     * @var \Mockery\MockInterface Mock of \SAML2\Assertion\Processor
      */
     private $assertionProcessor;
 
@@ -46,8 +46,8 @@ class SignatureValidationTest extends PHPUnit_Framework_TestCase
      */
     public function setUp()
     {
-        $this->assertionProcessorBuilder = Mockery::mock('alias:SAML2_Assertion_ProcessorBuilder');
-        $this->assertionProcessor = Mockery::mock('SAML2_Assertion_Processor');
+        $this->assertionProcessorBuilder = \Mockery::mock('alias:SAML2\Assertion\ProcessorBuilder');
+        $this->assertionProcessor = \Mockery::mock('SAML2\Assertion\Processor');
         $this->assertionProcessorBuilder
             ->shouldReceive('build')
             ->once()
@@ -68,7 +68,7 @@ class SignatureValidationTest extends PHPUnit_Framework_TestCase
      */
     public function tearDown()
     {
-        Mockery::close();
+        \Mockery::close();
     }
 
     /**
@@ -146,7 +146,7 @@ class SignatureValidationTest extends PHPUnit_Framework_TestCase
      */
     private function getSignedResponseWithUnsignedAssertion()
     {
-        $doc = new DOMDocument();
+        $doc = new \DOMDocument();
         $doc->load(__DIR__ . '/response.xml');
         $response = new Response($doc->firstChild);
         $response->setSignatureKey(CertificatesMock::getPrivateKey());
@@ -161,7 +161,7 @@ class SignatureValidationTest extends PHPUnit_Framework_TestCase
      */
     private function getUnsignedResponseWithSignedAssertion()
     {
-        $doc = new DOMDocument();
+        $doc = new \DOMDocument();
         $doc->load(__DIR__ . '/response.xml');
         $response = new Response($doc->firstChild);
 
@@ -181,7 +181,7 @@ class SignatureValidationTest extends PHPUnit_Framework_TestCase
      */
     private function getSignedResponseWithSignedAssertion()
     {
-        $doc = new DOMDocument();
+        $doc = new \DOMDocument();
         $doc->load(__DIR__ . '/response.xml');
         $response = new Response($doc->firstChild);
         $response->setSignatureKey(CertificatesMock::getPrivateKey());
@@ -200,7 +200,7 @@ class SignatureValidationTest extends PHPUnit_Framework_TestCase
      */
     private function getUnsignedResponseWithUnsignedAssertion()
     {
-        $doc = new DOMDocument();
+        $doc = new \DOMDocument();
         $doc->load(__DIR__ . '/response.xml');
         return new Response($doc->firstChild);
     }

@@ -16,7 +16,7 @@ abstract class ControlledTimeTest extends \PHPUnit_Framework_TestCase
 
     public function setUp()
     {
-        $timing = m::mock('alias:SAML2_Utilities_Temporal');
+        $timing = m::mock('alias:SAML2\Utilities\Temporal');
         $timing->shouldReceive('getTime')->andReturn($this->currentTime);
     }
 }

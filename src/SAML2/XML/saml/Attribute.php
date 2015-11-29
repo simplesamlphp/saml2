@@ -45,17 +45,17 @@ class Attribute
     /**
      * Initialize an Attribute.
      *
-     * @param DOMElement|NULL $xml The XML element we should load.
-     * @throws Exception
+     * @param \DOMElement|NULL $xml The XML element we should load.
+     * @throws \Exception
      */
-    public function __construct(DOMElement $xml = NULL)
+    public function __construct(\DOMElement $xml = NULL)
     {
         if ($xml === NULL) {
             return;
         }
 
         if (!$xml->hasAttribute('Name')) {
-            throw new Exception('Missing Name on Attribute.');
+            throw new \Exception('Missing Name on Attribute.');
         }
         $this->Name = $xml->getAttribute('Name');
 
@@ -76,12 +76,12 @@ class Attribute
      * Internal implementation of toXML.
      * This function allows RequestedAttribute to specify the element name and namespace.
      *
-     * @param DOMElement $parent    The element we should append this Attribute to.
+     * @param \DOMElement $parent    The element we should append this Attribute to.
      * @param string     $namespace The namespace the element should be created in.
      * @param string     $name      The name of the element.
-     * @return DOMElement
+     * @return \DOMElement
      */
-    protected function toXMLInternal(DOMElement $parent, $namespace, $name)
+    protected function toXMLInternal(\DOMElement $parent, $namespace, $name)
     {
         assert('is_string($namespace)');
         assert('is_string($name)');
@@ -113,10 +113,10 @@ class Attribute
     /**
      * Convert this Attribute to XML.
      *
-     * @param DOMElement $parent The element we should append this Attribute to.
-     * @return DOMElement
+     * @param \DOMElement $parent The element we should append this Attribute to.
+     * @return \DOMElement
      */
-    public function toXML(DOMElement $parent)
+    public function toXML(\DOMElement $parent)
     {
         return $this->toXMLInternal($parent, Constants::NS_SAML, 'saml:Attribute');
     }

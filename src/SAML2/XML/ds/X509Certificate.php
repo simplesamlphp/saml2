@@ -22,9 +22,9 @@ class X509Certificate
     /**
      * Initialize an X509Certificate element.
      *
-     * @param DOMElement|NULL $xml The XML element we should load.
+     * @param \DOMElement|NULL $xml The XML element we should load.
      */
-    public function __construct(DOMElement $xml = NULL)
+    public function __construct(\DOMElement $xml = NULL)
     {
         if ($xml === NULL) {
             return;
@@ -36,10 +36,10 @@ class X509Certificate
     /**
      * Convert this X509Certificate element to XML.
      *
-     * @param DOMElement $parent The element we should append this X509Certificate element to.
-     * @return DOMElement
+     * @param \DOMElement $parent The element we should append this X509Certificate element to.
+     * @return \DOMElement
      */
-    public function toXML(DOMElement $parent)
+    public function toXML(\DOMElement $parent)
     {
         assert('is_string($this->certificate)');
 

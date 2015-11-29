@@ -45,9 +45,9 @@ class Organization
     /**
      * Initialize an Organization element.
      *
-     * @param DOMElement|NULL $xml The XML element we should load.
+     * @param \DOMElement|NULL $xml The XML element we should load.
      */
-    public function __construct(DOMElement $xml = NULL)
+    public function __construct(\DOMElement $xml = NULL)
     {
         if ($xml === NULL) {
             return;
@@ -74,10 +74,10 @@ class Organization
     /**
      * Convert this Organization to XML.
      *
-     * @param  DOMElement $parent The element we should add this organization to.
-     * @return DOMElement This Organization-element.
+     * @param  \DOMElement $parent The element we should add this organization to.
+     * @return \DOMElement This Organization-element.
      */
-    public function toXML(DOMElement $parent)
+    public function toXML(\DOMElement $parent)
     {
         assert('is_array($this->Extensions)');
         assert('is_array($this->OrganizationName)');

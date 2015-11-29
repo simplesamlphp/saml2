@@ -93,10 +93,10 @@ class RoleDescriptor extends SignedElementHelper
      * Initialize a RoleDescriptor.
      *
      * @param string          $elementName The name of this element.
-     * @param DOMElement|NULL $xml         The XML element we should load.
-     * @throws Exception
+     * @param \DOMElement|NULL $xml         The XML element we should load.
+     * @throws \Exception
      */
-    protected function __construct($elementName, DOMElement $xml = NULL)
+    protected function __construct($elementName, \DOMElement $xml = NULL)
     {
         assert('is_string($elementName)');
 
@@ -118,7 +118,7 @@ class RoleDescriptor extends SignedElementHelper
         }
 
         if (!$xml->hasAttribute('protocolSupportEnumeration')) {
-            throw new Exception('Missing protocolSupportEnumeration attribute on ' . $xml->localName);
+            throw new \Exception('Missing protocolSupportEnumeration attribute on ' . $xml->localName);
         }
         $this->protocolSupportEnumeration = preg_split('/[\s]+/', $xml->getAttribute('protocolSupportEnumeration'));
 
@@ -134,7 +134,7 @@ class RoleDescriptor extends SignedElementHelper
 
         $organization = Utils::xpQuery($xml, './saml_metadata:Organization');
         if (count($organization) > 1) {
-            throw new Exception('More than one Organization in the entity.');
+            throw new \Exception('More than one Organization in the entity.');
         } elseif (!empty($organization)) {
             $this->Organization = new Organization($organization[0]);
         }
@@ -147,10 +147,10 @@ class RoleDescriptor extends SignedElementHelper
     /**
      * Add this RoleDescriptor to an EntityDescriptor.
      *
-     * @param DOMElement $parent The EntityDescriptor we should append this endpoint to.
-     * @return DOMElement
+     * @param \DOMElement $parent The EntityDescriptor we should append this endpoint to.
+     * @return \DOMElement
      */
-    protected function toXML(DOMElement $parent)
+    protected function toXML(\DOMElement $parent)
     {
         assert('is_null($this->ID) || is_string($this->ID)');
         assert('is_null($this->validUntil) || is_int($this->validUntil)');
@@ -159,7 +159,7 @@ class RoleDescriptor extends SignedElementHelper
         assert('is_null($this->errorURL) || is_string($this->errorURL)');
         assert('is_array($this->Extensions)');
         assert('is_array($this->KeyDescriptor)');
-        assert('is_null($this->Organization) || $this->Organization instanceof SAML2_XML_md_Organization');
+        assert('is_null($this->Organization) || $this->Organization instanceof \SAML2\XML\md\Organization');
         assert('is_array($this->ContactPerson)');
 
         $e = $parent->ownerDocument->createElementNS(Constants::NS_MD, $this->elementName);

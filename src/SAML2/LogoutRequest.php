@@ -24,7 +24,7 @@ class LogoutRequest extends Request
      *
      * If this is not NULL, the NameID needs decryption before it can be accessed.
      *
-     * @var DOMElement|NULL
+     * @var \DOMElement|NULL
      */
     private $encryptedNameId;
 
@@ -45,10 +45,10 @@ class LogoutRequest extends Request
     /**
      * Constructor for SAML 2 logout request messages.
      *
-     * @param DOMElement|NULL $xml The input message.
-     * @throws Exception
+     * @param \DOMElement|NULL $xml The input message.
+     * @throws \Exception
      */
-    public function __construct(DOMElement $xml = NULL)
+    public function __construct(\DOMElement $xml = NULL)
     {
         parent::__construct('LogoutRequest', $xml);
 
@@ -64,9 +64,9 @@ class LogoutRequest extends Request
 
         $nameId = Utils::xpQuery($xml, './saml_assertion:NameID | ./saml_assertion:EncryptedID/xenc:EncryptedData');
         if (empty($nameId)) {
-            throw new Exception('Missing <saml:NameID> or <saml:EncryptedID> in <samlp:LogoutRequest>.');
+            throw new \Exception('Missing <saml:NameID> or <saml:EncryptedID> in <samlp:LogoutRequest>.');
         } elseif (count($nameId) > 1) {
-            throw new Exception('More than one <saml:NameID> or <saml:EncryptedD> in <samlp:LogoutRequest>.');
+            throw new \Exception('More than one <saml:NameID> or <saml:EncryptedD> in <samlp:LogoutRequest>.');
         }
         $nameId = $nameId[0];
         if ($nameId->localName === 'EncryptedData') {
@@ -172,12 +172,12 @@ class LogoutRequest extends Request
      * Retrieve the name identifier of the session that should be terminated.
      *
      * @return array The name identifier of the session that should be terminated.
-     * @throws Exception
+     * @throws \Exception
      */
     public function getNameId()
     {
         if ($this->encryptedNameId !== NULL) {
-            throw new Exception('Attempted to retrieve encrypted NameID without decrypting it first.');
+            throw new \Exception('Attempted to retrieve encrypted NameID without decrypting it first.');
         }
 
         return $this->nameId;
@@ -251,7 +251,7 @@ class LogoutRequest extends Request
     /**
      * Convert this logout request message to an XML element.
      *
-     * @return DOMElement This logout request.
+     * @return \DOMElement This logout request.
      */
     public function toUnsignedXML()
     {

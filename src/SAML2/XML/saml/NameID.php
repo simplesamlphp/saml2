@@ -50,9 +50,9 @@ class NameID
     /**
      * Initialize a saml:NameID.
      *
-     * @param DOMElement|NULL $xml The XML element we should load.
+     * @param \DOMElement|NULL $xml The XML element we should load.
      */
-    public function __construct(DOMElement $xml = NULL)
+    public function __construct(\DOMElement $xml = NULL)
     {
         if ($xml === NULL) {
             return;
@@ -80,10 +80,10 @@ class NameID
     /**
      * Convert this NameID to XML.
      *
-     * @param  DOMElement|NULL $parent The element we should append to.
-     * @return DOMElement      This AdditionalMetadataLocation-element.
+     * @param  \DOMElement|NULL $parent The element we should append to.
+     * @return \DOMElement      This AdditionalMetadataLocation-element.
      */
-    public function toXML(DOMElement $parent = NULL)
+    public function toXML(\DOMElement $parent = NULL)
     {
         assert('is_string($this->NameQualifier) || is_null($this->NameQualifier)');
         assert('is_string($this->SPNameQualifier) || is_null($this->SPNameQualifier)');

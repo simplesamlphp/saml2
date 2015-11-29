@@ -38,17 +38,17 @@ class RegistrationInfo
     /**
      * Create/parse a mdrpi:RegistrationInfo element.
      *
-     * @param DOMElement|NULL $xml The XML element we should load.
-     * @throws Exception
+     * @param \DOMElement|NULL $xml The XML element we should load.
+     * @throws \Exception
      */
-    public function __construct(DOMElement $xml = NULL)
+    public function __construct(\DOMElement $xml = NULL)
     {
         if ($xml === NULL) {
             return;
         }
 
         if (!$xml->hasAttribute('registrationAuthority')) {
-            throw new Exception('Missing required attribute "registrationAuthority" in mdrpi:RegistrationInfo element.');
+            throw new \Exception('Missing required attribute "registrationAuthority" in mdrpi:RegistrationInfo element.');
         }
         $this->registrationAuthority = $xml->getAttribute('registrationAuthority');
 
@@ -62,17 +62,17 @@ class RegistrationInfo
     /**
      * Convert this element to XML.
      *
-     * @param DOMElement $parent The element we should append to.
-     * @return DOMElement
+     * @param \DOMElement $parent The element we should append to.
+     * @return \DOMElement
      */
-    public function toXML(DOMElement $parent)
+    public function toXML(\DOMElement $parent)
     {
         assert('is_string($this->registrationAuthority)');
         assert('is_int($this->registrationInstant) || is_null($this->registrationInstant)');
         assert('is_array($this->RegistrationPolicy)');
 
         if (empty($this->registrationAuthority)) {
-            throw new Exception('Missing required registration authority.');
+            throw new \Exception('Missing required registration authority.');
         }
 
         $doc = $parent->ownerDocument;
