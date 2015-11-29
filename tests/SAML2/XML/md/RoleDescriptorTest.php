@@ -27,7 +27,7 @@ class SAML2_XML_md_RoleDescriptorTest extends \PHPUnit_Framework_TestCase
         $this->assertEquals('2009-02-13T23:31:30Z', $roleDescriptorElement->getAttribute("validUntil"));
         $this->assertEquals('PT5000S', $roleDescriptorElement->getAttribute("cacheDuration"));
         $this->assertEquals('protocol1 protocol2', $roleDescriptorElement->getAttribute("protocolSupportEnumeration"));
-        $this->assertEquals('myns:MyElement', $roleDescriptorElement->getAttributeNS(SAML2_Const::NS_XSI, "type"));
+        $this->assertEquals('myns:MyElement', $roleDescriptorElement->getAttributeNS(SAML2_Constants::NS_XSI, "type"));
         $this->assertEquals('http://example.org/mynsdefinition', $roleDescriptorElement->lookupNamespaceURI("myns"));
     }
 }

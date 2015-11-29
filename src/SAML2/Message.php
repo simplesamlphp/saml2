@@ -54,7 +54,7 @@ abstract class SAML2_Message implements SAML2_SignedElement
      *
      * @var string|NULL
      */
-    private $consent = SAML2_Const::CONSENT_UNSPECIFIED;
+    private $consent = SAML2_Constants::CONSENT_UNSPECIFIED;
 
     /**
      * The entity id of the issuer of this message, or NULL if unknown.
@@ -307,7 +307,7 @@ abstract class SAML2_Message implements SAML2_SignedElement
      * Set the given consent for this message.
      *
      * Most likely (though not required) a value of rn:oasis:names:tc:SAML:2.0:consent.
-     * @see SAML2_Const
+     * @see SAML2_Constants
      *
      * @param string $consent
      */
@@ -322,7 +322,7 @@ abstract class SAML2_Message implements SAML2_SignedElement
      * Set the given consent for this message.
      *
      * Most likely (though not required) a value of rn:oasis:names:tc:SAML:2.0:consent.
-     * @see SAML2_Const
+     * @see SAML2_Constants
      *
      * @return string Consent
      */
@@ -396,12 +396,12 @@ abstract class SAML2_Message implements SAML2_SignedElement
     {
         $this->document = SAML2_DOMDocumentFactory::create();
 
-        $root = $this->document->createElementNS(SAML2_Const::NS_SAMLP, 'samlp:' . $this->tagName);
+        $root = $this->document->createElementNS(SAML2_Constants::NS_SAMLP, 'samlp:' . $this->tagName);
         $this->document->appendChild($root);
 
         /* Ugly hack to add another namespace declaration to the root element. */
-        $root->setAttributeNS(SAML2_Const::NS_SAML, 'saml:tmp', 'tmp');
-        $root->removeAttributeNS(SAML2_Const::NS_SAML, 'tmp');
+        $root->setAttributeNS(SAML2_Constants::NS_SAML, 'saml:tmp', 'tmp');
+        $root->removeAttributeNS(SAML2_Constants::NS_SAML, 'tmp');
 
         $root->setAttribute('ID', $this->id);
         $root->setAttribute('Version', '2.0');
@@ -410,12 +410,12 @@ abstract class SAML2_Message implements SAML2_SignedElement
         if ($this->destination !== NULL) {
             $root->setAttribute('Destination', $this->destination);
         }
-        if ($this->consent !== NULL && $this->consent !== SAML2_Const::CONSENT_UNSPECIFIED) {
+        if ($this->consent !== NULL && $this->consent !== SAML2_Constants::CONSENT_UNSPECIFIED) {
             $root->setAttribute('Consent', $this->consent);
         }
 
         if ($this->issuer !== NULL) {
-            SAML2_Utils::addString($root, SAML2_Const::NS_SAML, 'saml:Issuer', $this->issuer);
+            SAML2_Utils::addString($root, SAML2_Constants::NS_SAML, 'saml:Issuer', $this->issuer);
         }
 
         if (!empty($this->extensions)) {
@@ -521,7 +521,7 @@ abstract class SAML2_Message implements SAML2_SignedElement
      */
     public static function fromXML(DOMElement $xml)
     {
-        if ($xml->namespaceURI !== SAML2_Const::NS_SAMLP) {
+        if ($xml->namespaceURI !== SAML2_Constants::NS_SAMLP) {
             throw new Exception('Unknown namespace of SAML message: ' . var_export($xml->namespaceURI, TRUE));
         }
 

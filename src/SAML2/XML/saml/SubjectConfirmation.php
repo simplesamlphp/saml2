@@ -72,7 +72,7 @@ class SAML2_XML_saml_SubjectConfirmation
         assert('is_null($this->NameID) || $this->NameID instanceof SAML2_XML_saml_NameID');
         assert('is_null($this->SubjectConfirmationData) || $this->SubjectConfirmationData instanceof SAML2_XML_saml_SubjectConfirmationData');
 
-        $e = $parent->ownerDocument->createElementNS(SAML2_Const::NS_SAML, 'saml:SubjectConfirmation');
+        $e = $parent->ownerDocument->createElementNS(SAML2_Constants::NS_SAML, 'saml:SubjectConfirmation');
         $parent->appendChild($e);
 
         $e->setAttribute('Method', $this->Method);

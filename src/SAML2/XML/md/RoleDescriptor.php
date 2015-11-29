@@ -156,7 +156,7 @@ class SAML2_XML_md_RoleDescriptor extends SAML2_SignedElementHelper
         assert('is_null($this->Organization) || $this->Organization instanceof SAML2_XML_md_Organization');
         assert('is_array($this->ContactPerson)');
 
-        $e = $parent->ownerDocument->createElementNS(SAML2_Const::NS_MD, $this->elementName);
+        $e = $parent->ownerDocument->createElementNS(SAML2_Constants::NS_MD, $this->elementName);
         $parent->appendChild($e);
 
         if (isset($this->ID)) {

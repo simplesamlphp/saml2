@@ -146,7 +146,7 @@ class SAML2_XML_md_ContactPerson
 
         $doc = $parent->ownerDocument;
 
-        $e = $doc->createElementNS(SAML2_Const::NS_MD, 'md:ContactPerson');
+        $e = $doc->createElementNS(SAML2_Constants::NS_MD, 'md:ContactPerson');
         $parent->appendChild($e);
 
         $e->setAttribute('contactType', $this->contactType);
@@ -154,19 +154,19 @@ class SAML2_XML_md_ContactPerson
         SAML2_XML_md_Extensions::addList($e, $this->Extensions);
 
         if (isset($this->Company)) {
-            SAML2_Utils::addString($e, SAML2_Const::NS_MD, 'md:Company', $this->Company);
+            SAML2_Utils::addString($e, SAML2_Constants::NS_MD, 'md:Company', $this->Company);
         }
         if (isset($this->GivenName)) {
-            SAML2_Utils::addString($e, SAML2_Const::NS_MD, 'md:GivenName', $this->GivenName);
+            SAML2_Utils::addString($e, SAML2_Constants::NS_MD, 'md:GivenName', $this->GivenName);
         }
         if (isset($this->SurName)) {
-            SAML2_Utils::addString($e, SAML2_Const::NS_MD, 'md:SurName', $this->SurName);
+            SAML2_Utils::addString($e, SAML2_Constants::NS_MD, 'md:SurName', $this->SurName);
         }
         if (!empty($this->EmailAddress)) {
-            SAML2_Utils::addStrings($e, SAML2_Const::NS_MD, 'md:EmailAddress', FALSE, $this->EmailAddress);
+            SAML2_Utils::addStrings($e, SAML2_Constants::NS_MD, 'md:EmailAddress', FALSE, $this->EmailAddress);
         }
         if (!empty($this->TelephoneNumber)) {
-            SAML2_Utils::addStrings($e, SAML2_Const::NS_MD, 'md:TelephoneNumber', FALSE, $this->TelephoneNumber);
+            SAML2_Utils::addStrings($e, SAML2_Constants::NS_MD, 'md:TelephoneNumber', FALSE, $this->TelephoneNumber);
         }
 
         return $e;

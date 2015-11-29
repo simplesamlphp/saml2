@@ -5,7 +5,7 @@
  *
  * @package SimpleSAMLphp
  */
-class SAML2_Const
+class SAML2_Constants
 {
     /**
      * Password authentication context.

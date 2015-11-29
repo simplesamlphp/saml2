@@ -35,8 +35,8 @@ class SAML2_Response_Validation_ConstraintValidator_IsSuccessful implements
      */
     private function truncateStatus($status)
     {
-        $prefixLength = strlen(SAML2_Const::STATUS_PREFIX);
-        if (strpos($status, SAML2_Const::STATUS_PREFIX) !== 0) {
+        $prefixLength = strlen(SAML2_Constants::STATUS_PREFIX);
+        if (strpos($status, SAML2_Constants::STATUS_PREFIX) !== 0) {
             return $status;
         }
 

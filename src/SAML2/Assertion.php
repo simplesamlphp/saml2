@@ -216,7 +216,7 @@ class SAML2_Assertion implements SAML2_SignedElement
         $this->issuer = '';
         $this->authnInstant = SAML2_Utilities_Temporal::getTime();
         $this->attributes = array();
-        $this->nameFormat = SAML2_Const::NAMEFORMAT_UNSPECIFIED;
+        $this->nameFormat = SAML2_Constants::NAMEFORMAT_UNSPECIFIED;
         $this->certificates = array();
         $this->AuthenticatingAuthority = array();
         $this->SubjectConfirmation = array();
@@ -331,12 +331,12 @@ class SAML2_Assertion implements SAML2_SignedElement
             if ($node instanceof DOMText) {
                 continue;
             }
-            if ($node->namespaceURI !== SAML2_Const::NS_SAML) {
+            if ($node->namespaceURI !== SAML2_Constants::NS_SAML) {
                 throw new Exception('Unknown namespace of condition: ' . var_export($node->namespaceURI, TRUE));
             }
             switch ($node->localName) {
                 case 'AudienceRestriction':
-                    $audiences = SAML2_Utils::extractStrings($node, SAML2_Const::NS_SAML, 'Audience');
+                    $audiences = SAML2_Utils::extractStrings($node, SAML2_Constants::NS_SAML, 'Audience');
                     if ($this->validAudiences === NULL) {
                         /* The first (and probably last) AudienceRestriction element. */
                         $this->validAudiences = $audiences;
@@ -450,7 +450,7 @@ class SAML2_Assertion implements SAML2_SignedElement
 
         $this->AuthenticatingAuthority = SAML2_Utils::extractStrings(
             $authnContextEl,
-            SAML2_Const::NS_SAML,
+            SAML2_Constants::NS_SAML,
             'AuthenticatingAuthority'
         );
     }
@@ -474,7 +474,7 @@ class SAML2_Assertion implements SAML2_SignedElement
             if ($attribute->hasAttribute('NameFormat')) {
                 $nameFormat = $attribute->getAttribute('NameFormat');
             } else {
-                $nameFormat = SAML2_Const::NAMEFORMAT_UNSPECIFIED;
+                $nameFormat = SAML2_Constants::NAMEFORMAT_UNSPECIFIED;
             }
 
             if ($firstAttribute) {
@@ -482,7 +482,7 @@ class SAML2_Assertion implements SAML2_SignedElement
                 $firstAttribute = FALSE;
             } else {
                 if ($this->nameFormat !== $nameFormat) {
-                    $this->nameFormat = SAML2_Const::NAMEFORMAT_UNSPECIFIED;
+                    $this->nameFormat = SAML2_Constants::NAMEFORMAT_UNSPECIFIED;
                 }
             }
 
@@ -750,7 +750,7 @@ class SAML2_Assertion implements SAML2_SignedElement
             if ($attribute->hasAttribute('NameFormat')) {
                 $nameFormat = $attribute->getAttribute('NameFormat');
             } else {
-                $nameFormat = SAML2_Const::NAMEFORMAT_UNSPECIFIED;
+                $nameFormat = SAML2_Constants::NAMEFORMAT_UNSPECIFIED;
             }
 
             if ($firstAttribute) {
@@ -758,7 +758,7 @@ class SAML2_Assertion implements SAML2_SignedElement
                 $firstAttribute = FALSE;
             } else {
                 if ($this->nameFormat !== $nameFormat) {
-                    $this->nameFormat = SAML2_Const::NAMEFORMAT_UNSPECIFIED;
+                    $this->nameFormat = SAML2_Constants::NAMEFORMAT_UNSPECIFIED;
                 }
             }
 
@@ -1238,22 +1238,22 @@ class SAML2_Assertion implements SAML2_SignedElement
             $document = $parentElement->ownerDocument;
         }
 
-        $root = $document->createElementNS(SAML2_Const::NS_SAML, 'saml:' . 'Assertion');
+        $root = $document->createElementNS(SAML2_Constants::NS_SAML, 'saml:' . 'Assertion');
         $parentElement->appendChild($root);
 
         /* Ugly hack to add another namespace declaration to the root element. */
-        $root->setAttributeNS(SAML2_Const::NS_SAMLP, 'samlp:tmp', 'tmp');
-        $root->removeAttributeNS(SAML2_Const::NS_SAMLP, 'tmp');
-        $root->setAttributeNS(SAML2_Const::NS_XSI, 'xsi:tmp', 'tmp');
-        $root->removeAttributeNS(SAML2_Const::NS_XSI, 'tmp');
-        $root->setAttributeNS(SAML2_Const::NS_XS, 'xs:tmp', 'tmp');
-        $root->removeAttributeNS(SAML2_Const::NS_XS, 'tmp');
+        $root->setAttributeNS(SAML2_Constants::NS_SAMLP, 'samlp:tmp', 'tmp');
+        $root->removeAttributeNS(SAML2_Constants::NS_SAMLP, 'tmp');
+        $root->setAttributeNS(SAML2_Constants::NS_XSI, 'xsi:tmp', 'tmp');
+        $root->removeAttributeNS(SAML2_Constants::NS_XSI, 'tmp');
+        $root->setAttributeNS(SAML2_Constants::NS_XS, 'xs:tmp', 'tmp');
+        $root->removeAttributeNS(SAML2_Constants::NS_XS, 'tmp');
 
         $root->setAttribute('ID', $this->id);
         $root->setAttribute('Version', '2.0');
         $root->setAttribute('IssueInstant', gmdate('Y-m-d\TH:i:s\Z', $this->issueInstant));
 
-        $issuer = SAML2_Utils::addString($root, SAML2_Const::NS_SAML, 'saml:Issuer', $this->issuer);
+        $issuer = SAML2_Utils::addString($root, SAML2_Constants::NS_SAML, 'saml:Issuer', $this->issuer);
 
         $this->addSubject($root);
         $this->addConditions($root);
@@ -1284,13 +1284,13 @@ class SAML2_Assertion implements SAML2_SignedElement
             return;
         }
 
-        $subject = $root->ownerDocument->createElementNS(SAML2_Const::NS_SAML, 'saml:Subject');
+        $subject = $root->ownerDocument->createElementNS(SAML2_Constants::NS_SAML, 'saml:Subject');
         $root->appendChild($subject);
 
         if ($this->encryptedNameId === NULL) {
             SAML2_Utils::addNameId($subject, $this->nameId);
         } else {
-            $eid = $subject->ownerDocument->createElementNS(SAML2_Const::NS_SAML, 'saml:' . 'EncryptedID');
+            $eid = $subject->ownerDocument->createElementNS(SAML2_Constants::NS_SAML, 'saml:' . 'EncryptedID');
             $subject->appendChild($eid);
             $eid->appendChild($subject->ownerDocument->importNode($this->encryptedNameId, TRUE));
         }
@@ -1310,7 +1310,7 @@ class SAML2_Assertion implements SAML2_SignedElement
     {
         $document = $root->ownerDocument;
 
-        $conditions = $document->createElementNS(SAML2_Const::NS_SAML, 'saml:Conditions');
+        $conditions = $document->createElementNS(SAML2_Constants::NS_SAML, 'saml:Conditions');
         $root->appendChild($conditions);
 
         if ($this->notBefore !== NULL) {
@@ -1321,10 +1321,10 @@ class SAML2_Assertion implements SAML2_SignedElement
         }
 
         if ($this->validAudiences !== NULL) {
-            $ar = $document->createElementNS(SAML2_Const::NS_SAML, 'saml:AudienceRestriction');
+            $ar = $document->createElementNS(SAML2_Constants::NS_SAML, 'saml:AudienceRestriction');
             $conditions->appendChild($ar);
 
-            SAML2_Utils::addStrings($ar, SAML2_Const::NS_SAML, 'saml:Audience', FALSE, $this->validAudiences);
+            SAML2_Utils::addStrings($ar, SAML2_Constants::NS_SAML, 'saml:Audience', FALSE, $this->validAudiences);
         }
     }
 
@@ -1350,7 +1350,7 @@ class SAML2_Assertion implements SAML2_SignedElement
 
         $document = $root->ownerDocument;
 
-        $authnStatementEl = $document->createElementNS(SAML2_Const::NS_SAML, 'saml:AuthnStatement');
+        $authnStatementEl = $document->createElementNS(SAML2_Constants::NS_SAML, 'saml:AuthnStatement');
         $root->appendChild($authnStatementEl);
 
         $authnStatementEl->setAttribute('AuthnInstant', gmdate('Y-m-d\TH:i:s\Z', $this->authnInstant));
@@ -1362,13 +1362,13 @@ class SAML2_Assertion implements SAML2_SignedElement
             $authnStatementEl->setAttribute('SessionIndex', $this->sessionIndex);
         }
 
-        $authnContextEl = $document->createElementNS(SAML2_Const::NS_SAML, 'saml:AuthnContext');
+        $authnContextEl = $document->createElementNS(SAML2_Constants::NS_SAML, 'saml:AuthnContext');
         $authnStatementEl->appendChild($authnContextEl);
 
         if (!empty($this->authnContextClassRef)) {
             SAML2_Utils::addString(
                 $authnContextEl,
-                SAML2_Const::NS_SAML,
+                SAML2_Constants::NS_SAML,
                 'saml:AuthnContextClassRef',
                 $this->authnContextClassRef
             );
@@ -1379,7 +1379,7 @@ class SAML2_Assertion implements SAML2_SignedElement
         if (!empty($this->authnContextDeclRef)) {
             SAML2_Utils::addString(
                 $authnContextEl,
-                SAML2_Const::NS_SAML,
+                SAML2_Constants::NS_SAML,
                 'saml:AuthnContextDeclRef',
                 $this->authnContextDeclRef
             );
@@ -1387,7 +1387,7 @@ class SAML2_Assertion implements SAML2_SignedElement
 
         SAML2_Utils::addStrings(
             $authnContextEl,
-            SAML2_Const::NS_SAML,
+            SAML2_Constants::NS_SAML,
             'saml:AuthenticatingAuthority',
             FALSE,
             $this->AuthenticatingAuthority
@@ -1408,15 +1408,15 @@ class SAML2_Assertion implements SAML2_SignedElement
 
         $document = $root->ownerDocument;
 
-        $attributeStatement = $document->createElementNS(SAML2_Const::NS_SAML, 'saml:AttributeStatement');
+        $attributeStatement = $document->createElementNS(SAML2_Constants::NS_SAML, 'saml:AttributeStatement');
         $root->appendChild($attributeStatement);
 
         foreach ($this->attributes as $name => $values) {
-            $attribute = $document->createElementNS(SAML2_Const::NS_SAML, 'saml:Attribute');
+            $attribute = $document->createElementNS(SAML2_Constants::NS_SAML, 'saml:Attribute');
             $attributeStatement->appendChild($attribute);
             $attribute->setAttribute('Name', $name);
 
-            if ($this->nameFormat !== SAML2_Const::NAMEFORMAT_UNSPECIFIED) {
+            if ($this->nameFormat !== SAML2_Constants::NAMEFORMAT_UNSPECIFIED) {
                 $attribute->setAttribute('NameFormat', $this->nameFormat);
             }
 
@@ -1429,13 +1429,13 @@ class SAML2_Assertion implements SAML2_SignedElement
                     $type = NULL;
                 }
 
-                $attributeValue = $document->createElementNS(SAML2_Const::NS_SAML, 'saml:AttributeValue');
+                $attributeValue = $document->createElementNS(SAML2_Constants::NS_SAML, 'saml:AttributeValue');
                 $attribute->appendChild($attributeValue);
                 if ($type !== NULL) {
-                    $attributeValue->setAttributeNS(SAML2_Const::NS_XSI, 'xsi:type', $type);
+                    $attributeValue->setAttributeNS(SAML2_Constants::NS_XSI, 'xsi:type', $type);
                 }
                 if (is_null($value)) {
-                    $attributeValue->setAttributeNS(SAML2_Const::NS_XSI, 'xsi:nil', 'true');
+                    $attributeValue->setAttributeNS(SAML2_Constants::NS_XSI, 'xsi:nil', 'true');
                 }
 
                 if ($value instanceof DOMNodeList) {
@@ -1464,16 +1464,16 @@ class SAML2_Assertion implements SAML2_SignedElement
 
         $document = $root->ownerDocument;
 
-        $attributeStatement = $document->createElementNS(SAML2_Const::NS_SAML, 'saml:AttributeStatement');
+        $attributeStatement = $document->createElementNS(SAML2_Constants::NS_SAML, 'saml:AttributeStatement');
         $root->appendChild($attributeStatement);
 
         foreach ($this->attributes as $name => $values) {
             $document2 = SAML2_DOMDocumentFactory::create();
-            $attribute = $document2->createElementNS(SAML2_Const::NS_SAML, 'saml:Attribute');
+            $attribute = $document2->createElementNS(SAML2_Constants::NS_SAML, 'saml:Attribute');
             $attribute->setAttribute('Name', $name);
             $document2->appendChild($attribute);
 
-            if ($this->nameFormat !== SAML2_Const::NAMEFORMAT_UNSPECIFIED) {
+            if ($this->nameFormat !== SAML2_Constants::NAMEFORMAT_UNSPECIFIED) {
                 $attribute->setAttribute('NameFormat', $this->nameFormat);
             }
 
@@ -1486,10 +1486,10 @@ class SAML2_Assertion implements SAML2_SignedElement
                     $type = NULL;
                 }
 
-                $attributeValue = $document2->createElementNS(SAML2_Const::NS_SAML, 'saml:AttributeValue');
+                $attributeValue = $document2->createElementNS(SAML2_Constants::NS_SAML, 'saml:AttributeValue');
                 $attribute->appendChild($attributeValue);
                 if ($type !== NULL) {
-                    $attributeValue->setAttributeNS(SAML2_Const::NS_XSI, 'xsi:type', $type);
+                    $attributeValue->setAttributeNS(SAML2_Constants::NS_XSI, 'xsi:type', $type);
                 }
 
                 if ($value instanceof DOMNodeList) {
@@ -1514,7 +1514,7 @@ class SAML2_Assertion implements SAML2_SignedElement
             $EncAssert->encryptKey($this->encryptionKey, $symmetricKey);
             $EncrNode = $EncAssert->encryptNode($symmetricKey);
 
-            $EncAttribute = $document->createElementNS(SAML2_Const::NS_SAML, 'saml:EncryptedAttribute');
+            $EncAttribute = $document->createElementNS(SAML2_Constants::NS_SAML, 'saml:EncryptedAttribute');
             $attributeStatement->appendChild($EncAttribute);
             $n = $document->importNode($EncrNode, TRUE);
             $EncAttribute->appendChild($n);

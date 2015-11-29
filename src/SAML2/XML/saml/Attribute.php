@@ -113,7 +113,7 @@ class SAML2_XML_saml_Attribute
      */
     public function toXML(DOMElement $parent)
     {
-        return $this->toXMLInternal($parent, SAML2_Const::NS_SAML, 'saml:Attribute');
+        return $this->toXMLInternal($parent, SAML2_Constants::NS_SAML, 'saml:Attribute');
     }
 
 }

@@ -95,7 +95,7 @@ class SAML2_XML_md_AffiliationDescriptor extends SAML2_SignedElementHelper
 
         $this->Extensions = SAML2_XML_md_Extensions::getList($xml);
 
-        $this->AffiliateMember = SAML2_Utils::extractStrings($xml, SAML2_Const::NS_MD, 'AffiliateMember');
+        $this->AffiliateMember = SAML2_Utils::extractStrings($xml, SAML2_Constants::NS_MD, 'AffiliateMember');
         if (empty($this->AffiliateMember)) {
             throw new Exception('Missing AffiliateMember in AffiliationDescriptor.');
         }
@@ -122,7 +122,7 @@ class SAML2_XML_md_AffiliationDescriptor extends SAML2_SignedElementHelper
         assert('!empty($this->AffiliateMember)');
         assert('is_array($this->KeyDescriptor)');
 
-        $e = $parent->ownerDocument->createElementNS(SAML2_Const::NS_MD, 'md:AffiliationDescriptor');
+        $e = $parent->ownerDocument->createElementNS(SAML2_Constants::NS_MD, 'md:AffiliationDescriptor');
         $parent->appendChild($e);
 
         $e->setAttribute('affiliationOwnerID', $this->affiliationOwnerID);
@@ -141,7 +141,7 @@ class SAML2_XML_md_AffiliationDescriptor extends SAML2_SignedElementHelper
 
         SAML2_XML_md_Extensions::addList($e, $this->Extensions);
 
-        SAML2_Utils::addStrings($e, SAML2_Const::NS_MD, 'md:AffiliateMember', FALSE, $this->AffiliateMember);
+        SAML2_Utils::addStrings($e, SAML2_Constants::NS_MD, 'md:AffiliateMember', FALSE, $this->AffiliateMember);
 
         foreach ($this->KeyDescriptor as $kd) {
             $kd->toXML($e);

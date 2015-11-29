@@ -51,7 +51,7 @@ class SAML2_ArtifactResolve extends SAML2_Request
     public function toUnsignedXML()
     {
         $root = parent::toUnsignedXML();
-        $artifactelement = $this->document->createElementNS(SAML2_Const::NS_SAMLP, 'Artifact', $this->artifact);
+        $artifactelement = $this->document->createElementNS(SAML2_Constants::NS_SAMLP, 'Artifact', $this->artifact);
         $root->appendChild($artifactelement);
 
         return $root;

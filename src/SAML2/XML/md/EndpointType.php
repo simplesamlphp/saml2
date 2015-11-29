@@ -167,7 +167,7 @@ class SAML2_XML_md_EndpointType
         assert('is_string($this->Location)');
         assert('is_null($this->ResponseLocation) || is_string($this->ResponseLocation)');
 
-        $e = $parent->ownerDocument->createElementNS(SAML2_Const::NS_MD, $name);
+        $e = $parent->ownerDocument->createElementNS(SAML2_Constants::NS_MD, $name);
         $parent->appendChild($e);
 
         $e->setAttribute('Binding', $this->Binding);

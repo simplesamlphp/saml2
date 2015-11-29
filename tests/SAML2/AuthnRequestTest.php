@@ -134,7 +134,7 @@ AUTHNREQUEST
     public function testThatTheSubjectCanBeSetBySettingTheNameId()
     {
         $request = new SAML2_AuthnRequest();
-        $request->setNameId(array('Value' => 'user@example.org', 'Format' => SAML2_Const::NAMEID_UNSPECIFIED));
+        $request->setNameId(array('Value' => 'user@example.org', 'Format' => SAML2_Constants::NAMEID_UNSPECIFIED));
 
         $requestAsXML = $request->toUnsignedXML()->ownerDocument->saveXML();
         $expected = '<saml:Subject><saml:NameID Format="urn:oasis:names:tc:SAML:1.1:nameid-format:unspecified">user@example.org</saml:NameID></saml:Subject>';
@@ -180,7 +180,7 @@ AUTHNREQUEST
         $key = SAML2_CertificatesMock::getPrivateKey();
         $authnRequest->decryptNameId($key);
 
-        $expectedNameId = array('Value' => md5('Arthur Dent'), 'Format' => SAML2_Const::NAMEID_ENCRYPTED);
+        $expectedNameId = array('Value' => md5('Arthur Dent'), 'Format' => SAML2_Constants::NAMEID_ENCRYPTED);
 
         $this->assertEquals($expectedNameId, $authnRequest->getNameId());
     }
@@ -193,7 +193,7 @@ AUTHNREQUEST
     public function testThatAnEncryptedNameIdResultsInTheCorrectXmlStructure()
     {
         // the NameID we're going to encrypt
-        $nameId = array('Value' => md5('Arthur Dent'), 'Format' => SAML2_Const::NAMEID_ENCRYPTED);
+        $nameId = array('Value' => md5('Arthur Dent'), 'Format' => SAML2_Constants::NAMEID_ENCRYPTED);
 
         // basic AuthnRequest
         $request = new SAML2_AuthnRequest();

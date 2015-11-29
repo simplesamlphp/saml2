@@ -50,7 +50,7 @@ abstract class SAML2_StatusResponse extends SAML2_Message
         parent::__construct($tagName, $xml);
 
         $this->status = array(
-            'Code' => SAML2_Const::STATUS_SUCCESS,
+            'Code' => SAML2_Constants::STATUS_SUCCESS,
             'SubCode' => NULL,
             'Message' => NULL,
             );
@@ -98,7 +98,7 @@ abstract class SAML2_StatusResponse extends SAML2_Message
     {
         assert('array_key_exists("Code", $this->status)');
 
-        if ($this->status['Code'] === SAML2_Const::STATUS_SUCCESS) {
+        if ($this->status['Code'] === SAML2_Constants::STATUS_SUCCESS) {
             return TRUE;
         }
 
@@ -173,21 +173,21 @@ abstract class SAML2_StatusResponse extends SAML2_Message
             $root->setAttribute('InResponseTo', $this->inResponseTo);
         }
 
-        $status = $this->document->createElementNS(SAML2_Const::NS_SAMLP, 'Status');
+        $status = $this->document->createElementNS(SAML2_Constants::NS_SAMLP, 'Status');
         $root->appendChild($status);
 
-        $statusCode = $this->document->createElementNS(SAML2_Const::NS_SAMLP, 'StatusCode');
+        $statusCode = $this->document->createElementNS(SAML2_Constants::NS_SAMLP, 'StatusCode');
         $statusCode->setAttribute('Value', $this->status['Code']);
         $status->appendChild($statusCode);
 
         if (!is_null($this->status['SubCode'])) {
-            $subStatusCode = $this->document->createElementNS(SAML2_Const::NS_SAMLP, 'StatusCode');
+            $subStatusCode = $this->document->createElementNS(SAML2_Constants::NS_SAMLP, 'StatusCode');
             $subStatusCode->setAttribute('Value', $this->status['SubCode']);
             $statusCode->appendChild($subStatusCode);
         }
 
         if (!is_null($this->status['Message'])) {
-            SAML2_Utils::addString($status, SAML2_Const::NS_SAMLP, 'StatusMessage', $this->status['Message']);
+            SAML2_Utils::addString($status, SAML2_Constants::NS_SAMLP, 'StatusMessage', $this->status['Message']);
         }
 
         return $root;

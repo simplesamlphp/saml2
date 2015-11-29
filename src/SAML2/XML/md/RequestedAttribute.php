@@ -40,7 +40,7 @@ class SAML2_XML_md_RequestedAttribute extends SAML2_XML_saml_Attribute
     {
         assert('is_bool($this->isRequired) || is_null($this->isRequired)');
 
-        $e = $this->toXMLInternal($parent, SAML2_Const::NS_MD, 'md:RequestedAttribute');
+        $e = $this->toXMLInternal($parent, SAML2_Constants::NS_MD, 'md:RequestedAttribute');
 
         if ($this->isRequired === TRUE) {
             $e->setAttribute('isRequired', 'true');

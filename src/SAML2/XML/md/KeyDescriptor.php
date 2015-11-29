@@ -76,7 +76,7 @@ class SAML2_XML_md_KeyDescriptor
 
         $doc = $parent->ownerDocument;
 
-        $e = $doc->createElementNS(SAML2_Const::NS_MD, 'md:KeyDescriptor');
+        $e = $doc->createElementNS(SAML2_Constants::NS_MD, 'md:KeyDescriptor');
         $parent->appendChild($e);
 
         if (isset($this->use)) {

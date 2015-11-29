@@ -92,7 +92,7 @@ class SAML2_XML_saml_NameID
         } else {
             $doc = $parent->ownerDocument;
         }
-        $e = $doc->createElementNS(SAML2_Const::NS_SAML, 'saml:NameID');
+        $e = $doc->createElementNS(SAML2_Constants::NS_SAML, 'saml:NameID');
         $parent->appendChild($e);
 
         if ($this->NameQualifier !== NULL) {

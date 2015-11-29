@@ -28,7 +28,7 @@ class SAML2_Response extends SAML2_StatusResponse
         }
 
         for ($node = $xml->firstChild; $node !== NULL; $node = $node->nextSibling) {
-            if ($node->namespaceURI !== SAML2_Const::NS_SAML) {
+            if ($node->namespaceURI !== SAML2_Constants::NS_SAML) {
                 continue;
             }
 

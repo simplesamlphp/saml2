@@ -50,17 +50,17 @@ class SAML2_XML_md_Organization
 
         $this->Extensions = SAML2_XML_md_Extensions::getList($xml);
 
-        $this->OrganizationName = SAML2_Utils::extractLocalizedStrings($xml, SAML2_Const::NS_MD, 'OrganizationName');
+        $this->OrganizationName = SAML2_Utils::extractLocalizedStrings($xml, SAML2_Constants::NS_MD, 'OrganizationName');
         if (empty($this->OrganizationName)) {
             $this->OrganizationName = array('invalid' => '');
         }
 
-        $this->OrganizationDisplayName = SAML2_Utils::extractLocalizedStrings($xml, SAML2_Const::NS_MD, 'OrganizationDisplayName');
+        $this->OrganizationDisplayName = SAML2_Utils::extractLocalizedStrings($xml, SAML2_Constants::NS_MD, 'OrganizationDisplayName');
         if (empty($this->OrganizationDisplayName)) {
             $this->OrganizationDisplayName = array('invalid' => '');
         }
 
-        $this->OrganizationURL = SAML2_Utils::extractLocalizedStrings($xml, SAML2_Const::NS_MD, 'OrganizationURL');
+        $this->OrganizationURL = SAML2_Utils::extractLocalizedStrings($xml, SAML2_Constants::NS_MD, 'OrganizationURL');
         if (empty($this->OrganizationURL)) {
             $this->OrganizationURL = array('invalid' => '');
         }
@@ -84,14 +84,14 @@ class SAML2_XML_md_Organization
 
         $doc = $parent->ownerDocument;
 
-        $e = $doc->createElementNS(SAML2_Const::NS_MD, 'md:Organization');
+        $e = $doc->createElementNS(SAML2_Constants::NS_MD, 'md:Organization');
         $parent->appendChild($e);
 
         SAML2_XML_md_Extensions::addList($e, $this->Extensions);
 
-        SAML2_Utils::addStrings($e, SAML2_Const::NS_MD, 'md:OrganizationName', TRUE, $this->OrganizationName);
-        SAML2_Utils::addStrings($e, SAML2_Const::NS_MD, 'md:OrganizationDisplayName', TRUE, $this->OrganizationDisplayName);
-        SAML2_Utils::addStrings($e, SAML2_Const::NS_MD, 'md:OrganizationURL', TRUE, $this->OrganizationURL);
+        SAML2_Utils::addStrings($e, SAML2_Constants::NS_MD, 'md:OrganizationName', TRUE, $this->OrganizationName);
+        SAML2_Utils::addStrings($e, SAML2_Constants::NS_MD, 'md:OrganizationDisplayName', TRUE, $this->OrganizationDisplayName);
+        SAML2_Utils::addStrings($e, SAML2_Constants::NS_MD, 'md:OrganizationURL', TRUE, $this->OrganizationURL);
 
         return $e;
     }

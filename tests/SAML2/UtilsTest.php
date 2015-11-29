@@ -135,7 +135,7 @@ class SAML2_UtilsTest extends PHPUnit_Framework_TestCase
     public function testExtractString()
     {
         $document = SAML2_DOMDocumentFactory::fromString(
-            '<root xmlns="' . SAML2_Const::NS_MD . '">'.
+            '<root xmlns="' . SAML2_Constants::NS_MD . '">'.
             '<somenode>value1</somenode>'.
             '<somenode>value2</somenode>'.
             '</root>'
@@ -143,7 +143,7 @@ class SAML2_UtilsTest extends PHPUnit_Framework_TestCase
 
         $stringValues = SAML2_Utils::extractStrings(
             $document->firstChild,
-            SAML2_Const::NS_MD,
+            SAML2_Constants::NS_MD,
             'somenode'
         );
 
@@ -158,7 +158,7 @@ class SAML2_UtilsTest extends PHPUnit_Framework_TestCase
     public function testExtractLocalizedString()
     {
         $document = SAML2_DOMDocumentFactory::fromString(
-            '<root xmlns="' . SAML2_Const::NS_MD . '">'.
+            '<root xmlns="' . SAML2_Constants::NS_MD . '">'.
             '<somenode xml:lang="en">value (en)</somenode>'.
             '<somenode xml:lang="no">value (no)</somenode>'.
             '</root>'
@@ -166,7 +166,7 @@ class SAML2_UtilsTest extends PHPUnit_Framework_TestCase
 
         $localizedStringValues = SAML2_Utils::extractLocalizedStrings(
             $document->firstChild,
-            SAML2_Const::NS_MD,
+            SAML2_Constants::NS_MD,
             'somenode'
         );
 

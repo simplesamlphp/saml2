@@ -71,7 +71,7 @@ abstract class SAML2_XML_md_SSODescriptorType extends SAML2_XML_md_RoleDescripto
             $this->ManageNameIDService[] = new SAML2_XML_md_EndpointType($ep);
         }
 
-        $this->NameIDFormat = SAML2_Utils::extractStrings($xml, SAML2_Const::NS_MD, 'NameIDFormat');
+        $this->NameIDFormat = SAML2_Utils::extractStrings($xml, SAML2_Constants::NS_MD, 'NameIDFormat');
     }
 
     /**
@@ -101,7 +101,7 @@ abstract class SAML2_XML_md_SSODescriptorType extends SAML2_XML_md_RoleDescripto
             $ep->toXML($e, 'md:ManageNameIDService');
         }
 
-        SAML2_Utils::addStrings($e, SAML2_Const::NS_MD, 'md:NameIDFormat', FALSE, $this->NameIDFormat);
+        SAML2_Utils::addStrings($e, SAML2_Constants::NS_MD, 'md:NameIDFormat', FALSE, $this->NameIDFormat);
 
         return $e;
     }
