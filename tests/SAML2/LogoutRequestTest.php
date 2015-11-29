@@ -3,9 +3,9 @@
 require_once 'CertificatesMock.php';
 
 /**
- * Class LogoutRequestTest
+ * Class SAML2_LogoutRequestTest
  */
-class LogoutRequestTest extends \PHPUnit_Framework_TestCase
+class SAML2_LogoutRequestTest extends \PHPUnit_Framework_TestCase
 {
     /**
      * @var DOMElement
