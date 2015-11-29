@@ -105,10 +105,10 @@ class SAML2_XML_md_EntitiesDescriptor extends SAML2_SignedElementHelper
 
         if ($parent === NULL) {
             $doc = SAML2_DOMDocumentFactory::create();
-            $e = $doc->createElementNS(SAML2_Const::NS_MD, 'md:EntitiesDescriptor');
+            $e = $doc->createElementNS(SAML2_Constants::NS_MD, 'md:EntitiesDescriptor');
             $doc->appendChild($e);
         } else {
-            $e = $parent->ownerDocument->createElementNS(SAML2_Const::NS_MD, 'md:EntitiesDescriptor');
+            $e = $parent->ownerDocument->createElementNS(SAML2_Constants::NS_MD, 'md:EntitiesDescriptor');
             $parent->appendChild($e);
         }
 

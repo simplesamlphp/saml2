@@ -106,7 +106,7 @@ abstract class SAML2_SubjectQuery extends SAML2_Request
     {
         $root = parent::toUnsignedXML();
 
-        $subject = $root->ownerDocument->createElementNS(SAML2_Const::NS_SAML, 'saml:Subject');
+        $subject = $root->ownerDocument->createElementNS(SAML2_Constants::NS_SAML, 'saml:Subject');
         $root->appendChild($subject);
 
         SAML2_Utils::addNameId($subject, $this->nameId);

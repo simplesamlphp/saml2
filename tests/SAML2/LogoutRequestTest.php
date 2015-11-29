@@ -52,7 +52,7 @@ XML;
 
         $logoutRequestElement = $logoutRequest->toUnsignedXML();
         $this->assertEquals('LogoutRequest', $logoutRequestElement->localName);
-        $this->assertEquals(SAML2_Const::NS_SAMLP, $logoutRequestElement->namespaceURI);
+        $this->assertEquals(SAML2_Constants::NS_SAMLP, $logoutRequestElement->namespaceURI);
 
         $nameIdElements = SAML2_Utils::xpQuery($logoutRequestElement, './saml_assertion:NameID');
         $this->assertCount(1, $nameIdElements);

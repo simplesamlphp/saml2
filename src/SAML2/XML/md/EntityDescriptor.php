@@ -117,7 +117,7 @@ class SAML2_XML_md_EntityDescriptor extends SAML2_SignedElementHelper
                 continue;
             }
 
-            if ($node->namespaceURI !== SAML2_Const::NS_MD) {
+            if ($node->namespaceURI !== SAML2_Constants::NS_MD) {
                 continue;
             }
 
@@ -193,10 +193,10 @@ class SAML2_XML_md_EntityDescriptor extends SAML2_SignedElementHelper
 
         if ($parent === NULL) {
             $doc = SAML2_DOMDocumentFactory::create();
-            $e = $doc->createElementNS(SAML2_Const::NS_MD, 'md:EntityDescriptor');
+            $e = $doc->createElementNS(SAML2_Constants::NS_MD, 'md:EntityDescriptor');
             $doc->appendChild($e);
         } else {
-            $e = $parent->ownerDocument->createElementNS(SAML2_Const::NS_MD, 'md:EntityDescriptor');
+            $e = $parent->ownerDocument->createElementNS(SAML2_Constants::NS_MD, 'md:EntityDescriptor');
             $parent->appendChild($e);
         }
 

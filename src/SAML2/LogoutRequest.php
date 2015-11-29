@@ -259,13 +259,13 @@ class SAML2_LogoutRequest extends SAML2_Request
         if ($this->encryptedNameId === NULL) {
             SAML2_Utils::addNameId($root, $this->nameId);
         } else {
-            $eid = $root->ownerDocument->createElementNS(SAML2_Const::NS_SAML, 'saml:' . 'EncryptedID');
+            $eid = $root->ownerDocument->createElementNS(SAML2_Constants::NS_SAML, 'saml:' . 'EncryptedID');
             $root->appendChild($eid);
             $eid->appendChild($root->ownerDocument->importNode($this->encryptedNameId, TRUE));
         }
 
         foreach ($this->sessionIndexes as $sessionIndex) {
-            SAML2_Utils::addString($root, SAML2_Const::NS_SAMLP, 'SessionIndex', $sessionIndex);
+            SAML2_Utils::addString($root, SAML2_Constants::NS_SAMLP, 'SessionIndex', $sessionIndex);
         }
 
         return $root;

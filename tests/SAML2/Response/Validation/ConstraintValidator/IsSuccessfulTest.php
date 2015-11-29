@@ -36,7 +36,7 @@ class SAML2_Response_Validation_ConstraintValidator_IsSuccessfulTest extends \PH
     {
         $responseStatus = array(
             'Code'    => 'foo',
-            'SubCode' => SAML2_Const::STATUS_PREFIX . 'bar',
+            'SubCode' => SAML2_Constants::STATUS_PREFIX . 'bar',
             'Message' => 'this is a test message'
         );
         $this->response->shouldReceive('isSuccess')->once()->andReturn(false);

@@ -45,7 +45,7 @@ class SAML2_AttributeQuery extends SAML2_SubjectQuery
         parent::__construct('AttributeQuery', $xml);
 
         $this->attributes = array();
-        $this->nameFormat = SAML2_Const::NAMEFORMAT_UNSPECIFIED;
+        $this->nameFormat = SAML2_Constants::NAMEFORMAT_UNSPECIFIED;
 
         if ($xml === NULL) {
             return;
@@ -62,7 +62,7 @@ class SAML2_AttributeQuery extends SAML2_SubjectQuery
             if ($attribute->hasAttribute('NameFormat')) {
                 $nameFormat = $attribute->getAttribute('NameFormat');
             } else {
-                $nameFormat = SAML2_Const::NAMEFORMAT_UNSPECIFIED;
+                $nameFormat = SAML2_Constants::NAMEFORMAT_UNSPECIFIED;
             }
 
             if ($firstAttribute) {
@@ -70,7 +70,7 @@ class SAML2_AttributeQuery extends SAML2_SubjectQuery
                 $firstAttribute = FALSE;
             } else {
                 if ($this->nameFormat !== $nameFormat) {
-                    $this->nameFormat = SAML2_Const::NAMEFORMAT_UNSPECIFIED;
+                    $this->nameFormat = SAML2_Constants::NAMEFORMAT_UNSPECIFIED;
                 }
             }
 
@@ -140,11 +140,11 @@ class SAML2_AttributeQuery extends SAML2_SubjectQuery
         $root = parent::toUnsignedXML();
 
         foreach ($this->attributes as $name => $values) {
-            $attribute = $root->ownerDocument->createElementNS(SAML2_Const::NS_SAML, 'saml:Attribute');
+            $attribute = $root->ownerDocument->createElementNS(SAML2_Constants::NS_SAML, 'saml:Attribute');
             $root->appendChild($attribute);
             $attribute->setAttribute('Name', $name);
 
-            if ($this->nameFormat !== SAML2_Const::NAMEFORMAT_UNSPECIFIED) {
+            if ($this->nameFormat !== SAML2_Constants::NAMEFORMAT_UNSPECIFIED) {
                 $attribute->setAttribute('NameFormat', $this->nameFormat);
             }
 
@@ -157,9 +157,9 @@ class SAML2_AttributeQuery extends SAML2_SubjectQuery
                     $type = NULL;
                 }
 
-                $attributeValue = SAML2_Utils::addString($attribute, SAML2_Const::NS_SAML, 'saml:AttributeValue', $value);
+                $attributeValue = SAML2_Utils::addString($attribute, SAML2_Constants::NS_SAML, 'saml:AttributeValue', $value);
                 if ($type !== NULL) {
-                    $attributeValue->setAttributeNS(SAML2_Const::NS_XSI, 'xsi:type', $type);
+                    $attributeValue->setAttributeNS(SAML2_Constants::NS_XSI, 'xsi:type', $type);
                 }
             }
         }

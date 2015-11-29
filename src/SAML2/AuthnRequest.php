@@ -237,7 +237,7 @@ class SAML2_AuthnRequest extends SAML2_Request
 
         $rac = array(
             'AuthnContextClassRef' => array(),
-            'Comparison'           => SAML2_Const::COMPARISON_EXACT,
+            'Comparison'           => SAML2_Constants::COMPARISON_EXACT,
         );
 
         $accr = SAML2_Utils::xpQuery($requestedAuthnContext, './saml_assertion:AuthnContextClassRef');
@@ -701,7 +701,7 @@ class SAML2_AuthnRequest extends SAML2_Request
         $this->addSubject($root);
 
         if (!empty($this->nameIdPolicy)) {
-            $nameIdPolicy = $this->document->createElementNS(SAML2_Const::NS_SAMLP, 'NameIDPolicy');
+            $nameIdPolicy = $this->document->createElementNS(SAML2_Constants::NS_SAMLP, 'NameIDPolicy');
             if (array_key_exists('Format', $this->nameIdPolicy)) {
                 $nameIdPolicy->setAttribute('Format', $this->nameIdPolicy['Format']);
             }
@@ -716,25 +716,25 @@ class SAML2_AuthnRequest extends SAML2_Request
 
         $rac = $this->requestedAuthnContext;
         if (!empty($rac) && !empty($rac['AuthnContextClassRef'])) {
-            $e = $this->document->createElementNS(SAML2_Const::NS_SAMLP, 'RequestedAuthnContext');
+            $e = $this->document->createElementNS(SAML2_Constants::NS_SAMLP, 'RequestedAuthnContext');
             $root->appendChild($e);
-            if (isset($rac['Comparison']) && $rac['Comparison'] !== SAML2_Const::COMPARISON_EXACT) {
+            if (isset($rac['Comparison']) && $rac['Comparison'] !== SAML2_Constants::COMPARISON_EXACT) {
                 $e->setAttribute('Comparison', $rac['Comparison']);
             }
             foreach ($rac['AuthnContextClassRef'] as $accr) {
-                SAML2_Utils::addString($e, SAML2_Const::NS_SAML, 'AuthnContextClassRef', $accr);
+                SAML2_Utils::addString($e, SAML2_Constants::NS_SAML, 'AuthnContextClassRef', $accr);
             }
         }
 
         if ($this->ProxyCount !== NULL || count($this->IDPList) > 0 || count($this->RequesterID) > 0) {
-            $scoping = $this->document->createElementNS(SAML2_Const::NS_SAMLP, 'Scoping');
+            $scoping = $this->document->createElementNS(SAML2_Constants::NS_SAMLP, 'Scoping');
             if ($this->ProxyCount !== NULL) {
                 $scoping->setAttribute('ProxyCount', $this->ProxyCount);
             }
             if (count($this->IDPList) > 0) {
-                $idplist = $this->document->createElementNS(SAML2_Const::NS_SAMLP, 'IDPList');
+                $idplist = $this->document->createElementNS(SAML2_Constants::NS_SAMLP, 'IDPList');
                 foreach ($this->IDPList as $provider) {
-                    $idpEntry = $this->document->createElementNS(SAML2_Const::NS_SAMLP, 'IDPEntry');
+                    $idpEntry = $this->document->createElementNS(SAML2_Constants::NS_SAMLP, 'IDPEntry');
                     if (is_string($provider)) {
                         $idpEntry->setAttribute('ProviderID', $provider);
                     } elseif (is_array($provider)) {
@@ -754,7 +754,7 @@ class SAML2_AuthnRequest extends SAML2_Request
                 $root->appendChild($scoping);
             }
             if (count($this->RequesterID) > 0) {
-                SAML2_Utils::addStrings($scoping, SAML2_Const::NS_SAMLP, 'RequesterID', FALSE, $this->RequesterID);
+                SAML2_Utils::addStrings($scoping, SAML2_Constants::NS_SAMLP, 'RequesterID', FALSE, $this->RequesterID);
             }
         }
 
@@ -773,13 +773,13 @@ class SAML2_AuthnRequest extends SAML2_Request
             return;
         }
 
-        $subject = $root->ownerDocument->createElementNS(SAML2_Const::NS_SAML, 'saml:Subject');
+        $subject = $root->ownerDocument->createElementNS(SAML2_Constants::NS_SAML, 'saml:Subject');
         $root->appendChild($subject);
 
         if ($this->encryptedNameId === NULL) {
             SAML2_Utils::addNameId($subject, $this->nameId);
         } else {
-            $eid = $subject->ownerDocument->createElementNS(SAML2_Const::NS_SAML, 'saml:EncryptedID');
+            $eid = $subject->ownerDocument->createElementNS(SAML2_Constants::NS_SAML, 'saml:EncryptedID');
             $eid->appendChild($subject->ownerDocument->importNode($this->encryptedNameId, TRUE));
             $subject->appendChild($eid);
         }

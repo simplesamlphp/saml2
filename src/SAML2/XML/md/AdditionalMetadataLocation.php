@@ -52,7 +52,7 @@ class SAML2_XML_md_AdditionalMetadataLocation
         assert('is_string($this->namespace)');
         assert('is_string($this->location)');
 
-        $e = SAML2_Utils::addString($parent, SAML2_Const::NS_MD, 'md:AdditionalMetadataLocation', $this->location);
+        $e = SAML2_Utils::addString($parent, SAML2_Constants::NS_MD, 'md:AdditionalMetadataLocation', $this->location);
         $e->setAttribute('namespace', $this->namespace);
 
         return $e;

@@ -30,7 +30,7 @@ class SAML2_XML_md_AttributeTest extends \PHPUnit_Framework_TestCase
 
     public function testUnmarshalling()
     {
-        $samlNamespace = SAML2_Const::NS_SAML;
+        $samlNamespace = SAML2_Constants::NS_SAML;
         $document = SAML2_DOMDocumentFactory::fromString(<<<XML
 <saml:Attribute xmlns:saml="{$samlNamespace}" Name="TheName" NameFormat="TheNameFormat" FriendlyName="TheFriendlyName">
     <saml:AttributeValue>FirstValue</saml:AttributeValue>
@@ -51,7 +51,7 @@ XML
 
     public function testUnmarshallingFailure()
     {
-        $samlNamespace = SAML2_Const::NS_SAML;
+        $samlNamespace = SAML2_Constants::NS_SAML;
         $document = SAML2_DOMDocumentFactory::fromString(<<<XML
 <saml:Attribute xmlns:saml="{$samlNamespace}" NameFormat="TheNameFormat" FriendlyName="TheFriendlyName">
     <saml:AttributeValue>FirstValue</saml:AttributeValue>

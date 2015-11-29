@@ -28,25 +28,25 @@ class SAML2_XML_saml_AttributeValue implements Serializable
 
         if (is_string($value)) {
             $doc = SAML2_DOMDocumentFactory::create();
-            $this->element = $doc->createElementNS(SAML2_Const::NS_SAML, 'saml:AttributeValue');
-            $this->element->setAttributeNS(SAML2_Const::NS_XSI, 'xsi:type', 'xs:string');
+            $this->element = $doc->createElementNS(SAML2_Constants::NS_SAML, 'saml:AttributeValue');
+            $this->element->setAttributeNS(SAML2_Constants::NS_XSI, 'xsi:type', 'xs:string');
             $this->element->appendChild($doc->createTextNode($value));
 
             /* Make sure that the xs-namespace is available in the AttributeValue (for xs:string). */
-            $this->element->setAttributeNS(SAML2_Const::NS_XS, 'xs:tmp', 'tmp');
-            $this->element->removeAttributeNS(SAML2_Const::NS_XS, 'tmp');
+            $this->element->setAttributeNS(SAML2_Constants::NS_XS, 'xs:tmp', 'tmp');
+            $this->element->removeAttributeNS(SAML2_Constants::NS_XS, 'tmp');
 
             return;
         }
 
-        if ($value->namespaceURI === SAML2_Const::NS_SAML && $value->localName === 'AttributeValue') {
+        if ($value->namespaceURI === SAML2_Constants::NS_SAML && $value->localName === 'AttributeValue') {
             $this->element = SAML2_Utils::copyElement($value);
 
             return;
         }
 
         $doc = SAML2_DOMDocumentFactory::create();
-        $this->element = $doc->createElementNS(SAML2_Const::NS_SAML, 'saml:AttributeValue');
+        $this->element = $doc->createElementNS(SAML2_Constants::NS_SAML, 'saml:AttributeValue');
         SAML2_Utils::copyElement($value, $this->element);
     }
 
@@ -59,7 +59,7 @@ class SAML2_XML_saml_AttributeValue implements Serializable
     public function toXML(DOMElement $parent)
     {
         assert('$this->element instanceof DOMElement');
-        assert('$this->element->namespaceURI === SAML2_Const::NS_SAML && $this->element->localName === "AttributeValue"');
+        assert('$this->element->namespaceURI === SAML2_Constants::NS_SAML && $this->element->localName === "AttributeValue"');
 
         $v = SAML2_Utils::copyElement($this->element, $parent);
 

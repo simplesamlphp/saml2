@@ -28,13 +28,13 @@ abstract class SAML2_Binding
         assert('is_string($urn)');
 
         switch ($urn) {
-            case SAML2_Const::BINDING_HTTP_POST:
+            case SAML2_Constants::BINDING_HTTP_POST:
                 return new SAML2_HTTPPost();
-            case SAML2_Const::BINDING_HTTP_REDIRECT:
+            case SAML2_Constants::BINDING_HTTP_REDIRECT:
                 return new SAML2_HTTPRedirect();
-            case SAML2_Const::BINDING_HTTP_ARTIFACT:
+            case SAML2_Constants::BINDING_HTTP_ARTIFACT:
                 return new SAML2_HTTPArtifact();
-            case SAML2_Const::BINDING_HOK_SSO:
+            case SAML2_Constants::BINDING_HOK_SSO:
                 return new SAML2_HTTPPost();
             default:
                 throw new Exception('Unsupported binding: ' . var_export($urn, TRUE));

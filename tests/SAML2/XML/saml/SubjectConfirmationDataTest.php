@@ -33,7 +33,7 @@ class SAML2_XML_saml_SubjectConfirmationDataTest extends \PHPUnit_Framework_Test
 
     public function testUnmarshalling()
     {
-        $samlNamespace = SAML2_Const::NS_SAML;
+        $samlNamespace = SAML2_Constants::NS_SAML;
         $document = SAML2_DOMDocumentFactory::fromString(<<<XML
 <saml:SubjectConfirmationData
     xmlns:saml="{$samlNamespace}"

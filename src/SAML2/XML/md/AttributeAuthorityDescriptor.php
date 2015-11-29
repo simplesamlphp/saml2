@@ -77,9 +77,9 @@ class SAML2_XML_md_AttributeAuthorityDescriptor extends SAML2_XML_md_RoleDescrip
             $this->AssertionIDRequestService[] = new SAML2_XML_md_EndpointType($ep);
         }
 
-        $this->NameIDFormat = SAML2_Utils::extractStrings($xml, SAML2_Const::NS_MD, 'NameIDFormat');
+        $this->NameIDFormat = SAML2_Utils::extractStrings($xml, SAML2_Constants::NS_MD, 'NameIDFormat');
 
-        $this->AttributeProfile = SAML2_Utils::extractStrings($xml, SAML2_Const::NS_MD, 'AttributeProfile');
+        $this->AttributeProfile = SAML2_Utils::extractStrings($xml, SAML2_Constants::NS_MD, 'AttributeProfile');
 
         foreach (SAML2_Utils::xpQuery($xml, './saml_assertion:Attribute') as $a) {
             $this->Attribute[] = new SAML2_XML_saml_Attribute($a);
@@ -111,9 +111,9 @@ class SAML2_XML_md_AttributeAuthorityDescriptor extends SAML2_XML_md_RoleDescrip
             $ep->toXML($e, 'md:AssertionIDRequestService');
         }
 
-        SAML2_Utils::addStrings($e, SAML2_Const::NS_MD, 'md:NameIDFormat', FALSE, $this->NameIDFormat);
+        SAML2_Utils::addStrings($e, SAML2_Constants::NS_MD, 'md:NameIDFormat', FALSE, $this->NameIDFormat);
 
-        SAML2_Utils::addStrings($e, SAML2_Const::NS_MD, 'md:AttributeProfile', FALSE, $this->AttributeProfile);
+        SAML2_Utils::addStrings($e, SAML2_Constants::NS_MD, 'md:AttributeProfile', FALSE, $this->AttributeProfile);
 
         foreach ($this->Attribute as $a) {
             $a->toXML($e);

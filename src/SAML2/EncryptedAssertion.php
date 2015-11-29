@@ -107,7 +107,7 @@ class SAML2_EncryptedAssertion
             $document = $parentElement->ownerDocument;
         }
 
-        $root = $document->createElementNS(SAML2_Const::NS_SAML, 'saml:' . 'EncryptedAssertion');
+        $root = $document->createElementNS(SAML2_Constants::NS_SAML, 'saml:' . 'EncryptedAssertion');
         $parentElement->appendChild($root);
 
         $root->appendChild($document->importNode($this->encryptedData, TRUE));

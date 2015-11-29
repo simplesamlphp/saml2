@@ -179,10 +179,10 @@ class SAML2_Utils
 
         if ($xpCache === NULL || !$xpCache->document->isSameNode($doc)) {
             $xpCache = new DOMXPath($doc);
-            $xpCache->registerNamespace('soap-env', SAML2_Const::NS_SOAP);
-            $xpCache->registerNamespace('saml_protocol', SAML2_Const::NS_SAMLP);
-            $xpCache->registerNamespace('saml_assertion', SAML2_Const::NS_SAML);
-            $xpCache->registerNamespace('saml_metadata', SAML2_Const::NS_MD);
+            $xpCache->registerNamespace('soap-env', SAML2_Constants::NS_SOAP);
+            $xpCache->registerNamespace('saml_protocol', SAML2_Constants::NS_SAMLP);
+            $xpCache->registerNamespace('saml_assertion', SAML2_Constants::NS_SAML);
+            $xpCache->registerNamespace('saml_metadata', SAML2_Constants::NS_MD);
             $xpCache->registerNamespace('ds', XMLSecurityDSig::XMLDSIGNS);
             $xpCache->registerNamespace('xenc', XMLSecEnc::XMLENCNS);
         }
@@ -287,7 +287,7 @@ class SAML2_Utils
     {
         assert('array_key_exists("Value", $nameId)');
 
-        $xml = SAML2_Utils::addString($node, SAML2_Const::NS_SAML, 'saml:NameID', $nameId['Value']);
+        $xml = SAML2_Utils::addString($node, SAML2_Constants::NS_SAML, 'saml:NameID', $nameId['Value']);
 
         if (array_key_exists('NameQualifier', $nameId) && $nameId['NameQualifier'] !== NULL) {
             $xml->setAttribute('NameQualifier', $nameId['NameQualifier']);

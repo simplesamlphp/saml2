@@ -20,7 +20,7 @@ class SAML2_Assertion_Validation_ConstraintValidator_SubjectConfirmationTest ext
      */
     public function a_subject_confirmation_with_bearer_method_is_valid()
     {
-        $this->subjectConfirmation->Method = SAML2_Const::CM_BEARER;
+        $this->subjectConfirmation->Method = SAML2_Constants::CM_BEARER;
 
         $validator = new SAML2_Assertion_Validation_ConstraintValidator_SubjectConfirmationMethod();
         $result = new SAML2_Assertion_Validation_Result();
@@ -36,7 +36,7 @@ class SAML2_Assertion_Validation_ConstraintValidator_SubjectConfirmationTest ext
      */
     public function a_subject_confirmation_with_holder_of_key_method_is_not_valid()
     {
-        $this->subjectConfirmation->Method = SAML2_Const::CM_HOK;
+        $this->subjectConfirmation->Method = SAML2_Constants::CM_HOK;
 
         $validator = new SAML2_Assertion_Validation_ConstraintValidator_SubjectConfirmationMethod();
         $result    = new SAML2_Assertion_Validation_Result();

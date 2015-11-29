@@ -111,7 +111,7 @@ class SAML2_XML_saml_SubjectConfirmationData
         assert('is_null($this->InResponseTo) || is_string($this->InResponseTo)');
         assert('is_null($this->Address) || is_string($this->Address)');
 
-        $e = $parent->ownerDocument->createElementNS(SAML2_Const::NS_SAML, 'saml:SubjectConfirmationData');
+        $e = $parent->ownerDocument->createElementNS(SAML2_Constants::NS_SAML, 'saml:SubjectConfirmationData');
         $parent->appendChild($e);
 
         if (isset($this->NotBefore)) {

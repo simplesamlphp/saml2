@@ -36,7 +36,7 @@ class SAML2_XML_md_EndpointTypeTest extends PHPUnit_Framework_TestCase
 
     public function testUnmarshalling()
     {
-        $mdNamespace = SAML2_Const::NS_MD;
+        $mdNamespace = SAML2_Constants::NS_MD;
         $document = SAML2_DOMDocumentFactory::fromString(
 <<<XML
 <md:Test xmlns:md="{$mdNamespace}" Binding="urn:something" Location="https://whatever/" xmlns:test="urn:test" test:attr="value" />

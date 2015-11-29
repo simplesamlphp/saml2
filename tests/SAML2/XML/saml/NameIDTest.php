@@ -28,7 +28,7 @@ class SAML2_XML_md_NameIDTest extends \PHPUnit_Framework_TestCase
 
     public function testUnmarshalling()
     {
-        $samlNamespace = SAML2_Const::NS_SAML;
+        $samlNamespace = SAML2_Constants::NS_SAML;
         $document = SAML2_DOMDocumentFactory::fromString(<<<XML
 <saml:NameID xmlns:saml="{$samlNamespace}" NameQualifier="TheNameQualifier" SPNameQualifier="TheSPNameQualifier" Format="TheFormat" SPProvidedID="TheSPProvidedID">TheNameIDValue</saml:NameID>
 XML

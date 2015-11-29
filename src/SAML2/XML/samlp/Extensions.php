@@ -35,7 +35,7 @@ class SAML2_XML_samlp_Extensions
             return;
         }
 
-        $extElement = $parent->ownerDocument->createElementNS(SAML2_Const::NS_SAMLP, 'samlp:Extensions');
+        $extElement = $parent->ownerDocument->createElementNS(SAML2_Constants::NS_SAMLP, 'samlp:Extensions');
         $parent->appendChild($extElement);
 
         foreach ($extensions as $ext) {
