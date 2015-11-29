@@ -2,6 +2,7 @@
 
 namespace SAML2\Response;
 
+use Psr\Log\LoggerInterface;
 use SAML2\Assertion\ProcessorBuilder;
 use SAML2\Configuration\Destination;
 use SAML2\Configuration\IdentityProvider;
@@ -51,7 +52,7 @@ class Processor
      * @param \Psr\Log\LoggerInterface        $logger
      *
      */
-    public function __construct(\Psr\Log\LoggerInterface $logger)
+    public function __construct(LoggerInterface $logger)
     {
         $this->logger = $logger;
 

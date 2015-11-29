@@ -2,7 +2,9 @@
 
 namespace SAML2\Compat\Ssp;
 
-class Logger implements Psr\Log\LoggerInterface
+use Psr\Log\LoggerInterface;
+
+class Logger implements LoggerInterface
 {
     /**
      * System is unusable.

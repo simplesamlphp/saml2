@@ -2,6 +2,7 @@
 
 namespace SAML2\Signature;
 
+use Psr\Log\LoggerInterface;
 use SAML2\Certificate\FingerprintLoader;
 use SAML2\Certificate\X509;
 use SAML2\Configuration\CertificateProvider;
@@ -23,7 +24,7 @@ class FingerprintValidator extends AbstractChainedValidator
     private $fingerprintLoader;
 
     public function __construct(
-        \Psr\Log\LoggerInterface $logger,
+        LoggerInterface $logger,
         FingerprintLoader $fingerprintLoader
     ) {
         $this->fingerprintLoader = $fingerprintLoader;

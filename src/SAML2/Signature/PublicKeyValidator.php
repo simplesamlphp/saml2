@@ -2,6 +2,7 @@
 
 namespace SAML2\Signature;
 
+use Psr\Log\LoggerInterface;
 use SAML2\Certificate\Key;
 use SAML2\Certificate\KeyLoader;
 use SAML2\Certificate\X509;
@@ -20,7 +21,7 @@ class PublicKeyValidator extends AbstractChainedValidator
      */
     private $keyLoader;
 
-    public function __construct(\Psr\Log\LoggerInterface $logger, KeyLoader $keyLoader)
+    public function __construct(LoggerInterface $logger, KeyLoader $keyLoader)
     {
         $this->keyLoader = $keyLoader;
 

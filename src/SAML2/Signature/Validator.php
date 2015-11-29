@@ -2,6 +2,7 @@
 
 namespace SAML2\Signature;
 
+use Psr\Log\LoggerInterface;
 use SAML2\Certificate\FingerprintLoader;
 use SAML2\Certificate\KeyLoader;
 use SAML2\Configuration\CertificateProvider;
@@ -17,7 +18,7 @@ class Validator
      */
     private $logger;
 
-    public function __construct(\Psr\Log\LoggerInterface $logger)
+    public function __construct(LoggerInterface $logger)
     {
         $this->logger = $logger;
     }

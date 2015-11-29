@@ -2,6 +2,7 @@
 
 namespace SAML2\Assertion\Transformer;
 
+use Psr\Log\LoggerInterface;
 use SAML2\Assertion;
 use SAML2\Assertion\Exception\NotDecryptedException;
 use SAML2\Certificate\PrivateKeyLoader;
@@ -36,7 +37,7 @@ class NameIdDecryptionTransformer implements
     private $logger;
 
     public function __construct(
-        \Psr\Log\LoggerInterface $logger,
+        LoggerInterface $logger,
         PrivateKeyLoader $privateKeyLoader
     ) {
         $this->privateKeyLoader = $privateKeyLoader;

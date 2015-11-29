@@ -7,7 +7,7 @@ use SAML2\Compat\AbstractContainer;
 class Container extends AbstractContainer
 {
     /**
-     * @var Psr\Log\LoggerInterface
+     * @var \Psr\Log\LoggerInterface
      */
     protected $logger;
 

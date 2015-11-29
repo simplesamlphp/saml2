@@ -39,7 +39,7 @@ class MockContainer extends AbstractContainer
 
     /**
      * Get a PSR-3 compatible logger.
-     * @return Psr\Log\LoggerInterface
+     * @return \Psr\Log\LoggerInterface
      */
     public function getLogger()
     {

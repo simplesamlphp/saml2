@@ -2,6 +2,7 @@
 
 namespace SAML2\Assertion;
 
+use Psr\Log\LoggerInterface;
 use SAML2\Assertion;
 use SAML2\Assertion\Exception\InvalidAssertionException;
 use SAML2\Assertion\Exception\InvalidSubjectConfirmationException;
@@ -61,7 +62,7 @@ class Processor
         SubjectConfirmationValidator $subjectConfirmationValidator,
         Transformer $transformer,
         IdentityProvider $identityProviderConfiguration,
-        \Psr\Log\LoggerInterface $logger
+        LoggerInterface $logger
     ) {
         $this->assertionValidator            = $assertionValidator;
         $this->signatureValidator            = $signatureValidator;
