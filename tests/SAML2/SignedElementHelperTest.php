@@ -2,6 +2,8 @@
 
 namespace SAML2;
 
+use RobRichards\XMLSecLibs\XMLSecurityDSig;
+
 /**
  * Class \SAML2\SignedElementHelperTest
  */

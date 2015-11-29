@@ -2,6 +2,8 @@
 
 namespace SAML2;
 
+use RobRichards\XMLSecLibs\XMLSecurityKey;
+
 /**
  * Class \SAML2\CertificatesMock
  */

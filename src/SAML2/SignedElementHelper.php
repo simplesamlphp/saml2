@@ -2,6 +2,8 @@
 
 namespace SAML2;
 
+use RobRichards\XMLSecLibs\XMLSecurityKey;
+
 /**
  * Helper class for processing signed elements.
  *

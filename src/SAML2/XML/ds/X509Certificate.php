@@ -2,6 +2,7 @@
 
 namespace SAML2\XML\ds;
 
+use RobRichards\XMLSecLibs\XMLSecurityDSig;
 use SAML2\Utils;
 
 /**

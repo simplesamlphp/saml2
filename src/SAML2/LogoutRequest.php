@@ -2,6 +2,9 @@
 
 namespace SAML2;
 
+use RobRichards\XMLSecLibs\XMLSecEnc;
+use RobRichards\XMLSecLibs\XMLSecurityKey;
+
 /**
  * Class for SAML 2 logout request messages.
  *

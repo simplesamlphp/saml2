@@ -2,6 +2,8 @@
 
 namespace SAML2\Configuration;
 
+use RobRichards\XMLSecLibs\XMLSecurityKey;
+
 /**
  * Basic Configuration Wrapper
  */

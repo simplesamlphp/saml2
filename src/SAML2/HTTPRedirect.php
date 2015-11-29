@@ -2,6 +2,8 @@
 
 namespace SAML2;
 
+use RobRichards\XMLSecLibs\XMLSecurityKey;
+
 /**
  * Class which implements the HTTP-Redirect binding.
  *
