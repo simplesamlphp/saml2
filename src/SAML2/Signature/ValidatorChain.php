@@ -2,6 +2,7 @@
 
 namespace SAML2\Signature;
 
+use Psr\Log\LoggerInterface;
 use SAML2\Configuration\CertificateProvider;
 use SAML2\SignedElement;
 
@@ -27,7 +28,7 @@ class ValidatorChain implements ValidatorInterface
      * @param \Psr\Log\LoggerInterface           $logger
      * @param \SAML2\Signature\ChainedValidator[] $validators
      */
-    public function __construct(\Psr\Log\LoggerInterface $logger, array $validators)
+    public function __construct(LoggerInterface $logger, array $validators)
     {
         $this->logger = $logger;
 

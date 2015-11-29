@@ -6,7 +6,7 @@ abstract class AbstractContainer
 {
     /**
      * Get a PSR-3 compatible logger.
-     * @return Psr\Log\LoggerInterface
+     * @return \Psr\Log\LoggerInterface
      */
     abstract public function getLogger();
 

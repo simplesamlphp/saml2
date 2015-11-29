@@ -2,6 +2,7 @@
 
 namespace SAML2\Assertion;
 
+use Psr\Log\LoggerInterface;
 use SAML2\Assertion\Transformer\DecodeBase64Transformer;
 use SAML2\Assertion\Transformer\NameIdDecryptionTransformer;
 use SAML2\Assertion\Transformer\TransformerChain;
@@ -33,7 +34,7 @@ use SAML2\Signature\Validator;
 class ProcessorBuilder
 {
     public static function build(
-        Psr\Log\LoggerInterface $logger,
+        LoggerInterface $logger,
         Validator $signatureValidator,
         Destination $currentDestination,
         IdentityProvider $identityProvider,
@@ -112,7 +113,7 @@ class ProcessorBuilder
     }
 
     private static function createAssertionTransformerChain(
-        \Psr\Log\LoggerInterface $logger,
+        LoggerInterface $logger,
         PrivateKeyLoader $keyloader,
         IdentityProvider $identityProvider,
         ServiceProvider $serviceProvider
