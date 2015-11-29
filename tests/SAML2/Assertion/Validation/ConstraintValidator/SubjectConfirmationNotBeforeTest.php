@@ -1,5 +1,10 @@
 <?php
 
+namespace SAML2\Assertion\Validation\ConstraintValidator;
+
+use SAML2\ControlledTimeTest;
+use SAML2\Assertion\Validation\Result;
+
 use \Mockery as m;
 
 /**
@@ -8,7 +13,7 @@ use \Mockery as m;
  *
  * @runTestsInSeparateProcesses
  */
-class SAML2_Assertion_Validation_ConstraintValidator_SubjectConfirmationNotBeforeTest extends SAML2_ControlledTimeTest
+class SubjectConfirmationNotBeforeTest extends ControlledTimeTest
 {
     /**
      * @var \Mockery\MockInterface
@@ -36,8 +41,8 @@ class SAML2_Assertion_Validation_ConstraintValidator_SubjectConfirmationNotBefor
     {
         $this->subjectConfirmation->SubjectConfirmationData->NotBefore = $this->currentTime + 61;
 
-        $validator = new SAML2_Assertion_Validation_ConstraintValidator_SubjectConfirmationNotBefore();
-        $result    = new SAML2_Assertion_Validation_Result();
+        $validator = new SubjectConfirmationNotBefore();
+        $result    = new Result();
 
         $validator->validate($this->subjectConfirmation, $result);
 
@@ -53,8 +58,8 @@ class SAML2_Assertion_Validation_ConstraintValidator_SubjectConfirmationNotBefor
     {
         $this->subjectConfirmation->SubjectConfirmationData->NotBefore = $this->currentTime + 60;
 
-        $validator = new SAML2_Assertion_Validation_ConstraintValidator_SubjectConfirmationNotBefore();
-        $result    = new SAML2_Assertion_Validation_Result();
+        $validator = new SubjectConfirmationNotBefore();
+        $result    = new Result();
 
         $validator->validate($this->subjectConfirmation, $result);
 
@@ -69,8 +74,8 @@ class SAML2_Assertion_Validation_ConstraintValidator_SubjectConfirmationNotBefor
     {
         $this->subjectConfirmation->SubjectConfirmationData->NotBefore = $this->currentTime;
 
-        $validator = new SAML2_Assertion_Validation_ConstraintValidator_SubjectConfirmationNotBefore();
-        $result    = new SAML2_Assertion_Validation_Result();
+        $validator = new SubjectConfirmationNotBefore();
+        $result    = new Result();
 
         $validator->validate($this->subjectConfirmation, $result);
 

@@ -1,9 +1,16 @@
 <?php
 
+namespace SAML2\Signature;
+
+use SAML2\Certificate\FingerprintLoader;
+use SAML2\SignedElement;
+use SAML2\Configuration\CertificateProvider;
+use SAML2\Certificate\X509;
+
 /**
  * Validates the signature based on the fingerprint of the certificate
  */
-class SAML2_Signature_FingerprintValidator extends SAML2_Signature_AbstractChainedValidator
+class FingerprintValidator extends AbstractChainedValidator
 {
     /**
      * @var array
@@ -11,13 +18,13 @@ class SAML2_Signature_FingerprintValidator extends SAML2_Signature_AbstractChain
     private $certificates;
 
     /**
-     * @var SAML2_Certificate_FingerprintLoader
+     * @var \SAML2\Certificate\FingerprintLoader
      */
     private $fingerprintLoader;
 
     public function __construct(
         \Psr\Log\LoggerInterface $logger,
-        SAML2_Certificate_FingerprintLoader $fingerprintLoader
+        FingerprintLoader $fingerprintLoader
     ) {
         $this->fingerprintLoader = $fingerprintLoader;
 
@@ -25,8 +32,8 @@ class SAML2_Signature_FingerprintValidator extends SAML2_Signature_AbstractChain
     }
 
     public function canValidate(
-        SAML2_SignedElement $signedElement,
-        SAML2_Configuration_CertificateProvider $configuration
+        SignedElement $signedElement,
+        CertificateProvider $configuration
     ) {
         if ($configuration->getCertificateFingerprints() === NULL) {
             $this->logger->debug(
@@ -48,24 +55,24 @@ class SAML2_Signature_FingerprintValidator extends SAML2_Signature_AbstractChain
     }
 
     /**
-     * @param SAML2_SignedElement             $signedElement
-     * @param SAML2_Configuration_CertificateProvider $configuration
+     * @param \SAML2\SignedElement             $signedElement
+     * @param \SAML2\Configuration\CertificateProvider $configuration
      *
      * @return bool
      */
     public function hasValidSignature(
-        SAML2_SignedElement $signedElement,
-        SAML2_Configuration_CertificateProvider $configuration
+        SignedElement $signedElement,
+        CertificateProvider $configuration
     ) {
         $this->certificates = array_map(function ($certificate) {
-            return SAML2_Certificate_X509::createFromCertificateData($certificate);
+            return X509::createFromCertificateData($certificate);
         }, $this->certificates);
 
         $fingerprintCollection = $this->fingerprintLoader->loadFromConfiguration($configuration);
 
         $pemCandidates = array();
         foreach ($this->certificates as $certificate) {
-            /** @var SAML2_Certificate_X509 $certificate */
+            /** @var \SAML2\Certificate\X509 $certificate */
             $certificateFingerprint = $certificate->getFingerprint();
             if ($fingerprintCollection->contains($certificateFingerprint)) {
                 $pemCandidates[] = $certificate;

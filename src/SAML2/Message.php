@@ -1,5 +1,10 @@
 <?php
 
+namespace SAML2;
+
+use SAML2\Utilities\Temporal;
+use SAML2\XML\samlp\Extensions;
+
 /**
  * Base class for all SAML 2 messages.
  *
@@ -10,7 +15,7 @@
  *
  * @SuppressWarnings(PHPMD.ExcessiveClassComplexity)
  */
-abstract class SAML2_Message implements SAML2_SignedElement
+abstract class Message implements SignedElement
 {
     /**
      * Request extensions.
@@ -54,7 +59,7 @@ abstract class SAML2_Message implements SAML2_SignedElement
      *
      * @var string|NULL
      */
-    private $consent = SAML2_Constants::CONSENT_UNSPECIFIED;
+    private $consent = Constants::CONSENT_UNSPECIFIED;
 
     /**
      * The entity id of the issuer of this message, or NULL if unknown.
@@ -127,8 +132,8 @@ abstract class SAML2_Message implements SAML2_SignedElement
         assert('is_string($tagName)');
         $this->tagName = $tagName;
 
-        $this->id = SAML2_Utils::getContainer()->generateId();
-        $this->issueInstant = SAML2_Utilities_Temporal::getTime();
+        $this->id = Utils::getContainer()->generateId();
+        $this->issueInstant = Temporal::getTime();
         $this->certificates = array();
         $this->validators = array();
 
@@ -146,7 +151,7 @@ abstract class SAML2_Message implements SAML2_SignedElement
             throw new Exception('Unsupported version: ' . $xml->getAttribute('Version'));
         }
 
-        $this->issueInstant = SAML2_Utils::xsDateTimeToTimestamp($xml->getAttribute('IssueInstant'));
+        $this->issueInstant = Utils::xsDateTimeToTimestamp($xml->getAttribute('IssueInstant'));
 
         if ($xml->hasAttribute('Destination')) {
             $this->destination = $xml->getAttribute('Destination');
@@ -156,14 +161,14 @@ abstract class SAML2_Message implements SAML2_SignedElement
             $this->consent = $xml->getAttribute('Consent');
         }
 
-        $issuer = SAML2_Utils::xpQuery($xml, './saml_assertion:Issuer');
+        $issuer = Utils::xpQuery($xml, './saml_assertion:Issuer');
         if (!empty($issuer)) {
             $this->issuer = trim($issuer[0]->textContent);
         }
 
         /* Validate the signature element of the message. */
         try {
-            $sig = SAML2_Utils::validateElement($xml);
+            $sig = Utils::validateElement($xml);
 
             if ($sig !== FALSE) {
                 $this->messageContainedSignatureUponConstruction = TRUE;
@@ -178,7 +183,7 @@ abstract class SAML2_Message implements SAML2_SignedElement
             /* Ignore signature validation errors. */
         }
 
-        $this->extensions = SAML2_XML_samlp_Extensions::getList($xml);
+        $this->extensions = Extensions::getList($xml);
     }
 
     /**
@@ -307,7 +312,7 @@ abstract class SAML2_Message implements SAML2_SignedElement
      * Set the given consent for this message.
      *
      * Most likely (though not required) a value of rn:oasis:names:tc:SAML:2.0:consent.
-     * @see SAML2_Constants
+     * @see \SAML2\Constants
      *
      * @param string $consent
      */
@@ -322,7 +327,7 @@ abstract class SAML2_Message implements SAML2_SignedElement
      * Set the given consent for this message.
      *
      * Most likely (though not required) a value of rn:oasis:names:tc:SAML:2.0:consent.
-     * @see SAML2_Constants
+     * @see \SAML2\Constants
      *
      * @return string Consent
      */
@@ -394,14 +399,14 @@ abstract class SAML2_Message implements SAML2_SignedElement
      */
     public function toUnsignedXML()
     {
-        $this->document = SAML2_DOMDocumentFactory::create();
+        $this->document = DOMDocumentFactory::create();
 
-        $root = $this->document->createElementNS(SAML2_Constants::NS_SAMLP, 'samlp:' . $this->tagName);
+        $root = $this->document->createElementNS(Constants::NS_SAMLP, 'samlp:' . $this->tagName);
         $this->document->appendChild($root);
 
         /* Ugly hack to add another namespace declaration to the root element. */
-        $root->setAttributeNS(SAML2_Constants::NS_SAML, 'saml:tmp', 'tmp');
-        $root->removeAttributeNS(SAML2_Constants::NS_SAML, 'tmp');
+        $root->setAttributeNS(Constants::NS_SAML, 'saml:tmp', 'tmp');
+        $root->removeAttributeNS(Constants::NS_SAML, 'tmp');
 
         $root->setAttribute('ID', $this->id);
         $root->setAttribute('Version', '2.0');
@@ -410,16 +415,16 @@ abstract class SAML2_Message implements SAML2_SignedElement
         if ($this->destination !== NULL) {
             $root->setAttribute('Destination', $this->destination);
         }
-        if ($this->consent !== NULL && $this->consent !== SAML2_Constants::CONSENT_UNSPECIFIED) {
+        if ($this->consent !== NULL && $this->consent !== Constants::CONSENT_UNSPECIFIED) {
             $root->setAttribute('Consent', $this->consent);
         }
 
         if ($this->issuer !== NULL) {
-            SAML2_Utils::addString($root, SAML2_Constants::NS_SAML, 'saml:Issuer', $this->issuer);
+            Utils::addString($root, Constants::NS_SAML, 'saml:Issuer', $this->issuer);
         }
 
         if (!empty($this->extensions)) {
-            SAML2_XML_samlp_Extensions::addList($root, $this->extensions);
+            Extensions::addList($root, $this->extensions);
         }
 
         return $root;
@@ -458,7 +463,7 @@ abstract class SAML2_Message implements SAML2_SignedElement
         }
 
 
-        SAML2_Utils::insertSignature($this->signatureKey, $this->certificates, $root, $insertBefore);
+        Utils::insertSignature($this->signatureKey, $this->certificates, $root, $insertBefore);
 
         return $root;
     }
@@ -516,30 +521,30 @@ abstract class SAML2_Message implements SAML2_SignedElement
      * Convert an XML element into a message.
      *
      * @param  DOMElement    $xml The root XML element.
-     * @return SAML2_Message The message.
+     * @return \SAML2\Message The message.
      * @throws Exception
      */
     public static function fromXML(DOMElement $xml)
     {
-        if ($xml->namespaceURI !== SAML2_Constants::NS_SAMLP) {
+        if ($xml->namespaceURI !== Constants::NS_SAMLP) {
             throw new Exception('Unknown namespace of SAML message: ' . var_export($xml->namespaceURI, TRUE));
         }
 
         switch ($xml->localName) {
             case 'AttributeQuery':
-                return new SAML2_AttributeQuery($xml);
+                return new AttributeQuery($xml);
             case 'AuthnRequest':
-                return new SAML2_AuthnRequest($xml);
+                return new AuthnRequest($xml);
             case 'LogoutResponse':
-                return new SAML2_LogoutResponse($xml);
+                return new LogoutResponse($xml);
             case 'LogoutRequest':
-                return new SAML2_LogoutRequest($xml);
+                return new LogoutRequest($xml);
             case 'Response':
-                return new SAML2_Response($xml);
+                return new Response($xml);
             case 'ArtifactResponse':
-                return new SAML2_ArtifactResponse($xml);
+                return new ArtifactResponse($xml);
             case 'ArtifactResolve':
-                return new SAML2_ArtifactResolve($xml);
+                return new ArtifactResolve($xml);
             default:
                 throw new Exception('Unknown SAML message: ' . var_export($xml->localName, TRUE));
         }
@@ -549,7 +554,7 @@ abstract class SAML2_Message implements SAML2_SignedElement
     /**
      * Retrieve the Extensions.
      *
-     * @return SAML2_XML_samlp_Extensions.
+     * @return \SAML2\XML\samlp\Extensions.
      */
     public function getExtensions()
     {

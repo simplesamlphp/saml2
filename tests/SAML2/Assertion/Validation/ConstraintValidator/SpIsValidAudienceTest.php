@@ -1,12 +1,16 @@
 <?php
 
+namespace SAML2\Assertion\Validation\ConstraintValidator;
+
+use SAML2\Assertion\Validation\Result;
+
 use \Mockery as m;
 
 /**
  * Because we're mocking a static call, we have to run it in separate processes so as to no contaminate the other
  * tests.
  */
-class SAML2_Assertion_Validation_ConstraintValidator_SpIsValidAudienceTest extends \PHPUnit_Framework_TestCase
+class SpIsValidAudienceTest extends \PHPUnit_Framework_TestCase
 {
     /**
      * @var \Mockery\MockInterface
@@ -34,9 +38,9 @@ class SAML2_Assertion_Validation_ConstraintValidator_SpIsValidAudienceTest exten
         $this->assertion->shouldReceive('getValidAudiences')->andReturn(null);
         $this->serviceProvider->shouldReceive('getEntityId')->andReturn('entityId');
 
-        $validator = new SAML2_Assertion_Validation_ConstraintValidator_SpIsValidAudience();
+        $validator = new SpIsValidAudience();
         $validator->setServiceProvider($this->serviceProvider);
-        $result    = new SAML2_Assertion_Validation_Result();
+        $result    = new Result();
 
         $validator->validate($this->assertion, $result);
 
@@ -52,9 +56,9 @@ class SAML2_Assertion_Validation_ConstraintValidator_SpIsValidAudienceTest exten
         $this->assertion->shouldReceive('getValidAudiences')->andReturn(array('someEntityId'));
         $this->serviceProvider->shouldReceive('getEntityId')->andReturn('anotherEntityId');
 
-        $validator = new SAML2_Assertion_Validation_ConstraintValidator_SpIsValidAudience();
+        $validator = new SpIsValidAudience();
         $validator->setServiceProvider($this->serviceProvider);
-        $result    = new SAML2_Assertion_Validation_Result();
+        $result    = new Result();
 
         $validator->validate($this->assertion, $result);
 
@@ -71,9 +75,9 @@ class SAML2_Assertion_Validation_ConstraintValidator_SpIsValidAudienceTest exten
         $this->assertion->shouldReceive('getValidAudiences')->andReturn(array('foo', 'bar', 'validEntityId', 'baz'));
         $this->serviceProvider->shouldReceive('getEntityId')->andReturn('validEntityId');
 
-        $validator = new SAML2_Assertion_Validation_ConstraintValidator_SpIsValidAudience();
+        $validator = new SpIsValidAudience();
         $validator->setServiceProvider($this->serviceProvider);
-        $result    = new SAML2_Assertion_Validation_Result();
+        $result    = new Result();
 
         $validator->validate($this->assertion, $result);
 

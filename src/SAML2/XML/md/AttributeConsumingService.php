@@ -1,11 +1,16 @@
 <?php
 
+namespace SAML2\XML\md;
+
+use SAML2\Utils;
+use SAML2\Constants;
+
 /**
  * Class representing SAML 2 Metadata AttributeConsumingService element.
  *
  * @package SimpleSAMLphp
  */
-class SAML2_XML_md_AttributeConsumingService
+class AttributeConsumingService
 {
     /**
      * The index of this AttributeConsumingService.
@@ -44,7 +49,7 @@ class SAML2_XML_md_AttributeConsumingService
      *
      * This is an array of SAML_RequestedAttributeType elements.
      *
-     * @var SAML2_XML_md_RequestedAttribute[]
+     * @var \SAML2\XML\md\RequestedAttribute[]
      */
     public $RequestedAttribute = array();
 
@@ -65,17 +70,17 @@ class SAML2_XML_md_AttributeConsumingService
         }
         $this->index = (int) $xml->getAttribute('index');
 
-        $this->isDefault = SAML2_Utils::parseBoolean($xml, 'isDefault', NULL);
+        $this->isDefault = Utils::parseBoolean($xml, 'isDefault', NULL);
 
-        $this->ServiceName = SAML2_Utils::extractLocalizedStrings($xml, SAML2_Constants::NS_MD, 'ServiceName');
+        $this->ServiceName = Utils::extractLocalizedStrings($xml, Constants::NS_MD, 'ServiceName');
         if (empty($this->ServiceName)) {
             throw new Exception('Missing ServiceName in AttributeConsumingService.');
         }
 
-        $this->ServiceDescription = SAML2_Utils::extractLocalizedStrings($xml, SAML2_Constants::NS_MD, 'ServiceDescription');
+        $this->ServiceDescription = Utils::extractLocalizedStrings($xml, Constants::NS_MD, 'ServiceDescription');
 
-        foreach (SAML2_Utils::xpQuery($xml, './saml_metadata:RequestedAttribute') as $ra) {
-            $this->RequestedAttribute[] = new SAML2_XML_md_RequestedAttribute($ra);
+        foreach (Utils::xpQuery($xml, './saml_metadata:RequestedAttribute') as $ra) {
+            $this->RequestedAttribute[] = new RequestedAttribute($ra);
         }
     }
 
@@ -95,7 +100,7 @@ class SAML2_XML_md_AttributeConsumingService
 
         $doc = $parent->ownerDocument;
 
-        $e = $doc->createElementNS(SAML2_Constants::NS_MD, 'md:AttributeConsumingService');
+        $e = $doc->createElementNS(Constants::NS_MD, 'md:AttributeConsumingService');
         $parent->appendChild($e);
 
         $e->setAttribute('index', (string) $this->index);
@@ -106,8 +111,8 @@ class SAML2_XML_md_AttributeConsumingService
             $e->setAttribute('isDefault', 'false');
         }
 
-        SAML2_Utils::addStrings($e, SAML2_Constants::NS_MD, 'md:ServiceName', TRUE, $this->ServiceName);
-        SAML2_Utils::addStrings($e, SAML2_Constants::NS_MD, 'md:ServiceDescription', TRUE, $this->ServiceDescription);
+        Utils::addStrings($e, Constants::NS_MD, 'md:ServiceName', TRUE, $this->ServiceName);
+        Utils::addStrings($e, Constants::NS_MD, 'md:ServiceDescription', TRUE, $this->ServiceDescription);
 
         foreach ($this->RequestedAttribute as $ra) {
             $ra->toXML($e);

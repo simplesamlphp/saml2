@@ -1,12 +1,14 @@
 <?php
 
+namespace SAML2\XML\mdui;
+
 /**
  * Class for handling the Keywords metadata extensions for login and discovery user interface
  *
  * @link: http://docs.oasis-open.org/security/saml/Post2.0/sstc-saml-metadata-ui/v1.0/sstc-saml-metadata-ui-v1.0.pdf
  * @package SimpleSAMLphp
  */
-class SAML2_XML_mdui_Keywords
+class Keywords
 {
     /**
      * The keywords of this item.
@@ -61,7 +63,7 @@ class SAML2_XML_mdui_Keywords
 
         $doc = $parent->ownerDocument;
 
-        $e = $doc->createElementNS(SAML2_XML_mdui_UIInfo::NS, 'mdui:Keywords');
+        $e = $doc->createElementNS(UIInfo::NS, 'mdui:Keywords');
         $e->setAttribute('xml:lang', $this->lang);
         $value = '';
         foreach ($this->Keywords as $keyword) {

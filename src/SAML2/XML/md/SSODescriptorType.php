@@ -1,18 +1,23 @@
 <?php
 
+namespace SAML2\XML\md;
+
+use SAML2\Utils;
+use SAML2\Constants;
+
 /**
  * Class representing SAML 2 SSODescriptorType.
  *
  * @package SimpleSAMLphp
  */
-abstract class SAML2_XML_md_SSODescriptorType extends SAML2_XML_md_RoleDescriptor
+abstract class SSODescriptorType extends RoleDescriptor
 {
     /**
      * List of ArtifactResolutionService endpoints.
      *
      * Array with IndexedEndpointType objects.
      *
-     * @var SAML2_XML_md_IndexedEndpointType[]
+     * @var \SAML2\XML\md\IndexedEndpointType[]
      */
     public $ArtifactResolutionService = array();
 
@@ -21,7 +26,7 @@ abstract class SAML2_XML_md_SSODescriptorType extends SAML2_XML_md_RoleDescripto
      *
      * Array with EndpointType objects.
      *
-     * @var SAML2_XML_md_EndpointType[]
+     * @var \SAML2\XML\md\EndpointType[]
      */
     public $SingleLogoutService = array();
 
@@ -30,7 +35,7 @@ abstract class SAML2_XML_md_SSODescriptorType extends SAML2_XML_md_RoleDescripto
      *
      * Array with EndpointType objects.
      *
-     * @var SAML2_XML_md_EndpointType[]
+     * @var \SAML2\XML\md\EndpointType[]
      */
     public $ManageNameIDService = array();
 
@@ -59,19 +64,19 @@ abstract class SAML2_XML_md_SSODescriptorType extends SAML2_XML_md_RoleDescripto
             return;
         }
 
-        foreach (SAML2_Utils::xpQuery($xml, './saml_metadata:ArtifactResolutionService') as $ep) {
-            $this->ArtifactResolutionService[] = new SAML2_XML_md_IndexedEndpointType($ep);
+        foreach (Utils::xpQuery($xml, './saml_metadata:ArtifactResolutionService') as $ep) {
+            $this->ArtifactResolutionService[] = new IndexedEndpointType($ep);
         }
 
-        foreach (SAML2_Utils::xpQuery($xml, './saml_metadata:SingleLogoutService') as $ep) {
-            $this->SingleLogoutService[] = new SAML2_XML_md_EndpointType($ep);
+        foreach (Utils::xpQuery($xml, './saml_metadata:SingleLogoutService') as $ep) {
+            $this->SingleLogoutService[] = new EndpointType($ep);
         }
 
-        foreach (SAML2_Utils::xpQuery($xml, './saml_metadata:ManageNameIDService') as $ep) {
-            $this->ManageNameIDService[] = new SAML2_XML_md_EndpointType($ep);
+        foreach (Utils::xpQuery($xml, './saml_metadata:ManageNameIDService') as $ep) {
+            $this->ManageNameIDService[] = new EndpointType($ep);
         }
 
-        $this->NameIDFormat = SAML2_Utils::extractStrings($xml, SAML2_Constants::NS_MD, 'NameIDFormat');
+        $this->NameIDFormat = Utils::extractStrings($xml, Constants::NS_MD, 'NameIDFormat');
     }
 
     /**
@@ -101,7 +106,7 @@ abstract class SAML2_XML_md_SSODescriptorType extends SAML2_XML_md_RoleDescripto
             $ep->toXML($e, 'md:ManageNameIDService');
         }
 
-        SAML2_Utils::addStrings($e, SAML2_Constants::NS_MD, 'md:NameIDFormat', FALSE, $this->NameIDFormat);
+        Utils::addStrings($e, Constants::NS_MD, 'md:NameIDFormat', FALSE, $this->NameIDFormat);
 
         return $e;
     }

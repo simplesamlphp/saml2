@@ -1,12 +1,14 @@
 <?php
 
+namespace SAML2\XML\mdui;
+
 /**
  * Class for handling the Logo metadata extensions for login and discovery user interface
  *
  * @link: http://docs.oasis-open.org/security/saml/Post2.0/sstc-saml-metadata-ui/v1.0/sstc-saml-metadata-ui-v1.0.pdf
  * @package SimpleSAMLphp
  */
-class SAML2_XML_mdui_Logo
+class Logo
 {
     /**
      * The url of this logo.
@@ -77,7 +79,7 @@ class SAML2_XML_mdui_Logo
 
         $doc = $parent->ownerDocument;
 
-        $e = $doc->createElementNS(SAML2_XML_mdui_UIInfo::NS, 'mdui:Logo');
+        $e = $doc->createElementNS(UIInfo::NS, 'mdui:Logo');
         $e->appendChild($doc->createTextNode($this->url));
         $e->setAttribute('width', (int) $this->width);
         $e->setAttribute('height', (int) $this->height);

@@ -1,11 +1,13 @@
 <?php
 
+namespace SAML2;
+
 /**
  * Interface to a SAML 2 element which may be signed.
  *
  * @package SimpleSAMLphp
  */
-interface SAML2_SignedElement
+interface SignedElement
 {
     /**
      * Validate this element against a public key.

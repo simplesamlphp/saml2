@@ -1,6 +1,8 @@
 <?php
 
-interface SAML2_Configuration_DecryptionProvider
+namespace SAML2\Configuration;
+
+interface DecryptionProvider
 {
     /**
      * @return null|bool

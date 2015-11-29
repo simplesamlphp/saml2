@@ -1,9 +1,23 @@
 <?php
 
+namespace SAML2\Response;
+
+use SAML2\Signature\Validator;
+use SAML2\Configuration\ServiceProvider;
+use SAML2\Configuration\IdentityProvider;
+use SAML2\Configuration\Destination;
+use SAML2\Response;
+use SAML2\Response\Validation\PreconditionValidator;
+use SAML2\Assertion\ProcessorBuilder;
+use SAML2\Response\Exception\PreconditionNotMetException;
+use SAML2\Response\Exception\InvalidResponseException;
+use SAML2\Response\Exception\NoAssertionsFoundException;
+use SAML2\Response\Exception\UnsignedResponseException;
+
 /**
  * @SuppressWarnings(PHPMD.CouplingBetweenObjects) - due to specific exceptions
  */
-class SAML2_Response_Processor
+class Processor
 {
     /**
      * @var \Psr\Log\LoggerInterface
@@ -11,17 +25,17 @@ class SAML2_Response_Processor
     private $logger;
 
     /**
-     * @var SAML2_Response_Validation_PreconditionValidator
+     * @var \SAML2\Response\Validation\PreconditionValidator
      */
     private $preconditionValidator;
 
     /**
-     * @var SAML2_Signature_Validator
+     * @var \SAML2\Signature\Validator
      */
     private $signatureValidator;
 
     /**
-     * @var SAML2_Assertion_Processor
+     * @var \SAML2\Assertion\Processor
      */
     private $assertionProcessor;
 
@@ -41,25 +55,25 @@ class SAML2_Response_Processor
     {
         $this->logger = $logger;
 
-        $this->signatureValidator = new SAML2_Signature_Validator($logger);
+        $this->signatureValidator = new Validator($logger);
     }
 
     /**
-     * @param SAML2_Configuration_ServiceProvider  $serviceProviderConfiguration
-     * @param SAML2_Configuration_IdentityProvider $identityProviderConfiguration
-     * @param SAML2_Configuration_Destination      $currentDestination
-     * @param SAML2_Response                       $response
+     * @param \SAML2\Configuration\ServiceProvider  $serviceProviderConfiguration
+     * @param \SAML2\Configuration\IdentityProvider $identityProviderConfiguration
+     * @param \SAML2\Configuration\Destination      $currentDestination
+     * @param \SAML2\Response                       $response
      *
-     * @return SAML2_Assertion[] Collection (SAML2_Utilities_ArrayCollection) of SAML2_Assertion objects
+     * @return \SAML2\Assertion[] Collection (\SAML2\Utilities\ArrayCollection) of \SAML2\Assertion objects
      */
     public function process(
-        SAML2_Configuration_ServiceProvider $serviceProviderConfiguration,
-        SAML2_Configuration_IdentityProvider $identityProviderConfiguration,
-        SAML2_Configuration_Destination $currentDestination,
-        SAML2_Response $response
+        ServiceProvider $serviceProviderConfiguration,
+        IdentityProvider $identityProviderConfiguration,
+        Destination $currentDestination,
+        Response $response
     ) {
-        $this->preconditionValidator = new SAML2_Response_Validation_PreconditionValidator($currentDestination);
-        $this->assertionProcessor = SAML2_Assertion_ProcessorBuilder::build(
+        $this->preconditionValidator = new PreconditionValidator($currentDestination);
+        $this->assertionProcessor = ProcessorBuilder::build(
             $this->logger,
             $this->signatureValidator,
             $currentDestination,
@@ -76,24 +90,24 @@ class SAML2_Response_Processor
     /**
      * Checks the preconditions that must be valid in order for the response to be processed.
      *
-     * @param SAML2_Response $response
+     * @param \SAML2\Response $response
      */
-    private function enforcePreconditions(SAML2_Response $response)
+    private function enforcePreconditions(Response $response)
     {
         $result = $this->preconditionValidator->validate($response);
 
         if (!$result->isValid()) {
-            throw SAML2_Response_Exception_PreconditionNotMetException::createFromValidationResult($result);
+            throw PreconditionNotMetException::createFromValidationResult($result);
         }
     }
 
     /**
-     * @param SAML2_Response                       $response
-     * @param SAML2_Configuration_IdentityProvider $identityProviderConfiguration
+     * @param \SAML2\Response                       $response
+     * @param \SAML2\Configuration\IdentityProvider $identityProviderConfiguration
      */
     private function verifySignature(
-        SAML2_Response $response,
-        SAML2_Configuration_IdentityProvider $identityProviderConfiguration
+        Response $response,
+        IdentityProvider $identityProviderConfiguration
     ) {
         if (!$response->isMessageConstructedWithSignature()) {
             $this->logger->info(sprintf(
@@ -113,26 +127,26 @@ class SAML2_Response_Processor
         $this->responseIsSigned = TRUE;
 
         if (!$this->signatureValidator->hasValidSignature($response, $identityProviderConfiguration)) {
-            throw new SAML2_Response_Exception_InvalidResponseException();
+            throw new InvalidResponseException();
         }
     }
 
     /**
-     * @param SAML2_Response $response
+     * @param \SAML2\Response $response
      *
-     * @return SAML2_Assertion[]
+     * @return \SAML2\Assertion[]
      */
-    private function processAssertions(SAML2_Response $response)
+    private function processAssertions(Response $response)
     {
         $assertions = $response->getAssertions();
         if (empty($assertions)) {
-            throw new SAML2_Response_Exception_NoAssertionsFoundException('No assertions found in response from IdP.');
+            throw new NoAssertionsFoundException('No assertions found in response from IdP.');
         }
 
         if (!$this->responseIsSigned) {
             foreach ($assertions as $assertion) {
                 if (!$assertion->getWasSignedAtConstruction()) {
-                    throw new SAML2_Response_Exception_UnsignedResponseException(
+                    throw new UnsignedResponseException(
                         'Both the response and the assertion it containes are not signed.'
                     );
                 }

@@ -1,6 +1,8 @@
 <?php
 
-final class SAML2_Exception_UnparseableXmlException extends SAML2_Exception_RuntimeException
+namespace SAML2\Exception;
+
+final class UnparseableXmlException extends RuntimeException
 {
     private static $levelMap = array(
         LIBXML_ERR_WARNING => 'WARNING',

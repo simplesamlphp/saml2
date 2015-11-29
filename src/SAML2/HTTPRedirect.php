@@ -1,21 +1,23 @@
 <?php
 
+namespace SAML2;
+
 /**
  * Class which implements the HTTP-Redirect binding.
  *
  * @package SimpleSAMLphp
  */
-class SAML2_HTTPRedirect extends SAML2_Binding
+class HTTPRedirect extends Binding
 {
     const DEFLATE = 'urn:oasis:names:tc:SAML:2.0:bindings:URL-Encoding:DEFLATE';
 
     /**
      * Create the redirect URL for a message.
      *
-     * @param  SAML2_Message $message The message.
+     * @param  \SAML2\Message $message The message.
      * @return string        The URL the user should be redirected to in order to send a message.
      */
-    public function getRedirectURL(SAML2_Message $message)
+    public function getRedirectURL(Message $message)
     {
         if ($this->destination === NULL) {
             $destination = $message->getDestination();
@@ -30,14 +32,14 @@ class SAML2_HTTPRedirect extends SAML2_Binding
         $msgStr = $message->toUnsignedXML();
         $msgStr = $msgStr->ownerDocument->saveXML($msgStr);
 
-        SAML2_Utils::getContainer()->debugMessage($msgStr, 'out');
+        Utils::getContainer()->debugMessage($msgStr, 'out');
 
         $msgStr = gzdeflate($msgStr);
         $msgStr = base64_encode($msgStr);
 
         /* Build the query string. */
 
-        if ($message instanceof SAML2_Request) {
+        if ($message instanceof Request) {
             $msg = 'SAMLRequest=';
         } else {
             $msg = 'SAMLResponse=';
@@ -70,13 +72,13 @@ class SAML2_HTTPRedirect extends SAML2_Binding
      *
      * Note: This function never returns.
      *
-     * @param SAML2_Message $message The message we should send.
+     * @param \SAML2\Message $message The message we should send.
      */
-    public function send(SAML2_Message $message)
+    public function send(Message $message)
     {
         $destination = $this->getRedirectURL($message);
-        SAML2_Utils::getContainer()->getLogger()->debug('Redirect to ' . strlen($destination) . ' byte URL: ' . $destination);
-        SAML2_Utils::getContainer()->redirect($destination);
+        Utils::getContainer()->getLogger()->debug('Redirect to ' . strlen($destination) . ' byte URL: ' . $destination);
+        Utils::getContainer()->redirect($destination);
     }
 
     /**
@@ -84,7 +86,7 @@ class SAML2_HTTPRedirect extends SAML2_Binding
      *
      * Throws an exception if it is unable receive the message.
      *
-     * @return SAML2_Message The received message.
+     * @return \SAML2\Message The received message.
      * @throws Exception
      *
      * NPath is currently too high but solving that just moves code around.
@@ -115,10 +117,10 @@ class SAML2_HTTPRedirect extends SAML2_Binding
             throw new Exception('Error while inflating SAML message.');
         }
 
-        SAML2_Utils::getContainer()->debugMessage($message, 'in');
-        $document = SAML2_DOMDocumentFactory::fromString($message);
+        Utils::getContainer()->debugMessage($message, 'in');
+        $document = DOMDocumentFactory::fromString($message);
         $xml      = $document->firstChild;
-        $message  = SAML2_Message::fromXML($xml);
+        $message  = Message::fromXML($xml);
 
         if (array_key_exists('RelayState', $data)) {
             $message->setRelayState($data['RelayState']);
@@ -219,7 +221,7 @@ class SAML2_HTTPRedirect extends SAML2_Binding
             throw new Exception('Invalid key type for validating signature on query string.');
         }
         if ($key->type !== $sigAlg) {
-            $key = SAML2_Utils::castKey($key, $sigAlg);
+            $key = Utils::castKey($key, $sigAlg);
         }
 
         if (!$key->verifySignature($query, $signature)) {

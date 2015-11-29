@@ -1,18 +1,24 @@
 <?php
 
+namespace SAML2\XML\md;
+
+use SAML2\Utils;
+use SAML2\Constants;
+use SAML2\XML\saml\Attribute;
+
 /**
  * Class representing SAML 2 metadata AttributeAuthorityDescriptor.
  *
  * @package SimpleSAMLphp
  */
-class SAML2_XML_md_AttributeAuthorityDescriptor extends SAML2_XML_md_RoleDescriptor
+class AttributeAuthorityDescriptor extends RoleDescriptor
 {
     /**
      * List of AttributeService endpoints.
      *
      * Array with EndpointType objects.
      *
-     * @var SAML2_XML_md_EndpointType[]
+     * @var \SAML2\XML\md\EndpointType[]
      */
     public $AttributeService = array();
 
@@ -21,7 +27,7 @@ class SAML2_XML_md_AttributeAuthorityDescriptor extends SAML2_XML_md_RoleDescrip
      *
      * Array with EndpointType objects.
      *
-     * @var SAML2_XML_md_EndpointType[]
+     * @var \SAML2\XML\md\EndpointType[]
      */
     public $AssertionIDRequestService = array();
 
@@ -46,9 +52,9 @@ class SAML2_XML_md_AttributeAuthorityDescriptor extends SAML2_XML_md_RoleDescrip
     /**
      * List of supported attributes.
      *
-     * Array with SAML2_XML_saml_Attribute objects.
+     * Array with \SAML2\XML\saml\Attribute objects.
      *
-     * @var SAML2_XML_saml_Attribute[]
+     * @var \SAML2\XML\saml\Attribute[]
      */
     public $Attribute = array();
 
@@ -66,23 +72,23 @@ class SAML2_XML_md_AttributeAuthorityDescriptor extends SAML2_XML_md_RoleDescrip
             return;
         }
 
-        foreach (SAML2_Utils::xpQuery($xml, './saml_metadata:AttributeService') as $ep) {
-            $this->AttributeService[] = new SAML2_XML_md_EndpointType($ep);
+        foreach (Utils::xpQuery($xml, './saml_metadata:AttributeService') as $ep) {
+            $this->AttributeService[] = new EndpointType($ep);
         }
         if (empty($this->AttributeService)) {
             throw new Exception('Must have at least one AttributeService in AttributeAuthorityDescriptor.');
         }
 
-        foreach (SAML2_Utils::xpQuery($xml, './saml_metadata:AssertionIDRequestService') as $ep) {
-            $this->AssertionIDRequestService[] = new SAML2_XML_md_EndpointType($ep);
+        foreach (Utils::xpQuery($xml, './saml_metadata:AssertionIDRequestService') as $ep) {
+            $this->AssertionIDRequestService[] = new EndpointType($ep);
         }
 
-        $this->NameIDFormat = SAML2_Utils::extractStrings($xml, SAML2_Constants::NS_MD, 'NameIDFormat');
+        $this->NameIDFormat = Utils::extractStrings($xml, Constants::NS_MD, 'NameIDFormat');
 
-        $this->AttributeProfile = SAML2_Utils::extractStrings($xml, SAML2_Constants::NS_MD, 'AttributeProfile');
+        $this->AttributeProfile = Utils::extractStrings($xml, Constants::NS_MD, 'AttributeProfile');
 
-        foreach (SAML2_Utils::xpQuery($xml, './saml_assertion:Attribute') as $a) {
-            $this->Attribute[] = new SAML2_XML_saml_Attribute($a);
+        foreach (Utils::xpQuery($xml, './saml_assertion:Attribute') as $a) {
+            $this->Attribute[] = new Attribute($a);
         }
     }
 
@@ -111,9 +117,9 @@ class SAML2_XML_md_AttributeAuthorityDescriptor extends SAML2_XML_md_RoleDescrip
             $ep->toXML($e, 'md:AssertionIDRequestService');
         }
 
-        SAML2_Utils::addStrings($e, SAML2_Constants::NS_MD, 'md:NameIDFormat', FALSE, $this->NameIDFormat);
+        Utils::addStrings($e, Constants::NS_MD, 'md:NameIDFormat', FALSE, $this->NameIDFormat);
 
-        SAML2_Utils::addStrings($e, SAML2_Constants::NS_MD, 'md:AttributeProfile', FALSE, $this->AttributeProfile);
+        Utils::addStrings($e, Constants::NS_MD, 'md:AttributeProfile', FALSE, $this->AttributeProfile);
 
         foreach ($this->Attribute as $a) {
             $a->toXML($e);

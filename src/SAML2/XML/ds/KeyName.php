@@ -1,11 +1,15 @@
 <?php
 
+namespace SAML2\XML\ds;
+
+use SAML2\Utils;
+
 /**
  * Class representing a ds:KeyName element.
  *
  * @package SimpleSAMLphp
  */
-class SAML2_XML_ds_KeyName
+class KeyName
 {
     /**
      * The key name.
@@ -38,7 +42,7 @@ class SAML2_XML_ds_KeyName
     {
         assert('is_string($this->name)');
 
-        return SAML2_Utils::addString($parent, XMLSecurityDSig::XMLDSIGNS, 'ds:KeyName', $this->name);
+        return Utils::addString($parent, XMLSecurityDSig::XMLDSIGNS, 'ds:KeyName', $this->name);
     }
 
 }

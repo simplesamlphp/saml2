@@ -1,11 +1,16 @@
 <?php
 
+namespace SAML2\XML\saml;
+
+use SAML2\Utils;
+use SAML2\Constants;
+
 /**
  * Class representing SAML 2 Attribute.
  *
  * @package SimpleSAMLphp
  */
-class SAML2_XML_saml_Attribute
+class Attribute
 {
     /**
      * The Name of this attribute.
@@ -31,9 +36,9 @@ class SAML2_XML_saml_Attribute
     /**
      * List of attribute values.
      *
-     * Array of SAML2_XML_saml_AttributeValue elements.
+     * Array of \SAML2\XML\saml\AttributeValue elements.
      *
-     * @var SAML2_XML_saml_AttributeValue[]
+     * @var \SAML2\XML\saml\AttributeValue[]
      */
     public $AttributeValue = array();
 
@@ -62,8 +67,8 @@ class SAML2_XML_saml_Attribute
             $this->FriendlyName = $xml->getAttribute('FriendlyName');
         }
 
-        foreach (SAML2_Utils::xpQuery($xml, './saml_assertion:AttributeValue') as $av) {
-            $this->AttributeValue[] = new SAML2_XML_saml_AttributeValue($av);
+        foreach (Utils::xpQuery($xml, './saml_assertion:AttributeValue') as $av) {
+            $this->AttributeValue[] = new AttributeValue($av);
         }
     }
 
@@ -113,7 +118,7 @@ class SAML2_XML_saml_Attribute
      */
     public function toXML(DOMElement $parent)
     {
-        return $this->toXMLInternal($parent, SAML2_Constants::NS_SAML, 'saml:Attribute');
+        return $this->toXMLInternal($parent, Constants::NS_SAML, 'saml:Attribute');
     }
 
 }

@@ -1,18 +1,26 @@
 <?php
 
-class SAML2_Signature_PublicKeyValidator extends SAML2_Signature_AbstractChainedValidator
+namespace SAML2\Signature;
+
+use SAML2\Certificate\KeyLoader;
+use SAML2\SignedElement;
+use SAML2\Configuration\CertificateProvider;
+use SAML2\Certificate\Key;
+use SAML2\Certificate\X509;
+
+class PublicKeyValidator extends AbstractChainedValidator
 {
     /**
-     * @var SAML2_Certificate_KeyCollection
+     * @var \SAML2\Certificate\KeyCollection
      */
     private $configuredKeys;
 
     /**
-     * @var SAML2_Certificate_KeyLoader
+     * @var \SAML2\Certificate\KeyLoader
      */
     private $keyLoader;
 
-    public function __construct(\Psr\Log\LoggerInterface $logger, SAML2_Certificate_KeyLoader $keyLoader)
+    public function __construct(\Psr\Log\LoggerInterface $logger, KeyLoader $keyLoader)
     {
         $this->keyLoader = $keyLoader;
 
@@ -20,14 +28,14 @@ class SAML2_Signature_PublicKeyValidator extends SAML2_Signature_AbstractChained
     }
 
     /**
-     * @param SAML2_SignedElement             $signedElement
-     * @param SAML2_Configuration_CertificateProvider $configuration
+     * @param \SAML2\SignedElement             $signedElement
+     * @param \SAML2\Configuration\CertificateProvider $configuration
      *
      * @return bool
      */
     public function canValidate(
-        SAML2_SignedElement $signedElement,
-        SAML2_Configuration_CertificateProvider $configuration
+        SignedElement $signedElement,
+        CertificateProvider $configuration
     ) {
         $this->configuredKeys = $this->keyLoader->extractPublicKeys($configuration);
 
@@ -35,18 +43,18 @@ class SAML2_Signature_PublicKeyValidator extends SAML2_Signature_AbstractChained
     }
 
     /**
-     * @param SAML2_SignedElement             $signedElement
-     * @param SAML2_Configuration_CertificateProvider $configuration
+     * @param \SAML2\SignedElement             $signedElement
+     * @param \SAML2\Configuration\CertificateProvider $configuration
      *
      * @return bool
      */
     public function hasValidSignature(
-        SAML2_SignedElement $signedElement,
-        SAML2_Configuration_CertificateProvider $configuration
+        SignedElement $signedElement,
+        CertificateProvider $configuration
     ) {
         $logger = $this->logger;
-        $pemCandidates = $this->configuredKeys->filter(function (SAML2_Certificate_Key $key) use ($logger) {
-            if (!$key instanceof SAML2_Certificate_X509) {
+        $pemCandidates = $this->configuredKeys->filter(function (Key $key) use ($logger) {
+            if (!$key instanceof X509) {
                 $logger->debug(sprintf('Skipping unknown key type: "%s"', $key['type']));
                 return FALSE;
             }

@@ -1,5 +1,7 @@
 <?php
 
+namespace SAML2;
+
 use \Mockery as m;
 
 /**
@@ -8,7 +10,7 @@ use \Mockery as m;
  *
  * @runTestsInSeparateProcesses
  */
-abstract class SAML2_ControlledTimeTest extends \PHPUnit_Framework_TestCase
+abstract class ControlledTimeTest extends \PHPUnit_Framework_TestCase
 {
     protected $currentTime = 1;
 

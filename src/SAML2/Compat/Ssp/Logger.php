@@ -1,6 +1,8 @@
 <?php
 
-class SAML2_Compat_Ssp_Logger implements Psr\Log\LoggerInterface
+namespace SAML2\Compat\Ssp;
+
+class Logger implements Psr\Log\LoggerInterface
 {
     /**
      * System is unusable.

@@ -1,5 +1,7 @@
 <?php
 
+namespace SAML2;
+
 /**
  * Helper class for processing signed elements.
  *
@@ -7,7 +9,7 @@
  *
  * @package SimpleSAMLphp
  */
-class SAML2_SignedElementHelper implements SAML2_SignedElement
+class SignedElementHelper implements SignedElement
 {
     /**
      * The private key we should use to sign the message.
@@ -48,7 +50,7 @@ class SAML2_SignedElementHelper implements SAML2_SignedElement
 
         /* Validate the signature element of the message. */
         try {
-            $sig = SAML2_Utils::validateElement($xml);
+            $sig = Utils::validateElement($xml);
 
             if ($sig !== FALSE) {
                 $this->certificates = $sig['Certificates'];
@@ -209,7 +211,7 @@ class SAML2_SignedElementHelper implements SAML2_SignedElement
             return NULL;
         }
 
-        SAML2_Utils::insertSignature($this->signatureKey, $this->certificates, $root, $insertBefore);
+        Utils::insertSignature($this->signatureKey, $this->certificates, $root, $insertBefore);
 
         return $root;
     }

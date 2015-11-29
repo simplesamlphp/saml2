@@ -1,15 +1,19 @@
 <?php
 
-class SAML2_Certificate_PrivateKeyLoaderTest extends \PHPUnit_Framework_TestCase
+namespace SAML2\Certificate;
+
+use SAML2\Configuration\PrivateKey;
+
+class PrivateKeyLoaderTest extends \PHPUnit_Framework_TestCase
 {
     /**
-     * @var SAML2_Certificate_PrivateKeyLoader
+     * @var \SAML2\Certificate\PrivateKeyLoader
      */
     private $privateKeyLoader;
 
     public function setUp()
     {
-        $this->privateKeyLoader = new SAML2_Certificate_PrivateKeyLoader();
+        $this->privateKeyLoader = new PrivateKeyLoader();
     }
 
     /**
@@ -17,10 +21,10 @@ class SAML2_Certificate_PrivateKeyLoaderTest extends \PHPUnit_Framework_TestCase
      * @test
      * @dataProvider privateKeyTestProvider
      *
-     * @param SAML2_Configuration_PrivateKey $configuredKey
+     * @param \SAML2\Configuration\PrivateKey $configuredKey
      */
     public function loading_a_configured_private_key_returns_a_certificate_private_key(
-        SAML2_Configuration_PrivateKey $configuredKey
+        PrivateKey $configuredKey
     ) {
         $resultingKey = $this->privateKeyLoader->loadPrivateKey($configuredKey);
 
@@ -38,15 +42,15 @@ class SAML2_Certificate_PrivateKeyLoaderTest extends \PHPUnit_Framework_TestCase
     {
         return array(
             'no passphrase'   => array(
-                new SAML2_Configuration_PrivateKey(
+                new PrivateKey(
                     dirname(__FILE__) . '/File/a_fake_private_key_file.pem',
-                    SAML2_Configuration_PrivateKey::NAME_DEFAULT
+                    PrivateKey::NAME_DEFAULT
                 )
             ),
             'with passphrase' => array(
-                new SAML2_Configuration_PrivateKey(
+                new PrivateKey(
                     dirname(__FILE__) . '/File/a_fake_private_key_file.pem',
-                    SAML2_Configuration_PrivateKey::NAME_DEFAULT,
+                    PrivateKey::NAME_DEFAULT,
                     'foo bar baz'
                 )
             ),

@@ -1,12 +1,17 @@
 <?php
 
+namespace SAML2\XML\mdui;
+
+use SAML2\Utils;
+use SAML2\XML\Chunk;
+
 /**
  * Class for handling the metadata extensions for login and discovery user interface
  *
  * @link: http://docs.oasis-open.org/security/saml/Post2.0/sstc-saml-metadata-ui/v1.0/sstc-saml-metadata-ui-v1.0.pdf
  * @package SimpleSAMLphp
  */
-class SAML2_XML_mdui_DiscoHints
+class DiscoHints
 {
     /**
      * The namespace used for the DiscoHints extension.
@@ -16,9 +21,9 @@ class SAML2_XML_mdui_DiscoHints
     /**
      * Array with child elements.
      *
-     * The elements can be any of the other SAML2_XML_mdui_* elements.
+     * The elements can be any of the other \SAML2\XML\mdui\* elements.
      *
-     * @var SAML2_XML_Chunk[]
+     * @var \SAML2\XML\Chunk[]
      */
     public $children = array();
 
@@ -54,12 +59,12 @@ class SAML2_XML_mdui_DiscoHints
             return;
         }
 
-        $this->IPHint =          SAML2_Utils::extractStrings($xml, self::NS, 'IPHint');
-        $this->DomainHint =      SAML2_Utils::extractStrings($xml, self::NS, 'DomainHint');
-        $this->GeolocationHint = SAML2_Utils::extractStrings($xml, self::NS, 'GeolocationHint');
+        $this->IPHint =          Utils::extractStrings($xml, self::NS, 'IPHint');
+        $this->DomainHint =      Utils::extractStrings($xml, self::NS, 'DomainHint');
+        $this->GeolocationHint = Utils::extractStrings($xml, self::NS, 'GeolocationHint');
 
-        foreach (SAML2_Utils::xpQuery($xml, "./*[namespace-uri()!='".self::NS."']") as $node) {
-            $this->children[] = new SAML2_XML_Chunk($node);
+        foreach (Utils::xpQuery($xml, "./*[namespace-uri()!='".self::NS."']") as $node) {
+            $this->children[] = new Chunk($node);
         }
     }
 
@@ -91,9 +96,9 @@ class SAML2_XML_mdui_DiscoHints
                 }
             }
 
-            SAML2_Utils::addStrings($e, self::NS, 'mdui:IPHint', FALSE, $this->IPHint);
-            SAML2_Utils::addStrings($e, self::NS, 'mdui:DomainHint', FALSE, $this->DomainHint);
-            SAML2_Utils::addStrings($e, self::NS, 'mdui:GeolocationHint', FALSE, $this->GeolocationHint);
+            Utils::addStrings($e, self::NS, 'mdui:IPHint', FALSE, $this->IPHint);
+            Utils::addStrings($e, self::NS, 'mdui:DomainHint', FALSE, $this->DomainHint);
+            Utils::addStrings($e, self::NS, 'mdui:GeolocationHint', FALSE, $this->GeolocationHint);
 
             return $e;
         }

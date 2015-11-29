@@ -1,11 +1,17 @@
 <?php
 
+namespace SAML2\XML\md;
+
+use SAML2\SignedElementHelper;
+use SAML2\Utils;
+use SAML2\Constants;
+
 /**
  * Class representing SAML 2 RoleDescriptor element.
  *
  * @package SimpleSAMLphp
  */
-class SAML2_XML_md_RoleDescriptor extends SAML2_SignedElementHelper
+class RoleDescriptor extends SignedElementHelper
 {
     /**
      * The name of this descriptor element.
@@ -61,25 +67,25 @@ class SAML2_XML_md_RoleDescriptor extends SAML2_SignedElementHelper
     /**
      * KeyDescriptor elements.
      *
-     * Array of SAML2_XML_md_KeyDescriptor elements.
+     * Array of \SAML2\XML\md\KeyDescriptor elements.
      *
-     * @var SAML2_XML_md_KeyDescriptor[]
+     * @var \SAML2\XML\md\KeyDescriptor[]
      */
     public $KeyDescriptor = array();
 
     /**
      * Organization of this role.
      *
-     * @var SAML2_XML_md_Organization|NULL
+     * @var \SAML2\XML\md\Organization|NULL
      */
     public $Organization = NULL;
 
     /**
      * ContactPerson elements for this role.
      *
-     * Array of SAML2_XML_md_ContactPerson objects.
+     * Array of \SAML2\XML\md\ContactPerson objects.
      *
-     * @var SAML2_XML_md_ContactPerson[]
+     * @var \SAML2\XML\md\ContactPerson[]
      */
     public $ContactPerson = array();
 
@@ -105,7 +111,7 @@ class SAML2_XML_md_RoleDescriptor extends SAML2_SignedElementHelper
             $this->ID = $xml->getAttribute('ID');
         }
         if ($xml->hasAttribute('validUntil')) {
-            $this->validUntil = SAML2_Utils::xsDateTimeToTimestamp($xml->getAttribute('validUntil'));
+            $this->validUntil = Utils::xsDateTimeToTimestamp($xml->getAttribute('validUntil'));
         }
         if ($xml->hasAttribute('cacheDuration')) {
             $this->cacheDuration = $xml->getAttribute('cacheDuration');
@@ -120,21 +126,21 @@ class SAML2_XML_md_RoleDescriptor extends SAML2_SignedElementHelper
             $this->errorURL = $xml->getAttribute('errorURL');
         }
 
-        $this->Extensions = SAML2_XML_md_Extensions::getList($xml);
+        $this->Extensions = Extensions::getList($xml);
 
-        foreach (SAML2_Utils::xpQuery($xml, './saml_metadata:KeyDescriptor') as $kd) {
-            $this->KeyDescriptor[] = new SAML2_XML_md_KeyDescriptor($kd);
+        foreach (Utils::xpQuery($xml, './saml_metadata:KeyDescriptor') as $kd) {
+            $this->KeyDescriptor[] = new KeyDescriptor($kd);
         }
 
-        $organization = SAML2_Utils::xpQuery($xml, './saml_metadata:Organization');
+        $organization = Utils::xpQuery($xml, './saml_metadata:Organization');
         if (count($organization) > 1) {
             throw new Exception('More than one Organization in the entity.');
         } elseif (!empty($organization)) {
-            $this->Organization = new SAML2_XML_md_Organization($organization[0]);
+            $this->Organization = new Organization($organization[0]);
         }
 
-        foreach (SAML2_Utils::xpQuery($xml, './saml_metadata:ContactPerson') as $cp) {
-            $this->contactPersons[] = new SAML2_XML_md_ContactPerson($cp);
+        foreach (Utils::xpQuery($xml, './saml_metadata:ContactPerson') as $cp) {
+            $this->contactPersons[] = new ContactPerson($cp);
         }
     }
 
@@ -156,7 +162,7 @@ class SAML2_XML_md_RoleDescriptor extends SAML2_SignedElementHelper
         assert('is_null($this->Organization) || $this->Organization instanceof SAML2_XML_md_Organization');
         assert('is_array($this->ContactPerson)');
 
-        $e = $parent->ownerDocument->createElementNS(SAML2_Constants::NS_MD, $this->elementName);
+        $e = $parent->ownerDocument->createElementNS(Constants::NS_MD, $this->elementName);
         $parent->appendChild($e);
 
         if (isset($this->ID)) {
@@ -177,7 +183,7 @@ class SAML2_XML_md_RoleDescriptor extends SAML2_SignedElementHelper
             $e->setAttribute('errorURL', $this->errorURL);
         }
 
-        SAML2_XML_md_Extensions::addList($e, $this->Extensions);
+        Extensions::addList($e, $this->Extensions);
 
         foreach ($this->KeyDescriptor as $kd) {
             $kd->toXML($e);

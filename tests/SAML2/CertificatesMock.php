@@ -1,9 +1,11 @@
 <?php
 
+namespace SAML2;
+
 /**
- * Class SAML2_CertificatesMock
+ * Class \SAML2\CertificatesMock
  */
-class SAML2_CertificatesMock
+class CertificatesMock
 {
     const PUBLIC_KEY_PEM = '-----BEGIN CERTIFICATE-----
 MIICgTCCAeoCCQCbOlrWDdX7FTANBgkqhkiG9w0BAQUFADCBhDELMAkGA1UEBhMC

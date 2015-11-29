@@ -1,22 +1,27 @@
 <?php
 
+namespace SAML2\XML\md;
+
+use SAML2\DOMDocumentFactory;
+use SAML2\Utils;
+
 /**
- * Class SAML2_XML_md_IndexedEndpointTypeTest
+ * Class \SAML2\XML\md\IndexedEndpointTypeTest
  */
-class SAML2_XML_md_IndexedEndpointTypeTest extends \PHPUnit_Framework_TestCase
+class IndexedEndpointTypeTest extends \PHPUnit_Framework_TestCase
 {
     public function testMarshalling()
     {
-        $indexedEndpointType = new SAML2_XML_md_IndexedEndpointType();
+        $indexedEndpointType = new IndexedEndpointType();
         $indexedEndpointType->Binding = 'TestBinding';
         $indexedEndpointType->Location = 'TestLocation';
         $indexedEndpointType->index = 42;
         $indexedEndpointType->isDefault = FALSE;
 
-        $document = SAML2_DOMDocumentFactory::fromString('<root />');
+        $document = DOMDocumentFactory::fromString('<root />');
         $indexedEndpointTypeElement = $indexedEndpointType->toXML($document->firstChild, 'md:Test');
 
-        $indexedEndpointElements = SAML2_Utils::xpQuery($indexedEndpointTypeElement, '/root/saml_metadata:Test');
+        $indexedEndpointElements = Utils::xpQuery($indexedEndpointTypeElement, '/root/saml_metadata:Test');
         $this->assertCount(1, $indexedEndpointElements);
         $indexedEndpointElement = $indexedEndpointElements[0];
 
@@ -28,14 +33,14 @@ class SAML2_XML_md_IndexedEndpointTypeTest extends \PHPUnit_Framework_TestCase
         $indexedEndpointType->isDefault = TRUE;
         $document->loadXML('<root />');
         $indexedEndpointTypeElement = $indexedEndpointType->toXML($document->firstChild, 'md:Test');
-        $indexedEndpointTypeElement = SAML2_Utils::xpQuery($indexedEndpointTypeElement, '/root/saml_metadata:Test');
+        $indexedEndpointTypeElement = Utils::xpQuery($indexedEndpointTypeElement, '/root/saml_metadata:Test');
         $this->assertCount(1, $indexedEndpointTypeElement);
         $this->assertEquals('true', $indexedEndpointTypeElement[0]->getAttribute('isDefault'));
 
         $indexedEndpointType->isDefault = NULL;
         $document->loadXML('<root />');
         $indexedEndpointTypeElement = $indexedEndpointType->toXML($document->firstChild, 'md:Test');
-        $indexedEndpointTypeElement = SAML2_Utils::xpQuery($indexedEndpointTypeElement, '/root/saml_metadata:Test');
+        $indexedEndpointTypeElement = Utils::xpQuery($indexedEndpointTypeElement, '/root/saml_metadata:Test');
         $this->assertCount(1, $indexedEndpointTypeElement);
         $this->assertTrue(!$indexedEndpointTypeElement[0]->hasAttribute('isDefault'));
     }

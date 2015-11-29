@@ -1,11 +1,16 @@
 <?php
 
+namespace SAML2\XML\md;
+
+use SAML2\Utils;
+use SAML2\Constants;
+
 /**
  * Class representing SAML 2 ContactPerson.
  *
  * @package SimpleSAMLphp
  */
-class SAML2_XML_md_ContactPerson
+class ContactPerson
 {
     /**
      * The contact type.
@@ -75,7 +80,7 @@ class SAML2_XML_md_ContactPerson
         }
         $this->contactType = $xml->getAttribute('contactType');
 
-        $this->Extensions = SAML2_XML_md_Extensions::getList($xml);
+        $this->Extensions = Extensions::getList($xml);
 
         $this->Company = self::getStringElement($xml, 'Company');
         $this->GivenName = self::getStringElement($xml, 'GivenName');
@@ -95,7 +100,7 @@ class SAML2_XML_md_ContactPerson
     {
         assert('is_string($name)');
 
-        $e = SAML2_Utils::xpQuery($parent, './saml_metadata:' . $name);
+        $e = Utils::xpQuery($parent, './saml_metadata:' . $name);
 
         $ret = array();
         foreach ($e as $i) {
@@ -146,27 +151,27 @@ class SAML2_XML_md_ContactPerson
 
         $doc = $parent->ownerDocument;
 
-        $e = $doc->createElementNS(SAML2_Constants::NS_MD, 'md:ContactPerson');
+        $e = $doc->createElementNS(Constants::NS_MD, 'md:ContactPerson');
         $parent->appendChild($e);
 
         $e->setAttribute('contactType', $this->contactType);
 
-        SAML2_XML_md_Extensions::addList($e, $this->Extensions);
+        Extensions::addList($e, $this->Extensions);
 
         if (isset($this->Company)) {
-            SAML2_Utils::addString($e, SAML2_Constants::NS_MD, 'md:Company', $this->Company);
+            Utils::addString($e, Constants::NS_MD, 'md:Company', $this->Company);
         }
         if (isset($this->GivenName)) {
-            SAML2_Utils::addString($e, SAML2_Constants::NS_MD, 'md:GivenName', $this->GivenName);
+            Utils::addString($e, Constants::NS_MD, 'md:GivenName', $this->GivenName);
         }
         if (isset($this->SurName)) {
-            SAML2_Utils::addString($e, SAML2_Constants::NS_MD, 'md:SurName', $this->SurName);
+            Utils::addString($e, Constants::NS_MD, 'md:SurName', $this->SurName);
         }
         if (!empty($this->EmailAddress)) {
-            SAML2_Utils::addStrings($e, SAML2_Constants::NS_MD, 'md:EmailAddress', FALSE, $this->EmailAddress);
+            Utils::addStrings($e, Constants::NS_MD, 'md:EmailAddress', FALSE, $this->EmailAddress);
         }
         if (!empty($this->TelephoneNumber)) {
-            SAML2_Utils::addStrings($e, SAML2_Constants::NS_MD, 'md:TelephoneNumber', FALSE, $this->TelephoneNumber);
+            Utils::addStrings($e, Constants::NS_MD, 'md:TelephoneNumber', FALSE, $this->TelephoneNumber);
         }
 
         return $e;

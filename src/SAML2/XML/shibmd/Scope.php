@@ -1,12 +1,16 @@
 <?php
 
+namespace SAML2\XML\shibmd;
+
+use SAML2\Utils;
+
 /**
  * Class which represents the Scope element found in Shibboleth metadata.
  *
  * @link https://wiki.shibboleth.net/confluence/display/SHIB/ShibbolethMetadataProfile
  * @package SimpleSAMLphp
  */
-class SAML2_XML_shibmd_Scope
+class Scope
 {
     /**
      * The namespace used for the Scope extension element.
@@ -39,7 +43,7 @@ class SAML2_XML_shibmd_Scope
         }
 
         $this->scope = $xml->textContent;
-        $this->regexp = SAML2_Utils::parseBoolean($xml, 'regexp', NULL);
+        $this->regexp = Utils::parseBoolean($xml, 'regexp', NULL);
     }
 
     /**
@@ -55,7 +59,7 @@ class SAML2_XML_shibmd_Scope
 
         $doc = $parent->ownerDocument;
 
-        $e = $doc->createElementNS(SAML2_XML_shibmd_Scope::NS, 'shibmd:Scope');
+        $e = $doc->createElementNS(Scope::NS, 'shibmd:Scope');
         $parent->appendChild($e);
 
         $e->appendChild($doc->createTextNode($this->scope));

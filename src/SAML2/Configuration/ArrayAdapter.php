@@ -1,9 +1,11 @@
 <?php
 
+namespace SAML2\Configuration;
+
 /**
  * Default implementation for configuration
  */
-class SAML2_Configuration_ArrayAdapter implements SAML2_Configuration_Queryable
+class ArrayAdapter implements Queryable
 {
     /**
      * @var array

@@ -1,10 +1,12 @@
 <?php
 
+namespace SAML2;
+
 /**
  * Base class for all SAML 2 response messages.
  *
  * Implements samlp:StatusResponseType. All of the elements in that type is
- * stored in the SAML2_Message class, and this class is therefore more
+ * stored in the \SAML2\Message class, and this class is therefore more
  * or less empty. It is included mainly to make it easy to separate requests from
  * responses.
  *
@@ -20,7 +22,7 @@
  *
  * @package SimpleSAMLphp
  */
-abstract class SAML2_StatusResponse extends SAML2_Message
+abstract class StatusResponse extends Message
 {
     /**
      * The ID of the request this is a response to, or NULL if this is an unsolicited response.
@@ -50,7 +52,7 @@ abstract class SAML2_StatusResponse extends SAML2_Message
         parent::__construct($tagName, $xml);
 
         $this->status = array(
-            'Code' => SAML2_Constants::STATUS_SUCCESS,
+            'Code' => Constants::STATUS_SUCCESS,
             'SubCode' => NULL,
             'Message' => NULL,
             );
@@ -63,13 +65,13 @@ abstract class SAML2_StatusResponse extends SAML2_Message
             $this->inResponseTo = $xml->getAttribute('InResponseTo');
         }
 
-        $status = SAML2_Utils::xpQuery($xml, './saml_protocol:Status');
+        $status = Utils::xpQuery($xml, './saml_protocol:Status');
         if (empty($status)) {
             throw new Exception('Missing status code on response.');
         }
         $status = $status[0];
 
-        $statusCode = SAML2_Utils::xpQuery($status, './saml_protocol:StatusCode');
+        $statusCode = Utils::xpQuery($status, './saml_protocol:StatusCode');
         if (empty($statusCode)) {
             throw new Exception('Missing status code in status element.');
         }
@@ -77,12 +79,12 @@ abstract class SAML2_StatusResponse extends SAML2_Message
 
         $this->status['Code'] = $statusCode->getAttribute('Value');
 
-        $subCode = SAML2_Utils::xpQuery($statusCode, './saml_protocol:StatusCode');
+        $subCode = Utils::xpQuery($statusCode, './saml_protocol:StatusCode');
         if (!empty($subCode)) {
             $this->status['SubCode'] = $subCode[0]->getAttribute('Value');
         }
 
-        $message = SAML2_Utils::xpQuery($status, './saml_protocol:StatusMessage');
+        $message = Utils::xpQuery($status, './saml_protocol:StatusMessage');
         if (!empty($message)) {
             $this->status['Message'] = trim($message[0]->textContent);
         }
@@ -98,7 +100,7 @@ abstract class SAML2_StatusResponse extends SAML2_Message
     {
         assert('array_key_exists("Code", $this->status)');
 
-        if ($this->status['Code'] === SAML2_Constants::STATUS_SUCCESS) {
+        if ($this->status['Code'] === Constants::STATUS_SUCCESS) {
             return TRUE;
         }
 
@@ -173,21 +175,21 @@ abstract class SAML2_StatusResponse extends SAML2_Message
             $root->setAttribute('InResponseTo', $this->inResponseTo);
         }
 
-        $status = $this->document->createElementNS(SAML2_Constants::NS_SAMLP, 'Status');
+        $status = $this->document->createElementNS(Constants::NS_SAMLP, 'Status');
         $root->appendChild($status);
 
-        $statusCode = $this->document->createElementNS(SAML2_Constants::NS_SAMLP, 'StatusCode');
+        $statusCode = $this->document->createElementNS(Constants::NS_SAMLP, 'StatusCode');
         $statusCode->setAttribute('Value', $this->status['Code']);
         $status->appendChild($statusCode);
 
         if (!is_null($this->status['SubCode'])) {
-            $subStatusCode = $this->document->createElementNS(SAML2_Constants::NS_SAMLP, 'StatusCode');
+            $subStatusCode = $this->document->createElementNS(Constants::NS_SAMLP, 'StatusCode');
             $subStatusCode->setAttribute('Value', $this->status['SubCode']);
             $statusCode->appendChild($subStatusCode);
         }
 
         if (!is_null($this->status['Message'])) {
-            SAML2_Utils::addString($status, SAML2_Constants::NS_SAMLP, 'StatusMessage', $this->status['Message']);
+            Utils::addString($status, Constants::NS_SAMLP, 'StatusMessage', $this->status['Message']);
         }
 
         return $root;

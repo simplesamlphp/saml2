@@ -1,12 +1,16 @@
 <?php
 
+namespace SAML2\XML\mdrpi;
+
+use SAML2\Utils;
+
 /**
  * Class for handling the mdrpi:PublicationInfo element.
  *
  * @link: http://docs.oasis-open.org/security/saml/Post2.0/saml-metadata-rpi/v1.0/saml-metadata-rpi-v1.0.pdf
  * @package SimpleSAMLphp
  */
-class SAML2_XML_mdrpi_PublicationInfo
+class PublicationInfo
 {
     /**
      * The identifier of the metadata publisher.
@@ -56,14 +60,14 @@ class SAML2_XML_mdrpi_PublicationInfo
         $this->publisher = $xml->getAttribute('publisher');
 
         if ($xml->hasAttribute('creationInstant')) {
-            $this->creationInstant = SAML2_Utils::xsDateTimeToTimestamp($xml->getAttribute('creationInstant'));
+            $this->creationInstant = Utils::xsDateTimeToTimestamp($xml->getAttribute('creationInstant'));
         }
 
         if ($xml->hasAttribute('publicationId')) {
             $this->publicationId = $xml->getAttribute('publicationId');
         }
 
-        $this->UsagePolicy = SAML2_Utils::extractLocalizedStrings($xml, SAML2_XML_mdrpi_Common::NS_MDRPI, 'UsagePolicy');
+        $this->UsagePolicy = Utils::extractLocalizedStrings($xml, Common::NS_MDRPI, 'UsagePolicy');
     }
 
     /**
@@ -81,7 +85,7 @@ class SAML2_XML_mdrpi_PublicationInfo
 
         $doc = $parent->ownerDocument;
 
-        $e = $doc->createElementNS(SAML2_XML_mdrpi_Common::NS_MDRPI, 'mdrpi:PublicationInfo');
+        $e = $doc->createElementNS(Common::NS_MDRPI, 'mdrpi:PublicationInfo');
         $parent->appendChild($e);
 
         $e->setAttribute('publisher', $this->publisher);
@@ -94,7 +98,7 @@ class SAML2_XML_mdrpi_PublicationInfo
             $e->setAttribute('publicationId', $this->publicationId);
         }
 
-        SAML2_Utils::addStrings($e, SAML2_XML_mdrpi_Common::NS_MDRPI, 'mdrpi:UsagePolicy', TRUE, $this->UsagePolicy);
+        Utils::addStrings($e, Common::NS_MDRPI, 'mdrpi:UsagePolicy', TRUE, $this->UsagePolicy);
 
         return $e;
     }
