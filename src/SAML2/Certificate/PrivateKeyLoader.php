@@ -3,7 +3,7 @@
 namespace SAML2\Certificate;
 
 use RobRichards\XMLSecLibs\XMLSecurityKey;
-use SAML2\Configuration\PrivateKey;
+use SAML2\Configuration\PrivateKey as PrivateKeyConfiguration;
 use SAML2\Utilities\File;
 use SAML2\Configuration\DecryptionProvider;
 use SAML2\Utilities\ArrayCollection;
@@ -17,7 +17,7 @@ class PrivateKeyLoader
      *
      * @return \SAML2\Certificate\PrivateKey
      */
-    public function loadPrivateKey(PrivateKey $key)
+    public function loadPrivateKey(PrivateKeyConfiguration $key)
     {
         $privateKey = File::getFileContents($key->getFilePath());
 
@@ -29,7 +29,7 @@ class PrivateKeyLoader
      * @param \SAML2\Configuration\DecryptionProvider $serviceProvider
      *
      * @return \SAML2\Utilities\ArrayCollection
-     * @throws Exception
+     * @throws \Exception
      */
     public function loadDecryptionKeys(
         DecryptionProvider $identityProvider,
@@ -63,7 +63,7 @@ class PrivateKeyLoader
      * @param \SAML2\Certificate\PrivateKey $privateKey
      *
      * @return XMLSecurityKey
-     * @throws Exception
+     * @throws \Exception
      */
     private function convertPrivateKeyToRsaKey(PrivateKey $privateKey)
     {

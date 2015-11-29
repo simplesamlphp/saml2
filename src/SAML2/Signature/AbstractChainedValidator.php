@@ -23,7 +23,7 @@ abstract class AbstractChainedValidator implements ChainedValidator
      * @param \SAML2\SignedElement      $element
      * @param \SAML2\Certificate\X509[] $pemCandidates
      *
-     * @throws Exception
+     * @throws \Exception
      *
      * @return bool
      */
@@ -44,7 +44,7 @@ abstract class AbstractChainedValidator implements ChainedValidator
                     return TRUE;
                 }
                 $this->logger->debug(sprintf('Validation with key "#%d" failed without exception.', $index));
-            } catch (Exception $e) {
+            } catch (\Exception $e) {
                 $this->logger->debug(sprintf(
                     'Validation with key "#%d" failed with exception: %s',
                     $index,

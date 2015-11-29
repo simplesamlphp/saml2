@@ -31,7 +31,7 @@ class ArrayCollection implements Collection
         return isset($this->elements[$key]) ? $this->elements[$key] : NULL;
     }
 
-    public function filter(Closure $f)
+    public function filter(\Closure $f)
     {
         return new self(array_filter($this->elements, $f));
     }
@@ -59,7 +59,7 @@ class ArrayCollection implements Collection
     {
         if ($this->count() !== 1) {
             throw new RuntimeException(sprintf(
-                'SAML2_Utilities_ArrayCollection::getOnlyElement requires that the collection has exactly one element, '
+                __CLASS__ . '::' . __METHOD__ . ' requires that the collection has exactly one element, '
                 . '"%d" elements found',
                 $this->count()
             ));
@@ -78,7 +78,7 @@ class ArrayCollection implements Collection
         return end($this->elements);
     }
 
-    public function map(Closure $function)
+    public function map(\Closure $function)
     {
         return new self(array_map($function, $this->elements));
     }
@@ -90,7 +90,7 @@ class ArrayCollection implements Collection
 
     public function getIterator()
     {
-        return new ArrayIterator($this->elements);
+        return new \ArrayIterator($this->elements);
     }
 
     public function offsetExists($offset)

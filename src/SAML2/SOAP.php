@@ -38,14 +38,14 @@ class SOAP extends Binding
      * Throws an exception if it is unable receive the message.
      *
      * @return \SAML2\Message The received message.
-     * @throws Exception
+     * @throws \Exception
      */
     public function receive()
     {
         $postText = file_get_contents('php://input');
 
         if (empty($postText)) {
-            throw new Exception('Invalid message received to AssertionConsumerService endpoint.');
+            throw new \Exception('Invalid message received to AssertionConsumerService endpoint.');
         }
 
         $document = DOMDocumentFactory::fromString($postText);

@@ -89,7 +89,7 @@ class HTTPRedirect extends Binding
      * Throws an exception if it is unable receive the message.
      *
      * @return \SAML2\Message The received message.
-     * @throws Exception
+     * @throws \Exception
      */
     public function receive()
     {
@@ -100,7 +100,7 @@ class HTTPRedirect extends Binding
         } elseif (array_key_exists('SAMLResponse', $data)) {
             $msg = $data['SAMLResponse'];
         } else {
-            throw new Exception('Missing SAMLRequest or SAMLResponse parameter.');
+            throw new \Exception('Missing SAMLRequest or SAMLResponse parameter.');
         }
 
         if (array_key_exists('SAMLEncoding', $data)) {
@@ -115,7 +115,7 @@ class HTTPRedirect extends Binding
                 $msg = gzinflate($msg);
                 break;
             default:
-                throw new Exception('Unknown SAMLEncoding: ' . var_export($encoding, TRUE));
+                throw new \Exception('Unknown SAMLEncoding: ' . var_export($encoding, TRUE));
         }
 
         Utils::getContainer()->debugMessage($msg, 'in');
@@ -131,7 +131,7 @@ class HTTPRedirect extends Binding
 
         if (array_key_exists('Signature', $data)) {
             if (!array_key_exists('SigAlg', $data)) {
-                throw new Exception('Missing signature algorithm.');
+                throw new \Exception('Missing signature algorithm.');
             }
 
             $signData = array(
@@ -203,7 +203,7 @@ class HTTPRedirect extends Binding
      *
      * @param array          $data The data we need to validate the query string.
      * @param XMLSecurityKey $key  The key we should validate the query against.
-     * @throws Exception
+     * @throws \Exception
      */
     public static function validateSignature(array $data, XMLSecurityKey $key)
     {
@@ -218,14 +218,14 @@ class HTTPRedirect extends Binding
         $signature = base64_decode($signature);
 
         if ($key->type !== XMLSecurityKey::RSA_SHA1) {
-            throw new Exception('Invalid key type for validating signature on query string.');
+            throw new \Exception('Invalid key type for validating signature on query string.');
         }
         if ($key->type !== $sigAlg) {
             $key = Utils::castKey($key, $sigAlg);
         }
 
         if (!$key->verifySignature($query, $signature)) {
-            throw new Exception('Unable to validate signature on query string.');
+            throw new \Exception('Unable to validate signature on query string.');
         }
     }
 

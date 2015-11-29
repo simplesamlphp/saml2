@@ -5,7 +5,7 @@ namespace SAML2;
 /**
  * Class \SAML2\AuthnRequestTest
  */
-class AuthnRequestTest extends PHPUnit_Framework_TestCase
+class AuthnRequestTest extends \PHPUnit_Framework_TestCase
 {
     public function testUnmarshalling()
     {
@@ -40,7 +40,7 @@ class AuthnRequestTest extends PHPUnit_Framework_TestCase
 
     public function testMarshallingOfSimpleRequest()
     {
-        $document = new DOMDocument();
+        $document = new \DOMDocument();
         $document->loadXML(<<<AUTHNREQUEST
 <samlp:AuthnRequest
   xmlns:samlp="urn:oasis:names:tc:SAML:2.0:protocol"
@@ -107,7 +107,7 @@ AUTHNREQUEST;
 
     public function testThatTheSubjectIsCorrectlyRead()
     {
-        $document = new DOMDocument();
+        $document = new \DOMDocument();
         $document->loadXML(<<<AUTHNREQUEST
 <samlp:AuthnRequest
     xmlns:samlp="urn:oasis:names:tc:SAML:2.0:protocol"
@@ -145,7 +145,7 @@ AUTHNREQUEST
 
     public function testThatAnEncryptedNameIdCanBeDecrypted()
     {
-        $document = new DOMDocument();
+        $document = new \DOMDocument();
         $document->loadXML(<<<AUTHNREQUEST
 <samlp:AuthnRequest
     xmlns:samlp="urn:oasis:names:tc:SAML:2.0:protocol"
@@ -207,7 +207,7 @@ AUTHNREQUEST
         $key = CertificatesMock::getPublicKey();
         $request->encryptNameId($key);
 
-        $expectedStructureDocument = new DOMDocument();
+        $expectedStructureDocument = new \DOMDocument();
         $expectedStructureDocument->loadXML(<<<AUTHNREQUEST
 <samlp:AuthnRequest
     xmlns:samlp="urn:oasis:names:tc:SAML:2.0:protocol"
@@ -261,7 +261,7 @@ AUTHNREQUEST
             array('ProviderID' => 'urn:example:1', 'Name' => 'Voorbeeld', 'Something' => 'Else')
         ));
 
-        $expectedStructureDocument = new DOMDocument();
+        $expectedStructureDocument = new \DOMDocument();
         $expectedStructureDocument->loadXML(<<<AUTHNREQUEST
 <samlp:AuthnRequest
     xmlns:samlp="urn:oasis:names:tc:SAML:2.0:protocol"

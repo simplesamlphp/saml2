@@ -14,7 +14,7 @@ class DestinationMatchesTest extends \PHPUnit_Framework_TestCase
 
     public function setUp()
     {
-        $this->response = \Mockery::mock('SAML2_Response');
+        $this->response = \Mockery::mock('SAML2\Response');
     }
 
     /**

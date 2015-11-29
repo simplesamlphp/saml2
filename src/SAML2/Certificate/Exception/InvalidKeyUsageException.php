@@ -8,7 +8,7 @@ use SAML2\Certificate\Key;
 /**
  * Named exception for when a non-existent key-usage is given
  */
-class InvalidKeyUsageException extends InvalidArgumentException implements
+class InvalidKeyUsageException extends \InvalidArgumentException implements
     Throwable
 {
     /**

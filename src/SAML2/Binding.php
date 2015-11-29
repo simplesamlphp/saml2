@@ -23,7 +23,7 @@ abstract class Binding
      *
      * @param  string        $urn The URN of the binding.
      * @return \SAML2\Binding The binding.
-     * @throws Exception
+     * @throws \Exception
      */
     public static function getBinding($urn)
     {
@@ -39,7 +39,7 @@ abstract class Binding
             case Constants::BINDING_HOK_SSO:
                 return new HTTPPost();
             default:
-                throw new Exception('Unsupported binding: ' . var_export($urn, TRUE));
+                throw new \Exception('Unsupported binding: ' . var_export($urn, TRUE));
         }
     }
 
@@ -52,7 +52,7 @@ abstract class Binding
      * An exception will be thrown if it is unable to guess the binding.
      *
      * @return \SAML2\Binding The binding.
-     * @throws Exception
+     * @throws \Exception
      */
     public static function getCurrentBinding()
     {
@@ -96,7 +96,7 @@ abstract class Binding
             $logger->warning('Content-Type: ' . var_export($_SERVER['CONTENT_TYPE'], TRUE));
         }
 
-        throw new Exception('Unable to find the current binding.');
+        throw new \Exception('Unable to find the current binding.');
     }
 
     /**

@@ -68,9 +68,9 @@ class IDPSSODescriptor extends SSODescriptorType
     /**
      * Initialize an IDPSSODescriptor.
      *
-     * @param DOMElement|NULL $xml The XML element we should load.
+     * @param \DOMElement|NULL $xml The XML element we should load.
      */
-    public function __construct(DOMElement $xml = NULL)
+    public function __construct(\DOMElement $xml = NULL)
     {
         parent::__construct('md:IDPSSODescriptor', $xml);
 
@@ -102,10 +102,10 @@ class IDPSSODescriptor extends SSODescriptorType
     /**
      * Add this IDPSSODescriptor to an EntityDescriptor.
      *
-     * @param DOMElement $parent The EntityDescriptor we should append this IDPSSODescriptor to.
-     * @return DOMElement
+     * @param \DOMElement $parent The EntityDescriptor we should append this IDPSSODescriptor to.
+     * @return \DOMElement
      */
-    public function toXML(DOMElement $parent)
+    public function toXML(\DOMElement $parent)
     {
         assert('is_null($this->WantAuthnRequestsSigned) || is_bool($this->WantAuthnRequestsSigned)');
         assert('is_array($this->SingleSignOnService)');

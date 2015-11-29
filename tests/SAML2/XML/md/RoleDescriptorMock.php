@@ -6,11 +6,11 @@ use SAML2\Constants;
 
 
 class RoleDescriptorMock extends RoleDescriptor {
-    public function __construct(DOMElement $xml = NULL) {
+    public function __construct(\DOMElement $xml = NULL) {
         parent::__construct('md:RoleDescriptor', $xml);
     }
 
-    public function toXML(DOMElement $parent) {
+    public function toXML(\DOMElement $parent) {
         $xml = parent::toXML($parent);
         $xml->setAttributeNS(Constants::NS_XSI, 'xsi:type', 'myns:MyElement');
         $xml->setAttributeNS('http://example.org/mynsdefinition', 'myns:tmp', 'tmp');

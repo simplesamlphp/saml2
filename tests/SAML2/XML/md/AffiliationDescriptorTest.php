@@ -6,7 +6,7 @@ use SAML2\DOMDocumentFactory;
 use SAML2\Utils;
 use SAML2\Constants;
 
-class AffiliationDescriptorTest extends PHPUnit_Framework_TestCase
+class AffiliationDescriptorTest extends \PHPUnit_Framework_TestCase
 {
     public function testMarshalling()
     {

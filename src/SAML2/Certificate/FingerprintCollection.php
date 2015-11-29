@@ -19,7 +19,7 @@ class FingerprintCollection extends ArrayCollection
     {
         if (!$fingerprint instanceof Fingerprint) {
             throw InvalidArgumentException::invalidType(
-                'SAML2_Certificate_Fingerprint ',
+                'SAML2\Certificate\Fingerprint ',
                 $fingerprint
             );
         }

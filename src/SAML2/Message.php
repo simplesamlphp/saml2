@@ -77,12 +77,12 @@ abstract class Message implements SignedElement
     private $relayState;
 
     /**
-     * The DOMDocument we are currently building.
+     * The \DOMDocument we are currently building.
      *
      * This variable is used while generating XML from this message. It holds the
-     * DOMDocument of the XML we are generating.
+     * \DOMDocument of the XML we are generating.
      *
-     * @var DOMDocument
+     * @var \DOMDocument
      */
     protected $document;
 
@@ -117,7 +117,7 @@ abstract class Message implements SignedElement
     /**
      * Initialize a message.
      *
-     * This constructor takes an optional parameter with a DOMElement. If this
+     * This constructor takes an optional parameter with a \DOMElement. If this
      * parameter is given, the message will be initialized with data from that
      * XML element.
      *
@@ -125,10 +125,10 @@ abstract class Message implements SignedElement
      * default values.
      *
      * @param string          $tagName The tag name of the root element.
-     * @param DOMElement|NULL $xml     The input message.
-     * @throws Exception
+     * @param \DOMElement|NULL $xml     The input message.
+     * @throws \Exception
      */
-    protected function __construct($tagName, DOMElement $xml = NULL)
+    protected function __construct($tagName, \DOMElement $xml = NULL)
     {
         assert('is_string($tagName)');
         $this->tagName = $tagName;
@@ -143,13 +143,13 @@ abstract class Message implements SignedElement
         }
 
         if (!$xml->hasAttribute('ID')) {
-            throw new Exception('Missing ID attribute on SAML message.');
+            throw new \Exception('Missing ID attribute on SAML message.');
         }
         $this->id = $xml->getAttribute('ID');
 
         if ($xml->getAttribute('Version') !== '2.0') {
             /* Currently a very strict check. */
-            throw new Exception('Unsupported version: ' . $xml->getAttribute('Version'));
+            throw new \Exception('Unsupported version: ' . $xml->getAttribute('Version'));
         }
 
         $this->issueInstant = Utils::xsDateTimeToTimestamp($xml->getAttribute('IssueInstant'));
@@ -175,12 +175,12 @@ abstract class Message implements SignedElement
                 $this->messageContainedSignatureUponConstruction = TRUE;
                 $this->certificates = $sig['Certificates'];
                 $this->validators[] = array(
-                    'Function' => array('SAML2_Utils', 'validateSignature'),
+                    'Function' => array('\SAML2\Utils', 'validateSignature'),
                     'Data' => $sig,
                     );
             }
 
-        } catch (Exception $e) {
+        } catch (\Exception $e) {
             /* Ignore signature validation errors. */
         }
 
@@ -215,7 +215,7 @@ abstract class Message implements SignedElement
      *
      * @param  XMLSecurityKey $key The key we should check against.
      * @return boolean        TRUE on success, FALSE when we don't have a signature.
-     * @throws Exception
+     * @throws \Exception
      */
     public function validate(XMLSecurityKey $key)
     {
@@ -234,7 +234,7 @@ abstract class Message implements SignedElement
                 /* We were able to validate the message with this validator. */
 
                 return TRUE;
-            } catch (Exception $e) {
+            } catch (\Exception $e) {
                 $exceptions[] = $e;
             }
         }
@@ -396,7 +396,7 @@ abstract class Message implements SignedElement
      *
      * This method does not sign the resulting XML document.
      *
-     * @return DOMElement The root element of the DOM tree.
+     * @return \DOMElement The root element of the DOM tree.
      */
     public function toUnsignedXML()
     {
@@ -437,7 +437,7 @@ abstract class Message implements SignedElement
      * This method sign the resulting XML document if the private key for
      * the signature is set.
      *
-     * @return DOMElement The root element of the DOM tree.
+     * @return \DOMElement The root element of the DOM tree.
      */
     public function toSignedXML()
     {
@@ -521,14 +521,14 @@ abstract class Message implements SignedElement
     /**
      * Convert an XML element into a message.
      *
-     * @param  DOMElement    $xml The root XML element.
+     * @param  \DOMElement    $xml The root XML element.
      * @return \SAML2\Message The message.
-     * @throws Exception
+     * @throws \Exception
      */
-    public static function fromXML(DOMElement $xml)
+    public static function fromXML(\DOMElement $xml)
     {
         if ($xml->namespaceURI !== Constants::NS_SAMLP) {
-            throw new Exception('Unknown namespace of SAML message: ' . var_export($xml->namespaceURI, TRUE));
+            throw new \Exception('Unknown namespace of SAML message: ' . var_export($xml->namespaceURI, TRUE));
         }
 
         switch ($xml->localName) {
@@ -547,7 +547,7 @@ abstract class Message implements SignedElement
             case 'ArtifactResolve':
                 return new ArtifactResolve($xml);
             default:
-                throw new Exception('Unknown SAML message: ' . var_export($xml->localName, TRUE));
+                throw new \Exception('Unknown SAML message: ' . var_export($xml->localName, TRUE));
         }
 
     }

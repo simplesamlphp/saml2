@@ -34,9 +34,9 @@ class Scope
     /**
      * Create a Scope.
      *
-     * @param DOMElement|NULL $xml The XML element we should load.
+     * @param \DOMElement|NULL $xml The XML element we should load.
      */
-    public function __construct(DOMElement $xml = NULL)
+    public function __construct(\DOMElement $xml = NULL)
     {
         if ($xml === NULL) {
             return;
@@ -49,10 +49,10 @@ class Scope
     /**
      * Convert this Scope to XML.
      *
-     * @param DOMElement $parent The element we should append this Scope to.
-     * @return DOMElement
+     * @param \DOMElement $parent The element we should append this Scope to.
+     * @return \DOMElement
      */
-    public function toXML(DOMElement $parent)
+    public function toXML(\DOMElement $parent)
     {
         assert('is_string($this->scope)');
         assert('is_bool($this->regexp) || is_null($this->regexp)');

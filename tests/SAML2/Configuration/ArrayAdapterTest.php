@@ -2,7 +2,7 @@
 
 namespace SAML2\Configuration;
 
-class ArrayAdapterTest extends PHPUnit_Framework_TestCase
+class ArrayAdapterTest extends \PHPUnit_Framework_TestCase
 {
     /**
      * @group configuration

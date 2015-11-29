@@ -8,7 +8,7 @@ namespace SAML2;
 class LogoutRequestTest extends \PHPUnit_Framework_TestCase
 {
     /**
-     * @var DOMElement
+     * @var \DOMElement
      */
     private $logoutRequestElement;
 

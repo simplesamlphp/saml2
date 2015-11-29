@@ -27,9 +27,9 @@ abstract class SubjectQuery extends Request
      * Constructor for SAML 2 subject query messages.
      *
      * @param string          $tagName The tag name of the root element.
-     * @param DOMElement|NULL $xml     The input message.
+     * @param \DOMElement|NULL $xml     The input message.
      */
-    protected function __construct($tagName, DOMElement $xml = NULL)
+    protected function __construct($tagName, \DOMElement $xml = NULL)
     {
         parent::__construct($tagName, $xml);
 
@@ -44,25 +44,25 @@ abstract class SubjectQuery extends Request
     /**
      * Parse subject in query.
      *
-     * @param DOMElement $xml The SubjectQuery XML element.
-     * @throws Exception
+     * @param \DOMElement $xml The SubjectQuery XML element.
+     * @throws \Exception
      */
-    private function parseSubject(DOMElement $xml)
+    private function parseSubject(\DOMElement $xml)
     {
         $subject = Utils::xpQuery($xml, './saml_assertion:Subject');
         if (empty($subject)) {
             /* No Subject node. */
-            throw new Exception('Missing subject in subject query.');
+            throw new \Exception('Missing subject in subject query.');
         } elseif (count($subject) > 1) {
-            throw new Exception('More than one <saml:Subject> in <saml:Assertion>.');
+            throw new \Exception('More than one <saml:Subject> in <saml:Assertion>.');
         }
         $subject = $subject[0];
 
         $nameId = Utils::xpQuery($subject, './saml_assertion:NameID');
         if (empty($nameId)) {
-            throw new Exception('Missing <saml:NameID> in <saml:Subject>.');
+            throw new \Exception('Missing <saml:NameID> in <saml:Subject>.');
         } elseif (count($nameId) > 1) {
-            throw new Exception('More than one <saml:NameID> in <saml:Subject>.');
+            throw new \Exception('More than one <saml:NameID> in <saml:Subject>.');
         }
         $nameId = $nameId[0];
         $this->nameId = Utils::parseNameId($nameId);
@@ -102,7 +102,7 @@ abstract class SubjectQuery extends Request
     /**
      * Convert subject query message to an XML element.
      *
-     * @return DOMElement This subject query.
+     * @return \DOMElement This subject query.
      */
     public function toUnsignedXML()
     {

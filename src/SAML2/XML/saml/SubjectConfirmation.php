@@ -36,30 +36,30 @@ class SubjectConfirmation
     /**
      * Initialize (and parse? a SubjectConfirmation element.
      *
-     * @param DOMElement|NULL $xml The XML element we should load.
-     * @throws Exception
+     * @param \DOMElement|NULL $xml The XML element we should load.
+     * @throws \Exception
      */
-    public function __construct(DOMElement $xml = NULL)
+    public function __construct(\DOMElement $xml = NULL)
     {
         if ($xml === NULL) {
             return;
         }
 
         if (!$xml->hasAttribute('Method')) {
-            throw new Exception('SubjectConfirmation element without Method attribute.');
+            throw new \Exception('SubjectConfirmation element without Method attribute.');
         }
         $this->Method = $xml->getAttribute('Method');
 
         $nid = Utils::xpQuery($xml, './saml_assertion:NameID');
         if (count($nid) > 1) {
-            throw new Exception('More than one NameID in a SubjectConfirmation element.');
+            throw new \Exception('More than one NameID in a SubjectConfirmation element.');
         } elseif (!empty($nid)) {
             $this->NameID = new NameID($nid[0]);
         }
 
         $scd = Utils::xpQuery($xml, './saml_assertion:SubjectConfirmationData');
         if (count($scd) > 1) {
-            throw new Exception('More than one SubjectConfirmationData child in a SubjectConfirmation element.');
+            throw new \Exception('More than one SubjectConfirmationData child in a SubjectConfirmation element.');
         } elseif (!empty($scd)) {
             $this->SubjectConfirmationData = new SubjectConfirmationData($scd[0]);
         }
@@ -68,14 +68,14 @@ class SubjectConfirmation
     /**
      * Convert this element to XML.
      *
-     * @param  DOMElement $parent The parent element we should append this element to.
-     * @return DOMElement This element, as XML.
+     * @param  \DOMElement $parent The parent element we should append this element to.
+     * @return \DOMElement This element, as XML.
      */
-    public function toXML(DOMElement $parent)
+    public function toXML(\DOMElement $parent)
     {
         assert('is_string($this->Method)');
-        assert('is_null($this->NameID) || $this->NameID instanceof SAML2_XML_saml_NameID');
-        assert('is_null($this->SubjectConfirmationData) || $this->SubjectConfirmationData instanceof SAML2_XML_saml_SubjectConfirmationData');
+        assert('is_null($this->NameID) || $this->NameID instanceof \SAML2\XML\saml\NameID');
+        assert('is_null($this->SubjectConfirmationData) || $this->SubjectConfirmationData instanceof SAML2\XML\saml\SubjectConfirmationData');
 
         $e = $parent->ownerDocument->createElementNS(Constants::NS_SAML, 'saml:SubjectConfirmation');
         $parent->appendChild($e);

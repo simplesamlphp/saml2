@@ -25,13 +25,13 @@ class HTTPArtifact extends Binding
      *
      * @param  \SAML2\Message $message The message.
      * @return string        The URL the user should be redirected to in order to send a message.
-     * @throws Exception
+     * @throws \Exception
      */
     public function getRedirectURL(Message $message)
     {
         $store = SimpleSAML_Store::getInstance();
         if ($store === FALSE) {
-            throw new Exception('Unable to send artifact without a datastore configured.');
+            throw new \Exception('Unable to send artifact without a datastore configured.');
         }
 
         $generatedId = pack('H*', ((string) SimpleSAML_Utilities::stringToHex(SimpleSAML_Utilities::generateRandomBytes(20))));
@@ -71,7 +71,7 @@ class HTTPArtifact extends Binding
      * Throws an exception if it is unable receive the message.
      *
      * @return \SAML2\Message The received message.
-     * @throws Exception
+     * @throws \Exception
      */
     public function receive()
     {
@@ -81,7 +81,7 @@ class HTTPArtifact extends Binding
             $sourceId = bin2hex(substr($artifact, 4, 20));
 
         } else {
-            throw new Exception('Missing SAMLArt parameter.');
+            throw new \Exception('Missing SAMLArt parameter.');
         }
 
         $metadataHandler = SimpleSAML_Metadata_MetaDataStorageHandler::getMetadataHandler();
@@ -89,7 +89,7 @@ class HTTPArtifact extends Binding
         $idpMetadata = $metadataHandler->getMetaDataConfigForSha1($sourceId, 'saml20-idp-remote');
 
         if ($idpMetadata === NULL) {
-            throw new Exception('No metadata found for remote provider with SHA1 ID: ' . var_export($sourceId, TRUE));
+            throw new \Exception('No metadata found for remote provider with SHA1 ID: ' . var_export($sourceId, TRUE));
         }
 
         $endpoint = NULL;
@@ -101,7 +101,7 @@ class HTTPArtifact extends Binding
         }
 
         if ($endpoint === NULL) {
-            throw new Exception('No ArtifactResolutionService with the correct index.');
+            throw new \Exception('No ArtifactResolutionService with the correct index.');
         }
 
         Utils::getContainer()->getLogger()->debug("ArtifactResolutionService endpoint being used is := " . $endpoint['Location']);
@@ -125,7 +125,7 @@ class HTTPArtifact extends Binding
         $artifactResponse = $soap->send($ar, $this->spMetadata);
 
         if (!$artifactResponse->isSuccess()) {
-            throw new Exception('Received error from ArtifactResolutionService.');
+            throw new \Exception('Received error from ArtifactResolutionService.');
         }
 
         $xml = $artifactResponse->getAny();

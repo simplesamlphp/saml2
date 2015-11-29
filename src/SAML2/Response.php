@@ -17,9 +17,9 @@ class Response extends StatusResponse
     /**
      * Constructor for SAML 2 response messages.
      *
-     * @param DOMElement|NULL $xml The input message.
+     * @param \DOMElement|NULL $xml The input message.
      */
-    public function __construct(DOMElement $xml = NULL)
+    public function __construct(\DOMElement $xml = NULL)
     {
         parent::__construct('Response', $xml);
 
@@ -65,7 +65,7 @@ class Response extends StatusResponse
     /**
      * Convert the response message to an XML element.
      *
-     * @return DOMElement This response.
+     * @return \DOMElement This response.
      */
     public function toUnsignedXML()
     {

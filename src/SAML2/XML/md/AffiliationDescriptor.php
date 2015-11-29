@@ -71,10 +71,10 @@ class AffiliationDescriptor extends SignedElementHelper
     /**
      * Initialize a AffiliationDescriptor.
      *
-     * @param DOMElement|NULL $xml The XML element we should load.
-     * @throws Exception
+     * @param \DOMElement|NULL $xml The XML element we should load.
+     * @throws \Exception
      */
-    public function __construct(DOMElement $xml = NULL)
+    public function __construct(\DOMElement $xml = NULL)
     {
         parent::__construct($xml);
 
@@ -83,7 +83,7 @@ class AffiliationDescriptor extends SignedElementHelper
         }
 
         if (!$xml->hasAttribute('affiliationOwnerID')) {
-            throw new Exception('Missing affiliationOwnerID on AffiliationDescriptor.');
+            throw new \Exception('Missing affiliationOwnerID on AffiliationDescriptor.');
         }
         $this->affiliationOwnerID = $xml->getAttribute('affiliationOwnerID');
 
@@ -103,7 +103,7 @@ class AffiliationDescriptor extends SignedElementHelper
 
         $this->AffiliateMember = Utils::extractStrings($xml, Constants::NS_MD, 'AffiliateMember');
         if (empty($this->AffiliateMember)) {
-            throw new Exception('Missing AffiliateMember in AffiliationDescriptor.');
+            throw new \Exception('Missing AffiliateMember in AffiliationDescriptor.');
         }
 
         foreach (Utils::xpQuery($xml, './saml_metadata:KeyDescriptor') as $kd) {
@@ -114,10 +114,10 @@ class AffiliationDescriptor extends SignedElementHelper
     /**
      * Add this AffiliationDescriptor to an EntityDescriptor.
      *
-     * @param DOMElement $parent The EntityDescriptor we should append this endpoint to.
-     * @return DOMElement
+     * @param \DOMElement $parent The EntityDescriptor we should append this endpoint to.
+     * @return \DOMElement
      */
-    public function toXML(DOMElement $parent)
+    public function toXML(\DOMElement $parent)
     {
         assert('is_string($this->affiliationOwnerID)');
         assert('is_null($this->ID) || is_string($this->ID)');

@@ -12,9 +12,9 @@ class LogoutResponse extends StatusResponse
     /**
      * Constructor for SAML 2 response messages.
      *
-     * @param DOMElement|NULL $xml     The input message.
+     * @param \DOMElement|NULL $xml     The input message.
      */
-    public function __construct(DOMElement $xml = NULL)
+    public function __construct(\DOMElement $xml = NULL)
     {
         parent::__construct('LogoutResponse', $xml);
 

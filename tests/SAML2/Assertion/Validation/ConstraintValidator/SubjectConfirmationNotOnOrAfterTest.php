@@ -28,8 +28,8 @@ class SubjectConfirmationNotOnOrAfterTest extends ControlledTimeTest
     public function setUp()
     {
         parent::setUp();
-        $this->subjectConfirmation                          = m::mock('SAML2_XML_saml_SubjectConfirmation');
-        $this->subjectConfirmationData                      = m::mock('SAML2_XML_saml_SubjectConfirmationData');
+        $this->subjectConfirmation                          = m::mock('SAML2\XML\saml\SubjectConfirmation');
+        $this->subjectConfirmationData                      = m::mock('SAML2\XML\saml\SubjectConfirmationData');
         $this->subjectConfirmation->SubjectConfirmationData = $this->subjectConfirmationData;
     }
 

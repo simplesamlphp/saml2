@@ -63,9 +63,9 @@ class SubjectConfirmationData
     /**
      * Initialize (and parse) a SubjectConfirmationData element.
      *
-     * @param DOMElement|NULL $xml The XML element we should load.
+     * @param \DOMElement|NULL $xml The XML element we should load.
      */
-    public function __construct(DOMElement $xml = NULL)
+    public function __construct(\DOMElement $xml = NULL)
     {
         if ($xml === NULL) {
             return;
@@ -87,7 +87,7 @@ class SubjectConfirmationData
             $this->Address = $xml->getAttribute('Address');
         }
         for ($n = $xml->firstChild; $n !== NULL; $n = $n->nextSibling) {
-            if (!($n instanceof DOMElement)) {
+            if (!($n instanceof \DOMElement)) {
                 continue;
             }
             if ($n->namespaceURI !== XMLSecurityDSig::XMLDSIGNS) {
@@ -108,10 +108,10 @@ class SubjectConfirmationData
     /**
      * Convert this element to XML.
      *
-     * @param  DOMElement $parent The parent element we should append this element to.
-     * @return DOMElement This element, as XML.
+     * @param  \DOMElement $parent The parent element we should append this element to.
+     * @return \DOMElement This element, as XML.
      */
-    public function toXML(DOMElement $parent)
+    public function toXML(\DOMElement $parent)
     {
         assert('is_null($this->NotBefore) || is_int($this->NotBefore)');
         assert('is_null($this->NotOnOrAfter) || is_int($this->NotOnOrAfter)');

@@ -27,10 +27,10 @@ class SubjectConfirmationResponseToMatchesTest extends
     public function setUp()
     {
         parent::setUp();
-        $this->subjectConfirmation                          = m::mock('SAML2_XML_saml_SubjectConfirmation');
-        $this->subjectConfirmationData                      = m::mock('SAML2_XML_saml_SubjectConfirmationData');
+        $this->subjectConfirmation                          = m::mock('SAML2\XML\saml\SubjectConfirmation');
+        $this->subjectConfirmationData                      = m::mock('SAML2\XML\saml\SubjectConfirmationData');
         $this->subjectConfirmation->SubjectConfirmationData = $this->subjectConfirmationData;
-        $this->response                                     = m::mock('SAML2_Response');
+        $this->response                                     = m::mock('SAML2\Response');
     }
 
     /**

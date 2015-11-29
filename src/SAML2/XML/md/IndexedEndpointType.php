@@ -28,10 +28,10 @@ class IndexedEndpointType extends EndpointType
     /**
      * Initialize an IndexedEndpointType.
      *
-     * @param DOMElement|NULL $xml The XML element we should load.
-     * @throws Exception
+     * @param \DOMElement|NULL $xml The XML element we should load.
+     * @throws \Exception
      */
-    public function __construct(DOMElement $xml = NULL)
+    public function __construct(\DOMElement $xml = NULL)
     {
         parent::__construct($xml);
 
@@ -40,7 +40,7 @@ class IndexedEndpointType extends EndpointType
         }
 
         if (!$xml->hasAttribute('index')) {
-            throw new Exception('Missing index on ' . $xml->tagName);
+            throw new \Exception('Missing index on ' . $xml->tagName);
         }
         $this->index = (int) $xml->getAttribute('index');
 
@@ -50,11 +50,11 @@ class IndexedEndpointType extends EndpointType
     /**
      * Add this endpoint to an XML element.
      *
-     * @param DOMElement $parent The element we should append this endpoint to.
+     * @param \DOMElement $parent The element we should append this endpoint to.
      * @param string     $name   The name of the element we should create.
-     * @return DOMElement
+     * @return \DOMElement
      */
-    public function toXML(DOMElement $parent, $name)
+    public function toXML(\DOMElement $parent, $name)
     {
         assert('is_string($name)');
         assert('is_int($this->index)');

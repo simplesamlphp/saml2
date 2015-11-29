@@ -2,7 +2,7 @@
 
 namespace SAML2;
 
-class DOMDocumentFactoryTest extends PHPUnit_Framework_TestCase
+class DOMDocumentFactoryTest extends \PHPUnit_Framework_TestCase
 {
     /**
      * @param mixed $argument
@@ -135,7 +135,7 @@ class DOMDocumentFactoryTest extends PHPUnit_Framework_TestCase
         return array(
             'integer' => array(1),
             'float'   => array(1.234),
-            'object'  => array(new stdClass()),
+            'object'  => array(new \stdClass()),
             'null'    => array(NULL),
             'boolean' => array(FALSE),
             'array'   => array(array()),

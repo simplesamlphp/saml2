@@ -72,9 +72,9 @@ class UIInfo
     /**
      * Create a UIInfo element.
      *
-     * @param DOMElement|NULL $xml The XML element we should load.
+     * @param \DOMElement|NULL $xml The XML element we should load.
      */
-    public function __construct(DOMElement $xml = NULL)
+    public function __construct(\DOMElement $xml = NULL)
     {
         if ($xml === NULL) {
             return;
@@ -104,10 +104,10 @@ class UIInfo
     /**
      * Convert this UIInfo to XML.
      *
-     * @param DOMElement $parent The element we should append to.
-     * @return DOMElement|NULL
+     * @param \DOMElement $parent The element we should append to.
+     * @return \DOMElement|NULL
      */
-    public function toXML(DOMElement $parent)
+    public function toXML(\DOMElement $parent)
     {
         assert('is_array($this->DisplayName)');
         assert('is_array($this->InformationURL)');

@@ -9,7 +9,7 @@ use SAML2\Exception\InvalidArgumentException;
  * Simple DTO wrapper for (X509) keys. Implements ArrayAccess
  * for easier backwards compatibility.
  */
-class Key implements ArrayAccess
+class Key implements \ArrayAccess
 {
     // Possible key usages
     const USAGE_SIGNING = 'signing';
@@ -88,7 +88,7 @@ class Key implements ArrayAccess
      * Asserts that the parameter is of type string
      * @param mixed $test
      *
-     * @throws Exception
+     * @throws \Exception
      */
     protected function assertIsString($test)
     {

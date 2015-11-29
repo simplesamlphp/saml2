@@ -54,7 +54,7 @@ class HTTPPost extends Binding
      * Throws an exception if it is unable receive the message.
      *
      * @return \SAML2\Message The received message.
-     * @throws Exception
+     * @throws \Exception
      */
     public function receive()
     {
@@ -63,7 +63,7 @@ class HTTPPost extends Binding
         } elseif (array_key_exists('SAMLResponse', $_POST)) {
             $msg = $_POST['SAMLResponse'];
         } else {
-            throw new Exception('Missing SAMLRequest or SAMLResponse parameter.');
+            throw new \Exception('Missing SAMLRequest or SAMLResponse parameter.');
         }
 
         $msg = base64_decode($msg);

@@ -23,9 +23,9 @@ class RequestedAttribute extends Attribute
     /**
      * Initialize an RequestedAttribute.
      *
-     * @param DOMElement|NULL $xml The XML element we should load.
+     * @param \DOMElement|NULL $xml The XML element we should load.
      */
-    public function __construct(DOMElement $xml = NULL)
+    public function __construct(\DOMElement $xml = NULL)
     {
         parent::__construct($xml);
 
@@ -39,10 +39,10 @@ class RequestedAttribute extends Attribute
     /**
      * Convert this RequestedAttribute to XML.
      *
-     * @param DOMElement $parent The element we should append this RequestedAttribute to.
-     * @return DOMElement
+     * @param \DOMElement $parent The element we should append this RequestedAttribute to.
+     * @return \DOMElement
      */
-    public function toXML(DOMElement $parent)
+    public function toXML(\DOMElement $parent)
     {
         assert('is_bool($this->isRequired) || is_null($this->isRequired)');
 

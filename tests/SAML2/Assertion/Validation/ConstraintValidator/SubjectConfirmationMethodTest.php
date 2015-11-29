@@ -16,7 +16,7 @@ class SubjectConfirmationTest extends \PHPUnit_Framework_TestCase
 
     public function setUp()
     {
-        $this->subjectConfirmation = m::mock('SAML2_XML_saml_SubjectConfirmation');
+        $this->subjectConfirmation = m::mock('SAML2\XML\saml\SubjectConfirmation');
     }
 
     /**

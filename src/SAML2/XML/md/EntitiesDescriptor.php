@@ -61,9 +61,9 @@ class EntitiesDescriptor extends SignedElementHelper
     /**
      * Initialize an EntitiesDescriptor.
      *
-     * @param DOMElement|NULL $xml The XML element we should load.
+     * @param \DOMElement|NULL $xml The XML element we should load.
      */
-    public function __construct(DOMElement $xml = NULL)
+    public function __construct(\DOMElement $xml = NULL)
     {
         parent::__construct($xml);
 
@@ -98,10 +98,10 @@ class EntitiesDescriptor extends SignedElementHelper
     /**
      * Convert this EntitiesDescriptor to XML.
      *
-     * @param DOMElement|NULL $parent The EntitiesDescriptor we should append this EntitiesDescriptor to.
-     * @return DOMElement
+     * @param \DOMElement|NULL $parent The EntitiesDescriptor we should append this EntitiesDescriptor to.
+     * @return \DOMElement
      */
-    public function toXML(DOMElement $parent = NULL)
+    public function toXML(\DOMElement $parent = NULL)
     {
         assert('is_null($this->ID) || is_string($this->ID)');
         assert('is_null($this->validUntil) || is_int($this->validUntil)');

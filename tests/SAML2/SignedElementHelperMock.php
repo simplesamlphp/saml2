@@ -8,15 +8,15 @@ namespace SAML2;
 class SignedElementHelperMock extends SignedElementHelper
 {
     /**
-     * @param DOMElement $xml
+     * @param \DOMElement $xml
      */
-    public function __construct(DOMElement $xml = NULL)
+    public function __construct(\DOMElement $xml = NULL)
     {
         parent::__construct($xml);
     }
 
     /**
-     * @return DOMElement
+     * @return \DOMElement
      */
     public function toSignedXML()
     {

@@ -25,8 +25,8 @@ class SpIsValidAudienceTest extends \PHPUnit_Framework_TestCase
     public function setUp()
     {
         parent::setUp();
-        $this->assertion = m::mock('SAML2_Assertion');
-        $this->serviceProvider = m::mock('SAML2_Configuration_ServiceProvider');
+        $this->assertion = m::mock('SAML2\Assertion');
+        $this->serviceProvider = m::mock('SAML2\Configuration\ServiceProvider');
     }
 
     /**

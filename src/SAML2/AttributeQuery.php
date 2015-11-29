@@ -39,10 +39,10 @@ class AttributeQuery extends SubjectQuery
     /**
      * Constructor for SAML 2 attribute query messages.
      *
-     * @param DOMElement|NULL $xml The input message.
-     * @throws Exception
+     * @param \DOMElement|NULL $xml The input message.
+     * @throws \Exception
      */
-    public function __construct(DOMElement $xml = NULL)
+    public function __construct(\DOMElement $xml = NULL)
     {
         parent::__construct('AttributeQuery', $xml);
 
@@ -57,7 +57,7 @@ class AttributeQuery extends SubjectQuery
         $attributes = Utils::xpQuery($xml, './saml_assertion:Attribute');
         foreach ($attributes as $attribute) {
             if (!$attribute->hasAttribute('Name')) {
-                throw new Exception('Missing name on <saml:Attribute> element.');
+                throw new \Exception('Missing name on <saml:Attribute> element.');
             }
             $name = $attribute->getAttribute('Name');
 
@@ -135,7 +135,7 @@ class AttributeQuery extends SubjectQuery
     /**
      * Convert the attribute query message to an XML element.
      *
-     * @return DOMElement This attribute query.
+     * @return \DOMElement This attribute query.
      */
     public function toUnsignedXML()
     {

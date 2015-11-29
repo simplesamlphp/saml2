@@ -51,9 +51,9 @@ class DiscoHints
     /**
      * Create a DiscoHints element.
      *
-     * @param DOMElement|NULL $xml The XML element we should load.
+     * @param \DOMElement|NULL $xml The XML element we should load.
      */
-    public function __construct(DOMElement $xml = NULL)
+    public function __construct(\DOMElement $xml = NULL)
     {
         if ($xml === NULL) {
             return;
@@ -71,10 +71,10 @@ class DiscoHints
     /**
      * Convert this DiscoHints to XML.
      *
-     * @param DOMElement $parent The element we should append to.
-     * @return DOMElement|NULL
+     * @param \DOMElement $parent The element we should append to.
+     * @return \DOMElement|NULL
      */
-    public function toXML(DOMElement $parent)
+    public function toXML(\DOMElement $parent)
     {
         assert('is_array($this->IPHint)');
         assert('is_array($this->DomainHint)');

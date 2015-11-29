@@ -19,7 +19,7 @@ class KeyCollection extends ArrayCollection
     {
         if (!$key instanceof Key) {
             throw InvalidArgumentException::invalidType(
-                'SAML2_Certificate_Key',
+                'SAML2\Certificate\Key',
                 $key
             );
         }

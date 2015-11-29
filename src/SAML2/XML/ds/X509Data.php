@@ -25,16 +25,16 @@ class X509Data
     /**
      * Initialize a X509Data.
      *
-     * @param DOMElement|NULL $xml The XML element we should load.
+     * @param \DOMElement|NULL $xml The XML element we should load.
      */
-    public function __construct(DOMElement $xml = NULL)
+    public function __construct(\DOMElement $xml = NULL)
     {
         if ($xml === NULL) {
             return;
         }
 
         for ($n = $xml->firstChild; $n !== NULL; $n = $n->nextSibling) {
-            if (!($n instanceof DOMElement)) {
+            if (!($n instanceof \DOMElement)) {
                 continue;
             }
 
@@ -56,10 +56,10 @@ class X509Data
     /**
      * Convert this X509Data element to XML.
      *
-     * @param DOMElement $parent The element we should append this X509Data element to.
-     * @return DOMElement
+     * @param \DOMElement $parent The element we should append this X509Data element to.
+     * @return \DOMElement
      */
-    public function toXML(DOMElement $parent)
+    public function toXML(\DOMElement $parent)
     {
         assert('is_array($this->data)');
 

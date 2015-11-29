@@ -2,7 +2,7 @@
 
 namespace SAML2\Certificate;
 
-class FingerprintTest extends PHPUnit_Framework_TestCase
+class FingerprintTest extends \PHPUnit_Framework_TestCase
 {
     /**
      * @var \SAML2\Certificate\Fingerprint

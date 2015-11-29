@@ -11,15 +11,15 @@ namespace SAML2;
 class ArtifactResponse extends StatusResponse
 {
     /**
-     * The DOMElement with the message the artifact refers
+     * The \DOMElement with the message the artifact refers
      * to, or NULL if we don't refer to any artifact.
      *
-     * @var DOMElement|NULL
+     * @var \DOMElement|NULL
      */
     private $any;
 
 
-    public function __construct(DOMElement $xml = NULL)
+    public function __construct(\DOMElement $xml = NULL)
     {
         parent::__construct('ArtifactResponse', $xml);
 
@@ -31,7 +31,7 @@ class ArtifactResponse extends StatusResponse
             $status = $status[0];
 
             for ($any = $status->nextSibling; $any !== NULL; $any = $any->nextSibling) {
-                if ($any instanceof DOMElement) {
+                if ($any instanceof \DOMElement) {
                     $this->any = $any;
                     break;
                 }
@@ -41,7 +41,7 @@ class ArtifactResponse extends StatusResponse
 
     }
 
-    public function setAny(DOMElement $any = NULL)
+    public function setAny(\DOMElement $any = NULL)
     {
         $this->any = $any;
     }
@@ -54,7 +54,7 @@ class ArtifactResponse extends StatusResponse
     /**
      * Convert the response message to an XML element.
      *
-     * @return DOMElement This response.
+     * @return \DOMElement This response.
      */
     public function toUnsignedXML()
     {

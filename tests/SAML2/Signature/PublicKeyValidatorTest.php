@@ -19,8 +19,8 @@ class PublicKeyValidatorTest extends \PHPUnit_Framework_TestCase
 
     public function setUp()
     {
-        $this->mockConfiguration = \Mockery::mock('SAML2_Configuration_CertificateProvider');
-        $this->mockSignedElement = \Mockery::mock('SAML2_SignedElement');
+        $this->mockConfiguration = \Mockery::mock('SAML2\Configuration\CertificateProvider');
+        $this->mockSignedElement = \Mockery::mock('SAML2\SignedElement');
     }
 
     /**
@@ -95,7 +95,7 @@ class PublicKeyValidatorTest extends \PHPUnit_Framework_TestCase
 
     private function prepareKeyLoader($returnValue)
     {
-        return \Mockery::mock('SAML2_Certificate_KeyLoader')
+        return \Mockery::mock('SAML2\Certificate\KeyLoader')
             ->shouldReceive('extractPublicKeys')
             ->andReturn($returnValue)
             ->getMock();

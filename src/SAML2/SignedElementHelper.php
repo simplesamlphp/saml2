@@ -39,9 +39,9 @@ class SignedElementHelper implements SignedElement
     /**
      * Initialize the helper class.
      *
-     * @param DOMElement|NULL $xml The XML element which may be signed.
+     * @param \DOMElement|NULL $xml The XML element which may be signed.
      */
-    protected function __construct(DOMElement $xml = NULL)
+    protected function __construct(\DOMElement $xml = NULL)
     {
         $this->certificates = array();
         $this->validators = array();
@@ -57,12 +57,12 @@ class SignedElementHelper implements SignedElement
             if ($sig !== FALSE) {
                 $this->certificates = $sig['Certificates'];
                 $this->validators[] = array(
-                    'Function' => array('SAML2_Utils', 'validateSignature'),
+                    'Function' => array('\SAML2\Utils', 'validateSignature'),
                     'Data' => $sig,
                 );
             }
 
-        } catch (Exception $e) {
+        } catch (\Exception $e) {
             /* Ignore signature validation errors. */
         }
     }
@@ -94,7 +94,7 @@ class SignedElementHelper implements SignedElement
      *
      * @param  XMLSecurityKey $key The key we should check against.
      * @return boolean        TRUE on success, FALSE when we don't have a signature.
-     * @throws Exception
+     * @throws \Exception
      */
     public function validate(XMLSecurityKey $key)
     {
@@ -113,7 +113,7 @@ class SignedElementHelper implements SignedElement
                 /* We were able to validate the message with this validator. */
 
                 return TRUE;
-            } catch (Exception $e) {
+            } catch (\Exception $e) {
                 $exceptions[] = $e;
             }
         }
@@ -190,7 +190,7 @@ class SignedElementHelper implements SignedElement
                 if ($this->validate($key)) {
                     $ret[] = $cert;
                 }
-            } catch (Exception $e) {
+            } catch (\Exception $e) {
                 /* This certificate does not sign this element. */
             }
         }
@@ -201,11 +201,11 @@ class SignedElementHelper implements SignedElement
     /**
      * Sign the given XML element.
      *
-     * @param DOMElement      $root         The element we should sign.
-     * @param DOMElement|NULL $insertBefore The element we should insert the signature node before.
-     * @return DOMElement|NULL
+     * @param \DOMElement      $root         The element we should sign.
+     * @param \DOMElement|NULL $insertBefore The element we should insert the signature node before.
+     * @return \DOMElement|NULL
      */
-    protected function signElement(DOMElement $root, DOMElement $insertBefore = NULL)
+    protected function signElement(\DOMElement $root, \DOMElement $insertBefore = NULL)
     {
         if ($this->signatureKey === NULL) {
             /* We cannot sign this element. */

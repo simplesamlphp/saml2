@@ -66,17 +66,17 @@ class ContactPerson
     /**
      * Initialize a ContactPerson element.
      *
-     * @param DOMElement|NULL $xml The XML element we should load.
-     * @throws Exception
+     * @param \DOMElement|NULL $xml The XML element we should load.
+     * @throws \Exception
      */
-    public function __construct(DOMElement $xml = NULL)
+    public function __construct(\DOMElement $xml = NULL)
     {
         if ($xml === NULL) {
             return;
         }
 
         if (!$xml->hasAttribute('contactType')) {
-            throw new Exception('Missing contactType on ContactPerson.');
+            throw new \Exception('Missing contactType on ContactPerson.');
         }
         $this->contactType = $xml->getAttribute('contactType');
 
@@ -90,13 +90,13 @@ class ContactPerson
     }
 
     /**
-     * Retrieve the value of a child DOMElements as an array of strings.
+     * Retrieve the value of a child \DOMElements as an array of strings.
      *
-     * @param  DOMElement $parent The parent element.
+     * @param  \DOMElement $parent The parent element.
      * @param  string     $name   The name of the child elements.
      * @return array      The value of the child elements.
      */
-    private static function getStringElements(DOMElement $parent, $name)
+    private static function getStringElements(\DOMElement $parent, $name)
     {
         assert('is_string($name)');
 
@@ -111,14 +111,14 @@ class ContactPerson
     }
 
     /**
-     * Retrieve the value of a child DOMElement as a string.
+     * Retrieve the value of a child \DOMElement as a string.
      *
-     * @param  DOMElement  $parent The parent element.
+     * @param  \DOMElement  $parent The parent element.
      * @param  string      $name   The name of the child element.
      * @return string|NULL The value of the child element.
-     * @throws Exception
+     * @throws \Exception
      */
-    private static function getStringElement(DOMElement $parent, $name)
+    private static function getStringElement(\DOMElement $parent, $name)
     {
         assert('is_string($name)');
 
@@ -127,7 +127,7 @@ class ContactPerson
             return NULL;
         }
         if (count($e) > 1) {
-            throw new Exception('More than one ' . $name . ' in ' . $parent->tagName);
+            throw new \Exception('More than one ' . $name . ' in ' . $parent->tagName);
         }
 
         return $e[0];
@@ -136,10 +136,10 @@ class ContactPerson
     /**
      * Convert this ContactPerson to XML.
      *
-     * @param  DOMElement $parent The element we should add this contact to.
-     * @return DOMElement The new ContactPerson-element.
+     * @param  \DOMElement $parent The element we should add this contact to.
+     * @return \DOMElement The new ContactPerson-element.
      */
-    public function toXML(DOMElement $parent)
+    public function toXML(\DOMElement $parent)
     {
         assert('is_string($this->contactType)');
         assert('is_array($this->Extensions)');
