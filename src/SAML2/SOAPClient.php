@@ -4,6 +4,8 @@ namespace SAML2;
 
 use RobRichards\XMLSecLibs\XMLSecurityKey;
 use SAML2\Exception\RuntimeException;
+use SimpleSAML_Configuration;
+use SimpleSAML_Utilities;
 
 /**
  * Implementation of the SAML 2.0 SOAP binding.
@@ -20,8 +22,8 @@ class SOAPClient
      * This function sends the SOAP message to the service location and returns SOAP response
      *
      * @param  \SAML2\Message            $msg         The request that should be sent.
-     * @param  SimpleSAML_Configuration $srcMetadata The metadata of the issuer of the message.
-     * @param  SimpleSAML_Configuration $dstMetadata The metadata of the destination of the message.
+     * @param  \SimpleSAML_Configuration $srcMetadata The metadata of the issuer of the message.
+     * @param  \SimpleSAML_Configuration $dstMetadata The metadata of the destination of the message.
      * @return \SAML2\Message            The response we received.
      * @throws \Exception
      */

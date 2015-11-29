@@ -2,14 +2,16 @@
 
 namespace SAML2\Configuration;
 
+use SimpleSAML_Configuration;
+
 /**
  * Backwards compatibility helper for SimpleSAMLphp
  */
 class SimpleSAMLConverter
 {
     /**
-     * @param SimpleSAML_Configuration $configuration
-     * @param string                   $certificatePrefix
+     * @param \SimpleSAML_Configuration $configuration
+     * @param string                    $certificatePrefix
      *
      * @return \SAML2\Configuration\IdentityProvider
      */
@@ -25,8 +27,8 @@ class SimpleSAMLConverter
     }
 
     /**
-     * @param SimpleSAML_Configuration $configuration
-     * @param string                   $certificatePrefix
+     * @param \SimpleSAML_Configuration $configuration
+     * @param string                    $certificatePrefix
      *
      * @return \SAML2\Configuration\ServiceProvider
      */
@@ -42,8 +44,8 @@ class SimpleSAMLConverter
     }
 
     /**
-     * @param SimpleSAML_Configuration $configuration
-     * @param string                   $prefix
+     * @param \SimpleSAML_Configuration $configuration
+     * @param string                    $prefix
      *
      * @return array
      */

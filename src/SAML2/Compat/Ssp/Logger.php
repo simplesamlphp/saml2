@@ -3,6 +3,7 @@
 namespace SAML2\Compat\Ssp;
 
 use Psr\Log\LoggerInterface;
+use SimpleSAML_Logger;
 
 class Logger implements LoggerInterface
 {

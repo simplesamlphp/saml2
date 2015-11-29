@@ -3,6 +3,7 @@
 namespace SAML2\Compat\Ssp;
 
 use SAML2\Compat\AbstractContainer;
+use SimpleSAML_Utilities;
 
 class Container extends AbstractContainer
 {

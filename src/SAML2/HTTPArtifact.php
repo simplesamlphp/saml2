@@ -4,6 +4,10 @@ namespace SAML2;
 
 use RobRichards\XMLSecLibs\XMLSecurityKey;
 use SAML2\Utilities\Temporal;
+use SimpleSAML_Configuration;
+use SimpleSAML_Metadata_MetaDataStorageHandler;
+use SimpleSAML_Store;
+use SimpleSAML_Utilities;
 
 /**
  * Class which implements the HTTP-Artifact binding.
@@ -16,7 +20,7 @@ use SAML2\Utilities\Temporal;
 class HTTPArtifact extends Binding
 {
     /**
-     * @var SimpleSAML_Configuration
+     * @var \SimpleSAML_Configuration
      */
     private $spMetadata;
 
@@ -145,7 +149,7 @@ class HTTPArtifact extends Binding
     }
 
     /**
-     * @param SimpleSAML_Configuration $sp
+     * @param \SimpleSAML_Configuration $sp
      */
     public function setSPMetadata(SimpleSAML_Configuration $sp)
     {
