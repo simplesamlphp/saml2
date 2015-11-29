@@ -1,11 +1,15 @@
 <?php
 
+namespace SAML2\XML\md;
+
+use SAML2\Utils;
+
 /**
  * Class representing SAML 2 IndexedEndpointType.
  *
  * @package SimpleSAMLphp
  */
-class SAML2_XML_md_IndexedEndpointType extends SAML2_XML_md_EndpointType
+class IndexedEndpointType extends EndpointType
 {
     /**
      * The index for this endpoint.
@@ -40,7 +44,7 @@ class SAML2_XML_md_IndexedEndpointType extends SAML2_XML_md_EndpointType
         }
         $this->index = (int) $xml->getAttribute('index');
 
-        $this->isDefault = SAML2_Utils::parseBoolean($xml, 'isDefault', NULL);
+        $this->isDefault = Utils::parseBoolean($xml, 'isDefault', NULL);
     }
 
     /**

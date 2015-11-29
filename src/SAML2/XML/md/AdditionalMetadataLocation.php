@@ -1,11 +1,16 @@
 <?php
 
+namespace SAML2\XML\md;
+
+use SAML2\Utils;
+use SAML2\Constants;
+
 /**
  * Class representing SAML 2 metadata AdditionalMetadataLocation element.
  *
  * @package SimpleSAMLphp
  */
-class SAML2_XML_md_AdditionalMetadataLocation
+class AdditionalMetadataLocation
 {
     /**
      * The namespace of this metadata.
@@ -52,7 +57,7 @@ class SAML2_XML_md_AdditionalMetadataLocation
         assert('is_string($this->namespace)');
         assert('is_string($this->location)');
 
-        $e = SAML2_Utils::addString($parent, SAML2_Constants::NS_MD, 'md:AdditionalMetadataLocation', $this->location);
+        $e = Utils::addString($parent, Constants::NS_MD, 'md:AdditionalMetadataLocation', $this->location);
         $e->setAttribute('namespace', $this->namespace);
 
         return $e;

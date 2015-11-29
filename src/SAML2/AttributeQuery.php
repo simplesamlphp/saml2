@@ -1,5 +1,7 @@
 <?php
 
+namespace SAML2;
+
 /**
  * Class for SAML 2 attribute query messages.
  *
@@ -15,7 +17,7 @@
  *
  * @package SimpleSAMLphp
  */
-class SAML2_AttributeQuery extends SAML2_SubjectQuery
+class AttributeQuery extends SubjectQuery
 {
     /**
      * The attributes, as an associative array.
@@ -45,14 +47,14 @@ class SAML2_AttributeQuery extends SAML2_SubjectQuery
         parent::__construct('AttributeQuery', $xml);
 
         $this->attributes = array();
-        $this->nameFormat = SAML2_Constants::NAMEFORMAT_UNSPECIFIED;
+        $this->nameFormat = Constants::NAMEFORMAT_UNSPECIFIED;
 
         if ($xml === NULL) {
             return;
         }
 
         $firstAttribute = TRUE;
-        $attributes = SAML2_Utils::xpQuery($xml, './saml_assertion:Attribute');
+        $attributes = Utils::xpQuery($xml, './saml_assertion:Attribute');
         foreach ($attributes as $attribute) {
             if (!$attribute->hasAttribute('Name')) {
                 throw new Exception('Missing name on <saml:Attribute> element.');
@@ -62,7 +64,7 @@ class SAML2_AttributeQuery extends SAML2_SubjectQuery
             if ($attribute->hasAttribute('NameFormat')) {
                 $nameFormat = $attribute->getAttribute('NameFormat');
             } else {
-                $nameFormat = SAML2_Constants::NAMEFORMAT_UNSPECIFIED;
+                $nameFormat = Constants::NAMEFORMAT_UNSPECIFIED;
             }
 
             if ($firstAttribute) {
@@ -70,7 +72,7 @@ class SAML2_AttributeQuery extends SAML2_SubjectQuery
                 $firstAttribute = FALSE;
             } else {
                 if ($this->nameFormat !== $nameFormat) {
-                    $this->nameFormat = SAML2_Constants::NAMEFORMAT_UNSPECIFIED;
+                    $this->nameFormat = Constants::NAMEFORMAT_UNSPECIFIED;
                 }
             }
 
@@ -78,7 +80,7 @@ class SAML2_AttributeQuery extends SAML2_SubjectQuery
                 $this->attributes[$name] = array();
             }
 
-            $values = SAML2_Utils::xpQuery($attribute, './saml_assertion:AttributeValue');
+            $values = Utils::xpQuery($attribute, './saml_assertion:AttributeValue');
             foreach ($values as $value) {
                 $this->attributes[$name][] = trim($value->textContent);
             }
@@ -140,11 +142,11 @@ class SAML2_AttributeQuery extends SAML2_SubjectQuery
         $root = parent::toUnsignedXML();
 
         foreach ($this->attributes as $name => $values) {
-            $attribute = $root->ownerDocument->createElementNS(SAML2_Constants::NS_SAML, 'saml:Attribute');
+            $attribute = $root->ownerDocument->createElementNS(Constants::NS_SAML, 'saml:Attribute');
             $root->appendChild($attribute);
             $attribute->setAttribute('Name', $name);
 
-            if ($this->nameFormat !== SAML2_Constants::NAMEFORMAT_UNSPECIFIED) {
+            if ($this->nameFormat !== Constants::NAMEFORMAT_UNSPECIFIED) {
                 $attribute->setAttribute('NameFormat', $this->nameFormat);
             }
 
@@ -157,9 +159,9 @@ class SAML2_AttributeQuery extends SAML2_SubjectQuery
                     $type = NULL;
                 }
 
-                $attributeValue = SAML2_Utils::addString($attribute, SAML2_Constants::NS_SAML, 'saml:AttributeValue', $value);
+                $attributeValue = Utils::addString($attribute, Constants::NS_SAML, 'saml:AttributeValue', $value);
                 if ($type !== NULL) {
-                    $attributeValue->setAttributeNS(SAML2_Constants::NS_XSI, 'xsi:type', $type);
+                    $attributeValue->setAttributeNS(Constants::NS_XSI, 'xsi:type', $type);
                 }
             }
         }

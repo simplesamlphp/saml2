@@ -1,19 +1,27 @@
 <?php
 
-class SAML2_Assertion_Decrypter
+namespace SAML2\Assertion;
+
+use SAML2\Configuration\IdentityProvider;
+use SAML2\Configuration\ServiceProvider;
+use SAML2\Certificate\PrivateKeyLoader;
+use SAML2\EncryptedAssertion;
+use SAML2\Assertion\Exception\NotDecryptedException;
+
+class Decrypter
 {
     /**
-     * @var SAML2_Configuration_IdentityProvider
+     * @var \SAML2\Configuration\IdentityProvider
      */
     private $identityProvider;
 
     /**
-     * @var SAML2_Configuration_ServiceProvider
+     * @var \SAML2\Configuration\ServiceProvider
      */
     private $serviceProvider;
 
     /**
-     * @var SAML2_Certificate_PrivateKeyLoader
+     * @var \SAML2\Certificate\PrivateKeyLoader
      */
     private $privateKeyLoader;
 
@@ -24,9 +32,9 @@ class SAML2_Assertion_Decrypter
 
     public function __construct(
         \Psr\Log\LoggerInterface $logger,
-        SAML2_Configuration_IdentityProvider $identityProvider,
-        SAML2_Configuration_ServiceProvider $serviceProvider,
-        SAML2_Certificate_PrivateKeyLoader $privateKeyLoader
+        IdentityProvider $identityProvider,
+        ServiceProvider $serviceProvider,
+        PrivateKeyLoader $privateKeyLoader
     ) {
         $this->logger = $logger;
         $this->identityProvider = $identityProvider;
@@ -44,11 +52,11 @@ class SAML2_Assertion_Decrypter
     }
 
     /**
-     * @param SAML2_EncryptedAssertion $assertion
+     * @param \SAML2\EncryptedAssertion $assertion
      *
-     * @return SAML2_Assertion
+     * @return \SAML2\Assertion
      */
-    public function decrypt(SAML2_EncryptedAssertion $assertion)
+    public function decrypt(EncryptedAssertion $assertion)
     {
         $decryptionKeys = $this->privateKeyLoader->loadDecryptionKeys($this->identityProvider, $this->serviceProvider);
         $blacklistedKeys = $this->identityProvider->getBlacklistedAlgorithms();
@@ -75,7 +83,7 @@ class SAML2_Assertion_Decrypter
             }
         }
 
-        throw new SAML2_Assertion_Exception_NotDecryptedException(sprintf(
+        throw new NotDecryptedException(sprintf(
             'Could not decrypt the assertion, tried with "%d" keys. See the debug log for more information',
             count($decryptionKeys)
         ));

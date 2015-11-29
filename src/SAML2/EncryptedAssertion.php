@@ -1,11 +1,13 @@
 <?php
 
+namespace SAML2;
+
 /**
  * Class handling encrypted assertions.
  *
  * @package SimpleSAMLphp
  */
-class SAML2_EncryptedAssertion
+class EncryptedAssertion
 {
     /**
      * The current encrypted assertion.
@@ -26,7 +28,7 @@ class SAML2_EncryptedAssertion
             return;
         }
 
-        $data = SAML2_Utils::xpQuery($xml, './xenc:EncryptedData');
+        $data = Utils::xpQuery($xml, './xenc:EncryptedData');
         if (count($data) === 0) {
             throw new Exception('Missing encrypted data in <saml:EncryptedAssertion>.');
         } elseif (count($data) > 1) {
@@ -38,15 +40,15 @@ class SAML2_EncryptedAssertion
     /**
      * Set the assertion.
      *
-     * @param SAML2_Assertion $assertion The assertion.
+     * @param \SAML2\Assertion $assertion The assertion.
      * @param XMLSecurityKey  $key       The key we should use to encrypt the assertion.
      * @throws Exception
      */
-    public function setAssertion(SAML2_Assertion $assertion, XMLSecurityKey $key)
+    public function setAssertion(Assertion $assertion, XMLSecurityKey $key)
     {
         $xml = $assertion->toXML();
 
-        SAML2_Utils::getContainer()->debugMessage($xml, 'encrypt');
+        Utils::getContainer()->debugMessage($xml, 'encrypt');
 
         $enc = new XMLSecEnc();
         $enc->setNode($xml);
@@ -81,15 +83,15 @@ class SAML2_EncryptedAssertion
      *
      * @param  XMLSecurityKey  $inputKey  The key we should use to decrypt the assertion.
      * @param  array           $blacklist Blacklisted decryption algorithms.
-     * @return SAML2_Assertion The decrypted assertion.
+     * @return \SAML2\Assertion The decrypted assertion.
      */
     public function getAssertion(XMLSecurityKey $inputKey, array $blacklist = array())
     {
-        $assertionXML = SAML2_Utils::decryptElement($this->encryptedData, $inputKey, $blacklist);
+        $assertionXML = Utils::decryptElement($this->encryptedData, $inputKey, $blacklist);
 
-        SAML2_Utils::getContainer()->debugMessage($assertionXML, 'decrypt');
+        Utils::getContainer()->debugMessage($assertionXML, 'decrypt');
 
-        return new SAML2_Assertion($assertionXML);
+        return new Assertion($assertionXML);
     }
 
     /**
@@ -101,13 +103,13 @@ class SAML2_EncryptedAssertion
     public function toXML(DOMNode $parentElement = NULL)
     {
         if ($parentElement === NULL) {
-            $document = SAML2_DOMDocumentFactory::create();
+            $document = DOMDocumentFactory::create();
             $parentElement = $document;
         } else {
             $document = $parentElement->ownerDocument;
         }
 
-        $root = $document->createElementNS(SAML2_Constants::NS_SAML, 'saml:' . 'EncryptedAssertion');
+        $root = $document->createElementNS(Constants::NS_SAML, 'saml:' . 'EncryptedAssertion');
         $parentElement->appendChild($root);
 
         $root->appendChild($document->importNode($this->encryptedData, TRUE));

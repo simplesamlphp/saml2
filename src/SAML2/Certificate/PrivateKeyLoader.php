@@ -1,33 +1,40 @@
 <?php
 
-class SAML2_Certificate_PrivateKeyLoader
+namespace SAML2\Certificate;
+
+use SAML2\Configuration\PrivateKey;
+use SAML2\Utilities\File;
+use SAML2\Configuration\DecryptionProvider;
+use SAML2\Utilities\ArrayCollection;
+
+class PrivateKeyLoader
 {
     /**
      * Loads a private key based on the configuration given.
      *
-     * @param SAML2_Configuration_PrivateKey $key
+     * @param \SAML2\Configuration\PrivateKey $key
      *
-     * @return SAML2_Certificate_PrivateKey
+     * @return \SAML2\Certificate\PrivateKey
      */
-    public function loadPrivateKey(SAML2_Configuration_PrivateKey $key)
+    public function loadPrivateKey(PrivateKey $key)
     {
-        $privateKey = SAML2_Utilities_File::getFileContents($key->getFilePath());
+        $privateKey = File::getFileContents($key->getFilePath());
 
-        return SAML2_Certificate_PrivateKey::create($privateKey, $key->getPassPhrase());
+        return PrivateKey::create($privateKey, $key->getPassPhrase());
     }
 
     /**
-     * @param SAML2_Configuration_DecryptionProvider $identityProvider
-     * @param SAML2_Configuration_DecryptionProvider $serviceProvider
+     * @param \SAML2\Configuration\DecryptionProvider $identityProvider
+     * @param \SAML2\Configuration\DecryptionProvider $serviceProvider
      *
-     * @return SAML2_Utilities_ArrayCollection
+     * @return \SAML2\Utilities\ArrayCollection
      * @throws Exception
      */
     public function loadDecryptionKeys(
-        SAML2_Configuration_DecryptionProvider $identityProvider,
-        SAML2_Configuration_DecryptionProvider $serviceProvider
+        DecryptionProvider $identityProvider,
+        DecryptionProvider $serviceProvider
     ) {
-        $decryptionKeys = new SAML2_Utilities_ArrayCollection();
+        $decryptionKeys = new ArrayCollection();
 
         $senderSharedKey = $identityProvider->getSharedKey();
         if ($senderSharedKey) {
@@ -38,13 +45,13 @@ class SAML2_Certificate_PrivateKeyLoader
             return $decryptionKeys;
         }
 
-        $newPrivateKey = $serviceProvider->getPrivateKey(SAML2_Configuration_PrivateKey::NAME_NEW);
-        if ($newPrivateKey instanceof SAML2_Configuration_PrivateKey) {
+        $newPrivateKey = $serviceProvider->getPrivateKey(PrivateKey::NAME_NEW);
+        if ($newPrivateKey instanceof PrivateKey) {
             $loadedKey = $this->loadPrivateKey($newPrivateKey);
             $decryptionKeys->add($this->convertPrivateKeyToRsaKey($loadedKey));
         }
 
-        $privateKey = $serviceProvider->getPrivateKey(SAML2_Configuration_PrivateKey::NAME_DEFAULT, TRUE);
+        $privateKey = $serviceProvider->getPrivateKey(PrivateKey::NAME_DEFAULT, TRUE);
         $loadedKey  = $this->loadPrivateKey($privateKey);
         $decryptionKeys->add($this->convertPrivateKeyToRsaKey($loadedKey));
 
@@ -52,12 +59,12 @@ class SAML2_Certificate_PrivateKeyLoader
     }
 
     /**
-     * @param SAML2_Certificate_PrivateKey $privateKey
+     * @param \SAML2\Certificate\PrivateKey $privateKey
      *
      * @return XMLSecurityKey
      * @throws Exception
      */
-    private function convertPrivateKeyToRsaKey(SAML2_Certificate_PrivateKey $privateKey)
+    private function convertPrivateKeyToRsaKey(PrivateKey $privateKey)
     {
         $key        = new XMLSecurityKey(XMLSecurityKey::RSA_1_5, array('type' => 'private'));
         $passphrase = $privateKey->getPassphrase();

@@ -1,12 +1,14 @@
 <?php
 
+namespace SAML2\Configuration;
+
 /**
  * Basic configuration wrapper
  */
-class SAML2_Configuration_IdentityProvider extends SAML2_Configuration_ArrayAdapter implements
-    SAML2_Configuration_CertificateProvider,
-    SAML2_Configuration_DecryptionProvider,
-    SAML2_Configuration_EntityIdProvider
+class IdentityProvider extends ArrayAdapter implements
+    CertificateProvider,
+    DecryptionProvider,
+    EntityIdProvider
 {
     public function getKeys()
     {
@@ -46,7 +48,7 @@ class SAML2_Configuration_IdentityProvider extends SAML2_Configuration_ArrayAdap
     public function getPrivateKey($name, $required = FALSE)
     {
         $privateKeys = $this->get('privateKeys');
-        $key = array_filter($privateKeys, function (SAML2_Configuration_PrivateKey $key) use ($name) {
+        $key = array_filter($privateKeys, function (PrivateKey $key) use ($name) {
             return $key->getName() === $name;
         });
 

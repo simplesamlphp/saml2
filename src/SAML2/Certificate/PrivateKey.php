@@ -1,15 +1,19 @@
 <?php
 
-class SAML2_Certificate_PrivateKey extends SAML2_Certificate_Key
+namespace SAML2\Certificate;
+
+use SAML2\Exception\InvalidArgumentException;
+
+class PrivateKey extends Key
 {
     public static function create($keyContents, $passphrase = NULL)
     {
         if (!is_string($keyContents)) {
-            throw SAML2_Exception_InvalidArgumentException::invalidType('string', $keyContents);
+            throw InvalidArgumentException::invalidType('string', $keyContents);
         }
 
         if ($passphrase && !is_string($passphrase)) {
-            throw SAML2_Exception_InvalidArgumentException::invalidType('string', $passphrase);
+            throw InvalidArgumentException::invalidType('string', $passphrase);
         }
 
         $keyData = array ('PEM' => $keyContents, self::USAGE_ENCRYPTION => TRUE);

@@ -1,11 +1,18 @@
 <?php
 
+namespace SAML2\XML\md;
+
+use SAML2\SignedElementHelper;
+use SAML2\Utils;
+use SAML2\Constants;
+use SAML2\DOMDocumentFactory;
+
 /**
  * Class representing SAML 2 EntityDescriptor element.
  *
  * @package SimpleSAMLphp
  */
-class SAML2_XML_md_EntityDescriptor extends SAML2_SignedElementHelper
+class EntityDescriptor extends SignedElementHelper
 {
     /**
      * The entityID this EntityDescriptor represents.
@@ -47,37 +54,37 @@ class SAML2_XML_md_EntityDescriptor extends SAML2_SignedElementHelper
     /**
      * Array with all roles for this entity.
      *
-     * Array of SAML2_XML_md_RoleDescriptor objects (and subclasses of RoleDescriptor).
+     * Array of \SAML2\XML\md\RoleDescriptor objects (and subclasses of RoleDescriptor).
      *
-     * @var (SAML2_XML_md_UnknownRoleDescriptor|SAML2_XML_md_IDPSSODescriptor|SAML2_XML_md_SPSSODescriptor|SAML2_XML_md_AuthnAuthorityDescriptor|SAML2_XML_md_AttributeAuthorityDescriptor|SAML2_XML_md_PDPDescriptor)[]
+     * @var (\SAML2\XML\md\UnknownRoleDescriptor|\SAML2\XML\md\IDPSSODescriptor|\SAML2\XML\md\SPSSODescriptor|\SAML2\XML\md\AuthnAuthorityDescriptor|\SAML2\XML\md\AttributeAuthorityDescriptor|\SAML2\XML\md\PDPDescriptor)[]
      */
     public $RoleDescriptor = array();
 
     /**
      * AffiliationDescriptor of this entity.
      *
-     * @var SAML2_XML_md_AffiliationDescriptor|NULL
+     * @var \SAML2\XML\md\AffiliationDescriptor|NULL
      */
     public $AffiliationDescriptor = NULL;
 
     /**
      * Organization of this entity.
      *
-     * @var SAML2_XML_md_Organization|NULL
+     * @var \SAML2\XML\md\Organization|NULL
      */
     public $Organization = NULL;
 
     /**
      * ContactPerson elements for this entity.
      *
-     * @var SAML2_XML_md_ContactPerson[]
+     * @var \SAML2\XML\md\ContactPerson[]
      */
     public $ContactPerson = array();
 
     /**
      * AdditionalMetadataLocation elements for this entity.
      *
-     * @var SAML2_XML_md_AdditionalMetadataLocation[]
+     * @var \SAML2\XML\md\AdditionalMetadataLocation[]
      */
     public $AdditionalMetadataLocation = array();
 
@@ -104,50 +111,50 @@ class SAML2_XML_md_EntityDescriptor extends SAML2_SignedElementHelper
             $this->ID = $xml->getAttribute('ID');
         }
         if ($xml->hasAttribute('validUntil')) {
-            $this->validUntil = SAML2_Utils::xsDateTimeToTimestamp($xml->getAttribute('validUntil'));
+            $this->validUntil = Utils::xsDateTimeToTimestamp($xml->getAttribute('validUntil'));
         }
         if ($xml->hasAttribute('cacheDuration')) {
             $this->cacheDuration = $xml->getAttribute('cacheDuration');
         }
 
-        $this->Extensions = SAML2_XML_md_Extensions::getList($xml);
+        $this->Extensions = Extensions::getList($xml);
 
         for ($node = $xml->firstChild; $node !== NULL; $node = $node->nextSibling) {
             if (!($node instanceof DOMElement)) {
                 continue;
             }
 
-            if ($node->namespaceURI !== SAML2_Constants::NS_MD) {
+            if ($node->namespaceURI !== Constants::NS_MD) {
                 continue;
             }
 
             switch ($node->localName) {
                 case 'RoleDescriptor':
-                    $this->RoleDescriptor[] = new SAML2_XML_md_UnknownRoleDescriptor($node);
+                    $this->RoleDescriptor[] = new UnknownRoleDescriptor($node);
                     break;
                 case 'IDPSSODescriptor':
-                    $this->RoleDescriptor[] = new SAML2_XML_md_IDPSSODescriptor($node);
+                    $this->RoleDescriptor[] = new IDPSSODescriptor($node);
                     break;
                 case 'SPSSODescriptor':
-                    $this->RoleDescriptor[] = new SAML2_XML_md_SPSSODescriptor($node);
+                    $this->RoleDescriptor[] = new SPSSODescriptor($node);
                     break;
                 case 'AuthnAuthorityDescriptor':
-                    $this->RoleDescriptor[] = new SAML2_XML_md_AuthnAuthorityDescriptor($node);
+                    $this->RoleDescriptor[] = new AuthnAuthorityDescriptor($node);
                     break;
                 case 'AttributeAuthorityDescriptor':
-                    $this->RoleDescriptor[] = new SAML2_XML_md_AttributeAuthorityDescriptor($node);
+                    $this->RoleDescriptor[] = new AttributeAuthorityDescriptor($node);
                     break;
                 case 'PDPDescriptor':
-                    $this->RoleDescriptor[] = new SAML2_XML_md_PDPDescriptor($node);
+                    $this->RoleDescriptor[] = new PDPDescriptor($node);
                     break;
             }
         }
 
-        $affiliationDescriptor = SAML2_Utils::xpQuery($xml, './saml_metadata:AffiliationDescriptor');
+        $affiliationDescriptor = Utils::xpQuery($xml, './saml_metadata:AffiliationDescriptor');
         if (count($affiliationDescriptor) > 1) {
             throw new Exception('More than one AffiliationDescriptor in the entity.');
         } elseif (!empty($affiliationDescriptor)) {
-            $this->AffiliationDescriptor = new SAML2_XML_md_AffiliationDescriptor($affiliationDescriptor[0]);
+            $this->AffiliationDescriptor = new AffiliationDescriptor($affiliationDescriptor[0]);
         }
 
         if (empty($this->RoleDescriptor) && is_null($this->AffiliationDescriptor)) {
@@ -156,19 +163,19 @@ class SAML2_XML_md_EntityDescriptor extends SAML2_SignedElementHelper
             throw new Exception('AffiliationDescriptor cannot be combined with other RoleDescriptor elements in EntityDescriptor.');
         }
 
-        $organization = SAML2_Utils::xpQuery($xml, './saml_metadata:Organization');
+        $organization = Utils::xpQuery($xml, './saml_metadata:Organization');
         if (count($organization) > 1) {
             throw new Exception('More than one Organization in the entity.');
         } elseif (!empty($organization)) {
-            $this->Organization = new SAML2_XML_md_Organization($organization[0]);
+            $this->Organization = new Organization($organization[0]);
         }
 
-        foreach (SAML2_Utils::xpQuery($xml, './saml_metadata:ContactPerson') as $cp) {
-            $this->ContactPerson[] = new SAML2_XML_md_ContactPerson($cp);
+        foreach (Utils::xpQuery($xml, './saml_metadata:ContactPerson') as $cp) {
+            $this->ContactPerson[] = new ContactPerson($cp);
         }
 
-        foreach (SAML2_Utils::xpQuery($xml, './saml_metadata:AdditionalMetadataLocation') as $aml) {
-            $this->AdditionalMetadataLocation[] = new SAML2_XML_md_AdditionalMetadataLocation($aml);
+        foreach (Utils::xpQuery($xml, './saml_metadata:AdditionalMetadataLocation') as $aml) {
+            $this->AdditionalMetadataLocation[] = new AdditionalMetadataLocation($aml);
         }
     }
 
@@ -192,11 +199,11 @@ class SAML2_XML_md_EntityDescriptor extends SAML2_SignedElementHelper
         assert('is_array($this->AdditionalMetadataLocation)');
 
         if ($parent === NULL) {
-            $doc = SAML2_DOMDocumentFactory::create();
-            $e = $doc->createElementNS(SAML2_Constants::NS_MD, 'md:EntityDescriptor');
+            $doc = DOMDocumentFactory::create();
+            $e = $doc->createElementNS(Constants::NS_MD, 'md:EntityDescriptor');
             $doc->appendChild($e);
         } else {
-            $e = $parent->ownerDocument->createElementNS(SAML2_Constants::NS_MD, 'md:EntityDescriptor');
+            $e = $parent->ownerDocument->createElementNS(Constants::NS_MD, 'md:EntityDescriptor');
             $parent->appendChild($e);
         }
 
@@ -214,9 +221,9 @@ class SAML2_XML_md_EntityDescriptor extends SAML2_SignedElementHelper
             $e->setAttribute('cacheDuration', $this->cacheDuration);
         }
 
-        SAML2_XML_md_Extensions::addList($e, $this->Extensions);
+        Extensions::addList($e, $this->Extensions);
 
-        /** @var SAML2_XML_md_UnknownRoleDescriptor|SAML2_XML_md_IDPSSODescriptor|SAML2_XML_md_SPSSODescriptor|SAML2_XML_md_AuthnAuthorityDescriptor|SAML2_XML_md_AttributeAuthorityDescriptor|SAML2_XML_md_PDPDescriptor $n */
+        /** @var \SAML2\XML\md\UnknownRoleDescriptor|\SAML2\XML\md\IDPSSODescriptor|\SAML2\XML\md\SPSSODescriptor|\SAML2\XML\md\AuthnAuthorityDescriptor|\SAML2\XML\md\AttributeAuthorityDescriptor|\SAML2\XML\md\PDPDescriptor $n */
         foreach ($this->RoleDescriptor as $n) {
             $n->toXML($e);
         }

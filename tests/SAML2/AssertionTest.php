@@ -1,14 +1,18 @@
 <?php
 
+namespace SAML2;
+
+use SAML2\XML\Chunk;
+
 /**
- * Class SAML2_AssertionTest
+ * Class \SAML2\AssertionTest
  */
-class SAML2_AssertionTest extends \PHPUnit_Framework_TestCase
+class AssertionTest extends \PHPUnit_Framework_TestCase
 {
     public function testMarshalling()
     {
         // Create an assertion
-        $assertion = new \SAML2_Assertion();
+        $assertion = new \Assertion();
         $assertion->setIssuer('testIssuer');
         $assertion->setValidAudiences(array('audience1', 'audience2'));
         $assertion->setAuthnContext('someAuthnContext');
@@ -17,12 +21,12 @@ class SAML2_AssertionTest extends \PHPUnit_Framework_TestCase
         $assertionElement = $assertion->toXML();
 
         // Test for an Issuer
-        $issuerElements = \SAML2_Utils::xpQuery($assertionElement, './saml_assertion:Issuer');
+        $issuerElements = \Utils::xpQuery($assertionElement, './saml_assertion:Issuer');
         $this->assertCount(1, $issuerElements);
         $this->assertEquals('testIssuer', $issuerElements[0]->textContent);
 
         // Test for an AudienceRestriction
-        $audienceElements = \SAML2_Utils::xpQuery(
+        $audienceElements = \Utils::xpQuery(
             $assertionElement,
             './saml_assertion:Conditions/saml_assertion:AudienceRestriction/saml_assertion:Audience'
         );
@@ -31,7 +35,7 @@ class SAML2_AssertionTest extends \PHPUnit_Framework_TestCase
         $this->assertEquals('audience2', $audienceElements[1]->textContent);
 
         // Test for an Authentication Context
-        $authnContextElements = \SAML2_Utils::xpQuery(
+        $authnContextElements = \Utils::xpQuery(
             $assertionElement,
             './saml_assertion:AuthnStatement/saml_assertion:AuthnContext/saml_assertion:AuthnContextClassRef'
         );
@@ -65,8 +69,8 @@ class SAML2_AssertionTest extends \PHPUnit_Framework_TestCase
   </saml:AuthnStatement>
 </saml:Assertion>
 XML;
-        $document  = SAML2_DOMDocumentFactory::fromString($xml);
-        $assertion = new \SAML2_Assertion($document->firstChild);
+        $document  = DOMDocumentFactory::fromString($xml);
+        $assertion = new \Assertion($document->firstChild);
 
         // Test for valid audiences
         $assertionValidAudiences = $assertion->getValidAudiences();
@@ -104,9 +108,9 @@ XML;
 XML;
 
         // Try with unmarshalling
-        $document = SAML2_DOMDocumentFactory::fromString($xml);
+        $document = DOMDocumentFactory::fromString($xml);
 
-        $assertion = new \SAML2_Assertion($document->documentElement);
+        $assertion = new \Assertion($document->documentElement);
         $authnContextDecl = $assertion->getAuthnContextDecl();
         $this->assertNotEmpty($authnContextDecl);
         $this->assertEquals('AuthnContextDecl', $authnContextDecl->localName);
@@ -136,9 +140,9 @@ XML;
 </saml:Assertion>
 XML;
 
-        $document = SAML2_DOMDocumentFactory::fromString($xml);
+        $document = DOMDocumentFactory::fromString($xml);
 
-        $assertion = new \SAML2_Assertion($document->documentElement);
+        $assertion = new \Assertion($document->documentElement);
         $this->assertEquals('/relative/path/to/document.xml', $assertion->getAuthnContextDeclRef());
         $this->assertEquals('someAuthnContext', $assertion->getAuthnContextClassRef());
     }
@@ -150,24 +154,24 @@ XML;
 </samlac:AuthenticationContextDeclaration>
 XML;
 
-        $document  = SAML2_DOMDocumentFactory::fromString($xml);
-        $assertion = new \SAML2_Assertion();
+        $document  = DOMDocumentFactory::fromString($xml);
+        $assertion = new \Assertion();
 
         $e = null;
         try {
-            $assertion->setAuthnContextDecl(new SAML2_XML_Chunk($document->documentElement));
+            $assertion->setAuthnContextDecl(new Chunk($document->documentElement));
             $assertion->setAuthnContextDeclRef('/relative/path/to/document.xml');
         }
         catch (Exception $e) {}
         $this->assertNotEmpty($e);
 
         // Try again in reverse order for good measure.
-        $assertion = new \SAML2_Assertion();
+        $assertion = new \Assertion();
 
         $e = null;
         try {
             $assertion->setAuthnContextDeclRef('/relative/path/to/document.xml');
-            $assertion->setAuthnContextDecl(new SAML2_XML_Chunk($document->documentElement));
+            $assertion->setAuthnContextDecl(new Chunk($document->documentElement));
         }
         catch (Exception $e) {}
         $this->assertNotEmpty($e);
@@ -193,11 +197,11 @@ XML;
 </saml:Assertion>
 XML;
 
-        $document = SAML2_DOMDocumentFactory::fromString($xml);
+        $document = DOMDocumentFactory::fromString($xml);
 
         $e = null;
         try {
-            new \SAML2_Assertion($document->documentElement);
+            new \Assertion($document->documentElement);
         }
         catch (Exception $e) {}
         $this->assertNotEmpty($e);
@@ -206,7 +210,7 @@ XML;
     public function testMustHaveClassRefOrDeclOrDeclRef()
     {
         // Unmarshall an assertion
-        $document = SAML2_DOMDocumentFactory::fromString(<<<XML
+        $document = DOMDocumentFactory::fromString(<<<XML
 <saml:Assertion xmlns:saml="urn:oasis:names:tc:SAML:2.0:assertion"
                 ID="_593e33ddf86449ce4d4c22b60ac48e067d98a0b2bf"
                 Version="2.0"
@@ -224,7 +228,7 @@ XML
         );
         $e = null;
         try {
-            $assertion = new \SAML2_Assertion($document->firstChild);
+            $assertion = new \Assertion($document->firstChild);
         }
         catch (Exception $e) {
         }
@@ -241,7 +245,7 @@ XML
         $authnContextDeclRef = 'relative/url/to/authcontext.xml';
 
         // Unmarshall an assertion
-        $document = SAML2_DOMDocumentFactory::fromString(<<<XML
+        $document = DOMDocumentFactory::fromString(<<<XML
 <saml:Assertion xmlns:saml="urn:oasis:names:tc:SAML:2.0:assertion"
                 xmlns:samlp="urn:oasis:names:tc:SAML:2.0:protocol"
                 ID="_593e33ddf86449ce4d4c22b60ac48e067d98a0b2bf"
@@ -257,7 +261,7 @@ XML
 </saml:Assertion>
 XML
         );
-        $assertion = new \SAML2_Assertion($document->firstChild);
+        $assertion = new \Assertion($document->firstChild);
         $this->assertEmpty($assertion->getAuthnContextClassRef());
         $this->assertEquals($authnContextDeclRef, $assertion->getAuthnContextDeclRef());
     }
@@ -321,7 +325,7 @@ XML
     </saml:Assertion>
 XML
         );
-        $assertion = new \SAML2_Assertion($document->firstChild);
+        $assertion = new \Assertion($document->firstChild);
         $this->assertTrue($assertion->hasEncryptedAttributes());
     }
 }

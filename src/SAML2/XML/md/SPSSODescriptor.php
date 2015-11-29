@@ -1,11 +1,15 @@
 <?php
 
+namespace SAML2\XML\md;
+
+use SAML2\Utils;
+
 /**
  * Class representing SAML 2 SPSSODescriptor.
  *
  * @package SimpleSAMLphp
  */
-class SAML2_XML_md_SPSSODescriptor extends SAML2_XML_md_SSODescriptorType
+class SPSSODescriptor extends SSODescriptorType
 {
     /**
      * Whether this SP signs authentication requests.
@@ -26,16 +30,16 @@ class SAML2_XML_md_SPSSODescriptor extends SAML2_XML_md_SSODescriptorType
      *
      * Array with IndexedEndpointType objects.
      *
-     * @var SAML2_XML_md_IndexedEndpointType[]
+     * @var \SAML2\XML\md\IndexedEndpointType[]
      */
     public $AssertionConsumerService = array();
 
     /**
      * List of AttributeConsumingService descriptors for this SP.
      *
-     * Array with SAML2_XML_md_AttributeConsumingService objects.
+     * Array with \SAML2\XML\md\AttributeConsumingService objects.
      *
-     * @var SAML2_XML_md_AttributeConsumingService[]
+     * @var \SAML2\XML\md\AttributeConsumingService[]
      */
     public $AttributeConsumingService = array();
 
@@ -52,15 +56,15 @@ class SAML2_XML_md_SPSSODescriptor extends SAML2_XML_md_SSODescriptorType
             return;
         }
 
-        $this->AuthnRequestsSigned = SAML2_Utils::parseBoolean($xml, 'AuthnRequestsSigned', NULL);
-        $this->WantAssertionsSigned = SAML2_Utils::parseBoolean($xml, 'WantAssertionsSigned', NULL);
+        $this->AuthnRequestsSigned = Utils::parseBoolean($xml, 'AuthnRequestsSigned', NULL);
+        $this->WantAssertionsSigned = Utils::parseBoolean($xml, 'WantAssertionsSigned', NULL);
 
-        foreach (SAML2_Utils::xpQuery($xml, './saml_metadata:AssertionConsumerService') as $ep) {
-            $this->AssertionConsumerService[] = new SAML2_XML_md_IndexedEndpointType($ep);
+        foreach (Utils::xpQuery($xml, './saml_metadata:AssertionConsumerService') as $ep) {
+            $this->AssertionConsumerService[] = new IndexedEndpointType($ep);
         }
 
-        foreach (SAML2_Utils::xpQuery($xml, './saml_metadata:AttributeConsumingService') as $acs) {
-            $this->AttributeConsumingService[] = new SAML2_XML_md_AttributeConsumingService($acs);
+        foreach (Utils::xpQuery($xml, './saml_metadata:AttributeConsumingService') as $acs) {
+            $this->AttributeConsumingService[] = new AttributeConsumingService($acs);
         }
     }
 

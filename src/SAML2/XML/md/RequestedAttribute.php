@@ -1,11 +1,17 @@
 <?php
 
+namespace SAML2\XML\md;
+
+use SAML2\XML\saml\Attribute;
+use SAML2\Utils;
+use SAML2\Constants;
+
 /**
  * Class representing SAML 2 metadata RequestedAttribute.
  *
  * @package SimpleSAMLphp
  */
-class SAML2_XML_md_RequestedAttribute extends SAML2_XML_saml_Attribute
+class RequestedAttribute extends Attribute
 {
     /**
      * Whether this attribute is required.
@@ -27,7 +33,7 @@ class SAML2_XML_md_RequestedAttribute extends SAML2_XML_saml_Attribute
             return;
         }
 
-        $this->isRequired = SAML2_Utils::parseBoolean($xml, 'isRequired', NULL);
+        $this->isRequired = Utils::parseBoolean($xml, 'isRequired', NULL);
     }
 
     /**
@@ -40,7 +46,7 @@ class SAML2_XML_md_RequestedAttribute extends SAML2_XML_saml_Attribute
     {
         assert('is_bool($this->isRequired) || is_null($this->isRequired)');
 
-        $e = $this->toXMLInternal($parent, SAML2_Constants::NS_MD, 'md:RequestedAttribute');
+        $e = $this->toXMLInternal($parent, Constants::NS_MD, 'md:RequestedAttribute');
 
         if ($this->isRequired === TRUE) {
             $e->setAttribute('isRequired', 'true');

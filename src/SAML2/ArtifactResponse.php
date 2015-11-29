@@ -1,12 +1,14 @@
 <?php
 
+namespace SAML2;
+
 /**
- * The SAML2_ArtifactResponse, is the response to the SAML2_ArtifactResolve.
+ * The \SAML2\ArtifactResponse, is the response to the \SAML2\ArtifactResolve.
  *
  * @author Danny Bollaert, UGent AS. <danny.bollaert@ugent.be>
  * @package SimpleSAMLphp
  */
-class SAML2_ArtifactResponse extends SAML2_StatusResponse
+class ArtifactResponse extends StatusResponse
 {
     /**
      * The DOMElement with the message the artifact refers
@@ -23,7 +25,7 @@ class SAML2_ArtifactResponse extends SAML2_StatusResponse
 
         if (!is_null($xml)) {
 
-            $status = SAML2_Utils::xpQuery($xml, './saml_protocol:Status');
+            $status = Utils::xpQuery($xml, './saml_protocol:Status');
             assert('!empty($status)'); /* Will have failed during StatusResponse parsing. */
 
             $status = $status[0];

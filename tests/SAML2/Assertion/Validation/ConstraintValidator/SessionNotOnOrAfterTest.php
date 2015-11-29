@@ -1,5 +1,10 @@
 <?php
 
+namespace SAML2\Assertion\Validation\ConstraintValidator;
+
+use SAML2\ControlledTimeTest;
+use SAML2\Assertion\Validation\Result;
+
 use \Mockery as m;
 
 /**
@@ -8,7 +13,7 @@ use \Mockery as m;
  *
  * @runTestsInSeparateProcesses
  */
-class SAML2_Assertion_Validation_ConstraintValidator_SessionNotOnOrAfterTest extends SAML2_ControlledTimeTest
+class SessionNotOnOrAfterTest extends ControlledTimeTest
 {
     /**
      * @var \Mockery\MockInterface
@@ -29,8 +34,8 @@ class SAML2_Assertion_Validation_ConstraintValidator_SessionNotOnOrAfterTest ext
     {
         $this->assertion->shouldReceive('getSessionNotOnOrAfter')->andReturn($this->currentTime - 60);
 
-        $validator = new SAML2_Assertion_Validation_ConstraintValidator_SessionNotOnOrAfter();
-        $result    = new SAML2_Assertion_Validation_Result();
+        $validator = new SessionNotOnOrAfter();
+        $result    = new Result();
 
         $validator->validate($this->assertion, $result);
 
@@ -46,8 +51,8 @@ class SAML2_Assertion_Validation_ConstraintValidator_SessionNotOnOrAfterTest ext
     {
         $this->assertion->shouldReceive('getSessionNotOnOrAfter')->andReturn($this->currentTime - 59);
 
-        $validator = new SAML2_Assertion_Validation_ConstraintValidator_SessionNotOnOrAfter();
-        $result    = new SAML2_Assertion_Validation_Result();
+        $validator = new SessionNotOnOrAfter();
+        $result    = new Result();
 
         $validator->validate($this->assertion, $result);
 
@@ -62,8 +67,8 @@ class SAML2_Assertion_Validation_ConstraintValidator_SessionNotOnOrAfterTest ext
     {
         $this->assertion->shouldReceive('getSessionNotOnOrAfter')->andReturn($this->currentTime);
 
-        $validator = new SAML2_Assertion_Validation_ConstraintValidator_SessionNotOnOrAfter();
-        $result    = new SAML2_Assertion_Validation_Result();
+        $validator = new SessionNotOnOrAfter();
+        $result    = new Result();
 
         $validator->validate($this->assertion, $result);
 

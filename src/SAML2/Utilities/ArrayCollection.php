@@ -1,11 +1,15 @@
 <?php
 
+namespace SAML2\Utilities;
+
+use SAML2\Exception\RuntimeException;
+
 /**
  * Simple Array implementation of Collection.
  *
  * @SuppressWarnings(PHPMD.TooManyMethods) - it just has a large api.
  */
-class SAML2_Utilities_ArrayCollection implements SAML2_Utilities_Collection
+class ArrayCollection implements Collection
 {
     /**
      * @var array
@@ -54,7 +58,7 @@ class SAML2_Utilities_ArrayCollection implements SAML2_Utilities_Collection
     public function getOnlyElement()
     {
         if ($this->count() !== 1) {
-            throw new SAML2_Exception_RuntimeException(sprintf(
+            throw new RuntimeException(sprintf(
                 'SAML2_Utilities_ArrayCollection::getOnlyElement requires that the collection has exactly one element, '
                 . '"%d" elements found',
                 $this->count()

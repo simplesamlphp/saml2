@@ -1,11 +1,15 @@
 <?php
 
+namespace SAML2\XML\md;
+
+use SAML2\Constants;
+
 /**
  * Class representing SAML 2 EndpointType.
  *
  * @package SimpleSAMLphp
  */
-class SAML2_XML_md_EndpointType
+class EndpointType
 {
     /**
      * The binding for this endpoint.
@@ -167,7 +171,7 @@ class SAML2_XML_md_EndpointType
         assert('is_string($this->Location)');
         assert('is_null($this->ResponseLocation) || is_string($this->ResponseLocation)');
 
-        $e = $parent->ownerDocument->createElementNS(SAML2_Constants::NS_MD, $name);
+        $e = $parent->ownerDocument->createElementNS(Constants::NS_MD, $name);
         $parent->appendChild($e);
 
         $e->setAttribute('Binding', $this->Binding);

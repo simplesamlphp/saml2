@@ -1,18 +1,23 @@
 <?php
 
+namespace SAML2\XML\md;
+
+use SAML2\Utils;
+use SAML2\Constants;
+
 /**
  * Class representing SAML 2 metadata PDPDescriptor.
  *
  * @package SimpleSAMLphp
  */
-class SAML2_XML_md_PDPDescriptor extends SAML2_XML_md_RoleDescriptor
+class PDPDescriptor extends RoleDescriptor
 {
     /**
      * List of AuthzService endpoints.
      *
      * Array with EndpointType objects.
      *
-     * @var SAML2_XML_md_EndpointType[]
+     * @var \SAML2\XML\md\EndpointType[]
      */
     public $AuthzService = array();
 
@@ -21,7 +26,7 @@ class SAML2_XML_md_PDPDescriptor extends SAML2_XML_md_RoleDescriptor
      *
      * Array with EndpointType objects.
      *
-     * @var SAML2_XML_md_EndpointType[]
+     * @var \SAML2\XML\md\EndpointType[]
      */
     public $AssertionIDRequestService = array();
 
@@ -48,18 +53,18 @@ class SAML2_XML_md_PDPDescriptor extends SAML2_XML_md_RoleDescriptor
             return;
         }
 
-        foreach (SAML2_Utils::xpQuery($xml, './saml_metadata:AuthzService') as $ep) {
-            $this->AuthzService[] = new SAML2_XML_md_EndpointType($ep);
+        foreach (Utils::xpQuery($xml, './saml_metadata:AuthzService') as $ep) {
+            $this->AuthzService[] = new EndpointType($ep);
         }
         if (empty($this->AuthzService)) {
             throw new Exception('Must have at least one AuthzService in PDPDescriptor.');
         }
 
-        foreach (SAML2_Utils::xpQuery($xml, './saml_metadata:AssertionIDRequestService') as $ep) {
-            $this->AssertionIDRequestService[] = new SAML2_XML_md_EndpointType($ep);
+        foreach (Utils::xpQuery($xml, './saml_metadata:AssertionIDRequestService') as $ep) {
+            $this->AssertionIDRequestService[] = new EndpointType($ep);
         }
 
-        $this->NameIDFormat = SAML2_Utils::extractStrings($xml, SAML2_Constants::NS_MD, 'NameIDFormat');
+        $this->NameIDFormat = Utils::extractStrings($xml, Constants::NS_MD, 'NameIDFormat');
     }
 
     /**
@@ -85,7 +90,7 @@ class SAML2_XML_md_PDPDescriptor extends SAML2_XML_md_RoleDescriptor
             $ep->toXML($e, 'md:AssertionIDRequestService');
         }
 
-        SAML2_Utils::addStrings($e, SAML2_Constants::NS_MD, 'md:NameIDFormat', FALSE, $this->NameIDFormat);
+        Utils::addStrings($e, Constants::NS_MD, 'md:NameIDFormat', FALSE, $this->NameIDFormat);
 
         return $e;
     }

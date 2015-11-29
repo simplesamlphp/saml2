@@ -1,19 +1,23 @@
 <?php
 
+namespace SAML2\XML\ds;
+
+use SAML2\XML\Chunk;
+
 /**
  * Class representing a ds:X509Data element.
  *
  * @package SimpleSAMLphp
  */
-class SAML2_XML_ds_X509Data
+class X509Data
 {
     /**
      * The various X509 data elements.
      *
      * Array with various elements describing this certificate.
-     * Unknown elements will be represented by SAML2_XML_Chunk.
+     * Unknown elements will be represented by \SAML2\XML\Chunk.
      *
-     * @var (SAML2_XML_Chunk|SAML2_XML_ds_X509Certificate)[]
+     * @var (\SAML2\XML\Chunk|\SAML2\XML\ds\X509Certificate)[]
      */
     public $data = array();
 
@@ -34,15 +38,15 @@ class SAML2_XML_ds_X509Data
             }
 
             if ($n->namespaceURI !== XMLSecurityDSig::XMLDSIGNS) {
-                $this->data[] = new SAML2_XML_Chunk($n);
+                $this->data[] = new Chunk($n);
                 continue;
             }
             switch ($n->localName) {
                 case 'X509Certificate':
-                    $this->data[] = new SAML2_XML_ds_X509Certificate($n);
+                    $this->data[] = new X509Certificate($n);
                     break;
                 default:
-                    $this->data[] = new SAML2_XML_Chunk($n);
+                    $this->data[] = new Chunk($n);
                     break;
             }
         }
@@ -63,7 +67,7 @@ class SAML2_XML_ds_X509Data
         $e = $doc->createElementNS(XMLSecurityDSig::XMLDSIGNS, 'ds:X509Data');
         $parent->appendChild($e);
 
-        /** @var SAML2_XML_Chunk|SAML2_XML_ds_X509Certificate $n */
+        /** @var \SAML2\XML\Chunk|\SAML2\XML\ds\X509Certificate $n */
         foreach ($this->data as $n) {
             $n->toXML($e);
         }

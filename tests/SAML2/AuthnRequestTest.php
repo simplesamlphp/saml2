@@ -1,13 +1,15 @@
 <?php
 
+namespace SAML2;
+
 /**
- * Class SAML2_AuthnRequestTest
+ * Class \SAML2\AuthnRequestTest
  */
-class SAML2_AuthnRequestTest extends PHPUnit_Framework_TestCase
+class AuthnRequestTest extends PHPUnit_Framework_TestCase
 {
     public function testUnmarshalling()
     {
-        $authnRequest = new SAML2_AuthnRequest();
+        $authnRequest = new AuthnRequest();
         $authnRequest->setRequestedAuthnContext(array(
             'AuthnContextClassRef' => array(
                 'accr1',
@@ -18,7 +20,7 @@ class SAML2_AuthnRequestTest extends PHPUnit_Framework_TestCase
 
         $authnRequestElement = $authnRequest->toUnsignedXML();
 
-        $requestedAuthnContextElements = SAML2_Utils::xpQuery(
+        $requestedAuthnContextElements = Utils::xpQuery(
             $authnRequestElement,
             './saml_protocol:RequestedAuthnContext'
         );
@@ -27,7 +29,7 @@ class SAML2_AuthnRequestTest extends PHPUnit_Framework_TestCase
         $requestedAuthnConextElement = $requestedAuthnContextElements[0];
         $this->assertEquals('better', $requestedAuthnConextElement->getAttribute("Comparison"));
 
-        $authnContextClassRefElements = SAML2_Utils::xpQuery(
+        $authnContextClassRefElements = Utils::xpQuery(
             $requestedAuthnConextElement,
             './saml_assertion:AuthnContextClassRef'
         );
@@ -54,9 +56,9 @@ class SAML2_AuthnRequestTest extends PHPUnit_Framework_TestCase
 AUTHNREQUEST
         );
 
-        $authnRequest = new SAML2_AuthnRequest($document->documentElement);
+        $authnRequest = new AuthnRequest($document->documentElement);
 
-        $expectedIssueInstant = SAML2_Utils::xsDateTimeToTimestamp('2004-12-05T09:21:59Z');
+        $expectedIssueInstant = Utils::xsDateTimeToTimestamp('2004-12-05T09:21:59Z');
         $this->assertEquals($expectedIssueInstant, $authnRequest->getIssueInstant());
         $this->assertEquals('https://idp.example.org/SAML2/SSO/Artifact', $authnRequest->getDestination());
         $this->assertEquals('urn:oasis:names:tc:SAML:2.0:bindings:HTTP-Artifact', $authnRequest->getProtocolBinding());
@@ -97,8 +99,8 @@ AUTHNREQUEST
 </samlp:AuthnRequest>
 AUTHNREQUEST;
 
-        $document     = SAML2_DOMDocumentFactory::fromString($xml);
-        $authnRequest = new SAML2_AuthnRequest($document->documentElement);
+        $document     = DOMDocumentFactory::fromString($xml);
+        $authnRequest = new AuthnRequest($document->documentElement);
 
         $this->assertXmlStringEqualsXmlString($document->C14N(), $authnRequest->toUnsignedXML()->C14N());
     }
@@ -122,7 +124,7 @@ AUTHNREQUEST;
 </samlp:AuthnRequest>
 AUTHNREQUEST
 );
-        $authnRequest = new SAML2_AuthnRequest($document->documentElement);
+        $authnRequest = new AuthnRequest($document->documentElement);
 
         $expectedNameId = array(
             'Value'  => "user@example.org",
@@ -133,8 +135,8 @@ AUTHNREQUEST
 
     public function testThatTheSubjectCanBeSetBySettingTheNameId()
     {
-        $request = new SAML2_AuthnRequest();
-        $request->setNameId(array('Value' => 'user@example.org', 'Format' => SAML2_Constants::NAMEID_UNSPECIFIED));
+        $request = new AuthnRequest();
+        $request->setNameId(array('Value' => 'user@example.org', 'Format' => Constants::NAMEID_UNSPECIFIED));
 
         $requestAsXML = $request->toUnsignedXML()->ownerDocument->saveXML();
         $expected = '<saml:Subject><saml:NameID Format="urn:oasis:names:tc:SAML:1.1:nameid-format:unspecified">user@example.org</saml:NameID></saml:Subject>';
@@ -175,12 +177,12 @@ AUTHNREQUEST
 AUTHNREQUEST
         );
 
-        $authnRequest = new SAML2_AuthnRequest($document->documentElement);
+        $authnRequest = new AuthnRequest($document->documentElement);
 
-        $key = SAML2_CertificatesMock::getPrivateKey();
+        $key = CertificatesMock::getPrivateKey();
         $authnRequest->decryptNameId($key);
 
-        $expectedNameId = array('Value' => md5('Arthur Dent'), 'Format' => SAML2_Constants::NAMEID_ENCRYPTED);
+        $expectedNameId = array('Value' => md5('Arthur Dent'), 'Format' => Constants::NAMEID_ENCRYPTED);
 
         $this->assertEquals($expectedNameId, $authnRequest->getNameId());
     }
@@ -193,16 +195,16 @@ AUTHNREQUEST
     public function testThatAnEncryptedNameIdResultsInTheCorrectXmlStructure()
     {
         // the NameID we're going to encrypt
-        $nameId = array('Value' => md5('Arthur Dent'), 'Format' => SAML2_Constants::NAMEID_ENCRYPTED);
+        $nameId = array('Value' => md5('Arthur Dent'), 'Format' => Constants::NAMEID_ENCRYPTED);
 
         // basic AuthnRequest
-        $request = new SAML2_AuthnRequest();
+        $request = new AuthnRequest();
         $request->setIssuer('https://gateway.stepup.org/saml20/sp/metadata');
         $request->setDestination('https://tiqr.stepup.org/idp/profile/saml2/Redirect/SSO');
         $request->setNameId($nameId);
 
         // encrypt the NameID
-        $key = SAML2_CertificatesMock::getPublicKey();
+        $key = CertificatesMock::getPublicKey();
         $request->encryptNameId($key);
 
         $expectedStructureDocument = new DOMDocument();
@@ -250,7 +252,7 @@ AUTHNREQUEST
     public function testIDPlistAttributes()
     {
         // basic AuthnRequest
-        $request = new SAML2_AuthnRequest();
+        $request = new AuthnRequest();
         $request->setIssuer('https://gateway.example.org/saml20/sp/metadata');
         $request->setDestination('https://tiqr.example.org/idp/profile/saml2/Redirect/SSO');
         $request->setIDPList(array(

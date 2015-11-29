@@ -1,11 +1,15 @@
 <?php
 
+namespace SAML2\XML\ds;
+
+use SAML2\Utils;
+
 /**
  * Class representing a ds:X509Certificate element.
  *
  * @package SimpleSAMLphp
  */
-class SAML2_XML_ds_X509Certificate
+class X509Certificate
 {
     /**
      * The base64-encoded certificate.
@@ -38,7 +42,7 @@ class SAML2_XML_ds_X509Certificate
     {
         assert('is_string($this->certificate)');
 
-        return SAML2_Utils::addString($parent, XMLSecurityDSig::XMLDSIGNS, 'ds:X509Certificate', $this->certificate);
+        return Utils::addString($parent, XMLSecurityDSig::XMLDSIGNS, 'ds:X509Certificate', $this->certificate);
     }
 
 }

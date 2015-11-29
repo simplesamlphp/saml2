@@ -1,11 +1,20 @@
 <?php
 
+namespace SAML2;
+
+use SAML2\Exception\RuntimeException;
+use SAML2\XML\ds\X509Certificate;
+use SAML2\XML\ds\X509Data;
+use SAML2\XML\ds\KeyInfo;
+use SAML2\XML\md\KeyDescriptor;
+use SAML2\Compat\ContainerSingleton;
+
 /**
  * Helper functions for the SAML2 library.
  *
  * @package SimpleSAMLphp
  */
-class SAML2_Utils
+class Utils
 {
     /**
      * Check the Signature in a XML element.
@@ -179,10 +188,10 @@ class SAML2_Utils
 
         if ($xpCache === NULL || !$xpCache->document->isSameNode($doc)) {
             $xpCache = new DOMXPath($doc);
-            $xpCache->registerNamespace('soap-env', SAML2_Constants::NS_SOAP);
-            $xpCache->registerNamespace('saml_protocol', SAML2_Constants::NS_SAMLP);
-            $xpCache->registerNamespace('saml_assertion', SAML2_Constants::NS_SAML);
-            $xpCache->registerNamespace('saml_metadata', SAML2_Constants::NS_MD);
+            $xpCache->registerNamespace('soap-env', Constants::NS_SOAP);
+            $xpCache->registerNamespace('saml_protocol', Constants::NS_SAMLP);
+            $xpCache->registerNamespace('saml_assertion', Constants::NS_SAML);
+            $xpCache->registerNamespace('saml_metadata', Constants::NS_MD);
             $xpCache->registerNamespace('ds', XMLSecurityDSig::XMLDSIGNS);
             $xpCache->registerNamespace('xenc', XMLSecEnc::XMLENCNS);
         }
@@ -207,14 +216,14 @@ class SAML2_Utils
     public static function copyElement(DOMElement $element, DOMElement $parent = NULL)
     {
         if ($parent === NULL) {
-            $document = SAML2_DOMDocumentFactory::create();
+            $document = DOMDocumentFactory::create();
         } else {
             $document = $parent->ownerDocument;
         }
 
         $namespaces = array();
         for ($e = $element; $e !== NULL; $e = $e->parentNode) {
-            foreach (SAML2_Utils::xpQuery($e, './namespace::*') as $ns) {
+            foreach (Utils::xpQuery($e, './namespace::*') as $ns) {
                 $prefix = $ns->localName;
                 if ($prefix === 'xml' || $prefix === 'xmlns') {
                     continue;
@@ -287,7 +296,7 @@ class SAML2_Utils
     {
         assert('array_key_exists("Value", $nameId)');
 
-        $xml = SAML2_Utils::addString($node, SAML2_Constants::NS_SAML, 'saml:NameID', $nameId['Value']);
+        $xml = Utils::addString($node, Constants::NS_SAML, 'saml:NameID', $nameId['Value']);
 
         if (array_key_exists('NameQualifier', $nameId) && $nameId['NameQualifier'] !== NULL) {
             $xml->setAttribute('NameQualifier', $nameId['NameQualifier']);
@@ -445,7 +454,7 @@ class SAML2_Utils
                 }
             } catch (Exception $e) {
                 /* We failed to decrypt this key. Log it, and substitute a "random" key. */
-                SAML2_Utils::getContainer()->getLogger()->error('Failed to decrypt symmetric key: ' . $e->getMessage());
+                Utils::getContainer()->getLogger()->error('Failed to decrypt symmetric key: ' . $e->getMessage());
                 /* Create a replacement key, so that it looks like we fail in the same way as if the key was correctly padded. */
 
                 /* We base the symmetric key on the encrypted key and private key, so that we always behave the
@@ -497,8 +506,8 @@ class SAML2_Utils
             '</root>';
 
         try {
-            $newDoc = SAML2_DOMDocumentFactory::fromString($xml);
-        } catch (SAML2_Exception_RuntimeException $e) {
+            $newDoc = DOMDocumentFactory::fromString($xml);
+        } catch (RuntimeException $e) {
             throw new Exception('Failed to parse decrypted XML. Maybe the wrong sharedkey was used?', 0, $e);
         }
 
@@ -532,7 +541,7 @@ class SAML2_Utils
              * Something went wrong during decryption, but for security
              * reasons we cannot tell the user what failed.
              */
-            SAML2_Utils::getContainer()->getLogger()->error('Decryption failed: ' . $e->getMessage());
+            Utils::getContainer()->getLogger()->error('Decryption failed: ' . $e->getMessage());
             throw new Exception('Failed to decrypt XML element.', 0, $e);
         }
     }
@@ -646,22 +655,22 @@ class SAML2_Utils
      * Create a KeyDescriptor with the given certificate.
      *
      * @param  string                     $x509Data The certificate, as a base64-encoded DER data.
-     * @return SAML2_XML_md_KeyDescriptor The keydescriptor.
+     * @return \SAML2\XML\md\KeyDescriptor The keydescriptor.
      */
     public static function createKeyDescriptor($x509Data)
     {
         assert('is_string($x509Data)');
 
-        $x509Certificate = new SAML2_XML_ds_X509Certificate();
+        $x509Certificate = new X509Certificate();
         $x509Certificate->certificate = $x509Data;
 
-        $x509Data = new SAML2_XML_ds_X509Data();
+        $x509Data = new X509Data();
         $x509Data->data[] = $x509Certificate;
 
-        $keyInfo = new SAML2_XML_ds_KeyInfo();
+        $keyInfo = new KeyInfo();
         $keyInfo->info[] = $x509Data;
 
-        $keyDescriptor = new SAML2_XML_md_KeyDescriptor();
+        $keyDescriptor = new KeyDescriptor();
         $keyDescriptor->KeyInfo = $keyInfo;
 
         return $keyDescriptor;
@@ -715,10 +724,10 @@ class SAML2_Utils
     }
 
     /**
-     * @return SAML2_Compat_Ssp_Container
+     * @return \SAML2\Compat\Ssp\Container
      */
     public static function getContainer()
     {
-        return SAML2_Compat_ContainerSingleton::getInstance();
+        return ContainerSingleton::getInstance();
     }
 }

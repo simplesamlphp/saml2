@@ -1,10 +1,15 @@
 <?php
+
+namespace SAML2\XML;
+
+use SAML2\Utils;
+use SAML2\DOMDocumentFactory;
 /**
  * Serializable class used to hold an XML element.
  *
  * @package SimpleSAMLphp
  */
-class SAML2_XML_Chunk implements Serializable
+class Chunk implements Serializable
 {
     /**
      * The localName of the element.
@@ -37,7 +42,7 @@ class SAML2_XML_Chunk implements Serializable
         $this->localName = $xml->localName;
         $this->namespaceURI = $xml->namespaceURI;
 
-        $this->xml = SAML2_Utils::copyElement($xml);
+        $this->xml = Utils::copyElement($xml);
     }
 
     /**
@@ -59,7 +64,7 @@ class SAML2_XML_Chunk implements Serializable
      */
     public function toXML(DOMElement $parent)
     {
-        return SAML2_Utils::copyElement($this->xml, $parent);
+        return Utils::copyElement($this->xml, $parent);
     }
 
     /**
@@ -76,11 +81,11 @@ class SAML2_XML_Chunk implements Serializable
      * Un-serialize this XML chunk.
      *
      * @param  string          $serialized The serialized chunk.
-     * @return SAML2_XML_Chunk The chunk object represented by the serialized string.
+     * @return \SAML2\XML\Chunk The chunk object represented by the serialized string.
      */
     public function unserialize($serialized)
     {
-        $doc = SAML2_DOMDocumentFactory::fromString(unserialize($serialized));
+        $doc = DOMDocumentFactory::fromString(unserialize($serialized));
         $this->xml = $doc->documentElement;
         $this->localName = $this->xml->localName;
         $this->namespaceURI = $this->xml->namespaceURI;

@@ -1,11 +1,16 @@
 <?php
 
+namespace SAML2\XML\saml;
+
+use SAML2\DOMDocumentFactory;
+use SAML2\Constants;
+
 /**
  * Class representing the saml:NameID element.
  *
  * @package SimpleSAMLphp
  */
-class SAML2_XML_saml_NameID
+class NameID
 {
     /**
      * The NameQualifier or the NameID.
@@ -87,12 +92,12 @@ class SAML2_XML_saml_NameID
         assert('is_string($this->value)');
 
         if ($parent === NULL) {
-            $parent = SAML2_DOMDocumentFactory::create();
+            $parent = DOMDocumentFactory::create();
             $doc = $parent;
         } else {
             $doc = $parent->ownerDocument;
         }
-        $e = $doc->createElementNS(SAML2_Constants::NS_SAML, 'saml:NameID');
+        $e = $doc->createElementNS(Constants::NS_SAML, 'saml:NameID');
         $parent->appendChild($e);
 
         if ($this->NameQualifier !== NULL) {

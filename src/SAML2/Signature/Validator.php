@@ -1,9 +1,16 @@
 <?php
 
+namespace SAML2\Signature;
+
+use SAML2\SignedElement;
+use SAML2\Configuration\CertificateProvider;
+use SAML2\Certificate\KeyLoader;
+use SAML2\Certificate\FingerprintLoader;
+
 /**
  * Signature Validator.
  */
-class SAML2_Signature_Validator
+class Validator
 {
     /**
      * @var \Psr\Log\LoggerInterface
@@ -16,15 +23,15 @@ class SAML2_Signature_Validator
     }
 
     public function hasValidSignature(
-        SAML2_SignedElement $signedElement,
-        SAML2_Configuration_CertificateProvider $configuration
+        SignedElement $signedElement,
+        CertificateProvider $configuration
     ) {
         // should be DI
-        $validator = new SAML2_Signature_ValidatorChain(
+        $validator = new ValidatorChain(
             $this->logger,
             array(
-                new SAML2_Signature_PublicKeyValidator($this->logger, new SAML2_Certificate_KeyLoader()),
-                new SAML2_Signature_FingerprintValidator($this->logger, new SAML2_Certificate_FingerprintLoader())
+                new PublicKeyValidator($this->logger, new KeyLoader()),
+                new FingerprintValidator($this->logger, new FingerprintLoader())
             )
         );
 

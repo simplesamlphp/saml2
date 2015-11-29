@@ -1,11 +1,13 @@
 <?php
 
+namespace SAML2;
+
 /**
  * Class for SAML 2 Response messages.
  *
  * @package SimpleSAMLphp
  */
-class SAML2_Response extends SAML2_StatusResponse
+class Response extends StatusResponse
 {
     /**
      * The assertions in this response.
@@ -28,14 +30,14 @@ class SAML2_Response extends SAML2_StatusResponse
         }
 
         for ($node = $xml->firstChild; $node !== NULL; $node = $node->nextSibling) {
-            if ($node->namespaceURI !== SAML2_Constants::NS_SAML) {
+            if ($node->namespaceURI !== Constants::NS_SAML) {
                 continue;
             }
 
             if ($node->localName === 'Assertion') {
-                $this->assertions[] = new SAML2_Assertion($node);
+                $this->assertions[] = new Assertion($node);
             } elseif ($node->localName === 'EncryptedAssertion') {
-                $this->assertions[] = new SAML2_EncryptedAssertion($node);
+                $this->assertions[] = new EncryptedAssertion($node);
             }
         }
     }
@@ -43,7 +45,7 @@ class SAML2_Response extends SAML2_StatusResponse
     /**
      * Retrieve the assertions in this response.
      *
-     * @return SAML2_Assertion[]|SAML2_EncryptedAssertion[]
+     * @return \SAML2\Assertion[]|\SAML2\EncryptedAssertion[]
      */
     public function getAssertions()
     {
@@ -53,7 +55,7 @@ class SAML2_Response extends SAML2_StatusResponse
     /**
      * Set the assertions that should be included in this response.
      *
-     * @param SAML2_Assertion[]|SAML2_EncryptedAssertion[] The assertions.
+     * @param \SAML2\Assertion[]|\SAML2\EncryptedAssertion[] The assertions.
      */
     public function setAssertions(array $assertions)
     {
@@ -69,7 +71,7 @@ class SAML2_Response extends SAML2_StatusResponse
     {
         $root = parent::toUnsignedXML();
 
-        /** @var SAML2_Assertion|SAML2_EncryptedAssertion $assertion */
+        /** @var \SAML2\Assertion|\SAML2\EncryptedAssertion $assertion */
         foreach ($this->assertions as $assertion) {
 
             $assertion->toXML($root);

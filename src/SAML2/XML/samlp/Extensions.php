@@ -1,11 +1,17 @@
 <?php
 
+namespace SAML2\XML\samlp;
+
+use SAML2\Utils;
+use SAML2\XML\Chunk;
+use SAML2\Constants;
+
 /**
  * Class for handling SAML2 extensions.
  *
  * @package SimpleSAMLphp
  */
-class SAML2_XML_samlp_Extensions
+class Extensions
 {
     /**
      * Get a list of Extensions in the given element.
@@ -16,8 +22,8 @@ class SAML2_XML_samlp_Extensions
     public static function getList(DOMElement $parent)
     {
         $ret = array();
-        foreach (SAML2_Utils::xpQuery($parent, './saml_protocol:Extensions/*') as $node) {
-            $ret[] = new SAML2_XML_Chunk($node);
+        foreach (Utils::xpQuery($parent, './saml_protocol:Extensions/*') as $node) {
+            $ret[] = new Chunk($node);
         }
 
         return $ret;
@@ -27,7 +33,7 @@ class SAML2_XML_samlp_Extensions
      * Add a list of Extensions to the given element.
      *
      * @param DOMElement        $parent     The element we should add the extensions to.
-     * @param SAML2_XML_Chunk[] $extensions List of extension objects.
+     * @param \SAML2\XML\Chunk[] $extensions List of extension objects.
      */
     public static function addList(DOMElement $parent, array $extensions)
     {
@@ -35,7 +41,7 @@ class SAML2_XML_samlp_Extensions
             return;
         }
 
-        $extElement = $parent->ownerDocument->createElementNS(SAML2_Constants::NS_SAMLP, 'samlp:Extensions');
+        $extElement = $parent->ownerDocument->createElementNS(Constants::NS_SAMLP, 'samlp:Extensions');
         $parent->appendChild($extElement);
 
         foreach ($extensions as $ext) {

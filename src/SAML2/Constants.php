@@ -1,11 +1,13 @@
 <?php
 
+namespace SAML2;
+
 /**
  * Various SAML 2 constants.
  *
  * @package SimpleSAMLphp
  */
-class SAML2_Constants
+class Constants
 {
     /**
      * Password authentication context.

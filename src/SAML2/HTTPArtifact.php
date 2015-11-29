@@ -1,5 +1,9 @@
 <?php
 
+namespace SAML2;
+
+use SAML2\Utilities\Temporal;
+
 /**
  * Class which implements the HTTP-Artifact binding.
  *
@@ -8,7 +12,7 @@
  *
  * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
  */
-class SAML2_HTTPArtifact extends SAML2_Binding
+class HTTPArtifact extends Binding
 {
     /**
      * @var SimpleSAML_Configuration
@@ -18,11 +22,11 @@ class SAML2_HTTPArtifact extends SAML2_Binding
     /**
      * Create the redirect URL for a message.
      *
-     * @param  SAML2_Message $message The message.
+     * @param  \SAML2\Message $message The message.
      * @return string        The URL the user should be redirected to in order to send a message.
      * @throws Exception
      */
-    public function getRedirectURL(SAML2_Message $message)
+    public function getRedirectURL(Message $message)
     {
         $store = SimpleSAML_Store::getInstance();
         if ($store === FALSE) {
@@ -34,7 +38,7 @@ class SAML2_HTTPArtifact extends SAML2_Binding
         $artifactData = $message->toUnsignedXML();
         $artifactDataString = $artifactData->ownerDocument->saveXML($artifactData);
 
-        $store->set('artifact', $artifact, $artifactDataString, SAML2_Utilities_Temporal::getTime() + 15*60);
+        $store->set('artifact', $artifact, $artifactDataString, Temporal::getTime() + 15*60);
 
         $params = array(
             'SAMLart' => $artifact,
@@ -52,12 +56,12 @@ class SAML2_HTTPArtifact extends SAML2_Binding
      *
      * Note: This function never returns.
      *
-     * @param SAML2_Message $message The message we should send.
+     * @param \SAML2\Message $message The message we should send.
      */
-    public function send(SAML2_Message $message)
+    public function send(Message $message)
     {
         $destination = $this->getRedirectURL($message);
-        SAML2_Utils::getContainer()->redirect($destination);
+        Utils::getContainer()->redirect($destination);
     }
 
     /**
@@ -65,7 +69,7 @@ class SAML2_HTTPArtifact extends SAML2_Binding
      *
      * Throws an exception if it is unable receive the message.
      *
-     * @return SAML2_Message The received message.
+     * @return \SAML2\Message The received message.
      * @throws Exception
      */
     public function receive()
@@ -99,10 +103,10 @@ class SAML2_HTTPArtifact extends SAML2_Binding
             throw new Exception('No ArtifactResolutionService with the correct index.');
         }
 
-        SAML2_Utils::getContainer()->getLogger()->debug("ArtifactResolutionService endpoint being used is := " . $endpoint['Location']);
+        Utils::getContainer()->getLogger()->debug("ArtifactResolutionService endpoint being used is := " . $endpoint['Location']);
 
         //Construct the ArtifactResolve Request
-        $ar = new SAML2_ArtifactResolve();
+        $ar = new ArtifactResolve();
 
         /* Set the request attributes */
 
@@ -113,10 +117,10 @@ class SAML2_HTTPArtifact extends SAML2_Binding
         /* Sign the request */
         sspmod_saml_Message::addSign($this->spMetadata, $idpMetadata, $ar); // Shoaib - moved from the SOAPClient.
 
-        $soap = new SAML2_SOAPClient();
+        $soap = new SOAPClient();
 
         // Send message through SoapClient
-        /** @var SAML2_ArtifactResponse $artifactResponse */
+        /** @var \SAML2\ArtifactResponse $artifactResponse */
         $artifactResponse = $soap->send($ar, $this->spMetadata);
 
         if (!$artifactResponse->isSuccess()) {
@@ -130,7 +134,7 @@ class SAML2_HTTPArtifact extends SAML2_Binding
             return NULL;
         }
 
-        $samlResponse = SAML2_Message::fromXML($xml);
+        $samlResponse = Message::fromXML($xml);
         $samlResponse->addValidator(array(get_class($this), 'validateSignature'), $artifactResponse);
 
         if (isset($_REQUEST['RelayState'])) {
@@ -151,11 +155,11 @@ class SAML2_HTTPArtifact extends SAML2_Binding
     /**
      * A validator which returns TRUE if the ArtifactResponse was signed with the given key
      *
-     * @param SAML2_ArtifactResponse $message
+     * @param \SAML2\ArtifactResponse $message
      * @param XMLSecurityKey $key
      * @return bool
      */
-    public static function validateSignature(SAML2_ArtifactResponse $message, XMLSecurityKey $key)
+    public static function validateSignature(ArtifactResponse $message, XMLSecurityKey $key)
     {
         return $message->validate($key);
     }

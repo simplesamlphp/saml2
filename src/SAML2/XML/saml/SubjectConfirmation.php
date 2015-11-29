@@ -1,11 +1,16 @@
 <?php
 
+namespace SAML2\XML\saml;
+
+use SAML2\Utils;
+use SAML2\Constants;
+
 /**
  * Class representing SAML 2 SubjectConfirmation element.
  *
  * @package SimpleSAMLphp
  */
-class SAML2_XML_saml_SubjectConfirmation
+class SubjectConfirmation
 {
     /**
      * The method we can use to verify this Subject.
@@ -17,14 +22,14 @@ class SAML2_XML_saml_SubjectConfirmation
     /**
      * The NameID of the entity that can use this element to verify the Subject.
      *
-     * @var SAML2_XML_saml_NameID|NULL
+     * @var \SAML2\XML\saml\NameID|NULL
      */
     public $NameID;
 
     /**
      * SubjectConfirmationData element with extra data for verification of the Subject.
      *
-     * @var SAML2_XML_saml_SubjectConfirmationData|NULL
+     * @var \SAML2\XML\saml\SubjectConfirmationData|NULL
      */
     public $SubjectConfirmationData;
 
@@ -45,18 +50,18 @@ class SAML2_XML_saml_SubjectConfirmation
         }
         $this->Method = $xml->getAttribute('Method');
 
-        $nid = SAML2_Utils::xpQuery($xml, './saml_assertion:NameID');
+        $nid = Utils::xpQuery($xml, './saml_assertion:NameID');
         if (count($nid) > 1) {
             throw new Exception('More than one NameID in a SubjectConfirmation element.');
         } elseif (!empty($nid)) {
-            $this->NameID = new SAML2_XML_saml_NameID($nid[0]);
+            $this->NameID = new NameID($nid[0]);
         }
 
-        $scd = SAML2_Utils::xpQuery($xml, './saml_assertion:SubjectConfirmationData');
+        $scd = Utils::xpQuery($xml, './saml_assertion:SubjectConfirmationData');
         if (count($scd) > 1) {
             throw new Exception('More than one SubjectConfirmationData child in a SubjectConfirmation element.');
         } elseif (!empty($scd)) {
-            $this->SubjectConfirmationData = new SAML2_XML_saml_SubjectConfirmationData($scd[0]);
+            $this->SubjectConfirmationData = new SubjectConfirmationData($scd[0]);
         }
     }
 
@@ -72,7 +77,7 @@ class SAML2_XML_saml_SubjectConfirmation
         assert('is_null($this->NameID) || $this->NameID instanceof SAML2_XML_saml_NameID');
         assert('is_null($this->SubjectConfirmationData) || $this->SubjectConfirmationData instanceof SAML2_XML_saml_SubjectConfirmationData');
 
-        $e = $parent->ownerDocument->createElementNS(SAML2_Constants::NS_SAML, 'saml:SubjectConfirmation');
+        $e = $parent->ownerDocument->createElementNS(Constants::NS_SAML, 'saml:SubjectConfirmation');
         $parent->appendChild($e);
 
         $e->setAttribute('Method', $this->Method);

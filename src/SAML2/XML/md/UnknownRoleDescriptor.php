@@ -1,16 +1,20 @@
 <?php
 
+namespace SAML2\XML\md;
+
+use SAML2\XML\Chunk;
+
 /**
  * Class representing unknown RoleDescriptors.
  *
  * @package SimpleSAMLphp
  */
-class SAML2_XML_md_UnknownRoleDescriptor extends SAML2_XML_md_RoleDescriptor
+class UnknownRoleDescriptor extends RoleDescriptor
 {
     /**
      * This RoleDescriptor as XML
      *
-     * @var SAML2_XML_Chunk
+     * @var \SAML2\XML\Chunk
      */
     private $xml;
 
@@ -23,7 +27,7 @@ class SAML2_XML_md_UnknownRoleDescriptor extends SAML2_XML_md_RoleDescriptor
     {
         parent::__construct('md:RoleDescriptor', $xml);
 
-        $this->xml = new SAML2_XML_Chunk($xml);
+        $this->xml = new Chunk($xml);
     }
 
     /**

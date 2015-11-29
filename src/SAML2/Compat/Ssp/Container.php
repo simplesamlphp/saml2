@@ -1,6 +1,10 @@
 <?php
 
-class SAML2_Compat_Ssp_Container extends SAML2_Compat_AbstractContainer
+namespace SAML2\Compat\Ssp;
+
+use SAML2\Compat\AbstractContainer;
+
+class Container extends AbstractContainer
 {
     /**
      * @var Psr\Log\LoggerInterface
@@ -12,7 +16,7 @@ class SAML2_Compat_Ssp_Container extends SAML2_Compat_AbstractContainer
      */
     public function __construct()
     {
-        $this->logger = new SAML2_Compat_Ssp_Logger();
+        $this->logger = new Logger();
     }
 
     /**

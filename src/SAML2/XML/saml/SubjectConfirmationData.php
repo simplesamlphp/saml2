@@ -1,11 +1,18 @@
 <?php
 
+namespace SAML2\XML\saml;
+
+use SAML2\Utils;
+use SAML2\XML\Chunk;
+use SAML2\XML\ds\KeyInfo;
+use SAML2\Constants;
+
 /**
  * Class representing SAML 2 SubjectConfirmationData element.
  *
  * @package SimpleSAMLphp
  */
-class SAML2_XML_saml_SubjectConfirmationData
+class SubjectConfirmationData
 {
     /**
      * The time before this element is valid, as an unix timestamp.
@@ -46,9 +53,9 @@ class SAML2_XML_saml_SubjectConfirmationData
      * The various key information elements.
      *
      * Array with various elements describing this key.
-     * Unknown elements will be represented by SAML2_XML_Chunk.
+     * Unknown elements will be represented by \SAML2\XML\Chunk.
      *
-     * @var (SAML2_XML_ds_KeyInfo|SAML2_XML_Chunk)[]
+     * @var (\SAML2\XML\ds\KeyInfo|\SAML2\XML\Chunk)[]
      */
     public $info = array();
 
@@ -64,10 +71,10 @@ class SAML2_XML_saml_SubjectConfirmationData
         }
 
         if ($xml->hasAttribute('NotBefore')) {
-            $this->NotBefore = SAML2_Utils::xsDateTimeToTimestamp($xml->getAttribute('NotBefore'));
+            $this->NotBefore = Utils::xsDateTimeToTimestamp($xml->getAttribute('NotBefore'));
         }
         if ($xml->hasAttribute('NotOnOrAfter')) {
-            $this->NotOnOrAfter = SAML2_Utils::xsDateTimeToTimestamp($xml->getAttribute('NotOnOrAfter'));
+            $this->NotOnOrAfter = Utils::xsDateTimeToTimestamp($xml->getAttribute('NotOnOrAfter'));
         }
         if ($xml->hasAttribute('Recipient')) {
             $this->Recipient = $xml->getAttribute('Recipient');
@@ -83,15 +90,15 @@ class SAML2_XML_saml_SubjectConfirmationData
                 continue;
             }
             if ($n->namespaceURI !== XMLSecurityDSig::XMLDSIGNS) {
-                $this->info[] = new SAML2_XML_Chunk($n);
+                $this->info[] = new Chunk($n);
                 continue;
             }
             switch ($n->localName) {
                 case 'KeyInfo':
-                    $this->info[] = new SAML2_XML_ds_KeyInfo($n);
+                    $this->info[] = new KeyInfo($n);
                     break;
                 default:
-                    $this->info[] = new SAML2_XML_Chunk($n);
+                    $this->info[] = new Chunk($n);
                     break;
             }
         }
@@ -111,7 +118,7 @@ class SAML2_XML_saml_SubjectConfirmationData
         assert('is_null($this->InResponseTo) || is_string($this->InResponseTo)');
         assert('is_null($this->Address) || is_string($this->Address)');
 
-        $e = $parent->ownerDocument->createElementNS(SAML2_Constants::NS_SAML, 'saml:SubjectConfirmationData');
+        $e = $parent->ownerDocument->createElementNS(Constants::NS_SAML, 'saml:SubjectConfirmationData');
         $parent->appendChild($e);
 
         if (isset($this->NotBefore)) {
@@ -129,7 +136,7 @@ class SAML2_XML_saml_SubjectConfirmationData
         if (isset($this->Address)) {
             $e->setAttribute('Address', $this->Address);
         }
-        /** @var SAML2_XML_ds_KeyInfo|SAML2_XML_Chunk $n */
+        /** @var \SAML2\XML\ds\KeyInfo|\SAML2\XML\Chunk $n */
         foreach ($this->info as $n) {
             $n->toXML($e);
         }

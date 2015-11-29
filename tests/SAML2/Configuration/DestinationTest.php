@@ -1,6 +1,8 @@
 <?php
 
-class SAML2_Configuration_DestinationTest extends \PHPUnit_Framework_TestCase
+namespace SAML2\Configuration;
+
+class DestinationTest extends \PHPUnit_Framework_TestCase
 {
     /**
      * @group configuration
@@ -8,8 +10,8 @@ class SAML2_Configuration_DestinationTest extends \PHPUnit_Framework_TestCase
      */
     public function two_destinations_with_the_same_value_are_equal()
     {
-        $destinationOne = new SAML2_Configuration_Destination('a');
-        $destinationTwo = new SAML2_Configuration_Destination('a');
+        $destinationOne = new Destination('a');
+        $destinationTwo = new Destination('a');
 
         $this->assertTrue($destinationOne->equals($destinationTwo));
     }
@@ -20,8 +22,8 @@ class SAML2_Configuration_DestinationTest extends \PHPUnit_Framework_TestCase
      */
     public function two_destinations_with_the_different_values_are_not_equal()
     {
-        $destinationOne = new SAML2_Configuration_Destination('a');
-        $destinationTwo = new SAML2_Configuration_Destination('a');
+        $destinationOne = new Destination('a');
+        $destinationTwo = new Destination('a');
 
         $this->assertTrue($destinationOne->equals($destinationTwo));
     }
@@ -30,11 +32,11 @@ class SAML2_Configuration_DestinationTest extends \PHPUnit_Framework_TestCase
      * @group configuration
      * @test
      * @dataProvider nonStringValueProvider
-     * @expectedException SAML2_Exception_InvalidArgumentException
+     * @expectedException \SAML2\Exception\InvalidArgumentException
      */
     public function a_destination_cannot_be_created_with_a_non_string_value($value)
     {
-        $destination = new SAML2_Configuration_Destination($value);
+        $destination = new Destination($value);
     }
 
     /**

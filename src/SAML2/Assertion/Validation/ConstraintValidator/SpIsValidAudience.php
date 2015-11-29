@@ -1,20 +1,28 @@
 <?php
 
-class SAML2_Assertion_Validation_ConstraintValidator_SpIsValidAudience implements
-    SAML2_Assertion_Validation_AssertionConstraintValidator,
-    SAML2_Configuration_ServiceProviderAware
+namespace SAML2\Assertion\Validation\ConstraintValidator;
+
+use SAML2\Assertion\Validation\AssertionConstraintValidator;
+use SAML2\Configuration\ServiceProviderAware;
+use SAML2\Configuration\ServiceProvider;
+use SAML2\Assertion;
+use SAML2\Assertion\Validation\Result;
+
+class SpIsValidAudience implements
+    AssertionConstraintValidator,
+    ServiceProviderAware
 {
     /**
-     * @var SAML2_Configuration_ServiceProvider
+     * @var \SAML2\Configuration\ServiceProvider
      */
     private $serviceProvider;
 
-    public function setServiceProvider(SAML2_Configuration_ServiceProvider $serviceProvider)
+    public function setServiceProvider(ServiceProvider $serviceProvider)
     {
         $this->serviceProvider = $serviceProvider;
     }
 
-    public function validate(SAML2_Assertion $assertion, SAML2_Assertion_Validation_Result $result)
+    public function validate(Assertion $assertion, Result $result)
     {
         $intendedAudiences = $assertion->getValidAudiences();
         if ($intendedAudiences === NULL) {
