@@ -23,7 +23,7 @@ class FileTest extends \PHPUnit_Framework_TestCase
      */
     public function passing_nonstring_filename_throws_exception()
     {
-        File::getFileContents(NULL);
+        File::getFileContents(null);
     }
 
     /**

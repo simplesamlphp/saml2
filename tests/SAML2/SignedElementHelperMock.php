@@ -10,7 +10,7 @@ class SignedElementHelperMock extends SignedElementHelper
     /**
      * @param \DOMElement $xml
      */
-    public function __construct(\DOMElement $xml = NULL)
+    public function __construct(\DOMElement $xml = null)
     {
         parent::__construct($xml);
     }

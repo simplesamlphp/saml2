@@ -45,7 +45,7 @@ class IdentityProvider extends ArrayAdapter implements
         return $this->get('base64EncodedAttributes');
     }
 
-    public function getPrivateKey($name, $required = FALSE)
+    public function getPrivateKey($name, $required = false)
     {
         $privateKeys = $this->get('privateKeys');
         $key = array_filter($privateKeys, function (PrivateKey $key) use ($name) {
@@ -63,7 +63,7 @@ class IdentityProvider extends ArrayAdapter implements
         }
 
         if (!$keyCount) {
-            return NULL;
+            return null;
         }
 
         return array_pop($key);

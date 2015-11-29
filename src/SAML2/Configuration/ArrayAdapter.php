@@ -20,7 +20,7 @@ class ArrayAdapter implements Queryable
         $this->configuration = $configuration;
     }
 
-    public function get($key, $defaultValue = NULL)
+    public function get($key, $defaultValue = null)
     {
         if (!$this->has($key)) {
             return $defaultValue;

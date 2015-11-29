@@ -37,10 +37,10 @@ class FingerprintCollection extends ArrayCollection
         foreach ($this->elements as $fingerprint) {
             /** @var \SAML2\Certificate\Fingerprint $fingerprint */
             if ($fingerprint->equals($otherFingerprint)) {
-                return TRUE;
+                return true;
             }
         }
 
-        return FALSE;
+        return false;
     }
 }

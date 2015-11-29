@@ -18,7 +18,7 @@ class SOAP extends Binding
      */
     public function send(Message $message)
     {
-        header('Content-Type: text/xml', TRUE);
+        header('Content-Type: text/xml', true);
         $outputFromIdp = '<?xml version="1.0" encoding="UTF-8"?>';
         $outputFromIdp .= '<SOAP-ENV:Envelope xmlns:SOAP-ENV="http://schemas.xmlsoap.org/soap/envelope/">';
         $outputFromIdp .= '<SOAP-ENV:Body>';
@@ -55,5 +55,4 @@ class SOAP extends Binding
 
         return Message::fromXML($results[0]);
     }
-
 }

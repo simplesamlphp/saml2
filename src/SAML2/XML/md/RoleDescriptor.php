@@ -23,21 +23,21 @@ class RoleDescriptor extends SignedElementHelper
     /**
      * The ID of this element.
      *
-     * @var string|NULL
+     * @var string|null
      */
     public $ID;
 
     /**
      * How long this element is valid, as a unix timestamp.
      *
-     * @var int|NULL
+     * @var int|null
      */
     public $validUntil;
 
     /**
      * The length of time this element can be cached, as string.
      *
-     * @var string|NULL
+     * @var string|null
      */
     public $cacheDuration;
 
@@ -51,7 +51,7 @@ class RoleDescriptor extends SignedElementHelper
     /**
      * Error URL for this role.
      *
-     * @var string|NULL
+     * @var string|null
      */
     public $errorURL;
 
@@ -76,9 +76,9 @@ class RoleDescriptor extends SignedElementHelper
     /**
      * Organization of this role.
      *
-     * @var \SAML2\XML\md\Organization|NULL
+     * @var \SAML2\XML\md\Organization|null
      */
-    public $Organization = NULL;
+    public $Organization = null;
 
     /**
      * ContactPerson elements for this role.
@@ -93,17 +93,17 @@ class RoleDescriptor extends SignedElementHelper
      * Initialize a RoleDescriptor.
      *
      * @param string          $elementName The name of this element.
-     * @param \DOMElement|NULL $xml         The XML element we should load.
+     * @param \DOMElement|null $xml         The XML element we should load.
      * @throws \Exception
      */
-    protected function __construct($elementName, \DOMElement $xml = NULL)
+    protected function __construct($elementName, \DOMElement $xml = null)
     {
         assert('is_string($elementName)');
 
         parent::__construct($xml);
         $this->elementName = $elementName;
 
-        if ($xml === NULL) {
+        if ($xml === null) {
             return;
         }
 
@@ -199,5 +199,4 @@ class RoleDescriptor extends SignedElementHelper
 
         return $e;
     }
-
 }

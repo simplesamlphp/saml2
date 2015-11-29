@@ -23,8 +23,8 @@ final class DOMDocumentFactory
             throw InvalidArgumentException::invalidType('non-empty string', $xml);
         }
 
-        $entityLoader   = libxml_disable_entity_loader(TRUE);
-        $internalErrors = libxml_use_internal_errors(TRUE);
+        $entityLoader   = libxml_disable_entity_loader(true);
+        $internalErrors = libxml_use_internal_errors(true);
         libxml_clear_errors();
 
         $domDocument = self::create();
@@ -80,7 +80,7 @@ final class DOMDocumentFactory
         // libxml_disable_entity_loader(true) disables \DOMDocument::load() method
         // so we need to read the content and use \DOMDocument::loadXML()
         $xml = file_get_contents($file);
-        if ($xml === FALSE) {
+        if ($xml === false) {
             throw new RuntimeException(sprintf(
                 'Contents of readable file "%s" could not be gotten',
                 $file

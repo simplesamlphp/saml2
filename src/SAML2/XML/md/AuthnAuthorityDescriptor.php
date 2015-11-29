@@ -42,14 +42,14 @@ class AuthnAuthorityDescriptor extends RoleDescriptor
     /**
      * Initialize an IDPSSODescriptor.
      *
-     * @param \DOMElement|NULL $xml The XML element we should load.
+     * @param \DOMElement|null $xml The XML element we should load.
      * @throws \Exception
      */
-    public function __construct(\DOMElement $xml = NULL)
+    public function __construct(\DOMElement $xml = null)
     {
         parent::__construct('md:AuthnAuthorityDescriptor', $xml);
 
-        if ($xml === NULL) {
+        if ($xml === null) {
             return;
         }
 
@@ -90,9 +90,8 @@ class AuthnAuthorityDescriptor extends RoleDescriptor
             $ep->toXML($e, 'md:AssertionIDRequestService');
         }
 
-        Utils::addStrings($e, Constants::NS_MD, 'md:NameIDFormat', FALSE, $this->NameIDFormat);
+        Utils::addStrings($e, Constants::NS_MD, 'md:NameIDFormat', false, $this->NameIDFormat);
 
         return $e;
     }
-
 }

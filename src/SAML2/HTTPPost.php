@@ -18,7 +18,7 @@ class HTTPPost extends Binding
      */
     public function send(Message $message)
     {
-        if ($this->destination === NULL) {
+        if ($this->destination === null) {
             $destination = $message->getDestination();
         } else {
             $destination = $this->destination;
@@ -41,7 +41,7 @@ class HTTPPost extends Binding
         $post = array();
         $post[$msgType] = $msgStr;
 
-        if ($relayState !== NULL) {
+        if ($relayState !== null) {
             $post['RelayState'] = $relayState;
         }
 
@@ -81,5 +81,4 @@ class HTTPPost extends Binding
 
         return $msg;
     }
-
 }

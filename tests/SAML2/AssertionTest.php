@@ -41,7 +41,6 @@ class AssertionTest extends \PHPUnit_Framework_TestCase
         );
         $this->assertCount(1, $authnContextElements);
         $this->assertEquals('someAuthnContext', $authnContextElements[0]->textContent);
-
     }
 
     public function testUnmarshalling()
@@ -161,8 +160,8 @@ XML;
         try {
             $assertion->setAuthnContextDecl(new Chunk($document->documentElement));
             $assertion->setAuthnContextDeclRef('/relative/path/to/document.xml');
+        } catch (\Exception $e) {
         }
-        catch (\Exception $e) {}
         $this->assertNotEmpty($e);
 
         // Try again in reverse order for good measure.
@@ -172,8 +171,8 @@ XML;
         try {
             $assertion->setAuthnContextDeclRef('/relative/path/to/document.xml');
             $assertion->setAuthnContextDecl(new Chunk($document->documentElement));
+        } catch (\Exception $e) {
         }
-        catch (\Exception $e) {}
         $this->assertNotEmpty($e);
 
         // Try with unmarshalling
@@ -202,8 +201,8 @@ XML;
         $e = null;
         try {
             new Assertion($document->documentElement);
+        } catch (\Exception $e) {
         }
-        catch (\Exception $e) {}
         $this->assertNotEmpty($e);
     }
 
@@ -229,8 +228,7 @@ XML
         $e = null;
         try {
             $assertion = new Assertion($document->firstChild);
-        }
-        catch (\Exception $e) {
+        } catch (\Exception $e) {
         }
         $this->assertNotEmpty($e);
     }
@@ -329,4 +327,3 @@ XML
         $this->assertTrue($assertion->hasEncryptedAttributes());
     }
 }
-

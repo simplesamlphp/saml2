@@ -75,7 +75,7 @@ class SimpleSAMLConverter
             $extracted['certificateFingerprint'] = $configuration->getArrayizeString('certFingerprint');
         }
 
-        $extracted['assertionEncryptionEnabled'] = $configuration->getBoolean('assertion.encryption', FALSE);
+        $extracted['assertionEncryptionEnabled'] = $configuration->getBoolean('assertion.encryption', false);
 
         if ($configuration->has('sharedKey')) {
             $extracted['sharedKey'] = $configuration->getString('sharedKey');
@@ -86,7 +86,7 @@ class SimpleSAMLConverter
 
     private static function enrichForIdentityProvider(SimpleSAML_Configuration $configuration, &$baseConfiguration)
     {
-        $baseConfiguration['base64EncodedAttributes'] = $configuration->getBoolean('base64attributes', FALSE);
+        $baseConfiguration['base64EncodedAttributes'] = $configuration->getBoolean('base64attributes', false);
         $baseConfiguration['entityId'] = $configuration->getString('entityid');
     }
 
@@ -100,22 +100,22 @@ class SimpleSAMLConverter
         array &$baseConfiguration
     ) {
         if ($configuration->has('sharedKey')) {
-            $baseConfiguration['sharedKey'] = $configuration->getString('sharedKey', NULL);
+            $baseConfiguration['sharedKey'] = $configuration->getString('sharedKey', null);
         }
 
         if ($configuration->has('new_privatekey')) {
             $baseConfiguration['privateKeys'][] = new PrivateKey(
                 $configuration->getString('new_privatekey'),
                 PrivateKey::NAME_NEW,
-                $configuration->getString('new_privatekey_pass', NULL)
+                $configuration->getString('new_privatekey_pass', null)
             );
         }
 
-        if ($configuration->getBoolean('assertion.encryption', FALSE)) {
+        if ($configuration->getBoolean('assertion.encryption', false)) {
             $baseConfiguration['privateKeys'][] = new PrivateKey(
                 $configuration->getString('privatekey'),
                 PrivateKey::NAME_DEFAULT,
-                $configuration->getString('privatekey_pass', NULL)
+                $configuration->getString('privatekey_pass', null)
             );
 
             if ($configuration->has('encryption.blacklisted-algorithms')) {

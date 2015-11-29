@@ -15,16 +15,16 @@ class LogoutRequest extends Request
     /**
      * The expiration time of this request.
      *
-     * @var int|NULL
+     * @var int|null
      */
     private $notOnOrAfter;
 
     /**
      * The encrypted NameID in the request.
      *
-     * If this is not NULL, the NameID needs decryption before it can be accessed.
+     * If this is not null, the NameID needs decryption before it can be accessed.
      *
-     * @var \DOMElement|NULL
+     * @var \DOMElement|null
      */
     private $encryptedNameId;
 
@@ -45,16 +45,16 @@ class LogoutRequest extends Request
     /**
      * Constructor for SAML 2 logout request messages.
      *
-     * @param \DOMElement|NULL $xml The input message.
+     * @param \DOMElement|null $xml The input message.
      * @throws \Exception
      */
-    public function __construct(\DOMElement $xml = NULL)
+    public function __construct(\DOMElement $xml = null)
     {
         parent::__construct('LogoutRequest', $xml);
 
         $this->sessionIndexes = array();
 
-        if ($xml === NULL) {
+        if ($xml === null) {
             return;
         }
 
@@ -85,7 +85,7 @@ class LogoutRequest extends Request
     /**
      * Retrieve the expiration time of this request.
      *
-     * @return int|NULL The expiration time of this request.
+     * @return int|null The expiration time of this request.
      */
     public function getNotOnOrAfter()
     {
@@ -95,7 +95,7 @@ class LogoutRequest extends Request
     /**
      * Set the expiration time of this request.
      *
-     * @param int|NULL $notOnOrAfter The expiration time of this request.
+     * @param int|null $notOnOrAfter The expiration time of this request.
      */
     public function setNotOnOrAfter($notOnOrAfter)
     {
@@ -107,15 +107,15 @@ class LogoutRequest extends Request
     /**
      * Check whether the NameId is encrypted.
      *
-     * @return TRUE if the NameId is encrypted, FALSE if not.
+     * @return true if the NameId is encrypted, false if not.
      */
     public function isNameIdEncrypted()
     {
-        if ($this->encryptedNameId !== NULL) {
-            return TRUE;
+        if ($this->encryptedNameId !== null) {
+            return true;
         }
 
-        return FALSE;
+        return false;
     }
 
     /**
@@ -144,7 +144,7 @@ class LogoutRequest extends Request
         $enc->encryptKey($key, $symmetricKey);
 
         $this->encryptedNameId = $enc->encryptNode($symmetricKey);
-        $this->nameId = NULL;
+        $this->nameId = null;
     }
 
     /**
@@ -155,7 +155,7 @@ class LogoutRequest extends Request
      */
     public function decryptNameId(XMLSecurityKey $key, array $blacklist = array())
     {
-        if ($this->encryptedNameId === NULL) {
+        if ($this->encryptedNameId === null) {
             /* No NameID to decrypt. */
 
             return;
@@ -165,7 +165,7 @@ class LogoutRequest extends Request
         Utils::getContainer()->debugMessage($nameId, 'decrypt');
         $this->nameId = Utils::parseNameId($nameId);
 
-        $this->encryptedNameId = NULL;
+        $this->encryptedNameId = null;
     }
 
     /**
@@ -176,7 +176,7 @@ class LogoutRequest extends Request
      */
     public function getNameId()
     {
-        if ($this->encryptedNameId !== NULL) {
+        if ($this->encryptedNameId !== null) {
             throw new \Exception('Attempted to retrieve encrypted NameID without decrypting it first.');
         }
 
@@ -221,12 +221,12 @@ class LogoutRequest extends Request
     /**
      * Retrieve the sesion index of the session that should be terminated.
      *
-     * @return string|NULL The sesion index of the session that should be terminated.
+     * @return string|null The sesion index of the session that should be terminated.
      */
     public function getSessionIndex()
     {
         if (empty($this->sessionIndexes)) {
-            return NULL;
+            return null;
         }
 
         return $this->sessionIndexes[0];
@@ -235,7 +235,7 @@ class LogoutRequest extends Request
     /**
      * Set the sesion index of the session that should be terminated.
      *
-     * @param string|NULL $sessionIndex The sesion index of the session that should be terminated.
+     * @param string|null $sessionIndex The sesion index of the session that should be terminated.
      */
     public function setSessionIndex($sessionIndex)
     {
@@ -257,16 +257,16 @@ class LogoutRequest extends Request
     {
         $root = parent::toUnsignedXML();
 
-        if ($this->notOnOrAfter !== NULL) {
+        if ($this->notOnOrAfter !== null) {
             $root->setAttribute('NotOnOrAfter', gmdate('Y-m-d\TH:i:s\Z', $this->notOnOrAfter));
         }
 
-        if ($this->encryptedNameId === NULL) {
+        if ($this->encryptedNameId === null) {
             Utils::addNameId($root, $this->nameId);
         } else {
             $eid = $root->ownerDocument->createElementNS(Constants::NS_SAML, 'saml:' . 'EncryptedID');
             $root->appendChild($eid);
-            $eid->appendChild($root->ownerDocument->importNode($this->encryptedNameId, TRUE));
+            $eid->appendChild($root->ownerDocument->importNode($this->encryptedNameId, true));
         }
 
         foreach ($this->sessionIndexes as $sessionIndex) {
@@ -275,5 +275,4 @@ class LogoutRequest extends Request
 
         return $root;
     }
-
 }

@@ -17,28 +17,28 @@ class EntitiesDescriptor extends SignedElementHelper
     /**
      * The ID of this element.
      *
-     * @var string|NULL
+     * @var string|null
      */
     public $ID;
 
     /**
      * How long this element is valid, as a unix timestamp.
      *
-     * @var int|NULL
+     * @var int|null
      */
     public $validUntil;
 
     /**
      * The length of time this element can be cached, as string.
      *
-     * @var string|NULL
+     * @var string|null
      */
     public $cacheDuration;
 
     /**
      * The name of this entity collection.
      *
-     * @var string|NULL
+     * @var string|null
      */
     public $Name;
 
@@ -61,13 +61,13 @@ class EntitiesDescriptor extends SignedElementHelper
     /**
      * Initialize an EntitiesDescriptor.
      *
-     * @param \DOMElement|NULL $xml The XML element we should load.
+     * @param \DOMElement|null $xml The XML element we should load.
      */
-    public function __construct(\DOMElement $xml = NULL)
+    public function __construct(\DOMElement $xml = null)
     {
         parent::__construct($xml);
 
-        if ($xml === NULL) {
+        if ($xml === null) {
             return;
         }
 
@@ -98,10 +98,10 @@ class EntitiesDescriptor extends SignedElementHelper
     /**
      * Convert this EntitiesDescriptor to XML.
      *
-     * @param \DOMElement|NULL $parent The EntitiesDescriptor we should append this EntitiesDescriptor to.
+     * @param \DOMElement|null $parent The EntitiesDescriptor we should append this EntitiesDescriptor to.
      * @return \DOMElement
      */
-    public function toXML(\DOMElement $parent = NULL)
+    public function toXML(\DOMElement $parent = null)
     {
         assert('is_null($this->ID) || is_string($this->ID)');
         assert('is_null($this->validUntil) || is_int($this->validUntil)');
@@ -110,7 +110,7 @@ class EntitiesDescriptor extends SignedElementHelper
         assert('is_array($this->Extensions)');
         assert('is_array($this->children)');
 
-        if ($parent === NULL) {
+        if ($parent === null) {
             $doc = DOMDocumentFactory::create();
             $e = $doc->createElementNS(Constants::NS_MD, 'md:EntitiesDescriptor');
             $doc->appendChild($e);
@@ -146,5 +146,4 @@ class EntitiesDescriptor extends SignedElementHelper
 
         return $e;
     }
-
 }

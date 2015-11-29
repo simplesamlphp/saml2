@@ -22,11 +22,11 @@ class KeyName
     /**
      * Initialize a KeyName element.
      *
-     * @param \DOMElement|NULL $xml The XML element we should load.
+     * @param \DOMElement|null $xml The XML element we should load.
      */
-    public function __construct(\DOMElement $xml = NULL)
+    public function __construct(\DOMElement $xml = null)
     {
-        if ($xml === NULL) {
+        if ($xml === null) {
             return;
         }
 
@@ -45,5 +45,4 @@ class KeyName
 
         return Utils::addString($parent, XMLSecurityDSig::XMLDSIGNS, 'ds:KeyName', $this->name);
     }
-
 }

@@ -15,9 +15,9 @@ class KeyInfo
     /**
      * The Id attribute on this element.
      *
-     * @var string|NULL
+     * @var string|null
      */
-    public $Id = NULL;
+    public $Id = null;
 
     /**
      * The various key information elements.
@@ -32,11 +32,11 @@ class KeyInfo
     /**
      * Initialize a KeyInfo element.
      *
-     * @param \DOMElement|NULL $xml The XML element we should load.
+     * @param \DOMElement|null $xml The XML element we should load.
      */
-    public function __construct(\DOMElement $xml = NULL)
+    public function __construct(\DOMElement $xml = null)
     {
-        if ($xml === NULL) {
+        if ($xml === null) {
             return;
         }
 
@@ -44,7 +44,7 @@ class KeyInfo
             $this->Id = $xml->getAttribute('Id');
         }
 
-        for ($n = $xml->firstChild; $n !== NULL; $n = $n->nextSibling) {
+        for ($n = $xml->firstChild; $n !== null; $n = $n->nextSibling) {
             if (!($n instanceof \DOMElement)) {
                 continue;
             }
@@ -94,5 +94,4 @@ class KeyInfo
 
         return $e;
     }
-
 }

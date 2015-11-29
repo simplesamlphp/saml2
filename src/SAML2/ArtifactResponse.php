@@ -12,25 +12,24 @@ class ArtifactResponse extends StatusResponse
 {
     /**
      * The \DOMElement with the message the artifact refers
-     * to, or NULL if we don't refer to any artifact.
+     * to, or null if we don't refer to any artifact.
      *
-     * @var \DOMElement|NULL
+     * @var \DOMElement|null
      */
     private $any;
 
 
-    public function __construct(\DOMElement $xml = NULL)
+    public function __construct(\DOMElement $xml = null)
     {
         parent::__construct('ArtifactResponse', $xml);
 
         if (!is_null($xml)) {
-
             $status = Utils::xpQuery($xml, './saml_protocol:Status');
             assert('!empty($status)'); /* Will have failed during StatusResponse parsing. */
 
             $status = $status[0];
 
-            for ($any = $status->nextSibling; $any !== NULL; $any = $any->nextSibling) {
+            for ($any = $status->nextSibling; $any !== null; $any = $any->nextSibling) {
                 if ($any instanceof \DOMElement) {
                     $this->any = $any;
                     break;
@@ -38,10 +37,9 @@ class ArtifactResponse extends StatusResponse
                 /* Ignore comments and text nodes. */
             }
         }
-
     }
 
-    public function setAny(\DOMElement $any = NULL)
+    public function setAny(\DOMElement $any = null)
     {
         $this->any = $any;
     }
@@ -60,12 +58,10 @@ class ArtifactResponse extends StatusResponse
     {
         $root = parent::toUnsignedXML();
         if (isset($this->any)) {
-            $node = $root->ownerDocument->importNode($this->any, TRUE);
+            $node = $root->ownerDocument->importNode($this->any, true);
             $root->appendChild($node);
-
         }
 
         return $root;
     }
-
 }

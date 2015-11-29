@@ -91,6 +91,4 @@ XML
         $this->setExpectedException('Exception', 'Missing affiliationOwnerID on AffiliationDescriptor.');
         new AffiliationDescriptor($document->firstChild);
     }
-
-
 }

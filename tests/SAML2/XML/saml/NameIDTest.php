@@ -49,7 +49,3 @@ XML
         $this->assertEquals('TheNameIDValue', $nameId->value);
     }
 }
-
-
-
-

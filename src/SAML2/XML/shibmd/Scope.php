@@ -27,23 +27,23 @@ class Scope
     /**
      * Whether this is a regexp scope.
      *
-     * @var bool|NULL
+     * @var bool|null
      */
-    public $regexp = NULL;
+    public $regexp = null;
 
     /**
      * Create a Scope.
      *
-     * @param \DOMElement|NULL $xml The XML element we should load.
+     * @param \DOMElement|null $xml The XML element we should load.
      */
-    public function __construct(\DOMElement $xml = NULL)
+    public function __construct(\DOMElement $xml = null)
     {
-        if ($xml === NULL) {
+        if ($xml === null) {
             return;
         }
 
         $this->scope = $xml->textContent;
-        $this->regexp = Utils::parseBoolean($xml, 'regexp', NULL);
+        $this->regexp = Utils::parseBoolean($xml, 'regexp', null);
     }
 
     /**
@@ -64,13 +64,12 @@ class Scope
 
         $e->appendChild($doc->createTextNode($this->scope));
 
-        if ($this->regexp === TRUE) {
+        if ($this->regexp === true) {
             $e->setAttribute('regexp', 'true');
-        } elseif ($this->regexp === FALSE) {
+        } elseif ($this->regexp === false) {
             $e->setAttribute('regexp', 'false');
         }
 
         return $e;
     }
-
 }

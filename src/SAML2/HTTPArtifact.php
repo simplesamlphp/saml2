@@ -30,12 +30,12 @@ class HTTPArtifact extends Binding
     public function getRedirectURL(Message $message)
     {
         $store = SimpleSAML_Store::getInstance();
-        if ($store === FALSE) {
+        if ($store === false) {
             throw new \Exception('Unable to send artifact without a datastore configured.');
         }
 
         $generatedId = pack('H*', ((string) SimpleSAML_Utilities::stringToHex(SimpleSAML_Utilities::generateRandomBytes(20))));
-        $artifact = base64_encode("\x00\x04\x00\x00" . sha1($message->getIssuer(), TRUE) . $generatedId) ;
+        $artifact = base64_encode("\x00\x04\x00\x00" . sha1($message->getIssuer(), true) . $generatedId) ;
         $artifactData = $message->toUnsignedXML();
         $artifactDataString = $artifactData->ownerDocument->saveXML($artifactData);
 
@@ -45,7 +45,7 @@ class HTTPArtifact extends Binding
             'SAMLart' => $artifact,
         );
         $relayState = $message->getRelayState();
-        if ($relayState !== NULL) {
+        if ($relayState !== null) {
             $params['RelayState'] = $relayState;
         }
 
@@ -79,7 +79,6 @@ class HTTPArtifact extends Binding
             $artifact = base64_decode($_REQUEST['SAMLart']);
             $endpointIndex =  bin2hex(substr($artifact, 2, 2));
             $sourceId = bin2hex(substr($artifact, 4, 20));
-
         } else {
             throw new \Exception('Missing SAMLArt parameter.');
         }
@@ -88,11 +87,11 @@ class HTTPArtifact extends Binding
 
         $idpMetadata = $metadataHandler->getMetaDataConfigForSha1($sourceId, 'saml20-idp-remote');
 
-        if ($idpMetadata === NULL) {
-            throw new \Exception('No metadata found for remote provider with SHA1 ID: ' . var_export($sourceId, TRUE));
+        if ($idpMetadata === null) {
+            throw new \Exception('No metadata found for remote provider with SHA1 ID: ' . var_export($sourceId, true));
         }
 
-        $endpoint = NULL;
+        $endpoint = null;
         foreach ($idpMetadata->getEndpoints('ArtifactResolutionService') as $ep) {
             if ($ep['index'] ===  hexdec($endpointIndex)) {
                 $endpoint = $ep;
@@ -100,7 +99,7 @@ class HTTPArtifact extends Binding
             }
         }
 
-        if ($endpoint === NULL) {
+        if ($endpoint === null) {
             throw new \Exception('No ArtifactResolutionService with the correct index.');
         }
 
@@ -129,10 +128,10 @@ class HTTPArtifact extends Binding
         }
 
         $xml = $artifactResponse->getAny();
-        if ($xml === NULL) {
+        if ($xml === null) {
             /* Empty ArtifactResponse - possibly because of Artifact replay? */
 
-            return NULL;
+            return null;
         }
 
         $samlResponse = Message::fromXML($xml);
@@ -154,7 +153,7 @@ class HTTPArtifact extends Binding
     }
 
     /**
-     * A validator which returns TRUE if the ArtifactResponse was signed with the given key
+     * A validator which returns true if the ArtifactResponse was signed with the given key
      *
      * @param \SAML2\ArtifactResponse $message
      * @param XMLSecurityKey $key
@@ -164,5 +163,4 @@ class HTTPArtifact extends Binding
     {
         return $message->validate($key);
     }
-
 }

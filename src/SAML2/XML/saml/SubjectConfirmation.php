@@ -22,26 +22,26 @@ class SubjectConfirmation
     /**
      * The NameID of the entity that can use this element to verify the Subject.
      *
-     * @var \SAML2\XML\saml\NameID|NULL
+     * @var \SAML2\XML\saml\NameID|null
      */
     public $NameID;
 
     /**
      * SubjectConfirmationData element with extra data for verification of the Subject.
      *
-     * @var \SAML2\XML\saml\SubjectConfirmationData|NULL
+     * @var \SAML2\XML\saml\SubjectConfirmationData|null
      */
     public $SubjectConfirmationData;
 
     /**
      * Initialize (and parse? a SubjectConfirmation element.
      *
-     * @param \DOMElement|NULL $xml The XML element we should load.
+     * @param \DOMElement|null $xml The XML element we should load.
      * @throws \Exception
      */
-    public function __construct(\DOMElement $xml = NULL)
+    public function __construct(\DOMElement $xml = null)
     {
-        if ($xml === NULL) {
+        if ($xml === null) {
             return;
         }
 
@@ -91,5 +91,4 @@ class SubjectConfirmation
 
         return $e;
     }
-
 }

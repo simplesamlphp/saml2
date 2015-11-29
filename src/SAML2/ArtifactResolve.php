@@ -14,7 +14,7 @@ class ArtifactResolve extends Request
 {
     private $artifact;
 
-    public function __construct(\DOMElement $xml = NULL)
+    public function __construct(\DOMElement $xml = null)
     {
         parent::__construct('ArtifactResolve', $xml);
 
@@ -22,7 +22,6 @@ class ArtifactResolve extends Request
             $results = Utils::xpQuery($xml, './saml_protocol:Artifact');
             $this->artifact = $results[0]->textContent;
         }
-
     }
 
     /**
@@ -59,5 +58,4 @@ class ArtifactResolve extends Request
 
         return $root;
     }
-
 }

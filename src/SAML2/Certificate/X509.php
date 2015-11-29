@@ -15,8 +15,8 @@ class X509 extends Key
     public static function createFromCertificateData($certificateContents)
     {
         $data = array(
-            'encryption'      => TRUE,
-            'signing'         => TRUE,
+            'encryption'      => true,
+            'signing'         => true,
             'type'            => 'X509Certificate',
             'X509Certificate' => $certificateContents
         );

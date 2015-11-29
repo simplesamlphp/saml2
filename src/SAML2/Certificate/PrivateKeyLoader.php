@@ -52,7 +52,7 @@ class PrivateKeyLoader
             $decryptionKeys->add($this->convertPrivateKeyToRsaKey($loadedKey));
         }
 
-        $privateKey = $serviceProvider->getPrivateKey(PrivateKey::NAME_DEFAULT, TRUE);
+        $privateKey = $serviceProvider->getPrivateKey(PrivateKey::NAME_DEFAULT, true);
         $loadedKey  = $this->loadPrivateKey($privateKey);
         $decryptionKeys->add($this->convertPrivateKeyToRsaKey($loadedKey));
 

@@ -28,9 +28,9 @@ class EndpointType
     /**
      * The URI where responses can be delivered.
      *
-     * @var string|NULL
+     * @var string|null
      */
-    public $ResponseLocation = NULL;
+    public $ResponseLocation = null;
 
     /**
      * Extra (namespace qualified) attributes.
@@ -42,12 +42,12 @@ class EndpointType
     /**
      * Initialize an EndpointType.
      *
-     * @param \DOMElement|NULL $xml The XML element we should load.
+     * @param \DOMElement|null $xml The XML element we should load.
      * @throws \Exception
      */
-    public function __construct(\DOMElement $xml = NULL)
+    public function __construct(\DOMElement $xml = null)
     {
-        if ($xml === NULL) {
+        if ($xml === null) {
             return;
         }
 
@@ -66,7 +66,7 @@ class EndpointType
         }
 
         foreach ($xml->attributes as $a) {
-            if ($a->namespaceURI === NULL) {
+            if ($a->namespaceURI === null) {
                 continue; /* Not namespace-qualified -- skip. */
             }
             $fullName = '{' . $a->namespaceURI . '}' . $a->localName;
@@ -83,7 +83,7 @@ class EndpointType
      *
      * @param  string  $namespaceURI The namespace URI.
      * @param  string  $localName    The local name.
-     * @return boolean TRUE if the attribute exists, FALSE if not.
+     * @return boolean true if the attribute exists, false if not.
      */
     public function hasAttributeNS($namespaceURI, $localName)
     {
@@ -187,5 +187,4 @@ class EndpointType
 
         return $e;
     }
-
 }

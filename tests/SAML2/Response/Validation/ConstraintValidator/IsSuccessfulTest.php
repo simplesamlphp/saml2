@@ -57,5 +57,4 @@ class IsSuccessfulTest extends \PHPUnit_Framework_TestCase
         $this->assertCount(1, $errors);
         $this->assertEquals('foo/bar this is a test message', $errors[0]);
     }
-
 }

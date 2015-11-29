@@ -72,7 +72,6 @@ class Decrypter
                 $this->logger->debug(sprintf('Decrypted Assertion with key "#%d"', $index));
 
                 return $decryptedAssertion;
-
             } catch (\Exception $e) {
                 $this->logger->debug(sprintf(
                     'Could not decrypt assertion with key "#%d", "%s" thrown: "%s"',

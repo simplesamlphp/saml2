@@ -35,11 +35,11 @@ class FingerprintValidator extends AbstractChainedValidator
         SignedElement $signedElement,
         CertificateProvider $configuration
     ) {
-        if ($configuration->getCertificateFingerprints() === NULL) {
+        if ($configuration->getCertificateFingerprints() === null) {
             $this->logger->debug(
                 'Configuration does not have "certFingerprint" value, cannot validate signature with fingerprint'
             );
-            return FALSE;
+            return false;
         }
 
         // use internal cache to prevent doing certificate extraction twice.
@@ -48,10 +48,10 @@ class FingerprintValidator extends AbstractChainedValidator
             $this->logger->debug(
                 'Signed element does not have certificates, cannot validate signature with fingerprint'
             );
-            return FALSE;
+            return false;
         }
 
-        return TRUE;
+        return true;
     }
 
     /**
@@ -84,7 +84,7 @@ class FingerprintValidator extends AbstractChainedValidator
                 'Unable to match a certificate of the SignedElement matching a configured fingerprint'
             );
 
-            return FALSE;
+            return false;
         }
 
         return $this->validateElementWithKeys($signedElement, $pemCandidates);

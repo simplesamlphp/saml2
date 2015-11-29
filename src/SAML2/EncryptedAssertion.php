@@ -22,12 +22,12 @@ class EncryptedAssertion
     /**
      * Constructor for SAML 2 encrypted assertions.
      *
-     * @param \DOMElement|NULL $xml The encrypted assertion XML element.
+     * @param \DOMElement|null $xml The encrypted assertion XML element.
      * @throws \Exception
      */
-    public function __construct(\DOMElement $xml = NULL)
+    public function __construct(\DOMElement $xml = null)
     {
-        if ($xml === NULL) {
+        if ($xml === null) {
             return;
         }
 
@@ -100,12 +100,12 @@ class EncryptedAssertion
     /**
      * Convert this encrypted assertion to an XML element.
      *
-     * @param  \DOMNode|NULL $parentElement The DOM node the assertion should be created in.
+     * @param  \DOMNode|null $parentElement The DOM node the assertion should be created in.
      * @return \DOMElement   This encrypted assertion.
      */
-    public function toXML(\DOMNode $parentElement = NULL)
+    public function toXML(\DOMNode $parentElement = null)
     {
-        if ($parentElement === NULL) {
+        if ($parentElement === null) {
             $document = DOMDocumentFactory::create();
             $parentElement = $document;
         } else {
@@ -115,9 +115,8 @@ class EncryptedAssertion
         $root = $document->createElementNS(Constants::NS_SAML, 'saml:' . 'EncryptedAssertion');
         $parentElement->appendChild($root);
 
-        $root->appendChild($document->importNode($this->encryptedData, TRUE));
+        $root->appendChild($document->importNode($this->encryptedData, true));
 
         return $root;
     }
-
 }

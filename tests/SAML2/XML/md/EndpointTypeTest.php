@@ -49,13 +49,13 @@ class EndpointTypeTest extends \PHPUnit_Framework_TestCase
 XML
         );
         $endpointType = new EndpointType($document->firstChild);
-        $this->assertEquals(TRUE, $endpointType->hasAttributeNS('urn:test', 'attr'));
+        $this->assertEquals(true, $endpointType->hasAttributeNS('urn:test', 'attr'));
         $this->assertEquals('value', $endpointType->getAttributeNS('urn:test', 'attr'));
-        $this->assertEquals(FALSE, $endpointType->hasAttributeNS('urn:test', 'invalid'));
+        $this->assertEquals(false, $endpointType->hasAttributeNS('urn:test', 'invalid'));
         $this->assertEquals('', $endpointType->getAttributeNS('urn:test', 'invalid'));
 
         $endpointType->removeAttributeNS('urn:test', 'attr');
-        $this->assertEquals(FALSE, $endpointType->hasAttributeNS('urn:test', 'attr'));
+        $this->assertEquals(false, $endpointType->hasAttributeNS('urn:test', 'attr'));
         $this->assertEquals('', $endpointType->getAttributeNS('urn:test', 'attr'));
 
         $endpointType->setAttributeNS('urn:test2', 'test2:attr2', 'value2');
@@ -68,7 +68,6 @@ XML
         $endpointTypeElement = $endpointTypeElements[0];
 
         $this->assertEquals('value2', $endpointTypeElement->getAttributeNS('urn:test2', 'attr2'));
-        $this->assertEquals(FALSE, $endpointTypeElement->hasAttributeNS('urn:test', 'attr'));
-
+        $this->assertEquals(false, $endpointTypeElement->hasAttributeNS('urn:test', 'attr'));
     }
 }

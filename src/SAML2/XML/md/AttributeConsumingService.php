@@ -22,9 +22,9 @@ class AttributeConsumingService
     /**
      * Whether this is the default AttributeConsumingService.
      *
-     * @var bool|NULL
+     * @var bool|null
      */
-    public $isDefault = NULL;
+    public $isDefault = null;
 
     /**
      * The ServiceName of this AttributeConsumingService.
@@ -56,12 +56,12 @@ class AttributeConsumingService
     /**
      * Initialize / parse an AttributeConsumingService.
      *
-     * @param \DOMElement|NULL $xml The XML element we should load.
+     * @param \DOMElement|null $xml The XML element we should load.
      * @throws \Exception
      */
-    public function __construct(\DOMElement $xml = NULL)
+    public function __construct(\DOMElement $xml = null)
     {
-        if ($xml === NULL) {
+        if ($xml === null) {
             return;
         }
 
@@ -70,7 +70,7 @@ class AttributeConsumingService
         }
         $this->index = (int) $xml->getAttribute('index');
 
-        $this->isDefault = Utils::parseBoolean($xml, 'isDefault', NULL);
+        $this->isDefault = Utils::parseBoolean($xml, 'isDefault', null);
 
         $this->ServiceName = Utils::extractLocalizedStrings($xml, Constants::NS_MD, 'ServiceName');
         if (empty($this->ServiceName)) {
@@ -105,14 +105,14 @@ class AttributeConsumingService
 
         $e->setAttribute('index', (string) $this->index);
 
-        if ($this->isDefault === TRUE) {
+        if ($this->isDefault === true) {
             $e->setAttribute('isDefault', 'true');
-        } elseif ($this->isDefault === FALSE) {
+        } elseif ($this->isDefault === false) {
             $e->setAttribute('isDefault', 'false');
         }
 
-        Utils::addStrings($e, Constants::NS_MD, 'md:ServiceName', TRUE, $this->ServiceName);
-        Utils::addStrings($e, Constants::NS_MD, 'md:ServiceDescription', TRUE, $this->ServiceDescription);
+        Utils::addStrings($e, Constants::NS_MD, 'md:ServiceName', true, $this->ServiceName);
+        Utils::addStrings($e, Constants::NS_MD, 'md:ServiceDescription', true, $this->ServiceDescription);
 
         foreach ($this->RequestedAttribute as $ra) {
             $ra->toXML($e);
@@ -120,5 +120,4 @@ class AttributeConsumingService
 
         return $e;
     }
-
 }

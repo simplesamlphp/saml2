@@ -34,8 +34,8 @@ class SubjectConfirmationResponseToMatches implements
     private function getInResponseTo()
     {
         $inResponseTo = $this->response->getInResponseTo();
-        if ($inResponseTo === NULL) {
-            return FALSE;
+        if ($inResponseTo === null) {
+            return false;
         }
 
         return $inResponseTo;

@@ -17,19 +17,19 @@ class Response extends StatusResponse
     /**
      * Constructor for SAML 2 response messages.
      *
-     * @param \DOMElement|NULL $xml The input message.
+     * @param \DOMElement|null $xml The input message.
      */
-    public function __construct(\DOMElement $xml = NULL)
+    public function __construct(\DOMElement $xml = null)
     {
         parent::__construct('Response', $xml);
 
         $this->assertions = array();
 
-        if ($xml === NULL) {
+        if ($xml === null) {
             return;
         }
 
-        for ($node = $xml->firstChild; $node !== NULL; $node = $node->nextSibling) {
+        for ($node = $xml->firstChild; $node !== null; $node = $node->nextSibling) {
             if ($node->namespaceURI !== Constants::NS_SAML) {
                 continue;
             }
@@ -73,11 +73,9 @@ class Response extends StatusResponse
 
         /** @var \SAML2\Assertion|\SAML2\EncryptedAssertion $assertion */
         foreach ($this->assertions as $assertion) {
-
             $assertion->toXML($root);
         }
 
         return $root;
     }
-
 }

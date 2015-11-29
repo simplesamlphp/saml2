@@ -45,11 +45,11 @@ class Organization
     /**
      * Initialize an Organization element.
      *
-     * @param \DOMElement|NULL $xml The XML element we should load.
+     * @param \DOMElement|null $xml The XML element we should load.
      */
-    public function __construct(\DOMElement $xml = NULL)
+    public function __construct(\DOMElement $xml = null)
     {
-        if ($xml === NULL) {
+        if ($xml === null) {
             return;
         }
 
@@ -94,11 +94,10 @@ class Organization
 
         Extensions::addList($e, $this->Extensions);
 
-        Utils::addStrings($e, Constants::NS_MD, 'md:OrganizationName', TRUE, $this->OrganizationName);
-        Utils::addStrings($e, Constants::NS_MD, 'md:OrganizationDisplayName', TRUE, $this->OrganizationDisplayName);
-        Utils::addStrings($e, Constants::NS_MD, 'md:OrganizationURL', TRUE, $this->OrganizationURL);
+        Utils::addStrings($e, Constants::NS_MD, 'md:OrganizationName', true, $this->OrganizationName);
+        Utils::addStrings($e, Constants::NS_MD, 'md:OrganizationDisplayName', true, $this->OrganizationDisplayName);
+        Utils::addStrings($e, Constants::NS_MD, 'md:OrganizationURL', true, $this->OrganizationURL);
 
         return $e;
     }
-
 }

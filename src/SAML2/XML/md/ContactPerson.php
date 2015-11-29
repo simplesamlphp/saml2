@@ -33,21 +33,21 @@ class ContactPerson
      *
      * @var string
      */
-    public $Company = NULL;
+    public $Company = null;
 
     /**
      * The GivenName of this contact.
      *
      * @var string
      */
-    public $GivenName = NULL;
+    public $GivenName = null;
 
     /**
      * The SurName of this contact.
      *
      * @var string
      */
-    public $SurName = NULL;
+    public $SurName = null;
 
     /**
      * The EmailAddresses of this contact.
@@ -66,12 +66,12 @@ class ContactPerson
     /**
      * Initialize a ContactPerson element.
      *
-     * @param \DOMElement|NULL $xml The XML element we should load.
+     * @param \DOMElement|null $xml The XML element we should load.
      * @throws \Exception
      */
-    public function __construct(\DOMElement $xml = NULL)
+    public function __construct(\DOMElement $xml = null)
     {
-        if ($xml === NULL) {
+        if ($xml === null) {
             return;
         }
 
@@ -115,7 +115,7 @@ class ContactPerson
      *
      * @param  \DOMElement  $parent The parent element.
      * @param  string      $name   The name of the child element.
-     * @return string|NULL The value of the child element.
+     * @return string|null The value of the child element.
      * @throws \Exception
      */
     private static function getStringElement(\DOMElement $parent, $name)
@@ -124,7 +124,7 @@ class ContactPerson
 
         $e = self::getStringElements($parent, $name);
         if (empty($e)) {
-            return NULL;
+            return null;
         }
         if (count($e) > 1) {
             throw new \Exception('More than one ' . $name . ' in ' . $parent->tagName);
@@ -168,13 +168,12 @@ class ContactPerson
             Utils::addString($e, Constants::NS_MD, 'md:SurName', $this->SurName);
         }
         if (!empty($this->EmailAddress)) {
-            Utils::addStrings($e, Constants::NS_MD, 'md:EmailAddress', FALSE, $this->EmailAddress);
+            Utils::addStrings($e, Constants::NS_MD, 'md:EmailAddress', false, $this->EmailAddress);
         }
         if (!empty($this->TelephoneNumber)) {
-            Utils::addStrings($e, Constants::NS_MD, 'md:TelephoneNumber', FALSE, $this->TelephoneNumber);
+            Utils::addStrings($e, Constants::NS_MD, 'md:TelephoneNumber', false, $this->TelephoneNumber);
         }
 
         return $e;
     }
-
 }

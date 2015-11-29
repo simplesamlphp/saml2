@@ -72,11 +72,11 @@ class UIInfo
     /**
      * Create a UIInfo element.
      *
-     * @param \DOMElement|NULL $xml The XML element we should load.
+     * @param \DOMElement|null $xml The XML element we should load.
      */
-    public function __construct(\DOMElement $xml = NULL)
+    public function __construct(\DOMElement $xml = null)
     {
-        if ($xml === NULL) {
+        if ($xml === null) {
             return;
         }
 
@@ -105,7 +105,7 @@ class UIInfo
      * Convert this UIInfo to XML.
      *
      * @param \DOMElement $parent The element we should append to.
-     * @return \DOMElement|NULL
+     * @return \DOMElement|null
      */
     public function toXML(\DOMElement $parent)
     {
@@ -116,7 +116,7 @@ class UIInfo
         assert('is_array($this->Logo)');
         assert('is_array($this->children)');
 
-        $e = NULL;
+        $e = null;
         if (!empty($this->DisplayName)
          || !empty($this->Description)
          || !empty($this->InformationURL)
@@ -129,10 +129,10 @@ class UIInfo
             $e = $doc->createElementNS(self::NS, 'mdui:UIInfo');
             $parent->appendChild($e);
 
-            Utils::addStrings($e, self::NS, 'mdui:DisplayName', TRUE, $this->DisplayName);
-            Utils::addStrings($e, self::NS, 'mdui:Description', TRUE, $this->Description);
-            Utils::addStrings($e, self::NS, 'mdui:InformationURL', TRUE, $this->InformationURL);
-            Utils::addStrings($e, self::NS, 'mdui:PrivacyStatementURL', TRUE, $this->PrivacyStatementURL);
+            Utils::addStrings($e, self::NS, 'mdui:DisplayName', true, $this->DisplayName);
+            Utils::addStrings($e, self::NS, 'mdui:Description', true, $this->Description);
+            Utils::addStrings($e, self::NS, 'mdui:InformationURL', true, $this->InformationURL);
+            Utils::addStrings($e, self::NS, 'mdui:PrivacyStatementURL', true, $this->PrivacyStatementURL);
 
             if (!empty($this->Keywords)) {
                 foreach ($this->Keywords as $child) {
@@ -155,5 +155,4 @@ class UIInfo
 
         return $e;
     }
-
 }

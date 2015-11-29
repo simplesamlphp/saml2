@@ -51,11 +51,11 @@ class DiscoHints
     /**
      * Create a DiscoHints element.
      *
-     * @param \DOMElement|NULL $xml The XML element we should load.
+     * @param \DOMElement|null $xml The XML element we should load.
      */
-    public function __construct(\DOMElement $xml = NULL)
+    public function __construct(\DOMElement $xml = null)
     {
-        if ($xml === NULL) {
+        if ($xml === null) {
             return;
         }
 
@@ -72,7 +72,7 @@ class DiscoHints
      * Convert this DiscoHints to XML.
      *
      * @param \DOMElement $parent The element we should append to.
-     * @return \DOMElement|NULL
+     * @return \DOMElement|null
      */
     public function toXML(\DOMElement $parent)
     {
@@ -96,14 +96,13 @@ class DiscoHints
                 }
             }
 
-            Utils::addStrings($e, self::NS, 'mdui:IPHint', FALSE, $this->IPHint);
-            Utils::addStrings($e, self::NS, 'mdui:DomainHint', FALSE, $this->DomainHint);
-            Utils::addStrings($e, self::NS, 'mdui:GeolocationHint', FALSE, $this->GeolocationHint);
+            Utils::addStrings($e, self::NS, 'mdui:IPHint', false, $this->IPHint);
+            Utils::addStrings($e, self::NS, 'mdui:DomainHint', false, $this->DomainHint);
+            Utils::addStrings($e, self::NS, 'mdui:GeolocationHint', false, $this->GeolocationHint);
 
             return $e;
         }
 
-        return NULL;
+        return null;
     }
-
 }

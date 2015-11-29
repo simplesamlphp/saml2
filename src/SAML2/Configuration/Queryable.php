@@ -24,5 +24,5 @@ interface Queryable
      *
      * @return mixed
      */
-    public function get($key, $default = NULL);
+    public function get($key, $default = null);
 }

@@ -69,5 +69,4 @@ class Extensions
             $ext->toXML($extElement);
         }
     }
-
 }

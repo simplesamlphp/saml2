@@ -136,8 +136,8 @@ class DOMDocumentFactoryTest extends \PHPUnit_Framework_TestCase
             'integer' => array(1),
             'float'   => array(1.234),
             'object'  => array(new \stdClass()),
-            'null'    => array(NULL),
-            'boolean' => array(FALSE),
+            'null'    => array(null),
+            'boolean' => array(false),
             'array'   => array(array()),
         );
     }

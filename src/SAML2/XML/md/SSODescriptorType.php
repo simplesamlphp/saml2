@@ -52,15 +52,15 @@ abstract class SSODescriptorType extends RoleDescriptor
      * Initialize a SSODescriptor.
      *
      * @param string          $elementName The name of this element.
-     * @param \DOMElement|NULL $xml         The XML element we should load.
+     * @param \DOMElement|null $xml         The XML element we should load.
      */
-    protected function __construct($elementName, \DOMElement $xml = NULL)
+    protected function __construct($elementName, \DOMElement $xml = null)
     {
         assert('is_string($elementName)');
 
         parent::__construct($elementName, $xml);
 
-        if ($xml === NULL) {
+        if ($xml === null) {
             return;
         }
 
@@ -106,9 +106,8 @@ abstract class SSODescriptorType extends RoleDescriptor
             $ep->toXML($e, 'md:ManageNameIDService');
         }
 
-        Utils::addStrings($e, Constants::NS_MD, 'md:NameIDFormat', FALSE, $this->NameIDFormat);
+        Utils::addStrings($e, Constants::NS_MD, 'md:NameIDFormat', false, $this->NameIDFormat);
 
         return $e;
     }
-
 }

@@ -27,7 +27,7 @@ class PrivateKey extends ArrayAdapter
      */
     private $name;
 
-    public function __construct($filePath, $name, $passphrase = NULL)
+    public function __construct($filePath, $name, $passphrase = null)
     {
         if (!is_string($filePath)) {
             throw InvalidArgumentException::invalidType('string', $filePath);

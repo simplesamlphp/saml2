@@ -54,7 +54,6 @@ XML
         $this->assertCount(2, $attribute->AttributeValue);
         $this->assertEquals('FirstValue', (string)$attribute->AttributeValue[0]);
         $this->assertEquals('SecondValue', (string)$attribute->AttributeValue[1]);
-
     }
 
     public function testUnmarshallingFailure()

@@ -25,20 +25,20 @@ class SOAPClient
      * @return \SAML2\Message            The response we received.
      * @throws \Exception
      */
-    public function send(Message $msg, SimpleSAML_Configuration $srcMetadata, SimpleSAML_Configuration $dstMetadata = NULL)
+    public function send(Message $msg, SimpleSAML_Configuration $srcMetadata, SimpleSAML_Configuration $dstMetadata = null)
     {
         $issuer = $msg->getIssuer();
 
         $ctxOpts = array(
             'ssl' => array(
-                'capture_peer_cert' => TRUE,
+                'capture_peer_cert' => true,
             ),
         );
 
         // Determine if we are going to do a MutualSSL connection between the IdP and SP  - Shoaib
         if ($srcMetadata->hasValue('saml.SOAPClient.certificate')) {
             $cert = $srcMetadata->getValue('saml.SOAPClient.certificate');
-            if ($cert !== FALSE) {
+            if ($cert !== false) {
                 $ctxOpts['ssl']['local_cert'] = SimpleSAML_Utilities::resolveCert(
                     $srcMetadata->getString('saml.SOAPClient.certificate')
                 );
@@ -50,7 +50,7 @@ class SOAPClient
             /* Use the SP certificate and privatekey if it is configured. */
             $privateKey = SimpleSAML_Utilities::loadPrivateKey($srcMetadata);
             $publicKey = SimpleSAML_Utilities::loadPublicKey($srcMetadata);
-            if ($privateKey !== NULL && $publicKey !== NULL && isset($publicKey['PEM'])) {
+            if ($privateKey !== null && $publicKey !== null && isset($publicKey['PEM'])) {
                 $keyCertData = $privateKey['PEM'] . $publicKey['PEM'];
                 $file = SimpleSAML_Utilities::getTempDir() . '/' . sha1($keyCertData) . '.pem';
                 if (!file_exists($file)) {
@@ -64,8 +64,8 @@ class SOAPClient
         }
 
         // do peer certificate verification
-        if ($dstMetadata !== NULL) {
-            $peerPublicKeys = $dstMetadata->getPublicKeys('signing', TRUE);
+        if ($dstMetadata !== null) {
+            $peerPublicKeys = $dstMetadata->getPublicKeys('signing', true);
             $certData = '';
             foreach ($peerPublicKeys as $key) {
                 if ($key['type'] !== 'X509Certificate') {
@@ -80,13 +80,13 @@ class SOAPClient
                 SimpleSAML_Utilities::writeFile($peerCertFile, $certData);
             }
             // create ssl context
-            $ctxOpts['ssl']['verify_peer'] = TRUE;
+            $ctxOpts['ssl']['verify_peer'] = true;
             $ctxOpts['ssl']['verify_depth'] = 1;
             $ctxOpts['ssl']['cafile'] = $peerCertFile;
         }
 
         $context = stream_context_create($ctxOpts);
-        if ($context === NULL) {
+        if ($context === null) {
             throw new \Exception('Unable to create SSL stream context');
         }
 
@@ -96,7 +96,7 @@ class SOAPClient
             'stream_context' => $context,
         );
 
-        $x = new SoapClient(NULL, $options);
+        $x = new SoapClient(null, $options);
 
         // Add soap-envelopes
         $request = $msg->toSignedXML();
@@ -110,7 +110,7 @@ class SOAPClient
 
         /* Perform SOAP Request over HTTP */
         $soapresponsexml = $x->__doRequest($request, $destination, $action, $version);
-        if ($soapresponsexml === NULL || $soapresponsexml === "") {
+        if ($soapresponsexml === null || $soapresponsexml === "") {
             throw new \Exception('Empty SOAP response, check peer certificate.');
         }
 
@@ -137,7 +137,6 @@ class SOAPClient
         Utils::getContainer()->getLogger()->debug("Valid ArtifactResponse received from IdP");
 
         return $samlresponse;
-
     }
 
     /**
@@ -157,14 +156,14 @@ class SOAPClient
         //openssl_x509_export($options['ssl']['peer_certificate'], $out);
 
         $key = openssl_pkey_get_public($options['ssl']['peer_certificate']);
-        if ($key === FALSE) {
+        if ($key === false) {
             Utils::getContainer()->getLogger()->warning('Unable to get public key from peer certificate.');
 
             return;
         }
 
         $keyInfo = openssl_pkey_get_details($key);
-        if ($keyInfo === FALSE) {
+        if ($keyInfo === false) {
             Utils::getContainer()->getLogger()->warning('Unable to get key details from public key.');
 
             return;
@@ -191,7 +190,7 @@ class SOAPClient
         assert('is_string($data)');
 
         $keyInfo = openssl_pkey_get_details($key->key);
-        if ($keyInfo === FALSE) {
+        if ($keyInfo === false) {
             throw new \Exception('Unable to get key details from XMLSecurityKey.');
         }
 
@@ -211,7 +210,7 @@ class SOAPClient
     /*
      * Extracts the SOAP Fault from SOAP message
      * @param $soapmessage Soap response needs to be type DOMDocument
-     * @return $soapfaultstring string|NULL
+     * @return $soapfaultstring string|null
      */
     private function getSOAPFault($soapMessage)
     {
@@ -220,7 +219,7 @@ class SOAPClient
         if (empty($soapFault)) {
             /* No fault. */
 
-            return NULL;
+            return null;
         }
         $soapFaultElement = $soapFault[0];
         // There is a fault element but we haven't found out what the fault string is
@@ -233,5 +232,4 @@ class SOAPClient
 
         return $soapFaultString;
     }
-
 }

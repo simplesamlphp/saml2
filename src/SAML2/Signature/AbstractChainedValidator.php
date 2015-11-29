@@ -29,7 +29,7 @@ abstract class AbstractChainedValidator implements ChainedValidator
      */
     protected function validateElementWithKeys(SignedElement $element, $pemCandidates)
     {
-        $lastException = NULL;
+        $lastException = null;
         foreach ($pemCandidates as $index => $candidateKey) {
             $key = new XMLSecurityKey(XMLSecurityKey::RSA_SHA1, array('type' => 'public'));
             $key->loadKey($candidateKey->getCertificate());
@@ -41,7 +41,7 @@ abstract class AbstractChainedValidator implements ChainedValidator
                 $result = $element->validate($key);
                 if ($result) {
                     $this->logger->debug(sprintf('Validation with key "#%d" succeeded', $index));
-                    return TRUE;
+                    return true;
                 }
                 $this->logger->debug(sprintf('Validation with key "#%d" failed without exception.', $index));
             } catch (\Exception $e) {
@@ -55,10 +55,10 @@ abstract class AbstractChainedValidator implements ChainedValidator
             }
         }
 
-        if ($lastException !== NULL) {
+        if ($lastException !== null) {
             throw $lastException;
         } else {
-            return FALSE;
+            return false;
         }
     }
 }

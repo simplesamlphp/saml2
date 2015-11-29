@@ -9,11 +9,11 @@ class Logger implements Psr\Log\LoggerInterface
      *
      * @param string $message
      * @param array $context
-     * @return NULL
+     * @return null
      */
     public function emergency($message, array $context = array())
     {
-        SimpleSAML_Logger::emergency($message . var_export($context, TRUE));
+        SimpleSAML_Logger::emergency($message . var_export($context, true));
     }
 
     /**
@@ -24,11 +24,11 @@ class Logger implements Psr\Log\LoggerInterface
      *
      * @param string $message
      * @param array $context
-     * @return NULL
+     * @return null
      */
     public function alert($message, array $context = array())
     {
-        SimpleSAML_Logger::alert($message . var_export($context, TRUE));
+        SimpleSAML_Logger::alert($message . var_export($context, true));
     }
 
     /**
@@ -38,11 +38,11 @@ class Logger implements Psr\Log\LoggerInterface
      *
      * @param string $message
      * @param array $context
-     * @return NULL
+     * @return null
      */
     public function critical($message, array $context = array())
     {
-        SimpleSAML_Logger::critical($message . var_export($context, TRUE));
+        SimpleSAML_Logger::critical($message . var_export($context, true));
     }
 
     /**
@@ -51,11 +51,11 @@ class Logger implements Psr\Log\LoggerInterface
      *
      * @param string $message
      * @param array $context
-     * @return NULL
+     * @return null
      */
     public function error($message, array $context = array())
     {
-        SimpleSAML_Logger::error($message . var_export($context, TRUE));
+        SimpleSAML_Logger::error($message . var_export($context, true));
     }
 
     /**
@@ -66,11 +66,11 @@ class Logger implements Psr\Log\LoggerInterface
      *
      * @param string $message
      * @param array $context
-     * @return NULL
+     * @return null
      */
     public function warning($message, array $context = array())
     {
-        SimpleSAML_Logger::warning($message . var_export($context, TRUE));
+        SimpleSAML_Logger::warning($message . var_export($context, true));
     }
 
     /**
@@ -78,11 +78,11 @@ class Logger implements Psr\Log\LoggerInterface
      *
      * @param string $message
      * @param array $context
-     * @return NULL
+     * @return null
      */
     public function notice($message, array $context = array())
     {
-        SimpleSAML_Logger::notice($message . var_export($context, TRUE));
+        SimpleSAML_Logger::notice($message . var_export($context, true));
     }
 
     /**
@@ -92,11 +92,11 @@ class Logger implements Psr\Log\LoggerInterface
      *
      * @param string $message
      * @param array $context
-     * @return NULL
+     * @return null
      */
     public function info($message, array $context = array())
     {
-        SimpleSAML_Logger::info($message . var_export($context, TRUE));
+        SimpleSAML_Logger::info($message . var_export($context, true));
     }
 
     /**
@@ -104,11 +104,11 @@ class Logger implements Psr\Log\LoggerInterface
      *
      * @param string $message
      * @param array $context
-     * @return NULL
+     * @return null
      */
     public function debug($message, array $context = array())
     {
-        SimpleSAML_Logger::debug($message . var_export($context, TRUE));
+        SimpleSAML_Logger::debug($message . var_export($context, true));
     }
 
     /**
@@ -117,7 +117,7 @@ class Logger implements Psr\Log\LoggerInterface
      * @param mixed $level
      * @param string $message
      * @param array $context
-     * @return NULL
+     * @return null
      */
     public function log($level, $message, array $context = array())
     {

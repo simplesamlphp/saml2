@@ -22,7 +22,7 @@ class RegistrationInfo
     /**
      * The registration timestamp for the metadata, as a UNIX timestamp.
      *
-     * @var int|NULL
+     * @var int|null
      */
     public $registrationInstant;
 
@@ -38,12 +38,12 @@ class RegistrationInfo
     /**
      * Create/parse a mdrpi:RegistrationInfo element.
      *
-     * @param \DOMElement|NULL $xml The XML element we should load.
+     * @param \DOMElement|null $xml The XML element we should load.
      * @throws \Exception
      */
-    public function __construct(\DOMElement $xml = NULL)
+    public function __construct(\DOMElement $xml = null)
     {
-        if ($xml === NULL) {
+        if ($xml === null) {
             return;
         }
 
@@ -82,13 +82,12 @@ class RegistrationInfo
 
         $e->setAttribute('registrationAuthority', $this->registrationAuthority);
 
-        if ($this->registrationInstant !== NULL) {
+        if ($this->registrationInstant !== null) {
             $e->setAttribute('registrationInstant', gmdate('Y-m-d\TH:i:s\Z', $this->registrationInstant));
         }
 
-        Utils::addStrings($e, Common::NS_MDRPI, 'mdrpi:RegistrationPolicy', TRUE, $this->RegistrationPolicy);
+        Utils::addStrings($e, Common::NS_MDRPI, 'mdrpi:RegistrationPolicy', true, $this->RegistrationPolicy);
 
         return $e;
     }
-
 }
