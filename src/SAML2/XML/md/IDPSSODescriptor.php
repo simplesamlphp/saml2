@@ -16,9 +16,9 @@ class IDPSSODescriptor extends SSODescriptorType
     /**
      * Whether AuthnRequests sent to this IdP should be signed.
      *
-     * @var bool|NULL
+     * @var bool|null
      */
-    public $WantAuthnRequestsSigned = NULL;
+    public $WantAuthnRequestsSigned = null;
 
     /**
      * List of SingleSignOnService endpoints.
@@ -68,17 +68,17 @@ class IDPSSODescriptor extends SSODescriptorType
     /**
      * Initialize an IDPSSODescriptor.
      *
-     * @param \DOMElement|NULL $xml The XML element we should load.
+     * @param \DOMElement|null $xml The XML element we should load.
      */
-    public function __construct(\DOMElement $xml = NULL)
+    public function __construct(\DOMElement $xml = null)
     {
         parent::__construct('md:IDPSSODescriptor', $xml);
 
-        if ($xml === NULL) {
+        if ($xml === null) {
             return;
         }
 
-        $this->WantAuthnRequestsSigned = Utils::parseBoolean($xml, 'WantAuthnRequestsSigned', NULL);
+        $this->WantAuthnRequestsSigned = Utils::parseBoolean($xml, 'WantAuthnRequestsSigned', null);
 
         foreach (Utils::xpQuery($xml, './saml_metadata:SingleSignOnService') as $ep) {
             $this->SingleSignOnService[] = new EndpointType($ep);
@@ -116,9 +116,9 @@ class IDPSSODescriptor extends SSODescriptorType
 
         $e = parent::toXML($parent);
 
-        if ($this->WantAuthnRequestsSigned === TRUE) {
+        if ($this->WantAuthnRequestsSigned === true) {
             $e->setAttribute('WantAuthnRequestsSigned', 'true');
-        } elseif ($this->WantAuthnRequestsSigned === FALSE) {
+        } elseif ($this->WantAuthnRequestsSigned === false) {
             $e->setAttribute('WantAuthnRequestsSigned', 'false');
         }
 
@@ -134,7 +134,7 @@ class IDPSSODescriptor extends SSODescriptorType
             $ep->toXML($e, 'md:AssertionIDRequestService');
         }
 
-        Utils::addStrings($e, Constants::NS_MD, 'md:AttributeProfile', FALSE, $this->AttributeProfile);
+        Utils::addStrings($e, Constants::NS_MD, 'md:AttributeProfile', false, $this->AttributeProfile);
 
         foreach ($this->Attribute as $a) {
             $a->toXML($e);
@@ -142,5 +142,4 @@ class IDPSSODescriptor extends SSODescriptorType
 
         return $e;
     }
-
 }

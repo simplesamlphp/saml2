@@ -48,5 +48,4 @@ class MockChainedValidator extends AbstractChainedValidator
     ) {
         return $this->isValid;
     }
-
 }

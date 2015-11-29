@@ -16,24 +16,24 @@ class RequestedAttribute extends Attribute
     /**
      * Whether this attribute is required.
      *
-     * @var bool|NULL
+     * @var bool|null
      */
-    public $isRequired = NULL;
+    public $isRequired = null;
 
     /**
      * Initialize an RequestedAttribute.
      *
-     * @param \DOMElement|NULL $xml The XML element we should load.
+     * @param \DOMElement|null $xml The XML element we should load.
      */
-    public function __construct(\DOMElement $xml = NULL)
+    public function __construct(\DOMElement $xml = null)
     {
         parent::__construct($xml);
 
-        if ($xml === NULL) {
+        if ($xml === null) {
             return;
         }
 
-        $this->isRequired = Utils::parseBoolean($xml, 'isRequired', NULL);
+        $this->isRequired = Utils::parseBoolean($xml, 'isRequired', null);
     }
 
     /**
@@ -48,13 +48,12 @@ class RequestedAttribute extends Attribute
 
         $e = $this->toXMLInternal($parent, Constants::NS_MD, 'md:RequestedAttribute');
 
-        if ($this->isRequired === TRUE) {
+        if ($this->isRequired === true) {
             $e->setAttribute('isRequired', 'true');
-        } elseif ($this->isRequired === FALSE) {
+        } elseif ($this->isRequired === false) {
             $e->setAttribute('isRequired', 'false');
         }
 
         return $e;
     }
-
 }

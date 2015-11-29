@@ -51,28 +51,28 @@ abstract class Message implements SignedElement
     /**
      * The destination URL of this message if it is known.
      *
-     * @var string|NULL
+     * @var string|null
      */
     private $destination;
 
     /**
      * The destination URL of this message if it is known.
      *
-     * @var string|NULL
+     * @var string|null
      */
     private $consent = Constants::CONSENT_UNSPECIFIED;
 
     /**
-     * The entity id of the issuer of this message, or NULL if unknown.
+     * The entity id of the issuer of this message, or null if unknown.
      *
-     * @var string|NULL
+     * @var string|null
      */
     private $issuer;
 
     /**
      * The RelayState associated with this message.
      *
-     * @var string|NULL
+     * @var string|null
      */
     private $relayState;
 
@@ -89,16 +89,16 @@ abstract class Message implements SignedElement
     /**
      * The private key we should use to sign the message.
      *
-     * The private key can be NULL, in which case the message is sent unsigned.
+     * The private key can be null, in which case the message is sent unsigned.
      *
-     * @var XMLSecurityKey|NULL
+     * @var XMLSecurityKey|null
      */
     private $signatureKey;
 
     /**
      * @var bool
      */
-    protected $messageContainedSignatureUponConstruction = FALSE;
+    protected $messageContainedSignatureUponConstruction = false;
 
     /**
      * List of certificates that should be included in the message.
@@ -125,10 +125,10 @@ abstract class Message implements SignedElement
      * default values.
      *
      * @param string          $tagName The tag name of the root element.
-     * @param \DOMElement|NULL $xml     The input message.
+     * @param \DOMElement|null $xml     The input message.
      * @throws \Exception
      */
-    protected function __construct($tagName, \DOMElement $xml = NULL)
+    protected function __construct($tagName, \DOMElement $xml = null)
     {
         assert('is_string($tagName)');
         $this->tagName = $tagName;
@@ -138,7 +138,7 @@ abstract class Message implements SignedElement
         $this->certificates = array();
         $this->validators = array();
 
-        if ($xml === NULL) {
+        if ($xml === null) {
             return;
         }
 
@@ -171,15 +171,14 @@ abstract class Message implements SignedElement
         try {
             $sig = Utils::validateElement($xml);
 
-            if ($sig !== FALSE) {
-                $this->messageContainedSignatureUponConstruction = TRUE;
+            if ($sig !== false) {
+                $this->messageContainedSignatureUponConstruction = true;
                 $this->certificates = $sig['Certificates'];
                 $this->validators[] = array(
                     'Function' => array('\SAML2\Utils', 'validateSignature'),
                     'Data' => $sig,
                     );
             }
-
         } catch (\Exception $e) {
             /* Ignore signature validation errors. */
         }
@@ -209,18 +208,18 @@ abstract class Message implements SignedElement
     /**
      * Validate this message against a public key.
      *
-     * TRUE is returned on success, FALSE is returned if we don't have any
+     * true is returned on success, false is returned if we don't have any
      * signature we can validate. An exception is thrown if the signature
      * validation fails.
      *
      * @param  XMLSecurityKey $key The key we should check against.
-     * @return boolean        TRUE on success, FALSE when we don't have a signature.
+     * @return boolean        true on success, false when we don't have a signature.
      * @throws \Exception
      */
     public function validate(XMLSecurityKey $key)
     {
         if (count($this->validators) === 0) {
-            return FALSE;
+            return false;
         }
 
         $exceptions = array();
@@ -233,7 +232,7 @@ abstract class Message implements SignedElement
                 call_user_func($function, $data, $key);
                 /* We were able to validate the message with this validator. */
 
-                return TRUE;
+                return true;
             } catch (\Exception $e) {
                 $exceptions[] = $e;
             }
@@ -290,7 +289,7 @@ abstract class Message implements SignedElement
     /**
      * Retrieve the destination of this message.
      *
-     * @return string|NULL The destination of this message, or NULL if no destination is given.
+     * @return string|null The destination of this message, or NULL if no destination is given.
      */
     public function getDestination()
     {
@@ -300,7 +299,7 @@ abstract class Message implements SignedElement
     /**
      * Set the destination of this message.
      *
-     * @param string|NULL $destination The new destination of this message.
+     * @param string|null $destination The new destination of this message.
      */
     public function setDestination($destination)
     {
@@ -340,7 +339,7 @@ abstract class Message implements SignedElement
     /**
      * Retrieve the issuer if this message.
      *
-     * @return string|NULL The issuer of this message, or NULL if no issuer is given.
+     * @return string|null The issuer of this message, or NULL if no issuer is given.
      */
     public function getIssuer()
     {
@@ -350,7 +349,7 @@ abstract class Message implements SignedElement
     /**
      * Set the issuer of this message.
      *
-     * @param string|NULL $issuer The new issuer of this message.
+     * @param string|null $issuer The new issuer of this message.
      */
     public function setIssuer($issuer)
     {
@@ -372,7 +371,7 @@ abstract class Message implements SignedElement
     /**
      * Retrieve the RelayState associated with this message.
      *
-     * @return string|NULL The RelayState, or NULL if no RelayState is given.
+     * @return string|null The RelayState, or NULL if no RelayState is given.
      */
     public function getRelayState()
     {
@@ -382,7 +381,7 @@ abstract class Message implements SignedElement
     /**
      * Set the RelayState associated with this message.
      *
-     * @param string|NULL $relayState The new RelayState.
+     * @param string|null $relayState The new RelayState.
      */
     public function setRelayState($relayState)
     {
@@ -413,14 +412,14 @@ abstract class Message implements SignedElement
         $root->setAttribute('Version', '2.0');
         $root->setAttribute('IssueInstant', gmdate('Y-m-d\TH:i:s\Z', $this->issueInstant));
 
-        if ($this->destination !== NULL) {
+        if ($this->destination !== null) {
             $root->setAttribute('Destination', $this->destination);
         }
-        if ($this->consent !== NULL && $this->consent !== Constants::CONSENT_UNSPECIFIED) {
+        if ($this->consent !== null && $this->consent !== Constants::CONSENT_UNSPECIFIED) {
             $root->setAttribute('Consent', $this->consent);
         }
 
-        if ($this->issuer !== NULL) {
+        if ($this->issuer !== null) {
             Utils::addString($root, Constants::NS_SAML, 'saml:Issuer', $this->issuer);
         }
 
@@ -443,7 +442,7 @@ abstract class Message implements SignedElement
     {
         $root = $this->toUnsignedXML();
 
-        if ($this->signatureKey === NULL) {
+        if ($this->signatureKey === null) {
             /* We don't have a key to sign it with. */
 
             return $root;
@@ -451,7 +450,7 @@ abstract class Message implements SignedElement
 
 
         /* Find the position we should insert the signature node at. */
-        if ($this->issuer !== NULL) {
+        if ($this->issuer !== null) {
             /*
              * We have an issuer node. The signature node should come
              * after the issuer node.
@@ -473,7 +472,7 @@ abstract class Message implements SignedElement
     /**
      * Retrieve the private key we should use to sign the message.
      *
-     * @return XMLSecurityKey|NULL The key, or NULL if no key is specified.
+     * @return XMLSecurityKey|null The key, or NULL if no key is specified.
      */
     public function getSignatureKey()
     {
@@ -484,11 +483,11 @@ abstract class Message implements SignedElement
     /**
      * Set the private key we should use to sign the message.
      *
-     * If the key is NULL, the message will be sent unsigned.
+     * If the key is null, the message will be sent unsigned.
      *
-     * @param XMLSecurityKey|NULL $signatureKey
+     * @param XMLSecurityKey|null $signatureKey
      */
-    public function setSignatureKey(XMLsecurityKey $signatureKey = NULL)
+    public function setSignatureKey(XMLsecurityKey $signatureKey = null)
     {
         $this->signatureKey = $signatureKey;
     }
@@ -528,7 +527,7 @@ abstract class Message implements SignedElement
     public static function fromXML(\DOMElement $xml)
     {
         if ($xml->namespaceURI !== Constants::NS_SAMLP) {
-            throw new \Exception('Unknown namespace of SAML message: ' . var_export($xml->namespaceURI, TRUE));
+            throw new \Exception('Unknown namespace of SAML message: ' . var_export($xml->namespaceURI, true));
         }
 
         switch ($xml->localName) {
@@ -547,9 +546,8 @@ abstract class Message implements SignedElement
             case 'ArtifactResolve':
                 return new ArtifactResolve($xml);
             default:
-                throw new \Exception('Unknown SAML message: ' . var_export($xml->localName, TRUE));
+                throw new \Exception('Unknown SAML message: ' . var_export($xml->localName, true));
         }
-
     }
 
     /**
@@ -565,7 +563,7 @@ abstract class Message implements SignedElement
     /**
      * Set the Extensions.
      *
-     * @param array|NULL $extensions The Extensions.
+     * @param array|null $extensions The Extensions.
      */
     public function setExtensions($extensions)
     {
@@ -573,5 +571,4 @@ abstract class Message implements SignedElement
 
         $this->extensions = $extensions;
     }
-
 }

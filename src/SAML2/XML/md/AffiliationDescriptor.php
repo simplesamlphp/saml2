@@ -23,21 +23,21 @@ class AffiliationDescriptor extends SignedElementHelper
     /**
      * The ID of this element.
      *
-     * @var string|NULL
+     * @var string|null
      */
     public $ID;
 
     /**
      * How long this element is valid, as a unix timestamp.
      *
-     * @var int|NULL
+     * @var int|null
      */
     public $validUntil;
 
     /**
      * The length of time this element can be cached, as string.
      *
-     * @var string|NULL
+     * @var string|null
      */
     public $cacheDuration;
 
@@ -71,14 +71,14 @@ class AffiliationDescriptor extends SignedElementHelper
     /**
      * Initialize a AffiliationDescriptor.
      *
-     * @param \DOMElement|NULL $xml The XML element we should load.
+     * @param \DOMElement|null $xml The XML element we should load.
      * @throws \Exception
      */
-    public function __construct(\DOMElement $xml = NULL)
+    public function __construct(\DOMElement $xml = null)
     {
         parent::__construct($xml);
 
-        if ($xml === NULL) {
+        if ($xml === null) {
             return;
         }
 
@@ -147,7 +147,7 @@ class AffiliationDescriptor extends SignedElementHelper
 
         Extensions::addList($e, $this->Extensions);
 
-        Utils::addStrings($e, Constants::NS_MD, 'md:AffiliateMember', FALSE, $this->AffiliateMember);
+        Utils::addStrings($e, Constants::NS_MD, 'md:AffiliateMember', false, $this->AffiliateMember);
 
         foreach ($this->KeyDescriptor as $kd) {
             $kd->toXML($e);
@@ -157,5 +157,4 @@ class AffiliationDescriptor extends SignedElementHelper
 
         return $e;
     }
-
 }

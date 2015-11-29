@@ -27,13 +27,13 @@ abstract class SubjectQuery extends Request
      * Constructor for SAML 2 subject query messages.
      *
      * @param string          $tagName The tag name of the root element.
-     * @param \DOMElement|NULL $xml     The input message.
+     * @param \DOMElement|null $xml     The input message.
      */
-    protected function __construct($tagName, \DOMElement $xml = NULL)
+    protected function __construct($tagName, \DOMElement $xml = null)
     {
         parent::__construct($tagName, $xml);
 
-        if ($xml === NULL) {
+        if ($xml === null) {
             return;
         }
 
@@ -75,7 +75,7 @@ abstract class SubjectQuery extends Request
      * The returned NameId is in the format used by \SAML2\Utils::addNameId().
      *
      * @see \SAML2\Utils::addNameId()
-     * @return array|NULL The name identifier of the assertion.
+     * @return array|null The name identifier of the assertion.
      */
     public function getNameId()
     {
@@ -89,7 +89,7 @@ abstract class SubjectQuery extends Request
      * The NameId must be in the format accepted by \SAML2\Utils::addNameId().
      *
      * @see \SAML2\Utils::addNameId()
-     * @param array|NULL $nameId The name identifier of the assertion.
+     * @param array|null $nameId The name identifier of the assertion.
      */
     public function setNameId($nameId)
     {
@@ -115,5 +115,4 @@ abstract class SubjectQuery extends Request
 
         return $root;
     }
-
 }

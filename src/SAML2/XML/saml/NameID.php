@@ -15,28 +15,28 @@ class NameID
     /**
      * The NameQualifier or the NameID.
      *
-     * @var string|NULL
+     * @var string|null
      */
     public $NameQualifier;
 
     /**
      * The SPNameQualifier or the NameID.
      *
-     * @var string|NULL
+     * @var string|null
      */
     public $SPNameQualifier;
 
     /**
      * The Format or the NameID.
      *
-     * @var string|NULL
+     * @var string|null
      */
     public $Format;
 
     /**
      * The SPProvidedID or the NameID.
      *
-     * @var string|NULL
+     * @var string|null
      */
     public $SPProvidedID;
 
@@ -50,11 +50,11 @@ class NameID
     /**
      * Initialize a saml:NameID.
      *
-     * @param \DOMElement|NULL $xml The XML element we should load.
+     * @param \DOMElement|null $xml The XML element we should load.
      */
-    public function __construct(\DOMElement $xml = NULL)
+    public function __construct(\DOMElement $xml = null)
     {
-        if ($xml === NULL) {
+        if ($xml === null) {
             return;
         }
 
@@ -80,10 +80,10 @@ class NameID
     /**
      * Convert this NameID to XML.
      *
-     * @param  \DOMElement|NULL $parent The element we should append to.
+     * @param  \DOMElement|null $parent The element we should append to.
      * @return \DOMElement      This AdditionalMetadataLocation-element.
      */
-    public function toXML(\DOMElement $parent = NULL)
+    public function toXML(\DOMElement $parent = null)
     {
         assert('is_string($this->NameQualifier) || is_null($this->NameQualifier)');
         assert('is_string($this->SPNameQualifier) || is_null($this->SPNameQualifier)');
@@ -91,7 +91,7 @@ class NameID
         assert('is_string($this->SPProvidedID) || is_null($this->SPProvidedID)');
         assert('is_string($this->value)');
 
-        if ($parent === NULL) {
+        if ($parent === null) {
             $parent = DOMDocumentFactory::create();
             $doc = $parent;
         } else {
@@ -100,19 +100,19 @@ class NameID
         $e = $doc->createElementNS(Constants::NS_SAML, 'saml:NameID');
         $parent->appendChild($e);
 
-        if ($this->NameQualifier !== NULL) {
+        if ($this->NameQualifier !== null) {
             $e->setAttribute('NameQualifier', $this->NameQualifier);
         }
 
-        if ($this->SPNameQualifier !== NULL) {
+        if ($this->SPNameQualifier !== null) {
             $e->setAttribute('SPNameQualifier', $this->SPNameQualifier);
         }
 
-        if ($this->Format !== NULL) {
+        if ($this->Format !== null) {
             $e->setAttribute('Format', $this->Format);
         }
 
-        if ($this->SPProvidedID !== NULL) {
+        if ($this->SPProvidedID !== null) {
             $e->setAttribute('SPProvidedID', $this->SPProvidedID);
         }
 
@@ -121,5 +121,4 @@ class NameID
 
         return $e;
     }
-
 }

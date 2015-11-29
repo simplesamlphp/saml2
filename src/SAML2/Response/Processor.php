@@ -45,7 +45,7 @@ class Processor
      *
      * @var bool
      */
-    private $responseIsSigned = FALSE;
+    private $responseIsSigned = false;
 
     /**
      * @param \Psr\Log\LoggerInterface        $logger
@@ -124,7 +124,7 @@ class Processor
             $response->getId()
         ));
 
-        $this->responseIsSigned = TRUE;
+        $this->responseIsSigned = true;
 
         if (!$this->signatureValidator->hasValidSignature($response, $identityProviderConfiguration)) {
             throw new InvalidResponseException();

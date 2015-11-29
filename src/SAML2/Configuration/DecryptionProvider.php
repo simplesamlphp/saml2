@@ -20,7 +20,7 @@ interface DecryptionProvider
      *
      * @return mixed
      */
-    public function getPrivateKey($name, $required = FALSE);
+    public function getPrivateKey($name, $required = false);
 
     /**
      * @return array

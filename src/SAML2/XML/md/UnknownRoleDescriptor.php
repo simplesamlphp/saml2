@@ -40,5 +40,4 @@ class UnknownRoleDescriptor extends RoleDescriptor
     {
         $this->xml->toXML($parent);
     }
-
 }

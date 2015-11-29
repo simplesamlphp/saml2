@@ -14,11 +14,11 @@ interface SignedElement
     /**
      * Validate this element against a public key.
      *
-     * If no signature is present, FALSE is returned. If a signature is present,
+     * If no signature is present, false is returned. If a signature is present,
      * but cannot be verified, an exception will be thrown.
      *
      * @param  XMLSecurityKey $key The key we should check against.
-     * @return boolean        TRUE if successful, FALSE if we don't have a signature that can be verified.
+     * @return boolean        true if successful, false if we don't have a signature that can be verified.
      */
     public function validate(XMLSecurityKey $key);
 
@@ -41,16 +41,16 @@ interface SignedElement
     /**
      * Retrieve the private key we should use to sign the element.
      *
-     * @return XMLSecurityKey|NULL The key, or NULL if no key is specified.
+     * @return XMLSecurityKey|null The key, or NULL if no key is specified.
      */
     public function getSignatureKey();
 
     /**
      * Set the private key we should use to sign the element.
      *
-     * If the key is NULL, the message will be sent unsigned.
+     * If the key is null, the message will be sent unsigned.
      *
-     * @param XMLSecurityKey|NULL $signatureKey
+     * @param XMLSecurityKey|null $signatureKey
      */
-    public function setSignatureKey(XMLsecurityKey $signatureKey = NULL);
+    public function setSignatureKey(XMLsecurityKey $signatureKey = null);
 }

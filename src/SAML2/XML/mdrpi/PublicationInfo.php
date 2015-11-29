@@ -22,14 +22,14 @@ class PublicationInfo
     /**
      * The creation timestamp for the metadata, as a UNIX timestamp.
      *
-     * @var int|NULL
+     * @var int|null
      */
     public $creationInstant;
 
     /**
      * Identifier for this metadata publication.
      *
-     * @var string|NULL
+     * @var string|null
      */
     public $publicationId;
 
@@ -45,12 +45,12 @@ class PublicationInfo
     /**
      * Create/parse a mdrpi:PublicationInfo element.
      *
-     * @param \DOMElement|NULL $xml The XML element we should load.
+     * @param \DOMElement|null $xml The XML element we should load.
      * @throws \Exception
      */
-    public function __construct(\DOMElement $xml = NULL)
+    public function __construct(\DOMElement $xml = null)
     {
-        if ($xml === NULL) {
+        if ($xml === null) {
             return;
         }
 
@@ -90,17 +90,16 @@ class PublicationInfo
 
         $e->setAttribute('publisher', $this->publisher);
 
-        if ($this->creationInstant !== NULL) {
+        if ($this->creationInstant !== null) {
             $e->setAttribute('creationInstant', gmdate('Y-m-d\TH:i:s\Z', $this->creationInstant));
         }
 
-        if ($this->publicationId !== NULL) {
+        if ($this->publicationId !== null) {
             $e->setAttribute('publicationId', $this->publicationId);
         }
 
-        Utils::addStrings($e, Common::NS_MDRPI, 'mdrpi:UsagePolicy', TRUE, $this->UsagePolicy);
+        Utils::addStrings($e, Common::NS_MDRPI, 'mdrpi:UsagePolicy', true, $this->UsagePolicy);
 
         return $e;
     }
-
 }

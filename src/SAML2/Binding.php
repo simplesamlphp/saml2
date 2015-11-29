@@ -12,7 +12,7 @@ abstract class Binding
     /**
      * The destination of messages.
      *
-     * This can be NULL, in which case the destination in the message is used.
+     * This can be null, in which case the destination in the message is used.
      */
     protected $destination;
 
@@ -39,7 +39,7 @@ abstract class Binding
             case Constants::BINDING_HOK_SSO:
                 return new HTTPPost();
             default:
-                throw new \Exception('Unsupported binding: ' . var_export($urn, TRUE));
+                throw new \Exception('Unsupported binding: ' . var_export($urn, true));
         }
     }
 
@@ -71,7 +71,7 @@ abstract class Binding
                     $contentType = explode(';', $contentType);
                     $contentType = $contentType[0]; /* Remove charset. */
                 } else {
-                    $contentType = NULL;
+                    $contentType = null;
                 }
                 if (array_key_exists('SAMLRequest', $_POST) || array_key_exists('SAMLResponse', $_POST)) {
                     return new HTTPPost();
@@ -85,7 +85,7 @@ abstract class Binding
 
         $logger = Utils::getContainer()->getLogger();
         $logger->warning('Unable to find the SAML 2 binding used for this request.');
-        $logger->warning('Request method: ' . var_export($_SERVER['REQUEST_METHOD'], TRUE));
+        $logger->warning('Request method: ' . var_export($_SERVER['REQUEST_METHOD'], true));
         if (!empty($_GET)) {
             $logger->warning("GET parameters: '" . implode("', '", array_map('addslashes', array_keys($_GET))) . "'");
         }
@@ -93,7 +93,7 @@ abstract class Binding
             $logger->warning("POST parameters: '" . implode("', '", array_map('addslashes', array_keys($_POST))) . "'");
         }
         if (isset($_SERVER['CONTENT_TYPE'])) {
-            $logger->warning('Content-Type: ' . var_export($_SERVER['CONTENT_TYPE'], TRUE));
+            $logger->warning('Content-Type: ' . var_export($_SERVER['CONTENT_TYPE'], true));
         }
 
         throw new \Exception('Unable to find the current binding.');
@@ -102,7 +102,7 @@ abstract class Binding
     /**
      * Retrieve the destination of a message.
      *
-     * @return string|NULL $destination  The destination the message will be delivered to.
+     * @return string|null $destination  The destination the message will be delivered to.
      */
     public function getDestination()
     {
@@ -112,9 +112,9 @@ abstract class Binding
     /**
      * Override the destination of a message.
      *
-     * Set to NULL to use the destination set in the message.
+     * Set to null to use the destination set in the message.
      *
-     * @param string|NULL $destination The destination the message should be delivered to.
+     * @param string|null $destination The destination the message should be delivered to.
      */
     public function setDestination($destination)
     {
@@ -142,5 +142,4 @@ abstract class Binding
      * @return \SAML2\Message The received message.
      */
     abstract public function receive();
-
 }

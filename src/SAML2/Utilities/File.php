@@ -29,7 +29,7 @@ class File
         }
 
         $contents = file_get_contents($file);
-        if ($contents === FALSE) {
+        if ($contents === false) {
             throw new RuntimeException(sprintf(
                 'Could not read from existing and readable file "%s"',
                 $file

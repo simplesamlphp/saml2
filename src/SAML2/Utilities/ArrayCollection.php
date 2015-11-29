@@ -28,7 +28,7 @@ class ArrayCollection implements Collection
 
     public function get($key)
     {
-        return isset($this->elements[$key]) ? $this->elements[$key] : NULL;
+        return isset($this->elements[$key]) ? $this->elements[$key] : null;
     }
 
     public function filter(\Closure $f)
@@ -45,8 +45,8 @@ class ArrayCollection implements Collection
     {
         $key = array_search($element, $this->elements);
 
-        if ($key === FALSE) {
-            return FALSE;
+        if ($key === false) {
+            return false;
         }
 
         $removed = $this->elements[$key];

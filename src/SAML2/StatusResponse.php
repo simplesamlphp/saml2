@@ -17,7 +17,7 @@ namespace SAML2;
  *   'Message' => '<status message>',
  * )
  *
- * Only the 'Code' field is required. The others will be set to NULL if they
+ * Only the 'Code' field is required. The others will be set to null if they
  * aren't present.
  *
  * @package SimpleSAMLphp
@@ -25,9 +25,9 @@ namespace SAML2;
 abstract class StatusResponse extends Message
 {
     /**
-     * The ID of the request this is a response to, or NULL if this is an unsolicited response.
+     * The ID of the request this is a response to, or null if this is an unsolicited response.
      *
-     * @var string|NULL
+     * @var string|null
      */
     private $inResponseTo;
 
@@ -44,20 +44,20 @@ abstract class StatusResponse extends Message
      * Constructor for SAML 2 response messages.
      *
      * @param string          $tagName The tag name of the root element.
-     * @param \DOMElement|NULL $xml     The input message.
+     * @param \DOMElement|null $xml     The input message.
      * @throws \Exception
      */
-    protected function __construct($tagName, \DOMElement $xml = NULL)
+    protected function __construct($tagName, \DOMElement $xml = null)
     {
         parent::__construct($tagName, $xml);
 
         $this->status = array(
             'Code' => Constants::STATUS_SUCCESS,
-            'SubCode' => NULL,
-            'Message' => NULL,
+            'SubCode' => null,
+            'Message' => null,
             );
 
-        if ($xml === NULL) {
+        if ($xml === null) {
             return;
         }
 
@@ -94,24 +94,24 @@ abstract class StatusResponse extends Message
     /**
      * Determine whether this is a successful response.
      *
-     * @return boolean TRUE if the status code is success, FALSE if not.
+     * @return boolean true if the status code is success, false if not.
      */
     public function isSuccess()
     {
         assert('array_key_exists("Code", $this->status)');
 
         if ($this->status['Code'] === Constants::STATUS_SUCCESS) {
-            return TRUE;
+            return true;
         }
 
-        return FALSE;
+        return false;
     }
 
 
     /**
      * Retrieve the ID of the request this is a response to.
      *
-     * @return string|NULL The ID of the request.
+     * @return string|null The ID of the request.
      */
     public function getInResponseTo()
     {
@@ -122,7 +122,7 @@ abstract class StatusResponse extends Message
     /**
      * Set the ID of the request this is a response to.
      *
-     * @param string|NULL $inResponseTo The ID of the request.
+     * @param string|null $inResponseTo The ID of the request.
      */
     public function setInResponseTo($inResponseTo)
     {
@@ -154,10 +154,10 @@ abstract class StatusResponse extends Message
 
         $this->status = $status;
         if (!array_key_exists('SubCode', $status)) {
-            $this->status['SubCode'] = NULL;
+            $this->status['SubCode'] = null;
         }
         if (!array_key_exists('Message', $status)) {
-            $this->status['Message'] = NULL;
+            $this->status['Message'] = null;
         }
     }
 
@@ -171,7 +171,7 @@ abstract class StatusResponse extends Message
     {
         $root = parent::toUnsignedXML();
 
-        if ($this->inResponseTo !== NULL) {
+        if ($this->inResponseTo !== null) {
             $root->setAttribute('InResponseTo', $this->inResponseTo);
         }
 
@@ -194,5 +194,4 @@ abstract class StatusResponse extends Message
 
         return $root;
     }
-
 }

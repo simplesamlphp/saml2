@@ -39,21 +39,21 @@ class AttributeQuery extends SubjectQuery
     /**
      * Constructor for SAML 2 attribute query messages.
      *
-     * @param \DOMElement|NULL $xml The input message.
+     * @param \DOMElement|null $xml The input message.
      * @throws \Exception
      */
-    public function __construct(\DOMElement $xml = NULL)
+    public function __construct(\DOMElement $xml = null)
     {
         parent::__construct('AttributeQuery', $xml);
 
         $this->attributes = array();
         $this->nameFormat = Constants::NAMEFORMAT_UNSPECIFIED;
 
-        if ($xml === NULL) {
+        if ($xml === null) {
             return;
         }
 
-        $firstAttribute = TRUE;
+        $firstAttribute = true;
         $attributes = Utils::xpQuery($xml, './saml_assertion:Attribute');
         foreach ($attributes as $attribute) {
             if (!$attribute->hasAttribute('Name')) {
@@ -69,7 +69,7 @@ class AttributeQuery extends SubjectQuery
 
             if ($firstAttribute) {
                 $this->nameFormat = $nameFormat;
-                $firstAttribute = FALSE;
+                $firstAttribute = false;
             } else {
                 if ($this->nameFormat !== $nameFormat) {
                     $this->nameFormat = Constants::NAMEFORMAT_UNSPECIFIED;
@@ -156,11 +156,11 @@ class AttributeQuery extends SubjectQuery
                 } elseif (is_int($value)) {
                     $type = 'xs:integer';
                 } else {
-                    $type = NULL;
+                    $type = null;
                 }
 
                 $attributeValue = Utils::addString($attribute, Constants::NS_SAML, 'saml:AttributeValue', $value);
-                if ($type !== NULL) {
+                if ($type !== null) {
                     $attributeValue->setAttributeNS(Constants::NS_XSI, 'xsi:type', $type);
                 }
             }
@@ -168,5 +168,4 @@ class AttributeQuery extends SubjectQuery
 
         return $root;
     }
-
 }

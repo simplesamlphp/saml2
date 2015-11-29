@@ -56,15 +56,15 @@ class PublicKeyValidator extends AbstractChainedValidator
         $pemCandidates = $this->configuredKeys->filter(function (Key $key) use ($logger) {
             if (!$key instanceof X509) {
                 $logger->debug(sprintf('Skipping unknown key type: "%s"', $key['type']));
-                return FALSE;
+                return false;
             }
-            return TRUE;
+            return true;
         });
 
         if (!count($pemCandidates)) {
             $this->logger->debug('No configured X509 certificate found to verify the signature with');
 
-            return FALSE;
+            return false;
         }
 
         return $this->validateElementWithKeys($signedElement, $pemCandidates);

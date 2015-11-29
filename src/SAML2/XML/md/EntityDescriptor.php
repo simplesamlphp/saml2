@@ -24,21 +24,21 @@ class EntityDescriptor extends SignedElementHelper
     /**
      * The ID of this element.
      *
-     * @var string|NULL
+     * @var string|null
      */
     public $ID;
 
     /**
      * How long this element is valid, as a unix timestamp.
      *
-     * @var int|NULL
+     * @var int|null
      */
     public $validUntil;
 
     /**
      * The length of time this element can be cached, as string.
      *
-     * @var string|NULL
+     * @var string|null
      */
     public $cacheDuration;
 
@@ -63,16 +63,16 @@ class EntityDescriptor extends SignedElementHelper
     /**
      * AffiliationDescriptor of this entity.
      *
-     * @var \SAML2\XML\md\AffiliationDescriptor|NULL
+     * @var \SAML2\XML\md\AffiliationDescriptor|null
      */
-    public $AffiliationDescriptor = NULL;
+    public $AffiliationDescriptor = null;
 
     /**
      * Organization of this entity.
      *
-     * @var \SAML2\XML\md\Organization|NULL
+     * @var \SAML2\XML\md\Organization|null
      */
-    public $Organization = NULL;
+    public $Organization = null;
 
     /**
      * ContactPerson elements for this entity.
@@ -91,14 +91,14 @@ class EntityDescriptor extends SignedElementHelper
     /**
      * Initialize an EntitiyDescriptor.
      *
-     * @param \DOMElement|NULL $xml The XML element we should load.
+     * @param \DOMElement|null $xml The XML element we should load.
      * @throws \Exception
      */
-    public function __construct(\DOMElement $xml = NULL)
+    public function __construct(\DOMElement $xml = null)
     {
         parent::__construct($xml);
 
-        if ($xml === NULL) {
+        if ($xml === null) {
             return;
         }
 
@@ -119,7 +119,7 @@ class EntityDescriptor extends SignedElementHelper
 
         $this->Extensions = Extensions::getList($xml);
 
-        for ($node = $xml->firstChild; $node !== NULL; $node = $node->nextSibling) {
+        for ($node = $xml->firstChild; $node !== null; $node = $node->nextSibling) {
             if (!($node instanceof \DOMElement)) {
                 continue;
             }
@@ -182,10 +182,10 @@ class EntityDescriptor extends SignedElementHelper
     /**
      * Create this EntityDescriptor.
      *
-     * @param \DOMElement|NULL $parent The EntitiesDescriptor we should append this EntityDescriptor to.
+     * @param \DOMElement|null $parent The EntitiesDescriptor we should append this EntityDescriptor to.
      * @return \DOMElement
      */
-    public function toXML(\DOMElement $parent = NULL)
+    public function toXML(\DOMElement $parent = null)
     {
         assert('is_string($this->entityID)');
         assert('is_null($this->ID) || is_string($this->ID)');
@@ -198,7 +198,7 @@ class EntityDescriptor extends SignedElementHelper
         assert('is_array($this->ContactPerson)');
         assert('is_array($this->AdditionalMetadataLocation)');
 
-        if ($parent === NULL) {
+        if ($parent === null) {
             $doc = DOMDocumentFactory::create();
             $e = $doc->createElementNS(Constants::NS_MD, 'md:EntityDescriptor');
             $doc->appendChild($e);
@@ -248,5 +248,4 @@ class EntityDescriptor extends SignedElementHelper
 
         return $e;
     }
-
 }

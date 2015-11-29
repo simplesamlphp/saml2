@@ -37,8 +37,8 @@ class KeyLoader
      */
     public static function extractPublicKeys(
         CertificateProvider $config,
-        $usage = NULL,
-        $required = FALSE,
+        $usage = null,
+        $required = false,
         $prefix = ''
     ) {
         $keyLoader = new self();
@@ -48,15 +48,15 @@ class KeyLoader
 
     /**
      * @param \SAML2\Configuration\CertificateProvider $config
-     * @param NULL|string                             $usage
+     * @param null|string                             $usage
      * @param bool                                    $required
      *
      * @return \SAML2\Certificate\KeyCollection
      */
     public function loadKeysFromConfiguration(
         CertificateProvider $config,
-        $usage = NULL,
-        $required = FALSE
+        $usage = null,
+        $required = false
     ) {
         $keys = $config->getKeys();
         $certificateData = $config->getCertificateData();

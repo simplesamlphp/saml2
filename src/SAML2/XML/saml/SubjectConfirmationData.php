@@ -18,35 +18,35 @@ class SubjectConfirmationData
     /**
      * The time before this element is valid, as an unix timestamp.
      *
-     * @var int|NULL
+     * @var int|null
      */
     public $NotBefore;
 
     /**
      * The time after which this element is invalid, as an unix timestamp.
      *
-     * @var int|NULL
+     * @var int|null
      */
     public $NotOnOrAfter;
 
     /**
      * The Recipient this Subject is valid for. Either an entity or a location.
      *
-     * @var string|NULL
+     * @var string|null
      */
     public $Recipient;
 
     /**
      * The ID of the AuthnRequest this is a response to.
      *
-     * @var string|NULL
+     * @var string|null
      */
     public $InResponseTo;
 
     /**
      * The IP(v6) address of the user.
      *
-     * @var string|NULL
+     * @var string|null
      */
     public $Address;
 
@@ -63,11 +63,11 @@ class SubjectConfirmationData
     /**
      * Initialize (and parse) a SubjectConfirmationData element.
      *
-     * @param \DOMElement|NULL $xml The XML element we should load.
+     * @param \DOMElement|null $xml The XML element we should load.
      */
-    public function __construct(\DOMElement $xml = NULL)
+    public function __construct(\DOMElement $xml = null)
     {
-        if ($xml === NULL) {
+        if ($xml === null) {
             return;
         }
 
@@ -86,7 +86,7 @@ class SubjectConfirmationData
         if ($xml->hasAttribute('Address')) {
             $this->Address = $xml->getAttribute('Address');
         }
-        for ($n = $xml->firstChild; $n !== NULL; $n = $n->nextSibling) {
+        for ($n = $xml->firstChild; $n !== null; $n = $n->nextSibling) {
             if (!($n instanceof \DOMElement)) {
                 continue;
             }
@@ -144,5 +144,4 @@ class SubjectConfirmationData
 
         return $e;
     }
-
 }

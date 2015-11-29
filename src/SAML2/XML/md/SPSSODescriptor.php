@@ -14,16 +14,16 @@ class SPSSODescriptor extends SSODescriptorType
     /**
      * Whether this SP signs authentication requests.
      *
-     * @var bool|NULL
+     * @var bool|null
      */
-    public $AuthnRequestsSigned = NULL;
+    public $AuthnRequestsSigned = null;
 
     /**
      * Whether this SP wants the Assertion elements to be signed.
      *
-     * @var bool|NULL
+     * @var bool|null
      */
-    public $WantAssertionsSigned = NULL;
+    public $WantAssertionsSigned = null;
 
     /**
      * List of AssertionConsumerService endpoints for this SP.
@@ -46,18 +46,18 @@ class SPSSODescriptor extends SSODescriptorType
     /**
      * Initialize a SPSSODescriptor.
      *
-     * @param \DOMElement|NULL $xml The XML element we should load.
+     * @param \DOMElement|null $xml The XML element we should load.
      */
-    public function __construct(\DOMElement $xml = NULL)
+    public function __construct(\DOMElement $xml = null)
     {
         parent::__construct('md:SPSSODescriptor', $xml);
 
-        if ($xml === NULL) {
+        if ($xml === null) {
             return;
         }
 
-        $this->AuthnRequestsSigned = Utils::parseBoolean($xml, 'AuthnRequestsSigned', NULL);
-        $this->WantAssertionsSigned = Utils::parseBoolean($xml, 'WantAssertionsSigned', NULL);
+        $this->AuthnRequestsSigned = Utils::parseBoolean($xml, 'AuthnRequestsSigned', null);
+        $this->WantAssertionsSigned = Utils::parseBoolean($xml, 'WantAssertionsSigned', null);
 
         foreach (Utils::xpQuery($xml, './saml_metadata:AssertionConsumerService') as $ep) {
             $this->AssertionConsumerService[] = new IndexedEndpointType($ep);
@@ -83,15 +83,15 @@ class SPSSODescriptor extends SSODescriptorType
 
         $e = parent::toXML($parent);
 
-        if ($this->AuthnRequestsSigned === TRUE) {
+        if ($this->AuthnRequestsSigned === true) {
             $e->setAttribute('AuthnRequestsSigned', 'true');
-        } elseif ($this->AuthnRequestsSigned === FALSE) {
+        } elseif ($this->AuthnRequestsSigned === false) {
             $e->setAttribute('AuthnRequestsSigned', 'false');
         }
 
-        if ($this->WantAssertionsSigned === TRUE) {
+        if ($this->WantAssertionsSigned === true) {
             $e->setAttribute('WantAssertionsSigned', 'true');
-        } elseif ($this->WantAssertionsSigned === FALSE) {
+        } elseif ($this->WantAssertionsSigned === false) {
             $e->setAttribute('WantAssertionsSigned', 'false');
         }
 
@@ -103,5 +103,4 @@ class SPSSODescriptor extends SSODescriptorType
             $acs->toXML($e);
         }
     }
-
 }

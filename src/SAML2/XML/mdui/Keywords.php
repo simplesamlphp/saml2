@@ -27,12 +27,12 @@ class Keywords
     /**
      * Initialize a Keywords.
      *
-     * @param \DOMElement|NULL $xml The XML element we should load.
+     * @param \DOMElement|null $xml The XML element we should load.
      * @throws \Exception
      */
-    public function __construct(\DOMElement $xml = NULL)
+    public function __construct(\DOMElement $xml = null)
     {
-        if ($xml === NULL) {
+        if ($xml === null) {
             return;
         }
 
@@ -67,7 +67,7 @@ class Keywords
         $e->setAttribute('xml:lang', $this->lang);
         $value = '';
         foreach ($this->Keywords as $keyword) {
-            if (strpos($keyword, "+") !== FALSE) {
+            if (strpos($keyword, "+") !== false) {
                 throw new \Exception('Keywords may not contain a "+" character.');
             }
             $value .= str_replace(' ', '+', $keyword) . ' ';
@@ -78,5 +78,4 @@ class Keywords
 
         return $e;
     }
-
 }

@@ -21,7 +21,7 @@ class HTTPRedirect extends Binding
      */
     public function getRedirectURL(Message $message)
     {
-        if ($this->destination === NULL) {
+        if ($this->destination === null) {
             $destination = $message->getDestination();
         } else {
             $destination = $this->destination;
@@ -48,11 +48,11 @@ class HTTPRedirect extends Binding
         }
         $msg .= urlencode($msgStr);
 
-        if ($relayState !== NULL) {
+        if ($relayState !== null) {
             $msg .= '&RelayState=' . urlencode($relayState);
         }
 
-        if ($key !== NULL) {
+        if ($key !== null) {
             /* Add the signature. */
             $msg .= '&SigAlg=' . urlencode($key->type);
 
@@ -60,7 +60,7 @@ class HTTPRedirect extends Binding
             $msg .= '&Signature=' . urlencode(base64_encode($signature));
         }
 
-        if (strpos($destination, '?') === FALSE) {
+        if (strpos($destination, '?') === false) {
             $destination .= '?' . $msg;
         } else {
             $destination .= '&' . $msg;
@@ -230,5 +230,4 @@ class HTTPRedirect extends Binding
             throw new \Exception('Unable to validate signature on query string.');
         }
     }
-
 }

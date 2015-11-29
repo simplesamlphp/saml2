@@ -17,6 +17,6 @@ class FingerprintTest extends \PHPUnit_Framework_TestCase
      */
     public function fails_on_invalid_fingerprint_data()
     {
-        $this->fingerprint = new Fingerprint(NULL);
+        $this->fingerprint = new Fingerprint(null);
     }
 }

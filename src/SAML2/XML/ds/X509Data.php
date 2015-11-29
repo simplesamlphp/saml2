@@ -25,15 +25,15 @@ class X509Data
     /**
      * Initialize a X509Data.
      *
-     * @param \DOMElement|NULL $xml The XML element we should load.
+     * @param \DOMElement|null $xml The XML element we should load.
      */
-    public function __construct(\DOMElement $xml = NULL)
+    public function __construct(\DOMElement $xml = null)
     {
-        if ($xml === NULL) {
+        if ($xml === null) {
             return;
         }
 
-        for ($n = $xml->firstChild; $n !== NULL; $n = $n->nextSibling) {
+        for ($n = $xml->firstChild; $n !== null; $n = $n->nextSibling) {
             if (!($n instanceof \DOMElement)) {
                 continue;
             }
@@ -75,5 +75,4 @@ class X509Data
 
         return $e;
     }
-
 }

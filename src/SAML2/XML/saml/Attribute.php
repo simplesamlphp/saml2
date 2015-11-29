@@ -22,16 +22,16 @@ class Attribute
     /**
      * The NameFormat of this attribute.
      *
-     * @var string|NULL
+     * @var string|null
      */
     public $NameFormat;
 
     /**
      * The FriendlyName of this attribute.
      *
-     * @var string|NULL
+     * @var string|null
      */
-    public $FriendlyName = NULL;
+    public $FriendlyName = null;
 
     /**
      * List of attribute values.
@@ -45,12 +45,12 @@ class Attribute
     /**
      * Initialize an Attribute.
      *
-     * @param \DOMElement|NULL $xml The XML element we should load.
+     * @param \DOMElement|null $xml The XML element we should load.
      * @throws \Exception
      */
-    public function __construct(\DOMElement $xml = NULL)
+    public function __construct(\DOMElement $xml = null)
     {
-        if ($xml === NULL) {
+        if ($xml === null) {
             return;
         }
 
@@ -120,5 +120,4 @@ class Attribute
     {
         return $this->toXMLInternal($parent, Constants::NS_SAML, 'saml:Attribute');
     }
-
 }

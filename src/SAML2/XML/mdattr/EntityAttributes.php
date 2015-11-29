@@ -31,11 +31,11 @@ class EntityAttributes
     /**
      * Create a EntityAttributes element.
      *
-     * @param \DOMElement|NULL $xml The XML element we should load.
+     * @param \DOMElement|null $xml The XML element we should load.
      */
-    public function __construct(\DOMElement $xml = NULL)
+    public function __construct(\DOMElement $xml = null)
     {
-        if ($xml === NULL) {
+        if ($xml === null) {
             return;
         }
 
@@ -46,7 +46,6 @@ class EntityAttributes
                 $this->children[] = new Chunk($node);
             }
         }
-
     }
 
     /**
@@ -71,5 +70,4 @@ class EntityAttributes
 
         return $e;
     }
-
 }

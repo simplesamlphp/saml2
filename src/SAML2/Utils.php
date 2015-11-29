@@ -29,7 +29,7 @@ class Utils
      * Note that this function only validates the element itself. It does not
      * check this against any local keys.
      *
-     * If no Signature-element is located, this function will return FALSE. All
+     * If no Signature-element is located, this function will return false. All
      * other validation errors result in an exception. On successful validation
      * an array will be returned. This array contains the information required to
      * check the signature against a public key.
@@ -51,7 +51,7 @@ class Utils
         if (count($signatureElement) === 0) {
             /* We don't have a signature element ot validate. */
 
-            return FALSE;
+            return false;
         } elseif (count($signatureElement) > 1) {
             throw new \Exception('XMLSec: more than one signature element in root.');
         }
@@ -67,15 +67,15 @@ class Utils
         }
 
         /* Check that $root is one of the signed nodes. */
-        $rootSigned = FALSE;
+        $rootSigned = false;
         /** @var \DOMNode $signedNode */
         foreach ($objXMLSecDSig->getValidatedNodes() as $signedNode) {
             if ($signedNode->isSameNode($root)) {
-                $rootSigned = TRUE;
+                $rootSigned = true;
                 break;
             } elseif ($root->parentNode instanceof \DOMDocument && $signedNode->isSameNode($root->ownerDocument)) {
                 /* $root is the root element of a signed document. */
-                $rootSigned = TRUE;
+                $rootSigned = true;
                 break;
             }
         }
@@ -120,7 +120,7 @@ class Utils
         }
 
         $keyInfo = openssl_pkey_get_details($key->key);
-        if ($keyInfo === FALSE) {
+        if ($keyInfo === false) {
             throw new \Exception('Unable to get key details from XMLSecurityKey.');
         }
         if (!isset($keyInfo['key'])) {
@@ -181,7 +181,7 @@ class Utils
     public static function xpQuery(\DOMNode $node, $query)
     {
         assert('is_string($query)');
-        static $xpCache = NULL;
+        static $xpCache = null;
 
         if ($node instanceof \DOMDocument) {
             $doc = $node;
@@ -189,7 +189,7 @@ class Utils
             $doc = $node->ownerDocument;
         }
 
-        if ($xpCache === NULL || !$xpCache->document->isSameNode($doc)) {
+        if ($xpCache === null || !$xpCache->document->isSameNode($doc)) {
             $xpCache = new \DOMXPath($doc);
             $xpCache->registerNamespace('soap-env', Constants::NS_SOAP);
             $xpCache->registerNamespace('saml_protocol', Constants::NS_SAMLP);
@@ -213,19 +213,19 @@ class Utils
      * Make an exact copy the specific \DOMElement.
      *
      * @param  \DOMElement      $element The element we should copy.
-     * @param  \DOMElement|NULL $parent  The target parent element.
+     * @param  \DOMElement|null $parent  The target parent element.
      * @return \DOMElement      The copied element.
      */
-    public static function copyElement(\DOMElement $element, \DOMElement $parent = NULL)
+    public static function copyElement(\DOMElement $element, \DOMElement $parent = null)
     {
-        if ($parent === NULL) {
+        if ($parent === null) {
             $document = DOMDocumentFactory::create();
         } else {
             $document = $parent->ownerDocument;
         }
 
         $namespaces = array();
-        for ($e = $element; $e !== NULL; $e = $e->parentNode) {
+        for ($e = $element; $e !== null; $e = $e->parentNode) {
             foreach (Utils::xpQuery($e, './namespace::*') as $ns) {
                 $prefix = $ns->localName;
                 if ($prefix === 'xml' || $prefix === 'xmlns') {
@@ -239,8 +239,8 @@ class Utils
         }
 
         /** @var \DOMElement $newElement */
-        $newElement = $document->importNode($element, TRUE);
-        if ($parent !== NULL) {
+        $newElement = $document->importNode($element, true);
+        if ($parent !== null) {
             /* We need to append the child to the parent before we add the namespaces. */
             $parent->appendChild($newElement);
         }
@@ -263,7 +263,7 @@ class Utils
      * @return bool|mixed The value of the attribute, or $default if the attribute doesn't exist.
      * @throws \Exception
      */
-    public static function parseBoolean(\DOMElement $node, $attributeName, $default = NULL)
+    public static function parseBoolean(\DOMElement $node, $attributeName, $default = null)
     {
         assert('is_string($attributeName)');
 
@@ -274,12 +274,12 @@ class Utils
         switch (strtolower($value)) {
             case '0':
             case 'false':
-                return FALSE;
+                return false;
             case '1':
             case 'true':
-                return TRUE;
+                return true;
             default:
-                throw new \Exception('Invalid value of boolean attribute ' . var_export($attributeName, TRUE) . ': ' . var_export($value, TRUE));
+                throw new \Exception('Invalid value of boolean attribute ' . var_export($attributeName, true) . ': ' . var_export($value, true));
         }
     }
 
@@ -301,13 +301,13 @@ class Utils
 
         $xml = Utils::addString($node, Constants::NS_SAML, 'saml:NameID', $nameId['Value']);
 
-        if (array_key_exists('NameQualifier', $nameId) && $nameId['NameQualifier'] !== NULL) {
+        if (array_key_exists('NameQualifier', $nameId) && $nameId['NameQualifier'] !== null) {
             $xml->setAttribute('NameQualifier', $nameId['NameQualifier']);
         }
-        if (array_key_exists('SPNameQualifier', $nameId) && $nameId['SPNameQualifier'] !== NULL) {
+        if (array_key_exists('SPNameQualifier', $nameId) && $nameId['SPNameQualifier'] !== null) {
             $xml->setAttribute('SPNameQualifier', $nameId['SPNameQualifier']);
         }
-        if (array_key_exists('Format', $nameId) && $nameId['Format'] !== NULL) {
+        if (array_key_exists('Format', $nameId) && $nameId['Format'] !== null) {
             $xml->setAttribute('Format', $nameId['Format']);
         }
     }
@@ -343,7 +343,7 @@ class Utils
         XMLSecurityKey $key,
         array $certificates,
         \DOMElement $root,
-        \DOMNode $insertBefore = NULL
+        \DOMNode $insertBefore = null
     ) {
         $objXMLSecDSig = new XMLSecurityDSig();
         $objXMLSecDSig->setCanonicalMethod(XMLSecurityDSig::EXC_C14N);
@@ -366,17 +366,16 @@ class Utils
             array($root),
             $type,
             array('http://www.w3.org/2000/09/xmldsig#enveloped-signature', XMLSecurityDSig::EXC_C14N),
-            array('id_name' => 'ID', 'overwrite' => FALSE)
+            array('id_name' => 'ID', 'overwrite' => false)
         );
 
         $objXMLSecDSig->sign($key);
 
         foreach ($certificates as $certificate) {
-            $objXMLSecDSig->add509Cert($certificate, TRUE);
+            $objXMLSecDSig->add509Cert($certificate, true);
         }
 
         $objXMLSecDSig->insertSignature($root, $insertBefore);
-
     }
 
     /**
@@ -411,8 +410,8 @@ class Utils
         if ($symmetricKeyInfo->isEncrypted) {
             $symKeyInfoAlgo = $symmetricKeyInfo->getAlgorith();
 
-            if (in_array($symKeyInfoAlgo, $blacklist, TRUE)) {
-                throw new \Exception('Algorithm disabled: ' . var_export($symKeyInfoAlgo, TRUE));
+            if (in_array($symKeyInfoAlgo, $blacklist, true)) {
+                throw new \Exception('Algorithm disabled: ' . var_export($symKeyInfoAlgo, true));
             }
 
             if ($symKeyInfoAlgo === XMLSecurityKey::RSA_OAEP_MGF1P && $inputKeyAlgo === XMLSecurityKey::RSA_1_5) {
@@ -430,8 +429,8 @@ class Utils
                 throw new \Exception(
                     'Algorithm mismatch between input key and key used to encrypt ' .
                     ' the symmetric key for the message. Key was: ' .
-                    var_export($inputKeyAlgo, TRUE) . '; message was: ' .
-                    var_export($symKeyInfoAlgo, TRUE)
+                    var_export($inputKeyAlgo, true) . '; message was: ' .
+                    var_export($symKeyInfoAlgo, true)
                 );
             }
 
@@ -440,11 +439,11 @@ class Utils
             $symmetricKeyInfo->key = $inputKey->key;
 
             $keySize = $symmetricKey->getSymmetricKeySize();
-            if ($keySize === NULL) {
+            if ($keySize === null) {
                 /* To protect against "key oracle" attacks, we need to be able to create a
                  * symmetric key, and for that we need to know the key size.
                  */
-                throw new \Exception('Unknown key size for encryption algorithm: ' . var_export($symmetricKey->type, TRUE));
+                throw new \Exception('Unknown key size for encryption algorithm: ' . var_export($symmetricKey->type, true));
             }
 
             try {
@@ -452,7 +451,7 @@ class Utils
                 if (strlen($key) != $keySize) {
                     throw new \Exception(
                         'Unexpected key size (' . strlen($key) * 8 . 'bits) for encryption algorithm: ' .
-                        var_export($symmetricKey->type, TRUE)
+                        var_export($symmetricKey->type, true)
                     );
                 }
             } catch (\Exception $e) {
@@ -465,8 +464,8 @@ class Utils
                  */
                 $encryptedKey = $encKey->getCipherValue();
                 $pkey = openssl_pkey_get_details($symmetricKeyInfo->key);
-                $pkey = sha1(serialize($pkey), TRUE);
-                $key = sha1($encryptedKey . $pkey, TRUE);
+                $pkey = sha1(serialize($pkey), true);
+                $key = sha1($encryptedKey . $pkey, true);
 
                 /* Make sure that the key has the correct length. */
                 if (strlen($key) > $keySize) {
@@ -476,27 +475,26 @@ class Utils
                 }
             }
             $symmetricKey->loadkey($key);
-
         } else {
             $symKeyAlgo = $symmetricKey->getAlgorith();
             /* Make sure that the input key has the correct format. */
             if ($inputKeyAlgo !== $symKeyAlgo) {
                 throw new \Exception(
                     'Algorithm mismatch between input key and key in message. ' .
-                    'Key was: ' . var_export($inputKeyAlgo, TRUE) . '; message was: ' .
-                    var_export($symKeyAlgo, TRUE)
+                    'Key was: ' . var_export($inputKeyAlgo, true) . '; message was: ' .
+                    var_export($symKeyAlgo, true)
                 );
             }
             $symmetricKey = $inputKey;
         }
 
         $algorithm = $symmetricKey->getAlgorith();
-        if (in_array($algorithm, $blacklist, TRUE)) {
-            throw new \Exception('Algorithm disabled: ' . var_export($algorithm, TRUE));
+        if (in_array($algorithm, $blacklist, true)) {
+            throw new \Exception('Algorithm disabled: ' . var_export($algorithm, true));
         }
 
         /** @var string $decrypted */
-        $decrypted = $enc->decryptNode($symmetricKey, FALSE);
+        $decrypted = $enc->decryptNode($symmetricKey, false);
 
         /*
          * This is a workaround for the case where only a subset of the XML
@@ -515,7 +513,7 @@ class Utils
         }
 
         $decryptedElement = $newDoc->firstChild->firstChild;
-        if ($decryptedElement === NULL) {
+        if ($decryptedElement === null) {
             throw new \Exception('Missing encrypted element.');
         }
 
@@ -563,7 +561,7 @@ class Utils
         assert('is_string($localName)');
 
         $ret = array();
-        for ($node = $parent->firstChild; $node !== NULL; $node = $node->nextSibling) {
+        for ($node = $parent->firstChild; $node !== null; $node = $node->nextSibling) {
             if ($node->namespaceURI !== $namespaceURI || $node->localName !== $localName) {
                 continue;
             }
@@ -593,7 +591,7 @@ class Utils
         assert('is_string($localName)');
 
         $ret = array();
-        for ($node = $parent->firstChild; $node !== NULL; $node = $node->nextSibling) {
+        for ($node = $parent->firstChild; $node !== null; $node = $node->nextSibling) {
             if ($node->namespaceURI !== $namespaceURI || $node->localName !== $localName) {
                 continue;
             }

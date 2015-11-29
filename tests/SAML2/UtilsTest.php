@@ -71,7 +71,7 @@ class UtilsTest extends \PHPUnit_Framework_TestCase
             $document->firstChild,
             'testns',
             'ns:somenode',
-            FALSE,
+            false,
             array('value1', 'value2')
         );
         $this->assertEquals(
@@ -87,7 +87,7 @@ class UtilsTest extends \PHPUnit_Framework_TestCase
             $document->firstChild,
             'testns',
             'ns:somenode',
-            FALSE,
+            false,
             array('value1', 'value2')
         );
         $this->assertEquals(
@@ -103,7 +103,7 @@ class UtilsTest extends \PHPUnit_Framework_TestCase
             $document->firstChild,
             'testns',
             'ns:somenode',
-            TRUE,
+            true,
             array('en' => 'value (en)', 'no' => 'value (no)')
         );
         $this->assertEquals(
@@ -119,7 +119,7 @@ class UtilsTest extends \PHPUnit_Framework_TestCase
             $document->firstChild,
             'testns',
             'ns:somenode',
-            TRUE,
+            true,
             array('en' => 'value (en)', 'no' => 'value (no)')
         );
         $this->assertEquals(

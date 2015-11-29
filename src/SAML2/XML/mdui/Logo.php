@@ -41,12 +41,12 @@ class Logo
     /**
      * Initialize a Logo.
      *
-     * @param \DOMElement|NULL $xml The XML element we should load.
+     * @param \DOMElement|null $xml The XML element we should load.
      * @throws \Exception
      */
-    public function __construct(\DOMElement $xml = NULL)
+    public function __construct(\DOMElement $xml = null)
     {
-        if ($xml === NULL) {
+        if ($xml === null) {
             return;
         }
 
@@ -62,7 +62,7 @@ class Logo
         $this->url = $xml->textContent;
         $this->width = (int) $xml->getAttribute('width');
         $this->height = (int) $xml->getAttribute('height');
-        $this->lang = $xml->hasAttribute('xml:lang') ? $xml->getAttribute('xml:lang') : NULL;
+        $this->lang = $xml->hasAttribute('xml:lang') ? $xml->getAttribute('xml:lang') : null;
     }
 
     /**
@@ -90,5 +90,4 @@ class Logo
 
         return $e;
     }
-
 }

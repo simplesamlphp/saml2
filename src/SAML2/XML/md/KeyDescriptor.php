@@ -17,9 +17,9 @@ class KeyDescriptor
     /**
      * What this key can be used for.
      *
-     * 'encryption', 'signing' or NULL.
+     * 'encryption', 'signing' or null.
      *
-     * @var string|NULL
+     * @var string|null
      */
     public $use;
 
@@ -42,12 +42,12 @@ class KeyDescriptor
     /**
      * Initialize an KeyDescriptor.
      *
-     * @param \DOMElement|NULL $xml The XML element we should load.
+     * @param \DOMElement|null $xml The XML element we should load.
      * @throws \Exception
      */
-    public function __construct(\DOMElement $xml = NULL)
+    public function __construct(\DOMElement $xml = null)
     {
-        if ($xml === NULL) {
+        if ($xml === null) {
             return;
         }
 
@@ -66,7 +66,6 @@ class KeyDescriptor
         foreach (Utils::xpQuery($xml, './saml_metadata:EncryptionMethod') as $em) {
             $this->EncryptionMethod[] = new Chunk($em);
         }
-
     }
 
     /**
@@ -98,5 +97,4 @@ class KeyDescriptor
 
         return $e;
     }
-
 }
