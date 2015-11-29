@@ -1,20 +1,26 @@
 <?php
 
+namespace SAML2\XML\md;
+
+use SAML2\Constants;
+use SAML2\DOMDocumentFactory;
+use SAML2\Utils;
+
 /**
- * Class SAML2_XML_md_AdditionalMetadataLocationTest
+ * Class \SAML2\XML\md\AdditionalMetadataLocationTest
  */
-class SAML2_XML_md_AdditionalMetadataLocationTest extends PHPUnit_Framework_TestCase
+class AdditionalMetadataLocationTest extends \PHPUnit_Framework_TestCase
 {
     public function testMarshalling()
     {
-        $document = SAML2_DOMDocumentFactory::fromString('<root/>');
+        $document = DOMDocumentFactory::fromString('<root/>');
 
-        $additionalMetadataLocation = new SAML2_XML_md_AdditionalMetadataLocation();
+        $additionalMetadataLocation = new AdditionalMetadataLocation();
         $additionalMetadataLocation->namespace = 'NamespaceAttribute';
         $additionalMetadataLocation->location = 'TheLocation';
         $additionalMetadataLocationElement = $additionalMetadataLocation->toXML($document->firstChild);
 
-        $additionalMetadataLocationElements = SAML2_Utils::xpQuery(
+        $additionalMetadataLocationElements = Utils::xpQuery(
             $additionalMetadataLocationElement,
             '/root/saml_metadata:AdditionalMetadataLocation'
         );
@@ -27,19 +33,19 @@ class SAML2_XML_md_AdditionalMetadataLocationTest extends PHPUnit_Framework_Test
 
     public function testUnmarshalling()
     {
-        $document = SAML2_DOMDocumentFactory::fromString(
-            '<md:AdditionalMetadataLocation xmlns:md="' . SAML2_Const::NS_MD . '"'.
+        $document = DOMDocumentFactory::fromString(
+            '<md:AdditionalMetadataLocation xmlns:md="' . Constants::NS_MD . '"'.
             ' namespace="TheNamespaceAttribute">LocationText</md:AdditionalMetadataLocation>'
         );
-        $additionalMetadataLocation = new SAML2_XML_md_AdditionalMetadataLocation($document->firstChild);
+        $additionalMetadataLocation = new AdditionalMetadataLocation($document->firstChild);
         $this->assertEquals('TheNamespaceAttribute', $additionalMetadataLocation->namespace);
         $this->assertEquals('LocationText', $additionalMetadataLocation->location);
 
         $document->loadXML(
-            '<md:AdditionalMetadataLocation xmlns:md="' . SAML2_Const::NS_MD . '"'.
+            '<md:AdditionalMetadataLocation xmlns:md="' . Constants::NS_MD . '"'.
             '>LocationText</md:AdditionalMetadataLocation>'
         );
         $this->setExpectedException('Exception', 'Missing namespace attribute on AdditionalMetadataLocation element.');
-        new SAML2_XML_md_AdditionalMetadataLocation($document->firstChild);
+        new AdditionalMetadataLocation($document->firstChild);
     }
 }

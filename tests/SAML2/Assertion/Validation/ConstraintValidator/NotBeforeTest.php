@@ -1,6 +1,10 @@
 <?php
 
-use \Mockery as m;
+namespace SAML2\Assertion\Validation\ConstraintValidator;
+
+use Mockery as m;
+use SAML2\Assertion\Validation\Result;
+use SAML2\ControlledTimeTest;
 
 /**
  * Because we're mocking a static call, we have to run it in separate processes so as to no contaminate the other
@@ -8,7 +12,7 @@ use \Mockery as m;
  *
  * @runTestsInSeparateProcesses
  */
-class SAML2_Assertion_Validation_ConstraintValidator_NotBeforeTest extends SAML2_ControlledTimeTest
+class NotBeforeTest extends ControlledTimeTest
 {
     /**
      * @var \Mockery\MockInterface
@@ -23,7 +27,7 @@ class SAML2_Assertion_Validation_ConstraintValidator_NotBeforeTest extends SAML2
     public function setUp()
     {
         parent::setUp();
-        $this->assertion = m::mock('SAML2_Assertion');
+        $this->assertion = m::mock('SAML2\Assertion');
     }
 
     /**
@@ -34,8 +38,8 @@ class SAML2_Assertion_Validation_ConstraintValidator_NotBeforeTest extends SAML2
     {
         $this->assertion->shouldReceive('getNotBefore')->andReturn($this->currentTime + 61);
 
-        $validator = new SAML2_Assertion_Validation_ConstraintValidator_NotBefore();
-        $result    = new SAML2_Assertion_Validation_Result();
+        $validator = new NotBefore();
+        $result    = new Result();
 
         $validator->validate($this->assertion, $result);
 
@@ -51,8 +55,8 @@ class SAML2_Assertion_Validation_ConstraintValidator_NotBeforeTest extends SAML2
     {
         $this->assertion->shouldReceive('getNotBefore')->andReturn($this->currentTime + 60);
 
-        $validator = new SAML2_Assertion_Validation_ConstraintValidator_NotBefore();
-        $result    = new SAML2_Assertion_Validation_Result();
+        $validator = new NotBefore();
+        $result    = new Result();
 
         $validator->validate($this->assertion, $result);
 
@@ -67,8 +71,8 @@ class SAML2_Assertion_Validation_ConstraintValidator_NotBeforeTest extends SAML2
     {
         $this->assertion->shouldReceive('getNotBefore')->andReturn($this->currentTime);
 
-        $validator = new SAML2_Assertion_Validation_ConstraintValidator_NotBefore();
-        $result    = new SAML2_Assertion_Validation_Result();
+        $validator = new NotBefore();
+        $result    = new Result();
 
         $validator->validate($this->assertion, $result);
 

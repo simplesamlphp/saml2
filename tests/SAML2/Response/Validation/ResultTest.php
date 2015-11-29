@@ -1,6 +1,8 @@
 <?php
 
-class SAML2_Response_Validation_ResultTest extends \PHPUnit_Framework_TestCase
+namespace SAML2\Response\Validation;
+
+class ResultTest extends \PHPUnit_Framework_TestCase
 {
     /**
      * @group response-validation
@@ -9,7 +11,7 @@ class SAML2_Response_Validation_ResultTest extends \PHPUnit_Framework_TestCase
     public function added_errors_can_be_retrieved()
     {
         $error = 'This would be an error message';
-        $result = new SAML2_Response_Validation_Result();
+        $result = new Result();
 
         $result->addError($error);
         $errors = $result->getErrors();
@@ -22,11 +24,11 @@ class SAML2_Response_Validation_ResultTest extends \PHPUnit_Framework_TestCase
      * @group response-validation
      * @test
      *
-     * @expectedException SAML2_Exception_InvalidArgumentException
+     * @expectedException \SAML2\Exception\InvalidArgumentException
      */
     public function an_exception_is_thrown_when_trying_to_add_an_invalid_error()
     {
-        $result = new SAML2_Response_Validation_Result();
+        $result = new Result();
 
         $result->addError(123);
     }
@@ -37,7 +39,7 @@ class SAML2_Response_Validation_ResultTest extends \PHPUnit_Framework_TestCase
      */
     public function the_result_correctly_reports_whether_or_not_it_is_valid()
     {
-        $result = new SAML2_Response_Validation_Result();
+        $result = new Result();
 
         $this->assertTrue($result->isValid());
         $this->assertCount(0, $result->getErrors());

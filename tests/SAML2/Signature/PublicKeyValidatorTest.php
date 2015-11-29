@@ -1,14 +1,26 @@
 <?php
 
-class SAML2_Signature_PublicKeyValidatorTest extends \PHPUnit_Framework_TestCase
+namespace SAML2\Signature;
+
+use SAML2\Certificate\Key;
+use SAML2\Certificate\KeyCollection;
+use SAML2\Certificate\KeyLoader;
+use SAML2\CertificatesMock;
+use SAML2\Configuration\IdentityProvider;
+use SAML2\DOMDocumentFactory;
+use SAML2\Response;
+use SAML2\SimpleTestLogger;
+use SAML2\Utilities\Certificate;
+
+class PublicKeyValidatorTest extends \PHPUnit_Framework_TestCase
 {
     private $mockSignedElement;
     private $mockConfiguration;
 
     public function setUp()
     {
-        $this->mockConfiguration = \Mockery::mock('SAML2_Configuration_CertificateProvider');
-        $this->mockSignedElement = \Mockery::mock('SAML2_SignedElement');
+        $this->mockConfiguration = \Mockery::mock('SAML2\Configuration\CertificateProvider');
+        $this->mockSignedElement = \Mockery::mock('SAML2\SignedElement');
     }
 
     /**
@@ -17,8 +29,8 @@ class SAML2_Signature_PublicKeyValidatorTest extends \PHPUnit_Framework_TestCase
      */
     public function it_cannot_validate_if_no_keys_can_be_loaded()
     {
-        $keyloaderMock = $this->prepareKeyLoader(new SAML2_Certificate_KeyCollection());
-        $validator = new SAML2_Signature_PublicKeyValidator(new \Psr\Log\NullLogger(), $keyloaderMock);
+        $keyloaderMock = $this->prepareKeyLoader(new KeyCollection());
+        $validator = new PublicKeyValidator(new \Psr\Log\NullLogger(), $keyloaderMock);
 
         $this->assertFalse($validator->canValidate($this->mockSignedElement, $this->mockConfiguration));
     }
@@ -29,8 +41,8 @@ class SAML2_Signature_PublicKeyValidatorTest extends \PHPUnit_Framework_TestCase
      */
     public function it_will_validate_when_keys_can_be_loaded()
     {
-        $keyloaderMock = $this->prepareKeyLoader(new SAML2_Certificate_KeyCollection(array(1, 2)));
-        $validator = new SAML2_Signature_PublicKeyValidator(new \Psr\Log\NullLogger(), $keyloaderMock);
+        $keyloaderMock = $this->prepareKeyLoader(new KeyCollection(array(1, 2)));
+        $validator = new PublicKeyValidator(new \Psr\Log\NullLogger(), $keyloaderMock);
 
         $this->assertTrue($validator->canValidate($this->mockSignedElement, $this->mockConfiguration));
     }
@@ -41,14 +53,14 @@ class SAML2_Signature_PublicKeyValidatorTest extends \PHPUnit_Framework_TestCase
      */
     public function non_X509_keys_are_not_used_for_validation()
     {
-        $controlledCollection = new SAML2_Certificate_KeyCollection(array(
-            new SAML2_Certificate_Key(array('type' => 'not_X509')),
-            new SAML2_Certificate_Key(array('type' => 'again_not_X509'))
+        $controlledCollection = new KeyCollection(array(
+            new Key(array('type' => 'not_X509')),
+            new Key(array('type' => 'again_not_X509'))
         ));
 
         $keyloaderMock = $this->prepareKeyLoader($controlledCollection);
-        $logger = new SAML2_SimpleTestLogger();
-        $validator = new SAML2_Signature_PublicKeyValidator($logger, $keyloaderMock);
+        $logger = new SimpleTestLogger();
+        $validator = new PublicKeyValidator($logger, $keyloaderMock);
 
         $this->assertTrue($validator->canValidate($this->mockSignedElement, $this->mockConfiguration));
         $this->assertFalse($validator->hasValidSignature($this->mockSignedElement, $this->mockConfiguration));
@@ -63,19 +75,19 @@ class SAML2_Signature_PublicKeyValidatorTest extends \PHPUnit_Framework_TestCase
      */
     public function signed_message_with_valid_signature_is_validated_correctly()
     {
-        $pattern = SAML2_Utilities_Certificate::CERTIFICATE_PATTERN;
-        preg_match($pattern, SAML2_CertificatesMock::PUBLIC_KEY_PEM, $matches);
+        $pattern = Certificate::CERTIFICATE_PATTERN;
+        preg_match($pattern, CertificatesMock::PUBLIC_KEY_PEM, $matches);
 
-        $config = new SAML2_Configuration_IdentityProvider(array('certificateData' => $matches[1]));
-        $validator = new SAML2_Signature_PublicKeyValidator(new SAML2_SimpleTestLogger(), new SAML2_Certificate_KeyLoader());
+        $config = new IdentityProvider(array('certificateData' => $matches[1]));
+        $validator = new PublicKeyValidator(new SimpleTestLogger(), new KeyLoader());
 
-        $doc = SAML2_DOMDocumentFactory::fromFile(__DIR__ . '/response.xml');
-        $response = new SAML2_Response($doc->firstChild);
-        $response->setSignatureKey(SAML2_CertificatesMock::getPrivateKey());
-        $response->setCertificates(array(SAML2_CertificatesMock::PUBLIC_KEY_PEM));
+        $doc = DOMDocumentFactory::fromFile(__DIR__ . '/response.xml');
+        $response = new Response($doc->firstChild);
+        $response->setSignatureKey(CertificatesMock::getPrivateKey());
+        $response->setCertificates(array(CertificatesMock::PUBLIC_KEY_PEM));
 
         // convert to signed response
-        $response = new SAML2_Response($response->toSignedXML());
+        $response = new Response($response->toSignedXML());
 
         $this->assertTrue($validator->canValidate($response, $config), 'Cannot validate the element');
         $this->assertTrue($validator->hasValidSignature($response, $config), 'The signature is not valid');
@@ -83,7 +95,7 @@ class SAML2_Signature_PublicKeyValidatorTest extends \PHPUnit_Framework_TestCase
 
     private function prepareKeyLoader($returnValue)
     {
-        return \Mockery::mock('SAML2_Certificate_KeyLoader')
+        return \Mockery::mock('SAML2\Certificate\KeyLoader')
             ->shouldReceive('extractPublicKeys')
             ->andReturn($returnValue)
             ->getMock();

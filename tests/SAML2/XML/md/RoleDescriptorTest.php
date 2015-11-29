@@ -1,12 +1,18 @@
 <?php
 
+namespace SAML2\XML\md;
+
+use SAML2\Constants;
+use SAML2\DOMDocumentFactory;
+use SAML2\Utils;
+
 require 'RoleDescriptorMock.php';
 
-class SAML2_XML_md_RoleDescriptorTest extends \PHPUnit_Framework_TestCase
+class RoleDescriptorTest extends \PHPUnit_Framework_TestCase
 {
     public function testMarshalling()
     {
-        $roleDescriptor = new SAML2_XML_md_RoleDescriptorMock();
+        $roleDescriptor = new RoleDescriptorMock();
         $roleDescriptor->ID = 'SomeID';
         $roleDescriptor->validUntil = 1234567890;
         $roleDescriptor->cacheDuration = 'PT5000S';
@@ -16,10 +22,10 @@ class SAML2_XML_md_RoleDescriptorTest extends \PHPUnit_Framework_TestCase
         );
         $roleDescriptor->errorURL = 'https://example.org/error';
 
-        $document = SAML2_DOMDocumentFactory::fromString('<root />');
+        $document = DOMDocumentFactory::fromString('<root />');
         $roleDescriptorElement = $roleDescriptor->toXML($document->firstChild);
 
-        $roleDescriptorElement = SAML2_Utils::xpQuery($roleDescriptorElement, '/root/md:RoleDescriptor');
+        $roleDescriptorElement = Utils::xpQuery($roleDescriptorElement, '/root/md:RoleDescriptor');
         $this->assertCount(1, $roleDescriptorElement);
         $roleDescriptorElement = $roleDescriptorElement[0];
 
@@ -27,7 +33,7 @@ class SAML2_XML_md_RoleDescriptorTest extends \PHPUnit_Framework_TestCase
         $this->assertEquals('2009-02-13T23:31:30Z', $roleDescriptorElement->getAttribute("validUntil"));
         $this->assertEquals('PT5000S', $roleDescriptorElement->getAttribute("cacheDuration"));
         $this->assertEquals('protocol1 protocol2', $roleDescriptorElement->getAttribute("protocolSupportEnumeration"));
-        $this->assertEquals('myns:MyElement', $roleDescriptorElement->getAttributeNS(SAML2_Const::NS_XSI, "type"));
+        $this->assertEquals('myns:MyElement', $roleDescriptorElement->getAttributeNS(Constants::NS_XSI, "type"));
         $this->assertEquals('http://example.org/mynsdefinition', $roleDescriptorElement->lookupNamespaceURI("myns"));
     }
 }

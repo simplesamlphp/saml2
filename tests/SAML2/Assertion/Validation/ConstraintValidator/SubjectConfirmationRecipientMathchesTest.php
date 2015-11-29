@@ -1,8 +1,12 @@
 <?php
 
-use \Mockery as m;
+namespace SAML2\Assertion\Validation\ConstraintValidator;
 
-class SAML2_Assertion_Validation_ConstraintValidator_SubjectConfirmationRecipientMatchesTest extends
+use Mockery as m;
+use SAML2\Assertion\Validation\Result;
+use SAML2\Configuration\Destination;
+
+class SubjectConfirmationRecipientMathchesTest extends
     \PHPUnit_Framework_TestCase
 {
     /**
@@ -18,8 +22,8 @@ class SAML2_Assertion_Validation_ConstraintValidator_SubjectConfirmationRecipien
     public function setUp()
     {
         parent::setUp();
-        $this->subjectConfirmation                          = m::mock('SAML2_XML_saml_SubjectConfirmation');
-        $this->subjectConfirmationData                      = m::mock('SAML2_XML_saml_SubjectConfirmationData');
+        $this->subjectConfirmation                          = m::mock('SAML2\XML\saml\SubjectConfirmation');
+        $this->subjectConfirmationData                      = m::mock('SAML2\XML\saml\SubjectConfirmationData');
         $this->subjectConfirmation->SubjectConfirmationData = $this->subjectConfirmationData;
     }
 
@@ -31,10 +35,10 @@ class SAML2_Assertion_Validation_ConstraintValidator_SubjectConfirmationRecipien
     {
         $this->subjectConfirmation->SubjectConfirmationData->Recipient = 'someDestination';
 
-        $validator = new SAML2_Assertion_Validation_ConstraintValidator_SubjectConfirmationRecipientMatches(
-            new SAML2_Configuration_Destination('anotherDestination')
+        $validator = new SubjectConfirmationRecipientMatches(
+            new Destination('anotherDestination')
         );
-        $result = new SAML2_Assertion_Validation_Result();
+        $result = new Result();
 
         $validator->validate($this->subjectConfirmation, $result);
 
@@ -50,10 +54,10 @@ class SAML2_Assertion_Validation_ConstraintValidator_SubjectConfirmationRecipien
     {
         $this->subjectConfirmation->SubjectConfirmationData->Recipient = 'theSameDestination';
 
-        $validator = new SAML2_Assertion_Validation_ConstraintValidator_SubjectConfirmationRecipientMatches(
-            new SAML2_Configuration_Destination('theSameDestination')
+        $validator = new SubjectConfirmationRecipientMatches(
+            new Destination('theSameDestination')
         );
-        $result = new SAML2_Assertion_Validation_Result();
+        $result = new Result();
 
         $validator->validate($this->subjectConfirmation, $result);
 

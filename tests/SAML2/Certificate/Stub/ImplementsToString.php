@@ -1,6 +1,8 @@
 <?php
 
-class SAML2_Certificate_Stub_ImplementsToString
+namespace SAML2\Certificate\Stub;
+
+class ImplementsToString
 {
     /**
      * @var string

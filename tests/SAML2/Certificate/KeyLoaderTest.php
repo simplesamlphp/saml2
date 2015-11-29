@@ -1,9 +1,13 @@
 <?php
 
-class SAML2_Certificate_KeyLoaderTest extends \PHPUnit_Framework_TestCase
+namespace SAML2\Certificate;
+
+use SAML2\Utilities\Certificate;
+
+class KeyLoaderTest extends \PHPUnit_Framework_TestCase
 {
     /**
-     * @var SAML2_Certificate_KeyLoader
+     * @var \SAML2\Certificate\KeyLoader
      */
     private $keyLoader;
 
@@ -21,8 +25,8 @@ class SAML2_Certificate_KeyLoaderTest extends \PHPUnit_Framework_TestCase
 
     public function setUp()
     {
-        $this->keyLoader = new SAML2_Certificate_KeyLoader();
-        $this->configurationMock = \Mockery::mock('SAML2_Configuration_CertificateProvider');
+        $this->keyLoader = new KeyLoader();
+        $this->configurationMock = \Mockery::mock('SAML2\Configuration\CertificateProvider');
     }
 
     /**
@@ -32,23 +36,23 @@ class SAML2_Certificate_KeyLoaderTest extends \PHPUnit_Framework_TestCase
      */
     public function load_keys_checks_for_usage_of_key()
     {
-        $signing = array(SAML2_Certificate_Key::USAGE_SIGNING => true);
-        $encryption = array(SAML2_Certificate_Key::USAGE_ENCRYPTION => true);
+        $signing = array(Key::USAGE_SIGNING => true);
+        $encryption = array(Key::USAGE_ENCRYPTION => true);
 
         $keys = array($signing, $encryption);
 
-        $this->keyLoader->loadKeys($keys, SAML2_Certificate_Key::USAGE_SIGNING);
+        $this->keyLoader->loadKeys($keys, Key::USAGE_SIGNING);
         $loadedKeys = $this->keyLoader->getKeys();
 
         $this->assertCount(1, $loadedKeys, 'Amount of keys that have been loaded does not match the expected amount');
-        $this->assertTrue($loadedKeys->get(0)->canBeUsedFor(SAML2_Certificate_Key::USAGE_SIGNING));
+        $this->assertTrue($loadedKeys->get(0)->canBeUsedFor(Key::USAGE_SIGNING));
     }
 
     /**
      * @group certificate
      *
      * @test
-     * @expectedException SAML2_Exception_InvalidArgumentException
+     * @expectedException \SAML2\Exception\InvalidArgumentException
      */
     public function certificate_data_with_invalid_format_throws_an_exception()
     {
@@ -77,7 +81,7 @@ class SAML2_Certificate_KeyLoaderTest extends \PHPUnit_Framework_TestCase
      * @group certificate
      *
      * @test
-     * @expectedException SAML2_Certificate_Exception_InvalidCertificateStructureException
+     * @expectedException \SAML2\Certificate\Exception\InvalidCertificateStructureException
      */
     public function loading_a_file_with_the_wrong_format_throws_an_exception()
     {
@@ -98,7 +102,7 @@ class SAML2_Certificate_KeyLoaderTest extends \PHPUnit_Framework_TestCase
         $loadedKeys = $this->keyLoader->getKeys();
         $loadedKey = $loadedKeys->get(0);
         $fileContents = file_get_contents($file);
-        preg_match(SAML2_Utilities_Certificate::CERTIFICATE_PATTERN, $fileContents, $matches);
+        preg_match(Certificate::CERTIFICATE_PATTERN, $fileContents, $matches);
         $expected = preg_replace('~\s+~', '', $matches[1]);
 
         $this->assertTrue($this->keyLoader->hasKeys());
@@ -110,7 +114,7 @@ class SAML2_Certificate_KeyLoaderTest extends \PHPUnit_Framework_TestCase
      * @group certificate
      *
      * @test
-     * @expectedException SAML2_Certificate_Exception_NoKeysFoundException
+     * @expectedException \SAML2\Certificate\Exception\NoKeysFoundException
      */
     public function loading_a_required_certificate_from_an_empty_configuration_throws_an_exception()
     {
@@ -158,7 +162,7 @@ class SAML2_Certificate_KeyLoaderTest extends \PHPUnit_Framework_TestCase
      * @group certificate
      *
      * @test
-     * @expectedException SAML2_Certificate_Exception_InvalidCertificateStructureException
+     * @expectedException \SAML2\Certificate\Exception\InvalidCertificateStructureException
      */
     public function loading_an_invalid_certificate_file_from_configuration_throws_exception()
     {

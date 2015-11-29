@@ -1,6 +1,10 @@
 <?php
 
-use \Mockery as m;
+namespace SAML2\Assertion\Validation\ConstraintValidator;
+
+use Mockery as m;
+use SAML2\Assertion\Validation\Result;
+use SAML2\ControlledTimeTest;
 
 /**
  * Because we're mocking a static call, we have to run it in separate processes so as to no contaminate the other
@@ -8,7 +12,7 @@ use \Mockery as m;
  *
  * @runTestsInSeparateProcesses
  */
-class SAML2_Assertion_Validation_ConstraintValidator_SubjectConfirmationNotBeforeTest extends SAML2_ControlledTimeTest
+class SubjectConfirmationNotBeforeTest extends ControlledTimeTest
 {
     /**
      * @var \Mockery\MockInterface
@@ -23,8 +27,8 @@ class SAML2_Assertion_Validation_ConstraintValidator_SubjectConfirmationNotBefor
     public function setUp()
     {
         parent::setUp();
-        $this->subjectConfirmation = m::mock('SAML2_XML_saml_SubjectConfirmation');
-        $this->subjectConfirmationData = m::mock('SAML2_XML_saml_SubjectConfirmationData');
+        $this->subjectConfirmation = m::mock('SAML2\XML\saml\SubjectConfirmation');
+        $this->subjectConfirmationData = m::mock('SAML2\XML\saml\SubjectConfirmationData');
         $this->subjectConfirmation->SubjectConfirmationData = $this->subjectConfirmationData;
     }
 
@@ -36,8 +40,8 @@ class SAML2_Assertion_Validation_ConstraintValidator_SubjectConfirmationNotBefor
     {
         $this->subjectConfirmation->SubjectConfirmationData->NotBefore = $this->currentTime + 61;
 
-        $validator = new SAML2_Assertion_Validation_ConstraintValidator_SubjectConfirmationNotBefore();
-        $result    = new SAML2_Assertion_Validation_Result();
+        $validator = new SubjectConfirmationNotBefore();
+        $result    = new Result();
 
         $validator->validate($this->subjectConfirmation, $result);
 
@@ -53,8 +57,8 @@ class SAML2_Assertion_Validation_ConstraintValidator_SubjectConfirmationNotBefor
     {
         $this->subjectConfirmation->SubjectConfirmationData->NotBefore = $this->currentTime + 60;
 
-        $validator = new SAML2_Assertion_Validation_ConstraintValidator_SubjectConfirmationNotBefore();
-        $result    = new SAML2_Assertion_Validation_Result();
+        $validator = new SubjectConfirmationNotBefore();
+        $result    = new Result();
 
         $validator->validate($this->subjectConfirmation, $result);
 
@@ -69,8 +73,8 @@ class SAML2_Assertion_Validation_ConstraintValidator_SubjectConfirmationNotBefor
     {
         $this->subjectConfirmation->SubjectConfirmationData->NotBefore = $this->currentTime;
 
-        $validator = new SAML2_Assertion_Validation_ConstraintValidator_SubjectConfirmationNotBefore();
-        $result    = new SAML2_Assertion_Validation_Result();
+        $validator = new SubjectConfirmationNotBefore();
+        $result    = new Result();
 
         $validator->validate($this->subjectConfirmation, $result);
 
