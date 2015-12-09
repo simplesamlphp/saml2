@@ -106,9 +106,15 @@ class SAML2_HTTPRedirect extends SAML2_Binding
         }
 
         $msg = base64_decode($msg);
+        if ($msg === false) {
+            throw new Exception('Error while base64 decoding SAML message.');
+        }
         switch ($encoding) {
             case self::DEFLATE:
                 $msg = gzinflate($msg);
+                if ($msg === false) {
+                    throw new Exception('Error while inflating SAML message.');
+                }
                 break;
             default:
                 throw new Exception('Unknown SAMLEncoding: ' . var_export($encoding, TRUE));
