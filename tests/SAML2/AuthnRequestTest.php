@@ -242,4 +242,45 @@ AUTHNREQUEST
 
         $this->assertEqualXMLStructure($expectedStructure, $requestStructure);
     }
+
+    /**
+     * Test for setting IDPEntry values via setIDPList.
+     * Tests legacy support (single string), array of attributes, and skipping of unknown attributes.
+     */
+    public function testIDPlistAttributes()
+    {
+        // basic AuthnRequest
+        $request = new SAML2_AuthnRequest();
+        $request->setIssuer('https://gateway.example.org/saml20/sp/metadata');
+        $request->setDestination('https://tiqr.example.org/idp/profile/saml2/Redirect/SSO');
+        $request->setIDPList(array(
+            'Legacy1',
+            array('ProviderID' => 'http://example.org/AAP', 'Name' => 'N00T', 'Loc' => 'https://mies'),
+            array('ProviderID' => 'urn:example:1', 'Name' => 'Voorbeeld', 'Something' => 'Else')
+        ));
+
+        $expectedStructureDocument = new DOMDocument();
+        $expectedStructureDocument->loadXML(<<<AUTHNREQUEST
+<samlp:AuthnRequest
+    xmlns:samlp="urn:oasis:names:tc:SAML:2.0:protocol"
+    xmlns:saml="urn:oasis:names:tc:SAML:2.0:assertion"
+    ID=""
+    Version=""
+    IssueInstant=""
+    Destination="">
+    <saml:Issuer></saml:Issuer>
+    <samlp:Scoping><samlp:IDPList>
+        <samlp:IDPEntry ProviderID="Legacy1"/>
+        <samlp:IDPEntry ProviderID="http://example.org/AAP" Name="N00T" Loc="https://mies"/>
+        <samlp:IDPEntry ProviderID="urn:example:1" Name="Voorbeeld"/>
+    </samlp:IDPList></samlp:Scoping>
+</samlp:AuthnRequest>
+AUTHNREQUEST
+        );
+
+        $expectedStructure = $expectedStructureDocument->documentElement;
+        $requestStructure = $request->toUnsignedXML();
+
+        $this->assertEqualXMLStructure($expectedStructure, $requestStructure);
+    }
 }

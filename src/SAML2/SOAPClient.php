@@ -122,6 +122,16 @@ class SAML2_SOAPClient
             $ctxOpts['http']['header'] .= 'Authorization: Basic ' . $authData . "\n";
         }
 
+        if ($srcMetadata->hasValue('saml.SOAPClient.proxyhost')) {
+            $options['proxy_host'] = $srcMetadata->getValue('saml.SOAPClient.proxyhost');
+        }
+
+        if ($srcMetadata->hasValue('saml.SOAPClient.proxyport')) {
+            $options['proxy_port'] = $srcMetadata->getValue('saml.SOAPClient.proxyport');
+        }
+
+        $x = new SoapClient(NULL, $options);
+
         /* Add soap-envelopes */
         $request = $msg->toSignedXML();
         $request = self::START_SOAP_ENVELOPE . $request->ownerDocument->saveXML($request) . self::END_SOAP_ENVELOPE;

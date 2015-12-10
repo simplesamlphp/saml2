@@ -534,7 +534,7 @@ class SAML2_Utils
              * reasons we cannot tell the user what failed.
              */
             SAML2_Utils::getContainer()->getLogger()->error('Decryption failed: ' . $e->getMessage());
-            throw new Exception('Failed to decrypt XML element.');
+            throw new Exception('Failed to decrypt XML element.', 0, $e);
         }
     }
 
@@ -677,6 +677,11 @@ class SAML2_Utils
      *  I got this timestamp from Shibboleth 1.3 IdP: 2008-01-17T11:28:03.577Z
      *  Therefore I added to possibility to have microseconds to the format.
      * Added: (\.\\d{1,3})? to the regex.
+     *
+     * Note that we always require a 'Z' timezone for the dateTime to be valid.
+     * This is not in the SAML spec but that's considered to be a bug in the
+     * spec. See https://github.com/simplesamlphp/saml2/pull/36 for some
+     * background.
      *
      * @param string $time The time we should convert.
      * @return int Converted to a unix timestamp.

@@ -385,12 +385,17 @@ class SAML2_AuthnRequest extends SAML2_Request
 
 
     /**
-     * This function sets the scoping for the request
-     * See Core 3.4.1.2 for the definition of scoping
-     * Currently we only support an IDPList of idpEntries
-     * and only the required ProviderID in an IDPEntry
-     * $providerIDs is an array of Entity Identifiers
+     * This function sets the scoping for the request.
+     * See Core 3.4.1.2 for the definition of scoping.
+     * Currently we support an IDPList of idpEntries.
      *
+     * Each idpEntries consists of an array, containing
+     * keys (mapped to attributes) and corresponding values.
+     * Allowed attributes: Loc, Name, ProviderID.
+     *
+     * For backward compatibility, an idpEntries can also
+     * be a string instead of an array, where each string
+     * is mapped to the value of attribute ProviderID.
      */
     public function setIDPList($IDPList)
     {
@@ -723,7 +728,6 @@ class SAML2_AuthnRequest extends SAML2_Request
 
         if ($this->ProxyCount !== NULL || count($this->IDPList) > 0 || count($this->RequesterID) > 0) {
             $scoping = $this->document->createElementNS(SAML2_Const::NS_SAMLP, 'Scoping');
-            $root->appendChild($scoping);
             if ($this->ProxyCount !== NULL) {
                 $scoping->setAttribute('ProxyCount', $this->ProxyCount);
             }
@@ -731,10 +735,23 @@ class SAML2_AuthnRequest extends SAML2_Request
                 $idplist = $this->document->createElementNS(SAML2_Const::NS_SAMLP, 'IDPList');
                 foreach ($this->IDPList as $provider) {
                     $idpEntry = $this->document->createElementNS(SAML2_Const::NS_SAMLP, 'IDPEntry');
-                    $idpEntry->setAttribute('ProviderID', $provider);
+                    if (is_string($provider)) {
+                        $idpEntry->setAttribute('ProviderID', $provider);
+                    } elseif (is_array($provider)) {
+                        foreach ($provider as $attribute => $value) {
+                            if (in_array($attribute, array(
+                                'ProviderID',
+                                'Loc',
+                                'Name'
+                            ))) {
+                                $idpEntry->setAttribute($attribute, $value);
+                            }
+                        }
+                    }
                     $idplist->appendChild($idpEntry);
                 }
                 $scoping->appendChild($idplist);
+                $root->appendChild($scoping);
             }
             if (count($this->RequesterID) > 0) {
                 SAML2_Utils::addStrings($scoping, SAML2_Const::NS_SAMLP, 'RequesterID', FALSE, $this->RequesterID);
