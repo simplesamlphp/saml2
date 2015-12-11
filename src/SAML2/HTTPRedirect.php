@@ -17,7 +17,7 @@ class SAML2_HTTPRedirect extends SAML2_Binding
      */
     public function getRedirectURL(SAML2_Message $message)
     {
-        if ($this->destination === NULL) {
+        if ($this->destination === null) {
             $destination = $message->getDestination();
         } else {
             $destination = $this->destination;
@@ -44,11 +44,11 @@ class SAML2_HTTPRedirect extends SAML2_Binding
         }
         $msg .= urlencode($msgStr);
 
-        if ($relayState !== NULL) {
+        if ($relayState !== null) {
             $msg .= '&RelayState=' . urlencode($relayState);
         }
 
-        if ($key !== NULL) {
+        if ($key !== null) {
             /* Add the signature. */
             $msg .= '&SigAlg=' . urlencode($key->type);
 
@@ -56,7 +56,7 @@ class SAML2_HTTPRedirect extends SAML2_Binding
             $msg .= '&Signature=' . urlencode(base64_encode($signature));
         }
 
-        if (strpos($destination, '?') === FALSE) {
+        if (strpos($destination, '?') === false) {
             $destination .= '?' . $msg;
         } else {
             $destination .= '&' . $msg;
@@ -90,61 +90,54 @@ class SAML2_HTTPRedirect extends SAML2_Binding
     public function receive()
     {
         $data = self::parseQuery();
-
         if (array_key_exists('SAMLRequest', $data)) {
-            $msg = $data['SAMLRequest'];
+            $message = $data['SAMLRequest'];
         } elseif (array_key_exists('SAMLResponse', $data)) {
-            $msg = $data['SAMLResponse'];
+            $message = $data['SAMLResponse'];
         } else {
             throw new Exception('Missing SAMLRequest or SAMLResponse parameter.');
         }
 
-        if (array_key_exists('SAMLEncoding', $data)) {
-            $encoding = $data['SAMLEncoding'];
-        } else {
-            $encoding = self::DEFLATE;
+        if (isset($data['SAMLEncoding']) && $data['SAMLEncoding'] !== self::DEFLATE) {
+            throw new Exception('Unknown SAMLEncoding: ' . var_export($data['SAMLEncoding'], true));
         }
 
-        $msg = base64_decode($msg);
-        if ($msg === false) {
+        $message = base64_decode($message);
+        if ($message === false) {
             throw new Exception('Error while base64 decoding SAML message.');
         }
-        switch ($encoding) {
-            case self::DEFLATE:
-                $msg = gzinflate($msg);
-                if ($msg === false) {
-                    throw new Exception('Error while inflating SAML message.');
-                }
-                break;
-            default:
-                throw new Exception('Unknown SAMLEncoding: ' . var_export($encoding, TRUE));
+
+        $message = gzinflate($message);
+        if ($message === false) {
+            throw new Exception('Error while inflating SAML message.');
         }
 
-        SAML2_Utils::getContainer()->debugMessage($msg, 'in');
-
-        $document = SAML2_DOMDocumentFactory::fromString($msg);
-        $xml = $document->firstChild;
-
-        $msg = SAML2_Message::fromXML($xml);
+        SAML2_Utils::getContainer()->debugMessage($message, 'in');
+        $document = SAML2_DOMDocumentFactory::fromString($message);
+        $xml      = $document->firstChild;
+        $message  = SAML2_Message::fromXML($xml);
 
         if (array_key_exists('RelayState', $data)) {
-            $msg->setRelayState($data['RelayState']);
+            $message->setRelayState($data['RelayState']);
         }
 
-        if (array_key_exists('Signature', $data)) {
-            if (!array_key_exists('SigAlg', $data)) {
-                throw new Exception('Missing signature algorithm.');
-            }
-
-            $signData = array(
-                'Signature' => $data['Signature'],
-                'SigAlg' => $data['SigAlg'],
-                'Query' => $data['SignedQuery'],
-            );
-            $msg->addValidator(array(get_class($this), 'validateSignature'), $signData);
+        if (!array_key_exists('Signature', $data)) {
+            return $message;
         }
 
-        return $msg;
+        if (!array_key_exists('SigAlg', $data)) {
+            throw new Exception('Missing signature algorithm.');
+        }
+
+        $signData = array(
+            'Signature' => $data['Signature'],
+            'SigAlg'    => $data['SigAlg'],
+            'Query'     => $data['SignedQuery'],
+        );
+
+        $message->addValidator(array(get_class($this), 'validateSignature'), $signData);
+
+        return $message;
     }
 
     /**
@@ -173,7 +166,7 @@ class SAML2_HTTPRedirect extends SAML2_Binding
             if (count($tmp) === 2) {
                 $value = $tmp[1];
             } else {
-                /* No value for this paramter. */
+                /* No value for this parameter. */
                 $value = '';
             }
             $name = urldecode($name);
