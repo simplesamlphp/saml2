@@ -17,7 +17,7 @@ class SAML2_HTTPRedirect extends SAML2_Binding
      */
     public function getRedirectURL(SAML2_Message $message)
     {
-        if ($this->destination === null) {
+        if ($this->destination === NULL) {
             $destination = $message->getDestination();
         } else {
             $destination = $this->destination;
@@ -44,11 +44,11 @@ class SAML2_HTTPRedirect extends SAML2_Binding
         }
         $msg .= urlencode($msgStr);
 
-        if ($relayState !== null) {
+        if ($relayState !== NULL) {
             $msg .= '&RelayState=' . urlencode($relayState);
         }
 
-        if ($key !== null) {
+        if ($key !== NULL) {
             /* Add the signature. */
             $msg .= '&SigAlg=' . urlencode($key->type);
 
@@ -56,7 +56,7 @@ class SAML2_HTTPRedirect extends SAML2_Binding
             $msg .= '&Signature=' . urlencode(base64_encode($signature));
         }
 
-        if (strpos($destination, '?') === false) {
+        if (strpos($destination, '?') === FALSE) {
             $destination .= '?' . $msg;
         } else {
             $destination .= '&' . $msg;
@@ -102,16 +102,16 @@ class SAML2_HTTPRedirect extends SAML2_Binding
         }
 
         if (isset($data['SAMLEncoding']) && $data['SAMLEncoding'] !== self::DEFLATE) {
-            throw new Exception('Unknown SAMLEncoding: ' . var_export($data['SAMLEncoding'], true));
+            throw new Exception('Unknown SAMLEncoding: ' . var_export($data['SAMLEncoding'], TRUE));
         }
 
         $message = base64_decode($message);
-        if ($message === false) {
+        if ($message === FALSE) {
             throw new Exception('Error while base64 decoding SAML message.');
         }
 
         $message = gzinflate($message);
-        if ($message === false) {
+        if ($message === FALSE) {
             throw new Exception('Error while inflating SAML message.');
         }
 
