@@ -86,6 +86,9 @@ class SAML2_HTTPRedirect extends SAML2_Binding
      *
      * @return SAML2_Message The received message.
      * @throws Exception
+     *
+     * NPath is currently too high but solving that just moves code around.
+     * @SuppressWarnings(PHPMD.NPathComplexity)
      */
     public function receive()
     {
