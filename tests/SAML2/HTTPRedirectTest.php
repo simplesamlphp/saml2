@@ -38,6 +38,22 @@ class SAML2_HTTPRedirectTest extends PHPUnit_Framework_TestCase
     }
 
     /**
+     * Test parsing a signed authentication request.
+     * It does not actually verify the validity of the signature.
+     */
+    public function testSignedRequestParsing()
+    {
+        $request = 'SAMLRequest=nVLBauMwEP0Vo7sjW7FpKpJA2rBsoNuGOruHXhZFHm8EsuRqxtv27yvbWWgvYelFgjfvzbx5zBJVazu56enkHuG5B6TktbUO5VhYsT446RUalE61gJK0rDY%2F7qSYZbILnrz2ln2QXFYoRAhkvGPJbrtiv7VoygJEoTJ9LOusXDSFuJ4vdH6cxwoIEGUjsrqoFUt%2BQcCoXLHYKMoRe9g5JOUoQlleprlI8%2FyQz6W4ksXiiSXbuI1xikbViahDyfkRSM2wD40DmjnL0bSdhcE6Hx7BTd3xqnqoIPw1GmbdqWPJNx80jCGtGIUeWLL5t8mtd9i3EM78n493%2FzWr9XVvx%2B58mj39IlUaR%2FQmKOPq4Dtkyf4c9E1EjPtzOePjREL5%2FXDYp%2FuH6sDWy6G3HDML66%2B5ayO7VlHx2dySf2y9nM7pPprabffeGv02ZNcquux5QEydNiNVUlAODTiKMVvrX24DKIJz8nw9jfx8tOt3&RelayState=https%3A%2F%2Fbeta.surfnet.nl%2Fsimplesaml%2Fmodule.php%2Fcore%2Fauthenticate.php%3Fas%3DBraindrops&SigAlg=http%3A%2F%2Fwww.w3.org%2F2000%2F09%2Fxmldsig%23rsa-sha1&Signature=b%2Bqe%2FXGgICOrEL1v9dwuoy0RJtJ%2FGNAr7gJGYSJzLG0riPKwo7v5CH8GPC2P9IRikaeaNeQrnhBAaf8FCWrO0cLFw4qR6msK9bxRBGk%2BhIaTUYCh54ETrVCyGlmBneMgC5%2FiCRvtEW3ESPXCCqt8Ncu98yZmv9LIVyHSl67Se%2BfbB9sDw3%2FfzwYIHRMqK2aS8jnsnqlgnBGGOXqIqN3%2Bd%2F2dwtCfz14s%2F9odoYzSUv32qfNPiPez6PSNqwhwH7dWE3TlO%2FjZmz0DnOeQ2ft6qdZEi5ZN5KCV6VmNKpkrLMq6DDPnuwPm%2F8oCAoT88R2jG7uf9QZB%2BArWJKMEhDLsCA%3D%3D';
+        $_SERVER['QUERY_STRING'] = $request;
+
+        $hr = new SAML2_HTTPRedirect();
+        $request = $hr->receive();
+        $this->assertInstanceOf('SAML2_Request', $request);
+        $relaystate = $request->getRelayState();
+        $this->assertEquals('https://beta.surfnet.nl/simplesaml/module.php/core/authenticate.php?as=Braindrops', $relaystate);
+    }
+
+    /**
      * test that a request with unsupported encoding specified fails
      */
     public function testInvalidEncodingSpecified()
@@ -46,6 +62,16 @@ class SAML2_HTTPRedirectTest extends PHPUnit_Framework_TestCase
         $_SERVER['QUERY_STRING'] = $request;
 
         $this->setExpectedException('Exception', 'Unknown SAMLEncoding:');
+        $hr = new SAML2_HTTPRedirect();
+        $request = $hr->receive();
+    }
+
+    public function testNoSigAlgSpecified()
+    {
+        $request = 'SAMLRequest=nVLBauMwEP0Vo7sjW7FpKpJA2rBsoNuGOruHXhZFHm8EsuRqxtv27yvbWWgvYelFgjfvzbx5zBJVazu56enkHuG5B6TktbUO5VhYsT446RUalE61gJK0rDY%2F7qSYZbILnrz2ln2QXFYoRAhkvGPJbrtiv7VoygJEoTJ9LOusXDSFuJ4vdH6cxwoIEGUjsrqoFUt%2BQcCoXLHYKMoRe9g5JOUoQlleprlI8%2FyQz6W4ksXiiSXbuI1xikbViahDyfkRSM2wD40DmjnL0bSdhcE6Hx7BTd3xqnqoIPw1GmbdqWPJNx80jCGtGIUeWLL5t8mtd9i3EM78n493%2FzWr9XVvx%2B58mj39IlUaR%2FQmKOPq4Dtkyf4c9E1EjPtzOePjREL5%2FXDYp%2FuH6sDWy6G3HDML66%2B5ayO7VlHx2dySf2y9nM7pPprabffeGv02ZNcquux5QEydNiNVUlAODTiKMVvrX24DKIJz8nw9jfx8tOt3&RelayState=https%3A%2F%2Fbeta.surfnet.nl%2Fsimplesaml%2Fmodule.php%2Fcore%2Fauthenticate.php%3Fas%3DBraindrops&Signature=b%2Bqe%2FXGgICOrEL1v9dwuoy0RJtJ%2FGNAr7gJGYSJzLG0riPKwo7v5CH8GPC2P9IRikaeaNeQrnhBAaf8FCWrO0cLFw4qR6msK9bxRBGk%2BhIaTUYCh54ETrVCyGlmBneMgC5%2FiCRvtEW3ESPXCCqt8Ncu98yZmv9LIVyHSl67Se%2BfbB9sDw3%2FfzwYIHRMqK2aS8jnsnqlgnBGGOXqIqN3%2Bd%2F2dwtCfz14s%2F9odoYzSUv32qfNPiPez6PSNqwhwH7dWE3TlO%2FjZmz0DnOeQ2ft6qdZEi5ZN5KCV6VmNKpkrLMq6DDPnuwPm%2F8oCAoT88R2jG7uf9QZB%2BArWJKMEhDLsCA%3D%3D';
+        $_SERVER['QUERY_STRING'] = $request;
+
+        $this->setExpectedException('Exception', 'Missing signature algorithm');
         $hr = new SAML2_HTTPRedirect();
         $request = $hr->receive();
     }
@@ -62,12 +88,12 @@ class SAML2_HTTPRedirectTest extends PHPUnit_Framework_TestCase
         PHPUnit_Framework_Error_Warning::$enabled = false;
         $this->setExpectedException('Exception', 'Error while inflating');
         $hr = new SAML2_HTTPRedirect();
-        $request = $hr->receive();
+        $request = @$hr->receive();
         PHPUnit_Framework_Error_Warning::$enabled = $oldwarning;
     }
 
     /**
-     * test handling of non-deflated data in samlrequest
+     * test with a query string that has Request nor Response
      */
     public function testNoRequestOrResponse()
     {
@@ -78,4 +104,29 @@ class SAML2_HTTPRedirectTest extends PHPUnit_Framework_TestCase
         $hr = new SAML2_HTTPRedirect();
         $request = $hr->receive();
     }
+
+    /**
+     * Construct an authnrequest and send it.
+     */
+    public function testSendAuthnrequest()
+    {
+        $request = new SAML2_AuthnRequest();
+        $hr = new SAML2_HTTPRedirect();
+	$hr->send($request);
+    }
+
+    /**
+     * Construct an authnresponse and send it.
+     * Also test setting a relaystate and destination for the response.
+     */
+    public function testSendAuthnResponse()
+    {
+        $response = new SAML2_Response();
+        $response->setIssuer('testIssuer');
+        $response->setRelayState('http://example.org');
+        $response->setDestination('http://example.org/login?success=yes');
+        $hr = new SAML2_HTTPRedirect();
+	$hr->send($response);
+    }
+
 }
