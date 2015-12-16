@@ -22,7 +22,7 @@
     </target>
 
     <target name="composer-install" depends="check-composer" unless="composer.installed">
-        <get src="http://getcomposer.org/composer.phar" dest="composer.phar"/>
+        <get src="https://getcomposer.org/composer.phar" dest="composer.phar"/>
     </target>
 
     <target name="composer-update" depends="composer-install">
