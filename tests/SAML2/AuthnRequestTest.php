@@ -283,4 +283,42 @@ AUTHNREQUEST
 
         $this->assertEqualXMLStructure($expectedStructure, $requestStructure);
     }
+
+    /**
+     * Test setting a requesterID.
+     */
+    public function testRequesterId()
+    {
+        // basic AuthnRequest
+        $request = new SAML2_AuthnRequest();
+        $request->setIssuer('https://gateway.example.org/saml20/sp/metadata');
+        $request->setDestination('https://tiqr.example.org/idp/profile/saml2/Redirect/SSO');
+        $request->setRequesterID(array(
+            'https://engine.demo.openconext.org/authentication/sp/metadata',
+            'https://shib.example.edu/SSO/Metadata',
+        ));
+
+        $expectedStructureDocument = new DOMDocument();
+        $expectedStructureDocument->loadXML(<<<AUTHNREQUEST
+<samlp:AuthnRequest
+    xmlns:samlp="urn:oasis:names:tc:SAML:2.0:protocol"
+    xmlns:saml="urn:oasis:names:tc:SAML:2.0:assertion"
+    ID=""
+    Version=""
+    IssueInstant=""
+    Destination="">
+    <saml:Issuer></saml:Issuer>
+    <samlp:Scoping>
+        <samlp:RequesterID>https://engine.demo.openconext.org/authentication/sp/metadata</samlp:RequesterID>
+        <samlp:RequesterID>https://shib.example.edu/SSO/Metadata</samlp:RequesterID>
+    </samlp:Scoping>
+</samlp:AuthnRequest>
+AUTHNREQUEST
+        );
+
+        $expectedStructure = $expectedStructureDocument->documentElement;
+        $requestStructure = $request->toUnsignedXML();
+
+        $this->assertEqualXMLStructure($expectedStructure, $requestStructure);
+    }
 }
