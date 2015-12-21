@@ -2,6 +2,8 @@
 
 namespace SAML2;
 
+use DOMDocument;
+
 /**
  * Class \SAML2\AuthnRequestTest
  */
@@ -292,7 +294,7 @@ AUTHNREQUEST
     public function testRequesterId()
     {
         // basic AuthnRequest
-        $request = new SAML2_AuthnRequest();
+        $request = new AuthnRequest();
         $request->setIssuer('https://gateway.example.org/saml20/sp/metadata');
         $request->setDestination('https://tiqr.example.org/idp/profile/saml2/Redirect/SSO');
         $request->setRequesterID(array(
