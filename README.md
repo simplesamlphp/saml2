@@ -23,13 +23,26 @@ So let us know what you would like to see in a PHP SAML2 library.
 
 Note that the **HTTP Artifact Binding and SOAP client do not work** outside of SimpleSAMLphp.
 
+Which version to pick?
+----------------------
+It is **strongly recommended** to use the latest stable version of the `2.x` range as that is the currently supported version. 
+
+The `1.x` range should be considered deprecated. This means it will receive fixes and, if required,
+ functionality may be backported. This version should only be relied on if migrating the project to
+ the `2.x` range cannot be done yet.
+
+The `0.x` range is discontinued and will no longer receive any fixes or features. The `0.x` range however
+ is functionally the same as the `1.x` range. Should your project or a dependency of your project rely on a `0.x` version
+ [composer inline aliasing](https://getcomposer.org/doc/articles/aliases.md#require-inline-alias) will help, by using
+ `composer require "simplesamlphp/saml2:1.7.0 as 0.8"` allows to install 1.7.0 as if 0.8 were installed.
+
 Usage
 -----
 
 * Install with [Composer](https://getcomposer.org/doc/00-intro.md), run the following command in your project:
 
 ```bash
-composer require simplesamlphp/saml2
+composer require simplesamlphp/saml2:^2.0
 ```
 
 * Provide the required external dependencies by extending and implementing the ```SAML2\Compat\AbstractContainer```
