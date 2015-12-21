@@ -106,16 +106,16 @@ class HTTPRedirect extends Binding
         }
 
         if (isset($data['SAMLEncoding']) && $data['SAMLEncoding'] !== self::DEFLATE) {
-            throw new \Exception('Unknown SAMLEncoding: ' . var_export($data['SAMLEncoding'], TRUE));
+            throw new \Exception('Unknown SAMLEncoding: ' . var_export($data['SAMLEncoding'], true));
         }
 
         $message = base64_decode($message);
-        if ($message === FALSE) {
+        if ($message === false) {
             throw new \Exception('Error while base64 decoding SAML message.');
         }
 
         $message = gzinflate($message);
-        if ($message === FALSE) {
+        if ($message === false) {
             throw new \Exception('Error while inflating SAML message.');
         }
 
