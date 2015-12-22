@@ -1,6 +1,11 @@
 <?php
 
-class SAML2_Response_Validation_ConstraintValidator_IsSuccessfulTest extends \PHPUnit_Framework_TestCase
+namespace SAML2\Response\Validation\ConstraintValidator;
+
+use SAML2\Constants;
+use SAML2\Response\Validation\Result;
+
+class IsSuccessfulTest extends \PHPUnit_Framework_TestCase
 {
     /**
      * @var \Mockery\MockInterface
@@ -9,7 +14,7 @@ class SAML2_Response_Validation_ConstraintValidator_IsSuccessfulTest extends \PH
 
     public function setUp()
     {
-        $this->response = \Mockery::mock('SAML2_Response');
+        $this->response = \Mockery::mock('SAML2\Response');
     }
 
     /**
@@ -20,8 +25,8 @@ class SAML2_Response_Validation_ConstraintValidator_IsSuccessfulTest extends \PH
     {
         $this->response->shouldReceive('isSuccess')->once()->andReturn(true);
 
-        $validator = new SAML2_Response_Validation_ConstraintValidator_IsSuccessful();
-        $result    = new SAML2_Response_Validation_Result();
+        $validator = new IsSuccessful();
+        $result    = new Result();
 
         $validator->validate($this->response, $result);
 
@@ -36,14 +41,14 @@ class SAML2_Response_Validation_ConstraintValidator_IsSuccessfulTest extends \PH
     {
         $responseStatus = array(
             'Code'    => 'foo',
-            'SubCode' => SAML2_Const::STATUS_PREFIX . 'bar',
+            'SubCode' => Constants::STATUS_PREFIX . 'bar',
             'Message' => 'this is a test message'
         );
         $this->response->shouldReceive('isSuccess')->once()->andReturn(false);
         $this->response->shouldReceive('getStatus')->once()->andReturn($responseStatus);
 
-        $validator = new SAML2_Response_Validation_ConstraintValidator_IsSuccessful();
-        $result    = new SAML2_Response_Validation_Result();
+        $validator = new IsSuccessful();
+        $result    = new Result();
 
         $validator->validate($this->response, $result);
         $errors = $result->getErrors();
@@ -52,5 +57,4 @@ class SAML2_Response_Validation_ConstraintValidator_IsSuccessfulTest extends \PH
         $this->assertCount(1, $errors);
         $this->assertEquals('foo/bar this is a test message', $errors[0]);
     }
-
 }

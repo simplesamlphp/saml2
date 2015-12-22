@@ -1,21 +1,23 @@
 <?php
 
+namespace SAML2;
+
 /**
- * Class SAML2_ResponseTest
+ * Class \SAML2\ResponseTest
  */
-class SAML2_ResponseTest extends PHPUnit_Framework_TestCase
+class ResponseTest extends \PHPUnit_Framework_TestCase
 {
     public function testMarshalling()
     {
-        $response = new SAML2_Response();
-        $response->setConsent(SAML2_Const::CONSENT_EXPLICIT);
+        $response = new Response();
+        $response->setConsent(Constants::CONSENT_EXPLICIT);
         $response->setIssuer('SomeIssuer');
         $responseElement = $response->toUnsignedXML();
 
         $this->assertTrue($responseElement->hasAttribute('Consent'));
-        $this->assertEquals($responseElement->getAttribute('Consent'), SAML2_Const::CONSENT_EXPLICIT);
+        $this->assertEquals($responseElement->getAttribute('Consent'), Constants::CONSENT_EXPLICIT);
 
-        $issuerElements = SAML2_Utils::xpQuery($responseElement, './saml_assertion:Issuer');
+        $issuerElements = Utils::xpQuery($responseElement, './saml_assertion:Issuer');
         $this->assertCount(1, $issuerElements);
         $this->assertEquals('SomeIssuer', $issuerElements[0]->textContent);
     }
@@ -103,8 +105,8 @@ class SAML2_ResponseTest extends PHPUnit_Framework_TestCase
 </samlp:Response>
 XML;
 
-        $fixtureResponseDom = SAML2_DOMDocumentFactory::fromString($xml);
-        $request            = new SAML2_Response($fixtureResponseDom->firstChild);
+        $fixtureResponseDom = DOMDocumentFactory::fromString($xml);
+        $request            = new Response($fixtureResponseDom->firstChild);
 
         $requestXml = $requestDocument = $request->toUnsignedXML()->ownerDocument->C14N();
         $fixtureXml = $fixtureResponseDom->C14N();

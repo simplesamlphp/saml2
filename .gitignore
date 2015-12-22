@@ -1,4 +1,5 @@
+/build/
+/cache.properties
+/composer.lock
+/composer.phar
 /vendor/
-build
-cache.properties
-composer.phar

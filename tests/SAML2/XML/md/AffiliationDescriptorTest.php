@@ -1,12 +1,18 @@
 <?php
 
-class SAML2_XML_md_AffiliationDescriptorTest extends PHPUnit_Framework_TestCase
+namespace SAML2\XML\md;
+
+use SAML2\Constants;
+use SAML2\DOMDocumentFactory;
+use SAML2\Utils;
+
+class AffiliationDescriptorTest extends \PHPUnit_Framework_TestCase
 {
     public function testMarshalling()
     {
-        $document = SAML2_DOMDocumentFactory::fromString('<root />');
+        $document = DOMDocumentFactory::fromString('<root />');
 
-        $affiliationDescriptorElement = new SAML2_XML_md_AffiliationDescriptor();
+        $affiliationDescriptorElement = new AffiliationDescriptor();
         $affiliationDescriptorElement->affiliationOwnerID = 'TheOwner';
         $affiliationDescriptorElement->ID = 'TheID';
         $affiliationDescriptorElement->validUntil = 1234567890;
@@ -18,7 +24,7 @@ class SAML2_XML_md_AffiliationDescriptorTest extends PHPUnit_Framework_TestCase
 
         $affiliationDescriptorElement = $affiliationDescriptorElement->toXML($document->firstChild);
 
-        $affiliationDescriptorElements = SAML2_Utils::xpQuery(
+        $affiliationDescriptorElements = Utils::xpQuery(
             $affiliationDescriptorElement,
             '/root/saml_metadata:AffiliationDescriptor'
         );
@@ -30,7 +36,7 @@ class SAML2_XML_md_AffiliationDescriptorTest extends PHPUnit_Framework_TestCase
         $this->assertEquals('2009-02-13T23:31:30Z', $affiliationDescriptorElement->getAttribute("validUntil"));
         $this->assertEquals('PT5000S', $affiliationDescriptorElement->getAttribute("cacheDuration"));
 
-        $affiliateMembers = SAML2_Utils::xpQuery($affiliationDescriptorElement, './saml_metadata:AffiliateMember');
+        $affiliateMembers = Utils::xpQuery($affiliationDescriptorElement, './saml_metadata:AffiliateMember');
         $this->assertCount(2, $affiliateMembers);
         $this->assertEquals('Member1', $affiliateMembers[0]->textContent);
         $this->assertEquals('Member2', $affiliateMembers[1]->textContent);
@@ -38,8 +44,8 @@ class SAML2_XML_md_AffiliationDescriptorTest extends PHPUnit_Framework_TestCase
 
     public function testUnmarshalling()
     {
-        $mdNamespace = SAML2_Const::NS_MD;
-        $document = SAML2_DOMDocumentFactory::fromString(<<<XML
+        $mdNamespace = Constants::NS_MD;
+        $document = DOMDocumentFactory::fromString(<<<XML
 <md:AffiliationDescriptor xmlns:md="{$mdNamespace}" affiliationOwnerID="TheOwner" ID="TheID" validUntil="2009-02-13T23:31:30Z" cacheDuration="PT5000S">
     <md:AffiliateMember>Member</md:AffiliateMember>
     <md:AffiliateMember>OtherMember</md:AffiliateMember>
@@ -47,7 +53,7 @@ class SAML2_XML_md_AffiliationDescriptorTest extends PHPUnit_Framework_TestCase
 XML
         );
 
-        $affiliateDescriptor = new SAML2_XML_md_AffiliationDescriptor($document->firstChild);
+        $affiliateDescriptor = new AffiliationDescriptor($document->firstChild);
         $this->assertEquals('TheOwner', $affiliateDescriptor->affiliationOwnerID);
         $this->assertEquals('TheID', $affiliateDescriptor->ID);
         $this->assertEquals(1234567890, $affiliateDescriptor->validUntil);
@@ -59,21 +65,21 @@ XML
 
     public function testUnmarshallingWithoutMembers()
     {
-        $mdNamespace = SAML2_Const::NS_MD;
-        $document = SAML2_DOMDocumentFactory::fromString(
+        $mdNamespace = Constants::NS_MD;
+        $document = DOMDocumentFactory::fromString(
 <<<XML
 <md:AffiliationDescriptor xmlns:md="{$mdNamespace}" affiliationOwnerID="TheOwner" ID="TheID" validUntil="2009-02-13T23:31:30Z" cacheDuration="PT5000S">
 </md:AffiliationDescriptor>
 XML
         );
         $this->setExpectedException('Exception', 'Missing AffiliateMember in AffiliationDescriptor.');
-        new SAML2_XML_md_AffiliationDescriptor($document->firstChild);
+        new AffiliationDescriptor($document->firstChild);
     }
 
     public function testUnmarshallingWithoutOwner()
     {
-        $mdNamespace = SAML2_Const::NS_MD;
-        $document = SAML2_DOMDocumentFactory::fromString(
+        $mdNamespace = Constants::NS_MD;
+        $document = DOMDocumentFactory::fromString(
             <<<XML
     <md:AffiliationDescriptor xmlns:md="{$mdNamespace}" ID="TheID" validUntil="2009-02-13T23:31:30Z" cacheDuration="PT5000S">
     <md:AffiliateMember>Member</md:AffiliateMember>
@@ -83,8 +89,6 @@ XML
         );
 
         $this->setExpectedException('Exception', 'Missing affiliationOwnerID on AffiliationDescriptor.');
-        new SAML2_XML_md_AffiliationDescriptor($document->firstChild);
+        new AffiliationDescriptor($document->firstChild);
     }
-
-
 }

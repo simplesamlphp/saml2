@@ -1,23 +1,29 @@
 <?php
 
+namespace SAML2\XML\saml;
+
+use SAML2\Constants;
+use SAML2\DOMDocumentFactory;
+use SAML2\Utils;
+
 /**
- * Class SAML2_XML_saml_SubjectConfirmationDataTest
+ * Class \SAML2\XML\saml\SubjectConfirmationDataTest
  */
-class SAML2_XML_saml_SubjectConfirmationDataTest extends \PHPUnit_Framework_TestCase
+class SubjectConfirmationDataTest extends \PHPUnit_Framework_TestCase
 {
     public function testMarshalling()
     {
-        $subjectConfirmationData = new SAML2_XML_saml_SubjectConfirmationData();
+        $subjectConfirmationData = new SubjectConfirmationData();
         $subjectConfirmationData->NotBefore = 987654321;
         $subjectConfirmationData->NotOnOrAfter = 1234567890;
         $subjectConfirmationData->Recipient = 'https://sp.example.org/asdf';
         $subjectConfirmationData->InResponseTo = 'SomeRequestID';
         $subjectConfirmationData->Address = '127.0.0.1';
 
-        $document = SAML2_DOMDocumentFactory::fromString('<root />');
+        $document = DOMDocumentFactory::fromString('<root />');
         $subjectConfirmationDataElement = $subjectConfirmationData->toXML($document->firstChild);
 
-        $subjectConfirmationDataElements = SAML2_Utils::xpQuery(
+        $subjectConfirmationDataElements = Utils::xpQuery(
             $subjectConfirmationDataElement,
             '//saml_assertion:SubjectConfirmationData'
         );
@@ -33,8 +39,8 @@ class SAML2_XML_saml_SubjectConfirmationDataTest extends \PHPUnit_Framework_Test
 
     public function testUnmarshalling()
     {
-        $samlNamespace = SAML2_Const::NS_SAML;
-        $document = SAML2_DOMDocumentFactory::fromString(<<<XML
+        $samlNamespace = Constants::NS_SAML;
+        $document = DOMDocumentFactory::fromString(<<<XML
 <saml:SubjectConfirmationData
     xmlns:saml="{$samlNamespace}"
     NotBefore="2001-04-19T04:25:21Z"
@@ -46,7 +52,7 @@ class SAML2_XML_saml_SubjectConfirmationDataTest extends \PHPUnit_Framework_Test
 XML
         );
 
-        $subjectConfirmationData = new SAML2_XML_saml_SubjectConfirmationData($document->firstChild);
+        $subjectConfirmationData = new SubjectConfirmationData($document->firstChild);
         $this->assertEquals(987654321, $subjectConfirmationData->NotBefore);
         $this->assertEquals(1234567890, $subjectConfirmationData->NotOnOrAfter);
         $this->assertEquals('https://sp.example.org/asdf', $subjectConfirmationData->Recipient);

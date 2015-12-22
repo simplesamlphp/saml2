@@ -1,6 +1,11 @@
 <?php
 
-class SAML2_Response_Validation_ConstraintValidator_DestinationMatchesTest extends \PHPUnit_Framework_TestCase
+namespace SAML2\Response\Validation\ConstraintValidator;
+
+use SAML2\Configuration\Destination;
+use SAML2\Response\Validation\Result;
+
+class DestinationMatchesTest extends \PHPUnit_Framework_TestCase
 {
     /**
      * @var \Mockery\MockInterface
@@ -9,7 +14,7 @@ class SAML2_Response_Validation_ConstraintValidator_DestinationMatchesTest exten
 
     public function setUp()
     {
-        $this->response = \Mockery::mock('SAML2_Response');
+        $this->response = \Mockery::mock('SAML2\Response');
     }
 
     /**
@@ -18,10 +23,10 @@ class SAML2_Response_Validation_ConstraintValidator_DestinationMatchesTest exten
      */
     public function a_response_is_valid_when_the_destinations_match()
     {
-        $expectedDestination = new SAML2_Configuration_Destination('VALID DESTINATION');
+        $expectedDestination = new Destination('VALID DESTINATION');
         $this->response->shouldReceive('getDestination')->once()->andReturn('VALID DESTINATION');
-        $validator = new SAML2_Response_Validation_ConstraintValidator_DestinationMatches($expectedDestination);
-        $result    = new SAML2_Response_Validation_Result();
+        $validator = new DestinationMatches($expectedDestination);
+        $result    = new Result();
 
         $validator->validate($this->response, $result);
 
@@ -35,10 +40,10 @@ class SAML2_Response_Validation_ConstraintValidator_DestinationMatchesTest exten
     public function a_response_is_not_valid_when_the_destinations_are_not_equal()
     {
         $this->response->shouldReceive('getDestination')->once()->andReturn('FOO');
-        $validator = new SAML2_Response_Validation_ConstraintValidator_DestinationMatches(
-            new SAML2_Configuration_Destination('BAR')
+        $validator = new DestinationMatches(
+            new Destination('BAR')
         );
-        $result = new SAML2_Response_Validation_Result();
+        $result = new Result();
 
         $validator->validate($this->response, $result);
         $errors = $result->getErrors();

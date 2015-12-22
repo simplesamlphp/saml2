@@ -1,8 +1,12 @@
 <?php
 
-use \Mockery as m;
+namespace SAML2\Assertion\Validation\ConstraintValidator;
 
-class SAML2_Assertion_Validation_ConstraintValidator_SubjectConfirmationTest extends \PHPUnit_Framework_TestCase
+use Mockery as m;
+use SAML2\Assertion\Validation\Result;
+use SAML2\Constants;
+
+class SubjectConfirmationMethodTest extends \PHPUnit_Framework_TestCase
 {
     /**
      * @var \Mockery\MockInterface
@@ -11,7 +15,7 @@ class SAML2_Assertion_Validation_ConstraintValidator_SubjectConfirmationTest ext
 
     public function setUp()
     {
-        $this->subjectConfirmation = m::mock('SAML2_XML_saml_SubjectConfirmation');
+        $this->subjectConfirmation = m::mock('SAML2\XML\saml\SubjectConfirmation');
     }
 
     /**
@@ -20,10 +24,10 @@ class SAML2_Assertion_Validation_ConstraintValidator_SubjectConfirmationTest ext
      */
     public function a_subject_confirmation_with_bearer_method_is_valid()
     {
-        $this->subjectConfirmation->Method = SAML2_Const::CM_BEARER;
+        $this->subjectConfirmation->Method = Constants::CM_BEARER;
 
-        $validator = new SAML2_Assertion_Validation_ConstraintValidator_SubjectConfirmationMethod();
-        $result = new SAML2_Assertion_Validation_Result();
+        $validator = new SubjectConfirmationMethod();
+        $result = new Result();
 
         $validator->validate($this->subjectConfirmation, $result);
 
@@ -36,10 +40,10 @@ class SAML2_Assertion_Validation_ConstraintValidator_SubjectConfirmationTest ext
      */
     public function a_subject_confirmation_with_holder_of_key_method_is_not_valid()
     {
-        $this->subjectConfirmation->Method = SAML2_Const::CM_HOK;
+        $this->subjectConfirmation->Method = Constants::CM_HOK;
 
-        $validator = new SAML2_Assertion_Validation_ConstraintValidator_SubjectConfirmationMethod();
-        $result    = new SAML2_Assertion_Validation_Result();
+        $validator = new SubjectConfirmationMethod();
+        $result    = new Result();
 
         $validator->validate($this->subjectConfirmation, $result);
 

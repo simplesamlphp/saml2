@@ -1,37 +1,42 @@
 <?php
 
+namespace SAML2\XML\saml;
+
+use SAML2\Constants;
+use SAML2\DOMDocumentFactory;
+
 /**
  * Class representing the saml:NameID element.
  *
  * @package SimpleSAMLphp
  */
-class SAML2_XML_saml_NameID
+class NameID
 {
     /**
      * The NameQualifier or the NameID.
      *
-     * @var string|NULL
+     * @var string|null
      */
     public $NameQualifier;
 
     /**
      * The SPNameQualifier or the NameID.
      *
-     * @var string|NULL
+     * @var string|null
      */
     public $SPNameQualifier;
 
     /**
      * The Format or the NameID.
      *
-     * @var string|NULL
+     * @var string|null
      */
     public $Format;
 
     /**
      * The SPProvidedID or the NameID.
      *
-     * @var string|NULL
+     * @var string|null
      */
     public $SPProvidedID;
 
@@ -45,11 +50,11 @@ class SAML2_XML_saml_NameID
     /**
      * Initialize a saml:NameID.
      *
-     * @param DOMElement|NULL $xml The XML element we should load.
+     * @param \DOMElement|null $xml The XML element we should load.
      */
-    public function __construct(DOMElement $xml = NULL)
+    public function __construct(\DOMElement $xml = null)
     {
-        if ($xml === NULL) {
+        if ($xml === null) {
             return;
         }
 
@@ -75,10 +80,10 @@ class SAML2_XML_saml_NameID
     /**
      * Convert this NameID to XML.
      *
-     * @param  DOMElement|NULL $parent The element we should append to.
-     * @return DOMElement      This AdditionalMetadataLocation-element.
+     * @param  \DOMElement|null $parent The element we should append to.
+     * @return \DOMElement      This AdditionalMetadataLocation-element.
      */
-    public function toXML(DOMElement $parent = NULL)
+    public function toXML(\DOMElement $parent = null)
     {
         assert('is_string($this->NameQualifier) || is_null($this->NameQualifier)');
         assert('is_string($this->SPNameQualifier) || is_null($this->SPNameQualifier)');
@@ -86,28 +91,28 @@ class SAML2_XML_saml_NameID
         assert('is_string($this->SPProvidedID) || is_null($this->SPProvidedID)');
         assert('is_string($this->value)');
 
-        if ($parent === NULL) {
-            $parent = SAML2_DOMDocumentFactory::create();
+        if ($parent === null) {
+            $parent = DOMDocumentFactory::create();
             $doc = $parent;
         } else {
             $doc = $parent->ownerDocument;
         }
-        $e = $doc->createElementNS(SAML2_Const::NS_SAML, 'saml:NameID');
+        $e = $doc->createElementNS(Constants::NS_SAML, 'saml:NameID');
         $parent->appendChild($e);
 
-        if ($this->NameQualifier !== NULL) {
+        if ($this->NameQualifier !== null) {
             $e->setAttribute('NameQualifier', $this->NameQualifier);
         }
 
-        if ($this->SPNameQualifier !== NULL) {
+        if ($this->SPNameQualifier !== null) {
             $e->setAttribute('SPNameQualifier', $this->SPNameQualifier);
         }
 
-        if ($this->Format !== NULL) {
+        if ($this->Format !== null) {
             $e->setAttribute('Format', $this->Format);
         }
 
-        if ($this->SPProvidedID !== NULL) {
+        if ($this->SPProvidedID !== null) {
             $e->setAttribute('SPProvidedID', $this->SPProvidedID);
         }
 
@@ -116,5 +121,4 @@ class SAML2_XML_saml_NameID
 
         return $e;
     }
-
 }

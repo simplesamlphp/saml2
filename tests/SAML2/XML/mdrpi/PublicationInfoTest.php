@@ -1,13 +1,18 @@
 <?php
 
+namespace SAML2\XML\mdrpi;
+
+use SAML2\DOMDocumentFactory;
+use SAML2\Utils;
+
 /**
- * Class SAML2_XML_mdrpi_PublicationInfoTest
+ * Class \SAML2\XML\mdrpi\PublicationInfoTest
  */
-class SAML2_XML_mdrpi_PublicationInfoTest extends \PHPUnit_Framework_TestCase
+class PublicationInfoTest extends \PHPUnit_Framework_TestCase
 {
     public function testMarshalling()
     {
-        $publicationInfo = new SAML2_XML_mdrpi_PublicationInfo();
+        $publicationInfo = new PublicationInfo();
         $publicationInfo->publisher = 'TestPublisher';
         $publicationInfo->creationInstant = 1234567890;
         $publicationInfo->publicationId = 'PublicationIdValue';
@@ -16,10 +21,10 @@ class SAML2_XML_mdrpi_PublicationInfoTest extends \PHPUnit_Framework_TestCase
             'no' => 'http://NorwegianUsagePolicy',
         );
 
-        $document = SAML2_DOMDocumentFactory::fromString('<root />');
+        $document = DOMDocumentFactory::fromString('<root />');
         $xml = $publicationInfo->toXML($document->firstChild);
 
-        $publicationInfoElements = SAML2_Utils::xpQuery(
+        $publicationInfoElements = Utils::xpQuery(
             $xml,
             '/root/*[local-name()=\'PublicationInfo\' and namespace-uri()=\'urn:oasis:names:tc:SAML:metadata:rpi\']'
         );
@@ -30,7 +35,7 @@ class SAML2_XML_mdrpi_PublicationInfoTest extends \PHPUnit_Framework_TestCase
         $this->assertEquals('2009-02-13T23:31:30Z', $publicationInfoElement->getAttribute("creationInstant"));
         $this->assertEquals('PublicationIdValue', $publicationInfoElement->getAttribute("publicationId"));
 
-        $usagePolicyElements = SAML2_Utils::xpQuery(
+        $usagePolicyElements = Utils::xpQuery(
             $publicationInfoElement,
             './*[local-name()=\'UsagePolicy\' and namespace-uri()=\'urn:oasis:names:tc:SAML:metadata:rpi\']'
         );
@@ -44,7 +49,7 @@ class SAML2_XML_mdrpi_PublicationInfoTest extends \PHPUnit_Framework_TestCase
 
     public function testUnmarshalling()
     {
-        $document = SAML2_DOMDocumentFactory::fromString(<<<XML
+        $document = DOMDocumentFactory::fromString(<<<XML
 <mdrpi:PublicationInfo xmlns:mdrpi="urn:oasis:names:tc:SAML:metadata:rpi"
                        publisher="SomePublisher"
                        creationInstant="2011-01-01T00:00:00Z"
@@ -55,7 +60,7 @@ class SAML2_XML_mdrpi_PublicationInfoTest extends \PHPUnit_Framework_TestCase
 XML
         );
 
-        $publicationInfo = new SAML2_XML_mdrpi_PublicationInfo($document->firstChild);
+        $publicationInfo = new PublicationInfo($document->firstChild);
 
         $this->assertEquals('SomePublisher', $publicationInfo->publisher);
         $this->assertEquals(1293840000, $publicationInfo->creationInstant);

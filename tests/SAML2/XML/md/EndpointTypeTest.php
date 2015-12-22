@@ -1,20 +1,26 @@
 <?php
 
+namespace SAML2\XML\md;
+
+use SAML2\Constants;
+use SAML2\DOMDocumentFactory;
+use SAML2\Utils;
+
 /**
- * Class SAML2_XML_md_EndpointType
+ * Class \SAML2\XML\md\EndpointType
  */
-class SAML2_XML_md_EndpointTypeTest extends PHPUnit_Framework_TestCase
+class EndpointTypeTest extends \PHPUnit_Framework_TestCase
 {
     public function testMarshalling()
     {
-        $endpointType = new SAML2_XML_md_EndpointType();
+        $endpointType = new EndpointType();
         $endpointType->Binding = 'TestBinding';
         $endpointType->Location = 'TestLocation';
 
-        $document = SAML2_DOMDocumentFactory::fromString('<root />');
+        $document = DOMDocumentFactory::fromString('<root />');
         $endpointTypeElement = $endpointType->toXML($document->firstChild, 'md:Test');
 
-        $endpointTypeElements = SAML2_Utils::xpQuery($endpointTypeElement, '/root/saml_metadata:Test');
+        $endpointTypeElements = Utils::xpQuery($endpointTypeElement, '/root/saml_metadata:Test');
         $this->assertCount(1, $endpointTypeElements);
         $endpointTypeElement = $endpointTypeElements[0];
 
@@ -27,7 +33,7 @@ class SAML2_XML_md_EndpointTypeTest extends PHPUnit_Framework_TestCase
         $document->loadXML('<root />');
         $endpointTypeElement = $endpointType->toXML($document->firstChild, 'md:Test');
 
-        $endpointTypeElement = SAML2_Utils::xpQuery($endpointTypeElement, '/root/saml_metadata:Test');
+        $endpointTypeElement = Utils::xpQuery($endpointTypeElement, '/root/saml_metadata:Test');
         $this->assertCount(1, $endpointTypeElement);
         $endpointTypeElement = $endpointTypeElement[0];
 
@@ -36,20 +42,20 @@ class SAML2_XML_md_EndpointTypeTest extends PHPUnit_Framework_TestCase
 
     public function testUnmarshalling()
     {
-        $mdNamespace = SAML2_Const::NS_MD;
-        $document = SAML2_DOMDocumentFactory::fromString(
+        $mdNamespace = Constants::NS_MD;
+        $document = DOMDocumentFactory::fromString(
 <<<XML
 <md:Test xmlns:md="{$mdNamespace}" Binding="urn:something" Location="https://whatever/" xmlns:test="urn:test" test:attr="value" />
 XML
         );
-        $endpointType = new SAML2_XML_md_EndpointType($document->firstChild);
-        $this->assertEquals(TRUE, $endpointType->hasAttributeNS('urn:test', 'attr'));
+        $endpointType = new EndpointType($document->firstChild);
+        $this->assertEquals(true, $endpointType->hasAttributeNS('urn:test', 'attr'));
         $this->assertEquals('value', $endpointType->getAttributeNS('urn:test', 'attr'));
-        $this->assertEquals(FALSE, $endpointType->hasAttributeNS('urn:test', 'invalid'));
+        $this->assertEquals(false, $endpointType->hasAttributeNS('urn:test', 'invalid'));
         $this->assertEquals('', $endpointType->getAttributeNS('urn:test', 'invalid'));
 
         $endpointType->removeAttributeNS('urn:test', 'attr');
-        $this->assertEquals(FALSE, $endpointType->hasAttributeNS('urn:test', 'attr'));
+        $this->assertEquals(false, $endpointType->hasAttributeNS('urn:test', 'attr'));
         $this->assertEquals('', $endpointType->getAttributeNS('urn:test', 'attr'));
 
         $endpointType->setAttributeNS('urn:test2', 'test2:attr2', 'value2');
@@ -57,12 +63,11 @@ XML
 
         $document->loadXML('<root />');
         $endpointTypeElement = $endpointType->toXML($document->firstChild, 'md:Test');
-        $endpointTypeElements = SAML2_Utils::xpQuery($endpointTypeElement, '/root/saml_metadata:Test');
+        $endpointTypeElements = Utils::xpQuery($endpointTypeElement, '/root/saml_metadata:Test');
         $this->assertCount(1, $endpointTypeElements);
         $endpointTypeElement = $endpointTypeElements[0];
 
         $this->assertEquals('value2', $endpointTypeElement->getAttributeNS('urn:test2', 'attr2'));
-        $this->assertEquals(FALSE, $endpointTypeElement->hasAttributeNS('urn:test', 'attr'));
-
+        $this->assertEquals(false, $endpointTypeElement->hasAttributeNS('urn:test', 'attr'));
     }
 }

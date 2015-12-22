@@ -1,13 +1,17 @@
 <?php
 
+namespace SAML2\XML\md;
+
+use SAML2\DOMDocumentFactory;
+
 /**
- * Class SAML2_XML_md_EntityDescriptorTest
+ * Class \SAML2\XML\md\EntityDescriptorTest
  */
-class SAML2_XML_md_EntityDescriptorTest extends \PHPUnit_Framework_TestCase
+class EntityDescriptorTest extends \PHPUnit_Framework_TestCase
 {
     public function testMissingAffiliationId()
     {
-        $document = SAML2_DOMDocumentFactory::fromString(
+        $document = DOMDocumentFactory::fromString(
         <<<XML
 <EntityDescriptor entityID="theEntityID" xmlns="urn:oasis:names:tc:SAML:2.0:metadata">
     <AffiliationDescriptor>
@@ -17,12 +21,12 @@ class SAML2_XML_md_EntityDescriptorTest extends \PHPUnit_Framework_TestCase
 XML
         );
         $this->setExpectedException('Exception', 'Missing affiliationOwnerID on AffiliationDescriptor.');
-        new SAML2_XML_md_EntityDescriptor($document->firstChild);
+        new EntityDescriptor($document->firstChild);
     }
 
     public function testMissingEntityId()
     {
-        $document = SAML2_DOMDocumentFactory::fromString(
+        $document = DOMDocumentFactory::fromString(
         <<<XML
 <EntityDescriptor xmlns="urn:oasis:names:tc:SAML:2.0:metadata">
     <AffiliationDescriptor affiliationOwnerID="asdf">
@@ -32,12 +36,12 @@ XML
 XML
         );
         $this->setExpectedException('Exception', 'Missing required attribute entityID on EntityDescriptor.');
-        new SAML2_XML_md_EntityDescriptor($document->firstChild);
+        new EntityDescriptor($document->firstChild);
     }
 
     public function testMissingAffiliateMember()
     {
-        $document = SAML2_DOMDocumentFactory::fromString(
+        $document = DOMDocumentFactory::fromString(
         <<<XML
 <EntityDescriptor entityID="theEntityID" xmlns="urn:oasis:names:tc:SAML:2.0:metadata">
     <AffiliationDescriptor affiliationOwnerID="asdf">
@@ -46,24 +50,24 @@ XML
 XML
         );
         $this->setExpectedException('Exception', 'Missing AffiliateMember in AffiliationDescriptor.');
-        new SAML2_XML_md_EntityDescriptor($document->firstChild);
+        new EntityDescriptor($document->firstChild);
     }
 
     public function testMissingDescriptor()
     {
-        $document = SAML2_DOMDocumentFactory::fromString(
+        $document = DOMDocumentFactory::fromString(
         <<<XML
 <EntityDescriptor entityID="theEntityID" xmlns="urn:oasis:names:tc:SAML:2.0:metadata">
 </EntityDescriptor>
 XML
         );
         $this->setExpectedException('Exception', 'Must have either one of the RoleDescriptors or an AffiliationDescriptor in EntityDescriptor.');
-        new SAML2_XML_md_EntityDescriptor($document->firstChild);
+        new EntityDescriptor($document->firstChild);
     }
 
     public function testInvalidValidUntil()
     {
-        $document = SAML2_DOMDocumentFactory::fromString(
+        $document = DOMDocumentFactory::fromString(
         <<<XML
 <EntityDescriptor validUntil="asdf" entityID="theEntityID" xmlns="urn:oasis:names:tc:SAML:2.0:metadata">
     <AffiliationDescriptor affiliationOwnerID="asd">
@@ -73,12 +77,12 @@ XML
 XML
         );
         $this->setExpectedException('Exception', 'Invalid SAML2 timestamp passed to xsDateTimeToTimestamp: asdf');
-        new SAML2_XML_md_EntityDescriptor($document->firstChild);
+        new EntityDescriptor($document->firstChild);
     }
 
     public function testUnmarshalling()
     {
-        $document = SAML2_DOMDocumentFactory::fromString(
+        $document = DOMDocumentFactory::fromString(
         <<<XML
 <EntityDescriptor entityID="theEntityID" xmlns="urn:oasis:names:tc:SAML:2.0:metadata">
     <AffiliationDescriptor affiliationOwnerID="asdf" ID="theAffiliationDescriptorID" validUntil="2010-02-01T12:34:56Z" cacheDuration="PT9000S" >
@@ -88,15 +92,15 @@ XML
 </EntityDescriptor>
 XML
         );
-        $entityDescriptor = new SAML2_XML_md_EntityDescriptor($document->firstChild);
+        $entityDescriptor = new EntityDescriptor($document->firstChild);
 
-        $this->assertTrue($entityDescriptor instanceof SAML2_XML_md_EntityDescriptor);
+        $this->assertTrue($entityDescriptor instanceof EntityDescriptor);
         $this->assertEquals('theEntityID', $entityDescriptor->entityID);
 
         $this->assertTrue(empty($entityDescriptor->RoleDescriptor));
 
         $affiliationDescriptor = $entityDescriptor->AffiliationDescriptor;
-        $this->assertTrue($affiliationDescriptor instanceof SAML2_XML_md_AffiliationDescriptor);
+        $this->assertTrue($affiliationDescriptor instanceof AffiliationDescriptor);
         $this->assertEquals('asdf', $affiliationDescriptor->affiliationOwnerID);
         $this->assertEquals('theAffiliationDescriptorID', $affiliationDescriptor->ID);
         $this->assertEquals(1265027696, $affiliationDescriptor->validUntil);
@@ -108,7 +112,7 @@ XML
 
     public function testUnmarshalling2()
     {
-        $document = SAML2_DOMDocumentFactory::fromString(<<<XML
+        $document = DOMDocumentFactory::fromString(<<<XML
 <EntityDescriptor entityID="theEntityID" ID="theID" validUntil="2010-01-01T12:34:56Z" cacheDuration="PT5000S" xmlns="urn:oasis:names:tc:SAML:2.0:metadata">
 
     <AttributeAuthorityDescriptor protocolSupportEnumeration="urn:oasis:names:tc:SAML:2.0:protocol">
@@ -126,19 +130,19 @@ XML
 </EntityDescriptor>
 XML
         );
-        $entityDescriptor = new SAML2_XML_md_EntityDescriptor($document->firstChild);
+        $entityDescriptor = new EntityDescriptor($document->firstChild);
 
-        $this->assertTrue($entityDescriptor instanceof SAML2_XML_md_EntityDescriptor);
+        $this->assertTrue($entityDescriptor instanceof EntityDescriptor);
         $this->assertEquals('theEntityID', $entityDescriptor->entityID);
         $this->assertEquals('theID', $entityDescriptor->ID);
         $this->assertEquals(1262349296, $entityDescriptor->validUntil);
         $this->assertEquals('PT5000S', $entityDescriptor->cacheDuration);
 
         $this->assertCount(1, $entityDescriptor->RoleDescriptor);
-        $this->assertTrue($entityDescriptor->RoleDescriptor[0] instanceof SAML2_XML_md_AttributeAuthorityDescriptor);
+        $this->assertTrue($entityDescriptor->RoleDescriptor[0] instanceof AttributeAuthorityDescriptor);
 
         $o = $entityDescriptor->Organization;
-        $this->assertTrue($o instanceof SAML2_XML_md_Organization);
+        $this->assertTrue($o instanceof Organization);
         $this->assertCount(2, $o->OrganizationName);
         $this->assertEquals('orgNameTest (no)', $o->OrganizationName["no"]);
         $this->assertEquals('orgNameTest (en)', $o->OrganizationName["en"]);
