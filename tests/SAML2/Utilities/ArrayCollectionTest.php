@@ -106,4 +106,29 @@ class ArrayCollectionTest extends \PHPUnit_Framework_TestCase
         $arc = new ArrayCollection(array('aap', 'noot'));
         $this->assertInstanceOf('\ArrayIterator', $arc->getIterator());
     }
+
+    public function test_filter_map()
+    {
+        $arc = new ArrayCollection(array('aap', 'aap', 'noot', 'mies'));
+
+        $filtered = $arc->filter(function ($i) { return $i != 'aap'; });
+        $this->assertInstanceOf('\SAML2\Utilities\ArrayCollection', $filtered);
+        $this->assertEquals($filtered->get(0), null);
+        $this->assertEquals($filtered->get(1), null);
+        $this->assertEquals($filtered->get(2), 'noot');
+        $this->assertEquals($filtered->get(3), 'mies');
+
+        $mapped = $arc->map(function ($i) { return ucfirst($i); });
+        $this->assertInstanceOf('\SAML2\Utilities\ArrayCollection', $mapped);
+        $this->assertEquals($mapped->get(0), 'Aap');
+        $this->assertEquals($mapped->get(1), 'Aap');
+        $this->assertEquals($mapped->get(2), 'Noot');
+        $this->assertEquals($mapped->get(3), 'Mies');
+
+        // ensure original is not changed 
+        $this->assertEquals($arc->get(0), 'aap');
+        $this->assertEquals($arc->get(1), 'aap');
+        $this->assertEquals($arc->get(2), 'noot');
+        $this->assertEquals($arc->get(3), 'mies');
+    }
 }
