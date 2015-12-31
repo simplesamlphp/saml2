@@ -38,7 +38,7 @@ class ArrayCollection implements Collection
 
     public function set($key, $value)
     {
-        $this->elements[$value] = $key;
+        $this->elements[$key] = $value;
     }
 
     public function remove($element)
