@@ -1,25 +1,34 @@
 <?php
 
-class SAML2_Response_XmlSignatureWrappingTest extends PHPUnit_Framework_TestCase
+namespace SAML2\Response;
+
+use SAML2\Assertion;
+use SAML2\CertificatesMock;
+use SAML2\Configuration\IdentityProvider;
+use SAML2\DOMDocumentFactory;
+use SAML2\Signature\Validator;
+use SAML2\Utilities\Certificate;
+
+class XmlSignatureWrappingTest extends \PHPUnit_Framework_TestCase
 {
     /**
-     * @var SAML2_Signature_Validator
+     * @var \SAML2\Signature\Validator
      */
     private $signatureValidator;
 
     /**
-     * @var SAML2_Configuration_IdentityProvider
+     * @var \SAML2\Configuration\IdentityProvider
      */
     private $identityProviderConfiguration;
 
     public function setUp()
     {
-        $this->signatureValidator = new SAML2_Signature_Validator(new \Psr\Log\NullLogger());
+        $this->signatureValidator = new Validator(new \Psr\Log\NullLogger());
 
-        $pattern = SAML2_Utilities_Certificate::CERTIFICATE_PATTERN;
-        preg_match($pattern, SAML2_CertificatesMock::PUBLIC_KEY_PEM, $matches);
+        $pattern = Certificate::CERTIFICATE_PATTERN;
+        preg_match($pattern, CertificatesMock::PUBLIC_KEY_PEM, $matches);
 
-        $this->identityProviderConfiguration = new SAML2_Configuration_IdentityProvider(
+        $this->identityProviderConfiguration = new IdentityProvider(
             array('certificateData' => $matches[1])
         );
     }
@@ -48,16 +57,16 @@ class SAML2_Response_XmlSignatureWrappingTest extends PHPUnit_Framework_TestCase
 
     private function getSignedAssertionWithSignatureThatReferencesAnotherAssertion()
     {
-        $doc = SAML2_DOMDocumentFactory::fromFile(__DIR__ . '/signedAssertionWithInvalidReferencedId.xml');
-        $assertion = new SAML2_Assertion($doc->firstChild);
+        $doc = DOMDocumentFactory::fromFile(__DIR__ . '/signedAssertionWithInvalidReferencedId.xml');
+        $assertion = new Assertion($doc->firstChild);
 
         return $assertion;
     }
 
     private function getSignedAssertionWithEmbeddedAssertionReferencedInSignature()
     {
-        $document = SAML2_DOMDocumentFactory::fromFile(__DIR__ . '/signedAssertionReferencedEmbeddedAssertion.xml');
-        $assertion = new SAML2_Assertion($document->firstChild);
+        $document = DOMDocumentFactory::fromFile(__DIR__ . '/signedAssertionReferencedEmbeddedAssertion.xml');
+        $assertion = new Assertion($document->firstChild);
 
         return $assertion;
     }

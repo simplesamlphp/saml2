@@ -1,33 +1,39 @@
 <?php
 
+namespace SAML2\XML\saml;
+
+use SAML2\Constants;
+use SAML2\DOMDocumentFactory;
+use SAML2\Utils;
+
 /**
- * Class SAML2_XML_saml_SubjectConfirmationTest
+ * Class \SAML2\XML\saml\SubjectConfirmationTest
  */
-class SAML2_XML_saml_SubjectConfirmationTest extends \PHPUnit_Framework_TestCase
+class SubjectConfirmationTest extends \PHPUnit_Framework_TestCase
 {
     public function testMarshalling()
     {
-        $subjectConfirmation = new SAML2_XML_saml_SubjectConfirmation();
+        $subjectConfirmation = new SubjectConfirmation();
         $subjectConfirmation->Method = 'SomeMethod';
-        $subjectConfirmation->NameID = new SAML2_XML_saml_NameID();
+        $subjectConfirmation->NameID = new NameID();
         $subjectConfirmation->NameID->value = 'SomeNameIDValue';
-        $subjectConfirmation->SubjectConfirmationData = new SAML2_XML_saml_SubjectConfirmationData();
+        $subjectConfirmation->SubjectConfirmationData = new SubjectConfirmationData();
 
-        $document = SAML2_DOMDocumentFactory::fromString('<root />');
+        $document = DOMDocumentFactory::fromString('<root />');
         $subjectConfirmationElement = $subjectConfirmation->toXML($document->firstChild);
-        $subjectConfirmationElements = SAML2_Utils::xpQuery($subjectConfirmationElement, '//saml_assertion:SubjectConfirmation');
+        $subjectConfirmationElements = Utils::xpQuery($subjectConfirmationElement, '//saml_assertion:SubjectConfirmation');
         $this->assertCount(1, $subjectConfirmationElements);
         $subjectConfirmationElement = $subjectConfirmationElements[0];
 
         $this->assertEquals('SomeMethod', $subjectConfirmationElement->getAttribute("Method"));
-        $this->assertCount(1, SAML2_Utils::xpQuery($subjectConfirmationElement, "./saml_assertion:NameID"));
-        $this->assertCount(1, SAML2_Utils::xpQuery($subjectConfirmationElement, "./saml_assertion:SubjectConfirmationData"));
+        $this->assertCount(1, Utils::xpQuery($subjectConfirmationElement, "./saml_assertion:NameID"));
+        $this->assertCount(1, Utils::xpQuery($subjectConfirmationElement, "./saml_assertion:SubjectConfirmationData"));
     }
 
     public function testUnmarshalling()
     {
-        $samlNamespace = SAML2_Const::NS_SAML;
-        $document = SAML2_DOMDocumentFactory::fromString(
+        $samlNamespace = Constants::NS_SAML;
+        $document = DOMDocumentFactory::fromString(
 <<<XML
 <saml:SubjectConfirmation xmlns:saml="{$samlNamespace}" Method="SomeMethod">
   <saml:NameID>SomeNameIDValue</saml:NameID>
@@ -36,10 +42,10 @@ class SAML2_XML_saml_SubjectConfirmationTest extends \PHPUnit_Framework_TestCase
 XML
         );
 
-        $subjectConfirmation = new SAML2_XML_saml_SubjectConfirmation($document->firstChild);
+        $subjectConfirmation = new SubjectConfirmation($document->firstChild);
         $this->assertEquals('SomeMethod', $subjectConfirmation->Method);
-        $this->assertTrue($subjectConfirmation->NameID instanceof SAML2_XML_saml_NameID);
+        $this->assertTrue($subjectConfirmation->NameID instanceof NameID);
         $this->assertEquals('SomeNameIDValue', $subjectConfirmation->NameID->value);
-        $this->assertTrue($subjectConfirmation->SubjectConfirmationData instanceof SAML2_XML_saml_SubjectConfirmationData);
+        $this->assertTrue($subjectConfirmation->SubjectConfirmationData instanceof SubjectConfirmationData);
     }
 }

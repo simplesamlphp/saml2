@@ -1,6 +1,8 @@
 <?php
 
-class SAML2_Configuration_ArrayAdapterTest extends PHPUnit_Framework_TestCase
+namespace SAML2\Configuration;
+
+class ArrayAdapterTest extends \PHPUnit_Framework_TestCase
 {
     /**
      * @group configuration
@@ -8,7 +10,7 @@ class SAML2_Configuration_ArrayAdapterTest extends PHPUnit_Framework_TestCase
      */
     public function set_configuration_can_be_queried()
     {
-        $configuration = new SAML2_Configuration_ArrayAdapter(array('foo' => 'bar'));
+        $configuration = new ArrayAdapter(array('foo' => 'bar'));
 
         $this->assertTrue($configuration->has('foo'));
         $this->assertFalse($configuration->has('quux'));
@@ -23,7 +25,7 @@ class SAML2_Configuration_ArrayAdapterTest extends PHPUnit_Framework_TestCase
     {
         $configuration = array('foo' => 'bar');
 
-        $arrayAdapter = new SAML2_Configuration_ArrayAdapter($configuration);
+        $arrayAdapter = new ArrayAdapter($configuration);
 
         $this->assertNull($arrayAdapter->get('quuz'));
         $this->assertFalse($arrayAdapter->get('quux', false));

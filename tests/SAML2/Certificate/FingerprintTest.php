@@ -1,9 +1,11 @@
 <?php
 
-class SAML2_Certificate_FingerprintTest extends PHPUnit_Framework_TestCase
+namespace SAML2\Certificate;
+
+class FingerprintTest extends \PHPUnit_Framework_TestCase
 {
     /**
-     * @var SAML2_Certificate_Fingerprint
+     * @var \SAML2\Certificate\Fingerprint
      */
     private $fingerprint;
 
@@ -11,10 +13,10 @@ class SAML2_Certificate_FingerprintTest extends PHPUnit_Framework_TestCase
      * @group certificate
      * @test
      *
-     * @expectedException SAML2_Exception_InvalidArgumentException
+     * @expectedException \SAML2\Exception\InvalidArgumentException
      */
     public function fails_on_invalid_fingerprint_data()
     {
-        $this->fingerprint = new SAML2_Certificate_Fingerprint(NULL);
+        $this->fingerprint = new Fingerprint(null);
     }
 }

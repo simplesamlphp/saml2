@@ -1,9 +1,11 @@
 <?php
 
+namespace SAML2;
+
 /**
  * A very simple in-memory logger that allows querying the log for existence of messages
  */
-class SAML2_SimpleTestLogger extends \Psr\Log\AbstractLogger
+class SimpleTestLogger extends \Psr\Log\AbstractLogger
 {
     /**
      * @var array

@@ -1,10 +1,15 @@
 <?php
 
+namespace SAML2\Signature;
+
+use SAML2\Configuration\CertificateProvider;
+use SAML2\SignedElement;
+
 /**
  * MockChainedValidator, to be able to test the validatorchain without having to use
  * actual validators
  */
-class SAML2_Signature_MockChainedValidator extends SAML2_Signature_AbstractChainedValidator
+class MockChainedValidator extends AbstractChainedValidator
 {
     /**
      * @var boolean
@@ -31,17 +36,16 @@ class SAML2_Signature_MockChainedValidator extends SAML2_Signature_AbstractChain
     }
 
     public function canValidate(
-        SAML2_SignedElement $signedElement,
-        SAML2_Configuration_CertificateProvider $configuration
+        SignedElement $signedElement,
+        CertificateProvider $configuration
     ) {
         return $this->canValidate;
     }
 
     public function hasValidSignature(
-        SAML2_SignedElement $signedElement,
-        SAML2_Configuration_CertificateProvider $configuration
+        SignedElement $signedElement,
+        CertificateProvider $configuration
     ) {
         return $this->isValid;
     }
-
 }

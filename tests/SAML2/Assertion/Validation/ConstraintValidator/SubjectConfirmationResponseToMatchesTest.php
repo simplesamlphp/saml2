@@ -1,8 +1,11 @@
 <?php
 
-use \Mockery as m;
+namespace SAML2\Assertion\Validation\ConstraintValidator;
 
-class SAML2_Assertion_Validation_ConstraintValidator_SubjectConfirmationResponseToMatchesTest extends
+use Mockery as m;
+use SAML2\Assertion\Validation\Result;
+
+class SubjectConfirmationResponseToMatchesTest extends
     \PHPUnit_Framework_TestCase
 {
     /**
@@ -23,10 +26,10 @@ class SAML2_Assertion_Validation_ConstraintValidator_SubjectConfirmationResponse
     public function setUp()
     {
         parent::setUp();
-        $this->subjectConfirmation                          = m::mock('SAML2_XML_saml_SubjectConfirmation');
-        $this->subjectConfirmationData                      = m::mock('SAML2_XML_saml_SubjectConfirmationData');
+        $this->subjectConfirmation                          = m::mock('SAML2\XML\saml\SubjectConfirmation');
+        $this->subjectConfirmationData                      = m::mock('SAML2\XML\saml\SubjectConfirmationData');
         $this->subjectConfirmation->SubjectConfirmationData = $this->subjectConfirmationData;
-        $this->response                                     = m::mock('SAML2_Response');
+        $this->response                                     = m::mock('SAML2\Response');
     }
 
     /**
@@ -38,10 +41,10 @@ class SAML2_Assertion_Validation_ConstraintValidator_SubjectConfirmationResponse
         $this->response->shouldReceive('getInResponseTo')->andReturnNull();
         $this->subjectConfirmationData->InResponseTo = 'someValue';
 
-        $validator = new SAML2_Assertion_Validation_ConstraintValidator_SubjectConfirmationResponseToMatches(
+        $validator = new SubjectConfirmationResponseToMatches(
             $this->response
         );
-        $result    = new SAML2_Assertion_Validation_Result();
+        $result    = new Result();
 
         $validator->validate($this->subjectConfirmation, $result);
 
@@ -57,10 +60,10 @@ class SAML2_Assertion_Validation_ConstraintValidator_SubjectConfirmationResponse
         $this->response->shouldReceive('getInResponseTo')->andReturn('someValue');
         $this->subjectConfirmationData->InResponseTo = null;
 
-        $validator = new SAML2_Assertion_Validation_ConstraintValidator_SubjectConfirmationResponseToMatches(
+        $validator = new SubjectConfirmationResponseToMatches(
             $this->response
         );
-        $result    = new SAML2_Assertion_Validation_Result();
+        $result    = new Result();
 
         $validator->validate($this->subjectConfirmation, $result);
 
@@ -76,10 +79,10 @@ class SAML2_Assertion_Validation_ConstraintValidator_SubjectConfirmationResponse
         $this->response->shouldReceive('getInResponseTo')->andReturnNull();
         $this->subjectConfirmationData->InResponseTo = null;
 
-        $validator = new SAML2_Assertion_Validation_ConstraintValidator_SubjectConfirmationResponseToMatches(
+        $validator = new SubjectConfirmationResponseToMatches(
             $this->response
         );
-        $result    = new SAML2_Assertion_Validation_Result();
+        $result    = new Result();
 
         $validator->validate($this->subjectConfirmation, $result);
 
@@ -95,10 +98,10 @@ class SAML2_Assertion_Validation_ConstraintValidator_SubjectConfirmationResponse
         $this->response->shouldReceive('getInResponseTo')->andReturn('theSameValue');
         $this->subjectConfirmationData->InResponseTo = 'theSameValue';
 
-        $validator = new SAML2_Assertion_Validation_ConstraintValidator_SubjectConfirmationResponseToMatches(
+        $validator = new SubjectConfirmationResponseToMatches(
             $this->response
         );
-        $result    = new SAML2_Assertion_Validation_Result();
+        $result    = new Result();
 
         $validator->validate($this->subjectConfirmation, $result);
 
@@ -114,10 +117,10 @@ class SAML2_Assertion_Validation_ConstraintValidator_SubjectConfirmationResponse
         $this->response->shouldReceive('getInResponseTo')->andReturn('someValue');
         $this->subjectConfirmationData->InResponseTo = 'anotherValue';
 
-        $validator = new SAML2_Assertion_Validation_ConstraintValidator_SubjectConfirmationResponseToMatches(
+        $validator = new SubjectConfirmationResponseToMatches(
             $this->response
         );
-        $result    = new SAML2_Assertion_Validation_Result();
+        $result    = new Result();
 
         $validator->validate($this->subjectConfirmation, $result);
 

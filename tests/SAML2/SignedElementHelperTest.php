@@ -1,12 +1,13 @@
 <?php
 
-require_once 'SignedElementHelperMock.php';
-require_once 'CertificatesMock.php';
+namespace SAML2;
+
+use RobRichards\XMLSecLibs\XMLSecurityDSig;
 
 /**
- * Class SAML2_SignedElementHelperTest
+ * Class \SAML2\SignedElementHelperTest
  */
-class SAML2_SignedElementHelperTest extends \PHPUnit_Framework_TestCase
+class SignedElementHelperTest extends \PHPUnit_Framework_TestCase
 {
     /**
      * @var \DOMElement
@@ -18,9 +19,9 @@ class SAML2_SignedElementHelperTest extends \PHPUnit_Framework_TestCase
      */
     public function setUp()
     {
-        $mock = new SAML2_SignedElementHelperMock();
-        $mock->setSignatureKey(SAML2_CertificatesMock::getPrivateKey());
-        $mock->setCertificates(array(SAML2_CertificatesMock::PUBLIC_KEY_PEM));
+        $mock = new SignedElementHelperMock();
+        $mock->setSignatureKey(CertificatesMock::getPrivateKey());
+        $mock->setCertificates(array(CertificatesMock::PUBLIC_KEY_PEM));
         $this->signedMockElement = $mock->toSignedXML();
     }
 
@@ -32,10 +33,10 @@ class SAML2_SignedElementHelperTest extends \PHPUnit_Framework_TestCase
      */
     public function testValidateWithoutModification()
     {
-        $signedMockElementCopy = SAML2_Utils::copyElement($this->signedMockElement);
+        $signedMockElementCopy = Utils::copyElement($this->signedMockElement);
         $signedMockElementCopy->ownerDocument->appendChild($signedMockElementCopy);
-        $tmp = new SAML2_SignedElementHelperMock($signedMockElementCopy);
-        $this->assertTrue($tmp->validate(SAML2_CertificatesMock::getPublicKey()));
+        $tmp = new SignedElementHelperMock($signedMockElementCopy);
+        $this->assertTrue($tmp->validate(CertificatesMock::getPublicKey()));
     }
 
     /**
@@ -44,17 +45,17 @@ class SAML2_SignedElementHelperTest extends \PHPUnit_Framework_TestCase
     public function testValidateWithReferenceTampering()
     {
         // Test modification of reference.
-        $signedMockElementCopy = SAML2_Utils::copyElement($this->signedMockElement);
+        $signedMockElementCopy = Utils::copyElement($this->signedMockElement);
         $signedMockElementCopy->ownerDocument->appendChild($signedMockElementCopy);
-        $digestValueElements = SAML2_Utils::xpQuery(
+        $digestValueElements = Utils::xpQuery(
             $signedMockElementCopy,
             '/root/ds:Signature/ds:SignedInfo/ds:Reference/ds:DigestValue'
         );
         $this->assertCount(1, $digestValueElements);
         $digestValueElements[0]->firstChild->data = 'invalid';
-        $tmp = new SAML2_SignedElementHelperMock($signedMockElementCopy);
+        $tmp = new SignedElementHelperMock($signedMockElementCopy);
         $this->assertFalse(
-            $tmp->validate(SAML2_CertificatesMock::getPublicKey()),
+            $tmp->validate(CertificatesMock::getPublicKey()),
             'When the DigestValue has been tampered with, a signature should no longer be valid'
         );
     }
@@ -65,15 +66,15 @@ class SAML2_SignedElementHelperTest extends \PHPUnit_Framework_TestCase
     public function testValidateWithValueTampering()
     {
         // Test modification of SignatureValue.
-        $signedMockElementCopy = SAML2_Utils::copyElement($this->signedMockElement);
+        $signedMockElementCopy = Utils::copyElement($this->signedMockElement);
         $signedMockElementCopy->ownerDocument->appendChild($signedMockElementCopy);
-        $digestValueElements = SAML2_Utils::xpQuery($signedMockElementCopy, '/root/ds:Signature/ds:SignatureValue');
+        $digestValueElements = Utils::xpQuery($signedMockElementCopy, '/root/ds:Signature/ds:SignatureValue');
         $this->assertCount(1, $digestValueElements);
         $digestValueElements[0]->firstChild->data = 'invalid';
-        $tmp = new SAML2_SignedElementHelperMock($signedMockElementCopy);
+        $tmp = new SignedElementHelperMock($signedMockElementCopy);
 
         $this->setExpectedException('Exception', 'Unable to validate Signature');
-        $tmp->validate(SAML2_CertificatesMock::getPublicKey());
+        $tmp->validate(CertificatesMock::getPublicKey());
     }
 
     /**
@@ -81,12 +82,12 @@ class SAML2_SignedElementHelperTest extends \PHPUnit_Framework_TestCase
      */
     public function testGetValidatingCertificates()
     {
-        $certData = XMLSecurityDSig::staticGet509XCerts(SAML2_CertificatesMock::PUBLIC_KEY_PEM);
+        $certData = XMLSecurityDSig::staticGet509XCerts(CertificatesMock::PUBLIC_KEY_PEM);
         $certData = $certData[0];
 
-        $signedMockElementCopy = SAML2_Utils::copyElement($this->signedMockElement);
+        $signedMockElementCopy = Utils::copyElement($this->signedMockElement);
         $signedMockElementCopy->ownerDocument->appendChild($signedMockElementCopy);
-        $tmp = new SAML2_SignedElementHelperMock($signedMockElementCopy);
+        $tmp = new SignedElementHelperMock($signedMockElementCopy);
         $certs = $tmp->getValidatingCertificates();
         $this->assertCount(1, $certs);
         $this->assertEquals($certData, $certs[0]);
@@ -109,11 +110,11 @@ ULI2MAwGA1UdEwQFMAMBAf8wDQYJKoZIhvcNAQEFBQADgYEAScv7ee6QajoSM4c4
 r+X+X2Al/n6aDn7qAxXbl0RZuB+saxn+yFR6HFKggwkR1L2pimCuD0gTr6LlrNgf
 edF1YfJgq35hcMMLY9RE/0C0bCI=
 -----END CERTIFICATE-----';
-        $mock = new SAML2_SignedElementHelperMock();
-        $mock->setSignatureKey(SAML2_CertificatesMock::getPrivateKey());
-        $mock->setCertificates(array($tmpCert, SAML2_CertificatesMock::PUBLIC_KEY_PEM));
+        $mock = new SignedElementHelperMock();
+        $mock->setSignatureKey(CertificatesMock::getPrivateKey());
+        $mock->setCertificates(array($tmpCert, CertificatesMock::PUBLIC_KEY_PEM));
         $this->signedMockElement = $mock->toSignedXML();
-        $tmp = new SAML2_SignedElementHelperMock($this->signedMockElement);
+        $tmp = new SignedElementHelperMock($this->signedMockElement);
         $certs = $tmp->getValidatingCertificates();
         $this->assertCount(1, $certs);
         $this->assertEquals($certData, $certs[0]);

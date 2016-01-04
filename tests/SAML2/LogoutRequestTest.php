@@ -1,14 +1,14 @@
 <?php
 
-require_once 'CertificatesMock.php';
+namespace SAML2;
 
 /**
- * Class LogoutRequestTest
+ * Class \SAML2\LogoutRequestTest
  */
 class LogoutRequestTest extends \PHPUnit_Framework_TestCase
 {
     /**
-     * @var DOMElement
+     * @var \DOMElement
      */
     private $logoutRequestElement;
 
@@ -40,35 +40,35 @@ class LogoutRequestTest extends \PHPUnit_Framework_TestCase
   <samlp:SessionIndex>SomeSessionIndex2</samlp:SessionIndex>
 </samlp:LogoutRequest>
 XML;
-        $document = SAML2_DOMDocumentFactory::fromString($xml);
+        $document = DOMDocumentFactory::fromString($xml);
         $this->logoutRequestElement = $document->firstChild;
     }
 
     public function testMarshalling()
     {
-        $logoutRequest = new SAML2_LogoutRequest();
+        $logoutRequest = new LogoutRequest();
         $logoutRequest->setNameID(array('Value' => 'NameIDValue'));
         $logoutRequest->setSessionIndex('SessionIndexValue');
 
         $logoutRequestElement = $logoutRequest->toUnsignedXML();
         $this->assertEquals('LogoutRequest', $logoutRequestElement->localName);
-        $this->assertEquals(SAML2_Const::NS_SAMLP, $logoutRequestElement->namespaceURI);
+        $this->assertEquals(Constants::NS_SAMLP, $logoutRequestElement->namespaceURI);
 
-        $nameIdElements = SAML2_Utils::xpQuery($logoutRequestElement, './saml_assertion:NameID');
+        $nameIdElements = Utils::xpQuery($logoutRequestElement, './saml_assertion:NameID');
         $this->assertCount(1, $nameIdElements);
         $nameIdElements = $nameIdElements[0];
         $this->assertEquals('NameIDValue', $nameIdElements->textContent);
 
-        $sessionIndexElements = SAML2_Utils::xpQuery($logoutRequestElement, './saml_protocol:SessionIndex');
+        $sessionIndexElements = Utils::xpQuery($logoutRequestElement, './saml_protocol:SessionIndex');
         $this->assertCount(1, $sessionIndexElements);
         $this->assertEquals('SessionIndexValue', $sessionIndexElements[0]->textContent);
 
-        $logoutRequest = new SAML2_LogoutRequest();
+        $logoutRequest = new LogoutRequest();
         $logoutRequest->setNameID(array('Value' => 'NameIDValue'));
         $logoutRequest->setSessionIndexes(array('SessionIndexValue1', 'SessionIndexValue2'));
         $logoutRequestElement = $logoutRequest->toUnsignedXML();
 
-        $sessionIndexElements = SAML2_Utils::xpQuery($logoutRequestElement, './saml_protocol:SessionIndex');
+        $sessionIndexElements = Utils::xpQuery($logoutRequestElement, './saml_protocol:SessionIndex');
         $this->assertCount(2, $sessionIndexElements);
         $this->assertEquals('SessionIndexValue1', $sessionIndexElements[0]->textContent);
         $this->assertEquals('SessionIndexValue2', $sessionIndexElements[1]->textContent);
@@ -76,7 +76,7 @@ XML;
 
     public function testUnmarshalling()
     {
-        $logoutRequest = new SAML2_LogoutRequest($this->logoutRequestElement);
+        $logoutRequest = new LogoutRequest($this->logoutRequestElement);
         $this->assertEquals('TheIssuer', $logoutRequest->getIssuer());
         $this->assertTrue($logoutRequest->isNameIdEncrypted());
 
@@ -85,7 +85,7 @@ XML;
         $this->assertEquals('SomeSessionIndex1', $sessionIndexElements[0]);
         $this->assertEquals('SomeSessionIndex2', $sessionIndexElements[1]);
 
-        $logoutRequest->decryptNameId(SAML2_CertificatesMock::getPrivateKey());
+        $logoutRequest->decryptNameId(CertificatesMock::getPrivateKey());
 
         $nameId = $logoutRequest->getNameId();
         $this->assertEquals('TheNameIDValue', $nameId['Value']);
@@ -93,23 +93,23 @@ XML;
 
     public function testEncryptedNameId()
     {
-        $logoutRequest = new SAML2_LogoutRequest();
+        $logoutRequest = new LogoutRequest();
         $logoutRequest->setNameID(array('Value' => 'NameIDValue'));
-        $logoutRequest->encryptNameId(SAML2_CertificatesMock::getPublicKey());
+        $logoutRequest->encryptNameId(CertificatesMock::getPublicKey());
 
         $logoutRequestElement = $logoutRequest->toUnsignedXML();
         $this->assertCount(
             1,
-            SAML2_Utils::xpQuery($logoutRequestElement, './saml_assertion:EncryptedID/xenc:EncryptedData')
+            Utils::xpQuery($logoutRequestElement, './saml_assertion:EncryptedID/xenc:EncryptedData')
         );
     }
 
     public function testDecryptingNameId()
     {
-        $logoutRequest = new SAML2_LogoutRequest($this->logoutRequestElement);
+        $logoutRequest = new LogoutRequest($this->logoutRequestElement);
         $this->assertTrue($logoutRequest->isNameIdEncrypted());
 
-        $logoutRequest->decryptNameId(SAML2_CertificatesMock::getPrivateKey());
+        $logoutRequest->decryptNameId(CertificatesMock::getPrivateKey());
         $nameId = $logoutRequest->getNameId();
         $this->assertEquals('TheNameIDValue', $nameId['Value']);
     }

@@ -1,24 +1,26 @@
 <?php
 
+namespace SAML2;
+
 /**
- * Class SAML2_SignedElementHelperMock
+ * Class \SAML2\SignedElementHelperMock
  */
-class SAML2_SignedElementHelperMock extends SAML2_SignedElementHelper
+class SignedElementHelperMock extends SignedElementHelper
 {
     /**
-     * @param DOMElement $xml
+     * @param \DOMElement $xml
      */
-    public function __construct(DOMElement $xml = NULL)
+    public function __construct(\DOMElement $xml = null)
     {
         parent::__construct($xml);
     }
 
     /**
-     * @return DOMElement
+     * @return \DOMElement
      */
     public function toSignedXML()
     {
-        $doc = SAML2_DOMDocumentFactory::create();
+        $doc = DOMDocumentFactory::create();
         $root = $doc->createElement('root');
         $doc->appendChild($root);
 
