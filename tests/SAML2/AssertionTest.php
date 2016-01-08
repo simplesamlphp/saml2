@@ -324,5 +324,62 @@ XML
         $assertion = new \SAML2_Assertion($document->firstChild);
         $this->assertTrue($assertion->hasEncryptedAttributes());
     }
+
+    /**
+     * @group Assertion
+     */
+    public function testCorrectSignatureMethodCanBeExtracted()
+    {
+        $document = new \DOMDocument();
+        $document->loadXML(<<<XML
+    <saml:Assertion xmlns:saml="urn:oasis:names:tc:SAML:2.0:assertion"
+                    Version="2.0"
+                    ID="_93af655219464fb403b34436cfb0c5cb1d9a5502"
+                    IssueInstant="1970-01-01T01:33:31Z">
+      <saml:Issuer>Provider</saml:Issuer>
+      <saml:Subject>
+        <saml:NameID Format="urn:oasis:names:tc:SAML:2.0:nameid-format:persistent">s00000000:123456789</saml:NameID>
+        <saml:SubjectConfirmation Method="urn:oasis:names:tc:SAML:2.0:cm:bearer">
+          <saml:SubjectConfirmationData NotOnOrAfter="2011-08-31T08:51:05Z" Recipient="https://sp.example.com/assertion_consumer" InResponseTo="_13603a6565a69297e9809175b052d115965121c8" />
+        </saml:SubjectConfirmation>
+      </saml:Subject>
+      <saml:Conditions NotOnOrAfter="2011-08-31T08:51:05Z" NotBefore="2011-08-31T08:51:05Z">
+        <saml:AudienceRestriction>
+          <saml:Audience>ServiceProvider</saml:Audience>
+        </saml:AudienceRestriction>
+      </saml:Conditions>
+      <saml:AuthnStatement AuthnInstant="2011-08-31T08:51:05Z" SessionIndex="_93af655219464fb403b34436cfb0c5cb1d9a5502">
+        <saml:AuthnContext>
+          <saml:AuthnContextClassRef>urn:oasis:names:tc:SAML:2.0:ac:classes:PasswordProtectedTransport</saml:AuthnContextClassRef>
+        </saml:AuthnContext>
+        <saml:SubjectLocality Address="127.0.0.1"/>
+      </saml:AuthnStatement>
+      <saml:AttributeStatement>
+        <saml:Attribute Name="urn:ServiceID">
+          <saml:AttributeValue xmlns:xs="http://www.w3.org/2001/XMLSchema" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:type="xs:string">1</saml:AttributeValue>
+        </saml:Attribute>
+        <saml:Attribute Name="urn:EntityConcernedID">
+          <saml:AttributeValue xmlns:xs="http://www.w3.org/2001/XMLSchema" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:type="xs:string">1</saml:AttributeValue>
+        </saml:Attribute>
+        <saml:Attribute Name="urn:EntityConcernedSubID">
+          <saml:AttributeValue xmlns:xs="http://www.w3.org/2001/XMLSchema" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:type="xs:string">1</saml:AttributeValue>
+        </saml:Attribute>
+      </saml:AttributeStatement>
+    </saml:Assertion>
+XML
+        );
+
+        $privateKey = SAML2_CertificatesMock::getPrivateKey();
+
+        $unsignedAssertion = new SAML2_Assertion($document->firstChild);
+        $unsignedAssertion->setSignatureKey($privateKey);
+        $unsignedAssertion->setCertificates(array(SAML2_CertificatesMock::PUBLIC_KEY_PEM));
+
+        $signedAssertion = new SAML2_Assertion($unsignedAssertion->toXML());
+
+        $signatureMethod = $signedAssertion->getSignatureMethod();
+
+        $this->assertEquals($privateKey->getAlgorith(), $signatureMethod);
+    }
 }
 
