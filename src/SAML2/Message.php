@@ -109,6 +109,11 @@ abstract class SAML2_Message implements SAML2_SignedElement
     private $validators;
 
     /**
+     * @var null|string
+     */
+    private $signatureMethod;
+
+    /**
      * Initialize a message.
      *
      * This constructor takes an optional parameter with a DOMElement. If this
@@ -163,6 +168,9 @@ abstract class SAML2_Message implements SAML2_SignedElement
 
         /* Validate the signature element of the message. */
         try {
+            /** @var null|\DOMAttr $signatureMethod */
+            $signatureMethod = SAML2_Utils::xpQuery($xml, './ds:Signature/ds:SignedInfo/ds:SignatureMethod/@Algorithm');
+
             $sig = SAML2_Utils::validateElement($xml);
 
             if ($sig !== FALSE) {
@@ -172,6 +180,7 @@ abstract class SAML2_Message implements SAML2_SignedElement
                     'Function' => array('SAML2_Utils', 'validateSignature'),
                     'Data' => $sig,
                     );
+                $this->signatureMethod = $signatureMethod[0]->value;
             }
 
         } catch (Exception $e) {
@@ -568,4 +577,11 @@ abstract class SAML2_Message implements SAML2_SignedElement
         $this->extensions = $extensions;
     }
 
+    /**
+     * @return null|string
+     */
+    public function getSignatureMethod()
+    {
+        return $this->signatureMethod;
+    }
 }
