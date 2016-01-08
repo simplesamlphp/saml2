@@ -212,6 +212,11 @@ class Assertion implements SignedElement
     protected $wasSignedAtConstruction = false;
 
     /**
+     * @var string|null
+     */
+    private $signatureMethod;
+
+    /**
      * Constructor for SAML 2 assertions.
      *
      * @param \DOMElement|null $xml The input assertion.
@@ -523,12 +528,16 @@ class Assertion implements SignedElement
      */
     private function parseSignature(\DOMElement $xml)
     {
+        /** @var null|\DOMAttr $signatureMethod */
+        $signatureMethod = Utils::xpQuery($xml, './ds:Signature/ds:SignedInfo/ds:SignatureMethod/@Algorithm');
+
         /* Validate the signature element of the message. */
         $sig = Utils::validateElement($xml);
         if ($sig !== false) {
             $this->wasSignedAtConstruction = true;
             $this->certificates = $sig['Certificates'];
             $this->signatureData = $sig;
+            $this->signatureMethod = $signatureMethod[0]->value;
         }
     }
 
@@ -1227,6 +1236,14 @@ class Assertion implements SignedElement
     public function getWasSignedAtConstruction()
     {
         return $this->wasSignedAtConstruction;
+    }
+
+    /**
+     * @return null|string
+     */
+    public function getSignatureMethod()
+    {
+        return $this->signatureMethod;
     }
 
     /**
