@@ -34,6 +34,7 @@ class SOAPClient
         $ctxOpts = array(
             'ssl' => array(
                 'capture_peer_cert' => true,
+                'allow_self_signed' => true
             ),
         );
 
