@@ -116,6 +116,11 @@ EJpABx1x4ukY8bZVl6QzQ79P48oGxOaIy27/g1FVkGqRtA4UPABcn0sJ
         return self::PUBLIC_KEY_PEM;
     }
 
+    public static function getPlainPrivateKey()
+    {
+        return self::PRIVATE_KEY_PEM;
+    }
+
     /**
      * Returns just the certificate contents without the begin and end markings
      */
