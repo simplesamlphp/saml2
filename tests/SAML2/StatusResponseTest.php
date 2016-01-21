@@ -56,6 +56,12 @@ XML;
         $response           = new Response($fixtureResponseDom->firstChild);
 
         $this->assertFalse($response->isSuccess());
+
+        $status = $response->getStatus();
+        $this->assertEquals("urn:oasis:names:tc:SAML:2.0:status:Responder", $status['Code']);
+        $this->assertNull($status['SubCode']);
+        $this->assertEquals("Something is wrong...", $status['Message']);
+
         $this->assertEquals("_bec424fa5103428909a30ff1e31168327f79474984", $response->getInResponseTo());
     }
 
@@ -83,6 +89,11 @@ XML;
         $response           = new Response($fixtureResponseDom->firstChild);
 
         $this->assertTrue($response->isSuccess());
+
+        $status = $response->getStatus();
+        $this->assertEquals("urn:oasis:names:tc:SAML:2.0:status:Success", $status['Code']);
+        $this->assertNull($status['SubCode']);
+        $this->assertNull($status['Message']);
     }
 
     /**
@@ -112,6 +123,11 @@ XML;
         $response           = new Response($fixtureResponseDom->firstChild);
 
         $this->assertFalse($response->isSuccess());
+
+        $status = $response->getStatus();
+        $this->assertEquals("urn:oasis:names:tc:SAML:2.0:status:Requester", $status['Code']);
+        $this->assertEquals("urn:oasis:names:tc:SAML:2.0:status:RequestDenied", $status['SubCode']);
+        $this->assertEquals("The AuthnRequest could not be validated", $status['Message']);
     }
 
     /**
