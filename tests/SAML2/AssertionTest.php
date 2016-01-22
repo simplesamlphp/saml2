@@ -413,7 +413,7 @@ XML
     </saml:Assertion>
 XML;
 
-        $assertion = new Assertion(DOMDocumentFactory::fromString($xml)->firstChild);
+        $assertion = new \SAML2_Assertion(SAML2_DOMDocumentFactory::fromString($xml)->firstChild);
 
         $attributes = $assertion->getAttributes();
         $this->assertInstanceOf(
@@ -447,7 +447,7 @@ XML;
     </saml:Assertion>
 XML;
 
-        $assertion = new Assertion(DOMDocumentFactory::fromString($xml)->firstChild);
+        $assertion = new \SAML2_Assertion(SAML2_DOMDocumentFactory::fromString($xml)->firstChild);
 
         $attributes = $assertion->getAttributes();
         $this->assertInternalType('int', $attributes['urn:some:integer'][0]);
