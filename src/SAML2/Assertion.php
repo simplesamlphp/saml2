@@ -498,7 +498,7 @@ class SAML2_Assertion implements SAML2_SignedElement
             $values = SAML2_Utils::xpQuery($attribute, './saml_assertion:AttributeValue');
             foreach ($values as $value) {
                 $hasNonTextChildElements = false;
-                foreach($value->childNodes as $childNode) {
+                foreach ($value->childNodes as $childNode) {
                     /** @var \DOMNode $childNode */
                     if ($childNode->nodeType !== XML_TEXT_NODE) {
                         $hasNonTextChildElements = true;
