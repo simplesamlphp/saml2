@@ -146,7 +146,8 @@ class SAML2_Assertion implements SAML2_SignedElement
     /**
      * The attributes, as an associative array.
      *
-     * @var DOMElement[]
+     * @var array multi-dimensional array, indexed by attribute name with each value representing the attribute value
+     *            of that attribute. This value is an array of \DOMNodeList|string|int
      */
     private $attributes;
 
