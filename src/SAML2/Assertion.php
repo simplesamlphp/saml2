@@ -495,28 +495,37 @@ class SAML2_Assertion implements SAML2_SignedElement
                 $this->attributes[$name] = array();
             }
 
-            $values = SAML2_Utils::xpQuery($attribute, './saml_assertion:AttributeValue');
-            foreach ($values as $value) {
-                $hasNonTextChildElements = false;
-                foreach ($value->childNodes as $childNode) {
-                    /** @var \DOMNode $childNode */
-                    if ($childNode->nodeType !== XML_TEXT_NODE) {
-                        $hasNonTextChildElements = true;
-                        break;
-                    }
-                }
+            $this->parseAttributeValue($attribute, $name);
+        }
+    }
 
-                if ($hasNonTextChildElements) {
-                    $this->attributes[$name][] = $value->childNodes;
-                    continue;
+    /**
+     * @param \DOMNode $attribute
+     * @param string   $attributeName
+     */
+    private function parseAttributeValue($attribute, $attributeName)
+    {
+        $values = SAML2_Utils::xpQuery($attribute, './saml_assertion:AttributeValue');
+        foreach ($values as $value) {
+            $hasNonTextChildElements = false;
+            foreach ($value->childNodes as $childNode) {
+                /** @var \DOMNode $childNode */
+                if ($childNode->nodeType !== XML_TEXT_NODE) {
+                    $hasNonTextChildElements = true;
+                    break;
                 }
+            }
 
-                $type = $value->getAttribute('xsi:type');
-                if ($type === 'xs:integer') {
-                    $this->attributes[$name][] = (int) $value->textContent;
-                } else {
-                    $this->attributes[$name][] = trim($value->textContent);
-                }
+            if ($hasNonTextChildElements) {
+                $this->attributes[$attributeName][] = $value->childNodes;
+                continue;
+            }
+
+            $type = $value->getAttribute('xsi:type');
+            if ($type === 'xs:integer') {
+                $this->attributes[$attributeName][] = (int)$value->textContent;
+            } else {
+                $this->attributes[$attributeName][] = trim($value->textContent);
             }
         }
     }
@@ -794,10 +803,7 @@ class SAML2_Assertion implements SAML2_SignedElement
                 $this->attributes[$name] = array();
             }
 
-            $values = SAML2_Utils::xpQuery($attribute, './saml_assertion:AttributeValue');
-            foreach ($values as $value) {
-                $this->attributes[$name][] = trim($value->textContent);
-            }
+            $this->parseAttributeValue($attribute, $name);
         }
     }
 

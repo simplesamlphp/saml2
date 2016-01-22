@@ -454,5 +454,100 @@ XML;
         $this->assertInternalType('string', $attributes['urn:some:string'][0]);
         $this->assertXmlStringEqualsXmlString($xml, $assertion->toXML()->ownerDocument->saveXML());
     }
+
+    public function testEncryptedAttributeValuesWithComplexTypeValuesAreParsedCorrectly()
+    {
+        $xml = <<<XML
+            <saml:Assertion
+                    xmlns:saml="urn:oasis:names:tc:SAML:2.0:assertion"
+                    xmlns:samlp="urn:oasis:names:tc:SAML:2.0:protocol"
+                    xmlns:xs="http://www.w3.org/2001/XMLSchema"
+                    xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+                    Version="2.0"
+                    ID="_93af655219464fb403b34436cfb0c5cb1d9a5502"
+                    IssueInstant="1970-01-01T01:33:31Z">
+      <saml:Issuer>Provider</saml:Issuer>
+      <saml:Conditions/>
+      <saml:AttributeStatement>
+        <saml:Attribute Name="urn:oid:1.3.6.1.4.1.5923.1.1.1.10" NameFormat="urn:oasis:names:tc:SAML:2.0:attrname-format:uri">
+            <saml:AttributeValue>
+                <saml:NameID Format="urn:oasis:names:tc:SAML:2.0:nameid-format:persistent">abcd-some-value-xyz</saml:NameID>
+            </saml:AttributeValue>
+        </saml:Attribute>
+        <saml:Attribute Name="urn:mace:dir:attribute-def:eduPersonTargetedID" NameFormat="urn:oasis:names:tc:SAML:2.0:attrname-format:uri">
+            <saml:AttributeValue>
+                <saml:NameID Format="urn:oasis:names:tc:SAML:2.0:nameid-format:persistent">abcd-some-value-xyz</saml:NameID>
+            </saml:AttributeValue>
+        </saml:Attribute>
+        <saml:Attribute Name="urn:EntityConcernedSubID" NameFormat="urn:oasis:names:tc:SAML:2.0:attrname-format:uri">
+            <saml:AttributeValue xsi:type="xs:string">string</saml:AttributeValue>
+        </saml:Attribute>
+      </saml:AttributeStatement>
+    </saml:Assertion>
+XML;
+
+        $privateKey = SAML2_CertificatesMock::getPublicKey();
+
+        $assertion = new SAML2_Assertion(SAML2_DOMDocumentFactory::fromString($xml)->firstChild);
+        $assertion->setEncryptionKey($privateKey);
+        $assertion->setEncryptedAttributes(true);
+        $encryptedAssertion = $assertion->toXML()->ownerDocument->saveXML();
+
+        $assertionToVerify = new SAML2_Assertion(SAML2_DOMDocumentFactory::fromString($encryptedAssertion)->firstChild);
+
+        $this->assertTrue($assertionToVerify->hasEncryptedAttributes());
+
+        $assertionToVerify->decryptAttributes(SAML2_CertificatesMock::getPrivateKey());
+
+        $attributes = $assertionToVerify->getAttributes();
+        $this->assertInstanceOf(
+            '\DOMNodeList',
+            $attributes['urn:mace:dir:attribute-def:eduPersonTargetedID'][0]
+        );
+        $this->assertXmlStringEqualsXmlString($xml, $assertionToVerify->toXML()->ownerDocument->saveXML());
+    }
+
+    public function testTypedEncryptedAttributeValuesAreParsedCorrectly()
+    {
+        $xml = <<<XML
+            <saml:Assertion
+                    xmlns:saml="urn:oasis:names:tc:SAML:2.0:assertion"
+                    xmlns:samlp="urn:oasis:names:tc:SAML:2.0:protocol"
+                    xmlns:xs="http://www.w3.org/2001/XMLSchema"
+                    xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+                    Version="2.0"
+                    ID="_93af655219464fb403b34436cfb0c5cb1d9a5502"
+                    IssueInstant="1970-01-01T01:33:31Z">
+      <saml:Issuer>Provider</saml:Issuer>
+      <saml:Conditions/>
+      <saml:AttributeStatement>
+        <saml:Attribute Name="urn:some:string">
+            <saml:AttributeValue xsi:type="xs:string">string</saml:AttributeValue>
+        </saml:Attribute>
+        <saml:Attribute Name="urn:some:integer">
+            <saml:AttributeValue xsi:type="xs:integer">42</saml:AttributeValue>
+        </saml:Attribute>
+      </saml:AttributeStatement>
+    </saml:Assertion>
+XML;
+
+        $privateKey = SAML2_CertificatesMock::getPublicKey();
+
+        $assertion = new SAML2_Assertion(SAML2_DOMDocumentFactory::fromString($xml)->firstChild);
+        $assertion->setEncryptionKey($privateKey);
+        $assertion->setEncryptedAttributes(true);
+        $encryptedAssertion = $assertion->toXML()->ownerDocument->saveXML();
+
+        $assertionToVerify = new SAML2_Assertion(SAML2_DOMDocumentFactory::fromString($encryptedAssertion)->firstChild);
+
+        $this->assertTrue($assertionToVerify->hasEncryptedAttributes());
+
+        $assertionToVerify->decryptAttributes(SAML2_CertificatesMock::getPrivateKey());
+        $attributes = $assertionToVerify->getAttributes();
+
+        $this->assertInternalType('int', $attributes['urn:some:integer'][0]);
+        $this->assertInternalType('string', $attributes['urn:some:string'][0]);
+        $this->assertXmlStringEqualsXmlString($xml, $assertionToVerify->toXML()->ownerDocument->saveXML());
+    }
 }
 
