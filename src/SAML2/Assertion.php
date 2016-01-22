@@ -497,7 +497,26 @@ class SAML2_Assertion implements SAML2_SignedElement
 
             $values = SAML2_Utils::xpQuery($attribute, './saml_assertion:AttributeValue');
             foreach ($values as $value) {
-                $this->attributes[$name][] = trim($value->textContent);
+                $hasNonTextChildElements = false;
+                foreach($value->childNodes as $childNode) {
+                    /** @var \DOMNode $childNode */
+                    if ($childNode->nodeType !== XML_TEXT_NODE) {
+                        $hasNonTextChildElements = true;
+                        break;
+                    }
+                }
+
+                if ($hasNonTextChildElements) {
+                    $this->attributes[$name][] = $value->childNodes;
+                    continue;
+                }
+
+                $type = $value->getAttribute('xsi:type');
+                if ($type === 'xs:integer') {
+                    $this->attributes[$name][] = (int) $value->textContent;
+                } else {
+                    $this->attributes[$name][] = trim($value->textContent);
+                }
             }
         }
     }
