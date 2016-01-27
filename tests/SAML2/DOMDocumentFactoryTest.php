@@ -46,7 +46,7 @@ class DOMDocumentFactoryTest extends \PHPUnit_Framework_TestCase
      */
     public function testOnlyAStringIsAcceptedByFromFile($argument)
     {
-        DOMDocumentFactory::fromString($argument);
+        DOMDocumentFactory::fromFile($argument);
     }
 
     /**

@@ -11,8 +11,8 @@ Test with the PHPCS configuration in tools/phpcs/ruleset.xml
 Testing
 -------
 Use PHPUnit for Unit Testing.
-Test with the 2 known users: (SimpleSAMLphp)[http://www.simplesaml.org] and
-(OpenConext-engineblock)[http://www.openconext.org] .
+Test with the 2 known users: (SimpleSAMLphp)[https://www.simplesamlphp.org] and
+(OpenConext-engineblock)[https://www.openconext.org] .
 
 ### Using Tests in Development
 
