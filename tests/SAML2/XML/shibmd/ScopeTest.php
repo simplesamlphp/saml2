@@ -12,6 +12,7 @@ class ScopeTest extends \PHPUnit_Framework_TestCase
 {
     public function testMarshalling()
     {
+        // In literal, non-regexp form
         $scope = new Scope();
         $scope->scope = "example.org";
         $scope->regexp = FALSE;
@@ -27,6 +28,22 @@ class ScopeTest extends \PHPUnit_Framework_TestCase
         $this->assertEquals('urn:mace:shibboleth:metadata:1.0', $scopeElement->namespaceURI);
         $this->assertEquals('false', $scopeElement->getAttribute('regexp'));
 
+        // Without explicit regexp: should yield explicit 'false'
+        $scope = new Scope();
+        $scope->scope = "example.org";
+
+        $document = DOMDocumentFactory::fromString('<root />');
+        $scopeElement = $scope->toXML($document->firstChild);
+
+        $scopeElements = Utils::xpQuery($scopeElement, '/root/shibmd:Scope');
+        $this->assertCount(1, $scopeElements);
+        $scopeElement = $scopeElements[0];
+
+        $this->assertEquals('example.org', $scopeElement->nodeValue);
+        $this->assertEquals('urn:mace:shibboleth:metadata:1.0', $scopeElement->namespaceURI);
+        $this->assertEquals('false', $scopeElement->getAttribute('regexp'));
+
+        // In regexp form
         $scope = new Scope();
         $scope->scope = "^(.*\.)?example\.edu$";
         $scope->regexp = TRUE;
@@ -48,6 +65,16 @@ class ScopeTest extends \PHPUnit_Framework_TestCase
         $document = DOMDocumentFactory::fromString(
 <<<XML
 <shibmd:Scope regexp="false">example.org</shibmd:Scope>
+XML
+        );
+        $scope = new Scope($document->firstChild);
+
+        $this->assertEquals('example.org', $scope->scope);
+        $this->assertFalse($scope->regexp);
+
+        $document = DOMDocumentFactory::fromString(
+<<<XML
+<shibmd:Scope>example.org</shibmd:Scope>
 XML
         );
         $scope = new Scope($document->firstChild);
