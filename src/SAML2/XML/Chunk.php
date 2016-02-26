@@ -82,7 +82,6 @@ class Chunk implements \Serializable
      * Un-serialize this XML chunk.
      *
      * @param  string          $serialized The serialized chunk.
-     * @return \SAML2\XML\Chunk The chunk object represented by the serialized string.
      */
     public function unserialize($serialized)
     {
