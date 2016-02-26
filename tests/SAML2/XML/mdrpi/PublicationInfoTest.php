@@ -80,7 +80,7 @@ XML
 XML
         );
 
-	$this->setExpectedException('Exception', 'Missing required attribute "publisher"');
+        $this->setExpectedException('Exception', 'Missing required attribute "publisher"');
         $publicationInfo = new PublicationInfo($document->firstChild);
     }
 }

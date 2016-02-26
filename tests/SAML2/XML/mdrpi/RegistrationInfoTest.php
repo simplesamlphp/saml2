@@ -79,7 +79,7 @@ XML
 XML
         );
 
-	$this->setExpectedException('Exception', 'Missing required attribute "registrationAuthority"');
+        $this->setExpectedException('Exception', 'Missing required attribute "registrationAuthority"');
         $registrationInfo = new RegistrationInfo($document->firstChild);
     }
 
@@ -90,7 +90,7 @@ XML
 
         $document = DOMDocumentFactory::fromString('<root />');
 
-	$this->setExpectedException('Exception', 'Missing required registration authority.');
+        $this->setExpectedException('Exception', 'Missing required registration authority.');
         $xml = $registrationInfo->toXML($document->firstChild);
     }
 }
