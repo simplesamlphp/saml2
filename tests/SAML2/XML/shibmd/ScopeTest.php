@@ -10,9 +10,11 @@ use SAML2\Utils;
  */
 class ScopeTest extends \PHPUnit_Framework_TestCase
 {
-    public function testMarshalling()
+    /**
+     * Marshalling a scope in literal (non-regexp) form.
+     */
+    public function testMarshallingLiteral()
     {
-        // In literal, non-regexp form
         $scope = new Scope();
         $scope->scope = "example.org";
         $scope->regexp = FALSE;
@@ -27,8 +29,14 @@ class ScopeTest extends \PHPUnit_Framework_TestCase
         $this->assertEquals('example.org', $scopeElement->nodeValue);
         $this->assertEquals('urn:mace:shibboleth:metadata:1.0', $scopeElement->namespaceURI);
         $this->assertEquals('false', $scopeElement->getAttribute('regexp'));
+    }
 
-        // Without explicit regexp: should yield explicit 'false'
+    /**
+     * Marshalling a scope which does not specificy the value for
+     * regexp explicitly (expect it to default to 'false').
+     */
+    public function testMarshallingImplicitRegexpValue()
+    {
         $scope = new Scope();
         $scope->scope = "example.org";
 
@@ -42,8 +50,13 @@ class ScopeTest extends \PHPUnit_Framework_TestCase
         $this->assertEquals('example.org', $scopeElement->nodeValue);
         $this->assertEquals('urn:mace:shibboleth:metadata:1.0', $scopeElement->namespaceURI);
         $this->assertEquals('false', $scopeElement->getAttribute('regexp'));
+    }
 
-        // In regexp form
+    /**
+     * Marshalling a scope which is in regexp form.
+     */
+    public function testMarshallingRegexp()
+    {
         $scope = new Scope();
         $scope->scope = "^(.*\.)?example\.edu$";
         $scope->regexp = TRUE;
@@ -60,7 +73,10 @@ class ScopeTest extends \PHPUnit_Framework_TestCase
         $this->assertEquals('true', $scopeElement->getAttribute('regexp'));
     }
 
-    public function testUnmarshalling()
+    /**
+     * Unmarshalling a scope in literal (non-regexp) form.
+     */
+    public function testUnmarshallingLiteral()
     {
         $document = DOMDocumentFactory::fromString(
 <<<XML
@@ -71,7 +87,14 @@ XML
 
         $this->assertEquals('example.org', $scope->scope);
         $this->assertFalse($scope->regexp);
+    }
 
+    /**
+     * Unmarshalling a scope that does not specify an explicit
+     * regexp value (assumed to be false).
+     */
+    public function testUnmarshallingWithoutRegexpValue()
+    {
         $document = DOMDocumentFactory::fromString(
 <<<XML
 <shibmd:Scope>example.org</shibmd:Scope>
@@ -81,7 +104,13 @@ XML
 
         $this->assertEquals('example.org', $scope->scope);
         $this->assertFalse($scope->regexp);
+    }
 
+    /**
+     * Unmarshalling a scope in regexp form.
+     */
+    public function testUnmarshallingRegexp()
+    {
         $document = DOMDocumentFactory::fromString(
 <<<XML
 <shibmd:Scope regexp="true">^(.*|)example.edu$</shibmd:Scope>
