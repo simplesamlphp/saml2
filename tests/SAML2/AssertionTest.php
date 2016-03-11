@@ -3,6 +3,7 @@
 namespace SAML2;
 
 use SAML2\XML\Chunk;
+use RobRichards\XMLSecLibs\XMLSecurityKey;
 
 /**
  * Class \SAML2\AssertionTest
@@ -550,5 +551,96 @@ XML;
         $this->assertInternalType('int', $attributes['urn:some:integer'][0]);
         $this->assertInternalType('string', $attributes['urn:some:string'][0]);
         $this->assertXmlStringEqualsXmlString($xml, $assertionToVerify->toXML()->ownerDocument->saveXML());
+    }
+
+    /**
+     * Try to verify a signed assertion.
+     */
+    public function testVerifySignedAssertion()
+    {
+        $doc = new \DOMDocument();
+        $doc->load(__DIR__ . '/signedassertion.xml');
+
+        $publicKey = CertificatesMock::getPublicKey();
+
+        $assertion = new Assertion($doc->firstChild);
+        $result = $assertion->validate($publicKey);
+
+        $this->assertTrue($result);
+        // Double-check that we can actually retrieve some basics.
+        $this->assertEquals("_d908a49b8b63665738430d1c5b655f297b91331864", $assertion->getId());
+        $this->assertEquals("https://thki-sid.pt-48.utr.surfcloud.nl/ssp/saml2/idp/metadata.php", $assertion->getIssuer());
+        $this->assertEquals("1457707995", $assertion->getIssueInstant());
+
+        $certs = $assertion->getCertificates();
+        $this->assertCount(1, $certs);
+        $this->assertEquals(CertificatesMock::getPlainPublicKeyContents(), $certs[0]);
+    }
+
+    /**
+     * Try to verify a signed assertion in which a byte was changed after signing.
+     * Must yield a validation exception.
+     */
+    public function testVerifySignedAssertionChangedBody()
+    {
+        $doc = new \DOMDocument();
+        $doc->load(__DIR__ . '/signedassertion_tampered.xml');
+
+        $publicKey = CertificatesMock::getPublicKey();
+
+        $this->setExpectedException('Exception', 'Reference validation failed');
+        $assertion = new Assertion($doc->firstChild);
+    }
+
+    /**
+     * Try to verify a signed assertion with the wrong key.
+     * Must yield a signature validation exception.
+     */
+    public function testVerifySignedAssertionWrongKey()
+    {
+        $doc = new \DOMDocument();
+        $doc->load(__DIR__ . '/signedassertion.xml');
+
+        $publicKey = CertificatesMock::getPublicKey2();
+
+        $assertion = new Assertion($doc->firstChild);
+        $this->setExpectedException('Exception', 'Unable to validate Signature');
+        $assertion->validate($publicKey);
+    }
+
+    /**
+     * Calling validate on an unsigned assertion must return
+     * false, not an exception.
+     */
+    public function testVerifyUnsignedAssertion()
+    {
+        $xml = <<<XML
+<saml:Assertion xmlns:saml="urn:oasis:names:tc:SAML:2.0:assertion"
+                ID="_593e33ddf86449ce4d4c22b60ac48e067d98a0b2bf"
+                Version="2.0"
+                IssueInstant="2010-03-05T13:34:28Z"
+>
+  <saml:Issuer>testIssuer</saml:Issuer>
+  <saml:Conditions>
+    <saml:AudienceRestriction>
+      <saml:Audience>audience1</saml:Audience>
+      <saml:Audience>audience2</saml:Audience>
+    </saml:AudienceRestriction>
+  </saml:Conditions>
+  <saml:AuthnStatement AuthnInstant="2010-03-05T13:34:28Z">
+    <saml:AuthnContext>
+      <saml:AuthnContextClassRef>someAuthnContext</saml:AuthnContextClassRef>
+      <saml:AuthenticatingAuthority>someIdP1</saml:AuthenticatingAuthority>
+      <saml:AuthenticatingAuthority>someIdP2</saml:AuthenticatingAuthority>
+    </saml:AuthnContext>
+  </saml:AuthnStatement>
+</saml:Assertion>
+XML;
+        $document  = DOMDocumentFactory::fromString($xml);
+        $assertion = new Assertion($document->firstChild);
+
+        $publicKey = CertificatesMock::getPublicKey();
+        $result = $assertion->validate($publicKey);
+        $this->assertFalse($result);
     }
 }
