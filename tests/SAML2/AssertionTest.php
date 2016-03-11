@@ -3,7 +3,6 @@
 namespace SAML2;
 
 use SAML2\XML\Chunk;
-use RobRichards\XMLSecLibs\XMLSecurityKey;
 
 /**
  * Class \SAML2\AssertionTest
