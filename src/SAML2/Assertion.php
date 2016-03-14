@@ -388,7 +388,7 @@ class Assertion implements SignedElement
 
             return;
         } elseif (count($authnStatements) > 1) {
-            throw new \Exception('More that one <saml:AuthnStatement> in <saml:Assertion> not supported.');
+            throw new \Exception('More than one <saml:AuthnStatement> in <saml:Assertion> not supported.');
         }
         $authnStatement = $authnStatements[0];
 
