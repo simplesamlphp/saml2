@@ -9,6 +9,9 @@ use SAML2\XML\Chunk;
  */
 class AssertionTest extends \PHPUnit_Framework_TestCase
 {
+    /**
+     * Test to build a basic assertion
+     */
     public function testMarshalling()
     {
         // Create an assertion
@@ -43,6 +46,9 @@ class AssertionTest extends \PHPUnit_Framework_TestCase
         $this->assertEquals('someAuthnContext', $authnContextElements[0]->textContent);
     }
 
+    /**
+     * Test to parse a basic assertion
+     */
     public function testUnmarshalling()
     {
         // Unmarshall an assertion
@@ -84,6 +90,9 @@ XML;
         $this->assertEquals('someIdP2', $assertionAuthenticatingAuthorities[1]);
     }
 
+    /**
+     * Test parsing AuthnContext elements Decl and ClassRef
+     */
     public function testAuthnContextDeclAndClassRef()
     {
         $xml = <<<XML
@@ -119,6 +128,9 @@ XML;
         $this->assertEquals('someAuthnContext', $assertion->getAuthnContextClassRef());
     }
 
+    /**
+     * Test parsing AuthnContext elements DeclRef and ClassRef
+     */
     public function testAuthnContextDeclRefAndClassRef()
     {
         // Try with unmarshalling
@@ -641,5 +653,99 @@ XML;
         $publicKey = CertificatesMock::getPublicKeySha1();
         $result = $assertion->validate($publicKey);
         $this->assertFalse($result);
+    }
+
+    /**
+     * An assertion must always be version "2.0".
+     */
+    public function testAssertionVersionOtherThan20ThrowsException()
+    {
+        $xml = <<<XML
+<saml:Assertion xmlns:saml="urn:oasis:names:tc:SAML:2.0:assertion"
+                ID="_593e33ddf86449ce4d4c22b60ac48e067d98a0b2bf"
+                Version="1.3"
+                IssueInstant="2010-03-05T13:34:28Z"
+>
+  <saml:Issuer>testIssuer</saml:Issuer>
+  <saml:Conditions>
+    <saml:AudienceRestriction>
+      <saml:Audience>audience1</saml:Audience>
+      <saml:Audience>audience2</saml:Audience>
+    </saml:AudienceRestriction>
+  </saml:Conditions>
+  <saml:AuthnStatement AuthnInstant="2010-03-05T13:34:28Z">
+    <saml:AuthnContext>
+      <saml:AuthnContextClassRef>someAuthnContext</saml:AuthnContextClassRef>
+      <saml:AuthenticatingAuthority>someIdP1</saml:AuthenticatingAuthority>
+      <saml:AuthenticatingAuthority>someIdP2</saml:AuthenticatingAuthority>
+    </saml:AuthnContext>
+  </saml:AuthnStatement>
+</saml:Assertion>
+XML;
+        $document  = DOMDocumentFactory::fromString($xml);
+        $this->setExpectedException('Exception', 'Unsupported version: 1.3');
+        $assertion = new Assertion($document->firstChild);
+    }
+
+    /**
+     * An assertion without an ID must throw an exception
+     */
+    public function testAssertionWithoutIDthrowsException()
+    {
+        $xml = <<<XML
+<saml:Assertion xmlns:saml="urn:oasis:names:tc:SAML:2.0:assertion"
+                Version="2.0"
+                IssueInstant="2010-03-05T13:34:28Z"
+>
+  <saml:Issuer>testIssuer</saml:Issuer>
+  <saml:Conditions>
+    <saml:AudienceRestriction>
+      <saml:Audience>audience1</saml:Audience>
+      <saml:Audience>audience2</saml:Audience>
+    </saml:AudienceRestriction>
+  </saml:Conditions>
+  <saml:AuthnStatement AuthnInstant="2010-03-05T13:34:28Z">
+    <saml:AuthnContext>
+      <saml:AuthnContextClassRef>someAuthnContext</saml:AuthnContextClassRef>
+      <saml:AuthenticatingAuthority>someIdP1</saml:AuthenticatingAuthority>
+      <saml:AuthenticatingAuthority>someIdP2</saml:AuthenticatingAuthority>
+    </saml:AuthnContext>
+  </saml:AuthnStatement>
+</saml:Assertion>
+XML;
+        $document  = DOMDocumentFactory::fromString($xml);
+        $this->setExpectedException('Exception', 'Missing ID attribute on SAML assertion');
+        $assertion = new Assertion($document->firstChild);
+    }
+
+    /**
+     * An assertion must always have an Issuer element.
+     */
+    public function testAssertionWithoutIssuerThrowsException()
+    {
+        $xml = <<<XML
+<saml:Assertion xmlns:saml="urn:oasis:names:tc:SAML:2.0:assertion"
+                ID="_593e33ddf86449ce4d4c22b60ac48e067d98a0b2bf"
+                Version="2.0"
+                IssueInstant="2010-03-05T13:34:28Z"
+>
+  <saml:Conditions>
+    <saml:AudienceRestriction>
+      <saml:Audience>audience1</saml:Audience>
+      <saml:Audience>audience2</saml:Audience>
+    </saml:AudienceRestriction>
+  </saml:Conditions>
+  <saml:AuthnStatement AuthnInstant="2010-03-05T13:34:28Z">
+    <saml:AuthnContext>
+      <saml:AuthnContextClassRef>someAuthnContext</saml:AuthnContextClassRef>
+      <saml:AuthenticatingAuthority>someIdP1</saml:AuthenticatingAuthority>
+      <saml:AuthenticatingAuthority>someIdP2</saml:AuthenticatingAuthority>
+    </saml:AuthnContext>
+  </saml:AuthnStatement>
+</saml:Assertion>
+XML;
+        $document  = DOMDocumentFactory::fromString($xml);
+        $this->setExpectedException('Exception', 'Missing <saml:Issuer> in assertion');
+        $assertion = new Assertion($document->firstChild);
     }
 }
