@@ -3,7 +3,6 @@
 namespace SAML2;
 
 use SAML2\XML\Chunk;
-use RobRichards\XMLSecLibs\XMLSecurityKey;
 
 /**
  * Class \SAML2\AssertionTest
@@ -561,7 +560,7 @@ XML;
         $doc = new \DOMDocument();
         $doc->load(__DIR__ . '/signedassertion.xml');
 
-        $publicKey = CertificatesMock::getPublicKey();
+        $publicKey = CertificatesMock::getPublicKeySha1();
 
         $assertion = new Assertion($doc->firstChild);
         $result = $assertion->validate($publicKey);
@@ -586,7 +585,7 @@ XML;
         $doc = new \DOMDocument();
         $doc->load(__DIR__ . '/signedassertion_tampered.xml');
 
-        $publicKey = CertificatesMock::getPublicKey();
+        $publicKey = CertificatesMock::getPublicKeySha1();
 
         $this->setExpectedException('Exception', 'Reference validation failed');
         $assertion = new Assertion($doc->firstChild);
@@ -601,7 +600,7 @@ XML;
         $doc = new \DOMDocument();
         $doc->load(__DIR__ . '/signedassertion.xml');
 
-        $publicKey = CertificatesMock::getPublicKey2();
+        $publicKey = CertificatesMock::getPublicKey2Sha1();
 
         $assertion = new Assertion($doc->firstChild);
         $this->setExpectedException('Exception', 'Unable to validate Signature');
@@ -639,7 +638,7 @@ XML;
         $document  = DOMDocumentFactory::fromString($xml);
         $assertion = new Assertion($document->firstChild);
 
-        $publicKey = CertificatesMock::getPublicKey();
+        $publicKey = CertificatesMock::getPublicKeySha1();
         $result = $assertion->validate($publicKey);
         $this->assertFalse($result);
     }
