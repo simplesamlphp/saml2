@@ -287,21 +287,20 @@ class Assertion implements SignedElement
             $subject,
             './saml_assertion:NameID | ./saml_assertion:EncryptedID/xenc:EncryptedData'
         );
-        if (empty($nameId)) {
-            throw new \Exception('Missing <saml:NameID> or <saml:EncryptedID> in <saml:Subject>.');
-        } elseif (count($nameId) > 1) {
-            throw new \Exception('More than one <saml:NameID> or <saml:EncryptedD> in <saml:Subject>.');
-        }
-        $nameId = $nameId[0];
-        if ($nameId->localName === 'EncryptedData') {
-            /* The NameID element is encrypted. */
-            $this->encryptedNameId = $nameId;
-        } else {
-            $this->nameId = Utils::parseNameId($nameId);
+        if (count($nameId) > 1) {
+            throw new \Exception('More than one <saml:NameID> or <saml:EncryptedID> in <saml:Subject>.');
+        } elseif (!empty($nameId)) {
+            $nameId = $nameId[0];
+            if ($nameId->localName === 'EncryptedData') {
+                /* The NameID element is encrypted. */
+                $this->encryptedNameId = $nameId;
+            } else {
+                $this->nameId = Utils::parseNameId($nameId);
+            }
         }
 
         $subjectConfirmation = Utils::xpQuery($subject, './saml_assertion:SubjectConfirmation');
-        if (empty($subjectConfirmation)) {
+        if (empty($subjectConfirmation) && empty($nameId)) {
             throw new \Exception('Missing <saml:SubjectConfirmation> in <saml:Subject>.');
         }
 
