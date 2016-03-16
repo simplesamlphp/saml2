@@ -714,8 +714,9 @@ class AuthnRequest extends Request
             if (array_key_exists('SPNameQualifier', $this->nameIdPolicy)) {
                 $nameIdPolicy->setAttribute('SPNameQualifier', $this->nameIdPolicy['SPNameQualifier']);
             }
-            if (array_key_exists('AllowCreate', $this->nameIdPolicy) && $this->nameIdPolicy['AllowCreate'] === TRUE || $this->nameIdPolicy['AllowCreate'] === FALSE) {
-                $nameIdPolicy->setAttribute('AllowCreate', var_export($this->nameIdPolicy['AllowCreate'], TRUE) );
+            if (array_key_exists('AllowCreate', $this->nameIdPolicy) && $this->nameIdPolicy['AllowCreate'] === true
+                || $this->nameIdPolicy['AllowCreate'] === false) {
+                $nameIdPolicy->setAttribute('AllowCreate', var_export($this->nameIdPolicy['AllowCreate'], true));
             }
             $root->appendChild($nameIdPolicy);
         }
