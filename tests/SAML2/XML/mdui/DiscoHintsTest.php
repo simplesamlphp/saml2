@@ -10,6 +10,9 @@ use SAML2\Utils;
  */
 class DiscoHintsTest extends \PHPUnit_Framework_TestCase
 {
+    /**
+     * Test marshalling a basic DiscoHints element
+     */
     public function testMarshalling()
     {
         $discoHints = new DiscoHints();
@@ -65,6 +68,9 @@ class DiscoHintsTest extends \PHPUnit_Framework_TestCase
         $this->assertNull($xml);
     }
 
+    /**
+     * Test unmarshalling a basic DiscoHints element
+     */
     public function testUnmarshalling()
     {
         $document = DOMDocumentFactory::fromString(<<<XML
@@ -90,5 +96,50 @@ XML
         $this->assertCount(2, $disco->GeolocationHint);
         $this->assertEquals('geo:47.37328,8.531126', $disco->GeolocationHint[0]);
         $this->assertEquals('geo:19.34343,12.342514', $disco->GeolocationHint[1]);
+    }
+
+    /**
+     * Add a Keywords element to the children attribute
+     */
+    public function testMarshallingChildren()
+    {
+        $discoHints = new DiscoHints();
+        $keywords = new Keywords();
+        $keywords->lang = "nl";
+        $keywords->Keywords = array("voorbeeld", "specimen");
+        $discoHints->children = array($keywords);
+
+        $document = DOMDocumentFactory::fromString('<root />');
+        $xml = $discoHints->toXML($document->firstChild);
+
+        $discoElements = Utils::xpQuery(
+            $xml,
+            '/root/*[local-name()=\'DiscoHints\' and namespace-uri()=\'urn:oasis:names:tc:SAML:metadata:ui\']'
+        );
+        $this->assertCount(1, $discoElements);
+        $discoElement = $discoElements[0];
+        $this->assertEquals("mdui:Keywords", $discoElement->firstChild->nodeName);
+        $this->assertEquals("voorbeeld specimen", $discoElement->firstChild->textContent);
+    }
+
+    /**
+     * Umarshal a DiscoHints attribute with extra children
+     */
+    public function testUnmarshallingChildren()
+    {
+        $document = DOMDocumentFactory::fromString(<<<XML
+<mdui:DiscoHints xmlns:mdui="urn:oasis:names:tc:SAML:metadata:ui">
+  <mdui:GeolocationHint>geo:47.37328,8.531126</mdui:GeolocationHint>
+  <child1>content of tag</child1>
+</mdui:DiscoHints>
+XML
+        );
+
+        $disco = new DiscoHints($document->firstChild);
+
+        $this->assertCount(1, $disco->GeolocationHint);
+        $this->assertEquals('geo:47.37328,8.531126', $disco->GeolocationHint[0]);
+        $this->assertCount(1, $disco->children);
+        $this->assertEquals('content of tag', $disco->children[0]->xml->textContent);
     }
 }
