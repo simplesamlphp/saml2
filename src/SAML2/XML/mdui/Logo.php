@@ -20,14 +20,14 @@ class Logo
     /**
      * The width of this logo.
      *
-     * @var string
+     * @var int
      */
     public $width;
 
     /**
      * The height of this logo.
      *
-     * @var string
+     * @var int
      */
     public $height;
 
