@@ -6,6 +6,8 @@ use SAML2\Exception\InvalidArgumentException;
 
 /**
  * Simple representation of the fingerprint of a certificate
+ *
+ * @deprecated Please use full certificates instead.
  */
 class Fingerprint
 {
@@ -16,6 +18,8 @@ class Fingerprint
 
     /**
      * @param string $fingerPrint
+     *
+     * @deprecated Please use full certificates instead.
      */
     public function __construct($fingerPrint)
     {

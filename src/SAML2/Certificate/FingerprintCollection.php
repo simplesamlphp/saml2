@@ -7,6 +7,7 @@ use SAML2\Utilities\ArrayCollection;
 
 /**
  * Simple collection object for transporting keys
+ * @deprecated Please load full certificates instead.
  */
 class FingerprintCollection extends ArrayCollection
 {
@@ -14,6 +15,8 @@ class FingerprintCollection extends ArrayCollection
      * Add a key to the collection
      *
      * @param \SAML2\Certificate\Fingerprint $fingerprint
+     *
+     * @deprecated
      */
     public function add($fingerprint)
     {
@@ -31,6 +34,8 @@ class FingerprintCollection extends ArrayCollection
      * @param \SAML2\Certificate\Fingerprint $otherFingerprint
      *
      * @return bool
+     *
+     * @deprecated
      */
     public function contains(Fingerprint $otherFingerprint)
     {

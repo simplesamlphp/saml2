@@ -5,6 +5,9 @@ namespace SAML2\Certificate;
 use SAML2\Configuration\CertificateProvider;
 use SAML2\Exception\InvalidArgumentException;
 
+/**
+ * @deprecated Please load full certificates instead.
+ */
 class FingerprintLoader
 {
     /**
@@ -13,6 +16,8 @@ class FingerprintLoader
      * @param \SAML2\Configuration\CertificateProvider $configuration
      *
      * @return \SAML2\Certificate\FingerprintCollection
+     *
+     * @deprecated
      */
     public static function loadFromConfiguration(CertificateProvider $configuration)
     {
@@ -27,6 +32,8 @@ class FingerprintLoader
      * @param \SAML2\Configuration\CertificateProvider $configuration
      *
      * @return \SAML2\Certificate\FingerprintCollection
+     *
+     * @deprecated
      */
     public function loadFingerprints(CertificateProvider $configuration)
     {
