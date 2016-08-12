@@ -46,13 +46,13 @@ class PrivateKeyLoader
             return $decryptionKeys;
         }
 
-        $newPrivateKey = $serviceProvider->getPrivateKey(PrivateKey::NAME_NEW);
+        $newPrivateKey = $serviceProvider->getPrivateKey(PrivateKeyConfiguration::NAME_NEW);
         if ($newPrivateKey instanceof PrivateKey) {
             $loadedKey = $this->loadPrivateKey($newPrivateKey);
             $decryptionKeys->add($this->convertPrivateKeyToRsaKey($loadedKey));
         }
 
-        $privateKey = $serviceProvider->getPrivateKey(PrivateKey::NAME_DEFAULT, true);
+        $privateKey = $serviceProvider->getPrivateKey(PrivateKeyConfiguration::NAME_DEFAULT, true);
         $loadedKey  = $this->loadPrivateKey($privateKey);
         $decryptionKeys->add($this->convertPrivateKeyToRsaKey($loadedKey));
 
