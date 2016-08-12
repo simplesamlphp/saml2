@@ -40,6 +40,7 @@ class NameIdDecryptionTransformer implements
         LoggerInterface $logger,
         PrivateKeyLoader $privateKeyLoader
     ) {
+        $this->logger = $logger;
         $this->privateKeyLoader = $privateKeyLoader;
     }
 
