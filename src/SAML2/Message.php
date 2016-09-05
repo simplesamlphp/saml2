@@ -65,7 +65,7 @@ abstract class Message implements SignedElement
     /**
      * The entity id of the issuer of this message, or null if unknown.
      *
-     * @var string|null
+     * @var string|object|null
      */
     private $issuer;
 
@@ -358,11 +358,11 @@ abstract class Message implements SignedElement
     /**
      * Set the issuer of this message.
      *
-     * @param string|null $issuer The new issuer of this message.
+     * @param string|object|null $issuer The new issuer of this message.
      */
     public function setIssuer($issuer)
     {
-        assert('is_string($issuer) || is_null($issuer)');
+        assert('is_string($issuer) || is_object($issuer) || is_null($issuer)');
 
         $this->issuer = $issuer;
     }
@@ -429,7 +429,24 @@ abstract class Message implements SignedElement
         }
 
         if ($this->issuer !== null) {
-            Utils::addString($root, Constants::NS_SAML, 'saml:Issuer', $this->issuer);
+            if (is_string($this->issuer)){
+                Utils::addString($root, \SAML2_Const::NS_SAML, 'saml:Issuer', $this->issuer);
+            }elseif (is_object($this->issuer)){
+                Utils::addString($root, \SAML2_Const::NS_SAML, 'saml:Issuer', $this->issuer->__toString());
+                $issuer = \SAML2_Utils::xpQuery($root, './saml_assertion:Issuer');
+                if ($this->issuer->getNameQualifier()){
+                    $issuer[0]->setAttribute('NameQualifier', $this->issuer->getNameQualifier());
+                }
+                if ($this->issuer->getFormat()){
+                    $issuer[0]->setAttribute('Format', $this->issuer->getFormat());
+                }
+                if ($this->issuer->getSPNameQualifier()){
+                    $issuer[0]->setAttribute('SPNameQualifier', $this->issuer->getSPNameQualifier());
+                }
+                if ($this->issuer->getSPProvidedID()){
+                    $issuer[0]->setAttribute('SPProvidedID', $this->issuer->getSPProvidedID());
+                }
+            }
         }
 
         if (!empty($this->extensions)) {
