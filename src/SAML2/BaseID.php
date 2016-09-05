@@ -48,7 +48,7 @@ abstract class BaseID {
      * @return string The entity name.
      */
     public function getEntity() {
-        return $this->$entity;
+        return $this->entity;
     }
 
     /**
