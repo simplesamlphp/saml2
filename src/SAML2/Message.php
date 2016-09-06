@@ -348,11 +348,15 @@ abstract class Message implements SignedElement
     /**
      * Retrieve the issuer if this message.
      *
-     * @return string|null The issuer of this message, or NULL if no issuer is given.
+     * @return string|object|null The issuer of this message, or NULL if no issuer is given.
      */
     public function getIssuer()
     {
-        return $this->issuer;
+        if (is_string($this->issuer)){
+            return $this->issuer;
+        }elseif (is_object($this->issuer)){
+            return $this->issuer->__toString();
+        }
     }
 
     /**
@@ -429,7 +433,7 @@ abstract class Message implements SignedElement
         }
 
         if ($this->issuer !== null) {
-            if (is_string($this->issuer)){
+            if (is_string($this->issuer)) {
                 Utils::addString($root, \SAML2_Const::NS_SAML, 'saml:Issuer', $this->issuer);
             }elseif (is_object($this->issuer)) {
                 $this->setIssuerAttribute($root);
