@@ -352,9 +352,9 @@ abstract class Message implements SignedElement
      */
     public function getIssuer()
     {
-        if (is_string($this->issuer)){
+        if (is_string($this->issuer)) {
             return $this->issuer;
-        }elseif (is_object($this->issuer)){
+        }elseif (is_object($this->issuer)) {
             return $this->issuer->__toString();
         }
     }
@@ -435,7 +435,7 @@ abstract class Message implements SignedElement
         if ($this->issuer !== null) {
             if (is_string($this->issuer)) {
                 Utils::addString($root, \SAML2_Const::NS_SAML, 'saml:Issuer', $this->issuer);
-            }elseif (is_object($this->issuer)) {
+            } elseif (is_object($this->issuer)) {
                 $this->setIssuerAttribute($root);
             }
         }
@@ -451,7 +451,8 @@ abstract class Message implements SignedElement
      * Set attribute for Issuer if is an object.
      *
      */
-    private function setIssuerAttribute($root) {
+    private function setIssuerAttribute($root) 
+    {
         Utils::addString($root, \SAML2_Const::NS_SAML, 'saml:Issuer', $this->issuer->__toString());
         $issuer = \SAML2_Utils::xpQuery($root, './saml_assertion:Issuer');
         if ($this->issuer->getNameQualifier()) {
