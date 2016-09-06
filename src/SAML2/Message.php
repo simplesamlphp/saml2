@@ -354,7 +354,7 @@ abstract class Message implements SignedElement
     {
         if (is_string($this->issuer)) {
             return $this->issuer;
-        }elseif (is_object($this->issuer)) {
+        } elseif (is_object($this->issuer)) {
             return $this->issuer->__toString();
         }
     }
@@ -451,7 +451,7 @@ abstract class Message implements SignedElement
      * Set attribute for Issuer if is an object.
      *
      */
-    private function setIssuerAttribute($root) 
+    private function setIssuerAttribute($root)
     {
         Utils::addString($root, \SAML2_Const::NS_SAML, 'saml:Issuer', $this->issuer->__toString());
         $issuer = \SAML2_Utils::xpQuery($root, './saml_assertion:Issuer');
