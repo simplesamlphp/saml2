@@ -53,7 +53,7 @@ class Constants
     * Holder-of-Key subject confirmation method.
     */
     const CM_HOK = 'urn:oasis:names:tc:SAML:2.0:cm:holder-of-key';
-    
+
     /**
      * Vouches subject confirmation method.
      */
@@ -125,6 +125,10 @@ class Constants
      * Indicates that the issuer of the message does not believe that they need to obtain or report consent.
      */
     const CONSENT_INAPPLICABLE = 'urn:oasis:names:tc:SAML:2.0:consent:inapplicable';
+
+    const EPTI_URN_MACE = 'urn:mace:dir:attribute-def:eduPersonTargetedID';
+
+    const EPTI_URN_OID = 'urn:oid:1.3.6.1.4.1.5923.1.1.1.10';
 
     /**
      * The interpretation of the attribute name is left to individual implementations.
