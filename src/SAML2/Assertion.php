@@ -4,6 +4,7 @@ namespace SAML2;
 
 use RobRichards\XMLSecLibs\XMLSecEnc;
 use RobRichards\XMLSecLibs\XMLSecurityKey;
+use SAML2\Exception\RuntimeException;
 use SAML2\Utilities\Temporal;
 use SAML2\XML\Chunk;
 use SAML2\XML\saml\SubjectConfirmation;
@@ -511,7 +512,27 @@ class Assertion implements SignedElement
      */
     private function parseAttributeValue($attribute, $attributeName)
     {
+        /** @var \DOMElement[] $values */
         $values = Utils::xpQuery($attribute, './saml_assertion:AttributeValue');
+
+        if ($attributeName === Constants::EPTI_URN_MACE || $attributeName === Constants::EPTI_URN_OID) {
+            foreach ($values as $index => $eptiAttributeValue) {
+                $eptiNameId = Utils::xpQuery($eptiAttributeValue, './saml:NameID');
+
+                if (count($eptiNameId) !== 1) {
+                    throw new RuntimeException(sprintf(
+                        'A "%s" (EPTI) attribute value must be a NameID, none found for value no. "%d"',
+                        $attributeName,
+                        $index
+                    ));
+                }
+
+                $this->attributes[$attributeName][] = Utils::parseNameId($eptiNameId[0]);
+            }
+
+            return;
+        }
+
         foreach ($values as $value) {
             $hasNonTextChildElements = false;
             foreach ($value->childNodes as $childNode) {
@@ -1466,6 +1487,16 @@ class Assertion implements SignedElement
 
             if ($this->nameFormat !== Constants::NAMEFORMAT_UNSPECIFIED) {
                 $attribute->setAttribute('NameFormat', $this->nameFormat);
+            }
+
+            if ($name === Constants::EPTI_URN_MACE || $name === Constants::EPTI_URN_OID) {
+                foreach ($values as $eptiValue) {
+                    $attributeValue = $document->createElementNS(Constants::NS_SAML, 'saml:AttributeValue');
+                    $attribute->appendChild($attributeValue);
+                    Utils::addNameId($attributeValue, $eptiValue);
+                }
+
+                continue;
             }
 
             foreach ($values as $value) {
