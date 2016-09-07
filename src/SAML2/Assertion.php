@@ -153,10 +153,21 @@ class Assertion implements SignedElement
     private $AuthenticatingAuthority;
 
     /**
-     * The attributes, as an associative array.
+     * The attributes, as an associative array, indexed by attribute name
      *
-     * @var array multi-dimensional array, indexed by attribute name with each value representing the attribute value
-     *            of that attribute. This value is an array of \DOMNodeList|string|int
+     * To ease handling, all attribute values are represented as an array of values, also for values with a multiplicity
+     * of single. There are 4 possible variants of datatypes for the values: a string, an integer, an array or
+     * a DOMNodeList
+     *
+     * If the attribute is an eduPersonTargetedID, the values will be arrays that are created by @see Utils::parseNameId
+     *    and compatible with @see Utils::addNameID
+     * If the attribute value has an type-definition (xsi:string or xsi:int), the values will be of that type.
+     * If the attribute value contains a nested XML structure, the values will be a DOMNodeList
+     * In all other cases the values are treated as strings
+     *
+     * **WARNING** a DOMNodeList cannot be serialized without data-loss and should be handled explicitly
+     *
+     * @var array multi-dimensional array of \DOMNodeList|string|int|array
      */
     private $attributes;
 
