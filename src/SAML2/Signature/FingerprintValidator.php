@@ -10,6 +10,8 @@ use SAML2\SignedElement;
 
 /**
  * Validates the signature based on the fingerprint of the certificate
+ *
+ * @deprecated Please use full certificates instead.
  */
 class FingerprintValidator extends AbstractChainedValidator
 {
@@ -23,6 +25,9 @@ class FingerprintValidator extends AbstractChainedValidator
      */
     private $fingerprintLoader;
 
+    /**
+     * @deprecated Please use full certificates instead.
+     */
     public function __construct(
         LoggerInterface $logger,
         FingerprintLoader $fingerprintLoader

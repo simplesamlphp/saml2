@@ -36,6 +36,8 @@ interface CertificateProvider extends Queryable
      * fingerprint is a string containing the certificate fingerprint.
      *
      * @return null|array|\Traversable
+     *
+     * @deprecated Please use getCertifiateFile() or getCertificateData()
      */
     public function getCertificateFingerprints();
 }
