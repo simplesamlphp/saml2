@@ -4,13 +4,12 @@ namespace SAML2;
 
 use PHPUnit_Framework_TestCase as TestCase;
 
-class MessageTest extends TestCase
-{
+class MessageTest extends TestCase {
+
     /**
      * @group Message
      */
-    public function testCorrectSignatureMethodCanBeExtractedFromAuthnRequest()
-    {
+    public function testCorrectSignatureMethodCanBeExtractedFromAuthnRequest() {
         $authnRequest = new \DOMDocument();
         $authnRequest->loadXML(<<<'AUTHNREQUEST'
 <samlp:AuthnRequest
@@ -43,8 +42,7 @@ AUTHNREQUEST
     /**
      * @group Message
      */
-    public function testCorrectSignatureMethodCanBeExtractedFromWithIssuerObjectAuthnRequest()
-    {
+    public function testCorrectSignatureMethodCanBeExtractedFromWithIssuerObjectAuthnRequest() {
         $authnRequest = new \DOMDocument();
         $authnRequest->loadXML(<<<'AUTHNREQUEST'
 <samlp:AuthnRequest
@@ -81,8 +79,7 @@ AUTHNREQUEST
     /**
      * @group Message
      */
-    public function testCorrectSignatureMethodCanBeExtractedFromWithNameIDAuthnRequest()
-    {
+    public function testCorrectSignatureMethodCanBeExtractedFromWithNameIDAuthnRequest() {
         $authnRequest = new \DOMDocument();
         $authnRequest->loadXML(<<<'AUTHNREQUEST'
 <samlp:AuthnRequest
@@ -104,25 +101,32 @@ AUTHNREQUEST
 
         $privateKey = CertificatesMock::getPrivateKey();
 
+        $url = 'https://gateway.stepup.org/saml20/sp/metadata';
+        $sp = "MyServiceProvider";
         $unsignedMessage = Message::fromXML($authnRequest->documentElement);
         $unsignedMessage->setSignatureKey($privateKey);
         $unsignedMessage->setCertificates(array(CertificatesMock::PUBLIC_KEY_PEM));
         $nameIDObject = new NameID($unsignedMessage->getIssuer());
-        $nameIDObject->setNameQualifier('https://gateway.stepup.org/saml20/sp/metadata');
+        $nameIDObject->setNameQualifier($url);
         $nameIDObject->setFormat('urn:oasis:names:tc:SAML:2.0:nameid-format:entity');
+        $nameIDObject->setSPNameQualifier($url);
+        $nameIDObject->setSPProvidedID($sp);
         $unsignedMessage->setIssuer($nameIDObject);
         $signedMessage = Message::fromXML($unsignedMessage->toSignedXML());
 
         $this->assertEquals($privateKey->getAlgorith(), $signedMessage->getSignatureMethod());
+        $this->assertEquals($nameIDObject, $url);
+        $this->assertEquals($nameIDObject->getSPProvidedID(), $sp);
+        $this->assertEquals($nameIDObject->getEntity(), $url);
+        $this->assertEquals($nameIDObject->getNameQualifier(), $url);
     }
 
     /**
      * @group Message
      */
-    public function testCorrectSignatureMethodCanBeExtractedFromResponse()
-    {
+    public function testCorrectSignatureMethodCanBeExtractedFromResponse() {
         $response = new \DOMDocument();
-        $response->load(__DIR__.'/Response/response.xml');
+        $response->load(__DIR__ . '/Response/response.xml');
 
         $privateKey = CertificatesMock::getPrivateKey();
 
@@ -134,4 +138,5 @@ AUTHNREQUEST
 
         $this->assertEquals($privateKey->getAlgorith(), $signedMessage->getSignatureMethod());
     }
+
 }

@@ -33,7 +33,7 @@ abstract class BaseID
     /**
      * Constructor for SAML 2 BaseID.
      *
-     * @param string $$entity The $entity name
+     * @param string $entity The entity name
      */
     protected function __construct($entity)
     {
