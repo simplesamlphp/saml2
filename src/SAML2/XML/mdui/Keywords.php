@@ -13,7 +13,9 @@ class Keywords
     /**
      * The keywords of this item.
      *
-     * @var string
+     * Array of strings.
+     *
+     * @var string[]
      */
     public $Keywords;
 

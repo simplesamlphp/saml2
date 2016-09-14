@@ -90,7 +90,7 @@ class KeyLoader
     public function loadKeys(array $configuredKeys, $usage)
     {
         foreach ($configuredKeys as $keyData) {
-            if (isset($key['X509Certificate'])) {
+            if (isset($keyData['X509Certificate'])) {
                 $key = new X509($keyData);
             } else {
                 $key = new Key($keyData);

@@ -27,9 +27,9 @@ class Scope
     /**
      * Whether this is a regexp scope.
      *
-     * @var bool|null
+     * @var bool
      */
-    public $regexp = null;
+    public $regexp = false;
 
     /**
      * Create a Scope.
@@ -43,7 +43,7 @@ class Scope
         }
 
         $this->scope = $xml->textContent;
-        $this->regexp = Utils::parseBoolean($xml, 'regexp', null);
+        $this->regexp = Utils::parseBoolean($xml, 'regexp', false);
     }
 
     /**
@@ -66,7 +66,7 @@ class Scope
 
         if ($this->regexp === true) {
             $e->setAttribute('regexp', 'true');
-        } elseif ($this->regexp === false) {
+        } else {
             $e->setAttribute('regexp', 'false');
         }
 

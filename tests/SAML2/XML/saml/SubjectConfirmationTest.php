@@ -48,4 +48,54 @@ XML
         $this->assertEquals('SomeNameIDValue', $subjectConfirmation->NameID->value);
         $this->assertTrue($subjectConfirmation->SubjectConfirmationData instanceof SubjectConfirmationData);
     }
+
+    public function testMethodMissingThrowsException()
+    {
+        $samlNamespace = Constants::NS_SAML;
+        $document = DOMDocumentFactory::fromString(
+<<<XML
+<saml:SubjectConfirmation xmlns:saml="{$samlNamespace}">
+  <saml:NameID>SomeNameIDValue</saml:NameID>
+  <saml:SubjectConfirmationData/>
+</saml:SubjectConfirmation>
+XML
+        );
+
+        $this->setExpectedException('Exception', 'SubjectConfirmation element without Method attribute');
+        $subjectConfirmation = new SubjectConfirmation($document->firstChild);
+    }
+
+    public function testManyNameIDThrowsException()
+    {
+        $samlNamespace = Constants::NS_SAML;
+        $document = DOMDocumentFactory::fromString(
+<<<XML
+<saml:SubjectConfirmation xmlns:saml="{$samlNamespace}" Method="SomeMethod">
+  <saml:NameID>SomeNameIDValue</saml:NameID>
+  <saml:NameID>AnotherNameIDValue</saml:NameID>
+  <saml:SubjectConfirmationData/>
+</saml:SubjectConfirmation>
+XML
+        );
+
+        $this->setExpectedException('Exception', 'More than one NameID in a SubjectConfirmation element');
+        $subjectConfirmation = new SubjectConfirmation($document->firstChild);
+    }
+
+    public function testManySubjectConfirmationDataThrowsException()
+    {
+        $samlNamespace = Constants::NS_SAML;
+        $document = DOMDocumentFactory::fromString(
+<<<XML
+<saml:SubjectConfirmation xmlns:saml="{$samlNamespace}" Method="SomeMethod">
+  <saml:NameID>SomeNameIDValue</saml:NameID>
+  <saml:SubjectConfirmationData Recipient="Me" />
+  <saml:SubjectConfirmationData Recipient="Someone Else" />
+</saml:SubjectConfirmation>
+XML
+        );
+
+        $this->setExpectedException('Exception', 'More than one SubjectConfirmationData child in a SubjectConfirmation element');
+        $subjectConfirmation = new SubjectConfirmation($document->firstChild);
+    }
 }

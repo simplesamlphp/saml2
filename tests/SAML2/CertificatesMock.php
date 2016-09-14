@@ -94,6 +94,17 @@ EJpABx1x4ukY8bZVl6QzQ79P48oGxOaIy27/g1FVkGqRtA4UPABcn0sJ
     /**
      * @return XMLSecurityKey
      */
+    public static function getPublicKey2()
+    {
+        $publicKey = new XMLSecurityKey(XMLSecurityKey::RSA_1_5, array('type'=>'public'));
+        $publicKey->loadKey(self::PUBLIC_KEY_2_PEM);
+        return $publicKey;
+    }
+
+
+    /**
+     * @return XMLSecurityKey
+     */
     public static function getPublicKeySha1()
     {
         $publicKey = new XMLSecurityKey(XMLSecurityKey::RSA_SHA1, array('type'=>'public'));

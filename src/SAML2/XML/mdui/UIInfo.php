@@ -23,7 +23,7 @@ class UIInfo
      *
      * The elements can be any of the other \SAML2\XML\mdui\* elements.
      *
-     * @var array
+     * @var \SAML2\XML\Chunk[]
      */
     public $children = array();
 
@@ -56,16 +56,16 @@ class UIInfo
     public $PrivacyStatementURL = array();
 
     /**
-     * The Keywords, as an array of language => array of strings.
+     * The Keywords, as an array of Keywords objects
      *
-     * @var array
+     * @var \SAML2\XML\mdui\Keywords[]
      */
     public $Keywords = array();
 
     /**
-     * The Logo, as an array of associative arrays containing url, width, height, and optional lang.
+     * The Logo, as an array of Logo objects
      *
-     * @var array
+     * @var \SAML2\XML\mdui\Logo[]
      */
     public $Logo = array();
 

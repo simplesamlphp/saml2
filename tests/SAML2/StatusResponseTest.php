@@ -163,11 +163,42 @@ STATUSXML
     }
 
     /**
+     * A response without any <Status> element throws exception
+     */
+    public function testNoStatusElementThrowsException()
+    {
+        $this->setExpectedException('Exception', 'Missing status code on response');
+
+        $xml = <<<XML
+<samlp:Response xmlns:samlp="urn:oasis:names:tc:SAML:2.0:protocol"
+                xmlns:saml="urn:oasis:names:tc:SAML:2.0:assertion"
+                ID="s2a0da3504aff978b0f8c80f6a62c713c4a2f64c5b"
+                InResponseTo="_bec424fa5103428909a30ff1e31168327f79474984"
+                Version="2.0"
+                IssueInstant="2007-12-10T11:39:48Z"
+                Destination="http://somewhere.example.org/simplesaml/saml2/sp/AssertionConsumerService.php">
+    <saml:Issuer>max.example.org</saml:Issuer>
+    <saml:Assertion xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+                    xmlns:xs="http://www.w3.org/2001/XMLSchema"
+                    ID="s2a0da3504aff978b0f8c80f6a62c713c4a2f64c5c"
+                    Version="2.0"
+                    IssueInstant="2007-12-10T11:39:48Z"
+                    >
+        <saml:Issuer>max.example.org</saml:Issuer>
+     </saml:Assertion>
+</samlp:Response>
+XML;
+
+        $fixtureResponseDom = DOMDocumentFactory::fromString($xml);
+        $response           = new Response($fixtureResponseDom->firstChild);
+    }
+
+    /**
      * StatusCode is required in a StatusResponse.
      */
     public function testNoStatusCodeThrowsException()
     {
-        $this->setExpectedException('Exception', 'Missing status code');
+        $this->setExpectedException('Exception', 'Missing status code in status element');
 
         $xml = <<<XML
 <samlp:Response xmlns:samlp="urn:oasis:names:tc:SAML:2.0:protocol"
