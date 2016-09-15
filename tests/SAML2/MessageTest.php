@@ -120,6 +120,8 @@ AUTHNREQUEST
         $this->assertEquals($nameIDObject->getEntity(), $url);
         $this->assertEquals($nameIDObject->getNameQualifier(), $url);
         $this->assertEquals($unsignedMessage->getIssuer(), $nameIDObject);
+        $nameIDObject = new NameID(null);
+        $this->assertEquals($unsignedMessage->getIssuer(), null);
         
     }
 
