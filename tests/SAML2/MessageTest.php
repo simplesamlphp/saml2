@@ -123,8 +123,6 @@ AUTHNREQUEST
         $this->assertEquals($nameIDObject->getEntity(), $url);
         $this->assertEquals($nameIDObject->getNameQualifier(), $url);
         $this->assertEquals($unsignedMessage->getIssuer(), $nameIDObject);
-        $nameIDObject = new NameID(null);
-        $this->assertEquals($nameIDObject, null);
     }
 
     /**
@@ -158,11 +156,10 @@ AUTHNREQUEST
         $unsignedMessage = Message::fromXML($authnRequest->documentElement);
         $unsignedMessage->setSignatureKey($privateKey);
         $unsignedMessage->setCertificates(array(CertificatesMock::PUBLIC_KEY_PEM));
-        $nameIDObject = new NameID(null);
-        $unsignedMessage->setIssuer($nameIDObject);
+        $unsignedMessage->setIssuer('');
         $signedMessage = Message::fromXML($unsignedMessage->toSignedXML());
 
-        $this->assertEquals($unsignedMessage->getIssuer(), null);
+        $this->assertEquals($unsignedMessage->getIssuer(), '');
     }
 
     /**
