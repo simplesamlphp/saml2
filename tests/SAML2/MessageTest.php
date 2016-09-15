@@ -156,10 +156,10 @@ AUTHNREQUEST
         $unsignedMessage = Message::fromXML($authnRequest->documentElement);
         $unsignedMessage->setSignatureKey($privateKey);
         $unsignedMessage->setCertificates(array(CertificatesMock::PUBLIC_KEY_PEM));
-        $unsignedMessage->setIssuer('');
+        $unsignedMessage->setIssuer(null);
         $signedMessage = Message::fromXML($unsignedMessage->toSignedXML());
 
-        $this->assertEquals($unsignedMessage->getIssuer(), '');
+        $this->assertEquals($unsignedMessage->getIssuer(), null);
     }
 
     /**

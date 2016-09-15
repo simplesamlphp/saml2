@@ -361,7 +361,7 @@ abstract class Message implements SignedElement
         } elseif (is_object($this->issuer)) {
             return $this->issuer->__toString();
         } else {
-            return "";
+            return null;
         }
     }
 
