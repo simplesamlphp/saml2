@@ -119,6 +119,8 @@ AUTHNREQUEST
         $this->assertEquals($nameIDObject->getSPProvidedID(), $sp);
         $this->assertEquals($nameIDObject->getEntity(), $url);
         $this->assertEquals($nameIDObject->getNameQualifier(), $url);
+        $this->assertEquals($unsignedMessage->getIssuer(), $nameIDObject);
+        
     }
 
     /**
