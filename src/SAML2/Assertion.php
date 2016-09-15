@@ -144,10 +144,21 @@ class SAML2_Assertion implements SAML2_SignedElement
     private $AuthenticatingAuthority;
 
     /**
-     * The attributes, as an associative array.
+     * The attributes, as an associative array, indexed by attribute name
      *
-     * @var array multi-dimensional array, indexed by attribute name with each value representing the attribute value
-     *            of that attribute. This value is an array of \DOMNodeList|string|int
+     * To ease handling, all attribute values are represented as an array of values, also for values with a multiplicity
+     * of single. There are 4 possible variants of datatypes for the values: a string, an integer, an array or
+     * a DOMNodeList
+     *
+     * If the attribute is an eduPersonTargetedID, the values will be arrays that are created by @see Utils::parseNameId
+     *    and compatible with @see Utils::addNameID
+     * If the attribute value has an type-definition (xsi:string or xsi:int), the values will be of that type.
+     * If the attribute value contains a nested XML structure, the values will be a DOMNodeList
+     * In all other cases the values are treated as strings
+     *
+     * **WARNING** a DOMNodeList cannot be serialized without data-loss and should be handled explicitly
+     *
+     * @var array multi-dimensional array of \DOMNodeList|string|int|array
      */
     private $attributes;
 
@@ -505,7 +516,27 @@ class SAML2_Assertion implements SAML2_SignedElement
      */
     private function parseAttributeValue($attribute, $attributeName)
     {
+        /** @var \DOMElement[] $values */
         $values = SAML2_Utils::xpQuery($attribute, './saml_assertion:AttributeValue');
+
+        if ($attributeName === SAML2_Const::EPTI_URN_MACE || $attributeName === SAML2_Const::EPTI_URN_OID) {
+            foreach ($values as $index => $eptiAttributeValue) {
+                $eptiNameId = SAML2_Utils::xpQuery($eptiAttributeValue, './saml:NameID');
+
+                if (count($eptiNameId) !== 1) {
+                    throw new SAML2_Exception_RuntimeException(sprintf(
+                        'A "%s" (EPTI) attribute value must be a NameID, none found for value no. "%d"',
+                        $attributeName,
+                        $index
+                    ));
+                }
+
+                $this->attributes[$attributeName][] = SAML2_Utils::parseNameId($eptiNameId[0]);
+            }
+
+            return;
+        }
+
         foreach ($values as $value) {
             $hasNonTextChildElements = FALSE;
             foreach ($value->childNodes as $childNode) {
@@ -1460,6 +1491,16 @@ class SAML2_Assertion implements SAML2_SignedElement
 
             if ($this->nameFormat !== SAML2_Const::NAMEFORMAT_UNSPECIFIED) {
                 $attribute->setAttribute('NameFormat', $this->nameFormat);
+            }
+
+            if ($name === SAML2_Const::EPTI_URN_MACE || $name === SAML2_Const::EPTI_URN_OID) {
+                foreach ($values as $eptiValue) {
+                    $attributeValue = $document->createElementNS(SAML2_Const::NS_SAML, 'saml:AttributeValue');
+                    $attribute->appendChild($attributeValue);
+                    SAML2_Utils::addNameId($attributeValue, $eptiValue);
+                }
+
+                continue;
             }
 
             foreach ($values as $value) {
