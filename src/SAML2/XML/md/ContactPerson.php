@@ -64,6 +64,13 @@ class ContactPerson
     public $TelephoneNumber = array();
 
     /**
+     * Extra attributes on the contact element.
+     *
+     * @var array
+     */
+    public $ContactPersonAttributes = array();
+
+    /**
      * Initialize a ContactPerson element.
      *
      * @param \DOMElement|null $xml The XML element we should load.
@@ -148,6 +155,7 @@ class ContactPerson
         assert('is_null($this->SurName) || is_string($this->SurName)');
         assert('is_array($this->EmailAddress)');
         assert('is_array($this->TelephoneNumber)');
+        assert('is_array($this->ContactPersonAttributes)');
 
         $doc = $parent->ownerDocument;
 
@@ -155,6 +163,10 @@ class ContactPerson
         $parent->appendChild($e);
 
         $e->setAttribute('contactType', $this->contactType);
+
+        foreach ($this->ContactPersonAttributes as $attr => $val) {
+            $e->setAttribute($attr, $val);
+        }
 
         Extensions::addList($e, $this->Extensions);
 
