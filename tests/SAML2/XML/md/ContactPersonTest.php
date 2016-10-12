@@ -90,4 +90,70 @@ XML
         $this->assertEquals('testval', $contactPerson->ContactPersonAttributes['testattr']);
         $this->assertEquals('testval2', $contactPerson->ContactPersonAttributes['testattr2']);
     }
+
+    public function testMultipleNamesXML()
+    {
+        $mdNamespace = Constants::NS_MD;
+        $document = DOMDocumentFactory::fromString(
+<<<XML
+<?xml version="1.0"?>
+<md:Test xmlns:md="{$mdNamespace}" xmlns:test="urn:test" Binding="urn:something" Location="https://whatever/" test:attr="value">
+    <md:ContactPerson contactType="other" testattr="testval" testattr2="testval2">
+        <md:Company>Test Company</md:Company>
+        <md:GivenName>John</md:GivenName>
+        <md:GivenName>Jonathon</md:GivenName>
+        <md:SurName>Doe</md:SurName>
+        <md:EmailAddress>jdoe@test.company</md:EmailAddress>
+        <md:EmailAddress>john.doe@test.company</md:EmailAddress>
+        <md:TelephoneNumber>1-234-567-8901</md:TelephoneNumber>
+    </md:ContactPerson>
+</md:Test>
+XML
+        );
+
+        $this->setExpectedException('Exception', 'More than one GivenName in md:ContactPerson');
+
+        $contactPerson = new ContactPerson($document->getElementsByTagName('ContactPerson')->item(0));
+    }
+
+    public function testEmptySurNameXML()
+    {
+        $mdNamespace = Constants::NS_MD;
+        $document = DOMDocumentFactory::fromString(
+<<<XML
+<?xml version="1.0"?>
+<md:Test xmlns:md="{$mdNamespace}" xmlns:test="urn:test" Binding="urn:something" Location="https://whatever/" test:attr="value">
+    <md:ContactPerson contactType="other">
+        <md:Company>Test Company</md:Company>
+        <md:GivenName>John</md:GivenName>
+        <md:EmailAddress>jdoe@test.company</md:EmailAddress>
+        <md:EmailAddress>john.doe@test.company</md:EmailAddress>
+        <md:TelephoneNumber>1-234-567-8901</md:TelephoneNumber>
+    </md:ContactPerson>
+</md:Test>
+XML
+        );
+
+        $contactPerson = new ContactPerson($document->getElementsByTagName('ContactPerson')->item(0));
+
+        $this->assertNull($contactPerson->SurName);
+    }
+
+    public function testMissingContactTypeXML()
+    {
+        $mdNamespace = Constants::NS_MD;
+        $document = DOMDocumentFactory::fromString(
+<<<XML
+<?xml version="1.0"?>
+<md:Test xmlns:md="{$mdNamespace}" xmlns:test="urn:test" Binding="urn:something" Location="https://whatever/" test:attr="value">
+    <md:ContactPerson>
+    </md:ContactPerson>
+</md:Test>
+XML
+        );
+
+        $this->setExpectedException('Exception', 'Missing contactType on ContactPerson.');
+
+        $contactPerson = new ContactPerson($document->getElementsByTagName('ContactPerson')->item(0));
+    }
 }
