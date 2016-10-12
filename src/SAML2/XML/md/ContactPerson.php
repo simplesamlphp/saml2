@@ -96,8 +96,9 @@ class ContactPerson
         $this->TelephoneNumber = self::getStringElements($xml, 'TelephoneNumber');
 
         foreach ($xml->attributes as $attr) {
-            if ($attr->nodeName == "contactType")
+            if ($attr->nodeName == "contactType") {
                 continue;
+            }
 
             $this->ContactPersonAttributes[$attr->nodeName] = $attr->nodeValue;
         }
