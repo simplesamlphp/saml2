@@ -95,7 +95,7 @@ class ContactPerson
         $this->EmailAddress = self::getStringElements($xml, 'EmailAddress');
         $this->TelephoneNumber = self::getStringElements($xml, 'TelephoneNumber');
 
-        foreach($xml->attributes as $attr) {
+        foreach ($xml->attributes as $attr) {
             if ($attr->nodeName == "contactType")
                 continue;
 
