@@ -454,26 +454,6 @@ abstract class Message implements SignedElement
         return $root;
     }
 
-    /**
-     * Set attribute for Issuer if is an object.
-     */
-    private function setIssuerAttribute($root)
-    {
-        Utils::addString($root, \SAML2_Const::NS_SAML, 'saml:Issuer', $this->issuer->__toString());
-        $issuer = \SAML2_Utils::xpQuery($root, './saml_assertion:Issuer');
-        if ($this->issuer->getNameQualifier()) {
-            $issuer[0]->setAttribute('NameQualifier', $this->issuer->getNameQualifier());
-        }
-        if ($this->issuer->getFormat()) {
-            $issuer[0]->setAttribute('Format', $this->issuer->getFormat());
-        }
-        if ($this->issuer->getSPNameQualifier()) {
-            $issuer[0]->setAttribute('SPNameQualifier', $this->issuer->getSPNameQualifier());
-        }
-        if ($this->issuer->getSPProvidedID()) {
-            $issuer[0]->setAttribute('SPProvidedID', $this->issuer->getSPProvidedID());
-        }
-    }
 
     /**
      * Convert this message to a signed XML document.
