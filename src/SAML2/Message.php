@@ -175,7 +175,23 @@ abstract class Message implements SignedElement
             }
         }
 
-        /* Validate the signature element of the message. */
+        $this->validateSignature($xml);
+
+        $this->extensions = Extensions::getList($xml);
+    }
+
+
+    /**
+     * Validate the signature element of a SAML message, and configure this object appropriately to perform the
+     * signature verification afterwards.
+     *
+     * Please note this method does NOT verify the signature, it just validates the signature construction and prepares
+     * this object to do the verification.
+     *
+     * @param \DOMElement $xml The SAML message whose signature we want to validate.
+     */
+    private function validateSignature(\DOMElement $xml)
+    {
         try {
             /** @var null|\DOMAttr $signatureMethod */
             $signatureMethod = Utils::xpQuery($xml, './ds:Signature/ds:SignedInfo/ds:SignatureMethod/@Algorithm');
@@ -192,11 +208,10 @@ abstract class Message implements SignedElement
                 $this->signatureMethod = $signatureMethod[0]->value;
             }
         } catch (\Exception $e) {
-            /* Ignore signature validation errors. */
+            // ignore signature validation errors
         }
-
-        $this->extensions = Extensions::getList($xml);
     }
+
 
     /**
      * Add a method for validating this message.
