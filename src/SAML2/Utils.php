@@ -322,7 +322,7 @@ class Utils
     {
         $ret = array('Value' => trim($xml->textContent));
 
-        foreach (array('NameQualifier', 'SPNameQualifier', 'Format') as $attr) {
+        foreach (array('NameQualifier', 'SPNameQualifier', 'SPProvidedID', 'Format') as $attr) {
             if ($xml->hasAttribute($attr)) {
                 $ret[$attr] = $xml->getAttribute($attr);
             }
