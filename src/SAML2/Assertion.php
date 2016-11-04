@@ -31,9 +31,12 @@ class Assertion implements SignedElement
     private $issueInstant;
 
     /**
-     * The entity id of the issuer of this assertion.
+     * The issuer of this assertion.
      *
-     * @var string
+     * If the issuer's format is \SAML2\Constants::NAMEID_ENTITY, this property will just take the issuer's string
+     * value.
+     *
+     * @var string|\SAML2\XML\saml\Issuer
      */
     private $issuer;
 
@@ -267,7 +270,10 @@ class Assertion implements SignedElement
         if (empty($issuer)) {
             throw new \Exception('Missing <saml:Issuer> in assertion.');
         }
-        $this->issuer = trim($issuer[0]->textContent);
+        $this->issuer = new XML\saml\Issuer($issuer[0]);
+        if ($this->issuer->Format === Constants::NAMEID_ENTITY) {
+            $this->issuer = $this->issuer->value;
+        }
 
         $this->parseSubject($xml);
         $this->parseConditions($xml);
@@ -671,7 +677,7 @@ class Assertion implements SignedElement
     /**
      * Retrieve the issuer if this assertion.
      *
-     * @return string The issuer of this assertion.
+     * @return string|\SAML2\XML\saml\Issuer The issuer of this assertion.
      */
     public function getIssuer()
     {
@@ -681,11 +687,11 @@ class Assertion implements SignedElement
     /**
      * Set the issuer of this message.
      *
-     * @param string $issuer The new issuer of this assertion.
+     * @param string|\SAML2\XML\saml\Issuer $issuer The new issuer of this assertion.
      */
     public function setIssuer($issuer)
     {
-        assert('is_string($issuer)');
+        assert('is_string($issuer) || $issuer instanceof \SAML2\XML\saml\Issuer');
 
         $this->issuer = $issuer;
     }
@@ -1333,7 +1339,11 @@ class Assertion implements SignedElement
         $root->setAttribute('Version', '2.0');
         $root->setAttribute('IssueInstant', gmdate('Y-m-d\TH:i:s\Z', $this->issueInstant));
 
-        $issuer = Utils::addString($root, Constants::NS_SAML, 'saml:Issuer', $this->issuer);
+        if (is_string($this->issuer)) {
+            $issuer = Utils::addString($root, Constants::NS_SAML, 'saml:Issuer', $this->issuer);
+        } elseif ($this->issuer instanceof \SAML2\XML\saml\Issuer) {
+            $issuer = $this->issuer->toXML($root);
+        }
 
         $this->addSubject($root);
         $this->addConditions($root);

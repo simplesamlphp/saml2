@@ -43,7 +43,7 @@ AUTHNREQUEST
     /**
      * @group Message
      */
-    public function testCorrectSignatureMethodCanBeExtractedFromWithIssuerObjectAuthnRequest()
+    public function testIssuerParsedAsNameID()
     {
         $authnRequest = new \DOMDocument();
         $authnRequest->loadXML(<<<'AUTHNREQUEST'
@@ -56,7 +56,11 @@ AUTHNREQUEST
     IssueInstant="2014-09-22T13:42:00Z"
     Version="2.0">
   <saml:Issuer NameQualifier="https://gateway.stepup.org/saml20/sp/metadata"
-                 Format="urn:oasis:names:tc:SAML:2.0:nameid-format:entity">https://gateway.stepup.org/saml20/sp/metadata</saml:Issuer>
+    SPNameQualifier="https://spnamequalifier.com"
+    SPProvidedID="ProviderID"
+    Format="urn:oasis:names:tc:SAML:1.1:nameid-format:unspecified">
+        https://gateway.stepup.org/saml20/sp/metadata
+  </saml:Issuer>
   <saml:Subject>
         <saml:NameID Format="urn:oasis:names:tc:SAML:1.1:nameid-format:unspecified">user@example.org</saml:NameID>
   </saml:Subject>
@@ -64,24 +68,20 @@ AUTHNREQUEST
 AUTHNREQUEST
         );
 
-        $privateKey = CertificatesMock::getPrivateKey();
-
-        $unsignedMessage = Message::fromXML($authnRequest->documentElement);
-        $unsignedMessage->setSignatureKey($privateKey);
-        $unsignedMessage->setCertificates(array(CertificatesMock::PUBLIC_KEY_PEM));
-        $issuerObject = new Issuer($unsignedMessage->getIssuer());
-        $issuerObject->setNameQualifier('https://gateway.stepup.org/saml20/sp/metadata');
-        $issuerObject->setFormat('urn:oasis:names:tc:SAML:2.0:nameid-format:entity');
-        $unsignedMessage->setIssuer($issuerObject);
-        $signedMessage = Message::fromXML($unsignedMessage->toSignedXML());
-
-        $this->assertEquals($privateKey->getAlgorith(), $signedMessage->getSignatureMethod());
+        $message = Message::fromXML($authnRequest->documentElement);
+        $issuer = $message->getIssuer();
+        $this->assertInstanceOf('SAML2\XML\saml\Issuer', $issuer);
+        $this->assertEquals('https://gateway.stepup.org/saml20/sp/metadata', $issuer->NameQualifier);
+        $this->assertEquals('https://spnamequalifier.com', $issuer->SPNameQualifier);
+        $this->assertEquals('ProviderID', $issuer->SPProvidedID);
+        $this->assertEquals('urn:oasis:names:tc:SAML:1.1:nameid-format:unspecified', $issuer->Format);
+        $this->assertEquals('https://gateway.stepup.org/saml20/sp/metadata', $issuer->value);
     }
 
     /**
      * @group Message
      */
-    public function testCorrectSignatureMethodCanBeExtractedFromWithNameIDAuthnRequest()
+    public function testIssuerParsedAsString()
     {
         $authnRequest = new \DOMDocument();
         $authnRequest->loadXML(<<<'AUTHNREQUEST'
@@ -93,8 +93,7 @@ AUTHNREQUEST
     ID="_2b0226190ca1c22de6f66e85f5c95158"
     IssueInstant="2014-09-22T13:42:00Z"
     Version="2.0">
-  <saml:Issuer NameQualifier="https://gateway.stepup.org/saml20/sp/metadata"
-                 Format="urn:oasis:names:tc:SAML:2.0:nameid-format:entity">https://gateway.stepup.org/saml20/sp/metadata</saml:Issuer>
+  <saml:Issuer>https://gateway.stepup.org/saml20/sp/metadata</saml:Issuer>
   <saml:Subject>
         <saml:NameID Format="urn:oasis:names:tc:SAML:1.1:nameid-format:unspecified">user@example.org</saml:NameID>
   </saml:Subject>
@@ -102,64 +101,50 @@ AUTHNREQUEST
 AUTHNREQUEST
         );
 
-        $privateKey = CertificatesMock::getPrivateKey();
-
-        $url = 'https://gateway.stepup.org/saml20/sp/metadata';
-        $sp = 'MyServiceProvider';
-        $unsignedMessage = Message::fromXML($authnRequest->documentElement);
-        $unsignedMessage->setSignatureKey($privateKey);
-        $unsignedMessage->setCertificates(array(CertificatesMock::PUBLIC_KEY_PEM));
-        $nameIDObject = new NameID($unsignedMessage->getIssuer());
-        $nameIDObject->setNameQualifier($url);
-        $nameIDObject->setFormat('urn:oasis:names:tc:SAML:2.0:nameid-format:entity');
-        $nameIDObject->setSPNameQualifier($url);
-        $nameIDObject->setSPProvidedID($sp);
-        $unsignedMessage->setIssuer($nameIDObject);
-        $signedMessage = Message::fromXML($unsignedMessage->toSignedXML());
-
-        $this->assertEquals($privateKey->getAlgorith(), $signedMessage->getSignatureMethod());
-        $this->assertEquals($nameIDObject, $url);
-        $this->assertEquals($nameIDObject->getSPProvidedID(), $sp);
-        $this->assertEquals($nameIDObject->getEntity(), $url);
-        $this->assertEquals($nameIDObject->getNameQualifier(), $url);
-        $this->assertEquals($unsignedMessage->getIssuer(), $nameIDObject);
+        $message = Message::fromXML($authnRequest->documentElement);
+        $issuer = $message->getIssuer();
+        $this->assertNotInstanceOf('\SAML2\XML\saml\Issuer', $issuer);
+        $this->assertEquals('https://gateway.stepup.org/saml20/sp/metadata', $issuer);
     }
 
     /**
      * @group Message
      */
-    public function testCorrectSignatureMethodCanBeExtractedFromWithNameIDNullAuthnRequest()
+    public function testConvertIssuerToXML()
     {
-        $authnRequest = new \DOMDocument();
-        $authnRequest->loadXML(<<<'AUTHNREQUEST'
-<samlp:AuthnRequest
-    xmlns:samlp="urn:oasis:names:tc:SAML:2.0:protocol"
-    xmlns:saml="urn:oasis:names:tc:SAML:2.0:assertion"
-    AssertionConsumerServiceIndex="1"
-    Destination="https://tiqr.stepup.org/idp/profile/saml2/Redirect/SSO"
-    ID="_2b0226190ca1c22de6f66e85f5c95158"
-    IssueInstant="2014-09-22T13:42:00Z"
-    Version="2.0">
-  <saml:Issuer NameQualifier="https://gateway.stepup.org/saml20/sp/metadata"
-                 Format="urn:oasis:names:tc:SAML:2.0:nameid-format:entity">https://gateway.stepup.org/saml20/sp/metadata</saml:Issuer>
-  <saml:Subject>
-        <saml:NameID Format="urn:oasis:names:tc:SAML:1.1:nameid-format:unspecified">user@example.org</saml:NameID>
-  </saml:Subject>
-</samlp:AuthnRequest>
-AUTHNREQUEST
-        );
+        // first, try with common Issuer objects (Format=entity)
+        $response = new Response();
+        $issuer = new XML\saml\Issuer();
+        $issuer->value = 'https://gateway.stepup.org/saml20/sp/metadata';
+        $response->setIssuer($issuer);
+        $xml = $response->toUnsignedXML();
+        $xml_issuer = Utils::xpQuery($xml, './saml_assertion:Issuer');
+        $xml_issuer = $xml_issuer[0];
 
-        $privateKey = CertificatesMock::getPrivateKey();
+        $this->assertFalse($xml_issuer->hasAttributes());
+        $this->assertEquals($issuer->value, $xml_issuer->textContent);
 
-        $url = 'https://gateway.stepup.org/saml20/sp/metadata';
-        $sp = 'MyServiceProvider';
-        $unsignedMessage = Message::fromXML($authnRequest->documentElement);
-        $unsignedMessage->setSignatureKey($privateKey);
-        $unsignedMessage->setCertificates(array(CertificatesMock::PUBLIC_KEY_PEM));
-        $unsignedMessage->setIssuer(null);
-        $signedMessage = Message::fromXML($unsignedMessage->toSignedXML());
+        // now, try an Issuer with another format and attributes
+        $issuer->Format = Constants::NAMEID_UNSPECIFIED;
+        $issuer->NameQualifier = 'SomeNameQualifier';
+        $issuer->SPNameQualifier = 'SomeSPNameQualifier';
+        $issuer->SPProvidedID = 'SomeSPProvidedID';
+        $response->setIssuer($issuer);
+        $xml = $response->toUnsignedXML();
+        $xml_issuer = Utils::xpQuery($xml, './saml_assertion:Issuer');
+        $xml_issuer = $xml_issuer[0];
 
-        $this->assertEquals($unsignedMessage->getIssuer(), null);
+        $this->assertTrue($xml_issuer->hasAttributes());
+        $this->assertEquals($issuer->value, $xml_issuer->textContent);
+        $this->assertEquals($issuer->NameQualifier, $xml_issuer->getAttribute('NameQualifier'));
+        $this->assertEquals($issuer->SPNameQualifier, $xml_issuer->getAttribute('SPNameQualifier'));
+        $this->assertEquals($issuer->SPProvidedID, $xml_issuer->getAttribute('SPProvidedID'));
+
+        // finally, make sure we can skip the Issuer by setting it to null
+        $response->setIssuer(null);
+        $xml = $response->toUnsignedXML();
+
+        $this->assertEmpty(Utils::xpQuery($xml, './saml_assertion:Issuer'));
     }
 
     /**
