@@ -159,18 +159,17 @@ class Assertion implements SignedElement
      * The attributes, as an associative array, indexed by attribute name
      *
      * To ease handling, all attribute values are represented as an array of values, also for values with a multiplicity
-     * of single. There are 4 possible variants of datatypes for the values: a string, an integer, an array or
-     * a DOMNodeList
+     * of single. There are 5 possible variants of datatypes for the values: a string, an integer, an array, a
+     * DOMNodeList or a SAML2\XML\saml\NameID object.
      *
-     * If the attribute is an eduPersonTargetedID, the values will be arrays that are created by @see Utils::parseNameId
-     *    and compatible with @see Utils::addNameID
+     * If the attribute is an eduPersonTargetedID, the values will be SAML2\XML\saml\NameID objects.
      * If the attribute value has an type-definition (xsi:string or xsi:int), the values will be of that type.
      * If the attribute value contains a nested XML structure, the values will be a DOMNodeList
      * In all other cases the values are treated as strings
      *
      * **WARNING** a DOMNodeList cannot be serialized without data-loss and should be handled explicitly
      *
-     * @var array multi-dimensional array of \DOMNodeList|string|int|array
+     * @var array multi-dimensional array of \DOMNodeList|\SAML2\XML\saml\NameID|string|int|array
      */
     private $attributes;
 
@@ -544,7 +543,7 @@ class Assertion implements SignedElement
                     ));
                 }
 
-                $this->attributes[$attributeName][] = Utils::parseNameId($eptiNameId[0]);
+                $this->attributes[$attributeName][] = new XML\saml\NameID($eptiNameId[0]);
             }
 
             return;
@@ -1510,11 +1509,19 @@ class Assertion implements SignedElement
                 $attribute->setAttribute('NameFormat', $this->nameFormat);
             }
 
+            // make sure eduPersonTargetedID can be handled properly as a NameID
             if ($name === Constants::EPTI_URN_MACE || $name === Constants::EPTI_URN_OID) {
                 foreach ($values as $eptiValue) {
                     $attributeValue = $document->createElementNS(Constants::NS_SAML, 'saml:AttributeValue');
                     $attribute->appendChild($attributeValue);
-                    Utils::addNameId($attributeValue, $eptiValue);
+                    if ($eptiValue instanceof XML\saml\NameID) {
+                        $eptiValue->toXML($attributeValue);
+                    } elseif ($eptiValue instanceof \DOMNodeList) {
+                        $node = $root->ownerDocument->importNode($eptiValue->item(0), true);
+                        $attributeValue->appendChild($node);
+                    } else {
+                        $attributeValue->textContent = $eptiValue;
+                    }
                 }
 
                 continue;
