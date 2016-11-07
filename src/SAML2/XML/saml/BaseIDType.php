@@ -106,8 +106,6 @@ abstract class BaseIDType
      */
     public function __toString()
     {
-        assert('!is_null($this->element)');
-
         $doc = DOMDocumentFactory::create();
         $root = $doc->createElementNS(Constants::NS_SAML, 'root');
         $ele = $this->toXML($root);
