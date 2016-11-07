@@ -48,4 +48,20 @@ XML
         $this->assertEquals('TheSPProvidedID', $nameId->SPProvidedID);
         $this->assertEquals('TheNameIDValue', $nameId->value);
     }
+
+    public function testToString()
+    {
+        $nameId = new NameID();
+        $nameId->NameQualifier = 'TheNameQualifier';
+        $nameId->SPNameQualifier = 'TheSPNameQualifier';
+        $nameId->Format = 'TheFormat';
+        $nameId->SPProvidedID = 'TheSPProvidedID';
+        $nameId->value = 'TheNameIDValue';
+
+        $output = '<saml:NameID xmlns:saml="'.\SAML2\Constants::NS_SAML.'" NameQualifier="TheNameQualifier" '.
+                  'SPNameQualifier="TheSPNameQualifier" Format="TheFormat" SPProvidedID="TheSPProvidedID">'.
+                  'TheNameIDValue</saml:NameID>';
+
+        $this->assertXmlStringEqualsXmlString($output, $nameId);
+    }
 }
