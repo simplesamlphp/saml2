@@ -1500,7 +1500,7 @@ class SAML2_Assertion implements SAML2_SignedElement
                     if (is_array($eptiValue)) {
                         SAML2_Utils::addNameId($attributeValue, $eptiValue);
                     } elseif ($eptiValue instanceof DOMNodeList) {
-                        $node = $root->ownerDocument->importNode($eptiValue->item(0), true);
+                        $node = $root->ownerDocument->importNode($eptiValue->item(0), TRUE);
                         $attributeValue->appendChild($node);
                     } else {
                         $attributeValue->textContent = $eptiValue;
