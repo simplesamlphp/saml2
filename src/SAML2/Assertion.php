@@ -521,7 +521,7 @@ class SAML2_Assertion implements SAML2_SignedElement
 
         if ($attributeName === SAML2_Const::EPTI_URN_MACE || $attributeName === SAML2_Const::EPTI_URN_OID) {
             foreach ($values as $index => $eptiAttributeValue) {
-                $eptiNameId = SAML2_Utils::xpQuery($eptiAttributeValue, './saml:NameID');
+                $eptiNameId = SAML2_Utils::xpQuery($eptiAttributeValue, './saml_assertion:NameID');
 
                 if (count($eptiNameId) !== 1) {
                     throw new SAML2_Exception_RuntimeException(sprintf(
