@@ -533,7 +533,7 @@ class Assertion implements SignedElement
 
         if ($attributeName === Constants::EPTI_URN_MACE || $attributeName === Constants::EPTI_URN_OID) {
             foreach ($values as $index => $eptiAttributeValue) {
-                $eptiNameId = Utils::xpQuery($eptiAttributeValue, './saml:NameID');
+                $eptiNameId = Utils::xpQuery($eptiAttributeValue, './saml_assertion:NameID');
 
                 if (count($eptiNameId) !== 1) {
                     throw new RuntimeException(sprintf(
