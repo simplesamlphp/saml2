@@ -1497,7 +1497,14 @@ class SAML2_Assertion implements SAML2_SignedElement
                 foreach ($values as $eptiValue) {
                     $attributeValue = $document->createElementNS(SAML2_Const::NS_SAML, 'saml:AttributeValue');
                     $attribute->appendChild($attributeValue);
-                    SAML2_Utils::addNameId($attributeValue, $eptiValue);
+                    if (is_array($eptiValue)) {
+                        SAML2_Utils::addNameId($attributeValue, $eptiValue);
+                    } elseif ($eptiValue instanceof DOMNodeList) {
+                        $node = $root->ownerDocument->importNode($eptiValue->item(0), true);
+                        $attributeValue->appendChild($node);
+                    } else {
+                        $attributeValue->textContent = $eptiValue;
+                    }
                 }
 
                 continue;
