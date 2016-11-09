@@ -1504,7 +1504,14 @@ class Assertion implements SignedElement
                 foreach ($values as $eptiValue) {
                     $attributeValue = $document->createElementNS(Constants::NS_SAML, 'saml:AttributeValue');
                     $attribute->appendChild($attributeValue);
-                    Utils::addNameId($attributeValue, $eptiValue);
+                    if (is_array($eptiValue)) {
+                        Utils::addNameId($attributeValue, $eptiValue);
+                    } elseif ($eptiValue instanceof \DOMNodeList) {
+                        $node = $root->ownerDocument->importNode($eptiValue->item(0), true);
+                        $attributeValue->appendChild($node);
+                    } else {
+                        $attributeValue->textContent = $eptiValue;
+                    }
                 }
 
                 continue;
