@@ -165,7 +165,7 @@ class Utils
         }
 
         /* Check the signature. */
-        if (! $objXMLSecDSig->verify($key)) {
+        if ($objXMLSecDSig->verify($key) !== 1) {
             throw new \Exception("Unable to validate Signature");
         }
     }
