@@ -859,6 +859,22 @@ XML;
     }
 
     /**
+     * Try to verify an assertion signed with RSA with a DSA public key.
+     * Must yield a signature validation exception.
+     */
+    public function testVerifySignedAssertionWrongKeyDSA()
+    {
+        $doc = new \DOMDocument();
+        $doc->load(__DIR__ . '/signedassertion.xml');
+
+        $publicKey = CertificatesMock::getPublicKeyDSAasRSA();
+
+        $assertion = new Assertion($doc->firstChild);
+        $this->setExpectedException('Exception', 'Unable to validate Signature');
+        $assertion->validate($publicKey);
+    }
+
+    /**
      * Calling validate on an unsigned assertion must return
      * false, not an exception.
      */
