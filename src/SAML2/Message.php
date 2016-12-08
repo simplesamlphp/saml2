@@ -626,7 +626,7 @@ abstract class Message implements SignedElement
         assert('is_string($functionName)');
 
         foreach ($this->validators as $validator) {
-            if (in_array($functionName,$validator["Function"])) {
+            if (in_array($functionName, $validator["Function"])) {
                 return true;
             }
         }
