@@ -107,7 +107,7 @@ class SOAPClient
             $options['proxy_port'] = $srcMetadata->getValue('saml.SOAPClient.proxyport');
         }
 
-        $x = new SoapClient(null, $options);
+        $x = new \SoapClient(null, $options);
 
         // Add soap-envelopes
         $request = $msg->toSignedXML();
