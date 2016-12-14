@@ -50,6 +50,8 @@ class X509 extends Key
 
     /**
      * @return \SAML2\Certificate\Fingerprint
+     *
+     * @deprecated Please use full certificates instead.
      */
     public function getFingerprint()
     {

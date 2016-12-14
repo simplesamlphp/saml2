@@ -497,7 +497,7 @@ XML
 
     }
 
-    public function testAttributeValuesWithComplexTypeValuesAreParsedCorrectly()
+    public function testEptiAttributeValuesAreParsedCorrectly()
     {
         $xml = <<<XML
             <saml:Assertion
@@ -531,9 +531,145 @@ XML;
         $assertion = new Assertion(DOMDocumentFactory::fromString($xml)->firstChild);
 
         $attributes = $assertion->getAttributes();
+
+        $maceValue = $attributes['urn:mace:dir:attribute-def:eduPersonTargetedID'][0];
+        $oidValue = $attributes['urn:oid:1.3.6.1.4.1.5923.1.1.1.10'][0];
+
+        $this->assertInstanceOf('SAML2\XML\saml\NameID', $maceValue);
+        $this->assertInstanceOf('SAML2\XML\saml\NameID', $oidValue);
+        $this->assertEquals('abcd-some-value-xyz', $maceValue->value);
+        $this->assertEquals('abcd-some-value-xyz', $oidValue->value);
+        $this->assertEquals('urn:oasis:names:tc:SAML:2.0:nameid-format:persistent', $maceValue->Format);
+        $this->assertEquals('urn:oasis:names:tc:SAML:2.0:nameid-format:persistent', $oidValue->Format);
+        $this->assertXmlStringEqualsXmlString($xml, $assertion->toXML()->ownerDocument->saveXML());
+    }
+
+    public function testEptiAttributeValuesMustBeANameID()
+    {
+        $xml = <<<XML
+            <saml:Assertion
+                    xmlns:saml="urn:oasis:names:tc:SAML:2.0:assertion"
+                    xmlns:samlp="urn:oasis:names:tc:SAML:2.0:protocol"
+                    xmlns:xs="http://www.w3.org/2001/XMLSchema"
+                    xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+                    Version="2.0"
+                    ID="_93af655219464fb403b34436cfb0c5cb1d9a5502"
+                    IssueInstant="1970-01-01T01:33:31Z">
+      <saml:Issuer>Provider</saml:Issuer>
+      <saml:Conditions/>
+      <saml:AttributeStatement>
+        <saml:Attribute Name="urn:oid:1.3.6.1.4.1.5923.1.1.1.10" NameFormat="urn:oasis:names:tc:SAML:2.0:attrname-format:uri">
+          <saml:AttributeValue>
+            <saml:NameID Format="urn:oasis:names:tc:SAML:2.0:nameid-format:persistent">abcd-some-value-xyz</saml:NameID>
+          </saml:AttributeValue>
+        </saml:Attribute>
+        <saml:Attribute Name="urn:mace:dir:attribute-def:eduPersonTargetedID" NameFormat="urn:oasis:names:tc:SAML:2.0:attrname-format:uri">
+          <saml:AttributeValue>
+            <saml:Attribute Name="urn:some:custom:nested:element">
+              <saml:AttributeValue>abcd-some-value-xyz</saml:AttributeValue>
+            </saml:Attribute>
+          </saml:AttributeValue>
+        </saml:Attribute>
+        <saml:Attribute Name="urn:EntityConcernedSubID" NameFormat="urn:oasis:names:tc:SAML:2.0:attrname-format:uri">
+          <saml:AttributeValue xsi:type="xs:string">string</saml:AttributeValue>
+        </saml:Attribute>
+      </saml:AttributeStatement>
+    </saml:Assertion>
+XML;
+
+        $this->setExpectedException(
+            'SAML2\Exception\RuntimeException',
+            'A "urn:mace:dir:attribute-def:eduPersonTargetedID" (EPTI) attribute value must be a NameID, '
+            . 'none found for value no. "0"'
+        );
+        new Assertion(DOMDocumentFactory::fromString($xml)->firstChild);
+    }
+
+    /**
+     * as per http://software.internet2.edu/eduperson/internet2-mace-dir-eduperson-201310.html#eduPersonTargetedID
+     * it is multivalued
+     */
+    public function testEptiAttributeParsingSupportsMultipleValues()
+    {
+        $xml
+            = <<<XML
+            <saml:Assertion
+                    xmlns:saml="urn:oasis:names:tc:SAML:2.0:assertion"
+                    xmlns:samlp="urn:oasis:names:tc:SAML:2.0:protocol"
+                    xmlns:xs="http://www.w3.org/2001/XMLSchema"
+                    xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+                    Version="2.0"
+                    ID="_93af655219464fb403b34436cfb0c5cb1d9a5502"
+                    IssueInstant="1970-01-01T01:33:31Z">
+      <saml:Issuer>Provider</saml:Issuer>
+      <saml:Conditions/>
+      <saml:AttributeStatement>
+        <saml:Attribute Name="urn:mace:dir:attribute-def:eduPersonTargetedID" NameFormat="urn:oasis:names:tc:SAML:2.0:attrname-format:uri">
+            <saml:AttributeValue>
+                <saml:NameID Format="urn:oasis:names:tc:SAML:2.0:nameid-format:persistent">abcd-some-value-xyz</saml:NameID>
+            </saml:AttributeValue>
+            <saml:AttributeValue>
+                <saml:NameID Format="urn:oasis:names:tc:SAML:2.0:nameid-format:persistent">xyz-some-value-abcd</saml:NameID>
+            </saml:AttributeValue>
+        </saml:Attribute>
+        <saml:Attribute Name="urn:EntityConcernedSubID" NameFormat="urn:oasis:names:tc:SAML:2.0:attrname-format:uri">
+            <saml:AttributeValue xsi:type="xs:string">string</saml:AttributeValue>
+        </saml:Attribute>
+      </saml:AttributeStatement>
+    </saml:Assertion>
+XML;
+
+        $assertion = new Assertion(DOMDocumentFactory::fromString($xml)->firstChild);
+
+        $attributes = $assertion->getAttributes();
+
+        $maceFirstValue = $attributes['urn:mace:dir:attribute-def:eduPersonTargetedID'][0];
+        $maceSecondValue = $attributes['urn:mace:dir:attribute-def:eduPersonTargetedID'][1];
+
+        $this->assertInstanceOf('SAML2\XML\saml\NameID', $maceFirstValue);
+        $this->assertInstanceOf('SAML2\XML\saml\NameID', $maceSecondValue);
+        $this->assertEquals('abcd-some-value-xyz', $maceFirstValue->value);
+        $this->assertEquals('xyz-some-value-abcd', $maceSecondValue->value);
+        $this->assertEquals('urn:oasis:names:tc:SAML:2.0:nameid-format:persistent', $maceFirstValue->Format);
+        $this->assertEquals('urn:oasis:names:tc:SAML:2.0:nameid-format:persistent', $maceSecondValue->Format);
+
+        $this->assertXmlStringEqualsXmlString($xml, $assertion->toXML()->ownerDocument->saveXML());
+    }
+
+    public function testAttributeValuesWithComplexTypesAreParsedCorrectly()
+    {
+        $xml = <<<XML
+            <saml:Assertion
+                    xmlns:saml="urn:oasis:names:tc:SAML:2.0:assertion"
+                    xmlns:samlp="urn:oasis:names:tc:SAML:2.0:protocol"
+                    xmlns:xs="http://www.w3.org/2001/XMLSchema"
+                    xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+                    Version="2.0"
+                    ID="_93af655219464fb403b34436cfb0c5cb1d9a5502"
+                    IssueInstant="1970-01-01T01:33:31Z">
+            <saml:Issuer>Provider</saml:Issuer>
+            <saml:Conditions/>
+            <saml:AttributeStatement>
+              <saml:Attribute Name="urn:some:custom:outer:element" NameFormat="urn:oasis:names:tc:SAML:2.0:attrname-format:uri">
+                <saml:AttributeValue>
+                  <saml:Attribute Name="urn:some:custom:nested:element">
+                    <saml:AttributeValue>abcd-some-value-xyz</saml:AttributeValue>
+                  </saml:Attribute>
+                </saml:AttributeValue>
+              </saml:Attribute>
+              <saml:Attribute Name="urn:EntityConcernedSubID" NameFormat="urn:oasis:names:tc:SAML:2.0:attrname-format:uri">
+                <saml:AttributeValue xsi:type="xs:string">string</saml:AttributeValue>
+              </saml:Attribute>
+            </saml:AttributeStatement>
+            </saml:Assertion>
+XML;
+
+        $assertion = new Assertion(DOMDocumentFactory::fromString($xml)->firstChild);
+
+        $attributes = $assertion->getAttributes();
         $this->assertInstanceOf(
             '\DOMNodeList',
-            $attributes['urn:mace:dir:attribute-def:eduPersonTargetedID'][0]
+            $attributes['urn:some:custom:outer:element'][0]
         );
         $this->assertXmlStringEqualsXmlString($xml, $assertion->toXML()->ownerDocument->saveXML());
     }
@@ -584,14 +720,11 @@ XML;
       <saml:Issuer>Provider</saml:Issuer>
       <saml:Conditions/>
       <saml:AttributeStatement>
-        <saml:Attribute Name="urn:oid:1.3.6.1.4.1.5923.1.1.1.10" NameFormat="urn:oasis:names:tc:SAML:2.0:attrname-format:uri">
+        <saml:Attribute Name="urn:some:custom:outer:element" NameFormat="urn:oasis:names:tc:SAML:2.0:attrname-format:uri">
             <saml:AttributeValue>
-                <saml:NameID Format="urn:oasis:names:tc:SAML:2.0:nameid-format:persistent">abcd-some-value-xyz</saml:NameID>
-            </saml:AttributeValue>
-        </saml:Attribute>
-        <saml:Attribute Name="urn:mace:dir:attribute-def:eduPersonTargetedID" NameFormat="urn:oasis:names:tc:SAML:2.0:attrname-format:uri">
-            <saml:AttributeValue>
-                <saml:NameID Format="urn:oasis:names:tc:SAML:2.0:nameid-format:persistent">abcd-some-value-xyz</saml:NameID>
+                <saml:Attribute Name="urn:some:custom:nested:element">
+                    <saml:AttributeValue>abcd-some-value-xyz</saml:AttributeValue>
+                </saml:Attribute>
             </saml:AttributeValue>
         </saml:Attribute>
         <saml:Attribute Name="urn:EntityConcernedSubID" NameFormat="urn:oasis:names:tc:SAML:2.0:attrname-format:uri">
@@ -619,7 +752,7 @@ XML;
         $attributes = $assertionToVerify->getAttributes();
         $this->assertInstanceOf(
             '\DOMNodeList',
-            $attributes['urn:mace:dir:attribute-def:eduPersonTargetedID'][0]
+            $attributes['urn:some:custom:outer:element'][0]
         );
         $this->assertXmlStringEqualsXmlString($xml, $assertionToVerify->toXML()->ownerDocument->saveXML());
     }
@@ -719,6 +852,22 @@ XML;
         $doc->load(__DIR__ . '/signedassertion.xml');
 
         $publicKey = CertificatesMock::getPublicKey2Sha1();
+
+        $assertion = new Assertion($doc->firstChild);
+        $this->setExpectedException('Exception', 'Unable to validate Signature');
+        $assertion->validate($publicKey);
+    }
+
+    /**
+     * Try to verify an assertion signed with RSA with a DSA public key.
+     * Must yield a signature validation exception.
+     */
+    public function testVerifySignedAssertionWrongKeyDSA()
+    {
+        $doc = new \DOMDocument();
+        $doc->load(__DIR__ . '/signedassertion.xml');
+
+        $publicKey = CertificatesMock::getPublicKeyDSAasRSA();
 
         $assertion = new Assertion($doc->firstChild);
         $this->setExpectedException('Exception', 'Unable to validate Signature');
@@ -1347,7 +1496,7 @@ XML
       <saml:Issuer>Provider</saml:Issuer>
       <saml:Conditions/>
       <saml:AttributeStatement>
-        <saml:Attribute Name="urn:oid:1.3.6.1.4.1.5923.1.1.1.10" NameFormat="urn:oasis:names:tc:SAML:2.0:attrname-format:uri">
+        <saml:Attribute Name="1.3.6.1.4.1.25178.1.2.9" NameFormat="urn:oasis:names:tc:SAML:2.0:attrname-format:uri">
             <saml:AttributeValue xsi:type="xs:string">string</saml:AttributeValue>
         </saml:Attribute>
         <saml:Attribute Name="urn:EntityConcernedSubID" NameFormat="urn:oasis:names:tc:SAML:2.0:attrname-format:basic">
@@ -1359,8 +1508,8 @@ XML;
 
         $assertion = new Assertion(DOMDocumentFactory::fromString($xml)->firstChild);
 
-        $namefmt = $assertion->getAttributeNameFormat();
-        $this->assertEquals('urn:oasis:names:tc:SAML:2.0:attrname-format:unspecified', $namefmt);
+        $nameFormat = $assertion->getAttributeNameFormat();
+        $this->assertEquals('urn:oasis:names:tc:SAML:2.0:attrname-format:unspecified', $nameFormat);
     }
 
     /**

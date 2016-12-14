@@ -175,7 +175,7 @@ class SignedElementHelper implements SignedElement
         $ret = array();
         foreach ($this->certificates as $cert) {
 
-            /* We have found a matching fingerprint. */
+            /* Construct a PEM formatted certificate */
             $pemCert = "-----BEGIN CERTIFICATE-----\n" .
                 chunk_split($cert, 64) .
                 "-----END CERTIFICATE-----\n";
