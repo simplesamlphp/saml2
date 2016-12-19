@@ -345,4 +345,168 @@ AUTHNREQUEST;
 
         $this->assertEquals($requesterId, $authnRequest->getRequesterID());
     }
+
+    /**
+     * Test getting NameIDPolicy
+     */
+    public function testGettingNameIDPolicy()
+    {
+        $xml = <<<AUTHNREQUEST
+<samlp:AuthnRequest
+  xmlns:samlp="urn:oasis:names:tc:SAML:2.0:protocol"
+  xmlns:saml="urn:oasis:names:tc:SAML:2.0:assertion"
+  ID="_306f8ec5b618f361c70b6ffb1480eade"
+  Version="2.0"
+  IssueInstant="2004-12-05T09:21:59Z"
+  Destination="https://idp.example.org/SAML2/SSO/Artifact"
+  ProtocolBinding="urn:oasis:names:tc:SAML:2.0:bindings:HTTP-Artifact"
+  AssertionConsumerServiceURL="https://sp.example.com/SAML2/SSO/Artifact">
+  <saml:Issuer>https://sp.example.com/SAML2</saml:Issuer>
+  <samlp:NameIDPolicy
+    AllowCreate="true"
+    SPNameQualifier="https://sp.example.com/SAML2"
+    Format="urn:oasis:names:tc:SAML:2.0:nameid-format:transient"/>
+</samlp:AuthnRequest>
+AUTHNREQUEST;
+
+        $document     = DOMDocumentFactory::fromString($xml);
+        $authnRequest = new AuthnRequest($document->documentElement);
+
+        $nameIdPolicy = $authnRequest->getNameIdPolicy();
+
+        $this->assertCount(3, $nameIdPolicy);
+
+        $this->assertArrayHasKey('AllowCreate', $nameIdPolicy);
+        $this->assertArrayHasKey('SPNameQualifier', $nameIdPolicy);
+        $this->assertArrayHasKey('Format', $nameIdPolicy);
+
+        $this->assertEquals(true, $nameIdPolicy['AllowCreate']);
+        $this->assertEquals("https://sp.example.com/SAML2", $nameIdPolicy['SPNameQualifier']);
+        $this->assertEquals("urn:oasis:names:tc:SAML:2.0:nameid-format:transient", $nameIdPolicy['Format']);
+    }
+
+
+    /**
+     * Test setting NameIDPolicy results in expected XML
+     */
+    public function testSettingNameIDPolicy()
+    {
+        // basic AuthnRequest
+        $request = new AuthnRequest();
+        $request->setIssuer('https://gateway.example.org/saml20/sp/metadata');
+        $request->setDestination('https://tiqr.example.org/idp/profile/saml2/Redirect/SSO');
+        $request->setIssueInstant( Utils::xsDateTimeToTimestamp('2004-12-05T09:21:59Z'));
+
+        $nameIdPolicy = array("Format" => "urn:oasis:names:tc:SAML:2.0:nameid-format:transient",
+            "SPNameQualifier" => "https://sp.example.com/SAML2",
+            "AllowCreate" => true);
+        $request->setNameIDPolicy($nameIdPolicy);
+
+        $expectedStructureDocument = <<<AUTHNREQUEST
+<samlp:AuthnRequest
+    xmlns:samlp="urn:oasis:names:tc:SAML:2.0:protocol"
+    xmlns:saml="urn:oasis:names:tc:SAML:2.0:assertion"
+    ID="123"
+    Version="2.0"
+    IssueInstant="2004-12-05T09:21:59Z"
+    Destination="https://tiqr.example.org/idp/profile/saml2/Redirect/SSO">
+    <saml:Issuer>https://gateway.example.org/saml20/sp/metadata</saml:Issuer>
+    <samlp:NameIDPolicy
+        Format="urn:oasis:names:tc:SAML:2.0:nameid-format:transient"
+        SPNameQualifier="https://sp.example.com/SAML2" AllowCreate="true"
+    />
+</samlp:AuthnRequest>
+AUTHNREQUEST;
+
+        $expectedStructure = DOMDocumentFactory::fromString($expectedStructureDocument)->documentElement;
+        $requestStructure = $request->toUnsignedXML();
+
+        $this->assertEqualXMLStructure($expectedStructure, $requestStructure);
+
+        $this->assertXmlStringEqualsXmlString($expectedStructure->ownerDocument->saveXML(), $requestStructure->ownerDocument->saveXML());
+    }
+
+    /**
+     * Test setting NameIDPolicy with only a Format results in expected XML
+     */
+    public function testSettingNameIDPolicyFormatOnly()
+    {
+        // basic AuthnRequest
+        $request = new AuthnRequest();
+        $request->setIssuer('https://gateway.example.org/saml20/sp/metadata');
+        $request->setDestination('https://tiqr.example.org/idp/profile/saml2/Redirect/SSO');
+        $request->setIssueInstant( Utils::xsDateTimeToTimestamp('2004-12-05T09:21:59Z'));
+
+        $nameIdPolicy = array("Format" => "urn:oasis:names:tc:SAML:2.0:nameid-format:transient");
+        $request->setNameIDPolicy($nameIdPolicy);
+
+        $expectedStructureDocument = <<<AUTHNREQUEST
+<samlp:AuthnRequest
+    xmlns:samlp="urn:oasis:names:tc:SAML:2.0:protocol"
+    xmlns:saml="urn:oasis:names:tc:SAML:2.0:assertion"
+    ID="123"
+    Version="2.0"
+    IssueInstant="2004-12-05T09:21:59Z"
+    Destination="https://tiqr.example.org/idp/profile/saml2/Redirect/SSO">
+    <saml:Issuer>https://gateway.example.org/saml20/sp/metadata</saml:Issuer>
+    <samlp:NameIDPolicy Format="urn:oasis:names:tc:SAML:2.0:nameid-format:transient"/>
+</samlp:AuthnRequest>
+AUTHNREQUEST;
+
+        $expectedStructure = DOMDocumentFactory::fromString($expectedStructureDocument)->documentElement;
+        $requestStructure = $request->toUnsignedXML();
+
+        $this->assertEqualXMLStructure($expectedStructure, $requestStructure);
+
+        $this->assertXmlStringEqualsXmlString($expectedStructure->ownerDocument->saveXML(), $requestStructure->ownerDocument->saveXML());
+    }
+
+    /**
+     * Test setting NameIDPolicy with invalid type for AllowCreate.
+     */
+    public function testSettingNameIDPolicyToIncorrectTypeAllowCreate()
+    {
+        // basic AuthnRequest
+        $request = new AuthnRequest();
+        $request->setIssuer('https://gateway.example.org/saml20/sp/metadata');
+        $request->setDestination('https://tiqr.example.org/idp/profile/saml2/Redirect/SSO');
+
+        // AllowCreate must be a bool
+        $nameIdPolicy = array("AllowCreate" => "true");
+        $this->setExpectedException('InvalidArgumentException', 'Invalid Argument type: "bool" expected');
+        $request->setNameIDPolicy($nameIdPolicy);
+    }
+
+    /**
+     * Test setting NameIDPolicy with invalid type for SPNameQualifier.
+     */
+    public function testSettingNameIDPolicyToIncorrectTypeSPNameQualifier()
+    {
+        // basic AuthnRequest
+        $request = new AuthnRequest();
+        $request->setIssuer('https://gateway.example.org/saml20/sp/metadata');
+        $request->setDestination('https://tiqr.example.org/idp/profile/saml2/Redirect/SSO');
+
+        // SPNameQualifier must be a string
+        $nameIdPolicy = array("SPNameQualifier" => true);
+        $this->setExpectedException('InvalidArgumentException', 'Invalid Argument type: "string" expected');
+        $request->setNameIDPolicy($nameIdPolicy);
+    }
+
+    /**
+     * Test setting NameIDPolicy with one invalid type for Format.
+     * It would be nice to iterate over various types to check this more thoroughly.
+     */
+    public function testSettingNameIDPolicyToIncorrectTypeFormat()
+    {
+        // basic AuthnRequest
+        $request = new AuthnRequest();
+        $request->setIssuer('https://gateway.example.org/saml20/sp/metadata');
+        $request->setDestination('https://tiqr.example.org/idp/profile/saml2/Redirect/SSO');
+
+        // Format must be a string
+        $nameIdPolicy = array("Format" => 2.0);
+        $this->setExpectedException('InvalidArgumentException', 'Invalid Argument type: "string" expected');
+        $request->setNameIDPolicy($nameIdPolicy);
+    }
 }
