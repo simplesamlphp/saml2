@@ -160,6 +160,10 @@ class AuthnRequest extends Request
             $this->assertionConsumerServiceIndex = (int) $xml->getAttribute('AssertionConsumerServiceIndex');
         }
 
+        if ($xml->hasAttribute('ProviderName')) {
+            $this->ProviderName = $xml->getAttribute('ProviderName');
+        }
+
         $this->parseSubject($xml);
         $this->parseNameIdPolicy($xml);
         $this->parseRequestedAuthnContext($xml);
