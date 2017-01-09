@@ -32,23 +32,34 @@ class Extensions
     public static function getList(\DOMElement $parent)
     {
         $ret = array();
+        $supported = array(
+            Scope::NS => array(
+                'Scope'
+            ),
+            EntityAttributes::NS => array(
+                'EntityAttributes'
+            ),
+            MDRPI::NS_MDRPI => array(
+                'RegistrationInfo',
+                'PublicationInfo',
+            ),
+            UIInfo::NS => array(
+                'UIInfo'
+            ),
+            DiscoHints::NS => array(
+                'DiscoHints'
+            ),
+            ALG::NS => array(
+                'DigestMethod',
+                'SigningMethod',
+            ),
+        );
+
         foreach (Utils::xpQuery($parent, './saml_metadata:Extensions/*') as $node) {
-            if ($node->namespaceURI === Scope::NS && $node->localName === 'Scope') {
-                $ret[] = new Scope($node);
-            } elseif ($node->namespaceURI === EntityAttributes::NS && $node->localName === 'EntityAttributes') {
-                $ret[] = new EntityAttributes($node);
-            } elseif ($node->namespaceURI === MDRPI::NS_MDRPI && $node->localName === 'RegistrationInfo') {
-                $ret[] = new RegistrationInfo($node);
-            } elseif ($node->namespaceURI === MDRPI::NS_MDRPI && $node->localName === 'PublicationInfo') {
-                $ret[] = new PublicationInfo($node);
-            } elseif ($node->namespaceURI === UIInfo::NS && $node->localName === 'UIInfo') {
-                $ret[] = new UIInfo($node);
-            } elseif ($node->namespaceURI === DiscoHints::NS && $node->localName === 'DiscoHints') {
-                $ret[] = new DiscoHints($node);
-            } elseif ($node->namespaceURI === ALG::NS && $node->localName === 'DigestMethod') {
-                $ret[] = new DigestMethod($node);
-            } elseif ($node->namespaceURI === ALG::NS && $node->localName === 'SigningMethod') {
-                $ret[] = new SigningMethod($node);
+            if (in_array($node->namespaceURI, array_keys($supported)) &&
+                in_array($node->localName, $supported[$node->namespaceURI])
+            ) {
+                $ret[] = new $supported[$node->namespaceURI]($node);
             } else {
                 $ret[] = new Chunk($node);
             }
