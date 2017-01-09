@@ -4,9 +4,12 @@ namespace SAML2\XML\md;
 
 use SAML2\Constants;
 use SAML2\Utils;
+use SAML2\XML\alg\Common as ALG;
+use SAML2\XML\alg\DigestMethod;
+use SAML2\XML\alg\SigningMethod;
 use SAML2\XML\Chunk;
 use SAML2\XML\mdattr\EntityAttributes;
-use SAML2\XML\mdrpi\Common;
+use SAML2\XML\mdrpi\Common as MDRPI;
 use SAML2\XML\mdrpi\PublicationInfo;
 use SAML2\XML\mdrpi\RegistrationInfo;
 use SAML2\XML\mdui\DiscoHints;
@@ -34,14 +37,18 @@ class Extensions
                 $ret[] = new Scope($node);
             } elseif ($node->namespaceURI === EntityAttributes::NS && $node->localName === 'EntityAttributes') {
                 $ret[] = new EntityAttributes($node);
-            } elseif ($node->namespaceURI === Common::NS_MDRPI && $node->localName === 'RegistrationInfo') {
+            } elseif ($node->namespaceURI === MDRPI::NS_MDRPI && $node->localName === 'RegistrationInfo') {
                 $ret[] = new RegistrationInfo($node);
-            } elseif ($node->namespaceURI === Common::NS_MDRPI && $node->localName === 'PublicationInfo') {
+            } elseif ($node->namespaceURI === MDRPI::NS_MDRPI && $node->localName === 'PublicationInfo') {
                 $ret[] = new PublicationInfo($node);
             } elseif ($node->namespaceURI === UIInfo::NS && $node->localName === 'UIInfo') {
                 $ret[] = new UIInfo($node);
             } elseif ($node->namespaceURI === DiscoHints::NS && $node->localName === 'DiscoHints') {
                 $ret[] = new DiscoHints($node);
+            } elseif ($node->namespaceURI === ALG::NS && $node->localName === 'DigestMethod') {
+                $ret[] = new DigestMethod($node);
+            } elseif ($node->namespaceURI === ALG::NS && $node->localName === 'SigningMethod') {
+                $ret[] = new SigningMethod($node);
             } else {
                 $ret[] = new Chunk($node);
             }
