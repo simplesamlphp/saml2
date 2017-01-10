@@ -5,13 +5,9 @@ namespace SAML2\XML\md;
 use SAML2\Constants;
 use SAML2\Utils;
 use SAML2\XML\alg\Common as ALG;
-use SAML2\XML\alg\DigestMethod;
-use SAML2\XML\alg\SigningMethod;
 use SAML2\XML\Chunk;
 use SAML2\XML\mdattr\EntityAttributes;
 use SAML2\XML\mdrpi\Common as MDRPI;
-use SAML2\XML\mdrpi\PublicationInfo;
-use SAML2\XML\mdrpi\RegistrationInfo;
 use SAML2\XML\mdui\DiscoHints;
 use SAML2\XML\mdui\UIInfo;
 use SAML2\XML\shibmd\Scope;
@@ -34,32 +30,32 @@ class Extensions
         $ret = array();
         $supported = array(
             Scope::NS => array(
-                'Scope'
+                'Scope' => '\SAML2\XML\shibmd\Scope',
             ),
             EntityAttributes::NS => array(
-                'EntityAttributes'
+                'EntityAttributes' => '\SAML2\XML\mdattr\EntityAttributes',
             ),
             MDRPI::NS_MDRPI => array(
-                'RegistrationInfo',
-                'PublicationInfo',
+                'RegistrationInfo' => '\SAML2\XML\mdrpi\RegistrationInfo',
+                'PublicationInfo' => '\SAML2\XML\mdrpi\PublicationInfo',
             ),
             UIInfo::NS => array(
-                'UIInfo'
+                'UIInfo' => '\SAML2\XML\mdui\UIInfo',
             ),
             DiscoHints::NS => array(
-                'DiscoHints'
+                'DiscoHints' => '\SAML2\XML\mdui\DiscoHints',
             ),
             ALG::NS => array(
-                'DigestMethod',
-                'SigningMethod',
+                'DigestMethod' => '\SAML2\XML\alg\DigestMethod',
+                'SigningMethod' => '\SAML2\XML\alg\SigningMethod',
             ),
         );
 
         foreach (Utils::xpQuery($parent, './saml_metadata:Extensions/*') as $node) {
             if (array_key_exists($node->namespaceURI, $supported) &&
-                in_array($node->localName, $supported[$node->namespaceURI])
+                array_key_exists($node->localName, $supported[$node->namespaceURI])
             ) {
-                $ret[] = new $node->localName($node);
+                $ret[] = new $supported[$node->namespaceURI][$node->localName]($node);
             } else {
                 $ret[] = new Chunk($node);
             }
