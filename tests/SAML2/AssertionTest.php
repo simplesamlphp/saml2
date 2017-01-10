@@ -1542,15 +1542,15 @@ XML;
         $assertion = new Assertion($document->documentElement);
 
         $nameID = $assertion->getNameID();
-        $this->assertEquals('b7de81420a19416', $nameID['Value']);
-        $this->assertEquals('urn:oasis:names:tc:SAML:2.0:nameid-format:transient', $nameID['Format']);
+        $this->assertEquals('b7de81420a19416', $nameID->value);
+        $this->assertEquals('urn:oasis:names:tc:SAML:2.0:nameid-format:transient', $nameID->Format);
         $this->assertFalse($assertion->isNameIdEncrypted());
 
         // Not encrypted, should be a no-op
         $privateKey = CertificatesMock::getPrivateKey();
         $decrypted = $assertion->decryptNameId($privateKey);
-        $this->assertEquals('b7de81420a19416', $nameID['Value']);
-        $this->assertEquals('urn:oasis:names:tc:SAML:2.0:nameid-format:transient', $nameID['Format']);
+        $this->assertEquals('b7de81420a19416', $nameID->value);
+        $this->assertEquals('urn:oasis:names:tc:SAML:2.0:nameid-format:transient', $nameID->Format);
         $this->assertFalse($assertion->isNameIdEncrypted());
     }
 
@@ -1584,8 +1584,8 @@ XML;
         $assertionToVerify->decryptNameId($privateKey);
         $this->assertFalse($assertionToVerify->isNameIdEncrypted());
         $nameID = $assertionToVerify->getNameID();
-        $this->assertEquals('just_a_basic_identifier', $nameID['Value']);
-        $this->assertEquals('urn:oasis:names:tc:SAML:2.0:nameid-format:transient', $nameID['Format']);
+        $this->assertEquals('just_a_basic_identifier', $nameID->value);
+        $this->assertEquals('urn:oasis:names:tc:SAML:2.0:nameid-format:transient', $nameID->Format);
     }
 
     /**

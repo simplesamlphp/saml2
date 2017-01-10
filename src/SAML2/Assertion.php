@@ -45,7 +45,7 @@ class Assertion implements SignedElement
      *
      * If the NameId is null, no subject was included in the assertion.
      *
-     * @var array|null
+     * @var \SAML2\XML\saml\NameID|null
      */
     private $nameId;
 
@@ -312,7 +312,7 @@ class Assertion implements SignedElement
                 /* The NameID element is encrypted. */
                 $this->encryptedNameId = $nameId;
             } else {
-                $this->nameId = Utils::parseNameId($nameId);
+                $this->nameId = new XML\saml\NameID($nameId);
             }
         }
 
@@ -698,10 +698,7 @@ class Assertion implements SignedElement
     /**
      * Retrieve the NameId of the subject in the assertion.
      *
-     * The returned NameId is in the format used by \SAML2\Utils::addNameId().
-     *
-     * @see \SAML2\Utils::addNameId()
-     * @return array|null The name identifier of the assertion.
+     * @return \SAML2\XML\saml\NameID|null The name identifier of the assertion.
      * @throws \Exception
      */
     public function getNameId()
@@ -716,15 +713,19 @@ class Assertion implements SignedElement
     /**
      * Set the NameId of the subject in the assertion.
      *
-     * The NameId must be in the format accepted by \SAML2\Utils::addNameId().
+     * The NameId must be a \SAML2\XML\saml\NameID object or an array in the format accepted by
+     * \SAML2\Utils::addNameId() (an array, deprecated).
      *
      * @see \SAML2\Utils::addNameId()
-     * @param array|null $nameId The name identifier of the assertion.
+     * @param \SAML2\XML\saml\NameID|array|null $nameId The name identifier of the assertion.
      */
     public function setNameId($nameId)
     {
-        assert('is_array($nameId) || is_null($nameId)');
+        assert('is_array($nameId) || is_null($nameId) || is_a($nameId, "\SAML2\XML\saml\NameID")');
 
+        if (is_array($nameId)) {
+            $nameId = XML\saml\NameID::fromArray($nameId);
+        }
         $this->nameId = $nameId;
     }
 
@@ -749,7 +750,7 @@ class Assertion implements SignedElement
         $doc = DOMDocumentFactory::create();
         $root = $doc->createElement('root');
         $doc->appendChild($root);
-        Utils::addNameId($root, $this->nameId);
+        $this->nameId->toXML($root);
         $nameId = $root->firstChild;
 
         Utils::getContainer()->debugMessage($nameId, 'encrypt');
@@ -785,7 +786,7 @@ class Assertion implements SignedElement
 
         $nameId = Utils::decryptElement($this->encryptedNameId, $key, $blacklist);
         Utils::getContainer()->debugMessage($nameId, 'decrypt');
-        $this->nameId = Utils::parseNameId($nameId);
+        $this->nameId = new XML\saml\NameID($nameId);
 
         $this->encryptedNameId = null;
     }
@@ -1377,7 +1378,7 @@ class Assertion implements SignedElement
         $root->appendChild($subject);
 
         if ($this->encryptedNameId === null) {
-            Utils::addNameId($subject, $this->nameId);
+            $this->nameId->toXML($subject);
         } else {
             $eid = $subject->ownerDocument->createElementNS(Constants::NS_SAML, 'saml:' . 'EncryptedID');
             $subject->appendChild($eid);

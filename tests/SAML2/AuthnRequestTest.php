@@ -125,11 +125,9 @@ AUTHNREQUEST;
 
         $authnRequest = new AuthnRequest(DOMDocumentFactory::fromString($xml)->documentElement);
 
-        $expectedNameId = array(
-            'Value'  => "user@example.org",
-            'Format' => "urn:oasis:names:tc:SAML:1.1:nameid-format:unspecified"
-        );
-        $this->assertEquals($expectedNameId, $authnRequest->getNameId());
+        $nameId = $authnRequest->getNameId();
+        $this->assertEquals("user@example.org", $nameId->value);
+        $this->assertEquals("urn:oasis:names:tc:SAML:1.1:nameid-format:unspecified", $nameId->Format);
     }
 
     public function testThatTheSubjectCanBeSetBySettingTheNameId()
@@ -179,9 +177,9 @@ AUTHNREQUEST;
         $key = CertificatesMock::getPrivateKey();
         $authnRequest->decryptNameId($key);
 
-        $expectedNameId = array('Value' => md5('Arthur Dent'), 'Format' => Constants::NAMEID_ENCRYPTED);
-
-        $this->assertEquals($expectedNameId, $authnRequest->getNameId());
+        $nameId = $authnRequest->getNameId();
+        $this->assertEquals(md5('Arthur Dent'), $nameId->value);
+        $this->assertEquals(Constants::NAMEID_ENCRYPTED, $nameId->Format);
     }
 
     /**
