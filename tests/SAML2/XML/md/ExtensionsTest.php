@@ -107,4 +107,38 @@ XML
         $this->assertInstanceOf('\SAML2\XML\alg\SigningMethod', $list[7]);
         $this->assertInstanceOf('\SAML2\XML\Chunk', $list[8]);
     }
+
+
+    /**
+     * This methods tests adding an md:Extensions element to a DOMElement.
+     */
+    public function testAddExtensions()
+    {
+        $document = DOMDocumentFactory::create();
+        $document->formatOutput = true;
+        $r = $document->createElement('root');
+        $document->appendChild($r);
+        $scope = new \SAML2\XML\shibmd\Scope();
+        $scope->scope = 'SomeScope';
+        $digest = new \SAML2\XML\alg\DigestMethod();
+        $digest->Algorithm = 'SomeAlgorithm';
+        $extensions = array(
+            $scope,
+            $digest,
+        );
+        Extensions::addList($r, $extensions);
+        $this->assertEquals(
+<<<XML
+<?xml version="1.0"?>
+<root>
+  <md:Extensions xmlns:md="urn:oasis:names:tc:SAML:2.0:metadata">
+    <shibmd:Scope xmlns:shibmd="urn:mace:shibboleth:metadata:1.0" regexp="false">SomeScope</shibmd:Scope>
+    <alg:DigestMethod xmlns:alg="urn:oasis:names:tc:SAML:metadata:algsupport" Algorithm="SomeAlgorithm"/>
+  </md:Extensions>
+</root>
+XML
+            ,
+            trim($r->ownerDocument->saveXML())
+        );
+    }
 }
