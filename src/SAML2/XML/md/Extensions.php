@@ -8,8 +8,7 @@ use SAML2\XML\alg\Common as ALG;
 use SAML2\XML\Chunk;
 use SAML2\XML\mdattr\EntityAttributes;
 use SAML2\XML\mdrpi\Common as MDRPI;
-use SAML2\XML\mdui\DiscoHints;
-use SAML2\XML\mdui\UIInfo;
+use SAML2\XML\mdui\Common as MDUI;
 use SAML2\XML\shibmd\Scope;
 
 /**
@@ -39,10 +38,8 @@ class Extensions
                 'RegistrationInfo' => '\SAML2\XML\mdrpi\RegistrationInfo',
                 'PublicationInfo' => '\SAML2\XML\mdrpi\PublicationInfo',
             ),
-            UIInfo::NS => array(
+            MDUI::NS => array(
                 'UIInfo' => '\SAML2\XML\mdui\UIInfo',
-            ),
-            DiscoHints::NS => array(
                 'DiscoHints' => '\SAML2\XML\mdui\DiscoHints',
             ),
             ALG::NS => array(
