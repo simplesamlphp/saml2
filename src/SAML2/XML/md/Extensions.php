@@ -4,13 +4,11 @@ namespace SAML2\XML\md;
 
 use SAML2\Constants;
 use SAML2\Utils;
+use SAML2\XML\alg\Common as ALG;
 use SAML2\XML\Chunk;
 use SAML2\XML\mdattr\EntityAttributes;
-use SAML2\XML\mdrpi\Common;
-use SAML2\XML\mdrpi\PublicationInfo;
-use SAML2\XML\mdrpi\RegistrationInfo;
-use SAML2\XML\mdui\DiscoHints;
-use SAML2\XML\mdui\UIInfo;
+use SAML2\XML\mdrpi\Common as MDRPI;
+use SAML2\XML\mdui\Common as MDUI;
 use SAML2\XML\shibmd\Scope;
 
 /**
@@ -29,19 +27,32 @@ class Extensions
     public static function getList(\DOMElement $parent)
     {
         $ret = array();
+        $supported = array(
+            Scope::NS => array(
+                'Scope' => '\SAML2\XML\shibmd\Scope',
+            ),
+            EntityAttributes::NS => array(
+                'EntityAttributes' => '\SAML2\XML\mdattr\EntityAttributes',
+            ),
+            MDRPI::NS_MDRPI => array(
+                'RegistrationInfo' => '\SAML2\XML\mdrpi\RegistrationInfo',
+                'PublicationInfo' => '\SAML2\XML\mdrpi\PublicationInfo',
+            ),
+            MDUI::NS => array(
+                'UIInfo' => '\SAML2\XML\mdui\UIInfo',
+                'DiscoHints' => '\SAML2\XML\mdui\DiscoHints',
+            ),
+            ALG::NS => array(
+                'DigestMethod' => '\SAML2\XML\alg\DigestMethod',
+                'SigningMethod' => '\SAML2\XML\alg\SigningMethod',
+            ),
+        );
+
         foreach (Utils::xpQuery($parent, './saml_metadata:Extensions/*') as $node) {
-            if ($node->namespaceURI === Scope::NS && $node->localName === 'Scope') {
-                $ret[] = new Scope($node);
-            } elseif ($node->namespaceURI === EntityAttributes::NS && $node->localName === 'EntityAttributes') {
-                $ret[] = new EntityAttributes($node);
-            } elseif ($node->namespaceURI === Common::NS_MDRPI && $node->localName === 'RegistrationInfo') {
-                $ret[] = new RegistrationInfo($node);
-            } elseif ($node->namespaceURI === Common::NS_MDRPI && $node->localName === 'PublicationInfo') {
-                $ret[] = new PublicationInfo($node);
-            } elseif ($node->namespaceURI === UIInfo::NS && $node->localName === 'UIInfo') {
-                $ret[] = new UIInfo($node);
-            } elseif ($node->namespaceURI === DiscoHints::NS && $node->localName === 'DiscoHints') {
-                $ret[] = new DiscoHints($node);
+            if (array_key_exists($node->namespaceURI, $supported) &&
+                array_key_exists($node->localName, $supported[$node->namespaceURI])
+            ) {
+                $ret[] = new $supported[$node->namespaceURI][$node->localName]($node);
             } else {
                 $ret[] = new Chunk($node);
             }

@@ -288,7 +288,7 @@ class Utils
      * Create a NameID element.
      *
      * The NameId array can have the following elements: 'Value', 'Format',
-     *   'NameQualifier, 'SPNameQualifier'
+     *   'NameQualifier, 'SPNameQualifier' and 'SPProviderID'.
      *
      * Only the 'Value'-element is required.
      *
@@ -299,17 +299,21 @@ class Utils
     {
         assert('array_key_exists("Value", $nameId)');
 
-        $xml = Utils::addString($node, Constants::NS_SAML, 'saml:NameID', $nameId['Value']);
+        $nid = new XML\saml\NameID();
+
+        $nid->value = $nameId['Value'];
 
         if (array_key_exists('NameQualifier', $nameId) && $nameId['NameQualifier'] !== null) {
-            $xml->setAttribute('NameQualifier', $nameId['NameQualifier']);
+            $nid->NameQualifier = $nameId['NameQualifier'];
         }
         if (array_key_exists('SPNameQualifier', $nameId) && $nameId['SPNameQualifier'] !== null) {
-            $xml->setAttribute('SPNameQualifier', $nameId['SPNameQualifier']);
+            $nid->SPNameQualifier = $nameId['SPNameQualifier'];
         }
         if (array_key_exists('Format', $nameId) && $nameId['Format'] !== null) {
-            $xml->setAttribute('Format', $nameId['Format']);
+            $nid->Format = $nameId['Format'];
         }
+
+        $nid->toXML($node);
     }
 
     /**
@@ -322,7 +326,7 @@ class Utils
     {
         $ret = array('Value' => trim($xml->textContent));
 
-        foreach (array('NameQualifier', 'SPNameQualifier', 'Format') as $attr) {
+        foreach (array('NameQualifier', 'SPNameQualifier', 'SPProvidedID', 'Format') as $attr) {
             if ($xml->hasAttribute($attr)) {
                 $ret[$attr] = $xml->getAttribute($attr);
             }
