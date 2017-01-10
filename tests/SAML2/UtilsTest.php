@@ -206,4 +206,65 @@ class UtilsTest extends \PHPUnit_Framework_TestCase
             array(false, '2015-01-01T00:00:00.0-04:00'),
         );
     }
+
+    /**
+     * Test parseBoolean, XML allows both 1 and true as values.
+     */
+    public function testParseBoolean()
+    {
+        // variations of true: "true", 1, and captalizations
+        $document = DOMDocumentFactory::fromString(
+            '<somenode anattribute="true"></somenode>'
+        );
+        $result = Utils::parseBoolean($document->firstChild, 'anattribute' );
+        $this->assertTrue($result);
+
+        $document = DOMDocumentFactory::fromString(
+            '<somenode anattribute="1"></somenode>'
+        );
+        $result = Utils::parseBoolean($document->firstChild, 'anattribute' );
+        $this->assertTrue($result);
+
+        $document = DOMDocumentFactory::fromString(
+            '<somenode anattribute="True"></somenode>'
+        );
+
+        // variations of false: "false", 0
+        $result = Utils::parseBoolean($document->firstChild, 'anattribute' );
+        $this->assertTrue($result);
+
+        $document = DOMDocumentFactory::fromString(
+            '<somenode anattribute="false"></somenode>'
+        );
+        $result = Utils::parseBoolean($document->firstChild, 'anattribute' );
+        $this->assertFalse($result);
+
+        $document = DOMDocumentFactory::fromString(
+            '<somenode anattribute="0"></somenode>'
+        );
+        $result = Utils::parseBoolean($document->firstChild, 'anattribute' );
+        $this->assertFalse($result);
+
+        // Usage of the default if attribute not found
+        $document = DOMDocumentFactory::fromString(
+            '<somenode anattribute="true"></somenode>'
+        );
+        $result = Utils::parseBoolean($document->firstChild, 'otherattribute' );
+        $this->assertNull($result);
+
+        $document = DOMDocumentFactory::fromString(
+            '<somenode anattribute="true"></somenode>'
+        );
+        $result = Utils::parseBoolean($document->firstChild, 'otherattribute', '404' );
+        $this->assertEquals($result, '404');
+
+        // Exception on invalid value
+        $this->setExpectedException('Exception', "Invalid value of boolean attribute 'anattribute': 'yes'");
+
+        $document = DOMDocumentFactory::fromString(
+            '<somenode anattribute="yes"></somenode>'
+        );
+        $result = Utils::parseBoolean($document->firstChild, 'anattribute' );
+    }
+
 }

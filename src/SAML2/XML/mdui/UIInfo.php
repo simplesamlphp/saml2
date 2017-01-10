@@ -14,11 +14,6 @@ use SAML2\XML\Chunk;
 class UIInfo
 {
     /**
-     * The namespace used for the UIInfo extension.
-     */
-    const NS = 'urn:oasis:names:tc:SAML:metadata:ui';
-
-    /**
      * Array with child elements.
      *
      * The elements can be any of the other \SAML2\XML\mdui\* elements.
@@ -80,13 +75,13 @@ class UIInfo
             return;
         }
 
-        $this->DisplayName         = Utils::extractLocalizedStrings($xml, self::NS, 'DisplayName');
-        $this->Description         = Utils::extractLocalizedStrings($xml, self::NS, 'Description');
-        $this->InformationURL      = Utils::extractLocalizedStrings($xml, self::NS, 'InformationURL');
-        $this->PrivacyStatementURL = Utils::extractLocalizedStrings($xml, self::NS, 'PrivacyStatementURL');
+        $this->DisplayName         = Utils::extractLocalizedStrings($xml, Common::NS, 'DisplayName');
+        $this->Description         = Utils::extractLocalizedStrings($xml, Common::NS, 'Description');
+        $this->InformationURL      = Utils::extractLocalizedStrings($xml, Common::NS, 'InformationURL');
+        $this->PrivacyStatementURL = Utils::extractLocalizedStrings($xml, Common::NS, 'PrivacyStatementURL');
 
         foreach (Utils::xpQuery($xml, './*') as $node) {
-            if ($node->namespaceURI === self::NS) {
+            if ($node->namespaceURI === Common::NS) {
                 switch ($node->localName) {
                     case 'Keywords':
                         $this->Keywords[] = new Keywords($node);
@@ -126,13 +121,13 @@ class UIInfo
          || !empty($this->children)) {
             $doc = $parent->ownerDocument;
 
-            $e = $doc->createElementNS(self::NS, 'mdui:UIInfo');
+            $e = $doc->createElementNS(Common::NS, 'mdui:UIInfo');
             $parent->appendChild($e);
 
-            Utils::addStrings($e, self::NS, 'mdui:DisplayName', true, $this->DisplayName);
-            Utils::addStrings($e, self::NS, 'mdui:Description', true, $this->Description);
-            Utils::addStrings($e, self::NS, 'mdui:InformationURL', true, $this->InformationURL);
-            Utils::addStrings($e, self::NS, 'mdui:PrivacyStatementURL', true, $this->PrivacyStatementURL);
+            Utils::addStrings($e, Common::NS, 'mdui:DisplayName', true, $this->DisplayName);
+            Utils::addStrings($e, Common::NS, 'mdui:Description', true, $this->Description);
+            Utils::addStrings($e, Common::NS, 'mdui:InformationURL', true, $this->InformationURL);
+            Utils::addStrings($e, Common::NS, 'mdui:PrivacyStatementURL', true, $this->PrivacyStatementURL);
 
             if (!empty($this->Keywords)) {
                 foreach ($this->Keywords as $child) {
