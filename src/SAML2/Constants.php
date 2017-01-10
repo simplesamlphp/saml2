@@ -155,31 +155,6 @@ class Constants
     const NAMEID_UNSPECIFIED = 'urn:oasis:names:tc:SAML:1.1:nameid-format:unspecified';
 
     /**
-     * Email address NameID format.
-     */
-    const NAMEID_EMAIL_ADDRESS = 'urn:oasis:names:tc:SAML:1.1:nameid-format:emailAddress';
-
-    /**
-     * X509 Subject Name NameID format.
-     */
-    const NAMEID_X509_SUBJECT_NAME = 'urn:oasis:names:tc:SAML:1.1:nameid-format:X509SubjectName';
-
-    /**
-     * Windows Domain Qualifier Name NameID format.
-     */
-    const NAMEID_WINDOWS_DOMAIN_QUALIFIED_NAME = 'urn:oasis:names:tc:SAML:1.1:nameid-format:WindowsDomainQualifiedName';
-
-    /**
-     * Kerberos Principal Name NameID format.
-     */
-    const NAMEID_KERBEROS = 'urn:oasis:names:tc:SAML:2.0:nameid-format:kerberos';
-
-    /**
-     * Entity NameID format.
-     */
-    const NAMEID_ENTITY = 'urn:oasis:names:tc:SAML:2.0:nameid-format:entity';
-
-    /**
      * Persistent NameID format.
      */
     const NAMEID_PERSISTENT = 'urn:oasis:names:tc:SAML:2.0:nameid-format:persistent';

@@ -84,7 +84,7 @@ class HTTPArtifact extends Binding
             $endpointIndex =  bin2hex(substr($artifact, 2, 2));
             $sourceId = bin2hex(substr($artifact, 4, 20));
         } else {
-            throw new \Exception('Missing SAMLart parameter.');
+            throw new \Exception('Missing SAMLArt parameter.');
         }
 
         $metadataHandler = SimpleSAML_Metadata_MetaDataStorageHandler::getMetadataHandler();

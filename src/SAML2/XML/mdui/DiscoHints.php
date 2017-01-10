@@ -14,6 +14,11 @@ use SAML2\XML\Chunk;
 class DiscoHints
 {
     /**
+     * The namespace used for the DiscoHints extension.
+     */
+    const NS = 'urn:oasis:names:tc:SAML:metadata:ui';
+
+    /**
      * Array with child elements.
      *
      * The elements can be any of the other \SAML2\XML\mdui\* elements.
@@ -54,11 +59,11 @@ class DiscoHints
             return;
         }
 
-        $this->IPHint =          Utils::extractStrings($xml, Common::NS, 'IPHint');
-        $this->DomainHint =      Utils::extractStrings($xml, Common::NS, 'DomainHint');
-        $this->GeolocationHint = Utils::extractStrings($xml, Common::NS, 'GeolocationHint');
+        $this->IPHint =          Utils::extractStrings($xml, self::NS, 'IPHint');
+        $this->DomainHint =      Utils::extractStrings($xml, self::NS, 'DomainHint');
+        $this->GeolocationHint = Utils::extractStrings($xml, self::NS, 'GeolocationHint');
 
-        foreach (Utils::xpQuery($xml, "./*[namespace-uri()!='".Common::NS."']") as $node) {
+        foreach (Utils::xpQuery($xml, "./*[namespace-uri()!='".self::NS."']") as $node) {
             $this->children[] = new Chunk($node);
         }
     }
@@ -82,7 +87,7 @@ class DiscoHints
          || !empty($this->children)) {
             $doc = $parent->ownerDocument;
 
-            $e = $doc->createElementNS(Common::NS, 'mdui:DiscoHints');
+            $e = $doc->createElementNS(self::NS, 'mdui:DiscoHints');
             $parent->appendChild($e);
 
             if (!empty($this->children)) {
@@ -91,9 +96,9 @@ class DiscoHints
                 }
             }
 
-            Utils::addStrings($e, Common::NS, 'mdui:IPHint', false, $this->IPHint);
-            Utils::addStrings($e, Common::NS, 'mdui:DomainHint', false, $this->DomainHint);
-            Utils::addStrings($e, Common::NS, 'mdui:GeolocationHint', false, $this->GeolocationHint);
+            Utils::addStrings($e, self::NS, 'mdui:IPHint', false, $this->IPHint);
+            Utils::addStrings($e, self::NS, 'mdui:DomainHint', false, $this->DomainHint);
+            Utils::addStrings($e, self::NS, 'mdui:GeolocationHint', false, $this->GeolocationHint);
 
             return $e;
         }

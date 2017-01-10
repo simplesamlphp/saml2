@@ -535,12 +535,23 @@ XML;
         $maceValue = $attributes['urn:mace:dir:attribute-def:eduPersonTargetedID'][0];
         $oidValue = $attributes['urn:oid:1.3.6.1.4.1.5923.1.1.1.10'][0];
 
-        $this->assertInstanceOf('SAML2\XML\saml\NameID', $maceValue);
-        $this->assertInstanceOf('SAML2\XML\saml\NameID', $oidValue);
-        $this->assertEquals('abcd-some-value-xyz', $maceValue->value);
-        $this->assertEquals('abcd-some-value-xyz', $oidValue->value);
-        $this->assertEquals('urn:oasis:names:tc:SAML:2.0:nameid-format:persistent', $maceValue->Format);
-        $this->assertEquals('urn:oasis:names:tc:SAML:2.0:nameid-format:persistent', $oidValue->Format);
+        $this->assertEquals(
+            array(
+                'Value'  => 'abcd-some-value-xyz',
+                'Format' => 'urn:oasis:names:tc:SAML:2.0:nameid-format:persistent'
+            ),
+            $maceValue,
+            'Parsing the EPTI attribute named with urn:mace did not result in the correct value'
+        );
+        $this->assertEquals(
+            array(
+                'Value'  => 'abcd-some-value-xyz',
+                'Format' => 'urn:oasis:names:tc:SAML:2.0:nameid-format:persistent'
+            ),
+            $oidValue,
+            'Parsing the EPTI attribute named with urn:oid did not result in the correct value'
+        );
+
         $this->assertXmlStringEqualsXmlString($xml, $assertion->toXML()->ownerDocument->saveXML());
     }
 
@@ -626,12 +637,22 @@ XML;
         $maceFirstValue = $attributes['urn:mace:dir:attribute-def:eduPersonTargetedID'][0];
         $maceSecondValue = $attributes['urn:mace:dir:attribute-def:eduPersonTargetedID'][1];
 
-        $this->assertInstanceOf('SAML2\XML\saml\NameID', $maceFirstValue);
-        $this->assertInstanceOf('SAML2\XML\saml\NameID', $maceSecondValue);
-        $this->assertEquals('abcd-some-value-xyz', $maceFirstValue->value);
-        $this->assertEquals('xyz-some-value-abcd', $maceSecondValue->value);
-        $this->assertEquals('urn:oasis:names:tc:SAML:2.0:nameid-format:persistent', $maceFirstValue->Format);
-        $this->assertEquals('urn:oasis:names:tc:SAML:2.0:nameid-format:persistent', $maceSecondValue->Format);
+        $this->assertEquals(
+            array(
+                'Value'  => 'abcd-some-value-xyz',
+                'Format' => 'urn:oasis:names:tc:SAML:2.0:nameid-format:persistent'
+            ),
+            $maceFirstValue,
+            'Parsing the EPTI attribute with multiple values resulted in an incorrect first value'
+        );
+        $this->assertEquals(
+            array(
+                'Value'  => 'xyz-some-value-abcd',
+                'Format' => 'urn:oasis:names:tc:SAML:2.0:nameid-format:persistent'
+            ),
+            $maceSecondValue,
+            'Parsing the EPTI attribute with multiple values resulted in an incorrect second value'
+        );
 
         $this->assertXmlStringEqualsXmlString($xml, $assertion->toXML()->ownerDocument->saveXML());
     }

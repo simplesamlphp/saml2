@@ -5,7 +5,6 @@ namespace SAML2;
 use RobRichards\XMLSecLibs\XMLSecEnc;
 use RobRichards\XMLSecLibs\XMLSecurityKey;
 use SAML2\XML\saml\SubjectConfirmation;
-use SAML2\Exception\InvalidArgumentException;
 
 /**
  * Class for SAML 2 authentication request messages.
@@ -160,10 +159,6 @@ class AuthnRequest extends Request
             $this->assertionConsumerServiceIndex = (int) $xml->getAttribute('AssertionConsumerServiceIndex');
         }
 
-        if ($xml->hasAttribute('ProviderName')) {
-            $this->ProviderName = $xml->getAttribute('ProviderName');
-        }
-
         $this->parseSubject($xml);
         $this->parseNameIdPolicy($xml);
         $this->parseRequestedAuthnContext($xml);
@@ -311,24 +306,14 @@ class AuthnRequest extends Request
      * Set the NameIDPolicy.
      *
      * This function accepts an array with the following options:
-     *  - 'Format' (string)
-     *  - 'SPNameQualifier' (string)
-     *  - 'AllowCreate' (bool)
+     *  - 'Format'
+     *  - 'SPNameQualifier'
+     *  - 'AllowCreate'
      *
      * @param array $nameIdPolicy The NameIDPolicy.
      */
     public function setNameIdPolicy(array $nameIdPolicy)
     {
-        if (isset($nameIdPolicy['Format']) && !is_string($nameIdPolicy['Format'])) {
-            throw InvalidArgumentException::invalidType('string', $nameIdPolicy['Format']);
-        }
-        if (isset($nameIdPolicy['SPNameQualifier']) && !is_string($nameIdPolicy['SPNameQualifier'])) {
-            throw InvalidArgumentException::invalidType('string', $nameIdPolicy['SPNameQualifier']);
-        }
-        if (isset($nameIdPolicy['AllowCreate']) && !is_bool($nameIdPolicy['AllowCreate'])) {
-            throw InvalidArgumentException::invalidType('bool', $nameIdPolicy['AllowCreate']);
-        }
-
         $this->nameIdPolicy = $nameIdPolicy;
     }
 
@@ -729,7 +714,7 @@ class AuthnRequest extends Request
             if (array_key_exists('SPNameQualifier', $this->nameIdPolicy)) {
                 $nameIdPolicy->setAttribute('SPNameQualifier', $this->nameIdPolicy['SPNameQualifier']);
             }
-            if (array_key_exists('AllowCreate', $this->nameIdPolicy)) {
+            if (array_key_exists('AllowCreate', $this->nameIdPolicy) && is_bool($this->nameIdPolicy['AllowCreate'])) {
                 $nameIdPolicy->setAttribute('AllowCreate', ($this->nameIdPolicy['AllowCreate']) ? 'true' : 'false');
             }
             $root->appendChild($nameIdPolicy);

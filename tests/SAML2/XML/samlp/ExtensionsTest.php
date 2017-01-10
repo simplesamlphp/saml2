@@ -7,7 +7,7 @@ use SAML2\XML\saml\Attribute;
 use SAML2\XML\shibmd\Scope;
 
 /**
- * Class \SAML2\XML\samlp\ExtensionsTest
+ * Class \SAML2\XML\md\ExtensionsTest
  */
 class ExtensionsTest extends \PHPUnit_Framework_TestCase
 {
@@ -47,7 +47,7 @@ XML
     }
 
     /**
-     * Test the getList() method.
+     * Test getList() method
      */
     public function testExtensionsGet()
     {
@@ -59,7 +59,7 @@ XML
     }
 
     /**
-     * Adding empty list should leave existing extensions unchanged.
+     * Adding empty list should leave exising extensions unchanged.
      */
     public function testExtensionsAddEmpty()
     {
@@ -73,7 +73,7 @@ XML
     }
 
     /**
-     * Test adding two random elements.
+     * Test adding two random elements
      */
     public function testExtensionsAddSome()
     {
