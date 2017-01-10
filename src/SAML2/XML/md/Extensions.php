@@ -56,10 +56,10 @@ class Extensions
         );
 
         foreach (Utils::xpQuery($parent, './saml_metadata:Extensions/*') as $node) {
-            if (in_array($node->namespaceURI, array_keys($supported)) &&
+            if (array_key_exists($node->namespaceURI, $supported) &&
                 in_array($node->localName, $supported[$node->namespaceURI])
             ) {
-                $ret[] = new $supported[$node->namespaceURI]($node);
+                $ret[] = new $node->localName($node);
             } else {
                 $ret[] = new Chunk($node);
             }
