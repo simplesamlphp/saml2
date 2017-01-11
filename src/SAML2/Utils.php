@@ -294,6 +294,12 @@ class Utils
      *
      * @param \DOMElement $node   The DOM node we should append the NameId to.
      * @param array      $nameId The name identifier.
+     *
+     * @deprecated Please use \SAML2\XML\saml\NameID objects instead:
+     *   $nameId = new \SAML2\XML\saml\NameID();
+     *   $nameId->value = $value;
+     *   ...
+     *   $nameId->toXML($node);
      */
     public static function addNameId(\DOMElement $node, array $nameId)
     {
@@ -321,6 +327,8 @@ class Utils
      *
      * @param  \DOMElement $xml The DOM element we should parse.
      * @return array      The parsed name identifier.
+     * @deprecated Please use \SAML2\XML\saml\NameID objects instead:
+     *   $nameId = new \SAML2\XML\saml\NameID($xml);
      */
     public static function parseNameId(\DOMElement $xml)
     {
