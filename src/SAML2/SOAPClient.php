@@ -38,6 +38,14 @@ class SOAPClient
             ),
         );
 
+        if ($srcMetadata->hasValue('saml.SOAPClient.verify_peer')) {
+            $ctxOpts['ssl']['verify_peer'] = $srcMetadata->getBoolean('saml.SOAPClient.verify_peer');
+        }
+
+        if ($srcMetadata->hasValue('saml.SOAPClient.verify_peer_name')) {
+            $ctxOpts['ssl']['verify_peer_name'] = $srcMetadata->getBoolean('saml.SOAPClient.verify_peer_name');
+        }
+
         // Determine if we are going to do a MutualSSL connection between the IdP and SP  - Shoaib
         if ($srcMetadata->hasValue('saml.SOAPClient.certificate')) {
             $cert = $srcMetadata->getValue('saml.SOAPClient.certificate');
