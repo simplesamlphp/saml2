@@ -88,6 +88,10 @@ class SOAPClient
             $ctxOpts['ssl']['cafile'] = $peerCertFile;
         }
 
+        if ($srcMetadata->hasValue('saml.SOAPClient.stream_context.ssl.peer_name')) {
+            $ctxOpts['ssl']['peer_name'] = $srcMetadata->getString('saml.SOAPClient.stream_context.ssl.peer_name');
+        }
+
         $context = stream_context_create($ctxOpts);
         if ($context === null) {
             throw new \Exception('Unable to create SSL stream context');
