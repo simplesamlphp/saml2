@@ -71,6 +71,28 @@ FKPQk+NwBYQqJ83Uil/36kbXsHQ81o/Vp6it7tlvLBOP1EN9jNGUXZuAqvFphNkw
 EJpABx1x4ukY8bZVl6QzQ79P48oGxOaIy27/g1FVkGqRtA4UPABcn0sJ
 -----END CERTIFICATE-----';
 
+    const PUBLIC_KEY_DSA_PEM = '-----BEGIN CERTIFICATE-----
+MIIDXTCCAxqgAwIBAgIJAO/P24rWSVJKMAsGCWCGSAFlAwQDAjBmMQswCQYDVQQG
+EwJOTDEQMA4GA1UECAwHVXRyZWNodDEQMA4GA1UEBwwHVXRyZWNodDEQMA4GA1UE
+CgwHU1VSRm5ldDEhMB8GA1UEAwwYQ2VydGlmaWNhdGUgd2l0aCBEU0Ega2V5MB4X
+DTE2MTEyOTE1MzU0MloXDTE2MTIyOTE1MzU0MlowZjELMAkGA1UEBhMCTkwxEDAO
+BgNVBAgMB1V0cmVjaHQxEDAOBgNVBAcMB1V0cmVjaHQxEDAOBgNVBAoMB1NVUkZu
+ZXQxITAfBgNVBAMMGENlcnRpZmljYXRlIHdpdGggRFNBIGtleTCCAbcwggEsBgcq
+hkjOOAQBMIIBHwKBgQDymea94rRzJ9Xtj7EoaXuYH8X9a2E0Ei8wfx+9lZK5C8Fm
+5wgTYeTGXV45Tf4VZ+eqz6sU4XQC6ehVIlxdO9PvodYgQdB3aGlDW9mhcVM/kL9v
+AIRgLMHMwyph6FDWD/uKyw6hH4A7XKer09SIfmqwhUqg27Xm5pKVH3kYOUGsBwIV
+ANooxK2eY8ojkNRjxebok0tbKD/tAoGBAMQawu3dHEDtKzYuGrSD9NxGLRB5NI0k
+h4qvliwD6ur2IDrrnxmN/VY0QqwOT6AWChiIur5glBP7zlG2GBR03FrMaJRF727r
+ExSzWETQKKgXx9vQpw6jcwIiHoQhullzjLr8qFQsOsNRnXeKmSvZxEJKRKhAUSAu
+0yEnLkJc4F44A4GEAAKBgF6rEBWslH8aV/iM07JjC+kcLPcG5Yp619KLcSfWt030
+CU2A8azmtNeQZ1FB/sg2PjciQ8qgcxFXBRHkUS/173WXb+6dDTuFBxwTYBVJM+ZD
+Zmm5GEXjGbZN2tV0s1ULp+plbOwROLC8F5oyZE2fvTAvqZ9XHeWIZkgyoVwSuvXO
+o1AwTjAdBgNVHQ4EFgQUC12Td80rgZbLXfvMefDul5w/S/YwHwYDVR0jBBgwFoAU
+C12Td80rgZbLXfvMefDul5w/S/YwDAYDVR0TBAUwAwEB/zALBglghkgBZQMEAwID
+MAAwLQIUKvKKf7u2pLv5JAsc5E5QOpZ9JWoCFQCVymKmF6aYAOJxuSlUj+vF1n6p
+UQ==
+-----END CERTIFICATE-----';
+
     /**
      * @return XMLSecurityKey
      */
@@ -94,6 +116,28 @@ EJpABx1x4ukY8bZVl6QzQ79P48oGxOaIy27/g1FVkGqRtA4UPABcn0sJ
     /**
      * @return XMLSecurityKey
      */
+    public static function getPublicKey2()
+    {
+        $publicKey = new XMLSecurityKey(XMLSecurityKey::RSA_1_5, array('type'=>'public'));
+        $publicKey->loadKey(self::PUBLIC_KEY_2_PEM);
+        return $publicKey;
+    }
+
+
+    /**
+     * @return XMLSecurityKey
+     */
+    public static function getPublicKey3()
+    {
+        $publicKey = new XMLSecurityKey(XMLSecurityKey::RSA_SHA1, array('type'=>'public'));
+        $publicKey->loadKey(self::PUBLIC_KEY_3_PEM);
+        return $publicKey;
+    }
+
+
+    /**
+     * @return XMLSecurityKey
+     */
     public static function getPublicKeySha1()
     {
         $publicKey = new XMLSecurityKey(XMLSecurityKey::RSA_SHA1, array('type'=>'public'));
@@ -111,9 +155,25 @@ EJpABx1x4ukY8bZVl6QzQ79P48oGxOaIy27/g1FVkGqRtA4UPABcn0sJ
         return $publicKey;
     }
 
+    /**
+     * Load a X.509 certificate with a DSA public key as RSA key
+     * @return XMLSecurityKey
+     */
+    public static function getPublicKeyDSAasRSA()
+    {
+        $publicKey = new XMLSecurityKey(XMLSecurityKey::RSA_SHA1, array('type'=>'public'));
+        $publicKey->loadKey(self::PUBLIC_KEY_DSA_PEM);
+        return $publicKey;
+    }
+
     public static function getPlainPublicKey()
     {
         return self::PUBLIC_KEY_PEM;
+    }
+
+    public static function getPlainPrivateKey()
+    {
+        return self::PRIVATE_KEY_PEM;
     }
 
     /**

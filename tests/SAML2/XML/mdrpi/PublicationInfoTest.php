@@ -69,4 +69,18 @@ XML
         $this->assertEquals('http://TheEnglishUsagePolicy', $publicationInfo->UsagePolicy["en"]);
         $this->assertEquals('http://TheNorwegianUsagePolicy', $publicationInfo->UsagePolicy["no"]);
     }
+
+    public function testMissingPublisherThrowsException()
+    {
+        $document = DOMDocumentFactory::fromString(<<<XML
+<mdrpi:PublicationInfo xmlns:mdrpi="urn:oasis:names:tc:SAML:metadata:rpi"
+                       creationInstant="2011-01-01T00:00:00Z"
+                       publicationId="SomePublicationId">
+</mdrpi:PublicationInfo>
+XML
+        );
+
+        $this->setExpectedException('Exception', 'Missing required attribute "publisher"');
+        $publicationInfo = new PublicationInfo($document->firstChild);
+    }
 }

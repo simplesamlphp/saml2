@@ -165,7 +165,7 @@ class Utils
         }
 
         /* Check the signature. */
-        if (! $objXMLSecDSig->verify($key)) {
+        if ($objXMLSecDSig->verify($key) !== 1) {
             throw new \Exception("Unable to validate Signature");
         }
     }
@@ -289,28 +289,38 @@ class Utils
      * Create a NameID element.
      *
      * The NameId array can have the following elements: 'Value', 'Format',
-     *   'NameQualifier, 'SPNameQualifier'
+     *   'NameQualifier, 'SPNameQualifier' and 'SPProviderID'.
      *
      * Only the 'Value'-element is required.
      *
      * @param \DOMElement $node   The DOM node we should append the NameId to.
      * @param array      $nameId The name identifier.
+     *
+     * @deprecated Please use \SAML2\XML\saml\NameID objects instead:
+     *   $nameId = new \SAML2\XML\saml\NameID();
+     *   $nameId->value = $value;
+     *   ...
+     *   $nameId->toXML($node);
      */
     public static function addNameId(\DOMElement $node, array $nameId)
     {
         assert('array_key_exists("Value", $nameId)');
 
-        $xml = Utils::addString($node, Constants::NS_SAML, 'saml:NameID', $nameId['Value']);
+        $nid = new XML\saml\NameID();
+
+        $nid->value = $nameId['Value'];
 
         if (array_key_exists('NameQualifier', $nameId) && $nameId['NameQualifier'] !== null) {
-            $xml->setAttribute('NameQualifier', $nameId['NameQualifier']);
+            $nid->NameQualifier = $nameId['NameQualifier'];
         }
         if (array_key_exists('SPNameQualifier', $nameId) && $nameId['SPNameQualifier'] !== null) {
-            $xml->setAttribute('SPNameQualifier', $nameId['SPNameQualifier']);
+            $nid->SPNameQualifier = $nameId['SPNameQualifier'];
         }
         if (array_key_exists('Format', $nameId) && $nameId['Format'] !== null) {
-            $xml->setAttribute('Format', $nameId['Format']);
+            $nid->Format = $nameId['Format'];
         }
+
+        $nid->toXML($node);
     }
 
     /**
@@ -318,12 +328,14 @@ class Utils
      *
      * @param  \DOMElement $xml The DOM element we should parse.
      * @return array      The parsed name identifier.
+     * @deprecated Please use \SAML2\XML\saml\NameID objects instead:
+     *   $nameId = new \SAML2\XML\saml\NameID($xml);
      */
     public static function parseNameId(\DOMElement $xml)
     {
         $ret = array('Value' => trim($xml->textContent));
 
-        foreach (array('NameQualifier', 'SPNameQualifier', 'Format') as $attr) {
+        foreach (array('NameQualifier', 'SPNameQualifier', 'SPProvidedID', 'Format') as $attr) {
             if ($xml->hasAttribute($attr)) {
                 $ret[$attr] = $xml->getAttribute($attr);
             }

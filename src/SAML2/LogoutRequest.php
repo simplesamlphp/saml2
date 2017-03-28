@@ -31,7 +31,7 @@ class LogoutRequest extends Request
     /**
      * The name identifier of the session that should be terminated.
      *
-     * @var array
+     * @var \SAML2\XML\saml\NameID
      */
     private $nameId;
 
@@ -73,7 +73,7 @@ class LogoutRequest extends Request
             /* The NameID element is encrypted. */
             $this->encryptedNameId = $nameId;
         } else {
-            $this->nameId = Utils::parseNameId($nameId);
+            $this->nameId = new XML\saml\NameID($nameId);
         }
 
         $sessionIndexes = Utils::xpQuery($xml, './saml_protocol:SessionIndex');
@@ -129,7 +129,7 @@ class LogoutRequest extends Request
         $doc = DOMDocumentFactory::create();
         $root = $doc->createElement('root');
         $doc->appendChild($root);
-        Utils::addNameId($root, $this->nameId);
+        $this->nameId->toXML($root);
         $nameId = $root->firstChild;
 
         Utils::getContainer()->debugMessage($nameId, 'encrypt');
@@ -163,7 +163,7 @@ class LogoutRequest extends Request
 
         $nameId = Utils::decryptElement($this->encryptedNameId, $key, $blacklist);
         Utils::getContainer()->debugMessage($nameId, 'decrypt');
-        $this->nameId = Utils::parseNameId($nameId);
+        $this->nameId = new XML\saml\NameID($nameId);
 
         $this->encryptedNameId = null;
     }
@@ -171,7 +171,7 @@ class LogoutRequest extends Request
     /**
      * Retrieve the name identifier of the session that should be terminated.
      *
-     * @return array The name identifier of the session that should be terminated.
+     * @return \SAML2\XML\saml\NameID The name identifier of the session that should be terminated.
      * @throws \Exception
      */
     public function getNameId()
@@ -186,15 +186,15 @@ class LogoutRequest extends Request
     /**
      * Set the name identifier of the session that should be terminated.
      *
-     * The name identifier must be in the format accepted by \SAML2\message::buildNameId().
-     *
-     * @see \SAML2\message::buildNameId()
-     * @param array $nameId The name identifier of the session that should be terminated.
+     * @param \SAML2\XML\saml\NameID|array|null $nameId The name identifier of the session that should be terminated.
      */
     public function setNameId($nameId)
     {
-        assert('is_array($nameId)');
+        assert('is_array($nameId) || is_a($nameId, "\SAML2\XML\saml\NameID")');
 
+        if (is_array($nameId)) {
+            $nameId = XML\saml\NameID::fromArray($nameId);
+        }
         $this->nameId = $nameId;
     }
 
@@ -262,7 +262,7 @@ class LogoutRequest extends Request
         }
 
         if ($this->encryptedNameId === null) {
-            Utils::addNameId($root, $this->nameId);
+            $this->nameId->toXML($root);
         } else {
             $eid = $root->ownerDocument->createElementNS(Constants::NS_SAML, 'saml:' . 'EncryptedID');
             $root->appendChild($eid);

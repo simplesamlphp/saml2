@@ -91,7 +91,7 @@
             <arg value="tools/phpmd/ruleset.xml"/>
             <!-- These classes are already messes, exclude them for now... -->
             <arg value="--exclude" />
-            <arg value="${basedir}/src/SAML2/AuthnRequest.php,${basedir}/src/SAML2/Assertion.php,${basedir}/src/SAML2/SOAP.php,${basedir}/src/SAML2/SOAPClient.php,${basedir}/src/SAML2/Utils.php,${basedir}/src/SAML2/XML/md/EntityDescriptor.php,${basedir}/src/SAML2/XML/md/RoleDescriptor.php,${basedir}/src/SAML2/XML/saml/SubjectConfirmationData.php" />
+            <arg value="${basedir}/src/SAML2/AuthnRequest.php,${basedir}/src/SAML2/Assertion.php,${basedir}/src/SAML2/SOAP.php,${basedir}/src/SAML2/SOAPClient.php,${basedir}/src/SAML2/Utils.php,${basedir}/src/SAML2/XML/md/EntityDescriptor.php,${basedir}/src/SAML2/XML/md/RoleDescriptor.php,${basedir}/src/SAML2/XML/saml/SubjectConfirmationData.php,${basedir}/src/SAML2/Message.php" />
         </exec>
     </target>
 

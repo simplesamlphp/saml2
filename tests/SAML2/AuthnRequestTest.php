@@ -42,8 +42,7 @@ class AuthnRequestTest extends \PHPUnit_Framework_TestCase
 
     public function testMarshallingOfSimpleRequest()
     {
-        $document = new \DOMDocument();
-        $document->loadXML(<<<AUTHNREQUEST
+        $xml = <<<AUTHNREQUEST
 <samlp:AuthnRequest
   xmlns:samlp="urn:oasis:names:tc:SAML:2.0:protocol"
   xmlns:saml="urn:oasis:names:tc:SAML:2.0:assertion"
@@ -55,10 +54,9 @@ class AuthnRequestTest extends \PHPUnit_Framework_TestCase
   AssertionConsumerServiceURL="https://sp.example.com/SAML2/SSO/Artifact">
     <saml:Issuer>https://sp.example.com/SAML2</saml:Issuer>
 </samlp:AuthnRequest>
-AUTHNREQUEST
-        );
+AUTHNREQUEST;
 
-        $authnRequest = new AuthnRequest($document->documentElement);
+        $authnRequest = new AuthnRequest(DOMDocumentFactory::fromString($xml)->documentElement);
 
         $expectedIssueInstant = Utils::xsDateTimeToTimestamp('2004-12-05T09:21:59Z');
         $this->assertEquals($expectedIssueInstant, $authnRequest->getIssueInstant());
@@ -109,8 +107,7 @@ AUTHNREQUEST;
 
     public function testThatTheSubjectIsCorrectlyRead()
     {
-        $document = new \DOMDocument();
-        $document->loadXML(<<<AUTHNREQUEST
+        $xml = <<<AUTHNREQUEST
 <samlp:AuthnRequest
     xmlns:samlp="urn:oasis:names:tc:SAML:2.0:protocol"
     xmlns:saml="urn:oasis:names:tc:SAML:2.0:assertion"
@@ -124,15 +121,13 @@ AUTHNREQUEST;
         <saml:NameID Format="urn:oasis:names:tc:SAML:1.1:nameid-format:unspecified">user@example.org</saml:NameID>
   </saml:Subject>
 </samlp:AuthnRequest>
-AUTHNREQUEST
-);
-        $authnRequest = new AuthnRequest($document->documentElement);
+AUTHNREQUEST;
 
-        $expectedNameId = array(
-            'Value'  => "user@example.org",
-            'Format' => "urn:oasis:names:tc:SAML:1.1:nameid-format:unspecified"
-        );
-        $this->assertEquals($expectedNameId, $authnRequest->getNameId());
+        $authnRequest = new AuthnRequest(DOMDocumentFactory::fromString($xml)->documentElement);
+
+        $nameId = $authnRequest->getNameId();
+        $this->assertEquals("user@example.org", $nameId->value);
+        $this->assertEquals("urn:oasis:names:tc:SAML:1.1:nameid-format:unspecified", $nameId->Format);
     }
 
     public function testThatTheSubjectCanBeSetBySettingTheNameId()
@@ -147,8 +142,7 @@ AUTHNREQUEST
 
     public function testThatAnEncryptedNameIdCanBeDecrypted()
     {
-        $document = new \DOMDocument();
-        $document->loadXML(<<<AUTHNREQUEST
+        $xml = <<<AUTHNREQUEST
 <samlp:AuthnRequest
     xmlns:samlp="urn:oasis:names:tc:SAML:2.0:protocol"
     xmlns:saml="urn:oasis:names:tc:SAML:2.0:assertion"
@@ -176,17 +170,16 @@ AUTHNREQUEST
         </saml:EncryptedID>
     </saml:Subject>
 </samlp:AuthnRequest>
-AUTHNREQUEST
-        );
+AUTHNREQUEST;
 
-        $authnRequest = new AuthnRequest($document->documentElement);
+        $authnRequest = new AuthnRequest(DOMDocumentFactory::fromString($xml)->documentElement);
 
         $key = CertificatesMock::getPrivateKey();
         $authnRequest->decryptNameId($key);
 
-        $expectedNameId = array('Value' => md5('Arthur Dent'), 'Format' => Constants::NAMEID_ENCRYPTED);
-
-        $this->assertEquals($expectedNameId, $authnRequest->getNameId());
+        $nameId = $authnRequest->getNameId();
+        $this->assertEquals(md5('Arthur Dent'), $nameId->value);
+        $this->assertEquals(Constants::NAMEID_ENCRYPTED, $nameId->Format);
     }
 
     /**
@@ -209,8 +202,7 @@ AUTHNREQUEST
         $key = CertificatesMock::getPublicKey();
         $request->encryptNameId($key);
 
-        $expectedStructureDocument = new \DOMDocument();
-        $expectedStructureDocument->loadXML(<<<AUTHNREQUEST
+        $expectedXml = <<<AUTHNREQUEST
 <samlp:AuthnRequest
     xmlns:samlp="urn:oasis:names:tc:SAML:2.0:protocol"
     xmlns:saml="urn:oasis:names:tc:SAML:2.0:assertion"
@@ -238,10 +230,9 @@ AUTHNREQUEST
         </saml:EncryptedID>
     </saml:Subject>
 </samlp:AuthnRequest>
-AUTHNREQUEST
-        );
+AUTHNREQUEST;
 
-        $expectedStructure = $expectedStructureDocument->documentElement;
+        $expectedStructure = DOMDocumentFactory::fromString($expectedXml)->documentElement;
         $requestStructure = $request->toUnsignedXML();
 
         $this->assertEqualXMLStructure($expectedStructure, $requestStructure);
@@ -263,8 +254,7 @@ AUTHNREQUEST
             array('ProviderID' => 'urn:example:1', 'Name' => 'Voorbeeld', 'Something' => 'Else')
         ));
 
-        $expectedStructureDocument = new \DOMDocument();
-        $expectedStructureDocument->loadXML(<<<AUTHNREQUEST
+        $expectedStructureDocument = <<<AUTHNREQUEST
 <samlp:AuthnRequest
     xmlns:samlp="urn:oasis:names:tc:SAML:2.0:protocol"
     xmlns:saml="urn:oasis:names:tc:SAML:2.0:assertion"
@@ -279,19 +269,77 @@ AUTHNREQUEST
         <samlp:IDPEntry ProviderID="urn:example:1" Name="Voorbeeld"/>
     </samlp:IDPList></samlp:Scoping>
 </samlp:AuthnRequest>
-AUTHNREQUEST
-        );
+AUTHNREQUEST;
 
-        $expectedStructure = $expectedStructureDocument->documentElement;
+        $expectedStructure = DOMDocumentFactory::fromString($expectedStructureDocument)->documentElement;
         $requestStructure = $request->toUnsignedXML();
 
         $this->assertEqualXMLStructure($expectedStructure, $requestStructure);
     }
 
     /**
+     * Test for getting IDPlist values.
+     */
+    public function testgetIDPlistAttributes()
+    {
+        $xmlRequest = <<<AUTHNREQUEST
+<samlp:AuthnRequest
+  xmlns:samlp="urn:oasis:names:tc:SAML:2.0:protocol"
+  xmlns:saml="urn:oasis:names:tc:SAML:2.0:assertion"
+  ID="_306f8ec5b618f361c70b6ffb1480eade"
+  Version="2.0"
+  IssueInstant="2004-12-05T09:21:59Z"
+  Destination="https://idp.example.org/SAML2/SSO/Artifact"
+  ProtocolBinding="urn:oasis:names:tc:SAML:2.0:bindings:HTTP-Artifact"
+  AssertionConsumerServiceURL="https://sp.example.com/SAML2/SSO/Artifact">
+  <saml:Issuer>https://sp.example.com/SAML2</saml:Issuer>
+    <samlp:Scoping><samlp:IDPList>
+        <samlp:IDPEntry ProviderID="Legacy1"/>
+        <samlp:IDPEntry ProviderID="http://example.org/AAP" Name="N00T" Loc="https://mies"/>
+        <samlp:IDPEntry ProviderID="urn:example:1" Name="Voorbeeld"/>
+    </samlp:IDPList></samlp:Scoping>
+</samlp:AuthnRequest>
+AUTHNREQUEST;
+
+        $authnRequest = new AuthnRequest(DOMDocumentFactory::fromString($xmlRequest)->firstChild);
+
+        $expectedList = array("Legacy1", "http://example.org/AAP", "urn:example:1");
+
+        $list = $authnRequest->getIDPList();
+        $this->assertCount(3, $list);
+        $this->assertEquals($expectedList, $list);
+    }
+
+    /**
+     * Test that parsing IDPList without ProviderID throws exception.
+     */
+    public function testScopeWithoutProviderIDThrowsException()
+    {
+        $xmlRequest = <<<AUTHNREQUEST
+<samlp:AuthnRequest
+  xmlns:samlp="urn:oasis:names:tc:SAML:2.0:protocol"
+  xmlns:saml="urn:oasis:names:tc:SAML:2.0:assertion"
+  ID="_306f8ec5b618f361c70b6ffb1480eadf"
+  Version="2.0"
+  IssueInstant="2004-12-05T09:21:59Z"
+  Destination="https://idp.example.org/SAML2/SSO/Artifact"
+  ProtocolBinding="urn:oasis:names:tc:SAML:2.0:bindings:HTTP-Artifact"
+  AssertionConsumerServiceURL="https://sp.example.com/SAML2/SSO/Artifact">
+  <saml:Issuer>https://sp.example.com/SAML2</saml:Issuer>
+    <samlp:Scoping><samlp:IDPList>
+        <samlp:IDPEntry Name="N00T" Loc="https://mies"/>
+    </samlp:IDPList></samlp:Scoping>
+</samlp:AuthnRequest>
+AUTHNREQUEST;
+
+        $this->setExpectedException('Exception', 'Could not get ProviderID');
+        $authnRequest = new AuthnRequest(DOMDocumentFactory::fromString($xmlRequest)->firstChild);
+    }
+
+    /**
      * Test setting a requesterID.
      */
-    public function testRequesterId()
+    public function testRequesterIdIsAddedCorrectly()
     {
         // basic AuthnRequest
         $request = new AuthnRequest();
@@ -302,8 +350,7 @@ AUTHNREQUEST
             'https://shib.example.edu/SSO/Metadata',
         ));
 
-        $expectedStructureDocument = new DOMDocument();
-        $expectedStructureDocument->loadXML(<<<AUTHNREQUEST
+        $expectedStructureDocument = <<<AUTHNREQUEST
 <samlp:AuthnRequest
     xmlns:samlp="urn:oasis:names:tc:SAML:2.0:protocol"
     xmlns:saml="urn:oasis:names:tc:SAML:2.0:assertion"
@@ -317,12 +364,622 @@ AUTHNREQUEST
         <samlp:RequesterID>https://shib.example.edu/SSO/Metadata</samlp:RequesterID>
     </samlp:Scoping>
 </samlp:AuthnRequest>
-AUTHNREQUEST
-        );
+AUTHNREQUEST;
 
-        $expectedStructure = $expectedStructureDocument->documentElement;
+        $expectedStructure = DOMDocumentFactory::fromString($expectedStructureDocument)->documentElement;
         $requestStructure = $request->toUnsignedXML();
 
         $this->assertEqualXMLStructure($expectedStructure, $requestStructure);
+    }
+
+    /**
+     * Test reading a requesterID.
+     */
+    public function testRequesterIdIsReadCorrectly()
+    {
+        $requesterId = array(
+            'https://engine.demo.openconext.org/authentication/sp/metadata',
+            'https://shib.example.edu/SSO/Metadata',
+        );
+
+        $xmlRequest = <<<AUTHNREQUEST
+<samlp:AuthnRequest
+    xmlns:samlp="urn:oasis:names:tc:SAML:2.0:protocol"
+    xmlns:saml="urn:oasis:names:tc:SAML:2.0:assertion"
+    ID="_1234567890abvdefghijkl"
+    Version="2.0"
+    IssueInstant="2015-05-11T09:02:36Z"
+    Destination="https://some.sp.invalid/acs">
+    <saml:Issuer>https://some.sp.invalid/metadata</saml:Issuer>
+    <samlp:Scoping>
+        <samlp:RequesterID>https://engine.demo.openconext.org/authentication/sp/metadata</samlp:RequesterID>
+        <samlp:RequesterID>https://shib.example.edu/SSO/Metadata</samlp:RequesterID>
+    </samlp:Scoping>
+</samlp:AuthnRequest>
+AUTHNREQUEST;
+
+        $authnRequest = new AuthnRequest(DOMDocumentFactory::fromString($xmlRequest)->firstChild);
+
+        $this->assertEquals($requesterId, $authnRequest->getRequesterID());
+    }
+
+    /**
+     * Test setting a ProxyCount.
+     */
+    public function testProxyCountIsAddedCorrectly()
+    {
+        // basic AuthnRequest
+        $request = new AuthnRequest();
+        $request->setIssuer('https://gateway.example.org/saml20/sp/metadata');
+        $request->setDestination('https://tiqr.example.org/idp/profile/saml2/Redirect/SSO');
+        $request->setIssueInstant( Utils::xsDateTimeToTimestamp('2004-12-05T09:21:59Z'));
+        $request->setProxyCount(34);
+        $request->setRequesterID(array(
+            'https://engine.demo.openconext.org/authentication/sp/metadata',
+        ));
+
+        $expectedStructureDocument = <<<AUTHNREQUEST
+<samlp:AuthnRequest
+    xmlns:samlp="urn:oasis:names:tc:SAML:2.0:protocol"
+    xmlns:saml="urn:oasis:names:tc:SAML:2.0:assertion"
+    ID="123"
+    Version="2.0"
+    IssueInstant="2004-12-05T09:21:59Z"
+    Destination="https://tiqr.example.org/idp/profile/saml2/Redirect/SSO">
+    <saml:Issuer>https://gateway.example.org/saml20/sp/metadata</saml:Issuer>
+    <samlp:Scoping ProxyCount="34">
+        <samlp:RequesterID>https://engine.demo.openconext.org/authentication/sp/metadata</samlp:RequesterID>
+    </samlp:Scoping>
+</samlp:AuthnRequest>
+AUTHNREQUEST;
+
+        $expectedStructure = DOMDocumentFactory::fromString($expectedStructureDocument)->documentElement;
+        $requestStructure = $request->toUnsignedXML();
+
+        $this->assertEqualXMLStructure($expectedStructure, $requestStructure);
+        $this->assertXmlStringEqualsXmlString($expectedStructure->ownerDocument->saveXML(), $requestStructure->ownerDocument->saveXML());
+    }
+
+    /**
+     * Test reading ProxyCount
+     */
+    public function testProxyCountIsReadCorrectly()
+    {
+        $proxyCount = 10;
+
+        $xmlRequest = <<<AUTHNREQUEST
+<samlp:AuthnRequest xmlns:samlp="urn:oasis:names:tc:SAML:2.0:protocol"
+                    xmlns:saml="urn:oasis:names:tc:SAML:2.0:assertion"
+                    ID="CORTO9d0394481f7c05d0ebe26263926f72e1bc5bac17"
+                    Version="2.0"
+                    IssueInstant="2016-12-27T15:51:00Z"
+                    Destination="https://idp.surfnet.nl/saml2/idp/SSOService.php"
+                    AssertionConsumerServiceURL="https://engine.example.org/authentication/sp/consume-assertion"
+                    ProtocolBinding="urn:oasis:names:tc:SAML:2.0:bindings:HTTP-POST"
+                    >
+    <saml:Issuer>https://engine.example.org/authentication/sp/metadata</saml:Issuer>
+    <samlp:NameIDPolicy AllowCreate="true" />
+    <samlp:Scoping ProxyCount="10">
+        <samlp:RequesterID>https://profile.example.org/authentication/metadata</samlp:RequesterID>
+    </samlp:Scoping>
+</samlp:AuthnRequest>
+AUTHNREQUEST;
+
+        $authnRequest = new AuthnRequest(DOMDocumentFactory::fromString($xmlRequest)->firstChild);
+
+        $this->assertEquals($proxyCount, $authnRequest->getProxyCount());
+    }
+
+    /**
+     * Test getting NameIDPolicy
+     */
+    public function testGettingNameIDPolicy()
+    {
+        $xml = <<<AUTHNREQUEST
+<samlp:AuthnRequest
+  xmlns:samlp="urn:oasis:names:tc:SAML:2.0:protocol"
+  xmlns:saml="urn:oasis:names:tc:SAML:2.0:assertion"
+  ID="_306f8ec5b618f361c70b6ffb1480eade"
+  Version="2.0"
+  IssueInstant="2004-12-05T09:21:59Z"
+  Destination="https://idp.example.org/SAML2/SSO/Artifact"
+  ProtocolBinding="urn:oasis:names:tc:SAML:2.0:bindings:HTTP-Artifact"
+  AssertionConsumerServiceURL="https://sp.example.com/SAML2/SSO/Artifact">
+  <saml:Issuer>https://sp.example.com/SAML2</saml:Issuer>
+  <samlp:NameIDPolicy
+    AllowCreate="true"
+    SPNameQualifier="https://sp.example.com/SAML2"
+    Format="urn:oasis:names:tc:SAML:2.0:nameid-format:transient"/>
+</samlp:AuthnRequest>
+AUTHNREQUEST;
+
+        $document     = DOMDocumentFactory::fromString($xml);
+        $authnRequest = new AuthnRequest($document->documentElement);
+
+        $nameIdPolicy = $authnRequest->getNameIdPolicy();
+
+        $this->assertCount(3, $nameIdPolicy);
+
+        $this->assertArrayHasKey('AllowCreate', $nameIdPolicy);
+        $this->assertArrayHasKey('SPNameQualifier', $nameIdPolicy);
+        $this->assertArrayHasKey('Format', $nameIdPolicy);
+
+        $this->assertEquals(true, $nameIdPolicy['AllowCreate']);
+        $this->assertEquals("https://sp.example.com/SAML2", $nameIdPolicy['SPNameQualifier']);
+        $this->assertEquals("urn:oasis:names:tc:SAML:2.0:nameid-format:transient", $nameIdPolicy['Format']);
+    }
+
+
+    /**
+     * Test setting NameIDPolicy results in expected XML
+     */
+    public function testSettingNameIDPolicy()
+    {
+        // basic AuthnRequest
+        $request = new AuthnRequest();
+        $request->setIssuer('https://gateway.example.org/saml20/sp/metadata');
+        $request->setDestination('https://tiqr.example.org/idp/profile/saml2/Redirect/SSO');
+        $request->setIssueInstant( Utils::xsDateTimeToTimestamp('2004-12-05T09:21:59Z'));
+
+        $nameIdPolicy = array("Format" => "urn:oasis:names:tc:SAML:2.0:nameid-format:transient",
+            "SPNameQualifier" => "https://sp.example.com/SAML2",
+            "AllowCreate" => true);
+        $request->setNameIDPolicy($nameIdPolicy);
+
+        $expectedStructureDocument = <<<AUTHNREQUEST
+<samlp:AuthnRequest
+    xmlns:samlp="urn:oasis:names:tc:SAML:2.0:protocol"
+    xmlns:saml="urn:oasis:names:tc:SAML:2.0:assertion"
+    ID="123"
+    Version="2.0"
+    IssueInstant="2004-12-05T09:21:59Z"
+    Destination="https://tiqr.example.org/idp/profile/saml2/Redirect/SSO">
+    <saml:Issuer>https://gateway.example.org/saml20/sp/metadata</saml:Issuer>
+    <samlp:NameIDPolicy
+        Format="urn:oasis:names:tc:SAML:2.0:nameid-format:transient"
+        SPNameQualifier="https://sp.example.com/SAML2" AllowCreate="true"
+    />
+</samlp:AuthnRequest>
+AUTHNREQUEST;
+
+        $expectedStructure = DOMDocumentFactory::fromString($expectedStructureDocument)->documentElement;
+        $requestStructure = $request->toUnsignedXML();
+
+        $this->assertEqualXMLStructure($expectedStructure, $requestStructure);
+
+        $this->assertXmlStringEqualsXmlString($expectedStructure->ownerDocument->saveXML(), $requestStructure->ownerDocument->saveXML());
+    }
+
+    /**
+     * Test setting NameIDPolicy with only a Format results in expected XML
+     */
+    public function testSettingNameIDPolicyFormatOnly()
+    {
+        // basic AuthnRequest
+        $request = new AuthnRequest();
+        $request->setIssuer('https://gateway.example.org/saml20/sp/metadata');
+        $request->setDestination('https://tiqr.example.org/idp/profile/saml2/Redirect/SSO');
+        $request->setIssueInstant( Utils::xsDateTimeToTimestamp('2004-12-05T09:21:59Z'));
+
+        $nameIdPolicy = array("Format" => "urn:oasis:names:tc:SAML:2.0:nameid-format:transient");
+        $request->setNameIDPolicy($nameIdPolicy);
+
+        $expectedStructureDocument = <<<AUTHNREQUEST
+<samlp:AuthnRequest
+    xmlns:samlp="urn:oasis:names:tc:SAML:2.0:protocol"
+    xmlns:saml="urn:oasis:names:tc:SAML:2.0:assertion"
+    ID="123"
+    Version="2.0"
+    IssueInstant="2004-12-05T09:21:59Z"
+    Destination="https://tiqr.example.org/idp/profile/saml2/Redirect/SSO">
+    <saml:Issuer>https://gateway.example.org/saml20/sp/metadata</saml:Issuer>
+    <samlp:NameIDPolicy Format="urn:oasis:names:tc:SAML:2.0:nameid-format:transient"/>
+</samlp:AuthnRequest>
+AUTHNREQUEST;
+
+        $expectedStructure = DOMDocumentFactory::fromString($expectedStructureDocument)->documentElement;
+        $requestStructure = $request->toUnsignedXML();
+
+        $this->assertEqualXMLStructure($expectedStructure, $requestStructure);
+
+        $this->assertXmlStringEqualsXmlString($expectedStructure->ownerDocument->saveXML(), $requestStructure->ownerDocument->saveXML());
+    }
+
+    /**
+     * Test setting NameIDPolicy with invalid type for AllowCreate.
+     */
+    public function testSettingNameIDPolicyToIncorrectTypeAllowCreate()
+    {
+        // basic AuthnRequest
+        $request = new AuthnRequest();
+        $request->setIssuer('https://gateway.example.org/saml20/sp/metadata');
+        $request->setDestination('https://tiqr.example.org/idp/profile/saml2/Redirect/SSO');
+
+        // AllowCreate must be a bool
+        $nameIdPolicy = array("AllowCreate" => "true");
+        $this->setExpectedException('InvalidArgumentException', 'Invalid Argument type: "bool" expected');
+        $request->setNameIDPolicy($nameIdPolicy);
+    }
+
+    /**
+     * Test setting NameIDPolicy with invalid type for SPNameQualifier.
+     */
+    public function testSettingNameIDPolicyToIncorrectTypeSPNameQualifier()
+    {
+        // basic AuthnRequest
+        $request = new AuthnRequest();
+        $request->setIssuer('https://gateway.example.org/saml20/sp/metadata');
+        $request->setDestination('https://tiqr.example.org/idp/profile/saml2/Redirect/SSO');
+
+        // SPNameQualifier must be a string
+        $nameIdPolicy = array("SPNameQualifier" => true);
+        $this->setExpectedException('InvalidArgumentException', 'Invalid Argument type: "string" expected');
+        $request->setNameIDPolicy($nameIdPolicy);
+    }
+
+    /**
+     * Test setting NameIDPolicy with one invalid type for Format.
+     * It would be nice to iterate over various types to check this more thoroughly.
+     */
+    public function testSettingNameIDPolicyToIncorrectTypeFormat()
+    {
+        // basic AuthnRequest
+        $request = new AuthnRequest();
+        $request->setIssuer('https://gateway.example.org/saml20/sp/metadata');
+        $request->setDestination('https://tiqr.example.org/idp/profile/saml2/Redirect/SSO');
+
+        // Format must be a string
+        $nameIdPolicy = array("Format" => 2.0);
+        $this->setExpectedException('InvalidArgumentException', 'Invalid Argument type: "string" expected');
+        $request->setNameIDPolicy($nameIdPolicy);
+    }
+
+    /**
+     * Test getting ForceAuthn
+     */
+    public function testGettingForceAuthn()
+    {
+        $xml = <<<AUTHNREQUEST
+<samlp:AuthnRequest
+  xmlns:samlp="urn:oasis:names:tc:SAML:2.0:protocol"
+  xmlns:saml="urn:oasis:names:tc:SAML:2.0:assertion"
+  ID="_306f8ec5b618f361c70b6ffb1480eade"
+  Version="2.0"
+  IssueInstant="2004-12-05T09:21:59Z"
+  Destination="https://idp.example.org/SAML2/SSO/Artifact"
+  ProtocolBinding="urn:oasis:names:tc:SAML:2.0:bindings:HTTP-Artifact"
+  AssertionConsumerServiceURL="https://sp.example.com/SAML2/SSO/Artifact">
+  <saml:Issuer>https://sp.example.com/SAML2</saml:Issuer>
+</samlp:AuthnRequest>
+AUTHNREQUEST;
+
+        $document     = DOMDocumentFactory::fromString($xml);
+        $authnRequest = new AuthnRequest($document->documentElement);
+
+        $this->assertFalse($authnRequest->getForceAuthn());
+
+        $xml = <<<AUTHNREQUEST
+<samlp:AuthnRequest
+  xmlns:samlp="urn:oasis:names:tc:SAML:2.0:protocol"
+  xmlns:saml="urn:oasis:names:tc:SAML:2.0:assertion"
+  ID="_306f8ec5b618f361c70b6ffb1480eade"
+  Version="2.0"
+  ForceAuthn="true"
+  IssueInstant="2004-12-05T09:21:59Z"
+  Destination="https://idp.example.org/SAML2/SSO/Artifact"
+  ProtocolBinding="urn:oasis:names:tc:SAML:2.0:bindings:HTTP-Artifact"
+  AssertionConsumerServiceURL="https://sp.example.com/SAML2/SSO/Artifact">
+  <saml:Issuer>https://sp.example.com/SAML2</saml:Issuer>
+</samlp:AuthnRequest>
+AUTHNREQUEST;
+
+        $document     = DOMDocumentFactory::fromString($xml);
+        $authnRequest = new AuthnRequest($document->documentElement);
+        $this->assertTrue($authnRequest->getForceAuthn());
+    }
+
+    /**
+     * Test setting ForceAuthn
+     */
+    public function testSettingForceAuthnResultsInCorrectXML()
+    {
+        // basic AuthnRequest
+        $request = new AuthnRequest();
+        $request->setIssuer('https://gateway.example.org/saml20/sp/metadata');
+        $request->setDestination('https://tiqr.example.org/idp/profile/saml2/Redirect/SSO');
+        $request->setIssueInstant( Utils::xsDateTimeToTimestamp('2004-12-05T09:21:59Z'));
+
+        $request->setForceAuthn(true);
+
+        $expectedStructureDocument = <<<AUTHNREQUEST
+<samlp:AuthnRequest
+    xmlns:samlp="urn:oasis:names:tc:SAML:2.0:protocol"
+    xmlns:saml="urn:oasis:names:tc:SAML:2.0:assertion"
+    ID="123"
+    Version="2.0"
+    ForceAuthn="true"
+    IssueInstant="2004-12-05T09:21:59Z"
+    Destination="https://tiqr.example.org/idp/profile/saml2/Redirect/SSO">
+    <saml:Issuer>https://gateway.example.org/saml20/sp/metadata</saml:Issuer>
+</samlp:AuthnRequest>
+AUTHNREQUEST;
+
+        $expectedStructure = DOMDocumentFactory::fromString($expectedStructureDocument)->documentElement;
+        $requestStructure = $request->toUnsignedXML();
+
+        $this->assertEqualXMLStructure($expectedStructure, $requestStructure);
+
+        $this->assertXmlStringEqualsXmlString($expectedStructure->ownerDocument->saveXML(), $requestStructure->ownerDocument->saveXML());
+    }
+
+    /**
+     * Test getting IsPassive
+     */
+    public function testGettingIsPassive()
+    {
+        $xml = <<<AUTHNREQUEST
+<samlp:AuthnRequest
+  xmlns:samlp="urn:oasis:names:tc:SAML:2.0:protocol"
+  xmlns:saml="urn:oasis:names:tc:SAML:2.0:assertion"
+  ID="_306f8ec5b618f361c70b6ffb1480eade"
+  Version="2.0"
+  IssueInstant="2004-12-05T09:21:59Z"
+  Destination="https://idp.example.org/SAML2/SSO/Artifact"
+  ProtocolBinding="urn:oasis:names:tc:SAML:2.0:bindings:HTTP-Artifact"
+  AssertionConsumerServiceURL="https://sp.example.com/SAML2/SSO/Artifact">
+  <saml:Issuer>https://sp.example.com/SAML2</saml:Issuer>
+</samlp:AuthnRequest>
+AUTHNREQUEST;
+
+        $document     = DOMDocumentFactory::fromString($xml);
+        $authnRequest = new AuthnRequest($document->documentElement);
+
+        $this->assertFalse($authnRequest->getIsPassive());
+
+        $xml = <<<AUTHNREQUEST
+<samlp:AuthnRequest IsPassive="false"
+  xmlns:samlp="urn:oasis:names:tc:SAML:2.0:protocol"
+  xmlns:saml="urn:oasis:names:tc:SAML:2.0:assertion"
+  ID="_306f8ec5b618f361c70b6ffb1480eade"
+  Version="2.0"
+  IssueInstant="2004-12-05T09:21:59Z"
+  Destination="https://idp.example.org/SAML2/SSO/Artifact"
+  ProtocolBinding="urn:oasis:names:tc:SAML:2.0:bindings:HTTP-Artifact"
+  AssertionConsumerServiceURL="https://sp.example.com/SAML2/SSO/Artifact">
+  <saml:Issuer>https://sp.example.com/SAML2</saml:Issuer>
+</samlp:AuthnRequest>
+AUTHNREQUEST;
+
+        $document     = DOMDocumentFactory::fromString($xml);
+        $authnRequest = new AuthnRequest($document->documentElement);
+        $this->assertFalse($authnRequest->getIsPassive());
+
+        $xml = <<<AUTHNREQUEST
+<samlp:AuthnRequest IsPassive="true"
+  xmlns:samlp="urn:oasis:names:tc:SAML:2.0:protocol"
+  xmlns:saml="urn:oasis:names:tc:SAML:2.0:assertion"
+  ID="_306f8ec5b618f361c70b6ffb1480eade"
+  Version="2.0"
+  IssueInstant="2004-12-05T09:21:59Z"
+  Destination="https://idp.example.org/SAML2/SSO/Artifact"
+  ProtocolBinding="urn:oasis:names:tc:SAML:2.0:bindings:HTTP-Artifact"
+  AssertionConsumerServiceURL="https://sp.example.com/SAML2/SSO/Artifact">
+  <saml:Issuer>https://sp.example.com/SAML2</saml:Issuer>
+</samlp:AuthnRequest>
+AUTHNREQUEST;
+
+        $document     = DOMDocumentFactory::fromString($xml);
+        $authnRequest = new AuthnRequest($document->documentElement);
+        $this->assertTrue($authnRequest->getIsPassive());
+    }
+
+    /**
+     * Test setting IsPassive
+     */
+    public function testSettingIsPassiveResultsInCorrectXML()
+    {
+        // basic AuthnRequest
+        $request = new AuthnRequest();
+        $request->setIssuer('https://gateway.example.org/saml20/sp/metadata');
+        $request->setDestination('https://tiqr.example.org/idp/profile/saml2/Redirect/SSO');
+        $request->setIssueInstant( Utils::xsDateTimeToTimestamp('2004-12-05T09:21:59Z'));
+
+        $request->setIsPassive(true);
+
+        $expectedStructureDocument = <<<AUTHNREQUEST
+<samlp:AuthnRequest
+    xmlns:samlp="urn:oasis:names:tc:SAML:2.0:protocol"
+    xmlns:saml="urn:oasis:names:tc:SAML:2.0:assertion"
+    ID="123"
+    Version="2.0"
+    IsPassive="true"
+    IssueInstant="2004-12-05T09:21:59Z"
+    Destination="https://tiqr.example.org/idp/profile/saml2/Redirect/SSO">
+    <saml:Issuer>https://gateway.example.org/saml20/sp/metadata</saml:Issuer>
+</samlp:AuthnRequest>
+AUTHNREQUEST;
+
+        $expectedStructure = DOMDocumentFactory::fromString($expectedStructureDocument)->documentElement;
+        $requestStructure = $request->toUnsignedXML();
+
+        $this->assertEqualXMLStructure($expectedStructure, $requestStructure);
+
+        $this->assertXmlStringEqualsXmlString($expectedStructure->ownerDocument->saveXML(), $requestStructure->ownerDocument->saveXML());
+    }
+
+    /**
+     * Test setting ProviderName
+     */
+    public function testSettingProviderNameResultsInCorrectXml()
+    {
+        // basic AuthnRequest
+        $request = new AuthnRequest();
+        $request->setIssuer('https://gateway.example.org/saml20/sp/metadata');
+        $request->setDestination('https://tiqr.example.org/idp/profile/saml2/Redirect/SSO');
+        $request->setIssueInstant( Utils::xsDateTimeToTimestamp('2004-12-05T09:21:59Z'));
+
+        $request->setProviderName("My Example SP");
+
+        $expectedStructureDocument = <<<AUTHNREQUEST
+<samlp:AuthnRequest
+    xmlns:samlp="urn:oasis:names:tc:SAML:2.0:protocol"
+    xmlns:saml="urn:oasis:names:tc:SAML:2.0:assertion"
+    ID="123"
+    ProviderName="My Example SP"
+    Version="2.0"
+    IssueInstant="2004-12-05T09:21:59Z"
+    Destination="https://tiqr.example.org/idp/profile/saml2/Redirect/SSO">
+    <saml:Issuer>https://gateway.example.org/saml20/sp/metadata</saml:Issuer>
+</samlp:AuthnRequest>
+AUTHNREQUEST;
+
+        $expectedStructure = DOMDocumentFactory::fromString($expectedStructureDocument)->documentElement;
+        $requestStructure = $request->toUnsignedXML();
+
+        $this->assertEqualXMLStructure($expectedStructure, $requestStructure);
+
+        $this->assertXmlStringEqualsXmlString($expectedStructure->ownerDocument->saveXML(), $requestStructure->ownerDocument->saveXML());
+    }
+
+
+    /**
+     * Test getting ProviderName
+     */
+    public function testGettingProviderName()
+    {
+        $xml = <<<AUTHNREQUEST
+<samlp:AuthnRequest
+  xmlns:samlp="urn:oasis:names:tc:SAML:2.0:protocol"
+  xmlns:saml="urn:oasis:names:tc:SAML:2.0:assertion"
+  ID="_306f8ec5b618f361c70b6ffb1480eade"
+  Version="2.0"
+  IssueInstant="2004-12-05T09:21:59Z"
+  Destination="https://idp.example.org/SAML2/SSO/Artifact"
+  ProviderName="Example SP"
+  ProtocolBinding="urn:oasis:names:tc:SAML:2.0:bindings:HTTP-Artifact"
+  AssertionConsumerServiceURL="https://sp.example.com/SAML2/SSO/Artifact">
+  <saml:Issuer>https://sp.example.com/SAML2</saml:Issuer>
+</samlp:AuthnRequest>
+AUTHNREQUEST;
+
+        $document     = DOMDocumentFactory::fromString($xml);
+        $authnRequest = new AuthnRequest($document->documentElement);
+
+        $this->assertEquals("Example SP", $authnRequest->getProviderName());
+    }
+
+    /**
+     * Test setting ProtocolBinding and AssertionConsumerServiceURL
+     */
+    public function testSettingProtocolBindingAndACSUrl()
+    {
+        // basic AuthnRequest
+        $request = new AuthnRequest();
+        $request->setIssuer('https://sp.example.org/saml20/sp/metadata');
+        $request->setDestination('https://idp.example.org/idp/profile/saml2/Redirect/SSO');
+        $request->setIssueInstant(Utils::xsDateTimeToTimestamp('2004-12-05T09:21:59Z'));
+
+        $request->setProtocolBinding("urn:oasis:names:tc:SAML:2.0:bindings:HTTP-POST");
+        $request->setAssertionConsumerServiceURL("https://sp.example.org/authentication/sp/consume-assertion");
+
+        $expectedStructureDocument = <<<AUTHNREQUEST
+<samlp:AuthnRequest
+    xmlns:samlp="urn:oasis:names:tc:SAML:2.0:protocol"
+    xmlns:saml="urn:oasis:names:tc:SAML:2.0:assertion"
+    ID="123"
+    Version="2.0"
+    IssueInstant="2004-12-05T09:21:59Z"
+    Destination="https://idp.example.org/idp/profile/saml2/Redirect/SSO"
+    AssertionConsumerServiceURL="https://sp.example.org/authentication/sp/consume-assertion"
+    ProtocolBinding="urn:oasis:names:tc:SAML:2.0:bindings:HTTP-POST"
+>
+    <saml:Issuer>https://sp.example.org/saml20/sp/metadata</saml:Issuer>
+</samlp:AuthnRequest>
+AUTHNREQUEST;
+
+        $expectedStructure = DOMDocumentFactory::fromString($expectedStructureDocument)->documentElement;
+        $requestStructure = $request->toUnsignedXML();
+
+        $this->assertEqualXMLStructure($expectedStructure, $requestStructure);
+
+        $this->assertXmlStringEqualsXmlString($expectedStructure->ownerDocument->saveXML(), $requestStructure->ownerDocument->saveXML());
+    }
+
+    /**
+     * Test that having multiple subject tags throws an exception.
+     */
+    public function testMultipleSubjectsThrowsException()
+    {
+        $xml = <<<AUTHNREQUEST
+<samlp:AuthnRequest
+    xmlns:samlp="urn:oasis:names:tc:SAML:2.0:protocol"
+    xmlns:saml="urn:oasis:names:tc:SAML:2.0:assertion"
+    AssertionConsumerServiceIndex="1"
+    Destination="https://idp.example.org/idp/profile/saml2/Redirect/SSO"
+    ID="_2b0226190ca1c22de6f66e85f5c95158"
+    IssueInstant="2014-09-22T13:42:00Z"
+    Version="2.0">
+  <saml:Issuer>https://gateway.example.org/saml20/sp/metadata</saml:Issuer>
+  <saml:Subject>
+        <saml:NameID Format="urn:oasis:names:tc:SAML:1.1:nameid-format:unspecified">user@example.org</saml:NameID>
+  </saml:Subject>
+  <saml:Subject>
+        <saml:NameID Format="urn:oasis:names:tc:SAML:2.0:nameid-format:persistent">aabbcc</saml:NameID>
+  </saml:Subject>
+</samlp:AuthnRequest>
+AUTHNREQUEST;
+
+        $this->setExpectedException('Exception', 'More than one <saml:Subject> in <saml:AuthnRequest>');
+        $authnRequest = new AuthnRequest(DOMDocumentFactory::fromString($xml)->documentElement);
+    }
+
+    /**
+     * Test that having multiple NameIds in a subject tag throws an exception.
+     */
+    public function testMultipleNameIdsInSubjectThrowsException()
+    {
+        $xml = <<<AUTHNREQUEST
+<samlp:AuthnRequest
+    xmlns:samlp="urn:oasis:names:tc:SAML:2.0:protocol"
+    xmlns:saml="urn:oasis:names:tc:SAML:2.0:assertion"
+    AssertionConsumerServiceIndex="1"
+    Destination="https://idp.example.org/idp/profile/saml2/Redirect/SSO"
+    ID="_2b0226190ca1c22de6f66e85f5c95158"
+    IssueInstant="2014-09-22T13:42:00Z"
+    Version="2.0">
+  <saml:Issuer>https://gateway.example.org/saml20/sp/metadata</saml:Issuer>
+  <saml:Subject>
+        <saml:NameID Format="urn:oasis:names:tc:SAML:1.1:nameid-format:unspecified">user@example.org</saml:NameID>
+        <saml:NameID Format="urn:oasis:names:tc:SAML:2.0:nameid-format:persistent">aabbcc</saml:NameID>
+  </saml:Subject>
+</samlp:AuthnRequest>
+AUTHNREQUEST;
+
+        $this->setExpectedException('Exception', 'More than one <saml:NameID> or <saml:EncryptedID> in <saml:Subject>');
+        $authnRequest = new AuthnRequest(DOMDocumentFactory::fromString($xml)->documentElement);
+    }
+
+    /**
+     * Test that a subject tag without a NameId throws an exception.
+     */
+    public function testEmptySubjectThrowsException()
+    {
+        $xml = <<<AUTHNREQUEST
+<samlp:AuthnRequest
+    xmlns:samlp="urn:oasis:names:tc:SAML:2.0:protocol"
+    xmlns:saml="urn:oasis:names:tc:SAML:2.0:assertion"
+    AssertionConsumerServiceIndex="1"
+    Destination="https://idp.example.org/idp/profile/saml2/Redirect/SSO"
+    ID="_2b0226190ca1c22de6f66e85f5c95158"
+    IssueInstant="2014-09-22T13:42:00Z"
+    Version="2.0">
+  <saml:Issuer>https://gateway.example.org/saml20/sp/metadata</saml:Issuer>
+  <saml:Subject>
+  </saml:Subject>
+</samlp:AuthnRequest>
+AUTHNREQUEST;
+
+        $this->setExpectedException('Exception', 'Missing <saml:NameID> or <saml:EncryptedID> in <saml:Subject>');
+        $authnRequest = new AuthnRequest(DOMDocumentFactory::fromString($xml)->documentElement);
     }
 }

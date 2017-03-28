@@ -67,6 +67,7 @@ class SOAPClient
         $ctxOpts = array(
             'ssl' => array(
                 'capture_peer_cert' => true,
+                'allow_self_signed' => true
             ),
         );
 
@@ -121,6 +122,10 @@ class SOAPClient
         }
 
         $ctxOpts['http']['header'] = 'SOAPAction: "http://www.oasis-open.org/committees/security"' . "\n";
+        if ($srcMetadata->hasValue('saml.SOAPClient.stream_context.ssl.peer_name')) {
+            $ctxOpts['ssl']['peer_name'] = $srcMetadata->getString('saml.SOAPClient.stream_context.ssl.peer_name');
+        }
+
         $context = stream_context_create($ctxOpts);
         if ($context === null) {
             throw new \Exception('Unable to create SSL stream context');
@@ -141,7 +146,7 @@ class SOAPClient
             $options['proxy_port'] = $srcMetadata->getValue('saml.SOAPClient.proxyport');
         }
 
-        $x = new SoapClient(null, $options);
+        $x = new \SoapClient(null, $options);
 
         /* Add soap-envelopes */
         $request = $msg->toSignedXML();

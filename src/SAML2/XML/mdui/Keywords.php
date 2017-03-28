@@ -13,7 +13,9 @@ class Keywords
     /**
      * The keywords of this item.
      *
-     * @var string
+     * Array of strings.
+     *
+     * @var string[]
      */
     public $Keywords;
 
@@ -63,7 +65,7 @@ class Keywords
 
         $doc = $parent->ownerDocument;
 
-        $e = $doc->createElementNS(UIInfo::NS, 'mdui:Keywords');
+        $e = $doc->createElementNS(Common::NS, 'mdui:Keywords');
         $e->setAttribute('xml:lang', $this->lang);
         $value = '';
         foreach ($this->Keywords as $keyword) {

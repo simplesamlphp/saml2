@@ -20,14 +20,14 @@ class Logo
     /**
      * The width of this logo.
      *
-     * @var string
+     * @var int
      */
     public $width;
 
     /**
      * The height of this logo.
      *
-     * @var string
+     * @var int
      */
     public $height;
 
@@ -79,7 +79,7 @@ class Logo
 
         $doc = $parent->ownerDocument;
 
-        $e = $doc->createElementNS(UIInfo::NS, 'mdui:Logo');
+        $e = $doc->createElementNS(Common::NS, 'mdui:Logo');
         $e->appendChild($doc->createTextNode($this->url));
         $e->setAttribute('width', (int) $this->width);
         $e->setAttribute('height', (int) $this->height);

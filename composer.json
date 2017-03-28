@@ -12,6 +12,7 @@
         "php": ">=5.3.3",
         "ext-openssl": "*",
         "ext-dom": "*",
+        "ext-zlib": "*",
 
         "robrichards/xmlseclibs": "^2.0",
         "psr/log": "~1.0"
@@ -28,7 +29,8 @@
     "autoload": {
         "psr-0": {
             "SAML2\\": "src/"
-        }
+        },
+        "files": ["src/_autoload.php"]
     },
     "autoload-dev": {
         "psr-0": {

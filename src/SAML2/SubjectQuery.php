@@ -18,7 +18,7 @@ abstract class SubjectQuery extends Request
     /**
      * The NameId of the subject in the query.
      *
-     * @var array
+     * @var \SAML2\XML\saml\NameID
      */
     private $nameId;
 
@@ -65,17 +65,14 @@ abstract class SubjectQuery extends Request
             throw new \Exception('More than one <saml:NameID> in <saml:Subject>.');
         }
         $nameId = $nameId[0];
-        $this->nameId = Utils::parseNameId($nameId);
+        $this->nameId = new XML\saml\NameID($nameId);
     }
 
 
     /**
      * Retrieve the NameId of the subject in the query.
      *
-     * The returned NameId is in the format used by \SAML2\Utils::addNameId().
-     *
-     * @see \SAML2\Utils::addNameId()
-     * @return array|null The name identifier of the assertion.
+     * @return \SAML2\XML\saml\NameID|null The name identifier of the assertion.
      */
     public function getNameId()
     {
@@ -86,15 +83,15 @@ abstract class SubjectQuery extends Request
     /**
      * Set the NameId of the subject in the query.
      *
-     * The NameId must be in the format accepted by \SAML2\Utils::addNameId().
-     *
-     * @see \SAML2\Utils::addNameId()
-     * @param array|null $nameId The name identifier of the assertion.
+     * @param \SAML2\XML\saml\NameID|array|null $nameId The name identifier of the assertion.
      */
     public function setNameId($nameId)
     {
-        assert('is_array($nameId) || is_null($nameId)');
+        assert('is_array($nameId) || is_null($nameId) || is_a($nameId, "\SAML2\XML\saml\NameID")');
 
+        if (is_array($nameId)) {
+            $nameId = XML\saml\NameID::fromArray($nameId);
+        }
         $this->nameId = $nameId;
     }
 
@@ -111,7 +108,7 @@ abstract class SubjectQuery extends Request
         $subject = $root->ownerDocument->createElementNS(Constants::NS_SAML, 'saml:Subject');
         $root->appendChild($subject);
 
-        Utils::addNameId($subject, $this->nameId);
+        $this->nameId->toXML($subject);
 
         return $root;
     }

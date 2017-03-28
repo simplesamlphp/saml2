@@ -5,6 +5,7 @@ namespace SAML2;
 use RobRichards\XMLSecLibs\XMLSecEnc;
 use RobRichards\XMLSecLibs\XMLSecurityKey;
 use SAML2\XML\saml\SubjectConfirmation;
+use SAML2\Exception\InvalidArgumentException;
 
 /**
  * Class for SAML 2 authentication request messages.
@@ -118,7 +119,7 @@ class AuthnRequest extends Request
     private $encryptedNameId;
 
     /**
-     * @var string
+     * @var \SAML2\XML\saml\NameID
      */
     private $nameId;
 
@@ -159,6 +160,10 @@ class AuthnRequest extends Request
             $this->assertionConsumerServiceIndex = (int) $xml->getAttribute('AssertionConsumerServiceIndex');
         }
 
+        if ($xml->hasAttribute('ProviderName')) {
+            $this->ProviderName = $xml->getAttribute('ProviderName');
+        }
+
         $this->parseSubject($xml);
         $this->parseNameIdPolicy($xml);
         $this->parseRequestedAuthnContext($xml);
@@ -196,7 +201,7 @@ class AuthnRequest extends Request
             /* The NameID element is encrypted. */
             $this->encryptedNameId = $nameId;
         } else {
-            $this->nameId = Utils::parseNameId($nameId);
+            $this->nameId = new XML\saml\NameID($nameId);
         }
 
         $subjectConfirmation = Utils::xpQuery($subject, './saml_assertion:SubjectConfirmation');
@@ -306,14 +311,24 @@ class AuthnRequest extends Request
      * Set the NameIDPolicy.
      *
      * This function accepts an array with the following options:
-     *  - 'Format'
-     *  - 'SPNameQualifier'
-     *  - 'AllowCreate'
+     *  - 'Format' (string)
+     *  - 'SPNameQualifier' (string)
+     *  - 'AllowCreate' (bool)
      *
      * @param array $nameIdPolicy The NameIDPolicy.
      */
     public function setNameIdPolicy(array $nameIdPolicy)
     {
+        if (isset($nameIdPolicy['Format']) && !is_string($nameIdPolicy['Format'])) {
+            throw InvalidArgumentException::invalidType('string', $nameIdPolicy['Format']);
+        }
+        if (isset($nameIdPolicy['SPNameQualifier']) && !is_string($nameIdPolicy['SPNameQualifier'])) {
+            throw InvalidArgumentException::invalidType('string', $nameIdPolicy['SPNameQualifier']);
+        }
+        if (isset($nameIdPolicy['AllowCreate']) && !is_bool($nameIdPolicy['AllowCreate'])) {
+            throw InvalidArgumentException::invalidType('bool', $nameIdPolicy['AllowCreate']);
+        }
+
         $this->nameIdPolicy = $nameIdPolicy;
     }
 
@@ -566,10 +581,7 @@ class AuthnRequest extends Request
     /**
      * Retrieve the NameId of the subject in the assertion.
      *
-     * The returned NameId is in the format used by \SAML2\Utils::addNameId().
-     *
-     * @see \SAML2\Utils::addNameId()
-     * @return array|null The name identifier of the assertion.
+     * @return \SAML2\XML\saml\NameID|null The name identifier of the assertion.
      * @throws \Exception
      */
     public function getNameId()
@@ -584,16 +596,15 @@ class AuthnRequest extends Request
     /**
      * Set the NameId of the subject in the assertion.
      *
-     * The NameId must be in the format accepted by \SAML2\Utils::addNameId().
-     *
-     * @see \SAML2\Utils::addNameId()
-     *
-     * @param array|null $nameId The name identifier of the assertion.
+     * @param \SAML2\XML\saml\NameID|null $nameId The name identifier of the assertion.
      */
     public function setNameId($nameId)
     {
-        assert('is_array($nameId) || is_null($nameId)');
+        assert('is_array($nameId) || is_null($nameId) || is_a($nameId, "\SAML2\XML\saml\NameID")');
 
+        if (is_array($nameId)) {
+            $nameId = XML\saml\NameID::fromArray($nameId);
+        }
         $this->nameId = $nameId;
     }
 
@@ -608,7 +619,7 @@ class AuthnRequest extends Request
         $doc  = new \DOMDocument();
         $root = $doc->createElement('root');
         $doc->appendChild($root);
-        Utils::addNameId($root, $this->nameId);
+        $this->nameId->toXML($root);
         $nameId = $root->firstChild;
 
         Utils::getContainer()->debugMessage($nameId, 'encrypt');
@@ -643,7 +654,7 @@ class AuthnRequest extends Request
 
         $nameId = Utils::decryptElement($this->encryptedNameId, $key, $blacklist);
         Utils::getContainer()->debugMessage($nameId, 'decrypt');
-        $this->nameId = Utils::parseNameId($nameId);
+        $this->nameId = new XML\saml\NameID($nameId);
 
         $this->encryptedNameId = null;
     }
@@ -714,8 +725,8 @@ class AuthnRequest extends Request
             if (array_key_exists('SPNameQualifier', $this->nameIdPolicy)) {
                 $nameIdPolicy->setAttribute('SPNameQualifier', $this->nameIdPolicy['SPNameQualifier']);
             }
-            if (array_key_exists('AllowCreate', $this->nameIdPolicy) && $this->nameIdPolicy['AllowCreate']) {
-                $nameIdPolicy->setAttribute('AllowCreate', 'true');
+            if (array_key_exists('AllowCreate', $this->nameIdPolicy)) {
+                $nameIdPolicy->setAttribute('AllowCreate', ($this->nameIdPolicy['AllowCreate']) ? 'true' : 'false');
             }
             $root->appendChild($nameIdPolicy);
         }
@@ -783,7 +794,7 @@ class AuthnRequest extends Request
         $root->appendChild($subject);
 
         if ($this->encryptedNameId === null) {
-            Utils::addNameId($subject, $this->nameId);
+            $this->nameId->toXML($subject);
         } else {
             $eid = $subject->ownerDocument->createElementNS(Constants::NS_SAML, 'saml:EncryptedID');
             $eid->appendChild($subject->ownerDocument->importNode($this->encryptedNameId, true));
