@@ -1,14 +1,14 @@
 <?php
 
+namespace SAML2\XML\ecp;
+
 /**
  * Class representing the ECP Response element.
  *
- * @package simpleSAMLphp
  * @version $Id$
  */
-class SAML2_XML_ecp_Response
+class Response
 {
-
     /**
      * The AssertionConsumerServiceURL.
      *
@@ -16,28 +16,26 @@ class SAML2_XML_ecp_Response
      */
     public $AssertionConsumerServiceURL;
 
-
     /**
      * Create a ECP Response element.
      *
-     * @param DOMElement|NULL $xml  The XML element we should load.
+     * @param UtilsDOMElement|null $xml The XML element we should load.
      */
-    public function __construct(DOMElement $xml = NULL)
+    public function __construct(UtilsDOMElement $xml = null)
     {
-
-        if ($xml === NULL) {
+        if ($xml === null) {
             return;
         }
 
-        if (!$xml->hasAttributeNS(SAML2_Const::NS_SOAP, 'mustUnderstand')) {
+        if (!$xml->hasAttributeNS(Constants::NS_SOAP, 'mustUnderstand')) {
             throw new Exception('Missing soap-env:mustUnderstand attribute in <ecp:Response>.');
-        } elseif ($xml->getAttributeNS(SAML2_Const::NS_SOAP, 'mustUnderstand') !== '1') {
+        } elseif ($xml->getAttributeNS(Constants::NS_SOAP, 'mustUnderstand') !== '1') {
             throw new Exception('Invalid value of soap-env:mustUnderstand attribute in <ecp:Response>.');
         }
 
-        if (!$xml->hasAttributeNS(SAML2_Const::NS_SOAP, 'actor')) {
+        if (!$xml->hasAttributeNS(Constants::NS_SOAP, 'actor')) {
             throw new Exception('Missing soap-env:mustUnderstand attribute in <ecp:Response>.');
-        } elseif ($xml->getAttributeNS(SAML2_Const::NS_SOAP, 'actor') !== 'http://schemas.xmlsoap.org/soap/actor/next') {
+        } elseif ($xml->getAttributeNS(Constants::NS_SOAP, 'actor') !== 'http://schemas.xmlsoap.org/soap/actor/next') {
             throw new Exception('Invalid value of soap-env:actor attribute in <ecp:Response>.');
         }
 
@@ -47,27 +45,25 @@ class SAML2_XML_ecp_Response
         $this->AssertionConsumerServiceURL = $xml->getAttribute('AssertionConsumerServiceURL');
     }
 
-
     /**
      * Convert this ECP Response to XML.
      *
-     * @param DOMElement $parent  The element we should append this element to.
+     * @param UtilsDOMElement $parent The element we should append this element to.
      */
-    public function toXML(DOMElement $parent)
+    public function toXML(UtilsDOMElement $parent)
     {
         assert('is_string($this->AssertionConsumerServiceURL)');
 
         $doc = $parent->ownerDocument;
 
-        $e = $doc->createElementNS(SAML2_Const::NS_ECP, 'ecp:Response');
+        $e = $doc->createElementNS(Constants::NS_ECP, 'ecp:Response');
         $parent->appendChild($e);
 
-        $e->setAttributeNS(SAML2_Const::NS_SOAP, 'SOAP-ENV:mustUnderstand', '1');
-        $e->setAttributeNS(SAML2_Const::NS_SOAP, 'SOAP-ENV:actor', 'http://schemas.xmlsoap.org/soap/actor/next');
+        $e->setAttributeNS(Constants::NS_SOAP, 'SOAP-ENV:mustUnderstand', '1');
+        $e->setAttributeNS(Constants::NS_SOAP, 'SOAP-ENV:actor', 'http://schemas.xmlsoap.org/soap/actor/next');
 
         $e->setAttribute('AssertionConsumerServiceURL', $this->AssertionConsumerServiceURL);
 
         return $e;
     }
-
 }

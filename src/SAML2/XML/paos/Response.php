@@ -1,31 +1,29 @@
 <?php
 
+namespace SAML2\XML\paos;
+
 /**
  * Class representing the PAOS Response element.
  *
- * @package simpleSAMLphp
  * @version $Id$
  */
-class SAML2_XML_paos_Response
+class Response
 {
-
     /**
      * The message ID from the request.
      *
-     * @var string|NULL
+     * @var string|null
      */
     public $refToMessageID;
-
 
     /**
      * Create a PAOS Response element.
      *
-     * @param DOMElement|NULL $xml  The XML element we should load.
+     * @param DOMElement|null $xml The XML element we should load.
      */
-    public function __construct(DOMElement $xml = NULL)
+    public function __construct(DOMElement $xml = null)
     {
-
-        if ($xml === NULL) {
+        if ($xml === null) {
             return;
         }
 
@@ -46,11 +44,10 @@ class SAML2_XML_paos_Response
         }
     }
 
-
     /**
      * Convert this PAOS Response to XML.
      *
-     * @param DOMElement $parent  The element we should append this element to.
+     * @param DOMElement $parent The element we should append this element to.
      */
     public function toXML(DOMElement $parent)
     {
@@ -64,11 +61,10 @@ class SAML2_XML_paos_Response
         $e->setAttributeNS(SAML2_Const::NS_SOAP, 'SOAP-ENV:mustUnderstand', '1');
         $e->setAttributeNS(SAML2_Const::NS_SOAP, 'SOAP-ENV:actor', 'http://schemas.xmlsoap.org/soap/actor/next');
 
-        if ($this->refToMessageID !== NULL) {
+        if ($this->refToMessageID !== null) {
             $e->setAttribute('refToMessageID', $this->refToMessageID);
         }
 
         return $e;
     }
-
 }

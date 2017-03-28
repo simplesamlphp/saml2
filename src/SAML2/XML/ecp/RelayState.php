@@ -1,14 +1,14 @@
 <?php
 
+namespace SAML2\XML\ecp;
+
 /**
  * Class representing the ECP RelayState element.
  *
- * @package simpleSAMLphp
  * @version $Id$
  */
-class SAML2_XML_ecp_RelayState
+class RelayState
 {
-
     /**
      * The RelayState.
      *
@@ -16,39 +16,36 @@ class SAML2_XML_ecp_RelayState
      */
     public $RelayState;
 
-
     /**
      * Create a ECP RelayState element.
      *
-     * @param DOMElement|NULL $xml  The XML element we should load.
+     * @param DOMElement|null $xml The XML element we should load.
      */
-    public function __construct(DOMElement $xml = NULL)
+    public function __construct(DOMElement $xml = null)
     {
-
-        if ($xml === NULL) {
+        if ($xml === null) {
             return;
         }
 
-        if (!$xml->hasAttributeNS(SAML2_Const::NS_SOAP, 'mustUnderstand')) {
+        if (!$xml->hasAttributeNS(Constants::NS_SOAP, 'mustUnderstand')) {
             throw new Exception('Missing soap-env:mustUnderstand attribute in <ecp:RelayState>.');
-        } elseif ($xml->getAttributeNS(SAML2_Const::NS_SOAP, 'mustUnderstand') !== '1') {
+        } elseif ($xml->getAttributeNS(Constants::NS_SOAP, 'mustUnderstand') !== '1') {
             throw new Exception('Invalid value of soap-env:mustUnderstand attribute in <ecp:RelayState>.');
         }
 
-        if (!$xml->hasAttributeNS(SAML2_Const::NS_SOAP, 'actor')) {
+        if (!$xml->hasAttributeNS(Constants::NS_SOAP, 'actor')) {
             throw new Exception('Missing soap-env:mustUnderstand attribute in <ecp:RelayState>.');
-        } elseif ($xml->getAttributeNS(SAML2_Const::NS_SOAP, 'actor') !== 'http://schemas.xmlsoap.org/soap/actor/next') {
+        } elseif ($xml->getAttributeNS(Constants::NS_SOAP, 'actor') !== 'http://schemas.xmlsoap.org/soap/actor/next') {
             throw new Exception('Invalid value of soap-env:actor attribute in <ecp:RelayState>.');
         }
 
         $this->RelayState = $xml->textContent;
     }
 
-
     /**
      * Convert this ECP RelayState to XML.
      *
-     * @param DOMElement $parent  The element we should append this element to.
+     * @param DOMElement $parent The element we should append this element to.
      */
     public function toXML(DOMElement $parent)
     {
@@ -56,15 +53,14 @@ class SAML2_XML_ecp_RelayState
 
         $doc = $parent->ownerDocument;
 
-        $e = $doc->createElementNS(SAML2_Const::NS_ECP, 'ecp:RelayState');
+        $e = $doc->createElementNS(Constants::NS_ECP, 'ecp:RelayState');
         $parent->appendChild($e);
 
-        $e->setAttributeNS(SAML2_Const::NS_SOAP, 'SOAP-ENV:mustUnderstand', '1');
-        $e->setAttributeNS(SAML2_Const::NS_SOAP, 'SOAP-ENV:actor', 'http://schemas.xmlsoap.org/soap/actor/next');
+        $e->setAttributeNS(Constants::NS_SOAP, 'SOAP-ENV:mustUnderstand', '1');
+        $e->setAttributeNS(Constants::NS_SOAP, 'SOAP-ENV:actor', 'http://schemas.xmlsoap.org/soap/actor/next');
 
         $e->appendChild($doc->createTextNode($this->RelayState));
 
         return $e;
     }
-
 }

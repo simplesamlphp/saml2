@@ -191,7 +191,7 @@ class Utils
 
         if ($xpCache === null || !$xpCache->document->isSameNode($doc)) {
             $xpCache = new \DOMXPath($doc);
-            $xpCache->registerNamespace('ecp', SAML2_Const::NS_ECP);
+            $xpCache->registerNamespace('ecp', Constants::NS_ECP);
             $xpCache->registerNamespace('soap-env', Constants::NS_SOAP);
             $xpCache->registerNamespace('saml_protocol', Constants::NS_SAMLP);
             $xpCache->registerNamespace('saml_assertion', Constants::NS_SAML);

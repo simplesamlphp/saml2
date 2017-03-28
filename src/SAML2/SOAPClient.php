@@ -11,13 +11,11 @@ use SimpleSAML_Utilities;
  * Implementation of the SAML 2.0 SOAP binding.
  *
  * @author Shoaib Ali
- * @package SimpleSAMLphp
  */
 class SOAPClient
 {
     const START_SOAP_ENVELOPE = '<soap-env:Envelope xmlns:soap-env="http://schemas.xmlsoap.org/soap/envelope/"><soap-env:Header/><soap-env:Body>';
     const END_SOAP_ENVELOPE = '</soap-env:Body></soap-env:Envelope>';
-
 
     /**
      * The username to use for HTTP authentication.
@@ -33,12 +31,11 @@ class SOAPClient
      */
     private $password;
 
-
     /**
      * Set username & password for HTTP Basic Auth.
      *
-     * @param string $username  The username.
-     * @param string $passwort  The password.
+     * @param string $username The username.
+     * @param string $passwort The password.
      */
     public function setBasicAuth($username, $password)
     {
@@ -49,15 +46,15 @@ class SOAPClient
         $this->password = $password;
     }
 
-
-
     /**
-     * This function sends the SOAP message to the service location and returns SOAP response
+     * This function sends the SOAP message to the service location and returns SOAP response.
      *
-     * @param  \SAML2\Message            $msg         The request that should be sent.
-     * @param  \SimpleSAML_Configuration $srcMetadata The metadata of the issuer of the message.
-     * @param  \SimpleSAML_Configuration $dstMetadata The metadata of the destination of the message.
-     * @return \SAML2\Message            The response we received.
+     * @param \SAML2\Message            $msg         The request that should be sent.
+     * @param \SimpleSAML_Configuration $srcMetadata The metadata of the issuer of the message.
+     * @param \SimpleSAML_Configuration $dstMetadata The metadata of the destination of the message.
+     *
+     * @return \SAML2\Message The response we received.
+     *
      * @throws \Exception
      */
     public function send(Message $msg, SimpleSAML_Configuration $srcMetadata, SimpleSAML_Configuration $dstMetadata = null)
@@ -67,7 +64,7 @@ class SOAPClient
         $ctxOpts = array(
             'ssl' => array(
                 'capture_peer_cert' => true,
-                'allow_self_signed' => true
+                'allow_self_signed' => true,
             ),
         );
 
@@ -87,8 +84,8 @@ class SOAPClient
             $privateKey = SimpleSAML_Utilities::loadPrivateKey($srcMetadata);
             $publicKey = SimpleSAML_Utilities::loadPublicKey($srcMetadata);
             if ($privateKey !== null && $publicKey !== null && isset($publicKey['PEM'])) {
-                $keyCertData = $privateKey['PEM'] . $publicKey['PEM'];
-                $file = SimpleSAML_Utilities::getTempDir() . '/' . sha1($keyCertData) . '.pem';
+                $keyCertData = $privateKey['PEM'].$publicKey['PEM'];
+                $file = SimpleSAML_Utilities::getTempDir().'/'.sha1($keyCertData).'.pem';
                 if (!file_exists($file)) {
                     SimpleSAML_Utilities::writeFile($file, $keyCertData);
                 }
@@ -107,11 +104,11 @@ class SOAPClient
                 if ($key['type'] !== 'X509Certificate') {
                     continue;
                 }
-                $certData .= "-----BEGIN CERTIFICATE-----\n" .
-                    chunk_split($key['X509Certificate'], 64) .
+                $certData .= "-----BEGIN CERTIFICATE-----\n".
+                    chunk_split($key['X509Certificate'], 64).
                     "-----END CERTIFICATE-----\n";
             }
-            $peerCertFile = SimpleSAML_Utilities::getTempDir() . '/' . sha1($certData) . '.pem';
+            $peerCertFile = SimpleSAML_Utilities::getTempDir().'/'.sha1($certData).'.pem';
             if (!file_exists($peerCertFile)) {
                 SimpleSAML_Utilities::writeFile($peerCertFile, $certData);
             }
@@ -121,7 +118,7 @@ class SOAPClient
             $ctxOpts['ssl']['cafile'] = $peerCertFile;
         }
 
-        $ctxOpts['http']['header'] = 'SOAPAction: "http://www.oasis-open.org/committees/security"' . "\n";
+        $ctxOpts['http']['header'] = 'SOAPAction: "http://www.oasis-open.org/committees/security"'."\n";
         if ($srcMetadata->hasValue('saml.SOAPClient.stream_context.ssl.peer_name')) {
             $ctxOpts['ssl']['peer_name'] = $srcMetadata->getString('saml.SOAPClient.stream_context.ssl.peer_name');
         }
@@ -131,11 +128,11 @@ class SOAPClient
             throw new \Exception('Unable to create SSL stream context');
         }
 
-        if ($this->username !== NULL && $this->password !== NULL) {
+        if ($this->username !== null && $this->password !== null) {
             /* Add HTTP Basic authentication header. */
-            $authData = $this->username . ':' . $this->password;
+            $authData = $this->username.':'.$this->password;
             $authData = base64_encode($authData);
-            $ctxOpts['http']['header'] .= 'Authorization: Basic ' . $authData . "\n";
+            $ctxOpts['http']['header'] .= 'Authorization: Basic '.$authData."\n";
         }
 
         if ($srcMetadata->hasValue('saml.SOAPClient.proxyhost')) {
@@ -150,18 +147,18 @@ class SOAPClient
 
         /* Add soap-envelopes */
         $request = $msg->toSignedXML();
-        $request = self::START_SOAP_ENVELOPE . $request->ownerDocument->saveXML($request) . self::END_SOAP_ENVELOPE;
+        $request = self::START_SOAP_ENVELOPE.$request->ownerDocument->saveXML($request).self::END_SOAP_ENVELOPE;
 
         Utils::getContainer()->debugMessage($request, 'out');
 
         $ctxOpts['http']['content'] = $request;
-        $ctxOpts['http']['header'] .= 'Content-Type: text/xml; charset=utf-8' . "\n";
+        $ctxOpts['http']['header'] .= 'Content-Type: text/xml; charset=utf-8'."\n";
         $ctxOpts['http']['method'] = 'POST';
         $destination = $msg->getDestination();
 
         /* Perform SOAP Request over HTTP */
         $soapresponsexml = $x->__doRequest($request, $destination, $action, $version);
-        if ($soapresponsexml === null || $soapresponsexml === "") {
+        if ($soapresponsexml === null || $soapresponsexml === '') {
             throw new \Exception('Empty SOAP response, check peer certificate.');
         }
 
@@ -185,7 +182,7 @@ class SOAPClient
         /* Add validator to message which uses the SSL context. */
         self::addSSLValidator($samlresponse, $context);
 
-        Utils::getContainer()->getLogger()->debug("Valid ArtifactResponse received from IdP");
+        Utils::getContainer()->getLogger()->debug('Valid ArtifactResponse received from IdP');
 
         return $samlresponse;
     }
@@ -194,7 +191,7 @@ class SOAPClient
      * Add a signature validator based on a SSL context.
      *
      * @param \SAML2\Message $msg     The message we should add a validator to.
-     * @param resource      $context The stream context.
+     * @param resource       $context The stream context.
      */
     private static function addSSLValidator(Message $msg, $context)
     {
@@ -231,6 +228,7 @@ class SOAPClient
      *
      * @param string         $data The public key that was used on the connection.
      * @param XMLSecurityKey $key  The key we should validate the certificate against.
+     *
      * @throws \Exception
      */
     public static function validateSSL($data, XMLSecurityKey $key)
@@ -267,13 +265,13 @@ class SOAPClient
         if (empty($soapFault)) {
             /* No fault. */
 
-            return null;
+            return;
         }
         $soapFaultElement = $soapFault[0];
         // There is a fault element but we haven't found out what the fault string is
-        $soapFaultString = "Unknown fault string found";
+        $soapFaultString = 'Unknown fault string found';
         // find out the fault string
-        $faultStringElement =   Utils::xpQuery($soapFaultElement, './soap-env:faultstring') ;
+        $faultStringElement = Utils::xpQuery($soapFaultElement, './soap-env:faultstring');
         if (!empty($faultStringElement)) {
             return $faultStringElement[0]->textContent;
         }
