@@ -1,11 +1,14 @@
 <?php
 
-/**
- * Class SAML2_ECPTest
- */
-class SAML2_ECPTest extends PHPUnit_Framework_TestCase
-{
+namespace SAML2;
 
+use PHPUnit_Framework_TestCase;
+
+/**
+ * Class ECPTest
+ */
+class ECPTest extends PHPUnit_Framework_TestCase
+{
     public function testPAOSRequest()
     {
         $xml = <<<XML
@@ -37,10 +40,10 @@ class SAML2_ECPTest extends PHPUnit_Framework_TestCase
 </S:Envelope>
 XML;
 
-        $fixtureResponseDom = SAML2_DOMDocumentFactory::fromString($xml);
-        $request            = new SAML2_XML_paos_Request($fixtureResponseDom->getElementsByTagNameNS('urn:liberty:paos:2003-08','Request')->item(0));
+        $fixtureResponseDom = DOMDocumentFactory::fromString($xml);
+        $request = new \SAML2\XML\paos\Request($fixtureResponseDom->getElementsByTagNameNS('urn:liberty:paos:2003-08', 'Request')->item(0));
 
-        $requestXml = $request->toXML( $fixtureResponseDom->firstChild )->ownerDocument->C14N();
+        $requestXml = $request->toXML($fixtureResponseDom->firstChild)->ownerDocument->C14N();
         $fixtureXml = $fixtureResponseDom->C14N();
 
         $this->assertXmlStringEqualsXmlString(
@@ -48,7 +51,6 @@ XML;
             $requestXml,
             'PAOS Request after Unmarshalling and re-marshalling remains the same'
         );
-
     }
 
     public function testECPRequest()
@@ -91,11 +93,10 @@ XML;
 </S:Envelope>
 XML;
 
+        $fixtureResponseDom = DOMDocumentFactory::fromString($xml);
+        $request = new \SAML2\XML\ecp\Request($fixtureResponseDom->getElementsByTagNameNS('urn:oasis:names:tc:SAML:2.0:profiles:SSO:ecp', 'Request')->item(0));
 
-        $fixtureResponseDom = SAML2_DOMDocumentFactory::fromString($xml);
-        $request            = new SAML2_XML_ecp_Request($fixtureResponseDom->getElementsByTagNameNS('urn:oasis:names:tc:SAML:2.0:profiles:SSO:ecp','Request')->item(0));
-
-        $requestXml = $request->toXML( $fixtureResponseDom->firstChild )->ownerDocument->C14N();
+        $requestXml = $request->toXML($fixtureResponseDom->firstChild)->ownerDocument->C14N();
         $fixtureXml = $fixtureResponseDom->C14N();
 
         $this->assertXmlStringEqualsXmlString(
@@ -103,6 +104,5 @@ XML;
             $requestXml,
             'PAOS Request after Unmarshalling and re-marshalling remains the same'
         );
-
     }
 }
