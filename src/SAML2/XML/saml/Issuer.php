@@ -41,6 +41,8 @@ class Issuer extends NameIDType
      * @var string
      */
     protected $nodeName = 'saml:Issuer';
+    public $SAML2IssuerShowFormat = false;
+    
 
 
     /**
@@ -52,14 +54,25 @@ class Issuer extends NameIDType
      */
     public function toXML(\DOMElement $parent = null)
     {
-        if ($this->Format !== Constants::NAMEID_ENTITY) {
-            return parent::toXML($parent);
-        }
+/* workaround to send NAMEID_Entity */
+	if ($this->SAML2IssuerShowFormat){
+		$this->Format = Constants::NAMEID_ENTITY;
+            	return parent::toXML($parent);
+	}
+	else
+	{
+	if ($this->Format !== Constants::NAMEID_ENTITY) {
+            	return parent::toXML($parent);
+	        }
+
+	}
+
 
         /*
          * From saml-core-2.0-os 8.3.6, when the entity Format is used: "The NameQualifier, SPNameQualifier, and
          * SPProvidedID attributes MUST be omitted."
          */
+
         if ($parent === null) {
             $parent = DOMDocumentFactory::create();
             $doc = $parent;
