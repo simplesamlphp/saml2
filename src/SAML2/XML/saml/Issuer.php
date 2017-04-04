@@ -41,7 +41,7 @@ class Issuer extends NameIDType
      * @var string
      */
     protected $nodeName = 'saml:Issuer';
-    public $SAML2IssuerShowFormat = false;
+    public $SAML2IssuerShowAll = false; //setting true break saml-core-2.0-os 8.3.6
     
 
 
@@ -55,8 +55,8 @@ class Issuer extends NameIDType
     public function toXML(\DOMElement $parent = null)
     {
 /* workaround to send NAMEID_Entity */
-	if ($this->SAML2IssuerShowFormat){
-		$this->Format = Constants::NAMEID_ENTITY;
+	if ($this->SAML2IssuerShowAll){
+	//	$this->Format = Constants::NAMEID_ENTITY; //is already assigned in its declaration
             	return parent::toXML($parent);
 	}
 	else
