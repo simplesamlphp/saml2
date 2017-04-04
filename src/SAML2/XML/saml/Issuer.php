@@ -47,10 +47,11 @@ class Issuer extends NameIDType
      * if $this->SAML2IssuerShowAll is set false   
      * From saml-core-2.0-os 8.3.6, when the entity Format is used: "The NameQualifier, SPNameQualifier, and 
      * SPProvidedID attributes MUST be omitted."
+     * if $this->SAML2IssuerShowAll is set true, when the entity Format is used: "The NameQualifier, SPNameQualifier, and SPProvidedID attributes are not omitted" 	
      *
      * @see saml-core-2.0-os 8.3.6
      *	     
-     * @var string
+     * @var boolean
      */
     public $SAML2IssuerShowAll = false; //setting true break saml-core-2.0-os 8.3.6
     
@@ -97,6 +98,6 @@ class Issuer extends NameIDType
         $value = $element->ownerDocument->createTextNode($this->value);
         $element->appendChild($value);
 
-        ret  urn $element;
+        return $element;
     }
 }
