@@ -66,19 +66,11 @@ class Issuer extends NameIDType
      * @return \DOMElement The current Issuer object converted into a \DOMElement.
      */
     public function toXML(\DOMElement $parent = null)
-    {
-	if ($this->SAML2IssuerShowAll){
-	//	$this->Format = Constants::NAMEID_ENTITY; //is already assigned 
-            	return parent::toXML($parent);
+    {	
+	
+	if ((($this->SAML2IssuerShowAll) && ($this->Format === Constants::NAMEID_ENTITY)) || ($this->Format !== Constants::NAMEID_ENTITY)){	
+		return parent::toXML($parent); 
 	}
-	else
-	{
-	if ($this->Format !== Constants::NAMEID_ENTITY) {
-            	return parent::toXML($parent);
-	        }
-
-	}
-
 
         /*
 	 *  if $this->SAML2IssuerShowAll is set false	
