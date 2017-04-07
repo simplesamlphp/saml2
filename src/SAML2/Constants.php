@@ -35,6 +35,11 @@ class Constants
     const BINDING_HTTP_ARTIFACT = 'urn:oasis:names:tc:SAML:2.0:bindings:HTTP-Artifact';
 
     /**
+     * The URN for the PAOS binding.
+     */
+    const BINDING_PAOS = 'urn:oasis:names:tc:SAML:2.0:bindings:PAOS';
+
+    /**
      * The URN for the SOAP binding.
      */
     const BINDING_SOAP = 'urn:oasis:names:tc:SAML:2.0:bindings:SOAP';
@@ -193,6 +198,11 @@ class Constants
      * Encrypted NameID format.
      */
     const NAMEID_ENCRYPTED = 'urn:oasis:names:tc:SAML:2.0:nameid-format:encrypted';
+
+    /**
+     * The namespace for the ECP protocol.
+     */
+    const NS_ECP = 'urn:oasis:names:tc:SAML:2.0:profiles:SSO:ecp';
 
     /**
      * The namespace for the SOAP protocol.

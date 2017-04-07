@@ -36,6 +36,8 @@ abstract class Binding
                 return new HTTPRedirect();
             case Constants::BINDING_HTTP_ARTIFACT:
                 return new HTTPArtifact();
+            case Constants::BINDING_SOAP:
+                return new SOAP();
             case Constants::BINDING_HOK_SSO:
                 return new HTTPPost();
             default:
@@ -77,7 +79,7 @@ abstract class Binding
                     return new HTTPPost();
                 } elseif (array_key_exists('SAMLart', $_POST)) {
                     return new HTTPArtifact();
-                } elseif ($contentType === 'text/xml') {
+                } elseif (in_array($contentType, array('text/xml','application/soap+xml','application/vnd.paos+xml'))) {
                     return new SOAP();
                 }
                 break;
