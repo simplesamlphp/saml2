@@ -48,8 +48,8 @@ class Issuer extends NameIDType
      * From saml-core-2.0-os 8.3.6, when the entity Format is used: "The NameQualifier, SPNameQualifier, and 
      * SPProvidedID attributes MUST be omitted."
      *
-     * if $this->SAML2IssuerShowAll is set true, when the entity Format is used: "The NameQualifier, SPNameQualifier, and SPProvidedID attributes are not omitted" 	
-     *
+     * if $this->SAML2IssuerShowAll is set true
+     * when the entity Format is used: "The NameQualifier, SPNameQualifier, and SPProvidedID attributes are not omitted"
      * @see saml-core-2.0-os 8.3.6
      *	     
      * @var boolean
@@ -66,9 +66,9 @@ class Issuer extends NameIDType
      * @return \DOMElement The current Issuer object converted into a \DOMElement.
      */
     public function toXML(\DOMElement $parent = null)
-    {	
-	
-        if ((($this->Saml2IssuerShowAll) && ($this->Format === Constants::NAMEID_ENTITY)) || ($this->Format !== Constants::NAMEID_ENTITY)){
+    {
+
+        if ((($this->Saml2IssuerShowAll) && ($this->Format === Constants::NAMEID_ENTITY)) || ($this->Format !== Constants::NAMEID_ENTITY)) {
             return parent::toXML($parent);
         }
 
