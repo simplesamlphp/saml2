@@ -19,6 +19,8 @@ class BindingTest extends PHPUnit_Framework_TestCase
         $this->assertInstanceOf('SAML2\HTTPArtifact', $bind);
         $bind = Binding::getBinding(Constants::BINDING_HOK_SSO);
         $this->assertInstanceOf('SAML2\HTTPPost', $bind);
+        $bind = Binding::getBinding(Constants::BINDING_PAOS);
+        $this->assertInstanceOf('SAML2\SOAP', $bind);
 
         $this->setExpectedException('Exception', 'Unsupported binding:');
         $bind = Binding::getBinding('nonsense');

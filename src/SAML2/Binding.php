@@ -38,6 +38,11 @@ abstract class Binding
                 return new HTTPArtifact();
             case Constants::BINDING_HOK_SSO:
                 return new HTTPPost();
+            // ECP ACS is defined with the PAOS binding, but as the IdP, we
+            // talk to the ECP using SOAP -- if support for ECP as an SP is
+            // implemented, this logic may need to change
+            case Constants::BINDING_PAOS:
+                return new SOAP();
             default:
                 throw new \Exception('Unsupported binding: ' . var_export($urn, true));
         }
