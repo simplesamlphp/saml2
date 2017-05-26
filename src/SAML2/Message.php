@@ -614,4 +614,22 @@ abstract class Message implements SignedElement
     {
         return $this->signatureMethod;
     }
+
+    /**
+     * Check if a named function exists among validator candidates
+     *
+     * @param string $functionName  The name of the function to be looked up
+     * @return bool
+     */
+    public function hasValidatorByFunctionName($functionName)
+    {
+        assert('is_string($functionName)');
+
+        foreach ($this->validators as $validator) {
+            if (in_array($functionName, $validator["Function"])) {
+                return true;
+            }
+        }
+        return false;
+    }
 }

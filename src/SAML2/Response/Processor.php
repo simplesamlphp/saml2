@@ -144,7 +144,7 @@ class Processor
             throw new NoAssertionsFoundException('No assertions found in response from IdP.');
         }
 
-        if (!$this->responseIsSigned) {
+        if (!$this->responseIsSigned && !$response->hasValidatorByFunctionName("validateSignature")) {
             foreach ($assertions as $assertion) {
                 if (!$assertion->getWasSignedAtConstruction()) {
                     throw new UnsignedResponseException(
