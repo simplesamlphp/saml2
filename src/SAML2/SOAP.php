@@ -9,6 +9,21 @@ namespace SAML2;
  */
 class SOAP extends Binding
 {
+    public function getOutputToSend(Message $message)
+    {
+        $outputFromIdp = '<?xml version="1.0" encoding="UTF-8"?>';
+        $outputFromIdp .= '<SOAP-ENV:Envelope xmlns:SOAP-ENV="http://schemas.xmlsoap.org/soap/envelope/">';
+        $outputFromIdp .= '<SOAP-ENV:Body>';
+        $xmlMessage = $message->toSignedXML();
+        Utils::getContainer()->debugMessage($xmlMessage, 'out');
+        $tempOutputFromIdp = $xmlMessage->ownerDocument->saveXML($xmlMessage);
+        $outputFromIdp .= $tempOutputFromIdp;
+        $outputFromIdp .= '</SOAP-ENV:Body>';
+        $outputFromIdp .= '</SOAP-ENV:Envelope>';
+
+        return $outputFromIdp;
+    }
+
     /**
      * Send a SAML 2 message using the SOAP binding.
      *
@@ -19,16 +34,7 @@ class SOAP extends Binding
     public function send(Message $message)
     {
         header('Content-Type: text/xml', true);
-        $outputFromIdp = '<?xml version="1.0" encoding="UTF-8"?>';
-        $outputFromIdp .= '<SOAP-ENV:Envelope xmlns:SOAP-ENV="http://schemas.xmlsoap.org/soap/envelope/">';
-        $outputFromIdp .= '<SOAP-ENV:Body>';
-        $xmlMessage = $message->toSignedXML();
-        Utils::getContainer()->debugMessage($xmlMessage, 'out');
-        $tempOutputFromIdp = $xmlMessage->ownerDocument->saveXML($xmlMessage);
-        $outputFromIdp .= $tempOutputFromIdp;
-        $outputFromIdp .= '</SOAP-ENV:Body>';
-        $outputFromIdp .= '</SOAP-ENV:Envelope>';
-        print($outputFromIdp);
+        print($this->getOutputToSend($message));
         exit(0);
     }
 
@@ -42,7 +48,7 @@ class SOAP extends Binding
      */
     public function receive()
     {
-        $postText = file_get_contents('php://input');
+        $postText = $this->getInputStream();
 
         if (empty($postText)) {
             throw new \Exception('Invalid message received to AssertionConsumerService endpoint.');
@@ -54,5 +60,10 @@ class SOAP extends Binding
         $results = Utils::xpQuery($xml, '/soap-env:Envelope/soap-env:Body/*[1]');
 
         return Message::fromXML($results[0]);
+    }
+
+    protected function getInputStream()
+    {
+        return file_get_contents('php://input');
     }
 }
