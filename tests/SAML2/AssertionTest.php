@@ -157,6 +157,97 @@ XML;
     }
 
     /**
+     * Test an assertion attribute value types options
+     */
+    public function testMarshallingUnmarshallingAttributeValTypes()
+    {
+        // Create an assertion
+        $assertion = new Assertion();
+
+        $assertion->setIssuer('testIssuer');
+        $assertion->setValidAudiences(array('audience1', 'audience2'));
+
+        $assertion->setAuthnContext('someAuthnContext');
+
+        $assertion->setAuthenticatingAuthority(array("idp1","idp2"));
+
+        $assertion->setAttributes(array(
+            "name1" => array("value1",123,"2017-31-12"),
+            "name2" => array(2),
+            "name3" => array(1234,"+2345")));
+        $assertion->setAttributeNameFormat("urn:oasis:names:tc:SAML:2.0:attrname-format:unspecified");
+
+        // set xs:type for first and third name1 values, and all name3 values.
+        // second name1 value and all name2 values will use default behaviour
+        $assertion->setAttributesValueTypes(array(
+            "name1" => array("xs:string",null,"xs:date"),
+            "name3" => "xs:decimal"));
+
+        $assertionElement = $assertion->toXML()->ownerDocument->saveXML();
+
+        $assertionToVerify = new Assertion(DOMDocumentFactory::fromString($assertionElement)->firstChild);
+
+        $authauth = $assertionToVerify->getAuthenticatingAuthority();
+        $this->assertCount(2, $authauth);
+        $this->assertEquals("idp2", $authauth[1]);
+
+        $attributes = $assertionToVerify->getAttributes();
+        $this->assertCount(3, $attributes);
+        $this->assertCount(3, $attributes['name1']);
+        $this->assertEquals("value1", $attributes['name1'][0]);
+        $this->assertEquals(123, $attributes['name1'][1]);
+        $this->assertEquals("2017-31-12", $attributes['name1'][2]);
+        $this->assertEquals(2, $attributes['name2'][0]);
+        $this->assertCount(2, $attributes['name3']);
+        $this->assertEquals("1234", $attributes['name3'][0]);
+        $this->assertEquals("+2345", $attributes['name3'][1]);
+        $this->assertEquals("urn:oasis:names:tc:SAML:2.0:attrname-format:unspecified", $assertionToVerify->getAttributeNameFormat());
+
+        $attributesValueTypes = $assertionToVerify->getAttributesValueTypes();
+        $this->assertCount(3, $attributesValueTypes);
+        $this->assertCount(3, $attributesValueTypes['name1']);
+        $this->assertEquals("xs:string", $attributesValueTypes['name1'][0]);
+        $this->assertEquals("xs:integer", $attributesValueTypes['name1'][1]);
+        $this->assertEquals("xs:date", $attributesValueTypes['name1'][2]);
+        $this->assertCount(1, $attributesValueTypes['name2']);
+        $this->assertEquals("xs:integer", $attributesValueTypes['name2'][0]);
+        $this->assertCount(2, $attributesValueTypes['name3']);
+        $this->assertEquals("xs:decimal", $attributesValueTypes['name3'][0]);
+        $this->assertEquals("xs:decimal", $attributesValueTypes['name3'][1]);
+    }
+
+    /**
+     * Test attribute value types check in Marshalling an assertion.
+     */
+
+    public function testMarshallingWrongAttributeValTypes()
+    {
+        // Create an assertion
+        $assertion = new Assertion();
+
+        $assertion->setIssuer('testIssuer');
+        $assertion->setValidAudiences(array('audience1', 'audience2'));
+
+        $assertion->setAuthnContext('someAuthnContext');
+
+        $assertion->setAuthenticatingAuthority(array("idp1","idp2"));
+
+        $assertion->setAttributes(array(
+            "name1" => array("value1","2017-31-12"),
+            "name2" => array(2),
+            "name3" => array(1234,"+2345")));
+        $assertion->setAttributeNameFormat("urn:oasis:names:tc:SAML:2.0:attrname-format:unspecified");
+
+        // set wrong number elements in name1
+        $assertion->setAttributesValueTypes(array(
+            "name1" => array("xs:string"),
+            "name3" => "xs:decimal"));
+
+        $this->setExpectedException('Exception', "Array of value types and array of values have different size for attribute 'name1'");
+        $assertionElement = $assertion->toXML()->ownerDocument->saveXML();
+    }
+
+    /**
      * Test parsing AuthnContext elements Decl and ClassRef
      */
     public function testAuthnContextDeclAndClassRef()

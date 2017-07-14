@@ -174,6 +174,23 @@ class Assertion implements SignedElement
     private $attributes;
 
     /**
+     * The attributes values types as per http://www.w3.org/2001/XMLSchema definitions
+     * the variable is as an associative array, indexed by attribute name
+     * 
+     * when parsing assertion, the variable will be:
+     * - <attribute name> => array(<Value1's xs type>|null, <xs type Value2>|null, ...)
+     * array will always have the same size of the array of vaules in $attributes for the same <attribute name>
+     *
+     * when generating assertion, the varuable can be:
+     * - null : backward compatibility
+     * - <attribute name> => <xs type> : all values for the given attribute will have the same xs type
+     * - <attribute name> => array(<Value1's xs type>|null, <xs type Value2>|null, ...) : Nth value will have type of the Nth in the array
+     * 
+     * @var array multi-dimensional array of array
+     */
+    private $attributesValueTypes;
+
+    /**
      * The NameFormat used on all attributes.
      *
      * If more than one NameFormat is used, this will contain
@@ -516,6 +533,7 @@ class Assertion implements SignedElement
 
             if (!array_key_exists($name, $this->attributes)) {
                 $this->attributes[$name] = array();
+                $this->attributesValueTypes[$name] = array();
             }
 
             $this->parseAttributeValue($attribute, $name);
@@ -559,12 +577,15 @@ class Assertion implements SignedElement
                 }
             }
 
+            $type = $value->getAttribute('xsi:type');
+            if($type === '') $type = null;
+            $this->attributesValueTypes[$attributeName][] = $type;
+
             if ($hasNonTextChildElements) {
                 $this->attributes[$attributeName][] = $value->childNodes;
                 continue;
             }
-
-            $type = $value->getAttribute('xsi:type');
+            
             if ($type === 'xs:integer') {
                 $this->attributes[$attributeName][] = (int)$value->textContent;
             } else {
@@ -1184,6 +1205,26 @@ class Assertion implements SignedElement
     }
 
     /**
+     * Retrieve all attributes value types.
+     *
+     * @return array All attributes value types, as an associative array.
+     */
+    public function getAttributesValueTypes()
+    {
+        return $this->attributesValueTypes;
+    }
+
+    /**
+     * Replace all attributes value types..
+     *
+     * @param array $attributes All new attribute value types, as an associative array.
+     */
+    public function setAttributesValueTypes(array $attributesValueTypes)
+    {
+        $this->attributesValueTypes = $attributesValueTypes;
+    }
+
+    /**
      * Retrieve the NameFormat used on all attributes.
      *
      * If more than one NameFormat is used in the received attributes, this
@@ -1528,13 +1569,42 @@ class Assertion implements SignedElement
                 continue;
             }
 
+            // get value type(s) for the current attribute
+            if(is_array($this->attributesValueTypes) && array_key_exists($name, $this->attributesValueTypes)) {
+                $valueTypes = $this->attributesValueTypes[$name];
+                if(is_array($valueTypes) && count($valueTypes) != count($values)) {
+                    throw new \Exception('Array of value types and array of values have different size for attribute '. var_export($name, true));
+                };
+            }
+            else {
+                // if no type(s), default behaviour
+                $valueTypes = null;
+            }
+
+            $vidx = -1;
             foreach ($values as $value) {
-                if (is_string($value)) {
-                    $type = 'xs:string';
-                } elseif (is_int($value)) {
-                    $type = 'xs:integer';
-                } else {
-                    $type = null;
+                $vidx++;
+
+                // try to get type from current types
+                $type = null;
+                if(!is_null($valueTypes)) {
+                    if(is_array($valueTypes)) {
+                        $type = $valueTypes[$vidx];
+                    }
+                    else {
+                        $type = $valueTypes;
+                    }                    
+                }
+
+                // if no type get from types, use default behaviour
+                if(is_null($type)) {
+                    if (is_string($value)) {
+                        $type = 'xs:string';
+                    } elseif (is_int($value)) {
+                        $type = 'xs:integer';
+                    } else {
+                        $type = null;
+                    }
                 }
 
                 $attributeValue = $document->createElementNS(Constants::NS_SAML, 'saml:AttributeValue');
