@@ -1577,8 +1577,7 @@ class Assertion implements SignedElement
                 if (is_array($valueTypes) && count($valueTypes) != count($values)) {
                     throw new \Exception('Array of value types and array of values have different size for attribute '. var_export($name, true));
                 };
-            }
-            else {
+            } else {
                 // if no type(s), default behaviour
                 $valueTypes = null;
             }
@@ -1590,10 +1589,9 @@ class Assertion implements SignedElement
                 // try to get type from current types
                 $type = null;
                 if (!is_null($valueTypes)) {
-                    if(is_array($valueTypes)) {
+                    if (is_array($valueTypes)) {
                         $type = $valueTypes[$vidx];
-                    }
-                    else {
+                    } else {
                         $type = $valueTypes;
                     }                    
                 }
