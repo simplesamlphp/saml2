@@ -578,7 +578,9 @@ class Assertion implements SignedElement
             }
 
             $type = $value->getAttribute('xsi:type');
-            if($type === '') $type = null;
+            if ($type === '') {
+                $type = null;
+            }
             $this->attributesValueTypes[$attributeName][] = $type;
 
             if ($hasNonTextChildElements) {
@@ -1570,9 +1572,9 @@ class Assertion implements SignedElement
             }
 
             // get value type(s) for the current attribute
-            if(is_array($this->attributesValueTypes) && array_key_exists($name, $this->attributesValueTypes)) {
+            if (is_array($this->attributesValueTypes) && array_key_exists($name, $this->attributesValueTypes)) {
                 $valueTypes = $this->attributesValueTypes[$name];
-                if(is_array($valueTypes) && count($valueTypes) != count($values)) {
+                if (is_array($valueTypes) && count($valueTypes) != count($values)) {
                     throw new \Exception('Array of value types and array of values have different size for attribute '. var_export($name, true));
                 };
             }
@@ -1587,7 +1589,7 @@ class Assertion implements SignedElement
 
                 // try to get type from current types
                 $type = null;
-                if(!is_null($valueTypes)) {
+                if (!is_null($valueTypes)) {
                     if(is_array($valueTypes)) {
                         $type = $valueTypes[$vidx];
                     }
@@ -1597,7 +1599,7 @@ class Assertion implements SignedElement
                 }
 
                 // if no type get from types, use default behaviour
-                if(is_null($type)) {
+                if (is_null($type)) {
                     if (is_string($value)) {
                         $type = 'xs:string';
                     } elseif (is_int($value)) {
