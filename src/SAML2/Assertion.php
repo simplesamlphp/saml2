@@ -1576,7 +1576,7 @@ class Assertion implements SignedElement
                 $valueTypes = $this->attributesValueTypes[$name];
                 if (is_array($valueTypes) && count($valueTypes) != count($values)) {
                     throw new \Exception('Array of value types and array of values have different size for attribute '. var_export($name, true));
-                };
+                }
             } else {
                 // if no type(s), default behaviour
                 $valueTypes = null;
