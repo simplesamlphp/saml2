@@ -1593,7 +1593,7 @@ class Assertion implements SignedElement
                         $type = $valueTypes[$vidx];
                     } else {
                         $type = $valueTypes;
-                    }                    
+                    }
                 }
 
                 // if no type get from types, use default behaviour
