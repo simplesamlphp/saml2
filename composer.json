@@ -14,7 +14,7 @@
         "ext-dom": "*",
         "ext-zlib": "*",
 
-        "robrichards/xmlseclibs": "^2.0|^3.0",
+        "simplesamlphp/xmlseclibs": "^2.0|^3.0",
         "psr/log": "~1.0"
     },
     "require-dev": {
