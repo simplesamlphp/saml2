@@ -23,20 +23,16 @@ class AttributeQueryTest extends \PHPUnit_Framework_TestCase
                     'test2_attrv3',
                 ),
                 'test3' => array(),
-                'test4' => array(5,2),
-                'test5' => array(true),
             )
         );
         $attributeQueryElement = $attributeQuery->toUnsignedXML();
 
         // Test Attribute Names
         $attributes = Utils::xpQuery($attributeQueryElement, './saml_assertion:Attribute');
-        $this->assertCount(5, $attributes);
+        $this->assertCount(3, $attributes);
         $this->assertEquals('test1', $attributes[0]->getAttribute('Name'));
         $this->assertEquals('test2', $attributes[1]->getAttribute('Name'));
         $this->assertEquals('test3', $attributes[2]->getAttribute('Name'));
-        $this->assertEquals('test4', $attributes[3]->getAttribute('Name'));
-        $this->assertEquals('test5', $attributes[4]->getAttribute('Name'));
 
         // Test Attribute Values for Attribute 1
         $av1 = Utils::xpQuery($attributes[0], './saml_assertion:AttributeValue');
@@ -54,17 +50,6 @@ class AttributeQueryTest extends \PHPUnit_Framework_TestCase
         // Test Attribute Values for Attribute 3
         $av3 = Utils::xpQuery($attributes[2], './saml_assertion:AttributeValue');
         $this->assertCount(0, $av3);
-
-        // Test Attribute Values for Attribute 4
-        $av4 = Utils::xpQuery($attributes[3], './saml_assertion:AttributeValue');
-        $this->assertCount(2, $av4);
-        $this->assertEquals(5, $av4[0]->textContent);
-        $this->assertEquals(2, $av4[1]->textContent);
-
-        // Test Attribute Values for Attribute 5
-        $av5 = Utils::xpQuery($attributes[4], './saml_assertion:AttributeValue');
-        $this->assertCount(1, $av5);
-        $this->assertEquals(1, $av5[0]->textContent);
     }
 
     public function testUnmarshalling()
