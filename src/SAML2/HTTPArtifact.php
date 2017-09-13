@@ -29,6 +29,16 @@ class HTTPArtifact extends Binding
 
 
     /**
+     * Return the URN of this binding
+     *
+     * @return string The URN of the binding
+     */
+    public function getURN()
+    {
+        return SAML2_Const::BINDING_HTTP_ARTIFACT;
+    }
+
+    /**
      * Create the redirect URL for a message.
      *
      * @param  \SAML2\Message $message The message.

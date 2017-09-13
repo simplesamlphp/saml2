@@ -70,9 +70,9 @@ class Assertion extends SignedElement
     /**
      * The encrypted Attributes.
      *
-     * If this is not an empty array, these Attributes need decryption before they can be used.
+     * If this is not null, these Attributes need decryption before they can be accessed.
      *
-     * @var \DOMElement[]
+     * @var \DOMElement[]|null
      */
     private $encryptedAttributes;
 
@@ -165,20 +165,10 @@ class Assertion extends SignedElement
     private $AuthenticatingAuthority = [];
 
     /**
-     * The attributes, as an associative array, indexed by attribute name
+     * The attributes, as an associative array.
      *
-     * To ease handling, all attribute values are represented as an array of values, also for values with a multiplicity
-     * of single. There are 5 possible variants of datatypes for the values: a string, an integer, an array, a
-     * DOMNodeList or a SAML2\XML\saml\NameID object.
-     *
-     * If the attribute is an eduPersonTargetedID, the values will be SAML2\XML\saml\NameID objects.
-     * If the attribute value has an type-definition (xsi:string or xsi:int), the values will be of that type.
-     * If the attribute value contains a nested XML structure, the values will be a DOMNodeList
-     * In all other cases the values are treated as strings
-     *
-     * **WARNING** a DOMNodeList cannot be serialized without data-loss and should be handled explicitly
-     *
-     * @var array multi-dimensional array of \DOMNodeList|\SAML2\XML\saml\NameID|string|int|array
+     * @var array array of attributes indexed by attribute name with each value an SAML2\XML\saml\Attribute 
+     * or an SAML2\XML\saml\NameID object if the attribute is an eduPersonTargetedID
      */
     private $attributes = [];
 
@@ -199,6 +189,22 @@ class Assertion extends SignedElement
      * @var array multi-dimensional array of array
      */
     private $attributesValueTypes = [];
+
+    /**
+     * The attributes NameFormats
+     * the variable is as an associative array, indexed by attribute name
+     * 
+     * @var array
+     */
+    private $attributeNameFormats;
+  
+    /**
+     * The attributes FriendlyNames
+     * the variable is as an associative array, indexed by attribute name
+     * 
+     * @var array
+     */
+    private $attributeFriendlyNames;
 
     /**
      * The NameFormat used on all attributes.
@@ -257,6 +263,18 @@ class Assertion extends SignedElement
         $this->issueInstant = Temporal::getTime();
         $this->issuer = $issuer;
         $this->authnInstant = Temporal::getTime();
+<<<<<<< HEAD
+=======
+        $this->attributes = array();
+        $this->attributesValueTypes = array();
+        $this->attributeNameFormats = array();
+        $this->attributeFriendlyNames = array();
+        $this->nameFormat = Constants::NAMEFORMAT_UNSPECIFIED;
+        $this->certificates = array();
+        $this->AuthenticatingAuthority = array();
+        $this->SubjectConfirmation = array();
+        $this->requiredEncAttributes = false;
+>>>>>>> updated \SAML2\Assertion to use \SAML2\XML\saml\Attribute objects instead of an array of string|int|DOMElement.
 
         if ($xml === null) {
             return;
@@ -544,11 +562,14 @@ class Assertion extends SignedElement
                 }
             }
 
+<<<<<<< HEAD
             if (!array_key_exists($name, $this->attributes)) {
                 $this->attributes[$name] = [];
                 $this->attributesValueTypes[$name] = [];
             }
 
+=======
+>>>>>>> updated \SAML2\Assertion to use \SAML2\XML\saml\Attribute objects instead of an array of string|int|DOMElement.
             $this->parseAttributeValue($attribute, $name);
         }
     }
@@ -559,10 +580,22 @@ class Assertion extends SignedElement
      * @param string   $attributeName
      * @return void
      */
+<<<<<<< HEAD
     private function parseAttributeValue(DOMNode $attribute, string $attributeName) : void
+=======
+    private function parseAttributeValue(\DOMNode $attribute, $attributeName)
+>>>>>>> updated \SAML2\Assertion to use \SAML2\XML\saml\Attribute objects instead of an array of string|int|DOMElement.
     {
-        /** @var \DOMElement[] $values */
+        $this->attributes[$attributeName] = new XML\saml\Attribute($attribute);
+        
+        if (!array_key_exists($attributeName, $this->attributesValueTypes)) {
+            $this->attributesValueTypes[$attributeName] = array();
+        }
+        $this->attributeNameFormats[$attributeName] = $attribute->getAttribute('NameFormat');
+        $this->attributeFriendlyNames[$attributeName] = $attribute->getAttribute('FriendlyName');
+        
         $values = Utils::xpQuery($attribute, './saml_assertion:AttributeValue');
+<<<<<<< HEAD
 
         if ($attributeName === Constants::EPTI_URN_MACE || $attributeName === Constants::EPTI_URN_OID) {
             foreach ($values as $index => $eptiAttributeValue) {
@@ -579,27 +612,25 @@ class Assertion extends SignedElement
                     $nameId = new NameID();
                     $nameId->setValue($eptiAttributeValue->textContent);
                     $this->attributes[$attributeName][] = $nameId;
+=======
+        foreach ($values as $index => $value) {
+            if ($attributeName === Constants::EPTI_URN_MACE || $attributeName === Constants::EPTI_URN_OID) {
+                $eptiNameId = Utils::xpQuery($value, './saml_assertion:NameID');
+                if (count($eptiNameId) !== 1) {
+                    throw new RuntimeException(sprintf(
+                        'A "%s" (EPTI) attribute value must be a NameID, none found for value no. "%d"',
+                        $attributeName,
+                        $index
+                    ));
+>>>>>>> updated \SAML2\Assertion to use \SAML2\XML\saml\Attribute objects instead of an array of string|int|DOMElement.
                 }
             }
-
-            return;
-        }
-
-        foreach ($values as $value) {
-            $hasNonTextChildElements = false;
-            foreach ($value->childNodes as $childNode) {
-                /** @var \DOMNode $childNode */
-                if ($childNode->nodeType !== XML_TEXT_NODE) {
-                    $hasNonTextChildElements = true;
-                    break;
-                }
-            }
-
             $type = $value->getAttribute('xsi:type');
             if ($type === '') {
                 $type = null;
             }
             $this->attributesValueTypes[$attributeName][] = $type;
+<<<<<<< HEAD
 
             if ($hasNonTextChildElements) {
                 $this->attributes[$attributeName][] = $value->childNodes;
@@ -611,6 +642,8 @@ class Assertion extends SignedElement
             } else {
                 $this->attributes[$attributeName][] = trim($value->textContent);
             }
+=======
+>>>>>>> updated \SAML2\Assertion to use \SAML2\XML\saml\Attribute objects instead of an array of string|int|DOMElement.
         }
     }
 
@@ -859,7 +892,7 @@ class Assertion extends SignedElement
      */
     public function hasEncryptedAttributes() : bool
     {
-        return $this->encryptedAttributes !== [];
+        return $this->encryptedAttributes !== null && $this->encryptedAttributes !== [];
     }
 
 
@@ -906,10 +939,13 @@ class Assertion extends SignedElement
                 }
             }
 
+<<<<<<< HEAD
             if (!array_key_exists($name, $this->attributes)) {
                 $this->attributes[$name] = [];
             }
 
+=======
+>>>>>>> updated \SAML2\Assertion to use \SAML2\XML\saml\Attribute objects instead of an array of string|int|DOMElement.
             $this->parseAttributeValue($attribute, $name);
         }
     }
@@ -1241,12 +1277,57 @@ class Assertion extends SignedElement
 
     /**
      * Retrieve all attributes.
-     *
+     * 
+     * @param boolean Indicates that returned array should be actual attribute objects instead of strings
      * @return array All attributes, as an associative array.
      */
+<<<<<<< HEAD
     public function getAttributes() : array
+=======
+    public function getAttributes($asObjects = false)
+>>>>>>> updated \SAML2\Assertion to use \SAML2\XML\saml\Attribute objects instead of an array of string|int|DOMElement.
     {
-        return $this->attributes;
+        if ($asObjects) {
+            return $this->attributes;
+        }
+        $compatArray = array();
+        foreach ($this->attributes as $attributeName => $attributeObj) {
+            $compatArray[$attributeName] = array();
+            
+            if ($attributeObj instanceof \SAML2\XML\saml\NameID) {
+                $compatArray[$attributeName][] = $attributeObj;
+                continue;
+            }
+            
+            foreach ($attributeObj->AttributeValue as $attributeValue) {
+                if ($attributeObj->Name === Constants::EPTI_URN_MACE || $attributeObj->Name === Constants::EPTI_URN_OID) {
+                    $eptiNameId = Utils::xpQuery($attributeValue->element, './saml_assertion:NameID');
+                    if (count($eptiNameId) === 1) {
+                        $compatArray[$attributeName][] = new XML\saml\NameID($eptiNameId[0]);
+                        continue;
+                    }
+                }
+
+                $hasNonTextChildElements = false;
+                foreach ($attributeValue->element->childNodes as $childNode) {
+                    if ($childNode->nodeType !== XML_TEXT_NODE) {
+                        $hasNonTextChildElements = true;
+                        break;
+                    }
+                }
+                if ($hasNonTextChildElements) {
+                    $compatArray[$attributeName][] = $attributeValue->element->childNodes;
+                    continue;
+                }
+
+                if ($attributeValue->element->getAttribute('xsi:type') === 'xs:integer') {
+                    $compatArray[$attributeName][] = (int)$attributeValue->getString();
+                } else {
+                    $compatArray[$attributeName][] = trim($attributeValue->getString());
+                }
+            }
+        }
+        return $compatArray;
     }
 
 
@@ -1258,7 +1339,54 @@ class Assertion extends SignedElement
      */
     public function setAttributes(array $attributes) : void
     {
-        $this->attributes = $attributes;
+        if (!isset($attributes)) {
+            $this->attributes = null;
+            return;
+        }
+        $this->attributes = array();
+        foreach ($attributes as $name => $value) {
+            if ($value instanceof \SAML2\XML\saml\Attribute || $value instanceof \SAML2\XML\saml\NameID) {
+                $this->attributes[$name] = $value;
+                continue;
+            }
+            $this->attributes[$name] = null;
+            if (is_array($value)) {
+
+                $document = DOMDocumentFactory::create();
+                $attrDomElement = $document->createElementNS(Constants::NS_SAML, 'saml:Attribute');
+                $document->appendChild($attrDomElement);
+                $attrDomElement->setAttribute('Name', $name);
+
+                if ($this->nameFormat !== null) {
+                    $attrDomElement->setAttribute('NameFormat', $this->nameFormat);
+                }
+                if (array_key_exists($name, $this->attributeNameFormats)) {
+                    $attrDomElement->setAttribute('NameFormat', $this->attributeNameFormats[$name]);
+                }
+                if (array_key_exists($name, $this->attributeFriendlyNames)) {
+                    $attrDomElement->setAttribute('FriendlyName', $this->attributeFriendlyNames[$name]);
+                }
+
+                $attributeObj = new \SAML2\XML\saml\Attribute($attrDomElement);
+
+                foreach ($value as $vidx => $attributeValue) {
+                    $attributeValueObj = new \SAML2\XML\saml\AttributeValue($attributeValue);
+                    $type = null;
+                    if (isset($this->attributesValueTypes[$name])) {
+                        if (is_array($this->attributesValueTypes[$name])) {
+                            $type = $this->attributesValueTypes[$name][$vidx];
+                        } else {
+                            $type = $this->attributesValueTypes[$name];
+                        }
+                        if ($type !== null) {
+                            $attributeValueObj->element->setAttributeNS(Constants::NS_XSI, 'xsi:type', $type);
+                        }
+                    }
+                    $attributeObj->AttributeValue[] = $attributeValueObj;
+                }
+                $this->attributes[$name] = $attributeObj;
+            }
+        }
     }
 
     /**
@@ -1302,6 +1430,46 @@ class Assertion extends SignedElement
         $this->attributesValueTypes = $attributesValueTypes;
     }
 
+
+    /**
+     * Retrieve all attribute name formats.
+     *
+     * @return array All attribute name formats, as an associative array.
+     */
+    public function getAttributeNameFormats()
+    {
+        return $this->attributeNameFormats;
+    }
+
+    /**
+     * Replace all attribute name formats
+     *
+     * @param array $attributeNameFormats All new attribute name formats, as an associative array.
+     */
+    public function setAttributeNameFormats(array $attributeNameFormats)
+    {
+        $this->attributeNameFormats = $attributeNameFormats;
+    }
+    
+    /**
+     * Retrieve all attribute friendly names.
+     *
+     * @return array All attribute friendly names, as an associative array.
+     */
+    public function getAttributeFriendlyNames()
+    {
+        return $this->attributeFriendlyNames;
+    }
+
+    /**
+     * Replace all attribute friendly names
+     *
+     * @param array $attributeFriendlyNames All new attribute friendly names, as an associative array.
+     */
+    public function setAttributeFriendlyNames(array $attributeFriendlyNames)
+    {
+        $this->attributeFriendlyNames = $attributeFriendlyNames;
+    }
 
     /**
      * Retrieve the NameFormat used on all attributes.
@@ -1654,6 +1822,7 @@ class Assertion extends SignedElement
         $attributeStatement = $document->createElementNS(Constants::NS_SAML, 'saml:AttributeStatement');
         $root->appendChild($attributeStatement);
 
+<<<<<<< HEAD
         foreach ($this->attributes as $name => $values) {
             $attribute = $document->createElementNS(Constants::NS_SAML, 'saml:Attribute');
             $attributeStatement->appendChild($attribute);
@@ -1738,7 +1907,17 @@ class Assertion extends SignedElement
                     $value = strval($value);
                     $attributeValue->appendChild($document->createTextNode($value));
                 }
+=======
+        foreach ($this->attributes as $name => $attributeObj) {
+            
+            // possibly override the xsi type for the current attribute
+            if (is_array($this->attributesValueTypes) &&
+                array_key_exists($attributeObj->Name, $this->attributesValueTypes)) {
+                $this->overrideAttributeType($attributeObj);
+>>>>>>> updated \SAML2\Assertion to use \SAML2\XML\saml\Attribute objects instead of an array of string|int|DOMElement.
             }
+            
+            $attributeObj->toXML($attributeStatement);
         }
     }
 
@@ -1759,18 +1938,22 @@ class Assertion extends SignedElement
         $document = $root->ownerDocument;
 
         $attributeStatement = $document->createElementNS(Constants::NS_SAML, 'saml:AttributeStatement');
-        $root->appendChild($attributeStatement);
 
-        foreach ($this->attributes as $name => $values) {
-            $document2 = DOMDocumentFactory::create();
-            $attribute = $document2->createElementNS(Constants::NS_SAML, 'saml:Attribute');
-            $attribute->setAttribute('Name', $name);
-            $document2->appendChild($attribute);
+        foreach ($this->attributes as $name => $attributeObj) {
 
+<<<<<<< HEAD
             if ($this->nameFormat !== Constants::NAMEFORMAT_UNSPECIFIED) {
                 $attribute->setAttribute('NameFormat', $this->getAttributeNameFormat());
+=======
+            // possibly override the xsi type for the current attribute
+            if (is_array($this->attributesValueTypes) &&
+                array_key_exists($attributeObj->Name, $this->attributesValueTypes)) {
+                $this->overrideAttributeType($attributeObj);
+>>>>>>> updated \SAML2\Assertion to use \SAML2\XML\saml\Attribute objects instead of an array of string|int|DOMElement.
             }
+            $attributeElement = $attributeObj->toXML($attributeStatement);
 
+<<<<<<< HEAD
             foreach ($values as $value) {
                 if (is_string($value)) {
                     $type = 'xs:string';
@@ -1797,8 +1980,11 @@ class Assertion extends SignedElement
                 }
             }
             /*Once the attribute nodes are built, the are encrypted*/
+=======
+            /*Once the attribute nodes are built, they are encrypted*/
+>>>>>>> updated \SAML2\Assertion to use \SAML2\XML\saml\Attribute objects instead of an array of string|int|DOMElement.
             $EncAssert = new XMLSecEnc();
-            $EncAssert->setNode($document2->documentElement);
+            $EncAssert->setNode($attributeElement);
             $EncAssert->type = 'http://www.w3.org/2001/04/xmlenc#Element';
             /*
              * Attributes are encrypted with a session key and this one with
@@ -1816,6 +2002,39 @@ class Assertion extends SignedElement
             /** @psalm-suppress InvalidArgument */
             $n = $document->importNode($EncrNode, true);
             $EncAttribute->appendChild($n);
+        }
+        $root->appendChild($attributeStatement);
+    }
+
+    /**
+     * Apply an attribute type override to the attribute's values.  The xsi type of each attribute is inferred based on its datatype 
+     * via the php gettype function inside XML\saml\AttributeValue, but not all xsi types can be inferred in this manner.
+     * Simple xsi types like decimal, double, date, dateTime, etc as well as custom types can only be set via overrides
+     *
+     * @param XML\saml\Attribute $attributeObj The actual attribute object to apply the override to.
+     */
+    private function overrideAttributeType(XML\saml\Attribute &$attributeObj)
+    {
+        $valueTypes = $this->attributesValueTypes[$attributeObj->Name];
+        if ($valueTypes === null) {
+            return;
+        }
+        if (is_array($valueTypes) && count($valueTypes) != count($attributeObj->AttributeValue)) {
+            throw new \Exception(
+                'Array of value types and array of values have different size for attribute '.
+                var_export($attributeObj->Name, true)
+            );
+        }
+        foreach ($attributeObj->AttributeValue as $vidx => &$attributeValue) {
+            $type = null;
+            if (is_array($valueTypes)) {
+                $type = $valueTypes[$vidx];
+            } else {
+                $type = $valueTypes;
+            }
+            if ($type !== null) {
+                $attributeValue->element->setAttributeNS(Constants::NS_XSI, 'xsi:type', $type);
+            }
         }
     }
 }

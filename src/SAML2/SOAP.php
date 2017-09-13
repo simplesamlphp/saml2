@@ -16,10 +16,17 @@ use SAML2\XML\ecp\Response as ECPResponse;
 class SOAP extends Binding
 {
     /**
+     * Return the URN of this binding
+     *
      * @param Message $message
      * @throws \Exception
      * @return string|false The XML or false on error
      */
+    public function getURN()
+    {
+        return SAML2_Const::BINDING_SOAP;
+    }
+
     public function getOutputToSend(Message $message)
     {
         $envelope = <<<SOAP

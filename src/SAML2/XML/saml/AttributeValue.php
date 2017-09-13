@@ -1,3 +1,4 @@
+
 <?php
 
 declare(strict_types=1);
@@ -10,6 +11,7 @@ use Webmozart\Assert\Assert;
 use SAML2\Constants;
 use SAML2\DOMDocumentFactory;
 use SAML2\Utils;
+use SAML2\XML\saml\NameID;
 
 /**
  * Serializable class representing an AttributeValue.
@@ -30,26 +32,36 @@ class AttributeValue implements \Serializable
      * Create an AttributeValue.
      *
      * @param mixed $value The value of this element. Can be one of:
-     *  - string                       Create an attribute value with a simple string.
+     *  - a scalar                     Create an attribute value with a simple value.
+     *  - a \XML\saml\NameID           Create an attribute value of the given NameID.
      *  - \DOMElement(AttributeValue)  Create an attribute value of the given DOMElement.
      *  - \DOMElement                  Create an attribute value with the given DOMElement as a child.
      */
     public function __construct($value)
     {
-        Assert::true(is_string($value) || $value instanceof DOMElement);
+        Assert::true(is_scalar($value) || is_null($value) || $value instanceof DOMElement || $value instanceof NameID);
 
-        if (is_string($value)) {
+        if (is_scalar($value) || is_null($value)) {
             $doc = DOMDocumentFactory::create();
             $this->element = $doc->createElementNS(Constants::NS_SAML, 'saml:AttributeValue');
-            $this->element->setAttributeNS(Constants::NS_XSI, 'xsi:type', 'xs:string');
-            $this->element->appendChild($doc->createTextNode($value));
+            if (is_null($value)) {
+                $this->element->setAttributeNS(Constants::NS_XSI, 'xsi:nil', 'true');
+            } else {
+                $this->element->setAttributeNS(Constants::NS_XSI, 'xsi:type', 'xs:'.gettype($value));
+                $this->element->appendChild($doc->createTextNode($value));
+            }
 
             /* Make sure that the xs-namespace is available in the AttributeValue (for xs:string). */
             $this->element->setAttributeNS(Constants::NS_XS, 'xs:tmp', 'tmp');
             $this->element->removeAttributeNS(Constants::NS_XS, 'tmp');
             return;
         }
-
+        
+        if ($value instanceof \XML\saml\NameID) {
+            $this->element = $value->toXML();
+            return;
+        }
+        
         if ($value->namespaceURI === Constants::NS_SAML && $value->localName === 'AttributeValue') {
             $this->element = Utils::copyElement($value);
             return;

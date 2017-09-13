@@ -39,7 +39,9 @@ abstract class Binding
             case Constants::BINDING_HTTP_ARTIFACT:
                 return new HTTPArtifact();
             case Constants::BINDING_HOK_SSO:
-                return new HTTPPost();
+                return new HTTPHoK();
+            case Constants::BINDING_SOAP:
+                return new SOAP();
             // ECP ACS is defined with the PAOS binding, but as the IdP, we
             // talk to the ECP using SOAP -- if support for ECP as an SP is
             // implemented, this logic may need to change
@@ -50,6 +52,13 @@ abstract class Binding
         }
     }
 
+
+    /**
+     * Retrieve the URN associated with the binding
+     *
+     * @return string The URN of the binding.
+     */
+    abstract public function getURN();
 
     /**
      * Guess the current binding.

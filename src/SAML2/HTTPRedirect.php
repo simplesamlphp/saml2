@@ -17,6 +17,16 @@ class HTTPRedirect extends Binding
     const DEFLATE = 'urn:oasis:names:tc:SAML:2.0:bindings:URL-Encoding:DEFLATE';
 
     /**
+     * Return the URN of this binding
+     *
+     * @return string The URN of the binding
+     */
+    public function getURN()
+    {
+        return SAML2_Const::BINDING_HTTP_REDIRECT;
+    }
+
+    /**
      * Create the redirect URL for a message.
      *
      * @param \SAML2\Message $message The message.
