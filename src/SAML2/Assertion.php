@@ -1245,7 +1245,7 @@ class Assertion implements SignedElement
      *
      * @param XMLSecurityKey|null $signatureKey
      */
-    public function setSignatureKey(XMLsecurityKey $signatureKey = null)
+    public function setSignatureKey(XMLSecurityKey $signatureKey = null)
     {
         $this->signatureKey = $signatureKey;
     }
