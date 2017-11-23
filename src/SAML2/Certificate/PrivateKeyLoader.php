@@ -47,7 +47,7 @@ class PrivateKeyLoader
         }
 
         $newPrivateKey = $serviceProvider->getPrivateKey(PrivateKeyConfiguration::NAME_NEW);
-        if ($newPrivateKey instanceof PrivateKey) {
+        if ($newPrivateKey instanceof PrivateKeyConfiguration) {
             $loadedKey = $this->loadPrivateKey($newPrivateKey);
             $decryptionKeys->add($this->convertPrivateKeyToRsaKey($loadedKey));
         }
