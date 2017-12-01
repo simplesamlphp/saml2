@@ -36,5 +36,10 @@
         "psr-0": {
             "SAML2\\": "tests/"
         }
+    },
+    "extra": {
+        "branch-alias": {
+            "dev-master": "v3.0.x-dev"
+        }
     }
 }
