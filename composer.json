@@ -9,12 +9,12 @@
         }
     ],
     "require": {
-        "php": ">=5.3.3",
+        "php": ">=5.4",
         "ext-openssl": "*",
         "ext-dom": "*",
         "ext-zlib": "*",
 
-        "robrichards/xmlseclibs": "^2.0|^3.0",
+        "robrichards/xmlseclibs": "^3.0",
         "psr/log": "~1.0"
     },
     "require-dev": {
