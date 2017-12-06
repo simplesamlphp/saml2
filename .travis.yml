@@ -12,6 +12,9 @@ matrix:
   allow_failures:
     - php: hhvm
 
+before_script:
+  - if [[ "$TRAVIS_PHP_VERSION" == "5.6" ]]; then composer require --dev php-coveralls/php-coveralls; fi
+
 script:
   - ant
 
