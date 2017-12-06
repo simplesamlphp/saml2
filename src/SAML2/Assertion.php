@@ -618,7 +618,7 @@ class Assertion implements SignedElement
      */
     public function validate(XMLSecurityKey $key)
     {
-        assert('$key->type === \RobRichards\XMLSecLibs\XMLSecurityKey::RSA_SHA1');
+        assert($key->type === \RobRichards\XMLSecLibs\XMLSecurityKey::RSA_SHA1);
 
         if ($this->signatureData === null) {
             return false;
@@ -646,7 +646,7 @@ class Assertion implements SignedElement
      */
     public function setId($id)
     {
-        assert('is_string($id)');
+        assert(is_string($id));
 
         $this->id = $id;
     }
@@ -668,7 +668,7 @@ class Assertion implements SignedElement
      */
     public function setIssueInstant($issueInstant)
     {
-        assert('is_int($issueInstant)');
+        assert(is_int($issueInstant));
 
         $this->issueInstant = $issueInstant;
     }
@@ -690,7 +690,7 @@ class Assertion implements SignedElement
      */
     public function setIssuer($issuer)
     {
-        assert('is_string($issuer) || $issuer instanceof \SAML2\XML\saml\Issuer');
+        assert(is_string($issuer) || $issuer instanceof \SAML2\XML\saml\Issuer);
 
         $this->issuer = $issuer;
     }
@@ -721,7 +721,7 @@ class Assertion implements SignedElement
      */
     public function setNameId($nameId)
     {
-        assert('is_array($nameId) || is_null($nameId) || is_a($nameId, "\SAML2\XML\saml\NameID")');
+        assert(is_array($nameId) || is_null($nameId) || is_a($nameId, "\SAML2\XML\saml\NameID"));
 
         if (is_array($nameId)) {
             $nameId = XML\saml\NameID::fromArray($nameId);
@@ -873,7 +873,7 @@ class Assertion implements SignedElement
      */
     public function setNotBefore($notBefore)
     {
-        assert('is_int($notBefore) || is_null($notBefore)');
+        assert(is_int($notBefore) || is_null($notBefore));
 
         $this->notBefore = $notBefore;
     }
@@ -900,7 +900,7 @@ class Assertion implements SignedElement
      */
     public function setNotOnOrAfter($notOnOrAfter)
     {
-        assert('is_int($notOnOrAfter) || is_null($notOnOrAfter)');
+        assert(is_int($notOnOrAfter) || is_null($notOnOrAfter));
 
         $this->notOnOrAfter = $notOnOrAfter;
     }
@@ -957,7 +957,7 @@ class Assertion implements SignedElement
      */
     public function setAuthnInstant($authnInstant)
     {
-        assert('is_int($authnInstant) || is_null($authnInstant)');
+        assert(is_int($authnInstant) || is_null($authnInstant));
 
         $this->authnInstant = $authnInstant;
     }
@@ -984,7 +984,7 @@ class Assertion implements SignedElement
      */
     public function setSessionNotOnOrAfter($sessionNotOnOrAfter)
     {
-        assert('is_int($sessionNotOnOrAfter) || is_null($sessionNotOnOrAfter)');
+        assert(is_int($sessionNotOnOrAfter) || is_null($sessionNotOnOrAfter));
 
         $this->sessionNotOnOrAfter = $sessionNotOnOrAfter;
     }
@@ -1009,7 +1009,7 @@ class Assertion implements SignedElement
      */
     public function setSessionIndex($sessionIndex)
     {
-        assert('is_string($sessionIndex) || is_null($sessionIndex)');
+        assert(is_string($sessionIndex) || is_null($sessionIndex));
 
         $this->sessionIndex = $sessionIndex;
     }
@@ -1076,7 +1076,7 @@ class Assertion implements SignedElement
      */
     public function setAuthnContextClassRef($authnContextClassRef)
     {
-        assert('is_string($authnContextClassRef) || is_null($authnContextClassRef)');
+        assert(is_string($authnContextClassRef) || is_null($authnContextClassRef));
 
         $this->authnContextClassRef = $authnContextClassRef;
     }
@@ -1203,7 +1203,7 @@ class Assertion implements SignedElement
      */
     public function setAttributeNameFormat($nameFormat)
     {
-        assert('is_string($nameFormat)');
+        assert(is_string($nameFormat));
 
         $this->nameFormat = $nameFormat;
     }
