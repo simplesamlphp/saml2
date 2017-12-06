@@ -2,6 +2,10 @@
 
 namespace SAML2;
 
+use DOMDocument;
+
+use SAML2\XML\ecp\Response as ECPResponse;
+
 /**
  * Class which implements the SOAP binding.
  *
@@ -11,17 +15,43 @@ class SOAP extends Binding
 {
     public function getOutputToSend(Message $message)
     {
-        $outputFromIdp = '<?xml version="1.0" encoding="UTF-8"?>';
-        $outputFromIdp .= '<SOAP-ENV:Envelope xmlns:SOAP-ENV="http://schemas.xmlsoap.org/soap/envelope/">';
-        $outputFromIdp .= '<SOAP-ENV:Body>';
-        $xmlMessage = $message->toSignedXML();
-        Utils::getContainer()->debugMessage($xmlMessage, 'out');
-        $tempOutputFromIdp = $xmlMessage->ownerDocument->saveXML($xmlMessage);
-        $outputFromIdp .= $tempOutputFromIdp;
-        $outputFromIdp .= '</SOAP-ENV:Body>';
-        $outputFromIdp .= '</SOAP-ENV:Envelope>';
+        $envelope = <<<SOAP
+<?xml version="1.0" encoding="utf-8"?>
+<SOAP-ENV:Envelope xmlns:SOAP-ENV="%s">
+    <SOAP-ENV:Header />
+    <SOAP-ENV:Body />
+</SOAP-ENV:Envelope>
+SOAP;
+        $envelope = sprintf($envelope, Constants::NS_SOAP);
 
-        return $outputFromIdp;
+        $doc = new DOMDocument;
+        $doc->loadXML($envelope);
+
+        // In the Artifact Resolution profile, this will be an ArtifactResolve
+        // containing another message (e.g. a Response), however in the ECP
+        // profile, this is the Response itself.
+        if ($message instanceof Response) {
+            $header = $doc->getElementsByTagNameNS(Constants::NS_SOAP, 'Header')->item(0);
+
+            $response = new ECPResponse;
+            $response->AssertionConsumerServiceURL = $this->getDestination() ?: $message->getDestination();
+
+            $response->toXML($header);
+
+            // TODO We SHOULD add ecp:RequestAuthenticated SOAP header if we
+            // authenticated the AuthnRequest. It may make sense to have a
+            // standardized way for Message objects to contain (optional) SOAP
+            // headers for use with the SOAP binding.
+            //
+            // https://docs.oasis-open.org/security/saml/Post2.0/saml-ecp/v2.0/cs01/saml-ecp-v2.0-cs01.html#_Toc366664733
+            // See Section 2.3.6.1
+        }
+
+        $body = $doc->getElementsByTagNameNs(Constants::NS_SOAP, 'Body')->item(0);
+
+        $body->appendChild($doc->importNode($message->toSignedXML(), true));
+
+        return $doc->saveXML();
     }
 
     /**
@@ -30,11 +60,17 @@ class SOAP extends Binding
      * Note: This function never returns.
      *
      * @param \SAML2\Message $message The message we should send.
+     *
+     * @SuppressWarnings(PHPMD.ExitExpression)
      */
     public function send(Message $message)
     {
         header('Content-Type: text/xml', true);
-        print($this->getOutputToSend($message));
+
+        $xml = $this->getOutputToSend($message);
+        SAML2_Utils::getContainer()->debugMessage($xml, 'out');
+        echo $xml;
+
         exit(0);
     }
 
