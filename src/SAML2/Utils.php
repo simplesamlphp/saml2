@@ -418,9 +418,9 @@ class Utils
             throw new \Exception('Could not locate <dsig:KeyInfo> for the encrypted key.');
         }
 
-        $inputKeyAlgo = $inputKey->getAlgorith();
+        $inputKeyAlgo = $inputKey->getAlgorithm();
         if ($symmetricKeyInfo->isEncrypted) {
-            $symKeyInfoAlgo = $symmetricKeyInfo->getAlgorith();
+            $symKeyInfoAlgo = $symmetricKeyInfo->getAlgorithm();
 
             if (in_array($symKeyInfoAlgo, $blacklist, true)) {
                 throw new \Exception('Algorithm disabled: ' . var_export($symKeyInfoAlgo, true));
@@ -488,7 +488,7 @@ class Utils
             }
             $symmetricKey->loadkey($key);
         } else {
-            $symKeyAlgo = $symmetricKey->getAlgorith();
+            $symKeyAlgo = $symmetricKey->getAlgorithm();
             /* Make sure that the input key has the correct format. */
             if ($inputKeyAlgo !== $symKeyAlgo) {
                 throw new \Exception(
@@ -500,7 +500,7 @@ class Utils
             $symmetricKey = $inputKey;
         }
 
-        $algorithm = $symmetricKey->getAlgorith();
+        $algorithm = $symmetricKey->getAlgorithm();
         if (in_array($algorithm, $blacklist, true)) {
             throw new \Exception('Algorithm disabled: ' . var_export($algorithm, true));
         }
