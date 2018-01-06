@@ -31,7 +31,6 @@ class KeyLoader
      * @param \SAML2\Configuration\CertificateProvider $config
      * @param null                                    $usage
      * @param bool                                    $required
-     * @param string                                  $prefix
      *
      * @return \SAML2\Certificate\KeyCollection
      */
@@ -39,7 +38,6 @@ class KeyLoader
         CertificateProvider $config,
         $usage = null,
         $required = false,
-        $prefix = ''
     ) {
         $keyLoader = new self();
 
