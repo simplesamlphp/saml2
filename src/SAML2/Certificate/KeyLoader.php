@@ -37,7 +37,7 @@ class KeyLoader
     public static function extractPublicKeys(
         CertificateProvider $config,
         $usage = null,
-        $required = false,
+        $required = false
     ) {
         $keyLoader = new self();
 
