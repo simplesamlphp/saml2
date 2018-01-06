@@ -265,6 +265,7 @@ class Assertion implements SignedElement
         $this->certificates = array();
         $this->AuthenticatingAuthority = array();
         $this->SubjectConfirmation = array();
+        $this->requiredEncAttributes = false;
 
         if ($xml === null) {
             return;
