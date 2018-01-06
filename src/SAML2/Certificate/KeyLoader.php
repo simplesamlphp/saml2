@@ -43,7 +43,7 @@ class KeyLoader
     ) {
         $keyLoader = new self();
 
-        return $keyLoader->loadKeysFromConfiguration($config, $usage, $required, $prefix, $keyLoader);
+        return $keyLoader->loadKeysFromConfiguration($config, $usage, $required);
     }
 
     /**
