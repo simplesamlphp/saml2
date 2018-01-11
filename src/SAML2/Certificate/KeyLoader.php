@@ -60,11 +60,11 @@ class KeyLoader
         $certificateData = $config->getCertificateData();
         $certificateFile = $config->getCertificateFile();
 
-        if ($keys) {
+        if ($keys !== null) {
             $this->loadKeys($keys, $usage);
-        } elseif ($certificateData) {
+        } elseif ($certificateData !== null) {
             $this->loadCertificateData($certificateData);
-        } elseif ($certificateFile) {
+        } elseif ($certificateFile !== null) {
             $this->loadCertificateFile($certificateFile);
         }
 
