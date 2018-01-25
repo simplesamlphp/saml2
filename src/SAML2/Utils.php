@@ -691,7 +691,7 @@ class SAML2_Utils
         $matches = array();
 
         // We use a very strict regex to parse the timestamp.
-        $regex = '/^(\\d\\d\\d\\d)-(\\d\\d)-(\\d\\d)T(\\d\\d):(\\d\\d):(\\d\\d)(?:\\.\\d{1,3})?Z$/D';
+        $regex = '/^(\\d\\d\\d\\d)-(\\d\\d)-(\\d\\d)T(\\d\\d):(\\d\\d):(\\d\\d)(?:\\.\\d{1,9})?Z$/D';
         if (preg_match($regex, $time, $matches) == 0) {
             throw new Exception(
                 'Invalid SAML2 timestamp passed to xsDateTimeToTimestamp: ' . $time
