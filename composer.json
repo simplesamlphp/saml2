@@ -1,7 +1,7 @@
 {
     "name": "simplesamlphp/saml2",
     "description": "SAML2 PHP library from SimpleSAMLphp",
-    "license": "LGPL-2.1",
+    "license": "LGPL-2.1-or-later",
     "authors": [
         {
             "name": "Andreas Åkre Solberg",
