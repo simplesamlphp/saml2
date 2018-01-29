@@ -15,24 +15,14 @@ Before you use it
 If you are not familiar with the SAML2 specification and are simply looking to connect your application using SAML2,
 you should probably use [SimpleSAMLphp](https://www.simplesamlphp.org).
 
-While this library is tagged as stable it is currently not very developer friendly and its API is likely to change
-significantly in the future. It is however a starting point for collaboration between parties.
-So let us know what you would like to see in a PHP SAML2 library.
-
 Note that the **HTTP Artifact Binding and SOAP client do not work** outside of SimpleSAMLphp.
 
 Which version to pick?
 ----------------------
-It is **strongly recommended** to use the latest stable version of the `3.x` range as that is the currently supported version. 
+The latest released version (`3.x` range) is the _only supported version_.
 
-The `1.x` range should be considered deprecated. This means it will receive fixes and, if required,
- functionality may be backported. This version should only be relied on if migrating the project to
- the `2.x` range cannot be done yet.
-
-The `0.x` range is discontinued and will no longer receive any fixes or features. The `0.x` range however
- is functionally the same as the `1.x` range. Should your project or a dependency of your project rely on a `0.x` version
- [composer inline aliasing](https://getcomposer.org/doc/articles/aliases.md#require-inline-alias) will help, by using
- `composer require "simplesamlphp/saml2:1.7.0 as 0.8"` allows to install 1.7.0 as if 0.8 were installed.
+All other branches (`2.x` and earlier) are no longer supported and will not receive any maintenance or
+(security) fixes. Do not use these versions.
 
 Usage
 -----
@@ -46,7 +36,7 @@ composer require simplesamlphp/saml2:^3.0
 * Provide the required external dependencies by extending and implementing the ```SAML2\Compat\AbstractContainer```
   then injecting it in the ContainerSingleton (see example below).
 
-* **Make sure you've read the security section below**
+* **Make sure you've read the security section below**.
 
 * Use at will.
 Example:
