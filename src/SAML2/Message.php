@@ -456,7 +456,7 @@ abstract class Message implements SignedElement
 
         if ($this->issuer !== null) {
             if (is_string($this->issuer)) {
-                Utils::addString($root, \SAML2_Const::NS_SAML, 'saml:Issuer', $this->issuer);
+                Utils::addString($root, Constants::NS_SAML, 'saml:Issuer', $this->issuer);
             } elseif ($this->issuer instanceof XML\saml\Issuer) {
                 $this->issuer->toXML($root);
             }
