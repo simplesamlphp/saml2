@@ -119,6 +119,15 @@ class Utils
             return $key;
         }
 
+        if (!in_array($algorithm, array(
+            XMLSecurityKey::RSA_SHA1,
+            XMLSecurityKey::RSA_SHA256,
+            XMLSecurityKey::RSA_SHA384,
+            XMLSecurityKey::RSA_SHA512
+        ))) {
+            throw new \Exception('Unsupported signing algorithm.');
+        }
+
         $keyInfo = openssl_pkey_get_details($key->key);
         if ($keyInfo === false) {
             throw new \Exception('Unable to get key details from XMLSecurityKey.');
