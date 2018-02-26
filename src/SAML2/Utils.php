@@ -108,6 +108,7 @@ class SAML2_Utils
         }
 
         if (!in_array($algorithm, array(
+            XMLSecurityKey::RSA_1_5,
             XMLSecurityKey::RSA_SHA1,
             XMLSecurityKey::RSA_SHA256,
             XMLSecurityKey::RSA_SHA384,
