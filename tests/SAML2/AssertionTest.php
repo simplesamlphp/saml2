@@ -827,6 +827,26 @@ XML;
         $this->assertTrue($assertion->getWasSignedAtConstruction());
     }
 
+
+    /**
+     * Make sure an assertion whose signature verifies cannot be tampered by using XML comments.
+     * @see https://duo.com/labs/psa/duo-psa-2017-003
+     */
+    public function testCommentsInSignedAssertion()
+    {
+        $doc = new \DOMDocument();
+        $doc->load(__DIR__ . '/signedassertion_with_comments.xml');
+
+        $publicKey = CertificatesMock::getPublicKeySha1();
+
+        $assertion = new Assertion($doc->firstChild);
+        $result = $assertion->validate($publicKey);
+
+        $this->assertTrue($result);
+        $this->assertEquals("_1bbcf227253269d19a689c53cdd542fe2384a9538b", $assertion->getNameId()['Value']);
+    }
+
+
     /**
      * Try to verify a signed assertion in which a byte was changed after signing.
      * Must yield a validation exception.
