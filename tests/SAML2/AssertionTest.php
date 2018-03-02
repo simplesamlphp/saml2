@@ -748,7 +748,8 @@ XML;
         $result = $assertion->validate($publicKey);
 
         $this->assertTrue($result);
-        $this->assertEquals("_1bbcf227253269d19a689c53cdd542fe2384a9538b", $assertion->getNameId()['Value']);
+        $nameId = $assertion->getNameId();
+        $this->assertEquals("_1bbcf227253269d19a689c53cdd542fe2384a9538b", $nameId['Value']);
     }
 
 
