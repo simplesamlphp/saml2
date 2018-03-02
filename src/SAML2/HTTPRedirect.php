@@ -222,7 +222,7 @@ class SAML2_HTTPRedirect extends SAML2_Binding
             $key = SAML2_Utils::castKey($key, $sigAlg);
         }
 
-        if (!$key->verifySignature($query, $signature)) {
+        if ($key->verifySignature($query, $signature) !== 1) {
             throw new Exception('Unable to validate signature on query string.');
         }
     }
