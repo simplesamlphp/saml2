@@ -62,6 +62,6 @@ XML
                   'SPNameQualifier="TheSPNameQualifier" Format="TheFormat" SPProvidedID="TheSPProvidedID">'.
                   'TheNameIDValue</saml:NameID>';
 
-        $this->assertXmlStringEqualsXmlString($output, $nameId);
+        $this->assertXmlStringEqualsXmlString($output, $nameId->__toString());
     }
 }
