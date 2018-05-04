@@ -822,7 +822,7 @@ class Assertion implements SignedElement
      */
     public function hasEncryptedAttributes()
     {
-        return $this->encryptedAttributes !== null && $this->encryptedAttributes !== [];
+        return $this->encryptedAttributes !== [];
     }
 
     /**
@@ -834,7 +834,7 @@ class Assertion implements SignedElement
      */
     public function decryptAttributes(XMLSecurityKey $key, array $blacklist = array())
     {
-        if ($this->encryptedAttributes === null) {
+        if (!$this->hasEncryptedAttributes()) {
             return;
         }
         $firstAttribute = true;
