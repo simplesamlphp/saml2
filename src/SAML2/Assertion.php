@@ -61,9 +61,9 @@ class Assertion implements SignedElement
     /**
      * The encrypted Attributes.
      *
-     * If this is not null, these Attributes need decryption before they can be accessed.
+     * If this is not an empty array, these Attributes need decryption before they can be used.
      *
-     * @var \DOMElement[]|null
+     * @var \DOMElement[]
      */
     private $encryptedAttributes;
 
@@ -822,7 +822,7 @@ class Assertion implements SignedElement
      */
     public function hasEncryptedAttributes()
     {
-        return $this->encryptedAttributes !== null;
+        return $this->encryptedAttributes !== [];
     }
 
     /**
@@ -834,7 +834,7 @@ class Assertion implements SignedElement
      */
     public function decryptAttributes(XMLSecurityKey $key, array $blacklist = array())
     {
-        if ($this->encryptedAttributes === null) {
+        if (!$this->hasEncryptedAttributes()) {
             return;
         }
         $firstAttribute = true;
