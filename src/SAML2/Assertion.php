@@ -61,9 +61,9 @@ class Assertion implements SignedElement
     /**
      * The encrypted Attributes.
      *
-     * If this is not null, these Attributes need decryption before they can be accessed.
+     * If this is not an empty array, these Attributes need decryption before they can be used.
      *
-     * @var \DOMElement[]|null
+     * @var \DOMElement[]
      */
     private $encryptedAttributes;
 
