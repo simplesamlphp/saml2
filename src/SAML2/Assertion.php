@@ -822,7 +822,7 @@ class Assertion implements SignedElement
      */
     public function hasEncryptedAttributes()
     {
-        return $this->encryptedAttributes !== null;
+        return $this->encryptedAttributes !== null && $this->encryptedAttributes !== [];
     }
 
     /**
