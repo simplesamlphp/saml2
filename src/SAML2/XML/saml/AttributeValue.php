@@ -33,7 +33,7 @@ class AttributeValue implements \Serializable
      *
      * @param mixed $value The value of this element. Can be one of:
      *  - a scalar                     Create an attribute value with a simple value.
-     *  - a \XML\saml\NameID           Create an attribute value of the given NameID.
+     *  - a NameID                     Create an attribute value of the given NameID.
      *  - \DOMElement(AttributeValue)  Create an attribute value of the given DOMElement.
      *  - \DOMElement                  Create an attribute value with the given DOMElement as a child.
      */
@@ -57,7 +57,7 @@ class AttributeValue implements \Serializable
             return;
         }
         
-        if ($value instanceof \XML\saml\NameID) {
+        if ($value instanceof NameID) {
             $this->element = $value->toXML();
             return;
         }
