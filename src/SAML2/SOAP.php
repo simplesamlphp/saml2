@@ -27,6 +27,7 @@ class SOAP extends Binding
         return SAML2_Const::BINDING_SOAP;
     }
 
+
     public function getOutputToSend(Message $message)
     {
         $envelope = <<<SOAP
@@ -120,6 +121,7 @@ SOAP;
 
         return Message::fromXML($results[0]);
     }
+
 
     /**
      * @return string|false

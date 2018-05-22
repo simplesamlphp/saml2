@@ -12,16 +12,6 @@ namespace SAML2;
 class HTTPPost extends Binding
 {
     /**
-     * Return the URN of this binding
-     *
-     * @return string The URN of the binding
-     */
-    public function getURN()
-    {
-        return SAML2_Const::BINDING_HTTP_POST;
-    }
-
-    /**
      * Send a SAML 2 message using the HTTP-POST binding.
      *
      * Note: This function never returns.
