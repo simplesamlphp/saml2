@@ -762,7 +762,7 @@ class AuthnRequest extends Request
                                 'ProviderID',
                                 'Loc',
                                 'Name'
-                            ))) {
+                            ), true)) {
                                 $idpEntry->setAttribute($attribute, $value);
                             }
                         }

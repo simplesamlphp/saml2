@@ -125,7 +125,7 @@ class Utils
             XMLSecurityKey::RSA_SHA256,
             XMLSecurityKey::RSA_SHA384,
             XMLSecurityKey::RSA_SHA512
-        ))) {
+        ), true)) {
             throw new \Exception('Unsupported signing algorithm.');
         }
 
