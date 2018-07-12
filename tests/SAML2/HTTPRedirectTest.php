@@ -82,12 +82,12 @@ class HTTPRedirectTest extends PHPUnit_Framework_TestCase
         $request = $hr->receive();
 
         // validate with the correct certificate, should verify
-        $result = $request->validate(CertificatesMock::getPublicKey2Sha1());
+        $result = $request->validate(CertificatesMock::getPublicKey2Sha256());
         $this->assertTrue($result);
 
         // validate with another cert, should fail
         $this->setExpectedException('Exception', 'Unable to validate signature');
-        $result = $request->validate(CertificatesMock::getPublicKeySha1());
+        $result = $request->validate(CertificatesMock::getPublicKeySha256());
     }
 
     /**

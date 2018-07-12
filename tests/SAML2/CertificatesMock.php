@@ -138,22 +138,24 @@ UQ==
     /**
      * @return XMLSecurityKey
      */
-    public static function getPublicKeySha1()
+    public static function getPublicKeySha256()
     {
-        $publicKey = new XMLSecurityKey(XMLSecurityKey::RSA_SHA1, array('type'=>'public'));
+        $publicKey = new XMLSecurityKey(XMLSecurityKey::RSA_SHA256, array('type'=>'public'));
         $publicKey->loadKey(self::PUBLIC_KEY_PEM);
         return $publicKey;
     }
 
+
     /**
      * @return XMLSecurityKey
      */
-    public static function getPublicKey2Sha1()
+    public static function getPublicKey2Sha256()
     {
-        $publicKey = new XMLSecurityKey(XMLSecurityKey::RSA_SHA1, array('type'=>'public'));
+        $publicKey = new XMLSecurityKey(XMLSecurityKey::RSA_SHA256, array('type'=>'public'));
         $publicKey->loadKey(self::PUBLIC_KEY_2_PEM);
         return $publicKey;
     }
+
 
     /**
      * Load a X.509 certificate with a DSA public key as RSA key
@@ -161,7 +163,7 @@ UQ==
      */
     public static function getPublicKeyDSAasRSA()
     {
-        $publicKey = new XMLSecurityKey(XMLSecurityKey::RSA_SHA1, array('type'=>'public'));
+        $publicKey = new XMLSecurityKey(XMLSecurityKey::RSA_SHA256, array('type'=>'public'));
         $publicKey->loadKey(self::PUBLIC_KEY_DSA_PEM);
         return $publicKey;
     }

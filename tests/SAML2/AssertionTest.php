@@ -943,7 +943,7 @@ XML;
         $doc = new \DOMDocument();
         $doc->load(__DIR__ . '/signedassertion.xml');
 
-        $publicKey = CertificatesMock::getPublicKeySha1();
+        $publicKey = CertificatesMock::getPublicKeySha256();
 
         $assertion = new Assertion($doc->firstChild);
         $result = $assertion->validate($publicKey);
@@ -972,7 +972,7 @@ XML;
         $doc = new \DOMDocument();
         $doc->load(__DIR__ . '/signedassertion_with_comments.xml');
 
-        $publicKey = CertificatesMock::getPublicKeySha1();
+        $publicKey = CertificatesMock::getPublicKeySha256();
 
         $assertion = new Assertion($doc->firstChild);
         $result = $assertion->validate($publicKey);
@@ -991,7 +991,7 @@ XML;
         $doc = new \DOMDocument();
         $doc->load(__DIR__ . '/signedassertion_tampered.xml');
 
-        $publicKey = CertificatesMock::getPublicKeySha1();
+        $publicKey = CertificatesMock::getPublicKeySha256();
 
         $this->setExpectedException('Exception', 'Reference validation failed');
         $assertion = new Assertion($doc->firstChild);
@@ -1006,7 +1006,7 @@ XML;
         $doc = new \DOMDocument();
         $doc->load(__DIR__ . '/signedassertion.xml');
 
-        $publicKey = CertificatesMock::getPublicKey2Sha1();
+        $publicKey = CertificatesMock::getPublicKey2Sha256();
 
         $assertion = new Assertion($doc->firstChild);
         $this->setExpectedException('Exception', 'Unable to validate Signature');
@@ -1063,7 +1063,7 @@ XML;
         // Was not signed
         $this->assertFalse($assertion->getWasSignedAtConstruction());
 
-        $publicKey = CertificatesMock::getPublicKeySha1();
+        $publicKey = CertificatesMock::getPublicKeySha256();
         $result = $assertion->validate($publicKey);
         $this->assertFalse($result);
     }

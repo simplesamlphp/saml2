@@ -642,7 +642,7 @@ class Assertion implements SignedElement
      */
     public function validate(XMLSecurityKey $key)
     {
-        assert($key->type === \RobRichards\XMLSecLibs\XMLSecurityKey::RSA_SHA1);
+        assert($key->type === \RobRichards\XMLSecLibs\XMLSecurityKey::RSA_SHA256);
 
         if ($this->signatureData === null) {
             return false;
