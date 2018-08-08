@@ -111,7 +111,7 @@ abstract class NameIDType extends BaseIDType
     /**
      * Convert this NameIDType to XML.
      *
-     * @param \DOMElement $element The element we are converting to XML.
+     * @param \DOMElement $parent The element we are converting to XML.
      *
      * @return \DOMElement The XML element after adding the data corresponding to this NameIDType.
      */
