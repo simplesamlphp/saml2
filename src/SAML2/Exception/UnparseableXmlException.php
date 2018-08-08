@@ -14,7 +14,7 @@ final class UnparseableXmlException extends RuntimeException
     {
         $message = sprintf(
             'Unable to parse XML - "%s[%d]": "%s" in "%s" at line %d on column %d"',
-            static::$levelMap[$error->level],
+            self::$levelMap[$error->level],
             $error->code,
             $error->message,
             $error->file ?: '(string)',
