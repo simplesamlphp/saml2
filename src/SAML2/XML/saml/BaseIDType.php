@@ -43,6 +43,11 @@ abstract class BaseIDType
      */
     protected $nodeName;
 
+    /**
+     * @var \DOMElement
+     */
+    protected $element;
+
 
     /**
      * Initialize a saml:BaseID, either from scratch or from an existing \DOMElement.
@@ -70,7 +75,7 @@ abstract class BaseIDType
     /**
      * Convert this BaseID to XML.
      *
-     * @param \DOMElement $element The element we are converting to XML.
+     * @param \DOMElement $parent The element we are converting to XML.
      * @return \DOMElement The XML element after adding the data corresponding to this BaseID.
      */
     public function toXML(\DOMElement $parent = null)
