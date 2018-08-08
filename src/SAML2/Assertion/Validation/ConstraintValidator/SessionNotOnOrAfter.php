@@ -14,7 +14,7 @@ class SessionNotOnOrAfter implements
     {
         $sessionNotOnOrAfterTimestamp = $assertion->getSessionNotOnOrAfter();
         $currentTime = Temporal::getTime();
-        if ($sessionNotOnOrAfterTimestamp && $sessionNotOnOrAfterTimestamp <= $currentTime - 60) {
+        if (($sessionNotOnOrAfterTimestamp !== null) && ($sessionNotOnOrAfterTimestamp <= ($currentTime - 60))) {
             $result->addError(
                 'Received an assertion with a session that has expired. Check clock synchronization on IdP and SP.'
             );

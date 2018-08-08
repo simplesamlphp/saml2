@@ -38,7 +38,7 @@ class PrivateKeyLoader
         $decryptionKeys = new ArrayCollection();
 
         $senderSharedKey = $identityProvider->getSharedKey();
-        if ($senderSharedKey) {
+        if ($senderSharedKey !== null) {
             $key = new XMLSecurityKey(XMLSecurityKey::AES128_CBC);
             $key->loadKey($senderSharedKey);
             $decryptionKeys->add($key);
