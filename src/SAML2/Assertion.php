@@ -1384,8 +1384,12 @@ class Assertion implements SignedElement
 
         if (is_string($this->issuer)) {
             $issuer = Utils::addString($root, Constants::NS_SAML, 'saml:Issuer', $this->issuer);
+            $nextSibling = $issuer->nextSibling;
         } elseif ($this->issuer instanceof XML\saml\Issuer) {
             $issuer = $this->issuer->toXML($root);
+            $nextSibling = $issuer->nextSibling;
+        } else {
+            $nextSibling = null;
         }
 
         $this->addSubject($root);
@@ -1398,7 +1402,7 @@ class Assertion implements SignedElement
         }
 
         if ($this->signatureKey !== null) {
-            Utils::insertSignature($this->signatureKey, $this->certificates, $root, $issuer->nextSibling);
+            Utils::insertSignature($this->signatureKey, $this->certificates, $root, $nextSibling);
         }
 
         return $root;
@@ -1637,6 +1641,9 @@ class Assertion implements SignedElement
     private function addEncryptedAttributeStatement(\DOMElement $root)
     {
         if ($this->requiredEncAttributes === false) {
+            return;
+        }
+        if ($this->encryptionKey === null) {
             return;
         }
 
