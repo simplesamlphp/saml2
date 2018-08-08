@@ -49,7 +49,7 @@ class SimpleSAMLConverter
      *
      * @return array
      */
-    private static function pluckConfiguration(SimpleSAML_Configuration $configuration, $prefix = '')
+    protected static function pluckConfiguration(SimpleSAML_Configuration $configuration, $prefix = '')
     {
         $extracted = array();
 
@@ -86,18 +86,18 @@ class SimpleSAMLConverter
         return $extracted;
     }
 
-    private static function enrichForIdentityProvider(SimpleSAML_Configuration $configuration, &$baseConfiguration)
+    protected static function enrichForIdentityProvider(SimpleSAML_Configuration $configuration, &$baseConfiguration)
     {
         $baseConfiguration['base64EncodedAttributes'] = $configuration->getBoolean('base64attributes', false);
         $baseConfiguration['entityId'] = $configuration->getString('entityid');
     }
 
-    private static function enrichForServiceProvider(SimpleSAML_Configuration $configuration, &$baseConfiguration)
+    protected static function enrichForServiceProvider(SimpleSAML_Configuration $configuration, &$baseConfiguration)
     {
         $baseConfiguration['entityId'] = $configuration->getString('entityid');
     }
 
-    private static function enrichForDecryptionProvider(
+    protected static function enrichForDecryptionProvider(
         SimpleSAML_Configuration $configuration,
         array &$baseConfiguration
     ) {
