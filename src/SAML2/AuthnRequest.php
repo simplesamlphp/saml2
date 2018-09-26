@@ -446,7 +446,7 @@ class AuthnRequest extends Request
     }
 
     /**
-     * @return int
+     * @return int|null
      */
     public function getProxyCount()
     {
