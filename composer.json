@@ -14,7 +14,7 @@
         "ext-dom": "*",
         "ext-zlib": "*",
 
-        "robrichards/xmlseclibs": "dev-master#93f8c07976b36b6050ab341ab5850484dc897ce0 as 3.0.2",
+        "robrichards/xmlseclibs": "^3.0",
         "psr/log": "~1.0"
     },
     "require-dev": {
