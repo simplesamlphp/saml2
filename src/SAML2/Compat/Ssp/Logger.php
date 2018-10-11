@@ -3,6 +3,7 @@
 namespace SAML2\Compat\Ssp;
 
 use Psr\Log\LoggerInterface;
+use Psr\Log\LogLevel;
 
 class Logger implements LoggerInterface
 {
@@ -124,29 +125,35 @@ class Logger implements LoggerInterface
     public function log($level, $message, array $context = array())
     {
         switch ($level) {
-            case \SimpleSAML\Logger::ALERT:
-                \SimpleSAML\Logger::alert($message);
+            /* From PSR:  Calling this method with one of the log level constants
+            MUST have the same result as calling the level-specific method
+            */
+            case LogLevel::ALERT:
+                $this->alert($message, $context);
                 break;
-            case \SimpleSAML\Logger::CRIT:
-                \SimpleSAML\Logger::critical($message);
+            case LogLevel::CRITICAL:
+                $this->critical($message, $context);
                 break;
-            case \SimpleSAML\Logger::DEBUG:
-                \SimpleSAML\Logger::debug($message);
+            case LogLevel::DEBUG:
+                $this->debug($message, $context);
                 break;
-            case \SimpleSAML\Logger::EMERG:
-                \SimpleSAML\Logger::emergency($message);
+            case LogLevel::EMERGENCY:
+                $this->emergency($message, $context);
                 break;
-            case \SimpleSAML\Logger::ERR:
-                \SimpleSAML\Logger::error($message);
+            case LogLevel::ERROR:
+                $this->error($message, $context);
                 break;
-            case \SimpleSAML\Logger::INFO:
-                \SimpleSAML\Logger::info($message);
+            case LogLevel::INFO:
+                $this->info($message, $context);
                 break;
-            case \SimpleSAML\Logger::NOTICE:
-                \SimpleSAML\Logger::notice($message);
+            case LogLevel::NOTICE:
+                $this->notice($message, $context);
                 break;
-            case \SimpleSAML\Logger::WARNING:
-                \SimpleSAML\Logger::warning($message);
+            case LogLevel::WARNING:
+                $this->warning($message, $context);
+                break;
+            default:
+                throw new \Psr\Log\InvalidArgumentException("Unrecognized log level '$level''");
         }
     }
 }
