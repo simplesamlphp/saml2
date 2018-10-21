@@ -83,7 +83,7 @@ class KeyLoader
      * are not configured to be used with the usage given
      *
      * @param array $configuredKeys
-     * @param       $usage
+     * @param string $usage
      */
     public function loadKeys(array $configuredKeys, $usage)
     {

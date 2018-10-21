@@ -1179,10 +1179,9 @@ class Assertion implements SignedElement
     /**
      * Set the AuthenticatingAuthority
      *
-     *
      * @param array.
      */
-    public function setAuthenticatingAuthority($authenticatingAuthority)
+    public function setAuthenticatingAuthority(array $authenticatingAuthority)
     {
         $this->AuthenticatingAuthority = $authenticatingAuthority;
     }

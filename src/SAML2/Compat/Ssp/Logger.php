@@ -14,7 +14,7 @@ class Logger implements LoggerInterface
      * @param array $context
      * @return null
      */
-    public function emergency($message, array $context = array())
+    public function emergency($message, array $context = [])
     {
         \SimpleSAML\Logger::emergency($message . var_export($context, true));
     }
@@ -29,7 +29,7 @@ class Logger implements LoggerInterface
      * @param array $context
      * @return null
      */
-    public function alert($message, array $context = array())
+    public function alert($message, array $context = [])
     {
         \SimpleSAML\Logger::alert($message . var_export($context, true));
     }
@@ -43,7 +43,7 @@ class Logger implements LoggerInterface
      * @param array $context
      * @return null
      */
-    public function critical($message, array $context = array())
+    public function critical($message, array $context = [])
     {
         \SimpleSAML\Logger::critical($message . var_export($context, true));
     }
@@ -56,7 +56,7 @@ class Logger implements LoggerInterface
      * @param array $context
      * @return null
      */
-    public function error($message, array $context = array())
+    public function error($message, array $context = [])
     {
         \SimpleSAML\Logger::error($message . var_export($context, true));
     }
@@ -71,7 +71,7 @@ class Logger implements LoggerInterface
      * @param array $context
      * @return null
      */
-    public function warning($message, array $context = array())
+    public function warning($message, array $context = [])
     {
         \SimpleSAML\Logger::warning($message . var_export($context, true));
     }
@@ -83,7 +83,7 @@ class Logger implements LoggerInterface
      * @param array $context
      * @return null
      */
-    public function notice($message, array $context = array())
+    public function notice($message, array $context = [])
     {
         \SimpleSAML\Logger::notice($message . var_export($context, true));
     }
@@ -97,7 +97,7 @@ class Logger implements LoggerInterface
      * @param array $context
      * @return null
      */
-    public function info($message, array $context = array())
+    public function info($message, array $context = [])
     {
         \SimpleSAML\Logger::info($message . var_export($context, true));
     }
@@ -109,7 +109,7 @@ class Logger implements LoggerInterface
      * @param array $context
      * @return null
      */
-    public function debug($message, array $context = array())
+    public function debug($message, array $context = [])
     {
         \SimpleSAML\Logger::debug($message . var_export($context, true));
     }
@@ -122,7 +122,7 @@ class Logger implements LoggerInterface
      * @param array $context
      * @return null
      */
-    public function log($level, $message, array $context = array())
+    public function log($level, $message, array $context = [])
     {
         switch ($level) {
             /* From PSR:  Calling this method with one of the log level constants
