@@ -165,4 +165,22 @@ AUTHNREQUEST
 
         $this->assertEquals($privateKey->getAlgorith(), $signedMessage->getSignatureMethod());
     }
+
+    /**
+     * @group Message
+     * @covers \SAML2\Message::setExtensions()
+     * @covers \SAML2\Message::getExtensions()
+     */
+    public function testSetExtensions()
+    {
+        $response = new \DOMDocument();
+        $response->load(__DIR__.'/Response/response.xml');
+
+        $unsignedMessage = Message::fromXML($response->documentElement);
+        $unsignedMessage->setExtensions(false);
+        $this->assertEquals($unsignedMessage->getExtensions, []);
+
+        $unsignedMessage->setExtensions(['1', '2', '3']);
+        $this->assertEquals($unsignedMessage->getExtensions, ['1', '2', '3']);
+    }
 }
