@@ -554,15 +554,13 @@ class Assertion implements SignedElement
             foreach ($values as $index => $eptiAttributeValue) {
                 $eptiNameId = Utils::xpQuery($eptiAttributeValue, './saml_assertion:NameID');
 
-                if (count($eptiNameId) !== 1) {
-                    throw new RuntimeException(sprintf(
-                        'A "%s" (EPTI) attribute value must be a NameID, none found for value no. "%d"',
-                        $attributeName,
-                        $index
-                    ));
+                if (count($eptiNameId) === 1) {
+                    $this->attributes[$attributeName][] = new XML\saml\NameID($eptiNameId[0]);
+                } else {
+                    /* Fall back for legacy IdPs sending string value (e.g. SSP < 1.15) */
+                    Utils::getContainer()->getLogger()->warning(sprintf("Attribute %s (EPTI) value %d is not an XML NameId", $attributeName, $index));
+                    $this->attributes[$attributeName][] = XML\saml\NameID::fromArray(['Value' => $eptiAttributeValue->textContent]);
                 }
-
-                $this->attributes[$attributeName][] = new XML\saml\NameID($eptiNameId[0]);
             }
 
             return;
