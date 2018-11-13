@@ -250,8 +250,7 @@ AUTHNREQUEST
         $xml = $message->toUnsignedXML();
         $xml_exts = Utils::xpQuery($xml, './samlp:Extensions');
         $this->assertCount(1, $xml_exts);
-        $this->assertCount(1, $xml_exts[0]->childNodes);
-        $this->assertEquals("test", $xml_exts[0]->childNodes[0]->localName);
-        $this->assertEquals("Test data!", $xml_exts[0]->childNodes[0]->textContent);
+        $this->assertEquals("test", $xml_exts[0]->childNodes->item(0)->localName);
+        $this->assertEquals("Test data!", $xml_exts[0]->childNodes->item(0)->textContent);
     }
 }
