@@ -165,4 +165,93 @@ AUTHNREQUEST
 
         $this->assertEquals($privateKey->getAlgorith(), $signedMessage->getSignatureMethod());
     }
+
+    /**
+     * @group Message
+     */
+    public function testGetExtensions() {
+        $authnRequest = new \DOMDocument();
+        $authnRequest->loadXML(<<<'AUTHNREQUEST'
+<samlp:AuthnRequest
+    xmlns:samlp="urn:oasis:names:tc:SAML:2.0:protocol"
+    xmlns:saml="urn:oasis:names:tc:SAML:2.0:assertion"
+    AssertionConsumerServiceIndex="1"
+    Destination="https://tiqr.stepup.org/idp/profile/saml2/Redirect/SSO"
+    ID="_2b0226190ca1c22de6f66e85f5c95158"
+    IssueInstant="2014-09-22T13:42:00Z"
+    Version="2.0">
+  <saml:Issuer NameQualifier="https://gateway.stepup.org/saml20/sp/metadata"
+    SPNameQualifier="https://spnamequalifier.com"
+    SPProvidedID="ProviderID"
+    Format="urn:oasis:names:tc:SAML:1.1:nameid-format:unspecified">
+        https://gateway.stepup.org/saml20/sp/metadata
+  </saml:Issuer>
+  <samlp:Extensions>
+    <myextElt att="value3">example1</myextElt>
+    <myextElt att="value5" />
+  </samlp:Extensions>
+  <saml:Subject>
+        <saml:NameID Format="urn:oasis:names:tc:SAML:1.1:nameid-format:unspecified">user@example.org</saml:NameID>
+  </saml:Subject>
+</samlp:AuthnRequest>
+AUTHNREQUEST
+        );
+
+        $message = Message::fromXML($authnRequest->documentElement);
+        $exts = $message->getExtensions();
+        $this->assertCount(2, $exts);
+        $this->assertEquals("myextElt", $exts[0]->localName);
+        $this->assertEquals("example1", $exts[0]->xml->textContent);
+        $this->assertEquals("myextElt", $exts[1]->localName);
+    }
+
+    /**
+     * @group Message
+     */
+    public function testSetExtensions() {
+        $authnRequest = new \DOMDocument();
+        $authnRequest->loadXML(<<<'AUTHNREQUEST'
+<samlp:AuthnRequest
+    xmlns:samlp="urn:oasis:names:tc:SAML:2.0:protocol"
+    xmlns:saml="urn:oasis:names:tc:SAML:2.0:assertion"
+    AssertionConsumerServiceIndex="1"
+    Destination="https://tiqr.stepup.org/idp/profile/saml2/Redirect/SSO"
+    ID="_2b0226190ca1c22de6f66e85f5c95158"
+    IssueInstant="2014-09-22T13:42:00Z"
+    Version="2.0">
+  <saml:Issuer NameQualifier="https://gateway.stepup.org/saml20/sp/metadata"
+    SPNameQualifier="https://spnamequalifier.com"
+    SPProvidedID="ProviderID"
+    Format="urn:oasis:names:tc:SAML:1.1:nameid-format:unspecified">
+        https://gateway.stepup.org/saml20/sp/metadata
+  </saml:Issuer>
+  <saml:Subject>
+        <saml:NameID Format="urn:oasis:names:tc:SAML:1.1:nameid-format:unspecified">user@example.org</saml:NameID>
+  </saml:Subject>
+</samlp:AuthnRequest>
+AUTHNREQUEST
+        );
+
+        $message = Message::fromXML($authnRequest->documentElement);
+        $exts = $message->getExtensions();
+        $this->assertCount(0, $exts);
+
+        $dom = \SAML2\DOMDocumentFactory::create();
+        $ce = $dom->createElementNS('http://www.example.com/XFoo', 'xfoo:test', 'Test data!');
+        $newexts[] = new \SAML2\XML\Chunk($ce);
+
+        $message->setExtensions($newexts);
+
+        $exts = $message->getExtensions();
+        $this->assertCount(1, $exts);
+        $this->assertEquals("test", $exts[0]->localName);
+        $this->assertEquals("Test data!", $exts[0]->xml->textContent);
+
+        $xml = $message->toUnsignedXML();
+        $xml_exts = Utils::xpQuery($xml, './samlp:Extensions');
+        $this->assertCount(1, $xml_exts);
+        $this->assertCount(1, $xml_exts[0]->childNodes);
+        $this->assertEquals("test", $xml_exts[0]->childNodes[0]->localName);
+        $this->assertEquals("Test data!", $xml_exts[0]->childNodes[0]->textContent);
+    }
 }
