@@ -342,6 +342,46 @@ XML;
     }
 
 
+    /**
+     * @group Assertion
+     */
+    public function testConvertIssuerToXML()
+    {
+        // first, try with common Issuer objects (Format=entity)
+        $assertion = new Assertion();
+        $issuer = new XML\saml\Issuer();
+        $issuer->value = 'https://gateway.stepup.org/saml20/sp/metadata';
+        $assertion->setIssuer($issuer);
+        $xml = $assertion->toXML();
+        $xml_issuer = Utils::xpQuery($xml, './saml_assertion:Issuer');
+        $xml_issuer = $xml_issuer[0];
+
+        $this->assertFalse($xml_issuer->hasAttributes());
+        $this->assertEquals($issuer->value, $xml_issuer->textContent);
+
+        // now, try an Issuer with another format and attributes
+        $issuer->Format = Constants::NAMEID_UNSPECIFIED;
+        $issuer->NameQualifier = 'SomeNameQualifier';
+        $issuer->SPNameQualifier = 'SomeSPNameQualifier';
+        $issuer->SPProvidedID = 'SomeSPProvidedID';
+        $assertion->setIssuer($issuer);
+        $xml = $assertion->toXML();
+        $xml_issuer = Utils::xpQuery($xml, './saml_assertion:Issuer');
+        $xml_issuer = $xml_issuer[0];
+
+        $this->assertTrue($xml_issuer->hasAttributes());
+        $this->assertEquals($issuer->value, $xml_issuer->textContent);
+        $this->assertEquals($issuer->NameQualifier, $xml_issuer->getAttribute('NameQualifier'));
+        $this->assertEquals($issuer->SPNameQualifier, $xml_issuer->getAttribute('SPNameQualifier'));
+        $this->assertEquals($issuer->SPProvidedID, $xml_issuer->getAttribute('SPProvidedID'));
+
+        // finally, make sure we can skip the Issuer by setting it to null
+        $assertion->setIssuer(null);
+        $xml = $assertion->toXML();
+
+        $this->assertEmpty(Utils::xpQuery($xml, './saml_assertion:Issuer'));
+    }
+
     public function testAuthnContextDeclAndRefConstraint()
     {
         $xml = <<<XML
@@ -430,6 +470,38 @@ XML
         } catch (\Exception $e) {
         }
         $this->assertNotEmpty($e);
+    }
+
+    public function testGetSubjectConfirmationData()
+    {
+        $document = DOMDocumentFactory::fromString(<<<XML
+<saml:Assertion xmlns:saml="urn:oasis:names:tc:SAML:2.0:assertion"
+                ID="_593e33ddf86449ce4d4c22b60ac48e067d98a0b2bf"
+                Version="2.0"
+                IssueInstant="2010-03-05T13:34:28Z"
+>
+  <saml:Issuer>testIssuer</saml:Issuer>
+  <saml:Subject>
+    <saml:NameID Format="urn:oasis:names:tc:SAML:1.1:nameid-format:unspecified">joehoe</saml:NameID>
+    <saml:SubjectConfirmation Method="urn:oasis:names:tc:SAML:2.0:cm:bearer">
+      <saml:SubjectConfirmationData NotOnOrAfter="2010-03-05T13:42:06Z"
+        Recipient="https://example.org/authentication/consume-assertion"
+        InResponseTo="_004387940075992d891e90c6a10bc9fd1bd443ee85a61b7d07fd12b0843d"
+        />
+    </saml:SubjectConfirmation>
+  </saml:Subject>
+</saml:Assertion>
+XML
+        );
+
+        $assertion = new Assertion($document->firstChild);
+        $sc = $assertion->getSubjectConfirmation();
+
+        $this->assertCount(1, $sc);
+        $this->assertInstanceOf('SAML2\XML\saml\SubjectConfirmation', $sc[0]);
+        $this->assertEquals('urn:oasis:names:tc:SAML:2.0:cm:bearer', $sc[0]->Method);
+        $this->assertEquals('https://example.org/authentication/consume-assertion', $sc[0]->SubjectConfirmationData->Recipient);
+        $this->assertEquals(1267796526, $sc[0]->SubjectConfirmationData->NotOnOrAfter);
     }
 
     /**
