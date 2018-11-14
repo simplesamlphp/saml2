@@ -374,12 +374,6 @@ XML;
         $this->assertEquals($issuer->NameQualifier, $xml_issuer->getAttribute('NameQualifier'));
         $this->assertEquals($issuer->SPNameQualifier, $xml_issuer->getAttribute('SPNameQualifier'));
         $this->assertEquals($issuer->SPProvidedID, $xml_issuer->getAttribute('SPProvidedID'));
-
-        // finally, make sure we can skip the Issuer by setting it to null
-        $assertion->setIssuer(null);
-        $xml = $assertion->toXML();
-
-        $this->assertEmpty(Utils::xpQuery($xml, './saml_assertion:Issuer'));
     }
 
     public function testAuthnContextDeclAndRefConstraint()
