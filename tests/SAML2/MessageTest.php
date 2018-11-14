@@ -168,6 +168,7 @@ AUTHNREQUEST
 
     /**
      * @group Message
+     * @covers \SAML2\Message::getExtensions()
      */
     public function testGetExtensions() {
         $authnRequest = new \DOMDocument();
@@ -207,6 +208,7 @@ AUTHNREQUEST
 
     /**
      * @group Message
+     * @covers \SAML2\Message::setExtensions()
      */
     public function testSetExtensions() {
         $authnRequest = new \DOMDocument();

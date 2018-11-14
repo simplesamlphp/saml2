@@ -37,7 +37,7 @@ abstract class AbstractContainer
      * @param array $data
      * @return void
      */
-    abstract public function redirect($url, $data = array());
+    abstract public function redirect($url, array $data = []);
 
     /**
      * Trigger the user to perform a POST to the given URL with the given data.
@@ -46,5 +46,5 @@ abstract class AbstractContainer
      * @param array $data
      * @return void
      */
-    abstract public function postRedirect($url, $data = array());
+    abstract public function postRedirect($url, array $data = []);
 }

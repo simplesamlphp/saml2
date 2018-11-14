@@ -13,7 +13,7 @@ class NotBefore implements
     public function validate(Assertion $assertion, Result $result)
     {
         $notBeforeTimestamp = $assertion->getNotBefore();
-        if ($notBeforeTimestamp && $notBeforeTimestamp > Temporal::getTime() + 60) {
+        if (($notBeforeTimestamp !== null) && ($notBeforeTimestamp > (Temporal::getTime() + 60))) {
             $result->addError(
                 'Received an assertion that is valid in the future. Check clock synchronization on IdP and SP.'
             );

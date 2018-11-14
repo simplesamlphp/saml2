@@ -41,7 +41,7 @@ class IssuerShowAllTest extends \PHPUnit_Framework_TestCase
 XML
         );
 
-        $issuer = new issuer($document->firstChild);
+        $issuer = new Issuer($document->firstChild);
         $this->assertEquals('TheNameQualifier', $issuer->NameQualifier);
         $this->assertEquals('TheSPNameQualifier', $issuer->SPNameQualifier);
         $this->assertEquals('TheFormat', $issuer->Format);
@@ -51,7 +51,7 @@ XML
 
     public function testToStringShowAllTrueFormatNameID()
     {
-        $issuer = new issuer();
+        $issuer = new Issuer();
         $issuer->NameQualifier = 'TheNameQualifier';
         $issuer->SPNameQualifier = 'TheSPNameQualifier';
         $issuer->Format = Constants::NAMEID_ENTITY;
@@ -66,7 +66,7 @@ XML
     }
     public function testToStringShowAllFalseFormatNameID()
     {
-        $issuer = new issuer();
+        $issuer = new Issuer();
         $issuer->NameQualifier = 'TheNameQualifier';
         $issuer->SPNameQualifier = 'TheSPNameQualifier';
         $issuer->Format = Constants::NAMEID_ENTITY;
@@ -80,7 +80,7 @@ XML
     }
     public function testToStringShowAllTrueNOTNameIDFormat()
     {
-        $issuer = new issuer();
+        $issuer = new Issuer();
         $issuer->NameQualifier = 'TheNameQualifier';
         $issuer->SPNameQualifier = 'TheSPNameQualifier';
         $issuer->Format = 'TheFormat';
@@ -96,7 +96,7 @@ XML
     }
     public function testToStringShowAllDefaultNOTNameIDFormat()
     {
-        $issuer = new issuer();
+        $issuer = new Issuer();
         $issuer->NameQualifier = 'TheNameQualifier';
         $issuer->SPNameQualifier = 'TheSPNameQualifier';
         $issuer->Format = 'TheFormat';
@@ -112,7 +112,7 @@ XML
     }
     public function testToStringShowAllDefaultNameIDFormat()
     {
-        $issuer = new issuer();
+        $issuer = new Issuer();
         $issuer->NameQualifier = 'TheNameQualifier';
         $issuer->SPNameQualifier = 'TheSPNameQualifier';
         $issuer->Format = Constants::NAMEID_ENTITY;
