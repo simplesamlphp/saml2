@@ -113,4 +113,67 @@ XML;
         $nameId = $logoutRequest->getNameId();
         $this->assertEquals('TheNameIDValue', $nameId->value);
     }
+
+    public function testPlainNameIDUnmarshalling()
+    {
+        $xml = <<<XML
+<samlp:LogoutRequest xmlns:samlp="urn:oasis:names:tc:SAML:2.0:protocol" xmlns:saml="urn:oasis:names:tc:SAML:2.0:assertion" ID="SomeIDValue" Version="2.0" IssueInstant="2010-07-22T11:30:19Z">
+  <saml:Issuer>TheIssuer</saml:Issuer>
+  <saml:NameID Format="urn:oasis:names:tc:SAML:2.0:nameid-format:unspecified">frits</saml:NameID>
+</samlp:LogoutRequest>
+XML;
+        $document = DOMDocumentFactory::fromString($xml);
+        $this->logoutRequestElement = $document->firstChild;
+
+        $logoutRequest = new LogoutRequest($this->logoutRequestElement);
+	$this->assertEquals("frits", $logoutRequest->getNameId()->value);
+	$this->assertEquals("urn:oasis:names:tc:SAML:2.0:nameid-format:unspecified", $logoutRequest->getNameId()->Format);
+        $this->assertFalse($logoutRequest->isNameIdEncrypted());
+    }
+
+    public function testMissingNameIDThrowsException()
+    {
+        $xml = <<<XML
+<samlp:LogoutRequest xmlns:samlp="urn:oasis:names:tc:SAML:2.0:protocol" xmlns:saml="urn:oasis:names:tc:SAML:2.0:assertion" ID="SomeIDValue" Version="2.0" IssueInstant="2010-07-22T11:30:19Z">
+  <saml:Issuer>TheIssuer</saml:Issuer>
+</samlp:LogoutRequest>
+XML;
+        $document = DOMDocumentFactory::fromString($xml);
+        $this->logoutRequestElement = $document->firstChild;
+
+        $this->setExpectedException('Exception', "Missing <saml:NameID> or <saml:EncryptedID> in <samlp:LogoutRequest>.");
+        $logoutRequest = new LogoutRequest($this->logoutRequestElement);
+    }
+
+    public function testMultipleNameIDThrowsException()
+    {
+        $xml = <<<XML
+<samlp:LogoutRequest xmlns:samlp="urn:oasis:names:tc:SAML:2.0:protocol" xmlns:saml="urn:oasis:names:tc:SAML:2.0:assertion" ID="SomeIDValue" Version="2.0" IssueInstant="2010-07-22T11:30:19Z">
+  <saml:Issuer>TheIssuer</saml:Issuer>
+  <saml:NameID Format="urn:oasis:names:tc:SAML:2.0:nameid-format:unspecified">frits</saml:NameID>
+  <saml:NameID Format="urn:oasis:names:tc:SAML:2.0:nameid-format:unspecified">willem</saml:NameID>
+</samlp:LogoutRequest>
+XML;
+        $document = DOMDocumentFactory::fromString($xml);
+        $this->logoutRequestElement = $document->firstChild;
+
+        $this->setExpectedException('Exception', "More than one <saml:NameID> or <saml:EncryptedD> in <samlp:LogoutRequest>.");
+        $logoutRequest = new LogoutRequest($this->logoutRequestElement);
+    }
+
+    public function testNotOnOrAfter()
+    {
+        $xml = <<<XML
+<samlp:LogoutRequest xmlns:samlp="urn:oasis:names:tc:SAML:2.0:protocol" xmlns:saml="urn:oasis:names:tc:SAML:2.0:assertion" ID="SomeIDValue" Version="2.0" IssueInstant="2010-07-22T11:30:19Z" NotOnOrAfter="2018-11-28T19:33:12Z">
+  <saml:Issuer>TheIssuer</saml:Issuer>
+  <saml:NameID Format="urn:oasis:names:tc:SAML:2.0:nameid-format:unspecified">frits</saml:NameID>
+</samlp:LogoutRequest>
+XML;
+        $document = DOMDocumentFactory::fromString($xml);
+        $this->logoutRequestElement = $document->firstChild;
+
+        $logoutRequest = new LogoutRequest($this->logoutRequestElement);
+	$this->assertEquals(1543433592, $logoutRequest->getNotOnOrAfter());
+    }
+
 }

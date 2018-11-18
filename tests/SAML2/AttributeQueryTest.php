@@ -10,26 +10,27 @@ class AttributeQueryTest extends \PHPUnit_Framework_TestCase
     public function testMarshalling()
     {
         $attributeQuery = new AttributeQuery();
-        $attributeQuery->setNameID(array('Value' => 'NameIDValue'));
+        $attributeQuery->setNameID(['Value' => 'NameIDValue']);
         $attributeQuery->setAttributes(
-            array(
-                'test1' => array(
+            [
+                'test1' => [
                     'test1_attrv1',
                     'test1_attrv2',
-                ),
-                'test2' => array(
+	        ],
+                'test2' => [
                     'test2_attrv1',
                     'test2_attrv2',
                     'test2_attrv3',
-                ),
-                'test3' => array(),
-            )
+	        ],
+                'test3' => [],
+                'test4' => [ 4, 23 ],
+	    ]
         );
         $attributeQueryElement = $attributeQuery->toUnsignedXML();
 
         // Test Attribute Names
         $attributes = Utils::xpQuery($attributeQueryElement, './saml_assertion:Attribute');
-        $this->assertCount(3, $attributes);
+        $this->assertCount(4, $attributes);
         $this->assertEquals('test1', $attributes[0]->getAttribute('Name'));
         $this->assertEquals('test2', $attributes[1]->getAttribute('Name'));
         $this->assertEquals('test3', $attributes[2]->getAttribute('Name'));
@@ -43,13 +44,24 @@ class AttributeQueryTest extends \PHPUnit_Framework_TestCase
         // Test Attribute Values for Attribute 2
         $av2 = Utils::xpQuery($attributes[1], './saml_assertion:AttributeValue');
         $this->assertCount(3, $av2);
+        $this->assertEquals('xs:string', $av2[0]->getAttribute('xsi:type'));
         $this->assertEquals('test2_attrv1', $av2[0]->textContent);
+        $this->assertEquals('xs:string', $av2[1]->getAttribute('xsi:type'));
         $this->assertEquals('test2_attrv2', $av2[1]->textContent);
+        $this->assertEquals('xs:string', $av2[2]->getAttribute('xsi:type'));
         $this->assertEquals('test2_attrv3', $av2[2]->textContent);
 
         // Test Attribute Values for Attribute 3
         $av3 = Utils::xpQuery($attributes[2], './saml_assertion:AttributeValue');
         $this->assertCount(0, $av3);
+
+        // Test Attribute Values for Attribute 3
+        $av3 = Utils::xpQuery($attributes[3], './saml_assertion:AttributeValue');
+        $this->assertCount(2, $av3);
+        $this->assertEquals('4', $av3[0]->textContent);
+        $this->assertEquals('xs:integer', $av3[0]->getAttribute('xsi:type'));
+        $this->assertEquals('23', $av3[1]->textContent);
+        $this->assertEquals('xs:integer', $av3[1]->getAttribute('xsi:type'));
     }
 
     public function testUnmarshalling()
@@ -97,20 +109,20 @@ XML;
         $fmt_uri = 'urn:oasis:names:tc:SAML:2.0:attrname-format:uri';
 
         $attributeQuery = new AttributeQuery();
-        $attributeQuery->setNameID(array('Value' => 'NameIDValue'));
+        $attributeQuery->setNameID(['Value' => 'NameIDValue']);
         $attributeQuery->setAttributes(
-            array(
-                'test1' => array(
+            [
+                'test1' => [
                     'test1_attrv1',
                     'test1_attrv2',
-                ),
-                'test2' => array(
+	        ],
+                'test2' => [
                     'test2_attrv1',
                     'test2_attrv2',
                     'test2_attrv3',
-                ),
-                'test3' => array(),
-            )
+	        ],
+                'test3' => [],
+	    ]
         );
         $attributeQuery->setAttributeNameFormat($fmt_uri);
         $attributeQueryElement = $attributeQuery->toUnsignedXML();

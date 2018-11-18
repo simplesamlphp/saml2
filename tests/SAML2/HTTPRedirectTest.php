@@ -184,4 +184,16 @@ class HTTPRedirectTest extends PHPUnit_Framework_TestCase
         $hr = new HTTPRedirect();
         $hr->send($response);
     }
+
+    /**
+     * Test setting destination in the HR binding.
+     */
+    public function testSendAuthnResponseBespokeDestination()
+    {
+        $response = new Response();
+        $response->setIssuer('testIssuer');
+        $hr = new HTTPRedirect();
+        $hr->setDestination('gopher://myurl');
+        $hr->send($response);
+    }
 }

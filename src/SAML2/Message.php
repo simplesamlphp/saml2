@@ -339,7 +339,7 @@ abstract class Message implements SignedElement
     /**
      * Set the given consent for this message.
      *
-     * Most likely (though not required) a value of rn:oasis:names:tc:SAML:2.0:consent.
+     * Most likely (though not required) a value of urn:oasis:names:tc:SAML:2.0:consent.
      *
      * @see \SAML2\Constants
      *
@@ -353,9 +353,9 @@ abstract class Message implements SignedElement
     }
 
     /**
-     * Set the given consent for this message.
+     * Get the given consent for this message.
      *
-     * Most likely (though not required) a value of rn:oasis:names:tc:SAML:2.0:consent.
+     * Most likely (though not required) a value of urn:oasis:names:tc:SAML:2.0:consent.
      *
      * @see \SAML2\Constants
      *
