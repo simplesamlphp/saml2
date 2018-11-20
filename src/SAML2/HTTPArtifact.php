@@ -39,7 +39,7 @@ class HTTPArtifact extends Binding
         }
 
         $generatedId = pack('H*', ((string) SimpleSAML_Utilities::stringToHex(SimpleSAML_Utilities::generateRandomBytes(20))));
-        $artifact = base64_encode("\x00\x04\x00\x00" . sha1($message->getIssuer(), true) . $generatedId) ;
+        $artifact = base64_encode("\x00\x04\x00\x00".sha1($message->getIssuer(), true).$generatedId);
         $artifactData = $message->toUnsignedXML();
         $artifactDataString = $artifactData->ownerDocument->saveXML($artifactData);
 
@@ -92,7 +92,7 @@ class HTTPArtifact extends Binding
         $idpMetadata = $metadataHandler->getMetaDataConfigForSha1($sourceId, 'saml20-idp-remote');
 
         if ($idpMetadata === null) {
-            throw new \Exception('No metadata found for remote provider with SHA1 ID: ' . var_export($sourceId, true));
+            throw new \Exception('No metadata found for remote provider with SHA1 ID: '.var_export($sourceId, true));
         }
 
         $endpoint = null;
@@ -107,7 +107,7 @@ class HTTPArtifact extends Binding
             throw new \Exception('No ArtifactResolutionService with the correct index.');
         }
 
-        Utils::getContainer()->getLogger()->debug("ArtifactResolutionService endpoint being used is := " . $endpoint['Location']);
+        Utils::getContainer()->getLogger()->debug("ArtifactResolutionService endpoint being used is := ".$endpoint['Location']);
 
         //Construct the ArtifactResolve Request
         $ar = new ArtifactResolve();

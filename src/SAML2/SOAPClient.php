@@ -54,8 +54,8 @@ class SOAPClient
             $privateKey = SimpleSAML_Utilities::loadPrivateKey($srcMetadata);
             $publicKey = SimpleSAML_Utilities::loadPublicKey($srcMetadata);
             if ($privateKey !== null && $publicKey !== null && isset($publicKey['PEM'])) {
-                $keyCertData = $privateKey['PEM'] . $publicKey['PEM'];
-                $file = SimpleSAML_Utilities::getTempDir() . '/' . sha1($keyCertData) . '.pem';
+                $keyCertData = $privateKey['PEM'].$publicKey['PEM'];
+                $file = SimpleSAML_Utilities::getTempDir().'/'.sha1($keyCertData).'.pem';
                 if (!file_exists($file)) {
                     SimpleSAML_Utilities::writeFile($file, $keyCertData);
                 }
@@ -74,11 +74,11 @@ class SOAPClient
                 if ($key['type'] !== 'X509Certificate') {
                     continue;
                 }
-                $certData .= "-----BEGIN CERTIFICATE-----\n" .
-                    chunk_split($key['X509Certificate'], 64) .
+                $certData .= "-----BEGIN CERTIFICATE-----\n".
+                    chunk_split($key['X509Certificate'], 64).
                     "-----END CERTIFICATE-----\n";
             }
-            $peerCertFile = SimpleSAML_Utilities::getTempDir() . '/' . sha1($certData) . '.pem';
+            $peerCertFile = SimpleSAML_Utilities::getTempDir().'/'.sha1($certData).'.pem';
             if (!file_exists($peerCertFile)) {
                 SimpleSAML_Utilities::writeFile($peerCertFile, $certData);
             }
@@ -115,7 +115,7 @@ class SOAPClient
 
         // Add soap-envelopes
         $request = $msg->toSignedXML();
-        $request = self::START_SOAP_ENVELOPE . $request->ownerDocument->saveXML($request) . self::END_SOAP_ENVELOPE;
+        $request = self::START_SOAP_ENVELOPE.$request->ownerDocument->saveXML($request).self::END_SOAP_ENVELOPE;
 
         Utils::getContainer()->debugMessage($request, 'out');
 
@@ -240,7 +240,7 @@ class SOAPClient
         // There is a fault element but we haven't found out what the fault string is
         $soapFaultString = "Unknown fault string found";
         // find out the fault string
-        $faultStringElement =   Utils::xpQuery($soapFaultElement, './soap-env:faultstring') ;
+        $faultStringElement = Utils::xpQuery($soapFaultElement, './soap-env:faultstring');
         if (!empty($faultStringElement)) {
             return $faultStringElement[0]->textContent;
         }

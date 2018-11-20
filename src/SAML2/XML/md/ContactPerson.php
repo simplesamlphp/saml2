@@ -115,7 +115,7 @@ class ContactPerson
     {
         assert(is_string($name));
 
-        $e = Utils::xpQuery($parent, './saml_metadata:' . $name);
+        $e = Utils::xpQuery($parent, './saml_metadata:'.$name);
 
         $ret = [];
         foreach ($e as $i) {
@@ -142,7 +142,7 @@ class ContactPerson
             return null;
         }
         if (count($e) > 1) {
-            throw new \Exception('More than one ' . $name . ' in ' . $parent->tagName);
+            throw new \Exception('More than one '.$name.' in '.$parent->tagName);
         }
 
         return $e[0];
