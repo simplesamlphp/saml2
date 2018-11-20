@@ -174,10 +174,9 @@ class SignedElementHelper implements SignedElement
     {
         $ret = [];
         foreach ($this->certificates as $cert) {
-
             /* Construct a PEM formatted certificate */
-            $pemCert = "-----BEGIN CERTIFICATE-----\n" .
-                chunk_split($cert, 64) .
+            $pemCert = "-----BEGIN CERTIFICATE-----\n".
+                chunk_split($cert, 64).
                 "-----END CERTIFICATE-----\n";
 
             /* Extract the public key from the certificate for validation. */

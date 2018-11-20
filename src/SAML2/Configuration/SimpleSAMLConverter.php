@@ -55,20 +55,20 @@ class SimpleSAMLConverter
 
         // ported from
         // https://github.com/simplesamlphp/simplesamlphp/blob/3d735912342767d391297cc5e13272a76730aca0/lib/SimpleSAML/Configuration.php#L1092
-        if ($configuration->hasValue($prefix . 'keys')) {
-            $extracted['keys'] = $configuration->getArray($prefix . 'keys');
+        if ($configuration->hasValue($prefix.'keys')) {
+            $extracted['keys'] = $configuration->getArray($prefix.'keys');
         }
 
         // ported from
         // https://github.com/simplesamlphp/simplesamlphp/blob/3d735912342767d391297cc5e13272a76730aca0/lib/SimpleSAML/Configuration.php#L1108
-        if ($configuration->hasValue($prefix . 'certData')) {
-            $extracted['certificateData'] = $configuration->getString($prefix . 'certData');
+        if ($configuration->hasValue($prefix.'certData')) {
+            $extracted['certificateData'] = $configuration->getString($prefix.'certData');
         }
 
         // ported from
         // https://github.com/simplesamlphp/simplesamlphp/blob/3d735912342767d391297cc5e13272a76730aca0/lib/SimpleSAML/Configuration.php#L1119
         if ($configuration->hasValue($prefix . 'certificate')) {
-            $extracted['certificateData'] = $configuration->getString($prefix . 'certificate');
+            $extracted['certificateData'] = $configuration->getString($prefix.'certificate');
         }
 
         // ported from

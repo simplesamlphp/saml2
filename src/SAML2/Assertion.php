@@ -176,7 +176,7 @@ class Assertion implements SignedElement
     /**
      * The attributes values types as per http://www.w3.org/2001/XMLSchema definitions
      * the variable is as an associative array, indexed by attribute name
-     * 
+     *
      * when parsing assertion, the variable will be:
      * - <attribute name> => [<Value1's xs type>|null, <xs type Value2>|null, ...]
      * array will always have the same size of the array of vaules in $attributes for the same <attribute name>
@@ -185,7 +185,7 @@ class Assertion implements SignedElement
      * - null : backward compatibility
      * - <attribute name> => <xs type> : all values for the given attribute will have the same xs type
      * - <attribute name> => [<Value1's xs type>|null, <xs type Value2>|null, ...] : Nth value will have type of the Nth in the array
-     * 
+     *
      * @var array multi-dimensional array of array
      */
     private $attributesValueTypes;

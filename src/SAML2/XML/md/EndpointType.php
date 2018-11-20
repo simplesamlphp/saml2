@@ -52,12 +52,12 @@ class EndpointType
         }
 
         if (!$xml->hasAttribute('Binding')) {
-            throw new \Exception('Missing Binding on ' . $xml->tagName);
+            throw new \Exception('Missing Binding on '.$xml->tagName);
         }
         $this->Binding = $xml->getAttribute('Binding');
 
         if (!$xml->hasAttribute('Location')) {
-            throw new \Exception('Missing Location on ' . $xml->tagName);
+            throw new \Exception('Missing Location on '.$xml->tagName);
         }
         $this->Location = $xml->getAttribute('Location');
 
@@ -69,7 +69,7 @@ class EndpointType
             if ($a->namespaceURI === null) {
                 continue; /* Not namespace-qualified -- skip. */
             }
-            $fullName = '{' . $a->namespaceURI . '}' . $a->localName;
+            $fullName = '{'.$a->namespaceURI.'}'.$a->localName;
             $this->attributes[$fullName] = [
                 'qualifiedName' => $a->nodeName,
                 'namespaceURI' => $a->namespaceURI,
@@ -90,7 +90,7 @@ class EndpointType
         assert(is_string($namespaceURI));
         assert(is_string($localName));
 
-        $fullName = '{' . $namespaceURI . '}' . $localName;
+        $fullName = '{'.$namespaceURI.'}'.$localName;
 
         return isset($this->attributes[$fullName]);
     }
@@ -107,7 +107,7 @@ class EndpointType
         assert(is_string($namespaceURI));
         assert(is_string($localName));
 
-        $fullName = '{' . $namespaceURI . '}' . $localName;
+        $fullName = '{'.$namespaceURI.'}'.$localName;
         if (!isset($this->attributes[$fullName])) {
             return '';
         }
@@ -134,7 +134,7 @@ class EndpointType
         }
         $localName = $name[1];
 
-        $fullName = '{' . $namespaceURI . '}' . $localName;
+        $fullName = '{'.$namespaceURI.'}'.$localName;
         $this->attributes[$fullName] = [
             'qualifiedName' => $qualifiedName,
             'namespaceURI' => $namespaceURI,
@@ -153,7 +153,7 @@ class EndpointType
         assert(is_string($namespaceURI));
         assert(is_string($localName));
 
-        $fullName = '{' . $namespaceURI . '}' . $localName;
+        $fullName = '{'.$namespaceURI.'}'.$localName;
         unset($this->attributes[$fullName]);
     }
 
