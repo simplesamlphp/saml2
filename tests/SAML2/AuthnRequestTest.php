@@ -133,7 +133,7 @@ AUTHNREQUEST;
     public function testThatTheSubjectCanBeSetBySettingTheNameId()
     {
         $request = new AuthnRequest();
-        $request->setNameId(['Value' => 'user@example.org', 'Format' => Constants::NAMEID_UNSPECIFIE]);
+        $request->setNameId(['Value' => 'user@example.org', 'Format' => Constants::NAMEID_UNSPECIFIED]);
 
         $requestAsXML = $request->toUnsignedXML()->ownerDocument->saveXML();
         $expected = '<saml:Subject><saml:NameID Format="urn:oasis:names:tc:SAML:1.1:nameid-format:unspecified">user@example.org</saml:NameID></saml:Subject>';
