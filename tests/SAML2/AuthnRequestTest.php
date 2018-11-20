@@ -135,7 +135,10 @@ AUTHNREQUEST;
     public function testThatTheSubjectCanBeSetBySettingTheNameId()
     {
         $request = new AuthnRequest();
-        $request->setNameId(['Value' => 'user@example.org', 'Format' => Constants::NAMEID_UNSPECIFIED]);
+        $nameId = new XML\saml\NameID();
+        $nameId->value = 'user@example.org';
+        $nameId->Format = Constants::NAMEID_UNSPECIFIED;
+        $request->setNameId($nameId);
 
         $requestAsXML = $request->toUnsignedXML()->ownerDocument->saveXML();
         $expected = '<saml:Subject><saml:NameID Format="urn:oasis:names:tc:SAML:1.1:nameid-format:unspecified">user@example.org</saml:NameID></saml:Subject>';
@@ -194,7 +197,9 @@ AUTHNREQUEST;
     public function testThatAnEncryptedNameIdResultsInTheCorrectXmlStructure()
     {
         // the NameID we're going to encrypt
-        $nameId = ['Value' => md5('Arthur Dent'), 'Format' => Constants::NAMEID_ENCRYPTED];
+        $nameId = new XML\saml\NameID();
+        $nameId->value = md5('Arthur Dent');
+        $nameId->Format = Constants::NAMEID_ENCRYPTED;
 
         // basic AuthnRequest
         $request = new AuthnRequest();
@@ -251,7 +256,7 @@ AUTHNREQUEST;
     {
         // basic AuthnRequest
         $request = new AuthnRequest();
-        $request->setIssuer('https://gateway.example.org/saml20/sp/metadata');
+        $request->setIssuer($issuer);
         $request->setDestination('https://tiqr.example.org/idp/profile/saml2/Redirect/SSO');
         $request->setIDPList([
             'Legacy1',
@@ -351,7 +356,7 @@ AUTHNREQUEST;
     {
         // basic AuthnRequest
         $request = new AuthnRequest();
-        $request->setIssuer('https://gateway.example.org/saml20/sp/metadata');
+        $request->setIssuer($issuer);
         $request->setDestination('https://tiqr.example.org/idp/profile/saml2/Redirect/SSO');
         $request->setRequesterID([
             'https://engine.demo.openconext.org/authentication/sp/metadata',
@@ -420,7 +425,7 @@ AUTHNREQUEST;
     {
         // basic AuthnRequest
         $request = new AuthnRequest();
-        $request->setIssuer('https://gateway.example.org/saml20/sp/metadata');
+        $request->setIssuer($issuer);
         $request->setDestination('https://tiqr.example.org/idp/profile/saml2/Redirect/SSO');
         $request->setIssueInstant( Utils::xsDateTimeToTimestamp('2004-12-05T09:21:59Z'));
         $request->setProxyCount(34);
@@ -529,7 +534,7 @@ AUTHNREQUEST;
     {
         // basic AuthnRequest
         $request = new AuthnRequest();
-        $request->setIssuer('https://gateway.example.org/saml20/sp/metadata');
+        $request->setIssuer($issuer);
         $request->setDestination('https://tiqr.example.org/idp/profile/saml2/Redirect/SSO');
         $request->setIssueInstant( Utils::xsDateTimeToTimestamp('2004-12-05T09:21:59Z'));
 
@@ -572,7 +577,7 @@ AUTHNREQUEST;
     {
         // basic AuthnRequest
         $request = new AuthnRequest();
-        $request->setIssuer('https://gateway.example.org/saml20/sp/metadata');
+        $request->setIssuer($issuer);
         $request->setDestination('https://tiqr.example.org/idp/profile/saml2/Redirect/SSO');
         $request->setIssueInstant( Utils::xsDateTimeToTimestamp('2004-12-05T09:21:59Z'));
 
@@ -608,7 +613,7 @@ AUTHNREQUEST;
     {
         // basic AuthnRequest
         $request = new AuthnRequest();
-        $request->setIssuer('https://gateway.example.org/saml20/sp/metadata');
+        $request->setIssuer($issuer);
         $request->setDestination('https://tiqr.example.org/idp/profile/saml2/Redirect/SSO');
 
         // AllowCreate must be a bool
@@ -625,7 +630,7 @@ AUTHNREQUEST;
     {
         // basic AuthnRequest
         $request = new AuthnRequest();
-        $request->setIssuer('https://gateway.example.org/saml20/sp/metadata');
+        $request->setIssuer($issuer);
         $request->setDestination('https://tiqr.example.org/idp/profile/saml2/Redirect/SSO');
 
         // SPNameQualifier must be a string
@@ -643,7 +648,7 @@ AUTHNREQUEST;
     {
         // basic AuthnRequest
         $request = new AuthnRequest();
-        $request->setIssuer('https://gateway.example.org/saml20/sp/metadata');
+        $request->setIssuer($issuer);
         $request->setDestination('https://tiqr.example.org/idp/profile/saml2/Redirect/SSO');
 
         // Format must be a string
@@ -705,7 +710,7 @@ AUTHNREQUEST;
     {
         // basic AuthnRequest
         $request = new AuthnRequest();
-        $request->setIssuer('https://gateway.example.org/saml20/sp/metadata');
+        $request->setIssuer($issuer);
         $request->setDestination('https://tiqr.example.org/idp/profile/saml2/Redirect/SSO');
         $request->setIssueInstant( Utils::xsDateTimeToTimestamp('2004-12-05T09:21:59Z'));
 
@@ -802,7 +807,7 @@ AUTHNREQUEST;
     {
         // basic AuthnRequest
         $request = new AuthnRequest();
-        $request->setIssuer('https://gateway.example.org/saml20/sp/metadata');
+        $request->setIssuer($issuer);
         $request->setDestination('https://tiqr.example.org/idp/profile/saml2/Redirect/SSO');
         $request->setIssueInstant( Utils::xsDateTimeToTimestamp('2004-12-05T09:21:59Z'));
 
@@ -837,7 +842,7 @@ AUTHNREQUEST;
     {
         // basic AuthnRequest
         $request = new AuthnRequest();
-        $request->setIssuer('https://gateway.example.org/saml20/sp/metadata');
+        $request->setIssuer($issuer);
         $request->setDestination('https://tiqr.example.org/idp/profile/saml2/Redirect/SSO');
         $request->setIssueInstant( Utils::xsDateTimeToTimestamp('2004-12-05T09:21:59Z'));
 
@@ -897,9 +902,13 @@ AUTHNREQUEST;
      */
     public function testSettingProtocolBindingAndACSUrl()
     {
+        // the Issuer
+        $issuer = new XML\saml\Issuer();
+        $issuer->value = 'https://sp.example.org/saml20/sp/metadata';
+
         // basic AuthnRequest
         $request = new AuthnRequest();
-        $request->setIssuer('https://sp.example.org/saml20/sp/metadata');
+        $request->setIssuer($issuer);
         $request->setDestination('https://idp.example.org/idp/profile/saml2/Redirect/SSO');
         $request->setIssueInstant(Utils::xsDateTimeToTimestamp('2004-12-05T09:21:59Z'));
 

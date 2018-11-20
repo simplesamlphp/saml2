@@ -15,11 +15,15 @@ class AssertionTest extends \Mockery\Adapter\Phpunit\MockeryTestCase
      */
     public function testMarshalling()
     {
+        // Create an Issuer
+        $issuer = new XML\saml\Issuer();
+        $issuer->value = 'testIssuer';
+
         // Create an assertion
         $assertion = new Assertion();
-        $assertion->setIssuer('testIssuer');
+        $assertion->setIssuer($issuer);
         $assertion->setValidAudiences(['audience1', 'audience2']);
-        $assertion->setAuthnContext('someAuthnContext');
+        $assertion->setAuthnContextClassRef('someAuthnContext');
 
         // Marshall it to a \DOMElement
         $assertionElement = $assertion->toXML();
@@ -101,16 +105,19 @@ XML;
      */
     public function testMarshallingUnmarshallingChristmas()
     {
+        // Create an Issuer
+        $issuer = new XML\saml\Issuer();
+        $issuer->value = 'testIssuer';
+
         // Create an assertion
         $assertion = new Assertion();
 
-        $assertion->setIssuer('testIssuer');
+        $assertion->setIssuer($issuer);
         $assertion->setValidAudiences(['audience1', 'audience2']);
 
-        // deprecated function
-        $this->assertNull($assertion->getAuthnContext());
+        $this->assertNull($assertion->getAuthnContextClassRef());
 
-        $assertion->setAuthnContext('someAuthnContext');
+        $assertion->setAuthnContextClassRef('someAuthnContext');
         $assertion->setAuthnContextDeclRef('/relative/path/to/document.xml');
 
         $assertion->setID("_123abc");
@@ -166,13 +173,17 @@ XML;
      */
     public function testMarshallingUnmarshallingAttributeValTypes()
     {
+        // Create an Issuer
+        $issuer = new XML\saml\Issuer();
+        $issuer->value = 'testIssuer';
+
         // Create an assertion
         $assertion = new Assertion();
 
-        $assertion->setIssuer('testIssuer');
+        $assertion->setIssuer($issuer);
         $assertion->setValidAudiences(['audience1', 'audience2']);
 
-        $assertion->setAuthnContext('someAuthnContext');
+        $assertion->setAuthnContextClassRef('someAuthnContext');
 
         $assertion->setAuthenticatingAuthority(["idp1", "idp2"]);
 
@@ -230,13 +241,17 @@ XML;
 
     public function testMarshallingWrongAttributeValTypes()
     {
+        // Create an Issuer
+        $issuer = new XML\saml\Issuer();
+        $issuer->value = 'testIssuer';
+
         // Create an assertion
         $assertion = new Assertion();
 
-        $assertion->setIssuer('testIssuer');
+        $assertion->setIssuer($issuer);
         $assertion->setValidAudiences(['audience1', 'audience2']);
 
-        $assertion->setAuthnContext('someAuthnContext');
+        $assertion->setAuthnContextClassRef('someAuthnContext');
 
         $assertion->setAuthenticatingAuthority(["idp1", "idp2"]);
 
@@ -290,13 +305,10 @@ XML;
         $authnContextDecl = $assertion->getAuthnContextDecl();
         $this->assertNotEmpty($authnContextDecl);
         $this->assertEquals('AuthnContextDecl', $authnContextDecl->localName);
-        $childLocalName = $authnContextDecl->getXML()->childNodes->item(1)->localName;
+        $childLocalName = $authnContextDecl->xml->childNodes->item(1)->localName;
         $this->assertEquals('AuthenticationContextDeclaration', $childLocalName);
 
         $this->assertEquals('someAuthnContext', $assertion->getAuthnContextClassRef());
-
-        // deprecated function
-        $this->assertEquals('someAuthnContext', $assertion->getAuthnContext());
     }
 
 
@@ -360,11 +372,14 @@ XML;
      */
     public function testConvertIssuerToXML()
     {
-        // first, try with common Issuer objects (Format=entity)
-        $assertion = new Assertion();
+        // Create an Issuer
         $issuer = new XML\saml\Issuer();
         $issuer->value = 'https://gateway.stepup.org/saml20/sp/metadata';
+
+        // first, try with common Issuer objects (Format=entity)
+        $assertion = new Assertion();
         $assertion->setIssuer($issuer);
+
         $xml = $assertion->toXML();
         $xml_issuer = Utils::xpQuery($xml, './saml_assertion:Issuer');
         $xml_issuer = $xml_issuer[0];
@@ -377,6 +392,7 @@ XML;
         $issuer->setNameQualifier('SomeNameQualifier');
         $issuer->setSPNameQualifier('SomeSPNameQualifier');
         $issuer->setSPProvidedID('SomeSPProvidedID');
+
         $assertion->setIssuer($issuer);
         $xml = $assertion->toXML();
         $xml_issuer = Utils::xpQuery($xml, './saml_assertion:Issuer');
@@ -449,8 +465,7 @@ XML;
         }
         $this->assertNotEmpty($e);
 
-        // deprecated function
-        $this->assertEquals('/relative/path/to/document.xml', $assertion->getAuthnContext());
+        $this->assertEquals('/relative/path/to/document.xml', $assertion->getAuthnContextDeclRef());
     }
 
 
@@ -1856,16 +1871,20 @@ XML;
      */
     public function testNameIdEncryption()
     {
+        // Create an Issuer
+        $issuer = new XML\saml\Issuer();
+        $issuer->value = 'testIssuer';
+
         // Create an assertion
         $assertion = new Assertion();
-        $assertion->setIssuer('testIssuer');
+        $assertion->setIssuer($issuer);
         $assertion->setValidAudiences(['audience1', 'audience2']);
-        $assertion->setAuthnContext('someAuthnContext');
+        $assertion->setAuthnContextClassRef('someAuthnContext');
 
-        $assertion->setNameId([
-            "Value" => "just_a_basic_identifier",
-            "Format" => "urn:oasis:names:tc:SAML:2.0:nameid-format:transient"
-        ]);
+        $nameId = new XML\saml\NameID();
+        $nameId->value = "just_a_basic_identifier";
+        $nameId->Format = "urn:oasis:names:tc:SAML:2.0:nameid-format:transient";
+        $assertion->setNameId($nameId);
         $this->assertFalse($assertion->isNameIdEncrypted());
 
         $publicKey = CertificatesMock::getPublicKey();
@@ -1928,19 +1947,25 @@ XML;
 
     public function testMarshallingElementOrdering()
     {
+        // Create an Issuer
+        $issuer = new XML\saml\Issuer();
+        $issuer->value = 'testIssuer';
+
         // Create an assertion
         $assertion = new Assertion();
-        $assertion->setIssuer('testIssuer');
+        $assertion->setIssuer($issuer);
         $assertion->setAttributes([
             "name1" => ["value1","value2"],
             "name2" => ["value3"],
         ]);
         $assertion->setAttributeNameFormat("urn:oasis:names:tc:SAML:2.0:attrname-format:unspecified");
         $assertion->setSignatureKey(CertificatesMock::getPrivateKey());
-        $assertion->setNameId([
-            "Value" => "just_a_basic_identifier",
-            "Format" => "urn:oasis:names:tc:SAML:2.0:nameid-format:transient"]);
-        $assertion->setAuthnContext('someAuthnContext');
+
+        $nameId = new XML\saml\NameID();
+        $nameId->value = "just_a_basic_identifier";
+        $nameId->Format = "urn:oasis:names:tc:SAML:2.0:nameid-format:transient";
+        $assertion->setNameId($nameId);
+        $assertion->setAuthnContextClassRef('someAuthnContext');
 
         // Marshall it to a \DOMElement
         $assertionElement = $assertion->toXML();

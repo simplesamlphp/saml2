@@ -14,18 +14,6 @@ class FileTest extends \PHPUnit\Framework\TestCase
         File::getFileContents('/foo/bar/baz/quux');
     }
 
-
-    /**
-     * @group utilities
-     * @test
-     */
-    public function passing_nonstring_filename_throws_exception()
-    {
-        $this->expectException(\SAML2\Exception\InvalidArgumentException::class, 'Invalid Argument type: "string" expected, "NULL" given');
-        File::getFileContents(null);
-    }
-
-
     /**
      * @group utilities
      * @test

@@ -36,20 +36,6 @@ class IdentityProvider extends ArrayAdapter implements
         return $this->get('certificateFile');
     }
 
-
-    /**
-     * @return mixed
-     * @deprecated Please use getCertifiateFile() or getCertificateData()
-     */
-    public function getCertificateFingerprints()
-    {
-        return $this->get('certificateFingerprints');
-    }
-
-
-    /**
-     * @return mixed
-     */
     public function isAssertionEncryptionRequired()
     {
         return $this->get('assertionEncryptionEnabled');

@@ -184,8 +184,11 @@ class HTTPRedirectTest extends \Mockery\Adapter\Phpunit\MockeryTestCase
      */
     public function testSendAuthnResponse()
     {
+        $issuer = new XML\saml\Issuer();
+        $issuer->value = 'testIssuer';
+
         $response = new Response();
-        $response->setIssuer('testIssuer');
+        $response->setIssuer($issuer);
         $response->setRelayState('http://example.org');
         $response->setDestination('http://example.org/login?success=yes');
         $response->setSignatureKey(CertificatesMock::getPrivateKey());
@@ -200,8 +203,11 @@ class HTTPRedirectTest extends \Mockery\Adapter\Phpunit\MockeryTestCase
      */
     public function testSendAuthnResponseBespokeDestination()
     {
+        $issuer = new XML\saml\Issuer();
+        $issuer->value = 'testIssuer';
+
         $response = new Response();
-        $response->setIssuer('testIssuer');
+        $response->setIssuer($issuer);
         $hr = new HTTPRedirect();
         $hr->setDestination('gopher://myurl');
         $hr->send($response);
