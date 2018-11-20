@@ -1866,4 +1866,38 @@ XML;
         $this->setExpectedException('Exception', "Attempted to retrieve encrypted NameID without decrypting it first");
         $assertion->getNameID();
     }
+
+    public function testMarshallingElementOrdering()
+    {
+        // Create an assertion
+        $assertion = new Assertion();
+        $assertion->setIssuer('testIssuer');
+        $assertion->setAttributes([
+            "name1" => ["value1","value2"],
+            "name2" => ["value3"],
+        ]);
+        $assertion->setAttributeNameFormat("urn:oasis:names:tc:SAML:2.0:attrname-format:unspecified");
+        $assertion->setSignatureKey(CertificatesMock::getPrivateKey());
+        $assertion->setNameId([
+            "Value" => "just_a_basic_identifier",
+            "Format" => "urn:oasis:names:tc:SAML:2.0:nameid-format:transient"]);
+        $assertion->setAuthnContext('someAuthnContext');
+
+        // Marshall it to a \DOMElement
+        $assertionElement = $assertion->toXML();
+
+        // Test for an Issuer
+        $issuerElements = Utils::xpQuery($assertionElement, './saml_assertion:Issuer');
+        $this->assertCount(1, $issuerElements);
+        $this->assertEquals('testIssuer', $issuerElements[0]->textContent);
+        // Test ordering of Assertion contents
+        $assertionElements = Utils::xpQuery($assertionElement, './saml_assertion:Issuer/following-sibling::*');
+        $this->assertCount(5, $assertionElements);
+        $this->assertEquals('ds:Signature', $assertionElements[0]->tagName);
+        $this->assertEquals('saml:Subject', $assertionElements[1]->tagName);
+        $this->assertEquals('saml:Conditions', $assertionElements[2]->tagName);
+        $this->assertEquals('saml:AuthnStatement', $assertionElements[3]->tagName);
+        $this->assertEquals('saml:AttributeStatement', $assertionElements[4]->tagName);
+    }
+
 }
