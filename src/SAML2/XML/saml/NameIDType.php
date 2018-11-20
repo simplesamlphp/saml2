@@ -75,40 +75,6 @@ abstract class NameIDType extends BaseIDType
 
 
     /**
-     * Create a \SAML2\XML\saml\NameID object from an array with its contents.
-     *
-     * @param array $nameId An array whose keys correspond to the fields of a NameID.
-     * @return \SAML2\XML\saml\NameID The corresponding NameID object.
-     *
-     * @throws \InvalidArgumentException If the array does not contain the "Value" key.
-     *
-     * @deprecated
-     */
-    public static function fromArray(array $nameId)
-    {
-        $nid = new NameID();
-        if (!array_key_exists('Value', $nameId)) {
-            throw new \InvalidArgumentException('Missing "Value" in array, cannot create NameID from it.');
-        }
-        $nid->value = $nameId['Value'];
-
-        if (array_key_exists('NameQualifier', $nameId) && $nameId['NameQualifier'] !== null) {
-            $nid->NameQualifier = $nameId['NameQualifier'];
-        }
-        if (array_key_exists('SPNameQualifier', $nameId) && $nameId['SPNameQualifier'] !== null) {
-            $nid->SPNameQualifier = $nameId['SPNameQualifier'];
-        }
-        if (array_key_exists('SPProvidedID', $nameId) && $nameId['SPProvidedId'] !== null) {
-            $nid->SPProvidedID = $nameId['SPProvidedID'];
-        }
-        if (array_key_exists('Format', $nameId) && $nameId['Format'] !== null) {
-            $nid->Format = $nameId['Format'];
-        }
-        return $nid;
-    }
-
-
-    /**
      * Convert this NameIDType to XML.
      *
      * @param \DOMElement $parent The element we are converting to XML.

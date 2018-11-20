@@ -9,9 +9,12 @@ class ResponseTest extends \PHPUnit_Framework_TestCase
 {
     public function testMarshalling()
     {
+        $issuer = new XML\saml\Issuer();
+        $issuer->value = 'SomeIssuer';
+
         $response = new Response();
         $response->setConsent(Constants::CONSENT_EXPLICIT);
-        $response->setIssuer('SomeIssuer');
+        $response->setIssuer($issuer);
         $responseElement = $response->toUnsignedXML();
 
         $this->assertTrue($responseElement->hasAttribute('Consent'));

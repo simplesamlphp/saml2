@@ -71,12 +71,6 @@ class SimpleSAMLConverter
             $extracted['certificateData'] = $configuration->getString($prefix.'certificate');
         }
 
-        // ported from
-        // https://github.com/simplesamlphp/simplesamlphp/blob/3d735912342767d391297cc5e13272a76730aca0/modules/saml/lib/Message.php#L161
-        if ($configuration->hasValue($prefix . 'certFingerprint')) {
-            $extracted['certificateFingerprint'] = $configuration->getArrayizeString('certFingerprint');
-        }
-
         $extracted['assertionEncryptionEnabled'] = $configuration->getBoolean('assertion.encryption', false);
 
         if ($configuration->has('sharedKey')) {

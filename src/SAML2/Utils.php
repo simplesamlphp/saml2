@@ -295,65 +295,6 @@ class Utils
 
 
     /**
-     * Create a NameID element.
-     *
-     * The NameId array can have the following elements: 'Value', 'Format',
-     *   'NameQualifier, 'SPNameQualifier' and 'SPProviderID'.
-     *
-     * Only the 'Value'-element is required.
-     *
-     * @param \DOMElement $node   The DOM node we should append the NameId to.
-     * @param array      $nameId The name identifier.
-     *
-     * @deprecated Please use \SAML2\XML\saml\NameID objects instead:
-     *   $nameId = new \SAML2\XML\saml\NameID();
-     *   $nameId->value = $value;
-     *   ...
-     *   $nameId->toXML($node);
-     */
-    public static function addNameId(\DOMElement $node, array $nameId)
-    {
-        assert(array_key_exists("Value", $nameId));
-
-        $nid = new XML\saml\NameID();
-
-        $nid->value = $nameId['Value'];
-
-        if (array_key_exists('NameQualifier', $nameId) && $nameId['NameQualifier'] !== null) {
-            $nid->NameQualifier = $nameId['NameQualifier'];
-        }
-        if (array_key_exists('SPNameQualifier', $nameId) && $nameId['SPNameQualifier'] !== null) {
-            $nid->SPNameQualifier = $nameId['SPNameQualifier'];
-        }
-        if (array_key_exists('Format', $nameId) && $nameId['Format'] !== null) {
-            $nid->Format = $nameId['Format'];
-        }
-
-        $nid->toXML($node);
-    }
-
-    /**
-     * Parse a NameID element.
-     *
-     * @param  \DOMElement $xml The DOM element we should parse.
-     * @return array      The parsed name identifier.
-     * @deprecated Please use \SAML2\XML\saml\NameID objects instead:
-     *   $nameId = new \SAML2\XML\saml\NameID($xml);
-     */
-    public static function parseNameId(\DOMElement $xml)
-    {
-        $ret = ['Value' => trim($xml->textContent)];
-
-        foreach (['NameQualifier', 'SPNameQualifier', 'SPProvidedID', 'Format'] as $attr) {
-            if ($xml->hasAttribute($attr)) {
-                $ret[$attr] = $xml->getAttribute($attr);
-            }
-        }
-
-        return $ret;
-    }
-
-    /**
      * Insert a Signature-node.
      *
      * @param XMLSecurityKey $key           The key we should use to sign the message.

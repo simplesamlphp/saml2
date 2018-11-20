@@ -15,17 +15,6 @@ class FileTest extends \PHPUnit_Framework_TestCase
         File::getFileContents('/foo/bar/baz/quux');
     }
 
-   /**
-     * @group utilities
-     * @test
-     *
-     * @expectedException \SAML2\Exception\InvalidArgumentException
-     */
-    public function passing_nonstring_filename_throws_exception()
-    {
-        File::getFileContents(null);
-    }
-
     /**
      * @group utilities
      * @test

@@ -83,9 +83,9 @@ class KeyLoader
      * are not configured to be used with the usage given
      *
      * @param array $configuredKeys
-     * @param string $usage
+     * @param string|null $usage
      */
-    public function loadKeys(array $configuredKeys, $usage)
+    public function loadKeys(array $configuredKeys, string $usage = null)
     {
         foreach ($configuredKeys as $keyData) {
             if (isset($keyData['X509Certificate'])) {

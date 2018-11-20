@@ -3,7 +3,6 @@
 namespace SAML2\Signature;
 
 use Psr\Log\LoggerInterface;
-use SAML2\Certificate\FingerprintLoader;
 use SAML2\Certificate\KeyLoader;
 use SAML2\Configuration\CertificateProvider;
 use SAML2\SignedElement;
@@ -31,8 +30,7 @@ class Validator
         $validator = new ValidatorChain(
             $this->logger,
             [
-                new PublicKeyValidator($this->logger, new KeyLoader()),
-                new FingerprintValidator($this->logger, new FingerprintLoader())
+                new PublicKeyValidator($this->logger, new KeyLoader())
             ]
         );
 

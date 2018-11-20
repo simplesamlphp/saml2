@@ -26,9 +26,9 @@ class HTTPPost extends Binding
         $relayState = $message->getRelayState();
 
         $msgStr = $message->toSignedXML();
-        $msgStr = $msgStr->ownerDocument->saveXML($msgStr);
 
         Utils::getContainer()->debugMessage($msgStr, 'out');
+        $msgStr = $msgStr->ownerDocument->saveXML($msgStr);
 
         $msgStr = base64_encode($msgStr);
 
@@ -59,21 +59,23 @@ class HTTPPost extends Binding
     public function receive()
     {
         if (array_key_exists('SAMLRequest', $_POST)) {
-            $msg = $_POST['SAMLRequest'];
+            $msgStr = $_POST['SAMLRequest'];
         } elseif (array_key_exists('SAMLResponse', $_POST)) {
-            $msg = $_POST['SAMLResponse'];
+            $msgStr = $_POST['SAMLResponse'];
         } else {
             throw new \Exception('Missing SAMLRequest or SAMLResponse parameter.');
         }
 
-        $msg = base64_decode($msg);
+        $msgStr = base64_decode($msgStr);
 
-        Utils::getContainer()->debugMessage($msg, 'in');
+        $xml = new \DOMDocument();
+        $xml->loadXML($msgStr);
+        $msgStr = $xml->saveXML();
 
-        $document = DOMDocumentFactory::fromString($msg);
-        $xml = $document->firstChild;
+        $document = DOMDocumentFactory::fromString($msgStr);
+        Utils::getContainer()->debugMessage($document->documentElement, 'in');
 
-        $msg = Message::fromXML($xml);
+        $msg = Message::fromXML($document->firstChild);
 
         if (array_key_exists('RelayState', $_POST)) {
             $msg->setRelayState($_POST['RelayState']);

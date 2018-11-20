@@ -32,9 +32,9 @@ class HTTPRedirect extends Binding
         $key = $message->getSignatureKey();
 
         $msgStr = $message->toUnsignedXML();
-        $msgStr = $msgStr->ownerDocument->saveXML($msgStr);
 
         Utils::getContainer()->debugMessage($msgStr, 'out');
+        $msgStr = $msgStr->ownerDocument->saveXML($msgStr);
 
         $msgStr = gzdeflate($msgStr);
         $msgStr = base64_encode($msgStr);
@@ -119,10 +119,9 @@ class HTTPRedirect extends Binding
             throw new \Exception('Error while inflating SAML message.');
         }
 
-        Utils::getContainer()->debugMessage($message, 'in');
         $document = DOMDocumentFactory::fromString($message);
-        $xml      = $document->firstChild;
-        $message  = Message::fromXML($xml);
+        Utils::getContainer()->debugMessage($document->documentElement, 'in');
+        $message  = Message::fromXML($document->firstChild);
 
         if (array_key_exists('RelayState', $data)) {
             $message->setRelayState($data['RelayState']);

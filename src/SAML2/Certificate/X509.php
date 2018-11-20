@@ -7,11 +7,6 @@ namespace SAML2\Certificate;
  */
 class X509 extends Key
 {
-    /**
-     * @var \SAML2\Certificate\Fingerprint
-     */
-    private $fingerprint;
-
     public static function createFromCertificateData($certificateContents)
     {
         $data = [
@@ -46,21 +41,5 @@ class X509 extends Key
         return "-----BEGIN CERTIFICATE-----\n"
                 . chunk_split($this->keyData['X509Certificate'], 64)
                 . "-----END CERTIFICATE-----\n";
-    }
-
-    /**
-     * @return \SAML2\Certificate\Fingerprint
-     *
-     * @deprecated Please use full certificates instead.
-     */
-    public function getFingerprint()
-    {
-        if (isset($this->fingerprint)) {
-            return $this->fingerprint;
-        }
-
-        $fingerprint = strtolower(sha1(base64_decode($this->keyData['X509Certificate'])));
-
-        return $this->fingerprint = new Fingerprint($fingerprint);
     }
 }

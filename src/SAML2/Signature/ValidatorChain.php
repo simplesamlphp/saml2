@@ -73,7 +73,7 @@ class ValidatorChain implements ValidatorInterface
         }
 
         throw new MissingConfigurationException(sprintf(
-            'No certificates or fingerprints have been configured%s',
+            'No certificates have been configured%s',
             $configuration->has('entityid') ? ' for "'.$configuration->get('entityid').'"' : ''
         ));
     }

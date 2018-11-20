@@ -46,8 +46,11 @@ XML;
 
     public function testMarshalling()
     {
+        $nameId = new XML\saml\NameID();
+        $nameId->value = 'NameIDValue';
+
         $logoutRequest = new LogoutRequest();
-        $logoutRequest->setNameID(['Value' => 'NameIDValue']);
+        $logoutRequest->setNameID($nameId);
         $logoutRequest->setSessionIndex('SessionIndexValue');
 
         $logoutRequestElement = $logoutRequest->toUnsignedXML();
@@ -63,8 +66,10 @@ XML;
         $this->assertCount(1, $sessionIndexElements);
         $this->assertEquals('SessionIndexValue', $sessionIndexElements[0]->textContent);
 
+        $nameId = new XML\saml\NameID();
+        $nameId->value = 'NameIDValue';
         $logoutRequest = new LogoutRequest();
-        $logoutRequest->setNameID(['Value' => 'NameIDValue']);
+        $logoutRequest->setNameID($nameId);
         $logoutRequest->setSessionIndexes(['SessionIndexValue1', 'SessionIndexValue2']);
         $logoutRequestElement = $logoutRequest->toUnsignedXML();
 
@@ -93,8 +98,11 @@ XML;
 
     public function testEncryptedNameId()
     {
+        $nameId = new XML\saml\NameID();
+        $nameId->value = 'NameIdValue';
+
         $logoutRequest = new LogoutRequest();
-        $logoutRequest->setNameID(['Value' => 'NameIDValue']);
+        $logoutRequest->setNameID($nameId);
         $logoutRequest->encryptNameId(CertificatesMock::getPublicKey());
 
         $logoutRequestElement = $logoutRequest->toUnsignedXML();
