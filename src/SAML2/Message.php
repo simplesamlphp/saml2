@@ -22,7 +22,8 @@ abstract class Message implements SignedElement
      *
      * @var array
      */
-    protected $extensions = array();
+    protected $extensions;
+
     /**
      * The name of the root element of the DOM tree for the message.
      *
@@ -602,9 +603,8 @@ abstract class Message implements SignedElement
     public function setExtensions($extensions)
     {
         assert(is_array($extensions) || is_null($extensions));
-        if (is_array($extensions)) {
-            $this->extensions = $extensions;
-        }
+
+        $this->extensions = $extensions;
     }
 
     /**
