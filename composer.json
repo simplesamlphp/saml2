@@ -9,7 +9,7 @@
         }
     ],
     "require": {
-        "php": ">=5.4",
+        "php": ">=7.0",
         "ext-openssl": "*",
         "ext-dom": "*",
         "ext-zlib": "*",
