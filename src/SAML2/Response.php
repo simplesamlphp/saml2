@@ -23,7 +23,7 @@ class Response extends StatusResponse
     {
         parent::__construct('Response', $xml);
 
-        $this->assertions = array();
+        $this->assertions = [];
 
         if ($xml === null) {
             return;

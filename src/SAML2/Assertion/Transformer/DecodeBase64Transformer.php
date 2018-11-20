@@ -28,7 +28,7 @@ class DecodeBase64Transformer implements
 
         $attributes = $assertion->getAttributes();
         $keys = array_keys($attributes);
-        $decoded = array_map(array($this, 'decodeValue'), $attributes);
+        $decoded = array_map([$this, 'decodeValue'], $attributes);
 
         $attributes = array_combine($keys, $decoded);
 

@@ -16,10 +16,10 @@ class RoleDescriptorTest extends \PHPUnit_Framework_TestCase
         $roleDescriptor->ID = 'SomeID';
         $roleDescriptor->validUntil = 1234567890;
         $roleDescriptor->cacheDuration = 'PT5000S';
-        $roleDescriptor->protocolSupportEnumeration = array(
+        $roleDescriptor->protocolSupportEnumeration = [
             'protocol1',
             'protocol2',
-        );
+        ];
         $roleDescriptor->errorURL = 'https://example.org/error';
 
         $document = DOMDocumentFactory::fromString('<root />');

@@ -46,7 +46,7 @@ class RoleDescriptor extends SignedElementHelper
      *
      * @var array
      */
-    public $protocolSupportEnumeration = array();
+    public $protocolSupportEnumeration = [];
 
     /**
      * Error URL for this role.
@@ -62,7 +62,7 @@ class RoleDescriptor extends SignedElementHelper
      *
      * @var array
      */
-    public $Extensions = array();
+    public $Extensions = [];
 
     /**
      * KeyDescriptor elements.
@@ -71,7 +71,7 @@ class RoleDescriptor extends SignedElementHelper
      *
      * @var \SAML2\XML\md\KeyDescriptor[]
      */
-    public $KeyDescriptor = array();
+    public $KeyDescriptor = [];
 
     /**
      * Organization of this role.
@@ -87,7 +87,7 @@ class RoleDescriptor extends SignedElementHelper
      *
      * @var \SAML2\XML\md\ContactPerson[]
      */
-    public $ContactPerson = array();
+    public $ContactPerson = [];
 
     /**
      * Initialize a RoleDescriptor.

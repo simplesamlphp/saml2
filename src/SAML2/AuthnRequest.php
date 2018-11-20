@@ -49,7 +49,7 @@ class AuthnRequest extends Request
      *
      * @var array
      */
-    private $IDPList = array();
+    private $IDPList = [];
 
     /**
      * The ProxyCount in this request's scoping element
@@ -64,7 +64,7 @@ class AuthnRequest extends Request
      * @var array
      */
 
-    private $RequesterID = array();
+    private $RequesterID = [];
 
     /**
      * The URL of the asertion consumer service where the response should be delivered.
@@ -111,7 +111,7 @@ class AuthnRequest extends Request
     /**
      * @var \SAML2\XML\saml\SubjectConfirmation[]
      */
-    private $subjectConfirmation = array();
+    private $subjectConfirmation = [];
 
     /**
      * @var string
@@ -133,7 +133,7 @@ class AuthnRequest extends Request
     {
         parent::__construct('AuthnRequest', $xml);
 
-        $this->nameIdPolicy = array();
+        $this->nameIdPolicy = [];
         $this->forceAuthn = false;
         $this->isPassive = false;
 
@@ -246,10 +246,10 @@ class AuthnRequest extends Request
 
         $requestedAuthnContext = $requestedAuthnContext[0];
 
-        $rac = array(
-            'AuthnContextClassRef' => array(),
+        $rac = [
+            'AuthnContextClassRef' => [],
             'Comparison'           => Constants::COMPARISON_EXACT,
-        );
+        ];
 
         $accr = Utils::xpQuery($requestedAuthnContext, './saml_assertion:AuthnContextClassRef');
         foreach ($accr as $i) {
@@ -646,7 +646,7 @@ class AuthnRequest extends Request
      * @param XMLSecurityKey $key       The decryption key.
      * @param array          $blacklist Blacklisted decryption algorithms.
      */
-    public function decryptNameId(XMLSecurityKey $key, array $blacklist = array())
+    public function decryptNameId(XMLSecurityKey $key, array $blacklist = [])
     {
         if ($this->encryptedNameId === null) {
             /* No NameID to decrypt. */
@@ -758,11 +758,11 @@ class AuthnRequest extends Request
                         $idpEntry->setAttribute('ProviderID', $provider);
                     } elseif (is_array($provider)) {
                         foreach ($provider as $attribute => $value) {
-                            if (in_array($attribute, array(
+                            if (in_array($attribute, [
                                 'ProviderID',
                                 'Loc',
                                 'Name'
-                            ), true)) {
+                            ], true)) {
                                 $idpEntry->setAttribute($attribute, $value);
                             }
                         }

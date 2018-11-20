@@ -12,7 +12,7 @@ class Result
     /**
      * @var array
      */
-    private $errors = array();
+    private $errors = [];
 
     /**
      * @param $message

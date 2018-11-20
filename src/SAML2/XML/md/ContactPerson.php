@@ -26,7 +26,7 @@ class ContactPerson
      *
      * @var array
      */
-    public $Extensions = array();
+    public $Extensions = [];
 
     /**
      * The Company of this contact.
@@ -54,21 +54,21 @@ class ContactPerson
      *
      * @var array
      */
-    public $EmailAddress = array();
+    public $EmailAddress = [];
 
     /**
      * The TelephoneNumbers of this contact.
      *
      * @var array
      */
-    public $TelephoneNumber = array();
+    public $TelephoneNumber = [];
 
     /**
      * Extra attributes on the contact element.
      *
      * @var array
      */
-    public $ContactPersonAttributes = array();
+    public $ContactPersonAttributes = [];
 
     /**
      * Initialize a ContactPerson element.
@@ -117,7 +117,7 @@ class ContactPerson
 
         $e = Utils::xpQuery($parent, './saml_metadata:' . $name);
 
-        $ret = array();
+        $ret = [];
         foreach ($e as $i) {
             $ret[] = $i->textContent;
         }

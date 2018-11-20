@@ -24,9 +24,9 @@ class AttributeValueTest extends \PHPUnit_Framework_TestCase
         $attribute->Name = 'TheName';
         $attribute->NameFormat = 'TheNameFormat';
         $attribute->FriendlyName = 'TheFriendlyName';
-        $attribute->AttributeValue = array(
+        $attribute->AttributeValue = [
             new AttributeValue(""),
-        );
+        ];
 
         $document = DOMDocumentFactory::fromString('<root />');
         $returnedStructure = $attribute->toXML($document->firstChild);
@@ -62,9 +62,9 @@ ATTRIBUTEVALUE
 ATTRIBUTEVALUE
         );
 
-        $attribute->AttributeValue = array(
+        $attribute->AttributeValue = [
             new AttributeValue($element->documentElement),
-        );
+        ];
 
         $document = DOMDocumentFactory::fromString('<root />');
         $returnedStructure = $attribute->toXML($document->firstChild);

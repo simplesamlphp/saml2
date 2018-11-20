@@ -51,7 +51,7 @@ class SimpleSAMLConverter
      */
     protected static function pluckConfiguration(SimpleSAML_Configuration $configuration, $prefix = '')
     {
-        $extracted = array();
+        $extracted = [];
 
         // ported from
         // https://github.com/simplesamlphp/simplesamlphp/blob/3d735912342767d391297cc5e13272a76730aca0/lib/SimpleSAML/Configuration.php#L1092

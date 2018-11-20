@@ -16,7 +16,7 @@ class PrivateKey extends Key
             throw InvalidArgumentException::invalidType('string', $passphrase);
         }
 
-        $keyData = array('PEM' => $keyContents, self::USAGE_ENCRYPTION => true);
+        $keyData = ['PEM' => $keyContents, self::USAGE_ENCRYPTION => true];
         if ($passphrase) {
             $keyData['passphrase'] = $passphrase;
         }

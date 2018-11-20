@@ -30,10 +30,10 @@ class Validator
         // should be DI
         $validator = new ValidatorChain(
             $this->logger,
-            array(
+            [
                 new PublicKeyValidator($this->logger, new KeyLoader()),
                 new FingerprintValidator($this->logger, new FingerprintLoader())
-            )
+            ]
         );
 
         return $validator->hasValidSignature($signedElement, $configuration);

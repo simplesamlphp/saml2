@@ -10,15 +10,15 @@ class SimpleTestLogger extends \Psr\Log\AbstractLogger
     /**
      * @var array
      */
-    private $messages = array();
+    private $messages = [];
 
-    public function log($level, $message, array $context = array())
+    public function log($level, $message, array $context = [])
     {
-        $this->messages[] = array(
+        $this->messages[] = [
             'level'   => $level,
             'message' => $message,
             'context' => $context
-        );
+        ];
     }
 
     /**

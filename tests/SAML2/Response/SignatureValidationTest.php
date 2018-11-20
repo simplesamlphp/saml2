@@ -57,9 +57,9 @@ class SignatureValidationTest extends \PHPUnit_Framework_TestCase
         preg_match($pattern, CertificatesMock::PUBLIC_KEY_PEM, $matches);
 
         $this->identityProviderConfiguration
-            = new IdentityProvider(array('certificateData' => $matches[1]));
+            = new IdentityProvider(['certificateData' => $matches[1]]);
         $this->serviceProviderConfiguration
-            = new ServiceProvider(array('entityId' => 'urn:mace:feide.no:services:no.feide.moodle'));
+            = new ServiceProvider(['entityId' => 'urn:mace:feide.no:services:no.feide.moodle']);
     }
 
     /**
@@ -134,8 +134,8 @@ class SignatureValidationTest extends \PHPUnit_Framework_TestCase
         $processor = new Processor(new \Psr\Log\NullLogger());
 
         $processor->process(
-            new ServiceProvider(array()),
-            new IdentityProvider(array()),
+            new ServiceProvider([]),
+            new IdentityProvider([]),
             new Destination($this->currentDestination),
             $this->getUnsignedResponseWithUnsignedAssertion()
         );
@@ -150,7 +150,7 @@ class SignatureValidationTest extends \PHPUnit_Framework_TestCase
         $doc->load(__DIR__ . '/response.xml');
         $response = new Response($doc->firstChild);
         $response->setSignatureKey(CertificatesMock::getPrivateKey());
-        $response->setCertificates(array(CertificatesMock::PUBLIC_KEY_PEM));
+        $response->setCertificates([CertificatesMock::PUBLIC_KEY_PEM]);
 
         // convert to signed response
         return new Response($response->toSignedXML());
@@ -168,10 +168,10 @@ class SignatureValidationTest extends \PHPUnit_Framework_TestCase
         $assertions = $response->getAssertions();
         $assertion = $assertions[0];
         $assertion->setSignatureKey(CertificatesMock::getPrivateKey());
-        $assertion->setCertificates(array(CertificatesMock::PUBLIC_KEY_PEM));
+        $assertion->setCertificates([CertificatesMock::PUBLIC_KEY_PEM]);
         $signedAssertion = new Assertion($assertion->toXML());
 
-        $response->setAssertions(array($signedAssertion));
+        $response->setAssertions([$signedAssertion]);
 
         return $response;
     }
@@ -185,12 +185,12 @@ class SignatureValidationTest extends \PHPUnit_Framework_TestCase
         $doc->load(__DIR__ . '/response.xml');
         $response = new Response($doc->firstChild);
         $response->setSignatureKey(CertificatesMock::getPrivateKey());
-        $response->setCertificates(array(CertificatesMock::PUBLIC_KEY_PEM));
+        $response->setCertificates([CertificatesMock::PUBLIC_KEY_PEM]);
 
         $assertions = $response->getAssertions();
         $assertion  = $assertions[0];
         $assertion->setSignatureKey(CertificatesMock::getPrivateKey());
-        $assertion->setCertificates(array(CertificatesMock::PUBLIC_KEY_PEM));
+        $assertion->setCertificates([CertificatesMock::PUBLIC_KEY_PEM]);
 
         return new Response($response->toSignedXML());
     }

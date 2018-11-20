@@ -163,7 +163,7 @@ SOAP;
 
     private function getStubWithInput($input)
     {
-        $stub = $this->getMock('SAML2\\SOAP', array('getInputStream'));
+        $stub = $this->getMock('SAML2\\SOAP', ['getInputStream']);
         $stub->expects($this->once())
              ->method('getInputStream')
              ->will($this->returnValue($input));

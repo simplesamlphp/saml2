@@ -38,7 +38,7 @@ class HTTPPost extends Binding
             $msgType = 'SAMLResponse';
         }
 
-        $post = array();
+        $post = [];
         $post[$msgType] = $msgStr;
 
         if ($relayState !== null) {

@@ -46,7 +46,7 @@ class AttributeQuery extends SubjectQuery
     {
         parent::__construct('AttributeQuery', $xml);
 
-        $this->attributes = array();
+        $this->attributes = [];
         $this->nameFormat = Constants::NAMEFORMAT_UNSPECIFIED;
 
         if ($xml === null) {
@@ -77,7 +77,7 @@ class AttributeQuery extends SubjectQuery
             }
 
             if (!array_key_exists($name, $this->attributes)) {
-                $this->attributes[$name] = array();
+                $this->attributes[$name] = [];
             }
 
             $values = Utils::xpQuery($attribute, './saml_assertion:AttributeValue');

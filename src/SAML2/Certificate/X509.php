@@ -14,12 +14,12 @@ class X509 extends Key
 
     public static function createFromCertificateData($certificateContents)
     {
-        $data = array(
+        $data = [
             'encryption'      => true,
             'signing'         => true,
             'type'            => 'X509Certificate',
             'X509Certificate' => $certificateContents
-        );
+        ];
 
         return new self($data);
     }

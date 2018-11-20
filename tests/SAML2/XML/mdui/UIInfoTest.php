@@ -16,10 +16,10 @@ class UIInfoTest extends \PHPUnit_Framework_TestCase
     public function testMarshalling()
     {
         $uiinfo = new UIInfo();
-        $uiinfo->DisplayName = array("nl" => "Voorbeeld", "en" => "Example");
-        $uiinfo->Description = array("nl" => "Omschrijving", "en" => "Description");
-        $uiinfo->InformationURL = array("nl" => "https://voorbeeld.nl/", "en" => "https://example.org");
-        $uiinfo->PrivacyStatementURL = array("nl" => "https://voorbeeld.nl/privacy", "en" => "https://example.org/privacy");
+        $uiinfo->DisplayName = ["nl" => "Voorbeeld", "en" => "Example"];
+        $uiinfo->Description = ["nl" => "Omschrijving", "en" => "Description"];
+        $uiinfo->InformationURL = ["nl" => "https://voorbeeld.nl/", "en" => "https://example.org"];
+        $uiinfo->PrivacyStatementURL = ["nl" => "https://voorbeeld.nl/privacy", "en" => "https://example.org/privacy"];
 
         $document = DOMDocumentFactory::fromString('<root />');
         $xml = $uiinfo->toXML($document->firstChild);
@@ -79,21 +79,21 @@ class UIInfoTest extends \PHPUnit_Framework_TestCase
     {
         $keywords = new Keywords();
         $keywords->lang = "nl";
-        $keywords->Keywords = array("voorbeeld", "specimen");
+        $keywords->Keywords = ["voorbeeld", "specimen"];
         $logo = new Logo();
         $logo->lang = "nl";
         $logo->width = 30;
         $logo->height = 20;
         $logo->url = "https://example.edu/logo.png";
         $discohints = new DiscoHints();
-        $discohints->IPHint = array("192.168.6.0/24", "fd00:0123:aa:1001::/64");
+        $discohints->IPHint = ["192.168.6.0/24", "fd00:0123:aa:1001::/64"];
         // keywords appears twice, direcyly under UIinfo and as child of DiscoHints
-        $discohints->children = array($keywords);
+        $discohints->children = [$keywords];
 
         $uiinfo = new UIInfo();
-        $uiinfo->Logo = array($logo);
-        $uiinfo->Keywords = array($keywords);
-        $uiinfo->children = array($discohints);
+        $uiinfo->Logo = [$logo];
+        $uiinfo->Keywords = [$keywords];
+        $uiinfo->children = [$discohints];
 
         $document = DOMDocumentFactory::fromString('<root />');
         $xml = $uiinfo->toXML($document->firstChild);

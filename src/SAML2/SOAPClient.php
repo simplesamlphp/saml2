@@ -31,12 +31,12 @@ class SOAPClient
     {
         $issuer = $msg->getIssuer();
 
-        $ctxOpts = array(
-            'ssl' => array(
+        $ctxOpts = [
+            'ssl' => [
                 'capture_peer_cert' => true,
                 'allow_self_signed' => true
-            ),
-        );
+            ],
+        ];
 
         // Determine if we are going to do a MutualSSL connection between the IdP and SP  - Shoaib
         if ($srcMetadata->hasValue('saml.SOAPClient.certificate')) {
@@ -97,11 +97,11 @@ class SOAPClient
             throw new \Exception('Unable to create SSL stream context');
         }
 
-        $options = array(
+        $options = [
             'uri' => $issuer,
             'location' => $msg->getDestination(),
             'stream_context' => $context,
-        );
+        ];
 
         if ($srcMetadata->hasValue('saml.SOAPClient.proxyhost')) {
             $options['proxy_host'] = $srcMetadata->getValue('saml.SOAPClient.proxyhost');
@@ -190,7 +190,7 @@ class SOAPClient
             return;
         }
 
-        $msg->addValidator(array('\SAML2\SOAPClient', 'validateSSL'), $keyInfo['key']);
+        $msg->addValidator(['\SAML2\SOAPClient', 'validateSSL'], $keyInfo['key']);
     }
 
     /**

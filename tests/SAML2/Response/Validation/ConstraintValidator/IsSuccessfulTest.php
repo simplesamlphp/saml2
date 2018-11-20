@@ -39,11 +39,11 @@ class IsSuccessfulTest extends \PHPUnit_Framework_TestCase
      */
     public function an_unsuccessful_response_is_not_valid_and_generates_a_proper_error_message()
     {
-        $responseStatus = array(
+        $responseStatus = [
             'Code'    => 'foo',
             'SubCode' => Constants::STATUS_PREFIX . 'bar',
             'Message' => 'this is a test message'
-        );
+        ];
         $this->response->shouldReceive('isSuccess')->once()->andReturn(false);
         $this->response->shouldReceive('getStatus')->once()->andReturn($responseStatus);
 

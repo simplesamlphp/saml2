@@ -16,10 +16,10 @@ class PublicationInfoTest extends \PHPUnit_Framework_TestCase
         $publicationInfo->publisher = 'TestPublisher';
         $publicationInfo->creationInstant = 1234567890;
         $publicationInfo->publicationId = 'PublicationIdValue';
-        $publicationInfo->UsagePolicy = array(
+        $publicationInfo->UsagePolicy = [
             'en' => 'http://EnglishUsagePolicy',
             'no' => 'http://NorwegianUsagePolicy',
-        );
+        ];
 
         $document = DOMDocumentFactory::fromString('<root />');
         $xml = $publicationInfo->toXML($document->firstChild);

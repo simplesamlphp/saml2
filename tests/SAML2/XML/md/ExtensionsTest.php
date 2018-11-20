@@ -28,7 +28,7 @@ class ExtensionsTest extends \PHPUnit_Framework_TestCase
         $d->formatOutput = true;
 
         // add an empty list on an empty Extensions element
-        Extensions::addList($r, array());
+        Extensions::addList($r, []);
         $list = Extensions::getList($r);
         $this->assertCount(0, $list);
         $this->assertEquals(<<<XML
@@ -45,7 +45,7 @@ XML
         $chunk->setAttribute('foo', 'bar');
         $e->appendChild($chunk);
         $r->appendChild($e);
-        Extensions::addList($r, array());
+        Extensions::addList($r, []);
         $list = Extensions::getList($r);
         $this->assertCount(1, $list);
         $this->assertEquals(<<<XML
@@ -122,10 +122,10 @@ XML
         $scope->scope = 'SomeScope';
         $digest = new \SAML2\XML\alg\DigestMethod();
         $digest->Algorithm = 'SomeAlgorithm';
-        $extensions = array(
+        $extensions = [
             $scope,
             $digest,
-        );
+        ];
         Extensions::addList($r, $extensions);
         $this->assertEquals(
 <<<XML

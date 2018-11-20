@@ -44,12 +44,12 @@ class DestinationTest extends \PHPUnit_Framework_TestCase
      */
     public function nonStringValueProvider()
     {
-        return array(
-            'array'  => array(array()),
-            'object' => array(new \StdClass()),
-            'int'    => array(1),
-            'float'  => array(1.2323),
-            'bool'   => array(false)
-        );
+        return [
+            'array'  => [[]],
+            'object' => [new \StdClass()],
+            'int'    => [1],
+            'float'  => [1.2323],
+            'bool'   => [false]
+        ];
     }
 }

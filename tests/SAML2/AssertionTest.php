@@ -17,7 +17,7 @@ class AssertionTest extends \PHPUnit_Framework_TestCase
         // Create an assertion
         $assertion = new Assertion();
         $assertion->setIssuer('testIssuer');
-        $assertion->setValidAudiences(array('audience1', 'audience2'));
+        $assertion->setValidAudiences(['audience1', 'audience2']);
         $assertion->setAuthnContext('someAuthnContext');
 
         // Marshall it to a \DOMElement
@@ -102,7 +102,7 @@ XML;
         $assertion = new Assertion();
 
         $assertion->setIssuer('testIssuer');
-        $assertion->setValidAudiences(array('audience1', 'audience2'));
+        $assertion->setValidAudiences(['audience1', 'audience2']);
 
         // deprecated function
         $this->assertNull($assertion->getAuthnContext());
@@ -120,12 +120,13 @@ XML;
 
         $assertion->setSessionIndex("idx1");
 
-        $assertion->setAuthenticatingAuthority(array("idp1","idp2"));
+        $assertion->setAuthenticatingAuthority(["idp1", "idp2"]);
 
-        $assertion->setAttributes(array(
-            "name1" => array("value1","value2"),
-            "name2" => array(2),
-            "name3" => array(null)));
+        $assertion->setAttributes([
+            "name1" => ["value1", "value2"],
+            "name2" => [2],
+            "name3" => [null]
+        ]);
         $assertion->setAttributeNameFormat("urn:oasis:names:tc:SAML:2.0:attrname-format:unspecified");
 
         $assertionElement = $assertion->toXML()->ownerDocument->saveXML();
@@ -165,23 +166,25 @@ XML;
         $assertion = new Assertion();
 
         $assertion->setIssuer('testIssuer');
-        $assertion->setValidAudiences(array('audience1', 'audience2'));
+        $assertion->setValidAudiences(['audience1', 'audience2']);
 
         $assertion->setAuthnContext('someAuthnContext');
 
-        $assertion->setAuthenticatingAuthority(array("idp1","idp2"));
+        $assertion->setAuthenticatingAuthority(["idp1", "idp2"]);
 
-        $assertion->setAttributes(array(
-            "name1" => array("value1",123,"2017-31-12"),
-            "name2" => array(2),
-            "name3" => array(1234,"+2345")));
+        $assertion->setAttributes([
+            "name1" => ["value1",123,"2017-31-12"],
+            "name2" => [2],
+            "name3" => [1234, "+2345"]
+        ]);
         $assertion->setAttributeNameFormat("urn:oasis:names:tc:SAML:2.0:attrname-format:unspecified");
 
         // set xs:type for first and third name1 values, and all name3 values.
         // second name1 value and all name2 values will use default behaviour
-        $assertion->setAttributesValueTypes(array(
-            "name1" => array("xs:string",null,"xs:date"),
-            "name3" => "xs:decimal"));
+        $assertion->setAttributesValueTypes([
+            "name1" => ["xs:string", null, "xs:date"],
+            "name3" => "xs:decimal"
+        ]);
 
         $assertionElement = $assertion->toXML()->ownerDocument->saveXML();
 
@@ -226,22 +229,24 @@ XML;
         $assertion = new Assertion();
 
         $assertion->setIssuer('testIssuer');
-        $assertion->setValidAudiences(array('audience1', 'audience2'));
+        $assertion->setValidAudiences(['audience1', 'audience2']);
 
         $assertion->setAuthnContext('someAuthnContext');
 
-        $assertion->setAuthenticatingAuthority(array("idp1","idp2"));
+        $assertion->setAuthenticatingAuthority(["idp1", "idp2"]);
 
-        $assertion->setAttributes(array(
-            "name1" => array("value1","2017-31-12"),
-            "name2" => array(2),
-            "name3" => array(1234,"+2345")));
+        $assertion->setAttributes([
+            "name1" => ["value1", "2017-31-12"],
+            "name2" => [2],
+            "name3" => [1234, "+2345"]
+        ]);
         $assertion->setAttributeNameFormat("urn:oasis:names:tc:SAML:2.0:attrname-format:unspecified");
 
         // set wrong number elements in name1
-        $assertion->setAttributesValueTypes(array(
-            "name1" => array("xs:string"),
-            "name3" => "xs:decimal"));
+        $assertion->setAttributesValueTypes([
+            "name1" => ["xs:string"],
+            "name3" => "xs:decimal"
+        ]);
 
         $this->setExpectedException('Exception', "Array of value types and array of values have different size for attribute 'name1'");
         $assertionElement = $assertion->toXML()->ownerDocument->saveXML();
@@ -684,7 +689,7 @@ XML
 
         $unsignedAssertion = new Assertion($document->firstChild);
         $unsignedAssertion->setSignatureKey($privateKey);
-        $unsignedAssertion->setCertificates(array(CertificatesMock::PUBLIC_KEY_PEM));
+        $unsignedAssertion->setCertificates([CertificatesMock::PUBLIC_KEY_PEM]);
         $this->assertFalse($unsignedAssertion->getWasSignedAtConstruction());
         $this->assertEquals($privateKey, $unsignedAssertion->getSignatureKey());
 
@@ -1803,12 +1808,13 @@ XML;
         // Create an assertion
         $assertion = new Assertion();
         $assertion->setIssuer('testIssuer');
-        $assertion->setValidAudiences(array('audience1', 'audience2'));
+        $assertion->setValidAudiences(['audience1', 'audience2']);
         $assertion->setAuthnContext('someAuthnContext');
 
-        $assertion->setNameId(array(
+        $assertion->setNameId([
             "Value" => "just_a_basic_identifier",
-            "Format" => "urn:oasis:names:tc:SAML:2.0:nameid-format:transient"));
+            "Format" => "urn:oasis:names:tc:SAML:2.0:nameid-format:transient"
+        ]);
         $this->assertFalse($assertion->isNameIdEncrypted());
 
         $publicKey = CertificatesMock::getPublicKey();

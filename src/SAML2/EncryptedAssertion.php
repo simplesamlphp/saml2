@@ -88,7 +88,7 @@ class EncryptedAssertion
      * @param  array           $blacklist Blacklisted decryption algorithms.
      * @return \SAML2\Assertion The decrypted assertion.
      */
-    public function getAssertion(XMLSecurityKey $inputKey, array $blacklist = array())
+    public function getAssertion(XMLSecurityKey $inputKey, array $blacklist = [])
     {
         $assertionXML = Utils::decryptElement($this->encryptedData, $inputKey, $blacklist);
 

@@ -40,7 +40,7 @@ class Attribute
      *
      * @var \SAML2\XML\saml\AttributeValue[]
      */
-    public $AttributeValue = array();
+    public $AttributeValue = [];
 
     /**
      * Initialize an Attribute.

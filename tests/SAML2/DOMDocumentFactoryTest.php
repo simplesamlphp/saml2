@@ -132,13 +132,13 @@ class DOMDocumentFactoryTest extends \PHPUnit_Framework_TestCase
      */
     public function nonStringProvider()
     {
-        return array(
-            'integer' => array(1),
-            'float'   => array(1.234),
-            'object'  => array(new \stdClass()),
-            'null'    => array(null),
-            'boolean' => array(false),
-            'array'   => array(array()),
-        );
+        return [
+            'integer' => [1],
+            'float'   => [1.234],
+            'object'  => [new \stdClass()],
+            'null'    => [null],
+            'boolean' => [false],
+            'array'   => [[]],
+        ];
     }
 }

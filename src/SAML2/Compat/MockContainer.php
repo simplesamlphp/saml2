@@ -15,7 +15,7 @@ class MockContainer extends AbstractContainer
     /**
      * @var array
      */
-    private $debugMessages = array();
+    private $debugMessages = [];
 
     /**
      * @var string

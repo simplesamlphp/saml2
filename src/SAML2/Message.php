@@ -140,8 +140,8 @@ abstract class Message implements SignedElement
 
         $this->id = Utils::getContainer()->generateId();
         $this->issueInstant = Temporal::getTime();
-        $this->certificates = array();
-        $this->validators = array();
+        $this->certificates = [];
+        $this->validators = [];
 
         if ($xml === null) {
             return;
@@ -201,10 +201,10 @@ abstract class Message implements SignedElement
             if ($sig !== false) {
                 $this->messageContainedSignatureUponConstruction = true;
                 $this->certificates = $sig['Certificates'];
-                $this->validators[] = array(
-                    'Function' => array('\SAML2\Utils', 'validateSignature'),
+                $this->validators[] = [
+                    'Function' => ['\SAML2\Utils', 'validateSignature'],
                     'Data' => $sig,
-                );
+                ];
                 $this->signatureMethod = $signatureMethod[0]->value;
             }
         } catch (\Exception $e) {
@@ -226,10 +226,10 @@ abstract class Message implements SignedElement
     {
         assert(is_callable($function));
 
-        $this->validators[] = array(
+        $this->validators[] = [
             'Function' => $function,
             'Data' => $data,
-        );
+        ];
     }
 
     /**
@@ -251,7 +251,7 @@ abstract class Message implements SignedElement
             return false;
         }
 
-        $exceptions = array();
+        $exceptions = [];
 
         foreach ($this->validators as $validator) {
             $function = $validator['Function'];

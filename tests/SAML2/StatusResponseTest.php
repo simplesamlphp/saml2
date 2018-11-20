@@ -10,11 +10,11 @@ class StatusResponseTest extends \PHPUnit_Framework_TestCase
     public function testMarshalling()
     {
         $response = new Response();
-        $response->setStatus(array(
+        $response->setStatus([
             'Code' => 'OurStatusCode',
             'SubCode' => 'OurSubStatusCode',
             'Message' => 'OurMessageText',
-        ));
+        ]);
 
         $responseElement = $response->toUnsignedXML();
 
@@ -137,9 +137,9 @@ XML;
     {
         $response = new Response();
         $response->setIssueInstant(1453323439);
-        $response->setStatus(array(
+        $response->setStatus([
             'Code' => 'OurStatusCode'
-        ));
+        ]);
         $response->setInResponseTo('aabb12234');
 
         $responseElement = $response->toUnsignedXML();

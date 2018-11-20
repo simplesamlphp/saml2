@@ -15,9 +15,9 @@
 function SAML2_autoload($className)
 {
     // handle classes that have been renamed
-    $renamed = array(
+    $renamed = [
         'SAML2_Const' => 'SAML2_Constants',
-    );
+    ];
     $oldName = $className;
     if (array_key_exists($className, $renamed)) {
         $className = $renamed[$className];

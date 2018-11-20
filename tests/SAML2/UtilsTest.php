@@ -13,12 +13,12 @@ class UtilsTest extends \PHPUnit_Framework_TestCase
     public function testXpQuery()
     {
         $aq = new AttributeQuery();
-        $aq->setNameID(array(
+        $aq->setNameID([
             'Value' => 'NameIDValue',
             'Format' => 'SomeNameIDFormat',
             'NameQualifier' => 'OurNameQualifier',
             'SPNameQualifier' => 'TheSPNameQualifier',
-        ));
+        ]);
 
         $xml = $aq->toUnsignedXML();
 
@@ -72,7 +72,7 @@ class UtilsTest extends \PHPUnit_Framework_TestCase
             'testns',
             'ns:somenode',
             false,
-            array('value1', 'value2')
+            ['value1', 'value2']
         );
         $this->assertEquals(
             '<root>'.
@@ -88,7 +88,7 @@ class UtilsTest extends \PHPUnit_Framework_TestCase
             'testns',
             'ns:somenode',
             false,
-            array('value1', 'value2')
+            ['value1', 'value2']
         );
         $this->assertEquals(
             '<ns:root xmlns:ns="testns">'.
@@ -104,7 +104,7 @@ class UtilsTest extends \PHPUnit_Framework_TestCase
             'testns',
             'ns:somenode',
             true,
-            array('en' => 'value (en)', 'no' => 'value (no)')
+            ['en' => 'value (en)', 'no' => 'value (no)']
         );
         $this->assertEquals(
             '<root>'.
@@ -120,7 +120,7 @@ class UtilsTest extends \PHPUnit_Framework_TestCase
             'testns',
             'ns:somenode',
             true,
-            array('en' => 'value (en)', 'no' => 'value (no)')
+            ['en' => 'value (en)', 'no' => 'value (no)']
         );
         $this->assertEquals(
             '<ns:root xmlns:ns="testns">'.
@@ -195,21 +195,21 @@ class UtilsTest extends \PHPUnit_Framework_TestCase
 
     public function xsDateTimes()
     {
-        return array(
-            array(true, '2015-01-01T00:00:00Z', 1420070400),
-            array(true, '2015-01-01T00:00:00.0Z', 1420070400),
-            array(true, '2015-01-01T00:00:00.1Z', 1420070400),
-            array(true, '2015-01-01T00:00:00.321Z', 1420070400),
-            array(true, '2015-01-01T00:00:00.587Z', 1420070400),
-            array(true, '2015-01-01T00:00:00.123456Z', 1420070400),
-            array(true, '2015-01-01T00:00:00.1234567Z', 1420070400),
-            array(false, '2015-01-01T00:00:00', 1420070400),
-            array(false, '2015-01-01T00:00:00.0', 1420070400),
-            array(false, 'junk'),
-            array(false, '2015-01-01T00:00:00-04:00'),
-            array(false, '2015-01-01T00:00:00.0-04:00'),
-            array(false, '2015-01-01T00:00:00.123456Z789012345', 1420070400),
-        );
+        return [
+            [true, '2015-01-01T00:00:00Z', 1420070400],
+            [true, '2015-01-01T00:00:00.0Z', 1420070400],
+            [true, '2015-01-01T00:00:00.1Z', 1420070400],
+            [true, '2015-01-01T00:00:00.321Z', 1420070400],
+            [true, '2015-01-01T00:00:00.587Z', 1420070400],
+            [true, '2015-01-01T00:00:00.123456Z', 1420070400],
+            [true, '2015-01-01T00:00:00.1234567Z', 1420070400],
+            [false, '2015-01-01T00:00:00', 1420070400],
+            [false, '2015-01-01T00:00:00.0', 1420070400],
+            [false, 'junk'],
+            [false, '2015-01-01T00:00:00-04:00'],
+            [false, '2015-01-01T00:00:00.0-04:00'],
+            [false, '2015-01-01T00:00:00.123456Z789012345', 1420070400],
+        ];
     }
 
     /**

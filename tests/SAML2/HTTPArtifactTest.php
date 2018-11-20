@@ -14,7 +14,7 @@ class HTTPArtifactTest extends PHPUnit_Framework_TestCase
      */
     public function testArtifactMissingUrlParamThrowsException()
     {
-        $_REQUEST = array('a' => 'b', 'c' => 'd');
+        $_REQUEST = ['a' => 'b', 'c' => 'd'];
 
         $ha = new HTTPArtifact();
         $this->setExpectedException('Exception', 'Missing SAMLart parameter.');

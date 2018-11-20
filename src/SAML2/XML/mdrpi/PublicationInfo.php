@@ -40,7 +40,7 @@ class PublicationInfo
      *
      * @var array
      */
-    public $UsagePolicy = array();
+    public $UsagePolicy = [];
 
     /**
      * Create/parse a mdrpi:PublicationInfo element.

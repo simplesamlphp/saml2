@@ -63,7 +63,7 @@ XML
      */
     public function testExtensionsAddEmpty()
     {
-        Extensions::addList($this->testElement, array());
+        Extensions::addList($this->testElement, []);
 
         $list = Extensions::getList($this->testElement);
 
@@ -82,7 +82,7 @@ XML
         $scope = new Scope();
         $scope->scope = "scope";
 
-        Extensions::addList($this->testElement, array($attribute, $scope));
+        Extensions::addList($this->testElement, [$attribute, $scope]);
 
         $list = Extensions::getList($this->testElement);
 

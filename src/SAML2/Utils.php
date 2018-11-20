@@ -84,17 +84,17 @@ class Utils
         }
 
         /* Now we extract all available X509 certificates in the signature element. */
-        $certificates = array();
+        $certificates = [];
         foreach (self::xpQuery($signatureElement, './ds:KeyInfo/ds:X509Data/ds:X509Certificate') as $certNode) {
             $certData = trim($certNode->textContent);
-            $certData = str_replace(array("\r", "\n", "\t", ' '), '', $certData);
+            $certData = str_replace(["\r", "\n", "\t", ' '], '', $certData);
             $certificates[] = $certData;
         }
 
-        $ret = array(
+        $ret = [
             'Signature' => $objXMLSecDSig,
             'Certificates' => $certificates,
-            );
+        ];
 
         return $ret;
     }
@@ -119,13 +119,13 @@ class Utils
             return $key;
         }
 
-        if (!in_array($algorithm, array(
+        if (!in_array($algorithm, [
             XMLSecurityKey::RSA_1_5,
             XMLSecurityKey::RSA_SHA1,
             XMLSecurityKey::RSA_SHA256,
             XMLSecurityKey::RSA_SHA384,
             XMLSecurityKey::RSA_SHA512
-        ), true)) {
+        ], true)) {
             throw new \Exception('Unsupported signing algorithm.');
         }
 
@@ -137,7 +137,7 @@ class Utils
             throw new \Exception('Missing key in public key details.');
         }
 
-        $newKey = new XMLSecurityKey($algorithm, array('type'=>$type));
+        $newKey = new XMLSecurityKey($algorithm, ['type' => $type]);
         $newKey->loadKey($keyInfo['key']);
 
         return $newKey;
@@ -210,7 +210,7 @@ class Utils
         }
 
         $results = $xpCache->query($query, $node);
-        $ret = array();
+        $ret = [];
         for ($i = 0; $i < $results->length; $i++) {
             $ret[$i] = $results->item($i);
         }
@@ -234,7 +234,7 @@ class Utils
             $document = $parent->ownerDocument;
         }
 
-        $namespaces = array();
+        $namespaces = [];
         for ($e = $element; $e !== null; $e = $e->parentNode) {
             foreach (Utils::xpQuery($e, './namespace::*') as $ns) {
                 $prefix = $ns->localName;
@@ -342,9 +342,9 @@ class Utils
      */
     public static function parseNameId(\DOMElement $xml)
     {
-        $ret = array('Value' => trim($xml->textContent));
+        $ret = ['Value' => trim($xml->textContent)];
 
-        foreach (array('NameQualifier', 'SPNameQualifier', 'SPProvidedID', 'Format') as $attr) {
+        foreach (['NameQualifier', 'SPNameQualifier', 'SPProvidedID', 'Format'] as $attr) {
             if ($xml->hasAttribute($attr)) {
                 $ret[$attr] = $xml->getAttribute($attr);
             }
@@ -385,10 +385,10 @@ class Utils
         }
 
         $objXMLSecDSig->addReferenceList(
-            array($root),
+            [$root],
             $type,
-            array('http://www.w3.org/2000/09/xmldsig#enveloped-signature', XMLSecurityDSig::EXC_C14N),
-            array('id_name' => 'ID', 'overwrite' => false)
+            ['http://www.w3.org/2000/09/xmldsig#enveloped-signature', XMLSecurityDSig::EXC_C14N],
+            ['id_name' => 'ID', 'overwrite' => false]
         );
 
         $objXMLSecDSig->sign($key);
@@ -555,7 +555,7 @@ class Utils
      * @return \DOMElement     The decrypted element.
      * @throws \Exception
      */
-    public static function decryptElement(\DOMElement $encryptedData, XMLSecurityKey $inputKey, array $blacklist = array())
+    public static function decryptElement(\DOMElement $encryptedData, XMLSecurityKey $inputKey, array $blacklist = [])
     {
         try {
             return self::doDecryptElement($encryptedData, $inputKey, $blacklist);
@@ -582,7 +582,7 @@ class Utils
         assert(is_string($namespaceURI));
         assert(is_string($localName));
 
-        $ret = array();
+        $ret = [];
         for ($node = $parent->firstChild; $node !== null; $node = $node->nextSibling) {
             if ($node->namespaceURI !== $namespaceURI || $node->localName !== $localName) {
                 continue;
@@ -612,7 +612,7 @@ class Utils
         assert(is_string($namespaceURI));
         assert(is_string($localName));
 
-        $ret = array();
+        $ret = [];
         for ($node = $parent->firstChild; $node !== null; $node = $node->nextSibling) {
             if ($node->namespaceURI !== $namespaceURI || $node->localName !== $localName) {
                 continue;
@@ -720,7 +720,7 @@ class Utils
      */
     public static function xsDateTimeToTimestamp($time)
     {
-        $matches = array();
+        $matches = [];
 
         // We use a very strict regex to parse the timestamp.
         $regex = '/^(\\d\\d\\d\\d)-(\\d\\d)-(\\d\\d)T(\\d\\d):(\\d\\d):(\\d\\d)(?:\\.\\d{1,9})?Z$/D';

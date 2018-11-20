@@ -76,7 +76,7 @@ class FingerprintValidator extends AbstractChainedValidator
 
         $fingerprintCollection = $this->fingerprintLoader->loadFromConfiguration($configuration);
 
-        $pemCandidates = array();
+        $pemCandidates = [];
         foreach ($this->certificates as $certificate) {
             /** @var \SAML2\Certificate\X509 $certificate */
             $certificateFingerprint = $certificate->getFingerprint();

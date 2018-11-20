@@ -29,7 +29,7 @@ class XmlSignatureWrappingTest extends \PHPUnit_Framework_TestCase
         preg_match($pattern, CertificatesMock::PUBLIC_KEY_PEM, $matches);
 
         $this->identityProviderConfiguration = new IdentityProvider(
-            array('certificateData' => $matches[1])
+            ['certificateData' => $matches[1]]
         );
     }
 

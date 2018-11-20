@@ -19,28 +19,28 @@ class Organization
      *
      * @var array
      */
-    public $Extensions = array();
+    public $Extensions = [];
 
     /**
      * The OrganizationName, as an array of language => translation.
      *
      * @var array
      */
-    public $OrganizationName = array();
+    public $OrganizationName = [];
 
     /**
      * The OrganizationDisplayName, as an array of language => translation.
      *
      * @var array
      */
-    public $OrganizationDisplayName = array();
+    public $OrganizationDisplayName = [];
 
     /**
      * The OrganizationURL, as an array of language => translation.
      *
      * @var array
      */
-    public $OrganizationURL = array();
+    public $OrganizationURL = [];
 
     /**
      * Initialize an Organization element.
@@ -57,17 +57,17 @@ class Organization
 
         $this->OrganizationName = Utils::extractLocalizedStrings($xml, Constants::NS_MD, 'OrganizationName');
         if (empty($this->OrganizationName)) {
-            $this->OrganizationName = array('invalid' => '');
+            $this->OrganizationName = ['invalid' => ''];
         }
 
         $this->OrganizationDisplayName = Utils::extractLocalizedStrings($xml, Constants::NS_MD, 'OrganizationDisplayName');
         if (empty($this->OrganizationDisplayName)) {
-            $this->OrganizationDisplayName = array('invalid' => '');
+            $this->OrganizationDisplayName = ['invalid' => ''];
         }
 
         $this->OrganizationURL = Utils::extractLocalizedStrings($xml, Constants::NS_MD, 'OrganizationURL');
         if (empty($this->OrganizationURL)) {
-            $this->OrganizationURL = array('invalid' => '');
+            $this->OrganizationURL = ['invalid' => ''];
         }
     }
 

@@ -17,16 +17,16 @@ class EntityAttributesTest extends \PHPUnit_Framework_TestCase
         $attribute1 = new Attribute();
         $attribute1->Name = 'urn:simplesamlphp:v1:simplesamlphp';
         $attribute1->NameFormat = 'urn:oasis:names:tc:SAML:2.0:attrname-format:uri';
-        $attribute1->AttributeValue = array(
+        $attribute1->AttributeValue = [
              new AttributeValue('FirstValue'),
              new AttributeValue('SecondValue'),
-        );
+        ];
         $attribute2 = new Attribute();
         $attribute2->Name = 'foo';
         $attribute2->NameFormat = 'urn:simplesamlphp:v1';
-        $attribute2->AttributeValue = array(
+        $attribute2->AttributeValue = [
              new AttributeValue('bar'),
-        );
+        ];
 
         $entityAttributes = new EntityAttributes();
         $entityAttributes->children[] = $attribute1;

@@ -76,6 +76,6 @@ class ServiceProvider extends ArrayAdapter implements
 
     public function getBlacklistedAlgorithms()
     {
-        return $this->get('blacklistedEncryptionAlgorithms', array(XMLSecurityKey::RSA_1_5));
+        return $this->get('blacklistedEncryptionAlgorithms', [XMLSecurityKey::RSA_1_5]);
     }
 }

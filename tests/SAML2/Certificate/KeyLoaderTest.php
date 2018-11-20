@@ -36,10 +36,10 @@ class KeyLoaderTest extends \PHPUnit_Framework_TestCase
      */
     public function load_keys_checks_for_usage_of_key()
     {
-        $signing = array(Key::USAGE_SIGNING => true);
-        $encryption = array(Key::USAGE_ENCRYPTION => true);
+        $signing = [Key::USAGE_SIGNING => true];
+        $encryption = [Key::USAGE_ENCRYPTION => true];
 
-        $keys = array($signing, $encryption);
+        $keys = [$signing, $encryption];
 
         $this->keyLoader->loadKeys($keys, Key::USAGE_SIGNING);
         $loadedKeys = $this->keyLoader->getKeys();
@@ -55,9 +55,9 @@ class KeyLoaderTest extends \PHPUnit_Framework_TestCase
      */
     public function load_keys_constructs_x509_certificate()
     {
-        $keys = array(array(
+        $keys = [[
             'X509Certificate' => $this->certificate
-        ));
+        ]];
 
         $this->keyLoader->loadKeys($keys, null);
         $loadedKeys = $this->keyLoader->getKeys();
@@ -74,7 +74,7 @@ class KeyLoaderTest extends \PHPUnit_Framework_TestCase
      */
     public function certificate_data_with_invalid_format_throws_an_exception()
     {
-        $this->keyLoader->loadCertificateData(array());
+        $this->keyLoader->loadCertificateData([]);
     }
 
     /**

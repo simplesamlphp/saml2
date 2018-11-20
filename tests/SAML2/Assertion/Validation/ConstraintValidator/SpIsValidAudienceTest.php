@@ -52,7 +52,7 @@ class SpIsValidAudienceTest extends \PHPUnit_Framework_TestCase
      */
     public function if_the_sp_entity_id_is_not_in_the_valid_audiences_the_assertion_is_invalid()
     {
-        $this->assertion->shouldReceive('getValidAudiences')->andReturn(array('someEntityId'));
+        $this->assertion->shouldReceive('getValidAudiences')->andReturn(['someEntityId']);
         $this->serviceProvider->shouldReceive('getEntityId')->andReturn('anotherEntityId');
 
         $validator = new SpIsValidAudience();
@@ -71,7 +71,7 @@ class SpIsValidAudienceTest extends \PHPUnit_Framework_TestCase
      */
     public function the_assertion_is_valid_when_the_current_sp_entity_id_is_a_valid_audience()
     {
-        $this->assertion->shouldReceive('getValidAudiences')->andReturn(array('foo', 'bar', 'validEntityId', 'baz'));
+        $this->assertion->shouldReceive('getValidAudiences')->andReturn(['foo', 'bar', 'validEntityId', 'baz']);
         $this->serviceProvider->shouldReceive('getEntityId')->andReturn('validEntityId');
 
         $validator = new SpIsValidAudience();

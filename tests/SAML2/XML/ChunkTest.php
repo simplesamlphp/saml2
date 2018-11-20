@@ -25,10 +25,10 @@ class ChunkTest extends \PHPUnit_Framework_TestCase
         $attribute->Name = 'TheName';
         $attribute->NameFormat = 'TheNameFormat';
         $attribute->FriendlyName = 'TheFriendlyName';
-        $attribute->AttributeValue = array(
+        $attribute->AttributeValue = [
             new AttributeValue('FirstValue'),
             new AttributeValue('SecondValue'),
-        );
+        ];
 
         $document = DOMDocumentFactory::fromString('<root />');
         $attributeElement = $attribute->toXML($document->firstChild);

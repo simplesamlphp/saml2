@@ -7,7 +7,7 @@ class ArrayCollectionTest extends \PHPUnit_Framework_TestCase
 
     public function test_construct_get_add_set()
     {
-        $arc = new ArrayCollection(array('aap', 'aap', 'noot'));
+        $arc = new ArrayCollection(['aap', 'aap', 'noot']);
 
         $this->assertEquals($arc->get(0), 'aap');
         $this->assertEquals($arc->get(1), 'aap');
@@ -29,7 +29,7 @@ class ArrayCollectionTest extends \PHPUnit_Framework_TestCase
 
     public function test_remove()
     {
-        $arc = new ArrayCollection(array('aap', 'aap', 'noot', 'mies'));
+        $arc = new ArrayCollection(['aap', 'aap', 'noot', 'mies']);
 
         $removed = $arc->remove('noot');
         $this->assertEquals('noot', $removed);
@@ -62,7 +62,7 @@ class ArrayCollectionTest extends \PHPUnit_Framework_TestCase
 
     public function test_first_last_count()
     {
-        $arc = new ArrayCollection(array('aap', 'aap', 'noot', 'mies'));
+        $arc = new ArrayCollection(['aap', 'aap', 'noot', 'mies']);
 
         $this->assertEquals($arc->first(), 'aap');
         $this->assertEquals($arc->last(), 'mies');
@@ -71,7 +71,7 @@ class ArrayCollectionTest extends \PHPUnit_Framework_TestCase
 
     public function test_offset()
     {
-        $arc = new ArrayCollection(array('aap', 'aap', 'noot', 'mies'));
+        $arc = new ArrayCollection(['aap', 'aap', 'noot', 'mies']);
 
         $this->assertTrue($arc->offsetExists(0));
         $this->assertTrue($arc->offsetExists(1));
@@ -90,26 +90,26 @@ class ArrayCollectionTest extends \PHPUnit_Framework_TestCase
 
     public function test_onlyelement()
     {
-        $arc = new ArrayCollection(array('aap'));
+        $arc = new ArrayCollection(['aap']);
         $this->assertEquals($arc->getOnlyElement(), 'aap');
     }
 
     public function test_onlyelement_fail()
     {
-        $arc = new ArrayCollection(array('aap', 'noot'));
+        $arc = new ArrayCollection(['aap', 'noot']);
         $this->setExpectedException('SAML2\Exception\RuntimeException', 'SAML2\Utilities\ArrayCollection::SAML2\Utilities\ArrayCollection::getOnlyElement requires that the collection has exactly one element, "2" elements found');
         $arc->getOnlyElement();
     }
 
     public function test_getiterator()
     {
-        $arc = new ArrayCollection(array('aap', 'noot'));
+        $arc = new ArrayCollection(['aap', 'noot']);
         $this->assertInstanceOf('\ArrayIterator', $arc->getIterator());
     }
 
     public function test_filter_map()
     {
-        $arc = new ArrayCollection(array('aap', 'aap', 'noot', 'mies'));
+        $arc = new ArrayCollection(['aap', 'aap', 'noot', 'mies']);
 
         $filtered = $arc->filter(function ($i) { return $i != 'aap'; });
         $this->assertInstanceOf('\SAML2\Utilities\ArrayCollection', $filtered);

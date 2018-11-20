@@ -18,7 +18,7 @@ class Key implements \ArrayAccess
     /**
      * @var array
      */
-    protected $keyData = array();
+    protected $keyData = [];
 
     /**
      * @param array $keyData
@@ -52,10 +52,10 @@ class Key implements \ArrayAccess
      */
     public static function getValidKeyUsages()
     {
-        return array(
+        return [
             self::USAGE_ENCRYPTION,
             self::USAGE_SIGNING
-        );
+        ];
     }
 
     public function offsetExists($offset)

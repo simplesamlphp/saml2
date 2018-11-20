@@ -27,7 +27,7 @@ class KeyInfo
      *
      * @var (\SAML2\XML\Chunk|\SAML2\XML\ds\KeyName|\SAML2\XML\ds\X509Data)[]
      */
-    public $info = array();
+    public $info = [];
 
     /**
      * Initialize a KeyInfo element.

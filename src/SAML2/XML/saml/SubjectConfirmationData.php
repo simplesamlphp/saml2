@@ -58,7 +58,7 @@ class SubjectConfirmationData
      *
      * @var (\SAML2\XML\ds\KeyInfo|\SAML2\XML\Chunk)[]
      */
-    public $info = array();
+    public $info = [];
 
     /**
      * Initialize (and parse) a SubjectConfirmationData element.

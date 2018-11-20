@@ -61,35 +61,35 @@ class FingerprintLoaderTest extends \PHPUnit_Framework_TestCase
 
     public function invalidConfigurationProvider()
     {
-        return array(
-            'string'                             => array(''),
-            'null value'                         => array(null),
-            'non traversable'                    => array(new \StdClass()),
-            'traversable with non string values' => array(new ArrayAdapter(array('a', 1, null))),
-            'array with non string value'        => array(array('b', true, false))
-        );
+        return [
+            'string'                             => [''],
+            'null value'                         => [null],
+            'non traversable'                    => [new \StdClass()],
+            'traversable with non string values' => [new ArrayAdapter(['a', 1, null])],
+            'array with non string value'        => [['b', true, false]]
+        ];
     }
 
     public function validConfigurationProvider()
     {
-        return array(
-            'array of strings'  => array(
-                array('a', 'b', 'c')
-            ),
-            'mixed array'       => array(
-                array(
+        return [
+            'array of strings'  => [
+                ['a', 'b', 'c']
+            ],
+            'mixed array'       => [
+                [
                     'a',
                     new ImplementsToString('b'),
                     'c',
-                )
-            ),
-            'mixed traversable' => array(
-                new ArrayAdapter(array(
+                ]
+            ],
+            'mixed traversable' => [
+                new ArrayAdapter([
                     'a',
                     'b',
                     new ImplementsToString('c')
-                ))
-            ),
-        );
+                ])
+            ],
+        ];
     }
 }

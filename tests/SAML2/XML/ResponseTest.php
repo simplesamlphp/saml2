@@ -21,13 +21,13 @@ class ResponseTest extends PHPUnit_Framework_TestCase
 
     public function toXMLInvalidACSProvider()
     {
-        return array(
-            array(null),
-            array(1),
-            array(false),
-            array(array()),
-            array(new stdClass),
-        );
+        return [
+            [null],
+            [1],
+            [false],
+            [[]],
+            [new stdClass],
+        ];
     }
 
     /**

@@ -45,9 +45,9 @@ class HTTPArtifact extends Binding
 
         $store->set('artifact', $artifact, $artifactDataString, Temporal::getTime() + 15*60);
 
-        $params = array(
+        $params = [
             'SAMLart' => $artifact,
-        );
+        ];
         $relayState = $message->getRelayState();
         if ($relayState !== null) {
             $params['RelayState'] = $relayState;
@@ -139,7 +139,7 @@ class HTTPArtifact extends Binding
         }
 
         $samlResponse = Message::fromXML($xml);
-        $samlResponse->addValidator(array(get_class($this), 'validateSignature'), $artifactResponse);
+        $samlResponse->addValidator([get_class($this), 'validateSignature'], $artifactResponse);
 
         if (isset($_REQUEST['RelayState'])) {
             $samlResponse->setRelayState($_REQUEST['RelayState']);

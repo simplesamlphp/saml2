@@ -40,20 +40,20 @@ class PrivateKeyLoaderTest extends \PHPUnit_Framework_TestCase
      */
     public function privateKeyTestProvider()
     {
-        return array(
-            'no passphrase'   => array(
+        return [
+            'no passphrase'   => [
                 new PrivateKey(
                     dirname(__FILE__) . '/File/a_fake_private_key_file.pem',
                     PrivateKey::NAME_DEFAULT
                 )
-            ),
-            'with passphrase' => array(
+            ],
+            'with passphrase' => [
                 new PrivateKey(
                     dirname(__FILE__) . '/File/a_fake_private_key_file.pem',
                     PrivateKey::NAME_DEFAULT,
                     'foo bar baz'
                 )
-            ),
-        );
+            ],
+        ];
     }
 }

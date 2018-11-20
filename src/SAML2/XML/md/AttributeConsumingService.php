@@ -33,7 +33,7 @@ class AttributeConsumingService
      *
      * @var array
      */
-    public $ServiceName = array();
+    public $ServiceName = [];
 
     /**
      * The ServiceDescription of this AttributeConsumingService.
@@ -42,7 +42,7 @@ class AttributeConsumingService
      *
      * @var array
      */
-    public $ServiceDescription = array();
+    public $ServiceDescription = [];
 
     /**
      * The RequestedAttribute elements.
@@ -51,7 +51,7 @@ class AttributeConsumingService
      *
      * @var \SAML2\XML\md\RequestedAttribute[]
      */
-    public $RequestedAttribute = array();
+    public $RequestedAttribute = [];
 
     /**
      * Initialize / parse an AttributeConsumingService.

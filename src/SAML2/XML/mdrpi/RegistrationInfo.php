@@ -33,7 +33,7 @@ class RegistrationInfo
      *
      * @var array
      */
-    public $RegistrationPolicy = array();
+    public $RegistrationPolicy = [];
 
     /**
      * Create/parse a mdrpi:RegistrationInfo element.

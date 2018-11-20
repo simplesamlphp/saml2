@@ -44,7 +44,7 @@ class Keywords
         if (!is_string($xml->textContent) || !strlen($xml->textContent)) {
             throw new \Exception('Missing value for Keywords.');
         }
-        $this->Keywords = array();
+        $this->Keywords = [];
         foreach (explode(' ', $xml->textContent) as $keyword) {
             $this->Keywords[] = str_replace('+', ' ', $keyword);
         }

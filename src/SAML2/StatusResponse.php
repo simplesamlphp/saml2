@@ -11,11 +11,11 @@ namespace SAML2;
  * responses.
  *
  * The status code is represented as an array on the following form:
- * array(
+ * [
  *   'Code' => '<top-level status code>',
  *   'SubCode' => '<second-level status code>',
  *   'Message' => '<status message>',
- * )
+ * ]
  *
  * Only the 'Code' field is required. The others will be set to null if they
  * aren't present.
@@ -51,11 +51,11 @@ abstract class StatusResponse extends Message
     {
         parent::__construct($tagName, $xml);
 
-        $this->status = array(
+        $this->status = [
             'Code' => Constants::STATUS_SUCCESS,
             'SubCode' => null,
             'Message' => null,
-            );
+        ];
 
         if ($xml === null) {
             return;

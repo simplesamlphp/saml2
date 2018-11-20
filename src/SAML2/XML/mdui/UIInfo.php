@@ -20,49 +20,49 @@ class UIInfo
      *
      * @var \SAML2\XML\Chunk[]
      */
-    public $children = array();
+    public $children = [];
 
     /**
      * The DisplayName, as an array of language => translation.
      *
      * @var array
      */
-    public $DisplayName = array();
+    public $DisplayName = [];
 
     /**
      * The Description, as an array of language => translation.
      *
      * @var array
      */
-    public $Description = array();
+    public $Description = [];
 
     /**
      * The InformationURL, as an array of language => url.
      *
      * @var array
      */
-    public $InformationURL = array();
+    public $InformationURL = [];
 
     /**
      * The PrivacyStatementURL, as an array of language => url.
      *
      * @var array
      */
-    public $PrivacyStatementURL = array();
+    public $PrivacyStatementURL = [];
 
     /**
      * The Keywords, as an array of Keywords objects
      *
      * @var \SAML2\XML\mdui\Keywords[]
      */
-    public $Keywords = array();
+    public $Keywords = [];
 
     /**
      * The Logo, as an array of Logo objects
      *
      * @var \SAML2\XML\mdui\Logo[]
      */
-    public $Logo = array();
+    public $Logo = [];
 
     /**
      * Create a UIInfo element.

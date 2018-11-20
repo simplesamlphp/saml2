@@ -22,7 +22,7 @@ class ValidatorChain implements ValidatorInterface
     /**
      * @var  \SAML2\Signature\ChainedValidator[]
      */
-    private $validators = array();
+    private $validators = [];
 
     /**
      * @param \Psr\Log\LoggerInterface           $logger

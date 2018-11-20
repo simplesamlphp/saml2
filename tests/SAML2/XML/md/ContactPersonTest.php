@@ -16,9 +16,9 @@ class ContactPersonTest extends \PHPUnit_Framework_TestCase {
         $Company = "Test Company";
         $GivenName = "John";
         $SurName = "Doe";
-        $EmailAddress = array('jdoe@test.company', 'john.doe@test.company');
-        $TelephoneNumber = array('1-234-567-8901');
-        $ContactPersonAttributes = array('testattr' => 'testval', 'testattr2' => 'testval2');
+        $EmailAddress = ['jdoe@test.company', 'john.doe@test.company'];
+        $TelephoneNumber = ['1-234-567-8901'];
+        $ContactPersonAttributes = ['testattr' => 'testval', 'testattr2' => 'testval2'];
 
         $mdNamespace = Constants::NS_MD;
         $document = DOMDocumentFactory::fromString(

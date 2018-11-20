@@ -37,7 +37,7 @@ class EndpointType
      *
      * @var array
      */
-    private $attributes = array();
+    private $attributes = [];
 
     /**
      * Initialize an EndpointType.
@@ -70,11 +70,11 @@ class EndpointType
                 continue; /* Not namespace-qualified -- skip. */
             }
             $fullName = '{' . $a->namespaceURI . '}' . $a->localName;
-            $this->attributes[$fullName] = array(
+            $this->attributes[$fullName] = [
                 'qualifiedName' => $a->nodeName,
                 'namespaceURI' => $a->namespaceURI,
                 'value' => $a->value,
-            );
+            ];
         }
     }
 
@@ -135,11 +135,11 @@ class EndpointType
         $localName = $name[1];
 
         $fullName = '{' . $namespaceURI . '}' . $localName;
-        $this->attributes[$fullName] = array(
+        $this->attributes[$fullName] = [
             'qualifiedName' => $qualifiedName,
             'namespaceURI' => $namespaceURI,
             'value' => $value,
-        );
+        ];
     }
 
     /**

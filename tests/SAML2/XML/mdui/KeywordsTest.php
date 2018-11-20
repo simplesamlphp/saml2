@@ -17,7 +17,7 @@ class KeywordsTest extends \PHPUnit_Framework_TestCase
     {
         $keywords = new Keywords();
         $keywords->lang = "en";
-        $keywords->Keywords = array("KLM", "royal", "Dutch", "air lines");
+        $keywords->Keywords = ["KLM", "royal", "Dutch", "air lines"];
 
         $document = DOMDocumentFactory::fromString('<root />');
         $xml = $keywords->toXML($document->firstChild);
@@ -39,7 +39,7 @@ class KeywordsTest extends \PHPUnit_Framework_TestCase
     {
         $keywords = new Keywords();
         $keywords->lang = "en";
-        $keywords->Keywords = array("csharp", "pascal", "c++");
+        $keywords->Keywords = ["csharp", "pascal", "c++"];
 
         $document = DOMDocumentFactory::fromString('<root />');
         

@@ -52,7 +52,7 @@ class LogoutRequest extends Request
     {
         parent::__construct('LogoutRequest', $xml);
 
-        $this->sessionIndexes = array();
+        $this->sessionIndexes = [];
 
         if ($xml === null) {
             return;
@@ -153,7 +153,7 @@ class LogoutRequest extends Request
      * @param XMLSecurityKey $key       The decryption key.
      * @param array          $blacklist Blacklisted decryption algorithms.
      */
-    public function decryptNameId(XMLSecurityKey $key, array $blacklist = array())
+    public function decryptNameId(XMLSecurityKey $key, array $blacklist = [])
     {
         if ($this->encryptedNameId === null) {
             /* No NameID to decrypt. */
@@ -242,9 +242,9 @@ class LogoutRequest extends Request
         assert(is_string($sessionIndex) || is_null($sessionIndex));
 
         if (is_null($sessionIndex)) {
-            $this->sessionIndexes = array();
+            $this->sessionIndexes = [];
         } else {
-            $this->sessionIndexes = array($sessionIndex);
+            $this->sessionIndexes = [$sessionIndex];
         }
     }
 

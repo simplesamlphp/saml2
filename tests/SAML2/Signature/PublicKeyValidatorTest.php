@@ -41,7 +41,7 @@ class PublicKeyValidatorTest extends \PHPUnit_Framework_TestCase
      */
     public function it_will_validate_when_keys_can_be_loaded()
     {
-        $keyloaderMock = $this->prepareKeyLoader(new KeyCollection(array(1, 2)));
+        $keyloaderMock = $this->prepareKeyLoader(new KeyCollection([1, 2]));
         $validator = new PublicKeyValidator(new \Psr\Log\NullLogger(), $keyloaderMock);
 
         $this->assertTrue($validator->canValidate($this->mockSignedElement, $this->mockConfiguration));
@@ -53,10 +53,10 @@ class PublicKeyValidatorTest extends \PHPUnit_Framework_TestCase
      */
     public function non_X509_keys_are_not_used_for_validation()
     {
-        $controlledCollection = new KeyCollection(array(
-            new Key(array('type' => 'not_X509')),
-            new Key(array('type' => 'again_not_X509'))
-        ));
+        $controlledCollection = new KeyCollection([
+            new Key(['type' => 'not_X509']),
+            new Key(['type' => 'again_not_X509'])
+        ]);
 
         $keyloaderMock = $this->prepareKeyLoader($controlledCollection);
         $logger = new SimpleTestLogger();
@@ -78,13 +78,13 @@ class PublicKeyValidatorTest extends \PHPUnit_Framework_TestCase
         $pattern = Certificate::CERTIFICATE_PATTERN;
         preg_match($pattern, CertificatesMock::PUBLIC_KEY_PEM, $matches);
 
-        $config = new IdentityProvider(array('certificateData' => $matches[1]));
+        $config = new IdentityProvider(['certificateData' => $matches[1]]);
         $validator = new PublicKeyValidator(new SimpleTestLogger(), new KeyLoader());
 
         $doc = DOMDocumentFactory::fromFile(__DIR__ . '/response.xml');
         $response = new Response($doc->firstChild);
         $response->setSignatureKey(CertificatesMock::getPrivateKey());
-        $response->setCertificates(array(CertificatesMock::PUBLIC_KEY_PEM));
+        $response->setCertificates([CertificatesMock::PUBLIC_KEY_PEM]);
 
         // convert to signed response
         $response = new Response($response->toSignedXML());

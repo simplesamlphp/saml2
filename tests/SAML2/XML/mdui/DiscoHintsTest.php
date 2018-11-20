@@ -16,9 +16,9 @@ class DiscoHintsTest extends \PHPUnit_Framework_TestCase
     public function testMarshalling()
     {
         $discoHints = new DiscoHints();
-        $discoHints->IPHint = array("192.168.6.0/24", "fd00:0123:aa:1001::/64");
-        $discoHints->DomainHint = array("example.org", "student.example.org");
-        $discoHints->GeolocationHint = array("geo:47.37328,8.531126", "geo:19.34343,12.342514");
+        $discoHints->IPHint = ["192.168.6.0/24", "fd00:0123:aa:1001::/64"];
+        $discoHints->DomainHint = ["example.org", "student.example.org"];
+        $discoHints->GeolocationHint = ["geo:47.37328,8.531126", "geo:19.34343,12.342514"];
 
         $document = DOMDocumentFactory::fromString('<root />');
         $xml = $discoHints->toXML($document->firstChild);
@@ -106,8 +106,8 @@ XML
         $discoHints = new DiscoHints();
         $keywords = new Keywords();
         $keywords->lang = "nl";
-        $keywords->Keywords = array("voorbeeld", "specimen");
-        $discoHints->children = array($keywords);
+        $keywords->Keywords = ["voorbeeld", "specimen"];
+        $discoHints->children = [$keywords];
 
         $document = DOMDocumentFactory::fromString('<root />');
         $xml = $discoHints->toXML($document->firstChild);

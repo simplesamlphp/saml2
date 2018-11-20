@@ -21,7 +21,7 @@ class SignedElementHelperTest extends \PHPUnit_Framework_TestCase
     {
         $mock = new SignedElementHelperMock();
         $mock->setSignatureKey(CertificatesMock::getPrivateKey());
-        $mock->setCertificates(array(CertificatesMock::PUBLIC_KEY_PEM));
+        $mock->setCertificates([CertificatesMock::PUBLIC_KEY_PEM]);
         $this->signedMockElement = $mock->toSignedXML();
     }
 
@@ -112,7 +112,7 @@ edF1YfJgq35hcMMLY9RE/0C0bCI=
 -----END CERTIFICATE-----';
         $mock = new SignedElementHelperMock();
         $mock->setSignatureKey(CertificatesMock::getPrivateKey());
-        $mock->setCertificates(array($tmpCert, CertificatesMock::PUBLIC_KEY_PEM));
+        $mock->setCertificates([$tmpCert, CertificatesMock::PUBLIC_KEY_PEM]);
         $this->signedMockElement = $mock->toSignedXML();
         $tmp = new SignedElementHelperMock($this->signedMockElement);
         $certs = $tmp->getValidatingCertificates();

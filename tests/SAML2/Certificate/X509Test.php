@@ -11,12 +11,12 @@ class X509Test extends \PHPUnit_Framework_TestCase
      */
     public function x509_certificate_contents_must_be_stripped_of_whitespace()
     {
-        $toTest = array(
+        $toTest = [
             'X509Certificate' => ' Should   No Longer  Have Whitespaces'
-        );
+        ];
 
         $viaConstructor                = new X509($toTest);
-        $viaSetting                    = new X509(array());
+        $viaSetting                    = new X509([]);
         $viaSetting['X509Certificate'] = $toTest['X509Certificate'];
         $viaFactory                    = X509::createFromCertificateData($toTest['X509Certificate']);
 

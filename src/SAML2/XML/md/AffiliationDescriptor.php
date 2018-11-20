@@ -48,7 +48,7 @@ class AffiliationDescriptor extends SignedElementHelper
      *
      * @var array
      */
-    public $Extensions = array();
+    public $Extensions = [];
 
     /**
      * The AffiliateMember(s).
@@ -57,7 +57,7 @@ class AffiliationDescriptor extends SignedElementHelper
      *
      * @var array
      */
-    public $AffiliateMember = array();
+    public $AffiliateMember = [];
 
     /**
      * KeyDescriptor elements.
@@ -66,7 +66,7 @@ class AffiliationDescriptor extends SignedElementHelper
      *
      * @var \SAML2\XML\md\KeyDescriptor[]
      */
-    public $KeyDescriptor = array();
+    public $KeyDescriptor = [];
 
     /**
      * Initialize a AffiliationDescriptor.

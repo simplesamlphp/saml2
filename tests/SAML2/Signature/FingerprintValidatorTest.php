@@ -51,8 +51,8 @@ class FingerprintValidatorTest extends \PHPUnit_Framework_TestCase
      */
     public function it_cannot_validate_when_no_certificates_are_found()
     {
-        $this->mockConfiguration->shouldReceive('getCertificateFingerprints')->once()->andReturn(array());
-        $this->mockSignedElement->shouldReceive('getCertificates')->once()->andReturn(array());
+        $this->mockConfiguration->shouldReceive('getCertificateFingerprints')->once()->andReturn([]);
+        $this->mockSignedElement->shouldReceive('getCertificates')->once()->andReturn([]);
 
         $validator = new FingerprintValidator(
             new SimpleTestLogger(),
@@ -75,7 +75,7 @@ class FingerprintValidatorTest extends \PHPUnit_Framework_TestCase
         $fingerprint_retry = $certdata->getFingerprint();
         $this->assertTrue($fingerprint->equals($fingerprint_retry), 'Cached fingerprint does not match original');
 
-        $config    = new IdentityProvider(array('certificateFingerprints' => array($fingerprint->getRaw())));
+        $config    = new IdentityProvider(['certificateFingerprints' => [$fingerprint->getRaw()]]);
         $validator = new FingerprintValidator(
             new SimpleTestLogger(),
             new FingerprintLoader()
@@ -84,7 +84,7 @@ class FingerprintValidatorTest extends \PHPUnit_Framework_TestCase
         $doc = DOMDocumentFactory::fromFile(__DIR__ . '/response.xml');
         $response = new Response($doc->firstChild);
         $response->setSignatureKey(CertificatesMock::getPrivateKey());
-        $response->setCertificates(array(CertificatesMock::PUBLIC_KEY_PEM));
+        $response->setCertificates([CertificatesMock::PUBLIC_KEY_PEM]);
 
         // convert to signed response
         $response = new Response($response->toSignedXML());

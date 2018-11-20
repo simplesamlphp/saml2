@@ -15,10 +15,10 @@ class RegistrationInfoTest extends \PHPUnit_Framework_TestCase
         $registrationInfo = new RegistrationInfo();
         $registrationInfo->registrationAuthority = 'https://ExampleAuthority';
         $registrationInfo->registrationInstant = 1234567890;
-        $registrationInfo->RegistrationPolicy = array(
+        $registrationInfo->RegistrationPolicy = [
             'en' => 'http://EnglishRegistrationPolicy',
             'nl' => 'https://DutchRegistratiebeleid',
-        );
+        ];
 
         $document = DOMDocumentFactory::fromString('<root />');
         $xml = $registrationInfo->toXML($document->firstChild);

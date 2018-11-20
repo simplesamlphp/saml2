@@ -43,8 +43,8 @@ class SignedElementHelper implements SignedElement
      */
     protected function __construct(\DOMElement $xml = null)
     {
-        $this->certificates = array();
-        $this->validators = array();
+        $this->certificates = [];
+        $this->validators = [];
 
         if ($xml === null) {
             return;
@@ -56,10 +56,10 @@ class SignedElementHelper implements SignedElement
 
             if ($sig !== false) {
                 $this->certificates = $sig['Certificates'];
-                $this->validators[] = array(
-                    'Function' => array('\SAML2\Utils', 'validateSignature'),
+                $this->validators[] = [
+                    'Function' => ['\SAML2\Utils', 'validateSignature'],
                     'Data' => $sig,
-                );
+                ];
             }
         } catch (\Exception $e) {
             /* Ignore signature validation errors. */
@@ -78,10 +78,10 @@ class SignedElementHelper implements SignedElement
     {
         assert(is_callable($function));
 
-        $this->validators[] = array(
+        $this->validators[] = [
             'Function' => $function,
             'Data' => $data,
-        );
+        ];
     }
 
     /**
@@ -101,7 +101,7 @@ class SignedElementHelper implements SignedElement
             return false;
         }
 
-        $exceptions = array();
+        $exceptions = [];
 
         foreach ($this->validators as $validator) {
             $function = $validator['Function'];
@@ -172,7 +172,7 @@ class SignedElementHelper implements SignedElement
      */
     public function getValidatingCertificates()
     {
-        $ret = array();
+        $ret = [];
         foreach ($this->certificates as $cert) {
 
             /* Construct a PEM formatted certificate */
@@ -181,7 +181,7 @@ class SignedElementHelper implements SignedElement
                 "-----END CERTIFICATE-----\n";
 
             /* Extract the public key from the certificate for validation. */
-            $key = new XMLSecurityKey(XMLSecurityKey::RSA_SHA256, array('type'=>'public'));
+            $key = new XMLSecurityKey(XMLSecurityKey::RSA_SHA256, ['type'=>'public']);
             $key->loadKey($pemCert);
 
             try {

@@ -178,13 +178,13 @@ class Assertion implements SignedElement
      * the variable is as an associative array, indexed by attribute name
      * 
      * when parsing assertion, the variable will be:
-     * - <attribute name> => array(<Value1's xs type>|null, <xs type Value2>|null, ...)
+     * - <attribute name> => [<Value1's xs type>|null, <xs type Value2>|null, ...]
      * array will always have the same size of the array of vaules in $attributes for the same <attribute name>
      *
      * when generating assertion, the varuable can be:
      * - null : backward compatibility
      * - <attribute name> => <xs type> : all values for the given attribute will have the same xs type
-     * - <attribute name> => array(<Value1's xs type>|null, <xs type Value2>|null, ...) : Nth value will have type of the Nth in the array
+     * - <attribute name> => [<Value1's xs type>|null, <xs type Value2>|null, ...] : Nth value will have type of the Nth in the array
      * 
      * @var array multi-dimensional array of array
      */
@@ -260,11 +260,11 @@ class Assertion implements SignedElement
         $this->issueInstant = Temporal::getTime();
         $this->issuer = '';
         $this->authnInstant = Temporal::getTime();
-        $this->attributes = array();
+        $this->attributes = [];
         $this->nameFormat = Constants::NAMEFORMAT_UNSPECIFIED;
-        $this->certificates = array();
-        $this->AuthenticatingAuthority = array();
-        $this->SubjectConfirmation = array();
+        $this->certificates = [];
+        $this->AuthenticatingAuthority = [];
+        $this->SubjectConfirmation = [];
         $this->requiredEncAttributes = false;
 
         if ($xml === null) {
@@ -533,8 +533,8 @@ class Assertion implements SignedElement
             }
 
             if (!array_key_exists($name, $this->attributes)) {
-                $this->attributes[$name] = array();
-                $this->attributesValueTypes[$name] = array();
+                $this->attributes[$name] = [];
+                $this->attributesValueTypes[$name] = [];
             }
 
             $this->parseAttributeValue($attribute, $name);
@@ -798,7 +798,7 @@ class Assertion implements SignedElement
      * @param XMLSecurityKey $key       The decryption key.
      * @param array          $blacklist Blacklisted decryption algorithms.
      */
-    public function decryptNameId(XMLSecurityKey $key, array $blacklist = array())
+    public function decryptNameId(XMLSecurityKey $key, array $blacklist = [])
     {
         if ($this->encryptedNameId === null) {
             /* No NameID to decrypt. */
@@ -830,7 +830,7 @@ class Assertion implements SignedElement
      * @param array $blacklist
      * @throws \Exception
      */
-    public function decryptAttributes(XMLSecurityKey $key, array $blacklist = array())
+    public function decryptAttributes(XMLSecurityKey $key, array $blacklist = [])
     {
         if (!$this->hasEncryptedAttributes()) {
             return;
@@ -866,7 +866,7 @@ class Assertion implements SignedElement
             }
 
             if (!array_key_exists($name, $this->attributes)) {
-                $this->attributes[$name] = array();
+                $this->attributes[$name] = [];
             }
 
             $this->parseAttributeValue($attribute, $name);

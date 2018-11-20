@@ -16,7 +16,7 @@ class ArrayCollection implements Collection
      */
     protected $elements;
 
-    public function __construct(array $elements = array())
+    public function __construct(array $elements = [])
     {
         $this->elements = $elements;
     }

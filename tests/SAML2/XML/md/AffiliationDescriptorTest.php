@@ -17,10 +17,10 @@ class AffiliationDescriptorTest extends \PHPUnit_Framework_TestCase
         $affiliationDescriptorElement->ID = 'TheID';
         $affiliationDescriptorElement->validUntil = 1234567890;
         $affiliationDescriptorElement->cacheDuration = 'PT5000S';
-        $affiliationDescriptorElement->AffiliateMember = array(
+        $affiliationDescriptorElement->AffiliateMember = [
             'Member1',
             'Member2',
-        );
+        ];
 
         $affiliationDescriptorElement = $affiliationDescriptorElement->toXML($document->firstChild);
 
