@@ -80,18 +80,6 @@ class KeyLoaderTest extends \Mockery\Adapter\Phpunit\MockeryTestCase
      *
      * @test
      */
-    public function certificate_data_with_invalid_format_throws_an_exception()
-    {
-        $this->expectException(\SAML2\Exception\InvalidArgumentException::class);
-        $this->keyLoader->loadCertificateData([]);
-    }
-
-
-    /**
-     * @group certificate
-     *
-     * @test
-     */
     public function certificate_data_is_loaded_as_key()
     {
         $this->keyLoader->loadCertificateData($this->certificate);

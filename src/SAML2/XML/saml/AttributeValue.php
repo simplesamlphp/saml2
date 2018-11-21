@@ -140,6 +140,8 @@ class AttributeValue implements \Serializable
      *
      * @param string $serialized The serialized AttributeValue.
      * @return void
+     *
+     * Type hint not possible due to upstream method signature
      */
     public function unserialize($serialized)
     {

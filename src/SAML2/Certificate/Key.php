@@ -39,7 +39,7 @@ class Key implements \ArrayAccess
      * @param  string $usage
      * @return bool
      */
-    public function canBeUsedFor($usage)
+    public function canBeUsedFor(string $usage)
     {
         if (!in_array($usage, static::getValidKeyUsages(), true)) {
             throw new InvalidKeyUsageException($usage);
@@ -66,6 +66,8 @@ class Key implements \ArrayAccess
      * @param mixed $offset
      * @throws InvalidArgumentException
      * @return bool
+     *
+     * Type hint not possible due to upstream method signature
      */
     public function offsetExists($offset)
     {
@@ -80,6 +82,8 @@ class Key implements \ArrayAccess
      * @param mixed $offset
      * @throws InvalidArgumentException
      * @return string
+     *
+     * Type hint not possible due to upstream method signature
      */
     public function offsetGet($offset)
     {
@@ -109,6 +113,8 @@ class Key implements \ArrayAccess
      * @param mixed $offset
      * @throws InvalidArgumentException
      * @return void
+     *
+     * Type hint not possible due to upstream method signature
      */
     public function offsetUnset($offset)
     {

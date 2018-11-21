@@ -15,6 +15,8 @@ class KeyCollection extends ArrayCollection
      *
      * @param \SAML2\Certificate\Key $key
      * @return void
+     *
+     * Type hint not possible due to upstream method signature
      */
     public function add($key)
     {

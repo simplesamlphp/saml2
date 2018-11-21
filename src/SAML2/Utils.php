@@ -109,9 +109,8 @@ class Utils
      * @throws \Exception
      * @return XMLSecurityKey The new key.
      */
-    public static function castKey(XMLSecurityKey $key, $algorithm, $type = 'public')
+    public static function castKey(XMLSecurityKey $key, string $algorithm, $type = 'public')
     {
-        assert(is_string($algorithm));
         assert($type === "public" || $type === "private");
 
         // do nothing if algorithm is already the type of the key
@@ -189,9 +188,8 @@ class Utils
      * @param  string  $query The query.
      * @return \DOMElement[]    Array with matching DOM nodes.
      */
-    public static function xpQuery(\DOMNode $node, $query)
+    public static function xpQuery(\DOMNode $node, string $query)
     {
-        assert(is_string($query));
         static $xpCache = null;
 
         if ($node instanceof \DOMDocument) {
@@ -270,14 +268,12 @@ class Utils
      *
      * @param  \DOMElement $node          The element we should fetch the attribute from.
      * @param  string     $attributeName The name of the attribute.
-     * @param  mixed      $default       The value that should be returned if the attribute doesn't exist.
+     * @param  mixed|null $default       The value that should be returned if the attribute doesn't exist.
      * @throws \Exception
      * @return bool|mixed The value of the attribute, or $default if the attribute doesn't exist.
      */
-    public static function parseBoolean(\DOMElement $node, $attributeName, $default = null)
+    public static function parseBoolean(\DOMElement $node, string $attributeName, $default = null)
     {
-        assert(is_string($attributeName));
-
         if (!$node->hasAttribute($attributeName)) {
             return $default;
         }
@@ -523,11 +519,8 @@ class Utils
      * @param  string     $localName    The localName of the localized strings.
      * @return array      Localized strings.
      */
-    public static function extractLocalizedStrings(\DOMElement $parent, $namespaceURI, $localName)
+    public static function extractLocalizedStrings(\DOMElement $parent, string $namespaceURI, string $localName)
     {
-        assert(is_string($namespaceURI));
-        assert(is_string($localName));
-
         $ret = [];
         for ($node = $parent->firstChild; $node !== null; $node = $node->nextSibling) {
             if ($node->namespaceURI !== $namespaceURI || $node->localName !== $localName) {
@@ -554,11 +547,8 @@ class Utils
      * @param  string     $localName    The localName of the string elements.
      * @return array      The string values of the various nodes.
      */
-    public static function extractStrings(\DOMElement $parent, $namespaceURI, $localName)
+    public static function extractStrings(\DOMElement $parent, string $namespaceURI, string $localName)
     {
-        assert(is_string($namespaceURI));
-        assert(is_string($localName));
-
         $ret = [];
         for ($node = $parent->firstChild; $node !== null; $node = $node->nextSibling) {
             if ($node->namespaceURI !== $namespaceURI || $node->localName !== $localName) {
@@ -580,12 +570,8 @@ class Utils
      * @param  string     $value     The value of the element.
      * @return \DOMElement The generated element.
      */
-    public static function addString(\DOMElement $parent, $namespace, $name, $value)
+    public static function addString(\DOMElement $parent, string $namespace, string $name, string $value)
     {
-        assert(is_string($namespace));
-        assert(is_string($name));
-        assert(is_string($value));
-
         $doc = $parent->ownerDocument;
 
         $n = $doc->createElementNS($namespace, $name);
@@ -606,12 +592,8 @@ class Utils
      * @param array      $values    The values we should create the elements from.
      * @return void
      */
-    public static function addStrings(\DOMElement $parent, $namespace, $name, $localized, array $values)
+    public static function addStrings(\DOMElement $parent, string $namespace, string $name, bool $localized, array $values)
     {
-        assert(is_string($namespace));
-        assert(is_string($name));
-        assert(is_bool($localized));
-
         $doc = $parent->ownerDocument;
 
         foreach ($values as $index => $value) {
@@ -631,10 +613,8 @@ class Utils
      * @param  string                     $x509Data The certificate, as a base64-encoded DER data.
      * @return \SAML2\XML\md\KeyDescriptor The keydescriptor.
      */
-    public static function createKeyDescriptor($x509Data)
+    public static function createKeyDescriptor(string $x509Data)
     {
-        assert(is_string($x509Data));
-
         $x509Certificate = new X509Certificate();
         $x509Certificate->setCertificate($x509Data);
 
@@ -670,7 +650,7 @@ class Utils
      * @throws \Exception
      * @return int Converted to a unix timestamp.
      */
-    public static function xsDateTimeToTimestamp($time)
+    public static function xsDateTimeToTimestamp(string $time)
     {
         $matches = [];
 

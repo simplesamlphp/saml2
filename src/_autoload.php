@@ -12,7 +12,7 @@
  *
  * @param string $className Name of the class.
  */
-function SAML2_autoload($className)
+function SAML2_autoload(string $className)
 {
     // handle classes that have been renamed
     $renamed = [
