@@ -5,7 +5,6 @@ namespace SAML2;
 use RobRichards\XMLSecLibs\XMLSecurityKey;
 use SAML2\Exception\RuntimeException;
 use \SimpleSAML\Configuration;
-use \SimpleSAML\Utilities;
 
 /**
  * Implementation of the SAML 2.0 SOAP binding.
@@ -42,7 +41,7 @@ class SOAPClient
         if ($srcMetadata->hasValue('saml.SOAPClient.certificate')) {
             $cert = $srcMetadata->getValue('saml.SOAPClient.certificate');
             if ($cert !== false) {
-                $ctxOpts['ssl']['local_cert'] = Utilities::resolveCert(
+                $ctxOpts['ssl']['local_cert'] = \SimpleSAML\Utils\Config::resolveCert(
                     $srcMetadata->getString('saml.SOAPClient.certificate')
                 );
                 if ($srcMetadata->hasValue('saml.SOAPClient.privatekey_pass')) {
@@ -51,13 +50,13 @@ class SOAPClient
             }
         } else {
             /* Use the SP certificate and privatekey if it is configured. */
-            $privateKey = Utilities::loadPrivateKey($srcMetadata);
-            $publicKey = Utilities::loadPublicKey($srcMetadata);
+            $privateKey = \SimpleSAML\Utils\Crypto::loadPrivateKey($srcMetadata);
+            $publicKey = \SimpleSAML\Utils\Crypto::loadPublicKey($srcMetadata);
             if ($privateKey !== null && $publicKey !== null && isset($publicKey['PEM'])) {
                 $keyCertData = $privateKey['PEM'].$publicKey['PEM'];
-                $file = Utilities::getTempDir().'/'.sha1($keyCertData).'.pem';
+                $file = \SimpleSAML\Utils\System::getTempDir().'/'.sha1($keyCertData).'.pem';
                 if (!file_exists($file)) {
-                    Utilities::writeFile($file, $keyCertData);
+                    \SimpleSAML\Utils\System::writeFile($file, $keyCertData);
                 }
                 $ctxOpts['ssl']['local_cert'] = $file;
                 if (isset($privateKey['password'])) {
@@ -78,9 +77,9 @@ class SOAPClient
                     chunk_split($key['X509Certificate'], 64).
                     "-----END CERTIFICATE-----\n";
             }
-            $peerCertFile = Utilities::getTempDir().'/'.sha1($certData).'.pem';
+            $peerCertFile = \SimpleSAML\Utils\System::getTempDir().'/'.sha1($certData).'.pem';
             if (!file_exists($peerCertFile)) {
-                Utilities::writeFile($peerCertFile, $certData);
+                \SimpleSAML\Utils\System::writeFile($peerCertFile, $certData);
             }
             // create ssl context
             $ctxOpts['ssl']['verify_peer'] = true;
