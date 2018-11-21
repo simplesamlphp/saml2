@@ -54,7 +54,7 @@ abstract class SubjectQuery extends Request
             /* No Subject node. */
             throw new \Exception('Missing subject in subject query.');
         } elseif (count($subject) > 1) {
-            throw new \Exception('More than one <saml:Subject> in <saml:Assertion>.');
+            throw new \Exception('More than one <saml:Subject> in subject query.');
         }
         $subject = $subject[0];
 
