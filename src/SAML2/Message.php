@@ -14,6 +14,7 @@ use SAML2\XML\samlp\Extensions;
  *
  *
  * @SuppressWarnings(PHPMD.ExcessiveClassComplexity)
+ * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
  */
 abstract class Message implements SignedElement
 {
