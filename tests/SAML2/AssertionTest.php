@@ -1931,20 +1931,20 @@ XML;
 
         $this->assertCount(2, $assertionElements[1]->childNodes);
         // empty string should be empty string with type string
-        $this->assertEquals('', $assertionElements[1]->childNodes[1]->nodeValue);
-        $this->assertCount(1, $assertionElements[1]->childNodes[1]->attributes);
-        $this->assertEquals('xsi:type', $assertionElements[1]->childNodes[1]->attributes[0]->nodeName);
-        $this->assertEquals('xs:string', $assertionElements[1]->childNodes[1]->attributes[0]->value);
+        $this->assertEquals('', $assertionElements[1]->childNodes->item(1)->nodeValue);
+        $this->assertCount(1, $assertionElements[1]->childNodes->item(1)->attributes);
+        $this->assertEquals('xsi:type', $assertionElements[1]->childNodes->item(1)->attributes->item(0)->nodeName);
+        $this->assertEquals('xs:string', $assertionElements[1]->childNodes->item(1)->attributes->item(0)->value);
 
         $this->assertCount(3, $assertionElements[2]->childNodes);
         // null value should be empty attribute with nil attribute set to true
-        $this->assertEquals('', $assertionElements[2]->childNodes[1]->nodeValue);
-        $this->assertCount(1, $assertionElements[2]->childNodes[1]->attributes);
-        $this->assertEquals('xsi:nil', $assertionElements[2]->childNodes[1]->attributes[0]->nodeName);
-        $this->assertEquals('true', $assertionElements[2]->childNodes[1]->attributes[0]->value);
+        $this->assertEquals('', $assertionElements[2]->childNodes->item(1)->nodeValue);
+        $this->assertCount(1, $assertionElements[2]->childNodes->item(1)->attributes);
+        $this->assertEquals('xsi:nil', $assertionElements[2]->childNodes->item(1)->attributes->item(0)->nodeName);
+        $this->assertEquals('true', $assertionElements[2]->childNodes->item(1)->attributes->item(0)->value);
         // double check that 'normal' string attribute is still correct
-        $this->assertEquals('value5', $assertionElements[2]->childNodes[2]->nodeValue);
-        $this->assertEquals('xsi:type', $assertionElements[2]->childNodes[2]->attributes[0]->nodeName);
-        $this->assertEquals('xs:string', $assertionElements[2]->childNodes[2]->attributes[0]->value);
+        $this->assertEquals('value5', $assertionElements[2]->childNodes->item(2)->nodeValue);
+        $this->assertEquals('xsi:type', $assertionElements[2]->childNodes->item(2)->attributes->item(0)->nodeName);
+        $this->assertEquals('xs:string', $assertionElements[2]->childNodes->item(2)->attributes->item(0)->value);
     }
 }
