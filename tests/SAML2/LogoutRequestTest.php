@@ -91,6 +91,7 @@ XML;
         $this->assertCount(2, $sessionIndexElements);
         $this->assertEquals('SomeSessionIndex1', $sessionIndexElements[0]);
         $this->assertEquals('SomeSessionIndex2', $sessionIndexElements[1]);
+        $this->assertEquals('SomeSessionIndex1', $logoutRequest->getSessionIndex());
 
         $logoutRequest->decryptNameId(CertificatesMock::getPrivateKey());
 
@@ -124,6 +125,15 @@ XML;
         $this->assertEquals('TheNameIDValue', $nameId->value);
     }
 
+    public function testDecryptingNameIdForgotToDecryptThrowsException()
+    {
+        $logoutRequest = new LogoutRequest($this->logoutRequestElement);
+        $this->assertTrue($logoutRequest->isNameIdEncrypted());
+
+        $this->setExpectedException('Exception', "Attempted to retrieve encrypted NameID without decrypting it first.");
+        $nameId = $logoutRequest->getNameId();
+    }
+
     public function testPlainNameIDUnmarshalling()
     {
         $xml = <<<XML
@@ -136,9 +146,11 @@ XML;
         $this->logoutRequestElement = $document->firstChild;
 
         $logoutRequest = new LogoutRequest($this->logoutRequestElement);
-	$this->assertEquals("frits", $logoutRequest->getNameId()->value);
-	$this->assertEquals("urn:oasis:names:tc:SAML:2.0:nameid-format:unspecified", $logoutRequest->getNameId()->Format);
+        $this->assertEquals("frits", $logoutRequest->getNameId()->value);
+        $this->assertEquals("urn:oasis:names:tc:SAML:2.0:nameid-format:unspecified", $logoutRequest->getNameId()->Format);
+
         $this->assertFalse($logoutRequest->isNameIdEncrypted());
+        $this->assertNull($logoutRequest->decryptNameId(CertificatesMock::getPrivateKey()));
     }
 
     public function testMissingNameIDThrowsException()
@@ -171,7 +183,7 @@ XML;
         $logoutRequest = new LogoutRequest($this->logoutRequestElement);
     }
 
-    public function testNotOnOrAfter()
+    public function testGetNotOnOrAfter()
     {
         $xml = <<<XML
 <samlp:LogoutRequest xmlns:samlp="urn:oasis:names:tc:SAML:2.0:protocol" xmlns:saml="urn:oasis:names:tc:SAML:2.0:assertion" ID="SomeIDValue" Version="2.0" IssueInstant="2010-07-22T11:30:19Z" NotOnOrAfter="2018-11-28T19:33:12Z">
@@ -183,7 +195,49 @@ XML;
         $this->logoutRequestElement = $document->firstChild;
 
         $logoutRequest = new LogoutRequest($this->logoutRequestElement);
-	$this->assertEquals(1543433592, $logoutRequest->getNotOnOrAfter());
+        $this->assertEquals(1543433592, $logoutRequest->getNotOnOrAfter());
     }
 
+    public function testSetNotOnOrAfter()
+    {
+        $time = time();
+
+        $logoutRequest = new LogoutRequest();
+        $logoutRequest->setNameID(['Value' => 'NameIDValue']);
+        $logoutRequest->setNotOnOrAfter($time);
+        $logoutRequestElement = $logoutRequest->toUnsignedXML();
+
+        $logoutRequest2 = new LogoutRequest($logoutRequestElement);
+        $this->assertEquals($time, $logoutRequest2->getNotOnOrAfter());
+    }
+
+    public function testWithOutSessionIndices()
+    {
+        $xml = <<<XML
+<samlp:LogoutRequest xmlns:samlp="urn:oasis:names:tc:SAML:2.0:protocol" xmlns:saml="urn:oasis:names:tc:SAML:2.0:assertion" ID="SomeIDValue" Version="2.0" IssueInstant="2010-07-22T11:30:19Z">
+  <saml:Issuer>TheIssuer</saml:Issuer>
+  <saml:NameID Format="urn:oasis:names:tc:SAML:2.0:nameid-format:unspecified">frits</saml:NameID>
+</samlp:LogoutRequest>
+XML;
+        $document = DOMDocumentFactory::fromString($xml);
+        $this->logoutRequestElement = $document->firstChild;
+
+        $logoutRequest = new LogoutRequest($this->logoutRequestElement);
+        $this->assertCount(0, $logoutRequest->getSessionIndexes());
+        $this->assertNull($logoutRequest->getSessionIndex());
+    }
+
+    public function testSetSessionIndicesVariants()
+    {
+        $logoutRequest = new LogoutRequest();
+        $logoutRequest->setSessionIndexes(['SessionIndexValue1', 'SessionIndexValue2']);
+        $this->assertCount(2, $logoutRequest->getSessionIndexes());
+        $logoutRequest->setSessionIndex(null);
+        $this->assertCount(0, $logoutRequest->getSessionIndexes());
+        $logoutRequest->setSessionIndexes(['SessionIndexValue1', 'SessionIndexValue2']);
+        $this->assertCount(2, $logoutRequest->getSessionIndexes());
+        $logoutRequest->setSessionIndex('SessionIndexValue3');
+        $this->assertCount(1, $logoutRequest->getSessionIndexes());
+        $this->assertEquals('SessionIndexValue3', $logoutRequest->getSessionIndex());
+    }
 }

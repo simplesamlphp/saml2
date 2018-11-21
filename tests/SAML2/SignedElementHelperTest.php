@@ -121,4 +121,22 @@ edF1YfJgq35hcMMLY9RE/0C0bCI=
         $this->assertCount(1, $certs);
         $this->assertEquals($certData, $certs[0]);
     }
+
+    function testGetSignatureKeyCertificates()
+    {
+        $seh = new SignedElementHelperMock();
+        $origkey = CertificatesMock::getPrivateKey();
+        $origcerts = [CertificatesMock::PUBLIC_KEY_PEM];
+
+        $seh->setSignatureKey($origkey);
+        $seh->setCertificates($origcerts);
+
+        $key = $seh->getSignatureKey();
+
+        $this->assertInstanceOf('RobRichards\XMLSecLibs\XMLSecurityKey', $key);
+        $this->assertEquals($origkey, $key);
+
+        $certs = $seh->getCertificates();
+        $this->assertEquals($origcerts, $certs);
+    }
 }

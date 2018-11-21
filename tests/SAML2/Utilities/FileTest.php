@@ -9,11 +9,10 @@ class FileTest extends \PHPUnit_Framework_TestCase
     /**
      * @group utilities
      * @test
-     *
-     * @expectedException \SAML2\Exception\RuntimeException
      */
     public function when_loading_a_non_existant_file_an_exception_is_thrown()
     {
+        $this->setExpectedException('SAML2\Exception\RuntimeException', 'File "/foo/bar/baz/quux" does not exist or is not readable');
         File::getFileContents('/foo/bar/baz/quux');
     }
 
