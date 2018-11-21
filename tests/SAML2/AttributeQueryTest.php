@@ -326,4 +326,85 @@ XML;
         $aq = new AttributeQuery($document->firstChild);
     }
 
+    public function testNoSubjectThrowsException()
+    {
+        $xml = <<<XML
+  <samlp:AttributeQuery xmlns:saml="urn:oasis:names:tc:SAML:2.0:assertion" xmlns:samlp="urn:oasis:names:tc:SAML:2.0:protocol" ID="aaf23196-1773-2113-474a-fe114412ab72" Version="2.0" IssueInstant="2017-09-06T11:49:27Z">
+	<saml:Issuer Format="urn:oasis:names:tc:SAML:2.0:nameid-format:entity">https://example.org/</saml:Issuer>
+	<saml:Attribute
+	  NameFormat="urn:oasis:names:tc:SAML:2.0:attrname-format:uri"
+	  Name="urn:oid:1.3.6.1.4.1.5923.1.1.1.7"
+	  FriendlyName="entitlements">
+	</saml:Attribute>
+</samlp:AttributeQuery>
+XML;
+        $document = DOMDocumentFactory::fromString($xml);
+        $this->setExpectedException('Exception', 'Missing subject in subject');
+        $aq = new AttributeQuery($document->firstChild);
+    }
+
+    public function testTooManySubjectsThrowsException()
+    {
+        $xml = <<<XML
+  <samlp:AttributeQuery xmlns:saml="urn:oasis:names:tc:SAML:2.0:assertion" xmlns:samlp="urn:oasis:names:tc:SAML:2.0:protocol" ID="aaf23196-1773-2113-474a-fe114412ab72" Version="2.0" IssueInstant="2017-09-06T11:49:27Z">
+	<saml:Issuer Format="urn:oasis:names:tc:SAML:2.0:nameid-format:entity">https://example.org/</saml:Issuer>
+	<saml:Subject>
+	  <saml:NameID Format="urn:oasis:names:tc:SAML:2.0:nameid-format:unspecified">urn:example:subject</saml:NameID>
+	</saml:Subject>
+	<saml:Subject>
+	  <saml:NameID Format="urn:oasis:names:tc:SAML:2.0:nameid-format:unspecified">urn:example:another:subject</saml:NameID>
+	</saml:Subject>
+	<saml:Attribute
+	  NameFormat="urn:oasis:names:tc:SAML:2.0:attrname-format:uri"
+	  Name="urn:oid:1.3.6.1.4.1.5923.1.1.1.7"
+	  FriendlyName="entitlements">
+	</saml:Attribute>
+</samlp:AttributeQuery>
+XML;
+        $document = DOMDocumentFactory::fromString($xml);
+        $this->setExpectedException('Exception', 'More than one <saml:Subject> in subject');
+        $aq = new AttributeQuery($document->firstChild);
+    }
+
+    public function testNoNameIDinSubjectThrowsException()
+    {
+        $xml = <<<XML
+  <samlp:AttributeQuery xmlns:saml="urn:oasis:names:tc:SAML:2.0:assertion" xmlns:samlp="urn:oasis:names:tc:SAML:2.0:protocol" ID="aaf23196-1773-2113-474a-fe114412ab72" Version="2.0" IssueInstant="2017-09-06T11:49:27Z">
+	<saml:Issuer Format="urn:oasis:names:tc:SAML:2.0:nameid-format:entity">https://example.org/</saml:Issuer>
+	<saml:Subject>
+	  <saml:something>example</saml:something>
+	</saml:Subject>
+	<saml:Attribute
+	  NameFormat="urn:oasis:names:tc:SAML:2.0:attrname-format:uri"
+	  Name="urn:oid:1.3.6.1.4.1.5923.1.1.1.7"
+	  FriendlyName="entitlements">
+	</saml:Attribute>
+</samlp:AttributeQuery>
+XML;
+        $document = DOMDocumentFactory::fromString($xml);
+        $this->setExpectedException('Exception', 'Missing <saml:NameID> in <saml:Subject>');
+        $aq = new AttributeQuery($document->firstChild);
+    }
+
+    public function testTooManyNameIDsThrowsException()
+    {
+        $xml = <<<XML
+  <samlp:AttributeQuery xmlns:saml="urn:oasis:names:tc:SAML:2.0:assertion" xmlns:samlp="urn:oasis:names:tc:SAML:2.0:protocol" ID="aaf23196-1773-2113-474a-fe114412ab72" Version="2.0" IssueInstant="2017-09-06T11:49:27Z">
+	<saml:Issuer Format="urn:oasis:names:tc:SAML:2.0:nameid-format:entity">https://example.org/</saml:Issuer>
+	<saml:Subject>
+	  <saml:NameID Format="urn:oasis:names:tc:SAML:2.0:nameid-format:unspecified">urn:example:subject</saml:NameID>
+	  <saml:NameID Format="urn:oasis:names:tc:SAML:2.0:nameid-format:unspecified">urn:example:another:subject</saml:NameID>
+	</saml:Subject>
+	<saml:Attribute
+	  NameFormat="urn:oasis:names:tc:SAML:2.0:attrname-format:uri"
+	  Name="urn:oid:1.3.6.1.4.1.5923.1.1.1.7"
+	  FriendlyName="entitlements">
+	</saml:Attribute>
+</samlp:AttributeQuery>
+XML;
+        $document = DOMDocumentFactory::fromString($xml);
+        $this->setExpectedException('Exception', 'More than one <saml:NameID> in <saml:Subject>');
+        $aq = new AttributeQuery($document->firstChild);
+    }
+
 }

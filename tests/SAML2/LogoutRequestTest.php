@@ -134,6 +134,15 @@ XML;
         $nameId = $logoutRequest->getNameId();
     }
 
+    public function testDecryptingNameIdForgotToDecryptThrowsException()
+    {
+        $logoutRequest = new LogoutRequest($this->logoutRequestElement);
+        $this->assertTrue($logoutRequest->isNameIdEncrypted());
+
+        $this->setExpectedException('Exception', "Attempted to retrieve encrypted NameID without decrypting it first.");
+        $nameId = $logoutRequest->getNameId();
+    }
+
     public function testPlainNameIDUnmarshalling()
     {
         $xml = <<<XML
