@@ -4,8 +4,8 @@ namespace SAML2;
 
 use RobRichards\XMLSecLibs\XMLSecurityKey;
 use SAML2\Exception\RuntimeException;
-use SimpleSAML_Configuration;
-use SimpleSAML_Utilities;
+use \SimpleSAML\Configuration;
+use \SimpleSAML\Utilities;
 
 /**
  * Implementation of the SAML 2.0 SOAP binding.
@@ -22,12 +22,12 @@ class SOAPClient
      * This function sends the SOAP message to the service location and returns SOAP response
      *
      * @param  \SAML2\Message            $msg         The request that should be sent.
-     * @param  \SimpleSAML_Configuration $srcMetadata The metadata of the issuer of the message.
-     * @param  \SimpleSAML_Configuration $dstMetadata The metadata of the destination of the message.
+     * @param  \SimpleSAML\Configuration $srcMetadata The metadata of the issuer of the message.
+     * @param  \SimpleSAML\Configuration $dstMetadata The metadata of the destination of the message.
      * @return \SAML2\Message            The response we received.
      * @throws \Exception
      */
-    public function send(Message $msg, SimpleSAML_Configuration $srcMetadata, SimpleSAML_Configuration $dstMetadata = null)
+    public function send(Message $msg, Configuration $srcMetadata, Configuration $dstMetadata = null)
     {
         $issuer = $msg->getIssuer();
 
@@ -42,7 +42,7 @@ class SOAPClient
         if ($srcMetadata->hasValue('saml.SOAPClient.certificate')) {
             $cert = $srcMetadata->getValue('saml.SOAPClient.certificate');
             if ($cert !== false) {
-                $ctxOpts['ssl']['local_cert'] = SimpleSAML_Utilities::resolveCert(
+                $ctxOpts['ssl']['local_cert'] = Utilities::resolveCert(
                     $srcMetadata->getString('saml.SOAPClient.certificate')
                 );
                 if ($srcMetadata->hasValue('saml.SOAPClient.privatekey_pass')) {
@@ -51,13 +51,13 @@ class SOAPClient
             }
         } else {
             /* Use the SP certificate and privatekey if it is configured. */
-            $privateKey = SimpleSAML_Utilities::loadPrivateKey($srcMetadata);
-            $publicKey = SimpleSAML_Utilities::loadPublicKey($srcMetadata);
+            $privateKey = Utilities::loadPrivateKey($srcMetadata);
+            $publicKey = Utilities::loadPublicKey($srcMetadata);
             if ($privateKey !== null && $publicKey !== null && isset($publicKey['PEM'])) {
                 $keyCertData = $privateKey['PEM'].$publicKey['PEM'];
-                $file = SimpleSAML_Utilities::getTempDir().'/'.sha1($keyCertData).'.pem';
+                $file = Utilities::getTempDir().'/'.sha1($keyCertData).'.pem';
                 if (!file_exists($file)) {
-                    SimpleSAML_Utilities::writeFile($file, $keyCertData);
+                    Utilities::writeFile($file, $keyCertData);
                 }
                 $ctxOpts['ssl']['local_cert'] = $file;
                 if (isset($privateKey['password'])) {
@@ -78,9 +78,9 @@ class SOAPClient
                     chunk_split($key['X509Certificate'], 64).
                     "-----END CERTIFICATE-----\n";
             }
-            $peerCertFile = SimpleSAML_Utilities::getTempDir().'/'.sha1($certData).'.pem';
+            $peerCertFile = Utilities::getTempDir().'/'.sha1($certData).'.pem';
             if (!file_exists($peerCertFile)) {
-                SimpleSAML_Utilities::writeFile($peerCertFile, $certData);
+                Utilities::writeFile($peerCertFile, $certData);
             }
             // create ssl context
             $ctxOpts['ssl']['verify_peer'] = true;
