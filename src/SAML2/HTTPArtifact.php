@@ -4,10 +4,10 @@ namespace SAML2;
 
 use RobRichards\XMLSecLibs\XMLSecurityKey;
 use SAML2\Utilities\Temporal;
-use SimpleSAML_Configuration;
-use SimpleSAML_Metadata_MetaDataStorageHandler;
-use SimpleSAML_Store;
-use SimpleSAML_Utilities;
+use \SimpleSAML\Configuration;
+use \SimpleSAML\Metadata\MetaDataStorageHandler;
+use \SimpleSAML\Store;
+use \SimpleSAML\Utilities;
 
 /**
  * Class which implements the HTTP-Artifact binding.
@@ -20,7 +20,7 @@ use SimpleSAML_Utilities;
 class HTTPArtifact extends Binding
 {
     /**
-     * @var \SimpleSAML_Configuration
+     * @var \SimpleSAML\Configuration
      */
     private $spMetadata;
 
@@ -33,12 +33,12 @@ class HTTPArtifact extends Binding
      */
     public function getRedirectURL(Message $message)
     {
-        $store = SimpleSAML_Store::getInstance();
+        $store = Store::getInstance();
         if ($store === false) {
             throw new \Exception('Unable to send artifact without a datastore configured.');
         }
 
-        $generatedId = pack('H*', ((string) SimpleSAML_Utilities::stringToHex(SimpleSAML_Utilities::generateRandomBytes(20))));
+        $generatedId = pack('H*', ((string) Utilities::stringToHex(Utilities::generateRandomBytes(20))));
         $artifact = base64_encode("\x00\x04\x00\x00".sha1($message->getIssuer(), true).$generatedId);
         $artifactData = $message->toUnsignedXML();
         $artifactDataString = $artifactData->ownerDocument->saveXML($artifactData);
@@ -53,7 +53,7 @@ class HTTPArtifact extends Binding
             $params['RelayState'] = $relayState;
         }
 
-        return SimpleSAML_Utilities::addURLparameter($message->getDestination(), $params);
+        return Utilities::addURLparameter($message->getDestination(), $params);
     }
 
     /**
@@ -87,7 +87,7 @@ class HTTPArtifact extends Binding
             throw new \Exception('Missing SAMLart parameter.');
         }
 
-        $metadataHandler = SimpleSAML_Metadata_MetaDataStorageHandler::getMetadataHandler();
+        $metadataHandler = MetaDataStorageHandler::getMetadataHandler();
 
         $idpMetadata = $metadataHandler->getMetaDataConfigForSha1($sourceId, 'saml20-idp-remote');
 
@@ -149,9 +149,9 @@ class HTTPArtifact extends Binding
     }
 
     /**
-     * @param \SimpleSAML_Configuration $sp
+     * @param \SimpleSAML\Configuration $sp
      */
-    public function setSPMetadata(SimpleSAML_Configuration $sp)
+    public function setSPMetadata(Configuration $sp)
     {
         $this->spMetadata = $sp;
     }

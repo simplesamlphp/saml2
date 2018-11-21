@@ -2,7 +2,7 @@
 
 namespace SAML2\Configuration;
 
-use SimpleSAML_Configuration;
+use \SimpleSAML\Configuration;
 
 /**
  * Backwards compatibility helper for SimpleSAMLphp
@@ -10,13 +10,13 @@ use SimpleSAML_Configuration;
 class SimpleSAMLConverter
 {
     /**
-     * @param \SimpleSAML_Configuration $configuration
+     * @param \SimpleSAML\Configuration $configuration
      * @param string                    $certificatePrefix
      *
      * @return \SAML2\Configuration\IdentityProvider
      */
     public static function convertToIdentityProvider(
-        SimpleSAML_Configuration $configuration,
+        Configuration $configuration,
         string $certificatePrefix = ''
     ) {
         $pluckedConfiguration = static::pluckConfiguration($configuration, $certificatePrefix);
@@ -27,13 +27,13 @@ class SimpleSAMLConverter
     }
 
     /**
-     * @param \SimpleSAML_Configuration $configuration
+     * @param \SimpleSAML\Configuration $configuration
      * @param string                    $certificatePrefix
      *
      * @return \SAML2\Configuration\ServiceProvider
      */
     public static function convertToServiceProvider(
-        SimpleSAML_Configuration $configuration,
+        Configuration $configuration,
         string $certificatePrefix = ''
     ) {
         $pluckedConfiguration = static::pluckConfiguration($configuration, $certificatePrefix);
@@ -44,12 +44,12 @@ class SimpleSAMLConverter
     }
 
     /**
-     * @param \SimpleSAML_Configuration $configuration
+     * @param \SimpleSAML\Configuration $configuration
      * @param string                    $prefix
      *
      * @return array
      */
-    protected static function pluckConfiguration(SimpleSAML_Configuration $configuration, string $prefix = '')
+    protected static function pluckConfiguration(Configuration $configuration, string $prefix = '')
     {
         $extracted = [];
 
@@ -80,19 +80,19 @@ class SimpleSAMLConverter
         return $extracted;
     }
 
-    protected static function enrichForIdentityProvider(SimpleSAML_Configuration $configuration, array &$baseConfiguration)
+    protected static function enrichForIdentityProvider(Configuration $configuration, array &$baseConfiguration)
     {
         $baseConfiguration['base64EncodedAttributes'] = $configuration->getBoolean('base64attributes', false);
         $baseConfiguration['entityId'] = $configuration->getString('entityid');
     }
 
-    protected static function enrichForServiceProvider(SimpleSAML_Configuration $configuration, array &$baseConfiguration)
+    protected static function enrichForServiceProvider(Configuration $configuration, array &$baseConfiguration)
     {
         $baseConfiguration['entityId'] = $configuration->getString('entityid');
     }
 
     protected static function enrichForDecryptionProvider(
-        SimpleSAML_Configuration $configuration,
+        Configuration $configuration,
         array &$baseConfiguration
     ) {
         if ($configuration->has('sharedKey')) {

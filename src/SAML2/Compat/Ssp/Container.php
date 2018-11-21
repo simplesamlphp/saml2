@@ -3,7 +3,7 @@
 namespace SAML2\Compat\Ssp;
 
 use SAML2\Compat\AbstractContainer;
-use SimpleSAML_Utilities;
+use \SimpleSAML\Utilities;
 
 class Container extends AbstractContainer
 {
@@ -33,7 +33,7 @@ class Container extends AbstractContainer
      */
     public function generateId()
     {
-        return SimpleSAML_Utilities::generateID();
+        return Utilities::generateID();
     }
 
     /**
@@ -41,7 +41,7 @@ class Container extends AbstractContainer
      */
     public function debugMessage(\DOMElement $message, string $type)
     {
-        SimpleSAML_Utilities::debugMessage($message, $type);
+        Utilities::debugMessage($message, $type);
     }
 
     /**
@@ -49,7 +49,7 @@ class Container extends AbstractContainer
      */
     public function redirect(string $url, $data = [])
     {
-        SimpleSAML_Utilities::redirectTrustedURL($url, $data);
+        Utilities::redirectTrustedURL($url, $data);
     }
 
     /**
@@ -57,6 +57,6 @@ class Container extends AbstractContainer
      */
     public function postRedirect(string $url, $data = [])
     {
-        SimpleSAML_Utilities::postRedirect($url, $data);
+        Utilities::postRedirect($url, $data);
     }
 }
