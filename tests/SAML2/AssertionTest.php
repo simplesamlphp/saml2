@@ -1933,4 +1933,45 @@ XML;
         $this->assertEquals('saml:AttributeStatement', $assertionElements[4]->tagName);
     }
 
+    /**
+     * Test attribute value empty string and null.
+     * Ensure that empty string attribues are output, and null attributes also but
+     * with different type.
+     */
+    public function testAttributeValueEmptyStringAndNull()
+    {
+        // Create an assertion
+        $assertion = new Assertion();
+
+        $assertion->setIssuer('testIssuer');
+
+        $assertion->setAttributes([
+            "name1" => ["value1", "value2"],
+            "name2" => ["value3", ""],
+            "name3" => ["value1", null, "value5"],
+        ]);
+
+        $assertionElement = $assertion->toXML();
+        $assertionElements = Utils::xpQuery($assertionElement, './saml_assertion:AttributeStatement/saml_assertion:Attribute');
+
+        $this->assertCount(3, $assertionElements);
+
+        $this->assertEquals(2, $assertionElements[1]->childNodes->length);
+        // empty string should be empty string with type string
+        $this->assertEquals('', $assertionElements[1]->childNodes->item(1)->nodeValue);
+        $this->assertEquals(1, $assertionElements[1]->childNodes->item(1)->attributes->length);
+        $this->assertEquals('xsi:type', $assertionElements[1]->childNodes->item(1)->attributes->item(0)->nodeName);
+        $this->assertEquals('xs:string', $assertionElements[1]->childNodes->item(1)->attributes->item(0)->value);
+
+        $this->assertEquals(3, $assertionElements[2]->childNodes->length);
+        // null value should be empty attribute with nil attribute set to true
+        $this->assertEquals('', $assertionElements[2]->childNodes->item(1)->nodeValue);
+        $this->assertEquals(1, $assertionElements[2]->childNodes->item(1)->attributes->length);
+        $this->assertEquals('xsi:nil', $assertionElements[2]->childNodes->item(1)->attributes->item(0)->nodeName);
+        $this->assertEquals('true', $assertionElements[2]->childNodes->item(1)->attributes->item(0)->value);
+        // double check that 'normal' string attribute is still correct
+        $this->assertEquals('value5', $assertionElements[2]->childNodes->item(2)->nodeValue);
+        $this->assertEquals('xsi:type', $assertionElements[2]->childNodes->item(2)->attributes->item(0)->nodeName);
+        $this->assertEquals('xs:string', $assertionElements[2]->childNodes->item(2)->attributes->item(0)->value);
+    }
 }
