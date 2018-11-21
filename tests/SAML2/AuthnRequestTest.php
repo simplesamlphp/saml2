@@ -124,11 +124,11 @@ AUTHNREQUEST;
     xmlns:samlp="urn:oasis:names:tc:SAML:2.0:protocol"
     xmlns:saml="urn:oasis:names:tc:SAML:2.0:assertion"
     AssertionConsumerServiceIndex="1"
-    Destination="https://tiqr.stepup.org/idp/profile/saml2/Redirect/SSO"
+    Destination="https://tiqr.example.org/idp/profile/saml2/Redirect/SSO"
     ID="_2b0226190ca1c22de6f66e85f5c95158"
     IssueInstant="2014-09-22T13:42:00Z"
     Version="2.0">
-  <saml:Issuer>https://gateway.stepup.org/saml20/sp/metadata</saml:Issuer>
+  <saml:Issuer>https://gateway.example.org/saml20/sp/metadata</saml:Issuer>
   <saml:Subject>
         <saml:NameID Format="urn:oasis:names:tc:SAML:1.1:nameid-format:unspecified">user@example.org</saml:NameID>
   </saml:Subject>
@@ -166,8 +166,8 @@ AUTHNREQUEST;
     ID="123"
     Version="2.0"
     IssueInstant="2015-05-11T09:02:36Z"
-    Destination="https://tiqr.stepup.org/idp/profile/saml2/Redirect/SSO">
-    <saml:Issuer>https://gateway.stepup.org/saml20/sp/metadata</saml:Issuer>
+    Destination="https://tiqr.example.org/idp/profile/saml2/Redirect/SSO">
+    <saml:Issuer>https://gateway.example.org/saml20/sp/metadata</saml:Issuer>
     <saml:Subject>
         <saml:EncryptedID xmlns:xenc="http://www.w3.org/2001/04/xmlenc#" xmlns:dsig="http://www.w3.org/2000/09/xmldsig#">
             <xenc:EncryptedData xmlns:xenc="http://www.w3.org/2001/04/xmlenc#" xmlns:dsig="http://www.w3.org/2000/09/xmldsig#" Type="http://www.w3.org/2001/04/xmlenc#Element">
@@ -216,10 +216,14 @@ AUTHNREQUEST;
         $issuer = new Issuer();
         $issuer->setValue('https://gateway.example.org/saml20/sp/metadata');
 
+        // the Issuer
+        $issuer = new XML\saml\Issuer();
+        $issuer->value = 'https://gateway.example.org/saml20/sp/metadata';
+
         // basic AuthnRequest
         $request = new AuthnRequest();
         $request->setIssuer($issuer);
-        $request->setDestination('https://tiqr.stepup.org/idp/profile/saml2/Redirect/SSO');
+        $request->setDestination('https://tiqr.example.org/idp/profile/saml2/Redirect/SSO');
         $request->setNameId($nameId);
 
         // encrypt the NameID
