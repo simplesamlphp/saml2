@@ -125,7 +125,7 @@ class AttributeQuery extends SubjectQuery
      *
      * @param string $nameFormat The NameFormat used on all attributes.
      */
-    public function setAttributeNameFormat($nameFormat)
+    public function setAttributeNameFormat(string $nameFormat)
     {
         assert(is_string($nameFormat));
 

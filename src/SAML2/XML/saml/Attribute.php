@@ -81,10 +81,8 @@ class Attribute
      * @param string     $name      The name of the element.
      * @return \DOMElement
      */
-    protected function toXMLInternal(\DOMElement $parent, $namespace, $name)
+    protected function toXMLInternal(\DOMElement $parent, string $namespace, string $name)
     {
-        assert(is_string($namespace));
-        assert(is_string($name));
         assert(is_string($this->Name));
         assert(is_null($this->NameFormat) || is_string($this->NameFormat));
         assert(is_null($this->FriendlyName) || is_string($this->FriendlyName));

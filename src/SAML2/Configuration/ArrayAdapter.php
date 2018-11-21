@@ -21,10 +21,10 @@ class ArrayAdapter implements Queryable
     }
 
     /**
-     * @param mixed $key
+     * @param string $key
      * @param mixed|null $defaultValue
      */
-    public function get($key, $defaultValue = null)
+    public function get(string $key, $defaultValue = null)
     {
         if (!$this->has($key)) {
             return $defaultValue;
@@ -34,9 +34,9 @@ class ArrayAdapter implements Queryable
     }
 
     /**
-     * @param mixed $key
+     * @param string $key
      */
-    public function has($key)
+    public function has(string $key)
     {
         return array_key_exists($key, $this->configuration);
     }

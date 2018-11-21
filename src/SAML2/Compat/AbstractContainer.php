@@ -24,11 +24,11 @@ abstract class AbstractContainer
      * - **encrypt** XML that is about to be encrypted
      * - **decrypt** XML that was just decrypted
      *
-     * @param string $message
+     * @param \DOMElement $message
      * @param string $type
      * @return void
      */
-    abstract public function debugMessage($message, $type);
+    abstract public function debugMessage(\DOMElement $message, string $type);
 
     /**
      * Trigger the user to perform a GET to the given URL with the given data.
@@ -37,7 +37,7 @@ abstract class AbstractContainer
      * @param array $data
      * @return void
      */
-    abstract public function redirect($url, $data = []);
+    abstract public function redirect(string $url, $data = []);
 
     /**
      * Trigger the user to perform a POST to the given URL with the given data.
@@ -46,5 +46,5 @@ abstract class AbstractContainer
      * @param array $data
      * @return void
      */
-    abstract public function postRedirect($url, $data = []);
+    abstract public function postRedirect(string $url, $data = []);
 }

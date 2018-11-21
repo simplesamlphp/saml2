@@ -50,6 +50,7 @@ class Response
 
         $this->AssertionConsumerServiceURL = $xml->getAttribute('AssertionConsumerServiceURL');
     }
+
     /**
      * Convert this ECP Response to XML.
      *

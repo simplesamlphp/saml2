@@ -63,11 +63,11 @@ class MockContainer extends AbstractContainer
      * - **encrypt** XML that is about to be encrypted
      * - **decrypt** XML that was just decrypted
      *
-     * @param string $message
+     * @param \DOMElement $message
      * @param string $type
      * @return void
      */
-    public function debugMessage($message, $type)
+    public function debugMessage(\DOMElement $message, string $type)
     {
         $this->debugMessages[$type] = $message;
     }
@@ -79,7 +79,7 @@ class MockContainer extends AbstractContainer
      * @param array $data
      * @return void
      */
-    public function redirect($url, $data = [])
+    public function redirect(string $url, $data = [])
     {
         $this->redirectUrl = $url;
         $this->redirectData = $data;
@@ -88,11 +88,11 @@ class MockContainer extends AbstractContainer
     /**
      * Trigger the user to perform a POST to the given URL with the given data.
      *
-     * @param string $url
+     * @param string|null $url
      * @param array $data
      * @return void
      */
-    public function postRedirect($url, $data = [])
+    public function postRedirect(string $url = null, $data = [])
     {
         $this->postRedirectUrl = $url;
         $this->postRedirectData = $data;

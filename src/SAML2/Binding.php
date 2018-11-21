@@ -25,10 +25,8 @@ abstract class Binding
      * @return \SAML2\Binding The binding.
      * @throws \Exception
      */
-    public static function getBinding($urn)
+    public static function getBinding(string $urn)
     {
-        assert(is_string($urn));
-
         switch ($urn) {
             case Constants::BINDING_HTTP_POST:
                 return new HTTPPost();
@@ -121,10 +119,8 @@ abstract class Binding
      *
      * @param string|null $destination The destination the message should be delivered to.
      */
-    public function setDestination($destination)
+    public function setDestination(string $destination = null)
     {
-        assert(is_string($destination) || is_null($destination));
-
         $this->destination = $destination;
     }
 

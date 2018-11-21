@@ -36,12 +36,12 @@ class DecodeBase64Transformer implements
     }
 
     /**
-     * @param $value
+     * @param string $value
      *
      * @return array
      * @SuppressWarnings(PHPMD.UnusedPrivateMethod)
      */
-    private function decodeValue($value)
+    private function decodeValue(string $value)
     {
         $elements = explode('_', $value);
         return array_map('base64_decode', $elements);

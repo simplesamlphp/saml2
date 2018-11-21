@@ -71,13 +71,11 @@ class SignedElementHelper implements SignedElement
      *
      * This function is used for custom validation extensions
      *
-     * @param callback $function The function which should be called.
+     * @param callable $function The function which should be called.
      * @param mixed    $data     The data that should be included as the first parameter to the function.
      */
-    public function addValidator($function, $data)
+    public function addValidator(callable $function, $data)
     {
-        assert(is_callable($function));
-
         $this->validators[] = [
             'Function' => $function,
             'Data' => $data,

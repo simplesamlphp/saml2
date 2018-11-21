@@ -66,16 +66,6 @@ class KeyLoaderTest extends \PHPUnit_Framework_TestCase
         $this->assertInstanceOf('SAML2\Certificate\X509', $loadedKeys->get(0));
     }
 
-    /**
-     * @group certificate
-     *
-     * @test
-     * @expectedException \SAML2\Exception\InvalidArgumentException
-     */
-    public function certificate_data_with_invalid_format_throws_an_exception()
-    {
-        $this->keyLoader->loadCertificateData([]);
-    }
 
     /**
      * @group certificate

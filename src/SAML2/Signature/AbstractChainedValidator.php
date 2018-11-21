@@ -22,13 +22,13 @@ abstract class AbstractChainedValidator implements ChainedValidator
      * BC compatible version of the signature check
      *
      * @param \SAML2\SignedElement      $element
-     * @param \SAML2\Certificate\X509[] $pemCandidates
+     * @param \SAML2\Utilities\ArrayCollection $pemCandidates
      *
      * @throws \Exception
      *
      * @return bool
      */
-    protected function validateElementWithKeys(SignedElement $element, $pemCandidates)
+    protected function validateElementWithKeys(SignedElement $element, \SAML2\Utilities\ArrayCollection $pemCandidates)
     {
         $lastException = null;
         foreach ($pemCandidates as $index => $candidateKey) {

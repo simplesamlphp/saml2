@@ -111,10 +111,8 @@ class ContactPerson
      * @param  string     $name   The name of the child elements.
      * @return array      The value of the child elements.
      */
-    private static function getStringElements(\DOMElement $parent, $name)
+    private static function getStringElements(\DOMElement $parent, string $name)
     {
-        assert(is_string($name));
-
         $e = Utils::xpQuery($parent, './saml_metadata:'.$name);
 
         $ret = [];
@@ -133,10 +131,8 @@ class ContactPerson
      * @return string|null The value of the child element.
      * @throws \Exception
      */
-    private static function getStringElement(\DOMElement $parent, $name)
+    private static function getStringElement(\DOMElement $parent, string $name)
     {
-        assert(is_string($name));
-
         $e = self::getStringElements($parent, $name);
         if (empty($e)) {
             return null;

@@ -6,16 +6,8 @@ use SAML2\Exception\InvalidArgumentException;
 
 class PrivateKey extends Key
 {
-    public static function create($keyContents, $passphrase = null)
+    public static function create(string $keyContents, string $passphrase = null)
     {
-        if (!is_string($keyContents)) {
-            throw InvalidArgumentException::invalidType('string', $keyContents);
-        }
-
-        if ($passphrase && !is_string($passphrase)) {
-            throw InvalidArgumentException::invalidType('string', $passphrase);
-        }
-
         $keyData = ['PEM' => $keyContents, self::USAGE_ENCRYPTION => true];
         if ($passphrase) {
             $keyData['passphrase'] = $passphrase;

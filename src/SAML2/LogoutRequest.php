@@ -97,10 +97,8 @@ class LogoutRequest extends Request
      *
      * @param int|null $notOnOrAfter The expiration time of this request.
      */
-    public function setNotOnOrAfter($notOnOrAfter)
+    public function setNotOnOrAfter(int $notOnOrAfter = null)
     {
-        assert(is_int($notOnOrAfter) || is_null($notOnOrAfter));
-
         $this->notOnOrAfter = $notOnOrAfter;
     }
 
@@ -232,10 +230,8 @@ class LogoutRequest extends Request
      *
      * @param string|null $sessionIndex The sesion index of the session that should be terminated.
      */
-    public function setSessionIndex($sessionIndex)
+    public function setSessionIndex(string $sessionIndex = null)
     {
-        assert(is_string($sessionIndex) || is_null($sessionIndex));
-
         if (is_null($sessionIndex)) {
             $this->sessionIndexes = [];
         } else {

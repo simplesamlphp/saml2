@@ -70,10 +70,12 @@ class Chunk implements \Serializable
     /**
      * Un-serialize this XML chunk.
      *
-     * @param  string          $serialized The serialized chunk.
+     * @param string          $serialized The serialized chunk.
+     * Type hint not possible due to upstream method signature
      */
     public function unserialize($serialized)
     {
+        assert(is_string($serialized));
         $doc = DOMDocumentFactory::fromString(unserialize($serialized));
         $this->xml = $doc->documentElement;
         $this->localName = $this->xml->localName;

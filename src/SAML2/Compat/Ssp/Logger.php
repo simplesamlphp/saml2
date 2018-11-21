@@ -13,6 +13,8 @@ class Logger implements LoggerInterface
      * @param string $message
      * @param array $context
      * @return null
+     *
+     * Type hint not possible due to upstream method signature
      */
     public function emergency($message, array $context = [])
     {
@@ -28,6 +30,8 @@ class Logger implements LoggerInterface
      * @param string $message
      * @param array $context
      * @return null
+     *
+     * Type hint not possible due to upstream method signature
      */
     public function alert($message, array $context = [])
     {
@@ -42,6 +46,8 @@ class Logger implements LoggerInterface
      * @param string $message
      * @param array $context
      * @return null
+     *
+     * Type hint not possible due to upstream method signature
      */
     public function critical($message, array $context = [])
     {
@@ -55,6 +61,8 @@ class Logger implements LoggerInterface
      * @param string $message
      * @param array $context
      * @return null
+     *
+     * Type hint not possible due to upstream method signature
      */
     public function error($message, array $context = [])
     {
@@ -70,6 +78,8 @@ class Logger implements LoggerInterface
      * @param string $message
      * @param array $context
      * @return null
+     *
+     * Type hint not possible due to upstream method signature
      */
     public function warning($message, array $context = [])
     {
@@ -82,6 +92,8 @@ class Logger implements LoggerInterface
      * @param string $message
      * @param array $context
      * @return null
+     *
+     * Type hint not possible due to upstream method signature
      */
     public function notice($message, array $context = [])
     {
@@ -96,6 +108,8 @@ class Logger implements LoggerInterface
      * @param string $message
      * @param array $context
      * @return null
+     *
+     * Type hint not possible due to upstream method signature
      */
     public function info($message, array $context = [])
     {
@@ -108,6 +122,8 @@ class Logger implements LoggerInterface
      * @param string $message
      * @param array $context
      * @return null
+     *
+     * Type hint not possible due to upstream method signature
      */
     public function debug($message, array $context = [])
     {
@@ -121,9 +137,13 @@ class Logger implements LoggerInterface
      * @param string $message
      * @param array $context
      * @return null
+     *
+     * Type hint not possible due to upstream method signature
      */
     public function log($level, $message, array $context = [])
     {
+        assert(is_string($message));
+
         switch ($level) {
             /* From PSR:  Calling this method with one of the log level constants
             MUST have the same result as calling the level-specific method

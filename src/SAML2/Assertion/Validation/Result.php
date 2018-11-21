@@ -17,12 +17,8 @@ class Result
     /**
      * @param $message
      */
-    public function addError($message)
+    public function addError(string $message)
     {
-        if (!is_string($message)) {
-            throw InvalidArgumentException::invalidType('string', $message);
-        }
-
         $this->errors[] = $message;
     }
 

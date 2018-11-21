@@ -200,10 +200,8 @@ class SOAPClient
      * @param XMLSecurityKey $key  The key we should validate the certificate against.
      * @throws \Exception
      */
-    public static function validateSSL($data, XMLSecurityKey $key)
+    public static function validateSSL(string $data, XMLSecurityKey $key)
     {
-        assert(is_string($data));
-
         $keyInfo = openssl_pkey_get_details($key->key);
         if ($keyInfo === false) {
             throw new \Exception('Unable to get key details from XMLSecurityKey.');
@@ -224,10 +222,10 @@ class SOAPClient
 
     /*
      * Extracts the SOAP Fault from SOAP message
-     * @param $soapmessage Soap response needs to be type DOMDocument
+     * @param \DOMDocument $soapMessage Soap response needs to be type DOMDocument
      * @return $soapfaultstring string|null
      */
-    private function getSOAPFault($soapMessage)
+    private function getSOAPFault(\DOMDocument $soapMessage)
     {
         $soapFault = Utils::xpQuery($soapMessage->firstChild, '/soap-env:Envelope/soap-env:Body/soap-env:Fault');
 

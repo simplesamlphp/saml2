@@ -7,7 +7,7 @@ namespace SAML2\Certificate;
  */
 class X509 extends Key
 {
-    public static function createFromCertificateData($certificateContents)
+    public static function createFromCertificateData(string $certificateContents)
     {
         $data = [
             'encryption'      => true,
@@ -21,6 +21,12 @@ class X509 extends Key
 
     /**
      * {@inheritdoc} Best place to ensure the logic is encapsulated in a single place
+     *
+     * @param mixed $offset
+     * @param mixed $value
+     * @return void
+     *
+     * Type hint not possible due to upstream method signature
      */
     public function offsetSet($offset, $value)
     {

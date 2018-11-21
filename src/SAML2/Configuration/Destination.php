@@ -17,12 +17,8 @@ class Destination
     /**
      * @param string $destination
      */
-    public function __construct($destination)
+    public function __construct(string $destination)
     {
-        if (!is_string($destination)) {
-            throw InvalidArgumentException::invalidType('string', $destination);
-        }
-
         $this->destination = $destination;
     }
 

@@ -47,7 +47,7 @@ abstract class StatusResponse extends Message
      * @param \DOMElement|null $xml     The input message.
      * @throws \Exception
      */
-    protected function __construct($tagName, \DOMElement $xml = null)
+    protected function __construct(string $tagName, \DOMElement $xml = null)
     {
         parent::__construct($tagName, $xml);
 
@@ -124,10 +124,8 @@ abstract class StatusResponse extends Message
      *
      * @param string|null $inResponseTo The ID of the request.
      */
-    public function setInResponseTo($inResponseTo)
+    public function setInResponseTo(string $inResponseTo = null)
     {
-        assert(is_string($inResponseTo) || is_null($inResponseTo));
-
         $this->inResponseTo = $inResponseTo;
     }
 

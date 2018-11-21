@@ -29,15 +29,15 @@ class KeyLoader
      * Prioritisation order is keys > certData > certificate
      *
      * @param \SAML2\Configuration\CertificateProvider $config
-     * @param null                                    $usage
-     * @param bool                                    $required
+     * @param string|null                              $usage
+     * @param bool                                     $required
      *
      * @return \SAML2\Certificate\KeyCollection
      */
     public static function extractPublicKeys(
         CertificateProvider $config,
-        $usage = null,
-        $required = false
+        string $usage = null,
+        bool $required = false
     ) {
         $keyLoader = new self();
 
@@ -53,8 +53,8 @@ class KeyLoader
      */
     public function loadKeysFromConfiguration(
         CertificateProvider $config,
-        $usage = null,
-        $required = false
+        string $usage = null,
+        bool $required = false
     ) {
         $keys = $config->getKeys();
         $certificateData = $config->getCertificateData();
@@ -107,12 +107,8 @@ class KeyLoader
      *
      * @param string $certificateData
      */
-    public function loadCertificateData($certificateData)
+    public function loadCertificateData(string $certificateData)
     {
-        if (!is_string($certificateData)) {
-            throw InvalidArgumentException::invalidType('string', $certificateData);
-        }
-
         $this->loadedKeys->add(X509::createFromCertificateData($certificateData));
     }
 
@@ -121,7 +117,7 @@ class KeyLoader
      *
      * @param string $certificateFile the full path to the cert file.
      */
-    public function loadCertificateFile($certificateFile)
+    public function loadCertificateFile(string $certificateFile)
     {
         $certificate = File::getFileContents($certificateFile);
 

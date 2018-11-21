@@ -14,7 +14,7 @@ class InvalidKeyUsageException extends \InvalidArgumentException implements
     /**
      * @param string $usage
      */
-    public function __construct($usage)
+    public function __construct(string $usage)
     {
         $message = sprintf(
             'Invalid key usage given: "%s", usages "%s" allowed',

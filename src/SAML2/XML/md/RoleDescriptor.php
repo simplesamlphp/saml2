@@ -96,10 +96,8 @@ class RoleDescriptor extends SignedElementHelper
      * @param \DOMElement|null $xml         The XML element we should load.
      * @throws \Exception
      */
-    protected function __construct($elementName, \DOMElement $xml = null)
+    protected function __construct(string $elementName, \DOMElement $xml = null)
     {
-        assert(is_string($elementName));
-
         parent::__construct($xml);
         $this->elementName = $elementName;
 

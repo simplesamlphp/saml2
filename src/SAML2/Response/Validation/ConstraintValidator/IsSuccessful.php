@@ -44,7 +44,7 @@ class IsSuccessful implements ConstraintValidator
      *
      * @return string
      */
-    private function truncateStatus($status)
+    private function truncateStatus(string $status)
     {
         $prefixLength = strlen(Constants::STATUS_PREFIX);
         if (strpos($status, Constants::STATUS_PREFIX) !== 0) {

@@ -134,9 +134,8 @@ abstract class Message implements SignedElement
      *
      * @throws \Exception
      */
-    protected function __construct($tagName, \DOMElement $xml = null)
+    protected function __construct(string $tagName, \DOMElement $xml = null)
     {
-        assert(is_string($tagName));
         $this->tagName = $tagName;
 
         $this->id = Utils::getContainer()->generateId();
@@ -220,13 +219,11 @@ abstract class Message implements SignedElement
      * This function is used by the HTTP-Redirect binding, to make it possible to
      * check the signature against the one included in the query string.
      *
-     * @param callback $function The function which should be called
+     * @param callable $function The function which should be called
      * @param mixed    $data     The data that should be included as the first parameter to the function
      */
-    public function addValidator($function, $data)
+    public function addValidator(callable $function, $data)
     {
-        assert(is_callable($function));
-
         $this->validators[] = [
             'Function' => $function,
             'Data' => $data,
@@ -287,10 +284,8 @@ abstract class Message implements SignedElement
      *
      * @param string $id The new identifier of this message
      */
-    public function setId($id)
+    public function setId(string $id)
     {
-        assert(is_string($id));
-
         $this->id = $id;
     }
 
@@ -309,10 +304,8 @@ abstract class Message implements SignedElement
      *
      * @param int $issueInstant The new issue timestamp of this message, as an UNIX timestamp
      */
-    public function setIssueInstant($issueInstant)
+    public function setIssueInstant(int $issueInstant)
     {
-        assert(is_int($issueInstant));
-
         $this->issueInstant = $issueInstant;
     }
 
@@ -331,10 +324,8 @@ abstract class Message implements SignedElement
      *
      * @param string|null $destination The new destination of this message
      */
-    public function setDestination($destination)
+    public function setDestination(string $destination = null)
     {
-        assert(is_string($destination) || is_null($destination));
-
         $this->destination = $destination;
     }
 
@@ -347,10 +338,8 @@ abstract class Message implements SignedElement
      *
      * @param string $consent
      */
-    public function setConsent($consent)
+    public function setConsent(string $consent)
     {
-        assert(is_string($consent));
-
         $this->consent = $consent;
     }
 
@@ -385,12 +374,10 @@ abstract class Message implements SignedElement
     /**
      * Set the issuer of this message.
      *
-     * @param string|\SAML2\XML\saml\Issuer|null $issuer The new issuer of this message
+     * @param \SAML2\XML\saml\Issuer|null $issuer The new issuer of this message
      */
-    public function setIssuer($issuer)
+    public function setIssuer(\SAML2\XML\saml\Issuer $issuer = null)
     {
-        assert(is_string($issuer) || $issuer instanceof XML\saml\Issuer || is_null($issuer));
-
         $this->issuer = $issuer;
     }
 
@@ -419,10 +406,8 @@ abstract class Message implements SignedElement
      *
      * @param string|null $relayState The new RelayState
      */
-    public function setRelayState($relayState)
+    public function setRelayState(string $relayState = null)
     {
-        assert(is_string($relayState) || is_null($relayState));
-
         $this->relayState = $relayState;
     }
 
@@ -601,10 +586,8 @@ abstract class Message implements SignedElement
      *
      * @param array|null $extensions The Extensions
      */
-    public function setExtensions($extensions)
+    public function setExtensions(array $extensions = null)
     {
-        assert(is_array($extensions) || is_null($extensions));
-
         $this->extensions = $extensions;
     }
 

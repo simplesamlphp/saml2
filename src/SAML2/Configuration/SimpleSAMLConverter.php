@@ -17,7 +17,7 @@ class SimpleSAMLConverter
      */
     public static function convertToIdentityProvider(
         SimpleSAML_Configuration $configuration,
-        $certificatePrefix = ''
+        string $certificatePrefix = ''
     ) {
         $pluckedConfiguration = static::pluckConfiguration($configuration, $certificatePrefix);
         static::enrichForDecryptionProvider($configuration, $pluckedConfiguration);
@@ -34,7 +34,7 @@ class SimpleSAMLConverter
      */
     public static function convertToServiceProvider(
         SimpleSAML_Configuration $configuration,
-        $certificatePrefix = ''
+        string $certificatePrefix = ''
     ) {
         $pluckedConfiguration = static::pluckConfiguration($configuration, $certificatePrefix);
         static::enrichForServiceProvider($configuration, $pluckedConfiguration);
@@ -49,7 +49,7 @@ class SimpleSAMLConverter
      *
      * @return array
      */
-    protected static function pluckConfiguration(SimpleSAML_Configuration $configuration, $prefix = '')
+    protected static function pluckConfiguration(SimpleSAML_Configuration $configuration, string $prefix = '')
     {
         $extracted = [];
 
@@ -80,13 +80,13 @@ class SimpleSAMLConverter
         return $extracted;
     }
 
-    protected static function enrichForIdentityProvider(SimpleSAML_Configuration $configuration, &$baseConfiguration)
+    protected static function enrichForIdentityProvider(SimpleSAML_Configuration $configuration, array &$baseConfiguration)
     {
         $baseConfiguration['base64EncodedAttributes'] = $configuration->getBoolean('base64attributes', false);
         $baseConfiguration['entityId'] = $configuration->getString('entityid');
     }
 
-    protected static function enrichForServiceProvider(SimpleSAML_Configuration $configuration, &$baseConfiguration)
+    protected static function enrichForServiceProvider(SimpleSAML_Configuration $configuration, array &$baseConfiguration)
     {
         $baseConfiguration['entityId'] = $configuration->getString('entityid');
     }

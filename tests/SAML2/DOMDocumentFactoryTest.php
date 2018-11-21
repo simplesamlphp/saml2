@@ -5,20 +5,8 @@ namespace SAML2;
 class DOMDocumentFactoryTest extends \PHPUnit_Framework_TestCase
 {
     /**
-     * @param mixed $argument
-     *
      * @group domdocument
-     * @dataProvider nonStringProvider
-     * @expectedException \SAML2\Exception\InvalidArgumentException
-     */
-    public function testOnlyAStringIsAcceptedByFronString($argument)
-    {
-        DOMDocumentFactory::fromString($argument);
-    }
-
-    /**
-     * @group domdocument
-     * @expectedException \SAML2\Exception\RuntimeException
+     * @expectedException \SAML2\Exception\UnparseableXmlException
      */
     public function testNotXmlStringRaisesAnException()
     {
@@ -38,20 +26,6 @@ class DOMDocumentFactoryTest extends \PHPUnit_Framework_TestCase
     }
 
     /**
-     * @param mixed $argument
-     *
-     * @group        domdocument
-     * @dataProvider nonStringProvider
-     * @expectedException \SAML2\Exception\InvalidArgumentException
-     */
-    public function testOnlyAStringIsAcceptedByFromFile($argument)
-    {
-        DOMDocumentFactory::fromFile($argument);
-    }
-
-    /**
-     * @group        domdocument
-     * @dataProvider nonStringProvider
      * @expectedException \SAML2\Exception\InvalidArgumentException
      */
     public function testFileThatDoesNotExistIsNotAccepted()
@@ -125,20 +99,5 @@ class DOMDocumentFactoryTest extends \PHPUnit_Framework_TestCase
     public function testEmptyStringIsNotValid()
     {
         DOMDocumentFactory::fromString("");
-    }
-
-    /**
-     * @return array
-     */
-    public function nonStringProvider()
-    {
-        return [
-            'integer' => [1],
-            'float'   => [1.234],
-            'object'  => [new \stdClass()],
-            'null'    => [null],
-            'boolean' => [false],
-            'array'   => [[]],
-        ];
     }
 }
