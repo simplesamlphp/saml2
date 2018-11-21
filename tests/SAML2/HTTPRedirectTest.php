@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 namespace SAML2;
 
 use SAML2\DOMDocumentFactory;
@@ -182,6 +184,7 @@ class HTTPRedirectTest extends \Mockery\Adapter\Phpunit\MockeryTestCase
     {
         $request = new AuthnRequest();
         $hr = new HTTPRedirect();
+        $hr->setDestination('https://idp.example.org/');
         $hr->send($request);
     }
 

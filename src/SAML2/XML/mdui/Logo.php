@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 namespace SAML2\XML\mdui;
 
 /**
@@ -175,8 +177,8 @@ class Logo
 
         $e = $doc->createElementNS(Common::NS, 'mdui:Logo');
         $e->appendChild($doc->createTextNode($this->getUrl()));
-        $e->setAttribute('width', intval($this->getWidth()));
-        $e->setAttribute('height', intval($this->getHeight()));
+        $e->setAttribute('width', strval($this->getWidth()));
+        $e->setAttribute('height', strval($this->getHeight()));
         if ($this->getLanguage() !== null) {
             $e->setAttribute('xml:lang', $this->getLanguage());
         }
