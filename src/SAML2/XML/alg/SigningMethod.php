@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 namespace SAML2\XML\alg;
 
 /**
@@ -83,11 +85,11 @@ class SigningMethod
         $e->setAttribute('Algorithm', $this->Algorithm);
 
         if ($this->MinKeySize !== null) {
-            $e->setAttribute('MinKeySize', $this->MinKeySize);
+            $e->setAttribute('MinKeySize', strval($this->MinKeySize));
         }
 
         if ($this->MaxKeySize !== null) {
-            $e->setAttribute('MaxKeySize', $this->MaxKeySize);
+            $e->setAttribute('MaxKeySize', strval($this->MaxKeySize));
         }
 
         return $e;

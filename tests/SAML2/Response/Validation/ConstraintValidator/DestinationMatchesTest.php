@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 namespace SAML2\Response\Validation\ConstraintValidator;
 
 use SAML2\Configuration\Destination;

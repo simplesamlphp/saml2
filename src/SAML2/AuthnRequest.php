@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 namespace SAML2;
 
 use RobRichards\XMLSecLibs\XMLSecEnc;
@@ -680,7 +682,7 @@ class AuthnRequest extends Request
         }
 
         if ($this->assertionConsumerServiceIndex !== null) {
-            $root->setAttribute('AssertionConsumerServiceIndex', $this->assertionConsumerServiceIndex);
+            $root->setAttribute('AssertionConsumerServiceIndex', strval($this->assertionConsumerServiceIndex));
         } else {
             if ($this->assertionConsumerServiceURL !== null) {
                 $root->setAttribute('AssertionConsumerServiceURL', $this->assertionConsumerServiceURL);
@@ -691,7 +693,7 @@ class AuthnRequest extends Request
         }
 
         if ($this->attributeConsumingServiceIndex !== null) {
-            $root->setAttribute('AttributeConsumingServiceIndex', $this->attributeConsumingServiceIndex);
+            $root->setAttribute('AttributeConsumingServiceIndex', strval($this->attributeConsumingServiceIndex));
         }
 
         $this->addSubject($root);
@@ -726,7 +728,7 @@ class AuthnRequest extends Request
             $scoping = $this->document->createElementNS(Constants::NS_SAMLP, 'Scoping');
             $root->appendChild($scoping);
             if ($this->ProxyCount !== null) {
-                $scoping->setAttribute('ProxyCount', $this->ProxyCount);
+                $scoping->setAttribute('ProxyCount', strval($this->ProxyCount));
             }
             if (count($this->IDPList) > 0) {
                 $idplist = $this->document->createElementNS(Constants::NS_SAMLP, 'IDPList');

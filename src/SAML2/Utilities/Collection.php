@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 namespace SAML2\Utilities;
 
 interface Collection extends \ArrayAccess, \Countable, \IteratorAggregate

@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 namespace SAML2\Compat\Ssp;
 
 use SAML2\Compat\AbstractContainer;

@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 /**
  * Temporary autoloader to ensure compatibility with old, non-PSR-2 compliant classes.
  *

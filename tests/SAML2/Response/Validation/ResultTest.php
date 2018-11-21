@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 namespace SAML2\Response\Validation;
 
 class ResultTest extends \PHPUnit_Framework_TestCase

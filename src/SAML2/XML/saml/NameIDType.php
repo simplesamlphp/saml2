@@ -6,8 +6,9 @@
  * @package simplesamlphp/saml2
  */
 
-namespace SAML2\XML\saml;
+declare(strict_types=1);
 
+namespace SAML2\XML\saml;
 
 abstract class NameIDType extends BaseIDType
 {

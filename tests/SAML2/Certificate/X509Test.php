@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 namespace SAML2\Certificate;
 
 class X509Test extends \PHPUnit_Framework_TestCase
