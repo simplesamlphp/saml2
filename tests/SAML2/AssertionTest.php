@@ -1929,17 +1929,17 @@ XML;
 
         $this->assertCount(3, $assertionElements);
 
-        $this->assertCount(2, $assertionElements[1]->childNodes);
+        $this->assertEquals(2, $assertionElements[1]->childNodes->length);
         // empty string should be empty string with type string
         $this->assertEquals('', $assertionElements[1]->childNodes->item(1)->nodeValue);
-        $this->assertCount(1, $assertionElements[1]->childNodes->item(1)->attributes);
+        $this->assertEquals(1, $assertionElements[1]->childNodes->item(1)->attributes->length);
         $this->assertEquals('xsi:type', $assertionElements[1]->childNodes->item(1)->attributes->item(0)->nodeName);
         $this->assertEquals('xs:string', $assertionElements[1]->childNodes->item(1)->attributes->item(0)->value);
 
-        $this->assertCount(3, $assertionElements[2]->childNodes);
+        $this->assertEquals(3, $assertionElements[2]->childNodes->length);
         // null value should be empty attribute with nil attribute set to true
         $this->assertEquals('', $assertionElements[2]->childNodes->item(1)->nodeValue);
-        $this->assertCount(1, $assertionElements[2]->childNodes->item(1)->attributes);
+        $this->assertEquals(1, $assertionElements[2]->childNodes->item(1)->attributes->length);
         $this->assertEquals('xsi:nil', $assertionElements[2]->childNodes->item(1)->attributes->item(0)->nodeName);
         $this->assertEquals('true', $assertionElements[2]->childNodes->item(1)->attributes->item(0)->value);
         // double check that 'normal' string attribute is still correct
