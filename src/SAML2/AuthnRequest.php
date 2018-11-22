@@ -109,6 +109,13 @@ class AuthnRequest extends Request
     private $requestedAuthnContext;
 
     /**
+     * Audiences to send in the request.
+     *
+     * @var array
+     */
+    private $audiences;
+
+    /**
      * @var \SAML2\XML\saml\SubjectConfirmation[]
      */
     private $subjectConfirmation = [];
@@ -402,6 +409,30 @@ class AuthnRequest extends Request
         assert(is_bool($isPassive));
 
         $this->isPassive = $isPassive;
+    }
+
+    /**
+     * Retrieve the audiences to send in the request.
+     *
+     * This may be null, in which case no audience will be sent.
+     *
+     * @return array|null The audiences.
+     */
+    public function getAudiences()
+    {
+        return $this->audiences;
+    }
+
+    /**
+     * Set the audiences to send in the request.
+     *
+     * This may be null, in which case no audience will be sent.
+     *
+     * @param array|null $audiences The audiences.
+     */
+    public function setAudiences(array $audiences = null)
+    {
+        $this->audiences = $audiences;
     }
 
 
@@ -732,6 +763,8 @@ class AuthnRequest extends Request
             $root->appendChild($nameIdPolicy);
         }
 
+        $this->addConditions($root);
+
         $rac = $this->requestedAuthnContext;
         if (!empty($rac) && !empty($rac['AuthnContextClassRef'])) {
             $e = $this->document->createElementNS(Constants::NS_SAMLP, 'RequestedAuthnContext');
@@ -804,6 +837,26 @@ class AuthnRequest extends Request
 
         foreach ($this->subjectConfirmation as $sc) {
             $sc->toXML($subject);
+        }
+    }
+
+    /**
+     * Add a Conditions-node to the request.
+     *
+     * @param \DOMElement $root The request element we should add the conditions to.
+     */
+    private function addConditions(\DOMElement $root)
+    {
+        if ($this->audiences !== null) {
+            $document = $root->ownerDocument;
+
+            $conditions = $document->createElementNS(Constants::NS_SAML, 'saml:Conditions');
+            $root->appendChild($conditions);
+
+            $ar = $document->createElementNS(Constants::NS_SAML, 'saml:AudienceRestriction');
+            $conditions->appendChild($ar);
+
+            Utils::addStrings($ar, Constants::NS_SAML, 'saml:Audience', false, $this->audiences);
         }
     }
 }
