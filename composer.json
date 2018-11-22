@@ -21,7 +21,7 @@
         "squizlabs/php_codesniffer": "~1.4",
         "phpmd/phpmd": "~1.5",
         "sensiolabs/security-checker": "~1.1",
-        "phpunit/phpunit": "~4",
+        "phpunit/phpunit": "^5.0",
         "sebastian/phpcpd": "~1.4",
         "mockery/mockery": "~0.9"
     },

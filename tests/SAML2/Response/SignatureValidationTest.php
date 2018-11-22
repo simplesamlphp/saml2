@@ -75,6 +75,7 @@ class SignatureValidationTest extends \PHPUnit_Framework_TestCase
 
     /**
      * @runInSeparateProcess
+     * @preserveGlobalState disabled
      */
     public function testThatAnUnsignedResponseWithASignedAssertionCanBeProcessed()
     {
@@ -92,6 +93,7 @@ class SignatureValidationTest extends \PHPUnit_Framework_TestCase
 
     /**
      * @runInSeparateProcess
+     * @preserveGlobalState disabled
      */
     public function testThatAnSignedResponseWithAnUnsignedAssertionCanBeProcessed()
     {
@@ -109,6 +111,7 @@ class SignatureValidationTest extends \PHPUnit_Framework_TestCase
 
     /**
      * @runInSeparateProcess
+     * @preserveGlobalState disabled
      */
     public function testThatASignedResponseWithASignedAssertionIsValid()
     {
@@ -126,7 +129,9 @@ class SignatureValidationTest extends \PHPUnit_Framework_TestCase
 
     /**
      * @expectedException \SAML2\Response\Exception\UnsignedResponseException
+     *
      * @runInSeparateProcess
+     * @preserveGlobalState disabled
      */
     public function testThatAnUnsignedResponseWithNoSignedAssertionsThrowsAnException()
     {

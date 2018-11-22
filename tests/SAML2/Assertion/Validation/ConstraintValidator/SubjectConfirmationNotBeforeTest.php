@@ -11,8 +11,6 @@ use SAML2\ControlledTimeTest;
 /**
  * Because we're mocking a static call, we have to run it in separate processes so as to no contaminate the other
  * tests.
- *
- * @runTestsInSeparateProcesses
  */
 class SubjectConfirmationNotBeforeTest extends ControlledTimeTest
 {
@@ -37,6 +35,9 @@ class SubjectConfirmationNotBeforeTest extends ControlledTimeTest
     /**
      * @group assertion-validation
      * @test
+     *
+     * @runInSeparateProcess 
+     * @preserveGlobalState disabled
      */
     public function timestamp_in_the_future_beyond_graceperiod_is_not_valid()
     {
@@ -54,6 +55,9 @@ class SubjectConfirmationNotBeforeTest extends ControlledTimeTest
     /**
      * @group assertion-validation
      * @test
+     *
+     * @runInSeparateProcess 
+     * @preserveGlobalState disabled
      */
     public function time_within_graceperiod_is_valid()
     {
@@ -70,6 +74,9 @@ class SubjectConfirmationNotBeforeTest extends ControlledTimeTest
     /**
      * @group assertion-validation
      * @test
+     *
+     * @runInSeparateProcess 
+     * @preserveGlobalState disabled
      */
     public function current_time_is_valid()
     {

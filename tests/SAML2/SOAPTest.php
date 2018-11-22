@@ -13,7 +13,7 @@ class SOAPTest extends PHPUnit_Framework_TestCase
 {
     public function testRequestParsingEmptyMessage()
     {
-        $this->setExpectedException('Exception', 'Invalid message received');
+        $this->setExpectedException(\Exception::class, 'Invalid message received');
 
         $stub = $this->getStubWithInput('');
         $stub->receive();
@@ -43,7 +43,7 @@ SOAP
 
         $message = $stub->receive();
 
-        $this->assertInstanceOf('SAML2\\ArtifactResolve', $message);
+        $this->assertInstanceOf(ArtifactResolve::class, $message);
         $this->assertEquals($artifact, $message->getArtifact());
         $this->assertEquals($id, $message->getId());
         $this->assertEquals($issuer, $message->getIssuer());
@@ -165,11 +165,10 @@ SOAP;
 
     private function getStubWithInput($input)
     {
-        $stub = $this->getMock('SAML2\\SOAP', ['getInputStream']);
+        $stub = $this->getMockBuilder(SOAP::class)->setMethods(['getInputStream'])->getMock();
         $stub->expects($this->once())
              ->method('getInputStream')
-             ->will($this->returnValue($input));
-
+             ->willReturn($input);
         return $stub;
     }
 }
