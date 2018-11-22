@@ -200,10 +200,12 @@ XML;
 
     public function testSetNotOnOrAfter()
     {
+        $nameId = new XML\saml\NameID();
+        $nameId->value = 'NameIDValue';
         $time = time();
 
         $logoutRequest = new LogoutRequest();
-        $logoutRequest->setNameID(['Value' => 'NameIDValue']);
+        $logoutRequest->setNameID($nameId);
         $logoutRequest->setNotOnOrAfter($time);
         $logoutRequestElement = $logoutRequest->toUnsignedXML();
 

@@ -1943,7 +1943,9 @@ XML;
         // Create an assertion
         $assertion = new Assertion();
 
-        $assertion->setIssuer('testIssuer');
+        $issuer = new XML\saml\Issuer();
+        $issuer->value = 'testIssuer';
+        $assertion->setIssuer($issuer);
 
         $assertion->setAttributes([
             "name1" => ["value1", "value2"],
