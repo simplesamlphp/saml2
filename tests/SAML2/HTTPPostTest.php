@@ -76,7 +76,7 @@ class HTTPPostTest extends PHPUnit_Framework_TestCase
     public function testSendAuthnResponse()
     {
         $issuer  = new XML\saml\Issuer();
-        $issuer->value = 'testIssuer';
+        $issuer->setValue('testIssuer');
 
         $response = new Response();
         $response->setIssuer($issuer);

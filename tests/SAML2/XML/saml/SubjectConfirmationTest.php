@@ -18,7 +18,7 @@ class SubjectConfirmationTest extends \PHPUnit_Framework_TestCase
         $subjectConfirmation = new SubjectConfirmation();
         $subjectConfirmation->Method = 'SomeMethod';
         $subjectConfirmation->NameID = new NameID();
-        $subjectConfirmation->NameID->value = 'SomeNameIDValue';
+        $subjectConfirmation->NameID->setValue('SomeNameIDValue');
         $subjectConfirmation->SubjectConfirmationData = new SubjectConfirmationData();
 
         $document = DOMDocumentFactory::fromString('<root />');
@@ -47,7 +47,7 @@ XML
         $subjectConfirmation = new SubjectConfirmation($document->firstChild);
         $this->assertEquals('SomeMethod', $subjectConfirmation->Method);
         $this->assertTrue($subjectConfirmation->NameID instanceof NameID);
-        $this->assertEquals('SomeNameIDValue', $subjectConfirmation->NameID->value);
+        $this->assertEquals('SomeNameIDValue', $subjectConfirmation->NameID->getValue());
         $this->assertTrue($subjectConfirmation->SubjectConfirmationData instanceof SubjectConfirmationData);
     }
 

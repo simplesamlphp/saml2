@@ -73,11 +73,11 @@ AUTHNREQUEST
         $message = Message::fromXML($authnRequest->documentElement);
         $issuer = $message->getIssuer();
         $this->assertInstanceOf('SAML2\XML\saml\Issuer', $issuer);
-        $this->assertEquals('https://gateway.stepup.org/saml20/sp/metadata', $issuer->NameQualifier);
-        $this->assertEquals('https://spnamequalifier.com', $issuer->SPNameQualifier);
-        $this->assertEquals('ProviderID', $issuer->SPProvidedID);
-        $this->assertEquals('urn:oasis:names:tc:SAML:1.1:nameid-format:unspecified', $issuer->Format);
-        $this->assertEquals('https://gateway.stepup.org/saml20/sp/metadata', $issuer->value);
+        $this->assertEquals('https://gateway.stepup.org/saml20/sp/metadata', $issuer->getNameQualifier());
+        $this->assertEquals('https://spnamequalifier.com', $issuer->getSPNameQualifier());
+        $this->assertEquals('ProviderID', $issuer->getSPProvidedID());
+        $this->assertEquals('urn:oasis:names:tc:SAML:1.1:nameid-format:unspecified', $issuer->getFormat());
+        $this->assertEquals('https://gateway.stepup.org/saml20/sp/metadata', $issuer->getValue());
     }
 
     /**
@@ -117,30 +117,30 @@ AUTHNREQUEST
         // first, try with common Issuer objects (Format=entity)
         $response = new Response();
         $issuer = new XML\saml\Issuer();
-        $issuer->value = 'https://gateway.stepup.org/saml20/sp/metadata';
+        $issuer->setValue('https://gateway.stepup.org/saml20/sp/metadata');
         $response->setIssuer($issuer);
         $xml = $response->toUnsignedXML();
         $xml_issuer = Utils::xpQuery($xml, './saml_assertion:Issuer');
         $xml_issuer = $xml_issuer[0];
 
         $this->assertFalse($xml_issuer->hasAttributes());
-        $this->assertEquals($issuer->value, $xml_issuer->textContent);
+        $this->assertEquals($issuer->getValue(), $xml_issuer->textContent);
 
         // now, try an Issuer with another format and attributes
-        $issuer->Format = Constants::NAMEID_UNSPECIFIED;
-        $issuer->NameQualifier = 'SomeNameQualifier';
-        $issuer->SPNameQualifier = 'SomeSPNameQualifier';
-        $issuer->SPProvidedID = 'SomeSPProvidedID';
+        $issuer->setFormat(Constants::NAMEID_UNSPECIFIED);
+        $issuer->setNameQualifier('SomeNameQualifier');
+        $issuer->setSPNameQualifier('SomeSPNameQualifier');
+        $issuer->setSPProvidedID('SomeSPProvidedID');
         $response->setIssuer($issuer);
         $xml = $response->toUnsignedXML();
         $xml_issuer = Utils::xpQuery($xml, './saml_assertion:Issuer');
         $xml_issuer = $xml_issuer[0];
 
         $this->assertTrue($xml_issuer->hasAttributes());
-        $this->assertEquals($issuer->value, $xml_issuer->textContent);
-        $this->assertEquals($issuer->NameQualifier, $xml_issuer->getAttribute('NameQualifier'));
-        $this->assertEquals($issuer->SPNameQualifier, $xml_issuer->getAttribute('SPNameQualifier'));
-        $this->assertEquals($issuer->SPProvidedID, $xml_issuer->getAttribute('SPProvidedID'));
+        $this->assertEquals($issuer->getValue(), $xml_issuer->textContent);
+        $this->assertEquals($issuer->getNameQualifier(), $xml_issuer->getAttribute('NameQualifier'));
+        $this->assertEquals($issuer->getSPNameQualifier(), $xml_issuer->getAttribute('SPNameQualifier'));
+        $this->assertEquals($issuer->getSPProvidedID(), $xml_issuer->getAttribute('SPProvidedID'));
 
         // finally, make sure we can skip the Issuer by setting it to null
         $response->setIssuer(null);

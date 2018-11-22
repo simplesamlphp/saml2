@@ -18,7 +18,7 @@ class AssertionTest extends \PHPUnit_Framework_TestCase
     {
         // Create an Issuer
         $issuer = new XML\saml\Issuer();
-        $issuer->value = 'testIssuer';
+        $issuer->setValue('testIssuer');
 
         // Create an assertion
         $assertion = new Assertion();
@@ -106,7 +106,7 @@ XML;
     {
         // Create an Issuer
         $issuer = new XML\saml\Issuer();
-        $issuer->value = 'testIssuer';
+        $issuer->setValue('testIssuer');
 
         // Create an assertion
         $assertion = new Assertion();
@@ -173,7 +173,7 @@ XML;
     {
         // Create an Issuer
         $issuer = new XML\saml\Issuer();
-        $issuer->value = 'testIssuer';
+        $issuer->setValue('testIssuer');
 
         // Create an assertion
         $assertion = new Assertion();
@@ -240,7 +240,7 @@ XML;
     {
         // Create an Issuer
         $issuer = new XML\saml\Issuer();
-        $issuer->value = 'testIssuer';
+        $issuer->setValue('testIssuer');
 
         // Create an assertion
         $assertion = new Assertion();
@@ -368,7 +368,7 @@ XML;
     {
         // Create an Issuer
         $issuer = new XML\saml\Issuer();
-        $issuer->value = 'https://gateway.stepup.org/saml20/sp/metadata';
+        $issuer->setValue('https://gateway.stepup.org/saml20/sp/metadata');
 
         // first, try with common Issuer objects (Format=entity)
         $assertion = new Assertion();
@@ -379,13 +379,13 @@ XML;
         $xml_issuer = $xml_issuer[0];
 
         $this->assertFalse($xml_issuer->hasAttributes());
-        $this->assertEquals($issuer->value, $xml_issuer->textContent);
+        $this->assertEquals($issuer->getValue(), $xml_issuer->textContent);
 
         // now, try an Issuer with another format and attributes
-        $issuer->Format = Constants::NAMEID_UNSPECIFIED;
-        $issuer->NameQualifier = 'SomeNameQualifier';
-        $issuer->SPNameQualifier = 'SomeSPNameQualifier';
-        $issuer->SPProvidedID = 'SomeSPProvidedID';
+        $issuer->setFormat(Constants::NAMEID_UNSPECIFIED);
+        $issuer->setNameQualifier('SomeNameQualifier');
+        $issuer->setSPNameQualifier('SomeSPNameQualifier');
+        $issuer->setSPProvidedID('SomeSPProvidedID');
 
         $assertion->setIssuer($issuer);
         $xml = $assertion->toXML();
@@ -393,10 +393,10 @@ XML;
         $xml_issuer = $xml_issuer[0];
 
         $this->assertTrue($xml_issuer->hasAttributes());
-        $this->assertEquals($issuer->value, $xml_issuer->textContent);
-        $this->assertEquals($issuer->NameQualifier, $xml_issuer->getAttribute('NameQualifier'));
-        $this->assertEquals($issuer->SPNameQualifier, $xml_issuer->getAttribute('SPNameQualifier'));
-        $this->assertEquals($issuer->SPProvidedID, $xml_issuer->getAttribute('SPProvidedID'));
+        $this->assertEquals($issuer->getValue(), $xml_issuer->textContent);
+        $this->assertEquals($issuer->getNameQualifier(), $xml_issuer->getAttribute('NameQualifier'));
+        $this->assertEquals($issuer->getSPNameQualifier(), $xml_issuer->getAttribute('SPNameQualifier'));
+        $this->assertEquals($issuer->getSPProvidedID(), $xml_issuer->getAttribute('SPProvidedID'));
     }
 
     public function testAuthnContextDeclAndRefConstraint()
@@ -760,10 +760,10 @@ XML;
 
         $this->assertInstanceOf('SAML2\XML\saml\NameID', $maceValue);
         $this->assertInstanceOf('SAML2\XML\saml\NameID', $oidValue);
-        $this->assertEquals('abcd-some-value-xyz', $maceValue->value);
-        $this->assertEquals('abcd-some-value-xyz', $oidValue->value);
-        $this->assertEquals('urn:oasis:names:tc:SAML:2.0:nameid-format:persistent', $maceValue->Format);
-        $this->assertEquals('urn:oasis:names:tc:SAML:2.0:nameid-format:persistent', $oidValue->Format);
+        $this->assertEquals('abcd-some-value-xyz', $maceValue->getValue());
+        $this->assertEquals('abcd-some-value-xyz', $oidValue->getValue());
+        $this->assertEquals('urn:oasis:names:tc:SAML:2.0:nameid-format:persistent', $maceValue->getFormat());
+        $this->assertEquals('urn:oasis:names:tc:SAML:2.0:nameid-format:persistent', $oidValue->getFormat());
         $this->assertXmlStringEqualsXmlString($xml, $assertion->toXML()->ownerDocument->saveXML());
     }
 
@@ -824,8 +824,8 @@ XML;
         $oidValue = $attributes['urn:oid:1.3.6.1.4.1.5923.1.1.1.10'][0];
         $this->assertInstanceOf('SAML2\XML\saml\NameID', $maceValue);
         $this->assertInstanceOf('SAML2\XML\saml\NameID', $oidValue);
-        $this->assertEquals('string-23', $maceValue->value);
-        $this->assertEquals('string-12', $oidValue->value);
+        $this->assertEquals('string-23', $maceValue->getValue());
+        $this->assertEquals('string-12', $oidValue->getValue());
     }
 
     /**
@@ -871,10 +871,10 @@ XML;
 
         $this->assertInstanceOf('SAML2\XML\saml\NameID', $maceFirstValue);
         $this->assertInstanceOf('SAML2\XML\saml\NameID', $maceSecondValue);
-        $this->assertEquals('abcd-some-value-xyz', $maceFirstValue->value);
-        $this->assertEquals('xyz-some-value-abcd', $maceSecondValue->value);
-        $this->assertEquals('urn:oasis:names:tc:SAML:2.0:nameid-format:persistent', $maceFirstValue->Format);
-        $this->assertEquals('urn:oasis:names:tc:SAML:2.0:nameid-format:persistent', $maceSecondValue->Format);
+        $this->assertEquals('abcd-some-value-xyz', $maceFirstValue->getValue());
+        $this->assertEquals('xyz-some-value-abcd', $maceSecondValue->getValue());
+        $this->assertEquals('urn:oasis:names:tc:SAML:2.0:nameid-format:persistent', $maceFirstValue->getFormat());
+        $this->assertEquals('urn:oasis:names:tc:SAML:2.0:nameid-format:persistent', $maceSecondValue->getFormat());
 
         $this->assertXmlStringEqualsXmlString($xml, $assertion->toXML()->ownerDocument->saveXML());
     }
@@ -1086,7 +1086,7 @@ XML;
         $result = $assertion->validate($publicKey);
 
         $this->assertTrue($result);
-        $this->assertEquals("_1bbcf227253269d19a689c53cdd542fe2384a9538b", $assertion->getNameId()->value);
+        $this->assertEquals("_1bbcf227253269d19a689c53cdd542fe2384a9538b", $assertion->getNameId()->getValue());
     }
 
 
@@ -1805,15 +1805,15 @@ XML;
         $assertion = new Assertion($document->documentElement);
 
         $nameID = $assertion->getNameID();
-        $this->assertEquals('b7de81420a19416', $nameID->value);
-        $this->assertEquals('urn:oasis:names:tc:SAML:2.0:nameid-format:transient', $nameID->Format);
+        $this->assertEquals('b7de81420a19416', $nameID->getValue());
+        $this->assertEquals('urn:oasis:names:tc:SAML:2.0:nameid-format:transient', $nameID->getFormat());
         $this->assertFalse($assertion->isNameIdEncrypted());
 
         // Not encrypted, should be a no-op
         $privateKey = CertificatesMock::getPrivateKey();
         $decrypted = $assertion->decryptNameId($privateKey);
-        $this->assertEquals('b7de81420a19416', $nameID->value);
-        $this->assertEquals('urn:oasis:names:tc:SAML:2.0:nameid-format:transient', $nameID->Format);
+        $this->assertEquals('b7de81420a19416', $nameID->getValue());
+        $this->assertEquals('urn:oasis:names:tc:SAML:2.0:nameid-format:transient', $nameID->getFormat());
         $this->assertFalse($assertion->isNameIdEncrypted());
     }
 
@@ -1824,7 +1824,7 @@ XML;
     {
         // Create an Issuer
         $issuer = new XML\saml\Issuer();
-        $issuer->value = 'testIssuer';
+        $issuer->setValue('testIssuer');
 
         // Create an assertion
         $assertion = new Assertion();
@@ -1833,8 +1833,8 @@ XML;
         $assertion->setAuthnContextClassRef('someAuthnContext');
 
         $nameId = new XML\saml\NameID();
-        $nameId->value = "just_a_basic_identifier";
-        $nameId->Format = "urn:oasis:names:tc:SAML:2.0:nameid-format:transient";
+        $nameId->setValue("just_a_basic_identifier");
+        $nameId->setFormat("urn:oasis:names:tc:SAML:2.0:nameid-format:transient");
         $assertion->setNameId($nameId);
         $this->assertFalse($assertion->isNameIdEncrypted());
 
@@ -1852,8 +1852,8 @@ XML;
         $assertionToVerify->decryptNameId($privateKey);
         $this->assertFalse($assertionToVerify->isNameIdEncrypted());
         $nameID = $assertionToVerify->getNameID();
-        $this->assertEquals('just_a_basic_identifier', $nameID->value);
-        $this->assertEquals('urn:oasis:names:tc:SAML:2.0:nameid-format:transient', $nameID->Format);
+        $this->assertEquals('just_a_basic_identifier', $nameID->getValue());
+        $this->assertEquals('urn:oasis:names:tc:SAML:2.0:nameid-format:transient', $nameID->getFormat());
     }
 
     /**
@@ -1898,7 +1898,7 @@ XML;
     {
         // Create an Issuer
         $issuer = new XML\saml\Issuer();
-        $issuer->value = 'testIssuer';
+        $issuer->setValue('testIssuer');
 
         // Create an assertion
         $assertion = new Assertion();
@@ -1911,8 +1911,8 @@ XML;
         $assertion->setSignatureKey(CertificatesMock::getPrivateKey());
 
         $nameId = new XML\saml\NameID();
-        $nameId->value = "just_a_basic_identifier";
-        $nameId->Format = "urn:oasis:names:tc:SAML:2.0:nameid-format:transient";
+        $nameId->setValue("just_a_basic_identifier");
+        $nameId->setFormat("urn:oasis:names:tc:SAML:2.0:nameid-format:transient");
         $assertion->setNameId($nameId);
         $assertion->setAuthnContextClassRef('someAuthnContext');
 
@@ -1944,7 +1944,7 @@ XML;
         $assertion = new Assertion();
 
         $issuer = new XML\saml\Issuer();
-        $issuer->value = 'testIssuer';
+        $issuer->setValue('testIssuer');
         $assertion->setIssuer($issuer);
 
         $assertion->setAttributes([

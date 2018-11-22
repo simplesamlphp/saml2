@@ -128,16 +128,16 @@ AUTHNREQUEST;
         $authnRequest = new AuthnRequest(DOMDocumentFactory::fromString($xml)->documentElement);
 
         $nameId = $authnRequest->getNameId();
-        $this->assertEquals("user@example.org", $nameId->value);
-        $this->assertEquals("urn:oasis:names:tc:SAML:1.1:nameid-format:unspecified", $nameId->Format);
+        $this->assertEquals("user@example.org", $nameId->getValue());
+        $this->assertEquals("urn:oasis:names:tc:SAML:1.1:nameid-format:unspecified", $nameId->getFormat());
     }
 
     public function testThatTheSubjectCanBeSetBySettingTheNameId()
     {
         $request = new AuthnRequest();
         $nameId = new XML\saml\NameID();
-        $nameId->value = 'user@example.org';
-        $nameId->Format = Constants::NAMEID_UNSPECIFIED;
+        $nameId->setValue('user@example.org');
+        $nameId->setFormat(Constants::NAMEID_UNSPECIFIED);
         $request->setNameId($nameId);
 
         $requestAsXML = $request->toUnsignedXML()->ownerDocument->saveXML();
@@ -183,8 +183,8 @@ AUTHNREQUEST;
         $authnRequest->decryptNameId($key);
 
         $nameId = $authnRequest->getNameId();
-        $this->assertEquals(md5('Arthur Dent'), $nameId->value);
-        $this->assertEquals(Constants::NAMEID_ENCRYPTED, $nameId->Format);
+        $this->assertEquals(md5('Arthur Dent'), $nameId->getValue());
+        $this->assertEquals(Constants::NAMEID_ENCRYPTED, $nameId->getFormat());
     }
 
     /**
@@ -196,12 +196,12 @@ AUTHNREQUEST;
     {
         // the NameID we're going to encrypt
         $nameId = new XML\saml\NameID();
-        $nameId->value = md5('Arthur Dent');
-        $nameId->Format = Constants::NAMEID_ENCRYPTED;
+        $nameId->setValue(md5('Arthur Dent'));
+        $nameId->setFormat(Constants::NAMEID_ENCRYPTED);
 
         // the Issuer
         $issuer = new XML\saml\Issuer();
-        $issuer->value = 'https://gateway.example.org/saml20/sp/metadata';
+        $issuer->setValue('https://gateway.example.org/saml20/sp/metadata');
 
         // basic AuthnRequest
         $request = new AuthnRequest();
@@ -257,7 +257,7 @@ AUTHNREQUEST;
     {
         // the Issuer
         $issuer = new XML\saml\Issuer();
-        $issuer->value = 'https://gateway.example.org/saml20/sp/metadata';
+        $issuer->setValue('https://gateway.example.org/saml20/sp/metadata');
 
         // basic AuthnRequest
         $request = new AuthnRequest();
@@ -358,7 +358,7 @@ AUTHNREQUEST;
     {
         // the Issuer
         $issuer = new XML\saml\Issuer();
-        $issuer->value = 'https://gateway.example.org/saml20/sp/metadata';
+        $issuer->setValue('https://gateway.example.org/saml20/sp/metadata');
 
         // basic AuthnRequest
         $request = new AuthnRequest();
@@ -429,7 +429,7 @@ AUTHNREQUEST;
     {
         // the Issuer
         $issuer = new XML\saml\Issuer();
-        $issuer->value = 'https://gateway.example.org/saml20/sp/metadata';
+        $issuer->setValue('https://gateway.example.org/saml20/sp/metadata');
 
         // basic AuthnRequest
         $request = new AuthnRequest();
@@ -540,7 +540,7 @@ AUTHNREQUEST;
     {
         // the Issuer
         $issuer = new XML\saml\Issuer();
-        $issuer->value = 'https://gateway.example.org/saml20/sp/metadata';
+        $issuer->setValue('https://gateway.example.org/saml20/sp/metadata');
 
         // basic AuthnRequest
         $request = new AuthnRequest();
@@ -586,7 +586,7 @@ AUTHNREQUEST;
     {
         // the Issuer
         $issuer = new XML\saml\Issuer();
-        $issuer->value = 'https://gateway.example.org/saml20/sp/metadata';
+        $issuer->setValue('https://gateway.example.org/saml20/sp/metadata');
 
         // basic AuthnRequest
         $request = new AuthnRequest();
@@ -625,7 +625,7 @@ AUTHNREQUEST;
     {
         // the Issuer
         $issuer = new XML\saml\Issuer();
-        $issuer->value = 'https://gateway.example.org/saml20/sp/metadata';
+        $issuer->setValue('https://gateway.example.org/saml20/sp/metadata');
 
         // basic AuthnRequest
         $request = new AuthnRequest();
@@ -645,7 +645,7 @@ AUTHNREQUEST;
     {
         // the Issuer
         $issuer = new XML\saml\Issuer();
-        $issuer->value = 'https://gateway.example.org/saml20/sp/metadata';
+        $issuer->setValue('https://gateway.example.org/saml20/sp/metadata');
 
         // basic AuthnRequest
         $request = new AuthnRequest();
@@ -666,7 +666,7 @@ AUTHNREQUEST;
     {
         // the Issuer
         $issuer = new XML\saml\Issuer();
-        $issuer->value = 'https://gateway.example.org/saml20/sp/metadata';
+        $issuer->setValue('https://gateway.example.org/saml20/sp/metadata');
 
         // basic AuthnRequest
         $request = new AuthnRequest();
@@ -730,7 +730,7 @@ AUTHNREQUEST;
     {
         // the Issuer
         $issuer = new XML\saml\Issuer();
-        $issuer->value = 'https://gateway.example.org/saml20/sp/metadata';
+        $issuer->setValue('https://gateway.example.org/saml20/sp/metadata');
 
         // basic AuthnRequest
         $request = new AuthnRequest();
@@ -829,7 +829,7 @@ AUTHNREQUEST;
     {
         // the Issuer
         $issuer = new XML\saml\Issuer();
-        $issuer->value = 'https://gateway.example.org/saml20/sp/metadata';
+        $issuer->setValue('https://gateway.example.org/saml20/sp/metadata');
 
         // basic AuthnRequest
         $request = new AuthnRequest();
@@ -867,7 +867,7 @@ AUTHNREQUEST;
     {
         // the Issuer
         $issuer = new XML\saml\Issuer();
-        $issuer->value = 'https://gateway.example.org/saml20/sp/metadata';
+        $issuer->setValue('https://gateway.example.org/saml20/sp/metadata');
 
         // basic AuthnRequest
         $request = new AuthnRequest();
@@ -932,7 +932,7 @@ AUTHNREQUEST;
     {
         // the Issuer
         $issuer = new XML\saml\Issuer();
-        $issuer->value = 'https://sp.example.org/saml20/sp/metadata';
+        $issuer->setValue('https://sp.example.org/saml20/sp/metadata');
 
         // basic AuthnRequest
         $request = new AuthnRequest();

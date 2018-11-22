@@ -28,7 +28,7 @@ abstract class NameIDType extends BaseIDType
      *
      * @see saml-core-2.0-os
      */
-    public $Format = null;
+    protected $Format = null;
 
     /**
      * A name identifier established by a service provider or affiliation of providers for the entity, if different from
@@ -40,14 +40,14 @@ abstract class NameIDType extends BaseIDType
      *
      * @see saml-core-2.0-os
      */
-    public $SPProvidedID = null;
+    protected $SPProvidedID = null;
 
     /**
      * The NameIDType complex type is used when an element serves to represent an entity by a string-valued name.
      *
      * @var string|null
      */
-    public $value = null;
+    protected $value = null;
 
 
     /**
@@ -74,6 +74,66 @@ abstract class NameIDType extends BaseIDType
         $this->value = trim($xml->textContent);
     }
 
+
+    /**
+     * Set the value of the value-property
+     *
+     * @param string|null $value
+     */
+    public function setValue(string $value = null)
+    {
+        $this->value = $value;
+    }
+
+    /**
+     * Collect the value of the value-property
+     *
+     * @return string|null
+     */
+    public function getValue()
+    {
+        return $this->value;
+    }
+
+    /**
+     * Set the value of the Format-property
+     *
+     * @param string|null $Format
+     */
+    public function setFormat(string $Format = null)
+    {
+        $this->Format = $Format;
+    }
+
+    /**
+     * Collect the value of the Format-property
+     *
+     * @return string|null
+     */
+    public function getFormat()
+    {
+        return $this->Format;
+    }
+
+    /**
+     * Set the value of the SPProvidedID-property
+     *
+     * @param string|null $SPProvidedID
+     */
+    public function setSPProvidedID(string $SPProvidedID = null)
+    {
+        $this->SPProvidedID = $SPProvidedID;
+    }
+
+    /**
+     * Collect the value of the SPProvidedID-property
+     *
+     * @return string|null
+     */
+    public function getSPProvidedID()
+    {
+        return $this->SPProvidedID;
+    }
 
     /**
      * Convert this NameIDType to XML.

@@ -290,8 +290,8 @@ class Assertion implements SignedElement
             throw new \Exception('Missing <saml:Issuer> in assertion.');
         }
         $this->issuer = new XML\saml\Issuer($issuer[0]);
-        if ($this->issuer->Format === Constants::NAMEID_ENTITY) {
-            $this->issuer = $this->issuer->value;
+        if ($this->issuer->getFormat() === Constants::NAMEID_ENTITY) {
+            $this->issuer = $this->issuer->getValue();
         }
 
         $this->parseSubject($xml);
@@ -562,7 +562,7 @@ class Assertion implements SignedElement
                     /* Fall back for legacy IdPs sending string value (e.g. SSP < 1.15) */
                     Utils::getContainer()->getLogger()->warning(sprintf("Attribute %s (EPTI) value %d is not an XML NameId", $attributeName, $index));
                     $nameId = new XML\saml\NameID();
-                    $nameId->value = $eptiAttributeValue->textContent;
+                    $nameId->setValue($eptiAttributeValue->textContent);
                     $this->attributes[$attributeName][] = $nameId;
                 }
             }

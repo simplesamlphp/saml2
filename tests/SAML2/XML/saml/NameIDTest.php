@@ -17,11 +17,11 @@ class NameIDTest extends \PHPUnit_Framework_TestCase
     public function testMarshalling()
     {
         $nameId = new NameID();
-        $nameId->NameQualifier = 'TheNameQualifier';
-        $nameId->SPNameQualifier = 'TheSPNameQualifier';
-        $nameId->Format = 'TheFormat';
-        $nameId->SPProvidedID = 'TheSPProvidedID';
-        $nameId->value = 'TheNameIDValue';
+        $nameId->setNameQualifier('TheNameQualifier');
+        $nameId->setSPNameQualifier('TheSPNameQualifier');
+        $nameId->setFormat('TheFormat');
+        $nameId->setSPProvidedID('TheSPProvidedID');
+        $nameId->setValue('TheNameIDValue');
         $nameIdElement = $nameId->toXML();
 
         $nameIdElements = Utils::xpQuery($nameIdElement, '/saml_assertion:NameID');
@@ -44,21 +44,21 @@ XML
         );
 
         $nameId = new NameID($document->firstChild);
-        $this->assertEquals('TheNameQualifier', $nameId->NameQualifier);
-        $this->assertEquals('TheSPNameQualifier', $nameId->SPNameQualifier);
-        $this->assertEquals('TheFormat', $nameId->Format);
-        $this->assertEquals('TheSPProvidedID', $nameId->SPProvidedID);
-        $this->assertEquals('TheNameIDValue', $nameId->value);
+        $this->assertEquals('TheNameQualifier', $nameId->getNameQualifier());
+        $this->assertEquals('TheSPNameQualifier', $nameId->getSPNameQualifier());
+        $this->assertEquals('TheFormat', $nameId->getFormat());
+        $this->assertEquals('TheSPProvidedID', $nameId->getSPProvidedID());
+        $this->assertEquals('TheNameIDValue', $nameId->getValue());
     }
 
     public function testToString()
     {
         $nameId = new NameID();
-        $nameId->NameQualifier = 'TheNameQualifier';
-        $nameId->SPNameQualifier = 'TheSPNameQualifier';
-        $nameId->Format = 'TheFormat';
-        $nameId->SPProvidedID = 'TheSPProvidedID';
-        $nameId->value = 'TheNameIDValue';
+        $nameId->setNameQualifier('TheNameQualifier');
+        $nameId->setSPNameQualifier('TheSPNameQualifier');
+        $nameId->setFormat('TheFormat');
+        $nameId->setSPProvidedID('TheSPProvidedID');
+        $nameId->setValue('TheNameIDValue');
 
         $output = '<saml:NameID xmlns:saml="'.\SAML2\Constants::NS_SAML.'" NameQualifier="TheNameQualifier" '.
                   'SPNameQualifier="TheSPNameQualifier" Format="TheFormat" SPProvidedID="TheSPProvidedID">'.

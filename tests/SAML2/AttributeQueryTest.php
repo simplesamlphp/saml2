@@ -13,7 +13,7 @@ class AttributeQueryTest extends \PHPUnit_Framework_TestCase
     {
         $attributeQuery = new AttributeQuery();
         $nameId = new XML\saml\NameID();
-        $nameId->value = 'NameIDValue';
+        $nameId->setValue('NameIDValue');
         $attributeQuery->setNameID($nameId);
         $attributeQuery->setAttributes(
             [
@@ -101,7 +101,7 @@ XML;
 
         $nameid = $aq->getNameId();
         $this->assertInstanceOf('SAML2\XML\saml\NameID', $nameid);
-        $this->assertEquals('urn:example:subject', $nameid->value);
+        $this->assertEquals('urn:example:subject', $nameid->getValue());
 
         $attributes = array_keys($aq->getAttributes());
         $this->assertCount(3, $attributes);
@@ -118,7 +118,7 @@ XML;
 
         $attributeQuery = new AttributeQuery();
         $nameId = new XML\saml\NameID();
-        $nameId->value = 'NameIDValue';
+        $nameId->setValue('NameIDValue');
         $attributeQuery->setNameID($nameId);
         $attributeQuery->setAttributes(
             [

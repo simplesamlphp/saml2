@@ -12,7 +12,7 @@ class ResponseTest extends \PHPUnit_Framework_TestCase
     public function testMarshalling()
     {
         $issuer = new XML\saml\Issuer();
-        $issuer->value = 'SomeIssuer';
+        $issuer->setValue('SomeIssuer');
 
         $response = new Response();
         $response->setConsent(Constants::CONSENT_EXPLICIT);

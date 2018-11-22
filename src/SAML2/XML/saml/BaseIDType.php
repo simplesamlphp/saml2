@@ -25,7 +25,7 @@ abstract class BaseIDType
      *
      * @var string|null
      */
-    public $NameQualifier = null;
+    private $NameQualifier = null;
 
     /**
      * Further qualifies an identifier with the name of a service provider or affiliation of providers.
@@ -35,7 +35,7 @@ abstract class BaseIDType
      *
      * @var string|null
      */
-    public $SPNameQualifier = null;
+    private $SPNameQualifier = null;
 
     /**
      * The name for this BaseID.
@@ -72,6 +72,48 @@ abstract class BaseIDType
         if ($xml->hasAttribute('SPNameQualifier')) {
             $this->SPNameQualifier = $xml->getAttribute('SPNameQualifier');
         }
+    }
+
+
+    /**
+     * Collect the value of the NameQualifier property
+     *
+     * @return string|null
+     */
+    public function getNameQualifier()
+    {
+        return $this->NameQualifier;
+    }
+
+    /**
+     * Set the value of the NameQualifier-property
+     *
+     * @param string|null $NameQualifier
+     */
+    public function setNameQualifier(string $NameQualifier = null)
+    {
+        $this->NameQualifier = $NameQualifier;
+    }
+
+
+    /**
+     * Collect the value of the SPNameQualifier property
+     *
+     * @return string|null
+     */
+    public function getSPNameQualifier()
+    {
+        return $this->SPNameQualifier;
+    }
+
+    /**
+     * Set the value of the SPNameQualifier-property
+     *
+     * @param string|null $SPNameQualifier
+     */
+    public function setSPNameQualifier(string $SPNameQualifier = null)
+    {
+        $this->SPNameQualifier = $SPNameQualifier;
     }
 
 

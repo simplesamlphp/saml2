@@ -172,8 +172,8 @@ abstract class Message implements SignedElement
         $issuer = Utils::xpQuery($xml, './saml_assertion:Issuer');
         if (!empty($issuer)) {
             $this->issuer = new XML\saml\Issuer($issuer[0]);
-            if ($this->issuer->Format === Constants::NAMEID_ENTITY) {
-                $this->issuer = $this->issuer->value;
+            if ($this->issuer->getFormat() === Constants::NAMEID_ENTITY) {
+                $this->issuer = $this->issuer->getValue();
             }
         }
 
@@ -366,11 +366,7 @@ abstract class Message implements SignedElement
      */
     public function getIssuer()
     {
-        if (is_string($this->issuer) || $this->issuer instanceof XML\saml\Issuer) {
-            return $this->issuer;
-        }
-
-        return null;
+        return $this->issuer;
     }
 
     /**

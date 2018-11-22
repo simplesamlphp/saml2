@@ -49,7 +49,7 @@ XML;
     public function testMarshalling()
     {
         $nameId = new XML\saml\NameID();
-        $nameId->value = 'NameIDValue';
+        $nameId->setValue('NameIDValue');
 
         $logoutRequest = new LogoutRequest();
         $logoutRequest->setNameID($nameId);
@@ -69,7 +69,7 @@ XML;
         $this->assertEquals('SessionIndexValue', $sessionIndexElements[0]->textContent);
 
         $nameId = new XML\saml\NameID();
-        $nameId->value = 'NameIDValue';
+        $nameId->setValue('NameIDValue');
         $logoutRequest = new LogoutRequest();
         $logoutRequest->setNameID($nameId);
         $logoutRequest->setSessionIndexes(['SessionIndexValue1', 'SessionIndexValue2']);
@@ -96,13 +96,13 @@ XML;
         $logoutRequest->decryptNameId(CertificatesMock::getPrivateKey());
 
         $nameId = $logoutRequest->getNameId();
-        $this->assertEquals('TheNameIDValue', $nameId->value);
+        $this->assertEquals('TheNameIDValue', $nameId->getValue());
     }
 
     public function testEncryptedNameId()
     {
         $nameId = new XML\saml\NameID();
-        $nameId->value = 'NameIdValue';
+        $nameId->setValue('NameIdValue');
 
         $logoutRequest = new LogoutRequest();
         $logoutRequest->setNameID($nameId);
@@ -122,7 +122,7 @@ XML;
 
         $logoutRequest->decryptNameId(CertificatesMock::getPrivateKey());
         $nameId = $logoutRequest->getNameId();
-        $this->assertEquals('TheNameIDValue', $nameId->value);
+        $this->assertEquals('TheNameIDValue', $nameId->getValue());
     }
 
     public function testDecryptingNameIdForgotToDecryptThrowsException()
@@ -146,8 +146,8 @@ XML;
         $this->logoutRequestElement = $document->firstChild;
 
         $logoutRequest = new LogoutRequest($this->logoutRequestElement);
-        $this->assertEquals("frits", $logoutRequest->getNameId()->value);
-        $this->assertEquals("urn:oasis:names:tc:SAML:2.0:nameid-format:unspecified", $logoutRequest->getNameId()->Format);
+        $this->assertEquals("frits", $logoutRequest->getNameId()->getValue());
+        $this->assertEquals("urn:oasis:names:tc:SAML:2.0:nameid-format:unspecified", $logoutRequest->getNameId()->getFormat());
 
         $this->assertFalse($logoutRequest->isNameIdEncrypted());
         $this->assertNull($logoutRequest->decryptNameId(CertificatesMock::getPrivateKey()));
@@ -201,7 +201,7 @@ XML;
     public function testSetNotOnOrAfter()
     {
         $nameId = new XML\saml\NameID();
-        $nameId->value = 'NameIDValue';
+        $nameId->setValue('NameIDValue');
         $time = time();
 
         $logoutRequest = new LogoutRequest();

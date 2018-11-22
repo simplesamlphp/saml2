@@ -12,8 +12,8 @@ class ArtifactResponseTest extends PHPUnit_Framework_TestCase
     {
         $issuer1 = new XML\saml\Issuer();
         $issuer2 = new XML\saml\Issuer();
-        $issuer1->value = 'urn:example:issuer';
-        $issuer2->value = 'urn:example:other';
+        $issuer1->setValue('urn:example:issuer');
+        $issuer2->setValue('urn:example:other');
 
         $artifactResponse = new ArtifactResponse();
         $artifactResponse->setIssuer($issuer1);
@@ -27,11 +27,11 @@ class ArtifactResponseTest extends PHPUnit_Framework_TestCase
 
         $artifactIssuer = Utils::xpQuery($artifactResponseElement, './saml:Issuer');
         $this->assertCount(1, $artifactIssuer);
-        $this->assertEquals($issuer1->value, $artifactIssuer[0]->textContent);
+        $this->assertEquals($issuer1->getValue(), $artifactIssuer[0]->textContent);
 
         $authnelement = Utils::xpQuery($artifactResponseElement, './saml_protocol:AuthnRequest/saml:Issuer');
         $this->assertCount(1, $authnelement);
-        $this->assertEquals($issuer2->value, $authnelement[0]->textContent);
+        $this->assertEquals($issuer2->getValue(), $authnelement[0]->textContent);
     }
 
 

@@ -15,10 +15,10 @@ class UtilsTest extends \PHPUnit_Framework_TestCase
     public function testXpQuery()
     {
         $nameId_before = new XML\saml\NameID();
-        $nameId_before->value = 'NameIDValue';
-        $nameId_before->Format = 'SomeNameIDFormat';
-        $nameId_before->NameQualifier = 'OurNameQualifier';
-        $nameId_before->SPNameQualifier = 'TheSPNameQualifier';
+        $nameId_before->setValue('NameIDValue');
+        $nameId_before->setFormat('SomeNameIDFormat');
+        $nameId_before->setNameQualifier('OurNameQualifier');
+        $nameId_before->setSPNameQualifier('TheSPNameQualifier');
 
         $aq = new AttributeQuery();
         $aq->setNameID($nameId_before);
