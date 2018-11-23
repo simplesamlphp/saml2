@@ -33,7 +33,7 @@
 
     <target name="composer-run-install" depends="composer-update">
         <exec executable="php" failonerror="true">
-            <arg line="composer.phar install --dev --prefer-source"/>
+            <arg line="composer.phar install --prefer-source"/>
         </exec>
     </target>
 
