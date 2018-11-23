@@ -4,14 +4,13 @@ declare(strict_types=1);
 
 namespace SAML2\Assertion\Validation\ConstraintValidator;
 
-use Mockery as m;
 use SAML2\Assertion\Validation\Result;
 
 /**
  * Because we're mocking a static call, we have to run it in separate processes so as to no contaminate the other
  * tests.
  */
-class SpIsValidAudienceTest extends \PHPUnit\Framework\TestCase
+class SpIsValidAudienceTest extends \Mockery\Adapter\Phpunit\MockeryTestCase
 {
     /**
      * @var \Mockery\MockInterface
@@ -26,15 +25,15 @@ class SpIsValidAudienceTest extends \PHPUnit\Framework\TestCase
     public function setUp()
     {
         parent::setUp();
-        $this->assertion = m::mock('SAML2\Assertion');
-        $this->serviceProvider = m::mock('SAML2\Configuration\ServiceProvider');
+        $this->assertion = \Mockery::mock(\SAML2\Assertion::class);
+        $this->serviceProvider = \Mockery::mock(\SAML2\Configuration\ServiceProvider::class);
     }
 
     /**
      * @group assertion-validation
      * @test
      */
-    public function when_no_valid_adiences_are_given_the_assertion_is_valid()
+    public function when_no_valid_audiences_are_given_the_assertion_is_valid()
     {
         $this->assertion->shouldReceive('getValidAudiences')->andReturn(null);
         $this->serviceProvider->shouldReceive('getEntityId')->andReturn('entityId');

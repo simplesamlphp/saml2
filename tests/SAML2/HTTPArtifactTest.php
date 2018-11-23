@@ -16,7 +16,7 @@ class HTTPArtifactTest extends \PHPUnit\Framework\TestCase
         $_REQUEST = ['a' => 'b', 'c' => 'd'];
 
         $ha = new HTTPArtifact();
-        $this->setExpectedException(\Exception::class, 'Missing SAMLart parameter.');
+        $this->expectException(\Exception::class, 'Missing SAMLart parameter.');
         $request = $ha->receive();
     }
 }

@@ -77,7 +77,7 @@ XML
                    MaxKeySize="4096" />
 XML
         );
-        $this->setExpectedException(\Exception::class, 'Missing required attribute "Algorithm"');
+        $this->expectException(\Exception::class, 'Missing required attribute "Algorithm"');
         new SigningMethod($document->firstChild);
     }
 }

@@ -65,7 +65,7 @@ XML
 XML
         );
 
-        $this->setExpectedException(\Exception::class, 'Missing url value for Logo');
+        $this->expectException(\Exception::class, 'Missing url value for Logo');
         $logo = new Logo($document->firstChild);
     }
 
@@ -79,7 +79,7 @@ XML
 XML
         );
 
-        $this->setExpectedException(\Exception::class, 'Missing width of Logo');
+        $this->expectException(\Exception::class, 'Missing width of Logo');
         $logo = new Logo($document->firstChild);
     }
 
@@ -93,7 +93,7 @@ XML
 XML
         );
 
-        $this->setExpectedException(\Exception::class, 'Missing height of Logo');
+        $this->expectException(\Exception::class, 'Missing height of Logo');
         $logo = new Logo($document->firstChild);
     }
 }

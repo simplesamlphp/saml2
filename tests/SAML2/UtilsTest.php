@@ -267,7 +267,7 @@ class UtilsTest extends \PHPUnit\Framework\TestCase
         $this->assertEquals($result, '404');
 
         // Exception on invalid value
-        $this->setExpectedException(\Exception::class, "Invalid value of boolean attribute 'anattribute': 'yes'");
+        $this->expectException(\Exception::class, "Invalid value of boolean attribute 'anattribute': 'yes'");
 
         $document = DOMDocumentFactory::fromString(
             '<somenode anattribute="yes"></somenode>'

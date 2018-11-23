@@ -47,7 +47,7 @@ class AdditionalMetadataLocationTest extends \PHPUnit\Framework\TestCase
             '<md:AdditionalMetadataLocation xmlns:md="' . Constants::NS_MD . '"'.
             '>LocationText</md:AdditionalMetadataLocation>'
         );
-        $this->setExpectedException(\Exception::class, 'Missing namespace attribute on AdditionalMetadataLocation element.');
+        $this->expectException(\Exception::class, 'Missing namespace attribute on AdditionalMetadataLocation element.');
         new AdditionalMetadataLocation($document->firstChild);
     }
 }

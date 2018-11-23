@@ -68,7 +68,7 @@ XML
 </saml:Attribute>
 XML
         );
-        $this->setExpectedException(\Exception::class, 'Missing Name on Attribute.');
+        $this->expectException(\Exception::class, 'Missing Name on Attribute.');
         new Attribute($document->firstChild);
     }
 }

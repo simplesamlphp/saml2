@@ -45,7 +45,7 @@ class KeywordsTest extends \PHPUnit\Framework\TestCase
 
         $document = DOMDocumentFactory::fromString('<root />');
         
-        $this->setExpectedException(\Exception::class, 'Keywords may not contain a "+" character');
+        $this->expectException(\Exception::class, 'Keywords may not contain a "+" character');
         $xml = $keywords->toXML($document->firstChild);
     }
 
@@ -77,7 +77,7 @@ XML
 XML
         );
 
-        $this->setExpectedException(\Exception::class, 'Missing lang on Keywords');
+        $this->expectException(\Exception::class, 'Missing lang on Keywords');
         $keywords = new Keywords($document->firstChild);
     }
 
@@ -91,7 +91,7 @@ XML
 XML
         );
 
-        $this->setExpectedException(\Exception::class, 'Missing value for Keywords');
+        $this->expectException(\Exception::class, 'Missing value for Keywords');
         $keywords = new Keywords($document->firstChild);
     }
 }

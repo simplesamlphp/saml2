@@ -14,7 +14,7 @@ use SAML2\Response;
 use SAML2\SimpleTestLogger;
 use SAML2\Utilities\Certificate;
 
-class PublicKeyValidatorTest extends \PHPUnit\Framework\TestCase
+class PublicKeyValidatorTest extends \Mockery\Adapter\Phpunit\MockeryTestCase
 {
     private $mockSignedElement;
     private $mockConfiguration;

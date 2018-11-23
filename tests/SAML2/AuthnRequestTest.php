@@ -345,7 +345,7 @@ AUTHNREQUEST;
 </samlp:AuthnRequest>
 AUTHNREQUEST;
 
-        $this->setExpectedException(\Exception::class, 'Could not get ProviderID');
+        $this->expectException(\Exception::class, 'Could not get ProviderID');
         $authnRequest = new AuthnRequest(DOMDocumentFactory::fromString($xmlRequest)->firstChild);
     }
 
@@ -632,7 +632,7 @@ AUTHNREQUEST;
 
         // AllowCreate must be a bool
         $nameIdPolicy = ["AllowCreate" => "true"];
-        $this->setExpectedException(\InvalidArgumentException::class, 'Invalid Argument type: "bool" expected');
+        $this->expectException(\InvalidArgumentException::class, 'Invalid Argument type: "bool" expected');
         $request->setNameIDPolicy($nameIdPolicy);
     }
 
@@ -652,7 +652,7 @@ AUTHNREQUEST;
 
         // SPNameQualifier must be a string
         $nameIdPolicy = ["SPNameQualifier" => true];
-        $this->setExpectedException(\InvalidArgumentException::class, 'Invalid Argument type: "string" expected');
+        $this->expectException(\InvalidArgumentException::class, 'Invalid Argument type: "string" expected');
         $request->setNameIDPolicy($nameIdPolicy);
     }
 
@@ -673,7 +673,7 @@ AUTHNREQUEST;
 
         // Format must be a string
         $nameIdPolicy = ["Format" => 2.0];
-        $this->setExpectedException(\InvalidArgumentException::class, 'Invalid Argument type: "string" expected');
+        $this->expectException(\InvalidArgumentException::class, 'Invalid Argument type: "string" expected');
         $request->setNameIDPolicy($nameIdPolicy);
     }
 
@@ -988,7 +988,7 @@ AUTHNREQUEST;
 </samlp:AuthnRequest>
 AUTHNREQUEST;
 
-        $this->setExpectedException(\Exception::class, 'More than one <saml:Subject> in <saml:AuthnRequest>');
+        $this->expectException(\Exception::class, 'More than one <saml:Subject> in <saml:AuthnRequest>');
         $authnRequest = new AuthnRequest(DOMDocumentFactory::fromString($xml)->documentElement);
     }
 
@@ -1014,7 +1014,7 @@ AUTHNREQUEST;
 </samlp:AuthnRequest>
 AUTHNREQUEST;
 
-        $this->setExpectedException(\Exception::class, 'More than one <saml:NameID> or <saml:EncryptedID> in <saml:Subject>');
+        $this->expectException(\Exception::class, 'More than one <saml:NameID> or <saml:EncryptedID> in <saml:Subject>');
         $authnRequest = new AuthnRequest(DOMDocumentFactory::fromString($xml)->documentElement);
     }
 
@@ -1038,7 +1038,7 @@ AUTHNREQUEST;
 </samlp:AuthnRequest>
 AUTHNREQUEST;
 
-        $this->setExpectedException(\Exception::class, 'Missing <saml:NameID> or <saml:EncryptedID> in <saml:Subject>');
+        $this->expectException(\Exception::class, 'Missing <saml:NameID> or <saml:EncryptedID> in <saml:Subject>');
         $authnRequest = new AuthnRequest(DOMDocumentFactory::fromString($xml)->documentElement);
     }
 }

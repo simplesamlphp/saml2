@@ -29,7 +29,7 @@ class ValidatorChainTest extends \PHPUnit\Framework\TestCase
         $this->chain->appendValidator(new MockChainedValidator(false, true));
         $this->chain->appendValidator(new MockChainedValidator(false, true));
 
-        $this->setExpectedException(MissingConfigurationException::class);
+        $this->expectException(MissingConfigurationException::class);
         $this->chain->hasValidSignature(new Response(), new IdentityProvider([]));
     }
 

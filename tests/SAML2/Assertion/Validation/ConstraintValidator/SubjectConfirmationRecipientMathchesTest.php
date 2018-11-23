@@ -4,11 +4,10 @@ declare(strict_types=1);
 
 namespace SAML2\Assertion\Validation\ConstraintValidator;
 
-use Mockery as m;
 use SAML2\Assertion\Validation\Result;
 use SAML2\Configuration\Destination;
 
-class SubjectConfirmationRecipientMathchesTest extends \PHPUnit\Framework\TestCase
+class SubjectConfirmationRecipientMathchesTest extends \Mockery\Adapter\Phpunit\MockeryTestCase
 {
     /**
      * @var \Mockery\MockInterface
@@ -23,8 +22,8 @@ class SubjectConfirmationRecipientMathchesTest extends \PHPUnit\Framework\TestCa
     public function setUp()
     {
         parent::setUp();
-        $this->subjectConfirmation                          = m::mock('SAML2\XML\saml\SubjectConfirmation');
-        $this->subjectConfirmationData                      = m::mock('SAML2\XML\saml\SubjectConfirmationData');
+        $this->subjectConfirmation                          = \Mockery::mock(\SAML2\XML\saml\SubjectConfirmation::class);
+        $this->subjectConfirmationData                      = \Mockery::mock(\SAML2\XML\saml\SubjectConfirmationData::class);
         $this->subjectConfirmation->SubjectConfirmationData = $this->subjectConfirmationData;
     }
 

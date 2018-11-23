@@ -15,7 +15,7 @@ use SAML2\Utilities\Certificate;
 /**
  * Test that ensures that either the response or the assertion(s) or both must be signed.
  */
-class SignatureValidationTest extends \PHPUnit\Framework\TestCase
+class SignatureValidationTest extends \Mockery\Adapter\Phpunit\MockeryTestCase
 {
     /**
      * @var \SAML2\Configuration\IdentityProvider
@@ -49,7 +49,7 @@ class SignatureValidationTest extends \PHPUnit\Framework\TestCase
     public function setUp()
     {
         $this->assertionProcessorBuilder = \Mockery::mock('alias:SAML2\Assertion\ProcessorBuilder');
-        $this->assertionProcessor = \Mockery::mock('SAML2\Assertion\Processor');
+        $this->assertionProcessor = \Mockery::mock(\SAML2\Assertion\Processor::class);
         $this->assertionProcessorBuilder
             ->shouldReceive('build')
             ->once()
@@ -67,11 +67,11 @@ class SignatureValidationTest extends \PHPUnit\Framework\TestCase
     /**
      * This ensures that the mockery expectations are tested. This cannot be done through the registered listener (See
      * the phpunit.xml in the /tools/phpunit directory) as the tests run in isolation.
-     */
     public function tearDown()
     {
         \Mockery::close();
     }
+     */
 
     /**
      * @runInSeparateProcess
@@ -138,7 +138,7 @@ class SignatureValidationTest extends \PHPUnit\Framework\TestCase
 
         $processor = new Processor(new \Psr\Log\NullLogger());
 
-        $this->setExpectedException(Exception\UnsignedResponseException::class);
+        $this->expectException(Exception\UnsignedResponseException::class);
         $processor->process(
             new ServiceProvider([]),
             new IdentityProvider([]),

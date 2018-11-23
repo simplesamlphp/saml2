@@ -22,7 +22,7 @@ class BindingTest extends \PHPUnit\Framework\TestCase
         $bind = Binding::getBinding(Constants::BINDING_PAOS);
         $this->assertInstanceOf(SOAP::class, $bind);
 
-        $this->setExpectedException(\Exception::class, 'Unsupported binding:');
+        $this->expectException(\Exception::class, 'Unsupported binding:');
         $bind = Binding::getBinding('nonsense');
     }
 
@@ -45,7 +45,7 @@ class BindingTest extends \PHPUnit\Framework\TestCase
         $this->assertInstanceOf(HTTPArtifact::class, $bind);
 
         $_GET = ['aap' => 'noot'];
-        $this->setExpectedException(\Exception::class, 'Unable to find the current binding.');
+        $this->expectException(\Exception::class, 'Unable to find the current binding.');
         $bind = Binding::getCurrentBinding();
     }
     /**
@@ -60,7 +60,7 @@ class BindingTest extends \PHPUnit\Framework\TestCase
 
         $_POST = ['SAMLResponse' => 'PHNhbWxwOlJlc3BvbnNlIHhtbG5zOnNhbWxwPSJ1cm46b2FzaXM6bmFtZXM6dGM6U0FNTDoyLjA6cHJvdG9jb2wiIHhtbG5zOnNhbWw9InVybjpvYXNpczpuYW1lczp0YzpTQU1MOjIuMDphc3NlcnRpb24iIElEPSJDT1JUT2Y1MmFhMTA5NDQ3MWVkODJmYTRiM2QzZDBmNTcxNDE2MGNlMWEyMDciIFZlcnNpb249IjIuMCIgSXNzdWVJbnN0YW50PSIyMDE1LTEyLTE2VDE2OjM5OjU3WiIgRGVzdGluYXRpb249Imh0dHBzOi8vdGhraS1zaWQucHQtNDgudXRyLnN1cmZjbG91ZC5ubC9tZWxsb24vcG9zdFJlc3BvbnNlIiBJblJlc3BvbnNlVG89Il84NzNDQzMyMDhERDc1RkJFMTFCQTdCMzQxNkU2Qjc2MSI+PHNhbWw6SXNzdWVyPmh0dHBzOi8vZW5naW5lLnRlc3Quc3VyZmNvbmV4dC5ubC9hdXRoZW50aWNhdGlvbi9pZHAvbWV0YWRhdGE8L3NhbWw6SXNzdWVyPjxzYW1scDpTdGF0dXM+PHNhbWxwOlN0YXR1c0NvZGUgVmFsdWU9InVybjpvYXNpczpuYW1lczp0YzpTQU1MOjIuMDpzdGF0dXM6U3VjY2VzcyIvPjwvc2FtbHA6U3RhdHVzPjxzYW1sOkFzc2VydGlvbiB4bWxuczp4c2k9Imh0dHA6Ly93d3cudzMub3JnLzIwMDEvWE1MU2NoZW1hLWluc3RhbmNlIiB4bWxuczp4cz0iaHR0cDovL3d3dy53My5vcmcvMjAwMS9YTUxTY2hlbWEiIElEPSJDT1JUTzkxZDViNWI0OWJiOGVlMTY2YzlkNDFjNmEwMWE3Zjk2MzcwOTUyNTQiIFZlcnNpb249IjIuMCIgSXNzdWVJbnN0YW50PSIyMDE1LTEyLTE2VDE2OjM5OjU3WiI+PHNhbWw6SXNzdWVyPmh0dHBzOi8vZW5naW5lLnRlc3Quc3VyZmNvbmV4dC5ubC9hdXRoZW50aWNhdGlvbi9pZHAvbWV0YWRhdGE8L3NhbWw6SXNzdWVyPjxkczpTaWduYXR1cmUgeG1sbnM6ZHM9Imh0dHA6Ly93d3cudzMub3JnLzIwMDAvMDkveG1sZHNpZyMiPgogIDxkczpTaWduZWRJbmZvPjxkczpDYW5vbmljYWxpemF0aW9uTWV0aG9kIEFsZ29yaXRobT0iaHR0cDovL3d3dy53My5vcmcvMjAwMS8xMC94bWwtZXhjLWMxNG4jIi8+CiAgICA8ZHM6U2lnbmF0dXJlTWV0aG9kIEFsZ29yaXRobT0iaHR0cDovL3d3dy53My5vcmcvMjAwMC8wOS94bWxkc2lnI3JzYS1zaGExIi8+CiAgPGRzOlJlZmVyZW5jZSBVUkk9IiNDT1JUTzkxZDViNWI0OWJiOGVlMTY2YzlkNDFjNmEwMWE3Zjk2MzcwOTUyNTQiPjxkczpUcmFuc2Zvcm1zPjxkczpUcmFuc2Zvcm0gQWxnb3JpdGhtPSJodHRwOi8vd3d3LnczLm9yZy8yMDAwLzA5L3htbGRzaWcjZW52ZWxvcGVkLXNpZ25hdHVyZSIvPjxkczpUcmFuc2Zvcm0gQWxnb3JpdGhtPSJodHRwOi8vd3d3LnczLm9yZy8yMDAxLzEwL3htbC1leGMtYzE0biMiLz48L2RzOlRyYW5zZm9ybXM+PGRzOkRpZ2VzdE1ldGhvZCBBbGdvcml0aG09Imh0dHA6Ly93d3cudzMub3JnLzIwMDAvMDkveG1sZHNpZyNzaGExIi8+PGRzOkRpZ2VzdFZhbHVlPmZGVzdzQW1KLzFNbTUxWWlIcUxTOE1QUHlsMD08L2RzOkRpZ2VzdFZhbHVlPjwvZHM6UmVmZXJlbmNlPjwvZHM6U2lnbmVkSW5mbz48ZHM6U2lnbmF0dXJlVmFsdWU+Wjh2WGQ2MTZaT0d0YmFIdytRWjJkUUVGYlVWdEg5Rmg5SmZHbFdLNzN3dHNmNVpjZGhsa2lJejA4UzE4K201TkZZS3pZaVpOeVZLWTRqZDZ2Q0gva3BIbVo1b3FXUzhmazhZU2dxYTZ6Q3UzTnVrN2NYZWZQQVB5QWtaUDZwb0pwcUM5QTc4T2c3Z3BzQ0VLaVE5WVhrMFpudFQ5TGdZSjg5R21HdnFialFVPTwvZHM6U2lnbmF0dXJlVmFsdWU+CjxkczpLZXlJbmZvPjxkczpYNTA5RGF0YT48ZHM6WDUwOUNlcnRpZmljYXRlPk1JSUMrekNDQW1TZ0F3SUJBZ0lKQVBKdkxqUXNSUjRpTUEwR0NTcUdTSWIzRFFFQkJRVUFNRjB4Q3pBSkJnTlZCQVlUQWs1TU1SQXdEZ1lEVlFRSUV3ZFZkSEpsWTJoME1SQXdEZ1lEVlFRSEV3ZFZkSEpsWTJoME1SQXdEZ1lEVlFRS0V3ZFRWVkpHYm1WME1SZ3dGZ1lEVlFRREV3OTBaWE4wTWlCellXMXNJR05sY25Rd0hoY05NVFV3TXpJME1UUXdNekUzV2hjTk1qVXdNekl4TVRRd016RTNXakJkTVFzd0NRWURWUVFHRXdKT1RERVFNQTRHQTFVRUNCTUhWWFJ5WldOb2RERVFNQTRHQTFVRUJ4TUhWWFJ5WldOb2RERVFNQTRHQTFVRUNoTUhVMVZTUm01bGRERVlNQllHQTFVRUF4TVBkR1Z6ZERJZ2MyRnRiQ0JqWlhKME1JR2ZNQTBHQ1NxR1NJYjNEUUVCQVFVQUE0R05BRENCaVFLQmdRQ3hLWXJuVzhOd3FkUndSd2FIdWx1ZUw2OWdRRlRKYmRmb0FTTGhZaWUyYk9pb0p5SncxZitjQXZwanNsNFNWWXB2RXNlSWV0WEg4TGdwazdLNzNQa0RKTDhkRmc0c0VqRkY2amdtanJPRVMzb3gvZ3RUZDlkL1Z3UEhJL3ZQSWNHeTFzYlZKNHBFTUZsNWQ4R09Bem9Ka05XZFBqOXdWNHJ2NHV2MzVNYXk4d0lEQVFBQm80SENNSUcvTUIwR0ExVWREZ1FXQkJUVElhUHdwS3BKbFk4ZUlNU3pOUlpValN0YmlqQ0Jqd1lEVlIwakJJR0hNSUdFZ0JUVElhUHdwS3BKbFk4ZUlNU3pOUlpValN0YmlxRmhwRjh3WFRFTE1Ba0dBMVVFQmhNQ1Rrd3hFREFPQmdOVkJBZ1RCMVYwY21WamFIUXhFREFPQmdOVkJBY1RCMVYwY21WamFIUXhFREFPQmdOVkJBb1RCMU5WVWtadVpYUXhHREFXQmdOVkJBTVREM1JsYzNReUlITmhiV3dnWTJWeWRJSUpBUEp2TGpRc1JSNGlNQXdHQTFVZEV3UUZNQU1CQWY4d0RRWUpLb1pJaHZjTkFRRUZCUUFEZ1lFQUs4RXZUVTBMZ0hKc1N1Z29yT2VtZ1JscHBNZkpBZU9tdXVaTmhTTVkyUWh1bUZPWnBhQWI4TkZJd1VLVVZ5eUpuU283azZrdEhDS0k5NHNRczk3NjI0MmhURERZRXdXSkQ5SGhBc0FxT28yMVVhOGdaVDM4L3dtNjJlM0tncktYdm5sakFiS1BYRFhKTTRha3o3eTZINnd2dklHVDZmMGYwaUpXSHEzNGp3dz08L2RzOlg1MDlDZXJ0aWZpY2F0ZT48L2RzOlg1MDlEYXRhPjwvZHM6S2V5SW5mbz48L2RzOlNpZ25hdHVyZT48c2FtbDpTdWJqZWN0PjxzYW1sOk5hbWVJRCBGb3JtYXQ9InVybjpvYXNpczpuYW1lczp0YzpTQU1MOjIuMDpuYW1laWQtZm9ybWF0OnRyYW5zaWVudCI+OGQ0NmIwM2VjNWZlMmZmNmJkNTNlOThhY2E3OTQ3ZjMzMDUzY2MwYjwvc2FtbDpOYW1lSUQ+PHNhbWw6U3ViamVjdENvbmZpcm1hdGlvbiBNZXRob2Q9InVybjpvYXNpczpuYW1lczp0YzpTQU1MOjIuMDpjbTpiZWFyZXIiPjxzYW1sOlN1YmplY3RDb25maXJtYXRpb25EYXRhIE5vdE9uT3JBZnRlcj0iMjAxNS0xMi0xNlQxNjo0NDo1N1oiIFJlY2lwaWVudD0iaHR0cHM6Ly90aGtpLXNpZC5wdC00OC51dHIuc3VyZmNsb3VkLm5sL21lbGxvbi9wb3N0UmVzcG9uc2UiIEluUmVzcG9uc2VUbz0iXzg3M0NDMzIwOERENzVGQkUxMUJBN0IzNDE2RTZCNzYxIi8+PC9zYW1sOlN1YmplY3RDb25maXJtYXRpb24+PC9zYW1sOlN1YmplY3Q+PHNhbWw6Q29uZGl0aW9ucyBOb3RCZWZvcmU9IjIwMTUtMTItMTZUMTY6Mzk6NTZaIiBOb3RPbk9yQWZ0ZXI9IjIwMTUtMTItMTZUMTY6NDQ6NTdaIj48c2FtbDpBdWRpZW5jZVJlc3RyaWN0aW9uPjxzYW1sOkF1ZGllbmNlPmh0dHBzOi8vdGhraS1zaWQucHQtNDgudXRyLnN1cmZjbG91ZC5ubC9tZWxsb24vbWV0YWRhdGE8L3NhbWw6QXVkaWVuY2U+PC9zYW1sOkF1ZGllbmNlUmVzdHJpY3Rpb24+PC9zYW1sOkNvbmRpdGlvbnM+PHNhbWw6QXV0aG5TdGF0ZW1lbnQgQXV0aG5JbnN0YW50PSIyMDE1LTEyLTE2VDE2OjM5OjU3WiIgU2Vzc2lvbk5vdE9uT3JBZnRlcj0iMjAxNS0xMi0xN1QwMDozOTo1N1oiIFNlc3Npb25JbmRleD0iXzYxMzU1ZTg2NTU3OGJhZDFlYTNkM2U1MzM2MDRhYjY3NjkyNThlOGI4YSI+PHNhbWw6QXV0aG5Db250ZXh0PjxzYW1sOkF1dGhuQ29udGV4dENsYXNzUmVmPnVybjpvYXNpczpuYW1lczp0YzpTQU1MOjIuMDphYzpjbGFzc2VzOlBhc3N3b3JkPC9zYW1sOkF1dGhuQ29udGV4dENsYXNzUmVmPjxzYW1sOkF1dGhlbnRpY2F0aW5nQXV0aG9yaXR5Pmh0dHBzOi8vb3BlbmlkcC5mZWlkZS5ubzwvc2FtbDpBdXRoZW50aWNhdGluZ0F1dGhvcml0eT48L3NhbWw6QXV0aG5Db250ZXh0Pjwvc2FtbDpBdXRoblN0YXRlbWVudD48L3NhbWw6QXNzZXJ0aW9uPjwvc2FtbHA6UmVzcG9uc2U+'];
         $bind = Binding::getCurrentBinding();
-        $this->assertInstanceOf(HTTPPost::calss, $bind);
+        $this->assertInstanceOf(HTTPPost::class, $bind);
 
         $_POST = [];
         $_SERVER['CONTENT_TYPE'] = 'text/xml';
@@ -73,7 +73,7 @@ class BindingTest extends \PHPUnit\Framework\TestCase
 
         $_POST = ['AAP' => 'Noot'];
         unset($_SERVER['CONTENT_TYPE']);
-        $this->setExpectedException(\Exception::class, 'Unable to find the current binding.');
+        $this->expectException(\Exception::class, 'Unable to find the current binding.');
         $bind = Binding::getCurrentBinding();
     }
 
@@ -84,7 +84,7 @@ class BindingTest extends \PHPUnit\Framework\TestCase
     {
         $_SERVER['REQUEST_METHOD'] = 'PUT';
         $_SERVER['CONTENT_TYPE'] = 'text/xml';
-        $this->setExpectedException(\Exception::class, 'Unable to find the current binding.');
+        $this->expectException(\Exception::class, 'Unable to find the current binding.');
         $bind = Binding::getCurrentBinding();
     }
 

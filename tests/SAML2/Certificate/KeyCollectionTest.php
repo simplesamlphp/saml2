@@ -14,7 +14,7 @@ class KeyCollectionTest extends \PHPUnit\Framework\TestCase
     public function testKeyCollectionAddWrongType()
     {
         $kc = new KeyCollection();
-        $this->setExpectedException(\SAML2\Exception\InvalidArgumentException::class);
+        $this->expectException(\SAML2\Exception\InvalidArgumentException::class);
         $kc->add("not a key, just a string");
     }
 }

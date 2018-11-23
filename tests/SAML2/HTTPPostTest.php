@@ -4,7 +4,7 @@ declare(strict_types=1);
 
 namespace SAML2;
 
-class HTTPPostTest extends \PHPUnit\Framework\TestCase
+class HTTPPostTest extends \Mockery\Adapter\Phpunit\MockeryTestCase
 {
     /**
      * test parsing of basic query string with authnrequest and
@@ -52,12 +52,13 @@ class HTTPPostTest extends \PHPUnit\Framework\TestCase
         $_POST = [];
         $_POST = ['non' => 'sense'];
         $hp = new HTTPPost();
-        $this->setExpectedException(\Exception::class, 'Missing SAMLRequest or SAMLResponse parameter');
+        $this->expectException(\Exception::class, 'Missing SAMLRequest or SAMLResponse parameter');
         $msg = $hp->receive();
     }
 
     /**
      * Construct an authnrequest and send it.
+     * @doesNotPerformAssertions
      */
     public function testSendAuthnrequest()
     {
@@ -69,6 +70,7 @@ class HTTPPostTest extends \PHPUnit\Framework\TestCase
     /**
      * Construct an authnresponse and send it.
      * Also test setting a relaystate and destination for the response.
+     * @doesNotPerformAssertions
      */
     public function testSendAuthnResponse()
     {
@@ -80,6 +82,7 @@ class HTTPPostTest extends \PHPUnit\Framework\TestCase
         $response->setRelayState('http://example.org');
         $response->setDestination('http://example.org/login?success=yes');
         $response->setSignatureKey(CertificatesMock::getPrivateKey());
+
         $hr = new HTTPPost();
         $hr->send($response);
     }

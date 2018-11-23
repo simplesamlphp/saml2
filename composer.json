@@ -23,7 +23,7 @@
         "sensiolabs/security-checker": "~1.1",
         "phpunit/phpunit": "^6.0",
         "sebastian/phpcpd": "~1.4",
-        "mockery/mockery": "~0.9"
+        "mockery/mockery": "~1.2"
     },
     "autoload": {
         "psr-0": {

@@ -63,7 +63,7 @@ XML
 XML
         );
 
-        $this->setExpectedException(\Exception::class, 'SubjectConfirmation element without Method attribute');
+        $this->expectException(\Exception::class, 'SubjectConfirmation element without Method attribute');
         $subjectConfirmation = new SubjectConfirmation($document->firstChild);
     }
 
@@ -80,7 +80,7 @@ XML
 XML
         );
 
-        $this->setExpectedException(\Exception::class, 'More than one NameID in a SubjectConfirmation element');
+        $this->expectException(\Exception::class, 'More than one NameID in a SubjectConfirmation element');
         $subjectConfirmation = new SubjectConfirmation($document->firstChild);
     }
 
@@ -97,7 +97,7 @@ XML
 XML
         );
 
-        $this->setExpectedException(\Exception::class, 'More than one SubjectConfirmationData child in a SubjectConfirmation element');
+        $this->expectException(\Exception::class, 'More than one SubjectConfirmationData child in a SubjectConfirmation element');
         $subjectConfirmation = new SubjectConfirmation($document->firstChild);
     }
 }

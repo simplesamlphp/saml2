@@ -4,7 +4,7 @@ declare(strict_types=1);
 
 namespace SAML2;
 
-class MessageTest extends \PHPUnit\Framework\TestCase
+class MessageTest extends \Mockery\Adapter\Phpunit\MockeryTestCase
 {
     /**
      * @group Message
@@ -273,7 +273,7 @@ AUTHNREQUEST
 </saml:Assertion>
 XML;
         $document  = DOMDocumentFactory::fromString($xml);
-        $this->setExpectedException(\Exception::class, "Unknown namespace of SAML message: 'urn:oasis:names:tc:SAML:2.0:assertion'");
+        $this->expectException(\Exception::class, "Unknown namespace of SAML message: 'urn:oasis:names:tc:SAML:2.0:assertion'");
         $message = Message::fromXML($document->documentElement);
     }
 
@@ -299,7 +299,7 @@ XML;
 XML;
 
         $document  = DOMDocumentFactory::fromString($xml);
-        $this->setExpectedException(\Exception::class, "Unsupported version: 2.1");
+        $this->expectException(\Exception::class, "Unsupported version: 2.1");
         $message = Message::fromXML($document->documentElement);
     }
 
@@ -318,7 +318,7 @@ XML;
 </samlp:LogoutRequest>
 XML;
         $document  = DOMDocumentFactory::fromString($xml);
-        $this->setExpectedException(\Exception::class, "Missing ID attribute on SAML message.");
+        $this->expectException(\Exception::class, "Missing ID attribute on SAML message.");
         $message = Message::fromXML($document->documentElement);
     }
 
@@ -379,7 +379,7 @@ XML;
 </samlp:MyFantasy>
 XML;
         $document  = DOMDocumentFactory::fromString($xml);
-        $this->setExpectedException(\Exception::class, "Unknown SAML message: 'MyFantasy'");
+        $this->expectException(\Exception::class, "Unknown SAML message: 'MyFantasy'");
         $message = Message::fromXML($document->documentElement);
     }
 }

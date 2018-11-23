@@ -169,7 +169,7 @@ STATUSXML
      */
     public function testNoStatusElementThrowsException()
     {
-        $this->setExpectedException(\Exception::class, 'Missing status code on response');
+        $this->expectException(\Exception::class, 'Missing status code on response');
 
         $xml = <<<XML
 <samlp:Response xmlns:samlp="urn:oasis:names:tc:SAML:2.0:protocol"
@@ -200,7 +200,7 @@ XML;
      */
     public function testNoStatusCodeThrowsException()
     {
-        $this->setExpectedException(\Exception::class, 'Missing status code in status element');
+        $this->expectException(\Exception::class, 'Missing status code in status element');
 
         $xml = <<<XML
 <samlp:Response xmlns:samlp="urn:oasis:names:tc:SAML:2.0:protocol"

@@ -52,7 +52,7 @@ XML
 <alg:DigestMethod xmlns:alg="urn:oasis:names:tc:SAML:metadata:algsupport" />
 XML
         );
-        $this->setExpectedException(\Exception::class, 'Missing required attribute "Algorithm"');
+        $this->expectException(\Exception::class, 'Missing required attribute "Algorithm"');
         new DigestMethod($document->firstChild);
     }
 }

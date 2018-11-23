@@ -4,11 +4,11 @@ declare(strict_types=1);
 
 namespace SAML2;
 
-class SOAPTest extends \PHPUnit\Framework\TestCase
+class SOAPTest extends \Mockery\Adapter\Phpunit\MockeryTestCase
 {
     public function testRequestParsingEmptyMessage()
     {
-        $this->setExpectedException(\Exception::class, 'Invalid message received');
+        $this->expectException(\Exception::class, 'Invalid message received');
 
         $stub = $this->getStubWithInput('');
         $stub->receive();

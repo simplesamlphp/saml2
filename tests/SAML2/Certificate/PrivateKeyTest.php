@@ -4,7 +4,7 @@ declare(strict_types=1);
 
 namespace SAML2\Certificate;
 
-class PrivateKeyTest extends \PHPUnit\Framework\TestCase
+class PrivateKeyTest extends \Mockery\Adapter\Phpunit\MockeryTestCase
 {
     /**
      * @group certificate

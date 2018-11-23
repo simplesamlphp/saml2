@@ -33,11 +33,11 @@ class ResponseTest extends \PHPUnit\Framework\TestCase
      */
     public function testToXMLInvalidACS($url)
     {
-        $this->setExpectedException(\InvalidArgumentException::class, 'AssertionConsumerServiceURL');
+        $this->expectException(\InvalidArgumentException::class, 'AssertionConsumerServiceURL');
 
         $response = new Response;
         $response->AssertionConsumerServiceURL = $url;
-        $response->toXML(new DOMElement('Foobar'));
+        $response->toXML(new \DOMElement('Foobar'));
     }
 
     public function testToXMLReturnsResponse()
