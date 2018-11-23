@@ -177,6 +177,7 @@ class AuthnRequest extends Request
         $this->parseNameIdPolicy($xml);
         $this->parseRequestedAuthnContext($xml);
         $this->parseScoping($xml);
+        $this->parseConditions($xml);
     }
 
     /**
@@ -305,6 +306,30 @@ class AuthnRequest extends Request
     }
 
     /**
+     * @param \DOMElement $xml
+     */
+    protected function parseConditions(\DOMElement $xml)
+    {
+        $conditions = Utils::xpQuery($xml, './saml_assertion:Conditions');
+        if (empty($conditions)) {
+            return;
+        }
+        $conditions = $conditions[0];
+
+        $ar = Utils::xpQuery($conditions, './saml_assertion:AudienceRestriction');
+        if (empty($ar)) {
+            return;
+        }
+        $ar = $ar[0];
+
+        $audiences = Utils::xpQuery($ar, './saml_assertion:Audience');
+        $this->audiences = array();
+        foreach ($audiences as $a) {
+            $this->audiences[] = trim($a->textContent);
+        }
+    }
+
+    /**
      * Retrieve the NameIdPolicy.
      *
      * @see \SAML2\AuthnRequest::setNameIdPolicy()
@@ -408,9 +433,9 @@ class AuthnRequest extends Request
     }
 
     /**
-     * Retrieve the audiences to send in the request.
+     * Retrieve the audiences from the request.
      *
-     * This may be null, in which case no audience will be sent.
+     * This may be null, in which case no audience is included.
      *
      * @return array|null The audiences.
      */
