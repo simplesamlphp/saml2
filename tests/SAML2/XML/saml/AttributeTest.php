@@ -13,7 +13,7 @@ use SAML2\XML\saml\AttributeValue;
 /**
  * Class \SAML2\XML\md\AttributeTest
  */
-class AttributeTest extends \PHPUnit_Framework_TestCase
+class AttributeTest extends \PHPUnit\Framework\TestCase
 {
     public function testMarshalling()
     {
@@ -68,7 +68,7 @@ XML
 </saml:Attribute>
 XML
         );
-        $this->setExpectedException('Exception', 'Missing Name on Attribute.');
+        $this->setExpectedException(\Exception::class, 'Missing Name on Attribute.');
         new Attribute($document->firstChild);
     }
 }

@@ -12,7 +12,7 @@ use Mockery as m;
  *
  * @runTestsInSeparateProcesses
  */
-abstract class ControlledTimeTest extends \PHPUnit_Framework_TestCase
+abstract class ControlledTimeTest extends \PHPUnit\Framework\TestCase
 {
     protected $currentTime = 1;
 

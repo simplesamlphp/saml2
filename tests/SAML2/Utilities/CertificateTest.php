@@ -4,7 +4,7 @@ declare(strict_types=1);
 
 namespace SAML2\Utilities;
 
-class CertificateTest extends \PHPUnit_Framework_TestCase
+class CertificateTest extends \PHPUnit\Framework\TestCase
 {
     /**
      * @group utilities

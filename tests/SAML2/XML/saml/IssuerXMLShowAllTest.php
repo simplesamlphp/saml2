@@ -12,7 +12,7 @@ use SAML2\XML\saml\Issuer;
 /**
  * Class \SAML2\XML\md\issuerShowAllTest
  */
-class IssuerShowAllTest extends \PHPUnit_Framework_TestCase
+class IssuerShowAllTest extends \PHPUnit\Framework\TestCase
 {
     
     public function testMarshalling()

@@ -10,7 +10,7 @@ use SAML2\Utils;
 /**
  * Class \SAML2\XML\md\IndexedEndpointTypeTest
  */
-class IndexedEndpointTypeTest extends \PHPUnit_Framework_TestCase
+class IndexedEndpointTypeTest extends \PHPUnit\Framework\TestCase
 {
     public function testMarshalling()
     {

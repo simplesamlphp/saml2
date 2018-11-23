@@ -4,10 +4,7 @@ declare(strict_types=1);
 
 namespace SAML2;
 
-use PHPUnit_Framework_Error_Warning;
-use PHPUnit_Framework_TestCase;
-
-class HTTPArtifactTest extends PHPUnit_Framework_TestCase
+class HTTPArtifactTest extends \PHPUnit\Framework\TestCase
 {
     /**
      * The Artifact binding depends on simpleSAMLphp, so currently
@@ -19,7 +16,7 @@ class HTTPArtifactTest extends PHPUnit_Framework_TestCase
         $_REQUEST = ['a' => 'b', 'c' => 'd'];
 
         $ha = new HTTPArtifact();
-        $this->setExpectedException('Exception', 'Missing SAMLart parameter.');
+        $this->setExpectedException(\Exception::class, 'Missing SAMLart parameter.');
         $request = $ha->receive();
     }
 }

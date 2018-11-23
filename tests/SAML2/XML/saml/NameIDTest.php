@@ -12,7 +12,7 @@ use SAML2\XML\saml\NameID;
 /**
  * Class \SAML2\XML\md\NameIDTest
  */
-class NameIDTest extends \PHPUnit_Framework_TestCase
+class NameIDTest extends \PHPUnit\Framework\TestCase
 {
     public function testMarshalling()
     {

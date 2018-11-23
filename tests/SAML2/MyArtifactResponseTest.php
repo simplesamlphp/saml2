@@ -4,9 +4,7 @@ declare(strict_types=1);
 
 namespace SAML2;
 
-use PHPUnit_Framework_TestCase;
-
-class ArtifactResponseTest extends PHPUnit_Framework_TestCase
+class ArtifactResponseTest extends \PHPUnit\Framework\TestCase
 {
     public function testMarshalling()
     {
@@ -66,7 +64,7 @@ XML;
         $document = DOMDocumentFactory::fromString($xml);
         $ar = new ArtifactResponse($document->firstChild);
 
-        $this->assertInstanceOf('SAML2\\ArtifactResponse', $ar);
+        $this->assertInstanceOf(\SAML2\ArtifactResponse::class, $ar);
         $this->assertEquals(true, $ar->isSuccess());
         $this->assertEquals("_d84a49e5958803dedcff4c984c2b0d95", $ar->getId());
 

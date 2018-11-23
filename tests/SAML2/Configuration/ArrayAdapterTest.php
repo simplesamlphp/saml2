@@ -4,7 +4,7 @@ declare(strict_types=1);
 
 namespace SAML2\Configuration;
 
-class ArrayAdapterTest extends \PHPUnit_Framework_TestCase
+class ArrayAdapterTest extends \PHPUnit\Framework\TestCase
 {
     /**
      * @group configuration

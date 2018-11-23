@@ -4,10 +4,7 @@ declare(strict_types=1);
 
 namespace SAML2;
 
-use PHPUnit_Framework_Error_Warning;
-use PHPUnit_Framework_TestCase;
-
-class HTTPPostTest extends PHPUnit_Framework_TestCase
+class HTTPPostTest extends \PHPUnit\Framework\TestCase
 {
     /**
      * test parsing of basic query string with authnrequest and
@@ -20,7 +17,7 @@ class HTTPPostTest extends PHPUnit_Framework_TestCase
 
         $hp = new HTTPPost();
         $request = $hp->receive();
-        $this->assertInstanceOf('SAML2\AuthnRequest', $request);
+        $this->assertInstanceOf(AuthnRequest::class, $request);
         $issuer = $request->getIssuer();
         $this->assertEquals('https://engine.test.surfconext.nl/authentication/sp/metadata', $issuer);
     }
@@ -38,7 +35,7 @@ class HTTPPostTest extends PHPUnit_Framework_TestCase
 
         $hp = new HTTPPost();
         $response = $hp->receive();
-        $this->assertInstanceOf('SAML2\Response', $response);
+        $this->assertInstanceOf(Response::class, $response);
         $issuer = $response->getIssuer();
         $this->assertEquals('https://engine.test.surfconext.nl/authentication/idp/metadata', $issuer);
         $relay = $response->getRelayState();
@@ -55,7 +52,7 @@ class HTTPPostTest extends PHPUnit_Framework_TestCase
         $_POST = [];
         $_POST = ['non' => 'sense'];
         $hp = new HTTPPost();
-        $this->setExpectedException('Exception', 'Missing SAMLRequest or SAMLResponse parameter');
+        $this->setExpectedException(\Exception::class, 'Missing SAMLRequest or SAMLResponse parameter');
         $msg = $hp->receive();
     }
 

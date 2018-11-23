@@ -11,7 +11,7 @@ use SAML2\DOMDocumentFactory;
 use SAML2\Signature\Validator;
 use SAML2\Utilities\Certificate;
 
-class XmlSignatureWrappingTest extends \PHPUnit_Framework_TestCase
+class XmlSignatureWrappingTest extends \PHPUnit\Framework\TestCase
 {
     /**
      * @var \SAML2\Signature\Validator
@@ -36,24 +36,22 @@ class XmlSignatureWrappingTest extends \PHPUnit_Framework_TestCase
     }
 
     /**
-     * @expectedException Exception
-     * @expectedExceptionMessage Reference validation failed
      */
     public function testThatASignatureReferencingAnEmbeddedAssertionIsNotValid()
     {
         $assertion = $this->getSignedAssertionWithEmbeddedAssertionReferencedInSignature();
 
+        $this->setExpectedException(\Exception::class, 'Referece validation failed');
         $this->signatureValidator->hasValidSignature($assertion, $this->identityProviderConfiguration);
     }
 
     /**
-     * @expectedException Exception
-     * @expectedExceptionMessage Reference validation failed
      */
     public function testThatASignatureReferencingAnotherAssertionIsNotValid()
     {
         $assertion = $this->getSignedAssertionWithSignatureThatReferencesAnotherAssertion();
 
+        $this->setExpectedException(\Exception::class, 'Reference validation failed');
         $this->signatureValidator->hasValidSignature($assertion, $this->identityProviderConfiguration);
     }
 

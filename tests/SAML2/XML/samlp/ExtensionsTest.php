@@ -11,7 +11,7 @@ use SAML2\XML\shibmd\Scope;
 /**
  * Class \SAML2\XML\samlp\ExtensionsTest
  */
-class ExtensionsTest extends \PHPUnit_Framework_TestCase
+class ExtensionsTest extends \PHPUnit\Framework\TestCase
 {
     /**
      * @var \DOMElement

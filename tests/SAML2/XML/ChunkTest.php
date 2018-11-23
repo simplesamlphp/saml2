@@ -11,7 +11,7 @@ use SAML2\XML\saml\AttributeValue;
 /**
  * Class \SAML2\XML\ChunkTest
  */
-class ChunkTest extends \PHPUnit_Framework_TestCase
+class ChunkTest extends \PHPUnit\Framework\TestCase
 {
     /**
      * @var \SAML2\XML\Chunk

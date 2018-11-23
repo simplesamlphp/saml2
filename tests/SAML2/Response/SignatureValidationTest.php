@@ -15,7 +15,7 @@ use SAML2\Utilities\Certificate;
 /**
  * Test that ensures that either the response or the assertion(s) or both must be signed.
  */
-class SignatureValidationTest extends \PHPUnit_Framework_TestCase
+class SignatureValidationTest extends \PHPUnit\Framework\TestCase
 {
     /**
      * @var \SAML2\Configuration\IdentityProvider
@@ -128,8 +128,6 @@ class SignatureValidationTest extends \PHPUnit_Framework_TestCase
     }
 
     /**
-     * @expectedException \SAML2\Response\Exception\UnsignedResponseException
-     *
      * @runInSeparateProcess
      * @preserveGlobalState disabled
      */
@@ -140,6 +138,7 @@ class SignatureValidationTest extends \PHPUnit_Framework_TestCase
 
         $processor = new Processor(new \Psr\Log\NullLogger());
 
+        $this->setExpectedException(Exception\UnsignedResponseException::class);
         $processor->process(
             new ServiceProvider([]),
             new IdentityProvider([]),

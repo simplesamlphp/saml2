@@ -9,7 +9,7 @@ use SAML2\DOMDocumentFactory;
 /**
  * Class \SAML2\XML\md\EntityDescriptorTest
  */
-class EntityDescriptorTest extends \PHPUnit_Framework_TestCase
+class EntityDescriptorTest extends \PHPUnit\Framework\TestCase
 {
     public function testMissingAffiliationId()
     {
@@ -22,7 +22,7 @@ class EntityDescriptorTest extends \PHPUnit_Framework_TestCase
 </EntityDescriptor>
 XML
         );
-        $this->setExpectedException('Exception', 'Missing affiliationOwnerID on AffiliationDescriptor.');
+        $this->setExpectedException(\Exception::class, 'Missing affiliationOwnerID on AffiliationDescriptor.');
         new EntityDescriptor($document->firstChild);
     }
 
@@ -37,7 +37,7 @@ XML
 </EntityDescriptor>
 XML
         );
-        $this->setExpectedException('Exception', 'Missing required attribute entityID on EntityDescriptor.');
+        $this->setExpectedException(\Exception::class, 'Missing required attribute entityID on EntityDescriptor.');
         new EntityDescriptor($document->firstChild);
     }
 
@@ -51,7 +51,7 @@ XML
 </EntityDescriptor>
 XML
         );
-        $this->setExpectedException('Exception', 'Missing AffiliateMember in AffiliationDescriptor.');
+        $this->setExpectedException(\Exception::class, 'Missing AffiliateMember in AffiliationDescriptor.');
         new EntityDescriptor($document->firstChild);
     }
 
@@ -63,7 +63,7 @@ XML
 </EntityDescriptor>
 XML
         );
-        $this->setExpectedException('Exception', 'Must have either one of the RoleDescriptors or an AffiliationDescriptor in EntityDescriptor.');
+        $this->setExpectedException(\Exception::class, 'Must have either one of the RoleDescriptors or an AffiliationDescriptor in EntityDescriptor.');
         new EntityDescriptor($document->firstChild);
     }
 
@@ -78,7 +78,7 @@ XML
 </EntityDescriptor>
 XML
         );
-        $this->setExpectedException('Exception', 'Invalid SAML2 timestamp passed to xsDateTimeToTimestamp: asdf');
+        $this->setExpectedException(\Exception::Class, 'Invalid SAML2 timestamp passed to xsDateTimeToTimestamp: asdf');
         new EntityDescriptor($document->firstChild);
     }
 

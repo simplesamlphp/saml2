@@ -14,7 +14,7 @@ use SAML2\DOMDocumentFactory;
  *
  * @package simplesamlphp/saml2
  */
-class ExtensionsTest extends \PHPUnit_Framework_TestCase
+class ExtensionsTest extends \PHPUnit\Framework\TestCase
 {
 
     /**
@@ -61,7 +61,7 @@ XML
             ,
             trim($d->saveXML())
         );
-        $this->assertInstanceOf('SAML2\XML\Chunk', $list[0]);
+        $this->assertInstanceOf(\SAML2\XML\Chunk::class, $list[0]);
     }
 
 
@@ -99,15 +99,15 @@ XML
         );
         $list = Extensions::getList($document->documentElement);
         $this->assertCount(9, $list);
-        $this->assertInstanceOf('\SAML2\XML\shibmd\Scope', $list[0]);
-        $this->assertInstanceOf('\SAML2\XML\mdattr\EntityAttributes', $list[1]);
-        $this->assertInstanceOf('\SAML2\XML\mdrpi\RegistrationInfo', $list[2]);
-        $this->assertInstanceOf('\SAML2\XML\mdrpi\PublicationInfo', $list[3]);
-        $this->assertInstanceOf('\SAML2\XML\mdui\UIInfo', $list[4]);
-        $this->assertInstanceOf('\SAML2\XML\mdui\DiscoHints', $list[5]);
-        $this->assertInstanceOf('\SAML2\XML\alg\DigestMethod', $list[6]);
-        $this->assertInstanceOf('\SAML2\XML\alg\SigningMethod', $list[7]);
-        $this->assertInstanceOf('\SAML2\XML\Chunk', $list[8]);
+        $this->assertInstanceOf(\SAML2\XML\shibmd\Scope::class, $list[0]);
+        $this->assertInstanceOf(\SAML2\XML\mdattr\EntityAttributes::class, $list[1]);
+        $this->assertInstanceOf(\SAML2\XML\mdrpi\RegistrationInfo::class, $list[2]);
+        $this->assertInstanceOf(\SAML2\XML\mdrpi\PublicationInfo::class, $list[3]);
+        $this->assertInstanceOf(\SAML2\XML\mdui\UIInfo::class, $list[4]);
+        $this->assertInstanceOf(\SAML2\XML\mdui\DiscoHints::class, $list[5]);
+        $this->assertInstanceOf(\SAML2\XML\alg\DigestMethod::class, $list[6]);
+        $this->assertInstanceOf(\SAML2\XML\alg\SigningMethod::class, $list[7]);
+        $this->assertInstanceOf(\SAML2\XML\Chunk::class, $list[8]);
     }
 
 

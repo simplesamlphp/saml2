@@ -6,7 +6,7 @@ namespace SAML2\Certificate;
 
 use SAML2\Utilities\Certificate;
 
-class KeyLoaderTest extends \PHPUnit_Framework_TestCase
+class KeyLoaderTest extends \PHPUnit\Framework\TestCase
 {
     /**
      * @var \SAML2\Certificate\KeyLoader
@@ -65,7 +65,7 @@ class KeyLoaderTest extends \PHPUnit_Framework_TestCase
         $loadedKeys = $this->keyLoader->getKeys();
 
         $this->assertCount(1, $loadedKeys);
-        $this->assertInstanceOf('SAML2\Certificate\X509', $loadedKeys->get(0));
+        $this->assertInstanceOf(\SAML2\Certificate\X509::class, $loadedKeys->get(0));
     }
 
 
@@ -91,11 +91,11 @@ class KeyLoaderTest extends \PHPUnit_Framework_TestCase
      * @group certificate
      *
      * @test
-     * @expectedException \SAML2\Certificate\Exception\InvalidCertificateStructureException
      */
     public function loading_a_file_with_the_wrong_format_throws_an_exception()
     {
         $filePath = dirname(__FILE__) . '/File/';
+        $this->setExpectedException(Exception\InvalidCertificateStructureException::class);
         $this->keyLoader->loadCertificateFile($filePath . 'not_a_key.crt');
     }
 
@@ -124,7 +124,6 @@ class KeyLoaderTest extends \PHPUnit_Framework_TestCase
      * @group certificate
      *
      * @test
-     * @expectedException \SAML2\Certificate\Exception\NoKeysFoundException
      */
     public function loading_a_required_certificate_from_an_empty_configuration_throws_an_exception()
     {
@@ -139,6 +138,7 @@ class KeyLoaderTest extends \PHPUnit_Framework_TestCase
             ->once()
             ->andReturnNull();
 
+        $this->setExpectedException(Exception\NoKeysFoundException::class);
         $this->keyLoader->loadKeysFromConfiguration($this->configurationMock, null, true);
     }
 
@@ -172,7 +172,6 @@ class KeyLoaderTest extends \PHPUnit_Framework_TestCase
      * @group certificate
      *
      * @test
-     * @expectedException \SAML2\Certificate\Exception\InvalidCertificateStructureException
      */
     public function loading_an_invalid_certificate_file_from_configuration_throws_exception()
     {
@@ -190,6 +189,7 @@ class KeyLoaderTest extends \PHPUnit_Framework_TestCase
             ->once()
             ->andReturn($file);
 
+        $this->setExpectedException(Exception\InvalidCertificateStructureException::class);
         $loadedKeys = $this->keyLoader->loadKeysFromConfiguration($this->configurationMock);
     }
 }

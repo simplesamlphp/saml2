@@ -12,7 +12,7 @@ use SAML2\Utils;
 /**
  * Class \SAML2\XML\mdattr\EntityAttributesTest
  */
-class EntityAttributesTest extends \PHPUnit_Framework_TestCase
+class EntityAttributesTest extends \PHPUnit\Framework\TestCase
 {
     public function testMarshalling()
     {
@@ -67,11 +67,11 @@ XML
         $entityAttributes = new EntityAttributes($document->firstChild);
         $this->assertCount(5, $entityAttributes->children);
 
-        $this->assertInstanceOf('SAML2\XML\Chunk', $entityAttributes->children[0]);
-        $this->assertInstanceOf('SAML2\XML\saml\Attribute', $entityAttributes->children[1]);
-        $this->assertInstanceOf('SAML2\XML\Chunk', $entityAttributes->children[2]);
-        $this->assertInstanceOf('SAML2\XML\saml\Attribute', $entityAttributes->children[3]);
-        $this->assertInstanceOf('SAML2\XML\saml\Attribute', $entityAttributes->children[4]);
+        $this->assertInstanceOf(\SAML2\XML\Chunk::class, $entityAttributes->children[0]);
+        $this->assertInstanceOf(\SAML2\XML\saml\Attribute::class, $entityAttributes->children[1]);
+        $this->assertInstanceOf(\SAML2\XML\Chunk::class, $entityAttributes->children[2]);
+        $this->assertInstanceOf(\SAML2\XML\saml\Attribute::class, $entityAttributes->children[3]);
+        $this->assertInstanceOf(\SAML2\XML\saml\Attribute::class, $entityAttributes->children[4]);
 
         $this->assertEquals('Assertion', $entityAttributes->children[0]->localName);
         $this->assertEquals('1984-08-26T10:01:30.000Z', $entityAttributes->children[0]->xml->getAttribute('IssueInstant'));

@@ -13,7 +13,7 @@ use SAML2\XML\saml\AttributeValue;
 /**
  * Class \SAML2\XML\md\AttributeTest
  */
-class AttributeValueTest extends \PHPUnit_Framework_TestCase
+class AttributeValueTest extends \PHPUnit\Framework\TestCase
 {
 
     /**

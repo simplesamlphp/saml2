@@ -10,7 +10,7 @@ use SAML2\Utils;
 /**
  * Class \SAML2\XML\mdrpi\RegistrationInfoTest
  */
-class RegistrationInfoTest extends \PHPUnit_Framework_TestCase
+class RegistrationInfoTest extends \PHPUnit\Framework\TestCase
 {
     public function testMarshalling()
     {
@@ -81,7 +81,7 @@ XML
 XML
         );
 
-        $this->setExpectedException('Exception', 'Missing required attribute "registrationAuthority"');
+        $this->setExpectedException(\Exception::class, 'Missing required attribute "registrationAuthority"');
         $registrationInfo = new RegistrationInfo($document->firstChild);
     }
 
@@ -92,7 +92,7 @@ XML
 
         $document = DOMDocumentFactory::fromString('<root />');
 
-        $this->setExpectedException('Exception', 'Missing required registration authority.');
+        $this->setExpectedException(\Exception::class, 'Missing required registration authority.');
         $xml = $registrationInfo->toXML($document->firstChild);
     }
 }

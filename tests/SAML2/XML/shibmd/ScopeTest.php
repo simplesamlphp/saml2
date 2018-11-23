@@ -10,7 +10,7 @@ use SAML2\Utils;
 /**
  * Class \SAML2\XML\shibmd\Scope
  */
-class ScopeTest extends \PHPUnit_Framework_TestCase
+class ScopeTest extends \PHPUnit\Framework\TestCase
 {
     /**
      * Marshalling a scope in literal (non-regexp) form.

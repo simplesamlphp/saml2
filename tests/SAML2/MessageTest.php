@@ -4,9 +4,7 @@ declare(strict_types=1);
 
 namespace SAML2;
 
-use PHPUnit_Framework_TestCase as TestCase;
-
-class MessageTest extends TestCase
+class MessageTest extends \PHPUnit\Framework\TestCase
 {
     /**
      * @group Message
@@ -72,7 +70,7 @@ AUTHNREQUEST
 
         $message = Message::fromXML($authnRequest->documentElement);
         $issuer = $message->getIssuer();
-        $this->assertInstanceOf('SAML2\XML\saml\Issuer', $issuer);
+        $this->assertInstanceOf(\SAML2\XML\saml\Issuer::class, $issuer);
         $this->assertEquals('https://gateway.stepup.org/saml20/sp/metadata', $issuer->getNameQualifier());
         $this->assertEquals('https://spnamequalifier.com', $issuer->getSPNameQualifier());
         $this->assertEquals('ProviderID', $issuer->getSPProvidedID());
@@ -105,7 +103,7 @@ AUTHNREQUEST
 
         $message = Message::fromXML($authnRequest->documentElement);
         $issuer = $message->getIssuer();
-        $this->assertNotInstanceOf('\SAML2\XML\saml\Issuer', $issuer);
+        $this->assertNotInstanceOf(\SAML2\XML\saml\Issuer::class, $issuer);
         $this->assertEquals('https://gateway.stepup.org/saml20/sp/metadata', $issuer);
     }
 
@@ -275,7 +273,7 @@ AUTHNREQUEST
 </saml:Assertion>
 XML;
         $document  = DOMDocumentFactory::fromString($xml);
-        $this->setExpectedException('Exception', "Unknown namespace of SAML message: 'urn:oasis:names:tc:SAML:2.0:assertion'");
+        $this->setExpectedException(\Exception::class, "Unknown namespace of SAML message: 'urn:oasis:names:tc:SAML:2.0:assertion'");
         $message = Message::fromXML($document->documentElement);
     }
 
@@ -301,7 +299,7 @@ XML;
 XML;
 
         $document  = DOMDocumentFactory::fromString($xml);
-        $this->setExpectedException('Exception', "Unsupported version: 2.1");
+        $this->setExpectedException(\Exception::class, "Unsupported version: 2.1");
         $message = Message::fromXML($document->documentElement);
     }
 
@@ -320,7 +318,7 @@ XML;
 </samlp:LogoutRequest>
 XML;
         $document  = DOMDocumentFactory::fromString($xml);
-        $this->setExpectedException('Exception', "Missing ID attribute on SAML message.");
+        $this->setExpectedException(\Exception::class, "Missing ID attribute on SAML message.");
         $message = Message::fromXML($document->documentElement);
     }
 
@@ -381,7 +379,7 @@ XML;
 </samlp:MyFantasy>
 XML;
         $document  = DOMDocumentFactory::fromString($xml);
-        $this->setExpectedException('Exception', "Unknown SAML message: 'MyFantasy'");
+        $this->setExpectedException(\Exception::class, "Unknown SAML message: 'MyFantasy'");
         $message = Message::fromXML($document->documentElement);
     }
 }

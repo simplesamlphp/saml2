@@ -10,7 +10,7 @@ use SAML2\Utils;
 /**
  * Class \SAML2\XML\mdrpi\DiscoHintsTest
  */
-class DiscoHintsTest extends \PHPUnit_Framework_TestCase
+class DiscoHintsTest extends \PHPUnit\Framework\TestCase
 {
     /**
      * Test marshalling a basic DiscoHints element

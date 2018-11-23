@@ -11,7 +11,7 @@ use SAML2\Utils;
 /**
  * Class \SAML2\XML\md\ContactPersonTest
  */
-class ContactPersonTest extends \PHPUnit_Framework_TestCase {
+class ContactPersonTest extends \PHPUnit\Framework\TestCase {
     public function testContactPerson()
     {
         $contactType = "other";
@@ -113,7 +113,7 @@ XML
 XML
         );
 
-        $this->setExpectedException('Exception', 'More than one GivenName in md:ContactPerson');
+        $this->setExpectedException(\Exception::class, 'More than one GivenName in md:ContactPerson');
 
         $contactPerson = new ContactPerson($document->getElementsByTagName('ContactPerson')->item(0));
     }
@@ -154,7 +154,7 @@ XML
 XML
         );
 
-        $this->setExpectedException('Exception', 'Missing contactType on ContactPerson.');
+        $this->setExpectedException(\Exception::class, 'Missing contactType on ContactPerson.');
 
         $contactPerson = new ContactPerson($document->getElementsByTagName('ContactPerson')->item(0));
     }

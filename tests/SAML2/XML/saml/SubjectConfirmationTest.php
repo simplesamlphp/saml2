@@ -11,7 +11,7 @@ use SAML2\Utils;
 /**
  * Class \SAML2\XML\saml\SubjectConfirmationTest
  */
-class SubjectConfirmationTest extends \PHPUnit_Framework_TestCase
+class SubjectConfirmationTest extends \PHPUnit\Framework\TestCase
 {
     public function testMarshalling()
     {
@@ -63,7 +63,7 @@ XML
 XML
         );
 
-        $this->setExpectedException('Exception', 'SubjectConfirmation element without Method attribute');
+        $this->setExpectedException(\Exception::class, 'SubjectConfirmation element without Method attribute');
         $subjectConfirmation = new SubjectConfirmation($document->firstChild);
     }
 
@@ -80,7 +80,7 @@ XML
 XML
         );
 
-        $this->setExpectedException('Exception', 'More than one NameID in a SubjectConfirmation element');
+        $this->setExpectedException(\Exception::class, 'More than one NameID in a SubjectConfirmation element');
         $subjectConfirmation = new SubjectConfirmation($document->firstChild);
     }
 
@@ -97,7 +97,7 @@ XML
 XML
         );
 
-        $this->setExpectedException('Exception', 'More than one SubjectConfirmationData child in a SubjectConfirmation element');
+        $this->setExpectedException(\Exception::class, 'More than one SubjectConfirmationData child in a SubjectConfirmation element');
         $subjectConfirmation = new SubjectConfirmation($document->firstChild);
     }
 }

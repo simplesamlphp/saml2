@@ -7,8 +7,7 @@ namespace SAML2\Assertion\Validation\ConstraintValidator;
 use Mockery as m;
 use SAML2\Assertion\Validation\Result;
 
-class SubjectConfirmationResponseToMatchesTest extends
-    \PHPUnit_Framework_TestCase
+class SubjectConfirmationResponseToMatchesTest extends \PHPUnit\Framework\TestCase
 {
     /**
      * @var \Mockery\MockInterface

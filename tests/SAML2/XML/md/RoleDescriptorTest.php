@@ -10,7 +10,7 @@ use SAML2\Utils;
 
 require 'RoleDescriptorMock.php';
 
-class RoleDescriptorTest extends \PHPUnit_Framework_TestCase
+class RoleDescriptorTest extends \PHPUnit\Framework\TestCase
 {
     public function testMarshalling()
     {

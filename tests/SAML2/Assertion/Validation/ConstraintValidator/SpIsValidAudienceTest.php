@@ -11,7 +11,7 @@ use SAML2\Assertion\Validation\Result;
  * Because we're mocking a static call, we have to run it in separate processes so as to no contaminate the other
  * tests.
  */
-class SpIsValidAudienceTest extends \PHPUnit_Framework_TestCase
+class SpIsValidAudienceTest extends \PHPUnit\Framework\TestCase
 {
     /**
      * @var \Mockery\MockInterface

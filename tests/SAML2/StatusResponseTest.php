@@ -7,7 +7,7 @@ namespace SAML2;
 /**
  * Class \SAML2\StatusResponseTest
  */
-class StatusResponseTest extends \PHPUnit_Framework_TestCase
+class StatusResponseTest extends \PHPUnit\Framework\TestCase
 {
     public function testMarshalling()
     {
@@ -169,7 +169,7 @@ STATUSXML
      */
     public function testNoStatusElementThrowsException()
     {
-        $this->setExpectedException('Exception', 'Missing status code on response');
+        $this->setExpectedException(\Exception::class, 'Missing status code on response');
 
         $xml = <<<XML
 <samlp:Response xmlns:samlp="urn:oasis:names:tc:SAML:2.0:protocol"
@@ -200,7 +200,7 @@ XML;
      */
     public function testNoStatusCodeThrowsException()
     {
-        $this->setExpectedException('Exception', 'Missing status code in status element');
+        $this->setExpectedException(\Exception::class, 'Missing status code in status element');
 
         $xml = <<<XML
 <samlp:Response xmlns:samlp="urn:oasis:names:tc:SAML:2.0:protocol"

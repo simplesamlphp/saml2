@@ -9,7 +9,7 @@ use SAML2\XML\Chunk;
 /**
  * Class \SAML2\AssertionTest
  */
-class AssertionTest extends \PHPUnit_Framework_TestCase
+class AssertionTest extends \PHPUnit\Framework\TestCase
 {
     /**
      * Test to build a basic assertion
@@ -265,7 +265,7 @@ XML;
             "name3" => "xs:decimal"
         ]);
 
-        $this->setExpectedException('Exception', "Array of value types and array of values have different size for attribute 'name1'");
+        $this->setExpectedException(\Exception::class, "Array of value types and array of values have different size for attribute 'name1'");
         $assertionElement = $assertion->toXML()->ownerDocument->saveXML();
     }
 
@@ -514,7 +514,7 @@ XML
         $sc = $assertion->getSubjectConfirmation();
 
         $this->assertCount(1, $sc);
-        $this->assertInstanceOf('SAML2\XML\saml\SubjectConfirmation', $sc[0]);
+        $this->assertInstanceOf(\SAML2\XML\saml\SubjectConfirmation::class, $sc[0]);
         $this->assertEquals('urn:oasis:names:tc:SAML:2.0:cm:bearer', $sc[0]->Method);
         $this->assertEquals('https://example.org/authentication/consume-assertion', $sc[0]->SubjectConfirmationData->Recipient);
         $this->assertEquals(1267796526, $sc[0]->SubjectConfirmationData->NotOnOrAfter);
@@ -758,8 +758,8 @@ XML;
         $maceValue = $attributes['urn:mace:dir:attribute-def:eduPersonTargetedID'][0];
         $oidValue = $attributes['urn:oid:1.3.6.1.4.1.5923.1.1.1.10'][0];
 
-        $this->assertInstanceOf('SAML2\XML\saml\NameID', $maceValue);
-        $this->assertInstanceOf('SAML2\XML\saml\NameID', $oidValue);
+        $this->assertInstanceOf(\SAML2\XML\saml\NameID::class, $maceValue);
+        $this->assertInstanceOf(\SAML2\XML\saml\NameID::class, $oidValue);
         $this->assertEquals('abcd-some-value-xyz', $maceValue->getValue());
         $this->assertEquals('abcd-some-value-xyz', $oidValue->getValue());
         $this->assertEquals('urn:oasis:names:tc:SAML:2.0:nameid-format:persistent', $maceValue->getFormat());
@@ -822,8 +822,8 @@ XML;
         $attributes = $assertion->getAttributes();
         $maceValue = $attributes['urn:mace:dir:attribute-def:eduPersonTargetedID'][0];
         $oidValue = $attributes['urn:oid:1.3.6.1.4.1.5923.1.1.1.10'][0];
-        $this->assertInstanceOf('SAML2\XML\saml\NameID', $maceValue);
-        $this->assertInstanceOf('SAML2\XML\saml\NameID', $oidValue);
+        $this->assertInstanceOf(\SAML2\XML\saml\NameID::class, $maceValue);
+        $this->assertInstanceOf(\SAML2\XML\saml\NameID::class, $oidValue);
         $this->assertEquals('string-23', $maceValue->getValue());
         $this->assertEquals('string-12', $oidValue->getValue());
     }
@@ -869,8 +869,8 @@ XML;
         $maceFirstValue = $attributes['urn:mace:dir:attribute-def:eduPersonTargetedID'][0];
         $maceSecondValue = $attributes['urn:mace:dir:attribute-def:eduPersonTargetedID'][1];
 
-        $this->assertInstanceOf('SAML2\XML\saml\NameID', $maceFirstValue);
-        $this->assertInstanceOf('SAML2\XML\saml\NameID', $maceSecondValue);
+        $this->assertInstanceOf(\SAML2\XML\saml\NameID::class, $maceFirstValue);
+        $this->assertInstanceOf(\SAML2\XML\saml\NameID::class, $maceSecondValue);
         $this->assertEquals('abcd-some-value-xyz', $maceFirstValue->getValue());
         $this->assertEquals('xyz-some-value-abcd', $maceSecondValue->getValue());
         $this->assertEquals('urn:oasis:names:tc:SAML:2.0:nameid-format:persistent', $maceFirstValue->getFormat());
@@ -911,7 +911,7 @@ XML;
 
         $attributes = $assertion->getAttributes();
         $this->assertInstanceOf(
-            '\DOMNodeList',
+            \DOMNodeList::class,
             $attributes['urn:some:custom:outer:element'][0]
         );
         $this->assertXmlStringEqualsXmlString($xml, $assertion->toXML()->ownerDocument->saveXML());
@@ -994,7 +994,7 @@ XML;
 
         $attributes = $assertionToVerify->getAttributes();
         $this->assertInstanceOf(
-            '\DOMNodeList',
+            \DOMNodeList::class,
             $attributes['urn:some:custom:outer:element'][0]
         );
         $this->assertXmlStringEqualsXmlString($xml, $assertionToVerify->toXML()->ownerDocument->saveXML());
@@ -1101,7 +1101,7 @@ XML;
 
         $publicKey = CertificatesMock::getPublicKeySha256();
 
-        $this->setExpectedException('Exception', 'Reference validation failed');
+        $this->setExpectedException(\Exception::class, 'Reference validation failed');
         $assertion = new Assertion($doc->firstChild);
     }
 
@@ -1117,7 +1117,7 @@ XML;
         $publicKey = CertificatesMock::getPublicKey2Sha256();
 
         $assertion = new Assertion($doc->firstChild);
-        $this->setExpectedException('Exception', 'Unable to validate Signature');
+        $this->setExpectedException(\Exception::class, 'Unable to validate Signature');
         $assertion->validate($publicKey);
     }
 
@@ -1133,7 +1133,7 @@ XML;
         $publicKey = CertificatesMock::getPublicKeyDSAasRSA();
 
         $assertion = new Assertion($doc->firstChild);
-        $this->setExpectedException('Exception', 'Unable to validate Signature');
+        $this->setExpectedException(\Exception::class, 'Unable to validate Signature');
         $assertion->validate($publicKey);
     }
 
@@ -1204,7 +1204,7 @@ XML;
 </saml:Assertion>
 XML;
         $document  = DOMDocumentFactory::fromString($xml);
-        $this->setExpectedException('Exception', 'Unsupported version: 1.3');
+        $this->setExpectedException(\Exception::class, 'Unsupported version: 1.3');
         $assertion = new Assertion($document->firstChild);
     }
 
@@ -1235,7 +1235,7 @@ XML;
 </saml:Assertion>
 XML;
         $document  = DOMDocumentFactory::fromString($xml);
-        $this->setExpectedException('Exception', 'Missing ID attribute on SAML assertion');
+        $this->setExpectedException(\Exception::class, 'Missing ID attribute on SAML assertion');
         $assertion = new Assertion($document->firstChild);
     }
 
@@ -1266,7 +1266,7 @@ XML;
 </saml:Assertion>
 XML;
         $document  = DOMDocumentFactory::fromString($xml);
-        $this->setExpectedException('Exception', 'Missing <saml:Issuer> in assertion');
+        $this->setExpectedException(\Exception::class, 'Missing <saml:Issuer> in assertion');
         $assertion = new Assertion($document->firstChild);
     }
 
@@ -1300,7 +1300,7 @@ XML;
 
         $document = DOMDocumentFactory::fromString($xml);
 
-        $this->setExpectedException('Exception', 'More than one <saml:Subject> in <saml:Assertion>');
+        $this->setExpectedException(\Exception::class, 'More than one <saml:Subject> in <saml:Assertion>');
         $assertion = new Assertion($document->documentElement);
     }
 
@@ -1332,7 +1332,7 @@ XML;
 
         $document = DOMDocumentFactory::fromString($xml);
 
-        $this->setExpectedException('Exception', 'More than one <saml:NameID> or <saml:EncryptedID> in <saml:Subject>');
+        $this->setExpectedException(\Exception::class, 'More than one <saml:NameID> or <saml:EncryptedID> in <saml:Subject>');
         $assertion = new Assertion($document->documentElement);
     }
 
@@ -1363,7 +1363,7 @@ XML;
 
         $document = DOMDocumentFactory::fromString($xml);
 
-        $this->setExpectedException('Exception', 'Missing <saml:SubjectConfirmation> in <saml:Subject>');
+        $this->setExpectedException(\Exception::class, 'Missing <saml:SubjectConfirmation> in <saml:Subject>');
         $assertion = new Assertion($document->documentElement);
     }
 
@@ -1399,7 +1399,7 @@ XML;
 XML;
         $document  = DOMDocumentFactory::fromString($xml);
 
-        $this->setExpectedException('Exception', 'More than one <saml:Conditions> in <saml:Assertion>');
+        $this->setExpectedException(\Exception::class, 'More than one <saml:Conditions> in <saml:Assertion>');
         $assertion = new Assertion($document->firstChild);
     }
 
@@ -1432,7 +1432,7 @@ XML;
 XML;
         $document  = DOMDocumentFactory::fromString($xml);
 
-        $this->setExpectedException('Exception', 'Unknown namespace of condition:');
+        $this->setExpectedException(\Exception::class, 'Unknown namespace of condition:');
         $assertion = new Assertion($document->firstChild);
     }
 
@@ -1512,7 +1512,7 @@ XML;
 XML;
         $document  = DOMDocumentFactory::fromString($xml);
 
-        $this->setExpectedException('Exception', "Unknown condition: 'OtherCondition'");
+        $this->setExpectedException(\Exception::class, "Unknown condition: 'OtherCondition'");
         $assertion = new Assertion($document->firstChild);
     }
 
@@ -1544,7 +1544,7 @@ XML;
 XML;
         $document  = DOMDocumentFactory::fromString($xml);
 
-        $this->setExpectedException('Exception', "More than one <saml:AuthnStatement> in <saml:Assertion> not supported");
+        $this->setExpectedException(\Exception::class, "More than one <saml:AuthnStatement> in <saml:Assertion> not supported");
         $assertion = new Assertion($document->firstChild);
     }
 
@@ -1571,7 +1571,7 @@ XML;
 XML;
         $document  = DOMDocumentFactory::fromString($xml);
 
-        $this->setExpectedException('Exception', "Missing required AuthnInstant attribute on <saml:AuthnStatement>");
+        $this->setExpectedException(\Exception::class, "Missing required AuthnInstant attribute on <saml:AuthnStatement>");
         $assertion = new Assertion($document->firstChild);
     }
 
@@ -1601,7 +1601,7 @@ XML;
 XML;
         $document  = DOMDocumentFactory::fromString($xml);
 
-        $this->setExpectedException('Exception', "More than one <saml:AuthnContext> in <saml:AuthnStatement>");
+        $this->setExpectedException(\Exception::class, "More than one <saml:AuthnContext> in <saml:AuthnStatement>");
         $assertion = new Assertion($document->firstChild);
     }
 
@@ -1623,7 +1623,7 @@ XML;
 XML;
         $document  = DOMDocumentFactory::fromString($xml);
 
-        $this->setExpectedException('Exception', "Missing required <saml:AuthnContext> in <saml:AuthnStatement>");
+        $this->setExpectedException(\Exception::class, "Missing required <saml:AuthnContext> in <saml:AuthnStatement>");
         $assertion = new Assertion($document->firstChild);
     }
 
@@ -1650,7 +1650,7 @@ XML;
 XML;
         $document  = DOMDocumentFactory::fromString($xml);
 
-        $this->setExpectedException('Exception', "More than one <saml:AuthnContextDeclRef> found");
+        $this->setExpectedException(\Exception::class, "More than one <saml:AuthnContextDeclRef> found");
         $assertion = new Assertion($document->firstChild);
     }
 
@@ -1682,7 +1682,7 @@ XML;
 XML;
         $document  = DOMDocumentFactory::fromString($xml);
 
-        $this->setExpectedException('Exception', "More than one <saml:AuthnContextDecl> found?");
+        $this->setExpectedException(\Exception::class, "More than one <saml:AuthnContextDecl> found?");
         $assertion = new Assertion($document->firstChild);
     }
 
@@ -1709,7 +1709,7 @@ XML;
 XML;
         $document  = DOMDocumentFactory::fromString($xml);
 
-        $this->setExpectedException('Exception', "More than one <saml:AuthnContextClassRef> in <saml:AuthnContext>");
+        $this->setExpectedException(\Exception::class, "More than one <saml:AuthnContextClassRef> in <saml:AuthnContext>");
         $assertion = new Assertion($document->firstChild);
     }
 
@@ -1737,7 +1737,7 @@ XML;
 XML
         );
 
-        $this->setExpectedException('Exception', "Missing name on <saml:Attribute> element");
+        $this->setExpectedException(\Exception::class, "Missing name on <saml:Attribute> element");
         $assertion = new Assertion($document->firstChild);
     }
 
@@ -1890,7 +1890,7 @@ XML;
         $document = DOMDocumentFactory::fromString($xml);
 
         $assertion = new Assertion($document->documentElement);
-        $this->setExpectedException('Exception', "Attempted to retrieve encrypted NameID without decrypting it first");
+        $this->setExpectedException(\Exception::class, "Attempted to retrieve encrypted NameID without decrypting it first");
         $assertion->getNameID();
     }
 

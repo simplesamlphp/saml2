@@ -5,14 +5,10 @@ declare(strict_types=1);
 namespace SAML2\XML\ecp;
 
 use stdClass;
-use DOMDocument;
-use DOMElement;
 
 use SAML2\Constants;
 
-use PHPUnit_Framework_TestCase;
-
-class ResponseTest extends PHPUnit_Framework_TestCase
+class ResponseTest extends \PHPUnit\Framework\TestCase
 {
     public function testConstructorWithoutXML()
     {
@@ -37,7 +33,7 @@ class ResponseTest extends PHPUnit_Framework_TestCase
      */
     public function testToXMLInvalidACS($url)
     {
-        $this->setExpectedException('InvalidArgumentException', 'AssertionConsumerServiceURL');
+        $this->setExpectedException(\InvalidArgumentException::class, 'AssertionConsumerServiceURL');
 
         $response = new Response;
         $response->AssertionConsumerServiceURL = $url;
@@ -46,14 +42,14 @@ class ResponseTest extends PHPUnit_Framework_TestCase
 
     public function testToXMLReturnsResponse()
     {
-        $doc = new DOMDocument;
+        $doc = new \DOMDocument;
         $element = $doc->createElement('Foobar');
 
         $response = new Response;
         $response->AssertionConsumerServiceURL = 'https://example.com/ACS';
         $return = $response->toXML($element);
 
-        $this->assertInstanceOf('DOMElement', $return);
+        $this->assertInstanceOf(\DOMElement::class, $return);
         $this->assertEquals('ecp:Response', $return->tagName);
     }
 
@@ -61,7 +57,7 @@ class ResponseTest extends PHPUnit_Framework_TestCase
     {
         $acs = 'https://example.com/ACS';
 
-        $doc = new DOMDocument;
+        $doc = new \DOMDocument;
         $element = $doc->createElement('Foobar');
 
         $response = new Response;
@@ -78,7 +74,7 @@ class ResponseTest extends PHPUnit_Framework_TestCase
 
     public function testToXMLResponseAppended()
     {
-        $doc = new DOMDocument;
+        $doc = new \DOMDocument;
         $element = $doc->createElement('Foobar');
 
         $response = new Response;

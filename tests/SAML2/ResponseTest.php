@@ -7,7 +7,7 @@ namespace SAML2;
 /**
  * Class \SAML2\ResponseTest
  */
-class ResponseTest extends \PHPUnit_Framework_TestCase
+class ResponseTest extends \PHPUnit\Framework\TestCase
 {
     public function testMarshalling()
     {

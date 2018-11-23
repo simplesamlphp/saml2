@@ -7,7 +7,7 @@ namespace SAML2;
 /**
  * Class \SAML2\LogoutResponseTest
  */
-class LogoutResponseTest extends \PHPUnit_Framework_TestCase
+class LogoutResponseTest extends \PHPUnit\Framework\TestCase
 {
     public function testLogoutFailed()
     {

@@ -10,7 +10,7 @@ use SAML2\Utils;
 /**
  * Class \SAML2\XML\mdrpi\UIInfoTest
  */
-class UIInfoTest extends \PHPUnit_Framework_TestCase
+class UIInfoTest extends \PHPUnit\Framework\TestCase
 {
     /**
      * Test creating a basic UIInfo element.

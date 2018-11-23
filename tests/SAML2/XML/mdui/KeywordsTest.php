@@ -10,7 +10,7 @@ use SAML2\Utils;
 /**
  * Class \SAML2\XML\mdrpi\KeywordsTest
  */
-class KeywordsTest extends \PHPUnit_Framework_TestCase
+class KeywordsTest extends \PHPUnit\Framework\TestCase
 {
     /**
      * Test creating a basic Keywords element.
@@ -45,7 +45,7 @@ class KeywordsTest extends \PHPUnit_Framework_TestCase
 
         $document = DOMDocumentFactory::fromString('<root />');
         
-        $this->setExpectedException('Exception', 'Keywords may not contain a "+" character');
+        $this->setExpectedException(\Exception::class, 'Keywords may not contain a "+" character');
         $xml = $keywords->toXML($document->firstChild);
     }
 
@@ -77,7 +77,7 @@ XML
 XML
         );
 
-        $this->setExpectedException('Exception', 'Missing lang on Keywords');
+        $this->setExpectedException(\Exception::class, 'Missing lang on Keywords');
         $keywords = new Keywords($document->firstChild);
     }
 
@@ -91,7 +91,7 @@ XML
 XML
         );
 
-        $this->setExpectedException('Exception', 'Missing value for Keywords');
+        $this->setExpectedException(\Exception::class, 'Missing value for Keywords');
         $keywords = new Keywords($document->firstChild);
     }
 }

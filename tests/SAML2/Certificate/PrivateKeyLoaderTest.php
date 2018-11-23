@@ -4,9 +4,7 @@ declare(strict_types=1);
 
 namespace SAML2\Certificate;
 
-use SAML2\Configuration\PrivateKey;
-
-class PrivateKeyLoaderTest extends \PHPUnit_Framework_TestCase
+class PrivateKeyLoaderTest extends \PHPUnit\Framework\TestCase
 {
     /**
      * @var \SAML2\Certificate\PrivateKeyLoader
@@ -26,11 +24,11 @@ class PrivateKeyLoaderTest extends \PHPUnit_Framework_TestCase
      * @param \SAML2\Configuration\PrivateKey $configuredKey
      */
     public function loading_a_configured_private_key_returns_a_certificate_private_key(
-        PrivateKey $configuredKey
+        \SAML2\Configuration\PrivateKey $configuredKey
     ) {
         $resultingKey = $this->privateKeyLoader->loadPrivateKey($configuredKey);
 
-        $this->assertInstanceOf('\SAML2\Certificate\PrivateKey', $resultingKey);
+        $this->assertInstanceOf(\SAML2\Certificate\PrivateKey::class, $resultingKey);
         $this->assertEquals($resultingKey->getKeyAsString(), "This would normally contain the private key data.\n");
         $this->assertEquals($resultingKey->getPassphrase(), $configuredKey->getPassPhrase());
     }
@@ -44,15 +42,15 @@ class PrivateKeyLoaderTest extends \PHPUnit_Framework_TestCase
     {
         return [
             'no passphrase'   => [
-                new PrivateKey(
+                new \SAML2\Configuration\PrivateKey(
                     dirname(__FILE__) . '/File/a_fake_private_key_file.pem',
-                    PrivateKey::NAME_DEFAULT
+                    \SAML2\Configuration\PrivateKey::NAME_DEFAULT
                 )
             ],
             'with passphrase' => [
-                new PrivateKey(
+                new \SAML2\Configuration\PrivateKey(
                     dirname(__FILE__) . '/File/a_fake_private_key_file.pem',
-                    PrivateKey::NAME_DEFAULT,
+                    \SAML2\Configuration\PrivateKey::NAME_DEFAULT,
                     'foo bar baz'
                 )
             ],

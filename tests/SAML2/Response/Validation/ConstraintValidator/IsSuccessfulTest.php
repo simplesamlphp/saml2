@@ -7,7 +7,7 @@ namespace SAML2\Response\Validation\ConstraintValidator;
 use SAML2\Constants;
 use SAML2\Response\Validation\Result;
 
-class IsSuccessfulTest extends \PHPUnit_Framework_TestCase
+class IsSuccessfulTest extends \PHPUnit\Framework\TestCase
 {
     /**
      * @var \Mockery\MockInterface

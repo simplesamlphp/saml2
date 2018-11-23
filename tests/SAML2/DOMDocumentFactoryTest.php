@@ -4,14 +4,14 @@ declare(strict_types=1);
 
 namespace SAML2;
 
-class DOMDocumentFactoryTest extends \PHPUnit_Framework_TestCase
+class DOMDocumentFactoryTest extends \PHPUnit\Framework\TestCase
 {
     /**
      * @group domdocument
-     * @expectedException \SAML2\Exception\UnparseableXmlException
      */
     public function testNotXmlStringRaisesAnException()
     {
+        $this->setExpectedException(Exception\UnparseableXmlException::class);
         DOMDocumentFactory::fromString('this is not xml');
     }
 
@@ -28,23 +28,22 @@ class DOMDocumentFactoryTest extends \PHPUnit_Framework_TestCase
     }
 
     /**
-     * @expectedException \SAML2\Exception\InvalidArgumentException
+     * @group domdocument
      */
     public function testFileThatDoesNotExistIsNotAccepted()
     {
         $filename = 'DoesNotExist.ext';
-
+        $this->setExpectedException(Exception\InvalidArgumentException::class);
         DOMDocumentFactory::fromFile($filename);
     }
 
     /**
      * @group domdocument
-     * @expectedException \SAML2\Exception\RuntimeException
      */
     public function testFileThatDoesNotContainXMLCannotBeLoaded()
     {
         $file = realpath(dirname(__FILE__)) . DIRECTORY_SEPARATOR . 'domdocument_invalid_xml.xml';
-
+        $this->setExpectedException(Exception\RuntimeException::class);
         DOMDocumentFactory::fromFile($file);
     }
 
@@ -62,44 +61,40 @@ class DOMDocumentFactoryTest extends \PHPUnit_Framework_TestCase
 
     /**
      * @group                    domdocument
-     * @expectedException        \SAML2\Exception\RuntimeException
-     * @expectedExceptionMessage Dangerous XML detected, DOCTYPE nodes are not allowed in the XML body
      */
     public function testFileThatContainsDocTypeIsNotAccepted()
     {
         $file = realpath(dirname(__FILE__)) . DIRECTORY_SEPARATOR . 'domdocument_doctype.xml';
+        $this->setExpectedException(Exception\RuntimeException::class, 'Dangerous XML detected, DOCTYPE nodes are not allowed in the XML body');
         DOMDocumentFactory::fromFile($file);
     }
 
     /**
      * @group                    domdocument
-     * @expectedException        \SAML2\Exception\RuntimeException
-     * @expectedExceptionMessage Dangerous XML detected, DOCTYPE nodes are not allowed in the XML body
      */
     public function testStringThatContainsDocTypeIsNotAccepted()
     {
         $xml = '<!DOCTYPE foo [<!ELEMENT foo ANY > <!ENTITY xxe SYSTEM "file:///dev/random" >]><foo />';
+        $this->setExpectedException(Exception\RuntimeException::class, 'Dangerous XML detected, DOCTYPE nodes are not allowed in the XML body');
         DOMDocumentFactory::fromString($xml);
     }
 
     /**
      * @group                    domdocument
-     * @expectedException        \SAML2\Exception\RuntimeException
-     * @expectedExceptionMessage does not have content
      */
     public function testEmptyFileIsNotValid()
     {
         $file = realpath(dirname(__FILE__)) . DIRECTORY_SEPARATOR . 'domdocument_empty.xml';
+        $this->setExpectedException(Exception\RuntimeException::class, 'does not have content');
         DOMDocumentFactory::fromFile($file);
     }
 
     /**
      * @group                    domdocument
-     * @expectedException        \SAML2\Exception\InvalidArgumentException
-     * @expectedExceptionMessage Invalid Argument type: "non-empty string" expected, "string" given
      */
     public function testEmptyStringIsNotValid()
     {
+        $this->setExpectedException(Exception\InvalidArgumentException::class, 'Invalid Argument type: "non-empty string" expected, "string" given');
         DOMDocumentFactory::fromString("");
     }
 }

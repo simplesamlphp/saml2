@@ -4,7 +4,7 @@ declare(strict_types=1);
 
 namespace SAML2\Configuration;
 
-class DestinationTest extends \PHPUnit_Framework_TestCase
+class DestinationTest extends \PHPUnit\Framework\TestCase
 {
     /**
      * @group configuration

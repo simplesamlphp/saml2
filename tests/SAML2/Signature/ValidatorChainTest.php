@@ -7,7 +7,7 @@ namespace SAML2\Signature;
 use SAML2\Configuration\IdentityProvider;
 use SAML2\Response;
 
-class ValidatorChainTest extends \PHPUnit_Framework_TestCase
+class ValidatorChainTest extends \PHPUnit\Framework\TestCase
 {
     /**
      * @var \SAML2\Signature\ValidatorChain
@@ -23,13 +23,13 @@ class ValidatorChainTest extends \PHPUnit_Framework_TestCase
      * @group signature
      *
      * @test
-     * @expectedException \SAML2\Signature\MissingConfigurationException
      */
     public function if_no_validators_can_validate_an_exception_is_thrown()
     {
         $this->chain->appendValidator(new MockChainedValidator(false, true));
         $this->chain->appendValidator(new MockChainedValidator(false, true));
 
+        $this->setExpectedException(MissingConfigurationException::class);
         $this->chain->hasValidSignature(new Response(), new IdentityProvider([]));
     }
 
