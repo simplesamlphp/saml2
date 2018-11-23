@@ -2,7 +2,7 @@
 
 declare(strict_types=1);
 
-namespace SAML2;
+namespace SAML2\Tests;
 
 use RobRichards\XMLSecLibs\XMLSecurityKey;
 

@@ -2,9 +2,10 @@
 
 declare(strict_types=1);
 
-namespace SAML2\Assertion\Validation\ConstraintValidator;
+namespace SAML2\Tests\Assertion\Validation\ConstraintValidator;
 
 use SAML2\Assertion\Validation\Result;
+use SAML2\Assertion\Validation\ConstraintValidator\SubjectConfirmationResponseToMatches;
 
 class SubjectConfirmationResponseToMatchesTest extends \Mockery\Adapter\Phpunit\MockeryTestCase
 {
@@ -26,10 +27,10 @@ class SubjectConfirmationResponseToMatchesTest extends \Mockery\Adapter\Phpunit\
     public function setUp()
     {
         parent::setUp();
-        $this->subjectConfirmation                          = \Mockery::mock('SAML2\XML\saml\SubjectConfirmation');
-        $this->subjectConfirmationData                      = \Mockery::mock('SAML2\XML\saml\SubjectConfirmationData');
+        $this->subjectConfirmation                          = \Mockery::mock(\SAML2\XML\saml\SubjectConfirmation::class);
+        $this->subjectConfirmationData                      = \Mockery::mock(\SAML2\XML\saml\SubjectConfirmationData::class);
         $this->subjectConfirmation->SubjectConfirmationData = $this->subjectConfirmationData;
-        $this->response                                     = \Mockery::mock('SAML2\Response');
+        $this->response                                     = \Mockery::mock(\SAML2\Response::class);
     }
 
     /**

@@ -2,9 +2,10 @@
 
 declare(strict_types=1);
 
-namespace SAML2\XML\mdui;
+namespace SAML2\Tests\XML\mdui;
 
 use SAML2\DOMDocumentFactory;
+use SAML2\XML\mdui\Logo;
 use SAML2\Utils;
 
 /**

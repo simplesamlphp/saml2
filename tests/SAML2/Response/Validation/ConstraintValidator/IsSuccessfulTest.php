@@ -2,10 +2,11 @@
 
 declare(strict_types=1);
 
-namespace SAML2\Response\Validation\ConstraintValidator;
+namespace SAML2\Tests\Response\Validation\ConstraintValidator;
 
 use SAML2\Constants;
 use SAML2\Response\Validation\Result;
+use SAML2\Response\Validation\ConstraintValidator\IsSuccessful;
 
 class IsSuccessfulTest extends \Mockery\Adapter\Phpunit\MockeryTestCase
 {

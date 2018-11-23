@@ -2,11 +2,12 @@
 
 declare(strict_types=1);
 
-namespace SAML2\XML\ecp;
+namespace SAML2\Tests\XML\ecp;
 
 use stdClass;
 
 use SAML2\Constants;
+use SAML2\XML\ecp\Response;
 
 class ResponseTest extends \PHPUnit\Framework\TestCase
 {

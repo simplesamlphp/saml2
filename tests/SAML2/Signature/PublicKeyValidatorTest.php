@@ -2,17 +2,20 @@
 
 declare(strict_types=1);
 
-namespace SAML2\Signature;
+namespace SAML2\Tests\Signature;
 
+use SAML2\Tests\CertificatesMock;
 use SAML2\Certificate\Key;
 use SAML2\Certificate\KeyCollection;
 use SAML2\Certificate\KeyLoader;
-use SAML2\CertificatesMock;
 use SAML2\Configuration\IdentityProvider;
 use SAML2\DOMDocumentFactory;
 use SAML2\Response;
-use SAML2\SimpleTestLogger;
+use SAML2\Tests\SimpleTestLogger;
 use SAML2\Utilities\Certificate;
+use SAML2\Signature\PublicKeyValidator;
+use SAML2\Configuration\CertificateProvider;
+use SAML2\SignedElement;
 
 class PublicKeyValidatorTest extends \Mockery\Adapter\Phpunit\MockeryTestCase
 {
@@ -21,8 +24,8 @@ class PublicKeyValidatorTest extends \Mockery\Adapter\Phpunit\MockeryTestCase
 
     public function setUp()
     {
-        $this->mockConfiguration = \Mockery::mock('SAML2\Configuration\CertificateProvider');
-        $this->mockSignedElement = \Mockery::mock('SAML2\SignedElement');
+        $this->mockConfiguration = \Mockery::mock(CertificateProvider::class);
+        $this->mockSignedElement = \Mockery::mock(SignedElement::class);
     }
 
     /**
@@ -97,7 +100,7 @@ class PublicKeyValidatorTest extends \Mockery\Adapter\Phpunit\MockeryTestCase
 
     private function prepareKeyLoader($returnValue)
     {
-        return \Mockery::mock('SAML2\Certificate\KeyLoader')
+        return \Mockery::mock(KeyLoader::class)
             ->shouldReceive('extractPublicKeys')
             ->andReturn($returnValue)
             ->getMock();

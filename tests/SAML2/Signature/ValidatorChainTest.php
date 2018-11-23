@@ -2,10 +2,12 @@
 
 declare(strict_types=1);
 
-namespace SAML2\Signature;
+namespace SAML2\Tests\Signature;
 
 use SAML2\Configuration\IdentityProvider;
+use SAML2\Signature\ValidatorChain;
 use SAML2\Response;
+use SAML2\Signature\MissingConfigurationException;
 
 class ValidatorChainTest extends \PHPUnit\Framework\TestCase
 {

@@ -2,7 +2,11 @@
 
 declare(strict_types=1);
 
-namespace SAML2;
+namespace SAML2\Tests;
+
+use SAML2\Message;
+use SAML2\SOAP;
+use SAML2\ArtifactResolve;
 
 class SOAPTest extends \Mockery\Adapter\Phpunit\MockeryTestCase
 {

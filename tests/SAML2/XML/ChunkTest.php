@@ -2,11 +2,12 @@
 
 declare(strict_types=1);
 
-namespace SAML2\XML;
+namespace SAML2\Tests\XML;
 
 use SAML2\DOMDocumentFactory;
 use SAML2\XML\saml\Attribute;
 use SAML2\XML\saml\AttributeValue;
+use SAML2\XML\Chunk;
 
 /**
  * Class \SAML2\XML\ChunkTest

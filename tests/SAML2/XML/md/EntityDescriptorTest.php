@@ -2,9 +2,13 @@
 
 declare(strict_types=1);
 
-namespace SAML2\XML\md;
+namespace SAML2\Tests\XML\md;
 
 use SAML2\DOMDocumentFactory;
+use SAML2\XML\md\EntityDescriptor;
+use SAML2\XML\md\AffiliationDescriptor;
+use SAML2\XML\md\Organization;
+use SAML2\XML\md\AttributeAuthorityDescriptor;
 
 /**
  * Class \SAML2\XML\md\EntityDescriptorTest

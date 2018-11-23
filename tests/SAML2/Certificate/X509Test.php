@@ -2,7 +2,9 @@
 
 declare(strict_types=1);
 
-namespace SAML2\Certificate;
+namespace SAML2\Tests\Certificate;
+
+use SAML2\Certificate\X509;
 
 class X509Test extends \PHPUnit\Framework\TestCase
 {

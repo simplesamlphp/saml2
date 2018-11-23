@@ -2,7 +2,10 @@
 
 declare(strict_types=1);
 
-namespace SAML2\Utilities;
+namespace SAML2\Tests\Utilities;
+
+use SAML2\Utilities\File;
+use SAML2\Exception\RuntimeException;
 
 class FileTest extends \PHPUnit\Framework\TestCase
 {
@@ -12,7 +15,7 @@ class FileTest extends \PHPUnit\Framework\TestCase
      */
     public function when_loading_a_non_existant_file_an_exception_is_thrown()
     {
-        $this->expectException(\SAML2\Exception\RuntimeException::class, 'File "/foo/bar/baz/quux" does not exist or is not readable');
+        $this->expectException(RuntimeException::class, 'File "/foo/bar/baz/quux" does not exist or is not readable');
         File::getFileContents('/foo/bar/baz/quux');
     }
 

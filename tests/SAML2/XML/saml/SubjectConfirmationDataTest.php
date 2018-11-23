@@ -2,10 +2,11 @@
 
 declare(strict_types=1);
 
-namespace SAML2\XML\saml;
+namespace SAML2\Tests\XML\saml;
 
 use SAML2\Constants;
 use SAML2\DOMDocumentFactory;
+use SAML2\XML\saml\SubjectConfirmationData;
 use SAML2\Utils;
 
 /**

@@ -2,7 +2,7 @@
 
 declare(strict_types=1);
 
-namespace SAML2;
+namespace SAML2\Tests;
 
 /**
  * Because we're mocking a static call, we have to run it in separate processes so as to no contaminate the other

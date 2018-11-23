@@ -2,10 +2,11 @@
 
 declare(strict_types=1);
 
-namespace SAML2\XML\samlp;
+namespace SAML2\Tests\XML\samlp;
 
 use SAML2\DOMDocumentFactory;
 use SAML2\XML\saml\Attribute;
+use SAML2\XML\samlp\Extensions;
 use SAML2\XML\shibmd\Scope;
 
 /**

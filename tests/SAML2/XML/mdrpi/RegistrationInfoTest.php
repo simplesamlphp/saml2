@@ -2,9 +2,10 @@
 
 declare(strict_types=1);
 
-namespace SAML2\XML\mdrpi;
+namespace SAML2\Tests\XML\mdrpi;
 
 use SAML2\DOMDocumentFactory;
+use SAML2\XML\mdrpi\RegistrationInfo;
 use SAML2\Utils;
 
 /**

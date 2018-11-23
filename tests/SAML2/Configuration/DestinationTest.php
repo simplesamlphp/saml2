@@ -2,7 +2,9 @@
 
 declare(strict_types=1);
 
-namespace SAML2\Configuration;
+namespace SAML2\Tests\Configuration;
+
+use SAML2\Configuration\Destination;
 
 class DestinationTest extends \PHPUnit\Framework\TestCase
 {

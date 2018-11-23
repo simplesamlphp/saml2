@@ -2,11 +2,12 @@
 
 declare(strict_types=1);
 
-namespace SAML2\Assertion\Validation\ConstraintValidator;
+namespace SAML2\Tests\Assertion\Validation\ConstraintValidator;
 
-use Mockery as m;
+use SAML2\Assertion\Validation\ConstraintValidator\SubjectConfirmationNotOnOrAfter;
+use SAML2\Assertion\Validation\ConstraintValidator\SubjectConfirmationNotBefore;
 use SAML2\Assertion\Validation\Result;
-use SAML2\ControlledTimeTest;
+use SAML2\Tests\ControlledTimeTest;
 
 /**
  * Because we're mocking a static call, we have to run it in separate processes so as to no contaminate the other
@@ -27,8 +28,8 @@ class SubjectConfirmationNotOnOrAfterTest extends ControlledTimeTest
     public function setUp()
     {
         parent::setUp();
-        $this->subjectConfirmation                          = \Mockery::mock('SAML2\XML\saml\SubjectConfirmation');
-        $this->subjectConfirmationData                      = \Mockery::mock('SAML2\XML\saml\SubjectConfirmationData');
+        $this->subjectConfirmation = \Mockery::mock(\SAML2\XML\saml\SubjectConfirmation::class);
+        $this->subjectConfirmationData = \Mockery::mock(\SAML2\XML\saml\SubjectConfirmationData::class);
         $this->subjectConfirmation->SubjectConfirmationData = $this->subjectConfirmationData;
     }
 

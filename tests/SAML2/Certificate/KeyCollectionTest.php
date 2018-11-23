@@ -2,7 +2,9 @@
 
 declare(strict_types=1);
 
-namespace SAML2\Certificate;
+namespace SAML2\Tests\Certificate;
+
+use SAML2\Certificate\KeyCollection;
 
 class KeyCollectionTest extends \PHPUnit\Framework\TestCase
 {

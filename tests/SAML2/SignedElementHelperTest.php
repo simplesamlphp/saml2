@@ -2,9 +2,13 @@
 
 declare(strict_types=1);
 
-namespace SAML2;
+namespace SAML2\Tests;
 
+use SAML2\Tests\SignedElementHelperMock;
+use SAML2\Tests\CertificatesMock;
 use RobRichards\XMLSecLibs\XMLSecurityDSig;
+use SAML2\SignedElementHelper;
+use SAML2\Utils;
 
 /**
  * Class \SAML2\SignedElementHelperTest

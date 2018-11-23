@@ -2,9 +2,10 @@
 
 declare(strict_types=1);
 
-namespace SAML2\XML\md;
+namespace SAML2\Tests\XML\md;
 
 use SAML2\DOMDocumentFactory;
+use SAML2\XML\md\IndexedEndpointType;
 use SAML2\Utils;
 
 /**

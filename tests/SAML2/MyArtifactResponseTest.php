@@ -2,14 +2,20 @@
 
 declare(strict_types=1);
 
-namespace SAML2;
+namespace SAML2\Tests;
+
+use SAML2\XML\saml\Issuer;
+use SAML2\ArtifactResponse;
+use SAML2\AuthnRequest;
+use SAML2\DOMDocumentFactory;
+use SAML2\Utils;
 
 class ArtifactResponseTest extends \PHPUnit\Framework\TestCase
 {
     public function testMarshalling()
     {
-        $issuer1 = new XML\saml\Issuer();
-        $issuer2 = new XML\saml\Issuer();
+        $issuer1 = new Issuer();
+        $issuer2 = new Issuer();
         $issuer1->setValue('urn:example:issuer');
         $issuer2->setValue('urn:example:other');
 
@@ -64,7 +70,7 @@ XML;
         $document = DOMDocumentFactory::fromString($xml);
         $ar = new ArtifactResponse($document->firstChild);
 
-        $this->assertInstanceOf(\SAML2\ArtifactResponse::class, $ar);
+        $this->assertInstanceOf(ArtifactResponse::class, $ar);
         $this->assertEquals(true, $ar->isSuccess());
         $this->assertEquals("_d84a49e5958803dedcff4c984c2b0d95", $ar->getId());
 

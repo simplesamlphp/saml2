@@ -2,7 +2,10 @@
 
 declare(strict_types=1);
 
-namespace SAML2\Certificate;
+namespace SAML2\Tests\Certificate;
+
+use SAML2\Tests\CertificatesMock;
+use SAML2\Certificate\PrivateKey;
 
 class PrivateKeyTest extends \Mockery\Adapter\Phpunit\MockeryTestCase
 {
@@ -12,7 +15,7 @@ class PrivateKeyTest extends \Mockery\Adapter\Phpunit\MockeryTestCase
      */
     public function test_create_from_key()
     {
-        $key = \SAML2\CertificatesMock::getPlainPrivateKey();
+        $key = CertificatesMock::getPlainPrivateKey();
 
         $pk_nopass = PrivateKey::create($key);
         $this->assertEquals($key, $pk_nopass->getKeyAsString());

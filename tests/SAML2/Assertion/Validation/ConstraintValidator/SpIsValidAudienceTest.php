@@ -2,8 +2,9 @@
 
 declare(strict_types=1);
 
-namespace SAML2\Assertion\Validation\ConstraintValidator;
+namespace SAML2\Tests\Assertion\Validation\ConstraintValidator;
 
+use SAML2\Assertion\Validation\ConstraintValidator\SpIsValidAudience;
 use SAML2\Assertion\Validation\Result;
 
 /**

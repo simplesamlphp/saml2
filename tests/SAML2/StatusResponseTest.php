@@ -2,7 +2,11 @@
 
 declare(strict_types=1);
 
-namespace SAML2;
+namespace SAML2\Tests;
+
+use SAML2\Response;
+use SAML2\Utils;
+use SAML2\DOMDocumentFactory;
 
 /**
  * Class \SAML2\StatusResponseTest

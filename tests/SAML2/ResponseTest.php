@@ -2,7 +2,13 @@
 
 declare(strict_types=1);
 
-namespace SAML2;
+namespace SAML2\Tests;
+
+use SAML2\XML\saml\Issuer;
+use SAML2\DOMDocumentFactory;
+use SAML2\Response;
+use SAML2\Utils;
+use SAML2\Constants;
 
 /**
  * Class \SAML2\ResponseTest
@@ -11,7 +17,7 @@ class ResponseTest extends \PHPUnit\Framework\TestCase
 {
     public function testMarshalling()
     {
-        $issuer = new XML\saml\Issuer();
+        $issuer = new Issuer();
         $issuer->setValue('SomeIssuer');
 
         $response = new Response();

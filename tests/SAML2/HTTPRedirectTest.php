@@ -2,7 +2,14 @@
 
 declare(strict_types=1);
 
-namespace SAML2;
+namespace SAML2\Tests;
+
+use SAML2\DOMDocumentFactory;
+use SAML2\HTTPRedirect;
+use SAML2\AuthnRequest;
+use SAML2\Request;
+use SAML2\Response;
+use SAML2\XML\saml\Issuer;
 
 class HTTPRedirectTest extends \Mockery\Adapter\Phpunit\MockeryTestCase
 {
@@ -17,7 +24,7 @@ class HTTPRedirectTest extends \Mockery\Adapter\Phpunit\MockeryTestCase
 
         $hr = new HTTPRedirect();
         $request = $hr->receive();
-        $this->assertInstanceOf(\SAML2\Request::class, $request);
+        $this->assertInstanceOf(Request::class, $request);
         $issuer = $request->getIssuer();
         $this->assertEquals('https://profile.surfconext.nl/simplesaml/module.php/saml/sp/metadata.php/default-sp', $issuer);
     }
@@ -33,7 +40,7 @@ class HTTPRedirectTest extends \Mockery\Adapter\Phpunit\MockeryTestCase
 
         $hr = new HTTPRedirect();
         $request = $hr->receive();
-        $this->assertInstanceOf(\SAML2\Response::class, $request);
+        $this->assertInstanceOf(Response::class, $request);
         $issuer = $request->getIssuer();
         $this->assertEquals('https://engine.test.surfconext.nl/authentication/idp/metadata', $issuer);
     }
@@ -48,7 +55,7 @@ class HTTPRedirectTest extends \Mockery\Adapter\Phpunit\MockeryTestCase
 
         $hr = new HTTPRedirect();
         $request = $hr->receive();
-        $this->assertInstanceOf(\SAML2\Request::class, $request);
+        $this->assertInstanceOf(Request::class, $request);
         $relaystate = $request->getRelayState();
         $this->assertEquals('https://profile.surfconext.nl/', $relaystate);
     }
@@ -64,7 +71,7 @@ class HTTPRedirectTest extends \Mockery\Adapter\Phpunit\MockeryTestCase
 
         $hr = new HTTPRedirect();
         $request = $hr->receive();
-        $this->assertInstanceOf(\SAML2\Request::class, $request);
+        $this->assertInstanceOf(Request::class, $request);
         $relaystate = $request->getRelayState();
         $this->assertEquals('https://beta.surfnet.nl/simplesaml/module.php/core/authenticate.php?as=Braindrops', $relaystate);
     }
@@ -178,7 +185,7 @@ class HTTPRedirectTest extends \Mockery\Adapter\Phpunit\MockeryTestCase
      */
     public function testSendAuthnResponse()
     {
-        $issuer = new XML\saml\Issuer();
+        $issuer = new Issuer();
         $issuer->setValue('testIssuer');
 
         $response = new Response();
@@ -196,7 +203,7 @@ class HTTPRedirectTest extends \Mockery\Adapter\Phpunit\MockeryTestCase
      */
     public function testSendAuthnResponseBespokeDestination()
     {
-        $issuer = new XML\saml\Issuer();
+        $issuer = new Issuer();
         $issuer->setValue('testIssuer');
 
         $response = new Response();

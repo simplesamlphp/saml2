@@ -2,7 +2,9 @@
 
 declare(strict_types=1);
 
-namespace SAML2;
+namespace SAML2\Tests;
+
+use SAML2\HTTPArtifact;
 
 class HTTPArtifactTest extends \PHPUnit\Framework\TestCase
 {

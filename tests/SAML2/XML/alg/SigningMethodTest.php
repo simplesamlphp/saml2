@@ -2,9 +2,10 @@
 
 declare(strict_types=1);
 
-namespace SAML2\XML\alg;
+namespace SAML2\Tests\XML\alg;
 
 use SAML2\DOMDocumentFactory;
+use SAML2\XML\alg\SigningMethod;
 use SAML2\Utils;
 
 /**

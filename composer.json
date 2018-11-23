@@ -26,19 +26,18 @@
         "mockery/mockery": "~1.2"
     },
     "autoload": {
-        "psr-0": {
-            "SAML2\\": "src/"
-        },
-        "files": ["src/_autoload.php"]
+        "psr-4": {
+            "SAML2\\": "src/SAML2"
+        }
     },
     "autoload-dev": {
-        "psr-0": {
-            "SAML2\\": "tests/"
+        "psr-4": {
+            "SAML2\\Tests\\": "tests/SAML2/"
         }
     },
     "extra": {
         "branch-alias": {
-            "dev-master": "v3.1.x-dev"
+            "dev-master": "v4.0.x-dev"
         }
     }
 }

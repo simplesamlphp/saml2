@@ -2,9 +2,10 @@
 
 declare(strict_types=1);
 
-namespace SAML2\XML\shibmd;
+namespace SAML2\Tests\XML\shibmd;
 
 use SAML2\DOMDocumentFactory;
+use SAML2\XML\shibmd\Scope;
 use SAML2\Utils;
 
 /**
