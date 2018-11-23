@@ -2,6 +2,9 @@
 
 namespace SAML2;
 
+use SAML2\DOMDocumentFactory;
+use SAML2\LogoutResponse;
+
 /**
  * Class \SAML2\LogoutResponseTest
  */

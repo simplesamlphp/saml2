@@ -2,6 +2,10 @@
 
 namespace SAML2;
 
+use SAML2\Response;
+use SAML2\Utils;
+use SAML2\DOMDocumentFactory;
+
 /**
  * Class \SAML2\StatusResponseTest
  */

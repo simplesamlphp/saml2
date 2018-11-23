@@ -2,6 +2,12 @@
 
 namespace SAML2;
 
+use SAML2\DOMDocumentFactory;
+use SAML2\Constants;
+use SAML2\Utils;
+use SAML2\LogoutRequest;
+use SAML2\XML\saml\NameID;
+
 /**
  * Class \SAML2\LogoutRequestTest
  */
@@ -48,8 +54,8 @@ XML;
 
     public function testMarshalling()
     {
-        $nameId = new XML\saml\NameID();
-        $nameId->value = 'NameIDValue';
+        $nameId = new NameID();
+        $nameId->setValue('NameIDValue');
 
         $logoutRequest = new LogoutRequest();
         $logoutRequest->setNameID($nameId);
@@ -68,8 +74,8 @@ XML;
         $this->assertCount(1, $sessionIndexElements);
         $this->assertEquals('SessionIndexValue', $sessionIndexElements[0]->textContent);
 
-        $nameId = new XML\saml\NameID();
-        $nameId->value = 'NameIDValue';
+        $nameId = new NameID();
+        $nameId->setValue('NameIDValue');
         $logoutRequest = new LogoutRequest();
         $logoutRequest->setNameID($nameId);
         $logoutRequest->setSessionIndexes(['SessionIndexValue1', 'SessionIndexValue2']);
@@ -103,8 +109,8 @@ XML;
 
     public function testEncryptedNameId()
     {
-        $nameId = new XML\saml\NameID();
-        $nameId->value = 'NameIdValue';
+        $nameId = new NameID();
+        $nameId->setValue('NameIdValue');
 
         $logoutRequest = new LogoutRequest();
         $logoutRequest->setNameID($nameId);
@@ -209,6 +215,8 @@ XML;
 
     public function testSetNotOnOrAfter()
     {
+        $nameId = new NameID();
+        $nameId->setValue('NameIDValue');
         $time = time();
         $nameId = new XML\saml\NameID();
         $nameId->setValue('NameIDValue');

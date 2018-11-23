@@ -6,6 +6,7 @@ use SAML2\DOMDocumentFactory;
 use SAML2\XML\Chunk;
 use SAML2\XML\saml\Attribute;
 use SAML2\XML\saml\AttributeValue;
+use SAML2\XML\mdattr\EntityAttributes;
 use SAML2\Utils;
 
 /**

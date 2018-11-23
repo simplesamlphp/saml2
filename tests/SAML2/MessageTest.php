@@ -2,6 +2,13 @@
 
 namespace SAML2;
 
+use SAML2\Message;
+use SAML2\Response;
+use SAML2\DOMDocumentFactory;
+use SAML2\XML\saml\Issuer;
+use SAML2\Constants;
+use SAML2\Utils;
+
 class MessageTest extends \Mockery\Adapter\Phpunit\MockeryTestCase
 {
     /**
@@ -69,7 +76,7 @@ AUTHNREQUEST
 
         $message = Message::fromXML($authnRequest->documentElement);
         $issuer = $message->getIssuer();
-        $this->assertInstanceOf(\SAML2\XML\saml\Issuer::class, $issuer);
+        $this->assertInstanceOf(Issuer::class, $issuer);
         $this->assertEquals('https://gateway.stepup.org/saml20/sp/metadata', $issuer->getNameQualifier());
         $this->assertEquals('https://spnamequalifier.com', $issuer->getSPNameQualifier());
         $this->assertEquals('ProviderID', $issuer->getSPProvidedID());
@@ -103,7 +110,7 @@ AUTHNREQUEST
 
         $message = Message::fromXML($authnRequest->documentElement);
         $issuer = $message->getIssuer();
-        $this->assertNotInstanceOf(\SAML2\XML\saml\Issuer::class, $issuer);
+        $this->assertNotInstanceOf(Issuer::class, $issuer);
         $this->assertEquals('https://gateway.stepup.org/saml20/sp/metadata', $issuer);
     }
 
@@ -115,7 +122,7 @@ AUTHNREQUEST
     {
         // first, try with common Issuer objects (Format=entity)
         $response = new Response();
-        $issuer = new XML\saml\Issuer();
+        $issuer = new Issuer();
         $issuer->setValue('https://gateway.stepup.org/saml20/sp/metadata');
         $response->setIssuer($issuer);
         $xml = $response->toUnsignedXML();

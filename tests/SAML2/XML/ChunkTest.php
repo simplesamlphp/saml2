@@ -5,6 +5,7 @@ namespace SAML2\XML;
 use SAML2\DOMDocumentFactory;
 use SAML2\XML\saml\Attribute;
 use SAML2\XML\saml\AttributeValue;
+use SAML2\XML\Chunk;
 
 /**
  * Class \SAML2\XML\ChunkTest

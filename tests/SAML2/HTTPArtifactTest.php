@@ -2,6 +2,8 @@
 
 namespace SAML2;
 
+use SAML2\HTTPArtifact;
+
 class HTTPArtifactTest extends \PHPUnit\Framework\TestCase
 {
     /**

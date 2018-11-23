@@ -2,7 +2,14 @@
 
 namespace SAML2\Utilities;
 
+<<<<<<< HEAD
 class ArrayCollectionTest extends \PHPUnit\Framework\TestCase
+=======
+use SAML2\Utilities\ArrayCollection;
+use SAML2\Exception\RuntimeException;
+
+class ArrayCollectionTest extends \PHPUnit_Framework_TestCase
+>>>>>>> Remove PSR-0 autoloader
 {
     public function test_construct_get_add_set()
     {
@@ -100,8 +107,12 @@ class ArrayCollectionTest extends \PHPUnit\Framework\TestCase
 
     public function test_onlyelement_fail()
     {
+        $this->expectException(RuntimeException::class, 'SAML2\Utilities\ArrayCollection::SAML2\Utilities\ArrayCollection::getOnlyElement requires that the collection has exactly one element, "2" elements found');
         $arc = new ArrayCollection(['aap', 'noot']);
+<<<<<<< HEAD
         $this->expectException(\SAML2\Exception\RuntimeException::class, 'SAML2\Utilities\ArrayCollection::SAML2\Utilities\ArrayCollection::getOnlyElement requires that the collection has exactly one element, "2" elements found');
+=======
+>>>>>>> Remove PSR-0 autoloader
         $arc->getOnlyElement();
     }
 
@@ -118,14 +129,22 @@ class ArrayCollectionTest extends \PHPUnit\Framework\TestCase
         $arc = new ArrayCollection(['aap', 'aap', 'noot', 'mies']);
 
         $filtered = $arc->filter(function ($i) { return $i != 'aap'; });
+<<<<<<< HEAD
         $this->assertInstanceOf(\SAML2\Utilities\ArrayCollection::class, $filtered);
+=======
+        $this->assertInstanceOf(ArrayCollection::class, $filtered);
+>>>>>>> Remove PSR-0 autoloader
         $this->assertEquals($filtered->get(0), null);
         $this->assertEquals($filtered->get(1), null);
         $this->assertEquals($filtered->get(2), 'noot');
         $this->assertEquals($filtered->get(3), 'mies');
 
         $mapped = $arc->map(function ($i) { return ucfirst($i); });
+<<<<<<< HEAD
         $this->assertInstanceOf(\SAML2\Utilities\ArrayCollection::class, $mapped);
+=======
+        $this->assertInstanceOf(ArrayCollection::class, $mapped);
+>>>>>>> Remove PSR-0 autoloader
         $this->assertEquals($mapped->get(0), 'Aap');
         $this->assertEquals($mapped->get(1), 'Aap');
         $this->assertEquals($mapped->get(2), 'Noot');

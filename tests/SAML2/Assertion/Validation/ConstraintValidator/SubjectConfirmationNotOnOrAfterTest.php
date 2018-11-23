@@ -2,6 +2,8 @@
 
 namespace SAML2\Assertion\Validation\ConstraintValidator;
 
+use SAML2\Assertion\Validation\ConstraintValidator\SubjectConfirmationNotOnOrAfter;
+use SAML2\Assertion\Validation\ConstraintValidator\SubjectConfirmationNotBefore;
 use SAML2\Assertion\Validation\Result;
 use SAML2\ControlledTimeTest;
 

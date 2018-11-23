@@ -2,7 +2,13 @@
 
 namespace SAML2\Response\Validation;
 
+<<<<<<< HEAD
 class ResultTest extends \PHPUnit\Framework\TestCase
+=======
+use SAML2\Response\Validation\Result;
+
+class ResultTest extends \PHPUnit_Framework_TestCase
+>>>>>>> Remove PSR-0 autoloader
 {
     /**
      * @group response-validation

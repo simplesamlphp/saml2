@@ -2,13 +2,14 @@
 
 namespace SAML2\Response;
 
-use SAML2\Assertion;
 use SAML2\CertificatesMock;
+use SAML2\Assertion;
 use SAML2\Configuration\Destination;
 use SAML2\Configuration\IdentityProvider;
 use SAML2\Configuration\ServiceProvider;
 use SAML2\Response;
 use SAML2\Utilities\Certificate;
+use SAML2\Response\Exception\UnsignedResponseException;
 
 /**
  * Test that ensures that either the response or the assertion(s) or both must be signed.
@@ -48,7 +49,11 @@ class SignatureValidationTest extends \Mockery\Adapter\Phpunit\MockeryTestCase
     public function setUp()
     {
         $this->assertionProcessorBuilder = \Mockery::mock('alias:SAML2\Assertion\ProcessorBuilder');
+<<<<<<< HEAD
         $this->assertionProcessor = \Mockery::mock(\SAML2\Assertion\Processor::class);
+=======
+        $this->assertionProcessor = \Mockery::mock(Assertion\Processor::class);
+>>>>>>> Remove PSR-0 autoloader
         $this->assertionProcessorBuilder
             ->shouldReceive('build')
             ->once()
@@ -72,7 +77,7 @@ class SignatureValidationTest extends \Mockery\Adapter\Phpunit\MockeryTestCase
     {
         $this->assertionProcessor->shouldReceive('processAssertions')->once();
 
-        $processor = new Processor(new \Psr\Log\NullLogger());
+        $processor = new Response\Processor(new \Psr\Log\NullLogger());
 
         $processor->process(
             $this->serviceProviderConfiguration,
@@ -91,7 +96,7 @@ class SignatureValidationTest extends \Mockery\Adapter\Phpunit\MockeryTestCase
     {
         $this->assertionProcessor->shouldReceive('processAssertions')->once();
 
-        $processor = new Processor(new \Psr\Log\NullLogger());
+        $processor = new Response\Processor(new \Psr\Log\NullLogger());
 
         $processor->process(
             $this->serviceProviderConfiguration,
@@ -110,7 +115,7 @@ class SignatureValidationTest extends \Mockery\Adapter\Phpunit\MockeryTestCase
     {
         $this->assertionProcessor->shouldReceive('processAssertions')->once();
 
-        $processor = new Processor(new \Psr\Log\NullLogger());
+        $processor = new Response\Processor(new \Psr\Log\NullLogger());
 
         $processor->process(
             $this->serviceProviderConfiguration,
@@ -127,10 +132,12 @@ class SignatureValidationTest extends \Mockery\Adapter\Phpunit\MockeryTestCase
      */
     public function testThatAnUnsignedResponseWithNoSignedAssertionsThrowsAnException()
     {
+        $this->expectException(UnsignedResponseException::class);
+
         // here the processAssertions may not be called as it should fail with an exception due to having no signature
         $this->assertionProcessor->shouldReceive('processAssertions')->never();
 
-        $processor = new Processor(new \Psr\Log\NullLogger());
+        $processor = new Response\Processor(new \Psr\Log\NullLogger());
 
         $this->expectException(Exception\UnsignedResponseException::class);
         $processor->process(

@@ -4,6 +4,7 @@ namespace SAML2\XML\samlp;
 
 use SAML2\DOMDocumentFactory;
 use SAML2\XML\saml\Attribute;
+use SAML2\XML\samlp\Extensions;
 use SAML2\XML\shibmd\Scope;
 
 /**

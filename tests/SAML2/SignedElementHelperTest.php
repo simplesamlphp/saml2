@@ -2,7 +2,11 @@
 
 namespace SAML2;
 
+use SAML2\SignedElementHelperMock;
+use SAML2\CertificatesMock;
 use RobRichards\XMLSecLibs\XMLSecurityDSig;
+use SAML2\SignedElementHelper;
+use SAML2\Utils;
 
 /**
  * Class \SAML2\SignedElementHelperTest

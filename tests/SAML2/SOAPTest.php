@@ -2,7 +2,20 @@
 
 namespace SAML2;
 
+<<<<<<< HEAD
 class SOAPTest extends \Mockery\Adapter\Phpunit\MockeryTestCase
+=======
+use SAML2\Message;
+use SAML2\SOAP;
+use SAML2\ArtifactResolve;
+
+use Exception;
+use DOMDocument;
+
+use PHPUnit_Framework_TestCase;
+
+class SOAPTest extends PHPUnit_Framework_TestCase
+>>>>>>> Remove PSR-0 autoloader
 {
     public function testRequestParsingEmptyMessage()
     {

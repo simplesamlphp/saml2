@@ -3,6 +3,7 @@
 namespace SAML2\XML\mdui;
 
 use SAML2\DOMDocumentFactory;
+use SAML2\XML\mdui\Logo;
 use SAML2\Utils;
 
 /**
