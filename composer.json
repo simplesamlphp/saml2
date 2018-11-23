@@ -22,7 +22,7 @@
         "phpmd/phpmd": "~2.6",
         "sensiolabs/security-checker": "~5.0",
         "phpunit/phpunit": "^6.0",
-        "sebastian/phpcpd": "~1.4",
+        "sebastian/phpcpd": "~3.0",
         "mockery/mockery": "~1.2"
     },
     "autoload": {
