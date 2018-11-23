@@ -5,7 +5,7 @@ namespace SAML2;
 /**
  * Class \SAML2\LogoutRequestTest
  */
-class LogoutRequestTest extends \PHPUnit\Framework\TestCase
+class LogoutRequestTest extends \Mockery\Adapter\Phpunit\MockeryTestCase
 {
     /**
      * @var \DOMElement
@@ -126,7 +126,7 @@ XML;
         $logoutRequest = new LogoutRequest($this->logoutRequestElement);
         $this->assertTrue($logoutRequest->isNameIdEncrypted());
 
-        $this->setExpectedException(\Exception::class, "Attempted to retrieve encrypted NameID without decrypting it first.");
+        $this->expectException(\Exception::class, "Attempted to retrieve encrypted NameID without decrypting it first.");
         $nameId = $logoutRequest->getNameId();
     }
 
@@ -161,7 +161,7 @@ XML;
         $document = DOMDocumentFactory::fromString($xml);
         $this->logoutRequestElement = $document->firstChild;
 
-        $this->setExpectedException(\Exception::class, "Missing <saml:NameID> or <saml:EncryptedID> in <samlp:LogoutRequest>.");
+        $this->expectException(\Exception::class, "Missing <saml:NameID> or <saml:EncryptedID> in <samlp:LogoutRequest>.");
         $logoutRequest = new LogoutRequest($this->logoutRequestElement);
     }
 
@@ -178,7 +178,7 @@ XML;
         $document = DOMDocumentFactory::fromString($xml);
         $this->logoutRequestElement = $document->firstChild;
 
-        $this->setExpectedException(\Exception::class, "More than one <saml:NameID> or <saml:EncryptedD> in <samlp:LogoutRequest>.");
+        $this->expectException(\Exception::class, "More than one <saml:NameID> or <saml:EncryptedD> in <samlp:LogoutRequest>.");
         $logoutRequest = new LogoutRequest($this->logoutRequestElement);
     }
 

@@ -7,7 +7,7 @@ use RobRichards\XMLSecLibs\XMLSecurityDSig;
 /**
  * Class \SAML2\SignedElementHelperTest
  */
-class SignedElementHelperTest extends \PHPUnit\Framework\TestCase
+class SignedElementHelperTest extends \Mockery\Adapter\Phpunit\MockeryTestCase
 {
     /**
      * @var \DOMElement
@@ -77,7 +77,7 @@ class SignedElementHelperTest extends \PHPUnit\Framework\TestCase
         $digestValueElements[0]->firstChild->data = 'invalid';
         $tmp = new SignedElementHelperMock($signedMockElementCopy);
 
-        $this->setExpectedException(\Exception::class, 'Unable to validate Signature');
+        $this->expectException(\Exception::class, 'Unable to validate Signature');
         $tmp->validate(CertificatesMock::getPublicKey());
     }
 

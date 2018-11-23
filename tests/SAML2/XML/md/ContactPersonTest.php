@@ -114,7 +114,7 @@ XML
 XML
         );
 
-        $this->setExpectedException(\Exception::class, 'More than one GivenName in md:ContactPerson');
+        $this->expectException(\Exception::class, 'More than one GivenName in md:ContactPerson');
 
         $contactPerson = new ContactPerson($document->getElementsByTagName('ContactPerson')->item(0));
     }
@@ -157,7 +157,7 @@ XML
 XML
         );
 
-        $this->setExpectedException(\Exception::class, 'Missing contactType on ContactPerson.');
+        $this->expectException(\Exception::class, 'Missing contactType on ContactPerson.');
 
         $contactPerson = new ContactPerson($document->getElementsByTagName('ContactPerson')->item(0));
     }

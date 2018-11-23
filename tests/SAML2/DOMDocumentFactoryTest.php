@@ -22,7 +22,7 @@ class DOMDocumentFactoryTest extends \PHPUnit\Framework\TestCase
      */
     public function testNotXmlStringRaisesAnException()
     {
-        $this->setExpectedException(Exception\UnparseableXmlException::class);
+        $this->expectException(Exception\UnparseableXmlException::class);
         DOMDocumentFactory::fromString('this is not xml');
     }
 
@@ -71,7 +71,7 @@ class DOMDocumentFactoryTest extends \PHPUnit\Framework\TestCase
     public function testFileThatDoesNotContainXMLCannotBeLoaded()
     {
         $file = realpath(dirname(__FILE__)) . DIRECTORY_SEPARATOR . 'domdocument_invalid_xml.xml';
-        $this->setExpectedException(Exception\RuntimeException::class);
+        $this->expectException(Exception\RuntimeException::class);
         DOMDocumentFactory::fromFile($file);
     }
 
@@ -95,7 +95,7 @@ class DOMDocumentFactoryTest extends \PHPUnit\Framework\TestCase
     public function testFileThatContainsDocTypeIsNotAccepted()
     {
         $file = realpath(dirname(__FILE__)) . DIRECTORY_SEPARATOR . 'domdocument_doctype.xml';
-        $this->setExpectedException(Exception\RuntimeException::class, 'Dangerous XML detected, DOCTYPE nodes are not allowed in the XML body');
+        $this->expectException(Exception\RuntimeException::class, 'Dangerous XML detected, DOCTYPE nodes are not allowed in the XML body');
         DOMDocumentFactory::fromFile($file);
     }
 
@@ -106,7 +106,7 @@ class DOMDocumentFactoryTest extends \PHPUnit\Framework\TestCase
     public function testStringThatContainsDocTypeIsNotAccepted()
     {
         $xml = '<!DOCTYPE foo [<!ELEMENT foo ANY > <!ENTITY xxe SYSTEM "file:///dev/random" >]><foo />';
-        $this->setExpectedException(Exception\RuntimeException::class, 'Dangerous XML detected, DOCTYPE nodes are not allowed in the XML body');
+        $this->expectException(Exception\RuntimeException::class, 'Dangerous XML detected, DOCTYPE nodes are not allowed in the XML body');
         DOMDocumentFactory::fromString($xml);
     }
 
@@ -117,7 +117,7 @@ class DOMDocumentFactoryTest extends \PHPUnit\Framework\TestCase
     public function testEmptyFileIsNotValid()
     {
         $file = realpath(dirname(__FILE__)) . DIRECTORY_SEPARATOR . 'domdocument_empty.xml';
-        $this->setExpectedException(Exception\RuntimeException::class, 'does not have content');
+        $this->expectException(Exception\RuntimeException::class, 'does not have content');
         DOMDocumentFactory::fromFile($file);
     }
 
@@ -127,7 +127,7 @@ class DOMDocumentFactoryTest extends \PHPUnit\Framework\TestCase
      */
     public function testEmptyStringIsNotValid()
     {
-        $this->setExpectedException(Exception\InvalidArgumentException::class, 'Invalid Argument type: "non-empty string" expected, "string" given');
+        $this->expectException(Exception\InvalidArgumentException::class, 'Invalid Argument type: "non-empty string" expected, "string" given');
         DOMDocumentFactory::fromString("");
     }
 

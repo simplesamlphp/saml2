@@ -78,7 +78,7 @@ XML
 </md:AffiliationDescriptor>
 XML
         );
-        $this->setExpectedException(\Exception::class, 'Missing AffiliateMember in AffiliationDescriptor.');
+        $this->expectException(\Exception::class, 'Missing AffiliateMember in AffiliationDescriptor.');
         new AffiliationDescriptor($document->firstChild);
     }
 
@@ -95,7 +95,7 @@ XML
 XML
         );
 
-        $this->setExpectedException(\Exception::class, 'Missing affiliationOwnerID on AffiliationDescriptor.');
+        $this->expectException(\Exception::class, 'Missing affiliationOwnerID on AffiliationDescriptor.');
         new AffiliationDescriptor($document->firstChild);
     }
 }
