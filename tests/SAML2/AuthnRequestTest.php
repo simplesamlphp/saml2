@@ -1041,7 +1041,7 @@ AUTHNREQUEST;
         $this->expectException(\Exception::class, 'Missing <saml:NameID> or <saml:EncryptedID> in <saml:Subject>');
         $authnRequest = new AuthnRequest(DOMDocumentFactory::fromString($xml)->documentElement);
     }
-    
+
     /**
      * Test setting audiences.
      */
@@ -1051,7 +1051,7 @@ AUTHNREQUEST;
         $request = new AuthnRequest();
         $request->setIssuer('https://gateway.example.org/saml20/sp/metadata');
         $request->setDestination('https://tiqr.example.org/idp/profile/saml2/Redirect/SSO');
-        $request->setAudiences(array('https://sp1.example.org', 'https://sp2.example.org');
+        $request->setAudiences(array('https://sp1.example.org', 'https://sp2.example.org'));
 
         $expectedStructureDocument = <<<AUTHNREQUEST
 <samlp:AuthnRequest
