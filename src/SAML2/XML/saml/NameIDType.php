@@ -8,7 +8,6 @@
 
 namespace SAML2\XML\saml;
 
-
 abstract class NameIDType extends BaseIDType
 {
     /**
