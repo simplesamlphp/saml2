@@ -109,6 +109,13 @@ class AuthnRequest extends Request
     private $requestedAuthnContext;
 
     /**
+     * Audiences to send in the request.
+     *
+     * @var array
+     */
+    private $audiences;
+
+    /**
      * @var \SAML2\XML\saml\SubjectConfirmation[]
      */
     private $subjectConfirmation = [];
@@ -168,6 +175,7 @@ class AuthnRequest extends Request
         $this->parseNameIdPolicy($xml);
         $this->parseRequestedAuthnContext($xml);
         $this->parseScoping($xml);
+        $this->parseConditions($xml);
     }
 
     /**
@@ -296,6 +304,30 @@ class AuthnRequest extends Request
     }
 
     /**
+     * @param \DOMElement $xml
+     */
+    protected function parseConditions(\DOMElement $xml)
+    {
+        $conditions = Utils::xpQuery($xml, './saml_assertion:Conditions');
+        if (empty($conditions)) {
+            return;
+        }
+        $conditions = $conditions[0];
+
+        $ar = Utils::xpQuery($conditions, './saml_assertion:AudienceRestriction');
+        if (empty($ar)) {
+            return;
+        }
+        $ar = $ar[0];
+
+        $audiences = Utils::xpQuery($ar, './saml_assertion:Audience');
+        $this->audiences = array();
+        foreach ($audiences as $a) {
+            $this->audiences[] = trim($a->textContent);
+        }
+    }
+
+    /**
      * Retrieve the NameIdPolicy.
      *
      * @see \SAML2\AuthnRequest::setNameIdPolicy()
@@ -402,6 +434,30 @@ class AuthnRequest extends Request
         assert(is_bool($isPassive));
 
         $this->isPassive = $isPassive;
+    }
+
+    /**
+     * Retrieve the audiences from the request.
+     *
+     * This may be null, in which case no audience is included.
+     *
+     * @return array|null The audiences.
+     */
+    public function getAudiences()
+    {
+        return $this->audiences;
+    }
+
+    /**
+     * Set the audiences to send in the request.
+     *
+     * This may be null, in which case no audience will be sent.
+     *
+     * @param array|null $audiences The audiences.
+     */
+    public function setAudiences(array $audiences = null)
+    {
+        $this->audiences = $audiences;
     }
 
 
@@ -732,6 +788,8 @@ class AuthnRequest extends Request
             $root->appendChild($nameIdPolicy);
         }
 
+        $this->addConditions($root);
+
         $rac = $this->requestedAuthnContext;
         if (!empty($rac) && !empty($rac['AuthnContextClassRef'])) {
             $e = $this->document->createElementNS(Constants::NS_SAMLP, 'RequestedAuthnContext');
@@ -804,6 +862,26 @@ class AuthnRequest extends Request
 
         foreach ($this->subjectConfirmation as $sc) {
             $sc->toXML($subject);
+        }
+    }
+
+    /**
+     * Add a Conditions-node to the request.
+     *
+     * @param \DOMElement $root The request element we should add the conditions to.
+     */
+    private function addConditions(\DOMElement $root)
+    {
+        if ($this->audiences !== null) {
+            $document = $root->ownerDocument;
+
+            $conditions = $document->createElementNS(Constants::NS_SAML, 'saml:Conditions');
+            $root->appendChild($conditions);
+
+            $ar = $document->createElementNS(Constants::NS_SAML, 'saml:AudienceRestriction');
+            $conditions->appendChild($ar);
+
+            Utils::addStrings($ar, Constants::NS_SAML, 'saml:Audience', false, $this->audiences);
         }
     }
 }
