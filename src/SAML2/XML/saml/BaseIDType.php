@@ -11,7 +11,6 @@ declare(strict_types=1);
 
 namespace SAML2\XML\saml;
 
-
 use SAML2\Constants;
 use SAML2\DOMDocumentFactory;
 

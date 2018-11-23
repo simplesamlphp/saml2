@@ -44,7 +44,7 @@ class Issuer extends NameIDType
     protected $nodeName = 'saml:Issuer';
 
     /**
-     * if $this->SAML2IssuerShowAll is set false   
+     * if $this->SAML2IssuerShowAll is set false
      * From saml-core-2.0-os 8.3.6, when the entity Format is used: "The NameQualifier, SPNameQualifier, and
      * SPProvidedID attributes MUST be omitted."
      *
