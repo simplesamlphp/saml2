@@ -2,18 +2,17 @@
 
 namespace SAML2\Certificate;
 
-class KeyTest extends \PHPUnit_Framework_TestCase
+class KeyTest extends \PHPUnit\Framework\TestCase
 {
     /**
      * @group certificate
      *
      * @test
-     * @expectedException \SAML2\Certificate\Exception\InvalidKeyUsageException
      */
     public function invalid_key_usage_should_throw_an_exception()
     {
         $key = new Key([Key::USAGE_SIGNING => true]);
-
+        $this->setExpectedException(Exception\InvalidKeyUsageException::class);
         $key->canBeUsedFor('foo');
     }
 
@@ -22,12 +21,11 @@ class KeyTest extends \PHPUnit_Framework_TestCase
      * @group certificate
      * @dataProvider functionProvider
      * @test
-     * @expectedException \SAML2\Exception\InvalidArgumentException
      */
     public function invalid_offset_type_should_throw_an_exception($function, $params)
     {
         $key = new Key([Key::USAGE_SIGNING => true]);
-        $this->setExpectedException('\SAML2\Exception\InvalidArgumentException');
+        $this->setExpectedException(\SAML2\Exception\InvalidArgumentException::class);
         call_user_func_array([$key, $function], $params);
     }
 

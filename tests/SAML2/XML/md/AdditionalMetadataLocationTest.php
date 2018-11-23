@@ -9,7 +9,7 @@ use SAML2\Utils;
 /**
  * Class \SAML2\XML\md\AdditionalMetadataLocationTest
  */
-class AdditionalMetadataLocationTest extends \PHPUnit_Framework_TestCase
+class AdditionalMetadataLocationTest extends \PHPUnit\Framework\TestCase
 {
     public function testMarshalling()
     {
@@ -46,7 +46,7 @@ class AdditionalMetadataLocationTest extends \PHPUnit_Framework_TestCase
             '<md:AdditionalMetadataLocation xmlns:md="' . Constants::NS_MD . '"'.
             '>LocationText</md:AdditionalMetadataLocation>'
         );
-        $this->setExpectedException('Exception', 'Missing namespace attribute on AdditionalMetadataLocation element.');
+        $this->setExpectedException(\Exception::class, 'Missing namespace attribute on AdditionalMetadataLocation element.');
         new AdditionalMetadataLocation($document->firstChild);
     }
 }

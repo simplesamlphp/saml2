@@ -11,7 +11,7 @@ use SAML2\Response;
 use SAML2\SimpleTestLogger;
 use SAML2\Utilities\Certificate;
 
-class FingerprintValidatorTest extends \PHPUnit_Framework_TestCase
+class FingerprintValidatorTest extends \PHPUnit\Framework\TestCase
 {
     /**
      * @var \Mockery\MockInterface

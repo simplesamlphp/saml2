@@ -2,9 +2,7 @@
 
 namespace SAML2;
 
-use PHPUnit_Framework_TestCase;
-
-class ArtifactResolveTest extends PHPUnit_Framework_TestCase
+class ArtifactResolveTest extends \PHPUnit\Framework\TestCase
 {
     public function testMashalling()
     {
@@ -42,7 +40,7 @@ XML;
         $document = DOMDocumentFactory::fromString($xml);
         $ar = new ArtifactResolve($document->firstChild);
 
-        $this->assertInstanceOf('SAML2\\ArtifactResolve', $ar);
+        $this->assertInstanceOf(\SAML2\ArtifactResolve::class, $ar);
         $this->assertEquals($artifact, $ar->getArtifact());
         $this->assertEquals($id, $ar->getId());
         $this->assertEquals($issuer, $ar->getIssuer());

@@ -9,7 +9,7 @@ use SAML2\Utils;
 /**
  * Class \SAML2\XML\saml\SubjectConfirmationDataTest
  */
-class SubjectConfirmationDataTest extends \PHPUnit_Framework_TestCase
+class SubjectConfirmationDataTest extends \PHPUnit\Framework\TestCase
 {
     public function testMarshalling()
     {

@@ -2,7 +2,7 @@
 
 namespace SAML2\Certificate;
 
-class X509Test extends \PHPUnit_Framework_TestCase
+class X509Test extends \PHPUnit\Framework\TestCase
 {
     /**
      * @group certificate

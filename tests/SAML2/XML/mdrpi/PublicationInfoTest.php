@@ -8,7 +8,7 @@ use SAML2\Utils;
 /**
  * Class \SAML2\XML\mdrpi\PublicationInfoTest
  */
-class PublicationInfoTest extends \PHPUnit_Framework_TestCase
+class PublicationInfoTest extends \PHPUnit\Framework\TestCase
 {
     public function testMarshalling()
     {
@@ -84,7 +84,7 @@ XML
 XML
         );
 
-        $this->setExpectedException('Exception', 'Missing required attribute "publisher"');
+        $this->setExpectedException(\Exception::class, 'Missing required attribute "publisher"');
         $publicationInfo = new PublicationInfo($document->firstChild);
     }
 }

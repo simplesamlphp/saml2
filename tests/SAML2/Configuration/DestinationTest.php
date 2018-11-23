@@ -2,7 +2,7 @@
 
 namespace SAML2\Configuration;
 
-class DestinationTest extends \PHPUnit_Framework_TestCase
+class DestinationTest extends \PHPUnit\Framework\TestCase
 {
     /**
      * @group configuration
@@ -34,10 +34,10 @@ class DestinationTest extends \PHPUnit_Framework_TestCase
      * @group configuration
      * @test
      * @dataProvider nonStringValueProvider
-     * @expectedException \SAML2\Exception\InvalidArgumentException
      */
     public function a_destination_cannot_be_created_with_a_non_string_value($value)
     {
+        $this->expectException(\SAML2\Exception\InvalidArgumentException::class);
         $destination = new Destination($value);
     }
 

@@ -5,7 +5,7 @@ namespace SAML2\Assertion\Validation\ConstraintValidator;
 use SAML2\Assertion\Validation\Result;
 use SAML2\Constants;
 
-class SubjectConfirmationMethodTest extends \PHPUnit_Framework_TestCase
+class SubjectConfirmationMethodTest extends \PHPUnit\Framework\TestCase
 {
     /**
      * @var \Mockery\MockInterface

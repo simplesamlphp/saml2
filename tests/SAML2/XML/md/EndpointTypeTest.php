@@ -9,7 +9,7 @@ use SAML2\Utils;
 /**
  * Class \SAML2\XML\md\EndpointType
  */
-class EndpointTypeTest extends \PHPUnit_Framework_TestCase
+class EndpointTypeTest extends \PHPUnit\Framework\TestCase
 {
     public function testMarshalling()
     {
