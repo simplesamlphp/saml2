@@ -1041,4 +1041,39 @@ AUTHNREQUEST;
         $this->expectException(\Exception::class, 'Missing <saml:NameID> or <saml:EncryptedID> in <saml:Subject>');
         $authnRequest = new AuthnRequest(DOMDocumentFactory::fromString($xml)->documentElement);
     }
+    
+    /**
+     * Test setting audiences.
+     */
+    public function testAudiencesAreAddedCorrectly()
+    {
+        // basic AuthnRequest
+        $request = new AuthnRequest();
+        $request->setIssuer('https://gateway.example.org/saml20/sp/metadata');
+        $request->setDestination('https://tiqr.example.org/idp/profile/saml2/Redirect/SSO');
+        $request->setAudiences(array('https://sp1.example.org', 'https://sp2.example.org');
+
+        $expectedStructureDocument = <<<AUTHNREQUEST
+<samlp:AuthnRequest
+    xmlns:samlp="urn:oasis:names:tc:SAML:2.0:protocol"
+    xmlns:saml="urn:oasis:names:tc:SAML:2.0:assertion"
+    ID=""
+    Version=""
+    IssueInstant=""
+    Destination="https://tiqr.example.org/idp/profile/saml2/Redirect/SSO">
+    <saml:Issuer>https://gateway.example.org/saml20/sp/metadata</saml:Issuer>
+    <saml:Conditions>
+      <saml:AudienceRestriction>
+        <saml:Audience>https://sp1.example.org</saml:Audience>
+        <saml:Audience>https://sp2.example.org</saml:Audience>
+      </saml:AudienceRestriction>
+    </saml:Conditions>
+</samlp:AuthnRequest>
+AUTHNREQUEST;
+
+        $expectedStructure = DOMDocumentFactory::fromString($expectedStructureDocument)->documentElement;
+        $requestStructure = $request->toUnsignedXML();
+
+        $this->assertEqualXMLStructure($expectedStructure, $requestStructure);
+    }
 }
