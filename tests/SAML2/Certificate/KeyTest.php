@@ -19,14 +19,15 @@ class KeyTest extends \PHPUnit_Framework_TestCase
 
     /**
      * @group certificate
-     *
+     * @dataProvider functionProvider
      * @test
      * @expectedException \SAML2\Exception\InvalidArgumentException
      */
-    public function invalid_offset_type_should_throw_an_exception()
+    public function invalid_offset_type_should_throw_an_exception($function, $params)
     {
         $key = new Key([Key::USAGE_SIGNING => true]);
-        $key->offsetGet(0);
+        $this->setExpectedException('\SAML2\Exception\InvalidArgumentException');
+        call_user_func_array([$key, $function], $params);
     }
 
 
@@ -73,5 +74,15 @@ class KeyTest extends \PHPUnit_Framework_TestCase
         $key->offsetUnset(Key::USAGE_ENCRYPTION);
         $this->assertFalse($key->offsetExists(Key::USAGE_SIGNING));
         $this->assertFalse($key->offsetExists(Key::USAGE_ENCRYPTION));
+    }
+
+    public function functionProvider()
+    {
+        return [
+            'offseGet' => ['offsetGet', [0]],
+            'offsetExists' => ['offsetExists', [0]],
+            'offsetSet' => ['offsetSet', [0, 2]],
+            'offsetUnset' => ['offsetUnset', [0]]
+        ];
     }
 }
