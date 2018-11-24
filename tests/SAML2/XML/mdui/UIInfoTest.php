@@ -21,11 +21,18 @@ class UIInfoTest extends \PHPUnit\Framework\TestCase
      */
     public function testMarshalling()
     {
+        $logo = new Logo();
+        $logo->lang = "nl";
+        $logo->width = 30;
+        $logo->height = 20;
+        $logo->url = "https://example.edu/logo.png";
+
         $uiinfo = new UIInfo();
         $uiinfo->DisplayName = ["nl" => "Voorbeeld", "en" => "Example"];
         $uiinfo->Description = ["nl" => "Omschrijving", "en" => "Description"];
         $uiinfo->InformationURL = ["nl" => "https://voorbeeld.nl/", "en" => "https://example.org"];
         $uiinfo->PrivacyStatementURL = ["nl" => "https://voorbeeld.nl/privacy", "en" => "https://example.org/privacy"];
+        $uiinfo->Logo = [$logo];
 
         $document = DOMDocumentFactory::fromString('<root />');
         $xml = $uiinfo->toXML($document->firstChild);

@@ -24,14 +24,14 @@ class KeyTest extends \PHPunit\Framework\TestCase
 
     /**
      * @group certificate
-     *
+     * @dataProvider functionProvider
      * @test
      */
-    public function invalid_offset_type_should_throw_an_exception()
+    public function invalid_offset_type_should_throw_an_exception($function, $params)
     {
         $key = new Key([Key::USAGE_SIGNING => true]);
         $this->expectException(InvalidArgumentException::class);
-        $key->offsetGet(0);
+        call_user_func_array([$key, $function], $params);
     }
 
 
@@ -78,5 +78,15 @@ class KeyTest extends \PHPunit\Framework\TestCase
         $key->offsetUnset(Key::USAGE_ENCRYPTION);
         $this->assertFalse($key->offsetExists(Key::USAGE_SIGNING));
         $this->assertFalse($key->offsetExists(Key::USAGE_ENCRYPTION));
+    }
+
+    public function functionProvider()
+    {
+        return [
+            'offseGet' => ['offsetGet', [0]],
+            'offsetExists' => ['offsetExists', [0]],
+            'offsetSet' => ['offsetSet', [0, 2]],
+            'offsetUnset' => ['offsetUnset', [0]]
+        ];
     }
 }
