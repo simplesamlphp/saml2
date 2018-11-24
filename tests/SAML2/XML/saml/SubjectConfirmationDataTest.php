@@ -14,11 +14,11 @@ class SubjectConfirmationDataTest extends \PHPUnit_Framework_TestCase
     public function testMarshalling()
     {
         $subjectConfirmationData = new SubjectConfirmationData();
-        $subjectConfirmationData->NotBefore = 987654321;
-        $subjectConfirmationData->NotOnOrAfter = 1234567890;
-        $subjectConfirmationData->Recipient = 'https://sp.example.org/asdf';
-        $subjectConfirmationData->InResponseTo = 'SomeRequestID';
-        $subjectConfirmationData->Address = '127.0.0.1';
+        $subjectConfirmationData->setNotBefore(987654321);
+        $subjectConfirmationData->setNotOnOrAfter(1234567890);
+        $subjectConfirmationData->setRecipient('https://sp.example.org/asdf');
+        $subjectConfirmationData->setInResponseTo('SomeRequestID');
+        $subjectConfirmationData->setAddress('127.0.0.1');
 
         $document = DOMDocumentFactory::fromString('<root />');
         $subjectConfirmationDataElement = $subjectConfirmationData->toXML($document->firstChild);
@@ -53,10 +53,10 @@ XML
         );
 
         $subjectConfirmationData = new SubjectConfirmationData($document->firstChild);
-        $this->assertEquals(987654321, $subjectConfirmationData->NotBefore);
-        $this->assertEquals(1234567890, $subjectConfirmationData->NotOnOrAfter);
-        $this->assertEquals('https://sp.example.org/asdf', $subjectConfirmationData->Recipient);
-        $this->assertEquals('SomeRequestID', $subjectConfirmationData->InResponseTo);
-        $this->assertEquals('127.0.0.1', $subjectConfirmationData->Address);
+        $this->assertEquals(987654321, $subjectConfirmationData->getNotBefore());
+        $this->assertEquals(1234567890, $subjectConfirmationData->getNotOnOrAfter());
+        $this->assertEquals('https://sp.example.org/asdf', $subjectConfirmationData->getRecipient());
+        $this->assertEquals('SomeRequestID', $subjectConfirmationData->getInResponseTo());
+        $this->assertEquals('127.0.0.1', $subjectConfirmationData->getAddress());
     }
 }

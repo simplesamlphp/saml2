@@ -22,7 +22,7 @@ class Chunk implements \Serializable
     /**
      * The namespaceURI of this element.
      *
-     * @var string
+     * @var string|null
      */
     public $namespaceURI;
 
@@ -40,10 +40,10 @@ class Chunk implements \Serializable
      */
     public function __construct(\DOMElement $xml)
     {
-        $this->localName = $xml->localName;
-        $this->namespaceURI = $xml->namespaceURI;
+        $this->setLocalName($xml->localName);
+        $this->setNamespaceURI($xml->namespaceURI);
 
-        $this->xml = Utils::copyElement($xml);
+        $this->setXml(Utils::copyElement($xml));
     }
 
     /**
@@ -69,13 +69,61 @@ class Chunk implements \Serializable
     }
 
     /**
+     * Collect the value of the localName-property
+     * @return string
+     */
+    public function getLocalName()
+    {
+        return $this->localName;
+    }
+
+    /**
+     * Set the value of the localName-property
+     * @param string $localName
+     */
+    public function setLocalName($localName)
+    {
+        assert(is_string($localName));
+        $this->localName = $localName;
+    }
+
+    /**
+     * Collect the value of the namespaceURI-property
+     * @return string|null
+     */
+    public function getNamespaceURI()
+    {
+        return $this->namespaceURI;
+    }
+
+    /**
+     * Set the value of the namespaceURI-property
+     * @param string|null $namespaceURI
+     */
+    public function setNamespaceURI($namespaceURI = null)
+    {
+        assert(is_string($namespaceURI) || is_null($namespaceURI));
+        $this->namespaceURI = $namespaceURI;
+    }
+
+    /**
+     * Set the value of the xml-property
+     * @param \DOMelement $xml
+     */
+    private function setXml($xml)
+    {
+        assert($xml instanceof \DOMElement);
+        $this->xml = $xml;
+    }
+
+    /**
      * Serialize this XML chunk.
      *
      * @return string The serialized chunk.
      */
     public function serialize()
     {
-        return serialize($this->xml->ownerDocument->saveXML($this->xml));
+        return serialize($this->getXml()->ownerDocument->saveXML($this->getXml()));
     }
 
     /**
@@ -86,8 +134,8 @@ class Chunk implements \Serializable
     public function unserialize($serialized)
     {
         $doc = DOMDocumentFactory::fromString(unserialize($serialized));
-        $this->xml = $doc->documentElement;
-        $this->localName = $this->xml->localName;
-        $this->namespaceURI = $this->xml->namespaceURI;
+        $this->setXml($doc->documentElement);
+        $this->setLocalName($this->getXml()->localName);
+        $this->setNamespaceURI($this->getXml()->namespaceURI);
     }
 }

@@ -320,13 +320,13 @@ class Utils
         $nid->value = $nameId['Value'];
 
         if (array_key_exists('NameQualifier', $nameId) && $nameId['NameQualifier'] !== null) {
-            $nid->NameQualifier = $nameId['NameQualifier'];
+            $nid->setNameQualifier($nameId['NameQualifier']);
         }
         if (array_key_exists('SPNameQualifier', $nameId) && $nameId['SPNameQualifier'] !== null) {
-            $nid->SPNameQualifier = $nameId['SPNameQualifier'];
+            $nid->setSPNameQualifier($nameId['SPNameQualifier']);
         }
         if (array_key_exists('Format', $nameId) && $nameId['Format'] !== null) {
-            $nid->Format = $nameId['Format'];
+            $nid->setFormat($nameId['Format']);
         }
 
         $nid->toXML($node);
@@ -685,13 +685,13 @@ class Utils
         assert(is_string($x509Data));
 
         $x509Certificate = new X509Certificate();
-        $x509Certificate->certificate = $x509Data;
+        $x509Certificate->setCertificate($x509Data);
 
         $x509Data = new X509Data();
-        $x509Data->data[] = $x509Certificate;
+        $x509Data->addData($x509Certificate);
 
         $keyInfo = new KeyInfo();
-        $keyInfo->info[] = $x509Data;
+        $keyInfo->addInfo($x509Data);
 
         $keyDescriptor = new KeyDescriptor();
         $keyDescriptor->KeyInfo = $keyInfo;

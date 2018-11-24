@@ -4,6 +4,8 @@ namespace SAML2\XML\md;
 
 use SAML2\Constants;
 use SAML2\DOMDocumentFactory;
+use SAML2\XML\shibmd\Scope;
+use SAML2\XML\alg\DigestMethod;
 
 /**
  * Class \SAML2\XML\md\ExtensionsTest.
@@ -118,10 +120,10 @@ XML
         $document->formatOutput = true;
         $r = $document->createElement('root');
         $document->appendChild($r);
-        $scope = new \SAML2\XML\shibmd\Scope();
-        $scope->scope = 'SomeScope';
-        $digest = new \SAML2\XML\alg\DigestMethod();
-        $digest->Algorithm = 'SomeAlgorithm';
+        $scope = new Scope();
+        $scope->setScope('SomeScope');
+        $digest = new DigestMethod();
+        $digest->setAlgorithm('SomeAlgorithm');
         $extensions = [
             $scope,
             $digest,

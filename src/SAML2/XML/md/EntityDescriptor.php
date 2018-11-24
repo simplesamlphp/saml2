@@ -105,19 +105,19 @@ class EntityDescriptor extends SignedElementHelper
         if (!$xml->hasAttribute('entityID')) {
             throw new \Exception('Missing required attribute entityID on EntityDescriptor.');
         }
-        $this->entityID = $xml->getAttribute('entityID');
+        $this->setEntityID($xml->getAttribute('entityID'));
 
         if ($xml->hasAttribute('ID')) {
-            $this->ID = $xml->getAttribute('ID');
+            $this->setID($xml->getAttribute('ID'));
         }
         if ($xml->hasAttribute('validUntil')) {
-            $this->validUntil = Utils::xsDateTimeToTimestamp($xml->getAttribute('validUntil'));
+            $this->setValidUntil(Utils::xsDateTimeToTimestamp($xml->getAttribute('validUntil')));
         }
         if ($xml->hasAttribute('cacheDuration')) {
-            $this->cacheDuration = $xml->getAttribute('cacheDuration');
+            $this->setCacheDuration($xml->getAttribute('cacheDuration'));
         }
 
-        $this->Extensions = Extensions::getList($xml);
+        $this->setExtensions(Extensions::getList($xml));
 
         for ($node = $xml->firstChild; $node !== null; $node = $node->nextSibling) {
             if (!($node instanceof \DOMElement)) {
@@ -130,22 +130,22 @@ class EntityDescriptor extends SignedElementHelper
 
             switch ($node->localName) {
                 case 'RoleDescriptor':
-                    $this->RoleDescriptor[] = new UnknownRoleDescriptor($node);
+                    $this->addRoleDescriptor(new UnknownRoleDescriptor($node));
                     break;
                 case 'IDPSSODescriptor':
-                    $this->RoleDescriptor[] = new IDPSSODescriptor($node);
+                    $this->addRoleDescriptor(new IDPSSODescriptor($node));
                     break;
                 case 'SPSSODescriptor':
-                    $this->RoleDescriptor[] = new SPSSODescriptor($node);
+                    $this->addRoleDescriptor(new SPSSODescriptor($node));
                     break;
                 case 'AuthnAuthorityDescriptor':
-                    $this->RoleDescriptor[] = new AuthnAuthorityDescriptor($node);
+                    $this->addRoleDescriptor(new AuthnAuthorityDescriptor($node));
                     break;
                 case 'AttributeAuthorityDescriptor':
-                    $this->RoleDescriptor[] = new AttributeAuthorityDescriptor($node);
+                    $this->addRoleDescriptor(new AttributeAuthorityDescriptor($node));
                     break;
                 case 'PDPDescriptor':
-                    $this->RoleDescriptor[] = new PDPDescriptor($node);
+                    $this->addRoleDescriptor(new PDPDescriptor($node));
                     break;
             }
         }
@@ -154,12 +154,13 @@ class EntityDescriptor extends SignedElementHelper
         if (count($affiliationDescriptor) > 1) {
             throw new \Exception('More than one AffiliationDescriptor in the entity.');
         } elseif (!empty($affiliationDescriptor)) {
-            $this->AffiliationDescriptor = new AffiliationDescriptor($affiliationDescriptor[0]);
+            $this->setAffiliationDescriptor(new AffiliationDescriptor($affiliationDescriptor[0]));
         }
 
-        if (empty($this->RoleDescriptor) && is_null($this->AffiliationDescriptor)) {
+        $roleDescriptor = $this->getRoleDescriptor();
+        if (empty($roleDescriptor) && is_null($this->getAffiliationDescriptor())) {
             throw new \Exception('Must have either one of the RoleDescriptors or an AffiliationDescriptor in EntityDescriptor.');
-        } elseif (!empty($this->RoleDescriptor) && !is_null($this->AffiliationDescriptor)) {
+        } elseif (!empty($roleDescriptor) && !is_null($this->getAffiliationDescriptor())) {
             throw new \Exception('AffiliationDescriptor cannot be combined with other RoleDescriptor elements in EntityDescriptor.');
         }
 
@@ -167,17 +168,230 @@ class EntityDescriptor extends SignedElementHelper
         if (count($organization) > 1) {
             throw new \Exception('More than one Organization in the entity.');
         } elseif (!empty($organization)) {
-            $this->Organization = new Organization($organization[0]);
+            $this->setOrganization(new Organization($organization[0]));
         }
 
         foreach (Utils::xpQuery($xml, './saml_metadata:ContactPerson') as $cp) {
-            $this->ContactPerson[] = new ContactPerson($cp);
+            $this->addContactPerson(new ContactPerson($cp));
         }
 
         foreach (Utils::xpQuery($xml, './saml_metadata:AdditionalMetadataLocation') as $aml) {
-            $this->AdditionalMetadataLocation[] = new AdditionalMetadataLocation($aml);
+            $this->addAdditionalMetadataLocation(new AdditionalMetadataLocation($aml));
         }
     }
+
+    /**
+     * Collect the value of the entityID-property
+     * @return string
+     */
+    public function getEntityID()
+    {
+        return $this->entityID;
+    }
+
+    /**
+     * Set the value of the entityID-property
+     * @param string|null $entityId
+     */
+    public function setEntityID($entityId)
+    {
+        assert(is_string($entityId) || is_null($entityId));
+        $this->entityID = $entityId;
+    }
+
+    /**
+     * Collect the value of the ID-property
+     * @return string|null
+     */
+    public function getID()
+    {
+        return $this->ID;
+    }
+
+    /**
+     * Set the value of the ID-property
+     * @param string|null $Id
+     */
+    public function setID($Id = null)
+    {
+        assert(is_string($Id) || is_null($Id));
+        $this->ID = $Id;
+    }
+
+    /**
+     * Collect the value of the validUntil-property
+     * @return int|null
+     */
+    public function getValidUntil()
+    {
+        return $this->validUntil;
+    }
+
+    /**
+     * Set the value of the validUntil-property
+     * @param int|null $validUntil
+     */
+    public function setValidUntil($validUntil = null)
+    {
+        assert(is_int($validUntil) || is_null($validUntil));
+        $this->validUntil = $validUntil;
+    }
+
+    /**
+     * Collect the value of the cacheDuration-property
+     * @return string|null
+     */
+    public function getCacheDuration()
+    {
+        return $this->cacheDuration;
+    }
+
+    /**
+     * Set the value of the cacheDuration-property
+     * @param string|null $cacheDuration
+     */
+    public function setCacheDuration($cacheDuration = null)
+    {
+        assert(is_string($cacheDuration) || is_null($cacheDuration));
+        $this->cacheDuration = $cacheDuration;
+    }
+
+    /**
+     * Collect the value of the Extensions-property
+     * @return \SAML2\XML\Chunk[]
+     */
+    public function getExtensions()
+    {
+        return $this->Extensions;
+    }
+
+    /**
+     * Set the value of the Extensions-property
+     * @param array $extensions
+     */
+    public function setExtensions(array $extensions)
+    {
+        $this->Extensions = $extensions;
+    }
+
+    /**
+     * Collect the value of the RoleDescriptor-property
+     * @return \SAML2\XML\md\RoleDescriptor[]
+     */
+    public function getRoleDescriptor()
+    {
+        return $this->RoleDescriptor;
+    }
+
+    /**
+     * Set the value of the RoleDescriptor-property
+     * @param array $roleDescriptor
+     */
+    public function setRoleDescriptor(array $roleDescriptor)
+    {
+        $this->RoleDescriptor = $roleDescriptor;
+    }
+
+    /**
+     * Add the value to the RoleDescriptor-property
+     * @param \SAML2\XML\md\Role $roleDescriptor
+     */
+    public function addRoleDescriptor($roleDescriptor)
+    {
+        $this->RoleDescriptor[] = $roleDescriptor;
+    }
+
+    /**
+     * Collect the value of the AffiliationDescriptor-property
+     * @return \SAML2\XML\md\AffiliationDescriptor|null
+     */
+    public function getAffiliationDescriptor()
+    {
+        return $this->AffiliationDescriptor;
+    }
+
+    /**
+     * Set the value of the AffliationDescriptor-property
+     * @param \SAML2\XML\md\AffiliationDescriptor $affiliationDescriptor|null
+     */
+    public function setAffiliationDescriptor(AffiliationDescriptor $affiliationDescriptor = null)
+    {
+        $this->AffiliationDescriptor = $affiliationDescriptor;
+    }
+
+    /**
+     * Collect the value of the Organization-property
+     * @return \SAML2\XML\md\Organization|null
+     */
+    public function getOrganization()
+    {
+        return $this->Organization;
+    }
+
+    /**
+     * Set the value of the Organization-property
+     * @param \SAML2\XML\md\Organization $organization|null
+     */
+    public function setOrganization(Organization $organization = null)
+    {
+        $this->Organization = $organization;
+    }
+
+
+    /**
+     * Collect the value of the ContactPerson-property
+     * @return \SAML2\XML\md\ContactPerson[]
+     */
+    public function getContactPerson()
+    {
+        return $this->ContactPerson;
+    }
+
+    /**
+     * Set the value of the ContactPerson-property
+     * @param array $contactPerson
+     */
+    public function setContactPerson(array $contactPerson)
+    {
+        $this->ContactPerson = $contactPerson;
+    }
+
+    /**
+     * Add the value to the ContactPerson-property
+     * @param \SAML2\XML\md\ContactPerson $contactPerson
+     */
+    public function addContactPerson(ContactPerson $contactPerson)
+    {
+        $this->ContactPerson[] = $contactPerson;
+    }
+
+    /**
+     * Collect the value of the AdditionalMetadataLocation-property
+     * @return \SAML2\XML\md\AdditionalMetadataLocation[]
+     */
+    public function getAdditionalMetadataLocation()
+    {
+        return $this->AdditionalMetadataLocation;
+    }
+
+    /**
+     * Set the value of the AdditionalMetadataLocation-property
+     * @param array $additionalMetadataLocation
+     */
+    public function setAdditionalMetadataLocation(array $additionalMetadataLocation)
+    {
+        $this->AdditionalMetadataLocation = $additionalMetadataLocation;
+    }
+
+    /**
+     * Add the value to the AdditionalMetadataLocation-property
+     * @param AdditionalMetadataLocation $additionalMetadataLocation
+     */
+    public function addAdditionalMetadataLocation(AdditionalMetadataLocation $additionalMetadataLocation)
+    {
+        $this->AdditionalMetadataLocation[] = $additionalMetadataLocation;
+    }
+
 
     /**
      * Create this EntityDescriptor.
@@ -187,16 +401,16 @@ class EntityDescriptor extends SignedElementHelper
      */
     public function toXML(\DOMElement $parent = null)
     {
-        assert(is_string($this->entityID));
-        assert(is_null($this->ID) || is_string($this->ID));
-        assert(is_null($this->validUntil) || is_int($this->validUntil));
-        assert(is_null($this->cacheDuration) || is_string($this->cacheDuration));
-        assert(is_array($this->Extensions));
-        assert(is_array($this->RoleDescriptor));
-        assert(is_null($this->AffiliationDescriptor) || $this->AffiliationDescriptor instanceof AffiliationDescriptor);
-        assert(is_null($this->Organization) || $this->Organization instanceof Organization);
-        assert(is_array($this->ContactPerson));
-        assert(is_array($this->AdditionalMetadataLocation));
+        assert(is_string($this->getEntityID()));
+        assert(is_null($this->getID()) || is_string($this->getID()));
+        assert(is_null($this->getValidUntil()) || is_int($this->getValidUntil()));
+        assert(is_null($this->getCacheDuration()) || is_string($this->getCacheDuration()));
+        assert(is_array($this->getExtensions()));
+        assert(is_array($this->getRoleDescriptor()));
+        assert(is_null($this->getAffiliationDescriptor()) || $this->getAffiliationDescriptor() instanceof AffiliationDescriptor);
+        assert(is_null($this->getOrganization()) || $this->getOrganization() instanceof Organization);
+        assert(is_array($this->getContactPerson()));
+        assert(is_array($this->getAdditionalMetadataLocation()));
 
         if ($parent === null) {
             $doc = DOMDocumentFactory::create();
@@ -207,40 +421,40 @@ class EntityDescriptor extends SignedElementHelper
             $parent->appendChild($e);
         }
 
-        $e->setAttribute('entityID', $this->entityID);
+        $e->setAttribute('entityID', $this->getEntityID());
 
-        if (isset($this->ID)) {
-            $e->setAttribute('ID', $this->ID);
+        if ($this->getID() !== null) {
+            $e->setAttribute('ID', $this->getID());
         }
 
-        if (isset($this->validUntil)) {
-            $e->setAttribute('validUntil', gmdate('Y-m-d\TH:i:s\Z', $this->validUntil));
+        if ($this->getValidUntil() !== null) {
+            $e->setAttribute('validUntil', gmdate('Y-m-d\TH:i:s\Z', $this->getValidUntil()));
         }
 
-        if (isset($this->cacheDuration)) {
-            $e->setAttribute('cacheDuration', $this->cacheDuration);
+        if ($this->getCacheDuration() !== null) {
+            $e->setAttribute('cacheDuration', $this->getCacheDuration());
         }
 
-        Extensions::addList($e, $this->Extensions);
+        Extensions::addList($e, $this->getExtensions());
 
         /** @var \SAML2\XML\md\UnknownRoleDescriptor|\SAML2\XML\md\IDPSSODescriptor|\SAML2\XML\md\SPSSODescriptor|\SAML2\XML\md\AuthnAuthorityDescriptor|\SAML2\XML\md\AttributeAuthorityDescriptor|\SAML2\XML\md\PDPDescriptor $n */
-        foreach ($this->RoleDescriptor as $n) {
+        foreach ($this->getRoleDescriptor() as $n) {
             $n->toXML($e);
         }
 
-        if (isset($this->AffiliationDescriptor)) {
-            $this->AffiliationDescriptor->toXML($e);
+        if ($this->getAffiliationDescriptor() !== null) {
+            $this->getAffiliationDescriptor()->toXML($e);
         }
 
-        if (isset($this->Organization)) {
-            $this->Organization->toXML($e);
+        if ($this->getOrganization() !== null) {
+            $this->getOrganization()->toXML($e);
         }
 
-        foreach ($this->ContactPerson as $cp) {
+        foreach ($this->getContactPerson() as $cp) {
             $cp->toXML($e);
         }
 
-        foreach ($this->AdditionalMetadataLocation as $n) {
+        foreach ($this->getAdditionalMetadataLocation() as $n) {
             $n->toXML($e);
         }
 

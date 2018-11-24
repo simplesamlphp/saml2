@@ -75,25 +75,178 @@ class UIInfo
             return;
         }
 
-        $this->DisplayName         = Utils::extractLocalizedStrings($xml, Common::NS, 'DisplayName');
-        $this->Description         = Utils::extractLocalizedStrings($xml, Common::NS, 'Description');
-        $this->InformationURL      = Utils::extractLocalizedStrings($xml, Common::NS, 'InformationURL');
-        $this->PrivacyStatementURL = Utils::extractLocalizedStrings($xml, Common::NS, 'PrivacyStatementURL');
+        $this->setDisplayName(Utils::extractLocalizedStrings($xml, Common::NS, 'DisplayName'));
+        $this->setDescription(Utils::extractLocalizedStrings($xml, Common::NS, 'Description'));
+        $this->setInformationURL(Utils::extractLocalizedStrings($xml, Common::NS, 'InformationURL'));
+        $this->setPrivacyStatementURL(Utils::extractLocalizedStrings($xml, Common::NS, 'PrivacyStatementURL'));
 
         foreach (Utils::xpQuery($xml, './*') as $node) {
             if ($node->namespaceURI === Common::NS) {
                 switch ($node->localName) {
                     case 'Keywords':
-                        $this->Keywords[] = new Keywords($node);
+                        $this->addKeyword(new Keywords($node));
                         break;
                     case 'Logo':
-                        $this->Logo[] = new Logo($node);
+                        $this->addLogo(new Logo($node));
                         break;
                 }
             } else {
-                $this->children[] = new Chunk($node);
+                $this->addChildren(new Chunk($node));
             }
         }
+    }
+
+    /**
+     * Collect the value of the Keywords-property
+     * @return \SAML2\XML\mdui\Keywords[]
+     */
+    public function getKeywords()
+    {
+        return $this->Keywords;
+    }
+
+    /**
+     * Set the value of the Keywords-property
+     * @param \SAML2\XML\mdui\Keywords[] $keywords
+     */
+    public function setKeywords(array $keywords)
+    {
+        $this->Keywords = $keywords;
+    }
+
+    /**
+     * Add the value to the Keywords-property
+     * @param \SAML2\XML\mdui\Keywords $keyword
+     */
+    public function addKeyword(Keywords $keyword)
+    {
+        $this->Keywords[] = $keyword;
+    }
+
+    /**
+     * Collect the value of the DisplayName-property
+     * @return string[]
+     */
+    public function getDisplayName()
+    {
+        return $this->DisplayName;
+    }
+
+    /**
+     * Set the value of the DisplayName-property
+     * @param array $displayName
+     */
+    public function setDisplayName(array $displayName)
+    {
+        $this->DisplayName = $displayName;
+    }
+
+    /**
+     * Collect the value of the Description-property
+     * @return string[]
+     */
+    public function getDescription()
+    {
+        return $this->Description;
+    }
+
+    /**
+     * Set the value of the Description-property
+     * @param array $description
+     */
+    public function setDescription(array $description)
+    {
+        $this->Description = $description;
+    }
+
+    /**
+     * Collect the value of the InformationURL-property
+     * @return string[]
+     */
+    public function getInformationURL()
+    {
+        return $this->InformationURL;
+    }
+
+    /**
+     * Set the value of the InformationURL-property
+     * @param array $informationURL
+     */
+    public function setInformationURL(array $informationURL)
+    {
+        $this->InformationURL = $informationURL;
+    }
+
+    /**
+     * Collect the value of the PrivacyStatementURL-property
+     * @return string[]
+     */
+    public function getPrivacyStatementURL()
+    {
+        return $this->PrivacyStatementURL;
+    }
+
+    /**
+     * Set the value of the PrivacyStatementURL-property
+     * @param array $privacyStatementURL
+     */
+    public function setPrivacyStatementURL(array $privacyStatementURL)
+    {
+        $this->PrivacyStatementURL = $privacyStatementURL;
+    }
+
+    /**
+     * Collect the value of the Logo-property
+     * @return \SAML2\XML\mdui\Logo[]
+     */
+    public function getLogo()
+    {
+        return $this->Logo;
+    }
+
+    /**
+     * Set the value of the Logo-property
+     * @param \SAML2\XML\mdui\Logo $logo
+     */
+    public function setLogo(array $logo)
+    {
+        $this->Logo = $logo;
+    }
+
+    /**
+     * Add the value to the Logo-property
+     * @param \SAML2\XML\mdui\Logo $logo
+     */
+    public function addLogo(Logo $logo)
+    {
+        $this->Logo[] = $logo;
+    }
+
+    /**
+     * Collect the value of the children-property
+     * @return \SAML2\XML\Chunk[]
+     */
+    public function getChildren()
+    {
+        return $this->children;
+    }
+
+    /**
+     * Set the value of the childen-property
+     * @param array $children
+     */
+    public function setChildren(array $children)
+    {
+        $this->children = $children;
+    }
+
+    /**
+     * Add the value to the children-property
+     * @param \SAML2\XML\Chunk $child
+     */
+    public function addChildren(Chunk $child)
+    {
+        $this->children[] = $child;
     }
 
     /**
@@ -104,45 +257,46 @@ class UIInfo
      */
     public function toXML(\DOMElement $parent)
     {
-        assert(is_array($this->DisplayName));
-        assert(is_array($this->InformationURL));
-        assert(is_array($this->PrivacyStatementURL));
-        assert(is_array($this->Keywords));
-        assert(is_array($this->Logo));
-        assert(is_array($this->children));
+        assert(is_array($displayName = $this->getDisplayName()));
+        assert(is_array($description = $this->getDescription()));
+        assert(is_array($informationURL = $this->getInformationURL()));
+        assert(is_array($privacyStatementURL = $this->getPrivacyStatementURL()));
+        assert(is_array($keywords = $this->getKeywords()));
+        assert(is_array($logo = $this->getLogo()));
+        assert(is_array($children = $this->getChildren()));
 
         $e = null;
-        if (!empty($this->DisplayName)
-         || !empty($this->Description)
-         || !empty($this->InformationURL)
-         || !empty($this->PrivacyStatementURL)
-         || !empty($this->Keywords)
-         || !empty($this->Logo)
-         || !empty($this->children)) {
+        if (!empty($displayName)
+         || !empty($description)
+         || !empty($informationURL)
+         || !empty($privacyStatementURL)
+         || !empty($keywords)
+         || !empty($logo)
+         || !empty($children)) {
             $doc = $parent->ownerDocument;
 
             $e = $doc->createElementNS(Common::NS, 'mdui:UIInfo');
             $parent->appendChild($e);
 
-            Utils::addStrings($e, Common::NS, 'mdui:DisplayName', true, $this->DisplayName);
-            Utils::addStrings($e, Common::NS, 'mdui:Description', true, $this->Description);
-            Utils::addStrings($e, Common::NS, 'mdui:InformationURL', true, $this->InformationURL);
-            Utils::addStrings($e, Common::NS, 'mdui:PrivacyStatementURL', true, $this->PrivacyStatementURL);
+            Utils::addStrings($e, Common::NS, 'mdui:DisplayName', true, $this->getDisplayName());
+            Utils::addStrings($e, Common::NS, 'mdui:Description', true, $this->getDescription());
+            Utils::addStrings($e, Common::NS, 'mdui:InformationURL', true, $this->getInformationURL());
+            Utils::addStrings($e, Common::NS, 'mdui:PrivacyStatementURL', true, $this->getPrivacyStatementURL());
 
-            if (!empty($this->Keywords)) {
-                foreach ($this->Keywords as $child) {
+            if ($this->getKeywords() !== null) {
+                foreach ($this->getKeywords() as $child) {
                     $child->toXML($e);
                 }
             }
 
-            if (!empty($this->Logo)) {
-                foreach ($this->Logo as $child) {
+            if ($this->getLogo() !== null) {
+                foreach ($this->getLogo() as $child) {
                     $child->toXML($e);
                 }
             }
 
-            if (!empty($this->children)) {
-                foreach ($this->children as $child) {
+            if ($this->getChildren() !== null) {
+                foreach ($this->getChildren() as $child) {
                     $child->toXML($e);
                 }
             }

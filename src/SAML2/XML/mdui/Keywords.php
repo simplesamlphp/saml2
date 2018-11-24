@@ -44,11 +44,58 @@ class Keywords
         if (!is_string($xml->textContent) || !strlen($xml->textContent)) {
             throw new \Exception('Missing value for Keywords.');
         }
-        $this->Keywords = [];
+        $this->setKeywords([]);
         foreach (explode(' ', $xml->textContent) as $keyword) {
-            $this->Keywords[] = str_replace('+', ' ', $keyword);
+            $this->addKeyword(str_replace('+', ' ', $keyword));
         }
-        $this->lang = $xml->getAttribute('xml:lang');
+        $this->setLanguage($xml->getAttribute('xml:lang'));
+    }
+
+    /**
+     * Collect the value of the lang-property
+     * @return string
+     */
+    public function getLanguage()
+    {
+        return $this->lang;
+    }
+
+    /**
+     * Set the value of the lang-property
+     * @param string $lang
+     */
+    public function setLanguage($lang)
+    {
+        assert(is_string($lang) || is_null($lang));
+        $this->lang = $lang;
+    }
+
+    /**
+     * Collect the value of the Keywords-property
+     * @return string[]
+     */
+    public function getKeywords()
+    {
+        return $this->Keywords;
+    }
+
+    /**
+     * Set the value of the Keywords-property
+     * @param string[] $keywords
+     */
+    public function setKeywords(array $keywords)
+    {
+        $this->Keywords = $keywords;
+    }
+
+    /**
+     * Add the value to the Keywords-property
+     * @param string $keyword
+     */
+    public function addKeyword($keyword)
+    {
+        assert(is_string($keyword));
+        $this->Keywords[] = $keyword;
     }
 
     /**
@@ -60,15 +107,15 @@ class Keywords
      */
     public function toXML(\DOMElement $parent)
     {
-        assert(is_string($this->lang));
-        assert(is_array($this->Keywords));
+        assert(is_string($this->getLanguage()));
+        assert(is_array($this->getKeywords()));
 
         $doc = $parent->ownerDocument;
 
         $e = $doc->createElementNS(Common::NS, 'mdui:Keywords');
-        $e->setAttribute('xml:lang', $this->lang);
+        $e->setAttribute('xml:lang', $this->getLanguage());
         $value = '';
-        foreach ($this->Keywords as $keyword) {
+        foreach ($this->getKeywords() as $keyword) {
             if (strpos($keyword, "+") !== false) {
                 throw new \Exception('Keywords may not contain a "+" character.');
             }

@@ -62,16 +62,72 @@ abstract class NameIDType extends BaseIDType
         }
 
         if ($xml->hasAttribute('Format')) {
-            $this->Format = $xml->getAttribute('Format');
+            $this->setFormat($xml->getAttribute('Format'));
         }
 
         if ($xml->hasAttribute('SPProvidedID')) {
-            $this->SPProvidedID = $xml->getAttribute('SPProvidedID');
+            $this->setSPProvidedID($xml->getAttribute('SPProvidedID'));
         }
 
-        $this->value = trim($xml->textContent);
+        $this->setValue(trim($xml->textContent));
     }
 
+    /**
+     * Collect the value of the Format-property
+     * @return string|null
+     */
+    public function getFormat()
+    {
+        return $this->Format;
+    }
+
+    /**
+     * Set the value of the Format-property
+     * @param string|null $format
+     */
+    public function setFormat($format = null)
+    {
+        assert(is_string($format) || is_null($format));
+        $this->Format = $format;
+    }
+
+    /**
+     * Collect the value of the value-property
+     * @return string|null
+     */
+    public function getValue()
+    {
+        return $this->value;
+    }
+
+    /**
+     * Set the value of the value-property
+     * @param string|null $value
+     */
+    public function setValue($value)
+    {
+        assert(is_string($value) || is_null($value));
+        $this->value = $value;
+    }
+
+    /**
+     * Collect the value of the SPProvidedID-property
+     * @return string|null
+     */
+    public function getSPProvidedID()
+    {
+        return $this->SPProvidedID;
+    }
+
+    /**
+     * Set the value of the SPProvidedID-property
+     * @param string|null $spProvidedID
+     */
+    public function setSPProvidedID($spProvidedID)
+    {
+        assert(is_string($spProvidedID) || is_null($spProvidedID));
+        $this->SPProvidedID = $spProvidedID;
+    }
 
     /**
      * Create a \SAML2\XML\saml\NameID object from an array with its contents.
@@ -89,19 +145,19 @@ abstract class NameIDType extends BaseIDType
         if (!array_key_exists('Value', $nameId)) {
             throw new \InvalidArgumentException('Missing "Value" in array, cannot create NameID from it.');
         }
-        $nid->value = $nameId['Value'];
+        $nid->setValue($nameId['Value']);
 
         if (array_key_exists('NameQualifier', $nameId) && $nameId['NameQualifier'] !== null) {
-            $nid->NameQualifier = $nameId['NameQualifier'];
+            $nid->setNameQualifier($nameId['NameQualifier']);
         }
         if (array_key_exists('SPNameQualifier', $nameId) && $nameId['SPNameQualifier'] !== null) {
-            $nid->SPNameQualifier = $nameId['SPNameQualifier'];
+            $nid->setSPNameQualifier($nameId['SPNameQualifier']);
         }
         if (array_key_exists('SPProvidedID', $nameId) && $nameId['SPProvidedId'] !== null) {
-            $nid->SPProvidedID = $nameId['SPProvidedID'];
+            $nid->setSPProvidedID($nameId['SPProvidedID']);
         }
         if (array_key_exists('Format', $nameId) && $nameId['Format'] !== null) {
-            $nid->Format = $nameId['Format'];
+            $nid->setFormat($nameId['Format']);
         }
         return $nid;
     }
@@ -116,21 +172,21 @@ abstract class NameIDType extends BaseIDType
      */
     public function toXML(\DOMElement $parent = null)
     {
-        assert(is_string($this->Format) || is_null($this->Format));
-        assert(is_string($this->SPProvidedID) || is_null($this->SPProvidedID));
-        assert(is_string($this->value));
+        assert(is_string($this->getFormat()) || is_null($this->getFormat()));
+        assert(is_string($this->getSPProvidedID()) || is_null($this->getSPProvidedID()));
+        assert(is_string($this->getValue()));
 
         $element = parent::toXML($parent);
 
-        if ($this->Format !== null) {
-            $element->setAttribute('Format', $this->Format);
+        if ($this->getFormat() !== null) {
+            $element->setAttribute('Format', $this->getFormat());
         }
 
-        if ($this->SPProvidedID !== null) {
-            $element->setAttribute('SPProvidedID', $this->SPProvidedID);
+        if ($this->getSPProvidedID() !== null) {
+            $element->setAttribute('SPProvidedID', $this->getSPProvidedID());
         }
 
-        $value = $element->ownerDocument->createTextNode($this->value);
+        $value = $element->ownerDocument->createTextNode($this->getValue());
         $element->appendChild($value);
 
         return $element;

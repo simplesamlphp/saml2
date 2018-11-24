@@ -68,20 +68,121 @@ class AttributeConsumingService
         if (!$xml->hasAttribute('index')) {
             throw new \Exception('Missing index on AttributeConsumingService.');
         }
-        $this->index = (int) $xml->getAttribute('index');
+        $this->setIndex(intval($xml->getAttribute('index')));
 
-        $this->isDefault = Utils::parseBoolean($xml, 'isDefault', null);
+        $this->setIsDefault(Utils::parseBoolean($xml, 'isDefault', null));
 
-        $this->ServiceName = Utils::extractLocalizedStrings($xml, Constants::NS_MD, 'ServiceName');
-        if (empty($this->ServiceName)) {
+        $this->setServiceName(Utils::extractLocalizedStrings($xml, Constants::NS_MD, 'ServiceName'));
+        if ($this->getServiceName() === []) {
             throw new \Exception('Missing ServiceName in AttributeConsumingService.');
         }
 
-        $this->ServiceDescription = Utils::extractLocalizedStrings($xml, Constants::NS_MD, 'ServiceDescription');
+        $this->setServiceDescription(Utils::extractLocalizedStrings($xml, Constants::NS_MD, 'ServiceDescription'));
 
         foreach (Utils::xpQuery($xml, './saml_metadata:RequestedAttribute') as $ra) {
-            $this->RequestedAttribute[] = new RequestedAttribute($ra);
+            $this->addRequestedAttribute(new RequestedAttribute($ra));
         }
+    }
+
+    /**
+     * Collect the value of the index-property
+     * @return int
+     */
+    public function getIndex()
+    {
+        return $this->index;
+    }
+
+    /**
+     * Set the value of the index-property
+     * @param int $index
+     */
+    public function setIndex($index)
+    {
+        assert(is_int($index));
+        $this->index = $index;
+    }
+
+    /**
+     * Collect the value of the isDefault-property
+     * @return boolean|null
+     */
+    public function getIsDefault()
+    {
+        return $this->isDefault;
+    }
+
+    /**
+     * Set the value of the isDefault-property
+     * @param boolean|null $flag
+     */
+    public function setIsDefault($flag = null)
+    {
+        assert(is_bool($flag));
+        $this->isDefault = $flag;
+    }
+
+    /**
+     * Collect the value of the ServiceName-property
+     * @return string[]
+     */
+    public function getServiceName()
+    {
+        return $this->ServiceName;
+    }
+
+    /**
+     * Set the value of the ServiceName-property
+     * @param string[] $serviceName
+     */
+    public function setServiceName(array $serviceName)
+    {
+        $this->ServiceName = $serviceName;
+    }
+
+    /**
+     * Collect the value of the ServiceDescription-property
+     * @return string[]
+     */
+    public function getServiceDescription()
+    {
+        return $this->ServiceDescription;
+    }
+
+    /**
+     * Set the value of the ServiceDescription-property
+     * @param string[] $serviceDescription
+     */
+    public function setServiceDescription(array $serviceDescription)
+    {
+        $this->ServiceDescription = $serviceDescription;
+    }
+
+    /**
+     * Collect the value of the RequestedAttribute-property
+     * @return \SAML2\XML\md\RequestedAttribute[]
+     */
+    public function getRequestedAttribute()
+    {
+        return $this->RequestedAttribute;
+    }
+
+    /**
+     * Set the value of the RequestedAttribute-property
+     * @param \SAML2\XML\md\RequestedAttribute[] $requestedAttribute
+     */
+    public function setRequestedAttribute(array $requestedAttribute)
+    {
+        $this->RequestedAttribute = $requestedAttribute;
+    }
+
+    /**
+     * Add the value to the RequestedAttribute-property
+     * @param \SAML2\XML\md\RequestedAttribute $requestedAttribute
+     */
+    public function addRequestedAttribute(RequestedAttribute $requestedAttribute)
+    {
+        $this->RequestedAttribute[] = $requestedAttribute;
     }
 
     /**
@@ -92,29 +193,29 @@ class AttributeConsumingService
      */
     public function toXML(\DOMElement $parent)
     {
-        assert(is_int($this->index));
-        assert(is_null($this->isDefault) || is_bool($this->isDefault));
-        assert(is_array($this->ServiceName));
-        assert(is_array($this->ServiceDescription));
-        assert(is_array($this->RequestedAttribute));
+        assert(is_int($this->getIndex()));
+        assert(is_null($this->getIsDefault()) || is_bool($this->getIsDefault()));
+        assert(is_array($this->getServiceName()));
+        assert(is_array($this->getServiceDescription()));
+        assert(is_array($this->getRequestedAttribute()));
 
         $doc = $parent->ownerDocument;
 
         $e = $doc->createElementNS(Constants::NS_MD, 'md:AttributeConsumingService');
         $parent->appendChild($e);
 
-        $e->setAttribute('index', (string) $this->index);
+        $e->setAttribute('index', strval($this->getIndex()));
 
-        if ($this->isDefault === true) {
+        if ($this->getIsDefault() === true) {
             $e->setAttribute('isDefault', 'true');
-        } elseif ($this->isDefault === false) {
+        } elseif ($this->getIsDefault() === false) {
             $e->setAttribute('isDefault', 'false');
         }
 
-        Utils::addStrings($e, Constants::NS_MD, 'md:ServiceName', true, $this->ServiceName);
-        Utils::addStrings($e, Constants::NS_MD, 'md:ServiceDescription', true, $this->ServiceDescription);
+        Utils::addStrings($e, Constants::NS_MD, 'md:ServiceName', true, $this->getServiceName());
+        Utils::addStrings($e, Constants::NS_MD, 'md:ServiceDescription', true, $this->getServiceDescription());
 
-        foreach ($this->RequestedAttribute as $ra) {
+        foreach ($this->getRequestedAttribute() as $ra) {
             $ra->toXML($e);
         }
 

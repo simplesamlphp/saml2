@@ -16,7 +16,7 @@ class SigningMethodTest extends \PHPUnit_Framework_TestCase
     public function testMarshalling()
     {
         $signingMethod = new SigningMethod();
-        $signingMethod->Algorithm = 'http://exampleAlgorithm';
+        $signingMethod->setAlgorithm('http://exampleAlgorithm');
 
         $document = DOMDocumentFactory::fromString('<root />');
         $xml = $signingMethod->toXML($document->firstChild);
@@ -32,8 +32,8 @@ class SigningMethodTest extends \PHPUnit_Framework_TestCase
         $this->assertFalse($signingMethodElement->hasAttribute('MinKeySize'));
         $this->assertFalse($signingMethodElement->hasAttribute('MaxKeySize'));
 
-        $signingMethod->MinKeySize = 1024;
-        $signingMethod->MaxKeySize = 4096;
+        $signingMethod->setMinKeySize(1024);
+        $signingMethod->setMaxKeySize(4096);
 
         $document = DOMDocumentFactory::fromString('<root />');
         $xml = $signingMethod->toXML($document->firstChild);
@@ -61,9 +61,9 @@ XML
         );
 
         $signingMethod = new SigningMethod($document->firstChild);
-        $this->assertEquals('http://exampleAlgorithm', $signingMethod->Algorithm);
-        $this->assertEquals(1024, $signingMethod->MinKeySize);
-        $this->assertEquals(4096, $signingMethod->MaxKeySize);
+        $this->assertEquals('http://exampleAlgorithm', $signingMethod->getAlgorithm());
+        $this->assertEquals(1024, $signingMethod->getMinKeySize());
+        $this->assertEquals(4096, $signingMethod->getMaxKeySize());
     }
 
 

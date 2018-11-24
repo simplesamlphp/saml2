@@ -48,8 +48,31 @@ class Response
             throw new Exception('Missing AssertionConsumerServiceURL attribute in <ecp:Response>.');
         }
 
-        $this->AssertionConsumerServiceURL = $xml->getAttribute('AssertionConsumerServiceURL');
+        $this->setAssertionConsumerServiceURL($xml->getAttribute('AssertionConsumerServiceURL'));
     }
+
+    /**
+     * Collect the value of the AssertionConsumerServiceURL-property
+     * @return string
+     */
+    public function getAssertionConsumerServiceURL()
+    {
+        return $this->AssertionConsumerServiceURL;
+    }
+
+    /**
+     * Set the value of the AssertionConsumerServiceURL-property
+     * @param string $AssertionConsumerServiceURL
+     */
+    public function setAssertionConsumerServiceURL($assertionConsumerServiceURL)
+    {
+        assert(is_string($assertionConsumerServiceURL));
+        if (!filter_var($assertionConsumerServiceURL, FILTER_VALIDATE_URL)) {
+            throw new \InvalidArgumentException('Provided argument is not a valid URL.');
+        }
+        $this->AssertionConsumerServiceURL = $assertionConsumerServiceURL;
+    }
+
     /**
      * Convert this ECP Response to XML.
      *
@@ -57,7 +80,7 @@ class Response
      */
     public function toXML(DOMElement $parent)
     {
-        if (!is_string($this->AssertionConsumerServiceURL)) {
+        if (!is_string($this->getAssertionConsumerServiceURL())) {
             throw new InvalidArgumentException("AssertionConsumerServiceURL must be a string");
         }
 
@@ -68,7 +91,7 @@ class Response
 
         $response->setAttributeNS(Constants::NS_SOAP, 'SOAP-ENV:mustUnderstand', '1');
         $response->setAttributeNS(Constants::NS_SOAP, 'SOAP-ENV:actor', 'http://schemas.xmlsoap.org/soap/actor/next');
-        $response->setAttribute('AssertionConsumerServiceURL', $this->AssertionConsumerServiceURL);
+        $response->setAttribute('AssertionConsumerServiceURL', $this->getAssertionConsumerServiceURL());
 
         return $response;
     }

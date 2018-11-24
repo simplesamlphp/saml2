@@ -56,17 +56,110 @@ class SPSSODescriptor extends SSODescriptorType
             return;
         }
 
-        $this->AuthnRequestsSigned = Utils::parseBoolean($xml, 'AuthnRequestsSigned', null);
-        $this->WantAssertionsSigned = Utils::parseBoolean($xml, 'WantAssertionsSigned', null);
+        $this->setAuthnRequestsSigned(Utils::parseBoolean($xml, 'AuthnRequestsSigned', null));
+        $this->setWantAssertionsSigned(Utils::parseBoolean($xml, 'WantAssertionsSigned', null));
 
         foreach (Utils::xpQuery($xml, './saml_metadata:AssertionConsumerService') as $ep) {
-            $this->AssertionConsumerService[] = new IndexedEndpointType($ep);
+            $this->addAssertionConsumerService(new IndexedEndpointType($ep));
         }
 
         foreach (Utils::xpQuery($xml, './saml_metadata:AttributeConsumingService') as $acs) {
-            $this->AttributeConsumingService[] = new AttributeConsumingService($acs);
+            $this->addAttributeConsumingService(new AttributeConsumingService($acs));
         }
     }
+
+    /**
+     * Collect the value of the AuthnRequestsSigned-property
+     * @return bool|null
+     */
+    public function getAuthnRequestsSigned()
+    {
+        return $this->AuthnRequestsSigned;
+    }
+
+    /**
+     * Set the value of the AuthnRequestsSigned-property
+     * @param bool|null $flag
+     */
+    public function setAuthnRequestsSigned($flag = null)
+    {
+        assert(is_bool($flag) || is_null($flag));
+        $this->AuthnRequestsSigned = $flag;
+    }
+
+    /**
+     * Collect the value of the WantAssertionsSigned-property
+     * @return bool|null
+     */
+    public function wantAssertionsSigned()
+    {
+        return $this->WantAssertionsSigned;
+    }
+
+    /**
+     * Set the value of the WantAssertionsSigned-property
+     * @param bool|null $flag
+     */
+    public function setWantAssertionsSigned($flag = null)
+    {
+        assert(is_bool($flag) || is_null($flag));
+        $this->WantAssertionsSigned = $flag;
+    }
+
+    /**
+     * Collect the value of the AssertionConsumerService-property
+     * @return array
+     */
+    public function getAssertionConsumerService()
+    {
+        return $this->AssertionConsumerService;
+    }
+
+    /**
+     * Set the value of the AssertionConsumerService-property
+     * @param array $acs
+     */
+    public function setAssertionConsumerService(array $acs)
+    {
+        $this->AssertionConsumerService = $acs;
+    }
+
+    /**
+     * Add the value to the AssertionConsumerService-property
+     * @param \SAML2\XML\md\IndexedEndpointType $acs
+     */
+    public function addAssertionConsumerService(IndexedEndpointType $acs)
+    {
+        $this->AssertionConsumerService[] = $acs;
+    }
+
+    /**
+     * Collect the value of the AttributeConsumingService-property
+     * @return array
+     */
+    public function getAttributeConsumingService()
+    {
+        return $this->AttributeConsumingService;
+    }
+
+    /**
+     * Add the value to the AttributeConsumingService-property
+     * @param \SAML2\XML\md\AttributeConsumingService $acs
+     */
+    public function addAttributeConsumingService(AttributeConsumingService $acs)
+    {
+        $this->AttributeConsumingService[] = $acs;
+    }
+
+    /**
+     * Set the value of the AttributeConsumingService-property
+     * @param array $acs
+     */
+    public function setAttributeConsumingService(array $acs)
+    {
+        $this->AttributeConsumingService = $acs;
+    }
+
 
     /**
      * Add this SPSSODescriptor to an EntityDescriptor.
@@ -76,30 +169,30 @@ class SPSSODescriptor extends SSODescriptorType
      */
     public function toXML(\DOMElement $parent)
     {
-        assert(is_null($this->AuthnRequestsSigned) || is_bool($this->AuthnRequestsSigned));
-        assert(is_null($this->WantAssertionsSigned) || is_bool($this->WantAssertionsSigned));
-        assert(is_array($this->AssertionConsumerService));
-        assert(is_array($this->AttributeConsumingService));
+        assert(is_null($this->getAuthnRequestsSigned()) || is_bool($this->getAuthnRequestsSigned()));
+        assert(is_null($this->wantAssertionsSigned()) || is_bool($this->wantAssertionsSigned()));
+        assert(is_array($this->getAssertionConsumerService()));
+        assert(is_array($this->getAttributeConsumingService()));
 
         $e = parent::toXML($parent);
 
-        if ($this->AuthnRequestsSigned === true) {
+        if ($this->getAuthnRequestsSigned() === true) {
             $e->setAttribute('AuthnRequestsSigned', 'true');
-        } elseif ($this->AuthnRequestsSigned === false) {
+        } elseif ($this->getAuthnRequestsSigned() === false) {
             $e->setAttribute('AuthnRequestsSigned', 'false');
         }
 
-        if ($this->WantAssertionsSigned === true) {
+        if ($this->wantAssertionsSigned() === true) {
             $e->setAttribute('WantAssertionsSigned', 'true');
-        } elseif ($this->WantAssertionsSigned === false) {
+        } elseif ($this->wantAssertionsSigned() === false) {
             $e->setAttribute('WantAssertionsSigned', 'false');
         }
 
-        foreach ($this->AssertionConsumerService as $ep) {
+        foreach ($this->getAssertionConsumerService() as $ep) {
             $ep->toXML($e, 'md:AssertionConsumerService');
         }
 
-        foreach ($this->AttributeConsumingService as $acs) {
+        foreach ($this->getAttributeConsumingService() as $acs) {
             $acs->toXML($e);
         }
     }

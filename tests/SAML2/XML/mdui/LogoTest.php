@@ -16,10 +16,10 @@ class LogoTest extends \PHPUnit_Framework_TestCase
     public function testMarshalling()
     {
         $logo = new Logo();
-        $logo->lang = "nl";
-        $logo->width = 300;
-        $logo->height = 200;
-        $logo->url = "https://static.example.org/images/logos/logo300x200.png";
+        $logo->setLanguage("nl");
+        $logo->setWidth(300);
+        $logo->setHeight(200);
+        $logo->setUrl("https://static.example.org/images/logos/logo300x200.png");
 
         $document = DOMDocumentFactory::fromString('<root />');
         $xml = $logo->toXML($document->firstChild);
@@ -47,10 +47,10 @@ XML
         );
 
         $logo = new Logo($document->firstChild);
-        $this->assertEquals("nl", $logo->lang);
-        $this->assertEquals(300, $logo->width);
-        $this->assertEquals(200, $logo->height);
-        $this->assertEquals("https://static.example.org/images/logos/logo300x200.png", $logo->url);
+        $this->assertEquals("nl", $logo->getLanguage());
+        $this->assertEquals(300, $logo->getWidth());
+        $this->assertEquals(200, $logo->getHeight());
+        $this->assertEquals("https://static.example.org/images/logos/logo300x200.png", $logo->getUrl());
     }
 
     /**

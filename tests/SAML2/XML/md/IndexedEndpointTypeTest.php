@@ -15,8 +15,8 @@ class IndexedEndpointTypeTest extends \PHPUnit_Framework_TestCase
         $indexedEndpointType = new IndexedEndpointType();
         $indexedEndpointType->Binding = 'TestBinding';
         $indexedEndpointType->Location = 'TestLocation';
-        $indexedEndpointType->index = 42;
-        $indexedEndpointType->isDefault = false;
+        $indexedEndpointType->setIndex(42);
+        $indexedEndpointType->setIsDefault(false);
 
         $document = DOMDocumentFactory::fromString('<root />');
         $indexedEndpointTypeElement = $indexedEndpointType->toXML($document->firstChild, 'md:Test');
@@ -30,14 +30,14 @@ class IndexedEndpointTypeTest extends \PHPUnit_Framework_TestCase
         $this->assertEquals('42', $indexedEndpointElement->getAttribute('index'));
         $this->assertEquals('false', $indexedEndpointElement->getAttribute('isDefault'));
 
-        $indexedEndpointType->isDefault = true;
+        $indexedEndpointType->setIsDefault(true);
         $document->loadXML('<root />');
         $indexedEndpointTypeElement = $indexedEndpointType->toXML($document->firstChild, 'md:Test');
         $indexedEndpointTypeElement = Utils::xpQuery($indexedEndpointTypeElement, '/root/saml_metadata:Test');
         $this->assertCount(1, $indexedEndpointTypeElement);
         $this->assertEquals('true', $indexedEndpointTypeElement[0]->getAttribute('isDefault'));
 
-        $indexedEndpointType->isDefault = null;
+        $indexedEndpointType->setIsDefault(null);
         $document->loadXML('<root />');
         $indexedEndpointTypeElement = $indexedEndpointType->toXML($document->firstChild, 'md:Test');
         $indexedEndpointTypeElement = Utils::xpQuery($indexedEndpointTypeElement, '/root/saml_metadata:Test');

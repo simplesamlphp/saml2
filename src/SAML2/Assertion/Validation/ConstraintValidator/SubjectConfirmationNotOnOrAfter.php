@@ -14,7 +14,7 @@ class SubjectConfirmationNotOnOrAfter implements
         SubjectConfirmation $subjectConfirmation,
         Result $result
     ) {
-        $notOnOrAfter = $subjectConfirmation->SubjectConfirmationData->NotOnOrAfter;
+        $notOnOrAfter = $subjectConfirmation->getSubjectConfirmationData()->getNotOnOrAfter();
         if ($notOnOrAfter && $notOnOrAfter <= Temporal::getTime() - 60) {
             $result->addError('NotOnOrAfter in SubjectConfirmationData is in the past');
         }
