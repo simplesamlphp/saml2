@@ -1098,7 +1098,7 @@ class Assertion implements SignedElement
      *
      * The URI reference MAY directly resolve into an XML document containing the referenced declaration.
      *
-     * @return \SAML2\XML\Chunk|null
+     * @return string|null
      */
     public function getAuthnContextDeclRef()
     {
