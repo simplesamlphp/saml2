@@ -6,7 +6,6 @@ namespace SAML2;
 
 use RobRichards\XMLSecLibs\XMLSecEnc;
 use RobRichards\XMLSecLibs\XMLSecurityKey;
-use SAML2\Exception\RuntimeException;
 use SAML2\Utilities\Temporal;
 use SAML2\XML\Chunk;
 use SAML2\XML\saml\SubjectConfirmation;
@@ -282,7 +281,7 @@ class Assertion implements SignedElement
 
         if ($xml->getAttribute('Version') !== '2.0') {
             /* Currently a very strict check. */
-            throw new \Exception('Unsupported version: ' . $xml->getAttribute('Version'));
+            throw new \Exception('Unsupported version: '.$xml->getAttribute('Version'));
         }
 
         $this->issueInstant = Utils::xsDateTimeToTimestamp($xml->getAttribute('IssueInstant'));
@@ -384,7 +383,7 @@ class Assertion implements SignedElement
                 continue;
             }
             if ($node->namespaceURI !== Constants::NS_SAML) {
-                throw new \Exception('Unknown namespace of condition: ' . var_export($node->namespaceURI, true));
+                throw new \Exception('Unknown namespace of condition: '.var_export($node->namespaceURI, true));
             }
             switch ($node->localName) {
                 case 'AudienceRestriction':
@@ -407,7 +406,7 @@ class Assertion implements SignedElement
                     /* Currently ignored. */
                     break;
                 default:
-                    throw new \Exception('Unknown condition: ' . var_export($node->localName, true));
+                    throw new \Exception('Unknown condition: '.var_export($node->localName, true));
             }
         }
     }
@@ -1305,7 +1304,7 @@ class Assertion implements SignedElement
             $document = $parentElement->ownerDocument;
         }
 
-        $root = $document->createElementNS(Constants::NS_SAML, 'saml:' . 'Assertion');
+        $root = $document->createElementNS(Constants::NS_SAML, 'saml:'.'Assertion');
         $parentElement->appendChild($root);
 
         /* Ugly hack to add another namespace declaration to the root element. */
@@ -1361,7 +1360,7 @@ class Assertion implements SignedElement
         if ($this->encryptedNameId === null) {
             $this->nameId->toXML($subject);
         } else {
-            $eid = $subject->ownerDocument->createElementNS(Constants::NS_SAML, 'saml:' . 'EncryptedID');
+            $eid = $subject->ownerDocument->createElementNS(Constants::NS_SAML, 'saml:'.'EncryptedID');
             $subject->appendChild($eid);
             $eid->appendChild($subject->ownerDocument->importNode($this->encryptedNameId, true));
         }
@@ -1513,7 +1512,7 @@ class Assertion implements SignedElement
             if (is_array($this->attributesValueTypes) && array_key_exists($name, $this->attributesValueTypes)) {
                 $valueTypes = $this->attributesValueTypes[$name];
                 if (is_array($valueTypes) && count($valueTypes) != count($values)) {
-                    throw new \Exception('Array of value types and array of values have different size for attribute '. var_export($name, true));
+                    throw new \Exception('Array of value types and array of values have different size for attribute '.var_export($name, true));
                 }
             } else {
                 // if no type(s), default behaviour

@@ -77,7 +77,7 @@ final class EncryptedAssertion
                 break;
 
             default:
-                throw new \Exception('Unknown key type for encryption: ' . $key->type);
+                throw new \Exception('Unknown key type for encryption: '.$key->type);
         }
 
         $this->encryptedData = $enc->encryptNode($symmetricKey);
@@ -114,7 +114,7 @@ final class EncryptedAssertion
             $document = $parentElement->ownerDocument;
         }
 
-        $root = $document->createElementNS(Constants::NS_SAML, 'saml:' . 'EncryptedAssertion');
+        $root = $document->createElementNS(Constants::NS_SAML, 'saml:'.'EncryptedAssertion');
         $parentElement->appendChild($root);
 
         $root->appendChild($document->importNode($this->encryptedData, true));
