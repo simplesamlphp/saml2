@@ -20,7 +20,7 @@ final class Logger implements LoggerInterface
      */
     public function emergency($message, array $context = [])
     {
-        \SimpleSAML\Logger::emergency($message . ($context ? " " . var_export($context, true) : ""));
+        \SimpleSAML\Logger::emergency($message.($context ? " ".var_export($context, true) : ""));
     }
 
     /**
@@ -37,7 +37,7 @@ final class Logger implements LoggerInterface
      */
     public function alert($message, array $context = [])
     {
-        \SimpleSAML\Logger::alert($message . ($context ? " " . var_export($context, true) : ""));
+        \SimpleSAML\Logger::alert($message.($context ? " ".var_export($context, true) : ""));
     }
 
     /**
@@ -53,7 +53,7 @@ final class Logger implements LoggerInterface
      */
     public function critical($message, array $context = [])
     {
-        \SimpleSAML\Logger::critical($message . ($context ? " " . var_export($context, true) : ""));
+        \SimpleSAML\Logger::critical($message.($context ? " ".var_export($context, true) : ""));
     }
 
     /**
@@ -68,7 +68,7 @@ final class Logger implements LoggerInterface
      */
     public function error($message, array $context = [])
     {
-        \SimpleSAML\Logger::error($message . ($context ? " " . var_export($context, true) : ""));
+        \SimpleSAML\Logger::error($message.($context ? " ".var_export($context, true) : ""));
     }
 
     /**
@@ -85,7 +85,7 @@ final class Logger implements LoggerInterface
      */
     public function warning($message, array $context = [])
     {
-        \SimpleSAML\Logger::warning($message . ($context ? " " . var_export($context, true) : ""));
+        \SimpleSAML\Logger::warning($message.($context ? " ".var_export($context, true) : ""));
     }
 
     /**
@@ -99,7 +99,7 @@ final class Logger implements LoggerInterface
      */
     public function notice($message, array $context = [])
     {
-        \SimpleSAML\Logger::notice($message . ($context ? " " . var_export($context, true) : ""));
+        \SimpleSAML\Logger::notice($message.($context ? " ".var_export($context, true) : ""));
     }
 
     /**
@@ -115,7 +115,7 @@ final class Logger implements LoggerInterface
      */
     public function info($message, array $context = [])
     {
-        \SimpleSAML\Logger::info($message . ($context ? " " . var_export($context, true) : ""));
+        \SimpleSAML\Logger::info($message.($context ? " ".var_export($context, true) : ""));
     }
 
     /**
@@ -129,7 +129,7 @@ final class Logger implements LoggerInterface
      */
     public function debug($message, array $context = [])
     {
-        \SimpleSAML\Logger::debug($message . ($context ? " " . var_export($context, true) : ""));
+        \SimpleSAML\Logger::debug($message.($context ? " ".var_export($context, true) : ""));
     }
 
     /**

@@ -51,21 +51,21 @@ final class HTTPRedirect extends Binding
         $msg .= urlencode($msgStr);
 
         if ($relayState !== null) {
-            $msg .= '&RelayState=' . urlencode($relayState);
+            $msg .= '&RelayState='.urlencode($relayState);
         }
 
         if ($key !== null) {
             /* Add the signature. */
-            $msg .= '&SigAlg=' . urlencode($key->type);
+            $msg .= '&SigAlg='.urlencode($key->type);
 
             $signature = $key->signData($msg);
-            $msg .= '&Signature=' . urlencode(base64_encode($signature));
+            $msg .= '&Signature='.urlencode(base64_encode($signature));
         }
 
         if (strpos($destination, '?') === false) {
-            $destination .= '?' . $msg;
+            $destination .= '?'.$msg;
         } else {
-            $destination .= '&' . $msg;
+            $destination .= '&'.$msg;
         }
 
         return $destination;
@@ -81,7 +81,7 @@ final class HTTPRedirect extends Binding
     public function send(Message $message)
     {
         $destination = $this->getRedirectURL($message);
-        Utils::getContainer()->getLogger()->debug('Redirect to ' . strlen($destination) . ' byte URL: ' . $destination);
+        Utils::getContainer()->getLogger()->debug('Redirect to '.strlen($destination).' byte URL: '.$destination);
         Utils::getContainer()->redirect($destination);
     }
 
@@ -108,7 +108,7 @@ final class HTTPRedirect extends Binding
         }
 
         if (isset($data['SAMLEncoding']) && $data['SAMLEncoding'] !== self::DEFLATE) {
-            throw new \Exception('Unknown SAMLEncoding: ' . var_export($data['SAMLEncoding'], true));
+            throw new \Exception('Unknown SAMLEncoding: '.var_export($data['SAMLEncoding'], true));
         }
 
         $message = base64_decode($message);
@@ -183,18 +183,18 @@ final class HTTPRedirect extends Binding
             switch ($name) {
                 case 'SAMLRequest':
                 case 'SAMLResponse':
-                    $sigQuery = $name . '=' . $value;
+                    $sigQuery = $name.'='.$value;
                     break;
                 case 'RelayState':
-                    $relayState = '&RelayState=' . $value;
+                    $relayState = '&RelayState='.$value;
                     break;
                 case 'SigAlg':
-                    $sigAlg = '&SigAlg=' . $value;
+                    $sigAlg = '&SigAlg='.$value;
                     break;
             }
         }
 
-        $data['SignedQuery'] = $sigQuery . $relayState . $sigAlg;
+        $data['SignedQuery'] = $sigQuery.$relayState.$sigAlg;
 
         return $data;
     }

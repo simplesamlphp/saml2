@@ -67,7 +67,7 @@ final class Processor
      * @param \SAML2\Configuration\Destination      $currentDestination
      * @param \SAML2\Response                       $response
      *
-     * @return \SAML2\Assertion[] Collection (\SAML2\Utilities\ArrayCollection) of \SAML2\Assertion objects
+     * @return \SAML2\Utilities\ArrayCollection Collection (\SAML2\Utilities\ArrayCollection) of \SAML2\Assertion objects
      */
     public function process(
         ServiceProvider $serviceProviderConfiguration,
@@ -137,7 +137,7 @@ final class Processor
     /**
      * @param \SAML2\Response $response
      *
-     * @return \SAML2\Assertion[]
+     * @return \SAML2\Utilities\ArrayCollection
      */
     private function processAssertions(Response $response)
     {

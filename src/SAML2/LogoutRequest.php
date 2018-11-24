@@ -258,7 +258,7 @@ final class LogoutRequest extends Request
         if ($this->encryptedNameId === null) {
             $this->nameId->toXML($root);
         } else {
-            $eid = $root->ownerDocument->createElementNS(Constants::NS_SAML, 'saml:' . 'EncryptedID');
+            $eid = $root->ownerDocument->createElementNS(Constants::NS_SAML, 'saml:'.'EncryptedID');
             $root->appendChild($eid);
             $eid->appendChild($root->ownerDocument->importNode($this->encryptedNameId, true));
         }

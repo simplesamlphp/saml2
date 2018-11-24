@@ -7,7 +7,6 @@ namespace SAML2\Certificate;
 use SAML2\Certificate\Exception\InvalidCertificateStructureException;
 use SAML2\Certificate\Exception\NoKeysFoundException;
 use SAML2\Configuration\CertificateProvider;
-use SAML2\Exception\InvalidArgumentException;
 use SAML2\Utilities\Certificate;
 use SAML2\Utilities\File;
 
