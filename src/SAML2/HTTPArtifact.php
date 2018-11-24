@@ -82,7 +82,7 @@ final class HTTPArtifact extends Binding
     {
         if (array_key_exists('SAMLart', $_REQUEST)) {
             $artifact = base64_decode($_REQUEST['SAMLart']);
-            $endpointIndex =  bin2hex(substr($artifact, 2, 2));
+            $endpointIndex = bin2hex(substr($artifact, 2, 2));
             $sourceId = bin2hex(substr($artifact, 4, 20));
         } else {
             throw new \Exception('Missing SAMLart parameter.');
@@ -98,7 +98,7 @@ final class HTTPArtifact extends Binding
 
         $endpoint = null;
         foreach ($idpMetadata->getEndpoints('ArtifactResolutionService') as $ep) {
-            if ($ep['index'] ===  hexdec($endpointIndex)) {
+            if ($ep['index'] === hexdec($endpointIndex)) {
                 $endpoint = $ep;
                 break;
             }

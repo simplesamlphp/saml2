@@ -35,8 +35,8 @@ final class IsSuccessful implements ConstraintValidator
         return sprintf(
             '%s%s%s',
             $this->truncateStatus($responseStatus['Code']),
-            $responseStatus['SubCode'] ? '/' . $this->truncateStatus($responseStatus['SubCode']) : '',
-            $responseStatus['Message'] ? ' ' . $responseStatus['Message'] : ''
+            $responseStatus['SubCode'] ? '/'.$this->truncateStatus($responseStatus['SubCode']) : '',
+            $responseStatus['Message'] ? ' '.$responseStatus['Message'] : ''
         );
     }
 
