@@ -9,7 +9,7 @@ final class PrivateKey extends Key
     public static function create(string $keyContents, string $passphrase = null)
     {
         $keyData = ['PEM' => $keyContents, self::USAGE_ENCRYPTION => true];
-        if ($passphrase) {
+        if (is_string($passphrase)) {
             $keyData['passphrase'] = $passphrase;
         }
 

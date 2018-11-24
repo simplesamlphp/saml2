@@ -119,7 +119,7 @@ final class SOAPClient
 
         // Add soap-envelopes
         $request = $msg->toSignedXML();
-        $request = self::START_SOAP_ENVELOPE.$request->ownerDocument->saveXML($request).self::END_SOAP_ENVELOPE;
+        $requestStr = self::START_SOAP_ENVELOPE.$request->ownerDocument->saveXML($request).self::END_SOAP_ENVELOPE;
 
         Utils::getContainer()->debugMessage($request, 'out');
 
@@ -128,12 +128,10 @@ final class SOAPClient
         $destination = $msg->getDestination();
 
         /* Perform SOAP Request over HTTP */
-        $soapresponsexml = $x->__doRequest($request, $destination, $action, $version);
+        $soapresponsexml = $x->__doRequest($requestStr, $destination, $action, $version);
         if ($soapresponsexml === null || $soapresponsexml === "") {
             throw new \Exception('Empty SOAP response, check peer certificate.');
         }
-
-        Utils::getContainer()->debugMessage($soapresponsexml, 'in');
 
         // Convert to SAML2\Message (\DOMElement)
         try {
@@ -141,6 +139,7 @@ final class SOAPClient
         } catch (RuntimeException $e) {
             throw new \Exception('Not a SOAP response.', 0, $e);
         }
+        Utils::getContainer()->debugMessage($soapresponsexml, 'in');
 
         $soapfault = $this->getSOAPFault($dom);
         if (isset($soapfault)) {
@@ -224,7 +223,7 @@ final class SOAPClient
     /*
      * Extracts the SOAP Fault from SOAP message
      * @param \DOMDocument $soapMessage Soap response needs to be type DOMDocument
-     * @return $soapfaultstring string|null
+     * @return string|null
      */
     private function getSOAPFault(\DOMDocument $soapMessage)
     {

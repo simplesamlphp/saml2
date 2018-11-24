@@ -24,7 +24,7 @@ abstract class Message implements SignedElement
     /**
      * Request extensions.
      *
-     * @var array
+     * @var array|null
      */
     protected $extensions;
 

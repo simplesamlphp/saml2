@@ -114,7 +114,7 @@ final class AuthnRequest extends Request
     /**
      * Audiences to send in the request.
      *
-     * @var array
+     * @var array|null
      */
     private $audiences;
 
@@ -124,7 +124,7 @@ final class AuthnRequest extends Request
     private $subjectConfirmation = [];
 
     /**
-     * @var string
+     * @var \DOMElement
      */
     private $encryptedNameId;
 

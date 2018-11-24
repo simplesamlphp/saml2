@@ -9,12 +9,12 @@ use SAML2\Compat\Ssp\Container;
 final class ContainerSingleton
 {
     /**
-     * @var \SAML2\Compat\Ssp\Container
+     * @var \SAML2\Compat\AbstractContainer
      */
     protected static $container;
 
     /**
-     * @return \SAML2\Compat\Ssp\Container
+     * @return \SAML2\Compat\AbstractContainer
      */
     public static function getInstance()
     {
@@ -37,7 +37,7 @@ final class ContainerSingleton
     }
 
     /**
-     * @return \SAML2\Compat\Ssp\Container
+     * @return \SAML2\Compat\AbstractContainer
      */
     public static function initSspContainer()
     {

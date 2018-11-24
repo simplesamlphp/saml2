@@ -140,7 +140,7 @@ class RoleDescriptor extends SignedElementHelper
         }
 
         foreach (Utils::xpQuery($xml, './saml_metadata:ContactPerson') as $cp) {
-            $this->contactPersons[] = new ContactPerson($cp);
+            $this->ContactPerson[] = new ContactPerson($cp);
         }
     }
 
