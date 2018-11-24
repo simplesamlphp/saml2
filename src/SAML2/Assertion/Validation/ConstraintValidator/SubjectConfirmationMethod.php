@@ -9,7 +9,7 @@ use SAML2\Assertion\Validation\SubjectConfirmationConstraintValidator;
 use SAML2\Constants;
 use SAML2\XML\saml\SubjectConfirmation;
 
-class SubjectConfirmationMethod implements
+final class SubjectConfirmationMethod implements
     SubjectConfirmationConstraintValidator
 {
     public function validate(

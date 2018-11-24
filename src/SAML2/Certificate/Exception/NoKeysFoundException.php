@@ -9,6 +9,6 @@ use SAML2\Exception\Throwable;
 /**
  * Named exception. Indicates that although required, no keys could be loaded from the configuration
  */
-class NoKeysFoundException extends \DomainException implements Throwable
+final class NoKeysFoundException extends \DomainException implements Throwable
 {
 }

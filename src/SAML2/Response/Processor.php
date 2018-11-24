@@ -20,7 +20,7 @@ use SAML2\Signature\Validator;
 /**
  * @SuppressWarnings(PHPMD.CouplingBetweenObjects) - due to specific exceptions
  */
-class Processor
+final class Processor
 {
     /**
      * @var \Psr\Log\LoggerInterface

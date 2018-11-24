@@ -9,7 +9,7 @@ namespace SAML2;
  *
  * @package SimpleSAMLphp
  */
-class HTTPPost extends Binding
+final class HTTPPost extends Binding
 {
     /**
      * Send a SAML 2 message using the HTTP-POST binding.

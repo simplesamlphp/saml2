@@ -13,7 +13,7 @@ use SAML2\Utils;
  *
  * @package SimpleSAMLphp
  */
-class AffiliationDescriptor extends SignedElementHelper
+final class AffiliationDescriptor extends SignedElementHelper
 {
     /**
      * The affiliationOwnerID.

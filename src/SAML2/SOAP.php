@@ -4,8 +4,6 @@ declare(strict_types=1);
 
 namespace SAML2;
 
-use DOMDocument;
-
 use SAML2\XML\ecp\Response as ECPResponse;
 
 /**
@@ -26,7 +24,7 @@ class SOAP extends Binding
 SOAP;
         $envelope = sprintf($envelope, Constants::NS_SOAP);
 
-        $doc = new DOMDocument;
+        $doc = new \DOMDocument;
         $doc->loadXML($envelope);
 
         // In the Artifact Resolution profile, this will be an ArtifactResolve

@@ -11,7 +11,7 @@ use SAML2\Certificate\X509;
 use SAML2\Configuration\CertificateProvider;
 use SAML2\SignedElement;
 
-class PublicKeyValidator extends AbstractChainedValidator
+final class PublicKeyValidator extends AbstractChainedValidator
 {
     /**
      * @var \SAML2\Certificate\KeyCollection

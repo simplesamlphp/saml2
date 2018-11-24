@@ -8,13 +8,14 @@ use RobRichards\XMLSecLibs\XMLSecEnc;
 use RobRichards\XMLSecLibs\XMLSecurityKey;
 use SAML2\XML\saml\SubjectConfirmation;
 use SAML2\Exception\InvalidArgumentException;
+use SAML2\XML\saml\NameID;
 
 /**
  * Class for SAML 2 authentication request messages.
  *
  * @package SimpleSAMLphp
  */
-class AuthnRequest extends Request
+final class AuthnRequest extends Request
 {
     /**
      * The options for what type of name identifier should be returned.
@@ -162,11 +163,11 @@ class AuthnRequest extends Request
         }
 
         if ($xml->hasAttribute('AttributeConsumingServiceIndex')) {
-            $this->attributeConsumingServiceIndex = (int) $xml->getAttribute('AttributeConsumingServiceIndex');
+            $this->attributeConsumingServiceIndex = intval($xml->getAttribute('AttributeConsumingServiceIndex'));
         }
 
         if ($xml->hasAttribute('AssertionConsumerServiceIndex')) {
-            $this->assertionConsumerServiceIndex = (int) $xml->getAttribute('AssertionConsumerServiceIndex');
+            $this->assertionConsumerServiceIndex = intval($xml->getAttribute('AssertionConsumerServiceIndex'));
         }
 
         if ($xml->hasAttribute('ProviderName')) {
@@ -211,7 +212,7 @@ class AuthnRequest extends Request
             /* The NameID element is encrypted. */
             $this->encryptedNameId = $nameId;
         } else {
-            $this->nameId = new XML\saml\NameID($nameId);
+            $this->nameId = new NameID($nameId);
         }
 
         $subjectConfirmation = Utils::xpQuery($subject, './saml_assertion:SubjectConfirmation');
@@ -288,7 +289,7 @@ class AuthnRequest extends Request
         $scoping = $scoping[0];
 
         if ($scoping->hasAttribute('ProxyCount')) {
-            $this->ProxyCount = (int) $scoping->getAttribute('ProxyCount');
+            $this->ProxyCount = intval($scoping->getAttribute('ProxyCount'));
         }
         $idpEntries = Utils::xpQuery($scoping, './saml_protocol:IDPList/saml_protocol:IDPEntry');
 
@@ -640,7 +641,7 @@ class AuthnRequest extends Request
      *
      * @param \SAML2\XML\saml\NameID|null $nameId The name identifier of the assertion.
      */
-    public function setNameId(\SAML2\XML\saml\NameID $nameId = null)
+    public function setNameId(NameID $nameId = null)
     {
         $this->nameId = $nameId;
     }
@@ -673,7 +674,7 @@ class AuthnRequest extends Request
         $enc->encryptKey($key, $symmetricKey);
 
         $this->encryptedNameId = $enc->encryptNode($symmetricKey);
-        $this->nameId          = null;
+        $this->nameId = null;
     }
 
     /**
@@ -691,7 +692,7 @@ class AuthnRequest extends Request
 
         $nameId = Utils::decryptElement($this->encryptedNameId, $key, $blacklist);
         Utils::getContainer()->debugMessage($nameId, 'decrypt');
-        $this->nameId = new XML\saml\NameID($nameId);
+        $this->nameId = new NameID($nameId);
 
         $this->encryptedNameId = null;
     }

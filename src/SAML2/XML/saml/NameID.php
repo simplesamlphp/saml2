@@ -10,7 +10,7 @@ namespace SAML2\XML\saml;
  * @author Jaime Pérez Crespo, UNINETT AS <jaime.perez@uninett.no>
  * @package SimpleSAMLphp
  */
-class NameID extends NameIDType
+final class NameID extends NameIDType
 {
 
     /**

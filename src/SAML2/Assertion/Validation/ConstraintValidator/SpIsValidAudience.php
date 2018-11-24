@@ -10,7 +10,7 @@ use SAML2\Assertion\Validation\Result;
 use SAML2\Configuration\ServiceProvider;
 use SAML2\Configuration\ServiceProviderAware;
 
-class SpIsValidAudience implements
+final class SpIsValidAudience implements
     AssertionConstraintValidator,
     ServiceProviderAware
 {

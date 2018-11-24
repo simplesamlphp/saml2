@@ -7,7 +7,7 @@ namespace SAML2\Utilities;
 /**
  * Collection of Utility functions specifically for certificates
  */
-class Certificate
+final class Certificate
 {
     /**
      * The pattern that the contents of a certificate should adhere to

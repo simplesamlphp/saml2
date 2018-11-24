@@ -9,7 +9,7 @@ use SAML2\Response\Validation\Result;
 /**
  * Named exception to indicate that the preconditions for processing the SAML response have not been met.
  */
-class PreconditionNotMetException extends InvalidResponseException
+final class PreconditionNotMetException extends InvalidResponseException
 {
     public static function createFromValidationResult(Result $result)
     {

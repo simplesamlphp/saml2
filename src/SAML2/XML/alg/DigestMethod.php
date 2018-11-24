@@ -11,7 +11,7 @@ namespace SAML2\XML\alg;
  * @author Jaime Pérez Crespo, UNINETT AS <jaime.perez@uninett.no>
  * @package simplesamlphp/saml2
  */
-class DigestMethod
+final class DigestMethod
 {
     /**
      * An URI identifying an algorithm supported for digest operations.

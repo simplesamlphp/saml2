@@ -12,7 +12,7 @@ use SAML2\Utils;
  *
  * @package SimpleSAMLphp
  */
-class Chunk implements \Serializable
+final class Chunk implements \Serializable
 {
     /**
      * The localName of the element.

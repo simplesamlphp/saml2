@@ -6,7 +6,7 @@ namespace SAML2\Compat\Ssp;
 
 use SAML2\Compat\AbstractContainer;
 
-class Container extends AbstractContainer
+final class Container extends AbstractContainer
 {
     /**
      * @var \Psr\Log\LoggerInterface

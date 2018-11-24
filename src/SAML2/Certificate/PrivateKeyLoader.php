@@ -10,7 +10,7 @@ use SAML2\Configuration\PrivateKey as PrivateKeyConfiguration;
 use SAML2\Utilities\ArrayCollection;
 use SAML2\Utilities\File;
 
-class PrivateKeyLoader
+final class PrivateKeyLoader
 {
     /**
      * Loads a private key based on the configuration given.

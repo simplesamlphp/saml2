@@ -9,7 +9,7 @@ use SAML2\Assertion\Validation\AssertionConstraintValidator;
 use SAML2\Assertion\Validation\Result;
 use SAML2\Utilities\Temporal;
 
-class NotBefore implements
+final class NotBefore implements
     AssertionConstraintValidator
 {
     public function validate(Assertion $assertion, Result $result)

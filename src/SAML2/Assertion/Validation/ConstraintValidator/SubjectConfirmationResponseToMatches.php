@@ -9,7 +9,7 @@ use SAML2\Assertion\Validation\SubjectConfirmationConstraintValidator;
 use SAML2\Response;
 use SAML2\XML\saml\SubjectConfirmation;
 
-class SubjectConfirmationResponseToMatches implements
+final class SubjectConfirmationResponseToMatches implements
     SubjectConfirmationConstraintValidator
 {
     private $response;

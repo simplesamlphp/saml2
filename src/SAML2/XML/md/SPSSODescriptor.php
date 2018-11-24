@@ -11,7 +11,7 @@ use SAML2\Utils;
  *
  * @package SimpleSAMLphp
  */
-class SPSSODescriptor extends SSODescriptorType
+final class SPSSODescriptor extends SSODescriptorType
 {
     /**
      * Whether this SP signs authentication requests.

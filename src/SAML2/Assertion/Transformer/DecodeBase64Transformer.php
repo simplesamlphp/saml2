@@ -8,7 +8,7 @@ use SAML2\Assertion;
 use SAML2\Configuration\IdentityProvider;
 use SAML2\Configuration\IdentityProviderAware;
 
-class DecodeBase64Transformer implements
+final class DecodeBase64Transformer implements
     Transformer,
     IdentityProviderAware
 {

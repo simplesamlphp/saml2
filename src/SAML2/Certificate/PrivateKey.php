@@ -6,7 +6,7 @@ namespace SAML2\Certificate;
 
 use SAML2\Exception\InvalidArgumentException;
 
-class PrivateKey extends Key
+final class PrivateKey extends Key
 {
     public static function create(string $keyContents, string $passphrase = null)
     {

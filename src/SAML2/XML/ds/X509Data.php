@@ -12,7 +12,7 @@ use SAML2\XML\Chunk;
  *
  * @package SimpleSAMLphp
  */
-class X509Data
+final class X509Data
 {
     /**
      * The various X509 data elements.

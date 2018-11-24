@@ -11,7 +11,7 @@ namespace SAML2\XML\alg;
  * @author Jaime Pérez Crespo, UNINETT AS <jaime.perez@uninett.no>
  * @package simplesamlphp/saml2
  */
-class Common
+final class Common
 {
     const NS = 'urn:oasis:names:tc:SAML:metadata:algsupport';
 }

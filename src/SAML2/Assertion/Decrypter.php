@@ -11,7 +11,7 @@ use SAML2\Configuration\IdentityProvider;
 use SAML2\Configuration\ServiceProvider;
 use SAML2\EncryptedAssertion;
 
-class Decrypter
+final class Decrypter
 {
     /**
      * @var \SAML2\Configuration\IdentityProvider

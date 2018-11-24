@@ -19,7 +19,7 @@ use SAML2\XML\md\KeyDescriptor;
  *
  * @package SimpleSAMLphp
  */
-class Utils
+final class Utils
 {
     /**
      * Check the Signature in a XML element.

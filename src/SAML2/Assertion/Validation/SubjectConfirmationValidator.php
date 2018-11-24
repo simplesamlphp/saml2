@@ -10,7 +10,7 @@ use SAML2\Configuration\ServiceProvider;
 use SAML2\Configuration\ServiceProviderAware;
 use SAML2\XML\saml\SubjectConfirmation;
 
-class SubjectConfirmationValidator
+final class SubjectConfirmationValidator
 {
     /**
      * @var \SAML2\Assertion\Validation\SubjectConfirmationConstraintValidator[]

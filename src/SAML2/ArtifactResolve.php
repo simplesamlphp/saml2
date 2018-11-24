@@ -12,7 +12,7 @@ namespace SAML2;
  * @author Danny Bollaert, UGent AS. <danny.bollaert@ugent.be>
  * @package SimpleSAMLphp
  */
-class ArtifactResolve extends Request
+final class ArtifactResolve extends Request
 {
     private $artifact;
 
@@ -43,7 +43,6 @@ class ArtifactResolve extends Request
      */
     public function setArtifact(string $artifact)
     {
-        assert(is_string($artifact));
         $this->artifact = $artifact;
     }
 

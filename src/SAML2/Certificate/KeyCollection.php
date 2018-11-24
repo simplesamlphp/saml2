@@ -10,7 +10,7 @@ use SAML2\Utilities\ArrayCollection;
 /**
  * Simple collection object for transporting keys
  */
-class KeyCollection extends ArrayCollection
+final class KeyCollection extends ArrayCollection
 {
     /**
      * Add a key to the collection
@@ -22,7 +22,7 @@ class KeyCollection extends ArrayCollection
     {
         if (!$key instanceof Key) {
             throw InvalidArgumentException::invalidType(
-                'SAML2\Certificate\Key',
+                Key::class,
                 $key
             );
         }

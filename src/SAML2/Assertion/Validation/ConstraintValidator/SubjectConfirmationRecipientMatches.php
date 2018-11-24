@@ -9,7 +9,7 @@ use SAML2\Assertion\Validation\SubjectConfirmationConstraintValidator;
 use SAML2\Configuration\Destination;
 use SAML2\XML\saml\SubjectConfirmation;
 
-class SubjectConfirmationRecipientMatches implements
+final class SubjectConfirmationRecipientMatches implements
     SubjectConfirmationConstraintValidator
 {
     /**

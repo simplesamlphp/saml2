@@ -12,7 +12,7 @@ use SAML2\Utils;
  *
  * @package SimpleSAMLphp
  */
-class KeyName
+final class KeyName
 {
     /**
      * The key name.

@@ -7,7 +7,7 @@ namespace SAML2\Certificate;
 /**
  * Specific Certificate Key.
  */
-class X509 extends Key
+final class X509 extends Key
 {
     public static function createFromCertificateData(string $certificateContents)
     {

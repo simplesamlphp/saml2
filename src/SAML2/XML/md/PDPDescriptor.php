@@ -12,7 +12,7 @@ use SAML2\Utils;
  *
  * @package SimpleSAMLphp
  */
-class PDPDescriptor extends RoleDescriptor
+final class PDPDescriptor extends RoleDescriptor
 {
     /**
      * List of AuthzService endpoints.

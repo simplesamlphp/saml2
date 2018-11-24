@@ -10,7 +10,7 @@ use SAML2\Exception\Throwable;
 /**
  * Named exception for when a non-existent key-usage is given
  */
-class InvalidKeyUsageException extends \InvalidArgumentException implements
+final class InvalidKeyUsageException extends \InvalidArgumentException implements
     Throwable
 {
     /**

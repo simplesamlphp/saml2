@@ -9,7 +9,7 @@ namespace SAML2;
  *
  * @package SimpleSAMLphp
  */
-class Constants
+final class Constants
 {
     /**
      * Password authentication context.

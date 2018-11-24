@@ -9,7 +9,7 @@ use SAML2\Exception\InvalidArgumentException;
 /**
  * Value Object representing the current destination
  */
-class Destination
+final class Destination
 {
     /**
      * @var string

@@ -12,7 +12,7 @@ use RobRichards\XMLSecLibs\XMLSecurityKey;
  *
  * @package SimpleSAMLphp
  */
-class EncryptedAssertion
+final class EncryptedAssertion
 {
     /**
      * The current encrypted assertion.

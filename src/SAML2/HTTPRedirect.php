@@ -11,7 +11,7 @@ use RobRichards\XMLSecLibs\XMLSecurityKey;
  *
  * @package SimpleSAMLphp
  */
-class HTTPRedirect extends Binding
+final class HTTPRedirect extends Binding
 {
     const DEFLATE = 'urn:oasis:names:tc:SAML:2.0:bindings:URL-Encoding:DEFLATE';
 
@@ -143,7 +143,7 @@ class HTTPRedirect extends Binding
             'Query'     => $data['SignedQuery'],
         ];
 
-        $message->addValidator([get_class($this), 'validateSignature'], $signData);
+        $message->addValidator([self::class, 'validateSignature'], $signData);
 
         return $message;
     }

@@ -9,7 +9,7 @@ namespace SAML2;
  *
  * @package SimpleSAMLphp
  */
-class LogoutResponse extends StatusResponse
+final class LogoutResponse extends StatusResponse
 {
     /**
      * Constructor for SAML 2 response messages.

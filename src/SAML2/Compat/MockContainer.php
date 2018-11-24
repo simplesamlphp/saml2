@@ -7,7 +7,7 @@ namespace SAML2\Compat;
 /**
  * Class \SAML2\Compat\MockContainer
  */
-class MockContainer extends AbstractContainer
+final class MockContainer extends AbstractContainer
 {
     /**
      * @var string

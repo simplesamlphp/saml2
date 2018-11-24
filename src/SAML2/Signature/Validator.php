@@ -12,7 +12,7 @@ use SAML2\SignedElement;
 /**
  * Signature Validator.
  */
-class Validator
+final class Validator
 {
     /**
      * @var \Psr\Log\LoggerInterface

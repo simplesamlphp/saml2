@@ -13,7 +13,7 @@ use SAML2\XML\saml\Attribute;
  *
  * @package SimpleSAMLphp
  */
-class AttributeAuthorityDescriptor extends RoleDescriptor
+final class AttributeAuthorityDescriptor extends RoleDescriptor
 {
     /**
      * List of AttributeService endpoints.

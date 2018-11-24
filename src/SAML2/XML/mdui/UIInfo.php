@@ -13,7 +13,7 @@ use SAML2\XML\Chunk;
  * @link: http://docs.oasis-open.org/security/saml/Post2.0/sstc-saml-metadata-ui/v1.0/sstc-saml-metadata-ui-v1.0.pdf
  * @package SimpleSAMLphp
  */
-class UIInfo
+final class UIInfo
 {
     /**
      * Array with child elements.

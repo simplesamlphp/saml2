@@ -10,7 +10,7 @@ use SAML2\Configuration\IdentityProviderAware;
 use SAML2\Configuration\ServiceProvider;
 use SAML2\Configuration\ServiceProviderAware;
 
-class AssertionValidator
+final class AssertionValidator
 {
     /**
      * @var \SAML2\Assertion\Validation\AssertionConstraintValidator[]

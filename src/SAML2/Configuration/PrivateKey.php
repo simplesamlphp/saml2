@@ -9,7 +9,7 @@ use SAML2\Exception\InvalidArgumentException;
 /**
  * Configuration of a private key.
  */
-class PrivateKey extends ArrayAdapter
+final class PrivateKey extends ArrayAdapter
 {
     const NAME_NEW     = 'new';
     const NAME_DEFAULT = 'default';

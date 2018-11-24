@@ -10,7 +10,7 @@ use SAML2\Configuration\IdentityProviderAware;
 use SAML2\Configuration\ServiceProvider;
 use SAML2\Configuration\ServiceProviderAware;
 
-class TransformerChain implements Transformer
+final class TransformerChain implements Transformer
 {
     /**
      * @var \SAML2\Assertion\Transformer\Transformer[]

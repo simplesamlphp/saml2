@@ -14,7 +14,7 @@ use SAML2\XML\ds\KeyInfo;
  *
  * @package SimpleSAMLphp
  */
-class KeyDescriptor
+final class KeyDescriptor
 {
     /**
      * What this key can be used for.

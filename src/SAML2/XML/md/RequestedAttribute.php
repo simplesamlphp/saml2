@@ -13,7 +13,7 @@ use SAML2\XML\saml\Attribute;
  *
  * @package SimpleSAMLphp
  */
-class RequestedAttribute extends Attribute
+final class RequestedAttribute extends Attribute
 {
     /**
      * Whether this attribute is required.

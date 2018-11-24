@@ -11,7 +11,7 @@ use SAML2\XML\Chunk;
  *
  * @package SimpleSAMLphp
  */
-class UnknownRoleDescriptor extends RoleDescriptor
+final class UnknownRoleDescriptor extends RoleDescriptor
 {
     /**
      * This RoleDescriptor as XML

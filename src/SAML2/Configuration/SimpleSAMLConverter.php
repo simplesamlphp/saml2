@@ -9,7 +9,7 @@ use \SimpleSAML\Configuration;
 /**
  * Backwards compatibility helper for SimpleSAMLphp
  */
-class SimpleSAMLConverter
+final class SimpleSAMLConverter
 {
     /**
      * @param \SimpleSAML\Configuration $configuration

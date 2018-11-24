@@ -6,7 +6,7 @@ namespace SAML2\Compat;
 
 use SAML2\Compat\Ssp\Container;
 
-class ContainerSingleton
+final class ContainerSingleton
 {
     /**
      * @var \SAML2\Compat\Ssp\Container

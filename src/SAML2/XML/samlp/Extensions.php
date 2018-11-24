@@ -13,7 +13,7 @@ use SAML2\XML\Chunk;
  *
  * @package SimpleSAMLphp
  */
-class Extensions
+final class Extensions
 {
     /**
      * Get a list of Extensions in the given element.

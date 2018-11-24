@@ -12,7 +12,7 @@ use SAML2\Utils;
  *
  * @package SimpleSAMLphp
  */
-class AuthnAuthorityDescriptor extends RoleDescriptor
+final class AuthnAuthorityDescriptor extends RoleDescriptor
 {
     /**
      * List of AuthnQueryService endpoints.

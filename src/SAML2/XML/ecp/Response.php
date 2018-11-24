@@ -12,7 +12,7 @@ use SAML2\Constants;
 /**
  * Class representing the ECP Response element.
  */
-class Response
+final class Response
 {
     /**
      * The AssertionConsumerServiceURL.
@@ -33,21 +33,21 @@ class Response
         }
 
         if (!$xml->hasAttributeNS(Constants::NS_SOAP, 'mustUnderstand')) {
-            throw new Exception('Missing SOAP-ENV:mustUnderstand attribute in <ecp:Response>.');
+            throw new \Exception('Missing SOAP-ENV:mustUnderstand attribute in <ecp:Response>.');
         }
         if ($xml->getAttributeNS(Constants::NS_SOAP, 'mustUnderstand') !== '1') {
-            throw new Exception('Invalid value of SOAP-ENV:mustUnderstand attribute in <ecp:Response>.');
+            throw new \Exception('Invalid value of SOAP-ENV:mustUnderstand attribute in <ecp:Response>.');
         }
 
         if (!$xml->hasAttributeNS(Constants::NS_SOAP, 'actor')) {
-            throw new Exception('Missing SOAP-ENV:actor attribute in <ecp:Response>.');
+            throw new \Exception('Missing SOAP-ENV:actor attribute in <ecp:Response>.');
         }
         if ($xml->getAttributeNS(Constants::NS_SOAP, 'actor') !== 'http://schemas.xmlsoap.org/soap/actor/next') {
-            throw new Exception('Invalid value of SOAP-ENV:actor attribute in <ecp:Response>.');
+            throw new \Exception('Invalid value of SOAP-ENV:actor attribute in <ecp:Response>.');
         }
 
         if (!$xml->hasAttribute('AssertionConsumerServiceURL')) {
-            throw new Exception('Missing AssertionConsumerServiceURL attribute in <ecp:Response>.');
+            throw new \Exception('Missing AssertionConsumerServiceURL attribute in <ecp:Response>.');
         }
 
         $this->AssertionConsumerServiceURL = $xml->getAttribute('AssertionConsumerServiceURL');

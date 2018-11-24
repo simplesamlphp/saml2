@@ -12,7 +12,7 @@ use SAML2\Utils;
  *
  * @package SimpleSAMLphp
  */
-class AdditionalMetadataLocation
+final class AdditionalMetadataLocation
 {
     /**
      * The namespace of this metadata.

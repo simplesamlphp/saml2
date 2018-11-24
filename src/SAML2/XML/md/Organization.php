@@ -12,7 +12,7 @@ use SAML2\Utils;
  *
  * @package SimpleSAMLphp
  */
-class Organization
+final class Organization
 {
     /**
      * Extensions on this element.

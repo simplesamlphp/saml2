@@ -14,7 +14,7 @@ use SAML2\Utils;
  *
  * @package SimpleSAMLphp
  */
-class EntitiesDescriptor extends SignedElementHelper
+final class EntitiesDescriptor extends SignedElementHelper
 {
     /**
      * The ID of this element.

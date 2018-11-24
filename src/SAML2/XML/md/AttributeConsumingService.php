@@ -12,7 +12,7 @@ use SAML2\Utils;
  *
  * @package SimpleSAMLphp
  */
-class AttributeConsumingService
+final class AttributeConsumingService
 {
     /**
      * The index of this AttributeConsumingService.
@@ -70,7 +70,7 @@ class AttributeConsumingService
         if (!$xml->hasAttribute('index')) {
             throw new \Exception('Missing index on AttributeConsumingService.');
         }
-        $this->index = (int) $xml->getAttribute('index');
+        $this->index = intval($xml->getAttribute('index'));
 
         $this->isDefault = Utils::parseBoolean($xml, 'isDefault', null);
 
@@ -105,7 +105,7 @@ class AttributeConsumingService
         $e = $doc->createElementNS(Constants::NS_MD, 'md:AttributeConsumingService');
         $parent->appendChild($e);
 
-        $e->setAttribute('index', (string) $this->index);
+        $e->setAttribute('index', strval($this->index));
 
         if ($this->isDefault === true) {
             $e->setAttribute('isDefault', 'true');

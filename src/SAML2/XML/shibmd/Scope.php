@@ -12,7 +12,7 @@ use SAML2\Utils;
  * @link https://wiki.shibboleth.net/confluence/display/SHIB/ShibbolethMetadataProfile
  * @package SimpleSAMLphp
  */
-class Scope
+final class Scope
 {
     /**
      * The namespace used for the Scope extension element.

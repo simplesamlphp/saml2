@@ -14,7 +14,7 @@ use SAML2\XML\saml\Attribute;
  * @link: http://docs.oasis-open.org/security/saml/Post2.0/sstc-metadata-attr-cs-01.pdf
  * @package SimpleSAMLphp
  */
-class EntityAttributes
+final class EntityAttributes
 {
     /**
      * The namespace used for the EntityAttributes extension.

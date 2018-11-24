@@ -12,7 +12,7 @@ use SAML2\Utils;
  *
  * @package SimpleSAMLphp
  */
-class ContactPerson
+final class ContactPerson
 {
     /**
      * The contact type.

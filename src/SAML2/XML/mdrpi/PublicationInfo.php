@@ -12,7 +12,7 @@ use SAML2\Utils;
  * @link: http://docs.oasis-open.org/security/saml/Post2.0/saml-metadata-rpi/v1.0/saml-metadata-rpi-v1.0.pdf
  * @package SimpleSAMLphp
  */
-class PublicationInfo
+final class PublicationInfo
 {
     /**
      * The identifier of the metadata publisher.

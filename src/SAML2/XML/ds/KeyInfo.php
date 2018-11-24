@@ -12,7 +12,7 @@ use SAML2\XML\Chunk;
  *
  * @package SimpleSAMLphp
  */
-class KeyInfo
+final class KeyInfo
 {
     /**
      * The Id attribute on this element.

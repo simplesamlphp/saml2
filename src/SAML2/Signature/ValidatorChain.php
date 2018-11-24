@@ -14,7 +14,7 @@ use SAML2\SignedElement;
  *
  * If no validation is possible an exception is thrown.
  */
-class ValidatorChain implements ValidatorInterface
+final class ValidatorChain implements ValidatorInterface
 {
     /**
      * @var \Psr\Log\LoggerInterface

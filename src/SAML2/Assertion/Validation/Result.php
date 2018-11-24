@@ -9,7 +9,7 @@ use SAML2\Exception\InvalidArgumentException;
 /**
  * Simple Result object
  */
-class Result
+final class Result
 {
     /**
      * @var array

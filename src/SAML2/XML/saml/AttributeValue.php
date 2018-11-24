@@ -13,7 +13,7 @@ use SAML2\Utils;
  *
  * @package SimpleSAMLphp
  */
-class AttributeValue implements \Serializable
+final class AttributeValue implements \Serializable
 {
     /**
      * The raw \DOMElement representing this value.

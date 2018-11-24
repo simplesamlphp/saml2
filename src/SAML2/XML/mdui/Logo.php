@@ -10,7 +10,7 @@ namespace SAML2\XML\mdui;
  * @link: http://docs.oasis-open.org/security/saml/Post2.0/sstc-saml-metadata-ui/v1.0/sstc-saml-metadata-ui-v1.0.pdf
  * @package SimpleSAMLphp
  */
-class Logo
+final class Logo
 {
     /**
      * The url of this logo.
@@ -62,8 +62,8 @@ class Logo
             throw new \Exception('Missing url value for Logo.');
         }
         $this->url = $xml->textContent;
-        $this->width = (int) $xml->getAttribute('width');
-        $this->height = (int) $xml->getAttribute('height');
+        $this->width = intval($xml->getAttribute('width'));
+        $this->height = intval($xml->getAttribute('height'));
         $this->lang = $xml->hasAttribute('xml:lang') ? $xml->getAttribute('xml:lang') : null;
     }
 

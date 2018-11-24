@@ -33,7 +33,7 @@ use SAML2\Signature\Validator;
  *
  * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
  */
-class ProcessorBuilder
+final class ProcessorBuilder
 {
     public static function build(
         LoggerInterface $logger,

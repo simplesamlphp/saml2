@@ -13,7 +13,7 @@ use SAML2\XML\saml\Attribute;
  *
  * @package SimpleSAMLphp
  */
-class IDPSSODescriptor extends SSODescriptorType
+final class IDPSSODescriptor extends SSODescriptorType
 {
     /**
      * Whether AuthnRequests sent to this IdP should be signed.

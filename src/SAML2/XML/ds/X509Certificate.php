@@ -12,7 +12,7 @@ use SAML2\Utils;
  *
  * @package SimpleSAMLphp
  */
-class X509Certificate
+final class X509Certificate
 {
     /**
      * The base64-encoded certificate.

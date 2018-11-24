@@ -11,7 +11,7 @@ namespace SAML2\XML\alg;
  * @author Jaime Pérez Crespo, UNINETT AS <jaime.perez@uninett.no>
  * @package simplesamlphp/saml2
  */
-class SigningMethod
+final class SigningMethod
 {
     /**
      * An URI identifying the algorithm supported for XML signature operations.

@@ -9,7 +9,7 @@ use SAML2\Assertion\Validation\SubjectConfirmationConstraintValidator;
 use SAML2\Utilities\Temporal;
 use SAML2\XML\saml\SubjectConfirmation;
 
-class SubjectConfirmationNotOnOrAfter implements
+final class SubjectConfirmationNotOnOrAfter implements
     SubjectConfirmationConstraintValidator
 {
     public function validate(

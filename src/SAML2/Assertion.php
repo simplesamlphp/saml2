@@ -10,6 +10,8 @@ use SAML2\Exception\RuntimeException;
 use SAML2\Utilities\Temporal;
 use SAML2\XML\Chunk;
 use SAML2\XML\saml\SubjectConfirmation;
+use SAML2\XML\saml\Issuer;
+use SAML2\XML\saml\NameID;
 
 /**
  * Class representing a SAML 2 assertion.
@@ -289,7 +291,7 @@ class Assertion implements SignedElement
         if (empty($issuer)) {
             throw new \Exception('Missing <saml:Issuer> in assertion.');
         }
-        $this->issuer = new XML\saml\Issuer($issuer[0]);
+        $this->issuer = new Issuer($issuer[0]);
         if ($this->issuer->getFormat() === Constants::NAMEID_ENTITY) {
             $this->issuer = $this->issuer->getValue();
         }
@@ -332,7 +334,7 @@ class Assertion implements SignedElement
                 /* The NameID element is encrypted. */
                 $this->encryptedNameId = $nameId;
             } else {
-                $this->nameId = new XML\saml\NameID($nameId);
+                $this->nameId = new NameID($nameId);
             }
         }
 
@@ -557,11 +559,11 @@ class Assertion implements SignedElement
                 $eptiNameId = Utils::xpQuery($eptiAttributeValue, './saml_assertion:NameID');
 
                 if (count($eptiNameId) === 1) {
-                    $this->attributes[$attributeName][] = new XML\saml\NameID($eptiNameId[0]);
+                    $this->attributes[$attributeName][] = new NameID($eptiNameId[0]);
                 } else {
                     /* Fall back for legacy IdPs sending string value (e.g. SSP < 1.15) */
                     Utils::getContainer()->getLogger()->warning(sprintf("Attribute %s (EPTI) value %d is not an XML NameId", $attributeName, $index));
-                    $nameId = new XML\saml\NameID();
+                    $nameId = new NameID();
                     $nameId->setValue($eptiAttributeValue->textContent);
                     $this->attributes[$attributeName][] = $nameId;
                 }
@@ -592,7 +594,7 @@ class Assertion implements SignedElement
             }
             
             if ($type === 'xs:integer') {
-                $this->attributes[$attributeName][] = (int)$value->textContent;
+                $this->attributes[$attributeName][] = intval($value->textContent);
             } else {
                 $this->attributes[$attributeName][] = trim($value->textContent);
             }
@@ -644,7 +646,7 @@ class Assertion implements SignedElement
      */
     public function validate(XMLSecurityKey $key)
     {
-        assert($key->type === \RobRichards\XMLSecLibs\XMLSecurityKey::RSA_SHA256);
+        assert($key->type === XMLSecurityKey::RSA_SHA256);
 
         if ($this->signatureData === null) {
             return false;
@@ -672,8 +674,6 @@ class Assertion implements SignedElement
      */
     public function setId(string $id)
     {
-        assert(is_string($id));
-
         $this->id = $id;
     }
 
@@ -694,8 +694,6 @@ class Assertion implements SignedElement
      */
     public function setIssueInstant(int $issueInstant)
     {
-        assert(is_int($issueInstant));
-
         $this->issueInstant = $issueInstant;
     }
 
@@ -714,7 +712,7 @@ class Assertion implements SignedElement
      *
      * @param \SAML2\XML\saml\Issuer $issuer The new issuer of this assertion.
      */
-    public function setIssuer(\SAML2\XML\saml\Issuer $issuer)
+    public function setIssuer(Issuer $issuer)
     {
         $this->issuer = $issuer;
     }
@@ -741,7 +739,7 @@ class Assertion implements SignedElement
      *
      * @param \SAML2\XML\saml\NameID|null $nameId The name identifier of the assertion.
      */
-    public function setNameId(\SAML2\XML\saml\NameID $nameId = null)
+    public function setNameId(NameID $nameId = null)
     {
         $this->nameId = $nameId;
     }
@@ -803,7 +801,7 @@ class Assertion implements SignedElement
 
         $nameId = Utils::decryptElement($this->encryptedNameId, $key, $blacklist);
         Utils::getContainer()->debugMessage($nameId, 'decrypt');
-        $this->nameId = new XML\saml\NameID($nameId);
+        $this->nameId = new NameID($nameId);
 
         $this->encryptedNameId = null;
     }
@@ -1324,7 +1322,7 @@ class Assertion implements SignedElement
 
         if (is_string($this->issuer)) {
             $issuer = Utils::addString($root, Constants::NS_SAML, 'saml:Issuer', $this->issuer);
-        } elseif ($this->issuer instanceof XML\saml\Issuer) {
+        } elseif ($this->issuer instanceof Issuer) {
             $issuer = $this->issuer->toXML($root);
         }
 
@@ -1498,7 +1496,7 @@ class Assertion implements SignedElement
                 foreach ($values as $eptiValue) {
                     $attributeValue = $document->createElementNS(Constants::NS_SAML, 'saml:AttributeValue');
                     $attribute->appendChild($attributeValue);
-                    if ($eptiValue instanceof XML\saml\NameID) {
+                    if ($eptiValue instanceof NameID) {
                         $eptiValue->toXML($attributeValue);
                     } elseif ($eptiValue instanceof \DOMNodeList) {
                         $node = $root->ownerDocument->importNode($eptiValue->item(0), true);

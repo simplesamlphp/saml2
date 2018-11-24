@@ -10,7 +10,7 @@ use SAML2\Exception\RuntimeException;
 /**
  * Various File Utilities
  */
-class File
+final class File
 {
     /**
      * @param string $file full absolute path to the file

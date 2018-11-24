@@ -59,7 +59,7 @@ class SignedElementHelper implements SignedElement
             if ($sig !== false) {
                 $this->certificates = $sig['Certificates'];
                 $this->validators[] = [
-                    'Function' => ['\SAML2\Utils', 'validateSignature'],
+                    'Function' => [Utils::class, 'validateSignature'],
                     'Data' => $sig,
                 ];
             }
