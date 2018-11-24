@@ -56,8 +56,8 @@ final class DiscoHints
             return;
         }
 
-        $this->IPHint =          Utils::extractStrings($xml, Common::NS, 'IPHint');
-        $this->DomainHint =      Utils::extractStrings($xml, Common::NS, 'DomainHint');
+        $this->IPHint = Utils::extractStrings($xml, Common::NS, 'IPHint');
+        $this->DomainHint = Utils::extractStrings($xml, Common::NS, 'DomainHint');
         $this->GeolocationHint = Utils::extractStrings($xml, Common::NS, 'GeolocationHint');
 
         foreach (Utils::xpQuery($xml, "./*[namespace-uri()!='".Common::NS."']") as $node) {

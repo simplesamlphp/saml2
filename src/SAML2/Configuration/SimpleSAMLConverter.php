@@ -69,7 +69,7 @@ final class SimpleSAMLConverter
 
         // ported from
         // https://github.com/simplesamlphp/simplesamlphp/blob/3d735912342767d391297cc5e13272a76730aca0/lib/SimpleSAML/Configuration.php#L1119
-        if ($configuration->hasValue($prefix . 'certificate')) {
+        if ($configuration->hasValue($prefix.'certificate')) {
             $extracted['certificateData'] = $configuration->getString($prefix.'certificate');
         }
 
