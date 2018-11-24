@@ -147,7 +147,7 @@ class Assertion implements SignedElement
      *
      * The URI reference MAY directly resolve into an XML document containing the referenced declaration.
      *
-     * @var \SAML2\XML\Chunk
+     * @var string|null
      */
     private $authnContextDeclRef;
 
