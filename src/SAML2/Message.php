@@ -68,7 +68,7 @@ abstract class Message implements SignedElement
     /**
      * The entity id of the issuer of this message, or null if unknown.
      *
-     * @var string|\SAML2\XML\saml\Issuer|null
+     * @var \SAML2\XML\saml\Issuer|null
      */
     private $issuer;
 
@@ -363,7 +363,7 @@ abstract class Message implements SignedElement
     /**
      * Retrieve the issuer if this message.
      *
-     * @return string|\SAML2\XML\saml\Issuer|null The issuer of this message, or NULL if no issuer is given
+     * @return \SAML2\XML\saml\Issuer|null The issuer of this message, or NULL if no issuer is given
      */
     public function getIssuer()
     {

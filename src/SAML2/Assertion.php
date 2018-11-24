@@ -78,7 +78,7 @@ class Assertion implements SignedElement
      */
     private $encryptionKey;
 
-     /**
+    /**
      * The earliest time this assertion is valid, as an UNIX timestamp.
      *
      * @var int
@@ -747,7 +747,7 @@ class Assertion implements SignedElement
     /**
      * Check whether the NameId is encrypted.
      *
-     * @return true if the NameId is encrypted, false if not.
+     * @return boolean True if the NameId is encrypted, false if not.
      */
     public function isNameIdEncrypted()
     {
@@ -1098,7 +1098,7 @@ class Assertion implements SignedElement
      *
      * The URI reference MAY directly resolve into an XML document containing the referenced declaration.
      *
-     * @return string
+     * @return \SAML2\XML\Chunk|null
      */
     public function getAuthnContextDeclRef()
     {

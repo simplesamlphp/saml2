@@ -108,7 +108,7 @@ final class LogoutRequest extends Request
     /**
      * Check whether the NameId is encrypted.
      *
-     * @return true if the NameId is encrypted, false if not.
+     * @return boolean True if the NameId is encrypted, false if not.
      */
     public function isNameIdEncrypted()
     {
