@@ -25,20 +25,6 @@ class EntitiesDescriptor extends SignedElementHelper
     private $ID;
 
     /**
-     * How long this element is valid, as a unix timestamp.
-     *
-     * @var int|null
-     */
-    public $validUntil;
-
-    /**
-     * The length of time this element can be cached, as string.
-     *
-     * @var string|null
-     */
-    public $cacheDuration;
-
-    /**
      * The name of this entity collection.
      *
      * @var string|null

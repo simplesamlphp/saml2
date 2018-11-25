@@ -19,7 +19,7 @@ use SAML2\XML\saml\SubjectConfirmation;
  *
  * @package SimpleSAMLphp
  */
-class Assertion implements SignedElement
+class Assertion extends SignedElement
 {
     /**
      * The identifier of this assertion.
@@ -204,22 +204,6 @@ class Assertion implements SignedElement
      * @var string
      */
     private $nameFormat;
-
-    /**
-     * The private key we should use to sign the assertion.
-     *
-     * The private key can be null, in which case the assertion is sent unsigned.
-     *
-     * @var XMLSecurityKey|null
-     */
-    private $signatureKey;
-
-    /**
-     * List of certificates that should be included in the assertion.
-     *
-     * @var array
-     */
-    private $certificates;
 
     /**
      * The data needed to verify the signature.
