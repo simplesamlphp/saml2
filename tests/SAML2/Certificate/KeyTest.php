@@ -79,7 +79,7 @@ class KeyTest extends \PHPUnit_Framework_TestCase
     public function functionProvider()
     {
         return [
-            'offseGet' => ['offsetGet', [0]],
+            'offsetGet' => ['offsetGet', [0]],
             'offsetExists' => ['offsetExists', [0]],
             'offsetSet' => ['offsetSet', [0, 2]],
             'offsetUnset' => ['offsetUnset', [0]]
