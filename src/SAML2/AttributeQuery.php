@@ -159,7 +159,7 @@ class AttributeQuery extends SubjectQuery
                     $type = null;
                 }
 
-                $attributeValue = Utils::addString($attribute, Constants::NS_SAML, 'saml:AttributeValue', (string)$value);
+                $attributeValue = Utils::addString($attribute, Constants::NS_SAML, 'saml:AttributeValue', strval($value));
                 if ($type !== null) {
                     $attributeValue->setAttributeNS(Constants::NS_XSI, 'xsi:type', $type);
                 }

@@ -24,7 +24,7 @@ abstract class AbstractContainer
      * - **encrypt** XML that is about to be encrypted
      * - **decrypt** XML that was just decrypted
      *
-     * @param string $message
+     * @param string|\DOMNode $message
      * @param string $type
      * @return void
      */

@@ -101,7 +101,7 @@ class EntitiesDescriptor extends SignedElementHelper
      */
     public function getName()
     {
-        return $this->name;
+        return $this->Name;
     }
 
     /**

@@ -140,7 +140,7 @@ class RoleDescriptor extends SignedElementHelper
         }
 
         foreach (Utils::xpQuery($xml, './saml_metadata:ContactPerson') as $cp) {
-            $this->addContactPersons(ContactPerson($cp));
+            $this->addContactPerson(new ContactPerson($cp));
         }
     }
 
@@ -270,7 +270,7 @@ class RoleDescriptor extends SignedElementHelper
 
     /**
      * Set the value of the Organization-property
-     * @param \SAML2\XML\md\Organization $organization|null
+     * @param \SAML2\XML\md\Organization|null $organization
      */
     public function setOrganization(Organization $organization = null)
     {

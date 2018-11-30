@@ -40,7 +40,7 @@ class AuthnRequest extends Request
     /**
      * Set to true if this request is passive.
      *
-     * @var bool.
+     * @var bool
      */
     private $isPassive;
 
@@ -113,7 +113,7 @@ class AuthnRequest extends Request
      *
      * @var array
      */
-    private $audiences;
+    private $audiences = [];
 
     /**
      * @var \SAML2\XML\saml\SubjectConfirmation[]
@@ -441,7 +441,7 @@ class AuthnRequest extends Request
      *
      * This may be null, in which case no audience is included.
      *
-     * @return array|null The audiences.
+     * @return array The audiences.
      */
     public function getAudiences()
     {
@@ -455,7 +455,7 @@ class AuthnRequest extends Request
      *
      * @param array|null $audiences The audiences.
      */
-    public function setAudiences(array $audiences = null)
+    public function setAudiences(array $audiences)
     {
         $this->audiences = $audiences;
     }
@@ -474,7 +474,7 @@ class AuthnRequest extends Request
      * be a string instead of an array, where each string
      * is mapped to the value of attribute ProviderID.
      *
-     * @param array List of idpEntries to scope the request to.
+     * @param array $IDPList List of idpEntries to scope the request to.
      */
     public function setIDPList(array $IDPList)
     {
@@ -626,11 +626,11 @@ class AuthnRequest extends Request
     /**
      * Set the RequestedAuthnContext.
      *
-     * @param array|null $requestedAuthnContext The RequestedAuthnContext.
+     * @param array $requestedAuthnContext The RequestedAuthnContext.
      */
     public function setRequestedAuthnContext($requestedAuthnContext)
     {
-        assert(is_array($requestedAuthnContext) || is_null($requestedAuthnContext));
+        assert(is_array($requestedAuthnContext));
 
         $this->requestedAuthnContext = $requestedAuthnContext;
     }
@@ -872,7 +872,7 @@ class AuthnRequest extends Request
      */
     private function addConditions(\DOMElement $root)
     {
-        if ($this->audiences !== null) {
+        if ($this->audiences !== []) {
             $document = $root->ownerDocument;
 
             $conditions = $document->createElementNS(Constants::NS_SAML, 'saml:Conditions');
@@ -881,7 +881,7 @@ class AuthnRequest extends Request
             $ar = $document->createElementNS(Constants::NS_SAML, 'saml:AudienceRestriction');
             $conditions->appendChild($ar);
 
-            Utils::addStrings($ar, Constants::NS_SAML, 'saml:Audience', false, $this->audiences);
+            Utils::addStrings($ar, Constants::NS_SAML, 'saml:Audience', false, $this->getAudiences());
         }
     }
 }

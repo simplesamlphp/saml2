@@ -119,7 +119,7 @@ class SOAPClient
         Utils::getContainer()->debugMessage($request, 'out');
 
         $action = 'http://www.oasis-open.org/committees/security';
-        $version = '1.1';
+        $version = SOAP_1_1;
         $destination = $msg->getDestination();
 
         /* Perform SOAP Request over HTTP */
@@ -224,7 +224,7 @@ class SOAPClient
     /*
      * Extracts the SOAP Fault from SOAP message
      * @param $soapmessage Soap response needs to be type DOMDocument
-     * @return $soapfaultstring string|null
+     * @return string|null $soapfaultstring
      */
     private function getSOAPFault($soapMessage)
     {

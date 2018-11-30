@@ -118,7 +118,7 @@ class HTTPArtifact extends Binding
         $ar->setDestination($endpoint['Location']);
 
         /* Sign the request */
-        \sspmod_saml_Message::addSign($this->spMetadata, $idpMetadata, $ar); // Shoaib - moved from the SOAPClient.
+        \SimpleSAML\Module\saml\Message::addSign($this->spMetadata, $idpMetadata, $ar); // Shoaib - moved from the SOAPClient.
 
         $soap = new SOAPClient();
 

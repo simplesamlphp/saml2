@@ -99,7 +99,7 @@ abstract class SSODescriptorType extends RoleDescriptor
 
     /**
      * Add the value to the ArtifactResolutionService-property
-     * @param \SAML2\XML\md\IndexedEndpointType $artifactResolucationService
+     * @param \SAML2\XML\md\IndexedEndpointType $artifactResolutionService
      */
     public function addArtifactResolutionService(IndexedEndpointType $artifactResolutionService)
     {

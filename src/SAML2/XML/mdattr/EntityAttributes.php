@@ -68,7 +68,7 @@ class EntityAttributes
 
     /**
      * Add the value to the children-property
-     * @param \SAML2\XML\Chunk $child
+     * @param \SAML2\XML\Chunk|\SAML2\XML\saml\Attribute $child
      */
     public function addChildren($child)
     {

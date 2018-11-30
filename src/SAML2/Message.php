@@ -23,7 +23,7 @@ abstract class Message implements SignedElement
      *
      * @var array
      */
-    protected $extensions;
+    protected $extensions = [];
 
     /**
      * The name of the root element of the DOM tree for the message.
@@ -589,7 +589,7 @@ abstract class Message implements SignedElement
     /**
      * Retrieve the Extensions.
      *
-     * @return \SAML2\XML\samlp\Extensions
+     * @return \SAML2\XML\samlp\Extensions[]
      */
     public function getExtensions()
     {
@@ -599,12 +599,10 @@ abstract class Message implements SignedElement
     /**
      * Set the Extensions.
      *
-     * @param array|null $extensions The Extensions
+     * @param array $extensions The Extensions
      */
-    public function setExtensions($extensions)
+    public function setExtensions(array $extensions)
     {
-        assert(is_array($extensions) || is_null($extensions));
-
         $this->extensions = $extensions;
     }
 

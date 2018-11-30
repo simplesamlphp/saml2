@@ -559,7 +559,9 @@ class Assertion implements SignedElement
                 } else {
                     /* Fall back for legacy IdPs sending string value (e.g. SSP < 1.15) */
                     Utils::getContainer()->getLogger()->warning(sprintf("Attribute %s (EPTI) value %d is not an XML NameId", $attributeName, $index));
-                    $this->attributes[$attributeName][] = XML\saml\NameID::fromArray(['Value' => $eptiAttributeValue->textContent]);
+                    $nameId = new XML\saml\NameID();
+                    $nameId->setValue($eptiAttributeValue->textContent);
+                    $this->attributes[$attributeName][] = $nameId;
                 }
             }
 
@@ -766,6 +768,7 @@ class Assertion implements SignedElement
         assert(is_array($nameId) || is_null($nameId) || $nameId instanceof XML\saml\NameID);
 
         if (is_array($nameId)) {
+            // @deprecated behaviour
             $nameId = XML\saml\NameID::fromArray($nameId);
         }
         $this->nameId = $nameId;
@@ -1147,7 +1150,7 @@ class Assertion implements SignedElement
     /**
      * Set the signature method used.
      *
-     * @param string|null $signatureMethod.
+     * @param string|null $signatureMethod
      */
     public function setSignatureMethod($signatureMethod)
     {
@@ -1189,7 +1192,7 @@ class Assertion implements SignedElement
     /**
      * Set the authentication context declaration reference.
      *
-     * @param string $authnContextDeclRef
+     * @param string|\SAML2\XML\Chunk $authnContextDeclRef
      * @throws \Exception
      */
     public function setAuthnContextDeclRef($authnContextDeclRef)

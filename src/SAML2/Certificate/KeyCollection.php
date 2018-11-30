@@ -17,7 +17,7 @@ class KeyCollection extends ArrayCollection
      */
     public function add($key)
     {
-        if (!$key instanceof Key) {
+        if (!($key instanceof Key)) {
             throw InvalidArgumentException::invalidType(
                 'SAML2\Certificate\Key',
                 $key

@@ -154,7 +154,7 @@ class HTTPRedirect extends Binding
      * It also adds a new parameter, SignedQuery, which contains the data that is
      * signed.
      *
-     * @return string The query data that is signed.
+     * @return array The query data that is signed.
      */
     private static function parseQuery()
     {

@@ -219,7 +219,7 @@ class IDPSSODescriptor extends SSODescriptorType
 
     /**
      * Collect the value of the Attribute-property
-     * @return \SAML2\XML\md\Attribute[]
+     * @return \SAML2\XML\saml\Attribute[]
      */
     public function getAttribute()
     {

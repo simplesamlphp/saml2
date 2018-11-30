@@ -78,7 +78,7 @@ class PDPDescriptor extends RoleDescriptor
 
     /**
      * Set the value of the AuthzService-property
-     * @param \SAML2\XML\md\EndpointType[] $AuthzService
+     * @param \SAML2\XML\md\EndpointType[] $authzService
      */
     public function setAuthzService(array $authzService = [])
     {

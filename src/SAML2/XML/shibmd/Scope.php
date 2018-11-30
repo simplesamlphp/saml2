@@ -93,7 +93,7 @@ class Scope
     public function toXML(\DOMElement $parent)
     {
         assert(is_string($this->getScope()));
-        assert(is_bool($this->isRegexpScope()) || is_null($this->isRRegexpScope()));
+        assert(is_bool($this->isRegexpScope()) || is_null($this->isRegexpScope()));
 
         $doc = $parent->ownerDocument;
 

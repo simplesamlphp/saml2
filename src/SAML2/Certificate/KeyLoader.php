@@ -29,8 +29,8 @@ class KeyLoader
      * Prioritisation order is keys > certData > certificate
      *
      * @param \SAML2\Configuration\CertificateProvider $config
-     * @param null                                    $usage
-     * @param bool                                    $required
+     * @param string|null                              $usage
+     * @param bool                                     $required
      *
      * @return \SAML2\Certificate\KeyCollection
      */

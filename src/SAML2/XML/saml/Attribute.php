@@ -102,7 +102,7 @@ class Attribute
 
     /**
      * Set the value of the NameFormat-property
-     * @param string|null $NameFormat
+     * @param string|null $nameFormat
      */
     public function setNameFormat($nameFormat = null)
     {
@@ -131,7 +131,7 @@ class Attribute
 
     /**
      * Collect the value of the AttributeValue-property
-     * @return SAML2\XML\saml\AttributeValue[]
+     * @return \SAML2\XML\saml\AttributeValue[]
      */
     public function getAttributeValue()
     {

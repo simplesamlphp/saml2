@@ -294,9 +294,9 @@ class EntityDescriptor extends SignedElementHelper
 
     /**
      * Add the value to the RoleDescriptor-property
-     * @param \SAML2\XML\md\Role $roleDescriptor
+     * @param \SAML2\XML\md\RoleDescriptor $roleDescriptor
      */
-    public function addRoleDescriptor($roleDescriptor)
+    public function addRoleDescriptor(RoleDescriptor $roleDescriptor)
     {
         $this->RoleDescriptor[] = $roleDescriptor;
     }
@@ -312,7 +312,7 @@ class EntityDescriptor extends SignedElementHelper
 
     /**
      * Set the value of the AffliationDescriptor-property
-     * @param \SAML2\XML\md\AffiliationDescriptor $affiliationDescriptor|null
+     * @param \SAML2\XML\md\AffiliationDescriptor|null $affiliationDescriptor
      */
     public function setAffiliationDescriptor(AffiliationDescriptor $affiliationDescriptor = null)
     {
@@ -330,7 +330,7 @@ class EntityDescriptor extends SignedElementHelper
 
     /**
      * Set the value of the Organization-property
-     * @param \SAML2\XML\md\Organization $organization|null
+     * @param \SAML2\XML\md\Organization|null $organization
      */
     public function setOrganization(Organization $organization = null)
     {
