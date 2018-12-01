@@ -676,26 +676,6 @@ class Assertion implements SignedElement
     }
 
     /**
-     * @return string The nameFormat.
-     */
-    public function getNameFormat()
-    {
-        return $this->nameFormat;
-    }
-
-    /**
-     * Set the Nameformat
-     *
-     * @param string $nameFormat
-     */
-    public function setNameFormat($nameFormat)
-    {
-        assert(is_string($nameFormat));
-
-        $this->nameFormat = $nameFormat;
-    }
-
-    /**
      * Retrieve the issue timestamp of this assertion.
      *
      * @return int The issue timestamp of this assertion, as an UNIX timestamp.
@@ -1743,7 +1723,7 @@ class Assertion implements SignedElement
             $document2->appendChild($attribute);
 
             if ($this->nameFormat !== Constants::NAMEFORMAT_UNSPECIFIED) {
-                $attribute->setAttribute('NameFormat', $this->getNameFormat());
+                $attribute->setAttribute('NameFormat', $this->getAttributeNameFormat());
             }
 
             foreach ($values as $value) {

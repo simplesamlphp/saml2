@@ -15,22 +15,21 @@ class EntityAttributesTest extends \PHPUnit_Framework_TestCase
     public function testMarshalling()
     {
         $attribute1 = new Attribute();
-        $attribute1->Name = 'urn:simplesamlphp:v1:simplesamlphp';
-        $attribute1->NameFormat = 'urn:oasis:names:tc:SAML:2.0:attrname-format:uri';
-        $attribute1->AttributeValue = [
+        $attribute1->setName('urn:simplesamlphp:v1:simplesamlphp');
+        $attribute1->setNameFormat('urn:oasis:names:tc:SAML:2.0:attrname-format:uri');
+        $attribute1->setAttributeValue([
              new AttributeValue('FirstValue'),
              new AttributeValue('SecondValue'),
-        ];
+        ]);
         $attribute2 = new Attribute();
-        $attribute2->Name = 'foo';
-        $attribute2->NameFormat = 'urn:simplesamlphp:v1';
-        $attribute2->AttributeValue = [
+        $attribute2->setName('foo');
+        $attribute2->setNameFormat('urn:simplesamlphp:v1');
+        $attribute2->setAttributeValue([
              new AttributeValue('bar'),
-        ];
+        ]);
 
         $entityAttributes = new EntityAttributes();
-        $entityAttributes->children[] = $attribute1;
-        $entityAttributes->children[] = $attribute2;
+        $entityAttributes->setChildren([$attribute1, $attribute2]);
 
         $document = DOMDocumentFactory::fromString('<root />');
         $xml = $entityAttributes->toXML($document->firstChild);
@@ -71,9 +70,9 @@ XML
         $this->assertInstanceOf('SAML2\XML\saml\Attribute', $entityAttributes->getChildren()[3]);
         $this->assertInstanceOf('SAML2\XML\saml\Attribute', $entityAttributes->getChildren()[4]);
 
-        $this->assertEquals('Assertion', $entityAttributes->getChildren()[0]->localName);
+        $this->assertEquals('Assertion', $entityAttributes->getChildren()[0]->getLocalName());
         $this->assertEquals('1984-08-26T10:01:30.000Z', $entityAttributes->getChildren()[0]->xml->getAttribute('IssueInstant'));
-        $this->assertEquals('attrib2', $entityAttributes->getChildren()[3]->Name);
+        $this->assertEquals('attrib2', $entityAttributes->getChildren()[3]->getName());
     }
 
     public function testUnmarshallingAttributes()
@@ -95,11 +94,11 @@ XML
         $entityAttributes = new EntityAttributes($document->firstChild);
         $this->assertCount(2, $entityAttributes->getChildren());
 
-        $this->assertEquals('urn:simplesamlphp:v1:simplesamlphp', $entityAttributes->getChildren()[0]->Name);
-        $this->assertEquals('urn:oasis:names:tc:SAML:2.0:attrname-format:uri', $entityAttributes->getChildren()[0]->NameFormat);
-        $this->assertCount(3, $entityAttributes->getChildren()[0]->AttributeValue);
-        $this->assertEquals('foo', $entityAttributes->getChildren()[1]->Name);
-        $this->assertEquals('urn:simplesamlphp:v1', $entityAttributes->getChildren()[1]->NameFormat);
-        $this->assertCount(1, $entityAttributes->getChildren()[1]->AttributeValue);
+        $this->assertEquals('urn:simplesamlphp:v1:simplesamlphp', $entityAttributes->getChildren()[0]->getName());
+        $this->assertEquals('urn:oasis:names:tc:SAML:2.0:attrname-format:uri', $entityAttributes->getChildren()[0]->getNameFormat());
+        $this->assertCount(3, $entityAttributes->getChildren()[0]->getAttributeValue());
+        $this->assertEquals('foo', $entityAttributes->getChildren()[1]->getName());
+        $this->assertEquals('urn:simplesamlphp:v1', $entityAttributes->getChildren()[1]->getNameFormat());
+        $this->assertCount(1, $entityAttributes->getChildren()[1]->getAttributeValue());
     }
 }

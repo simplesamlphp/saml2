@@ -21,6 +21,9 @@ class AffiliationDescriptorTest extends \PHPUnit_Framework_TestCase
             'Member1',
             'Member2',
         ]);
+        $affiliationDescriptorElement->setKeyDescriptor([
+            Utils::createKeyDescriptor("testCert")
+        ]);
 
         $affiliationDescriptorElement = $affiliationDescriptorElement->toXML($document->firstChild);
 

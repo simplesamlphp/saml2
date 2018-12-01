@@ -21,6 +21,9 @@ class RoleDescriptorTest extends \PHPUnit_Framework_TestCase
             'protocol2',
         ]);
         $roleDescriptor->setErrorURL('https://example.org/error');
+        $roleDescriptor->setKeyDescriptor([
+            Utils::createKeyDescriptor("testCert")
+        ]);
 
         $document = DOMDocumentFactory::fromString('<root />');
         $roleDescriptorElement = $roleDescriptor->toXML($document->firstChild);
