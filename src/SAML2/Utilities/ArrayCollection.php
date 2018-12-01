@@ -59,7 +59,7 @@ class ArrayCollection implements Collection
     {
         if ($this->count() !== 1) {
             throw new RuntimeException(sprintf(
-                __CLASS__ . '::' . __METHOD__ . ' requires that the collection has exactly one element, '
+                __CLASS__.'::'.__METHOD__.' requires that the collection has exactly one element, '
                 . '"%d" elements found',
                 $this->count()
             ));

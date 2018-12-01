@@ -40,7 +40,7 @@ class IndexedEndpointType extends EndpointType
         }
 
         if (!$xml->hasAttribute('index')) {
-            throw new \Exception('Missing index on ' . $xml->tagName);
+            throw new \Exception('Missing index on '.$xml->tagName);
         }
         $this->setIndex(intval($xml->getAttribute('index')));
 
