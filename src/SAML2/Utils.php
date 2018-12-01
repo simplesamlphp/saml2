@@ -472,7 +472,7 @@ class Utils
                 $key = $encKey->decryptKey($symmetricKeyInfo);
                 if (strlen($key) != $keySize) {
                     throw new \Exception(
-                        'Unexpected key size ('.strlen($key)*8.'bits) for encryption algorithm: '.
+                        'Unexpected key size ('.strval(strlen($key)*8).'bits) for encryption algorithm: '.
                         var_export($symmetricKey->type, true)
                     );
                 }
