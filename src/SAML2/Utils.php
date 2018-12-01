@@ -524,8 +524,8 @@ class Utils
          * namespaces needed to parse the XML.
          */
         $xml = '<root xmlns:saml="urn:oasis:names:tc:SAML:2.0:assertion" '.
-                        'xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">' .
-            $decrypted .
+                        'xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">'.
+            $decrypted.
             '</root>';
 
         try {
