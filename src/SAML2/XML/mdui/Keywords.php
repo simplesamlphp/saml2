@@ -119,7 +119,7 @@ class Keywords
             if (strpos($keyword, "+") !== false) {
                 throw new \Exception('Keywords may not contain a "+" character.');
             }
-            $value .= str_replace(' ', '+', $keyword) . ' ';
+            $value .= str_replace(' ', '+', $keyword).' ';
         }
         $value = rtrim($value);
         $e->appendChild($doc->createTextNode($value));
