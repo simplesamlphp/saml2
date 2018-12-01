@@ -118,7 +118,7 @@ class AttributeConsumingService
      */
     public function setIsDefault($flag = null)
     {
-        assert(is_bool($flag));
+        assert(is_bool($flag) || is_null($flag));
         $this->isDefault = $flag;
     }
 
