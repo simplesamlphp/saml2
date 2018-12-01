@@ -256,7 +256,7 @@ class Utils
         }
 
         foreach ($namespaces as $prefix => $uri) {
-            $newElement->setAttributeNS($uri, $prefix . ':__ns_workaround__', 'tmp');
+            $newElement->setAttributeNS($uri, $prefix.':__ns_workaround__', 'tmp');
             $newElement->removeAttributeNS($uri, '__ns_workaround__');
         }
 
@@ -289,7 +289,7 @@ class Utils
             case 'true':
                 return true;
             default:
-                throw new \Exception('Invalid value of boolean attribute ' . var_export($attributeName, true) . ': ' . var_export($value, true));
+                throw new \Exception('Invalid value of boolean attribute '.var_export($attributeName, true).': '.var_export($value, true));
         }
     }
 
@@ -320,13 +320,13 @@ class Utils
         $nid->value = $nameId['Value'];
 
         if (array_key_exists('NameQualifier', $nameId) && $nameId['NameQualifier'] !== null) {
-            $nid->NameQualifier = $nameId['NameQualifier'];
+            $nid->setNameQualifier($nameId['NameQualifier']);
         }
         if (array_key_exists('SPNameQualifier', $nameId) && $nameId['SPNameQualifier'] !== null) {
-            $nid->SPNameQualifier = $nameId['SPNameQualifier'];
+            $nid->setSPNameQualifier($nameId['SPNameQualifier']);
         }
         if (array_key_exists('Format', $nameId) && $nameId['Format'] !== null) {
-            $nid->Format = $nameId['Format'];
+            $nid->setFormat($nameId['Format']);
         }
 
         $nid->toXML($node);
@@ -433,7 +433,7 @@ class Utils
             $symKeyInfoAlgo = $symmetricKeyInfo->getAlgorithm();
 
             if (in_array($symKeyInfoAlgo, $blacklist, true)) {
-                throw new \Exception('Algorithm disabled: ' . var_export($symKeyInfoAlgo, true));
+                throw new \Exception('Algorithm disabled: '.var_export($symKeyInfoAlgo, true));
             }
 
             if ($symKeyInfoAlgo === XMLSecurityKey::RSA_OAEP_MGF1P && $inputKeyAlgo === XMLSecurityKey::RSA_1_5) {
@@ -449,9 +449,9 @@ class Utils
             /* Make sure that the input key format is the same as the one used to encrypt the key. */
             if ($inputKeyAlgo !== $symKeyInfoAlgo) {
                 throw new \Exception(
-                    'Algorithm mismatch between input key and key used to encrypt ' .
-                    ' the symmetric key for the message. Key was: ' .
-                    var_export($inputKeyAlgo, true) . '; message was: ' .
+                    'Algorithm mismatch between input key and key used to encrypt '.
+                    ' the symmetric key for the message. Key was: '.
+                    var_export($inputKeyAlgo, true).'; message was: '.
                     var_export($symKeyInfoAlgo, true)
                 );
             }
@@ -465,20 +465,20 @@ class Utils
                 /* To protect against "key oracle" attacks, we need to be able to create a
                  * symmetric key, and for that we need to know the key size.
                  */
-                throw new \Exception('Unknown key size for encryption algorithm: ' . var_export($symmetricKey->type, true));
+                throw new \Exception('Unknown key size for encryption algorithm: '.var_export($symmetricKey->type, true));
             }
 
             try {
                 $key = $encKey->decryptKey($symmetricKeyInfo);
                 if (strlen($key) != $keySize) {
                     throw new \Exception(
-                        'Unexpected key size (' . strlen($key) * 8 . 'bits) for encryption algorithm: ' .
+                        'Unexpected key size ('.strval(strlen($key)*8).'bits) for encryption algorithm: '.
                         var_export($symmetricKey->type, true)
                     );
                 }
             } catch (\Exception $e) {
                 /* We failed to decrypt this key. Log it, and substitute a "random" key. */
-                Utils::getContainer()->getLogger()->error('Failed to decrypt symmetric key: ' . $e->getMessage());
+                Utils::getContainer()->getLogger()->error('Failed to decrypt symmetric key: '.$e->getMessage());
                 /* Create a replacement key, so that it looks like we fail in the same way as if the key was correctly padded. */
 
                 /* We base the symmetric key on the encrypted key and private key, so that we always behave the
@@ -487,7 +487,7 @@ class Utils
                 $encryptedKey = $encKey->getCipherValue();
                 $pkey = openssl_pkey_get_details($symmetricKeyInfo->key);
                 $pkey = sha1(serialize($pkey), true);
-                $key = sha1($encryptedKey . $pkey, true);
+                $key = sha1($encryptedKey.$pkey, true);
 
                 /* Make sure that the key has the correct length. */
                 if (strlen($key) > $keySize) {
@@ -502,8 +502,8 @@ class Utils
             /* Make sure that the input key has the correct format. */
             if ($inputKeyAlgo !== $symKeyAlgo) {
                 throw new \Exception(
-                    'Algorithm mismatch between input key and key in message. ' .
-                    'Key was: ' . var_export($inputKeyAlgo, true) . '; message was: ' .
+                    'Algorithm mismatch between input key and key in message. '.
+                    'Key was: '.var_export($inputKeyAlgo, true).'; message was: '.
                     var_export($symKeyAlgo, true)
                 );
             }
@@ -512,7 +512,7 @@ class Utils
 
         $algorithm = $symmetricKey->getAlgorithm();
         if (in_array($algorithm, $blacklist, true)) {
-            throw new \Exception('Algorithm disabled: ' . var_export($algorithm, true));
+            throw new \Exception('Algorithm disabled: '.var_export($algorithm, true));
         }
 
         /** @var string $decrypted */
@@ -524,8 +524,8 @@ class Utils
          * namespaces needed to parse the XML.
          */
         $xml = '<root xmlns:saml="urn:oasis:names:tc:SAML:2.0:assertion" '.
-                     'xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">' .
-            $decrypted .
+                        'xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">'.
+            $decrypted.
             '</root>';
 
         try {
@@ -564,7 +564,7 @@ class Utils
              * Something went wrong during decryption, but for security
              * reasons we cannot tell the user what failed.
              */
-            Utils::getContainer()->getLogger()->error('Decryption failed: ' . $e->getMessage());
+            Utils::getContainer()->getLogger()->error('Decryption failed: '.$e->getMessage());
             throw new \Exception('Failed to decrypt XML element.', 0, $e);
         }
     }
@@ -685,13 +685,13 @@ class Utils
         assert(is_string($x509Data));
 
         $x509Certificate = new X509Certificate();
-        $x509Certificate->certificate = $x509Data;
+        $x509Certificate->setCertificate($x509Data);
 
         $x509Data = new X509Data();
-        $x509Data->data[] = $x509Certificate;
+        $x509Data->addData($x509Certificate);
 
         $keyInfo = new KeyInfo();
-        $keyInfo->info[] = $x509Data;
+        $keyInfo->addInfo($x509Data);
 
         $keyDescriptor = new KeyDescriptor();
         $keyDescriptor->KeyInfo = $keyInfo;
@@ -726,7 +726,7 @@ class Utils
         $regex = '/^(\\d\\d\\d\\d)-(\\d\\d)-(\\d\\d)T(\\d\\d):(\\d\\d):(\\d\\d)(?:\\.\\d{1,9})?Z$/D';
         if (preg_match($regex, $time, $matches) == 0) {
             throw new \Exception(
-                'Invalid SAML2 timestamp passed to xsDateTimeToTimestamp: ' . $time
+                'Invalid SAML2 timestamp passed to xsDateTimeToTimestamp: '.$time
             );
         }
 

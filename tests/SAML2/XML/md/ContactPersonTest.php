@@ -28,13 +28,13 @@ class ContactPersonTest extends \PHPUnit_Framework_TestCase {
 XML
         );
         $contactPerson = new ContactPerson();
-        $contactPerson->contactType = $contactType;
-        $contactPerson->Company = $Company;
-        $contactPerson->GivenName = $GivenName;
-        $contactPerson->SurName = $SurName;
-        $contactPerson->EmailAddress = $EmailAddress;
-        $contactPerson->TelephoneNumber = $TelephoneNumber;
-        $contactPerson->ContactPersonAttributes = $ContactPersonAttributes;
+        $contactPerson->setContactType($contactType);
+        $contactPerson->setCompany($Company);
+        $contactPerson->setGivenName($GivenName);
+        $contactPerson->setSurName($SurName);
+        $contactPerson->setEmailAddress($EmailAddress);
+        $contactPerson->setTelephoneNumber($TelephoneNumber);
+        $contactPerson->setContactPersonAttributes($ContactPersonAttributes);
 
         $contactPerson->toXML($document->firstChild);
 
@@ -81,14 +81,14 @@ XML
 
         $contactPerson = new ContactPerson($document->getElementsByTagName('ContactPerson')->item(0));
 
-        $this->assertEquals('Test Company', $contactPerson->Company);
-        $this->assertEquals('John', $contactPerson->GivenName);
-        $this->assertEquals('Doe', $contactPerson->SurName);
-        $this->assertTrue(in_array('jdoe@test.company', $contactPerson->EmailAddress));
-        $this->assertTrue(in_array('john.doe@test.company', $contactPerson->EmailAddress));
-        $this->assertTrue(in_array('1-234-567-8901', $contactPerson->TelephoneNumber));
-        $this->assertEquals('testval', $contactPerson->ContactPersonAttributes['testattr']);
-        $this->assertEquals('testval2', $contactPerson->ContactPersonAttributes['testattr2']);
+        $this->assertEquals('Test Company', $contactPerson->getCompany());
+        $this->assertEquals('John', $contactPerson->getGivenName());
+        $this->assertEquals('Doe', $contactPerson->getSurName());
+        $this->assertTrue(in_array('jdoe@test.company', $contactPerson->getEmailAddress()));
+        $this->assertTrue(in_array('john.doe@test.company', $contactPerson->getEmailAddress()));
+        $this->assertTrue(in_array('1-234-567-8901', $contactPerson->getTelephoneNumber()));
+        $this->assertEquals('testval', $contactPerson->getContactPersonAttributes()['testattr']);
+        $this->assertEquals('testval2', $contactPerson->getContactPersonAttributes()['testattr2']);
     }
 
     public function testMultipleNamesXML()
@@ -136,7 +136,7 @@ XML
 
         $contactPerson = new ContactPerson($document->getElementsByTagName('ContactPerson')->item(0));
 
-        $this->assertNull($contactPerson->SurName);
+        $this->assertNull($contactPerson->getSurName());
     }
 
     public function testMissingContactTypeXML()

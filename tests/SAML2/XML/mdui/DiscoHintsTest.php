@@ -16,9 +16,9 @@ class DiscoHintsTest extends \PHPUnit_Framework_TestCase
     public function testMarshalling()
     {
         $discoHints = new DiscoHints();
-        $discoHints->IPHint = ["192.168.6.0/24", "fd00:0123:aa:1001::/64"];
-        $discoHints->DomainHint = ["example.org", "student.example.org"];
-        $discoHints->GeolocationHint = ["geo:47.37328,8.531126", "geo:19.34343,12.342514"];
+        $discoHints->setIPHint(["192.168.6.0/24", "fd00:0123:aa:1001::/64"]);
+        $discoHints->setDomainHint(["example.org", "student.example.org"]);
+        $discoHints->setGeolocationHint(["geo:47.37328,8.531126", "geo:19.34343,12.342514"]);
 
         $document = DOMDocumentFactory::fromString('<root />');
         $xml = $discoHints->toXML($document->firstChild);
@@ -87,15 +87,15 @@ XML
 
         $disco = new DiscoHints($document->firstChild);
 
-        $this->assertCount(2, $disco->IPHint);
-        $this->assertEquals('130.59.0.0/16', $disco->IPHint[0]);
-        $this->assertEquals('2001:620::0/96', $disco->IPHint[1]);
-        $this->assertCount(2, $disco->DomainHint);
-        $this->assertEquals('example.com', $disco->DomainHint[0]);
-        $this->assertEquals('www.example.com', $disco->DomainHint[1]);
-        $this->assertCount(2, $disco->GeolocationHint);
-        $this->assertEquals('geo:47.37328,8.531126', $disco->GeolocationHint[0]);
-        $this->assertEquals('geo:19.34343,12.342514', $disco->GeolocationHint[1]);
+        $this->assertCount(2, $disco->getIPHint());
+        $this->assertEquals('130.59.0.0/16', $disco->getIPHint()[0]);
+        $this->assertEquals('2001:620::0/96', $disco->getIPHint()[1]);
+        $this->assertCount(2, $disco->getDomainHint());
+        $this->assertEquals('example.com', $disco->getDomainHint()[0]);
+        $this->assertEquals('www.example.com', $disco->getDomainHint()[1]);
+        $this->assertCount(2, $disco->getGeolocationHint());
+        $this->assertEquals('geo:47.37328,8.531126', $disco->getGeolocationHint()[0]);
+        $this->assertEquals('geo:19.34343,12.342514', $disco->getGeolocationHint()[1]);
     }
 
     /**
@@ -105,9 +105,9 @@ XML
     {
         $discoHints = new DiscoHints();
         $keywords = new Keywords();
-        $keywords->lang = "nl";
-        $keywords->Keywords = ["voorbeeld", "specimen"];
-        $discoHints->children = [$keywords];
+        $keywords->setLanguage("nl");
+        $keywords->setKeywords(["voorbeeld", "specimen"]);
+        $discoHints->setChildren([$keywords]);
 
         $document = DOMDocumentFactory::fromString('<root />');
         $xml = $discoHints->toXML($document->firstChild);
@@ -137,9 +137,9 @@ XML
 
         $disco = new DiscoHints($document->firstChild);
 
-        $this->assertCount(1, $disco->GeolocationHint);
-        $this->assertEquals('geo:47.37328,8.531126', $disco->GeolocationHint[0]);
-        $this->assertCount(1, $disco->children);
-        $this->assertEquals('content of tag', $disco->children[0]->xml->textContent);
+        $this->assertCount(1, $disco->getGeolocationHint());
+        $this->assertEquals('geo:47.37328,8.531126', $disco->getGeolocationHint()[0]);
+        $this->assertCount(1, $disco->getChildren());
+        $this->assertEquals('content of tag', $disco->getChildren()[0]->xml->textContent);
     }
 }

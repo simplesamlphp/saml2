@@ -24,7 +24,7 @@ class SubjectConfirmationRecipientMatches implements
         SubjectConfirmation $subjectConfirmation,
         Result $result
     ) {
-        $recipient = $subjectConfirmation->SubjectConfirmationData->Recipient;
+        $recipient = $subjectConfirmation->getSubjectConfirmationData()->getRecipient();
         if ($recipient && !$this->destination->equals(new Destination($recipient))) {
             $result->addError(sprintf(
                 'Recipient in SubjectConfirmationData ("%s") does not match the current destination ("%s")',

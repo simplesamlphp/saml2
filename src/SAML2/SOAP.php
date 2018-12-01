@@ -34,7 +34,7 @@ SOAP;
             $header = $doc->getElementsByTagNameNS(Constants::NS_SOAP, 'Header')->item(0);
 
             $response = new ECPResponse;
-            $response->AssertionConsumerServiceURL = $this->getDestination() ?: $message->getDestination();
+            $response->setAssertionConsumerServiceURL($this->getDestination() ?: $message->getDestination());
 
             $response->toXML($header);
 

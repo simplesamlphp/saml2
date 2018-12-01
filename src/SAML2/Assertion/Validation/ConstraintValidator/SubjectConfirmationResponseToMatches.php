@@ -21,7 +21,7 @@ class SubjectConfirmationResponseToMatches implements
         SubjectConfirmation $subjectConfirmation,
         Result $result
     ) {
-        $inResponseTo = $subjectConfirmation->SubjectConfirmationData->InResponseTo;
+        $inResponseTo = $subjectConfirmation->getSubjectConfirmationData()->getInResponseTo();
         if ($inResponseTo && ($this->getInResponseTo() !== false) && ($this->getInResponseTo() !== $inResponseTo)) {
             $result->addError(sprintf(
                 'InResponseTo in SubjectConfirmationData ("%s") does not match the Response InResponseTo ("%s")',

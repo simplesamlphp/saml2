@@ -41,11 +41,39 @@ class EntityAttributes
 
         foreach (Utils::xpQuery($xml, './saml_assertion:Attribute|./saml_assertion:Assertion') as $node) {
             if ($node->localName === 'Attribute') {
-                $this->children[] = new Attribute($node);
+                $this->addChildren(new Attribute($node));
             } else {
-                $this->children[] = new Chunk($node);
+                $this->addChildren(new Chunk($node));
             }
         }
+    }
+
+    /**
+     * Collect the value of the children-property
+     * @return (\SAML2\XML\Chunk|\SAML2\XML\saml\Attribute)[]
+     */
+    public function getChildren()
+    {
+        return $this->children;
+    }
+
+    /**
+     * Set the value of the childen-property
+     * @param array $children
+     */
+    public function setChildren(array $children)
+    {
+        $this->children = $children;
+    }
+
+    /**
+     * Add the value to the children-property
+     * @param \SAML2\XML\Chunk|\SAML2\XML\saml\Attribute $child
+     */
+    public function addChildren($child)
+    {
+        assert($child instanceof Chunk || $child instanceof Attribute);
+        $this->children[] = $child;
     }
 
     /**
@@ -56,7 +84,7 @@ class EntityAttributes
      */
     public function toXML(\DOMElement $parent)
     {
-        assert(is_array($this->children));
+        assert(is_array($this->getChildren()));
 
         $doc = $parent->ownerDocument;
 
@@ -64,7 +92,7 @@ class EntityAttributes
         $parent->appendChild($e);
 
         /** @var \SAML2\XML\saml\Attribute|\SAML2\XML\Chunk $child */
-        foreach ($this->children as $child) {
+        foreach ($this->getChildren() as $child) {
             $child->toXML($e);
         }
 

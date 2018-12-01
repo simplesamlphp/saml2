@@ -16,30 +16,7 @@ class ResponseTest extends PHPUnit_Framework_TestCase
     {
         $response = new Response;
 
-        $this->assertNull($response->AssertionConsumerServiceURL);
-    }
-
-    public function toXMLInvalidACSProvider()
-    {
-        return [
-            [null],
-            [1],
-            [false],
-            [[]],
-            [new stdClass],
-        ];
-    }
-
-    /**
-     * @dataProvider toXMLInvalidACSProvider
-     */
-    public function testToXMLInvalidACS($url)
-    {
-        $this->setExpectedException('InvalidArgumentException', 'AssertionConsumerServiceURL');
-
-        $response = new Response;
-        $response->AssertionConsumerServiceURL = $url;
-        $response->toXML(new DOMElement('Foobar'));
+        $this->assertNull($response->getAssertionConsumerServiceURL());
     }
 
     public function testToXMLReturnsResponse()
@@ -48,7 +25,7 @@ class ResponseTest extends PHPUnit_Framework_TestCase
         $element = $doc->createElement('Foobar');
 
         $response = new Response;
-        $response->AssertionConsumerServiceURL = 'https://example.com/ACS';
+        $response->setAssertionConsumerServiceURL('https://example.com/ACS');
         $return = $response->toXML($element);
 
         $this->assertInstanceOf('DOMElement', $return);
@@ -63,7 +40,7 @@ class ResponseTest extends PHPUnit_Framework_TestCase
         $element = $doc->createElement('Foobar');
 
         $response = new Response;
-        $response->AssertionConsumerServiceURL = $acs;
+        $response->setAssertionConsumerServiceURL($acs);
         $return = $response->toXML($element);
 
         $this->assertTrue($return->hasAttributeNS(Constants::NS_SOAP, 'mustUnderstand'));
@@ -80,7 +57,7 @@ class ResponseTest extends PHPUnit_Framework_TestCase
         $element = $doc->createElement('Foobar');
 
         $response = new Response;
-        $response->AssertionConsumerServiceURL = 'https://example.com/ACS';
+        $response->setAssertionConsumerServiceURL('https://example.com/ACS');
         $return = $response->toXML($element);
 
         $elements = $element->getElementsByTagNameNS(Constants::NS_ECP, 'Response');

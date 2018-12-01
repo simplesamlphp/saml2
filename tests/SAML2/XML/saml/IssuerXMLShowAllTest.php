@@ -16,11 +16,11 @@ class IssuerShowAllTest extends \PHPUnit_Framework_TestCase
     public function testMarshalling()
     {
         $issuer = new Issuer();
-        $issuer->NameQualifier = 'TheNameQualifier';
-        $issuer->SPNameQualifier = 'TheSPNameQualifier';
-        $issuer->Format = 'TheFormat';
-        $issuer->SPProvidedID = 'TheSPProvidedID';
-        $issuer->value = 'TheIssuerValue';
+        $issuer->setNameQualifier('TheNameQualifier');
+        $issuer->setSPNameQualifier('TheSPNameQualifier');
+        $issuer->setFormat('TheFormat');
+        $issuer->setSPProvidedID('TheSPProvidedID');
+        $issuer->setValue('TheIssuerValue');
         $issuerElement = $issuer->toXML();
         $issuerElements = Utils::xpQuery($issuerElement, '/saml_assertion:Issuer');
         $this->assertCount(1, $issuerElements);
@@ -42,22 +42,22 @@ XML
         );
 
         $issuer = new Issuer($document->firstChild);
-        $this->assertEquals('TheNameQualifier', $issuer->NameQualifier);
-        $this->assertEquals('TheSPNameQualifier', $issuer->SPNameQualifier);
-        $this->assertEquals('TheFormat', $issuer->Format);
-        $this->assertEquals('TheSPProvidedID', $issuer->SPProvidedID);
-        $this->assertEquals('TheIssuerValue', $issuer->value);
+        $this->assertEquals('TheNameQualifier', $issuer->getNameQualifier());
+        $this->assertEquals('TheSPNameQualifier', $issuer->getSPNameQualifier());
+        $this->assertEquals('TheFormat', $issuer->getFormat());
+        $this->assertEquals('TheSPProvidedID', $issuer->getSPProvidedID());
+        $this->assertEquals('TheIssuerValue', $issuer->getValue());
     }
 
     public function testToStringShowAllTrueFormatNameID()
     {
         $issuer = new Issuer();
-        $issuer->NameQualifier = 'TheNameQualifier';
-        $issuer->SPNameQualifier = 'TheSPNameQualifier';
-        $issuer->Format = Constants::NAMEID_ENTITY;
-        $issuer->SPProvidedID = 'TheSPProvidedID';
-        $issuer->value = 'TheIssuerValue';
-        $issuer->Saml2IssuerShowAll=true;
+        $issuer->setNameQualifier('TheNameQualifier');
+        $issuer->setSPNameQualifier('TheSPNameQualifier');
+        $issuer->setFormat(Constants::NAMEID_ENTITY);
+        $issuer->setSPProvidedID('TheSPProvidedID');
+        $issuer->setvalue('TheIssuerValue');
+        $issuer->setSaml2IssuerShowAll(true);
 
         $output = '<saml:Issuer xmlns:saml="'.\SAML2\Constants::NS_SAML.'" NameQualifier="TheNameQualifier" SPNameQualifier="TheSPNameQualifier" Format="'.Constants::NAMEID_ENTITY.'" SPProvidedID="TheSPProvidedID">'.
                   'TheIssuerValue</saml:Issuer>';
@@ -67,12 +67,12 @@ XML
     public function testToStringShowAllFalseFormatNameID()
     {
         $issuer = new Issuer();
-        $issuer->NameQualifier = 'TheNameQualifier';
-        $issuer->SPNameQualifier = 'TheSPNameQualifier';
-        $issuer->Format = Constants::NAMEID_ENTITY;
-        $issuer->SPProvidedID = 'TheSPProvidedID';
-        $issuer->value = 'TheIssuerValue';
-        $issuer->Saml2IssuerShowAll=false;
+        $issuer->setNameQualifier('TheNameQualifier');
+        $issuer->setSPNameQualifier('TheSPNameQualifier');
+        $issuer->setFormat(Constants::NAMEID_ENTITY);
+        $issuer->setSPProvidedID('TheSPProvidedID');
+        $issuer->setValue('TheIssuerValue');
+        $issuer->setSaml2IssuerShowAll(false);
         
         $output = '<saml:Issuer xmlns:saml="'.\SAML2\Constants::NS_SAML.'">TheIssuerValue</saml:Issuer>';
         
@@ -81,12 +81,12 @@ XML
     public function testToStringShowAllTrueNOTNameIDFormat()
     {
         $issuer = new Issuer();
-        $issuer->NameQualifier = 'TheNameQualifier';
-        $issuer->SPNameQualifier = 'TheSPNameQualifier';
-        $issuer->Format = 'TheFormat';
-        $issuer->SPProvidedID = 'TheSPProvidedID';
-        $issuer->value = 'TheIssuerValue';
-        $issuer->Saml2IssuerShowAll=true;
+        $issuer->setNameQualifier('TheNameQualifier');
+        $issuer->setSPNameQualifier('TheSPNameQualifier');
+        $issuer->setFormat('TheFormat');
+        $issuer->setSPProvidedID('TheSPProvidedID');
+        $issuer->setValue('TheIssuerValue');
+        $issuer->setSaml2IssuerShowAll(true);
                 
         $output = '<saml:Issuer xmlns:saml="'.\SAML2\Constants::NS_SAML.'" NameQualifier="TheNameQualifier" '.
             'SPNameQualifier="TheSPNameQualifier" Format="TheFormat" SPProvidedID="TheSPProvidedID">'.
@@ -97,12 +97,12 @@ XML
     public function testToStringShowAllDefaultNOTNameIDFormat()
     {
         $issuer = new Issuer();
-        $issuer->NameQualifier = 'TheNameQualifier';
-        $issuer->SPNameQualifier = 'TheSPNameQualifier';
-        $issuer->Format = 'TheFormat';
-        $issuer->SPProvidedID = 'TheSPProvidedID';
-        $issuer->value = 'TheIssuerValue';
-        //$issuer->Saml2IssuerShowAll=false;
+        $issuer->setNameQualifier('TheNameQualifier');
+        $issuer->setSPNameQualifier('TheSPNameQualifier');
+        $issuer->setFormat('TheFormat');
+        $issuer->setSPProvidedID('TheSPProvidedID');
+        $issuer->setValue('TheIssuerValue');
+        //$issuer->setSaml2IssuerShowAll(false);
         
         $output = '<saml:Issuer xmlns:saml="'.\SAML2\Constants::NS_SAML.'" NameQualifier="TheNameQualifier" '.
             'SPNameQualifier="TheSPNameQualifier" Format="TheFormat" SPProvidedID="TheSPProvidedID">'.
@@ -113,12 +113,12 @@ XML
     public function testToStringShowAllDefaultNameIDFormat()
     {
         $issuer = new Issuer();
-        $issuer->NameQualifier = 'TheNameQualifier';
-        $issuer->SPNameQualifier = 'TheSPNameQualifier';
-        $issuer->Format = Constants::NAMEID_ENTITY;
-        $issuer->SPProvidedID = 'TheSPProvidedID';
-        $issuer->value = 'TheIssuerValue';
-        //$issuer->Saml2IssuerShowAll=false;
+        $issuer->setNameQualifier('TheNameQualifier');
+        $issuer->setSPNameQualifier('TheSPNameQualifier');
+        $issuer->setFormat(Constants::NAMEID_ENTITY);
+        $issuer->setSPProvidedID('TheSPProvidedID');
+        $issuer->setValue('TheIssuerValue');
+        //$issuer->setSaml2IssuerShowAll(false);
         
         
         $output = '<saml:Issuer xmlns:saml="'.\SAML2\Constants::NS_SAML.'">TheIssuerValue</saml:Issuer>';

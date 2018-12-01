@@ -13,14 +13,17 @@ class RoleDescriptorTest extends \PHPUnit_Framework_TestCase
     public function testMarshalling()
     {
         $roleDescriptor = new RoleDescriptorMock();
-        $roleDescriptor->ID = 'SomeID';
-        $roleDescriptor->validUntil = 1234567890;
-        $roleDescriptor->cacheDuration = 'PT5000S';
-        $roleDescriptor->protocolSupportEnumeration = [
+        $roleDescriptor->setID('SomeID');
+        $roleDescriptor->setValidUntil(1234567890);
+        $roleDescriptor->setCacheDuration('PT5000S');
+        $roleDescriptor->setProtocolSupportEnumeration([
             'protocol1',
             'protocol2',
-        ];
-        $roleDescriptor->errorURL = 'https://example.org/error';
+        ]);
+        $roleDescriptor->setErrorURL('https://example.org/error');
+        $roleDescriptor->setKeyDescriptor([
+            Utils::createKeyDescriptor("testCert")
+        ]);
 
         $document = DOMDocumentFactory::fromString('<root />');
         $roleDescriptorElement = $roleDescriptor->toXML($document->firstChild);

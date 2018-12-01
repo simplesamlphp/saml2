@@ -54,17 +54,92 @@ class PDPDescriptor extends RoleDescriptor
         }
 
         foreach (Utils::xpQuery($xml, './saml_metadata:AuthzService') as $ep) {
-            $this->AuthzService[] = new EndpointType($ep);
+            $this->addAuthzService(new EndpointType($ep));
         }
-        if (empty($this->AuthzService)) {
+        if ($this->getAuthzService() !== []) {
             throw new \Exception('Must have at least one AuthzService in PDPDescriptor.');
         }
 
         foreach (Utils::xpQuery($xml, './saml_metadata:AssertionIDRequestService') as $ep) {
-            $this->AssertionIDRequestService[] = new EndpointType($ep);
+            $this->addAssertionIDRequestService(new EndpointType($ep));
         }
 
-        $this->NameIDFormat = Utils::extractStrings($xml, Constants::NS_MD, 'NameIDFormat');
+        $this->setNameIDFormat(Utils::extractStrings($xml, Constants::NS_MD, 'NameIDFormat'));
+    }
+
+    /**
+     * Collect the value of the AuthzService-property
+     * @return \SAML2\XML\md\EndpointType[]
+     */
+    public function getAuthzService()
+    {
+        return $this->AuthzService;
+    }
+
+    /**
+     * Set the value of the AuthzService-property
+     * @param \SAML2\XML\md\EndpointType[] $authzService
+     */
+    public function setAuthzService(array $authzService = [])
+    {
+        $this->AuthzService = $authzService;
+    }
+
+    /**
+     * Add the value to the AuthzService-property
+     * @param \SAML2\XML\md\EndpointType $authzService
+     */
+    public function addAuthzService(EndpointType $authzService)
+    {
+        assert($authzService instanceof EndpointType);
+        $this->AuthzService[] = $authzService;
+    }
+
+    /**
+     * Collect the value of the AssertionIDRequestService-property
+     * @return \SAML2\XML\md\EndpointType[]
+     */
+    public function getAssertionIDRequestService()
+    {
+        return $this->AssertionIDRequestService;
+    }
+
+    /**
+     * Set the value of the AssertionIDRequestService-property
+     * @param \SAML2\XML\md\EndpointType[] $assertionIDRequestService
+     */
+    public function setAssertionIDRequestService(array $assertionIDRequestService)
+    {
+        $this->AssertionIDRequestService = $assertionIDRequestService;
+    }
+
+    /**
+     * Add the value to the AssertionIDRequestService-property
+     * @param \SAML2\XML\md\EndpointType $assertionIDRequestService
+     */
+    public function addAssertionIDRequestService(EndpointType $assertionIDRequestService)
+    {
+        assert($assertionIDRequestService instanceof EndpointType);
+        $this->AssertionIDRequestService[] = $assertionIDRequestService;
+    }
+
+
+    /**
+     * Collect the value of the NameIDFormat-property
+     * @return string[]
+     */
+    public function getNameIDFormat()
+    {
+        return $this->NameIDFormat;
+    }
+
+    /**
+     * Set the value of the NameIDFormat-property
+     * @param string[] $nameIDFormat
+     */
+    public function setNameIDFormat(array $nameIDFormat)
+    {
+        $this->NameIDFormat = $nameIDFormat;
     }
 
     /**
@@ -75,22 +150,22 @@ class PDPDescriptor extends RoleDescriptor
      */
     public function toXML(\DOMElement $parent)
     {
-        assert(is_array($this->AuthzService));
-        assert(!empty($this->AuthzService));
-        assert(is_array($this->AssertionIDRequestService));
-        assert(is_array($this->NameIDFormat));
+        assert(is_array($authzService = $this->getAuthzService()));
+        assert(!empty($authzService));
+        assert(is_array($this->getAssertionIDRequestService()));
+        assert(is_array($this->getNameIDFormat()));
 
         $e = parent::toXML($parent);
 
-        foreach ($this->AuthzService as $ep) {
+        foreach ($this->getAuthzService() as $ep) {
             $ep->toXML($e, 'md:AuthzService');
         }
 
-        foreach ($this->AssertionIDRequestService as $ep) {
+        foreach ($this->getAssertionIDRequestService() as $ep) {
             $ep->toXML($e, 'md:AssertionIDRequestService');
         }
 
-        Utils::addStrings($e, Constants::NS_MD, 'md:NameIDFormat', false, $this->NameIDFormat);
+        Utils::addStrings($e, Constants::NS_MD, 'md:NameIDFormat', false, $this->getNameIDFormat());
 
         return $e;
     }

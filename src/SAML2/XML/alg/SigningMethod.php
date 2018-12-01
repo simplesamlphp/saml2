@@ -38,6 +38,64 @@ class SigningMethod
 
 
     /**
+     * Collect the value of the Algorithm-property
+     * @return string
+     */
+    public function getAlgorithm()
+    {
+        return $this->Algorithm;
+    }
+
+    /**
+     * Set the value of the Algorithm-property
+     * @param string $algorithm
+     */
+    public function setAlgorithm($algorithm)
+    {
+        assert(is_string($algorithm));
+        $this->Algorithm = $algorithm;
+    }
+
+
+    /**
+     * Collect the value of the MinKeySize-property
+     * @return int|null
+     */
+    public function getMinKeySize()
+    {
+        return $this->MinKeySize;
+    }
+
+    /**
+     * Set the value of the MinKeySize-property
+     * @param int|null $minKeySize
+     */
+    public function setMinKeySize($minKeySize = null)
+    {
+        assert(is_int($minKeySize) || is_null($minKeySize));
+        $this->MinKeySize = $minKeySize;
+    }
+
+    /**
+     * Collect the value of the MaxKeySize-property
+     * @return int|null
+     */
+    public function getMaxKeySize()
+    {
+        return $this->MaxKeySize;
+    }
+
+    /**
+     * Set the value of the MaxKeySize-property
+     * @param int|null $maxKeySize
+     */
+    public function setMaxKeySize($maxKeySize = null)
+    {
+        assert(is_int($maxKeySize) || is_null($maxKeySize));
+        $this->MaxKeySize = $maxKeySize;
+    }
+
+    /**
      * Create/parse an alg:SigningMethod element.
      *
      * @param \DOMElement|null $xml The XML element we should load or null to create a new one from scratch.
@@ -53,14 +111,14 @@ class SigningMethod
         if (!$xml->hasAttribute('Algorithm')) {
             throw new \Exception('Missing required attribute "Algorithm" in alg:SigningMethod element.');
         }
-        $this->Algorithm = $xml->getAttribute('Algorithm');
+        $this->setAlgorithm($xml->getAttribute('Algorithm'));
 
         if ($xml->hasAttribute('MinKeySize')) {
-            $this->MinKeySize = intval($xml->getAttribute('MinKeySize'));
+            $this->setMinKeySize(intval($xml->getAttribute('MinKeySize')));
         }
 
         if ($xml->hasAttribute('MaxKeySize')) {
-            $this->MaxKeySize = intval($xml->getAttribute('MaxKeySize'));
+            $this->setMaxKeySize(intval($xml->getAttribute('MaxKeySize')));
         }
     }
 
@@ -73,21 +131,21 @@ class SigningMethod
      */
     public function toXML(\DOMElement $parent)
     {
-        assert(is_string($this->Algorithm));
-        assert(is_int($this->MinKeySize) || is_null($this->MinKeySize));
-        assert(is_int($this->MaxKeySize) || is_null($this->MaxKeySize));
+        assert(is_string($this->getAlgorithm()));
+        assert(is_int($this->getMinKeySize()) || is_null($this->getMinKeySize()));
+        assert(is_int($this->getMaxKeySize()) || is_null($this->getMaxKeySize()));
 
         $doc = $parent->ownerDocument;
         $e = $doc->createElementNS(Common::NS, 'alg:SigningMethod');
         $parent->appendChild($e);
-        $e->setAttribute('Algorithm', $this->Algorithm);
+        $e->setAttribute('Algorithm', $this->getAlgorithm());
 
-        if ($this->MinKeySize !== null) {
-            $e->setAttribute('MinKeySize', $this->MinKeySize);
+        if ($this->getMinKeySize() !== null) {
+            $e->setAttribute('MinKeySize', $this->getMinKeySize());
         }
 
-        if ($this->MaxKeySize !== null) {
-            $e->setAttribute('MaxKeySize', $this->MaxKeySize);
+        if ($this->getMaxKeySize() !== null) {
+            $e->setAttribute('MaxKeySize', $this->getMaxKeySize());
         }
 
         return $e;

@@ -35,7 +35,27 @@ class DigestMethod
         if (!$xml->hasAttribute('Algorithm')) {
             throw new \Exception('Missing required attribute "Algorithm" in alg:DigestMethod element.');
         }
-        $this->Algorithm = $xml->getAttribute('Algorithm');
+        $this->setAlgorithm($xml->getAttribute('Algorithm'));
+    }
+
+
+    /**
+     * Collect the value of the algorithm-property
+     * @return string
+     */
+    public function getAlgorithm()
+    {
+        return $this->Algorithm;
+    }
+
+    /**
+     * Set the value of the Algorithm-property
+     * @param string $algorithm
+     */
+    public function setAlgorithm($algorithm)
+    {
+        assert(is_string($algorithm));
+        $this->Algorithm = $algorithm;
     }
 
 
@@ -47,12 +67,12 @@ class DigestMethod
      */
     public function toXML(\DOMElement $parent)
     {
-        assert(is_string($this->Algorithm));
+        assert(is_string($this->getAlgorithm()));
 
         $doc = $parent->ownerDocument;
         $e = $doc->createElementNS(Common::NS, 'alg:DigestMethod');
         $parent->appendChild($e);
-        $e->setAttribute('Algorithm', $this->Algorithm);
+        $e->setAttribute('Algorithm', $this->getAlgorithm());
 
         return $e;
     }

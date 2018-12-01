@@ -57,19 +57,103 @@ class Attribute
         if (!$xml->hasAttribute('Name')) {
             throw new \Exception('Missing Name on Attribute.');
         }
-        $this->Name = $xml->getAttribute('Name');
+        $this->setName($xml->getAttribute('Name'));
 
         if ($xml->hasAttribute('NameFormat')) {
-            $this->NameFormat = $xml->getAttribute('NameFormat');
+            $this->setNameFormat($xml->getAttribute('NameFormat'));
         }
 
         if ($xml->hasAttribute('FriendlyName')) {
-            $this->FriendlyName = $xml->getAttribute('FriendlyName');
+            $this->setFriendlyName($xml->getAttribute('FriendlyName'));
         }
 
         foreach (Utils::xpQuery($xml, './saml_assertion:AttributeValue') as $av) {
-            $this->AttributeValue[] = new AttributeValue($av);
+            $this->addAttributeValue(new AttributeValue($av));
         }
+    }
+
+    /**
+     * Collect the value of the Name-property
+     * @return string
+     */
+    public function getName()
+    {
+        return $this->Name;
+    }
+
+    /**
+     * Set the value of the Name-property
+     * @param string $name
+     */
+    public function setName($name)
+    {
+        assert(is_string($name));
+        $this->Name = $name;
+    }
+
+    /**
+     * Collect the value of the NameFormat-property
+     * @return string|null
+     */
+    public function getNameFormat()
+    {
+        return $this->NameFormat;
+    }
+
+    /**
+     * Set the value of the NameFormat-property
+     * @param string|null $nameFormat
+     */
+    public function setNameFormat($nameFormat = null)
+    {
+        assert(is_string($nameFormat) || is_null($nameFormat));
+        $this->NameFormat = $nameFormat;
+    }
+
+    /**
+     * Collect the value of the FriendlyName-property
+     * @return string|null
+     */
+    public function getFriendlyName()
+    {
+        return $this->FriendlyName;
+    }
+
+    /**
+     * Set the value of the FriendlyName-property
+     * @param string|null $friendlyName
+     */
+    public function setFriendlyName($friendlyName = null)
+    {
+        assert(is_string($friendlyName) || is_null($friendlyName));
+        $this->FriendlyName = $friendlyName;
+    }
+
+    /**
+     * Collect the value of the AttributeValue-property
+     * @return \SAML2\XML\saml\AttributeValue[]
+     */
+    public function getAttributeValue()
+    {
+        return $this->AttributeValue;
+    }
+
+    /**
+     * Set the value of the AttributeValue-property
+     * @param array $attributeValue
+     */
+    public function setAttributeValue(array $attributeValue)
+    {
+        $this->AttributeValue = $attributeValue;
+    }
+
+    /**
+     * Add the value to the AttributeValue-property
+     * @param \SAML2\XML\saml\AttributeValue $attributeValue
+     */
+    public function addAttributeValue(AttributeValue $attributeValue)
+    {
+        $this->AttributeValue[] = $attributeValue;
     }
 
     /**
@@ -81,29 +165,30 @@ class Attribute
      * @param string     $name      The name of the element.
      * @return \DOMElement
      */
+
     protected function toXMLInternal(\DOMElement $parent, $namespace, $name)
     {
         assert(is_string($namespace));
         assert(is_string($name));
-        assert(is_string($this->Name));
-        assert(is_null($this->NameFormat) || is_string($this->NameFormat));
-        assert(is_null($this->FriendlyName) || is_string($this->FriendlyName));
-        assert(is_array($this->AttributeValue));
+        assert(is_string($this->getName()));
+        assert(is_null($this->getNameFormat()) || is_string($this->getNameFormat()));
+        assert(is_null($this->getFriendlyName()) || is_string($this->getFriendlyName()));
+        assert(is_array($this->getAttributeValue()));
 
         $e = $parent->ownerDocument->createElementNS($namespace, $name);
         $parent->appendChild($e);
 
-        $e->setAttribute('Name', $this->Name);
+        $e->setAttribute('Name', $this->getName());
 
-        if (isset($this->NameFormat)) {
+        if ($this->getNameFormat() !== null) {
             $e->setAttribute('NameFormat', $this->NameFormat);
         }
 
-        if (isset($this->FriendlyName)) {
-            $e->setAttribute('FriendlyName', $this->FriendlyName);
+        if ($this->FriendlyName !== null) {
+            $e->setAttribute('FriendlyName', $this->getFriendlyName());
         }
 
-        foreach ($this->AttributeValue as $av) {
+        foreach ($this->getAttributeValue() as $av) {
             $av->toXML($e);
         }
 

@@ -146,7 +146,7 @@ class Processor
 
         if (!$this->responseIsSigned) {
             foreach ($assertions as $assertion) {
-                if (!$assertion->getWasSignedAtConstruction()) {
+                if (!$assertion->wasSignedAtConstruction()) {
                     throw new UnsignedResponseException(
                         'Both the response and the assertion it contains are not signed.'
                     );

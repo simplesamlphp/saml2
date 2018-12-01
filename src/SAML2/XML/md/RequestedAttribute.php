@@ -33,7 +33,26 @@ class RequestedAttribute extends Attribute
             return;
         }
 
-        $this->isRequired = Utils::parseBoolean($xml, 'isRequired', null);
+        $this->setIsRequired(Utils::parseBoolean($xml, 'isRequired', null));
+    }
+
+    /**
+     * Collect the value of the isRequired-property
+     * @return boolean|null
+     */
+    public function getIsRequired()
+    {
+        return $this->isRequired;
+    }
+
+    /**
+     * Set the value of the isRequired-property
+     * @param boolean|null $flag
+     */
+    public function setIsRequired($flag = null)
+    {
+        assert(is_bool($flag));
+        $this->isRequired = $flag;
     }
 
     /**
@@ -48,9 +67,9 @@ class RequestedAttribute extends Attribute
 
         $e = $this->toXMLInternal($parent, Constants::NS_MD, 'md:RequestedAttribute');
 
-        if ($this->isRequired === true) {
+        if ($this->getIsRequired() === true) {
             $e->setAttribute('isRequired', 'true');
-        } elseif ($this->isRequired === false) {
+        } elseif ($this->getIsRequired() === false) {
             $e->setAttribute('isRequired', 'false');
         }
 

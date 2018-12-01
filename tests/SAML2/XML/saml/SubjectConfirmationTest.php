@@ -13,11 +13,13 @@ class SubjectConfirmationTest extends \PHPUnit_Framework_TestCase
 {
     public function testMarshalling()
     {
+        $nameId = new NameID();
+        $nameId->setValue('SomeNameIDValue');
+
         $subjectConfirmation = new SubjectConfirmation();
-        $subjectConfirmation->Method = 'SomeMethod';
-        $subjectConfirmation->NameID = new NameID();
-        $subjectConfirmation->NameID->value = 'SomeNameIDValue';
-        $subjectConfirmation->SubjectConfirmationData = new SubjectConfirmationData();
+        $subjectConfirmation->setMethod('SomeMethod');
+        $subjectConfirmation->setNameID($nameId);
+        $subjectConfirmation->setSubjectConfirmationData(new SubjectConfirmationData());
 
         $document = DOMDocumentFactory::fromString('<root />');
         $subjectConfirmationElement = $subjectConfirmation->toXML($document->firstChild);
@@ -43,10 +45,10 @@ XML
         );
 
         $subjectConfirmation = new SubjectConfirmation($document->firstChild);
-        $this->assertEquals('SomeMethod', $subjectConfirmation->Method);
-        $this->assertTrue($subjectConfirmation->NameID instanceof NameID);
-        $this->assertEquals('SomeNameIDValue', $subjectConfirmation->NameID->value);
-        $this->assertTrue($subjectConfirmation->SubjectConfirmationData instanceof SubjectConfirmationData);
+        $this->assertEquals('SomeMethod', $subjectConfirmation->getMethod());
+        $this->assertTrue($subjectConfirmation->getNameID() instanceof NameID);
+        $this->assertEquals('SomeNameIDValue', $subjectConfirmation->getNameID()->getValue());
+        $this->assertTrue($subjectConfirmation->getSubjectConfirmationData() instanceof SubjectConfirmationData);
     }
 
     public function testMethodMissingThrowsException()

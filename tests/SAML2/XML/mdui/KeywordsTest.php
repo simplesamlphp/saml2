@@ -16,8 +16,8 @@ class KeywordsTest extends \PHPUnit_Framework_TestCase
     public function testMarshalling()
     {
         $keywords = new Keywords();
-        $keywords->lang = "en";
-        $keywords->Keywords = ["KLM", "royal", "Dutch", "air lines"];
+        $keywords->setLanguage("en");
+        $keywords->setKeywords(["KLM", "royal", "Dutch", "air lines"]);
 
         $document = DOMDocumentFactory::fromString('<root />');
         $xml = $keywords->toXML($document->firstChild);
@@ -38,8 +38,8 @@ class KeywordsTest extends \PHPUnit_Framework_TestCase
     public function testKeywordWithPlusSignThrowsException()
     {
         $keywords = new Keywords();
-        $keywords->lang = "en";
-        $keywords->Keywords = ["csharp", "pascal", "c++"];
+        $keywords->setLanguage("en");
+        $keywords->setKeywords(["csharp", "pascal", "c++"]);
 
         $document = DOMDocumentFactory::fromString('<root />');
         
@@ -58,11 +58,11 @@ XML
         );
 
         $keywords = new Keywords($document->firstChild);
-        $this->assertEquals("nl", $keywords->lang);
-        $this->assertCount(3, $keywords->Keywords);
-        $this->assertEquals("KLM", $keywords->Keywords[0]);
-        $this->assertEquals("koninklijke", $keywords->Keywords[1]);
-        $this->assertEquals("luchtvaart maatschappij", $keywords->Keywords[2]);
+        $this->assertEquals("nl", $keywords->getLanguage());
+        $this->assertCount(3, $keywords->getKeywords());
+        $this->assertEquals("KLM", $keywords->getKeywords()[0]);
+        $this->assertEquals("koninklijke", $keywords->getKeywords()[1]);
+        $this->assertEquals("luchtvaart maatschappij", $keywords->getKeywords()[2]);
     }
 
     /**

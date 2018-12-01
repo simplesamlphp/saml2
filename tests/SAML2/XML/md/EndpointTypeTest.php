@@ -14,8 +14,8 @@ class EndpointTypeTest extends \PHPUnit_Framework_TestCase
     public function testMarshalling()
     {
         $endpointType = new EndpointType();
-        $endpointType->Binding = 'TestBinding';
-        $endpointType->Location = 'TestLocation';
+        $endpointType->setBinding('TestBinding');
+        $endpointType->setLocation('TestLocation');
 
         $document = DOMDocumentFactory::fromString('<root />');
         $endpointTypeElement = $endpointType->toXML($document->firstChild, 'md:Test');
@@ -28,7 +28,7 @@ class EndpointTypeTest extends \PHPUnit_Framework_TestCase
         $this->assertEquals('TestLocation', $endpointTypeElement->getAttribute('Location'));
         $this->assertFalse($endpointTypeElement->hasAttribute('ResponseLocation'));
 
-        $endpointType->ResponseLocation = 'TestResponseLocation';
+        $endpointType->setResponseLocation('TestResponseLocation');
 
         $document->loadXML('<root />');
         $endpointTypeElement = $endpointType->toXML($document->firstChild, 'md:Test');

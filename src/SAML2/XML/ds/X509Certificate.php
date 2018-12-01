@@ -30,8 +30,29 @@ class X509Certificate
             return;
         }
 
-        $this->certificate = $xml->textContent;
+        $this->setCertificate($xml->textContent);
     }
+
+
+    /**
+     * Collect the value of the certificate-property
+     * @return string
+     */
+    public function getCertificate()
+    {
+        return $this->certificate;
+    }
+
+    /**
+     * Set the value of the certificate-property
+     * @param string $certificate
+     */
+    public function setCertificate($certificate)
+    {
+        assert(is_string($certificate));
+        $this->certificate = $certificate;
+    }
+
 
     /**
      * Convert this X509Certificate element to XML.
@@ -43,6 +64,6 @@ class X509Certificate
     {
         assert(is_string($this->certificate));
 
-        return Utils::addString($parent, XMLSecurityDSig::XMLDSIGNS, 'ds:X509Certificate', $this->certificate);
+        return Utils::addString($parent, XMLSecurityDSig::XMLDSIGNS, 'ds:X509Certificate', $this->getCertificate());
     }
 }

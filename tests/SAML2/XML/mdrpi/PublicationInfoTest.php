@@ -13,13 +13,13 @@ class PublicationInfoTest extends \PHPUnit_Framework_TestCase
     public function testMarshalling()
     {
         $publicationInfo = new PublicationInfo();
-        $publicationInfo->publisher = 'TestPublisher';
-        $publicationInfo->creationInstant = 1234567890;
-        $publicationInfo->publicationId = 'PublicationIdValue';
-        $publicationInfo->UsagePolicy = [
+        $publicationInfo->setPublisher('TestPublisher');
+        $publicationInfo->setCreationInstant(1234567890);
+        $publicationInfo->setPublicationId('PublicationIdValue');
+        $publicationInfo->setUsagePolicy([
             'en' => 'http://EnglishUsagePolicy',
             'no' => 'http://NorwegianUsagePolicy',
-        ];
+        ]);
 
         $document = DOMDocumentFactory::fromString('<root />');
         $xml = $publicationInfo->toXML($document->firstChild);
@@ -62,12 +62,14 @@ XML
 
         $publicationInfo = new PublicationInfo($document->firstChild);
 
-        $this->assertEquals('SomePublisher', $publicationInfo->publisher);
-        $this->assertEquals(1293840000, $publicationInfo->creationInstant);
-        $this->assertEquals('SomePublicationId', $publicationInfo->publicationId);
-        $this->assertCount(2, $publicationInfo->UsagePolicy);
-        $this->assertEquals('http://TheEnglishUsagePolicy', $publicationInfo->UsagePolicy["en"]);
-        $this->assertEquals('http://TheNorwegianUsagePolicy', $publicationInfo->UsagePolicy["no"]);
+        $this->assertEquals('SomePublisher', $publicationInfo->getPublisher());
+        $this->assertEquals(1293840000, $publicationInfo->getCreationInstant());
+        $this->assertEquals('SomePublicationId', $publicationInfo->getPublicationId());
+
+        $usagePolicy = $publicationInfo->getUsagePolicy();
+        $this->assertCount(2, $usagePolicy);
+        $this->assertEquals('http://TheEnglishUsagePolicy', $usagePolicy["en"]);
+        $this->assertEquals('http://TheNorwegianUsagePolicy', $usagePolicy["no"]);
     }
 
     public function testMissingPublisherThrowsException()

@@ -97,7 +97,7 @@ class Processor
     {
         $assertion = $this->decryptAssertion($assertion);
 
-        if (!$assertion->getWasSignedAtConstruction()) {
+        if (!$assertion->wasSignedAtConstruction()) {
             $this->logger->info(sprintf(
                 'Assertion with id "%s" was not signed at construction, not verifying the signature',
                 $assertion->getId()

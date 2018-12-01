@@ -13,12 +13,12 @@ class RegistrationInfoTest extends \PHPUnit_Framework_TestCase
     public function testMarshalling()
     {
         $registrationInfo = new RegistrationInfo();
-        $registrationInfo->registrationAuthority = 'https://ExampleAuthority';
-        $registrationInfo->registrationInstant = 1234567890;
-        $registrationInfo->RegistrationPolicy = [
+        $registrationInfo->setRegistrationAuthority('https://ExampleAuthority');
+        $registrationInfo->setRegistrationInstant(1234567890);
+        $registrationInfo->setRegistrationPolicy([
             'en' => 'http://EnglishRegistrationPolicy',
             'nl' => 'https://DutchRegistratiebeleid',
-        ];
+        ]);
 
         $document = DOMDocumentFactory::fromString('<root />');
         $xml = $registrationInfo->toXML($document->firstChild);
@@ -63,11 +63,13 @@ XML
 
         $registrationInfo = new RegistrationInfo($document->firstChild);
 
-        $this->assertEquals('urn:example:example.org', $registrationInfo->registrationAuthority);
-        $this->assertEquals(1148902467, $registrationInfo->registrationInstant);
-        $this->assertCount(2, $registrationInfo->RegistrationPolicy);
-        $this->assertEquals('http://www.example.org/aai/metadata/en_registration.html', $registrationInfo->RegistrationPolicy["en"]);
-        $this->assertEquals('http://www.example.org/aai/metadata/de_registration.html', $registrationInfo->RegistrationPolicy["de"]);
+        $this->assertEquals('urn:example:example.org', $registrationInfo->getRegistrationAuthority());
+        $this->assertEquals(1148902467, $registrationInfo->getRegistrationInstant());
+
+        $registrationPolicy = $registrationInfo->getRegistrationPolicy();
+        $this->assertCount(2, $registrationPolicy);
+        $this->assertEquals('http://www.example.org/aai/metadata/en_registration.html', $registrationPolicy["en"]);
+        $this->assertEquals('http://www.example.org/aai/metadata/de_registration.html', $registrationPolicy["de"]);
     }
 
     public function testMissingPublisherThrowsException()
@@ -86,7 +88,7 @@ XML
     public function testEmptyRegistrationAuthorityOutboundThrowsException()
     {
         $registrationInfo = new RegistrationInfo();
-        $registrationInfo->registrationAuthority = '';
+        $registrationInfo->setRegistrationAuthority('');
 
         $document = DOMDocumentFactory::fromString('<root />');
 

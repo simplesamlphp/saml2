@@ -13,14 +13,17 @@ class AffiliationDescriptorTest extends \PHPUnit_Framework_TestCase
         $document = DOMDocumentFactory::fromString('<root />');
 
         $affiliationDescriptorElement = new AffiliationDescriptor();
-        $affiliationDescriptorElement->affiliationOwnerID = 'TheOwner';
-        $affiliationDescriptorElement->ID = 'TheID';
-        $affiliationDescriptorElement->validUntil = 1234567890;
-        $affiliationDescriptorElement->cacheDuration = 'PT5000S';
-        $affiliationDescriptorElement->AffiliateMember = [
+        $affiliationDescriptorElement->setAffiliationOwnerID('TheOwner');
+        $affiliationDescriptorElement->setID('TheID');
+        $affiliationDescriptorElement->setValidUntil(1234567890);
+        $affiliationDescriptorElement->setCacheDuration('PT5000S');
+        $affiliationDescriptorElement->setAffiliateMember([
             'Member1',
             'Member2',
-        ];
+        ]);
+        $affiliationDescriptorElement->setKeyDescriptor([
+            Utils::createKeyDescriptor("testCert")
+        ]);
 
         $affiliationDescriptorElement = $affiliationDescriptorElement->toXML($document->firstChild);
 
@@ -54,13 +57,14 @@ XML
         );
 
         $affiliateDescriptor = new AffiliationDescriptor($document->firstChild);
-        $this->assertEquals('TheOwner', $affiliateDescriptor->affiliationOwnerID);
-        $this->assertEquals('TheID', $affiliateDescriptor->ID);
-        $this->assertEquals(1234567890, $affiliateDescriptor->validUntil);
-        $this->assertEquals('PT5000S', $affiliateDescriptor->cacheDuration);
-        $this->assertCount(2, $affiliateDescriptor->AffiliateMember);
-        $this->assertEquals('Member', $affiliateDescriptor->AffiliateMember[0]);
-        $this->assertEquals('OtherMember', $affiliateDescriptor->AffiliateMember[1]);
+        $this->assertEquals('TheOwner', $affiliateDescriptor->getAffiliationOwnerID());
+        $this->assertEquals('TheID', $affiliateDescriptor->getID());
+        $this->assertEquals(1234567890, $affiliateDescriptor->getValidUntil());
+        $this->assertEquals('PT5000S', $affiliateDescriptor->getCacheDuration());
+        $affiliateMember = $affiliateDescriptor->getAffiliateMember();
+        $this->assertCount(2, $affiliateMember);
+        $this->assertEquals('Member', $affiliateMember[0]);
+        $this->assertEquals('OtherMember', $affiliateMember[1]);
     }
 
     public function testUnmarshallingWithoutMembers()

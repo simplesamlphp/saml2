@@ -30,8 +30,28 @@ class KeyName
             return;
         }
 
-        $this->name = $xml->textContent;
+        $this->setName($xml->textContent);
     }
+
+    /**
+     * Collect the value of the name-property
+     * @return string
+     */
+    public function getName()
+    {
+        return $this->name;
+    }
+
+    /**
+     * Set the value of the name-property
+     * @param string $name
+     */
+    public function setName($name)
+    {
+        assert(is_string($name) || is_null($name));
+        $this->name = $name;
+    }
+
 
     /**
      * Convert this KeyName element to XML.

@@ -16,7 +16,7 @@ class DigestMethodTest extends \PHPUnit_Framework_TestCase
     public function testMarshalling()
     {
         $digestMethod = new DigestMethod();
-        $digestMethod->Algorithm = 'http://exampleAlgorithm';
+        $digestMethod->setAlgorithm('http://exampleAlgorithm');
 
         $document = DOMDocumentFactory::fromString('<root />');
         $xml = $digestMethod->toXML($document->firstChild);
@@ -40,7 +40,7 @@ XML
         );
 
         $digestMethod = new DigestMethod($document->firstChild);
-        $this->assertEquals('http://exampleAlgorithm', $digestMethod->Algorithm);
+        $this->assertEquals('http://exampleAlgorithm', $digestMethod->getAlgorithm());
     }
 
 
