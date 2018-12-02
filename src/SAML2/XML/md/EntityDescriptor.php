@@ -198,9 +198,8 @@ class EntityDescriptor extends SignedElementHelper
      * @param string|null $entityId
      * @return void
      */
-    public function setEntityID($entityId)
+    public function setEntityID(string $entityId = null)
     {
-        assert(is_string($entityId) || is_null($entityId));
         $this->entityID = $entityId;
     }
 
@@ -220,9 +219,8 @@ class EntityDescriptor extends SignedElementHelper
      * @param string|null $Id
      * @return void
      */
-    public function setID($Id = null)
+    public function setID(string $Id = null)
     {
-        assert(is_string($Id) || is_null($Id));
         $this->ID = $Id;
     }
 

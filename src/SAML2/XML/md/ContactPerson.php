@@ -164,9 +164,8 @@ class ContactPerson
      * @param string $contactType
      * @return void
      */
-    public function setContactType($contactType)
+    public function setContactType(string $contactType)
     {
-        assert(is_string($contactType));
         $this->contactType = $contactType;
     }
 
@@ -186,9 +185,8 @@ class ContactPerson
      * @param string|null $company
      * @return void
      */
-    public function setCompany($company)
+    public function setCompany(string $company = null)
     {
-        assert(is_string($company) || is_null($company));
         $this->Company = $company;
     }
 
@@ -208,9 +206,8 @@ class ContactPerson
      * @param string|null $givenName
      * @return void
      */
-    public function setGivenName($givenName)
+    public function setGivenName(string $givenName = null)
     {
-        assert(is_string($givenName) || is_null($givenName));
         $this->GivenName = $givenName;
     }
 
@@ -230,9 +227,8 @@ class ContactPerson
      * @param string|null $surName
      * @return void
      */
-    public function setSurName($surName)
+    public function setSurName(string $surName = null)
     {
-        assert(is_string($surName) || is_null($surName));
         $this->SurName = $surName;
     }
 
@@ -361,10 +357,8 @@ class ContactPerson
      * @param string $value
      * @return void
      */
-    public function addContactPersonAttributes($attr, $value)
+    public function addContactPersonAttributes(string $attr, string $value)
     {
-        assert(is_string($attr));
-        assert(is_string($value));
         $this->ContactPersonAttributes[$attr] = $value;
     }
 

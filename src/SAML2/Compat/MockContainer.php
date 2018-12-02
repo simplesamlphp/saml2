@@ -84,7 +84,7 @@ class MockContainer extends AbstractContainer
      * @param array $data
      * @return void
      */
-    public function redirect(string $url, $data = [])
+    public function redirect(string $url, array $data = [])
     {
         $this->redirectUrl = $url;
         $this->redirectData = $data;
@@ -98,7 +98,7 @@ class MockContainer extends AbstractContainer
      * @param array $data
      * @return void
      */
-    public function postRedirect(string $url = null, $data = [])
+    public function postRedirect(string $url = null, array $data = [])
     {
         $this->postRedirectUrl = $url;
         $this->postRedirectData = $data;

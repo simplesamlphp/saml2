@@ -49,6 +49,16 @@ class Chunk implements \Serializable
 
 
     /**
+     * Get this \DOMElement.
+     *
+     * @return \DOMElement This element.
+     */
+    public function getXML()
+    {
+        return $this->xml;
+    }
+
+    /**
      * Append this XML element to a different XML element.
      *
      * @param  \DOMElement $parent The element we should append this element to.
@@ -75,9 +85,8 @@ class Chunk implements \Serializable
      * @param string $localName
      * @return void
      */
-    public function setLocalName($localName)
+    public function setLocalName(string $localName)
     {
-        assert(is_string($localName));
         $this->localName = $localName;
     }
 
@@ -97,9 +106,8 @@ class Chunk implements \Serializable
      * @param string|null $namespaceURI
      * @return void
      */
-    public function setNamespaceURI($namespaceURI = null)
+    public function setNamespaceURI(string $namespaceURI = null)
     {
-        assert(is_string($namespaceURI) || is_null($namespaceURI));
         $this->namespaceURI = $namespaceURI;
     }
 
@@ -119,7 +127,7 @@ class Chunk implements \Serializable
      * @param \DOMelement $xml
      * @return void
      */
-    private function setXml(\DOMelement $xml)
+    private function setXml(\DOMElement $xml)
     {
         $this->xml = $xml;
     }

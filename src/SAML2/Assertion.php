@@ -257,9 +257,12 @@ class Assertion implements SignedElement
      */
     public function __construct(\DOMElement $xml = null)
     {
+        $issuer = new Issuer();
+        $issuer->setValue('');
+
         $this->setId(Utils::getContainer()->generateId());
         $this->setIssueInstant(Temporal::getTime());
-        $this->setIssuer('');
+        $this->setIssuer($issuer);
         $this->setAuthnInstant(Temporal::getTime());
         $this->setAttributes([]);
         $this->setAttributeNameFormat(Constants::NAMEFORMAT_UNSPECIFIED);
@@ -981,7 +984,6 @@ class Assertion implements SignedElement
      */
     public function setRequiredEncAttributes(bool $ea)
     {
-        assert(is_bool($ea));
         $this->requiredEncAttributes = $ea;
     }
 
@@ -1136,10 +1138,8 @@ class Assertion implements SignedElement
      * @param string|null $signatureMethod
      * @return void
      */
-    public function setSignatureMethod($signatureMethod)
+    public function setSignatureMethod(string $signatureMethod = null)
     {
-        assert(is_string($signatureMethod) || is_null($signatureMethod));
-
         $this->signatureMethod = $signatureMethod;
     }
 
@@ -1456,9 +1456,8 @@ class Assertion implements SignedElement
      * @param bool $flag
      * @return void
      */
-    public function setWasSignedAtConstruction($flag)
+    public function setWasSignedAtConstruction(bool $flag)
     {
-        assert(is_bool($flag));
         $this->wasSignedAtConstruction = $flag;
     }
 

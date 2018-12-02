@@ -128,9 +128,8 @@ class AffiliationDescriptor extends SignedElementHelper
      * @param string $affiliationOwnerId
      * @return void
      */
-    public function setAffiliationOwnerID($affiliationOwnerId)
+    public function setAffiliationOwnerID(string $affiliationOwnerId)
     {
-        assert(is_string($affiliationOwnerId));
         $this->affiliationOwnerID = $affiliationOwnerId;
     }
 
@@ -150,9 +149,8 @@ class AffiliationDescriptor extends SignedElementHelper
      * @param string|null $Id
      * @return void
      */
-    public function setID($Id = null)
+    public function setID(string $Id = null)
     {
-        assert(is_string($Id) || is_null($Id));
         $this->ID = $Id;
     }
 

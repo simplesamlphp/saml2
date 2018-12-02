@@ -57,7 +57,7 @@ class Container extends AbstractContainer
      * @param array $data
      * @return void
      */
-    public function redirect(string $url, $data = [])
+    public function redirect(string $url, array $data = [])
     {
         \SimpleSAML\Utils\HTTP::redirectTrustedURL($url, $data);
     }
@@ -69,7 +69,7 @@ class Container extends AbstractContainer
      * @param array $data
      * @return void
      */
-    public function postRedirect(string $url, $data = [])
+    public function postRedirect(string $url, array $data = [])
     {
         \SimpleSAML\Utils\HTTP::submitPOSTData($url, $data);
     }

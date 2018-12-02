@@ -113,9 +113,8 @@ class EntitiesDescriptor extends SignedElementHelper
      * @param string|null $name
      * @return void
      */
-    public function setName($name = null)
+    public function setName(string $name = null)
     {
-        assert(is_string($name) || is_null($name));
         $this->Name = $name;
     }
 
@@ -135,9 +134,8 @@ class EntitiesDescriptor extends SignedElementHelper
      * @param string|null $Id
      * @return void
      */
-    public function setID($Id = null)
+    public function setID(string $Id = null)
     {
-        assert(is_string($Id) || is_null($Id));
         $this->ID = $Id;
     }
 

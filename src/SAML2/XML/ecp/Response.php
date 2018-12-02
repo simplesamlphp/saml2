@@ -69,9 +69,8 @@ class Response
      * @throws InvalidArgumentException
      * @return void
      */
-    public function setAssertionConsumerServiceURL($assertionConsumerServiceURL)
+    public function setAssertionConsumerServiceURL(string $assertionConsumerServiceURL)
     {
-        assert(is_string($assertionConsumerServiceURL));
         if (!filter_var($assertionConsumerServiceURL, FILTER_VALIDATE_URL)) {
             throw new InvalidArgumentException('AssertionConsumerServiceURL is not a valid URL.');
         }

@@ -26,7 +26,6 @@ class KeyCollection extends ArrayCollection
                 $key
             );
         }
-
         parent::add($key);
     }
 }

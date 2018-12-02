@@ -41,7 +41,7 @@ abstract class AbstractContainer
      * @param array $data
      * @return void
      */
-    abstract public function redirect(string $url, $data = []);
+    abstract public function redirect(string $url, array $data = []);
 
 
     /**
@@ -51,5 +51,5 @@ abstract class AbstractContainer
      * @param array $data
      * @return void
      */
-    abstract public function postRedirect(string $url, $data = []);
+    abstract public function postRedirect(string $url, array $data = []);
 }

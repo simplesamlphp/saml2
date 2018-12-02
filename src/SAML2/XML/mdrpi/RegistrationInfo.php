@@ -76,9 +76,8 @@ class RegistrationInfo
      * @param string $registrationAuthority
      * @return void
      */
-    public function setRegistrationAuthority($registrationAuthority)
+    public function setRegistrationAuthority(string $registrationAuthority)
     {
-        assert(is_string($registrationAuthority));
         $this->registrationAuthority = $registrationAuthority;
     }
 
@@ -98,9 +97,8 @@ class RegistrationInfo
      * @param int|null $registrationInstant
      * @return void
      */
-    public function setRegistrationInstant($registrationInstant = null)
+    public function setRegistrationInstant(int $registrationInstant = null)
     {
-        assert(is_int($registrationInstant) || is_null($registrationInstant));
         $this->registrationInstant = $registrationInstant;
     }
 

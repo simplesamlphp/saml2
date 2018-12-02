@@ -160,9 +160,8 @@ class RoleDescriptor extends SignedElementHelper
      * @param string|null $Id
      * @return void
      */
-    public function setID($Id = null)
+    public function setID(string $Id = null)
     {
-        assert(is_string($Id) || is_null($Id));
         $this->ID = $Id;
     }
 
@@ -249,9 +248,8 @@ class RoleDescriptor extends SignedElementHelper
      * @param string|null $errorURL
      * @return void
      */
-    public function setErrorURL($errorURL = null)
+    public function setErrorURL(string $errorURL = null)
     {
-        assert(is_string($errorURL) || is_null($errorURL));
         if (!is_null($errorURL) && !filter_var($errorURL, FILTER_VALIDATE_URL)) {
             throw new \InvalidArgumentException('RoleDescriptor errorURL is not a valid URL.');
         }

@@ -15,7 +15,7 @@ class KeyName
     /**
      * The key name.
      *
-     * @var string
+     * @var string|null
      */
     public $name;
 
@@ -47,15 +47,13 @@ class KeyName
 
     /**
      * Set the value of the name-property
-     * @param string $name
+     * @param string $name|null
      * @return void
      */
-    public function setName($name)
+    public function setName(string $name = null)
     {
-        assert(is_string($name) || is_null($name));
         $this->name = $name;
     }
-
 
     /**
      * Convert this KeyName element to XML.
