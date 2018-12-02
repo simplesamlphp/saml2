@@ -22,7 +22,7 @@ class Keywords
     /**
      * The language of this item.
      *
-     * @var string
+     * @var string|null
      */
     public $lang;
 
@@ -53,7 +53,7 @@ class Keywords
 
     /**
      * Collect the value of the lang-property
-     * @return string
+     * @return string|null
      */
     public function getLanguage()
     {
