@@ -76,7 +76,7 @@ XML
         $this->assertInstanceOf(Attribute::class, $entityAttributes->getChildren()[4]);
 
         $this->assertEquals('Assertion', $entityAttributes->getChildren()[0]->getLocalName());
-        $this->assertEquals('1984-08-26T10:01:30.000Z', $entityAttributes->getChildren()[0]->xml->getAttribute('IssueInstant'));
+        $this->assertEquals('1984-08-26T10:01:30.000Z', $entityAttributes->getChildren()[0]->getXML()->getAttribute('IssueInstant'));
         $this->assertEquals('attrib2', $entityAttributes->getChildren()[3]->getName());
     }
 

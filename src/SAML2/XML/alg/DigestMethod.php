@@ -18,7 +18,7 @@ class DigestMethod
      *
      * @var string
      */
-    public $Algorithm;
+    private $Algorithm;
 
 
     /**

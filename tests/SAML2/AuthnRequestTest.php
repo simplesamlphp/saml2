@@ -138,8 +138,8 @@ AUTHNREQUEST;
         $authnRequest = new AuthnRequest(DOMDocumentFactory::fromString($xml)->documentElement);
 
         $nameId = $authnRequest->getNameId();
-        $this->assertEquals("user@example.org", $nameId->value);
-        $this->assertEquals("urn:oasis:names:tc:SAML:1.1:nameid-format:unspecified", $nameId->Format);
+        $this->assertEquals("user@example.org", $nameId->getValue());
+        $this->assertEquals("urn:oasis:names:tc:SAML:1.1:nameid-format:unspecified", $nameId->getFormat());
     }
 
 
@@ -195,8 +195,8 @@ AUTHNREQUEST;
         $authnRequest->decryptNameId($key);
 
         $nameId = $authnRequest->getNameId();
-        $this->assertEquals(md5('Arthur Dent'), $nameId->value);
-        $this->assertEquals(Constants::NAMEID_ENCRYPTED, $nameId->Format);
+        $this->assertEquals(md5('Arthur Dent'), $nameId->getValue());
+        $this->assertEquals(Constants::NAMEID_ENCRYPTED, $nameId->getFormat());
     }
 
 

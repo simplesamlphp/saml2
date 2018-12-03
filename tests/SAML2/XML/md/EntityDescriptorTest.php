@@ -158,14 +158,14 @@ XML
 
         $o = $entityDescriptor->getOrganization();
         $this->assertTrue($o instanceof Organization);
-        $this->assertCount(2, $o->OrganizationName);
-        $this->assertEquals('orgNameTest (no)', $o->OrganizationName["no"]);
-        $this->assertEquals('orgNameTest (en)', $o->OrganizationName["en"]);
-        $this->assertCount(2, $o->OrganizationDisplayName);
-        $this->assertEquals('orgDispNameTest (no)', $o->OrganizationDisplayName["no"]);
-        $this->assertEquals('orgDispNameTest (en)', $o->OrganizationDisplayName["en"]);
-        $this->assertCount(2, $o->OrganizationURL);
-        $this->assertEquals('orgURL (no)', $o->OrganizationURL["no"]);
-        $this->assertEquals('orgURL (en)', $o->OrganizationURL["en"]);
+        $this->assertCount(2, $o->getOrganizationName());
+        $this->assertEquals('orgNameTest (no)', $o->getOrganizationName()["no"]);
+        $this->assertEquals('orgNameTest (en)', $o->getOrganizationName()["en"]);
+        $this->assertCount(2, $o->getOrganizationDisplayName());
+        $this->assertEquals('orgDispNameTest (no)', $o->getOrganizationDisplayName()["no"]);
+        $this->assertEquals('orgDispNameTest (en)', $o->getOrganizationDisplayName()["en"]);
+        $this->assertCount(2, $o->getOrganizationURL());
+        $this->assertEquals('orgURL (no)', $o->getOrganizationURL()["no"]);
+        $this->assertEquals('orgURL (en)', $o->getOrganizationURL()["en"]);
     }
 }

@@ -19,14 +19,14 @@ class AdditionalMetadataLocation
      *
      * @var string
      */
-    public $namespace;
+    private $namespace;
 
     /**
      * The URI where the metadata is located.
      *
      * @var string
      */
-    public $location;
+    private $location;
 
 
     /**

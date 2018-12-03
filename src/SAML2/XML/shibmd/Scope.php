@@ -24,14 +24,14 @@ class Scope
      *
      * @var string
      */
-    public $scope;
+    private $scope;
 
     /**
      * Whether this is a regexp scope.
      *
      * @var bool
      */
-    public $regexp = false;
+    private $regexp = false;
 
 
     /**

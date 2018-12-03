@@ -20,7 +20,7 @@ class ContactPerson
      *
      * @var string
      */
-    public $contactType;
+    private $contactType;
 
     /**
      * Extensions on this element.
@@ -29,49 +29,49 @@ class ContactPerson
      *
      * @var array
      */
-    public $Extensions = [];
+    private $Extensions = [];
 
     /**
      * The Company of this contact.
      *
      * @var string
      */
-    public $Company = null;
+    private $Company = null;
 
     /**
      * The GivenName of this contact.
      *
      * @var string
      */
-    public $GivenName = null;
+    private $GivenName = null;
 
     /**
      * The SurName of this contact.
      *
      * @var string
      */
-    public $SurName = null;
+    private $SurName = null;
 
     /**
      * The EmailAddresses of this contact.
      *
      * @var array
      */
-    public $EmailAddress = [];
+    private $EmailAddress = [];
 
     /**
      * The TelephoneNumbers of this contact.
      *
      * @var array
      */
-    public $TelephoneNumber = [];
+    private $TelephoneNumber = [];
 
     /**
      * Extra attributes on the contact element.
      *
      * @var array
      */
-    public $ContactPersonAttributes = [];
+    private $ContactPersonAttributes = [];
 
 
     /**

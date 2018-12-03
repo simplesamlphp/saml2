@@ -19,7 +19,7 @@ class X509Certificate
      *
      * @var string
      */
-    public $certificate;
+    private $certificate;
 
 
     /**

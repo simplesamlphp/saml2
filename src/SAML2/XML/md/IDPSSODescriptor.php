@@ -20,7 +20,7 @@ class IDPSSODescriptor extends SSODescriptorType
      *
      * @var bool|null
      */
-    public $WantAuthnRequestsSigned = null;
+    private $WantAuthnRequestsSigned = null;
 
     /**
      * List of SingleSignOnService endpoints.
@@ -29,7 +29,7 @@ class IDPSSODescriptor extends SSODescriptorType
      *
      * @var \SAML2\XML\md\EndpointType[]
      */
-    public $SingleSignOnService = [];
+    private $SingleSignOnService = [];
 
     /**
      * List of NameIDMappingService endpoints.
@@ -38,7 +38,7 @@ class IDPSSODescriptor extends SSODescriptorType
      *
      * @var \SAML2\XML\md\EndpointType[]
      */
-    public $NameIDMappingService = [];
+    private $NameIDMappingService = [];
 
     /**
      * List of AssertionIDRequestService endpoints.
@@ -47,7 +47,7 @@ class IDPSSODescriptor extends SSODescriptorType
      *
      * @var \SAML2\XML\md\EndpointType[]
      */
-    public $AssertionIDRequestService = [];
+    private $AssertionIDRequestService = [];
 
     /**
      * List of supported attribute profiles.
@@ -56,7 +56,7 @@ class IDPSSODescriptor extends SSODescriptorType
      *
      * @var array
      */
-    public $AttributeProfile = [];
+    private $AttributeProfile = [];
 
     /**
      * List of supported attributes.
@@ -65,7 +65,7 @@ class IDPSSODescriptor extends SSODescriptorType
      *
      * @var \SAML2\XML\saml\Attribute[]
      */
-    public $Attribute = [];
+    private $Attribute = [];
 
 
     /**

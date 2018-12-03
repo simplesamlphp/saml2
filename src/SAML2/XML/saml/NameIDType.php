@@ -28,7 +28,7 @@ abstract class NameIDType extends BaseIDType
      *
      * @see saml-core-2.0-os
      */
-    public $Format = null;
+    private $Format = null;
 
     /**
      * A name identifier established by a service provider or affiliation of providers for the entity, if different from
@@ -40,14 +40,14 @@ abstract class NameIDType extends BaseIDType
      *
      * @see saml-core-2.0-os
      */
-    public $SPProvidedID = null;
+    private $SPProvidedID = null;
 
     /**
      * The NameIDType complex type is used when an element serves to represent an entity by a string-valued name.
      *
      * @var string|null
      */
-    public $value = null;
+    private $value = null;
 
 
     /**

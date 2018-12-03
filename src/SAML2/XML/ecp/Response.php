@@ -19,7 +19,7 @@ class Response
      *
      * @var string
      */
-    public $AssertionConsumerServiceURL;
+    private $AssertionConsumerServiceURL;
 
 
     /**

@@ -18,13 +18,13 @@ class AttributeTest extends \PHPUnit\Framework\TestCase
     public function testMarshalling()
     {
         $attribute = new Attribute();
-        $attribute->Name = 'TheName';
-        $attribute->NameFormat = 'TheNameFormat';
-        $attribute->FriendlyName = 'TheFriendlyName';
-        $attribute->AttributeValue = [
+        $attribute->setName('TheName');
+        $attribute->setNameFormat('TheNameFormat');
+        $attribute->setFriendlyName('TheFriendlyName');
+        $attribute->setAttributeValue([
             new AttributeValue('FirstValue'),
             new AttributeValue('SecondValue'),
-        ];
+        ]);
 
         $document = DOMDocumentFactory::fromString('<root />');
         $attributeElement = $attribute->toXML($document->firstChild);
@@ -51,12 +51,12 @@ XML
         );
 
         $attribute = new Attribute($document->firstChild);
-        $this->assertEquals('TheName', $attribute->Name);
-        $this->assertEquals('TheNameFormat', $attribute->NameFormat);
-        $this->assertEquals('TheFriendlyName', $attribute->FriendlyName);
-        $this->assertCount(2, $attribute->AttributeValue);
-        $this->assertEquals('FirstValue', (string)$attribute->AttributeValue[0]);
-        $this->assertEquals('SecondValue', (string)$attribute->AttributeValue[1]);
+        $this->assertEquals('TheName', $attribute->getName());
+        $this->assertEquals('TheNameFormat', $attribute->getNameFormat());
+        $this->assertEquals('TheFriendlyName', $attribute->getFriendlyName());
+        $this->assertCount(2, $attribute->getAttributeValue());
+        $this->assertEquals('FirstValue', strval($attribute->getAttributeValue()[0]));
+        $this->assertEquals('SecondValue', strval($attribute->getAttributeValue()[1]));
     }
 
 

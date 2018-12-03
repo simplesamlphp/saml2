@@ -19,21 +19,21 @@ class Chunk implements \Serializable
      *
      * @var string
      */
-    public $localName;
+    private $localName;
 
     /**
      * The namespaceURI of this element.
      *
      * @var string|null
      */
-    public $namespaceURI;
+    private $namespaceURI;
 
     /**
      * The \DOMElement we contain.
      *
      * @var \DOMElement
      */
-    public $xml;
+    private $xml;
 
 
     /**

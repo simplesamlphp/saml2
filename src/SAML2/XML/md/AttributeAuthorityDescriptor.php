@@ -22,7 +22,7 @@ class AttributeAuthorityDescriptor extends RoleDescriptor
      *
      * @var \SAML2\XML\md\EndpointType[]
      */
-    public $AttributeService = [];
+    private $AttributeService = [];
 
     /**
      * List of AssertionIDRequestService endpoints.
@@ -31,7 +31,7 @@ class AttributeAuthorityDescriptor extends RoleDescriptor
      *
      * @var \SAML2\XML\md\EndpointType[]
      */
-    public $AssertionIDRequestService = [];
+    private $AssertionIDRequestService = [];
 
     /**
      * List of supported NameID formats.
@@ -40,7 +40,7 @@ class AttributeAuthorityDescriptor extends RoleDescriptor
      *
      * @var string[]
      */
-    public $NameIDFormat = [];
+    private $NameIDFormat = [];
 
     /**
      * List of supported attribute profiles.
@@ -49,7 +49,7 @@ class AttributeAuthorityDescriptor extends RoleDescriptor
      *
      * @var array
      */
-    public $AttributeProfile = [];
+    private $AttributeProfile = [];
 
     /**
      * List of supported attributes.
@@ -58,7 +58,7 @@ class AttributeAuthorityDescriptor extends RoleDescriptor
      *
      * @var \SAML2\XML\saml\Attribute[]
      */
-    public $Attribute = [];
+    private $Attribute = [];
 
 
     /**

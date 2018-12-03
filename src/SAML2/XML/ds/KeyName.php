@@ -19,7 +19,7 @@ class KeyName
      *
      * @var string|null
      */
-    public $name;
+    private $name;
 
 
     /**

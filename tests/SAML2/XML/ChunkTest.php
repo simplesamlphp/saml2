@@ -26,13 +26,13 @@ class ChunkTest extends \PHPUnit\Framework\TestCase
     public function setUp()
     {
         $attribute = new Attribute();
-        $attribute->Name = 'TheName';
-        $attribute->NameFormat = 'TheNameFormat';
-        $attribute->FriendlyName = 'TheFriendlyName';
-        $attribute->AttributeValue = [
+        $attribute->setName('TheName');
+        $attribute->setNameFormat('TheNameFormat');
+        $attribute->setFriendlyName('TheFriendlyName');
+        $attribute->setAttributeValue([
             new AttributeValue('FirstValue'),
             new AttributeValue('SecondValue'),
-        ];
+        ]);
 
         $document = DOMDocumentFactory::fromString('<root />');
         $attributeElement = $attribute->toXML($document->firstChild);
@@ -51,6 +51,6 @@ class ChunkTest extends \PHPUnit\Framework\TestCase
         $newchunk = new Chunk($document->firstChild);
         $newchunk->unserialize($ser);
 
-        $this->assertEqualXMLStructure($this->chunk->xml, $newchunk->xml);
+        $this->assertEqualXMLStructure($this->chunk->getXML(), $newchunk->getXML());
     }
 }

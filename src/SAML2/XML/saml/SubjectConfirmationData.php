@@ -22,35 +22,35 @@ class SubjectConfirmationData
      *
      * @var int|null
      */
-    public $NotBefore;
+    private $NotBefore;
 
     /**
      * The time after which this element is invalid, as an unix timestamp.
      *
      * @var int|null
      */
-    public $NotOnOrAfter;
+    private $NotOnOrAfter;
 
     /**
      * The Recipient this Subject is valid for. Either an entity or a location.
      *
      * @var string|null
      */
-    public $Recipient;
+    private $Recipient;
 
     /**
      * The ID of the AuthnRequest this is a response to.
      *
      * @var string|null
      */
-    public $InResponseTo;
+    private $InResponseTo;
 
     /**
      * The IP(v6) address of the user.
      *
      * @var string|null
      */
-    public $Address;
+    private $Address;
 
     /**
      * The various key information elements.
@@ -60,7 +60,7 @@ class SubjectConfirmationData
      *
      * @var (\SAML2\XML\ds\KeyInfo|\SAML2\XML\Chunk)[]
      */
-    public $info = [];
+    private $info = [];
 
 
     /**

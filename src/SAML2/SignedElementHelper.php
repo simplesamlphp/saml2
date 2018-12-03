@@ -39,6 +39,13 @@ class SignedElementHelper implements SignedElement
     private $validators;
 
     /**
+     * How long this element is valid, as a unix timestamp.
+     *
+     * @var int|null
+     */
+    private $validUntil;
+
+    /**
      * The length of time this element can be cached, as string.
      *
      * @var string|null

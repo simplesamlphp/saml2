@@ -18,14 +18,14 @@ class IndexedEndpointType extends EndpointType
      *
      * @var int
      */
-    public $index;
+    private $index;
 
     /**
      * Whether this endpoint is the default.
      *
      * @var bool|null
      */
-    public $isDefault = null;
+    private $isDefault = null;
 
 
     /**
