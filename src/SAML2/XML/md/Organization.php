@@ -98,7 +98,7 @@ class Organization
      *
      * @param \SAML2\XML\Chunk $extensions The Extensions
      */
-    public function addExtensions(Extensions $extension)
+    public function addExtension(Extensions $extension)
     {
         $this->Extensions[] = $extension;
     }

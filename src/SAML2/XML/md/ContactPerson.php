@@ -284,7 +284,7 @@ class ContactPerson
      *
      * @param \SAML2\XML\Chunk $extensions The Extensions
      */
-    public function addExtensions(Chunk $extension)
+    public function addExtension(Chunk $extension)
     {
         $this->Extensions[] = $extension;
     }

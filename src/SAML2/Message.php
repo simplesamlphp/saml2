@@ -611,7 +611,7 @@ abstract class Message implements SignedElement
      *
      * @param \SAML2\XML\samlp\Extensions $extensions The Extensions
      */
-    public function addExtensions(Extensions $extension)
+    public function addExtension(Extensions $extension)
     {
         $this->extensions[] = $extension;
     }
