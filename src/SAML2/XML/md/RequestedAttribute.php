@@ -51,7 +51,7 @@ class RequestedAttribute extends Attribute
      */
     public function setIsRequired($flag = null)
     {
-        assert(is_bool($flag));
+        assert(is_bool($flag) || is_null($flag));
         $this->isRequired = $flag;
     }
 
