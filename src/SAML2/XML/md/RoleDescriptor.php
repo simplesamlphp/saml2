@@ -271,6 +271,15 @@ class RoleDescriptor extends SignedElementHelper
     }
 
     /**
+     * Add the value to the ProtocolSupportEnumeration-property
+     * @param string $protocol
+     */
+    public function addProtocolSupportEnumeration(string $protocol)
+    {
+        $this->protocolSupportEnumeration[] = $protocol;
+    }
+
+    /**
      * Collect the value of the Organization-property
      * @return \SAML2\XML\md\Organization
      */
