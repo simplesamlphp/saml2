@@ -6,6 +6,7 @@ use SAML2\Constants;
 use SAML2\DOMDocumentFactory;
 use SAML2\SignedElementHelper;
 use SAML2\Utils;
+use SAML2\XML\Chunk;
 
 /**
  * Class representing SAML 2 EntityDescriptor element.
@@ -272,6 +273,16 @@ class EntityDescriptor extends SignedElementHelper
     public function setExtensions(array $extensions)
     {
         $this->Extensions = $extensions;
+    }
+
+    /**
+     * Add an Extension.
+     *
+     * @param \SAML2\XML\Chunk $extensions The Extensions
+     */
+    public function addExtensions(Extensions $extension)
+    {
+        $this->Extensions[] = $extension;
     }
 
     /**

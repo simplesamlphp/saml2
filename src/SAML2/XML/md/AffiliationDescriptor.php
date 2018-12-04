@@ -206,6 +206,16 @@ class AffiliationDescriptor extends SignedElementHelper
     }
 
     /**
+     * Add an Extension.
+     *
+     * @param \SAML2\XML\Chunk $extensions The Extensions
+     */
+    public function addExtensions(Extensions $extension)
+    {
+        $this->Extensions[] = $extension;
+    }
+
+    /**
      * Collect the value of the AffiliateMember-property
      * @return array
      */

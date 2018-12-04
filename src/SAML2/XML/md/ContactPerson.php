@@ -4,6 +4,7 @@ namespace SAML2\XML\md;
 
 use SAML2\Constants;
 use SAML2\Utils;
+use SAML2\XML\Chunk;
 
 /**
  * Class representing SAML 2 ContactPerson.
@@ -276,6 +277,16 @@ class ContactPerson
     public function setExtensions(array $extensions)
     {
         $this->Extensions = $extensions;
+    }
+
+    /**
+     * Add an Extension.
+     *
+     * @param \SAML2\XML\Chunk $extensions The Extensions
+     */
+    public function addExtensions(Chunk $extension)
+    {
+        $this->Extensions[] = $extension;
     }
 
     /**
