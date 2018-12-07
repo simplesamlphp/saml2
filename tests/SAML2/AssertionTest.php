@@ -78,7 +78,7 @@ XML;
         $assertion = new Assertion($document->firstChild);
 
         // Was not signed
-        $this->assertFalse($assertion->wasSignedAtConstruction());
+        $this->assertFalse($assertion->getWasSignedAtConstruction());
 
         // Test for valid audiences
         $assertionValidAudiences = $assertion->getValidAudiences();
@@ -690,7 +690,7 @@ XML
         $unsignedAssertion = new Assertion($document->firstChild);
         $unsignedAssertion->setSignatureKey($privateKey);
         $unsignedAssertion->setCertificates([CertificatesMock::PUBLIC_KEY_PEM]);
-        $this->assertFalse($unsignedAssertion->wasSignedAtConstruction());
+        $this->assertFalse($unsignedAssertion->getWasSignedAtConstruction());
         $this->assertEquals($privateKey, $unsignedAssertion->getSignatureKey());
 
         $signedAssertion = new Assertion($unsignedAssertion->toXML());
@@ -699,7 +699,7 @@ XML
 
         $this->assertEquals($privateKey->getAlgorith(), $signatureMethod);
 
-        $this->assertTrue($signedAssertion->wasSignedAtConstruction());
+        $this->assertTrue($signedAssertion->getWasSignedAtConstruction());
 
     }
 
@@ -1050,7 +1050,7 @@ XML;
         $this->assertEquals(CertificatesMock::getPlainPublicKeyContents(), $certs[0]);
 
         // Was signed
-        $this->assertTrue($assertion->wasSignedAtConstruction());
+        $this->assertTrue($assertion->getWasSignedAtConstruction());
     }
 
 
@@ -1152,7 +1152,7 @@ XML;
         $assertion = new Assertion($document->firstChild);
 
         // Was not signed
-        $this->assertFalse($assertion->wasSignedAtConstruction());
+        $this->assertFalse($assertion->getWasSignedAtConstruction());
 
         $publicKey = CertificatesMock::getPublicKeySha256();
         $result = $assertion->validate($publicKey);

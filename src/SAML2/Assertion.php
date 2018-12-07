@@ -1409,7 +1409,7 @@ class Assertion implements SignedElement
     /**
      * @return bool
      */
-    public function wasSignedAtConstruction()
+    public function getWasSignedAtConstruction()
     {
         return $this->wasSignedAtConstruction;
     }
