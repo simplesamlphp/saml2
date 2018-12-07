@@ -244,6 +244,15 @@ class ContactPerson
     }
 
     /**
+     * Add the value to the EmailAddress-property
+     * @param string $emailAddress
+     */
+    public function addEmailAddress($emailAddress)
+    {
+        $this->EmailAddress[] = $emailAddress;
+    }
+
+    /**
      * Collect the value of the TelephoneNumber-property
      * @return string[]
      */
@@ -259,6 +268,15 @@ class ContactPerson
     public function setTelephoneNumber(array $telephoneNumber)
     {
         $this->TelephoneNumber = $telephoneNumber;
+    }
+
+    /**
+     * Add the value to the TelephoneNumber-property
+     * @param string $telephoneNumber
+     */
+    public function addTelephoneNumber($telephoneNumber)
+    {
+        $this->TelephoneNumber[] = $telephoneNumber;
     }
 
     /**
