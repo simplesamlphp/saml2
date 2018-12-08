@@ -62,7 +62,9 @@ class Logo
         $this->setUrl($xml->textContent);
         $this->setWidth(intval($xml->getAttribute('width')));
         $this->setHeight(intval($xml->getAttribute('height')));
-        $this->setLanguage($xml->hasAttribute('xml:lang') ? $xml->getAttribute('xml:lang') : null);
+        if ($xml->hasAttribute('xml:lang')) {
+            $this->setLanguage($xml->getAttribute('xml:lang'));
+        }
     }
 
     /**
