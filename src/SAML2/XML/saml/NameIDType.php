@@ -153,7 +153,7 @@ abstract class NameIDType extends BaseIDType
         if (array_key_exists('SPNameQualifier', $nameId) && $nameId['SPNameQualifier'] !== null) {
             $nid->setSPNameQualifier($nameId['SPNameQualifier']);
         }
-        if (array_key_exists('SPProvidedID', $nameId) && $nameId['SPProvidedId'] !== null) {
+        if (array_key_exists('SPProvidedID', $nameId) && $nameId['SPProvidedID'] !== null) {
             $nid->setSPProvidedID($nameId['SPProvidedID']);
         }
         if (array_key_exists('Format', $nameId) && $nameId['Format'] !== null) {
