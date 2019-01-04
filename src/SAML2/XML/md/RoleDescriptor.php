@@ -238,7 +238,7 @@ class RoleDescriptor extends SignedElementHelper
     {
         assert(is_string($errorURL) || is_null($errorURL));
         if (!is_null($errorURL) && !filter_var($errorURL, FILTER_VALIDATE_URL)) {
-            throw new \InvalidArgumentException('Provided argument is not a valid URL.');
+            throw new \InvalidArgumentException('RoleDescriptor errorURL is not a valid URL.');
         }
         $this->errorURL = $errorURL;
     }

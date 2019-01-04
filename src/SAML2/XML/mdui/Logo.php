@@ -84,7 +84,7 @@ class Logo
     {
         assert(is_string($url));
         if (!filter_var($url, FILTER_VALIDATE_URL)) {
-            throw new \InvalidArgumentException('Provided argument is not a valid URL.');
+            throw new \InvalidArgumentException('mdui:Logo is not a valid URL.');
         }
         $this->url = $url;
     }
