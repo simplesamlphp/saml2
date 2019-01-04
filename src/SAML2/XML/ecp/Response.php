@@ -68,7 +68,7 @@ class Response
     {
         assert(is_string($assertionConsumerServiceURL));
         if (!filter_var($assertionConsumerServiceURL, FILTER_VALIDATE_URL)) {
-            throw new \InvalidArgumentException('Provided argument is not a valid URL.');
+            throw new \InvalidArgumentException('AssertionConsumerServiceURL is not a valid URL.');
         }
         $this->AssertionConsumerServiceURL = $assertionConsumerServiceURL;
     }

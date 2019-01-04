@@ -54,6 +54,22 @@ XML
     }
 
     /**
+     * Unmarshalling of a logo tag with a data: URL
+     */
+    public function testUnmarshallingDataURL()
+    {
+        $document = DOMDocumentFactory::fromString(<<<XML
+<mdui:Logo height="1" width="1">data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAAEAAAABCAQAAAC1HAwCAAAAC0lEQVR42mNkYAAAAAYAAjCB0C8AAAAASUVORK5CYII=</mdui:Logo>
+XML
+        );
+
+        $logo = new Logo($document->firstChild);
+        $this->assertEquals(1, $logo->getWidth());
+        $this->assertEquals(1, $logo->getHeight());
+        $this->assertEquals("data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAAEAAAABCAQAAAC1HAwCAAAAC0lEQVR42mNkYAAAAAYAAjCB0C8AAAAASUVORK5CYII=", $logo->getUrl());
+    }
+
+    /**
      * Unmarshalling fails if url attribute not present
      */
     public function testUnmarshallingFailsEmptyURL()

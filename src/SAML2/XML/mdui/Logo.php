@@ -83,8 +83,8 @@ class Logo
     public function setUrl($url)
     {
         assert(is_string($url));
-        if (!filter_var($url, FILTER_VALIDATE_URL)) {
-            throw new \InvalidArgumentException('Provided argument is not a valid URL.');
+        if (!filter_var(trim($url), FILTER_VALIDATE_URL) && substr(trim($url), 0, 5) !== 'data:') {
+            throw new \InvalidArgumentException('mdui:Logo is not a valid URL.');
         }
         $this->url = $url;
     }
