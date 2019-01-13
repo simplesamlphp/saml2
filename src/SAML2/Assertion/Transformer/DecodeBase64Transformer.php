@@ -51,7 +51,6 @@ class DecodeBase64Transformer implements
      * @param $value
      *
      * @return array
-     * @SuppressWarnings(PHPMD.UnusedPrivateMethod)
      */
     private function decodeValue($value)
     {

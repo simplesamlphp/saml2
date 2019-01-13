@@ -13,7 +13,6 @@ use SAML2\XML\shibmd\Scope;
 
 /**
  * Class for handling SAML2 metadata extensions.
- *
  * @package SimpleSAMLphp
  */
 class Extensions
