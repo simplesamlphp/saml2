@@ -152,7 +152,7 @@ class Assertion implements SignedElement
      *
      * @var string
      */
-    private $authnContextDeclRef;
+    private $authnContextDeclRef = null;
 
     /**
      * The list of AuthenticatingAuthorities for this assertion.
@@ -240,7 +240,7 @@ class Assertion implements SignedElement
     /**
      * The SubjectConfirmation elements of the Subject in the assertion.
      *
-     * @var \SAML2\XML\saml\SubjectConfirmation[].
+     * @var \SAML2\XML\saml\SubjectConfirmation[]
      */
     private $SubjectConfirmation;
 
@@ -863,6 +863,7 @@ class Assertion implements SignedElement
      *
      * @param XMLSecurityKey $key
      * @param array $blacklist
+     * @return void
      * @throws \Exception
      * @return void
      */
@@ -1149,6 +1150,7 @@ class Assertion implements SignedElement
      * Set the authentication context declaration.
      *
      * @param \SAML2\XML\Chunk $authnContextDecl
+     * @return void
      * @throws \Exception
      * @return void
      */
@@ -1225,7 +1227,7 @@ class Assertion implements SignedElement
     /**
      * Set the AuthenticatingAuthority
      *
-     * @param array
+     * @param array $authenticatingAuthority
      * @return void
      */
     public function setAuthenticatingAuthority(array $authenticatingAuthority)
