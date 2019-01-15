@@ -24,7 +24,7 @@ abstract class BaseIDType
      *
      * @var string|null
      */
-    public $NameQualifier = null;
+    protected $NameQualifier = null;
 
     /**
      * Further qualifies an identifier with the name of a service provider or affiliation of providers.
@@ -34,7 +34,7 @@ abstract class BaseIDType
      *
      * @var string|null
      */
-    public $SPNameQualifier = null;
+    protected $SPNameQualifier = null;
 
     /**
      * The name for this BaseID.
@@ -65,17 +65,18 @@ abstract class BaseIDType
         $this->element = $xml;
 
         if ($xml->hasAttribute('NameQualifier')) {
-            $this->setNameQualifier($xml->getAttribute('NameQualifier'));
+            $this->NameQualifier = $xml->getAttribute('NameQualifier');
         }
 
         if ($xml->hasAttribute('SPNameQualifier')) {
-            $this->setSPNameQualifier($xml->getAttribute('SPNameQualifier'));
+            $this->SPNameQualifier = $xml->getAttribute('SPNameQualifier');
         }
     }
 
 
     /**
      * Collect the value of the NameQualifier-property
+     *
      * @return string|null
      */
     public function getNameQualifier()
@@ -86,6 +87,7 @@ abstract class BaseIDType
 
     /**
      * Set the value of the NameQualifier-property
+     *
      * @param string|null $nameQualifier
      * @return void
      */
@@ -97,6 +99,7 @@ abstract class BaseIDType
 
     /**
      * Collect the value of the SPNameQualifier-property
+     *
      * @return string|null
      */
     public function getSPNameQualifier()
@@ -107,6 +110,7 @@ abstract class BaseIDType
 
     /**
      * Set the value of the SPNameQualifier-property
+     *
      * @param string|null $spNameQualifier
      * @return void
      */
@@ -133,12 +137,12 @@ abstract class BaseIDType
         $element = $doc->createElementNS(Constants::NS_SAML, $this->nodeName);
         $parent->appendChild($element);
 
-        if ($this->getNameQualifier() !== null) {
-            $element->setAttribute('NameQualifier', $this->getNameQualifier());
+        if ($this->NameQualifier !== null) {
+            $element->setAttribute('NameQualifier', $this->NameQualifier);
         }
 
-        if ($this->getSPNameQualifier() !== null) {
-            $element->setAttribute('SPNameQualifier', $this->getSPNameQualifier());
+        if ($this->SPNameQualifier !== null) {
+            $element->setAttribute('SPNameQualifier', $this->SPNameQualifier);
         }
 
         return $element;

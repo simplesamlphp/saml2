@@ -28,7 +28,7 @@ abstract class NameIDType extends BaseIDType
      *
      * @see saml-core-2.0-os
      */
-    public $Format = null;
+    protected $Format = null;
 
     /**
      * A name identifier established by a service provider or affiliation of providers for the entity, if different from
@@ -40,14 +40,14 @@ abstract class NameIDType extends BaseIDType
      *
      * @see saml-core-2.0-os
      */
-    public $SPProvidedID = null;
+    protected $SPProvidedID = null;
 
     /**
      * The NameIDType complex type is used when an element serves to represent an entity by a string-valued name.
      *
      * @var string
      */
-    public $value = '';
+    protected $value = '';
 
 
     /**
@@ -64,19 +64,20 @@ abstract class NameIDType extends BaseIDType
         }
 
         if ($xml->hasAttribute('Format')) {
-            $this->setFormat($xml->getAttribute('Format'));
+            $this->Format = $xml->getAttribute('Format');
         }
 
         if ($xml->hasAttribute('SPProvidedID')) {
-            $this->setSPProvidedID($xml->getAttribute('SPProvidedID'));
+            $this->SPProvidedID = $xml->getAttribute('SPProvidedID');
         }
 
-        $this->setValue(trim($xml->textContent));
+        $this->value = trim($xml->textContent);
     }
 
 
     /**
      * Collect the value of the Format-property
+     *
      * @return string|null
      */
     public function getFormat()
@@ -87,6 +88,7 @@ abstract class NameIDType extends BaseIDType
 
     /**
      * Set the value of the Format-property
+     *
      * @param string|null $format
      * @return void
      */
@@ -98,6 +100,7 @@ abstract class NameIDType extends BaseIDType
 
     /**
      * Collect the value of the value-property
+     *
      * @return string
      */
     public function getValue()
@@ -109,6 +112,7 @@ abstract class NameIDType extends BaseIDType
     /**
      * Set the value of the value-property
      * @param string $value
+     *
      * @return void
      */
     public function setValue(string $value)
@@ -119,6 +123,7 @@ abstract class NameIDType extends BaseIDType
 
     /**
      * Collect the value of the SPProvidedID-property
+     *
      * @return string|null
      */
     public function getSPProvidedID()
@@ -129,6 +134,7 @@ abstract class NameIDType extends BaseIDType
 
     /**
      * Set the value of the SPProvidedID-property
+     *
      * @param string|null $spProvidedID
      * @return void
      */
@@ -148,15 +154,18 @@ abstract class NameIDType extends BaseIDType
     {
         $element = parent::toXML($parent);
 
-        if ($this->getFormat() !== null) {
-            $element->setAttribute('Format', $this->getFormat());
+        if ($this->Format !== null) {
+            $element->setAttribute('Format', $this->Format);
         }
 
-        if ($this->getSPProvidedID() !== null) {
-            $element->setAttribute('SPProvidedID', $this->getSPProvidedID());
+        if ($this->SPProvidedID !== null) {
+            $element->setAttribute('SPProvidedID', $this->SPProvidedID);
         }
 
-        $value = $element->ownerDocument->createTextNode($this->getValue());
+        if ($this->value === null) {
+            throw new \Exception("Cannot convert NameIDType to XML with no value.");
+        }
+        $value = $element->ownerDocument->createTextNode($this->value);
         $element->appendChild($value);
 
         return $element;
