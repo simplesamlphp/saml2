@@ -11,10 +11,12 @@ class Validator
      */
     protected $constraints;
 
+
     public function addConstraintValidator(ConstraintValidator $constraint)
     {
         $this->constraints[] = $constraint;
     }
+
 
     public function validate(Response $response)
     {

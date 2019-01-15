@@ -23,6 +23,7 @@ class HTTPRedirectTest extends PHPUnit_Framework_TestCase
         $this->assertEquals('https://profile.surfconext.nl/simplesaml/module.php/saml/sp/metadata.php/default-sp', $issuer);
     }
 
+
     /**
      * test parsing of basic query string with saml response and
      * verify that the correct issuer is found.
@@ -39,6 +40,7 @@ class HTTPRedirectTest extends PHPUnit_Framework_TestCase
         $this->assertEquals('https://engine.test.surfconext.nl/authentication/idp/metadata', $issuer);
     }
 
+
     /**
      * test parsing of Relaystate and SAMLencoding together with authnrequest
      */
@@ -53,6 +55,7 @@ class HTTPRedirectTest extends PHPUnit_Framework_TestCase
         $relaystate = $request->getRelayState();
         $this->assertEquals('https://profile.surfconext.nl/', $relaystate);
     }
+
 
     /**
      * Test parsing a signed authentication request.
@@ -69,6 +72,7 @@ class HTTPRedirectTest extends PHPUnit_Framework_TestCase
         $relaystate = $request->getRelayState();
         $this->assertEquals('https://beta.surfnet.nl/simplesaml/module.php/core/authenticate.php?as=Braindrops', $relaystate);
     }
+
 
     /**
      * Test validating a signed authentication request.
@@ -90,6 +94,7 @@ class HTTPRedirectTest extends PHPUnit_Framework_TestCase
         $result = $request->validate(CertificatesMock::getPublicKeySha256());
     }
 
+
     /**
      * Test validating a signed authentication request.
      */
@@ -107,7 +112,6 @@ class HTTPRedirectTest extends PHPUnit_Framework_TestCase
     }
 
 
-
     /**
      * test that a request with unsupported encoding specified fails
      */
@@ -121,6 +125,7 @@ class HTTPRedirectTest extends PHPUnit_Framework_TestCase
         $request = $hr->receive();
     }
 
+
     public function testNoSigAlgSpecified()
     {
         $qs = 'SAMLRequest=nVLBauMwEP0Vo7sjW7FpKpJA2rBsoNuGOruHXhZFHm8EsuRqxtv27yvbWWgvYelFgjfvzbx5zBJVazu56enkHuG5B6TktbUO5VhYsT446RUalE61gJK0rDY%2F7qSYZbILnrz2ln2QXFYoRAhkvGPJbrtiv7VoygJEoTJ9LOusXDSFuJ4vdH6cxwoIEGUjsrqoFUt%2BQcCoXLHYKMoRe9g5JOUoQlleprlI8%2FyQz6W4ksXiiSXbuI1xikbViahDyfkRSM2wD40DmjnL0bSdhcE6Hx7BTd3xqnqoIPw1GmbdqWPJNx80jCGtGIUeWLL5t8mtd9i3EM78n493%2FzWr9XVvx%2B58mj39IlUaR%2FQmKOPq4Dtkyf4c9E1EjPtzOePjREL5%2FXDYp%2FuH6sDWy6G3HDML66%2B5ayO7VlHx2dySf2y9nM7pPprabffeGv02ZNcquux5QEydNiNVUlAODTiKMVvrX24DKIJz8nw9jfx8tOt3&RelayState=https%3A%2F%2Fbeta.surfnet.nl%2Fsimplesaml%2Fmodule.php%2Fcore%2Fauthenticate.php%3Fas%3DBraindrops&Signature=b%2Bqe%2FXGgICOrEL1v9dwuoy0RJtJ%2FGNAr7gJGYSJzLG0riPKwo7v5CH8GPC2P9IRikaeaNeQrnhBAaf8FCWrO0cLFw4qR6msK9bxRBGk%2BhIaTUYCh54ETrVCyGlmBneMgC5%2FiCRvtEW3ESPXCCqt8Ncu98yZmv9LIVyHSl67Se%2BfbB9sDw3%2FfzwYIHRMqK2aS8jnsnqlgnBGGOXqIqN3%2Bd%2F2dwtCfz14s%2F9odoYzSUv32qfNPiPez6PSNqwhwH7dWE3TlO%2FjZmz0DnOeQ2ft6qdZEi5ZN5KCV6VmNKpkrLMq6DDPnuwPm%2F8oCAoT88R2jG7uf9QZB%2BArWJKMEhDLsCA%3D%3D';
@@ -130,6 +135,7 @@ class HTTPRedirectTest extends PHPUnit_Framework_TestCase
         $hr = new HTTPRedirect();
         $request = $hr->receive();
     }
+
 
     /**
      * test handling of non-deflated data in samlrequest
@@ -147,6 +153,7 @@ class HTTPRedirectTest extends PHPUnit_Framework_TestCase
         PHPUnit_Framework_Error_Warning::$enabled = $oldwarning;
     }
 
+
     /**
      * test with a query string that has Request nor Response
      */
@@ -160,6 +167,7 @@ class HTTPRedirectTest extends PHPUnit_Framework_TestCase
         $request = $hr->receive();
     }
 
+
     /**
      * Construct an authnrequest and send it.
      */
@@ -169,6 +177,7 @@ class HTTPRedirectTest extends PHPUnit_Framework_TestCase
         $hr = new HTTPRedirect();
         $hr->send($request);
     }
+
 
     /**
      * Construct an authnresponse and send it.
@@ -184,6 +193,7 @@ class HTTPRedirectTest extends PHPUnit_Framework_TestCase
         $hr = new HTTPRedirect();
         $hr->send($response);
     }
+
 
     /**
      * Test setting destination in the HR binding.

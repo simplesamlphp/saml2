@@ -48,6 +48,7 @@ class HTTPPost extends Binding
         Utils::getContainer()->postRedirect($destination, $post);
     }
 
+
     /**
      * Receive a SAML 2 message sent using the HTTP-POST binding.
      *

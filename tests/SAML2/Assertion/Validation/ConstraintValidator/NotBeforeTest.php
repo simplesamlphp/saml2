@@ -24,11 +24,13 @@ class NotBeforeTest extends ControlledTimeTest
      */
     protected $currentTime = 1;
 
+
     public function setUp()
     {
         parent::setUp();
         $this->assertion = m::mock('SAML2\Assertion');
     }
+
 
     /**
      * @group assertion-validation
@@ -47,6 +49,7 @@ class NotBeforeTest extends ControlledTimeTest
         $this->assertCount(1, $result->getErrors());
     }
 
+
     /**
      * @group assertion-validation
      * @test
@@ -62,6 +65,7 @@ class NotBeforeTest extends ControlledTimeTest
 
         $this->assertTrue($result->isValid());
     }
+
 
     /**
      * @group assertion-validation

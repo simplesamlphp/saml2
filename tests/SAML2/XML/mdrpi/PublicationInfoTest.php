@@ -47,6 +47,7 @@ class PublicationInfoTest extends \PHPUnit_Framework_TestCase
         $this->assertEquals('http://NorwegianUsagePolicy', $usagePolicyElements[1]->textContent);
     }
 
+
     public function testUnmarshalling()
     {
         $document = DOMDocumentFactory::fromString(<<<XML
@@ -71,6 +72,7 @@ XML
         $this->assertEquals('http://TheEnglishUsagePolicy', $usagePolicy["en"]);
         $this->assertEquals('http://TheNorwegianUsagePolicy', $usagePolicy["no"]);
     }
+
 
     public function testMissingPublisherThrowsException()
     {

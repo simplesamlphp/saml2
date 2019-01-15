@@ -25,6 +25,7 @@ class AssertionValidator
      */
     private $serviceProvider;
 
+
     /**
      * @param \SAML2\Configuration\IdentityProvider $identityProvider
      * @param \SAML2\Configuration\ServiceProvider  $serviceProvider
@@ -36,6 +37,7 @@ class AssertionValidator
         $this->identityProvider = $identityProvider;
         $this->serviceProvider = $serviceProvider;
     }
+
 
     public function addConstraintValidator(AssertionConstraintValidator $constraint)
     {
@@ -49,6 +51,7 @@ class AssertionValidator
 
         $this->constraints[] = $constraint;
     }
+
 
     public function validate(Assertion $assertion)
     {

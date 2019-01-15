@@ -10,6 +10,7 @@ final class UnparseableXmlException extends RuntimeException
         LIBXML_ERR_FATAL   => 'FATAL'
     ];
 
+
     public function __construct(\LibXMLError $error)
     {
         $message = sprintf(

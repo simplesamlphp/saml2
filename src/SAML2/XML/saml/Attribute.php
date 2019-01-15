@@ -42,6 +42,7 @@ class Attribute
      */
     public $AttributeValue = [];
 
+
     /**
      * Initialize an Attribute.
      *
@@ -72,6 +73,7 @@ class Attribute
         }
     }
 
+
     /**
      * Collect the value of the Name-property
      * @return string
@@ -80,6 +82,7 @@ class Attribute
     {
         return $this->Name;
     }
+
 
     /**
      * Set the value of the Name-property
@@ -91,6 +94,7 @@ class Attribute
         $this->Name = $name;
     }
 
+
     /**
      * Collect the value of the NameFormat-property
      * @return string|null
@@ -99,6 +103,7 @@ class Attribute
     {
         return $this->NameFormat;
     }
+
 
     /**
      * Set the value of the NameFormat-property
@@ -110,6 +115,7 @@ class Attribute
         $this->NameFormat = $nameFormat;
     }
 
+
     /**
      * Collect the value of the FriendlyName-property
      * @return string|null
@@ -118,6 +124,7 @@ class Attribute
     {
         return $this->FriendlyName;
     }
+
 
     /**
      * Set the value of the FriendlyName-property
@@ -129,6 +136,7 @@ class Attribute
         $this->FriendlyName = $friendlyName;
     }
 
+
     /**
      * Collect the value of the AttributeValue-property
      * @return \SAML2\XML\saml\AttributeValue[]
@@ -137,6 +145,7 @@ class Attribute
     {
         return $this->AttributeValue;
     }
+
 
     /**
      * Set the value of the AttributeValue-property
@@ -147,6 +156,7 @@ class Attribute
         $this->AttributeValue = $attributeValue;
     }
 
+
     /**
      * Add the value to the AttributeValue-property
      * @param \SAML2\XML\saml\AttributeValue $attributeValue
@@ -155,6 +165,7 @@ class Attribute
     {
         $this->AttributeValue[] = $attributeValue;
     }
+
 
     /**
      * Internal implementation of toXML.
@@ -165,7 +176,6 @@ class Attribute
      * @param string     $name      The name of the element.
      * @return \DOMElement
      */
-
     protected function toXMLInternal(\DOMElement $parent, $namespace, $name)
     {
         assert(is_string($namespace));
@@ -194,6 +204,7 @@ class Attribute
 
         return $e;
     }
+
 
     /**
      * Convert this Attribute to XML.

@@ -12,6 +12,7 @@ class ArrayAdapter implements Queryable
      */
     private $configuration;
 
+
     /**
      * @param array $configuration
      */
@@ -19,6 +20,7 @@ class ArrayAdapter implements Queryable
     {
         $this->configuration = $configuration;
     }
+
 
     /**
      * @param mixed $key
@@ -32,6 +34,7 @@ class ArrayAdapter implements Queryable
 
         return $this->configuration[$key];
     }
+
 
     /**
      * @param mixed $key

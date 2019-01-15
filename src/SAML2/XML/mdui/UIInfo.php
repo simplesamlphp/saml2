@@ -64,6 +64,7 @@ class UIInfo
      */
     public $Logo = [];
 
+
     /**
      * Create a UIInfo element.
      *
@@ -96,6 +97,7 @@ class UIInfo
         }
     }
 
+
     /**
      * Collect the value of the Keywords-property
      * @return \SAML2\XML\mdui\Keywords[]
@@ -104,6 +106,7 @@ class UIInfo
     {
         return $this->Keywords;
     }
+
 
     /**
      * Set the value of the Keywords-property
@@ -114,6 +117,7 @@ class UIInfo
         $this->Keywords = $keywords;
     }
 
+
     /**
      * Add the value to the Keywords-property
      * @param \SAML2\XML\mdui\Keywords $keyword
@@ -122,6 +126,7 @@ class UIInfo
     {
         $this->Keywords[] = $keyword;
     }
+
 
     /**
      * Collect the value of the DisplayName-property
@@ -132,6 +137,7 @@ class UIInfo
         return $this->DisplayName;
     }
 
+
     /**
      * Set the value of the DisplayName-property
      * @param array $displayName
@@ -140,6 +146,7 @@ class UIInfo
     {
         $this->DisplayName = $displayName;
     }
+
 
     /**
      * Collect the value of the Description-property
@@ -150,6 +157,7 @@ class UIInfo
         return $this->Description;
     }
 
+
     /**
      * Set the value of the Description-property
      * @param array $description
@@ -158,6 +166,7 @@ class UIInfo
     {
         $this->Description = $description;
     }
+
 
     /**
      * Collect the value of the InformationURL-property
@@ -168,6 +177,7 @@ class UIInfo
         return $this->InformationURL;
     }
 
+
     /**
      * Set the value of the InformationURL-property
      * @param array $informationURL
@@ -176,6 +186,7 @@ class UIInfo
     {
         $this->InformationURL = $informationURL;
     }
+
 
     /**
      * Collect the value of the PrivacyStatementURL-property
@@ -186,6 +197,7 @@ class UIInfo
         return $this->PrivacyStatementURL;
     }
 
+
     /**
      * Set the value of the PrivacyStatementURL-property
      * @param array $privacyStatementURL
@@ -194,6 +206,7 @@ class UIInfo
     {
         $this->PrivacyStatementURL = $privacyStatementURL;
     }
+
 
     /**
      * Collect the value of the Logo-property
@@ -204,6 +217,7 @@ class UIInfo
         return $this->Logo;
     }
 
+
     /**
      * Set the value of the Logo-property
      * @param \SAML2\XML\mdui\Logo $logo
@@ -212,6 +226,7 @@ class UIInfo
     {
         $this->Logo = $logo;
     }
+
 
     /**
      * Add the value to the Logo-property
@@ -222,6 +237,7 @@ class UIInfo
         $this->Logo[] = $logo;
     }
 
+
     /**
      * Collect the value of the children-property
      * @return \SAML2\XML\Chunk[]
@@ -230,6 +246,7 @@ class UIInfo
     {
         return $this->children;
     }
+
 
     /**
      * Set the value of the childen-property
@@ -240,6 +257,7 @@ class UIInfo
         $this->children = $children;
     }
 
+
     /**
      * Add the value to the children-property
      * @param \SAML2\XML\Chunk $child
@@ -248,6 +266,7 @@ class UIInfo
     {
         $this->children[] = $child;
     }
+
 
     /**
      * Convert this UIInfo to XML.

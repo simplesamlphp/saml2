@@ -26,6 +26,7 @@ class Keywords
      */
     public $lang;
 
+
     /**
      * Initialize a Keywords.
      *
@@ -51,6 +52,7 @@ class Keywords
         $this->setLanguage($xml->getAttribute('xml:lang'));
     }
 
+
     /**
      * Collect the value of the lang-property
      * @return string|null
@@ -59,6 +61,7 @@ class Keywords
     {
         return $this->lang;
     }
+
 
     /**
      * Set the value of the lang-property
@@ -70,6 +73,7 @@ class Keywords
         $this->lang = $lang;
     }
 
+
     /**
      * Collect the value of the Keywords-property
      * @return string[]
@@ -78,6 +82,7 @@ class Keywords
     {
         return $this->Keywords;
     }
+
 
     /**
      * Set the value of the Keywords-property
@@ -88,6 +93,7 @@ class Keywords
         $this->Keywords = $keywords;
     }
 
+
     /**
      * Add the value to the Keywords-property
      * @param string $keyword
@@ -97,6 +103,7 @@ class Keywords
         assert(is_string($keyword));
         $this->Keywords[] = $keyword;
     }
+
 
     /**
      * Convert this Keywords to XML.

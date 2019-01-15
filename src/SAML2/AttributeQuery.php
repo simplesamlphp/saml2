@@ -36,6 +36,7 @@ class AttributeQuery extends SubjectQuery
      */
     private $nameFormat;
 
+
     /**
      * Constructor for SAML 2 attribute query messages.
      *
@@ -87,6 +88,7 @@ class AttributeQuery extends SubjectQuery
         }
     }
 
+
     /**
      * Retrieve all requested attributes.
      *
@@ -97,6 +99,7 @@ class AttributeQuery extends SubjectQuery
         return $this->attributes;
     }
 
+
     /**
      * Set all requested attributes.
      *
@@ -106,6 +109,7 @@ class AttributeQuery extends SubjectQuery
     {
         $this->attributes = $attributes;
     }
+
 
     /**
      * Retrieve the NameFormat used on all attributes.
@@ -120,6 +124,7 @@ class AttributeQuery extends SubjectQuery
         return $this->nameFormat;
     }
 
+
     /**
      * Set the NameFormat used on all attributes.
      *
@@ -131,6 +136,7 @@ class AttributeQuery extends SubjectQuery
 
         $this->nameFormat = $nameFormat;
     }
+
 
     /**
      * Convert the attribute query message to an XML element.

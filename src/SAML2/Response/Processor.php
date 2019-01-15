@@ -48,6 +48,7 @@ class Processor
      */
     private $responseIsSigned = false;
 
+
     /**
      * @param \Psr\Log\LoggerInterface        $logger
      *
@@ -58,6 +59,7 @@ class Processor
 
         $this->signatureValidator = new Validator($logger);
     }
+
 
     /**
      * @param \SAML2\Configuration\ServiceProvider  $serviceProviderConfiguration
@@ -88,6 +90,7 @@ class Processor
         return $this->processAssertions($response);
     }
 
+
     /**
      * Checks the preconditions that must be valid in order for the response to be processed.
      *
@@ -101,6 +104,7 @@ class Processor
             throw PreconditionNotMetException::createFromValidationResult($result);
         }
     }
+
 
     /**
      * @param \SAML2\Response                       $response
@@ -131,6 +135,7 @@ class Processor
             throw new InvalidResponseException();
         }
     }
+
 
     /**
      * @param \SAML2\Response $response

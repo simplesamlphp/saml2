@@ -30,6 +30,7 @@ class FingerprintCollection extends ArrayCollection
         parent::add($fingerprint);
     }
 
+
     /**
      * @param \SAML2\Certificate\Fingerprint $otherFingerprint
      *

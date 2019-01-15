@@ -19,6 +19,7 @@ class Logger implements LoggerInterface
         \SimpleSAML\Logger::emergency($message.($context ? " ".var_export($context, true) : ""));
     }
 
+
     /**
      * Action must be taken immediately.
      *
@@ -34,6 +35,7 @@ class Logger implements LoggerInterface
         \SimpleSAML\Logger::alert($message.($context ? " ".var_export($context, true) : ""));
     }
 
+
     /**
      * Critical conditions.
      *
@@ -48,6 +50,7 @@ class Logger implements LoggerInterface
         \SimpleSAML\Logger::critical($message.($context ? " ".var_export($context, true) : ""));
     }
 
+
     /**
      * Runtime errors that do not require immediate action but should typically
      * be logged and monitored.
@@ -60,6 +63,7 @@ class Logger implements LoggerInterface
     {
         \SimpleSAML\Logger::error($message.($context ? " ".var_export($context, true) : ""));
     }
+
 
     /**
      * Exceptional occurrences that are not errors.
@@ -76,6 +80,7 @@ class Logger implements LoggerInterface
         \SimpleSAML\Logger::warning($message.($context ? " ".var_export($context, true) : ""));
     }
 
+
     /**
      * Normal but significant events.
      *
@@ -87,6 +92,7 @@ class Logger implements LoggerInterface
     {
         \SimpleSAML\Logger::notice($message.($context ? " ".var_export($context, true) : ""));
     }
+
 
     /**
      * Interesting events.
@@ -102,6 +108,7 @@ class Logger implements LoggerInterface
         \SimpleSAML\Logger::info($message.($context ? " ".var_export($context, true) : ""));
     }
 
+
     /**
      * Detailed debug information.
      *
@@ -113,6 +120,7 @@ class Logger implements LoggerInterface
     {
         \SimpleSAML\Logger::debug($message.($context ? " ".var_export($context, true) : ""));
     }
+
 
     /**
      * Logs with an arbitrary level.

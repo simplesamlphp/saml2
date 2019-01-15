@@ -59,6 +59,7 @@ class EntitiesDescriptor extends SignedElementHelper
      */
     public $children = [];
 
+
     /**
      * Initialize an EntitiesDescriptor.
      *
@@ -96,6 +97,7 @@ class EntitiesDescriptor extends SignedElementHelper
         }
     }
 
+
     /**
      * Collect the value of the Name-property
      * @return string|null
@@ -104,6 +106,7 @@ class EntitiesDescriptor extends SignedElementHelper
     {
         return $this->Name;
     }
+
 
     /**
      * Set the value of the Name-property
@@ -115,6 +118,7 @@ class EntitiesDescriptor extends SignedElementHelper
         $this->Name = $name;
     }
 
+
     /**
      * Collect the value of the ID-property
      * @return string|null
@@ -123,6 +127,7 @@ class EntitiesDescriptor extends SignedElementHelper
     {
         return $this->ID;
     }
+
 
     /**
      * Set the value of the ID-property
@@ -134,6 +139,7 @@ class EntitiesDescriptor extends SignedElementHelper
         $this->ID = $Id;
     }
 
+
     /**
      * Collect the value of the validUntil-property
      * @return int|null
@@ -142,6 +148,7 @@ class EntitiesDescriptor extends SignedElementHelper
     {
         return $this->validUntil;
     }
+
 
     /**
      * Set the value of the validUntil-property
@@ -153,6 +160,7 @@ class EntitiesDescriptor extends SignedElementHelper
         $this->validUntil = $validUntil;
     }
 
+
     /**
      * Collect the value of the cacheDuration-property
      * @return string|null
@@ -161,6 +169,7 @@ class EntitiesDescriptor extends SignedElementHelper
     {
         return $this->cacheDuration;
     }
+
 
     /**
      * Set the value of the cacheDuration-property
@@ -172,6 +181,7 @@ class EntitiesDescriptor extends SignedElementHelper
         $this->cacheDuration = $cacheDuration;
     }
 
+
     /**
      * Collect the value of the Extensions-property
      * @return \SAML2\XML\Chunk[]
@@ -181,6 +191,7 @@ class EntitiesDescriptor extends SignedElementHelper
         return $this->Extensions;
     }
 
+
     /**
      * Set the value of the Extensions-property
      * @param array $extensions
@@ -189,6 +200,7 @@ class EntitiesDescriptor extends SignedElementHelper
     {
         $this->Extensions = $extensions;
     }
+
 
     /**
      * Add an Extension.
@@ -200,6 +212,7 @@ class EntitiesDescriptor extends SignedElementHelper
         $this->Extensions[] = $extension;
     }
 
+
     /**
      * Collect the value of the children-property
      * @return (\SAML2\XML\md\EntityDescriptor|\SAML2\XML\md\EntitiesDescriptor)[]
@@ -208,6 +221,7 @@ class EntitiesDescriptor extends SignedElementHelper
     {
         return $this->children;
     }
+
 
     /**
      * Set the value of the childen-property
@@ -218,6 +232,7 @@ class EntitiesDescriptor extends SignedElementHelper
         $this->children = $children;
     }
 
+
     /**
      * Add the value to the children-property
      * @param \SAML2\XML\md\EntityDescriptor|\SAML2\XML\md\EntitiesDescriptor $child
@@ -227,6 +242,7 @@ class EntitiesDescriptor extends SignedElementHelper
         assert($child instanceof EntityDescriptor || $child instanceof EntitiesDescriptor);
         $this->children[] = $child;
     }
+
 
     /**
      * Convert this EntitiesDescriptor to XML.

@@ -38,6 +38,7 @@ XML;
         $this->assertEquals("_bec424fa5103428909a30ff1e31168327f79474984", $response->getInResponseTo());
     }
 
+
     /**
      * A successful logout response
      */
@@ -68,5 +69,4 @@ XML;
         $this->assertNull($status['SubCode']);
         $this->assertNull($status['Message']);
     }
-
 }

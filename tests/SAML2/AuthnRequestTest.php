@@ -40,6 +40,7 @@ class AuthnRequestTest extends \PHPUnit_Framework_TestCase
         $this->assertEquals('accr2', $authnContextClassRefElements[1]->textContent);
     }
 
+
     public function testMarshallingOfSimpleRequest()
     {
         $xml = <<<AUTHNREQUEST
@@ -68,6 +69,7 @@ AUTHNREQUEST;
         );
         $this->assertEquals('https://sp.example.com/SAML2', $authnRequest->getIssuer());
     }
+
 
     /**
      * Test unmarshalling / marshalling of XML with Extensions element
@@ -105,6 +107,7 @@ AUTHNREQUEST;
         $this->assertXmlStringEqualsXmlString($document->C14N(), $authnRequest->toUnsignedXML()->C14N());
     }
 
+
     public function testThatTheSubjectIsCorrectlyRead()
     {
         $xml = <<<AUTHNREQUEST
@@ -130,6 +133,7 @@ AUTHNREQUEST;
         $this->assertEquals("urn:oasis:names:tc:SAML:1.1:nameid-format:unspecified", $nameId->Format);
     }
 
+
     public function testThatTheSubjectCanBeSetBySettingTheNameId()
     {
         $request = new AuthnRequest();
@@ -139,6 +143,7 @@ AUTHNREQUEST;
         $expected = '<saml:Subject><saml:NameID Format="urn:oasis:names:tc:SAML:1.1:nameid-format:unspecified">user@example.org</saml:NameID></saml:Subject>';
         $this->assertContains($expected, $requestAsXML);
     }
+
 
     public function testThatAnEncryptedNameIdCanBeDecrypted()
     {
@@ -181,6 +186,7 @@ AUTHNREQUEST;
         $this->assertEquals(md5('Arthur Dent'), $nameId->value);
         $this->assertEquals(Constants::NAMEID_ENCRYPTED, $nameId->Format);
     }
+
 
     /**
      * Due to the fact that the symmetric key is generated each time, we cannot test whether or not the resulting XML
@@ -238,6 +244,7 @@ AUTHNREQUEST;
         $this->assertEqualXMLStructure($expectedStructure, $requestStructure);
     }
 
+
     /**
      * Test for setting IDPEntry values via setIDPList.
      * Tests legacy support (single string), array of attributes, and skipping of unknown attributes.
@@ -277,6 +284,7 @@ AUTHNREQUEST;
         $this->assertEqualXMLStructure($expectedStructure, $requestStructure);
     }
 
+
     /**
      * Test for getting IDPlist values.
      */
@@ -310,6 +318,7 @@ AUTHNREQUEST;
         $this->assertEquals($expectedList, $list);
     }
 
+
     /**
      * Test that parsing IDPList without ProviderID throws exception.
      */
@@ -335,6 +344,7 @@ AUTHNREQUEST;
         $this->setExpectedException('Exception', 'Could not get ProviderID');
         $authnRequest = new AuthnRequest(DOMDocumentFactory::fromString($xmlRequest)->firstChild);
     }
+
 
     /**
      * Test setting a requesterID.
@@ -372,6 +382,7 @@ AUTHNREQUEST;
         $this->assertEqualXMLStructure($expectedStructure, $requestStructure);
     }
 
+
     /**
      * Test reading a requesterID.
      */
@@ -402,6 +413,7 @@ AUTHNREQUEST;
 
         $this->assertEquals($requesterId, $authnRequest->getRequesterID());
     }
+
 
     /**
      * Test setting a ProxyCount.
@@ -440,6 +452,7 @@ AUTHNREQUEST;
         $this->assertXmlStringEqualsXmlString($expectedStructure->ownerDocument->saveXML(), $requestStructure->ownerDocument->saveXML());
     }
 
+
     /**
      * Test reading ProxyCount
      */
@@ -469,6 +482,7 @@ AUTHNREQUEST;
 
         $this->assertEquals($proxyCount, $authnRequest->getProxyCount());
     }
+
 
     /**
      * Test getting NameIDPolicy
@@ -552,6 +566,7 @@ AUTHNREQUEST;
         $this->assertXmlStringEqualsXmlString($expectedStructure->ownerDocument->saveXML(), $requestStructure->ownerDocument->saveXML());
     }
 
+
     /**
      * Test setting NameIDPolicy with only a Format results in expected XML
      */
@@ -587,6 +602,7 @@ AUTHNREQUEST;
         $this->assertXmlStringEqualsXmlString($expectedStructure->ownerDocument->saveXML(), $requestStructure->ownerDocument->saveXML());
     }
 
+
     /**
      * Test setting NameIDPolicy with invalid type for AllowCreate.
      */
@@ -602,6 +618,7 @@ AUTHNREQUEST;
         $this->setExpectedException('InvalidArgumentException', 'Invalid Argument type: "bool" expected');
         $request->setNameIDPolicy($nameIdPolicy);
     }
+
 
     /**
      * Test setting NameIDPolicy with invalid type for SPNameQualifier.
@@ -619,6 +636,7 @@ AUTHNREQUEST;
         $request->setNameIDPolicy($nameIdPolicy);
     }
 
+
     /**
      * Test setting NameIDPolicy with one invalid type for Format.
      * It would be nice to iterate over various types to check this more thoroughly.
@@ -635,6 +653,7 @@ AUTHNREQUEST;
         $this->setExpectedException('InvalidArgumentException', 'Invalid Argument type: "string" expected');
         $request->setNameIDPolicy($nameIdPolicy);
     }
+
 
     /**
      * Test getting ForceAuthn
@@ -680,6 +699,7 @@ AUTHNREQUEST;
         $this->assertTrue($authnRequest->getForceAuthn());
     }
 
+
     /**
      * Test setting ForceAuthn
      */
@@ -713,6 +733,7 @@ AUTHNREQUEST;
 
         $this->assertXmlStringEqualsXmlString($expectedStructure->ownerDocument->saveXML(), $requestStructure->ownerDocument->saveXML());
     }
+
 
     /**
      * Test getting IsPassive
@@ -775,6 +796,7 @@ AUTHNREQUEST;
         $this->assertTrue($authnRequest->getIsPassive());
     }
 
+
     /**
      * Test setting IsPassive
      */
@@ -808,6 +830,7 @@ AUTHNREQUEST;
 
         $this->assertXmlStringEqualsXmlString($expectedStructure->ownerDocument->saveXML(), $requestStructure->ownerDocument->saveXML());
     }
+
 
     /**
      * Test setting ProviderName
@@ -870,6 +893,7 @@ AUTHNREQUEST;
         $this->assertEquals("Example SP", $authnRequest->getProviderName());
     }
 
+
     /**
      * Test setting ProtocolBinding and AssertionConsumerServiceURL
      */
@@ -907,6 +931,7 @@ AUTHNREQUEST;
         $this->assertXmlStringEqualsXmlString($expectedStructure->ownerDocument->saveXML(), $requestStructure->ownerDocument->saveXML());
     }
 
+
     /**
      * Test that having multiple subject tags throws an exception.
      */
@@ -935,6 +960,7 @@ AUTHNREQUEST;
         $authnRequest = new AuthnRequest(DOMDocumentFactory::fromString($xml)->documentElement);
     }
 
+
     /**
      * Test that having multiple NameIds in a subject tag throws an exception.
      */
@@ -961,6 +987,7 @@ AUTHNREQUEST;
         $authnRequest = new AuthnRequest(DOMDocumentFactory::fromString($xml)->documentElement);
     }
 
+
     /**
      * Test that a subject tag without a NameId throws an exception.
      */
@@ -984,6 +1011,7 @@ AUTHNREQUEST;
         $this->setExpectedException('Exception', 'Missing <saml:NameID> or <saml:EncryptedID> in <saml:Subject>');
         $authnRequest = new AuthnRequest(DOMDocumentFactory::fromString($xml)->documentElement);
     }
+
 
     /**
      * Test setting audiences.
@@ -1019,6 +1047,7 @@ AUTHNREQUEST;
 
         $this->assertEqualXMLStructure($expectedStructure, $requestStructure);
     }
+
 
     /**
      * Test reading audiences.

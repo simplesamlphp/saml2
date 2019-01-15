@@ -60,6 +60,7 @@ class SubjectConfirmationData
      */
     public $info = [];
 
+
     /**
      * Collect the value of the NotBefore-property
      * @return int|null
@@ -68,6 +69,7 @@ class SubjectConfirmationData
     {
         return $this->NotBefore;
     }
+
 
     /**
      * Set the value of the NotBefore-property
@@ -79,6 +81,7 @@ class SubjectConfirmationData
         $this->NotBefore = $notBefore;
     }
 
+
     /**
      * Collect the value of the NotOnOrAfter-property
      * @return int|null
@@ -87,6 +90,7 @@ class SubjectConfirmationData
     {
         return $this->NotOnOrAfter;
     }
+
 
     /**
      * Set the value of the NotOnOrAfter-property
@@ -98,6 +102,7 @@ class SubjectConfirmationData
         $this->NotOnOrAfter = $notOnOrAfter;
     }
 
+
     /**
      * Collect the value of the Recipient-property
      * @return string|null
@@ -106,6 +111,7 @@ class SubjectConfirmationData
     {
         return $this->Recipient;
     }
+
 
     /**
      * Set the value of the Recipient-property
@@ -117,6 +123,7 @@ class SubjectConfirmationData
         $this->Recipient = $recipient;
     }
 
+
     /**
      * Collect the value of the InResponseTo-property
      * @return string|null
@@ -125,6 +132,7 @@ class SubjectConfirmationData
     {
         return $this->InResponseTo;
     }
+
 
     /**
      * Set the value of the InResponseTo-property
@@ -136,6 +144,7 @@ class SubjectConfirmationData
         $this->InResponseTo = $inResponseTo;
     }
 
+
     /**
      * Collect the value of the Address-property
      * @return string|null
@@ -144,6 +153,7 @@ class SubjectConfirmationData
     {
         return $this->Address;
     }
+
 
     /**
      * Set the value of the Address-property
@@ -158,6 +168,7 @@ class SubjectConfirmationData
         $this->Address = $address;
     }
 
+
     /**
      * Collect the value of the info-property
      * @return (\SAML2\XML\ds\KeyInfo|\SAML2\XML\Chunk)[]
@@ -166,6 +177,7 @@ class SubjectConfirmationData
     {
         return $this->info;
     }
+
 
     /**
      * Set the value of the info-property
@@ -176,6 +188,7 @@ class SubjectConfirmationData
         $this->info = $info;
     }
 
+
     /**
      * Add the value to the info-property
      * @param \SAML2\XML\Chunk|\SAML2\XML\ds\KeyInfo $info
@@ -185,6 +198,7 @@ class SubjectConfirmationData
         assert($info instanceof Chunk || $info instanceof KeyInfo);
         $this->info[] = $info;
     }
+
 
     /**
      * Initialize (and parse) a SubjectConfirmationData element.
@@ -230,6 +244,7 @@ class SubjectConfirmationData
             }
         }
     }
+
 
     /**
      * Convert this element to XML.

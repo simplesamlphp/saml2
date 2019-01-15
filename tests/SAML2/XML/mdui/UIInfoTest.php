@@ -79,6 +79,7 @@ class UIInfoTest extends \PHPUnit_Framework_TestCase
         $this->assertEquals("en", $privurlElements[1]->getAttribute("xml:lang"));
     }
 
+
     /**
      * Test creating an UIinfo element with XML children
      */
@@ -151,6 +152,7 @@ class UIInfoTest extends \PHPUnit_Framework_TestCase
         $this->assertEquals("nl", $keywordElements[0]->getAttribute("xml:lang"));
     }
 
+
     /**
      * Test unmarshalling a basic UIInfo element
      */
@@ -181,6 +183,7 @@ XML
         $this->assertCount(1, $uiinfo->getDescription());
         $this->assertEquals('Just an example', $uiinfo->getDescription()['en']);
     }
+
 
     /**
      * Test unmarshalling wuth Logo, Keywords child elements

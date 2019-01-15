@@ -39,15 +39,18 @@ class ArtifactResponse extends StatusResponse
         }
     }
 
+
     public function setAny(\DOMElement $any = null)
     {
         $this->any = $any;
     }
 
+
     public function getAny()
     {
         return $this->any;
     }
+
 
     /**
      * Convert the response message to an XML element.

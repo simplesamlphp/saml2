@@ -19,6 +19,7 @@ class Response
      */
     public $AssertionConsumerServiceURL;
 
+
     /**
      * Create a ECP Response element.
      *
@@ -51,6 +52,7 @@ class Response
         $this->setAssertionConsumerServiceURL($xml->getAttribute('AssertionConsumerServiceURL'));
     }
 
+
     /**
      * Collect the value of the AssertionConsumerServiceURL-property
      * @return string
@@ -59,6 +61,7 @@ class Response
     {
         return $this->AssertionConsumerServiceURL;
     }
+
 
     /**
      * Set the value of the AssertionConsumerServiceURL-property
@@ -72,6 +75,7 @@ class Response
         }
         $this->AssertionConsumerServiceURL = $assertionConsumerServiceURL;
     }
+
 
     /**
      * Convert this ECP Response to XML.

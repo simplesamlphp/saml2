@@ -38,6 +38,7 @@ class Logo
      */
     public $lang;
 
+
     /**
      * Initialize a Logo.
      *
@@ -67,6 +68,7 @@ class Logo
         }
     }
 
+
     /**
      * Collect the value of the url-property
      * @return string
@@ -75,6 +77,7 @@ class Logo
     {
         return $this->url;
     }
+
 
     /**
      * Set the value of the url-property
@@ -89,6 +92,7 @@ class Logo
         $this->url = $url;
     }
 
+
     /**
      * Collect the value of the lang-property
      * @return string
@@ -97,6 +101,7 @@ class Logo
     {
         return $this->lang;
     }
+
 
     /**
      * Set the value of the lang-property
@@ -108,6 +113,7 @@ class Logo
         $this->lang = $lang;
     }
 
+
     /**
      * Collect the value of the height-property
      * @return int
@@ -116,6 +122,7 @@ class Logo
     {
         return $this->height;
     }
+
 
     /**
      * Set the value of the height-property
@@ -127,6 +134,7 @@ class Logo
         $this->height = $height;
     }
 
+
     /**
      * Collect the value of the width-property
      * @return int
@@ -135,6 +143,7 @@ class Logo
     {
         return $this->width;
     }
+
 
     /**
      * Set the value of the width-property
@@ -145,6 +154,7 @@ class Logo
         assert(is_int($width));
         $this->width = $width;
     }
+
 
     /**
      * Convert this Logo to XML.

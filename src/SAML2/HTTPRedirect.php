@@ -13,6 +13,7 @@ class HTTPRedirect extends Binding
 {
     const DEFLATE = 'urn:oasis:names:tc:SAML:2.0:bindings:URL-Encoding:DEFLATE';
 
+
     /**
      * Create the redirect URL for a message.
      *
@@ -69,6 +70,7 @@ class HTTPRedirect extends Binding
         return $destination;
     }
 
+
     /**
      * Send a SAML 2 message using the HTTP-Redirect binding.
      *
@@ -82,6 +84,7 @@ class HTTPRedirect extends Binding
         Utils::getContainer()->getLogger()->debug('Redirect to '.strlen($destination).' byte URL: '.$destination);
         Utils::getContainer()->redirect($destination);
     }
+
 
     /**
      * Receive a SAML 2 message sent using the HTTP-Redirect binding.
@@ -147,6 +150,7 @@ class HTTPRedirect extends Binding
         return $message;
     }
 
+
     /**
      * Helper function to parse query data.
      *
@@ -197,6 +201,7 @@ class HTTPRedirect extends Binding
 
         return $data;
     }
+
 
     /**
      * Validate the signature on a HTTP-Redirect message.

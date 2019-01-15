@@ -20,6 +20,7 @@ class RequestedAttribute extends Attribute
      */
     public $isRequired = null;
 
+
     /**
      * Initialize an RequestedAttribute.
      *
@@ -36,6 +37,7 @@ class RequestedAttribute extends Attribute
         $this->setIsRequired(Utils::parseBoolean($xml, 'isRequired', null));
     }
 
+
     /**
      * Collect the value of the isRequired-property
      * @return boolean|null
@@ -44,6 +46,7 @@ class RequestedAttribute extends Attribute
     {
         return $this->isRequired;
     }
+
 
     /**
      * Set the value of the isRequired-property
@@ -54,6 +57,7 @@ class RequestedAttribute extends Attribute
         assert(is_bool($flag) || is_null($flag));
         $this->isRequired = $flag;
     }
+
 
     /**
      * Convert this RequestedAttribute to XML.

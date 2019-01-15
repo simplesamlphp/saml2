@@ -17,6 +17,7 @@ class ArrayAdapterTest extends \PHPUnit_Framework_TestCase
         $this->assertEquals('bar', $configuration->get('foo'));
     }
 
+
     /**
      * @group configuration
      * @test

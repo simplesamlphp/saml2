@@ -15,10 +15,12 @@ class DestinationMatches implements
      */
     private $expectedDestination;
 
+
     public function __construct(Destination $destination)
     {
         $this->expectedDestination = $destination;
     }
+
 
     public function validate(Response $response, Result $result)
     {

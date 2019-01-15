@@ -14,6 +14,7 @@ class Destination
      */
     private $destination;
 
+
     /**
      * @param string $destination
      */
@@ -26,6 +27,7 @@ class Destination
         $this->destination = $destination;
     }
 
+
     /**
      * @param \SAML2\Configuration\Destination $otherDestination
      *
@@ -35,6 +37,7 @@ class Destination
     {
         return $this->destination === $otherDestination->destination;
     }
+
 
     public function __toString()
     {

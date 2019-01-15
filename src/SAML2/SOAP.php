@@ -54,6 +54,7 @@ SOAP;
         return $doc->saveXML();
     }
 
+
     /**
      * Send a SAML 2 message using the SOAP binding.
      *
@@ -73,6 +74,7 @@ SOAP;
 
         exit(0);
     }
+
 
     /**
      * Receive a SAML 2 message sent using the HTTP-POST binding.
@@ -97,6 +99,7 @@ SOAP;
 
         return Message::fromXML($results[0]);
     }
+
 
     protected function getInputStream()
     {

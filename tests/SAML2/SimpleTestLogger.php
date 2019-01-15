@@ -12,6 +12,7 @@ class SimpleTestLogger extends \Psr\Log\AbstractLogger
      */
     private $messages = [];
 
+
     public function log($level, $message, array $context = [])
     {
         $this->messages[] = [
@@ -20,6 +21,7 @@ class SimpleTestLogger extends \Psr\Log\AbstractLogger
             'context' => $context
         ];
     }
+
 
     /**
      * Get all the messages logged at the specified level
@@ -33,6 +35,7 @@ class SimpleTestLogger extends \Psr\Log\AbstractLogger
             return $message['level'] === $level;
         });
     }
+
 
     /**
      * Check if the given message exists within the log

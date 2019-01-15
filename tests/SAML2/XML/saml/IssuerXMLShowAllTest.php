@@ -12,7 +12,6 @@ use SAML2\XML\saml\Issuer;
  */
 class IssuerShowAllTest extends \PHPUnit_Framework_TestCase
 {
-    
     public function testMarshalling()
     {
         $issuer = new Issuer();
@@ -33,6 +32,7 @@ class IssuerShowAllTest extends \PHPUnit_Framework_TestCase
         $this->assertEquals('TheIssuerValue', $issuerElement->textContent);
     }
 
+
     public function testUnmarshalling()
     {
         $samlNamespace = Constants::NS_SAML;
@@ -49,6 +49,7 @@ XML
         $this->assertEquals('TheIssuerValue', $issuer->getValue());
     }
 
+
     public function testToStringShowAllTrueFormatNameID()
     {
         $issuer = new Issuer();
@@ -64,6 +65,8 @@ XML
 
         $this->assertXmlStringEqualsXmlString($output, $issuer->__toString());
     }
+
+
     public function testToStringShowAllFalseFormatNameID()
     {
         $issuer = new Issuer();
@@ -78,6 +81,8 @@ XML
         
         $this->assertXmlStringEqualsXmlString($output, $issuer->__toString());
     }
+
+
     public function testToStringShowAllTrueNOTNameIDFormat()
     {
         $issuer = new Issuer();
@@ -94,6 +99,8 @@ XML
         
         $this->assertXmlStringEqualsXmlString($output, $issuer->__toString());
     }
+
+
     public function testToStringShowAllDefaultNOTNameIDFormat()
     {
         $issuer = new Issuer();
@@ -110,6 +117,8 @@ XML
         
         $this->assertXmlStringEqualsXmlString($output, $issuer->__toString());
     }
+
+
     public function testToStringShowAllDefaultNameIDFormat()
     {
         $issuer = new Issuer();
@@ -125,6 +134,4 @@ XML
         
         $this->assertXmlStringEqualsXmlString($output, $issuer->__toString());
     }
-    
-    
 }

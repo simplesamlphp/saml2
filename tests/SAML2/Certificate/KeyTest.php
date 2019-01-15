@@ -17,6 +17,7 @@ class KeyTest extends \PHPUnit_Framework_TestCase
         $key->canBeUsedFor('foo');
     }
 
+
     /**
      * @group certificate
      * @dataProvider functionProvider
@@ -47,6 +48,7 @@ class KeyTest extends \PHPUnit_Framework_TestCase
         $this->assertFalse($key->canBeUsedFor(Key::USAGE_ENCRYPTION));
     }
 
+
     /**
      * @group certificate
      *
@@ -57,6 +59,7 @@ class KeyTest extends \PHPUnit_Framework_TestCase
         $key = new Key([Key::USAGE_SIGNING => true]);
         $this->assertTrue($key->offsetGet(Key::USAGE_SIGNING));
     }
+
 
     /**
      * @group certificate
@@ -75,6 +78,7 @@ class KeyTest extends \PHPUnit_Framework_TestCase
         $this->assertFalse($key->offsetExists(Key::USAGE_SIGNING));
         $this->assertFalse($key->offsetExists(Key::USAGE_ENCRYPTION));
     }
+
 
     public function functionProvider()
     {

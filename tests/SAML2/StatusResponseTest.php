@@ -34,6 +34,7 @@ class StatusResponseTest extends \PHPUnit_Framework_TestCase
         $this->assertEquals('OurMessageText', $statusMessageElements[0]->textContent);
     }
 
+
     public function testUnmarshalling()
     {
         $xml = <<<XML
@@ -65,6 +66,7 @@ XML;
         $this->assertEquals("_bec424fa5103428909a30ff1e31168327f79474984", $response->getInResponseTo());
     }
 
+
     /**
      * A status reponse that is not an error
      */
@@ -95,6 +97,7 @@ XML;
         $this->assertNull($status['SubCode']);
         $this->assertNull($status['Message']);
     }
+
 
     /**
      * See if we can parse a StatusResponse with a subcode
@@ -130,6 +133,7 @@ XML;
         $this->assertEquals("The AuthnRequest could not be validated", $status['Message']);
     }
 
+
     /**
      * Test adding in-response-to to a status message.
      */
@@ -162,6 +166,7 @@ STATUSXML
        $this->assertEqualXMLStructure($expectedStructure, $responseElement);
     }
 
+
     /**
      * A response without any <Status> element throws exception
      */
@@ -193,6 +198,7 @@ XML;
         $response           = new Response($fixtureResponseDom->firstChild);
     }
 
+
     /**
      * StatusCode is required in a StatusResponse.
      */
@@ -218,5 +224,4 @@ XML;
         $fixtureResponseDom = DOMDocumentFactory::fromString($xml);
         $response           = new Response($fixtureResponseDom->firstChild);
     }
-
 }

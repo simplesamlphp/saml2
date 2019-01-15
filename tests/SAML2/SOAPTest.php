@@ -17,6 +17,7 @@ class SOAPTest extends PHPUnit_Framework_TestCase
         $stub->receive();
     }
 
+
     public function testRequestParsing()
     {
         $id = '_6c3a4f8b9c2d';
@@ -48,6 +49,7 @@ SOAP
 
         // TODO Validate XML signature is received?
     }
+
 
     public function testSendArtifactResponse()
     {
@@ -100,6 +102,7 @@ SOAP;
         $this->assertEquals($expected, $output);
     }
 
+
     public function testSendResponse()
     {
         $doc = new DOMDocument();
@@ -142,7 +145,7 @@ SOAP;
   </saml:Assertion>
 </samlp:Response>
 XML
-    );
+        );
 
         $message = Message::fromXML($doc->getElementsByTagName('Response')->item(0));
 
@@ -160,6 +163,7 @@ SOAP;
 
         $this->assertEquals($expected, $output);
     }
+
 
     private function getStubWithInput($input)
     {

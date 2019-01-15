@@ -29,6 +29,7 @@ class KeyInfo
      */
     public $info = [];
 
+
     /**
      * Initialize a KeyInfo element.
      *
@@ -67,6 +68,7 @@ class KeyInfo
         }
     }
 
+
     /**
      * Collect the value of the Id-property
      * @return string|null
@@ -75,6 +77,7 @@ class KeyInfo
     {
         return $this->Id;
     }
+
 
     /**
      * Set the value of the Id-property
@@ -86,6 +89,7 @@ class KeyInfo
         $this->Id = $id;
     }
 
+
     /**
      * Collect the value of the info-property
      * @return array
@@ -94,6 +98,7 @@ class KeyInfo
     {
         return $this->info;
     }
+
 
     /**
      * Set the value of the info-property
@@ -104,6 +109,7 @@ class KeyInfo
         $this->info = $info;
     }
 
+
     /**
      * Add the value to the info-property
      * @param \SAML2\XML\Chunk|\SAML2\XML\ds\KeyName|\SAML2\XML\ds\X509Data $info
@@ -113,6 +119,7 @@ class KeyInfo
         assert($info instanceof Chunk || $info instanceof KeyName || $info instanceof X509Data);
         $this->info[] = $info;
     }
+
 
     /**
      * Convert this KeyInfo to XML.

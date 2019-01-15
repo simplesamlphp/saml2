@@ -32,6 +32,7 @@ class SubjectConfirmationTest extends \PHPUnit_Framework_TestCase
         $this->assertCount(1, Utils::xpQuery($subjectConfirmationElement, "./saml_assertion:SubjectConfirmationData"));
     }
 
+
     public function testUnmarshalling()
     {
         $samlNamespace = Constants::NS_SAML;
@@ -67,6 +68,7 @@ XML
         $subjectConfirmation = new SubjectConfirmation($document->firstChild);
     }
 
+
     public function testManyNameIDThrowsException()
     {
         $samlNamespace = Constants::NS_SAML;
@@ -83,6 +85,7 @@ XML
         $this->setExpectedException('Exception', 'More than one NameID in a SubjectConfirmation element');
         $subjectConfirmation = new SubjectConfirmation($document->firstChild);
     }
+
 
     public function testManySubjectConfirmationDataThrowsException()
     {

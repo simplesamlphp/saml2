@@ -15,15 +15,18 @@ class IdentityProvider extends ArrayAdapter implements
         return $this->get('keys');
     }
 
+
     public function getCertificateData()
     {
         return $this->get('certificateData');
     }
 
+
     public function getCertificateFile()
     {
         return $this->get('certificateFile');
     }
+
 
     /**
      * @deprecated Please use getCertifiateFile() or getCertificateData()
@@ -33,20 +36,24 @@ class IdentityProvider extends ArrayAdapter implements
         return $this->get('certificateFingerprints');
     }
 
+
     public function isAssertionEncryptionRequired()
     {
         return $this->get('assertionEncryptionEnabled');
     }
+
 
     public function getSharedKey()
     {
         return $this->get('sharedKey');
     }
 
+
     public function hasBase64EncodedAttributes()
     {
         return $this->get('base64EncodedAttributes');
     }
+
 
     public function getPrivateKey($name, $required = false)
     {
@@ -72,10 +79,12 @@ class IdentityProvider extends ArrayAdapter implements
         return array_pop($key);
     }
 
+
     public function getBlacklistedAlgorithms()
     {
         return $this->get('blacklistedEncryptionAlgorithms');
     }
+
 
     /**
      * @return null|string

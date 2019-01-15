@@ -23,11 +23,13 @@ class FingerprintValidatorTest extends \PHPUnit_Framework_TestCase
      */
     private $mockConfiguration;
 
+
     public function setUp()
     {
         $this->mockConfiguration = \Mockery::mock('SAML2\Configuration\CertificateProvider');
         $this->mockSignedElement = \Mockery::mock('SAML2\SignedElement');
     }
+
 
     /**
      * @test
@@ -45,6 +47,7 @@ class FingerprintValidatorTest extends \PHPUnit_Framework_TestCase
         $this->assertFalse($validator->canValidate($this->mockSignedElement, $this->mockConfiguration));
     }
 
+
     /**
      * @test
      * @group signature
@@ -61,6 +64,7 @@ class FingerprintValidatorTest extends \PHPUnit_Framework_TestCase
 
         $this->assertFalse($validator->canValidate($this->mockSignedElement, $this->mockConfiguration));
     }
+
 
     /**
      * @test

@@ -55,6 +55,7 @@ class DiscoHintsTest extends \PHPUnit_Framework_TestCase
         $this->assertEquals("geo:19.34343,12.342514", $geoHintElements[1]->textContent);
     }
 
+
     /**
      * Create an empty discoHints element
      */
@@ -67,6 +68,7 @@ class DiscoHintsTest extends \PHPUnit_Framework_TestCase
 
         $this->assertNull($xml);
     }
+
 
     /**
      * Test unmarshalling a basic DiscoHints element
@@ -98,6 +100,7 @@ XML
         $this->assertEquals('geo:19.34343,12.342514', $disco->getGeolocationHint()[1]);
     }
 
+
     /**
      * Add a Keywords element to the children attribute
      */
@@ -121,6 +124,7 @@ XML
         $this->assertEquals("mdui:Keywords", $discoElement->firstChild->nodeName);
         $this->assertEquals("voorbeeld specimen", $discoElement->firstChild->textContent);
     }
+
 
     /**
      * Umarshal a DiscoHints attribute with extra children

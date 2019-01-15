@@ -32,6 +32,7 @@ class KeywordsTest extends \PHPUnit_Framework_TestCase
         $this->assertEquals("en", $keywordElement->getAttribute('xml:lang'));
     }
 
+
     /**
      * Keyword may not contain a "+", Exception expected.
      */
@@ -46,6 +47,7 @@ class KeywordsTest extends \PHPUnit_Framework_TestCase
         $this->setExpectedException('Exception', 'Keywords may not contain a "+" character');
         $xml = $keywords->toXML($document->firstChild);
     }
+
 
     /**
      * Unmarshalling of a keywords tag
@@ -65,6 +67,7 @@ XML
         $this->assertEquals("luchtvaart maatschappij", $keywords->getKeywords()[2]);
     }
 
+
     /**
      * Unmarshalling fails if lang attribute not present
      */
@@ -78,6 +81,7 @@ XML
         $this->setExpectedException('Exception', 'Missing lang on Keywords');
         $keywords = new Keywords($document->firstChild);
     }
+
 
     /**
      * Unmarshalling fails if attribute is empty

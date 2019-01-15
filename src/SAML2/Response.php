@@ -14,6 +14,7 @@ class Response extends StatusResponse
      */
     private $assertions;
 
+
     /**
      * Constructor for SAML 2 response messages.
      *
@@ -42,6 +43,7 @@ class Response extends StatusResponse
         }
     }
 
+
     /**
      * Retrieve the assertions in this response.
      *
@@ -52,6 +54,7 @@ class Response extends StatusResponse
         return $this->assertions;
     }
 
+
     /**
      * Set the assertions that should be included in this response.
      *
@@ -61,6 +64,7 @@ class Response extends StatusResponse
     {
         $this->assertions = $assertions;
     }
+
 
     /**
      * Convert the response message to an XML element.

@@ -14,7 +14,8 @@ class FileTest extends \PHPUnit_Framework_TestCase
         File::getFileContents('/foo/bar/baz/quux');
     }
 
-   /**
+
+    /**
      * @group utilities
      * @test
      */
@@ -23,6 +24,7 @@ class FileTest extends \PHPUnit_Framework_TestCase
         $this->setExpectedException('SAML2\Exception\InvalidArgumentException', 'Invalid Argument type: "string" expected, "NULL" given');
         File::getFileContents(null);
     }
+
 
     /**
      * @group utilities

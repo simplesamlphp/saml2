@@ -15,10 +15,12 @@ class DecodeBase64Transformer implements
      */
     private $identityProvider;
 
+
     public function setIdentityProvider(IdentityProvider $identityProvider)
     {
         $this->identityProvider = $identityProvider;
     }
+
 
     public function transform(Assertion $assertion)
     {
@@ -34,6 +36,7 @@ class DecodeBase64Transformer implements
 
         $assertion->setAttributes($attributes);
     }
+
 
     /**
      * @param $value

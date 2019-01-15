@@ -36,6 +36,7 @@ class SignedElementHelper implements SignedElement
      */
     private $validators;
 
+
     /**
      * Initialize the helper class.
      *
@@ -66,6 +67,7 @@ class SignedElementHelper implements SignedElement
         }
     }
 
+
     /**
      * Add a method for validating this element.
      *
@@ -83,6 +85,7 @@ class SignedElementHelper implements SignedElement
             'Data' => $data,
         ];
     }
+
 
     /**
      * Validate this element against a public key.
@@ -121,6 +124,7 @@ class SignedElementHelper implements SignedElement
         throw $exceptions[0];
     }
 
+
     /**
      * Retrieve the private key we should use to sign the message.
      *
@@ -130,6 +134,7 @@ class SignedElementHelper implements SignedElement
     {
         return $this->signatureKey;
     }
+
 
     /**
      * Set the private key we should use to sign the message.
@@ -143,6 +148,7 @@ class SignedElementHelper implements SignedElement
         $this->signatureKey = $signatureKey;
     }
 
+
     /**
      * Set the certificates that should be included in the message.
      *
@@ -155,6 +161,7 @@ class SignedElementHelper implements SignedElement
         $this->certificates = $certificates;
     }
 
+
     /**
      * Retrieve the certificates that are included in the message.
      *
@@ -164,6 +171,7 @@ class SignedElementHelper implements SignedElement
     {
         return $this->certificates;
     }
+
 
     /**
      * Retrieve certificates that sign this element.
@@ -195,6 +203,7 @@ class SignedElementHelper implements SignedElement
 
         return $ret;
     }
+
 
     /**
      * Sign the given XML element.

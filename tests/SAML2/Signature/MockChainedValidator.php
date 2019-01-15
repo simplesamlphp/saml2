@@ -21,6 +21,7 @@ class MockChainedValidator extends AbstractChainedValidator
      */
     private $isValid;
 
+
     /**
      * Constructor that allows to control the behavior of the Validator
      *
@@ -35,12 +36,14 @@ class MockChainedValidator extends AbstractChainedValidator
         parent::__construct(new \Psr\Log\NullLogger());
     }
 
+
     public function canValidate(
         SignedElement $signedElement,
         CertificateProvider $configuration
     ) {
         return $this->canValidate;
     }
+
 
     public function hasValidSignature(
         SignedElement $signedElement,

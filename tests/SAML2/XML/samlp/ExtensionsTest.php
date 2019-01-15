@@ -16,6 +16,7 @@ class ExtensionsTest extends \PHPUnit_Framework_TestCase
      */
     private $testElement;
 
+
     /**
      * Prepare a basic DOMelement to test against
      */
@@ -46,6 +47,7 @@ XML
         $this->testElement = $document->documentElement;
     }
 
+
     /**
      * Test the getList() method.
      */
@@ -57,6 +59,7 @@ XML
         $this->assertEquals("urn:mynamespace", $list[0]->namespaceURI);
         $this->assertEquals("ExampleElement", $list[1]->localName);
     }
+
 
     /**
      * Adding empty list should leave existing extensions unchanged.
@@ -71,6 +74,7 @@ XML
         $this->assertEquals("urn:mynamespace", $list[0]->namespaceURI);
         $this->assertEquals("ExampleElement", $list[1]->localName);
     }
+
 
     /**
      * Test adding two random elements.

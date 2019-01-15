@@ -43,6 +43,7 @@ class SPSSODescriptor extends SSODescriptorType
      */
     public $AttributeConsumingService = [];
 
+
     /**
      * Initialize a SPSSODescriptor.
      *
@@ -68,6 +69,7 @@ class SPSSODescriptor extends SSODescriptorType
         }
     }
 
+
     /**
      * Collect the value of the AuthnRequestsSigned-property
      * @return bool|null
@@ -76,6 +78,7 @@ class SPSSODescriptor extends SSODescriptorType
     {
         return $this->AuthnRequestsSigned;
     }
+
 
     /**
      * Set the value of the AuthnRequestsSigned-property
@@ -87,6 +90,7 @@ class SPSSODescriptor extends SSODescriptorType
         $this->AuthnRequestsSigned = $flag;
     }
 
+
     /**
      * Collect the value of the WantAssertionsSigned-property
      * @return bool|null
@@ -95,6 +99,7 @@ class SPSSODescriptor extends SSODescriptorType
     {
         return $this->WantAssertionsSigned;
     }
+
 
     /**
      * Set the value of the WantAssertionsSigned-property
@@ -106,6 +111,7 @@ class SPSSODescriptor extends SSODescriptorType
         $this->WantAssertionsSigned = $flag;
     }
 
+
     /**
      * Collect the value of the AssertionConsumerService-property
      * @return array
@@ -114,6 +120,7 @@ class SPSSODescriptor extends SSODescriptorType
     {
         return $this->AssertionConsumerService;
     }
+
 
     /**
      * Set the value of the AssertionConsumerService-property
@@ -124,6 +131,7 @@ class SPSSODescriptor extends SSODescriptorType
         $this->AssertionConsumerService = $acs;
     }
 
+
     /**
      * Add the value to the AssertionConsumerService-property
      * @param \SAML2\XML\md\IndexedEndpointType $acs
@@ -132,6 +140,7 @@ class SPSSODescriptor extends SSODescriptorType
     {
         $this->AssertionConsumerService[] = $acs;
     }
+
 
     /**
      * Collect the value of the AttributeConsumingService-property
@@ -142,6 +151,7 @@ class SPSSODescriptor extends SSODescriptorType
         return $this->AttributeConsumingService;
     }
 
+
     /**
      * Add the value to the AttributeConsumingService-property
      * @param \SAML2\XML\md\AttributeConsumingService $acs
@@ -150,6 +160,7 @@ class SPSSODescriptor extends SSODescriptorType
     {
         $this->AttributeConsumingService[] = $acs;
     }
+
 
     /**
      * Set the value of the AttributeConsumingService-property

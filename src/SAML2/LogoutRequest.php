@@ -43,6 +43,7 @@ class LogoutRequest extends Request
      */
     private $sessionIndexes;
 
+
     /**
      * Constructor for SAML 2 logout request messages.
      *
@@ -83,6 +84,7 @@ class LogoutRequest extends Request
         }
     }
 
+
     /**
      * Retrieve the expiration time of this request.
      *
@@ -92,6 +94,7 @@ class LogoutRequest extends Request
     {
         return $this->notOnOrAfter;
     }
+
 
     /**
      * Set the expiration time of this request.
@@ -104,6 +107,7 @@ class LogoutRequest extends Request
 
         $this->notOnOrAfter = $notOnOrAfter;
     }
+
 
     /**
      * Check whether the NameId is encrypted.
@@ -118,6 +122,7 @@ class LogoutRequest extends Request
 
         return false;
     }
+
 
     /**
      * Encrypt the NameID in the LogoutRequest.
@@ -148,6 +153,7 @@ class LogoutRequest extends Request
         $this->setNameId(null);
     }
 
+
     /**
      * Decrypt the NameID in the LogoutRequest.
      *
@@ -169,6 +175,7 @@ class LogoutRequest extends Request
         $this->setEncryptedNameId(null);
     }
 
+
     /**
      * Retrieve the name identifier of the session that should be terminated.
      *
@@ -184,6 +191,7 @@ class LogoutRequest extends Request
         return $this->nameId;
     }
 
+
     /**
      * Set the name identifier of the session that should be terminated.
      *
@@ -198,6 +206,8 @@ class LogoutRequest extends Request
         }
         $this->nameId = $nameId;
     }
+
+
     /**
      * Retrieve the encrypted name identifier.
      *
@@ -207,6 +217,7 @@ class LogoutRequest extends Request
     {
         return $this->encryptedNameId;
     }
+
 
     /**
      * Set the encrypted name identifier.
@@ -218,6 +229,7 @@ class LogoutRequest extends Request
         $this->encryptedNameId = $nameId;
     }
 
+
     /**
      * Retrieve the SessionIndexes of the sessions that should be terminated.
      *
@@ -228,6 +240,7 @@ class LogoutRequest extends Request
         return $this->sessionIndexes;
     }
 
+
     /**
      * Set the SessionIndexes of the sessions that should be terminated.
      *
@@ -237,6 +250,7 @@ class LogoutRequest extends Request
     {
         $this->sessionIndexes = $sessionIndexes;
     }
+
 
     /**
      * Retrieve the sesion index of the session that should be terminated.
@@ -251,6 +265,7 @@ class LogoutRequest extends Request
 
         return $this->sessionIndexes[0];
     }
+
 
     /**
      * Set the sesion index of the session that should be terminated.
@@ -267,6 +282,7 @@ class LogoutRequest extends Request
             $this->sessionIndexes = [$sessionIndex];
         }
     }
+
 
     /**
      * Convert this logout request message to an XML element.

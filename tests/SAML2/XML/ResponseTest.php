@@ -19,6 +19,7 @@ class ResponseTest extends PHPUnit_Framework_TestCase
         $this->assertNull($response->getAssertionConsumerServiceURL());
     }
 
+
     public function testToXMLReturnsResponse()
     {
         $doc = new DOMDocument;
@@ -31,6 +32,7 @@ class ResponseTest extends PHPUnit_Framework_TestCase
         $this->assertInstanceOf('DOMElement', $return);
         $this->assertEquals('ecp:Response', $return->tagName);
     }
+
 
     public function testToXMLResponseAttributes()
     {
@@ -50,6 +52,7 @@ class ResponseTest extends PHPUnit_Framework_TestCase
         $this->assertTrue($return->hasAttribute('AssertionConsumerServiceURL'));
         $this->assertEquals($acs, $return->getAttribute('AssertionConsumerServiceURL'));
     }
+
 
     public function testToXMLResponseAppended()
     {

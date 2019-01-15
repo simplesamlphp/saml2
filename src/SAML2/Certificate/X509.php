@@ -12,6 +12,7 @@ class X509 extends Key
      */
     private $fingerprint;
 
+
     public static function createFromCertificateData($certificateContents)
     {
         $data = [
@@ -23,6 +24,7 @@ class X509 extends Key
 
         return new self($data);
     }
+
 
     /**
      * {@inheritdoc} Best place to ensure the logic is encapsulated in a single place
@@ -36,6 +38,7 @@ class X509 extends Key
         parent::offsetSet($offset, $value);
     }
 
+
     /**
      * Get the certificate representation
      *
@@ -47,6 +50,7 @@ class X509 extends Key
                 . chunk_split($this->keyData['X509Certificate'], 64)
                 . "-----END CERTIFICATE-----\n";
     }
+
 
     /**
      * @return \SAML2\Certificate\Fingerprint

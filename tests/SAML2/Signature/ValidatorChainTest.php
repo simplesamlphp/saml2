@@ -12,10 +12,12 @@ class ValidatorChainTest extends \PHPUnit_Framework_TestCase
      */
     private $chain;
 
+
     public function setUp()
     {
         $this->chain = new ValidatorChain(new \Psr\Log\NullLogger(), []);
     }
+
 
     /**
      * @group signature
@@ -30,6 +32,7 @@ class ValidatorChainTest extends \PHPUnit_Framework_TestCase
 
         $this->chain->hasValidSignature(new Response(), new IdentityProvider([]));
     }
+
 
     /**
      * @group signature
@@ -48,6 +51,7 @@ class ValidatorChainTest extends \PHPUnit_Framework_TestCase
         );
         $this->assertFalse($validationResult, 'The validation result is not what is expected');
     }
+
 
     /**
      * @group signature

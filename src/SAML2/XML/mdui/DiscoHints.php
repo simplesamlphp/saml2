@@ -43,6 +43,7 @@ class DiscoHints
      */
     public $GeolocationHint = [];
 
+
     /**
      * Create a DiscoHints element.
      *
@@ -63,6 +64,7 @@ class DiscoHints
         }
     }
 
+
     /**
      * Collect the value of the IPHint-property
      * @return string[]
@@ -71,6 +73,7 @@ class DiscoHints
     {
         return $this->IPHint;
     }
+
 
     /**
      * Set the value of the IPHint-property
@@ -81,6 +84,7 @@ class DiscoHints
         $this->IPHint = $hints;
     }
 
+
     /**
      * Collect the value of the DomainHint-property
      * @return string[]
@@ -89,6 +93,7 @@ class DiscoHints
     {
         return $this->DomainHint;
     }
+
 
     /**
      * Set the value of the DomainHint-property
@@ -99,6 +104,7 @@ class DiscoHints
         $this->DomainHint = $hints;
     }
 
+
     /**
      * Collect the value of the GeolocationHint-property
      * @return string[]
@@ -107,6 +113,7 @@ class DiscoHints
     {
         return $this->GeolocationHint;
     }
+
 
     /**
      * Set the value of the GeolocationHint-property
@@ -117,6 +124,7 @@ class DiscoHints
         $this->GeolocationHint = $hints;
     }
 
+
     /**
      * Collect the value of the children-property
      * @return \SAML2\XML\Chunk[]
@@ -125,6 +133,7 @@ class DiscoHints
     {
         return $this->children;
     }
+
 
     /**
      * Set the value of the childen-property
@@ -135,6 +144,7 @@ class DiscoHints
         $this->children = $children;
     }
 
+
     /**
      * Add the value to the children-property
      * @param \SAML2\XML\Chunk $child
@@ -144,6 +154,7 @@ class DiscoHints
         assert($child instanceof Chunk);
         $this->children[] = $child;
     }
+
 
     /**
      * Convert this DiscoHints to XML.

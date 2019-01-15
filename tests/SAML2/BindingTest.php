@@ -26,6 +26,7 @@ class BindingTest extends PHPUnit_Framework_TestCase
         $bind = Binding::getBinding('nonsense');
     }
 
+
     /**
      * Test binding guessing functionality.
      */
@@ -48,6 +49,8 @@ class BindingTest extends PHPUnit_Framework_TestCase
         $this->setExpectedException('Exception', 'Unable to find the current binding.');
         $bind = Binding::getCurrentBinding();
     }
+
+
     /**
      * Test binding guessing functionality.
      */
@@ -77,6 +80,7 @@ class BindingTest extends PHPUnit_Framework_TestCase
         $bind = Binding::getCurrentBinding();
     }
 
+
     /**
      * Test binding guessing functionality with unsupported HTTP method.
      */
@@ -88,8 +92,9 @@ class BindingTest extends PHPUnit_Framework_TestCase
         $bind = Binding::getCurrentBinding();
     }
 
+
     /**
-     * test destination getter and setter.
+     * Test destination getter and setter.
      */
     public function testGetSetDestination()
     {

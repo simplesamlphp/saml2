@@ -11,6 +11,7 @@ class ContainerSingleton
      */
     protected static $container;
 
+
     /**
      * @return \SAML2\Compat\AbstractContainer
      */
@@ -21,6 +22,7 @@ class ContainerSingleton
         }
         return self::$container;
     }
+
 
     /**
      * Set a container to use.
@@ -33,6 +35,7 @@ class ContainerSingleton
         self::$container = $container;
         return $container;
     }
+
 
     /**
      * @return \SAML2\Compat\Ssp\Container

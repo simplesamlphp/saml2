@@ -17,6 +17,7 @@ class SOAPClient
     const START_SOAP_ENVELOPE = '<soap-env:Envelope xmlns:soap-env="http://schemas.xmlsoap.org/soap/envelope/"><soap-env:Header/><soap-env:Body>';
     const END_SOAP_ENVELOPE = '</soap-env:Body></soap-env:Envelope>';
 
+
     /**
      * This function sends the SOAP message to the service location and returns SOAP response
      *
@@ -153,6 +154,7 @@ class SOAPClient
         return $samlresponse;
     }
 
+
     /**
      * Add a signature validator based on a SSL context.
      *
@@ -192,6 +194,7 @@ class SOAPClient
         $msg->addValidator(['\SAML2\SOAPClient', 'validateSSL'], $keyInfo['key']);
     }
 
+
     /**
      * Validate a SOAP message against the certificate on the SSL connection.
      *
@@ -220,6 +223,7 @@ class SOAPClient
 
         Utils::getContainer()->getLogger()->debug('Message validated based on SSL certificate.');
     }
+
 
     /*
      * Extracts the SOAP Fault from SOAP message

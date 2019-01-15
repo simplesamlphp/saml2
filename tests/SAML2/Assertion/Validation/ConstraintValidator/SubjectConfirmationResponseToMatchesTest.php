@@ -23,6 +23,7 @@ class SubjectConfirmationResponseToMatchesTest extends
      */
     private $response;
 
+
     public function setUp()
     {
         parent::setUp();
@@ -31,6 +32,7 @@ class SubjectConfirmationResponseToMatchesTest extends
         $this->subjectConfirmation->SubjectConfirmationData = $this->subjectConfirmationData;
         $this->response = m::mock('SAML2\Response');
     }
+
 
     /**
      * @group assertion-validation
@@ -51,6 +53,7 @@ class SubjectConfirmationResponseToMatchesTest extends
         $this->assertTrue($result->isValid());
     }
 
+
     /**
      * @group assertion-validation
      * @test
@@ -69,6 +72,7 @@ class SubjectConfirmationResponseToMatchesTest extends
 
         $this->assertTrue($result->isValid());
     }
+
 
     /**
      * @group assertion-validation
@@ -89,6 +93,7 @@ class SubjectConfirmationResponseToMatchesTest extends
         $this->assertTrue($result->isValid());
     }
 
+
     /**
      * @group assertion-validation
      * @test
@@ -107,6 +112,7 @@ class SubjectConfirmationResponseToMatchesTest extends
 
         $this->assertTrue($result->isValid());
     }
+
 
     /**
      * @group assertion-validation

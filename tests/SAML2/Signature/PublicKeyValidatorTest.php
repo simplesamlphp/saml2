@@ -17,11 +17,13 @@ class PublicKeyValidatorTest extends \PHPUnit_Framework_TestCase
     private $mockSignedElement;
     private $mockConfiguration;
 
+
     public function setUp()
     {
         $this->mockConfiguration = \Mockery::mock('SAML2\Configuration\CertificateProvider');
         $this->mockSignedElement = \Mockery::mock('SAML2\SignedElement');
     }
+
 
     /**
      * @test
@@ -35,6 +37,7 @@ class PublicKeyValidatorTest extends \PHPUnit_Framework_TestCase
         $this->assertFalse($validator->canValidate($this->mockSignedElement, $this->mockConfiguration));
     }
 
+
     /**
      * @test
      * @group signature
@@ -46,6 +49,7 @@ class PublicKeyValidatorTest extends \PHPUnit_Framework_TestCase
 
         $this->assertTrue($validator->canValidate($this->mockSignedElement, $this->mockConfiguration));
     }
+
 
     /**
      * @test
@@ -68,6 +72,7 @@ class PublicKeyValidatorTest extends \PHPUnit_Framework_TestCase
         $this->assertTrue($logger->hasMessage('Skipping unknown key type: "again_not_X509"'));
         $this->assertTrue($logger->hasMessage('No configured X509 certificate found to verify the signature with'));
     }
+
 
     /**
      * @test
@@ -92,6 +97,7 @@ class PublicKeyValidatorTest extends \PHPUnit_Framework_TestCase
         $this->assertTrue($validator->canValidate($response, $config), 'Cannot validate the element');
         $this->assertTrue($validator->hasValidSignature($response, $config), 'The signature is not valid');
     }
+
 
     private function prepareKeyLoader($returnValue)
     {

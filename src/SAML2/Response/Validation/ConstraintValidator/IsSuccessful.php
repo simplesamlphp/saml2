@@ -23,6 +23,7 @@ class IsSuccessful implements ConstraintValidator
         }
     }
 
+
     /**
      * @param array $responseStatus
      *
@@ -37,6 +38,7 @@ class IsSuccessful implements ConstraintValidator
             $responseStatus['Message'] ? ' '.$responseStatus['Message'] : ''
         );
     }
+
 
     /**
      * Truncate the status if it is prefixed by its urn.

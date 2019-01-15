@@ -12,6 +12,7 @@ class LogoutRequestTest extends \PHPUnit_Framework_TestCase
      */
     private $logoutRequestElement;
 
+
     /**
      * Load a fixture.
      */
@@ -44,6 +45,7 @@ XML;
         $this->logoutRequestElement = $document->firstChild;
     }
 
+
     public function testMarshalling()
     {
         $logoutRequest = new LogoutRequest();
@@ -74,6 +76,7 @@ XML;
         $this->assertEquals('SessionIndexValue2', $sessionIndexElements[1]->textContent);
     }
 
+
     public function testUnmarshalling()
     {
         $logoutRequest = new LogoutRequest($this->logoutRequestElement);
@@ -92,6 +95,7 @@ XML;
         $this->assertEquals('TheNameIDValue', $nameId->value);
     }
 
+
     public function testEncryptedNameId()
     {
         $logoutRequest = new LogoutRequest();
@@ -105,6 +109,7 @@ XML;
         );
     }
 
+
     public function testDecryptingNameId()
     {
         $logoutRequest = new LogoutRequest($this->logoutRequestElement);
@@ -115,6 +120,7 @@ XML;
         $this->assertEquals('TheNameIDValue', $nameId->value);
     }
 
+
     public function testDecryptingNameIdForgotToDecryptThrowsException()
     {
         $logoutRequest = new LogoutRequest($this->logoutRequestElement);
@@ -123,6 +129,7 @@ XML;
         $this->setExpectedException('Exception', "Attempted to retrieve encrypted NameID without decrypting it first.");
         $nameId = $logoutRequest->getNameId();
     }
+
 
     public function testPlainNameIDUnmarshalling()
     {
@@ -143,6 +150,7 @@ XML;
         $this->assertNull($logoutRequest->decryptNameId(CertificatesMock::getPrivateKey()));
     }
 
+
     public function testMissingNameIDThrowsException()
     {
         $xml = <<<XML
@@ -156,6 +164,7 @@ XML;
         $this->setExpectedException('Exception', "Missing <saml:NameID> or <saml:EncryptedID> in <samlp:LogoutRequest>.");
         $logoutRequest = new LogoutRequest($this->logoutRequestElement);
     }
+
 
     public function testMultipleNameIDThrowsException()
     {
@@ -173,6 +182,7 @@ XML;
         $logoutRequest = new LogoutRequest($this->logoutRequestElement);
     }
 
+
     public function testGetNotOnOrAfter()
     {
         $xml = <<<XML
@@ -187,6 +197,7 @@ XML;
         $logoutRequest = new LogoutRequest($this->logoutRequestElement);
         $this->assertEquals(1543433592, $logoutRequest->getNotOnOrAfter());
     }
+
 
     public function testSetNotOnOrAfter()
     {
@@ -203,6 +214,7 @@ XML;
         $this->assertEquals($time, $logoutRequest2->getNotOnOrAfter());
     }
 
+
     public function testWithOutSessionIndices()
     {
         $xml = <<<XML
@@ -218,6 +230,7 @@ XML;
         $this->assertCount(0, $logoutRequest->getSessionIndexes());
         $this->assertNull($logoutRequest->getSessionIndex());
     }
+
 
     public function testSetSessionIndicesVariants()
     {

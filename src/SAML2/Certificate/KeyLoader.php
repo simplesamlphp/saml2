@@ -19,10 +19,12 @@ class KeyLoader
      */
     private $loadedKeys;
 
+
     public function __construct()
     {
         $this->loadedKeys = new KeyCollection();
     }
+
 
     /**
      * Extracts the public keys given by the configuration. Mainly exists for BC purposes.
@@ -43,6 +45,7 @@ class KeyLoader
 
         return $keyLoader->loadKeysFromConfiguration($config, $usage, $required);
     }
+
 
     /**
      * @param \SAML2\Configuration\CertificateProvider $config
@@ -78,6 +81,7 @@ class KeyLoader
         return $this->getKeys();
     }
 
+
     /**
      * Loads the keys given, optionally excluding keys when a usage is given and they
      * are not configured to be used with the usage given
@@ -102,6 +106,7 @@ class KeyLoader
         }
     }
 
+
     /**
      * Attempts to load a key based on the given certificateData
      *
@@ -115,6 +120,7 @@ class KeyLoader
 
         $this->loadedKeys->add(X509::createFromCertificateData($certificateData));
     }
+
 
     /**
      * Loads the certificate in the file given
@@ -137,6 +143,7 @@ class KeyLoader
         $this->loadedKeys->add(X509::createFromCertificateData($matches[1]));
     }
 
+
     /**
      * @return \SAML2\Certificate\KeyCollection
      */
@@ -144,6 +151,7 @@ class KeyLoader
     {
         return $this->loadedKeys;
     }
+
 
     /**
      * @return bool

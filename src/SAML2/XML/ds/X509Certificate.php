@@ -19,6 +19,7 @@ class X509Certificate
      */
     public $certificate;
 
+
     /**
      * Initialize an X509Certificate element.
      *
@@ -42,6 +43,7 @@ class X509Certificate
     {
         return $this->certificate;
     }
+
 
     /**
      * Set the value of the certificate-property

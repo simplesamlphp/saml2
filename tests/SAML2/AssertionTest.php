@@ -46,6 +46,7 @@ class AssertionTest extends \PHPUnit_Framework_TestCase
         $this->assertEquals('someAuthnContext', $authnContextElements[0]->textContent);
     }
 
+
     /**
      * Test to parse a basic assertion
      */
@@ -92,6 +93,7 @@ XML;
         $this->assertEquals('someIdP1', $assertionAuthenticatingAuthorities[0]);
         $this->assertEquals('someIdP2', $assertionAuthenticatingAuthorities[1]);
     }
+
 
     /**
      * Test an assertion with lots of options
@@ -157,6 +159,7 @@ XML;
         $this->assertEquals("urn:oasis:names:tc:SAML:2.0:attrname-format:unspecified", $assertionToVerify->getAttributeNameFormat());
     }
 
+
     /**
      * Test an assertion attribute value types options
      */
@@ -219,6 +222,7 @@ XML;
         $this->assertEquals("xs:decimal", $attributesValueTypes['name3'][1]);
     }
 
+
     /**
      * Test attribute value types check in Marshalling an assertion.
      */
@@ -251,6 +255,7 @@ XML;
         $this->setExpectedException('Exception', "Array of value types and array of values have different size for attribute 'name1'");
         $assertionElement = $assertion->toXML()->ownerDocument->saveXML();
     }
+
 
     /**
      * Test parsing AuthnContext elements Decl and ClassRef
@@ -293,6 +298,7 @@ XML;
         $this->assertEquals('someAuthnContext', $assertion->getAuthnContext());
     }
 
+
     /**
      * Test parsing AuthnContext elements DeclRef and ClassRef
      */
@@ -322,6 +328,7 @@ XML;
         $this->assertEquals('/relative/path/to/document.xml', $assertion->getAuthnContextDeclRef());
         $this->assertEquals('someAuthnContext', $assertion->getAuthnContextClassRef());
     }
+
 
     /**
      * Test setting an AuthnContextDecl chunk.
@@ -380,6 +387,7 @@ XML;
         $this->assertEquals($issuer->getSPNameQualifier(), $xml_issuer->getAttribute('SPNameQualifier'));
         $this->assertEquals($issuer->getSPProvidedID(), $xml_issuer->getAttribute('SPProvidedID'));
     }
+
 
     public function testAuthnContextDeclAndRefConstraint()
     {
@@ -444,6 +452,7 @@ XML;
         $this->assertEquals('/relative/path/to/document.xml', $assertion->getAuthnContext());
     }
 
+
     public function testMustHaveClassRefOrDeclOrDeclRef()
     {
         // Unmarshall an assertion
@@ -470,6 +479,7 @@ XML
         }
         $this->assertNotEmpty($e);
     }
+
 
     public function testGetSubjectConfirmationData()
     {
@@ -503,6 +513,7 @@ XML
         $this->assertEquals(1267796526, $sc[0]->getSubjectConfirmationData()->getNotOnOrAfter());
     }
 
+
     /**
      * Tests that AuthnContextDeclRef is not mistaken for AuthnContextClassRef.
      *
@@ -533,6 +544,7 @@ XML
         $this->assertEmpty($assertion->getAuthnContextClassRef());
         $this->assertEquals($authnContextDeclRef, $assertion->getAuthnContextDeclRef());
     }
+
 
     public function testHasEncryptedAttributes()
     {
@@ -597,6 +609,7 @@ XML
         $this->assertTrue($assertion->hasEncryptedAttributes());
     }
 
+
     public function testHasEncryptedAttributes2()
     {
         $document = new \DOMDocument();
@@ -640,6 +653,7 @@ XML
         $assertion = new Assertion($document->firstChild);
         $this->assertFalse($assertion->hasEncryptedAttributes());
     }
+
 
     /**
      * @group Assertion
@@ -703,6 +717,7 @@ XML
 
     }
 
+
     public function testEptiAttributeValuesAreParsedCorrectly()
     {
         $xml = <<<XML
@@ -749,6 +764,7 @@ XML;
         $this->assertEquals('urn:oasis:names:tc:SAML:2.0:nameid-format:persistent', $oidValue->getFormat());
         $this->assertXmlStringEqualsXmlString($xml, $assertion->toXML()->ownerDocument->saveXML());
     }
+
 
     public function testEptiLegacyAttributeValuesCanBeString()
     {
@@ -811,6 +827,7 @@ XML;
         $this->assertEquals('string-12', $oidValue->getValue());
     }
 
+
     /**
      * as per http://software.internet2.edu/eduperson/internet2-mace-dir-eduperson-201310.html#eduPersonTargetedID
      * it is multivalued
@@ -862,6 +879,7 @@ XML;
         $this->assertXmlStringEqualsXmlString($xml, $assertion->toXML()->ownerDocument->saveXML());
     }
 
+
     public function testAttributeValuesWithComplexTypesAreParsedCorrectly()
     {
         $xml = <<<XML
@@ -900,6 +918,7 @@ XML;
         $this->assertXmlStringEqualsXmlString($xml, $assertion->toXML()->ownerDocument->saveXML());
     }
 
+
     public function testTypedAttributeValuesAreParsedCorrectly()
     {
         $xml = <<<XML
@@ -931,6 +950,7 @@ XML;
         $this->assertInternalType('string', $attributes['urn:some:string'][0]);
         $this->assertXmlStringEqualsXmlString($xml, $assertion->toXML()->ownerDocument->saveXML());
     }
+
 
     public function testEncryptedAttributeValuesWithComplexTypeValuesAreParsedCorrectly()
     {
@@ -983,6 +1003,7 @@ XML;
         $this->assertXmlStringEqualsXmlString($xml, $assertionToVerify->toXML()->ownerDocument->saveXML());
     }
 
+
     public function testTypedEncryptedAttributeValuesAreParsedCorrectly()
     {
         $xml = <<<XML
@@ -1025,6 +1046,7 @@ XML;
         $this->assertInternalType('string', $attributes['urn:some:string'][0]);
         $this->assertXmlStringEqualsXmlString($xml, $assertionToVerify->toXML()->ownerDocument->saveXML());
     }
+
 
     /**
      * Try to verify a signed assertion.
@@ -1088,6 +1110,7 @@ XML;
         $assertion = new Assertion($doc->firstChild);
     }
 
+
     /**
      * Try to verify a signed assertion with the wrong key.
      * Must yield a signature validation exception.
@@ -1104,6 +1127,7 @@ XML;
         $assertion->validate($publicKey);
     }
 
+
     /**
      * Try to verify an assertion signed with RSA with a DSA public key.
      * Must yield a signature validation exception.
@@ -1119,6 +1143,7 @@ XML;
         $this->setExpectedException('Exception', 'Unable to validate Signature');
         $assertion->validate($publicKey);
     }
+
 
     /**
      * Calling validate on an unsigned assertion must return
@@ -1159,6 +1184,7 @@ XML;
         $this->assertFalse($result);
     }
 
+
     /**
      * An assertion must always be version "2.0".
      */
@@ -1191,6 +1217,7 @@ XML;
         $assertion = new Assertion($document->firstChild);
     }
 
+
     /**
      * An assertion without an ID must throw an exception
      */
@@ -1222,6 +1249,7 @@ XML;
         $assertion = new Assertion($document->firstChild);
     }
 
+
     /**
      * An assertion must always have an Issuer element.
      */
@@ -1252,6 +1280,7 @@ XML;
         $this->setExpectedException('Exception', 'Missing <saml:Issuer> in assertion');
         $assertion = new Assertion($document->firstChild);
     }
+
 
     /**
      * More than one <saml:Subject> is not allowed in an Assertion.
@@ -1287,6 +1316,7 @@ XML;
         $assertion = new Assertion($document->documentElement);
     }
 
+
     /**
      * No more than one NameID may be present in the Subject
      */
@@ -1319,6 +1349,7 @@ XML;
         $assertion = new Assertion($document->documentElement);
     }
 
+
     /**
      * A <saml:Subject> wtthout both NameID and SubjectConfirmation throws exception.
      */
@@ -1349,6 +1380,7 @@ XML;
         $this->setExpectedException('Exception', 'Missing <saml:SubjectConfirmation> in <saml:Subject>');
         $assertion = new Assertion($document->documentElement);
     }
+
 
     /**
      * An Assertion may not have more than one <saml:Conditions>
@@ -1386,6 +1418,7 @@ XML;
         $assertion = new Assertion($document->firstChild);
     }
 
+
     /**
      * A Condition must be of namespace saml.
      */
@@ -1418,6 +1451,7 @@ XML;
         $this->setExpectedException('Exception', 'Unknown namespace of condition:');
         $assertion = new Assertion($document->firstChild);
     }
+
 
     /**
      * Test various types of allowed Conditions.
@@ -1465,6 +1499,7 @@ XML;
         $this->assertEquals('audience1', $audienceRestrictions[0]);
     }
 
+
     /**
      * Any Condition other than AudienceRestirction, OneTimeUse and
      * ProxyRestriction must throw an Exception.
@@ -1499,6 +1534,7 @@ XML;
         $assertion = new Assertion($document->firstChild);
     }
 
+
     /**
      * More than one AuthnStatement will throw Exception.
      */
@@ -1531,6 +1567,7 @@ XML;
         $assertion = new Assertion($document->firstChild);
     }
 
+
     /**
      * AuthnStatement must have AuthnInstant attribute, if missing
      * throw Exception.
@@ -1557,6 +1594,7 @@ XML;
         $this->setExpectedException('Exception', "Missing required AuthnInstant attribute on <saml:AuthnStatement>");
         $assertion = new Assertion($document->firstChild);
     }
+
 
     /**
      * More than one AuthnContext inside AuthnStatement will throw Exception.
@@ -1588,6 +1626,7 @@ XML;
         $assertion = new Assertion($document->firstChild);
     }
 
+
     /**
      * No AuthnContext inside AuthnStatement will throw Exception.
      */
@@ -1609,6 +1648,7 @@ XML;
         $this->setExpectedException('Exception', "Missing required <saml:AuthnContext> in <saml:AuthnStatement>");
         $assertion = new Assertion($document->firstChild);
     }
+
 
     /**
      * More than one AuthnContextDeclRef inside AuthnContext will throw Exception.
@@ -1636,6 +1676,7 @@ XML;
         $this->setExpectedException('Exception', "More than one <saml:AuthnContextDeclRef> found");
         $assertion = new Assertion($document->firstChild);
     }
+
 
     /**
      * More than one AuthnContextDecl inside AuthnContext will throw Exception.
@@ -1669,6 +1710,7 @@ XML;
         $assertion = new Assertion($document->firstChild);
     }
 
+
     /**
      * More than one AuthnContextClassRef inside AuthnContext will throw Exception.
      */
@@ -1695,6 +1737,7 @@ XML;
         $this->setExpectedException('Exception', "More than one <saml:AuthnContextClassRef> in <saml:AuthnContext>");
         $assertion = new Assertion($document->firstChild);
     }
+
 
     /**
      * When an Attribute element has no name, exception is thrown.
@@ -1723,6 +1766,7 @@ XML
         $this->setExpectedException('Exception', "Missing name on <saml:Attribute> element");
         $assertion = new Assertion($document->firstChild);
     }
+
 
     /**
      * If this assertion mixes Attribute NameFormats, the AttributeNameFormat
@@ -1757,6 +1801,7 @@ XML;
         $nameFormat = $assertion->getAttributeNameFormat();
         $this->assertEquals('urn:oasis:names:tc:SAML:2.0:attrname-format:unspecified', $nameFormat);
     }
+
 
     /**
      * Test basic NameID unmarshalling.
@@ -1800,6 +1845,7 @@ XML;
         $this->assertFalse($assertion->isNameIdEncrypted());
     }
 
+
     /**
      * Test NameID Encryption and Decryption.
      */
@@ -1834,6 +1880,7 @@ XML;
         $this->assertEquals('just_a_basic_identifier', $nameID->getValue());
         $this->assertEquals('urn:oasis:names:tc:SAML:2.0:nameid-format:transient', $nameID->getFormat());
     }
+
 
     /**
      * Test Exception when trying to get encrypted NameId without
@@ -1873,6 +1920,7 @@ XML;
         $assertion->getNameID();
     }
 
+
     public function testMarshallingElementOrdering()
     {
         // Create an assertion
@@ -1905,6 +1953,7 @@ XML;
         $this->assertEquals('saml:AuthnStatement', $assertionElements[3]->tagName);
         $this->assertEquals('saml:AttributeStatement', $assertionElements[4]->tagName);
     }
+
 
     /**
      * Test attribute value empty string and null.

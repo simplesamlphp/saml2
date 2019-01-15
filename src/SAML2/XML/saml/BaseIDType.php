@@ -70,6 +70,7 @@ abstract class BaseIDType
         }
     }
 
+
     /**
      * Collect the value of the NameQualifier-property
      * @return string|null
@@ -78,6 +79,7 @@ abstract class BaseIDType
     {
         return $this->NameQualifier;
     }
+
 
     /**
      * Set the value of the NameQualifier-property
@@ -89,6 +91,7 @@ abstract class BaseIDType
         $this->NameQualifier = $nameQualifier;
     }
 
+
     /**
      * Collect the value of the SPNameQualifier-property
      * @return string|null
@@ -97,6 +100,7 @@ abstract class BaseIDType
     {
         return $this->SPNameQualifier;
     }
+
 
     /**
      * Set the value of the SPNameQualifier-property
@@ -107,6 +111,7 @@ abstract class BaseIDType
         assert(is_string($spNameQualifier) || is_null($spNameQualifier));
         $this->SPNameQualifier = $spNameQualifier;
     }
+
 
     /**
      * Convert this BaseID to XML.

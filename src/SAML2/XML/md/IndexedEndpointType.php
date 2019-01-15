@@ -25,6 +25,7 @@ class IndexedEndpointType extends EndpointType
      */
     public $isDefault = null;
 
+
     /**
      * Initialize an IndexedEndpointType.
      *
@@ -47,6 +48,7 @@ class IndexedEndpointType extends EndpointType
         $this->setIsDefault(Utils::parseBoolean($xml, 'isDefault', null));
     }
 
+
     /**
      * Collect the value of the index-property
      * @return int
@@ -55,6 +57,7 @@ class IndexedEndpointType extends EndpointType
     {
         return $this->index;
     }
+
 
     /**
      * Set the value of the index-property
@@ -66,6 +69,7 @@ class IndexedEndpointType extends EndpointType
         $this->index = $index;
     }
 
+
     /**
      * Collect the value of the isDefault-property
      * @return bool|null
@@ -74,6 +78,7 @@ class IndexedEndpointType extends EndpointType
     {
         return $this->isDefault;
     }
+
 
     /**
      * Set the value of the isDefault-property

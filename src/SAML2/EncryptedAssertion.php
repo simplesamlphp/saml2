@@ -19,6 +19,7 @@ class EncryptedAssertion
      */
     private $encryptedData;
 
+
     /**
      * Constructor for SAML 2 encrypted assertions.
      *
@@ -39,6 +40,7 @@ class EncryptedAssertion
         }
         $this->encryptedData = $data[0];
     }
+
 
     /**
      * Set the assertion.
@@ -81,6 +83,7 @@ class EncryptedAssertion
         $this->encryptedData = $enc->encryptNode($symmetricKey);
     }
 
+
     /**
      * Retrieve the assertion.
      *
@@ -96,6 +99,7 @@ class EncryptedAssertion
 
         return new Assertion($assertionXML);
     }
+
 
     /**
      * Convert this encrypted assertion to an XML element.

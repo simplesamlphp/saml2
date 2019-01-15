@@ -24,6 +24,7 @@ XML
         new EntityDescriptor($document->firstChild);
     }
 
+
     public function testMissingEntityId()
     {
         $document = DOMDocumentFactory::fromString(
@@ -39,6 +40,7 @@ XML
         new EntityDescriptor($document->firstChild);
     }
 
+
     public function testMissingAffiliateMember()
     {
         $document = DOMDocumentFactory::fromString(
@@ -53,6 +55,7 @@ XML
         new EntityDescriptor($document->firstChild);
     }
 
+
     public function testMissingDescriptor()
     {
         $document = DOMDocumentFactory::fromString(
@@ -64,6 +67,7 @@ XML
         $this->setExpectedException('Exception', 'Must have either one of the RoleDescriptors or an AffiliationDescriptor in EntityDescriptor.');
         new EntityDescriptor($document->firstChild);
     }
+
 
     public function testInvalidValidUntil()
     {
@@ -79,6 +83,7 @@ XML
         $this->setExpectedException('Exception', 'Invalid SAML2 timestamp passed to xsDateTimeToTimestamp: asdf');
         new EntityDescriptor($document->firstChild);
     }
+
 
     public function testUnmarshalling()
     {
@@ -111,6 +116,7 @@ XML
         $this->assertEquals('test', $affiliateMember[0]);
         $this->assertEquals('test2', $affiliateMember[1]);
     }
+
 
     public function testUnmarshalling2()
     {

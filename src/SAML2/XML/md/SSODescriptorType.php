@@ -48,6 +48,7 @@ abstract class SSODescriptorType extends RoleDescriptor
      */
     public $NameIDFormat = [];
 
+
     /**
      * Initialize a SSODescriptor.
      *
@@ -79,6 +80,7 @@ abstract class SSODescriptorType extends RoleDescriptor
         $this->setNameIDFormat(Utils::extractStrings($xml, Constants::NS_MD, 'NameIDFormat'));
     }
 
+
     /**
      * Collect the value of the ArtifactResolutionService-property
      * @return \SAML2\XML\md\IndexedEndpointType[]
@@ -88,6 +90,7 @@ abstract class SSODescriptorType extends RoleDescriptor
         return $this->ArtifactResolutionService;
     }
 
+
     /**
      * Set the value of the ArtifactResolutionService-property
      * @param \SAML2\XML\md\IndexedEndpointType[] $artifactResolutionService
@@ -96,6 +99,7 @@ abstract class SSODescriptorType extends RoleDescriptor
     {
         $this->ArtifactResolutionService = $artifactResolutionService;
     }
+
 
     /**
      * Add the value to the ArtifactResolutionService-property
@@ -107,6 +111,7 @@ abstract class SSODescriptorType extends RoleDescriptor
         $this->ArtifactResolutionService[] = $artifactResolutionService;
     }
 
+
     /**
      * Collect the value of the SingleLogoutService-property
      * @return \SAML2\XML\md\EndpointType[]
@@ -116,6 +121,7 @@ abstract class SSODescriptorType extends RoleDescriptor
         return $this->SingleLogoutService;
     }
 
+
     /**
      * Set the value of the SingleLogoutService-property
      * @param \SAML2\XML\md\EndpointType[] $singleLogoutService
@@ -124,6 +130,7 @@ abstract class SSODescriptorType extends RoleDescriptor
     {
         $this->SingleLogoutService = $singleLogoutService;
     }
+
 
     /**
      * Add the value to the SingleLogoutService-property
@@ -135,6 +142,7 @@ abstract class SSODescriptorType extends RoleDescriptor
         $this->SingleLogoutService[] = $singleLogoutService;
     }
 
+
     /**
      * Collect the value of the ManageNameIDService-property
      * @return \SAML2\XML\md\EndpointType[]
@@ -144,6 +152,7 @@ abstract class SSODescriptorType extends RoleDescriptor
         return $this->ManageNameIDService;
     }
 
+
     /**
      * Set the value of the ManageNameIDService-property
      * @param \SAML2\XML\md\EndpointType[] $manageNameIDService
@@ -152,6 +161,7 @@ abstract class SSODescriptorType extends RoleDescriptor
     {
         $this->ManageNameIDService = $manageNameIDService;
     }
+
 
     /**
      * Add the value to the ManageNameIDService-property
@@ -163,6 +173,7 @@ abstract class SSODescriptorType extends RoleDescriptor
         $this->ManageNameIDService[] = $manageNameIDService;
     }
 
+
     /**
      * Collect the value of the NameIDFormat-property
      * @return string[]
@@ -172,6 +183,7 @@ abstract class SSODescriptorType extends RoleDescriptor
         return $this->NameIDFormat;
     }
 
+
     /**
      * Set the value of the NameIDFormat-property
      * @param string[] $nameIDFormat
@@ -180,6 +192,7 @@ abstract class SSODescriptorType extends RoleDescriptor
     {
         $this->NameIDFormat = $nameIDFormat;
     }
+
 
     /**
      * Add this SSODescriptorType to an EntityDescriptor.

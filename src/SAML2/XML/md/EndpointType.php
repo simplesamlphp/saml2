@@ -39,6 +39,7 @@ class EndpointType
      */
     private $attributes = [];
 
+
     /**
      * Initialize an EndpointType.
      *
@@ -78,6 +79,7 @@ class EndpointType
         }
     }
 
+
     /**
      * Check if a namespace-qualified attribute exists.
      *
@@ -94,6 +96,7 @@ class EndpointType
 
         return isset($this->attributes[$fullName]);
     }
+
 
     /**
      * Get a namespace-qualified attribute.
@@ -114,6 +117,7 @@ class EndpointType
 
         return $this->attributes[$fullName]['value'];
     }
+
 
     /**
      * Get a namespace-qualified attribute.
@@ -142,6 +146,7 @@ class EndpointType
         ];
     }
 
+
     /**
      * Remove a namespace-qualified attribute.
      *
@@ -157,6 +162,7 @@ class EndpointType
         unset($this->attributes[$fullName]);
     }
 
+
     /**
      * Collect the value of the Binding-property
      * @return string
@@ -165,6 +171,7 @@ class EndpointType
     {
         return $this->Binding;
     }
+
 
     /**
      * Set the value of the Binding-property
@@ -176,6 +183,7 @@ class EndpointType
         $this->Binding = $binding;
     }
 
+
     /**
      * Collect the value of the Location-property
      * @return string|null
@@ -184,6 +192,7 @@ class EndpointType
     {
         return $this->Location;
     }
+
 
     /**
      * Set the value of the Location-property
@@ -195,6 +204,7 @@ class EndpointType
         $this->Location = $location;
     }
 
+
     /**
      * Collect the value of the ResponseLocation-property
      * @return string|null
@@ -203,6 +213,7 @@ class EndpointType
     {
         return $this->ResponseLocation;
     }
+
 
     /**
      * Set the value of the ResponseLocation-property
@@ -213,6 +224,7 @@ class EndpointType
         assert(is_string($responseLocation) || is_null($responseLocation));
         $this->ResponseLocation = $responseLocation;
     }
+
 
     /**
      * Add this endpoint to an XML element.

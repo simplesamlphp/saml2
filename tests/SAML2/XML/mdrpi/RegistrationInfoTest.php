@@ -45,6 +45,7 @@ class RegistrationInfoTest extends \PHPUnit_Framework_TestCase
         $this->assertEquals('https://DutchRegistratiebeleid', $usagePolicyElements[1]->textContent);
     }
 
+
     public function testUnmarshalling()
     {
         $document = DOMDocumentFactory::fromString(<<<XML
@@ -72,6 +73,7 @@ XML
         $this->assertEquals('http://www.example.org/aai/metadata/de_registration.html', $registrationPolicy["de"]);
     }
 
+
     public function testMissingPublisherThrowsException()
     {
         $document = DOMDocumentFactory::fromString(<<<XML
@@ -84,6 +86,7 @@ XML
         $this->setExpectedException('Exception', 'Missing required attribute "registrationAuthority"');
         $registrationInfo = new RegistrationInfo($document->firstChild);
     }
+
 
     public function testEmptyRegistrationAuthorityOutboundThrowsException()
     {

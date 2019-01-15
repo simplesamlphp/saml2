@@ -11,10 +11,12 @@ class PrivateKeyLoaderTest extends \PHPUnit_Framework_TestCase
      */
     private $privateKeyLoader;
 
+
     public function setUp()
     {
         $this->privateKeyLoader = new PrivateKeyLoader();
     }
+
 
     /**
      * @group        certificate
@@ -32,6 +34,7 @@ class PrivateKeyLoaderTest extends \PHPUnit_Framework_TestCase
         $this->assertEquals($resultingKey->getKeyAsString(), "This would normally contain the private key data.\n");
         $this->assertEquals($resultingKey->getPassphrase(), $configuredKey->getPassPhrase());
     }
+
 
     /**
      * Dataprovider for 'loading_a_configured_private_key_returns_a_certificate_private_key'

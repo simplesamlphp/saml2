@@ -13,6 +13,7 @@ interface Collection extends \ArrayAccess, \Countable, \IteratorAggregate
      */
     public function add($element);
 
+
     /**
      * Shorthand for getting a single element that also must be the only element in the collection.
      *
@@ -22,6 +23,7 @@ interface Collection extends \ArrayAccess, \Countable, \IteratorAggregate
      */
     public function getOnlyElement();
 
+
     /**
      * Return the first element from the collection
      *
@@ -29,12 +31,14 @@ interface Collection extends \ArrayAccess, \Countable, \IteratorAggregate
      */
     public function first();
 
+
     /**
      * Return the last element from the collection
      *
      * @return mixed
      */
     public function last();
+
 
     /**
      * Applies the given function to each element in the collection and returns a new collection with the elements returned by the function.
@@ -45,12 +49,14 @@ interface Collection extends \ArrayAccess, \Countable, \IteratorAggregate
      */
     public function map(\Closure $function);
 
+
     /**
      * @param callable $filterFunction
      *
      * @return \SAML2\Utilities\Collection
      */
     public function filter(\Closure $filterFunction);
+
 
     /**
      * Get the element at index
@@ -61,10 +67,12 @@ interface Collection extends \ArrayAccess, \Countable, \IteratorAggregate
      */
     public function get($key);
 
+
     /**
      * @param $element
      */
     public function remove($element);
+
 
     /**
      * Set the value for index

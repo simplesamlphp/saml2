@@ -4,7 +4,6 @@ namespace SAML2\Utilities;
 
 class ArrayCollectionTest extends \PHPUnit_Framework_TestCase
 {
-
     public function test_construct_get_add_set()
     {
         $arc = new ArrayCollection(['aap', 'aap', 'noot']);
@@ -26,6 +25,7 @@ class ArrayCollectionTest extends \PHPUnit_Framework_TestCase
         $this->assertEquals($arc->get(2), 'noot');
         $this->assertEquals($arc->get(3), 'mies');
     }
+
 
     public function test_remove()
     {
@@ -60,6 +60,7 @@ class ArrayCollectionTest extends \PHPUnit_Framework_TestCase
         $this->assertEquals($arc->get(3), 'mies');
     }
 
+
     public function test_first_last_count()
     {
         $arc = new ArrayCollection(['aap', 'aap', 'noot', 'mies']);
@@ -68,6 +69,7 @@ class ArrayCollectionTest extends \PHPUnit_Framework_TestCase
         $this->assertEquals($arc->last(), 'mies');
         $this->assertEquals($arc->count(), 4);
     }
+
 
     public function test_offset()
     {
@@ -88,11 +90,13 @@ class ArrayCollectionTest extends \PHPUnit_Framework_TestCase
         $this->assertTrue($arc->offsetExists(1));
     }
 
+
     public function test_onlyelement()
     {
         $arc = new ArrayCollection(['aap']);
         $this->assertEquals($arc->getOnlyElement(), 'aap');
     }
+
 
     public function test_onlyelement_fail()
     {
@@ -101,11 +105,13 @@ class ArrayCollectionTest extends \PHPUnit_Framework_TestCase
         $arc->getOnlyElement();
     }
 
+
     public function test_getiterator()
     {
         $arc = new ArrayCollection(['aap', 'noot']);
         $this->assertInstanceOf('\ArrayIterator', $arc->getIterator());
     }
+
 
     public function test_filter_map()
     {

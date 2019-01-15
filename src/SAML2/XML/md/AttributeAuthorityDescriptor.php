@@ -58,6 +58,7 @@ class AttributeAuthorityDescriptor extends RoleDescriptor
      */
     public $Attribute = [];
 
+
     /**
      * Initialize an IDPSSODescriptor.
      *
@@ -92,6 +93,7 @@ class AttributeAuthorityDescriptor extends RoleDescriptor
         }
     }
 
+
     /**
      * Collect the value of the AttributeService-property
      * @return \SAML2\XML\md\EndpointType[]
@@ -101,6 +103,7 @@ class AttributeAuthorityDescriptor extends RoleDescriptor
         return $this->AttributeService;
     }
 
+
     /**
      * Set the value of the AttributeService-property
      * @param \SAML2\XML\md\EndpointType[] $attributeService
@@ -109,6 +112,7 @@ class AttributeAuthorityDescriptor extends RoleDescriptor
     {
         $this->AttributeService = $attributeService;
     }
+
 
     /**
      * Add the value to the AttributeService-property
@@ -120,6 +124,7 @@ class AttributeAuthorityDescriptor extends RoleDescriptor
         $this->AttributeService[] = $attributeService;
     }
 
+
     /**
      * Collect the value of the NameIDFormat-property
      * @return string[]
@@ -128,6 +133,7 @@ class AttributeAuthorityDescriptor extends RoleDescriptor
     {
         return $this->NameIDFormat;
     }
+
 
     /**
      * Set the value of the NameIDFormat-property
@@ -138,6 +144,7 @@ class AttributeAuthorityDescriptor extends RoleDescriptor
         $this->NameIDFormat = $nameIDFormat;
     }
 
+
     /**
      * Collect the value of the AssertionIDRequestService-property
      * @return \SAML2\XML\md\EndpointType[]
@@ -147,6 +154,7 @@ class AttributeAuthorityDescriptor extends RoleDescriptor
         return $this->AssertionIDRequestService;
     }
 
+
     /**
      * Set the value of the AssertionIDRequestService-property
      * @param \SAML2\XML\md\EndpointType[] $assertionIDRequestService
@@ -155,6 +163,7 @@ class AttributeAuthorityDescriptor extends RoleDescriptor
     {
         $this->AssertionIDRequestService = $assertionIDRequestService;
     }
+
 
     /**
      * Add the value to the AssertionIDRequestService-property
@@ -166,6 +175,7 @@ class AttributeAuthorityDescriptor extends RoleDescriptor
         $this->AssertionIDRequestService[] = $assertionIDRequestService;
     }
 
+
     /**
      * Collect the value of the AttributeProfile-property
      * @return string[]
@@ -174,6 +184,7 @@ class AttributeAuthorityDescriptor extends RoleDescriptor
     {
         return $this->AttributeProfile;
     }
+
 
     /**
      * Set the value of the AttributeProfile-property
@@ -184,6 +195,7 @@ class AttributeAuthorityDescriptor extends RoleDescriptor
         $this->AttributeProfile = $attributeProfile;
     }
 
+
     /**
      * Collect the value of the Attribute-property
      * @return \SAML2\XML\saml\Attribute[]
@@ -192,6 +204,7 @@ class AttributeAuthorityDescriptor extends RoleDescriptor
     {
         return $this->Attribute;
     }
+
 
     /**
      * Set the value of the Attribute-property
@@ -202,6 +215,7 @@ class AttributeAuthorityDescriptor extends RoleDescriptor
         $this->Attribute = $attribute;
     }
 
+
     /**
      * Add the value to the Attribute-property
      * @param \SAML2\XML\saml\Attribute $attribute
@@ -211,6 +225,7 @@ class AttributeAuthorityDescriptor extends RoleDescriptor
         assert($attribute instanceof Attribute);
         $this->Attribute[] = $attribute;
     }
+
 
     /**
      * Add this AttributeAuthorityDescriptor to an EntityDescriptor.

@@ -33,6 +33,7 @@ class Chunk implements \Serializable
      */
     public $xml;
 
+
     /**
      * Create a XMLChunk from a copy of the given \DOMElement.
      *
@@ -46,6 +47,7 @@ class Chunk implements \Serializable
         $this->setXml(Utils::copyElement($xml));
     }
 
+
     /**
      * Get this \DOMElement.
      *
@@ -56,6 +58,7 @@ class Chunk implements \Serializable
     {
         return $this->xml;
     }
+
 
     /**
      * Append this XML element to a different XML element.
@@ -68,6 +71,7 @@ class Chunk implements \Serializable
         return Utils::copyElement($this->xml, $parent);
     }
 
+
     /**
      * Collect the value of the localName-property
      * @return string
@@ -76,6 +80,7 @@ class Chunk implements \Serializable
     {
         return $this->localName;
     }
+
 
     /**
      * Set the value of the localName-property
@@ -87,6 +92,7 @@ class Chunk implements \Serializable
         $this->localName = $localName;
     }
 
+
     /**
      * Collect the value of the namespaceURI-property
      * @return string|null
@@ -95,6 +101,7 @@ class Chunk implements \Serializable
     {
         return $this->namespaceURI;
     }
+
 
     /**
      * Set the value of the namespaceURI-property
@@ -106,6 +113,7 @@ class Chunk implements \Serializable
         $this->namespaceURI = $namespaceURI;
     }
 
+
     /**
      * Set the value of the xml-property
      * @param \DOMelement $xml
@@ -116,6 +124,7 @@ class Chunk implements \Serializable
         $this->xml = $xml;
     }
 
+
     /**
      * Serialize this XML chunk.
      *
@@ -125,6 +134,7 @@ class Chunk implements \Serializable
     {
         return serialize($this->getXml()->ownerDocument->saveXML($this->getXml()));
     }
+
 
     /**
      * Un-serialize this XML chunk.

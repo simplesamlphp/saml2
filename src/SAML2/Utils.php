@@ -332,6 +332,7 @@ class Utils
         $nid->toXML($node);
     }
 
+
     /**
      * Parse a NameID element.
      *
@@ -352,6 +353,7 @@ class Utils
 
         return $ret;
     }
+
 
     /**
      * Insert a Signature-node.
@@ -399,6 +401,7 @@ class Utils
 
         $objXMLSecDSig->insertSignature($root, $insertBefore);
     }
+
 
     /**
      * Decrypt an encrypted element.
@@ -546,6 +549,7 @@ class Utils
         return $decryptedElement;
     }
 
+
     /**
      * Decrypt an encrypted element.
      *
@@ -568,6 +572,7 @@ class Utils
             throw new \Exception('Failed to decrypt XML element.', 0, $e);
         }
     }
+
 
     /**
      * Extract localized strings from a set of nodes.
@@ -599,6 +604,7 @@ class Utils
         return $ret;
     }
 
+
     /**
      * Extract strings from a set of nodes.
      *
@@ -623,6 +629,7 @@ class Utils
         return $ret;
     }
 
+
     /**
      * Append string element.
      *
@@ -646,6 +653,7 @@ class Utils
 
         return $n;
     }
+
 
     /**
      * Append string elements.
@@ -674,6 +682,7 @@ class Utils
         }
     }
 
+
     /**
      * Create a KeyDescriptor with the given certificate.
      *
@@ -698,6 +707,7 @@ class Utils
 
         return $keyDescriptor;
     }
+
 
     /**
      * This function converts a SAML2 timestamp on the form
@@ -745,6 +755,7 @@ class Utils
 
         return $ts;
     }
+
 
     /**
      * @return \SAML2\Compat\Ssp\Container

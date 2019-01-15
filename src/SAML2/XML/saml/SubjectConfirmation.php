@@ -33,6 +33,7 @@ class SubjectConfirmation
      */
     public $SubjectConfirmationData;
 
+
     /**
      * Initialize (and parse? a SubjectConfirmation element.
      *
@@ -65,6 +66,7 @@ class SubjectConfirmation
         }
     }
 
+
     /**
      * Collect the value of the Method-property
      * @return string
@@ -73,6 +75,7 @@ class SubjectConfirmation
     {
         return $this->Method;
     }
+
 
     /**
      * Set the value of the Method-property
@@ -84,6 +87,7 @@ class SubjectConfirmation
         $this->Method = $method;
     }
 
+
     /**
      * Collect the value of the NameID-property
      * @return \SAML2\XML\saml\NameID
@@ -92,6 +96,7 @@ class SubjectConfirmation
     {
         return $this->NameID;
     }
+
 
     /**
      * Set the value of the NameID-property
@@ -102,6 +107,7 @@ class SubjectConfirmation
         $this->NameID = $nameId;
     }
 
+
     /**
      * Collect the value of the SubjectConfirmationData-property
      * @return \SAML2\XML\saml\SubjectConfirmationData|null
@@ -111,6 +117,7 @@ class SubjectConfirmation
         return $this->SubjectConfirmationData;
     }
 
+
     /**
      * Set the value of the SubjectConfirmationData-property
      * @param \SAML2\XML\saml\SubjectConfirmationData|null $subjectConfirmationData
@@ -119,6 +126,7 @@ class SubjectConfirmation
     {
         $this->SubjectConfirmationData = $subjectConfirmationData;
     }
+
 
     /**
      * Convert this element to XML.

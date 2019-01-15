@@ -42,6 +42,7 @@ class PublicationInfo
      */
     public $UsagePolicy = [];
 
+
     /**
      * Create/parse a mdrpi:PublicationInfo element.
      *
@@ -70,6 +71,7 @@ class PublicationInfo
         $this->setUsagePolicy(Utils::extractLocalizedStrings($xml, Common::NS_MDRPI, 'UsagePolicy'));
     }
 
+
     /**
      * Collect the value of the publisher-property
      * @return string
@@ -78,6 +80,7 @@ class PublicationInfo
     {
         return $this->publisher;
     }
+
 
     /**
      * Collect the value of the creationInstant-property
@@ -88,6 +91,7 @@ class PublicationInfo
         return $this->creationInstant;
     }
 
+
     /**
      * Collect the value of the publicationId-property
      * @return string|null
@@ -97,6 +101,7 @@ class PublicationInfo
         return $this->publicationId;
     }
 
+
     /**
      * Collect the value of the UsagePolicy-property
      * @return array
@@ -105,6 +110,7 @@ class PublicationInfo
     {
         return $this->UsagePolicy;
     }
+
 
     /**
      * Set the value of the publisher-property
@@ -116,6 +122,7 @@ class PublicationInfo
         $this->publisher = $publisher;
     }
 
+
     /**
      * Set the value of the creationInstant-property
      * @param int|null $creationInstant
@@ -125,6 +132,7 @@ class PublicationInfo
         assert(is_int($creationInstant) || is_null($creationInstant));
         $this->creationInstant = $creationInstant;
     }
+
 
     /**
      * Set the value of the publicationId-property
@@ -136,6 +144,7 @@ class PublicationInfo
         $this->publicationId = $publicationId;
     }
 
+
     /**
      * Set the value of the UsagePolicy-property
      * @param array $usagePolicy
@@ -144,6 +153,7 @@ class PublicationInfo
     {
         $this->UsagePolicy = $usagePolicy;
     }
+
 
     /**
      * Convert this element to XML.

@@ -37,6 +37,7 @@ class MockContainer extends AbstractContainer
      */
     private $postRedirectData;
 
+
     /**
      * Get a PSR-3 compatible logger.
      * @return \Psr\Log\LoggerInterface
@@ -46,6 +47,7 @@ class MockContainer extends AbstractContainer
         return new \Psr\Log\NullLogger();
     }
 
+
     /**
      * Generate a random identifier for identifying SAML2 documents.
      */
@@ -53,6 +55,7 @@ class MockContainer extends AbstractContainer
     {
         return $this->id;
     }
+
 
     /**
      * Log an incoming message to the debug log.
@@ -72,6 +75,7 @@ class MockContainer extends AbstractContainer
         $this->debugMessages[$type] = $message;
     }
 
+
     /**
      * Trigger the user to perform a GET to the given URL with the given data.
      *
@@ -84,6 +88,7 @@ class MockContainer extends AbstractContainer
         $this->redirectUrl = $url;
         $this->redirectData = $data;
     }
+
 
     /**
      * Trigger the user to perform a POST to the given URL with the given data.

@@ -68,6 +68,7 @@ class AffiliationDescriptor extends SignedElementHelper
      */
     public $KeyDescriptor = [];
 
+
     /**
      * Initialize a AffiliationDescriptor.
      *
@@ -111,6 +112,7 @@ class AffiliationDescriptor extends SignedElementHelper
         }
     }
 
+
     /**
      * Collect the value of the affiliationOwnerId-property
      * @return string
@@ -119,6 +121,7 @@ class AffiliationDescriptor extends SignedElementHelper
     {
         return $this->affiliationOwnerID;
     }
+
 
     /**
      * Set the value of the affiliationOwnerId-property
@@ -130,6 +133,7 @@ class AffiliationDescriptor extends SignedElementHelper
         $this->affiliationOwnerID = $affiliationOwnerId;
     }
 
+
     /**
      * Collect the value of the ID-property
      * @return string|null
@@ -138,6 +142,7 @@ class AffiliationDescriptor extends SignedElementHelper
     {
         return $this->ID;
     }
+
 
     /**
      * Set the value of the ID-property
@@ -149,6 +154,7 @@ class AffiliationDescriptor extends SignedElementHelper
         $this->ID = $Id;
     }
 
+
     /**
      * Collect the value of the validUntil-property
      * @return int|null
@@ -157,6 +163,7 @@ class AffiliationDescriptor extends SignedElementHelper
     {
         return $this->validUntil;
     }
+
 
     /**
      * Set the value of the validUntil-property
@@ -168,6 +175,7 @@ class AffiliationDescriptor extends SignedElementHelper
         $this->validUntil = $validUntil;
     }
 
+
     /**
      * Collect the value of the cacheDuration-property
      * @return string|null
@@ -176,6 +184,7 @@ class AffiliationDescriptor extends SignedElementHelper
     {
         return $this->cacheDuration;
     }
+
 
     /**
      * Set the value of the cacheDuration-property
@@ -187,6 +196,7 @@ class AffiliationDescriptor extends SignedElementHelper
         $this->cacheDuration = $cacheDuration;
     }
 
+
     /**
      * Collect the value of the Extensions-property
      * @return \SAML2\XML\Chunk[]
@@ -196,6 +206,7 @@ class AffiliationDescriptor extends SignedElementHelper
         return $this->Extensions;
     }
 
+
     /**
      * Set the value of the Extensions-property
      * @param array $extensions
@@ -204,6 +215,7 @@ class AffiliationDescriptor extends SignedElementHelper
     {
         $this->Extensions = $extensions;
     }
+
 
     /**
      * Add an Extension.
@@ -215,6 +227,7 @@ class AffiliationDescriptor extends SignedElementHelper
         $this->Extensions[] = $extension;
     }
 
+
     /**
      * Collect the value of the AffiliateMember-property
      * @return array
@@ -223,6 +236,7 @@ class AffiliationDescriptor extends SignedElementHelper
     {
         return $this->AffiliateMember;
     }
+
 
     /**
      * Set the value of the AffiliateMember-property
@@ -233,6 +247,7 @@ class AffiliationDescriptor extends SignedElementHelper
         $this->AffiliateMember = $affiliateMember;
     }
 
+
     /**
      * Collect the value of the KeyDescriptor-property
      * @return \SAML2\XML\md\KeyDescriptor[]
@@ -241,6 +256,7 @@ class AffiliationDescriptor extends SignedElementHelper
     {
         return $this->KeyDescriptor;
     }
+
 
     /**
      * Set the value of the KeyDescriptor-property
@@ -251,6 +267,7 @@ class AffiliationDescriptor extends SignedElementHelper
         $this->KeyDescriptor = $keyDescriptor;
     }
 
+
     /**
      * Add the value to the KeyDescriptor-property
      * @param \SAML2\XML\md\KeyDescriptor $keyDescriptor
@@ -259,6 +276,7 @@ class AffiliationDescriptor extends SignedElementHelper
     {
         $this->KeyDescriptor[] = $keyDescriptor;
     }
+
 
     /**
      * Add this AffiliationDescriptor to an EntityDescriptor.

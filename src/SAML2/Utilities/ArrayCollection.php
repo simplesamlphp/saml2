@@ -16,30 +16,36 @@ class ArrayCollection implements Collection
      */
     protected $elements;
 
+
     public function __construct(array $elements = [])
     {
         $this->elements = $elements;
     }
+
 
     public function add($element)
     {
         $this->elements[] = $element;
     }
 
+
     public function get($key)
     {
         return isset($this->elements[$key]) ? $this->elements[$key] : null;
     }
+
 
     public function filter(\Closure $f)
     {
         return new self(array_filter($this->elements, $f));
     }
 
+
     public function set($key, $value)
     {
         $this->elements[$key] = $value;
     }
+
 
     public function remove($element)
     {
@@ -55,6 +61,7 @@ class ArrayCollection implements Collection
         return $removed;
     }
 
+
     public function getOnlyElement()
     {
         if ($this->count() !== 1) {
@@ -68,45 +75,54 @@ class ArrayCollection implements Collection
         return reset($this->elements);
     }
 
+
     public function first()
     {
         return reset($this->elements);
     }
+
 
     public function last()
     {
         return end($this->elements);
     }
 
+
     public function map(\Closure $function)
     {
         return new self(array_map($function, $this->elements));
     }
+
 
     public function count()
     {
         return count($this->elements);
     }
 
+
     public function getIterator()
     {
         return new \ArrayIterator($this->elements);
     }
+
 
     public function offsetExists($offset)
     {
         return isset($this->elements[$offset]);
     }
 
+
     public function offsetGet($offset)
     {
         return $this->elements[$offset];
     }
 
+
     public function offsetSet($offset, $value)
     {
         $this->elements[$offset] = $value;
     }
+
 
     public function offsetUnset($offset)
     {

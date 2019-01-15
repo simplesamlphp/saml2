@@ -40,6 +40,7 @@ class SignatureValidationTest extends \PHPUnit_Framework_TestCase
      */
     private $currentDestination = 'http://moodle.bridge.feide.no/simplesaml/saml2/sp/AssertionConsumerService.php';
 
+
     /**
      * We mock the actual assertion processing as that is not what we want to test here. Since the assertion processor
      * is created via a static ::build() method we have to mock that, and have to run the tests in separate processes
@@ -62,6 +63,7 @@ class SignatureValidationTest extends \PHPUnit_Framework_TestCase
             = new ServiceProvider(['entityId' => 'urn:mace:feide.no:services:no.feide.moodle']);
     }
 
+
     /**
      * This ensures that the mockery expectations are tested. This cannot be done through the registered listener (See
      * the phpunit.xml in the /tools/phpunit directory) as the tests run in isolation.
@@ -70,6 +72,7 @@ class SignatureValidationTest extends \PHPUnit_Framework_TestCase
     {
         \Mockery::close();
     }
+
 
     /**
      * @runInSeparateProcess
@@ -88,6 +91,7 @@ class SignatureValidationTest extends \PHPUnit_Framework_TestCase
         );
     }
 
+
     /**
      * @runInSeparateProcess
      */
@@ -105,6 +109,7 @@ class SignatureValidationTest extends \PHPUnit_Framework_TestCase
         );
     }
 
+
     /**
      * @runInSeparateProcess
      */
@@ -121,6 +126,7 @@ class SignatureValidationTest extends \PHPUnit_Framework_TestCase
             $this->getSignedResponseWithSignedAssertion()
         );
     }
+
 
     /**
      * @expectedException \SAML2\Response\Exception\UnsignedResponseException
@@ -141,6 +147,7 @@ class SignatureValidationTest extends \PHPUnit_Framework_TestCase
         );
     }
 
+
     /**
      * @return \SAML2\Response
      */
@@ -155,6 +162,7 @@ class SignatureValidationTest extends \PHPUnit_Framework_TestCase
         // convert to signed response
         return new Response($response->toSignedXML());
     }
+
 
     /**
      * @return \SAML2\Response
@@ -176,6 +184,7 @@ class SignatureValidationTest extends \PHPUnit_Framework_TestCase
         return $response;
     }
 
+
     /**
      * @return \SAML2\Response
      */
@@ -194,6 +203,7 @@ class SignatureValidationTest extends \PHPUnit_Framework_TestCase
 
         return new Response($response->toSignedXML());
     }
+
 
     /**
      * @return \SAML2\Response

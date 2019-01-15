@@ -12,10 +12,12 @@ class SubjectConfirmationResponseToMatches implements
 {
     private $response;
 
+
     public function __construct(Response $response)
     {
         $this->response = $response;
     }
+
 
     public function validate(
         SubjectConfirmation $subjectConfirmation,
@@ -30,6 +32,7 @@ class SubjectConfirmationResponseToMatches implements
             ));
         }
     }
+
 
     private function getInResponseTo()
     {

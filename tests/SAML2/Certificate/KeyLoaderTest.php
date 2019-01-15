@@ -23,11 +23,13 @@ class KeyLoaderTest extends \PHPUnit_Framework_TestCase
      */
     private $configurationMock;
 
+
     public function setUp()
     {
         $this->keyLoader = new KeyLoader();
         $this->configurationMock = \Mockery::mock('SAML2\Configuration\CertificateProvider');
     }
+
 
     /**
      * @group certificate
@@ -48,6 +50,7 @@ class KeyLoaderTest extends \PHPUnit_Framework_TestCase
         $this->assertTrue($loadedKeys->get(0)->canBeUsedFor(Key::USAGE_SIGNING));
     }
 
+
     /**
      * @group certificate
      *
@@ -66,6 +69,7 @@ class KeyLoaderTest extends \PHPUnit_Framework_TestCase
         $this->assertInstanceOf('SAML2\Certificate\X509', $loadedKeys->get(0));
     }
 
+
     /**
      * @group certificate
      *
@@ -76,6 +80,7 @@ class KeyLoaderTest extends \PHPUnit_Framework_TestCase
     {
         $this->keyLoader->loadCertificateData([]);
     }
+
 
     /**
      * @group certificate
@@ -95,6 +100,7 @@ class KeyLoaderTest extends \PHPUnit_Framework_TestCase
         $this->assertEquals(preg_replace('~\s+~', '', $this->certificate), $loadedKey['X509Certificate']);
     }
 
+
     /**
      * @group certificate
      *
@@ -106,6 +112,7 @@ class KeyLoaderTest extends \PHPUnit_Framework_TestCase
         $filePath = dirname(__FILE__) . '/File/';
         $this->keyLoader->loadCertificateFile($filePath . 'not_a_key.crt');
     }
+
 
     /**
      * @group certificate
@@ -128,6 +135,7 @@ class KeyLoaderTest extends \PHPUnit_Framework_TestCase
         $this->assertEquals($expected, $loadedKey['X509Certificate']);
     }
 
+
     /**
      * @group certificate
      *
@@ -149,6 +157,7 @@ class KeyLoaderTest extends \PHPUnit_Framework_TestCase
 
         $this->keyLoader->loadKeysFromConfiguration($this->configurationMock, null, true);
     }
+
 
     /**
      * @group certificate
@@ -175,6 +184,7 @@ class KeyLoaderTest extends \PHPUnit_Framework_TestCase
 
         $this->assertCount(1, $loadedKeys);
     }
+
 
     /**
      * @group certificate

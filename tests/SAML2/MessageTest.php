@@ -40,6 +40,7 @@ AUTHNREQUEST
         $this->assertEquals($privateKey->getAlgorith(), $signedMessage->getSignatureMethod());
     }
 
+
     /**
      * @group Message
      */
@@ -78,6 +79,7 @@ AUTHNREQUEST
         $this->assertEquals('https://gateway.stepup.org/saml20/sp/metadata', $issuer->getValue());
     }
 
+
     /**
      * @group Message
      */
@@ -106,6 +108,7 @@ AUTHNREQUEST
         $this->assertNotInstanceOf('\SAML2\XML\saml\Issuer', $issuer);
         $this->assertEquals('https://gateway.stepup.org/saml20/sp/metadata', $issuer);
     }
+
 
     /**
      * @group Message
@@ -147,6 +150,7 @@ AUTHNREQUEST
         $this->assertEmpty(Utils::xpQuery($xml, './saml_assertion:Issuer'));
     }
 
+
     /**
      * @group Message
      */
@@ -165,6 +169,7 @@ AUTHNREQUEST
 
         $this->assertEquals($privateKey->getAlgorith(), $signedMessage->getSignatureMethod());
     }
+
 
     /**
      * @group Message
@@ -206,6 +211,7 @@ AUTHNREQUEST
         $this->assertEquals("example1", $exts[0]->xml->textContent);
         $this->assertEquals("myextElt", $exts[1]->localName);
     }
+
 
     /**
      * @group Message
@@ -258,6 +264,7 @@ AUTHNREQUEST
         $this->assertEquals("Test data!", $xml_exts[0]->childNodes->item(0)->textContent);
     }
 
+
     /**
      * @group Message
      */
@@ -276,6 +283,7 @@ XML;
         $this->setExpectedException('Exception', "Unknown namespace of SAML message: 'urn:oasis:names:tc:SAML:2.0:assertion'");
         $message = Message::fromXML($document->documentElement);
     }
+
 
     /**
      * @group Message
@@ -303,6 +311,7 @@ XML;
         $message = Message::fromXML($document->documentElement);
     }
 
+
     /**
      * @group Message
      */
@@ -321,6 +330,7 @@ XML;
         $this->setExpectedException('Exception', "Missing ID attribute on SAML message.");
         $message = Message::fromXML($document->documentElement);
     }
+
 
     /**
      * Tests AQ message type and some getters/setters.
@@ -363,6 +373,7 @@ XML;
         $xp = Utils::xpQuery($messageElement, '.');
         $this->assertEquals('somethingNEW', $xp[0]->getAttribute('ID'));
     }
+
 
     /**
      * @group Message

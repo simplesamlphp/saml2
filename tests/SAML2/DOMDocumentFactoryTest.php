@@ -16,6 +16,7 @@ class DOMDocumentFactoryTest extends \PHPUnit_Framework_TestCase
         DOMDocumentFactory::fromString($argument);
     }
 
+
     /**
      * @group domdocument
      * @expectedException \SAML2\Exception\RuntimeException
@@ -24,6 +25,7 @@ class DOMDocumentFactoryTest extends \PHPUnit_Framework_TestCase
     {
         DOMDocumentFactory::fromString('this is not xml');
     }
+
 
     /**
      * @group domdocument
@@ -37,6 +39,7 @@ class DOMDocumentFactoryTest extends \PHPUnit_Framework_TestCase
         $this->assertXmlStringEqualsXmlString($xml, $document->saveXML());
     }
 
+
     /**
      * @param mixed $argument
      *
@@ -48,6 +51,7 @@ class DOMDocumentFactoryTest extends \PHPUnit_Framework_TestCase
     {
         DOMDocumentFactory::fromFile($argument);
     }
+
 
     /**
      * @group        domdocument
@@ -61,6 +65,7 @@ class DOMDocumentFactoryTest extends \PHPUnit_Framework_TestCase
         DOMDocumentFactory::fromFile($filename);
     }
 
+
     /**
      * @group domdocument
      * @expectedException \SAML2\Exception\RuntimeException
@@ -71,6 +76,7 @@ class DOMDocumentFactoryTest extends \PHPUnit_Framework_TestCase
 
         DOMDocumentFactory::fromFile($file);
     }
+
 
     /**
      * @group domdocument
@@ -84,6 +90,7 @@ class DOMDocumentFactoryTest extends \PHPUnit_Framework_TestCase
         $this->assertXmlStringEqualsXmlFile($file, $document->saveXML());
     }
 
+
     /**
      * @group                    domdocument
      * @expectedException        \SAML2\Exception\RuntimeException
@@ -94,6 +101,7 @@ class DOMDocumentFactoryTest extends \PHPUnit_Framework_TestCase
         $file = realpath(dirname(__FILE__)) . DIRECTORY_SEPARATOR . 'domdocument_doctype.xml';
         DOMDocumentFactory::fromFile($file);
     }
+
 
     /**
      * @group                    domdocument
@@ -106,6 +114,7 @@ class DOMDocumentFactoryTest extends \PHPUnit_Framework_TestCase
         DOMDocumentFactory::fromString($xml);
     }
 
+
     /**
      * @group                    domdocument
      * @expectedException        \SAML2\Exception\RuntimeException
@@ -117,6 +126,7 @@ class DOMDocumentFactoryTest extends \PHPUnit_Framework_TestCase
         DOMDocumentFactory::fromFile($file);
     }
 
+
     /**
      * @group                    domdocument
      * @expectedException        \SAML2\Exception\InvalidArgumentException
@@ -126,6 +136,7 @@ class DOMDocumentFactoryTest extends \PHPUnit_Framework_TestCase
     {
         DOMDocumentFactory::fromString("");
     }
+
 
     /**
      * @return array

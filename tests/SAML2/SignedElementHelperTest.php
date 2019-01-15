@@ -14,6 +14,7 @@ class SignedElementHelperTest extends \PHPUnit_Framework_TestCase
      */
     private $signedMockElement;
 
+
     /**
      * Create a mock signed element called 'root'
      */
@@ -24,6 +25,7 @@ class SignedElementHelperTest extends \PHPUnit_Framework_TestCase
         $mock->setCertificates([CertificatesMock::PUBLIC_KEY_PEM]);
         $this->signedMockElement = $mock->toSignedXML();
     }
+
 
     /**
      * First check that we are able to validate with no modifications.
@@ -38,6 +40,7 @@ class SignedElementHelperTest extends \PHPUnit_Framework_TestCase
         $tmp = new SignedElementHelperMock($signedMockElementCopy);
         $this->assertTrue($tmp->validate(CertificatesMock::getPublicKey()));
     }
+
 
     /**
      * Test the modification of references.
@@ -60,6 +63,7 @@ class SignedElementHelperTest extends \PHPUnit_Framework_TestCase
         );
     }
 
+
     /**
      * Test that signatures no longer validate if the value has been tampered with.
      */
@@ -76,6 +80,7 @@ class SignedElementHelperTest extends \PHPUnit_Framework_TestCase
         $this->setExpectedException('Exception', 'Unable to validate Signature');
         $tmp->validate(CertificatesMock::getPublicKey());
     }
+
 
     /**
      * Test that signatures contain the corresponding public keys.
@@ -120,7 +125,8 @@ edF1YfJgq35hcMMLY9RE/0C0bCI=
         $this->assertEquals($certData, $certs[0]);
     }
 
-    function testGetSignatureKeyCertificates()
+
+    public function testGetSignatureKeyCertificates()
     {
         $seh = new SignedElementHelperMock();
         $origkey = CertificatesMock::getPrivateKey();

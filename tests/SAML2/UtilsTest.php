@@ -30,6 +30,7 @@ class UtilsTest extends \PHPUnit_Framework_TestCase
         $this->assertEquals('NameIDValue', $nameID[0]->textContent);
     }
 
+
     /**
      * Test adding an element with a string value.
      */
@@ -60,6 +61,7 @@ class UtilsTest extends \PHPUnit_Framework_TestCase
             $document->saveXML($document->firstChild)
         );
     }
+
 
     /**
      * Test adding multiple elements of a given type with given values.
@@ -131,6 +133,7 @@ class UtilsTest extends \PHPUnit_Framework_TestCase
         );
     }
 
+
     /**
      * Test retrieval of a string value for a given node.
      */
@@ -153,6 +156,7 @@ class UtilsTest extends \PHPUnit_Framework_TestCase
         $this->assertEquals('value1', $stringValues[0]);
         $this->assertEquals('value2', $stringValues[1]);
     }
+
 
     /**
      * Test retrieval of a localized string for a given node.
@@ -177,6 +181,7 @@ class UtilsTest extends \PHPUnit_Framework_TestCase
         $this->assertEquals('value (no)', $localizedStringValues["no"]);
     }
 
+
     /**
      * Test xsDateTime format validity
      *
@@ -192,6 +197,7 @@ class UtilsTest extends \PHPUnit_Framework_TestCase
             $this->assertFalse($shouldPass);
         }
     }
+
 
     public function xsDateTimes()
     {
@@ -211,6 +217,7 @@ class UtilsTest extends \PHPUnit_Framework_TestCase
             [false, '2015-01-01T00:00:00.123456Z789012345', 1420070400],
         ];
     }
+
 
     /**
      * Test parseBoolean, XML allows both 1 and true as values.
@@ -271,6 +278,7 @@ class UtilsTest extends \PHPUnit_Framework_TestCase
         );
         $result = Utils::parseBoolean($document->firstChild, 'anattribute' );
     }
+
 
     /**
      * Test createKeyDescriptor.

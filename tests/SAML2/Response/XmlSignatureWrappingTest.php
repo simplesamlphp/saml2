@@ -21,6 +21,7 @@ class XmlSignatureWrappingTest extends \PHPUnit_Framework_TestCase
      */
     private $identityProviderConfiguration;
 
+
     public function setUp()
     {
         $this->signatureValidator = new Validator(new \Psr\Log\NullLogger());
@@ -33,6 +34,7 @@ class XmlSignatureWrappingTest extends \PHPUnit_Framework_TestCase
         );
     }
 
+
     /**
      * @expectedException Exception
      * @expectedExceptionMessage Reference validation failed
@@ -43,6 +45,7 @@ class XmlSignatureWrappingTest extends \PHPUnit_Framework_TestCase
 
         $this->signatureValidator->hasValidSignature($assertion, $this->identityProviderConfiguration);
     }
+
 
     /**
      * @expectedException Exception
@@ -55,6 +58,7 @@ class XmlSignatureWrappingTest extends \PHPUnit_Framework_TestCase
         $this->signatureValidator->hasValidSignature($assertion, $this->identityProviderConfiguration);
     }
 
+
     private function getSignedAssertionWithSignatureThatReferencesAnotherAssertion()
     {
         $doc = DOMDocumentFactory::fromFile(__DIR__ . '/signedAssertionWithInvalidReferencedId.xml');
@@ -62,6 +66,7 @@ class XmlSignatureWrappingTest extends \PHPUnit_Framework_TestCase
 
         return $assertion;
     }
+
 
     private function getSignedAssertionWithEmbeddedAssertionReferencedInSignature()
     {

@@ -9,6 +9,7 @@ class FingerprintTest extends \PHPUnit_Framework_TestCase
      */
     private $fingerprint;
 
+
     /**
      * @group certificate
      * @test

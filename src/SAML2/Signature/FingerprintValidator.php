@@ -25,6 +25,7 @@ class FingerprintValidator extends AbstractChainedValidator
      */
     private $fingerprintLoader;
 
+
     /**
      * @deprecated Please use full certificates instead.
      */
@@ -36,6 +37,7 @@ class FingerprintValidator extends AbstractChainedValidator
 
         parent::__construct($logger);
     }
+
 
     public function canValidate(
         SignedElement $signedElement,
@@ -59,6 +61,7 @@ class FingerprintValidator extends AbstractChainedValidator
 
         return true;
     }
+
 
     /**
      * @param \SAML2\SignedElement             $signedElement

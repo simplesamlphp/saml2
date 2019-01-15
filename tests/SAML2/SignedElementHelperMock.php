@@ -15,6 +15,7 @@ class SignedElementHelperMock extends SignedElementHelper
         parent::__construct($xml);
     }
 
+
     /**
      * @return \DOMElement
      */

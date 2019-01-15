@@ -28,14 +28,12 @@ class AuthnRequest extends Request
      */
     private $forceAuthn;
 
-
     /**
      * Optional ProviderID attribute
      *
      * @var string
      */
     private $ProviderName;
-
 
     /**
      * Set to true if this request is passive.
@@ -73,14 +71,12 @@ class AuthnRequest extends Request
      */
     private $assertionConsumerServiceURL;
 
-
     /**
      * What binding should be used when sending the response.
      *
      * @var string|null
      */
     private $protocolBinding;
-
 
     /**
      * The index of the AttributeConsumingService.
@@ -95,7 +91,6 @@ class AuthnRequest extends Request
      * @var int|null
      */
     private $assertionConsumerServiceIndex;
-
 
     /**
      * What authentication context was requested.
@@ -129,6 +124,7 @@ class AuthnRequest extends Request
      * @var \SAML2\XML\saml\NameID
      */
     private $nameId;
+
 
     /**
      * Constructor for SAML 2 authentication request messages.
@@ -178,6 +174,7 @@ class AuthnRequest extends Request
         $this->parseConditions($xml);
     }
 
+
     /**
      * @param $xml
      *
@@ -218,6 +215,7 @@ class AuthnRequest extends Request
         }
     }
 
+
     /**
      * @param \DOMElement $xml
      *
@@ -241,6 +239,7 @@ class AuthnRequest extends Request
             $this->nameIdPolicy['AllowCreate'] = Utils::parseBoolean($nameIdPolicy, 'AllowCreate', false);
         }
     }
+
 
     /**
      * @param \DOMElement $xml
@@ -270,6 +269,7 @@ class AuthnRequest extends Request
 
         $this->requestedAuthnContext = $rac;
     }
+
 
     /**
      * @param \DOMElement $xml
@@ -303,6 +303,7 @@ class AuthnRequest extends Request
         }
     }
 
+
     /**
      * @param \DOMElement $xml
      */
@@ -326,6 +327,7 @@ class AuthnRequest extends Request
             $this->audiences[] = trim($a->textContent);
         }
     }
+
 
     /**
      * Retrieve the NameIdPolicy.
@@ -436,6 +438,7 @@ class AuthnRequest extends Request
         $this->isPassive = $isPassive;
     }
 
+
     /**
      * Retrieve the audiences from the request.
      *
@@ -447,6 +450,7 @@ class AuthnRequest extends Request
     {
         return $this->audiences;
     }
+
 
     /**
      * Set the audiences to send in the request.
@@ -492,6 +496,7 @@ class AuthnRequest extends Request
         return $this->IDPList;
     }
 
+
     /**
      * @param int $ProxyCount
      */
@@ -501,6 +506,7 @@ class AuthnRequest extends Request
         $this->ProxyCount = $ProxyCount;
     }
 
+
     /**
      * @return int|null
      */
@@ -508,6 +514,7 @@ class AuthnRequest extends Request
     {
         return $this->ProxyCount;
     }
+
 
     /**
      * @param array $RequesterID
@@ -517,6 +524,7 @@ class AuthnRequest extends Request
         $this->RequesterID = $RequesterID;
     }
 
+
     /**
      * @return array
      */
@@ -524,6 +532,7 @@ class AuthnRequest extends Request
     {
         return $this->RequesterID;
     }
+
 
     /**
      * Retrieve the value of the AssertionConsumerServiceURL attribute.
@@ -534,6 +543,7 @@ class AuthnRequest extends Request
     {
         return $this->assertionConsumerServiceURL;
     }
+
 
     /**
      * Set the value of the AssertionConsumerServiceURL attribute.
@@ -547,6 +557,7 @@ class AuthnRequest extends Request
         $this->assertionConsumerServiceURL = $assertionConsumerServiceURL;
     }
 
+
     /**
      * Retrieve the value of the ProtocolBinding attribute.
      *
@@ -556,6 +567,7 @@ class AuthnRequest extends Request
     {
         return $this->protocolBinding;
     }
+
 
     /**
      * Set the value of the ProtocolBinding attribute.
@@ -569,6 +581,7 @@ class AuthnRequest extends Request
         $this->protocolBinding = $protocolBinding;
     }
 
+
     /**
      * Retrieve the value of the AttributeConsumingServiceIndex attribute.
      *
@@ -578,6 +591,7 @@ class AuthnRequest extends Request
     {
         return $this->attributeConsumingServiceIndex;
     }
+
 
     /**
      * Set the value of the AttributeConsumingServiceIndex attribute.
@@ -591,6 +605,7 @@ class AuthnRequest extends Request
         $this->attributeConsumingServiceIndex = $attributeConsumingServiceIndex;
     }
 
+
     /**
      * Retrieve the value of the AssertionConsumerServiceIndex attribute.
      *
@@ -600,6 +615,7 @@ class AuthnRequest extends Request
     {
         return $this->assertionConsumerServiceIndex;
     }
+
 
     /**
      * Set the value of the AssertionConsumerServiceIndex attribute.
@@ -613,6 +629,7 @@ class AuthnRequest extends Request
         $this->assertionConsumerServiceIndex = $assertionConsumerServiceIndex;
     }
 
+
     /**
      * Retrieve the RequestedAuthnContext.
      *
@@ -622,6 +639,7 @@ class AuthnRequest extends Request
     {
         return $this->requestedAuthnContext;
     }
+
 
     /**
      * Set the RequestedAuthnContext.
@@ -634,6 +652,7 @@ class AuthnRequest extends Request
 
         $this->requestedAuthnContext = $requestedAuthnContext;
     }
+
 
     /**
      * Retrieve the NameId of the subject in the assertion.
@@ -650,6 +669,7 @@ class AuthnRequest extends Request
         return $this->nameId;
     }
 
+
     /**
      * Set the NameId of the subject in the assertion.
      *
@@ -664,6 +684,7 @@ class AuthnRequest extends Request
         }
         $this->nameId = $nameId;
     }
+
 
     /**
      * Encrypt the NameID in the AuthnRequest.
@@ -696,6 +717,7 @@ class AuthnRequest extends Request
         $this->nameId          = null;
     }
 
+
     /**
      * Decrypt the NameId of the subject in the assertion.
      *
@@ -716,6 +738,7 @@ class AuthnRequest extends Request
         $this->encryptedNameId = null;
     }
 
+
     /**
      * Retrieve the SubjectConfirmation elements we have in our Subject element.
      *
@@ -726,6 +749,7 @@ class AuthnRequest extends Request
         return $this->subjectConfirmation;
     }
 
+
     /**
      * Set the SubjectConfirmation elements that should be included in the assertion.
      *
@@ -735,6 +759,7 @@ class AuthnRequest extends Request
     {
         $this->subjectConfirmation = $subjectConfirmation;
     }
+
 
     /**
      * Convert this authentication request to an XML element.
@@ -837,6 +862,7 @@ class AuthnRequest extends Request
         return $root;
     }
 
+
     /**
      * Add a Subject-node to the assertion.
      *
@@ -864,6 +890,7 @@ class AuthnRequest extends Request
             $sc->toXML($subject);
         }
     }
+
 
     /**
      * Add a Conditions-node to the request.

@@ -46,6 +46,7 @@ ATTRIBUTEVALUE
         $this->assertEquals("", $attribute->AttributeValue[0]->getString());
     }
 
+
     /**
      * Verifies that we can create an AttributeValue from a DOMElement.
      */
@@ -84,6 +85,7 @@ ATTRIBUTEXML
         $this->assertEqualXMLStructure($expectedStructure, $returnedStructure);
         $this->assertEquals("urn:collab:person:surftest.nl:example", $attribute->AttributeValue[0]->getString());
     }
+
 
     /**
      * Serialize an AttributeValue and Unserialize that again.

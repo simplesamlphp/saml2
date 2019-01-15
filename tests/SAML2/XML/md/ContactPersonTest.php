@@ -9,7 +9,8 @@ use SAML2\Utils;
 /**
  * Class \SAML2\XML\md\ContactPersonTest
  */
-class ContactPersonTest extends \PHPUnit_Framework_TestCase {
+class ContactPersonTest extends \PHPUnit_Framework_TestCase
+{
     public function testContactPerson()
     {
         $contactType = "other";
@@ -60,6 +61,7 @@ XML
         }
     }
 
+
     public function testContactPersonFromXML()
     {
         $mdNamespace = Constants::NS_MD;
@@ -91,6 +93,7 @@ XML
         $this->assertEquals('testval2', $contactPerson->getContactPersonAttributes()['testattr2']);
     }
 
+
     public function testMultipleNamesXML()
     {
         $mdNamespace = Constants::NS_MD;
@@ -116,6 +119,7 @@ XML
         $contactPerson = new ContactPerson($document->getElementsByTagName('ContactPerson')->item(0));
     }
 
+
     public function testEmptySurNameXML()
     {
         $mdNamespace = Constants::NS_MD;
@@ -138,6 +142,7 @@ XML
 
         $this->assertNull($contactPerson->getSurName());
     }
+
 
     public function testMissingContactTypeXML()
     {

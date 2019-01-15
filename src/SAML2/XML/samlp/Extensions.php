@@ -29,6 +29,7 @@ class Extensions
         return $ret;
     }
 
+
     /**
      * Add a list of Extensions to the given element.
      *

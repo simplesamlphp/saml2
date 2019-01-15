@@ -20,6 +20,7 @@ class AttributeValue implements \Serializable
      */
     public $element;
 
+
     /**
      * Create an AttributeValue.
      *
@@ -54,6 +55,7 @@ class AttributeValue implements \Serializable
         Utils::copyElement($value, $this->element);
     }
 
+
     /**
      * Collect the value of the element-property
      * @return \DOMElement
@@ -63,6 +65,7 @@ class AttributeValue implements \Serializable
         return $this->element;
     }
 
+
     /**
      * Set the value of the element-property
      * @param \DOMElement $element
@@ -71,6 +74,7 @@ class AttributeValue implements \Serializable
     {
         $this->element = $element;
     }
+
 
     /**
      * Append this attribute value to an element.
@@ -86,6 +90,7 @@ class AttributeValue implements \Serializable
         return Utils::copyElement($this->getElement(), $parent);
     }
 
+
     /**
      * Returns a plain text content of the attribute value.
      */
@@ -93,6 +98,7 @@ class AttributeValue implements \Serializable
     {
         return $this->element->textContent;
     }
+
 
     /**
      * Convert this attribute value to a string.

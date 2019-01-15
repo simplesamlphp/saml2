@@ -11,6 +11,7 @@ class Container extends AbstractContainer
      */
     protected $logger;
 
+
     /**
      * Create a new SimpleSAMLphp compatible container.
      */
@@ -18,6 +19,7 @@ class Container extends AbstractContainer
     {
         $this->logger = new Logger();
     }
+
 
     /**
      * {@inheritdoc}
@@ -27,6 +29,7 @@ class Container extends AbstractContainer
         return $this->logger;
     }
 
+
     /**
      * {@inheritdoc}
      */
@@ -34,6 +37,7 @@ class Container extends AbstractContainer
     {
         return \SimpleSAML\Utils\Random::generateID();
     }
+
 
     /**
      * {@inheritdoc}
@@ -43,6 +47,7 @@ class Container extends AbstractContainer
         \SimpleSAML\Utils\XML::debugSAMLMessage($message, $type);
     }
 
+
     /**
      * {@inheritdoc}
      */
@@ -50,6 +55,7 @@ class Container extends AbstractContainer
     {
         \SimpleSAML\Utils\HTTP::redirectTrustedURL($url, $data);
     }
+
 
     /**
      * {@inheritdoc}

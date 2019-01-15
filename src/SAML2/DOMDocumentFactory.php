@@ -12,6 +12,7 @@ final class DOMDocumentFactory
     {
     }
 
+
     /**
      * @param string $xml
      *
@@ -58,6 +59,7 @@ final class DOMDocumentFactory
         return $domDocument;
     }
 
+
     /**
      * @param $file
      *
@@ -93,6 +95,7 @@ final class DOMDocumentFactory
 
         return static::fromString($xml);
     }
+
 
     /**
      * @return \DOMDocument

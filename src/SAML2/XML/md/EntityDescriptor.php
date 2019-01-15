@@ -89,6 +89,7 @@ class EntityDescriptor extends SignedElementHelper
      */
     public $AdditionalMetadataLocation = [];
 
+
     /**
      * Initialize an EntitiyDescriptor.
      *
@@ -181,6 +182,7 @@ class EntityDescriptor extends SignedElementHelper
         }
     }
 
+
     /**
      * Collect the value of the entityID-property
      * @return string
@@ -189,6 +191,7 @@ class EntityDescriptor extends SignedElementHelper
     {
         return $this->entityID;
     }
+
 
     /**
      * Set the value of the entityID-property
@@ -200,6 +203,7 @@ class EntityDescriptor extends SignedElementHelper
         $this->entityID = $entityId;
     }
 
+
     /**
      * Collect the value of the ID-property
      * @return string|null
@@ -208,6 +212,7 @@ class EntityDescriptor extends SignedElementHelper
     {
         return $this->ID;
     }
+
 
     /**
      * Set the value of the ID-property
@@ -219,6 +224,7 @@ class EntityDescriptor extends SignedElementHelper
         $this->ID = $Id;
     }
 
+
     /**
      * Collect the value of the validUntil-property
      * @return int|null
@@ -227,6 +233,7 @@ class EntityDescriptor extends SignedElementHelper
     {
         return $this->validUntil;
     }
+
 
     /**
      * Set the value of the validUntil-property
@@ -238,6 +245,7 @@ class EntityDescriptor extends SignedElementHelper
         $this->validUntil = $validUntil;
     }
 
+
     /**
      * Collect the value of the cacheDuration-property
      * @return string|null
@@ -246,6 +254,7 @@ class EntityDescriptor extends SignedElementHelper
     {
         return $this->cacheDuration;
     }
+
 
     /**
      * Set the value of the cacheDuration-property
@@ -257,6 +266,7 @@ class EntityDescriptor extends SignedElementHelper
         $this->cacheDuration = $cacheDuration;
     }
 
+
     /**
      * Collect the value of the Extensions-property
      * @return \SAML2\XML\Chunk[]
@@ -266,6 +276,7 @@ class EntityDescriptor extends SignedElementHelper
         return $this->Extensions;
     }
 
+
     /**
      * Set the value of the Extensions-property
      * @param array $extensions
@@ -274,6 +285,7 @@ class EntityDescriptor extends SignedElementHelper
     {
         $this->Extensions = $extensions;
     }
+
 
     /**
      * Add an Extension.
@@ -285,6 +297,7 @@ class EntityDescriptor extends SignedElementHelper
         $this->Extensions[] = $extension;
     }
 
+
     /**
      * Collect the value of the RoleDescriptor-property
      * @return \SAML2\XML\md\RoleDescriptor[]
@@ -293,6 +306,7 @@ class EntityDescriptor extends SignedElementHelper
     {
         return $this->RoleDescriptor;
     }
+
 
     /**
      * Set the value of the RoleDescriptor-property
@@ -303,6 +317,7 @@ class EntityDescriptor extends SignedElementHelper
         $this->RoleDescriptor = $roleDescriptor;
     }
 
+
     /**
      * Add the value to the RoleDescriptor-property
      * @param \SAML2\XML\md\RoleDescriptor $roleDescriptor
@@ -311,6 +326,7 @@ class EntityDescriptor extends SignedElementHelper
     {
         $this->RoleDescriptor[] = $roleDescriptor;
     }
+
 
     /**
      * Collect the value of the AffiliationDescriptor-property
@@ -321,6 +337,7 @@ class EntityDescriptor extends SignedElementHelper
         return $this->AffiliationDescriptor;
     }
 
+
     /**
      * Set the value of the AffliationDescriptor-property
      * @param \SAML2\XML\md\AffiliationDescriptor|null $affiliationDescriptor
@@ -330,6 +347,7 @@ class EntityDescriptor extends SignedElementHelper
         $this->AffiliationDescriptor = $affiliationDescriptor;
     }
 
+
     /**
      * Collect the value of the Organization-property
      * @return \SAML2\XML\md\Organization|null
@@ -338,6 +356,7 @@ class EntityDescriptor extends SignedElementHelper
     {
         return $this->Organization;
     }
+
 
     /**
      * Set the value of the Organization-property
@@ -358,6 +377,7 @@ class EntityDescriptor extends SignedElementHelper
         return $this->ContactPerson;
     }
 
+
     /**
      * Set the value of the ContactPerson-property
      * @param array $contactPerson
@@ -366,6 +386,7 @@ class EntityDescriptor extends SignedElementHelper
     {
         $this->ContactPerson = $contactPerson;
     }
+
 
     /**
      * Add the value to the ContactPerson-property
@@ -376,6 +397,7 @@ class EntityDescriptor extends SignedElementHelper
         $this->ContactPerson[] = $contactPerson;
     }
 
+
     /**
      * Collect the value of the AdditionalMetadataLocation-property
      * @return \SAML2\XML\md\AdditionalMetadataLocation[]
@@ -385,6 +407,7 @@ class EntityDescriptor extends SignedElementHelper
         return $this->AdditionalMetadataLocation;
     }
 
+
     /**
      * Set the value of the AdditionalMetadataLocation-property
      * @param array $additionalMetadataLocation
@@ -393,6 +416,7 @@ class EntityDescriptor extends SignedElementHelper
     {
         $this->AdditionalMetadataLocation = $additionalMetadataLocation;
     }
+
 
     /**
      * Add the value to the AdditionalMetadataLocation-property

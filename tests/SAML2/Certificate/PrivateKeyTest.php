@@ -4,7 +4,6 @@ namespace SAML2\Certificate;
 
 class PrivateKeyTest extends \PHPUnit_Framework_TestCase
 {
-
     /**
      * @group certificate
      * @test
@@ -21,6 +20,7 @@ class PrivateKeyTest extends \PHPUnit_Framework_TestCase
         $this->assertEquals("s3cr1t", $pk_withpass->getPassphrase());
     }
 
+
     /**
      * @group certificate
      *
@@ -31,6 +31,7 @@ class PrivateKeyTest extends \PHPUnit_Framework_TestCase
     {
         PrivateKey::create(0);
     }
+
 
     /**
      * @group certificate

@@ -22,6 +22,7 @@ class X509Data
      */
     public $data = [];
 
+
     /**
      * Initialize a X509Data.
      *
@@ -53,6 +54,7 @@ class X509Data
         }
     }
 
+
     /**
      * Collect the value of the data-property
      * @return array
@@ -61,6 +63,7 @@ class X509Data
     {
         return $this->data;
     }
+
 
     /**
      * Set the value of the data-property
@@ -71,6 +74,7 @@ class X509Data
         $this->data = $data;
     }
 
+
     /**
      * Add the value to the data-property
      * @param \SAML2\XML\Chunk|\SAML2\XML\ds\X509Certificate $data
@@ -80,6 +84,7 @@ class X509Data
         assert($data instanceof \SAML2\XML\Chunk || $data instanceof \SAML2\XML\ds\X509Certificate);
         $this->data[] = $data;
     }
+
 
     /**
      * Convert this X509Data element to XML.

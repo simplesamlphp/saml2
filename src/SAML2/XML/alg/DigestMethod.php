@@ -48,6 +48,7 @@ class DigestMethod
         return $this->Algorithm;
     }
 
+
     /**
      * Set the value of the Algorithm-property
      * @param string $algorithm

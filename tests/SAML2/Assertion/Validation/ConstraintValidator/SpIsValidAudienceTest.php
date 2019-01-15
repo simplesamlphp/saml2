@@ -21,12 +21,14 @@ class SpIsValidAudienceTest extends \PHPUnit_Framework_TestCase
      */
     private $serviceProvider;
 
+
     public function setUp()
     {
         parent::setUp();
         $this->assertion = m::mock('SAML2\Assertion');
         $this->serviceProvider = m::mock('SAML2\Configuration\ServiceProvider');
     }
+
 
     /**
      * @group assertion-validation
@@ -46,6 +48,7 @@ class SpIsValidAudienceTest extends \PHPUnit_Framework_TestCase
         $this->assertTrue($result->isValid());
     }
 
+
     /**
      * @group assertion-validation
      * @test
@@ -64,6 +67,7 @@ class SpIsValidAudienceTest extends \PHPUnit_Framework_TestCase
         $this->assertFalse($result->isValid());
         $this->assertCount(1, $result->getErrors());
     }
+
 
     /**
      * @group assertion-validation

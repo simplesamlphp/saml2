@@ -36,6 +36,7 @@ class NameIdDecryptionTransformer implements
      */
     private $logger;
 
+
     public function __construct(
         LoggerInterface $logger,
         PrivateKeyLoader $privateKeyLoader
@@ -43,6 +44,7 @@ class NameIdDecryptionTransformer implements
         $this->logger = $logger;
         $this->privateKeyLoader = $privateKeyLoader;
     }
+
 
     public function transform(Assertion $assertion)
     {
@@ -79,10 +81,12 @@ class NameIdDecryptionTransformer implements
         return $assertion;
     }
 
+
     public function setIdentityProvider(IdentityProvider $identityProvider)
     {
         $this->identityProvider = $identityProvider;
     }
+
 
     public function setServiceProvider(ServiceProvider $serviceProvider)
     {

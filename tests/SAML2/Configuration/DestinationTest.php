@@ -16,6 +16,7 @@ class DestinationTest extends \PHPUnit_Framework_TestCase
         $this->assertTrue($destinationOne->equals($destinationTwo));
     }
 
+
     /**
      * @group configuration
      * @test
@@ -28,6 +29,7 @@ class DestinationTest extends \PHPUnit_Framework_TestCase
         $this->assertTrue($destinationOne->equals($destinationTwo));
     }
 
+
     /**
      * @group configuration
      * @test
@@ -38,6 +40,7 @@ class DestinationTest extends \PHPUnit_Framework_TestCase
     {
         $destination = new Destination($value);
     }
+
 
     /**
      * data-provider for a_destination_cannot_be_created_with_a_non_string_value

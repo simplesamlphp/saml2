@@ -43,6 +43,7 @@ class Organization
      */
     public $OrganizationURL = [];
 
+
     /**
      * Initialize an Organization element.
      *
@@ -75,6 +76,7 @@ class Organization
         }
     }
 
+
     /**
      * Collect the value of the Extensions-property
      * @return \SAML2\XML\Chunk[]
@@ -84,6 +86,7 @@ class Organization
         return $this->Extensions;
     }
 
+
     /**
      * Set the value of the Extensions-property
      * @param array $extensions
@@ -92,6 +95,7 @@ class Organization
     {
         $this->Extensions = $extensions;
     }
+
 
     /**
      * Add an Extension.
@@ -103,6 +107,7 @@ class Organization
         $this->Extensions[] = $extension;
     }
 
+
     /**
      * Collect the value of the OrganizationName-property
      * @return string[]
@@ -111,6 +116,7 @@ class Organization
     {
         return $this->OrganizationName;
     }
+
 
     /**
      * Set the value of the OrganizationName-property
@@ -121,6 +127,7 @@ class Organization
         $this->OrganizationName = $organizationName;
     }
 
+
     /**
      * Collect the value of the OrganizationDisplayName-property
      * @return string[]
@@ -129,6 +136,7 @@ class Organization
     {
         return $this->OrganizationDisplayName;
     }
+
 
     /**
      * Set the value of the OrganizationDisplayName-property
@@ -139,6 +147,7 @@ class Organization
         $this->OrganizationDisplayName = $organizationDisplayName;
     }
 
+
     /**
      * Collect the value of the OrganizationURL-property
      * @return string[]
@@ -148,6 +157,7 @@ class Organization
         return $this->OrganizationURL;
     }
 
+
     /**
      * Set the value of the OrganizationURL-property
      * @param array $organizationURL
@@ -156,6 +166,7 @@ class Organization
     {
         $this->OrganizationURL = $organizationURL;
     }
+
 
     /**
      * Convert this Organization to XML.

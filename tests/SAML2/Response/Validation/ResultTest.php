@@ -20,6 +20,7 @@ class ResultTest extends \PHPUnit_Framework_TestCase
         $this->assertEquals($error, $errors[0]);
     }
 
+
     /**
      * @group response-validation
      * @test
@@ -32,6 +33,7 @@ class ResultTest extends \PHPUnit_Framework_TestCase
 
         $result->addError(123);
     }
+
 
     /**
      * @group response-validation

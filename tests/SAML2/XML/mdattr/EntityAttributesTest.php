@@ -48,6 +48,7 @@ class EntityAttributesTest extends \PHPUnit_Framework_TestCase
         $this->assertCount(2, $attributeElements);
     }
 
+
     public function testUnmarshalling()
     {
         $document = DOMDocumentFactory::fromString(<<<XML
@@ -74,6 +75,7 @@ XML
         $this->assertEquals('1984-08-26T10:01:30.000Z', $entityAttributes->getChildren()[0]->xml->getAttribute('IssueInstant'));
         $this->assertEquals('attrib2', $entityAttributes->getChildren()[3]->getName());
     }
+
 
     public function testUnmarshallingAttributes()
     {

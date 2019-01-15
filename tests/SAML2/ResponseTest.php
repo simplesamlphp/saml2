@@ -22,6 +22,7 @@ class ResponseTest extends \PHPUnit_Framework_TestCase
         $this->assertEquals('SomeIssuer', $issuerElements[0]->textContent);
     }
 
+
     public function testLoop()
     {
         $xml = <<<XML

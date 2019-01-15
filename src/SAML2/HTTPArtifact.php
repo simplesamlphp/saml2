@@ -23,6 +23,7 @@ class HTTPArtifact extends Binding
      */
     private $spMetadata;
 
+
     /**
      * Create the redirect URL for a message.
      *
@@ -55,6 +56,7 @@ class HTTPArtifact extends Binding
         return \SimpleSAML\Utils\HTTP::addURLparameter($message->getDestination(), $params);
     }
 
+
     /**
      * Send a SAML 2 message using the HTTP-Redirect binding.
      *
@@ -67,6 +69,7 @@ class HTTPArtifact extends Binding
         $destination = $this->getRedirectURL($message);
         Utils::getContainer()->redirect($destination);
     }
+
 
     /**
      * Receive a SAML 2 message sent using the HTTP-Artifact binding.
@@ -147,6 +150,7 @@ class HTTPArtifact extends Binding
         return $samlResponse;
     }
 
+
     /**
      * @param \SimpleSAML\Configuration $sp
      */
@@ -154,6 +158,7 @@ class HTTPArtifact extends Binding
     {
         $this->spMetadata = $sp;
     }
+
 
     /**
      * A validator which returns true if the ArtifactResponse was signed with the given key

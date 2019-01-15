@@ -23,6 +23,7 @@ class SubjectConfirmationNotBeforeTest extends ControlledTimeTest
      */
     private $subjectConfirmationData;
 
+
     public function setUp()
     {
         parent::setUp();
@@ -30,6 +31,7 @@ class SubjectConfirmationNotBeforeTest extends ControlledTimeTest
         $this->subjectConfirmationData = new \SAML2\XML\saml\SubjectConfirmationData();
         $this->subjectConfirmation->setSubjectConfirmationData($this->subjectConfirmationData);
     }
+
 
     /**
      * @group assertion-validation
@@ -48,6 +50,7 @@ class SubjectConfirmationNotBeforeTest extends ControlledTimeTest
         $this->assertCount(1, $result->getErrors());
     }
 
+
     /**
      * @group assertion-validation
      * @test
@@ -63,6 +66,7 @@ class SubjectConfirmationNotBeforeTest extends ControlledTimeTest
 
         $this->assertTrue($result->isValid());
     }
+
 
     /**
      * @group assertion-validation

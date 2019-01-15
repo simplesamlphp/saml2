@@ -72,6 +72,7 @@ abstract class NameIDType extends BaseIDType
         $this->setValue(trim($xml->textContent));
     }
 
+
     /**
      * Collect the value of the Format-property
      * @return string|null
@@ -80,6 +81,7 @@ abstract class NameIDType extends BaseIDType
     {
         return $this->Format;
     }
+
 
     /**
      * Set the value of the Format-property
@@ -91,6 +93,7 @@ abstract class NameIDType extends BaseIDType
         $this->Format = $format;
     }
 
+
     /**
      * Collect the value of the value-property
      * @return string|null
@@ -99,6 +102,7 @@ abstract class NameIDType extends BaseIDType
     {
         return $this->value;
     }
+
 
     /**
      * Set the value of the value-property
@@ -110,6 +114,7 @@ abstract class NameIDType extends BaseIDType
         $this->value = $value;
     }
 
+
     /**
      * Collect the value of the SPProvidedID-property
      * @return string|null
@@ -118,6 +123,7 @@ abstract class NameIDType extends BaseIDType
     {
         return $this->SPProvidedID;
     }
+
 
     /**
      * Set the value of the SPProvidedID-property
@@ -128,6 +134,7 @@ abstract class NameIDType extends BaseIDType
         assert(is_string($spProvidedID) || is_null($spProvidedID));
         $this->SPProvidedID = $spProvidedID;
     }
+
 
     /**
      * Create a \SAML2\XML\saml\NameID object from an array with its contents.

@@ -14,6 +14,7 @@ abstract class ControlledTimeTest extends \PHPUnit_Framework_TestCase
 {
     protected $currentTime = 1;
 
+
     public function setUp()
     {
         $timing = m::mock('alias:SAML2\Utilities\Temporal');

@@ -11,6 +11,7 @@ class RoleDescriptorMock extends RoleDescriptor
         parent::__construct('md:RoleDescriptor', $xml);
     }
 
+
     public function toXML(\DOMElement $parent)
     {
         $xml = parent::toXML($parent);

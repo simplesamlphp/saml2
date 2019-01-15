@@ -31,6 +31,7 @@ class Scope
      */
     public $regexp = false;
 
+
     /**
      * Create a Scope.
      *
@@ -46,6 +47,7 @@ class Scope
         $this->setIsRegexpScope(Utils::parseBoolean($xml, 'regexp', false));
     }
 
+
     /**
      * Collect the value of the scope-property
      * @return string
@@ -54,6 +56,7 @@ class Scope
     {
         return $this->scope;
     }
+
 
     /**
      * Set the value of the scope-property
@@ -65,6 +68,7 @@ class Scope
         $this->scope = $scope;
     }
 
+
     /**
      * Collect the value of the regexp-property
      * @return boolean
@@ -73,6 +77,7 @@ class Scope
     {
         return $this->regexp;
     }
+
 
     /**
      * Set the value of the regexp-property
@@ -83,6 +88,7 @@ class Scope
         assert(is_bool($regexp));
         $this->regexp = $regexp;
     }
+
 
     /**
      * Convert this Scope to XML.

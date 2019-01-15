@@ -248,6 +248,7 @@ class Assertion implements SignedElement
      */
     private $signatureMethod;
 
+
     /**
      * Constructor for SAML 2 assertions.
      *
@@ -300,6 +301,7 @@ class Assertion implements SignedElement
         $this->parseSignature($xml);
     }
 
+
     /**
      * Parse subject in assertion.
      *
@@ -343,6 +345,7 @@ class Assertion implements SignedElement
             $this->SubjectConfirmation[] = new SubjectConfirmation($sc);
         }
     }
+
 
     /**
      * Parse conditions in assertion.
@@ -408,6 +411,7 @@ class Assertion implements SignedElement
         }
     }
 
+
     /**
      * Parse AuthnStatement in assertion.
      *
@@ -441,6 +445,7 @@ class Assertion implements SignedElement
 
         $this->parseAuthnContext($authnStatement);
     }
+
 
     /**
      * Parse AuthnContext in AuthnStatement.
@@ -501,6 +506,7 @@ class Assertion implements SignedElement
         );
     }
 
+
     /**
      * Parse attribute statements in assertion.
      *
@@ -540,6 +546,7 @@ class Assertion implements SignedElement
             $this->parseAttributeValue($attribute, $name);
         }
     }
+
 
     /**
      * @param \DOMNode $attribute
@@ -597,6 +604,7 @@ class Assertion implements SignedElement
         }
     }
 
+
     /**
      * Parse encrypted attribute statements in assertion.
      *
@@ -609,6 +617,7 @@ class Assertion implements SignedElement
             './saml_assertion:AttributeStatement/saml_assertion:EncryptedAttribute'
         ));
     }
+
 
     /**
      * Parse signature on assertion.
@@ -629,6 +638,7 @@ class Assertion implements SignedElement
             $this->setSignatureMethod($signatureMethod[0]->value);
         }
     }
+
 
     /**
      * Validate this assertion against a public key.
@@ -653,6 +663,7 @@ class Assertion implements SignedElement
         return true;
     }
 
+
     /**
      * Retrieve the identifier of this assertion.
      *
@@ -662,6 +673,7 @@ class Assertion implements SignedElement
     {
         return $this->id;
     }
+
 
     /**
      * Set the identifier of this assertion.
@@ -675,6 +687,7 @@ class Assertion implements SignedElement
         $this->id = $id;
     }
 
+
     /**
      * Retrieve the issue timestamp of this assertion.
      *
@@ -684,6 +697,7 @@ class Assertion implements SignedElement
     {
         return $this->issueInstant;
     }
+
 
     /**
      * Set the issue timestamp of this assertion.
@@ -697,6 +711,7 @@ class Assertion implements SignedElement
         $this->issueInstant = $issueInstant;
     }
 
+
     /**
      * Retrieve the issuer if this assertion.
      *
@@ -706,6 +721,7 @@ class Assertion implements SignedElement
     {
         return $this->issuer;
     }
+
 
     /**
      * Set the issuer of this message.
@@ -718,6 +734,7 @@ class Assertion implements SignedElement
 
         $this->issuer = $issuer;
     }
+
 
     /**
      * Retrieve the NameId of the subject in the assertion.
@@ -733,6 +750,7 @@ class Assertion implements SignedElement
 
         return $this->nameId;
     }
+
 
     /**
      * Set the NameId of the subject in the assertion.
@@ -754,6 +772,7 @@ class Assertion implements SignedElement
         $this->nameId = $nameId;
     }
 
+
     /**
      * Check whether the NameId is encrypted.
      *
@@ -763,6 +782,7 @@ class Assertion implements SignedElement
     {
         return $this->encryptedNameId !== null;
     }
+
 
     /**
      * Encrypt the NameID in the Assertion.
@@ -795,6 +815,7 @@ class Assertion implements SignedElement
         $this->nameId = null;
     }
 
+
     /**
      * Decrypt the NameId of the subject in the assertion.
      *
@@ -816,6 +837,7 @@ class Assertion implements SignedElement
         $this->encryptedNameId = null;
     }
 
+
     /**
      * Did this Assertion contain encrypted Attributes?
      *
@@ -825,6 +847,7 @@ class Assertion implements SignedElement
     {
         return $this->encryptedAttributes !== [];
     }
+
 
     /**
      * Decrypt the assertion attributes.
@@ -876,6 +899,7 @@ class Assertion implements SignedElement
         }
     }
 
+
     /**
      * Retrieve the earliest timestamp this assertion is valid.
      *
@@ -888,6 +912,7 @@ class Assertion implements SignedElement
     {
         return $this->notBefore;
     }
+
 
     /**
      * Set the earliest timestamp this assertion can be used.
@@ -903,6 +928,7 @@ class Assertion implements SignedElement
         $this->notBefore = $notBefore;
     }
 
+
     /**
      * Retrieve the expiration timestamp of this assertion.
      *
@@ -915,6 +941,7 @@ class Assertion implements SignedElement
     {
         return $this->notOnOrAfter;
     }
+
 
     /**
      * Set the expiration timestamp of this assertion.
@@ -930,6 +957,7 @@ class Assertion implements SignedElement
         $this->notOnOrAfter = $notOnOrAfter;
     }
 
+
     /**
      * Retrieve $requiredEncAttributes if attributes will be send encrypted
      *
@@ -939,6 +967,7 @@ class Assertion implements SignedElement
     {
         return $this->requiredEncAttributes;
     }
+
 
     /**
      * Set $requiredEncAttributes if attributes will be send encrypted
@@ -950,6 +979,7 @@ class Assertion implements SignedElement
         assert(is_bool($ea));
         $this->requiredEncAttributes = $ea;
     }
+
 
     /**
      * Retrieve the audiences that are allowed to receive this assertion.
@@ -963,6 +993,7 @@ class Assertion implements SignedElement
         return $this->validAudiences;
     }
 
+
     /**
      * Set the audiences that are allowed to receive this assertion.
      *
@@ -974,6 +1005,7 @@ class Assertion implements SignedElement
     {
         $this->validAudiences = $validAudiences;
     }
+
 
     /**
      * Retrieve the AuthnInstant of the assertion.
@@ -998,6 +1030,7 @@ class Assertion implements SignedElement
         $this->authnInstant = $authnInstant;
     }
 
+
     /**
      * Retrieve the session expiration timestamp.
      *
@@ -1010,6 +1043,7 @@ class Assertion implements SignedElement
     {
         return $this->sessionNotOnOrAfter;
     }
+
 
     /**
      * Set the session expiration timestamp.
@@ -1025,6 +1059,7 @@ class Assertion implements SignedElement
         $this->sessionNotOnOrAfter = $sessionNotOnOrAfter;
     }
 
+
     /**
      * Retrieve the session index of the user at the IdP.
      *
@@ -1034,6 +1069,7 @@ class Assertion implements SignedElement
     {
         return $this->sessionIndex;
     }
+
 
     /**
      * Set the session index of the user at the IdP.
@@ -1049,6 +1085,7 @@ class Assertion implements SignedElement
 
         $this->sessionIndex = $sessionIndex;
     }
+
 
     /**
      * Retrieve the authentication method used to authenticate the user.
@@ -1075,6 +1112,7 @@ class Assertion implements SignedElement
         return null;
     }
 
+
     /**
      * Set the authentication method used to authenticate the user.
      *
@@ -1089,6 +1127,7 @@ class Assertion implements SignedElement
         $this->setAuthnContextClassRef($authnContext);
     }
 
+
     /**
      * Retrieve the authentication method used to authenticate the user.
      *
@@ -1101,6 +1140,7 @@ class Assertion implements SignedElement
     {
         return $this->authnContextClassRef;
     }
+
 
     /**
      * Set the authentication method used to authenticate the user.
@@ -1117,6 +1157,7 @@ class Assertion implements SignedElement
         $this->authnContextClassRef = $authnContextClassRef;
     }
 
+
     /**
      * Retrieve the signature method.
      *
@@ -1126,6 +1167,7 @@ class Assertion implements SignedElement
     {
         return $this->signatureMethod;
     }
+
 
     /**
      * Set the signature method used.
@@ -1138,6 +1180,7 @@ class Assertion implements SignedElement
 
         $this->signatureMethod = $signatureMethod;
     }
+
 
     /**
      * Set the authentication context declaration.
@@ -1156,6 +1199,7 @@ class Assertion implements SignedElement
         $this->authnContextDecl = $authnContextDecl;
     }
 
+
     /**
      * Get the authentication context declaration.
      *
@@ -1168,6 +1212,7 @@ class Assertion implements SignedElement
     {
         return $this->authnContextDecl;
     }
+
 
     /**
      * Set the authentication context declaration reference.
@@ -1186,6 +1231,7 @@ class Assertion implements SignedElement
         $this->authnContextDeclRef = $authnContextDeclRef;
     }
 
+
     /**
      * Get the authentication context declaration reference.
      * URI reference that identifies an authentication context declaration.
@@ -1199,6 +1245,7 @@ class Assertion implements SignedElement
         return $this->authnContextDeclRef;
     }
 
+
     /**
      * Retrieve the AuthenticatingAuthority.
      *
@@ -1210,6 +1257,7 @@ class Assertion implements SignedElement
         return $this->AuthenticatingAuthority;
     }
 
+
     /**
      * Set the AuthenticatingAuthority
      *
@@ -1220,6 +1268,7 @@ class Assertion implements SignedElement
         $this->AuthenticatingAuthority = $authenticatingAuthority;
     }
 
+
     /**
      * Retrieve all attributes.
      *
@@ -1229,6 +1278,7 @@ class Assertion implements SignedElement
     {
         return $this->attributes;
     }
+
 
     /**
      * Replace all attributes.
@@ -1248,6 +1298,7 @@ class Assertion implements SignedElement
         return $this->signatureData;
     }
 
+
     /**
      * @param array|null $signatureData
      */
@@ -1255,6 +1306,7 @@ class Assertion implements SignedElement
     {
         $this->signatureData = $signatureData;
     }
+
 
     /**
      * Retrieve all attributes value types.
@@ -1266,6 +1318,7 @@ class Assertion implements SignedElement
         return $this->attributesValueTypes;
     }
 
+
     /**
      * Replace all attributes value types..
      *
@@ -1275,6 +1328,7 @@ class Assertion implements SignedElement
     {
         $this->attributesValueTypes = $attributesValueTypes;
     }
+
 
     /**
      * Retrieve the NameFormat used on all attributes.
@@ -1289,6 +1343,7 @@ class Assertion implements SignedElement
         return $this->nameFormat;
     }
 
+
     /**
      * Set the NameFormat used on all attributes.
      *
@@ -1301,6 +1356,7 @@ class Assertion implements SignedElement
         $this->nameFormat = $nameFormat;
     }
 
+
     /**
      * Retrieve the SubjectConfirmation elements we have in our Subject element.
      *
@@ -1310,6 +1366,7 @@ class Assertion implements SignedElement
     {
         return $this->SubjectConfirmation;
     }
+
 
     /**
      * Set the SubjectConfirmation elements that should be included in the assertion.
@@ -1321,6 +1378,7 @@ class Assertion implements SignedElement
         $this->SubjectConfirmation = $SubjectConfirmation;
     }
 
+
     /**
      * Retrieve the encryptedAttributes elements we have.
      *
@@ -1330,6 +1388,7 @@ class Assertion implements SignedElement
     {
         return $this->encryptedAttributes;
     }
+
 
     /**
      * Set the encryptedAttributes elements
@@ -1341,6 +1400,7 @@ class Assertion implements SignedElement
         $this->encryptedAttributes = $encAttrs;
     }
 
+
     /**
      * Retrieve the private key we should use to sign the assertion.
      *
@@ -1350,6 +1410,7 @@ class Assertion implements SignedElement
     {
         return $this->signatureKey;
     }
+
 
     /**
      * Set the private key we should use to sign the assertion.
@@ -1363,6 +1424,7 @@ class Assertion implements SignedElement
         $this->signatureKey = $signatureKey;
     }
 
+
     /**
      * Return the key we should use to encrypt the assertion.
      *
@@ -1374,6 +1436,7 @@ class Assertion implements SignedElement
         return $this->encryptionKey;
     }
 
+
     /**
      * Set the private key we should use to encrypt the attributes.
      *
@@ -1383,6 +1446,7 @@ class Assertion implements SignedElement
     {
         $this->encryptionKey = $Key;
     }
+
 
     /**
      * Set the certificates that should be included in the assertion.
@@ -1396,6 +1460,7 @@ class Assertion implements SignedElement
         $this->certificates = $certificates;
     }
 
+
     /**
      * Retrieve the certificates that are included in the assertion.
      *
@@ -1406,6 +1471,7 @@ class Assertion implements SignedElement
         return $this->certificates;
     }
 
+
     /**
      * @return bool
      */
@@ -1413,6 +1479,7 @@ class Assertion implements SignedElement
     {
         return $this->wasSignedAtConstruction;
     }
+
 
     /**
      * @param bool $flag
@@ -1422,6 +1489,7 @@ class Assertion implements SignedElement
         assert(is_bool($flag));
         $this->wasSignedAtConstruction = $flag;
     }
+
 
     /**
      * Convert this assertion to an XML element.
@@ -1474,6 +1542,7 @@ class Assertion implements SignedElement
 
         return $root;
     }
+
 
     /**
      * Add a Subject-node to the assertion.

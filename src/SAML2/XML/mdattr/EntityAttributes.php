@@ -28,6 +28,7 @@ class EntityAttributes
      */
     public $children;
 
+
     /**
      * Create a EntityAttributes element.
      *
@@ -48,6 +49,7 @@ class EntityAttributes
         }
     }
 
+
     /**
      * Collect the value of the children-property
      * @return (\SAML2\XML\Chunk|\SAML2\XML\saml\Attribute)[]
@@ -56,6 +58,7 @@ class EntityAttributes
     {
         return $this->children;
     }
+
 
     /**
      * Set the value of the childen-property
@@ -66,6 +69,7 @@ class EntityAttributes
         $this->children = $children;
     }
 
+
     /**
      * Add the value to the children-property
      * @param \SAML2\XML\Chunk|\SAML2\XML\saml\Attribute $child
@@ -75,6 +79,7 @@ class EntityAttributes
         assert($child instanceof Chunk || $child instanceof Attribute);
         $this->children[] = $child;
     }
+
 
     /**
      * Convert this EntityAttributes to XML.

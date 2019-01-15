@@ -69,6 +69,7 @@ class ProcessorBuilder
         );
     }
 
+
     private static function createAssertionValidator(
         IdentityProvider $identityProvider,
         ServiceProvider $serviceProvider
@@ -81,6 +82,7 @@ class ProcessorBuilder
 
         return $validator;
     }
+
 
     private static function createSubjectConfirmationValidator(
         IdentityProvider $identityProvider,
@@ -111,6 +113,7 @@ class ProcessorBuilder
 
         return $validator;
     }
+
 
     private static function createAssertionTransformerChain(
         LoggerInterface $logger,

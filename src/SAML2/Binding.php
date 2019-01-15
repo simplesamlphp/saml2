@@ -16,6 +16,7 @@ abstract class Binding
      */
     protected $destination;
 
+
     /**
      * Retrieve a binding with the given URN.
      *
@@ -47,6 +48,7 @@ abstract class Binding
                 throw new \Exception('Unsupported binding: '.var_export($urn, true));
         }
     }
+
 
     /**
      * Guess the current binding.
@@ -104,6 +106,7 @@ abstract class Binding
         throw new \Exception('Unable to find the current binding.');
     }
 
+
     /**
      * Retrieve the destination of a message.
      *
@@ -113,6 +116,7 @@ abstract class Binding
     {
         return $this->destination;
     }
+
 
     /**
      * Override the destination of a message.
@@ -128,6 +132,7 @@ abstract class Binding
         $this->destination = $destination;
     }
 
+
     /**
      * Send a SAML 2 message.
      *
@@ -137,6 +142,7 @@ abstract class Binding
      * @param \SAML2\Message $message The message which should be sent.
      */
     abstract public function send(Message $message);
+
 
     /**
      * Receive a SAML 2 message.

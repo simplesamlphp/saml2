@@ -53,6 +53,7 @@ class AttributeConsumingService
      */
     public $RequestedAttribute = [];
 
+
     /**
      * Initialize / parse an AttributeConsumingService.
      *
@@ -84,6 +85,7 @@ class AttributeConsumingService
         }
     }
 
+
     /**
      * Collect the value of the index-property
      * @return int
@@ -92,6 +94,7 @@ class AttributeConsumingService
     {
         return $this->index;
     }
+
 
     /**
      * Set the value of the index-property
@@ -103,6 +106,7 @@ class AttributeConsumingService
         $this->index = $index;
     }
 
+
     /**
      * Collect the value of the isDefault-property
      * @return boolean|null
@@ -111,6 +115,7 @@ class AttributeConsumingService
     {
         return $this->isDefault;
     }
+
 
     /**
      * Set the value of the isDefault-property
@@ -122,6 +127,7 @@ class AttributeConsumingService
         $this->isDefault = $flag;
     }
 
+
     /**
      * Collect the value of the ServiceName-property
      * @return string[]
@@ -130,6 +136,7 @@ class AttributeConsumingService
     {
         return $this->ServiceName;
     }
+
 
     /**
      * Set the value of the ServiceName-property
@@ -140,6 +147,7 @@ class AttributeConsumingService
         $this->ServiceName = $serviceName;
     }
 
+
     /**
      * Collect the value of the ServiceDescription-property
      * @return string[]
@@ -148,6 +156,7 @@ class AttributeConsumingService
     {
         return $this->ServiceDescription;
     }
+
 
     /**
      * Set the value of the ServiceDescription-property
@@ -158,6 +167,7 @@ class AttributeConsumingService
         $this->ServiceDescription = $serviceDescription;
     }
 
+
     /**
      * Collect the value of the RequestedAttribute-property
      * @return \SAML2\XML\md\RequestedAttribute[]
@@ -166,6 +176,7 @@ class AttributeConsumingService
     {
         return $this->RequestedAttribute;
     }
+
 
     /**
      * Set the value of the RequestedAttribute-property
@@ -176,6 +187,7 @@ class AttributeConsumingService
         $this->RequestedAttribute = $requestedAttribute;
     }
 
+
     /**
      * Add the value to the RequestedAttribute-property
      * @param \SAML2\XML\md\RequestedAttribute $requestedAttribute
@@ -184,6 +196,7 @@ class AttributeConsumingService
     {
         $this->RequestedAttribute[] = $requestedAttribute;
     }
+
 
     /**
      * Convert to \DOMElement.

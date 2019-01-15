@@ -55,6 +55,7 @@ class Processor
      */
     private $logger;
 
+
     public function __construct(
         Decrypter $decrypter,
         Validator $signatureValidator,
@@ -73,6 +74,7 @@ class Processor
         $this->logger                        = $logger;
     }
 
+
     /**
      * @param \SAML2\Utilities\ArrayCollection $assertions
      *
@@ -87,6 +89,7 @@ class Processor
 
         return $processed;
     }
+
 
     /**
      * @param \SAML2\Assertion|\SAML2\EncryptedAssertion $assertion
@@ -117,6 +120,7 @@ class Processor
         return $assertion;
     }
 
+
     /**
      * @param \SAML2\Assertion|\SAML2\EncryptedAssertion $assertion
      *
@@ -134,6 +138,7 @@ class Processor
 
         return $this->decrypter->decrypt($assertion);
     }
+
 
     /**
      * @param \SAML2\Assertion $assertion
@@ -160,6 +165,7 @@ class Processor
             }
         }
     }
+
 
     /**
      * @param \SAML2\Assertion $assertion

@@ -64,6 +64,7 @@ class AttributeQueryTest extends \PHPUnit_Framework_TestCase
         $this->assertEquals('xs:integer', $av3[1]->getAttribute('xsi:type'));
     }
 
+
     public function testUnmarshalling()
     {
         $xml = <<<XML
@@ -108,6 +109,7 @@ XML;
         $this->assertEquals('urn:oasis:names:tc:SAML:2.0:attrname-format:uri', $aq->getAttributeNameFormat());
     }
 
+
     public function testAttributeNameFormat()
     {
         $fmt_uri = 'urn:oasis:names:tc:SAML:2.0:attrname-format:uri';
@@ -148,6 +150,7 @@ XML;
         $this->assertEquals('test1_attrv2', $av1[1]->textContent);
     }
 
+
     public function testNoNameFormatDefaultsToUnspecified()
     {
         $xml = <<<XML
@@ -170,6 +173,7 @@ XML;
 
         $this->assertEquals('urn:oasis:names:tc:SAML:2.0:attrname-format:unspecified', $aq->getAttributeNameFormat());
     }
+
 
     public function testMultiNameFormatDefaultsToUnspecified()
     {
@@ -205,6 +209,7 @@ XML;
         $this->assertEquals('urn:oasis:names:tc:SAML:2.0:attrname-format:unspecified', $aq->getAttributeNameFormat());
     }
 
+
     /**
      * Each specified attribute requires a Name element, otherwise exception
      * is thrown.
@@ -239,6 +244,7 @@ XML;
         $aq = new AttributeQuery($document->firstChild);
     }
 
+
     public function testNoSubjectThrowsException()
     {
         $xml = <<<XML
@@ -255,6 +261,7 @@ XML;
         $this->setExpectedException('Exception', 'Missing subject in subject');
         $aq = new AttributeQuery($document->firstChild);
     }
+
 
     public function testTooManySubjectsThrowsException()
     {
@@ -279,6 +286,7 @@ XML;
         $aq = new AttributeQuery($document->firstChild);
     }
 
+
     public function testNoNameIDinSubjectThrowsException()
     {
         $xml = <<<XML
@@ -298,6 +306,7 @@ XML;
         $this->setExpectedException('Exception', 'Missing <saml:NameID> in <saml:Subject>');
         $aq = new AttributeQuery($document->firstChild);
     }
+
 
     public function testTooManyNameIDsThrowsException()
     {

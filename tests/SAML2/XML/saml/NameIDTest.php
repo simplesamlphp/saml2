@@ -33,6 +33,7 @@ class NameIDTest extends \PHPUnit_Framework_TestCase
         $this->assertEquals('TheNameIDValue', $nameIdElement->textContent);
     }
 
+
     public function testUnmarshalling()
     {
         $samlNamespace = Constants::NS_SAML;
@@ -48,6 +49,7 @@ XML
         $this->assertEquals('TheSPProvidedID', $nameId->getSPProvidedID());
         $this->assertEquals('TheNameIDValue', $nameId->getValue());
     }
+
 
     public function testToString()
     {

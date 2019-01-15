@@ -25,6 +25,7 @@ class SubjectConfirmationValidator
      */
     protected $serviceProvider;
 
+
     public function __construct(
         IdentityProvider $identityProvider,
         ServiceProvider $serviceProvider
@@ -32,6 +33,7 @@ class SubjectConfirmationValidator
         $this->identityProvider = $identityProvider;
         $this->serviceProvider = $serviceProvider;
     }
+
 
     public function addConstraintValidator(
         SubjectConfirmationConstraintValidator $constraint
@@ -46,6 +48,7 @@ class SubjectConfirmationValidator
 
         $this->constraints[] = $constraint;
     }
+
 
     public function validate(SubjectConfirmation $subjectConfirmation)
     {

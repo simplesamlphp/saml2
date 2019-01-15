@@ -21,12 +21,14 @@ class PublicKeyValidator extends AbstractChainedValidator
      */
     private $keyLoader;
 
+
     public function __construct(LoggerInterface $logger, KeyLoader $keyLoader)
     {
         $this->keyLoader = $keyLoader;
 
         parent::__construct($logger);
     }
+
 
     /**
      * @param \SAML2\SignedElement             $signedElement
@@ -42,6 +44,7 @@ class PublicKeyValidator extends AbstractChainedValidator
 
         return !!count($this->configuredKeys);
     }
+
 
     /**
      * @param \SAML2\SignedElement             $signedElement

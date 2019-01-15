@@ -71,6 +71,7 @@ class ContactPerson
      */
     public $ContactPersonAttributes = [];
 
+
     /**
      * Initialize a ContactPerson element.
      *
@@ -105,6 +106,7 @@ class ContactPerson
         }
     }
 
+
     /**
      * Retrieve the value of a child \DOMElements as an array of strings.
      *
@@ -125,6 +127,7 @@ class ContactPerson
 
         return $ret;
     }
+
 
     /**
      * Retrieve the value of a child \DOMElement as a string.
@@ -149,6 +152,7 @@ class ContactPerson
         return $e[0];
     }
 
+
     /**
      * Collect the value of the contactType-property
      * @return string
@@ -157,6 +161,7 @@ class ContactPerson
     {
         return $this->contactType;
     }
+
 
     /**
      * Set the value of the contactType-property
@@ -168,6 +173,7 @@ class ContactPerson
         $this->contactType = $contactType;
     }
 
+
     /**
      * Collect the value of the Company-property
      * @return string|null
@@ -176,6 +182,7 @@ class ContactPerson
     {
         return $this->Company;
     }
+
 
     /**
      * Set the value of the Company-property
@@ -187,6 +194,7 @@ class ContactPerson
         $this->Company = $company;
     }
 
+
     /**
      * Collect the value of the GivenName-property
      * @return string|null
@@ -195,6 +203,7 @@ class ContactPerson
     {
         return $this->GivenName;
     }
+
 
     /**
      * Set the value of the GivenName-property
@@ -206,6 +215,7 @@ class ContactPerson
         $this->GivenName = $givenName;
     }
 
+
     /**
      * Collect the value of the SurName-property
      * @return string|null
@@ -214,6 +224,7 @@ class ContactPerson
     {
         return $this->SurName;
     }
+
 
     /**
      * Set the value of the SurName-property
@@ -225,6 +236,7 @@ class ContactPerson
         $this->SurName = $surName;
     }
 
+
     /**
      * Collect the value of the EmailAddress-property
      * @return string[]
@@ -233,6 +245,7 @@ class ContactPerson
     {
         return $this->EmailAddress;
     }
+
 
     /**
      * Set the value of the EmailAddress-property
@@ -243,6 +256,7 @@ class ContactPerson
         $this->EmailAddress = $emailAddress;
     }
 
+
     /**
      * Add the value to the EmailAddress-property
      * @param string $emailAddress
@@ -251,6 +265,7 @@ class ContactPerson
     {
         $this->EmailAddress[] = $emailAddress;
     }
+
 
     /**
      * Collect the value of the TelephoneNumber-property
@@ -261,6 +276,7 @@ class ContactPerson
         return $this->TelephoneNumber;
     }
 
+
     /**
      * Set the value of the TelephoneNumber-property
      * @param string[] $telephoneNumber
@@ -269,6 +285,7 @@ class ContactPerson
     {
         $this->TelephoneNumber = $telephoneNumber;
     }
+
 
     /**
      * Add the value to the TelephoneNumber-property
@@ -279,6 +296,7 @@ class ContactPerson
         $this->TelephoneNumber[] = $telephoneNumber;
     }
 
+
     /**
      * Collect the value of the Extensions-property
      * @return \SAML2\XML\Chunk[]
@@ -288,6 +306,7 @@ class ContactPerson
         return $this->Extensions;
     }
 
+
     /**
      * Set the value of the Extensions-property
      * @param array $extensions
@@ -296,6 +315,7 @@ class ContactPerson
     {
         $this->Extensions = $extensions;
     }
+
 
     /**
      * Add an Extension.
@@ -307,6 +327,7 @@ class ContactPerson
         $this->Extensions[] = $extension;
     }
 
+
     /**
      * Collect the value of the ContactPersonAttributes-property
      * @return string[]
@@ -316,6 +337,7 @@ class ContactPerson
         return $this->ContactPersonAttributes;
     }
 
+
     /**
      * Set the value of the ContactPersonAttributes-property
      * @param string[] $contactPersonAttributes
@@ -324,6 +346,7 @@ class ContactPerson
     {
         $this->ContactPersonAttributes = $contactPersonAttributes;
     }
+
 
     /**
      * Add the key/value of the ContactPersonAttributes-property
@@ -336,6 +359,7 @@ class ContactPerson
         assert(is_string($value));
         $this->ContactPersonAttributes[$attr] = $value;
     }
+
 
     /**
      * Convert this ContactPerson to XML.

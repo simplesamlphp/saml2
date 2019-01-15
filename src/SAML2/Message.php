@@ -119,6 +119,7 @@ abstract class Message implements SignedElement
      */
     private $signatureMethod;
 
+
     /**
      * Initialize a message.
      *
@@ -233,6 +234,7 @@ abstract class Message implements SignedElement
         ];
     }
 
+
     /**
      * Validate this message against a public key.
      *
@@ -272,6 +274,7 @@ abstract class Message implements SignedElement
         throw $exceptions[0];
     }
 
+
     /**
      * Retrieve the identifier of this message.
      *
@@ -281,6 +284,7 @@ abstract class Message implements SignedElement
     {
         return $this->id;
     }
+
 
     /**
      * Set the identifier of this message.
@@ -294,6 +298,7 @@ abstract class Message implements SignedElement
         $this->id = $id;
     }
 
+
     /**
      * Retrieve the issue timestamp of this message.
      *
@@ -303,6 +308,7 @@ abstract class Message implements SignedElement
     {
         return $this->issueInstant;
     }
+
 
     /**
      * Set the issue timestamp of this message.
@@ -316,6 +322,7 @@ abstract class Message implements SignedElement
         $this->issueInstant = $issueInstant;
     }
 
+
     /**
      * Retrieve the destination of this message.
      *
@@ -325,6 +332,7 @@ abstract class Message implements SignedElement
     {
         return $this->destination;
     }
+
 
     /**
      * Set the destination of this message.
@@ -337,6 +345,7 @@ abstract class Message implements SignedElement
 
         $this->destination = $destination;
     }
+
 
     /**
      * Set the given consent for this message.
@@ -354,6 +363,7 @@ abstract class Message implements SignedElement
         $this->consent = $consent;
     }
 
+
     /**
      * Get the given consent for this message.
      *
@@ -367,6 +377,7 @@ abstract class Message implements SignedElement
     {
         return $this->consent;
     }
+
 
     /**
      * Retrieve the issuer if this message.
@@ -382,6 +393,7 @@ abstract class Message implements SignedElement
         return null;
     }
 
+
     /**
      * Set the issuer of this message.
      *
@@ -394,6 +406,7 @@ abstract class Message implements SignedElement
         $this->issuer = $issuer;
     }
 
+
     /**
      * Query whether or not the message contained a signature at the root level when the object was constructed.
      *
@@ -404,6 +417,7 @@ abstract class Message implements SignedElement
         return $this->messageContainedSignatureUponConstruction;
     }
 
+
     /**
      * Retrieve the RelayState associated with this message.
      *
@@ -413,6 +427,7 @@ abstract class Message implements SignedElement
     {
         return $this->relayState;
     }
+
 
     /**
      * Set the RelayState associated with this message.
@@ -425,6 +440,7 @@ abstract class Message implements SignedElement
 
         $this->relayState = $relayState;
     }
+
 
     /**
      * Convert this message to an unsigned XML document.
@@ -507,6 +523,7 @@ abstract class Message implements SignedElement
         return $root;
     }
 
+
     /**
      * Retrieve the private key we should use to sign the message.
      *
@@ -516,6 +533,7 @@ abstract class Message implements SignedElement
     {
         return $this->signatureKey;
     }
+
 
     /**
      * Set the private key we should use to sign the message.
@@ -529,6 +547,7 @@ abstract class Message implements SignedElement
         $this->signatureKey = $signatureKey;
     }
 
+
     /**
      * Set the certificates that should be included in the message.
      *
@@ -541,6 +560,7 @@ abstract class Message implements SignedElement
         $this->certificates = $certificates;
     }
 
+
     /**
      * Retrieve the certificates that are included in the message.
      *
@@ -550,6 +570,7 @@ abstract class Message implements SignedElement
     {
         return $this->certificates;
     }
+
 
     /**
      * Convert an XML element into a message.
@@ -586,6 +607,7 @@ abstract class Message implements SignedElement
         }
     }
 
+
     /**
      * Retrieve the Extensions.
      *
@@ -595,6 +617,7 @@ abstract class Message implements SignedElement
     {
         return $this->extensions;
     }
+
 
     /**
      * Set the Extensions.
@@ -606,6 +629,7 @@ abstract class Message implements SignedElement
         $this->extensions = $extensions;
     }
 
+
     /**
      * Add an Extension.
      *
@@ -615,6 +639,7 @@ abstract class Message implements SignedElement
     {
         $this->extensions[] = $extension;
     }
+
 
     /**
      * @return null|string

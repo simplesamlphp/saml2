@@ -39,6 +39,7 @@ class AuthnAuthorityDescriptor extends RoleDescriptor
      */
     public $NameIDFormat = [];
 
+
     /**
      * Initialize an IDPSSODescriptor.
      *
@@ -67,6 +68,7 @@ class AuthnAuthorityDescriptor extends RoleDescriptor
         $this->setNameIDFormat(Utils::extractStrings($xml, Constants::NS_MD, 'NameIDFormat'));
     }
 
+
     /**
      * Collect the value of the AuthnQueryService-property
      * @return \SAML2\XML\md\EndpointType[]
@@ -76,6 +78,7 @@ class AuthnAuthorityDescriptor extends RoleDescriptor
         return $this->AuthnQueryService;
     }
 
+
     /**
      * Set the value of the AuthnQueryService-property
      * @param \SAML2\XML\md\EndpointType[] $authnQueryService
@@ -84,6 +87,7 @@ class AuthnAuthorityDescriptor extends RoleDescriptor
     {
         $this->AuthnQueryService = $authnQueryService;
     }
+
 
     /**
      * Add the value to the AuthnQueryService-property
@@ -95,6 +99,7 @@ class AuthnAuthorityDescriptor extends RoleDescriptor
         $this->AuthnQueryService[] = $authnQueryService;
     }
 
+
     /**
      * Collect the value of the AssertionIDRequestService-property
      * @return \SAML2\XML\md\EndpointType[]
@@ -104,6 +109,7 @@ class AuthnAuthorityDescriptor extends RoleDescriptor
         return $this->AssertionIDRequestService;
     }
 
+
     /**
      * Set the value of the AssertionIDRequestService-property
      * @param \SAML2\XML\md\EndpointType[] $assertionIDRequestService
@@ -112,6 +118,7 @@ class AuthnAuthorityDescriptor extends RoleDescriptor
     {
         $this->AssertionIDRequestService = $assertionIDRequestService;
     }
+
 
     /**
      * Add the value to the AssertionIDRequestService-property
@@ -123,6 +130,7 @@ class AuthnAuthorityDescriptor extends RoleDescriptor
         $this->AssertionIDRequestService[] = $assertionIDRequestService;
     }
 
+
     /**
      * Collect the value of the NameIDFormat-property
      * @return string[]
@@ -132,6 +140,7 @@ class AuthnAuthorityDescriptor extends RoleDescriptor
         return $this->NameIDFormat;
     }
 
+
     /**
      * Set the value of the NameIDFormat-property
      * @param string[] $nameIDFormat
@@ -140,6 +149,7 @@ class AuthnAuthorityDescriptor extends RoleDescriptor
     {
         $this->NameIDFormat = $nameIDFormat;
     }
+
 
     /**
      * Add this IDPSSODescriptor to an EntityDescriptor.

@@ -39,6 +39,7 @@ class KeyDescriptor
      */
     public $EncryptionMethod = [];
 
+
     /**
      * Initialize an KeyDescriptor.
      *
@@ -68,6 +69,7 @@ class KeyDescriptor
         }
     }
 
+
     /**
      * Collect the value of the use-property
      * @return string
@@ -76,6 +78,7 @@ class KeyDescriptor
     {
         return $this->use;
     }
+
 
     /**
      * Set the value of the use-property
@@ -87,6 +90,7 @@ class KeyDescriptor
         $this->use = $use;
     }
 
+
     /**
      * Collect the value of the KeyInfo-property
      * @return \SAML2\XML\ds\KeyInfo
@@ -95,6 +99,7 @@ class KeyDescriptor
     {
         return $this->KeyInfo;
     }
+
 
     /**
      * Set the value of the KeyInfo-property
@@ -105,6 +110,7 @@ class KeyDescriptor
         $this->KeyInfo = $keyInfo;
     }
 
+
     /**
      * Collect the value of the EncryptionMethod-property
      * @return \SAML2\XML\Chunk[]
@@ -113,6 +119,7 @@ class KeyDescriptor
     {
         return $this->EncryptionMethod;
     }
+
 
     /**
      * Set the value of the EncryptionMethod-property
@@ -123,6 +130,7 @@ class KeyDescriptor
         $this->EncryptionMethod = $encryptionMethod;
     }
 
+
     /**
      * Add the value to the EncryptionMethod-property
      * @param \SAML2\XML\Chunk $encryptionMethod
@@ -131,6 +139,7 @@ class KeyDescriptor
     {
         $this->EncryptionMethod[] = $encryptionMethod;
     }
+
 
     /**
      * Convert this KeyDescriptor to XML.

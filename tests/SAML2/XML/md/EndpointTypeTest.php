@@ -40,6 +40,7 @@ class EndpointTypeTest extends \PHPUnit_Framework_TestCase
         $this->assertEquals('TestResponseLocation', $endpointTypeElement->getAttribute('ResponseLocation'));
     }
 
+
     public function testUnmarshalling()
     {
         $mdNamespace = Constants::NS_MD;

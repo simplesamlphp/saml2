@@ -16,6 +16,7 @@ class ChunkTest extends \PHPUnit_Framework_TestCase
      */
     private $chunk;
 
+
     /**
      * Make a new Chunk object to test with
      */
@@ -35,6 +36,7 @@ class ChunkTest extends \PHPUnit_Framework_TestCase
 
         $this->chunk = new Chunk($attributeElement);
     }
+
 
     /**
      * Test the getXML() method
@@ -59,5 +61,4 @@ class ChunkTest extends \PHPUnit_Framework_TestCase
 
         $this->assertEqualXMLStructure($this->chunk->getXML(), $newchunk->getXML());
     }
-
 }

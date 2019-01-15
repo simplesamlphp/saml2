@@ -14,6 +14,7 @@ class Result
      */
     private $errors = [];
 
+
     /**
      * @param $message
      */
@@ -26,6 +27,7 @@ class Result
         $this->errors[] = $message;
     }
 
+
     /**
      * @return bool
      */
@@ -33,6 +35,7 @@ class Result
     {
         return empty($this->errors);
     }
+
 
     /**
      * @return array

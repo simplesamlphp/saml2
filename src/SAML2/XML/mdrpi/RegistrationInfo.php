@@ -35,6 +35,7 @@ class RegistrationInfo
      */
     public $RegistrationPolicy = [];
 
+
     /**
      * Create/parse a mdrpi:RegistrationInfo element.
      *
@@ -59,6 +60,7 @@ class RegistrationInfo
         $this->setRegistrationPolicy(Utils::extractLocalizedStrings($xml, Common::NS_MDRPI, 'RegistrationPolicy'));
     }
 
+
     /**
      * Collect the value of the RegistrationAuthority-property
      * @return string
@@ -67,6 +69,7 @@ class RegistrationInfo
     {
         return $this->registrationAuthority;
     }
+
 
     /**
      * Set the value of the registrationAuthority-property
@@ -78,6 +81,7 @@ class RegistrationInfo
         $this->registrationAuthority = $registrationAuthority;
     }
 
+
     /**
      * Collect the value of the registrationInstant-property
      * @return int|null
@@ -86,6 +90,7 @@ class RegistrationInfo
     {
         return $this->registrationInstant;
     }
+
 
     /**
      * Set the value of the registrationInstant-property
@@ -97,6 +102,7 @@ class RegistrationInfo
         $this->registrationInstant = $registrationInstant;
     }
 
+
     /**
      * Collect the value of the RegistrationPolicy-property
      * @return array
@@ -106,6 +112,7 @@ class RegistrationInfo
         return $this->RegistrationPolicy;
     }
 
+
     /**
      * Set the value of the RegistrationPolicy-property
      * @param array $registrationPolicy
@@ -114,6 +121,7 @@ class RegistrationInfo
     {
         $this->RegistrationPolicy = $registrationPolicy;
     }
+
 
     /**
      * Convert this element to XML.

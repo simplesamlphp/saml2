@@ -39,6 +39,7 @@ class PDPDescriptor extends RoleDescriptor
      */
     public $NameIDFormat = [];
 
+
     /**
      * Initialize an IDPSSODescriptor.
      *
@@ -67,6 +68,7 @@ class PDPDescriptor extends RoleDescriptor
         $this->setNameIDFormat(Utils::extractStrings($xml, Constants::NS_MD, 'NameIDFormat'));
     }
 
+
     /**
      * Collect the value of the AuthzService-property
      * @return \SAML2\XML\md\EndpointType[]
@@ -76,6 +78,7 @@ class PDPDescriptor extends RoleDescriptor
         return $this->AuthzService;
     }
 
+
     /**
      * Set the value of the AuthzService-property
      * @param \SAML2\XML\md\EndpointType[] $authzService
@@ -84,6 +87,7 @@ class PDPDescriptor extends RoleDescriptor
     {
         $this->AuthzService = $authzService;
     }
+
 
     /**
      * Add the value to the AuthzService-property
@@ -95,6 +99,7 @@ class PDPDescriptor extends RoleDescriptor
         $this->AuthzService[] = $authzService;
     }
 
+
     /**
      * Collect the value of the AssertionIDRequestService-property
      * @return \SAML2\XML\md\EndpointType[]
@@ -104,6 +109,7 @@ class PDPDescriptor extends RoleDescriptor
         return $this->AssertionIDRequestService;
     }
 
+
     /**
      * Set the value of the AssertionIDRequestService-property
      * @param \SAML2\XML\md\EndpointType[] $assertionIDRequestService
@@ -112,6 +118,7 @@ class PDPDescriptor extends RoleDescriptor
     {
         $this->AssertionIDRequestService = $assertionIDRequestService;
     }
+
 
     /**
      * Add the value to the AssertionIDRequestService-property
@@ -133,6 +140,7 @@ class PDPDescriptor extends RoleDescriptor
         return $this->NameIDFormat;
     }
 
+
     /**
      * Set the value of the NameIDFormat-property
      * @param string[] $nameIDFormat
@@ -141,6 +149,7 @@ class PDPDescriptor extends RoleDescriptor
     {
         $this->NameIDFormat = $nameIDFormat;
     }
+
 
     /**
      * Add this PDPDescriptor to an EntityDescriptor.

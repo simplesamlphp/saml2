@@ -12,10 +12,12 @@ class DestinationMatchesTest extends \PHPUnit_Framework_TestCase
      */
     private $response;
 
+
     public function setUp()
     {
         $this->response = \Mockery::mock('SAML2\Response');
     }
+
 
     /**
      * @group response-validation
@@ -32,6 +34,7 @@ class DestinationMatchesTest extends \PHPUnit_Framework_TestCase
 
         $this->assertTrue($result->isValid());
     }
+
 
     /**
      * @group response-validation

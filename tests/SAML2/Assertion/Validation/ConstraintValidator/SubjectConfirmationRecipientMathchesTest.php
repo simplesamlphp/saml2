@@ -18,6 +18,7 @@ class SubjectConfirmationRecipientMathchesTest extends
      */
     private $subjectConfirmationData;
 
+
     public function setUp()
     {
         parent::setUp();
@@ -25,6 +26,7 @@ class SubjectConfirmationRecipientMathchesTest extends
         $this->subjectConfirmationData = new \SAML2\XML\saml\SubjectConfirmationData();
         $this->subjectConfirmation->setSubjectConfirmationData($this->subjectConfirmationData);
     }
+
 
     /**
      * @group assertion-validation
@@ -44,6 +46,7 @@ class SubjectConfirmationRecipientMathchesTest extends
         $this->assertFalse($result->isValid());
         $this->assertCount(1, $result->getErrors());
     }
+
 
     /**
      * @group assertion-validation

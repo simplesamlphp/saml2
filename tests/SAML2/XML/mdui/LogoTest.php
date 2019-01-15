@@ -36,6 +36,7 @@ class LogoTest extends \PHPUnit_Framework_TestCase
         $this->assertEquals(200, $logoElement->getAttribute("height"));
     }
 
+
     /**
      * Unmarshalling of a logo tag
      */
@@ -53,6 +54,7 @@ XML
         $this->assertEquals("https://static.example.org/images/logos/logo300x200.png", $logo->getUrl());
     }
 
+
     /**
      * Unmarshalling of a logo tag with a data: URL
      */
@@ -69,6 +71,7 @@ XML
         $this->assertEquals("data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAAEAAAABCAQAAAC1HAwCAAAAC0lEQVR42mNkYAAAAAYAAjCB0C8AAAAASUVORK5CYII=", $logo->getUrl());
     }
 
+
     /**
      * Unmarshalling fails if url attribute not present
      */
@@ -83,6 +86,7 @@ XML
         $logo = new Logo($document->firstChild);
     }
 
+
     /**
      * Unmarshalling fails if width attribute not present
      */
@@ -96,6 +100,7 @@ XML
         $this->setExpectedException('Exception', 'Missing width of Logo');
         $logo = new Logo($document->firstChild);
     }
+
 
     /**
      * Unmarshalling fails if height attribute not present

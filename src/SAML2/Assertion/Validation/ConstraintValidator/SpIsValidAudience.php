@@ -17,10 +17,12 @@ class SpIsValidAudience implements
      */
     private $serviceProvider;
 
+
     public function setServiceProvider(ServiceProvider $serviceProvider)
     {
         $this->serviceProvider = $serviceProvider;
     }
+
 
     public function validate(Assertion $assertion, Result $result)
     {

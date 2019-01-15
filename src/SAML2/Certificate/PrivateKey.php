@@ -24,10 +24,12 @@ class PrivateKey extends Key
         return new self($keyData);
     }
 
+
     public function getKeyAsString()
     {
         return $this->keyData['PEM'];
     }
+
 
     public function getPassphrase()
     {

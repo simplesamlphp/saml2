@@ -16,7 +16,6 @@ use SAML2\XML\alg\DigestMethod;
  */
 class ExtensionsTest extends \PHPUnit_Framework_TestCase
 {
-
     /**
      * Adding an empty list to an Extensions element should yield an empty element. If there were contents already
      * there, those should be left untouched.

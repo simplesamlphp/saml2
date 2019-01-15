@@ -14,6 +14,7 @@ class ArtifactResolve extends Request
 {
     private $artifact;
 
+
     public function __construct(\DOMElement $xml = null)
     {
         parent::__construct('ArtifactResolve', $xml);
@@ -34,6 +35,7 @@ class ArtifactResolve extends Request
         return $this->artifact;
     }
 
+
     /**
      * Set the artifact that should be included in this response.
      *
@@ -44,6 +46,7 @@ class ArtifactResolve extends Request
         assert(is_string($artifact));
         $this->artifact = $artifact;
     }
+
 
     /**
      * Convert the response message to an XML element.

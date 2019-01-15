@@ -23,6 +23,7 @@ class HTTPPostTest extends PHPUnit_Framework_TestCase
         $this->assertEquals('https://engine.test.surfconext.nl/authentication/sp/metadata', $issuer);
     }
 
+
     /**
      * test parsing of SAMLResponse in post.
      * verify that the correct issuer is found.
@@ -57,6 +58,7 @@ class HTTPPostTest extends PHPUnit_Framework_TestCase
         $msg = $hp->receive();
     }
 
+
     /**
      * Construct an authnrequest and send it.
      */
@@ -66,6 +68,7 @@ class HTTPPostTest extends PHPUnit_Framework_TestCase
         $hp = new HTTPPost();
         $hp->send($request);
     }
+
 
     /**
      * Construct an authnresponse and send it.

@@ -17,15 +17,18 @@ class ServiceProvider extends ArrayAdapter implements
         return $this->get('keys');
     }
 
+
     public function getCertificateData()
     {
         return $this->get('certificateData');
     }
 
+
     public function getCertificateFile()
     {
         return $this->get('certificateFile');
     }
+
 
     /**
      * @deprecated Please use getCertificateData() or getCertificateFile().
@@ -35,20 +38,24 @@ class ServiceProvider extends ArrayAdapter implements
         return $this->get('certificateFingerprints');
     }
 
+
     public function getEntityId()
     {
         return $this->get('entityId');
     }
+
 
     public function isAssertionEncryptionRequired()
     {
         return $this->get('assertionEncryptionEnabled');
     }
 
+
     public function getSharedKey()
     {
         return $this->get('sharedKey');
     }
+
 
     public function getPrivateKey($name, $required = false)
     {
@@ -73,6 +80,7 @@ class ServiceProvider extends ArrayAdapter implements
 
         return array_pop($key);
     }
+
 
     public function getBlacklistedAlgorithms()
     {

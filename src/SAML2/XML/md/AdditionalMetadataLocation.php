@@ -26,6 +26,7 @@ class AdditionalMetadataLocation
      */
     public $location;
 
+
     /**
      * Initialize an AdditionalMetadataLocation element.
      *
@@ -46,6 +47,7 @@ class AdditionalMetadataLocation
         $this->setLocation($xml->textContent);
     }
 
+
     /**
      * Collect the value of the namespace-property
      * @return string
@@ -54,6 +56,7 @@ class AdditionalMetadataLocation
     {
         return $this->namespace;
     }
+
 
     /**
      * Set the value of the namespace-property
@@ -65,6 +68,7 @@ class AdditionalMetadataLocation
         $this->namespace = $namespace;
     }
 
+
     /**
      * Collect the value of the location-property
      * @return string
@@ -73,6 +77,7 @@ class AdditionalMetadataLocation
     {
         return $this->location;
     }
+
 
     /**
      * Set the value of the location-property
@@ -83,6 +88,7 @@ class AdditionalMetadataLocation
         assert(is_string($location));
         $this->location = $location;
     }
+
 
     /**
      * Convert this AdditionalMetadataLocation to XML.

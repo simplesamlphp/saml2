@@ -24,6 +24,7 @@ class PrivateKeyLoader
         return PrivateKey::create($privateKey, $key->getPassPhrase());
     }
 
+
     /**
      * @param \SAML2\Configuration\DecryptionProvider $identityProvider
      * @param \SAML2\Configuration\DecryptionProvider $serviceProvider
@@ -58,6 +59,7 @@ class PrivateKeyLoader
 
         return $decryptionKeys;
     }
+
 
     /**
      * @param \SAML2\Certificate\PrivateKey $privateKey

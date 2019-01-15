@@ -26,6 +26,7 @@ class FingerprintLoader
         return $loader->loadFingerprints($configuration);
     }
 
+
     /**
      * Loads the fingerprints from a configurationValue
      *

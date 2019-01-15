@@ -4,7 +4,6 @@ namespace SAML2\Certificate;
 
 class FingerprintCollectionTest extends \PHPUnit_Framework_TestCase
 {
-
     /**
      * @group certificate
      * @test
@@ -34,6 +33,7 @@ class FingerprintCollectionTest extends \PHPUnit_Framework_TestCase
         $this->assertTrue($fpc->contains($fpr0));
         $this->assertTrue($fpc->contains($fpr1));
     }
+
 
     /**
      * @group certificate

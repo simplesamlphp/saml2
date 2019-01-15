@@ -46,6 +46,7 @@ class SigningMethod
         return $this->Algorithm;
     }
 
+
     /**
      * Set the value of the Algorithm-property
      * @param string $algorithm
@@ -66,6 +67,7 @@ class SigningMethod
         return $this->MinKeySize;
     }
 
+
     /**
      * Set the value of the MinKeySize-property
      * @param int|null $minKeySize
@@ -76,6 +78,7 @@ class SigningMethod
         $this->MinKeySize = $minKeySize;
     }
 
+
     /**
      * Collect the value of the MaxKeySize-property
      * @return int|null
@@ -84,6 +87,7 @@ class SigningMethod
     {
         return $this->MaxKeySize;
     }
+
 
     /**
      * Set the value of the MaxKeySize-property
@@ -94,6 +98,7 @@ class SigningMethod
         assert(is_int($maxKeySize) || is_null($maxKeySize));
         $this->MaxKeySize = $maxKeySize;
     }
+
 
     /**
      * Create/parse an alg:SigningMethod element.

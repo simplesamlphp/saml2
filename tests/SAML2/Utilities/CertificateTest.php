@@ -16,6 +16,7 @@ class CertificateTest extends \PHPUnit_Framework_TestCase
         $this->assertFalse($result);
     }
 
+
     /**
      * @group utilities
      * @test

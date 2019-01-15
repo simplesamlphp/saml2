@@ -19,6 +19,7 @@ class KeyName
      */
     public $name;
 
+
     /**
      * Initialize a KeyName element.
      *
@@ -33,6 +34,7 @@ class KeyName
         $this->setName($xml->textContent);
     }
 
+
     /**
      * Collect the value of the name-property
      * @return string
@@ -41,6 +43,7 @@ class KeyName
     {
         return $this->name;
     }
+
 
     /**
      * Set the value of the name-property

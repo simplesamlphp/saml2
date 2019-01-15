@@ -18,10 +18,12 @@ class Validator
      */
     private $logger;
 
+
     public function __construct(LoggerInterface $logger)
     {
         $this->logger = $logger;
     }
+
 
     public function hasValidSignature(
         SignedElement $signedElement,

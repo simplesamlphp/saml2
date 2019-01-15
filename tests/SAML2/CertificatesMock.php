@@ -93,6 +93,7 @@ MAAwLQIUKvKKf7u2pLv5JAsc5E5QOpZ9JWoCFQCVymKmF6aYAOJxuSlUj+vF1n6p
 UQ==
 -----END CERTIFICATE-----';
 
+
     /**
      * @return XMLSecurityKey
      */
@@ -103,6 +104,7 @@ UQ==
         return $publicKey;
     }
 
+
     /**
      * @return XMLSecurityKey
      */
@@ -112,6 +114,7 @@ UQ==
         $privateKey->loadKey(self::PRIVATE_KEY_PEM);
         return $privateKey;
     }
+
 
     /**
      * @return XMLSecurityKey
@@ -168,15 +171,18 @@ UQ==
         return $publicKey;
     }
 
+
     public static function getPlainPublicKey()
     {
         return self::PUBLIC_KEY_PEM;
     }
 
+
     public static function getPlainPrivateKey()
     {
         return self::PRIVATE_KEY_PEM;
     }
+
 
     /**
      * Returns just the certificate contents without the begin and end markings
@@ -185,6 +191,7 @@ UQ==
     {
         return self::PUBLIC_KEY_PEM_CONTENTS;
     }
+
 
     /**
      * Returns malformed public key by truncating it.

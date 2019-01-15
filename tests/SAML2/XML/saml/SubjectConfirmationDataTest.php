@@ -37,6 +37,7 @@ class SubjectConfirmationDataTest extends \PHPUnit_Framework_TestCase
         $this->assertEquals('127.0.0.1', $subjectConfirmationDataElement->getAttribute("Address"));
     }
 
+
     public function testUnmarshalling()
     {
         $samlNamespace = Constants::NS_SAML;

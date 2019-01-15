@@ -36,6 +36,7 @@ class AttributeTest extends \PHPUnit_Framework_TestCase
         $this->assertEquals('TheFriendlyName', $attributeElement->getAttribute('FriendlyName'));
     }
 
+
     public function testUnmarshalling()
     {
         $samlNamespace = Constants::NS_SAML;
@@ -55,6 +56,7 @@ XML
         $this->assertEquals('FirstValue', (string)$attribute->AttributeValue[0]);
         $this->assertEquals('SecondValue', (string)$attribute->AttributeValue[1]);
     }
+
 
     public function testUnmarshallingFailure()
     {

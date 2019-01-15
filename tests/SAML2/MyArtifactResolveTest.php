@@ -22,6 +22,7 @@ class ArtifactResolveTest extends PHPUnit_Framework_TestCase
         $this->assertEquals($artifact, $artelement[0]->textContent);
     }
 
+
     public function testUnmarshalling()
     {
         $id = '_6c3a4f8b9c2d';

@@ -19,11 +19,13 @@ class NotOnOrAfterTest extends ControlledTimeTest
      */
     private $assertion;
 
+
     public function setUp()
     {
         parent::setUp();
         $this->assertion = m::mock('SAML2\Assertion');
     }
+
 
     /**
      * @group assertion-validation
@@ -42,6 +44,7 @@ class NotOnOrAfterTest extends ControlledTimeTest
         $this->assertCount(1, $result->getErrors());
     }
 
+
     /**
      * @group assertion-validation
      * @test
@@ -57,6 +60,7 @@ class NotOnOrAfterTest extends ControlledTimeTest
 
         $this->assertTrue($result->isValid());
     }
+
 
     /**
      * @group assertion-validation

@@ -12,10 +12,12 @@ class SubjectConfirmationMethodTest extends \PHPUnit_Framework_TestCase
      */
     private $subjectConfirmation;
 
+
     public function setUp()
     {
         $this->subjectConfirmation = new \SAML2\XML\saml\SubjectConfirmation();
     }
+
 
     /**
      * @group assertion-validation
@@ -32,6 +34,7 @@ class SubjectConfirmationMethodTest extends \PHPUnit_Framework_TestCase
 
         $this->assertTrue($result->isValid());
     }
+
 
     /**
      * @group assertion-validation

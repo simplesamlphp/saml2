@@ -25,6 +25,7 @@ class TransformerChain implements Transformer
      */
     private $serviceProvider;
 
+
     public function __construct(
         IdentityProvider $identityProvider,
         ServiceProvider $serviceProvider
@@ -32,6 +33,7 @@ class TransformerChain implements Transformer
         $this->identityProvider = $identityProvider;
         $this->serviceProvider  = $serviceProvider;
     }
+
 
     public function addTransformerStep(Transformer $transformer)
     {
@@ -45,6 +47,7 @@ class TransformerChain implements Transformer
 
         $this->transformers[] = $transformer;
     }
+
 
     /**
      * @param \SAML2\Assertion $assertion

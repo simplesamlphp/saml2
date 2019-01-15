@@ -45,6 +45,7 @@ class AffiliationDescriptorTest extends \PHPUnit_Framework_TestCase
         $this->assertEquals('Member2', $affiliateMembers[1]->textContent);
     }
 
+
     public function testUnmarshalling()
     {
         $mdNamespace = Constants::NS_MD;
@@ -67,6 +68,7 @@ XML
         $this->assertEquals('OtherMember', $affiliateMember[1]);
     }
 
+
     public function testUnmarshallingWithoutMembers()
     {
         $mdNamespace = Constants::NS_MD;
@@ -79,6 +81,7 @@ XML
         $this->setExpectedException('Exception', 'Missing AffiliateMember in AffiliationDescriptor.');
         new AffiliationDescriptor($document->firstChild);
     }
+
 
     public function testUnmarshallingWithoutOwner()
     {

@@ -13,10 +13,12 @@ abstract class AbstractChainedValidator implements ChainedValidator
      */
     protected $logger;
 
+
     public function __construct(LoggerInterface $logger)
     {
         $this->logger = $logger;
     }
+
 
     /**
      * BC compatible version of the signature check

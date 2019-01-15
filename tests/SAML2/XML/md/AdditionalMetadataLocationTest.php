@@ -31,6 +31,7 @@ class AdditionalMetadataLocationTest extends \PHPUnit_Framework_TestCase
         $this->assertEquals('NamespaceAttribute', $additionalMetadataLocationElement->getAttribute("namespace"));
     }
 
+
     public function testUnmarshalling()
     {
         $document = DOMDocumentFactory::fromString(

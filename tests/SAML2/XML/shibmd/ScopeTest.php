@@ -31,6 +31,7 @@ class ScopeTest extends \PHPUnit_Framework_TestCase
         $this->assertEquals('false', $scopeElement->getAttribute('regexp'));
     }
 
+
     /**
      * Marshalling a scope which does not specificy the value for
      * regexp explicitly (expect it to default to 'false').
@@ -51,6 +52,7 @@ class ScopeTest extends \PHPUnit_Framework_TestCase
         $this->assertEquals('urn:mace:shibboleth:metadata:1.0', $scopeElement->namespaceURI);
         $this->assertEquals('false', $scopeElement->getAttribute('regexp'));
     }
+
 
     /**
      * Marshalling a scope which is in regexp form.
@@ -73,6 +75,7 @@ class ScopeTest extends \PHPUnit_Framework_TestCase
         $this->assertEquals('true', $scopeElement->getAttribute('regexp'));
     }
 
+
     /**
      * Unmarshalling a scope in literal (non-regexp) form.
      */
@@ -88,6 +91,7 @@ XML
         $this->assertEquals('example.org', $scope->getScope());
         $this->assertFalse($scope->isRegexpScope());
     }
+
 
     /**
      * Unmarshalling a scope that does not specify an explicit
@@ -105,6 +109,7 @@ XML
         $this->assertEquals('example.org', $scope->getScope());
         $this->assertFalse($scope->isRegexpScope());
     }
+
 
     /**
      * Unmarshalling a scope in regexp form.

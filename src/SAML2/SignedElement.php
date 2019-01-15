@@ -22,6 +22,7 @@ interface SignedElement
      */
     public function validate(XMLSecurityKey $key);
 
+
     /**
      * Set the certificates that should be included in the element.
      *
@@ -31,6 +32,7 @@ interface SignedElement
      */
     public function setCertificates(array $certificates);
 
+
     /**
      * Retrieve the certificates that are included in the element (if any).
      *
@@ -38,12 +40,14 @@ interface SignedElement
      */
     public function getCertificates();
 
+
     /**
      * Retrieve the private key we should use to sign the element.
      *
      * @return XMLSecurityKey|null The key, or NULL if no key is specified.
      */
     public function getSignatureKey();
+
 
     /**
      * Set the private key we should use to sign the element.
