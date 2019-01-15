@@ -39,7 +39,7 @@ class X509Data
             return;
         }
 
-        for ($n = $xml->firstChild; $n !== null; $n = $n->nextSibling) {
+        for ($n = $xml->firstChild;; $n = $n->nextSibling) {
             if (!($n instanceof \DOMElement)) {
                 continue;
             }
@@ -62,6 +62,7 @@ class X509Data
 
     /**
      * Collect the value of the data-property
+     *
      * @return array
      */
     public function getData() : array
@@ -72,6 +73,7 @@ class X509Data
 
     /**
      * Set the value of the data-property
+     *
      * @param array $data
      * @return void
      */
@@ -83,6 +85,7 @@ class X509Data
 
     /**
      * Add the value to the data-property
+     *
      * @param \SAML2\XML\Chunk|\SAML2\XML\ds\X509Certificate $data
      * @return void
      */

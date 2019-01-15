@@ -100,6 +100,7 @@ class AttributeAuthorityDescriptor extends RoleDescriptor
 
     /**
      * Collect the value of the AttributeService-property
+     *
      * @return \SAML2\XML\md\EndpointType[]
      */
     public function getAttributeService() : array
@@ -110,6 +111,7 @@ class AttributeAuthorityDescriptor extends RoleDescriptor
 
     /**
      * Set the value of the AttributeService-property
+     *
      * @param \SAML2\XML\md\EndpointType[] $attributeService
      * @return void
      */
@@ -121,6 +123,7 @@ class AttributeAuthorityDescriptor extends RoleDescriptor
 
     /**
      * Add the value to the AttributeService-property
+     *
      * @param \SAML2\XML\md\EndpointType $attributeService
      * @return void
      */
@@ -132,6 +135,7 @@ class AttributeAuthorityDescriptor extends RoleDescriptor
 
     /**
      * Collect the value of the NameIDFormat-property
+     *
      * @return string[]
      */
     public function getNameIDFormat() : array
@@ -142,6 +146,7 @@ class AttributeAuthorityDescriptor extends RoleDescriptor
 
     /**
      * Set the value of the NameIDFormat-property
+     *
      * @param string[] $nameIDFormat
      * @return void
      */
@@ -153,6 +158,7 @@ class AttributeAuthorityDescriptor extends RoleDescriptor
 
     /**
      * Collect the value of the AssertionIDRequestService-property
+     *
      * @return \SAML2\XML\md\EndpointType[]
      */
     public function getAssertionIDRequestService() : array
@@ -163,6 +169,7 @@ class AttributeAuthorityDescriptor extends RoleDescriptor
 
     /**
      * Set the value of the AssertionIDRequestService-property
+     *
      * @param \SAML2\XML\md\EndpointType[] $assertionIDRequestService
      * @return void
      */
@@ -174,6 +181,7 @@ class AttributeAuthorityDescriptor extends RoleDescriptor
 
     /**
      * Add the value to the AssertionIDRequestService-property
+     *
      * @param \SAML2\XML\md\EndpointType $assertionIDRequestService
      * @return void
      */
@@ -185,6 +193,7 @@ class AttributeAuthorityDescriptor extends RoleDescriptor
 
     /**
      * Collect the value of the AttributeProfile-property
+     *
      * @return string[]
      */
     public function getAttributeProfile() : array
@@ -195,6 +204,7 @@ class AttributeAuthorityDescriptor extends RoleDescriptor
 
     /**
      * Set the value of the AttributeProfile-property
+     *
      * @param string[] $attributeProfile
      * @return void
      */
@@ -206,6 +216,7 @@ class AttributeAuthorityDescriptor extends RoleDescriptor
 
     /**
      * Collect the value of the Attribute-property
+     *
      * @return \SAML2\XML\saml\Attribute[]
      */
     public function getAttribute() : array
@@ -216,6 +227,7 @@ class AttributeAuthorityDescriptor extends RoleDescriptor
 
     /**
      * Set the value of the Attribute-property
+     *
      * @param \SAML2\XML\saml\Attribute[] $attribute
      * @return void
      */
@@ -227,6 +239,7 @@ class AttributeAuthorityDescriptor extends RoleDescriptor
 
     /**
      * Add the value to the Attribute-property
+     *
      * @param \SAML2\XML\saml\Attribute $attribute
      * @return void
      */

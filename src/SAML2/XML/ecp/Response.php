@@ -57,6 +57,7 @@ class Response
 
     /**
      * Collect the value of the AssertionConsumerServiceURL-property
+     *
      * @return string
      */
     public function getAssertionConsumerServiceURL() : string
@@ -67,6 +68,7 @@ class Response
 
     /**
      * Set the value of the AssertionConsumerServiceURL-property
+     *
      * @param string $assertionConsumerServiceURL
      * @throws InvalidArgumentException
      * @return void

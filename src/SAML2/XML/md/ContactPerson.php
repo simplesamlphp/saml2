@@ -34,23 +34,23 @@ class ContactPerson
     /**
      * The Company of this contact.
      *
-     * @var string
+     * @var string|null
      */
-    public $Company = null;
+    private $Company = null;
 
     /**
      * The GivenName of this contact.
      *
-     * @var string
+     * @var string|null
      */
-    public $GivenName = null;
+    private $GivenName = null;
 
     /**
      * The SurName of this contact.
      *
-     * @var string
+     * @var string|null
      */
-    public $SurName = null;
+    private $SurName = null;
 
     /**
      * The EmailAddresses of this contact.
@@ -153,6 +153,7 @@ class ContactPerson
 
     /**
      * Collect the value of the contactType-property
+     *
      * @return string
      */
     public function getContactType() : string
@@ -163,6 +164,7 @@ class ContactPerson
 
     /**
      * Set the value of the contactType-property
+     *
      * @param string $contactType
      * @return void
      */
@@ -174,6 +176,7 @@ class ContactPerson
 
     /**
      * Collect the value of the Company-property
+     *
      * @return string|null
      */
     public function getCompany()
@@ -184,6 +187,7 @@ class ContactPerson
 
     /**
      * Set the value of the Company-property
+     *
      * @param string|null $company
      * @return void
      */
@@ -195,6 +199,7 @@ class ContactPerson
 
     /**
      * Collect the value of the GivenName-property
+     *
      * @return string|null
      */
     public function getGivenName()
@@ -205,6 +210,7 @@ class ContactPerson
 
     /**
      * Set the value of the GivenName-property
+     *
      * @param string|null $givenName
      * @return void
      */
@@ -216,6 +222,7 @@ class ContactPerson
 
     /**
      * Collect the value of the SurName-property
+     *
      * @return string|null
      */
     public function getSurName()
@@ -226,6 +233,7 @@ class ContactPerson
 
     /**
      * Set the value of the SurName-property
+     *
      * @param string|null $surName
      * @return void
      */
@@ -237,6 +245,7 @@ class ContactPerson
 
     /**
      * Collect the value of the EmailAddress-property
+     *
      * @return string[]
      */
     public function getEmailAddress() : array
@@ -247,6 +256,7 @@ class ContactPerson
 
     /**
      * Set the value of the EmailAddress-property
+     *
      * @param string[] $emailAddress
      * @return void
      */
@@ -258,6 +268,7 @@ class ContactPerson
 
     /**
      * Add the value to the EmailAddress-property
+     *
      * @param string $emailAddress
      * @return void
      */
@@ -269,6 +280,7 @@ class ContactPerson
 
     /**
      * Collect the value of the TelephoneNumber-property
+     *
      * @return string[]
      */
     public function getTelephoneNumber() : array
@@ -279,6 +291,7 @@ class ContactPerson
 
     /**
      * Set the value of the TelephoneNumber-property
+     *
      * @param string[] $telephoneNumber
      * @return void
      */
@@ -290,6 +303,7 @@ class ContactPerson
 
     /**
      * Add the value to the TelephoneNumber-property
+     *
      * @param string $telephoneNumber
      * @return void
      */
@@ -301,6 +315,7 @@ class ContactPerson
 
     /**
      * Collect the value of the Extensions-property
+     *
      * @return \SAML2\XML\Chunk[]
      */
     public function getExtensions() : array
@@ -311,6 +326,7 @@ class ContactPerson
 
     /**
      * Set the value of the Extensions-property
+     *
      * @param array $extensions
      * @return void
      */
@@ -334,6 +350,7 @@ class ContactPerson
 
     /**
      * Collect the value of the ContactPersonAttributes-property
+     *
      * @return string[]
      */
     public function getContactPersonAttributes() : array
@@ -344,6 +361,7 @@ class ContactPerson
 
     /**
      * Set the value of the ContactPersonAttributes-property
+     *
      * @param string[] $contactPersonAttributes
      * @return void
      */
@@ -355,6 +373,7 @@ class ContactPerson
 
     /**
      * Add the key/value of the ContactPersonAttributes-property
+     *
      * @param string $attr
      * @param string $value
      * @return void
@@ -386,19 +405,19 @@ class ContactPerson
 
         Extensions::addList($e, $this->getExtensions());
 
-        if ($this->getCompany() !== null) {
-            Utils::addString($e, Constants::NS_MD, 'md:Company', $this->getCompany());
+        if ($this->Company !== null) {
+            Utils::addString($e, Constants::NS_MD, 'md:Company', $this->Company);
         }
-        if ($this->getGivenName() !== null) {
-            Utils::addString($e, Constants::NS_MD, 'md:GivenName', $this->getGivenName());
+        if ($this->GivenName !== null) {
+            Utils::addString($e, Constants::NS_MD, 'md:GivenName', $this->GivenName);
         }
-        if ($this->getSurName() !== null) {
-            Utils::addString($e, Constants::NS_MD, 'md:SurName', $this->getSurName());
+        if ($this->SurName !== null) {
+            Utils::addString($e, Constants::NS_MD, 'md:SurName', $this->SurName);
         }
-        if ($this->getEmailAddress() !== null) {
+        if (!empty($this->getEmailAddress())) {
             Utils::addStrings($e, Constants::NS_MD, 'md:EmailAddress', false, $this->getEmailAddress());
         }
-        if ($this->getTelephoneNumber() !== null) {
+        if (!empty($this->getTelephoneNumber())) {
             Utils::addStrings($e, Constants::NS_MD, 'md:TelephoneNumber', false, $this->getTelephoneNumber());
         }
 
