@@ -134,7 +134,7 @@ class RoleDescriptor extends SignedElementHelper
 
 
     /**
-     * Collect the value of the ID-property
+     * Collect the value of the ID property.
      *
      * @return string|null
      */
@@ -145,7 +145,7 @@ class RoleDescriptor extends SignedElementHelper
 
 
     /**
-     * Set the value of the ID-property
+     * Set the value of the ID property.
      *
      * @param string|null $Id
      * @return void
@@ -199,7 +199,7 @@ class RoleDescriptor extends SignedElementHelper
 
 
     /**
-     * Collect the value of the Extensions-property
+     * Collect the value of the Extensions property.
      *
      * @return \SAML2\XML\Chunk[]
      */
@@ -210,7 +210,7 @@ class RoleDescriptor extends SignedElementHelper
 
 
     /**
-     * Set the value of the Extensions-property
+     * Set the value of the Extensions property.
      *
      * @param array $extensions
      * @return void
@@ -234,7 +234,7 @@ class RoleDescriptor extends SignedElementHelper
 
 
     /**
-     * Set the value of the errorURL-property
+     * Set the value of the errorURL property.
      *
      * @param string|null $errorURL
      * @return void
@@ -249,7 +249,7 @@ class RoleDescriptor extends SignedElementHelper
 
 
     /**
-     * Collect the value of the errorURL-property
+     * Collect the value of the errorURL property.
      *
      * @return string|null
      */
@@ -260,7 +260,7 @@ class RoleDescriptor extends SignedElementHelper
 
 
     /**
-     * Collect the value of the ProtocolSupportEnumeration-property
+     * Collect the value of the ProtocolSupportEnumeration property.
      *
      * @return string[]
      */
@@ -271,7 +271,7 @@ class RoleDescriptor extends SignedElementHelper
 
 
     /**
-     * Set the value of the ProtocolSupportEnumeration-property
+     * Set the value of the ProtocolSupportEnumeration property.
      *
      * @param array $protocols
      * @return void
@@ -283,7 +283,7 @@ class RoleDescriptor extends SignedElementHelper
 
 
     /**
-     * Add the value to the ProtocolSupportEnumeration-property
+     * Add the value to the ProtocolSupportEnumeration property.
      *
      * @param string $protocol
      * @return void
@@ -295,7 +295,7 @@ class RoleDescriptor extends SignedElementHelper
 
 
     /**
-     * Collect the value of the Organization-property
+     * Collect the value of the Organization property.
      *
      * @return \SAML2\XML\md\Organization|null
      */
@@ -306,7 +306,7 @@ class RoleDescriptor extends SignedElementHelper
 
 
     /**
-     * Set the value of the Organization-property
+     * Set the value of the Organization property.
      *
      * @param \SAML2\XML\md\Organization|null $organization
      * @return void
@@ -318,7 +318,7 @@ class RoleDescriptor extends SignedElementHelper
 
 
     /**
-     * Collect the value of the ContactPerson-property
+     * Collect the value of the ContactPerson property.
      *
      * @return \SAML2\XML\md\ContactPerson[]
      */
@@ -329,7 +329,7 @@ class RoleDescriptor extends SignedElementHelper
 
 
     /**
-     * Set the value of the ContactPerson-property
+     * Set the value of the ContactPerson property.
      *
      * @param array $contactPerson
      * @return void
@@ -341,7 +341,7 @@ class RoleDescriptor extends SignedElementHelper
 
 
     /**
-     * Add the value to the ContactPerson-property
+     * Add the value to the ContactPerson property.
      *
      * @param \SAML2\XML\md\ContactPerson $contactPerson
      * @return void
@@ -353,7 +353,7 @@ class RoleDescriptor extends SignedElementHelper
 
 
     /**
-     * Collect the value of the KeyDescriptor-property
+     * Collect the value of the KeyDescriptor property.
      *
      * @return \SAML2\XML\md\KeyDescriptor[]
      */
@@ -364,7 +364,7 @@ class RoleDescriptor extends SignedElementHelper
 
 
     /**
-     * Set the value of the KeyDescriptor-property
+     * Set the value of the KeyDescriptor property.
      *
      * @param array $keyDescriptor
      * @return void
@@ -376,7 +376,7 @@ class RoleDescriptor extends SignedElementHelper
 
 
     /**
-     * Add the value to the KeyDescriptor-property
+     * Add the value to the KeyDescriptor property.
      *
      * @param \SAML2\XML\md\KeyDescriptor $keyDescriptor
      * @return void

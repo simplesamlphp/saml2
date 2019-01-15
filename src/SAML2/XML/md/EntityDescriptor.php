@@ -59,7 +59,12 @@ class EntityDescriptor extends SignedElementHelper
      *
      * Array of \SAML2\XML\md\RoleDescriptor objects (and subclasses of RoleDescriptor).
      *
-     * @var (\SAML2\XML\md\UnknownRoleDescriptor|\SAML2\XML\md\IDPSSODescriptor|\SAML2\XML\md\SPSSODescriptor|\SAML2\XML\md\AuthnAuthorityDescriptor|\SAML2\XML\md\AttributeAuthorityDescriptor|\SAML2\XML\md\PDPDescriptor)[]
+     * @var (\SAML2\XML\md\UnknownRoleDescriptor|
+     *       \SAML2\XML\md\IDPSSODescriptor|
+     *       \SAML2\XML\md\SPSSODescriptor|
+     *       \SAML2\XML\md\AuthnAuthorityDescriptor|
+     *       \SAML2\XML\md\AttributeAuthorityDescriptor|
+     *       \SAML2\XML\md\PDPDescriptor)[]
      */
     public $RoleDescriptor = [];
 
@@ -109,21 +114,21 @@ class EntityDescriptor extends SignedElementHelper
         if (!$xml->hasAttribute('entityID')) {
             throw new \Exception('Missing required attribute entityID on EntityDescriptor.');
         }
-        $this->setEntityID($xml->getAttribute('entityID'));
+        $this->entityID = $xml->getAttribute('entityID');
 
         if ($xml->hasAttribute('ID')) {
-            $this->setID($xml->getAttribute('ID'));
+            $this->ID = $xml->getAttribute('ID');
         }
         if ($xml->hasAttribute('validUntil')) {
-            $this->setValidUntil(Utils::xsDateTimeToTimestamp($xml->getAttribute('validUntil')));
+            $this->validUntil = Utils::xsDateTimeToTimestamp($xml->getAttribute('validUntil'));
         }
         if ($xml->hasAttribute('cacheDuration')) {
-            $this->setCacheDuration($xml->getAttribute('cacheDuration'));
+            $this->cacheDuration = $xml->getAttribute('cacheDuration');
         }
 
-        $this->setExtensions(Extensions::getList($xml));
+        $this->Extensions = Extensions::getList($xml);
 
-        for ($node = $xml->firstChild; $node !== null; $node = $node->nextSibling) {
+        for ($node = $xml->firstChild; $node instanceof \DOMNode; $node = $node->nextSibling) {
             if (!($node instanceof \DOMElement)) {
                 continue;
             }
@@ -134,60 +139,60 @@ class EntityDescriptor extends SignedElementHelper
 
             switch ($node->localName) {
                 case 'RoleDescriptor':
-                    $this->addRoleDescriptor(new UnknownRoleDescriptor($node));
+                    $this->RoleDescriptor[] = new UnknownRoleDescriptor($node);
                     break;
                 case 'IDPSSODescriptor':
-                    $this->addRoleDescriptor(new IDPSSODescriptor($node));
+                    $this->RoleDescriptor[] = new IDPSSODescriptor($node);
                     break;
                 case 'SPSSODescriptor':
-                    $this->addRoleDescriptor(new SPSSODescriptor($node));
+                    $this->RoleDescriptor[] = new SPSSODescriptor($node);
                     break;
                 case 'AuthnAuthorityDescriptor':
-                    $this->addRoleDescriptor(new AuthnAuthorityDescriptor($node));
+                    $this->RoleDescriptor[] = new AuthnAuthorityDescriptor($node);
                     break;
                 case 'AttributeAuthorityDescriptor':
-                    $this->addRoleDescriptor(new AttributeAuthorityDescriptor($node));
+                    $this->RoleDescriptor[] = new AttributeAuthorityDescriptor($node);
                     break;
                 case 'PDPDescriptor':
-                    $this->addRoleDescriptor(new PDPDescriptor($node));
+                    $this->RoleDescriptor[] = new PDPDescriptor($node);
+                    break;
+                case 'AffiliationDescriptor':
+                    if ($this->AffiliationDescriptor !== null) {
+                        throw new \Exception('More than one AffiliationDescriptor in the entity.');
+                    }
+                    $this->AffiliationDescriptor = new AffiliationDescriptor($node);
+                    break;
+                case 'Organization':
+                    if ($this->Organization !== null) {
+                        throw new \Exception('More than one Organization in the entity.');
+                    }
+                    $this->Organization = new Organization($node);
+                    break;
+                case 'ContactPerson':
+                    $this->ContactPerson[] = new ContactPerson($node);
+                    break;
+                case 'AdditionalMetadataLocation':
+                    $this->AdditionalMetadataLocation[] = new AdditionalMetadataLocation($node);
                     break;
             }
         }
 
-        $affiliationDescriptor = Utils::xpQuery($xml, './saml_metadata:AffiliationDescriptor');
-        if (count($affiliationDescriptor) > 1) {
-            throw new \Exception('More than one AffiliationDescriptor in the entity.');
-        } elseif (!empty($affiliationDescriptor)) {
-            $this->setAffiliationDescriptor(new AffiliationDescriptor($affiliationDescriptor[0]));
-        }
-
-        $roleDescriptor = $this->getRoleDescriptor();
-        if (empty($roleDescriptor) && is_null($this->getAffiliationDescriptor())) {
-            throw new \Exception('Must have either one of the RoleDescriptors or an AffiliationDescriptor in EntityDescriptor.');
-        } elseif (!empty($roleDescriptor) && !is_null($this->getAffiliationDescriptor())) {
-            throw new \Exception('AffiliationDescriptor cannot be combined with other RoleDescriptor elements in EntityDescriptor.');
-        }
-
-        $organization = Utils::xpQuery($xml, './saml_metadata:Organization');
-        if (count($organization) > 1) {
-            throw new \Exception('More than one Organization in the entity.');
-        } elseif (!empty($organization)) {
-            $this->setOrganization(new Organization($organization[0]));
-        }
-
-        foreach (Utils::xpQuery($xml, './saml_metadata:ContactPerson') as $cp) {
-            $this->addContactPerson(new ContactPerson($cp));
-        }
-
-        foreach (Utils::xpQuery($xml, './saml_metadata:AdditionalMetadataLocation') as $aml) {
-            $this->addAdditionalMetadataLocation(new AdditionalMetadataLocation($aml));
+        if (empty($this->RoleDescriptor) && is_null($this->AffiliationDescriptor)) {
+            throw new \Exception(
+                'Must have either one of the RoleDescriptors or an AffiliationDescriptor in EntityDescriptor.'
+            );
+        } elseif (!empty($this->RoleDescriptor) && !is_null($this->AffiliationDescriptor)) {
+            throw new \Exception(
+                'AffiliationDescriptor cannot be combined with other RoleDescriptor elements in EntityDescriptor.'
+            );
         }
     }
 
 
     /**
-     * Collect the value of the entityID-property
-     * @return string
+     * Collect the value of the entityID property.
+     *
+     * @return string|null
      */
     public function getEntityID() : string
     {
@@ -207,7 +212,8 @@ class EntityDescriptor extends SignedElementHelper
 
 
     /**
-     * Collect the value of the ID-property
+     * Collect the value of the ID property.
+     *
      * @return string|null
      */
     public function getID()
@@ -217,7 +223,8 @@ class EntityDescriptor extends SignedElementHelper
 
 
     /**
-     * Set the value of the ID-property
+     * Set the value of the ID property.
+     *
      * @param string|null $Id
      * @return void
      */
@@ -270,7 +277,8 @@ class EntityDescriptor extends SignedElementHelper
 
 
     /**
-     * Collect the value of the Extensions-property
+     * Collect the value of the Extensions property.
+     *
      * @return \SAML2\XML\Chunk[]
      */
     public function getExtensions() : array
@@ -280,7 +288,8 @@ class EntityDescriptor extends SignedElementHelper
 
 
     /**
-     * Set the value of the Extensions-property
+     * Set the value of the Extensions property.
+     *
      * @param array $extensions
      * @return void
      */
@@ -303,8 +312,14 @@ class EntityDescriptor extends SignedElementHelper
 
 
     /**
-     * Collect the value of the RoleDescriptor-property
-     * @return \SAML2\XML\md\RoleDescriptor[]
+     * Collect the value of the RoleDescriptor property.
+     *
+     * @return (\SAML2\XML\md\UnknownRoleDescriptor|
+     *          \SAML2\XML\md\IDPSSODescriptor|
+     *          \SAML2\XML\md\SPSSODescriptor|
+     *          \SAML2\XML\md\AuthnAuthorityDescriptor|
+     *          \SAML2\XML\md\AttributeAuthorityDescriptor|
+     *          \SAML2\XML\md\PDPDescriptor)[]
      */
     public function getRoleDescriptor() : array
     {
@@ -313,8 +328,14 @@ class EntityDescriptor extends SignedElementHelper
 
 
     /**
-     * Set the value of the RoleDescriptor-property
-     * @param array $roleDescriptor
+     * Set the value of the RoleDescriptor property.
+     *
+     * @param (\SAML2\XML\md\UnknownRoleDescriptor|
+     *         \SAML2\XML\md\IDPSSODescriptor|
+     *         \SAML2\XML\md\SPSSODescriptor|
+     *         \SAML2\XML\md\AuthnAuthorityDescriptor|
+     *         \SAML2\XML\md\AttributeAuthorityDescriptor|
+     *         \SAML2\XML\md\PDPDescriptor)[] $roleDescriptor
      * @return void
      */
     public function setRoleDescriptor(array $roleDescriptor)
@@ -324,8 +345,14 @@ class EntityDescriptor extends SignedElementHelper
 
 
     /**
-     * Add the value to the RoleDescriptor-property
-     * @param \SAML2\XML\md\RoleDescriptor $roleDescriptor
+     * Add the value to the RoleDescriptor property.
+     *
+     * @param \SAML2\XML\md\UnknownRoleDescriptor|
+     *        \SAML2\XML\md\IDPSSODescriptor|
+     *        \SAML2\XML\md\SPSSODescriptor|
+     *        \SAML2\XML\md\AuthnAuthorityDescriptor|
+     *        \SAML2\XML\md\AttributeAuthorityDescriptor|
+     *        \SAML2\XML\md\PDPDescriptor $roleDescriptor
      * @return void
      */
     public function addRoleDescriptor(RoleDescriptor $roleDescriptor)
@@ -335,7 +362,8 @@ class EntityDescriptor extends SignedElementHelper
 
 
     /**
-     * Collect the value of the AffiliationDescriptor-property
+     * Collect the value of the AffiliationDescriptor property.
+     *
      * @return \SAML2\XML\md\AffiliationDescriptor|null
      */
     public function getAffiliationDescriptor()
@@ -345,7 +373,8 @@ class EntityDescriptor extends SignedElementHelper
 
 
     /**
-     * Set the value of the AffliationDescriptor-property
+     * Set the value of the AffliationDescriptor property.
+     *
      * @param \SAML2\XML\md\AffiliationDescriptor|null $affiliationDescriptor
      * @return void
      */
@@ -356,7 +385,8 @@ class EntityDescriptor extends SignedElementHelper
 
 
     /**
-     * Collect the value of the Organization-property
+     * Collect the value of the Organization property.
+     *
      * @return \SAML2\XML\md\Organization|null
      */
     public function getOrganization()
@@ -366,7 +396,8 @@ class EntityDescriptor extends SignedElementHelper
 
 
     /**
-     * Set the value of the Organization-property
+     * Set the value of the Organization property.
+     *
      * @param \SAML2\XML\md\Organization|null $organization
      * @return void
      */
@@ -377,7 +408,8 @@ class EntityDescriptor extends SignedElementHelper
 
 
     /**
-     * Collect the value of the ContactPerson-property
+     * Collect the value of the ContactPerson property.
+     *
      * @return \SAML2\XML\md\ContactPerson[]
      */
     public function getContactPerson() : array
@@ -387,7 +419,8 @@ class EntityDescriptor extends SignedElementHelper
 
 
     /**
-     * Set the value of the ContactPerson-property
+     * Set the value of the ContactPerson property.
+     *
      * @param array $contactPerson
      * @return void
      */
@@ -398,7 +431,8 @@ class EntityDescriptor extends SignedElementHelper
 
 
     /**
-     * Add the value to the ContactPerson-property
+     * Add the value to the ContactPerson property.
+     *
      * @param \SAML2\XML\md\ContactPerson $contactPerson
      * @return void
      */
@@ -409,7 +443,8 @@ class EntityDescriptor extends SignedElementHelper
 
 
     /**
-     * Collect the value of the AdditionalMetadataLocation-property
+     * Collect the value of the AdditionalMetadataLocation property.
+     *
      * @return \SAML2\XML\md\AdditionalMetadataLocation[]
      */
     public function getAdditionalMetadataLocation() : array
@@ -419,7 +454,8 @@ class EntityDescriptor extends SignedElementHelper
 
 
     /**
-     * Set the value of the AdditionalMetadataLocation-property
+     * Set the value of the AdditionalMetadataLocation property.
+     *
      * @param array $additionalMetadataLocation
      * @return void
      */
@@ -430,7 +466,8 @@ class EntityDescriptor extends SignedElementHelper
 
 
     /**
-     * Add the value to the AdditionalMetadataLocation-property
+     * Add the value to the AdditionalMetadataLocation property.
+     *
      * @param AdditionalMetadataLocation $additionalMetadataLocation
      * @return void
      */
@@ -448,6 +485,10 @@ class EntityDescriptor extends SignedElementHelper
      */
     public function toXML(\DOMElement $parent = null) : \DOMElement
     {
+        if (empty($this->entityID)) {
+            throw new \Exception('Cannot convert EntityDescriptor to XML without an EntityID set.');
+        }
+
         if ($parent === null) {
             $doc = DOMDocumentFactory::create();
             $e = $doc->createElementNS(Constants::NS_MD, 'md:EntityDescriptor');
@@ -457,44 +498,45 @@ class EntityDescriptor extends SignedElementHelper
             $parent->appendChild($e);
         }
 
-        $e->setAttribute('entityID', $this->getEntityID());
+        $e->setAttribute('entityID', $this->entityID);
 
-        if ($this->getID() !== null) {
-            $e->setAttribute('ID', $this->getID());
+        if ($this->ID !== null) {
+            $e->setAttribute('ID', $this->ID);
         }
 
-        if ($this->getValidUntil() !== null) {
-            $e->setAttribute('validUntil', gmdate('Y-m-d\TH:i:s\Z', $this->getValidUntil()));
+        if ($this->validUntil !== null) {
+            $e->setAttribute('validUntil', gmdate('Y-m-d\TH:i:s\Z', $this->validUntil));
         }
 
-        if ($this->getCacheDuration() !== null) {
-            $e->setAttribute('cacheDuration', $this->getCacheDuration());
+        if ($this->cacheDuration !== null) {
+            $e->setAttribute('cacheDuration', $this->cacheDuration);
         }
 
-        Extensions::addList($e, $this->getExtensions());
+        Extensions::addList($e, $this->Extensions);
 
-        /** @var \SAML2\XML\md\UnknownRoleDescriptor|\SAML2\XML\md\IDPSSODescriptor|\SAML2\XML\md\SPSSODescriptor|\SAML2\XML\md\AuthnAuthorityDescriptor|\SAML2\XML\md\AttributeAuthorityDescriptor|\SAML2\XML\md\PDPDescriptor $n */
-        foreach ($this->getRoleDescriptor() as $n) {
+        foreach ($this->RoleDescriptor as $n) {
             $n->toXML($e);
         }
 
-        if ($this->getAffiliationDescriptor() !== null) {
-            $this->getAffiliationDescriptor()->toXML($e);
+        if ($this->AffiliationDescriptor !== null) {
+            $this->AffiliationDescriptor->toXML($e);
         }
 
-        if ($this->getOrganization() !== null) {
-            $this->getOrganization()->toXML($e);
+        if ($this->Organization !== null) {
+            $this->Organization->toXML($e);
         }
 
-        foreach ($this->getContactPerson() as $cp) {
+        foreach ($this->ContactPerson as $cp) {
             $cp->toXML($e);
         }
 
-        foreach ($this->getAdditionalMetadataLocation() as $n) {
+        foreach ($this->AdditionalMetadataLocation as $n) {
             $n->toXML($e);
         }
 
-        $this->signElement($e, $e->firstChild);
+        /** @var \DOMElement $child */
+        $child = $e->firstChild;
+        $this->signElement($e, $child);
 
         return $e;
     }

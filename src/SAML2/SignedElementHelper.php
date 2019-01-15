@@ -223,7 +223,7 @@ class SignedElementHelper implements SignedElement
 
 
     /**
-     * Collect the value of the validUntil-property
+     * Collect the value of the validUntil property.
      *
      * @return int|null
      */
@@ -234,7 +234,7 @@ class SignedElementHelper implements SignedElement
 
 
     /**
-     * Set the value of the validUntil-property
+     * Set the value of the validUntil property.
      *
      * @param int|null $validUntil
      * @return void
@@ -246,7 +246,7 @@ class SignedElementHelper implements SignedElement
 
 
     /**
-     * Collect the value of the cacheDuration-property
+     * Collect the value of the cacheDuration property.
      *
      * @return string|null
      */
@@ -257,7 +257,7 @@ class SignedElementHelper implements SignedElement
 
 
     /**
-     * Set the value of the cacheDuration-property
+     * Set the value of the cacheDuration property.
      *
      * @param string|null $cacheDuration
      * @return void
@@ -271,11 +271,11 @@ class SignedElementHelper implements SignedElement
     /**
      * Sign the given XML element.
      *
-     * @param \DOMElement      $root         The element we should sign.
-     * @param \DOMElement|null $insertBefore The element we should insert the signature node before.
+     * @param \DOMElement $root The element we should sign.
+     * @param \DOMNode|null $insertBefore The element we should insert the signature node before.
      * @return \DOMElement|null
      */
-    protected function signElement(\DOMElement $root, \DOMElement $insertBefore = null)
+    protected function signElement(\DOMElement $root, \DOMNode $insertBefore = null)
     {
         if ($this->signatureKey === null) {
             /* We cannot sign this element. */

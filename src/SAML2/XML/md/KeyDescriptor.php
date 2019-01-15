@@ -4,6 +4,8 @@ declare(strict_types=1);
 
 namespace SAML2\XML\md;
 
+use Webmozart\Assert\Assert;
+
 use SAML2\Constants;
 use SAML2\Utils;
 use SAML2\XML\Chunk;
@@ -23,14 +25,14 @@ class KeyDescriptor
      *
      * @var string|null
      */
-    public $use = null;
+    private $use = null;
 
     /**
      * The KeyInfo for this key.
      *
-     * @var \SAML2\XML\ds\KeyInfo
+     * @var \SAML2\XML\ds\KeyInfo|null
      */
-    public $KeyInfo;
+    private $KeyInfo = null;
 
     /**
      * Supported EncryptionMethods.
@@ -55,7 +57,7 @@ class KeyDescriptor
         }
 
         if ($xml->hasAttribute('use')) {
-            $this->setUse($xml->getAttribute('use'));
+            $this->use = $xml->getAttribute('use');
         }
 
         $keyInfo = Utils::xpQuery($xml, './ds:KeyInfo');
@@ -64,16 +66,17 @@ class KeyDescriptor
         } elseif (empty($keyInfo)) {
             throw new \Exception('No ds:KeyInfo in the KeyDescriptor.');
         }
-        $this->setKeyInfo(new KeyInfo($keyInfo[0]));
+        $this->KeyInfo = new KeyInfo($keyInfo[0]);
 
         foreach (Utils::xpQuery($xml, './saml_metadata:EncryptionMethod') as $em) {
-            $this->addEncryptionMethod(new Chunk($em));
+            $this->EncryptionMethod[] = new Chunk($em);
         }
     }
 
 
     /**
-     * Collect the value of the use-property
+     * Collect the value of the use property.
+     *
      * @return string|null
      */
     public function getUse()
@@ -83,7 +86,8 @@ class KeyDescriptor
 
 
     /**
-     * Set the value of the use-property
+     * Set the value of the use property.
+     *
      * @param string|null $use
      * @return void
      */
@@ -94,8 +98,9 @@ class KeyDescriptor
 
 
     /**
-     * Collect the value of the KeyInfo-property
-     * @return \SAML2\XML\ds\KeyInfo
+     * Collect the value of the KeyInfo property.
+     *
+     * @return \SAML2\XML\ds\KeyInfo|null
      */
     public function getKeyInfo() : KeyInfo
     {
@@ -104,7 +109,8 @@ class KeyDescriptor
 
 
     /**
-     * Set the value of the KeyInfo-property
+     * Set the value of the KeyInfo property.
+     *
      * @param \SAML2\XML\ds\KeyInfo $keyInfo
      * @return void
      */
@@ -115,7 +121,8 @@ class KeyDescriptor
 
 
     /**
-     * Collect the value of the EncryptionMethod-property
+     * Collect the value of the EncryptionMethod property.
+     *
      * @return \SAML2\XML\Chunk[]
      */
     public function getEncryptionMethod() : array
@@ -125,7 +132,8 @@ class KeyDescriptor
 
 
     /**
-     * Set the value of the EncryptionMethod-property
+     * Set the value of the EncryptionMethod property.
+     *
      * @param \SAML2\XML\Chunk[] $encryptionMethod
      * @return void
      */
@@ -136,7 +144,8 @@ class KeyDescriptor
 
 
     /**
-     * Add the value to the EncryptionMethod-property
+     * Add the value to the EncryptionMethod property.
+     *
      * @param \SAML2\XML\Chunk $encryptionMethod
      * @return void
      */
@@ -154,18 +163,20 @@ class KeyDescriptor
      */
     public function toXML(\DOMElement $parent) : \DOMElement
     {
+        Assert::isInstanceOf($this->KeyInfo, KeyInfo::class, 'Cannot convert KeyDescriptor to XML without KeyInfo set.');
+
         $doc = $parent->ownerDocument;
 
         $e = $doc->createElementNS(Constants::NS_MD, 'md:KeyDescriptor');
         $parent->appendChild($e);
 
-        if ($this->getUse() !== null) {
-            $e->setAttribute('use', $this->getUse());
+        if ($this->use !== null) {
+            $e->setAttribute('use', $this->use);
         }
 
-        $this->getKeyInfo()->toXML($e);
+        $this->KeyInfo->toXML($e);
 
-        foreach ($this->getEncryptionMethod() as $em) {
+        foreach ($this->EncryptionMethod as $em) {
             $em->toXML($e);
         }
 
