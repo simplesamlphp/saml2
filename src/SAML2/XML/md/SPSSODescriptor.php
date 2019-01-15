@@ -107,7 +107,7 @@ class SPSSODescriptor extends SSODescriptorType
 
 
     /**
-     * Set the value of the WantAssertionsSigned-propert
+     * Set the value of the WantAssertionsSigned-property
      *
      * @param bool|null $flag
      * @return void
