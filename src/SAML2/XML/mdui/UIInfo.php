@@ -78,23 +78,23 @@ class UIInfo
             return;
         }
 
-        $this->setDisplayName(Utils::extractLocalizedStrings($xml, Common::NS, 'DisplayName'));
-        $this->setDescription(Utils::extractLocalizedStrings($xml, Common::NS, 'Description'));
-        $this->setInformationURL(Utils::extractLocalizedStrings($xml, Common::NS, 'InformationURL'));
-        $this->setPrivacyStatementURL(Utils::extractLocalizedStrings($xml, Common::NS, 'PrivacyStatementURL'));
+        $this->DisplayName = Utils::extractLocalizedStrings($xml, Common::NS, 'DisplayName');
+        $this->Description = Utils::extractLocalizedStrings($xml, Common::NS, 'Description');
+        $this->InformationURL = Utils::extractLocalizedStrings($xml, Common::NS, 'InformationURL');
+        $this->PrivacyStatementURL = Utils::extractLocalizedStrings($xml, Common::NS, 'PrivacyStatementURL');
 
         foreach (Utils::xpQuery($xml, './*') as $node) {
             if ($node->namespaceURI === Common::NS) {
                 switch ($node->localName) {
                     case 'Keywords':
-                        $this->addKeyword(new Keywords($node));
+                        $this->Keywords[] = new Keywords($node);
                         break;
                     case 'Logo':
-                        $this->addLogo(new Logo($node));
+                        $this->Logo[] = new Logo($node);
                         break;
                 }
             } else {
-                $this->addChildren(new Chunk($node));
+                $this->children[] = new Chunk($node);
             }
         }
     }
@@ -102,6 +102,7 @@ class UIInfo
 
     /**
      * Collect the value of the Keywords-property
+     *
      * @return \SAML2\XML\mdui\Keywords[]
      */
     public function getKeywords() : array
@@ -112,6 +113,7 @@ class UIInfo
 
     /**
      * Set the value of the Keywords-property
+     *
      * @param \SAML2\XML\mdui\Keywords[] $keywords
      * @return void
      */
@@ -123,6 +125,7 @@ class UIInfo
 
     /**
      * Add the value to the Keywords-property
+     *
      * @param \SAML2\XML\mdui\Keywords $keyword
      * @return void
      */
@@ -134,6 +137,7 @@ class UIInfo
 
     /**
      * Collect the value of the DisplayName-property
+     *
      * @return string[]
      */
     public function getDisplayName() : array
@@ -144,6 +148,7 @@ class UIInfo
 
     /**
      * Set the value of the DisplayName-property
+     *
      * @param array $displayName
      * @return void
      */
@@ -155,6 +160,7 @@ class UIInfo
 
     /**
      * Collect the value of the Description-property
+     *
      * @return string[]
      */
     public function getDescription() : array
@@ -165,6 +171,7 @@ class UIInfo
 
     /**
      * Set the value of the Description-property
+     *
      * @param array $description
      * @return void
      */
@@ -186,6 +193,7 @@ class UIInfo
 
     /**
      * Set the value of the InformationURL-property
+     *
      * @param array $informationURL
      * @return void
      */
@@ -197,6 +205,7 @@ class UIInfo
 
     /**
      * Collect the value of the PrivacyStatementURL-property
+     *
      * @return string[]
      */
     public function getPrivacyStatementURL() : array
@@ -207,6 +216,7 @@ class UIInfo
 
     /**
      * Set the value of the PrivacyStatementURL-property
+     *
      * @param array $privacyStatementURL
      * @return void
      */
@@ -218,6 +228,7 @@ class UIInfo
 
     /**
      * Collect the value of the Logo-property
+     *
      * @return \SAML2\XML\mdui\Logo[]
      */
     public function getLogo() : array
@@ -228,7 +239,8 @@ class UIInfo
 
     /**
      * Set the value of the Logo-property
-     * @param \SAML2\XML\mdui\Logo $logo
+     *
+     * @param \SAML2\XML\mdui\Logo[] $logo
      * @return void
      */
     public function setLogo(array $logo)
@@ -239,6 +251,7 @@ class UIInfo
 
     /**
      * Add the value to the Logo-property
+     *
      * @param \SAML2\XML\mdui\Logo $logo
      * @return void
      */
@@ -250,6 +263,7 @@ class UIInfo
 
     /**
      * Collect the value of the children-property
+     *
      * @return \SAML2\XML\Chunk[]
      */
     public function getChildren() : array
@@ -260,6 +274,7 @@ class UIInfo
 
     /**
      * Set the value of the childen-property
+     *
      * @param array $children
      * @return void
      */
@@ -271,6 +286,7 @@ class UIInfo
 
     /**
      * Add the value to the children-property
+     *
      * @param \SAML2\XML\Chunk $child
      * @return void
      */
@@ -295,7 +311,8 @@ class UIInfo
          || !empty($this->PrivacyStatementURL)
          || !empty($this->Keywords)
          || !empty($this->Logo)
-         || !empty($this->children)) {
+         || !empty($this->children)
+        ) {
             $doc = $parent->ownerDocument;
 
             $e = $doc->createElementNS(Common::NS, 'mdui:UIInfo');
@@ -306,22 +323,16 @@ class UIInfo
             Utils::addStrings($e, Common::NS, 'mdui:InformationURL', true, $this->InformationURL);
             Utils::addStrings($e, Common::NS, 'mdui:PrivacyStatementURL', true, $this->PrivacyStatementURL);
 
-            if ($this->Keywords !== null) {
-                foreach ($this->Keywords as $child) {
-                    $child->toXML($e);
-                }
+            foreach ($this->Keywords as $child) {
+                $child->toXML($e);
             }
 
-            if ($this->Logo !== null) {
-                foreach ($this->Logo as $child) {
-                    $child->toXML($e);
-                }
+            foreach ($this->Logo as $child) {
+                $child->toXML($e);
             }
 
-            if ($this->children !== null) {
-                foreach ($this->children as $child) {
-                    $child->toXML($e);
-                }
+            foreach ($this->children as $child) {
+                $child->toXML($e);
             }
         }
 

@@ -365,6 +365,9 @@ XML;
         $assertion = new Assertion();
 
         $assertion->setAuthnContextDecl(new Chunk($document->documentElement));
+        $issuer = new Issuer();
+        $issuer->setValue('example:issuer');
+        $assertion->setIssuer($issuer);
         $documentParent  = DOMDocumentFactory::fromString("<root />");
         $assertionElement = $assertion->toXML($documentParent->firstChild);
 

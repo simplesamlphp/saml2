@@ -4,6 +4,8 @@ declare(strict_types=1);
 
 namespace SAML2\XML\mdui;
 
+use Webmozart\Assert\Assert;
+
 /**
  * Class for handling the Keywords metadata extensions for login and discovery user interface
  *
@@ -19,14 +21,14 @@ class Keywords
      *
      * @var string[]
      */
-    public $Keywords = [];
+    private $Keywords = [];
 
     /**
      * The language of this item.
      *
      * @var string
      */
-    public $lang;
+    private $lang = '';
 
 
     /**
@@ -48,17 +50,18 @@ class Keywords
             throw new \Exception('Missing value for Keywords.');
         }
         foreach (explode(' ', $xml->textContent) as $keyword) {
-            $this->addKeyword(str_replace('+', ' ', $keyword));
+            $this->Keywords[] = str_replace('+', ' ', $keyword);
         }
-        $this->setLanguage($xml->getAttribute('xml:lang'));
+        $this->lang = $xml->getAttribute('xml:lang');
     }
 
 
     /**
      * Collect the value of the lang-property
+     *
      * @return string
      */
-    public function getLanguage()
+    public function getLanguage() : string
     {
         return $this->lang;
     }
@@ -66,6 +69,7 @@ class Keywords
 
     /**
      * Set the value of the lang-property
+     *
      * @param string $lang
      * @return void
      */
@@ -77,6 +81,7 @@ class Keywords
 
     /**
      * Collect the value of the Keywords-property
+     *
      * @return string[]
      */
     public function getKeywords() : array
@@ -87,6 +92,7 @@ class Keywords
 
     /**
      * Set the value of the Keywords-property
+     *
      * @param string[] $keywords
      * @return void
      */
@@ -98,6 +104,7 @@ class Keywords
 
     /**
      * Add the value to the Keywords-property
+     *
      * @param string $keyword
      * @return void
      */
@@ -116,12 +123,14 @@ class Keywords
      */
     public function toXML(\DOMElement $parent) : \DOMElement
     {
+        Assert::notEmpty($this->lang, "Cannot convert Keywords to XML without a language set.");
+
         $doc = $parent->ownerDocument;
 
         $e = $doc->createElementNS(Common::NS, 'mdui:Keywords');
-        $e->setAttribute('xml:lang', $this->getLanguage());
+        $e->setAttribute('xml:lang', $this->lang);
         $value = '';
-        foreach ($this->getKeywords() as $keyword) {
+        foreach ($this->Keywords as $keyword) {
             if (strpos($keyword, "+") !== false) {
                 throw new \Exception('Keywords may not contain a "+" character.');
             }

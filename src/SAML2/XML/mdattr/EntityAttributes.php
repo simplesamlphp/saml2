@@ -30,7 +30,7 @@ class EntityAttributes
      *
      * @var (\SAML2\XML\saml\Attribute|\SAML2\XML\Chunk)[]
      */
-    public $children = [];
+    private $children = [];
 
 
     /**
@@ -46,9 +46,9 @@ class EntityAttributes
 
         foreach (Utils::xpQuery($xml, './saml_assertion:Attribute|./saml_assertion:Assertion') as $node) {
             if ($node->localName === 'Attribute') {
-                $this->addChildren(new Attribute($node));
+                $this->children[] = new Attribute($node);
             } else {
-                $this->addChildren(new Chunk($node));
+                $this->children[] = new Chunk($node);
             }
         }
     }
@@ -56,6 +56,7 @@ class EntityAttributes
 
     /**
      * Collect the value of the children-property
+     *
      * @return (\SAML2\XML\Chunk|\SAML2\XML\saml\Attribute)[]
      */
     public function getChildren() : array
@@ -66,6 +67,7 @@ class EntityAttributes
 
     /**
      * Set the value of the childen-property
+     *
      * @param array $children
      * @return void
      */
@@ -77,6 +79,7 @@ class EntityAttributes
 
     /**
      * Add the value to the children-property
+     *
      * @param \SAML2\XML\Chunk|\SAML2\XML\saml\Attribute $child
      * @return void
      */
@@ -101,7 +104,7 @@ class EntityAttributes
         $parent->appendChild($e);
 
         /** @var \SAML2\XML\saml\Attribute|\SAML2\XML\Chunk $child */
-        foreach ($this->getChildren() as $child) {
+        foreach ($this->children as $child) {
             $child->toXML($e);
         }
 

@@ -39,6 +39,13 @@ class SignedElementHelper implements SignedElement
     private $validators;
 
     /**
+     * How long this element is valid, as a unix timestamp.
+     *
+     * @var int|null
+     */
+    protected $validUntil;
+
+    /**
      * The length of time this element can be cached, as string.
      *
      * @var string|null
@@ -217,6 +224,7 @@ class SignedElementHelper implements SignedElement
 
     /**
      * Collect the value of the validUntil-property
+     *
      * @return int|null
      */
     public function getValidUntil()
@@ -227,7 +235,9 @@ class SignedElementHelper implements SignedElement
 
     /**
      * Set the value of the validUntil-property
+     *
      * @param int|null $validUntil
+     * @return void
      */
     public function setValidUntil(int $validUntil = null)
     {
@@ -237,6 +247,7 @@ class SignedElementHelper implements SignedElement
 
     /**
      * Collect the value of the cacheDuration-property
+     *
      * @return string|null
      */
     public function getCacheDuration()
@@ -247,7 +258,9 @@ class SignedElementHelper implements SignedElement
 
     /**
      * Set the value of the cacheDuration-property
+     *
      * @param string|null $cacheDuration
+     * @return void
      */
     public function setCacheDuration(string $cacheDuration = null)
     {

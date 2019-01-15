@@ -38,7 +38,7 @@ class Logo
      *
      * @var string|null
      */
-    public $lang = null;
+    private $lang = null;
 
 
     /**
@@ -73,6 +73,7 @@ class Logo
 
     /**
      * Collect the value of the url-property
+     *
      * @return string
      */
     public function getUrl() : string
@@ -83,7 +84,9 @@ class Logo
 
     /**
      * Set the value of the url-property
+     *
      * @param string $url
+     * @return void
      */
     public function setUrl(string $url)
     {
@@ -96,6 +99,7 @@ class Logo
 
     /**
      * Collect the value of the lang-property
+     *
      * @return string|null
      */
     public function getLanguage()
@@ -106,6 +110,7 @@ class Logo
 
     /**
      * Set the value of the lang-property
+     *
      * @param string $lang
      * @return void
      */
@@ -117,6 +122,7 @@ class Logo
 
     /**
      * Collect the value of the height-property
+     *
      * @return int
      */
     public function getHeight() : int
@@ -127,6 +133,7 @@ class Logo
 
     /**
      * Set the value of the height-property
+     *
      * @param int $height
      * @return void
      */
@@ -138,6 +145,7 @@ class Logo
 
     /**
      * Collect the value of the width-property
+     *
      * @return int
      */
     public function getWidth() : int
@@ -148,6 +156,7 @@ class Logo
 
     /**
      * Set the value of the width-property
+     *
      * @param int $width
      * @return void
      */
@@ -168,11 +177,11 @@ class Logo
         $doc = $parent->ownerDocument;
 
         $e = $doc->createElementNS(Common::NS, 'mdui:Logo');
-        $e->appendChild($doc->createTextNode($this->getUrl()));
-        $e->setAttribute('width', strval($this->getWidth()));
-        $e->setAttribute('height', strval($this->getHeight()));
-        if ($this->getLanguage() !== null) {
-            $e->setAttribute('xml:lang', $this->getLanguage());
+        $e->appendChild($doc->createTextNode($this->url));
+        $e->setAttribute('width', strval($this->width));
+        $e->setAttribute('height', strval($this->height));
+        if ($this->lang !== null) {
+            $e->setAttribute('xml:lang', $this->lang);
         }
         $parent->appendChild($e);
 

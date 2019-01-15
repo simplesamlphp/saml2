@@ -194,7 +194,7 @@ class Attribute
         $e = $parent->ownerDocument->createElementNS($namespace, $name);
         $parent->appendChild($e);
 
-        if ($this->Name === null) {
+        if (empty($this->Name)) {
             throw new \Exception('Cannot convert Attribute to XML with no Name set.');
         }
         $e->setAttribute('Name', $this->Name);

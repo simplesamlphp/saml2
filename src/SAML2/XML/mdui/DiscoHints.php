@@ -57,18 +57,19 @@ class DiscoHints
             return;
         }
 
-        $this->setIPHint(Utils::extractStrings($xml, Common::NS, 'IPHint'));
-        $this->setDomainHint(Utils::extractStrings($xml, Common::NS, 'DomainHint'));
-        $this->setGeolocationHint(Utils::extractStrings($xml, Common::NS, 'GeolocationHint'));
+        $this->IPHint = Utils::extractStrings($xml, Common::NS, 'IPHint');
+        $this->DomainHint = Utils::extractStrings($xml, Common::NS, 'DomainHint');
+        $this->GeolocationHint = Utils::extractStrings($xml, Common::NS, 'GeolocationHint');
 
         foreach (Utils::xpQuery($xml, "./*[namespace-uri()!='".Common::NS."']") as $node) {
-            $this->addChildren(new Chunk($node));
+            $this->children[] = new Chunk($node);
         }
     }
 
 
     /**
      * Collect the value of the IPHint-property
+     *
      * @return string[]
      */
     public function getIPHint() : array
@@ -79,6 +80,7 @@ class DiscoHints
 
     /**
      * Set the value of the IPHint-property
+     *
      * @param string[] $hints
      * @return void
      */
@@ -90,6 +92,7 @@ class DiscoHints
 
     /**
      * Collect the value of the DomainHint-property
+     *
      * @return string[]
      */
     public function getDomainHint() : array
@@ -100,6 +103,7 @@ class DiscoHints
 
     /**
      * Set the value of the DomainHint-property
+     *
      * @param string[] $hints
      * @return void
      */
@@ -111,6 +115,7 @@ class DiscoHints
 
     /**
      * Collect the value of the GeolocationHint-property
+     *
      * @return string[]
      */
     public function getGeolocationHint() : array
@@ -121,6 +126,7 @@ class DiscoHints
 
     /**
      * Set the value of the GeolocationHint-property
+     *
      * @param string[] $hints
      * @return void
      */
@@ -132,6 +138,7 @@ class DiscoHints
 
     /**
      * Collect the value of the children-property
+     *
      * @return \SAML2\XML\Chunk[]
      */
     public function getChildren() : array
@@ -142,6 +149,7 @@ class DiscoHints
 
     /**
      * Set the value of the childen-property
+     *
      * @param array $children
      * @return void
      */
@@ -153,6 +161,7 @@ class DiscoHints
 
     /**
      * Add the value to the children-property
+     *
      * @param \SAML2\XML\Chunk $child
      * @return void
      */
@@ -173,21 +182,20 @@ class DiscoHints
         if (!empty($this->IPHint)
          || !empty($this->DomainHint)
          || !empty($this->GeolocationHint)
-         || !empty($this->children)) {
+         || !empty($this->children)
+        ) {
             $doc = $parent->ownerDocument;
 
             $e = $doc->createElementNS(Common::NS, 'mdui:DiscoHints');
             $parent->appendChild($e);
 
-            if (!empty($this->children)) {
-                foreach ($this->getChildren() as $child) {
-                    $child->toXML($e);
-                }
+            foreach ($this->getChildren() as $child) {
+                $child->toXML($e);
             }
 
-            Utils::addStrings($e, Common::NS, 'mdui:IPHint', false, $this->getIPHint());
-            Utils::addStrings($e, Common::NS, 'mdui:DomainHint', false, $this->getDomainHint());
-            Utils::addStrings($e, Common::NS, 'mdui:GeolocationHint', false, $this->getGeolocationHint());
+            Utils::addStrings($e, Common::NS, 'mdui:IPHint', false, $this->IPHint);
+            Utils::addStrings($e, Common::NS, 'mdui:DomainHint', false, $this->DomainHint);
+            Utils::addStrings($e, Common::NS, 'mdui:GeolocationHint', false, $this->GeolocationHint);
 
             return $e;
         }
