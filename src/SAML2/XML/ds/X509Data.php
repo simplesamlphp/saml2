@@ -68,6 +68,7 @@ class X509Data
     /**
      * Set the value of the data-property
      * @param array $data
+     * @return void
      */
     public function setData(array $data)
     {
@@ -78,6 +79,7 @@ class X509Data
     /**
      * Add the value to the data-property
      * @param \SAML2\XML\Chunk|\SAML2\XML\ds\X509Certificate $data
+     * @return void
      */
     public function addData($data)
     {

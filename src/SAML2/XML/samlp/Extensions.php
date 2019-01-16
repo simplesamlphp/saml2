@@ -35,6 +35,7 @@ class Extensions
      *
      * @param \DOMElement        $parent     The element we should add the extensions to.
      * @param \SAML2\XML\Chunk[] $extensions List of extension objects.
+     * @return void
      */
     public static function addList(\DOMElement $parent, array $extensions)
     {

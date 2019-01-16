@@ -26,6 +26,12 @@ class TransformerChain implements Transformer
     private $serviceProvider;
 
 
+    /**
+     * Constructor for TransformerChain
+     *
+     * @param IdentityProvider $identityProvider
+     * @param ServiceProvider $serviceProvider
+     */
     public function __construct(
         IdentityProvider $identityProvider,
         ServiceProvider $serviceProvider
@@ -35,6 +41,10 @@ class TransformerChain implements Transformer
     }
 
 
+    /**
+     * @param Transformer $transformer
+     * @return void
+     */
     public function addTransformerStep(Transformer $transformer)
     {
         if ($transformer instanceof IdentityProviderAware) {

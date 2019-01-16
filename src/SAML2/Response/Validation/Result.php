@@ -17,6 +17,8 @@ class Result
 
     /**
      * @param $message
+     * @throws InvalidArgumentException
+     * @return void
      */
     public function addError($message)
     {

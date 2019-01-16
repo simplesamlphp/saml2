@@ -63,6 +63,7 @@ class EntityAttributes
     /**
      * Set the value of the childen-property
      * @param array $children
+     * @return void
      */
     public function setChildren(array $children)
     {
@@ -73,6 +74,7 @@ class EntityAttributes
     /**
      * Add the value to the children-property
      * @param \SAML2\XML\Chunk|\SAML2\XML\saml\Attribute $child
+     * @return void
      */
     public function addChildren($child)
     {

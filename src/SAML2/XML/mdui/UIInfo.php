@@ -111,6 +111,7 @@ class UIInfo
     /**
      * Set the value of the Keywords-property
      * @param \SAML2\XML\mdui\Keywords[] $keywords
+     * @return void
      */
     public function setKeywords(array $keywords)
     {
@@ -121,6 +122,7 @@ class UIInfo
     /**
      * Add the value to the Keywords-property
      * @param \SAML2\XML\mdui\Keywords $keyword
+     * @return void
      */
     public function addKeyword(Keywords $keyword)
     {
@@ -141,6 +143,7 @@ class UIInfo
     /**
      * Set the value of the DisplayName-property
      * @param array $displayName
+     * @return void
      */
     public function setDisplayName(array $displayName)
     {
@@ -161,6 +164,7 @@ class UIInfo
     /**
      * Set the value of the Description-property
      * @param array $description
+     * @return void
      */
     public function setDescription(array $description)
     {
@@ -181,6 +185,7 @@ class UIInfo
     /**
      * Set the value of the InformationURL-property
      * @param array $informationURL
+     * @return void
      */
     public function setInformationURL(array $informationURL)
     {
@@ -201,6 +206,7 @@ class UIInfo
     /**
      * Set the value of the PrivacyStatementURL-property
      * @param array $privacyStatementURL
+     * @return void
      */
     public function setPrivacyStatementURL(array $privacyStatementURL)
     {
@@ -221,6 +227,7 @@ class UIInfo
     /**
      * Set the value of the Logo-property
      * @param \SAML2\XML\mdui\Logo $logo
+     * @return void
      */
     public function setLogo(array $logo)
     {
@@ -231,6 +238,7 @@ class UIInfo
     /**
      * Add the value to the Logo-property
      * @param \SAML2\XML\mdui\Logo $logo
+     * @return void
      */
     public function addLogo(Logo $logo)
     {
@@ -251,6 +259,7 @@ class UIInfo
     /**
      * Set the value of the childen-property
      * @param array $children
+     * @return void
      */
     public function setChildren(array $children)
     {
@@ -261,6 +270,7 @@ class UIInfo
     /**
      * Add the value to the children-property
      * @param \SAML2\XML\Chunk $child
+     * @return void
      */
     public function addChildren(Chunk $child)
     {

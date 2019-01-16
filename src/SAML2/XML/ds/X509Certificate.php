@@ -48,6 +48,7 @@ class X509Certificate
     /**
      * Set the value of the certificate-property
      * @param string $certificate
+     * @return void
      */
     public function setCertificate($certificate)
     {
@@ -65,7 +66,6 @@ class X509Certificate
     public function toXML(\DOMElement $parent)
     {
         assert(is_string($this->certificate));
-
         return Utils::addString($parent, XMLSecurityDSig::XMLDSIGNS, 'ds:X509Certificate', $this->getCertificate());
     }
 }

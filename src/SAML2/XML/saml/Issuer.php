@@ -79,6 +79,7 @@ class Issuer extends NameIDType
     /**
      * Set the value of the Saml2IssuerShowAll-property
      * @param boolean $saml2IssuerShowAll
+     * @return void
      */
     public function setSaml2IssuerShowAll($saml2IssuerShowAll)
     {

@@ -134,8 +134,8 @@ class ContactPerson
      *
      * @param  \DOMElement  $parent The parent element.
      * @param  string      $name   The name of the child element.
-     * @return string|null The value of the child element.
      * @throws \Exception
+     * @return string|null The value of the child element.
      */
     private static function getStringElement(\DOMElement $parent, $name)
     {
@@ -166,6 +166,7 @@ class ContactPerson
     /**
      * Set the value of the contactType-property
      * @param string $contactType
+     * @return void
      */
     public function setContactType($contactType)
     {
@@ -187,6 +188,7 @@ class ContactPerson
     /**
      * Set the value of the Company-property
      * @param string|null $company
+     * @return void
      */
     public function setCompany($company)
     {
@@ -208,6 +210,7 @@ class ContactPerson
     /**
      * Set the value of the GivenName-property
      * @param string|null $givenName
+     * @return void
      */
     public function setGivenName($givenName)
     {
@@ -229,6 +232,7 @@ class ContactPerson
     /**
      * Set the value of the SurName-property
      * @param string|null $surName
+     * @return void
      */
     public function setSurName($surName)
     {
@@ -250,6 +254,7 @@ class ContactPerson
     /**
      * Set the value of the EmailAddress-property
      * @param string[] $emailAddress
+     * @return void
      */
     public function setEmailAddress(array $emailAddress)
     {
@@ -260,6 +265,7 @@ class ContactPerson
     /**
      * Add the value to the EmailAddress-property
      * @param string $emailAddress
+     * @return void
      */
     public function addEmailAddress($emailAddress)
     {
@@ -280,6 +286,7 @@ class ContactPerson
     /**
      * Set the value of the TelephoneNumber-property
      * @param string[] $telephoneNumber
+     * @return void
      */
     public function setTelephoneNumber(array $telephoneNumber)
     {
@@ -290,6 +297,7 @@ class ContactPerson
     /**
      * Add the value to the TelephoneNumber-property
      * @param string $telephoneNumber
+     * @return void
      */
     public function addTelephoneNumber($telephoneNumber)
     {
@@ -310,6 +318,7 @@ class ContactPerson
     /**
      * Set the value of the Extensions-property
      * @param array $extensions
+     * @return void
      */
     public function setExtensions(array $extensions)
     {
@@ -321,6 +330,7 @@ class ContactPerson
      * Add an Extension.
      *
      * @param \SAML2\XML\Chunk $extensions The Extensions
+     * @return void
      */
     public function addExtension(Chunk $extension)
     {
@@ -341,6 +351,7 @@ class ContactPerson
     /**
      * Set the value of the ContactPersonAttributes-property
      * @param string[] $contactPersonAttributes
+     * @return void
      */
     public function setContactPersonAttributes(array $contactPersonAttributes)
     {
@@ -352,6 +363,7 @@ class ContactPerson
      * Add the key/value of the ContactPersonAttributes-property
      * @param string $attr
      * @param string $value
+     * @return void
      */
     public function addContactPersonAttributes($attr, $value)
     {

@@ -62,6 +62,7 @@ class IndexedEndpointType extends EndpointType
     /**
      * Set the value of the index-property
      * @param int $index
+     * @return void
      */
     public function setIndex($index)
     {
@@ -83,6 +84,7 @@ class IndexedEndpointType extends EndpointType
     /**
      * Set the value of the isDefault-property
      * @param bool|null $flag
+     * @return void
      */
     public function setIsDefault($flag = null)
     {

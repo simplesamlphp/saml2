@@ -54,7 +54,6 @@ class Fingerprint
 
     /**
      * @param \SAML2\Certificate\Fingerprint $fingerprint
-     *
      * @return bool
      */
     public function equals(Fingerprint $fingerprint)

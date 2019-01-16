@@ -82,6 +82,7 @@ class PDPDescriptor extends RoleDescriptor
     /**
      * Set the value of the AuthzService-property
      * @param \SAML2\XML\md\EndpointType[] $authzService
+     * @return void
      */
     public function setAuthzService(array $authzService = [])
     {
@@ -92,6 +93,7 @@ class PDPDescriptor extends RoleDescriptor
     /**
      * Add the value to the AuthzService-property
      * @param \SAML2\XML\md\EndpointType $authzService
+     * @return void
      */
     public function addAuthzService(EndpointType $authzService)
     {
@@ -113,6 +115,7 @@ class PDPDescriptor extends RoleDescriptor
     /**
      * Set the value of the AssertionIDRequestService-property
      * @param \SAML2\XML\md\EndpointType[] $assertionIDRequestService
+     * @return void
      */
     public function setAssertionIDRequestService(array $assertionIDRequestService)
     {
@@ -123,6 +126,7 @@ class PDPDescriptor extends RoleDescriptor
     /**
      * Add the value to the AssertionIDRequestService-property
      * @param \SAML2\XML\md\EndpointType $assertionIDRequestService
+     * @return void
      */
     public function addAssertionIDRequestService(EndpointType $assertionIDRequestService)
     {
@@ -144,6 +148,7 @@ class PDPDescriptor extends RoleDescriptor
     /**
      * Set the value of the NameIDFormat-property
      * @param string[] $nameIDFormat
+     * @return void
      */
     public function setNameIDFormat(array $nameIDFormat)
     {

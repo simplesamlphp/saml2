@@ -24,8 +24,8 @@ class SOAPClient
      * @param  \SAML2\Message            $msg         The request that should be sent.
      * @param  \SimpleSAML\Configuration $srcMetadata The metadata of the issuer of the message.
      * @param  \SimpleSAML\Configuration $dstMetadata The metadata of the destination of the message.
-     * @return \SAML2\Message            The response we received.
      * @throws \Exception
+     * @return \SAML2\Message            The response we received.
      */
     public function send(Message $msg, Configuration $srcMetadata, Configuration $dstMetadata = null)
     {
@@ -160,6 +160,7 @@ class SOAPClient
      *
      * @param \SAML2\Message $msg     The message we should add a validator to.
      * @param resource      $context The stream context.
+     * @return void
      */
     private static function addSSLValidator(Message $msg, $context)
     {
@@ -227,6 +228,7 @@ class SOAPClient
 
     /*
      * Extracts the SOAP Fault from SOAP message
+     *
      * @param $soapmessage Soap response needs to be type DOMDocument
      * @return string|null $soapfaultstring
      */

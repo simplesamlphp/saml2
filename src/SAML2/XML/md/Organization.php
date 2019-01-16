@@ -90,6 +90,7 @@ class Organization
     /**
      * Set the value of the Extensions-property
      * @param array $extensions
+     * @return void
      */
     public function setExtensions(array $extensions)
     {
@@ -101,6 +102,7 @@ class Organization
      * Add an Extension.
      *
      * @param \SAML2\XML\Chunk $extensions The Extensions
+     * @return void
      */
     public function addExtension(Extensions $extension)
     {
@@ -121,6 +123,7 @@ class Organization
     /**
      * Set the value of the OrganizationName-property
      * @param array $organizationName
+     * @return void
      */
     public function setOrganizationName(array $organizationName)
     {
@@ -141,6 +144,7 @@ class Organization
     /**
      * Set the value of the OrganizationDisplayName-property
      * @param array $organizationDisplayName
+     * @return void
      */
     public function setOrganizationDisplayName(array $organizationDisplayName)
     {
@@ -161,6 +165,7 @@ class Organization
     /**
      * Set the value of the OrganizationURL-property
      * @param array $organizationURL
+     * @return void
      */
     public function setOrganizationURL(array $organizationURL)
     {

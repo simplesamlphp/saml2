@@ -48,6 +48,7 @@ class EncryptedAssertion
      * @param \SAML2\Assertion $assertion The assertion.
      * @param XMLSecurityKey  $key       The key we should use to encrypt the assertion.
      * @throws \Exception
+     * @return void
      */
     public function setAssertion(Assertion $assertion, XMLSecurityKey $key)
     {

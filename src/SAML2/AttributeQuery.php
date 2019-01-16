@@ -104,6 +104,7 @@ class AttributeQuery extends SubjectQuery
      * Set all requested attributes.
      *
      * @param array $attributes All requested attributes, as an associative array.
+     * @return void
      */
     public function setAttributes(array $attributes)
     {
@@ -129,6 +130,7 @@ class AttributeQuery extends SubjectQuery
      * Set the NameFormat used on all attributes.
      *
      * @param string $nameFormat The NameFormat used on all attributes.
+     * @return void
      */
     public function setAttributeNameFormat($nameFormat)
     {

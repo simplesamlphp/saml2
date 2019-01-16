@@ -13,6 +13,10 @@ use SAML2\XML\ecp\Response as ECPResponse;
  */
 class SOAP extends Binding
 {
+    /**
+     * @param Message $message
+     * @return string|bool The XML or false on error
+     */
     public function getOutputToSend(Message $message)
     {
         $envelope = <<<SOAP
@@ -61,6 +65,7 @@ SOAP;
      * Note: This function never returns.
      *
      * @param \SAML2\Message $message The message we should send.
+     * @return void
      *
      * @SuppressWarnings(PHPMD.ExitExpression)
      */
@@ -79,10 +84,8 @@ SOAP;
     /**
      * Receive a SAML 2 message sent using the HTTP-POST binding.
      *
-     * Throws an exception if it is unable receive the message.
-     *
+     * @throws \Exception If unable to receive the message
      * @return \SAML2\Message The received message.
-     * @throws \Exception
      */
     public function receive()
     {
@@ -100,7 +103,9 @@ SOAP;
         return Message::fromXML($results[0]);
     }
 
-
+    /**
+     * @return string|bool
+     */
     protected function getInputStream()
     {
         return file_get_contents('php://input');

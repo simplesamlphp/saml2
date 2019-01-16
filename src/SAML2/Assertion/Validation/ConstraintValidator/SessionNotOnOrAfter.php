@@ -10,6 +10,11 @@ use SAML2\Utilities\Temporal;
 class SessionNotOnOrAfter implements
     AssertionConstraintValidator
 {
+    /**
+     * @param Assertion $assertion
+     * @param Result $result
+     * @return void
+     */
     public function validate(Assertion $assertion, Result $result)
     {
         $sessionNotOnOrAfterTimestamp = $assertion->getSessionNotOnOrAfter();

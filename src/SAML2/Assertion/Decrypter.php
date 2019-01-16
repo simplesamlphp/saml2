@@ -32,6 +32,14 @@ class Decrypter
     private $logger;
 
 
+    /**
+     * Constructor for Decrypter.
+     *
+     * @param LoggerInterface $logger
+     * @param IdentityProvider $identityProvider
+     * @param ServiceProvideer $serviceProvider
+     * @param PrivateKeyLoader $privateKeyLoader
+     */
     public function __construct(
         LoggerInterface $logger,
         IdentityProvider $identityProvider,
@@ -47,6 +55,8 @@ class Decrypter
 
     /**
      * Allows for checking whether either the SP or the IdP requires assertion encryption
+     *
+     * @return bool
      */
     public function isEncryptionRequired()
     {

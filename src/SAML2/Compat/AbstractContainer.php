@@ -13,6 +13,7 @@ abstract class AbstractContainer
 
     /**
      * Generate a random identifier for identifying SAML2 documents.
+     * @return string
      */
     abstract public function generateId();
 

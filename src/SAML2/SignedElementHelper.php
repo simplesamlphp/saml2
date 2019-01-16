@@ -75,6 +75,7 @@ class SignedElementHelper implements SignedElement
      *
      * @param callback $function The function which should be called.
      * @param mixed    $data     The data that should be included as the first parameter to the function.
+     * @return void
      */
     public function addValidator($function, $data)
     {
@@ -95,8 +96,8 @@ class SignedElementHelper implements SignedElement
      * validation fails.
      *
      * @param  XMLSecurityKey $key The key we should check against.
-     * @return boolean        true on success, false when we don't have a signature.
      * @throws \Exception
+     * @return boolean        true on success, false when we don't have a signature.
      */
     public function validate(XMLSecurityKey $key)
     {
@@ -142,6 +143,7 @@ class SignedElementHelper implements SignedElement
      * If the key is null, the message will be sent unsigned.
      *
      * @param XMLSecurityKey|null $signatureKey
+     * @return void
      */
     public function setSignatureKey(XMLSecurityKey $signatureKey = null)
     {
@@ -155,6 +157,7 @@ class SignedElementHelper implements SignedElement
      * The certificates should be strings with the PEM encoded data.
      *
      * @param array $certificates An array of certificates.
+     * @return void
      */
     public function setCertificates(array $certificates)
     {
@@ -216,7 +219,6 @@ class SignedElementHelper implements SignedElement
     {
         if ($this->signatureKey === null) {
             /* We cannot sign this element. */
-
             return null;
         }
 

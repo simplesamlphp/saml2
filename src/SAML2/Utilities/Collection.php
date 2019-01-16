@@ -17,9 +17,9 @@ interface Collection extends \ArrayAccess, \Countable, \IteratorAggregate
     /**
      * Shorthand for getting a single element that also must be the only element in the collection.
      *
-     * @return mixed
-     *
      * @throws \SAML2\Exception\RuntimeException if the element was not the only element
+     *
+     * @return mixed
      */
     public function getOnlyElement();
 
@@ -70,6 +70,7 @@ interface Collection extends \ArrayAccess, \Countable, \IteratorAggregate
 
     /**
      * @param $element
+     * @return void
      */
     public function remove($element);
 
@@ -79,6 +80,7 @@ interface Collection extends \ArrayAccess, \Countable, \IteratorAggregate
      *
      * @param mixed $key
      * @param mixed $value
+     * @return void
      */
     public function set($key, $value);
 }

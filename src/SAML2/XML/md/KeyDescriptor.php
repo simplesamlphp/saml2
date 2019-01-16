@@ -83,6 +83,7 @@ class KeyDescriptor
     /**
      * Set the value of the use-property
      * @param string|null $use
+     * @return void
      */
     public function setUse($use)
     {
@@ -104,6 +105,7 @@ class KeyDescriptor
     /**
      * Set the value of the KeyInfo-property
      * @param \SAML2\XML\ds\KeyInfo $keyInfo
+     * @return void
      */
     public function setKeyInfo(KeyInfo $keyInfo)
     {
@@ -124,6 +126,7 @@ class KeyDescriptor
     /**
      * Set the value of the EncryptionMethod-property
      * @param \SAML2\XML\Chunk[] $encryptionMethod
+     * @return void
      */
     public function setEncryptionMethod(array $encryptionMethod)
     {
@@ -134,6 +137,7 @@ class KeyDescriptor
     /**
      * Add the value to the EncryptionMethod-property
      * @param \SAML2\XML\Chunk $encryptionMethod
+     * @return void
      */
     public function addEncryptionMethod(Chunk $encryptionMethod)
     {

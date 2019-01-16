@@ -61,6 +61,7 @@ class AdditionalMetadataLocation
     /**
      * Set the value of the namespace-property
      * @param string $namespace
+     * @return void
      */
     public function setNamespace($namespace)
     {
@@ -82,6 +83,7 @@ class AdditionalMetadataLocation
     /**
      * Set the value of the location-property
      * @param string $location
+     * @return void
      */
     public function setLocation($location)
     {

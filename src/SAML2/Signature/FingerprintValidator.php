@@ -27,6 +27,8 @@ class FingerprintValidator extends AbstractChainedValidator
 
 
     /**
+     * @param LoggerInterface $logger
+     * @param FingerprintLoader $fingerprintLoader
      * @deprecated Please use full certificates instead.
      */
     public function __construct(
@@ -34,11 +36,16 @@ class FingerprintValidator extends AbstractChainedValidator
         FingerprintLoader $fingerprintLoader
     ) {
         $this->fingerprintLoader = $fingerprintLoader;
-
         parent::__construct($logger);
     }
 
 
+    /**
+     * @param SignedElement $signedElement
+     * @param CertificateProvider $configuration
+     *
+     * @return bool
+     */
     public function canValidate(
         SignedElement $signedElement,
         CertificateProvider $configuration

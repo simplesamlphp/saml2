@@ -39,6 +39,10 @@ class AssertionValidator
     }
 
 
+    /**
+     * @param AssertionConstraintValidator $constraint
+     * @return void
+     */
     public function addConstraintValidator(AssertionConstraintValidator $constraint)
     {
         if ($constraint instanceof IdentityProviderAware) {
@@ -53,6 +57,10 @@ class AssertionValidator
     }
 
 
+    /**
+     * @param Assertion $assertion
+     * @return Result
+     */
     public function validate(Assertion $assertion)
     {
         $result = new Result();

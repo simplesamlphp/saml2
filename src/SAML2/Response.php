@@ -59,6 +59,7 @@ class Response extends StatusResponse
      * Set the assertions that should be included in this response.
      *
      * @param \SAML2\Assertion[]|\SAML2\EncryptedAssertion[] $assertions The assertions.
+     * @return void
      */
     public function setAssertions(array $assertions)
     {

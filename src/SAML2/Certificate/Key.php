@@ -62,6 +62,11 @@ class Key implements \ArrayAccess
     }
 
 
+    /**
+     * @param mixed $offset
+     * @throws InvalidArgumentException
+     * @return bool
+     */
     public function offsetExists($offset)
     {
         if (!is_string($offset)) {
@@ -71,6 +76,11 @@ class Key implements \ArrayAccess
     }
 
 
+    /**
+     * @param mixed $offset
+     * @throws InvalidArgumentException
+     * @return string
+     */
     public function offsetGet($offset)
     {
         if (!is_string($offset)) {
@@ -80,6 +90,12 @@ class Key implements \ArrayAccess
     }
 
 
+    /**
+     * @param mixed $offset
+     * @param mixed $value
+     * @throws InvalidArgumentException
+     * @return viud
+     */
     public function offsetSet($offset, $value)
     {
         if (!is_string($offset)) {
@@ -89,6 +105,11 @@ class Key implements \ArrayAccess
     }
 
 
+    /**
+     * @param mixed $offset
+     * @throws InvalidArgumentException
+     * @return void
+     */
     public function offsetUnset($offset)
     {
         if (!is_string($offset)) {

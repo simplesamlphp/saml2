@@ -100,6 +100,7 @@ class LogoutRequest extends Request
      * Set the expiration time of this request.
      *
      * @param int|null $notOnOrAfter The expiration time of this request.
+     * @return void
      */
     public function setNotOnOrAfter($notOnOrAfter)
     {
@@ -128,6 +129,7 @@ class LogoutRequest extends Request
      * Encrypt the NameID in the LogoutRequest.
      *
      * @param XMLSecurityKey $key The encryption key.
+     * @return void
      */
     public function encryptNameId(XMLSecurityKey $key)
     {
@@ -159,12 +161,12 @@ class LogoutRequest extends Request
      *
      * @param XMLSecurityKey $key       The decryption key.
      * @param array          $blacklist Blacklisted decryption algorithms.
+     * @return void
      */
     public function decryptNameId(XMLSecurityKey $key, array $blacklist = [])
     {
         if ($this->getEncryptedNameId() === null) {
             /* No NameID to decrypt. */
-
             return;
         }
 
@@ -179,8 +181,8 @@ class LogoutRequest extends Request
     /**
      * Retrieve the name identifier of the session that should be terminated.
      *
-     * @return \SAML2\XML\saml\NameID The name identifier of the session that should be terminated.
      * @throws \Exception
+     * @return \SAML2\XML\saml\NameID The name identifier of the session that should be terminated.
      */
     public function getNameId()
     {
@@ -196,6 +198,7 @@ class LogoutRequest extends Request
      * Set the name identifier of the session that should be terminated.
      *
      * @param \SAML2\XML\saml\NameID|array|null $nameId The name identifier of the session that should be terminated.
+     * @return void
      */
     public function setNameId($nameId)
     {
@@ -223,6 +226,7 @@ class LogoutRequest extends Request
      * Set the encrypted name identifier.
      *
      * @param \DOMElement|null $nameId The name identifier of the session that should be terminated.
+     * @return void
      */
     private function setEncryptedNameId(\DOMElement $nameId = null)
     {
@@ -245,6 +249,7 @@ class LogoutRequest extends Request
      * Set the SessionIndexes of the sessions that should be terminated.
      *
      * @param array $sessionIndexes The SessionIndexes, or an empty array if all sessions should be terminated.
+     * @return void
      */
     public function setSessionIndexes(array $sessionIndexes)
     {
@@ -271,6 +276,7 @@ class LogoutRequest extends Request
      * Set the sesion index of the session that should be terminated.
      *
      * @param string|null $sessionIndex The sesion index of the session that should be terminated.
+     * @return void
      */
     public function setSessionIndex($sessionIndex)
     {

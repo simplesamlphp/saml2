@@ -123,6 +123,7 @@ abstract class StatusResponse extends Message
      * Set the ID of the request this is a response to.
      *
      * @param string|null $inResponseTo The ID of the request.
+     * @return void
      */
     public function setInResponseTo($inResponseTo)
     {
@@ -147,6 +148,7 @@ abstract class StatusResponse extends Message
      * Set the status code.
      *
      * @param array $status The status code.
+     * @return void
      */
     public function setStatus(array $status)
     {

@@ -50,6 +50,7 @@ class MockContainer extends AbstractContainer
 
     /**
      * Generate a random identifier for identifying SAML2 documents.
+     * @return string
      */
     public function generateId()
     {

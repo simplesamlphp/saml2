@@ -83,6 +83,7 @@ class SPSSODescriptor extends SSODescriptorType
     /**
      * Set the value of the AuthnRequestsSigned-property
      * @param bool|null $flag
+     * @return void
      */
     public function setAuthnRequestsSigned($flag = null)
     {
@@ -104,6 +105,7 @@ class SPSSODescriptor extends SSODescriptorType
     /**
      * Set the value of the WantAssertionsSigned-property
      * @param bool|null $flag
+     * @return void
      */
     public function setWantAssertionsSigned($flag = null)
     {
@@ -125,6 +127,7 @@ class SPSSODescriptor extends SSODescriptorType
     /**
      * Set the value of the AssertionConsumerService-property
      * @param array $acs
+     * @return void
      */
     public function setAssertionConsumerService(array $acs)
     {
@@ -135,6 +138,7 @@ class SPSSODescriptor extends SSODescriptorType
     /**
      * Add the value to the AssertionConsumerService-property
      * @param \SAML2\XML\md\IndexedEndpointType $acs
+     * @return void
      */
     public function addAssertionConsumerService(IndexedEndpointType $acs)
     {
@@ -155,6 +159,7 @@ class SPSSODescriptor extends SSODescriptorType
     /**
      * Add the value to the AttributeConsumingService-property
      * @param \SAML2\XML\md\AttributeConsumingService $acs
+     * @return void
      */
     public function addAttributeConsumingService(AttributeConsumingService $acs)
     {
@@ -165,6 +170,7 @@ class SPSSODescriptor extends SSODescriptorType
     /**
      * Set the value of the AttributeConsumingService-property
      * @param array $acs
+     * @return void
      */
     public function setAttributeConsumingService(array $acs)
     {

@@ -25,6 +25,7 @@ class ArrayAdapter implements Queryable
     /**
      * @param mixed $key
      * @param mixed|null $defaultValue
+     * @return mixed
      */
     public function get($key, $defaultValue = null)
     {

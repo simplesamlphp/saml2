@@ -87,6 +87,7 @@ class Attribute
     /**
      * Set the value of the Name-property
      * @param string $name
+     * @return void
      */
     public function setName($name)
     {
@@ -108,6 +109,7 @@ class Attribute
     /**
      * Set the value of the NameFormat-property
      * @param string|null $nameFormat
+     * @return void
      */
     public function setNameFormat($nameFormat = null)
     {
@@ -129,6 +131,7 @@ class Attribute
     /**
      * Set the value of the FriendlyName-property
      * @param string|null $friendlyName
+     * @return void
      */
     public function setFriendlyName($friendlyName = null)
     {
@@ -150,6 +153,7 @@ class Attribute
     /**
      * Set the value of the AttributeValue-property
      * @param array $attributeValue
+     * @return void
      */
     public function setAttributeValue(array $attributeValue)
     {
@@ -160,6 +164,7 @@ class Attribute
     /**
      * Add the value to the AttributeValue-property
      * @param \SAML2\XML\saml\AttributeValue $attributeValue
+     * @return void
      */
     public function addAttributeValue(AttributeValue $attributeValue)
     {

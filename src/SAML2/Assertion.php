@@ -307,6 +307,7 @@ class Assertion implements SignedElement
      *
      * @param \DOMElement $xml The assertion XML element.
      * @throws \Exception
+     * @return void
      */
     private function parseSubject(\DOMElement $xml)
     {
@@ -352,6 +353,7 @@ class Assertion implements SignedElement
      *
      * @param \DOMElement $xml The assertion XML element.
      * @throws \Exception
+     * @return void
      */
     private function parseConditions(\DOMElement $xml)
     {
@@ -417,6 +419,7 @@ class Assertion implements SignedElement
      *
      * @param \DOMElement $xml The assertion XML element.
      * @throws \Exception
+     * @return void
      */
     private function parseAuthnStatement(\DOMElement $xml)
     {
@@ -452,6 +455,7 @@ class Assertion implements SignedElement
      *
      * @param \DOMElement $authnStatementEl
      * @throws \Exception
+     * @return void
      */
     private function parseAuthnContext(\DOMElement $authnStatementEl)
     {
@@ -512,6 +516,7 @@ class Assertion implements SignedElement
      *
      * @param \DOMElement $xml The XML element with the assertion.
      * @throws \Exception
+     * @return void
      */
     private function parseAttributes(\DOMElement $xml)
     {
@@ -551,6 +556,7 @@ class Assertion implements SignedElement
     /**
      * @param \DOMNode $attribute
      * @param string   $attributeName
+     * @return void
      */
     private function parseAttributeValue($attribute, $attributeName)
     {
@@ -609,6 +615,7 @@ class Assertion implements SignedElement
      * Parse encrypted attribute statements in assertion.
      *
      * @param \DOMElement $xml The XML element with the assertion.
+     * @return void
      */
     private function parseEncryptedAttributes(\DOMElement $xml)
     {
@@ -623,6 +630,7 @@ class Assertion implements SignedElement
      * Parse signature on assertion.
      *
      * @param \DOMElement $xml The assertion XML element.
+     * @return void
      */
     private function parseSignature(\DOMElement $xml)
     {
@@ -679,6 +687,7 @@ class Assertion implements SignedElement
      * Set the identifier of this assertion.
      *
      * @param string $id The new identifier of this assertion.
+     * @return void
      */
     public function setId($id)
     {
@@ -703,6 +712,7 @@ class Assertion implements SignedElement
      * Set the issue timestamp of this assertion.
      *
      * @param int $issueInstant The new issue timestamp of this assertion, as an UNIX timestamp.
+     * @return void
      */
     public function setIssueInstant($issueInstant)
     {
@@ -727,6 +737,7 @@ class Assertion implements SignedElement
      * Set the issuer of this message.
      *
      * @param string|\SAML2\XML\saml\Issuer $issuer The new issuer of this assertion.
+     * @return void
      */
     public function setIssuer($issuer)
     {
@@ -739,8 +750,8 @@ class Assertion implements SignedElement
     /**
      * Retrieve the NameId of the subject in the assertion.
      *
-     * @return \SAML2\XML\saml\NameID|null The name identifier of the assertion.
      * @throws \Exception
+     * @return \SAML2\XML\saml\NameID|null The name identifier of the assertion.
      */
     public function getNameId()
     {
@@ -760,6 +771,7 @@ class Assertion implements SignedElement
      *
      * @see \SAML2\Utils::addNameId()
      * @param \SAML2\XML\saml\NameID|array|null $nameId The name identifier of the assertion.
+     * @return void
      */
     public function setNameId($nameId)
     {
@@ -776,7 +788,7 @@ class Assertion implements SignedElement
     /**
      * Check whether the NameId is encrypted.
      *
-     * @return true if the NameId is encrypted, false if not.
+     * @return bool True if the NameId is encrypted, false if not.
      */
     public function isNameIdEncrypted()
     {
@@ -788,6 +800,7 @@ class Assertion implements SignedElement
      * Encrypt the NameID in the Assertion.
      *
      * @param XMLSecurityKey $key The encryption key.
+     * @return void
      */
     public function encryptNameId(XMLSecurityKey $key)
     {
@@ -821,6 +834,7 @@ class Assertion implements SignedElement
      *
      * @param XMLSecurityKey $key       The decryption key.
      * @param array          $blacklist Blacklisted decryption algorithms.
+     * @return void
      */
     public function decryptNameId(XMLSecurityKey $key, array $blacklist = [])
     {
@@ -855,6 +869,7 @@ class Assertion implements SignedElement
      * @param XMLSecurityKey $key
      * @param array $blacklist
      * @throws \Exception
+     * @return void
      */
     public function decryptAttributes(XMLSecurityKey $key, array $blacklist = [])
     {
@@ -920,6 +935,7 @@ class Assertion implements SignedElement
      * Set this to null if no limit is required.
      *
      * @param int|null $notBefore The earliest timestamp this assertion is valid.
+     * @return void
      */
     public function setNotBefore($notBefore)
     {
@@ -949,6 +965,7 @@ class Assertion implements SignedElement
      * Set this to null if no limit is required.
      *
      * @param int|null $notOnOrAfter The latest timestamp this assertion is valid.
+     * @return void
      */
     public function setNotOnOrAfter($notOnOrAfter)
     {
@@ -973,6 +990,7 @@ class Assertion implements SignedElement
      * Set $requiredEncAttributes if attributes will be send encrypted
      *
      * @param boolean $ea true to encrypt attributes in the assertion.
+     * @return void
      */
     public function setRequiredEncAttributes($ea)
     {
@@ -1000,6 +1018,7 @@ class Assertion implements SignedElement
      * This may be null, in which case all audiences are allowed.
      *
      * @param array|null $validAudiences The allowed audiences.
+     * @return void
      */
     public function setValidAudiences(array $validAudiences = null)
     {
@@ -1022,6 +1041,7 @@ class Assertion implements SignedElement
      * Set the AuthnInstant of the assertion.
      *
      * @param int|null $authnInstant Timestamp the user was authenticated, or NULL if we don't want an AuthnStatement.
+     * @return void
      */
     public function setAuthnInstant($authnInstant)
     {
@@ -1051,6 +1071,7 @@ class Assertion implements SignedElement
      * Set this to null if no limit is required.
      *
      * @param int|null $sessionNotOnOrAfter The latest timestamp this session is valid.
+     * @return void
      */
     public function setSessionNotOnOrAfter($sessionNotOnOrAfter)
     {
@@ -1078,6 +1099,7 @@ class Assertion implements SignedElement
      * session index can be inluded in the assertion.
      *
      * @param string|null $sessionIndex The session index of the user at the IdP.
+     * @return void
      */
     public function setSessionIndex($sessionIndex)
     {
@@ -1121,6 +1143,7 @@ class Assertion implements SignedElement
      *
      * @deprecated use setAuthnContextClassRef
      * @param string|null $authnContext The authentication method.
+     * @return void
      */
     public function setAuthnContext($authnContext)
     {
@@ -1149,6 +1172,7 @@ class Assertion implements SignedElement
      * included in the assertion. The default is null.
      *
      * @param string|null $authnContextClassRef The authentication method.
+     * @return void
      */
     public function setAuthnContextClassRef($authnContextClassRef)
     {
@@ -1173,6 +1197,7 @@ class Assertion implements SignedElement
      * Set the signature method used.
      *
      * @param string|null $signatureMethod
+     * @return void
      */
     public function setSignatureMethod($signatureMethod)
     {
@@ -1187,6 +1212,7 @@ class Assertion implements SignedElement
      *
      * @param \SAML2\XML\Chunk $authnContextDecl
      * @throws \Exception
+     * @return void
      */
     public function setAuthnContextDecl(Chunk $authnContextDecl)
     {
@@ -1219,6 +1245,7 @@ class Assertion implements SignedElement
      *
      * @param string|\SAML2\XML\Chunk $authnContextDeclRef
      * @throws \Exception
+     * @return void
      */
     public function setAuthnContextDeclRef($authnContextDeclRef)
     {
@@ -1249,7 +1276,6 @@ class Assertion implements SignedElement
     /**
      * Retrieve the AuthenticatingAuthority.
      *
-     *
      * @return array
      */
     public function getAuthenticatingAuthority()
@@ -1261,7 +1287,8 @@ class Assertion implements SignedElement
     /**
      * Set the AuthenticatingAuthority
      *
-     * @param array.
+     * @param array
+     * @return void
      */
     public function setAuthenticatingAuthority(array $authenticatingAuthority)
     {
@@ -1284,6 +1311,7 @@ class Assertion implements SignedElement
      * Replace all attributes.
      *
      * @param array $attributes All new attributes, as an associative array.
+     * @return void
      */
     public function setAttributes(array $attributes)
     {
@@ -1301,6 +1329,7 @@ class Assertion implements SignedElement
 
     /**
      * @param array|null $signatureData
+     * @return void
      */
     public function setSignatureData(array $signatureData = null)
     {
@@ -1323,6 +1352,7 @@ class Assertion implements SignedElement
      * Replace all attributes value types..
      *
      * @param array $attributesValueTypes All new attribute value types, as an associative array.
+     * @return void
      */
     public function setAttributesValueTypes(array $attributesValueTypes)
     {
@@ -1348,6 +1378,7 @@ class Assertion implements SignedElement
      * Set the NameFormat used on all attributes.
      *
      * @param string $nameFormat The NameFormat used on all attributes.
+     * @return void
      */
     public function setAttributeNameFormat($nameFormat)
     {
@@ -1372,6 +1403,7 @@ class Assertion implements SignedElement
      * Set the SubjectConfirmation elements that should be included in the assertion.
      *
      * @param array $SubjectConfirmation Array of \SAML2\XML\saml\SubjectConfirmation elements.
+     * @return void
      */
     public function setSubjectConfirmation(array $SubjectConfirmation)
     {
@@ -1394,6 +1426,7 @@ class Assertion implements SignedElement
      * Set the encryptedAttributes elements
      *
      * @param array $encAttrs Array of \DOMElement elements.
+     * @return void
      */
     public function setEncryptedAttributes(array $encAttrs)
     {
@@ -1418,6 +1451,7 @@ class Assertion implements SignedElement
      * If the key is null, the assertion will be sent unsigned.
      *
      * @param XMLSecurityKey|null $signatureKey
+     * @return void
      */
     public function setSignatureKey(XMLSecurityKey $signatureKey = null)
     {
@@ -1441,6 +1475,7 @@ class Assertion implements SignedElement
      * Set the private key we should use to encrypt the attributes.
      *
      * @param XMLSecurityKey|null $Key
+     * @return void
      */
     public function setEncryptionKey(XMLSecurityKey $Key = null)
     {
@@ -1454,6 +1489,7 @@ class Assertion implements SignedElement
      * The certificates should be strings with the PEM encoded data.
      *
      * @param array $certificates An array of certificates.
+     * @return void
      */
     public function setCertificates(array $certificates)
     {
@@ -1483,6 +1519,7 @@ class Assertion implements SignedElement
 
     /**
      * @param bool $flag
+     * @return void
      */
     public function setWasSignedAtConstruction($flag)
     {
@@ -1548,6 +1585,7 @@ class Assertion implements SignedElement
      * Add a Subject-node to the assertion.
      *
      * @param \DOMElement $root The assertion element we should add the subject to.
+     * @return void
      */
     private function addSubject(\DOMElement $root)
     {
@@ -1578,6 +1616,7 @@ class Assertion implements SignedElement
      * Add a Conditions-node to the assertion.
      *
      * @param \DOMElement $root The assertion element we should add the conditions to.
+     * @return void
      */
     private function addConditions(\DOMElement $root)
     {
@@ -1606,6 +1645,7 @@ class Assertion implements SignedElement
      * Add a AuthnStatement-node to the assertion.
      *
      * @param \DOMElement $root The assertion element we should add the authentication statement to.
+     * @return void
      */
     private function addAuthnStatement(\DOMElement $root)
     {
@@ -1672,6 +1712,7 @@ class Assertion implements SignedElement
      * Add an AttributeStatement-node to the assertion.
      *
      * @param \DOMElement $root The assertion element we should add the subject to.
+     * @return void
      */
     private function addAttributeStatement(\DOMElement $root)
     {
@@ -1773,6 +1814,7 @@ class Assertion implements SignedElement
      * Add an EncryptedAttribute Statement-node to the assertion.
      *
      * @param \DOMElement $root The assertion element we should add the Encrypted Attribute Statement to.
+     * @return void
      */
     private function addEncryptedAttributeStatement(\DOMElement $root)
     {

@@ -106,6 +106,7 @@ class Logo
     /**
      * Set the value of the lang-property
      * @param string $lang
+     * @return void
      */
     public function setLanguage($lang)
     {
@@ -127,6 +128,7 @@ class Logo
     /**
      * Set the value of the height-property
      * @param int $height
+     * @return void
      */
     public function setHeight($height)
     {
@@ -148,6 +150,7 @@ class Logo
     /**
      * Set the value of the width-property
      * @param int $width
+     * @return void
      */
     public function setWidth($width)
     {

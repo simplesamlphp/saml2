@@ -23,6 +23,7 @@ class Container extends AbstractContainer
 
     /**
      * {@inheritdoc}
+     * @return void
      */
     public function getLogger()
     {
@@ -32,6 +33,7 @@ class Container extends AbstractContainer
 
     /**
      * {@inheritdoc}
+     * @return string
      */
     public function generateId()
     {
@@ -41,6 +43,7 @@ class Container extends AbstractContainer
 
     /**
      * {@inheritdoc}
+     * @return void
      */
     public function debugMessage($message, $type)
     {
@@ -50,6 +53,9 @@ class Container extends AbstractContainer
 
     /**
      * {@inheritdoc}
+     * @param string $url
+     * @param array $data
+     * @return void
      */
     public function redirect($url, $data = [])
     {
@@ -59,6 +65,9 @@ class Container extends AbstractContainer
 
     /**
      * {@inheritdoc}
+     * @param string $url
+     * @param array $data
+     * @return void
      */
     public function postRedirect($url, $data = [])
     {

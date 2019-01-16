@@ -82,6 +82,7 @@ class KeyInfo
     /**
      * Set the value of the Id-property
      * @param string|null $id
+     * @return void
      */
     public function setId($id = null)
     {
@@ -103,6 +104,7 @@ class KeyInfo
     /**
      * Set the value of the info-property
      * @param array $info
+     * @return void
      */
     public function setInfo(array $info)
     {
@@ -113,6 +115,7 @@ class KeyInfo
     /**
      * Add the value to the info-property
      * @param \SAML2\XML\Chunk|\SAML2\XML\ds\KeyName|\SAML2\XML\ds\X509Data $info
+     * @return void
      */
     public function addInfo($info)
     {

@@ -74,6 +74,7 @@ class SubjectConfirmationData
     /**
      * Set the value of the NotBefore-property
      * @param int|null $notBefore
+     * @return void
      */
     public function setNotBefore($notBefore = null)
     {
@@ -95,6 +96,7 @@ class SubjectConfirmationData
     /**
      * Set the value of the NotOnOrAfter-property
      * @param int|null $notOnOrAfter
+     * @return void
      */
     public function setNotOnOrAfter($notOnOrAfter = null)
     {
@@ -116,6 +118,7 @@ class SubjectConfirmationData
     /**
      * Set the value of the Recipient-property
      * @param string|null $recipient
+     * @return void
      */
     public function setRecipient($recipient = null)
     {
@@ -137,6 +140,7 @@ class SubjectConfirmationData
     /**
      * Set the value of the InResponseTo-property
      * @param string|null $inResponseTo
+     * @return void
      */
     public function setInResponseTo($inResponseTo = null)
     {
@@ -158,6 +162,7 @@ class SubjectConfirmationData
     /**
      * Set the value of the Address-property
      * @param string|null $address
+     * @return void
      */
     public function setAddress($address = null)
     {
@@ -182,6 +187,7 @@ class SubjectConfirmationData
     /**
      * Set the value of the info-property
      * @param (\SAML2\XML\ds\KeyInfo|\SAML2\XML\Chunk)[] $info
+     * @return void
      */
     public function setInfo(array $info)
     {
@@ -192,6 +198,7 @@ class SubjectConfirmationData
     /**
      * Add the value to the info-property
      * @param \SAML2\XML\Chunk|\SAML2\XML\ds\KeyInfo $info
+     * @return void
      */
     public function addInfo($info)
     {

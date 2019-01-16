@@ -35,8 +35,8 @@ class Utils
      * check the signature against a public key.
      *
      * @param  \DOMElement  $root The element which should be validated.
-     * @return array|bool An array with information about the Signature-element.
      * @throws \Exception
+     * @return array|bool An array with information about the Signature-element.
      */
     public static function validateElement(\DOMElement $root)
     {
@@ -106,8 +106,8 @@ class Utils
      * @param  XMLSecurityKey $key       The key.
      * @param  string         $algorithm The desired algorithm.
      * @param  string         $type      Public or private key, defaults to public.
-     * @return XMLSecurityKey The new key.
      * @throws \Exception
+     * @return XMLSecurityKey The new key.
      */
     public static function castKey(XMLSecurityKey $key, $algorithm, $type = 'public')
     {
@@ -152,6 +152,7 @@ class Utils
      * @param array          $info The information returned by the validateElement()-function.
      * @param XMLSecurityKey $key  The publickey that should validate the Signature object.
      * @throws \Exception
+     * @return void
      */
     public static function validateSignature(array $info, XMLSecurityKey $key)
     {
@@ -270,8 +271,8 @@ class Utils
      * @param  \DOMElement $node          The element we should fetch the attribute from.
      * @param  string     $attributeName The name of the attribute.
      * @param  mixed      $default       The value that should be returned if the attribute doesn't exist.
-     * @return bool|mixed The value of the attribute, or $default if the attribute doesn't exist.
      * @throws \Exception
+     * @return bool|mixed The value of the attribute, or $default if the attribute doesn't exist.
      */
     public static function parseBoolean(\DOMElement $node, $attributeName, $default = null)
     {
@@ -304,6 +305,7 @@ class Utils
      *
      * @param \DOMElement $node   The DOM node we should append the NameId to.
      * @param array      $nameId The name identifier.
+     * @return void
      *
      * @deprecated Please use \SAML2\XML\saml\NameID objects instead:
      *   $nameId = new \SAML2\XML\saml\NameID();
@@ -362,6 +364,7 @@ class Utils
      * @param array          $certificates  The certificates we should add to the signature node.
      * @param \DOMElement     $root          The XML node we should sign.
      * @param \DOMNode        $insertBefore  The XML element we should insert the signature element before.
+     * @return void
      */
     public static function insertSignature(
         XMLSecurityKey $key,
@@ -411,8 +414,8 @@ class Utils
      * @param  \DOMElement     $encryptedData The encrypted data.
      * @param  XMLSecurityKey $inputKey      The decryption key.
      * @param  array          &$blacklist    Blacklisted decryption algorithms.
-     * @return \DOMElement     The decrypted element.
      * @throws \Exception
+     * @return \DOMElement     The decrypted element.
      */
     private static function doDecryptElement(\DOMElement $encryptedData, XMLSecurityKey $inputKey, array &$blacklist)
     {
@@ -556,8 +559,8 @@ class Utils
      * @param  \DOMElement     $encryptedData The encrypted data.
      * @param  XMLSecurityKey $inputKey      The decryption key.
      * @param  array          $blacklist     Blacklisted decryption algorithms.
-     * @return \DOMElement     The decrypted element.
      * @throws \Exception
+     * @return \DOMElement     The decrypted element.
      */
     public static function decryptElement(\DOMElement $encryptedData, XMLSecurityKey $inputKey, array $blacklist = [])
     {
@@ -663,6 +666,7 @@ class Utils
      * @param string     $name      The name of the created elements
      * @param bool       $localized Whether the strings are localized, and should include the xml:lang attribute.
      * @param array      $values    The values we should create the elements from.
+     * @return void
      */
     public static function addStrings(\DOMElement $parent, $namespace, $name, $localized, array $values)
     {
@@ -725,8 +729,8 @@ class Utils
      * background.
      *
      * @param string $time The time we should convert.
-     * @return int Converted to a unix timestamp.
      * @throws \Exception
+     * @return int Converted to a unix timestamp.
      */
     public static function xsDateTimeToTimestamp($time)
     {

@@ -177,8 +177,8 @@ class AuthnRequest extends Request
 
     /**
      * @param $xml
-     *
      * @throws \Exception
+     * @return void
      */
     private function parseSubject(\DOMElement $xml)
     {
@@ -218,8 +218,8 @@ class AuthnRequest extends Request
 
     /**
      * @param \DOMElement $xml
-     *
      * @throws \Exception
+     * @return void
      */
     protected function parseNameIdPolicy(\DOMElement $xml)
     {
@@ -243,6 +243,7 @@ class AuthnRequest extends Request
 
     /**
      * @param \DOMElement $xml
+     * @return void
      */
     protected function parseRequestedAuthnContext(\DOMElement $xml)
     {
@@ -273,8 +274,8 @@ class AuthnRequest extends Request
 
     /**
      * @param \DOMElement $xml
-     *
      * @throws \Exception
+     * @return void
      */
     protected function parseScoping(\DOMElement $xml)
     {
@@ -306,6 +307,7 @@ class AuthnRequest extends Request
 
     /**
      * @param \DOMElement $xml
+     * @return void
      */
     protected function parseConditions(\DOMElement $xml)
     {
@@ -350,6 +352,7 @@ class AuthnRequest extends Request
      *  - 'AllowCreate' (bool)
      *
      * @param array $nameIdPolicy The NameIDPolicy.
+     * @return void
      */
     public function setNameIdPolicy(array $nameIdPolicy)
     {
@@ -382,6 +385,7 @@ class AuthnRequest extends Request
      * Set the value of the ForceAuthn attribute.
      *
      * @param bool $forceAuthn The ForceAuthn attribute.
+     * @return void
      */
     public function setForceAuthn($forceAuthn)
     {
@@ -406,6 +410,7 @@ class AuthnRequest extends Request
      * Set the value of the ProviderName attribute.
      *
      * @param string $ProviderName The ProviderName attribute.
+     * @return void
      */
     public function setProviderName($ProviderName)
     {
@@ -430,6 +435,7 @@ class AuthnRequest extends Request
      * Set the value of the IsPassive attribute.
      *
      * @param bool $isPassive The IsPassive attribute.
+     * @return void
      */
     public function setIsPassive($isPassive)
     {
@@ -441,7 +447,6 @@ class AuthnRequest extends Request
 
     /**
      * Retrieve the audiences from the request.
-     *
      * This may be null, in which case no audience is included.
      *
      * @return array The audiences.
@@ -454,10 +459,10 @@ class AuthnRequest extends Request
 
     /**
      * Set the audiences to send in the request.
-     *
      * This may be null, in which case no audience will be sent.
      *
      * @param array|null $audiences The audiences.
+     * @return void
      */
     public function setAudiences(array $audiences)
     {
@@ -479,6 +484,7 @@ class AuthnRequest extends Request
      * is mapped to the value of attribute ProviderID.
      *
      * @param array $IDPList List of idpEntries to scope the request to.
+     * @return void
      */
     public function setIDPList(array $IDPList)
     {
@@ -489,6 +495,7 @@ class AuthnRequest extends Request
     /**
      * This function retrieves the list of providerIDs from this authentication request.
      * Currently we only support a list of ipd ientity id's.
+     *
      * @return array List of idp EntityIDs from the request
      */
     public function getIDPList()
@@ -499,6 +506,7 @@ class AuthnRequest extends Request
 
     /**
      * @param int $ProxyCount
+     * @return void
      */
     public function setProxyCount($ProxyCount)
     {
@@ -518,6 +526,7 @@ class AuthnRequest extends Request
 
     /**
      * @param array $RequesterID
+     * @return void
      */
     public function setRequesterID(array $RequesterID)
     {
@@ -549,6 +558,7 @@ class AuthnRequest extends Request
      * Set the value of the AssertionConsumerServiceURL attribute.
      *
      * @param string|null $assertionConsumerServiceURL The AssertionConsumerServiceURL attribute.
+     * @return void
      */
     public function setAssertionConsumerServiceURL($assertionConsumerServiceURL)
     {
@@ -573,6 +583,7 @@ class AuthnRequest extends Request
      * Set the value of the ProtocolBinding attribute.
      *
      * @param string $protocolBinding The ProtocolBinding attribute.
+     * @return void
      */
     public function setProtocolBinding($protocolBinding)
     {
@@ -597,6 +608,7 @@ class AuthnRequest extends Request
      * Set the value of the AttributeConsumingServiceIndex attribute.
      *
      * @param int|null $attributeConsumingServiceIndex The AttributeConsumingServiceIndex attribute.
+     * @return void
      */
     public function setAttributeConsumingServiceIndex($attributeConsumingServiceIndex)
     {
@@ -621,6 +633,7 @@ class AuthnRequest extends Request
      * Set the value of the AssertionConsumerServiceIndex attribute.
      *
      * @param int|null $assertionConsumerServiceIndex The AssertionConsumerServiceIndex attribute.
+     * @return void
      */
     public function setAssertionConsumerServiceIndex($assertionConsumerServiceIndex)
     {
@@ -645,6 +658,7 @@ class AuthnRequest extends Request
      * Set the RequestedAuthnContext.
      *
      * @param array $requestedAuthnContext The RequestedAuthnContext.
+     * @return void
      */
     public function setRequestedAuthnContext($requestedAuthnContext)
     {
@@ -657,8 +671,8 @@ class AuthnRequest extends Request
     /**
      * Retrieve the NameId of the subject in the assertion.
      *
-     * @return \SAML2\XML\saml\NameID|null The name identifier of the assertion.
      * @throws \Exception
+     * @return \SAML2\XML\saml\NameID|null The name identifier of the assertion.
      */
     public function getNameId()
     {
@@ -674,6 +688,7 @@ class AuthnRequest extends Request
      * Set the NameId of the subject in the assertion.
      *
      * @param \SAML2\XML\saml\NameID|null $nameId The name identifier of the assertion.
+     * @return void
      */
     public function setNameId($nameId)
     {
@@ -690,6 +705,7 @@ class AuthnRequest extends Request
      * Encrypt the NameID in the AuthnRequest.
      *
      * @param XMLSecurityKey $key The encryption key.
+     * @return void
      */
     public function encryptNameId(XMLSecurityKey $key)
     {
@@ -714,7 +730,7 @@ class AuthnRequest extends Request
         $enc->encryptKey($key, $symmetricKey);
 
         $this->encryptedNameId = $enc->encryptNode($symmetricKey);
-        $this->nameId          = null;
+        $this->nameId = null;
     }
 
 
@@ -723,6 +739,7 @@ class AuthnRequest extends Request
      *
      * @param XMLSecurityKey $key       The decryption key.
      * @param array          $blacklist Blacklisted decryption algorithms.
+     * @return void
      */
     public function decryptNameId(XMLSecurityKey $key, array $blacklist = [])
     {
@@ -754,6 +771,7 @@ class AuthnRequest extends Request
      * Set the SubjectConfirmation elements that should be included in the assertion.
      *
      * @param array \SAML2\XML\saml\SubjectConfirmation[]
+     * @return void
      */
     public function setSubjectConfirmation(array $subjectConfirmation)
     {
@@ -867,6 +885,7 @@ class AuthnRequest extends Request
      * Add a Subject-node to the assertion.
      *
      * @param \DOMElement $root The assertion element we should add the subject to.
+     * @return void
      */
     private function addSubject(\DOMElement $root)
     {
@@ -896,6 +915,7 @@ class AuthnRequest extends Request
      * Add a Conditions-node to the request.
      *
      * @param \DOMElement $root The request element we should add the conditions to.
+     * @return void
      */
     private function addConditions(\DOMElement $root)
     {

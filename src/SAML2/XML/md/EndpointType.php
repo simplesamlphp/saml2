@@ -126,6 +126,7 @@ class EndpointType
      * @param string $qualifiedName The local name.
      * @param string $value         The attribute value.
      * @throws \Exception
+     * @return void
      */
     public function setAttributeNS($namespaceURI, $qualifiedName, $value)
     {
@@ -152,6 +153,7 @@ class EndpointType
      *
      * @param string $namespaceURI The namespace URI.
      * @param string $localName    The local name.
+     * @return void
      */
     public function removeAttributeNS($namespaceURI, $localName)
     {
@@ -176,6 +178,7 @@ class EndpointType
     /**
      * Set the value of the Binding-property
      * @param string $binding
+     * @return void
      */
     public function setBinding($binding)
     {
@@ -197,6 +200,7 @@ class EndpointType
     /**
      * Set the value of the Location-property
      * @param string|null $location
+     * @return void
      */
     public function setLocation($location)
     {
@@ -218,6 +222,7 @@ class EndpointType
     /**
      * Set the value of the ResponseLocation-property
      * @param string|null $responseLocation
+     * @return void
      */
     public function setResponseLocation($responseLocation)
     {

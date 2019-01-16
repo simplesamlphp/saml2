@@ -86,6 +86,7 @@ abstract class NameIDType extends BaseIDType
     /**
      * Set the value of the Format-property
      * @param string|null $format
+     * @return void
      */
     public function setFormat($format = null)
     {
@@ -107,6 +108,7 @@ abstract class NameIDType extends BaseIDType
     /**
      * Set the value of the value-property
      * @param string|null $value
+     * @return void
      */
     public function setValue($value)
     {
@@ -128,6 +130,7 @@ abstract class NameIDType extends BaseIDType
     /**
      * Set the value of the SPProvidedID-property
      * @param string|null $spProvidedID
+     * @return void
      */
     public function setSPProvidedID($spProvidedID)
     {
@@ -140,9 +143,8 @@ abstract class NameIDType extends BaseIDType
      * Create a \SAML2\XML\saml\NameID object from an array with its contents.
      *
      * @param array $nameId An array whose keys correspond to the fields of a NameID.
-     * @return \SAML2\XML\saml\NameID The corresponding NameID object.
-     *
      * @throws \InvalidArgumentException If the array does not contain the "Value" key.
+     * @return \SAML2\XML\saml\NameID The corresponding NameID object.
      *
      * @deprecated
      */
@@ -174,7 +176,6 @@ abstract class NameIDType extends BaseIDType
      * Convert this NameIDType to XML.
      *
      * @param \DOMElement $parent The element we are converting to XML.
-     *
      * @return \DOMElement The XML element after adding the data corresponding to this NameIDType.
      */
     public function toXML(\DOMElement $parent = null)

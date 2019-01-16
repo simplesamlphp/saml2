@@ -99,6 +99,7 @@ class AttributeConsumingService
     /**
      * Set the value of the index-property
      * @param int $index
+     * @return void
      */
     public function setIndex($index)
     {
@@ -120,6 +121,7 @@ class AttributeConsumingService
     /**
      * Set the value of the isDefault-property
      * @param boolean|null $flag
+     * @return void
      */
     public function setIsDefault($flag = null)
     {
@@ -141,6 +143,7 @@ class AttributeConsumingService
     /**
      * Set the value of the ServiceName-property
      * @param string[] $serviceName
+     * @return void
      */
     public function setServiceName(array $serviceName)
     {
@@ -161,6 +164,7 @@ class AttributeConsumingService
     /**
      * Set the value of the ServiceDescription-property
      * @param string[] $serviceDescription
+     * @return void
      */
     public function setServiceDescription(array $serviceDescription)
     {
@@ -181,6 +185,7 @@ class AttributeConsumingService
     /**
      * Set the value of the RequestedAttribute-property
      * @param \SAML2\XML\md\RequestedAttribute[] $requestedAttribute
+     * @return void
      */
     public function setRequestedAttribute(array $requestedAttribute)
     {
@@ -191,6 +196,7 @@ class AttributeConsumingService
     /**
      * Add the value to the RequestedAttribute-property
      * @param \SAML2\XML\md\RequestedAttribute $requestedAttribute
+     * @return void
      */
     public function addRequestedAttribute(RequestedAttribute $requestedAttribute)
     {

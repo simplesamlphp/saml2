@@ -15,6 +15,11 @@ class ArtifactResolve extends Request
     private $artifact;
 
 
+    /**
+     * Constructor for SAML 2 ArtifactResolve.
+     *
+     * @param \DOMElement|null $xml The input assertion.
+     */
     public function __construct(\DOMElement $xml = null)
     {
         parent::__construct('ArtifactResolve', $xml);
@@ -40,6 +45,7 @@ class ArtifactResolve extends Request
      * Set the artifact that should be included in this response.
      *
      * @param string $artifact
+     * @return void
      */
     public function setArtifact($artifact)
     {

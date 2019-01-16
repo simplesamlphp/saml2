@@ -85,6 +85,7 @@ class Chunk implements \Serializable
     /**
      * Set the value of the localName-property
      * @param string $localName
+     * @return void
      */
     public function setLocalName($localName)
     {
@@ -106,6 +107,7 @@ class Chunk implements \Serializable
     /**
      * Set the value of the namespaceURI-property
      * @param string|null $namespaceURI
+     * @return void
      */
     public function setNamespaceURI($namespaceURI = null)
     {
@@ -117,6 +119,7 @@ class Chunk implements \Serializable
     /**
      * Set the value of the xml-property
      * @param \DOMelement $xml
+     * @return void
      */
     private function setXml($xml)
     {
@@ -140,6 +143,7 @@ class Chunk implements \Serializable
      * Un-serialize this XML chunk.
      *
      * @param  string          $serialized The serialized chunk.
+     * @return void
      */
     public function unserialize($serialized)
     {

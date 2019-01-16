@@ -51,6 +51,7 @@ class RequestedAttribute extends Attribute
     /**
      * Set the value of the isRequired-property
      * @param boolean|null $flag
+     * @return void
      */
     public function setIsRequired($flag = null)
     {

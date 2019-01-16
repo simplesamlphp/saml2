@@ -46,6 +46,7 @@ abstract class SubjectQuery extends Request
      *
      * @param \DOMElement $xml The SubjectQuery XML element.
      * @throws \Exception
+     * @return void
      */
     private function parseSubject(\DOMElement $xml)
     {
@@ -84,6 +85,7 @@ abstract class SubjectQuery extends Request
      * Set the NameId of the subject in the query.
      *
      * @param \SAML2\XML\saml\NameID|array|null $nameId The name identifier of the assertion.
+     * @return void
      */
     public function setNameId($nameId)
     {

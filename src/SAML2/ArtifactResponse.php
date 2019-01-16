@@ -19,6 +19,12 @@ class ArtifactResponse extends StatusResponse
     private $any;
 
 
+    /**
+     * Constructor for SAML 2 ArtifactResponse.
+     *
+     * @param \DOMElement|null $xml The input assertion.
+     * @throws \Exception
+     */
     public function __construct(\DOMElement $xml = null)
     {
         parent::__construct('ArtifactResponse', $xml);
@@ -40,12 +46,19 @@ class ArtifactResponse extends StatusResponse
     }
 
 
+    /**
+     * @param \DOMElement|null $any
+     * @return void
+     */
     public function setAny(\DOMElement $any = null)
     {
         $this->any = $any;
     }
 
 
+    /**
+     * @return \DOMElement|null
+    */
     public function getAny()
     {
         return $this->any;

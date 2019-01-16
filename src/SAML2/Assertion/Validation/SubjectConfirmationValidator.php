@@ -26,6 +26,12 @@ class SubjectConfirmationValidator
     protected $serviceProvider;
 
 
+    /**
+     * Constructor for SubjectConfirmationValidator
+     *
+     * @param IdentityProvider $identityProvider
+     * @param ServiceProvider $serviceProvider
+     */
     public function __construct(
         IdentityProvider $identityProvider,
         ServiceProvider $serviceProvider
@@ -35,6 +41,10 @@ class SubjectConfirmationValidator
     }
 
 
+    /**
+     * @param SubjectConfirmationConstraintValidator $constraint
+     * @return void
+     */
     public function addConstraintValidator(
         SubjectConfirmationConstraintValidator $constraint
     ) {
@@ -50,6 +60,10 @@ class SubjectConfirmationValidator
     }
 
 
+    /**
+     * @param SubjectConfirmation $subjectConfirmation
+     * @return Result
+     */
     public function validate(SubjectConfirmation $subjectConfirmation)
     {
         $result = new Result();

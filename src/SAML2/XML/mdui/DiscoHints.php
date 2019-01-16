@@ -78,6 +78,7 @@ class DiscoHints
     /**
      * Set the value of the IPHint-property
      * @param string[] $hints
+     * @return void
      */
     public function setIPHint(array $hints)
     {
@@ -98,6 +99,7 @@ class DiscoHints
     /**
      * Set the value of the DomainHint-property
      * @param string[] $hints
+     * @return void
      */
     public function setDomainHint(array $hints)
     {
@@ -118,6 +120,7 @@ class DiscoHints
     /**
      * Set the value of the GeolocationHint-property
      * @param string[] $hints
+     * @return void
      */
     public function setGeolocationHint(array $hints)
     {
@@ -138,6 +141,7 @@ class DiscoHints
     /**
      * Set the value of the childen-property
      * @param array $children
+     * @return void
      */
     public function setChildren(array $children)
     {
@@ -148,6 +152,7 @@ class DiscoHints
     /**
      * Add the value to the children-property
      * @param \SAML2\XML\Chunk $child
+     * @return void
      */
     public function addChildren(Chunk $child)
     {

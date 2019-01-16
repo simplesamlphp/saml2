@@ -74,6 +74,7 @@ class RegistrationInfo
     /**
      * Set the value of the registrationAuthority-property
      * @param string $registrationAuthority
+     * @return void
      */
     public function setRegistrationAuthority($registrationAuthority)
     {
@@ -95,6 +96,7 @@ class RegistrationInfo
     /**
      * Set the value of the registrationInstant-property
      * @param int|null $registrationInstant
+     * @return void
      */
     public function setRegistrationInstant($registrationInstant = null)
     {
@@ -116,6 +118,7 @@ class RegistrationInfo
     /**
      * Set the value of the RegistrationPolicy-property
      * @param array $registrationPolicy
+     * @return void
      */
     public function setRegistrationPolicy(array $registrationPolicy)
     {

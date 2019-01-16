@@ -19,12 +19,22 @@ class Validator
     private $logger;
 
 
+    /**
+     * Constructor for Validator
+     *
+     * @param LoggerInterface $logger
+     */
     public function __construct(LoggerInterface $logger)
     {
         $this->logger = $logger;
     }
 
 
+    /**
+     * @param SignedElement $signedElement
+     * @oaram CertificateProvider $configuration
+     * @return bool
+     */
     public function hasValidSignature(
         SignedElement $signedElement,
         CertificateProvider $configuration

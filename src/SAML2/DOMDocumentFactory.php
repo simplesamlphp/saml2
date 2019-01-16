@@ -8,6 +8,10 @@ use SAML2\Exception\UnparseableXmlException;
 
 final class DOMDocumentFactory
 {
+    /**
+     * Constructor for DOMDocumentFactory.
+     * This class should never be instantiated
+     */
     private function __construct()
     {
     }

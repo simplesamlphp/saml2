@@ -82,6 +82,7 @@ class AuthnAuthorityDescriptor extends RoleDescriptor
     /**
      * Set the value of the AuthnQueryService-property
      * @param \SAML2\XML\md\EndpointType[] $authnQueryService
+     * @return void
      */
     public function setAuthnQueryService(array $authnQueryService)
     {
@@ -92,6 +93,7 @@ class AuthnAuthorityDescriptor extends RoleDescriptor
     /**
      * Add the value to the AuthnQueryService-property
      * @param \SAML2\XML\md\EndpointType $authnQueryService
+     * @return void
      */
     public function addAuthnQueryService(EndpointType $authnQueryService)
     {
@@ -113,6 +115,7 @@ class AuthnAuthorityDescriptor extends RoleDescriptor
     /**
      * Set the value of the AssertionIDRequestService-property
      * @param \SAML2\XML\md\EndpointType[] $assertionIDRequestService
+     * @return void
      */
     public function setAssertionIDRequestService(array $assertionIDRequestService)
     {
@@ -123,6 +126,7 @@ class AuthnAuthorityDescriptor extends RoleDescriptor
     /**
      * Add the value to the AssertionIDRequestService-property
      * @param \SAML2\XML\md\EndpointType $assertionIDRequestService
+     * @return void
      */
     public function addAssertionIDRequestService(EndpointType $assertionIDRequestService)
     {
@@ -144,6 +148,7 @@ class AuthnAuthorityDescriptor extends RoleDescriptor
     /**
      * Set the value of the NameIDFormat-property
      * @param string[] $nameIDFormat
+     * @return void
      */
     public function setNameIDFormat(array $nameIDFormat)
     {

@@ -17,6 +17,7 @@ class Result
 
     /**
      * @param $message
+     * @return void
      */
     public function addError($message)
     {

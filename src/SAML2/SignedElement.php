@@ -25,10 +25,10 @@ interface SignedElement
 
     /**
      * Set the certificates that should be included in the element.
-     *
      * The certificates should be strings with the PEM encoded data.
      *
      * @param array $certificates An array of certificates.
+     * @return void
      */
     public function setCertificates(array $certificates);
 
@@ -51,10 +51,10 @@ interface SignedElement
 
     /**
      * Set the private key we should use to sign the element.
-     *
      * If the key is null, the message will be sent unsigned.
      *
      * @param XMLSecurityKey|null $signatureKey
+     * @return void
      */
     public function setSignatureKey(XMLSecurityKey $signatureKey = null);
 }

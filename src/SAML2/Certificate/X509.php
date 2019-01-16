@@ -13,6 +13,10 @@ class X509 extends Key
     private $fingerprint;
 
 
+    /**
+     * @param string $certificateContents
+     * @return X509
+     */
     public static function createFromCertificateData($certificateContents)
     {
         $data = [
@@ -28,6 +32,9 @@ class X509 extends Key
 
     /**
      * {@inheritdoc} Best place to ensure the logic is encapsulated in a single place
+     * @param mixed $offset
+     * @param mixed $value
+     * @return void
      */
     public function offsetSet($offset, $value)
     {

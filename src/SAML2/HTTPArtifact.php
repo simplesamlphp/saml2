@@ -28,8 +28,8 @@ class HTTPArtifact extends Binding
      * Create the redirect URL for a message.
      *
      * @param  \SAML2\Message $message The message.
-     * @return string        The URL the user should be redirected to in order to send a message.
      * @throws \Exception
+     * @return string        The URL the user should be redirected to in order to send a message.
      */
     public function getRedirectURL(Message $message)
     {
@@ -63,6 +63,7 @@ class HTTPArtifact extends Binding
      * Note: This function never returns.
      *
      * @param \SAML2\Message $message The message we should send.
+     * @retrun void
      */
     public function send(Message $message)
     {
@@ -76,8 +77,8 @@ class HTTPArtifact extends Binding
      *
      * Throws an exception if it is unable receive the message.
      *
-     * @return \SAML2\Message The received message.
      * @throws \Exception
+     * @return \SAML2\Message The received message.
      */
     public function receive()
     {
@@ -153,6 +154,7 @@ class HTTPArtifact extends Binding
 
     /**
      * @param \SimpleSAML\Configuration $sp
+     * @return void
      */
     public function setSPMetadata(Configuration $sp)
     {

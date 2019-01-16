@@ -50,13 +50,12 @@ class Processor
 
 
     /**
-     * @param \Psr\Log\LoggerInterface        $logger
+     * @param \Psr\Log\LoggerInterface $logger
      *
      */
     public function __construct(LoggerInterface $logger)
     {
         $this->logger = $logger;
-
         $this->signatureValidator = new Validator($logger);
     }
 
@@ -95,6 +94,8 @@ class Processor
      * Checks the preconditions that must be valid in order for the response to be processed.
      *
      * @param \SAML2\Response $response
+     * @throws PreconditionNotMetException
+     * @return void
      */
     private function enforcePreconditions(Response $response)
     {
@@ -109,6 +110,8 @@ class Processor
     /**
      * @param \SAML2\Response                       $response
      * @param \SAML2\Configuration\IdentityProvider $identityProviderConfiguration
+     * @throws InvalidResponseException
+     * @return void
      */
     private function verifySignature(
         Response $response,
@@ -139,7 +142,8 @@ class Processor
 
     /**
      * @param \SAML2\Response $response
-     *
+     * @throws UnsignedResponseException
+     * @throws NoAssertionsFoundException
      * @return \SAML2\Assertion[]
      */
     private function processAssertions(Response $response)

@@ -115,6 +115,7 @@ class PublicationInfo
     /**
      * Set the value of the publisher-property
      * @param string $publisher
+     * @return void
      */
     public function setPublisher($publisher)
     {
@@ -126,6 +127,7 @@ class PublicationInfo
     /**
      * Set the value of the creationInstant-property
      * @param int|null $creationInstant
+     * @return void
      */
     public function setCreationInstant($creationInstant = null)
     {
@@ -137,6 +139,7 @@ class PublicationInfo
     /**
      * Set the value of the publicationId-property
      * @param string|null $publicationId
+     * @return void
      */
     public function setPublicationId($publicationId = null)
     {
@@ -148,6 +151,7 @@ class PublicationInfo
     /**
      * Set the value of the UsagePolicy-property
      * @param array $usagePolicy
+     * @return void
      */
     public function setUsagePolicy(array $usagePolicy)
     {

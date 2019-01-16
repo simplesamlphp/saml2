@@ -48,6 +48,7 @@ class KeyName
     /**
      * Set the value of the name-property
      * @param string $name
+     * @return void
      */
     public function setName($name)
     {

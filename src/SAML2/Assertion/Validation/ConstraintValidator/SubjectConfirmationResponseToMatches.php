@@ -10,15 +10,25 @@ use SAML2\XML\saml\SubjectConfirmation;
 class SubjectConfirmationResponseToMatches implements
     SubjectConfirmationConstraintValidator
 {
+    /** @var Response */
     private $response;
 
 
+    /**
+     * Constructor for SubjectConfirmationResponseToMatches
+     * @param Response $response
+     */
     public function __construct(Response $response)
     {
         $this->response = $response;
     }
 
 
+    /**
+     * @param SubjectConfirmation
+     * @param Result $result
+     * @return void
+     */
     public function validate(
         SubjectConfirmation $subjectConfirmation,
         Result $result
@@ -34,6 +44,9 @@ class SubjectConfirmationResponseToMatches implements
     }
 
 
+    /**
+     * @return string|bool
+     */
     private function getInResponseTo()
     {
         $inResponseTo = $this->response->getInResponseTo();

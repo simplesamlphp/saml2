@@ -111,6 +111,7 @@ class EntitiesDescriptor extends SignedElementHelper
     /**
      * Set the value of the Name-property
      * @param string|null $name
+     * @return void
      */
     public function setName($name = null)
     {
@@ -132,6 +133,7 @@ class EntitiesDescriptor extends SignedElementHelper
     /**
      * Set the value of the ID-property
      * @param string|null $Id
+     * @return void
      */
     public function setID($Id = null)
     {
@@ -153,6 +155,7 @@ class EntitiesDescriptor extends SignedElementHelper
     /**
      * Set the value of the validUntil-property
      * @param int|null $validUntil
+     * @return void
      */
     public function setValidUntil($validUntil = null)
     {
@@ -174,6 +177,7 @@ class EntitiesDescriptor extends SignedElementHelper
     /**
      * Set the value of the cacheDuration-property
      * @param string|null $cacheDuration
+     * @return void
      */
     public function setCacheDuration($cacheDuration = null)
     {
@@ -195,6 +199,7 @@ class EntitiesDescriptor extends SignedElementHelper
     /**
      * Set the value of the Extensions-property
      * @param array $extensions
+     * @return void
      */
     public function setExtensions(array $extensions)
     {
@@ -206,6 +211,7 @@ class EntitiesDescriptor extends SignedElementHelper
      * Add an Extension.
      *
      * @param \SAML2\XML\Chunk $extensions The Extensions
+     * @return void
      */
     public function addExtension(Extensions $extension)
     {
@@ -226,6 +232,7 @@ class EntitiesDescriptor extends SignedElementHelper
     /**
      * Set the value of the childen-property
      * @param array $children
+     * @return void
      */
     public function setChildren(array $children)
     {
@@ -236,6 +243,7 @@ class EntitiesDescriptor extends SignedElementHelper
     /**
      * Add the value to the children-property
      * @param \SAML2\XML\md\EntityDescriptor|\SAML2\XML\md\EntitiesDescriptor $child
+     * @return void
      */
     public function addChildren($child)
     {

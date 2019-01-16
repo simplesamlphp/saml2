@@ -18,12 +18,21 @@ class SpIsValidAudience implements
     private $serviceProvider;
 
 
+    /**
+     * @param ServiceProvider $serviceProvider
+     * @return void
+     */
     public function setServiceProvider(ServiceProvider $serviceProvider)
     {
         $this->serviceProvider = $serviceProvider;
     }
 
 
+    /**
+     * @param Assertion $assertion
+     * @param Result $result
+     * @return void
+     */
     public function validate(Assertion $assertion, Result $result)
     {
         $intendedAudiences = $assertion->getValidAudiences();

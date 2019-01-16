@@ -50,6 +50,7 @@ class SigningMethod
     /**
      * Set the value of the Algorithm-property
      * @param string $algorithm
+     * @return void
      */
     public function setAlgorithm($algorithm)
     {
@@ -71,6 +72,7 @@ class SigningMethod
     /**
      * Set the value of the MinKeySize-property
      * @param int|null $minKeySize
+     * @return void
      */
     public function setMinKeySize($minKeySize = null)
     {
@@ -92,6 +94,7 @@ class SigningMethod
     /**
      * Set the value of the MaxKeySize-property
      * @param int|null $maxKeySize
+     * @return void
      */
     public function setMaxKeySize($maxKeySize = null)
     {
@@ -104,8 +107,8 @@ class SigningMethod
      * Create/parse an alg:SigningMethod element.
      *
      * @param \DOMElement|null $xml The XML element we should load or null to create a new one from scratch.
-     *
      * @throws \Exception
+     * @return void
      */
     public function __construct(\DOMElement $xml = null)
     {

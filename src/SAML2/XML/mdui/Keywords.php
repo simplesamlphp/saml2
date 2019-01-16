@@ -66,6 +66,7 @@ class Keywords
     /**
      * Set the value of the lang-property
      * @param string $lang
+     * @return void
      */
     public function setLanguage($lang)
     {
@@ -87,6 +88,7 @@ class Keywords
     /**
      * Set the value of the Keywords-property
      * @param string[] $keywords
+     * @return void
      */
     public function setKeywords(array $keywords)
     {
@@ -97,6 +99,7 @@ class Keywords
     /**
      * Add the value to the Keywords-property
      * @param string $keyword
+     * @return void
      */
     public function addKeyword($keyword)
     {
@@ -109,8 +112,8 @@ class Keywords
      * Convert this Keywords to XML.
      *
      * @param \DOMElement $parent The element we should append this Keywords to.
-     * @return \DOMElement
      * @throws \Exception
+     * @return \DOMElement
      */
     public function toXML(\DOMElement $parent)
     {

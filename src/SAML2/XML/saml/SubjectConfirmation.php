@@ -80,6 +80,7 @@ class SubjectConfirmation
     /**
      * Set the value of the Method-property
      * @param string $method
+     * @return void
      */
     public function setMethod($method)
     {
@@ -101,6 +102,7 @@ class SubjectConfirmation
     /**
      * Set the value of the NameID-property
      * @param \SAML2\XML\saml\NameID $nameId
+     * @return void
      */
     public function setNameID(NameID $nameId)
     {
@@ -121,6 +123,7 @@ class SubjectConfirmation
     /**
      * Set the value of the SubjectConfirmationData-property
      * @param \SAML2\XML\saml\SubjectConfirmationData|null $subjectConfirmationData
+     * @return void
      */
     public function setSubjectConfirmationData($subjectConfirmationData = null)
     {

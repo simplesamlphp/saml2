@@ -22,9 +22,9 @@ abstract class Binding
      *
      * Will throw an exception if it is unable to locate the binding.
      *
-     * @param  string        $urn The URN of the binding.
-     * @return \SAML2\Binding The binding.
+     * @param string $urn The URN of the binding.
      * @throws \Exception
+     * @return \SAML2\Binding The binding.
      */
     public static function getBinding($urn)
     {
@@ -58,8 +58,8 @@ abstract class Binding
      *
      * An exception will be thrown if it is unable to guess the binding.
      *
-     * @return \SAML2\Binding The binding.
      * @throws \Exception
+     * @return \SAML2\Binding The binding.
      */
     public static function getCurrentBinding()
     {
@@ -124,6 +124,7 @@ abstract class Binding
      * Set to null to use the destination set in the message.
      *
      * @param string|null $destination The destination the message should be delivered to.
+     * @return void
      */
     public function setDestination($destination)
     {
@@ -140,6 +141,7 @@ abstract class Binding
      * The message will be delivered to the destination set in the message.
      *
      * @param \SAML2\Message $message The message which should be sent.
+     * @return void
      */
     abstract public function send(Message $message);
 

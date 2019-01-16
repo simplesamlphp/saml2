@@ -14,6 +14,7 @@ class KeyCollection extends ArrayCollection
      * Add a key to the collection
      *
      * @param \SAML2\Certificate\Key $key
+     * @return void
      */
     public function add($key)
     {

@@ -107,6 +107,7 @@ class AttributeAuthorityDescriptor extends RoleDescriptor
     /**
      * Set the value of the AttributeService-property
      * @param \SAML2\XML\md\EndpointType[] $attributeService
+     * @return void
      */
     public function setAttributeService(array $attributeService)
     {
@@ -117,6 +118,7 @@ class AttributeAuthorityDescriptor extends RoleDescriptor
     /**
      * Add the value to the AttributeService-property
      * @param \SAML2\XML\md\EndpointType $attributeService
+     * @return void
      */
     public function addAttributeService(EndpointType $attributeService)
     {
@@ -138,6 +140,7 @@ class AttributeAuthorityDescriptor extends RoleDescriptor
     /**
      * Set the value of the NameIDFormat-property
      * @param string[] $nameIDFormat
+     * @return void
      */
     public function setNameIDFormat(array $nameIDFormat)
     {
@@ -158,6 +161,7 @@ class AttributeAuthorityDescriptor extends RoleDescriptor
     /**
      * Set the value of the AssertionIDRequestService-property
      * @param \SAML2\XML\md\EndpointType[] $assertionIDRequestService
+     * @return void
      */
     public function setAssertionIDRequestService(array $assertionIDRequestService)
     {
@@ -168,6 +172,7 @@ class AttributeAuthorityDescriptor extends RoleDescriptor
     /**
      * Add the value to the AssertionIDRequestService-property
      * @param \SAML2\XML\md\EndpointType $assertionIDRequestService
+     * @return void
      */
     public function addAssertionIDRequestService(EndpointType $assertionIDRequestService)
     {
@@ -189,6 +194,7 @@ class AttributeAuthorityDescriptor extends RoleDescriptor
     /**
      * Set the value of the AttributeProfile-property
      * @param string[] $attributeProfile
+     * @return void
      */
     public function setAttributeProfile(array $attributeProfile)
     {
@@ -209,6 +215,7 @@ class AttributeAuthorityDescriptor extends RoleDescriptor
     /**
      * Set the value of the Attribute-property
      * @param \SAML2\XML\saml\Attribute[] $attribute
+     * @return void
      */
     public function setAttribute(array $attribute)
     {
@@ -219,6 +226,7 @@ class AttributeAuthorityDescriptor extends RoleDescriptor
     /**
      * Add the value to the Attribute-property
      * @param \SAML2\XML\saml\Attribute $attribute
+     * @return void
      */
     public function addAttribute(Attribute $attribute)
     {

@@ -28,6 +28,14 @@ class PrivateKey extends ArrayAdapter
     private $name;
 
 
+    /**
+     * Constructor for PrivateKey.
+     *
+     * @param string $filePath
+     * @param string $name
+     * @param string|null $passphrase
+     * @throws \Exception
+     */
     public function __construct($filePath, $name, $passphrase = null)
     {
         if (!is_string($filePath)) {

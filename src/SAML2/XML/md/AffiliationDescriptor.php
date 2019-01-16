@@ -126,6 +126,7 @@ class AffiliationDescriptor extends SignedElementHelper
     /**
      * Set the value of the affiliationOwnerId-property
      * @param string $affiliationOwnerId
+     * @return void
      */
     public function setAffiliationOwnerID($affiliationOwnerId)
     {
@@ -147,6 +148,7 @@ class AffiliationDescriptor extends SignedElementHelper
     /**
      * Set the value of the ID-property
      * @param string|null $Id
+     * @return void
      */
     public function setID($Id = null)
     {
@@ -168,6 +170,7 @@ class AffiliationDescriptor extends SignedElementHelper
     /**
      * Set the value of the validUntil-property
      * @param int|null $validUntil
+     * @return void
      */
     public function setValidUntil($validUntil = null)
     {
@@ -189,6 +192,7 @@ class AffiliationDescriptor extends SignedElementHelper
     /**
      * Set the value of the cacheDuration-property
      * @param string|null $cacheDuration
+     * @return void
      */
     public function setCacheDuration($cacheDuration = null)
     {
@@ -210,6 +214,7 @@ class AffiliationDescriptor extends SignedElementHelper
     /**
      * Set the value of the Extensions-property
      * @param array $extensions
+     * @return void
      */
     public function setExtensions(array $extensions)
     {
@@ -221,6 +226,7 @@ class AffiliationDescriptor extends SignedElementHelper
      * Add an Extension.
      *
      * @param \SAML2\XML\Chunk $extensions The Extensions
+     * @return void
      */
     public function addExtension(Extensions $extension)
     {
@@ -241,6 +247,7 @@ class AffiliationDescriptor extends SignedElementHelper
     /**
      * Set the value of the AffiliateMember-property
      * @param array $affiliateMember
+     * @return void
      */
     public function setAffiliateMember(array $affiliateMember)
     {
@@ -261,6 +268,7 @@ class AffiliationDescriptor extends SignedElementHelper
     /**
      * Set the value of the KeyDescriptor-property
      * @param array $keyDescriptor
+     * @return void
      */
     public function setKeyDescriptor(array $keyDescriptor)
     {
@@ -271,6 +279,7 @@ class AffiliationDescriptor extends SignedElementHelper
     /**
      * Add the value to the KeyDescriptor-property
      * @param \SAML2\XML\md\KeyDescriptor $keyDescriptor
+     * @return void
      */
     public function addKeyDescriptor(KeyDescriptor $keyDescriptor)
     {

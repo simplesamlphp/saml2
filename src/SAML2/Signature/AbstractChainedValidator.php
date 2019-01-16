@@ -14,6 +14,11 @@ abstract class AbstractChainedValidator implements ChainedValidator
     protected $logger;
 
 
+    /**
+     * Constructor for AbstractChainedValidator
+     *
+     * @param LoggerInterface $logger
+     */
     public function __construct(LoggerInterface $logger)
     {
         $this->logger = $logger;

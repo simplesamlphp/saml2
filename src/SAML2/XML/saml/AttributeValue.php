@@ -69,6 +69,7 @@ class AttributeValue implements \Serializable
     /**
      * Set the value of the element-property
      * @param \DOMElement $element
+     * @return void
      */
     public function setElement(\DOMElement $element)
     {
@@ -93,6 +94,7 @@ class AttributeValue implements \Serializable
 
     /**
      * Returns a plain text content of the attribute value.
+     * @return string
      */
     public function getString()
     {
@@ -137,6 +139,7 @@ class AttributeValue implements \Serializable
      * Un-serialize this AttributeValue.
      *
      * @param string $serialized The serialized AttributeValue.
+     * @return void
      */
     public function unserialize($serialized)
     {

@@ -10,18 +10,27 @@ class IdentityProvider extends ArrayAdapter implements
     DecryptionProvider,
     EntityIdProvider
 {
+    /**
+     * @return mixed
+     */
     public function getKeys()
     {
         return $this->get('keys');
     }
 
 
+    /**
+     * @return mixed
+     */
     public function getCertificateData()
     {
         return $this->get('certificateData');
     }
 
 
+    /**
+     * @return mixed
+     */
     public function getCertificateFile()
     {
         return $this->get('certificateFile');
@@ -29,6 +38,7 @@ class IdentityProvider extends ArrayAdapter implements
 
 
     /**
+     * @return mixed
      * @deprecated Please use getCertifiateFile() or getCertificateData()
      */
     public function getCertificateFingerprints()
@@ -37,24 +47,38 @@ class IdentityProvider extends ArrayAdapter implements
     }
 
 
+    /**
+     * @return mixed
+     */
     public function isAssertionEncryptionRequired()
     {
         return $this->get('assertionEncryptionEnabled');
     }
 
 
+    /**
+     * @return mixed
+     */
     public function getSharedKey()
     {
         return $this->get('sharedKey');
     }
 
 
+    /**
+     * @return mixed
+     */
     public function hasBase64EncodedAttributes()
     {
         return $this->get('base64EncodedAttributes');
     }
 
 
+    /**
+     * @param string $name
+     * @param bool $required
+     * @return mixed|null
+     */
     public function getPrivateKey($name, $required = false)
     {
         $privateKeys = $this->get('privateKeys');
@@ -80,6 +104,9 @@ class IdentityProvider extends ArrayAdapter implements
     }
 
 
+    /**
+     * @return mixed
+     */
     public function getBlacklistedAlgorithms()
     {
         return $this->get('blacklistedEncryptionAlgorithms');
@@ -87,7 +114,7 @@ class IdentityProvider extends ArrayAdapter implements
 
 
     /**
-     * @return null|string
+     * @return mixed
      */
     public function getEntityId()
     {

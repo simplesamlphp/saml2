@@ -191,6 +191,7 @@ abstract class Message implements SignedElement
      * this object to do the verification.
      *
      * @param \DOMElement $xml The SAML message whose signature we want to validate.
+     * @return void
      */
     private function validateSignature(\DOMElement $xml)
     {
@@ -223,6 +224,7 @@ abstract class Message implements SignedElement
      *
      * @param callback $function The function which should be called
      * @param mixed    $data     The data that should be included as the first parameter to the function
+     * @return void
      */
     public function addValidator($function, $data)
     {
@@ -243,10 +245,8 @@ abstract class Message implements SignedElement
      * validation fails.
      *
      * @param XMLSecurityKey $key The key we should check against
-     *
-     * @return bool true on success, false when we don't have a signature
-     *
      * @throws \Exception
+     * @return bool true on success, false when we don't have a signature
      */
     public function validate(XMLSecurityKey $key)
     {
@@ -290,6 +290,7 @@ abstract class Message implements SignedElement
      * Set the identifier of this message.
      *
      * @param string $id The new identifier of this message
+     * @return void
      */
     public function setId($id)
     {
@@ -314,6 +315,7 @@ abstract class Message implements SignedElement
      * Set the issue timestamp of this message.
      *
      * @param int $issueInstant The new issue timestamp of this message, as an UNIX timestamp
+     * @return void
      */
     public function setIssueInstant($issueInstant)
     {
@@ -338,6 +340,7 @@ abstract class Message implements SignedElement
      * Set the destination of this message.
      *
      * @param string|null $destination The new destination of this message
+     * @return void
      */
     public function setDestination($destination)
     {
@@ -349,12 +352,11 @@ abstract class Message implements SignedElement
 
     /**
      * Set the given consent for this message.
-     *
      * Most likely (though not required) a value of urn:oasis:names:tc:SAML:2.0:consent.
      *
      * @see \SAML2\Constants
-     *
      * @param string $consent
+     * @return void
      */
     public function setConsent($consent)
     {
@@ -366,11 +368,9 @@ abstract class Message implements SignedElement
 
     /**
      * Get the given consent for this message.
-     *
      * Most likely (though not required) a value of urn:oasis:names:tc:SAML:2.0:consent.
      *
      * @see \SAML2\Constants
-     *
      * @return string Consent
      */
     public function getConsent()
@@ -398,6 +398,7 @@ abstract class Message implements SignedElement
      * Set the issuer of this message.
      *
      * @param string|\SAML2\XML\saml\Issuer|null $issuer The new issuer of this message
+     * @return void
      */
     public function setIssuer($issuer)
     {
@@ -433,6 +434,7 @@ abstract class Message implements SignedElement
      * Set the RelayState associated with this message.
      *
      * @param string|null $relayState The new RelayState
+     * @return void
      */
     public function setRelayState($relayState)
     {
@@ -444,7 +446,6 @@ abstract class Message implements SignedElement
 
     /**
      * Convert this message to an unsigned XML document.
-     *
      * This method does not sign the resulting XML document.
      *
      * @return \DOMElement The root element of the DOM tree
@@ -489,7 +490,6 @@ abstract class Message implements SignedElement
 
     /**
      * Convert this message to a signed XML document.
-     *
      * This method sign the resulting XML document if the private key for
      * the signature is set.
      *
@@ -537,10 +537,10 @@ abstract class Message implements SignedElement
 
     /**
      * Set the private key we should use to sign the message.
-     *
      * If the key is null, the message will be sent unsigned.
      *
      * @param XMLSecurityKey|null $signatureKey
+     * @return void
      */
     public function setSignatureKey(XMLSecurityKey $signatureKey = null)
     {
@@ -550,10 +550,10 @@ abstract class Message implements SignedElement
 
     /**
      * Set the certificates that should be included in the message.
-     *
      * The certificates should be strings with the PEM encoded data.
      *
      * @param array $certificates An array of certificates
+     * @return void
      */
     public function setCertificates(array $certificates)
     {
@@ -576,10 +576,8 @@ abstract class Message implements SignedElement
      * Convert an XML element into a message.
      *
      * @param \DOMElement $xml The root XML element
-     *
-     * @return \SAML2\Message The message
-     *
      * @throws \Exception
+     * @return \SAML2\Message The message
      */
     public static function fromXML(\DOMElement $xml)
     {
@@ -623,6 +621,7 @@ abstract class Message implements SignedElement
      * Set the Extensions.
      *
      * @param array $extensions The Extensions
+     * @return void
      */
     public function setExtensions(array $extensions)
     {
@@ -634,6 +633,7 @@ abstract class Message implements SignedElement
      * Add an Extension.
      *
      * @param \SAML2\XML\samlp\Extensions $extensions The Extensions
+     * @return void
      */
     public function addExtension(Extensions $extension)
     {

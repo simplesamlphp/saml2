@@ -52,6 +52,7 @@ class DigestMethod
     /**
      * Set the value of the Algorithm-property
      * @param string $algorithm
+     * @return void
      */
     public function setAlgorithm($algorithm)
     {

@@ -61,6 +61,7 @@ class Scope
     /**
      * Set the value of the scope-property
      * @param string $scope
+     * @return void
      */
     public function setScope($scope)
     {
@@ -82,6 +83,7 @@ class Scope
     /**
      * Set the value of the regexp-property
      * @param boolean $regexp
+     * @return void
      */
     public function setIsRegexpScope($regexp)
     {
