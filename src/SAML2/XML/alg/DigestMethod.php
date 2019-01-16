@@ -4,6 +4,8 @@ declare(strict_types=1);
 
 namespace SAML2\XML\alg;
 
+use Webmozart\Assert\Assert;
+
 /**
  * Class for handling the alg:DigestMethod element.
  *
@@ -16,9 +18,9 @@ class DigestMethod
     /**
      * An URI identifying an algorithm supported for digest operations.
      *
-     * @var string
+     * @var string|null
      */
-    public $Algorithm;
+    private $Algorithm = null;
 
 
     /**
@@ -43,7 +45,8 @@ class DigestMethod
 
     /**
      * Collect the value of the algorithm-property
-     * @return string
+     *
+     * @return string|null
      */
     public function getAlgorithm() : string
     {
@@ -53,6 +56,7 @@ class DigestMethod
 
     /**
      * Set the value of the Algorithm-property
+     *
      * @param string $algorithm
      * @return void
      */
@@ -67,13 +71,16 @@ class DigestMethod
      *
      * @param \DOMElement $parent The element we should append to.
      * @return \DOMElement
+     * @throws \Exception
      */
     public function toXML(\DOMElement $parent) : \DOMElement
     {
+        Assertion::notNull($this->Algorithm, 'Cannot convert DigestMethod to XML without an Algorithm set.');
+
         $doc = $parent->ownerDocument;
         $e = $doc->createElementNS(Common::NS, 'alg:DigestMethod');
         $parent->appendChild($e);
-        $e->setAttribute('Algorithm', $this->getAlgorithm());
+        $e->setAttribute('Algorithm', $this->Algorithm);
 
         return $e;
     }

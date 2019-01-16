@@ -46,27 +46,27 @@ class KeyInfo
         }
 
         if ($xml->hasAttribute('Id')) {
-            $this->setId($xml->getAttribute('Id'));
+            $this->Id = $xml->getAttribute('Id');
         }
 
-        for ($n = $xml->firstChild; $n !== null; $n = $n->nextSibling) {
+        for ($n = $xml->firstChild; $n instanceof \DOMNode; $n = $n->nextSibling) {
             if (!($n instanceof \DOMElement)) {
                 continue;
             }
 
             if ($n->namespaceURI !== XMLSecurityDSig::XMLDSIGNS) {
-                $this->addInfo(new Chunk($n));
+                $this->info[] = new Chunk($n);
                 continue;
             }
             switch ($n->localName) {
                 case 'KeyName':
-                    $this->addInfo(new KeyName($n));
+                    $this->info[] = new KeyName($n);
                     break;
                 case 'X509Data':
-                    $this->addInfo(new X509Data($n));
+                    $this->info[] = new X509Data($n);
                     break;
                 default:
-                    $this->addInfo(new Chunk($n));
+                    $this->info[] = new Chunk($n);
                     break;
             }
         }
@@ -75,6 +75,7 @@ class KeyInfo
 
     /**
      * Collect the value of the Id-property
+     *
      * @return string|null
      */
     public function getId()
@@ -85,6 +86,7 @@ class KeyInfo
 
     /**
      * Set the value of the Id-property
+     *
      * @param string|null $id
      * @return void
      */
@@ -96,6 +98,7 @@ class KeyInfo
 
     /**
      * Collect the value of the info-property
+     *
      * @return array
      */
     public function getInfo() : array
@@ -106,6 +109,7 @@ class KeyInfo
 
     /**
      * Set the value of the info-property
+     *
      * @param array $info
      * @return void
      */
@@ -117,12 +121,15 @@ class KeyInfo
 
     /**
      * Add the value to the info-property
+     *
      * @param \SAML2\XML\Chunk|\SAML2\XML\ds\KeyName|\SAML2\XML\ds\X509Data $info
+     * @throws \Exception
      * @return void
      */
     public function addInfo($info)
     {
-        Assert::isInstanceOfAny($info, [Chunk::class, KeyName::class, X509Data::class]);
+        Assert::isInstanceOfAny($info, [Chunk::class, KeyName::class, X509Data::class],
+            'KeyInfo can only contain instances of KeyName, X509Data or Chunk.');
         $this->info[] = $info;
     }
 
@@ -140,12 +147,11 @@ class KeyInfo
         $e = $doc->createElementNS(XMLSecurityDSig::XMLDSIGNS, 'ds:KeyInfo');
         $parent->appendChild($e);
 
-        if ($this->getId() !== null) {
-            $e->setAttribute('Id', $this->getId());
+        if ($this->Id !== null) {
+            $e->setAttribute('Id', $this->Id);
         }
 
-        /** @var \SAML2\XML\Chunk|\SAML2\XML\ds\KeyName|\SAML2\XML\ds\X509Data $n */
-        foreach ($this->getInfo() as $n) {
+        foreach ($this->info as $n) {
             $n->toXML($e);
         }
 

@@ -43,10 +43,21 @@ class Chunk implements \Serializable
      */
     public function __construct(\DOMElement $xml)
     {
-        $this->setLocalName($xml->localName);
-        $this->setNamespaceURI($xml->namespaceURI);
+        $this->localName = $xml->localName;
+        $this->namespaceURI = $xml->namespaceURI;
 
         $this->xml = Utils::copyElement($xml);
+    }
+
+
+    /**
+     * Get this \DOMElement.
+     *
+     * @return \DOMElement This element.
+     */
+    public function getXML()
+    {
+        return $this->xml;
     }
 
 
@@ -64,6 +75,7 @@ class Chunk implements \Serializable
 
     /**
      * Collect the value of the localName-property
+     *
      * @return string
      */
     public function getLocalName() : string
@@ -74,6 +86,7 @@ class Chunk implements \Serializable
 
     /**
      * Set the value of the localName-property
+     *
      * @param string $localName
      * @return void
      */
@@ -85,6 +98,7 @@ class Chunk implements \Serializable
 
     /**
      * Collect the value of the namespaceURI-property
+     *
      * @return string|null
      */
     public function getNamespaceURI()
@@ -95,6 +109,7 @@ class Chunk implements \Serializable
 
     /**
      * Set the value of the namespaceURI-property
+     *
      * @param string|null $namespaceURI
      * @return void
      */
@@ -117,6 +132,7 @@ class Chunk implements \Serializable
 
     /**
      * Set the value of the xml-property
+     *
      * @param \DOMelement $xml
      * @return void
      */
@@ -136,11 +152,11 @@ class Chunk implements \Serializable
         return serialize($this->xml->ownerDocument->saveXML($this->xml));
     }
 
-
+    
     /**
      * Un-serialize this XML chunk.
      *
-     * @param string          $serialized The serialized chunk.
+     * @param string $serialized The serialized chunk.
      * @return void
      *
      * Type hint not possible due to upstream method signature

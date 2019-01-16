@@ -18,10 +18,9 @@ class SigningMethod
     /**
      * An URI identifying the algorithm supported for XML signature operations.
      *
-     * @var string
+     * @var string|null
      */
-    public $Algorithm;
-
+    private $Algorithm = null;
 
     /**
      * The smallest key size, in bits, that the entity supports in conjunction with the algorithm. If omitted, no
@@ -29,8 +28,7 @@ class SigningMethod
      *
      * @var int|null
      */
-    public $MinKeySize;
-
+    private $MinKeySize = null;
 
     /**
      * The largest key size, in bits, that the entity supports in conjunction with the algorithm. If omitted, no
@@ -38,11 +36,40 @@ class SigningMethod
      *
      * @var int|null
      */
-    public $MaxKeySize;
+    private $MaxKeySize = null;
+
+
+    /**
+     * Create/parse an alg:SigningMethod element.
+     *
+     * @param \DOMElement|null $xml The XML element we should load or null to create a new one from scratch.
+     *
+     * @throws \Exception
+     */
+    public function __construct(\DOMElement $xml = null)
+    {
+        if ($xml === null) {
+            return;
+        }
+
+        if (!$xml->hasAttribute('Algorithm')) {
+            throw new \Exception('Missing required attribute "Algorithm" in alg:SigningMethod element.');
+        }
+        $this->Algorithm = $xml->getAttribute('Algorithm');
+
+        if ($xml->hasAttribute('MinKeySize')) {
+            $this->MinKeySize = intval($xml->getAttribute('MinKeySize'));
+        }
+
+        if ($xml->hasAttribute('MaxKeySize')) {
+            $this->MaxKeySize = intval($xml->getAttribute('MaxKeySize'));
+        }
+    }
 
 
     /**
      * Collect the value of the Algorithm-property
+     *
      * @return string
      */
     public function getAlgorithm() : string
@@ -53,6 +80,7 @@ class SigningMethod
 
     /**
      * Set the value of the Algorithm-property
+     *
      * @param string $algorithm
      * @return void
      */
@@ -64,6 +92,7 @@ class SigningMethod
 
     /**
      * Collect the value of the MinKeySize-property
+     *
      * @return int|null
      */
     public function getMinKeySize()
@@ -74,6 +103,7 @@ class SigningMethod
 
     /**
      * Set the value of the MinKeySize-property
+     *
      * @param int|null $minKeySize
      * @return void
      */
@@ -85,6 +115,7 @@ class SigningMethod
 
     /**
      * Collect the value of the MaxKeySize-property
+     *
      * @return int|null
      */
     public function getMaxKeySize()
@@ -95,6 +126,7 @@ class SigningMethod
 
     /**
      * Set the value of the MaxKeySize-property
+     *
      * @param int|null $maxKeySize
      * @return void
      */
@@ -105,41 +137,15 @@ class SigningMethod
 
 
     /**
-     * Create/parse an alg:SigningMethod element.
-     *
-     * @param \DOMElement|null $xml The XML element we should load or null to create a new one from scratch.
-     * @throws \Exception
-     * @return void
-     */
-    public function __construct(\DOMElement $xml = null)
-    {
-        if ($xml === null) {
-            return;
-        }
-
-        if (!$xml->hasAttribute('Algorithm')) {
-            throw new \Exception('Missing required attribute "Algorithm" in alg:SigningMethod element.');
-        }
-        $this->setAlgorithm($xml->getAttribute('Algorithm'));
-
-        if ($xml->hasAttribute('MinKeySize')) {
-            $this->setMinKeySize(intval($xml->getAttribute('MinKeySize')));
-        }
-
-        if ($xml->hasAttribute('MaxKeySize')) {
-            $this->setMaxKeySize(intval($xml->getAttribute('MaxKeySize')));
-        }
-    }
-
-
-    /**
      * Convert this element to XML.
      *
      * @param \DOMElement $parent The element we should append to.
      * @return \DOMElement
+     * @throws \Exception
      */
     public function toXML(\DOMElement $parent) : \DOMElement
     {
+        Assert::notNull($this->Algorithm, 'Cannot convert SigningMethod to XML without an Algorithm set.');
         Assert::nullOrInteger($this->MinKeySize);
         Assert::nullOrInteger($this->MaxKeySize);
 
