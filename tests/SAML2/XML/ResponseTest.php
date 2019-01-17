@@ -12,34 +12,7 @@ class ResponseTest extends \PHPUnit\Framework\TestCase
     {
         $response = new Response;
 
-<<<<<<< HEAD
         $this->assertNull($response->getAssertionConsumerServiceURL());
-=======
-        $this->assertNull($response->AssertionConsumerServiceURL);
-    }
-
-    public function toXMLInvalidACSProvider()
-    {
-        return [
-            [null],
-            [1],
-            [false],
-            [[]],
-            [new stdClass],
-        ];
-    }
-
-    /**
-     * @dataProvider toXMLInvalidACSProvider
-     */
-    public function testToXMLInvalidACS($url)
-    {
-        $this->expectException(\InvalidArgumentException::class, 'AssertionConsumerServiceURL');
-
-        $response = new Response;
-        $response->AssertionConsumerServiceURL = $url;
-        $response->toXML(new \DOMElement('Foobar'));
->>>>>>> Upgrade mockery to 1.2 work with PHPunit 6
     }
 
 

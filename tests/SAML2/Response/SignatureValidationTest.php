@@ -65,16 +65,6 @@ class SignatureValidationTest extends \Mockery\Adapter\Phpunit\MockeryTestCase
 
 
     /**
-     * This ensures that the mockery expectations are tested. This cannot be done through the registered listener (See
-     * the phpunit.xml in the /tools/phpunit directory) as the tests run in isolation.
-    public function tearDown()
-    {
-        \Mockery::close();
-    }
-     */
-
-
-    /**
      * @runInSeparateProcess
      * @preserveGlobalState disabled
      */

@@ -3,6 +3,7 @@
 namespace SAML2;
 
 use SAML2\XML\Chunk;
+use SAML2\XML\saml\SubjectConfirmation;
 
 /**
  * Class \SAML2\AssertionTest
@@ -507,7 +508,7 @@ XML
         $sc = $assertion->getSubjectConfirmation();
 
         $this->assertCount(1, $sc);
-        $this->assertInstanceOf(SAML2\XML\saml\SubjectConfirmation::class, $sc[0]);
+        $this->assertInstanceOf(SubjectConfirmation::class, $sc[0]);
         $this->assertEquals('urn:oasis:names:tc:SAML:2.0:cm:bearer', $sc[0]->getMethod());
         $this->assertEquals('https://example.org/authentication/consume-assertion', $sc[0]->getSubjectConfirmationData()->getRecipient());
         $this->assertEquals(1267796526, $sc[0]->getSubjectConfirmationData()->getNotOnOrAfter());

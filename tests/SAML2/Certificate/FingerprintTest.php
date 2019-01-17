@@ -2,7 +2,7 @@
 
 namespace SAML2\Certificate;
 
-class FingerprintTest extends \PHPUnit\Framework\TestCase
+class FingerprintTest extends \Mockery\Adapter\Phpunit\MockeryTestCase
 {
     /**
      * @var \SAML2\Certificate\Fingerprint

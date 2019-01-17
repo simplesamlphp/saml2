@@ -3,6 +3,7 @@
 namespace SAML2\Assertion\Validation\ConstraintValidator;
 
 use SAML2\Assertion\Validation\Result;
+use Mockery as m;
 
 class SubjectConfirmationResponseToMatchesTest extends \Mockery\Adapter\Phpunit\MockeryTestCase
 {

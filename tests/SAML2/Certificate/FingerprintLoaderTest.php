@@ -5,7 +5,7 @@ namespace SAML2\Certificate;
 use SAML2\Certificate\Stub\ImplementsToString;
 use SAML2\Configuration\ArrayAdapter;
 
-class FingerprintLoaderTest extends \PHPUnit\Framework\TestCase
+class FingerprintLoaderTest extends \Mockery\Adapter\Phpunit\MockeryTestCase
 {
     /**
      * @var \SAML2\Certificate\FingerprintLoader
