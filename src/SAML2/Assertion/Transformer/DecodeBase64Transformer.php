@@ -28,7 +28,7 @@ class DecodeBase64Transformer implements
 
     /**
      * @param Assertion $assertion
-     * @return void
+     * @return Assertion
      */
     public function transform(Assertion $assertion)
     {
@@ -43,6 +43,7 @@ class DecodeBase64Transformer implements
         $attributes = array_combine($keys, $decoded);
 
         $assertion->setAttributes($attributes);
+        return $assertion;
     }
 
 

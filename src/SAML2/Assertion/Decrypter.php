@@ -37,7 +37,7 @@ class Decrypter
      *
      * @param LoggerInterface $logger
      * @param IdentityProvider $identityProvider
-     * @param ServiceProvideer $serviceProvider
+     * @param ServiceProvider $serviceProvider
      * @param PrivateKeyLoader $privateKeyLoader
      */
     public function __construct(

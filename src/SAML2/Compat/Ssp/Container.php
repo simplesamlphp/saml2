@@ -23,7 +23,7 @@ class Container extends AbstractContainer
 
     /**
      * {@inheritdoc}
-     * @return void
+     * @return \Psr\Log\LoggerInterface
      */
     public function getLogger()
     {

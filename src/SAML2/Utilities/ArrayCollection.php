@@ -135,7 +135,7 @@ class ArrayCollection implements Collection
 
 
     /**
-     * @return ArrayIterator
+     * @return \ArrayIterator
      */
     public function getIterator()
     {
@@ -154,7 +154,7 @@ class ArrayCollection implements Collection
 
 
     /**
-     * @param mixed offset
+     * @param mixed $offset
      * @return mixed
      */
     public function offsetGet($offset)

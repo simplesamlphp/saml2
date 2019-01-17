@@ -94,7 +94,7 @@ class Key implements \ArrayAccess
      * @param mixed $offset
      * @param mixed $value
      * @throws InvalidArgumentException
-     * @return viud
+     * @return void
      */
     public function offsetSet($offset, $value)
     {
