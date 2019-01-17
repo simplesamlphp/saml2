@@ -77,20 +77,15 @@ class ArrayCollection implements Collection
     /**
      * @param mixed $element
      *
-     * @return bool|mixed
+     * @return void
      */
     public function remove($element)
     {
         $key = array_search($element, $this->elements);
-
         if ($key === false) {
-            return false;
+            return;
         }
-
-        $removed = $this->elements[$key];
         unset($this->elements[$key]);
-
-        return $removed;
     }
 
 

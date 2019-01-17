@@ -24,6 +24,7 @@ class Extensions
     public static function getList(\DOMElement $parent) : array
     {
         $ret = [];
+        /** @var \DOMElement $node */
         foreach (Utils::xpQuery($parent, './saml_protocol:Extensions/*') as $node) {
             $ret[] = new Chunk($node);
         }

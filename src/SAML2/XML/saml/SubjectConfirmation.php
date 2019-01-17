@@ -55,6 +55,7 @@ class SubjectConfirmation
         }
         $this->Method = $xml->getAttribute('Method');
 
+        /** @var \DOMElement[] $nid */
         $nid = Utils::xpQuery($xml, './saml_assertion:NameID');
         if (count($nid) > 1) {
             throw new \Exception('More than one NameID in a SubjectConfirmation element.');
@@ -62,6 +63,7 @@ class SubjectConfirmation
             $this->NameID = new NameID($nid[0]);
         }
 
+        /** @var \DOMElement[] $scd */
         $scd = Utils::xpQuery($xml, './saml_assertion:SubjectConfirmationData');
         if (count($scd) > 1) {
             throw new \Exception('More than one SubjectConfirmationData child in a SubjectConfirmation element.');

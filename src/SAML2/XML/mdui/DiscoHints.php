@@ -61,6 +61,7 @@ class DiscoHints
         $this->DomainHint = Utils::extractStrings($xml, Common::NS, 'DomainHint');
         $this->GeolocationHint = Utils::extractStrings($xml, Common::NS, 'GeolocationHint');
 
+        /** @var \DOMElement $node */
         foreach (Utils::xpQuery($xml, "./*[namespace-uri()!='".Common::NS."']") as $node) {
             $this->children[] = new Chunk($node);
         }

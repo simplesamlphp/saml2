@@ -117,6 +117,7 @@ class RoleDescriptor extends SignedElementHelper
         $this->Extensions = Extensions::getList($xml);
 
         foreach (Utils::xpQuery($xml, './saml_metadata:KeyDescriptor') as $kd) {
+            /** @var \DOMElement $kd */
             $this->KeyDescriptor[] = new KeyDescriptor($kd);
         }
 
@@ -124,10 +125,12 @@ class RoleDescriptor extends SignedElementHelper
         if (count($organization) > 1) {
             throw new \Exception('More than one Organization in the entity.');
         } elseif (!empty($organization)) {
+            /** @var \DOMElement $organization[0] */
             $this->Organization = new Organization($organization[0]);
         }
 
         foreach (Utils::xpQuery($xml, './saml_metadata:ContactPerson') as $cp) {
+            /** @var \DOMElement $cp */
             $this->ContactPerson[] = new ContactPerson($cp);
         }
     }

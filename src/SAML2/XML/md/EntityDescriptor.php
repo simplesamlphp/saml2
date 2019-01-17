@@ -20,30 +20,16 @@ class EntityDescriptor extends SignedElementHelper
     /**
      * The entityID this EntityDescriptor represents.
      *
-     * @var string
+     * @var string|null
      */
-    public $entityID;
+    private $entityID = null;
 
     /**
      * The ID of this element.
      *
      * @var string|null
      */
-    public $ID = null;
-
-    /**
-     * How long this element is valid, as a unix timestamp.
-     *
-     * @var int|null
-     */
-    public $validUntil = null;
-
-    /**
-     * The length of time this element can be cached, as string.
-     *
-     * @var string|null
-     */
-    public $cacheDuration = null;
+    private $ID = null;
 
     /**
      * Extensions on this element.
@@ -202,10 +188,10 @@ class EntityDescriptor extends SignedElementHelper
 
     /**
      * Set the value of the entityID-property
-     * @param string|null $entityId
+     * @param string $entityId
      * @return void
      */
-    public function setEntityID(string $entityId = null)
+    public function setEntityID(string $entityId)
     {
         $this->entityID = $entityId;
     }

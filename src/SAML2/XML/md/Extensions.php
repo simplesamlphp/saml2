@@ -57,6 +57,7 @@ class Extensions
             ],
         ];
 
+        /** @var \DOMElement $node */
         foreach (Utils::xpQuery($parent, './saml_metadata:Extensions/*') as $node) {
             if (array_key_exists($node->namespaceURI, $supported) &&
                 array_key_exists($node->localName, $supported[$node->namespaceURI])

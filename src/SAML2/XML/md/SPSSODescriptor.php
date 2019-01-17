@@ -62,10 +62,12 @@ class SPSSODescriptor extends SSODescriptorType
         $this->AuthnRequestsSigned = Utils::parseBoolean($xml, 'AuthnRequestsSigned', null);
         $this->WantAssertionsSigned = Utils::parseBoolean($xml, 'WantAssertionsSigned', null);
 
+        /** @var \DOMElement $ep */
         foreach (Utils::xpQuery($xml, './saml_metadata:AssertionConsumerService') as $ep) {
             $this->AssertionConsumerService[] = new IndexedEndpointType($ep);
         }
 
+        /** @var \DOMElement $acs */
         foreach (Utils::xpQuery($xml, './saml_metadata:AttributeConsumingService') as $acs) {
             $this->AttributeConsumingService[] = new AttributeConsumingService($acs);
         }

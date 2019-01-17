@@ -83,20 +83,24 @@ class IDPSSODescriptor extends SSODescriptorType
 
         $this->WantAuthnRequestsSigned = Utils::parseBoolean($xml, 'WantAuthnRequestsSigned', null);
 
+        /** @var \DOMElement $ep */
         foreach (Utils::xpQuery($xml, './saml_metadata:SingleSignOnService') as $ep) {
             $this->SingleSignOnService[] = new EndpointType($ep);
         }
 
+        /** @var \DOMElement $ep */
         foreach (Utils::xpQuery($xml, './saml_metadata:NameIDMappingService') as $ep) {
             $this->NameIDMappingService[] = new EndpointType($ep);
         }
 
+        /** @var \DOMElement $ep */
         foreach (Utils::xpQuery($xml, './saml_metadata:AssertionIDRequestService') as $ep) {
             $this->AssertionIDRequestService[] = new EndpointType($ep);
         }
 
         $this->AttributeProfile = Utils::extractStrings($xml, Constants::NS_MD, 'AttributeProfile');
 
+        /** @var \DOMElement $a */
         foreach (Utils::xpQuery($xml, './saml_assertion:Attribute') as $a) {
             $this->Attribute[] = new Attribute($a);
         }

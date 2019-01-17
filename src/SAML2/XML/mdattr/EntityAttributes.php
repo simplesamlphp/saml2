@@ -44,6 +44,7 @@ class EntityAttributes
             return;
         }
 
+        /** @var \DOMElement $node */
         foreach (Utils::xpQuery($xml, './saml_assertion:Attribute|./saml_assertion:Assertion') as $node) {
             if ($node->localName === 'Attribute') {
                 $this->children[] = new Attribute($node);

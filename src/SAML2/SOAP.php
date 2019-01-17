@@ -18,7 +18,7 @@ class SOAP extends Binding
     /**
      * @param Message $message
      * @throws \Exception
-     * @return string|bool The XML or false on error
+     * @return string|false The XML or false on error
      */
     public function getOutputToSend(Message $message)
     {
@@ -81,9 +81,12 @@ SOAP;
         header('Content-Type: text/xml', true);
 
         $xml = $this->getOutputToSend($message);
-        Utils::getContainer()->debugMessage($xml, 'out');
-        echo $xml;
+        if ($xml !== false) {
+            Utils::getContainer()->debugMessage($xml, 'out');
+            echo $xml;
+        }
 
+        // DOMDocument::saveXML() returned false. Something is seriously wrong here. Not much we can do.
         exit(0);
     }
 
@@ -98,20 +101,21 @@ SOAP;
     {
         $postText = $this->getInputStream();
 
-        if (empty($postText)) {
+        if ($postText === false) {
             throw new \Exception('Invalid message received to AssertionConsumerService endpoint.');
         }
 
         $document = DOMDocumentFactory::fromString($postText);
         $xml = $document->firstChild;
         Utils::getContainer()->debugMessage($document->documentElement, 'in');
+        /** @var \DOMElement[] $results */
         $results = Utils::xpQuery($xml, '/soap-env:Envelope/soap-env:Body/*[1]');
 
         return Message::fromXML($results[0]);
     }
 
     /**
-     * @return string|bool
+     * @return string|false
      */
     protected function getInputStream()
     {

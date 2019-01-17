@@ -65,14 +65,17 @@ abstract class SSODescriptorType extends RoleDescriptor
             return;
         }
 
+        /** @var \DOMElement $ep */
         foreach (Utils::xpQuery($xml, './saml_metadata:ArtifactResolutionService') as $ep) {
             $this->addArtifactResolutionService(new IndexedEndpointType($ep));
         }
 
+        /** @var \DOMElement $ep */
         foreach (Utils::xpQuery($xml, './saml_metadata:SingleLogoutService') as $ep) {
             $this->addSingleLogoutService(new EndpointType($ep));
         }
 
+        /** @var \DOMElement $ep */
         foreach (Utils::xpQuery($xml, './saml_metadata:ManageNameIDService') as $ep) {
             $this->addManageNameIDService(new EndpointType($ep));
         }

@@ -83,6 +83,7 @@ class UIInfo
         $this->InformationURL = Utils::extractLocalizedStrings($xml, Common::NS, 'InformationURL');
         $this->PrivacyStatementURL = Utils::extractLocalizedStrings($xml, Common::NS, 'PrivacyStatementURL');
 
+        /** @var \DOMElement $node */
         foreach (Utils::xpQuery($xml, './*') as $node) {
             if ($node->namespaceURI === Common::NS) {
                 switch ($node->localName) {

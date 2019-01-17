@@ -28,7 +28,7 @@ class Utils
     /**
      * Check the Signature in a XML element.
      *
-     * This function expects the XML element to contain a Signature-element
+     * This function expects the XML element to contain a Signature element
      * which contains a reference to the XML-element. This is common for both
      * messages and assertions.
      *
@@ -42,7 +42,7 @@ class Utils
      *
      * @param \DOMElement $root The element which should be validated.
      * @throws \Exception
-     * @return array|bool An array with information about the Signature-element.
+     * @return array|false An array with information about the Signature element.
      */
     public static function validateElement(\DOMElement $root)
     {
@@ -53,8 +53,9 @@ class Utils
         $objXMLSecDSig->idKeys[] = 'ID';
 
         /* Locate the XMLDSig Signature element to be used. */
+        /** @var \DOMElement[] $signatureElement */
         $signatureElement = self::xpQuery($root, './ds:Signature');
-        if (count($signatureElement) === 0) {
+        if (empty($signatureElement)) {
             /* We don't have a signature element ot validate. */
 
             return false;
@@ -154,7 +155,7 @@ class Utils
      *
      * An exception is thrown if we are unable to validate the signature.
      *
-     * @param array $info The information returned by the validateElement()-function.
+     * @param array $info The information returned by the validateElement() function.
      * @param XMLSecurityKey $key The publickey that should validate the Signature object.
      * @return void
      * @throws \Exception
@@ -167,6 +168,7 @@ class Utils
         /** @var XMLSecurityDSig $objXMLSecDSig */
         $objXMLSecDSig = $info['Signature'];
 
+        /** @var \DOMElement[] $sigMethod */
         $sigMethod = self::xpQuery($objXMLSecDSig->sigNode, './ds:SignedInfo/ds:SignatureMethod');
         if (empty($sigMethod)) {
             throw new \Exception('Missing SignatureMethod element.');
@@ -193,7 +195,7 @@ class Utils
      *
      * @param \DOMNode $node  The XML node.
      * @param string $query The query.
-     * @return \DOMElement[] Array with matching DOM nodes.
+     * @return \DOMNode[] Array with matching DOM nodes.
      */
     public static function xpQuery(\DOMNode $node, string $query) : array
     {
@@ -299,7 +301,7 @@ class Utils
 
 
     /**
-     * Insert a Signature-node.
+     * Insert a Signature node.
      *
      * @param XMLSecurityKey $key The key we should use to sign the message.
      * @param array $certificates The certificates we should add to the signature node.
@@ -357,7 +359,7 @@ class Utils
      * @param array &$blacklist Blacklisted decryption algorithms.
      * @return \DOMElement The decrypted element.
      * @throws \Exception
-     * @return \DOMElement     The decrypted element.
+     * @return \DOMElement The decrypted element.
      */
     private static function doDecryptElement(\DOMElement $encryptedData, XMLSecurityKey $inputKey, array &$blacklist) : \DOMElement
     {

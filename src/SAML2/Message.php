@@ -52,12 +52,12 @@ abstract class Message implements SignedElement
      *
      * @var string|null
      */
-    private $destination;
+    private $destination = null;
 
     /**
      * The destination URL of this message if it is known.
      *
-     * @var string|null
+     * @var string
      */
     private $consent = Constants::CONSENT_UNSPECIFIED;
 
@@ -66,14 +66,14 @@ abstract class Message implements SignedElement
      *
      * @var \SAML2\XML\saml\Issuer|null
      */
-    private $issuer;
+    private $issuer = null;
 
     /**
      * The RelayState associated with this message.
      *
      * @var string|null
      */
-    private $relayState;
+    private $relayState = null;
 
     /**
      * The \DOMDocument we are currently building.
@@ -116,7 +116,8 @@ abstract class Message implements SignedElement
     /**
      * @var null|string
      */
-    private $signatureMethod;
+    private $signatureMethod = null;
+
 
 
     /**
@@ -129,8 +130,8 @@ abstract class Message implements SignedElement
      * If no XML element is given, the message is initialized with suitable
      * default values.
      *
-     * @param string           $tagName The tag name of the root element
-     * @param \DOMElement|null $xml     The input message
+     * @param string $tagName The tag name of the root element
+     * @param \DOMElement|null $xml The input message
      *
      * @throws \Exception
      */
@@ -192,8 +193,11 @@ abstract class Message implements SignedElement
     private function validateSignature(\DOMElement $xml)
     {
         try {
-            /** @var null|\DOMAttr $signatureMethod */
+            /** @var \DOMAttr[] $signatureMethod */
             $signatureMethod = Utils::xpQuery($xml, './ds:Signature/ds:SignedInfo/ds:SignatureMethod/@Algorithm');
+            if (empty($signatureMethod)) {
+                throw new \Exception('No Algorithm specified in signature.');
+            }
 
             $sig = Utils::validateElement($xml);
 
@@ -219,7 +223,7 @@ abstract class Message implements SignedElement
      * check the signature against the one included in the query string.
      *
      * @param callable $function The function which should be called
-     * @param mixed    $data     The data that should be included as the first parameter to the function
+     * @param mixed $data The data that should be included as the first parameter to the function
      * @return void
      */
     public function addValidator(callable $function, $data)
@@ -379,7 +383,7 @@ abstract class Message implements SignedElement
     /**
      * Set the issuer of this message.
      *
-     * @param \SAML2\XML\saml\Issuer|null $issuer The new issuer of this message
+     * @param \SAML2\XML\saml\Issuer $issuer The new issuer of this message
      * @return void
      */
     public function setIssuer(\SAML2\XML\saml\Issuer $issuer = null)
@@ -430,6 +434,9 @@ abstract class Message implements SignedElement
      */
     public function toUnsignedXML() : \DOMElement
     {
+        if ($this->issuer === null) {
+            throw new \Exception('Cannot convert Assertion to XML without an Issuer set.');
+        }
         $this->document = DOMDocumentFactory::create();
 
         $root = $this->document->createElementNS(Constants::NS_SAMLP, 'samlp:'.$this->tagName);
@@ -446,7 +453,7 @@ abstract class Message implements SignedElement
         if ($this->destination !== null) {
             $root->setAttribute('Destination', $this->destination);
         }
-        if ($this->consent !== null && $this->consent !== Constants::CONSENT_UNSPECIFIED) {
+        if ($this->consent !== Constants::CONSENT_UNSPECIFIED) {
             $root->setAttribute('Consent', $this->consent);
         }
 
@@ -454,9 +461,7 @@ abstract class Message implements SignedElement
             $this->issuer->toXML($root);
         }
 
-        if (!empty($this->extensions)) {
-            Extensions::addList($root, $this->extensions);
-        }
+        Extensions::addList($root, $this->extensions);
 
         return $root;
     }

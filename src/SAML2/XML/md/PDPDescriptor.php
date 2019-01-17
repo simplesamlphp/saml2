@@ -58,6 +58,7 @@ class PDPDescriptor extends RoleDescriptor
             return;
         }
 
+        /** @var \DOMElement $ep */
         foreach (Utils::xpQuery($xml, './saml_metadata:AuthzService') as $ep) {
             $this->AuthzService[] = new EndpointType($ep);
         }
@@ -65,6 +66,7 @@ class PDPDescriptor extends RoleDescriptor
             throw new \Exception('Must have at least one AuthzService in PDPDescriptor.');
         }
 
+        /** @var \DOMElement $ep */
         foreach (Utils::xpQuery($xml, './saml_metadata:AssertionIDRequestService') as $ep) {
             $this->AssertionIDRequestService[] = new EndpointType($ep);
         }

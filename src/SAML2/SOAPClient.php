@@ -155,6 +155,7 @@ class SOAPClient
             throw new \Exception($soapfault);
         }
         //Extract the message from the response
+        /** @var \DOMElement[] $samlresponse */
         $samlresponse = Utils::xpQuery($dom->firstChild, '/soap-env:Envelope/soap-env:Body/*[1]');
         $samlresponse = Message::fromXML($samlresponse[0]);
 

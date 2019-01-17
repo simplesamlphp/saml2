@@ -78,6 +78,7 @@ class EntitiesDescriptor extends SignedElementHelper
 
         $this->Extensions = Extensions::getList($xml);
 
+        /** @var \DOMElement $node */
         foreach (Utils::xpQuery($xml, './saml_metadata:EntityDescriptor|./saml_metadata:EntitiesDescriptor') as $node) {
             if ($node->localName === 'EntityDescriptor') {
                 $this->children[] = new EntityDescriptor($node);
