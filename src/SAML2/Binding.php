@@ -15,8 +15,10 @@ abstract class Binding
      * The destination of messages.
      *
      * This can be null, in which case the destination in the message is used.
+     * @var string|null
      */
-    protected $destination;
+    protected $destination = null;
+
 
 
     /**
@@ -110,7 +112,7 @@ abstract class Binding
     /**
      * Retrieve the destination of a message.
      *
-     * @return string|null $destination  The destination the message will be delivered to.
+     * @return string|null $destination The destination the message will be delivered to.
      */
     public function getDestination()
     {

@@ -71,7 +71,7 @@ class SignedElementHelper implements SignedElement
         try {
             $sig = Utils::validateElement($xml);
 
-            if ($sig !== false) {
+            if ($sig) {
                 $this->certificates = $sig['Certificates'];
                 $this->validators[] = [
                     'Function' => ['\SAML2\Utils', 'validateSignature'],
@@ -90,7 +90,7 @@ class SignedElementHelper implements SignedElement
      * This function is used for custom validation extensions
      *
      * @param callable $function The function which should be called.
-     * @param mixed    $data     The data that should be included as the first parameter to the function.
+     * @param mixed $data The data that should be included as the first parameter to the function.
      * @return void
      */
     public function addValidator(callable $function, $data)
@@ -110,6 +110,7 @@ class SignedElementHelper implements SignedElement
      * validation fails.
      *
      * @param  XMLSecurityKey $key The key we should check against.
+     * @return bool True on success, false when we don't have a signature.
      * @throws \Exception
      * @return bool        true on success, false when we don't have a signature.
      */

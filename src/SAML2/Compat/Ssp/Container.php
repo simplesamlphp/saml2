@@ -49,7 +49,7 @@ class Container extends AbstractContainer
      * {@inheritdoc}
      * @return void
      */
-    public function debugMessage(\DOMElement $message, string $type)
+    public function debugMessage($message, string $type)
     {
         \SimpleSAML\Utils\XML::debugSAMLMessage($message, $type);
     }
@@ -76,5 +76,26 @@ class Container extends AbstractContainer
     public function postRedirect(string $url, array $data = [])
     {
         \SimpleSAML\Utils\HTTP::submitPOSTData($url, $data);
+    }
+
+
+    /**
+     * {@inheritdoc}
+     */
+    public function getTempDir()
+    {
+        return \SimpleSAML\Utils\System::getTempDir();
+    }
+
+
+    /**
+     * {@inheritdoc}
+     */
+    public function writeFile(string $filename, string $data, int $mode = null)
+    {
+        if ($mode === null) {
+            $mode = 0600;
+        }
+        \SimpleSAML\Utils\System::writeFile($filename, $data, $mode);
     }
 }

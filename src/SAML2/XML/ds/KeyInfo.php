@@ -49,7 +49,7 @@ class KeyInfo
             $this->Id = $xml->getAttribute('Id');
         }
 
-        for ($n = $xml->firstChild; $n instanceof \DOMNode; $n = $n->nextSibling) {
+        foreach ($xml->childNodes as $n) {
             if (!($n instanceof \DOMElement)) {
                 continue;
             }

@@ -22,16 +22,16 @@ abstract class SubjectQuery extends Request
     /**
      * The NameId of the subject in the query.
      *
-     * @var \SAML2\XML\saml\NameID
+     * @var \SAML2\XML\saml\NameID|null
      */
-    private $nameId;
+    private $nameId = null;
 
 
     /**
      * Constructor for SAML 2 subject query messages.
      *
-     * @param string          $tagName The tag name of the root element.
-     * @param \DOMElement|null $xml     The input message.
+     * @param string $tagName The tag name of the root element.
+     * @param \DOMElement|null $xml The input message.
      */
     protected function __construct(string $tagName, \DOMElement $xml = null)
     {
@@ -49,6 +49,7 @@ abstract class SubjectQuery extends Request
      * Parse subject in query.
      *
      * @param \DOMElement $xml The SubjectQuery XML element.
+     * @return void
      * @throws \Exception
      * @return void
      */
@@ -56,7 +57,6 @@ abstract class SubjectQuery extends Request
     {
         $subject = Utils::xpQuery($xml, './saml_assertion:Subject');
         if (empty($subject)) {
-            /* No Subject node. */
             throw new \Exception('Missing subject in subject query.');
         } elseif (count($subject) > 1) {
             throw new \Exception('More than one <saml:Subject> in subject query.');
@@ -104,6 +104,9 @@ abstract class SubjectQuery extends Request
      */
     public function toUnsignedXML() : \DOMElement
     {
+        if ($this->nameId === null) {
+            throw new \Exception('Cannot convert SubjectQuery to XML without a NameID set.');
+        }
         $root = parent::toUnsignedXML();
 
         $subject = $root->ownerDocument->createElementNS(Constants::NS_SAML, 'saml:Subject');

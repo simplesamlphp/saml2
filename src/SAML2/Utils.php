@@ -40,7 +40,7 @@ class Utils
      * an array will be returned. This array contains the information required to
      * check the signature against a public key.
      *
-     * @param  \DOMElement  $root The element which should be validated.
+     * @param \DOMElement $root The element which should be validated.
      * @throws \Exception
      * @return array|bool An array with information about the Signature-element.
      */
@@ -109,10 +109,9 @@ class Utils
     /**
      * Helper function to convert a XMLSecurityKey to the correct algorithm.
      *
-     * @param  XMLSecurityKey $key       The key.
-     * @param  string         $algorithm The desired algorithm.
-     * @param  string         $type      Public or private key, defaults to public.
-     * @throws \Exception
+     * @param XMLSecurityKey $key The key.
+     * @param string $algorithm The desired algorithm.
+     * @param string $type Public or private key, defaults to public.
      * @return XMLSecurityKey The new key.
      */
     public static function castKey(XMLSecurityKey $key, string $algorithm, string $type = null) : XMLSecurityKey
@@ -155,8 +154,9 @@ class Utils
      *
      * An exception is thrown if we are unable to validate the signature.
      *
-     * @param array          $info The information returned by the validateElement()-function.
-     * @param XMLSecurityKey $key  The publickey that should validate the Signature object.
+     * @param array $info The information returned by the validateElement()-function.
+     * @param XMLSecurityKey $key The publickey that should validate the Signature object.
+     * @return void
      * @throws \Exception
      * @return void
      */
@@ -191,9 +191,9 @@ class Utils
     /**
      * Do an XPath query on an XML node.
      *
-     * @param  \DOMNode $node  The XML node.
-     * @param  string  $query The query.
-     * @return \DOMElement[]    Array with matching DOM nodes.
+     * @param \DOMNode $node  The XML node.
+     * @param string $query The query.
+     * @return \DOMElement[] Array with matching DOM nodes.
      */
     public static function xpQuery(\DOMNode $node, string $query) : array
     {
@@ -228,9 +228,9 @@ class Utils
     /**
      * Make an exact copy the specific \DOMElement.
      *
-     * @param  \DOMElement      $element The element we should copy.
-     * @param  \DOMElement|null $parent  The target parent element.
-     * @return \DOMElement      The copied element.
+     * @param \DOMElement $element The element we should copy.
+     * @param \DOMElement|null $parent The target parent element.
+     * @return \DOMElement The copied element.
      */
     public static function copyElement(\DOMElement $element, \DOMElement $parent = null) : \DOMElement
     {
@@ -241,7 +241,7 @@ class Utils
         }
 
         $namespaces = [];
-        for ($e = $element; $e !== null; $e = $e->parentNode) {
+        for ($e = $element; $e instanceof \DOMNode; $e = $e->parentNode) {
             foreach (Utils::xpQuery($e, './namespace::*') as $ns) {
                 $prefix = $ns->localName;
                 if ($prefix === 'xml' || $prefix === 'xmlns') {
@@ -273,10 +273,9 @@ class Utils
     /**
      * Parse a boolean attribute.
      *
-     * @param  \DOMElement $node          The element we should fetch the attribute from.
-     * @param  string     $attributeName The name of the attribute.
-     * @param  mixed|null $default       The value that should be returned if the attribute doesn't exist.
-     * @throws \Exception
+     * @param \DOMElement $node The element we should fetch the attribute from.
+     * @param string $attributeName The name of the attribute.
+     * @param mixed|null $default The value that should be returned if the attribute doesn't exist.
      * @return bool|mixed The value of the attribute, or $default if the attribute doesn't exist.
      */
     public static function parseBoolean(\DOMElement $node, string $attributeName, $default = null)
@@ -293,7 +292,8 @@ class Utils
             case 'true':
                 return true;
             default:
-                throw new \Exception('Invalid value of boolean attribute '.var_export($attributeName, true).': '.var_export($value, true));
+                throw new \Exception('Invalid value of boolean attribute '.var_export($attributeName, true).': '.
+                    var_export($value, true));
         }
     }
 
@@ -301,10 +301,10 @@ class Utils
     /**
      * Insert a Signature-node.
      *
-     * @param XMLSecurityKey $key           The key we should use to sign the message.
-     * @param array          $certificates  The certificates we should add to the signature node.
-     * @param \DOMElement     $root          The XML node we should sign.
-     * @param \DOMNode        $insertBefore  The XML element we should insert the signature element before.
+     * @param XMLSecurityKey $key The key we should use to sign the message.
+     * @param array $certificates The certificates we should add to the signature node.
+     * @param \DOMElement $root The XML node we should sign.
+     * @param \DOMNode $insertBefore  The XML element we should insert the signature element before.
      * @return void
      */
     public static function insertSignature(
@@ -352,9 +352,10 @@ class Utils
      *
      * This is an internal helper function.
      *
-     * @param  \DOMElement     $encryptedData The encrypted data.
-     * @param  XMLSecurityKey $inputKey      The decryption key.
-     * @param  array          &$blacklist    Blacklisted decryption algorithms.
+     * @param \DOMElement $encryptedData The encrypted data.
+     * @param XMLSecurityKey $inputKey The decryption key.
+     * @param array &$blacklist Blacklisted decryption algorithms.
+     * @return \DOMElement The decrypted element.
      * @throws \Exception
      * @return \DOMElement     The decrypted element.
      */
@@ -412,12 +413,15 @@ class Utils
                 /* To protect against "key oracle" attacks, we need to be able to create a
                  * symmetric key, and for that we need to know the key size.
                  */
-                throw new \Exception('Unknown key size for encryption algorithm: '.var_export($symmetricKey->type, true));
+                throw new \Exception(
+                    'Unknown key size for encryption algorithm: '.var_export($symmetricKey->type, true)
+                );
             }
 
             try {
+                /** @var string $key */
                 $key = $encKey->decryptKey($symmetricKeyInfo);
-                if (strlen($key) != $keySize) {
+                if (strlen($key) !== $keySize) {
                     throw new \Exception(
                         'Unexpected key size ('.strval(strlen($key)*8).'bits) for encryption algorithm: '.
                         var_export($symmetricKey->type, true)
@@ -426,12 +430,16 @@ class Utils
             } catch (\Exception $e) {
                 /* We failed to decrypt this key. Log it, and substitute a "random" key. */
                 Utils::getContainer()->getLogger()->error('Failed to decrypt symmetric key: '.$e->getMessage());
-                /* Create a replacement key, so that it looks like we fail in the same way as if the key was correctly padded. */
+                /* Create a replacement key, so that it looks like we fail in the same way as if the key was correctly
+                 * padded. */
 
                 /* We base the symmetric key on the encrypted key and private key, so that we always behave the
                  * same way for a given input key.
                  */
                 $encryptedKey = $encKey->getCipherValue();
+                if ($encryptedKey === null) {
+                    throw new \Exception('No CipherValue available in the encrypted element.');
+                }
                 $pkey = openssl_pkey_get_details($symmetricKeyInfo->key);
                 $pkey = sha1(serialize($pkey), true);
                 $key = sha1($encryptedKey.$pkey, true);
@@ -482,12 +490,8 @@ class Utils
         }
 
         $decryptedElement = $newDoc->firstChild->firstChild;
-        if ($decryptedElement === null) {
-            throw new \Exception('Missing encrypted element.');
-        }
-
         if (!($decryptedElement instanceof \DOMElement)) {
-            throw new \Exception('Decrypted element was not actually a \DOMElement.');
+            throw new \Exception('Missing decrypted element or it was not actually a DOMElement.');
         }
 
         return $decryptedElement;
@@ -497,11 +501,11 @@ class Utils
     /**
      * Decrypt an encrypted element.
      *
-     * @param  \DOMElement     $encryptedData The encrypted data.
-     * @param  XMLSecurityKey $inputKey      The decryption key.
-     * @param  array          $blacklist     Blacklisted decryption algorithms.
+     * @param \DOMElement $encryptedData The encrypted data.
+     * @param XMLSecurityKey $inputKey The decryption key.
+     * @param array $blacklist Blacklisted decryption algorithms.
      * @throws \Exception
-     * @return \DOMElement     The decrypted element.
+     * @return \DOMElement The decrypted element.
      */
     public static function decryptElement(\DOMElement $encryptedData, XMLSecurityKey $inputKey, array $blacklist = []) : \DOMElement
     {
@@ -521,15 +525,15 @@ class Utils
     /**
      * Extract localized strings from a set of nodes.
      *
-     * @param  \DOMElement $parent       The element that contains the localized strings.
-     * @param  string     $namespaceURI The namespace URI the localized strings should have.
-     * @param  string     $localName    The localName of the localized strings.
-     * @return array      Localized strings.
+     * @param \DOMElement $parent The element that contains the localized strings.
+     * @param string $namespaceURI The namespace URI the localized strings should have.
+     * @param string $localName The localName of the localized strings.
+     * @return array Localized strings.
      */
     public static function extractLocalizedStrings(\DOMElement $parent, string $namespaceURI, string $localName) : array
     {
         $ret = [];
-        for ($node = $parent->firstChild; $node !== null; $node = $node->nextSibling) {
+        foreach ($parent->childNodes as $node) {
             if ($node->namespaceURI !== $namespaceURI || $node->localName !== $localName) {
                 continue;
             }
@@ -549,15 +553,15 @@ class Utils
     /**
      * Extract strings from a set of nodes.
      *
-     * @param  \DOMElement $parent       The element that contains the localized strings.
-     * @param  string     $namespaceURI The namespace URI the string elements should have.
-     * @param  string     $localName    The localName of the string elements.
-     * @return array      The string values of the various nodes.
+     * @param \DOMElement $parent The element that contains the localized strings.
+     * @param string $namespaceURI The namespace URI the string elements should have.
+     * @param string $localName The localName of the string elements.
+     * @return array The string values of the various nodes.
      */
     public static function extractStrings(\DOMElement $parent, string $namespaceURI, string $localName) : array
     {
         $ret = [];
-        for ($node = $parent->firstChild; $node !== null; $node = $node->nextSibling) {
+        foreach ($parent->childNodes as $node) {
             if ($node->namespaceURI !== $namespaceURI || $node->localName !== $localName) {
                 continue;
             }
@@ -571,10 +575,10 @@ class Utils
     /**
      * Append string element.
      *
-     * @param  \DOMElement $parent    The parent element we should append the new nodes to.
-     * @param  string     $namespace The namespace of the created element.
-     * @param  string     $name      The name of the created element.
-     * @param  string     $value     The value of the element.
+     * @param \DOMElement $parent The parent element we should append the new nodes to.
+     * @param string $namespace The namespace of the created element.
+     * @param string $name The name of the created element.
+     * @param string $value The value of the element.
      * @return \DOMElement The generated element.
      */
     public static function addString(
@@ -596,15 +600,20 @@ class Utils
     /**
      * Append string elements.
      *
-     * @param \DOMElement $parent    The parent element we should append the new nodes to.
-     * @param string     $namespace The namespace of the created elements
-     * @param string     $name      The name of the created elements
-     * @param bool       $localized Whether the strings are localized, and should include the xml:lang attribute.
-     * @param array      $values    The values we should create the elements from.
+     * @param \DOMElement $parent The parent element we should append the new nodes to.
+     * @param string $namespace The namespace of the created elements
+     * @param string $name The name of the created elements
+     * @param bool $localized Whether the strings are localized, and should include the xml:lang attribute.
+     * @param array $values The values we should create the elements from.
      * @return void
      */
-    public static function addStrings(\DOMElement $parent, string $namespace, string $name, bool $localized, array $values)
-    {
+    public static function addStrings(
+        \DOMElement $parent,
+        string $namespace,
+        string $name,
+        bool $localized,
+        array $values
+    ) {
         $doc = $parent->ownerDocument;
 
         foreach ($values as $index => $value) {
@@ -621,7 +630,7 @@ class Utils
     /**
      * Create a KeyDescriptor with the given certificate.
      *
-     * @param  string                     $x509Data The certificate, as a base64-encoded DER data.
+     * @param string $x509Data The certificate, as a base64-encoded DER data.
      * @return \SAML2\XML\md\KeyDescriptor The keydescriptor.
      */
     public static function createKeyDescriptor(string $x509Data) : KeyDescriptor

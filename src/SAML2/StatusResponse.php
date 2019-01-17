@@ -47,8 +47,8 @@ abstract class StatusResponse extends Message
     /**
      * Constructor for SAML 2 response messages.
      *
-     * @param string          $tagName The tag name of the root element.
-     * @param \DOMElement|null $xml     The input message.
+     * @param string $tagName The tag name of the root element.
+     * @param \DOMElement|null $xml The input message.
      * @throws \Exception
      */
     protected function __construct(string $tagName, \DOMElement $xml = null)
@@ -104,11 +104,7 @@ abstract class StatusResponse extends Message
     {
         Assert::keyExists($this->status, "Code");
 
-        if ($this->status['Code'] === Constants::STATUS_SUCCESS) {
-            return true;
-        }
-
-        return false;
+        return $this->status['Code'] === Constants::STATUS_SUCCESS;
     }
 
 
@@ -154,7 +150,7 @@ abstract class StatusResponse extends Message
      */
     public function setStatus(array $status)
     {
-        Assert::keyExists($status, "Code");
+        Assert::keyExists($status, "Code", 'Cannot set status without a Code key in the array.');
 
         $this->status = $status;
         if (!array_key_exists('SubCode', $status)) {

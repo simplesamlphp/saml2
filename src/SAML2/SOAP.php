@@ -17,6 +17,7 @@ class SOAP extends Binding
 {
     /**
      * @param Message $message
+     * @throws \Exception
      * @return string|bool The XML or false on error
      */
     public function getOutputToSend(Message $message)
@@ -37,10 +38,15 @@ SOAP;
         // containing another message (e.g. a Response), however in the ECP
         // profile, this is the Response itself.
         if ($message instanceof Response) {
+            /** @var \DOMElement $header */
             $header = $doc->getElementsByTagNameNS(Constants::NS_SOAP, 'Header')->item(0);
 
-            $response = new ECPResponse;
-            $response->setAssertionConsumerServiceURL($this->getDestination() ?: $message->getDestination());
+            $response = new ECPResponse();
+            $destination = $this->destination ?: $message->getDestination();
+            if ($destination === null) {
+                throw new \Exception('No destination available for SOAP message.');
+            }
+            $response->setAssertionConsumerServiceURL($destination);
 
             $response->toXML($header);
 
@@ -53,6 +59,7 @@ SOAP;
             // See Section 2.3.6.1
         }
 
+        /** @var \DOMElement $body */
         $body = $doc->getElementsByTagNameNs(Constants::NS_SOAP, 'Body')->item(0);
 
         $body->appendChild($doc->importNode($message->toSignedXML(), true));
@@ -97,7 +104,7 @@ SOAP;
 
         $document = DOMDocumentFactory::fromString($postText);
         $xml = $document->firstChild;
-        Utils::getContainer()->debugMessage($xml, 'in');
+        Utils::getContainer()->debugMessage($document->documentElement, 'in');
         $results = Utils::xpQuery($xml, '/soap-env:Envelope/soap-env:Body/*[1]');
 
         return Message::fromXML($results[0]);

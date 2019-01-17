@@ -245,7 +245,7 @@ class SubjectConfirmationData
         if ($xml->hasAttribute('Address')) {
             $this->setAddress($xml->getAttribute('Address'));
         }
-        for ($n = $xml->firstChild; $n instanceof \DOMNode; $n = $n->nextSibling) {
+        foreach ($xml->childNodes as $n) {
             if (!($n instanceof \DOMElement)) {
                 continue;
             }

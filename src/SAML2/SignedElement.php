@@ -14,13 +14,30 @@ use RobRichards\XMLSecLibs\XMLSecurityKey;
 interface SignedElement
 {
     /**
+     * The private key we should use to sign the message.
+     *
+     * The private key can be null, in which case the message is sent unsigned.
+     *
+     * @var XMLSecurityKey|null
+     */
+    protected $signatureKey;
+
+    /**
+     * List of certificates that should be included in the message.
+     *
+     * @var array
+     */
+    protected $certificates;
+
+
+    /**
      * Validate this element against a public key.
      *
      * If no signature is present, false is returned. If a signature is present,
      * but cannot be verified, an exception will be thrown.
      *
      * @param  XMLSecurityKey $key The key we should check against.
-     * @return bool        true if successful, false if we don't have a signature that can be verified.
+     * @return bool True if successful, false if we don't have a signature that can be verified.
      */
     public function validate(XMLSecurityKey $key) : bool;
 

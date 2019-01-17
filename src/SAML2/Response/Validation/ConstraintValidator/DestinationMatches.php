@@ -9,7 +9,7 @@ use SAML2\Response;
 use SAML2\Response\Validation\ConstraintValidator;
 use SAML2\Response\Validation\Result;
 
-class DestinationMatches implements
+final class DestinationMatches implements
     ConstraintValidator
 {
     /**
@@ -18,7 +18,8 @@ class DestinationMatches implements
     private $expectedDestination;
 
     /**
-     * Constructor for DestinationMatches
+     * DestinationMatches constructor.
+     *
      * @param Destination $destination
      */
     public function __construct(Destination $destination)
@@ -35,6 +36,9 @@ class DestinationMatches implements
     public function validate(Response $response, Result $result)
     {
         $destination = $response->getDestination();
+        if ($destination === null) {
+            throw new \Exception('No destination set in the response.');
+        }
         if (!$this->expectedDestination->equals(new Destination($destination))) {
             $result->addError(sprintf(
                 'Destination in response "%s" does not match the expected destination "%s"',

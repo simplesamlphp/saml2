@@ -5,7 +5,6 @@ declare(strict_types=1);
 namespace SAML2;
 
 use SAML2\Message;
-use SAML2\SOAP;
 use SAML2\ArtifactResolve;
 
 use Exception;
@@ -100,7 +99,7 @@ XML
 
 SOAP;
 
-        $soap = new SOAP;
+        $soap = new SOAP();
         $output = $soap->getOutputToSend($message);
 
         $this->assertEquals($expected, $output);

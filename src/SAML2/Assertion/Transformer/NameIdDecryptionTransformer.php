@@ -13,7 +13,7 @@ use SAML2\Configuration\IdentityProviderAware;
 use SAML2\Configuration\ServiceProvider;
 use SAML2\Configuration\ServiceProviderAware;
 
-class NameIdDecryptionTransformer implements
+final class NameIdDecryptionTransformer implements
     Transformer,
     IdentityProviderAware,
     ServiceProviderAware
@@ -56,6 +56,8 @@ class NameIdDecryptionTransformer implements
 
     /**
      * @param Assertion $assertion
+     *
+     * @throws \Exception
      * @return Assertion
      */
     public function transform(Assertion $assertion) : Assertion

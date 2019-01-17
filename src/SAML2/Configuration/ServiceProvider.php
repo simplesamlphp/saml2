@@ -69,8 +69,11 @@ class ServiceProvider extends ArrayAdapter implements
      * @param bool $required
      * @return mixed|null
      */
-    public function getPrivateKey(string $name, bool $required = false)
+    public function getPrivateKey(string $name, bool $required = null)
     {
+        if ($required === null) {
+            $required = false;
+        }
         $privateKeys = $this->get('privateKeys');
         $key         = array_filter($privateKeys, function (PrivateKey $key) use ($name) {
             return $key->getName() === $name;

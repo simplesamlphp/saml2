@@ -128,7 +128,7 @@ class EntityDescriptor extends SignedElementHelper
 
         $this->Extensions = Extensions::getList($xml);
 
-        for ($node = $xml->firstChild; $node instanceof \DOMNode; $node = $node->nextSibling) {
+        foreach ($xml->childNodes as $node) {
             if (!($node instanceof \DOMElement)) {
                 continue;
             }
