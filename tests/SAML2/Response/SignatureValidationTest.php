@@ -49,11 +49,7 @@ class SignatureValidationTest extends \Mockery\Adapter\Phpunit\MockeryTestCase
     public function setUp()
     {
         $this->assertionProcessorBuilder = \Mockery::mock('alias:SAML2\Assertion\ProcessorBuilder');
-<<<<<<< HEAD
-        $this->assertionProcessor = \Mockery::mock(\SAML2\Assertion\Processor::class);
-=======
         $this->assertionProcessor = \Mockery::mock(Assertion\Processor::class);
->>>>>>> Remove PSR-0 autoloader
         $this->assertionProcessorBuilder
             ->shouldReceive('build')
             ->once()

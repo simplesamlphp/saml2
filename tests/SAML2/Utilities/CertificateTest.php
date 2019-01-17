@@ -2,14 +2,10 @@
 
 namespace SAML2\Utilities;
 
-<<<<<<< HEAD
-class CertificateTest extends \PHPUnit\Framework\TestCase
-=======
 use SAML2\CertificatesMock;
 use SAML2\Utilities\Certificate;
 
-class CertificateTest extends \PHPUnit_Framework_TestCase
->>>>>>> Remove PSR-0 autoloader
+class CertificateTest extends \PHPUnit\Framework\TestCase
 {
     /**
      * @group utilities

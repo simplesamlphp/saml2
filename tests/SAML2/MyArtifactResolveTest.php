@@ -7,8 +7,6 @@ use SAML2\DOMDocumentFactory;
 use SAML2\ArtifactResolve;
 use SAML2\Utils;
 
-use PHPUnit_Framework_TestCase;
-
 class ArtifactResolveTest extends \PHPUnit\Framework\TestCase
 {
     public function testMarshalling()
