@@ -36,13 +36,13 @@ class SignedElementHelper implements SignedElement
      */
     private $validators;
 
-
     /**
      * The length of time this element can be cached, as string.
      *
      * @var string|null
      */
     public $cacheDuration;
+
 
     /**
      * Initialize the helper class.
@@ -222,6 +222,7 @@ class SignedElementHelper implements SignedElement
         return $this->validUntil;
     }
 
+
     /**
      * Set the value of the validUntil-property
      * @param int|null $validUntil
@@ -230,6 +231,7 @@ class SignedElementHelper implements SignedElement
     {
         $this->validUntil = $validUntil;
     }
+
 
     /**
      * Collect the value of the cacheDuration-property
@@ -240,6 +242,7 @@ class SignedElementHelper implements SignedElement
         return $this->cacheDuration;
     }
 
+
     /**
      * Set the value of the cacheDuration-property
      * @param string|null $cacheDuration
@@ -248,6 +251,7 @@ class SignedElementHelper implements SignedElement
     {
         $this->cacheDuration = $cacheDuration;
     }
+
 
     /**
      * Sign the given XML element.

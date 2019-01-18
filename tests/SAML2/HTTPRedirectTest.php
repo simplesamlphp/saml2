@@ -25,8 +25,10 @@ class HTTPRedirectTest extends \Mockery\Adapter\Phpunit\MockeryTestCase
         $hr = new HTTPRedirect();
         $request = $hr->receive();
         $this->assertInstanceOf(Request::class, $request);
-        $issuer = $request->getIssuer();
-        $this->assertEquals('https://profile.surfconext.nl/simplesaml/module.php/saml/sp/metadata.php/default-sp', $issuer);
+        $this->assertEquals(
+            'https://profile.surfconext.nl/simplesaml/module.php/saml/sp/metadata.php/default-sp',
+            $request->getIssuer()->getValue()
+        );
     }
 
 
@@ -43,7 +45,7 @@ class HTTPRedirectTest extends \Mockery\Adapter\Phpunit\MockeryTestCase
         $request = $hr->receive();
         $this->assertInstanceOf(Response::class, $request);
         $issuer = $request->getIssuer();
-        $this->assertEquals('https://engine.test.surfconext.nl/authentication/idp/metadata', $issuer);
+        $this->assertEquals('https://engine.test.surfconext.nl/authentication/idp/metadata', $issuer->getValue());
     }
 
 

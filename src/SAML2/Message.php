@@ -4,6 +4,7 @@ namespace SAML2;
 
 use RobRichards\XMLSecLibs\XMLSecurityKey;
 use SAML2\Utilities\Temporal;
+use SAML2\XML\saml\Issuer;
 use SAML2\XML\samlp\Extensions;
 
 /**
@@ -61,7 +62,7 @@ abstract class Message implements SignedElement
     /**
      * The entity id of the issuer of this message, or null if unknown.
      *
-     * @var string|\SAML2\XML\saml\Issuer|null
+     * @var \SAML2\XML\saml\Issuer|null
      */
     private $issuer;
 
@@ -164,12 +165,10 @@ abstract class Message implements SignedElement
             $this->consent = $xml->getAttribute('Consent');
         }
 
+        /** @var \DOMElement[] $issuer */
         $issuer = Utils::xpQuery($xml, './saml_assertion:Issuer');
         if (!empty($issuer)) {
-            $this->issuer = new XML\saml\Issuer($issuer[0]);
-            if ($this->issuer->Format === Constants::NAMEID_ENTITY) {
-                $this->issuer = $this->issuer->value;
-            }
+            $this->issuer = new Issuer($issuer[0]);
         }
 
         $this->validateSignature($xml);
@@ -367,22 +366,18 @@ abstract class Message implements SignedElement
     /**
      * Retrieve the issuer if this message.
      *
-     * @return string|\SAML2\XML\saml\Issuer|null The issuer of this message, or NULL if no issuer is given
+     * @return \SAML2\XML\saml\Issuer|null The issuer of this message, or NULL if no issuer is given
      */
     public function getIssuer()
     {
-        if (is_string($this->issuer) || $this->issuer instanceof XML\saml\Issuer) {
-            return $this->issuer;
-        }
-
-        return null;
+        return $this->issuer;
     }
 
 
     /**
      * Set the issuer of this message.
      *
-     * @param string|\SAML2\XML\saml\Issuer|null $issuer The new issuer of this message
+     * @param \SAML2\XML\saml\Issuer|null $issuer The new issuer of this message
      * @return void
      */
     public function setIssuer(\SAML2\XML\saml\Issuer $issuer = null)
@@ -454,11 +449,7 @@ abstract class Message implements SignedElement
         }
 
         if ($this->issuer !== null) {
-            if (is_string($this->issuer)) {
-                Utils::addString($root, Constants::NS_SAML, 'saml:Issuer', $this->issuer);
-            } elseif ($this->issuer instanceof XML\saml\Issuer) {
-                $this->issuer->toXML($root);
-            }
+            $this->issuer->toXML($root);
         }
 
         if (!empty($this->extensions)) {

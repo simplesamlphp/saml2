@@ -51,6 +51,6 @@ XML;
         $this->assertInstanceOf(ArtifactResolve::class, $ar);
         $this->assertEquals($artifact, $ar->getArtifact());
         $this->assertEquals($id, $ar->getId());
-        $this->assertEquals($issuer->value, $ar->getIssuer());
+        $this->assertEquals($issuer->getValue(), $ar->getIssuer()->getValue());
     }
 }

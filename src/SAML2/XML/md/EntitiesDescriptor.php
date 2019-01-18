@@ -155,7 +155,7 @@ class EntitiesDescriptor extends SignedElementHelper
      * @param int|null $validUntil
      * @return void
      */
-    public function setValidUntil($validUntil = null)
+    public function setValidUntil(int $validUntil = null)
     {
         assert(is_int($validUntil) || is_null($validUntil));
         $this->validUntil = $validUntil;
@@ -177,7 +177,7 @@ class EntitiesDescriptor extends SignedElementHelper
      * @param string|null $cacheDuration
      * @return void
      */
-    public function setCacheDuration($cacheDuration = null)
+    public function setCacheDuration(string $cacheDuration = null)
     {
         assert(is_string($cacheDuration) || is_null($cacheDuration));
         $this->cacheDuration = $cacheDuration;

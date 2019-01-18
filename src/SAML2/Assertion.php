@@ -7,6 +7,7 @@ use RobRichards\XMLSecLibs\XMLSecurityKey;
 use SAML2\Exception\RuntimeException;
 use SAML2\Utilities\Temporal;
 use SAML2\XML\Chunk;
+use SAML2\XML\saml\Issuer;
 use SAML2\XML\saml\SubjectConfirmation;
 
 /**
@@ -36,7 +37,7 @@ class Assertion implements SignedElement
      * If the issuer's format is \SAML2\Constants::NAMEID_ENTITY, this property will just take the issuer's string
      * value.
      *
-     * @var string|\SAML2\XML\saml\Issuer
+     * @var \SAML2\XML\saml\Issuer
      */
     private $issuer;
 
@@ -292,9 +293,6 @@ class Assertion implements SignedElement
             throw new \Exception('Missing <saml:Issuer> in assertion.');
         }
         $this->issuer = new XML\saml\Issuer($issuer[0]);
-        if ($this->issuer->Format === Constants::NAMEID_ENTITY) {
-            $this->issuer = $this->issuer->value;
-        }
 
         $this->parseSubject($xml);
         $this->parseConditions($xml);
@@ -728,7 +726,7 @@ class Assertion implements SignedElement
     /**
      * Retrieve the issuer if this assertion.
      *
-     * @return string|\SAML2\XML\saml\Issuer The issuer of this assertion.
+     * @return \SAML2\XML\saml\Issuer The issuer of this assertion.
      */
     public function getIssuer()
     {
@@ -739,7 +737,7 @@ class Assertion implements SignedElement
     /**
      * Set the issuer of this message.
      *
-     * @param string|\SAML2\XML\saml\Issuer $issuer The new issuer of this assertion.
+     * @param \SAML2\XML\saml\Issuer $issuer The new issuer of this assertion.
      * @return void
      */
     public function setIssuer(\SAML2\XML\saml\Issuer $issuer)
@@ -1180,7 +1178,7 @@ class Assertion implements SignedElement
     /**
      * Set the authentication context declaration reference.
      *
-     * @param string|\SAML2\XML\Chunk $authnContextDeclRef
+     * @param string $authnContextDeclRef
      * @throws \Exception
      * @return void
      */
@@ -1202,7 +1200,7 @@ class Assertion implements SignedElement
      *
      * The URI reference MAY directly resolve into an XML document containing the referenced declaration.
      *
-     * @return string
+     * @return string|null
      */
     public function getAuthnContextDeclRef()
     {
@@ -1492,11 +1490,7 @@ class Assertion implements SignedElement
         $root->setAttribute('Version', '2.0');
         $root->setAttribute('IssueInstant', gmdate('Y-m-d\TH:i:s\Z', $this->issueInstant));
 
-        if (is_string($this->issuer)) {
-            $issuer = Utils::addString($root, Constants::NS_SAML, 'saml:Issuer', $this->issuer);
-        } elseif ($this->issuer instanceof XML\saml\Issuer) {
-            $issuer = $this->issuer->toXML($root);
-        }
+        $issuer = $this->issuer->toXML($root);
 
         $this->addSubject($root);
         $this->addConditions($root);
