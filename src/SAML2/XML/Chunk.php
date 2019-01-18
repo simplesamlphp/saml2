@@ -120,29 +120,6 @@ class Chunk implements \Serializable
 
 
     /**
-     * Get this \DOMElement.
-     *
-     * @return \DOMElement This element.
-     */
-    public function getXml() : \DOMElement
-    {
-        return $this->xml;
-    }
-
-
-    /**
-     * Set the value of the xml-property
-     *
-     * @param \DOMelement $xml
-     * @return void
-     */
-    private function setXml(\DOMElement $xml)
-    {
-        $this->xml = $xml;
-    }
-
-
-    /**
      * Serialize this XML chunk.
      *
      * @return string The serialized chunk.
