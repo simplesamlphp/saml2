@@ -36,29 +36,25 @@ class ArrayCollectionTest extends \PHPUnit\Framework\TestCase
     {
         $arc = new ArrayCollection(['aap', 'aap', 'noot', 'mies']);
 
-        $removed = $arc->remove('noot');
-        $this->assertEquals('noot', $removed);
+        $arc->remove('noot');
         $this->assertEquals($arc->get(0), 'aap');
         $this->assertEquals($arc->get(1), 'aap');
         $this->assertEquals($arc->get(2), null);
         $this->assertEquals($arc->get(3), 'mies');
 
-        $removed = $arc->remove('wim');
-        $this->assertFalse($removed);
+        $arc->remove('wim');
         $this->assertEquals($arc->get(0), 'aap');
         $this->assertEquals($arc->get(1), 'aap');
         $this->assertEquals($arc->get(2), null);
         $this->assertEquals($arc->get(3), 'mies');
 
-        $removed = $arc->remove('aap');
-        $this->assertEquals('aap', $removed);
+        $arc->remove('aap');
         $this->assertEquals($arc->get(0), null);
         $this->assertEquals($arc->get(1), 'aap');
         $this->assertEquals($arc->get(2), null);
         $this->assertEquals($arc->get(3), 'mies');
 
-        $removed = $arc->remove('aap');
-        $this->assertEquals('aap', $removed);
+        $arc->remove('aap');
         $this->assertEquals($arc->get(0), null);
         $this->assertEquals($arc->get(1), null);
         $this->assertEquals($arc->get(2), null);
