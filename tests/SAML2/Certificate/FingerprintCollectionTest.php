@@ -2,7 +2,7 @@
 
 namespace SAML2\Certificate;
 
-class FingerprintCollectionTest extends \PHPUnit_Framework_TestCase
+class FingerprintCollectionTest extends \PHPUnit\Framework\TestCase
 {
     /**
      * @group certificate
@@ -38,11 +38,10 @@ class FingerprintCollectionTest extends \PHPUnit_Framework_TestCase
     /**
      * @group certificate
      * @test
-     *
-     * @expectedException \SAML2\Exception\InvalidArgumentException
      */
     public function fails_on_invalid_fingerprint_data()
     {
+        $this->expectException(\SAML2\Exception\InvalidArgumentException::class);
         $fpc = new FingerprintCollection();
         $fpc->add('string');
     }

@@ -2,16 +2,16 @@
 
 namespace SAML2\Certificate;
 
-class KeyCollectionTest extends \PHPUnit_Framework_TestCase
+class KeyCollectionTest extends \Mockery\Adapter\Phpunit\MockeryTestCase
 {
     /**
      * @group certificate
      *
      * @test
-     * @expectedException \SAML2\Exception\InvalidArgumentException
      */
     public function testKeyCollectionAddWrongType()
     {
+        $this->expectException(\SAML2\Exception\InvalidArgumentException::class);
         $kc = new KeyCollection();
         $kc->add("not a key, just a string");
     }

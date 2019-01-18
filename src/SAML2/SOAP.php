@@ -66,8 +66,6 @@ SOAP;
      *
      * @param \SAML2\Message $message The message we should send.
      * @return void
-     *
-     * @SuppressWarnings(PHPMD.ExitExpression)
      */
     public function send(Message $message)
     {

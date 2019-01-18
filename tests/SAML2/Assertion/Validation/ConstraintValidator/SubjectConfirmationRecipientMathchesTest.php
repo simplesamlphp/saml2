@@ -5,8 +5,7 @@ namespace SAML2\Assertion\Validation\ConstraintValidator;
 use SAML2\Assertion\Validation\Result;
 use SAML2\Configuration\Destination;
 
-class SubjectConfirmationRecipientMathchesTest extends
-    \PHPUnit_Framework_TestCase
+class SubjectConfirmationRecipientMathchesTest extends \Mockery\Adapter\Phpunit\MockeryTestCase
 {
     /**
      * @var \Mockery\MockInterface

@@ -5,7 +5,7 @@ namespace SAML2\Response\Validation\ConstraintValidator;
 use SAML2\Configuration\Destination;
 use SAML2\Response\Validation\Result;
 
-class DestinationMatchesTest extends \PHPUnit_Framework_TestCase
+class DestinationMatchesTest extends \Mockery\Adapter\Phpunit\MockeryTestCase
 {
     /**
      * @var \Mockery\MockInterface

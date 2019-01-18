@@ -32,7 +32,7 @@ class LogoutRequest extends Request
     /**
      * The name identifier of the session that should be terminated.
      *
-     * @var \SAML2\XML\saml\NameID
+     * @var \SAML2\XML\saml\NameID|array
      */
     private $nameId;
 
@@ -202,7 +202,7 @@ class LogoutRequest extends Request
      */
     public function setNameId($nameId)
     {
-        assert(is_array($nameId) || $nameId instanceof XML\saml\NameID);
+        assert(is_null($nameId) || is_array($nameId) || $nameId instanceof XML\saml\NameID);
 
         if (is_array($nameId)) {
             $nameId = XML\saml\NameID::fromArray($nameId);

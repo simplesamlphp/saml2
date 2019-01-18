@@ -3,14 +3,10 @@
 namespace SAML2\XML\ecp;
 
 use stdClass;
-use DOMDocument;
-use DOMElement;
 
 use SAML2\Constants;
 
-use PHPUnit_Framework_TestCase;
-
-class ResponseTest extends PHPUnit_Framework_TestCase
+class ResponseTest extends \PHPUnit\Framework\TestCase
 {
     public function testConstructorWithoutXML()
     {
@@ -22,14 +18,14 @@ class ResponseTest extends PHPUnit_Framework_TestCase
 
     public function testToXMLReturnsResponse()
     {
-        $doc = new DOMDocument;
+        $doc = new \DOMDocument;
         $element = $doc->createElement('Foobar');
 
         $response = new Response;
         $response->setAssertionConsumerServiceURL('https://example.com/ACS');
         $return = $response->toXML($element);
 
-        $this->assertInstanceOf('DOMElement', $return);
+        $this->assertInstanceOf(\DOMElement::class, $return);
         $this->assertEquals('ecp:Response', $return->tagName);
     }
 
@@ -38,7 +34,7 @@ class ResponseTest extends PHPUnit_Framework_TestCase
     {
         $acs = 'https://example.com/ACS';
 
-        $doc = new DOMDocument;
+        $doc = new \DOMDocument;
         $element = $doc->createElement('Foobar');
 
         $response = new Response;
@@ -56,7 +52,7 @@ class ResponseTest extends PHPUnit_Framework_TestCase
 
     public function testToXMLResponseAppended()
     {
-        $doc = new DOMDocument;
+        $doc = new \DOMDocument;
         $element = $doc->createElement('Foobar');
 
         $response = new Response;

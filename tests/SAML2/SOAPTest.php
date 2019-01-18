@@ -2,16 +2,11 @@
 
 namespace SAML2;
 
-use Exception;
-use DOMDocument;
-
-use PHPUnit_Framework_TestCase;
-
-class SOAPTest extends PHPUnit_Framework_TestCase
+class SOAPTest extends \Mockery\Adapter\Phpunit\MockeryTestCase
 {
     public function testRequestParsingEmptyMessage()
     {
-        $this->setExpectedException('Exception', 'Invalid message received');
+        $this->expectException(\Exception::class, 'Invalid message received');
 
         $stub = $this->getStubWithInput('');
         $stub->receive();
@@ -42,7 +37,7 @@ SOAP
 
         $message = $stub->receive();
 
-        $this->assertInstanceOf('SAML2\\ArtifactResolve', $message);
+        $this->assertInstanceOf(ArtifactResolve::class, $message);
         $this->assertEquals($artifact, $message->getArtifact());
         $this->assertEquals($id, $message->getId());
         $this->assertEquals($issuer, $message->getIssuer());
@@ -53,7 +48,7 @@ SOAP
 
     public function testSendArtifactResponse()
     {
-        $doc = new DOMDocument;
+        $doc = new \DOMDocument;
         $doc->loadXML(<<<XML
 <samlp:ArtifactResponse
   xmlns:samlp="urn:oasis:names:tc:SAML:2.0:protocol"
@@ -105,7 +100,7 @@ SOAP;
 
     public function testSendResponse()
     {
-        $doc = new DOMDocument();
+        $doc = new \DOMDocument();
         $doc->loadXML(<<<XML
 <samlp:Response xmlns:samlp="urn:oasis:names:tc:SAML:2.0:protocol" xmlns:saml="urn:oasis:names:tc:SAML:2.0:assertion" ID="_8e8dc5f69a98cc4c1ff3427e5ce34606fd672f91e6" Version="2.0" IssueInstant="2014-07-17T01:01:48Z" Destination="http://sp.example.com/demo1/index.php?acs" InResponseTo="ONELOGIN_4fee3b046395c4e751011e97f8900b5273d56685">
   <saml:Issuer>http://idp.example.com/metadata.php</saml:Issuer>
@@ -167,11 +162,10 @@ SOAP;
 
     private function getStubWithInput($input)
     {
-        $stub = $this->getMock('SAML2\\SOAP', ['getInputStream']);
+        $stub = $this->getMockBuilder(SOAP::class)->setMethods(['getInputStream'])->getMock();
         $stub->expects($this->once())
              ->method('getInputStream')
-             ->will($this->returnValue($input));
-
+             ->willReturn($input);
         return $stub;
     }
 }

@@ -2,7 +2,7 @@
 
 <project name="Simplesamlphp Saml2" default="build">
     <target name="build"
-            depends="prepare,composer-run-install,php-lint-ci,phpmd-ci,phpcs-ci,phpcpd-ci,php-security-checker,phpunit-ci"/>
+            depends="prepare,composer-run-install,php-lint-ci,phpcs-ci,phpcpd-ci,php-security-checker,phpunit-ci"/>
 
     <target name="clean" description="Cleanup build artifacts">
         <delete dir="build/artifacts/coverage"/>
@@ -81,29 +81,6 @@
             <arg value="security:check"/>
             <arg value="--verbose"/>
             <arg value="composer.lock"/>
-        </exec>
-    </target>
-
-    <target name="phpmd" description="Perform project mess detection using PHPMD and print human readable output. Intended for usage on the command line before committing.">
-        <exec executable="vendor/bin/phpmd" failonerror="true">
-            <arg path="src"/>
-            <arg value="text"/>
-            <arg value="tools/phpmd/ruleset.xml"/>
-            <!-- These classes are already messes, exclude them for now... -->
-            <arg value="--exclude" />
-            <arg value="${basedir}/src/SAML2/AuthnRequest.php,${basedir}/src/SAML2/Assertion.php,${basedir}/src/SAML2/SOAP.php,${basedir}/src/SAML2/SOAPClient.php,${basedir}/src/SAML2/Utils.php,${basedir}/src/SAML2/XML/md/EntityDescriptor.php,${basedir}/src/SAML2/XML/md/RoleDescriptor.php,${basedir}/src/SAML2/XML/saml/SubjectConfirmationData.php,${basedir}/src/SAML2/Message.php" />
-        </exec>
-    </target>
-
-    <target name="phpmd-ci"
-            description="Perform project mess detection using PHPMD creating a log file for the continuous integration server">
-        <exec executable="vendor/bin/phpmd" failonerror="true">
-            <arg path="src"/>
-            <arg value="text"/>
-            <arg value="tools/phpmd/ruleset.xml"/>
-            <!-- These classes are already messes, exclude them for now... -->
-            <arg value="--exclude" />
-            <arg value="${basedir}/src/SAML2/AuthnRequest.php,${basedir}/src/SAML2/Assertion.php,${basedir}/src/SAML2/SOAP.php,${basedir}/src/SAML2/SOAPClient.php,${basedir}/src/SAML2/Utils.php,${basedir}/src/SAML2/XML/md/EntityDescriptor.php,${basedir}/src/SAML2/XML/md/RoleDescriptor.php,${basedir}/src/SAML2/XML/saml/SubjectConfirmationData.php" />
         </exec>
     </target>
 

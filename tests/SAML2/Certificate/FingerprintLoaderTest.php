@@ -5,7 +5,7 @@ namespace SAML2\Certificate;
 use SAML2\Certificate\Stub\ImplementsToString;
 use SAML2\Configuration\ArrayAdapter;
 
-class FingerprintLoaderTest extends \PHPUnit_Framework_TestCase
+class FingerprintLoaderTest extends \Mockery\Adapter\Phpunit\MockeryTestCase
 {
     /**
      * @var \SAML2\Certificate\FingerprintLoader
@@ -30,10 +30,10 @@ class FingerprintLoaderTest extends \PHPUnit_Framework_TestCase
      * @test
      *
      * @dataProvider invalidConfigurationProvider
-     * @expectedException \SAML2\Exception\InvalidArgumentException
      */
     public function it_does_not_accept_invalid_configuration_values($configurationValue)
     {
+        $this->expectException(\SAML2\Exception\InvalidArgumentException::class);
         $this->configurationMock
             ->shouldReceive('getCertificateFingerprints')
             ->once()
@@ -48,10 +48,10 @@ class FingerprintLoaderTest extends \PHPUnit_Framework_TestCase
      * @test
      *
      * @dataProvider invalidConfigurationProvider
-     * @expectedException \SAML2\Exception\InvalidArgumentException
      */
     public function it_correctly_parses_arrays_and_traversables($configurationValue)
     {
+        $this->expectException(\SAML2\Exception\InvalidArgumentException::class);
         $this->configurationMock
             ->shouldReceive('getCertificateFingerprints')
             ->once()

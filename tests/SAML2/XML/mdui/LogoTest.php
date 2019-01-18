@@ -8,7 +8,7 @@ use SAML2\Utils;
 /**
  * Class \SAML2\XML\mdrpi\LogoTest
  */
-class LogoTest extends \PHPUnit_Framework_TestCase
+class LogoTest extends \PHPUnit\Framework\TestCase
 {
     /**
      * Test creating a basic Logo element.
@@ -82,7 +82,7 @@ XML
 XML
         );
 
-        $this->setExpectedException('Exception', 'Missing url value for Logo');
+        $this->expectException(\Exception::class, 'Missing url value for Logo');
         $logo = new Logo($document->firstChild);
     }
 
@@ -97,7 +97,7 @@ XML
 XML
         );
 
-        $this->setExpectedException('Exception', 'Missing width of Logo');
+        $this->expectException(\Exception::class, 'Missing width of Logo');
         $logo = new Logo($document->firstChild);
     }
 
@@ -112,7 +112,7 @@ XML
 XML
         );
 
-        $this->setExpectedException('Exception', 'Missing height of Logo');
+        $this->expectException(\Exception::class, 'Missing height of Logo');
         $logo = new Logo($document->firstChild);
     }
 }

@@ -95,7 +95,6 @@ class HTTPRedirect extends Binding
      * @return \SAML2\Message The received message.
      *
      * NPath is currently too high but solving that just moves code around.
-     * @SuppressWarnings(PHPMD.NPathComplexity)
      */
     public function receive()
     {

@@ -13,8 +13,6 @@ use \SimpleSAML\Store;
  *
  * @author  Danny Bollaert, UGent AS. <danny.bollaert@ugent.be>
  * @package SimpleSAMLphp
- *
- * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
  */
 class HTTPArtifact extends Binding
 {

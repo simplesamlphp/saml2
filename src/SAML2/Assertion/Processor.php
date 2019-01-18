@@ -15,9 +15,6 @@ use SAML2\Response\Exception\UnencryptedAssertionFoundException;
 use SAML2\Signature\Validator;
 use SAML2\Utilities\ArrayCollection;
 
-/**
- * @SuppressWarnings(PHPMD.CouplingBetweenObjects) - due to all the named exceptions
- */
 class Processor
 {
     /**

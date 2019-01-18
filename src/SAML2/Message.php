@@ -11,10 +11,6 @@ use SAML2\XML\samlp\Extensions;
  *
  * Implements what is common between the samlp:RequestAbstractType and
  * samlp:StatusResponseType element types.
- *
- *
- * @SuppressWarnings(PHPMD.ExcessiveClassComplexity)
- * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
  */
 abstract class Message implements SignedElement
 {

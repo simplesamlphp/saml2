@@ -2,27 +2,27 @@
 
 namespace SAML2;
 
-class DOMDocumentFactoryTest extends \PHPUnit_Framework_TestCase
+class DOMDocumentFactoryTest extends \PHPUnit\Framework\TestCase
 {
     /**
      * @param mixed $argument
      *
      * @group domdocument
      * @dataProvider nonStringProvider
-     * @expectedException \SAML2\Exception\InvalidArgumentException
      */
     public function testOnlyAStringIsAcceptedByFronString($argument)
     {
+        $this->expectException(Exception\InvalidArgumentException::class);
         DOMDocumentFactory::fromString($argument);
     }
 
 
     /**
      * @group domdocument
-     * @expectedException \SAML2\Exception\RuntimeException
      */
     public function testNotXmlStringRaisesAnException()
     {
+        $this->expectException(Exception\UnparseableXmlException::class);
         DOMDocumentFactory::fromString('this is not xml');
     }
 
@@ -45,10 +45,10 @@ class DOMDocumentFactoryTest extends \PHPUnit_Framework_TestCase
      *
      * @group        domdocument
      * @dataProvider nonStringProvider
-     * @expectedException \SAML2\Exception\InvalidArgumentException
      */
     public function testOnlyAStringIsAcceptedByFromFile($argument)
     {
+        $this->expectException(Exception\InvalidArgumentException::class);
         DOMDocumentFactory::fromFile($argument);
     }
 
@@ -56,24 +56,22 @@ class DOMDocumentFactoryTest extends \PHPUnit_Framework_TestCase
     /**
      * @group        domdocument
      * @dataProvider nonStringProvider
-     * @expectedException \SAML2\Exception\InvalidArgumentException
      */
     public function testFileThatDoesNotExistIsNotAccepted()
     {
+        $this->expectException(Exception\InvalidArgumentException::class);
         $filename = 'DoesNotExist.ext';
-
         DOMDocumentFactory::fromFile($filename);
     }
 
 
     /**
      * @group domdocument
-     * @expectedException \SAML2\Exception\RuntimeException
      */
     public function testFileThatDoesNotContainXMLCannotBeLoaded()
     {
         $file = realpath(dirname(__FILE__)) . DIRECTORY_SEPARATOR . 'domdocument_invalid_xml.xml';
-
+        $this->expectException(Exception\RuntimeException::class);
         DOMDocumentFactory::fromFile($file);
     }
 
@@ -93,47 +91,43 @@ class DOMDocumentFactoryTest extends \PHPUnit_Framework_TestCase
 
     /**
      * @group                    domdocument
-     * @expectedException        \SAML2\Exception\RuntimeException
-     * @expectedExceptionMessage Dangerous XML detected, DOCTYPE nodes are not allowed in the XML body
      */
     public function testFileThatContainsDocTypeIsNotAccepted()
     {
         $file = realpath(dirname(__FILE__)) . DIRECTORY_SEPARATOR . 'domdocument_doctype.xml';
+        $this->expectException(Exception\RuntimeException::class, 'Dangerous XML detected, DOCTYPE nodes are not allowed in the XML body');
         DOMDocumentFactory::fromFile($file);
     }
 
 
     /**
      * @group                    domdocument
-     * @expectedException        \SAML2\Exception\RuntimeException
-     * @expectedExceptionMessage Dangerous XML detected, DOCTYPE nodes are not allowed in the XML body
      */
     public function testStringThatContainsDocTypeIsNotAccepted()
     {
         $xml = '<!DOCTYPE foo [<!ELEMENT foo ANY > <!ENTITY xxe SYSTEM "file:///dev/random" >]><foo />';
+        $this->expectException(Exception\RuntimeException::class, 'Dangerous XML detected, DOCTYPE nodes are not allowed in the XML body');
         DOMDocumentFactory::fromString($xml);
     }
 
 
     /**
      * @group                    domdocument
-     * @expectedException        \SAML2\Exception\RuntimeException
-     * @expectedExceptionMessage does not have content
      */
     public function testEmptyFileIsNotValid()
     {
         $file = realpath(dirname(__FILE__)) . DIRECTORY_SEPARATOR . 'domdocument_empty.xml';
+        $this->expectException(Exception\RuntimeException::class, 'does not have content');
         DOMDocumentFactory::fromFile($file);
     }
 
 
     /**
      * @group                    domdocument
-     * @expectedException        \SAML2\Exception\InvalidArgumentException
-     * @expectedExceptionMessage Invalid Argument type: "non-empty string" expected, "string" given
      */
     public function testEmptyStringIsNotValid()
     {
+        $this->expectException(Exception\InvalidArgumentException::class, 'Invalid Argument type: "non-empty string" expected, "string" given');
         DOMDocumentFactory::fromString("");
     }
 

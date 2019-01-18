@@ -2,7 +2,7 @@
 
 namespace SAML2\Certificate;
 
-class PrivateKeyTest extends \PHPUnit_Framework_TestCase
+class PrivateKeyTest extends \Mockery\Adapter\Phpunit\MockeryTestCase
 {
     /**
      * @group certificate
@@ -25,10 +25,10 @@ class PrivateKeyTest extends \PHPUnit_Framework_TestCase
      * @group certificate
      *
      * @test
-     * @expectedException \SAML2\Exception\InvalidArgumentException
      */
     public function test_create_from_nonstring_throws_exception()
     {
+        $this->expectException(\SAML2\Exception\InvalidArgumentException::class);
         PrivateKey::create(0);
     }
 
@@ -37,10 +37,10 @@ class PrivateKeyTest extends \PHPUnit_Framework_TestCase
      * @group certificate
      *
      * @test
-     * @expectedException \SAML2\Exception\InvalidArgumentException
      */
     public function test_create_with_nonstring_password_throws_exception()
     {
+        $this->expectException(\SAML2\Exception\InvalidArgumentException::class);
         $key = \SAML2\CertificatesMock::getPlainPrivateKey();
         PrivateKey::create($key, 1);
     }

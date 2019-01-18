@@ -2,7 +2,7 @@
 
 namespace SAML2\Certificate;
 
-class FingerprintTest extends \PHPUnit_Framework_TestCase
+class FingerprintTest extends \Mockery\Adapter\Phpunit\MockeryTestCase
 {
     /**
      * @var \SAML2\Certificate\Fingerprint
@@ -13,11 +13,10 @@ class FingerprintTest extends \PHPUnit_Framework_TestCase
     /**
      * @group certificate
      * @test
-     *
-     * @expectedException \SAML2\Exception\InvalidArgumentException
      */
     public function fails_on_invalid_fingerprint_data()
     {
+        $this->expectException(\SAML2\Exception\InvalidArgumentException::class);
         $this->fingerprint = new Fingerprint(null);
     }
 }

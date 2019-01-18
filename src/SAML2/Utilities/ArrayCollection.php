@@ -6,8 +6,6 @@ use SAML2\Exception\RuntimeException;
 
 /**
  * Simple Array implementation of Collection.
- *
- * @SuppressWarnings(PHPMD.TooManyMethods) - it just has a large api.
  */
 class ArrayCollection implements Collection
 {

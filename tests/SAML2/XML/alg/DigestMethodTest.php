@@ -11,7 +11,7 @@ use SAML2\Utils;
  * @author Jaime Pérez Crespo, UNINETT AS <jaime.perez@uninett.no>
  * @package simplesamlphp/saml2
  */
-class DigestMethodTest extends \PHPUnit_Framework_TestCase
+class DigestMethodTest extends \PHPUnit\Framework\TestCase
 {
     public function testMarshalling()
     {
@@ -50,7 +50,7 @@ XML
 <alg:DigestMethod xmlns:alg="urn:oasis:names:tc:SAML:metadata:algsupport" />
 XML
         );
-        $this->setExpectedException('Exception', 'Missing required attribute "Algorithm"');
+        $this->expectException(\Exception::class, 'Missing required attribute "Algorithm"');
         new DigestMethod($document->firstChild);
     }
 }

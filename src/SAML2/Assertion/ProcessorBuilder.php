@@ -28,8 +28,6 @@ use SAML2\Signature\Validator;
  * Simple Builder that allows to build a new Assertion Processor.
  *
  * This is an excellent candidate for refactoring towards dependency injection
- *
- * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
  */
 class ProcessorBuilder
 {

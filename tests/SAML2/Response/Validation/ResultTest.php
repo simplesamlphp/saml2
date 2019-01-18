@@ -2,7 +2,7 @@
 
 namespace SAML2\Response\Validation;
 
-class ResultTest extends \PHPUnit_Framework_TestCase
+class ResultTest extends \PHPUnit\Framework\TestCase
 {
     /**
      * @group response-validation
@@ -24,13 +24,11 @@ class ResultTest extends \PHPUnit_Framework_TestCase
     /**
      * @group response-validation
      * @test
-     *
-     * @expectedException \SAML2\Exception\InvalidArgumentException
      */
     public function an_exception_is_thrown_when_trying_to_add_an_invalid_error()
     {
+        $this->expectException(\SAML2\Exception\InvalidArgumentException::class);
         $result = new Result();
-
         $result->addError(123);
     }
 
