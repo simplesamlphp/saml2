@@ -383,10 +383,10 @@ abstract class Message implements SignedElement
     /**
      * Set the issuer of this message.
      *
-     * @param \SAML2\XML\saml\Issuer $issuer The new issuer of this message
+     * @param \SAML2\XML\saml\Issuer|null $issuer The new issuer of this message
      * @return void
      */
-    public function setIssuer(\SAML2\XML\saml\Issuer $issuer = null)
+    public function setIssuer(Issuer $issuer = null)
     {
         $this->issuer = $issuer;
     }
@@ -434,9 +434,6 @@ abstract class Message implements SignedElement
      */
     public function toUnsignedXML() : \DOMElement
     {
-        if ($this->issuer === null) {
-            throw new \Exception('Cannot convert Assertion to XML without an Issuer set.');
-        }
         $this->document = DOMDocumentFactory::create();
 
         $root = $this->document->createElementNS(Constants::NS_SAMLP, 'samlp:'.$this->tagName);
