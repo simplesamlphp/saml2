@@ -2,6 +2,13 @@
 
 namespace SAML2;
 
+use SAML2\Binding;
+use SAML2\Constants;
+use SAML2\HTTPArtifact;
+use SAML2\HTTPPost;
+use SAML2\HTTPRedirect;
+use SAML2\SOAP;
+
 class BindingTest extends \PHPUnit\Framework\TestCase
 {
     /**

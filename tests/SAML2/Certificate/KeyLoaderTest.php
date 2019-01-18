@@ -3,6 +3,11 @@
 namespace SAML2\Certificate;
 
 use SAML2\Utilities\Certificate;
+use SAML2\Certificate\Key;
+use SAML2\Certificate\KeyLoader;
+use SAML2\Certificate\Exception\InvalidCertificateStructureException;
+use SAML2\Certificate\Exception\NoKeysFoundException;
+use SAML2\Configuration\CertificateProvider;
 
 class KeyLoaderTest extends \Mockery\Adapter\Phpunit\MockeryTestCase
 {
@@ -27,7 +32,7 @@ class KeyLoaderTest extends \Mockery\Adapter\Phpunit\MockeryTestCase
     public function setUp()
     {
         $this->keyLoader = new KeyLoader();
-        $this->configurationMock = \Mockery::mock('SAML2\Configuration\CertificateProvider');
+        $this->configurationMock = \Mockery::mock(CertificateProvider::class);
     }
 
 
@@ -109,7 +114,7 @@ class KeyLoaderTest extends \Mockery\Adapter\Phpunit\MockeryTestCase
     public function loading_a_file_with_the_wrong_format_throws_an_exception()
     {
         $filePath = dirname(__FILE__) . '/File/';
-        $this->expectException(Exception\InvalidCertificateStructureException::class);
+        $this->expectException(InvalidCertificateStructureException::class);
         $this->keyLoader->loadCertificateFile($filePath . 'not_a_key.crt');
     }
 
@@ -154,7 +159,7 @@ class KeyLoaderTest extends \Mockery\Adapter\Phpunit\MockeryTestCase
             ->once()
             ->andReturnNull();
 
-        $this->expectException(Exception\NoKeysFoundException::class);
+        $this->expectException(NoKeysFoundException::class);
         $this->keyLoader->loadKeysFromConfiguration($this->configurationMock, null, true);
     }
 
@@ -207,7 +212,7 @@ class KeyLoaderTest extends \Mockery\Adapter\Phpunit\MockeryTestCase
             ->once()
             ->andReturn($file);
 
-        $this->expectException(Exception\InvalidCertificateStructureException::class);
+        $this->expectException(InvalidCertificateStructureException::class);
         $loadedKeys = $this->keyLoader->loadKeysFromConfiguration($this->configurationMock);
     }
 }

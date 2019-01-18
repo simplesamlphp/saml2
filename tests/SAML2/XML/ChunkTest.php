@@ -5,6 +5,7 @@ namespace SAML2\XML;
 use SAML2\DOMDocumentFactory;
 use SAML2\XML\saml\Attribute;
 use SAML2\XML\saml\AttributeValue;
+use SAML2\XML\Chunk;
 
 /**
  * Class \SAML2\XML\ChunkTest
@@ -39,17 +40,6 @@ class ChunkTest extends \PHPUnit\Framework\TestCase
 
 
     /**
-     * Test the getXML() method
-     */
-    public function testChunkGetXML()
-    {
-        $xml = $this->chunk->getXML();
-        $this->assertInstanceOf('DOMElement', $xml);
-        $this->assertEquals('saml:Attribute', $xml->tagName);
-    }
-
-
-    /**
      * Test serialization and unserialization
      */
     public function testChunkSerializationLoop()
@@ -59,6 +49,6 @@ class ChunkTest extends \PHPUnit\Framework\TestCase
         $newchunk = new Chunk($document->firstChild);
         $newchunk->unserialize($ser);
 
-        $this->assertEqualXMLStructure($this->chunk->getXML(), $newchunk->getXML());
+        $this->assertEqualXMLStructure($this->chunk->xml, $newchunk->xml);
     }
 }

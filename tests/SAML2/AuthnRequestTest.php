@@ -2,6 +2,15 @@
 
 namespace SAML2;
 
+use SAML2\AuthnRequest;
+use SAML2\Constants;
+use SAML2\DOMDocumentFactory;
+use SAML2\XML\saml\Issuer;
+use SAML2\XML\saml\NameID;
+use SAML2\Utils;
+
+use DOMDocument;
+
 /**
  * Class \SAML2\AuthnRequestTest
  */
@@ -135,7 +144,10 @@ AUTHNREQUEST;
     public function testThatTheSubjectCanBeSetBySettingTheNameId()
     {
         $request = new AuthnRequest();
-        $request->setNameId(['Value' => 'user@example.org', 'Format' => Constants::NAMEID_UNSPECIFIED]);
+        $nameId = new NameID();
+        $nameId->setValue('user@example.org');
+        $nameId->setFormat(Constants::NAMEID_UNSPECIFIED);
+        $request->setNameId($nameId);
 
         $requestAsXML = $request->toUnsignedXML()->ownerDocument->saveXML();
         $expected = '<saml:Subject><saml:NameID Format="urn:oasis:names:tc:SAML:1.1:nameid-format:unspecified">user@example.org</saml:NameID></saml:Subject>';
@@ -194,7 +206,13 @@ AUTHNREQUEST;
     public function testThatAnEncryptedNameIdResultsInTheCorrectXmlStructure()
     {
         // the NameID we're going to encrypt
-        $nameId = ['Value' => md5('Arthur Dent'), 'Format' => Constants::NAMEID_ENCRYPTED];
+        $nameId = new NameID();
+        $nameId->setValue(md5('Arthur Dent'));
+        $nameId->setFormat(Constants::NAMEID_ENCRYPTED);
+
+        // the Issuer
+        $issuer = new Issuer();
+        $issuer->setValue('https://gateway.example.org/saml20/sp/metadata');
 
         // basic AuthnRequest
         $request = new AuthnRequest();
@@ -249,9 +267,13 @@ AUTHNREQUEST;
      */
     public function testIDPlistAttributes()
     {
+        // the Issuer
+        $issuer = new Issuer();
+        $issuer->setValue('https://gateway.example.org/saml20/sp/metadata');
+
         // basic AuthnRequest
         $request = new AuthnRequest();
-        $request->setIssuer('https://gateway.example.org/saml20/sp/metadata');
+        $request->setIssuer($issuer);
         $request->setDestination('https://tiqr.example.org/idp/profile/saml2/Redirect/SSO');
         $request->setIDPList([
             'Legacy1',
@@ -349,9 +371,13 @@ AUTHNREQUEST;
      */
     public function testRequesterIdIsAddedCorrectly()
     {
+        // the Issuer
+        $issuer = new Issuer();
+        $issuer->setValue('https://gateway.example.org/saml20/sp/metadata');
+
         // basic AuthnRequest
         $request = new AuthnRequest();
-        $request->setIssuer('https://gateway.example.org/saml20/sp/metadata');
+        $request->setIssuer($issuer);
         $request->setDestination('https://tiqr.example.org/idp/profile/saml2/Redirect/SSO');
         $request->setRequesterID([
             'https://engine.demo.openconext.org/authentication/sp/metadata',
@@ -418,9 +444,13 @@ AUTHNREQUEST;
      */
     public function testProxyCountIsAddedCorrectly()
     {
+        // the Issuer
+        $issuer = new Issuer();
+        $issuer->setValue('https://gateway.example.org/saml20/sp/metadata');
+
         // basic AuthnRequest
         $request = new AuthnRequest();
-        $request->setIssuer('https://gateway.example.org/saml20/sp/metadata');
+        $request->setIssuer($issuer);
         $request->setDestination('https://tiqr.example.org/idp/profile/saml2/Redirect/SSO');
         $request->setIssueInstant( Utils::xsDateTimeToTimestamp('2004-12-05T09:21:59Z'));
         $request->setProxyCount(34);
@@ -527,9 +557,13 @@ AUTHNREQUEST;
      */
     public function testSettingNameIDPolicy()
     {
+        // the Issuer
+        $issuer = new Issuer();
+        $issuer->setValue('https://gateway.example.org/saml20/sp/metadata');
+
         // basic AuthnRequest
         $request = new AuthnRequest();
-        $request->setIssuer('https://gateway.example.org/saml20/sp/metadata');
+        $request->setIssuer($issuer);
         $request->setDestination('https://tiqr.example.org/idp/profile/saml2/Redirect/SSO');
         $request->setIssueInstant( Utils::xsDateTimeToTimestamp('2004-12-05T09:21:59Z'));
 
@@ -570,9 +604,13 @@ AUTHNREQUEST;
      */
     public function testSettingNameIDPolicyFormatOnly()
     {
+        // the Issuer
+        $issuer = new Issuer();
+        $issuer->setValue('https://gateway.example.org/saml20/sp/metadata');
+
         // basic AuthnRequest
         $request = new AuthnRequest();
-        $request->setIssuer('https://gateway.example.org/saml20/sp/metadata');
+        $request->setIssuer($issuer);
         $request->setDestination('https://tiqr.example.org/idp/profile/saml2/Redirect/SSO');
         $request->setIssueInstant( Utils::xsDateTimeToTimestamp('2004-12-05T09:21:59Z'));
 
@@ -606,9 +644,13 @@ AUTHNREQUEST;
      */
     public function testSettingNameIDPolicyToIncorrectTypeAllowCreate()
     {
+        // the Issuer
+        $issuer = new Issuer();
+        $issuer->setValue('https://gateway.example.org/saml20/sp/metadata');
+
         // basic AuthnRequest
         $request = new AuthnRequest();
-        $request->setIssuer('https://gateway.example.org/saml20/sp/metadata');
+        $request->setIssuer($issuer);
         $request->setDestination('https://tiqr.example.org/idp/profile/saml2/Redirect/SSO');
 
         // AllowCreate must be a bool
@@ -623,9 +665,13 @@ AUTHNREQUEST;
      */
     public function testSettingNameIDPolicyToIncorrectTypeSPNameQualifier()
     {
+        // the Issuer
+        $issuer = new Issuer();
+        $issuer->setValue('https://gateway.example.org/saml20/sp/metadata');
+
         // basic AuthnRequest
         $request = new AuthnRequest();
-        $request->setIssuer('https://gateway.example.org/saml20/sp/metadata');
+        $request->setIssuer($issuer);
         $request->setDestination('https://tiqr.example.org/idp/profile/saml2/Redirect/SSO');
 
         // SPNameQualifier must be a string
@@ -641,9 +687,13 @@ AUTHNREQUEST;
      */
     public function testSettingNameIDPolicyToIncorrectTypeFormat()
     {
+        // the Issuer
+        $issuer = new Issuer();
+        $issuer->setValue('https://gateway.example.org/saml20/sp/metadata');
+
         // basic AuthnRequest
         $request = new AuthnRequest();
-        $request->setIssuer('https://gateway.example.org/saml20/sp/metadata');
+        $request->setIssuer($issuer);
         $request->setDestination('https://tiqr.example.org/idp/profile/saml2/Redirect/SSO');
 
         // Format must be a string
@@ -703,9 +753,13 @@ AUTHNREQUEST;
      */
     public function testSettingForceAuthnResultsInCorrectXML()
     {
+        // the Issuer
+        $issuer = new Issuer();
+        $issuer->setValue('https://gateway.example.org/saml20/sp/metadata');
+
         // basic AuthnRequest
         $request = new AuthnRequest();
-        $request->setIssuer('https://gateway.example.org/saml20/sp/metadata');
+        $request->setIssuer($issuer);
         $request->setDestination('https://tiqr.example.org/idp/profile/saml2/Redirect/SSO');
         $request->setIssueInstant( Utils::xsDateTimeToTimestamp('2004-12-05T09:21:59Z'));
 
@@ -800,9 +854,13 @@ AUTHNREQUEST;
      */
     public function testSettingIsPassiveResultsInCorrectXML()
     {
+        // the Issuer
+        $issuer = new Issuer();
+        $issuer->setValue('https://gateway.example.org/saml20/sp/metadata');
+
         // basic AuthnRequest
         $request = new AuthnRequest();
-        $request->setIssuer('https://gateway.example.org/saml20/sp/metadata');
+        $request->setIssuer($issuer);
         $request->setDestination('https://tiqr.example.org/idp/profile/saml2/Redirect/SSO');
         $request->setIssueInstant( Utils::xsDateTimeToTimestamp('2004-12-05T09:21:59Z'));
 
@@ -835,9 +893,13 @@ AUTHNREQUEST;
      */
     public function testSettingProviderNameResultsInCorrectXml()
     {
+        // the Issuer
+        $issuer = new Issuer();
+        $issuer->setValue('https://gateway.example.org/saml20/sp/metadata');
+
         // basic AuthnRequest
         $request = new AuthnRequest();
-        $request->setIssuer('https://gateway.example.org/saml20/sp/metadata');
+        $request->setIssuer($issuer);
         $request->setDestination('https://tiqr.example.org/idp/profile/saml2/Redirect/SSO');
         $request->setIssueInstant( Utils::xsDateTimeToTimestamp('2004-12-05T09:21:59Z'));
 
@@ -897,9 +959,13 @@ AUTHNREQUEST;
      */
     public function testSettingProtocolBindingAndACSUrl()
     {
+        // the Issuer
+        $issuer = new Issuer();
+        $issuer->setValue('https://sp.example.org/saml20/sp/metadata');
+
         // basic AuthnRequest
         $request = new AuthnRequest();
-        $request->setIssuer('https://sp.example.org/saml20/sp/metadata');
+        $request->setIssuer($issuer);
         $request->setDestination('https://idp.example.org/idp/profile/saml2/Redirect/SSO');
         $request->setIssueInstant(Utils::xsDateTimeToTimestamp('2004-12-05T09:21:59Z'));
 
@@ -1016,9 +1082,12 @@ AUTHNREQUEST;
      */
     public function testAudiencesAreAddedCorrectly()
     {
+        $issuer = new Issuer();
+        $issuer->setValue('https://gateway.example.org/saml20/sp/metadata');
+
         // basic AuthnRequest
         $request = new AuthnRequest();
-        $request->setIssuer('https://gateway.example.org/saml20/sp/metadata');
+        $request->setIssuer($issuer);
         $request->setDestination('https://tiqr.example.org/idp/profile/saml2/Redirect/SSO');
         $request->setAudiences(array('https://sp1.example.org', 'https://sp2.example.org'));
 

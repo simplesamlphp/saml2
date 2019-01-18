@@ -2,6 +2,13 @@
 
 namespace SAML2;
 
+use SAML2\Message;
+use SAML2\SOAP;
+use SAML2\ArtifactResolve;
+
+use Exception;
+use DOMDocument;
+
 class SOAPTest extends \Mockery\Adapter\Phpunit\MockeryTestCase
 {
     public function testRequestParsingEmptyMessage()

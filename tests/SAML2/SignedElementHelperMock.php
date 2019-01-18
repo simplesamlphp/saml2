@@ -2,6 +2,9 @@
 
 namespace SAML2;
 
+use SAML2\SignedElementHelper;
+use SAML2\DOMDocumentFactory;
+
 /**
  * Class \SAML2\SignedElementHelperMock
  */

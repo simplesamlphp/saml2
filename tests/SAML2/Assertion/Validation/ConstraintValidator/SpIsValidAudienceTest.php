@@ -2,6 +2,7 @@
 
 namespace SAML2\Assertion\Validation\ConstraintValidator;
 
+use SAML2\Assertion\Validation\ConstraintValidator\SpIsValidAudience;
 use SAML2\Assertion\Validation\Result;
 
 /**

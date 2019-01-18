@@ -2,6 +2,14 @@
 
 namespace SAML2;
 
+use SAML2\AuthnRequest;
+use SAML2\HTTPPost;
+use SAML2\Response;
+use SAML2\XML\saml\Issuer;
+
+use PHPUnit_Framework_Error_Warning;
+use PHPUnit_Framework_TestCase;
+
 class HTTPPostTest extends \Mockery\Adapter\Phpunit\MockeryTestCase
 {
     /**
@@ -75,8 +83,11 @@ class HTTPPostTest extends \Mockery\Adapter\Phpunit\MockeryTestCase
      */
     public function testSendAuthnResponse()
     {
+        $issuer  = new Issuer();
+        $issuer->setValue('testIssuer');
+
         $response = new Response();
-        $response->setIssuer('testIssuer');
+        $response->setIssuer($issuer);
         $response->setRelayState('http://example.org');
         $response->setDestination('http://example.org/login?success=yes');
         $response->setSignatureKey(CertificatesMock::getPrivateKey());

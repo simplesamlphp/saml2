@@ -38,20 +38,6 @@ class ServiceProvider extends ArrayAdapter implements
         return $this->get('certificateFile');
     }
 
-
-    /**
-     * @return mixed
-     * @deprecated Please use getCertificateData() or getCertificateFile().
-     */
-    public function getCertificateFingerprints()
-    {
-        return $this->get('certificateFingerprints');
-    }
-
-
-    /**
-     * @return mixed
-     */
     public function getEntityId()
     {
         return $this->get('entityId');

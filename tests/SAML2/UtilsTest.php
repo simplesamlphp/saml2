@@ -2,6 +2,12 @@
 
 namespace SAML2;
 
+use SAML2\XML\saml\NameID;
+use SAML2\Constants;
+use SAML2\Utils;
+use SAML2\AttributeQuery;
+use SAML2\DOMDocumentFactory;
+
 /**
  * Class \SAML2\UtilsTest
  */
@@ -12,22 +18,23 @@ class UtilsTest extends \PHPUnit\Framework\TestCase
      */
     public function testXpQuery()
     {
+        $nameId_before = new NameID();
+        $nameId_before->setValue('NameIDValue');
+        $nameId_before->setFormat('SomeNameIDFormat');
+        $nameId_before->setNameQualifier('OurNameQualifier');
+        $nameId_before->setSPNameQualifier('TheSPNameQualifier');
+
         $aq = new AttributeQuery();
-        $aq->setNameID([
-            'Value' => 'NameIDValue',
-            'Format' => 'SomeNameIDFormat',
-            'NameQualifier' => 'OurNameQualifier',
-            'SPNameQualifier' => 'TheSPNameQualifier',
-        ]);
+        $aq->setNameID($nameId_before);
 
         $xml = $aq->toUnsignedXML();
 
-        $nameID = Utils::xpQuery($xml, './saml_assertion:Subject/saml_assertion:NameID');
-        $this->assertTrue(count($nameID) === 1);
-        $this->assertEquals('SomeNameIDFormat', $nameID[0]->getAttribute("Format"));
-        $this->assertEquals('OurNameQualifier', $nameID[0]->getAttribute("NameQualifier"));
-        $this->assertEquals('TheSPNameQualifier', $nameID[0]->getAttribute("SPNameQualifier"));
-        $this->assertEquals('NameIDValue', $nameID[0]->textContent);
+        $nameId_after = Utils::xpQuery($xml, './saml_assertion:Subject/saml_assertion:NameID');
+        $this->assertTrue(count($nameId_after) === 1);
+        $this->assertEquals('SomeNameIDFormat', $nameId_after[0]->getAttribute("Format"));
+        $this->assertEquals('OurNameQualifier', $nameId_after[0]->getAttribute("NameQualifier"));
+        $this->assertEquals('TheSPNameQualifier', $nameId_after[0]->getAttribute("SPNameQualifier"));
+        $this->assertEquals('NameIDValue', $nameId_after[0]->textContent);
     }
 
 

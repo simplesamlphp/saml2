@@ -2,12 +2,20 @@
 
 namespace SAML2;
 
+use SAML2\XML\saml\Issuer;
+use SAML2\ArtifactResponse;
+use SAML2\AuthnRequest;
+use SAML2\DOMDocumentFactory;
+use SAML2\Utils;
+
 class ArtifactResponseTest extends \PHPUnit\Framework\TestCase
 {
-    public function testMashalling()
+    public function testMarshalling()
     {
-        $issuer1 = 'urn:example:issuer';
-        $issuer2 = 'urn:example:other';
+        $issuer1 = new Issuer();
+        $issuer2 = new Issuer();
+        $issuer1->setValue('urn:example:issuer');
+        $issuer2->setValue('urn:example:other');
 
         $artifactResponse = new ArtifactResponse();
         $artifactResponse->setIssuer($issuer1);
@@ -21,11 +29,11 @@ class ArtifactResponseTest extends \PHPUnit\Framework\TestCase
 
         $artifactIssuer = Utils::xpQuery($artifactResponseElement, './saml:Issuer');
         $this->assertCount(1, $artifactIssuer);
-        $this->assertEquals($issuer1, $artifactIssuer[0]->textContent);
+        $this->assertEquals($issuer1->value, $artifactIssuer[0]->textContent);
 
         $authnelement = Utils::xpQuery($artifactResponseElement, './saml_protocol:AuthnRequest/saml:Issuer');
         $this->assertCount(1, $authnelement);
-        $this->assertEquals($issuer2, $authnelement[0]->textContent);
+        $this->assertEquals($issuer2->value, $authnelement[0]->textContent);
     }
 
 
@@ -60,7 +68,7 @@ XML;
         $document = DOMDocumentFactory::fromString($xml);
         $ar = new ArtifactResponse($document->firstChild);
 
-        $this->assertInstanceOf(\SAML2\ArtifactResponse::class, $ar);
+        $this->assertInstanceOf(ArtifactResponse::class, $ar);
         $this->assertEquals(true, $ar->isSuccess());
         $this->assertEquals("_d84a49e5958803dedcff4c984c2b0d95", $ar->getId());
 

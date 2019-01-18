@@ -2,6 +2,15 @@
 
 namespace SAML2;
 
+use SAML2\DOMDocumentFactory;
+use SAML2\HTTPRedirect;
+use SAML2\AuthnRequest;
+use SAML2\Request;
+use SAML2\Response;
+use SAML2\XML\saml\Issuer;
+
+use PHPUnit_Framework_Error_Warning;
+
 class HTTPRedirectTest extends \Mockery\Adapter\Phpunit\MockeryTestCase
 {
     /**
@@ -15,7 +24,7 @@ class HTTPRedirectTest extends \Mockery\Adapter\Phpunit\MockeryTestCase
 
         $hr = new HTTPRedirect();
         $request = $hr->receive();
-        $this->assertInstanceOf(\SAML2\Request::class, $request);
+        $this->assertInstanceOf(Request::class, $request);
         $issuer = $request->getIssuer();
         $this->assertEquals('https://profile.surfconext.nl/simplesaml/module.php/saml/sp/metadata.php/default-sp', $issuer);
     }
@@ -32,7 +41,7 @@ class HTTPRedirectTest extends \Mockery\Adapter\Phpunit\MockeryTestCase
 
         $hr = new HTTPRedirect();
         $request = $hr->receive();
-        $this->assertInstanceOf(\SAML2\Response::class, $request);
+        $this->assertInstanceOf(Response::class, $request);
         $issuer = $request->getIssuer();
         $this->assertEquals('https://engine.test.surfconext.nl/authentication/idp/metadata', $issuer);
     }
@@ -48,7 +57,7 @@ class HTTPRedirectTest extends \Mockery\Adapter\Phpunit\MockeryTestCase
 
         $hr = new HTTPRedirect();
         $request = $hr->receive();
-        $this->assertInstanceOf(\SAML2\Request::class, $request);
+        $this->assertInstanceOf(Request::class, $request);
         $relaystate = $request->getRelayState();
         $this->assertEquals('https://profile.surfconext.nl/', $relaystate);
     }
@@ -65,7 +74,7 @@ class HTTPRedirectTest extends \Mockery\Adapter\Phpunit\MockeryTestCase
 
         $hr = new HTTPRedirect();
         $request = $hr->receive();
-        $this->assertInstanceOf(\SAML2\Request::class, $request);
+        $this->assertInstanceOf(Request::class, $request);
         $relaystate = $request->getRelayState();
         $this->assertEquals('https://beta.surfnet.nl/simplesaml/module.php/core/authenticate.php?as=Braindrops', $relaystate);
     }
@@ -184,8 +193,11 @@ class HTTPRedirectTest extends \Mockery\Adapter\Phpunit\MockeryTestCase
      */
     public function testSendAuthnResponse()
     {
+        $issuer = new Issuer();
+        $issuer->setValue('testIssuer');
+
         $response = new Response();
-        $response->setIssuer('testIssuer');
+        $response->setIssuer($issuer);
         $response->setRelayState('http://example.org');
         $response->setDestination('http://example.org/login?success=yes');
         $response->setSignatureKey(CertificatesMock::getPrivateKey());
@@ -200,8 +212,11 @@ class HTTPRedirectTest extends \Mockery\Adapter\Phpunit\MockeryTestCase
      */
     public function testSendAuthnResponseBespokeDestination()
     {
+        $issuer = new Issuer();
+        $issuer->setValue('testIssuer');
+
         $response = new Response();
-        $response->setIssuer('testIssuer');
+        $response->setIssuer($issuer);
         $hr = new HTTPRedirect();
         $hr->setDestination('gopher://myurl');
         $hr->send($response);

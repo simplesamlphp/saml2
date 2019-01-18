@@ -2,8 +2,12 @@
 
 namespace SAML2\Assertion\Validation\ConstraintValidator;
 
-use SAML2\Assertion\Validation\Result;
-use SAML2\Configuration\Destination;
+use \SAML2\Assertion\Validation\ConstraintValidator\SubjectConfirmationRecipientMatches;
+use \SAML2\Assertion\Validation\ConstraintValidator\SubjectConfirmationResponseToMatches;
+use \SAML2\Assertion\Validation\Result;
+use \SAML2\Configuration\Destination;
+use \SAML2\XML\saml\SubjectConfirmationData;
+use \SAML2\XML\saml\SubjectConfirmationMatches;
 
 class SubjectConfirmationRecipientMathchesTest extends \Mockery\Adapter\Phpunit\MockeryTestCase
 {

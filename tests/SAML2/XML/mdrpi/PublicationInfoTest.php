@@ -3,6 +3,7 @@
 namespace SAML2\XML\mdrpi;
 
 use SAML2\DOMDocumentFactory;
+use SAML2\XML\mdrpi\PublicationInfo;
 use SAML2\Utils;
 
 /**

@@ -5,6 +5,7 @@ namespace SAML2\XML\ecp;
 use stdClass;
 
 use SAML2\Constants;
+use SAML2\XML\ecp\Response;
 
 class ResponseTest extends \PHPUnit\Framework\TestCase
 {

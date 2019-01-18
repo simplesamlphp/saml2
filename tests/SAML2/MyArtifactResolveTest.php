@@ -2,11 +2,17 @@
 
 namespace SAML2;
 
+use SAML2\XML\saml\Issuer;
+use SAML2\DOMDocumentFactory;
+use SAML2\ArtifactResolve;
+use SAML2\Utils;
+
 class ArtifactResolveTest extends \PHPUnit\Framework\TestCase
 {
-    public function testMashalling()
+    public function testMarshalling()
     {
-        $issuer = 'urn:example:issuer';
+        $issuer = new Issuer();
+        $issuer->setValue('urn:example:issuer');
         $artifact = 'AAQAADWNEw5VT47wcO4zX/iEzMmFQvGknDfws2ZtqSGdkNSbsW1cmVR0bzU=';
 
         $artifactResolve = new ArtifactResolve();
@@ -25,7 +31,9 @@ class ArtifactResolveTest extends \PHPUnit\Framework\TestCase
     {
         $id = '_6c3a4f8b9c2d';
         $artifact = 'AAQAADWNEw5VT47wcO4zX/iEzMmFQvGknDfws2ZtqSGdkNSbsW1cmVR0bzU=';
-        $issuer = 'https://ServiceProvider.com/SAML';
+
+        $issuer = new Issuer();
+        $issuer->setValue('https://ServiceProvider.com/SAML');
 
         $xml = <<<XML
 <samlp:ArtifactResolve
@@ -40,9 +48,9 @@ XML;
         $document = DOMDocumentFactory::fromString($xml);
         $ar = new ArtifactResolve($document->firstChild);
 
-        $this->assertInstanceOf(\SAML2\ArtifactResolve::class, $ar);
+        $this->assertInstanceOf(ArtifactResolve::class, $ar);
         $this->assertEquals($artifact, $ar->getArtifact());
         $this->assertEquals($id, $ar->getId());
-        $this->assertEquals($issuer, $ar->getIssuer());
+        $this->assertEquals($issuer->value, $ar->getIssuer());
     }
 }

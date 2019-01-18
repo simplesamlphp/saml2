@@ -2,6 +2,7 @@
 
 namespace SAML2\Assertion\Validation\ConstraintValidator;
 
+use SAML2\Assertion\Validation\ConstraintValidator\SessionNotOnOrAfter;
 use SAML2\Assertion\Validation\Result;
 use SAML2\ControlledTimeTest;
 
@@ -22,7 +23,7 @@ class SessionNotOnOrAfterTest extends ControlledTimeTest
     public function setUp()
     {
         parent::setUp();
-        $this->assertion = \Mockery::mock('SAML2\Assertion');
+        $this->assertion = \Mockery::mock(\SAML2\Assertion::class);
     }
 
 

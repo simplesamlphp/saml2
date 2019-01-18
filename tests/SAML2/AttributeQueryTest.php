@@ -2,6 +2,11 @@
 
 namespace SAML2;
 
+use SAML2\AttributeQuery;
+use SAML2\DOMDocumentFactory;
+use SAML2\XML\saml\NameID;
+use SAML2\Utils;
+
 /**
  * Class \SAML2\AttributeQueryTest
  */
@@ -10,7 +15,9 @@ class AttributeQueryTest extends \PHPUnit\Framework\TestCase
     public function testMarshalling()
     {
         $attributeQuery = new AttributeQuery();
-        $attributeQuery->setNameID(['Value' => 'NameIDValue']);
+        $nameId = new NameID();
+        $nameId->setValue('NameIDValue');
+        $attributeQuery->setNameID($nameId);
         $attributeQuery->setAttributes(
             [
                 'test1' => [
@@ -97,7 +104,7 @@ XML;
         $this->assertEquals('https://example.org/', $aq->getIssuer());
 
         $nameid = $aq->getNameId();
-        $this->assertInstanceOf(\SAML2\XML\saml\NameID::class, $nameid);
+        $this->assertInstanceOf(NameID::class, $nameid);
         $this->assertEquals('urn:example:subject', $nameid->getValue());
 
         $attributes = array_keys($aq->getAttributes());
@@ -115,7 +122,9 @@ XML;
         $fmt_uri = 'urn:oasis:names:tc:SAML:2.0:attrname-format:uri';
 
         $attributeQuery = new AttributeQuery();
-        $attributeQuery->setNameID(['Value' => 'NameIDValue']);
+        $nameId = new NameID();
+        $nameId->setValue('NameIDValue');
+        $attributeQuery->setNameID($nameId);
         $attributeQuery->setAttributes(
             [
                 'test1' => [

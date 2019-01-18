@@ -2,6 +2,7 @@
 
 namespace SAML2\Assertion\Validation\ConstraintValidator;
 
+use SAML2\Assertion\Validation\ConstraintValidator\SubjectConfirmationMethod;
 use SAML2\Assertion\Validation\Result;
 use SAML2\Constants;
 

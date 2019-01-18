@@ -766,21 +766,14 @@ class Assertion implements SignedElement
     /**
      * Set the NameId of the subject in the assertion.
      *
-     * The NameId must be a \SAML2\XML\saml\NameID object or an array in the format accepted by
-     * \SAML2\Utils::addNameId() (an array, deprecated).
+     * The NameId must be a \SAML2\XML\saml\NameID object.
      *
      * @see \SAML2\Utils::addNameId()
-     * @param \SAML2\XML\saml\NameID|array|null $nameId The name identifier of the assertion.
+     * @param \SAML2\XML\saml\NameID|null $nameId The name identifier of the assertion.
      * @return void
      */
-    public function setNameId($nameId)
+    public function setNameId(\SAML2\XML\saml\NameID $nameId = null)
     {
-        assert(is_array($nameId) || is_null($nameId) || $nameId instanceof XML\saml\NameID);
-
-        if (is_array($nameId)) {
-            // @deprecated behaviour
-            $nameId = XML\saml\NameID::fromArray($nameId);
-        }
         $this->nameId = $nameId;
     }
 
@@ -804,7 +797,7 @@ class Assertion implements SignedElement
      */
     public function encryptNameId(XMLSecurityKey $key)
     {
-        /* First create a XML representation of the NameID. */
+        /* First create an XML representation of the NameID. */
         $doc = DOMDocumentFactory::create();
         $root = $doc->createElement('root');
         $doc->appendChild($root);
@@ -1106,48 +1099,6 @@ class Assertion implements SignedElement
         assert(is_string($sessionIndex) || is_null($sessionIndex));
 
         $this->sessionIndex = $sessionIndex;
-    }
-
-
-    /**
-     * Retrieve the authentication method used to authenticate the user.
-     *
-     * This will return null if no authentication statement was
-     * included in the assertion.
-     *
-     * Note that this returns either the AuthnContextClassRef or the AuthnConextDeclRef, whose definition overlaps
-     * but is slightly different (consult the specification for more information).
-     * This was done to work around an old bug of Shibboleth ( https://bugs.internet2.edu/jira/browse/SIDP-187 ).
-     * Should no longer be required, please use either getAuthnConextClassRef or getAuthnContextDeclRef.
-     *
-     * @deprecated use getAuthnContextClassRef
-     * @return string|null The authentication method.
-     */
-    public function getAuthnContext()
-    {
-        if (!empty($this->authnContextClassRef)) {
-            return $this->authnContextClassRef;
-        }
-        if (!empty($this->authnContextDeclRef)) {
-            return $this->authnContextDeclRef;
-        }
-        return null;
-    }
-
-
-    /**
-     * Set the authentication method used to authenticate the user.
-     *
-     * If this is set to null, no authentication statement will be
-     * included in the assertion. The default is null.
-     *
-     * @deprecated use setAuthnContextClassRef
-     * @param string|null $authnContext The authentication method.
-     * @return void
-     */
-    public function setAuthnContext($authnContext)
-    {
-        $this->setAuthnContextClassRef($authnContext);
     }
 
 

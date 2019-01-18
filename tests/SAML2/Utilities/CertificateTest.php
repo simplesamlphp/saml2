@@ -2,6 +2,9 @@
 
 namespace SAML2\Utilities;
 
+use SAML2\CertificatesMock;
+use SAML2\Utilities\Certificate;
+
 class CertificateTest extends \PHPUnit\Framework\TestCase
 {
     /**
@@ -10,9 +13,9 @@ class CertificateTest extends \PHPUnit\Framework\TestCase
      */
     public function testValidStructure()
     {
-        $result = Certificate::hasValidStructure(\SAML2\CertificatesMock::getPlainPublicKey());
+        $result = Certificate::hasValidStructure(CertificatesMock::getPlainPublicKey());
         $this->assertTrue($result);
-        $result = Certificate::hasValidStructure(\SAML2\CertificatesMock::getPlainInvalidPublicKey());
+        $result = Certificate::hasValidStructure(CertificatesMock::getPlainInvalidPublicKey());
         $this->assertFalse($result);
     }
 
@@ -23,8 +26,8 @@ class CertificateTest extends \PHPUnit\Framework\TestCase
      */
     public function testConvertToCertificate()
     {
-        $result = Certificate::convertToCertificate(\SAML2\CertificatesMock::getPlainPublicKeyContents());
+        $result = Certificate::convertToCertificate(CertificatesMock::getPlainPublicKeyContents());
         // the formatted public key in CertificatesMock is stored with unix newlines
-        $this->assertEquals(\SAML2\CertificatesMock::getPlainPublicKey() . "\n", str_replace("\r", "", $result));
+        $this->assertEquals(CertificatesMock::getPlainPublicKey() . "\n", str_replace("\r", "", $result));
     }
 }
