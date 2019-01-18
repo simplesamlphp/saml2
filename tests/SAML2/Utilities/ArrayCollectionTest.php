@@ -105,7 +105,7 @@ class ArrayCollectionTest extends \PHPUnit\Framework\TestCase
 
     public function test_onlyelement_fail()
     {
-        $this->expectException(RuntimeException::class, 'SAML2\Utilities\ArrayCollection::SAML2\Utilities\ArrayCollection::getOnlyElement requires that the collection has exactly one element, "2" elements found');
+        $this->setExpectedException(RuntimeException::class, 'SAML2\Utilities\ArrayCollection::SAML2\Utilities\ArrayCollection::getOnlyElement requires that the collection has exactly one element, "2" elements found');
         $arc = new ArrayCollection(['aap', 'noot']);
         $arc->getOnlyElement();
     }
