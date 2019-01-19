@@ -151,11 +151,11 @@ class SigningMethod
         $e->setAttribute('Algorithm', $this->getAlgorithm());
 
         if ($this->getMinKeySize() !== null) {
-            $e->setAttribute('MinKeySize', $this->getMinKeySize());
+            $e->setAttribute('MinKeySize', strval($this->getMinKeySize()));
         }
 
         if ($this->getMaxKeySize() !== null) {
-            $e->setAttribute('MaxKeySize', $this->getMaxKeySize());
+            $e->setAttribute('MaxKeySize', strval($this->getMaxKeySize()));
         }
 
         return $e;
