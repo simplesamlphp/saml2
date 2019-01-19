@@ -4,6 +4,9 @@ declare(strict_types=1);
 
 namespace SAML2\Compat;
 
+use \Psr\Log\LoggerInterface;
+use \Psr\Log\NullLogger;
+
 /**
  * Class \SAML2\Compat\MockContainer
  */
@@ -44,9 +47,9 @@ class MockContainer extends AbstractContainer
      * Get a PSR-3 compatible logger.
      * @return \Psr\Log\LoggerInterface
      */
-    public function getLogger()
+    public function getLogger() : LoggerInterface
     {
-        return new \Psr\Log\NullLogger();
+        return new NullLogger();
     }
 
 
@@ -54,7 +57,7 @@ class MockContainer extends AbstractContainer
      * Generate a random identifier for identifying SAML2 documents.
      * @return string
      */
-    public function generateId()
+    public function generateId() : string
     {
         return $this->id;
     }

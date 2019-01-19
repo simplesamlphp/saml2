@@ -75,7 +75,7 @@ class PDPDescriptor extends RoleDescriptor
      * Collect the value of the AuthzService-property
      * @return \SAML2\XML\md\EndpointType[]
      */
-    public function getAuthzService()
+    public function getAuthzService() : array
     {
         return $this->AuthzService;
     }
@@ -108,7 +108,7 @@ class PDPDescriptor extends RoleDescriptor
      * Collect the value of the AssertionIDRequestService-property
      * @return \SAML2\XML\md\EndpointType[]
      */
-    public function getAssertionIDRequestService()
+    public function getAssertionIDRequestService() : array
     {
         return $this->AssertionIDRequestService;
     }
@@ -141,7 +141,7 @@ class PDPDescriptor extends RoleDescriptor
      * Collect the value of the NameIDFormat-property
      * @return string[]
      */
-    public function getNameIDFormat()
+    public function getNameIDFormat() : array
     {
         return $this->NameIDFormat;
     }
@@ -164,7 +164,7 @@ class PDPDescriptor extends RoleDescriptor
      * @param \DOMElement $parent The EntityDescriptor we should append this IDPSSODescriptor to.
      * @return \DOMElement
      */
-    public function toXML(\DOMElement $parent)
+    public function toXML(\DOMElement $parent) : \DOMElement
     {
         assert(is_array($authzService = $this->getAuthzService()));
         assert(!empty($authzService));

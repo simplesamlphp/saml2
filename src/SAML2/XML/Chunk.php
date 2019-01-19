@@ -56,7 +56,7 @@ class Chunk implements \Serializable
      * @param  \DOMElement $parent The element we should append this element to.
      * @return \DOMElement The new element.
      */
-    public function toXML(\DOMElement $parent)
+    public function toXML(\DOMElement $parent) : \DOMElement
     {
         return Utils::copyElement($this->xml, $parent);
     }
@@ -66,7 +66,7 @@ class Chunk implements \Serializable
      * Collect the value of the localName-property
      * @return string
      */
-    public function getLocalName()
+    public function getLocalName() : string
     {
         return $this->localName;
     }
@@ -109,7 +109,7 @@ class Chunk implements \Serializable
      *
      * @return \DOMElement This element.
      */
-    public function getXml()
+    public function getXml() : \DOMElement
     {
         return $this->xml;
     }
@@ -131,7 +131,7 @@ class Chunk implements \Serializable
      *
      * @return string The serialized chunk.
      */
-    public function serialize()
+    public function serialize() : string
     {
         return serialize($this->xml->ownerDocument->saveXML($this->xml));
     }

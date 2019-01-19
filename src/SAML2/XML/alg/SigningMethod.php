@@ -43,7 +43,7 @@ class SigningMethod
      * Collect the value of the Algorithm-property
      * @return string
      */
-    public function getAlgorithm()
+    public function getAlgorithm() : string
     {
         return $this->Algorithm;
     }
@@ -136,7 +136,7 @@ class SigningMethod
      * @param \DOMElement $parent The element we should append to.
      * @return \DOMElement
      */
-    public function toXML(\DOMElement $parent)
+    public function toXML(\DOMElement $parent) : \DOMElement
     {
         assert(is_string($this->getAlgorithm()));
         assert(is_int($this->getMinKeySize()) || is_null($this->getMinKeySize()));

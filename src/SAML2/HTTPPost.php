@@ -17,6 +17,7 @@ class HTTPPost extends Binding
      * Note: This function never returns.
      *
      * @param \SAML2\Message $message The message we should send.
+     * @return void
      */
     public function send(Message $message)
     {
@@ -59,7 +60,7 @@ class HTTPPost extends Binding
      * @return \SAML2\Message The received message.
      * @throws \Exception
      */
-    public function receive()
+    public function receive() : Message
     {
         if (array_key_exists('SAMLRequest', $_POST)) {
             $msgStr = $_POST['SAMLRequest'];

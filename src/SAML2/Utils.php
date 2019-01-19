@@ -7,7 +7,10 @@ namespace SAML2;
 use RobRichards\XMLSecLibs\XMLSecEnc;
 use RobRichards\XMLSecLibs\XMLSecurityDSig;
 use RobRichards\XMLSecLibs\XMLSecurityKey;
+
+use SAML2\Compat\AbstractContainer;
 use SAML2\Compat\ContainerSingleton;
+use SAML2\Compat\Ssp\Container;
 use SAML2\Exception\RuntimeException;
 use SAML2\XML\ds\KeyInfo;
 use SAML2\XML\ds\X509Certificate;
@@ -111,7 +114,7 @@ class Utils
      * @throws \Exception
      * @return XMLSecurityKey The new key.
      */
-    public static function castKey(XMLSecurityKey $key, string $algorithm, string $type = 'public')
+    public static function castKey(XMLSecurityKey $key, string $algorithm, string $type = 'public') : XMLSecurityKey
     {
         assert($type === "public" || $type === "private");
 
@@ -190,7 +193,7 @@ class Utils
      * @param  string  $query The query.
      * @return \DOMElement[]    Array with matching DOM nodes.
      */
-    public static function xpQuery(\DOMNode $node, string $query)
+    public static function xpQuery(\DOMNode $node, string $query) : array
     {
         static $xpCache = null;
 
@@ -227,7 +230,7 @@ class Utils
      * @param  \DOMElement|null $parent  The target parent element.
      * @return \DOMElement      The copied element.
      */
-    public static function copyElement(\DOMElement $element, \DOMElement $parent = null)
+    public static function copyElement(\DOMElement $element, \DOMElement $parent = null) : \DOMElement
     {
         if ($parent === null) {
             $document = DOMDocumentFactory::create();
@@ -353,7 +356,7 @@ class Utils
      * @throws \Exception
      * @return \DOMElement     The decrypted element.
      */
-    private static function doDecryptElement(\DOMElement $encryptedData, XMLSecurityKey $inputKey, array &$blacklist)
+    private static function doDecryptElement(\DOMElement $encryptedData, XMLSecurityKey $inputKey, array &$blacklist) : \DOMElement
     {
         $enc = new XMLSecEnc();
 
@@ -498,7 +501,7 @@ class Utils
      * @throws \Exception
      * @return \DOMElement     The decrypted element.
      */
-    public static function decryptElement(\DOMElement $encryptedData, XMLSecurityKey $inputKey, array $blacklist = [])
+    public static function decryptElement(\DOMElement $encryptedData, XMLSecurityKey $inputKey, array $blacklist = []) : \DOMElement
     {
         try {
             return self::doDecryptElement($encryptedData, $inputKey, $blacklist);
@@ -521,7 +524,7 @@ class Utils
      * @param  string     $localName    The localName of the localized strings.
      * @return array      Localized strings.
      */
-    public static function extractLocalizedStrings(\DOMElement $parent, string $namespaceURI, string $localName)
+    public static function extractLocalizedStrings(\DOMElement $parent, string $namespaceURI, string $localName) : array
     {
         $ret = [];
         for ($node = $parent->firstChild; $node !== null; $node = $node->nextSibling) {
@@ -549,7 +552,7 @@ class Utils
      * @param  string     $localName    The localName of the string elements.
      * @return array      The string values of the various nodes.
      */
-    public static function extractStrings(\DOMElement $parent, string $namespaceURI, string $localName)
+    public static function extractStrings(\DOMElement $parent, string $namespaceURI, string $localName) : array
     {
         $ret = [];
         for ($node = $parent->firstChild; $node !== null; $node = $node->nextSibling) {
@@ -572,8 +575,12 @@ class Utils
      * @param  string     $value     The value of the element.
      * @return \DOMElement The generated element.
      */
-    public static function addString(\DOMElement $parent, string $namespace, string $name, string $value)
-    {
+    public static function addString(
+        \DOMElement $parent,
+        string $namespace,
+        string $name,
+        string $value
+    ) : \DOMElement {
         $doc = $parent->ownerDocument;
 
         $n = $doc->createElementNS($namespace, $name);
@@ -615,7 +622,7 @@ class Utils
      * @param  string                     $x509Data The certificate, as a base64-encoded DER data.
      * @return \SAML2\XML\md\KeyDescriptor The keydescriptor.
      */
-    public static function createKeyDescriptor(string $x509Data)
+    public static function createKeyDescriptor(string $x509Data) : KeyDescriptor
     {
         $x509Certificate = new X509Certificate();
         $x509Certificate->setCertificate($x509Data);
@@ -652,7 +659,7 @@ class Utils
      * @throws \Exception
      * @return int Converted to a unix timestamp.
      */
-    public static function xsDateTimeToTimestamp(string $time)
+    public static function xsDateTimeToTimestamp(string $time) : int
     {
         $matches = [];
 
@@ -682,9 +689,9 @@ class Utils
 
 
     /**
-     * @return \SAML2\Compat\Ssp\Container
+     * @return \SAML2\Compat\AbstractContainer
      */
-    public static function getContainer()
+    public static function getContainer() : AbstractContainer
     {
         return ContainerSingleton::getInstance();
     }

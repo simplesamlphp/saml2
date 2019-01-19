@@ -54,7 +54,7 @@ class AdditionalMetadataLocation
      * Collect the value of the namespace-property
      * @return string
      */
-    public function getNamespace()
+    public function getNamespace() : string
     {
         return $this->namespace;
     }
@@ -75,7 +75,7 @@ class AdditionalMetadataLocation
      * Collect the value of the location-property
      * @return string
      */
-    public function getLocation()
+    public function getLocation() : string
     {
         return $this->location;
     }
@@ -98,7 +98,7 @@ class AdditionalMetadataLocation
      * @param  \DOMElement $parent The element we should append to.
      * @return \DOMElement This AdditionalMetadataLocation-element.
      */
-    public function toXML(\DOMElement $parent)
+    public function toXML(\DOMElement $parent) : \DOMElement
     {
         assert(is_string($this->getNamespace()));
         assert(is_string($this->getLocation()));

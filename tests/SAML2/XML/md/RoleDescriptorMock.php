@@ -14,7 +14,7 @@ class RoleDescriptorMock extends \SAML2\XML\md\RoleDescriptor
     }
 
 
-    public function toXML(\DOMElement $parent)
+    public function toXML(\DOMElement $parent) : \DOMElement
     {
         $xml = parent::toXML($parent);
         $xml->setAttributeNS(Constants::NS_XSI, 'xsi:type', 'myns:MyElement');

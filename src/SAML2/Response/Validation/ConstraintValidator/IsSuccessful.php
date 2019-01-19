@@ -31,7 +31,7 @@ class IsSuccessful implements ConstraintValidator
      *
      * @return string
      */
-    private function buildMessage(array $responseStatus)
+    private function buildMessage(array $responseStatus) : string
     {
         return sprintf(
             '%s%s%s',
@@ -48,7 +48,7 @@ class IsSuccessful implements ConstraintValidator
      *
      * @return string
      */
-    private function truncateStatus(string $status)
+    private function truncateStatus(string $status) : string
     {
         $prefixLength = strlen(Constants::STATUS_PREFIX);
         if (strpos($status, Constants::STATUS_PREFIX) !== 0) {

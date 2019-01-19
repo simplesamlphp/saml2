@@ -190,7 +190,7 @@ class EntitiesDescriptor extends SignedElementHelper
      * Collect the value of the Extensions-property
      * @return \SAML2\XML\Chunk[]
      */
-    public function getExtensions()
+    public function getExtensions() : array
     {
         return $this->Extensions;
     }
@@ -223,7 +223,7 @@ class EntitiesDescriptor extends SignedElementHelper
      * Collect the value of the children-property
      * @return (\SAML2\XML\md\EntityDescriptor|\SAML2\XML\md\EntitiesDescriptor)[]
      */
-    public function getChildren()
+    public function getChildren() : array
     {
         return $this->children;
     }
@@ -258,7 +258,7 @@ class EntitiesDescriptor extends SignedElementHelper
      * @param \DOMElement|null $parent The EntitiesDescriptor we should append this EntitiesDescriptor to.
      * @return \DOMElement
      */
-    public function toXML(\DOMElement $parent = null)
+    public function toXML(\DOMElement $parent = null) : \DOMElement
     {
         assert(is_null($this->getID()) || is_string($this->getID()));
         assert(is_null($this->getValidUntil()) || is_int($this->getValidUntil()));

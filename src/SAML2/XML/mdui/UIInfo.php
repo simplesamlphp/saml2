@@ -104,7 +104,7 @@ class UIInfo
      * Collect the value of the Keywords-property
      * @return \SAML2\XML\mdui\Keywords[]
      */
-    public function getKeywords()
+    public function getKeywords() : array
     {
         return $this->Keywords;
     }
@@ -136,7 +136,7 @@ class UIInfo
      * Collect the value of the DisplayName-property
      * @return string[]
      */
-    public function getDisplayName()
+    public function getDisplayName() : array
     {
         return $this->DisplayName;
     }
@@ -157,7 +157,7 @@ class UIInfo
      * Collect the value of the Description-property
      * @return string[]
      */
-    public function getDescription()
+    public function getDescription() : array
     {
         return $this->Description;
     }
@@ -178,7 +178,7 @@ class UIInfo
      * Collect the value of the InformationURL-property
      * @return string[]
      */
-    public function getInformationURL()
+    public function getInformationURL() : array
     {
         return $this->InformationURL;
     }
@@ -199,7 +199,7 @@ class UIInfo
      * Collect the value of the PrivacyStatementURL-property
      * @return string[]
      */
-    public function getPrivacyStatementURL()
+    public function getPrivacyStatementURL() : array
     {
         return $this->PrivacyStatementURL;
     }
@@ -220,7 +220,7 @@ class UIInfo
      * Collect the value of the Logo-property
      * @return \SAML2\XML\mdui\Logo[]
      */
-    public function getLogo()
+    public function getLogo() : array
     {
         return $this->Logo;
     }
@@ -252,7 +252,7 @@ class UIInfo
      * Collect the value of the children-property
      * @return \SAML2\XML\Chunk[]
      */
-    public function getChildren()
+    public function getChildren() : array
     {
         return $this->children;
     }

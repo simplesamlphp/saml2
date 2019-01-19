@@ -28,7 +28,7 @@ class Validator
      * @param Response $response
      * @return Result
      */
-    public function validate(Response $response)
+    public function validate(Response $response) : Result
     {
         $result = new Result();
         foreach ($this->constraints as $validator) {

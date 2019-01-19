@@ -41,7 +41,7 @@ class Key implements \ArrayAccess
      * @param  string $usage
      * @return bool
      */
-    public function canBeUsedFor(string $usage)
+    public function canBeUsedFor(string $usage) : bool
     {
         if (!in_array($usage, static::getValidKeyUsages(), true)) {
             throw new InvalidKeyUsageException($usage);
@@ -55,7 +55,7 @@ class Key implements \ArrayAccess
      * Returns the list of valid key usage options
      * @return array
      */
-    public static function getValidKeyUsages()
+    public static function getValidKeyUsages() : array
     {
         return [
             self::USAGE_ENCRYPTION,
@@ -71,7 +71,7 @@ class Key implements \ArrayAccess
      *
      * Type hint not possible due to upstream method signature
      */
-    public function offsetExists($offset)
+    public function offsetExists($offset) : bool
     {
         if (!is_string($offset)) {
             throw InvalidArgumentException::invalidType('string', $offset);
@@ -87,7 +87,7 @@ class Key implements \ArrayAccess
      *
      * Type hint not possible due to upstream method signature
      */
-    public function offsetGet($offset)
+    public function offsetGet($offset) : string
     {
         if (!is_string($offset)) {
             throw InvalidArgumentException::invalidType('string', $offset);

@@ -104,9 +104,9 @@ class SignedElementHelper implements SignedElement
      *
      * @param  XMLSecurityKey $key The key we should check against.
      * @throws \Exception
-     * @return boolean        true on success, false when we don't have a signature.
+     * @return bool        true on success, false when we don't have a signature.
      */
-    public function validate(XMLSecurityKey $key)
+    public function validate(XMLSecurityKey $key) : bool
     {
         if (count($this->validators) === 0) {
             return false;
@@ -177,7 +177,7 @@ class SignedElementHelper implements SignedElement
      *
      * @return array An array of certificates.
      */
-    public function getCertificates()
+    public function getCertificates() : array
     {
         return $this->certificates;
     }
@@ -188,7 +188,7 @@ class SignedElementHelper implements SignedElement
      *
      * @return array Array with certificates.
      */
-    public function getValidatingCertificates()
+    public function getValidatingCertificates() : array
     {
         $ret = [];
         foreach ($this->certificates as $cert) {
@@ -262,7 +262,7 @@ class SignedElementHelper implements SignedElement
      * @param \DOMElement|null $insertBefore The element we should insert the signature node before.
      * @return \DOMElement|null
      */
-    protected function signElement(\DOMElement $root, \DOMElement $insertBefore = null)
+    protected function signElement(\DOMElement $root, \DOMElement $insertBefore = null) : \DOMElement
     {
         if ($this->signatureKey === null) {
             /* We cannot sign this element. */

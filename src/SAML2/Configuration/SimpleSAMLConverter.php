@@ -20,7 +20,7 @@ class SimpleSAMLConverter
     public static function convertToIdentityProvider(
         Configuration $configuration,
         string $certificatePrefix = ''
-    ) {
+    ) : IdentityProvider {
         $pluckedConfiguration = static::pluckConfiguration($configuration, $certificatePrefix);
         static::enrichForDecryptionProvider($configuration, $pluckedConfiguration);
         static::enrichForIdentityProvider($configuration, $pluckedConfiguration);
@@ -38,7 +38,7 @@ class SimpleSAMLConverter
     public static function convertToServiceProvider(
         Configuration $configuration,
         string $certificatePrefix = ''
-    ) {
+    ) : ServiceProvider {
         $pluckedConfiguration = static::pluckConfiguration($configuration, $certificatePrefix);
         static::enrichForServiceProvider($configuration, $pluckedConfiguration);
         static::enrichForDecryptionProvider($configuration, $pluckedConfiguration);
@@ -53,7 +53,7 @@ class SimpleSAMLConverter
      *
      * @return array
      */
-    protected static function pluckConfiguration(Configuration $configuration, string $prefix = '')
+    protected static function pluckConfiguration(Configuration $configuration, string $prefix = '') : array
     {
         $extracted = [];
 

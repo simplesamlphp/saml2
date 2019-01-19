@@ -83,7 +83,7 @@ class Organization
      * Collect the value of the Extensions-property
      * @return \SAML2\XML\Chunk[]
      */
-    public function getExtensions()
+    public function getExtensions() : array
     {
         return $this->Extensions;
     }
@@ -116,7 +116,7 @@ class Organization
      * Collect the value of the OrganizationName-property
      * @return string[]
      */
-    public function getOrganizationName()
+    public function getOrganizationName() : array
     {
         return $this->OrganizationName;
     }
@@ -137,7 +137,7 @@ class Organization
      * Collect the value of the OrganizationDisplayName-property
      * @return string[]
      */
-    public function getOrganizationDisplayName()
+    public function getOrganizationDisplayName() : array
     {
         return $this->OrganizationDisplayName;
     }
@@ -158,7 +158,7 @@ class Organization
      * Collect the value of the OrganizationURL-property
      * @return string[]
      */
-    public function getOrganizationURL()
+    public function getOrganizationURL() : array
     {
         return $this->OrganizationURL;
     }
@@ -181,7 +181,7 @@ class Organization
      * @param  \DOMElement $parent The element we should add this organization to.
      * @return \DOMElement This Organization-element.
      */
-    public function toXML(\DOMElement $parent)
+    public function toXML(\DOMElement $parent) : \DOMElement
     {
         assert(is_array($this->getExtensions()));
         assert(is_array($organizationName = $this->getOrganizationName()));

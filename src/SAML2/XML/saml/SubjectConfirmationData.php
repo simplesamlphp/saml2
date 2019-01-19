@@ -175,7 +175,7 @@ class SubjectConfirmationData
      * Collect the value of the info-property
      * @return (\SAML2\XML\ds\KeyInfo|\SAML2\XML\Chunk)[]
      */
-    public function getInfo()
+    public function getInfo() : array
     {
         return $this->info;
     }

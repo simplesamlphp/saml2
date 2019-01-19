@@ -85,9 +85,9 @@ class Processor
 
     /**
      * @param \SAML2\Utilities\ArrayCollection $assertions
-     * @return \SAML2\Assertion[] Collection (\SAML2\Utilities\ArrayCollection) of processed assertions
+     * @return \SAML2\Utils\ArrayCollection Collection of processed assertions
      */
-    public function processAssertions(array $assertions)
+    public function processAssertions(ArrayCollection $assertions) : ArrayCollection
     {
         $processed = new ArrayCollection();
         foreach ($assertions as $assertion) {
@@ -102,7 +102,7 @@ class Processor
      * @param \SAML2\Assertion|\SAML2\EncryptedAssertion $assertion
      * @return \SAML2\Assertion
      */
-    public function process($assertion)
+    public function process($assertion) : Assertion
     {
         $assertion = $this->decryptAssertion($assertion);
 
@@ -131,7 +131,7 @@ class Processor
      * @param \SAML2\Assertion|\SAML2\EncryptedAssertion $assertion
      * @return \SAML2\Assertion
      */
-    private function decryptAssertion($assertion)
+    private function decryptAssertion($assertion) : Assertion
     {
         if ($this->decrypter->isEncryptionRequired() && $assertion instanceof Assertion) {
             throw new UnencryptedAssertionFoundException();
@@ -177,7 +177,7 @@ class Processor
      * @param \SAML2\Assertion $assertion
      * @return \SAML2\Assertion
      */
-    private function transformAssertion(Assertion $assertion)
+    private function transformAssertion(Assertion $assertion) : Assertion
     {
         return $this->transformer->transform($assertion);
     }

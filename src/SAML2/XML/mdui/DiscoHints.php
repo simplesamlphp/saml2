@@ -71,7 +71,7 @@ class DiscoHints
      * Collect the value of the IPHint-property
      * @return string[]
      */
-    public function getIPHint()
+    public function getIPHint() : array
     {
         return $this->IPHint;
     }
@@ -92,7 +92,7 @@ class DiscoHints
      * Collect the value of the DomainHint-property
      * @return string[]
      */
-    public function getDomainHint()
+    public function getDomainHint() : array
     {
         return $this->DomainHint;
     }
@@ -113,7 +113,7 @@ class DiscoHints
      * Collect the value of the GeolocationHint-property
      * @return string[]
      */
-    public function getGeolocationHint()
+    public function getGeolocationHint() : array
     {
         return $this->GeolocationHint;
     }
@@ -134,7 +134,7 @@ class DiscoHints
      * Collect the value of the children-property
      * @return \SAML2\XML\Chunk[]
      */
-    public function getChildren()
+    public function getChildren() : array
     {
         return $this->children;
     }

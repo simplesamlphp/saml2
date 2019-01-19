@@ -96,7 +96,7 @@ class KeyInfo
      * Collect the value of the info-property
      * @return array
      */
-    public function getInfo()
+    public function getInfo() : array
     {
         return $this->info;
     }
@@ -131,7 +131,7 @@ class KeyInfo
      * @param \DOMElement $parent The element we should append this KeyInfo to.
      * @return \DOMElement
      */
-    public function toXML(\DOMElement $parent)
+    public function toXML(\DOMElement $parent) : \DOMElement
     {
         assert(is_null($this->getId()) || is_string($this->getId()));
         assert(is_array($this->getInfo()));

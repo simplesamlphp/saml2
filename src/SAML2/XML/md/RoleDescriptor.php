@@ -216,7 +216,7 @@ class RoleDescriptor extends SignedElementHelper
      * Collect the value of the Extensions-property
      * @return \SAML2\XML\Chunk[]
      */
-    public function getExtensions()
+    public function getExtensions() : array
     {
         return $this->Extensions;
     }
@@ -273,7 +273,7 @@ class RoleDescriptor extends SignedElementHelper
      * Collect the value of the ProtocolSupportEnumeration-property
      * @return string[]
      */
-    public function getProtocolSupportEnumeration()
+    public function getProtocolSupportEnumeration() : array
     {
         return $this->protocolSupportEnumeration;
     }
@@ -305,7 +305,7 @@ class RoleDescriptor extends SignedElementHelper
      * Collect the value of the Organization-property
      * @return \SAML2\XML\md\Organization
      */
-    public function getOrganization()
+    public function getOrganization() : Organization
     {
         return $this->Organization;
     }
@@ -326,7 +326,7 @@ class RoleDescriptor extends SignedElementHelper
      * Collect the value of the ContactPerson-property
      * @return \SAML2\XML\md\ContactPerson[]
      */
-    public function getContactPerson()
+    public function getContactPerson() : array
     {
         return $this->ContactPerson;
     }
@@ -358,7 +358,7 @@ class RoleDescriptor extends SignedElementHelper
      * Collect the value of the KeyDescriptor-property
      * @return \SAML2\XML\md\KeyDescriptor[]
      */
-    public function getKeyDescriptor()
+    public function getKeyDescriptor() : array
     {
         return $this->KeyDescriptor;
     }
@@ -392,7 +392,7 @@ class RoleDescriptor extends SignedElementHelper
      * @param \DOMElement $parent The EntityDescriptor we should append this endpoint to.
      * @return \DOMElement
      */
-    protected function toXML(\DOMElement $parent)
+    protected function toXML(\DOMElement $parent) : \DOMElement
     {
         assert(is_null($this->getID()) || is_string($this->getID()));
         assert(is_null($this->getValidUntil()) || is_int($this->getValidUntil()));

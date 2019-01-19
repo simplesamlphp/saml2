@@ -80,7 +80,7 @@ class Keywords
      * Collect the value of the Keywords-property
      * @return string[]
      */
-    public function getKeywords()
+    public function getKeywords() : array
     {
         return $this->Keywords;
     }
@@ -115,7 +115,7 @@ class Keywords
      * @throws \Exception
      * @return \DOMElement
      */
-    public function toXML(\DOMElement $parent)
+    public function toXML(\DOMElement $parent) : \DOMElement
     {
         assert(is_string($this->getLanguage()));
         assert(is_array($this->getKeywords()));

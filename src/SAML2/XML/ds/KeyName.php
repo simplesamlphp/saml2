@@ -41,7 +41,7 @@ class KeyName
      * Collect the value of the name-property
      * @return string
      */
-    public function getName()
+    public function getName() : string
     {
         return $this->name;
     }
@@ -63,7 +63,7 @@ class KeyName
      * @param \DOMElement $parent The element we should append this KeyName element to.
      * @return \DOMElement
      */
-    public function toXML(\DOMElement $parent)
+    public function toXML(\DOMElement $parent) : \DOMElement
     {
         assert(is_string($this->name));
 

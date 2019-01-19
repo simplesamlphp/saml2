@@ -41,7 +41,7 @@ class X509Certificate
      * Collect the value of the certificate-property
      * @return string
      */
-    public function getCertificate()
+    public function getCertificate() : string
     {
         return $this->certificate;
     }
@@ -64,7 +64,7 @@ class X509Certificate
      * @param \DOMElement $parent The element we should append this X509Certificate element to.
      * @return \DOMElement
      */
-    public function toXML(\DOMElement $parent)
+    public function toXML(\DOMElement $parent) : \DOMElement
     {
         assert(is_string($this->certificate));
         return Utils::addString($parent, XMLSecurityDSig::XMLDSIGNS, 'ds:X509Certificate', $this->getCertificate());

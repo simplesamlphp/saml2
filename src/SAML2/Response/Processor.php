@@ -72,7 +72,7 @@ class Processor
         IdentityProvider $identityProviderConfiguration,
         Destination $currentDestination,
         Response $response
-    ) {
+    ) : array {
         $this->preconditionValidator = new PreconditionValidator($currentDestination);
         $this->assertionProcessor = ProcessorBuilder::build(
             $this->logger,
@@ -145,7 +145,7 @@ class Processor
      * @throws NoAssertionsFoundException
      * @return \SAML2\Assertion[]
      */
-    private function processAssertions(Response $response)
+    private function processAssertions(Response $response) : array
     {
         $assertions = $response->getAssertions();
         if (empty($assertions)) {

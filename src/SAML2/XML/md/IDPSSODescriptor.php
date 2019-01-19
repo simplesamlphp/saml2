@@ -128,7 +128,7 @@ class IDPSSODescriptor extends SSODescriptorType
      * Collect the value of the SingleSignOnService-property
      * @return \SAML2\XML\md\EndpointType[]
      */
-    public function getSingleSignOnService()
+    public function getSingleSignOnService() : array
     {
         return $this->SingleSignOnService;
     }
@@ -160,7 +160,7 @@ class IDPSSODescriptor extends SSODescriptorType
      * Collect the value of the NameIDMappingService-property
      * @return \SAML2\XML\md\EndpointType[]
      */
-    public function getNameIDMappingService()
+    public function getNameIDMappingService() : array
     {
         return $this->NameIDMappingService;
     }
@@ -192,7 +192,7 @@ class IDPSSODescriptor extends SSODescriptorType
      * Collect the value of the AssertionIDRequestService-property
      * @return \SAML2\XML\md\EndpointType[]
      */
-    public function getAssertionIDRequestService()
+    public function getAssertionIDRequestService() : array
     {
         return $this->AssertionIDRequestService;
     }
@@ -224,7 +224,7 @@ class IDPSSODescriptor extends SSODescriptorType
      * Collect the value of the AttributeProfile-property
      * @return array
      */
-    public function getAttributeProfile()
+    public function getAttributeProfile() : array
     {
         return $this->AttributeProfile;
     }
@@ -245,7 +245,7 @@ class IDPSSODescriptor extends SSODescriptorType
      * Collect the value of the Attribute-property
      * @return \SAML2\XML\saml\Attribute[]
      */
-    public function getAttribute()
+    public function getAttribute() : array
     {
         return $this->Attribute;
     }
@@ -279,7 +279,7 @@ class IDPSSODescriptor extends SSODescriptorType
      * @param \DOMElement $parent The EntityDescriptor we should append this IDPSSODescriptor to.
      * @return \DOMElement
      */
-    public function toXML(\DOMElement $parent)
+    public function toXML(\DOMElement $parent) : \DOMElement
     {
         assert(is_null($this->WantAuthnRequestsSigned()) || is_bool($this->WantAuthnRequestsSigned()));
         assert(is_array($this->getSingleSignOnService()));

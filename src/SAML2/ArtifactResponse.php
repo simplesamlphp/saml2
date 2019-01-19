@@ -72,7 +72,7 @@ class ArtifactResponse extends StatusResponse
      *
      * @return \DOMElement This response.
      */
-    public function toUnsignedXML()
+    public function toUnsignedXML() : \DOMElement
     {
         $root = parent::toUnsignedXML();
         if (isset($this->any)) {

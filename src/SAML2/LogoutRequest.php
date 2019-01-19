@@ -115,7 +115,7 @@ class LogoutRequest extends Request
      *
      * @return bool True if the NameId is encrypted, false if not.
      */
-    public function isNameIdEncrypted()
+    public function isNameIdEncrypted() : bool
     {
         if ($this->getEncryptedNameId() !== null) {
             return true;
@@ -184,7 +184,7 @@ class LogoutRequest extends Request
      * @throws \Exception
      * @return \SAML2\XML\saml\NameID The name identifier of the session that should be terminated.
      */
-    public function getNameId()
+    public function getNameId() : NameID
     {
         if ($this->getEncryptedNameId() !== null) {
             throw new \Exception('Attempted to retrieve encrypted NameID without decrypting it first.');
@@ -200,7 +200,7 @@ class LogoutRequest extends Request
      * @param \SAML2\XML\saml\NameID|null $nameId The name identifier of the session that should be terminated.
      * @return void
      */
-    public function setNameId(\SAML2\XML\saml\NameID $nameId = null)
+    public function setNameId(NameID $nameId = null)
     {
         $this->nameId = $nameId;
     }
@@ -234,7 +234,7 @@ class LogoutRequest extends Request
      *
      * @return array The SessionIndexes, or an empty array if all sessions should be terminated.
      */
-    public function getSessionIndexes()
+    public function getSessionIndexes() : array
     {
         return $this->sessionIndexes;
     }
@@ -288,7 +288,7 @@ class LogoutRequest extends Request
      *
      * @return \DOMElement This logout request.
      */
-    public function toUnsignedXML()
+    public function toUnsignedXML() : \DOMElement
     {
         $root = parent::toUnsignedXML();
 

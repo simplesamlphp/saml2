@@ -37,7 +37,7 @@ class ArtifactResolve extends Request
      *
      * @return string artifact.
      */
-    public function getArtifact()
+    public function getArtifact() : string
     {
         return $this->artifact;
     }
@@ -61,7 +61,7 @@ class ArtifactResolve extends Request
      *
      * @return \DOMElement This response.
      */
-    public function toUnsignedXML()
+    public function toUnsignedXML() : \DOMElement
     {
         $root = parent::toUnsignedXML();
         $artifactelement = $this->document->createElementNS(Constants::NS_SAMLP, 'Artifact', $this->artifact);

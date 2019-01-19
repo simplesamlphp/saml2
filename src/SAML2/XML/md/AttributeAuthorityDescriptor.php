@@ -100,7 +100,7 @@ class AttributeAuthorityDescriptor extends RoleDescriptor
      * Collect the value of the AttributeService-property
      * @return \SAML2\XML\md\EndpointType[]
      */
-    public function getAttributeService()
+    public function getAttributeService() : array
     {
         return $this->AttributeService;
     }
@@ -133,7 +133,7 @@ class AttributeAuthorityDescriptor extends RoleDescriptor
      * Collect the value of the NameIDFormat-property
      * @return string[]
      */
-    public function getNameIDFormat()
+    public function getNameIDFormat() : array
     {
         return $this->NameIDFormat;
     }
@@ -154,7 +154,7 @@ class AttributeAuthorityDescriptor extends RoleDescriptor
      * Collect the value of the AssertionIDRequestService-property
      * @return \SAML2\XML\md\EndpointType[]
      */
-    public function getAssertionIDRequestService()
+    public function getAssertionIDRequestService() : array
     {
         return $this->AssertionIDRequestService;
     }
@@ -187,7 +187,7 @@ class AttributeAuthorityDescriptor extends RoleDescriptor
      * Collect the value of the AttributeProfile-property
      * @return string[]
      */
-    public function getAttributeProfile()
+    public function getAttributeProfile() : array
     {
         return $this->AttributeProfile;
     }
@@ -208,7 +208,7 @@ class AttributeAuthorityDescriptor extends RoleDescriptor
      * Collect the value of the Attribute-property
      * @return \SAML2\XML\saml\Attribute[]
      */
-    public function getAttribute()
+    public function getAttribute() : array
     {
         return $this->Attribute;
     }
@@ -243,7 +243,7 @@ class AttributeAuthorityDescriptor extends RoleDescriptor
      * @param \DOMElement $parent The EntityDescriptor we should append this IDPSSODescriptor to.
      * @return \DOMElement
      */
-    public function toXML(\DOMElement $parent)
+    public function toXML(\DOMElement $parent) : \DOMElement
     {
         assert(is_array($attributeService = $this->getAttributeService()));
         assert(!empty($attributeService));

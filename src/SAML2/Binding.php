@@ -28,7 +28,7 @@ abstract class Binding
      * @throws \Exception
      * @return \SAML2\Binding The binding.
      */
-    public static function getBinding(string $urn)
+    public static function getBinding(string $urn) : Binding
     {
         switch ($urn) {
             case Constants::BINDING_HTTP_POST:
@@ -61,7 +61,7 @@ abstract class Binding
      * @throws \Exception
      * @return \SAML2\Binding The binding.
      */
-    public static function getCurrentBinding()
+    public static function getCurrentBinding() : Binding
     {
         switch ($_SERVER['REQUEST_METHOD']) {
             case 'GET':
@@ -152,5 +152,5 @@ abstract class Binding
      *
      * @return \SAML2\Message The received message.
      */
-    abstract public function receive();
+    abstract public function receive() : Message;
 }

@@ -49,7 +49,7 @@ class PrivateKey extends ArrayAdapter
     /**
      * @return string
      */
-    public function getFilePath()
+    public function getFilePath() : string
     {
         return $this->filePath;
     }
@@ -58,7 +58,7 @@ class PrivateKey extends ArrayAdapter
     /**
      * @return bool
      */
-    public function hasPassPhrase()
+    public function hasPassPhrase() : bool
     {
         return (bool) $this->passphrase;
     }
@@ -67,7 +67,7 @@ class PrivateKey extends ArrayAdapter
     /**
      * @return string
      */
-    public function getPassPhrase()
+    public function getPassPhrase() : string
     {
         return $this->passphrase;
     }
@@ -76,7 +76,7 @@ class PrivateKey extends ArrayAdapter
     /**
      * @return string
      */
-    public function getName()
+    public function getName() : string
     {
         return $this->name;
     }

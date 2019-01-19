@@ -51,7 +51,7 @@ class Response extends StatusResponse
      *
      * @return \SAML2\Assertion[]|\SAML2\EncryptedAssertion[]
      */
-    public function getAssertions()
+    public function getAssertions() : array
     {
         return $this->assertions;
     }
@@ -74,7 +74,7 @@ class Response extends StatusResponse
      *
      * @return \DOMElement This response.
      */
-    public function toUnsignedXML()
+    public function toUnsignedXML() : \DOMElement
     {
         $root = parent::toUnsignedXML();
 

@@ -25,7 +25,7 @@ class Extensions
      * @param  \DOMElement $parent The element that may contain the md:Extensions element.
      * @return \SAML2\XML\Chunk[]  Array of extensions.
      */
-    public static function getList(\DOMElement $parent)
+    public static function getList(\DOMElement $parent) : array
     {
         $ret = [];
         $supported = [

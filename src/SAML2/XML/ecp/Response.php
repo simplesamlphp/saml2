@@ -59,7 +59,7 @@ class Response
      * Collect the value of the AssertionConsumerServiceURL-property
      * @return string
      */
-    public function getAssertionConsumerServiceURL()
+    public function getAssertionConsumerServiceURL() : string
     {
         return $this->AssertionConsumerServiceURL;
     }
@@ -87,7 +87,7 @@ class Response
      * @throws InvalidArgumentException
      * @return \DOMElement
      */
-    public function toXML(\DOMElement $parent)
+    public function toXML(\DOMElement $parent) : \DOMElement
     {
         if (!is_string($this->getAssertionConsumerServiceURL())) {
             throw new InvalidArgumentException("AssertionConsumerServiceURL must be a string");

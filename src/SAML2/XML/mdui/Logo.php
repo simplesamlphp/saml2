@@ -75,7 +75,7 @@ class Logo
      * Collect the value of the url-property
      * @return string
      */
-    public function getUrl()
+    public function getUrl() : string
     {
         return $this->url;
     }
@@ -98,7 +98,7 @@ class Logo
      * Collect the value of the lang-property
      * @return string
      */
-    public function getLanguage()
+    public function getLanguage() : string
     {
         return $this->lang;
     }
@@ -119,7 +119,7 @@ class Logo
      * Collect the value of the height-property
      * @return int
      */
-    public function getHeight()
+    public function getHeight() : int
     {
         return $this->height;
     }
@@ -140,7 +140,7 @@ class Logo
      * Collect the value of the width-property
      * @return int
      */
-    public function getWidth()
+    public function getWidth() : int
     {
         return $this->width;
     }
@@ -163,7 +163,7 @@ class Logo
      * @param \DOMElement $parent The element we should append this Logo to.
      * @return \DOMElement
      */
-    public function toXML(\DOMElement $parent)
+    public function toXML(\DOMElement $parent) : \DOMElement
     {
         assert(is_int($this->getWidth()));
         assert(is_int($this->getHeight()));

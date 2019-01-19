@@ -67,7 +67,7 @@ class RequestedAttribute extends Attribute
      * @param \DOMElement $parent The element we should append this RequestedAttribute to.
      * @return \DOMElement
      */
-    public function toXML(\DOMElement $parent)
+    public function toXML(\DOMElement $parent) : \DOMElement
     {
         assert(is_bool($this->isRequired) || is_null($this->isRequired));
 

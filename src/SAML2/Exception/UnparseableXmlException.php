@@ -4,6 +4,8 @@ declare(strict_types=1);
 
 namespace SAML2\Exception;
 
+use \LibXMLError;
+
 final class UnparseableXmlException extends RuntimeException
 {
     private static $levelMap = [
@@ -18,7 +20,7 @@ final class UnparseableXmlException extends RuntimeException
      *
      * @param \LibXMLError $error
      */
-    public function __construct(\LibXMLError $error)
+    public function __construct(LibXMLError $error)
     {
         $message = sprintf(
             'Unable to parse XML - "%s[%d]": "%s" in "%s" at line %d on column %d"',

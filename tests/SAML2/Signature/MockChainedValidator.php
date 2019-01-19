@@ -15,12 +15,12 @@ use SAML2\SignedElement;
 class MockChainedValidator extends AbstractChainedValidator
 {
     /**
-     * @var boolean
+     * @var bool
      */
     private $canValidate;
 
     /**
-     * @var boolean
+     * @var bool
      */
     private $isValid;
 
@@ -43,7 +43,7 @@ class MockChainedValidator extends AbstractChainedValidator
     public function canValidate(
         SignedElement $signedElement,
         CertificateProvider $configuration
-    ) {
+    ) : bool {
         return $this->canValidate;
     }
 
@@ -51,7 +51,7 @@ class MockChainedValidator extends AbstractChainedValidator
     public function hasValidSignature(
         SignedElement $signedElement,
         CertificateProvider $configuration
-    ) {
+    ) : bool {
         return $this->isValid;
     }
 }

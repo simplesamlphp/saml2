@@ -85,7 +85,7 @@ abstract class SSODescriptorType extends RoleDescriptor
      * Collect the value of the ArtifactResolutionService-property
      * @return \SAML2\XML\md\IndexedEndpointType[]
      */
-    public function getArtifactResolutionService()
+    public function getArtifactResolutionService() : array
     {
         return $this->ArtifactResolutionService;
     }
@@ -118,7 +118,7 @@ abstract class SSODescriptorType extends RoleDescriptor
      * Collect the value of the SingleLogoutService-property
      * @return \SAML2\XML\md\EndpointType[]
      */
-    public function getSingleLogoutService()
+    public function getSingleLogoutService() : array
     {
         return $this->SingleLogoutService;
     }
@@ -151,7 +151,7 @@ abstract class SSODescriptorType extends RoleDescriptor
      * Collect the value of the ManageNameIDService-property
      * @return \SAML2\XML\md\EndpointType[]
      */
-    public function getManageNameIDService()
+    public function getManageNameIDService() : array
     {
         return $this->ManageNameIDService;
     }
@@ -184,7 +184,7 @@ abstract class SSODescriptorType extends RoleDescriptor
      * Collect the value of the NameIDFormat-property
      * @return string[]
      */
-    public function getNameIDFormat()
+    public function getNameIDFormat() : array
     {
         return $this->NameIDFormat;
     }
@@ -207,7 +207,7 @@ abstract class SSODescriptorType extends RoleDescriptor
      * @param  \DOMElement $parent The EntityDescriptor we should append this SSODescriptorType to.
      * @return \DOMElement The generated SSODescriptor DOMElement.
      */
-    protected function toXML(\DOMElement $parent)
+    protected function toXML(\DOMElement $parent) : \DOMElement
     {
         assert(is_array($this->getArtifactResolutionService()));
         assert(is_array($this->getSingleLogoutService()));

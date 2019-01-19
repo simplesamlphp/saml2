@@ -63,7 +63,7 @@ class AssertionValidator
      * @param Assertion $assertion
      * @return Result
      */
-    public function validate(Assertion $assertion)
+    public function validate(Assertion $assertion) : Result
     {
         $result = new Result();
         foreach ($this->constraints as $validator) {

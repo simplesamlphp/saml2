@@ -39,7 +39,7 @@ class Validator
     public function hasValidSignature(
         SignedElement $signedElement,
         CertificateProvider $configuration
-    ) {
+    ) : bool {
         // should be DI
         $validator = new ValidatorChain(
             $this->logger,

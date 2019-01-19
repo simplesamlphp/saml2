@@ -22,7 +22,7 @@ class HTTPRedirect extends Binding
      * @param  \SAML2\Message $message The message.
      * @return string        The URL the user should be redirected to in order to send a message.
      */
-    public function getRedirectURL(Message $message)
+    public function getRedirectURL(Message $message) : string
     {
         if ($this->destination === null) {
             $destination = $message->getDestination();
@@ -80,7 +80,7 @@ class HTTPRedirect extends Binding
      * @param \SAML2\Message $message The message we should send.
      * @return void
      */
-    public function send(Message $message)
+    public function send(Message $message) : Message
     {
         $destination = $this->getRedirectURL($message);
         Utils::getContainer()->getLogger()->debug('Redirect to '.strlen($destination).' byte URL: '.$destination);
@@ -98,7 +98,7 @@ class HTTPRedirect extends Binding
      *
      * NPath is currently too high but solving that just moves code around.
      */
-    public function receive()
+    public function receive() : Message
     {
         $data = self::parseQuery();
         if (array_key_exists('SAMLRequest', $data)) {
@@ -160,7 +160,7 @@ class HTTPRedirect extends Binding
      *
      * @return array The query data that is signed.
      */
-    private static function parseQuery()
+    private static function parseQuery() : array
     {
         /*
          * Parse the query string. We need to do this ourself, so that we get access
