@@ -70,9 +70,9 @@ class Issuer extends NameIDType
 
     /**
      * Collect the value of the Saml2IssuerShowAll-property
-     * @return boolean
+     * @return bool
      */
-    public function isSaml2IssuerShowAll()
+    public function isSaml2IssuerShowAll() : bool
     {
         return $this->Saml2IssuerShowAll;
     }
@@ -96,7 +96,7 @@ class Issuer extends NameIDType
      *
      * @return \DOMElement The current Issuer object converted into a \DOMElement.
      */
-    public function toXML(\DOMElement $parent = null)
+    public function toXML(\DOMElement $parent = null) : \DOMElement
     {
         if (($this->isSaml2IssuerShowAll() && ($this->getFormat() === Constants::NAMEID_ENTITY))
             || ($this->getFormat() !== Constants::NAMEID_ENTITY)

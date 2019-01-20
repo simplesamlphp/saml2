@@ -87,9 +87,9 @@ class EndpointType
      *
      * @param  string  $namespaceURI The namespace URI.
      * @param  string  $localName    The local name.
-     * @return boolean true if the attribute exists, false if not.
+     * @return bool true if the attribute exists, false if not.
      */
-    public function hasAttributeNS(string $namespaceURI, string $localName)
+    public function hasAttributeNS(string $namespaceURI, string $localName) : bool
     {
         $fullName = '{'.$namespaceURI.'}'.$localName;
 
@@ -104,7 +104,7 @@ class EndpointType
      * @param  string $localName    The local name.
      * @return string The value of the attribute, or an empty string if the attribute does not exist.
      */
-    public function getAttributeNS(string $namespaceURI, string $localName)
+    public function getAttributeNS(string $namespaceURI, string $localName) : string
     {
         $fullName = '{'.$namespaceURI.'}'.$localName;
         if (!isset($this->attributes[$fullName])) {
@@ -159,7 +159,7 @@ class EndpointType
      * Collect the value of the Binding-property
      * @return string
      */
-    public function getBinding()
+    public function getBinding() : string
     {
         return $this->Binding;
     }
@@ -225,7 +225,7 @@ class EndpointType
      * @param string     $name   The name of the element we should create.
      * @return \DOMElement
      */
-    public function toXML(\DOMElement $parent, string $name)
+    public function toXML(\DOMElement $parent, string $name) : \DOMElement
     {
         assert(is_string($name));
         assert(is_string($this->getBinding()));

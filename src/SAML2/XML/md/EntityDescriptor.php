@@ -189,7 +189,7 @@ class EntityDescriptor extends SignedElementHelper
      * Collect the value of the entityID-property
      * @return string
      */
-    public function getEntityID()
+    public function getEntityID() : string
     {
         return $this->entityID;
     }
@@ -275,7 +275,7 @@ class EntityDescriptor extends SignedElementHelper
      * Collect the value of the Extensions-property
      * @return \SAML2\XML\Chunk[]
      */
-    public function getExtensions()
+    public function getExtensions() : array
     {
         return $this->Extensions;
     }
@@ -308,7 +308,7 @@ class EntityDescriptor extends SignedElementHelper
      * Collect the value of the RoleDescriptor-property
      * @return \SAML2\XML\md\RoleDescriptor[]
      */
-    public function getRoleDescriptor()
+    public function getRoleDescriptor() : array
     {
         return $this->RoleDescriptor;
     }
@@ -382,7 +382,7 @@ class EntityDescriptor extends SignedElementHelper
      * Collect the value of the ContactPerson-property
      * @return \SAML2\XML\md\ContactPerson[]
      */
-    public function getContactPerson()
+    public function getContactPerson() : array
     {
         return $this->ContactPerson;
     }
@@ -414,7 +414,7 @@ class EntityDescriptor extends SignedElementHelper
      * Collect the value of the AdditionalMetadataLocation-property
      * @return \SAML2\XML\md\AdditionalMetadataLocation[]
      */
-    public function getAdditionalMetadataLocation()
+    public function getAdditionalMetadataLocation() : array
     {
         return $this->AdditionalMetadataLocation;
     }
@@ -448,7 +448,7 @@ class EntityDescriptor extends SignedElementHelper
      * @param \DOMElement|null $parent The EntitiesDescriptor we should append this EntityDescriptor to.
      * @return \DOMElement
      */
-    public function toXML(\DOMElement $parent = null)
+    public function toXML(\DOMElement $parent = null) : \DOMElement
     {
         assert(is_string($this->getEntityID()));
         assert(is_null($this->getID()) || is_string($this->getID()));

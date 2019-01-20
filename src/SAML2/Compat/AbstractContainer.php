@@ -4,20 +4,22 @@ declare(strict_types=1);
 
 namespace SAML2\Compat;
 
+use \Psr\Log\LoggerInterface;
+
 abstract class AbstractContainer
 {
     /**
      * Get a PSR-3 compatible logger.
      * @return \Psr\Log\LoggerInterface
      */
-    abstract public function getLogger();
+    abstract public function getLogger() : LoggerInterface;
 
 
     /**
      * Generate a random identifier for identifying SAML2 documents.
      * @return string
      */
-    abstract public function generateId();
+    abstract public function generateId() : string;
 
 
     /**

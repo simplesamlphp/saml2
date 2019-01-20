@@ -4,6 +4,8 @@ declare(strict_types=1);
 
 namespace SAML2\Compat\Ssp;
 
+use \Psr\Log\LoggerInterface;
+
 use SAML2\Compat\AbstractContainer;
 
 class Container extends AbstractContainer
@@ -27,7 +29,7 @@ class Container extends AbstractContainer
      * {@inheritdoc}
      * @return \Psr\Log\LoggerInterface
      */
-    public function getLogger()
+    public function getLogger() : LoggerInterface
     {
         return $this->logger;
     }
@@ -37,7 +39,7 @@ class Container extends AbstractContainer
      * {@inheritdoc}
      * @return string
      */
-    public function generateId()
+    public function generateId() : string
     {
         return \SimpleSAML\Utils\Random::generateID();
     }

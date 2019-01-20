@@ -38,10 +38,10 @@ class UnknownRoleDescriptor extends RoleDescriptor
      * Add this RoleDescriptor to an EntityDescriptor.
      *
      * @param \DOMElement $parent The EntityDescriptor we should append this RoleDescriptor to.
-     * @return void
+     * @return \DOMElement
      */
-    public function toXML(\DOMElement $parent)
+    public function toXML(\DOMElement $parent) : \DOMElement
     {
-        $this->xml->toXML($parent);
+        return $this->xml->toXML($parent);
     }
 }

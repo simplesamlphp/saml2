@@ -15,7 +15,7 @@ interface Queryable
      * @param string $key
      * @return bool
      */
-    public function has(string $key);
+    public function has(string $key) : bool;
 
 
     /**

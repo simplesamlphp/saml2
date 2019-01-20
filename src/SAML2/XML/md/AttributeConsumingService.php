@@ -92,7 +92,7 @@ class AttributeConsumingService
      * Collect the value of the index-property
      * @return int
      */
-    public function getIndex()
+    public function getIndex() : int
     {
         return $this->index;
     }
@@ -111,7 +111,7 @@ class AttributeConsumingService
 
     /**
      * Collect the value of the isDefault-property
-     * @return boolean|null
+     * @return bool|null
      */
     public function getIsDefault()
     {
@@ -121,7 +121,7 @@ class AttributeConsumingService
 
     /**
      * Set the value of the isDefault-property
-     * @param boolean|null $flag
+     * @param bool|null $flag
      * @return void
      */
     public function setIsDefault(bool $flag = null)
@@ -134,7 +134,7 @@ class AttributeConsumingService
      * Collect the value of the ServiceName-property
      * @return string[]
      */
-    public function getServiceName()
+    public function getServiceName() : array
     {
         return $this->ServiceName;
     }
@@ -155,7 +155,7 @@ class AttributeConsumingService
      * Collect the value of the ServiceDescription-property
      * @return string[]
      */
-    public function getServiceDescription()
+    public function getServiceDescription() : array
     {
         return $this->ServiceDescription;
     }
@@ -176,7 +176,7 @@ class AttributeConsumingService
      * Collect the value of the RequestedAttribute-property
      * @return \SAML2\XML\md\RequestedAttribute[]
      */
-    public function getRequestedAttribute()
+    public function getRequestedAttribute() : array
     {
         return $this->RequestedAttribute;
     }
@@ -210,7 +210,7 @@ class AttributeConsumingService
      * @param \DOMElement $parent The element we should append this AttributeConsumingService to.
      * @return \DOMElement
      */
-    public function toXML(\DOMElement $parent)
+    public function toXML(\DOMElement $parent) : \DOMElement
     {
         assert(is_int($this->getIndex()));
         assert(is_null($this->getIsDefault()) || is_bool($this->getIsDefault()));

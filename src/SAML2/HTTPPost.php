@@ -17,6 +17,7 @@ class HTTPPost extends Binding
      * Note: This function never returns.
      *
      * @param \SAML2\Message $message The message we should send.
+     * @return void
      */
     public function send(Message $message)
     {
@@ -56,7 +57,7 @@ class HTTPPost extends Binding
      *
      * Throws an exception if it is unable receive the message.
      *
-     * @return \SAML2\Message The received message.
+     * @return \SAML2\Message|null The received message.
      * @throws \Exception
      */
     public function receive()

@@ -93,7 +93,7 @@ class IdentityProvider extends ArrayAdapter implements
 
 
     /**
-     * @return mixed
+     * @return array|null
      */
     public function getBlacklistedAlgorithms()
     {

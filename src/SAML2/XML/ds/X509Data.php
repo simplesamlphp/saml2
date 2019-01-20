@@ -61,7 +61,7 @@ class X509Data
      * Collect the value of the data-property
      * @return array
      */
-    public function getData()
+    public function getData() : array
     {
         return $this->data;
     }
@@ -96,7 +96,7 @@ class X509Data
      * @param \DOMElement $parent The element we should append this X509Data element to.
      * @return \DOMElement
      */
-    public function toXML(\DOMElement $parent)
+    public function toXML(\DOMElement $parent) : \DOMElement
     {
         assert(is_array($this->getData()));
 

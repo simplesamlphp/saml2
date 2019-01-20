@@ -6,6 +6,7 @@ namespace SAML2;
 
 use RobRichards\XMLSecLibs\XMLSecEnc;
 use RobRichards\XMLSecLibs\XMLSecurityKey;
+
 use SAML2\XML\saml\SubjectConfirmation;
 use SAML2\Exception\InvalidArgumentException;
 
@@ -101,7 +102,7 @@ class AuthnRequest extends Request
      * - AuthnContextClassRef (required)
      * - Comparison (optinal)
      *
-     * @var array
+     * @var array|null
      */
     private $requestedAuthnContext;
 
@@ -339,7 +340,7 @@ class AuthnRequest extends Request
      * @see \SAML2\AuthnRequest::setNameIdPolicy()
      * @return array The NameIdPolicy.
      */
-    public function getNameIdPolicy()
+    public function getNameIdPolicy() : array
     {
         return $this->nameIdPolicy;
     }
@@ -377,7 +378,7 @@ class AuthnRequest extends Request
      *
      * @return bool The ForceAuthn attribute.
      */
-    public function getForceAuthn()
+    public function getForceAuthn() : bool
     {
         return $this->forceAuthn;
     }
@@ -400,7 +401,7 @@ class AuthnRequest extends Request
      *
      * @return string The ProviderName attribute.
      */
-    public function getProviderName()
+    public function getProviderName() : string
     {
         return $this->ProviderName;
     }
@@ -423,7 +424,7 @@ class AuthnRequest extends Request
      *
      * @return bool The IsPassive attribute.
      */
-    public function getIsPassive()
+    public function getIsPassive() : bool
     {
         return $this->isPassive;
     }
@@ -447,7 +448,7 @@ class AuthnRequest extends Request
      *
      * @return array The audiences.
      */
-    public function getAudiences()
+    public function getAudiences() : array
     {
         return $this->audiences;
     }
@@ -494,7 +495,7 @@ class AuthnRequest extends Request
      *
      * @return array List of idp EntityIDs from the request
      */
-    public function getIDPList()
+    public function getIDPList() : array
     {
         return $this->IDPList;
     }
@@ -532,7 +533,7 @@ class AuthnRequest extends Request
     /**
      * @return array
      */
-    public function getRequesterID()
+    public function getRequesterID() : array
     {
         return $this->RequesterID;
     }
@@ -644,10 +645,10 @@ class AuthnRequest extends Request
     /**
      * Set the RequestedAuthnContext.
      *
-     * @param array $requestedAuthnContext The RequestedAuthnContext.
+     * @param array|null $requestedAuthnContext The RequestedAuthnContext.
      * @return void
      */
-    public function setRequestedAuthnContext(array $requestedAuthnContext = [])
+    public function setRequestedAuthnContext(array $requestedAuthnContext = null)
     {
         $this->requestedAuthnContext = $requestedAuthnContext;
     }
@@ -741,7 +742,7 @@ class AuthnRequest extends Request
      *
      * @return \SAML2\XML\saml\SubjectConfirmation[]
      */
-    public function getSubjectConfirmation()
+    public function getSubjectConfirmation() : array
     {
         return $this->subjectConfirmation;
     }
@@ -764,7 +765,7 @@ class AuthnRequest extends Request
      *
      * @return \DOMElement This authentication request.
      */
-    public function toUnsignedXML()
+    public function toUnsignedXML() : \DOMElement
     {
         $root = parent::toUnsignedXML();
 

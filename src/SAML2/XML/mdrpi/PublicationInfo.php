@@ -78,7 +78,7 @@ class PublicationInfo
      * Collect the value of the publisher-property
      * @return string
      */
-    public function getPublisher()
+    public function getPublisher() : string
     {
         return $this->publisher;
     }
@@ -108,7 +108,7 @@ class PublicationInfo
      * Collect the value of the UsagePolicy-property
      * @return array
      */
-    public function getUsagePolicy()
+    public function getUsagePolicy() : array
     {
         return $this->UsagePolicy;
     }
@@ -164,7 +164,7 @@ class PublicationInfo
      * @param \DOMElement $parent The element we should append to.
      * @return \DOMElement
      */
-    public function toXML(\DOMElement $parent)
+    public function toXML(\DOMElement $parent) : \DOMElement
     {
         assert(is_string($this->getPublisher()));
         assert(is_int($this->getCreationInstant()) || is_null($this->getCreationInstant()));

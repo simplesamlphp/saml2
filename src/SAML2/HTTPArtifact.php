@@ -31,7 +31,7 @@ class HTTPArtifact extends Binding
      * @throws \Exception
      * @return string        The URL the user should be redirected to in order to send a message.
      */
-    public function getRedirectURL(Message $message)
+    public function getRedirectURL(Message $message) : string
     {
         $store = Store::getInstance();
         if ($store === false) {
@@ -63,7 +63,7 @@ class HTTPArtifact extends Binding
      * Note: This function never returns.
      *
      * @param \SAML2\Message $message The message we should send.
-     * @retrun void
+     * @return void
      */
     public function send(Message $message)
     {
@@ -78,7 +78,7 @@ class HTTPArtifact extends Binding
      * Throws an exception if it is unable receive the message.
      *
      * @throws \Exception
-     * @return \SAML2\Message The received message.
+     * @return \SAML2\Message|null The received message.
      */
     public function receive()
     {
@@ -169,7 +169,7 @@ class HTTPArtifact extends Binding
      * @param XMLSecurityKey $key
      * @return bool
      */
-    public static function validateSignature(ArtifactResponse $message, XMLSecurityKey $key)
+    public static function validateSignature(ArtifactResponse $message, XMLSecurityKey $key) : bool
     {
         return $message->validate($key);
     }

@@ -37,8 +37,10 @@ abstract class AbstractChainedValidator implements ChainedValidator
      *
      * @return bool
      */
-    protected function validateElementWithKeys(SignedElement $element, \SAML2\Utilities\ArrayCollection $pemCandidates)
-    {
+    protected function validateElementWithKeys(
+        SignedElement $element,
+        \SAML2\Utilities\ArrayCollection $pemCandidates
+    ) : bool {
         $lastException = null;
         foreach ($pemCandidates as $index => $candidateKey) {
             $key = new XMLSecurityKey(XMLSecurityKey::RSA_SHA256, ['type' => 'public']);

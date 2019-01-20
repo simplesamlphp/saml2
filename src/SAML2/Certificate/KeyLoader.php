@@ -6,6 +6,7 @@ namespace SAML2\Certificate;
 
 use SAML2\Certificate\Exception\InvalidCertificateStructureException;
 use SAML2\Certificate\Exception\NoKeysFoundException;
+use SAML2\Certificate\KeyCollection;
 use SAML2\Configuration\CertificateProvider;
 use SAML2\Exception\InvalidArgumentException;
 use SAML2\Utilities\Certificate;
@@ -44,7 +45,7 @@ class KeyLoader
         CertificateProvider $config,
         string $usage = null,
         bool $required = false
-    ) {
+    ) : KeyCollection {
         $keyLoader = new self();
 
         return $keyLoader->loadKeysFromConfiguration($config, $usage, $required);
@@ -61,7 +62,7 @@ class KeyLoader
         CertificateProvider $config,
         string $usage = null,
         bool $required = false
-    ) {
+    ) : KeyCollection {
         $keys = $config->getKeys();
         $certificateData = $config->getCertificateData();
         $certificateFile = $config->getCertificateFile();
@@ -149,7 +150,7 @@ class KeyLoader
     /**
      * @return \SAML2\Certificate\KeyCollection
      */
-    public function getKeys()
+    public function getKeys() : KeyCollection
     {
         return $this->loadedKeys;
     }
@@ -158,7 +159,7 @@ class KeyLoader
     /**
      * @return bool
      */
-    public function hasKeys()
+    public function hasKeys() : bool
     {
         return !!count($this->loadedKeys);
     }

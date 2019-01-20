@@ -47,7 +47,7 @@ class PublicKeyValidator extends AbstractChainedValidator
     public function canValidate(
         SignedElement $signedElement,
         CertificateProvider $configuration
-    ) {
+    ) : bool {
         $this->configuredKeys = $this->keyLoader->extractPublicKeys($configuration);
 
         return !!count($this->configuredKeys);
@@ -63,7 +63,7 @@ class PublicKeyValidator extends AbstractChainedValidator
     public function hasValidSignature(
         SignedElement $signedElement,
         CertificateProvider $configuration
-    ) {
+    ) : bool {
         $logger = $this->logger;
         $pemCandidates = $this->configuredKeys->filter(function (Key $key) use ($logger) {
             if (!$key instanceof X509) {

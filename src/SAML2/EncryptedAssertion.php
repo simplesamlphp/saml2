@@ -94,7 +94,7 @@ class EncryptedAssertion
      * @param  array           $blacklist Blacklisted decryption algorithms.
      * @return \SAML2\Assertion The decrypted assertion.
      */
-    public function getAssertion(XMLSecurityKey $inputKey, array $blacklist = [])
+    public function getAssertion(XMLSecurityKey $inputKey, array $blacklist = []) : Assertion
     {
         $assertionXML = Utils::decryptElement($this->encryptedData, $inputKey, $blacklist);
 
@@ -110,7 +110,7 @@ class EncryptedAssertion
      * @param  \DOMNode|null $parentElement The DOM node the assertion should be created in.
      * @return \DOMElement   This encrypted assertion.
      */
-    public function toXML(\DOMNode $parentElement = null)
+    public function toXML(\DOMNode $parentElement = null) : \DOMElement
     {
         if ($parentElement === null) {
             $document = DOMDocumentFactory::create();

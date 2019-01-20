@@ -21,7 +21,7 @@ class Extensions
      * @param  \DOMElement $parent The element that may contain the samlp:Extensions element.
      * @return array      Array of extensions.
      */
-    public static function getList(\DOMElement $parent)
+    public static function getList(\DOMElement $parent) : array
     {
         $ret = [];
         foreach (Utils::xpQuery($parent, './saml_protocol:Extensions/*') as $node) {

@@ -34,14 +34,13 @@ use SAML2\Signature\Validator;
 class ProcessorBuilder
 {
     /**
-     * Constructor for ProcessorBuilder
-     *
      * @param LoggerInterface $logger
      * @param Validator $signatureValidator
      * @param Destination $currentDestination
      * @param IdentityProvider $identityProvider
      * @param ServiceProvider $serviceProvider
      * @param Response $response
+     * @return Processor
      */
     public static function build(
         LoggerInterface $logger,
@@ -50,7 +49,7 @@ class ProcessorBuilder
         IdentityProvider $identityProvider,
         ServiceProvider $serviceProvider,
         Response $response
-    ) {
+    ) : Processor {
         $keyloader = new PrivateKeyLoader();
         $decrypter = new Decrypter($logger, $identityProvider, $serviceProvider, $keyloader);
         $assertionValidator = self::createAssertionValidator($identityProvider, $serviceProvider);
@@ -88,7 +87,7 @@ class ProcessorBuilder
     private static function createAssertionValidator(
         IdentityProvider $identityProvider,
         ServiceProvider $serviceProvider
-    ) {
+    ) : AssertionValidator {
         $validator = new AssertionValidator($identityProvider, $serviceProvider);
         $validator->addConstraintValidator(new NotBefore());
         $validator->addConstraintValidator(new NotOnOrAfter());
@@ -111,7 +110,7 @@ class ProcessorBuilder
         ServiceProvider $serviceProvider,
         Destination $currentDestination,
         Response $response
-    ) {
+    ) : SubjectConfirmationValidator {
         $validator = new SubjectConfirmationValidator($identityProvider, $serviceProvider);
         $validator->addConstraintValidator(
             new SubjectConfirmationMethod()
@@ -148,7 +147,7 @@ class ProcessorBuilder
         PrivateKeyLoader $keyloader,
         IdentityProvider $identityProvider,
         ServiceProvider $serviceProvider
-    ) {
+    ) : TransformerChain {
         $chain = new TransformerChain($identityProvider, $serviceProvider);
         $chain->addTransformerStep(new DecodeBase64Transformer());
         $chain->addTransformerStep(

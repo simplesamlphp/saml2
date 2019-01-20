@@ -144,7 +144,7 @@ abstract class NameIDType extends BaseIDType
      * @param \DOMElement $parent The element we are converting to XML.
      * @return \DOMElement The XML element after adding the data corresponding to this NameIDType.
      */
-    public function toXML(\DOMElement $parent = null)
+    public function toXML(\DOMElement $parent = null) : \DOMElement
     {
         assert(is_string($this->getFormat()) || is_null($this->getFormat()));
         assert(is_string($this->getSPProvidedID()) || is_null($this->getSPProvidedID()));

@@ -73,7 +73,7 @@ class SubjectConfirmation
      * Collect the value of the Method-property
      * @return string
      */
-    public function getMethod()
+    public function getMethod() : string
     {
         return $this->Method;
     }
@@ -92,7 +92,7 @@ class SubjectConfirmation
 
     /**
      * Collect the value of the NameID-property
-     * @return \SAML2\XML\saml\NameID
+     * @return \SAML2\XML\saml\NameID|null
      */
     public function getNameID()
     {
@@ -102,10 +102,10 @@ class SubjectConfirmation
 
     /**
      * Set the value of the NameID-property
-     * @param \SAML2\XML\saml\NameID $nameId
+     * @param \SAML2\XML\saml\NameID|null $nameId
      * @return void
      */
-    public function setNameID(NameID $nameId)
+    public function setNameID(NameID $nameId = null)
     {
         $this->NameID = $nameId;
     }
@@ -138,7 +138,7 @@ class SubjectConfirmation
      * @param  \DOMElement $parent The parent element we should append this element to.
      * @return \DOMElement This element, as XML.
      */
-    public function toXML(\DOMElement $parent)
+    public function toXML(\DOMElement $parent) : \DOMElement
     {
         assert(is_string($this->getMethod()));
         assert(is_null($this->getNameID()) || $this->getNameID() instanceof NameID);

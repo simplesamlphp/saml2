@@ -20,9 +20,9 @@ interface SignedElement
      * but cannot be verified, an exception will be thrown.
      *
      * @param  XMLSecurityKey $key The key we should check against.
-     * @return boolean        true if successful, false if we don't have a signature that can be verified.
+     * @return bool        true if successful, false if we don't have a signature that can be verified.
      */
-    public function validate(XMLSecurityKey $key);
+    public function validate(XMLSecurityKey $key) : bool;
 
 
     /**
@@ -40,7 +40,7 @@ interface SignedElement
      *
      * @return array An array of certificates.
      */
-    public function getCertificates();
+    public function getCertificates() : array;
 
 
     /**

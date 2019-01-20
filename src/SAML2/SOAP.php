@@ -87,7 +87,7 @@ SOAP;
      * @throws \Exception If unable to receive the message
      * @return \SAML2\Message The received message.
      */
-    public function receive()
+    public function receive() : Message
     {
         $postText = $this->getInputStream();
 

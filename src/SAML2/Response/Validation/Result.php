@@ -31,7 +31,7 @@ class Result
     /**
      * @return bool
      */
-    public function isValid()
+    public function isValid() : bool
     {
         return empty($this->errors);
     }
@@ -40,7 +40,7 @@ class Result
     /**
      * @return array
      */
-    public function getErrors()
+    public function getErrors() : array
     {
         return $this->errors;
     }

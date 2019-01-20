@@ -55,7 +55,7 @@ class IndexedEndpointType extends EndpointType
      * Collect the value of the index-property
      * @return int
      */
-    public function getIndex()
+    public function getIndex() : int
     {
         return $this->index;
     }
@@ -100,7 +100,7 @@ class IndexedEndpointType extends EndpointType
      * @param string     $name   The name of the element we should create.
      * @return \DOMElement
      */
-    public function toXML(\DOMElement $parent, string $name)
+    public function toXML(\DOMElement $parent, string $name) : \DOMElement
     {
         assert(is_string($name));
         assert(is_int($this->getIndex()));

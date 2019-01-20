@@ -96,7 +96,7 @@ class AttributeQuery extends SubjectQuery
      *
      * @return array All requested attributes, as an associative array.
      */
-    public function getAttributes()
+    public function getAttributes() : array
     {
         return $this->attributes;
     }
@@ -122,7 +122,7 @@ class AttributeQuery extends SubjectQuery
      *
      * @return string The NameFormat used on all attributes.
      */
-    public function getAttributeNameFormat()
+    public function getAttributeNameFormat() : string
     {
         return $this->nameFormat;
     }
@@ -145,7 +145,7 @@ class AttributeQuery extends SubjectQuery
      *
      * @return \DOMElement This attribute query.
      */
-    public function toUnsignedXML()
+    public function toUnsignedXML() : \DOMElement
     {
         $root = parent::toUnsignedXML();
 

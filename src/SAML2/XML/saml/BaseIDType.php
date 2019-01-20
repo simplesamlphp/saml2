@@ -122,7 +122,7 @@ abstract class BaseIDType
      * @param \DOMElement $parent The element we are converting to XML.
      * @return \DOMElement The XML element after adding the data corresponding to this BaseID.
      */
-    public function toXML(\DOMElement $parent = null)
+    public function toXML(\DOMElement $parent = null) : \DOMElement
     {
         assert(is_string($this->getNameQualifier()) || is_null($this->getNameQualifier()));
         assert(is_string($this->getSPNameQualifier()) || is_null($this->getSPNameQualifier()));

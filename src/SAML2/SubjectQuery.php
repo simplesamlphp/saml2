@@ -4,6 +4,8 @@ declare(strict_types=1);
 
 namespace SAML2;
 
+use \SAML2\XML\saml\NameID;
+
 /**
  * Base class for SAML 2 subject query messages.
  *
@@ -68,7 +70,7 @@ abstract class SubjectQuery extends Request
             throw new \Exception('More than one <saml:NameID> in <saml:Subject>.');
         }
         $nameId = $nameId[0];
-        $this->nameId = new XML\saml\NameID($nameId);
+        $this->nameId = new NameID($nameId);
     }
 
 
@@ -86,10 +88,10 @@ abstract class SubjectQuery extends Request
     /**
      * Set the NameId of the subject in the query.
      *
-     * @param \SAML2\XML\saml\NameID|array|null $nameId The name identifier of the assertion.
+     * @param \SAML2\XML\saml\NameID|null $nameId The name identifier of the assertion.
      * @return void
      */
-    public function setNameId(\SAML2\XML\saml\NameID $nameId = null)
+    public function setNameId(NameID $nameId = null)
     {
         $this->nameId = $nameId;
     }
@@ -100,7 +102,7 @@ abstract class SubjectQuery extends Request
      *
      * @return \DOMElement This subject query.
      */
-    public function toUnsignedXML()
+    public function toUnsignedXML() : \DOMElement
     {
         $root = parent::toUnsignedXML();
 

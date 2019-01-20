@@ -4,6 +4,8 @@ declare(strict_types=1);
 
 namespace SAML2\Utilities;
 
+use \ArrayIterator;
+
 use SAML2\Exception\RuntimeException;
 
 /**
@@ -47,7 +49,7 @@ class ArrayCollection implements Collection
     /**
      * @return ArrayCollection
      */
-    public function filter(\Closure $f)
+    public function filter(\Closure $f) : Collection
     {
         return new self(array_filter($this->elements, $f));
     }
@@ -119,7 +121,7 @@ class ArrayCollection implements Collection
     /**
      * @return ArrayCollection
      */
-    public function map(\Closure $function)
+    public function map(\Closure $function) : ArrayCollection
     {
         return new self(array_map($function, $this->elements));
     }
@@ -128,7 +130,7 @@ class ArrayCollection implements Collection
     /**
      * @return int
      */
-    public function count()
+    public function count() : int
     {
         return count($this->elements);
     }
@@ -137,9 +139,9 @@ class ArrayCollection implements Collection
     /**
      * @return \ArrayIterator
      */
-    public function getIterator()
+    public function getIterator() : ArrayIterator
     {
-        return new \ArrayIterator($this->elements);
+        return new ArrayIterator($this->elements);
     }
 
 
@@ -147,7 +149,7 @@ class ArrayCollection implements Collection
      * @param mixed $offset
      * @return bool
      */
-    public function offsetExists($offset)
+    public function offsetExists($offset) : bool
     {
         return isset($this->elements[$offset]);
     }

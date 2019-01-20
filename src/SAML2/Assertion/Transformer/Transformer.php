@@ -13,5 +13,5 @@ interface Transformer
      *
      * @return \SAML2\Assertion
      */
-    public function transform(Assertion $assertion);
+    public function transform(Assertion $assertion) : Assertion;
 }

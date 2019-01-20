@@ -116,7 +116,7 @@ class ContactPerson
      * @param  string     $name   The name of the child elements.
      * @return array      The value of the child elements.
      */
-    private static function getStringElements(\DOMElement $parent, string $name)
+    private static function getStringElements(\DOMElement $parent, string $name) : array
     {
         $e = Utils::xpQuery($parent, './saml_metadata:'.$name);
 
@@ -155,7 +155,7 @@ class ContactPerson
      * Collect the value of the contactType-property
      * @return string
      */
-    public function getContactType()
+    public function getContactType() : string
     {
         return $this->contactType;
     }
@@ -239,7 +239,7 @@ class ContactPerson
      * Collect the value of the EmailAddress-property
      * @return string[]
      */
-    public function getEmailAddress()
+    public function getEmailAddress() : array
     {
         return $this->EmailAddress;
     }
@@ -271,7 +271,7 @@ class ContactPerson
      * Collect the value of the TelephoneNumber-property
      * @return string[]
      */
-    public function getTelephoneNumber()
+    public function getTelephoneNumber() : array
     {
         return $this->TelephoneNumber;
     }
@@ -303,7 +303,7 @@ class ContactPerson
      * Collect the value of the Extensions-property
      * @return \SAML2\XML\Chunk[]
      */
-    public function getExtensions()
+    public function getExtensions() : array
     {
         return $this->Extensions;
     }
@@ -336,7 +336,7 @@ class ContactPerson
      * Collect the value of the ContactPersonAttributes-property
      * @return string[]
      */
-    public function getContactPersonAttributes()
+    public function getContactPersonAttributes() : array
     {
         return $this->ContactPersonAttributes;
     }
@@ -371,7 +371,7 @@ class ContactPerson
      * @param  \DOMElement $parent The element we should add this contact to.
      * @return \DOMElement The new ContactPerson-element.
      */
-    public function toXML(\DOMElement $parent)
+    public function toXML(\DOMElement $parent) : \DOMElement
     {
         assert(is_string($this->getContactType()));
         assert(is_array($this->getExtensions()));

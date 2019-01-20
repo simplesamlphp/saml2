@@ -13,9 +13,10 @@ class ResponseTest extends \PHPUnit\Framework\TestCase
 {
     public function testConstructorWithoutXML()
     {
-        $response = new Response;
+        $this->expectException(\TypeError::class);
 
-        $this->assertNull($response->getAssertionConsumerServiceURL());
+        $response = new Response;
+        $response->getAssertionConsumerServiceURL();
     }
 
 

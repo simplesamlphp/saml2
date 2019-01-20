@@ -20,7 +20,7 @@ class Certificate
      *
      * @return bool
      */
-    public static function hasValidStructure(string $certificate)
+    public static function hasValidStructure(string $certificate) : bool
     {
         return !!preg_match(self::CERTIFICATE_PATTERN, $certificate);
     }
@@ -31,7 +31,7 @@ class Certificate
      *
      * @return string
      */
-    public static function convertToCertificate(string $X509CertificateContents)
+    public static function convertToCertificate(string $X509CertificateContents) : string
     {
         return "-----BEGIN CERTIFICATE-----\n"
                 . chunk_split($X509CertificateContents, 64)

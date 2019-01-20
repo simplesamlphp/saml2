@@ -29,7 +29,7 @@ class SOAPClient
      * @throws \Exception
      * @return \SAML2\Message            The response we received.
      */
-    public function send(Message $msg, Configuration $srcMetadata, Configuration $dstMetadata = null)
+    public function send(Message $msg, Configuration $srcMetadata, Configuration $dstMetadata = null) : Message
     {
         $issuer = $msg->getIssuer();
 

@@ -96,9 +96,9 @@ abstract class StatusResponse extends Message
     /**
      * Determine whether this is a successful response.
      *
-     * @return boolean true if the status code is success, false if not.
+     * @return bool true if the status code is success, false if not.
      */
-    public function isSuccess()
+    public function isSuccess() : bool
     {
         assert(array_key_exists("Code", $this->status));
 
@@ -138,7 +138,7 @@ abstract class StatusResponse extends Message
      *
      * @return array The status code.
      */
-    public function getStatus()
+    public function getStatus() : array
     {
         return $this->status;
     }
@@ -169,7 +169,7 @@ abstract class StatusResponse extends Message
      *
      * @return \DOMElement This status response.
      */
-    public function toUnsignedXML()
+    public function toUnsignedXML() : \DOMElement
     {
         $root = parent::toUnsignedXML();
 

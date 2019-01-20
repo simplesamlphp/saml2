@@ -74,7 +74,7 @@ class KeyDescriptor
 
     /**
      * Collect the value of the use-property
-     * @return string
+     * @return string|null
      */
     public function getUse()
     {
@@ -97,7 +97,7 @@ class KeyDescriptor
      * Collect the value of the KeyInfo-property
      * @return \SAML2\XML\ds\KeyInfo
      */
-    public function getKeyInfo()
+    public function getKeyInfo() : KeyInfo
     {
         return $this->KeyInfo;
     }
@@ -118,7 +118,7 @@ class KeyDescriptor
      * Collect the value of the EncryptionMethod-property
      * @return \SAML2\XML\Chunk[]
      */
-    public function getEncryptionMethod()
+    public function getEncryptionMethod() : array
     {
         return $this->EncryptionMethod;
     }
@@ -152,7 +152,7 @@ class KeyDescriptor
      * @param \DOMElement $parent The element we should append this KeyDescriptor to.
      * @return \DOMElement
      */
-    public function toXML(\DOMElement $parent)
+    public function toXML(\DOMElement $parent) : \DOMElement
     {
         assert(is_null($this->getUse()) || is_string($this->getUse()));
         assert($this->getKeyInfo() instanceof KeyInfo);

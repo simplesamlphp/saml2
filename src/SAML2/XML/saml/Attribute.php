@@ -80,7 +80,7 @@ class Attribute
      * Collect the value of the Name-property
      * @return string
      */
-    public function getName()
+    public function getName() : string
     {
         return $this->Name;
     }
@@ -143,7 +143,7 @@ class Attribute
      * Collect the value of the AttributeValue-property
      * @return \SAML2\XML\saml\AttributeValue[]
      */
-    public function getAttributeValue()
+    public function getAttributeValue() : array
     {
         return $this->AttributeValue;
     }
@@ -180,7 +180,7 @@ class Attribute
      * @param string     $name      The name of the element.
      * @return \DOMElement
      */
-    protected function toXMLInternal(\DOMElement $parent, $namespace, $name)
+    protected function toXMLInternal(\DOMElement $parent, $namespace, $name) : \DOMElement
     {
         assert(is_string($namespace));
         assert(is_string($name));
@@ -216,7 +216,7 @@ class Attribute
      * @param \DOMElement $parent The element we should append this Attribute to.
      * @return \DOMElement
      */
-    public function toXML(\DOMElement $parent)
+    public function toXML(\DOMElement $parent) : \DOMElement
     {
         return $this->toXMLInternal($parent, Constants::NS_SAML, 'saml:Attribute');
     }

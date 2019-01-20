@@ -32,7 +32,7 @@ class DecodeBase64Transformer implements
      * @param Assertion $assertion
      * @return Assertion
      */
-    public function transform(Assertion $assertion)
+    public function transform(Assertion $assertion) : Assertion
     {
         if (!$this->identityProvider->hasBase64EncodedAttributes()) {
             return $assertion;
@@ -54,7 +54,7 @@ class DecodeBase64Transformer implements
      *
      * @return array
      */
-    private function decodeValue(string $value)
+    private function decodeValue(string $value) : array
     {
         $elements = explode('_', $value);
         return array_map('base64_decode', $elements);

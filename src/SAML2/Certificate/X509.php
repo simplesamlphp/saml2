@@ -9,7 +9,7 @@ namespace SAML2\Certificate;
  */
 class X509 extends Key
 {
-    public static function createFromCertificateData(string $certificateContents)
+    public static function createFromCertificateData(string $certificateContents) : X509
     {
         $data = [
             'encryption'      => true,
@@ -46,7 +46,7 @@ class X509 extends Key
      *
      * @return string
      */
-    public function getCertificate()
+    public function getCertificate() : string
     {
         return "-----BEGIN CERTIFICATE-----\n"
                 . chunk_split($this->keyData['X509Certificate'], 64)

@@ -57,7 +57,7 @@ interface Collection extends \ArrayAccess, \Countable, \IteratorAggregate
      *
      * @return \SAML2\Utilities\Collection
      */
-    public function filter(\Closure $filterFunction);
+    public function filter(\Closure $filterFunction): Collection;
 
 
     /**

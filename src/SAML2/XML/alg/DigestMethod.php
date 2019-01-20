@@ -45,7 +45,7 @@ class DigestMethod
      * Collect the value of the algorithm-property
      * @return string
      */
-    public function getAlgorithm()
+    public function getAlgorithm() : string
     {
         return $this->Algorithm;
     }
@@ -68,7 +68,7 @@ class DigestMethod
      * @param \DOMElement $parent The element we should append to.
      * @return \DOMElement
      */
-    public function toXML(\DOMElement $parent)
+    public function toXML(\DOMElement $parent) : \DOMElement
     {
         assert(is_string($this->getAlgorithm()));
 

@@ -58,7 +58,7 @@ class NameIdDecryptionTransformer implements
      * @param Assertion $assertion
      * @return Assertion
      */
-    public function transform(Assertion $assertion)
+    public function transform(Assertion $assertion) : Assertion
     {
         if (!$assertion->isNameIdEncrypted()) {
             return $assertion;

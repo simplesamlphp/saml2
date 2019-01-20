@@ -119,7 +119,7 @@ class AffiliationDescriptor extends SignedElementHelper
      * Collect the value of the affiliationOwnerId-property
      * @return string
      */
-    public function getAffiliationOwnerID()
+    public function getAffiliationOwnerID() : string
     {
         return $this->affiliationOwnerID;
     }
@@ -205,7 +205,7 @@ class AffiliationDescriptor extends SignedElementHelper
      * Collect the value of the Extensions-property
      * @return \SAML2\XML\Chunk[]
      */
-    public function getExtensions()
+    public function getExtensions() : array
     {
         return $this->Extensions;
     }
@@ -238,7 +238,7 @@ class AffiliationDescriptor extends SignedElementHelper
      * Collect the value of the AffiliateMember-property
      * @return array
      */
-    public function getAffiliateMember()
+    public function getAffiliateMember() : array
     {
         return $this->AffiliateMember;
     }
@@ -259,7 +259,7 @@ class AffiliationDescriptor extends SignedElementHelper
      * Collect the value of the KeyDescriptor-property
      * @return \SAML2\XML\md\KeyDescriptor[]
      */
-    public function getKeyDescriptor()
+    public function getKeyDescriptor() : array
     {
         return $this->KeyDescriptor;
     }
@@ -293,7 +293,7 @@ class AffiliationDescriptor extends SignedElementHelper
      * @param \DOMElement $parent The EntityDescriptor we should append this endpoint to.
      * @return \DOMElement
      */
-    public function toXML(\DOMElement $parent)
+    public function toXML(\DOMElement $parent) : \DOMElement
     {
         assert(is_string($this->getAffiliationOwnerID()));
         assert(is_null($this->getID()) || is_string($this->getID()));

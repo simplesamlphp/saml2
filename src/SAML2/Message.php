@@ -242,7 +242,7 @@ abstract class Message implements SignedElement
      * @throws \Exception
      * @return bool true on success, false when we don't have a signature
      */
-    public function validate(XMLSecurityKey $key)
+    public function validate(XMLSecurityKey $key) : bool
     {
         if (count($this->validators) === 0) {
             return false;
@@ -274,7 +274,7 @@ abstract class Message implements SignedElement
      *
      * @return string The identifier of this message
      */
-    public function getId()
+    public function getId() : string
     {
         return $this->id;
     }
@@ -297,7 +297,7 @@ abstract class Message implements SignedElement
      *
      * @return int The issue timestamp of this message, as an UNIX timestamp
      */
-    public function getIssueInstant()
+    public function getIssueInstant() : int
     {
         return $this->issueInstant;
     }
@@ -343,10 +343,10 @@ abstract class Message implements SignedElement
      * Most likely (though not required) a value of urn:oasis:names:tc:SAML:2.0:consent.
      *
      * @see \SAML2\Constants
-     * @param string $consent
+     * @param string|null $consent
      * @return void
      */
-    public function setConsent(string $consent)
+    public function setConsent(string $consent = null)
     {
         $this->consent = $consent;
     }
@@ -357,7 +357,7 @@ abstract class Message implements SignedElement
      * Most likely (though not required) a value of urn:oasis:names:tc:SAML:2.0:consent.
      *
      * @see \SAML2\Constants
-     * @return string Consent
+     * @return string|null Consent
      */
     public function getConsent()
     {
@@ -393,7 +393,7 @@ abstract class Message implements SignedElement
      *
      * @return bool
      */
-    public function isMessageConstructedWithSignature()
+    public function isMessageConstructedWithSignature() : bool
     {
         return $this->messageContainedSignatureUponConstruction;
     }
@@ -428,7 +428,7 @@ abstract class Message implements SignedElement
      *
      * @return \DOMElement The root element of the DOM tree
      */
-    public function toUnsignedXML()
+    public function toUnsignedXML() : \DOMElement
     {
         $this->document = DOMDocumentFactory::create();
 
@@ -469,7 +469,7 @@ abstract class Message implements SignedElement
      *
      * @return \DOMElement The root element of the DOM tree
      */
-    public function toSignedXML()
+    public function toSignedXML() : \DOMElement
     {
         $root = $this->toUnsignedXML();
 
@@ -540,7 +540,7 @@ abstract class Message implements SignedElement
      *
      * @return array An array of certificates
      */
-    public function getCertificates()
+    public function getCertificates() : array
     {
         return $this->certificates;
     }
@@ -553,7 +553,7 @@ abstract class Message implements SignedElement
      * @throws \Exception
      * @return \SAML2\Message The message
      */
-    public static function fromXML(\DOMElement $xml)
+    public static function fromXML(\DOMElement $xml) : Message
     {
         if ($xml->namespaceURI !== Constants::NS_SAMLP) {
             throw new \Exception('Unknown namespace of SAML message: '.var_export($xml->namespaceURI, true));
@@ -585,7 +585,7 @@ abstract class Message implements SignedElement
      *
      * @return \SAML2\XML\samlp\Extensions[]
      */
-    public function getExtensions()
+    public function getExtensions() : array
     {
         return $this->extensions;
     }

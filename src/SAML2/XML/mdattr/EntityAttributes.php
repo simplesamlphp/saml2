@@ -56,7 +56,7 @@ class EntityAttributes
      * Collect the value of the children-property
      * @return (\SAML2\XML\Chunk|\SAML2\XML\saml\Attribute)[]
      */
-    public function getChildren()
+    public function getChildren() : array
     {
         return $this->children;
     }
@@ -91,7 +91,7 @@ class EntityAttributes
      * @param \DOMElement $parent The element we should append to.
      * @return \DOMElement
      */
-    public function toXML(\DOMElement $parent)
+    public function toXML(\DOMElement $parent) : \DOMElement
     {
         assert(is_array($this->getChildren()));
 

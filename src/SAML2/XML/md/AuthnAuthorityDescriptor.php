@@ -75,7 +75,7 @@ class AuthnAuthorityDescriptor extends RoleDescriptor
      * Collect the value of the AuthnQueryService-property
      * @return \SAML2\XML\md\EndpointType[]
      */
-    public function getAuthnQueryService()
+    public function getAuthnQueryService() : array
     {
         return $this->AuthnQueryService;
     }
@@ -108,7 +108,7 @@ class AuthnAuthorityDescriptor extends RoleDescriptor
      * Collect the value of the AssertionIDRequestService-property
      * @return \SAML2\XML\md\EndpointType[]
      */
-    public function getAssertionIDRequestService()
+    public function getAssertionIDRequestService() : array
     {
         return $this->AssertionIDRequestService;
     }
@@ -141,7 +141,7 @@ class AuthnAuthorityDescriptor extends RoleDescriptor
      * Collect the value of the NameIDFormat-property
      * @return string[]
      */
-    public function getNameIDFormat()
+    public function getNameIDFormat() : array
     {
         return $this->NameIDFormat;
     }
@@ -164,7 +164,7 @@ class AuthnAuthorityDescriptor extends RoleDescriptor
      * @param \DOMElement $parent The EntityDescriptor we should append this AuthnAuthorityDescriptor to.
      * @return \DOMElement
      */
-    public function toXML(\DOMElement $parent)
+    public function toXML(\DOMElement $parent) : \DOMElement
     {
         assert(is_array($authnQueryService = $this->getAuthnQueryService()));
         assert(!empty($authnQueryService));

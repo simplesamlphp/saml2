@@ -118,7 +118,7 @@ class SPSSODescriptor extends SSODescriptorType
      * Collect the value of the AssertionConsumerService-property
      * @return array
      */
-    public function getAssertionConsumerService()
+    public function getAssertionConsumerService() : array
     {
         return $this->AssertionConsumerService;
     }
@@ -150,7 +150,7 @@ class SPSSODescriptor extends SSODescriptorType
      * Collect the value of the AttributeConsumingService-property
      * @return array
      */
-    public function getAttributeConsumingService()
+    public function getAttributeConsumingService() : array
     {
         return $this->AttributeConsumingService;
     }
@@ -182,9 +182,9 @@ class SPSSODescriptor extends SSODescriptorType
      * Add this SPSSODescriptor to an EntityDescriptor.
      *
      * @param \DOMElement $parent The EntityDescriptor we should append this SPSSODescriptor to.
-     * @return void
+     * @return \DOMElement
      */
-    public function toXML(\DOMElement $parent)
+    public function toXML(\DOMElement $parent) : \DOMElement
     {
         assert(is_null($this->getAuthnRequestsSigned()) || is_bool($this->getAuthnRequestsSigned()));
         assert(is_null($this->wantAssertionsSigned()) || is_bool($this->wantAssertionsSigned()));
@@ -212,5 +212,7 @@ class SPSSODescriptor extends SSODescriptorType
         foreach ($this->getAttributeConsumingService() as $acs) {
             $acs->toXML($e);
         }
+
+        return $e;
     }
 }

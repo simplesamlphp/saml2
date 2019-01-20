@@ -62,7 +62,7 @@ class AttributeValue implements \Serializable
      * Collect the value of the element-property
      * @return \DOMElement
      */
-    public function getElement()
+    public function getElement() : \DOMElement
     {
         return $this->element;
     }
@@ -85,7 +85,7 @@ class AttributeValue implements \Serializable
      * @param  \DOMElement $parent The element we should append this attribute value to.
      * @return \DOMElement The generated AttributeValue element.
      */
-    public function toXML(\DOMElement $parent)
+    public function toXML(\DOMElement $parent) : \DOMElement
     {
         assert($this->getElement() instanceof \DOMElement);
         assert($this->getElement()->namespaceURI === \SAML2\Constants::NS_SAML && $this->element->localName === "AttributeValue");
@@ -98,7 +98,7 @@ class AttributeValue implements \Serializable
      * Returns a plain text content of the attribute value.
      * @return string
      */
-    public function getString()
+    public function getString() : string
     {
         return $this->element->textContent;
     }
@@ -111,7 +111,7 @@ class AttributeValue implements \Serializable
      *
      * @return string This attribute value.
      */
-    public function __toString()
+    public function __toString() : string
     {
         assert($this->getElement() instanceof \DOMElement);
 
@@ -131,7 +131,7 @@ class AttributeValue implements \Serializable
      *
      * @return string The AttributeValue serialized.
      */
-    public function serialize()
+    public function serialize() : string
     {
         return serialize($this->getElement()->ownerDocument->saveXML($this->getElement()));
     }

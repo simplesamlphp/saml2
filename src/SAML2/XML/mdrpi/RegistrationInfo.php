@@ -67,7 +67,7 @@ class RegistrationInfo
      * Collect the value of the RegistrationAuthority-property
      * @return string
      */
-    public function getRegistrationAuthority()
+    public function getRegistrationAuthority() : string
     {
         return $this->registrationAuthority;
     }
@@ -109,7 +109,7 @@ class RegistrationInfo
      * Collect the value of the RegistrationPolicy-property
      * @return array
      */
-    public function getRegistrationPolicy()
+    public function getRegistrationPolicy() : array
     {
         return $this->RegistrationPolicy;
     }
@@ -132,7 +132,7 @@ class RegistrationInfo
      * @param \DOMElement $parent The element we should append to.
      * @return \DOMElement
      */
-    public function toXML(\DOMElement $parent)
+    public function toXML(\DOMElement $parent) : \DOMElement
     {
         assert(is_string($this->getRegistrationAuthority()));
         assert(is_int($this->getRegistrationInstant()) || is_null($this->getRegistrationInstant()));

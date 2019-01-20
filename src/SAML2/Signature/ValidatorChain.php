@@ -61,7 +61,7 @@ class ValidatorChain implements ValidatorInterface
     public function hasValidSignature(
         SignedElement $signedElement,
         CertificateProvider $configuration
-    ) {
+    ) : bool {
         foreach ($this->validators as $validator) {
             if ($validator->canValidate($signedElement, $configuration)) {
                 $this->logger->debug(sprintf(

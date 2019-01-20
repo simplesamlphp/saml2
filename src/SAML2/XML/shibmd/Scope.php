@@ -54,7 +54,7 @@ class Scope
      * Collect the value of the scope-property
      * @return string
      */
-    public function getScope()
+    public function getScope() : string
     {
         return $this->scope;
     }
@@ -73,9 +73,9 @@ class Scope
 
     /**
      * Collect the value of the regexp-property
-     * @return boolean
+     * @return bool
      */
-    public function isRegexpScope()
+    public function isRegexpScope() : bool
     {
         return $this->regexp;
     }
@@ -98,7 +98,7 @@ class Scope
      * @param \DOMElement $parent The element we should append this Scope to.
      * @return \DOMElement
      */
-    public function toXML(\DOMElement $parent)
+    public function toXML(\DOMElement $parent) : \DOMElement
     {
         assert(is_string($this->getScope()));
         assert(is_bool($this->isRegexpScope()) || is_null($this->isRegexpScope()));
