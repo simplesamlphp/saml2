@@ -91,7 +91,7 @@ XML;
     public function testUnmarshalling()
     {
         $logoutRequest = new LogoutRequest($this->logoutRequestElement);
-        $this->assertEquals('TheIssuer', $logoutRequest->getIssuer());
+        $this->assertEquals('TheIssuer', $logoutRequest->getIssuer()->getValue());
         $this->assertTrue($logoutRequest->isNameIdEncrypted());
 
         $sessionIndexElements = $logoutRequest->getSessionIndexes();

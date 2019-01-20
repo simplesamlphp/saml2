@@ -83,9 +83,8 @@ class Logo
      * Set the value of the url-property
      * @param string $url
      */
-    public function setUrl($url)
+    public function setUrl(string $url)
     {
-        assert(is_string($url));
         if (!filter_var(trim($url), FILTER_VALIDATE_URL) && substr(trim($url), 0, 5) !== 'data:') {
             throw new \InvalidArgumentException('mdui:Logo is not a valid URL.');
         }
@@ -108,9 +107,8 @@ class Logo
      * @param string $lang
      * @return void
      */
-    public function setLanguage($lang)
+    public function setLanguage(string $lang)
     {
-        assert(is_string($lang));
         $this->lang = $lang;
     }
 
@@ -130,9 +128,8 @@ class Logo
      * @param int $height
      * @return void
      */
-    public function setHeight($height)
+    public function setHeight(int $height)
     {
-        assert(is_int($height));
         $this->height = $height;
     }
 
@@ -152,9 +149,8 @@ class Logo
      * @param int $width
      * @return void
      */
-    public function setWidth($width)
+    public function setWidth(int $width)
     {
-        assert(is_int($width));
         $this->width = $width;
     }
 

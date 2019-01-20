@@ -74,7 +74,7 @@ AUTHNREQUEST;
             'https://sp.example.com/SAML2/SSO/Artifact',
             $authnRequest->getAssertionConsumerServiceURL()
         );
-        $this->assertEquals('https://sp.example.com/SAML2', $authnRequest->getIssuer());
+        $this->assertEquals('https://sp.example.com/SAML2', $authnRequest->getIssuer()->getValue());
     }
 
 
@@ -216,7 +216,7 @@ AUTHNREQUEST;
 
         // basic AuthnRequest
         $request = new AuthnRequest();
-        $request->setIssuer('https://gateway.stepup.org/saml20/sp/metadata');
+        $request->setIssuer($issuer);
         $request->setDestination('https://tiqr.stepup.org/idp/profile/saml2/Redirect/SSO');
         $request->setNameId($nameId);
 
@@ -452,7 +452,7 @@ AUTHNREQUEST;
         $request = new AuthnRequest();
         $request->setIssuer($issuer);
         $request->setDestination('https://tiqr.example.org/idp/profile/saml2/Redirect/SSO');
-        $request->setIssueInstant( Utils::xsDateTimeToTimestamp('2004-12-05T09:21:59Z'));
+        $request->setIssueInstant(Utils::xsDateTimeToTimestamp('2004-12-05T09:21:59Z'));
         $request->setProxyCount(34);
         $request->setRequesterID([
             'https://engine.demo.openconext.org/authentication/sp/metadata',

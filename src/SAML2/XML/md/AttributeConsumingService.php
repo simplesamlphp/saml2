@@ -101,9 +101,8 @@ class AttributeConsumingService
      * @param int $index
      * @return void
      */
-    public function setIndex($index)
+    public function setIndex(int $index)
     {
-        assert(is_int($index));
         $this->index = $index;
     }
 
@@ -123,9 +122,8 @@ class AttributeConsumingService
      * @param boolean|null $flag
      * @return void
      */
-    public function setIsDefault($flag = null)
+    public function setIsDefault(bool $flag = null)
     {
-        assert(is_bool($flag) || is_null($flag));
         $this->isDefault = $flag;
     }
 

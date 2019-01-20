@@ -128,9 +128,8 @@ class AffiliationDescriptor extends SignedElementHelper
      * @param string $affiliationOwnerId
      * @return void
      */
-    public function setAffiliationOwnerID($affiliationOwnerId)
+    public function setAffiliationOwnerID(string $affiliationOwnerId)
     {
-        assert(is_string($affiliationOwnerId));
         $this->affiliationOwnerID = $affiliationOwnerId;
     }
 
@@ -150,9 +149,8 @@ class AffiliationDescriptor extends SignedElementHelper
      * @param string|null $Id
      * @return void
      */
-    public function setID($Id = null)
+    public function setID(string $Id = null)
     {
-        assert(is_string($Id) || is_null($Id));
         $this->ID = $Id;
     }
 
@@ -172,7 +170,7 @@ class AffiliationDescriptor extends SignedElementHelper
      * @param int|null $validUntil
      * @return void
      */
-    public function setValidUntil($validUntil = null)
+    public function setValidUntil(int $validUntil = null)
     {
         assert(is_int($validUntil) || is_null($validUntil));
         $this->validUntil = $validUntil;
@@ -194,7 +192,7 @@ class AffiliationDescriptor extends SignedElementHelper
      * @param string|null $cacheDuration
      * @return void
      */
-    public function setCacheDuration($cacheDuration = null)
+    public function setCacheDuration(string $cacheDuration = null)
     {
         assert(is_string($cacheDuration) || is_null($cacheDuration));
         $this->cacheDuration = $cacheDuration;

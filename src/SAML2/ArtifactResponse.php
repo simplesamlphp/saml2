@@ -58,7 +58,7 @@ class ArtifactResponse extends StatusResponse
 
     /**
      * @return \DOMElement|null
-    */
+     */
     public function getAny()
     {
         return $this->any;

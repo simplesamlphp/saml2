@@ -68,9 +68,8 @@ class Keywords
      * @param string $lang
      * @return void
      */
-    public function setLanguage($lang)
+    public function setLanguage(string $lang = null)
     {
-        assert(is_string($lang) || is_null($lang));
         $this->lang = $lang;
     }
 
@@ -101,9 +100,8 @@ class Keywords
      * @param string $keyword
      * @return void
      */
-    public function addKeyword($keyword)
+    public function addKeyword(string $keyword)
     {
-        assert(is_string($keyword));
         $this->Keywords[] = $keyword;
     }
 

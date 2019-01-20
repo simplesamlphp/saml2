@@ -84,9 +84,8 @@ class KeyInfo
      * @param string|null $id
      * @return void
      */
-    public function setId($id = null)
+    public function setId(string $id = null)
     {
-        assert(is_string($id) || is_null($id));
         $this->Id = $id;
     }
 

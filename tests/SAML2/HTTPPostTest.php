@@ -25,7 +25,7 @@ class HTTPPostTest extends \Mockery\Adapter\Phpunit\MockeryTestCase
         $request = $hp->receive();
         $this->assertInstanceOf(AuthnRequest::class, $request);
         $issuer = $request->getIssuer();
-        $this->assertEquals('https://engine.test.surfconext.nl/authentication/sp/metadata', $issuer);
+        $this->assertEquals('https://engine.test.surfconext.nl/authentication/sp/metadata', $issuer->getValue());
     }
 
 
@@ -44,7 +44,7 @@ class HTTPPostTest extends \Mockery\Adapter\Phpunit\MockeryTestCase
         $response = $hp->receive();
         $this->assertInstanceOf(Response::class, $response);
         $issuer = $response->getIssuer();
-        $this->assertEquals('https://engine.test.surfconext.nl/authentication/idp/metadata', $issuer);
+        $this->assertEquals('https://engine.test.surfconext.nl/authentication/idp/metadata', $issuer->getValue());
         $relay = $response->getRelayState();
         $this->assertEquals('relaystate001', $relay);
     }

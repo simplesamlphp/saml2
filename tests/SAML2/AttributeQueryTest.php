@@ -2,10 +2,8 @@
 
 namespace SAML2;
 
-use SAML2\AttributeQuery;
-use SAML2\DOMDocumentFactory;
+use SAML2\XML\saml\Issuer;
 use SAML2\XML\saml\NameID;
-use SAML2\Utils;
 
 /**
  * Class \SAML2\AttributeQueryTest
@@ -23,15 +21,15 @@ class AttributeQueryTest extends \PHPUnit\Framework\TestCase
                 'test1' => [
                     'test1_attrv1',
                     'test1_attrv2',
-	        ],
+                ],
                 'test2' => [
                     'test2_attrv1',
                     'test2_attrv2',
                     'test2_attrv3',
-	        ],
+                ],
                 'test3' => [],
                 'test4' => [ 4, 23 ],
-	    ]
+            ]
         );
         $attributeQueryElement = $attributeQuery->toUnsignedXML();
 
@@ -101,7 +99,7 @@ XML;
         $aq = new AttributeQuery($document->firstChild);
 
         // Sanity check
-        $this->assertEquals('https://example.org/', $aq->getIssuer());
+        $this->assertEquals('https://example.org/', $aq->getIssuer()->getValue());
 
         $nameid = $aq->getNameId();
         $this->assertInstanceOf(NameID::class, $nameid);
@@ -130,14 +128,14 @@ XML;
                 'test1' => [
                     'test1_attrv1',
                     'test1_attrv2',
-	        ],
+                    ],
                 'test2' => [
                     'test2_attrv1',
                     'test2_attrv2',
                     'test2_attrv3',
-	        ],
+                    ],
                 'test3' => [],
-	    ]
+            ]
         );
         $attributeQuery->setAttributeNameFormat($fmt_uri);
         $attributeQueryElement = $attributeQuery->toUnsignedXML();
@@ -178,7 +176,7 @@ XML;
         $aq = new AttributeQuery($document->firstChild);
 
         // Sanity check
-        $this->assertEquals('https://example.org/', $aq->getIssuer());
+        $this->assertEquals('https://example.org/', $aq->getIssuer()->getValue());
 
         $this->assertEquals('urn:oasis:names:tc:SAML:2.0:attrname-format:unspecified', $aq->getAttributeNameFormat());
     }
@@ -213,7 +211,7 @@ XML;
         $aq = new AttributeQuery($document->firstChild);
 
         // Sanity check
-        $this->assertEquals('https://example.org/', $aq->getIssuer());
+        $this->assertEquals('https://example.org/', $aq->getIssuer()->getValue());
 
         $this->assertEquals('urn:oasis:names:tc:SAML:2.0:attrname-format:unspecified', $aq->getAttributeNameFormat());
     }

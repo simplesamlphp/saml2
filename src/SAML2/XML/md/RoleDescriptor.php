@@ -98,10 +98,8 @@ class RoleDescriptor extends SignedElementHelper
      * @param \DOMElement|null $xml         The XML element we should load.
      * @throws \Exception
      */
-    protected function __construct($elementName, \DOMElement $xml = null)
+    protected function __construct(string $elementName, \DOMElement $xml = null)
     {
-        assert(is_string($elementName));
-
         parent::__construct($xml);
         $this->elementName = $elementName;
 
@@ -162,9 +160,8 @@ class RoleDescriptor extends SignedElementHelper
      * @param string|null $Id
      * @return void
      */
-    public function setID($Id = null)
+    public function setID(string $Id = null)
     {
-        assert(is_string($Id) || is_null($Id));
         $this->ID = $Id;
     }
 
@@ -184,7 +181,7 @@ class RoleDescriptor extends SignedElementHelper
      * @param int|null $validUntil
      * @return void
      */
-    public function setValidUntil($validUntil = null)
+    public function setValidUntil(int $validUntil = null)
     {
         assert(is_int($validUntil) || is_null($validUntil));
         $this->validUntil = $validUntil;
@@ -206,7 +203,7 @@ class RoleDescriptor extends SignedElementHelper
      * @param string|null $cacheDuration
      * @return void
      */
-    public function setCacheDuration($cacheDuration = null)
+    public function setCacheDuration(string $cacheDuration = null)
     {
         assert(is_string($cacheDuration) || is_null($cacheDuration));
         $this->cacheDuration = $cacheDuration;
@@ -251,9 +248,8 @@ class RoleDescriptor extends SignedElementHelper
      * @param string|null $errorURL
      * @return void
      */
-    public function setErrorURL($errorURL = null)
+    public function setErrorURL(string $errorURL = null)
     {
-        assert(is_string($errorURL) || is_null($errorURL));
         if (!is_null($errorURL) && !filter_var($errorURL, FILTER_VALIDATE_URL)) {
             throw new \InvalidArgumentException('RoleDescriptor errorURL is not a valid URL.');
         }

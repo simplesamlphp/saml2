@@ -50,9 +50,8 @@ class X509Certificate
      * @param string $certificate
      * @return void
      */
-    public function setCertificate($certificate)
+    public function setCertificate(string $certificate)
     {
-        assert(is_string($certificate));
         $this->certificate = $certificate;
     }
 

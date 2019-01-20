@@ -75,9 +75,8 @@ class Chunk implements \Serializable
      * @param string $localName
      * @return void
      */
-    public function setLocalName($localName)
+    public function setLocalName(string $localName)
     {
-        assert(is_string($localName));
         $this->localName = $localName;
     }
 
@@ -97,9 +96,8 @@ class Chunk implements \Serializable
      * @param string|null $namespaceURI
      * @return void
      */
-    public function setNamespaceURI($namespaceURI = null)
+    public function setNamespaceURI(string $namespaceURI = null)
     {
-        assert(is_string($namespaceURI) || is_null($namespaceURI));
         $this->namespaceURI = $namespaceURI;
     }
 
@@ -114,12 +112,13 @@ class Chunk implements \Serializable
         return $this->xml;
     }
 
+
     /**
      * Set the value of the xml-property
      * @param \DOMelement $xml
      * @return void
      */
-    private function setXml(\DOMelement $xml)
+    private function setXml(\DOMElement $xml)
     {
         $this->xml = $xml;
     }
@@ -139,11 +138,12 @@ class Chunk implements \Serializable
     /**
      * Un-serialize this XML chunk.
      *
-     * @param  string          $serialized The serialized chunk.
+     * @param string          $serialized The serialized chunk.
      * @return void
      */
     public function unserialize($serialized)
     {
+        assert(is_string($serialized));
         $doc = DOMDocumentFactory::fromString(unserialize($serialized));
         $this->xml = $doc->documentElement;
         $this->setLocalName($this->xml->localName);

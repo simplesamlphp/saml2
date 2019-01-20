@@ -82,9 +82,8 @@ class SubjectConfirmation
      * @param string $method
      * @return void
      */
-    public function setMethod($method)
+    public function setMethod(string $method)
     {
-        assert(is_string($method));
         $this->Method = $method;
     }
 
@@ -125,7 +124,7 @@ class SubjectConfirmation
      * @param \SAML2\XML\saml\SubjectConfirmationData|null $subjectConfirmationData
      * @return void
      */
-    public function setSubjectConfirmationData($subjectConfirmationData = null)
+    public function setSubjectConfirmationData(SubjectConfirmationData $subjectConfirmationData = null)
     {
         $this->SubjectConfirmationData = $subjectConfirmationData;
     }

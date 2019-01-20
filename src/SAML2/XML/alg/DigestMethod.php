@@ -54,9 +54,8 @@ class DigestMethod
      * @param string $algorithm
      * @return void
      */
-    public function setAlgorithm($algorithm)
+    public function setAlgorithm(string $algorithm)
     {
-        assert(is_string($algorithm));
         $this->Algorithm = $algorithm;
     }
 

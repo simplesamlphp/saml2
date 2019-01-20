@@ -87,11 +87,8 @@ class EndpointType
      * @param  string  $localName    The local name.
      * @return boolean true if the attribute exists, false if not.
      */
-    public function hasAttributeNS($namespaceURI, $localName)
+    public function hasAttributeNS(string $namespaceURI, string $localName)
     {
-        assert(is_string($namespaceURI));
-        assert(is_string($localName));
-
         $fullName = '{'.$namespaceURI.'}'.$localName;
 
         return isset($this->attributes[$fullName]);
@@ -105,11 +102,8 @@ class EndpointType
      * @param  string $localName    The local name.
      * @return string The value of the attribute, or an empty string if the attribute does not exist.
      */
-    public function getAttributeNS($namespaceURI, $localName)
+    public function getAttributeNS(string $namespaceURI, string $localName)
     {
-        assert(is_string($namespaceURI));
-        assert(is_string($localName));
-
         $fullName = '{'.$namespaceURI.'}'.$localName;
         if (!isset($this->attributes[$fullName])) {
             return '';
@@ -128,11 +122,8 @@ class EndpointType
      * @throws \Exception
      * @return void
      */
-    public function setAttributeNS($namespaceURI, $qualifiedName, $value)
+    public function setAttributeNS(string $namespaceURI, string $qualifiedName, string $value)
     {
-        assert(is_string($namespaceURI));
-        assert(is_string($qualifiedName));
-
         $name = explode(':', $qualifiedName, 2);
         if (count($name) < 2) {
             throw new \Exception('Not a qualified name.');
@@ -155,11 +146,8 @@ class EndpointType
      * @param string $localName    The local name.
      * @return void
      */
-    public function removeAttributeNS($namespaceURI, $localName)
+    public function removeAttributeNS(string $namespaceURI, string $localName)
     {
-        assert(is_string($namespaceURI));
-        assert(is_string($localName));
-
         $fullName = '{'.$namespaceURI.'}'.$localName;
         unset($this->attributes[$fullName]);
     }
@@ -180,9 +168,8 @@ class EndpointType
      * @param string $binding
      * @return void
      */
-    public function setBinding($binding)
+    public function setBinding(string $binding)
     {
-        assert(is_string($binding));
         $this->Binding = $binding;
     }
 
@@ -202,9 +189,8 @@ class EndpointType
      * @param string|null $location
      * @return void
      */
-    public function setLocation($location)
+    public function setLocation(string $location = null)
     {
-        assert(is_string($location) || is_null($location));
         $this->Location = $location;
     }
 
@@ -224,9 +210,8 @@ class EndpointType
      * @param string|null $responseLocation
      * @return void
      */
-    public function setResponseLocation($responseLocation)
+    public function setResponseLocation(string $responseLocation = null)
     {
-        assert(is_string($responseLocation) || is_null($responseLocation));
         $this->ResponseLocation = $responseLocation;
     }
 
@@ -238,7 +223,7 @@ class EndpointType
      * @param string     $name   The name of the element we should create.
      * @return \DOMElement
      */
-    public function toXML(\DOMElement $parent, $name)
+    public function toXML(\DOMElement $parent, string $name)
     {
         assert(is_string($name));
         assert(is_string($this->getBinding()));

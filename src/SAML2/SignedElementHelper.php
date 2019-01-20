@@ -36,6 +36,13 @@ class SignedElementHelper implements SignedElement
      */
     private $validators;
 
+    /**
+     * The length of time this element can be cached, as string.
+     *
+     * @var string|null
+     */
+    public $cacheDuration;
+
 
     /**
      * Initialize the helper class.
@@ -73,14 +80,12 @@ class SignedElementHelper implements SignedElement
      *
      * This function is used for custom validation extensions
      *
-     * @param callback $function The function which should be called.
+     * @param callable $function The function which should be called.
      * @param mixed    $data     The data that should be included as the first parameter to the function.
      * @return void
      */
-    public function addValidator($function, $data)
+    public function addValidator(callable $function, $data)
     {
-        assert(is_callable($function));
-
         $this->validators[] = [
             'Function' => $function,
             'Data' => $data,
@@ -205,6 +210,46 @@ class SignedElementHelper implements SignedElement
         }
 
         return $ret;
+    }
+
+
+    /**
+     * Collect the value of the validUntil-property
+     * @return int|null
+     */
+    public function getValidUntil()
+    {
+        return $this->validUntil;
+    }
+
+
+    /**
+     * Set the value of the validUntil-property
+     * @param int|null $validUntil
+     */
+    public function setValidUntil(int $validUntil = null)
+    {
+        $this->validUntil = $validUntil;
+    }
+
+
+    /**
+     * Collect the value of the cacheDuration-property
+     * @return string|null
+     */
+    public function getCacheDuration()
+    {
+        return $this->cacheDuration;
+    }
+
+
+    /**
+     * Set the value of the cacheDuration-property
+     * @param string|null $cacheDuration
+     */
+    public function setCacheDuration(string $cacheDuration = null)
+    {
+        $this->cacheDuration = $cacheDuration;
     }
 
 

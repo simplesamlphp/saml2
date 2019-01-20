@@ -13,7 +13,7 @@ interface Queryable
      * @param string $key
      * @return bool
      */
-    public function has($key);
+    public function has(string $key);
 
 
     /**
@@ -25,5 +25,5 @@ interface Queryable
      *
      * @return mixed
      */
-    public function get($key, $default = null);
+    public function get(string $key, $default = null);
 }

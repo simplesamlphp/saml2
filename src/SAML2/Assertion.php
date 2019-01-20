@@ -7,6 +7,7 @@ use RobRichards\XMLSecLibs\XMLSecurityKey;
 use SAML2\Exception\RuntimeException;
 use SAML2\Utilities\Temporal;
 use SAML2\XML\Chunk;
+use SAML2\XML\saml\Issuer;
 use SAML2\XML\saml\SubjectConfirmation;
 
 /**
@@ -36,7 +37,7 @@ class Assertion implements SignedElement
      * If the issuer's format is \SAML2\Constants::NAMEID_ENTITY, this property will just take the issuer's string
      * value.
      *
-     * @var string|\SAML2\XML\saml\Issuer
+     * @var \SAML2\XML\saml\Issuer
      */
     private $issuer;
 
@@ -257,9 +258,12 @@ class Assertion implements SignedElement
      */
     public function __construct(\DOMElement $xml = null)
     {
+        $issuer = new Issuer();
+        $issuer->setValue('');
+
         $this->setId(Utils::getContainer()->generateId());
         $this->setIssueInstant(Temporal::getTime());
-        $this->setIssuer('');
+        $this->setIssuer($issuer);
         $this->setAuthnInstant(Temporal::getTime());
         $this->setAttributes([]);
         $this->setAttributeNameFormat(Constants::NAMEFORMAT_UNSPECIFIED);
@@ -289,9 +293,6 @@ class Assertion implements SignedElement
             throw new \Exception('Missing <saml:Issuer> in assertion.');
         }
         $this->issuer = new XML\saml\Issuer($issuer[0]);
-        if ($this->issuer->Format === Constants::NAMEID_ENTITY) {
-            $this->issuer = $this->issuer->value;
-        }
 
         $this->parseSubject($xml);
         $this->parseConditions($xml);
@@ -558,7 +559,7 @@ class Assertion implements SignedElement
      * @param string   $attributeName
      * @return void
      */
-    private function parseAttributeValue($attribute, $attributeName)
+    private function parseAttributeValue(\DOMNode $attribute, string $attributeName)
     {
         /** @var \DOMElement[] $values */
         $values = Utils::xpQuery($attribute, './saml_assertion:AttributeValue');
@@ -689,7 +690,7 @@ class Assertion implements SignedElement
      * @param string $id The new identifier of this assertion.
      * @return void
      */
-    public function setId($id)
+    public function setId(string $id)
     {
         assert(is_string($id));
 
@@ -714,7 +715,7 @@ class Assertion implements SignedElement
      * @param int $issueInstant The new issue timestamp of this assertion, as an UNIX timestamp.
      * @return void
      */
-    public function setIssueInstant($issueInstant)
+    public function setIssueInstant(int $issueInstant)
     {
         assert(is_int($issueInstant));
 
@@ -725,7 +726,7 @@ class Assertion implements SignedElement
     /**
      * Retrieve the issuer if this assertion.
      *
-     * @return string|\SAML2\XML\saml\Issuer The issuer of this assertion.
+     * @return \SAML2\XML\saml\Issuer The issuer of this assertion.
      */
     public function getIssuer()
     {
@@ -736,13 +737,11 @@ class Assertion implements SignedElement
     /**
      * Set the issuer of this message.
      *
-     * @param string|\SAML2\XML\saml\Issuer $issuer The new issuer of this assertion.
+     * @param \SAML2\XML\saml\Issuer $issuer The new issuer of this assertion.
      * @return void
      */
-    public function setIssuer($issuer)
+    public function setIssuer(\SAML2\XML\saml\Issuer $issuer)
     {
-        assert(is_string($issuer) || $issuer instanceof XML\saml\Issuer);
-
         $this->issuer = $issuer;
     }
 
@@ -930,10 +929,8 @@ class Assertion implements SignedElement
      * @param int|null $notBefore The earliest timestamp this assertion is valid.
      * @return void
      */
-    public function setNotBefore($notBefore)
+    public function setNotBefore(int $notBefore = null)
     {
-        assert(is_int($notBefore) || is_null($notBefore));
-
         $this->notBefore = $notBefore;
     }
 
@@ -960,10 +957,8 @@ class Assertion implements SignedElement
      * @param int|null $notOnOrAfter The latest timestamp this assertion is valid.
      * @return void
      */
-    public function setNotOnOrAfter($notOnOrAfter)
+    public function setNotOnOrAfter(int $notOnOrAfter = null)
     {
-        assert(is_int($notOnOrAfter) || is_null($notOnOrAfter));
-
         $this->notOnOrAfter = $notOnOrAfter;
     }
 
@@ -982,12 +977,11 @@ class Assertion implements SignedElement
     /**
      * Set $requiredEncAttributes if attributes will be send encrypted
      *
-     * @param boolean $ea true to encrypt attributes in the assertion.
+     * @param bool $ea true to encrypt attributes in the assertion.
      * @return void
      */
-    public function setRequiredEncAttributes($ea)
+    public function setRequiredEncAttributes(bool $ea)
     {
-        assert(is_bool($ea));
         $this->requiredEncAttributes = $ea;
     }
 
@@ -1036,10 +1030,8 @@ class Assertion implements SignedElement
      * @param int|null $authnInstant Timestamp the user was authenticated, or NULL if we don't want an AuthnStatement.
      * @return void
      */
-    public function setAuthnInstant($authnInstant)
+    public function setAuthnInstant(int $authnInstant = null)
     {
-        assert(is_int($authnInstant) || is_null($authnInstant));
-
         $this->authnInstant = $authnInstant;
     }
 
@@ -1066,10 +1058,8 @@ class Assertion implements SignedElement
      * @param int|null $sessionNotOnOrAfter The latest timestamp this session is valid.
      * @return void
      */
-    public function setSessionNotOnOrAfter($sessionNotOnOrAfter)
+    public function setSessionNotOnOrAfter(int $sessionNotOnOrAfter = null)
     {
-        assert(is_int($sessionNotOnOrAfter) || is_null($sessionNotOnOrAfter));
-
         $this->sessionNotOnOrAfter = $sessionNotOnOrAfter;
     }
 
@@ -1094,10 +1084,8 @@ class Assertion implements SignedElement
      * @param string|null $sessionIndex The session index of the user at the IdP.
      * @return void
      */
-    public function setSessionIndex($sessionIndex)
+    public function setSessionIndex(string $sessionIndex = null)
     {
-        assert(is_string($sessionIndex) || is_null($sessionIndex));
-
         $this->sessionIndex = $sessionIndex;
     }
 
@@ -1125,10 +1113,8 @@ class Assertion implements SignedElement
      * @param string|null $authnContextClassRef The authentication method.
      * @return void
      */
-    public function setAuthnContextClassRef($authnContextClassRef)
+    public function setAuthnContextClassRef(string $authnContextClassRef = null)
     {
-        assert(is_string($authnContextClassRef) || is_null($authnContextClassRef));
-
         $this->authnContextClassRef = $authnContextClassRef;
     }
 
@@ -1150,10 +1136,8 @@ class Assertion implements SignedElement
      * @param string|null $signatureMethod
      * @return void
      */
-    public function setSignatureMethod($signatureMethod)
+    public function setSignatureMethod(string $signatureMethod = null)
     {
-        assert(is_string($signatureMethod) || is_null($signatureMethod));
-
         $this->signatureMethod = $signatureMethod;
     }
 
@@ -1194,11 +1178,11 @@ class Assertion implements SignedElement
     /**
      * Set the authentication context declaration reference.
      *
-     * @param string|\SAML2\XML\Chunk $authnContextDeclRef
+     * @param string $authnContextDeclRef
      * @throws \Exception
      * @return void
      */
-    public function setAuthnContextDeclRef($authnContextDeclRef)
+    public function setAuthnContextDeclRef(string $authnContextDeclRef)
     {
         if (!empty($this->authnContextDecl)) {
             throw new \Exception(
@@ -1216,7 +1200,7 @@ class Assertion implements SignedElement
      *
      * The URI reference MAY directly resolve into an XML document containing the referenced declaration.
      *
-     * @return string
+     * @return string|null
      */
     public function getAuthnContextDeclRef()
     {
@@ -1331,10 +1315,8 @@ class Assertion implements SignedElement
      * @param string $nameFormat The NameFormat used on all attributes.
      * @return void
      */
-    public function setAttributeNameFormat($nameFormat)
+    public function setAttributeNameFormat(string $nameFormat)
     {
-        assert(is_string($nameFormat));
-
         $this->nameFormat = $nameFormat;
     }
 
@@ -1472,9 +1454,8 @@ class Assertion implements SignedElement
      * @param bool $flag
      * @return void
      */
-    public function setWasSignedAtConstruction($flag)
+    public function setWasSignedAtConstruction(bool $flag)
     {
-        assert(is_bool($flag));
         $this->wasSignedAtConstruction = $flag;
     }
 
@@ -1509,11 +1490,7 @@ class Assertion implements SignedElement
         $root->setAttribute('Version', '2.0');
         $root->setAttribute('IssueInstant', gmdate('Y-m-d\TH:i:s\Z', $this->issueInstant));
 
-        if (is_string($this->issuer)) {
-            $issuer = Utils::addString($root, Constants::NS_SAML, 'saml:Issuer', $this->issuer);
-        } elseif ($this->issuer instanceof XML\saml\Issuer) {
-            $issuer = $this->issuer->toXML($root);
-        }
+        $issuer = $this->issuer->toXML($root);
 
         $this->addSubject($root);
         $this->addConditions($root);

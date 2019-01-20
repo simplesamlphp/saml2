@@ -110,8 +110,8 @@ AUTHNREQUEST
 
         $message = Message::fromXML($authnRequest->documentElement);
         $issuer = $message->getIssuer();
-        $this->assertNotInstanceOf(Issuer::class, $issuer);
-        $this->assertEquals('https://gateway.stepup.org/saml20/sp/metadata', $issuer);
+        $this->assertInstanceOf(Issuer::class, $issuer);
+        $this->assertEquals('https://gateway.stepup.org/saml20/sp/metadata', $issuer->getValue());
     }
 
 
@@ -365,12 +365,11 @@ XML;
         $document  = DOMDocumentFactory::fromString($xml);
         $message = Message::fromXML($document->documentElement);
 
-        $this->assertEquals('https://example.org/', $message->getIssuer());
+        $this->assertEquals('https://example.org/', $message->getIssuer()->getValue());
         $this->assertEquals('aaf23196-1773-2113-474a-fe114412ab72', $message->getId());
 
         $message->setId('somethingNEW');
 
-        $this->assertEquals('https://example.org/', $message->getIssuer());
         $this->assertEquals('somethingNEW', $message->getId());
         $this->assertEquals(Constants::CONSENT_PRIOR, $message->getConsent());
 

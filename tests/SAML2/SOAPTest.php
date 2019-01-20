@@ -40,14 +40,14 @@ class SOAPTest extends \Mockery\Adapter\Phpunit\MockeryTestCase
     </SOAP-ENV:Body>
 </SOAP-ENV:Envelope>
 SOAP
-    );
+        );
 
         $message = $stub->receive();
 
         $this->assertInstanceOf(ArtifactResolve::class, $message);
         $this->assertEquals($artifact, $message->getArtifact());
         $this->assertEquals($id, $message->getId());
-        $this->assertEquals($issuer, $message->getIssuer());
+        $this->assertEquals($issuer, $message->getIssuer()->getValue());
 
         // TODO Validate XML signature is received?
     }

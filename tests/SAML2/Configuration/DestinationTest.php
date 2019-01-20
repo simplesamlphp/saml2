@@ -30,31 +30,4 @@ class DestinationTest extends \PHPUnit\Framework\TestCase
 
         $this->assertTrue($destinationOne->equals($destinationTwo));
     }
-
-
-    /**
-     * @group configuration
-     * @test
-     * @dataProvider nonStringValueProvider
-     */
-    public function a_destination_cannot_be_created_with_a_non_string_value($value)
-    {
-        $this->expectException(\SAML2\Exception\InvalidArgumentException::class);
-        $destination = new Destination($value);
-    }
-
-
-    /**
-     * data-provider for a_destination_cannot_be_created_with_a_non_string_value
-     */
-    public function nonStringValueProvider()
-    {
-        return [
-            'array'  => [[]],
-            'object' => [new \StdClass()],
-            'int'    => [1],
-            'float'  => [1.2323],
-            'bool'   => [false]
-        ];
-    }
 }

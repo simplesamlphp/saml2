@@ -63,9 +63,8 @@ class AdditionalMetadataLocation
      * @param string $namespace
      * @return void
      */
-    public function setNamespace($namespace)
+    public function setNamespace(string $namespace)
     {
-        assert(is_string($namespace));
         $this->namespace = $namespace;
     }
 
@@ -85,9 +84,8 @@ class AdditionalMetadataLocation
      * @param string $location
      * @return void
      */
-    public function setLocation($location)
+    public function setLocation(string $location)
     {
-        assert(is_string($location));
         $this->location = $location;
     }
 

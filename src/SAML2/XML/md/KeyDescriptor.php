@@ -85,9 +85,8 @@ class KeyDescriptor
      * @param string|null $use
      * @return void
      */
-    public function setUse($use)
+    public function setUse(string $use = null)
     {
-        assert(is_string($use) || is_null($use));
         $this->use = $use;
     }
 

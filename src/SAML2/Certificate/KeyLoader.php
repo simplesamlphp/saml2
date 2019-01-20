@@ -40,8 +40,8 @@ class KeyLoader
      */
     public static function extractPublicKeys(
         CertificateProvider $config,
-        $usage = null,
-        $required = false
+        string $usage = null,
+        bool $required = false
     ) {
         $keyLoader = new self();
 
@@ -57,8 +57,8 @@ class KeyLoader
      */
     public function loadKeysFromConfiguration(
         CertificateProvider $config,
-        $usage = null,
-        $required = false
+        string $usage = null,
+        bool $required = false
     ) {
         $keys = $config->getKeys();
         $certificateData = $config->getCertificateData();
@@ -115,12 +115,8 @@ class KeyLoader
      * @param string $certificateData
      * @return void
      */
-    public function loadCertificateData($certificateData)
+    public function loadCertificateData(string $certificateData)
     {
-        if (!is_string($certificateData)) {
-            throw InvalidArgumentException::invalidType('string', $certificateData);
-        }
-
         $this->loadedKeys->add(X509::createFromCertificateData($certificateData));
     }
 
@@ -131,7 +127,7 @@ class KeyLoader
      * @param string $certificateFile the full path to the cert file.
      * @return void
      */
-    public function loadCertificateFile($certificateFile)
+    public function loadCertificateFile(string $certificateFile)
     {
         $certificate = File::getFileContents($certificateFile);
 

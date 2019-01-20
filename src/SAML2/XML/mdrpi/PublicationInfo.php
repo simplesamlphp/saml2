@@ -117,9 +117,8 @@ class PublicationInfo
      * @param string $publisher
      * @return void
      */
-    public function setPublisher($publisher)
+    public function setPublisher(string $publisher)
     {
-        assert(is_string($publisher));
         $this->publisher = $publisher;
     }
 
@@ -129,9 +128,8 @@ class PublicationInfo
      * @param int|null $creationInstant
      * @return void
      */
-    public function setCreationInstant($creationInstant = null)
+    public function setCreationInstant(int $creationInstant = null)
     {
-        assert(is_int($creationInstant) || is_null($creationInstant));
         $this->creationInstant = $creationInstant;
     }
 
@@ -141,9 +139,8 @@ class PublicationInfo
      * @param string|null $publicationId
      * @return void
      */
-    public function setPublicationId($publicationId = null)
+    public function setPublicationId(string $publicationId = null)
     {
-        assert(is_string($publicationId) || is_null($publicationId));
         $this->publicationId = $publicationId;
     }
 

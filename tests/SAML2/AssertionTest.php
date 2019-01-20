@@ -1090,7 +1090,10 @@ XML;
         $this->assertTrue($result);
         // Double-check that we can actually retrieve some basics.
         $this->assertEquals("_d908a49b8b63665738430d1c5b655f297b91331864", $assertion->getId());
-        $this->assertEquals("https://thki-sid.pt-48.utr.surfcloud.nl/ssp/saml2/idp/metadata.php", $assertion->getIssuer());
+        $this->assertEquals(
+            "https://thki-sid.pt-48.utr.surfcloud.nl/ssp/saml2/idp/metadata.php",
+            $assertion->getIssuer()->getValue()
+        );
         $this->assertEquals("1457707995", $assertion->getIssueInstant());
 
         $certs = $assertion->getCertificates();

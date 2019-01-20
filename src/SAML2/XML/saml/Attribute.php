@@ -89,9 +89,8 @@ class Attribute
      * @param string $name
      * @return void
      */
-    public function setName($name)
+    public function setName(string $name)
     {
-        assert(is_string($name));
         $this->Name = $name;
     }
 
@@ -111,9 +110,8 @@ class Attribute
      * @param string|null $nameFormat
      * @return void
      */
-    public function setNameFormat($nameFormat = null)
+    public function setNameFormat(string $nameFormat = null)
     {
-        assert(is_string($nameFormat) || is_null($nameFormat));
         $this->NameFormat = $nameFormat;
     }
 
@@ -133,9 +131,8 @@ class Attribute
      * @param string|null $friendlyName
      * @return void
      */
-    public function setFriendlyName($friendlyName = null)
+    public function setFriendlyName(string $friendlyName = null)
     {
-        assert(is_string($friendlyName) || is_null($friendlyName));
         $this->FriendlyName = $friendlyName;
     }
 

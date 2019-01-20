@@ -15,12 +15,8 @@ class File
      *
      * @return string
      */
-    public static function getFileContents($file)
+    public static function getFileContents(string $file)
     {
-        if (!is_string($file)) {
-            throw InvalidArgumentException::invalidType('string', $file);
-        }
-
         if (!is_readable($file)) {
             throw new RuntimeException(sprintf(
                 'File "%s" does not exist or is not readable',

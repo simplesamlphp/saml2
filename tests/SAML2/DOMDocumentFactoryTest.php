@@ -10,19 +10,6 @@ use SAML2\Exception\RuntimeException;
 class DOMDocumentFactoryTest extends \PHPUnit\Framework\TestCase
 {
     /**
-     * @param mixed $argument
-     *
-     * @group domdocument
-     * @dataProvider nonStringProvider
-     */
-    public function testOnlyAStringIsAcceptedByFronString($argument)
-    {
-        $this->expectException(Exception\InvalidArgumentException::class);
-        DOMDocumentFactory::fromString($argument);
-    }
-
-
-    /**
      * @group domdocument
      */
     public function testNotXmlStringRaisesAnException()
@@ -46,21 +33,6 @@ class DOMDocumentFactoryTest extends \PHPUnit\Framework\TestCase
 
 
     /**
-     * @param mixed $argument
-     *
-     * @group        domdocument
-     * @dataProvider nonStringProvider
-     */
-    public function testOnlyAStringIsAcceptedByFromFile($argument)
-    {
-        $this->expectException(InvalidArgumentException::class);
-        DOMDocumentFactory::fromFile($argument);
-    }
-
-
-    /**
-     * @group        domdocument
-     * @dataProvider nonStringProvider
      */
     public function testFileThatDoesNotExistIsNotAccepted()
     {
@@ -137,21 +109,5 @@ class DOMDocumentFactoryTest extends \PHPUnit\Framework\TestCase
     {
         $this->expectException(InvalidArgumentException::class, 'Invalid Argument type: "non-empty string" expected, "string" given');
         DOMDocumentFactory::fromString("");
-    }
-
-
-    /**
-     * @return array
-     */
-    public function nonStringProvider()
-    {
-        return [
-            'integer' => [1],
-            'float'   => [1.234],
-            'object'  => [new \stdClass()],
-            'null'    => [null],
-            'boolean' => [false],
-            'array'   => [[]],
-        ];
     }
 }

@@ -85,7 +85,7 @@ class Processor
      * @param \SAML2\Utilities\ArrayCollection $assertions
      * @return \SAML2\Assertion[] Collection (\SAML2\Utilities\ArrayCollection) of processed assertions
      */
-    public function processAssertions($assertions)
+    public function processAssertions(array $assertions)
     {
         $processed = new ArrayCollection();
         foreach ($assertions as $assertion) {
