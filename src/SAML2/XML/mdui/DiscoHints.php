@@ -179,7 +179,7 @@ class DiscoHints
             $e = $doc->createElementNS(Common::NS, 'mdui:DiscoHints');
             $parent->appendChild($e);
 
-            if (!empty($children)) {
+            if (!empty($this->children)) {
                 foreach ($this->getChildren() as $child) {
                     $child->toXML($e);
                 }

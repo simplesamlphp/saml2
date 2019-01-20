@@ -289,31 +289,31 @@ class UIInfo
     public function toXML(\DOMElement $parent)
     {
         $e = null;
-        if (!empty($this->displayName)
-         || !empty($this->description)
-         || !empty($this->informationURL)
-         || !empty($this->privacyStatementURL)
-         || !empty($this->keywords)
-         || !empty($this->logo)
+        if (!empty($this->DisplayName)
+         || !empty($this->Description)
+         || !empty($this->InformationURL)
+         || !empty($this->PrivacyStatementURL)
+         || !empty($this->Keywords)
+         || !empty($this->Logo)
          || !empty($this->children)) {
             $doc = $parent->ownerDocument;
 
             $e = $doc->createElementNS(Common::NS, 'mdui:UIInfo');
             $parent->appendChild($e);
 
-            Utils::addStrings($e, Common::NS, 'mdui:DisplayName', true, $this->displayName);
-            Utils::addStrings($e, Common::NS, 'mdui:Description', true, $this->description);
-            Utils::addStrings($e, Common::NS, 'mdui:InformationURL', true, $this->informationURL);
-            Utils::addStrings($e, Common::NS, 'mdui:PrivacyStatementURL', true, $this->privacyStatementURL);
+            Utils::addStrings($e, Common::NS, 'mdui:DisplayName', true, $this->DisplayName);
+            Utils::addStrings($e, Common::NS, 'mdui:Description', true, $this->Description);
+            Utils::addStrings($e, Common::NS, 'mdui:InformationURL', true, $this->InformationURL);
+            Utils::addStrings($e, Common::NS, 'mdui:PrivacyStatementURL', true, $this->PrivacyStatementURL);
 
-            if ($this->keywords !== null) {
-                foreach ($this->keywords as $child) {
+            if ($this->Keywords !== null) {
+                foreach ($this->Keywords as $child) {
                     $child->toXML($e);
                 }
             }
 
-            if ($this->logo !== null) {
-                foreach ($this->logo as $child) {
+            if ($this->Logo !== null) {
+                foreach ($this->Logo as $child) {
                     $child->toXML($e);
                 }
             }
