@@ -182,7 +182,7 @@ class SPSSODescriptor extends SSODescriptorType
      * Add this SPSSODescriptor to an EntityDescriptor.
      *
      * @param \DOMElement $parent The EntityDescriptor we should append this SPSSODescriptor to.
-     * @return void
+     * @return \DOMElement
      */
     public function toXML(\DOMElement $parent)
     {
@@ -212,5 +212,7 @@ class SPSSODescriptor extends SSODescriptorType
         foreach ($this->getAttributeConsumingService() as $acs) {
             $acs->toXML($e);
         }
+
+        return $e;
     }
 }
