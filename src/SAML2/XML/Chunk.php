@@ -142,8 +142,10 @@ class Chunk implements \Serializable
      *
      * @param string          $serialized The serialized chunk.
      * @return void
+     *
+     * Type hint not possible due to upstream method signature
      */
-    public function unserialize(string $serialized)
+    public function unserialize($serialized)
     {
         $doc = DOMDocumentFactory::fromString(unserialize($serialized));
         $this->xml = $doc->documentElement;
