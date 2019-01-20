@@ -71,11 +71,7 @@ final class DOMDocumentFactory
      *
      * @return \DOMDocument
      */
-<<<<<<< HEAD
-    public static function fromFile(string $file)
-=======
-    public static function fromFile($file) : \DOMDocument
->>>>>>> Add return types for non-nullable types
+    public static function fromFile(string $file) : \DOMDocument
     {
         if (!is_file($file)) {
             throw new InvalidArgumentException(sprintf('Path "%s" is not a file', $file));
