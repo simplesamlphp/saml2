@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 namespace SAML2;
 
 use RobRichards\XMLSecLibs\XMLSecEnc;
@@ -1731,6 +1733,7 @@ class Assertion implements SignedElement
                         $attributeValue->appendChild($node);
                     }
                 } else {
+                    $value = strval($value);
                     $attributeValue->appendChild($document->createTextNode($value));
                 }
             }
@@ -1786,6 +1789,7 @@ class Assertion implements SignedElement
                         $attributeValue->appendChild($node);
                     }
                 } else {
+                    $value = strval($value);
                     $attributeValue->appendChild($document2->createTextNode($value));
                 }
             }

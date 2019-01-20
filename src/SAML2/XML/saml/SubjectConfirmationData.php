@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 namespace SAML2\XML\saml;
 
 use RobRichards\XMLSecLibs\XMLSecurityDSig;
