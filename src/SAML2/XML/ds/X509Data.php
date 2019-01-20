@@ -4,7 +4,9 @@ declare(strict_types=1);
 
 namespace SAML2\XML\ds;
 
+use Assert\Assertion;
 use RobRichards\XMLSecLibs\XMLSecurityDSig;
+
 use SAML2\XML\Chunk;
 
 /**
@@ -85,7 +87,7 @@ class X509Data
      */
     public function addData($data)
     {
-        assert($data instanceof \SAML2\XML\Chunk || $data instanceof \SAML2\XML\ds\X509Certificate);
+        Assertion::true($data instanceof \SAML2\XML\Chunk || $data instanceof \SAML2\XML\ds\X509Certificate);
         $this->data[] = $data;
     }
 
@@ -98,8 +100,6 @@ class X509Data
      */
     public function toXML(\DOMElement $parent) : \DOMElement
     {
-        assert(is_array($this->getData()));
-
         $doc = $parent->ownerDocument;
 
         $e = $doc->createElementNS(XMLSecurityDSig::XMLDSIGNS, 'ds:X509Data');

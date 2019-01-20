@@ -373,15 +373,6 @@ class ContactPerson
      */
     public function toXML(\DOMElement $parent) : \DOMElement
     {
-        assert(is_string($this->getContactType()));
-        assert(is_array($this->getExtensions()));
-        assert(is_null($this->getCompany()) || is_string($this->getCompany()));
-        assert(is_null($this->getGivenName()) || is_string($this->getGivenName()));
-        assert(is_null($this->getSurName()) || is_string($this->getSurName()));
-        assert(is_array($this->getEmailAddress()));
-        assert(is_array($this->getTelephoneNumber()));
-        assert(is_array($this->getContactPersonAttributes()));
-
         $doc = $parent->ownerDocument;
 
         $e = $doc->createElementNS(Constants::NS_MD, 'md:ContactPerson');

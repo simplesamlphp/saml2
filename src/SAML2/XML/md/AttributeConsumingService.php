@@ -212,12 +212,6 @@ class AttributeConsumingService
      */
     public function toXML(\DOMElement $parent) : \DOMElement
     {
-        assert(is_int($this->getIndex()));
-        assert(is_null($this->getIsDefault()) || is_bool($this->getIsDefault()));
-        assert(is_array($this->getServiceName()));
-        assert(is_array($this->getServiceDescription()));
-        assert(is_array($this->getRequestedAttribute()));
-
         $doc = $parent->ownerDocument;
 
         $e = $doc->createElementNS(Constants::NS_MD, 'md:AttributeConsumingService');

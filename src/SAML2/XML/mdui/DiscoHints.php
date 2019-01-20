@@ -170,11 +170,6 @@ class DiscoHints
      */
     public function toXML(\DOMElement $parent)
     {
-        assert(is_array($IPHint = $this->getIPHint()));
-        assert(is_array($DomainHint = $this->getDomainHint()));
-        assert(is_array($GeolocationHint = $this->getGeolocationHint()));
-        assert(is_array($children = $this->getChildren()));
-
         if (!empty($IPHint)
          || !empty($DomainHint)
          || !empty($GeolocationHint)

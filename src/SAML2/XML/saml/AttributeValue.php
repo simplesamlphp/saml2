@@ -4,6 +4,8 @@ declare(strict_types=1);
 
 namespace SAML2\XML\saml;
 
+use Assert\Assertion;
+
 use SAML2\Constants;
 use SAML2\DOMDocumentFactory;
 use SAML2\Utils;
@@ -33,7 +35,7 @@ class AttributeValue implements \Serializable
      */
     public function __construct($value)
     {
-        assert(is_string($value) || $value instanceof \DOMElement);
+        Assertion::true(is_string($value) || $value instanceof \DOMElement);
 
         if (is_string($value)) {
             $doc = DOMDocumentFactory::create();
@@ -87,8 +89,8 @@ class AttributeValue implements \Serializable
      */
     public function toXML(\DOMElement $parent) : \DOMElement
     {
-        assert($this->getElement() instanceof \DOMElement);
-        assert($this->getElement()->namespaceURI === \SAML2\Constants::NS_SAML && $this->element->localName === "AttributeValue");
+        Assertion::that($this->getElement()->namespaceURI)->eq(\SAML2\Constants::NS_SAML);
+        Assertion::that($this->getElement()->localName)->eq("AttributeValue");
 
         return Utils::copyElement($this->getElement(), $parent);
     }
@@ -113,8 +115,6 @@ class AttributeValue implements \Serializable
      */
     public function __toString() : string
     {
-        assert($this->getElement() instanceof \DOMElement);
-
         $doc = $this->getElement()->ownerDocument;
 
         $ret = '';

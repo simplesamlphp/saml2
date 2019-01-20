@@ -143,9 +143,8 @@ class Chunk implements \Serializable
      * @param string          $serialized The serialized chunk.
      * @return void
      */
-    public function unserialize($serialized)
+    public function unserialize(string $serialized)
     {
-        assert(is_string($serialized));
         $doc = DOMDocumentFactory::fromString(unserialize($serialized));
         $this->xml = $doc->documentElement;
         $this->setLocalName($this->xml->localName);

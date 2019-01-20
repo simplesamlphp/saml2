@@ -4,6 +4,8 @@ declare(strict_types=1);
 
 namespace SAML2\XML\md;
 
+use Assert\Assertion;
+
 use SAML2\Constants;
 use SAML2\Utils;
 use SAML2\XML\saml\Attribute;
@@ -124,7 +126,6 @@ class AttributeAuthorityDescriptor extends RoleDescriptor
      */
     public function addAttributeService(EndpointType $attributeService)
     {
-        assert($attributeService instanceof EndpointType);
         $this->AttributeService[] = $attributeService;
     }
 
@@ -178,7 +179,6 @@ class AttributeAuthorityDescriptor extends RoleDescriptor
      */
     public function addAssertionIDRequestService(EndpointType $assertionIDRequestService)
     {
-        assert($assertionIDRequestService instanceof EndpointType);
         $this->AssertionIDRequestService[] = $assertionIDRequestService;
     }
 
@@ -232,7 +232,6 @@ class AttributeAuthorityDescriptor extends RoleDescriptor
      */
     public function addAttribute(Attribute $attribute)
     {
-        assert($attribute instanceof Attribute);
         $this->Attribute[] = $attribute;
     }
 
@@ -245,12 +244,7 @@ class AttributeAuthorityDescriptor extends RoleDescriptor
      */
     public function toXML(\DOMElement $parent) : \DOMElement
     {
-        assert(is_array($attributeService = $this->getAttributeService()));
-        assert(!empty($attributeService));
-        assert(is_array($this->getAssertionIDRequestService()));
-        assert(is_array($this->getNameIDFormat()));
-        assert(is_array($this->getAttributeProfile()));
-        assert(is_array($this->Attribute));
+        Assertion::notEmpty($this->attributeService);
 
         $e = parent::toXML($parent);
 

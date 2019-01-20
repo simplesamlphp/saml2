@@ -4,6 +4,8 @@ declare(strict_types=1);
 
 namespace SAML2\XML\md;
 
+use Assert\Assertion;
+
 use SAML2\Constants;
 use SAML2\Utils;
 use SAML2\XML\Chunk;
@@ -183,13 +185,9 @@ class Organization
      */
     public function toXML(\DOMElement $parent) : \DOMElement
     {
-        assert(is_array($this->getExtensions()));
-        assert(is_array($organizationName = $this->getOrganizationName()));
-        assert(!empty($organizationName));
-        assert(is_array($organizationDisplayName = $this->getOrganizationDisplayName()));
-        assert(!empty($organizationDisplayName));
-        assert(is_array($organizationURL = $this->getOrganizationURL()));
-        assert(!empty($organizationURL));
+        Assertion::notEmpty($this->OrganizationName);
+        Assertion::notEmpty($this->OrganizationDisplayName);
+        Assertion::notEmpty($this->OrganizationURL);
 
         $doc = $parent->ownerDocument;
 

@@ -5,6 +5,7 @@ declare(strict_types=1);
 namespace SAML2\XML\ds;
 
 use RobRichards\XMLSecLibs\XMLSecurityDSig;
+
 use SAML2\Utils;
 
 /**
@@ -66,7 +67,6 @@ class X509Certificate
      */
     public function toXML(\DOMElement $parent) : \DOMElement
     {
-        assert(is_string($this->certificate));
         return Utils::addString($parent, XMLSecurityDSig::XMLDSIGNS, 'ds:X509Certificate', $this->getCertificate());
     }
 }

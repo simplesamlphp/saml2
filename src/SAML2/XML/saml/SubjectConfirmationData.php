@@ -4,7 +4,9 @@ declare(strict_types=1);
 
 namespace SAML2\XML\saml;
 
+use Assert\Assertion;
 use RobRichards\XMLSecLibs\XMLSecurityDSig;
+
 use SAML2\Constants;
 use SAML2\Utils;
 use SAML2\XML\Chunk;
@@ -22,35 +24,35 @@ class SubjectConfirmationData
      *
      * @var int|null
      */
-    public $NotBefore;
+    public $NotBefore = null;
 
     /**
      * The time after which this element is invalid, as an unix timestamp.
      *
      * @var int|null
      */
-    public $NotOnOrAfter;
+    public $NotOnOrAfter = null;
 
     /**
      * The Recipient this Subject is valid for. Either an entity or a location.
      *
      * @var string|null
      */
-    public $Recipient;
+    public $Recipient = null;
 
     /**
      * The ID of the AuthnRequest this is a response to.
      *
      * @var string|null
      */
-    public $InResponseTo;
+    public $InResponseTo = null;
 
     /**
      * The IP(v6) address of the user.
      *
      * @var string|null
      */
-    public $Address;
+    public $Address = null;
 
     /**
      * The various key information elements.
@@ -199,7 +201,7 @@ class SubjectConfirmationData
      */
     public function addInfo($info)
     {
-        assert($info instanceof Chunk || $info instanceof KeyInfo);
+        Assertion::true($info instanceof Chunk || $info instanceof KeyInfo);
         $this->info[] = $info;
     }
 
@@ -258,12 +260,6 @@ class SubjectConfirmationData
      */
     public function toXML(\DOMElement $parent)
     {
-        assert(is_null($this->getNotBefore()) || is_int($this->getNotBefore()));
-        assert(is_null($this->getNotOnOrAfter()) || is_int($this->getNotOnOrAfter()));
-        assert(is_null($this->getRecipient()) || is_string($this->getRecipient()));
-        assert(is_null($this->getInResponseTo()) || is_string($this->getInResponseTo()));
-        assert(is_null($this->getAddress()) || is_string($this->getAddress()));
-
         $e = $parent->ownerDocument->createElementNS(Constants::NS_SAML, 'saml:SubjectConfirmationData');
         $parent->appendChild($e);
 

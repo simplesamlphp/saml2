@@ -28,21 +28,21 @@ class RoleDescriptor extends SignedElementHelper
      *
      * @var string|null
      */
-    public $ID;
+    public $ID = null;
 
     /**
      * How long this element is valid, as a unix timestamp.
      *
      * @var int|null
      */
-    public $validUntil;
+    public $validUntil = null;
 
     /**
      * The length of time this element can be cached, as string.
      *
      * @var string|null
      */
-    public $cacheDuration;
+    public $cacheDuration = null;
 
     /**
      * List of supported protocols.
@@ -56,7 +56,7 @@ class RoleDescriptor extends SignedElementHelper
      *
      * @var string|null
      */
-    public $errorURL;
+    public $errorURL = null;
 
     /**
      * Extensions on this element.
@@ -185,7 +185,6 @@ class RoleDescriptor extends SignedElementHelper
      */
     public function setValidUntil(int $validUntil = null)
     {
-        assert(is_int($validUntil) || is_null($validUntil));
         $this->validUntil = $validUntil;
     }
 
@@ -207,7 +206,6 @@ class RoleDescriptor extends SignedElementHelper
      */
     public function setCacheDuration(string $cacheDuration = null)
     {
-        assert(is_string($cacheDuration) || is_null($cacheDuration));
         $this->cacheDuration = $cacheDuration;
     }
 
@@ -394,16 +392,6 @@ class RoleDescriptor extends SignedElementHelper
      */
     protected function toXML(\DOMElement $parent) : \DOMElement
     {
-        assert(is_null($this->getID()) || is_string($this->getID()));
-        assert(is_null($this->getValidUntil()) || is_int($this->getValidUntil()));
-        assert(is_null($this->getCacheDuration()) || is_string($this->getcacheDuration()));
-        assert(is_array($this->getProtocolSupportEnumeration()));
-        assert(is_null($this->getErrorURL()) || is_string($this->getErrorURL()));
-        assert(is_array($this->getExtensions()));
-        assert(is_array($this->getKeyDescriptor()));
-        assert(is_null($this->getOrganization()) || ($this->getOrganization() instanceof Organization));
-        assert(is_array($this->getContactPerson()));
-
         $e = $parent->ownerDocument->createElementNS(Constants::NS_MD, $this->elementName);
         $parent->appendChild($e);
 

@@ -4,6 +4,8 @@ declare(strict_types=1);
 
 namespace SAML2\XML\alg;
 
+use Assert\Assertion;
+
 /**
  * Class for handling the alg:SigningMethod element.
  *
@@ -138,9 +140,8 @@ class SigningMethod
      */
     public function toXML(\DOMElement $parent) : \DOMElement
     {
-        assert(is_string($this->getAlgorithm()));
-        assert(is_int($this->getMinKeySize()) || is_null($this->getMinKeySize()));
-        assert(is_int($this->getMaxKeySize()) || is_null($this->getMaxKeySize()));
+        Assertion::nullOrInteger($this->MinKeySize);
+        Assertion::nullOrInteger($this->MaxKeySize);
 
         $doc = $parent->ownerDocument;
         $e = $doc->createElementNS(Common::NS, 'alg:SigningMethod');

@@ -4,6 +4,8 @@ declare(strict_types=1);
 
 namespace SAML2\XML\md;
 
+use Assert\Assertion;
+
 use SAML2\Constants;
 use SAML2\Utils;
 
@@ -99,7 +101,6 @@ class AuthnAuthorityDescriptor extends RoleDescriptor
      */
     public function addAuthnQueryService(EndpointType $authnQueryService)
     {
-        assert($authnQueryService instanceof EndpointType);
         $this->AuthnQueryService[] = $authnQueryService;
     }
 
@@ -132,7 +133,6 @@ class AuthnAuthorityDescriptor extends RoleDescriptor
      */
     public function addAssertionIDRequestService(EndpointType $assertionIDRequestService)
     {
-        assert($assertionIDRequestService instanceof EndpointType);
         $this->AssertionIDRequestService[] = $assertionIDRequestService;
     }
 
@@ -166,10 +166,7 @@ class AuthnAuthorityDescriptor extends RoleDescriptor
      */
     public function toXML(\DOMElement $parent) : \DOMElement
     {
-        assert(is_array($authnQueryService = $this->getAuthnQueryService()));
-        assert(!empty($authnQueryService));
-        assert(is_array($this->getAssertionIDRequestService()));
-        assert(is_array($this->NameIDFormat));
+        Assertion::notEmpty($this->AuthnQueryService);
 
         $e = parent::toXML($parent);
 

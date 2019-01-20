@@ -4,6 +4,7 @@ declare(strict_types=1);
 
 namespace SAML2\Compat\Ssp;
 
+use Assert\Assertion;
 use Psr\Log\LoggerInterface;
 use Psr\Log\LogLevel;
 
@@ -152,7 +153,7 @@ class Logger implements LoggerInterface
      */
     public function log($level, $message, array $context = [])
     {
-        assert(is_string($message));
+        Assertion::string($message);
 
         switch ($level) {
             /* From PSR:  Calling this method with one of the log level constants

@@ -24,14 +24,14 @@ class Scope
      *
      * @var string
      */
-    public $scope;
+    public $scope = '';
 
     /**
      * Whether this is a regexp scope.
      *
-     * @var bool
+     * @var bool|null
      */
-    public $regexp = false;
+    public $regexp = null;
 
 
     /**
@@ -100,9 +100,6 @@ class Scope
      */
     public function toXML(\DOMElement $parent) : \DOMElement
     {
-        assert(is_string($this->getScope()));
-        assert(is_bool($this->isRegexpScope()) || is_null($this->isRegexpScope()));
-
         $doc = $parent->ownerDocument;
 
         $e = $doc->createElementNS(Scope::NS, 'shibmd:Scope');

@@ -26,14 +26,14 @@ class SubjectConfirmation
      *
      * @var \SAML2\XML\saml\NameID|null
      */
-    public $NameID;
+    public $NameID = null;
 
     /**
      * SubjectConfirmationData element with extra data for verification of the Subject.
      *
      * @var \SAML2\XML\saml\SubjectConfirmationData|null
      */
-    public $SubjectConfirmationData;
+    public $SubjectConfirmationData = null;
 
 
     /**
@@ -140,10 +140,6 @@ class SubjectConfirmation
      */
     public function toXML(\DOMElement $parent) : \DOMElement
     {
-        assert(is_string($this->getMethod()));
-        assert(is_null($this->getNameID()) || $this->getNameID() instanceof NameID);
-        assert(is_null($this->getSubjectConfirmationData()) || $this->getSubjectConfirmationData() instanceof SubjectConfirmationData);
-
         $e = $parent->ownerDocument->createElementNS(Constants::NS_SAML, 'saml:SubjectConfirmation');
         $parent->appendChild($e);
 

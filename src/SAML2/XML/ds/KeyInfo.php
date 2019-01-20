@@ -4,7 +4,9 @@ declare(strict_types=1);
 
 namespace SAML2\XML\ds;
 
+use Assert\Assertion;
 use RobRichards\XMLSecLibs\XMLSecurityDSig;
+
 use SAML2\XML\Chunk;
 
 /**
@@ -120,7 +122,7 @@ class KeyInfo
      */
     public function addInfo($info)
     {
-        assert($info instanceof Chunk || $info instanceof KeyName || $info instanceof X509Data);
+        Assertion::true($info instanceof Chunk || $info instanceof KeyName || $info instanceof X509Data);
         $this->info[] = $info;
     }
 
@@ -133,9 +135,6 @@ class KeyInfo
      */
     public function toXML(\DOMElement $parent) : \DOMElement
     {
-        assert(is_null($this->getId()) || is_string($this->getId()));
-        assert(is_array($this->getInfo()));
-
         $doc = $parent->ownerDocument;
 
         $e = $doc->createElementNS(XMLSecurityDSig::XMLDSIGNS, 'ds:KeyInfo');
