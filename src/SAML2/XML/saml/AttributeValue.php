@@ -4,6 +4,7 @@ declare(strict_types=1);
 
 namespace SAML2\XML\saml;
 
+use Assert\Assert;
 use Assert\Assertion;
 
 use SAML2\Constants;
@@ -89,8 +90,8 @@ class AttributeValue implements \Serializable
      */
     public function toXML(\DOMElement $parent) : \DOMElement
     {
-        Assertion::that($this->getElement()->namespaceURI)->eq(\SAML2\Constants::NS_SAML);
-        Assertion::that($this->getElement()->localName)->eq("AttributeValue");
+        Assert::that($this->getElement()->namespaceURI)->eq(\SAML2\Constants::NS_SAML);
+        Assert::that($this->getElement()->localName)->eq("AttributeValue");
 
         return Utils::copyElement($this->getElement(), $parent);
     }

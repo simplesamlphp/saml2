@@ -295,7 +295,7 @@ class AffiliationDescriptor extends SignedElementHelper
      */
     public function toXML(\DOMElement $parent) : \DOMElement
     {
-        Assertion::notEmpty($this->affiliateMember);
+        Assertion::notEmpty($this->AffiliateMember);
 
         $e = $parent->ownerDocument->createElementNS(Constants::NS_MD, 'md:AffiliationDescriptor');
         $parent->appendChild($e);

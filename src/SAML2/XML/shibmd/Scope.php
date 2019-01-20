@@ -29,9 +29,9 @@ class Scope
     /**
      * Whether this is a regexp scope.
      *
-     * @var bool|null
+     * @var bool
      */
-    public $regexp = null;
+    public $regexp = false;
 
 
     /**

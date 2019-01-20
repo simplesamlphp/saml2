@@ -170,10 +170,10 @@ class DiscoHints
      */
     public function toXML(\DOMElement $parent)
     {
-        if (!empty($IPHint)
-         || !empty($DomainHint)
-         || !empty($GeolocationHint)
-         || !empty($children)) {
+        if (!empty($this->IPHint)
+         || !empty($this->DomainHint)
+         || !empty($this->GeolocationHint)
+         || !empty($this->children)) {
             $doc = $parent->ownerDocument;
 
             $e = $doc->createElementNS(Common::NS, 'mdui:DiscoHints');
