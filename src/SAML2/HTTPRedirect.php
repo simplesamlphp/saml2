@@ -80,7 +80,7 @@ class HTTPRedirect extends Binding
      * @param \SAML2\Message $message The message we should send.
      * @return void
      */
-    public function send(Message $message) : Message
+    public function send(Message $message)
     {
         $destination = $this->getRedirectURL($message);
         Utils::getContainer()->getLogger()->debug('Redirect to '.strlen($destination).' byte URL: '.$destination);

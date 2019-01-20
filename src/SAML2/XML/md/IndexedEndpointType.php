@@ -76,7 +76,7 @@ class IndexedEndpointType extends EndpointType
      * Collect the value of the isDefault-property
      * @return bool|null
      */
-    public function getIsDefault() : bool
+    public function getIsDefault()
     {
         return $this->isDefault;
     }

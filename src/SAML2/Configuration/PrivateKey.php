@@ -35,10 +35,10 @@ class PrivateKey extends ArrayAdapter
      *
      * @param string $filePath
      * @param string $name
-     * @param string|null $passphrase
+     * @param string $passphrase
      * @throws \Exception
      */
-    public function __construct(string $filePath, string $name, string $passphrase = null)
+    public function __construct(string $filePath, string $name, string $passphrase = '')
     {
         $this->filePath = $filePath;
         $this->passphrase = $passphrase;

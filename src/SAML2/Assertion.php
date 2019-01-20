@@ -226,7 +226,7 @@ class Assertion implements SignedElement
      *
      * @var array|null
      */
-    private $signatureData;
+    private $signatureData = null;
 
     /**
      * Boolean that indicates if attributes are encrypted in the
@@ -262,6 +262,7 @@ class Assertion implements SignedElement
      */
     public function __construct(\DOMElement $xml = null)
     {
+        // Create an Issuer
         $issuer = new Issuer();
         $issuer->setValue('');
 
@@ -296,6 +297,7 @@ class Assertion implements SignedElement
         if (empty($issuer)) {
             throw new \Exception('Missing <saml:Issuer> in assertion.');
         }
+
         $this->issuer = new Issuer($issuer[0]);
 
         $this->parseSubject($xml);
@@ -1258,9 +1260,9 @@ class Assertion implements SignedElement
     }
 
     /**
-     * @return array
+     * @return array|null
      */
-    public function getSignatureData() : array
+    public function getSignatureData()
     {
         return $this->signatureData;
     }

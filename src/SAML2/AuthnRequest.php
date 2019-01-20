@@ -102,7 +102,7 @@ class AuthnRequest extends Request
      * - AuthnContextClassRef (required)
      * - Comparison (optinal)
      *
-     * @var array
+     * @var array|null
      */
     private $requestedAuthnContext;
 
@@ -645,10 +645,10 @@ class AuthnRequest extends Request
     /**
      * Set the RequestedAuthnContext.
      *
-     * @param array $requestedAuthnContext The RequestedAuthnContext.
+     * @param array|null $requestedAuthnContext The RequestedAuthnContext.
      * @return void
      */
-    public function setRequestedAuthnContext(array $requestedAuthnContext = [])
+    public function setRequestedAuthnContext(array $requestedAuthnContext = null)
     {
         $this->requestedAuthnContext = $requestedAuthnContext;
     }

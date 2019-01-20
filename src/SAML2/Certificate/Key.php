@@ -38,7 +38,7 @@ class Key implements \ArrayAccess
     /**
      * Whether or not the key is configured to be used for usage given
      *
-     * @param  string $usage
+     * @param string $usage
      * @return bool
      */
     public function canBeUsedFor(string $usage) : bool
@@ -83,11 +83,11 @@ class Key implements \ArrayAccess
     /**
      * @param mixed $offset
      * @throws InvalidArgumentException
-     * @return string
+     * @return mixed
      *
      * Type hint not possible due to upstream method signature
      */
-    public function offsetGet($offset) : string
+    public function offsetGet($offset)
     {
         if (!is_string($offset)) {
             throw InvalidArgumentException::invalidType('string', $offset);

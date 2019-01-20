@@ -92,9 +92,9 @@ class SubjectConfirmation
 
     /**
      * Collect the value of the NameID-property
-     * @return \SAML2\XML\saml\NameID
+     * @return \SAML2\XML\saml\NameID|null
      */
-    public function getNameID() : NameID
+    public function getNameID()
     {
         return $this->NameID;
     }
@@ -102,10 +102,10 @@ class SubjectConfirmation
 
     /**
      * Set the value of the NameID-property
-     * @param \SAML2\XML\saml\NameID $nameId
+     * @param \SAML2\XML\saml\NameID|null $nameId
      * @return void
      */
-    public function setNameID(NameID $nameId)
+    public function setNameID(NameID $nameId = null)
     {
         $this->NameID = $nameId;
     }

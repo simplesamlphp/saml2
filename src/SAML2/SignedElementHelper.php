@@ -262,7 +262,7 @@ class SignedElementHelper implements SignedElement
      * @param \DOMElement|null $insertBefore The element we should insert the signature node before.
      * @return \DOMElement|null
      */
-    protected function signElement(\DOMElement $root, \DOMElement $insertBefore = null) : \DOMElement
+    protected function signElement(\DOMElement $root, \DOMElement $insertBefore = null)
     {
         if ($this->signatureKey === null) {
             /* We cannot sign this element. */

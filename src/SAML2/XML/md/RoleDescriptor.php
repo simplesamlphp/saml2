@@ -303,9 +303,9 @@ class RoleDescriptor extends SignedElementHelper
 
     /**
      * Collect the value of the Organization-property
-     * @return \SAML2\XML\md\Organization
+     * @return \SAML2\XML\md\Organization|null
      */
-    public function getOrganization() : Organization
+    public function getOrganization()
     {
         return $this->Organization;
     }
@@ -401,7 +401,7 @@ class RoleDescriptor extends SignedElementHelper
         assert(is_null($this->getErrorURL()) || is_string($this->getErrorURL()));
         assert(is_array($this->getExtensions()));
         assert(is_array($this->getKeyDescriptor()));
-        assert(is_null($this->getOrganization()) || $this->getOrganization() instanceof Organization);
+        assert(is_null($this->getOrganization()) || ($this->getOrganization() instanceof Organization));
         assert(is_array($this->getContactPerson()));
 
         $e = $parent->ownerDocument->createElementNS(Constants::NS_MD, $this->elementName);

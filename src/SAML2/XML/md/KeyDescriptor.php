@@ -74,9 +74,9 @@ class KeyDescriptor
 
     /**
      * Collect the value of the use-property
-     * @return string
+     * @return string|null
      */
-    public function getUse() : string
+    public function getUse()
     {
         return $this->use;
     }
@@ -152,7 +152,7 @@ class KeyDescriptor
      * @param \DOMElement $parent The element we should append this KeyDescriptor to.
      * @return \DOMElement
      */
-    public function toXML(\DOMElement $parent) : KeyInfo
+    public function toXML(\DOMElement $parent) : \DOMElement
     {
         assert(is_null($this->getUse()) || is_string($this->getUse()));
         assert($this->getKeyInfo() instanceof KeyInfo);
