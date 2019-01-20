@@ -149,7 +149,7 @@ class Assertion implements SignedElement
      *
      * The URI reference MAY directly resolve into an XML document containing the referenced declaration.
      *
-     * @var \SAML2\XML\Chunk
+     * @var string
      */
     private $authnContextDeclRef;
 
@@ -1184,11 +1184,11 @@ class Assertion implements SignedElement
     /**
      * Set the authentication context declaration reference.
      *
-     * @param string $authnContextDeclRef
+     * @param string|null $authnContextDeclRef
      * @throws \Exception
      * @return void
      */
-    public function setAuthnContextDeclRef(string $authnContextDeclRef)
+    public function setAuthnContextDeclRef(string $authnContextDeclRef = null)
     {
         if (!empty($this->authnContextDecl)) {
             throw new \Exception(
@@ -1208,7 +1208,7 @@ class Assertion implements SignedElement
      *
      * @return string|null
      */
-    public function getAuthnContextDeclRef() : string
+    public function getAuthnContextDeclRef()
     {
         return $this->authnContextDeclRef;
     }

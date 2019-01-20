@@ -85,7 +85,7 @@ class Processor
 
     /**
      * @param \SAML2\Utilities\ArrayCollection $assertions
-     * @return \SAML2\Utils\ArrayCollection Collection of processed assertions
+     * @return \SAML2\Utilities\ArrayCollection Collection of processed assertions
      */
     public function processAssertions(ArrayCollection $assertions) : ArrayCollection
     {

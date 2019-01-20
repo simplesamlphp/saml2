@@ -93,9 +93,9 @@ class IdentityProvider extends ArrayAdapter implements
 
 
     /**
-     * @return array
+     * @return array|null
      */
-    public function getBlacklistedAlgorithms() : array
+    public function getBlacklistedAlgorithms()
     {
         return $this->get('blacklistedEncryptionAlgorithms');
     }

@@ -94,11 +94,11 @@ class HTTPRedirect extends Binding
      * Throws an exception if it is unable receive the message.
      *
      * @throws \Exception
-     * @return \SAML2\Message The received message.
+     * @return \SAML2\Message|null The received message.
      *
      * NPath is currently too high but solving that just moves code around.
      */
-    public function receive() : Message
+    public function receive()
     {
         $data = self::parseQuery();
         if (array_key_exists('SAMLRequest', $data)) {

@@ -28,7 +28,7 @@ interface DecryptionProvider
 
 
     /**
-     * @return array
+     * @return array|null
      */
-    public function getBlacklistedAlgorithms() : array;
+    public function getBlacklistedAlgorithms();
 }

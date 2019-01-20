@@ -16,6 +16,7 @@ use SAML2\Response\Exception\PreconditionNotMetException;
 use SAML2\Response\Exception\UnsignedResponseException;
 use SAML2\Response\Validation\PreconditionValidator;
 use SAML2\Signature\Validator;
+use SAML2\Utilities\ArrayCollection;
 
 class Processor
 {
@@ -65,14 +66,14 @@ class Processor
      * @param \SAML2\Configuration\Destination      $currentDestination
      * @param \SAML2\Response                       $response
      *
-     * @return \SAML2\Assertion[] Collection (\SAML2\Utilities\ArrayCollection) of \SAML2\Assertion objects
+     * @return \SAML2\Utilities\ArrayCollection Collection of \SAML2\Assertion objects
      */
     public function process(
         ServiceProvider $serviceProviderConfiguration,
         IdentityProvider $identityProviderConfiguration,
         Destination $currentDestination,
         Response $response
-    ) : array {
+    ) : ArrayCollection {
         $this->preconditionValidator = new PreconditionValidator($currentDestination);
         $this->assertionProcessor = ProcessorBuilder::build(
             $this->logger,
@@ -143,9 +144,9 @@ class Processor
      * @param \SAML2\Response $response
      * @throws UnsignedResponseException
      * @throws NoAssertionsFoundException
-     * @return \SAML2\Assertion[]
+     * @return \SAML2\Utilities\ArrayCollection
      */
-    private function processAssertions(Response $response) : array
+    private function processAssertions(Response $response) : ArrayCollection
     {
         $assertions = $response->getAssertions();
         if (empty($assertions)) {
@@ -162,6 +163,7 @@ class Processor
             }
         }
 
+        $assertions = new ArrayCollection($assertions);
         return $this->assertionProcessor->processAssertions($assertions);
     }
 }
