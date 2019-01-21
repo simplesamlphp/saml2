@@ -45,7 +45,7 @@ class SubjectConfirmationData
      *
      * @var string|null
      */
-    private $InResponseTo = null
+    private $InResponseTo = null;
 
     /**
      * The IP(v6) address of the user.
