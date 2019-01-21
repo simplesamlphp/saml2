@@ -15,7 +15,7 @@ use SAML2\XML\samlp\Extensions;
  * Implements what is common between the samlp:RequestAbstractType and
  * samlp:StatusResponseType element types.
  */
-abstract class Message implements SignedElement
+abstract class Message extends SignedElement
 {
     /**
      * Request extensions.
