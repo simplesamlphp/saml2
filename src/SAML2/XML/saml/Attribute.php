@@ -26,7 +26,7 @@ class Attribute
      *
      * @var string|null
      */
-    public $NameFormat;
+    public $NameFormat = null;
 
     /**
      * The FriendlyName of this attribute.
@@ -180,15 +180,8 @@ class Attribute
      * @param string     $name      The name of the element.
      * @return \DOMElement
      */
-    protected function toXMLInternal(\DOMElement $parent, $namespace, $name) : \DOMElement
+    protected function toXMLInternal(\DOMElement $parent, string $namespace, string $name) : \DOMElement
     {
-        assert(is_string($namespace));
-        assert(is_string($name));
-        assert(is_string($this->getName()));
-        assert(is_null($this->getNameFormat()) || is_string($this->getNameFormat()));
-        assert(is_null($this->getFriendlyName()) || is_string($this->getFriendlyName()));
-        assert(is_array($this->getAttributeValue()));
-
         $e = $parent->ownerDocument->createElementNS($namespace, $name);
         $parent->appendChild($e);
 

@@ -227,11 +227,6 @@ class EndpointType
      */
     public function toXML(\DOMElement $parent, string $name) : \DOMElement
     {
-        assert(is_string($name));
-        assert(is_string($this->getBinding()));
-        assert(is_string($this->getLocation()));
-        assert(is_null($this->getResponseLocation()) || is_string($this->getResponseLocation()));
-
         $e = $parent->ownerDocument->createElementNS(Constants::NS_MD, $name);
         $parent->appendChild($e);
 

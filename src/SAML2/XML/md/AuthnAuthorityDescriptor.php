@@ -4,6 +4,8 @@ declare(strict_types=1);
 
 namespace SAML2\XML\md;
 
+use Webmozart\Assert\Assert;
+
 use SAML2\Constants;
 use SAML2\Utils;
 
@@ -99,7 +101,6 @@ class AuthnAuthorityDescriptor extends RoleDescriptor
      */
     public function addAuthnQueryService(EndpointType $authnQueryService)
     {
-        assert($authnQueryService instanceof EndpointType);
         $this->AuthnQueryService[] = $authnQueryService;
     }
 
@@ -132,7 +133,6 @@ class AuthnAuthorityDescriptor extends RoleDescriptor
      */
     public function addAssertionIDRequestService(EndpointType $assertionIDRequestService)
     {
-        assert($assertionIDRequestService instanceof EndpointType);
         $this->AssertionIDRequestService[] = $assertionIDRequestService;
     }
 
@@ -166,22 +166,19 @@ class AuthnAuthorityDescriptor extends RoleDescriptor
      */
     public function toXML(\DOMElement $parent) : \DOMElement
     {
-        assert(is_array($authnQueryService = $this->getAuthnQueryService()));
-        assert(!empty($authnQueryService));
-        assert(is_array($this->getAssertionIDRequestService()));
-        assert(is_array($this->NameIDFormat));
+        Assert::notEmpty($this->AuthnQueryService);
 
         $e = parent::toXML($parent);
 
-        foreach ($this->getAuthnQueryService() as $ep) {
+        foreach ($this->AuthnQueryService as $ep) {
             $ep->toXML($e, 'md:AuthnQueryService');
         }
 
-        foreach ($this->getAssertionIDRequestService() as $ep) {
+        foreach ($this->AssertionIDRequestService as $ep) {
             $ep->toXML($e, 'md:AssertionIDRequestService');
         }
 
-        Utils::addStrings($e, Constants::NS_MD, 'md:NameIDFormat', false, $this->getNameIDFormat());
+        Utils::addStrings($e, Constants::NS_MD, 'md:NameIDFormat', false, $this->NameIDFormat);
 
         return $e;
     }

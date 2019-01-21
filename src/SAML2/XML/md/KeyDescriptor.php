@@ -23,7 +23,7 @@ class KeyDescriptor
      *
      * @var string|null
      */
-    public $use;
+    public $use = null;
 
     /**
      * The KeyInfo for this key.
@@ -154,10 +154,6 @@ class KeyDescriptor
      */
     public function toXML(\DOMElement $parent) : \DOMElement
     {
-        assert(is_null($this->getUse()) || is_string($this->getUse()));
-        assert($this->getKeyInfo() instanceof KeyInfo);
-        assert(is_array($this->getEncryptionMethod()));
-
         $doc = $parent->ownerDocument;
 
         $e = $doc->createElementNS(Constants::NS_MD, 'md:KeyDescriptor');

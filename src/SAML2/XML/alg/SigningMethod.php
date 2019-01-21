@@ -4,6 +4,8 @@ declare(strict_types=1);
 
 namespace SAML2\XML\alg;
 
+use Webmozart\Assert\Assert;
+
 /**
  * Class for handling the alg:SigningMethod element.
  *
@@ -138,21 +140,20 @@ class SigningMethod
      */
     public function toXML(\DOMElement $parent) : \DOMElement
     {
-        assert(is_string($this->getAlgorithm()));
-        assert(is_int($this->getMinKeySize()) || is_null($this->getMinKeySize()));
-        assert(is_int($this->getMaxKeySize()) || is_null($this->getMaxKeySize()));
+        Assert::nullOrInteger($this->MinKeySize);
+        Assert::nullOrInteger($this->MaxKeySize);
 
         $doc = $parent->ownerDocument;
         $e = $doc->createElementNS(Common::NS, 'alg:SigningMethod');
         $parent->appendChild($e);
-        $e->setAttribute('Algorithm', $this->getAlgorithm());
+        $e->setAttribute('Algorithm', $this->Algorithm);
 
-        if ($this->getMinKeySize() !== null) {
-            $e->setAttribute('MinKeySize', strval($this->getMinKeySize()));
+        if ($this->MinKeySize !== null) {
+            $e->setAttribute('MinKeySize', strval($this->MinKeySize));
         }
 
-        if ($this->getMaxKeySize() !== null) {
-            $e->setAttribute('MaxKeySize', strval($this->getMaxKeySize()));
+        if ($this->MaxKeySize !== null) {
+            $e->setAttribute('MaxKeySize', strval($this->MaxKeySize));
         }
 
         return $e;

@@ -170,21 +170,16 @@ class DiscoHints
      */
     public function toXML(\DOMElement $parent)
     {
-        assert(is_array($IPHint = $this->getIPHint()));
-        assert(is_array($DomainHint = $this->getDomainHint()));
-        assert(is_array($GeolocationHint = $this->getGeolocationHint()));
-        assert(is_array($children = $this->getChildren()));
-
-        if (!empty($IPHint)
-         || !empty($DomainHint)
-         || !empty($GeolocationHint)
-         || !empty($children)) {
+        if (!empty($this->IPHint)
+         || !empty($this->DomainHint)
+         || !empty($this->GeolocationHint)
+         || !empty($this->children)) {
             $doc = $parent->ownerDocument;
 
             $e = $doc->createElementNS(Common::NS, 'mdui:DiscoHints');
             $parent->appendChild($e);
 
-            if (!empty($children)) {
+            if (!empty($this->children)) {
                 foreach ($this->getChildren() as $child) {
                     $child->toXML($e);
                 }

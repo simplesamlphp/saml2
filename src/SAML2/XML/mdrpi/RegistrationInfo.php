@@ -26,7 +26,7 @@ class RegistrationInfo
      *
      * @var int|null
      */
-    public $registrationInstant;
+    public $registrationInstant = null;
 
     /**
      * Link to registration policy for this metadata.
@@ -134,10 +134,6 @@ class RegistrationInfo
      */
     public function toXML(\DOMElement $parent) : \DOMElement
     {
-        assert(is_string($this->getRegistrationAuthority()));
-        assert(is_int($this->getRegistrationInstant()) || is_null($this->getRegistrationInstant()));
-        assert(is_array($this->getRegistrationPolicy()));
-
         $registrationAuthority = $this->getRegistrationAuthority();
         if (empty($registrationAuthority)) {
             throw new \Exception('Missing required registration authority.');

@@ -288,46 +288,38 @@ class UIInfo
      */
     public function toXML(\DOMElement $parent)
     {
-        assert(is_array($displayName = $this->getDisplayName()));
-        assert(is_array($description = $this->getDescription()));
-        assert(is_array($informationURL = $this->getInformationURL()));
-        assert(is_array($privacyStatementURL = $this->getPrivacyStatementURL()));
-        assert(is_array($keywords = $this->getKeywords()));
-        assert(is_array($logo = $this->getLogo()));
-        assert(is_array($children = $this->getChildren()));
-
         $e = null;
-        if (!empty($displayName)
-         || !empty($description)
-         || !empty($informationURL)
-         || !empty($privacyStatementURL)
-         || !empty($keywords)
-         || !empty($logo)
-         || !empty($children)) {
+        if (!empty($this->DisplayName)
+         || !empty($this->Description)
+         || !empty($this->InformationURL)
+         || !empty($this->PrivacyStatementURL)
+         || !empty($this->Keywords)
+         || !empty($this->Logo)
+         || !empty($this->children)) {
             $doc = $parent->ownerDocument;
 
             $e = $doc->createElementNS(Common::NS, 'mdui:UIInfo');
             $parent->appendChild($e);
 
-            Utils::addStrings($e, Common::NS, 'mdui:DisplayName', true, $this->getDisplayName());
-            Utils::addStrings($e, Common::NS, 'mdui:Description', true, $this->getDescription());
-            Utils::addStrings($e, Common::NS, 'mdui:InformationURL', true, $this->getInformationURL());
-            Utils::addStrings($e, Common::NS, 'mdui:PrivacyStatementURL', true, $this->getPrivacyStatementURL());
+            Utils::addStrings($e, Common::NS, 'mdui:DisplayName', true, $this->DisplayName);
+            Utils::addStrings($e, Common::NS, 'mdui:Description', true, $this->Description);
+            Utils::addStrings($e, Common::NS, 'mdui:InformationURL', true, $this->InformationURL);
+            Utils::addStrings($e, Common::NS, 'mdui:PrivacyStatementURL', true, $this->PrivacyStatementURL);
 
-            if ($this->getKeywords() !== null) {
-                foreach ($this->getKeywords() as $child) {
+            if ($this->Keywords !== null) {
+                foreach ($this->Keywords as $child) {
                     $child->toXML($e);
                 }
             }
 
-            if ($this->getLogo() !== null) {
-                foreach ($this->getLogo() as $child) {
+            if ($this->Logo !== null) {
+                foreach ($this->Logo as $child) {
                     $child->toXML($e);
                 }
             }
 
-            if ($this->getChildren() !== null) {
-                foreach ($this->getChildren() as $child) {
+            if ($this->children !== null) {
+                foreach ($this->children as $child) {
                     $child->toXML($e);
                 }
             }

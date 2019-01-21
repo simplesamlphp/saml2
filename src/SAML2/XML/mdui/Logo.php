@@ -36,9 +36,9 @@ class Logo
     /**
      * The language of this item.
      *
-     * @var string
+     * @var string|null
      */
-    public $lang;
+    public $lang = null;
 
 
     /**
@@ -96,9 +96,9 @@ class Logo
 
     /**
      * Collect the value of the lang-property
-     * @return string
+     * @return string|null
      */
-    public function getLanguage() : string
+    public function getLanguage()
     {
         return $this->lang;
     }
@@ -165,10 +165,6 @@ class Logo
      */
     public function toXML(\DOMElement $parent) : \DOMElement
     {
-        assert(is_int($this->getWidth()));
-        assert(is_int($this->getHeight()));
-        assert(is_string($this->getUrl()));
-
         $doc = $parent->ownerDocument;
 
         $e = $doc->createElementNS(Common::NS, 'mdui:Logo');

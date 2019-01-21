@@ -4,6 +4,8 @@ declare(strict_types=1);
 
 namespace SAML2\XML\mdattr;
 
+use Webmozart\Assert\Assert;
+
 use SAML2\Utils;
 use SAML2\XML\Chunk;
 use SAML2\XML\saml\Attribute;
@@ -28,7 +30,7 @@ class EntityAttributes
      *
      * @var (\SAML2\XML\saml\Attribute|\SAML2\XML\Chunk)[]
      */
-    public $children;
+    public $children = [];
 
 
     /**
@@ -80,7 +82,7 @@ class EntityAttributes
      */
     public function addChildren($child)
     {
-        assert($child instanceof Chunk || $child instanceof Attribute);
+        Assert::isInstanceOfAny($child, [Chunk::class, Attribute::class]);
         $this->children[] = $child;
     }
 
@@ -93,8 +95,6 @@ class EntityAttributes
      */
     public function toXML(\DOMElement $parent) : \DOMElement
     {
-        assert(is_array($this->getChildren()));
-
         $doc = $parent->ownerDocument;
 
         $e = $doc->createElementNS(EntityAttributes::NS, 'mdattr:EntityAttributes');

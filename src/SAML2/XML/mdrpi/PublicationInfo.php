@@ -26,14 +26,14 @@ class PublicationInfo
      *
      * @var int|null
      */
-    public $creationInstant;
+    public $creationInstant = null;
 
     /**
      * Identifier for this metadata publication.
      *
      * @var string|null
      */
-    public $publicationId;
+    public $publicationId = null;
 
     /**
      * Link to usage policy for this metadata.
@@ -166,11 +166,6 @@ class PublicationInfo
      */
     public function toXML(\DOMElement $parent) : \DOMElement
     {
-        assert(is_string($this->getPublisher()));
-        assert(is_int($this->getCreationInstant()) || is_null($this->getCreationInstant()));
-        assert(is_string($this->getPublicationId()) || is_null($this->getPublicationId()));
-        assert(is_array($this->getUsagePolicy()));
-
         $doc = $parent->ownerDocument;
 
         $e = $doc->createElementNS(Common::NS_MDRPI, 'mdrpi:PublicationInfo');
