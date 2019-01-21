@@ -128,8 +128,11 @@ class KeyInfo
      */
     public function addInfo($info)
     {
-        Assert::isInstanceOfAny($info, [Chunk::class, KeyName::class, X509Data::class],
-            'KeyInfo can only contain instances of KeyName, X509Data or Chunk.');
+        Assert::isInstanceOfAny(
+            $info,
+            [Chunk::class, KeyName::class, X509Data::class],
+            'KeyInfo can only contain instances of KeyName, X509Data or Chunk.'
+        );
         $this->info[] = $info;
     }
 
