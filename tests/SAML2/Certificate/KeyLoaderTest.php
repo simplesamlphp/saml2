@@ -104,7 +104,7 @@ class KeyLoaderTest extends \Mockery\Adapter\Phpunit\MockeryTestCase
     public function loading_a_file_with_the_wrong_format_throws_an_exception()
     {
         $filePath = dirname(__FILE__) . '/File/';
-        $this->setExpectedException(InvalidCertificateStructureException::class);
+        $this->expectException(InvalidCertificateStructureException::class);
         $this->keyLoader->loadCertificateFile($filePath . 'not_a_key.crt');
     }
 
@@ -149,7 +149,7 @@ class KeyLoaderTest extends \Mockery\Adapter\Phpunit\MockeryTestCase
             ->once()
             ->andReturnNull();
 
-        $this->setExpectedException(NoKeysFoundException::class);
+        $this->expectException(NoKeysFoundException::class);
         $this->keyLoader->loadKeysFromConfiguration($this->configurationMock, null, true);
     }
 
@@ -202,7 +202,7 @@ class KeyLoaderTest extends \Mockery\Adapter\Phpunit\MockeryTestCase
             ->once()
             ->andReturn($file);
 
-        $this->setExpectedException(InvalidCertificateStructureException::class);
+        $this->expectException(InvalidCertificateStructureException::class);
         $loadedKeys = $this->keyLoader->loadKeysFromConfiguration($this->configurationMock);
     }
 }

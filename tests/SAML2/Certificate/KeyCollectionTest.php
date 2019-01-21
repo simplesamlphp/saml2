@@ -16,7 +16,7 @@ class KeyCollectionTest extends \Mockery\Adapter\Phpunit\MockeryTestCase
      */
     public function testKeyCollectionAddWrongType()
     {
-        $this->setExpectedException(InvalidArgumentException::class);
+        $this->expectException(InvalidArgumentException::class);
         $kc = new KeyCollection();
         $kc->add("not a key, just a string");
     }
