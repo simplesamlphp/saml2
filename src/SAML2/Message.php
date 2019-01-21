@@ -92,7 +92,7 @@ abstract class Message extends SignedElement
      *
      * @var XMLSecurityKey|null
      */
-    private $signatureKey;
+    protected $signatureKey;
 
     /**
      * @var bool
@@ -104,7 +104,7 @@ abstract class Message extends SignedElement
      *
      * @var array
      */
-    private $certificates;
+    protected $certificates;
 
     /**
      * Available methods for validating this message.
