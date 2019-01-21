@@ -115,8 +115,9 @@ class Utils
      * @throws \Exception
      * @return XMLSecurityKey The new key.
      */
-    public static function castKey(XMLSecurityKey $key, string $algorithm, string $type = 'public') : XMLSecurityKey
+    public static function castKey(XMLSecurityKey $key, string $algorithm, string $type = null) : XMLSecurityKey
     {
+        $type = $type ?: 'public';
         Assertion::choice($type, ["private", "public"]);
 
         // do nothing if algorithm is already the type of the key
