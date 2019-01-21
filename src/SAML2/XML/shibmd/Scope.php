@@ -102,7 +102,7 @@ class Scope
      */
     public function toXML(\DOMElement $parent) : \DOMElement
     {
-        Assertion::notEmpty($this->scope);
+        Assert::notEmpty($this->scope);
         $doc = $parent->ownerDocument;
 
         $e = $doc->createElementNS(Scope::NS, 'shibmd:Scope');
