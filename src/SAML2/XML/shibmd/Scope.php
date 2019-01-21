@@ -4,6 +4,8 @@ declare(strict_types=1);
 
 namespace SAML2\XML\shibmd;
 
+use Assert\Assertion;
+
 use SAML2\Utils;
 
 /**
@@ -100,14 +102,15 @@ class Scope
      */
     public function toXML(\DOMElement $parent) : \DOMElement
     {
+        Assertion::notEmpty($this->scope);
         $doc = $parent->ownerDocument;
 
         $e = $doc->createElementNS(Scope::NS, 'shibmd:Scope');
         $parent->appendChild($e);
 
-        $e->appendChild($doc->createTextNode($this->getScope()));
+        $e->appendChild($doc->createTextNode($this->scope));
 
-        if ($this->isRegexpScope() === true) {
+        if ($this->regexp === true) {
             $e->setAttribute('regexp', 'true');
         } else {
             $e->setAttribute('regexp', 'false');
