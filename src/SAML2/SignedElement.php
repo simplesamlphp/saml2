@@ -59,7 +59,7 @@ abstract class SignedElement
      *
      * @return array An array of certificates
      */
-    public function getCertificates() : array;
+    public function getCertificates() : array
     {
         return $this->certificates;
     }
