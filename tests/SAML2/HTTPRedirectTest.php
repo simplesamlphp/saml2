@@ -185,7 +185,7 @@ class HTTPRedirectTest extends \Mockery\Adapter\Phpunit\MockeryTestCase
     {
         $request = new AuthnRequest();
         $hr = new HTTPRedirect();
-        $this->setExpectedException('Exception', 'Cannot build a redirect URL, no destination set.');
+        $this->expectException('Exception', 'Cannot build a redirect URL, no destination set.');
         $hr->send($request);
     }
 

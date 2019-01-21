@@ -75,7 +75,7 @@ class HTTPPostTest extends \Mockery\Adapter\Phpunit\MockeryTestCase
     {
         $request = new AuthnRequest();
         $hp = new HTTPPost();
-        $this->setExpectedException('Exception', 'Cannot send message, no destination set.');
+        $this->expectException('Exception', 'Cannot send message, no destination set.');
         $hp->send($request);
     }
 
