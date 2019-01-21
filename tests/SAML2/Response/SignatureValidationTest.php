@@ -130,14 +130,12 @@ class SignatureValidationTest extends \Mockery\Adapter\Phpunit\MockeryTestCase
      */
     public function testThatAnUnsignedResponseWithNoSignedAssertionsThrowsAnException()
     {
-        $this->setExpectedException(UnsignedResponseException::class);
+        $this->expectException(UnsignedResponseException::class);
 
         // here the processAssertions may not be called as it should fail with an exception due to having no signature
         $this->assertionProcessor->shouldReceive('processAssertions')->never();
 
         $processor = new Response\Processor(new \Psr\Log\NullLogger());
-
-        $this->expectException(Exception\UnsignedResponseException::class);
         $processor->process(
             new ServiceProvider([]),
             new IdentityProvider([]),

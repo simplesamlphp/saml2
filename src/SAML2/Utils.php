@@ -647,7 +647,7 @@ class Utils
         $keyInfo->addInfo($x509Data);
 
         $keyDescriptor = new KeyDescriptor();
-        $keyDescriptor->KeyInfo = $keyInfo;
+        $keyDescriptor->setKeyInfo($keyInfo);
 
         return $keyDescriptor;
     }
