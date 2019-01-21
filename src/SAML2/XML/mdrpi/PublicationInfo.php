@@ -19,7 +19,7 @@ class PublicationInfo
      *
      * @var string
      */
-    public $publisher;
+    private $publisher;
 
     /**
      * The creation timestamp for the metadata, as a UNIX timestamp.
@@ -33,7 +33,7 @@ class PublicationInfo
      *
      * @var string|null
      */
-    public $publicationId = null;
+    private $publicationId = null;
 
     /**
      * Link to usage policy for this metadata.
@@ -42,7 +42,7 @@ class PublicationInfo
      *
      * @var array
      */
-    public $UsagePolicy = [];
+    private $UsagePolicy = [];
 
 
     /**

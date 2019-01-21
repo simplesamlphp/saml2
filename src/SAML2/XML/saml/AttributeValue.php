@@ -22,7 +22,7 @@ class AttributeValue implements \Serializable
      *
      * @var \DOMElement
      */
-    public $element;
+    private $element;
 
 
     /**

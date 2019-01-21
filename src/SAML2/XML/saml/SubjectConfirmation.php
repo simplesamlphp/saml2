@@ -19,21 +19,21 @@ class SubjectConfirmation
      *
      * @var string
      */
-    public $Method;
+    private $Method;
 
     /**
      * The NameID of the entity that can use this element to verify the Subject.
      *
      * @var \SAML2\XML\saml\NameID|null
      */
-    public $NameID = null;
+    private $NameID = null;
 
     /**
      * SubjectConfirmationData element with extra data for verification of the Subject.
      *
      * @var \SAML2\XML\saml\SubjectConfirmationData|null
      */
-    public $SubjectConfirmationData = null;
+    private $SubjectConfirmationData = null;
 
 
     /**

@@ -221,6 +221,6 @@ XML
         $this->assertEquals('Fictional', $uiinfo->getKeywords()[0]->getKeywords()[1]);
         $this->assertEquals('fr', $uiinfo->getKeywords()[1]->getLanguage());
         $this->assertCount(2, $uiinfo->getChildren());
-        $this->assertEquals('child2', $uiinfo->getChildren()[1]->localName);
+        $this->assertEquals('child2', $uiinfo->getChildren()[1]->getLocalName());
     }
 }

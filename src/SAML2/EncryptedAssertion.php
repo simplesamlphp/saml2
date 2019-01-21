@@ -23,6 +23,11 @@ class EncryptedAssertion
 
 
     /**
+     * @var bool
+     */
+    protected $wasSignedAtConstruction = false;
+
+    /**
      * Constructor for SAML 2 encrypted assertions.
      *
      * @param \DOMElement|null $xml The encrypted assertion XML element.
@@ -43,6 +48,14 @@ class EncryptedAssertion
         $this->encryptedData = $data[0];
     }
 
+
+    /**
+     * @return bool
+     */
+    public function wasSignedAtConstruction()
+    {
+        return $this->wasSignedAtConstruction;
+    }
 
     /**
      * Set the assertion.

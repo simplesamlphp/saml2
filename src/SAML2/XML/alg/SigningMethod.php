@@ -20,7 +20,7 @@ class SigningMethod
      *
      * @var string
      */
-    public $Algorithm;
+    private $Algorithm;
 
 
     /**
@@ -29,7 +29,7 @@ class SigningMethod
      *
      * @var int|null
      */
-    public $MinKeySize;
+    private $MinKeySize;
 
 
     /**
@@ -38,7 +38,7 @@ class SigningMethod
      *
      * @var int|null
      */
-    public $MaxKeySize;
+    private $MaxKeySize;
 
 
     /**

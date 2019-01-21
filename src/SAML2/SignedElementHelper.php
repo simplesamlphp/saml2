@@ -13,30 +13,21 @@ use RobRichards\XMLSecLibs\XMLSecurityKey;
  *
  * @package SimpleSAMLphp
  */
-class SignedElementHelper implements SignedElement
+class SignedElementHelper extends SignedElement
 {
-    /**
-     * The private key we should use to sign the message.
-     *
-     * The private key can be null, in which case the message is sent unsigned.
-     *
-     * @var XMLSecurityKey|null
-     */
-    private $signatureKey;
-
-    /**
-     * List of certificates that should be included in the message.
-     *
-     * @var array
-     */
-    private $certificates;
-
     /**
      * Available methods for validating this message.
      *
      * @var array
      */
     private $validators;
+
+    /**
+     * How long this element is valid, as a unix timestamp.
+     *
+     * @var int|null
+     */
+    public $validUntil;
 
     /**
      * The length of time this element can be cached, as string.
@@ -223,7 +214,6 @@ class SignedElementHelper implements SignedElement
     {
         return $this->validUntil;
     }
-
 
     /**
      * Set the value of the validUntil-property

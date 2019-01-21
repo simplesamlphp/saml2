@@ -29,21 +29,7 @@ class AffiliationDescriptor extends SignedElementHelper
      *
      * @var string|null
      */
-    public $ID = null;
-
-    /**
-     * How long this element is valid, as a unix timestamp.
-     *
-     * @var int|null
-     */
-    public $validUntil = null;
-
-    /**
-     * The length of time this element can be cached, as string.
-     *
-     * @var string|null
-     */
-    public $cacheDuration = null;
+    private $ID;
 
     /**
      * Extensions on this element.
@@ -52,7 +38,7 @@ class AffiliationDescriptor extends SignedElementHelper
      *
      * @var \SAML2\XML\Chunk[]
      */
-    public $Extensions = [];
+    private $Extensions = [];
 
     /**
      * The AffiliateMember(s).
@@ -61,7 +47,7 @@ class AffiliationDescriptor extends SignedElementHelper
      *
      * @var array
      */
-    public $AffiliateMember = [];
+    private $AffiliateMember = [];
 
     /**
      * KeyDescriptor elements.
@@ -70,7 +56,7 @@ class AffiliationDescriptor extends SignedElementHelper
      *
      * @var \SAML2\XML\md\KeyDescriptor[]
      */
-    public $KeyDescriptor = [];
+    private $KeyDescriptor = [];
 
 
     /**

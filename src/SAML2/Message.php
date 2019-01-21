@@ -15,7 +15,7 @@ use SAML2\XML\samlp\Extensions;
  * Implements what is common between the samlp:RequestAbstractType and
  * samlp:StatusResponseType element types.
  */
-abstract class Message implements SignedElement
+abstract class Message extends SignedElement
 {
     /**
      * Request extensions.
@@ -86,25 +86,9 @@ abstract class Message implements SignedElement
     protected $document;
 
     /**
-     * The private key we should use to sign the message.
-     *
-     * The private key can be null, in which case the message is sent unsigned.
-     *
-     * @var XMLSecurityKey|null
-     */
-    private $signatureKey;
-
-    /**
      * @var bool
      */
     protected $messageContainedSignatureUponConstruction = false;
-
-    /**
-     * List of certificates that should be included in the message.
-     *
-     * @var array
-     */
-    private $certificates;
 
     /**
      * Available methods for validating this message.

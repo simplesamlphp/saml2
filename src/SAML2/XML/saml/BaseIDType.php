@@ -24,7 +24,7 @@ abstract class BaseIDType
      *
      * @var string|null
      */
-    public $NameQualifier = null;
+    private $NameQualifier = null;
 
     /**
      * Further qualifies an identifier with the name of a service provider or affiliation of providers.
@@ -34,7 +34,7 @@ abstract class BaseIDType
      *
      * @var string|null
      */
-    public $SPNameQualifier = null;
+    private $SPNameQualifier = null;
 
     /**
      * The name for this BaseID.
