@@ -36,13 +36,6 @@ class SignedElementHelper extends SignedElement
      */
     public $cacheDuration;
 
-    /**
-     * The length of time this element can be cached, as string.
-     *
-     * @var string|null
-     */
-    public $cacheDuration;
-
 
     /**
      * Initialize the helper class.
