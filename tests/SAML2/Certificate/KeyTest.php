@@ -18,7 +18,7 @@ class KeyTest extends \PHPUnit\Framework\TestCase
     public function invalid_key_usage_should_throw_an_exception()
     {
         $key = new Key([Key::USAGE_SIGNING => true]);
-        $this->setExpectedException(InvalidKeyUsageException::class);
+        $this->expectException(InvalidKeyUsageException::class);
         $key->canBeUsedFor('foo');
     }
 
@@ -31,7 +31,7 @@ class KeyTest extends \PHPUnit\Framework\TestCase
     public function invalid_offset_type_should_throw_an_exception($function, $params)
     {
         $key = new Key([Key::USAGE_SIGNING => true]);
-        $this->setExpectedException(InvalidArgumentException::class);
+        $this->expectException(InvalidArgumentException::class);
         call_user_func_array([$key, $function], $params);
     }
 

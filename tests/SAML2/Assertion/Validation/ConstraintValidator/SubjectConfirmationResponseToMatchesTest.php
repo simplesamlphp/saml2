@@ -30,7 +30,7 @@ class SubjectConfirmationResponseToMatchesTest extends \Mockery\Adapter\Phpunit\
         parent::setUp();
         $this->subjectConfirmation = new \SAML2\XML\saml\SubjectConfirmation();
         $this->subjectConfirmationData = new \SAML2\XML\saml\SubjectConfirmationData();
-        $this->subjectConfirmation->SubjectConfirmationData = $this->getSubjectConfirmationData();
+        $this->subjectConfirmation->SubjectConfirmationData = $this->SubjectConfirmationData;
         $this->response = \Mockery::mock(\SAML2\Response::class);
     }
 
