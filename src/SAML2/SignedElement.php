@@ -39,7 +39,7 @@ abstract class SignedElement
      * @param  XMLSecurityKey $key The key we should check against.
      * @return bool True if successful, false if we don't have a signature that can be verified.
      */
-    public function validate(XMLSecurityKey $key) : bool;
+    public function validate(XMLSecurityKey $key);
 
 
     /**
