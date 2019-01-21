@@ -260,7 +260,7 @@ class AttributeAuthorityDescriptor extends RoleDescriptor
      */
     public function toXML(\DOMElement $parent) : \DOMElement
     {
-        Assert::notEmpty($this->attributeService);
+        Assert::notEmpty($this->AttributeService);
 
         $e = parent::toXML($parent);
 
