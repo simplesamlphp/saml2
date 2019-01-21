@@ -22,14 +22,14 @@ class SignedElementHelper extends SignedElement
      *
      * @var XMLSecurityKey|null
      */
-    private $signatureKey;
+    protected $signatureKey;
 
     /**
      * List of certificates that should be included in the message.
      *
      * @var array
      */
-    private $certificates;
+    protected $certificates;
 
     /**
      * Available methods for validating this message.
