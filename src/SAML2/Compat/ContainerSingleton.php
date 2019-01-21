@@ -32,7 +32,7 @@ class ContainerSingleton
      * @param \SAML2\Compat\AbstractContainer $container
      * @return void
      */
-    public static function setContainer(AbstractContainer $container) : AbstractContainer
+    public static function setContainer(AbstractContainer $container)
     {
         self::$container = $container;
     }
