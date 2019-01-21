@@ -212,17 +212,6 @@ class LogoutRequest extends Request
 
 
     /**
-     * Retrieve the encrypted name identifier.
-     *
-     * @return \DOMElement|null
-     */
-    private function getEncryptedNameId()
-    {
-        return $this->encryptedNameId;
-    }
-
-
-    /**
      * Retrieve the SessionIndexes of the sessions that should be terminated.
      *
      * @return array The SessionIndexes, or an empty array if all sessions should be terminated.
