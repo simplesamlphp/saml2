@@ -39,7 +39,11 @@ class HTTPArtifact extends Binding
         }
 
         $generatedId = pack('H*', bin2hex(openssl_random_pseudo_bytes(20)));
-        $artifact = base64_encode("\x00\x04\x00\x00".sha1($message->getIssuer(), true).$generatedId);
+        $issuer = $message->getIssuer();
+        if ($issuer === null || $value = $issuer->getValue() === null) {
+            throw new \Exception('Cannot get redirect URL, no Issuer set in the message.');
+        }
+        $artifact = base64_encode("\x00\x04\x00\x00".sha1($value, true).$generatedId);
         $artifactData = $message->toUnsignedXML();
         $artifactDataString = $artifactData->ownerDocument->saveXML($artifactData);
 
@@ -53,7 +57,11 @@ class HTTPArtifact extends Binding
             $params['RelayState'] = $relayState;
         }
 
-        return \SimpleSAML\Utils\HTTP::addURLparameter($message->getDestination(), $params);
+        $destination = $message->getDestination();
+        if ($destination === null) {
+            throw new \Exception('Cannot get redirect URL, no destination set in the message.');
+        }
+        return \SimpleSAML\Utils\HTTP::addURLparameters($destination, $params);
     }
 
 
@@ -138,7 +146,7 @@ class HTTPArtifact extends Binding
         if ($xml === null) {
             /* Empty ArtifactResponse - possibly because of Artifact replay? */
 
-            return null;
+            throw new \Exception('Empty ArtifactResponse received, maybe a replay?');
         }
 
         $samlResponse = Message::fromXML($xml);

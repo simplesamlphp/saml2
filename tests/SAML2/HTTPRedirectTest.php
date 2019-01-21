@@ -174,7 +174,19 @@ class HTTPRedirectTest extends \Mockery\Adapter\Phpunit\MockeryTestCase
 
         $this->expectException(\Exception::class, 'Missing SAMLRequest or SAMLResponse parameter.');
         $hr = new HTTPRedirect();
-        $request = $hr->receive();
+        $hr->receive();
+    }
+
+
+    /**
+     * Construct an authnrequest and try to send it without a destination.
+     */
+    public function testSendWithoutDestination()
+    {
+        $request = new AuthnRequest();
+        $hr = new HTTPRedirect();
+        $this->setExpectedException('Exception', 'Cannot build a redirect URL, no destination set.');
+        $hr->send($request);
     }
 
 

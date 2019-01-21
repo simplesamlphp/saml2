@@ -27,6 +27,9 @@ class HTTPRedirect extends Binding
     {
         if ($this->destination === null) {
             $destination = $message->getDestination();
+            if ($destination === null) {
+                throw new \Exception('Cannot build a redirect URL, no destination set.');
+            }
         } else {
             $destination = $this->destination;
         }
@@ -126,6 +129,9 @@ class HTTPRedirect extends Binding
 
         $document = DOMDocumentFactory::fromString($message);
         Utils::getContainer()->debugMessage($document->documentElement, 'in');
+        if (!$document->firstChild instanceof \DOMElement) {
+            throw new \Exception('Malformed SAML message received.');
+        }
         $message  = Message::fromXML($document->firstChild);
 
         if (array_key_exists('RelayState', $data)) {

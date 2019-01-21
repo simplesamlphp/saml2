@@ -13,7 +13,7 @@ final class IdentityProvider extends ArrayAdapter implements
     EntityIdProvider
 {
     /**
-     * @return array|mixed|\Traversable|null
+     * @return array|\Traversable|null
      */
     public function getKeys()
     {
@@ -22,7 +22,7 @@ final class IdentityProvider extends ArrayAdapter implements
 
 
     /**
-     * @return mixed|string|null
+     * @return string|null
      */
     public function getCertificateData()
     {
@@ -31,7 +31,7 @@ final class IdentityProvider extends ArrayAdapter implements
 
 
     /**
-     * @return mixed|string|null
+     * @return string|null
      */
     public function getCertificateFile()
     {
@@ -40,7 +40,16 @@ final class IdentityProvider extends ArrayAdapter implements
 
 
     /**
-     * @return bool|mixed|null
+     * @return array|mixed|\Traversable|null
+     */
+    public function getCertificateFingerprints()
+    {
+        return $this->get('certificateFingerprints');
+    }
+
+
+    /**
+     * @return bool|null
      */
     public function isAssertionEncryptionRequired()
     {
@@ -49,7 +58,7 @@ final class IdentityProvider extends ArrayAdapter implements
 
 
     /**
-     * @return mixed|string|null
+     * @return string|null
      */
     public function getSharedKey()
     {
@@ -69,7 +78,7 @@ final class IdentityProvider extends ArrayAdapter implements
     /**
      * @param string $name
      * @param bool $required
-     * @return mixed|\TValue|null
+     * @return mixed|null
      */
     public function getPrivateKey(string $name, bool $required = null)
     {

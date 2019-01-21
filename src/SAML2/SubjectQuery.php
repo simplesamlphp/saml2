@@ -55,22 +55,22 @@ abstract class SubjectQuery extends Request
      */
     private function parseSubject(\DOMElement $xml)
     {
+        /** @var \DOMElement[] $subject */
         $subject = Utils::xpQuery($xml, './saml_assertion:Subject');
         if (empty($subject)) {
             throw new \Exception('Missing subject in subject query.');
         } elseif (count($subject) > 1) {
             throw new \Exception('More than one <saml:Subject> in subject query.');
         }
-        $subject = $subject[0];
 
-        $nameId = Utils::xpQuery($subject, './saml_assertion:NameID');
+        /** @var \DOMElement[] $nameId */
+        $nameId = Utils::xpQuery($subject[0], './saml_assertion:NameID');
         if (empty($nameId)) {
             throw new \Exception('Missing <saml:NameID> in <saml:Subject>.');
         } elseif (count($nameId) > 1) {
             throw new \Exception('More than one <saml:NameID> in <saml:Subject>.');
         }
-        $nameId = $nameId[0];
-        $this->nameId = new NameID($nameId);
+        $this->nameId = new NameID($nameId[0]);
     }
 
 

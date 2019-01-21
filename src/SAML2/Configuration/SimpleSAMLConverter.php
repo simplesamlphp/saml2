@@ -77,7 +77,7 @@ class SimpleSAMLConverter
 
         $extracted['assertionEncryptionEnabled'] = $configuration->getBoolean('assertion.encryption', false);
 
-        if ($configuration->has('sharedKey')) {
+        if ($configuration->hasValue('sharedKey')) {
             $extracted['sharedKey'] = $configuration->getString('sharedKey');
         }
 
@@ -120,11 +120,11 @@ class SimpleSAMLConverter
         Configuration $configuration,
         array &$baseConfiguration
     ) {
-        if ($configuration->has('sharedKey')) {
+        if ($configuration->hasValue('sharedKey')) {
             $baseConfiguration['sharedKey'] = $configuration->getString('sharedKey', null);
         }
 
-        if ($configuration->has('new_privatekey')) {
+        if ($configuration->hasValue('new_privatekey')) {
             $baseConfiguration['privateKeys'][] = new PrivateKey(
                 $configuration->getString('new_privatekey'),
                 PrivateKey::NAME_NEW,
@@ -139,9 +139,9 @@ class SimpleSAMLConverter
                 $configuration->getString('privatekey_pass', null)
             );
 
-            if ($configuration->has('encryption.blacklisted-algorithms')) {
+            if ($configuration->hasValue('encryption.blacklisted-algorithms')) {
                 $baseConfiguration['blacklistedEncryptionAlgorithms'] = $configuration
-                    ->get('encryption.blacklisted-algorithms');
+                    ->getValue('encryption.blacklisted-algorithms');
             }
         }
     }

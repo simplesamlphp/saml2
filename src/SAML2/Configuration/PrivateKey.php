@@ -20,7 +20,7 @@ class PrivateKey extends ArrayAdapter
     private $filePath;
 
     /**
-     * @var string
+     * @var string|null
      */
     private $passphrase;
 
@@ -60,12 +60,12 @@ class PrivateKey extends ArrayAdapter
      */
     public function hasPassPhrase() : bool
     {
-        return (bool) $this->passphrase;
+        return $this->passphrase !== null;
     }
 
 
     /**
-     * @return string
+     * @return string|null
      */
     public function getPassPhrase() : string
     {

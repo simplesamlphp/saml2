@@ -82,6 +82,7 @@ class AttributeConsumingService
 
         $this->setServiceDescription(Utils::extractLocalizedStrings($xml, Constants::NS_MD, 'ServiceDescription'));
 
+        /** @var \DOMElement $ra */
         foreach (Utils::xpQuery($xml, './saml_metadata:RequestedAttribute') as $ra) {
             $this->addRequestedAttribute(new RequestedAttribute($ra));
         }

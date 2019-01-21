@@ -77,6 +77,7 @@ class AttributeAuthorityDescriptor extends RoleDescriptor
             return;
         }
 
+        /** @var \DOMElement $ep */
         foreach (Utils::xpQuery($xml, './saml_metadata:AttributeService') as $ep) {
             $this->addAttributeService(new EndpointType($ep));
         }
@@ -84,6 +85,7 @@ class AttributeAuthorityDescriptor extends RoleDescriptor
             throw new \Exception('Must have at least one AttributeService in AttributeAuthorityDescriptor.');
         }
 
+        /** @var \DOMElement $ep */
         foreach (Utils::xpQuery($xml, './saml_metadata:AssertionIDRequestService') as $ep) {
             $this->addAssertionIDRequestService(new EndpointType($ep));
         }
@@ -92,6 +94,7 @@ class AttributeAuthorityDescriptor extends RoleDescriptor
 
         $this->setAttributeProfile(Utils::extractStrings($xml, Constants::NS_MD, 'AttributeProfile'));
 
+        /** @var \DOMElement $a */
         foreach (Utils::xpQuery($xml, './saml_assertion:Attribute') as $a) {
             $this->addAttribute(new Attribute($a));
         }

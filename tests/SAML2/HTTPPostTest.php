@@ -4,13 +4,14 @@ declare(strict_types=1);
 
 namespace SAML2;
 
+use PHPUnit_Framework_Error_Warning;
+use PHPUnit_Framework_TestCase;
+use SimpleSAML\Utils\HTTP;
+
 use SAML2\AuthnRequest;
 use SAML2\HTTPPost;
 use SAML2\Response;
 use SAML2\XML\saml\Issuer;
-
-use PHPUnit_Framework_Error_Warning;
-use PHPUnit_Framework_TestCase;
 
 class HTTPPostTest extends \Mockery\Adapter\Phpunit\MockeryTestCase
 {
@@ -62,17 +63,42 @@ class HTTPPostTest extends \Mockery\Adapter\Phpunit\MockeryTestCase
         $_POST = ['non' => 'sense'];
         $hp = new HTTPPost();
         $this->expectException(\Exception::class, 'Missing SAMLRequest or SAMLResponse parameter');
-        $msg = $hp->receive();
+        $hp->receive();
     }
 
 
     /**
-     * Construct an authnrequest and send it.
+     * Construct an authnrequest without a destination and try to send it.
      * @doesNotPerformAssertions
      */
-    public function testSendAuthnrequest()
+    public function testSendMissingDestination()
     {
         $request = new AuthnRequest();
+        $hp = new HTTPPost();
+        $this->setExpectedException('Exception', 'Cannot send message, no destination set.');
+        $hp->send($request);
+    }
+
+
+    /**
+     * Construct an authnrequest and send it to the destination set in the binding.
+     */
+    public function testSendAuthnRequestWithDestinationInBinding()
+    {
+        $request = new AuthnRequest();
+        $hp = new HTTPPost();
+        $hp->setDestination('https://example.org');
+        $hp->send($request);
+    }
+
+
+    /**
+     * Construct an authnrequest with a destination set and try to send it.
+     */
+    public function testSendAuthnRequestWithDestination()
+    {
+        $request = new AuthnRequest();
+        $request->setDestination('https://example.org');
         $hp = new HTTPPost();
         $hp->send($request);
     }

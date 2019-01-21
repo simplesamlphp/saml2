@@ -58,6 +58,7 @@ class AuthnAuthorityDescriptor extends RoleDescriptor
             return;
         }
 
+        /** @var \DOMElement $ep */
         foreach (Utils::xpQuery($xml, './saml_metadata:AuthnQueryService') as $ep) {
             $this->addAuthnQueryService(new EndpointType($ep));
         }
@@ -65,6 +66,7 @@ class AuthnAuthorityDescriptor extends RoleDescriptor
             throw new \Exception('Must have at least one AuthnQueryService in AuthnAuthorityDescriptor.');
         }
 
+        /** @var \DOMElement $ep */
         foreach (Utils::xpQuery($xml, './saml_metadata:AssertionIDRequestService') as $ep) {
             $this->addAssertionIDRequestService(new EndpointType($ep));
         }

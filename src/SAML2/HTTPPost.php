@@ -23,6 +23,9 @@ class HTTPPost extends Binding
     {
         if ($this->destination === null) {
             $destination = $message->getDestination();
+            if ($destination === null) {
+                throw new \Exception('Cannot send message, no destination set.');
+            }
         } else {
             $destination = $this->destination;
         }
@@ -78,6 +81,9 @@ class HTTPPost extends Binding
 
         $document = DOMDocumentFactory::fromString($msgStr);
         Utils::getContainer()->debugMessage($document->documentElement, 'in');
+        if (!$document->firstChild instanceof \DOMElement) {
+            throw new \Exception('Malformed SAML message received.');
+        }
 
         $msg = Message::fromXML($document->firstChild);
 

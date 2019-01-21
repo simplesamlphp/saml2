@@ -63,8 +63,8 @@ class Processor
     /**
      * @param \SAML2\Configuration\ServiceProvider  $serviceProviderConfiguration
      * @param \SAML2\Configuration\IdentityProvider $identityProviderConfiguration
-     * @param \SAML2\Configuration\Destination      $currentDestination
-     * @param \SAML2\Response                       $response
+     * @param \SAML2\Configuration\Destination $currentDestination
+     * @param \SAML2\Response $response
      *
      * @return \SAML2\Utilities\ArrayCollection Collection of \SAML2\Assertion objects
      */
@@ -108,15 +108,13 @@ class Processor
 
 
     /**
-     * @param \SAML2\Response                       $response
+     * @param \SAML2\Response $response
      * @param \SAML2\Configuration\IdentityProvider $identityProviderConfiguration
      * @throws InvalidResponseException
      * @return void
      */
-    private function verifySignature(
-        Response $response,
-        IdentityProvider $identityProviderConfiguration
-    ) {
+    private function verifySignature(Response $response, IdentityProvider $identityProviderConfiguration)
+    {
         if (!$response->isMessageConstructedWithSignature()) {
             $this->logger->info(sprintf(
                 'SAMLResponse with id "%s" was not signed at root level, not attempting to verify the signature of the'
@@ -155,7 +153,7 @@ class Processor
 
         if (!$this->responseIsSigned) {
             foreach ($assertions as $assertion) {
-                if (!$assertion->getWasSignedAtConstruction()) {
+                if (!$assertion->wasSignedAtConstruction()) {
                     throw new UnsignedResponseException(
                         'Both the response and the assertion it contains are not signed.'
                     );

@@ -84,6 +84,7 @@ class EncryptedAssertion
                 throw new \Exception('Unknown key type for encryption: '.$key->type);
         }
 
+        /** @var \DOMElement encryptedData */
         $this->encryptedData = $enc->encryptNode($symmetricKey);
     }
 

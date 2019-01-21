@@ -69,26 +69,27 @@ abstract class StatusResponse extends Message
             $this->inResponseTo = $xml->getAttribute('InResponseTo');
         }
 
+        /** @var \DOMElement[] $status */
         $status = Utils::xpQuery($xml, './saml_protocol:Status');
         if (empty($status)) {
             throw new \Exception('Missing status code on response.');
         }
-        $status = $status[0];
 
-        $statusCode = Utils::xpQuery($status, './saml_protocol:StatusCode');
+        /** @var \DOMElement[] $statusCode */
+        $statusCode = Utils::xpQuery($status[0], './saml_protocol:StatusCode');
         if (empty($statusCode)) {
             throw new \Exception('Missing status code in status element.');
         }
-        $statusCode = $statusCode[0];
+        $this->status['Code'] = $statusCode[0]->getAttribute('Value');
 
-        $this->status['Code'] = $statusCode->getAttribute('Value');
-
-        $subCode = Utils::xpQuery($statusCode, './saml_protocol:StatusCode');
+        /** @var \DOMElement[] $subCode */
+        $subCode = Utils::xpQuery($statusCode[0], './saml_protocol:StatusCode');
         if (!empty($subCode)) {
             $this->status['SubCode'] = $subCode[0]->getAttribute('Value');
         }
 
-        $message = Utils::xpQuery($status, './saml_protocol:StatusMessage');
+        /** @var \DOMElement[] $message */
+        $message = Utils::xpQuery($status[0], './saml_protocol:StatusMessage');
         if (!empty($message)) {
             $this->status['Message'] = trim($message[0]->textContent);
         }

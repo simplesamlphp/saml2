@@ -661,7 +661,7 @@ class Assertion implements SignedElement
         /* Validate the signature element of the message. */
         $sig = Utils::validateElement($xml);
         if ($sig !== false) {
-            $this->setWasSignedAtConstruction(true);
+            $this->wasSignedAtConstruction = true;
             $this->setCertificates($sig['Certificates']);
             $this->setSignatureData($sig);
             $this->setSignatureMethod($signatureMethod[0]->value);
@@ -1465,19 +1465,9 @@ class Assertion implements SignedElement
     /**
      * @return bool
      */
-    public function getWasSignedAtConstruction() : bool
+    public function wasSignedAtConstruction() : bool
     {
         return $this->wasSignedAtConstruction;
-    }
-
-
-    /**
-     * @param bool $flag
-     * @return void
-     */
-    public function setWasSignedAtConstruction(bool $flag)
-    {
-        $this->wasSignedAtConstruction = $flag;
     }
 
 
