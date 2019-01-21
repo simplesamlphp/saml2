@@ -20,7 +20,7 @@ use SAML2\XML\saml\SubjectConfirmation;
  *
  * @package SimpleSAMLphp
  */
-class Assertion implements SignedElement
+class Assertion extends SignedElement
 {
     /**
      * The identifier of this assertion.
@@ -213,14 +213,14 @@ class Assertion implements SignedElement
      *
      * @var XMLSecurityKey|null
      */
-    private $signatureKey;
+    protected $signatureKey;
 
     /**
      * List of certificates that should be included in the assertion.
      *
      * @var array
      */
-    private $certificates;
+    protected $certificates;
 
     /**
      * The data needed to verify the signature.
