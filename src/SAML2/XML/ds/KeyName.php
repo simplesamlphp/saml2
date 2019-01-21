@@ -5,6 +5,7 @@ declare(strict_types=1);
 namespace SAML2\XML\ds;
 
 use RobRichards\XMLSecLibs\XMLSecurityDSig;
+
 use SAML2\Utils;
 
 /**
@@ -17,9 +18,9 @@ class KeyName
     /**
      * The key name.
      *
-     * @var string|null
+     * @var string
      */
-    private $name;
+    public $name = '';
 
 
     /**
@@ -49,10 +50,10 @@ class KeyName
 
     /**
      * Set the value of the name-property
-     * @param string $name|null
+     * @param string $name
      * @return void
      */
-    public function setName(string $name = null)
+    public function setName(string $name)
     {
         $this->name = $name;
     }
@@ -65,8 +66,6 @@ class KeyName
      */
     public function toXML(\DOMElement $parent) : \DOMElement
     {
-        assert(is_string($this->name));
-
         return Utils::addString($parent, XMLSecurityDSig::XMLDSIGNS, 'ds:KeyName', $this->name);
     }
 }

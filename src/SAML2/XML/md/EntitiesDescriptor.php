@@ -4,6 +4,8 @@ declare(strict_types=1);
 
 namespace SAML2\XML\md;
 
+use Webmozart\Assert\Assert;
+
 use SAML2\Constants;
 use SAML2\DOMDocumentFactory;
 use SAML2\SignedElementHelper;
@@ -29,7 +31,7 @@ class EntitiesDescriptor extends SignedElementHelper
      *
      * @var string|null
      */
-    private $Name;
+    public $Name = null;
 
     /**
      * Extensions on this element.
@@ -145,7 +147,6 @@ class EntitiesDescriptor extends SignedElementHelper
      */
     public function setValidUntil(int $validUntil = null)
     {
-        assert(is_int($validUntil) || is_null($validUntil));
         $this->validUntil = $validUntil;
     }
 
@@ -167,7 +168,6 @@ class EntitiesDescriptor extends SignedElementHelper
      */
     public function setCacheDuration(string $cacheDuration = null)
     {
-        assert(is_string($cacheDuration) || is_null($cacheDuration));
         $this->cacheDuration = $cacheDuration;
     }
 
@@ -233,7 +233,7 @@ class EntitiesDescriptor extends SignedElementHelper
      */
     public function addChildren($child)
     {
-        assert($child instanceof EntityDescriptor || $child instanceof EntitiesDescriptor);
+        Assert::isInstanceOfAny($child, [EntityDescriptor::class, EntitiesDescriptor::class]);
         $this->children[] = $child;
     }
 
@@ -246,13 +246,6 @@ class EntitiesDescriptor extends SignedElementHelper
      */
     public function toXML(\DOMElement $parent = null) : \DOMElement
     {
-        assert(is_null($this->getID()) || is_string($this->getID()));
-        assert(is_null($this->getValidUntil()) || is_int($this->getValidUntil()));
-        assert(is_null($this->getCacheDuration()) || is_string($this->getCacheDuration()));
-        assert(is_null($this->getName()) || is_string($this->getName()));
-        assert(is_array($this->getExtensions()));
-        assert(is_array($this->getChildren()));
-
         if ($parent === null) {
             $doc = DOMDocumentFactory::create();
             $e = $doc->createElementNS(Constants::NS_MD, 'md:EntitiesDescriptor');

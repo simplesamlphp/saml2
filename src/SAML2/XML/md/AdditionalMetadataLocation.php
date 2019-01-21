@@ -100,9 +100,6 @@ class AdditionalMetadataLocation
      */
     public function toXML(\DOMElement $parent) : \DOMElement
     {
-        assert(is_string($this->getNamespace()));
-        assert(is_string($this->getLocation()));
-
         $e = Utils::addString($parent, Constants::NS_MD, 'md:AdditionalMetadataLocation', $this->getLocation());
         $e->setAttribute('namespace', $this->getNamespace());
 

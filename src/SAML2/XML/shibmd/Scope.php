@@ -4,6 +4,8 @@ declare(strict_types=1);
 
 namespace SAML2\XML\shibmd;
 
+use Webmozart\Assert\Assert;
+
 use SAML2\Utils;
 
 /**
@@ -24,7 +26,7 @@ class Scope
      *
      * @var string
      */
-    private $scope;
+    private $scope = '';
 
     /**
      * Whether this is a regexp scope.
@@ -100,17 +102,15 @@ class Scope
      */
     public function toXML(\DOMElement $parent) : \DOMElement
     {
-        assert(is_string($this->getScope()));
-        assert(is_bool($this->isRegexpScope()) || is_null($this->isRegexpScope()));
-
+        Assert::notEmpty($this->scope);
         $doc = $parent->ownerDocument;
 
         $e = $doc->createElementNS(Scope::NS, 'shibmd:Scope');
         $parent->appendChild($e);
 
-        $e->appendChild($doc->createTextNode($this->getScope()));
+        $e->appendChild($doc->createTextNode($this->scope));
 
-        if ($this->isRegexpScope() === true) {
+        if ($this->regexp === true) {
             $e->setAttribute('regexp', 'true');
         } else {
             $e->setAttribute('regexp', 'false');

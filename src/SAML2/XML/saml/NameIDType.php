@@ -45,9 +45,9 @@ abstract class NameIDType extends BaseIDType
     /**
      * The NameIDType complex type is used when an element serves to represent an entity by a string-valued name.
      *
-     * @var string|null
+     * @var string
      */
-    private $value = null;
+    public $value = '';
 
 
     /**
@@ -98,7 +98,7 @@ abstract class NameIDType extends BaseIDType
 
     /**
      * Collect the value of the value-property
-     * @return string|null
+     * @return string
      */
     public function getValue()
     {
@@ -108,10 +108,10 @@ abstract class NameIDType extends BaseIDType
 
     /**
      * Set the value of the value-property
-     * @param string|null $value
+     * @param string $value
      * @return void
      */
-    public function setValue(string $value = null)
+    public function setValue(string $value)
     {
         $this->value = $value;
     }
@@ -146,10 +146,6 @@ abstract class NameIDType extends BaseIDType
      */
     public function toXML(\DOMElement $parent = null) : \DOMElement
     {
-        assert(is_string($this->getFormat()) || is_null($this->getFormat()));
-        assert(is_string($this->getSPProvidedID()) || is_null($this->getSPProvidedID()));
-        assert(is_string($this->getValue()));
-
         $element = parent::toXML($parent);
 
         if ($this->getFormat() !== null) {

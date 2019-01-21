@@ -19,12 +19,12 @@ class Keywords
      *
      * @var string[]
      */
-    private $Keywords;
+    private $Keywords = [];
 
     /**
      * The language of this item.
      *
-     * @var string|null
+     * @var string
      */
     private $lang;
 
@@ -47,7 +47,6 @@ class Keywords
         if (!is_string($xml->textContent) || !strlen($xml->textContent)) {
             throw new \Exception('Missing value for Keywords.');
         }
-        $this->setKeywords([]);
         foreach (explode(' ', $xml->textContent) as $keyword) {
             $this->addKeyword(str_replace('+', ' ', $keyword));
         }
@@ -57,7 +56,7 @@ class Keywords
 
     /**
      * Collect the value of the lang-property
-     * @return string|null
+     * @return string
      */
     public function getLanguage()
     {
@@ -70,7 +69,7 @@ class Keywords
      * @param string $lang
      * @return void
      */
-    public function setLanguage(string $lang = null)
+    public function setLanguage(string $lang)
     {
         $this->lang = $lang;
     }
@@ -117,9 +116,6 @@ class Keywords
      */
     public function toXML(\DOMElement $parent) : \DOMElement
     {
-        assert(is_string($this->getLanguage()));
-        assert(is_array($this->getKeywords()));
-
         $doc = $parent->ownerDocument;
 
         $e = $doc->createElementNS(Common::NS, 'mdui:Keywords');

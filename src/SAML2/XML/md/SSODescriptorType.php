@@ -109,7 +109,6 @@ abstract class SSODescriptorType extends RoleDescriptor
      */
     public function addArtifactResolutionService(IndexedEndpointType $artifactResolutionService)
     {
-        assert($artifactResolutionService instanceof IndexedEndpointType);
         $this->ArtifactResolutionService[] = $artifactResolutionService;
     }
 
@@ -142,7 +141,6 @@ abstract class SSODescriptorType extends RoleDescriptor
      */
     public function addSingleLogoutService(EndpointType $singleLogoutService)
     {
-        assert($singleLogoutService instanceof EndpointType);
         $this->SingleLogoutService[] = $singleLogoutService;
     }
 
@@ -175,7 +173,6 @@ abstract class SSODescriptorType extends RoleDescriptor
      */
     public function addManageNameIDService(EndpointType $manageNameIDService)
     {
-        assert($manageNameIDService instanceof EndpointType);
         $this->ManageNameIDService[] = $manageNameIDService;
     }
 
@@ -209,11 +206,6 @@ abstract class SSODescriptorType extends RoleDescriptor
      */
     protected function toXML(\DOMElement $parent) : \DOMElement
     {
-        assert(is_array($this->getArtifactResolutionService()));
-        assert(is_array($this->getSingleLogoutService()));
-        assert(is_array($this->getManageNameIDService()));
-        assert(is_array($this->getNameIDFormat()));
-
         $e = parent::toXML($parent);
 
         foreach ($this->getArtifactResolutionService() as $ep) {

@@ -4,6 +4,7 @@ declare(strict_types=1);
 
 namespace SAML2;
 
+use Webmozart\Assert\Assert;
 use RobRichards\XMLSecLibs\XMLSecEnc;
 use RobRichards\XMLSecLibs\XMLSecurityKey;
 
@@ -651,7 +652,7 @@ class Assertion extends SignedElement
      */
     public function validate(XMLSecurityKey $key) : bool
     {
-        assert($key->type === \RobRichards\XMLSecLibs\XMLSecurityKey::RSA_SHA256);
+        Assert::same($key->type, XMLSecurityKey::RSA_SHA256);
 
         if ($this->getSignatureData() === null) {
             return false;
@@ -682,8 +683,6 @@ class Assertion extends SignedElement
      */
     public function setId(string $id)
     {
-        assert(is_string($id));
-
         $this->id = $id;
     }
 
@@ -707,8 +706,6 @@ class Assertion extends SignedElement
      */
     public function setIssueInstant(int $issueInstant)
     {
-        assert(is_int($issueInstant));
-
         $this->issueInstant = $issueInstant;
     }
 

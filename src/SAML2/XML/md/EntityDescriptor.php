@@ -230,7 +230,6 @@ class EntityDescriptor extends SignedElementHelper
      */
     public function setValidUntil(int $validUntil = null)
     {
-        assert(is_int($validUntil) || is_null($validUntil));
         $this->validUntil = $validUntil;
     }
 
@@ -252,7 +251,6 @@ class EntityDescriptor extends SignedElementHelper
      */
     public function setCacheDuration(string $cacheDuration = null)
     {
-        assert(is_string($cacheDuration) || is_null($cacheDuration));
         $this->cacheDuration = $cacheDuration;
     }
 
@@ -436,17 +434,6 @@ class EntityDescriptor extends SignedElementHelper
      */
     public function toXML(\DOMElement $parent = null) : \DOMElement
     {
-        assert(is_string($this->getEntityID()));
-        assert(is_null($this->getID()) || is_string($this->getID()));
-        assert(is_null($this->getValidUntil()) || is_int($this->getValidUntil()));
-        assert(is_null($this->getCacheDuration()) || is_string($this->getCacheDuration()));
-        assert(is_array($this->getExtensions()));
-        assert(is_array($this->getRoleDescriptor()));
-        assert(is_null($this->getAffiliationDescriptor()) || $this->getAffiliationDescriptor() instanceof AffiliationDescriptor);
-        assert(is_null($this->getOrganization()) || $this->getOrganization() instanceof Organization);
-        assert(is_array($this->getContactPerson()));
-        assert(is_array($this->getAdditionalMetadataLocation()));
-
         if ($parent === null) {
             $doc = DOMDocumentFactory::create();
             $e = $doc->createElementNS(Constants::NS_MD, 'md:EntityDescriptor');
