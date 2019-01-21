@@ -33,7 +33,7 @@ class Attribute
      *
      * @var string|null
      */
-    public $FriendlyName = null;
+    private $FriendlyName = null;
 
     /**
      * List of attribute values.
@@ -42,7 +42,7 @@ class Attribute
      *
      * @var \SAML2\XML\saml\AttributeValue[]
      */
-    public $AttributeValue = [];
+    private $AttributeValue = [];
 
 
     /**

@@ -25,7 +25,7 @@ class IndexedEndpointType extends EndpointType
      *
      * @var bool|null
      */
-    public $isDefault = null;
+    private $isDefault = null;
 
 
     /**

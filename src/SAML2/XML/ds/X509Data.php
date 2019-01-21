@@ -25,7 +25,7 @@ class X509Data
      *
      * @var (\SAML2\XML\Chunk|\SAML2\XML\ds\X509Certificate)[]
      */
-    public $data = [];
+    private $data = [];
 
 
     /**

@@ -44,7 +44,7 @@ class PublicationInfo
      *
      * @var array
      */
-    public $UsagePolicy = [];
+    private $UsagePolicy = [];
 
 
     /**

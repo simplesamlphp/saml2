@@ -35,7 +35,7 @@ class RegistrationInfo
      *
      * @var array
      */
-    public $RegistrationPolicy = [];
+    private $RegistrationPolicy = [];
 
 
     /**

@@ -20,7 +20,7 @@ class RequestedAttribute extends Attribute
      *
      * @var bool|null
      */
-    public $isRequired = null;
+    private $isRequired = null;
 
 
     /**

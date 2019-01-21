@@ -41,7 +41,7 @@ class KeyDescriptor
      *
      * @var \SAML2\XML\Chunk[]
      */
-    public $EncryptionMethod = [];
+    private $EncryptionMethod = [];
 
 
     /**

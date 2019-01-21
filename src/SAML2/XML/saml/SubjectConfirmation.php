@@ -35,7 +35,7 @@ class SubjectConfirmation
      *
      * @var \SAML2\XML\saml\SubjectConfirmationData|null
      */
-    private $SubjectConfirmationData;
+    private $SubjectConfirmationData = null;
 
 
     /**

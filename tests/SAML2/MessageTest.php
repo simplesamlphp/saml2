@@ -184,9 +184,9 @@ AUTHNREQUEST
         $message = Message::fromXML($authnRequest->documentElement);
         $exts = $message->getExtensions();
         $this->assertCount(2, $exts);
-        $this->assertEquals("myextElt", $exts[0]->localName);
-        $this->assertEquals("example1", $exts[0]->xml->textContent);
-        $this->assertEquals("myextElt", $exts[1]->localName);
+        $this->assertEquals("myextElt", $exts[0]->getLocalName());
+        $this->assertEquals("example1", $exts[0]->getXML()->textContent);
+        $this->assertEquals("myextElt", $exts[1]->getLocalName());
     }
 
 
@@ -231,8 +231,8 @@ AUTHNREQUEST
 
         $exts = $message->getExtensions();
         $this->assertCount(1, $exts);
-        $this->assertEquals("test", $exts[0]->localName);
-        $this->assertEquals("Test data!", $exts[0]->xml->textContent);
+        $this->assertEquals("test", $exts[0]->getLocalName());
+        $this->assertEquals("Test data!", $exts[0]->getXML()->textContent);
 
         $xml = $message->toUnsignedXML();
         $xml_exts = Utils::xpQuery($xml, './samlp:Extensions');

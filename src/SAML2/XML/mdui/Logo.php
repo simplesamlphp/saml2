@@ -17,21 +17,21 @@ class Logo
      *
      * @var string
      */
-    public $url;
+    private $url;
 
     /**
      * The width of this logo.
      *
      * @var int
      */
-    public $width;
+    private $width;
 
     /**
      * The height of this logo.
      *
      * @var int
      */
-    public $height;
+    private $height;
 
     /**
      * The language of this item.

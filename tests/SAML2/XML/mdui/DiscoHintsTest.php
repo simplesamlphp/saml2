@@ -148,6 +148,6 @@ XML
         $this->assertCount(1, $disco->getGeolocationHint());
         $this->assertEquals('geo:47.37328,8.531126', $disco->getGeolocationHint()[0]);
         $this->assertCount(1, $disco->getChildren());
-        $this->assertEquals('content of tag', $disco->getChildren()[0]->xml->textContent);
+        $this->assertEquals('content of tag', $disco->getChildren()[0]->getXML()->textContent);
     }
 }

@@ -51,6 +51,6 @@ class ChunkTest extends \PHPUnit\Framework\TestCase
         $newchunk = new Chunk($document->firstChild);
         $newchunk->unserialize($ser);
 
-        $this->assertEqualXMLStructure($this->chunk->xml, $newchunk->xml);
+        $this->assertEqualXMLStructure($this->chunk->getXML(), $newchunk->getXML());
     }
 }

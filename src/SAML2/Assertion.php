@@ -207,22 +207,6 @@ class Assertion extends SignedElement
     private $nameFormat;
 
     /**
-     * The private key we should use to sign the assertion.
-     *
-     * The private key can be null, in which case the assertion is sent unsigned.
-     *
-     * @var XMLSecurityKey|null
-     */
-    protected $signatureKey;
-
-    /**
-     * List of certificates that should be included in the assertion.
-     *
-     * @var array
-     */
-    protected $certificates;
-
-    /**
      * The data needed to verify the signature.
      *
      * @var array|null

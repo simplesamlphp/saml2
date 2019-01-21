@@ -312,8 +312,8 @@ XML;
         $assertion = new Assertion($document->documentElement);
         $authnContextDecl = $assertion->getAuthnContextDecl();
         $this->assertNotEmpty($authnContextDecl);
-        $this->assertEquals('AuthnContextDecl', $authnContextDecl->localName);
-        $childLocalName = $authnContextDecl->xml->childNodes->item(1)->localName;
+        $this->assertEquals('AuthnContextDecl', $authnContextDecl->getLocalName());
+        $childLocalName = $authnContextDecl->getXML()->childNodes->item(1)->localName;
         $this->assertEquals('AuthenticationContextDeclaration', $childLocalName);
 
         $this->assertEquals('someAuthnContext', $assertion->getAuthnContextClassRef());

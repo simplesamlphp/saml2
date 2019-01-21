@@ -7,7 +7,7 @@ namespace SAML2;
 use RobRichards\XMLSecLibs\XMLSecurityKey;
 
 /**
- * Interface to a SAML 2 element which may be signed.
+ * Abstract class to a SAML 2 element which may be signed.
  *
  * @package SimpleSAMLphp
  */
@@ -30,7 +30,7 @@ abstract class SignedElement
     protected $certificates;
 
 
-    /**
+      /**
      * Validate this element against a public key.
      *
      * If no signature is present, false is returned. If a signature is present,
@@ -49,31 +49,44 @@ abstract class SignedElement
      * @param array $certificates An array of certificates.
      * @return void
      */
-    abstract public function setCertificates(array $certificates);
+    public function setCertificates(array $certificates)
+    {
+        $this->certificates = $certificates;
+    }
 
 
     /**
-     * Retrieve the certificates that are included in the element (if any).
+     * Retrieve the certificates that are included in the message.
      *
-     * @return array An array of certificates.
+     * @return array An array of certificates
      */
-    abstract public function getCertificates() : array;
+    public function getCertificates() : array
+    {
+        return $this->certificates;
+    }
 
 
     /**
-     * Retrieve the private key we should use to sign the element.
+     * Retrieve the private key we should use to sign the message.
      *
-     * @return XMLSecurityKey|null The key, or NULL if no key is specified.
+     * @return XMLSecurityKey|null The key, or NULL if no key is specified
      */
-    abstract public function getSignatureKey();
+    public function getSignatureKey()
+    {
+        return $this->signatureKey;
+    }
 
 
     /**
-     * Set the private key we should use to sign the element.
+     * Set the private key we should use to sign the message.
+     *
      * If the key is null, the message will be sent unsigned.
      *
      * @param XMLSecurityKey|null $signatureKey
      * @return void
      */
-    abstract public function setSignatureKey(XMLSecurityKey $signatureKey = null);
+    public function setSignatureKey(XMLSecurityKey $signatureKey = null)
+    {
+        $this->signatureKey = $signatureKey;
+    }
 }

@@ -16,27 +16,18 @@ use RobRichards\XMLSecLibs\XMLSecurityKey;
 class SignedElementHelper extends SignedElement
 {
     /**
-     * The private key we should use to sign the message.
-     *
-     * The private key can be null, in which case the message is sent unsigned.
-     *
-     * @var XMLSecurityKey|null
-     */
-    protected $signatureKey;
-
-    /**
-     * List of certificates that should be included in the message.
-     *
-     * @var array
-     */
-    protected $certificates;
-
-    /**
      * Available methods for validating this message.
      *
      * @var array
      */
     private $validators;
+
+    /**
+     * How long this element is valid, as a unix timestamp.
+     *
+     * @var int|null
+     */
+    public $validUntil;
 
     /**
      * How long this element is valid, as a unix timestamp.
@@ -232,7 +223,6 @@ class SignedElementHelper extends SignedElement
     {
         return $this->validUntil;
     }
-
 
     /**
      * Set the value of the validUntil property.

@@ -21,7 +21,7 @@ abstract class SSODescriptorType extends RoleDescriptor
      *
      * @var \SAML2\XML\md\IndexedEndpointType[]
      */
-    public $ArtifactResolutionService = [];
+    private $ArtifactResolutionService = [];
 
     /**
      * List of SingleLogoutService endpoints.
@@ -30,7 +30,7 @@ abstract class SSODescriptorType extends RoleDescriptor
      *
      * @var \SAML2\XML\md\EndpointType[]
      */
-    public $SingleLogoutService = [];
+    private $SingleLogoutService = [];
 
     /**
      * List of ManageNameIDService endpoints.
@@ -39,7 +39,7 @@ abstract class SSODescriptorType extends RoleDescriptor
      *
      * @var \SAML2\XML\md\EndpointType[]
      */
-    public $ManageNameIDService = [];
+    private $ManageNameIDService = [];
 
     /**
      * List of supported NameID formats.
@@ -48,7 +48,7 @@ abstract class SSODescriptorType extends RoleDescriptor
      *
      * @var string[]
      */
-    public $NameIDFormat = [];
+    private $NameIDFormat = [];
 
 
     /**

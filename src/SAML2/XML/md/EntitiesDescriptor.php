@@ -40,14 +40,14 @@ class EntitiesDescriptor extends SignedElementHelper
      *
      * @var array
      */
-    public $Extensions = [];
+    private $Extensions = [];
 
     /**
      * Child EntityDescriptor and EntitiesDescriptor elements.
      *
      * @var (\SAML2\XML\md\EntityDescriptor|\SAML2\XML\md\EntitiesDescriptor)[]
      */
-    public $children = [];
+    private $children = [];
 
 
     /**

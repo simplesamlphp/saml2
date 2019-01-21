@@ -32,7 +32,7 @@ class EndpointType
      *
      * @var string|null
      */
-    public $ResponseLocation = null;
+    private $ResponseLocation = null;
 
     /**
      * Extra (namespace qualified) attributes.
