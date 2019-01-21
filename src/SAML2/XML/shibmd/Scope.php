@@ -4,7 +4,7 @@ declare(strict_types=1);
 
 namespace SAML2\XML\shibmd;
 
-use Assert\Assertion;
+use Webmozart\Assert\Assert;
 
 use SAML2\Utils;
 
