@@ -6,6 +6,9 @@ namespace SAML2\Assertion\Validation\ConstraintValidator;
 
 use SAML2\Assertion\Validation\Result;
 use SAML2\Assertion\Validation\ConstraintValidator\SubjectConfirmationResponseToMatches;
+use SAML2\Response;
+use SAML2\XML\saml\SubjectConfirmation;
+use SAML2\XML\saml\SubjectConfirmationData;
 
 class SubjectConfirmationResponseToMatchesTest extends \Mockery\Adapter\Phpunit\MockeryTestCase
 {
@@ -48,7 +51,7 @@ class SubjectConfirmationResponseToMatchesTest extends \Mockery\Adapter\Phpunit\
         $validator = new SubjectConfirmationResponseToMatches(
             $this->response
         );
-        $result    = new Result();
+        $result = new Result();
 
         $validator->validate($this->subjectConfirmation, $result);
 
@@ -68,7 +71,7 @@ class SubjectConfirmationResponseToMatchesTest extends \Mockery\Adapter\Phpunit\
         $validator = new SubjectConfirmationResponseToMatches(
             $this->response
         );
-        $result    = new Result();
+        $result = new Result();
 
         $validator->validate($this->subjectConfirmation, $result);
 
@@ -88,7 +91,7 @@ class SubjectConfirmationResponseToMatchesTest extends \Mockery\Adapter\Phpunit\
         $validator = new SubjectConfirmationResponseToMatches(
             $this->response
         );
-        $result    = new Result();
+        $result = new Result();
 
         $validator->validate($this->subjectConfirmation, $result);
 
@@ -108,7 +111,7 @@ class SubjectConfirmationResponseToMatchesTest extends \Mockery\Adapter\Phpunit\
         $validator = new SubjectConfirmationResponseToMatches(
             $this->response
         );
-        $result    = new Result();
+        $result = new Result();
 
         $validator->validate($this->subjectConfirmation, $result);
 
@@ -128,7 +131,7 @@ class SubjectConfirmationResponseToMatchesTest extends \Mockery\Adapter\Phpunit\
         $validator = new SubjectConfirmationResponseToMatches(
             $this->response
         );
-        $result    = new Result();
+        $result = new Result();
 
         $validator->validate($this->subjectConfirmation, $result);
 
