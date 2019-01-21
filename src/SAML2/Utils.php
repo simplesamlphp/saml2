@@ -4,7 +4,7 @@ declare(strict_types=1);
 
 namespace SAML2;
 
-use Assert\Assertion;
+use Webmozart\Assert\Assert;
 use RobRichards\XMLSecLibs\XMLSecEnc;
 use RobRichards\XMLSecLibs\XMLSecurityDSig;
 use RobRichards\XMLSecLibs\XMLSecurityKey;
@@ -118,7 +118,7 @@ class Utils
     public static function castKey(XMLSecurityKey $key, string $algorithm, string $type = null) : XMLSecurityKey
     {
         $type = $type ?: 'public';
-        Assertion::choice($type, ["private", "public"]);
+        Assert::oneOf($type, ["private", "public"]);
 
         // do nothing if algorithm is already the type of the key
         if ($key->type === $algorithm) {
@@ -162,7 +162,7 @@ class Utils
      */
     public static function validateSignature(array $info, XMLSecurityKey $key)
     {
-        Assertion::keyExists($info, "Signature");
+        Assert::keyExists($info, "Signature");
 
         /** @var XMLSecurityDSig $objXMLSecDSig */
         $objXMLSecDSig = $info['Signature'];

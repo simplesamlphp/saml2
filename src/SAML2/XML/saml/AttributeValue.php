@@ -4,8 +4,7 @@ declare(strict_types=1);
 
 namespace SAML2\XML\saml;
 
-use Assert\Assert;
-use Assert\Assertion;
+use Webmozart\Assert\Assert;
 
 use SAML2\Constants;
 use SAML2\DOMDocumentFactory;
@@ -30,13 +29,13 @@ class AttributeValue implements \Serializable
      * Create an AttributeValue.
      *
      * @param mixed $value The value of this element. Can be one of:
-     *  - string                      Create an attribute value with a simple string.
+     *  - string                       Create an attribute value with a simple string.
      *  - \DOMElement(AttributeValue)  Create an attribute value of the given DOMElement.
      *  - \DOMElement                  Create an attribute value with the given DOMElement as a child.
      */
     public function __construct($value)
     {
-        Assertion::true(is_string($value) || $value instanceof \DOMElement);
+        Assert::true(is_string($value) || $value instanceof \DOMElement);
 
         if (is_string($value)) {
             $doc = DOMDocumentFactory::create();
@@ -90,8 +89,8 @@ class AttributeValue implements \Serializable
      */
     public function toXML(\DOMElement $parent) : \DOMElement
     {
-        Assert::that($this->getElement()->namespaceURI)->eq(\SAML2\Constants::NS_SAML);
-        Assert::that($this->getElement()->localName)->eq("AttributeValue");
+        Assert::same($this->getElement()->namespaceURI, Constants::NS_SAML);
+        Assert::same($this->getElement()->localName, "AttributeValue");
 
         return Utils::copyElement($this->getElement(), $parent);
     }

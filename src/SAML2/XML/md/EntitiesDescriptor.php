@@ -4,7 +4,7 @@ declare(strict_types=1);
 
 namespace SAML2\XML\md;
 
-use Assert\Assertion;
+use Webmozart\Assert\Assert;
 
 use SAML2\Constants;
 use SAML2\DOMDocumentFactory;
@@ -247,7 +247,7 @@ class EntitiesDescriptor extends SignedElementHelper
      */
     public function addChildren($child)
     {
-        Assertion::true($child instanceof EntityDescriptor || $child instanceof EntitiesDescriptor);
+        Assert::isInstanceOfAny($child, [EntityDescriptor::class, EntitiesDescriptor::class]);
         $this->children[] = $child;
     }
 

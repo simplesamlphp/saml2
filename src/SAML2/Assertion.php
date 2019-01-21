@@ -4,7 +4,7 @@ declare(strict_types=1);
 
 namespace SAML2;
 
-use Assert\Assertion as Assert;
+use Webmozart\Assert\Assert;
 use RobRichards\XMLSecLibs\XMLSecEnc;
 use RobRichards\XMLSecLibs\XMLSecurityKey;
 
@@ -668,7 +668,7 @@ class Assertion implements SignedElement
      */
     public function validate(XMLSecurityKey $key) : bool
     {
-        Assert::eq($key->type, XMLSecurityKey::RSA_SHA256);
+        Assert::same($key->type, XMLSecurityKey::RSA_SHA256);
 
         if ($this->getSignatureData() === null) {
             return false;

@@ -4,7 +4,7 @@ declare(strict_types=1);
 
 namespace SAML2\XML\mdattr;
 
-use Assert\Assertion;
+use Webmozart\Assert\Assert;
 
 use SAML2\Utils;
 use SAML2\XML\Chunk;
@@ -82,7 +82,7 @@ class EntityAttributes
      */
     public function addChildren($child)
     {
-        Assertion::true($child instanceof Chunk || $child instanceof Attribute);
+        Assert::isInstanceOfAny($child, [Chunk::class, Attribute::class]);
         $this->children[] = $child;
     }
 

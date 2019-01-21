@@ -4,7 +4,7 @@ declare(strict_types=1);
 
 namespace SAML2;
 
-use Assert\Assertion;
+use Webmozart\Assert\Assert;
 use RobRichards\XMLSecLibs\XMLSecurityKey;
 
 /**
@@ -216,9 +216,9 @@ class HTTPRedirect extends Binding
      */
     public static function validateSignature(array $data, XMLSecurityKey $key)
     {
-        Assertion::keyExists($data, "Query");
-        Assertion::keyExists($data, "SigAlg");
-        Assertion::keyExists($data, "Signature");
+        Assert::keyExists($data, "Query");
+        Assert::keyExists($data, "SigAlg");
+        Assert::keyExists($data, "Signature");
 
         $query = $data['Query'];
         $sigAlg = $data['SigAlg'];

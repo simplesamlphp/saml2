@@ -4,7 +4,7 @@ declare(strict_types=1);
 
 namespace SAML2\XML\md;
 
-use Assert\Assertion;
+use Webmozart\Assert\Assert;
 
 use SAML2\Constants;
 use SAML2\Utils;
@@ -185,20 +185,20 @@ class Organization
      */
     public function toXML(\DOMElement $parent) : \DOMElement
     {
-        Assertion::notEmpty($this->OrganizationName);
-        Assertion::notEmpty($this->OrganizationDisplayName);
-        Assertion::notEmpty($this->OrganizationURL);
+        Assert::notEmpty($this->OrganizationName);
+        Assert::notEmpty($this->OrganizationDisplayName);
+        Assert::notEmpty($this->OrganizationURL);
 
         $doc = $parent->ownerDocument;
 
         $e = $doc->createElementNS(Constants::NS_MD, 'md:Organization');
         $parent->appendChild($e);
 
-        Extensions::addList($e, $this->getExtensions());
+        Extensions::addList($e, $this->Extensions);
 
-        Utils::addStrings($e, Constants::NS_MD, 'md:OrganizationName', true, $this->getOrganizationName());
-        Utils::addStrings($e, Constants::NS_MD, 'md:OrganizationDisplayName', true, $this->getOrganizationDisplayName());
-        Utils::addStrings($e, Constants::NS_MD, 'md:OrganizationURL', true, $this->getOrganizationURL());
+        Utils::addStrings($e, Constants::NS_MD, 'md:OrganizationName', true, $this->OrganizationName);
+        Utils::addStrings($e, Constants::NS_MD, 'md:OrganizationDisplayName', true, $this->OrganizationDisplayName);
+        Utils::addStrings($e, Constants::NS_MD, 'md:OrganizationURL', true, $this->OrganizationURL);
 
         return $e;
     }

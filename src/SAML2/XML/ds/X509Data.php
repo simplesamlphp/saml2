@@ -4,10 +4,11 @@ declare(strict_types=1);
 
 namespace SAML2\XML\ds;
 
-use Assert\Assertion;
 use RobRichards\XMLSecLibs\XMLSecurityDSig;
+use Webmozart\Assert\Assert;
 
 use SAML2\XML\Chunk;
+use SAML2\XML\ds\X509Certificate;
 
 /**
  * Class representing a ds:X509Data element.
@@ -87,7 +88,7 @@ class X509Data
      */
     public function addData($data)
     {
-        Assertion::true($data instanceof \SAML2\XML\Chunk || $data instanceof \SAML2\XML\ds\X509Certificate);
+        Assert::isInstanceOfAny($data, [Chunk::class, X509Certificate::class]);
         $this->data[] = $data;
     }
 

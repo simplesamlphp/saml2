@@ -4,7 +4,7 @@ declare(strict_types=1);
 
 namespace SAML2\XML\saml;
 
-use Assert\Assertion;
+use Webmozart\Assert\Assert;
 use RobRichards\XMLSecLibs\XMLSecurityDSig;
 
 use SAML2\Constants;
@@ -201,7 +201,7 @@ class SubjectConfirmationData
      */
     public function addInfo($info)
     {
-        Assertion::true($info instanceof Chunk || $info instanceof KeyInfo);
+        Assert::isInstanceOfAny($info, [Chunk::class, KeyInfo::class]);
         $this->info[] = $info;
     }
 

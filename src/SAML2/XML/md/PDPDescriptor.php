@@ -4,7 +4,7 @@ declare(strict_types=1);
 
 namespace SAML2\XML\md;
 
-use Assert\Assertion;
+use Webmozart\Assert\Assert;
 
 use SAML2\Constants;
 use SAML2\Utils;
@@ -166,19 +166,19 @@ class PDPDescriptor extends RoleDescriptor
      */
     public function toXML(\DOMElement $parent) : \DOMElement
     {
-        Assertion::notEmpty($this->AuthzService);
+        Assert::notEmpty($this->AuthzService);
 
         $e = parent::toXML($parent);
 
-        foreach ($this->getAuthzService() as $ep) {
+        foreach ($this->AuthzService as $ep) {
             $ep->toXML($e, 'md:AuthzService');
         }
 
-        foreach ($this->getAssertionIDRequestService() as $ep) {
+        foreach ($this->AssertionIDRequestService as $ep) {
             $ep->toXML($e, 'md:AssertionIDRequestService');
         }
 
-        Utils::addStrings($e, Constants::NS_MD, 'md:NameIDFormat', false, $this->getNameIDFormat());
+        Utils::addStrings($e, Constants::NS_MD, 'md:NameIDFormat', false, $this->NameIDFormat);
 
         return $e;
     }

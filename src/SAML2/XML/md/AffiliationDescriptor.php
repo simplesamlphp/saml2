@@ -4,7 +4,7 @@ declare(strict_types=1);
 
 namespace SAML2\XML\md;
 
-use Assert\Assertion;
+use Webmozart\Assert\Assert;
 
 use SAML2\Constants;
 use SAML2\SignedElementHelper;
@@ -295,30 +295,30 @@ class AffiliationDescriptor extends SignedElementHelper
      */
     public function toXML(\DOMElement $parent) : \DOMElement
     {
-        Assertion::notEmpty($this->AffiliateMember);
+        Assert::notEmpty($this->AffiliateMember);
 
         $e = $parent->ownerDocument->createElementNS(Constants::NS_MD, 'md:AffiliationDescriptor');
         $parent->appendChild($e);
 
-        $e->setAttribute('affiliationOwnerID', $this->getAffiliationOwnerID());
+        $e->setAttribute('affiliationOwnerID', $this->affiliationOwnerID);
 
-        if ($this->getID() !== null) {
-            $e->setAttribute('ID', $this->getID());
+        if ($this->ID !== null) {
+            $e->setAttribute('ID', $this->ID);
         }
 
-        if ($this->getValidUntil() !== null) {
-            $e->setAttribute('validUntil', gmdate('Y-m-d\TH:i:s\Z', $this->getValidUntil()));
+        if ($this->validUntil !== null) {
+            $e->setAttribute('validUntil', gmdate('Y-m-d\TH:i:s\Z', $this->validUntil));
         }
 
-        if ($this->getCacheDuration() !== null) {
-            $e->setAttribute('cacheDuration', $this->getCacheDuration());
+        if ($this->cacheDuration !== null) {
+            $e->setAttribute('cacheDuration', $this->cacheDuration);
         }
 
-        Extensions::addList($e, $this->getExtensions());
+        Extensions::addList($e, $this->Extensions);
 
-        Utils::addStrings($e, Constants::NS_MD, 'md:AffiliateMember', false, $this->getAffiliateMember());
+        Utils::addStrings($e, Constants::NS_MD, 'md:AffiliateMember', false, $this->AffiliateMember);
 
-        foreach ($this->getKeyDescriptor() as $kd) {
+        foreach ($this->KeyDescriptor as $kd) {
             $kd->toXML($e);
         }
 

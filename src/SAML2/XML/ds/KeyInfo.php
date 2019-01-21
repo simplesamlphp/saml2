@@ -4,8 +4,8 @@ declare(strict_types=1);
 
 namespace SAML2\XML\ds;
 
-use Assert\Assertion;
 use RobRichards\XMLSecLibs\XMLSecurityDSig;
+use Webmozart\Assert\Assert;
 
 use SAML2\XML\Chunk;
 
@@ -122,7 +122,7 @@ class KeyInfo
      */
     public function addInfo($info)
     {
-        Assertion::true($info instanceof Chunk || $info instanceof KeyName || $info instanceof X509Data);
+        Assert::isInstanceOfAny($info, [Chunk::class, KeyName::class, X509Data::class]);
         $this->info[] = $info;
     }
 

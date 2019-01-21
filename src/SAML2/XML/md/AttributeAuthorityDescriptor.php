@@ -4,7 +4,7 @@ declare(strict_types=1);
 
 namespace SAML2\XML\md;
 
-use Assert\Assertion;
+use Webmozart\Assert\Assert;
 
 use SAML2\Constants;
 use SAML2\Utils;
@@ -244,23 +244,23 @@ class AttributeAuthorityDescriptor extends RoleDescriptor
      */
     public function toXML(\DOMElement $parent) : \DOMElement
     {
-        Assertion::notEmpty($this->attributeService);
+        Assert::notEmpty($this->attributeService);
 
         $e = parent::toXML($parent);
 
-        foreach ($this->getAttributeService() as $ep) {
+        foreach ($this->AttributeService as $ep) {
             $ep->toXML($e, 'md:AttributeService');
         }
 
-        foreach ($this->getAssertionIDRequestService() as $ep) {
+        foreach ($this->AssertionIDRequestService as $ep) {
             $ep->toXML($e, 'md:AssertionIDRequestService');
         }
 
-        Utils::addStrings($e, Constants::NS_MD, 'md:NameIDFormat', false, $this->getNameIDFormat());
+        Utils::addStrings($e, Constants::NS_MD, 'md:NameIDFormat', false, $this->NameIDFormat);
 
-        Utils::addStrings($e, Constants::NS_MD, 'md:AttributeProfile', false, $this->getAttributeProfile());
+        Utils::addStrings($e, Constants::NS_MD, 'md:AttributeProfile', false, $this->AttributeProfile);
 
-        foreach ($this->getAttribute() as $a) {
+        foreach ($this->Attribute as $a) {
             $a->toXML($e);
         }
 
