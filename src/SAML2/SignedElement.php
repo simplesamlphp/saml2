@@ -11,7 +11,7 @@ use RobRichards\XMLSecLibs\XMLSecurityKey;
  *
  * @package SimpleSAMLphp
  */
-abstract SignedElement
+abstract class SignedElement
 {
     /**
      * The private key we should use to sign the message.
