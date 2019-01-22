@@ -238,7 +238,7 @@ class AffiliationDescriptor extends SignedElementHelper
      * @param \SAML2\XML\md\KeyDescriptor $keyDescriptor
      * @return void
      */
-    public function addKeyDescriptor(KeyDescriptor $keyDescriptor : void)
+    public function addKeyDescriptor(KeyDescriptor $keyDescriptor) : void
     {
         $this->KeyDescriptor[] = $keyDescriptor;
     }
