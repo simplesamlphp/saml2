@@ -30,7 +30,7 @@ abstract class SignedElement
     protected $certificates = [];
 
 
-      /**
+    /**
      * Validate this element against a public key.
      *
      * If no signature is present, false is returned. If a signature is present,
