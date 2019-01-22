@@ -104,7 +104,7 @@ class KeyDescriptor
      *
      * @return \SAML2\XML\ds\KeyInfo|null
      */
-    public function getKeyInfo() : KeyInfo
+    public function getKeyInfo()
     {
         return $this->KeyInfo;
     }
@@ -165,7 +165,11 @@ class KeyDescriptor
      */
     public function toXML(\DOMElement $parent) : \DOMElement
     {
-        Assert::isInstanceOf($this->KeyInfo, KeyInfo::class, 'Cannot convert KeyDescriptor to XML without KeyInfo set.');
+        Assert::isInstanceOf(
+            $this->KeyInfo,
+            KeyInfo::class,
+            'Cannot convert KeyDescriptor to XML without KeyInfo set.'
+        );
 
         $doc = $parent->ownerDocument;
 
@@ -176,6 +180,7 @@ class KeyDescriptor
             $e->setAttribute('use', $this->use);
         }
 
+        /** @psalm-suppress PossiblyNullReference */
         $this->KeyInfo->toXML($e);
 
         foreach ($this->EncryptionMethod as $em) {

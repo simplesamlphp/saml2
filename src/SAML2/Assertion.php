@@ -83,14 +83,14 @@ class Assertion extends SignedElement
      /**
      * The earliest time this assertion is valid, as an UNIX timestamp.
      *
-     * @var int
+     * @var int|null
      */
     private $notBefore;
 
     /**
      * The time this assertion expires, as an UNIX timestamp.
      *
-     * @var int
+     * @var int|null
      */
     private $notOnOrAfter;
 
@@ -141,16 +141,16 @@ class Assertion extends SignedElement
      * See:
      * @url http://docs.oasis-open.org/security/saml/v2.0/saml-authn-context-2.0-os.pdf
      *
-     * @var \SAML2\XML\Chunk
+     * @var \SAML2\XML\Chunk|null
      */
-    private $authnContextDecl;
+    private $authnContextDecl = null;
 
     /**
      * URI reference that identifies an authentication context declaration.
      *
      * The URI reference MAY directly resolve into an XML document containing the referenced declaration.
      *
-     * @var string
+     * @var string|null
      */
     private $authnContextDeclRef = null;
 
@@ -159,7 +159,7 @@ class Assertion extends SignedElement
      *
      * @var array
      */
-    private $AuthenticatingAuthority;
+    private $AuthenticatingAuthority = [];
 
     /**
      * The attributes, as an associative array, indexed by attribute name
@@ -177,7 +177,7 @@ class Assertion extends SignedElement
      *
      * @var array multi-dimensional array of \DOMNodeList|\SAML2\XML\saml\NameID|string|int|array
      */
-    private $attributes;
+    private $attributes = [];
 
     /**
      * The attributes values types as per http://www.w3.org/2001/XMLSchema definitions
@@ -190,21 +190,21 @@ class Assertion extends SignedElement
      * when generating assertion, the varuable can be:
      * - null : backward compatibility
      * - <attribute name> => <xs type> : all values for the given attribute will have the same xs type
-     * - <attribute name> => [<Value1's xs type>|null, <xs type Value2>|null, ...] : Nth value will have type of the Nth in the array
+     * - <attribute name> => [<Value1's xs type>|null, <xs type Value2>|null, ...] : Nth value will have type of the
+     *   Nth in the array
      *
      * @var array multi-dimensional array of array
      */
-    private $attributesValueTypes;
+    private $attributesValueTypes = [];
 
     /**
      * The NameFormat used on all attributes.
      *
-     * If more than one NameFormat is used, this will contain
-     * the unspecified nameformat.
+     * If more than one NameFormat is used, this will contain the unspecified nameformat.
      *
      * @var string
      */
-    private $nameFormat;
+    private $nameFormat = Constants::NAMEFORMAT_UNSPECIFIED;
 
     /**
      * The data needed to verify the signature.
@@ -214,19 +214,18 @@ class Assertion extends SignedElement
     private $signatureData = null;
 
     /**
-     * Boolean that indicates if attributes are encrypted in the
-     * assertion or not.
+     * Boolean that indicates if attributes are encrypted in the assertion or not.
      *
      * @var boolean
      */
-    private $requiredEncAttributes;
+    private $requiredEncAttributes = false;
 
     /**
      * The SubjectConfirmation elements of the Subject in the assertion.
      *
      * @var \SAML2\XML\saml\SubjectConfirmation[]
      */
-    private $SubjectConfirmation;
+    private $SubjectConfirmation = [];
 
     /**
      * @var bool
@@ -251,16 +250,10 @@ class Assertion extends SignedElement
         $issuer = new Issuer();
         $issuer->setValue('');
 
-        $this->setId(Utils::getContainer()->generateId());
-        $this->setIssueInstant(Temporal::getTime());
-        $this->setIssuer($issuer);
-        $this->setAuthnInstant(Temporal::getTime());
-        $this->setAttributes([]);
-        $this->setAttributeNameFormat(Constants::NAMEFORMAT_UNSPECIFIED);
-        $this->setCertificates([]);
-        $this->setAuthenticatingAuthority([]);
-        $this->setSubjectConfirmation([]);
-        $this->setRequiredEncAttributes(false);
+        $this->id = Utils::getContainer()->generateId();
+        $this->issueInstant = Temporal::getTime();
+        $this->issuer = $issuer;
+        $this->authnInstant = Temporal::getTime();
 
         if ($xml === null) {
             return;
@@ -437,7 +430,9 @@ class Assertion extends SignedElement
         $this->authnInstant = Utils::xsDateTimeToTimestamp($authnStatement->getAttribute('AuthnInstant'));
 
         if ($authnStatement->hasAttribute('SessionNotOnOrAfter')) {
-            $this->sessionNotOnOrAfter = Utils::xsDateTimeToTimestamp($authnStatement->getAttribute('SessionNotOnOrAfter'));
+            $this->sessionNotOnOrAfter = Utils::xsDateTimeToTimestamp(
+                $authnStatement->getAttribute('SessionNotOnOrAfter')
+            );
         }
 
         if ($authnStatement->hasAttribute('SessionIndex')) {
@@ -575,7 +570,9 @@ class Assertion extends SignedElement
                     $this->attributes[$attributeName][] = new NameID($eptiNameId[0]);
                 } else {
                     /* Fall back for legacy IdPs sending string value (e.g. SSP < 1.15) */
-                    Utils::getContainer()->getLogger()->warning(sprintf("Attribute %s (EPTI) value %d is not an XML NameId", $attributeName, $index));
+                    Utils::getContainer()->getLogger()->warning(
+                        sprintf("Attribute %s (EPTI) value %d is not an XML NameId", $attributeName, $index)
+                    );
                     $nameId = new NameID();
                     $nameId->setValue($eptiAttributeValue->textContent);
                     $this->attributes[$attributeName][] = $nameId;
@@ -771,7 +768,7 @@ class Assertion extends SignedElement
      * @param \SAML2\XML\saml\NameID|null $nameId The name identifier of the assertion.
      * @return void
      */
-    public function setNameId(\SAML2\XML\saml\NameID $nameId = null)
+    public function setNameId(NameID $nameId = null)
     {
         $this->nameId = $nameId;
     }
@@ -804,6 +801,7 @@ class Assertion extends SignedElement
         $root = $doc->createElement('root');
         $doc->appendChild($root);
         $this->nameId->toXML($root);
+        /** @var \DOMElement $nameId */
         $nameId = $root->firstChild;
 
         Utils::getContainer()->debugMessage($nameId, 'encrypt');
@@ -819,6 +817,7 @@ class Assertion extends SignedElement
         $symmetricKey->generateSessionKey();
         $enc->encryptKey($key, $symmetricKey);
 
+        /** @var \DOMElement encryptedNameId */
         $this->encryptedNameId = $enc->encryptNode($symmetricKey);
         $this->nameId = null;
     }
@@ -1592,7 +1591,10 @@ class Assertion extends SignedElement
         $authnStatementEl->setAttribute('AuthnInstant', gmdate('Y-m-d\TH:i:s\Z', $this->authnInstant));
 
         if ($this->sessionNotOnOrAfter !== null) {
-            $authnStatementEl->setAttribute('SessionNotOnOrAfter', gmdate('Y-m-d\TH:i:s\Z', $this->sessionNotOnOrAfter));
+            $authnStatementEl->setAttribute(
+                'SessionNotOnOrAfter',
+                gmdate('Y-m-d\TH:i:s\Z', $this->sessionNotOnOrAfter)
+            );
         }
         if ($this->sessionIndex !== null) {
             $authnStatementEl->setAttribute('SessionIndex', $this->sessionIndex);
@@ -1678,10 +1680,11 @@ class Assertion extends SignedElement
             }
 
             // get value type(s) for the current attribute
-            if (is_array($this->attributesValueTypes) && array_key_exists($name, $this->attributesValueTypes)) {
+            if (array_key_exists($name, $this->attributesValueTypes)) {
                 $valueTypes = $this->attributesValueTypes[$name];
                 if (is_array($valueTypes) && count($valueTypes) != count($values)) {
-                    throw new \Exception('Array of value types and array of values have different size for attribute '.var_export($name, true));
+                    throw new \Exception('Array of value types and array of values have different size for attribute '.
+                        var_export($name, true));
                 }
             } else {
                 // if no type(s), default behaviour
@@ -1723,8 +1726,8 @@ class Assertion extends SignedElement
                 }
 
                 if ($value instanceof \DOMNodeList) {
-                    for ($i = 0; $i < $value->length; $i++) {
-                        $node = $document->importNode($value->item($i), true);
+                    foreach ($value as $v) {
+                        $node = $document->importNode($v, true);
                         $attributeValue->appendChild($node);
                     }
                 } else {
@@ -1747,6 +1750,7 @@ class Assertion extends SignedElement
         if ($this->getRequiredEncAttributes() === false) {
             return;
         }
+        Assert::notNull($this->encryptionKey);
 
         $document = $root->ownerDocument;
 
@@ -1779,8 +1783,8 @@ class Assertion extends SignedElement
                 }
 
                 if ($value instanceof \DOMNodeList) {
-                    for ($i = 0; $i < $value->length; $i++) {
-                        $node = $document2->importNode($value->item($i), true);
+                    foreach ($value as $v) {
+                        $node = $document2->importNode($v, true);
                         $attributeValue->appendChild($node);
                     }
                 } else {
@@ -1798,6 +1802,7 @@ class Assertion extends SignedElement
              */
             $symmetricKey = new XMLSecurityKey(XMLSecurityKey::AES256_CBC);
             $symmetricKey->generateSessionKey();
+            /** @psalm-suppress PossiblyNullArgument */
             $EncAssert->encryptKey($this->encryptionKey, $symmetricKey);
             $EncrNode = $EncAssert->encryptNode($symmetricKey);
 

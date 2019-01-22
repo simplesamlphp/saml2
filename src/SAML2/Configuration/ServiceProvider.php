@@ -39,7 +39,7 @@ class ServiceProvider extends ArrayAdapter implements CertificateProvider, Decry
 
 
     /**
-     * @return array|mixed|\Traversable|null
+     * @return array|\Traversable|null
      */
     public function getCertificateFingerprints()
     {
@@ -48,7 +48,7 @@ class ServiceProvider extends ArrayAdapter implements CertificateProvider, Decry
 
 
     /**
-     * @return mixed|string|null
+     * @return string|null
      */
     public function getEntityId()
     {

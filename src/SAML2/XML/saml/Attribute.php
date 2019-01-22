@@ -81,7 +81,7 @@ class Attribute
      *
      * @return string|null
      */
-    public function getName() : string
+    public function getName()
     {
         return $this->Name;
     }

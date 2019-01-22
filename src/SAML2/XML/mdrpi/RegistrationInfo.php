@@ -51,7 +51,9 @@ class RegistrationInfo
         }
 
         if (!$xml->hasAttribute('registrationAuthority')) {
-            throw new \Exception('Missing required attribute "registrationAuthority" in mdrpi:RegistrationInfo element.');
+            throw new \Exception(
+                'Missing required attribute "registrationAuthority" in mdrpi:RegistrationInfo element.'
+            );
         }
         $this->registrationAuthority = $xml->getAttribute('registrationAuthority');
 
@@ -64,18 +66,18 @@ class RegistrationInfo
 
 
     /**
-     * Collect the value of the RegistrationAuthority-property
+     * Collect the value of the RegistrationAuthority property
      *
      * @return string|null
      */
-    public function getRegistrationAuthority() : string
+    public function getRegistrationAuthority()
     {
         return $this->registrationAuthority;
     }
 
 
     /**
-     * Set the value of the registrationAuthority-property
+     * Set the value of the registrationAuthority property
      *
      * @param string $registrationAuthority
      * @return void
@@ -87,7 +89,7 @@ class RegistrationInfo
 
 
     /**
-     * Collect the value of the registrationInstant-property
+     * Collect the value of the registrationInstant property
      *
      * @return int|null
      */
@@ -98,7 +100,7 @@ class RegistrationInfo
 
 
     /**
-     * Set the value of the registrationInstant-property
+     * Set the value of the registrationInstant property
      *
      * @param int|null $registrationInstant
      * @return void
@@ -110,7 +112,7 @@ class RegistrationInfo
 
 
     /**
-     * Collect the value of the RegistrationPolicy-property
+     * Collect the value of the RegistrationPolicy property
      *
      * @return array
      */
@@ -121,7 +123,7 @@ class RegistrationInfo
 
 
     /**
-     * Set the value of the RegistrationPolicy-property
+     * Set the value of the RegistrationPolicy property
      *
      * @param array $registrationPolicy
      * @return void

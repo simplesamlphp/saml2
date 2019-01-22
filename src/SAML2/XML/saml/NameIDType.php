@@ -162,9 +162,6 @@ abstract class NameIDType extends BaseIDType
             $element->setAttribute('SPProvidedID', $this->SPProvidedID);
         }
 
-        if ($this->value === null) {
-            throw new \Exception("Cannot convert NameIDType to XML with no value.");
-        }
         $value = $element->ownerDocument->createTextNode($this->value);
         $element->appendChild($value);
 

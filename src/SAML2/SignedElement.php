@@ -27,7 +27,7 @@ abstract class SignedElement
      *
      * @var array
      */
-    protected $certificates;
+    protected $certificates = [];
 
 
       /**

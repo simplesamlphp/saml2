@@ -70,9 +70,9 @@ class SigningMethod
     /**
      * Collect the value of the Algorithm-property
      *
-     * @return string
+     * @return string|null
      */
-    public function getAlgorithm() : string
+    public function getAlgorithm()
     {
         return $this->Algorithm;
     }
@@ -152,6 +152,7 @@ class SigningMethod
         $doc = $parent->ownerDocument;
         $e = $doc->createElementNS(Common::NS, 'alg:SigningMethod');
         $parent->appendChild($e);
+        /** @psalm-suppress PossiblyNullArgument */
         $e->setAttribute('Algorithm', $this->Algorithm);
 
         if ($this->MinKeySize !== null) {

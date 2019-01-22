@@ -347,10 +347,10 @@ abstract class Message extends SignedElement
      * Most likely (though not required) a value of urn:oasis:names:tc:SAML:2.0:consent.
      *
      * @see \SAML2\Constants
-     * @param string|null $consent
+     * @param string $consent
      * @return void
      */
-    public function setConsent(string $consent = null)
+    public function setConsent(string $consent)
     {
         $this->consent = $consent;
     }

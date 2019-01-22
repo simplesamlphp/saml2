@@ -7,10 +7,7 @@ namespace SAML2\Configuration;
 /**
  * Basic configuration wrapper
  */
-final class IdentityProvider extends ArrayAdapter implements
-    CertificateProvider,
-    DecryptionProvider,
-    EntityIdProvider
+final class IdentityProvider extends ArrayAdapter implements CertificateProvider, DecryptionProvider, EntityIdProvider
 {
     /**
      * @return array|\Traversable|null
@@ -118,7 +115,7 @@ final class IdentityProvider extends ArrayAdapter implements
 
 
     /**
-     * @return mixed
+     * @return string|null
      */
     public function getEntityId()
     {

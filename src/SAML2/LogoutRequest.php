@@ -189,7 +189,7 @@ class LogoutRequest extends Request
      * @throws \Exception
      * @return \SAML2\XML\saml\NameID|null The name identifier of the session that should be terminated.
      */
-    public function getNameId() : NameID
+    public function getNameId()
     {
         if ($this->encryptedNameId !== null) {
             throw new \Exception('Attempted to retrieve encrypted NameID without decrypting it first.');

@@ -78,7 +78,7 @@ class SubjectConfirmation
      *
      * @return string|null
      */
-    public function getMethod() : string
+    public function getMethod()
     {
         return $this->Method;
     }
@@ -155,6 +155,7 @@ class SubjectConfirmation
         $e = $parent->ownerDocument->createElementNS(Constants::NS_SAML, 'saml:SubjectConfirmation');
         $parent->appendChild($e);
 
+        /** @psalm-suppress PossiblyNullArgument */
         $e->setAttribute('Method', $this->Method);
 
         if ($this->NameID !== null) {

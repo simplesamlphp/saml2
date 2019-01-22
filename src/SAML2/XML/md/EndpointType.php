@@ -161,7 +161,7 @@ class EndpointType
      *
      * @return string|null
      */
-    public function getBinding() : string
+    public function getBinding()
     {
         return $this->Binding;
     }

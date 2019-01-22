@@ -35,6 +35,7 @@ class ArtifactResponse extends StatusResponse
             $status = Utils::xpQuery($xml, './saml_protocol:Status');
             $status = $status[0];
 
+            /** @psalm-suppress RedundantCondition */
             for ($any = $status->nextSibling; $any instanceof \DOMNode; $any = $any->nextSibling) {
                 if ($any instanceof \DOMElement) {
                     $this->any = $any;

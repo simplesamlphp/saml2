@@ -20,7 +20,7 @@ class InvalidKeyUsageException extends \InvalidArgumentException implements
     {
         $message = sprintf(
             'Invalid key usage given: "%s", usages "%s" allowed',
-            is_string($usage) ? $usage : gettype($usage),
+            $usage,
             implode('", "', Key::getValidKeyUsages())
         );
 

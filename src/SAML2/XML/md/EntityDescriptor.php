@@ -180,7 +180,7 @@ class EntityDescriptor extends SignedElementHelper
      *
      * @return string|null
      */
-    public function getEntityID() : string
+    public function getEntityID()
     {
         return $this->entityID;
     }

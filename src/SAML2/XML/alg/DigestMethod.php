@@ -48,7 +48,7 @@ class DigestMethod
      *
      * @return string|null
      */
-    public function getAlgorithm() : string
+    public function getAlgorithm()
     {
         return $this->Algorithm;
     }
@@ -80,6 +80,7 @@ class DigestMethod
         $doc = $parent->ownerDocument;
         $e = $doc->createElementNS(Common::NS, 'alg:DigestMethod');
         $parent->appendChild($e);
+        /** @psalm-suppress PossiblyNullArgument */
         $e->setAttribute('Algorithm', $this->Algorithm);
 
         return $e;

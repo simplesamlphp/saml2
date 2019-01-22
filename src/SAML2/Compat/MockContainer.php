@@ -30,12 +30,12 @@ class MockContainer extends AbstractContainer
     /**
      * @var array
      */
-    private $redirectData;
+    private $redirectData = [];
 
     /**
-     * @var string
+     * @var string|null
      */
-    private $postRedirectUrl;
+    private $postRedirectUrl = null;
 
     /**
      * @var array
