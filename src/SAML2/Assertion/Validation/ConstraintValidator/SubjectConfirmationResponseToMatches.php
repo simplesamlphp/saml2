@@ -8,6 +8,7 @@ use SAML2\Assertion\Validation\Result;
 use SAML2\Assertion\Validation\SubjectConfirmationConstraintValidator;
 use SAML2\Response;
 use SAML2\XML\saml\SubjectConfirmation;
+use Webmozart\Assert\Assert;
 
 class SubjectConfirmationResponseToMatches implements
     SubjectConfirmationConstraintValidator
@@ -27,15 +28,17 @@ class SubjectConfirmationResponseToMatches implements
 
 
     /**
-     * @param \SAML2\XML\saml\SubjectConfirmation
+     * @param \SAML2\XML\saml\SubjectConfirmation $subjectConfirmation
      * @param Result $result
      * @return void
      */
-    public function validate(
-        SubjectConfirmation $subjectConfirmation,
-        Result $result
-    ) {
-        $inResponseTo = $subjectConfirmation->getSubjectConfirmationData()->getInResponseTo();
+    public function validate(SubjectConfirmation $subjectConfirmation, Result $result)
+    {
+        $data = $subjectConfirmation->getSubjectConfirmationData();
+        Assert::notNull($data);
+
+        /** @psalm-suppress PossiblyNullReference */
+        $inResponseTo = $data->getInResponseTo();
         if ($inResponseTo && ($this->getInResponseTo() !== false) && ($this->getInResponseTo() !== $inResponseTo)) {
             $result->addError(sprintf(
                 'InResponseTo in SubjectConfirmationData ("%s") does not match the Response InResponseTo ("%s")',

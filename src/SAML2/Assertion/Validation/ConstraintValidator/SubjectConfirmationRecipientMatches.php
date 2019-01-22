@@ -8,6 +8,7 @@ use SAML2\Assertion\Validation\Result;
 use SAML2\Assertion\Validation\SubjectConfirmationConstraintValidator;
 use SAML2\Configuration\Destination;
 use SAML2\XML\saml\SubjectConfirmation;
+use Webmozart\Assert\Assert;
 
 class SubjectConfirmationRecipientMatches implements
     SubjectConfirmationConstraintValidator
@@ -29,15 +30,17 @@ class SubjectConfirmationRecipientMatches implements
 
 
     /**
-     * @param SubjectConfirmation
+     * @param SubjectConfirmation $subjectConfirmation
      * @param Result $result
      * @return void
      */
-    public function validate(
-        SubjectConfirmation $subjectConfirmation,
-        Result $result
-    ) {
-        $recipient = $subjectConfirmation->getSubjectConfirmationData()->getRecipient();
+    public function validate(SubjectConfirmation $subjectConfirmation, Result $result)
+    {
+        $data = $subjectConfirmation->getSubjectConfirmationData();
+        Assert::notNull($data);
+
+        /** @psalm-suppress PossiblyNullReference */
+        $recipient = $data->getRecipient();
         if ($recipient && !$this->destination->equals(new Destination($recipient))) {
             $result->addError(sprintf(
                 'Recipient in SubjectConfirmationData ("%s") does not match the current destination ("%s")',
