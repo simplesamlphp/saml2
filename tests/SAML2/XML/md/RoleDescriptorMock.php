@@ -4,17 +4,22 @@ declare(strict_types=1);
 
 namespace SAML2\XML\md;
 
+use DOMElement;
+
 use SAML2\Constants;
 
-class RoleDescriptorMock extends \SAML2\XML\md\RoleDescriptor
+class RoleDescriptorMock extends RoleDescriptor
 {
-    public function __construct(\DOMElement $xml = null)
+    public function __construct(DOMElement $xml = null)
     {
         parent::__construct('md:RoleDescriptor', $xml);
     }
 
 
-    public function toXML(\DOMElement $parent) : \DOMElement
+    /**
+     * @return DOMElement
+     */
+    public function toXML(DOMElement $parent) : DOMElement
     {
         $xml = parent::toXML($parent);
         $xml->setAttributeNS(Constants::NS_XSI, 'xsi:type', 'myns:MyElement');

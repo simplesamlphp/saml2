@@ -13,7 +13,10 @@ use SAML2\Utils;
  */
 class PublicationInfoTest extends \PHPUnit\Framework\TestCase
 {
-    public function testMarshalling()
+    /**
+     * @return void
+     */
+    public function testMarshalling() : void
     {
         $publicationInfo = new PublicationInfo();
         $publicationInfo->setPublisher('TestPublisher');
@@ -51,7 +54,10 @@ class PublicationInfoTest extends \PHPUnit\Framework\TestCase
     }
 
 
-    public function testUnmarshalling()
+    /**
+     * @return void
+     */
+    public function testUnmarshalling() : void
     {
         $document = DOMDocumentFactory::fromString(<<<XML
 <mdrpi:PublicationInfo xmlns:mdrpi="urn:oasis:names:tc:SAML:metadata:rpi"

@@ -40,6 +40,9 @@ class MockChainedValidator extends AbstractChainedValidator
     }
 
 
+    /**
+     * @return bool
+     */
     public function canValidate(
         SignedElement $signedElement,
         CertificateProvider $configuration
@@ -48,6 +51,9 @@ class MockChainedValidator extends AbstractChainedValidator
     }
 
 
+    /**
+     * @return bool
+     */
     public function hasValidSignature(
         SignedElement $signedElement,
         CertificateProvider $configuration

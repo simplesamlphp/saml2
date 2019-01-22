@@ -16,7 +16,10 @@ use SAML2\Utils;
  */
 class DigestMethodTest extends \PHPUnit\Framework\TestCase
 {
-    public function testMarshalling()
+    /**
+     * @return void
+     */
+    public function testMarshalling() : void
     {
         $digestMethod = new DigestMethod();
         $digestMethod->setAlgorithm('http://exampleAlgorithm');
@@ -34,7 +37,10 @@ class DigestMethodTest extends \PHPUnit\Framework\TestCase
     }
 
 
-    public function testUnmarshalling()
+    /**
+     * @return void
+     */
+    public function testUnmarshalling() : void
     {
         $document = DOMDocumentFactory::fromString(<<<XML
 <alg:DigestMethod xmlns:alg="urn:oasis:names:tc:SAML:metadata:algsupport"
@@ -47,7 +53,10 @@ XML
     }
 
 
-    public function testMissingAlgorithmThrowsException()
+    /**
+     * @return void
+     */
+    public function testMissingAlgorithmThrowsException() : void
     {
         $document = DOMDocumentFactory::fromString(<<<XML
 <alg:DigestMethod xmlns:alg="urn:oasis:names:tc:SAML:metadata:algsupport" />

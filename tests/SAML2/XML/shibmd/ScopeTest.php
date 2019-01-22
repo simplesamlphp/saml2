@@ -15,8 +15,9 @@ class ScopeTest extends \PHPUnit\Framework\TestCase
 {
     /**
      * Marshalling a scope in literal (non-regexp) form.
+     * @return void
      */
-    public function testMarshallingLiteral()
+    public function testMarshallingLiteral() : void
     {
         $scope = new Scope();
         $scope->setScope("example.org");
@@ -38,8 +39,9 @@ class ScopeTest extends \PHPUnit\Framework\TestCase
     /**
      * Marshalling a scope which does not specificy the value for
      * regexp explicitly (expect it to default to 'false').
+     * @return void
      */
-    public function testMarshallingImplicitRegexpValue()
+    public function testMarshallingImplicitRegexpValue() : void
     {
         $scope = new Scope();
         $scope->setScope("example.org");
@@ -59,8 +61,9 @@ class ScopeTest extends \PHPUnit\Framework\TestCase
 
     /**
      * Marshalling a scope which is in regexp form.
+     * @return void
      */
-    public function testMarshallingRegexp()
+    public function testMarshallingRegexp() : void
     {
         $scope = new Scope();
         $scope->setScope("^(.*\.)?example\.edu$");
@@ -81,8 +84,9 @@ class ScopeTest extends \PHPUnit\Framework\TestCase
 
     /**
      * Unmarshalling a scope in literal (non-regexp) form.
+     * @return void
      */
-    public function testUnmarshallingLiteral()
+    public function testUnmarshallingLiteral() : void
     {
         $document = DOMDocumentFactory::fromString(
 <<<XML
@@ -99,8 +103,9 @@ XML
     /**
      * Unmarshalling a scope that does not specify an explicit
      * regexp value (assumed to be false).
+     * @return void
      */
-    public function testUnmarshallingWithoutRegexpValue()
+    public function testUnmarshallingWithoutRegexpValue() : void
     {
         $document = DOMDocumentFactory::fromString(
 <<<XML
@@ -116,8 +121,9 @@ XML
 
     /**
      * Unmarshalling a scope in regexp form.
+     * @return void
      */
-    public function testUnmarshallingRegexp()
+    public function testUnmarshallingRegexp() : void
     {
         $document = DOMDocumentFactory::fromString(
 <<<XML

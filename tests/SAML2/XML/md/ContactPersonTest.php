@@ -14,7 +14,10 @@ use SAML2\Utils;
  */
 class ContactPersonTest extends \PHPUnit\Framework\TestCase
 {
-    public function testContactPerson()
+    /**
+     * @return void
+     */
+    public function testContactPerson() : void
     {
         $contactType = "other";
         $Company = "Test Company";
@@ -65,7 +68,10 @@ XML
     }
 
 
-    public function testContactPersonFromXML()
+    /**
+     * @return void
+     */
+    public function testContactPersonFromXML() : void
     {
         $mdNamespace = Constants::NS_MD;
         $document = DOMDocumentFactory::fromString(
@@ -97,7 +103,10 @@ XML
     }
 
 
-    public function testMultipleNamesXML()
+    /**
+     * @return void
+     */
+    public function testMultipleNamesXML() : void
     {
         $mdNamespace = Constants::NS_MD;
         $document = DOMDocumentFactory::fromString(
@@ -123,7 +132,10 @@ XML
     }
 
 
-    public function testEmptySurNameXML()
+    /**
+     * @return void
+     */
+    public function testEmptySurNameXML() : void
     {
         $mdNamespace = Constants::NS_MD;
         $document = DOMDocumentFactory::fromString(
@@ -147,7 +159,10 @@ XML
     }
 
 
-    public function testMissingContactTypeXML()
+    /**
+     * @return void
+     */
+    public function testMissingContactTypeXML() : void
     {
         $mdNamespace = Constants::NS_MD;
         $document = DOMDocumentFactory::fromString(

@@ -16,7 +16,10 @@ use SAML2\Utils;
  */
 class SubjectConfirmationTest extends \PHPUnit\Framework\TestCase
 {
-    public function testMarshalling()
+    /**
+     * @return void
+     */
+    public function testMarshalling() : void
     {
         $nameId = new NameID();
         $nameId->setValue('SomeNameIDValue');
@@ -38,7 +41,10 @@ class SubjectConfirmationTest extends \PHPUnit\Framework\TestCase
     }
 
 
-    public function testUnmarshalling()
+    /**
+     * @return void
+     */
+    public function testUnmarshalling() : void
     {
         $samlNamespace = Constants::NS_SAML;
         $document = DOMDocumentFactory::fromString(
@@ -57,7 +63,11 @@ XML
         $this->assertTrue($subjectConfirmation->getSubjectConfirmationData() instanceof SubjectConfirmationData);
     }
 
-    public function testMethodMissingThrowsException()
+
+    /**
+     * @return void
+     */
+    public function testMethodMissingThrowsException() : void
     {
         $samlNamespace = Constants::NS_SAML;
         $document = DOMDocumentFactory::fromString(
@@ -74,7 +84,10 @@ XML
     }
 
 
-    public function testManyNameIDThrowsException()
+    /**
+     * @return void
+     */
+    public function testManyNameIDThrowsException() : void
     {
         $samlNamespace = Constants::NS_SAML;
         $document = DOMDocumentFactory::fromString(
@@ -92,7 +105,10 @@ XML
     }
 
 
-    public function testManySubjectConfirmationDataThrowsException()
+    /**
+     * @return void
+     */
+    public function testManySubjectConfirmationDataThrowsException() : void
     {
         $samlNamespace = Constants::NS_SAML;
         $document = DOMDocumentFactory::fromString(

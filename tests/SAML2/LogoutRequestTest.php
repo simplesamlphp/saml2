@@ -23,8 +23,9 @@ class LogoutRequestTest extends \Mockery\Adapter\Phpunit\MockeryTestCase
 
     /**
      * Load a fixture.
+     * @return void
      */
-    public function setUp()
+    public function setUp() : void
     {
         $xml = <<<XML
 <samlp:LogoutRequest xmlns:samlp="urn:oasis:names:tc:SAML:2.0:protocol" xmlns:saml="urn:oasis:names:tc:SAML:2.0:assertion" ID="SomeIDValue" Version="2.0" IssueInstant="2010-07-22T11:30:19Z">
@@ -54,7 +55,10 @@ XML;
     }
 
 
-    public function testMarshalling()
+    /**
+     * @return void
+     */
+    public function testMarshalling() : void
     {
         $nameId = new NameID();
         $nameId->setValue('NameIDValue');
@@ -90,7 +94,10 @@ XML;
     }
 
 
-    public function testUnmarshalling()
+    /**
+     * @return void
+     */
+    public function testUnmarshalling() : void
     {
         $logoutRequest = new LogoutRequest($this->logoutRequestElement);
         $this->assertEquals('TheIssuer', $logoutRequest->getIssuer()->getValue());
@@ -109,7 +116,10 @@ XML;
     }
 
 
-    public function testEncryptedNameId()
+    /**
+     * @return void
+     */
+    public function testEncryptedNameId() : void
     {
         $nameId = new NameID();
         $nameId->setValue('NameIdValue');
@@ -126,7 +136,10 @@ XML;
     }
 
 
-    public function testDecryptingNameId()
+    /**
+     * @return void
+     */
+    public function testDecryptingNameId() : void
     {
         $logoutRequest = new LogoutRequest($this->logoutRequestElement);
         $this->assertTrue($logoutRequest->isNameIdEncrypted());
@@ -137,7 +150,10 @@ XML;
     }
 
 
-    public function testDecryptingNameIdForgotToDecryptThrowsException()
+    /**
+     * @return void
+     */
+    public function testDecryptingNameIdForgotToDecryptThrowsException() : void
     {
         $logoutRequest = new LogoutRequest($this->logoutRequestElement);
         $this->assertTrue($logoutRequest->isNameIdEncrypted());
@@ -147,7 +163,10 @@ XML;
     }
 
 
-    public function testPlainNameIDUnmarshalling()
+    /**
+     * @return void
+     */
+    public function testPlainNameIDUnmarshalling() : void
     {
         $xml = <<<XML
 <samlp:LogoutRequest xmlns:samlp="urn:oasis:names:tc:SAML:2.0:protocol" xmlns:saml="urn:oasis:names:tc:SAML:2.0:assertion" ID="SomeIDValue" Version="2.0" IssueInstant="2010-07-22T11:30:19Z">
@@ -167,7 +186,10 @@ XML;
     }
 
 
-    public function testMissingNameIDThrowsException()
+    /**
+     * @return void
+     */
+    public function testMissingNameIDThrowsException() : void
     {
         $xml = <<<XML
 <samlp:LogoutRequest xmlns:samlp="urn:oasis:names:tc:SAML:2.0:protocol" xmlns:saml="urn:oasis:names:tc:SAML:2.0:assertion" ID="SomeIDValue" Version="2.0" IssueInstant="2010-07-22T11:30:19Z">
@@ -182,7 +204,10 @@ XML;
     }
 
 
-    public function testMultipleNameIDThrowsException()
+    /**
+     * @return void
+     */
+    public function testMultipleNameIDThrowsException() : void
     {
         $xml = <<<XML
 <samlp:LogoutRequest xmlns:samlp="urn:oasis:names:tc:SAML:2.0:protocol" xmlns:saml="urn:oasis:names:tc:SAML:2.0:assertion" ID="SomeIDValue" Version="2.0" IssueInstant="2010-07-22T11:30:19Z">
@@ -199,7 +224,10 @@ XML;
     }
 
 
-    public function testGetNotOnOrAfter()
+    /**
+     * @return void
+     */
+    public function testGetNotOnOrAfter() : void
     {
         $xml = <<<XML
 <samlp:LogoutRequest xmlns:samlp="urn:oasis:names:tc:SAML:2.0:protocol" xmlns:saml="urn:oasis:names:tc:SAML:2.0:assertion" ID="SomeIDValue" Version="2.0" IssueInstant="2010-07-22T11:30:19Z" NotOnOrAfter="2018-11-28T19:33:12Z">
@@ -215,7 +243,10 @@ XML;
     }
 
 
-    public function testSetNotOnOrAfter()
+    /**
+     * @return void
+     */
+    public function testSetNotOnOrAfter() : void
     {
         $nameId = new NameID();
         $nameId->setValue('NameIDValue');
@@ -233,7 +264,10 @@ XML;
     }
 
 
-    public function testWithOutSessionIndices()
+    /**
+     * @return void
+     */
+    public function testWithOutSessionIndices() : void
     {
         $xml = <<<XML
 <samlp:LogoutRequest xmlns:samlp="urn:oasis:names:tc:SAML:2.0:protocol" xmlns:saml="urn:oasis:names:tc:SAML:2.0:assertion" ID="SomeIDValue" Version="2.0" IssueInstant="2010-07-22T11:30:19Z">
@@ -250,7 +284,10 @@ XML;
     }
 
 
-    public function testSetSessionIndicesVariants()
+    /**
+     * @return void
+     */
+    public function testSetSessionIndicesVariants() : void
     {
         $logoutRequest = new LogoutRequest();
         $logoutRequest->setSessionIndexes(['SessionIndexValue1', 'SessionIndexValue2']);

@@ -12,7 +12,10 @@ use DOMDocument;
 
 class SOAPTest extends \Mockery\Adapter\Phpunit\MockeryTestCase
 {
-    public function testRequestParsingEmptyMessage()
+    /**
+     * @return void
+     */
+    public function testRequestParsingEmptyMessage() : void
     {
         $this->expectException(Exception::class, 'Invalid message received');
 
@@ -21,7 +24,10 @@ class SOAPTest extends \Mockery\Adapter\Phpunit\MockeryTestCase
     }
 
 
-    public function testRequestParsing()
+    /**
+     * @return void
+     */
+    public function testRequestParsing() : void
     {
         $id = '_6c3a4f8b9c2d';
         $artifact = 'AAQAADWNEw5VT47wcO4zX/iEzMmFQvGknDfws2ZtqSGdkNSbsW1cmVR0bzU=';
@@ -54,7 +60,10 @@ SOAP
     }
 
 
-    public function testSendArtifactResponse()
+    /**
+     * @return void
+     */
+    public function testSendArtifactResponse() : void
     {
         $doc = new \DOMDocument;
         $doc->loadXML(<<<XML
@@ -106,7 +115,10 @@ SOAP;
     }
 
 
-    public function testSendResponse()
+    /**
+     * @return void
+     */
+    public function testSendResponse() : void
     {
         $doc = new \DOMDocument();
         $doc->loadXML(<<<XML
@@ -168,7 +180,10 @@ SOAP;
     }
 
 
-    private function getStubWithInput($input)
+    /**
+     * @return void
+     */
+    private function getStubWithInput($input) : void
     {
         $stub = $this->getMockBuilder(SOAP::class)->setMethods(['getInputStream'])->getMock();
         $stub->expects($this->once())

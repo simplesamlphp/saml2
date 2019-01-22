@@ -11,7 +11,10 @@ use SAML2\XML\ecp\Response;
 
 class ResponseTest extends \PHPUnit\Framework\TestCase
 {
-    public function testConstructorWithoutXML()
+    /**
+     * @return void
+     */
+    public function testConstructorWithoutXML() : void
     {
         $this->expectException(\TypeError::class);
 
@@ -20,7 +23,10 @@ class ResponseTest extends \PHPUnit\Framework\TestCase
     }
 
 
-    public function testToXMLReturnsResponse()
+    /**
+     * @return void
+     */
+    public function testToXMLReturnsResponse() : void
     {
         $doc = new \DOMDocument;
         $element = $doc->createElement('Foobar');
@@ -34,7 +40,10 @@ class ResponseTest extends \PHPUnit\Framework\TestCase
     }
 
 
-    public function testToXMLResponseAttributes()
+    /**
+     * @return void
+     */
+    public function testToXMLResponseAttributes() : void
     {
         $acs = 'https://example.com/ACS';
 
@@ -54,7 +63,10 @@ class ResponseTest extends \PHPUnit\Framework\TestCase
     }
 
 
-    public function testToXMLResponseAppended()
+    /**
+     * @return void
+     */
+    public function testToXMLResponseAppended() : void
     {
         $doc = new \DOMDocument;
         $element = $doc->createElement('Foobar');

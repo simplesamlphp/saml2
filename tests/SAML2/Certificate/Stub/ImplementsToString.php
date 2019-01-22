@@ -18,6 +18,9 @@ class ImplementsToString
     }
 
 
+    /**
+     * @return mixed
+     */
     public function __toString()
     {
         return $this->value;

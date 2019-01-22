@@ -24,7 +24,10 @@ class XmlSignatureWrappingTest extends \Mockery\Adapter\Phpunit\MockeryTestCase
     private $identityProviderConfiguration;
 
 
-    public function setUp()
+    /**
+     * @return void
+     */
+    public function setUp() : void
     {
         $this->signatureValidator = new Validator(new \Psr\Log\NullLogger());
 
@@ -38,8 +41,9 @@ class XmlSignatureWrappingTest extends \Mockery\Adapter\Phpunit\MockeryTestCase
 
 
     /**
+     * @return void
      */
-    public function testThatASignatureReferencingAnEmbeddedAssertionIsNotValid()
+    public function testThatASignatureReferencingAnEmbeddedAssertionIsNotValid() : void
     {
         $this->expectException(\Exception::class, 'Reference validation failed');
 
@@ -49,8 +53,9 @@ class XmlSignatureWrappingTest extends \Mockery\Adapter\Phpunit\MockeryTestCase
 
 
     /**
+     * @return void
      */
-    public function testThatASignatureReferencingAnotherAssertionIsNotValid()
+    public function testThatASignatureReferencingAnotherAssertionIsNotValid() : void
     {
         $this->expectException(\Exception::class, 'Reference validation failed');
 
@@ -59,7 +64,10 @@ class XmlSignatureWrappingTest extends \Mockery\Adapter\Phpunit\MockeryTestCase
     }
 
 
-    private function getSignedAssertionWithSignatureThatReferencesAnotherAssertion()
+    /**
+     * @return \SAML2\Assertion
+     */
+    private function getSignedAssertionWithSignatureThatReferencesAnotherAssertion() : Assertion
     {
         $doc = DOMDocumentFactory::fromFile(__DIR__ . '/signedAssertionWithInvalidReferencedId.xml');
         $assertion = new Assertion($doc->firstChild);
@@ -68,7 +76,10 @@ class XmlSignatureWrappingTest extends \Mockery\Adapter\Phpunit\MockeryTestCase
     }
 
 
-    private function getSignedAssertionWithEmbeddedAssertionReferencedInSignature()
+    /**
+     * @return \SAML2\Assertion
+     */
+    private function getSignedAssertionWithEmbeddedAssertionReferencedInSignature() : Assertion
     {
         $document = DOMDocumentFactory::fromFile(__DIR__ . '/signedAssertionReferencedEmbeddedAssertion.xml');
         $assertion = new Assertion($document->firstChild);

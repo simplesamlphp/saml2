@@ -11,7 +11,10 @@ use SAML2\Utils;
 
 class AffiliationDescriptorTest extends \PHPUnit\Framework\TestCase
 {
-    public function testMarshalling()
+    /**
+     * @return void
+     */
+    public function testMarshalling() : void
     {
         $document = DOMDocumentFactory::fromString('<root />');
 
@@ -49,7 +52,10 @@ class AffiliationDescriptorTest extends \PHPUnit\Framework\TestCase
     }
 
 
-    public function testUnmarshalling()
+    /**
+     * @return void
+     */
+    public function testUnmarshalling() : void
     {
         $mdNamespace = Constants::NS_MD;
         $document = DOMDocumentFactory::fromString(<<<XML
@@ -72,7 +78,10 @@ XML
     }
 
 
-    public function testUnmarshallingWithoutMembers()
+    /**
+     * @return void
+     */
+    public function testUnmarshallingWithoutMembers() : void
     {
         $mdNamespace = Constants::NS_MD;
         $document = DOMDocumentFactory::fromString(
@@ -86,7 +95,10 @@ XML
     }
 
 
-    public function testUnmarshallingWithoutOwner()
+    /**
+     * @return void
+     */
+    public function testUnmarshallingWithoutOwner() : void
     {
         $mdNamespace = Constants::NS_MD;
         $document = DOMDocumentFactory::fromString(

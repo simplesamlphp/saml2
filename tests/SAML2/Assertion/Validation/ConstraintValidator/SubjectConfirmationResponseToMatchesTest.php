@@ -29,7 +29,10 @@ class SubjectConfirmationResponseToMatchesTest extends \Mockery\Adapter\Phpunit\
     private $response;
 
 
-    public function setUp()
+    /**
+     * @return void
+     */
+    public function setUp() : void
     {
         parent::setUp();
 
@@ -43,8 +46,9 @@ class SubjectConfirmationResponseToMatchesTest extends \Mockery\Adapter\Phpunit\
     /**
      * @group assertion-validation
      * @test
+     * @return void
      */
-    public function when_the_response_responseto_is_null_the_subject_confirmation_is_valid()
+    public function when_the_response_responseto_is_null_the_subject_confirmation_is_valid() : void
     {
         $this->response->shouldReceive('getInResponseTo')->andReturnNull();
         $this->subjectConfirmationData->setInResponseTo('someValue');
@@ -63,8 +67,9 @@ class SubjectConfirmationResponseToMatchesTest extends \Mockery\Adapter\Phpunit\
     /**
      * @group assertion-validation
      * @test
+     * @return void
      */
-    public function when_the_subjectconfirmation_responseto_is_null_the_subjectconfirmation_is_valid()
+    public function when_the_subjectconfirmation_responseto_is_null_the_subjectconfirmation_is_valid() : void
     {
         $this->response->shouldReceive('getInResponseTo')->andReturn('someValue');
         $this->subjectConfirmationData->setInResponseTo(null);
@@ -83,8 +88,9 @@ class SubjectConfirmationResponseToMatchesTest extends \Mockery\Adapter\Phpunit\
     /**
      * @group assertion-validation
      * @test
+     * @return void
      */
-    public function when_the_subjectconfirmation_and_response_responseto_are_null_the_subjectconfirmation_is_valid()
+    public function when_the_subjectconfirmation_and_response_responseto_are_null_the_subjectconfirmation_is_valid() : void
     {
         $this->response->shouldReceive('getInResponseTo')->andReturnNull();
         $this->subjectConfirmationData->setInResponseTo(null);
@@ -104,7 +110,8 @@ class SubjectConfirmationResponseToMatchesTest extends \Mockery\Adapter\Phpunit\
      * @group assertion-validation
      * @test
      */
-    public function when_the_subjectconfirmation_and_response_responseto_are_equal_the_subjectconfirmation_is_valid()
+     * @return void
+    public function when_the_subjectconfirmation_and_response_responseto_are_equal_the_subjectconfirmation_is_valid() : void
     {
         $this->response->shouldReceive('getInResponseTo')->andReturn('theSameValue');
         $this->subjectConfirmationData->setInResponseTo('theSameValue');
@@ -123,8 +130,9 @@ class SubjectConfirmationResponseToMatchesTest extends \Mockery\Adapter\Phpunit\
     /**
      * @group assertion-validation
      * @test
+     * @return void
      */
-    public function when_the_subjectconfirmation_and_response_responseto_differ_the_subjectconfirmation_is_invalid()
+    public function when_the_subjectconfirmation_and_response_responseto_differ_the_subjectconfirmation_is_invalid() : void
     {
         $this->response->shouldReceive('getInResponseTo')->andReturn('someValue');
         $this->subjectConfirmationData->setInResponseTo('anotherValue');

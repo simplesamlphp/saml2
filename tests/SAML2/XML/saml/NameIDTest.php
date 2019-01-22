@@ -14,7 +14,10 @@ use SAML2\XML\saml\NameID;
  */
 class NameIDTest extends \PHPUnit\Framework\TestCase
 {
-    public function testMarshalling()
+    /**
+     * @return void
+     */
+    public function testMarshalling() : void
     {
         $nameId = new NameID();
         $nameId->setNameQualifier('TheNameQualifier');
@@ -36,7 +39,10 @@ class NameIDTest extends \PHPUnit\Framework\TestCase
     }
 
 
-    public function testUnmarshalling()
+    /**
+     * @return void
+     */
+    public function testUnmarshalling() : void
     {
         $samlNamespace = Constants::NS_SAML;
         $document = DOMDocumentFactory::fromString(<<<XML
@@ -53,7 +59,10 @@ XML
     }
 
 
-    public function testToString()
+    /**
+     * @return void
+     */
+    public function testToString() : void
     {
         $nameId = new NameID();
         $nameId->setNameQualifier('TheNameQualifier');

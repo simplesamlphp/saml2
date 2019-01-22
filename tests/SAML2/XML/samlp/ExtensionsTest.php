@@ -22,8 +22,9 @@ class ExtensionsTest extends \PHPUnit\Framework\TestCase
 
     /**
      * Prepare a basic DOMelement to test against
+     * @return void
      */
-    public function setUp()
+    public function setUp() : void
     {
         $document = DOMDocumentFactory::fromString(
 <<<XML
@@ -53,8 +54,9 @@ XML
 
     /**
      * Test the getList() method.
+     * @return void
      */
-    public function testExtensionsGet()
+    public function testExtensionsGet() : void
     {
         $list = Extensions::getList($this->testElement);
 
@@ -66,8 +68,9 @@ XML
 
     /**
      * Adding empty list should leave existing extensions unchanged.
+     * @return void
      */
-    public function testExtensionsAddEmpty()
+    public function testExtensionsAddEmpty() : void
     {
         Extensions::addList($this->testElement, []);
 
@@ -81,8 +84,9 @@ XML
 
     /**
      * Test adding two random elements.
+     * @return void
      */
-    public function testExtensionsAddSome()
+    public function testExtensionsAddSome() : void
     {
         $attribute = new Attribute();
         $attribute->setName('TheName');

@@ -13,7 +13,10 @@ use SAML2\Utils;
  */
 class IndexedEndpointTypeTest extends \PHPUnit\Framework\TestCase
 {
-    public function testMarshalling()
+    /**
+     * @return void
+     */
+    public function testMarshalling() : void
     {
         $indexedEndpointType = new IndexedEndpointType();
         $indexedEndpointType->setBinding('TestBinding');

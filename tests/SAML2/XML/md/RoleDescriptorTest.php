@@ -12,7 +12,10 @@ require 'RoleDescriptorMock.php';
 
 class RoleDescriptorTest extends \PHPUnit\Framework\TestCase
 {
-    public function testMarshalling()
+    /**
+     * @return void
+     */
+    public function testMarshalling() : void
     {
         $roleDescriptor = new RoleDescriptorMock();
         $roleDescriptor->setID('SomeID');

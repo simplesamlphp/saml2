@@ -14,7 +14,10 @@ use SAML2\Utils;
  */
 class AdditionalMetadataLocationTest extends \PHPUnit\Framework\TestCase
 {
-    public function testMarshalling()
+    /**
+     * @return void
+     */
+    public function testMarshalling() : void
     {
         $document = DOMDocumentFactory::fromString('<root/>');
 
@@ -35,7 +38,10 @@ class AdditionalMetadataLocationTest extends \PHPUnit\Framework\TestCase
     }
 
 
-    public function testUnmarshalling()
+    /**
+     * @return void
+     */
+    public function testUnmarshalling() : void
     {
         $document = DOMDocumentFactory::fromString(
             '<md:AdditionalMetadataLocation xmlns:md="' . Constants::NS_MD . '"'.

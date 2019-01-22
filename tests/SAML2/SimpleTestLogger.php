@@ -15,7 +15,10 @@ class SimpleTestLogger extends \Psr\Log\AbstractLogger
     private $messages = [];
 
 
-    public function log($level, $message, array $context = [])
+    /**
+     * @return void
+     */
+    public function log($level, $message, array $context = []) : void
     {
         $this->messages[] = [
             'level'   => $level,
@@ -31,7 +34,7 @@ class SimpleTestLogger extends \Psr\Log\AbstractLogger
      *
      * @return array
      */
-    public function getMessagesForLevel($level)
+    public function getMessagesForLevel($level) : array
     {
         return array_filter($this->messages, function ($message) use ($level) {
             return $message['level'] === $level;
@@ -45,7 +48,7 @@ class SimpleTestLogger extends \Psr\Log\AbstractLogger
      *
      * @return bool
      */
-    public function hasMessage($messageToFind)
+    public function hasMessage($messageToFind) : bool
     {
         $count = array_filter($this->messages, function ($message) use ($messageToFind) {
             return $message['message'] === $messageToFind;

@@ -13,8 +13,9 @@ class DOMDocumentFactoryTest extends \PHPUnit\Framework\TestCase
 {
     /**
      * @group domdocument
+     * @return void
      */
-    public function testNotXmlStringRaisesAnException()
+    public function testNotXmlStringRaisesAnException() : void
     {
         $this->expectException(UnparseableXmlException::class);
         DOMDocumentFactory::fromString('this is not xml');
@@ -23,8 +24,9 @@ class DOMDocumentFactoryTest extends \PHPUnit\Framework\TestCase
 
     /**
      * @group domdocument
+     * @return void
      */
-    public function testXmlStringIsCorrectlyLoaded()
+    public function testXmlStringIsCorrectlyLoaded() : void
     {
         $xml = '<root/>';
 
@@ -35,8 +37,9 @@ class DOMDocumentFactoryTest extends \PHPUnit\Framework\TestCase
 
 
     /**
+     * @return void
      */
-    public function testFileThatDoesNotExistIsNotAccepted()
+    public function testFileThatDoesNotExistIsNotAccepted() : void
     {
         $this->expectException(InvalidArgumentException::class);
         $filename = 'DoesNotExist.ext';
@@ -46,8 +49,9 @@ class DOMDocumentFactoryTest extends \PHPUnit\Framework\TestCase
 
     /**
      * @group domdocument
+     * @return void
      */
-    public function testFileThatDoesNotContainXMLCannotBeLoaded()
+    public function testFileThatDoesNotContainXMLCannotBeLoaded() : void
     {
         $this->expectException(RuntimeException::class);
         $file = realpath(dirname(__FILE__)) . DIRECTORY_SEPARATOR . 'domdocument_invalid_xml.xml';
@@ -57,8 +61,9 @@ class DOMDocumentFactoryTest extends \PHPUnit\Framework\TestCase
 
     /**
      * @group domdocument
+     * @return void
      */
-    public function testFileWithValidXMLCanBeLoaded()
+    public function testFileWithValidXMLCanBeLoaded() : void
     {
         $file = realpath(dirname(__FILE__)) . DIRECTORY_SEPARATOR . 'domdocument_valid_xml.xml';
 
@@ -70,8 +75,9 @@ class DOMDocumentFactoryTest extends \PHPUnit\Framework\TestCase
 
     /**
      * @group                    domdocument
+     * @return void
      */
-    public function testFileThatContainsDocTypeIsNotAccepted()
+    public function testFileThatContainsDocTypeIsNotAccepted() : void
     {
         $this->expectException(RuntimeException::class, 'Dangerous XML detected, DOCTYPE nodes are not allowed in the XML body');
         $file = realpath(dirname(__FILE__)) . DIRECTORY_SEPARATOR . 'domdocument_doctype.xml';
@@ -82,8 +88,9 @@ class DOMDocumentFactoryTest extends \PHPUnit\Framework\TestCase
 
     /**
      * @group                    domdocument
+     * @return void
      */
-    public function testStringThatContainsDocTypeIsNotAccepted()
+    public function testStringThatContainsDocTypeIsNotAccepted() : void
     {
         $this->expectException(RuntimeException::class, 'Dangerous XML detected, DOCTYPE nodes are not allowed in the XML body');
         $xml = '<!DOCTYPE foo [<!ELEMENT foo ANY > <!ENTITY xxe SYSTEM "file:///dev/random" >]><foo />';
@@ -94,8 +101,9 @@ class DOMDocumentFactoryTest extends \PHPUnit\Framework\TestCase
 
     /**
      * @group                    domdocument
+     * @return void
      */
-    public function testEmptyFileIsNotValid()
+    public function testEmptyFileIsNotValid() : void
     {
         $this->expectException(RuntimeException::class, 'does not have content');
         $file = realpath(dirname(__FILE__)) . DIRECTORY_SEPARATOR . 'domdocument_empty.xml';
@@ -106,8 +114,9 @@ class DOMDocumentFactoryTest extends \PHPUnit\Framework\TestCase
 
     /**
      * @group                    domdocument
+     * @return void
      */
-    public function testEmptyStringIsNotValid()
+    public function testEmptyStringIsNotValid() : void
     {
         $this->expectException(InvalidArgumentException::class, 'Invalid Argument type: "non-empty string" expected, "string" given');
         DOMDocumentFactory::fromString("");

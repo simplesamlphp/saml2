@@ -15,7 +15,10 @@ use SAML2\Constants;
  */
 class ResponseTest extends \PHPUnit\Framework\TestCase
 {
-    public function testMarshalling()
+    /**
+     * @return void
+     */
+    public function testMarshalling() : void
     {
         $issuer = new Issuer();
         $issuer->setValue('SomeIssuer');
@@ -34,7 +37,10 @@ class ResponseTest extends \PHPUnit\Framework\TestCase
     }
 
 
-    public function testLoop()
+    /**
+     * @return void
+     */
+    public function testLoop() : void
     {
         $xml = <<<XML
 <samlp:Response xmlns:samlp="urn:oasis:names:tc:SAML:2.0:protocol"

@@ -14,7 +14,10 @@ use SAML2\Utils;
  */
 class SubjectConfirmationDataTest extends \PHPUnit\Framework\TestCase
 {
-    public function testMarshalling()
+    /**
+     * @return void
+     */
+    public function testMarshalling() : void
     {
         $subjectConfirmationData = new SubjectConfirmationData();
         $subjectConfirmationData->setNotBefore(987654321);
@@ -41,7 +44,10 @@ class SubjectConfirmationDataTest extends \PHPUnit\Framework\TestCase
     }
 
 
-    public function testUnmarshalling()
+    /**
+     * @return void
+     */
+    public function testUnmarshalling() : void
     {
         $samlNamespace = Constants::NS_SAML;
         $document = DOMDocumentFactory::fromString(<<<XML

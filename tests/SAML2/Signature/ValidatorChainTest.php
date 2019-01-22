@@ -17,7 +17,10 @@ class ValidatorChainTest extends \PHPUnit\Framework\TestCase
     private $chain;
 
 
-    public function setUp()
+    /**
+     * @return void
+     */
+    public function setUp() : void
     {
         $this->chain = new ValidatorChain(new \Psr\Log\NullLogger(), []);
     }
@@ -25,10 +28,10 @@ class ValidatorChainTest extends \PHPUnit\Framework\TestCase
 
     /**
      * @group signature
-     *
      * @test
+     * @return void
      */
-    public function if_no_validators_can_validate_an_exception_is_thrown()
+    public function if_no_validators_can_validate_an_exception_is_thrown() : void
     {
         $this->chain->appendValidator(new MockChainedValidator(false, true));
         $this->chain->appendValidator(new MockChainedValidator(false, true));
@@ -40,10 +43,10 @@ class ValidatorChainTest extends \PHPUnit\Framework\TestCase
 
     /**
      * @group signature
-     *
      * @test
+     * @return void
      */
-    public function all_registered_validators_should_be_tried()
+    public function all_registered_validators_should_be_tried() : void
     {
         $this->chain->appendValidator(new MockChainedValidator(false, true));
         $this->chain->appendValidator(new MockChainedValidator(false, true));
@@ -59,10 +62,10 @@ class ValidatorChainTest extends \PHPUnit\Framework\TestCase
 
     /**
      * @group signature
-     *
      * @test
+     * @return void
      */
-    public function it_uses_the_result_of_the_first_validator_that_can_validate()
+    public function it_uses_the_result_of_the_first_validator_that_can_validate() : void
     {
         $this->chain->appendValidator(new MockChainedValidator(false, true));
         $this->chain->appendValidator(new MockChainedValidator(true, false));

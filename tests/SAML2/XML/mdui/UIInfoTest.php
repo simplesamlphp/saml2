@@ -18,8 +18,9 @@ class UIInfoTest extends \PHPUnit\Framework\TestCase
 {
     /**
      * Test creating a basic UIInfo element.
+     * @return void
      */
-    public function testMarshalling()
+    public function testMarshalling() : void
     {
         $logo = new Logo();
         $logo->setLanguage("nl");
@@ -88,8 +89,9 @@ class UIInfoTest extends \PHPUnit\Framework\TestCase
 
     /**
      * Test creating an UIinfo element with XML children
+     * @return void
      */
-    public function testMarshallingChildren()
+    public function testMarshallingChildren() : void
     {
         $keywords = new Keywords();
         $keywords->setLanguage("nl");
@@ -161,8 +163,9 @@ class UIInfoTest extends \PHPUnit\Framework\TestCase
 
     /**
      * Test unmarshalling a basic UIInfo element
+     * @return void
      */
-    public function testUnmarshalling()
+    public function testUnmarshalling() : void
     {
         $document = DOMDocumentFactory::fromString(<<<XML
 <mdui:UIInfo xmlns:mdui="urn:oasis:names:tc:SAML:metadata:ui">
@@ -193,8 +196,9 @@ XML
 
     /**
      * Test unmarshalling wuth Logo, Keywords child elements
+     * @return void
      */
-    public function testUnmarshallingChildren()
+    public function testUnmarshallingChildren() : void
     {
         $document = DOMDocumentFactory::fromString(<<<XML
 <mdui:UIInfo xmlns:mdui="urn:oasis:names:tc:SAML:metadata:ui">
