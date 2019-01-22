@@ -3,6 +3,7 @@
   name="SimpleSAMLphp"
   useDocblockTypes="true"
   totallyTyped="false"
+  hideExternalErrors="true"
 >
   <projectFiles>
     <directory name="src/SAML2" />
