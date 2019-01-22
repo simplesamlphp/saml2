@@ -49,7 +49,7 @@ abstract class SignedElement
      * @param array $certificates An array of certificates.
      * @return void
      */
-    public function setCertificates(array $certificates)
+    public function setCertificates(array $certificates) : void
     {
         $this->certificates = $certificates;
     }
@@ -71,7 +71,7 @@ abstract class SignedElement
      *
      * @return XMLSecurityKey|null The key, or NULL if no key is specified
      */
-    public function getSignatureKey()
+    public function getSignatureKey() : ?XMLSecurityKey
     {
         return $this->signatureKey;
     }
@@ -85,7 +85,7 @@ abstract class SignedElement
      * @param XMLSecurityKey|null $signatureKey
      * @return void
      */
-    public function setSignatureKey(XMLSecurityKey $signatureKey = null)
+    public function setSignatureKey(XMLSecurityKey $signatureKey = null) : void
     {
         $this->signatureKey = $signatureKey;
     }

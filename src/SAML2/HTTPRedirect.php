@@ -4,8 +4,8 @@ declare(strict_types=1);
 
 namespace SAML2;
 
-use Webmozart\Assert\Assert;
 use RobRichards\XMLSecLibs\XMLSecurityKey;
+use Webmozart\Assert\Assert;
 
 /**
  * Class which implements the HTTP-Redirect binding.
@@ -16,12 +16,11 @@ class HTTPRedirect extends Binding
 {
     const DEFLATE = 'urn:oasis:names:tc:SAML:2.0:bindings:URL-Encoding:DEFLATE';
 
-
     /**
      * Create the redirect URL for a message.
      *
-     * @param  \SAML2\Message $message The message.
-     * @return string        The URL the user should be redirected to in order to send a message.
+     * @param \SAML2\Message $message The message.
+     * @return string The URL the user should be redirected to in order to send a message.
      */
     public function getRedirectURL(Message $message) : string
     {
@@ -84,7 +83,7 @@ class HTTPRedirect extends Binding
      * @param \SAML2\Message $message The message we should send.
      * @return void
      */
-    public function send(Message $message)
+    public function send(Message $message) : void
     {
         $destination = $this->getRedirectURL($message);
         Utils::getContainer()->getLogger()->debug('Redirect to '.strlen($destination).' byte URL: '.$destination);
@@ -102,7 +101,7 @@ class HTTPRedirect extends Binding
      *
      * NPath is currently too high but solving that just moves code around.
      */
-    public function receive()
+    public function receive() : ?Message
     {
         $data = self::parseQuery();
         if (array_key_exists('SAMLRequest', $data)) {
@@ -220,7 +219,7 @@ class HTTPRedirect extends Binding
      * @throws \Exception
      * @return void
      */
-    public static function validateSignature(array $data, XMLSecurityKey $key)
+    public static function validateSignature(array $data, XMLSecurityKey $key) : void
     {
         Assert::keyExists($data, "Query");
         Assert::keyExists($data, "SigAlg");

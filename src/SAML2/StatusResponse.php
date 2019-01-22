@@ -4,6 +4,7 @@ declare(strict_types=1);
 
 namespace SAML2;
 
+use DOMElement;
 use Webmozart\Assert\Assert;
 
 /**
@@ -51,7 +52,7 @@ abstract class StatusResponse extends Message
      * @param \DOMElement|null $xml The input message.
      * @throws \Exception
      */
-    protected function __construct(string $tagName, \DOMElement $xml = null)
+    protected function __construct(string $tagName, DOMElement $xml = null)
     {
         parent::__construct($tagName, $xml);
 
@@ -114,7 +115,7 @@ abstract class StatusResponse extends Message
      *
      * @return string|null The ID of the request.
      */
-    public function getInResponseTo()
+    public function getInResponseTo() : ?string
     {
         return $this->inResponseTo;
     }
@@ -126,7 +127,7 @@ abstract class StatusResponse extends Message
      * @param string|null $inResponseTo The ID of the request.
      * @return void
      */
-    public function setInResponseTo(string $inResponseTo = null)
+    public function setInResponseTo(string $inResponseTo = null) : void
     {
         $this->inResponseTo = $inResponseTo;
     }
@@ -149,7 +150,7 @@ abstract class StatusResponse extends Message
      * @param array $status The status code.
      * @return void
      */
-    public function setStatus(array $status)
+    public function setStatus(array $status) : void
     {
         Assert::keyExists($status, "Code", 'Cannot set status without a Code key in the array.');
 
@@ -168,7 +169,7 @@ abstract class StatusResponse extends Message
      *
      * @return \DOMElement This status response.
      */
-    public function toUnsignedXML() : \DOMElement
+    public function toUnsignedXML() : DOMElement
     {
         $root = parent::toUnsignedXML();
 

@@ -20,7 +20,6 @@ abstract class Binding
     protected $destination = null;
 
 
-
     /**
      * Retrieve a binding with the given URN.
      *
@@ -114,7 +113,7 @@ abstract class Binding
      *
      * @return string|null $destination The destination the message will be delivered to.
      */
-    public function getDestination()
+    public function getDestination() : ?string
     {
         return $this->destination;
     }
@@ -128,7 +127,7 @@ abstract class Binding
      * @param string|null $destination The destination the message should be delivered to.
      * @return void
      */
-    public function setDestination(string $destination = null)
+    public function setDestination(string $destination = null) : void
     {
         $this->destination = $destination;
     }
@@ -143,7 +142,7 @@ abstract class Binding
      * @param \SAML2\Message $message The message which should be sent.
      * @return void
      */
-    abstract public function send(Message $message);
+    abstract public function send(Message $message) : void;
 
 
     /**
@@ -154,5 +153,5 @@ abstract class Binding
      *
      * @return \SAML2\Message|null The received message.
      */
-    abstract public function receive();
+    abstract public function receive() : ?Message;
 }

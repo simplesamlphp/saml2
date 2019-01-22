@@ -5,10 +5,13 @@ declare(strict_types=1);
 namespace SAML2;
 
 use RobRichards\XMLSecLibs\XMLSecurityKey;
+use SimpleSAML\Configuration;
+use SimpleSAML\Metadata\MetaDataStorageHandler;
+use SimpleSAML\Module\saml\Message as MSG;
+use SimpleSAML\Store;
+use SimpleSAML\Utils\HTTP;
+
 use SAML2\Utilities\Temporal;
-use \SimpleSAML\Configuration;
-use \SimpleSAML\Metadata\MetaDataStorageHandler;
-use \SimpleSAML\Store;
 
 /**
  * Class which implements the HTTP-Artifact binding.
@@ -64,7 +67,7 @@ class HTTPArtifact extends Binding
             throw new \Exception('Cannot get redirect URL, no destination set in the message.');
         }
         /** @psalm-suppress UndefinedClass */
-        return \SimpleSAML\Utils\HTTP::addURLparameters($destination, $params);
+        return HTTP::addURLparameters($destination, $params);
     }
 
 
@@ -76,7 +79,7 @@ class HTTPArtifact extends Binding
      * @param \SAML2\Message $message The message we should send.
      * @return void
      */
-    public function send(Message $message)
+    public function send(Message $message) : void
     {
         $destination = $this->getRedirectURL($message);
         Utils::getContainer()->redirect($destination);
@@ -91,7 +94,7 @@ class HTTPArtifact extends Binding
      * @throws \Exception
      * @return \SAML2\Message|null The received message.
      */
-    public function receive()
+    public function receive() : ?Message
     {
         if (array_key_exists('SAMLart', $_REQUEST)) {
             $artifact = base64_decode($_REQUEST['SAMLart']);
@@ -136,7 +139,7 @@ class HTTPArtifact extends Binding
 
         // sign the request
         /** @psalm-suppress UndefinedClass */
-        \SimpleSAML\Module\saml\Message::addSign($this->spMetadata, $idpMetadata, $ar); // Shoaib - moved from the SOAPClient.
+        MSG::addSign($this->spMetadata, $idpMetadata, $ar); // Shoaib - moved from the SOAPClient.
 
         $soap = new SOAPClient();
 
@@ -173,7 +176,7 @@ class HTTPArtifact extends Binding
      *
      * @psalm-suppress UndefinedClass
      */
-    public function setSPMetadata(Configuration $sp)
+    public function setSPMetadata(Configuration $sp) : void
     {
         $this->spMetadata = $sp;
     }
