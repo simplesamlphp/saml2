@@ -181,9 +181,9 @@ SOAP;
 
 
     /**
-     * @return void
+     * @return SOAP
      */
-    private function getStubWithInput($input) : void
+    private function getStubWithInput($input) : SOAP
     {
         $stub = $this->getMockBuilder(SOAP::class)->setMethods(['getInputStream'])->getMock();
         $stub->expects($this->once())
