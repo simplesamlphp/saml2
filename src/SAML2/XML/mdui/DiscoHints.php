@@ -180,13 +180,13 @@ class DiscoHints
      * @param \DOMElement $parent The element we should append to.
      * @return \DOMElement|null
      */
-    public function toXML(DOMElement $parent)
+    public function toXML(DOMElement $parent) : DOMElement
     {
         if (!empty($this->IPHint)
          || !empty($this->DomainHint)
          || !empty($this->GeolocationHint)
          || !empty($this->children)
-        ) ?DOMElement {
+        ) {
             $doc = $parent->ownerDocument;
 
             $e = $doc->createElementNS(Common::NS, 'mdui:DiscoHints');
