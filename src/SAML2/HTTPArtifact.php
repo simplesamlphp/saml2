@@ -40,7 +40,7 @@ class HTTPArtifact extends Binding
 
         $generatedId = pack('H*', bin2hex(openssl_random_pseudo_bytes(20)));
         $issuer = $message->getIssuer();
-        if ($issuer === null || $value = $issuer->getValue() === null) {
+        if ($issuer === null || ($value = $issuer->getValue()) === null) {
             throw new \Exception('Cannot get redirect URL, no Issuer set in the message.');
         }
         $artifact = base64_encode("\x00\x04\x00\x00".sha1($value, true).$generatedId);
