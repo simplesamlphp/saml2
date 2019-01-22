@@ -93,7 +93,7 @@ class IndexedEndpointType extends EndpointType
      * @param bool|null $flag
      * @return void
      */
-    public function setIsDefault(bool $flag = null) : ?bool
+    public function setIsDefault(bool $flag = null) : void
     {
         $this->isDefault = $flag;
     }
