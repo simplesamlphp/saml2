@@ -21,6 +21,7 @@ class Logger implements LoggerInterface
      */
     public function emergency($message, array $context = [])
     {
+        /** @psalm-suppress UndefinedClass */
         \SimpleSAML\Logger::emergency($message.($context ? " ".var_export($context, true) : ""));
     }
 
@@ -39,6 +40,7 @@ class Logger implements LoggerInterface
      */
     public function alert($message, array $context = [])
     {
+        /** @psalm-suppress UndefinedClass */
         \SimpleSAML\Logger::alert($message.($context ? " ".var_export($context, true) : ""));
     }
 
@@ -56,6 +58,7 @@ class Logger implements LoggerInterface
      */
     public function critical($message, array $context = [])
     {
+        /** @psalm-suppress UndefinedClass */
         \SimpleSAML\Logger::critical($message.($context ? " ".var_export($context, true) : ""));
     }
 
@@ -72,6 +75,7 @@ class Logger implements LoggerInterface
      */
     public function error($message, array $context = [])
     {
+        /** @psalm-suppress UndefinedClass */
         \SimpleSAML\Logger::error($message.($context ? " ".var_export($context, true) : ""));
     }
 
@@ -90,6 +94,7 @@ class Logger implements LoggerInterface
      */
     public function warning($message, array $context = [])
     {
+        /** @psalm-suppress UndefinedClass */
         \SimpleSAML\Logger::warning($message.($context ? " ".var_export($context, true) : ""));
     }
 
@@ -105,6 +110,7 @@ class Logger implements LoggerInterface
      */
     public function notice($message, array $context = [])
     {
+        /** @psalm-suppress UndefinedClass */
         \SimpleSAML\Logger::notice($message.($context ? " ".var_export($context, true) : ""));
     }
 
@@ -122,6 +128,7 @@ class Logger implements LoggerInterface
      */
     public function info($message, array $context = [])
     {
+        /** @psalm-suppress UndefinedClass */
         \SimpleSAML\Logger::info($message.($context ? " ".var_export($context, true) : ""));
     }
 
@@ -137,6 +144,7 @@ class Logger implements LoggerInterface
      */
     public function debug($message, array $context = [])
     {
+        /** @psalm-suppress UndefinedClass */
         \SimpleSAML\Logger::debug($message.($context ? " ".var_export($context, true) : ""));
     }
 

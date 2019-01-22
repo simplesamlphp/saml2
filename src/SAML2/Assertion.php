@@ -817,7 +817,10 @@ class Assertion extends SignedElement
         $symmetricKey->generateSessionKey();
         $enc->encryptKey($key, $symmetricKey);
 
-        /** @var \DOMElement encryptedNameId */
+        /**
+         * @var \DOMElement encryptedNameId
+         * @psalm-suppress UndefinedClass
+         */
         $this->encryptedNameId = $enc->encryptNode($symmetricKey);
         $this->nameId = null;
     }
@@ -1804,10 +1807,12 @@ class Assertion extends SignedElement
             $symmetricKey->generateSessionKey();
             /** @psalm-suppress PossiblyNullArgument */
             $EncAssert->encryptKey($this->encryptionKey, $symmetricKey);
+            /** @psalm-suppress UndefinedClass */
             $EncrNode = $EncAssert->encryptNode($symmetricKey);
 
             $EncAttribute = $document->createElementNS(Constants::NS_SAML, 'saml:EncryptedAttribute');
             $attributeStatement->appendChild($EncAttribute);
+            /** @psalm-suppress InvalidArgument */
             $n = $document->importNode($EncrNode, true);
             $EncAttribute->appendChild($n);
         }

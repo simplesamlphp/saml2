@@ -59,8 +59,8 @@ class HTTPRedirect extends Binding
             $msg .= '&RelayState='.urlencode($relayState);
         }
 
-        if ($key !== null) {
-            /* Add the signature. */
+        if ($key !== null) { // add the signature
+            /** @psalm-suppress PossiblyInvalidArgument */
             $msg .= '&SigAlg='.urlencode($key->type);
 
             $signature = $key->signData($msg);

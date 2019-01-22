@@ -11,7 +11,6 @@ use SAML2\Exception\RuntimeException;
 
 use SimpleSAML\Configuration;
 use SimpleSAML\Utils\Config;
-use SimpleSAML\Utils\Crypto;
 
 /**
  * Implementation of the SAML 2.0 SOAP binding.
@@ -35,6 +34,8 @@ class SOAPClient
      * @return \SAML2\Message The response we received.
      * @throws \Exception
      * @return \SAML2\Message            The response we received.
+     *
+     * @psalm-suppress UndefinedClass
      */
     public function send(Message $msg, Configuration $srcMetadata, Configuration $dstMetadata = null) : Message
     {

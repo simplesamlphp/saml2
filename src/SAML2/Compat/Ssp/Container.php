@@ -41,6 +41,7 @@ class Container extends AbstractContainer
      */
     public function generateId() : string
     {
+        /** @psalm-suppress UndefinedClass */
         return \SimpleSAML\Utils\Random::generateID();
     }
 
@@ -51,6 +52,7 @@ class Container extends AbstractContainer
      */
     public function debugMessage($message, string $type)
     {
+        /** @psalm-suppress UndefinedClass */
         \SimpleSAML\Utils\XML::debugSAMLMessage($message, $type);
     }
 
@@ -63,6 +65,7 @@ class Container extends AbstractContainer
      */
     public function redirect(string $url, array $data = [])
     {
+        /** @psalm-suppress UndefinedClass */
         \SimpleSAML\Utils\HTTP::redirectTrustedURL($url, $data);
     }
 
@@ -75,6 +78,7 @@ class Container extends AbstractContainer
      */
     public function postRedirect(string $url, array $data = [])
     {
+        /** @psalm-suppress UndefinedClass */
         \SimpleSAML\Utils\HTTP::submitPOSTData($url, $data);
     }
 
@@ -84,6 +88,7 @@ class Container extends AbstractContainer
      */
     public function getTempDir()
     {
+        /** @psalm-suppress UndefinedClass */
         return \SimpleSAML\Utils\System::getTempDir();
     }
 
@@ -96,6 +101,7 @@ class Container extends AbstractContainer
         if ($mode === null) {
             $mode = 0600;
         }
+        /** @psalm-suppress UndefinedClass */
         \SimpleSAML\Utils\System::writeFile($filename, $data, $mode);
     }
 }
