@@ -94,7 +94,7 @@ class KeyLoader
      * @param string|null $usage
      * @return void
      */
-    public function loadKeys($configuredKeys, string $usage = null)
+    public function loadKeys($configuredKeys, string $usage = null) : void
     {
         foreach ($configuredKeys as $keyData) {
             if (isset($keyData['X509Certificate'])) {
@@ -118,7 +118,7 @@ class KeyLoader
      * @param string $certificateData
      * @return void
      */
-    public function loadCertificateData(string $certificateData)
+    public function loadCertificateData(string $certificateData) : void
     {
         $this->loadedKeys->add(X509::createFromCertificateData($certificateData));
     }
@@ -130,7 +130,7 @@ class KeyLoader
      * @param string $certificateFile the full path to the cert file.
      * @return void
      */
-    public function loadCertificateFile(string $certificateFile)
+    public function loadCertificateFile(string $certificateFile) : void
     {
         $certificate = File::getFileContents($certificateFile);
 
@@ -161,6 +161,6 @@ class KeyLoader
      */
     public function hasKeys() : bool
     {
-        return !!count($this->loadedKeys);
+        return count($this->loadedKeys) && true;
     }
 }

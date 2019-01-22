@@ -4,6 +4,8 @@ declare(strict_types=1);
 
 namespace SAML2\XML;
 
+use DOMElement;
+
 use SAML2\DOMDocumentFactory;
 use SAML2\Utils;
 
@@ -41,7 +43,7 @@ class Chunk implements \Serializable
      *
      * @param \DOMElement $xml The element we should copy.
      */
-    public function __construct(\DOMElement $xml)
+    public function __construct(DOMElement $xml)
     {
         $this->localName = $xml->localName;
         $this->namespaceURI = $xml->namespaceURI;
@@ -55,7 +57,7 @@ class Chunk implements \Serializable
      *
      * @return \DOMElement This element.
      */
-    public function getXML()
+    public function getXML() : DOMElement
     {
         return $this->xml;
     }
@@ -67,7 +69,7 @@ class Chunk implements \Serializable
      * @param  \DOMElement $parent The element we should append this element to.
      * @return \DOMElement The new element.
      */
-    public function toXML(\DOMElement $parent) : \DOMElement
+    public function toXML(DOMElement $parent) : DOMElement
     {
         return Utils::copyElement($this->xml, $parent);
     }
@@ -90,7 +92,7 @@ class Chunk implements \Serializable
      * @param string $localName
      * @return void
      */
-    public function setLocalName(string $localName)
+    public function setLocalName(string $localName) : void
     {
         $this->localName = $localName;
     }
@@ -101,7 +103,7 @@ class Chunk implements \Serializable
      *
      * @return string|null
      */
-    public function getNamespaceURI()
+    public function getNamespaceURI() : ?string
     {
         return $this->namespaceURI;
     }
@@ -113,7 +115,7 @@ class Chunk implements \Serializable
      * @param string|null $namespaceURI
      * @return void
      */
-    public function setNamespaceURI(string $namespaceURI = null)
+    public function setNamespaceURI(string $namespaceURI = null) : void
     {
         $this->namespaceURI = $namespaceURI;
     }
@@ -138,7 +140,7 @@ class Chunk implements \Serializable
      *
      * Type hint not possible due to upstream method signature
      */
-    public function unserialize($serialized)
+    public function unserialize($serialized) : void
     {
         $doc = DOMDocumentFactory::fromString(unserialize($serialized));
         $this->xml = $doc->documentElement;

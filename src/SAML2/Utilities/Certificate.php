@@ -14,7 +14,6 @@ class Certificate
      */
     const CERTIFICATE_PATTERN = '/^-----BEGIN CERTIFICATE-----([^-]*)^-----END CERTIFICATE-----/m';
 
-
     /**
      * @param string $certificate
      *
