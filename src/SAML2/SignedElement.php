@@ -27,7 +27,8 @@ abstract class SignedElement
      *
      * @var array
      */
-    protected $certificates;
+    protected $certificates = [];
+
 
     /**
      * Validate this element against a public key.
@@ -36,7 +37,7 @@ abstract class SignedElement
      * but cannot be verified, an exception will be thrown.
      *
      * @param  XMLSecurityKey $key The key we should check against.
-     * @return bool        true if successful, false if we don't have a signature that can be verified.
+     * @return bool True if successful, false if we don't have a signature that can be verified.
      */
     abstract public function validate(XMLSecurityKey $key) : bool;
 

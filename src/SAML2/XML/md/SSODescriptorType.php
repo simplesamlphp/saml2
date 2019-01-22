@@ -54,8 +54,8 @@ abstract class SSODescriptorType extends RoleDescriptor
     /**
      * Initialize a SSODescriptor.
      *
-     * @param string          $elementName The name of this element.
-     * @param \DOMElement|null $xml         The XML element we should load.
+     * @param string $elementName The name of this element.
+     * @param \DOMElement|null $xml The XML element we should load.
      */
     protected function __construct(string $elementName, \DOMElement $xml = null)
     {
@@ -65,14 +65,17 @@ abstract class SSODescriptorType extends RoleDescriptor
             return;
         }
 
+        /** @var \DOMElement $ep */
         foreach (Utils::xpQuery($xml, './saml_metadata:ArtifactResolutionService') as $ep) {
             $this->addArtifactResolutionService(new IndexedEndpointType($ep));
         }
 
+        /** @var \DOMElement $ep */
         foreach (Utils::xpQuery($xml, './saml_metadata:SingleLogoutService') as $ep) {
             $this->addSingleLogoutService(new EndpointType($ep));
         }
 
+        /** @var \DOMElement $ep */
         foreach (Utils::xpQuery($xml, './saml_metadata:ManageNameIDService') as $ep) {
             $this->addManageNameIDService(new EndpointType($ep));
         }
@@ -83,6 +86,7 @@ abstract class SSODescriptorType extends RoleDescriptor
 
     /**
      * Collect the value of the ArtifactResolutionService-property
+     *
      * @return \SAML2\XML\md\IndexedEndpointType[]
      */
     public function getArtifactResolutionService() : array
@@ -93,6 +97,7 @@ abstract class SSODescriptorType extends RoleDescriptor
 
     /**
      * Set the value of the ArtifactResolutionService-property
+     *
      * @param \SAML2\XML\md\IndexedEndpointType[] $artifactResolutionService
      * @return void
      */
@@ -104,6 +109,7 @@ abstract class SSODescriptorType extends RoleDescriptor
 
     /**
      * Add the value to the ArtifactResolutionService-property
+     *
      * @param \SAML2\XML\md\IndexedEndpointType $artifactResolutionService
      * @return void
      */
@@ -115,6 +121,7 @@ abstract class SSODescriptorType extends RoleDescriptor
 
     /**
      * Collect the value of the SingleLogoutService-property
+     *
      * @return \SAML2\XML\md\EndpointType[]
      */
     public function getSingleLogoutService() : array
@@ -125,6 +132,7 @@ abstract class SSODescriptorType extends RoleDescriptor
 
     /**
      * Set the value of the SingleLogoutService-property
+     *
      * @param \SAML2\XML\md\EndpointType[] $singleLogoutService
      * @return void
      */
@@ -136,6 +144,7 @@ abstract class SSODescriptorType extends RoleDescriptor
 
     /**
      * Add the value to the SingleLogoutService-property
+     *
      * @param \SAML2\XML\md\EndpointType $singleLogoutService
      * @return void
      */
@@ -147,6 +156,7 @@ abstract class SSODescriptorType extends RoleDescriptor
 
     /**
      * Collect the value of the ManageNameIDService-property
+     *
      * @return \SAML2\XML\md\EndpointType[]
      */
     public function getManageNameIDService() : array
@@ -157,6 +167,7 @@ abstract class SSODescriptorType extends RoleDescriptor
 
     /**
      * Set the value of the ManageNameIDService-property
+     *
      * @param \SAML2\XML\md\EndpointType[] $manageNameIDService
      * @return void
      */
@@ -168,6 +179,7 @@ abstract class SSODescriptorType extends RoleDescriptor
 
     /**
      * Add the value to the ManageNameIDService-property
+     *
      * @param \SAML2\XML\md\EndpointType $manageNameIDService
      * @return void
      */
@@ -179,6 +191,7 @@ abstract class SSODescriptorType extends RoleDescriptor
 
     /**
      * Collect the value of the NameIDFormat-property
+     *
      * @return string[]
      */
     public function getNameIDFormat() : array
@@ -189,6 +202,7 @@ abstract class SSODescriptorType extends RoleDescriptor
 
     /**
      * Set the value of the NameIDFormat-property
+     *
      * @param string[] $nameIDFormat
      * @return void
      */
@@ -208,19 +222,19 @@ abstract class SSODescriptorType extends RoleDescriptor
     {
         $e = parent::toXML($parent);
 
-        foreach ($this->getArtifactResolutionService() as $ep) {
+        foreach ($this->ArtifactResolutionService as $ep) {
             $ep->toXML($e, 'md:ArtifactResolutionService');
         }
 
-        foreach ($this->getSingleLogoutService() as $ep) {
+        foreach ($this->SingleLogoutService as $ep) {
             $ep->toXML($e, 'md:SingleLogoutService');
         }
 
-        foreach ($this->getManageNameIDService() as $ep) {
+        foreach ($this->ManageNameIDService as $ep) {
             $ep->toXML($e, 'md:ManageNameIDService');
         }
 
-        Utils::addStrings($e, Constants::NS_MD, 'md:NameIDFormat', false, $this->getNameIDFormat());
+        Utils::addStrings($e, Constants::NS_MD, 'md:NameIDFormat', false, $this->NameIDFormat);
 
         return $e;
     }

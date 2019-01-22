@@ -20,7 +20,7 @@ class LogoutRequest extends Request
      *
      * @var int|null
      */
-    private $notOnOrAfter;
+    private $notOnOrAfter = null;
 
     /**
      * The encrypted NameID in the request.
@@ -29,21 +29,21 @@ class LogoutRequest extends Request
      *
      * @var \DOMElement|null
      */
-    private $encryptedNameId;
+    private $encryptedNameId = null;
 
     /**
      * The name identifier of the session that should be terminated.
      *
-     * @var \SAML2\XML\saml\NameID
+     * @var \SAML2\XML\saml\NameID|null
      */
-    private $nameId;
+    private $nameId = null;
 
     /**
      * The SessionIndexes of the sessions that should be terminated.
      *
      * @var array
      */
-    private $sessionIndexes;
+    private $sessionIndexes = [];
 
 
     /**
@@ -63,23 +63,24 @@ class LogoutRequest extends Request
         }
 
         if ($xml->hasAttribute('NotOnOrAfter')) {
-            $this->setNotOnOrAfter(Utils::xsDateTimeToTimestamp($xml->getAttribute('NotOnOrAfter')));
+            $this->notOnOrAfter = Utils::xsDateTimeToTimestamp($xml->getAttribute('NotOnOrAfter'));
         }
 
+        /** @var \DOMElement[] $nameId */
         $nameId = Utils::xpQuery($xml, './saml_assertion:NameID | ./saml_assertion:EncryptedID/xenc:EncryptedData');
         if (empty($nameId)) {
             throw new \Exception('Missing <saml:NameID> or <saml:EncryptedID> in <samlp:LogoutRequest>.');
         } elseif (count($nameId) > 1) {
             throw new \Exception('More than one <saml:NameID> or <saml:EncryptedD> in <samlp:LogoutRequest>.');
         }
-        $nameId = $nameId[0];
-        if ($nameId->localName === 'EncryptedData') {
+        if ($nameId[0]->localName === 'EncryptedData') {
             /* The NameID element is encrypted. */
-            $this->setEncryptedNameId($nameId);
+            $this->encryptedNameId = $nameId[0];
         } else {
-            $this->setNameId(new NameID($nameId));
+            $this->nameId = new NameID($nameId[0]);
         }
 
+        /** @var \DOMElement[] $sessionIndexes */
         $sessionIndexes = Utils::xpQuery($xml, './saml_protocol:SessionIndex');
         foreach ($sessionIndexes as $sessionIndex) {
             $this->sessionIndexes[] = trim($sessionIndex->textContent);
@@ -117,7 +118,7 @@ class LogoutRequest extends Request
      */
     public function isNameIdEncrypted() : bool
     {
-        if ($this->getEncryptedNameId() !== null) {
+        if ($this->encryptedNameId !== null) {
             return true;
         }
 
@@ -133,11 +134,15 @@ class LogoutRequest extends Request
      */
     public function encryptNameId(XMLSecurityKey $key)
     {
+        if ($this->nameId === null) {
+            throw new \Exception('Cannot encrypt NameID without a NameID set.');
+        }
         /* First create a XML representation of the NameID. */
         $doc = DOMDocumentFactory::create();
         $root = $doc->createElement('root');
         $doc->appendChild($root);
-        $this->getNameId()->toXML($root);
+        $this->nameId->toXML($root);
+        /** @var \DOMElement $nameId */
         $nameId = $root->firstChild;
 
         Utils::getContainer()->debugMessage($nameId, 'encrypt');
@@ -151,30 +156,33 @@ class LogoutRequest extends Request
         $symmetricKey->generateSessionKey();
         $enc->encryptKey($key, $symmetricKey);
 
-        $this->setEncryptedNameId($enc->encryptNode($symmetricKey));
-        $this->setNameId(null);
+        /**
+         * @var \DOMElement encryptedNameId
+         * @psalm-suppress UndefinedClass
+         */
+        $this->encryptedNameId = $enc->encryptNode($symmetricKey);
+        $this->nameId = null;
     }
 
 
     /**
      * Decrypt the NameID in the LogoutRequest.
      *
-     * @param XMLSecurityKey $key       The decryption key.
-     * @param array          $blacklist Blacklisted decryption algorithms.
+     * @param XMLSecurityKey $key The decryption key.
+     * @param array $blacklist Blacklisted decryption algorithms.
      * @return void
      */
     public function decryptNameId(XMLSecurityKey $key, array $blacklist = [])
     {
-        if ($this->getEncryptedNameId() === null) {
+        if ($this->encryptedNameId === null) {
             /* No NameID to decrypt. */
             return;
         }
 
-        $nameId = Utils::decryptElement($this->getEncryptedNameId(), $key, $blacklist);
+        $nameId = Utils::decryptElement($this->encryptedNameId, $key, $blacklist);
         Utils::getContainer()->debugMessage($nameId, 'decrypt');
-        $this->setNameId(new NameID($nameId));
-
-        $this->setEncryptedNameId(null);
+        $this->nameId = new NameID($nameId);
+        $this->encryptedNameId = null;
     }
 
 
@@ -182,11 +190,11 @@ class LogoutRequest extends Request
      * Retrieve the name identifier of the session that should be terminated.
      *
      * @throws \Exception
-     * @return \SAML2\XML\saml\NameID The name identifier of the session that should be terminated.
+     * @return \SAML2\XML\saml\NameID|null The name identifier of the session that should be terminated.
      */
-    public function getNameId() : NameID
+    public function getNameId()
     {
-        if ($this->getEncryptedNameId() !== null) {
+        if ($this->encryptedNameId !== null) {
             throw new \Exception('Attempted to retrieve encrypted NameID without decrypting it first.');
         }
 
@@ -197,35 +205,12 @@ class LogoutRequest extends Request
     /**
      * Set the name identifier of the session that should be terminated.
      *
-     * @param \SAML2\XML\saml\NameID|null $nameId The name identifier of the session that should be terminated.
+     * @param \SAML2\XML\saml\NameID $nameId The name identifier of the session that should be terminated.
      * @return void
      */
-    public function setNameId(NameID $nameId = null)
+    public function setNameId(NameID $nameId)
     {
         $this->nameId = $nameId;
-    }
-
-
-    /**
-     * Retrieve the encrypted name identifier.
-     *
-     * @return \DOMElement|null
-     */
-    private function getEncryptedNameId()
-    {
-        return $this->encryptedNameId;
-    }
-
-
-    /**
-     * Set the encrypted name identifier.
-     *
-     * @param \DOMElement|null $nameId The name identifier of the session that should be terminated.
-     * @return void
-     */
-    private function setEncryptedNameId(\DOMElement $nameId = null)
-    {
-        $this->encryptedNameId = $nameId;
     }
 
 
@@ -290,18 +275,22 @@ class LogoutRequest extends Request
      */
     public function toUnsignedXML() : \DOMElement
     {
+        if ($this->encryptedNameId === null && $this->nameId === null) {
+            throw new \Exception('Cannot convert LogoutRequest to XML without a NameID set.');
+        }
+
         $root = parent::toUnsignedXML();
 
         if ($this->notOnOrAfter !== null) {
-            $root->setAttribute('NotOnOrAfter', gmdate('Y-m-d\TH:i:s\Z', $this->getNotOnOrAfter()));
+            $root->setAttribute('NotOnOrAfter', gmdate('Y-m-d\TH:i:s\Z', $this->notOnOrAfter));
         }
 
-        if ($this->getEncryptedNameId() === null) {
+        if ($this->encryptedNameId === null) {
             $this->nameId->toXML($root);
         } else {
             $eid = $root->ownerDocument->createElementNS(Constants::NS_SAML, 'saml:'.'EncryptedID');
             $root->appendChild($eid);
-            $eid->appendChild($root->ownerDocument->importNode($this->getEncryptedNameId(), true));
+            $eid->appendChild($root->ownerDocument->importNode($this->encryptedNameId, true));
         }
 
         foreach ($this->sessionIndexes as $sessionIndex) {

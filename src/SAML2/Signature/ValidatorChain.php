@@ -28,7 +28,7 @@ class ValidatorChain implements ValidatorInterface
 
 
     /**
-     * @param \Psr\Log\LoggerInterface           $logger
+     * @param \Psr\Log\LoggerInterface $logger
      * @param \SAML2\Signature\ChainedValidator[] $validators
      */
     public function __construct(LoggerInterface $logger, array $validators)
@@ -53,7 +53,7 @@ class ValidatorChain implements ValidatorInterface
 
 
     /**
-     * @param \SAML2\SignedElement             $signedElement
+     * @param \SAML2\SignedElement $signedElement
      * @param \SAML2\Configuration\CertificateProvider $configuration
      *
      * @return bool

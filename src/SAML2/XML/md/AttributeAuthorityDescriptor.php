@@ -77,6 +77,7 @@ class AttributeAuthorityDescriptor extends RoleDescriptor
             return;
         }
 
+        /** @var \DOMElement $ep */
         foreach (Utils::xpQuery($xml, './saml_metadata:AttributeService') as $ep) {
             $this->addAttributeService(new EndpointType($ep));
         }
@@ -84,6 +85,7 @@ class AttributeAuthorityDescriptor extends RoleDescriptor
             throw new \Exception('Must have at least one AttributeService in AttributeAuthorityDescriptor.');
         }
 
+        /** @var \DOMElement $ep */
         foreach (Utils::xpQuery($xml, './saml_metadata:AssertionIDRequestService') as $ep) {
             $this->addAssertionIDRequestService(new EndpointType($ep));
         }
@@ -92,6 +94,7 @@ class AttributeAuthorityDescriptor extends RoleDescriptor
 
         $this->setAttributeProfile(Utils::extractStrings($xml, Constants::NS_MD, 'AttributeProfile'));
 
+        /** @var \DOMElement $a */
         foreach (Utils::xpQuery($xml, './saml_assertion:Attribute') as $a) {
             $this->addAttribute(new Attribute($a));
         }
@@ -100,6 +103,7 @@ class AttributeAuthorityDescriptor extends RoleDescriptor
 
     /**
      * Collect the value of the AttributeService-property
+     *
      * @return \SAML2\XML\md\EndpointType[]
      */
     public function getAttributeService() : array
@@ -110,6 +114,7 @@ class AttributeAuthorityDescriptor extends RoleDescriptor
 
     /**
      * Set the value of the AttributeService-property
+     *
      * @param \SAML2\XML\md\EndpointType[] $attributeService
      * @return void
      */
@@ -121,6 +126,7 @@ class AttributeAuthorityDescriptor extends RoleDescriptor
 
     /**
      * Add the value to the AttributeService-property
+     *
      * @param \SAML2\XML\md\EndpointType $attributeService
      * @return void
      */
@@ -132,6 +138,7 @@ class AttributeAuthorityDescriptor extends RoleDescriptor
 
     /**
      * Collect the value of the NameIDFormat-property
+     *
      * @return string[]
      */
     public function getNameIDFormat() : array
@@ -142,6 +149,7 @@ class AttributeAuthorityDescriptor extends RoleDescriptor
 
     /**
      * Set the value of the NameIDFormat-property
+     *
      * @param string[] $nameIDFormat
      * @return void
      */
@@ -153,6 +161,7 @@ class AttributeAuthorityDescriptor extends RoleDescriptor
 
     /**
      * Collect the value of the AssertionIDRequestService-property
+     *
      * @return \SAML2\XML\md\EndpointType[]
      */
     public function getAssertionIDRequestService() : array
@@ -163,6 +172,7 @@ class AttributeAuthorityDescriptor extends RoleDescriptor
 
     /**
      * Set the value of the AssertionIDRequestService-property
+     *
      * @param \SAML2\XML\md\EndpointType[] $assertionIDRequestService
      * @return void
      */
@@ -174,6 +184,7 @@ class AttributeAuthorityDescriptor extends RoleDescriptor
 
     /**
      * Add the value to the AssertionIDRequestService-property
+     *
      * @param \SAML2\XML\md\EndpointType $assertionIDRequestService
      * @return void
      */
@@ -185,6 +196,7 @@ class AttributeAuthorityDescriptor extends RoleDescriptor
 
     /**
      * Collect the value of the AttributeProfile-property
+     *
      * @return string[]
      */
     public function getAttributeProfile() : array
@@ -195,6 +207,7 @@ class AttributeAuthorityDescriptor extends RoleDescriptor
 
     /**
      * Set the value of the AttributeProfile-property
+     *
      * @param string[] $attributeProfile
      * @return void
      */
@@ -206,6 +219,7 @@ class AttributeAuthorityDescriptor extends RoleDescriptor
 
     /**
      * Collect the value of the Attribute-property
+     *
      * @return \SAML2\XML\saml\Attribute[]
      */
     public function getAttribute() : array
@@ -216,6 +230,7 @@ class AttributeAuthorityDescriptor extends RoleDescriptor
 
     /**
      * Set the value of the Attribute-property
+     *
      * @param \SAML2\XML\saml\Attribute[] $attribute
      * @return void
      */
@@ -227,6 +242,7 @@ class AttributeAuthorityDescriptor extends RoleDescriptor
 
     /**
      * Add the value to the Attribute-property
+     *
      * @param \SAML2\XML\saml\Attribute $attribute
      * @return void
      */
@@ -244,7 +260,7 @@ class AttributeAuthorityDescriptor extends RoleDescriptor
      */
     public function toXML(\DOMElement $parent) : \DOMElement
     {
-        Assert::notEmpty($this->attributeService);
+        Assert::notEmpty($this->AttributeService);
 
         $e = parent::toXML($parent);
 

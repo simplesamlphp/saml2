@@ -39,8 +39,9 @@ class EncryptedAssertion
             return;
         }
 
+        /** @var \DOMElement[] $data */
         $data = Utils::xpQuery($xml, './xenc:EncryptedData');
-        if (count($data) === 0) {
+        if (empty($data)) {
             throw new \Exception('Missing encrypted data in <saml:EncryptedAssertion>.');
         } elseif (count($data) > 1) {
             throw new \Exception('More than one encrypted data element in <saml:EncryptedAssertion>.');
@@ -96,6 +97,10 @@ class EncryptedAssertion
                 throw new \Exception('Unknown key type for encryption: '.$key->type);
         }
 
+        /**
+         * @var \DOMElement encryptedData
+         * @psalm-suppress UndefinedClass
+         */
         $this->encryptedData = $enc->encryptNode($symmetricKey);
     }
 

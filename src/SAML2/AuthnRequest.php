@@ -9,6 +9,7 @@ use RobRichards\XMLSecLibs\XMLSecurityKey;
 
 use SAML2\XML\saml\SubjectConfirmation;
 use SAML2\Exception\InvalidArgumentException;
+use Webmozart\Assert\Assert;
 
 /**
  * Class for SAML 2 authentication request messages.
@@ -22,28 +23,28 @@ class AuthnRequest extends Request
      *
      * @var array
      */
-    private $nameIdPolicy;
+    private $nameIdPolicy = [];
 
     /**
      * Whether the Identity Provider must authenticate the user again.
      *
      * @var bool
      */
-    private $forceAuthn;
+    private $forceAuthn = false;
 
     /**
      * Optional ProviderID attribute
      *
-     * @var string
+     * @var string|null
      */
-    private $ProviderName;
+    private $ProviderName = null;
 
     /**
      * Set to true if this request is passive.
      *
      * @var bool
      */
-    private $isPassive;
+    private $isPassive = false;
 
     /**
      * The list of providerIDs in this request's scoping element
@@ -55,7 +56,7 @@ class AuthnRequest extends Request
     /**
      * The ProxyCount in this request's scoping element
      *
-     * @var int
+     * @var int|null
      */
     private $ProxyCount = null;
 
@@ -119,14 +120,14 @@ class AuthnRequest extends Request
     private $subjectConfirmation = [];
 
     /**
-     * @var string
+     * @var \DOMElement|null
      */
-    private $encryptedNameId;
+    private $encryptedNameId = null;
 
     /**
-     * @var \SAML2\XML\saml\NameID
+     * @var \SAML2\XML\saml\NameID|null
      */
-    private $nameId;
+    private $nameId = null;
 
 
     /**
@@ -138,10 +139,6 @@ class AuthnRequest extends Request
     public function __construct(\DOMElement $xml = null)
     {
         parent::__construct('AuthnRequest', $xml);
-
-        $this->nameIdPolicy = [];
-        $this->forceAuthn = false;
-        $this->isPassive = false;
 
         if ($xml === null) {
             return;
@@ -185,6 +182,7 @@ class AuthnRequest extends Request
      */
     private function parseSubject(\DOMElement $xml)
     {
+        /** @var \DOMElement[] $subject */
         $subject = Utils::xpQuery($xml, './saml_assertion:Subject');
         if (empty($subject)) {
             return;
@@ -195,6 +193,7 @@ class AuthnRequest extends Request
         }
         $subject = $subject[0];
 
+        /** @var \DOMElement[] $nameId */
         $nameId = Utils::xpQuery(
             $subject,
             './saml_assertion:NameID | ./saml_assertion:EncryptedID/xenc:EncryptedData'
@@ -205,13 +204,13 @@ class AuthnRequest extends Request
             throw new \Exception('More than one <saml:NameID> or <saml:EncryptedID> in <saml:Subject>.');
         }
         $nameId = $nameId[0];
-        if ($nameId->localName === 'EncryptedData') {
-            /* The NameID element is encrypted. */
+        if ($nameId->localName === 'EncryptedData') { // the NameID element is encrypted
             $this->encryptedNameId = $nameId;
         } else {
             $this->nameId = new XML\saml\NameID($nameId);
         }
 
+        /** @var \DOMElement[] $subjectConfirmation */
         $subjectConfirmation = Utils::xpQuery($subject, './saml_assertion:SubjectConfirmation');
         foreach ($subjectConfirmation as $sc) {
             $this->subjectConfirmation[] = new SubjectConfirmation($sc);
@@ -226,6 +225,7 @@ class AuthnRequest extends Request
      */
     protected function parseNameIdPolicy(\DOMElement $xml)
     {
+        /** @var \DOMElement[] $nameIdPolicy */
         $nameIdPolicy = Utils::xpQuery($xml, './saml_protocol:NameIDPolicy');
         if (empty($nameIdPolicy)) {
             return;
@@ -250,6 +250,7 @@ class AuthnRequest extends Request
      */
     protected function parseRequestedAuthnContext(\DOMElement $xml)
     {
+        /** @var \DOMElement[] $requestedAuthnContext */
         $requestedAuthnContext = Utils::xpQuery($xml, './saml_protocol:RequestedAuthnContext');
         if (empty($requestedAuthnContext)) {
             return;
@@ -262,6 +263,7 @@ class AuthnRequest extends Request
             'Comparison'           => Constants::COMPARISON_EXACT,
         ];
 
+        /** @var \DOMElement[] $accr */
         $accr = Utils::xpQuery($requestedAuthnContext, './saml_assertion:AuthnContextClassRef');
         foreach ($accr as $i) {
             $rac['AuthnContextClassRef'][] = trim($i->textContent);
@@ -282,6 +284,7 @@ class AuthnRequest extends Request
      */
     protected function parseScoping(\DOMElement $xml)
     {
+        /** @var \DOMElement[] $scoping */
         $scoping = Utils::xpQuery($xml, './saml_protocol:Scoping');
         if (empty($scoping)) {
             return;
@@ -292,6 +295,7 @@ class AuthnRequest extends Request
         if ($scoping->hasAttribute('ProxyCount')) {
             $this->ProxyCount = (int) $scoping->getAttribute('ProxyCount');
         }
+        /** @var \DOMElement[] $idpEntries */
         $idpEntries = Utils::xpQuery($scoping, './saml_protocol:IDPList/saml_protocol:IDPEntry');
 
         foreach ($idpEntries as $idpEntry) {
@@ -301,6 +305,7 @@ class AuthnRequest extends Request
             $this->IDPList[] = $idpEntry->getAttribute('ProviderID');
         }
 
+        /** @var \DOMElement[] $requesterIDs */
         $requesterIDs = Utils::xpQuery($scoping, './saml_protocol:RequesterID');
         foreach ($requesterIDs as $requesterID) {
             $this->RequesterID[] = trim($requesterID->textContent);
@@ -314,18 +319,21 @@ class AuthnRequest extends Request
      */
     protected function parseConditions(\DOMElement $xml)
     {
+        /** @var \DOMElement[] $conditions */
         $conditions = Utils::xpQuery($xml, './saml_assertion:Conditions');
         if (empty($conditions)) {
             return;
         }
         $conditions = $conditions[0];
 
+        /** @var \DOMElement[] $ar */
         $ar = Utils::xpQuery($conditions, './saml_assertion:AudienceRestriction');
         if (empty($ar)) {
             return;
         }
         $ar = $ar[0];
 
+        /** @var \DOMElement[] $audiences */
         $audiences = Utils::xpQuery($ar, './saml_assertion:Audience');
         $this->audiences = array();
         foreach ($audiences as $a) {
@@ -399,9 +407,9 @@ class AuthnRequest extends Request
     /**
      * Retrieve the value of the ProviderName attribute.
      *
-     * @return string The ProviderName attribute.
+     * @return string|null The ProviderName attribute.
      */
-    public function getProviderName() : string
+    public function getProviderName()
     {
         return $this->ProviderName;
     }
@@ -458,7 +466,7 @@ class AuthnRequest extends Request
      * Set the audiences to send in the request.
      * This may be null, in which case no audience will be sent.
      *
-     * @param array|null $audiences The audiences.
+     * @param array $audiences The audiences.
      * @return void
      */
     public function setAudiences(array $audiences)
@@ -690,11 +698,15 @@ class AuthnRequest extends Request
      */
     public function encryptNameId(XMLSecurityKey $key)
     {
+        Assert::notNull($this->nameId, 'Cannot encrypt NameID if no NameID has been set.');
+
         /* First create a XML representation of the NameID. */
         $doc  = new \DOMDocument();
         $root = $doc->createElement('root');
         $doc->appendChild($root);
+        /** @psalm-suppress PossiblyNullReference */
         $this->nameId->toXML($root);
+        /** @var \DOMElement $nameId */
         $nameId = $root->firstChild;
 
         Utils::getContainer()->debugMessage($nameId, 'encrypt');
@@ -710,6 +722,10 @@ class AuthnRequest extends Request
         $symmetricKey->generateSessionKey();
         $enc->encryptKey($key, $symmetricKey);
 
+        /**
+         * @var \DOMElement encryptedNameId
+         * @psalm-suppress UndefinedClass
+         */
         $this->encryptedNameId = $enc->encryptNode($symmetricKey);
         $this->nameId = null;
     }

@@ -4,6 +4,8 @@ declare(strict_types=1);
 
 namespace SAML2\XML\saml;
 
+use Webmozart\Assert\Assert;
+
 use SAML2\Constants;
 use SAML2\Utils;
 
@@ -17,9 +19,9 @@ class SubjectConfirmation
     /**
      * The method we can use to verify this Subject.
      *
-     * @var string
+     * @var string|null
      */
-    private $Method;
+    private $Method = null;
 
     /**
      * The NameID of the entity that can use this element to verify the Subject.
@@ -51,29 +53,32 @@ class SubjectConfirmation
         if (!$xml->hasAttribute('Method')) {
             throw new \Exception('SubjectConfirmation element without Method attribute.');
         }
-        $this->setMethod($xml->getAttribute('Method'));
+        $this->Method = $xml->getAttribute('Method');
 
+        /** @var \DOMElement[] $nid */
         $nid = Utils::xpQuery($xml, './saml_assertion:NameID');
         if (count($nid) > 1) {
             throw new \Exception('More than one NameID in a SubjectConfirmation element.');
         } elseif (!empty($nid)) {
-            $this->setNameID(new NameID($nid[0]));
+            $this->NameID = new NameID($nid[0]);
         }
 
+        /** @var \DOMElement[] $scd */
         $scd = Utils::xpQuery($xml, './saml_assertion:SubjectConfirmationData');
         if (count($scd) > 1) {
             throw new \Exception('More than one SubjectConfirmationData child in a SubjectConfirmation element.');
         } elseif (!empty($scd)) {
-            $this->setSubjectConfirmationData(new SubjectConfirmationData($scd[0]));
+            $this->SubjectConfirmationData = new SubjectConfirmationData($scd[0]);
         }
     }
 
 
     /**
      * Collect the value of the Method-property
-     * @return string
+     *
+     * @return string|null
      */
-    public function getMethod() : string
+    public function getMethod()
     {
         return $this->Method;
     }
@@ -81,6 +86,7 @@ class SubjectConfirmation
 
     /**
      * Set the value of the Method-property
+     *
      * @param string $method
      * @return void
      */
@@ -92,6 +98,7 @@ class SubjectConfirmation
 
     /**
      * Collect the value of the NameID-property
+     *
      * @return \SAML2\XML\saml\NameID|null
      */
     public function getNameID()
@@ -102,7 +109,8 @@ class SubjectConfirmation
 
     /**
      * Set the value of the NameID-property
-     * @param \SAML2\XML\saml\NameID|null $nameId
+     *
+     * @param \SAML2\XML\saml\NameID $nameId
      * @return void
      */
     public function setNameID(NameID $nameId = null)
@@ -113,6 +121,7 @@ class SubjectConfirmation
 
     /**
      * Collect the value of the SubjectConfirmationData-property
+     *
      * @return \SAML2\XML\saml\SubjectConfirmationData|null
      */
     public function getSubjectConfirmationData()
@@ -123,6 +132,7 @@ class SubjectConfirmation
 
     /**
      * Set the value of the SubjectConfirmationData-property
+     *
      * @param \SAML2\XML\saml\SubjectConfirmationData|null $subjectConfirmationData
      * @return void
      */
@@ -140,16 +150,19 @@ class SubjectConfirmation
      */
     public function toXML(\DOMElement $parent) : \DOMElement
     {
+        Assert::notNull($this->Method, "Cannot convert SubjectConfirmation to XML without a Method set.");
+
         $e = $parent->ownerDocument->createElementNS(Constants::NS_SAML, 'saml:SubjectConfirmation');
         $parent->appendChild($e);
 
-        $e->setAttribute('Method', $this->getMethod());
+        /** @psalm-suppress PossiblyNullArgument */
+        $e->setAttribute('Method', $this->Method);
 
-        if ($this->getNameID() !== null) {
-            $this->getNameID()->toXML($e);
+        if ($this->NameID !== null) {
+            $this->NameID->toXML($e);
         }
-        if ($this->getSubjectConfirmationData() !== null) {
-            $this->getSubjectConfirmationData()->toXML($e);
+        if ($this->SubjectConfirmationData !== null) {
+            $this->SubjectConfirmationData->toXML($e);
         }
 
         return $e;

@@ -20,7 +20,9 @@ class ArrayCollection implements Collection
 
 
     /**
-     * @return void
+     * ArrayCollection constructor.
+     *
+     * @param array $elements
      */
     public function __construct(array $elements = [])
     {
@@ -29,6 +31,8 @@ class ArrayCollection implements Collection
 
 
     /**
+     * @param mixed $element
+     *
      * @return void
      */
     public function add($element)
@@ -38,6 +42,8 @@ class ArrayCollection implements Collection
 
 
     /**
+     * @param mixed $key
+     *
      * @return mixed|null
      */
     public function get($key)
@@ -47,6 +53,8 @@ class ArrayCollection implements Collection
 
 
     /**
+     * @param \Closure $f
+     *
      * @return ArrayCollection
      */
     public function filter(\Closure $f) : Collection
@@ -56,6 +64,8 @@ class ArrayCollection implements Collection
 
 
     /**
+     * @param mixed $key
+     * @param mixed $value
      * @return void
      */
     public function set($key, $value)
@@ -65,26 +75,23 @@ class ArrayCollection implements Collection
 
 
     /**
-     * @return mixed
+     * @param mixed $element
+     *
+     * @return void
      */
     public function remove($element)
     {
         $key = array_search($element, $this->elements);
-
         if ($key === false) {
-            return false;
+            return;
         }
-
-        $removed = $this->elements[$key];
         unset($this->elements[$key]);
-
-        return $removed;
     }
 
 
     /**
      * @throws RuntimeException
-     * @return mixed
+     * @return bool|mixed
      */
     public function getOnlyElement()
     {
@@ -101,7 +108,7 @@ class ArrayCollection implements Collection
 
 
     /**
-     * @return mixed
+     * @return bool|mixed
      */
     public function first()
     {
@@ -110,7 +117,7 @@ class ArrayCollection implements Collection
 
 
     /**
-     * @return mixed
+     * @return bool|mixed
      */
     public function last()
     {
@@ -119,6 +126,8 @@ class ArrayCollection implements Collection
 
 
     /**
+     * @param \Closure $function
+     *
      * @return ArrayCollection
      */
     public function map(\Closure $function) : ArrayCollection
@@ -147,6 +156,7 @@ class ArrayCollection implements Collection
 
     /**
      * @param mixed $offset
+     *
      * @return bool
      */
     public function offsetExists($offset) : bool
@@ -157,6 +167,7 @@ class ArrayCollection implements Collection
 
     /**
      * @param mixed $offset
+     *
      * @return mixed
      */
     public function offsetGet($offset)
@@ -177,7 +188,7 @@ class ArrayCollection implements Collection
 
 
     /**
-     * @param mixed
+     * @param $offset
      * @return void
      */
     public function offsetUnset($offset)

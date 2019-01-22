@@ -4,8 +4,8 @@ declare(strict_types=1);
 
 namespace SAML2\Certificate;
 
-use SAML2\Exception\InvalidArgumentException;
 use SAML2\Utilities\ArrayCollection;
+use Webmozart\Assert\Assert;
 
 /**
  * Simple collection object for transporting keys
@@ -15,6 +15,7 @@ class KeyCollection extends ArrayCollection
     /**
      * Add a key to the collection
      *
+     * @psalm-suppress MoreSpecificImplementedParamType
      * @param \SAML2\Certificate\Key $key
      * @return void
      *
@@ -22,12 +23,7 @@ class KeyCollection extends ArrayCollection
      */
     public function add($key)
     {
-        if (!($key instanceof Key)) {
-            throw InvalidArgumentException::invalidType(
-                'SAML2\Certificate\Key',
-                $key
-            );
-        }
+        Assert::isInstanceOf($key, Key::class);
         parent::add($key);
     }
 }

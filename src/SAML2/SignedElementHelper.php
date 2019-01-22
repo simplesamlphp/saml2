@@ -55,7 +55,7 @@ class SignedElementHelper extends SignedElement
         try {
             $sig = Utils::validateElement($xml);
 
-            if ($sig !== false) {
+            if ($sig) {
                 $this->certificates = $sig['Certificates'];
                 $this->validators[] = [
                     'Function' => ['\SAML2\Utils', 'validateSignature'],
@@ -74,7 +74,7 @@ class SignedElementHelper extends SignedElement
      * This function is used for custom validation extensions
      *
      * @param callable $function The function which should be called.
-     * @param mixed    $data     The data that should be included as the first parameter to the function.
+     * @param mixed $data The data that should be included as the first parameter to the function.
      * @return void
      */
     public function addValidator(callable $function, $data)
@@ -94,6 +94,7 @@ class SignedElementHelper extends SignedElement
      * validation fails.
      *
      * @param  XMLSecurityKey $key The key we should check against.
+     * @return bool True on success, false when we don't have a signature.
      * @throws \Exception
      * @return bool        true on success, false when we don't have a signature.
      */
@@ -207,7 +208,8 @@ class SignedElementHelper extends SignedElement
 
 
     /**
-     * Collect the value of the validUntil-property
+     * Collect the value of the validUntil property.
+     *
      * @return int|null
      */
     public function getValidUntil()
@@ -216,8 +218,10 @@ class SignedElementHelper extends SignedElement
     }
 
     /**
-     * Set the value of the validUntil-property
+     * Set the value of the validUntil property.
+     *
      * @param int|null $validUntil
+     * @return void
      */
     public function setValidUntil(int $validUntil = null)
     {
@@ -226,7 +230,8 @@ class SignedElementHelper extends SignedElement
 
 
     /**
-     * Collect the value of the cacheDuration-property
+     * Collect the value of the cacheDuration property.
+     *
      * @return string|null
      */
     public function getCacheDuration()
@@ -236,8 +241,10 @@ class SignedElementHelper extends SignedElement
 
 
     /**
-     * Set the value of the cacheDuration-property
+     * Set the value of the cacheDuration property.
+     *
      * @param string|null $cacheDuration
+     * @return void
      */
     public function setCacheDuration(string $cacheDuration = null)
     {
@@ -248,11 +255,11 @@ class SignedElementHelper extends SignedElement
     /**
      * Sign the given XML element.
      *
-     * @param \DOMElement      $root         The element we should sign.
-     * @param \DOMElement|null $insertBefore The element we should insert the signature node before.
+     * @param \DOMElement $root The element we should sign.
+     * @param \DOMNode|null $insertBefore The element we should insert the signature node before.
      * @return \DOMElement|null
      */
-    protected function signElement(\DOMElement $root, \DOMElement $insertBefore = null)
+    protected function signElement(\DOMElement $root, \DOMNode $insertBefore = null)
     {
         if ($this->signatureKey === null) {
             /* We cannot sign this element. */

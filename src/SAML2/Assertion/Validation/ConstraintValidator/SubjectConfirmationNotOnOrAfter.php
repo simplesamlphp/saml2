@@ -8,6 +8,7 @@ use SAML2\Assertion\Validation\Result;
 use SAML2\Assertion\Validation\SubjectConfirmationConstraintValidator;
 use SAML2\Utilities\Temporal;
 use SAML2\XML\saml\SubjectConfirmation;
+use Webmozart\Assert\Assert;
 
 class SubjectConfirmationNotOnOrAfter implements
     SubjectConfirmationConstraintValidator
@@ -21,7 +22,11 @@ class SubjectConfirmationNotOnOrAfter implements
         SubjectConfirmation $subjectConfirmation,
         Result $result
     ) {
-        $notOnOrAfter = $subjectConfirmation->getSubjectConfirmationData()->getNotOnOrAfter();
+        $data = $subjectConfirmation->getSubjectConfirmationData();
+        Assert::notNull($data);
+
+        /** @psalm-suppress PossiblyNullReference */
+        $notOnOrAfter = $data->getNotOnOrAfter();
         if ($notOnOrAfter && $notOnOrAfter <= Temporal::getTime() - 60) {
             $result->addError('NotOnOrAfter in SubjectConfirmationData is in the past');
         }

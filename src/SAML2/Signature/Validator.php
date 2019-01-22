@@ -33,7 +33,8 @@ class Validator
 
     /**
      * @param SignedElement $signedElement
-     * @oaram CertificateProvider $configuration
+     * @param CertificateProvider $configuration
+     *
      * @return bool
      */
     public function hasValidSignature(

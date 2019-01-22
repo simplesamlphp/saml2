@@ -81,30 +81,35 @@ class IDPSSODescriptor extends SSODescriptorType
             return;
         }
 
-        $this->setWantAuthnRequestsSigned(Utils::parseBoolean($xml, 'WantAuthnRequestsSigned', null));
+        $this->WantAuthnRequestsSigned = Utils::parseBoolean($xml, 'WantAuthnRequestsSigned', null);
 
+        /** @var \DOMElement $ep */
         foreach (Utils::xpQuery($xml, './saml_metadata:SingleSignOnService') as $ep) {
-            $this->addSingleSignOnService(new EndpointType($ep));
+            $this->SingleSignOnService[] = new EndpointType($ep);
         }
 
+        /** @var \DOMElement $ep */
         foreach (Utils::xpQuery($xml, './saml_metadata:NameIDMappingService') as $ep) {
-            $this->addNameIDMappingService(new EndpointType($ep));
+            $this->NameIDMappingService[] = new EndpointType($ep);
         }
 
+        /** @var \DOMElement $ep */
         foreach (Utils::xpQuery($xml, './saml_metadata:AssertionIDRequestService') as $ep) {
-            $this->addAssertionIDRequestService(new EndpointType($ep));
+            $this->AssertionIDRequestService[] = new EndpointType($ep);
         }
 
-        $this->setAttributeProfile(Utils::extractStrings($xml, Constants::NS_MD, 'AttributeProfile'));
+        $this->AttributeProfile = Utils::extractStrings($xml, Constants::NS_MD, 'AttributeProfile');
 
+        /** @var \DOMElement $a */
         foreach (Utils::xpQuery($xml, './saml_assertion:Attribute') as $a) {
-            $this->addAttribute(new Attribute($a));
+            $this->Attribute[] = new Attribute($a);
         }
     }
 
 
     /**
      * Collect the value of the WantAuthnRequestsSigned-property
+     *
      * @return bool|null
      */
     public function wantAuthnRequestsSigned()
@@ -115,6 +120,7 @@ class IDPSSODescriptor extends SSODescriptorType
 
     /**
      * Set the value of the WantAuthnRequestsSigned-property
+     *
      * @param bool|null $flag
      * @return void
      */
@@ -126,6 +132,7 @@ class IDPSSODescriptor extends SSODescriptorType
 
     /**
      * Collect the value of the SingleSignOnService-property
+     *
      * @return \SAML2\XML\md\EndpointType[]
      */
     public function getSingleSignOnService() : array
@@ -136,6 +143,7 @@ class IDPSSODescriptor extends SSODescriptorType
 
     /**
      * Set the value of the SingleSignOnService-property
+     *
      * @param array $singleSignOnService
      * @return void
      */
@@ -147,6 +155,7 @@ class IDPSSODescriptor extends SSODescriptorType
 
     /**
      * Add the value to the SingleSignOnService-property
+     *
      * @param \SAML2\XML\md\EndpointType $singleSignOnService
      * @return void
      */
@@ -158,6 +167,7 @@ class IDPSSODescriptor extends SSODescriptorType
 
     /**
      * Collect the value of the NameIDMappingService-property
+     *
      * @return \SAML2\XML\md\EndpointType[]
      */
     public function getNameIDMappingService() : array
@@ -168,6 +178,7 @@ class IDPSSODescriptor extends SSODescriptorType
 
     /**
      * Set the value of the NameIDMappingService-property
+     *
      * @param array $nameIDMappingService
      * @return void
      */
@@ -179,6 +190,7 @@ class IDPSSODescriptor extends SSODescriptorType
 
     /**
      * Add the value to the NameIDMappingService-property
+     *
      * @param \SAML2\XML\md\EndpointType $nameIDMappingService
      * @return void
      */
@@ -190,6 +202,7 @@ class IDPSSODescriptor extends SSODescriptorType
 
     /**
      * Collect the value of the AssertionIDRequestService-property
+     *
      * @return \SAML2\XML\md\EndpointType[]
      */
     public function getAssertionIDRequestService() : array
@@ -200,6 +213,7 @@ class IDPSSODescriptor extends SSODescriptorType
 
     /**
      * Set the value of the AssertionIDRequestService-property
+     *
      * @param array $assertionIDRequestService
      * @return void
      */
@@ -211,6 +225,7 @@ class IDPSSODescriptor extends SSODescriptorType
 
     /**
      * Add the value to the AssertionIDRequestService-property
+     *
      * @param \SAML2\XML\md\EndpointType $assertionIDRequestService
      * @return void
      */
@@ -232,6 +247,7 @@ class IDPSSODescriptor extends SSODescriptorType
 
     /**
      * Set the value of the AttributeProfile-property
+     *
      * @param array $attributeProfile
      * @return void
      */
@@ -243,6 +259,7 @@ class IDPSSODescriptor extends SSODescriptorType
 
     /**
      * Collect the value of the Attribute-property
+     *
      * @return \SAML2\XML\saml\Attribute[]
      */
     public function getAttribute() : array
@@ -253,6 +270,7 @@ class IDPSSODescriptor extends SSODescriptorType
 
     /**
      * Set the value of the Attribute-property
+     *
      * @param array $attribute
      * @return void
      */
@@ -264,6 +282,7 @@ class IDPSSODescriptor extends SSODescriptorType
 
     /**
      * Addthe value to the Attribute-property
+     *
      * @param \SAML2\XML\saml\Attribute $attribute
      * @return void
      */
@@ -283,27 +302,25 @@ class IDPSSODescriptor extends SSODescriptorType
     {
         $e = parent::toXML($parent);
 
-        if ($this->WantAuthnRequestsSigned() === true) {
-            $e->setAttribute('WantAuthnRequestsSigned', 'true');
-        } elseif ($this->WantAuthnRequestsSigned() === false) {
-            $e->setAttribute('WantAuthnRequestsSigned', 'false');
+        if (is_bool($this->WantAuthnRequestsSigned)) {
+            $e->setAttribute('WantAuthnRequestsSigned', $this->WantAuthnRequestsSigned ? 'true' : 'false');
         }
 
-        foreach ($this->getSingleSignOnService() as $ep) {
+        foreach ($this->SingleSignOnService as $ep) {
             $ep->toXML($e, 'md:SingleSignOnService');
         }
 
-        foreach ($this->getNameIDMappingService() as $ep) {
+        foreach ($this->NameIDMappingService as $ep) {
             $ep->toXML($e, 'md:NameIDMappingService');
         }
 
-        foreach ($this->getAssertionIDRequestService() as $ep) {
+        foreach ($this->AssertionIDRequestService as $ep) {
             $ep->toXML($e, 'md:AssertionIDRequestService');
         }
 
-        Utils::addStrings($e, Constants::NS_MD, 'md:AttributeProfile', false, $this->getAttributeProfile());
+        Utils::addStrings($e, Constants::NS_MD, 'md:AttributeProfile', false, $this->AttributeProfile);
 
-        foreach ($this->getAttribute() as $a) {
+        foreach ($this->Attribute as $a) {
             $a->toXML($e);
         }
 

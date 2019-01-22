@@ -18,8 +18,9 @@ use \SimpleSAML\Store;
  */
 class HTTPArtifact extends Binding
 {
+
     /**
-     * @var \SimpleSAML\Configuration
+     * @var mixed
      */
     private $spMetadata;
 
@@ -33,13 +34,18 @@ class HTTPArtifact extends Binding
      */
     public function getRedirectURL(Message $message) : string
     {
+        /** @psalm-suppress UndefinedClass */
         $store = Store::getInstance();
         if ($store === false) {
             throw new \Exception('Unable to send artifact without a datastore configured.');
         }
 
         $generatedId = pack('H*', bin2hex(openssl_random_pseudo_bytes(20)));
-        $artifact = base64_encode("\x00\x04\x00\x00".sha1($message->getIssuer(), true).$generatedId);
+        $issuer = $message->getIssuer();
+        if ($issuer === null) {
+            throw new \Exception('Cannot get redirect URL, no Issuer set in the message.');
+        }
+        $artifact = base64_encode("\x00\x04\x00\x00".sha1($issuer->getValue(), true).$generatedId);
         $artifactData = $message->toUnsignedXML();
         $artifactDataString = $artifactData->ownerDocument->saveXML($artifactData);
 
@@ -53,7 +59,12 @@ class HTTPArtifact extends Binding
             $params['RelayState'] = $relayState;
         }
 
-        return \SimpleSAML\Utils\HTTP::addURLparameter($message->getDestination(), $params);
+        $destination = $message->getDestination();
+        if ($destination === null) {
+            throw new \Exception('Cannot get redirect URL, no destination set in the message.');
+        }
+        /** @psalm-suppress UndefinedClass */
+        return \SimpleSAML\Utils\HTTP::addURLparameters($destination, $params);
     }
 
 
@@ -90,6 +101,7 @@ class HTTPArtifact extends Binding
             throw new \Exception('Missing SAMLart parameter.');
         }
 
+        /** @psalm-suppress UndefinedClass */
         $metadataHandler = MetaDataStorageHandler::getMetadataHandler();
 
         $idpMetadata = $metadataHandler->getMetaDataConfigForSha1($sourceId, 'saml20-idp-remote');
@@ -117,11 +129,13 @@ class HTTPArtifact extends Binding
 
         /* Set the request attributes */
 
+        /** @psalm-suppress UndefinedClass */
         $ar->setIssuer($this->spMetadata->getString('entityid'));
         $ar->setArtifact($_REQUEST['SAMLart']);
         $ar->setDestination($endpoint['Location']);
 
-        /* Sign the request */
+        // sign the request
+        /** @psalm-suppress UndefinedClass */
         \SimpleSAML\Module\saml\Message::addSign($this->spMetadata, $idpMetadata, $ar); // Shoaib - moved from the SOAPClient.
 
         $soap = new SOAPClient();
@@ -138,7 +152,7 @@ class HTTPArtifact extends Binding
         if ($xml === null) {
             /* Empty ArtifactResponse - possibly because of Artifact replay? */
 
-            return null;
+            throw new \Exception('Empty ArtifactResponse received, maybe a replay?');
         }
 
         $samlResponse = Message::fromXML($xml);
@@ -154,7 +168,10 @@ class HTTPArtifact extends Binding
 
     /**
      * @param \SimpleSAML\Configuration $sp
+     *
      * @return void
+     *
+     * @psalm-suppress UndefinedClass
      */
     public function setSPMetadata(Configuration $sp)
     {

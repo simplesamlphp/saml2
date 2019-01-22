@@ -14,6 +14,7 @@ namespace SAML2;
  */
 class ArtifactResolve extends Request
 {
+    /** @var string */
     private $artifact;
 
 

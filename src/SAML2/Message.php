@@ -52,12 +52,12 @@ abstract class Message extends SignedElement
      *
      * @var string|null
      */
-    private $destination;
+    private $destination = null;
 
     /**
      * The destination URL of this message if it is known.
      *
-     * @var string|null
+     * @var string
      */
     private $consent = Constants::CONSENT_UNSPECIFIED;
 
@@ -66,14 +66,14 @@ abstract class Message extends SignedElement
      *
      * @var \SAML2\XML\saml\Issuer|null
      */
-    private $issuer;
+    private $issuer = null;
 
     /**
      * The RelayState associated with this message.
      *
      * @var string|null
      */
-    private $relayState;
+    private $relayState = null;
 
     /**
      * The \DOMDocument we are currently building.
@@ -86,9 +86,25 @@ abstract class Message extends SignedElement
     protected $document;
 
     /**
+     * The private key we should use to sign the message.
+     *
+     * The private key can be null, in which case the message is sent unsigned.
+     *
+     * @var XMLSecurityKey|null
+     */
+    protected $signatureKey;
+
+    /**
      * @var bool
      */
     protected $messageContainedSignatureUponConstruction = false;
+
+    /**
+     * List of certificates that should be included in the message.
+     *
+     * @var array
+     */
+    protected $certificates;
 
     /**
      * Available methods for validating this message.
@@ -100,7 +116,8 @@ abstract class Message extends SignedElement
     /**
      * @var null|string
      */
-    private $signatureMethod;
+    private $signatureMethod = null;
+
 
 
     /**
@@ -113,8 +130,8 @@ abstract class Message extends SignedElement
      * If no XML element is given, the message is initialized with suitable
      * default values.
      *
-     * @param string           $tagName The tag name of the root element
-     * @param \DOMElement|null $xml     The input message
+     * @param string $tagName The tag name of the root element
+     * @param \DOMElement|null $xml The input message
      *
      * @throws \Exception
      */
@@ -176,8 +193,11 @@ abstract class Message extends SignedElement
     private function validateSignature(\DOMElement $xml)
     {
         try {
-            /** @var null|\DOMAttr $signatureMethod */
+            /** @var \DOMAttr[] $signatureMethod */
             $signatureMethod = Utils::xpQuery($xml, './ds:Signature/ds:SignedInfo/ds:SignatureMethod/@Algorithm');
+            if (empty($signatureMethod)) {
+                throw new \Exception('No Algorithm specified in signature.');
+            }
 
             $sig = Utils::validateElement($xml);
 
@@ -203,7 +223,7 @@ abstract class Message extends SignedElement
      * check the signature against the one included in the query string.
      *
      * @param callable $function The function which should be called
-     * @param mixed    $data     The data that should be included as the first parameter to the function
+     * @param mixed $data The data that should be included as the first parameter to the function
      * @return void
      */
     public function addValidator(callable $function, $data)
@@ -327,10 +347,10 @@ abstract class Message extends SignedElement
      * Most likely (though not required) a value of urn:oasis:names:tc:SAML:2.0:consent.
      *
      * @see \SAML2\Constants
-     * @param string|null $consent
+     * @param string $consent
      * @return void
      */
-    public function setConsent(string $consent = null)
+    public function setConsent(string $consent)
     {
         $this->consent = $consent;
     }
@@ -366,7 +386,7 @@ abstract class Message extends SignedElement
      * @param \SAML2\XML\saml\Issuer|null $issuer The new issuer of this message
      * @return void
      */
-    public function setIssuer(\SAML2\XML\saml\Issuer $issuer = null)
+    public function setIssuer(Issuer $issuer = null)
     {
         $this->issuer = $issuer;
     }
@@ -430,7 +450,7 @@ abstract class Message extends SignedElement
         if ($this->destination !== null) {
             $root->setAttribute('Destination', $this->destination);
         }
-        if ($this->consent !== null && $this->consent !== Constants::CONSENT_UNSPECIFIED) {
+        if ($this->consent !== Constants::CONSENT_UNSPECIFIED) {
             $root->setAttribute('Consent', $this->consent);
         }
 
@@ -438,9 +458,7 @@ abstract class Message extends SignedElement
             $this->issuer->toXML($root);
         }
 
-        if (!empty($this->extensions)) {
-            Extensions::addList($root, $this->extensions);
-        }
+        Extensions::addList($root, $this->extensions);
 
         return $root;
     }

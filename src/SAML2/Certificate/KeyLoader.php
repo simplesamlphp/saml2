@@ -54,8 +54,8 @@ class KeyLoader
 
     /**
      * @param \SAML2\Configuration\CertificateProvider $config
-     * @param null|string                             $usage
-     * @param bool                                    $required
+     * @param null|string $usage
+     * @param bool $required
      * @return \SAML2\Certificate\KeyCollection
      */
     public function loadKeysFromConfiguration(
@@ -90,11 +90,11 @@ class KeyLoader
      * Loads the keys given, optionally excluding keys when a usage is given and they
      * are not configured to be used with the usage given
      *
-     * @param array $configuredKeys
+     * @param array|\Traversable $configuredKeys
      * @param string|null $usage
      * @return void
      */
-    public function loadKeys(array $configuredKeys, string $usage = null)
+    public function loadKeys($configuredKeys, string $usage = null)
     {
         foreach ($configuredKeys as $keyData) {
             if (isset($keyData['X509Certificate'])) {

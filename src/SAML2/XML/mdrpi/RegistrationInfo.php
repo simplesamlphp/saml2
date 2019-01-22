@@ -17,9 +17,9 @@ class RegistrationInfo
     /**
      * The identifier of the metadata registration authority.
      *
-     * @var string
+     * @var string|null
      */
-    private $registrationAuthority;
+    private $registrationAuthority = null;
 
     /**
      * The registration timestamp for the metadata, as a UNIX timestamp.
@@ -51,30 +51,34 @@ class RegistrationInfo
         }
 
         if (!$xml->hasAttribute('registrationAuthority')) {
-            throw new \Exception('Missing required attribute "registrationAuthority" in mdrpi:RegistrationInfo element.');
+            throw new \Exception(
+                'Missing required attribute "registrationAuthority" in mdrpi:RegistrationInfo element.'
+            );
         }
-        $this->setRegistrationAuthority($xml->getAttribute('registrationAuthority'));
+        $this->registrationAuthority = $xml->getAttribute('registrationAuthority');
 
         if ($xml->hasAttribute('registrationInstant')) {
-            $this->setRegistrationInstant(Utils::xsDateTimeToTimestamp($xml->getAttribute('registrationInstant')));
+            $this->registrationInstant = Utils::xsDateTimeToTimestamp($xml->getAttribute('registrationInstant'));
         }
 
-        $this->setRegistrationPolicy(Utils::extractLocalizedStrings($xml, Common::NS_MDRPI, 'RegistrationPolicy'));
+        $this->RegistrationPolicy = Utils::extractLocalizedStrings($xml, Common::NS_MDRPI, 'RegistrationPolicy');
     }
 
 
     /**
-     * Collect the value of the RegistrationAuthority-property
-     * @return string
+     * Collect the value of the RegistrationAuthority property
+     *
+     * @return string|null
      */
-    public function getRegistrationAuthority() : string
+    public function getRegistrationAuthority()
     {
         return $this->registrationAuthority;
     }
 
 
     /**
-     * Set the value of the registrationAuthority-property
+     * Set the value of the registrationAuthority property
+     *
      * @param string $registrationAuthority
      * @return void
      */
@@ -85,7 +89,8 @@ class RegistrationInfo
 
 
     /**
-     * Collect the value of the registrationInstant-property
+     * Collect the value of the registrationInstant property
+     *
      * @return int|null
      */
     public function getRegistrationInstant()
@@ -95,7 +100,8 @@ class RegistrationInfo
 
 
     /**
-     * Set the value of the registrationInstant-property
+     * Set the value of the registrationInstant property
+     *
      * @param int|null $registrationInstant
      * @return void
      */
@@ -106,7 +112,8 @@ class RegistrationInfo
 
 
     /**
-     * Collect the value of the RegistrationPolicy-property
+     * Collect the value of the RegistrationPolicy property
+     *
      * @return array
      */
     public function getRegistrationPolicy() : array
@@ -116,7 +123,8 @@ class RegistrationInfo
 
 
     /**
-     * Set the value of the RegistrationPolicy-property
+     * Set the value of the RegistrationPolicy property
+     *
      * @param array $registrationPolicy
      * @return void
      */
@@ -134,8 +142,7 @@ class RegistrationInfo
      */
     public function toXML(\DOMElement $parent) : \DOMElement
     {
-        $registrationAuthority = $this->getRegistrationAuthority();
-        if (empty($registrationAuthority)) {
+        if (empty($this->registrationAuthority)) {
             throw new \Exception('Missing required registration authority.');
         }
 
@@ -144,13 +151,13 @@ class RegistrationInfo
         $e = $doc->createElementNS(Common::NS_MDRPI, 'mdrpi:RegistrationInfo');
         $parent->appendChild($e);
 
-        $e->setAttribute('registrationAuthority', $this->getRegistrationAuthority());
+        $e->setAttribute('registrationAuthority', $this->registrationAuthority);
 
-        if ($this->getRegistrationInstant() !== null) {
-            $e->setAttribute('registrationInstant', gmdate('Y-m-d\TH:i:s\Z', $this->getRegistrationInstant()));
+        if ($this->registrationInstant !== null) {
+            $e->setAttribute('registrationInstant', gmdate('Y-m-d\TH:i:s\Z', $this->registrationInstant));
         }
 
-        Utils::addStrings($e, Common::NS_MDRPI, 'mdrpi:RegistrationPolicy', true, $this->getRegistrationPolicy());
+        Utils::addStrings($e, Common::NS_MDRPI, 'mdrpi:RegistrationPolicy', true, $this->RegistrationPolicy);
 
         return $e;
     }

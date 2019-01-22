@@ -9,9 +9,9 @@ interface Collection extends \ArrayAccess, \Countable, \IteratorAggregate
     /**
      * Add an element to the collection
      *
-     * @param $element
+     * @param mixed $element
      *
-     * @return $this|\SAML2\Utilities\Collection
+     * @return void
      */
     public function add($element);
 
@@ -43,9 +43,10 @@ interface Collection extends \ArrayAccess, \Countable, \IteratorAggregate
 
 
     /**
-     * Applies the given function to each element in the collection and returns a new collection with the elements returned by the function.
+     * Applies the given function to each element in the collection and returns a new collection with the elements
+     * returned by the function.
      *
-     * @param callable $function
+     * @param \Closure $function
      *
      * @return mixed
      */
@@ -53,7 +54,7 @@ interface Collection extends \ArrayAccess, \Countable, \IteratorAggregate
 
 
     /**
-     * @param callable $filterFunction
+     * @param \Closure $filterFunction
      *
      * @return \SAML2\Utilities\Collection
      */
@@ -71,7 +72,7 @@ interface Collection extends \ArrayAccess, \Countable, \IteratorAggregate
 
 
     /**
-     * @param $element
+     * @param mixed $element
      * @return void
      */
     public function remove($element);

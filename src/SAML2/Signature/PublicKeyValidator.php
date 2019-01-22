@@ -39,7 +39,7 @@ class PublicKeyValidator extends AbstractChainedValidator
 
 
     /**
-     * @param \SAML2\SignedElement             $signedElement
+     * @param \SAML2\SignedElement $signedElement
      * @param \SAML2\Configuration\CertificateProvider $configuration
      *
      * @return bool
@@ -55,7 +55,7 @@ class PublicKeyValidator extends AbstractChainedValidator
 
 
     /**
-     * @param \SAML2\SignedElement             $signedElement
+     * @param \SAML2\SignedElement $signedElement
      * @param \SAML2\Configuration\CertificateProvider $configuration
      *
      * @return bool

@@ -52,6 +52,7 @@ class AdditionalMetadataLocation
 
     /**
      * Collect the value of the namespace-property
+     *
      * @return string
      */
     public function getNamespace() : string
@@ -62,6 +63,7 @@ class AdditionalMetadataLocation
 
     /**
      * Set the value of the namespace-property
+     *
      * @param string $namespace
      * @return void
      */
@@ -73,6 +75,7 @@ class AdditionalMetadataLocation
 
     /**
      * Collect the value of the location-property
+     *
      * @return string
      */
     public function getLocation() : string
@@ -83,6 +86,7 @@ class AdditionalMetadataLocation
 
     /**
      * Set the value of the location-property
+     *
      * @param string $location
      * @return void
      */

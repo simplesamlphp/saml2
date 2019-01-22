@@ -47,13 +47,14 @@ class Scope
             return;
         }
 
-        $this->setScope($xml->textContent);
-        $this->setIsRegexpScope(Utils::parseBoolean($xml, 'regexp', false));
+        $this->scope = $xml->textContent;
+        $this->regexp = Utils::parseBoolean($xml, 'regexp', false);
     }
 
 
     /**
      * Collect the value of the scope-property
+     *
      * @return string
      */
     public function getScope() : string
@@ -64,6 +65,7 @@ class Scope
 
     /**
      * Set the value of the scope-property
+     *
      * @param string $scope
      * @return void
      */
@@ -75,6 +77,7 @@ class Scope
 
     /**
      * Collect the value of the regexp-property
+     *
      * @return bool
      */
     public function isRegexpScope() : bool
@@ -85,6 +88,7 @@ class Scope
 
     /**
      * Set the value of the regexp-property
+     *
      * @param bool $regexp
      * @return void
      */
@@ -103,6 +107,7 @@ class Scope
     public function toXML(\DOMElement $parent) : \DOMElement
     {
         Assert::notEmpty($this->scope);
+
         $doc = $parent->ownerDocument;
 
         $e = $doc->createElementNS(Scope::NS, 'shibmd:Scope');

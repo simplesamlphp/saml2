@@ -40,6 +40,7 @@ class KeyName
 
     /**
      * Collect the value of the name-property
+     *
      * @return string
      */
     public function getName() : string
@@ -50,6 +51,7 @@ class KeyName
 
     /**
      * Set the value of the name-property
+     *
      * @param string $name
      * @return void
      */
@@ -57,6 +59,7 @@ class KeyName
     {
         $this->name = $name;
     }
+
 
     /**
      * Convert this KeyName element to XML.

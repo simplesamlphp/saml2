@@ -16,6 +16,8 @@ class SimpleSAMLConverter
      * @param string                    $certificatePrefix
      *
      * @return \SAML2\Configuration\IdentityProvider
+     *
+     * @psalm-suppress UndefinedClass
      */
     public static function convertToIdentityProvider(
         Configuration $configuration,
@@ -34,6 +36,8 @@ class SimpleSAMLConverter
      * @param string                    $certificatePrefix
      *
      * @return \SAML2\Configuration\ServiceProvider
+     *
+     * @psalm-suppress UndefinedClass
      */
     public static function convertToServiceProvider(
         Configuration $configuration,
@@ -52,6 +56,8 @@ class SimpleSAMLConverter
      * @param string                    $prefix
      *
      * @return array
+     *
+     * @psalm-suppress UndefinedClass
      */
     protected static function pluckConfiguration(Configuration $configuration, string $prefix = '') : array
     {
@@ -77,7 +83,7 @@ class SimpleSAMLConverter
 
         $extracted['assertionEncryptionEnabled'] = $configuration->getBoolean('assertion.encryption', false);
 
-        if ($configuration->has('sharedKey')) {
+        if ($configuration->hasValue('sharedKey')) {
             $extracted['sharedKey'] = $configuration->getString('sharedKey');
         }
 
@@ -90,6 +96,8 @@ class SimpleSAMLConverter
      * @param array                     $baseConfiguration
      *
      * @return void
+     *
+     * @psalm-suppress UndefinedClass
      */
     protected static function enrichForIdentityProvider(Configuration $configuration, array &$baseConfiguration)
     {
@@ -103,6 +111,8 @@ class SimpleSAMLConverter
      * @param array                     $baseConfiguration
      *
      * @return void
+     *
+     * @psalm-suppress UndefinedClass
      */
     protected static function enrichForServiceProvider(Configuration $configuration, array &$baseConfiguration)
     {
@@ -115,16 +125,18 @@ class SimpleSAMLConverter
      * @param array                     $baseConfiguration
      *
      * @return void
+     *
+     * @psalm-suppress UndefinedClass
      */
     protected static function enrichForDecryptionProvider(
         Configuration $configuration,
         array &$baseConfiguration
     ) {
-        if ($configuration->has('sharedKey')) {
+        if ($configuration->hasValue('sharedKey')) {
             $baseConfiguration['sharedKey'] = $configuration->getString('sharedKey', null);
         }
 
-        if ($configuration->has('new_privatekey')) {
+        if ($configuration->hasValue('new_privatekey')) {
             $baseConfiguration['privateKeys'][] = new PrivateKey(
                 $configuration->getString('new_privatekey'),
                 PrivateKey::NAME_NEW,
@@ -139,9 +151,9 @@ class SimpleSAMLConverter
                 $configuration->getString('privatekey_pass', null)
             );
 
-            if ($configuration->has('encryption.blacklisted-algorithms')) {
+            if ($configuration->hasValue('encryption.blacklisted-algorithms')) {
                 $baseConfiguration['blacklistedEncryptionAlgorithms'] = $configuration
-                    ->get('encryption.blacklisted-algorithms');
+                    ->getValue('encryption.blacklisted-algorithms');
             }
         }
     }

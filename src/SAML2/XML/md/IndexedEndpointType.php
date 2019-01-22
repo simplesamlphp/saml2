@@ -18,7 +18,7 @@ class IndexedEndpointType extends EndpointType
      *
      * @var int
      */
-    private $index;
+    private $index = 0;
 
     /**
      * Whether this endpoint is the default.
@@ -45,14 +45,15 @@ class IndexedEndpointType extends EndpointType
         if (!$xml->hasAttribute('index')) {
             throw new \Exception('Missing index on '.$xml->tagName);
         }
-        $this->setIndex(intval($xml->getAttribute('index')));
+        $this->index = intval($xml->getAttribute('index'));
 
-        $this->setIsDefault(Utils::parseBoolean($xml, 'isDefault', null));
+        $this->isDefault = Utils::parseBoolean($xml, 'isDefault', null);
     }
 
 
     /**
-     * Collect the value of the index-property
+     * Collect the value of the index property.
+     *
      * @return int
      */
     public function getIndex() : int
@@ -62,7 +63,8 @@ class IndexedEndpointType extends EndpointType
 
 
     /**
-     * Set the value of the index-property
+     * Set the value of the index property.
+     *
      * @param int $index
      * @return void
      */
@@ -73,7 +75,8 @@ class IndexedEndpointType extends EndpointType
 
 
     /**
-     * Collect the value of the isDefault-property
+     * Collect the value of the isDefault property.
+     *
      * @return bool|null
      */
     public function getIsDefault()
@@ -83,7 +86,8 @@ class IndexedEndpointType extends EndpointType
 
 
     /**
-     * Set the value of the isDefault-property
+     * Set the value of the isDefault property.
+     *
      * @param bool|null $flag
      * @return void
      */
@@ -97,18 +101,16 @@ class IndexedEndpointType extends EndpointType
      * Add this endpoint to an XML element.
      *
      * @param \DOMElement $parent The element we should append this endpoint to.
-     * @param string     $name   The name of the element we should create.
+     * @param string $name The name of the element we should create.
      * @return \DOMElement
      */
     public function toXML(\DOMElement $parent, string $name) : \DOMElement
     {
         $e = parent::toXML($parent, $name);
-        $e->setAttribute('index', (string) $this->getIndex());
+        $e->setAttribute('index', strval($this->index));
 
-        if ($this->getIsDefault() === true) {
-            $e->setAttribute('isDefault', 'true');
-        } elseif ($this->getIsDefault() === false) {
-            $e->setAttribute('isDefault', 'false');
+        if (is_bool($this->isDefault)) {
+            $e->setAttribute('isDefault', $this->isDefault ? 'true' : 'false');
         }
 
         return $e;

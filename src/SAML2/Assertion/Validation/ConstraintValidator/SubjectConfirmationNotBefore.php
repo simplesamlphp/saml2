@@ -8,6 +8,7 @@ use SAML2\Assertion\Validation\Result;
 use SAML2\Assertion\Validation\SubjectConfirmationConstraintValidator;
 use SAML2\Utilities\Temporal;
 use SAML2\XML\saml\SubjectConfirmation;
+use Webmozart\Assert\Assert;
 
 class SubjectConfirmationNotBefore implements
     SubjectConfirmationConstraintValidator
@@ -21,7 +22,11 @@ class SubjectConfirmationNotBefore implements
         SubjectConfirmation $subjectConfirmation,
         Result $result
     ) {
-        $notBefore = $subjectConfirmation->getSubjectConfirmationData()->getNotBefore();
+        $data = $subjectConfirmation->getSubjectConfirmationData();
+        Assert::notNull($data);
+
+        /** @psalm-suppress PossiblyNullReference */
+        $notBefore = $data->getNotBefore();
         if ($notBefore && $notBefore > Temporal::getTime() + 60) {
             $result->addError('NotBefore in SubjectConfirmationData is in the future');
         }

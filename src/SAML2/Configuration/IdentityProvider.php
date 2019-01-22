@@ -7,13 +7,10 @@ namespace SAML2\Configuration;
 /**
  * Basic configuration wrapper
  */
-class IdentityProvider extends ArrayAdapter implements
-    CertificateProvider,
-    DecryptionProvider,
-    EntityIdProvider
+final class IdentityProvider extends ArrayAdapter implements CertificateProvider, DecryptionProvider, EntityIdProvider
 {
     /**
-     * @return mixed
+     * @return array|\Traversable|null
      */
     public function getKeys()
     {
@@ -22,7 +19,7 @@ class IdentityProvider extends ArrayAdapter implements
 
 
     /**
-     * @return mixed
+     * @return string|null
      */
     public function getCertificateData()
     {
@@ -31,13 +28,26 @@ class IdentityProvider extends ArrayAdapter implements
 
 
     /**
-     * @return mixed
+     * @return string|null
      */
     public function getCertificateFile()
     {
         return $this->get('certificateFile');
     }
 
+
+    /**
+     * @return array|mixed|\Traversable|null
+     */
+    public function getCertificateFingerprints()
+    {
+        return $this->get('certificateFingerprints');
+    }
+
+
+    /**
+     * @return bool|null
+     */
     public function isAssertionEncryptionRequired()
     {
         return $this->get('assertionEncryptionEnabled');
@@ -45,7 +55,7 @@ class IdentityProvider extends ArrayAdapter implements
 
 
     /**
-     * @return mixed
+     * @return string|null
      */
     public function getSharedKey()
     {
@@ -54,7 +64,7 @@ class IdentityProvider extends ArrayAdapter implements
 
 
     /**
-     * @return mixed
+     * @return mixed|null
      */
     public function hasBase64EncodedAttributes()
     {
@@ -67,8 +77,11 @@ class IdentityProvider extends ArrayAdapter implements
      * @param bool $required
      * @return mixed|null
      */
-    public function getPrivateKey(string $name, bool $required = false)
+    public function getPrivateKey(string $name, bool $required = null)
     {
+        if ($required === null) {
+            $required = false;
+        }
         $privateKeys = $this->get('privateKeys');
         $key = array_filter($privateKeys, function (PrivateKey $key) use ($name) {
             return $key->getName() === $name;
@@ -102,7 +115,7 @@ class IdentityProvider extends ArrayAdapter implements
 
 
     /**
-     * @return mixed
+     * @return string|null
      */
     public function getEntityId()
     {

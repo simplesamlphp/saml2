@@ -31,11 +31,12 @@ abstract class AbstractContainer
      * - **encrypt** XML that is about to be encrypted
      * - **decrypt** XML that was just decrypted
      *
-     * @param \DOMElement $message
+     * @param \DOMElement|string $message
      * @param string $type
      * @return void
      */
-    abstract public function debugMessage(\DOMElement $message, string $type);
+    abstract public function debugMessage($message, string $type);
+
 
 
     /**
@@ -56,4 +57,28 @@ abstract class AbstractContainer
      * @return void
      */
     abstract public function postRedirect(string $url, array $data = []);
+
+
+    /**
+     * This function retrieves the path to a directory where temporary files can be saved.
+     *
+     * @return string Path to a temporary directory, without a trailing directory separator.
+     * @throws \Exception If the temporary directory cannot be created or it exists and does not belong
+     * to the current user.
+     */
+    abstract public function getTempDir();
+
+
+    /**
+     * Atomically write a file.
+     *
+     * This is a helper function for writing data atomically to a file. It does this by writing the file data to a
+     * temporary file, then renaming it to the required file name.
+     *
+     * @param string $filename The path to the file we want to write to.
+     * @param string $data The data we should write to the file.
+     * @param int $mode The permissions to apply to the file. Defaults to 0600.
+     * @return void
+     */
+    abstract public function writeFile(string $filename, string $data, int $mode = null);
 }

@@ -13,6 +13,8 @@ class Response extends StatusResponse
 {
     /**
      * The assertions in this response.
+     *
+     * @var (Assertion|EncryptedAssertion)[]
      */
     private $assertions;
 
@@ -32,7 +34,7 @@ class Response extends StatusResponse
             return;
         }
 
-        for ($node = $xml->firstChild; $node !== null; $node = $node->nextSibling) {
+        foreach ($xml->childNodes as $node) {
             if ($node->namespaceURI !== Constants::NS_SAML) {
                 continue;
             }

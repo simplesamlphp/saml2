@@ -19,12 +19,13 @@ interface DecryptionProvider
 
 
     /**
-     * @param string  $name     the name of the private key
-     * @param boolean $required whether or not the private key must exist
+     * @param string $name The name of the private key
+     * @param bool $required Whether or not the private key must exist
      *
      * @return mixed
      */
-    public function getPrivateKey(string $name, bool $required = false);
+    public function getPrivateKey(string $name, bool $required = null);
+
 
 
     /**

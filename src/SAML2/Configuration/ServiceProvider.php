@@ -9,13 +9,10 @@ use RobRichards\XMLSecLibs\XMLSecurityKey;
 /**
  * Basic Configuration Wrapper
  */
-class ServiceProvider extends ArrayAdapter implements
-    CertificateProvider,
-    DecryptionProvider,
-    EntityIdProvider
+class ServiceProvider extends ArrayAdapter implements CertificateProvider, DecryptionProvider, EntityIdProvider
 {
     /**
-     * @return mixed
+     * @return null|array|\Traversable
      */
     public function getKeys()
     {
@@ -24,7 +21,7 @@ class ServiceProvider extends ArrayAdapter implements
 
 
     /**
-     * @return mixed
+     * @return null|string
      */
     public function getCertificateData()
     {
@@ -33,13 +30,26 @@ class ServiceProvider extends ArrayAdapter implements
 
 
     /**
-     * @return mixed
+     * @return null|string
      */
     public function getCertificateFile()
     {
         return $this->get('certificateFile');
     }
 
+
+    /**
+     * @return array|\Traversable|null
+     */
+    public function getCertificateFingerprints()
+    {
+        return $this->get('certificateFingerprints');
+    }
+
+
+    /**
+     * @return string|null
+     */
     public function getEntityId()
     {
         return $this->get('entityId');
@@ -47,7 +57,7 @@ class ServiceProvider extends ArrayAdapter implements
 
 
     /**
-     * @return mixed
+     * @return null|bool
      */
     public function isAssertionEncryptionRequired()
     {
@@ -56,7 +66,7 @@ class ServiceProvider extends ArrayAdapter implements
 
 
     /**
-     * @return mixed
+     * @return null|string
      */
     public function getSharedKey()
     {
@@ -69,8 +79,11 @@ class ServiceProvider extends ArrayAdapter implements
      * @param bool $required
      * @return mixed|null
      */
-    public function getPrivateKey(string $name, bool $required = false)
+    public function getPrivateKey(string $name, bool $required = null)
     {
+        if ($required === null) {
+            $required = false;
+        }
         $privateKeys = $this->get('privateKeys');
         $key         = array_filter($privateKeys, function (PrivateKey $key) use ($name) {
             return $key->getName() === $name;

@@ -26,7 +26,7 @@ class AttributeQuery extends SubjectQuery
      *
      * @var array
      */
-    private $attributes;
+    private $attributes = [];
 
     /**
      * The NameFormat used on all attributes.
@@ -57,6 +57,7 @@ class AttributeQuery extends SubjectQuery
         }
 
         $firstAttribute = true;
+        /** @var \DOMElement[] $attributes */
         $attributes = Utils::xpQuery($xml, './saml_assertion:Attribute');
         foreach ($attributes as $attribute) {
             if (!$attribute->hasAttribute('Name')) {
@@ -167,7 +168,12 @@ class AttributeQuery extends SubjectQuery
                     $type = null;
                 }
 
-                $attributeValue = Utils::addString($attribute, Constants::NS_SAML, 'saml:AttributeValue', strval($value));
+                $attributeValue = Utils::addString(
+                    $attribute,
+                    Constants::NS_SAML,
+                    'saml:AttributeValue',
+                    strval($value)
+                );
                 if ($type !== null) {
                     $attributeValue->setAttributeNS(Constants::NS_XSI, 'xsi:type', $type);
                 }

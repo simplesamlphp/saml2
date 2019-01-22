@@ -47,8 +47,8 @@ abstract class StatusResponse extends Message
     /**
      * Constructor for SAML 2 response messages.
      *
-     * @param string          $tagName The tag name of the root element.
-     * @param \DOMElement|null $xml     The input message.
+     * @param string $tagName The tag name of the root element.
+     * @param \DOMElement|null $xml The input message.
      * @throws \Exception
      */
     protected function __construct(string $tagName, \DOMElement $xml = null)
@@ -69,26 +69,27 @@ abstract class StatusResponse extends Message
             $this->inResponseTo = $xml->getAttribute('InResponseTo');
         }
 
+        /** @var \DOMElement[] $status */
         $status = Utils::xpQuery($xml, './saml_protocol:Status');
         if (empty($status)) {
             throw new \Exception('Missing status code on response.');
         }
-        $status = $status[0];
 
-        $statusCode = Utils::xpQuery($status, './saml_protocol:StatusCode');
+        /** @var \DOMElement[] $statusCode */
+        $statusCode = Utils::xpQuery($status[0], './saml_protocol:StatusCode');
         if (empty($statusCode)) {
             throw new \Exception('Missing status code in status element.');
         }
-        $statusCode = $statusCode[0];
+        $this->status['Code'] = $statusCode[0]->getAttribute('Value');
 
-        $this->status['Code'] = $statusCode->getAttribute('Value');
-
-        $subCode = Utils::xpQuery($statusCode, './saml_protocol:StatusCode');
+        /** @var \DOMElement[] $subCode */
+        $subCode = Utils::xpQuery($statusCode[0], './saml_protocol:StatusCode');
         if (!empty($subCode)) {
             $this->status['SubCode'] = $subCode[0]->getAttribute('Value');
         }
 
-        $message = Utils::xpQuery($status, './saml_protocol:StatusMessage');
+        /** @var \DOMElement[] $message */
+        $message = Utils::xpQuery($status[0], './saml_protocol:StatusMessage');
         if (!empty($message)) {
             $this->status['Message'] = trim($message[0]->textContent);
         }
@@ -104,11 +105,7 @@ abstract class StatusResponse extends Message
     {
         Assert::keyExists($this->status, "Code");
 
-        if ($this->status['Code'] === Constants::STATUS_SUCCESS) {
-            return true;
-        }
-
-        return false;
+        return $this->status['Code'] === Constants::STATUS_SUCCESS;
     }
 
 
@@ -154,7 +151,7 @@ abstract class StatusResponse extends Message
      */
     public function setStatus(array $status)
     {
-        Assert::keyExists($status, "Code");
+        Assert::keyExists($status, "Code", 'Cannot set status without a Code key in the array.');
 
         $this->status = $status;
         if (!array_key_exists('SubCode', $status)) {

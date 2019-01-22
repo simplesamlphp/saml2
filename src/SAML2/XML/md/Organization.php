@@ -59,30 +59,32 @@ class Organization
             return;
         }
 
-        $this->setExtensions(Extensions::getList($xml));
+        $this->Extensions = Extensions::getList($xml);
 
-        $this->setOrganizationName(Utils::extractLocalizedStrings($xml, Constants::NS_MD, 'OrganizationName'));
-        $organizationName = $this->getOrganizationName();
-        if (empty($organizationName)) {
-            $this->setOrganizationName(['invalid' => '']);
+        $this->OrganizationName = Utils::extractLocalizedStrings($xml, Constants::NS_MD, 'OrganizationName');
+        if (empty($this->OrganizationName)) {
+            $this->OrganizationName = ['invalid' => ''];
         }
 
-        $this->setOrganizationDisplayName(Utils::extractLocalizedStrings($xml, Constants::NS_MD, 'OrganizationDisplayName'));
-        $organizationDisplayName = $this->getOrganizationDisplayName();
-        if (empty($organizationDisplayName)) {
-            $this->setOrganizationDisplayName(['invalid' => '']);
+        $this->OrganizationDisplayName = Utils::extractLocalizedStrings(
+            $xml,
+            Constants::NS_MD,
+            'OrganizationDisplayName'
+        );
+        if (empty($this->OrganizationDisplayName)) {
+            $this->OrganizationDisplayName = ['invalid' => ''];
         }
 
-        $this->setOrganizationURL(Utils::extractLocalizedStrings($xml, Constants::NS_MD, 'OrganizationURL'));
-        $organizationURL = $this->getOrganizationURL();
-        if (empty($organizationURL)) {
-            $this->setOrganizationURL(['invalid' => '']);
+        $this->OrganizationURL = Utils::extractLocalizedStrings($xml, Constants::NS_MD, 'OrganizationURL');
+        if (empty($this->OrganizationURL)) {
+            $this->OrganizationURL = ['invalid' => ''];
         }
     }
 
 
     /**
-     * Collect the value of the Extensions-property
+     * Collect the value of the Extensions property.
+     *
      * @return \SAML2\XML\Chunk[]
      */
     public function getExtensions() : array
@@ -92,7 +94,8 @@ class Organization
 
 
     /**
-     * Set the value of the Extensions-property
+     * Set the value of the Extensions property.
+     *
      * @param array $extensions
      * @return void
      */
@@ -115,7 +118,8 @@ class Organization
 
 
     /**
-     * Collect the value of the OrganizationName-property
+     * Collect the value of the OrganizationName property.
+     *
      * @return string[]
      */
     public function getOrganizationName() : array
@@ -125,7 +129,8 @@ class Organization
 
 
     /**
-     * Set the value of the OrganizationName-property
+     * Set the value of the OrganizationName property.
+     *
      * @param array $organizationName
      * @return void
      */
@@ -136,7 +141,8 @@ class Organization
 
 
     /**
-     * Collect the value of the OrganizationDisplayName-property
+     * Collect the value of the OrganizationDisplayName property.
+     *
      * @return string[]
      */
     public function getOrganizationDisplayName() : array
@@ -146,7 +152,8 @@ class Organization
 
 
     /**
-     * Set the value of the OrganizationDisplayName-property
+     * Set the value of the OrganizationDisplayName property.
+     *
      * @param array $organizationDisplayName
      * @return void
      */
@@ -157,7 +164,8 @@ class Organization
 
 
     /**
-     * Collect the value of the OrganizationURL-property
+     * Collect the value of the OrganizationURL property.
+     *
      * @return string[]
      */
     public function getOrganizationURL() : array
@@ -167,7 +175,8 @@ class Organization
 
 
     /**
-     * Set the value of the OrganizationURL-property
+     * Set the value of the OrganizationURL property.
+     *
      * @param array $organizationURL
      * @return void
      */

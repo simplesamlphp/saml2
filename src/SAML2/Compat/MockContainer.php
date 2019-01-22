@@ -30,12 +30,12 @@ class MockContainer extends AbstractContainer
     /**
      * @var array
      */
-    private $redirectData;
+    private $redirectData = [];
 
     /**
-     * @var string
+     * @var string|null
      */
-    private $postRedirectUrl;
+    private $postRedirectUrl = null;
 
     /**
      * @var array
@@ -72,11 +72,11 @@ class MockContainer extends AbstractContainer
      * - **encrypt** XML that is about to be encrypted
      * - **decrypt** XML that was just decrypted
      *
-     * @param \DOMElement $message
+     * @param \DOMElement|string $message
      * @param string $type
      * @return void
      */
-    public function debugMessage(\DOMElement $message, string $type)
+    public function debugMessage($message, string $type)
     {
         $this->debugMessages[$type] = $message;
     }
@@ -107,5 +107,27 @@ class MockContainer extends AbstractContainer
     {
         $this->postRedirectUrl = $url;
         $this->postRedirectData = $data;
+    }
+
+
+    /**
+     * {@inheritdoc}
+     */
+    public function getTempDir()
+    {
+        return sys_get_temp_dir();
+    }
+
+
+    /**
+     * {@inheritdoc}
+     */
+    public function writeFile(string $filename, string $data, int $mode = null)
+    {
+        if ($mode === null) {
+            $mode = 0600;
+        }
+        file_put_contents($filename, $data);
+        chmod($filename, $mode);
     }
 }

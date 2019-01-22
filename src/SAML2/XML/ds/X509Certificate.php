@@ -40,6 +40,7 @@ class X509Certificate
 
     /**
      * Collect the value of the certificate-property
+     *
      * @return string
      */
     public function getCertificate() : string
@@ -50,6 +51,7 @@ class X509Certificate
 
     /**
      * Set the value of the certificate-property
+     *
      * @param string $certificate
      * @return void
      */

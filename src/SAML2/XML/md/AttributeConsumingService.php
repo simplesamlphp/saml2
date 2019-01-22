@@ -82,6 +82,7 @@ class AttributeConsumingService
 
         $this->setServiceDescription(Utils::extractLocalizedStrings($xml, Constants::NS_MD, 'ServiceDescription'));
 
+        /** @var \DOMElement $ra */
         foreach (Utils::xpQuery($xml, './saml_metadata:RequestedAttribute') as $ra) {
             $this->addRequestedAttribute(new RequestedAttribute($ra));
         }
@@ -90,6 +91,7 @@ class AttributeConsumingService
 
     /**
      * Collect the value of the index-property
+     *
      * @return int
      */
     public function getIndex() : int
@@ -100,6 +102,7 @@ class AttributeConsumingService
 
     /**
      * Set the value of the index-property
+     *
      * @param int $index
      * @return void
      */
@@ -111,6 +114,7 @@ class AttributeConsumingService
 
     /**
      * Collect the value of the isDefault-property
+     *
      * @return bool|null
      */
     public function getIsDefault()
@@ -121,6 +125,7 @@ class AttributeConsumingService
 
     /**
      * Set the value of the isDefault-property
+     *
      * @param bool|null $flag
      * @return void
      */
@@ -132,6 +137,7 @@ class AttributeConsumingService
 
     /**
      * Collect the value of the ServiceName-property
+     *
      * @return string[]
      */
     public function getServiceName() : array
@@ -142,6 +148,7 @@ class AttributeConsumingService
 
     /**
      * Set the value of the ServiceName-property
+     *
      * @param string[] $serviceName
      * @return void
      */
@@ -153,6 +160,7 @@ class AttributeConsumingService
 
     /**
      * Collect the value of the ServiceDescription-property
+     *
      * @return string[]
      */
     public function getServiceDescription() : array
@@ -163,6 +171,7 @@ class AttributeConsumingService
 
     /**
      * Set the value of the ServiceDescription-property
+     *
      * @param string[] $serviceDescription
      * @return void
      */
@@ -174,6 +183,7 @@ class AttributeConsumingService
 
     /**
      * Collect the value of the RequestedAttribute-property
+     *
      * @return \SAML2\XML\md\RequestedAttribute[]
      */
     public function getRequestedAttribute() : array
@@ -184,6 +194,7 @@ class AttributeConsumingService
 
     /**
      * Set the value of the RequestedAttribute-property
+     *
      * @param \SAML2\XML\md\RequestedAttribute[] $requestedAttribute
      * @return void
      */
@@ -195,6 +206,7 @@ class AttributeConsumingService
 
     /**
      * Add the value to the RequestedAttribute-property
+     *
      * @param \SAML2\XML\md\RequestedAttribute $requestedAttribute
      * @return void
      */

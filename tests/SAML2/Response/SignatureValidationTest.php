@@ -136,8 +136,6 @@ class SignatureValidationTest extends \Mockery\Adapter\Phpunit\MockeryTestCase
         $this->assertionProcessor->shouldReceive('processAssertions')->never();
 
         $processor = new Response\Processor(new \Psr\Log\NullLogger());
-
-        $this->expectException(Exception\UnsignedResponseException::class);
         $processor->process(
             new ServiceProvider([]),
             new IdentityProvider([]),
