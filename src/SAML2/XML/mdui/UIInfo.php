@@ -305,7 +305,7 @@ class UIInfo
      * @param \DOMElement $parent The element we should append to.
      * @return \DOMElement|null
      */
-    public function toXML(DOMElement $parent) : DOMElement
+    public function toXML(DOMElement $parent) : ?DOMElement
     {
         $e = null;
         if (!empty($this->DisplayName)
