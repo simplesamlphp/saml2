@@ -7,7 +7,7 @@ namespace SAML2\Compat\Ssp;
 use Psr\Log\InvalidArgumentException;
 use Psr\Log\LoggerInterface;
 use Psr\Log\LogLevel;
-use SimpleSAML\Logger;
+use SimpleSAML\Logger as SspLogger;
 use Webmozart\Assert\Assert;
 
 class Logger implements LoggerInterface
@@ -24,7 +24,7 @@ class Logger implements LoggerInterface
     public function emergency($message, array $context = []) : void
     {
         /** @psalm-suppress UndefinedClass */
-        Logger::emergency($message.($context ? " ".var_export($context, true) : ""));
+        SspLogger::emergency($message.($context ? " ".var_export($context, true) : ""));
     }
 
 
@@ -43,7 +43,7 @@ class Logger implements LoggerInterface
     public function alert($message, array $context = []) : void
     {
         /** @psalm-suppress UndefinedClass */
-        Logger::alert($message.($context ? " ".var_export($context, true) : ""));
+        SspLogger::alert($message.($context ? " ".var_export($context, true) : ""));
     }
 
 
@@ -61,7 +61,7 @@ class Logger implements LoggerInterface
     public function critical($message, array $context = []) : void
     {
         /** @psalm-suppress UndefinedClass */
-        Logger::critical($message.($context ? " ".var_export($context, true) : ""));
+        SspLogger::critical($message.($context ? " ".var_export($context, true) : ""));
     }
 
 
@@ -78,7 +78,7 @@ class Logger implements LoggerInterface
     public function error($message, array $context = []) : void
     {
         /** @psalm-suppress UndefinedClass */
-        Logger::error($message.($context ? " ".var_export($context, true) : ""));
+        SspLogger::error($message.($context ? " ".var_export($context, true) : ""));
     }
 
 
@@ -97,7 +97,7 @@ class Logger implements LoggerInterface
     public function warning($message, array $context = []) : void
     {
         /** @psalm-suppress UndefinedClass */
-        Logger::warning($message.($context ? " ".var_export($context, true) : ""));
+        SspLogger::warning($message.($context ? " ".var_export($context, true) : ""));
     }
 
 
@@ -113,7 +113,7 @@ class Logger implements LoggerInterface
     public function notice($message, array $context = []) : void
     {
         /** @psalm-suppress UndefinedClass */
-        Logger::notice($message.($context ? " ".var_export($context, true) : ""));
+        SspLogger::notice($message.($context ? " ".var_export($context, true) : ""));
     }
 
 
@@ -131,7 +131,7 @@ class Logger implements LoggerInterface
     public function info($message, array $context = []) : void
     {
         /** @psalm-suppress UndefinedClass */
-        Logger::info($message.($context ? " ".var_export($context, true) : ""));
+        SspLogger::info($message.($context ? " ".var_export($context, true) : ""));
     }
 
 
@@ -147,7 +147,7 @@ class Logger implements LoggerInterface
     public function debug($message, array $context = []) : void
     {
         /** @psalm-suppress UndefinedClass */
-        Logger::debug($message.($context ? " ".var_export($context, true) : ""));
+        SspLogger::debug($message.($context ? " ".var_export($context, true) : ""));
     }
 
 
