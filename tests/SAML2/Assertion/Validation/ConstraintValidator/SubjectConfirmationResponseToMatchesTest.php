@@ -109,8 +109,8 @@ class SubjectConfirmationResponseToMatchesTest extends \Mockery\Adapter\Phpunit\
     /**
      * @group assertion-validation
      * @test
-     */
      * @return void
+     */
     public function when_the_subjectconfirmation_and_response_responseto_are_equal_the_subjectconfirmation_is_valid() : void
     {
         $this->response->shouldReceive('getInResponseTo')->andReturn('theSameValue');
