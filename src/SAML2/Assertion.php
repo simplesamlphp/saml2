@@ -80,7 +80,7 @@ class Assertion extends SignedElement
      */
     private $encryptionKey;
 
-     /**
+    /**
      * The earliest time this assertion is valid, as an UNIX timestamp.
      *
      * @var int|null
