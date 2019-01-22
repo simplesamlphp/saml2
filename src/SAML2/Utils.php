@@ -170,7 +170,7 @@ class Utils
         
         /**
          * @var \DOMElement[] $sigMethod
-         * @psalm-suppress UndefinedClass
+         * @var \DOMElement $objXMLSecDSig->sigNode
          */
         $sigMethod = self::xpQuery($objXMLSecDSig->sigNode, './ds:SignedInfo/ds:SignatureMethod');
         if (empty($sigMethod)) {
