@@ -132,7 +132,7 @@ class HTTPRedirect extends Binding
         if (!$document->firstChild instanceof \DOMElement) {
             throw new \Exception('Malformed SAML message received.');
         }
-        $message  = Message::fromXML($document->firstChild);
+        $message = Message::fromXML($document->firstChild);
 
         if (array_key_exists('RelayState', $data)) {
             $message->setRelayState($data['RelayState']);
