@@ -4,6 +4,7 @@ declare(strict_types=1);
 
 namespace SAML2\XML\mdui;
 
+use DOMElement;
 use Webmozart\Assert\Assert;
 
 /**
@@ -37,7 +38,7 @@ class Keywords
      * @param \DOMElement|null $xml The XML element we should load.
      * @throws \Exception
      */
-    public function __construct(\DOMElement $xml = null)
+    public function __construct(DOMElement $xml = null)
     {
         if ($xml === null) {
             return;
@@ -73,7 +74,7 @@ class Keywords
      * @param string $lang
      * @return void
      */
-    public function setLanguage(string $lang)
+    public function setLanguage(string $lang) : void
     {
         $this->lang = $lang;
     }
@@ -96,7 +97,7 @@ class Keywords
      * @param string[] $keywords
      * @return void
      */
-    public function setKeywords(array $keywords)
+    public function setKeywords(array $keywords) : void
     {
         $this->Keywords = $keywords;
     }
@@ -108,7 +109,7 @@ class Keywords
      * @param string $keyword
      * @return void
      */
-    public function addKeyword(string $keyword)
+    public function addKeyword(string $keyword) : void
     {
         $this->Keywords[] = $keyword;
     }
@@ -121,7 +122,7 @@ class Keywords
      * @throws \Exception
      * @return \DOMElement
      */
-    public function toXML(\DOMElement $parent) : \DOMElement
+    public function toXML(DOMElement $parent) : DOMElement
     {
         Assert::notEmpty($this->lang, "Cannot convert Keywords to XML without a language set.");
 

@@ -4,8 +4,9 @@ declare(strict_types=1);
 
 namespace SAML2\XML\saml;
 
-use Webmozart\Assert\Assert;
+use DOMElement;
 use RobRichards\XMLSecLibs\XMLSecurityDSig;
+use Webmozart\Assert\Assert;
 
 use SAML2\Constants;
 use SAML2\Utils;
@@ -70,7 +71,7 @@ class SubjectConfirmationData
      *
      * @return int|null
      */
-    public function getNotBefore()
+    public function getNotBefore() : ?int
     {
         return $this->NotBefore;
     }
@@ -82,7 +83,7 @@ class SubjectConfirmationData
      * @param int|null $notBefore
      * @return void
      */
-    public function setNotBefore(int $notBefore = null)
+    public function setNotBefore(int $notBefore = null) : void
     {
         $this->NotBefore = $notBefore;
     }
@@ -93,7 +94,7 @@ class SubjectConfirmationData
      *
      * @return int|null
      */
-    public function getNotOnOrAfter()
+    public function getNotOnOrAfter() : ?int
     {
         return $this->NotOnOrAfter;
     }
@@ -105,7 +106,7 @@ class SubjectConfirmationData
      * @param int|null $notOnOrAfter
      * @return void
      */
-    public function setNotOnOrAfter(int $notOnOrAfter = null)
+    public function setNotOnOrAfter(int $notOnOrAfter = null) : void
     {
         $this->NotOnOrAfter = $notOnOrAfter;
     }
@@ -116,7 +117,7 @@ class SubjectConfirmationData
      *
      * @return string|null
      */
-    public function getRecipient()
+    public function getRecipient() : ?string
     {
         return $this->Recipient;
     }
@@ -128,7 +129,7 @@ class SubjectConfirmationData
      * @param string|null $recipient
      * @return void
      */
-    public function setRecipient(string $recipient = null)
+    public function setRecipient(string $recipient = null) : void
     {
         $this->Recipient = $recipient;
     }
@@ -139,7 +140,7 @@ class SubjectConfirmationData
      *
      * @return string|null
      */
-    public function getInResponseTo()
+    public function getInResponseTo() : ?string
     {
         return $this->InResponseTo;
     }
@@ -151,7 +152,7 @@ class SubjectConfirmationData
      * @param string|null $inResponseTo
      * @return void
      */
-    public function setInResponseTo(string $inResponseTo = null)
+    public function setInResponseTo(string $inResponseTo = null) : void
     {
         $this->InResponseTo = $inResponseTo;
     }
@@ -162,7 +163,7 @@ class SubjectConfirmationData
      *
      * @return string|null
      */
-    public function getAddress()
+    public function getAddress() : ?string
     {
         return $this->Address;
     }
@@ -174,7 +175,7 @@ class SubjectConfirmationData
      * @param string|null $address
      * @return void
      */
-    public function setAddress(string $address = null)
+    public function setAddress(string $address = null) : void
     {
         if (!is_null($address) && !filter_var($address, FILTER_VALIDATE_IP, FILTER_FLAG_IPV4 | FILTER_FLAG_IPV6)) {
             throw new \InvalidArgumentException('Provided argument is not a valid IP address.');
@@ -200,7 +201,7 @@ class SubjectConfirmationData
      * @param (\SAML2\XML\ds\KeyInfo|\SAML2\XML\Chunk)[] $info
      * @return void
      */
-    public function setInfo(array $info)
+    public function setInfo(array $info) : void
     {
         $this->info = $info;
     }
@@ -212,7 +213,7 @@ class SubjectConfirmationData
      * @param \SAML2\XML\Chunk|\SAML2\XML\ds\KeyInfo $info
      * @return void
      */
-    public function addInfo($info)
+    public function addInfo($info) : void
     {
         Assert::isInstanceOfAny($info, [Chunk::class, KeyInfo::class]);
         $this->info[] = $info;
@@ -224,7 +225,7 @@ class SubjectConfirmationData
      *
      * @param \DOMElement|null $xml The XML element we should load.
      */
-    public function __construct(\DOMElement $xml = null)
+    public function __construct(DOMElement $xml = null)
     {
         if ($xml === null) {
             return;
@@ -246,7 +247,7 @@ class SubjectConfirmationData
             $this->setAddress($xml->getAttribute('Address'));
         }
         foreach ($xml->childNodes as $n) {
-            if (!($n instanceof \DOMElement)) {
+            if (!($n instanceof DOMElement)) {
                 continue;
             }
             if ($n->namespaceURI !== XMLSecurityDSig::XMLDSIGNS) {
@@ -271,7 +272,7 @@ class SubjectConfirmationData
      * @param  \DOMElement $parent The parent element we should append this element to.
      * @return \DOMElement This element, as XML.
      */
-    public function toXML(\DOMElement $parent)
+    public function toXML(DOMElement $parent) : DOMElement
     {
         $e = $parent->ownerDocument->createElementNS(Constants::NS_SAML, 'saml:SubjectConfirmationData');
         $parent->appendChild($e);

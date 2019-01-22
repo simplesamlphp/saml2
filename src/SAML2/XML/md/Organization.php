@@ -4,6 +4,7 @@ declare(strict_types=1);
 
 namespace SAML2\XML\md;
 
+use DOMElement;
 use Webmozart\Assert\Assert;
 
 use SAML2\Constants;
@@ -53,7 +54,7 @@ class Organization
      *
      * @param \DOMElement|null $xml The XML element we should load.
      */
-    public function __construct(\DOMElement $xml = null)
+    public function __construct(DOMElement $xml = null)
     {
         if ($xml === null) {
             return;
@@ -99,7 +100,7 @@ class Organization
      * @param array $extensions
      * @return void
      */
-    public function setExtensions(array $extensions)
+    public function setExtensions(array $extensions) : void
     {
         $this->Extensions = $extensions;
     }
@@ -111,7 +112,7 @@ class Organization
      * @param \SAML2\XML\Chunk $extensions The Extensions
      * @return void
      */
-    public function addExtension(Extensions $extension)
+    public function addExtension(Extensions $extension) : void
     {
         $this->Extensions[] = $extension;
     }
@@ -134,7 +135,7 @@ class Organization
      * @param array $organizationName
      * @return void
      */
-    public function setOrganizationName(array $organizationName)
+    public function setOrganizationName(array $organizationName) : void
     {
         $this->OrganizationName = $organizationName;
     }
@@ -157,7 +158,7 @@ class Organization
      * @param array $organizationDisplayName
      * @return void
      */
-    public function setOrganizationDisplayName(array $organizationDisplayName)
+    public function setOrganizationDisplayName(array $organizationDisplayName) : void
     {
         $this->OrganizationDisplayName = $organizationDisplayName;
     }
@@ -180,7 +181,7 @@ class Organization
      * @param array $organizationURL
      * @return void
      */
-    public function setOrganizationURL(array $organizationURL)
+    public function setOrganizationURL(array $organizationURL) : void
     {
         $this->OrganizationURL = $organizationURL;
     }
@@ -192,7 +193,7 @@ class Organization
      * @param  \DOMElement $parent The element we should add this organization to.
      * @return \DOMElement This Organization-element.
      */
-    public function toXML(\DOMElement $parent) : \DOMElement
+    public function toXML(DOMElement $parent) : DOMElement
     {
         Assert::notEmpty($this->OrganizationName);
         Assert::notEmpty($this->OrganizationDisplayName);
