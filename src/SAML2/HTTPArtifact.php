@@ -19,8 +19,8 @@ use \SimpleSAML\Store;
 class HTTPArtifact extends Binding
 {
     /**
-     * @psalm-suppress UndefinedClass
      * @var \SimpleSAML\Configuration
+     * @psalm-suppress UndefinedClass
      */
     private $spMetadata;
 
@@ -63,6 +63,7 @@ class HTTPArtifact extends Binding
         if ($destination === null) {
             throw new \Exception('Cannot get redirect URL, no destination set in the message.');
         }
+        /** @psalm-suppress UndefinedClass */
         return \SimpleSAML\Utils\HTTP::addURLparameters($destination, $params);
     }
 
@@ -100,7 +101,7 @@ class HTTPArtifact extends Binding
             throw new \Exception('Missing SAMLart parameter.');
         }
 
-        /**  @psalm-suppress UndefinedClass */
+        /** @psalm-suppress UndefinedClass */
         $metadataHandler = MetaDataStorageHandler::getMetadataHandler();
 
         $idpMetadata = $metadataHandler->getMetaDataConfigForSha1($sourceId, 'saml20-idp-remote');
