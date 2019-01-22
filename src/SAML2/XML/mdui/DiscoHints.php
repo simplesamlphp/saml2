@@ -180,7 +180,7 @@ class DiscoHints
      * @param \DOMElement $parent The element we should append to.
      * @return \DOMElement|null
      */
-    public function toXML(DOMElement $parent) : DOMElement
+    public function toXML(DOMElement $parent) : ?DOMElement
     {
         if (!empty($this->IPHint)
          || !empty($this->DomainHint)

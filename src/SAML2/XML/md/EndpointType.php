@@ -196,7 +196,7 @@ class EndpointType
      * @param string|null $location
      * @return void
      */
-    public function setLocation(string $location = null) : ?string
+    public function setLocation(string $location = null) : void
     {
         $this->Location = $location;
     }
