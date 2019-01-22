@@ -18,10 +18,9 @@ use \SimpleSAML\Store;
  */
 class HTTPArtifact extends Binding
 {
+
     /**
-     * @psalm-suppress UndefinedClass
-     * @var \SimpleSAML\Configuration
-     * @psalm-suppress UndefinedClass
+     * @var mixed
      */
     private $spMetadata;
 
@@ -135,7 +134,8 @@ class HTTPArtifact extends Binding
         $ar->setArtifact($_REQUEST['SAMLart']);
         $ar->setDestination($endpoint['Location']);
 
-        /* Sign the request */
+        // sign the request
+        /** @psalm-suppress UndefinedClass */
         \SimpleSAML\Module\saml\Message::addSign($this->spMetadata, $idpMetadata, $ar); // Shoaib - moved from the SOAPClient.
 
         $soap = new SOAPClient();
