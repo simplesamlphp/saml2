@@ -82,6 +82,7 @@ class HTTPPostTest extends \Mockery\Adapter\Phpunit\MockeryTestCase
 
     /**
      * Construct an authnrequest and send it to the destination set in the binding.
+     * @doesNotPerformAssertions
      */
     public function testSendAuthnRequestWithDestinationInBinding()
     {
@@ -94,6 +95,7 @@ class HTTPPostTest extends \Mockery\Adapter\Phpunit\MockeryTestCase
 
     /**
      * Construct an authnrequest with a destination set and try to send it.
+     * @doesNotPerformAssertions
      */
     public function testSendAuthnRequestWithDestination()
     {

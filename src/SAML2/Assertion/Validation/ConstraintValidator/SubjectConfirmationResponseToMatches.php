@@ -27,7 +27,7 @@ class SubjectConfirmationResponseToMatches implements
 
 
     /**
-     * @param SubjectConfirmation
+     * @param \SAML2\XML\saml\SubjectConfirmation
      * @param Result $result
      * @return void
      */
