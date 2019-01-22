@@ -167,8 +167,11 @@ class Utils
 
         /** @var XMLSecurityDSig $objXMLSecDSig */
         $objXMLSecDSig = $info['Signature'];
-
-        /** @var \DOMElement[] $sigMethod */
+        
+        /**
+         * @var \DOMElement[] $sigMethod
+         * @psalm-suppress UndefinedClass
+         */
         $sigMethod = self::xpQuery($objXMLSecDSig->sigNode, './ds:SignedInfo/ds:SignatureMethod');
         if (empty($sigMethod)) {
             throw new \Exception('Missing SignatureMethod element.');
@@ -421,7 +424,10 @@ class Utils
             }
 
             try {
-                /** @var string $key */
+                /**
+                 * @var string $key
+                 * @psalm-suppress UndefinedClass
+                 */
                 $key = $encKey->decryptKey($symmetricKeyInfo);
                 if (strlen($key) !== $keySize) {
                     throw new \Exception(
@@ -472,7 +478,10 @@ class Utils
             throw new \Exception('Algorithm disabled: '.var_export($algorithm, true));
         }
 
-        /** @var string $decrypted */
+        /**
+         * @var string $decrypted
+         * @psalm-suppress UndefinedClass
+         */
         $decrypted = $enc->decryptNode($symmetricKey, false);
 
         /*
