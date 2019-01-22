@@ -19,6 +19,7 @@ use \SimpleSAML\Store;
 class HTTPArtifact extends Binding
 {
     /**
+     * @psalm-suppress UndefinedClass
      * @var \SimpleSAML\Configuration
      * @psalm-suppress UndefinedClass
      */
@@ -129,6 +130,7 @@ class HTTPArtifact extends Binding
 
         /* Set the request attributes */
 
+        /** @psalm-suppress UndefinedClass */
         $ar->setIssuer($this->spMetadata->getString('entityid'));
         $ar->setArtifact($_REQUEST['SAMLart']);
         $ar->setDestination($endpoint['Location']);
