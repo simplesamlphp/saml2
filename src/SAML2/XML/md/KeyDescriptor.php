@@ -166,7 +166,7 @@ class KeyDescriptor
      */
     public function toXML(DOMElement $parent) : DOMElement
     {
-        if ($this->keyInfo === null) {
+        if ($this->KeyInfo === null) {
             throw new \Exception('Cannot convert KeyDescriptor to XML without KeyInfo set.');
         }
 
