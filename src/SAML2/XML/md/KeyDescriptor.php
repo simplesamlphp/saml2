@@ -33,7 +33,7 @@ class KeyDescriptor
      *
      * @var \SAML2\XML\ds\KeyInfo
      */
-    private $KeyInfo;
+    private $KeyInfo = null;
 
     /**
      * Supported EncryptionMethods.
