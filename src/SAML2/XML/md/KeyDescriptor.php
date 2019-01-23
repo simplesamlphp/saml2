@@ -31,7 +31,7 @@ class KeyDescriptor
     /**
      * The KeyInfo for this key.
      *
-     * @var \SAML2\XML\ds\KeyInfo
+     * @var \SAML2\XML\ds\KeyInfo|null
      */
     private $KeyInfo = null;
 
