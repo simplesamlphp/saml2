@@ -103,9 +103,9 @@ class KeyDescriptor
     /**
      * Collect the value of the KeyInfo property.
      *
-     * @return \SAML2\XML\ds\KeyInfo
+     * @return \SAML2\XML\ds\KeyInfo|null
      */
-    public function getKeyInfo() : KeyInfo
+    public function getKeyInfo() : ?KeyInfo
     {
         return $this->KeyInfo;
     }
