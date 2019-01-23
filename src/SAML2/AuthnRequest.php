@@ -38,7 +38,7 @@ class AuthnRequest extends Request
     /**
      * Optional ProviderID attribute
      *
-     * @var string
+     * @var string|null
      */
     private $ProviderName = null;
 
