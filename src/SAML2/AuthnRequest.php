@@ -410,9 +410,9 @@ class AuthnRequest extends Request
     /**
      * Retrieve the value of the ProviderName attribute.
      *
-     * @return string The ProviderName attribute.
+     * @return string|null The ProviderName attribute.
      */
-    public function getProviderName() : string
+    public function getProviderName() : ?string
     {
         return $this->ProviderName;
     }
