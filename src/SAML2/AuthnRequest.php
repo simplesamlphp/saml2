@@ -40,7 +40,7 @@ class AuthnRequest extends Request
      *
      * @var string
      */
-    private $ProviderName;
+    private $ProviderName = null;
 
     /**
      * Set to true if this request is passive.
