@@ -73,7 +73,6 @@ class HTTPPostTest extends \Mockery\Adapter\Phpunit\MockeryTestCase
     /**
      * Construct an authnrequest without a destination and try to send it.
      * @return void
-     * @doesNotPerformAssertions
      */
     public function testSendMissingDestination() : void
     {
