@@ -168,7 +168,7 @@ class SubjectConfirmationData
     {
         assert(is_string($address) || is_null($address));
         if (!is_null($address) && !filter_var($address, FILTER_VALIDATE_IP, FILTER_FLAG_IPV4 | FILTER_FLAG_IPV6)) {
-            throw new \InvalidArgumentException('Provided argument is not a valid IP address.');
+            Utils::getContainer()->getLogger()->warning(sprintf('Provided argument (%s) is not a valid IP address.', $address));
         }
         $this->Address = $address;
     }
