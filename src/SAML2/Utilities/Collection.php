@@ -4,6 +4,8 @@ declare(strict_types=1);
 
 namespace SAML2\Utilities;
 
+use Closure;
+
 interface Collection extends \ArrayAccess, \Countable, \IteratorAggregate
 {
     /**
@@ -13,7 +15,7 @@ interface Collection extends \ArrayAccess, \Countable, \IteratorAggregate
      *
      * @return void
      */
-    public function add($element);
+    public function add($element) : void;
 
 
     /**
@@ -50,7 +52,7 @@ interface Collection extends \ArrayAccess, \Countable, \IteratorAggregate
      *
      * @return mixed
      */
-    public function map(\Closure $function);
+    public function map(Closure $function);
 
 
     /**
@@ -58,7 +60,7 @@ interface Collection extends \ArrayAccess, \Countable, \IteratorAggregate
      *
      * @return \SAML2\Utilities\Collection
      */
-    public function filter(\Closure $filterFunction): Collection;
+    public function filter(Closure $filterFunction): Collection;
 
 
     /**
@@ -75,7 +77,7 @@ interface Collection extends \ArrayAccess, \Countable, \IteratorAggregate
      * @param mixed $element
      * @return void
      */
-    public function remove($element);
+    public function remove($element) : void;
 
 
     /**
@@ -85,5 +87,5 @@ interface Collection extends \ArrayAccess, \Countable, \IteratorAggregate
      * @param mixed $value
      * @return void
      */
-    public function set($key, $value);
+    public function set($key, $value) : void;
 }

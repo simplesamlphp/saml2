@@ -76,7 +76,7 @@ SOAP;
      * @param \SAML2\Message $message The message we should send.
      * @return void
      */
-    public function send(Message $message)
+    public function send(Message $message) : void
     {
         header('Content-Type: text/xml', true);
 

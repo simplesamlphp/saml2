@@ -4,6 +4,7 @@ declare(strict_types=1);
 
 namespace SAML2\XML\md;
 
+use DOMElement;
 use Webmozart\Assert\Assert;
 
 use SAML2\Constants;
@@ -50,7 +51,7 @@ class KeyDescriptor
      * @param \DOMElement|null $xml The XML element we should load.
      * @throws \Exception
      */
-    public function __construct(\DOMElement $xml = null)
+    public function __construct(DOMElement $xml = null)
     {
         if ($xml === null) {
             return;
@@ -81,7 +82,7 @@ class KeyDescriptor
      *
      * @return string|null
      */
-    public function getUse()
+    public function getUse() : ?string
     {
         return $this->use;
     }
@@ -93,7 +94,7 @@ class KeyDescriptor
      * @param string|null $use
      * @return void
      */
-    public function setUse(string $use = null)
+    public function setUse(string $use = null) : void
     {
         $this->use = $use;
     }
@@ -104,7 +105,7 @@ class KeyDescriptor
      *
      * @return \SAML2\XML\ds\KeyInfo|null
      */
-    public function getKeyInfo()
+    public function getKeyInfo() : ?KeyInfo
     {
         return $this->KeyInfo;
     }
@@ -116,7 +117,7 @@ class KeyDescriptor
      * @param \SAML2\XML\ds\KeyInfo $keyInfo
      * @return void
      */
-    public function setKeyInfo(KeyInfo $keyInfo)
+    public function setKeyInfo(KeyInfo $keyInfo) : void
     {
         $this->KeyInfo = $keyInfo;
     }
@@ -139,7 +140,7 @@ class KeyDescriptor
      * @param \SAML2\XML\Chunk[] $encryptionMethod
      * @return void
      */
-    public function setEncryptionMethod(array $encryptionMethod)
+    public function setEncryptionMethod(array $encryptionMethod) : void
     {
         $this->EncryptionMethod = $encryptionMethod;
     }
@@ -151,7 +152,7 @@ class KeyDescriptor
      * @param \SAML2\XML\Chunk $encryptionMethod
      * @return void
      */
-    public function addEncryptionMethod(Chunk $encryptionMethod)
+    public function addEncryptionMethod(Chunk $encryptionMethod) : void
     {
         $this->EncryptionMethod[] = $encryptionMethod;
     }
@@ -163,13 +164,11 @@ class KeyDescriptor
      * @param \DOMElement $parent The element we should append this KeyDescriptor to.
      * @return \DOMElement
      */
-    public function toXML(\DOMElement $parent) : \DOMElement
+    public function toXML(DOMElement $parent) : DOMElement
     {
-        Assert::isInstanceOf(
-            $this->KeyInfo,
-            KeyInfo::class,
-            'Cannot convert KeyDescriptor to XML without KeyInfo set.'
-        );
+        if ($this->KeyInfo === null) {
+            throw new \Exception('Cannot convert KeyDescriptor to XML without KeyInfo set.');
+        }
 
         $doc = $parent->ownerDocument;
 
@@ -180,7 +179,6 @@ class KeyDescriptor
             $e->setAttribute('use', $this->use);
         }
 
-        /** @psalm-suppress PossiblyNullReference */
         $this->KeyInfo->toXML($e);
 
         foreach ($this->EncryptionMethod as $em) {

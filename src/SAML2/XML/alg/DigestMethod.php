@@ -4,6 +4,7 @@ declare(strict_types=1);
 
 namespace SAML2\XML\alg;
 
+use DOMElement;
 use Webmozart\Assert\Assert;
 
 /**
@@ -18,9 +19,9 @@ class DigestMethod
     /**
      * An URI identifying an algorithm supported for digest operations.
      *
-     * @var string|null
+     * @var string
      */
-    private $Algorithm = null;
+    private $Algorithm = '';
 
 
     /**
@@ -30,7 +31,7 @@ class DigestMethod
      *
      * @throws \Exception
      */
-    public function __construct(\DOMElement $xml = null)
+    public function __construct(DOMElement $xml = null)
     {
         if ($xml === null) {
             return;
@@ -46,9 +47,9 @@ class DigestMethod
     /**
      * Collect the value of the algorithm-property
      *
-     * @return string|null
+     * @return string
      */
-    public function getAlgorithm()
+    public function getAlgorithm() : string
     {
         return $this->Algorithm;
     }
@@ -60,7 +61,7 @@ class DigestMethod
      * @param string $algorithm
      * @return void
      */
-    public function setAlgorithm(string $algorithm)
+    public function setAlgorithm(string $algorithm) : void
     {
         $this->Algorithm = $algorithm;
     }
@@ -73,14 +74,13 @@ class DigestMethod
      * @return \DOMElement
      * @throws \Exception
      */
-    public function toXML(\DOMElement $parent) : \DOMElement
+    public function toXML(DOMElement $parent) : DOMElement
     {
-        Assert::notNull($this->Algorithm, 'Cannot convert DigestMethod to XML without an Algorithm set.');
+        Assert::stringNotEmpty($this->Algorithm, 'Cannot convert DigestMethod to XML without an Algorithm set.');
 
         $doc = $parent->ownerDocument;
         $e = $doc->createElementNS(Common::NS, 'alg:DigestMethod');
         $parent->appendChild($e);
-        /** @psalm-suppress PossiblyNullArgument */
         $e->setAttribute('Algorithm', $this->Algorithm);
 
         return $e;

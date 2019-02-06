@@ -15,8 +15,9 @@ class MessageTest extends \Mockery\Adapter\Phpunit\MockeryTestCase
 {
     /**
      * @group Message
+     * @return void
      */
-    public function testCorrectSignatureMethodCanBeExtractedFromAuthnRequest()
+    public function testCorrectSignatureMethodCanBeExtractedFromAuthnRequest() : void
     {
         $authnRequest = new \DOMDocument();
         $authnRequest->loadXML(<<<'AUTHNREQUEST'
@@ -50,8 +51,9 @@ AUTHNREQUEST
 
     /**
      * @group Message
+     * @return void
      */
-    public function testIssuerParsedAsNameID()
+    public function testIssuerParsedAsNameID() : void
     {
         $authnRequest = new \DOMDocument();
         $authnRequest->loadXML(<<<'AUTHNREQUEST'
@@ -89,8 +91,9 @@ AUTHNREQUEST
 
     /**
      * @group Message
+     * @return void
      */
-    public function testConvertIssuerToXML()
+    public function testConvertIssuerToXML() : void
     {
         // first, try with common Issuer objects (Format=entity)
         $response = new Response();
@@ -130,8 +133,9 @@ AUTHNREQUEST
 
     /**
      * @group Message
+     * @return void
      */
-    public function testCorrectSignatureMethodCanBeExtractedFromResponse()
+    public function testCorrectSignatureMethodCanBeExtractedFromResponse() : void
     {
         $response = new \DOMDocument();
         $response->load(__DIR__.'/Response/response.xml');
@@ -151,8 +155,9 @@ AUTHNREQUEST
     /**
      * @group Message
      * @covers \SAML2\Message::getExtensions()
+     * @return void
      */
-    public function testGetExtensions()
+    public function testGetExtensions() : void
     {
         $authnRequest = new \DOMDocument();
         $authnRequest->loadXML(<<<'AUTHNREQUEST'
@@ -193,8 +198,9 @@ AUTHNREQUEST
     /**
      * @group Message
      * @covers \SAML2\Message::setExtensions()
+     * @return void
      */
-    public function testSetExtensions()
+    public function testSetExtensions() : void
     {
         $authnRequest = new \DOMDocument();
         $authnRequest->loadXML(<<<'AUTHNREQUEST'
@@ -244,8 +250,9 @@ AUTHNREQUEST
 
     /**
      * @group Message
+     * @return void
      */
-    public function testNamespaceMustBeProtocol()
+    public function testNamespaceMustBeProtocol() : void
     {
             $xml = <<<XML
 <saml:Assertion xmlns:saml="urn:oasis:names:tc:SAML:2.0:assertion"
@@ -264,8 +271,9 @@ XML;
 
     /**
      * @group Message
+     * @return void
      */
-    public function testSAMLversionMustBe20()
+    public function testSAMLversionMustBe20() : void
     {
         $xml = <<<XML
 <samlp:LogoutResponse xmlns:samlp="urn:oasis:names:tc:SAML:2.0:protocol"
@@ -291,8 +299,9 @@ XML;
 
     /**
      * @group Message
+     * @return void
      */
-    public function testMessageMustHaveID()
+    public function testMessageMustHaveID() : void
     {
         $xml = <<<XML
 <samlp:LogoutRequest
@@ -312,8 +321,9 @@ XML;
     /**
      * Tests AQ message type and some getters/setters.
      * @group Message
+     * @return void
      */
-    public function testParseAttributeQuery()
+    public function testParseAttributeQuery() : void
     {
         $xml = <<<XML
 <samlp:AttributeQuery
@@ -354,8 +364,9 @@ XML;
 
     /**
      * @group Message
+     * @return void
      */
-    public function testMessageTypeMustBeKnown()
+    public function testMessageTypeMustBeKnown() : void
     {
         $xml = <<<XML
 <samlp:MyFantasy

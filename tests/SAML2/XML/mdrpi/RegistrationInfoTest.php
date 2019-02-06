@@ -13,7 +13,10 @@ use SAML2\Utils;
  */
 class RegistrationInfoTest extends \PHPUnit\Framework\TestCase
 {
-    public function testMarshalling()
+    /**
+     * @return void
+     */
+    public function testMarshalling() : void
     {
         $registrationInfo = new RegistrationInfo();
         $registrationInfo->setRegistrationAuthority('https://ExampleAuthority');
@@ -49,7 +52,10 @@ class RegistrationInfoTest extends \PHPUnit\Framework\TestCase
     }
 
 
-    public function testUnmarshalling()
+    /**
+     * @return void
+     */
+    public function testUnmarshalling() : void
     {
         $document = DOMDocumentFactory::fromString(<<<XML
 <mdrpi:RegistrationInfo xmlns:mdrpi="urn:oasis:names:tc:SAML:metadata:rpi"
@@ -77,7 +83,10 @@ XML
     }
 
 
-    public function testMissingPublisherThrowsException()
+    /**
+     * @return void
+     */
+    public function testMissingPublisherThrowsException() : void
     {
         $document = DOMDocumentFactory::fromString(<<<XML
 <mdrpi:RegistrationInfo xmlns:mdrpi="urn:oasis:names:tc:SAML:metadata:rpi"
@@ -91,7 +100,10 @@ XML
     }
 
 
-    public function testEmptyRegistrationAuthorityOutboundThrowsException()
+    /**
+     * @return void
+     */
+    public function testEmptyRegistrationAuthorityOutboundThrowsException() : void
     {
         $registrationInfo = new RegistrationInfo();
         $registrationInfo->setRegistrationAuthority('');

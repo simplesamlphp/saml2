@@ -47,7 +47,7 @@ class TransformerChain implements Transformer
      * @param Transformer $transformer
      * @return void
      */
-    public function addTransformerStep(Transformer $transformer)
+    public function addTransformerStep(Transformer $transformer) : void
     {
         if ($transformer instanceof IdentityProviderAware) {
             $transformer->setIdentityProvider($this->identityProvider);

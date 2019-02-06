@@ -31,7 +31,7 @@ class X509 extends Key
      *
      * Type hint not possible due to upstream method signature
      */
-    public function offsetSet($offset, $value)
+    public function offsetSet($offset, $value) : void
     {
         if ($offset === 'X509Certificate') {
             $value = preg_replace('~\s+~', '', $value);

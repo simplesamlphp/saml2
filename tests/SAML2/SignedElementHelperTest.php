@@ -23,8 +23,9 @@ class SignedElementHelperTest extends \Mockery\Adapter\Phpunit\MockeryTestCase
 
     /**
      * Create a mock signed element called 'root'
+     * @return void
      */
-    public function setUp()
+    public function setUp() : void
     {
         $mock = new SignedElementHelperMock();
         $mock->setSignatureKey(CertificatesMock::getPrivateKey());
@@ -38,8 +39,9 @@ class SignedElementHelperTest extends \Mockery\Adapter\Phpunit\MockeryTestCase
      *
      * To do this we first need to copy the element and add it to it's own document again
      * @todo explain why we need to copy the element?
+     * @return void
      */
-    public function testValidateWithoutModification()
+    public function testValidateWithoutModification() : void
     {
         $signedMockElementCopy = Utils::copyElement($this->signedMockElement);
         $signedMockElementCopy->ownerDocument->appendChild($signedMockElementCopy);
@@ -50,8 +52,9 @@ class SignedElementHelperTest extends \Mockery\Adapter\Phpunit\MockeryTestCase
 
     /**
      * Test the modification of references.
+     * @return void
      */
-    public function testValidateWithReferenceTampering()
+    public function testValidateWithReferenceTampering() : void
     {
         // Test modification of reference.
         $signedMockElementCopy = Utils::copyElement($this->signedMockElement);
@@ -72,8 +75,9 @@ class SignedElementHelperTest extends \Mockery\Adapter\Phpunit\MockeryTestCase
 
     /**
      * Test that signatures no longer validate if the value has been tampered with.
+     * @return void
      */
-    public function testValidateWithValueTampering()
+    public function testValidateWithValueTampering() : void
     {
         // Test modification of SignatureValue.
         $signedMockElementCopy = Utils::copyElement($this->signedMockElement);
@@ -90,8 +94,9 @@ class SignedElementHelperTest extends \Mockery\Adapter\Phpunit\MockeryTestCase
 
     /**
      * Test that signatures contain the corresponding public keys.
+     * @return void
      */
-    public function testGetValidatingCertificates()
+    public function testGetValidatingCertificates() : void
     {
         $certData = XMLSecurityDSig::staticGet509XCerts(CertificatesMock::PUBLIC_KEY_PEM);
         $certData = $certData[0];
@@ -132,7 +137,10 @@ edF1YfJgq35hcMMLY9RE/0C0bCI=
     }
 
 
-    public function testGetSignatureKeyCertificates()
+    /**
+     * @return void
+     */
+    public function testGetSignatureKeyCertificates() : void
     {
         $seh = new SignedElementHelperMock();
         $origkey = CertificatesMock::getPrivateKey();

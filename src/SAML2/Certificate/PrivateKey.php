@@ -37,7 +37,7 @@ class PrivateKey extends Key
     /**
      * @return string|null
      */
-    public function getPassphrase()
+    public function getPassphrase() : ?string
     {
         return isset($this->keyData['passphrase']) ? $this->keyData['passphrase'] : null;
     }

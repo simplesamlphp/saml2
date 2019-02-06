@@ -4,6 +4,7 @@ declare(strict_types=1);
 
 namespace SAML2\XML\md;
 
+use DOMElement;
 use Webmozart\Assert\Assert;
 
 use SAML2\Constants;
@@ -50,7 +51,7 @@ class AuthnAuthorityDescriptor extends RoleDescriptor
      * @param \DOMElement|null $xml The XML element we should load.
      * @throws \Exception
      */
-    public function __construct(\DOMElement $xml = null)
+    public function __construct(DOMElement $xml = null)
     {
         parent::__construct('md:AuthnAuthorityDescriptor', $xml);
 
@@ -92,7 +93,7 @@ class AuthnAuthorityDescriptor extends RoleDescriptor
      * @param \SAML2\XML\md\EndpointType[] $authnQueryService
      * @return void
      */
-    public function setAuthnQueryService(array $authnQueryService)
+    public function setAuthnQueryService(array $authnQueryService) : void
     {
         $this->AuthnQueryService = $authnQueryService;
     }
@@ -104,7 +105,7 @@ class AuthnAuthorityDescriptor extends RoleDescriptor
      * @param \SAML2\XML\md\EndpointType $authnQueryService
      * @return void
      */
-    public function addAuthnQueryService(EndpointType $authnQueryService)
+    public function addAuthnQueryService(EndpointType $authnQueryService) : void
     {
         $this->AuthnQueryService[] = $authnQueryService;
     }
@@ -127,7 +128,7 @@ class AuthnAuthorityDescriptor extends RoleDescriptor
      * @param \SAML2\XML\md\EndpointType[] $assertionIDRequestService
      * @return void
      */
-    public function setAssertionIDRequestService(array $assertionIDRequestService)
+    public function setAssertionIDRequestService(array $assertionIDRequestService) : void
     {
         $this->AssertionIDRequestService = $assertionIDRequestService;
     }
@@ -139,7 +140,7 @@ class AuthnAuthorityDescriptor extends RoleDescriptor
      * @param \SAML2\XML\md\EndpointType $assertionIDRequestService
      * @return void
      */
-    public function addAssertionIDRequestService(EndpointType $assertionIDRequestService)
+    public function addAssertionIDRequestService(EndpointType $assertionIDRequestService) : void
     {
         $this->AssertionIDRequestService[] = $assertionIDRequestService;
     }
@@ -162,7 +163,7 @@ class AuthnAuthorityDescriptor extends RoleDescriptor
      * @param string[] $nameIDFormat
      * @return void
      */
-    public function setNameIDFormat(array $nameIDFormat)
+    public function setNameIDFormat(array $nameIDFormat) : void
     {
         $this->NameIDFormat = $nameIDFormat;
     }
@@ -174,7 +175,7 @@ class AuthnAuthorityDescriptor extends RoleDescriptor
      * @param \DOMElement $parent The EntityDescriptor we should append this AuthnAuthorityDescriptor to.
      * @return \DOMElement
      */
-    public function toXML(\DOMElement $parent) : \DOMElement
+    public function toXML(DOMElement $parent) : DOMElement
     {
         Assert::notEmpty($this->AuthnQueryService);
 

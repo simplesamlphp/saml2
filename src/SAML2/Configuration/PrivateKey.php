@@ -67,7 +67,7 @@ class PrivateKey extends ArrayAdapter
     /**
      * @return string|null
      */
-    public function getPassPhrase()
+    public function getPassPhrase() : ?string
     {
         return $this->passphrase;
     }

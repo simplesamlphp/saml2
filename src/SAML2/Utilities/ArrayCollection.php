@@ -4,7 +4,8 @@ declare(strict_types=1);
 
 namespace SAML2\Utilities;
 
-use \ArrayIterator;
+use ArrayIterator;
+use Closure;
 
 use SAML2\Exception\RuntimeException;
 
@@ -35,7 +36,7 @@ class ArrayCollection implements Collection
      *
      * @return void
      */
-    public function add($element)
+    public function add($element) : void
     {
         $this->elements[] = $element;
     }
@@ -57,7 +58,7 @@ class ArrayCollection implements Collection
      *
      * @return ArrayCollection
      */
-    public function filter(\Closure $f) : Collection
+    public function filter(Closure $f) : Collection
     {
         return new self(array_filter($this->elements, $f));
     }
@@ -68,7 +69,7 @@ class ArrayCollection implements Collection
      * @param mixed $value
      * @return void
      */
-    public function set($key, $value)
+    public function set($key, $value) : void
     {
         $this->elements[$key] = $value;
     }
@@ -79,7 +80,7 @@ class ArrayCollection implements Collection
      *
      * @return void
      */
-    public function remove($element)
+    public function remove($element) : void
     {
         $key = array_search($element, $this->elements);
         if ($key === false) {
@@ -130,7 +131,7 @@ class ArrayCollection implements Collection
      *
      * @return ArrayCollection
      */
-    public function map(\Closure $function) : ArrayCollection
+    public function map(Closure $function) : ArrayCollection
     {
         return new self(array_map($function, $this->elements));
     }
@@ -181,7 +182,7 @@ class ArrayCollection implements Collection
      * @param mixed $value
      * @return void
      */
-    public function offsetSet($offset, $value)
+    public function offsetSet($offset, $value) : void
     {
         $this->elements[$offset] = $value;
     }
@@ -191,7 +192,7 @@ class ArrayCollection implements Collection
      * @param $offset
      * @return void
      */
-    public function offsetUnset($offset)
+    public function offsetUnset($offset) : void
     {
         unset($this->elements[$offset]);
     }

@@ -73,7 +73,7 @@ class Response
      * @throws InvalidArgumentException
      * @return void
      */
-    public function setAssertionConsumerServiceURL(string $assertionConsumerServiceURL)
+    public function setAssertionConsumerServiceURL(string $assertionConsumerServiceURL) : void
     {
         if (!filter_var($assertionConsumerServiceURL, FILTER_VALIDATE_URL)) {
             throw new InvalidArgumentException('AssertionConsumerServiceURL is not a valid URL.');
@@ -89,7 +89,7 @@ class Response
      * @throws InvalidArgumentException
      * @return \DOMElement
      */
-    public function toXML(\DOMElement $parent) : \DOMElement
+    public function toXML(DOMElement $parent) : DOMElement
     {
         if (!is_string($this->getAssertionConsumerServiceURL())) {
             throw new InvalidArgumentException("AssertionConsumerServiceURL must be a string");

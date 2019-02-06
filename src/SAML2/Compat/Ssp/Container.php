@@ -4,7 +4,11 @@ declare(strict_types=1);
 
 namespace SAML2\Compat\Ssp;
 
-use \Psr\Log\LoggerInterface;
+use Psr\Log\LoggerInterface;
+use SimpleSAML\Utils\HTTP;
+use SimpleSAML\Utils\Random;
+use SimpleSAML\Utils\System;
+use SimpleSAML\Utils\XML;
 
 use SAML2\Compat\AbstractContainer;
 
@@ -42,18 +46,20 @@ class Container extends AbstractContainer
     public function generateId() : string
     {
         /** @psalm-suppress UndefinedClass */
-        return \SimpleSAML\Utils\Random::generateID();
+        return Random::generateID();
     }
 
 
     /**
      * {@inheritdoc}
+     * @param mixed $message
+     * @param string $type
      * @return void
      */
-    public function debugMessage($message, string $type)
+    public function debugMessage($message, string $type) : void
     {
         /** @psalm-suppress UndefinedClass */
-        \SimpleSAML\Utils\XML::debugSAMLMessage($message, $type);
+        XML::debugSAMLMessage($message, $type);
     }
 
 
@@ -63,10 +69,10 @@ class Container extends AbstractContainer
      * @param array $data
      * @return void
      */
-    public function redirect(string $url, array $data = [])
+    public function redirect(string $url, array $data = []) : void
     {
         /** @psalm-suppress UndefinedClass */
-        \SimpleSAML\Utils\HTTP::redirectTrustedURL($url, $data);
+        HTTP::redirectTrustedURL($url, $data);
     }
 
 
@@ -76,32 +82,37 @@ class Container extends AbstractContainer
      * @param array $data
      * @return void
      */
-    public function postRedirect(string $url, array $data = [])
+    public function postRedirect(string $url, array $data = []) : void
     {
         /** @psalm-suppress UndefinedClass */
-        \SimpleSAML\Utils\HTTP::submitPOSTData($url, $data);
+        HTTP::submitPOSTData($url, $data);
     }
 
 
     /**
      * {@inheritdoc}
+     * @return string
      */
-    public function getTempDir()
+    public function getTempDir() : string
     {
         /** @psalm-suppress UndefinedClass */
-        return \SimpleSAML\Utils\System::getTempDir();
+        return System::getTempDir();
     }
 
 
     /**
      * {@inheritdoc}
+     * @param string $filename
+     * @param string $date
+     * @param int|null $mode
+     * @return void
      */
-    public function writeFile(string $filename, string $data, int $mode = null)
+    public function writeFile(string $filename, string $data, int $mode = null) : void
     {
         if ($mode === null) {
             $mode = 0600;
         }
         /** @psalm-suppress UndefinedClass */
-        \SimpleSAML\Utils\System::writeFile($filename, $data, $mode);
+        System::writeFile($filename, $data, $mode);
     }
 }

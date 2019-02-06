@@ -4,6 +4,7 @@ declare(strict_types=1);
 
 namespace SAML2\XML\mdrpi;
 
+use DOMElement;
 use Webmozart\Assert\Assert;
 
 use SAML2\Utils;
@@ -53,7 +54,7 @@ class PublicationInfo
      * @param \DOMElement|null $xml The XML element we should load.
      * @throws \Exception
      */
-    public function __construct(\DOMElement $xml = null)
+    public function __construct(DOMElement $xml = null)
     {
         if ($xml === null) {
             return;
@@ -81,7 +82,7 @@ class PublicationInfo
      *
      * @return string
      */
-    public function getPublisher()
+    public function getPublisher() : string
     {
         return $this->publisher;
     }
@@ -92,7 +93,7 @@ class PublicationInfo
      *
      * @return int|null
      */
-    public function getCreationInstant()
+    public function getCreationInstant() : ?int
     {
         return $this->creationInstant;
     }
@@ -103,7 +104,7 @@ class PublicationInfo
      *
      * @return string|null
      */
-    public function getPublicationId()
+    public function getPublicationId() : ?string
     {
         return $this->publicationId;
     }
@@ -126,7 +127,7 @@ class PublicationInfo
      * @param string $publisher
      * @return void
      */
-    public function setPublisher(string $publisher)
+    public function setPublisher(string $publisher) : void
     {
         $this->publisher = $publisher;
     }
@@ -138,7 +139,7 @@ class PublicationInfo
      * @param int|null $creationInstant
      * @return void
      */
-    public function setCreationInstant(int $creationInstant = null)
+    public function setCreationInstant(int $creationInstant = null) : void
     {
         $this->creationInstant = $creationInstant;
     }
@@ -150,7 +151,7 @@ class PublicationInfo
      * @param string|null $publicationId
      * @return void
      */
-    public function setPublicationId(string $publicationId = null)
+    public function setPublicationId(string $publicationId = null) : void
     {
         $this->publicationId = $publicationId;
     }
@@ -162,7 +163,7 @@ class PublicationInfo
      * @param array $usagePolicy
      * @return void
      */
-    public function setUsagePolicy(array $usagePolicy)
+    public function setUsagePolicy(array $usagePolicy) : void
     {
         $this->UsagePolicy = $usagePolicy;
     }
@@ -174,7 +175,7 @@ class PublicationInfo
      * @param \DOMElement $parent The element we should append to.
      * @return \DOMElement
      */
-    public function toXML(\DOMElement $parent) : \DOMElement
+    public function toXML(DOMElement $parent) : DOMElement
     {
         Assert::notEmpty($this->publisher, "Cannot convert PublicationInfo to XML without a publisher set.");
 

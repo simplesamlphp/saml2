@@ -35,7 +35,7 @@ abstract class AbstractContainer
      * @param string $type
      * @return void
      */
-    abstract public function debugMessage($message, string $type);
+    abstract public function debugMessage($message, string $type) : void;
 
 
 
@@ -46,7 +46,7 @@ abstract class AbstractContainer
      * @param array $data
      * @return void
      */
-    abstract public function redirect(string $url, array $data = []);
+    abstract public function redirect(string $url, array $data = []) : void;
 
 
     /**
@@ -56,17 +56,17 @@ abstract class AbstractContainer
      * @param array $data
      * @return void
      */
-    abstract public function postRedirect(string $url, array $data = []);
+    abstract public function postRedirect(string $url, array $data = []) : void;
 
 
     /**
      * This function retrieves the path to a directory where temporary files can be saved.
      *
-     * @return string Path to a temporary directory, without a trailing directory separator.
      * @throws \Exception If the temporary directory cannot be created or it exists and does not belong
      * to the current user.
+     * @return string Path to a temporary directory, without a trailing directory separator.
      */
-    abstract public function getTempDir();
+    abstract public function getTempDir() : string;
 
 
     /**
@@ -80,5 +80,5 @@ abstract class AbstractContainer
      * @param int $mode The permissions to apply to the file. Defaults to 0600.
      * @return void
      */
-    abstract public function writeFile(string $filename, string $data, int $mode = null);
+    abstract public function writeFile(string $filename, string $data, int $mode = null) : void;
 }

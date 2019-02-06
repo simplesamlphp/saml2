@@ -4,6 +4,8 @@ declare(strict_types=1);
 
 namespace SAML2\XML\md;
 
+use DOMElement;
+
 use SAML2\Constants;
 use SAML2\Utils;
 
@@ -35,7 +37,7 @@ class AdditionalMetadataLocation
      * @param \DOMElement|null $xml The XML element we should load.
      * @throws \Exception
      */
-    public function __construct(\DOMElement $xml = null)
+    public function __construct(DOMElement $xml = null)
     {
         if ($xml === null) {
             return;
@@ -67,7 +69,7 @@ class AdditionalMetadataLocation
      * @param string $namespace
      * @return void
      */
-    public function setNamespace(string $namespace)
+    public function setNamespace(string $namespace) : void
     {
         $this->namespace = $namespace;
     }
@@ -90,7 +92,7 @@ class AdditionalMetadataLocation
      * @param string $location
      * @return void
      */
-    public function setLocation(string $location)
+    public function setLocation(string $location) : void
     {
         $this->location = $location;
     }
@@ -102,7 +104,7 @@ class AdditionalMetadataLocation
      * @param  \DOMElement $parent The element we should append to.
      * @return \DOMElement This AdditionalMetadataLocation-element.
      */
-    public function toXML(\DOMElement $parent) : \DOMElement
+    public function toXML(DOMElement $parent) : DOMElement
     {
         $e = Utils::addString($parent, Constants::NS_MD, 'md:AdditionalMetadataLocation', $this->getLocation());
         $e->setAttribute('namespace', $this->getNamespace());

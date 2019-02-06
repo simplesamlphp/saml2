@@ -15,7 +15,10 @@ use SAML2\XML\md\AttributeAuthorityDescriptor;
  */
 class EntityDescriptorTest extends \PHPUnit\Framework\TestCase
 {
-    public function testMissingAffiliationId()
+    /**
+     * @return void
+     */
+    public function testMissingAffiliationId() : void
     {
         $document = DOMDocumentFactory::fromString(
         <<<XML
@@ -31,7 +34,10 @@ XML
     }
 
 
-    public function testMissingEntityId()
+    /**
+     * @return void
+     */
+    public function testMissingEntityId() : void
     {
         $document = DOMDocumentFactory::fromString(
         <<<XML
@@ -47,7 +53,10 @@ XML
     }
 
 
-    public function testMissingAffiliateMember()
+    /**
+     * @return void
+     */
+    public function testMissingAffiliateMember() : void
     {
         $document = DOMDocumentFactory::fromString(
         <<<XML
@@ -62,7 +71,10 @@ XML
     }
 
 
-    public function testMissingDescriptor()
+    /**
+     * @return void
+     */
+    public function testMissingDescriptor() : void
     {
         $document = DOMDocumentFactory::fromString(
         <<<XML
@@ -75,7 +87,10 @@ XML
     }
 
 
-    public function testInvalidValidUntil()
+    /**
+     * @return void
+     */
+    public function testInvalidValidUntil() : void
     {
         $document = DOMDocumentFactory::fromString(
         <<<XML
@@ -91,7 +106,10 @@ XML
     }
 
 
-    public function testUnmarshalling()
+    /**
+     * @return void
+     */
+    public function testUnmarshalling() : void
     {
         $document = DOMDocumentFactory::fromString(
         <<<XML
@@ -124,7 +142,10 @@ XML
     }
 
 
-    public function testUnmarshalling2()
+    /**
+     * @return void
+     */
+    public function testUnmarshalling2() : void
     {
         $document = DOMDocumentFactory::fromString(<<<XML
 <EntityDescriptor entityID="theEntityID" ID="theID" validUntil="2010-01-01T12:34:56Z" cacheDuration="PT5000S" xmlns="urn:oasis:names:tc:SAML:2.0:metadata">

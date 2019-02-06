@@ -4,6 +4,8 @@ declare(strict_types=1);
 
 namespace SAML2\XML\md;
 
+use DOMElement;
+
 use SAML2\Utils;
 
 /**
@@ -51,7 +53,7 @@ class SPSSODescriptor extends SSODescriptorType
      *
      * @param \DOMElement|null $xml The XML element we should load.
      */
-    public function __construct(\DOMElement $xml = null)
+    public function __construct(DOMElement $xml = null)
     {
         parent::__construct('md:SPSSODescriptor', $xml);
 
@@ -79,7 +81,7 @@ class SPSSODescriptor extends SSODescriptorType
      *
      * @return bool|null
      */
-    public function getAuthnRequestsSigned()
+    public function getAuthnRequestsSigned() : ?bool
     {
         return $this->AuthnRequestsSigned;
     }
@@ -91,7 +93,7 @@ class SPSSODescriptor extends SSODescriptorType
      * @param bool|null $flag
      * @return void
      */
-    public function setAuthnRequestsSigned(bool $flag = null)
+    public function setAuthnRequestsSigned(bool $flag = null) : void
     {
         $this->AuthnRequestsSigned = $flag;
     }
@@ -102,7 +104,7 @@ class SPSSODescriptor extends SSODescriptorType
      *
      * @return bool|null
      */
-    public function wantAssertionsSigned()
+    public function wantAssertionsSigned() : ?bool
     {
         return $this->WantAssertionsSigned;
     }
@@ -114,7 +116,7 @@ class SPSSODescriptor extends SSODescriptorType
      * @param bool|null $flag
      * @return void
      */
-    public function setWantAssertionsSigned(bool $flag = null)
+    public function setWantAssertionsSigned(bool $flag = null) : void
     {
         $this->WantAssertionsSigned = $flag;
     }
@@ -137,7 +139,7 @@ class SPSSODescriptor extends SSODescriptorType
      * @param array $acs
      * @return void
      */
-    public function setAssertionConsumerService(array $acs)
+    public function setAssertionConsumerService(array $acs) : void
     {
         $this->AssertionConsumerService = $acs;
     }
@@ -149,7 +151,7 @@ class SPSSODescriptor extends SSODescriptorType
      * @param \SAML2\XML\md\IndexedEndpointType $acs
      * @return void
      */
-    public function addAssertionConsumerService(IndexedEndpointType $acs)
+    public function addAssertionConsumerService(IndexedEndpointType $acs) : void
     {
         $this->AssertionConsumerService[] = $acs;
     }
@@ -172,7 +174,7 @@ class SPSSODescriptor extends SSODescriptorType
      * @param \SAML2\XML\md\AttributeConsumingService $acs
      * @return void
      */
-    public function addAttributeConsumingService(AttributeConsumingService $acs)
+    public function addAttributeConsumingService(AttributeConsumingService $acs) : void
     {
         $this->AttributeConsumingService[] = $acs;
     }
@@ -184,7 +186,7 @@ class SPSSODescriptor extends SSODescriptorType
      * @param array $acs
      * @return void
      */
-    public function setAttributeConsumingService(array $acs)
+    public function setAttributeConsumingService(array $acs) : void
     {
         $this->AttributeConsumingService = $acs;
     }
@@ -196,7 +198,7 @@ class SPSSODescriptor extends SSODescriptorType
      * @param \DOMElement $parent The EntityDescriptor we should append this SPSSODescriptor to.
      * @return \DOMElement
      */
-    public function toXML(\DOMElement $parent) : \DOMElement
+    public function toXML(DOMElement $parent) : DOMElement
     {
         $e = parent::toXML($parent);
 

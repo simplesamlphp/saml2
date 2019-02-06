@@ -11,6 +11,8 @@ declare(strict_types=1);
 
 namespace SAML2\XML\saml;
 
+use DOMElement;
+
 use SAML2\Constants;
 use SAML2\DOMDocumentFactory;
 
@@ -56,7 +58,7 @@ abstract class BaseIDType
      *
      * @param \DOMElement|null $xml The XML element we should load, if any.
      */
-    public function __construct(\DOMElement $xml = null)
+    public function __construct(DOMElement $xml = null)
     {
         if ($xml === null) {
             return;
@@ -79,7 +81,7 @@ abstract class BaseIDType
      *
      * @return string|null
      */
-    public function getNameQualifier()
+    public function getNameQualifier() : ?string
     {
         return $this->NameQualifier;
     }
@@ -91,7 +93,7 @@ abstract class BaseIDType
      * @param string|null $nameQualifier
      * @return void
      */
-    public function setNameQualifier(string $nameQualifier = null)
+    public function setNameQualifier(string $nameQualifier = null) : void
     {
         $this->NameQualifier = $nameQualifier;
     }
@@ -102,7 +104,7 @@ abstract class BaseIDType
      *
      * @return string|null
      */
-    public function getSPNameQualifier()
+    public function getSPNameQualifier() : ?string
     {
         return $this->SPNameQualifier;
     }
@@ -114,7 +116,7 @@ abstract class BaseIDType
      * @param string|null $spNameQualifier
      * @return void
      */
-    public function setSPNameQualifier(string $spNameQualifier = null)
+    public function setSPNameQualifier(string $spNameQualifier = null) : void
     {
         $this->SPNameQualifier = $spNameQualifier;
     }
@@ -126,7 +128,7 @@ abstract class BaseIDType
      * @param \DOMElement $parent The element we are converting to XML.
      * @return \DOMElement The XML element after adding the data corresponding to this BaseID.
      */
-    public function toXML(\DOMElement $parent = null) : \DOMElement
+    public function toXML(DOMElement $parent = null) : DOMElement
     {
         if ($parent === null) {
             $parent = DOMDocumentFactory::create();

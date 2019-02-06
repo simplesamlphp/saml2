@@ -14,12 +14,12 @@ class IsSuccessful implements ConstraintValidator
     /**
      * @param \SAML2\Response $response
      * @param \SAML2\Response\Validation\Result $result
-     *
+     * @return void
      */
     public function validate(
         Response $response,
         Result $result
-    ) {
+    ) : void {
         if (!$response->isSuccess()) {
             $result->addError($this->buildMessage($response->getStatus()));
         }

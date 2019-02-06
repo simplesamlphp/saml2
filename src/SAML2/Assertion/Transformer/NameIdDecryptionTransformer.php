@@ -5,6 +5,7 @@ declare(strict_types=1);
 namespace SAML2\Assertion\Transformer;
 
 use Psr\Log\LoggerInterface;
+
 use SAML2\Assertion;
 use SAML2\Assertion\Exception\NotDecryptedException;
 use SAML2\Certificate\PrivateKeyLoader;
@@ -56,7 +57,6 @@ final class NameIdDecryptionTransformer implements
 
     /**
      * @param Assertion $assertion
-     *
      * @throws \Exception
      * @return Assertion
      */
@@ -100,7 +100,7 @@ final class NameIdDecryptionTransformer implements
      * @param IdentityProvider $identityProvider
      * @return void
      */
-    public function setIdentityProvider(IdentityProvider $identityProvider)
+    public function setIdentityProvider(IdentityProvider $identityProvider) : void
     {
         $this->identityProvider = $identityProvider;
     }
@@ -110,7 +110,7 @@ final class NameIdDecryptionTransformer implements
      * @param ServiceProvider $serviceProvider
      * @return void
      */
-    public function setServiceProvider(ServiceProvider $serviceProvider)
+    public function setServiceProvider(ServiceProvider $serviceProvider) : void
     {
         $this->serviceProvider = $serviceProvider;
     }

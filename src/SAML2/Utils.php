@@ -4,10 +4,14 @@ declare(strict_types=1);
 
 namespace SAML2;
 
-use Webmozart\Assert\Assert;
+use DOMDocument;
+use DOMElement;
+use DOMNode;
+use DOMXPath;
 use RobRichards\XMLSecLibs\XMLSecEnc;
 use RobRichards\XMLSecLibs\XMLSecurityDSig;
 use RobRichards\XMLSecLibs\XMLSecurityKey;
+use Webmozart\Assert\Assert;
 
 use SAML2\Compat\AbstractContainer;
 use SAML2\Compat\ContainerSingleton;
@@ -44,7 +48,7 @@ class Utils
      * @throws \Exception
      * @return array|false An array with information about the Signature element.
      */
-    public static function validateElement(\DOMElement $root)
+    public static function validateElement(DOMElement $root)
     {
         /* Create an XML security object. */
         $objXMLSecDSig = new XMLSecurityDSig();
@@ -157,11 +161,10 @@ class Utils
      *
      * @param array $info The information returned by the validateElement() function.
      * @param XMLSecurityKey $key The publickey that should validate the Signature object.
-     * @return void
      * @throws \Exception
      * @return void
      */
-    public static function validateSignature(array $info, XMLSecurityKey $key)
+    public static function validateSignature(array $info, XMLSecurityKey $key) : void
     {
         Assert::keyExists($info, "Signature");
 
@@ -200,18 +203,18 @@ class Utils
      * @param string $query The query.
      * @return \DOMNode[] Array with matching DOM nodes.
      */
-    public static function xpQuery(\DOMNode $node, string $query) : array
+    public static function xpQuery(DOMNode $node, string $query) : array
     {
         static $xpCache = null;
 
-        if ($node instanceof \DOMDocument) {
+        if ($node instanceof DOMDocument) {
             $doc = $node;
         } else {
             $doc = $node->ownerDocument;
         }
 
         if ($xpCache === null || !$xpCache->document->isSameNode($doc)) {
-            $xpCache = new \DOMXPath($doc);
+            $xpCache = new DOMXPath($doc);
             $xpCache->registerNamespace('soap-env', Constants::NS_SOAP);
             $xpCache->registerNamespace('saml_protocol', Constants::NS_SAMLP);
             $xpCache->registerNamespace('saml_assertion', Constants::NS_SAML);
@@ -237,7 +240,7 @@ class Utils
      * @param \DOMElement|null $parent The target parent element.
      * @return \DOMElement The copied element.
      */
-    public static function copyElement(\DOMElement $element, \DOMElement $parent = null) : \DOMElement
+    public static function copyElement(DOMElement $element, DOMElement $parent = null) : DOMElement
     {
         if ($parent === null) {
             $document = DOMDocumentFactory::create();
@@ -246,7 +249,7 @@ class Utils
         }
 
         $namespaces = [];
-        for ($e = $element; $e instanceof \DOMNode; $e = $e->parentNode) {
+        for ($e = $element; $e instanceof DOMNode; $e = $e->parentNode) {
             foreach (Utils::xpQuery($e, './namespace::*') as $ns) {
                 $prefix = $ns->localName;
                 if ($prefix === 'xml' || $prefix === 'xmlns') {
@@ -283,7 +286,7 @@ class Utils
      * @param mixed|null $default The value that should be returned if the attribute doesn't exist.
      * @return bool|mixed The value of the attribute, or $default if the attribute doesn't exist.
      */
-    public static function parseBoolean(\DOMElement $node, string $attributeName, $default = null)
+    public static function parseBoolean(DOMElement $node, string $attributeName, $default = null)
     {
         if (!$node->hasAttribute($attributeName)) {
             return $default;
@@ -315,9 +318,9 @@ class Utils
     public static function insertSignature(
         XMLSecurityKey $key,
         array $certificates,
-        \DOMElement $root,
-        \DOMNode $insertBefore = null
-    ) {
+        DOMElement $root,
+        DOMNode $insertBefore = null
+    ) : void {
         $objXMLSecDSig = new XMLSecurityDSig();
         $objXMLSecDSig->setCanonicalMethod(XMLSecurityDSig::EXC_C14N);
 
@@ -360,11 +363,10 @@ class Utils
      * @param \DOMElement $encryptedData The encrypted data.
      * @param XMLSecurityKey $inputKey The decryption key.
      * @param array &$blacklist Blacklisted decryption algorithms.
-     * @return \DOMElement The decrypted element.
      * @throws \Exception
      * @return \DOMElement The decrypted element.
      */
-    private static function doDecryptElement(\DOMElement $encryptedData, XMLSecurityKey $inputKey, array &$blacklist) : \DOMElement
+    private static function doDecryptElement(DOMElement $encryptedData, XMLSecurityKey $inputKey, array &$blacklist) : DOMElement
     {
         $enc = new XMLSecEnc();
 
@@ -501,7 +503,7 @@ class Utils
         }
 
         $decryptedElement = $newDoc->firstChild->firstChild;
-        if (!($decryptedElement instanceof \DOMElement)) {
+        if (!($decryptedElement instanceof DOMElement)) {
             throw new \Exception('Missing decrypted element or it was not actually a DOMElement.');
         }
 
@@ -518,7 +520,7 @@ class Utils
      * @throws \Exception
      * @return \DOMElement The decrypted element.
      */
-    public static function decryptElement(\DOMElement $encryptedData, XMLSecurityKey $inputKey, array $blacklist = []) : \DOMElement
+    public static function decryptElement(DOMElement $encryptedData, XMLSecurityKey $inputKey, array $blacklist = []) : DOMElement
     {
         try {
             return self::doDecryptElement($encryptedData, $inputKey, $blacklist);
@@ -569,7 +571,7 @@ class Utils
      * @param string $localName The localName of the string elements.
      * @return array The string values of the various nodes.
      */
-    public static function extractStrings(\DOMElement $parent, string $namespaceURI, string $localName) : array
+    public static function extractStrings(DOMElement $parent, string $namespaceURI, string $localName) : array
     {
         $ret = [];
         foreach ($parent->childNodes as $node) {
@@ -593,11 +595,11 @@ class Utils
      * @return \DOMElement The generated element.
      */
     public static function addString(
-        \DOMElement $parent,
+        DOMElement $parent,
         string $namespace,
         string $name,
         string $value
-    ) : \DOMElement {
+    ) : DOMElement {
         $doc = $parent->ownerDocument;
 
         $n = $doc->createElementNS($namespace, $name);
@@ -619,12 +621,12 @@ class Utils
      * @return void
      */
     public static function addStrings(
-        \DOMElement $parent,
+        DOMElement $parent,
         string $namespace,
         string $name,
         bool $localized,
         array $values
-    ) {
+    ) : void {
         $doc = $parent->ownerDocument;
 
         foreach ($values as $index => $value) {

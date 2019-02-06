@@ -23,7 +23,10 @@ class PublicKeyValidatorTest extends \Mockery\Adapter\Phpunit\MockeryTestCase
     private $mockConfiguration;
 
 
-    public function setUp()
+    /**
+     * @return void
+     */
+    public function setUp() : void
     {
         $this->mockConfiguration = \Mockery::mock(CertificateProvider::class);
         $this->mockSignedElement = \Mockery::mock(SignedElement::class);
@@ -33,8 +36,9 @@ class PublicKeyValidatorTest extends \Mockery\Adapter\Phpunit\MockeryTestCase
     /**
      * @test
      * @group signature
+     * @return void
      */
-    public function it_cannot_validate_if_no_keys_can_be_loaded()
+    public function it_cannot_validate_if_no_keys_can_be_loaded() : void
     {
         $keyloaderMock = $this->prepareKeyLoader(new KeyCollection());
         $validator = new PublicKeyValidator(new \Psr\Log\NullLogger(), $keyloaderMock);
@@ -46,8 +50,9 @@ class PublicKeyValidatorTest extends \Mockery\Adapter\Phpunit\MockeryTestCase
     /**
      * @test
      * @group signature
+     * @return void
      */
-    public function it_will_validate_when_keys_can_be_loaded()
+    public function it_will_validate_when_keys_can_be_loaded() : void
     {
         $keyloaderMock = $this->prepareKeyLoader(new KeyCollection([1, 2]));
         $validator = new PublicKeyValidator(new \Psr\Log\NullLogger(), $keyloaderMock);
@@ -59,8 +64,9 @@ class PublicKeyValidatorTest extends \Mockery\Adapter\Phpunit\MockeryTestCase
     /**
      * @test
      * @group signature
+     * @return void
      */
-    public function non_X509_keys_are_not_used_for_validation()
+    public function non_X509_keys_are_not_used_for_validation() : void
     {
         $controlledCollection = new KeyCollection([
             new Key(['type' => 'not_X509']),
@@ -82,8 +88,9 @@ class PublicKeyValidatorTest extends \Mockery\Adapter\Phpunit\MockeryTestCase
     /**
      * @test
      * @group signature
+     * @return void
      */
-    public function signed_message_with_valid_signature_is_validated_correctly()
+    public function signed_message_with_valid_signature_is_validated_correctly() : void
     {
         $pattern = Certificate::CERTIFICATE_PATTERN;
         preg_match($pattern, CertificatesMock::PUBLIC_KEY_PEM, $matches);
@@ -104,6 +111,9 @@ class PublicKeyValidatorTest extends \Mockery\Adapter\Phpunit\MockeryTestCase
     }
 
 
+    /**
+     * @return \SAML2\Certificate\KeyLoader
+     */
     private function prepareKeyLoader($returnValue)
     {
         return \Mockery::mock(KeyLoader::class)

@@ -14,7 +14,10 @@ use SAML2\XML\saml\Issuer;
  */
 class IssuerShowAllTest extends \PHPUnit\Framework\TestCase
 {
-    public function testMarshalling()
+    /**
+     * @return void
+     */
+    public function testMarshalling() : void
     {
         $issuer = new Issuer();
         $issuer->setNameQualifier('TheNameQualifier');
@@ -35,7 +38,10 @@ class IssuerShowAllTest extends \PHPUnit\Framework\TestCase
     }
 
 
-    public function testUnmarshalling()
+    /**
+     * @return void
+     */
+    public function testUnmarshalling() : void
     {
         $samlNamespace = Constants::NS_SAML;
         $document = DOMDocumentFactory::fromString(<<<XML
@@ -52,7 +58,10 @@ XML
     }
 
 
-    public function testToStringShowAllTrueFormatNameID()
+    /**
+     * @return void
+     */
+    public function testToStringShowAllTrueFormatNameID() : void
     {
         $issuer = new Issuer();
         $issuer->setNameQualifier('TheNameQualifier');
@@ -69,7 +78,10 @@ XML
     }
 
 
-    public function testToStringShowAllFalseFormatNameID()
+    /**
+     * @return void
+     */
+    public function testToStringShowAllFalseFormatNameID() : void
     {
         $issuer = new Issuer();
         $issuer->setNameQualifier('TheNameQualifier');
@@ -85,7 +97,10 @@ XML
     }
 
 
-    public function testToStringShowAllTrueNOTNameIDFormat()
+    /**
+     * @return void
+     */
+    public function testToStringShowAllTrueNOTNameIDFormat() : void
     {
         $issuer = new Issuer();
         $issuer->setNameQualifier('TheNameQualifier');
@@ -103,7 +118,10 @@ XML
     }
 
 
-    public function testToStringShowAllDefaultNOTNameIDFormat()
+    /**
+     * @return void
+     */
+    public function testToStringShowAllDefaultNOTNameIDFormat() : void
     {
         $issuer = new Issuer();
         $issuer->setNameQualifier('TheNameQualifier');
@@ -121,7 +139,10 @@ XML
     }
 
 
-    public function testToStringShowAllDefaultNameIDFormat()
+    /**
+     * @return void
+     */
+    public function testToStringShowAllDefaultNameIDFormat() : void
     {
         $issuer = new Issuer();
         $issuer->setNameQualifier('TheNameQualifier');

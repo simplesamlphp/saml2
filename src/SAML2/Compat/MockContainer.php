@@ -76,7 +76,7 @@ class MockContainer extends AbstractContainer
      * @param string $type
      * @return void
      */
-    public function debugMessage($message, string $type)
+    public function debugMessage($message, string $type) : void
     {
         $this->debugMessages[$type] = $message;
     }
@@ -89,7 +89,7 @@ class MockContainer extends AbstractContainer
      * @param array $data
      * @return void
      */
-    public function redirect(string $url, array $data = [])
+    public function redirect(string $url, array $data = []) : void
     {
         $this->redirectUrl = $url;
         $this->redirectData = $data;
@@ -103,7 +103,7 @@ class MockContainer extends AbstractContainer
      * @param array $data
      * @return void
      */
-    public function postRedirect(string $url = null, array $data = [])
+    public function postRedirect(string $url = null, array $data = []) : void
     {
         $this->postRedirectUrl = $url;
         $this->postRedirectData = $data;
@@ -111,18 +111,21 @@ class MockContainer extends AbstractContainer
 
 
     /**
-     * {@inheritdoc}
+     * @return string
      */
-    public function getTempDir()
+    public function getTempDir() : string
     {
         return sys_get_temp_dir();
     }
 
 
     /**
-     * {@inheritdoc}
+     * @param string $filename
+     * @param string $data
+     * @param int|null $mode
+     * @return void
      */
-    public function writeFile(string $filename, string $data, int $mode = null)
+    public function writeFile(string $filename, string $data, int $mode = null) : void
     {
         if ($mode === null) {
             $mode = 0600;

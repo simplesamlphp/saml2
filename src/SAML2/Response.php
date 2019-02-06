@@ -4,6 +4,8 @@ declare(strict_types=1);
 
 namespace SAML2;
 
+use DOMElement;
+
 /**
  * Class for SAML 2 Response messages.
  *
@@ -24,7 +26,7 @@ class Response extends StatusResponse
      *
      * @param \DOMElement|null $xml The input message.
      */
-    public function __construct(\DOMElement $xml = null)
+    public function __construct(DOMElement $xml = null)
     {
         parent::__construct('Response', $xml);
 
@@ -65,7 +67,7 @@ class Response extends StatusResponse
      * @param \SAML2\Assertion[]|\SAML2\EncryptedAssertion[] $assertions The assertions.
      * @return void
      */
-    public function setAssertions(array $assertions)
+    public function setAssertions(array $assertions) : void
     {
         $this->assertions = $assertions;
     }
@@ -76,7 +78,7 @@ class Response extends StatusResponse
      *
      * @return \DOMElement This response.
      */
-    public function toUnsignedXML() : \DOMElement
+    public function toUnsignedXML() : DOMElement
     {
         $root = parent::toUnsignedXML();
 

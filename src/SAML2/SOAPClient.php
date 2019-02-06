@@ -4,13 +4,14 @@ declare(strict_types=1);
 
 namespace SAML2;
 
+use DOMDocument;
 use RobRichards\XMLSecLibs\XMLSecurityKey;
+use SimpleSAML\Configuration;
+use SimpleSAML\Utils\Config;
+use SimpleSAML\Utils\Crypto;
 
 use SAML2\Compat\ContainerSingleton;
 use SAML2\Exception\RuntimeException;
-
-use SimpleSAML\Configuration;
-use SimpleSAML\Utils\Config;
 
 /**
  * Implementation of the SAML 2.0 SOAP binding.
@@ -63,8 +64,8 @@ class SOAPClient
             }
         } else {
             /* Use the SP certificate and privatekey if it is configured. */
-            $privateKey = \SimpleSAML\Utils\Crypto::loadPrivateKey($srcMetadata);
-            $publicKey = \SimpleSAML\Utils\Crypto::loadPublicKey($srcMetadata);
+            $privateKey = Crypto::loadPrivateKey($srcMetadata);
+            $publicKey = Crypto::loadPublicKey($srcMetadata);
             if ($privateKey !== null && $publicKey !== null && isset($publicKey['PEM'])) {
                 $keyCertData = $privateKey['PEM'].$publicKey['PEM'];
                 $file = $container->getTempDir().'/'.sha1($keyCertData).'.pem';
@@ -176,7 +177,7 @@ class SOAPClient
      * @param resource $context The stream context.
      * @return void
      */
-    private static function addSSLValidator(Message $msg, $context)
+    private static function addSSLValidator(Message $msg, $context) : void
     {
         $options = stream_context_get_options($context);
         if (!isset($options['ssl']['peer_certificate'])) {
@@ -204,7 +205,7 @@ class SOAPClient
             return;
         }
 
-        $msg->addValidator(['\SAML2\SOAPClient', 'validateSSL'], $keyInfo['key']);
+        $msg->addValidator([SOAPClient::class, 'validateSSL'], $keyInfo['key']);
     }
 
 
@@ -213,10 +214,10 @@ class SOAPClient
      *
      * @param string $data The public key that was used on the connection.
      * @param XMLSecurityKey $key The key we should validate the certificate against.
-     * @return void
      * @throws \Exception
+     * @return void
      */
-    public static function validateSSL(string $data, XMLSecurityKey $key)
+    public static function validateSSL(string $data, XMLSecurityKey $key) : void
     {
         $container = ContainerSingleton::getInstance();
         $keyInfo = openssl_pkey_get_details($key->key);
@@ -244,7 +245,7 @@ class SOAPClient
      * @param \DOMDocument $soapMessage Soap response needs to be type DOMDocument
      * @return string|null $soapfaultstring
      */
-    private function getSOAPFault(\DOMDocument $soapMessage)
+    private function getSOAPFault(DOMDocument $soapMessage) : ?string
     {
         $soapFault = Utils::xpQuery($soapMessage->firstChild, '/soap-env:Envelope/soap-env:Body/soap-env:Fault');
 

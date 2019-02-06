@@ -4,6 +4,8 @@ declare(strict_types=1);
 
 namespace SAML2;
 
+use DOMElement;
+
 use SAML2\SignedElementHelper;
 use SAML2\DOMDocumentFactory;
 
@@ -24,7 +26,7 @@ class SignedElementHelperMock extends SignedElementHelper
     /**
      * @return \DOMElement
      */
-    public function toSignedXML()
+    public function toSignedXML() : DOMElement
     {
         $doc = DOMDocumentFactory::create();
         $root = $doc->createElement('root');

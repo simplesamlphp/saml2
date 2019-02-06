@@ -12,8 +12,9 @@ class CertificateTest extends \PHPUnit\Framework\TestCase
     /**
      * @group utilities
      * @test
+     * @return void
      */
-    public function testValidStructure()
+    public function testValidStructure() : void
     {
         $result = Certificate::hasValidStructure(CertificatesMock::getPlainPublicKey());
         $this->assertTrue($result);
@@ -25,8 +26,9 @@ class CertificateTest extends \PHPUnit\Framework\TestCase
     /**
      * @group utilities
      * @test
+     * @return void
      */
-    public function testConvertToCertificate()
+    public function testConvertToCertificate() : void
     {
         $result = Certificate::convertToCertificate(CertificatesMock::getPlainPublicKeyContents());
         // the formatted public key in CertificatesMock is stored with unix newlines

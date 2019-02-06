@@ -1,19 +1,14 @@
 language: php
 
 php:
-  - 7.0
-  - 7.1
   - 7.2
   - 7.3
-  - hhvm
 
 matrix:
   fast_finish: true
-  allow_failures:
-    - php: hhvm
 
 before_script:
-  - if [[ "$TRAVIS_PHP_VERSION" == "7.0" ]]; then composer require php-coveralls/php-coveralls; fi
+  - if [[ "$TRAVIS_PHP_VERSION" == "7.2" ]]; then composer require php-coveralls/php-coveralls; fi
   - if [[ "$TRAVIS_PHP_VERSION" == "7.3" ]]; then composer require --dev vimeo/psalm; fi
 
 script:
@@ -22,4 +17,4 @@ script:
   - if [[ "$TRAVIS_PHP_VERSION" == "7.3" ]]; then vendor/bin/psalm; fi
 
 after_script:
-  - if [[ "$TRAVIS_PHP_VERSION" == "7.0" ]]; then php vendor/bin/php-coveralls -v; fi
+  - if [[ "$TRAVIS_PHP_VERSION" == "7.2" ]]; then php vendor/bin/php-coveralls -v; fi

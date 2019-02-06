@@ -10,6 +10,8 @@ declare(strict_types=1);
 
 namespace SAML2\XML\saml;
 
+use DOMElement;
+
 abstract class NameIDType extends BaseIDType
 {
     /**
@@ -55,7 +57,7 @@ abstract class NameIDType extends BaseIDType
      *
      * @param \DOMElement|null $xml The XML element we should load, if any.
      */
-    public function __construct(\DOMElement $xml = null)
+    public function __construct(DOMElement $xml = null)
     {
         parent::__construct($xml);
 
@@ -80,7 +82,7 @@ abstract class NameIDType extends BaseIDType
      *
      * @return string|null
      */
-    public function getFormat()
+    public function getFormat() : ?string
     {
         return $this->Format;
     }
@@ -92,7 +94,7 @@ abstract class NameIDType extends BaseIDType
      * @param string|null $format
      * @return void
      */
-    public function setFormat(string $format = null)
+    public function setFormat(string $format = null) : void
     {
         $this->Format = $format;
     }
@@ -103,7 +105,7 @@ abstract class NameIDType extends BaseIDType
      *
      * @return string
      */
-    public function getValue()
+    public function getValue() : string
     {
         return $this->value;
     }
@@ -115,7 +117,7 @@ abstract class NameIDType extends BaseIDType
      *
      * @return void
      */
-    public function setValue(string $value)
+    public function setValue(string $value) : void
     {
         $this->value = $value;
     }
@@ -126,7 +128,7 @@ abstract class NameIDType extends BaseIDType
      *
      * @return string|null
      */
-    public function getSPProvidedID()
+    public function getSPProvidedID() : ?string
     {
         return $this->SPProvidedID;
     }
@@ -138,7 +140,7 @@ abstract class NameIDType extends BaseIDType
      * @param string|null $spProvidedID
      * @return void
      */
-    public function setSPProvidedID(string $spProvidedID = null)
+    public function setSPProvidedID(string $spProvidedID = null) : void
     {
         $this->SPProvidedID = $spProvidedID;
     }
@@ -150,7 +152,7 @@ abstract class NameIDType extends BaseIDType
      * @param \DOMElement $parent The element we are converting to XML.
      * @return \DOMElement The XML element after adding the data corresponding to this NameIDType.
      */
-    public function toXML(\DOMElement $parent = null) : \DOMElement
+    public function toXML(DOMElement $parent = null) : DOMElement
     {
         $element = parent::toXML($parent);
 

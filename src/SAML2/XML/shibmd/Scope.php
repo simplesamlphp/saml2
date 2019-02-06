@@ -4,6 +4,7 @@ declare(strict_types=1);
 
 namespace SAML2\XML\shibmd;
 
+use DOMElement;
 use Webmozart\Assert\Assert;
 
 use SAML2\Utils;
@@ -41,7 +42,7 @@ class Scope
      *
      * @param \DOMElement|null $xml The XML element we should load.
      */
-    public function __construct(\DOMElement $xml = null)
+    public function __construct(DOMElement $xml = null)
     {
         if ($xml === null) {
             return;
@@ -69,7 +70,7 @@ class Scope
      * @param string $scope
      * @return void
      */
-    public function setScope(string $scope)
+    public function setScope(string $scope) : void
     {
         $this->scope = $scope;
     }
@@ -92,7 +93,7 @@ class Scope
      * @param bool $regexp
      * @return void
      */
-    public function setIsRegexpScope(bool $regexp)
+    public function setIsRegexpScope(bool $regexp) : void
     {
         $this->regexp = $regexp;
     }
@@ -104,7 +105,7 @@ class Scope
      * @param \DOMElement $parent The element we should append this Scope to.
      * @return \DOMElement
      */
-    public function toXML(\DOMElement $parent) : \DOMElement
+    public function toXML(DOMElement $parent) : DOMElement
     {
         Assert::notEmpty($this->scope);
 

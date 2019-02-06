@@ -49,7 +49,7 @@ class SubjectConfirmationValidator
      */
     public function addConstraintValidator(
         SubjectConfirmationConstraintValidator $constraint
-    ) {
+    ) : void {
         if ($constraint instanceof IdentityProviderAware) {
             $constraint->setIdentityProvider($this->identityProvider);
         }

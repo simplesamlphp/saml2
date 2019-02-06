@@ -18,7 +18,7 @@ use DOMDocument;
  */
 class AuthnRequestTest extends \PHPUnit\Framework\TestCase
 {
-    public function testUnmarshalling()
+    public function testUnmarshalling() : void
     {
         $authnRequest = new AuthnRequest();
         $authnRequest->setRequestedAuthnContext([
@@ -50,7 +50,7 @@ class AuthnRequestTest extends \PHPUnit\Framework\TestCase
     }
 
 
-    public function testMarshallingOfSimpleRequest()
+    public function testMarshallingOfSimpleRequest() : void
     {
         $xml = <<<AUTHNREQUEST
 <samlp:AuthnRequest
@@ -83,7 +83,7 @@ AUTHNREQUEST;
     /**
      * Test unmarshalling / marshalling of XML with Extensions element
      */
-    public function testExtensionOrdering()
+    public function testExtensionOrdering() : void
     {
         $xml = <<<AUTHNREQUEST
 <samlp:AuthnRequest
@@ -117,7 +117,7 @@ AUTHNREQUEST;
     }
 
 
-    public function testThatTheSubjectIsCorrectlyRead()
+    public function testThatTheSubjectIsCorrectlyRead() : void
     {
         $xml = <<<AUTHNREQUEST
 <samlp:AuthnRequest
@@ -143,7 +143,7 @@ AUTHNREQUEST;
     }
 
 
-    public function testThatTheSubjectCanBeSetBySettingTheNameId()
+    public function testThatTheSubjectCanBeSetBySettingTheNameId() : void
     {
         $request = new AuthnRequest();
         $nameId = new NameID();
@@ -157,7 +157,7 @@ AUTHNREQUEST;
     }
 
 
-    public function testThatAnEncryptedNameIdCanBeDecrypted()
+    public function testThatAnEncryptedNameIdCanBeDecrypted() : void
     {
         $xml = <<<AUTHNREQUEST
 <samlp:AuthnRequest
@@ -205,7 +205,7 @@ AUTHNREQUEST;
      * matches a specific XML, but we can test whether or not the resulting structure is actually correct, conveying
      * all information required to decrypt the NameId.
      */
-    public function testThatAnEncryptedNameIdResultsInTheCorrectXmlStructure()
+    public function testThatAnEncryptedNameIdResultsInTheCorrectXmlStructure() : void
     {
         // the NameID we're going to encrypt
         $nameId = new NameID();
@@ -267,7 +267,7 @@ AUTHNREQUEST;
      * Test for setting IDPEntry values via setIDPList.
      * Tests legacy support (single string), array of attributes, and skipping of unknown attributes.
      */
-    public function testIDPlistAttributes()
+    public function testIDPlistAttributes() : void
     {
         // the Issuer
         $issuer = new Issuer();
@@ -310,7 +310,7 @@ AUTHNREQUEST;
     /**
      * Test for getting IDPlist values.
      */
-    public function testgetIDPlistAttributes()
+    public function testgetIDPlistAttributes() : void
     {
         $xmlRequest = <<<AUTHNREQUEST
 <samlp:AuthnRequest
@@ -344,7 +344,7 @@ AUTHNREQUEST;
     /**
      * Test that parsing IDPList without ProviderID throws exception.
      */
-    public function testScopeWithoutProviderIDThrowsException()
+    public function testScopeWithoutProviderIDThrowsException() : void
     {
         $xmlRequest = <<<AUTHNREQUEST
 <samlp:AuthnRequest
@@ -371,7 +371,7 @@ AUTHNREQUEST;
     /**
      * Test setting a requesterID.
      */
-    public function testRequesterIdIsAddedCorrectly()
+    public function testRequesterIdIsAddedCorrectly() : void
     {
         // the Issuer
         $issuer = new Issuer();
@@ -412,7 +412,7 @@ AUTHNREQUEST;
     /**
      * Test reading a requesterID.
      */
-    public function testRequesterIdIsReadCorrectly()
+    public function testRequesterIdIsReadCorrectly() : void
     {
         $requesterId = [
             'https://engine.demo.openconext.org/authentication/sp/metadata',
@@ -444,7 +444,7 @@ AUTHNREQUEST;
     /**
      * Test setting a ProxyCount.
      */
-    public function testProxyCountIsAddedCorrectly()
+    public function testProxyCountIsAddedCorrectly() : void
     {
         // the Issuer
         $issuer = new Issuer();
@@ -486,7 +486,7 @@ AUTHNREQUEST;
     /**
      * Test reading ProxyCount
      */
-    public function testProxyCountIsReadCorrectly()
+    public function testProxyCountIsReadCorrectly() : void
     {
         $proxyCount = 10;
 
@@ -517,7 +517,7 @@ AUTHNREQUEST;
     /**
      * Test getting NameIDPolicy
      */
-    public function testGettingNameIDPolicy()
+    public function testGettingNameIDPolicy() : void
     {
         $xml = <<<AUTHNREQUEST
 <samlp:AuthnRequest
@@ -557,7 +557,7 @@ AUTHNREQUEST;
     /**
      * Test setting NameIDPolicy results in expected XML
      */
-    public function testSettingNameIDPolicy()
+    public function testSettingNameIDPolicy() : void
     {
         // the Issuer
         $issuer = new Issuer();
@@ -604,7 +604,7 @@ AUTHNREQUEST;
     /**
      * Test setting NameIDPolicy with only a Format results in expected XML
      */
-    public function testSettingNameIDPolicyFormatOnly()
+    public function testSettingNameIDPolicyFormatOnly() : void
     {
         // the Issuer
         $issuer = new Issuer();
@@ -644,7 +644,7 @@ AUTHNREQUEST;
     /**
      * Test setting NameIDPolicy with invalid type for AllowCreate.
      */
-    public function testSettingNameIDPolicyToIncorrectTypeAllowCreate()
+    public function testSettingNameIDPolicyToIncorrectTypeAllowCreate() : void
     {
         // the Issuer
         $issuer = new Issuer();
@@ -665,7 +665,7 @@ AUTHNREQUEST;
     /**
      * Test setting NameIDPolicy with invalid type for SPNameQualifier.
      */
-    public function testSettingNameIDPolicyToIncorrectTypeSPNameQualifier()
+    public function testSettingNameIDPolicyToIncorrectTypeSPNameQualifier() : void
     {
         // the Issuer
         $issuer = new Issuer();
@@ -687,7 +687,7 @@ AUTHNREQUEST;
      * Test setting NameIDPolicy with one invalid type for Format.
      * It would be nice to iterate over various types to check this more thoroughly.
      */
-    public function testSettingNameIDPolicyToIncorrectTypeFormat()
+    public function testSettingNameIDPolicyToIncorrectTypeFormat() : void
     {
         // the Issuer
         $issuer = new Issuer();
@@ -708,7 +708,7 @@ AUTHNREQUEST;
     /**
      * Test getting ForceAuthn
      */
-    public function testGettingForceAuthn()
+    public function testGettingForceAuthn() : void
     {
         $xml = <<<AUTHNREQUEST
 <samlp:AuthnRequest
@@ -753,7 +753,7 @@ AUTHNREQUEST;
     /**
      * Test setting ForceAuthn
      */
-    public function testSettingForceAuthnResultsInCorrectXML()
+    public function testSettingForceAuthnResultsInCorrectXML() : void
     {
         // the Issuer
         $issuer = new Issuer();
@@ -792,7 +792,7 @@ AUTHNREQUEST;
     /**
      * Test getting IsPassive
      */
-    public function testGettingIsPassive()
+    public function testGettingIsPassive() : void
     {
         $xml = <<<AUTHNREQUEST
 <samlp:AuthnRequest
@@ -854,7 +854,7 @@ AUTHNREQUEST;
     /**
      * Test setting IsPassive
      */
-    public function testSettingIsPassiveResultsInCorrectXML()
+    public function testSettingIsPassiveResultsInCorrectXML() : void
     {
         // the Issuer
         $issuer = new Issuer();
@@ -893,7 +893,7 @@ AUTHNREQUEST;
     /**
      * Test setting ProviderName
      */
-    public function testSettingProviderNameResultsInCorrectXml()
+    public function testSettingProviderNameResultsInCorrectXml() : void
     {
         // the Issuer
         $issuer = new Issuer();
@@ -932,7 +932,7 @@ AUTHNREQUEST;
     /**
      * Test getting ProviderName
      */
-    public function testGettingProviderName()
+    public function testGettingProviderName() : void
     {
         $xml = <<<AUTHNREQUEST
 <samlp:AuthnRequest
@@ -959,7 +959,7 @@ AUTHNREQUEST;
     /**
      * Test setting ProtocolBinding and AssertionConsumerServiceURL
      */
-    public function testSettingProtocolBindingAndACSUrl()
+    public function testSettingProtocolBindingAndACSUrl() : void
     {
         // the Issuer
         $issuer = new Issuer();
@@ -1001,7 +1001,7 @@ AUTHNREQUEST;
     /**
      * Test that having multiple subject tags throws an exception.
      */
-    public function testMultipleSubjectsThrowsException()
+    public function testMultipleSubjectsThrowsException() : void
     {
         $xml = <<<AUTHNREQUEST
 <samlp:AuthnRequest
@@ -1030,7 +1030,7 @@ AUTHNREQUEST;
     /**
      * Test that having multiple NameIds in a subject tag throws an exception.
      */
-    public function testMultipleNameIdsInSubjectThrowsException()
+    public function testMultipleNameIdsInSubjectThrowsException() : void
     {
         $xml = <<<AUTHNREQUEST
 <samlp:AuthnRequest
@@ -1057,7 +1057,7 @@ AUTHNREQUEST;
     /**
      * Test that a subject tag without a NameId throws an exception.
      */
-    public function testEmptySubjectThrowsException()
+    public function testEmptySubjectThrowsException() : void
     {
         $xml = <<<AUTHNREQUEST
 <samlp:AuthnRequest
@@ -1082,7 +1082,7 @@ AUTHNREQUEST;
     /**
      * Test setting audiences.
      */
-    public function testAudiencesAreAddedCorrectly()
+    public function testAudiencesAreAddedCorrectly() : void
     {
         $issuer = new Issuer();
         $issuer->setValue('https://gateway.example.org/saml20/sp/metadata');
@@ -1121,7 +1121,7 @@ AUTHNREQUEST;
     /**
      * Test reading audiences.
      */
-    public function testAudiencesAreReadCorrectly()
+    public function testAudiencesAreReadCorrectly() : void
     {
         $expectedAudiences = array('https://sp1.example.org', 'https://sp2.example.org');
 

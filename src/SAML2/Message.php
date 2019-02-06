@@ -4,7 +4,9 @@ declare(strict_types=1);
 
 namespace SAML2;
 
+use DOMElement;
 use RobRichards\XMLSecLibs\XMLSecurityKey;
+
 use SAML2\Utilities\Temporal;
 use SAML2\XML\saml\Issuer;
 use SAML2\XML\samlp\Extensions;
@@ -119,7 +121,6 @@ abstract class Message extends SignedElement
     private $signatureMethod = null;
 
 
-
     /**
      * Initialize a message.
      *
@@ -135,7 +136,7 @@ abstract class Message extends SignedElement
      *
      * @throws \Exception
      */
-    protected function __construct(string $tagName, \DOMElement $xml = null)
+    protected function __construct(string $tagName, DOMElement $xml = null)
     {
         $this->tagName = $tagName;
 
@@ -190,7 +191,7 @@ abstract class Message extends SignedElement
      * @param \DOMElement $xml The SAML message whose signature we want to validate.
      * @return void
      */
-    private function validateSignature(\DOMElement $xml)
+    private function validateSignature(DOMElement $xml) : void
     {
         try {
             /** @var \DOMAttr[] $signatureMethod */
@@ -226,7 +227,7 @@ abstract class Message extends SignedElement
      * @param mixed $data The data that should be included as the first parameter to the function
      * @return void
      */
-    public function addValidator(callable $function, $data)
+    public function addValidator(callable $function, $data) : void
     {
         $this->validators[] = [
             'Function' => $function,
@@ -290,7 +291,7 @@ abstract class Message extends SignedElement
      * @param string $id The new identifier of this message
      * @return void
      */
-    public function setId(string $id)
+    public function setId(string $id) : void
     {
         $this->id = $id;
     }
@@ -313,7 +314,7 @@ abstract class Message extends SignedElement
      * @param int $issueInstant The new issue timestamp of this message, as an UNIX timestamp
      * @return void
      */
-    public function setIssueInstant(int $issueInstant)
+    public function setIssueInstant(int $issueInstant) : void
     {
         $this->issueInstant = $issueInstant;
     }
@@ -324,7 +325,7 @@ abstract class Message extends SignedElement
      *
      * @return string|null The destination of this message, or NULL if no destination is given
      */
-    public function getDestination()
+    public function getDestination() : ?string
     {
         return $this->destination;
     }
@@ -336,7 +337,7 @@ abstract class Message extends SignedElement
      * @param string|null $destination The new destination of this message
      * @return void
      */
-    public function setDestination(string $destination = null)
+    public function setDestination(string $destination = null) : void
     {
         $this->destination = $destination;
     }
@@ -350,7 +351,7 @@ abstract class Message extends SignedElement
      * @param string $consent
      * @return void
      */
-    public function setConsent(string $consent)
+    public function setConsent(string $consent) : void
     {
         $this->consent = $consent;
     }
@@ -363,7 +364,7 @@ abstract class Message extends SignedElement
      * @see \SAML2\Constants
      * @return string|null Consent
      */
-    public function getConsent()
+    public function getConsent() : ?string
     {
         return $this->consent;
     }
@@ -374,7 +375,7 @@ abstract class Message extends SignedElement
      *
      * @return \SAML2\XML\saml\Issuer|null The issuer of this message, or NULL if no issuer is given
      */
-    public function getIssuer()
+    public function getIssuer() : ?Issuer
     {
         return $this->issuer;
     }
@@ -386,7 +387,7 @@ abstract class Message extends SignedElement
      * @param \SAML2\XML\saml\Issuer|null $issuer The new issuer of this message
      * @return void
      */
-    public function setIssuer(Issuer $issuer = null)
+    public function setIssuer(Issuer $issuer = null) : void
     {
         $this->issuer = $issuer;
     }
@@ -408,7 +409,7 @@ abstract class Message extends SignedElement
      *
      * @return string|null The RelayState, or NULL if no RelayState is given
      */
-    public function getRelayState()
+    public function getRelayState() : ?string
     {
         return $this->relayState;
     }
@@ -420,7 +421,7 @@ abstract class Message extends SignedElement
      * @param string|null $relayState The new RelayState
      * @return void
      */
-    public function setRelayState(string $relayState = null)
+    public function setRelayState(string $relayState = null) : void
     {
         $this->relayState = $relayState;
     }
@@ -432,7 +433,7 @@ abstract class Message extends SignedElement
      *
      * @return \DOMElement The root element of the DOM tree
      */
-    public function toUnsignedXML() : \DOMElement
+    public function toUnsignedXML() : DOMElement
     {
         $this->document = DOMDocumentFactory::create();
 
@@ -471,7 +472,7 @@ abstract class Message extends SignedElement
      *
      * @return \DOMElement The root element of the DOM tree
      */
-    public function toSignedXML() : \DOMElement
+    public function toSignedXML() : DOMElement
     {
         $root = $this->toUnsignedXML();
 
@@ -505,7 +506,7 @@ abstract class Message extends SignedElement
      *
      * @return XMLSecurityKey|null The key, or NULL if no key is specified
      */
-    public function getSignatureKey()
+    public function getSignatureKey() : ?XMLSecurityKey
     {
         return $this->signatureKey;
     }
@@ -518,7 +519,7 @@ abstract class Message extends SignedElement
      * @param XMLSecurityKey|null $signatureKey
      * @return void
      */
-    public function setSignatureKey(XMLSecurityKey $signatureKey = null)
+    public function setSignatureKey(XMLSecurityKey $signatureKey = null) : void
     {
         $this->signatureKey = $signatureKey;
     }
@@ -531,7 +532,7 @@ abstract class Message extends SignedElement
      * @param array $certificates An array of certificates
      * @return void
      */
-    public function setCertificates(array $certificates)
+    public function setCertificates(array $certificates) : void
     {
         $this->certificates = $certificates;
     }
@@ -599,7 +600,7 @@ abstract class Message extends SignedElement
      * @param array $extensions The Extensions
      * @return void
      */
-    public function setExtensions(array $extensions)
+    public function setExtensions(array $extensions) : void
     {
         $this->extensions = $extensions;
     }
@@ -611,7 +612,7 @@ abstract class Message extends SignedElement
      * @param \SAML2\XML\samlp\Extensions $extensions The Extensions
      * @return void
      */
-    public function addExtension(Extensions $extension)
+    public function addExtension(Extensions $extension) : void
     {
         $this->extensions[] = $extension;
     }
@@ -620,7 +621,7 @@ abstract class Message extends SignedElement
     /**
      * @return null|string
      */
-    public function getSignatureMethod()
+    public function getSignatureMethod() : ?string
     {
         return $this->signatureMethod;
     }
