@@ -297,7 +297,7 @@ class RoleDescriptor extends SignedElementHelper
      * @param string $protocol
      * @return void
      */
-    public function addProtocolSupportEnumeration(string $protocol)
+    public function addProtocolSupportEnumeration($protocol)
     {
         $this->protocolSupportEnumeration[] = $protocol;
     }
