@@ -153,7 +153,7 @@ AUTHNREQUEST;
 
         $requestAsXML = $request->toUnsignedXML()->ownerDocument->saveXML();
         $expected = '<saml:Subject><saml:NameID Format="urn:oasis:names:tc:SAML:1.1:nameid-format:unspecified">user@example.org</saml:NameID></saml:Subject>';
-        $this->assertContains($expected, $requestAsXML);
+        $this->assertStringContainsString($expected, $requestAsXML);
     }
 
 

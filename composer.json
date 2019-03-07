@@ -21,9 +21,9 @@
     "require-dev": {
         "squizlabs/php_codesniffer": "~3.4",
         "sensiolabs/security-checker": "~5.0",
-        "phpunit/phpunit": "^7.0",
         "sebastian/phpcpd": "~4.1",
-        "mockery/mockery": "~1.2"
+        "mockery/mockery": "~1.2",
+        "phpunit/phpunit": "^8.0"
     },
     "autoload": {
         "psr-4": {
