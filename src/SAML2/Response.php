@@ -5,7 +5,6 @@ declare(strict_types=1);
 namespace SAML2;
 
 use DOMElement;
-use DOMNode;
 
 /**
  * Class for SAML 2 Response messages.
@@ -25,9 +24,9 @@ class Response extends StatusResponse
     /**
      * Constructor for SAML 2 response messages.
      *
-     * @param \DOMNode|null $xml The input message.
+     * @param \DOMElement|null $xml The input message.
      */
-    public function __construct(DOMNode $xml = null)
+    public function __construct(DOMElement $xml = null)
     {
         parent::__construct('Response', $xml);
 
