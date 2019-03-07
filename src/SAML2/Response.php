@@ -39,6 +39,8 @@ class Response extends StatusResponse
         foreach ($xml->childNodes as $node) {
             if ($node->namespaceURI !== Constants::NS_SAML) {
                 continue;
+            } else if (!($node instanceof DOMElement)) {
+                continue;
             }
 
             if ($node->localName === 'Assertion') {
