@@ -107,11 +107,6 @@ class Processor
      */
     public function processAssertions(ArrayCollection $assertions) : ArrayCollection
     {
-        // BC compatibility, allow array argument.
-        if (is_array($assertions)) {
-            $assertions = new ArrayCollection($assertions);
-        }
-
         $processed = new ArrayCollection();
         foreach ($assertions->getIterator() as $assertion) {
             $processed->add($this->process($assertion));
