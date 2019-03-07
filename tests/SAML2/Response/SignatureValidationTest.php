@@ -148,6 +148,8 @@ class SignatureValidationTest extends \Mockery\Adapter\Phpunit\MockeryTestCase
      */
     public function testThatAnUnsignedResponseWithNoSignedAssertionsThrowsAnException() : void
     {
+        $this->expectException(UnsignedResponseException::class);
+
         $assertion = \Mockery::mock('SAML2\Assertion');
 
         // The processAssertions is called to decrypt possible encrypted assertions,
