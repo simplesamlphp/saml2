@@ -4,6 +4,8 @@ declare(strict_types=1);
 
 namespace SAML2;
 
+use DOMElement;
+use DOMNode;
 use RobRichards\XMLSecLibs\XMLSecEnc;
 use RobRichards\XMLSecLibs\XMLSecurityKey;
 
@@ -33,7 +35,7 @@ class EncryptedAssertion
      * @param \DOMElement|null $xml The encrypted assertion XML element.
      * @throws \Exception
      */
-    public function __construct(\DOMElement $xml = null)
+    public function __construct(DOMElement $xml = null)
     {
         if ($xml === null) {
             return;
@@ -53,7 +55,7 @@ class EncryptedAssertion
     /**
      * @return bool
      */
-    public function wasSignedAtConstruction()
+    public function wasSignedAtConstruction() : bool
     {
         return $this->wasSignedAtConstruction;
     }
@@ -66,7 +68,7 @@ class EncryptedAssertion
      * @throws \Exception
      * @return void
      */
-    public function setAssertion(Assertion $assertion, XMLSecurityKey $key)
+    public function setAssertion(Assertion $assertion, XMLSecurityKey $key) : void
     {
         $xml = $assertion->toXML();
 
@@ -128,7 +130,7 @@ class EncryptedAssertion
      * @param  \DOMNode|null $parentElement The DOM node the assertion should be created in.
      * @return \DOMElement   This encrypted assertion.
      */
-    public function toXML(\DOMNode $parentElement = null) : \DOMElement
+    public function toXML(DOMNode $parentElement = null) : DOMElement
     {
         if ($parentElement === null) {
             $document = DOMDocumentFactory::create();

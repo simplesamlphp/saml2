@@ -102,7 +102,7 @@ class Key implements \ArrayAccess
      * @throws InvalidArgumentException
      * @return void
      */
-    public function offsetSet($offset, $value)
+    public function offsetSet($offset, $value) : void
     {
         if (!is_string($offset)) {
             throw InvalidArgumentException::invalidType('string', $offset);
@@ -118,7 +118,7 @@ class Key implements \ArrayAccess
      *
      * Type hint not possible due to upstream method signature
      */
-    public function offsetUnset($offset)
+    public function offsetUnset($offset) : void
     {
         if (!is_string($offset)) {
             throw InvalidArgumentException::invalidType('string', $offset);

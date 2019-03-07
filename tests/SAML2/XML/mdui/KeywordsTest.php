@@ -15,8 +15,9 @@ class KeywordsTest extends \PHPUnit\Framework\TestCase
 {
     /**
      * Test creating a basic Keywords element.
+     * @return void
      */
-    public function testMarshalling()
+    public function testMarshalling() : void
     {
         $keywords = new Keywords();
         $keywords->setLanguage("en");
@@ -38,8 +39,9 @@ class KeywordsTest extends \PHPUnit\Framework\TestCase
 
     /**
      * Keyword may not contain a "+", Exception expected.
+     * @return void
      */
-    public function testKeywordWithPlusSignThrowsException()
+    public function testKeywordWithPlusSignThrowsException() : void
     {
         $keywords = new Keywords();
         $keywords->setLanguage("en");
@@ -54,8 +56,9 @@ class KeywordsTest extends \PHPUnit\Framework\TestCase
 
     /**
      * Unmarshalling of a keywords tag
+     * @return void
      */
-    public function testUnmarshalling()
+    public function testUnmarshalling() : void
     {
         $document = DOMDocumentFactory::fromString(<<<XML
 <mdui:Keywords xml:lang="nl">KLM koninklijke luchtvaart+maatschappij</mdui:Keywords>
@@ -73,8 +76,9 @@ XML
 
     /**
      * Unmarshalling fails if lang attribute not present
+     * @return void
      */
-    public function testUnmarshallingFailsMissingLanguage()
+    public function testUnmarshallingFailsMissingLanguage() : void
     {
         $document = DOMDocumentFactory::fromString(<<<XML
 <mdui:Keywords>KLM koninklijke luchtvaart+maatschappij</mdui:Keywords>
@@ -88,8 +92,9 @@ XML
 
     /**
      * Unmarshalling fails if attribute is empty
+     * @return void
      */
-    public function testUnmarshallingFailsMissingKeywords()
+    public function testUnmarshallingFailsMissingKeywords() : void
     {
         $document = DOMDocumentFactory::fromString(<<<XML
 <mdui:Keywords xml:lang="nl"></mdui:Keywords>

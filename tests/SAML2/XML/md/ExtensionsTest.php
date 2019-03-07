@@ -21,8 +21,9 @@ class ExtensionsTest extends \PHPUnit\Framework\TestCase
     /**
      * Adding an empty list to an Extensions element should yield an empty element. If there were contents already
      * there, those should be left untouched.
+     * @return void
      */
-    public function testExtensionAddEmpty()
+    public function testExtensionAddEmpty() : void
     {
         $d = DOMDocumentFactory::create();
         $r = $d->createElementNS(Constants::NS_MD, 'md:Extensions');
@@ -68,8 +69,9 @@ XML
 
     /**
      * This method tests for known extensions.
+     * @return void
      */
-    public function testSupportedExtensions()
+    public function testSupportedExtensions() : void
     {
         $document = DOMDocumentFactory::fromString(
 <<<XML
@@ -114,8 +116,9 @@ XML
 
     /**
      * This methods tests adding an md:Extensions element to a DOMElement.
+     * @return void
      */
-    public function testAddExtensions()
+    public function testAddExtensions() : void
     {
         $document = DOMDocumentFactory::create();
         $document->formatOutput = true;

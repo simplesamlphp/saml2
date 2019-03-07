@@ -8,10 +8,10 @@ class KeyCollectionTest extends \Mockery\Adapter\Phpunit\MockeryTestCase
 {
     /**
      * @group certificate
-     *
      * @test
+     * @return void
      */
-    public function testKeyCollectionAddWrongType()
+    public function testKeyCollectionAddWrongType() : void
     {
         $this->expectException(\InvalidArgumentException::class);
         $kc = new KeyCollection();

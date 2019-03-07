@@ -12,10 +12,11 @@ namespace SAML2;
  */
 abstract class ControlledTimeTest extends \Mockery\Adapter\Phpunit\MockeryTestCase
 {
+    /** @var int */
     protected $currentTime = 1;
 
 
-    public function setUp()
+    public function setUp() : void
     {
         $timing = \Mockery::mock('alias:SAML2\Utilities\Temporal');
         $timing->shouldReceive('getTime')->andReturn($this->currentTime);

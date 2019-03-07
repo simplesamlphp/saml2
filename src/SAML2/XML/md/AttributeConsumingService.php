@@ -4,6 +4,8 @@ declare(strict_types=1);
 
 namespace SAML2\XML\md;
 
+use DOMElement;
+
 use SAML2\Constants;
 use SAML2\Utils;
 
@@ -62,7 +64,7 @@ class AttributeConsumingService
      * @param \DOMElement|null $xml The XML element we should load.
      * @throws \Exception
      */
-    public function __construct(\DOMElement $xml = null)
+    public function __construct(DOMElement $xml = null)
     {
         if ($xml === null) {
             return;
@@ -106,7 +108,7 @@ class AttributeConsumingService
      * @param int $index
      * @return void
      */
-    public function setIndex(int $index)
+    public function setIndex(int $index) : void
     {
         $this->index = $index;
     }
@@ -117,7 +119,7 @@ class AttributeConsumingService
      *
      * @return bool|null
      */
-    public function getIsDefault()
+    public function getIsDefault() : ?bool
     {
         return $this->isDefault;
     }
@@ -129,7 +131,7 @@ class AttributeConsumingService
      * @param bool|null $flag
      * @return void
      */
-    public function setIsDefault(bool $flag = null)
+    public function setIsDefault(bool $flag = null) : void
     {
         $this->isDefault = $flag;
     }
@@ -152,7 +154,7 @@ class AttributeConsumingService
      * @param string[] $serviceName
      * @return void
      */
-    public function setServiceName(array $serviceName)
+    public function setServiceName(array $serviceName) : void
     {
         $this->ServiceName = $serviceName;
     }
@@ -175,7 +177,7 @@ class AttributeConsumingService
      * @param string[] $serviceDescription
      * @return void
      */
-    public function setServiceDescription(array $serviceDescription)
+    public function setServiceDescription(array $serviceDescription) : void
     {
         $this->ServiceDescription = $serviceDescription;
     }
@@ -198,7 +200,7 @@ class AttributeConsumingService
      * @param \SAML2\XML\md\RequestedAttribute[] $requestedAttribute
      * @return void
      */
-    public function setRequestedAttribute(array $requestedAttribute)
+    public function setRequestedAttribute(array $requestedAttribute) : void
     {
         $this->RequestedAttribute = $requestedAttribute;
     }
@@ -210,7 +212,7 @@ class AttributeConsumingService
      * @param \SAML2\XML\md\RequestedAttribute $requestedAttribute
      * @return void
      */
-    public function addRequestedAttribute(RequestedAttribute $requestedAttribute)
+    public function addRequestedAttribute(RequestedAttribute $requestedAttribute) : void
     {
         $this->RequestedAttribute[] = $requestedAttribute;
     }
@@ -222,7 +224,7 @@ class AttributeConsumingService
      * @param \DOMElement $parent The element we should append this AttributeConsumingService to.
      * @return \DOMElement
      */
-    public function toXML(\DOMElement $parent) : \DOMElement
+    public function toXML(DOMElement $parent) : DOMElement
     {
         $doc = $parent->ownerDocument;
 

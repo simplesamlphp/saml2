@@ -4,6 +4,9 @@ declare(strict_types=1);
 
 namespace SAML2;
 
+use DOMElement;
+use DOMNode;
+
 /**
  * The \SAML2\ArtifactResponse, is the response to the \SAML2\ArtifactResolve.
  *
@@ -18,7 +21,7 @@ class ArtifactResponse extends StatusResponse
      *
      * @var \DOMElement|null
      */
-    private $any;
+    private $any = null;
 
 
     /**
@@ -27,7 +30,7 @@ class ArtifactResponse extends StatusResponse
      * @param \DOMElement|null $xml The input assertion.
      * @throws \Exception
      */
-    public function __construct(\DOMElement $xml = null)
+    public function __construct(DOMElement $xml = null)
     {
         parent::__construct('ArtifactResponse', $xml);
 
@@ -36,8 +39,8 @@ class ArtifactResponse extends StatusResponse
             $status = $status[0];
 
             /** @psalm-suppress RedundantCondition */
-            for ($any = $status->nextSibling; $any instanceof \DOMNode; $any = $any->nextSibling) {
-                if ($any instanceof \DOMElement) {
+            for ($any = $status->nextSibling; $any instanceof DOMNode; $any = $any->nextSibling) {
+                if ($any instanceof DOMElement) {
                     $this->any = $any;
                     break;
                 }
@@ -51,7 +54,7 @@ class ArtifactResponse extends StatusResponse
      * @param \DOMElement|null $any
      * @return void
      */
-    public function setAny(\DOMElement $any = null)
+    public function setAny(DOMElement $any = null) : void
     {
         $this->any = $any;
     }
@@ -60,7 +63,7 @@ class ArtifactResponse extends StatusResponse
     /**
      * @return \DOMElement|null
      */
-    public function getAny()
+    public function getAny() : ?DOMElement
     {
         return $this->any;
     }
@@ -71,7 +74,7 @@ class ArtifactResponse extends StatusResponse
      *
      * @return \DOMElement This response.
      */
-    public function toUnsignedXML() : \DOMElement
+    public function toUnsignedXML() : DOMElement
     {
         $root = parent::toUnsignedXML();
         if (isset($this->any)) {

@@ -11,8 +11,9 @@ class DestinationTest extends \PHPUnit\Framework\TestCase
     /**
      * @group configuration
      * @test
+     * @return void
      */
-    public function two_destinations_with_the_same_value_are_equal()
+    public function two_destinations_with_the_same_value_are_equal() : void
     {
         $destinationOne = new Destination('a');
         $destinationTwo = new Destination('a');
@@ -24,8 +25,9 @@ class DestinationTest extends \PHPUnit\Framework\TestCase
     /**
      * @group configuration
      * @test
+     * @return void
      */
-    public function two_destinations_with_the_different_values_are_not_equal()
+    public function two_destinations_with_the_different_values_are_not_equal() : void
     {
         $destinationOne = new Destination('a');
         $destinationTwo = new Destination('a');

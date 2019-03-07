@@ -24,7 +24,10 @@ class SubjectConfirmationRecipientMathchesTest extends \Mockery\Adapter\Phpunit\
     private $subjectConfirmationData;
 
 
-    public function setUp()
+    /**
+     * @return void
+     */
+    public function setUp() : void
     {
         parent::setUp();
         $this->subjectConfirmation = new \SAML2\XML\saml\SubjectConfirmation();
@@ -36,8 +39,9 @@ class SubjectConfirmationRecipientMathchesTest extends \Mockery\Adapter\Phpunit\
     /**
      * @group assertion-validation
      * @test
+     * @return void
      */
-    public function when_the_subject_confirmation_recipient_differs_from_the_destination_the_sc_is_invalid()
+    public function when_the_subject_confirmation_recipient_differs_from_the_destination_the_sc_is_invalid() : void
     {
         $this->subjectConfirmation->getSubjectConfirmationData()->setRecipient('someDestination');
 
@@ -56,8 +60,9 @@ class SubjectConfirmationRecipientMathchesTest extends \Mockery\Adapter\Phpunit\
     /**
      * @group assertion-validation
      * @test
+     * @return void
      */
-    public function when_the_subject_confirmation_recipient_equals_the_destination_the_sc_is_invalid()
+    public function when_the_subject_confirmation_recipient_equals_the_destination_the_sc_is_invalid() : void
     {
         $this->subjectConfirmation->getSubjectConfirmationData()->setRecipient('theSameDestination');
 

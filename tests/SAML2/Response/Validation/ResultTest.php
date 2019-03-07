@@ -11,8 +11,9 @@ class ResultTest extends \PHPUnit\Framework\TestCase
     /**
      * @group response-validation
      * @test
+     * @return void
      */
-    public function added_errors_can_be_retrieved()
+    public function added_errors_can_be_retrieved() : void
     {
         $error = 'This would be an error message';
         $result = new Result();
@@ -28,8 +29,9 @@ class ResultTest extends \PHPUnit\Framework\TestCase
     /**
      * @group response-validation
      * @test
+     * @return void
      */
-    public function the_result_correctly_reports_whether_or_not_it_is_valid()
+    public function the_result_correctly_reports_whether_or_not_it_is_valid() : void
     {
         $result = new Result();
 

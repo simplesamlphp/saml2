@@ -4,6 +4,8 @@ declare(strict_types=1);
 
 namespace SAML2\XML\md;
 
+use DOMElement;
+
 use SAML2\Constants;
 use SAML2\SignedElementHelper;
 use SAML2\Utils;
@@ -86,7 +88,7 @@ class RoleDescriptor extends SignedElementHelper
      * @param \DOMElement|null $xml The XML element we should load.
      * @throws \Exception
      */
-    protected function __construct(string $elementName, \DOMElement $xml = null)
+    protected function __construct(string $elementName, DOMElement $xml = null)
     {
         parent::__construct($xml);
         $this->elementName = $elementName;
@@ -141,7 +143,7 @@ class RoleDescriptor extends SignedElementHelper
      *
      * @return string|null
      */
-    public function getID()
+    public function getID() : ?string
     {
         return $this->ID;
     }
@@ -153,7 +155,7 @@ class RoleDescriptor extends SignedElementHelper
      * @param string|null $Id
      * @return void
      */
-    public function setID(string $Id = null)
+    public function setID(string $Id = null) : void
     {
         $this->ID = $Id;
     }
@@ -163,7 +165,7 @@ class RoleDescriptor extends SignedElementHelper
      * Collect the value of the validUntil-property
      * @return int|null
      */
-    public function getValidUntil()
+    public function getValidUntil() : ?int
     {
         return $this->validUntil;
     }
@@ -174,7 +176,7 @@ class RoleDescriptor extends SignedElementHelper
      * @param int|null $validUntil
      * @return void
      */
-    public function setValidUntil(int $validUntil = null)
+    public function setValidUntil(int $validUntil = null) : void
     {
         $this->validUntil = $validUntil;
     }
@@ -184,7 +186,7 @@ class RoleDescriptor extends SignedElementHelper
      * Collect the value of the cacheDuration-property
      * @return string|null
      */
-    public function getCacheDuration()
+    public function getCacheDuration() : ?string
     {
         return $this->cacheDuration;
     }
@@ -195,7 +197,7 @@ class RoleDescriptor extends SignedElementHelper
      * @param string|null $cacheDuration
      * @return void
      */
-    public function setCacheDuration(string $cacheDuration = null)
+    public function setCacheDuration(string $cacheDuration = null) : void
     {
         $this->cacheDuration = $cacheDuration;
     }
@@ -218,7 +220,7 @@ class RoleDescriptor extends SignedElementHelper
      * @param array $extensions
      * @return void
      */
-    public function setExtensions(array $extensions)
+    public function setExtensions(array $extensions) : void
     {
         $this->Extensions = $extensions;
     }
@@ -230,7 +232,7 @@ class RoleDescriptor extends SignedElementHelper
      * @param \SAML2\XML\Chunk $extensions The Extensions
      * @return void
      */
-    public function addExtension(Extensions $extension)
+    public function addExtension(Extensions $extension) : void
     {
         $this->Extensions[] = $extension;
     }
@@ -242,7 +244,7 @@ class RoleDescriptor extends SignedElementHelper
      * @param string|null $errorURL
      * @return void
      */
-    public function setErrorURL(string $errorURL = null)
+    public function setErrorURL(string $errorURL = null) : void
     {
         if (!is_null($errorURL) && !filter_var($errorURL, FILTER_VALIDATE_URL)) {
             throw new \InvalidArgumentException('RoleDescriptor errorURL is not a valid URL.');
@@ -256,7 +258,7 @@ class RoleDescriptor extends SignedElementHelper
      *
      * @return string|null
      */
-    public function getErrorURL()
+    public function getErrorURL() : ?string
     {
         return $this->errorURL;
     }
@@ -279,7 +281,7 @@ class RoleDescriptor extends SignedElementHelper
      * @param array $protocols
      * @return void
      */
-    public function setProtocolSupportEnumeration(array $protocols)
+    public function setProtocolSupportEnumeration(array $protocols) : void
     {
         $this->protocolSupportEnumeration = $protocols;
     }
@@ -291,7 +293,7 @@ class RoleDescriptor extends SignedElementHelper
      * @param string $protocol
      * @return void
      */
-    public function addProtocolSupportEnumeration(string $protocol)
+    public function addProtocolSupportEnumeration(string $protocol) : void
     {
         $this->protocolSupportEnumeration[] = $protocol;
     }
@@ -302,7 +304,7 @@ class RoleDescriptor extends SignedElementHelper
      *
      * @return \SAML2\XML\md\Organization|null
      */
-    public function getOrganization()
+    public function getOrganization() : ?Organization
     {
         return $this->Organization;
     }
@@ -314,7 +316,7 @@ class RoleDescriptor extends SignedElementHelper
      * @param \SAML2\XML\md\Organization|null $organization
      * @return void
      */
-    public function setOrganization(Organization $organization = null)
+    public function setOrganization(Organization $organization = null) : void
     {
         $this->Organization = $organization;
     }
@@ -337,7 +339,7 @@ class RoleDescriptor extends SignedElementHelper
      * @param array $contactPerson
      * @return void
      */
-    public function setContactPerson(array $contactPerson)
+    public function setContactPerson(array $contactPerson) : void
     {
         $this->ContactPerson = $contactPerson;
     }
@@ -349,7 +351,7 @@ class RoleDescriptor extends SignedElementHelper
      * @param \SAML2\XML\md\ContactPerson $contactPerson
      * @return void
      */
-    public function addContactPerson(ContactPerson $contactPerson)
+    public function addContactPerson(ContactPerson $contactPerson) : void
     {
         $this->ContactPerson[] = $contactPerson;
     }
@@ -372,7 +374,7 @@ class RoleDescriptor extends SignedElementHelper
      * @param array $keyDescriptor
      * @return void
      */
-    public function setKeyDescriptor(array $keyDescriptor)
+    public function setKeyDescriptor(array $keyDescriptor) : void
     {
         $this->KeyDescriptor = $keyDescriptor;
     }
@@ -384,7 +386,7 @@ class RoleDescriptor extends SignedElementHelper
      * @param \SAML2\XML\md\KeyDescriptor $keyDescriptor
      * @return void
      */
-    public function addKeyDescriptor(KeyDescriptor $keyDescriptor)
+    public function addKeyDescriptor(KeyDescriptor $keyDescriptor) : void
     {
         $this->KeyDescriptor[] = $keyDescriptor;
     }
@@ -396,7 +398,7 @@ class RoleDescriptor extends SignedElementHelper
      * @param \DOMElement $parent The EntityDescriptor we should append this endpoint to.
      * @return \DOMElement
      */
-    protected function toXML(\DOMElement $parent) : \DOMElement
+    protected function toXML(DOMElement $parent) : DOMElement
     {
         $e = $parent->ownerDocument->createElementNS(Constants::NS_MD, $this->elementName);
         $parent->appendChild($e);

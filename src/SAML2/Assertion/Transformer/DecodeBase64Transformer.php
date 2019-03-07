@@ -22,7 +22,7 @@ class DecodeBase64Transformer implements
      * @param IdentityProvider $identityProvider
      * @return void
      */
-    public function setIdentityProvider(IdentityProvider $identityProvider)
+    public function setIdentityProvider(IdentityProvider $identityProvider) : void
     {
         $this->identityProvider = $identityProvider;
     }
@@ -51,7 +51,6 @@ class DecodeBase64Transformer implements
 
     /**
      * @param string $value
-     *
      * @return array
      */
     private function decodeValue(string $value) : array

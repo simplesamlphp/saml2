@@ -4,7 +4,7 @@ declare(strict_types=1);
 
 namespace SAML2\Configuration;
 
-use \SimpleSAML\Configuration;
+use SimpleSAML\Configuration;
 
 /**
  * Backwards compatibility helper for SimpleSAMLphp
@@ -99,7 +99,7 @@ class SimpleSAMLConverter
      *
      * @psalm-suppress UndefinedClass
      */
-    protected static function enrichForIdentityProvider(Configuration $configuration, array &$baseConfiguration)
+    protected static function enrichForIdentityProvider(Configuration $configuration, array &$baseConfiguration) : void
     {
         $baseConfiguration['base64EncodedAttributes'] = $configuration->getBoolean('base64attributes', false);
         $baseConfiguration['entityId'] = $configuration->getString('entityid');
@@ -114,7 +114,7 @@ class SimpleSAMLConverter
      *
      * @psalm-suppress UndefinedClass
      */
-    protected static function enrichForServiceProvider(Configuration $configuration, array &$baseConfiguration)
+    protected static function enrichForServiceProvider(Configuration $configuration, array &$baseConfiguration) : void
     {
         $baseConfiguration['entityId'] = $configuration->getString('entityid');
     }
@@ -131,7 +131,7 @@ class SimpleSAMLConverter
     protected static function enrichForDecryptionProvider(
         Configuration $configuration,
         array &$baseConfiguration
-    ) {
+    ) : void {
         if ($configuration->hasValue('sharedKey')) {
             $baseConfiguration['sharedKey'] = $configuration->getString('sharedKey', null);
         }

@@ -4,6 +4,7 @@ declare(strict_types=1);
 
 namespace SAML2\XML\ds;
 
+use DOMElement;
 use RobRichards\XMLSecLibs\XMLSecurityDSig;
 use Webmozart\Assert\Assert;
 
@@ -39,7 +40,7 @@ class KeyInfo
      *
      * @param \DOMElement|null $xml The XML element we should load.
      */
-    public function __construct(\DOMElement $xml = null)
+    public function __construct(DOMElement $xml = null)
     {
         if ($xml === null) {
             return;
@@ -78,7 +79,7 @@ class KeyInfo
      *
      * @return string|null
      */
-    public function getId()
+    public function getId() : ?string
     {
         return $this->Id;
     }
@@ -90,7 +91,7 @@ class KeyInfo
      * @param string|null $id
      * @return void
      */
-    public function setId(string $id = null)
+    public function setId(string $id = null) : void
     {
         $this->Id = $id;
     }
@@ -113,7 +114,7 @@ class KeyInfo
      * @param array $info
      * @return void
      */
-    public function setInfo(array $info)
+    public function setInfo(array $info) : void
     {
         $this->info = $info;
     }
@@ -126,7 +127,7 @@ class KeyInfo
      * @throws \Exception
      * @return void
      */
-    public function addInfo($info)
+    public function addInfo($info) : void
     {
         Assert::isInstanceOfAny(
             $info,
@@ -143,7 +144,7 @@ class KeyInfo
      * @param \DOMElement $parent The element we should append this KeyInfo to.
      * @return \DOMElement
      */
-    public function toXML(\DOMElement $parent) : \DOMElement
+    public function toXML(DOMElement $parent) : DOMElement
     {
         $doc = $parent->ownerDocument;
 

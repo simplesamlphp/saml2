@@ -13,5 +13,5 @@ interface ServiceProviderAware
      * @param ServiceProvider $serviceProvider
      * @return void
      */
-    public function setServiceProvider(ServiceProvider $serviceProvider);
+    public function setServiceProvider(ServiceProvider $serviceProvider) : void;
 }

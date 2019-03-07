@@ -15,7 +15,10 @@ use SAML2\XML\saml\AttributeValue;
  */
 class AttributeTest extends \PHPUnit\Framework\TestCase
 {
-    public function testMarshalling()
+    /**
+     * @return void
+     */
+    public function testMarshalling() : void
     {
         $attribute = new Attribute();
         $attribute->setName('TheName');
@@ -39,7 +42,10 @@ class AttributeTest extends \PHPUnit\Framework\TestCase
     }
 
 
-    public function testUnmarshalling()
+    /**
+     * @return void
+     */
+    public function testUnmarshalling() : void
     {
         $samlNamespace = Constants::NS_SAML;
         $document = DOMDocumentFactory::fromString(<<<XML
@@ -60,7 +66,10 @@ XML
     }
 
 
-    public function testUnmarshallingFailure()
+    /**
+     * @return void
+     */
+    public function testUnmarshallingFailure() : void
     {
         $samlNamespace = Constants::NS_SAML;
         $document = DOMDocumentFactory::fromString(<<<XML

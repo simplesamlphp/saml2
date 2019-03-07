@@ -9,13 +9,13 @@ interface DecryptionProvider
     /**
      * @return null|bool
      */
-    public function isAssertionEncryptionRequired();
+    public function isAssertionEncryptionRequired() : ?bool;
 
 
     /**
      * @return null|string
      */
-    public function getSharedKey();
+    public function getSharedKey() : ?string;
 
 
     /**
@@ -31,5 +31,5 @@ interface DecryptionProvider
     /**
      * @return array|null
      */
-    public function getBlacklistedAlgorithms();
+    public function getBlacklistedAlgorithms() : ?array;
 }

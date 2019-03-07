@@ -12,8 +12,9 @@ class PrivateKeyTest extends \Mockery\Adapter\Phpunit\MockeryTestCase
     /**
      * @group certificate
      * @test
+     * @return void
      */
-    public function test_create_from_key()
+    public function test_create_from_key() : void
     {
         $key = CertificatesMock::getPlainPrivateKey();
 

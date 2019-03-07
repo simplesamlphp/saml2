@@ -5,6 +5,7 @@ declare(strict_types=1);
 namespace SAML2\Assertion;
 
 use Psr\Log\LoggerInterface;
+
 use SAML2\Assertion;
 use SAML2\Assertion\Exception\InvalidAssertionException;
 use SAML2\Assertion\Exception\InvalidSubjectConfirmationException;
@@ -149,7 +150,7 @@ class Processor
      * @param \SAML2\Assertion $assertion
      * @return void
      */
-    public function validateAssertion(Assertion $assertion)
+    public function validateAssertion(Assertion $assertion) : void
     {
         $assertionValidationResult = $this->assertionValidator->validate($assertion);
         if (!$assertionValidationResult->isValid()) {

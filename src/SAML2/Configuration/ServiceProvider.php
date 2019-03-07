@@ -23,7 +23,7 @@ class ServiceProvider extends ArrayAdapter implements CertificateProvider, Decry
     /**
      * @return null|string
      */
-    public function getCertificateData()
+    public function getCertificateData() : ?string
     {
         return $this->get('certificateData');
     }
@@ -32,7 +32,7 @@ class ServiceProvider extends ArrayAdapter implements CertificateProvider, Decry
     /**
      * @return null|string
      */
-    public function getCertificateFile()
+    public function getCertificateFile() : ?string
     {
         return $this->get('certificateFile');
     }
@@ -50,7 +50,7 @@ class ServiceProvider extends ArrayAdapter implements CertificateProvider, Decry
     /**
      * @return string|null
      */
-    public function getEntityId()
+    public function getEntityId() : ?string
     {
         return $this->get('entityId');
     }
@@ -59,7 +59,7 @@ class ServiceProvider extends ArrayAdapter implements CertificateProvider, Decry
     /**
      * @return null|bool
      */
-    public function isAssertionEncryptionRequired()
+    public function isAssertionEncryptionRequired() : ?bool
     {
         return $this->get('assertionEncryptionEnabled');
     }
@@ -68,7 +68,7 @@ class ServiceProvider extends ArrayAdapter implements CertificateProvider, Decry
     /**
      * @return null|string
      */
-    public function getSharedKey()
+    public function getSharedKey() : ?string
     {
         return $this->get('sharedKey');
     }
@@ -85,7 +85,7 @@ class ServiceProvider extends ArrayAdapter implements CertificateProvider, Decry
             $required = false;
         }
         $privateKeys = $this->get('privateKeys');
-        $key         = array_filter($privateKeys, function (PrivateKey $key) use ($name) {
+        $key = array_filter($privateKeys, function (PrivateKey $key) use ($name) {
             return $key->getName() === $name;
         });
 

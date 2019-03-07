@@ -4,6 +4,7 @@ declare(strict_types=1);
 
 namespace SAML2\XML\mdattr;
 
+use DOMElement;
 use Webmozart\Assert\Assert;
 
 use SAML2\Utils;
@@ -38,7 +39,7 @@ class EntityAttributes
      *
      * @param \DOMElement|null $xml The XML element we should load.
      */
-    public function __construct(\DOMElement $xml = null)
+    public function __construct(DOMElement $xml = null)
     {
         if ($xml === null) {
             return;
@@ -72,7 +73,7 @@ class EntityAttributes
      * @param array $children
      * @return void
      */
-    public function setChildren(array $children)
+    public function setChildren(array $children) : void
     {
         $this->children = $children;
     }
@@ -84,7 +85,7 @@ class EntityAttributes
      * @param \SAML2\XML\Chunk|\SAML2\XML\saml\Attribute $child
      * @return void
      */
-    public function addChildren($child)
+    public function addChildren($child) : void
     {
         Assert::isInstanceOfAny($child, [Chunk::class, Attribute::class]);
         $this->children[] = $child;
@@ -97,7 +98,7 @@ class EntityAttributes
      * @param \DOMElement $parent The element we should append to.
      * @return \DOMElement
      */
-    public function toXML(\DOMElement $parent) : \DOMElement
+    public function toXML(DOMElement $parent) : DOMElement
     {
         $doc = $parent->ownerDocument;
 

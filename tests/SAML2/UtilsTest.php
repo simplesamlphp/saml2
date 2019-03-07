@@ -18,8 +18,9 @@ class UtilsTest extends \PHPUnit\Framework\TestCase
 {
     /**
      * Test querying a SAML XML document.
+     * @return void
      */
-    public function testXpQuery()
+    public function testXpQuery() : void
     {
         $nameId_before = new NameID();
         $nameId_before->setValue('NameIDValue');
@@ -43,8 +44,9 @@ class UtilsTest extends \PHPUnit\Framework\TestCase
 
     /**
      * Test adding an element with a string value.
+     * @return void
      */
-    public function testAddString()
+    public function testAddString() : void
     {
         $document = DOMDocumentFactory::fromString('<root/>');
 
@@ -75,8 +77,9 @@ class UtilsTest extends \PHPUnit\Framework\TestCase
 
     /**
      * Test adding multiple elements of a given type with given values.
+     * @return void
      */
-    public function testGetAddStrings()
+    public function testGetAddStrings() : void
     {
         $document = DOMDocumentFactory::fromString('<root/>');
         Utils::addStrings(
@@ -146,8 +149,9 @@ class UtilsTest extends \PHPUnit\Framework\TestCase
 
     /**
      * Test retrieval of a string value for a given node.
+     * @return void
      */
-    public function testExtractString()
+    public function testExtractString() : void
     {
         $document = DOMDocumentFactory::fromString(
             '<root xmlns="' . Constants::NS_MD . '">'.
@@ -170,8 +174,9 @@ class UtilsTest extends \PHPUnit\Framework\TestCase
 
     /**
      * Test retrieval of a localized string for a given node.
+     * @return void
      */
-    public function testExtractLocalizedString()
+    public function testExtractLocalizedString() : void
     {
         $document = DOMDocumentFactory::fromString(
             '<root xmlns="' . Constants::NS_MD . '">'.
@@ -196,8 +201,9 @@ class UtilsTest extends \PHPUnit\Framework\TestCase
      * Test xsDateTime format validity
      *
      * @dataProvider xsDateTimes
+     * @return void
      */
-    public function testXsDateTimeToTimestamp($shouldPass, $time, $expectedTs = null)
+    public function testXsDateTimeToTimestamp($shouldPass, $time, $expectedTs = null) : void
     {
         try {
             $ts = Utils::xsDateTimeToTimestamp($time);
@@ -209,7 +215,10 @@ class UtilsTest extends \PHPUnit\Framework\TestCase
     }
 
 
-    public function xsDateTimes()
+    /**
+     * @return void
+     */
+    public function xsDateTimes() : array
     {
         return [
             [true, '2015-01-01T00:00:00Z', 1420070400],
@@ -231,8 +240,9 @@ class UtilsTest extends \PHPUnit\Framework\TestCase
 
     /**
      * Test parseBoolean, XML allows both 1 and true as values.
+     * @return void
      */
-    public function testParseBoolean()
+    public function testParseBoolean() : void
     {
         // variations of true: "true", 1, and captalizations
         $document = DOMDocumentFactory::fromString(
@@ -292,8 +302,9 @@ class UtilsTest extends \PHPUnit\Framework\TestCase
 
     /**
      * Test createKeyDescriptor.
+     * @return void
      */
-    public function testCreateKeyDescriptor()
+    public function testCreateKeyDescriptor() : void
     {
         $X509Data = "MIICgTCCAeoCCQCbOlrWDdX7FTANBgkqhkiG9w0BAQUFADCBhDELMAkGA1UEBhMCTk8xGDAWBgNVBAgTD0FuZHJlYXMgU29sYmVyZzEMMAoGA1UEBxMDRm9vMRAwDgYDVQQKEwdVTklORVRUMRgwFgYDVQQDEw9mZWlkZS5lcmxhbmcubm8xITAfBgkqhkiG9w0BCQEWEmFuZHJlYXNAdW5pbmV0dC5ubzAeFw0wNzA2MTUxMjAxMzVaFw0wNzA4MTQxMjAxMzVaMIGEMQswCQYDVQQGEwJOTzEYMBYGA1UECBMPQW5kcmVhcyBTb2xiZXJnMQwwCgYDVQQHEwNGb28xEDAOBgNVBAoTB1VOSU5FVFQxGDAWBgNVBAMTD2ZlaWRlLmVybGFuZy5ubzEhMB8GCSqGSIb3DQEJARYSYW5kcmVhc0B1bmluZXR0Lm5vMIGfMA0GCSqGSIb3DQEBAQUAA4GNADCBiQKBgQDivbhR7P516x/S3BqKxupQe0LONoliupiBOesCO3SHbDrl3+q9IbfnfmE04rNuMcPsIxB161TdDpIesLCn7c8aPHISKOtPlAeTZSnb8QAu7aRjZq3+PbrP5uW3TcfCGPtKTytHOge/OlJbo078dVhXQ14d1EDwXJW1rRXuUt4C8QIDAQABMA0GCSqGSIb3DQEBBQUAA4GBACDVfp86HObqY+e8BUoWQ9+VMQx1ASDohBjwOsg2WykUqRXF+dLfcUH9dWR63CtZIKFDbStNomPnQz7nbK+onygwBspVEbnHuUihZq3ZUdmumQqCw4Uvs/1Uvq3orOo/WJVhTyvLgFVK2QarQ4/67OZfHd7R+POBXhophSMv1ZOo";
         $keyDescriptor = Utils::createKeyDescriptor($X509Data);

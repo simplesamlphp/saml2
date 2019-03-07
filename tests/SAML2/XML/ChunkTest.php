@@ -22,8 +22,9 @@ class ChunkTest extends \PHPUnit\Framework\TestCase
 
     /**
      * Make a new Chunk object to test with
+     * @return void
      */
-    public function setUp()
+    public function setUp() : void
     {
         $attribute = new Attribute();
         $attribute->setName('TheName');
@@ -43,8 +44,9 @@ class ChunkTest extends \PHPUnit\Framework\TestCase
 
     /**
      * Test serialization and unserialization
+     * @return void
      */
-    public function testChunkSerializationLoop()
+    public function testChunkSerializationLoop() : void
     {
         $ser = $this->chunk->serialize();
         $document = DOMDocumentFactory::fromString('<root />');

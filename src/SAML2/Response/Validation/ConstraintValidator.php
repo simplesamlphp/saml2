@@ -13,5 +13,5 @@ interface ConstraintValidator
      * @param Result $result
      * @return void
      */
-    public function validate(Response $response, Result $result);
+    public function validate(Response $response, Result $result) : void;
 }

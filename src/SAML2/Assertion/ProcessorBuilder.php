@@ -5,6 +5,7 @@ declare(strict_types=1);
 namespace SAML2\Assertion;
 
 use Psr\Log\LoggerInterface;
+
 use SAML2\Assertion\Transformer\DecodeBase64Transformer;
 use SAML2\Assertion\Transformer\NameIdDecryptionTransformer;
 use SAML2\Assertion\Transformer\TransformerChain;

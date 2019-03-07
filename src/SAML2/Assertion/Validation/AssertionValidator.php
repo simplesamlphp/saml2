@@ -45,7 +45,7 @@ class AssertionValidator
      * @param AssertionConstraintValidator $constraint
      * @return void
      */
-    public function addConstraintValidator(AssertionConstraintValidator $constraint)
+    public function addConstraintValidator(AssertionConstraintValidator $constraint) : void
     {
         if ($constraint instanceof IdentityProviderAware) {
             $constraint->setIdentityProvider($this->identityProvider);

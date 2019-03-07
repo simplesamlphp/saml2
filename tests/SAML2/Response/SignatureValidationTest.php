@@ -47,8 +47,9 @@ class SignatureValidationTest extends \Mockery\Adapter\Phpunit\MockeryTestCase
     /**
      * We mock the actual assertion processing as that is not what we want to test here. Since the assertion processor
      * is created via a static ::build() method we have to mock that, and have to run the tests in separate processes
+     * @return void
      */
-    public function setUp()
+    public function setUp() : void
     {
         $this->assertionProcessorBuilder = \Mockery::mock('alias:SAML2\Assertion\ProcessorBuilder');
         $this->assertionProcessor = \Mockery::mock(Assertion\Processor::class);
@@ -70,8 +71,9 @@ class SignatureValidationTest extends \Mockery\Adapter\Phpunit\MockeryTestCase
     /**
      * @runInSeparateProcess
      * @preserveGlobalState disabled
+     * @return void
      */
-    public function testThatAnUnsignedResponseWithASignedAssertionCanBeProcessed()
+    public function testThatAnUnsignedResponseWithASignedAssertionCanBeProcessed() : void
     {
         $this->assertionProcessor->shouldReceive('processAssertions')->once();
 
@@ -89,8 +91,9 @@ class SignatureValidationTest extends \Mockery\Adapter\Phpunit\MockeryTestCase
     /**
      * @runInSeparateProcess
      * @preserveGlobalState disabled
+     * @return void
      */
-    public function testThatAnSignedResponseWithAnUnsignedAssertionCanBeProcessed()
+    public function testThatAnSignedResponseWithAnUnsignedAssertionCanBeProcessed() : void
     {
         $this->assertionProcessor->shouldReceive('processAssertions')->once();
 
@@ -108,8 +111,9 @@ class SignatureValidationTest extends \Mockery\Adapter\Phpunit\MockeryTestCase
     /**
      * @runInSeparateProcess
      * @preserveGlobalState disabled
+     * @return void
      */
-    public function testThatASignedResponseWithASignedAssertionIsValid()
+    public function testThatASignedResponseWithASignedAssertionIsValid() : void
     {
         $this->assertionProcessor->shouldReceive('processAssertions')->once();
 
@@ -127,8 +131,9 @@ class SignatureValidationTest extends \Mockery\Adapter\Phpunit\MockeryTestCase
     /**
      * @runInSeparateProcess
      * @preserveGlobalState disabled
+     * @return void
      */
-    public function testThatAnUnsignedResponseWithNoSignedAssertionsThrowsAnException()
+    public function testThatAnUnsignedResponseWithNoSignedAssertionsThrowsAnException() : void
     {
         $this->expectException(UnsignedResponseException::class);
 
@@ -148,7 +153,7 @@ class SignatureValidationTest extends \Mockery\Adapter\Phpunit\MockeryTestCase
     /**
      * @return \SAML2\Response
      */
-    private function getSignedResponseWithUnsignedAssertion()
+    private function getSignedResponseWithUnsignedAssertion() : Response
     {
         $doc = new \DOMDocument();
         $doc->load(__DIR__ . '/response.xml');
@@ -164,7 +169,7 @@ class SignatureValidationTest extends \Mockery\Adapter\Phpunit\MockeryTestCase
     /**
      * @return \SAML2\Response
      */
-    private function getUnsignedResponseWithSignedAssertion()
+    private function getUnsignedResponseWithSignedAssertion() : Response
     {
         $doc = new \DOMDocument();
         $doc->load(__DIR__ . '/response.xml');
@@ -185,7 +190,7 @@ class SignatureValidationTest extends \Mockery\Adapter\Phpunit\MockeryTestCase
     /**
      * @return \SAML2\Response
      */
-    private function getSignedResponseWithSignedAssertion()
+    private function getSignedResponseWithSignedAssertion() : Response
     {
         $doc = new \DOMDocument();
         $doc->load(__DIR__ . '/response.xml');
@@ -205,7 +210,7 @@ class SignatureValidationTest extends \Mockery\Adapter\Phpunit\MockeryTestCase
     /**
      * @return \SAML2\Response
      */
-    private function getUnsignedResponseWithUnsignedAssertion()
+    private function getUnsignedResponseWithUnsignedAssertion() : Response
     {
         $doc = new \DOMDocument();
         $doc->load(__DIR__ . '/response.xml');

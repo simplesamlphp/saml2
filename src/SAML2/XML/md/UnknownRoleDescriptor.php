@@ -4,6 +4,8 @@ declare(strict_types=1);
 
 namespace SAML2\XML\md;
 
+use DOMElement;
+
 use SAML2\XML\Chunk;
 
 /**
@@ -26,7 +28,7 @@ class UnknownRoleDescriptor extends RoleDescriptor
      *
      * @param \DOMElement $xml The XML element we should load.
      */
-    public function __construct(\DOMElement $xml)
+    public function __construct(DOMElement $xml)
     {
         parent::__construct('md:RoleDescriptor', $xml);
 
@@ -40,7 +42,7 @@ class UnknownRoleDescriptor extends RoleDescriptor
      * @param \DOMElement $parent The EntityDescriptor we should append this RoleDescriptor to.
      * @return \DOMElement
      */
-    public function toXML(\DOMElement $parent) : \DOMElement
+    public function toXML(DOMElement $parent) : DOMElement
     {
         return $this->xml->toXML($parent);
     }

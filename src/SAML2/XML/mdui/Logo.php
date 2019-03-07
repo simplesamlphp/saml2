@@ -4,6 +4,8 @@ declare(strict_types=1);
 
 namespace SAML2\XML\mdui;
 
+use DOMElement;
+
 /**
  * Class for handling the Logo metadata extensions for login and discovery user interface
  *
@@ -47,7 +49,7 @@ class Logo
      * @param \DOMElement|null $xml The XML element we should load.
      * @throws \Exception
      */
-    public function __construct(\DOMElement $xml = null)
+    public function __construct(DOMElement $xml = null)
     {
         if ($xml === null) {
             return;
@@ -88,7 +90,7 @@ class Logo
      * @param string $url
      * @return void
      */
-    public function setUrl(string $url)
+    public function setUrl(string $url) : void
     {
         if (!filter_var(trim($url), FILTER_VALIDATE_URL) && substr(trim($url), 0, 5) !== 'data:') {
             throw new \InvalidArgumentException('mdui:Logo is not a valid URL.');
@@ -102,7 +104,7 @@ class Logo
      *
      * @return string|null
      */
-    public function getLanguage()
+    public function getLanguage() : ?string
     {
         return $this->lang;
     }
@@ -114,7 +116,7 @@ class Logo
      * @param string $lang
      * @return void
      */
-    public function setLanguage(string $lang)
+    public function setLanguage(string $lang) : void
     {
         $this->lang = $lang;
     }
@@ -137,7 +139,7 @@ class Logo
      * @param int $height
      * @return void
      */
-    public function setHeight(int $height)
+    public function setHeight(int $height) : void
     {
         $this->height = $height;
     }
@@ -160,7 +162,7 @@ class Logo
      * @param int $width
      * @return void
      */
-    public function setWidth(int $width)
+    public function setWidth(int $width) : void
     {
         $this->width = $width;
     }
@@ -172,7 +174,7 @@ class Logo
      * @param \DOMElement $parent The element we should append this Logo to.
      * @return \DOMElement
      */
-    public function toXML(\DOMElement $parent) : \DOMElement
+    public function toXML(DOMElement $parent) : DOMElement
     {
         $doc = $parent->ownerDocument;
 

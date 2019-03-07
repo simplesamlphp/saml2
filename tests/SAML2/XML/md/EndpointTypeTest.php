@@ -14,7 +14,10 @@ use SAML2\Utils;
  */
 class EndpointTypeTest extends \PHPUnit\Framework\TestCase
 {
-    public function testMarshalling()
+    /**
+     * @return void
+     */
+    public function testMarshalling() : void
     {
         $endpointType = new EndpointType();
         $endpointType->setBinding('TestBinding');
@@ -44,7 +47,10 @@ class EndpointTypeTest extends \PHPUnit\Framework\TestCase
     }
 
 
-    public function testUnmarshalling()
+    /**
+     * @return void
+     */
+    public function testUnmarshalling() : void
     {
         $mdNamespace = Constants::NS_MD;
         $document = DOMDocumentFactory::fromString(

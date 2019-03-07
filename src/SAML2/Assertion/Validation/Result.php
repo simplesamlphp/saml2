@@ -21,7 +21,7 @@ class Result
      * @param $message
      * @return void
      */
-    public function addError(string $message)
+    public function addError(string $message) : void
     {
         $this->errors[] = $message;
     }

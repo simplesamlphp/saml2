@@ -13,7 +13,10 @@ use SAML2\DOMDocumentFactory;
  */
 class StatusResponseTest extends \PHPUnit\Framework\TestCase
 {
-    public function testMarshalling()
+    /**
+     * @return void
+     */
+    public function testMarshalling() : void
     {
         $response = new Response();
         $response->setStatus([
@@ -41,7 +44,10 @@ class StatusResponseTest extends \PHPUnit\Framework\TestCase
     }
 
 
-    public function testUnmarshalling()
+    /**
+     * @return void
+     */
+    public function testUnmarshalling() : void
     {
         $xml = <<<XML
 <samlp:Response xmlns:samlp="urn:oasis:names:tc:SAML:2.0:protocol"
@@ -75,8 +81,9 @@ XML;
 
     /**
      * A status reponse that is not an error
+     * @return void
      */
-    public function testStatusSuccess()
+    public function testStatusSuccess() : void
     {
         $xml = <<<XML
 <samlp:Response xmlns:samlp="urn:oasis:names:tc:SAML:2.0:protocol"
@@ -107,8 +114,9 @@ XML;
 
     /**
      * See if we can parse a StatusResponse with a subcode
+     * @return void
      */
-    public function testStatusSubcode()
+    public function testStatusSubcode() : void
     {
         $xml = <<<XML
 <samlp:Response xmlns:samlp="urn:oasis:names:tc:SAML:2.0:protocol"
@@ -142,8 +150,9 @@ XML;
 
     /**
      * Test adding in-response-to to a status message.
+     * @return void
      */
-    public function testResponseTo()
+    public function testResponseTo() : void
     {
         $response = new Response();
         $response->setIssueInstant(1453323439);
@@ -175,8 +184,9 @@ STATUSXML
 
     /**
      * A response without any <Status> element throws exception
+     * @return void
      */
-    public function testNoStatusElementThrowsException()
+    public function testNoStatusElementThrowsException() : void
     {
         $this->expectException(\Exception::class, 'Missing status code on response');
 
@@ -207,8 +217,9 @@ XML;
 
     /**
      * StatusCode is required in a StatusResponse.
+     * @return void
      */
-    public function testNoStatusCodeThrowsException()
+    public function testNoStatusCodeThrowsException() : void
     {
         $this->expectException(\Exception::class, 'Missing status code in status element');
 

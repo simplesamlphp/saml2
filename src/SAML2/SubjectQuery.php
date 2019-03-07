@@ -4,7 +4,9 @@ declare(strict_types=1);
 
 namespace SAML2;
 
-use \SAML2\XML\saml\NameID;
+use DOMElement;
+
+use SAML2\XML\saml\NameID;
 
 /**
  * Base class for SAML 2 subject query messages.
@@ -33,7 +35,7 @@ abstract class SubjectQuery extends Request
      * @param string $tagName The tag name of the root element.
      * @param \DOMElement|null $xml The input message.
      */
-    protected function __construct(string $tagName, \DOMElement $xml = null)
+    protected function __construct(string $tagName, DOMElement $xml = null)
     {
         parent::__construct($tagName, $xml);
 
@@ -49,11 +51,10 @@ abstract class SubjectQuery extends Request
      * Parse subject in query.
      *
      * @param \DOMElement $xml The SubjectQuery XML element.
-     * @return void
      * @throws \Exception
      * @return void
      */
-    private function parseSubject(\DOMElement $xml)
+    private function parseSubject(\DOMElement $xml) : void
     {
         /** @var \DOMElement[] $subject */
         $subject = Utils::xpQuery($xml, './saml_assertion:Subject');
@@ -79,7 +80,7 @@ abstract class SubjectQuery extends Request
      *
      * @return \SAML2\XML\saml\NameID|null The name identifier of the assertion.
      */
-    public function getNameId()
+    public function getNameId() : ?NameID
     {
         return $this->nameId;
     }
@@ -91,7 +92,7 @@ abstract class SubjectQuery extends Request
      * @param \SAML2\XML\saml\NameID|null $nameId The name identifier of the assertion.
      * @return void
      */
-    public function setNameId(NameID $nameId = null)
+    public function setNameId(NameID $nameId = null) : void
     {
         $this->nameId = $nameId;
     }
@@ -102,7 +103,7 @@ abstract class SubjectQuery extends Request
      *
      * @return \DOMElement This subject query.
      */
-    public function toUnsignedXML() : \DOMElement
+    public function toUnsignedXML() : DOMElement
     {
         if ($this->nameId === null) {
             throw new \Exception('Cannot convert SubjectQuery to XML without a NameID set.');

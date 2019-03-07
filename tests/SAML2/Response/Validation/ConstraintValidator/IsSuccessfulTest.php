@@ -16,7 +16,10 @@ class IsSuccessfulTest extends \Mockery\Adapter\Phpunit\MockeryTestCase
     private $response;
 
 
-    public function setUp()
+    /**
+     * @return void
+     */
+    public function setUp() : void
     {
         $this->response = \Mockery::mock('SAML2\Response');
     }
@@ -25,8 +28,9 @@ class IsSuccessfulTest extends \Mockery\Adapter\Phpunit\MockeryTestCase
     /**
      * @group response-validation
      * @test
+     * @return void
      */
-    public function validating_a_successful_response_gives_a_valid_validation_result()
+    public function validating_a_successful_response_gives_a_valid_validation_result() : void
     {
         $this->response->shouldReceive('isSuccess')->once()->andReturn(true);
 
@@ -42,8 +46,9 @@ class IsSuccessfulTest extends \Mockery\Adapter\Phpunit\MockeryTestCase
     /**
      * @group response-validation
      * @test
+     * @return void
      */
-    public function an_unsuccessful_response_is_not_valid_and_generates_a_proper_error_message()
+    public function an_unsuccessful_response_is_not_valid_and_generates_a_proper_error_message() : void
     {
         $responseStatus = [
             'Code'    => 'foo',

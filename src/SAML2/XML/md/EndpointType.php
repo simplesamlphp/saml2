@@ -4,6 +4,8 @@ declare(strict_types=1);
 
 namespace SAML2\XML\md;
 
+use DOMElement;
+
 use SAML2\Constants;
 
 /**
@@ -48,7 +50,7 @@ class EndpointType
      * @param \DOMElement|null $xml The XML element we should load.
      * @throws \Exception
      */
-    public function __construct(\DOMElement $xml = null)
+    public function __construct(DOMElement $xml = null)
     {
         if ($xml === null) {
             return;
@@ -121,11 +123,10 @@ class EndpointType
      * @param string $namespaceURI  The namespace URI.
      * @param string $qualifiedName The local name.
      * @param string $value The attribute value.
-     * @return void
      * @throws \Exception
      * @return void
      */
-    public function setAttributeNS(string $namespaceURI, string $qualifiedName, string $value)
+    public function setAttributeNS(string $namespaceURI, string $qualifiedName, string $value) : void
     {
         $name = explode(':', $qualifiedName, 2);
         if (count($name) < 2) {
@@ -149,7 +150,7 @@ class EndpointType
      * @param string $localName The local name.
      * @return void
      */
-    public function removeAttributeNS(string $namespaceURI, string $localName)
+    public function removeAttributeNS(string $namespaceURI, string $localName) : void
     {
         $fullName = '{'.$namespaceURI.'}'.$localName;
         unset($this->attributes[$fullName]);
@@ -161,7 +162,7 @@ class EndpointType
      *
      * @return string|null
      */
-    public function getBinding()
+    public function getBinding() : ?string
     {
         return $this->Binding;
     }
@@ -173,7 +174,7 @@ class EndpointType
      * @param string $binding
      * @return void
      */
-    public function setBinding(string $binding)
+    public function setBinding(string $binding) : void
     {
         $this->Binding = $binding;
     }
@@ -184,7 +185,7 @@ class EndpointType
      *
      * @return string|null
      */
-    public function getLocation()
+    public function getLocation() : ?string
     {
         return $this->Location;
     }
@@ -195,7 +196,7 @@ class EndpointType
      * @param string|null $location
      * @return void
      */
-    public function setLocation(string $location = null)
+    public function setLocation(string $location = null) : void
     {
         $this->Location = $location;
     }
@@ -206,7 +207,7 @@ class EndpointType
      *
      * @return string|null
      */
-    public function getResponseLocation()
+    public function getResponseLocation() : ?string
     {
         return $this->ResponseLocation;
     }
@@ -218,7 +219,7 @@ class EndpointType
      * @param string|null $responseLocation
      * @return void
      */
-    public function setResponseLocation(string $responseLocation = null)
+    public function setResponseLocation(string $responseLocation = null) : void
     {
         $this->ResponseLocation = $responseLocation;
     }
@@ -231,7 +232,7 @@ class EndpointType
      * @param string $name The name of the element we should create.
      * @return \DOMElement
      */
-    public function toXML(\DOMElement $parent, string $name) : \DOMElement
+    public function toXML(DOMElement $parent, string $name) : DOMElement
     {
         $e = $parent->ownerDocument->createElementNS(Constants::NS_MD, $name);
         $parent->appendChild($e);

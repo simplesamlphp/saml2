@@ -12,8 +12,9 @@ class FileTest extends \PHPUnit\Framework\TestCase
     /**
      * @group utilities
      * @test
+     * @return void
      */
-    public function when_loading_a_non_existant_file_an_exception_is_thrown()
+    public function when_loading_a_non_existant_file_an_exception_is_thrown() : void
     {
         $this->expectException(RuntimeException::class, 'File "/foo/bar/baz/quux" does not exist or is not readable');
         File::getFileContents('/foo/bar/baz/quux');
@@ -22,8 +23,9 @@ class FileTest extends \PHPUnit\Framework\TestCase
     /**
      * @group utilities
      * @test
+     * @return void
      */
-    public function an_existing_readable_file_can_be_loaded()
+    public function an_existing_readable_file_can_be_loaded() : void
     {
         $contents = File::getFileContents(__DIR__ . '/File/can_be_loaded.txt');
 

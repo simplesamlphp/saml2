@@ -16,7 +16,10 @@ use SAML2\Utils;
  */
 class SigningMethodTest extends \PHPUnit\Framework\TestCase
 {
-    public function testMarshalling()
+    /**
+     * @return void
+     */
+    public function testMarshalling() : void
     {
         $signingMethod = new SigningMethod();
         $signingMethod->setAlgorithm('http://exampleAlgorithm');
@@ -53,7 +56,10 @@ class SigningMethodTest extends \PHPUnit\Framework\TestCase
     }
 
 
-    public function testUnmarshalling()
+    /**
+     * @return void
+     */
+    public function testUnmarshalling() : void
     {
         $document = DOMDocumentFactory::fromString(<<<XML
 <alg:SigningMethod xmlns:alg="urn:oasis:names:tc:SAML:metadata:algsupport"
@@ -70,7 +76,10 @@ XML
     }
 
 
-    public function testMissingAlgorithmThrowsException()
+    /**
+     * @return void
+     */
+    public function testMissingAlgorithmThrowsException() : void
     {
         $document = DOMDocumentFactory::fromString(<<<XML
 <alg:SigningMethod xmlns:alg="urn:oasis:names:tc:SAML:metadata:algsupport" 

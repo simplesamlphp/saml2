@@ -4,6 +4,8 @@ declare(strict_types=1);
 
 namespace SAML2\XML\md;
 
+use DOMElement;
+
 use SAML2\Constants;
 use SAML2\Utils;
 use SAML2\XML\saml\Attribute;
@@ -28,7 +30,7 @@ class RequestedAttribute extends Attribute
      *
      * @param \DOMElement|null $xml The XML element we should load.
      */
-    public function __construct(\DOMElement $xml = null)
+    public function __construct(DOMElement $xml = null)
     {
         parent::__construct($xml);
 
@@ -45,7 +47,7 @@ class RequestedAttribute extends Attribute
      *
      * @return bool|null
      */
-    public function getIsRequired()
+    public function getIsRequired() : ?bool
     {
         return $this->isRequired;
     }
@@ -54,10 +56,10 @@ class RequestedAttribute extends Attribute
     /**
      * Set the value of the isRequired-property
      *
-     * @param boolean|null $flag
+     * @param bool|null $flag
      * @return void
      */
-    public function setIsRequired(bool $flag = null)
+    public function setIsRequired(bool $flag = null) : void
     {
         $this->isRequired = $flag;
     }
@@ -69,7 +71,7 @@ class RequestedAttribute extends Attribute
      * @param \DOMElement $parent The element we should append this RequestedAttribute to.
      * @return \DOMElement
      */
-    public function toXML(\DOMElement $parent) : \DOMElement
+    public function toXML(DOMElement $parent) : DOMElement
     {
         $e = $this->toXMLInternal($parent, Constants::NS_MD, 'md:RequestedAttribute');
 

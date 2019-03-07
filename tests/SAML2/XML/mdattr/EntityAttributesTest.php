@@ -16,7 +16,10 @@ use SAML2\Utils;
  */
 class EntityAttributesTest extends \PHPUnit\Framework\TestCase
 {
-    public function testMarshalling()
+    /**
+     * @return void
+     */
+    public function testMarshalling() : void
     {
         $attribute1 = new Attribute();
         $attribute1->setName('urn:simplesamlphp:v1:simplesamlphp');
@@ -53,7 +56,10 @@ class EntityAttributesTest extends \PHPUnit\Framework\TestCase
     }
 
 
-    public function testUnmarshalling()
+    /**
+     * @return void
+     */
+    public function testUnmarshalling() : void
     {
         $document = DOMDocumentFactory::fromString(<<<XML
 <mdattr:EntityAttributes xmlns:mdattr="urn:oasis:names:tc:SAML:metadata:attribute">
@@ -81,7 +87,10 @@ XML
     }
 
 
-    public function testUnmarshallingAttributes()
+    /**
+     * @return void
+     */
+    public function testUnmarshallingAttributes() : void
     {
         $document = DOMDocumentFactory::fromString(<<<XML
 <mdattr:EntityAttributes xmlns:mdattr="urn:oasis:names:tc:SAML:metadata:attribute">

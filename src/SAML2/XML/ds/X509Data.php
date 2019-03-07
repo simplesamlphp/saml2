@@ -4,6 +4,7 @@ declare(strict_types=1);
 
 namespace SAML2\XML\ds;
 
+use DOMElement;
 use RobRichards\XMLSecLibs\XMLSecurityDSig;
 use Webmozart\Assert\Assert;
 
@@ -33,14 +34,14 @@ class X509Data
      *
      * @param \DOMElement|null $xml The XML element we should load.
      */
-    public function __construct(\DOMElement $xml = null)
+    public function __construct(DOMElement $xml = null)
     {
         if ($xml === null) {
             return;
         }
 
         for ($n = $xml->firstChild;; $n = $n->nextSibling) {
-            if (!($n instanceof \DOMElement)) {
+            if (!($n instanceof DOMElement)) {
                 continue;
             }
 
@@ -77,7 +78,7 @@ class X509Data
      * @param array $data
      * @return void
      */
-    public function setData(array $data)
+    public function setData(array $data) : void
     {
         $this->data = $data;
     }
@@ -89,7 +90,7 @@ class X509Data
      * @param \SAML2\XML\Chunk|\SAML2\XML\ds\X509Certificate $data
      * @return void
      */
-    public function addData($data)
+    public function addData($data) : void
     {
         Assert::isInstanceOfAny($data, [Chunk::class, X509Certificate::class]);
         $this->data[] = $data;
@@ -102,7 +103,7 @@ class X509Data
      * @param \DOMElement $parent The element we should append this X509Data element to.
      * @return \DOMElement
      */
-    public function toXML(\DOMElement $parent) : \DOMElement
+    public function toXML(DOMElement $parent) : DOMElement
     {
         $doc = $parent->ownerDocument;
 

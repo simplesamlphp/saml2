@@ -12,7 +12,10 @@ use SAML2\Utils;
 
 class ArtifactResponseTest extends \PHPUnit\Framework\TestCase
 {
-    public function testMarshalling()
+    /**
+     * @return void
+     */
+    public function testMarshalling() : void
     {
         $issuer1 = new Issuer();
         $issuer2 = new Issuer();
@@ -39,7 +42,10 @@ class ArtifactResponseTest extends \PHPUnit\Framework\TestCase
     }
 
 
-    public function testUnmarshalling()
+    /**
+     * @return void
+     */
+    public function testUnmarshalling() : void
     {
         $xml = <<<XML
 <samlp:ArtifactResponse

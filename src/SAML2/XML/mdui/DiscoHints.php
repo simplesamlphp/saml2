@@ -4,6 +4,8 @@ declare(strict_types=1);
 
 namespace SAML2\XML\mdui;
 
+use DOMElement;
+
 use SAML2\Utils;
 use SAML2\XML\Chunk;
 
@@ -51,7 +53,7 @@ class DiscoHints
      *
      * @param \DOMElement|null $xml The XML element we should load.
      */
-    public function __construct(\DOMElement $xml = null)
+    public function __construct(DOMElement $xml = null)
     {
         if ($xml === null) {
             return;
@@ -85,7 +87,7 @@ class DiscoHints
      * @param string[] $hints
      * @return void
      */
-    public function setIPHint(array $hints)
+    public function setIPHint(array $hints) : void
     {
         $this->IPHint = $hints;
     }
@@ -108,7 +110,7 @@ class DiscoHints
      * @param string[] $hints
      * @return void
      */
-    public function setDomainHint(array $hints)
+    public function setDomainHint(array $hints) : void
     {
         $this->DomainHint = $hints;
     }
@@ -131,7 +133,7 @@ class DiscoHints
      * @param string[] $hints
      * @return void
      */
-    public function setGeolocationHint(array $hints)
+    public function setGeolocationHint(array $hints) : void
     {
         $this->GeolocationHint = $hints;
     }
@@ -154,7 +156,7 @@ class DiscoHints
      * @param array $children
      * @return void
      */
-    public function setChildren(array $children)
+    public function setChildren(array $children) : void
     {
         $this->children = $children;
     }
@@ -166,7 +168,7 @@ class DiscoHints
      * @param \SAML2\XML\Chunk $child
      * @return void
      */
-    public function addChildren(Chunk $child)
+    public function addChildren(Chunk $child) : void
     {
         $this->children[] = $child;
     }
@@ -178,7 +180,7 @@ class DiscoHints
      * @param \DOMElement $parent The element we should append to.
      * @return \DOMElement|null
      */
-    public function toXML(\DOMElement $parent)
+    public function toXML(DOMElement $parent) : ?DOMElement
     {
         if (!empty($this->IPHint)
          || !empty($this->DomainHint)
