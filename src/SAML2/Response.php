@@ -24,9 +24,9 @@ class Response extends StatusResponse
     /**
      * Constructor for SAML 2 response messages.
      *
-     * @param \DOMElement|null $xml The input message.
+     * @param \DOMNode|null $xml The input message.
      */
-    public function __construct(DOMElement $xml = null)
+    public function __construct(DOMNode $xml = null)
     {
         parent::__construct('Response', $xml);
 

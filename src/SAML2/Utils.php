@@ -549,6 +549,8 @@ class Utils
         foreach ($parent->childNodes as $node) {
             if ($node->namespaceURI !== $namespaceURI || $node->localName !== $localName) {
                 continue;
+            } else if (!($node instanceOf DOMElement)) {
+                continue;
             }
 
             if ($node->hasAttribute('xml:lang')) {

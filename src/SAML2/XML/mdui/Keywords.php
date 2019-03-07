@@ -47,7 +47,7 @@ class Keywords
         if (!$xml->hasAttribute('xml:lang')) {
             throw new \Exception('Missing lang on Keywords.');
         }
-        if (!is_string($xml->textContent) || !strlen($xml->textContent)) {
+        if (!strlen($xml->textContent)) {
             throw new \Exception('Missing value for Keywords.');
         }
         foreach (explode(' ', $xml->textContent) as $keyword) {

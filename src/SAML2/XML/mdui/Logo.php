@@ -61,7 +61,7 @@ class Logo
         if (!$xml->hasAttribute('height')) {
             throw new \Exception('Missing height of Logo.');
         }
-        if (!is_string($xml->textContent) || !strlen($xml->textContent)) {
+        if (!strlen($xml->textContent)) {
             throw new \Exception('Missing url value for Logo.');
         }
         $this->setUrl($xml->textContent);
