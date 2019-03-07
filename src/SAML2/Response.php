@@ -5,6 +5,7 @@ declare(strict_types=1);
 namespace SAML2;
 
 use DOMElement;
+use DOMNode;
 
 /**
  * Class for SAML 2 Response messages.
