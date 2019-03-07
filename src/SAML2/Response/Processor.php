@@ -152,6 +152,10 @@ class Processor
             throw new NoAssertionsFoundException('No assertions found in response from IdP.');
         }
 
+        $decryptedAssertions = $this->assertionProcessor->decryptAssertions(
+            new ArrayCollection($assertions)
+        );
+
         if (!$this->responseIsSigned) {
             foreach ($assertions as $assertion) {
                 if (!$assertion->wasSignedAtConstruction()) {
@@ -162,7 +166,6 @@ class Processor
             }
         }
 
-        $assertions = new ArrayCollection($assertions);
-        return $this->assertionProcessor->processAssertions($assertions);
+        return $this->assertionProcessor->processAssertions($decryptedAssertions);
     }
 }

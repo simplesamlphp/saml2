@@ -85,13 +85,35 @@ class Processor
 
 
     /**
+     * Decrypt assertions, or do nothing if assertions are already decrypted.
+     *
      * @param \SAML2\Utilities\ArrayCollection $assertions
+     * @return \SAML2\Utilities\ArrayCollection Collection of processed assertions
+     */
+    public function decryptAssertions(ArrayCollection $assertions)
+    {
+        $decrypted = new ArrayCollection();
+        foreach ($assertions->getIterator() as $assertion) {
+            $decrypted->add($this->decryptAssertion($assertion));
+        }
+
+        return $decrypted;
+    }
+
+    /**
+     * @param \SAML2\Utilities\ArrayCollection|array $assertions Collection of decrypted assertions
+     *
      * @return \SAML2\Utilities\ArrayCollection Collection of processed assertions
      */
     public function processAssertions(ArrayCollection $assertions) : ArrayCollection
     {
+        // BC compatibility, allow array argument.
+        if (is_array($assertions)) {
+            $assertions = new ArrayCollection($assertions);
+        }
+
         $processed = new ArrayCollection();
-        foreach ($assertions as $assertion) {
+        foreach ($assertions->getIterator() as $assertion) {
             $processed->add($this->process($assertion));
         }
 
