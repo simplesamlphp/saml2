@@ -104,7 +104,7 @@ abstract class Binding
             $logger->warning('Content-Type: '.var_export($_SERVER['CONTENT_TYPE'], true));
         }
 
-        throw new \Exception('Unable to find the current binding.');
+        throw new \Exception('Unable to find the SAML 2 binding used for this request.');
     }
 
 

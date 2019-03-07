@@ -134,7 +134,9 @@ class Processor
         $this->responseIsSigned = true;
 
         if (!$this->signatureValidator->hasValidSignature($response, $identityProviderConfiguration)) {
-            throw new InvalidResponseException();
+            throw new InvalidResponseException(
+                sprintf('The SAMLResponse with id "%s", does not have a valid signature', $response->getId())
+            );
         }
     }
 

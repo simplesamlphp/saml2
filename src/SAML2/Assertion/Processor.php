@@ -116,7 +116,9 @@ class Processor
             $this->logger->info(sprintf('Verifying signature of Assertion with id "%s"', $assertion->getId()));
 
             if (!$this->signatureValidator->hasValidSignature($assertion, $this->identityProviderConfiguration)) {
-                throw new InvalidSignatureException();
+                throw new InvalidSignatureException(
+                    sprintf('The assertion with id "%s" does not have a valid signature', $assertion->getId())
+                );
             }
         }
 
@@ -135,7 +137,7 @@ class Processor
     private function decryptAssertion($assertion) : Assertion
     {
         if ($this->decrypter->isEncryptionRequired() && $assertion instanceof Assertion) {
-            throw new UnencryptedAssertionFoundException();
+            throw new UnencryptedAssertionFoundException('The assertion should be encrypted, but it was not');
         }
 
         if ($assertion instanceof Assertion) {
