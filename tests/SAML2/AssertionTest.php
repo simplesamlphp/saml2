@@ -977,8 +977,8 @@ XML;
         $assertion = new Assertion(DOMDocumentFactory::fromString($xml)->firstChild);
 
         $attributes = $assertion->getAttributes();
-        $this->assertInternalType('int', $attributes['urn:some:integer'][0]);
-        $this->assertInternalType('string', $attributes['urn:some:string'][0]);
+        $this->assertIsInt($attributes['urn:some:integer'][0]);
+        $this->assertIsString($attributes['urn:some:string'][0]);
         $this->assertXmlStringEqualsXmlString($xml, $assertion->toXML()->ownerDocument->saveXML());
     }
 
@@ -1073,8 +1073,8 @@ XML;
         $assertionToVerify->decryptAttributes(CertificatesMock::getPrivateKey());
         $attributes = $assertionToVerify->getAttributes();
 
-        $this->assertInternalType('int', $attributes['urn:some:integer'][0]);
-        $this->assertInternalType('string', $attributes['urn:some:string'][0]);
+        $this->assertIsInt($attributes['urn:some:integer'][0]);
+        $this->assertIsString($attributes['urn:some:string'][0]);
         $this->assertXmlStringEqualsXmlString($xml, $assertionToVerify->toXML()->ownerDocument->saveXML());
     }
 
