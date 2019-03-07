@@ -139,6 +139,8 @@ class SignatureValidationTest extends \Mockery\Adapter\Phpunit\MockeryTestCase
             $this->getSignedResponseWithSignedAssertion()
         );
     }
+
+
     /**
      * @runInSeparateProcess
      * @preserveGlobalState disabled
@@ -146,15 +148,7 @@ class SignatureValidationTest extends \Mockery\Adapter\Phpunit\MockeryTestCase
      */
     public function testThatAnUnsignedResponseWithNoSignedAssertionsThrowsAnException() : void
     {
-        $this->expectException(UnsignedResponseException::class);
-
-        // here the processAssertions may not be called as it should fail with an exception due to having no signature
-        $this->assertionProcessor->shouldReceive('processAssertions')->never();
-
         $assertion = \Mockery::mock('SAML2\Assertion');
-        $assertion->shouldReceive('wasSignedAtConstruction')
-            ->once()
-            ->andReturn(false);
 
         // The processAssertions is called to decrypt possible encrypted assertions,
         // after which it should fail with an exception due to having no signature
