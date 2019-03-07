@@ -24,5 +24,7 @@ Prior to contributing, please read the following documentation:
 - [Background][2]
 - [Technical Design][1]
 
+Also when introducing a BC breaking change, please update the [UPGRADING.md](UPGRADING.md) with instructions on how to deal with the change.
+
 [1]: https://github.com/simplesamlphp/saml2/wiki/SAML2-v1.0-Technical-Design
 [2]: https://github.com/simplesamlphp/saml2/wiki/Background
