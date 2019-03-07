@@ -10,6 +10,7 @@ use SAML2\Configuration\Destination;
 use SAML2\Configuration\IdentityProvider;
 use SAML2\Configuration\ServiceProvider;
 use SAML2\Response;
+use SAML2\Utilities\ArrayCollection;
 use SAML2\Utilities\Certificate;
 use SAML2\Response\Exception\UnsignedResponseException;
 
@@ -75,9 +76,13 @@ class SignatureValidationTest extends \Mockery\Adapter\Phpunit\MockeryTestCase
      */
     public function testThatAnUnsignedResponseWithASignedAssertionCanBeProcessed() : void
     {
+        $this->assertionProcessor->shouldReceive('decryptAssertions')
+            ->once()
+            ->andReturn(new ArrayCollection());
+
         $this->assertionProcessor->shouldReceive('processAssertions')->once();
 
-        $processor = new Response\Processor(new \Psr\Log\NullLogger());
+        $processor = new Processor(new \Psr\Log\NullLogger());
 
         $processor->process(
             $this->serviceProviderConfiguration,
@@ -95,6 +100,10 @@ class SignatureValidationTest extends \Mockery\Adapter\Phpunit\MockeryTestCase
      */
     public function testThatAnSignedResponseWithAnUnsignedAssertionCanBeProcessed() : void
     {
+        $this->assertionProcessor->shouldReceive('decryptAssertions')
+            ->once()
+            ->andReturn(new ArrayCollection());
+
         $this->assertionProcessor->shouldReceive('processAssertions')->once();
 
         $processor = new Response\Processor(new \Psr\Log\NullLogger());
@@ -115,6 +124,10 @@ class SignatureValidationTest extends \Mockery\Adapter\Phpunit\MockeryTestCase
      */
     public function testThatASignedResponseWithASignedAssertionIsValid() : void
     {
+        $this->assertionProcessor->shouldReceive('decryptAssertions')
+            ->once()
+            ->andReturn(new ArrayCollection());
+
         $this->assertionProcessor->shouldReceive('processAssertions')->once();
 
         $processor = new Response\Processor(new \Psr\Log\NullLogger());
@@ -137,13 +150,21 @@ class SignatureValidationTest extends \Mockery\Adapter\Phpunit\MockeryTestCase
     {
         $this->expectException(UnsignedResponseException::class);
 
-        // here the processAssertions may not be called as it should fail with an exception due to having no signature
-        $this->assertionProcessor->shouldReceive('processAssertions')->never();
+        $assertion = \Mockery::mock('SAML2\Assertion');
 
-        $processor = new Response\Processor(new \Psr\Log\NullLogger());
+        // The processAssertions is called to decrypt possible encrypted assertions,
+        // after which it should fail with an exception due to having no signature
+        $this->assertionProcessor->shouldReceive('decryptAssertions')
+            ->once()
+            ->andReturn(new ArrayCollection([
+                $assertion
+            ]));
+
+        $processor = new Processor(new \Psr\Log\NullLogger());
+
         $processor->process(
-            new ServiceProvider([]),
-            new IdentityProvider([]),
+            $this->serviceProviderConfiguration,
+            $this->identityProviderConfiguration,
             new Destination($this->currentDestination),
             $this->getUnsignedResponseWithUnsignedAssertion()
         );
