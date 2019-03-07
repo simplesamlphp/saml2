@@ -101,7 +101,7 @@ class Processor
     }
 
     /**
-     * @param \SAML2\Utilities\ArrayCollection|array $assertions Collection of decrypted assertions
+     * @param \SAML2\Utilities\ArrayCollection $assertions Collection of decrypted assertions
      *
      * @return \SAML2\Utilities\ArrayCollection Collection of processed assertions
      */

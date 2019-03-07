@@ -152,7 +152,7 @@ class SignatureValidationTest extends \Mockery\Adapter\Phpunit\MockeryTestCase
         $this->assertionProcessor->shouldReceive('processAssertions')->never();
 
         $assertion = \Mockery::mock('SAML2\Assertion');
-        $assertion->shouldReceive('getWasSignedAtConstruction')
+        $assertion->shouldReceive('wasSignedAtConstruction')
             ->once()
             ->andReturn(false);
 
