@@ -263,18 +263,6 @@ class Assertion extends SignedElement
         $this->issueInstant = Temporal::getTime();
         $this->issuer = $issuer;
         $this->authnInstant = Temporal::getTime();
-<<<<<<< HEAD
-=======
-        $this->attributes = array();
-        $this->attributesValueTypes = array();
-        $this->attributeNameFormats = array();
-        $this->attributeFriendlyNames = array();
-        $this->nameFormat = Constants::NAMEFORMAT_UNSPECIFIED;
-        $this->certificates = array();
-        $this->AuthenticatingAuthority = array();
-        $this->SubjectConfirmation = array();
-        $this->requiredEncAttributes = false;
->>>>>>> updated \SAML2\Assertion to use \SAML2\XML\saml\Attribute objects instead of an array of string|int|DOMElement.
 
         if ($xml === null) {
             return;
@@ -562,14 +550,11 @@ class Assertion extends SignedElement
                 }
             }
 
-<<<<<<< HEAD
             if (!array_key_exists($name, $this->attributes)) {
                 $this->attributes[$name] = [];
                 $this->attributesValueTypes[$name] = [];
             }
 
-=======
->>>>>>> updated \SAML2\Assertion to use \SAML2\XML\saml\Attribute objects instead of an array of string|int|DOMElement.
             $this->parseAttributeValue($attribute, $name);
         }
     }
@@ -580,11 +565,7 @@ class Assertion extends SignedElement
      * @param string   $attributeName
      * @return void
      */
-<<<<<<< HEAD
     private function parseAttributeValue(DOMNode $attribute, string $attributeName) : void
-=======
-    private function parseAttributeValue(\DOMNode $attribute, $attributeName)
->>>>>>> updated \SAML2\Assertion to use \SAML2\XML\saml\Attribute objects instead of an array of string|int|DOMElement.
     {
         $this->attributes[$attributeName] = new XML\saml\Attribute($attribute);
         
@@ -595,7 +576,6 @@ class Assertion extends SignedElement
         $this->attributeFriendlyNames[$attributeName] = $attribute->getAttribute('FriendlyName');
         
         $values = Utils::xpQuery($attribute, './saml_assertion:AttributeValue');
-<<<<<<< HEAD
 
         if ($attributeName === Constants::EPTI_URN_MACE || $attributeName === Constants::EPTI_URN_OID) {
             foreach ($values as $index => $eptiAttributeValue) {
@@ -612,17 +592,6 @@ class Assertion extends SignedElement
                     $nameId = new NameID();
                     $nameId->setValue($eptiAttributeValue->textContent);
                     $this->attributes[$attributeName][] = $nameId;
-=======
-        foreach ($values as $index => $value) {
-            if ($attributeName === Constants::EPTI_URN_MACE || $attributeName === Constants::EPTI_URN_OID) {
-                $eptiNameId = Utils::xpQuery($value, './saml_assertion:NameID');
-                if (count($eptiNameId) !== 1) {
-                    throw new RuntimeException(sprintf(
-                        'A "%s" (EPTI) attribute value must be a NameID, none found for value no. "%d"',
-                        $attributeName,
-                        $index
-                    ));
->>>>>>> updated \SAML2\Assertion to use \SAML2\XML\saml\Attribute objects instead of an array of string|int|DOMElement.
                 }
             }
             $type = $value->getAttribute('xsi:type');
@@ -630,7 +599,6 @@ class Assertion extends SignedElement
                 $type = null;
             }
             $this->attributesValueTypes[$attributeName][] = $type;
-<<<<<<< HEAD
 
             if ($hasNonTextChildElements) {
                 $this->attributes[$attributeName][] = $value->childNodes;
@@ -642,8 +610,6 @@ class Assertion extends SignedElement
             } else {
                 $this->attributes[$attributeName][] = trim($value->textContent);
             }
-=======
->>>>>>> updated \SAML2\Assertion to use \SAML2\XML\saml\Attribute objects instead of an array of string|int|DOMElement.
         }
     }
 
@@ -939,13 +905,10 @@ class Assertion extends SignedElement
                 }
             }
 
-<<<<<<< HEAD
             if (!array_key_exists($name, $this->attributes)) {
                 $this->attributes[$name] = [];
             }
 
-=======
->>>>>>> updated \SAML2\Assertion to use \SAML2\XML\saml\Attribute objects instead of an array of string|int|DOMElement.
             $this->parseAttributeValue($attribute, $name);
         }
     }
@@ -1281,11 +1244,7 @@ class Assertion extends SignedElement
      * @param boolean Indicates that returned array should be actual attribute objects instead of strings
      * @return array All attributes, as an associative array.
      */
-<<<<<<< HEAD
     public function getAttributes() : array
-=======
-    public function getAttributes($asObjects = false)
->>>>>>> updated \SAML2\Assertion to use \SAML2\XML\saml\Attribute objects instead of an array of string|int|DOMElement.
     {
         if ($asObjects) {
             return $this->attributes;
@@ -1953,7 +1912,6 @@ class Assertion extends SignedElement
             }
             $attributeElement = $attributeObj->toXML($attributeStatement);
 
-<<<<<<< HEAD
             foreach ($values as $value) {
                 if (is_string($value)) {
                     $type = 'xs:string';
@@ -1979,10 +1937,7 @@ class Assertion extends SignedElement
                     $attributeValue->appendChild($document2->createTextNode($value));
                 }
             }
-            /*Once the attribute nodes are built, the are encrypted*/
-=======
             /*Once the attribute nodes are built, they are encrypted*/
->>>>>>> updated \SAML2\Assertion to use \SAML2\XML\saml\Attribute objects instead of an array of string|int|DOMElement.
             $EncAssert = new XMLSecEnc();
             $EncAssert->setNode($attributeElement);
             $EncAssert->type = 'http://www.w3.org/2001/04/xmlenc#Element';
