@@ -2,7 +2,7 @@
 
 namespace SAML2\XML\mdui;
 
-use Wemozart\Assert\Assert;
+use Webmozart\Assert\Assert;
 
 /**
  * Class for handling the Keywords metadata extensions for login and discovery user interface
@@ -119,7 +119,7 @@ class Keywords
      */
     public function toXML(\DOMElement $parent)
     {
-        Assert::isString($this->getLanguage());
+        Assert::string($this->getLanguage());
         Assert::isArray($this->getKeywords());
 
         $doc = $parent->ownerDocument;

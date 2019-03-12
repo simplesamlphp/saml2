@@ -203,10 +203,10 @@ class LogoutRequest extends Request
      */
     public function setNameId($nameId)
     {
-        Assert::true(is_array($nameId) || $nameId instanceof XML\saml\NameID);
+        Assert::true(is_array($nameId) || $nameId instanceof NameID || is_null($nameId));
 
         if (is_array($nameId)) {
-            $nameId = XML\saml\NameID::fromArray($nameId);
+            $nameId = NameID::fromArray($nameId);
         }
         $this->nameId = $nameId;
     }

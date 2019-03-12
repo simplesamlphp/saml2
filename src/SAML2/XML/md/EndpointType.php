@@ -244,7 +244,7 @@ class EndpointType
         Assert::string($name);
         Assert::string($this->getBinding());
         Assert::string($this->getLocation());
-        Assert::nullorString($this->getResponseLocation());
+        Assert::nullOrString($this->getResponseLocation());
 
         $e = $parent->ownerDocument->createElementNS(Constants::NS_MD, $name);
         $parent->appendChild($e);

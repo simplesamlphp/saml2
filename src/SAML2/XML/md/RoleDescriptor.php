@@ -209,7 +209,7 @@ class RoleDescriptor extends SignedElementHelper
      */
     public function setCacheDuration($cacheDuration = null)
     {
-        Assert::nullOrInteger($cacheDuration);
+        Assert::nullOrString($cacheDuration);
         $this->cacheDuration = $cacheDuration;
     }
 

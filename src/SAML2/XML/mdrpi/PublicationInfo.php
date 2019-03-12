@@ -144,7 +144,7 @@ class PublicationInfo
      */
     public function setPublicationId($publicationId = null)
     {
-        Assert::nullOrInteger($publicationId);
+        Assert::nullOrString($publicationId);
         $this->publicationId = $publicationId;
     }
 
