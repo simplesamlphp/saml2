@@ -4,6 +4,7 @@ namespace SAML2\XML\md;
 
 use SAML2\Constants;
 use SAML2\Utils;
+use Webmozart\Assert\Assert;
 
 /**
  * Class representing SAML 2 SSODescriptorType.
@@ -57,7 +58,7 @@ abstract class SSODescriptorType extends RoleDescriptor
      */
     protected function __construct($elementName, \DOMElement $xml = null)
     {
-        assert(is_string($elementName));
+        Assert::string($elementName);
 
         parent::__construct($elementName, $xml);
 
@@ -109,7 +110,7 @@ abstract class SSODescriptorType extends RoleDescriptor
      */
     public function addArtifactResolutionService(IndexedEndpointType $artifactResolutionService)
     {
-        assert($artifactResolutionService instanceof IndexedEndpointType);
+        Assert::isInstanceOf($artifactResolutionService, IndexedEndpointType::class);
         $this->ArtifactResolutionService[] = $artifactResolutionService;
     }
 
@@ -142,7 +143,7 @@ abstract class SSODescriptorType extends RoleDescriptor
      */
     public function addSingleLogoutService(EndpointType $singleLogoutService)
     {
-        assert($singleLogoutService instanceof EndpointType);
+        Assert::isInstanceOf($singleLogoutService, EndpointType::class);
         $this->SingleLogoutService[] = $singleLogoutService;
     }
 
@@ -175,7 +176,7 @@ abstract class SSODescriptorType extends RoleDescriptor
      */
     public function addManageNameIDService(EndpointType $manageNameIDService)
     {
-        assert($manageNameIDService instanceof EndpointType);
+        Assert::isInstanceOf($manageNameIDService, EndpointType::class);
         $this->ManageNameIDService[] = $manageNameIDService;
     }
 
@@ -209,10 +210,10 @@ abstract class SSODescriptorType extends RoleDescriptor
      */
     protected function toXML(\DOMElement $parent)
     {
-        assert(is_array($this->getArtifactResolutionService()));
-        assert(is_array($this->getSingleLogoutService()));
-        assert(is_array($this->getManageNameIDService()));
-        assert(is_array($this->getNameIDFormat()));
+        Assert::isArray($this->getArtifactResolutionService());
+        Assert::isArray($this->getSingleLogoutService());
+        Assert::isArray($this->getManageNameIDService());
+        Assert::isArray($this->getNameIDFormat());
 
         $e = parent::toXML($parent);
 

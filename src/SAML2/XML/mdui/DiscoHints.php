@@ -4,6 +4,7 @@ namespace SAML2\XML\mdui;
 
 use SAML2\Utils;
 use SAML2\XML\Chunk;
+use Webmozart\Assert\Assert;
 
 /**
  * Class for handling the metadata extensions for login and discovery user interface
@@ -156,7 +157,7 @@ class DiscoHints
      */
     public function addChildren(Chunk $child)
     {
-        assert($child instanceof Chunk);
+        Assert::isInstanceOf($child, Chunk::class);
         $this->children[] = $child;
     }
 
@@ -169,10 +170,10 @@ class DiscoHints
      */
     public function toXML(\DOMElement $parent)
     {
-        assert(is_array($IPHint = $this->getIPHint()));
-        assert(is_array($DomainHint = $this->getDomainHint()));
-        assert(is_array($GeolocationHint = $this->getGeolocationHint()));
-        assert(is_array($children = $this->getChildren()));
+        Assert::isArray($IPHint = $this->getIPHint());
+        Assert::isArray($DomainHint = $this->getDomainHint());
+        Assert::isArray($GeolocationHint = $this->getGeolocationHint());
+        Assert::isArray($children = $this->getChildren());
 
         if (!empty($IPHint)
          || !empty($DomainHint)

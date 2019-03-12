@@ -3,6 +3,7 @@
 namespace SAML2\XML\md;
 
 use SAML2\Constants;
+use Webmozart\Assert\Assert;
 
 /**
  * Class representing SAML 2 EndpointType.
@@ -89,8 +90,8 @@ class EndpointType
      */
     public function hasAttributeNS($namespaceURI, $localName)
     {
-        assert(is_string($namespaceURI));
-        assert(is_string($localName));
+        Assert::string($namespaceURI);
+        Assert::string($localName);
 
         $fullName = '{'.$namespaceURI.'}'.$localName;
 
@@ -107,8 +108,8 @@ class EndpointType
      */
     public function getAttributeNS($namespaceURI, $localName)
     {
-        assert(is_string($namespaceURI));
-        assert(is_string($localName));
+        Assert::string($namespaceURI);
+        Assert::string($localName);
 
         $fullName = '{'.$namespaceURI.'}'.$localName;
         if (!isset($this->attributes[$fullName])) {
@@ -130,8 +131,8 @@ class EndpointType
      */
     public function setAttributeNS($namespaceURI, $qualifiedName, $value)
     {
-        assert(is_string($namespaceURI));
-        assert(is_string($qualifiedName));
+        Assert::string($namespaceURI);
+        Assert::string($qualifiedName);
 
         $name = explode(':', $qualifiedName, 2);
         if (count($name) < 2) {
@@ -157,8 +158,8 @@ class EndpointType
      */
     public function removeAttributeNS($namespaceURI, $localName)
     {
-        assert(is_string($namespaceURI));
-        assert(is_string($localName));
+        Assert::string($namespaceURI);
+        assert::string($localName);
 
         $fullName = '{'.$namespaceURI.'}'.$localName;
         unset($this->attributes[$fullName]);
@@ -182,7 +183,7 @@ class EndpointType
      */
     public function setBinding($binding)
     {
-        assert(is_string($binding));
+        Assert::string($binding);
         $this->Binding = $binding;
     }
 
@@ -204,7 +205,7 @@ class EndpointType
      */
     public function setLocation($location)
     {
-        assert(is_string($location) || is_null($location));
+        Assert::nullOrString($location);
         $this->Location = $location;
     }
 
@@ -226,7 +227,7 @@ class EndpointType
      */
     public function setResponseLocation($responseLocation)
     {
-        assert(is_string($responseLocation) || is_null($responseLocation));
+        Assert::nullOrString($responseLocation);
         $this->ResponseLocation = $responseLocation;
     }
 
@@ -240,10 +241,10 @@ class EndpointType
      */
     public function toXML(\DOMElement $parent, $name)
     {
-        assert(is_string($name));
-        assert(is_string($this->getBinding()));
-        assert(is_string($this->getLocation()));
-        assert(is_null($this->getResponseLocation()) || is_string($this->getResponseLocation()));
+        Assert::string($name);
+        Assert::string($this->getBinding());
+        Assert::string($this->getLocation());
+        Assert::nullorString($this->getResponseLocation());
 
         $e = $parent->ownerDocument->createElementNS(Constants::NS_MD, $name);
         $parent->appendChild($e);

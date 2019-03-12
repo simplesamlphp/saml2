@@ -3,7 +3,6 @@
 namespace SAML2;
 
 use DOMDocument;
-
 use SAML2\XML\ecp\Response as ECPResponse;
 
 /**

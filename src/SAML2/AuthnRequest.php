@@ -4,8 +4,10 @@ namespace SAML2;
 
 use RobRichards\XMLSecLibs\XMLSecEnc;
 use RobRichards\XMLSecLibs\XMLSecurityKey;
+use SAML2\XML\saml\NameID;
 use SAML2\XML\saml\SubjectConfirmation;
 use SAML2\Exception\InvalidArgumentException;
+use Webmozart\Assert\Assert;
 
 /**
  * Class for SAML 2 authentication request messages.
@@ -206,7 +208,7 @@ class AuthnRequest extends Request
             /* The NameID element is encrypted. */
             $this->encryptedNameId = $nameId;
         } else {
-            $this->nameId = new XML\saml\NameID($nameId);
+            $this->nameId = new NameID($nameId);
         }
 
         $subjectConfirmation = Utils::xpQuery($subject, './saml_assertion:SubjectConfirmation');
@@ -389,7 +391,7 @@ class AuthnRequest extends Request
      */
     public function setForceAuthn($forceAuthn)
     {
-        assert(is_bool($forceAuthn));
+        Assert::boolean($forceAuthn);
 
         $this->forceAuthn = $forceAuthn;
     }
@@ -414,7 +416,7 @@ class AuthnRequest extends Request
      */
     public function setProviderName($ProviderName)
     {
-        assert(is_string($ProviderName));
+        Assert::string($ProviderName);
 
         $this->ProviderName = $ProviderName;
     }
@@ -439,7 +441,7 @@ class AuthnRequest extends Request
      */
     public function setIsPassive($isPassive)
     {
-        assert(is_bool($isPassive));
+        Assert::boolean($isPassive);
 
         $this->isPassive = $isPassive;
     }
@@ -510,7 +512,7 @@ class AuthnRequest extends Request
      */
     public function setProxyCount($ProxyCount)
     {
-        assert(is_int($ProxyCount));
+        Assert::integer($ProxyCount);
         $this->ProxyCount = $ProxyCount;
     }
 
@@ -562,7 +564,7 @@ class AuthnRequest extends Request
      */
     public function setAssertionConsumerServiceURL($assertionConsumerServiceURL)
     {
-        assert(is_string($assertionConsumerServiceURL) || is_null($assertionConsumerServiceURL));
+        Assert::nullOrString($assertionConsumerServiceURL);
 
         $this->assertionConsumerServiceURL = $assertionConsumerServiceURL;
     }
@@ -587,7 +589,7 @@ class AuthnRequest extends Request
      */
     public function setProtocolBinding($protocolBinding)
     {
-        assert(is_string($protocolBinding) || is_null($protocolBinding));
+        Assert::nullOrString($protocolBinding);
 
         $this->protocolBinding = $protocolBinding;
     }
@@ -612,7 +614,7 @@ class AuthnRequest extends Request
      */
     public function setAttributeConsumingServiceIndex($attributeConsumingServiceIndex)
     {
-        assert(is_int($attributeConsumingServiceIndex) || is_null($attributeConsumingServiceIndex));
+        Assert::nullOrInteger($attributeConsumingServiceIndex);
 
         $this->attributeConsumingServiceIndex = $attributeConsumingServiceIndex;
     }
@@ -637,7 +639,7 @@ class AuthnRequest extends Request
      */
     public function setAssertionConsumerServiceIndex($assertionConsumerServiceIndex)
     {
-        assert(is_int($assertionConsumerServiceIndex) || is_null($assertionConsumerServiceIndex));
+        Assert::nullOrString($assertionConsumerServiceIndex);
 
         $this->assertionConsumerServiceIndex = $assertionConsumerServiceIndex;
     }
@@ -660,10 +662,8 @@ class AuthnRequest extends Request
      * @param array $requestedAuthnContext The RequestedAuthnContext.
      * @return void
      */
-    public function setRequestedAuthnContext($requestedAuthnContext)
+    public function setRequestedAuthnContext(array $requestedAuthnContext)
     {
-        assert(is_array($requestedAuthnContext));
-
         $this->requestedAuthnContext = $requestedAuthnContext;
     }
 
@@ -692,10 +692,10 @@ class AuthnRequest extends Request
      */
     public function setNameId($nameId)
     {
-        assert(is_array($nameId) || is_null($nameId) || $nameId instanceof XML\saml\NameID);
+        Assert::true(is_array($nameId) || is_null($nameId) || $nameId instanceof NameID);
 
         if (is_array($nameId)) {
-            $nameId = XML\saml\NameID::fromArray($nameId);
+            $nameId = NameID::fromArray($nameId);
         }
         $this->nameId = $nameId;
     }
@@ -750,7 +750,7 @@ class AuthnRequest extends Request
 
         $nameId = Utils::decryptElement($this->encryptedNameId, $key, $blacklist);
         Utils::getContainer()->debugMessage($nameId, 'decrypt');
-        $this->nameId = new XML\saml\NameID($nameId);
+        $this->nameId = new NameID($nameId);
 
         $this->encryptedNameId = null;
     }

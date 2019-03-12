@@ -4,8 +4,8 @@ namespace SAML2\XML\ecp;
 
 use DOMElement;
 use InvalidArgumentException;
-
 use SAML2\Constants;
+use Webmozart\Assert\Assert;
 
 /**
  * Class representing the ECP Response element.
@@ -71,7 +71,7 @@ class Response
      */
     public function setAssertionConsumerServiceURL($assertionConsumerServiceURL)
     {
-        assert(is_string($assertionConsumerServiceURL));
+        Assert::string($assertionConsumerServiceURL);
         if (!filter_var($assertionConsumerServiceURL, FILTER_VALIDATE_URL)) {
             throw new InvalidArgumentException('AssertionConsumerServiceURL is not a valid URL.');
         }

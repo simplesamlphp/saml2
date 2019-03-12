@@ -2,6 +2,8 @@
 
 namespace SAML2;
 
+use Webmozart\Assert\Assert;
+
 /**
  * The Artifact is part of the SAML 2.0 IdP code, and it builds an artifact object.
  * I am using strings, because I find them easier to work with.
@@ -49,7 +51,7 @@ class ArtifactResolve extends Request
      */
     public function setArtifact($artifact)
     {
-        assert(is_string($artifact));
+        Assert::string($artifact);
         $this->artifact = $artifact;
     }
 

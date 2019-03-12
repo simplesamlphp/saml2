@@ -4,7 +4,9 @@ namespace SAML2;
 
 use RobRichards\XMLSecLibs\XMLSecurityKey;
 use SAML2\Utilities\Temporal;
+use SAML2\XML\saml\Issuer;
 use SAML2\XML\samlp\Extensions;
+use Webmozart\Assert\Assert;
 
 /**
  * Base class for all SAML 2 messages.
@@ -137,7 +139,7 @@ abstract class Message implements SignedElement
      */
     protected function __construct($tagName, \DOMElement $xml = null)
     {
-        assert(is_string($tagName));
+        Assert::string($tagName);
         $this->tagName = $tagName;
 
         $this->id = Utils::getContainer()->generateId();
@@ -171,7 +173,7 @@ abstract class Message implements SignedElement
 
         $issuer = Utils::xpQuery($xml, './saml_assertion:Issuer');
         if (!empty($issuer)) {
-            $this->issuer = new XML\saml\Issuer($issuer[0]);
+            $this->issuer = new Issuer($issuer[0]);
             if ($this->issuer->Format === Constants::NAMEID_ENTITY) {
                 $this->issuer = $this->issuer->value;
             }
@@ -226,10 +228,8 @@ abstract class Message implements SignedElement
      * @param mixed    $data     The data that should be included as the first parameter to the function
      * @return void
      */
-    public function addValidator($function, $data)
+    public function addValidator(callable $function, $data)
     {
-        assert(is_callable($function));
-
         $this->validators[] = [
             'Function' => $function,
             'Data' => $data,
@@ -294,7 +294,7 @@ abstract class Message implements SignedElement
      */
     public function setId($id)
     {
-        assert(is_string($id));
+        Assert::string($id);
 
         $this->id = $id;
     }
@@ -319,7 +319,7 @@ abstract class Message implements SignedElement
      */
     public function setIssueInstant($issueInstant)
     {
-        assert(is_int($issueInstant));
+        Assert::integer($issueInstant);
 
         $this->issueInstant = $issueInstant;
     }
@@ -344,7 +344,7 @@ abstract class Message implements SignedElement
      */
     public function setDestination($destination)
     {
-        assert(is_string($destination) || is_null($destination));
+        Assert::nullOrString($destination);
 
         $this->destination = $destination;
     }
@@ -360,7 +360,7 @@ abstract class Message implements SignedElement
      */
     public function setConsent($consent)
     {
-        assert(is_string($consent));
+        Assert::string($consent);
 
         $this->consent = $consent;
     }
@@ -386,7 +386,7 @@ abstract class Message implements SignedElement
      */
     public function getIssuer()
     {
-        if (is_string($this->issuer) || $this->issuer instanceof XML\saml\Issuer) {
+        if (is_string($this->issuer) || $this->issuer instanceof Issuer) {
             return $this->issuer;
         }
 
@@ -402,7 +402,7 @@ abstract class Message implements SignedElement
      */
     public function setIssuer($issuer)
     {
-        assert(is_string($issuer) || $issuer instanceof XML\saml\Issuer || is_null($issuer));
+        Assert::true(is_string($issuer) || $issuer instanceof Issuer || is_null($issuer));
 
         $this->issuer = $issuer;
     }
@@ -438,7 +438,7 @@ abstract class Message implements SignedElement
      */
     public function setRelayState($relayState)
     {
-        assert(is_string($relayState) || is_null($relayState));
+        Assert::nullOrString($relayState);
 
         $this->relayState = $relayState;
     }
@@ -475,7 +475,7 @@ abstract class Message implements SignedElement
         if ($this->issuer !== null) {
             if (is_string($this->issuer)) {
                 Utils::addString($root, Constants::NS_SAML, 'saml:Issuer', $this->issuer);
-            } elseif ($this->issuer instanceof XML\saml\Issuer) {
+            } elseif ($this->issuer instanceof Issuer) {
                 $this->issuer->toXML($root);
             }
         }

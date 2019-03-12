@@ -5,6 +5,7 @@ namespace SAML2\XML\md;
 use SAML2\Constants;
 use SAML2\SignedElementHelper;
 use SAML2\Utils;
+use Webmozart\Assert\Assert;
 
 /**
  * Class representing SAML 2 AffiliationDescriptor element.
@@ -130,7 +131,7 @@ class AffiliationDescriptor extends SignedElementHelper
      */
     public function setAffiliationOwnerID($affiliationOwnerId)
     {
-        assert(is_string($affiliationOwnerId));
+        Assert::string($affiliationOwnerId);
         $this->affiliationOwnerID = $affiliationOwnerId;
     }
 
@@ -152,7 +153,8 @@ class AffiliationDescriptor extends SignedElementHelper
      */
     public function setID($Id = null)
     {
-        assert(is_string($Id) || is_null($Id));
+        Assert::nullOrString($Id);
+
         $this->ID = $Id;
     }
 
@@ -174,7 +176,7 @@ class AffiliationDescriptor extends SignedElementHelper
      */
     public function setValidUntil($validUntil = null)
     {
-        assert(is_int($validUntil) || is_null($validUntil));
+        Assert::nullOrInteger($validUntil);
         $this->validUntil = $validUntil;
     }
 
@@ -196,7 +198,7 @@ class AffiliationDescriptor extends SignedElementHelper
      */
     public function setCacheDuration($cacheDuration = null)
     {
-        assert(is_string($cacheDuration) || is_null($cacheDuration));
+        Assert::nullOrString($cacheDuration);
         $this->cacheDuration = $cacheDuration;
     }
 
@@ -295,14 +297,14 @@ class AffiliationDescriptor extends SignedElementHelper
      */
     public function toXML(\DOMElement $parent)
     {
-        assert(is_string($this->getAffiliationOwnerID()));
-        assert(is_null($this->getID()) || is_string($this->getID()));
-        assert(is_null($this->getValidUntil()) || is_int($this->getValidUntil()));
-        assert(is_null($this->getCacheDuration()) || is_string($this->getCacheDuration()));
-        assert(is_array($this->getExtensions()));
-        assert(is_array($affiliateMember = $this->getAffiliateMember()));
-        assert(!empty($affiliateMember));
-        assert(is_array($this->getKeyDescriptor()));
+        Assert::string($this->getAffiliationOwnerID());
+        Assert::nullOrString($this->getID());
+        Assert::nullOrInteger($this->getValidUntil());
+        Assert::nullOrString($this->getCacheDuration());
+        Assert::isArray($this->getExtensions());
+        Assert::isArray($affiliateMember = $this->getAffiliateMember());
+        Assert::notEmpty($affiliateMember);
+        Assert::isArray($this->getKeyDescriptor());
 
         $e = $parent->ownerDocument->createElementNS(Constants::NS_MD, 'md:AffiliationDescriptor');
         $parent->appendChild($e);

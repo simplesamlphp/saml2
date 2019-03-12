@@ -5,6 +5,7 @@ namespace SAML2\XML\md;
 use SAML2\Constants;
 use SAML2\Utils;
 use SAML2\XML\saml\Attribute;
+use Webmozart\Assert\Assert;
 
 /**
  * Class representing SAML 2 metadata RequestedAttribute.
@@ -55,7 +56,7 @@ class RequestedAttribute extends Attribute
      */
     public function setIsRequired($flag = null)
     {
-        assert(is_bool($flag) || is_null($flag));
+        Ássert::nullOrBoolean($flag);
         $this->isRequired = $flag;
     }
 
@@ -68,7 +69,7 @@ class RequestedAttribute extends Attribute
      */
     public function toXML(\DOMElement $parent)
     {
-        assert(is_bool($this->isRequired) || is_null($this->isRequired));
+        Assert::nullOrBoolean($this->isRequired);
 
         $e = $this->toXMLInternal($parent, Constants::NS_MD, 'md:RequestedAttribute');
 

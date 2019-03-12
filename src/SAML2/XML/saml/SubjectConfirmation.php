@@ -4,6 +4,7 @@ namespace SAML2\XML\saml;
 
 use SAML2\Constants;
 use SAML2\Utils;
+use Webmozart\Assert\Assert;
 
 /**
  * Class representing SAML 2 SubjectConfirmation element.
@@ -84,7 +85,7 @@ class SubjectConfirmation
      */
     public function setMethod($method)
     {
-        assert(is_string($method));
+        Assert::string($method);
         $this->Method = $method;
     }
 
@@ -139,9 +140,9 @@ class SubjectConfirmation
      */
     public function toXML(\DOMElement $parent)
     {
-        assert(is_string($this->getMethod()));
-        assert(is_null($this->getNameID()) || $this->getNameID() instanceof NameID);
-        assert(is_null($this->getSubjectConfirmationData()) || $this->getSubjectConfirmationData() instanceof SubjectConfirmationData);
+        Assert::string($this->getMethod());
+        Assert::nullOrIsInstanceOf($this->getNameID(), NameID::class);
+        Assert::nullOrIsInstanceOf($this->getSubjectConfirmationData(), SubjectConfirmationData::class);
 
         $e = $parent->ownerDocument->createElementNS(Constants::NS_SAML, 'saml:SubjectConfirmation');
         $parent->appendChild($e);

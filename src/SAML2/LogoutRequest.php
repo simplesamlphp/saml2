@@ -5,6 +5,7 @@ namespace SAML2;
 use RobRichards\XMLSecLibs\XMLSecEnc;
 use RobRichards\XMLSecLibs\XMLSecurityKey;
 use SAML2\XML\saml\NameID;
+use Webmozart\Assert\Assert;
 
 /**
  * Class for SAML 2 logout request messages.
@@ -104,7 +105,7 @@ class LogoutRequest extends Request
      */
     public function setNotOnOrAfter($notOnOrAfter)
     {
-        assert(is_int($notOnOrAfter) || is_null($notOnOrAfter));
+        Assert::nullOrInteger($notOnOrAfter);
 
         $this->notOnOrAfter = $notOnOrAfter;
     }
@@ -202,7 +203,7 @@ class LogoutRequest extends Request
      */
     public function setNameId($nameId)
     {
-        assert(is_array($nameId) || $nameId instanceof XML\saml\NameID);
+        Assert::true(is_array($nameId) || $nameId instanceof XML\saml\NameID);
 
         if (is_array($nameId)) {
             $nameId = XML\saml\NameID::fromArray($nameId);
@@ -280,7 +281,7 @@ class LogoutRequest extends Request
      */
     public function setSessionIndex($sessionIndex)
     {
-        assert(is_string($sessionIndex) || is_null($sessionIndex));
+        Assert::nullOrString($sessionIndex);
 
         if (is_null($sessionIndex)) {
             $this->sessionIndexes = [];

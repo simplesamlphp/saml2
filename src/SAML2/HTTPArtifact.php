@@ -4,9 +4,9 @@ namespace SAML2;
 
 use RobRichards\XMLSecLibs\XMLSecurityKey;
 use SAML2\Utilities\Temporal;
-use \SimpleSAML\Configuration;
-use \SimpleSAML\Metadata\MetaDataStorageHandler;
-use \SimpleSAML\Store;
+use SimpleSAML\Configuration;
+use SimpleSAML\Metadata\MetaDataStorageHandler;
+use SimpleSAML\Store;
 
 /**
  * Class which implements the HTTP-Artifact binding.

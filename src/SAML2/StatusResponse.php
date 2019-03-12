@@ -2,6 +2,8 @@
 
 namespace SAML2;
 
+use Webmozart\Assert\Assert;
+
 /**
  * Base class for all SAML 2 response messages.
  *
@@ -98,7 +100,7 @@ abstract class StatusResponse extends Message
      */
     public function isSuccess()
     {
-        assert(array_key_exists("Code", $this->status));
+        Assert::keyExists($this->status, "Code");
 
         if ($this->status['Code'] === Constants::STATUS_SUCCESS) {
             return true;
@@ -127,7 +129,7 @@ abstract class StatusResponse extends Message
      */
     public function setInResponseTo($inResponseTo)
     {
-        assert(is_string($inResponseTo) || is_null($inResponseTo));
+        Assert::nullOrString($inResponseTo);
 
         $this->inResponseTo = $inResponseTo;
     }
@@ -152,7 +154,7 @@ abstract class StatusResponse extends Message
      */
     public function setStatus(array $status)
     {
-        assert(array_key_exists("Code", $status));
+        Assert::keyExists($status, "Code");
 
         $this->status = $status;
         if (!array_key_exists('SubCode', $status)) {

@@ -3,6 +3,7 @@
 namespace SAML2\XML\mdrpi;
 
 use SAML2\Utils;
+use Webmozart\Assert\Assert;
 
 /**
  * Class for handling the mdrpi:PublicationInfo element.
@@ -119,7 +120,7 @@ class PublicationInfo
      */
     public function setPublisher($publisher)
     {
-        assert(is_string($publisher));
+        Assert::string($publisher);
         $this->publisher = $publisher;
     }
 
@@ -131,7 +132,7 @@ class PublicationInfo
      */
     public function setCreationInstant($creationInstant = null)
     {
-        assert(is_int($creationInstant) || is_null($creationInstant));
+        Assert::nullOrInteger($creationInstant);
         $this->creationInstant = $creationInstant;
     }
 
@@ -143,7 +144,7 @@ class PublicationInfo
      */
     public function setPublicationId($publicationId = null)
     {
-        assert(is_string($publicationId) || is_null($publicationId));
+        Assert::nullOrInteger($publicationId);
         $this->publicationId = $publicationId;
     }
 
@@ -167,10 +168,10 @@ class PublicationInfo
      */
     public function toXML(\DOMElement $parent)
     {
-        assert(is_string($this->getPublisher()));
-        assert(is_int($this->getCreationInstant()) || is_null($this->getCreationInstant()));
-        assert(is_string($this->getPublicationId()) || is_null($this->getPublicationId()));
-        assert(is_array($this->getUsagePolicy()));
+        Assert::string($this->getPublisher());
+        Assert::nullOrInteger($this->getCreationInstant());
+        Assert::nullOrString($this->getPublicationId());
+        Assert::isArray($this->getUsagePolicy());
 
         $doc = $parent->ownerDocument;
 
