@@ -7,9 +7,9 @@ use RobRichards\XMLSecLibs\XMLSecurityKey;
 use SAML2\Exception\RuntimeException;
 use SAML2\Utilities\Temporal;
 use SAML2\XML\Chunk;
-use SAML2\XML\Issuer;
 use SAML2\XML\NameID;
 use SAML2\XML\saml\SubjectConfirmation;
+use SAML2\XML\Issuer;
 use Webmozart\Assert\Assert;
 
 /**
