@@ -4,6 +4,7 @@ namespace SAML2\XML\saml;
 
 use SAML2\Constants;
 use SAML2\DOMDocumentFactory;
+use Webmozart\Assert\Assert;
 
 /**
  * Class representing the saml:Issuer element.
@@ -83,7 +84,7 @@ class Issuer extends NameIDType
      */
     public function setSaml2IssuerShowAll($saml2IssuerShowAll)
     {
-        assert(is_bool($saml2IssuerShowAll));
+        Assert::boolean($saml2IssuerShowAll);
         $this->Saml2IssuerShowAll = $saml2IssuerShowAll;
     }
 

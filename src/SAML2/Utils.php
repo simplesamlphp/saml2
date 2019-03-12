@@ -11,6 +11,7 @@ use SAML2\XML\ds\KeyInfo;
 use SAML2\XML\ds\X509Certificate;
 use SAML2\XML\ds\X509Data;
 use SAML2\XML\md\KeyDescriptor;
+use Webmozart\Assert\Assert;
 
 /**
  * Helper functions for the SAML2 library.
@@ -111,8 +112,8 @@ class Utils
      */
     public static function castKey(XMLSecurityKey $key, $algorithm, $type = 'public')
     {
-        assert(is_string($algorithm));
-        assert($type === "public" || $type === "private");
+        Assert::string($algorithm);
+        Assert::oneOf($type, ["public", "private"]);
 
         // do nothing if algorithm is already the type of the key
         if ($key->type === $algorithm) {
@@ -156,7 +157,7 @@ class Utils
      */
     public static function validateSignature(array $info, XMLSecurityKey $key)
     {
-        assert(array_key_exists("Signature", $info));
+        Assert::keyExists($info, "Signature");
 
         /** @var XMLSecurityDSig $objXMLSecDSig */
         $objXMLSecDSig = $info['Signature'];
@@ -191,7 +192,7 @@ class Utils
      */
     public static function xpQuery(\DOMNode $node, $query)
     {
-        assert(is_string($query));
+        Assert::string($query);
         static $xpCache = null;
 
         if ($node instanceof \DOMDocument) {
@@ -276,7 +277,7 @@ class Utils
      */
     public static function parseBoolean(\DOMElement $node, $attributeName, $default = null)
     {
-        assert(is_string($attributeName));
+        Assert::string($attributeName);
 
         if (!$node->hasAttribute($attributeName)) {
             return $default;
@@ -315,7 +316,7 @@ class Utils
      */
     public static function addNameId(\DOMElement $node, array $nameId)
     {
-        assert(array_key_exists("Value", $nameId));
+        Assert::keyExists($nameId, "Value");
 
         $nid = new XML\saml\NameID();
 
@@ -587,8 +588,8 @@ class Utils
      */
     public static function extractLocalizedStrings(\DOMElement $parent, $namespaceURI, $localName)
     {
-        assert(is_string($namespaceURI));
-        assert(is_string($localName));
+        Assert::string($namespaceURI);
+        Assert::string($localName);
 
         $ret = [];
         for ($node = $parent->firstChild; $node !== null; $node = $node->nextSibling) {
@@ -618,8 +619,8 @@ class Utils
      */
     public static function extractStrings(\DOMElement $parent, $namespaceURI, $localName)
     {
-        assert(is_string($namespaceURI));
-        assert(is_string($localName));
+        Assert::string($namespaceURI);
+        Assert::string($localName);
 
         $ret = [];
         for ($node = $parent->firstChild; $node !== null; $node = $node->nextSibling) {
@@ -644,9 +645,9 @@ class Utils
      */
     public static function addString(\DOMElement $parent, $namespace, $name, $value)
     {
-        assert(is_string($namespace));
-        assert(is_string($name));
-        assert(is_string($value));
+        Assert::string($namespace);
+        Assert::string($name);
+        Assert::string($value);
 
         $doc = $parent->ownerDocument;
 
@@ -670,9 +671,9 @@ class Utils
      */
     public static function addStrings(\DOMElement $parent, $namespace, $name, $localized, array $values)
     {
-        assert(is_string($namespace));
-        assert(is_string($name));
-        assert(is_bool($localized));
+        Assert::string($namespace);
+        Assert::string($name);
+        Assert::boolean($localized);
 
         $doc = $parent->ownerDocument;
 
@@ -695,7 +696,7 @@ class Utils
      */
     public static function createKeyDescriptor($x509Data)
     {
-        assert(is_string($x509Data));
+        Assert::string($x509Data);
 
         $x509Certificate = new X509Certificate();
         $x509Certificate->setCertificate($x509Data);

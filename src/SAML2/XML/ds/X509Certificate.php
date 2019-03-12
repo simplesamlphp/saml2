@@ -4,6 +4,7 @@ namespace SAML2\XML\ds;
 
 use RobRichards\XMLSecLibs\XMLSecurityDSig;
 use SAML2\Utils;
+use Webmozart\Assert\Assert;
 
 /**
  * Class representing a ds:X509Certificate element.
@@ -52,7 +53,7 @@ class X509Certificate
      */
     public function setCertificate($certificate)
     {
-        assert(is_string($certificate));
+        Assert::string($certificate);
         $this->certificate = $certificate;
     }
 
@@ -65,7 +66,7 @@ class X509Certificate
      */
     public function toXML(\DOMElement $parent)
     {
-        assert(is_string($this->certificate));
+        Assert::string($this->certificate);
         return Utils::addString($parent, XMLSecurityDSig::XMLDSIGNS, 'ds:X509Certificate', $this->getCertificate());
     }
 }

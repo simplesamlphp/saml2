@@ -2,6 +2,9 @@
 
 namespace SAML2;
 
+use SAML2\XML\saml\NameID;
+use Webmozart\Assert\Assert;
+
 /**
  * Base class for SAML 2 subject query messages.
  *
@@ -66,7 +69,7 @@ abstract class SubjectQuery extends Request
             throw new \Exception('More than one <saml:NameID> in <saml:Subject>.');
         }
         $nameId = $nameId[0];
-        $this->nameId = new XML\saml\NameID($nameId);
+        $this->nameId = new NameID($nameId);
     }
 
 
@@ -89,10 +92,10 @@ abstract class SubjectQuery extends Request
      */
     public function setNameId($nameId)
     {
-        assert(is_array($nameId) || is_null($nameId) || $nameId instanceof XML\saml\NameID);
+        Assert::true(is_array($nameId) || is_null($nameId) || $nameId instanceof NameID);
 
         if (is_array($nameId)) {
-            $nameId = XML\saml\NameID::fromArray($nameId);
+            $nameId = NameID::fromArray($nameId);
         }
         $this->nameId = $nameId;
     }

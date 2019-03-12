@@ -2,8 +2,10 @@
 
 namespace SAML2\XML;
 
+use DOMElement;
 use SAML2\DOMDocumentFactory;
 use SAML2\Utils;
+use Webmozart\Assert\Assert;
 
 /**
  * Serializable class used to hold an XML element.
@@ -66,7 +68,7 @@ class Chunk implements \Serializable
      * @param  \DOMElement $parent The element we should append this element to.
      * @return \DOMElement The new element.
      */
-    public function toXML(\DOMElement $parent)
+    public function toXML(DOMElement $parent)
     {
         return Utils::copyElement($this->xml, $parent);
     }
@@ -89,7 +91,7 @@ class Chunk implements \Serializable
      */
     public function setLocalName($localName)
     {
-        assert(is_string($localName));
+        Assert::string($localName);
         $this->localName = $localName;
     }
 
@@ -111,7 +113,7 @@ class Chunk implements \Serializable
      */
     public function setNamespaceURI($namespaceURI = null)
     {
-        assert(is_string($namespaceURI) || is_null($namespaceURI));
+        Assert::nullOrString($namespaceURI);
         $this->namespaceURI = $namespaceURI;
     }
 
@@ -123,7 +125,7 @@ class Chunk implements \Serializable
      */
     private function setXml($xml)
     {
-        assert($xml instanceof \DOMElement);
+        Assert::isInstanceOf($xml, DOMElement::class);
         $this->xml = $xml;
     }
 

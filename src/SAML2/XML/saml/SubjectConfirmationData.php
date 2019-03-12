@@ -7,6 +7,7 @@ use SAML2\Constants;
 use SAML2\Utils;
 use SAML2\XML\Chunk;
 use SAML2\XML\ds\KeyInfo;
+use Webmozart\Assert\Assert;
 
 /**
  * Class representing SAML 2 SubjectConfirmationData element.
@@ -78,7 +79,7 @@ class SubjectConfirmationData
      */
     public function setNotBefore($notBefore = null)
     {
-        assert(is_int($notBefore) || is_null($notBefore));
+        Assert::nullOrInteger($notBefore);
         $this->NotBefore = $notBefore;
     }
 
@@ -100,7 +101,7 @@ class SubjectConfirmationData
      */
     public function setNotOnOrAfter($notOnOrAfter = null)
     {
-        assert(is_int($notOnOrAfter) || is_null($notOnOrAfter));
+        Assert::nullOrInteger($notOnOrAfter);
         $this->NotOnOrAfter = $notOnOrAfter;
     }
 
@@ -122,7 +123,7 @@ class SubjectConfirmationData
      */
     public function setRecipient($recipient = null)
     {
-        assert(is_string($recipient) || is_null($recipient));
+        Assert::nullOrString($recipient);
         $this->Recipient = $recipient;
     }
 
@@ -144,7 +145,7 @@ class SubjectConfirmationData
      */
     public function setInResponseTo($inResponseTo = null)
     {
-        assert(is_string($inResponseTo) || is_null($inResponseTo));
+        Assert::nullOrString($inResponseTo);
         $this->InResponseTo = $inResponseTo;
     }
 
@@ -166,7 +167,7 @@ class SubjectConfirmationData
      */
     public function setAddress($address = null)
     {
-        assert(is_string($address) || is_null($address));
+        Assert::nullOrstring($address);
         if (!is_null($address) && !filter_var($address, FILTER_VALIDATE_IP, FILTER_FLAG_IPV4 | FILTER_FLAG_IPV6)) {
             Utils::getContainer()->getLogger()->warning(sprintf('Provided argument (%s) is not a valid IP address.', $address));
         }
@@ -202,7 +203,7 @@ class SubjectConfirmationData
      */
     public function addInfo($info)
     {
-        assert($info instanceof Chunk || $info instanceof KeyInfo);
+        Assert::isInstanceOfAny($info, [Chunk::class, KeyInfo::class]);
         $this->info[] = $info;
     }
 
@@ -261,11 +262,11 @@ class SubjectConfirmationData
      */
     public function toXML(\DOMElement $parent)
     {
-        assert(is_null($this->getNotBefore()) || is_int($this->getNotBefore()));
-        assert(is_null($this->getNotOnOrAfter()) || is_int($this->getNotOnOrAfter()));
-        assert(is_null($this->getRecipient()) || is_string($this->getRecipient()));
-        assert(is_null($this->getInResponseTo()) || is_string($this->getInResponseTo()));
-        assert(is_null($this->getAddress()) || is_string($this->getAddress()));
+        Assert::nullOrInteger($this->getNotBefore());
+        Assert::nullOrInteger($this->getNotOnOrAfter());
+        Assert::nullOrString($this->getRecipient());
+        Assert::nullOrString($this->getInResponseTo());
+        Assert::nullOrString($this->getAddress());
 
         $e = $parent->ownerDocument->createElementNS(Constants::NS_SAML, 'saml:SubjectConfirmationData');
         $parent->appendChild($e);

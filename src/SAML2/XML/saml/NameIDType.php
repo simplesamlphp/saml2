@@ -1,4 +1,5 @@
 <?php
+
 /**
  * SAML NameIDType abstract data type.
  *
@@ -7,6 +8,8 @@
  */
 
 namespace SAML2\XML\saml;
+
+use Webmozart\Assert\Assert;
 
 abstract class NameIDType extends BaseIDType
 {
@@ -90,7 +93,7 @@ abstract class NameIDType extends BaseIDType
      */
     public function setFormat($format = null)
     {
-        assert(is_string($format) || is_null($format));
+        Assert::nullOrString($format);
         $this->Format = $format;
     }
 
@@ -112,7 +115,7 @@ abstract class NameIDType extends BaseIDType
      */
     public function setValue($value)
     {
-        assert(is_string($value) || is_null($value));
+        Assert::nullOrString($value);
         $this->value = $value;
     }
 
@@ -134,7 +137,7 @@ abstract class NameIDType extends BaseIDType
      */
     public function setSPProvidedID($spProvidedID)
     {
-        assert(is_string($spProvidedID) || is_null($spProvidedID));
+        Assert::nullOrString($spProvidedID);
         $this->SPProvidedID = $spProvidedID;
     }
 
@@ -180,9 +183,9 @@ abstract class NameIDType extends BaseIDType
      */
     public function toXML(\DOMElement $parent = null)
     {
-        assert(is_string($this->getFormat()) || is_null($this->getFormat()));
-        assert(is_string($this->getSPProvidedID()) || is_null($this->getSPProvidedID()));
-        assert(is_string($this->getValue()));
+        Assert::nullOrString($this->getFormat());
+        Assert::nullOrString($this->getSPProvidedID());
+        Assert::string($this->getValue());
 
         $element = parent::toXML($parent);
 

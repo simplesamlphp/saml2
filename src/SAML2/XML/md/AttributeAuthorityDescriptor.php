@@ -5,6 +5,7 @@ namespace SAML2\XML\md;
 use SAML2\Constants;
 use SAML2\Utils;
 use SAML2\XML\saml\Attribute;
+use Webmozart\Assert\Assert;
 
 /**
  * Class representing SAML 2 metadata AttributeAuthorityDescriptor.
@@ -122,7 +123,7 @@ class AttributeAuthorityDescriptor extends RoleDescriptor
      */
     public function addAttributeService(EndpointType $attributeService)
     {
-        assert($attributeService instanceof EndpointType);
+        Assert::isInstanceOf($attributeService, EndpointType::class);
         $this->AttributeService[] = $attributeService;
     }
 
@@ -176,7 +177,7 @@ class AttributeAuthorityDescriptor extends RoleDescriptor
      */
     public function addAssertionIDRequestService(EndpointType $assertionIDRequestService)
     {
-        assert($assertionIDRequestService instanceof EndpointType);
+        Assert::isInstanceOf($assertionIDRequestService, EndpointType::class);
         $this->AssertionIDRequestService[] = $assertionIDRequestService;
     }
 
@@ -230,7 +231,7 @@ class AttributeAuthorityDescriptor extends RoleDescriptor
      */
     public function addAttribute(Attribute $attribute)
     {
-        assert($attribute instanceof Attribute);
+        Assert::isInstanceOf($attribute, Attribute::class);
         $this->Attribute[] = $attribute;
     }
 
@@ -243,12 +244,12 @@ class AttributeAuthorityDescriptor extends RoleDescriptor
      */
     public function toXML(\DOMElement $parent)
     {
-        assert(is_array($attributeService = $this->getAttributeService()));
-        assert(!empty($attributeService));
-        assert(is_array($this->getAssertionIDRequestService()));
-        assert(is_array($this->getNameIDFormat()));
-        assert(is_array($this->getAttributeProfile()));
-        assert(is_array($this->Attribute));
+        Assert::isArray($attributeService = $this->getAttributeService());
+        Assert::notEmpty($attributeService);
+        Assert::isArray($this->getAssertionIDRequestService());
+        Assert::isArray($this->getNameIDFormat());
+        Assert::isArray($this->getAttributeProfile());
+        Assert::isArray($this->Attribute);
 
         $e = parent::toXML($parent);
 

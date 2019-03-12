@@ -4,6 +4,7 @@ namespace SAML2\XML\mdui;
 
 use SAML2\Utils;
 use SAML2\XML\Chunk;
+use Webmozart\Assert\Assert;
 
 /**
  * Class for handling the metadata extensions for login and discovery user interface
@@ -286,13 +287,13 @@ class UIInfo
      */
     public function toXML(\DOMElement $parent)
     {
-        assert(is_array($displayName = $this->getDisplayName()));
-        assert(is_array($description = $this->getDescription()));
-        assert(is_array($informationURL = $this->getInformationURL()));
-        assert(is_array($privacyStatementURL = $this->getPrivacyStatementURL()));
-        assert(is_array($keywords = $this->getKeywords()));
-        assert(is_array($logo = $this->getLogo()));
-        assert(is_array($children = $this->getChildren()));
+        Assert::isArray($displayName = $this->getDisplayName());
+        Assert::isArray($description = $this->getDescription());
+        Assert::isArray($informationURL = $this->getInformationURL());
+        Assert::isArray($privacyStatementURL = $this->getPrivacyStatementURL());
+        Assert::isArray($keywords = $this->getKeywords());
+        Assert::isArray($logo = $this->getLogo());
+        Assert::isArray($children = $this->getChildren());
 
         $e = null;
         if (!empty($displayName)

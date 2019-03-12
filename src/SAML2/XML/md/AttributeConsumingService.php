@@ -4,6 +4,7 @@ namespace SAML2\XML\md;
 
 use SAML2\Constants;
 use SAML2\Utils;
+use Webmozart\Assert\Assert;
 
 /**
  * Class representing SAML 2 Metadata AttributeConsumingService element.
@@ -103,7 +104,7 @@ class AttributeConsumingService
      */
     public function setIndex($index)
     {
-        assert(is_int($index));
+        Assert::integer($index);
         $this->index = $index;
     }
 
@@ -125,7 +126,7 @@ class AttributeConsumingService
      */
     public function setIsDefault($flag = null)
     {
-        assert(is_bool($flag) || is_null($flag));
+        Assert::nullOrBoolean($flag);
         $this->isDefault = $flag;
     }
 
@@ -212,11 +213,11 @@ class AttributeConsumingService
      */
     public function toXML(\DOMElement $parent)
     {
-        assert(is_int($this->getIndex()));
-        assert(is_null($this->getIsDefault()) || is_bool($this->getIsDefault()));
-        assert(is_array($this->getServiceName()));
-        assert(is_array($this->getServiceDescription()));
-        assert(is_array($this->getRequestedAttribute()));
+        Assert::integer($this->getIndex());
+        Assert::nullOrBoolean($this->getIsDefault());
+        Assert::isArray($this->getServiceName());
+        Assert::isArray($this->getServiceDescription());
+        Assert::isArray($this->getRequestedAttribute());
 
         $doc = $parent->ownerDocument;
 
