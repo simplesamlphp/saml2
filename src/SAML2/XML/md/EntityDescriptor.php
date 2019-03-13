@@ -7,6 +7,8 @@ use SAML2\DOMDocumentFactory;
 use SAML2\SignedElementHelper;
 use SAML2\Utils;
 use SAML2\XML\Chunk;
+use SAML2\XML\md\AffiliationDescriptor;
+use SAML2\XML\md\Organization;
 use Webmozart\Assert\Assert;
 
 /**
@@ -457,8 +459,8 @@ class EntityDescriptor extends SignedElementHelper
         Assert::nullOrString($this->getCacheDuration());
         Assert::isArray($this->getExtensions());
         Assert::isArray($this->getRoleDescriptor());
-        Assert::nullOrIsInstanceOf($this->getAffiliationDescriptor());
-        Assert::nullOrIsInstanceOf($this->getOrganization());
+        Assert::nullOrIsInstanceOf($this->getAffiliationDescriptor(), AffiliationDescriptor::class);
+        Assert::nullOrIsInstanceOf($this->getOrganization(), Organization::class);
         Assert::isArray($this->getContactPerson());
         Assert::isArray($this->getAdditionalMetadataLocation());
 
