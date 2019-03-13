@@ -458,7 +458,7 @@ class EntityDescriptor extends SignedElementHelper
         Assert::isArray($this->getExtensions());
         Assert::isArray($this->getRoleDescriptor());
         Assert::nullOrIsInstanceOf($this->getAffiliationDescriptor());
-        Assert::nullOrIsInstance($this->getOrganization());
+        Assert::nullOrIsInstanceOf($this->getOrganization());
         Assert::isArray($this->getContactPerson());
         Assert::isArray($this->getAdditionalMetadataLocation());
 
