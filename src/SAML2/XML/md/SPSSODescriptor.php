@@ -189,7 +189,7 @@ class SPSSODescriptor extends SSODescriptorType
     {
         Assert::nullOrBoolean($this->getAuthnRequestsSigned());
         Assert::nullOrBoolean($this->wantAssertionsSigned());
-        Assert:isArray($this->getAssertionConsumerService());
+        Assert::isArray($this->getAssertionConsumerService());
         Assert::isArray($this->getAttributeConsumingService());
 
         $e = parent::toXML($parent);
