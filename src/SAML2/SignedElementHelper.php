@@ -77,10 +77,8 @@ class SignedElementHelper implements SignedElement
      * @param mixed    $data     The data that should be included as the first parameter to the function.
      * @return void
      */
-    public function addValidator($function, $data)
+    public function addValidator(callable $function, $data)
     {
-        assert(is_callable($function));
-
         $this->validators[] = [
             'Function' => $function,
             'Data' => $data,

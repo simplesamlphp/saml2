@@ -2,6 +2,8 @@
 
 namespace SAML2\XML\mdui;
 
+use Webmozart\Assert\Assert;
+
 /**
  * Class for handling the Logo metadata extensions for login and discovery user interface
  *
@@ -85,7 +87,7 @@ class Logo
      */
     public function setUrl($url)
     {
-        assert(is_string($url));
+        Assert::string($url);
         if (!filter_var(trim($url), FILTER_VALIDATE_URL) && substr(trim($url), 0, 5) !== 'data:') {
             throw new \InvalidArgumentException('mdui:Logo is not a valid URL.');
         }
@@ -110,7 +112,7 @@ class Logo
      */
     public function setLanguage($lang)
     {
-        assert(is_string($lang));
+        Assert::string($lang);
         $this->lang = $lang;
     }
 
@@ -132,7 +134,7 @@ class Logo
      */
     public function setHeight($height)
     {
-        assert(is_int($height));
+        Assert::integer($height);
         $this->height = $height;
     }
 
@@ -154,7 +156,7 @@ class Logo
      */
     public function setWidth($width)
     {
-        assert(is_int($width));
+        Assert::integer($width);
         $this->width = $width;
     }
 
@@ -167,9 +169,9 @@ class Logo
      */
     public function toXML(\DOMElement $parent)
     {
-        assert(is_int($this->getWidth()));
-        assert(is_int($this->getHeight()));
-        assert(is_string($this->getUrl()));
+        Assert::integer($this->getWidth());
+        Assert::integer($this->getHeight());
+        Assert::string($this->getUrl());
 
         $doc = $parent->ownerDocument;
 

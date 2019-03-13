@@ -3,6 +3,7 @@
 namespace SAML2;
 
 use RobRichards\XMLSecLibs\XMLSecurityKey;
+use Webmozart\Assert\Assert;
 
 /**
  * Class which implements the HTTP-Redirect binding.
@@ -215,9 +216,9 @@ class HTTPRedirect extends Binding
      */
     public static function validateSignature(array $data, XMLSecurityKey $key)
     {
-        assert(array_key_exists("Query", $data));
-        assert(array_key_exists("SigAlg", $data));
-        assert(array_key_exists("Signature", $data));
+        Assert::keyExists($data, "Query");
+        Assert::keyExists($data, "SigAlg");
+        Assert::keyExists($data, "Signature");
 
         $query = $data['Query'];
         $sigAlg = $data['SigAlg'];

@@ -4,6 +4,7 @@ namespace SAML2\XML\ds;
 
 use RobRichards\XMLSecLibs\XMLSecurityDSig;
 use SAML2\XML\Chunk;
+use Webmozart\Assert\Assert;
 
 /**
  * Class representing a ds:KeyInfo element.
@@ -86,7 +87,7 @@ class KeyInfo
      */
     public function setId($id = null)
     {
-        assert(is_string($id) || is_null($id));
+        Assert::nullOrString($id);
         $this->Id = $id;
     }
 
@@ -119,7 +120,7 @@ class KeyInfo
      */
     public function addInfo($info)
     {
-        assert($info instanceof Chunk || $info instanceof KeyName || $info instanceof X509Data);
+        Assert::isInstanceOfAny($info, [Chunk::class, KeyName::class, X509Data::class]);
         $this->info[] = $info;
     }
 
@@ -132,8 +133,8 @@ class KeyInfo
      */
     public function toXML(\DOMElement $parent)
     {
-        assert(is_null($this->getId()) || is_string($this->getId()));
-        assert(is_array($this->getInfo()));
+        Assert::nullOrString($this->getId());
+        Assert::isArray($this->getInfo());
 
         $doc = $parent->ownerDocument;
 

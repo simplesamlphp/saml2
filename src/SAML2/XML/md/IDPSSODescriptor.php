@@ -5,6 +5,7 @@ namespace SAML2\XML\md;
 use SAML2\Constants;
 use SAML2\Utils;
 use SAML2\XML\saml\Attribute;
+use Webmozart\Assert\Assert;
 
 /**
  * Class representing SAML 2 IDPSSODescriptor.
@@ -118,7 +119,7 @@ class IDPSSODescriptor extends SSODescriptorType
      */
     public function setWantAuthnRequestsSigned($flag = null)
     {
-        assert(is_bool($flag) || is_null($flag));
+        Assert::nullOrBoolean($flag);
         $this->WantAuthnRequestsSigned = $flag;
     }
 
@@ -280,12 +281,12 @@ class IDPSSODescriptor extends SSODescriptorType
      */
     public function toXML(\DOMElement $parent)
     {
-        assert(is_null($this->WantAuthnRequestsSigned()) || is_bool($this->WantAuthnRequestsSigned()));
-        assert(is_array($this->getSingleSignOnService()));
-        assert(is_array($this->getNameIDMappingService()));
-        assert(is_array($this->getAssertionIDRequestService()));
-        assert(is_array($this->getAttributeProfile()));
-        assert(is_array($this->getAttribute()));
+        Assert::nullOrBoolean($this->WantAuthnRequestsSigned());
+        Assert::isArray($this->getSingleSignOnService());
+        Assert::isArray($this->getNameIDMappingService());
+        Assert::isArray($this->getAssertionIDRequestService());
+        Assert::isArray($this->getAttributeProfile());
+        Assert::isArray($this->getAttribute());
 
         $e = parent::toXML($parent);
 

@@ -4,6 +4,7 @@ namespace SAML2\XML\md;
 
 use SAML2\Constants;
 use SAML2\Utils;
+use Webmozart\Assert\Assert;
 
 /**
  * Class representing SAML 2 metadata AuthnAuthorityDescriptor.
@@ -97,7 +98,7 @@ class AuthnAuthorityDescriptor extends RoleDescriptor
      */
     public function addAuthnQueryService(EndpointType $authnQueryService)
     {
-        assert($authnQueryService instanceof EndpointType);
+        Assert::isInstanceOf($authnQueryService, EndpointType::class);
         $this->AuthnQueryService[] = $authnQueryService;
     }
 
@@ -130,7 +131,7 @@ class AuthnAuthorityDescriptor extends RoleDescriptor
      */
     public function addAssertionIDRequestService(EndpointType $assertionIDRequestService)
     {
-        assert($assertionIDRequestService instanceof EndpointType);
+        Assert::isInstanceOf($assertionIDRequestService, EndpointType::class);
         $this->AssertionIDRequestService[] = $assertionIDRequestService;
     }
 
@@ -164,10 +165,10 @@ class AuthnAuthorityDescriptor extends RoleDescriptor
      */
     public function toXML(\DOMElement $parent)
     {
-        assert(is_array($authnQueryService = $this->getAuthnQueryService()));
-        assert(!empty($authnQueryService));
-        assert(is_array($this->getAssertionIDRequestService()));
-        assert(is_array($this->NameIDFormat));
+        Assert::isArray($authnQueryService = $this->getAuthnQueryService());
+        Assert::notEmpty($authnQueryService);
+        Assert::isArray($this->getAssertionIDRequestService());
+        Assert::isArray($this->NameIDFormat);
 
         $e = parent::toXML($parent);
 

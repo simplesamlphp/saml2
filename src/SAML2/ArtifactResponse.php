@@ -2,6 +2,8 @@
 
 namespace SAML2;
 
+use Webmozart\Assert\Assert;
+
 /**
  * The \SAML2\ArtifactResponse, is the response to the \SAML2\ArtifactResolve.
  *
@@ -31,7 +33,7 @@ class ArtifactResponse extends StatusResponse
 
         if (!is_null($xml)) {
             $status = Utils::xpQuery($xml, './saml_protocol:Status');
-            assert(!empty($status)); /* Will have failed during StatusResponse parsing. */
+            Assert::notEmpty($status); /* Will have failed during StatusResponse parsing. */
 
             $status = $status[0];
 

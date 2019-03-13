@@ -4,7 +4,8 @@ namespace SAML2;
 
 use RobRichards\XMLSecLibs\XMLSecurityKey;
 use SAML2\Exception\RuntimeException;
-use \SimpleSAML\Configuration;
+use SimpleSAML\Configuration;
+use Webmozart\Assert\Assert;
 
 /**
  * Implementation of the SAML 2.0 SOAP binding.
@@ -205,7 +206,7 @@ class SOAPClient
      */
     public static function validateSSL($data, XMLSecurityKey $key)
     {
-        assert(is_string($data));
+        Assert::string($data);
 
         $keyInfo = openssl_pkey_get_details($key->key);
         if ($keyInfo === false) {

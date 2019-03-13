@@ -4,6 +4,7 @@ namespace SAML2\XML\md;
 
 use SAML2\Constants;
 use SAML2\Utils;
+use Webmozart\Assert\Assert;
 
 /**
  * Class representing SAML 2 metadata PDPDescriptor.
@@ -97,7 +98,7 @@ class PDPDescriptor extends RoleDescriptor
      */
     public function addAuthzService(EndpointType $authzService)
     {
-        assert($authzService instanceof EndpointType);
+        Assert::isInstanceOf($authzService, EndpointType::class);
         $this->AuthzService[] = $authzService;
     }
 
@@ -130,7 +131,7 @@ class PDPDescriptor extends RoleDescriptor
      */
     public function addAssertionIDRequestService(EndpointType $assertionIDRequestService)
     {
-        assert($assertionIDRequestService instanceof EndpointType);
+        Assert::isinstanceOf($assertionIDRequestService, EndpointType::class);
         $this->AssertionIDRequestService[] = $assertionIDRequestService;
     }
 
@@ -164,10 +165,10 @@ class PDPDescriptor extends RoleDescriptor
      */
     public function toXML(\DOMElement $parent)
     {
-        assert(is_array($authzService = $this->getAuthzService()));
-        assert(!empty($authzService));
-        assert(is_array($this->getAssertionIDRequestService()));
-        assert(is_array($this->getNameIDFormat()));
+        Assert::isArray($authzService = $this->getAuthzService());
+        Assert::notEmpty($authzService);
+        Assert::isArray($this->getAssertionIDRequestService());
+        Assert::isArray($this->getNameIDFormat());
 
         $e = parent::toXML($parent);
 

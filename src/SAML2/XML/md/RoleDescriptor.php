@@ -6,6 +6,7 @@ use SAML2\Constants;
 use SAML2\SignedElementHelper;
 use SAML2\Utils;
 use SAML2\XML\Chunk;
+use Webmozart\Assert\Assert;
 
 /**
  * Class representing SAML 2 RoleDescriptor element.
@@ -100,7 +101,7 @@ class RoleDescriptor extends SignedElementHelper
      */
     protected function __construct($elementName, \DOMElement $xml = null)
     {
-        assert(is_string($elementName));
+        Assert::string($elementName);
 
         parent::__construct($xml);
         $this->elementName = $elementName;
@@ -164,7 +165,7 @@ class RoleDescriptor extends SignedElementHelper
      */
     public function setID($Id = null)
     {
-        assert(is_string($Id) || is_null($Id));
+        Assert::nullOrString($Id);
         $this->ID = $Id;
     }
 
@@ -186,7 +187,7 @@ class RoleDescriptor extends SignedElementHelper
      */
     public function setValidUntil($validUntil = null)
     {
-        assert(is_int($validUntil) || is_null($validUntil));
+        Assert::nullOrInteger($validUntil);
         $this->validUntil = $validUntil;
     }
 
@@ -208,7 +209,7 @@ class RoleDescriptor extends SignedElementHelper
      */
     public function setCacheDuration($cacheDuration = null)
     {
-        assert(is_string($cacheDuration) || is_null($cacheDuration));
+        Assert::nullOrString($cacheDuration);
         $this->cacheDuration = $cacheDuration;
     }
 
@@ -253,7 +254,7 @@ class RoleDescriptor extends SignedElementHelper
      */
     public function setErrorURL($errorURL = null)
     {
-        assert(is_string($errorURL) || is_null($errorURL));
+        Assert::nullOrString($errorURL);
         if (!is_null($errorURL) && !filter_var($errorURL, FILTER_VALIDATE_URL)) {
             throw new \InvalidArgumentException('RoleDescriptor errorURL is not a valid URL.');
         }
@@ -396,15 +397,15 @@ class RoleDescriptor extends SignedElementHelper
      */
     protected function toXML(\DOMElement $parent)
     {
-        assert(is_null($this->getID()) || is_string($this->getID()));
-        assert(is_null($this->getValidUntil()) || is_int($this->getValidUntil()));
-        assert(is_null($this->getCacheDuration()) || is_string($this->getcacheDuration()));
-        assert(is_array($this->getProtocolSupportEnumeration()));
-        assert(is_null($this->getErrorURL()) || is_string($this->getErrorURL()));
-        assert(is_array($this->getExtensions()));
-        assert(is_array($this->getKeyDescriptor()));
-        assert(is_null($this->getOrganization()) || $this->getOrganization() instanceof Organization);
-        assert(is_array($this->getContactPerson()));
+        Assert::nullOrString($this->getID());
+        Assert::nullOrInteger($this->getValidUntil());
+        Assert::nullOrString($this->getCacheDuration());
+        Assert::isArray($this->getProtocolSupportEnumeration());
+        Assert::nullOrString($this->getErrorURL());
+        Assert::isArray($this->getExtensions());
+        Assert::isArray($this->getKeyDescriptor());
+        Assert::nullOrIsInstanceOf($this->getOrganization(), Organization::class);
+        Assert::isArray($this->getContactPerson());
 
         $e = $parent->ownerDocument->createElementNS(Constants::NS_MD, $this->elementName);
         $parent->appendChild($e);

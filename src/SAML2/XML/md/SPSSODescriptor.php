@@ -3,6 +3,7 @@
 namespace SAML2\XML\md;
 
 use SAML2\Utils;
+use Webmozart\Assert\Assert;
 
 /**
  * Class representing SAML 2 SPSSODescriptor.
@@ -87,7 +88,7 @@ class SPSSODescriptor extends SSODescriptorType
      */
     public function setAuthnRequestsSigned($flag = null)
     {
-        assert(is_bool($flag) || is_null($flag));
+        Assert::nullOrBoolean($flag);
         $this->AuthnRequestsSigned = $flag;
     }
 
@@ -109,7 +110,7 @@ class SPSSODescriptor extends SSODescriptorType
      */
     public function setWantAssertionsSigned($flag = null)
     {
-        assert(is_bool($flag) || is_null($flag));
+        Assert::nullOrBoolean($flag);
         $this->WantAssertionsSigned = $flag;
     }
 
@@ -186,10 +187,10 @@ class SPSSODescriptor extends SSODescriptorType
      */
     public function toXML(\DOMElement $parent)
     {
-        assert(is_null($this->getAuthnRequestsSigned()) || is_bool($this->getAuthnRequestsSigned()));
-        assert(is_null($this->wantAssertionsSigned()) || is_bool($this->wantAssertionsSigned()));
-        assert(is_array($this->getAssertionConsumerService()));
-        assert(is_array($this->getAttributeConsumingService()));
+        Assert::nullOrBoolean($this->getAuthnRequestsSigned());
+        Assert::nullOrBoolean($this->wantAssertionsSigned());
+        Assert:isArray($this->getAssertionConsumerService());
+        Assert::isArray($this->getAttributeConsumingService());
 
         $e = parent::toXML($parent);
 

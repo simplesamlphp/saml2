@@ -6,6 +6,7 @@ use SAML2\Constants;
 use SAML2\Utils;
 use SAML2\XML\Chunk;
 use SAML2\XML\ds\KeyInfo;
+use Webmozart\Assert\Assert;
 
 /**
  * Class representing a KeyDescriptor element.
@@ -87,7 +88,7 @@ class KeyDescriptor
      */
     public function setUse($use)
     {
-        assert(is_string($use) || is_null($use));
+        Assert::nullOrString($use);
         $this->use = $use;
     }
 
@@ -153,9 +154,9 @@ class KeyDescriptor
      */
     public function toXML(\DOMElement $parent)
     {
-        assert(is_null($this->getUse()) || is_string($this->getUse()));
-        assert($this->getKeyInfo() instanceof KeyInfo);
-        assert(is_array($this->getEncryptionMethod()));
+        Assert::nullOrString($this->getUse());
+        Assert::isInstanceOf($this->getKeyInfo(), KeyInfo::class);
+        Assert::isArray($this->getEncryptionMethod());
 
         $doc = $parent->ownerDocument;
 

@@ -5,6 +5,7 @@ namespace SAML2\XML\md;
 use SAML2\Constants;
 use SAML2\Utils;
 use SAML2\XML\Chunk;
+use Webmozart\Assert\Assert;
 
 /**
  * Class representing SAML 2 Organization element.
@@ -181,13 +182,13 @@ class Organization
      */
     public function toXML(\DOMElement $parent)
     {
-        assert(is_array($this->getExtensions()));
-        assert(is_array($organizationName = $this->getOrganizationName()));
-        assert(!empty($organizationName));
-        assert(is_array($organizationDisplayName = $this->getOrganizationDisplayName()));
-        assert(!empty($organizationDisplayName));
-        assert(is_array($organizationURL = $this->getOrganizationURL()));
-        assert(!empty($organizationURL));
+        Assert::isArray($this->getExtensions());
+        Assert::isArray($organizationName = $this->getOrganizationName());
+        Assert::notEmpty($organizationName);
+        Assert::isArray($organizationDisplayName = $this->getOrganizationDisplayName());
+        Assert::notEmpty($organizationDisplayName);
+        Assert::isArray($organizationURL = $this->getOrganizationURL());
+        Assert::notEmpty($organizationURL);
 
         $doc = $parent->ownerDocument;
 

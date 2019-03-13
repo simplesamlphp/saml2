@@ -3,6 +3,7 @@
 namespace SAML2\XML\mdrpi;
 
 use SAML2\Utils;
+use Webmozart\Assert\Assert;
 
 /**
  * Class for handling the mdrpi:RegistrationInfo element.
@@ -78,7 +79,7 @@ class RegistrationInfo
      */
     public function setRegistrationAuthority($registrationAuthority)
     {
-        assert(is_string($registrationAuthority));
+        Assert::string($registrationAuthority);
         $this->registrationAuthority = $registrationAuthority;
     }
 
@@ -100,7 +101,7 @@ class RegistrationInfo
      */
     public function setRegistrationInstant($registrationInstant = null)
     {
-        assert(is_int($registrationInstant) || is_null($registrationInstant));
+        Assert::nullOrInteger($registrationInstant);
         $this->registrationInstant = $registrationInstant;
     }
 
@@ -134,9 +135,9 @@ class RegistrationInfo
      */
     public function toXML(\DOMElement $parent)
     {
-        assert(is_string($this->getRegistrationAuthority()));
-        assert(is_int($this->getRegistrationInstant()) || is_null($this->getRegistrationInstant()));
-        assert(is_array($this->getRegistrationPolicy()));
+        Assert::string($this->getRegistrationAuthority());
+        Assert::nullOrInteger($this->getRegistrationInstant());
+        Assert::isArray($this->getRegistrationPolicy());
 
         $registrationAuthority = $this->getRegistrationAuthority();
         if (empty($registrationAuthority)) {

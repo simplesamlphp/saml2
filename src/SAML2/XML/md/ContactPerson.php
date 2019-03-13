@@ -5,6 +5,7 @@ namespace SAML2\XML\md;
 use SAML2\Constants;
 use SAML2\Utils;
 use SAML2\XML\Chunk;
+use Webmozart\Assert\Assert;
 
 /**
  * Class representing SAML 2 ContactPerson.
@@ -116,7 +117,7 @@ class ContactPerson
      */
     private static function getStringElements(\DOMElement $parent, $name)
     {
-        assert(is_string($name));
+        Assert::string($name);
 
         $e = Utils::xpQuery($parent, './saml_metadata:'.$name);
 
@@ -139,7 +140,7 @@ class ContactPerson
      */
     private static function getStringElement(\DOMElement $parent, $name)
     {
-        assert(is_string($name));
+        Assert::string($name);
 
         $e = self::getStringElements($parent, $name);
         if (empty($e)) {
@@ -170,7 +171,7 @@ class ContactPerson
      */
     public function setContactType($contactType)
     {
-        assert(is_string($contactType));
+        Assert::string($contactType);
         $this->contactType = $contactType;
     }
 
@@ -192,7 +193,7 @@ class ContactPerson
      */
     public function setCompany($company)
     {
-        assert(is_string($company) || is_null($company));
+        Assert::nullOrString($company);
         $this->Company = $company;
     }
 
@@ -214,7 +215,7 @@ class ContactPerson
      */
     public function setGivenName($givenName)
     {
-        assert(is_string($givenName) || is_null($givenName));
+        Assert::nullOrString($givenName);
         $this->GivenName = $givenName;
     }
 
@@ -236,7 +237,7 @@ class ContactPerson
      */
     public function setSurName($surName)
     {
-        assert(is_string($surName) || is_null($surName));
+        Assert::nullOrString($surName);
         $this->SurName = $surName;
     }
 
@@ -367,8 +368,8 @@ class ContactPerson
      */
     public function addContactPersonAttributes($attr, $value)
     {
-        assert(is_string($attr));
-        assert(is_string($value));
+        Assert::string($attr);
+        Assert::string($value);
         $this->ContactPersonAttributes[$attr] = $value;
     }
 
@@ -381,14 +382,14 @@ class ContactPerson
      */
     public function toXML(\DOMElement $parent)
     {
-        assert(is_string($this->getContactType()));
-        assert(is_array($this->getExtensions()));
-        assert(is_null($this->getCompany()) || is_string($this->getCompany()));
-        assert(is_null($this->getGivenName()) || is_string($this->getGivenName()));
-        assert(is_null($this->getSurName()) || is_string($this->getSurName()));
-        assert(is_array($this->getEmailAddress()));
-        assert(is_array($this->getTelephoneNumber()));
-        assert(is_array($this->getContactPersonAttributes()));
+        Assert::string($this->getContactType());
+        Assert::isArray($this->getExtensions());
+        Assert::nullOrString($this->getCompany());
+        Assert::nullOrString($this->getGivenName());
+        Assert::nullOrString($this->getSurName());
+        Assert::isArray($this->getEmailAddress());
+        Assert::isArray($this->getTelephoneNumber());
+        Assert::isArray($this->getContactPersonAttributes());
 
         $doc = $parent->ownerDocument;
 

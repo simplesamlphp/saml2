@@ -2,6 +2,8 @@
 
 namespace SAML2;
 
+use Webmozart\Assert\Assert;
+
 /**
  * Base class for SAML 2 bindings.
  *
@@ -28,7 +30,7 @@ abstract class Binding
      */
     public static function getBinding($urn)
     {
-        assert(is_string($urn));
+        Assert::string($urn);
 
         switch ($urn) {
             case Constants::BINDING_HTTP_POST:
@@ -128,7 +130,7 @@ abstract class Binding
      */
     public function setDestination($destination)
     {
-        assert(is_string($destination) || is_null($destination));
+        Assert::nullOrString($destination);
 
         $this->destination = $destination;
     }

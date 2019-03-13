@@ -2,6 +2,8 @@
 
 namespace SAML2;
 
+use Webmozart\Assert\Assert;
+
 /**
  * Class for SAML 2 attribute query messages.
  *
@@ -134,7 +136,7 @@ class AttributeQuery extends SubjectQuery
      */
     public function setAttributeNameFormat($nameFormat)
     {
-        assert(is_string($nameFormat));
+        Assert::string($nameFormat);
 
         $this->nameFormat = $nameFormat;
     }
