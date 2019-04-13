@@ -174,7 +174,7 @@ class Processor
         $assertionValidationResult = $this->assertionValidator->validate($assertion);
         if (!$assertionValidationResult->isValid()) {
             throw new InvalidAssertionException(sprintf(
-                'Invalid Assertion in SAML Response, erorrs: "%s"',
+                'Invalid Assertion in SAML Response, errors: "%s"',
                 implode('", "', $assertionValidationResult->getErrors())
             ));
         }
