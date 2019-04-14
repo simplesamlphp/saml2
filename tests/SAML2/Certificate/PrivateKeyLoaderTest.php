@@ -65,6 +65,13 @@ class PrivateKeyLoaderTest extends \PHPUnit\Framework\TestCase
                     'foo bar baz'
                 )
             ],
+            'private key as contents' => [
+                new \SAML2\Configuration\PrivateKey(
+                    file_get_contents(dirname(__FILE__) . '/File/a_fake_private_key_file.pem'),
+                    null,
+                    true
+                )
+            ],
         ];
     }
 }

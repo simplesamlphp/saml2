@@ -17,7 +17,7 @@ class PrivateKey extends ArrayAdapter
     /**
      * @var string
      */
-    private $filePath;
+    private $filePathOrContents;
 
     /**
      * @var string|null
@@ -29,6 +29,10 @@ class PrivateKey extends ArrayAdapter
      */
     private $name;
 
+    /**
+     * @var bool
+     */
+    private $isFile;
 
     /**
      * Constructor for PrivateKey.
@@ -36,22 +40,27 @@ class PrivateKey extends ArrayAdapter
      * @param string $filePath
      * @param string $name
      * @param string $passphrase
-     * @throws \Exception
+     * @param bool $isFile
      */
-    public function __construct(string $filePath, string $name, string $passphrase = '')
+    public function __construct(string $filePath, string $name, string $passphrase = '', $isFile = true)
     {
         $this->filePath = $filePath;
         $this->passphrase = $passphrase;
         $this->name = $name;
+        $this->isFile = $isFile;
     }
 
 
     /**
      * @return string
      */
-    public function getFilePath() : string
+    public function getFilePath() : ?string
     {
-        return $this->filePath;
+        if (!$this->isFile()) {
+            return null;
+        }
+
+        return $this->filePathOrContents;
     }
 
 
@@ -79,5 +88,25 @@ class PrivateKey extends ArrayAdapter
     public function getName() : string
     {
         return $this->name;
+    }
+
+    /**
+     * @return string
+     */
+    public function getContents() : ?string
+    {
+        if ($this->isFile()) {
+            return null;
+        }
+
+        return $this->filePathOrContents;
+    }
+
+    /**
+     * @return bool
+     */
+    public function isFile(): bool
+    {
+        return $this->isFile;
     }
 }

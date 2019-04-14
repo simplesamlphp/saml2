@@ -22,7 +22,12 @@ class PrivateKeyLoader
      */
     public function loadPrivateKey(PrivateKeyConfiguration $key) : PrivateKey
     {
-        $privateKey = File::getFileContents($key->getFilePath());
+        if ($key->isFile()) {
+            $privateKey = File::getFileContents($key->getFilePath());
+        } else {
+            $privateKey = $key->getContents();
+        }
+
         return PrivateKey::create($privateKey, $key->getPassPhrase());
     }
 
