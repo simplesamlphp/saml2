@@ -70,7 +70,7 @@ class PrivateKeyLoaderTest extends \PHPUnit\Framework\TestCase
                     file_get_contents(dirname(__FILE__) . '/File/a_fake_private_key_file.pem'),
                     \SAML2\Configuration\PrivateKey::NAME_DEFAULT,
                     '',
-                    true
+                    false
                 )
             ],
         ];
