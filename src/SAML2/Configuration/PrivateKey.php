@@ -5,6 +5,7 @@ declare(strict_types=1);
 namespace SAML2\Configuration;
 
 use SAML2\Exception\InvalidArgumentException;
+use SAML2\Exception\RuntimeException;
 
 /**
  * Configuration of a private key.
@@ -37,14 +38,14 @@ class PrivateKey extends ArrayAdapter
     /**
      * Constructor for PrivateKey.
      *
-     * @param string $filePath
+     * @param string $filePathOrContents
      * @param string $name
      * @param string $passphrase
      * @param bool $isFile
      */
-    public function __construct(string $filePath, string $name, string $passphrase = '', bool $isFile = true)
+    public function __construct(string $filePathOrContents, string $name, string $passphrase = '', bool $isFile = true)
     {
-        $this->filePathOrContents = $filePath;
+        $this->filePathOrContents = $filePathOrContents;
         $this->passphrase = $passphrase;
         $this->name = $name;
         $this->isFile = $isFile;
@@ -54,10 +55,10 @@ class PrivateKey extends ArrayAdapter
     /**
      * @return string
      */
-    public function getFilePath() : ?string
+    public function getFilePath() : string
     {
         if (!$this->isFile()) {
-            return null;
+            throw new RuntimeException('No path provided.');
         }
 
         return $this->filePathOrContents;
@@ -93,10 +94,10 @@ class PrivateKey extends ArrayAdapter
     /**
      * @return string
      */
-    public function getContents() : ?string
+    public function getContents() : string
     {
         if ($this->isFile()) {
-            return null;
+            throw new RuntimeException('No contents provided');
         }
 
         return $this->filePathOrContents;
