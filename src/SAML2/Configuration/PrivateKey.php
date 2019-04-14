@@ -15,7 +15,7 @@ class PrivateKey extends ArrayAdapter
     /**
      * @var string
      */
-    private $filePath;
+    private $filePathOrContents;
 
     /**
      * @var string
@@ -27,10 +27,15 @@ class PrivateKey extends ArrayAdapter
      */
     private $name;
 
-    public function __construct($filePath, $name, $passphrase = null)
+    /**
+     * @var bool
+     */
+    private $isFile;
+
+    public function __construct($filePathOrContents, $name, $passphrase = null, $isFile = true)
     {
-        if (!is_string($filePath)) {
-            throw InvalidArgumentException::invalidType('string', $filePath);
+        if (!is_string($filePathOrContents)) {
+            throw InvalidArgumentException::invalidType('string', $filePathOrContents);
         }
 
         if (!is_string($name)) {
@@ -41,9 +46,10 @@ class PrivateKey extends ArrayAdapter
             throw InvalidArgumentException::invalidType('string', $passphrase);
         }
 
-        $this->filePath = $filePath;
+        $this->filePathOrContents = $filePathOrContents;
         $this->passphrase = $passphrase;
         $this->name = $name;
+        $this->isFile = (bool)$isFile;
     }
 
     /**
@@ -51,7 +57,11 @@ class PrivateKey extends ArrayAdapter
      */
     public function getFilePath()
     {
-        return $this->filePath;
+        if (!$this->isFile()) {
+            return null;
+        }
+
+        return $this->filePathOrContents;
     }
 
     /**
@@ -76,5 +86,25 @@ class PrivateKey extends ArrayAdapter
     public function getName()
     {
         return $this->name;
+    }
+
+    /**
+     * @return string
+     */
+    public function getContents()
+    {
+        if ($this->isFile()) {
+            return null;
+        }
+
+        return $this->filePathOrContents;
+    }
+
+    /**
+     * @return bool
+     */
+    public function isFile()
+    {
+        return $this->isFile;
     }
 }

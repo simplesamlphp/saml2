@@ -54,6 +54,13 @@ class PrivateKeyLoaderTest extends \PHPUnit_Framework_TestCase
                     'foo bar baz'
                 )
             ),
+            'private key as contents'   => array(
+                new PrivateKey(
+                    file_get_contents(dirname(__FILE__) . '/File/a_fake_private_key_file.pem'),
+                    null,
+                    true
+                )
+            ),
         );
     }
 }
