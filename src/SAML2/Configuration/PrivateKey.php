@@ -5,6 +5,7 @@ declare(strict_types=1);
 namespace SAML2\Configuration;
 
 use SAML2\Exception\InvalidArgumentException;
+use SAML2\Exception\RuntimeException;
 
 /**
  * Configuration of a private key.
@@ -17,7 +18,7 @@ class PrivateKey extends ArrayAdapter
     /**
      * @var string
      */
-    private $filePath;
+    private $filePathOrContents;
 
     /**
      * @var string|null
@@ -29,20 +30,25 @@ class PrivateKey extends ArrayAdapter
      */
     private $name;
 
+    /**
+     * @var bool
+     */
+    private $isFile;
 
     /**
      * Constructor for PrivateKey.
      *
-     * @param string $filePath
+     * @param string $filePathOrContents
      * @param string $name
      * @param string $passphrase
-     * @throws \Exception
+     * @param bool $isFile
      */
-    public function __construct(string $filePath, string $name, string $passphrase = '')
+    public function __construct(string $filePathOrContents, string $name, string $passphrase = '', bool $isFile = true)
     {
-        $this->filePath = $filePath;
+        $this->filePathOrContents = $filePathOrContents;
         $this->passphrase = $passphrase;
         $this->name = $name;
+        $this->isFile = $isFile;
     }
 
 
@@ -51,7 +57,11 @@ class PrivateKey extends ArrayAdapter
      */
     public function getFilePath() : string
     {
-        return $this->filePath;
+        if (!$this->isFile()) {
+            throw new RuntimeException('No path provided.');
+        }
+
+        return $this->filePathOrContents;
     }
 
 
@@ -79,5 +89,25 @@ class PrivateKey extends ArrayAdapter
     public function getName() : string
     {
         return $this->name;
+    }
+
+    /**
+     * @return string
+     */
+    public function getContents() : string
+    {
+        if ($this->isFile()) {
+            throw new RuntimeException('No contents provided');
+        }
+
+        return $this->filePathOrContents;
+    }
+
+    /**
+     * @return bool
+     */
+    public function isFile() : bool
+    {
+        return $this->isFile;
     }
 }
