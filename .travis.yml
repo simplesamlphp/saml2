@@ -9,7 +9,7 @@ matrix:
 
 before_script:
   - if [[ "$TRAVIS_PHP_VERSION" == "7.2" ]]; then composer require php-coveralls/php-coveralls; fi
-  - if [[ "$TRAVIS_PHP_VERSION" == "7.3" ]]; then composer require --dev vimeo/psalm:1.1.9; fi
+  - if [[ "$TRAVIS_PHP_VERSION" == "7.3" ]]; then composer require --dev vimeo/psalm; fi
 
 script:
   - tools/check-syntax.sh
