@@ -2,6 +2,7 @@
 
 namespace SAML2\XML\mdui;
 
+use DOMElement;
 use SAML2\Utils;
 use SAML2\XML\Chunk;
 use Webmozart\Assert\Assert;
@@ -116,6 +117,7 @@ class UIInfo
      */
     public function setKeywords(array $keywords)
     {
+        Assert::allIsInstanceOf($keywords, Keywords::class);
         $this->Keywords = $keywords;
     }
 
