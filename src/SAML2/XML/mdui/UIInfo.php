@@ -122,7 +122,7 @@ class UIInfo
      */
     public function setKeywords(array $keywords) : void
     {
-        Assert::allIsInstanceOf($employees, Keywords::class);
+        Assert::allIsInstanceOf($keywords, Keywords::class);
         $this->Keywords = $keywords;
     }
 
