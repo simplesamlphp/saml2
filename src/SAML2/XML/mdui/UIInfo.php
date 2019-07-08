@@ -5,9 +5,9 @@ declare(strict_types=1);
 namespace SAML2\XML\mdui;
 
 use DOMElement;
-
 use SAML2\Utils;
 use SAML2\XML\Chunk;
+use Webmozart\Assert\Assert;
 
 /**
  * Class for handling the metadata extensions for login and discovery user interface
@@ -122,6 +122,7 @@ class UIInfo
      */
     public function setKeywords(array $keywords) : void
     {
+        Assert::allIsInstanceOf($employees, Keywords::class);
         $this->Keywords = $keywords;
     }
 
