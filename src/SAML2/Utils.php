@@ -187,8 +187,8 @@ class Utils
      * Do an XPath query on an XML node.
      *
      * @param  \DOMNode $node  The XML node.
-     * @param  string  $query The query.
-     * @return \DOMElement[]    Array with matching DOM nodes.
+     * @param  string  $query  The query.
+     * @return \DOMNode[]      Array with matching DOM nodes.
      */
     public static function xpQuery(\DOMNode $node, $query)
     {
