@@ -27,6 +27,16 @@ class Constants
     const AC_UNSPECIFIED = 'urn:oasis:names:tc:SAML:2.0:ac:classes:unspecified';
 
     /**
+     * Subject identifier attribute
+     */
+    const ATTR_SUBJECT_ID = 'urn:oasis:names:tc:SAML:attribute:subject-id';
+
+    /**
+     * Pairwise identifier attribute
+     */
+    const ATTR_PAIRWISE_ID = 'urn:oasis:names:tc:SAML:attribute:pairwise-id';
+
+    /**
      * The URN for the HTTP-POST binding.
      */
     const BINDING_HTTP_POST = 'urn:oasis:names:tc:SAML:2.0:bindings:HTTP-POST';
