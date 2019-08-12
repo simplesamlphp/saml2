@@ -87,7 +87,7 @@
     <target name="phpcs"
             description="Find coding standard violations using PHP_CodeSniffer">
         <exec executable="vendor/bin/phpcs" failonerror="true">
-            <arg value="--standard=tools/phpcs/ruleset.xml"/>
+            <arg value="--standard=phpcs.xml"/>
             <arg value="--extensions=php"/>
             <arg path="src"/>
         </exec>
@@ -97,7 +97,7 @@
             description="Find coding standard violations using PHP_CodeSniffer creating a log file for the continuous integration server">
         <exec executable="vendor/bin/phpcs" failonerror="true">
             <arg value="--report=full"/>
-            <arg value="--standard=tools/phpcs/ruleset.xml"/>
+            <arg value="--standard=phpcs.xml"/>
             <arg value="--warning-severity=0"/>
             <arg value="--extensions=php"/>
             <arg path="src"/>
@@ -112,13 +112,13 @@
 
     <target name="phpunit" description="Run unit tests with PHPUnit">
         <exec executable="vendor/bin/phpunit" failonerror="true">
-            <arg line="--configuration=${basedir}/tools/phpunit"/>
+            <arg line="--configuration=${basedir}"/>
         </exec>
     </target>
 
     <target name="phpunit-ci" description="Run unit tests with PHPUnit">
         <exec executable="vendor/bin/phpunit" failonerror="true">
-            <arg line="--configuration=${basedir}/tools/phpunit"/>
+            <arg line="--configuration=${basedir}"/>
             <arg line="--coverage-clover=${basedir}/build/artifacts/coverage/clover.xml"/>
         </exec>
     </target>

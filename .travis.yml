@@ -12,7 +12,7 @@ before_script:
   - if [[ "$TRAVIS_PHP_VERSION" == "7.3" ]]; then composer require --dev vimeo/psalm; fi
 
 script:
-  - tools/check-syntax.sh
+  - vendor/simplesamlphp/simplesamlphp-test-framework/bin/check-syntax-php.sh
   - ant
   - if [[ "$TRAVIS_PHP_VERSION" == "7.3" ]]; then vendor/bin/psalm; fi
 

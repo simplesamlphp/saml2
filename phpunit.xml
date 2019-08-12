@@ -8,15 +8,15 @@
          convertWarningsToExceptions="true"
          processIsolation="false"
          stopOnFailure="false"
-         bootstrap="./../../tests/autoload.php">
+         bootstrap="./tests/autoload.php">
     <testsuites>
         <testsuite name="Test Suite">
-            <directory>./../../tests</directory>
+            <directory>./tests</directory>
         </testsuite>
     </testsuites>
     <filter>
         <whitelist processUncoveredFilesFromWhitelist="true">
-            <directory>./../../src</directory>
+            <directory>./src</directory>
         </whitelist>
     </filter>
     <listeners>
