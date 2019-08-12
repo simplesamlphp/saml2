@@ -13,7 +13,6 @@ before_script:
 
 script:
   - vendor/simplesamlphp/simplesamlphp-test-framework/bin/check-syntax-php.sh
-  - ant
   - if [[ "$TRAVIS_PHP_VERSION" == "7.3" ]]; then vendor/bin/psalm; fi
 
 after_script:
