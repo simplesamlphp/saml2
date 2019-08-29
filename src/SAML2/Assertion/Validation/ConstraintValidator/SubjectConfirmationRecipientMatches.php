@@ -46,7 +46,7 @@ class SubjectConfirmationRecipientMatches implements
             $result->addError(sprintf(
                 'Recipient in SubjectConfirmationData ("%s") does not match the current destination ("%s")',
                 $recipient,
-                $this->destination
+                strval($this->destination)
             ));
         }
     }

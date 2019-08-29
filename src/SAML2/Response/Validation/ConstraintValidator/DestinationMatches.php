@@ -43,7 +43,7 @@ final class DestinationMatches implements
             $result->addError(sprintf(
                 'Destination in response "%s" does not match the expected destination "%s"',
                 $destination,
-                $this->expectedDestination
+                strval($this->expectedDestination)
             ));
         }
     }

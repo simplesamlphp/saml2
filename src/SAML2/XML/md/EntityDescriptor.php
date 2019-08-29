@@ -47,12 +47,7 @@ class EntityDescriptor extends SignedElementHelper
      *
      * Array of \SAML2\XML\md\RoleDescriptor objects (and subclasses of RoleDescriptor).
      *
-     * @var (\SAML2\XML\md\UnknownRoleDescriptor|
-     *       \SAML2\XML\md\IDPSSODescriptor|
-     *       \SAML2\XML\md\SPSSODescriptor|
-     *       \SAML2\XML\md\AuthnAuthorityDescriptor|
-     *       \SAML2\XML\md\AttributeAuthorityDescriptor|
-     *       \SAML2\XML\md\PDPDescriptor)[]
+     * @var \SAML2\XML\md\RoleDescriptor[]
      */
     private $RoleDescriptor = [];
 
@@ -335,12 +330,7 @@ class EntityDescriptor extends SignedElementHelper
     /**
      * Add the value to the RoleDescriptor property.
      *
-     * @param \SAML2\XML\md\UnknownRoleDescriptor|
-     *        \SAML2\XML\md\IDPSSODescriptor|
-     *        \SAML2\XML\md\SPSSODescriptor|
-     *        \SAML2\XML\md\AuthnAuthorityDescriptor|
-     *        \SAML2\XML\md\AttributeAuthorityDescriptor|
-     *        \SAML2\XML\md\PDPDescriptor $roleDescriptor
+     * @param \SAML2\XML\md\RoleDescriptor $roleDescriptor
      * @return void
      */
     public function addRoleDescriptor(RoleDescriptor $roleDescriptor) : void
