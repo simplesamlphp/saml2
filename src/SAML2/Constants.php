@@ -420,4 +420,9 @@ class Constants
      * Second-level status code.
      */
     const STATUS_UNSUPPORTED_BINDING = 'urn:oasis:names:tc:SAML:2.0:status:UnsupportedBinding';
+
+    /**
+     * The name of the EntityAttribute used to indicate the subject-id needs of a Service Provider.
+     */
+    const SUBJECT_ID_REQ = 'urn:oasis:names:tc:SAML:profiles:subject-id:req';
 }
