@@ -297,12 +297,7 @@ class EntityDescriptor extends SignedElementHelper
     /**
      * Collect the value of the RoleDescriptor property.
      *
-     * @return (\SAML2\XML\md\UnknownRoleDescriptor|
-     *          \SAML2\XML\md\IDPSSODescriptor|
-     *          \SAML2\XML\md\SPSSODescriptor|
-     *          \SAML2\XML\md\AuthnAuthorityDescriptor|
-     *          \SAML2\XML\md\AttributeAuthorityDescriptor|
-     *          \SAML2\XML\md\PDPDescriptor)[]
+     * @return \SAML2\XML\md\RoleDescriptor[]
      */
     public function getRoleDescriptor() : array
     {
@@ -313,12 +308,7 @@ class EntityDescriptor extends SignedElementHelper
     /**
      * Set the value of the RoleDescriptor property.
      *
-     * @param (\SAML2\XML\md\UnknownRoleDescriptor|
-     *         \SAML2\XML\md\IDPSSODescriptor|
-     *         \SAML2\XML\md\SPSSODescriptor|
-     *         \SAML2\XML\md\AuthnAuthorityDescriptor|
-     *         \SAML2\XML\md\AttributeAuthorityDescriptor|
-     *         \SAML2\XML\md\PDPDescriptor)[] $roleDescriptor
+     * @param \SAML2\XML\md\RoleDescriptor[] $roleDescriptor
      * @return void
      */
     public function setRoleDescriptor(array $roleDescriptor) : void
