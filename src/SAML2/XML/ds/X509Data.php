@@ -40,7 +40,7 @@ class X509Data
             return;
         }
 
-        for ($n = $xml->firstChild;; $n = $n->nextSibling) {
+        for ($n = $xml->firstChild; $n !== null; $n = $n->nextSibling) {
             if (!($n instanceof DOMElement)) {
                 continue;
             }
