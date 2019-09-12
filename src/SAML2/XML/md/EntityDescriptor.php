@@ -22,9 +22,9 @@ class EntityDescriptor extends SignedElementHelper
     /**
      * The entityID this EntityDescriptor represents.
      *
-     * @var string|null
+     * @var string
      */
-    private $entityID = null;
+    private $entityID;
 
     /**
      * The ID of this element.
@@ -175,9 +175,9 @@ class EntityDescriptor extends SignedElementHelper
     /**
      * Collect the value of the entityID property.
      *
-     * @return string|null
+     * @return string
      */
-    public function getEntityID() : ?string
+    public function getEntityID() : string
     {
         return $this->entityID;
     }
