@@ -502,6 +502,7 @@ class Utils
             throw new \Exception('Failed to parse decrypted XML. Maybe the wrong sharedkey was used?', 0, $e);
         }
 
+        /** @psalm-suppress PossiblyNullPropertyFetch */
         $decryptedElement = $newDoc->firstChild->firstChild;
         if (!($decryptedElement instanceof DOMElement)) {
             throw new \Exception('Missing decrypted element or it was not actually a DOMElement.');
