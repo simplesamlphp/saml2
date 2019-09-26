@@ -106,7 +106,7 @@ SOAP;
         }
 
         $document = DOMDocumentFactory::fromString($postText);
-        /** @var string $xml */
+        /** @var DOMNode $xml */
         $xml = $document->firstChild;
         Utils::getContainer()->debugMessage($document->documentElement, 'in');
         /** @var \DOMElement[] $results */

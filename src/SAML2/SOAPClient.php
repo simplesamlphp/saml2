@@ -248,6 +248,7 @@ class SOAPClient
      */
     private function getSOAPFault(DOMDocument $soapMessage) : ?string
     {
+        /** @psalm-suppress PossiblyNullArgument */
         $soapFault = Utils::xpQuery($soapMessage->firstChild, '/soap-env:Envelope/soap-env:Body/soap-env:Fault');
 
         if (empty($soapFault)) {
@@ -255,7 +256,7 @@ class SOAPClient
 
             return null;
         }
-        /** @var string $soapFaultElement */
+        /** @var DOMNode $soapFaultElement */
         $soapFaultElement = $soapFault[0];
         // There is a fault element but we haven't found out what the fault string is
         $soapFaultString = "Unknown fault string found";
