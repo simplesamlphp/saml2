@@ -139,6 +139,7 @@ class Utils
             throw new \Exception('Unsupported signing algorithm.');
         }
 
+        /** @psalm-suppress PossiblyNullArgument */
         $keyInfo = openssl_pkey_get_details($key->key);
         if ($keyInfo === false) {
             throw new \Exception('Unable to get key details from XMLSecurityKey.');
@@ -450,6 +451,8 @@ class Utils
                 if ($encryptedKey === null) {
                     throw new \Exception('No CipherValue available in the encrypted element.');
                 }
+
+                /** @psalm-suppress PossiblyNullArgument */
                 $pkey = openssl_pkey_get_details($symmetricKeyInfo->key);
                 $pkey = sha1(serialize($pkey), true);
                 $key = sha1($encryptedKey.$pkey, true);
