@@ -146,7 +146,7 @@ class SigningMethod
      */
     public function toXML(DOMElement $parent) : DOMElement
     {
-        Assert::stringNotEmpty($this->Algorithm, 'Cannot convert SigningMethod to XML without an Algorithm set.');
+        Assert::notEmpty($this->Algorithm, 'Cannot convert SigningMethod to XML without an Algorithm set.');
         Assert::nullOrInteger($this->MinKeySize);
         Assert::nullOrInteger($this->MaxKeySize);
 

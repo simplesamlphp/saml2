@@ -76,7 +76,7 @@ class DigestMethod
      */
     public function toXML(DOMElement $parent) : DOMElement
     {
-        Assert::stringNotEmpty($this->Algorithm, 'Cannot convert DigestMethod to XML without an Algorithm set.');
+        Assert::notEmpty($this->Algorithm, 'Cannot convert DigestMethod to XML without an Algorithm set.');
 
         $doc = $parent->ownerDocument;
         $e = $doc->createElementNS(Common::NS, 'alg:DigestMethod');
