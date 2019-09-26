@@ -489,6 +489,7 @@ abstract class Message extends SignedElement
              * after the issuer node.
              */
             $issuerNode = $root->firstChild;
+            /** @psalm-suppress PossiblyNullPropertyFetch */
             $insertBefore = $issuerNode->nextSibling;
         } else {
             /* No issuer node - the signature element should be the first element. */
