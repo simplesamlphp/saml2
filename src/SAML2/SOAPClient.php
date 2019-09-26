@@ -220,6 +220,7 @@ class SOAPClient
     public static function validateSSL(string $data, XMLSecurityKey $key) : void
     {
         $container = ContainerSingleton::getInstance();
+        /** @psalm-suppress PossiblyNullArgument */
         $keyInfo = openssl_pkey_get_details($key->key);
         if ($keyInfo === false) {
             throw new \Exception('Unable to get key details from XMLSecurityKey.');
@@ -254,6 +255,7 @@ class SOAPClient
 
             return null;
         }
+        /** @var string $soapFaultElement */
         $soapFaultElement = $soapFault[0];
         // There is a fault element but we haven't found out what the fault string is
         $soapFaultString = "Unknown fault string found";
