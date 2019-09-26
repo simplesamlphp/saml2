@@ -163,6 +163,7 @@ class Logger implements LoggerInterface
      */
     public function log($level, $message, array $context = []) : void
     {
+        /** @psalm-suppress RedundantConditionGivenDocblockType */
         Assert::string($message);
 
         switch ($level) {

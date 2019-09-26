@@ -24,6 +24,7 @@ class KeyCollection extends ArrayCollection
      */
     public function add($key) : void
     {
+        /** @psalm-suppress RedundantConditionGivenDocblockType */
         Assert::isInstanceOf($key, Key::class);
         parent::add($key);
     }
