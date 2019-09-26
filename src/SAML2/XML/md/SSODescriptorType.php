@@ -220,7 +220,7 @@ abstract class SSODescriptorType extends RoleDescriptor
      * @param  \DOMElement $parent The EntityDescriptor we should append this SSODescriptorType to.
      * @return \DOMElement The generated SSODescriptor DOMElement.
      */
-    protected function toXML(DOMElement $parent) : DOMElement
+    public function toXML(DOMElement $parent) : DOMElement
     {
         $e = parent::toXML($parent);
 
