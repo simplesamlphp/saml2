@@ -398,7 +398,7 @@ class RoleDescriptor extends SignedElementHelper
      * @param \DOMElement $parent The EntityDescriptor we should append this endpoint to.
      * @return \DOMElement
      */
-    protected function toXML(DOMElement $parent) : DOMElement
+    public function toXML(DOMElement $parent) : DOMElement
     {
         $e = $parent->ownerDocument->createElementNS(Constants::NS_MD, $this->elementName);
         $parent->appendChild($e);
