@@ -3,7 +3,7 @@ Notes for the SimpleSAMLphp SAML2 developer
 
 Coding standard
 ---------------
-PSR-0, PSR-1 and PSR-2.
+PSR-0, PSR-1 and PSR-12.
 Test with the PHPCS configuration in tools/phpcs/ruleset.xml
 (note if you have PHPStorm you can use this to turn on the PHPCS inspection).
 
