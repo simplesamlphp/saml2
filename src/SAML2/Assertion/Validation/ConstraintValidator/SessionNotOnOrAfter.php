@@ -17,7 +17,7 @@ class SessionNotOnOrAfter implements
      * @param Result $result
      * @return void
      */
-    public function validate(Assertion $assertion, Result $result) : void
+    public function validate(Assertion $assertion, Result $result): void
     {
         $sessionNotOnOrAfterTimestamp = $assertion->getSessionNotOnOrAfter();
         $currentTime = Temporal::getTime();

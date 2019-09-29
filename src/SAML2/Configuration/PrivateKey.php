@@ -12,8 +12,8 @@ use SAML2\Exception\RuntimeException;
  */
 class PrivateKey extends ArrayAdapter
 {
-    const NAME_NEW     = 'new';
-    const NAME_DEFAULT = 'default';
+    public const NAME_NEW     = 'new';
+    public const NAME_DEFAULT = 'default';
 
     /**
      * @var string
@@ -55,7 +55,7 @@ class PrivateKey extends ArrayAdapter
     /**
      * @return string
      */
-    public function getFilePath() : string
+    public function getFilePath(): string
     {
         if (!$this->isFile()) {
             throw new RuntimeException('No path provided.');
@@ -68,7 +68,7 @@ class PrivateKey extends ArrayAdapter
     /**
      * @return bool
      */
-    public function hasPassPhrase() : bool
+    public function hasPassPhrase(): bool
     {
         return $this->passphrase !== null;
     }
@@ -77,7 +77,7 @@ class PrivateKey extends ArrayAdapter
     /**
      * @return string|null
      */
-    public function getPassPhrase() : ?string
+    public function getPassPhrase(): ?string
     {
         return $this->passphrase;
     }
@@ -86,7 +86,7 @@ class PrivateKey extends ArrayAdapter
     /**
      * @return string
      */
-    public function getName() : string
+    public function getName(): string
     {
         return $this->name;
     }
@@ -94,7 +94,7 @@ class PrivateKey extends ArrayAdapter
     /**
      * @return string
      */
-    public function getContents() : string
+    public function getContents(): string
     {
         if ($this->isFile()) {
             throw new RuntimeException('No contents provided');
@@ -106,7 +106,7 @@ class PrivateKey extends ArrayAdapter
     /**
      * @return bool
      */
-    public function isFile() : bool
+    public function isFile(): bool
     {
         return $this->isFile;
     }

@@ -12,7 +12,7 @@ use SAML2\XML\saml\NameID;
  */
 class AttributeQueryTest extends \PHPUnit\Framework\TestCase
 {
-    public function testMarshalling() : void
+    public function testMarshalling(): void
     {
         $attributeQuery = new AttributeQuery();
         $nameId = new NameID();
@@ -72,7 +72,7 @@ class AttributeQueryTest extends \PHPUnit\Framework\TestCase
     }
 
 
-    public function testUnmarshalling() : void
+    public function testUnmarshalling(): void
     {
         $xml = <<<XML
   <samlp:AttributeQuery xmlns:saml="urn:oasis:names:tc:SAML:2.0:assertion" xmlns:samlp="urn:oasis:names:tc:SAML:2.0:protocol" ID="aaf23196-1773-2113-474a-fe114412ab72" Version="2.0" IssueInstant="2017-09-06T11:49:27Z">
@@ -117,7 +117,7 @@ XML;
     }
 
 
-    public function testAttributeNameFormat() : void
+    public function testAttributeNameFormat(): void
     {
         $fmt_uri = 'urn:oasis:names:tc:SAML:2.0:attrname-format:uri';
 
@@ -160,7 +160,7 @@ XML;
     }
 
 
-    public function testNoNameFormatDefaultsToUnspecified() : void
+    public function testNoNameFormatDefaultsToUnspecified(): void
     {
         $xml = <<<XML
   <samlp:AttributeQuery xmlns:saml="urn:oasis:names:tc:SAML:2.0:assertion" xmlns:samlp="urn:oasis:names:tc:SAML:2.0:protocol" ID="aaf23196-1773-2113-474a-fe114412ab72" Version="2.0" IssueInstant="2017-09-06T11:49:27Z">
@@ -184,7 +184,7 @@ XML;
     }
 
 
-    public function testMultiNameFormatDefaultsToUnspecified() : void
+    public function testMultiNameFormatDefaultsToUnspecified(): void
     {
         $xml = <<<XML
   <samlp:AttributeQuery xmlns:saml="urn:oasis:names:tc:SAML:2.0:assertion" xmlns:samlp="urn:oasis:names:tc:SAML:2.0:protocol" ID="aaf23196-1773-2113-474a-fe114412ab72" Version="2.0" IssueInstant="2017-09-06T11:49:27Z">
@@ -223,7 +223,7 @@ XML;
      * Each specified attribute requires a Name element, otherwise exception
      * is thrown.
      */
-    public function testMissingNameOnAttributeThrowsException() : void
+    public function testMissingNameOnAttributeThrowsException(): void
     {
         $xml = <<<XML
   <samlp:AttributeQuery xmlns:saml="urn:oasis:names:tc:SAML:2.0:assertion" xmlns:samlp="urn:oasis:names:tc:SAML:2.0:protocol" ID="aaf23196-1773-2113-474a-fe114412ab72" Version="2.0" IssueInstant="2017-09-06T11:49:27Z">
@@ -254,7 +254,7 @@ XML;
     }
 
 
-    public function testNoSubjectThrowsException() : void
+    public function testNoSubjectThrowsException(): void
     {
         $xml = <<<XML
   <samlp:AttributeQuery xmlns:saml="urn:oasis:names:tc:SAML:2.0:assertion" xmlns:samlp="urn:oasis:names:tc:SAML:2.0:protocol" ID="aaf23196-1773-2113-474a-fe114412ab72" Version="2.0" IssueInstant="2017-09-06T11:49:27Z">
@@ -272,7 +272,7 @@ XML;
     }
 
 
-    public function testTooManySubjectsThrowsException() : void
+    public function testTooManySubjectsThrowsException(): void
     {
         $xml = <<<XML
   <samlp:AttributeQuery xmlns:saml="urn:oasis:names:tc:SAML:2.0:assertion" xmlns:samlp="urn:oasis:names:tc:SAML:2.0:protocol" ID="aaf23196-1773-2113-474a-fe114412ab72" Version="2.0" IssueInstant="2017-09-06T11:49:27Z">
@@ -296,7 +296,7 @@ XML;
     }
 
 
-    public function testNoNameIDinSubjectThrowsException() : void
+    public function testNoNameIDinSubjectThrowsException(): void
     {
         $xml = <<<XML
   <samlp:AttributeQuery xmlns:saml="urn:oasis:names:tc:SAML:2.0:assertion" xmlns:samlp="urn:oasis:names:tc:SAML:2.0:protocol" ID="aaf23196-1773-2113-474a-fe114412ab72" Version="2.0" IssueInstant="2017-09-06T11:49:27Z">
@@ -317,7 +317,7 @@ XML;
     }
 
 
-    public function testTooManyNameIDsThrowsException() : void
+    public function testTooManyNameIDsThrowsException(): void
     {
         $xml = <<<XML
   <samlp:AttributeQuery xmlns:saml="urn:oasis:names:tc:SAML:2.0:assertion" xmlns:samlp="urn:oasis:names:tc:SAML:2.0:protocol" ID="aaf23196-1773-2113-474a-fe114412ab72" Version="2.0" IssueInstant="2017-09-06T11:49:27Z">
@@ -337,5 +337,4 @@ XML;
         $this->expectException(\Exception::class, 'More than one <saml:NameID> in <saml:Subject>');
         $aq = new AttributeQuery($document->firstChild);
     }
-
 }

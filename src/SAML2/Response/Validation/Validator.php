@@ -18,7 +18,7 @@ class Validator
      * @param ConstraintValidator $constraint
      * @return void
      */
-    public function addConstraintValidator(ConstraintValidator $constraint) : void
+    public function addConstraintValidator(ConstraintValidator $constraint): void
     {
         $this->constraints[] = $constraint;
     }
@@ -28,7 +28,7 @@ class Validator
      * @param Response $response
      * @return Result
      */
-    public function validate(Response $response) : Result
+    public function validate(Response $response): Result
     {
         $result = new Result();
         foreach ($this->constraints as $validator) {

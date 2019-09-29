@@ -6,12 +6,11 @@ namespace SAML2\XML\saml;
 
 use DOMElement;
 use RobRichards\XMLSecLibs\XMLSecurityDSig;
-use Webmozart\Assert\Assert;
-
 use SAML2\Constants;
 use SAML2\Utils;
 use SAML2\XML\Chunk;
 use SAML2\XML\ds\KeyInfo;
+use Webmozart\Assert\Assert;
 
 /**
  * Class representing SAML 2 SubjectConfirmationData element.
@@ -67,160 +66,6 @@ class SubjectConfirmationData
 
 
     /**
-     * Collect the value of the NotBefore-property
-     *
-     * @return int|null
-     */
-    public function getNotBefore() : ?int
-    {
-        return $this->NotBefore;
-    }
-
-
-    /**
-     * Set the value of the NotBefore-property
-     *
-     * @param int|null $notBefore
-     * @return void
-     */
-    public function setNotBefore(int $notBefore = null) : void
-    {
-        $this->NotBefore = $notBefore;
-    }
-
-
-    /**
-     * Collect the value of the NotOnOrAfter-property
-     *
-     * @return int|null
-     */
-    public function getNotOnOrAfter() : ?int
-    {
-        return $this->NotOnOrAfter;
-    }
-
-
-    /**
-     * Set the value of the NotOnOrAfter-property
-     *
-     * @param int|null $notOnOrAfter
-     * @return void
-     */
-    public function setNotOnOrAfter(int $notOnOrAfter = null) : void
-    {
-        $this->NotOnOrAfter = $notOnOrAfter;
-    }
-
-
-    /**
-     * Collect the value of the Recipient-property
-     *
-     * @return string|null
-     */
-    public function getRecipient() : ?string
-    {
-        return $this->Recipient;
-    }
-
-
-    /**
-     * Set the value of the Recipient-property
-     *
-     * @param string|null $recipient
-     * @return void
-     */
-    public function setRecipient(string $recipient = null) : void
-    {
-        $this->Recipient = $recipient;
-    }
-
-
-    /**
-     * Collect the value of the InResponseTo-property
-     *
-     * @return string|null
-     */
-    public function getInResponseTo() : ?string
-    {
-        return $this->InResponseTo;
-    }
-
-
-    /**
-     * Set the value of the InResponseTo-property
-     *
-     * @param string|null $inResponseTo
-     * @return void
-     */
-    public function setInResponseTo(string $inResponseTo = null) : void
-    {
-        $this->InResponseTo = $inResponseTo;
-    }
-
-
-    /**
-     * Collect the value of the Address-property
-     *
-     * @return string|null
-     */
-    public function getAddress() : ?string
-    {
-        return $this->Address;
-    }
-
-
-    /**
-     * Set the value of the Address-property
-     *
-     * @param string|null $address
-     * @return void
-     */
-    public function setAddress(string $address = null) : void
-    {
-        if (!is_null($address) && !filter_var($address, FILTER_VALIDATE_IP, FILTER_FLAG_IPV4 | FILTER_FLAG_IPV6)) {
-            Utils::getContainer()->getLogger()->warning(sprintf('Provided argument (%s) is not a valid IP address.', $address));
-        }
-        $this->Address = $address;
-    }
-
-
-    /**
-     * Collect the value of the info-property
-     *
-     * @return (\SAML2\XML\ds\KeyInfo|\SAML2\XML\Chunk)[]
-     */
-    public function getInfo() : array
-    {
-        return $this->info;
-    }
-
-
-    /**
-     * Set the value of the info-property
-     *
-     * @param (\SAML2\XML\ds\KeyInfo|\SAML2\XML\Chunk)[] $info
-     * @return void
-     */
-    public function setInfo(array $info) : void
-    {
-        $this->info = $info;
-    }
-
-
-    /**
-     * Add the value to the info-property
-     *
-     * @param \SAML2\XML\Chunk|\SAML2\XML\ds\KeyInfo $info
-     * @return void
-     */
-    public function addInfo($info) : void
-    {
-        Assert::isInstanceOfAny($info, [Chunk::class, KeyInfo::class]);
-        $this->info[] = $info;
-    }
-
-
-    /**
      * Initialize (and parse) a SubjectConfirmationData element.
      *
      * @param \DOMElement|null $xml The XML element we should load.
@@ -267,12 +112,168 @@ class SubjectConfirmationData
 
 
     /**
+     * Collect the value of the NotBefore-property
+     *
+     * @return int|null
+     */
+    public function getNotBefore(): ?int
+    {
+        return $this->NotBefore;
+    }
+
+
+    /**
+     * Set the value of the NotBefore-property
+     *
+     * @param int|null $notBefore
+     * @return void
+     */
+    public function setNotBefore(int $notBefore = null): void
+    {
+        $this->NotBefore = $notBefore;
+    }
+
+
+    /**
+     * Collect the value of the NotOnOrAfter-property
+     *
+     * @return int|null
+     */
+    public function getNotOnOrAfter(): ?int
+    {
+        return $this->NotOnOrAfter;
+    }
+
+
+    /**
+     * Set the value of the NotOnOrAfter-property
+     *
+     * @param int|null $notOnOrAfter
+     * @return void
+     */
+    public function setNotOnOrAfter(int $notOnOrAfter = null): void
+    {
+        $this->NotOnOrAfter = $notOnOrAfter;
+    }
+
+
+    /**
+     * Collect the value of the Recipient-property
+     *
+     * @return string|null
+     */
+    public function getRecipient(): ?string
+    {
+        return $this->Recipient;
+    }
+
+
+    /**
+     * Set the value of the Recipient-property
+     *
+     * @param string|null $recipient
+     * @return void
+     */
+    public function setRecipient(string $recipient = null): void
+    {
+        $this->Recipient = $recipient;
+    }
+
+
+    /**
+     * Collect the value of the InResponseTo-property
+     *
+     * @return string|null
+     */
+    public function getInResponseTo(): ?string
+    {
+        return $this->InResponseTo;
+    }
+
+
+    /**
+     * Set the value of the InResponseTo-property
+     *
+     * @param string|null $inResponseTo
+     * @return void
+     */
+    public function setInResponseTo(string $inResponseTo = null): void
+    {
+        $this->InResponseTo = $inResponseTo;
+    }
+
+
+    /**
+     * Collect the value of the Address-property
+     *
+     * @return string|null
+     */
+    public function getAddress(): ?string
+    {
+        return $this->Address;
+    }
+
+
+    /**
+     * Set the value of the Address-property
+     *
+     * @param string|null $address
+     * @return void
+     */
+    public function setAddress(string $address = null): void
+    {
+        if (!is_null($address) && !filter_var($address, FILTER_VALIDATE_IP, FILTER_FLAG_IPV4 | FILTER_FLAG_IPV6)) {
+            Utils::getContainer()->getLogger()->warning(
+                sprintf('Provided argument (%s) is not a valid IP address.', $address)
+            );
+        }
+        $this->Address = $address;
+    }
+
+
+    /**
+     * Collect the value of the info-property
+     *
+     * @return (\SAML2\XML\ds\KeyInfo|\SAML2\XML\Chunk)[]
+     */
+    public function getInfo(): array
+    {
+        return $this->info;
+    }
+
+
+    /**
+     * Set the value of the info-property
+     *
+     * @param (\SAML2\XML\ds\KeyInfo|\SAML2\XML\Chunk)[] $info
+     * @return void
+     */
+    public function setInfo(array $info): void
+    {
+        $this->info = $info;
+    }
+
+
+    /**
+     * Add the value to the info-property
+     *
+     * @param \SAML2\XML\Chunk|\SAML2\XML\ds\KeyInfo $info
+     * @return void
+     */
+    public function addInfo($info): void
+    {
+        Assert::isInstanceOfAny($info, [Chunk::class, KeyInfo::class]);
+        $this->info[] = $info;
+    }
+
+
+    /**
      * Convert this element to XML.
      *
      * @param  \DOMElement $parent The parent element we should append this element to.
      * @return \DOMElement This element, as XML.
      */
-    public function toXML(DOMElement $parent) : DOMElement
+    public function toXML(DOMElement $parent): DOMElement
     {
         $e = $parent->ownerDocument->createElementNS(Constants::NS_SAML, 'saml:SubjectConfirmationData');
         $parent->appendChild($e);

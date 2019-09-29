@@ -14,7 +14,7 @@ class PrivateKey extends Key
      * @throws InvalidArgumentException
      * @return PrivateKey
      */
-    public static function create(string $keyContents, string $passphrase = null) : PrivateKey
+    public static function create(string $keyContents, string $passphrase = null): PrivateKey
     {
         $keyData = ['PEM' => $keyContents, self::USAGE_ENCRYPTION => true];
         if ($passphrase) {
@@ -28,7 +28,7 @@ class PrivateKey extends Key
     /**
      * @return string
      */
-    public function getKeyAsString() : string
+    public function getKeyAsString(): string
     {
         return $this->keyData['PEM'];
     }
@@ -37,7 +37,7 @@ class PrivateKey extends Key
     /**
      * @return string|null
      */
-    public function getPassphrase() : ?string
+    public function getPassphrase(): ?string
     {
         return isset($this->keyData['passphrase']) ? $this->keyData['passphrase'] : null;
     }

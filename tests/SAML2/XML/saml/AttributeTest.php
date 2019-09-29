@@ -18,7 +18,7 @@ class AttributeTest extends \PHPUnit\Framework\TestCase
     /**
      * @return void
      */
-    public function testMarshalling() : void
+    public function testMarshalling(): void
     {
         $attribute = new Attribute();
         $attribute->setName('TheName');
@@ -45,7 +45,7 @@ class AttributeTest extends \PHPUnit\Framework\TestCase
     /**
      * @return void
      */
-    public function testUnmarshalling() : void
+    public function testUnmarshalling(): void
     {
         $samlNamespace = Constants::NS_SAML;
         $document = DOMDocumentFactory::fromString(<<<XML
@@ -69,7 +69,7 @@ XML
     /**
      * @return void
      */
-    public function testUnmarshallingFailure() : void
+    public function testUnmarshallingFailure(): void
     {
         $samlNamespace = Constants::NS_SAML;
         $document = DOMDocumentFactory::fromString(<<<XML

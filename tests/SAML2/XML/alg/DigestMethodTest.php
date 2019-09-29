@@ -19,7 +19,7 @@ class DigestMethodTest extends \PHPUnit\Framework\TestCase
     /**
      * @return void
      */
-    public function testMarshalling() : void
+    public function testMarshalling(): void
     {
         $digestMethod = new DigestMethod();
         $digestMethod->setAlgorithm('http://exampleAlgorithm');
@@ -40,7 +40,7 @@ class DigestMethodTest extends \PHPUnit\Framework\TestCase
     /**
      * @return void
      */
-    public function testUnmarshalling() : void
+    public function testUnmarshalling(): void
     {
         $document = DOMDocumentFactory::fromString(<<<XML
 <alg:DigestMethod xmlns:alg="urn:oasis:names:tc:SAML:metadata:algsupport"
@@ -56,7 +56,7 @@ XML
     /**
      * @return void
      */
-    public function testMissingAlgorithmThrowsException() : void
+    public function testMissingAlgorithmThrowsException(): void
     {
         $document = DOMDocumentFactory::fromString(<<<XML
 <alg:DigestMethod xmlns:alg="urn:oasis:names:tc:SAML:metadata:algsupport" />

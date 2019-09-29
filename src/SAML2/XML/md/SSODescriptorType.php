@@ -5,7 +5,6 @@ declare(strict_types=1);
 namespace SAML2\XML\md;
 
 use DOMElement;
-
 use SAML2\Constants;
 use SAML2\Utils;
 
@@ -91,7 +90,7 @@ abstract class SSODescriptorType extends RoleDescriptor
      *
      * @return \SAML2\XML\md\IndexedEndpointType[]
      */
-    public function getArtifactResolutionService() : array
+    public function getArtifactResolutionService(): array
     {
         return $this->ArtifactResolutionService;
     }
@@ -103,7 +102,7 @@ abstract class SSODescriptorType extends RoleDescriptor
      * @param \SAML2\XML\md\IndexedEndpointType[] $artifactResolutionService
      * @return void
      */
-    public function setArtifactResolutionService(array $artifactResolutionService) : void
+    public function setArtifactResolutionService(array $artifactResolutionService): void
     {
         $this->ArtifactResolutionService = $artifactResolutionService;
     }
@@ -115,7 +114,7 @@ abstract class SSODescriptorType extends RoleDescriptor
      * @param \SAML2\XML\md\IndexedEndpointType $artifactResolutionService
      * @return void
      */
-    public function addArtifactResolutionService(IndexedEndpointType $artifactResolutionService) : void
+    public function addArtifactResolutionService(IndexedEndpointType $artifactResolutionService): void
     {
         $this->ArtifactResolutionService[] = $artifactResolutionService;
     }
@@ -126,7 +125,7 @@ abstract class SSODescriptorType extends RoleDescriptor
      *
      * @return \SAML2\XML\md\EndpointType[]
      */
-    public function getSingleLogoutService() : array
+    public function getSingleLogoutService(): array
     {
         return $this->SingleLogoutService;
     }
@@ -138,7 +137,7 @@ abstract class SSODescriptorType extends RoleDescriptor
      * @param \SAML2\XML\md\EndpointType[] $singleLogoutService
      * @return void
      */
-    public function setSingleLogoutService(array $singleLogoutService) : void
+    public function setSingleLogoutService(array $singleLogoutService): void
     {
         $this->SingleLogoutService = $singleLogoutService;
     }
@@ -150,7 +149,7 @@ abstract class SSODescriptorType extends RoleDescriptor
      * @param \SAML2\XML\md\EndpointType $singleLogoutService
      * @return void
      */
-    public function addSingleLogoutService(EndpointType $singleLogoutService) : void
+    public function addSingleLogoutService(EndpointType $singleLogoutService): void
     {
         $this->SingleLogoutService[] = $singleLogoutService;
     }
@@ -161,7 +160,7 @@ abstract class SSODescriptorType extends RoleDescriptor
      *
      * @return \SAML2\XML\md\EndpointType[]
      */
-    public function getManageNameIDService() : array
+    public function getManageNameIDService(): array
     {
         return $this->ManageNameIDService;
     }
@@ -173,7 +172,7 @@ abstract class SSODescriptorType extends RoleDescriptor
      * @param \SAML2\XML\md\EndpointType[] $manageNameIDService
      * @return void
      */
-    public function setManageNameIDService(array $manageNameIDService) : void
+    public function setManageNameIDService(array $manageNameIDService): void
     {
         $this->ManageNameIDService = $manageNameIDService;
     }
@@ -185,7 +184,7 @@ abstract class SSODescriptorType extends RoleDescriptor
      * @param \SAML2\XML\md\EndpointType $manageNameIDService
      * @return void
      */
-    public function addManageNameIDService(EndpointType $manageNameIDService) : void
+    public function addManageNameIDService(EndpointType $manageNameIDService): void
     {
         $this->ManageNameIDService[] = $manageNameIDService;
     }
@@ -196,7 +195,7 @@ abstract class SSODescriptorType extends RoleDescriptor
      *
      * @return string[]
      */
-    public function getNameIDFormat() : array
+    public function getNameIDFormat(): array
     {
         return $this->NameIDFormat;
     }
@@ -208,7 +207,7 @@ abstract class SSODescriptorType extends RoleDescriptor
      * @param string[] $nameIDFormat
      * @return void
      */
-    public function setNameIDFormat(array $nameIDFormat) : void
+    public function setNameIDFormat(array $nameIDFormat): void
     {
         $this->NameIDFormat = $nameIDFormat;
     }
@@ -220,7 +219,7 @@ abstract class SSODescriptorType extends RoleDescriptor
      * @param  \DOMElement $parent The EntityDescriptor we should append this SSODescriptorType to.
      * @return \DOMElement The generated SSODescriptor DOMElement.
      */
-    public function toXML(DOMElement $parent) : DOMElement
+    public function toXML(DOMElement $parent): DOMElement
     {
         $e = parent::toXML($parent);
 

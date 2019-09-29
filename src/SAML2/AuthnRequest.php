@@ -8,11 +8,10 @@ use DOMDocument;
 use DOMElement;
 use RobRichards\XMLSecLibs\XMLSecEnc;
 use RobRichards\XMLSecLibs\XMLSecurityKey;
-use Webmozart\Assert\Assert;
-
 use SAML2\XML\saml\NameID;
 use SAML2\XML\saml\SubjectConfirmation;
 use SAML2\Exception\InvalidArgumentException;
+use Webmozart\Assert\Assert;
 
 /**
  * Class for SAML 2 authentication request messages.
@@ -183,7 +182,7 @@ class AuthnRequest extends Request
      * @throws \Exception
      * @return void
      */
-    private function parseSubject(DOMElement $xml) : void
+    private function parseSubject(DOMElement $xml): void
     {
         /** @var \DOMElement[] $subject */
         $subject = Utils::xpQuery($xml, './saml_assertion:Subject');
@@ -226,7 +225,7 @@ class AuthnRequest extends Request
      * @throws \Exception
      * @return void
      */
-    protected function parseNameIdPolicy(DOMElement $xml) : void
+    protected function parseNameIdPolicy(DOMElement $xml): void
     {
         /** @var \DOMElement[] $nameIdPolicy */
         $nameIdPolicy = Utils::xpQuery($xml, './saml_protocol:NameIDPolicy');
@@ -251,7 +250,7 @@ class AuthnRequest extends Request
      * @param \DOMElement $xml
      * @return void
      */
-    protected function parseRequestedAuthnContext(DOMElement $xml) : void
+    protected function parseRequestedAuthnContext(DOMElement $xml): void
     {
         /** @var \DOMElement[] $requestedAuthnContext */
         $requestedAuthnContext = Utils::xpQuery($xml, './saml_protocol:RequestedAuthnContext');
@@ -285,7 +284,7 @@ class AuthnRequest extends Request
      * @throws \Exception
      * @return void
      */
-    protected function parseScoping(DOMElement $xml) : void
+    protected function parseScoping(DOMElement $xml): void
     {
         /** @var \DOMElement[] $scoping */
         $scoping = Utils::xpQuery($xml, './saml_protocol:Scoping');
@@ -320,7 +319,7 @@ class AuthnRequest extends Request
      * @param \DOMElement $xml
      * @return void
      */
-    protected function parseConditions(DOMElement $xml) : void
+    protected function parseConditions(DOMElement $xml): void
     {
         /** @var \DOMElement[] $conditions */
         $conditions = Utils::xpQuery($xml, './saml_assertion:Conditions');
@@ -351,7 +350,7 @@ class AuthnRequest extends Request
      * @see \SAML2\AuthnRequest::setNameIdPolicy()
      * @return array The NameIdPolicy.
      */
-    public function getNameIdPolicy() : array
+    public function getNameIdPolicy(): array
     {
         return $this->nameIdPolicy;
     }
@@ -368,7 +367,7 @@ class AuthnRequest extends Request
      * @param array $nameIdPolicy The NameIDPolicy.
      * @return void
      */
-    public function setNameIdPolicy(array $nameIdPolicy) : void
+    public function setNameIdPolicy(array $nameIdPolicy): void
     {
         if (isset($nameIdPolicy['Format']) && !is_string($nameIdPolicy['Format'])) {
             throw InvalidArgumentException::invalidType('string', $nameIdPolicy['Format']);
@@ -389,7 +388,7 @@ class AuthnRequest extends Request
      *
      * @return bool The ForceAuthn attribute.
      */
-    public function getForceAuthn() : bool
+    public function getForceAuthn(): bool
     {
         return $this->forceAuthn;
     }
@@ -401,7 +400,7 @@ class AuthnRequest extends Request
      * @param bool $forceAuthn The ForceAuthn attribute.
      * @return void
      */
-    public function setForceAuthn(bool $forceAuthn) : void
+    public function setForceAuthn(bool $forceAuthn): void
     {
         $this->forceAuthn = $forceAuthn;
     }
@@ -412,7 +411,7 @@ class AuthnRequest extends Request
      *
      * @return string|null The ProviderName attribute.
      */
-    public function getProviderName() : ?string
+    public function getProviderName(): ?string
     {
         return $this->ProviderName;
     }
@@ -424,7 +423,7 @@ class AuthnRequest extends Request
      * @param string $ProviderName The ProviderName attribute.
      * @return void
      */
-    public function setProviderName(string $ProviderName) : void
+    public function setProviderName(string $ProviderName): void
     {
         $this->ProviderName = $ProviderName;
     }
@@ -435,7 +434,7 @@ class AuthnRequest extends Request
      *
      * @return bool The IsPassive attribute.
      */
-    public function getIsPassive() : bool
+    public function getIsPassive(): bool
     {
         return $this->isPassive;
     }
@@ -447,7 +446,7 @@ class AuthnRequest extends Request
      * @param bool $isPassive The IsPassive attribute.
      * @return void
      */
-    public function setIsPassive(bool $isPassive) : void
+    public function setIsPassive(bool $isPassive): void
     {
         $this->isPassive = $isPassive;
     }
@@ -459,7 +458,7 @@ class AuthnRequest extends Request
      *
      * @return array The audiences.
      */
-    public function getAudiences() : array
+    public function getAudiences(): array
     {
         return $this->audiences;
     }
@@ -472,7 +471,7 @@ class AuthnRequest extends Request
      * @param array $audiences The audiences.
      * @return void
      */
-    public function setAudiences(array $audiences) : void
+    public function setAudiences(array $audiences): void
     {
         $this->audiences = $audiences;
     }
@@ -494,7 +493,7 @@ class AuthnRequest extends Request
      * @param array $IDPList List of idpEntries to scope the request to.
      * @return void
      */
-    public function setIDPList(array $IDPList) : void
+    public function setIDPList(array $IDPList): void
     {
         $this->IDPList = $IDPList;
     }
@@ -506,7 +505,7 @@ class AuthnRequest extends Request
      *
      * @return array List of idp EntityIDs from the request
      */
-    public function getIDPList() : array
+    public function getIDPList(): array
     {
         return $this->IDPList;
     }
@@ -516,7 +515,7 @@ class AuthnRequest extends Request
      * @param int $ProxyCount
      * @return void
      */
-    public function setProxyCount(int $ProxyCount) : void
+    public function setProxyCount(int $ProxyCount): void
     {
         $this->ProxyCount = $ProxyCount;
     }
@@ -525,7 +524,7 @@ class AuthnRequest extends Request
     /**
      * @return int|null
      */
-    public function getProxyCount() : ?int
+    public function getProxyCount(): ?int
     {
         return $this->ProxyCount;
     }
@@ -535,7 +534,7 @@ class AuthnRequest extends Request
      * @param array $RequesterID
      * @return void
      */
-    public function setRequesterID(array $RequesterID) : void
+    public function setRequesterID(array $RequesterID): void
     {
         $this->RequesterID = $RequesterID;
     }
@@ -544,7 +543,7 @@ class AuthnRequest extends Request
     /**
      * @return array
      */
-    public function getRequesterID() : array
+    public function getRequesterID(): array
     {
         return $this->RequesterID;
     }
@@ -555,7 +554,7 @@ class AuthnRequest extends Request
      *
      * @return string|null The AssertionConsumerServiceURL attribute.
      */
-    public function getAssertionConsumerServiceURL() : ?string
+    public function getAssertionConsumerServiceURL(): ?string
     {
         return $this->assertionConsumerServiceURL;
     }
@@ -567,7 +566,7 @@ class AuthnRequest extends Request
      * @param string|null $assertionConsumerServiceURL The AssertionConsumerServiceURL attribute.
      * @return void
      */
-    public function setAssertionConsumerServiceURL(string $assertionConsumerServiceURL = null) : void
+    public function setAssertionConsumerServiceURL(string $assertionConsumerServiceURL = null): void
     {
         $this->assertionConsumerServiceURL = $assertionConsumerServiceURL;
     }
@@ -578,7 +577,7 @@ class AuthnRequest extends Request
      *
      * @return string|null The ProtocolBinding attribute.
      */
-    public function getProtocolBinding() : ?string
+    public function getProtocolBinding(): ?string
     {
         return $this->protocolBinding;
     }
@@ -590,7 +589,7 @@ class AuthnRequest extends Request
      * @param string $protocolBinding The ProtocolBinding attribute.
      * @return void
      */
-    public function setProtocolBinding(string $protocolBinding = null) : void
+    public function setProtocolBinding(string $protocolBinding = null): void
     {
         $this->protocolBinding = $protocolBinding;
     }
@@ -601,7 +600,7 @@ class AuthnRequest extends Request
      *
      * @return int|null The AttributeConsumingServiceIndex attribute.
      */
-    public function getAttributeConsumingServiceIndex() : ?int
+    public function getAttributeConsumingServiceIndex(): ?int
     {
         return $this->attributeConsumingServiceIndex;
     }
@@ -613,7 +612,7 @@ class AuthnRequest extends Request
      * @param int|null $attributeConsumingServiceIndex The AttributeConsumingServiceIndex attribute.
      * @return void
      */
-    public function setAttributeConsumingServiceIndex(int $attributeConsumingServiceIndex = null) : void
+    public function setAttributeConsumingServiceIndex(int $attributeConsumingServiceIndex = null): void
     {
         $this->attributeConsumingServiceIndex = $attributeConsumingServiceIndex;
     }
@@ -624,7 +623,7 @@ class AuthnRequest extends Request
      *
      * @return int|null The AssertionConsumerServiceIndex attribute.
      */
-    public function getAssertionConsumerServiceIndex() : ?int
+    public function getAssertionConsumerServiceIndex(): ?int
     {
         return $this->assertionConsumerServiceIndex;
     }
@@ -636,7 +635,7 @@ class AuthnRequest extends Request
      * @param int|null $assertionConsumerServiceIndex The AssertionConsumerServiceIndex attribute.
      * @return void
      */
-    public function setAssertionConsumerServiceIndex(int $assertionConsumerServiceIndex = null) : void
+    public function setAssertionConsumerServiceIndex(int $assertionConsumerServiceIndex = null): void
     {
         $this->assertionConsumerServiceIndex = $assertionConsumerServiceIndex;
     }
@@ -647,7 +646,7 @@ class AuthnRequest extends Request
      *
      * @return array|null The RequestedAuthnContext.
      */
-    public function getRequestedAuthnContext() : ?array
+    public function getRequestedAuthnContext(): ?array
     {
         return $this->requestedAuthnContext;
     }
@@ -659,7 +658,7 @@ class AuthnRequest extends Request
      * @param array|null $requestedAuthnContext The RequestedAuthnContext.
      * @return void
      */
-    public function setRequestedAuthnContext(array $requestedAuthnContext = null) : void
+    public function setRequestedAuthnContext(array $requestedAuthnContext = null): void
     {
         $this->requestedAuthnContext = $requestedAuthnContext;
     }
@@ -671,7 +670,7 @@ class AuthnRequest extends Request
      * @throws \Exception
      * @return \SAML2\XML\saml\NameID|null The name identifier of the assertion.
      */
-    public function getNameId() : ?NameID
+    public function getNameId(): ?NameID
     {
         if ($this->encryptedNameId !== null) {
             throw new \Exception('Attempted to retrieve encrypted NameID without decrypting it first.');
@@ -687,7 +686,7 @@ class AuthnRequest extends Request
      * @param \SAML2\XML\saml\NameID|null $nameId The name identifier of the assertion.
      * @return void
      */
-    public function setNameId(NameID $nameId = null) : void
+    public function setNameId(NameID $nameId = null): void
     {
         $this->nameId = $nameId;
     }
@@ -699,7 +698,7 @@ class AuthnRequest extends Request
      * @param XMLSecurityKey $key The encryption key.
      * @return void
      */
-    public function encryptNameId(XMLSecurityKey $key) : void
+    public function encryptNameId(XMLSecurityKey $key): void
     {
         Assert::notNull($this->nameId, 'Cannot encrypt NameID if no NameID has been set.');
 
@@ -741,7 +740,7 @@ class AuthnRequest extends Request
      * @param array          $blacklist Blacklisted decryption algorithms.
      * @return void
      */
-    public function decryptNameId(XMLSecurityKey $key, array $blacklist = []) : void
+    public function decryptNameId(XMLSecurityKey $key, array $blacklist = []): void
     {
         if ($this->encryptedNameId === null) {
             /* No NameID to decrypt. */
@@ -761,7 +760,7 @@ class AuthnRequest extends Request
      *
      * @return \SAML2\XML\saml\SubjectConfirmation[]
      */
-    public function getSubjectConfirmation() : array
+    public function getSubjectConfirmation(): array
     {
         return $this->subjectConfirmation;
     }
@@ -773,7 +772,7 @@ class AuthnRequest extends Request
      * @param array \SAML2\XML\saml\SubjectConfirmation[]
      * @return void
      */
-    public function setSubjectConfirmation(array $subjectConfirmation) : void
+    public function setSubjectConfirmation(array $subjectConfirmation): void
     {
         $this->subjectConfirmation = $subjectConfirmation;
     }
@@ -784,7 +783,7 @@ class AuthnRequest extends Request
      *
      * @return \DOMElement This authentication request.
      */
-    public function toUnsignedXML() : DOMElement
+    public function toUnsignedXML(): DOMElement
     {
         $root = parent::toUnsignedXML();
 
@@ -859,11 +858,13 @@ class AuthnRequest extends Request
                         $idpEntry->setAttribute('ProviderID', $provider);
                     } elseif (is_array($provider)) {
                         foreach ($provider as $attribute => $value) {
-                            if (in_array($attribute, [
-                                'ProviderID',
-                                'Loc',
-                                'Name'
-                            ], true)) {
+                            if (
+                                in_array($attribute, [
+                                    'ProviderID',
+                                    'Loc',
+                                    'Name'
+                                ], true)
+                            ) {
                                 $idpEntry->setAttribute($attribute, $value);
                             }
                         }
@@ -887,7 +888,7 @@ class AuthnRequest extends Request
      * @param \DOMElement $root The assertion element we should add the subject to.
      * @return void
      */
-    private function addSubject(DOMElement $root) : void
+    private function addSubject(DOMElement $root): void
     {
         // If there is no nameId (encrypted or not) there is nothing to create a subject for
         if ($this->nameId === null && $this->encryptedNameId === null) {
@@ -917,7 +918,7 @@ class AuthnRequest extends Request
      * @param \DOMElement $root The request element we should add the conditions to.
      * @return void
      */
-    private function addConditions(DOMElement $root) : void
+    private function addConditions(DOMElement $root): void
     {
         if ($this->audiences !== []) {
             $document = $root->ownerDocument;

@@ -13,5 +13,5 @@ namespace SAML2\XML\mdui;
  */
 class Common
 {
-    const NS = 'urn:oasis:names:tc:SAML:metadata:ui';
+    public const NS = 'urn:oasis:names:tc:SAML:metadata:ui';
 }

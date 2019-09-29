@@ -39,7 +39,7 @@ class Response extends StatusResponse
         foreach ($xml->childNodes as $node) {
             if ($node->namespaceURI !== Constants::NS_SAML) {
                 continue;
-            } else if (!($node instanceof DOMElement)) {
+            } elseif (!($node instanceof DOMElement)) {
                 continue;
             }
 
@@ -57,7 +57,7 @@ class Response extends StatusResponse
      *
      * @return \SAML2\Assertion[]|\SAML2\EncryptedAssertion[]
      */
-    public function getAssertions() : array
+    public function getAssertions(): array
     {
         return $this->assertions;
     }
@@ -69,7 +69,7 @@ class Response extends StatusResponse
      * @param \SAML2\Assertion[]|\SAML2\EncryptedAssertion[] $assertions The assertions.
      * @return void
      */
-    public function setAssertions(array $assertions) : void
+    public function setAssertions(array $assertions): void
     {
         $this->assertions = $assertions;
     }
@@ -80,7 +80,7 @@ class Response extends StatusResponse
      *
      * @return \DOMElement This response.
      */
-    public function toUnsignedXML() : DOMElement
+    public function toUnsignedXML(): DOMElement
     {
         $root = parent::toUnsignedXML();
 

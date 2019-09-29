@@ -13,7 +13,7 @@ class X509Test extends \PHPUnit\Framework\TestCase
      * @test
      * @return void
      */
-    public function x509_certificate_contents_must_be_stripped_of_whitespace() : void
+    public function x509_certificate_contents_must_be_stripped_of_whitespace(): void
     {
         $toTest = [
             'X509Certificate' => ' Should   No Longer  Have Whitespaces'

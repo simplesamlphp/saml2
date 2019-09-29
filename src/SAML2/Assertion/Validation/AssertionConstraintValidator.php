@@ -13,5 +13,5 @@ interface AssertionConstraintValidator
      * @param Result $result
      * @return void
      */
-    public function validate(Assertion $assertion, Result $result) : void;
+    public function validate(Assertion $assertion, Result $result): void;
 }

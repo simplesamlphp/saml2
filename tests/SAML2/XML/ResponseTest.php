@@ -5,7 +5,6 @@ declare(strict_types=1);
 namespace SAML2\XML\ecp;
 
 use stdClass;
-
 use SAML2\Constants;
 use SAML2\XML\ecp\Response;
 
@@ -14,11 +13,11 @@ class ResponseTest extends \PHPUnit\Framework\TestCase
     /**
      * @return void
      */
-    public function testConstructorWithoutXML() : void
+    public function testConstructorWithoutXML(): void
     {
         $this->expectException(\TypeError::class);
 
-        $response = new Response;
+        $response = new Response();
         $response->getAssertionConsumerServiceURL();
     }
 
@@ -26,12 +25,12 @@ class ResponseTest extends \PHPUnit\Framework\TestCase
     /**
      * @return void
      */
-    public function testToXMLReturnsResponse() : void
+    public function testToXMLReturnsResponse(): void
     {
-        $doc = new \DOMDocument;
+        $doc = new \DOMDocument();
         $element = $doc->createElement('Foobar');
 
-        $response = new Response;
+        $response = new Response();
         $response->setAssertionConsumerServiceURL('https://example.com/ACS');
         $return = $response->toXML($element);
 
@@ -43,21 +42,24 @@ class ResponseTest extends \PHPUnit\Framework\TestCase
     /**
      * @return void
      */
-    public function testToXMLResponseAttributes() : void
+    public function testToXMLResponseAttributes(): void
     {
         $acs = 'https://example.com/ACS';
 
-        $doc = new \DOMDocument;
+        $doc = new \DOMDocument();
         $element = $doc->createElement('Foobar');
 
-        $response = new Response;
+        $response = new Response();
         $response->setAssertionConsumerServiceURL($acs);
         $return = $response->toXML($element);
 
         $this->assertTrue($return->hasAttributeNS(Constants::NS_SOAP, 'mustUnderstand'));
         $this->assertEquals('1', $return->getAttributeNS(Constants::NS_SOAP, 'mustUnderstand'));
         $this->assertTrue($return->hasAttributeNS(Constants::NS_SOAP, 'actor'));
-        $this->assertEquals('http://schemas.xmlsoap.org/soap/actor/next', $return->getAttributeNS(Constants::NS_SOAP, 'actor'));
+        $this->assertEquals(
+            'http://schemas.xmlsoap.org/soap/actor/next',
+            $return->getAttributeNS(Constants::NS_SOAP, 'actor')
+        );
         $this->assertTrue($return->hasAttribute('AssertionConsumerServiceURL'));
         $this->assertEquals($acs, $return->getAttribute('AssertionConsumerServiceURL'));
     }
@@ -66,12 +68,12 @@ class ResponseTest extends \PHPUnit\Framework\TestCase
     /**
      * @return void
      */
-    public function testToXMLResponseAppended() : void
+    public function testToXMLResponseAppended(): void
     {
-        $doc = new \DOMDocument;
+        $doc = new \DOMDocument();
         $element = $doc->createElement('Foobar');
 
-        $response = new Response;
+        $response = new Response();
         $response->setAssertionConsumerServiceURL('https://example.com/ACS');
         $return = $response->toXML($element);
 

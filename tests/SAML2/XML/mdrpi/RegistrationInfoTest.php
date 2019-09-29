@@ -16,7 +16,7 @@ class RegistrationInfoTest extends \PHPUnit\Framework\TestCase
     /**
      * @return void
      */
-    public function testMarshalling() : void
+    public function testMarshalling(): void
     {
         $registrationInfo = new RegistrationInfo();
         $registrationInfo->setRegistrationAuthority('https://ExampleAuthority');
@@ -36,7 +36,10 @@ class RegistrationInfoTest extends \PHPUnit\Framework\TestCase
         $this->assertCount(1, $registrationInfoElements);
         $registrationInfoElement = $registrationInfoElements[0];
 
-        $this->assertEquals('https://ExampleAuthority', $registrationInfoElement->getAttribute("registrationAuthority"));
+        $this->assertEquals(
+            'https://ExampleAuthority',
+            $registrationInfoElement->getAttribute("registrationAuthority")
+        );
         $this->assertEquals('2009-02-13T23:31:30Z', $registrationInfoElement->getAttribute("registrationInstant"));
 
         $usagePolicyElements = Utils::xpQuery(
@@ -45,9 +48,15 @@ class RegistrationInfoTest extends \PHPUnit\Framework\TestCase
         );
         $this->assertCount(2, $usagePolicyElements);
 
-        $this->assertEquals('en', $usagePolicyElements[0]->getAttributeNS("http://www.w3.org/XML/1998/namespace", "lang"));
+        $this->assertEquals(
+            'en',
+            $usagePolicyElements[0]->getAttributeNS("http://www.w3.org/XML/1998/namespace", "lang")
+        );
         $this->assertEquals('http://EnglishRegistrationPolicy', $usagePolicyElements[0]->textContent);
-        $this->assertEquals('nl', $usagePolicyElements[1]->getAttributeNS("http://www.w3.org/XML/1998/namespace", "lang"));
+        $this->assertEquals(
+            'nl',
+            $usagePolicyElements[1]->getAttributeNS("http://www.w3.org/XML/1998/namespace", "lang")
+        );
         $this->assertEquals('https://DutchRegistratiebeleid', $usagePolicyElements[1]->textContent);
     }
 
@@ -55,7 +64,7 @@ class RegistrationInfoTest extends \PHPUnit\Framework\TestCase
     /**
      * @return void
      */
-    public function testUnmarshalling() : void
+    public function testUnmarshalling(): void
     {
         $document = DOMDocumentFactory::fromString(<<<XML
 <mdrpi:RegistrationInfo xmlns:mdrpi="urn:oasis:names:tc:SAML:metadata:rpi"
@@ -86,7 +95,7 @@ XML
     /**
      * @return void
      */
-    public function testMissingPublisherThrowsException() : void
+    public function testMissingPublisherThrowsException(): void
     {
         $document = DOMDocumentFactory::fromString(<<<XML
 <mdrpi:RegistrationInfo xmlns:mdrpi="urn:oasis:names:tc:SAML:metadata:rpi"
@@ -103,7 +112,7 @@ XML
     /**
      * @return void
      */
-    public function testEmptyRegistrationAuthorityOutboundThrowsException() : void
+    public function testEmptyRegistrationAuthorityOutboundThrowsException(): void
     {
         $registrationInfo = new RegistrationInfo();
         $registrationInfo->setRegistrationAuthority('');

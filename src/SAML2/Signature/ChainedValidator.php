@@ -25,5 +25,5 @@ interface ChainedValidator extends ValidatorInterface
     public function canValidate(
         SignedElement $signedElement,
         CertificateProvider $configuration
-    ) : bool;
+    ): bool;
 }

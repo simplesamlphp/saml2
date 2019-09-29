@@ -5,7 +5,6 @@ declare(strict_types=1);
 namespace SAML2\XML\md;
 
 use DOMElement;
-
 use SAML2\Constants;
 use SAML2\Utils;
 use SAML2\XML\Chunk;
@@ -115,12 +114,12 @@ class ContactPerson
      * Retrieve the value of a child \DOMElements as an array of strings.
      *
      * @param  \DOMElement $parent The parent element.
-     * @param  string     $name   The name of the child elements.
-     * @return array      The value of the child elements.
+     * @param  string      $name   The name of the child elements.
+     * @return array       The value of the child elements.
      */
-    private static function getStringElements(\DOMElement $parent, string $name) : array
+    private static function getStringElements(\DOMElement $parent, string $name): array
     {
-        $e = Utils::xpQuery($parent, './saml_metadata:'.$name);
+        $e = Utils::xpQuery($parent, './saml_metadata:' . $name);
 
         $ret = [];
         foreach ($e as $i) {
@@ -135,18 +134,18 @@ class ContactPerson
      * Retrieve the value of a child \DOMElement as a string.
      *
      * @param  \DOMElement  $parent The parent element.
-     * @param  string      $name   The name of the child element.
+     * @param  string       $name   The name of the child element.
      * @throws \Exception
      * @return string|null The value of the child element.
      */
-    private static function getStringElement(\DOMElement $parent, string $name) : ?string
+    private static function getStringElement(\DOMElement $parent, string $name): ?string
     {
         $e = self::getStringElements($parent, $name);
         if (empty($e)) {
             return null;
         }
         if (count($e) > 1) {
-            throw new \Exception('More than one '.$name.' in '.$parent->tagName);
+            throw new \Exception('More than one ' . $name . ' in ' . $parent->tagName);
         }
 
         return $e[0];
@@ -158,7 +157,7 @@ class ContactPerson
      *
      * @return string
      */
-    public function getContactType() : string
+    public function getContactType(): string
     {
         return $this->contactType;
     }
@@ -170,7 +169,7 @@ class ContactPerson
      * @param string $contactType
      * @return void
      */
-    public function setContactType(string $contactType) : void
+    public function setContactType(string $contactType): void
     {
         $this->contactType = $contactType;
     }
@@ -181,7 +180,7 @@ class ContactPerson
      *
      * @return string|null
      */
-    public function getCompany() : ?string
+    public function getCompany(): ?string
     {
         return $this->Company;
     }
@@ -193,7 +192,7 @@ class ContactPerson
      * @param string|null $company
      * @return void
      */
-    public function setCompany(string $company = null) : void
+    public function setCompany(string $company = null): void
     {
         $this->Company = $company;
     }
@@ -204,7 +203,7 @@ class ContactPerson
      *
      * @return string|null
      */
-    public function getGivenName() : ?string
+    public function getGivenName(): ?string
     {
         return $this->GivenName;
     }
@@ -216,7 +215,7 @@ class ContactPerson
      * @param string|null $givenName
      * @return void
      */
-    public function setGivenName(string $givenName = null) : void
+    public function setGivenName(string $givenName = null): void
     {
         $this->GivenName = $givenName;
     }
@@ -227,7 +226,7 @@ class ContactPerson
      *
      * @return string|null
      */
-    public function getSurName() : ?string
+    public function getSurName(): ?string
     {
         return $this->SurName;
     }
@@ -239,7 +238,7 @@ class ContactPerson
      * @param string|null $surName
      * @return void
      */
-    public function setSurName(string $surName = null) : void
+    public function setSurName(string $surName = null): void
     {
         $this->SurName = $surName;
     }
@@ -250,7 +249,7 @@ class ContactPerson
      *
      * @return string[]
      */
-    public function getEmailAddress() : array
+    public function getEmailAddress(): array
     {
         return $this->EmailAddress;
     }
@@ -262,7 +261,7 @@ class ContactPerson
      * @param string[] $emailAddress
      * @return void
      */
-    public function setEmailAddress(array $emailAddress) : void
+    public function setEmailAddress(array $emailAddress): void
     {
         $this->EmailAddress = $emailAddress;
     }
@@ -274,7 +273,7 @@ class ContactPerson
      * @param string $emailAddress
      * @return void
      */
-    public function addEmailAddress($emailAddress) : void
+    public function addEmailAddress($emailAddress): void
     {
         $this->EmailAddress[] = $emailAddress;
     }
@@ -285,7 +284,7 @@ class ContactPerson
      *
      * @return string[]
      */
-    public function getTelephoneNumber() : array
+    public function getTelephoneNumber(): array
     {
         return $this->TelephoneNumber;
     }
@@ -297,7 +296,7 @@ class ContactPerson
      * @param string[] $telephoneNumber
      * @return void
      */
-    public function setTelephoneNumber(array $telephoneNumber) : void
+    public function setTelephoneNumber(array $telephoneNumber): void
     {
         $this->TelephoneNumber = $telephoneNumber;
     }
@@ -309,7 +308,7 @@ class ContactPerson
      * @param string $telephoneNumber
      * @return void
      */
-    public function addTelephoneNumber($telephoneNumber) : void
+    public function addTelephoneNumber($telephoneNumber): void
     {
         $this->TelephoneNumber[] = $telephoneNumber;
     }
@@ -320,7 +319,7 @@ class ContactPerson
      *
      * @return \SAML2\XML\Chunk[]
      */
-    public function getExtensions() : array
+    public function getExtensions(): array
     {
         return $this->Extensions;
     }
@@ -332,7 +331,7 @@ class ContactPerson
      * @param array $extensions
      * @return void
      */
-    public function setExtensions(array $extensions) : void
+    public function setExtensions(array $extensions): void
     {
         $this->Extensions = $extensions;
     }
@@ -344,7 +343,7 @@ class ContactPerson
      * @param \SAML2\XML\Chunk $extensions The Extensions
      * @return void
      */
-    public function addExtension(Chunk $extension) : void
+    public function addExtension(Chunk $extension): void
     {
         $this->Extensions[] = $extension;
     }
@@ -355,7 +354,7 @@ class ContactPerson
      *
      * @return string[]
      */
-    public function getContactPersonAttributes() : array
+    public function getContactPersonAttributes(): array
     {
         return $this->ContactPersonAttributes;
     }
@@ -367,7 +366,7 @@ class ContactPerson
      * @param string[] $contactPersonAttributes
      * @return void
      */
-    public function setContactPersonAttributes(array $contactPersonAttributes) : void
+    public function setContactPersonAttributes(array $contactPersonAttributes): void
     {
         $this->ContactPersonAttributes = $contactPersonAttributes;
     }
@@ -380,7 +379,7 @@ class ContactPerson
      * @param string $value
      * @return void
      */
-    public function addContactPersonAttributes(string $attr, string $value) : void
+    public function addContactPersonAttributes(string $attr, string $value): void
     {
         $this->ContactPersonAttributes[$attr] = $value;
     }
@@ -392,7 +391,7 @@ class ContactPerson
      * @param  \DOMElement $parent The element we should add this contact to.
      * @return \DOMElement The new ContactPerson-element.
      */
-    public function toXML(DOMElement $parent) : DOMElement
+    public function toXML(DOMElement $parent): DOMElement
     {
         $doc = $parent->ownerDocument;
 

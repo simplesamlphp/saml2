@@ -24,10 +24,9 @@ class ExtensionsTest extends \PHPUnit\Framework\TestCase
      * Prepare a basic DOMelement to test against
      * @return void
      */
-    public function setUp() : void
+    public function setUp(): void
     {
-        $document = DOMDocumentFactory::fromString(
-<<<XML
+        $document = DOMDocumentFactory::fromString(<<<XML
 <samlp:Response xmlns:samlp="urn:oasis:names:tc:SAML:2.0:protocol"
                 xmlns:saml="urn:oasis:names:tc:SAML:2.0:assertion"
                 ID="s2a0da3504aff978b0f8c80f6a62c713c4a2f64c5b"
@@ -56,7 +55,7 @@ XML
      * Test the getList() method.
      * @return void
      */
-    public function testExtensionsGet() : void
+    public function testExtensionsGet(): void
     {
         $list = Extensions::getList($this->testElement);
 
@@ -70,7 +69,7 @@ XML
      * Adding empty list should leave existing extensions unchanged.
      * @return void
      */
-    public function testExtensionsAddEmpty() : void
+    public function testExtensionsAddEmpty(): void
     {
         Extensions::addList($this->testElement, []);
 
@@ -86,7 +85,7 @@ XML
      * Test adding two random elements.
      * @return void
      */
-    public function testExtensionsAddSome() : void
+    public function testExtensionsAddSome(): void
     {
         $attribute = new Attribute();
         $attribute->setName('TheName');

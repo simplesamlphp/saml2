@@ -19,7 +19,7 @@ class SigningMethodTest extends \PHPUnit\Framework\TestCase
     /**
      * @return void
      */
-    public function testMarshalling() : void
+    public function testMarshalling(): void
     {
         $signingMethod = new SigningMethod();
         $signingMethod->setAlgorithm('http://exampleAlgorithm');
@@ -29,7 +29,7 @@ class SigningMethodTest extends \PHPUnit\Framework\TestCase
 
         $signingMethodElements = Utils::xpQuery(
             $xml,
-            '/root/*[local-name()=\'SigningMethod\' and '.
+            '/root/*[local-name()=\'SigningMethod\' and ' .
             'namespace-uri()=\'urn:oasis:names:tc:SAML:metadata:algsupport\']'
         );
         $this->assertCount(1, $signingMethodElements);
@@ -46,7 +46,7 @@ class SigningMethodTest extends \PHPUnit\Framework\TestCase
 
         $signingMethodElements = Utils::xpQuery(
             $xml,
-            '/root/*[local-name()=\'SigningMethod\' and '.
+            '/root/*[local-name()=\'SigningMethod\' and ' .
             'namespace-uri()=\'urn:oasis:names:tc:SAML:metadata:algsupport\']'
         );
         $this->assertCount(1, $signingMethodElements);
@@ -59,7 +59,7 @@ class SigningMethodTest extends \PHPUnit\Framework\TestCase
     /**
      * @return void
      */
-    public function testUnmarshalling() : void
+    public function testUnmarshalling(): void
     {
         $document = DOMDocumentFactory::fromString(<<<XML
 <alg:SigningMethod xmlns:alg="urn:oasis:names:tc:SAML:metadata:algsupport"
@@ -79,7 +79,7 @@ XML
     /**
      * @return void
      */
-    public function testMissingAlgorithmThrowsException() : void
+    public function testMissingAlgorithmThrowsException(): void
     {
         $document = DOMDocumentFactory::fromString(<<<XML
 <alg:SigningMethod xmlns:alg="urn:oasis:names:tc:SAML:metadata:algsupport" 

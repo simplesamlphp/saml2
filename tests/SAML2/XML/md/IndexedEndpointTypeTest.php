@@ -16,7 +16,7 @@ class IndexedEndpointTypeTest extends \PHPUnit\Framework\TestCase
     /**
      * @return void
      */
-    public function testMarshalling() : void
+    public function testMarshalling(): void
     {
         $indexedEndpointType = new IndexedEndpointType();
         $indexedEndpointType->setBinding('TestBinding');

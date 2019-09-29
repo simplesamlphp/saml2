@@ -9,14 +9,13 @@ use DOMNode;
 use DOMNodeList;
 use RobRichards\XMLSecLibs\XMLSecEnc;
 use RobRichards\XMLSecLibs\XMLSecurityKey;
-use Webmozart\Assert\Assert;
-
 use SAML2\Exception\RuntimeException;
 use SAML2\Utilities\Temporal;
 use SAML2\XML\Chunk;
 use SAML2\XML\saml\Issuer;
 use SAML2\XML\saml\NameID;
 use SAML2\XML\saml\SubjectConfirmation;
+use Webmozart\Assert\Assert;
 
 /**
  * Class representing a SAML 2 assertion.
@@ -269,7 +268,7 @@ class Assertion extends SignedElement
 
         if ($xml->getAttribute('Version') !== '2.0') {
             /* Currently a very strict check. */
-            throw new \Exception('Unsupported version: '.$xml->getAttribute('Version'));
+            throw new \Exception('Unsupported version: ' . $xml->getAttribute('Version'));
         }
 
         $this->issueInstant = Utils::xsDateTimeToTimestamp($xml->getAttribute('IssueInstant'));
@@ -298,7 +297,7 @@ class Assertion extends SignedElement
      * @throws \Exception
      * @return void
      */
-    private function parseSubject(DOMElement $xml) : void
+    private function parseSubject(DOMElement $xml): void
     {
         /** @var \DOMElement[] $subject */
         $subject = Utils::xpQuery($xml, './saml_assertion:Subject');
@@ -347,7 +346,7 @@ class Assertion extends SignedElement
      * @throws \Exception
      * @return void
      */
-    private function parseConditions(DOMElement $xml) : void
+    private function parseConditions(DOMElement $xml): void
     {
         /** @var \DOMElement[] $conditions */
         $conditions = Utils::xpQuery($xml, './saml_assertion:Conditions');
@@ -378,7 +377,7 @@ class Assertion extends SignedElement
                 continue;
             }
             if ($node->namespaceURI !== Constants::NS_SAML) {
-                throw new \Exception('Unknown namespace of condition: '.var_export($node->namespaceURI, true));
+                throw new \Exception('Unknown namespace of condition: ' . var_export($node->namespaceURI, true));
             }
             switch ($node->localName) {
                 case 'AudienceRestriction':
@@ -401,7 +400,7 @@ class Assertion extends SignedElement
                     /* Currently ignored. */
                     break;
                 default:
-                    throw new \Exception('Unknown condition: '.var_export($node->localName, true));
+                    throw new \Exception('Unknown condition: ' . var_export($node->localName, true));
             }
         }
     }
@@ -414,7 +413,7 @@ class Assertion extends SignedElement
      * @throws \Exception
      * @return void
      */
-    private function parseAuthnStatement(DOMElement $xml) : void
+    private function parseAuthnStatement(DOMElement $xml): void
     {
         /** @var \DOMElement[] $authnStatements */
         $authnStatements = Utils::xpQuery($xml, './saml_assertion:AuthnStatement');
@@ -453,7 +452,7 @@ class Assertion extends SignedElement
      * @throws \Exception
      * @return void
      */
-    private function parseAuthnContext(DOMElement $authnStatementEl) : void
+    private function parseAuthnContext(DOMElement $authnStatementEl): void
     {
         // Get the AuthnContext element
         /** @var \DOMElement[] $authnContexts */
@@ -518,7 +517,7 @@ class Assertion extends SignedElement
      * @throws \Exception
      * @return void
      */
-    private function parseAttributes(DOMElement $xml) : void
+    private function parseAttributes(DOMElement $xml): void
     {
         $firstAttribute = true;
         /** @var \DOMElement[] $attributes */
@@ -559,7 +558,7 @@ class Assertion extends SignedElement
      * @param string   $attributeName
      * @return void
      */
-    private function parseAttributeValue(DOMNode $attribute, string $attributeName) : void
+    private function parseAttributeValue(DOMNode $attribute, string $attributeName): void
     {
         /** @var \DOMElement[] $values */
         $values = Utils::xpQuery($attribute, './saml_assertion:AttributeValue');
@@ -621,7 +620,7 @@ class Assertion extends SignedElement
      * @param \DOMElement $xml The XML element with the assertion.
      * @return void
      */
-    private function parseEncryptedAttributes(DOMElement $xml) : void
+    private function parseEncryptedAttributes(DOMElement $xml): void
     {
         /** @var \DOMElement[] encryptedAttributes */
         $this->encryptedAttributes = Utils::xpQuery(
@@ -637,7 +636,7 @@ class Assertion extends SignedElement
      * @param \DOMElement $xml The assertion XML element.
      * @return void
      */
-    private function parseSignature(DOMElement $xml) : void
+    private function parseSignature(DOMElement $xml): void
     {
         /** @var \DOMAttr[] $signatureMethod */
         $signatureMethod = Utils::xpQuery($xml, './ds:Signature/ds:SignedInfo/ds:SignatureMethod/@Algorithm');
@@ -663,7 +662,7 @@ class Assertion extends SignedElement
      * @param  XMLSecurityKey $key The key we should check against.
      * @return boolean        true if successful, false if it is unsigned.
      */
-    public function validate(XMLSecurityKey $key) : bool
+    public function validate(XMLSecurityKey $key): bool
     {
         Assert::same($key->type, XMLSecurityKey::RSA_SHA256);
 
@@ -682,7 +681,7 @@ class Assertion extends SignedElement
      *
      * @return string The identifier of this assertion.
      */
-    public function getId() : string
+    public function getId(): string
     {
         return $this->id;
     }
@@ -694,7 +693,7 @@ class Assertion extends SignedElement
      * @param string $id The new identifier of this assertion.
      * @return void
      */
-    public function setId(string $id) : void
+    public function setId(string $id): void
     {
         $this->id = $id;
     }
@@ -705,7 +704,7 @@ class Assertion extends SignedElement
      *
      * @return int The issue timestamp of this assertion, as an UNIX timestamp.
      */
-    public function getIssueInstant() : int
+    public function getIssueInstant(): int
     {
         return $this->issueInstant;
     }
@@ -717,7 +716,7 @@ class Assertion extends SignedElement
      * @param int $issueInstant The new issue timestamp of this assertion, as an UNIX timestamp.
      * @return void
      */
-    public function setIssueInstant(int $issueInstant) : void
+    public function setIssueInstant(int $issueInstant): void
     {
         $this->issueInstant = $issueInstant;
     }
@@ -728,7 +727,7 @@ class Assertion extends SignedElement
      *
      * @return \SAML2\XML\saml\Issuer The issuer of this assertion.
      */
-    public function getIssuer() : Issuer
+    public function getIssuer(): Issuer
     {
         return $this->issuer;
     }
@@ -740,7 +739,7 @@ class Assertion extends SignedElement
      * @param \SAML2\XML\saml\Issuer $issuer The new issuer of this assertion.
      * @return void
      */
-    public function setIssuer(Issuer $issuer) : void
+    public function setIssuer(Issuer $issuer): void
     {
         $this->issuer = $issuer;
     }
@@ -752,7 +751,7 @@ class Assertion extends SignedElement
      * @throws \Exception
      * @return \SAML2\XML\saml\NameID|null The name identifier of the assertion.
      */
-    public function getNameId() : ?NameID
+    public function getNameId(): ?NameID
     {
         if ($this->encryptedNameId !== null) {
             throw new \Exception('Attempted to retrieve encrypted NameID without decrypting it first.');
@@ -771,7 +770,7 @@ class Assertion extends SignedElement
      * @param \SAML2\XML\saml\NameID|null $nameId The name identifier of the assertion.
      * @return void
      */
-    public function setNameId(NameID $nameId = null) : void
+    public function setNameId(NameID $nameId = null): void
     {
         $this->nameId = $nameId;
     }
@@ -782,7 +781,7 @@ class Assertion extends SignedElement
      *
      * @return bool True if the NameId is encrypted, false if not.
      */
-    public function isNameIdEncrypted() : bool
+    public function isNameIdEncrypted(): bool
     {
         return $this->encryptedNameId !== null;
     }
@@ -794,7 +793,7 @@ class Assertion extends SignedElement
      * @param XMLSecurityKey $key The encryption key.
      * @return void
      */
-    public function encryptNameId(XMLSecurityKey $key) : void
+    public function encryptNameId(XMLSecurityKey $key): void
     {
         if ($this->nameId === null) {
             throw new \Exception('Cannot encrypt NameID, no NameID set.');
@@ -836,7 +835,7 @@ class Assertion extends SignedElement
      * @param array          $blacklist Blacklisted decryption algorithms.
      * @return void
      */
-    public function decryptNameId(XMLSecurityKey $key, array $blacklist = []) : void
+    public function decryptNameId(XMLSecurityKey $key, array $blacklist = []): void
     {
         if ($this->encryptedNameId === null) {
             /* No NameID to decrypt. */
@@ -857,7 +856,7 @@ class Assertion extends SignedElement
      *
      * @return bool
      */
-    public function hasEncryptedAttributes() : bool
+    public function hasEncryptedAttributes(): bool
     {
         return $this->encryptedAttributes !== [];
     }
@@ -871,7 +870,7 @@ class Assertion extends SignedElement
      * @throws \Exception
      * @return void
      */
-    public function decryptAttributes(XMLSecurityKey $key, array $blacklist = []) : void
+    public function decryptAttributes(XMLSecurityKey $key, array $blacklist = []): void
     {
         if (!$this->hasEncryptedAttributes()) {
             return;
@@ -923,7 +922,7 @@ class Assertion extends SignedElement
      *
      * @return int|null The earliest timestamp this assertion is valid.
      */
-    public function getNotBefore() : ?int
+    public function getNotBefore(): ?int
     {
         return $this->notBefore;
     }
@@ -937,7 +936,7 @@ class Assertion extends SignedElement
      * @param int|null $notBefore The earliest timestamp this assertion is valid.
      * @return void
      */
-    public function setNotBefore(int $notBefore = null) : void
+    public function setNotBefore(int $notBefore = null): void
     {
         $this->notBefore = $notBefore;
     }
@@ -951,7 +950,7 @@ class Assertion extends SignedElement
      *
      * @return int|null The latest timestamp this assertion is valid.
      */
-    public function getNotOnOrAfter() : ?int
+    public function getNotOnOrAfter(): ?int
     {
         return $this->notOnOrAfter;
     }
@@ -965,7 +964,7 @@ class Assertion extends SignedElement
      * @param int|null $notOnOrAfter The latest timestamp this assertion is valid.
      * @return void
      */
-    public function setNotOnOrAfter(int $notOnOrAfter = null) : void
+    public function setNotOnOrAfter(int $notOnOrAfter = null): void
     {
         $this->notOnOrAfter = $notOnOrAfter;
     }
@@ -976,7 +975,7 @@ class Assertion extends SignedElement
      *
      * @return bool True to encrypt attributes in the assertion.
      */
-    public function getRequiredEncAttributes() : bool
+    public function getRequiredEncAttributes(): bool
     {
         return $this->requiredEncAttributes;
     }
@@ -988,7 +987,7 @@ class Assertion extends SignedElement
      * @param bool $ea true to encrypt attributes in the assertion.
      * @return void
      */
-    public function setRequiredEncAttributes(bool $ea) : void
+    public function setRequiredEncAttributes(bool $ea): void
     {
         $this->requiredEncAttributes = $ea;
     }
@@ -1001,7 +1000,7 @@ class Assertion extends SignedElement
      *
      * @return array|null The allowed audiences.
      */
-    public function getValidAudiences() : ?array
+    public function getValidAudiences(): ?array
     {
         return $this->validAudiences;
     }
@@ -1015,7 +1014,7 @@ class Assertion extends SignedElement
      * @param array|null $validAudiences The allowed audiences.
      * @return void
      */
-    public function setValidAudiences(array $validAudiences = null) : void
+    public function setValidAudiences(array $validAudiences = null): void
     {
         $this->validAudiences = $validAudiences;
     }
@@ -1026,7 +1025,7 @@ class Assertion extends SignedElement
      *
      * @return int|null The timestamp the user was authenticated, or NULL if the user isn't authenticated.
      */
-    public function getAuthnInstant() : ?int
+    public function getAuthnInstant(): ?int
     {
         return $this->authnInstant;
     }
@@ -1038,7 +1037,7 @@ class Assertion extends SignedElement
      * @param int|null $authnInstant Timestamp the user was authenticated, or NULL if we don't want an AuthnStatement.
      * @return void
      */
-    public function setAuthnInstant(int $authnInstant = null) : void
+    public function setAuthnInstant(int $authnInstant = null): void
     {
         $this->authnInstant = $authnInstant;
     }
@@ -1052,7 +1051,7 @@ class Assertion extends SignedElement
      *
      * @return int|null The latest timestamp this session is valid.
      */
-    public function getSessionNotOnOrAfter() : ?int
+    public function getSessionNotOnOrAfter(): ?int
     {
         return $this->sessionNotOnOrAfter;
     }
@@ -1066,7 +1065,7 @@ class Assertion extends SignedElement
      * @param int|null $sessionNotOnOrAfter The latest timestamp this session is valid.
      * @return void
      */
-    public function setSessionNotOnOrAfter(int $sessionNotOnOrAfter = null) : void
+    public function setSessionNotOnOrAfter(int $sessionNotOnOrAfter = null): void
     {
         $this->sessionNotOnOrAfter = $sessionNotOnOrAfter;
     }
@@ -1077,7 +1076,7 @@ class Assertion extends SignedElement
      *
      * @return string|null The session index of the user at the IdP.
      */
-    public function getSessionIndex() : ?string
+    public function getSessionIndex(): ?string
     {
         return $this->sessionIndex;
     }
@@ -1092,7 +1091,7 @@ class Assertion extends SignedElement
      * @param string|null $sessionIndex The session index of the user at the IdP.
      * @return void
      */
-    public function setSessionIndex(string $sessionIndex = null) : void
+    public function setSessionIndex(string $sessionIndex = null): void
     {
         $this->sessionIndex = $sessionIndex;
     }
@@ -1106,7 +1105,7 @@ class Assertion extends SignedElement
      *
      * @return string|null The authentication method.
      */
-    public function getAuthnContextClassRef() : ?string
+    public function getAuthnContextClassRef(): ?string
     {
         return $this->authnContextClassRef;
     }
@@ -1121,7 +1120,7 @@ class Assertion extends SignedElement
      * @param string|null $authnContextClassRef The authentication method.
      * @return void
      */
-    public function setAuthnContextClassRef(string $authnContextClassRef = null) : void
+    public function setAuthnContextClassRef(string $authnContextClassRef = null): void
     {
         $this->authnContextClassRef = $authnContextClassRef;
     }
@@ -1132,7 +1131,7 @@ class Assertion extends SignedElement
      *
      * @return string|null The signature method.
      */
-    public function getSignatureMethod() : ?string
+    public function getSignatureMethod(): ?string
     {
         return $this->signatureMethod;
     }
@@ -1144,7 +1143,7 @@ class Assertion extends SignedElement
      * @param string|null $signatureMethod
      * @return void
      */
-    public function setSignatureMethod(string $signatureMethod = null) : void
+    public function setSignatureMethod(string $signatureMethod = null): void
     {
         $this->signatureMethod = $signatureMethod;
     }
@@ -1157,7 +1156,7 @@ class Assertion extends SignedElement
      * @throws \Exception
      * @return void
      */
-    public function setAuthnContextDecl(Chunk $authnContextDecl) : void
+    public function setAuthnContextDecl(Chunk $authnContextDecl): void
     {
         if (!empty($this->authnContextDeclRef)) {
             throw new \Exception(
@@ -1177,7 +1176,7 @@ class Assertion extends SignedElement
      *
      * @return \SAML2\XML\Chunk|null
      */
-    public function getAuthnContextDecl() : ?Chunk
+    public function getAuthnContextDecl(): ?Chunk
     {
         return $this->authnContextDecl;
     }
@@ -1190,7 +1189,7 @@ class Assertion extends SignedElement
      * @throws \Exception
      * @return void
      */
-    public function setAuthnContextDeclRef(string $authnContextDeclRef = null) : void
+    public function setAuthnContextDeclRef(string $authnContextDeclRef = null): void
     {
         if (!empty($this->authnContextDecl)) {
             throw new \Exception(
@@ -1210,7 +1209,7 @@ class Assertion extends SignedElement
      *
      * @return string|null
      */
-    public function getAuthnContextDeclRef() : ?string
+    public function getAuthnContextDeclRef(): ?string
     {
         return $this->authnContextDeclRef;
     }
@@ -1221,7 +1220,7 @@ class Assertion extends SignedElement
      *
      * @return array
      */
-    public function getAuthenticatingAuthority() : array
+    public function getAuthenticatingAuthority(): array
     {
         return $this->AuthenticatingAuthority;
     }
@@ -1233,7 +1232,7 @@ class Assertion extends SignedElement
      * @param array $authenticatingAuthority
      * @return void
      */
-    public function setAuthenticatingAuthority(array $authenticatingAuthority) : void
+    public function setAuthenticatingAuthority(array $authenticatingAuthority): void
     {
         $this->AuthenticatingAuthority = $authenticatingAuthority;
     }
@@ -1244,7 +1243,7 @@ class Assertion extends SignedElement
      *
      * @return array All attributes, as an associative array.
      */
-    public function getAttributes() : array
+    public function getAttributes(): array
     {
         return $this->attributes;
     }
@@ -1256,7 +1255,7 @@ class Assertion extends SignedElement
      * @param array $attributes All new attributes, as an associative array.
      * @return void
      */
-    public function setAttributes(array $attributes) : void
+    public function setAttributes(array $attributes): void
     {
         $this->attributes = $attributes;
     }
@@ -1264,7 +1263,7 @@ class Assertion extends SignedElement
     /**
      * @return array|null
      */
-    public function getSignatureData() : ?array
+    public function getSignatureData(): ?array
     {
         return $this->signatureData;
     }
@@ -1274,7 +1273,7 @@ class Assertion extends SignedElement
      * @param array|null $signatureData
      * @return void
      */
-    public function setSignatureData(array $signatureData = null) : void
+    public function setSignatureData(array $signatureData = null): void
     {
         $this->signatureData = $signatureData;
     }
@@ -1285,7 +1284,7 @@ class Assertion extends SignedElement
      *
      * @return array All attributes value types, as an associative array.
      */
-    public function getAttributesValueTypes() : array
+    public function getAttributesValueTypes(): array
     {
         return $this->attributesValueTypes;
     }
@@ -1297,7 +1296,7 @@ class Assertion extends SignedElement
      * @param array $attributesValueTypes All new attribute value types, as an associative array.
      * @return void
      */
-    public function setAttributesValueTypes(array $attributesValueTypes) : void
+    public function setAttributesValueTypes(array $attributesValueTypes): void
     {
         $this->attributesValueTypes = $attributesValueTypes;
     }
@@ -1311,7 +1310,7 @@ class Assertion extends SignedElement
      *
      * @return string The NameFormat used on all attributes.
      */
-    public function getAttributeNameFormat() : string
+    public function getAttributeNameFormat(): string
     {
         return $this->nameFormat;
     }
@@ -1323,7 +1322,7 @@ class Assertion extends SignedElement
      * @param string $nameFormat The NameFormat used on all attributes.
      * @return void
      */
-    public function setAttributeNameFormat(string $nameFormat) : void
+    public function setAttributeNameFormat(string $nameFormat): void
     {
         $this->nameFormat = $nameFormat;
     }
@@ -1334,7 +1333,7 @@ class Assertion extends SignedElement
      *
      * @return array Array of \SAML2\XML\saml\SubjectConfirmation elements.
      */
-    public function getSubjectConfirmation() : array
+    public function getSubjectConfirmation(): array
     {
         return $this->SubjectConfirmation;
     }
@@ -1346,7 +1345,7 @@ class Assertion extends SignedElement
      * @param array $SubjectConfirmation Array of \SAML2\XML\saml\SubjectConfirmation elements.
      * @return void
      */
-    public function setSubjectConfirmation(array $SubjectConfirmation) : void
+    public function setSubjectConfirmation(array $SubjectConfirmation): void
     {
         $this->SubjectConfirmation = $SubjectConfirmation;
     }
@@ -1357,7 +1356,7 @@ class Assertion extends SignedElement
      *
      * @return array Array of \DOMElement elements.
      */
-    public function getEncryptedAttributes() : array
+    public function getEncryptedAttributes(): array
     {
         return $this->encryptedAttributes;
     }
@@ -1369,7 +1368,7 @@ class Assertion extends SignedElement
      * @param array $encAttrs Array of \DOMElement elements.
      * @return void
      */
-    public function setEncryptedAttributes(array $encAttrs) : void
+    public function setEncryptedAttributes(array $encAttrs): void
     {
         $this->encryptedAttributes = $encAttrs;
     }
@@ -1380,7 +1379,7 @@ class Assertion extends SignedElement
      *
      * @return XMLSecurityKey|null The key, or NULL if no key is specified.
      */
-    public function getSignatureKey() : ?XMLSecurityKey
+    public function getSignatureKey(): ?XMLSecurityKey
     {
         return $this->signatureKey;
     }
@@ -1394,7 +1393,7 @@ class Assertion extends SignedElement
      * @param XMLSecurityKey|null $signatureKey
      * @return void
      */
-    public function setSignatureKey(XMLSecurityKey $signatureKey = null) : void
+    public function setSignatureKey(XMLSecurityKey $signatureKey = null): void
     {
         $this->signatureKey = $signatureKey;
     }
@@ -1406,7 +1405,7 @@ class Assertion extends SignedElement
      * @return XMLSecurityKey|null The key, or NULL if no key is specified..
      *
      */
-    public function getEncryptionKey() : ?XMLSecurityKey
+    public function getEncryptionKey(): ?XMLSecurityKey
     {
         return $this->encryptionKey;
     }
@@ -1418,7 +1417,7 @@ class Assertion extends SignedElement
      * @param XMLSecurityKey|null $Key
      * @return void
      */
-    public function setEncryptionKey(XMLSecurityKey $Key = null) : void
+    public function setEncryptionKey(XMLSecurityKey $Key = null): void
     {
         $this->encryptionKey = $Key;
     }
@@ -1432,7 +1431,7 @@ class Assertion extends SignedElement
      * @param array $certificates An array of certificates.
      * @return void
      */
-    public function setCertificates(array $certificates) : void
+    public function setCertificates(array $certificates): void
     {
         $this->certificates = $certificates;
     }
@@ -1443,7 +1442,7 @@ class Assertion extends SignedElement
      *
      * @return array An array of certificates.
      */
-    public function getCertificates() : array
+    public function getCertificates(): array
     {
         return $this->certificates;
     }
@@ -1452,7 +1451,7 @@ class Assertion extends SignedElement
     /**
      * @return bool
      */
-    public function wasSignedAtConstruction() : bool
+    public function wasSignedAtConstruction(): bool
     {
         return $this->wasSignedAtConstruction;
     }
@@ -1464,7 +1463,7 @@ class Assertion extends SignedElement
      * @param  \DOMNode|null $parentElement The DOM node the assertion should be created in.
      * @return \DOMElement   This assertion.
      */
-    public function toXML(\DOMNode $parentElement = null) : DOMElement
+    public function toXML(\DOMNode $parentElement = null): DOMElement
     {
         if ($parentElement === null) {
             $document = DOMDocumentFactory::create();
@@ -1473,7 +1472,7 @@ class Assertion extends SignedElement
             $document = $parentElement->ownerDocument;
         }
 
-        $root = $document->createElementNS(Constants::NS_SAML, 'saml:'.'Assertion');
+        $root = $document->createElementNS(Constants::NS_SAML, 'saml:' . 'Assertion');
         $parentElement->appendChild($root);
 
         /* Ugly hack to add another namespace declaration to the root element. */
@@ -1513,7 +1512,7 @@ class Assertion extends SignedElement
      * @param \DOMElement $root The assertion element we should add the subject to.
      * @return void
      */
-    private function addSubject(DOMElement $root) : void
+    private function addSubject(DOMElement $root): void
     {
         if ($this->nameId === null && $this->encryptedNameId === null) {
             /* We don't have anything to create a Subject node for. */
@@ -1527,7 +1526,7 @@ class Assertion extends SignedElement
         if ($this->encryptedNameId === null) {
             $this->nameId->toXML($subject);
         } else {
-            $eid = $subject->ownerDocument->createElementNS(Constants::NS_SAML, 'saml:'.'EncryptedID');
+            $eid = $subject->ownerDocument->createElementNS(Constants::NS_SAML, 'saml:' . 'EncryptedID');
             $subject->appendChild($eid);
             $eid->appendChild($subject->ownerDocument->importNode($this->encryptedNameId, true));
         }
@@ -1544,7 +1543,7 @@ class Assertion extends SignedElement
      * @param \DOMElement $root The assertion element we should add the conditions to.
      * @return void
      */
-    private function addConditions(DOMElement $root) : void
+    private function addConditions(DOMElement $root): void
     {
         $document = $root->ownerDocument;
 
@@ -1573,13 +1572,14 @@ class Assertion extends SignedElement
      * @param \DOMElement $root The assertion element we should add the authentication statement to.
      * @return void
      */
-    private function addAuthnStatement(DOMElement $root) : void
+    private function addAuthnStatement(DOMElement $root): void
     {
-        if ($this->authnInstant === null ||
-            (
-                $this->authnContextClassRef === null &&
-                $this->authnContextDecl === null &&
-                $this->authnContextDeclRef === null
+        if (
+            $this->authnInstant === null
+            || (
+                $this->authnContextClassRef === null
+                && $this->authnContextDecl === null
+                && $this->authnContextDeclRef === null
             )
         ) {
             /* No authentication context or AuthnInstant => no authentication statement. */
@@ -1643,7 +1643,7 @@ class Assertion extends SignedElement
      * @param \DOMElement $root The assertion element we should add the subject to.
      * @return void
      */
-    private function addAttributeStatement(DOMElement $root) : void
+    private function addAttributeStatement(DOMElement $root): void
     {
         if (empty($this->attributes)) {
             return;
@@ -1687,7 +1687,7 @@ class Assertion extends SignedElement
             if (array_key_exists($name, $this->attributesValueTypes)) {
                 $valueTypes = $this->attributesValueTypes[$name];
                 if (is_array($valueTypes) && count($valueTypes) != count($values)) {
-                    throw new \Exception('Array of value types and array of values have different size for attribute '.
+                    throw new \Exception('Array of value types and array of values have different size for attribute ' .
                         var_export($name, true));
                 }
             } else {
@@ -1749,7 +1749,7 @@ class Assertion extends SignedElement
      * @param \DOMElement $root The assertion element we should add the Encrypted Attribute Statement to.
      * @return void
      */
-    private function addEncryptedAttributeStatement(DOMElement $root) : void
+    private function addEncryptedAttributeStatement(DOMElement $root): void
     {
         if ($this->getRequiredEncAttributes() === false) {
             return;

@@ -12,5 +12,5 @@ namespace SAML2\XML\mdrpi;
  */
 class Common
 {
-    const NS_MDRPI = 'urn:oasis:names:tc:SAML:metadata:rpi';
+    public const NS_MDRPI = 'urn:oasis:names:tc:SAML:metadata:rpi';
 }

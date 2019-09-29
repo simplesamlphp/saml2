@@ -17,7 +17,7 @@ class ScopeTest extends \PHPUnit\Framework\TestCase
      * Marshalling a scope in literal (non-regexp) form.
      * @return void
      */
-    public function testMarshallingLiteral() : void
+    public function testMarshallingLiteral(): void
     {
         $scope = new Scope();
         $scope->setScope("example.org");
@@ -41,7 +41,7 @@ class ScopeTest extends \PHPUnit\Framework\TestCase
      * regexp explicitly (expect it to default to 'false').
      * @return void
      */
-    public function testMarshallingImplicitRegexpValue() : void
+    public function testMarshallingImplicitRegexpValue(): void
     {
         $scope = new Scope();
         $scope->setScope("example.org");
@@ -63,7 +63,7 @@ class ScopeTest extends \PHPUnit\Framework\TestCase
      * Marshalling a scope which is in regexp form.
      * @return void
      */
-    public function testMarshallingRegexp() : void
+    public function testMarshallingRegexp(): void
     {
         $scope = new Scope();
         $scope->setScope("^(.*\.)?example\.edu$");
@@ -86,10 +86,9 @@ class ScopeTest extends \PHPUnit\Framework\TestCase
      * Unmarshalling a scope in literal (non-regexp) form.
      * @return void
      */
-    public function testUnmarshallingLiteral() : void
+    public function testUnmarshallingLiteral(): void
     {
-        $document = DOMDocumentFactory::fromString(
-<<<XML
+        $document = DOMDocumentFactory::fromString(<<<XML
 <shibmd:Scope regexp="false">example.org</shibmd:Scope>
 XML
         );
@@ -105,10 +104,9 @@ XML
      * regexp value (assumed to be false).
      * @return void
      */
-    public function testUnmarshallingWithoutRegexpValue() : void
+    public function testUnmarshallingWithoutRegexpValue(): void
     {
-        $document = DOMDocumentFactory::fromString(
-<<<XML
+        $document = DOMDocumentFactory::fromString(<<<XML
 <shibmd:Scope>example.org</shibmd:Scope>
 XML
         );
@@ -123,10 +121,9 @@ XML
      * Unmarshalling a scope in regexp form.
      * @return void
      */
-    public function testUnmarshallingRegexp() : void
+    public function testUnmarshallingRegexp(): void
     {
-        $document = DOMDocumentFactory::fromString(
-<<<XML
+        $document = DOMDocumentFactory::fromString(<<<XML
 <shibmd:Scope regexp="true">^(.*|)example.edu$</shibmd:Scope>
 XML
         );

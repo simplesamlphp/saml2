@@ -5,7 +5,6 @@ declare(strict_types=1);
 namespace SAML2\Certificate;
 
 use SAML2\Utilities\ArrayCollection;
-
 use Webmozart\Assert\Assert;
 
 /**
@@ -22,7 +21,7 @@ class KeyCollection extends ArrayCollection
      *
      * Type hint not possible due to upstream method signature
      */
-    public function add($key) : void
+    public function add($key): void
     {
         /** @psalm-suppress RedundantConditionGivenDocblockType */
         Assert::isInstanceOf($key, Key::class);

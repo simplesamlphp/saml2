@@ -17,7 +17,7 @@ class ContactPersonTest extends \PHPUnit\Framework\TestCase
     /**
      * @return void
      */
-    public function testContactPerson() : void
+    public function testContactPerson(): void
     {
         $contactType = "other";
         $Company = "Test Company";
@@ -28,8 +28,7 @@ class ContactPersonTest extends \PHPUnit\Framework\TestCase
         $ContactPersonAttributes = ['testattr' => 'testval', 'testattr2' => 'testval2'];
 
         $mdNamespace = Constants::NS_MD;
-        $document = DOMDocumentFactory::fromString(
-<<<XML
+        $document = DOMDocumentFactory::fromString(<<<XML
 <md:Test xmlns:md="{$mdNamespace}" Binding="urn:something" Location="https://whatever/" xmlns:test="urn:test" test:attr="value">
 </md:Test>
 XML
@@ -57,7 +56,10 @@ XML
             $this->assertTrue(in_array($element->nodeValue, $EmailAddress));
         }
 
-        $this->assertEquals(count($TelephoneNumber), $contactPersonElement->getElementsByTagName('TelephoneNumber')->length);
+        $this->assertEquals(
+            count($TelephoneNumber),
+            $contactPersonElement->getElementsByTagName('TelephoneNumber')->length
+        );
         foreach ($contactPersonElement->getElementsByTagName('TelephoneNumber') as $element) {
             $this->assertTrue(in_array($element->nodeValue, $TelephoneNumber));
         }
@@ -71,11 +73,10 @@ XML
     /**
      * @return void
      */
-    public function testContactPersonFromXML() : void
+    public function testContactPersonFromXML(): void
     {
         $mdNamespace = Constants::NS_MD;
-        $document = DOMDocumentFactory::fromString(
-<<<XML
+        $document = DOMDocumentFactory::fromString(<<<XML
 <?xml version="1.0"?>
 <md:Test xmlns:md="{$mdNamespace}" xmlns:test="urn:test" Binding="urn:something" Location="https://whatever/" test:attr="value">
     <md:ContactPerson contactType="other" testattr="testval" testattr2="testval2">
@@ -106,11 +107,10 @@ XML
     /**
      * @return void
      */
-    public function testMultipleNamesXML() : void
+    public function testMultipleNamesXML(): void
     {
         $mdNamespace = Constants::NS_MD;
-        $document = DOMDocumentFactory::fromString(
-<<<XML
+        $document = DOMDocumentFactory::fromString(<<<XML
 <?xml version="1.0"?>
 <md:Test xmlns:md="{$mdNamespace}" xmlns:test="urn:test" Binding="urn:something" Location="https://whatever/" test:attr="value">
     <md:ContactPerson contactType="other" testattr="testval" testattr2="testval2">
@@ -135,11 +135,10 @@ XML
     /**
      * @return void
      */
-    public function testEmptySurNameXML() : void
+    public function testEmptySurNameXML(): void
     {
         $mdNamespace = Constants::NS_MD;
-        $document = DOMDocumentFactory::fromString(
-<<<XML
+        $document = DOMDocumentFactory::fromString(<<<XML
 <?xml version="1.0"?>
 <md:Test xmlns:md="{$mdNamespace}" xmlns:test="urn:test" Binding="urn:something" Location="https://whatever/" test:attr="value">
     <md:ContactPerson contactType="other">
@@ -162,11 +161,10 @@ XML
     /**
      * @return void
      */
-    public function testMissingContactTypeXML() : void
+    public function testMissingContactTypeXML(): void
     {
         $mdNamespace = Constants::NS_MD;
-        $document = DOMDocumentFactory::fromString(
-<<<XML
+        $document = DOMDocumentFactory::fromString(<<<XML
 <?xml version="1.0"?>
 <md:Test xmlns:md="{$mdNamespace}" xmlns:test="urn:test" Binding="urn:something" Location="https://whatever/" test:attr="value">
     <md:ContactPerson>

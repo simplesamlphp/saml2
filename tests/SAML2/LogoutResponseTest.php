@@ -15,7 +15,7 @@ class LogoutResponseTest extends \PHPUnit\Framework\TestCase
     /**
      * @return void
      */
-    public function testLogoutFailed() : void
+    public function testLogoutFailed(): void
     {
         $xml = <<<XML
 <samlp:LogoutResponse xmlns:samlp="urn:oasis:names:tc:SAML:2.0:protocol"
@@ -51,7 +51,7 @@ XML;
      * A successful logout response
      * @return void
      */
-    public function testLogoutSuccess() : void
+    public function testLogoutSuccess(): void
     {
         $xml = <<<XML
 <samlp:LogoutResponse xmlns:samlp="urn:oasis:names:tc:SAML:2.0:protocol"

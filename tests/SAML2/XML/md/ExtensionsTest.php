@@ -23,7 +23,7 @@ class ExtensionsTest extends \PHPUnit\Framework\TestCase
      * there, those should be left untouched.
      * @return void
      */
-    public function testExtensionAddEmpty() : void
+    public function testExtensionAddEmpty(): void
     {
         $d = DOMDocumentFactory::create();
         $r = $d->createElementNS(Constants::NS_MD, 'md:Extensions');
@@ -71,10 +71,9 @@ XML
      * This method tests for known extensions.
      * @return void
      */
-    public function testSupportedExtensions() : void
+    public function testSupportedExtensions(): void
     {
-        $document = DOMDocumentFactory::fromString(
-<<<XML
+        $document = DOMDocumentFactory::fromString(<<<XML
 <root>
   <md:Extensions xmlns:md="urn:oasis:names:tc:SAML:2.0:metadata"
                  xmlns:shibmd="urn:mace:shibboleth:metadata:1.0"
@@ -118,7 +117,7 @@ XML
      * This methods tests adding an md:Extensions element to a DOMElement.
      * @return void
      */
-    public function testAddExtensions() : void
+    public function testAddExtensions(): void
     {
         $document = DOMDocumentFactory::create();
         $document->formatOutput = true;
@@ -133,8 +132,7 @@ XML
             $digest,
         ];
         Extensions::addList($r, $extensions);
-        $this->assertEquals(
-<<<XML
+        $this->assertEquals(<<<XML
 <?xml version="1.0"?>
 <root>
   <md:Extensions xmlns:md="urn:oasis:names:tc:SAML:2.0:metadata">

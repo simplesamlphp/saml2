@@ -4,18 +4,17 @@ declare(strict_types=1);
 
 namespace SAML2;
 
+use DOMDocument;
+use Exception;
 use SAML2\Message;
 use SAML2\ArtifactResolve;
-
-use Exception;
-use DOMDocument;
 
 class SOAPTest extends \Mockery\Adapter\Phpunit\MockeryTestCase
 {
     /**
      * @return void
      */
-    public function testRequestParsingEmptyMessage() : void
+    public function testRequestParsingEmptyMessage(): void
     {
         $this->expectException(Exception::class, 'Invalid message received');
 
@@ -27,7 +26,7 @@ class SOAPTest extends \Mockery\Adapter\Phpunit\MockeryTestCase
     /**
      * @return void
      */
-    public function testRequestParsing() : void
+    public function testRequestParsing(): void
     {
         $id = '_6c3a4f8b9c2d';
         $artifact = 'AAQAADWNEw5VT47wcO4zX/iEzMmFQvGknDfws2ZtqSGdkNSbsW1cmVR0bzU=';
@@ -63,9 +62,9 @@ SOAP
     /**
      * @return void
      */
-    public function testSendArtifactResponse() : void
+    public function testSendArtifactResponse(): void
     {
-        $doc = new \DOMDocument;
+        $doc = new \DOMDocument();
         $doc->loadXML(<<<XML
 <samlp:ArtifactResponse
   xmlns:samlp="urn:oasis:names:tc:SAML:2.0:protocol"
@@ -118,7 +117,7 @@ SOAP;
     /**
      * @return void
      */
-    public function testSendResponse() : void
+    public function testSendResponse(): void
     {
         $doc = new \DOMDocument();
         $doc->loadXML(<<<XML
@@ -173,7 +172,7 @@ XML
 
 SOAP;
 
-        $soap = new SOAP;
+        $soap = new SOAP();
         $output = $soap->getOutputToSend($message);
 
         $this->assertEquals($expected, $output);
@@ -183,7 +182,7 @@ SOAP;
     /**
      * @return SOAP
      */
-    private function getStubWithInput($input) : SOAP
+    private function getStubWithInput($input): SOAP
     {
         $stub = $this->getMockBuilder(SOAP::class)->setMethods(['getInputStream'])->getMock();
         $stub->expects($this->once())
