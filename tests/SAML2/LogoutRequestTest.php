@@ -182,7 +182,10 @@ XML;
 
         $logoutRequest = new LogoutRequest($this->logoutRequestElement);
         $this->assertEquals("frits", $logoutRequest->getNameId()->getValue());
-        $this->assertEquals(\SAML2\Constants::NAMEID_UNSPECIFIED, $logoutRequest->getNameId()->getFormat());
+        $this->assertEquals(
+            "urn:oasis:names:tc:SAML:2.0:nameid-format:unspecified",
+            $logoutRequest->getNameId()->getFormat()
+        );
 
         $this->assertFalse($logoutRequest->isNameIdEncrypted());
         $this->assertNull($logoutRequest->decryptNameId(CertificatesMock::getPrivateKey()));
