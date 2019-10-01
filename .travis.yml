@@ -9,11 +9,12 @@ matrix:
 
 before_script:
   - if [[ "$TRAVIS_PHP_VERSION" == "7.2" ]]; then composer require --dev php-coveralls/php-coveralls; fi
+  - vendor/simplesamlphp/simplesamlphp-test-framework/bin/check-syntax-php.sh
   - if [[ "$TRAVIS_PHP_VERSION" == "7.3" ]]; then composer require --dev vimeo/psalm; fi
 
 script:
-  - vendor/simplesamlphp/simplesamlphp-test-framework/bin/check-syntax-php.sh
   - vendor/bin/security-checker security:check
+  - if [[ "$TRAVIS_PHP_VERSION" == "7.3" ]]; then php vendor/phpunit/phpunit/phpunit; else php vendor/phpunit/phpunit/phpunit --no-coverage; fi
   - if [[ "$TRAVIS_PHP_VERSION" == "7.3" ]]; then vendor/bin/psalm; fi
 
 after_script:
