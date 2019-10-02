@@ -5,13 +5,7 @@ matrix:
 
 jobs:
   allow_failures:
-    - php: 7.2
-      env: Psalm
-    - php: 7.3
-      env: Psalm
-    - php: 7.2
-      env: PHP Codesniffer
-    - php: 7.3
+    - env: Psalm
       env: PHP Codesniffer
 
   include:
