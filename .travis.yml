@@ -59,14 +59,14 @@ jobs:
         - vendor/bin/psalm
     - stage: Code quality
       php: 7.2
-      env: Psalm
+      env: PHP Codesniffer
       before_script:
         - composer require squizlabs/php_codesniffer --dev
       script:
         - vendor/bin/phpcs src/
     - stage: Code quality
       php: 7.3
-      env: Psalm
+      env: PHP Codesniffer
       before_script:
         - composer require squizlabs/php_codesniffer --dev
       script:
