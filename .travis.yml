@@ -6,7 +6,7 @@ matrix:
 jobs:
   include:
     - stage: Syntax check
-       php:
+    - php:
         - 7.2
         - 7.3
       script: vendor/simplesamlphp/simplesamlphp-test-framework/bin/check-syntax-php.sh
@@ -19,14 +19,14 @@ jobs:
     - stage: Unit testing
       before_script:
         - composer install
-      php:
+    - php:
         - 7.2
         - 7.3
       script: if [[ "$TRAVIS_PHP_VERSION" == "7.3" ]]; then php vendor/phpunit/phpunit/phpunit; else php vendor/phpunit/phpunit/phpunit --no-coverage; fi
 
 
     - stage: Code quality
-      php:
+    - php:
         - 7.2
         - 7.3
       script: vendor/bin/psalm
