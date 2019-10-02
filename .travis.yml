@@ -1,5 +1,25 @@
 language: php
 
+stages:
+  - security
+  - test
+  - quality
+
+php:
+  - 7.2
+  - 7.3
+
+env:
+  - COMMAND="composer install"
+  - COMMAND="composer update"
+
+before_script:
+  - ${COMMAND}
+  - vendor/simplesamlphp/simplesamlphp-test-framework/bin/check-syntax-php.sh
+
+script:
+  - php vendor/phpunit/phpunit/phpunit --no-coverage
+
 jobs:
   fast_finish: true
 
@@ -8,57 +28,34 @@ jobs:
       env: PHP Codesniffer
 
   include:
-    - stage: Security check
+    - stage: security
       before_script:
         - composer require sensiolabs/security-checker --dev
       script:
         - vendor/bin/security-checker security:check
 
-
-    - stage: Unit testing
+    - stage: quality
       php: 7.2
+      env: Codecov
       before_script:
-        - composer install
-        - vendor/simplesamlphp/simplesamlphp-test-framework/bin/check-syntax-php.sh
-      script:
-        - php vendor/phpunit/phpunit/phpunit --no-coverage
-    - stage: Unit testing
-      php: 7.3
-      before_script:
-        - composer install
-        - vendor/simplesamlphp/simplesamlphp-test-framework/bin/check-syntax-php.sh
-      script:
         - php vendor/phpunit/phpunit/phpunit
-      after_success:
+      script:
         # Codecov, need to edit bash uploader for incorrect TRAVIS_PYTHON_VERSION environment variable matching, at least until codecov/codecov-bash#133 is resolved
         - curl -s https://codecov.io/bash > .codecov
         - sed -i -e 's/TRAVIS_.*_VERSION/^TRAVIS_.*_VERSION=/' .codecov
         - chmod +x .codecov
-        - ./.codecov -X gcov;
+        - ./.codecov -X gcov
         # - <(curl -s https://codecov.io/bash)
 
-    - stage: Code quality
-      php: 7.2
-      env: Psalm
-      before_script:
-        - composer require vimeo/psalm --dev
-      script:
-        - vendor/bin/psalm
-    - stage: Code quality
+    - stage: quality
       php: 7.3
       env: Psalm
       before_script:
         - composer require vimeo/psalm --dev
       script:
         - vendor/bin/psalm
-    - stage: Code quality
-      php: 7.2
-      env: PHP Codesniffer
-      before_script:
-        - composer require squizlabs/php_codesniffer --dev
-      script:
-        - vendor/bin/phpcs src/
-    - stage: Code quality
+
+    - stage: quality
       php: 7.3
       env: PHP Codesniffer
       before_script:
