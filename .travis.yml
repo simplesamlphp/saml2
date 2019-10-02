@@ -31,7 +31,7 @@ jobs:
 
   include:
     - stage: pre-conditions
-      env: Syntax check XML
+      env: Syntax checks
       before_script:
         - composer require simplesamlphp/simplesamlphp-test-framework --dev
       script:
