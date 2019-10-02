@@ -152,12 +152,12 @@ class Processor
      */
     private function decryptAssertion($assertion): Assertion
     {
-        if ($this->decrypter->isEncryptionRequired() && $assertion instanceof Assertion) {
-            throw new UnencryptedAssertionFoundException('The assertion should be encrypted, but it was not');
-        }
-
         if ($assertion instanceof Assertion) {
             return $assertion;
+        }
+
+        if ($this->decrypter->isEncryptionRequired() && $assertion instanceof Assertion) {
+            throw new UnencryptedAssertionFoundException('The assertion should be encrypted, but it was not');
         }
 
         return $this->decrypter->decrypt($assertion);
