@@ -1,7 +1,7 @@
 language: php
 
 stages:
-  - security
+  - pre-conditions
   - test
   - quality
 
@@ -30,7 +30,7 @@ jobs:
     - stage: pre-conditions
       name: Syntax check PHP
       before_script:
-        - composer require simplesamlphp/simplesamlphp-module-testframework --dev
+        - composer require simplesamlphp/simplesamlphp-test-framework --dev
       script:
         - vendor/simplesamlphp/simplesamlphp-test-framework/bin/check-syntax-php.sh
 
