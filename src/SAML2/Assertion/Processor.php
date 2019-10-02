@@ -12,6 +12,7 @@ use SAML2\Assertion\Transformer\Transformer;
 use SAML2\Assertion\Validation\AssertionValidator;
 use SAML2\Assertion\Validation\SubjectConfirmationValidator;
 use SAML2\Configuration\IdentityProvider;
+use SAML2\EncryptedAssertion;
 use SAML2\Response\Exception\InvalidSignatureException;
 use SAML2\Response\Exception\UnencryptedAssertionFoundException;
 use SAML2\Signature\Validator;
@@ -121,7 +122,7 @@ class Processor
      */
     public function process($assertion): Assertion
     {
-        $assertion = $this->decryptAssertion($assertion);
+        $assertion = $assertion instanceof EncryptedAssertion ? $this->decryptAssertion($assertion) : $assertion;
 
         if (!$assertion->wasSignedAtConstruction()) {
             $this->logger->info(sprintf(
@@ -152,12 +153,12 @@ class Processor
      */
     private function decryptAssertion($assertion): Assertion
     {
-        if ($assertion instanceof Assertion) {
-            return $assertion;
-        }
-
         if ($this->decrypter->isEncryptionRequired() && $assertion instanceof Assertion) {
             throw new UnencryptedAssertionFoundException('The assertion should be encrypted, but it was not');
+        }
+
+        if ($assertion instanceof Assertion) {
+            return $assertion;
         }
 
         return $this->decrypter->decrypt($assertion);
