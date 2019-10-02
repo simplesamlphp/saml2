@@ -6,9 +6,13 @@ matrix:
 jobs:
   include:
     - stage: Syntax check
-      php:
-        - 7.2
-        - 7.3
+      php: 7.2
+      before_script:
+        - composer require simplesamlphp/simplesamlphp-test-framework --dev
+      script:
+        - vendor/simplesamlphp/simplesamlphp-test-framework/bin/check-syntax-php.sh
+    - stage: Syntax check
+      php: 7.3
       before_script:
         - composer require simplesamlphp/simplesamlphp-test-framework --dev
       script:
@@ -23,14 +27,31 @@ jobs:
 
 
     - stage: Unit testing
+      php: 7.2
       before_script:
         - composer install --no-dev
         - composer require phpunit/phpunit --dev
-      script: if [[ "$TRAVIS_PHP_VERSION" == "7.3" ]]; then php vendor/phpunit/phpunit/phpunit; else php vendor/phpunit/phpunit/phpunit --no-coverage; fi
+      script:
+        - php vendor/phpunit/phpunit/phpunit --no-coverage
+    - stage: Unit testing
+      php: 7.3
+      before_script:
+        - composer install --no-dev
+        - composer require phpunit/phpunit --dev
+      script:
+        - php vendor/phpunit/phpunit/phpunit
+        - php vendor/bin/php-coveralls -v
 
 
     - stage: Code quality
+      php: 7.2
       before_script:
         - composer require vimeo/psalm --dev
-      script: vendor/bin/psalm
-    - script: if [[ "$TRAVIS_PHP_VERSION" == "7.3" ]]; then php vendor/bin/php-coveralls -v; fi
+      script:
+        - vendor/bin/psalm
+    - stage: Code quality
+      php: 7.3
+      before_script:
+        - composer require vimeo/psalm --dev
+      script:
+        - vendor/bin/psalm
