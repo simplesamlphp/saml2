@@ -189,7 +189,8 @@ class Constants
     /**
      * Windows Domain Qualifier Name NameID format.
      */
-    public const NAMEID_WINDOWS_DOMAIN_QUALIFIED_NAME = 'urn:oasis:names:tc:SAML:1.1:nameid-format:WindowsDomainQualifiedName';
+    public const NAMEID_WINDOWS_DOMAIN_QUALIFIED_NAME =
+        'urn:oasis:names:tc:SAML:1.1:nameid-format:WindowsDomainQualifiedName';
 
     /**
      * Kerberos Principal Name NameID format.
