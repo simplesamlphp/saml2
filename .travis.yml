@@ -38,6 +38,7 @@ jobs:
       php: 7.2
       env: Codecov
       before_script:
+        - composer require phpunit/phpunit --dev
         - php vendor/phpunit/phpunit/phpunit
       script:
         # Codecov, need to edit bash uploader for incorrect TRAVIS_PYTHON_VERSION environment variable matching, at least until codecov/codecov-bash#133 is resolved
