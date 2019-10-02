@@ -1,9 +1,8 @@
 language: php
 
-matrix:
+jobs:
   fast_finish: true
 
-jobs:
   allow_failures:
     - env: Psalm
       env: PHP Codesniffer
