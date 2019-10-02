@@ -4,6 +4,9 @@ matrix:
   fast_finish: true
 
 jobs:
+  allow_failures:
+  - stage: Code quality
+
   include:
     - stage: Syntax check
       php: 7.2
