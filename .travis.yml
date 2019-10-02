@@ -25,7 +25,7 @@ jobs:
 
   allow_failures:
     - env: Psalm
-      env: PHP Codesniffer
+    - env: PHP Codesniffer
 
   include:
     - stage: pre-conditions
