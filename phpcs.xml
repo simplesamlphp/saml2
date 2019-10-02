@@ -11,6 +11,10 @@
     <!-- This is the rule we inherit from. If you want to exlude some specific rules, see the docs on how to do that -->
     <rule ref="PSR12"/>
 
+    <rule ref="PSR1.Files.SideEffects">
+        <exclude-pattern>src/_autoload.php</exclude-pattern>
+    </rule>
+
     <rule ref="Generic.NamingConventions.UpperCaseConstantName.ConstantNotUpperCase">
         <exclude-pattern>**/Assertion.php</exclude-pattern>
         <exclude-pattern>**/LogoutRequest.php</exclude-pattern>
@@ -20,7 +24,7 @@
     <!-- Lines can be a little bit longer before they break the build -->
     <rule ref="Generic.Files.LineLength">
         <properties>
-            <property name="lineLimit" value="120"/>
+            <property name="lineLimit" value="130"/>
             <property name="absoluteLineLimit" value="130"/>
         </properties>
         <exclude-pattern>**/EntityDescriptor.php</exclude-pattern>

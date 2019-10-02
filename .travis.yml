@@ -1,21 +1,68 @@
 language: php
 
-php:
-  - 7.2
-  - 7.3
-
 matrix:
   fast_finish: true
 
-before_script:
-  - if [[ "$TRAVIS_PHP_VERSION" == "7.2" ]]; then composer require --dev php-coveralls/php-coveralls; fi
-  - vendor/simplesamlphp/simplesamlphp-test-framework/bin/check-syntax-php.sh
-  - if [[ "$TRAVIS_PHP_VERSION" == "7.3" ]]; then composer require --dev vimeo/psalm; fi
+jobs:
+  allow_failures:
+    - env: Psalm
+      env: PHP Codesniffer
 
-script:
-  - vendor/bin/security-checker security:check
-  - if [[ "$TRAVIS_PHP_VERSION" == "7.3" ]]; then php vendor/phpunit/phpunit/phpunit; else php vendor/phpunit/phpunit/phpunit --no-coverage; fi
-  - if [[ "$TRAVIS_PHP_VERSION" == "7.3" ]]; then vendor/bin/psalm; fi
+  include:
+    - stage: Security check
+      before_script:
+        - composer require sensiolabs/security-checker --dev
+      script:
+        - vendor/bin/security-checker security:check
 
-after_script:
-  - if [[ "$TRAVIS_PHP_VERSION" == "7.2" ]]; then php vendor/bin/php-coveralls -v; fi
+
+    - stage: Unit testing
+      php: 7.2
+      before_script:
+        - composer install
+        - vendor/simplesamlphp/simplesamlphp-test-framework/bin/check-syntax-php.sh
+      script:
+        - php vendor/phpunit/phpunit/phpunit --no-coverage
+    - stage: Unit testing
+      php: 7.3
+      before_script:
+        - composer install
+        - vendor/simplesamlphp/simplesamlphp-test-framework/bin/check-syntax-php.sh
+      script:
+        - php vendor/phpunit/phpunit/phpunit
+      after_success:
+        # Codecov, need to edit bash uploader for incorrect TRAVIS_PYTHON_VERSION environment variable matching, at least until codecov/codecov-bash#133 is resolved
+        - curl -s https://codecov.io/bash > .codecov
+        - sed -i -e 's/TRAVIS_.*_VERSION/^TRAVIS_.*_VERSION=/' .codecov
+        - chmod +x .codecov
+        - ./.codecov -X gcov;
+        # - <(curl -s https://codecov.io/bash)
+
+    - stage: Code quality
+      php: 7.2
+      env: Psalm
+      before_script:
+        - composer require vimeo/psalm --dev
+      script:
+        - vendor/bin/psalm
+    - stage: Code quality
+      php: 7.3
+      env: Psalm
+      before_script:
+        - composer require vimeo/psalm --dev
+      script:
+        - vendor/bin/psalm
+    - stage: Code quality
+      php: 7.2
+      env: PHP Codesniffer
+      before_script:
+        - composer require squizlabs/php_codesniffer --dev
+      script:
+        - vendor/bin/phpcs src/
+    - stage: Code quality
+      php: 7.3
+      env: PHP Codesniffer
+      before_script:
+        - composer require squizlabs/php_codesniffer --dev
+      script:
+        - vendor/bin/phpcs src/
