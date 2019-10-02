@@ -5,8 +5,8 @@ matrix:
 
 jobs:
   allow_failures:
-    - script: vendor/bin/psalm
-    - script: vendor/bin/phpcs src/
+    - env: Psalm
+    - env: PHP Codesniffer
 
   include:
     - stage: Security check
