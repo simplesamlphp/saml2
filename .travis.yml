@@ -15,7 +15,6 @@ env:
 
 before_script:
   - ${COMMAND}
-  - vendor/simplesamlphp/simplesamlphp-test-framework/bin/check-syntax-php.sh
 
 script:
   - php vendor/phpunit/phpunit/phpunit --no-coverage
@@ -28,11 +27,20 @@ jobs:
       env: PHP Codesniffer
 
   include:
-    - stage: security
+    - stage: pre-conditions
+      name: Syntax check PHP
+      before_script:
+        - composer require simplesamlphp/simplesamlphp-module-testframework --dev
+      script:
+        - vendor/simplesamlphp/simplesamlphp-test-framework/bin/check-syntax-php.sh
+
+    - stage: pre-conditions
+      name: Security check
       before_script:
         - composer require sensiolabs/security-checker --dev
       script:
         - vendor/bin/security-checker security:check
+
 
     - stage: quality
       php: 7.2
