@@ -9,20 +9,6 @@ jobs:
     - script: vendor/bin/phpcs src/
 
   include:
-    - stage: Syntax check
-      php: 7.2
-      before_script:
-        - composer require simplesamlphp/simplesamlphp-test-framework --dev
-      script:
-        - vendor/simplesamlphp/simplesamlphp-test-framework/bin/check-syntax-php.sh
-    - stage: Syntax check
-      php: 7.3
-      before_script:
-        - composer require simplesamlphp/simplesamlphp-test-framework --dev
-      script:
-        - vendor/simplesamlphp/simplesamlphp-test-framework/bin/check-syntax-php.sh
-
-
     - stage: Security check
       before_script:
         - composer require sensiolabs/security-checker --dev
@@ -33,19 +19,19 @@ jobs:
     - stage: Unit testing
       php: 7.2
       before_script:
-        - composer install --no-dev
-        - composer require phpunit/phpunit --dev
+        - composer install
+        - vendor/simplesamlphp/simplesamlphp-test-framework/bin/check-syntax-php.sh
       script:
         - php vendor/phpunit/phpunit/phpunit --no-coverage
     - stage: Unit testing
       php: 7.3
       before_script:
-        - composer install --no-dev
-        - composer require phpunit/phpunit --dev
+        - composer install
+        - vendor/simplesamlphp/simplesamlphp-test-framework/bin/check-syntax-php.sh
       script:
         - php vendor/phpunit/phpunit/phpunit
+      after_success:
         - php vendor/bin/php-coveralls -v
-
 
     - stage: Code quality
       php: 7.2
