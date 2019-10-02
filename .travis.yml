@@ -17,15 +17,21 @@ jobs:
 
 
     - stage: Security check
-      script: vendor/bin/security-checker security:check
+      before_script:
+        - composer require sensiolabs/security-checker --dev
+      script:
+        - vendor/bin/security-checker security:check
 
 
     - stage: Unit testing
       before_script:
-        - composer install
+        - composer install --no-dev
+        - composer require phpunit/phpunit --dev
       script: if [[ "$TRAVIS_PHP_VERSION" == "7.3" ]]; then php vendor/phpunit/phpunit/phpunit; else php vendor/phpunit/phpunit/phpunit --no-coverage; fi
 
 
     - stage: Code quality
+      before_script:
+        - composer require vimeo/psalm --dev
       script: vendor/bin/psalm
     - script: if [[ "$TRAVIS_PHP_VERSION" == "7.3" ]]; then php vendor/bin/php-coveralls -v; fi
