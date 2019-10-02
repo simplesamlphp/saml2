@@ -1,23 +1,33 @@
 language: php
 
-php:
-  - 7.2
-  - 7.3
-
 matrix:
   fast_finish: true
-
-before_script:
-  - composer install
 
 jobs:
   include:
     - stage: Syntax check
+       php:
+        - 7.2
+        - 7.3
       script: vendor/simplesamlphp/simplesamlphp-test-framework/bin/check-syntax-php.sh
-    - stage: Unit testing
-      script: if [[ "$TRAVIS_PHP_VERSION" == "7.3" ]]; then php vendor/phpunit/phpunit/phpunit; else php vendor/phpunit/phpunit/phpunit --no-coverage; fi
+
+
     - stage: Security check
       script: vendor/bin/security-checker security:check
+
+
+    - stage: Unit testing
+      before_script:
+        - composer install
+      php:
+        - 7.2
+        - 7.3
+      script: if [[ "$TRAVIS_PHP_VERSION" == "7.3" ]]; then php vendor/phpunit/phpunit/phpunit; else php vendor/phpunit/phpunit/phpunit --no-coverage; fi
+
+
     - stage: Code quality
+      php:
+        - 7.2
+        - 7.3
       script: vendor/bin/psalm
     - script: if [[ "$TRAVIS_PHP_VERSION" == "7.3" ]]; then php vendor/bin/php-coveralls -v; fi
