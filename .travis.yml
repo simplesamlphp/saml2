@@ -28,14 +28,14 @@ jobs:
 
   include:
     - stage: pre-conditions
-      name: Syntax check PHP
+      env: Syntax check PHP
       before_script:
         - composer require simplesamlphp/simplesamlphp-test-framework --dev
       script:
         - vendor/simplesamlphp/simplesamlphp-test-framework/bin/check-syntax-php.sh
 
     - stage: pre-conditions
-      name: Security check
+      env: Security check
       before_script:
         - composer require sensiolabs/security-checker --dev
       script:
