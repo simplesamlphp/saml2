@@ -36,12 +36,6 @@ jobs:
         - composer require simplesamlphp/simplesamlphp-test-framework --dev
       script:
         - vendor/simplesamlphp/simplesamlphp-test-framework/bin/check-syntax-xml.sh
-
-    - stage: pre-conditions
-      env: Syntax check YAML
-      before_script:
-        - composer require simplesamlphp/simplesamlphp-test-framework --dev
-      script:
         - vendor/simplesamlphp/simplesamlphp-test-framework/bin/check-syntax-yaml.sh
 
     - stage: pre-conditions
