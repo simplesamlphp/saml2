@@ -31,7 +31,12 @@ jobs:
       script:
         - php vendor/phpunit/phpunit/phpunit
       after_success:
-        - php vendor/bin/php-coveralls -v
+        # Codecov, need to edit bash uploader for incorrect TRAVIS_PYTHON_VERSION environment variable matching, at least until codecov/codecov-bash#133 is resolved
+        - curl -s https://codecov.io/bash > .codecov
+        - sed -i -e 's/TRAVIS_.*_VERSION/^TRAVIS_.*_VERSION=/' .codecov
+        - chmod +x .codecov
+        - ./.codecov -X gcov;
+        # - <(curl -s https://codecov.io/bash)
 
     - stage: Code quality
       php: 7.2
