@@ -7,6 +7,9 @@ php:
 matrix:
   fast_finish: true
 
+before_script:
+  - composer install
+
 jobs:
   include:
     - stage: Syntax check
