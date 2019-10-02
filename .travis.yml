@@ -5,9 +5,7 @@ matrix:
 
 jobs:
   allow_failures:
-  - env:
-    - Psalm
-    - PHP Codesniffer
+  - env: Psalm "PHP Codesniffer"
 
   include:
     - stage: Syntax check
