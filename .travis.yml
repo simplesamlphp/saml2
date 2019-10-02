@@ -24,8 +24,10 @@ jobs:
   fast_finish: true
 
   allow_failures:
-    - env: Psalm
-    - env: PHP Codesniffer
+    - php: 7.3
+      env: Psalm
+    - php: 7.3
+      env: PHP Codesniffer
 
   include:
     - stage: pre-conditions
