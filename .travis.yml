@@ -5,9 +5,14 @@ stages:
   - test
   - quality
 
+################
+#  Test stage  #
+################
+
 php:
   - 7.2
   - 7.3
+  - 7.4
 
 env:
   - COMMAND="composer install"
@@ -17,41 +22,84 @@ before_script:
   - ${COMMAND}
 
 script:
-  - vendor/simplesamlphp/simplesamlphp-test-framework/bin/check-syntax-php.sh
-  - php vendor/phpunit/phpunit/phpunit --no-coverage
+  - php vendor/bin/phpunit --no-coverage
 
 jobs:
   fast_finish: true
 
   allow_failures:
     - php: 7.3
+      env: Security check (composer install)
+    - php: 7.3
+      env: Security check (composer update)
+    - php: 7.3
       env: Psalm
     - php: 7.3
       env: PHP Codesniffer
 
   include:
+
+    ##########################
+    #  Pre-conditions stage  #
+    ##########################
+
     - stage: pre-conditions
-      env: Syntax checks
+      env: Syntax check PHP
+      php: 7.2
+      before_script:
+        - composer install
+      script:
+        - vendor/bin/check-syntax-php.sh
+
+    - stage: pre-conditions
+      env: Syntax check PHP
+      php: 7.3
+      before_script:
+        - composer install
+      script:
+        - vendor/bin/check-syntax-php.sh
+
+    - stage: pre-conditions
+      env: Syntax check PHP
+      php: 7.4
+      before_script:
+        - composer install
+      script:
+        - vendor/bin/check-syntax-php.sh
+
+    - stage: pre-conditions
+      env: Syntax check YAML / XML / JSON
       before_script:
         - composer require simplesamlphp/simplesamlphp-test-framework --dev
       script:
+        - vendor/simplesamlphp/simplesamlphp-test-framework/bin/check-syntax-json.sh
         - vendor/simplesamlphp/simplesamlphp-test-framework/bin/check-syntax-xml.sh
         - vendor/simplesamlphp/simplesamlphp-test-framework/bin/check-syntax-yaml.sh
 
-    - stage: pre-conditions
-      env: Security check
+    ###################
+    #  Quality stage  #
+    ###################
+
+    - stage: quality
+      env: Security check (composer install)
       before_script:
-        - composer require sensiolabs/security-checker --dev
+        - composer install
       script:
         - vendor/bin/security-checker security:check
 
+    - stage: quality
+      env: Security check (composer update)
+      before_script:
+        - composer update
+      script:
+        - vendor/bin/security-checker security:check
 
     - stage: quality
-      php: 7.2
+      php: 7.3
       env: Codecov
       before_script:
-        - composer require phpunit/phpunit --dev
-        - php vendor/phpunit/phpunit/phpunit
+        - composer update
+        - php vendor/bin/phpunit
       script:
         # Codecov, need to edit bash uploader for incorrect TRAVIS_PYTHON_VERSION environment variable matching, at least until codecov/codecov-bash#133 is resolved
         - curl -s https://codecov.io/bash > .codecov
@@ -64,7 +112,7 @@ jobs:
       php: 7.3
       env: Psalm
       before_script:
-        - composer require vimeo/psalm --dev
+        - composer update
       script:
         - vendor/bin/psalm
 
@@ -72,6 +120,6 @@ jobs:
       php: 7.3
       env: PHP Codesniffer
       before_script:
-        - composer require squizlabs/php_codesniffer --dev
+        - composer update
       script:
         - vendor/bin/phpcs src/

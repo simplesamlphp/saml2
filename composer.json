@@ -21,10 +21,11 @@
     "require-dev": {
         "mockery/mockery": "~1.2",
         "phpunit/phpunit": "^8.3",
-        "simplesamlphp/simplesamlphp-test-framework": "0.0.11",
+        "simplesamlphp/simplesamlphp-test-framework": "~0.0.12",
         "sensiolabs/security-checker": "~6.0",
         "sebastian/phpcpd": "~4.1",
-        "squizlabs/php_codesniffer": "~3.5"
+        "squizlabs/php_codesniffer": "~3.5",
+        "vimeo/psalm": "~3.5"
     },
     "autoload": {
         "psr-4": {
