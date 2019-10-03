@@ -81,6 +81,7 @@ jobs:
     ###################
 
     - stage: quality
+      php: 7.3
       env: Security check (composer install)
       before_script:
         - composer install
@@ -88,6 +89,7 @@ jobs:
         - vendor/bin/security-checker security:check
 
     - stage: quality
+      php: 7.3
       env: Security check (composer update)
       before_script:
         - composer update
