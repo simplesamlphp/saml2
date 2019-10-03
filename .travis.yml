@@ -61,7 +61,7 @@ jobs:
 
     - stage: pre-conditions
       env: Syntax check PHP
-      php: 7.4
+      php: 7.4snapshot
       before_script:
         - composer install
       script:
