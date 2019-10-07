@@ -1,5 +1,15 @@
 # UPGRADE NOTES
 
+## 4.0 to 4.1
+
+**Assertion processor BC breaking change**
+
+The assertion processor in 4.0 assumed all assertions are encrypted and would try and decrypt twice, causing a fatal error.
+This problem was introduced in [#120](https://github.com/simplesamlphp/saml2/pull/120).
+
+If you are using the assertion processor as a stand-alone component, then you will have to update your code to reflect this
+change, see: [97a7bd0](https://github.com/simplesamlphp/saml2/commit/97a7bd0be4865617048e1ea92aa0b55df488fe4a).
+
 ## 3.4 to 4.0 
 
 **Assertion processor BC breaking change**
