@@ -283,7 +283,6 @@ class EntitiesDescriptor extends SignedElementHelper
 
         Extensions::addList($e, $this->Extensions);
 
-        /** @var \SAML2\XML\md\EntityDescriptor|\SAML2\XML\md\EntitiesDescriptor $node */
         foreach ($this->children as $node) {
             $node->toXML($e);
         }

@@ -84,7 +84,6 @@ class Response extends StatusResponse
     {
         $root = parent::toUnsignedXML();
 
-        /** @var \SAML2\Assertion|\SAML2\EncryptedAssertion $assertion */
         foreach ($this->assertions as $assertion) {
             $assertion->toXML($root);
         }

@@ -104,7 +104,6 @@ class EntityAttributes
         $e = $doc->createElementNS(EntityAttributes::NS, 'mdattr:EntityAttributes');
         $parent->appendChild($e);
 
-        /** @var \SAML2\XML\saml\Attribute|\SAML2\XML\Chunk $child */
         foreach ($this->children as $child) {
             $child->toXML($e);
         }

@@ -293,7 +293,6 @@ class SubjectConfirmationData
         if ($this->Address !== null) {
             $e->setAttribute('Address', $this->Address);
         }
-        /** @var \SAML2\XML\ds\KeyInfo|\SAML2\XML\Chunk $n */
         foreach ($this->getInfo() as $n) {
             $n->toXML($e);
         }
