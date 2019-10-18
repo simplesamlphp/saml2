@@ -16,7 +16,7 @@ Test with the 2 known users: (SimpleSAMLphp)[https://www.simplesamlphp.org] and
 
 ### Using Tests in Development
 
-In order to run the unittests, use `vendor/bin/phpunit -c tools/phpunit`
+In order to run the unittests, use `vendor/bin/phpunit`
 
 Contributing
 ------------
