@@ -25,7 +25,7 @@
         "sensiolabs/security-checker": "~6.0",
         "sebastian/phpcpd": "~4.1",
         "squizlabs/php_codesniffer": "~3.5",
-        "vimeo/psalm": "~3.5"
+        "vimeo/psalm": "~3.6"
     },
     "autoload": {
         "psr-4": {
