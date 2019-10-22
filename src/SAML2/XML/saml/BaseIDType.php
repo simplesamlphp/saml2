@@ -2,18 +2,18 @@
 
 declare(strict_types=1);
 
+namespace SAML2\XML\saml;
+
+use DOMElement;
+use SAML2\Constants;
+use SAML2\DOMDocumentFactory;
+
 /**
  * Base class corresponding to the BaseID element.
  *
  * @author Jaime Pérez Crespo, UNINETT AS <jaime.perez@uninett.no>
  * @package simplesamlphp/saml2
  */
-
-namespace SAML2\XML\saml;
-
-use DOMElement;
-use SAML2\Constants;
-use SAML2\DOMDocumentFactory;
 
 abstract class BaseIDType
 {
