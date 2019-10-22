@@ -17,7 +17,7 @@ class ContainerSingleton
      */
     public static function getInstance()
     {
-        if (!self::$container) {
+        if (!isset(self::$container)) {
             self::setContainer(self::initSspContainer());
         }
         return self::$container;
