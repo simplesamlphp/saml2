@@ -13,7 +13,7 @@
         "ext-openssl": "*",
         "ext-dom": "*",
 
-        "robrichards/xmlseclibs": "^2.0",
+        "robrichards/xmlseclibs": "^2.1.1",
         "psr/log": "~1.0"
     },
     "require-dev": {
