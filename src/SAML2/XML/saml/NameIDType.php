@@ -50,7 +50,7 @@ abstract class NameIDType extends BaseIDType
      *
      * @var string
      */
-    protected $value = '';
+    protected $value;
 
 
     /**

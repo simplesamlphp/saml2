@@ -1037,7 +1037,7 @@ class Assertion extends SignedElement
      * @param int|null $authnInstant Timestamp the user was authenticated, or NULL if we don't want an AuthnStatement.
      * @return void
      */
-    public function setAuthnInstant(int $authnInstant = null): void
+    public function setAuthnInstant(?int $authnInstant): void
     {
         $this->authnInstant = $authnInstant;
     }

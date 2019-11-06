@@ -6,6 +6,7 @@ namespace SAML2\XML\md;
 
 use DOMElement;
 use SAML2\Utils;
+use Webmozart\Assert\Assert;
 
 /**
  * Class representing SAML 2 IndexedEndpointType.
@@ -19,7 +20,7 @@ class IndexedEndpointType extends EndpointType
      *
      * @var int
      */
-    private $index = 0;
+    private $index;
 
     /**
      * Whether this endpoint is the default.
@@ -107,6 +108,8 @@ class IndexedEndpointType extends EndpointType
      */
     public function toXML(DOMElement $parent, string $name): DOMElement
     {
+        Assert::notEmpty($this->index);
+
         $e = parent::toXML($parent, $name);
         $e->setAttribute('index', strval($this->index));
 

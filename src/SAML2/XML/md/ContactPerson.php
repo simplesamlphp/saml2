@@ -8,6 +8,7 @@ use DOMElement;
 use SAML2\Constants;
 use SAML2\Utils;
 use SAML2\XML\Chunk;
+use Webmozart\Assert\Assert;
 
 /**
  * Class representing SAML 2 ContactPerson.
@@ -393,18 +394,21 @@ class ContactPerson
      */
     public function toXML(DOMElement $parent): DOMElement
     {
+        Assert::notEmpty($this->contactType);
+        Assert::allEmail($this->EmailAddress);
+
         $doc = $parent->ownerDocument;
 
         $e = $doc->createElementNS(Constants::NS_MD, 'md:ContactPerson');
         $parent->appendChild($e);
 
-        $e->setAttribute('contactType', $this->getContactType());
+        $e->setAttribute('contactType', $this->contactType);
 
-        foreach ($this->getContactPersonAttributes() as $attr => $val) {
+        foreach ($this->ContactPersonAttributes as $attr => $val) {
             $e->setAttribute($attr, $val);
         }
 
-        Extensions::addList($e, $this->getExtensions());
+        Extensions::addList($e, $this->Extensions);
 
         if ($this->Company !== null) {
             Utils::addString($e, Constants::NS_MD, 'md:Company', $this->Company);
@@ -415,11 +419,11 @@ class ContactPerson
         if ($this->SurName !== null) {
             Utils::addString($e, Constants::NS_MD, 'md:SurName', $this->SurName);
         }
-        if (!empty($this->getEmailAddress())) {
-            Utils::addStrings($e, Constants::NS_MD, 'md:EmailAddress', false, $this->getEmailAddress());
+        if (!empty($this->EmailAddress)) {
+            Utils::addStrings($e, Constants::NS_MD, 'md:EmailAddress', false, $this->EmailAddress);
         }
-        if (!empty($this->getTelephoneNumber())) {
-            Utils::addStrings($e, Constants::NS_MD, 'md:TelephoneNumber', false, $this->getTelephoneNumber());
+        if (!empty($this->TelephoneNumber)) {
+            Utils::addStrings($e, Constants::NS_MD, 'md:TelephoneNumber', false, $this->TelephoneNumber);
         }
 
         return $e;

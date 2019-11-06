@@ -21,7 +21,7 @@ class SigningMethod
      *
      * @var string
      */
-    private $Algorithm = '';
+    private $Algorithm;
 
     /**
      * The smallest key size, in bits, that the entity supports in conjunction with the algorithm. If omitted, no

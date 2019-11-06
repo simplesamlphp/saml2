@@ -71,7 +71,7 @@ class AuthnRequest extends Request
     private $RequesterID = [];
 
     /**
-     * The URL of the asertion consumer service where the response should be delivered.
+     * The URL of the assertion consumer service where the response should be delivered.
      *
      * @var string|null
      */

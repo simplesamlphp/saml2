@@ -7,6 +7,7 @@ namespace SAML2\XML\saml;
 use DOMElement;
 use SAML2\Constants;
 use SAML2\Utils;
+use Webmozart\Assert\Assert;
 
 /**
  * Class representing SAML 2 Attribute.
@@ -18,9 +19,9 @@ class Attribute
     /**
      * The Name of this attribute.
      *
-     * @var string|null
+     * @var string
      */
-    private $Name = null;
+    private $Name;
 
     /**
      * The NameFormat of this attribute.
@@ -80,9 +81,9 @@ class Attribute
     /**
      * Collect the value of the Name-property
      *
-     * @return string|null
+     * @return string
      */
-    public function getName(): ?string
+    public function getName(): string
     {
         return $this->Name;
     }
@@ -192,12 +193,11 @@ class Attribute
      */
     protected function toXMLInternal(DOMElement $parent, string $namespace, string $name): DOMElement
     {
+        Assert::notEmpty($this->Name, 'Cannot convert Attribute to XML with no Name set.');
+
         $e = $parent->ownerDocument->createElementNS($namespace, $name);
         $parent->appendChild($e);
 
-        if (empty($this->Name)) {
-            throw new \Exception('Cannot convert Attribute to XML with no Name set.');
-        }
         $e->setAttribute('Name', $this->Name);
 
         if ($this->NameFormat !== null) {

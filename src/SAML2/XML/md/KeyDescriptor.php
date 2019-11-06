@@ -30,9 +30,9 @@ class KeyDescriptor
     /**
      * The KeyInfo for this key.
      *
-     * @var \SAML2\XML\ds\KeyInfo|null
+     * @var \SAML2\XML\ds\KeyInfo
      */
-    private $KeyInfo = null;
+    private $KeyInfo;
 
     /**
      * Supported EncryptionMethods.
@@ -102,9 +102,9 @@ class KeyDescriptor
     /**
      * Collect the value of the KeyInfo property.
      *
-     * @return \SAML2\XML\ds\KeyInfo|null
+     * @return \SAML2\XML\ds\KeyInfo
      */
-    public function getKeyInfo(): ?KeyInfo
+    public function getKeyInfo(): KeyInfo
     {
         return $this->KeyInfo;
     }
@@ -165,7 +165,7 @@ class KeyDescriptor
      */
     public function toXML(DOMElement $parent): DOMElement
     {
-        if ($this->KeyInfo === null) {
+        if (!isset($this->KeyInfo)) {
             throw new \Exception('Cannot convert KeyDescriptor to XML without KeyInfo set.');
         }
 

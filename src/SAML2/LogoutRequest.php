@@ -135,7 +135,7 @@ class LogoutRequest extends Request
      */
     public function encryptNameId(XMLSecurityKey $key): void
     {
-        if ($this->nameId === null) {
+        if (!isset($this->nameId)) {
             throw new \Exception('Cannot encrypt NameID without a NameID set.');
         }
         /* First create a XML representation of the NameID. */
@@ -191,9 +191,9 @@ class LogoutRequest extends Request
      * Retrieve the name identifier of the session that should be terminated.
      *
      * @throws \Exception
-     * @return \SAML2\XML\saml\NameID|null The name identifier of the session that should be terminated.
+     * @return \SAML2\XML\saml\NameID The name identifier of the session that should be terminated.
      */
-    public function getNameId(): ?NameID
+    public function getNameId(): NameID
     {
         if ($this->encryptedNameId !== null) {
             throw new \Exception('Attempted to retrieve encrypted NameID without decrypting it first.');
@@ -276,7 +276,7 @@ class LogoutRequest extends Request
      */
     public function toUnsignedXML(): DOMElement
     {
-        if ($this->encryptedNameId === null && $this->nameId === null) {
+        if ($this->encryptedNameId === null && !isset($this->nameId)) {
             throw new \Exception('Cannot convert LogoutRequest to XML without a NameID set.');
         }
 
@@ -289,7 +289,7 @@ class LogoutRequest extends Request
         if ($this->encryptedNameId === null) {
             $this->nameId->toXML($root);
         } else {
-            $eid = $root->ownerDocument->createElementNS(Constants::NS_SAML, 'saml:' . 'EncryptedID');
+            $eid = $root->ownerDocument->createElementNS(Constants::NS_SAML, 'saml:EncryptedID');
             $root->appendChild($eid);
             $eid->appendChild($root->ownerDocument->importNode($this->encryptedNameId, true));
         }

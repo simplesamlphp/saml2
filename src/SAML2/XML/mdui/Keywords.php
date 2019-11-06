@@ -29,7 +29,7 @@ class Keywords
      *
      * @var string
      */
-    private $lang = '';
+    private $lang;
 
 
     /**

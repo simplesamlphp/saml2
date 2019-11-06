@@ -21,7 +21,7 @@ class PublicationInfo
      *
      * @var string
      */
-    private $publisher = '';
+    private $publisher;
 
     /**
      * The creation timestamp for the metadata, as a UNIX timestamp.

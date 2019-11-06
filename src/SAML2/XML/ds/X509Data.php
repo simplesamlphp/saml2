@@ -92,6 +92,7 @@ class X509Data
     public function addData($data): void
     {
         Assert::isInstanceOfAny($data, [Chunk::class, X509Certificate::class]);
+
         $this->data[] = $data;
     }
 

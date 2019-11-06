@@ -9,6 +9,7 @@ use SAML2\Constants;
 use SAML2\SignedElementHelper;
 use SAML2\Utils;
 use SAML2\XML\Chunk;
+use Webmozart\Assert\Assert;
 
 /**
  * Class representing SAML 2 RoleDescriptor element.
@@ -399,6 +400,8 @@ class RoleDescriptor extends SignedElementHelper
      */
     public function toXML(DOMElement $parent): DOMElement
     {
+        Assert::notEmpty($this->protocolSupportEnumeration);
+
         $e = $parent->ownerDocument->createElementNS(Constants::NS_MD, $this->elementName);
         $parent->appendChild($e);
 

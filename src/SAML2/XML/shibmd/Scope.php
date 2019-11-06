@@ -26,7 +26,7 @@ class Scope
      *
      * @var string
      */
-    private $scope = '';
+    private $scope;
 
     /**
      * Whether this is a regexp scope.
