@@ -21,7 +21,6 @@ use SAML2\Utilities\Temporal;
  */
 class HTTPArtifact extends Binding
 {
-
     /**
      * @var mixed
      */
@@ -92,9 +91,9 @@ class HTTPArtifact extends Binding
      * Throws an exception if it is unable receive the message.
      *
      * @throws \Exception
-     * @return \SAML2\Message|null The received message.
+     * @return \SAML2\Message The received message.
      */
-    public function receive() : ?Message
+    public function receive(): Message
     {
         if (array_key_exists('SAMLart', $_REQUEST)) {
             $artifact = base64_decode($_REQUEST['SAMLart']);
