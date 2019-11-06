@@ -2,19 +2,18 @@
 
 declare(strict_types=1);
 
+namespace SAML2\XML\saml;
+
+use DOMElement;
+use SAML2\Constants;
+use SAML2\DOMDocumentFactory;
+
 /**
  * Base class corresponding to the BaseID element.
  *
  * @author Jaime Pérez Crespo, UNINETT AS <jaime.perez@uninett.no>
  * @package simplesamlphp/saml2
  */
-
-namespace SAML2\XML\saml;
-
-use DOMElement;
-
-use SAML2\Constants;
-use SAML2\DOMDocumentFactory;
 
 abstract class BaseIDType
 {
@@ -81,7 +80,7 @@ abstract class BaseIDType
      *
      * @return string|null
      */
-    public function getNameQualifier() : ?string
+    public function getNameQualifier(): ?string
     {
         return $this->NameQualifier;
     }
@@ -93,7 +92,7 @@ abstract class BaseIDType
      * @param string|null $nameQualifier
      * @return void
      */
-    public function setNameQualifier(string $nameQualifier = null) : void
+    public function setNameQualifier(string $nameQualifier = null): void
     {
         $this->NameQualifier = $nameQualifier;
     }
@@ -104,7 +103,7 @@ abstract class BaseIDType
      *
      * @return string|null
      */
-    public function getSPNameQualifier() : ?string
+    public function getSPNameQualifier(): ?string
     {
         return $this->SPNameQualifier;
     }
@@ -116,7 +115,7 @@ abstract class BaseIDType
      * @param string|null $spNameQualifier
      * @return void
      */
-    public function setSPNameQualifier(string $spNameQualifier = null) : void
+    public function setSPNameQualifier(string $spNameQualifier = null): void
     {
         $this->SPNameQualifier = $spNameQualifier;
     }
@@ -128,7 +127,7 @@ abstract class BaseIDType
      * @param \DOMElement $parent The element we are converting to XML.
      * @return \DOMElement The XML element after adding the data corresponding to this BaseID.
      */
-    public function toXML(DOMElement $parent = null) : DOMElement
+    public function toXML(DOMElement $parent = null): DOMElement
     {
         if ($parent === null) {
             $parent = DOMDocumentFactory::create();
@@ -156,7 +155,7 @@ abstract class BaseIDType
      *
      * @return string The resulting XML, as a string.
      */
-    public function __toString()
+    public function __toString(): string
     {
         $doc = DOMDocumentFactory::create();
         $root = $doc->createElementNS(Constants::NS_SAML, 'root');

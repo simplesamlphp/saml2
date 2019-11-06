@@ -17,7 +17,7 @@ class MessageTest extends \Mockery\Adapter\Phpunit\MockeryTestCase
      * @group Message
      * @return void
      */
-    public function testCorrectSignatureMethodCanBeExtractedFromAuthnRequest() : void
+    public function testCorrectSignatureMethodCanBeExtractedFromAuthnRequest(): void
     {
         $authnRequest = new \DOMDocument();
         $authnRequest->loadXML(<<<'AUTHNREQUEST'
@@ -53,7 +53,7 @@ AUTHNREQUEST
      * @group Message
      * @return void
      */
-    public function testIssuerParsedAsNameID() : void
+    public function testIssuerParsedAsNameID(): void
     {
         $authnRequest = new \DOMDocument();
         $authnRequest->loadXML(<<<'AUTHNREQUEST'
@@ -93,7 +93,7 @@ AUTHNREQUEST
      * @group Message
      * @return void
      */
-    public function testConvertIssuerToXML() : void
+    public function testConvertIssuerToXML(): void
     {
         // first, try with common Issuer objects (Format=entity)
         $response = new Response();
@@ -135,10 +135,10 @@ AUTHNREQUEST
      * @group Message
      * @return void
      */
-    public function testCorrectSignatureMethodCanBeExtractedFromResponse() : void
+    public function testCorrectSignatureMethodCanBeExtractedFromResponse(): void
     {
         $response = new \DOMDocument();
-        $response->load(__DIR__.'/Response/response.xml');
+        $response->load(__DIR__ . '/Response/response.xml');
 
         $privateKey = CertificatesMock::getPrivateKey();
 
@@ -157,7 +157,7 @@ AUTHNREQUEST
      * @covers \SAML2\Message::getExtensions()
      * @return void
      */
-    public function testGetExtensions() : void
+    public function testGetExtensions(): void
     {
         $authnRequest = new \DOMDocument();
         $authnRequest->loadXML(<<<'AUTHNREQUEST'
@@ -200,7 +200,7 @@ AUTHNREQUEST
      * @covers \SAML2\Message::setExtensions()
      * @return void
      */
-    public function testSetExtensions() : void
+    public function testSetExtensions(): void
     {
         $authnRequest = new \DOMDocument();
         $authnRequest->loadXML(<<<'AUTHNREQUEST'
@@ -252,9 +252,9 @@ AUTHNREQUEST
      * @group Message
      * @return void
      */
-    public function testNamespaceMustBeProtocol() : void
+    public function testNamespaceMustBeProtocol(): void
     {
-            $xml = <<<XML
+        $xml = <<<XML
 <saml:Assertion xmlns:saml="urn:oasis:names:tc:SAML:2.0:assertion"
                 ID="_593e33ddf86449ce4d4c22b60ac48e067d98a0b2bf"
                 Version="2.0"
@@ -264,7 +264,10 @@ AUTHNREQUEST
 </saml:Assertion>
 XML;
         $document  = DOMDocumentFactory::fromString($xml);
-        $this->expectException(\Exception::class, "Unknown namespace of SAML message: 'urn:oasis:names:tc:SAML:2.0:assertion'");
+        $this->expectException(
+            \Exception::class,
+            "Unknown namespace of SAML message: 'urn:oasis:names:tc:SAML:2.0:assertion'"
+        );
         $message = Message::fromXML($document->documentElement);
     }
 
@@ -273,7 +276,7 @@ XML;
      * @group Message
      * @return void
      */
-    public function testSAMLversionMustBe20() : void
+    public function testSAMLversionMustBe20(): void
     {
         $xml = <<<XML
 <samlp:LogoutResponse xmlns:samlp="urn:oasis:names:tc:SAML:2.0:protocol"
@@ -301,7 +304,7 @@ XML;
      * @group Message
      * @return void
      */
-    public function testMessageMustHaveID() : void
+    public function testMessageMustHaveID(): void
     {
         $xml = <<<XML
 <samlp:LogoutRequest
@@ -323,7 +326,7 @@ XML;
      * @group Message
      * @return void
      */
-    public function testParseAttributeQuery() : void
+    public function testParseAttributeQuery(): void
     {
         $xml = <<<XML
 <samlp:AttributeQuery
@@ -366,7 +369,7 @@ XML;
      * @group Message
      * @return void
      */
-    public function testMessageTypeMustBeKnown() : void
+    public function testMessageTypeMustBeKnown(): void
     {
         $xml = <<<XML
 <samlp:MyFantasy

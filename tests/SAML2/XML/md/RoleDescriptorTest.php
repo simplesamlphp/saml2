@@ -15,7 +15,7 @@ class RoleDescriptorTest extends \PHPUnit\Framework\TestCase
     /**
      * @return void
      */
-    public function testMarshalling() : void
+    public function testMarshalling(): void
     {
         $roleDescriptor = new RoleDescriptorMock();
         $roleDescriptor->setID('SomeID');

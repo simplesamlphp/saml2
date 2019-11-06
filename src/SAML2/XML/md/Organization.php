@@ -5,11 +5,10 @@ declare(strict_types=1);
 namespace SAML2\XML\md;
 
 use DOMElement;
-use Webmozart\Assert\Assert;
-
 use SAML2\Constants;
 use SAML2\Utils;
 use SAML2\XML\Chunk;
+use Webmozart\Assert\Assert;
 
 /**
  * Class representing SAML 2 Organization element.
@@ -88,7 +87,7 @@ class Organization
      *
      * @return \SAML2\XML\Chunk[]
      */
-    public function getExtensions() : array
+    public function getExtensions(): array
     {
         return $this->Extensions;
     }
@@ -100,7 +99,7 @@ class Organization
      * @param array $extensions
      * @return void
      */
-    public function setExtensions(array $extensions) : void
+    public function setExtensions(array $extensions): void
     {
         $this->Extensions = $extensions;
     }
@@ -112,7 +111,7 @@ class Organization
      * @param \SAML2\XML\Chunk $extensions The Extensions
      * @return void
      */
-    public function addExtension(Extensions $extension) : void
+    public function addExtension(Extensions $extension): void
     {
         $this->Extensions[] = $extension;
     }
@@ -123,7 +122,7 @@ class Organization
      *
      * @return string[]
      */
-    public function getOrganizationName() : array
+    public function getOrganizationName(): array
     {
         return $this->OrganizationName;
     }
@@ -135,7 +134,7 @@ class Organization
      * @param array $organizationName
      * @return void
      */
-    public function setOrganizationName(array $organizationName) : void
+    public function setOrganizationName(array $organizationName): void
     {
         $this->OrganizationName = $organizationName;
     }
@@ -146,7 +145,7 @@ class Organization
      *
      * @return string[]
      */
-    public function getOrganizationDisplayName() : array
+    public function getOrganizationDisplayName(): array
     {
         return $this->OrganizationDisplayName;
     }
@@ -158,7 +157,7 @@ class Organization
      * @param array $organizationDisplayName
      * @return void
      */
-    public function setOrganizationDisplayName(array $organizationDisplayName) : void
+    public function setOrganizationDisplayName(array $organizationDisplayName): void
     {
         $this->OrganizationDisplayName = $organizationDisplayName;
     }
@@ -169,7 +168,7 @@ class Organization
      *
      * @return string[]
      */
-    public function getOrganizationURL() : array
+    public function getOrganizationURL(): array
     {
         return $this->OrganizationURL;
     }
@@ -181,7 +180,7 @@ class Organization
      * @param array $organizationURL
      * @return void
      */
-    public function setOrganizationURL(array $organizationURL) : void
+    public function setOrganizationURL(array $organizationURL): void
     {
         $this->OrganizationURL = $organizationURL;
     }
@@ -193,7 +192,7 @@ class Organization
      * @param  \DOMElement $parent The element we should add this organization to.
      * @return \DOMElement This Organization-element.
      */
-    public function toXML(DOMElement $parent) : DOMElement
+    public function toXML(DOMElement $parent): DOMElement
     {
         Assert::notEmpty($this->OrganizationName);
         Assert::notEmpty($this->OrganizationDisplayName);

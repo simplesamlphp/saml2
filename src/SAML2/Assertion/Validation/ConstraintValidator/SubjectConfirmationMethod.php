@@ -19,7 +19,7 @@ final class SubjectConfirmationMethod implements SubjectConfirmationConstraintVa
     public function validate(
         SubjectConfirmation $subjectConfirmation,
         Result $result
-    ) : void {
+    ): void {
         if ($subjectConfirmation->getMethod() !== Constants::CM_BEARER) {
             $result->addError(sprintf(
                 'Invalid Method on SubjectConfirmation, current;y only Bearer (%s) is supported',

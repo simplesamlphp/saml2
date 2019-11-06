@@ -25,7 +25,7 @@ interface CertificateProvider extends Queryable
      *
      * @return null|string
      */
-    public function getCertificateData() : ?string;
+    public function getCertificateData(): ?string;
 
 
     /**
@@ -33,5 +33,5 @@ interface CertificateProvider extends Queryable
      *
      * @return null|string
      */
-    public function getCertificateFile() : ?string;
+    public function getCertificateFile(): ?string;
 }

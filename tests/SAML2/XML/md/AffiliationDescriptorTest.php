@@ -14,7 +14,7 @@ class AffiliationDescriptorTest extends \PHPUnit\Framework\TestCase
     /**
      * @return void
      */
-    public function testMarshalling() : void
+    public function testMarshalling(): void
     {
         $document = DOMDocumentFactory::fromString('<root />');
 
@@ -55,7 +55,7 @@ class AffiliationDescriptorTest extends \PHPUnit\Framework\TestCase
     /**
      * @return void
      */
-    public function testUnmarshalling() : void
+    public function testUnmarshalling(): void
     {
         $mdNamespace = Constants::NS_MD;
         $document = DOMDocumentFactory::fromString(<<<XML
@@ -81,11 +81,10 @@ XML
     /**
      * @return void
      */
-    public function testUnmarshallingWithoutMembers() : void
+    public function testUnmarshallingWithoutMembers(): void
     {
         $mdNamespace = Constants::NS_MD;
-        $document = DOMDocumentFactory::fromString(
-<<<XML
+        $document = DOMDocumentFactory::fromString(<<<XML
 <md:AffiliationDescriptor xmlns:md="{$mdNamespace}" affiliationOwnerID="TheOwner" ID="TheID" validUntil="2009-02-13T23:31:30Z" cacheDuration="PT5000S">
 </md:AffiliationDescriptor>
 XML
@@ -98,7 +97,7 @@ XML
     /**
      * @return void
      */
-    public function testUnmarshallingWithoutOwner() : void
+    public function testUnmarshallingWithoutOwner(): void
     {
         $mdNamespace = Constants::NS_MD;
         $document = DOMDocumentFactory::fromString(

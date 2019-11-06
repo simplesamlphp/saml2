@@ -5,13 +5,12 @@ declare(strict_types=1);
 namespace SAML2;
 
 use RobRichards\XMLSecLibs\XMLSecurityKey;
+use SAML2\Utilities\Temporal;
 use SimpleSAML\Configuration;
 use SimpleSAML\Metadata\MetaDataStorageHandler;
 use SimpleSAML\Module\saml\Message as MSG;
 use SimpleSAML\Store;
 use SimpleSAML\Utils\HTTP;
-
-use SAML2\Utilities\Temporal;
 
 /**
  * Class which implements the HTTP-Artifact binding.
@@ -21,7 +20,6 @@ use SAML2\Utilities\Temporal;
  */
 class HTTPArtifact extends Binding
 {
-
     /**
      * @var mixed
      */
@@ -35,7 +33,7 @@ class HTTPArtifact extends Binding
      * @throws \Exception
      * @return string        The URL the user should be redirected to in order to send a message.
      */
-    public function getRedirectURL(Message $message) : string
+    public function getRedirectURL(Message $message): string
     {
         /** @psalm-suppress UndefinedClass */
         $store = Store::getInstance();
@@ -48,11 +46,11 @@ class HTTPArtifact extends Binding
         if ($issuer === null) {
             throw new \Exception('Cannot get redirect URL, no Issuer set in the message.');
         }
-        $artifact = base64_encode("\x00\x04\x00\x00".sha1($issuer->getValue(), true).$generatedId);
+        $artifact = base64_encode("\x00\x04\x00\x00" . sha1($issuer->getValue(), true) . $generatedId);
         $artifactData = $message->toUnsignedXML();
         $artifactDataString = $artifactData->ownerDocument->saveXML($artifactData);
 
-        $store->set('artifact', $artifact, $artifactDataString, Temporal::getTime() + 15*60);
+        $store->set('artifact', $artifact, $artifactDataString, Temporal::getTime() + 15 * 60);
 
         $params = [
             'SAMLart' => $artifact,
@@ -79,7 +77,7 @@ class HTTPArtifact extends Binding
      * @param \SAML2\Message $message The message we should send.
      * @return void
      */
-    public function send(Message $message) : void
+    public function send(Message $message): void
     {
         $destination = $this->getRedirectURL($message);
         Utils::getContainer()->redirect($destination);
@@ -92,9 +90,9 @@ class HTTPArtifact extends Binding
      * Throws an exception if it is unable receive the message.
      *
      * @throws \Exception
-     * @return \SAML2\Message|null The received message.
+     * @return \SAML2\Message The received message.
      */
-    public function receive() : ?Message
+    public function receive(): Message
     {
         if (array_key_exists('SAMLart', $_REQUEST)) {
             $artifact = base64_decode($_REQUEST['SAMLart']);
@@ -110,7 +108,7 @@ class HTTPArtifact extends Binding
         $idpMetadata = $metadataHandler->getMetaDataConfigForSha1($sourceId, 'saml20-idp-remote');
 
         if ($idpMetadata === null) {
-            throw new \Exception('No metadata found for remote provider with SHA1 ID: '.var_export($sourceId, true));
+            throw new \Exception('No metadata found for remote provider with SHA1 ID: ' . var_export($sourceId, true));
         }
 
         $endpoint = null;
@@ -125,7 +123,9 @@ class HTTPArtifact extends Binding
             throw new \Exception('No ArtifactResolutionService with the correct index.');
         }
 
-        Utils::getContainer()->getLogger()->debug("ArtifactResolutionService endpoint being used is := ".$endpoint['Location']);
+        Utils::getContainer()->getLogger()->debug(
+            "ArtifactResolutionService endpoint being used is := " . $endpoint['Location']
+        );
 
         //Construct the ArtifactResolve Request
         $ar = new ArtifactResolve();
@@ -176,7 +176,7 @@ class HTTPArtifact extends Binding
      *
      * @psalm-suppress UndefinedClass
      */
-    public function setSPMetadata(Configuration $sp) : void
+    public function setSPMetadata(Configuration $sp): void
     {
         $this->spMetadata = $sp;
     }
@@ -189,7 +189,7 @@ class HTTPArtifact extends Binding
      * @param XMLSecurityKey $key
      * @return bool
      */
-    public static function validateSignature(ArtifactResponse $message, XMLSecurityKey $key) : bool
+    public static function validateSignature(ArtifactResponse $message, XMLSecurityKey $key): bool
     {
         return $message->validate($key);
     }

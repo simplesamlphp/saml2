@@ -12,7 +12,7 @@ class Temporal
      *
      * @return int
      */
-    public static function getTime() : int
+    public static function getTime(): int
     {
         return time();
     }

@@ -21,10 +21,10 @@ class Logger implements LoggerInterface
      *
      * Type hint not possible due to upstream method signature
      */
-    public function emergency($message, array $context = []) : void
+    public function emergency($message, array $context = []): void
     {
         /** @psalm-suppress UndefinedClass */
-        SspLogger::emergency($message.($context ? " ".var_export($context, true) : ""));
+        SspLogger::emergency($message . ($context ? " " . var_export($context, true) : ""));
     }
 
 
@@ -40,10 +40,10 @@ class Logger implements LoggerInterface
      *
      * Type hint not possible due to upstream method signature
      */
-    public function alert($message, array $context = []) : void
+    public function alert($message, array $context = []): void
     {
         /** @psalm-suppress UndefinedClass */
-        SspLogger::alert($message.($context ? " ".var_export($context, true) : ""));
+        SspLogger::alert($message . ($context ? " " . var_export($context, true) : ""));
     }
 
 
@@ -58,10 +58,10 @@ class Logger implements LoggerInterface
      *
      * Type hint not possible due to upstream method signature
      */
-    public function critical($message, array $context = []) : void
+    public function critical($message, array $context = []): void
     {
         /** @psalm-suppress UndefinedClass */
-        SspLogger::critical($message.($context ? " ".var_export($context, true) : ""));
+        SspLogger::critical($message . ($context ? " " . var_export($context, true) : ""));
     }
 
 
@@ -75,10 +75,10 @@ class Logger implements LoggerInterface
      *
      * Type hint not possible due to upstream method signature
      */
-    public function error($message, array $context = []) : void
+    public function error($message, array $context = []): void
     {
         /** @psalm-suppress UndefinedClass */
-        SspLogger::error($message.($context ? " ".var_export($context, true) : ""));
+        SspLogger::error($message . ($context ? " " . var_export($context, true) : ""));
     }
 
 
@@ -94,10 +94,10 @@ class Logger implements LoggerInterface
      *
      * Type hint not possible due to upstream method signature
      */
-    public function warning($message, array $context = []) : void
+    public function warning($message, array $context = []): void
     {
         /** @psalm-suppress UndefinedClass */
-        SspLogger::warning($message.($context ? " ".var_export($context, true) : ""));
+        SspLogger::warning($message . ($context ? " " . var_export($context, true) : ""));
     }
 
 
@@ -110,10 +110,10 @@ class Logger implements LoggerInterface
      *
      * Type hint not possible due to upstream method signature
      */
-    public function notice($message, array $context = []) : void
+    public function notice($message, array $context = []): void
     {
         /** @psalm-suppress UndefinedClass */
-        SspLogger::notice($message.($context ? " ".var_export($context, true) : ""));
+        SspLogger::notice($message . ($context ? " " . var_export($context, true) : ""));
     }
 
 
@@ -128,10 +128,10 @@ class Logger implements LoggerInterface
      *
      * Type hint not possible due to upstream method signature
      */
-    public function info($message, array $context = []) : void
+    public function info($message, array $context = []): void
     {
         /** @psalm-suppress UndefinedClass */
-        SspLogger::info($message.($context ? " ".var_export($context, true) : ""));
+        SspLogger::info($message . ($context ? " " . var_export($context, true) : ""));
     }
 
 
@@ -144,10 +144,10 @@ class Logger implements LoggerInterface
      *
      * Type hint not possible due to upstream method signature
      */
-    public function debug($message, array $context = []) : void
+    public function debug($message, array $context = []): void
     {
         /** @psalm-suppress UndefinedClass */
-        SspLogger::debug($message.($context ? " ".var_export($context, true) : ""));
+        SspLogger::debug($message . ($context ? " " . var_export($context, true) : ""));
     }
 
 
@@ -161,8 +161,9 @@ class Logger implements LoggerInterface
      *
      * Type hint not possible due to upstream method signature
      */
-    public function log($level, $message, array $context = []) : void
+    public function log($level, $message, array $context = []): void
     {
+        /** @psalm-suppress RedundantConditionGivenDocblockType */
         Assert::string($message);
 
         switch ($level) {

@@ -5,7 +5,6 @@ declare(strict_types=1);
 namespace SAML2\Response;
 
 use Psr\Log\LoggerInterface;
-
 use SAML2\Assertion\ProcessorBuilder;
 use SAML2\Configuration\Destination;
 use SAML2\Configuration\IdentityProvider;
@@ -74,7 +73,7 @@ class Processor
         IdentityProvider $identityProviderConfiguration,
         Destination $currentDestination,
         Response $response
-    ) : ArrayCollection {
+    ): ArrayCollection {
         $this->preconditionValidator = new PreconditionValidator($currentDestination);
         $this->assertionProcessor = ProcessorBuilder::build(
             $this->logger,
@@ -98,7 +97,7 @@ class Processor
      * @throws PreconditionNotMetException
      * @return void
      */
-    private function enforcePreconditions(Response $response) : void
+    private function enforcePreconditions(Response $response): void
     {
         $result = $this->preconditionValidator->validate($response);
 
@@ -114,7 +113,7 @@ class Processor
      * @throws InvalidResponseException
      * @return void
      */
-    private function verifySignature(Response $response, IdentityProvider $identityProviderConfiguration) : void
+    private function verifySignature(Response $response, IdentityProvider $identityProviderConfiguration): void
     {
         if (!$response->isMessageConstructedWithSignature()) {
             $this->logger->info(sprintf(
@@ -147,7 +146,7 @@ class Processor
      * @throws NoAssertionsFoundException
      * @return \SAML2\Utilities\ArrayCollection
      */
-    private function processAssertions(Response $response) : ArrayCollection
+    private function processAssertions(Response $response): ArrayCollection
     {
         $assertions = $response->getAssertions();
         if (empty($assertions)) {

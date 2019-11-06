@@ -47,7 +47,7 @@ class TransformerChain implements Transformer
      * @param Transformer $transformer
      * @return void
      */
-    public function addTransformerStep(Transformer $transformer) : void
+    public function addTransformerStep(Transformer $transformer): void
     {
         if ($transformer instanceof IdentityProviderAware) {
             $transformer->setIdentityProvider($this->identityProvider);
@@ -66,7 +66,7 @@ class TransformerChain implements Transformer
      *
      * @return \SAML2\Assertion
      */
-    public function transform(Assertion $assertion) : Assertion
+    public function transform(Assertion $assertion): Assertion
     {
         foreach ($this->transformers as $transformer) {
             $assertion = $transformer->transform($assertion);

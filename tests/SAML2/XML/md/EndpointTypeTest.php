@@ -17,7 +17,7 @@ class EndpointTypeTest extends \PHPUnit\Framework\TestCase
     /**
      * @return void
      */
-    public function testMarshalling() : void
+    public function testMarshalling(): void
     {
         $endpointType = new EndpointType();
         $endpointType->setBinding('TestBinding');
@@ -50,11 +50,10 @@ class EndpointTypeTest extends \PHPUnit\Framework\TestCase
     /**
      * @return void
      */
-    public function testUnmarshalling() : void
+    public function testUnmarshalling(): void
     {
         $mdNamespace = Constants::NS_MD;
-        $document = DOMDocumentFactory::fromString(
-<<<XML
+        $document = DOMDocumentFactory::fromString(<<<XML
 <md:Test xmlns:md="{$mdNamespace}" Binding="urn:something" Location="https://whatever/" xmlns:test="urn:test" test:attr="value" />
 XML
         );

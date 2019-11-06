@@ -5,11 +5,10 @@ declare(strict_types=1);
 namespace SAML2\XML\md;
 
 use DOMElement;
-use Webmozart\Assert\Assert;
-
 use SAML2\Constants;
 use SAML2\Utils;
 use SAML2\XML\saml\Attribute;
+use Webmozart\Assert\Assert;
 
 /**
  * Class representing SAML 2 metadata AttributeAuthorityDescriptor.
@@ -107,7 +106,7 @@ class AttributeAuthorityDescriptor extends RoleDescriptor
      *
      * @return \SAML2\XML\md\EndpointType[]
      */
-    public function getAttributeService() : array
+    public function getAttributeService(): array
     {
         return $this->AttributeService;
     }
@@ -119,7 +118,7 @@ class AttributeAuthorityDescriptor extends RoleDescriptor
      * @param \SAML2\XML\md\EndpointType[] $attributeService
      * @return void
      */
-    public function setAttributeService(array $attributeService) : void
+    public function setAttributeService(array $attributeService): void
     {
         $this->AttributeService = $attributeService;
     }
@@ -131,7 +130,7 @@ class AttributeAuthorityDescriptor extends RoleDescriptor
      * @param \SAML2\XML\md\EndpointType $attributeService
      * @return void
      */
-    public function addAttributeService(EndpointType $attributeService) : void
+    public function addAttributeService(EndpointType $attributeService): void
     {
         $this->AttributeService[] = $attributeService;
     }
@@ -142,7 +141,7 @@ class AttributeAuthorityDescriptor extends RoleDescriptor
      *
      * @return string[]
      */
-    public function getNameIDFormat() : array
+    public function getNameIDFormat(): array
     {
         return $this->NameIDFormat;
     }
@@ -154,7 +153,7 @@ class AttributeAuthorityDescriptor extends RoleDescriptor
      * @param string[] $nameIDFormat
      * @return void
      */
-    public function setNameIDFormat(array $nameIDFormat) : void
+    public function setNameIDFormat(array $nameIDFormat): void
     {
         $this->NameIDFormat = $nameIDFormat;
     }
@@ -165,7 +164,7 @@ class AttributeAuthorityDescriptor extends RoleDescriptor
      *
      * @return \SAML2\XML\md\EndpointType[]
      */
-    public function getAssertionIDRequestService() : array
+    public function getAssertionIDRequestService(): array
     {
         return $this->AssertionIDRequestService;
     }
@@ -177,7 +176,7 @@ class AttributeAuthorityDescriptor extends RoleDescriptor
      * @param \SAML2\XML\md\EndpointType[] $assertionIDRequestService
      * @return void
      */
-    public function setAssertionIDRequestService(array $assertionIDRequestService) : void
+    public function setAssertionIDRequestService(array $assertionIDRequestService): void
     {
         $this->AssertionIDRequestService = $assertionIDRequestService;
     }
@@ -189,7 +188,7 @@ class AttributeAuthorityDescriptor extends RoleDescriptor
      * @param \SAML2\XML\md\EndpointType $assertionIDRequestService
      * @return void
      */
-    public function addAssertionIDRequestService(EndpointType $assertionIDRequestService) : void
+    public function addAssertionIDRequestService(EndpointType $assertionIDRequestService): void
     {
         $this->AssertionIDRequestService[] = $assertionIDRequestService;
     }
@@ -200,7 +199,7 @@ class AttributeAuthorityDescriptor extends RoleDescriptor
      *
      * @return string[]
      */
-    public function getAttributeProfile() : array
+    public function getAttributeProfile(): array
     {
         return $this->AttributeProfile;
     }
@@ -212,7 +211,7 @@ class AttributeAuthorityDescriptor extends RoleDescriptor
      * @param string[] $attributeProfile
      * @return void
      */
-    public function setAttributeProfile(array $attributeProfile) : void
+    public function setAttributeProfile(array $attributeProfile): void
     {
         $this->AttributeProfile = $attributeProfile;
     }
@@ -223,7 +222,7 @@ class AttributeAuthorityDescriptor extends RoleDescriptor
      *
      * @return \SAML2\XML\saml\Attribute[]
      */
-    public function getAttribute() : array
+    public function getAttribute(): array
     {
         return $this->Attribute;
     }
@@ -235,7 +234,7 @@ class AttributeAuthorityDescriptor extends RoleDescriptor
      * @param \SAML2\XML\saml\Attribute[] $attribute
      * @return void
      */
-    public function setAttribute(array $attribute) : void
+    public function setAttribute(array $attribute): void
     {
         $this->Attribute = $attribute;
     }
@@ -247,7 +246,7 @@ class AttributeAuthorityDescriptor extends RoleDescriptor
      * @param \SAML2\XML\saml\Attribute $attribute
      * @return void
      */
-    public function addAttribute(Attribute $attribute) : void
+    public function addAttribute(Attribute $attribute): void
     {
         $this->Attribute[] = $attribute;
     }
@@ -259,7 +258,7 @@ class AttributeAuthorityDescriptor extends RoleDescriptor
      * @param \DOMElement $parent The EntityDescriptor we should append this IDPSSODescriptor to.
      * @return \DOMElement
      */
-    public function toXML(DOMElement $parent) : DOMElement
+    public function toXML(DOMElement $parent): DOMElement
     {
         Assert::notEmpty($this->AttributeService);
 

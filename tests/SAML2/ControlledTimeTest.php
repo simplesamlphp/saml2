@@ -16,7 +16,7 @@ abstract class ControlledTimeTest extends \Mockery\Adapter\Phpunit\MockeryTestCa
     protected $currentTime = 1;
 
 
-    public function setUp() : void
+    public function setUp(): void
     {
         $timing = \Mockery::mock('alias:SAML2\Utilities\Temporal');
         $timing->shouldReceive('getTime')->andReturn($this->currentTime);

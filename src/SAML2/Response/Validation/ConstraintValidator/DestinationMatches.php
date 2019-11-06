@@ -9,8 +9,7 @@ use SAML2\Response;
 use SAML2\Response\Validation\ConstraintValidator;
 use SAML2\Response\Validation\Result;
 
-final class DestinationMatches implements
-    ConstraintValidator
+final class DestinationMatches implements ConstraintValidator
 {
     /**
      * @var \SAML2\Configuration\Destination
@@ -33,7 +32,7 @@ final class DestinationMatches implements
      * @param Result $result
      * @return void
      */
-    public function validate(Response $response, Result $result) : void
+    public function validate(Response $response, Result $result): void
     {
         $destination = $response->getDestination();
         if ($destination === null) {
@@ -43,7 +42,7 @@ final class DestinationMatches implements
             $result->addError(sprintf(
                 'Destination in response "%s" does not match the expected destination "%s"',
                 $destination,
-                $this->expectedDestination
+                strval($this->expectedDestination)
             ));
         }
     }

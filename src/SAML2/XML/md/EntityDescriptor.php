@@ -5,7 +5,6 @@ declare(strict_types=1);
 namespace SAML2\XML\md;
 
 use DOMElement;
-
 use SAML2\Constants;
 use SAML2\DOMDocumentFactory;
 use SAML2\SignedElementHelper;
@@ -22,9 +21,9 @@ class EntityDescriptor extends SignedElementHelper
     /**
      * The entityID this EntityDescriptor represents.
      *
-     * @var string|null
+     * @var string
      */
-    private $entityID = null;
+    private $entityID;
 
     /**
      * The ID of this element.
@@ -47,12 +46,7 @@ class EntityDescriptor extends SignedElementHelper
      *
      * Array of \SAML2\XML\md\RoleDescriptor objects (and subclasses of RoleDescriptor).
      *
-     * @var (\SAML2\XML\md\UnknownRoleDescriptor|
-     *       \SAML2\XML\md\IDPSSODescriptor|
-     *       \SAML2\XML\md\SPSSODescriptor|
-     *       \SAML2\XML\md\AuthnAuthorityDescriptor|
-     *       \SAML2\XML\md\AttributeAuthorityDescriptor|
-     *       \SAML2\XML\md\PDPDescriptor)[]
+     * @var \SAML2\XML\md\RoleDescriptor[]
      */
     private $RoleDescriptor = [];
 
@@ -180,9 +174,9 @@ class EntityDescriptor extends SignedElementHelper
     /**
      * Collect the value of the entityID property.
      *
-     * @return string|null
+     * @return string
      */
-    public function getEntityID() : ?string
+    public function getEntityID(): string
     {
         return $this->entityID;
     }
@@ -193,7 +187,7 @@ class EntityDescriptor extends SignedElementHelper
      * @param string $entityId
      * @return void
      */
-    public function setEntityID(string $entityId) : void
+    public function setEntityID(string $entityId): void
     {
         $this->entityID = $entityId;
     }
@@ -204,7 +198,7 @@ class EntityDescriptor extends SignedElementHelper
      *
      * @return string|null
      */
-    public function getID() : ?string
+    public function getID(): ?string
     {
         return $this->ID;
     }
@@ -216,7 +210,7 @@ class EntityDescriptor extends SignedElementHelper
      * @param string|null $Id
      * @return void
      */
-    public function setID(string $Id = null) : void
+    public function setID(string $Id = null): void
     {
         $this->ID = $Id;
     }
@@ -226,7 +220,7 @@ class EntityDescriptor extends SignedElementHelper
      * Collect the value of the validUntil-property
      * @return int|null
      */
-    public function getValidUntil() : ?int
+    public function getValidUntil(): ?int
     {
         return $this->validUntil;
     }
@@ -237,7 +231,7 @@ class EntityDescriptor extends SignedElementHelper
      * @param int|null $validUntil
      * @return void
      */
-    public function setValidUntil(int $validUntil = null) : void
+    public function setValidUntil(int $validUntil = null): void
     {
         $this->validUntil = $validUntil;
     }
@@ -247,7 +241,7 @@ class EntityDescriptor extends SignedElementHelper
      * Collect the value of the cacheDuration-property
      * @return string|null
      */
-    public function getCacheDuration() : ?string
+    public function getCacheDuration(): ?string
     {
         return $this->cacheDuration;
     }
@@ -258,7 +252,7 @@ class EntityDescriptor extends SignedElementHelper
      * @param string|null $cacheDuration
      * @return void
      */
-    public function setCacheDuration(string $cacheDuration = null) : void
+    public function setCacheDuration(string $cacheDuration = null): void
     {
         $this->cacheDuration = $cacheDuration;
     }
@@ -269,7 +263,7 @@ class EntityDescriptor extends SignedElementHelper
      *
      * @return \SAML2\XML\Chunk[]
      */
-    public function getExtensions() : array
+    public function getExtensions(): array
     {
         return $this->Extensions;
     }
@@ -281,7 +275,7 @@ class EntityDescriptor extends SignedElementHelper
      * @param array $extensions
      * @return void
      */
-    public function setExtensions(array $extensions) : void
+    public function setExtensions(array $extensions): void
     {
         $this->Extensions = $extensions;
     }
@@ -293,7 +287,7 @@ class EntityDescriptor extends SignedElementHelper
      * @param \SAML2\XML\Chunk $extensions The Extensions
      * @return void
      */
-    public function addExtension(Extensions $extension) : void
+    public function addExtension(Extensions $extension): void
     {
         $this->Extensions[] = $extension;
     }
@@ -302,14 +296,9 @@ class EntityDescriptor extends SignedElementHelper
     /**
      * Collect the value of the RoleDescriptor property.
      *
-     * @return (\SAML2\XML\md\UnknownRoleDescriptor|
-     *          \SAML2\XML\md\IDPSSODescriptor|
-     *          \SAML2\XML\md\SPSSODescriptor|
-     *          \SAML2\XML\md\AuthnAuthorityDescriptor|
-     *          \SAML2\XML\md\AttributeAuthorityDescriptor|
-     *          \SAML2\XML\md\PDPDescriptor)[]
+     * @return \SAML2\XML\md\RoleDescriptor[]
      */
-    public function getRoleDescriptor() : array
+    public function getRoleDescriptor(): array
     {
         return $this->RoleDescriptor;
     }
@@ -318,15 +307,10 @@ class EntityDescriptor extends SignedElementHelper
     /**
      * Set the value of the RoleDescriptor property.
      *
-     * @param (\SAML2\XML\md\UnknownRoleDescriptor|
-     *         \SAML2\XML\md\IDPSSODescriptor|
-     *         \SAML2\XML\md\SPSSODescriptor|
-     *         \SAML2\XML\md\AuthnAuthorityDescriptor|
-     *         \SAML2\XML\md\AttributeAuthorityDescriptor|
-     *         \SAML2\XML\md\PDPDescriptor)[] $roleDescriptor
+     * @param \SAML2\XML\md\RoleDescriptor[] $roleDescriptor
      * @return void
      */
-    public function setRoleDescriptor(array $roleDescriptor) : void
+    public function setRoleDescriptor(array $roleDescriptor): void
     {
         $this->RoleDescriptor = $roleDescriptor;
     }
@@ -335,15 +319,10 @@ class EntityDescriptor extends SignedElementHelper
     /**
      * Add the value to the RoleDescriptor property.
      *
-     * @param \SAML2\XML\md\UnknownRoleDescriptor|
-     *        \SAML2\XML\md\IDPSSODescriptor|
-     *        \SAML2\XML\md\SPSSODescriptor|
-     *        \SAML2\XML\md\AuthnAuthorityDescriptor|
-     *        \SAML2\XML\md\AttributeAuthorityDescriptor|
-     *        \SAML2\XML\md\PDPDescriptor $roleDescriptor
+     * @param \SAML2\XML\md\RoleDescriptor $roleDescriptor
      * @return void
      */
-    public function addRoleDescriptor(RoleDescriptor $roleDescriptor) : void
+    public function addRoleDescriptor(RoleDescriptor $roleDescriptor): void
     {
         $this->RoleDescriptor[] = $roleDescriptor;
     }
@@ -354,7 +333,7 @@ class EntityDescriptor extends SignedElementHelper
      *
      * @return \SAML2\XML\md\AffiliationDescriptor|null
      */
-    public function getAffiliationDescriptor() : ?AffiliationDescriptor
+    public function getAffiliationDescriptor(): ?AffiliationDescriptor
     {
         return $this->AffiliationDescriptor;
     }
@@ -366,7 +345,7 @@ class EntityDescriptor extends SignedElementHelper
      * @param \SAML2\XML\md\AffiliationDescriptor|null $affiliationDescriptor
      * @return void
      */
-    public function setAffiliationDescriptor(AffiliationDescriptor $affiliationDescriptor = null) : void
+    public function setAffiliationDescriptor(AffiliationDescriptor $affiliationDescriptor = null): void
     {
         $this->AffiliationDescriptor = $affiliationDescriptor;
     }
@@ -377,7 +356,7 @@ class EntityDescriptor extends SignedElementHelper
      *
      * @return \SAML2\XML\md\Organization|null
      */
-    public function getOrganization() : ?Organization
+    public function getOrganization(): ?Organization
     {
         return $this->Organization;
     }
@@ -389,7 +368,7 @@ class EntityDescriptor extends SignedElementHelper
      * @param \SAML2\XML\md\Organization|null $organization
      * @return void
      */
-    public function setOrganization(Organization $organization = null) : void
+    public function setOrganization(Organization $organization = null): void
     {
         $this->Organization = $organization;
     }
@@ -400,7 +379,7 @@ class EntityDescriptor extends SignedElementHelper
      *
      * @return \SAML2\XML\md\ContactPerson[]
      */
-    public function getContactPerson() : array
+    public function getContactPerson(): array
     {
         return $this->ContactPerson;
     }
@@ -412,7 +391,7 @@ class EntityDescriptor extends SignedElementHelper
      * @param array $contactPerson
      * @return void
      */
-    public function setContactPerson(array $contactPerson) : void
+    public function setContactPerson(array $contactPerson): void
     {
         $this->ContactPerson = $contactPerson;
     }
@@ -424,7 +403,7 @@ class EntityDescriptor extends SignedElementHelper
      * @param \SAML2\XML\md\ContactPerson $contactPerson
      * @return void
      */
-    public function addContactPerson(ContactPerson $contactPerson) : void
+    public function addContactPerson(ContactPerson $contactPerson): void
     {
         $this->ContactPerson[] = $contactPerson;
     }
@@ -435,7 +414,7 @@ class EntityDescriptor extends SignedElementHelper
      *
      * @return \SAML2\XML\md\AdditionalMetadataLocation[]
      */
-    public function getAdditionalMetadataLocation() : array
+    public function getAdditionalMetadataLocation(): array
     {
         return $this->AdditionalMetadataLocation;
     }
@@ -447,7 +426,7 @@ class EntityDescriptor extends SignedElementHelper
      * @param array $additionalMetadataLocation
      * @return void
      */
-    public function setAdditionalMetadataLocation(array $additionalMetadataLocation) : void
+    public function setAdditionalMetadataLocation(array $additionalMetadataLocation): void
     {
         $this->AdditionalMetadataLocation = $additionalMetadataLocation;
     }
@@ -459,7 +438,7 @@ class EntityDescriptor extends SignedElementHelper
      * @param AdditionalMetadataLocation $additionalMetadataLocation
      * @return void
      */
-    public function addAdditionalMetadataLocation(AdditionalMetadataLocation $additionalMetadataLocation) : void
+    public function addAdditionalMetadataLocation(AdditionalMetadataLocation $additionalMetadataLocation): void
     {
         $this->AdditionalMetadataLocation[] = $additionalMetadataLocation;
     }
@@ -471,7 +450,7 @@ class EntityDescriptor extends SignedElementHelper
      * @param \DOMElement|null $parent The EntitiesDescriptor we should append this EntityDescriptor to.
      * @return \DOMElement
      */
-    public function toXML(DOMElement $parent = null) : DOMElement
+    public function toXML(DOMElement $parent = null): DOMElement
     {
         if (empty($this->entityID)) {
             throw new \Exception('Cannot convert EntityDescriptor to XML without an EntityID set.');

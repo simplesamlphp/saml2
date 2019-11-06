@@ -17,7 +17,7 @@ class SubjectConfirmationDataTest extends \PHPUnit\Framework\TestCase
     /**
      * @return void
      */
-    public function testMarshalling() : void
+    public function testMarshalling(): void
     {
         $subjectConfirmationData = new SubjectConfirmationData();
         $subjectConfirmationData->setNotBefore(987654321);
@@ -47,7 +47,7 @@ class SubjectConfirmationDataTest extends \PHPUnit\Framework\TestCase
     /**
      * @return void
      */
-    public function testUnmarshalling() : void
+    public function testUnmarshalling(): void
     {
         $samlNamespace = Constants::NS_SAML;
         $document = DOMDocumentFactory::fromString(<<<XML

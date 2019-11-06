@@ -20,7 +20,7 @@ class UIInfoTest extends \PHPUnit\Framework\TestCase
      * Test creating a basic UIInfo element.
      * @return void
      */
-    public function testMarshalling() : void
+    public function testMarshalling(): void
     {
         $logo = new Logo();
         $logo->setLanguage("nl");
@@ -32,7 +32,9 @@ class UIInfoTest extends \PHPUnit\Framework\TestCase
         $uiinfo->setDisplayName(["nl" => "Voorbeeld", "en" => "Example"]);
         $uiinfo->setDescription(["nl" => "Omschrijving", "en" => "Description"]);
         $uiinfo->setInformationURL(["nl" => "https://voorbeeld.nl/", "en" => "https://example.org"]);
-        $uiinfo->setPrivacyStatementURL(["nl" => "https://voorbeeld.nl/privacy", "en" => "https://example.org/privacy"]);
+        $uiinfo->setPrivacyStatementURL(
+            ["nl" => "https://voorbeeld.nl/privacy", "en" => "https://example.org/privacy"]
+        );
         $uiinfo->setLogo([$logo]);
 
         $document = DOMDocumentFactory::fromString('<root />');
@@ -91,7 +93,7 @@ class UIInfoTest extends \PHPUnit\Framework\TestCase
      * Test creating an UIinfo element with XML children
      * @return void
      */
-    public function testMarshallingChildren() : void
+    public function testMarshallingChildren(): void
     {
         $keywords = new Keywords();
         $keywords->setLanguage("nl");
@@ -165,7 +167,7 @@ class UIInfoTest extends \PHPUnit\Framework\TestCase
      * Test unmarshalling a basic UIInfo element
      * @return void
      */
-    public function testUnmarshalling() : void
+    public function testUnmarshalling(): void
     {
         $document = DOMDocumentFactory::fromString(<<<XML
 <mdui:UIInfo xmlns:mdui="urn:oasis:names:tc:SAML:metadata:ui">
@@ -198,7 +200,7 @@ XML
      * Test unmarshalling wuth Logo, Keywords child elements
      * @return void
      */
-    public function testUnmarshallingChildren() : void
+    public function testUnmarshallingChildren(): void
     {
         $document = DOMDocumentFactory::fromString(<<<XML
 <mdui:UIInfo xmlns:mdui="urn:oasis:names:tc:SAML:metadata:ui">

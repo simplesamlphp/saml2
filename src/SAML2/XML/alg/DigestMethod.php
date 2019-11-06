@@ -49,7 +49,7 @@ class DigestMethod
      *
      * @return string
      */
-    public function getAlgorithm() : string
+    public function getAlgorithm(): string
     {
         return $this->Algorithm;
     }
@@ -61,7 +61,7 @@ class DigestMethod
      * @param string $algorithm
      * @return void
      */
-    public function setAlgorithm(string $algorithm) : void
+    public function setAlgorithm(string $algorithm): void
     {
         $this->Algorithm = $algorithm;
     }
@@ -74,9 +74,9 @@ class DigestMethod
      * @return \DOMElement
      * @throws \Exception
      */
-    public function toXML(DOMElement $parent) : DOMElement
+    public function toXML(DOMElement $parent): DOMElement
     {
-        Assert::stringNotEmpty($this->Algorithm, 'Cannot convert DigestMethod to XML without an Algorithm set.');
+        Assert::notEmpty($this->Algorithm, 'Cannot convert DigestMethod to XML without an Algorithm set.');
 
         $doc = $parent->ownerDocument;
         $e = $doc->createElementNS(Common::NS, 'alg:DigestMethod');

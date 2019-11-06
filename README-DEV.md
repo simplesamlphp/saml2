@@ -3,7 +3,7 @@ Notes for the SimpleSAMLphp SAML2 developer
 
 Coding standard
 ---------------
-PSR-0, PSR-1 and PSR-2.
+PSR-0, PSR-1 and PSR-12.
 Test with the PHPCS configuration in tools/phpcs/ruleset.xml
 (note if you have PHPStorm you can use this to turn on the PHPCS inspection).
 
@@ -16,7 +16,7 @@ Test with the 2 known users: (SimpleSAMLphp)[https://www.simplesamlphp.org] and
 
 ### Using Tests in Development
 
-In order to run the unittests, use `vendor/bin/phpunit -c tools/phpunit`
+In order to run the unittests, use `vendor/bin/phpunit`
 
 Contributing
 ------------

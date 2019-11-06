@@ -15,13 +15,12 @@ use SAML2\XML\saml\AttributeValue;
  */
 class AttributeValueTest extends \PHPUnit\Framework\TestCase
 {
-
     /**
      * Verifies that supplying an empty string as attribute value will
      * generate a tag with no content (instead of e.g. an empty tag).
      * @return void
      */
-    public function testEmptyStringAttribute() : void
+    public function testEmptyStringAttribute(): void
     {
         $attribute = new Attribute();
         $attribute->setName('TheName');
@@ -54,7 +53,7 @@ ATTRIBUTEVALUE
      * Verifies that we can create an AttributeValue from a DOMElement.
      * @return void
      */
-    public function testCreateAttributeFromDOMElement() : void
+    public function testCreateAttributeFromDOMElement(): void
     {
         $attribute = new Attribute();
         $attribute->setName('TheName');
@@ -95,7 +94,7 @@ ATTRIBUTEXML
      * Serialize an AttributeValue and Unserialize that again.
      * @return void
      */
-    public function testSerialize() : void
+    public function testSerialize(): void
     {
         $av1 = new AttributeValue("Aap:noot:mies");
         $ser = $av1->serialize();

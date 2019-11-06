@@ -24,7 +24,7 @@ class SpIsValidAudience implements
      * @param ServiceProvider $serviceProvider
      * @return void
      */
-    public function setServiceProvider(ServiceProvider $serviceProvider) : void
+    public function setServiceProvider(ServiceProvider $serviceProvider): void
     {
         $this->serviceProvider = $serviceProvider;
     }
@@ -35,7 +35,7 @@ class SpIsValidAudience implements
      * @param Result $result
      * @return void
      */
-    public function validate(Assertion $assertion, Result $result) : void
+    public function validate(Assertion $assertion, Result $result): void
     {
         $intendedAudiences = $assertion->getValidAudiences();
         if ($intendedAudiences === null) {
@@ -46,7 +46,7 @@ class SpIsValidAudience implements
         if (!in_array($entityId, $intendedAudiences, true)) {
             $result->addError(sprintf(
                 'The configured Service Provider [%s] is not a valid audience for the assertion. Audiences: [%s]',
-                $entityId,
+                strval($entityId),
                 implode('], [', $intendedAudiences)
             ));
         }

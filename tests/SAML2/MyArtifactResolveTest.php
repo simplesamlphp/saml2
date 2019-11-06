@@ -14,7 +14,7 @@ class ArtifactResolveTest extends \PHPUnit\Framework\TestCase
     /**
      * @return void
      */
-    public function testMarshalling() : void
+    public function testMarshalling(): void
     {
         $issuer = new Issuer();
         $issuer->setValue('urn:example:issuer');
@@ -35,7 +35,7 @@ class ArtifactResolveTest extends \PHPUnit\Framework\TestCase
     /**
      * @return void
      */
-    public function testUnmarshalling() : void
+    public function testUnmarshalling(): void
     {
         $id = '_6c3a4f8b9c2d';
         $artifact = 'AAQAADWNEw5VT47wcO4zX/iEzMmFQvGknDfws2ZtqSGdkNSbsW1cmVR0bzU=';

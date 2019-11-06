@@ -4,12 +4,12 @@ declare(strict_types=1);
 
 namespace SAML2\Assertion\Validation\ConstraintValidator;
 
-use \SAML2\Assertion\Validation\ConstraintValidator\SubjectConfirmationRecipientMatches;
-use \SAML2\Assertion\Validation\ConstraintValidator\SubjectConfirmationResponseToMatches;
-use \SAML2\Assertion\Validation\Result;
-use \SAML2\Configuration\Destination;
-use \SAML2\XML\saml\SubjectConfirmationData;
-use \SAML2\XML\saml\SubjectConfirmationMatches;
+use SAML2\Assertion\Validation\ConstraintValidator\SubjectConfirmationRecipientMatches;
+use SAML2\Assertion\Validation\ConstraintValidator\SubjectConfirmationResponseToMatches;
+use SAML2\Assertion\Validation\Result;
+use SAML2\Configuration\Destination;
+use SAML2\XML\saml\SubjectConfirmationData;
+use SAML2\XML\saml\SubjectConfirmationMatches;
 
 class SubjectConfirmationRecipientMathchesTest extends \Mockery\Adapter\Phpunit\MockeryTestCase
 {
@@ -27,7 +27,7 @@ class SubjectConfirmationRecipientMathchesTest extends \Mockery\Adapter\Phpunit\
     /**
      * @return void
      */
-    public function setUp() : void
+    public function setUp(): void
     {
         parent::setUp();
         $this->subjectConfirmation = new \SAML2\XML\saml\SubjectConfirmation();
@@ -41,7 +41,7 @@ class SubjectConfirmationRecipientMathchesTest extends \Mockery\Adapter\Phpunit\
      * @test
      * @return void
      */
-    public function when_the_subject_confirmation_recipient_differs_from_the_destination_the_sc_is_invalid() : void
+    public function when_the_subject_confirmation_recipient_differs_from_the_destination_the_sc_is_invalid(): void
     {
         $this->subjectConfirmation->getSubjectConfirmationData()->setRecipient('someDestination');
 
@@ -62,7 +62,7 @@ class SubjectConfirmationRecipientMathchesTest extends \Mockery\Adapter\Phpunit\
      * @test
      * @return void
      */
-    public function when_the_subject_confirmation_recipient_equals_the_destination_the_sc_is_invalid() : void
+    public function when_the_subject_confirmation_recipient_equals_the_destination_the_sc_is_invalid(): void
     {
         $this->subjectConfirmation->getSubjectConfirmationData()->setRecipient('theSameDestination');
 

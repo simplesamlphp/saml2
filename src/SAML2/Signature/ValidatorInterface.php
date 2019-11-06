@@ -20,5 +20,5 @@ interface ValidatorInterface
     public function hasValidSignature(
         SignedElement $signedElement,
         CertificateProvider $configuration
-    ) : bool;
+    ): bool;
 }

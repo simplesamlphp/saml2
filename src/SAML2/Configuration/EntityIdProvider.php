@@ -12,5 +12,5 @@ interface EntityIdProvider
     /**
      * @return null|string
      */
-    public function getEntityId() : ?string;
+    public function getEntityId(): ?string;
 }

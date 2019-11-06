@@ -12,16 +12,19 @@ class ImplementsToString
     private $value;
 
 
-    public function __construct($value)
+    /**
+     * @param string $value
+     */
+    public function __construct(string $value)
     {
         $this->value = $value;
     }
 
 
     /**
-     * @return mixed
+     * @return string
      */
-    public function __toString()
+    public function __toString(): string
     {
         return $this->value;
     }

@@ -5,12 +5,10 @@ declare(strict_types=1);
 namespace SAML2\XML\saml;
 
 use DOMElement;
-use Webmozart\Assert\Assert;
-
 use SAML2\Constants;
 use SAML2\DOMDocumentFactory;
 use SAML2\Utils;
-use SAML2\XML\saml\NameID;
+use Webmozart\Assert\Assert;
 
 /**
  * Serializable class representing an AttributeValue.
@@ -77,7 +75,7 @@ class AttributeValue implements \Serializable
      *
      * @return \DOMElement
      */
-    public function getElement() : DOMElement
+    public function getElement(): DOMElement
     {
         return $this->element;
     }
@@ -89,7 +87,7 @@ class AttributeValue implements \Serializable
      * @param \DOMElement $element
      * @return void
      */
-    public function setElement(DOMElement $element) : void
+    public function setElement(DOMElement $element): void
     {
         $this->element = $element;
     }
@@ -101,7 +99,7 @@ class AttributeValue implements \Serializable
      * @param  \DOMElement $parent The element we should append this attribute value to.
      * @return \DOMElement The generated AttributeValue element.
      */
-    public function toXML(DOMElement $parent) : DOMElement
+    public function toXML(DOMElement $parent): DOMElement
     {
         Assert::same($this->getElement()->namespaceURI, Constants::NS_SAML);
         Assert::same($this->getElement()->localName, "AttributeValue");
@@ -115,7 +113,7 @@ class AttributeValue implements \Serializable
      *
      * @return string
      */
-    public function getString() : string
+    public function getString(): string
     {
         return $this->element->textContent;
     }
@@ -128,7 +126,7 @@ class AttributeValue implements \Serializable
      *
      * @return string This attribute value.
      */
-    public function __toString() : string
+    public function __toString(): string
     {
         $doc = $this->element->ownerDocument;
 
@@ -146,7 +144,7 @@ class AttributeValue implements \Serializable
      *
      * @return string The AttributeValue serialized.
      */
-    public function serialize() : string
+    public function serialize(): string
     {
         return serialize($this->element->ownerDocument->saveXML($this->element));
     }
@@ -160,7 +158,7 @@ class AttributeValue implements \Serializable
      *
      * Type hint not possible due to upstream method signature
      */
-    public function unserialize($serialized) : void
+    public function unserialize($serialized): void
     {
         $doc = DOMDocumentFactory::fromString(unserialize($serialized));
         $this->element = $doc->documentElement;
