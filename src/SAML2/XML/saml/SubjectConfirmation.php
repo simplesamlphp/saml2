@@ -80,6 +80,8 @@ class SubjectConfirmation
      */
     public function getMethod(): string
     {
+        Assert::notEmpty($this->Method);
+
         return $this->Method;
     }
 

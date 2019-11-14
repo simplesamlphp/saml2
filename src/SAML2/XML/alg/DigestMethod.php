@@ -21,7 +21,7 @@ class DigestMethod
      *
      * @var string
      */
-    private $Algorithm = '';
+    private $Algorithm;
 
 
     /**
@@ -51,6 +51,8 @@ class DigestMethod
      */
     public function getAlgorithm(): string
     {
+        Assert::notEmpty($this->Algorithm);
+
         return $this->Algorithm;
     }
 

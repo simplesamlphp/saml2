@@ -59,6 +59,8 @@ class AdditionalMetadataLocation
      */
     public function getNamespace(): string
     {
+        Assert::notEmpty($this->namespace);
+
         return $this->namespace;
     }
 
@@ -82,6 +84,8 @@ class AdditionalMetadataLocation
      */
     public function getLocation(): string
     {
+        Assert::notEmpty($this->location);
+
         return $this->location;
     }
 

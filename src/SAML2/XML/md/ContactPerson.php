@@ -160,6 +160,8 @@ class ContactPerson
      */
     public function getContactType(): string
     {
+        Assert::notEmpty($this->contactType);
+
         return $this->contactType;
     }
 

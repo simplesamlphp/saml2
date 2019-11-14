@@ -106,6 +106,8 @@ class KeyDescriptor
      */
     public function getKeyInfo(): KeyInfo
     {
+        Assert::notEmpty($this->KeyInfo);
+
         return $this->KeyInfo;
     }
 
@@ -165,9 +167,7 @@ class KeyDescriptor
      */
     public function toXML(DOMElement $parent): DOMElement
     {
-        if (!isset($this->KeyInfo)) {
-            throw new \Exception('Cannot convert KeyDescriptor to XML without KeyInfo set.');
-        }
+        Assert::notEmpty($this->KeyInfo, 'Cannot convert KeyDescriptor to XML without KeyInfo set.');
 
         $doc = $parent->ownerDocument;
 

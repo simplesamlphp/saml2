@@ -82,6 +82,8 @@ abstract class SubjectQuery extends Request
      */
     public function getNameId(): NameID
     {
+        Assert::notEmpty($this->nameId);
+
         return $this->nameId;
     }
 

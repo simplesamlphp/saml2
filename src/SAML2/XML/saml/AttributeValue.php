@@ -91,8 +91,8 @@ class AttributeValue implements \Serializable
      */
     public function toXML(DOMElement $parent): DOMElement
     {
-        Assert::same($this->getElement()->namespaceURI, Constants::NS_SAML);
-        Assert::same($this->getElement()->localName, "AttributeValue");
+        Assert::same($this->element->namespaceURI, Constants::NS_SAML);
+        Assert::same($this->element->localName, "AttributeValue");
 
         return Utils::copyElement($this->element, $parent);
     }

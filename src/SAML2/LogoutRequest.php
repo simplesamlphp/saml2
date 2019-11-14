@@ -8,6 +8,7 @@ use DOMElement;
 use RobRichards\XMLSecLibs\XMLSecEnc;
 use RobRichards\XMLSecLibs\XMLSecurityKey;
 use SAML2\XML\saml\NameID;
+use Webmozart\Assert\Assert;
 
 /**
  * Class for SAML 2 logout request messages.
@@ -56,8 +57,6 @@ class LogoutRequest extends Request
     public function __construct(DOMElement $xml = null)
     {
         parent::__construct('LogoutRequest', $xml);
-
-        $this->sessionIndexes = [];
 
         if ($xml === null) {
             return;
@@ -135,9 +134,8 @@ class LogoutRequest extends Request
      */
     public function encryptNameId(XMLSecurityKey $key): void
     {
-        if (!isset($this->nameId)) {
-            throw new \Exception('Cannot encrypt NameID without a NameID set.');
-        }
+        Assert::notEmpty($this->nameId, 'Cannot encrypt NameID without a NameID set.');
+
         /* First create a XML representation of the NameID. */
         $doc = DOMDocumentFactory::create();
         $root = $doc->createElement('root');
@@ -195,9 +193,8 @@ class LogoutRequest extends Request
      */
     public function getNameId(): NameID
     {
-        if ($this->encryptedNameId !== null) {
-            throw new \Exception('Attempted to retrieve encrypted NameID without decrypting it first.');
-        }
+        Assert::null($this->encryptedNameId, 'Attempted to retrieve encrypted NameID without decrypting it first.');
+        Assert::notNull($this->nameId);
 
         return $this->nameId;
     }
@@ -276,7 +273,7 @@ class LogoutRequest extends Request
      */
     public function toUnsignedXML(): DOMElement
     {
-        if ($this->encryptedNameId === null && !isset($this->nameId)) {
+        if ($this->encryptedNameId === null && $this->nameId === null) {
             throw new \Exception('Cannot convert LogoutRequest to XML without a NameID set.');
         }
 

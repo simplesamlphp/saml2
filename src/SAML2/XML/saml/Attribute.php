@@ -85,6 +85,8 @@ class Attribute
      */
     public function getName(): string
     {
+        Assert::notEmpty($this->Name);
+
         return $this->Name;
     }
 

@@ -83,6 +83,8 @@ class PublicationInfo
      */
     public function getPublisher(): string
     {
+        Assert::notEmpty($this->publisher);
+
         return $this->publisher;
     }
 

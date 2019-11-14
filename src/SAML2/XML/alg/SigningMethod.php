@@ -75,6 +75,8 @@ class SigningMethod
      */
     public function getAlgorithm(): string
     {
+        Assert::notEmpty($this->Algorithm);
+
         return $this->Algorithm;
     }
 

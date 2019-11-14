@@ -60,6 +60,8 @@ class IndexedEndpointType extends EndpointType
      */
     public function getIndex(): int
     {
+        Assert::notEmpty($this->index);
+
         return $this->index;
     }
 

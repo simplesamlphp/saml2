@@ -6,6 +6,7 @@ namespace SAML2\Configuration;
 
 use SAML2\Exception\InvalidArgumentException;
 use SAML2\Exception\RuntimeException;
+use Webmozart\Assert\Assert;
 
 /**
  * Configuration of a private key.
@@ -13,6 +14,7 @@ use SAML2\Exception\RuntimeException;
 class PrivateKey extends ArrayAdapter
 {
     public const NAME_NEW     = 'new';
+
     public const NAME_DEFAULT = 'default';
 
     /**
@@ -21,7 +23,7 @@ class PrivateKey extends ArrayAdapter
     private $filePathOrContents;
 
     /**
-     * @var string|null
+     * @var string
      */
     private $passphrase;
 
@@ -57,9 +59,7 @@ class PrivateKey extends ArrayAdapter
      */
     public function getFilePath(): string
     {
-        if (!$this->isFile()) {
-            throw new RuntimeException('No path provided.');
-        }
+        Assert::true($this->isFile(), 'No path provided.');
 
         return $this->filePathOrContents;
     }
@@ -70,14 +70,14 @@ class PrivateKey extends ArrayAdapter
      */
     public function hasPassPhrase(): bool
     {
-        return $this->passphrase !== null;
+        return !empty($this->passphrase);
     }
 
 
     /**
-     * @return string|null
+     * @return string
      */
-    public function getPassPhrase(): ?string
+    public function getPassPhrase(): string
     {
         return $this->passphrase;
     }
@@ -96,9 +96,7 @@ class PrivateKey extends ArrayAdapter
      */
     public function getContents(): string
     {
-        if ($this->isFile()) {
-            throw new RuntimeException('No contents provided');
-        }
+        Assert::false($this->isFile(), 'No contents provided.');
 
         return $this->filePathOrContents;
     }

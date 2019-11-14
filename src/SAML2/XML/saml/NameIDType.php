@@ -5,6 +5,7 @@ declare(strict_types=1);
 namespace SAML2\XML\saml;
 
 use DOMElement;
+use Webmozart\Assert\Assert;
 
 /**
  * SAML NameIDType abstract data type.
@@ -108,6 +109,8 @@ abstract class NameIDType extends BaseIDType
      */
     public function getValue(): string
     {
+        Assert::notEmpty($this->value);
+
         return $this->value;
     }
 

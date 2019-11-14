@@ -62,6 +62,8 @@ class Response
      */
     public function getAssertionConsumerServiceURL(): string
     {
+        Assert::notEmpty($this->AssertionConsumerServiceURL);
+
         return $this->AssertionConsumerServiceURL;
     }
 

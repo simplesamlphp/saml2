@@ -64,6 +64,8 @@ class Keywords
      */
     public function getLanguage(): string
     {
+        Assert::notEmpty($this->lang);
+
         return $this->lang;
     }
 

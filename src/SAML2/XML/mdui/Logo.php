@@ -5,6 +5,7 @@ declare(strict_types=1);
 namespace SAML2\XML\mdui;
 
 use DOMElement;
+use Webmozart\Assert\Assert;
 
 /**
  * Class for handling the Logo metadata extensions for login and discovery user interface
@@ -80,6 +81,8 @@ class Logo
      */
     public function getUrl(): string
     {
+        Assert::notEmpty($this->url);
+
         return $this->url;
     }
 
@@ -129,6 +132,8 @@ class Logo
      */
     public function getHeight(): int
     {
+        Assert::notEmpty($this->height);
+
         return $this->height;
     }
 
@@ -152,6 +157,8 @@ class Logo
      */
     public function getWidth(): int
     {
+        Assert::notEmpty($this->width);
+
         return $this->width;
     }
 
@@ -176,6 +183,10 @@ class Logo
      */
     public function toXML(DOMElement $parent): DOMElement
     {
+        Assert::notEmpty($this->url);
+        Assert::notEmpty($this->width);
+        Assert::notEmpty($this->height);
+
         $doc = $parent->ownerDocument;
 
         $e = $doc->createElementNS(Common::NS, 'mdui:Logo');

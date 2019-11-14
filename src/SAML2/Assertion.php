@@ -795,9 +795,8 @@ class Assertion extends SignedElement
      */
     public function encryptNameId(XMLSecurityKey $key): void
     {
-        if ($this->nameId === null) {
-            throw new \Exception('Cannot encrypt NameID, no NameID set.');
-        }
+        Assert::notEmpty($this->nameId, 'Cannot encrypt NameID, no NameID set.');
+
         /* First create an XML representation of the NameID. */
         $doc = DOMDocumentFactory::create();
         $root = $doc->createElement('root');
@@ -1486,6 +1485,8 @@ class Assertion extends SignedElement
         $root->setAttribute('ID', $this->id);
         $root->setAttribute('Version', '2.0');
         $root->setAttribute('IssueInstant', gmdate('Y-m-d\TH:i:s\Z', $this->issueInstant));
+
+        Assert::notEmpty($this->issuer, 'Cannot convert Assertion to XML without an Issuer set.');
 
         $issuer = $this->issuer->toXML($root);
 

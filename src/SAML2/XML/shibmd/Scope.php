@@ -59,6 +59,8 @@ class Scope
      */
     public function getScope(): string
     {
+        Assert::notEmpty($this->scope);
+
         return $this->scope;
     }
 

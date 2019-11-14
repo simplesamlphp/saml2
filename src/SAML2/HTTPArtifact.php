@@ -11,6 +11,7 @@ use SimpleSAML\Metadata\MetaDataStorageHandler;
 use SimpleSAML\Module\saml\Message as MSG;
 use SimpleSAML\Store;
 use SimpleSAML\Utils\HTTP;
+use Webmozart\Assert\Assert;
 
 /**
  * Class which implements the HTTP-Artifact binding.
@@ -21,7 +22,8 @@ use SimpleSAML\Utils\HTTP;
 class HTTPArtifact extends Binding
 {
     /**
-     * @var mixed
+     * @psalm-suppress UndefinedDocblockClass
+     * @var \SimpleSAML\Configuration
      */
     private $spMetadata;
 
@@ -127,12 +129,19 @@ class HTTPArtifact extends Binding
             "ArtifactResolutionService endpoint being used is := " . $endpoint['Location']
         );
 
-        //Construct the ArtifactResolve Request
+        // Construct the ArtifactResolve Request
         $ar = new ArtifactResolve();
 
-        /* Set the request attributes */
+        /**
+         * @psalm-suppress UndefinedClass
+         * @psalm-suppress DocblockTypeContradiction
+         */
+        Assert::notEmpty($this->spMetadata, 'Cannot process received message without SP metadata.');
 
-        /** @psalm-suppress UndefinedClass */
+        /**
+         * Set the request attributes
+         * @psalm-suppress UndefinedClass
+         */
         $ar->setIssuer($this->spMetadata->getString('entityid'));
         $ar->setArtifact($_REQUEST['SAMLart']);
         $ar->setDestination($endpoint['Location']);

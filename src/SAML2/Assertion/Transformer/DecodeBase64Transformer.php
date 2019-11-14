@@ -7,6 +7,7 @@ namespace SAML2\Assertion\Transformer;
 use SAML2\Assertion;
 use SAML2\Configuration\IdentityProvider;
 use SAML2\Configuration\IdentityProviderAware;
+use Webmozart\Assert\Assert;
 
 class DecodeBase64Transformer implements
     Transformer,
@@ -34,6 +35,8 @@ class DecodeBase64Transformer implements
      */
     public function transform(Assertion $assertion): Assertion
     {
+        Assert::notEmpty($this->identityProvider);
+
         if (!$this->identityProvider->hasBase64EncodedAttributes()) {
             return $assertion;
         }

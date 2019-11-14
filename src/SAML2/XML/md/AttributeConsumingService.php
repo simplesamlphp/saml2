@@ -98,6 +98,8 @@ class AttributeConsumingService
      */
     public function getIndex(): int
     {
+        Assert::notEmpty($this->index);
+
         return $this->index;
     }
 
@@ -226,6 +228,7 @@ class AttributeConsumingService
      */
     public function toXML(DOMElement $parent): DOMElement
     {
+        Assert::notEmpty($this->index);
         Assert::notEmpty($this->ServiceName);
         Assert::notEmpty($this->ServiceDescription);
 
@@ -234,7 +237,7 @@ class AttributeConsumingService
         $e = $doc->createElementNS(Constants::NS_MD, 'md:AttributeConsumingService');
         $parent->appendChild($e);
 
-        $e->setAttribute('index', strval($this->getIndex()));
+        $e->setAttribute('index', strval($this->index));
 
         if ($this->isDefault === true) {
             $e->setAttribute('isDefault', 'true');

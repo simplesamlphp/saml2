@@ -6,6 +6,7 @@ namespace SAML2\XML\md;
 
 use DOMElement;
 use SAML2\Constants;
+use Webmozart\Assert\Assert;
 
 /**
  * Class representing SAML 2 EndpointType.
@@ -164,6 +165,8 @@ class EndpointType
      */
     public function getBinding(): string
     {
+        Assert::notEmpty($this->Binding);
+
         return $this->Binding;
     }
 
@@ -187,6 +190,8 @@ class EndpointType
      */
     public function getLocation(): string
     {
+        Assert::notEmpty($this->Location);
+
         return $this->Location;
     }
 

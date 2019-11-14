@@ -46,6 +46,8 @@ class X509Certificate
      */
     public function getCertificate(): string
     {
+        Assert::notEmpty($this->certificate);
+
         return $this->certificate;
     }
 

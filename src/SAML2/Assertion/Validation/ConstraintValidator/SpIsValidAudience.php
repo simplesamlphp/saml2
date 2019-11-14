@@ -9,6 +9,7 @@ use SAML2\Assertion\Validation\AssertionConstraintValidator;
 use SAML2\Assertion\Validation\Result;
 use SAML2\Configuration\ServiceProvider;
 use SAML2\Configuration\ServiceProviderAware;
+use Webmozart\Assert\Assert;
 
 class SpIsValidAudience implements
     AssertionConstraintValidator,
@@ -37,6 +38,8 @@ class SpIsValidAudience implements
      */
     public function validate(Assertion $assertion, Result $result): void
     {
+        Assert::notEmpty($this->serviceProvider);
+
         $intendedAudiences = $assertion->getValidAudiences();
         if ($intendedAudiences === null) {
             return;

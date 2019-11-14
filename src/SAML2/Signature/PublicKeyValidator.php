@@ -10,6 +10,7 @@ use SAML2\Certificate\KeyLoader;
 use SAML2\Certificate\X509;
 use SAML2\Configuration\CertificateProvider;
 use SAML2\SignedElement;
+use Webmozart\Assert\Assert;
 
 class PublicKeyValidator extends AbstractChainedValidator
 {
@@ -64,6 +65,8 @@ class PublicKeyValidator extends AbstractChainedValidator
         SignedElement $signedElement,
         CertificateProvider $configuration
     ): bool {
+        Assert::notEmpty($this->configuredKeys);
+
         $logger = $this->logger;
         $pemCandidates = $this->configuredKeys->filter(function (Key $key) use ($logger) {
             if (!$key instanceof X509) {

@@ -70,10 +70,12 @@ class RegistrationInfo
     /**
      * Collect the value of the RegistrationAuthority property
      *
-     * @return string|null
+     * @return string
      */
-    public function getRegistrationAuthority(): ?string
+    public function getRegistrationAuthority(): string
     {
+        Assert::notEmpty($this->registrationAuthority);
+
         return $this->registrationAuthority;
     }
 

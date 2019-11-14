@@ -18,7 +18,7 @@ class Response extends StatusResponse
      *
      * @var (Assertion|EncryptedAssertion)[]
      */
-    private $assertions;
+    private $assertions = [];
 
 
     /**
@@ -29,8 +29,6 @@ class Response extends StatusResponse
     public function __construct(DOMElement $xml = null)
     {
         parent::__construct('Response', $xml);
-
-        $this->assertions = [];
 
         if ($xml === null) {
             return;
