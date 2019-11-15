@@ -4,14 +4,13 @@ declare(strict_types=1);
 
 namespace SAML2;
 
+use PHPUnit\Framework\Error\Warning;
 use SAML2\DOMDocumentFactory;
 use SAML2\HTTPRedirect;
 use SAML2\AuthnRequest;
 use SAML2\Request;
 use SAML2\Response;
 use SAML2\XML\saml\Issuer;
-
-use PHPUnit_Framework_Error_Warning;
 
 class HTTPRedirectTest extends \Mockery\Adapter\Phpunit\MockeryTestCase
 {
@@ -166,12 +165,9 @@ class HTTPRedirectTest extends \Mockery\Adapter\Phpunit\MockeryTestCase
         $qs = 'SAMLRequest=cannotinflate';
         $_SERVER['QUERY_STRING'] = $qs;
 
-        $oldwarning = \PHPUnit\Framework\Error\Warning::$enabled;
-        \PHPUnit\Framework\Error\Warning::$enabled = false;
         $this->expectException(\Exception::class, 'Error while inflating');
         $hr = new HTTPRedirect();
         $request = @$hr->receive();
-        \PHPUnit\Framework\Error\Warning::$enabled = $oldwarning;
     }
 
 
