@@ -38,7 +38,7 @@ class AttributeQuery extends SubjectQuery
      *
      * @var string
      */
-    private $nameFormat;
+    private $nameFormat = Constants::NAMEFORMAT_UNSPECIFIED;
 
 
     /**
@@ -50,9 +50,6 @@ class AttributeQuery extends SubjectQuery
     public function __construct(DOMElement $xml = null)
     {
         parent::__construct('AttributeQuery', $xml);
-
-        $this->attributes = [];
-        $this->nameFormat = Constants::NAMEFORMAT_UNSPECIFIED;
 
         if ($xml === null) {
             return;
@@ -67,19 +64,16 @@ class AttributeQuery extends SubjectQuery
             }
             $name = $attribute->getAttribute('Name');
 
+            $nameFormat = $this->nameFormat;
             if ($attribute->hasAttribute('NameFormat')) {
                 $nameFormat = $attribute->getAttribute('NameFormat');
-            } else {
-                $nameFormat = Constants::NAMEFORMAT_UNSPECIFIED;
             }
 
             if ($firstAttribute) {
                 $this->nameFormat = $nameFormat;
                 $firstAttribute = false;
-            } else {
-                if ($this->nameFormat !== $nameFormat) {
-                    $this->nameFormat = Constants::NAMEFORMAT_UNSPECIFIED;
-                }
+            } elseif ($this->nameFormat !== $nameFormat) {
+                $this->nameFormat = Constants::NAMEFORMAT_UNSPECIFIED;
             }
 
             if (!array_key_exists($name, $this->attributes)) {

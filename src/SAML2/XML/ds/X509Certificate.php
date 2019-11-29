@@ -7,6 +7,7 @@ namespace SAML2\XML\ds;
 use DOMElement;
 use RobRichards\XMLSecLibs\XMLSecurityDSig;
 use SAML2\Utils;
+use Webmozart\Assert\Assert;
 
 /**
  * Class representing a ds:X509Certificate element.
@@ -42,9 +43,13 @@ class X509Certificate
      * Collect the value of the certificate-property
      *
      * @return string
+     *
+     * @throws \InvalidArgumentException if assertions are false
      */
     public function getCertificate(): string
     {
+        Assert::notEmpty($this->certificate);
+
         return $this->certificate;
     }
 
@@ -66,9 +71,13 @@ class X509Certificate
      *
      * @param \DOMElement $parent The element we should append this X509Certificate element to.
      * @return \DOMElement
+     *
+     * @throws \InvalidArgumentException if assertions are false
      */
     public function toXML(DOMElement $parent): DOMElement
     {
-        return Utils::addString($parent, XMLSecurityDSig::XMLDSIGNS, 'ds:X509Certificate', $this->getCertificate());
+        Assert::notEmpty($this->certificate);
+
+        return Utils::addString($parent, XMLSecurityDSig::XMLDSIGNS, 'ds:X509Certificate', $this->certificate);
     }
 }

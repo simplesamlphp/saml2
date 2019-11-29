@@ -8,6 +8,7 @@ use DOMElement;
 use DOMNode;
 use RobRichards\XMLSecLibs\XMLSecEnc;
 use RobRichards\XMLSecLibs\XMLSecurityKey;
+use Webmozart\Assert\Assert;
 
 /**
  * Class handling encrypted assertions.
@@ -129,9 +130,13 @@ class EncryptedAssertion
      *
      * @param  \DOMNode|null $parentElement The DOM node the assertion should be created in.
      * @return \DOMElement   This encrypted assertion.
+     *
+     * @throws \InvalidArgumentException if assertions are false
      */
     public function toXML(DOMNode $parentElement = null): DOMElement
     {
+        Assert::notEmpty($this->encryptedData);
+
         if ($parentElement === null) {
             $document = DOMDocumentFactory::create();
             $parentElement = $document;

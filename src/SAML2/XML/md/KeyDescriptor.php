@@ -30,9 +30,9 @@ class KeyDescriptor
     /**
      * The KeyInfo for this key.
      *
-     * @var \SAML2\XML\ds\KeyInfo|null
+     * @var \SAML2\XML\ds\KeyInfo
      */
-    private $KeyInfo = null;
+    private $KeyInfo;
 
     /**
      * Supported EncryptionMethods.
@@ -102,10 +102,14 @@ class KeyDescriptor
     /**
      * Collect the value of the KeyInfo property.
      *
-     * @return \SAML2\XML\ds\KeyInfo|null
+     * @return \SAML2\XML\ds\KeyInfo
+     *
+     * @throws \InvalidArgumentException if assertions are false
      */
-    public function getKeyInfo(): ?KeyInfo
+    public function getKeyInfo(): KeyInfo
     {
+        Assert::notEmpty($this->KeyInfo);
+
         return $this->KeyInfo;
     }
 
@@ -162,12 +166,12 @@ class KeyDescriptor
      *
      * @param \DOMElement $parent The element we should append this KeyDescriptor to.
      * @return \DOMElement
+     *
+     * @throws \InvalidArgumentException if assertions are false
      */
     public function toXML(DOMElement $parent): DOMElement
     {
-        if ($this->KeyInfo === null) {
-            throw new \Exception('Cannot convert KeyDescriptor to XML without KeyInfo set.');
-        }
+        Assert::notEmpty($this->KeyInfo, 'Cannot convert KeyDescriptor to XML without KeyInfo set.');
 
         $doc = $parent->ownerDocument;
 

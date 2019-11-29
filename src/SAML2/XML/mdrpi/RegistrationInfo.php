@@ -6,6 +6,7 @@ namespace SAML2\XML\mdrpi;
 
 use DOMElement;
 use SAML2\Utils;
+use Webmozart\Assert\Assert;
 
 /**
  * Class for handling the mdrpi:RegistrationInfo element.
@@ -18,9 +19,9 @@ class RegistrationInfo
     /**
      * The identifier of the metadata registration authority.
      *
-     * @var string|null
+     * @var string
      */
-    private $registrationAuthority = null;
+    private $registrationAuthority;
 
     /**
      * The registration timestamp for the metadata, as a UNIX timestamp.
@@ -69,10 +70,14 @@ class RegistrationInfo
     /**
      * Collect the value of the RegistrationAuthority property
      *
-     * @return string|null
+     * @return string
+     *
+     * @throws \InvalidArgumentException if assertions are false
      */
-    public function getRegistrationAuthority(): ?string
+    public function getRegistrationAuthority(): string
     {
+        Assert::notEmpty($this->registrationAuthority);
+
         return $this->registrationAuthority;
     }
 
@@ -140,12 +145,12 @@ class RegistrationInfo
      *
      * @param \DOMElement $parent The element we should append to.
      * @return \DOMElement
+     *
+     * @throws \InvalidArgumentException if assertions are false
      */
     public function toXML(DOMElement $parent): DOMElement
     {
-        if (empty($this->registrationAuthority)) {
-            throw new \Exception('Missing required registration authority.');
-        }
+        Assert::notEmpty($this->registrationAuthority, 'Missing required registration authority.');
 
         $doc = $parent->ownerDocument;
 

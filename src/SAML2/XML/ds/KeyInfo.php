@@ -123,8 +123,9 @@ class KeyInfo
      * Add the value to the info-property
      *
      * @param \SAML2\XML\Chunk|\SAML2\XML\ds\KeyName|\SAML2\XML\ds\X509Data $info
-     * @throws \Exception
      * @return void
+     *
+     * @throws \InvalidArgumentException if assertions are false
      */
     public function addInfo($info): void
     {

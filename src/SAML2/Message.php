@@ -9,6 +9,7 @@ use RobRichards\XMLSecLibs\XMLSecurityKey;
 use SAML2\Utilities\Temporal;
 use SAML2\XML\saml\Issuer;
 use SAML2\XML\samlp\Extensions;
+use Webmozart\Assert\Assert;
 
 /**
  * Base class for all SAML 2 messages.
@@ -105,14 +106,14 @@ abstract class Message extends SignedElement
      *
      * @var array
      */
-    protected $certificates;
+    protected $certificates = [];
 
     /**
      * Available methods for validating this message.
      *
      * @var array
      */
-    private $validators;
+    private $validators = [];
 
     /**
      * @var null|string
@@ -141,8 +142,6 @@ abstract class Message extends SignedElement
 
         $this->id = Utils::getContainer()->generateId();
         $this->issueInstant = Temporal::getTime();
-        $this->certificates = [];
-        $this->validators = [];
 
         if ($xml === null) {
             return;
@@ -555,12 +554,16 @@ abstract class Message extends SignedElement
      * @param \DOMElement $xml The root XML element
      * @throws \Exception
      * @return \SAML2\Message The message
+     *
+     * @throws \InvalidArgumentException if assertions are false
      */
     public static function fromXML(\DOMElement $xml): Message
     {
-        if ($xml->namespaceURI !== Constants::NS_SAMLP) {
-            throw new \Exception('Unknown namespace of SAML message: ' . var_export($xml->namespaceURI, true));
-        }
+        Assert::same(
+            $xml->namespaceURI,
+            Constants::NS_SAMLP,
+            'Unknown namespace of SAML message: ' . var_export($xml->namespaceURI, true)
+        );
 
         switch ($xml->localName) {
             case 'AttributeQuery':

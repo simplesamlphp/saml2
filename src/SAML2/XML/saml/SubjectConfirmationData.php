@@ -259,6 +259,8 @@ class SubjectConfirmationData
      *
      * @param \SAML2\XML\Chunk|\SAML2\XML\ds\KeyInfo $info
      * @return void
+     *
+     * @throws \InvalidArgumentException if assertions are false
      */
     public function addInfo($info): void
     {

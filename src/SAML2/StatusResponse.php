@@ -104,8 +104,6 @@ abstract class StatusResponse extends Message
      */
     public function isSuccess(): bool
     {
-        Assert::keyExists($this->status, "Code");
-
         return $this->status['Code'] === Constants::STATUS_SUCCESS;
     }
 
@@ -149,6 +147,8 @@ abstract class StatusResponse extends Message
      *
      * @param array $status The status code.
      * @return void
+     *
+     * @throws \InvalidArgumentException if assertions are false
      */
     public function setStatus(array $status): void
     {

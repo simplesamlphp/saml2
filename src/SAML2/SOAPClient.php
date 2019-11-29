@@ -22,6 +22,7 @@ class SOAPClient
 {
     public const START_SOAP_ENVELOPE = '<soap-env:Envelope xmlns:soap-env="http://schemas.xmlsoap.org/soap/envelope/">\
         <soap-env:Header/><soap-env:Body>';
+
     public const END_SOAP_ENVELOPE = '</soap-env:Body></soap-env:Envelope>';
 
 

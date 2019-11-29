@@ -191,6 +191,8 @@ class Organization
      *
      * @param  \DOMElement $parent The element we should add this organization to.
      * @return \DOMElement This Organization-element.
+     *
+     * @throws \InvalidArgumentException if assertions are false
      */
     public function toXML(DOMElement $parent): DOMElement
     {

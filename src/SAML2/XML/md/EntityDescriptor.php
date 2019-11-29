@@ -10,6 +10,7 @@ use SAML2\DOMDocumentFactory;
 use SAML2\SignedElementHelper;
 use SAML2\Utils;
 use SAML2\XML\Chunk;
+use Webmozart\Assert\Assert;
 
 /**
  * Class representing SAML 2 EntityDescriptor element.
@@ -175,9 +176,13 @@ class EntityDescriptor extends SignedElementHelper
      * Collect the value of the entityID property.
      *
      * @return string
+     *
+     * @throws \InvalidArgumentException if assertions are false
      */
     public function getEntityID(): string
     {
+        Assert::notEmpty($this->entityID);
+
         return $this->entityID;
     }
 
@@ -449,12 +454,12 @@ class EntityDescriptor extends SignedElementHelper
      *
      * @param \DOMElement|null $parent The EntitiesDescriptor we should append this EntityDescriptor to.
      * @return \DOMElement
+     *
+     * @throws \InvalidArgumentException if assertions are false
      */
     public function toXML(DOMElement $parent = null): DOMElement
     {
-        if (empty($this->entityID)) {
-            throw new \Exception('Cannot convert EntityDescriptor to XML without an EntityID set.');
-        }
+        Assert::notEmpty($this->entityID, 'Cannot convert EntityDescriptor to XML without an EntityID set.');
 
         if ($parent === null) {
             $doc = DOMDocumentFactory::create();

@@ -216,14 +216,17 @@ class HTTPRedirect extends Binding
      *
      * @param array          $data The data we need to validate the query string.
      * @param XMLSecurityKey $key  The key we should validate the query against.
-     * @throws \Exception
      * @return void
+     *
+     * @throws \Exception
+     * @throws \InvalidArgumentException if assertions are false
      */
     public static function validateSignature(array $data, XMLSecurityKey $key): void
     {
         Assert::keyExists($data, "Query");
         Assert::keyExists($data, "SigAlg");
         Assert::keyExists($data, "Signature");
+        Assert::same($key->type, XMLSecurityKey::RSA_SHA256, 'Invalid key type for validating signature on query string.');
 
         $query = $data['Query'];
         $sigAlg = $data['SigAlg'];
@@ -231,9 +234,6 @@ class HTTPRedirect extends Binding
 
         $signature = base64_decode($signature);
 
-        if ($key->type !== XMLSecurityKey::RSA_SHA256) {
-            throw new \Exception('Invalid key type for validating signature on query string.');
-        }
         if ($key->type !== $sigAlg) {
             $key = Utils::castKey($key, $sigAlg);
         }

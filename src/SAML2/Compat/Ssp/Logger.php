@@ -159,6 +159,8 @@ class Logger implements LoggerInterface
      * @param array $context
      * @return void
      *
+     * @throws \InvalidArgumentException if assertions are false
+     *
      * Type hint not possible due to upstream method signature
      */
     public function log($level, $message, array $context = []): void

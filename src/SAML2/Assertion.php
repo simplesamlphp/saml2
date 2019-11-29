@@ -661,6 +661,8 @@ class Assertion extends SignedElement
      *
      * @param  XMLSecurityKey $key The key we should check against.
      * @return boolean        true if successful, false if it is unsigned.
+     *
+     * @throws \InvalidArgumentException if assertions are false
      */
     public function validate(XMLSecurityKey $key): bool
     {
@@ -792,12 +794,13 @@ class Assertion extends SignedElement
      *
      * @param XMLSecurityKey $key The encryption key.
      * @return void
+     *
+     * @throws \InvalidArgumentException if assertions are false
      */
     public function encryptNameId(XMLSecurityKey $key): void
     {
-        if ($this->nameId === null) {
-            throw new \Exception('Cannot encrypt NameID, no NameID set.');
-        }
+        Assert::notEmpty($this->nameId, 'Cannot encrypt NameID, no NameID set.');
+
         /* First create an XML representation of the NameID. */
         $doc = DOMDocumentFactory::create();
         $root = $doc->createElement('root');
@@ -1037,7 +1040,7 @@ class Assertion extends SignedElement
      * @param int|null $authnInstant Timestamp the user was authenticated, or NULL if we don't want an AuthnStatement.
      * @return void
      */
-    public function setAuthnInstant(int $authnInstant = null): void
+    public function setAuthnInstant(?int $authnInstant): void
     {
         $this->authnInstant = $authnInstant;
     }
@@ -1462,9 +1465,13 @@ class Assertion extends SignedElement
      *
      * @param  \DOMNode|null $parentElement The DOM node the assertion should be created in.
      * @return \DOMElement   This assertion.
+     *
+     * @throws \InvalidArgumentException if assertions are false
      */
     public function toXML(\DOMNode $parentElement = null): DOMElement
     {
+        Assert::notEmpty($this->issuer, 'Cannot convert Assertion to XML without an Issuer set.');
+
         if ($parentElement === null) {
             $document = DOMDocumentFactory::create();
             $parentElement = $document;
@@ -1748,6 +1755,8 @@ class Assertion extends SignedElement
      *
      * @param \DOMElement $root The assertion element we should add the Encrypted Attribute Statement to.
      * @return void
+     *
+     * @throws \InvalidArgumentException if assertions are false
      */
     private function addEncryptedAttributeStatement(DOMElement $root): void
     {

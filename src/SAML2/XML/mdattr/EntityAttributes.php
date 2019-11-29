@@ -83,6 +83,8 @@ class EntityAttributes
      *
      * @param \SAML2\XML\Chunk|\SAML2\XML\saml\Attribute $child
      * @return void
+     *
+     * @throws \InvalidArgumentException if assertions are false
      */
     public function addChildren($child): void
     {

@@ -119,6 +119,8 @@ class UIInfo
      *
      * @param \SAML2\XML\mdui\Keywords[] $keywords
      * @return void
+     *
+     * @throws \InvalidArgumentException if assertions are false
      */
     public function setKeywords(array $keywords): void
     {

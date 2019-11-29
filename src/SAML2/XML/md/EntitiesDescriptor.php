@@ -240,6 +240,8 @@ class EntitiesDescriptor extends SignedElementHelper
      *
      * @param \SAML2\XML\md\EntityDescriptor|\SAML2\XML\md\EntitiesDescriptor $child
      * @return void
+     *
+     * @throws \InvalidArgumentException if assertions are false
      */
     public function addChildren($child): void
     {

@@ -22,7 +22,7 @@ class SignedElementHelper extends SignedElement
      *
      * @var array
      */
-    private $validators;
+    private $validators = [];
 
     /**
      * How long this element is valid, as a unix timestamp.
@@ -46,9 +46,6 @@ class SignedElementHelper extends SignedElement
      */
     protected function __construct(DOMElement $xml = null)
     {
-        $this->certificates = [];
-        $this->validators = [];
-
         if ($xml === null) {
             return;
         }

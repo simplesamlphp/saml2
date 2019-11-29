@@ -117,6 +117,8 @@ class Utils
      * @param string $algorithm The desired algorithm.
      * @param string $type Public or private key, defaults to public.
      * @return XMLSecurityKey The new key.
+     *
+     * @throws \InvalidArgumentException if assertions are false
      */
     public static function castKey(XMLSecurityKey $key, string $algorithm, string $type = null): XMLSecurityKey
     {
@@ -169,6 +171,8 @@ class Utils
      * @param XMLSecurityKey $key The publickey that should validate the Signature object.
      * @throws \Exception
      * @return void
+     *
+     * @throws \InvalidArgumentException if assertions are false
      */
     public static function validateSignature(array $info, XMLSecurityKey $key): void
     {

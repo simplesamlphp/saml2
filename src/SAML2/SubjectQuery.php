@@ -6,6 +6,7 @@ namespace SAML2;
 
 use DOMElement;
 use SAML2\XML\saml\NameID;
+use Webmozart\Assert\Assert;
 
 /**
  * Base class for SAML 2 subject query messages.
@@ -23,9 +24,9 @@ abstract class SubjectQuery extends Request
     /**
      * The NameId of the subject in the query.
      *
-     * @var \SAML2\XML\saml\NameID|null
+     * @var \SAML2\XML\saml\NameID
      */
-    private $nameId = null;
+    private $nameId;
 
 
     /**
@@ -77,10 +78,14 @@ abstract class SubjectQuery extends Request
     /**
      * Retrieve the NameId of the subject in the query.
      *
-     * @return \SAML2\XML\saml\NameID|null The name identifier of the assertion.
+     * @return \SAML2\XML\saml\NameID The name identifier of the assertion.
+     *
+     * @throws \InvalidArgumentException if assertions are false
      */
-    public function getNameId(): ?NameID
+    public function getNameId(): NameID
     {
+        Assert::notEmpty($this->nameId);
+
         return $this->nameId;
     }
 
@@ -88,10 +93,10 @@ abstract class SubjectQuery extends Request
     /**
      * Set the NameId of the subject in the query.
      *
-     * @param \SAML2\XML\saml\NameID|null $nameId The name identifier of the assertion.
+     * @param \SAML2\XML\saml\NameID $nameId The name identifier of the assertion.
      * @return void
      */
-    public function setNameId(NameID $nameId = null): void
+    public function setNameId(NameID $nameId): void
     {
         $this->nameId = $nameId;
     }
@@ -101,12 +106,13 @@ abstract class SubjectQuery extends Request
      * Convert subject query message to an XML element.
      *
      * @return \DOMElement This subject query.
+     *
+     * @throws \InvalidArgumentException if assertions are false
      */
     public function toUnsignedXML(): DOMElement
     {
-        if ($this->nameId === null) {
-            throw new \Exception('Cannot convert SubjectQuery to XML without a NameID set.');
-        }
+        Assert::notEmpty($this->nameId, 'Cannot convert SubjectQuery to XML without a NameID set.');
+
         $root = parent::toUnsignedXML();
 
         $subject = $root->ownerDocument->createElementNS(Constants::NS_SAML, 'saml:Subject');
