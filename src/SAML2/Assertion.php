@@ -1464,6 +1464,8 @@ class Assertion extends SignedElement
      */
     public function toXML(\DOMNode $parentElement = null): DOMElement
     {
+        Assert::notEmpty($this->issuer, 'Cannot convert Assertion to XML without an Issuer set.');
+
         if ($parentElement === null) {
             $document = DOMDocumentFactory::create();
             $parentElement = $document;
@@ -1485,8 +1487,6 @@ class Assertion extends SignedElement
         $root->setAttribute('ID', $this->id);
         $root->setAttribute('Version', '2.0');
         $root->setAttribute('IssueInstant', gmdate('Y-m-d\TH:i:s\Z', $this->issueInstant));
-
-        Assert::notEmpty($this->issuer, 'Cannot convert Assertion to XML without an Issuer set.');
 
         $issuer = $this->issuer->toXML($root);
 
