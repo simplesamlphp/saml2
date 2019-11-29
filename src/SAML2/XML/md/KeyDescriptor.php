@@ -103,6 +103,8 @@ class KeyDescriptor
      * Collect the value of the KeyInfo property.
      *
      * @return \SAML2\XML\ds\KeyInfo
+     *
+     * @throws \InvalidArgumentException if assertions are false
      */
     public function getKeyInfo(): KeyInfo
     {
@@ -164,6 +166,8 @@ class KeyDescriptor
      *
      * @param \DOMElement $parent The element we should append this KeyDescriptor to.
      * @return \DOMElement
+     *
+     * @throws \InvalidArgumentException if assertions are false
      */
     public function toXML(DOMElement $parent): DOMElement
     {

@@ -32,6 +32,8 @@ class AttributeValue implements \Serializable
      *  - string                       Create an attribute value with a simple string.
      *  - \DOMElement(AttributeValue)  Create an attribute value of the given DOMElement.
      *  - \DOMElement                  Create an attribute value with the given DOMElement as a child.
+     *
+     * @throws \InvalidArgumentException if assertions are false
      */
     public function __construct($value)
     {
@@ -88,6 +90,8 @@ class AttributeValue implements \Serializable
      *
      * @param  \DOMElement $parent The element we should append this attribute value to.
      * @return \DOMElement The generated AttributeValue element.
+     *
+     * @throws \InvalidArgumentException if assertions are false
      */
     public function toXML(DOMElement $parent): DOMElement
     {

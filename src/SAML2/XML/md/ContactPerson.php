@@ -157,6 +157,8 @@ class ContactPerson
      * Collect the value of the contactType-property
      *
      * @return string
+     *
+     * @throws \InvalidArgumentException if assertions are false
      */
     public function getContactType(): string
     {
@@ -393,6 +395,8 @@ class ContactPerson
      *
      * @param  \DOMElement $parent The element we should add this contact to.
      * @return \DOMElement The new ContactPerson-element.
+     *
+     * @throws \InvalidArgumentException if assertions are false
      */
     public function toXML(DOMElement $parent): DOMElement
     {

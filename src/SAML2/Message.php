@@ -554,6 +554,8 @@ abstract class Message extends SignedElement
      * @param \DOMElement $xml The root XML element
      * @throws \Exception
      * @return \SAML2\Message The message
+     *
+     * @throws \InvalidArgumentException if assertions are false
      */
     public static function fromXML(\DOMElement $xml): Message
     {

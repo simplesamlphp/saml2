@@ -106,6 +106,8 @@ abstract class NameIDType extends BaseIDType
      * Collect the value of the value-property
      *
      * @return string
+     *
+     * @throws \InvalidArgumentException if assertions are false
      */
     public function getValue(): string
     {

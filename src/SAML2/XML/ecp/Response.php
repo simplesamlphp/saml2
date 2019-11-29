@@ -59,6 +59,8 @@ class Response
      * Collect the value of the AssertionConsumerServiceURL-property
      *
      * @return string
+     *
+     * @throws \InvalidArgumentException if assertions are false
      */
     public function getAssertionConsumerServiceURL(): string
     {
@@ -88,8 +90,9 @@ class Response
      * Convert this ECP Response to XML.
      *
      * @param \DOMElement $parent The element we should append this element to.
-     * @throws InvalidArgumentException
      * @return \DOMElement
+     *
+     * @throws \InvalidArgumentException if assertions are false
      */
     public function toXML(DOMElement $parent): DOMElement
     {

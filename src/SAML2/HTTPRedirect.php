@@ -216,8 +216,10 @@ class HTTPRedirect extends Binding
      *
      * @param array          $data The data we need to validate the query string.
      * @param XMLSecurityKey $key  The key we should validate the query against.
-     * @throws \Exception
      * @return void
+     *
+     * @throws \Exception
+     * @throws \InvalidArgumentException if assertions are false
      */
     public static function validateSignature(array $data, XMLSecurityKey $key): void
     {

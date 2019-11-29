@@ -57,6 +57,8 @@ class IndexedEndpointType extends EndpointType
      * Collect the value of the index property.
      *
      * @return int
+     *
+     * @throws \InvalidArgumentException if assertions are false
      */
     public function getIndex(): int
     {
@@ -107,6 +109,8 @@ class IndexedEndpointType extends EndpointType
      * @param \DOMElement $parent The element we should append this endpoint to.
      * @param string $name The name of the element we should create.
      * @return \DOMElement
+     *
+     * @throws \InvalidArgumentException if assertions are false
      */
     public function toXML(DOMElement $parent, string $name): DOMElement
     {

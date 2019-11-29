@@ -95,6 +95,8 @@ class AttributeConsumingService
      * Collect the value of the index-property
      *
      * @return int
+     *
+     * @throws \InvalidArgumentException if assertions are false
      */
     public function getIndex(): int
     {
@@ -225,6 +227,8 @@ class AttributeConsumingService
      *
      * @param \DOMElement $parent The element we should append this AttributeConsumingService to.
      * @return \DOMElement
+     *
+     * @throws \InvalidArgumentException if assertions are false
      */
     public function toXML(DOMElement $parent): DOMElement
     {

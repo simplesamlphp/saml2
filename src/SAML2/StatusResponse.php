@@ -147,6 +147,8 @@ abstract class StatusResponse extends Message
      *
      * @param array $status The status code.
      * @return void
+     *
+     * @throws \InvalidArgumentException if assertions are false
      */
     public function setStatus(array $status): void
     {

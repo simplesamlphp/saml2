@@ -93,6 +93,8 @@ class HTTPArtifact extends Binding
      *
      * @throws \Exception
      * @return \SAML2\Message The received message.
+     *
+     * @throws \InvalidArgumentException if assertions are false
      */
     public function receive(): Message
     {

@@ -77,6 +77,8 @@ class SubjectConfirmation
      * Collect the value of the Method-property
      *
      * @return string
+     *
+     * @throws \InvalidArgumentException if assertions are false
      */
     public function getMethod(): string
     {
@@ -149,6 +151,8 @@ class SubjectConfirmation
      *
      * @param  \DOMElement $parent The parent element we should append this element to.
      * @return \DOMElement This element, as XML.
+     *
+     * @throws \InvalidArgumentException if assertions are false
      */
     public function toXML(DOMElement $parent): DOMElement
     {

@@ -71,6 +71,8 @@ class RegistrationInfo
      * Collect the value of the RegistrationAuthority property
      *
      * @return string
+     *
+     * @throws \InvalidArgumentException if assertions are false
      */
     public function getRegistrationAuthority(): string
     {
@@ -143,6 +145,8 @@ class RegistrationInfo
      *
      * @param \DOMElement $parent The element we should append to.
      * @return \DOMElement
+     *
+     * @throws \InvalidArgumentException if assertions are false
      */
     public function toXML(DOMElement $parent): DOMElement
     {

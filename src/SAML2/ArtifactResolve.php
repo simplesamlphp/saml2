@@ -40,6 +40,8 @@ class ArtifactResolve extends Request
      * Retrieve the Artifact in this response.
      *
      * @return string artifact.
+     *
+     * @throws \InvalidArgumentException if assertions are false
      */
     public function getArtifact(): string
     {
@@ -65,6 +67,8 @@ class ArtifactResolve extends Request
      * Convert the response message to an XML element.
      *
      * @return \DOMElement This response.
+     *
+     * @throws \InvalidArgumentException if assertions are false
      */
     public function toUnsignedXML(): DOMElement
     {

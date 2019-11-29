@@ -60,6 +60,8 @@ class PublicKeyValidator extends AbstractChainedValidator
      * @param \SAML2\Configuration\CertificateProvider $configuration
      *
      * @return bool
+     *
+     * @throws \InvalidArgumentException if assertions are false
      */
     public function hasValidSignature(
         SignedElement $signedElement,

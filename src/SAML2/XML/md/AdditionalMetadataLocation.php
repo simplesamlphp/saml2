@@ -56,6 +56,8 @@ class AdditionalMetadataLocation
      * Collect the value of the namespace-property
      *
      * @return string
+     *
+     * @throws \InvalidArgumentException if assertions are false
      */
     public function getNamespace(): string
     {
@@ -81,6 +83,8 @@ class AdditionalMetadataLocation
      * Collect the value of the location-property
      *
      * @return string
+     *
+     * @throws \InvalidArgumentException if assertions are false
      */
     public function getLocation(): string
     {
@@ -107,6 +111,8 @@ class AdditionalMetadataLocation
      *
      * @param  \DOMElement $parent The element we should append to.
      * @return \DOMElement This AdditionalMetadataLocation-element.
+     *
+     * @throws \InvalidArgumentException if assertions are false
      */
     public function toXML(DOMElement $parent): DOMElement
     {

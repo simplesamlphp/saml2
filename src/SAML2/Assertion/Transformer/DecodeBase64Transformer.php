@@ -32,6 +32,8 @@ class DecodeBase64Transformer implements
     /**
      * @param Assertion $assertion
      * @return Assertion
+     *
+     * @throws \InvalidArgumentException if assertions are false
      */
     public function transform(Assertion $assertion): Assertion
     {

@@ -130,6 +130,8 @@ class EncryptedAssertion
      *
      * @param  \DOMNode|null $parentElement The DOM node the assertion should be created in.
      * @return \DOMElement   This encrypted assertion.
+     *
+     * @throws \InvalidArgumentException if assertions are false
      */
     public function toXML(DOMNode $parentElement = null): DOMElement
     {

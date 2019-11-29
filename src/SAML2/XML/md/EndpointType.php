@@ -162,6 +162,8 @@ class EndpointType
      * Collect the value of the Binding property.
      *
      * @return string
+     *
+     * @throws \InvalidArgumentException if assertions are false
      */
     public function getBinding(): string
     {
@@ -187,6 +189,8 @@ class EndpointType
      * Collect the value of the Location property.
      *
      * @return string
+     *
+     * @throws \InvalidArgumentException if assertions are false
      */
     public function getLocation(): string
     {

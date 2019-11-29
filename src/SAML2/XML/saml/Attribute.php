@@ -82,6 +82,8 @@ class Attribute
      * Collect the value of the Name-property
      *
      * @return string
+     *
+     * @throws \InvalidArgumentException if assertions are false
      */
     public function getName(): string
     {
@@ -192,6 +194,8 @@ class Attribute
      * @param string $namespace The namespace the element should be created in.
      * @param string $name The name of the element.
      * @return \DOMElement
+     *
+     * @throws \InvalidArgumentException if assertions are false
      */
     protected function toXMLInternal(DOMElement $parent, string $namespace, string $name): DOMElement
     {

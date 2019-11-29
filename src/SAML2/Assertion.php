@@ -661,6 +661,8 @@ class Assertion extends SignedElement
      *
      * @param  XMLSecurityKey $key The key we should check against.
      * @return boolean        true if successful, false if it is unsigned.
+     *
+     * @throws \InvalidArgumentException if assertions are false
      */
     public function validate(XMLSecurityKey $key): bool
     {
@@ -792,6 +794,8 @@ class Assertion extends SignedElement
      *
      * @param XMLSecurityKey $key The encryption key.
      * @return void
+     *
+     * @throws \InvalidArgumentException if assertions are false
      */
     public function encryptNameId(XMLSecurityKey $key): void
     {
@@ -1461,6 +1465,8 @@ class Assertion extends SignedElement
      *
      * @param  \DOMNode|null $parentElement The DOM node the assertion should be created in.
      * @return \DOMElement   This assertion.
+     *
+     * @throws \InvalidArgumentException if assertions are false
      */
     public function toXML(\DOMNode $parentElement = null): DOMElement
     {
@@ -1749,6 +1755,8 @@ class Assertion extends SignedElement
      *
      * @param \DOMElement $root The assertion element we should add the Encrypted Attribute Statement to.
      * @return void
+     *
+     * @throws \InvalidArgumentException if assertions are false
      */
     private function addEncryptedAttributeStatement(DOMElement $root): void
     {

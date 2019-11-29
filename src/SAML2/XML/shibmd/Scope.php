@@ -56,6 +56,8 @@ class Scope
      * Collect the value of the scope-property
      *
      * @return string
+     *
+     * @throws \InvalidArgumentException if assertions are false
      */
     public function getScope(): string
     {
@@ -105,6 +107,8 @@ class Scope
      *
      * @param \DOMElement $parent The element we should append this Scope to.
      * @return \DOMElement
+     *
+     * @throws \InvalidArgumentException if assertions are false
      */
     public function toXML(DOMElement $parent): DOMElement
     {

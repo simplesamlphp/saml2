@@ -697,6 +697,8 @@ class AuthnRequest extends Request
      *
      * @param XMLSecurityKey $key The encryption key.
      * @return void
+     *
+     * @throws \InvalidArgumentException if assertions are false
      */
     public function encryptNameId(XMLSecurityKey $key): void
     {

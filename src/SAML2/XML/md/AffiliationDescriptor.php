@@ -108,6 +108,8 @@ class AffiliationDescriptor extends SignedElementHelper
      * Collect the value of the affiliationOwnerId-property
      *
      * @return string
+     *
+     * @throws \InvalidArgumentException if assertions are false
      */
     public function getAffiliationOwnerID(): string
     {
@@ -250,6 +252,8 @@ class AffiliationDescriptor extends SignedElementHelper
      *
      * @param \DOMElement $parent The EntityDescriptor we should append this endpoint to.
      * @return \DOMElement
+     *
+     * @throws \InvalidArgumentException if assertions are false
      */
     public function toXML(DOMElement $parent): DOMElement
     {

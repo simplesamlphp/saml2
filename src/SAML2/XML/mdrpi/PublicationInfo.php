@@ -80,6 +80,8 @@ class PublicationInfo
      * Collect the value of the publisher-property
      *
      * @return string
+     *
+     * @throws \InvalidArgumentException if assertions are false
      */
     public function getPublisher(): string
     {
@@ -175,6 +177,8 @@ class PublicationInfo
      *
      * @param \DOMElement $parent The element we should append to.
      * @return \DOMElement
+     *
+     * @throws \InvalidArgumentException if assertions are false
      */
     public function toXML(DOMElement $parent): DOMElement
     {

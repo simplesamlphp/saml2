@@ -131,6 +131,8 @@ class LogoutRequest extends Request
      *
      * @param XMLSecurityKey $key The encryption key.
      * @return void
+     *
+     * @throws \InvalidArgumentException if assertions are false
      */
     public function encryptNameId(XMLSecurityKey $key): void
     {
@@ -188,8 +190,9 @@ class LogoutRequest extends Request
     /**
      * Retrieve the name identifier of the session that should be terminated.
      *
-     * @throws \Exception
      * @return \SAML2\XML\saml\NameID The name identifier of the session that should be terminated.
+     *
+     * @throws \InvalidArgumentException if assertions are false
      */
     public function getNameId(): NameID
     {

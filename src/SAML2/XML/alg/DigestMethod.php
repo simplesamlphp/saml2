@@ -48,6 +48,8 @@ class DigestMethod
      * Collect the value of the algorithm-property
      *
      * @return string
+     *
+     * @throws \InvalidArgumentException if assertions are false
      */
     public function getAlgorithm(): string
     {
@@ -74,7 +76,8 @@ class DigestMethod
      *
      * @param \DOMElement $parent The element we should append to.
      * @return \DOMElement
-     * @throws \Exception
+     *
+     * @throws \InvalidArgumentException if assertions are false
      */
     public function toXML(DOMElement $parent): DOMElement
     {

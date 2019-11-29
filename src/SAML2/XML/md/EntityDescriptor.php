@@ -176,6 +176,8 @@ class EntityDescriptor extends SignedElementHelper
      * Collect the value of the entityID property.
      *
      * @return string
+     *
+     * @throws \InvalidArgumentException if assertions are false
      */
     public function getEntityID(): string
     {
@@ -452,6 +454,8 @@ class EntityDescriptor extends SignedElementHelper
      *
      * @param \DOMElement|null $parent The EntitiesDescriptor we should append this EntityDescriptor to.
      * @return \DOMElement
+     *
+     * @throws \InvalidArgumentException if assertions are false
      */
     public function toXML(DOMElement $parent = null): DOMElement
     {

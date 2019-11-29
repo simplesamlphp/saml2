@@ -79,6 +79,8 @@ abstract class SubjectQuery extends Request
      * Retrieve the NameId of the subject in the query.
      *
      * @return \SAML2\XML\saml\NameID The name identifier of the assertion.
+     *
+     * @throws \InvalidArgumentException if assertions are false
      */
     public function getNameId(): NameID
     {
@@ -104,6 +106,8 @@ abstract class SubjectQuery extends Request
      * Convert subject query message to an XML element.
      *
      * @return \DOMElement This subject query.
+     *
+     * @throws \InvalidArgumentException if assertions are false
      */
     public function toUnsignedXML(): DOMElement
     {

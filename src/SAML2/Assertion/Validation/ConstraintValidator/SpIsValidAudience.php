@@ -35,6 +35,8 @@ class SpIsValidAudience implements
      * @param Assertion $assertion
      * @param Result $result
      * @return void
+     *
+     * @throws \InvalidArgumentException if assertions are false
      */
     public function validate(Assertion $assertion, Result $result): void
     {

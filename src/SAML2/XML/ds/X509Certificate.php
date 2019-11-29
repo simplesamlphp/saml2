@@ -43,6 +43,8 @@ class X509Certificate
      * Collect the value of the certificate-property
      *
      * @return string
+     *
+     * @throws \InvalidArgumentException if assertions are false
      */
     public function getCertificate(): string
     {
@@ -69,6 +71,8 @@ class X509Certificate
      *
      * @param \DOMElement $parent The element we should append this X509Certificate element to.
      * @return \DOMElement
+     *
+     * @throws \InvalidArgumentException if assertions are false
      */
     public function toXML(DOMElement $parent): DOMElement
     {

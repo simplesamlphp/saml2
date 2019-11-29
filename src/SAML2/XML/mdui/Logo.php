@@ -78,6 +78,8 @@ class Logo
      * Collect the value of the url-property
      *
      * @return string
+     *
+     * @throws \InvalidArgumentException if assertions are false
      */
     public function getUrl(): string
     {
@@ -129,6 +131,8 @@ class Logo
      * Collect the value of the height-property
      *
      * @return int
+     *
+     * @throws \InvalidArgumentException if assertions are false
      */
     public function getHeight(): int
     {
@@ -154,6 +158,8 @@ class Logo
      * Collect the value of the width-property
      *
      * @return int
+     *
+     * @throws \InvalidArgumentException if assertions are false
      */
     public function getWidth(): int
     {
@@ -180,6 +186,8 @@ class Logo
      *
      * @param \DOMElement $parent The element we should append this Logo to.
      * @return \DOMElement
+     *
+     * @throws \InvalidArgumentException if assertions are false
      */
     public function toXML(DOMElement $parent): DOMElement
     {
