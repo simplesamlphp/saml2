@@ -1243,12 +1243,12 @@ class Assertion extends SignedElement
      * @param boolean Indicates that returned array should be actual attribute objects instead of strings
      * @return array All attributes, as an associative array.
      */
-    public function getAttributes(): array
+    public function getAttributes(bool $asObjects = false): array
     {
         if ($asObjects) {
             return $this->attributes;
         }
-        $compatArray = array();
+        $compatArray = [];
         foreach ($this->attributes as $attributeName => $attributeObj) {
             $compatArray[$attributeName] = array();
             
