@@ -598,17 +598,6 @@ class Assertion extends SignedElement
                 $type = null;
             }
             $this->attributesValueTypes[$attributeName][] = $type;
-
-            if ($hasNonTextChildElements) {
-                $this->attributes[$attributeName][] = $value->childNodes;
-                continue;
-            }
-            
-            if ($type === 'xs:integer') {
-                $this->attributes[$attributeName][] = (int) $value->textContent;
-            } else {
-                $this->attributes[$attributeName][] = trim($value->textContent);
-            }
         }
     }
 
@@ -1781,99 +1770,12 @@ class Assertion extends SignedElement
         $attributeStatement = $document->createElementNS(Constants::NS_SAML, 'saml:AttributeStatement');
         $root->appendChild($attributeStatement);
 
-<<<<<<< HEAD
-        foreach ($this->attributes as $name => $values) {
-            $attribute = $document->createElementNS(Constants::NS_SAML, 'saml:Attribute');
-            $attributeStatement->appendChild($attribute);
-            $attribute->setAttribute('Name', $name);
-
-            if ($this->nameFormat !== Constants::NAMEFORMAT_UNSPECIFIED) {
-                $attribute->setAttribute('NameFormat', $this->nameFormat);
-            }
-
-            // make sure eduPersonTargetedID can be handled properly as a NameID
-            if ($name === Constants::EPTI_URN_MACE || $name === Constants::EPTI_URN_OID) {
-                foreach ($values as $eptiValue) {
-                    $attributeValue = $document->createElementNS(Constants::NS_SAML, 'saml:AttributeValue');
-                    $attribute->appendChild($attributeValue);
-                    if ($eptiValue instanceof NameID) {
-                        $eptiValue->toXML($attributeValue);
-                    } elseif ($eptiValue instanceof DOMNodeList) {
-                        /** @var \DOMElement $value */
-                        $value = $eptiValue->item(0);
-                        $node = $root->ownerDocument->importNode($value, true);
-                        $attributeValue->appendChild($node);
-                    } else {
-                        $attributeValue->textContent = $eptiValue;
-                    }
-                }
-
-                continue;
-            }
-
-            // get value type(s) for the current attribute
-            if (array_key_exists($name, $this->attributesValueTypes)) {
-                $valueTypes = $this->attributesValueTypes[$name];
-                if (is_array($valueTypes) && count($valueTypes) != count($values)) {
-                    throw new \Exception('Array of value types and array of values have different size for attribute ' .
-                        var_export($name, true));
-                }
-            } else {
-                // if no type(s), default behaviour
-                $valueTypes = null;
-            }
-
-            $vidx = -1;
-            foreach ($values as $value) {
-                $vidx++;
-
-                // try to get type from current types
-                $type = null;
-                if (!is_null($valueTypes)) {
-                    if (is_array($valueTypes)) {
-                        $type = $valueTypes[$vidx];
-                    } else {
-                        $type = $valueTypes;
-                    }
-                }
-
-                // if no type get from types, use default behaviour
-                if (is_null($type)) {
-                    if (is_string($value)) {
-                        $type = 'xs:string';
-                    } elseif (is_int($value)) {
-                        $type = 'xs:integer';
-                    } else {
-                        $type = null;
-                    }
-                }
-
-                $attributeValue = $document->createElementNS(Constants::NS_SAML, 'saml:AttributeValue');
-                $attribute->appendChild($attributeValue);
-                if ($type !== null) {
-                    $attributeValue->setAttributeNS(Constants::NS_XSI, 'xsi:type', $type);
-                }
-                if (is_null($value)) {
-                    $attributeValue->setAttributeNS(Constants::NS_XSI, 'xsi:nil', 'true');
-                }
-
-                if ($value instanceof \DOMNodeList) {
-                    foreach ($value as $v) {
-                        $node = $document->importNode($v, true);
-                        $attributeValue->appendChild($node);
-                    }
-                } else {
-                    $value = strval($value);
-                    $attributeValue->appendChild($document->createTextNode($value));
-                }
-=======
         foreach ($this->attributes as $name => $attributeObj) {
             
             // possibly override the xsi type for the current attribute
             if (is_array($this->attributesValueTypes) &&
                 array_key_exists($attributeObj->Name, $this->attributesValueTypes)) {
                 $this->overrideAttributeType($attributeObj);
->>>>>>> updated \SAML2\Assertion to use \SAML2\XML\saml\Attribute objects instead of an array of string|int|DOMElement.
             }
             
             $attributeObj->toXML($attributeStatement);
@@ -1899,61 +1801,34 @@ class Assertion extends SignedElement
         $attributeStatement = $document->createElementNS(Constants::NS_SAML, 'saml:AttributeStatement');
 
         foreach ($this->attributes as $name => $attributeObj) {
-
-<<<<<<< HEAD
-            if ($this->nameFormat !== Constants::NAMEFORMAT_UNSPECIFIED) {
-                $attribute->setAttribute('NameFormat', $this->getAttributeNameFormat());
-=======
             // possibly override the xsi type for the current attribute
             if (is_array($this->attributesValueTypes) &&
                 array_key_exists($attributeObj->Name, $this->attributesValueTypes)) {
                 $this->overrideAttributeType($attributeObj);
->>>>>>> updated \SAML2\Assertion to use \SAML2\XML\saml\Attribute objects instead of an array of string|int|DOMElement.
             }
             $attributeElement = $attributeObj->toXML($attributeStatement);
 
-            foreach ($values as $value) {
-                if (is_string($value)) {
-                    $type = 'xs:string';
-                } elseif (is_int($value)) {
-                    $type = 'xs:integer';
-                } else {
-                    $type = null;
-                }
-
-                $attributeValue = $document2->createElementNS(Constants::NS_SAML, 'saml:AttributeValue');
-                $attribute->appendChild($attributeValue);
-                if ($type !== null) {
-                    $attributeValue->setAttributeNS(Constants::NS_XSI, 'xsi:type', $type);
-                }
-
-                if ($value instanceof DOMNodeList) {
-                    foreach ($value as $v) {
-                        $node = $document2->importNode($v, true);
-                        $attributeValue->appendChild($node);
-                    }
-                } else {
-                    $value = strval($value);
-                    $attributeValue->appendChild($document2->createTextNode($value));
-                }
-            }
-            /*Once the attribute nodes are built, they are encrypted*/
+            // Once the attribute nodes are built, they are encrypted
             $EncAssert = new XMLSecEnc();
             $EncAssert->setNode($attributeElement);
             $EncAssert->type = 'http://www.w3.org/2001/04/xmlenc#Element';
-            /*
+
+            /**
              * Attributes are encrypted with a session key and this one with
              * $EncryptionKey
              */
             $symmetricKey = new XMLSecurityKey(XMLSecurityKey::AES256_CBC);
             $symmetricKey->generateSessionKey();
+
             /** @psalm-suppress PossiblyNullArgument */
             $EncAssert->encryptKey($this->encryptionKey, $symmetricKey);
+
             /** @psalm-suppress UndefinedClass */
             $EncrNode = $EncAssert->encryptNode($symmetricKey);
 
             $EncAttribute = $document->createElementNS(Constants::NS_SAML, 'saml:EncryptedAttribute');
             $attributeStatement->appendChild($EncAttribute);
+
             /** @psalm-suppress InvalidArgument */
             $n = $document->importNode($EncrNode, true);
             $EncAttribute->appendChild($n);
