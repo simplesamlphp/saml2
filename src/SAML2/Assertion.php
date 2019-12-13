@@ -1320,7 +1320,7 @@ class Assertion extends SignedElement
                 $attributeObj = new \SAML2\XML\saml\Attribute($attrDomElement);
 
                 foreach ($value as $vidx => $attributeValue) {
-                    $attributeValueObj = new \SAML2\XML\saml\AttributeValue($attributeValue);
+                    $attributeValueObj = new \SAML2\XML\saml\AttributeValue(strval($attributeValue));
                     $type = null;
                     if (isset($this->attributesValueTypes[$name])) {
                         if (is_array($this->attributesValueTypes[$name])) {
