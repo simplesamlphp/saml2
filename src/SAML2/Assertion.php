@@ -12,6 +12,8 @@ use RobRichards\XMLSecLibs\XMLSecurityKey;
 use SAML2\Exception\RuntimeException;
 use SAML2\Utilities\Temporal;
 use SAML2\XML\Chunk;
+use SAML2\XML\saml\Attribute;
+use SAML2\XML\saml\AttributeValue;
 use SAML2\XML\saml\Issuer;
 use SAML2\XML\saml\NameID;
 use SAML2\XML\saml\SubjectConfirmation;
@@ -569,14 +571,7 @@ class Assertion extends SignedElement
      */
     private function parseAttributeValue(DOMNode $attribute, string $attributeName): void
     {
-        $this->attributes[$attributeName] = new XML\saml\Attribute($attribute);
-        
-        if (!array_key_exists($attributeName, $this->attributesValueTypes)) {
-            $this->attributesValueTypes[$attributeName] = [];
-        }
-        $this->attributeNameFormats[$attributeName] = $attribute->getAttribute('NameFormat');
-        $this->attributeFriendlyNames[$attributeName] = $attribute->getAttribute('FriendlyName');
-        
+        /** @var \DOMElement[] $values */
         $values = Utils::xpQuery($attribute, './saml_assertion:AttributeValue');
 
         if ($attributeName === Constants::EPTI_URN_MACE || $attributeName === Constants::EPTI_URN_OID) {
@@ -585,22 +580,50 @@ class Assertion extends SignedElement
                 $eptiNameId = Utils::xpQuery($eptiAttributeValue, './saml_assertion:NameID');
 
                 if (count($eptiNameId) === 1) {
-                    $this->attributes[$attributeName][] = new NameID($eptiNameId[0]);
+                    $nameId = new NameID($eptiNameId[0]);
+                    $this->attributes[$attributeName]->addAttributeValue(
+                        new AttributeValue($nameId->toXML()->textContent)
+                    );
                 } else {
                     /* Fall back for legacy IdPs sending string value (e.g. SSP < 1.15) */
                     Utils::getContainer()->getLogger()->warning(
                         sprintf("Attribute %s (EPTI) value %d is not an XML NameId", $attributeName, $index)
                     );
-                    $nameId = new NameID();
-                    $nameId->setValue($eptiAttributeValue->textContent);
-                    $this->attributes[$attributeName][] = $nameId;
+                    $this->attributes[$attributeName]->addAttributeValue(
+                        new AttributeValue($eptiAttributeValue->textContent)
+                    );
                 }
             }
+
+            return;
+        }
+
+        foreach ($values as $value) {
+            $hasNonTextChildElements = false;
+            foreach ($value->childNodes as $childNode) {
+                /** @var \DOMNode $childNode */
+                if ($childNode->nodeType !== XML_TEXT_NODE) {
+                    $hasNonTextChildElements = true;
+                    break;
+                }
+            }
+
             $type = $value->getAttribute('xsi:type');
             if ($type === '') {
                 $type = null;
             }
             $this->attributesValueTypes[$attributeName][] = $type;
+
+            if ($hasNonTextChildElements) {
+                $this->attributes[$attributeName]->addAttributeValue(
+                    new AttributeValue($value->childNodes)
+                );
+                continue;
+            }
+            
+            $this->attributes[$attributeName]->addAttributeValue(
+                new AttributeValue(trim($value->textContent))
+            );
         }
     }
 
@@ -897,7 +920,10 @@ class Assertion extends SignedElement
             }
 
             if (!array_key_exists($name, $this->attributes)) {
-                $this->attributes[$name] = [];
+                $attr = new Attribute();
+                $attr->setName($name);
+
+                $this->attributes[$name] = $attr;
             }
 
             $this->parseAttributeValue($attribute, $name);
@@ -1244,7 +1270,7 @@ class Assertion extends SignedElement
         foreach ($this->attributes as $attributeName => $attributeObj) {
             $compatArray[$attributeName] = [];
             
-            if ($attributeObj instanceof \SAML2\XML\saml\NameID) {
+            if ($attributeObj instanceof NameID) {
                 $compatArray[$attributeName][] = $attributeObj;
                 continue;
             }
@@ -1253,7 +1279,10 @@ class Assertion extends SignedElement
                 if ($attributeObj->getName() === Constants::EPTI_URN_MACE || $attributeObj->getName() === Constants::EPTI_URN_OID) {
                     $eptiNameId = Utils::xpQuery($attributeValue->getElement(), './saml_assertion:NameID');
                     if (count($eptiNameId) === 1) {
-                        $compatArray[$attributeName][] = new XML\saml\NameID($eptiNameId[0]);
+                        $nameId = new NameID($eptiNameId[0]);
+                        $compatArray[$attributeName]->addAttributeValue(
+                            new AttributeValue($nameId->toXML()->textContent)
+                        );
                         continue;
                     }
                 }
@@ -1289,19 +1318,17 @@ class Assertion extends SignedElement
      */
     public function setAttributes(array $attributes): void
     {
-        if (!isset($attributes)) {
-            $this->attributes = null;
+        if (empty($attributes)) {
             return;
         }
-        $this->attributes = [];
+
         foreach ($attributes as $name => $value) {
-            if ($value instanceof \SAML2\XML\saml\Attribute || $value instanceof \SAML2\XML\saml\NameID) {
+            if ($value instanceof Attribute || $value instanceof NameID) {
                 $this->attributes[$name] = $value;
                 continue;
             }
             $this->attributes[$name] = null;
             if (is_array($value)) {
-
                 $document = DOMDocumentFactory::create();
                 $attrDomElement = $document->createElementNS(Constants::NS_SAML, 'saml:Attribute');
                 $document->appendChild($attrDomElement);
@@ -1317,10 +1344,10 @@ class Assertion extends SignedElement
                     $attrDomElement->setAttribute('FriendlyName', $this->attributeFriendlyNames[$name]);
                 }
 
-                $attributeObj = new \SAML2\XML\saml\Attribute($attrDomElement);
+                $attributeObj = new Attribute($attrDomElement);
 
                 foreach ($value as $vidx => $attributeValue) {
-                    $attributeValueObj = new \SAML2\XML\saml\AttributeValue(strval($attributeValue));
+                    $attributeValueObj = new AttributeValue(strval($attributeValue));
                     $type = null;
                     if (isset($this->attributesValueTypes[$name])) {
                         if (is_array($this->attributesValueTypes[$name])) {
@@ -1329,7 +1356,7 @@ class Assertion extends SignedElement
                             $type = $this->attributesValueTypes[$name];
                         }
                         if ($type !== null) {
-                            $attributeValueObj->element->setAttributeNS(Constants::NS_XSI, 'xsi:type', $type);
+                            $attributeValueObj->getElement()->setAttributeNS(Constants::NS_XSI, 'xsi:type', $type);
                         }
                     }
                     $attributeObj->addAttributeValue($attributeValueObj);
@@ -1846,7 +1873,7 @@ class Assertion extends SignedElement
      *
      * @param XML\saml\Attribute $attributeObj The actual attribute object to apply the override to.
      */
-    private function overrideAttributeType(XML\saml\Attribute &$attributeObj)
+    private function overrideAttributeType(Attribute &$attributeObj)
     {
         $valueTypes = $this->attributesValueTypes[$attributeObj->getName()];
         if ($valueTypes === null) {
