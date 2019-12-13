@@ -1249,9 +1249,9 @@ class Assertion extends SignedElement
                 continue;
             }
             
-            foreach ($attributeObj->AttributeValue as $attributeValue) {
-                if ($attributeObj->Name === Constants::EPTI_URN_MACE || $attributeObj->Name === Constants::EPTI_URN_OID) {
-                    $eptiNameId = Utils::xpQuery($attributeValue->element, './saml_assertion:NameID');
+            foreach ($attributeObj->getAttributeValue() as $attributeValue) {
+                if ($attributeObj->getName() === Constants::EPTI_URN_MACE || $attributeObj->getName() === Constants::EPTI_URN_OID) {
+                    $eptiNameId = Utils::xpQuery($attributeValue->getElement(), './saml_assertion:NameID');
                     if (count($eptiNameId) === 1) {
                         $compatArray[$attributeName][] = new XML\saml\NameID($eptiNameId[0]);
                         continue;
@@ -1259,18 +1259,18 @@ class Assertion extends SignedElement
                 }
 
                 $hasNonTextChildElements = false;
-                foreach ($attributeValue->element->childNodes as $childNode) {
+                foreach ($attributeValue->getElement()->childNodes as $childNode) {
                     if ($childNode->nodeType !== XML_TEXT_NODE) {
                         $hasNonTextChildElements = true;
                         break;
                     }
                 }
                 if ($hasNonTextChildElements) {
-                    $compatArray[$attributeName][] = $attributeValue->element->childNodes;
+                    $compatArray[$attributeName][] = $attributeValue->getElement()->childNodes;
                     continue;
                 }
 
-                if ($attributeValue->element->getAttribute('xsi:type') === 'xs:integer') {
+                if ($attributeValue->getElement()->getAttribute('xsi:type') === 'xs:integer') {
                     $compatArray[$attributeName][] = (int)$attributeValue->getString();
                 } else {
                     $compatArray[$attributeName][] = trim($attributeValue->getString());
@@ -1332,7 +1332,7 @@ class Assertion extends SignedElement
                             $attributeValueObj->element->setAttributeNS(Constants::NS_XSI, 'xsi:type', $type);
                         }
                     }
-                    $attributeObj->AttributeValue[] = $attributeValueObj;
+                    $attributeObj->addAttributeValue($attributeValueObj);
                 }
                 $this->attributes[$name] = $attributeObj;
             }
@@ -1777,7 +1777,7 @@ class Assertion extends SignedElement
             
             // possibly override the xsi type for the current attribute
             if (is_array($this->attributesValueTypes) &&
-                array_key_exists($attributeObj->Name, $this->attributesValueTypes)) {
+                array_key_exists($attributeObj->getName(), $this->attributesValueTypes)) {
                 $this->overrideAttributeType($attributeObj);
             }
             
@@ -1806,7 +1806,7 @@ class Assertion extends SignedElement
         foreach ($this->attributes as $name => $attributeObj) {
             // possibly override the xsi type for the current attribute
             if (is_array($this->attributesValueTypes) &&
-                array_key_exists($attributeObj->Name, $this->attributesValueTypes)) {
+                array_key_exists($attributeObj->getName(), $this->attributesValueTypes)) {
                 $this->overrideAttributeType($attributeObj);
             }
             $attributeElement = $attributeObj->toXML($attributeStatement);
@@ -1848,17 +1848,17 @@ class Assertion extends SignedElement
      */
     private function overrideAttributeType(XML\saml\Attribute &$attributeObj)
     {
-        $valueTypes = $this->attributesValueTypes[$attributeObj->Name];
+        $valueTypes = $this->attributesValueTypes[$attributeObj->getName()];
         if ($valueTypes === null) {
             return;
         }
-        if (is_array($valueTypes) && count($valueTypes) != count($attributeObj->AttributeValue)) {
+        if (is_array($valueTypes) && count($valueTypes) != count($attributeObj->getAttributeValue())) {
             throw new \Exception(
                 'Array of value types and array of values have different size for attribute '.
-                var_export($attributeObj->Name, true)
+                var_export($attributeObj->getName(), true)
             );
         }
-        foreach ($attributeObj->AttributeValue as $vidx => &$attributeValue) {
+        foreach ($attributeObj->getAttributeValue() as $vidx => &$attributeValue) {
             $type = null;
             if (is_array($valueTypes)) {
                 $type = $valueTypes[$vidx];
@@ -1866,7 +1866,7 @@ class Assertion extends SignedElement
                 $type = $valueTypes;
             }
             if ($type !== null) {
-                $attributeValue->element->setAttributeNS(Constants::NS_XSI, 'xsi:type', $type);
+                $attributeValue->getElement()->setAttributeNS(Constants::NS_XSI, 'xsi:type', $type);
             }
         }
     }
