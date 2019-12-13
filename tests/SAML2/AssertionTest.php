@@ -9,6 +9,8 @@ use SAML2\Constants;
 use SAML2\DOMDocumentFactory;
 use SAML2\Utils;
 use SAML2\XML\Chunk;
+use SAML2\XML\saml\Attribute;
+use SAML2\XML\saml\AttributeValue;
 use SAML2\XML\saml\Issuer;
 use SAML2\XML\saml\NameID;
 use SAML2\XML\saml\SubjectConfirmation;
@@ -140,11 +142,20 @@ XML;
 
         $assertion->setAuthenticatingAuthority(["idp1", "idp2"]);
 
-        $assertion->setAttributes([
-            "name1" => ["value1", "value2"],
-            "name2" => [2],
-            "name3" => [null]
-        ]);
+        $attr1 = new Attribute();
+        $attr1->setName("name1");
+        $attr1->addAttributeValue(new AttributeValue("value1"));
+        $attr1->addAttributeValue(new AttributeValue("value2"));
+
+        $attr2 = new Attribute();
+        $attr2->setName("name2");
+        $attr2->addAttributeValue(new AttributeValue(2));
+
+        $attr3 = new Attribute();
+        $attr3->setName("name3");
+        $attr3->addAttributeValue(new AttributeValue(null));
+
+        $assertion->setAttributes([$attr1, $attr2, $attr3]);
         $assertion->setAttributeNameFormat("urn:oasis:names:tc:SAML:2.0:attrname-format:unspecified");
 
         $assertionElement = $assertion->toXML()->ownerDocument->saveXML();
@@ -195,11 +206,22 @@ XML;
 
         $assertion->setAuthenticatingAuthority(["idp1", "idp2"]);
 
-        $assertion->setAttributes([
-            "name1" => ["value1",123,"2017-31-12"],
-            "name2" => [2],
-            "name3" => [1234, "+2345"]
-        ]);
+        $attr1 = new Attribute();
+        $attr1->setName("name1");
+        $attr1->addAttributeValue(new AttributeValue("value1"));
+        $attr1->addAttributeValue(new AttributeValue(123));
+        $attr1->addAttributeValue(new AttributeValue("2017-31-12"));
+
+        $attr2 = new Attribute("name2");
+        $attr2->setName("name2");
+        $attr2->addAttributeValue(new AttributeValue(2));
+
+        $attr3 = new Attribute("name3");
+        $attr3->setName("name3");
+        $attr3->addAttributeValue(new AttributeValue(1234));
+        $attr3->addAttributeValue(new AttributeValue("+2345"));
+
+        $assertion->setAttributes([$attr1, $attr2, $attr3]);
         $assertion->setAttributeNameFormat(\SAML2\Constants::NAMEFORMAT_UNSPECIFIED);
 
         // set xs:type for first and third name1 values, and all name3 values.
