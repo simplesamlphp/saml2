@@ -1413,40 +1413,44 @@ class Assertion extends SignedElement
      *
      * @return array All attribute name formats, as an associative array.
      */
-    public function getAttributeNameFormats()
+    public function getAttributeNameFormats(): array
     {
         return $this->attributeNameFormats;
     }
+
 
     /**
      * Replace all attribute name formats
      *
      * @param array $attributeNameFormats All new attribute name formats, as an associative array.
      */
-    public function setAttributeNameFormats(array $attributeNameFormats)
+    public function setAttributeNameFormats(array $attributeNameFormats): array
     {
         $this->attributeNameFormats = $attributeNameFormats;
     }
     
+
     /**
      * Retrieve all attribute friendly names.
      *
      * @return array All attribute friendly names, as an associative array.
      */
-    public function getAttributeFriendlyNames()
+    public function getAttributeFriendlyNames(): array
     {
         return $this->attributeFriendlyNames;
     }
+
 
     /**
      * Replace all attribute friendly names
      *
      * @param array $attributeFriendlyNames All new attribute friendly names, as an associative array.
      */
-    public function setAttributeFriendlyNames(array $attributeFriendlyNames)
+    public function setAttributeFriendlyNames(array $attributeFriendlyNames): array
     {
         $this->attributeFriendlyNames = $attributeFriendlyNames;
     }
+
 
     /**
      * Retrieve the NameFormat used on all attributes.
@@ -1872,8 +1876,9 @@ class Assertion extends SignedElement
      * Simple xsi types like decimal, double, date, dateTime, etc as well as custom types can only be set via overrides
      *
      * @param XML\saml\Attribute $attributeObj The actual attribute object to apply the override to.
+     * @return void
      */
-    private function overrideAttributeType(Attribute &$attributeObj)
+    private function overrideAttributeType(Attribute &$attributeObj): void
     {
         $valueTypes = $this->attributesValueTypes[$attributeObj->getName()];
         if ($valueTypes === null) {
