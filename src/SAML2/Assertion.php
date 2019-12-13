@@ -195,7 +195,7 @@ class Assertion extends SignedElement
      * 
      * @var array
      */
-    private $attributeNameFormats;
+    private $attributeNameFormats = [];
   
     /**
      * The attributes FriendlyNames
@@ -203,7 +203,7 @@ class Assertion extends SignedElement
      * 
      * @var array
      */
-    private $attributeFriendlyNames;
+    private $attributeFriendlyNames = [];
 
     /**
      * The NameFormat used on all attributes.
@@ -550,7 +550,10 @@ class Assertion extends SignedElement
             }
 
             if (!array_key_exists($name, $this->attributes)) {
-                $this->attributes[$name] = [];
+                $attr = new Attribute();
+                $attr->setName($name);
+
+                $this->attributes[$name] = $attr;
                 $this->attributesValueTypes[$name] = [];
             }
 
