@@ -569,7 +569,7 @@ class Assertion extends SignedElement
         $this->attributes[$attributeName] = new XML\saml\Attribute($attribute);
         
         if (!array_key_exists($attributeName, $this->attributesValueTypes)) {
-            $this->attributesValueTypes[$attributeName] = array();
+            $this->attributesValueTypes[$attributeName] = [];
         }
         $this->attributeNameFormats[$attributeName] = $attribute->getAttribute('NameFormat');
         $this->attributeFriendlyNames[$attributeName] = $attribute->getAttribute('FriendlyName');
@@ -1239,7 +1239,7 @@ class Assertion extends SignedElement
         }
         $compatArray = [];
         foreach ($this->attributes as $attributeName => $attributeObj) {
-            $compatArray[$attributeName] = array();
+            $compatArray[$attributeName] = [];
             
             if ($attributeObj instanceof \SAML2\XML\saml\NameID) {
                 $compatArray[$attributeName][] = $attributeObj;
@@ -1290,7 +1290,7 @@ class Assertion extends SignedElement
             $this->attributes = null;
             return;
         }
-        $this->attributes = array();
+        $this->attributes = [];
         foreach ($attributes as $name => $value) {
             if ($value instanceof \SAML2\XML\saml\Attribute || $value instanceof \SAML2\XML\saml\NameID) {
                 $this->attributes[$name] = $value;
