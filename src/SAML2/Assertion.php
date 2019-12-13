@@ -1805,10 +1805,8 @@ class Assertion extends SignedElement
         $root->appendChild($attributeStatement);
 
         foreach ($this->attributes as $name => $attributeObj) {
-            
             // possibly override the xsi type for the current attribute
-            if (is_array($this->attributesValueTypes) &&
-                array_key_exists($attributeObj->getName(), $this->attributesValueTypes)) {
+            if (array_key_exists($attributeObj->getName(), $this->attributesValueTypes)) {
                 $this->overrideAttributeType($attributeObj);
             }
             
@@ -1836,8 +1834,7 @@ class Assertion extends SignedElement
 
         foreach ($this->attributes as $name => $attributeObj) {
             // possibly override the xsi type for the current attribute
-            if (is_array($this->attributesValueTypes) &&
-                array_key_exists($attributeObj->getName(), $this->attributesValueTypes)) {
+            if (array_key_exists($attributeObj->getName(), $this->attributesValueTypes)) {
                 $this->overrideAttributeType($attributeObj);
             }
             $attributeElement = $attributeObj->toXML($attributeStatement);
