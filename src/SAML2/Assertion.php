@@ -73,7 +73,7 @@ class Assertion extends SignedElement
      *
      * If this is not null, these Attributes need decryption before they can be accessed.
      *
-     * @var \DOMElement[]|null
+     * @var \DOMElement[]
      */
     private $encryptedAttributes;
 
