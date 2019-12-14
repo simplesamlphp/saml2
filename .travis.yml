@@ -12,7 +12,7 @@ stages:
 php:
   - 7.2
   - 7.3
-  - 7.4snapshot
+  - 7.4
 
 env:
   - COMMAND="composer install"
@@ -61,7 +61,7 @@ jobs:
 
     - stage: pre-conditions
       env: Syntax check PHP
-      php: 7.4snapshot
+      php: 7.4
       before_script:
         - composer install
       script:
