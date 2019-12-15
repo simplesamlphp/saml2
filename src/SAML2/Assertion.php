@@ -174,40 +174,6 @@ class Assertion extends SignedElement
     private $attributes = [];
 
     /**
-     * The attributes values types as per http://www.w3.org/2001/XMLSchema definitions
-     * the variable is as an associative array, indexed by attribute name
-     *
-     * when parsing assertion, the variable will be:
-     * - <attribute name> => [<Value1's xs type>|null, <xs type Value2>|null, ...]
-     * array will always have the same size of the array of vaules in $attributes for the same <attribute name>
-     *
-     * when generating assertion, the varuable can be:
-     * - null : backward compatibility
-     * - <attribute name> => <xs type> : all values for the given attribute will have the same xs type
-     * - <attribute name> => [<Value1's xs type>|null, <xs type Value2>|null, ...] : Nth value will have type of the
-     *   Nth in the array
-     *
-     * @var array multi-dimensional array of array
-     */
-    private $attributesValueTypes = [];
-
-    /**
-     * The attributes NameFormats
-     * the variable is as an associative array, indexed by attribute name
-     * 
-     * @var array
-     */
-    private $attributeNameFormats = [];
-  
-    /**
-     * The attributes FriendlyNames
-     * the variable is as an associative array, indexed by attribute name
-     * 
-     * @var array
-     */
-    private $attributeFriendlyNames = [];
-
-    /**
      * The NameFormat used on all attributes.
      *
      * If more than one NameFormat is used, this will contain the unspecified nameformat.
@@ -556,7 +522,6 @@ class Assertion extends SignedElement
                 $attr->setName($name);
 
                 $this->attributes[$name] = $attr;
-                $this->attributesValueTypes[$name] = [];
             }
 
             $this->parseAttributeValue($attribute, $name);
@@ -607,12 +572,6 @@ class Assertion extends SignedElement
                     break;
                 }
             }
-
-            $type = $value->getAttribute('xsi:type');
-            if ($type === '') {
-                $type = null;
-            }
-            $this->attributesValueTypes[$attributeName][] = $type;
 
             if ($hasNonTextChildElements) {
                 $this->attributes[$attributeName]->addAttributeValue(
@@ -1258,55 +1217,11 @@ class Assertion extends SignedElement
     /**
      * Retrieve all attributes.
      * 
-     * @param boolean Indicates that returned array should be actual attribute objects instead of strings
      * @return array All attributes, as an associative array.
      */
-    public function getAttributes(bool $asObjects = false): array
+    public function getAttributes(): array
     {
-        if ($asObjects) {
-            return $this->attributes;
-        }
-        $compatArray = [];
-        foreach ($this->attributes as $attributeName => $attributeObj) {
-            $compatArray[$attributeName] = [];
-            
-            if ($attributeObj instanceof NameID) {
-                $compatArray[$attributeName][] = $attributeObj;
-                continue;
-            }
-            
-            foreach ($attributeObj->getAttributeValue() as $attributeValue) {
-                if ($attributeObj->getName() === Constants::EPTI_URN_MACE || $attributeObj->getName() === Constants::EPTI_URN_OID) {
-                    $eptiNameId = Utils::xpQuery($attributeValue->getElement(), './saml_assertion:NameID');
-                    if (count($eptiNameId) === 1) {
-                        $nameId = new NameID($eptiNameId[0]);
-                        $compatArray[$attributeName]->addAttributeValue(
-                            new AttributeValue($nameId->toXML()->textContent)
-                        );
-                        continue;
-                    }
-                }
-
-                $hasNonTextChildElements = false;
-                foreach ($attributeValue->getElement()->childNodes as $childNode) {
-                    if ($childNode->nodeType !== XML_TEXT_NODE) {
-                        $hasNonTextChildElements = true;
-                        break;
-                    }
-                }
-                if ($hasNonTextChildElements) {
-                    $compatArray[$attributeName][] = $attributeValue->getElement()->childNodes;
-                    continue;
-                }
-
-                if ($attributeValue->getElement()->getAttribute('xsi:type') === 'xs:integer') {
-                    $compatArray[$attributeName][] = (int)$attributeValue->getString();
-                } else {
-                    $compatArray[$attributeName][] = trim($attributeValue->getString());
-                }
-            }
-        }
-        return $compatArray;
+        return $this->attributes;
     }
 
 
@@ -1318,51 +1233,8 @@ class Assertion extends SignedElement
      */
     public function setAttributes(array $attributes): void
     {
-        if (empty($attributes)) {
-            return;
-        }
-
         foreach ($attributes as $name => $value) {
-            if ($value instanceof Attribute || $value instanceof NameID) {
-                $this->attributes[$name] = $value;
-                continue;
-            }
-            $this->attributes[$name] = null;
-            if (is_array($value)) {
-                $document = DOMDocumentFactory::create();
-                $attrDomElement = $document->createElementNS(Constants::NS_SAML, 'saml:Attribute');
-                $document->appendChild($attrDomElement);
-                $attrDomElement->setAttribute('Name', $name);
-
-                if ($this->nameFormat !== null) {
-                    $attrDomElement->setAttribute('NameFormat', $this->nameFormat);
-                }
-                if (array_key_exists($name, $this->attributeNameFormats)) {
-                    $attrDomElement->setAttribute('NameFormat', $this->attributeNameFormats[$name]);
-                }
-                if (array_key_exists($name, $this->attributeFriendlyNames)) {
-                    $attrDomElement->setAttribute('FriendlyName', $this->attributeFriendlyNames[$name]);
-                }
-
-                $attributeObj = new Attribute($attrDomElement);
-
-                foreach ($value as $vidx => $attributeValue) {
-                    $attributeValueObj = new AttributeValue(strval($attributeValue));
-                    $type = null;
-                    if (isset($this->attributesValueTypes[$name])) {
-                        if (is_array($this->attributesValueTypes[$name])) {
-                            $type = $this->attributesValueTypes[$name][$vidx];
-                        } else {
-                            $type = $this->attributesValueTypes[$name];
-                        }
-                        if ($type !== null) {
-                            $attributeValueObj->getElement()->setAttributeNS(Constants::NS_XSI, 'xsi:type', $type);
-                        }
-                    }
-                    $attributeObj->addAttributeValue($attributeValueObj);
-                }
-                $this->attributes[$name] = $attributeObj;
-            }
+            $this->attributes[$name] = $value;
         }
     }
 
@@ -1382,73 +1254,6 @@ class Assertion extends SignedElement
     public function setSignatureData(array $signatureData = null): void
     {
         $this->signatureData = $signatureData;
-    }
-
-
-    /**
-     * Retrieve all attributes value types.
-     *
-     * @return array All attributes value types, as an associative array.
-     */
-    public function getAttributesValueTypes(): array
-    {
-        return $this->attributesValueTypes;
-    }
-
-
-    /**
-     * Replace all attributes value types..
-     *
-     * @param array $attributesValueTypes All new attribute value types, as an associative array.
-     * @return void
-     */
-    public function setAttributesValueTypes(array $attributesValueTypes): void
-    {
-        $this->attributesValueTypes = $attributesValueTypes;
-    }
-
-
-    /**
-     * Retrieve all attribute name formats.
-     *
-     * @return array All attribute name formats, as an associative array.
-     */
-    public function getAttributeNameFormats(): array
-    {
-        return $this->attributeNameFormats;
-    }
-
-
-    /**
-     * Replace all attribute name formats
-     *
-     * @param array $attributeNameFormats All new attribute name formats, as an associative array.
-     */
-    public function setAttributeNameFormats(array $attributeNameFormats): array
-    {
-        $this->attributeNameFormats = $attributeNameFormats;
-    }
-    
-
-    /**
-     * Retrieve all attribute friendly names.
-     *
-     * @return array All attribute friendly names, as an associative array.
-     */
-    public function getAttributeFriendlyNames(): array
-    {
-        return $this->attributeFriendlyNames;
-    }
-
-
-    /**
-     * Replace all attribute friendly names
-     *
-     * @param array $attributeFriendlyNames All new attribute friendly names, as an associative array.
-     */
-    public function setAttributeFriendlyNames(array $attributeFriendlyNames): array
-    {
-        $this->attributeFriendlyNames = $attributeFriendlyNames;
     }
 
 
@@ -1806,7 +1611,7 @@ class Assertion extends SignedElement
 
         foreach ($this->attributes as $name => $attributeObj) {
             // possibly override the xsi type for the current attribute
-            if (array_key_exists($attributeObj->getName(), $this->attributesValueTypes)) {
+            if (array_key_exists($attributeObj->getName(), $this->attributes)) {
                 $this->overrideAttributeType($attributeObj);
             }
             
@@ -1834,7 +1639,7 @@ class Assertion extends SignedElement
 
         foreach ($this->attributes as $name => $attributeObj) {
             // possibly override the xsi type for the current attribute
-            if (array_key_exists($attributeObj->getName(), $this->attributesValueTypes)) {
+            if (array_key_exists($attributeObj->getName(), $this->attributes)) {
                 $this->overrideAttributeType($attributeObj);
             }
             $attributeElement = $attributeObj->toXML($attributeStatement);
@@ -1877,16 +1682,6 @@ class Assertion extends SignedElement
      */
     private function overrideAttributeType(Attribute &$attributeObj): void
     {
-        $valueTypes = $this->attributesValueTypes[$attributeObj->getName()];
-        if ($valueTypes === null) {
-            return;
-        }
-        if (is_array($valueTypes) && count($valueTypes) != count($attributeObj->getAttributeValue())) {
-            throw new \Exception(
-                'Array of value types and array of values have different size for attribute '.
-                var_export($attributeObj->getName(), true)
-            );
-        }
         foreach ($attributeObj->getAttributeValue() as $vidx => &$attributeValue) {
             $type = null;
             if (is_array($valueTypes)) {
