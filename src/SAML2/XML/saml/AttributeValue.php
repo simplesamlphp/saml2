@@ -45,7 +45,7 @@ class AttributeValue implements \Serializable
                 $this->element->setAttributeNS(Constants::NS_XSI, 'xsi:nil', 'true');
             } else {
                 $this->element->setAttributeNS(Constants::NS_XSI, 'xsi:type', 'xs:'.gettype($value));
-                $this->element->appendChild($doc->createTextNode($value));
+                $this->element->appendChild($doc->createTextNode(strval($value)));
             }
 
             /* Make sure that the xs-namespace is available in the AttributeValue (for xs:string). */
