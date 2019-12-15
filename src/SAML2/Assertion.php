@@ -1609,11 +1609,6 @@ class Assertion extends SignedElement
         $root->appendChild($attributeStatement);
 
         foreach ($this->attributes as $name => $attributeObj) {
-            // possibly override the xsi type for the current attribute
-            if (array_key_exists($attributeObj->getName(), $this->attributes)) {
-                $this->overrideAttributeType($attributeObj);
-            }
-            
             $attributeObj->toXML($attributeStatement);
         }
     }
@@ -1637,10 +1632,6 @@ class Assertion extends SignedElement
         $attributeStatement = $document->createElementNS(Constants::NS_SAML, 'saml:AttributeStatement');
 
         foreach ($this->attributes as $name => $attributeObj) {
-            // possibly override the xsi type for the current attribute
-            if (array_key_exists($attributeObj->getName(), $this->attributes)) {
-                $this->overrideAttributeType($attributeObj);
-            }
             $attributeElement = $attributeObj->toXML($attributeStatement);
 
             // Once the attribute nodes are built, they are encrypted
@@ -1669,28 +1660,5 @@ class Assertion extends SignedElement
             $EncAttribute->appendChild($n);
         }
         $root->appendChild($attributeStatement);
-    }
-
-    /**
-     * Apply an attribute type override to the attribute's values.  The xsi type of each attribute is inferred based on its datatype 
-     * via the php gettype function inside XML\saml\AttributeValue, but not all xsi types can be inferred in this manner.
-     * Simple xsi types like decimal, double, date, dateTime, etc as well as custom types can only be set via overrides
-     *
-     * @param XML\saml\Attribute $attributeObj The actual attribute object to apply the override to.
-     * @return void
-     */
-    private function overrideAttributeType(Attribute &$attributeObj): void
-    {
-        foreach ($attributeObj->getAttributeValue() as $vidx => &$attributeValue) {
-            $type = null;
-            if (is_array($valueTypes)) {
-                $type = $valueTypes[$vidx];
-            } else {
-                $type = $valueTypes;
-            }
-            if ($type !== null) {
-                $attributeValue->getElement()->setAttributeNS(Constants::NS_XSI, 'xsi:type', $type);
-            }
-        }
     }
 }
