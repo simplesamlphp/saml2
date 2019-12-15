@@ -545,9 +545,8 @@ class Assertion extends SignedElement
                 $eptiNameId = Utils::xpQuery($eptiAttributeValue, './saml_assertion:NameID');
 
                 if (count($eptiNameId) === 1) {
-                    $nameId = new NameID($eptiNameId[0]);
                     $this->attributes[$attributeName]->addAttributeValue(
-                        new AttributeValue($nameId->toXML()->textContent)
+                        new AttributeValue(new NameID($eptiNameId[0]))
                     );
                 } else {
                     /* Fall back for legacy IdPs sending string value (e.g. SSP < 1.15) */
