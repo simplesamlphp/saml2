@@ -166,10 +166,9 @@ class Assertion extends SignedElement
     private $AuthenticatingAuthority = [];
 
     /**
-     * The attributes, as an associative array.
+     * The attributes, as an array of Attribute-objects.
      *
-     * @var array array of attributes indexed by attribute name with each value an SAML2\XML\saml\Attribute 
-     * or an SAML2\XML\saml\NameID object if the attribute is an eduPersonTargetedID
+     * @var \SAML2\XML\saml\Attribute[] array of attributes with each value an \SAML2\XML\saml\Attribute 
      */
     private $attributes = [];
 
@@ -830,7 +829,7 @@ class Assertion extends SignedElement
      */
     public function hasEncryptedAttributes(): bool
     {
-        return $this->encryptedAttributes !== null && $this->encryptedAttributes !== [];
+        return !empty($this->encryptedAttributes);
     }
 
 
@@ -1216,7 +1215,7 @@ class Assertion extends SignedElement
     /**
      * Retrieve all attributes.
      * 
-     * @return array All attributes, as an associative array.
+     * @return \SAML2\XML\saml\Attribute[] All attributes, as an associative array.
      */
     public function getAttributes(): array
     {
@@ -1227,7 +1226,7 @@ class Assertion extends SignedElement
     /**
      * Replace all attributes.
      *
-     * @param array $attributes All new attributes, as an associative array.
+     * @param \SAML2\XML\saml\Attribute[] $attributes All new attributes, as an associative array.
      * @return void
      */
     public function setAttributes(array $attributes): void
