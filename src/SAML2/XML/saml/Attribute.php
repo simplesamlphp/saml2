@@ -7,6 +7,7 @@ namespace SAML2\XML\saml;
 use DOMElement;
 use SAML2\Constants;
 use SAML2\Utils;
+use SAML2\DOMDocumentFactory;
 
 /**
  * Class representing SAML 2 Attribute.
@@ -225,5 +226,67 @@ class Attribute
     public function toXML(DOMElement $parent): DOMElement
     {
         return $this->toXMLInternal($parent, Constants::NS_SAML, 'saml:Attribute');
+    }
+    
+    /**
+     * Convert an array of attributes with name = value(s) to an array of Attribute objects.
+     *
+     * @param \array $attributes The array of attributes we need to convert to objects
+     * @return \array Atrribute
+     */
+    public static function fromArray($attributes = array(), $attributesValueTypes = array()): array
+    {
+        $attr_array = array();
+        foreach ($attributes as $name => $value) {
+            if ($value instanceof Attribute || $value instanceof NameID) {
+                $attr_array[$name] = $value;
+            } 
+            else {
+                $attr_array[$name] = null;
+                if (is_array($value)) {
+
+                    $document = DOMDocumentFactory::create();
+                    $attrDomElement = $document->createElementNS(Constants::NS_SAML, 'saml:Attribute');
+                    $document->appendChild($attrDomElement);
+                    $attrDomElement->setAttribute('Name', $name);
+
+                    $attributeObj = new Attribute($attrDomElement);
+
+                    foreach ($value as $vidx => $attributeValue) {
+                        $attributeValueObj = new AttributeValue($attributeValue);
+                        $attributeObj->AttributeValue[] = $attributeValueObj;
+                    }
+                    $attr_array[$name] = $attributeObj;
+                }
+            }
+        }
+
+        // set types
+        foreach ($attributesValueTypes as $name => $valueTypes){
+            foreach ($attr_array as $attributeObj){
+                if ($attributeObj->getName() === $name){
+                    if ($valueTypes !== null) {
+                        if (is_array($valueTypes) && count($valueTypes) != count($attributeObj->getAttributeValue())) {
+                            throw new \Exception(
+                                'Array of value types and array of values have different size for attribute '.
+                                var_export($attributeObj->getName(), true)
+                            );
+                        }
+                        foreach ($attributeObj->getAttributeValue() as $vidx => &$attributeValue) {
+                            $type = null;
+                            if (is_array($valueTypes)) {
+                                $type = $valueTypes[$vidx];
+                            } else {
+                                $type = $valueTypes;
+                            }
+                            if ($type !== null) {
+                                $attributeValue->getElement()->setAttributeNS(Constants::NS_XSI, 'xsi:type', $type);
+                            }
+                        }
+                    }
+                }
+            }
+        }
+        return $attr_array;
     }
 }

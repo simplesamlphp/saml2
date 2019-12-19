@@ -142,20 +142,12 @@ XML;
 
         $assertion->setAuthenticatingAuthority(["idp1", "idp2"]);
 
-        $attr1 = new Attribute();
-        $attr1->setName("name1");
-        $attr1->addAttributeValue(new AttributeValue("value1"));
-        $attr1->addAttributeValue(new AttributeValue("value2"));
+        $assertion->setAttributes(Attribute::fromArray([
+            "name1" => ["value1", "value2"],
+            "name2" => [2],
+            "name3" => [null]
+        ]));
 
-        $attr2 = new Attribute();
-        $attr2->setName("name2");
-        $attr2->addAttributeValue(new AttributeValue(2));
-
-        $attr3 = new Attribute();
-        $attr3->setName("name3");
-        $attr3->addAttributeValue(new AttributeValue(null));
-
-        $assertion->setAttributes([$attr1, $attr2, $attr3]);
         $assertion->setAttributeNameFormat("urn:oasis:names:tc:SAML:2.0:attrname-format:unspecified");
 
         $assertionElement = $assertion->toXML()->ownerDocument->saveXML();
@@ -176,7 +168,8 @@ XML;
         $this->assertCount(2, $authauth);
         $this->assertEquals("idp2", $authauth[1]);
 
-        $attributes = $assertionToVerify->getAttributes();
+        $attributes = $assertionToVerify->getAttributeValues();
+        
         $this->assertCount(3, $attributes);
         $this->assertCount(2, $attributes['name1']);
         $this->assertEquals("value1", $attributes['name1'][0]);
@@ -201,35 +194,22 @@ XML;
 
         $assertion->setIssuer($issuer);
         $assertion->setValidAudiences(['audience1', 'audience2']);
-
         $assertion->setAuthnContextClassRef('someAuthnContext');
-
         $assertion->setAuthenticatingAuthority(["idp1", "idp2"]);
-
-        $attr1 = new Attribute();
-        $attr1->setName("name1");
-        $attr1->addAttributeValue(new AttributeValue("value1"));
-        $attr1->addAttributeValue(new AttributeValue(123));
-        $attr1->addAttributeValue(new AttributeValue("2017-31-12"));
-
-        $attr2 = new Attribute("name2");
-        $attr2->setName("name2");
-        $attr2->addAttributeValue(new AttributeValue(2));
-
-        $attr3 = new Attribute("name3");
-        $attr3->setName("name3");
-        $attr3->addAttributeValue(new AttributeValue(1234));
-        $attr3->addAttributeValue(new AttributeValue("+2345"));
-
-        $assertion->setAttributes([$attr1, $attr2, $attr3]);
-        $assertion->setAttributeNameFormat(\SAML2\Constants::NAMEFORMAT_UNSPECIFIED);
 
         // set xs:type for first and third name1 values, and all name3 values.
         // second name1 value and all name2 values will use default behaviour
-        $assertion->setAttributesValueTypes([
+        $attributesValueTypes = [
             "name1" => ["xs:string", null, "xs:date"],
             "name3" => "xs:decimal"
-        ]);
+        ];
+        
+        $assertion->setAttributes(Attribute::fromArray([
+            "name1" => ["value1",123,"2017-31-12"],
+            "name2" => [2],
+            "name3" => [1234, "+2345"]
+        ], $attributesValueTypes));
+        $assertion->setAttributeNameFormat(\SAML2\Constants::NAMEFORMAT_UNSPECIFIED);
 
         $assertionElement = $assertion->toXML()->ownerDocument->saveXML();
 
@@ -239,7 +219,16 @@ XML;
         $this->assertCount(2, $authauth);
         $this->assertEquals("idp2", $authauth[1]);
 
-        $attributes = $assertionToVerify->getAttributes();
+        $attributes = [];
+        $attributesValueTypes = [];
+        foreach ($assertionToVerify->getAttributes() as $attributeObj){            
+            $attributes[$attributeObj->getName()] = [];
+            $attributesValueTypes[$attributeObj->getName()] = [];
+            foreach ($attributeObj->getAttributeValue() as $attributeValue){
+                $attributes[$attributeObj->getName()][] = $attributeValue->getValue();
+                $attributesValueTypes[$attributeObj->getName()][] = $attributeValue->getType();
+            }
+        }
         $this->assertCount(3, $attributes);
         $this->assertCount(3, $attributes['name1']);
         $this->assertEquals("value1", $attributes['name1'][0]);
@@ -251,7 +240,8 @@ XML;
         $this->assertEquals("+2345", $attributes['name3'][1]);
         $this->assertEquals(\SAML2\Constants::NAMEFORMAT_UNSPECIFIED, $assertionToVerify->getAttributeNameFormat());
 
-        $attributesValueTypes = $assertionToVerify->getAttributesValueTypes();
+        
+        
         $this->assertCount(3, $attributesValueTypes);
         $this->assertCount(3, $attributesValueTypes['name1']);
         $this->assertEquals("xs:string", $attributesValueTypes['name1'][0]);
@@ -280,28 +270,27 @@ XML;
 
         $assertion->setIssuer($issuer);
         $assertion->setValidAudiences(['audience1', 'audience2']);
-
         $assertion->setAuthnContextClassRef('someAuthnContext');
-
         $assertion->setAuthenticatingAuthority(["idp1", "idp2"]);
-
-        $assertion->setAttributes([
-            "name1" => ["value1", "2017-31-12"],
-            "name2" => [2],
-            "name3" => [1234, "+2345"]
-        ]);
         $assertion->setAttributeNameFormat(\SAML2\Constants::NAMEFORMAT_UNSPECIFIED);
-
+        
         // set wrong number elements in name1
-        $assertion->setAttributesValueTypes([
+        $attributeValueTypes = [
             "name1" => ["xs:string"],
             "name3" => "xs:decimal"
-        ]);
-
+        ];
+        
         $this->expectException(
             \Exception::class,
             "Array of value types and array of values have different size for attribute 'name1'"
         );
+        
+        $assertion->setAttributes(Attribute::fromArray([
+            "name1" => ["value1", "2017-31-12"],
+            "name2" => [2],
+            "name3" => [1234, "+2345"]
+        ], $attributeValueTypes));
+
         $assertionElement = $assertion->toXML()->ownerDocument->saveXML();
     }
 
@@ -805,7 +794,7 @@ XML;
 
         $assertion = new Assertion(DOMDocumentFactory::fromString($xml)->firstChild);
 
-        $attributes = $assertion->getAttributes();
+        $attributes = $assertion->getAttributeValues();
 
         $maceValue = $attributes['urn:mace:dir:attribute-def:eduPersonTargetedID'][0];
         $oidValue = $attributes['urn:oid:1.3.6.1.4.1.5923.1.1.1.10'][0];
@@ -873,7 +862,9 @@ XML;
 XML;
 
         $assertion = new Assertion(DOMDocumentFactory::fromString($xml)->firstChild);
-        $attributes = $assertion->getAttributes();
+        
+        $attributes = $assertion->getAttributeValues();
+        
         $maceValue = $attributes['urn:mace:dir:attribute-def:eduPersonTargetedID'][0];
         $oidValue = $attributes['urn:oid:1.3.6.1.4.1.5923.1.1.1.10'][0];
 
@@ -921,7 +912,7 @@ XML;
 
         $assertion = new Assertion(DOMDocumentFactory::fromString($xml)->firstChild);
 
-        $attributes = $assertion->getAttributes();
+        $attributes = $assertion->getAttributeValues();
 
         $maceFirstValue = $attributes['urn:mace:dir:attribute-def:eduPersonTargetedID'][0];
         $maceSecondValue = $attributes['urn:mace:dir:attribute-def:eduPersonTargetedID'][1];
@@ -968,7 +959,8 @@ XML;
 
         $assertion = new Assertion(DOMDocumentFactory::fromString($xml)->firstChild);
 
-        $attributes = $assertion->getAttributes();
+        $attributes = $assertion->getAttributeValues();
+        
         $this->assertInstanceOf(
             \DOMNodeList::class,
             $attributes['urn:some:custom:outer:element'][0]
@@ -1003,7 +995,8 @@ XML;
 
         $assertion = new Assertion(DOMDocumentFactory::fromString($xml)->firstChild);
 
-        $attributes = $assertion->getAttributes();
+        $attributes = $assertion->getAttributeValues();
+        
         $this->assertIsInt($attributes['urn:some:integer'][0]);
         $this->assertIsString($attributes['urn:some:string'][0]);
         $this->assertXmlStringEqualsXmlString($xml, $assertion->toXML()->ownerDocument->saveXML());
@@ -1053,7 +1046,8 @@ XML;
 
         $assertionToVerify->decryptAttributes(CertificatesMock::getPrivateKey());
 
-        $attributes = $assertionToVerify->getAttributes();
+        $attributes = $assertionToVerify->getAttributeValues();
+        
         $this->assertInstanceOf(
             \DOMNodeList::class,
             $attributes['urn:some:custom:outer:element'][0]
@@ -1098,7 +1092,8 @@ XML;
         $this->assertTrue($assertionToVerify->hasEncryptedAttributes());
 
         $assertionToVerify->decryptAttributes(CertificatesMock::getPrivateKey());
-        $attributes = $assertionToVerify->getAttributes();
+        
+        $attributes = $assertionToVerify->getAttributeValues();
 
         $this->assertIsInt($attributes['urn:some:integer'][0]);
         $this->assertIsString($attributes['urn:some:string'][0]);
@@ -1995,10 +1990,10 @@ XML;
         // Create an assertion
         $assertion = new Assertion();
         $assertion->setIssuer($issuer);
-        $assertion->setAttributes([
+        $assertion->setAttributes(Attribute::fromArray([
             "name1" => ["value1","value2"],
             "name2" => ["value3"],
-        ]);
+        ]));
         $assertion->setAttributeNameFormat("urn:oasis:names:tc:SAML:2.0:attrname-format:unspecified");
         $assertion->setSignatureKey(CertificatesMock::getPrivateKey());
 
@@ -2040,11 +2035,11 @@ XML;
         $issuer->setValue('testIssuer');
         $assertion->setIssuer($issuer);
 
-        $assertion->setAttributes([
+        $assertion->setAttributes(Attribute::fromArray([
             "name1" => ["value1", "value2"],
             "name2" => ["value3", ""],
             "name3" => ["value1", null, "value5"],
-        ]);
+        ]));
 
         $assertionElement = $assertion->toXML();
         $assertionElements = Utils::xpQuery(

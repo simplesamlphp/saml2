@@ -497,94 +497,45 @@ class Assertion extends SignedElement
         /** @var \DOMElement[] $attributes */
         $attributes = Utils::xpQuery($xml, './saml_assertion:AttributeStatement/saml_assertion:Attribute');
         foreach ($attributes as $attribute) {
-            if (!$attribute->hasAttribute('Name')) {
-                throw new \Exception('Missing name on <saml:Attribute> element.');
-            }
-            $name = $attribute->getAttribute('Name');
-
-            if ($attribute->hasAttribute('NameFormat')) {
-                $nameFormat = $attribute->getAttribute('NameFormat');
-            } else {
-                $nameFormat = Constants::NAMEFORMAT_UNSPECIFIED;
-            }
-
+            $this->parseAttribute($attribute, $firstAttribute);
             if ($firstAttribute) {
-                $this->nameFormat = $nameFormat;
                 $firstAttribute = false;
-            } else {
-                if ($this->nameFormat !== $nameFormat) {
-                    $this->nameFormat = Constants::NAMEFORMAT_UNSPECIFIED;
-                }
             }
-
-            if (!array_key_exists($name, $this->attributes)) {
-                $attr = new Attribute();
-                $attr->setName($name);
-
-                $this->attributes[$name] = $attr;
-            }
-
-            $this->parseAttributeValue($attribute, $name);
         }
     }
-
 
     /**
-     * @param \DOMNode $attribute
-     * @param string   $attributeName
+     * Parse attribute statements in assertion.
+     *
+     * @param \DOMElement $xml The XML element with the Attribute.
+     * @param boolean $firstAttribute Whether this is the first attribute to parse.
+     * @throws \Exception
      * @return void
      */
-    private function parseAttributeValue(DOMNode $attribute, string $attributeName): void
+    private function parseAttribute(DOMElement $xml, bool $firstAttribute = false): void
     {
-        /** @var \DOMElement[] $values */
-        $values = Utils::xpQuery($attribute, './saml_assertion:AttributeValue');
-
-        if ($attributeName === Constants::EPTI_URN_MACE || $attributeName === Constants::EPTI_URN_OID) {
-            foreach ($values as $index => $eptiAttributeValue) {
-                /** @var \DOMElement[] $eptiNameId */
-                $eptiNameId = Utils::xpQuery($eptiAttributeValue, './saml_assertion:NameID');
-
-                if (count($eptiNameId) === 1) {
-                    $this->attributes[$attributeName]->addAttributeValue(
-                        new AttributeValue(new NameID($eptiNameId[0]))
-                    );
-                } else {
-                    /* Fall back for legacy IdPs sending string value (e.g. SSP < 1.15) */
-                    Utils::getContainer()->getLogger()->warning(
-                        sprintf("Attribute %s (EPTI) value %d is not an XML NameId", $attributeName, $index)
-                    );
-                    $this->attributes[$attributeName]->addAttributeValue(
-                        new AttributeValue($eptiAttributeValue->textContent)
-                    );
-                }
-            }
-
-            return;
+        $attribute = new Attribute($xml);
+        
+        if ($attribute->getNameFormat() !== null) {
+            $nameFormat = $attribute->getNameFormat();
+        } else {
+            $nameFormat = Constants::NAMEFORMAT_UNSPECIFIED;
         }
 
-        foreach ($values as $value) {
-            $hasNonTextChildElements = false;
-            foreach ($value->childNodes as $childNode) {
-                /** @var \DOMNode $childNode */
-                if ($childNode->nodeType !== XML_TEXT_NODE) {
-                    $hasNonTextChildElements = true;
-                    break;
-                }
+        if ($firstAttribute) {
+            $this->nameFormat = $nameFormat;
+        } else {
+            if ($this->nameFormat !== $nameFormat) {
+                $this->nameFormat = Constants::NAMEFORMAT_UNSPECIFIED;
             }
+        }
 
-            if ($hasNonTextChildElements) {
-                $this->attributes[$attributeName]->addAttributeValue(
-                    new AttributeValue($value->childNodes)
-                );
-                continue;
-            }
-            
-            $this->attributes[$attributeName]->addAttributeValue(
-                new AttributeValue(trim($value->textContent))
-            );
+        $name = $attribute->getName();
+        if (!array_key_exists($name, $this->attributes)) {
+            $this->attributes[$name] = $attribute;
         }
     }
-
+    
 
     /**
      * Parse encrypted attribute statements in assertion.
@@ -856,35 +807,10 @@ class Assertion extends SignedElement
                 $key,
                 $blacklist
             );
-
-            if (!$attribute->hasAttribute('Name')) {
-                throw new \Exception('Missing name on <saml:Attribute> element.');
-            }
-            $name = $attribute->getAttribute('Name');
-
-            if ($attribute->hasAttribute('NameFormat')) {
-                $nameFormat = $attribute->getAttribute('NameFormat');
-            } else {
-                $nameFormat = Constants::NAMEFORMAT_UNSPECIFIED;
-            }
-
+            $this->parseAttribute($attribute, $firstAttribute);
             if ($firstAttribute) {
-                $this->nameFormat = $nameFormat;
                 $firstAttribute = false;
-            } else {
-                if ($this->nameFormat !== $nameFormat) {
-                    $this->nameFormat = Constants::NAMEFORMAT_UNSPECIFIED;
-                }
             }
-
-            if (!array_key_exists($name, $this->attributes)) {
-                $attr = new Attribute();
-                $attr->setName($name);
-
-                $this->attributes[$name] = $attr;
-            }
-
-            $this->parseAttributeValue($attribute, $name);
         }
     }
 
@@ -1216,14 +1142,60 @@ class Assertion extends SignedElement
     /**
      * Retrieve all attributes.
      * 
-     * @return array All attributes, as an associative array.
+     * @return array of Attributes
      */
     public function getAttributes(): array
     {
         return $this->attributes;
     }
 
-
+    
+    /**
+     * Retrieve all attribute values as an associative array
+     *
+     * @return array of attribute values
+     */
+    public function getAttributeValues(): array
+    {
+        $attributes = [];
+        
+        foreach ($this->attributes as $attributeObj){  
+            $attributeName = $attributeObj->getName();
+            $attributes[$attributeName] = [];
+            
+            foreach ($attributeObj->getAttributeValue() as $attributeValue){
+                $value = $attributeValue->getValue();
+                
+                // need to determine if we should return a NameID
+                if ($attributeName === Constants::EPTI_URN_MACE || $attributeName === Constants::EPTI_URN_OID) {
+                    $nameId = null;
+                    if ($value instanceof DOMNodeList){
+                        foreach ($value as $node) {
+                            /** @var \DOMNode $node */
+                            if ($node->nodeType !== XML_TEXT_NODE && $node->localName === 'NameID' && $node->namespaceURI === Constants::NS_SAML) {
+                                $nameId = new NameID($node);
+                            }
+                        }
+                    }
+                    else {
+                        /* Fall back for legacy IdPs sending string value (e.g. SSP < 1.15) */
+                        Utils::getContainer()->getLogger()->warning(
+                            sprintf("Attribute %s (EPTI) value %d is not an XML NameId", $attributeName, $value)
+                        );
+                        $nameId = new NameID();
+                        $nameId->setValue($value);                    
+                    }  
+                    if ($nameId !== null){
+                        $value = $nameId;
+                    }
+                }            
+                $attributes[$attributeName][] = $value;
+            }
+        }
+        return $attributes;
+    }
+    
+    
     /**
      * Replace all attributes.
      *
