@@ -54,19 +54,19 @@ class AttributeValue implements \Serializable
             return;
         }
         
-        if ($value instanceof NameID) {
-            $this->element = $value->toXML();
-            return;
-        }
-        
-        if ($value->namespaceURI === Constants::NS_SAML && $value->localName === 'AttributeValue') {
+        if (($value instanceof DOMElement) && $value->namespaceURI === Constants::NS_SAML && $value->localName === 'AttributeValue') {
             $this->element = Utils::copyElement($value);
             return;
         }
 
         $doc = DOMDocumentFactory::create();
         $this->element = $doc->createElementNS(Constants::NS_SAML, 'saml:AttributeValue');
-        Utils::copyElement($value, $this->element);
+        if ($value instanceof NameID) {
+            $value->toXML($this->element);
+        }
+        else {
+            Utils::copyElement($value, $this->element);
+        }
     }
 
 
@@ -118,7 +118,87 @@ class AttributeValue implements \Serializable
         return $this->element->textContent;
     }
 
+    /**
+     * Returns the xsd type of the attribute value or null if its not defined.
+     *
+     * @return string
+     */
+    public function getType(): ?string
+    {
+        $type = null;
+        if ($this->element->hasAttributeNS(Constants::NS_XSI, 'type')){
+            $type = $this->element->getAttributeNS(Constants::NS_XSI, 'type');
+        }
+        return $type;
+    }
 
+    /**
+     * Returns the actual value of the attribute value object's element.
+     * Since this function can return multiple types, we cannot declare the return type without running on php 8 
+     *
+     * @return string|boolean|int|float|DOMNodeList
+     */
+    public function getValue()
+    {
+        $variable = null;
+        
+        if ($this->element->hasAttributeNS(Constants::NS_XSI, 'nil')){
+            $is_nil = $this->element->getAttributeNS(Constants::NS_XSI, 'nil');
+            if ($is_nil === "true"){
+                return $variable;
+            }
+        }
+        
+        $xsi_type = $this->getType();        
+        if ($xsi_type !== null)
+        {
+            switch ($xsi_type) {
+                case 'xs:boolean':
+                    $variable = $this->element->textContent === 'true';
+                    break;
+                case 'xs:int':
+                case 'xs:integer':
+                case 'xs:long':
+                case 'xs:negativeInteger':
+                case 'xs:nonNegativeInteger':
+                case 'xs:nonPositiveInteger':
+                case 'xs:positiveInteger':
+                case 'short':
+                case 'xs:unsignedLong':
+                case 'xs:unsignedInt':
+                case 'xs:unsignedShort':
+                case 'xs:unsignedByte':
+                    $variable = intval($this->element->textContent);
+                    break;
+                case 'xs:decimal':
+                case 'xs:double':
+                case 'xs:float':
+                    $variable = floatval($this->element->textContent);
+                    break;
+                default:
+                    // what about date/time/dateTime, base64Binary/hexBinary or other xsd types? everything else is basically a string for now...
+                    $variable = strval($this->element->textContent);
+            }
+        }
+        else {
+            $hasNonTextChildElements = false;
+            foreach ($this->element->childNodes as $childNode) {
+                /** @var \DOMNode $childNode */
+                if ($childNode->nodeType !== XML_TEXT_NODE) {
+                    $hasNonTextChildElements = true;
+                    break;
+                }
+            }
+            if ($hasNonTextChildElements){
+                $variable = $this->element->childNodes;
+            }
+            else {
+                $variable = strval($this->element->textContent);
+            }
+        }
+        return $variable;
+    }
+    
     /**
      * Convert this attribute value to a string.
      *
