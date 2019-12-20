@@ -233,14 +233,15 @@ class Attribute
     {
         return $this->toXMLInternal($parent, Constants::NS_SAML, 'saml:Attribute');
     }
-    
+
+
     /**
      * Convert an array of attributes with name = value(s) to an array of Attribute objects.
      *
-     * @param \array $attributes The array of attributes we need to convert to objects
-     * @return \array Atrribute
+     * @param array $attributes The array of attributes we need to convert to objects
+     * @return array Atrribute
      */
-    public static function fromArray($attributes = array(), $attributesValueTypes = array()): array
+    public static function fromArray(array $attributes = [], array $attributesValueTypes = []): array
     {
         $attr_array = array();
         foreach ($attributes as $name => $value) {
@@ -268,13 +269,13 @@ class Attribute
         }
 
         // set types
-        foreach ($attributesValueTypes as $name => $valueTypes){
+        foreach ($attributesValueTypes as $name => $valueTypes) {
             foreach ($attr_array as $attributeObj){
                 if ($attributeObj->getName() === $name){
                     if ($valueTypes !== null) {
                         if (is_array($valueTypes) && count($valueTypes) != count($attributeObj->getAttributeValue())) {
                             throw new \Exception(
-                                'Array of value types and array of values have different size for attribute '.
+                                'Array of value types and array of values have different size for attribute ' .
                                 var_export($attributeObj->getName(), true)
                             );
                         }
