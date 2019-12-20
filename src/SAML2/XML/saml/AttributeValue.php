@@ -125,7 +125,7 @@ class AttributeValue implements \Serializable
     /**
      * Returns the xsd type of the attribute value or null if its not defined.
      *
-     * @return string
+     * @return string|null
      */
     public function getType(): ?string
     {
@@ -140,7 +140,7 @@ class AttributeValue implements \Serializable
      * Returns the actual value of the attribute value object's element.
      * Since this function can return multiple types, we cannot declare the return type without running on php 8 
      *
-     * @return string|boolean|int|float|\DOMNodeList
+     * @return string|boolean|int|float|\DOMNodeList|null
      */
     public function getValue()
     {
@@ -203,6 +203,7 @@ class AttributeValue implements \Serializable
         return $variable;
     }
     
+
     /**
      * Convert this attribute value to a string.
      *
