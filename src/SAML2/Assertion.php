@@ -1142,7 +1142,7 @@ class Assertion extends SignedElement
     /**
      * Retrieve all attributes.
      * 
-     * @return array of Attributes
+     * @return \SAML2\XML\saml\Attribute[] All attributes, as an associative array.
      */
     public function getAttributes(): array
     {
