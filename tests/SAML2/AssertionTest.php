@@ -226,9 +226,6 @@ XML;
         $epti6->addAttributeValue(new AttributeValue($epti6NameId));
         
         $assertion->setAttributes([
-            "name1" => ["value1", "value2"],
-            "name2" => [2],
-            "name3" => [null],
             $name4->getName() => $name4,
             $epti5->getName() => $epti5,
             $epti6->getName() => $epti6
@@ -243,11 +240,7 @@ XML;
         
         $attributes = $assertionToVerify->getAttributeValues();
         
-        $this->assertCount(6, $attributes);
-        $this->assertCount(2, $attributes['name1']);
-        $this->assertEquals("value1", $attributes['name1'][0]);
-        $this->assertEquals(2, $attributes['name2'][0]);
-        $this->assertNull($attributes["name3"][0]);
+        $this->assertCount(3, $attributes);
         
         $this->assertEquals("testme", $attributes['name4'][0]);
         
