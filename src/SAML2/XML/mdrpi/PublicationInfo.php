@@ -21,7 +21,7 @@ class PublicationInfo
      *
      * @var string
      */
-    private $publisher = '';
+    private $publisher;
 
     /**
      * The creation timestamp for the metadata, as a UNIX timestamp.
@@ -80,9 +80,13 @@ class PublicationInfo
      * Collect the value of the publisher-property
      *
      * @return string
+     *
+     * @throws \InvalidArgumentException if assertions are false
      */
     public function getPublisher(): string
     {
+        Assert::notEmpty($this->publisher);
+
         return $this->publisher;
     }
 
@@ -173,6 +177,8 @@ class PublicationInfo
      *
      * @param \DOMElement $parent The element we should append to.
      * @return \DOMElement
+     *
+     * @throws \InvalidArgumentException if assertions are false
      */
     public function toXML(DOMElement $parent): DOMElement
     {

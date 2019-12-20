@@ -33,6 +33,8 @@ class AttributeValue implements \Serializable
      *  - a NameID                     Create an attribute value of the given NameID.
      *  - \DOMElement(AttributeValue)  Create an attribute value of the given DOMElement.
      *  - \DOMElement                  Create an attribute value with the given DOMElement as a child.
+     *
+     * @throws \InvalidArgumentException if assertions are false
      */
     public function __construct($value)
     {
@@ -98,11 +100,13 @@ class AttributeValue implements \Serializable
      *
      * @param  \DOMElement $parent The element we should append this attribute value to.
      * @return \DOMElement The generated AttributeValue element.
+     *
+     * @throws \InvalidArgumentException if assertions are false
      */
     public function toXML(DOMElement $parent): DOMElement
     {
-        Assert::same($this->getElement()->namespaceURI, Constants::NS_SAML);
-        Assert::same($this->getElement()->localName, "AttributeValue");
+        Assert::same($this->element->namespaceURI, Constants::NS_SAML);
+        Assert::same($this->element->localName, "AttributeValue");
 
         return Utils::copyElement($this->element, $parent);
     }

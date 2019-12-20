@@ -21,7 +21,7 @@ class SigningMethod
      *
      * @var string
      */
-    private $Algorithm = '';
+    private $Algorithm;
 
     /**
      * The smallest key size, in bits, that the entity supports in conjunction with the algorithm. If omitted, no
@@ -72,9 +72,13 @@ class SigningMethod
      * Collect the value of the Algorithm-property
      *
      * @return string
+     *
+     * @throws \InvalidArgumentException if assertions are false
      */
     public function getAlgorithm(): string
     {
+        Assert::notEmpty($this->Algorithm);
+
         return $this->Algorithm;
     }
 
@@ -142,7 +146,8 @@ class SigningMethod
      *
      * @param \DOMElement $parent The element we should append to.
      * @return \DOMElement
-     * @throws \Exception
+     *
+     * @throws \InvalidArgumentException if assertions are false
      */
     public function toXML(DOMElement $parent): DOMElement
     {

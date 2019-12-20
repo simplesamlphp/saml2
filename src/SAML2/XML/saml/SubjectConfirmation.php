@@ -19,9 +19,9 @@ class SubjectConfirmation
     /**
      * The method we can use to verify this Subject.
      *
-     * @var string|null
+     * @var string
      */
-    private $Method = null;
+    private $Method;
 
     /**
      * The NameID of the entity that can use this element to verify the Subject.
@@ -76,10 +76,14 @@ class SubjectConfirmation
     /**
      * Collect the value of the Method-property
      *
-     * @return string|null
+     * @return string
+     *
+     * @throws \InvalidArgumentException if assertions are false
      */
-    public function getMethod(): ?string
+    public function getMethod(): string
     {
+        Assert::notEmpty($this->Method);
+
         return $this->Method;
     }
 
@@ -147,10 +151,12 @@ class SubjectConfirmation
      *
      * @param  \DOMElement $parent The parent element we should append this element to.
      * @return \DOMElement This element, as XML.
+     *
+     * @throws \InvalidArgumentException if assertions are false
      */
     public function toXML(DOMElement $parent): DOMElement
     {
-        Assert::notNull($this->Method, "Cannot convert SubjectConfirmation to XML without a Method set.");
+        Assert::notEmpty($this->Method, "Cannot convert SubjectConfirmation to XML without a Method set.");
 
         $e = $parent->ownerDocument->createElementNS(Constants::NS_SAML, 'saml:SubjectConfirmation');
         $parent->appendChild($e);

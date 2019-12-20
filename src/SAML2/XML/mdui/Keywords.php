@@ -29,7 +29,7 @@ class Keywords
      *
      * @var string
      */
-    private $lang = '';
+    private $lang;
 
 
     /**
@@ -61,9 +61,13 @@ class Keywords
      * Collect the value of the lang-property
      *
      * @return string
+     *
+     * @throws \InvalidArgumentException if assertions are false
      */
     public function getLanguage(): string
     {
+        Assert::notEmpty($this->lang);
+
         return $this->lang;
     }
 
@@ -121,6 +125,8 @@ class Keywords
      * @param \DOMElement $parent The element we should append this Keywords to.
      * @throws \Exception
      * @return \DOMElement
+     *
+     * @throws \InvalidArgumentException if assertions are false
      */
     public function toXML(DOMElement $parent): DOMElement
     {

@@ -7,6 +7,7 @@ namespace SAML2\XML\ecp;
 use DOMElement;
 use InvalidArgumentException;
 use SAML2\Constants;
+use Webmozart\Assert\Assert;
 
 /**
  * Class representing the ECP Response element.
@@ -58,9 +59,13 @@ class Response
      * Collect the value of the AssertionConsumerServiceURL-property
      *
      * @return string
+     *
+     * @throws \InvalidArgumentException if assertions are false
      */
     public function getAssertionConsumerServiceURL(): string
     {
+        Assert::notEmpty($this->AssertionConsumerServiceURL);
+
         return $this->AssertionConsumerServiceURL;
     }
 
@@ -85,14 +90,13 @@ class Response
      * Convert this ECP Response to XML.
      *
      * @param \DOMElement $parent The element we should append this element to.
-     * @throws InvalidArgumentException
      * @return \DOMElement
+     *
+     * @throws \InvalidArgumentException if assertions are false
      */
     public function toXML(DOMElement $parent): DOMElement
     {
-        if (!is_string($this->getAssertionConsumerServiceURL())) {
-            throw new InvalidArgumentException("AssertionConsumerServiceURL must be a string");
-        }
+        Assert::notEmpty($this->AssertionConsumerServiceURL);
 
         $doc = $parent->ownerDocument;
         $response = $doc->createElementNS(Constants::NS_ECP, 'ecp:Response');
@@ -101,7 +105,7 @@ class Response
 
         $response->setAttributeNS(Constants::NS_SOAP, 'SOAP-ENV:mustUnderstand', '1');
         $response->setAttributeNS(Constants::NS_SOAP, 'SOAP-ENV:actor', 'http://schemas.xmlsoap.org/soap/actor/next');
-        $response->setAttribute('AssertionConsumerServiceURL', $this->getAssertionConsumerServiceURL());
+        $response->setAttribute('AssertionConsumerServiceURL', $this->AssertionConsumerServiceURL);
 
         return $response;
     }

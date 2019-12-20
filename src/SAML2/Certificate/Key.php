@@ -15,6 +15,7 @@ class Key implements \ArrayAccess
 {
     // Possible key usages
     public const USAGE_SIGNING = 'signing';
+
     public const USAGE_ENCRYPTION = 'encryption';
 
     /**

@@ -7,6 +7,7 @@ namespace SAML2\XML\md;
 use DOMElement;
 use SAML2\Constants;
 use SAML2\Utils;
+use Webmozart\Assert\Assert;
 
 /**
  * Class representing SAML 2 metadata AdditionalMetadataLocation element.
@@ -55,9 +56,13 @@ class AdditionalMetadataLocation
      * Collect the value of the namespace-property
      *
      * @return string
+     *
+     * @throws \InvalidArgumentException if assertions are false
      */
     public function getNamespace(): string
     {
+        Assert::notEmpty($this->namespace);
+
         return $this->namespace;
     }
 
@@ -78,9 +83,13 @@ class AdditionalMetadataLocation
      * Collect the value of the location-property
      *
      * @return string
+     *
+     * @throws \InvalidArgumentException if assertions are false
      */
     public function getLocation(): string
     {
+        Assert::notEmpty($this->location);
+
         return $this->location;
     }
 
@@ -102,11 +111,16 @@ class AdditionalMetadataLocation
      *
      * @param  \DOMElement $parent The element we should append to.
      * @return \DOMElement This AdditionalMetadataLocation-element.
+     *
+     * @throws \InvalidArgumentException if assertions are false
      */
     public function toXML(DOMElement $parent): DOMElement
     {
-        $e = Utils::addString($parent, Constants::NS_MD, 'md:AdditionalMetadataLocation', $this->getLocation());
-        $e->setAttribute('namespace', $this->getNamespace());
+        Assert::notEmpty($this->location);
+        Assert::notEmpty($this->namespace);
+
+        $e = Utils::addString($parent, Constants::NS_MD, 'md:AdditionalMetadataLocation', $this->location);
+        $e->setAttribute('namespace', $this->namespace);
 
         return $e;
     }

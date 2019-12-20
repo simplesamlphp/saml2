@@ -7,6 +7,7 @@ namespace SAML2\XML\ds;
 use DOMElement;
 use RobRichards\XMLSecLibs\XMLSecurityDSig;
 use SAML2\Utils;
+use Webmozart\Assert\Assert;
 
 /**
  * Class representing a ds:KeyName element.
@@ -20,7 +21,7 @@ class KeyName
      *
      * @var string
      */
-    public $name = '';
+    public $name;
 
 
     /**
@@ -45,6 +46,8 @@ class KeyName
      */
     public function getName(): string
     {
+        Assert::notEmpty($this->name);
+
         return $this->name;
     }
 
@@ -69,6 +72,8 @@ class KeyName
      */
     public function toXML(DOMElement $parent): DOMElement
     {
+        Assert::notEmpty($this->name);
+
         return Utils::addString($parent, XMLSecurityDSig::XMLDSIGNS, 'ds:KeyName', $this->name);
     }
 }

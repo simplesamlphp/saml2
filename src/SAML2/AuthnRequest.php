@@ -71,7 +71,7 @@ class AuthnRequest extends Request
     private $RequesterID = [];
 
     /**
-     * The URL of the asertion consumer service where the response should be delivered.
+     * The URL of the assertion consumer service where the response should be delivered.
      *
      * @var string|null
      */
@@ -697,6 +697,8 @@ class AuthnRequest extends Request
      *
      * @param XMLSecurityKey $key The encryption key.
      * @return void
+     *
+     * @throws \InvalidArgumentException if assertions are false
      */
     public function encryptNameId(XMLSecurityKey $key): void
     {

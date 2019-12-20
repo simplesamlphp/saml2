@@ -22,7 +22,7 @@ class AffiliationDescriptor extends SignedElementHelper
      *
      * @var string
      */
-    public $affiliationOwnerID = '';
+    public $affiliationOwnerID;
 
     /**
      * The ID of this element.
@@ -108,9 +108,13 @@ class AffiliationDescriptor extends SignedElementHelper
      * Collect the value of the affiliationOwnerId-property
      *
      * @return string
+     *
+     * @throws \InvalidArgumentException if assertions are false
      */
     public function getAffiliationOwnerID(): string
     {
+        Assert::notEmpty($this->affiliationOwnerID);
+
         return $this->affiliationOwnerID;
     }
 
@@ -248,10 +252,12 @@ class AffiliationDescriptor extends SignedElementHelper
      *
      * @param \DOMElement $parent The EntityDescriptor we should append this endpoint to.
      * @return \DOMElement
+     *
+     * @throws \InvalidArgumentException if assertions are false
      */
     public function toXML(DOMElement $parent): DOMElement
     {
-        Assert::notEmpty($this->AffiliateMember);
+        Assert::notEmpty($this->affiliationOwnerID);
 
         $e = $parent->ownerDocument->createElementNS(Constants::NS_MD, 'md:AffiliationDescriptor');
         $parent->appendChild($e);

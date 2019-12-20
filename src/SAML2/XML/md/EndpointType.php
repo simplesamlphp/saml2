@@ -6,6 +6,7 @@ namespace SAML2\XML\md;
 
 use DOMElement;
 use SAML2\Constants;
+use Webmozart\Assert\Assert;
 
 /**
  * Class representing SAML 2 EndpointType.
@@ -17,16 +18,16 @@ class EndpointType
     /**
      * The binding for this endpoint.
      *
-     * @var string|null
+     * @var string
      */
-    private $Binding = null;
+    private $Binding;
 
     /**
      * The URI to this endpoint.
      *
-     * @var string|null
+     * @var string
      */
-    private $Location = null;
+    private $Location;
 
     /**
      * The URI where responses can be delivered.
@@ -160,10 +161,14 @@ class EndpointType
     /**
      * Collect the value of the Binding property.
      *
-     * @return string|null
+     * @return string
+     *
+     * @throws \InvalidArgumentException if assertions are false
      */
-    public function getBinding(): ?string
+    public function getBinding(): string
     {
+        Assert::notEmpty($this->Binding);
+
         return $this->Binding;
     }
 
@@ -183,20 +188,24 @@ class EndpointType
     /**
      * Collect the value of the Location property.
      *
-     * @return string|null
+     * @return string
+     *
+     * @throws \InvalidArgumentException if assertions are false
      */
-    public function getLocation(): ?string
+    public function getLocation(): string
     {
+        Assert::notEmpty($this->Location);
+
         return $this->Location;
     }
 
 
     /**
      * Set the value of the Location-property.
-     * @param string|null $location
+     * @param string $location
      * @return void
      */
-    public function setLocation(string $location = null): void
+    public function setLocation(string $location): void
     {
         $this->Location = $location;
     }

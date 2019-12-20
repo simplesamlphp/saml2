@@ -22,6 +22,7 @@ class SOAPClient
 {
     public const START_SOAP_ENVELOPE = '<soap-env:Envelope xmlns:soap-env="http://schemas.xmlsoap.org/soap/envelope/">\
         <soap-env:Header/><soap-env:Body>';
+
     public const END_SOAP_ENVELOPE = '</soap-env:Body></soap-env:Envelope>';
 
 
@@ -31,9 +32,8 @@ class SOAPClient
      * @param \SAML2\Message $msg The request that should be sent.
      * @param \SimpleSAML\Configuration $srcMetadata The metadata of the issuer of the message.
      * @param \SimpleSAML\Configuration $dstMetadata The metadata of the destination of the message.
-     * @return \SAML2\Message The response we received.
      * @throws \Exception
-     * @return \SAML2\Message            The response we received.
+     * @return \SAML2\Message The response we received.
      *
      * @psalm-suppress UndefinedClass
      */

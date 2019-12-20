@@ -168,12 +168,9 @@ class HTTPRedirectTest extends \Mockery\Adapter\Phpunit\MockeryTestCase
         $qs = 'SAMLRequest=cannotinflate';
         $_SERVER['QUERY_STRING'] = $qs;
 
-//        $oldwarning = \PHPUnit\Framework\Error\Warning::$enabled;
-//        \PHPUnit\Framework\Error\Warning::$enabled = false;
         $this->expectException(\Exception::class, 'Error while inflating');
         $hr = new HTTPRedirect();
         $request = @$hr->receive();
-//        \PHPUnit\Framework\Error\Warning::$enabled = $oldwarning;
     }
 
 

@@ -17,6 +17,8 @@ class SubjectConfirmationNotOnOrAfter implements
      * @param SubjectConfirmation $subjectConfirmation
      * @param Result $result
      * @return void
+     *
+     * @throws \InvalidArgumentException if assertions are false
      */
     public function validate(
         SubjectConfirmation $subjectConfirmation,

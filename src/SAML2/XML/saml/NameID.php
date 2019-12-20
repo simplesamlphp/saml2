@@ -12,7 +12,6 @@ namespace SAML2\XML\saml;
  */
 class NameID extends NameIDType
 {
-
     /**
      * Set the name of this XML element to "saml:NameID"
      *

@@ -21,7 +21,7 @@
     "require-dev": {
         "mockery/mockery": "~1.2",
         "phpunit/phpunit": "^8.3",
-        "simplesamlphp/simplesamlphp-test-framework": "~0.0.12",
+        "simplesamlphp/simplesamlphp-test-framework": "~0.1.0",
         "sensiolabs/security-checker": "~6.0",
         "sebastian/phpcpd": "~4.1",
         "squizlabs/php_codesniffer": "~3.5",
@@ -39,7 +39,7 @@
     },
     "extra": {
         "branch-alias": {
-            "dev-master": "v4.0.x-dev"
+            "dev-master": "v4.2.x-dev"
         }
     }
 }

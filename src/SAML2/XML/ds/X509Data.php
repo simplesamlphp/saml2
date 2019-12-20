@@ -88,10 +88,13 @@ class X509Data
      *
      * @param \SAML2\XML\Chunk|\SAML2\XML\ds\X509Certificate $data
      * @return void
+     *
+     * @throws \InvalidArgumentException if assertions are false
      */
     public function addData($data): void
     {
         Assert::isInstanceOfAny($data, [Chunk::class, X509Certificate::class]);
+
         $this->data[] = $data;
     }
 

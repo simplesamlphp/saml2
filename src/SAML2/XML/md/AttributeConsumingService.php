@@ -7,6 +7,7 @@ namespace SAML2\XML\md;
 use DOMElement;
 use SAML2\Constants;
 use SAML2\Utils;
+use Webmozart\Assert\Assert;
 
 /**
  * Class representing SAML 2 Metadata AttributeConsumingService element.
@@ -94,9 +95,13 @@ class AttributeConsumingService
      * Collect the value of the index-property
      *
      * @return int
+     *
+     * @throws \InvalidArgumentException if assertions are false
      */
     public function getIndex(): int
     {
+        Assert::notEmpty($this->index);
+
         return $this->index;
     }
 
@@ -222,26 +227,32 @@ class AttributeConsumingService
      *
      * @param \DOMElement $parent The element we should append this AttributeConsumingService to.
      * @return \DOMElement
+     *
+     * @throws \InvalidArgumentException if assertions are false
      */
     public function toXML(DOMElement $parent): DOMElement
     {
+        Assert::notEmpty($this->index);
+        Assert::notEmpty($this->ServiceName);
+        Assert::notEmpty($this->ServiceDescription);
+
         $doc = $parent->ownerDocument;
 
         $e = $doc->createElementNS(Constants::NS_MD, 'md:AttributeConsumingService');
         $parent->appendChild($e);
 
-        $e->setAttribute('index', strval($this->getIndex()));
+        $e->setAttribute('index', strval($this->index));
 
-        if ($this->getIsDefault() === true) {
+        if ($this->isDefault === true) {
             $e->setAttribute('isDefault', 'true');
-        } elseif ($this->getIsDefault() === false) {
+        } elseif ($this->isDefault === false) {
             $e->setAttribute('isDefault', 'false');
         }
 
-        Utils::addStrings($e, Constants::NS_MD, 'md:ServiceName', true, $this->getServiceName());
-        Utils::addStrings($e, Constants::NS_MD, 'md:ServiceDescription', true, $this->getServiceDescription());
+        Utils::addStrings($e, Constants::NS_MD, 'md:ServiceName', true, $this->ServiceName);
+        Utils::addStrings($e, Constants::NS_MD, 'md:ServiceDescription', true, $this->ServiceDescription);
 
-        foreach ($this->getRequestedAttribute() as $ra) {
+        foreach ($this->RequestedAttribute as $ra) {
             $ra->toXML($e);
         }
 
