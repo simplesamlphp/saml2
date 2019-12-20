@@ -140,7 +140,7 @@ class AttributeValue implements \Serializable
      * Returns the actual value of the attribute value object's element.
      * Since this function can return multiple types, we cannot declare the return type without running on php 8 
      *
-     * @return string|boolean|int|float|DOMNodeList
+     * @return string|boolean|int|float|\DOMNodeList
      */
     public function getValue()
     {
