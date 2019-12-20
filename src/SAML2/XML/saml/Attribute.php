@@ -243,15 +243,13 @@ class Attribute
      */
     public static function fromArray(array $attributes = [], array $attributesValueTypes = []): array
     {
-        $attr_array = array();
+        $attr_array = [];
         foreach ($attributes as $name => $value) {
             if ($value instanceof Attribute || $value instanceof NameID) {
                 $attr_array[$name] = $value;
-            } 
-            else {
+            } else {
                 $attr_array[$name] = null;
                 if (is_array($value)) {
-
                     $document = DOMDocumentFactory::create();
                     $attrDomElement = $document->createElementNS(Constants::NS_SAML, 'saml:Attribute');
                     $document->appendChild($attrDomElement);
@@ -270,8 +268,8 @@ class Attribute
 
         // set types
         foreach ($attributesValueTypes as $name => $valueTypes) {
-            foreach ($attr_array as $attributeObj){
-                if ($attributeObj->getName() === $name){
+            foreach ($attr_array as $attributeObj) {
+                if ($attributeObj->getName() === $name) {
                     if ($valueTypes !== null) {
                         if (is_array($valueTypes) && count($valueTypes) != count($attributeObj->getAttributeValue())) {
                             throw new \Exception(

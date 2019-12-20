@@ -168,7 +168,7 @@ class Assertion extends SignedElement
     /**
      * The attributes, as an array of Attribute-objects.
      *
-     * @var \SAML2\XML\saml\Attribute[] array of attributes with each value an \SAML2\XML\saml\Attribute 
+     * @var \SAML2\XML\saml\Attribute[] array of attributes with each value an \SAML2\XML\saml\Attribute
      */
     private $attributes = [];
 
@@ -1143,7 +1143,7 @@ class Assertion extends SignedElement
 
     /**
      * Retrieve all attributes.
-     * 
+     *
      * @return \SAML2\XML\saml\Attribute[] All attributes, as an associative array.
      */
     public function getAttributes(): array
@@ -1161,36 +1161,39 @@ class Assertion extends SignedElement
     {
         $attributes = [];
         
-        foreach ($this->attributes as $attributeObj){  
+        foreach ($this->attributes as $attributeObj) {
             $attributeName = $attributeObj->getName();
             $attributes[$attributeName] = [];
             
-            foreach ($attributeObj->getAttributeValue() as $attributeValue){
+            foreach ($attributeObj->getAttributeValue() as $attributeValue) {
                 $value = $attributeValue->getValue();
                 
                 // need to determine if we should return a NameID
                 if ($attributeName === Constants::EPTI_URN_MACE || $attributeName === Constants::EPTI_URN_OID) {
                     $nameId = null;
-                    if ($value instanceof DOMNodeList){
+                    if ($value instanceof DOMNodeList) {
                         foreach ($value as $node) {
                             /** @var \DOMNode $node */
-                            if ($node->nodeType !== XML_TEXT_NODE && $node->localName === 'NameID' && $node->namespaceURI === Constants::NS_SAML) {
+                            if (
+                                $node->nodeType !== XML_TEXT_NODE
+                                && $node->localName === 'NameID'
+                                && $node->namespaceURI === Constants::NS_SAML
+                            ) {
                                 $nameId = new NameID($node);
                             }
                         }
-                    }
-                    else {
+                    } else {
                         /* Fall back for legacy IdPs sending string value (e.g. SSP < 1.15) */
                         Utils::getContainer()->getLogger()->warning(
                             sprintf("Attribute %s (EPTI) value %d is not an XML NameId", $attributeName, $value)
                         );
                         $nameId = new NameID();
-                        $nameId->setValue($value);                    
-                    }  
-                    if ($nameId !== null){
+                        $nameId->setValue($value);
+                    }
+                    if ($nameId !== null) {
                         $value = $nameId;
                     }
-                }            
+                }
                 $attributes[$attributeName][] = $value;
             }
         }
@@ -1207,18 +1210,16 @@ class Assertion extends SignedElement
     public function setAttributes(array $attributes): void
     {
         foreach ($attributes as $name => $value) {
-            if ($value instanceof Attribute){
+            if ($value instanceof Attribute) {
                 $this->attributes[$name] = $value;
-            }
-            else {
+            } else {
                 $attributeObj = new Attribute();
                 $attributeObj->setName($name);
                 if (is_array($value)) {
                     foreach ($value as $vidx => $attributeValue) {
                         $attributeObj->addAttributeValue(new AttributeValue($attributeValue));
-                    }                    
-                }
-                else {
+                    }
+                } else {
                     $attributeObj->addAttributeValue(new AttributeValue($value));
                 }
                 $this->attributes[$name] = $attributeObj;
