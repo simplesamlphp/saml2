@@ -174,12 +174,94 @@ XML;
         $this->assertCount(2, $attributes['name1']);
         $this->assertEquals("value1", $attributes['name1'][0]);
         $this->assertEquals(2, $attributes['name2'][0]);
-        // NOTE: nil attribute is currently parsed as string..
-        //$this->assertNull($attributes["name3"][0]);
+        $this->assertNull($attributes["name3"][0]);
         $this->assertEquals(\SAML2\Constants::NAMEFORMAT_UNSPECIFIED, $assertionToVerify->getAttributeNameFormat());
     }
 
 
+    /**
+     * Test an assertion with attributes of different types
+     */
+    public function testMixedAttributes(): void
+    {
+        // Create an Issuer
+        $issuer = new Issuer();
+        $issuer->setValue('testIssuer');
+
+        // Create an assertion
+        $assertion = new Assertion();
+
+        $assertion->setIssuer($issuer);
+        $assertion->setValidAudiences(['audience1', 'audience2']);
+
+        $this->assertNull($assertion->getAuthnContextClassRef());
+
+        $assertion->setAuthnContextClassRef('someAuthnContext');
+        $assertion->setAuthnContextDeclRef('/relative/path/to/document.xml');
+
+        $assertion->setID("_123abc");
+
+        $assertion->setIssueInstant(1234567890);
+        $assertion->setAuthnInstant(1234567890 - 1);
+        $assertion->setNotBefore(1234567890 - 10);
+        $assertion->setNotOnOrAfter(1234567890 + 100);
+        $assertion->setSessionNotOnOrAfter(1234568890 + 200);
+
+        $assertion->setSessionIndex("idx1");
+
+        $assertion->setAuthenticatingAuthority(["idp1", "idp2"]);
+
+        $name4 = new Attribute();
+        $name4->setName("name4");
+        $name4->addAttributeValue(new AttributeValue("testme"));
+
+        $epti5 = new Attribute();
+        $epti5->setName("urn:oid:1.3.6.1.4.1.5923.1.1.1.10");
+        $epti5->addAttributeValue(new AttributeValue("myid"));
+        
+        $epti6 = new Attribute();
+        $epti6->setName("urn:mace:dir:attribute-def:eduPersonTargetedID");
+        $epti6NameId = new NameID();
+        $epti6NameId->setValue("myid2");
+        $epti6->addAttributeValue(new AttributeValue($epti6NameId));
+        
+        $assertion->setAttributes([
+            "name1" => ["value1", "value2"],
+            "name2" => [2],
+            "name3" => [null],
+            $name4->getName() => $name4,
+            $epti5->getName() => $epti5,
+            $epti6->getName() => $epti6
+        ]);
+
+        $assertion->setAttributeNameFormat("urn:oasis:names:tc:SAML:2.0:attrname-format:unspecified");
+
+        $assertionElement = $assertion->toXML()->ownerDocument->saveXML();
+
+        $assertionToVerify = new Assertion(DOMDocumentFactory::fromString($assertionElement)->firstChild);
+
+        
+        $attributes = $assertionToVerify->getAttributeValues();
+        
+        $this->assertCount(6, $attributes);
+        $this->assertCount(2, $attributes['name1']);
+        $this->assertEquals("value1", $attributes['name1'][0]);
+        $this->assertEquals(2, $attributes['name2'][0]);
+        $this->assertNull($attributes["name3"][0]);
+        
+        $this->assertEquals("testme", $attributes['name4'][0]);
+        
+        $maceValue = $attributes['urn:mace:dir:attribute-def:eduPersonTargetedID'][0];
+        $oidValue = $attributes['urn:oid:1.3.6.1.4.1.5923.1.1.1.10'][0];
+
+        $this->assertInstanceOf(NameID::class, $maceValue);
+        $this->assertInstanceOf(NameID::class, $oidValue);
+
+        $this->assertEquals('myid2', $maceValue->getValue());
+        $this->assertEquals('myid', $oidValue->getValue());
+    }
+    
+    
     /**
      * Test an assertion attribute value types options
      */

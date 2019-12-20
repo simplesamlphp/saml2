@@ -54,19 +54,19 @@ class AttributeValue implements \Serializable
             return;
         }
         
-        if ($value instanceof NameID) {
-            $this->element = $value->toXML();
-            return;
-        }
-        
-        if ($value->namespaceURI === Constants::NS_SAML && $value->localName === 'AttributeValue') {
+        if (($value instanceof DOMElement) && $value->namespaceURI === Constants::NS_SAML && $value->localName === 'AttributeValue') {
             $this->element = Utils::copyElement($value);
             return;
         }
 
         $doc = DOMDocumentFactory::create();
         $this->element = $doc->createElementNS(Constants::NS_SAML, 'saml:AttributeValue');
-        Utils::copyElement($value, $this->element);
+        if ($value instanceof NameID) {
+            $value->toXML($this->element);
+        }
+        else {
+            Utils::copyElement($value, $this->element);
+        }
     }
 
 
@@ -141,7 +141,15 @@ class AttributeValue implements \Serializable
     public function getValue()
     {
         $variable = null;
-        $xsi_type = $this->getType();
+        
+        if ($this->element->hasAttributeNS(Constants::NS_XSI, 'nil')){
+            $is_nil = $this->element->getAttributeNS(Constants::NS_XSI, 'nil');
+            if ($is_nil === "true"){
+                return $variable;
+            }
+        }
+        
+        $xsi_type = $this->getType();        
         if ($xsi_type !== null)
         {
             switch ($xsi_type) {

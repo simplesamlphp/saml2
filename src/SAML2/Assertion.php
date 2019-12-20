@@ -1205,7 +1205,22 @@ class Assertion extends SignedElement
     public function setAttributes(array $attributes): void
     {
         foreach ($attributes as $name => $value) {
-            $this->attributes[$name] = $value;
+            if ($value instanceof Attribute){
+                $this->attributes[$name] = $value;
+            }
+            else {
+                $attributeObj = new Attribute();
+                $attributeObj->setName($name);
+                if (is_array($value)) {
+                    foreach ($value as $vidx => $attributeValue) {
+                        $attributeObj->addAttributeValue(new AttributeValue($attributeValue));
+                    }                    
+                }
+                else {
+                    $attributeObj->addAttributeValue(new AttributeValue($value));
+                }
+                $this->attributes[$name] = $attributeObj;
+            }
         }
     }
 
