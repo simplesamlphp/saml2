@@ -1,5 +1,12 @@
 # UPGRADE NOTES
 
+## 4.x to 5.0
+
+**NameIDPolicy BC breaking change**
+
+The NameIDPolicy can no longer be represented as an array, but has to be handled using
+the newly added NameIDPolicy-class.
+
 ## 4.0 to 4.1
 
 **Assertion processor BC breaking change**
