@@ -7,6 +7,11 @@
 The NameIDPolicy can no longer be represented as an array, but has to be handled using
 the newly added NameIDPolicy-class.
 
+**StatusResponse BC breaking change**
+
+The API of the StatusResponse-class has been slightly changed; getStatus/setStatus will now handle Status-objects
+instead of the previous array
+
 ## 4.0 to 4.1
 
 **Assertion processor BC breaking change**
