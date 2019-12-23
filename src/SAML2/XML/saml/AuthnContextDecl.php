@@ -92,6 +92,7 @@ class AuthnContextDecl extends \SAML2\XML\AbstractConvertable
         }
 
         $e->appendChild($e->ownerDocument->importNode($this->decl->getXML(), true));
+
         return $e;
     }
 }
