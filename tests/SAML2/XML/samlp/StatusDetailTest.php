@@ -20,12 +20,14 @@ class StatusDetailTest extends \PHPUnit\Framework\TestCase
      */
     public function testMarshalling(): void
     {
+        /** @psalm-var \DOMElement $document->firstChild */
         $document = DOMDocumentFactory::fromString(
             '<Cause>org.sourceid.websso.profiles.idp.FailedAuthnSsoException</Cause>'
         );
 
         $statusDetail = StatusDetail::fromXML($document->firstChild);
 
+        /** @psalm-var \DOMElement $statusDetailElement->firstChild */
         $statusDetailElement = $statusDetail->toXML();
 
         $this->assertEquals('Cause', $statusDetailElement->firstChild->tagName);

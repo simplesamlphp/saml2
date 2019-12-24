@@ -30,10 +30,12 @@ class StatusCodeTest extends \PHPUnit\Framework\TestCase
         );
 
         $document = DOMDocumentFactory::fromString('<root />');
+        /** @psalm-var \DOMElement $document->firstChild */
         $statusCodeElement = $statusCode->toXML($document->firstChild);
 
         $this->assertEquals(Constants::STATUS_RESPONDER, $statusCodeElement->getAttribute('Value'));
 
+        /** @psalm-var \DOMElement[] $statusCodeElements */
         $statusCodeElements = Utils::xpQuery($statusCodeElement, './saml_protocol:StatusCode');
         $this->assertEquals(Constants::STATUS_REQUEST_DENIED, $statusCodeElements[0]->getAttribute('Value'));
     }
