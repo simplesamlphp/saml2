@@ -8,9 +8,11 @@ use DOMDocument;
 use SAML2\AuthnRequest;
 use SAML2\Constants;
 use SAML2\DOMDocumentFactory;
+use SAML2\XML\saml\AuthnContextClassRef;
 use SAML2\XML\saml\Issuer;
 use SAML2\XML\saml\NameID;
 use SAML2\XML\samlp\NameIDPolicy;
+use SAML2\XML\samlp\RequestedAuthnContext;
 use SAML2\Utils;
 
 /**
@@ -20,14 +22,15 @@ class AuthnRequestTest extends \PHPUnit\Framework\TestCase
 {
     public function testUnmarshalling(): void
     {
-        $authnRequest = new AuthnRequest();
-        $authnRequest->setRequestedAuthnContext([
-            'AuthnContextClassRef' => [
-                'accr1',
-                'accr2',
+        $rac = new RequestedAuthnContext(
+            [
+                new AuthnContextClassRef('accr1'),
+                new AuthnContextClassRef('accr2')
             ],
-            'Comparison' => 'better',
-        ]);
+            'better'
+        );
+        $authnRequest = new AuthnRequest();
+        $authnRequest->setRequestedAuthnContext($rac);
 
         $authnRequestElement = $authnRequest->toUnsignedXML();
 
