@@ -21,6 +21,7 @@ class AuthnContextDeclRefTest extends \PHPUnit\Framework\TestCase
         $authnContextDeclRef = new AuthnContextDeclRef('/relative/path/to/document.xml');
 
         $document = DOMDocumentFactory::fromString('<root />');
+        /** @psalm-var \DOMElement $document->firstChild */
         $authnContextDeclRefElement = $authnContextDeclRef->toXML($document->firstChild);
 
         $authnContextDeclRefElements = Utils::xpQuery(
