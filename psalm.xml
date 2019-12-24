@@ -7,8 +7,11 @@
 >
   <projectFiles>
     <directory name="src/SAML2" />
+    <file name="tests/SAML2/XML/saml/AuthenticatingAuthorityTest.php" />
     <file name="tests/SAML2/XML/saml/AuthnContextClassRefTest.php" />
     <file name="tests/SAML2/XML/saml/AuthnContextDeclRefTest.php" />
+    <file name="tests/SAML2/XML/saml/AuthnContextDeclTest.php" />
+    <file name="tests/SAML2/XML/saml/AuthnContextTest.php" />
     <file name="tests/SAML2/XML/samlp/RequestedAuthnContextTest.php" />
     <file name="tests/SAML2/XML/samlp/StatusTest.php" />
     <file name="tests/SAML2/XML/samlp/StatusCodeTest.php" />
