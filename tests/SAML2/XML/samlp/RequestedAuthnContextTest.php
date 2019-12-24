@@ -26,6 +26,7 @@ class RequestedAuthnContextTest extends \PHPUnit\Framework\TestCase
         $requestedAuthnContext = new RequestedAuthnContext([$authnContextDeclRef], 'exact');
 
         $document = DOMDocumentFactory::fromString('<root />');
+        /** @psalm-var \DOMElement $document->firstChild */
         $requestedAuthnContextElement = $requestedAuthnContext->toXML($document->firstChild);
 
         $this->assertEquals('exact', $requestedAuthnContextElement->getAttribute('Comparison'));
@@ -61,7 +62,11 @@ XML
         /** @psalm-var \DOMElement $document->firstChild */
         $requestedAuthnContext = RequestedAuthnContext::fromXML($document->firstChild);
         $this->assertEquals('minimum', $requestedAuthnContext->getComparison());
-        $this->assertEquals(Constants::AC_PASSWORD_PROTECTED_TRANSPORT, $requestedAuthnContext->getRequestedAuthnContexts()[0]->getClassRef());
+
+        $contexts = $requestedAuthnContext->getRequestedAuthnContexts();
+        $this->assertCount(1, $contexts);
+        $this->assertInstanceOf(AuthnContextClassRef::class, $contexts[0]);
+        $this->assertEquals(Constants::AC_PASSWORD_PROTECTED_TRANSPORT, $contexts[0]->getClassRef());
     }
 
 

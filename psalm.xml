@@ -7,6 +7,9 @@
 >
   <projectFiles>
     <directory name="src/SAML2" />
+    <file name="tests/SAML2/XML/saml/AuthnContextClassRefTest.php" />
+    <file name="tests/SAML2/XML/saml/AuthnContextDeclRefTest.php" />
+    <file name="tests/SAML2/XML/samlp/RequestedAuthnContextTest.php" />
     <ignoreFiles>
       <directory name="vendor" />
     </ignoreFiles>
