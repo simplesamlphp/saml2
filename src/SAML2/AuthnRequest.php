@@ -11,6 +11,7 @@ use RobRichards\XMLSecLibs\XMLSecurityKey;
 use SAML2\XML\saml\NameID;
 use SAML2\XML\saml\SubjectConfirmation;
 use SAML2\XML\samlp\NameIDPolicy;
+use SAML2\XML\samlp\RequestedAuthnContext;
 use SAML2\Exception\InvalidArgumentException;
 use Webmozart\Assert\Assert;
 
@@ -102,11 +103,7 @@ class AuthnRequest extends Request
     /**
      * What authentication context was requested.
      *
-     * Array with the following elements.
-     * - AuthnContextClassRef (required)
-     * - Comparison (optinal)
-     *
-     * @var array|null
+     * @var \SAML2\XML\samlp\RequestedAuthnContext|null
      */
     private $requestedAuthnContext;
 
@@ -252,24 +249,7 @@ class AuthnRequest extends Request
             return;
         }
 
-        $requestedAuthnContext = $requestedAuthnContext[0];
-
-        $rac = [
-            'AuthnContextClassRef' => [],
-            'Comparison'           => Constants::COMPARISON_EXACT,
-        ];
-
-        /** @var \DOMElement[] $accr */
-        $accr = Utils::xpQuery($requestedAuthnContext, './saml_assertion:AuthnContextClassRef');
-        foreach ($accr as $i) {
-            $rac['AuthnContextClassRef'][] = trim($i->textContent);
-        }
-
-        if ($requestedAuthnContext->hasAttribute('Comparison')) {
-            $rac['Comparison'] = $requestedAuthnContext->getAttribute('Comparison');
-        }
-
-        $this->requestedAuthnContext = $rac;
+        $this->requestedAuthnContext = RequestedAuthnContext::fromXML($requestedAuthnContext[0]);
     }
 
 
@@ -623,9 +603,9 @@ class AuthnRequest extends Request
     /**
      * Retrieve the RequestedAuthnContext.
      *
-     * @return array|null The RequestedAuthnContext.
+     * @return \SAML2\XML\samlp\RequestedAuthnContext|null The RequestedAuthnContext.
      */
-    public function getRequestedAuthnContext(): ?array
+    public function getRequestedAuthnContext(): ?RequestedAuthnContext
     {
         return $this->requestedAuthnContext;
     }
@@ -634,10 +614,10 @@ class AuthnRequest extends Request
     /**
      * Set the RequestedAuthnContext.
      *
-     * @param array|null $requestedAuthnContext The RequestedAuthnContext.
+     * @param \SAML2\XML\samlp\RequestedAuthnContext|null $requestedAuthnContext The RequestedAuthnContext.
      * @return void
      */
-    public function setRequestedAuthnContext(array $requestedAuthnContext = null): void
+    public function setRequestedAuthnContext(RequestedAuthnContext $requestedAuthnContext = null): void
     {
         $this->requestedAuthnContext = $requestedAuthnContext;
     }
@@ -803,16 +783,8 @@ class AuthnRequest extends Request
 
         $this->addConditions($root);
 
-        $rac = $this->requestedAuthnContext;
-        if (!empty($rac) && !empty($rac['AuthnContextClassRef'])) {
-            $e = $this->document->createElementNS(Constants::NS_SAMLP, 'RequestedAuthnContext');
-            $root->appendChild($e);
-            if (isset($rac['Comparison']) && $rac['Comparison'] !== Constants::COMPARISON_EXACT) {
-                $e->setAttribute('Comparison', $rac['Comparison']);
-            }
-            foreach ($rac['AuthnContextClassRef'] as $accr) {
-                Utils::addString($e, Constants::NS_SAML, 'AuthnContextClassRef', $accr);
-            }
+        if (!empty($this->requestedAuthnContext)) {
+            $this->requestedAuthnContext->toXML($root);
         }
 
         if ($this->ProxyCount !== null || count($this->IDPList) > 0 || count($this->RequesterID) > 0) {
