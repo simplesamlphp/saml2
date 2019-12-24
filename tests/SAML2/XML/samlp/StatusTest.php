@@ -43,20 +43,25 @@ XML
         );
 
         $document = DOMDocumentFactory::fromString('<root />');
+        /** @psalm-var \DOMElement $document->firstChild */
         $statusElement = $status->toXML($document->firstChild);
 
+        /** @psalm-var \DOMElement[] $statusCodeElements */
         $statusCodeElements = Utils::xpQuery($statusElement, './saml_protocol:StatusCode');
         $this->assertCount(1, $statusCodeElements);
         $this->assertEquals(Constants::STATUS_RESPONDER, $statusCodeElements[0]->getAttribute('Value'));
 
+        /** @psalm-var \DOMElement[] $statusSubCodeElements */
         $statusSubCodeElements = Utils::xpQuery($statusCodeElements[0], './saml_protocol:StatusCode');
         $this->assertCount(1, $statusSubCodeElements);
         $this->assertEquals(Constants::STATUS_REQUEST_DENIED, $statusSubCodeElements[0]->getAttribute('Value'));
 
+        /** @psalm-var \DOMElement[] $statusMessageElements */
         $statusMessageElements = Utils::xpQuery($statusElement, './saml_protocol:StatusMessage');
         $this->assertCount(1, $statusMessageElements);
         $this->assertEquals('Something went wrong', $statusMessageElements[0]->textContent);
 
+        /** @psalm-var \DOMElement $statusDetailElements[0]->firstChild */
         $statusDetailElements = Utils::xpQuery($statusElement, './saml_protocol:StatusDetail');
         $this->assertCount(1, $statusDetailElements);
         $this->assertEquals('Cause', $statusDetailElements[0]->firstChild->tagName);
@@ -94,16 +99,16 @@ XML
 
         $this->assertEquals(Constants::STATUS_REQUEST_DENIED, $subCodes[0]->getValue());
 
+        /** @psalm-var \SAML2\XML\samlp\StatusMessage $statusMessage */
         $statusMessage = $status->getStatusMessage();
         $this->assertEquals('Something went wrong', $statusMessage->getMessage());
 
         /** @psalm-var \SAML2\XML\samlp\StatusDetail[] $statusDetails */
         $statusDetails = $status->getStatusDetails();
         $this->assertCount(1, $statusDetails);
-        
+
         /** @psalm-var \DOMElement $detailElement->firstChild */
         $detailElement = $statusDetails[0]->getDetail();
-
         $this->assertEquals('Cause', $detailElement->firstChild->tagName);
         $this->assertEquals('org.sourceid.websso.profiles.idp.FailedAuthnSsoException', $detailElement->firstChild->textContent);
     }
