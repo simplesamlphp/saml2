@@ -10,6 +10,7 @@ use SAML2\Constants;
 use SAML2\DOMDocumentFactory;
 use SAML2\XML\saml\Issuer;
 use SAML2\XML\saml\NameID;
+use SAML2\XML\samlp\NameIDPolicy;
 use SAML2\Utils;
 
 /**
@@ -70,7 +71,7 @@ AUTHNREQUEST;
         $expectedIssueInstant = Utils::xsDateTimeToTimestamp('2004-12-05T09:21:59Z');
         $this->assertEquals($expectedIssueInstant, $authnRequest->getIssueInstant());
         $this->assertEquals('https://idp.example.org/SAML2/SSO/Artifact', $authnRequest->getDestination());
-        $this->assertEquals('urn:oasis:names:tc:SAML:2.0:bindings:HTTP-Artifact', $authnRequest->getProtocolBinding());
+        $this->assertEquals(Constants::BINDING_HTTP_ARTIFACT, $authnRequest->getProtocolBinding());
         $this->assertEquals(
             'https://sp.example.com/SAML2/SSO/Artifact',
             $authnRequest->getAssertionConsumerServiceURL()
@@ -138,7 +139,7 @@ AUTHNREQUEST;
 
         $nameId = $authnRequest->getNameId();
         $this->assertEquals("user@example.org", $nameId->getValue());
-        $this->assertEquals("urn:oasis:names:tc:SAML:1.1:nameid-format:unspecified", $nameId->getFormat());
+        $this->assertEquals(Constants::NAMEID_UNSPECIFIED, $nameId->getFormat());
     }
 
 
@@ -541,15 +542,9 @@ AUTHNREQUEST;
 
         $nameIdPolicy = $authnRequest->getNameIdPolicy();
 
-        $this->assertCount(3, $nameIdPolicy);
-
-        $this->assertArrayHasKey('AllowCreate', $nameIdPolicy);
-        $this->assertArrayHasKey('SPNameQualifier', $nameIdPolicy);
-        $this->assertArrayHasKey('Format', $nameIdPolicy);
-
-        $this->assertEquals(true, $nameIdPolicy['AllowCreate']);
-        $this->assertEquals("https://sp.example.com/SAML2", $nameIdPolicy['SPNameQualifier']);
-        $this->assertEquals("urn:oasis:names:tc:SAML:2.0:nameid-format:transient", $nameIdPolicy['Format']);
+        $this->assertEquals(true, $nameIdPolicy->getAllowCreate());
+        $this->assertEquals("https://sp.example.com/SAML2", $nameIdPolicy->getSPNameQualifier());
+        $this->assertEquals(Constants::NAMEID_TRANSIENT, $nameIdPolicy->getFormat());
     }
 
 
@@ -568,11 +563,11 @@ AUTHNREQUEST;
         $request->setDestination('https://tiqr.example.org/idp/profile/saml2/Redirect/SSO');
         $request->setIssueInstant(Utils::xsDateTimeToTimestamp('2004-12-05T09:21:59Z'));
 
-        $nameIdPolicy = [
-            "Format" => "urn:oasis:names:tc:SAML:2.0:nameid-format:transient",
-            "SPNameQualifier" => "https://sp.example.com/SAML2",
-            "AllowCreate" => true
-        ];
+        $nameIdPolicy = new NameIDPolicy(
+            Constants::NAMEID_TRANSIENT,
+            "https://sp.example.com/SAML2",
+            true
+        );
         $request->setNameIDPolicy($nameIdPolicy);
 
         $expectedStructureDocument = <<<AUTHNREQUEST
@@ -615,7 +610,7 @@ AUTHNREQUEST;
         $request->setDestination('https://tiqr.example.org/idp/profile/saml2/Redirect/SSO');
         $request->setIssueInstant(Utils::xsDateTimeToTimestamp('2004-12-05T09:21:59Z'));
 
-        $nameIdPolicy = ["Format" => "urn:oasis:names:tc:SAML:2.0:nameid-format:transient"];
+        $nameIdPolicy = new NameIDPolicy(Constants::NAMEID_TRANSIENT);
         $request->setNameIDPolicy($nameIdPolicy);
 
         $expectedStructureDocument = <<<AUTHNREQUEST
@@ -970,7 +965,7 @@ AUTHNREQUEST;
         $request->setDestination('https://idp.example.org/idp/profile/saml2/Redirect/SSO');
         $request->setIssueInstant(Utils::xsDateTimeToTimestamp('2004-12-05T09:21:59Z'));
 
-        $request->setProtocolBinding("urn:oasis:names:tc:SAML:2.0:bindings:HTTP-POST");
+        $request->setProtocolBinding(Constants::BINDING_HTTP_POST);
         $request->setAssertionConsumerServiceURL("https://sp.example.org/authentication/sp/consume-assertion");
 
         $expectedStructureDocument = <<<AUTHNREQUEST

@@ -10,6 +10,7 @@ use RobRichards\XMLSecLibs\XMLSecEnc;
 use RobRichards\XMLSecLibs\XMLSecurityKey;
 use SAML2\XML\saml\NameID;
 use SAML2\XML\saml\SubjectConfirmation;
+use SAML2\XML\samlp\NameIDPolicy;
 use SAML2\Exception\InvalidArgumentException;
 use Webmozart\Assert\Assert;
 
@@ -23,9 +24,9 @@ class AuthnRequest extends Request
     /**
      * The options for what type of name identifier should be returned.
      *
-     * @var array
+     * @var \SAML2\XML\samlp\NameIDPolicy|null
      */
-    private $nameIdPolicy = [];
+    private $nameIdPolicy = null;
 
     /**
      * Whether the Identity Provider must authenticate the user again.
@@ -234,15 +235,8 @@ class AuthnRequest extends Request
         }
 
         $nameIdPolicy = $nameIdPolicy[0];
-        if ($nameIdPolicy->hasAttribute('Format')) {
-            $this->nameIdPolicy['Format'] = $nameIdPolicy->getAttribute('Format');
-        }
-        if ($nameIdPolicy->hasAttribute('SPNameQualifier')) {
-            $this->nameIdPolicy['SPNameQualifier'] = $nameIdPolicy->getAttribute('SPNameQualifier');
-        }
-        if ($nameIdPolicy->hasAttribute('AllowCreate')) {
-            $this->nameIdPolicy['AllowCreate'] = Utils::parseBoolean($nameIdPolicy, 'AllowCreate', false);
-        }
+
+        $this->nameIdPolicy = NameIDPolicy::fromXML($nameIdPolicy);
     }
 
 
@@ -348,9 +342,9 @@ class AuthnRequest extends Request
      * Retrieve the NameIdPolicy.
      *
      * @see \SAML2\AuthnRequest::setNameIdPolicy()
-     * @return array The NameIdPolicy.
+     * @return \SAML2\XML\samlp\NameIDPolicy|null The NameIdPolicy.
      */
-    public function getNameIdPolicy(): array
+    public function getNameIdPolicy(): ?NameIDPolicy
     {
         return $this->nameIdPolicy;
     }
@@ -359,26 +353,11 @@ class AuthnRequest extends Request
     /**
      * Set the NameIDPolicy.
      *
-     * This function accepts an array with the following options:
-     *  - 'Format' (string)
-     *  - 'SPNameQualifier' (string)
-     *  - 'AllowCreate' (bool)
-     *
-     * @param array $nameIdPolicy The NameIDPolicy.
+     * @param \SAML2\XML\samlp\NameIDPolicy|null $nameIdPolicy The NameIDPolicy.
      * @return void
      */
-    public function setNameIdPolicy(array $nameIdPolicy): void
+    public function setNameIdPolicy(?NameIDPolicy $nameIdPolicy): void
     {
-        if (isset($nameIdPolicy['Format']) && !is_string($nameIdPolicy['Format'])) {
-            throw InvalidArgumentException::invalidType('string', $nameIdPolicy['Format']);
-        }
-        if (isset($nameIdPolicy['SPNameQualifier']) && !is_string($nameIdPolicy['SPNameQualifier'])) {
-            throw InvalidArgumentException::invalidType('string', $nameIdPolicy['SPNameQualifier']);
-        }
-        if (isset($nameIdPolicy['AllowCreate']) && !is_bool($nameIdPolicy['AllowCreate'])) {
-            throw InvalidArgumentException::invalidType('bool', $nameIdPolicy['AllowCreate']);
-        }
-
         $this->nameIdPolicy = $nameIdPolicy;
     }
 
@@ -818,18 +797,8 @@ class AuthnRequest extends Request
 
         $this->addSubject($root);
 
-        if (!empty($this->nameIdPolicy)) {
-            $nameIdPolicy = $this->document->createElementNS(Constants::NS_SAMLP, 'NameIDPolicy');
-            if (array_key_exists('Format', $this->nameIdPolicy)) {
-                $nameIdPolicy->setAttribute('Format', $this->nameIdPolicy['Format']);
-            }
-            if (array_key_exists('SPNameQualifier', $this->nameIdPolicy)) {
-                $nameIdPolicy->setAttribute('SPNameQualifier', $this->nameIdPolicy['SPNameQualifier']);
-            }
-            if (array_key_exists('AllowCreate', $this->nameIdPolicy)) {
-                $nameIdPolicy->setAttribute('AllowCreate', ($this->nameIdPolicy['AllowCreate']) ? 'true' : 'false');
-            }
-            $root->appendChild($nameIdPolicy);
+        if ($this->nameIdPolicy !== null) {
+            $this->nameIdPolicy->toXML($root);
         }
 
         $this->addConditions($root);
