@@ -33,7 +33,7 @@ abstract class AbstractConvertable
      * @param \DOMElement|null $parent
      * @return \DOMElement
      */
-    abstract public static function toXML(DOMElement $parent = null): DOMElement;
+    abstract public function toXML(DOMElement $parent = null): DOMElement;
 
 
     /**
