@@ -1,6 +1,7 @@
 coverage:
   status:
     project: yes
+    patch: off
 comment:
   layout: "diff"
   behavior: once
