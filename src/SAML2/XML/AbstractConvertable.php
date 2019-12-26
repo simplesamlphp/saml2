@@ -42,5 +42,5 @@ abstract class AbstractConvertable
      * @param \DOMElement $xml
      * @return self
      */
-    abstract public static function fromXML(DOMElement $xml): self;
+    abstract public static function fromXML(DOMElement $xml): object;
 }
