@@ -11,7 +11,7 @@ use DOMXPath;
 use RobRichards\XMLSecLibs\XMLSecEnc;
 use RobRichards\XMLSecLibs\XMLSecurityDSig;
 use RobRichards\XMLSecLibs\XMLSecurityKey;
-use SAML2\Compat\AbstractContainer;
+use SAML2\Compat\ContainerInterface;
 use SAML2\Compat\ContainerSingleton;
 use SAML2\Compat\Ssp\Container;
 use SAML2\Exception\RuntimeException;
@@ -735,9 +735,9 @@ class Utils
 
 
     /**
-     * @return \SAML2\Compat\AbstractContainer
+     * @return \SAML2\Compat\ContainerInterface
      */
-    public static function getContainer(): AbstractContainer
+    public static function getContainer(): ContainerInterface
     {
         return ContainerSingleton::getInstance();
     }
