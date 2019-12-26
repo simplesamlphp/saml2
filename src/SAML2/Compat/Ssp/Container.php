@@ -5,13 +5,13 @@ declare(strict_types=1);
 namespace SAML2\Compat\Ssp;
 
 use Psr\Log\LoggerInterface;
-use SAML2\Compat\AbstractContainer;
+use SAML2\Compat\ContainerInterface;
 use SimpleSAML\Utils\HTTP;
 use SimpleSAML\Utils\Random;
 use SimpleSAML\Utils\System;
 use SimpleSAML\Utils\XML;
 
-class Container extends AbstractContainer
+class Container implements ContainerInterface
 {
     /**
      * @var \Psr\Log\LoggerInterface

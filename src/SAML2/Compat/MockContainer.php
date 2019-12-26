@@ -10,7 +10,7 @@ use Psr\Log\NullLogger;
 /**
  * Class \SAML2\Compat\MockContainer
  */
-class MockContainer extends AbstractContainer
+class MockContainer implements ContainerInterface
 {
     /**
      * @var string

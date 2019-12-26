@@ -6,20 +6,20 @@ namespace SAML2\Compat;
 
 use Psr\Log\LoggerInterface;
 
-abstract class AbstractContainer
+interface ContainerInterface
 {
     /**
      * Get a PSR-3 compatible logger.
      * @return \Psr\Log\LoggerInterface
      */
-    abstract public function getLogger(): LoggerInterface;
+    public function getLogger(): LoggerInterface;
 
 
     /**
      * Generate a random identifier for identifying SAML2 documents.
      * @return string
      */
-    abstract public function generateId(): string;
+    public function generateId(): string;
 
 
     /**
@@ -35,7 +35,7 @@ abstract class AbstractContainer
      * @param string $type
      * @return void
      */
-    abstract public function debugMessage($message, string $type): void;
+    public function debugMessage($message, string $type): void;
 
 
 
@@ -46,7 +46,7 @@ abstract class AbstractContainer
      * @param array $data
      * @return void
      */
-    abstract public function redirect(string $url, array $data = []): void;
+    public function redirect(string $url, array $data = []): void;
 
 
     /**
@@ -56,7 +56,7 @@ abstract class AbstractContainer
      * @param array $data
      * @return void
      */
-    abstract public function postRedirect(string $url, array $data = []): void;
+    public function postRedirect(string $url, array $data = []): void;
 
 
     /**
@@ -66,7 +66,7 @@ abstract class AbstractContainer
      * to the current user.
      * @return string Path to a temporary directory, without a trailing directory separator.
      */
-    abstract public function getTempDir(): string;
+    public function getTempDir(): string;
 
 
     /**
@@ -80,5 +80,5 @@ abstract class AbstractContainer
      * @param int $mode The permissions to apply to the file. Defaults to 0600.
      * @return void
      */
-    abstract public function writeFile(string $filename, string $data, int $mode = null): void;
+    public function writeFile(string $filename, string $data, int $mode = null): void;
 }
