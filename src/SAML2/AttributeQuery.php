@@ -30,16 +30,6 @@ class AttributeQuery extends SubjectQuery
      */
     private $attributes = [];
 
-    /**
-     * The NameFormat used on all attributes.
-     *
-     * If more than one NameFormat is used, this will contain
-     * the unspecified nameformat.
-     *
-     * @var string
-     */
-    private $nameFormat = Constants::NAMEFORMAT_UNSPECIFIED;
-
 
     /**
      * Constructor for SAML 2 attribute query messages.
@@ -55,7 +45,6 @@ class AttributeQuery extends SubjectQuery
             return;
         }
 
-        $firstAttribute = true;
         /** @var \DOMElement[] $attributes */
         $attributes = Utils::xpQuery($xml, './saml_assertion:Attribute');
         foreach ($attributes as $attribute) {
@@ -64,16 +53,8 @@ class AttributeQuery extends SubjectQuery
             }
             $name = $attribute->getAttribute('Name');
 
-            $nameFormat = $this->nameFormat;
             if ($attribute->hasAttribute('NameFormat')) {
                 $nameFormat = $attribute->getAttribute('NameFormat');
-            }
-
-            if ($firstAttribute) {
-                $this->nameFormat = $nameFormat;
-                $firstAttribute = false;
-            } elseif ($this->nameFormat !== $nameFormat) {
-                $this->nameFormat = Constants::NAMEFORMAT_UNSPECIFIED;
             }
 
             if (!array_key_exists($name, $this->attributes)) {
@@ -112,32 +93,6 @@ class AttributeQuery extends SubjectQuery
 
 
     /**
-     * Retrieve the NameFormat used on all attributes.
-     *
-     * If more than one NameFormat is used in the received attributes, this
-     * returns the unspecified NameFormat.
-     *
-     * @return string The NameFormat used on all attributes.
-     */
-    public function getAttributeNameFormat(): string
-    {
-        return $this->nameFormat;
-    }
-
-
-    /**
-     * Set the NameFormat used on all attributes.
-     *
-     * @param string $nameFormat The NameFormat used on all attributes.
-     * @return void
-     */
-    public function setAttributeNameFormat(string $nameFormat): void
-    {
-        $this->nameFormat = $nameFormat;
-    }
-
-
-    /**
      * Convert the attribute query message to an XML element.
      *
      * @return \DOMElement This attribute query.
@@ -150,10 +105,6 @@ class AttributeQuery extends SubjectQuery
             $attribute = $root->ownerDocument->createElementNS(Constants::NS_SAML, 'saml:Attribute');
             $root->appendChild($attribute);
             $attribute->setAttribute('Name', $name);
-
-            if ($this->nameFormat !== Constants::NAMEFORMAT_UNSPECIFIED) {
-                $attribute->setAttribute('NameFormat', $this->nameFormat);
-            }
 
             foreach ($values as $value) {
                 if (is_string($value)) {

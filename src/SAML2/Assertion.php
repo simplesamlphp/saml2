@@ -173,15 +173,6 @@ class Assertion extends SignedElement
     private $attributes = [];
 
     /**
-     * The NameFormat used on all attributes.
-     *
-     * If more than one NameFormat is used, this will contain the unspecified nameformat.
-     *
-     * @var string
-     */
-    private $nameFormat = Constants::NAMEFORMAT_UNSPECIFIED;
-
-    /**
      * The data needed to verify the signature.
      *
      * @var array|null
@@ -492,14 +483,10 @@ class Assertion extends SignedElement
      */
     private function parseAttributes(DOMElement $xml): void
     {
-        $firstAttribute = true;
         /** @var \DOMElement[] $attributes */
         $attributes = Utils::xpQuery($xml, './saml_assertion:AttributeStatement/saml_assertion:Attribute');
         foreach ($attributes as $attribute) {
-            $this->parseAttribute($attribute, $firstAttribute);
-            if ($firstAttribute) {
-                $firstAttribute = false;
-            }
+            $this->parseAttribute($attribute);
         }
     }
 
@@ -507,28 +494,13 @@ class Assertion extends SignedElement
      * Parse attribute statements in assertion.
      *
      * @param \DOMElement $xml The XML element with the Attribute.
-     * @param boolean $firstAttribute Whether this is the first attribute to parse.
      * @throws \Exception
      * @return void
      */
-    private function parseAttribute(DOMElement $xml, bool $firstAttribute = false): void
+    private function parseAttribute(DOMElement $xml): void
     {
         $attribute = new Attribute($xml);
         
-        if ($attribute->getNameFormat() !== null) {
-            $nameFormat = $attribute->getNameFormat();
-        } else {
-            $nameFormat = Constants::NAMEFORMAT_UNSPECIFIED;
-        }
-
-        if ($firstAttribute) {
-            $this->nameFormat = $nameFormat;
-        } else {
-            if ($this->nameFormat !== $nameFormat) {
-                $this->nameFormat = Constants::NAMEFORMAT_UNSPECIFIED;
-            }
-        }
-
         $name = $attribute->getName();
         if (!array_key_exists($name, $this->attributes)) {
             $this->attributes[$name] = $attribute;
@@ -800,7 +772,6 @@ class Assertion extends SignedElement
         if (!$this->hasEncryptedAttributes()) {
             return;
         }
-        $firstAttribute = true;
         $attributes = $this->getEncryptedAttributes();
         foreach ($attributes as $attributeEnc) {
             /* Decrypt node <EncryptedAttribute> */
@@ -809,10 +780,7 @@ class Assertion extends SignedElement
                 $key,
                 $blacklist
             );
-            $this->parseAttribute($attribute, $firstAttribute);
-            if ($firstAttribute) {
-                $firstAttribute = false;
-            }
+            $this->parseAttribute($attribute);
         }
     }
 
@@ -1173,16 +1141,16 @@ class Assertion extends SignedElement
                     $nameId = null;
                     if ($value instanceof DOMNodeList) {
                         foreach ($value as $node) {
-                            /** @var \DOMNode $node */
                             if (
                                 $node->nodeType !== XML_TEXT_NODE
                                 && $node->localName === 'NameID'
                                 && $node->namespaceURI === Constants::NS_SAML
                             ) {
+                                /** @var \DOMElement $node */
                                 $nameId = new NameID($node);
                             }
                         }
-                    } else {
+                    } elseif (is_string($value)) {
                         /* Fall back for legacy IdPs sending string value (e.g. SSP < 1.15) */
                         Utils::getContainer()->getLogger()->warning(
                             sprintf("Attribute %s (EPTI) value %d is not an XML NameId", $attributeName, $value)
@@ -1233,32 +1201,6 @@ class Assertion extends SignedElement
     public function setSignatureData(array $signatureData = null): void
     {
         $this->signatureData = $signatureData;
-    }
-
-
-    /**
-     * Retrieve the NameFormat used on all attributes.
-     *
-     * If more than one NameFormat is used in the received attributes, this
-     * returns the unspecified NameFormat.
-     *
-     * @return string The NameFormat used on all attributes.
-     */
-    public function getAttributeNameFormat(): string
-    {
-        return $this->nameFormat;
-    }
-
-
-    /**
-     * Set the NameFormat used on all attributes.
-     *
-     * @param string $nameFormat The NameFormat used on all attributes.
-     * @return void
-     */
-    public function setAttributeNameFormat(string $nameFormat): void
-    {
-        $this->nameFormat = $nameFormat;
     }
 
 
