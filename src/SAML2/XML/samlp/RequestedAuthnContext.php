@@ -60,17 +60,15 @@ class RequestedAuthnContext
     public function setRequestedAuthnContexts(array $requestedAuthnContexts): void
     {
         Assert::minCount($requestedAuthnContexts, 1);
-        $types = array_unique(array_map('gettype', $requestedAuthnContexts));
+        Assert::allIsInstanceOfAny($requestedAuthnContexts, [AuthnContextClassRef::class, AuthnContextDeclRef::class]);
 
         if ($requestedAuthnContexts[0] instanceof AuthnContextClassRef) {
-            Assert::allIsInstanceOf($requestedAuthnContexts, AuthnContextClassRef::class);
+            Assert::allIsInstanceOf($requestedAuthnContexts, AuthnContextClassRef::class, 'You need either AuthnContextClassRef or AuthnContextDeclRef, not both.');
         } elseif ($requestedAuthnContexts[0] instanceof AuthnContextDeclRef) {
-            Assert::allIsInstanceOf($requestedAuthnContexts, AuthnContextDeclRef::class);
+            Assert::allIsInstanceOf($requestedAuthnContexts, AuthnContextDeclRef::class, 'You need either AuthnContextClassRef or AuthnContextDeclRef, not both.');
         } else {
-            throw new \InvalidArgumentException('Invalid object types provided.');
+            throw new \InvalidArgumentException('You need either AuthnContextClassRef or AuthnContextDeclRef.');
         }
-
-        Assert::count($types, 1, 'You need either AuthnContextClassRef or AuthnContextDeclRef, not both');
 
         $this->requestedAuthnContexts = $requestedAuthnContexts;
     }
@@ -116,7 +114,7 @@ class RequestedAuthnContext
         Assert::oneOf(
             [],
             [$authnContextClassRef, $authnContextDeclRef],
-            'You need either AuthnContextClassRef or AuthnContextDeclRef, not both'
+            'You need either AuthnContextClassRef or AuthnContextDeclRef, not both.'
         );
 
         $requestedAuthnContexts = [];
