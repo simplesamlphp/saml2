@@ -46,6 +46,21 @@ class RequestedAuthnContextTest extends \PHPUnit\Framework\TestCase
     /**
      * @return void
      */
+    public function testMarshallingWithMixedContextsFails(): void
+    {
+        $authnContextDeclRef = new AuthnContextDeclRef('/relative/path/to/document.xml');
+        $authnContextClassRef = new AuthnContextClassRef(Constants::AC_PASSWORD_PROTECTED_TRANSPORT);
+
+        $this->expectException(InvalidArgumentException::class);
+        $this->expectExceptionMessage('You need either AuthnContextClassRef or AuthnContextDeclRef, not both.');
+
+        $requestedAuthnContext = new RequestedAuthnContext([$authnContextDeclRef, $authnContextClassRef], 'exact');
+    }
+
+
+    /**
+     * @return void
+     */
     public function testUnmarshalling(): void
     {
         $samlNamespace = Constants::NS_SAML;
@@ -91,7 +106,7 @@ XML
         );
 
         $this->expectException(InvalidArgumentException::class);
-        $this->expectExceptionMessage('You need either AuthnContextClassRef or AuthnContextDeclRef, not both');
+        $this->expectExceptionMessage('You need either AuthnContextClassRef or AuthnContextDeclRef, not both.');
 
         /** @psalm-var \DOMElement $document->firstChild */
         $requestedAuthnContext = RequestedAuthnContext::fromXML($document->firstChild);
