@@ -18,7 +18,7 @@ use Webmozart\Assert\Assert;
  * @author Tim van Dijen, <tvdijen@gmail.com>
  * @package SimpleSAMLphp
  */
-class RequestedAuthnContext
+class RequestedAuthnContext extends \SAML2\XML\AbstractConvertable
 {
     /** @var (\SAML2\XML\saml\AuthnContextClassRef|\SAML2\XML\saml\AuthnContextDeclRef)[] */
     private $requestedAuthnContexts = [];
