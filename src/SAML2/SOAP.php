@@ -86,7 +86,7 @@ SOAP;
         }
 
         // DOMDocument::saveXML() returned false. Something is seriously wrong here. Not much we can do.
-        exit(0);
+        throw new \Exception('Error while generating XML for SAML message.');
     }
 
 
