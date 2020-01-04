@@ -23,7 +23,7 @@ class RequestedAuthnContextTest extends \PHPUnit\Framework\TestCase
     {
         $authnContextDeclRef = new AuthnContextDeclRef('/relative/path/to/document.xml');
 
-        $requestedAuthnContext = new RequestedAuthnContext([$authnContextDeclRef], 'exact');
+        $requestedAuthnContext = new RequestedAuthnContext([], [$authnContextDeclRef], 'exact');
 
         $document = DOMDocumentFactory::fromString('<root />');
         /** @psalm-var \DOMElement $document->firstChild */
@@ -54,7 +54,7 @@ class RequestedAuthnContextTest extends \PHPUnit\Framework\TestCase
         $this->expectException(InvalidArgumentException::class);
         $this->expectExceptionMessage('You need either AuthnContextClassRef or AuthnContextDeclRef, not both.');
 
-        $requestedAuthnContext = new RequestedAuthnContext([$authnContextDeclRef, $authnContextClassRef], 'exact');
+        $requestedAuthnContext = new RequestedAuthnContext([$authnContextClassRef], [$authnContextDeclRef], 'exact');
     }
 
 
@@ -74,7 +74,10 @@ class RequestedAuthnContextTest extends \PHPUnit\Framework\TestCase
 XML
         );
 
-        /** @psalm-var \DOMElement $document->firstChild */
+        /**
+         * @psalm-var \SAML2\XML\samlp\RequestedAuthnContext $requestedAuthnContext
+         * @psalm-var \DOMElement $document->firstChild
+         */
         $requestedAuthnContext = RequestedAuthnContext::fromXML($document->firstChild);
         $this->assertEquals('minimum', $requestedAuthnContext->getComparison());
 
