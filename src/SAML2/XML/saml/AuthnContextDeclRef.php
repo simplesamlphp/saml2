@@ -62,11 +62,15 @@ class AuthnContextDeclRef extends \SAML2\XML\AbstractConvertable
     /**
      * Convert XML into a AuthnContextDeclRef
      *
-     * @param \DOMElement $xml The XML element we should load
-     * @return self
+     * @param \DOMElement|null $xml The XML element we should load
+     * @return self|null
      */
-    public static function fromXML(DOMElement $xml): object
+    public static function fromXML(?DOMElement $xml): ?object
     {
+        if ($xml === null) {
+            return null;
+        }
+
         return new self($xml->textContent);
     }
 
