@@ -24,7 +24,9 @@ class AuthnRequestTest extends \PHPUnit\Framework\TestCase
     {
         $rac = new RequestedAuthnContext(
             [
-                new AuthnContextClassRef('accr1'),
+                new AuthnContextClassRef('accr1')
+            ],
+            [
                 new AuthnContextClassRef('accr2')
             ],
             'better'

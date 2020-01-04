@@ -30,12 +30,16 @@ class RequestedAuthnContext extends \SAML2\XML\AbstractConvertable
     /**
      * Initialize a RequestedAuthnContext.
      *
-     * @param (\SAML2\XML\saml\AuthnContextClassRef|\SAML2\XML\saml\AuthnContextDeclRef)[] $requestedAuthnContexts
+     * @param \SAML2\XML\saml\AuthnContextClassRef[] $requestedAuthnContextClassRefs
+     * @param \SAML2\XML\saml\AuthnContextDeclRef[] $requestedAuthnContextDeclRefs
      * @param string $Comparison
      */
-    public function __construct(array $requestedAuthnContexts, string $Comparison = null)
-    {
-        $this->setRequestedAuthnContexts($requestedAuthnContexts);
+    public function __construct(
+        array $requestedAuthnContextClassRefs = [],
+        array $requestedAuthnContextDeclRefs = [],
+        string $Comparison = null
+    ) {
+        $this->setRequestedAuthnContexts(array_merge($requestedAuthnContextClassRefs, $requestedAuthnContextDeclRefs));
         $this->setComparison($Comparison);
     }
 
@@ -63,9 +67,17 @@ class RequestedAuthnContext extends \SAML2\XML\AbstractConvertable
         Assert::allIsInstanceOfAny($requestedAuthnContexts, [AuthnContextClassRef::class, AuthnContextDeclRef::class]);
 
         if ($requestedAuthnContexts[0] instanceof AuthnContextClassRef) {
-            Assert::allIsInstanceOf($requestedAuthnContexts, AuthnContextClassRef::class, 'You need either AuthnContextClassRef or AuthnContextDeclRef, not both.');
+            Assert::allIsInstanceOf(
+                $requestedAuthnContexts,
+                AuthnContextClassRef::class,
+                'You need either AuthnContextClassRef or AuthnContextDeclRef, not both.'
+            );
         } elseif ($requestedAuthnContexts[0] instanceof AuthnContextDeclRef) {
-            Assert::allIsInstanceOf($requestedAuthnContexts, AuthnContextDeclRef::class, 'You need either AuthnContextClassRef or AuthnContextDeclRef, not both.');
+            Assert::allIsInstanceOf(
+                $requestedAuthnContexts,
+                AuthnContextDeclRef::class,
+                'You need either AuthnContextClassRef or AuthnContextDeclRef, not both.'
+            );
         } else {
             throw new \InvalidArgumentException('You need either AuthnContextClassRef or AuthnContextDeclRef.');
         }
@@ -121,22 +133,19 @@ class RequestedAuthnContext extends \SAML2\XML\AbstractConvertable
             'You need either AuthnContextClassRef or AuthnContextDeclRef, not both.'
         );
 
-        $requestedAuthnContexts = [];
-
-        foreach ($authnContextClassRef as $classRef) {
-            $requestedAuthnContexts[] = AuthnContextClassRef::fromXML($classRef);
-        }
-
-        foreach ($authnContextDeclRef as $declRef) {
-            $requestedAuthnContexts[] = AuthnContextDeclRef::fromXML($declRef);
-        }
+        $requestedAuthnContextClassRefs = array_filter(
+            array_map([AuthnContextClassRef::class, 'fromXML'], $authnContextClassRef)
+        );
+        $requestedAuthnContextDeclRefs = array_filter(
+            array_map([AuthnContextDeclRef::class, 'fromXML'], $authnContextDeclRef)
+        );
 
         $Comparison = null;
         if ($xml->hasAttribute('Comparison')) {
             $Comparison = $xml->getAttribute('Comparison');
         }
 
-        return new self($requestedAuthnContexts, $Comparison);
+        return new self($requestedAuthnContextClassRefs, $requestedAuthnContextDeclRefs, $Comparison);
     }
 
 

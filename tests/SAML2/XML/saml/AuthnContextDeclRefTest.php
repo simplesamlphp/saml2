@@ -48,7 +48,10 @@ class AuthnContextDeclRefTest extends \PHPUnit\Framework\TestCase
 XML
         );
 
-        /** @psalm-var \DOMElement $document->firstChild */
+        /**
+         * @psalm-var \SAML2\XML\saml\AuthnContextDeclRef $authnContextDeclRef
+         * @psalm-var \DOMElement $document->firstChild
+         */
         $authnContextDeclRef = AuthnContextDeclRef::fromXML($document->firstChild);
         $this->assertEquals('/relative/path/to/document.xml', $authnContextDeclRef->getDeclRef());
     }
