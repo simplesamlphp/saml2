@@ -49,7 +49,6 @@ XML
         );
 
         /**
-         * @psalm-var \SAML2\XML\saml\AuthnContextClassRef $authnContextClassRef
          * @psalm-var \DOMElement $document->firstChild
          */
         $authnContextClassRef = AuthnContextClassRef::fromXML($document->firstChild);

@@ -75,7 +75,6 @@ XML
         );
 
         /**
-         * @psalm-var \SAML2\XML\samlp\RequestedAuthnContext $requestedAuthnContext
          * @psalm-var \DOMElement $document->firstChild
          */
         $requestedAuthnContext = RequestedAuthnContext::fromXML($document->firstChild);

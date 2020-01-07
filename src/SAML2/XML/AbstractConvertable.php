@@ -28,19 +28,19 @@ abstract class AbstractConvertable
 
 
     /**
+     * Create a class from XML
+     *
+     * @param \DOMElement $xml
+     * @return self
+     */
+    abstract public static function fromXML(DOMElement $xml): object;
+
+
+    /**
      * Create XML from this class
      *
      * @param \DOMElement|null $parent
      * @return \DOMElement
      */
     abstract public function toXML(DOMElement $parent = null): DOMElement;
-
-
-    /**
-     * Create a class from XML
-     *
-     * @param \DOMElement|null $xml
-     * @return self|null
-     */
-    abstract public static function fromXML(?DOMElement $xml): ?object;
 }

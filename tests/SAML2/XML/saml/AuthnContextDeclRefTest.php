@@ -49,7 +49,6 @@ XML
         );
 
         /**
-         * @psalm-var \SAML2\XML\saml\AuthnContextDeclRef $authnContextDeclRef
          * @psalm-var \DOMElement $document->firstChild
          */
         $authnContextDeclRef = AuthnContextDeclRef::fromXML($document->firstChild);
