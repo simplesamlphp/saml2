@@ -2,4 +2,5 @@
 /cache.properties
 /composer.lock
 /composer.phar
+/.phpunit.result.cache
 /vendor/
