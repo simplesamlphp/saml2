@@ -74,14 +74,18 @@ class AuthnContextTest extends \PHPUnit\Framework\TestCase
      */
     public function testMarshallingWithoutClassRef(): void
     {
+        $samlNamespace = Constants::NS_SAML;
+
         $document = DOMDocumentFactory::fromString(<<<XML
-<samlacpass:AuthenticationContextDeclaration>
-  <samlacpass:Identification nym="verinymity">
-    <samlacpass:Extension>
-       <safeac:NoVerification/>
-    </samlacpass:Extension>
-  </samlacpass:Identification>
-</samlacpass:AuthenticationContextDeclaration>
+<saml:AuthnContextDecl xmlns:saml="{$samlNamespace}">
+  <samlacpass:AuthenticationContextDeclaration>
+    <samlacpass:Identification nym="verinymity">
+      <samlacpass:Extension>
+         <safeac:NoVerification/>
+      </samlacpass:Extension>
+    </samlacpass:Identification>
+  </samlacpass:AuthenticationContextDeclaration>
+</saml:AuthnContextDecl>
 XML
         );
 
@@ -198,6 +202,6 @@ XML
 
         /** @psalm-var \DOMElement $authnContextDecl->childNodes[1] */
         $authnContextDecl = $contextDeclObj->getDecl()->getXML();
-        $this->assertEquals('samlacpass:AuthenticationContextDeclaration', $authnContextDecl->childNodes[1]->tagName);
+        $this->assertEquals('samlacpass:AuthenticationContextDeclaration', $authnContextDecl->tagName);
     }
 }
