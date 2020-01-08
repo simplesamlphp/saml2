@@ -40,8 +40,6 @@ class StatusMessage extends \SAML2\XML\AbstractConvertable
      */
     public function getMessage(): string
     {
-        Assert::stringNotEmpty($this->message);
-
         return $this->message;
     }
 
@@ -52,10 +50,8 @@ class StatusMessage extends \SAML2\XML\AbstractConvertable
      * @param string $message
      * @return void
      */
-    public function setMessage(string $message): void
+    private function setMessage(string $message): void
     {
-        $message = trim($message);
-        Assert::stringNotEmpty($message);
         $this->message = $message;
     }
 
@@ -68,6 +64,9 @@ class StatusMessage extends \SAML2\XML\AbstractConvertable
      */
     public static function fromXML(DOMElement $xml): object
     {
+        Assert::same($xml->tagName, 'samlp:StatusMessage');
+        Assert::same($xml->namespaceURI, Constants::NS_SAMLP);
+
         return new self($xml->textContent);
     }
 
@@ -90,6 +89,7 @@ class StatusMessage extends \SAML2\XML\AbstractConvertable
         }
 
         $e->textContent = $this->message;
+
         return $e;
     }
 }

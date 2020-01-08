@@ -41,8 +41,6 @@ class AuthnContextClassRef extends \SAML2\XML\AbstractConvertable
      */
     public function getClassRef(): string
     {
-        Assert::stringNotEmpty($this->classRef);
-
         return $this->classRef;
     }
 
@@ -53,11 +51,9 @@ class AuthnContextClassRef extends \SAML2\XML\AbstractConvertable
      * @param string $name
      * @return void
      */
-    public function setClassRef(string $classRef): void
+    private function setClassRef(string $classRef): void
     {
-        $classRef = trim($classRef);
-        Assert::stringNotEmpty($classRef);
-        $this->classRef = $classRef;
+        $this->classRef = trim($classRef);
     }
 
 
@@ -69,6 +65,9 @@ class AuthnContextClassRef extends \SAML2\XML\AbstractConvertable
      */
     public static function fromXML(DOMElement $xml): object
     {
+        Assert::same($xml->tagName, 'saml:AuthnContextClassRef');
+        Assert::same($xml->namespaceURI, Constants::NS_SAML);
+
         return new self($xml->textContent);
     }
 
@@ -81,8 +80,6 @@ class AuthnContextClassRef extends \SAML2\XML\AbstractConvertable
      */
     public function toXML(DOMElement $parent = null): DOMElement
     {
-        Assert::stringNotEmpty($this->classRef, 'Cannot convert AuthnContextClassRef to XML without a ClassRef set');
-
         if ($parent === null) {
             $doc = DOMDocumentFactory::create();
             $e = $doc->createElementNS(Constants::NS_SAML, 'saml:AuthnContextClassRef');

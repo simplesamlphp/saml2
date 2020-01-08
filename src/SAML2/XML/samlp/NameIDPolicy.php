@@ -7,6 +7,7 @@ namespace SAML2\XML\samlp;
 use DOMElement;
 use SAML2\Constants;
 use SAML2\DOMDocumentFactory;
+use Webmozart\Assert\Assert;
 
 /**
  * Class for handling SAML2 NameIDPolicy.
@@ -54,7 +55,7 @@ class NameIDPolicy extends \SAML2\XML\AbstractConvertable
      * @param string|null $Format
      * @return void
      */
-    public function setFormat(?string $Format): void
+    private function setFormat(?string $Format): void
     {
         $this->Format = $Format;
     }
@@ -73,7 +74,7 @@ class NameIDPolicy extends \SAML2\XML\AbstractConvertable
      * @param string|null $SPNameQualifier
      * @return void
      */
-    public function setSPNameQualifier(?string $SPNameQualifier): void
+    private function setSPNameQualifier(?string $SPNameQualifier): void
     {
         $this->SPNameQualifier = $SPNameQualifier;
     }
@@ -92,7 +93,7 @@ class NameIDPolicy extends \SAML2\XML\AbstractConvertable
      * @param bool|null $AllowCreate
      * @return void
      */
-    public function setAllowCreate(?bool $AllowCreate): void
+    private function setAllowCreate(?bool $AllowCreate): void
     {
         $this->AllowCreate = $AllowCreate;
     }
@@ -106,6 +107,9 @@ class NameIDPolicy extends \SAML2\XML\AbstractConvertable
      */
     public static function fromXML(DOMElement $xml): object
     {
+        Assert::same($xml->tagName, 'samlp:NameIDPolicy');
+        Assert::same($xml->namespaceURI, Constants::NS_SAMLP);
+
         $Format = $xml->hasAttribute('Format') ? $xml->getAttribute('Format') : null;
         $SPNameQualifier = $xml->hasAttribute('SPNameQualifier') ? $xml->getAttribute('SPNameQualifier') : null;
         $AllowCreate = $xml->hasAttribute('AllowCreate') ? $xml->getAttribute('AllowCreate') : null;

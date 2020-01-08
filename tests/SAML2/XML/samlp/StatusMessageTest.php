@@ -4,6 +4,7 @@ declare(strict_types=1);
 
 namespace SAML2\XML\samlp;
 
+use SAML2\Constants;
 use SAML2\DOMDocumentFactory;
 
 /**
@@ -32,8 +33,10 @@ class StatusMessageTest extends \PHPUnit\Framework\TestCase
      */
     public function testUnmarshalling(): void
     {
+        $samlNamespace = Constants::NS_SAMLP;
+
         $document = DOMDocumentFactory::fromString(<<<XML
-<samlp:StatusMessage>Something went horribly wrong</samlp:StatusMessage>
+<samlp:StatusMessage xmlns:samlp="{$samlNamespace}">Something went horribly wrong</samlp:StatusMessage>
 XML
         );
 

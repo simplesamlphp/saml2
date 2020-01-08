@@ -7,6 +7,7 @@ namespace SAML2\XML\samlp;
 use SAML2\Constants;
 use SAML2\DOMDocumentFactory;
 use SAML2\Utils;
+use SAML2\XML\Chunk;
 
 /**
  * Class \SAML2\XML\samlp\StatusTest
@@ -38,7 +39,7 @@ XML
             ),
             new StatusMessage('Something went wrong'),
             [
-                StatusDetail::fromXML($document->firstChild)
+                new StatusDetail(new Chunk($document->documentElement))
             ]
         );
 
@@ -61,11 +62,11 @@ XML
         $this->assertCount(1, $statusMessageElements);
         $this->assertEquals('Something went wrong', $statusMessageElements[0]->textContent);
 
-        /** @psalm-var \DOMElement $statusDetailElements[0]->firstChild */
+        /** @psalm-var \DOMElement $statusDetailElements[0]->childNodes[0] */
         $statusDetailElements = Utils::xpQuery($statusElement, './saml_protocol:StatusDetail');
         $this->assertCount(1, $statusDetailElements);
-        $this->assertEquals('Cause', $statusDetailElements[0]->firstChild->tagName);
-        $this->assertEquals('org.sourceid.websso.profiles.idp.FailedAuthnSsoException', $statusDetailElements[0]->firstChild->textContent);
+        $this->assertEquals('Cause', $statusDetailElements[0]->childNodes[0]->tagName);
+        $this->assertEquals('org.sourceid.websso.profiles.idp.FailedAuthnSsoException', $statusDetailElements[0]->childNodes[0]->textContent);
     }
 
 
@@ -82,7 +83,9 @@ XML
         <samlp:StatusCode Value="urn:oasis:names:tc:SAML:2.0:status:RequestDenied"/>
     </samlp:StatusCode>
     <samlp:StatusMessage>Something went wrong</samlp:StatusMessage>
-    <samlp:StatusDetail><Cause>org.sourceid.websso.profiles.idp.FailedAuthnSsoException</Cause></samlp:StatusDetail>
+    <samlp:StatusDetail>
+        <Cause>org.sourceid.websso.profiles.idp.FailedAuthnSsoException</Cause>
+    </samlp:StatusDetail>
 </samlp:Status>
 XML
         );
@@ -107,10 +110,12 @@ XML
         $statusDetails = $status->getStatusDetails();
         $this->assertCount(1, $statusDetails);
 
-        /** @psalm-var \DOMElement $detailElement->firstChild */
+        /** @psalm-var \SAML2\XML\Chunk $detailElement */
         $detailElement = $statusDetails[0]->getDetail();
-        $this->assertEquals('Cause', $detailElement->firstChild->tagName);
-        $this->assertEquals('org.sourceid.websso.profiles.idp.FailedAuthnSsoException', $detailElement->firstChild->textContent);
+
+        $detailElement = $detailElement->getXML();
+        $this->assertEquals('Cause', $detailElement->tagName);
+        $this->assertEquals('org.sourceid.websso.profiles.idp.FailedAuthnSsoException', $detailElement->textContent);
     }
 }
 

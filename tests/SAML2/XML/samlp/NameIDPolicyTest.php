@@ -41,8 +41,10 @@ class NameIDTestPolicy extends \PHPUnit\Framework\TestCase
      */
     public function testUnmarshalling(): void
     {
+        $samlNamespace = Constants::NS_SAMLP;
+
         $document = DOMDocumentFactory::fromString(<<<XML
-<samlp:NameIDPolicy AllowCreate="true" SPNameQualifier="TheSPNameQualifier" Format="TheFormat" />
+<samlp:NameIDPolicy xmlns:samlp="{$samlNamespace}" AllowCreate="true" SPNameQualifier="TheSPNameQualifier" Format="TheFormat" />
 XML
         );
 
