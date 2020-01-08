@@ -27,12 +27,11 @@ class NameIDTestPolicy extends \PHPUnit\Framework\TestCase
             true
         );
 
-        $document = DOMDocumentFactory::fromString('<root />');
-        $nameIdPolicyElement = $nameIdPolicy->toXML($document->firstChild);
-
-        $this->assertEquals('TheSPNameQualifier', $nameIdPolicyElement->getAttribute("SPNameQualifier"));
-        $this->assertEquals(Constants::NAMEID_TRANSIENT, $nameIdPolicyElement->getAttribute("Format"));
-        $this->assertEquals('true', $nameIdPolicyElement->getAttribute("AllowCreate"));
+        $this->assertEquals(
+            strval($nameIdPolicy),
+            '<samlp:NameIDPolicy xmlns:samlp="' . Constants::NS_SAMLP . '" Format="' . Constants::NAMEID_TRANSIENT
+                . '" SPNameQualifier="TheSPNameQualifier" AllowCreate="true"/>'
+        );
     }
 
 

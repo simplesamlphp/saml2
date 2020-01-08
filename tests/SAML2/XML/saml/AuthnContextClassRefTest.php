@@ -20,6 +20,12 @@ class AuthnContextClassRefTest extends \PHPUnit\Framework\TestCase
     {
         $authnContextClassRef = new AuthnContextClassRef(Constants::AC_PASSWORD_PROTECTED_TRANSPORT);
 
+        $this->assertEquals(
+            strval($authnContextClassRef),
+            '<saml:AuthnContextClassRef xmlns:saml="' . Constants::NS_SAML . '">'
+                . Constants::AC_PASSWORD_PROTECTED_TRANSPORT . '</saml:AuthnContextClassRef>'
+        );
+
         $document = DOMDocumentFactory::fromString('<root />');
         /** @psalm-var \DOMElement $document->firstChild */
         $authnContextClassRefElement = $authnContextClassRef->toXML($document->firstChild);

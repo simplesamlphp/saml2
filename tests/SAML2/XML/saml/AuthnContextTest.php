@@ -27,45 +27,13 @@ class AuthnContextTest extends \PHPUnit\Framework\TestCase
             ]
         );
 
-        $document = DOMDocumentFactory::fromString('<root />');
-        /** @var \DOMElement $document->firstChild */
-        $authnContextElement = $authnContext->toXML($document->firstChild);
-
-        $authnContextElements = Utils::xpQuery(
-            $authnContextElement,
-            '/root/saml_assertion:AuthnContext'
+        $this->assertEquals(
+            strval($authnContext),
+            '<saml:AuthnContext xmlns:saml="' . Constants::NS_SAML . '"><saml:AuthnContextClassRef>'
+                . Constants::AC_PASSWORD_PROTECTED_TRANSPORT . '</saml:AuthnContextClassRef><saml:AuthnContextDeclRef>'
+                . '/relative/path/to/document.xml</saml:AuthnContextDeclRef><saml:AuthenticatingAuthority>'
+                . 'https://sp.example.com/SAML2</saml:AuthenticatingAuthority></saml:AuthnContext>'
         );
-        $this->assertCount(1, $authnContextElements);
-
-        $authnContextClassRefElements = Utils::xpQuery(
-            $authnContextElements[0],
-            './saml_assertion:AuthnContextClassRef'
-        );
-
-        $this->assertCount(1, $authnContextClassRefElements);
-        $authnContextClassRefElement = $authnContextClassRefElements[0];
-
-        $this->assertEquals(Constants::AC_PASSWORD_PROTECTED_TRANSPORT, $authnContextClassRefElement->textContent);
-
-        $authnContextDeclRefElements = Utils::xpQuery(
-            $authnContextElements[0],
-            './saml_assertion:AuthnContextDeclRef'
-        );
-
-        $this->assertCount(1, $authnContextDeclRefElements);
-        $authnContextDeclRefElement = $authnContextDeclRefElements[0];
-
-        $this->assertEquals('/relative/path/to/document.xml', $authnContextDeclRefElement->textContent);
-
-        $authenticatingAuthorityElements = Utils::xpQuery(
-            $authnContextElements[0],
-            './saml_assertion:AuthenticatingAuthority'
-        );
-
-        $this->assertCount(1, $authenticatingAuthorityElements);
-        $authenticatingAuthorityElement = $authenticatingAuthorityElements[0];
-
-        $this->assertEquals('https://sp.example.com/SAML2', $authenticatingAuthorityElement->textContent);
     }
 
 

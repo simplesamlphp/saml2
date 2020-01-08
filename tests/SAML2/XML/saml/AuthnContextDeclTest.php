@@ -7,6 +7,7 @@ namespace SAML2\XML\saml;
 use SAML2\Constants;
 use SAML2\DOMDocumentFactory;
 use SAML2\Utils;
+use SAML2\XML\Chunk;
 
 /**
  * Class \SAML2\XML\saml\AuthnContextDeclTest
@@ -32,13 +33,14 @@ class AuthnContextDeclTest extends \PHPUnit\Framework\TestCase
 XML
         );
 
-        /** @var \DOMElement $document->firstChild */
-        $authnContextDecl = AuthnContextDecl::fromXML($document->firstChild);
+        $authnContextDecl = new AuthnContextDecl(new Chunk($document->documentElement));
+        /**
+         * @psalm-var \DOMElement $authnContextDeclElement
+         * @psalm-var \DOMElement $authnContextDeclElement->childNodes[1]
+         */
+        $authnContextDeclElement = $authnContextDecl->toXML()->firstChild;
 
-        /** @var \DOMElement $authnContextDeclElement->firstChild */
-        $authnContextDeclElement = $authnContextDecl->getDecl()->getXML();
-
-        $this->assertEquals('samlacpass:AuthenticationContextDeclaration', $authnContextDeclElement->tagName);
+        $this->assertEquals('samlacpass:AuthenticationContextDeclaration', $authnContextDeclElement->childNodes[1]->tagName);
     }
 
 
