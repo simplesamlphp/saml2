@@ -6,6 +6,7 @@ namespace SAML2\XML\samlp;
 
 use SAML2\Constants;
 use SAML2\DOMDocumentFactory;
+use SAML2\XML\Chunk;
 
 /**
  * Class \SAML2\XML\samlp\StatusDetailTest
@@ -25,15 +26,15 @@ class StatusDetailTest extends \PHPUnit\Framework\TestCase
             '<Cause>org.sourceid.websso.profiles.idp.FailedAuthnSsoException</Cause>'
         );
 
-        $statusDetail = StatusDetail::fromXML($document->firstChild);
+        $statusDetail = new StatusDetail(new Chunk($document->documentElement));
 
-        /** @psalm-var \DOMElement $statusDetailElement->firstChild */
+        /** @psalm-var \DOMElement $statusDetailElement->childNodes[0] */
         $statusDetailElement = $statusDetail->toXML();
 
-        $this->assertEquals('Cause', $statusDetailElement->firstChild->tagName);
+        $this->assertEquals('Cause', $statusDetailElement->childNodes[0]->tagName);
         $this->assertEquals(
             'org.sourceid.websso.profiles.idp.FailedAuthnSsoException',
-            $statusDetailElement->firstChild->textContent
+            $statusDetailElement->childNodes[0]->textContent
         );
     }
 
@@ -43,15 +44,22 @@ class StatusDetailTest extends \PHPUnit\Framework\TestCase
      */
     public function testUnmarshalling(): void
     {
-        $document = DOMDocumentFactory::fromString(
-            '<Cause>org.sourceid.websso.profiles.idp.FailedAuthnSsoException</Cause>'
+        $samlNamespace = Constants::NS_SAMLP;
+
+        $document = DOMDocumentFactory::fromString(<<<XML
+            <samlp:StatusDetail xmlns:samlp="{$samlNamespace}">
+                <Cause>org.sourceid.websso.profiles.idp.FailedAuthnSsoException</Cause>
+            </samlp:StatusDetail>
+XML
         );
 
         /** @psalm-var \DOMElement $document->firstChild */
         $statusDetail = StatusDetail::fromXML($document->firstChild);
 
-        /** @psalm-var \DOMElement $statusDetailElement */
+        /** @psalm-var \SAML2\XML\Chunk $statusDetailElement */
         $statusDetailElement = $statusDetail->getDetail();
+
+        $statusDetailElement = $statusDetailElement->getXML();
         $this->assertEquals('Cause', $statusDetailElement->tagName);
         $this->assertEquals('org.sourceid.websso.profiles.idp.FailedAuthnSsoException', $statusDetailElement->textContent);
     }

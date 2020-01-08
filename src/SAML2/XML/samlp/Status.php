@@ -8,6 +8,7 @@ use DOMElement;
 use SAML2\Constants;
 use SAML2\DOMDocumentFactory;
 use SAML2\Utils;
+use SAML2\XML\Chunk;
 use SAML2\XML\samlp\StatusCode;
 use SAML2\XML\samlp\StatusMessage;
 use SAML2\XML\samlp\StatusDetail;
@@ -66,7 +67,7 @@ class Status extends \SAML2\XML\AbstractConvertable
      *
      * @throws \InvalidArgumentException if assertions are false
      */
-    public function setStatusCode(StatusCode $statusCode): void
+    private function setStatusCode(StatusCode $statusCode): void
     {
         $this->statusCode = $statusCode;
     }
@@ -89,7 +90,7 @@ class Status extends \SAML2\XML\AbstractConvertable
      *
      * @return void
      */
-    public function setStatusMessage(?StatusMessage $statusMessage): void
+    private function setStatusMessage(?StatusMessage $statusMessage): void
     {
         $this->statusMessage = $statusMessage;
     }
@@ -112,7 +113,7 @@ class Status extends \SAML2\XML\AbstractConvertable
      * @param \SAML2\XML\samlp\StatusDetail[]|null $statusDetails
      * @return void
      */
-    public function setStatusDetails(?array $statusDetails): void
+    private function setStatusDetails(?array $statusDetails): void
     {
         if (!is_null($statusDetails)) {
             Assert::allIsInstanceOf($statusDetails, StatusDetail::class);
@@ -130,6 +131,9 @@ class Status extends \SAML2\XML\AbstractConvertable
      */
     public static function fromXML(DOMElement $xml): object
     {
+        Assert::same($xml->tagName, 'samlp:Status');
+        Assert::same($xml->namespaceURI, Constants::NS_SAMLP);
+
         /** @var DOMElement[] $statusCode */
         $statusCode = Utils::xpQuery($xml, './saml_protocol:StatusCode');
         Assert::count($statusCode, 1);

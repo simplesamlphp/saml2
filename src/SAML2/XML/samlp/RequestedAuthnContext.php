@@ -61,7 +61,7 @@ class RequestedAuthnContext extends \SAML2\XML\AbstractConvertable
      * @param (\SAML2\XML\saml\AuthnContextClassRef|\SAML2\XML\saml\AuthnContextDeclRef|mixed)[] $requestedAuthnContexts
      * @return void
      */
-    public function setRequestedAuthnContexts(array $requestedAuthnContexts): void
+    private function setRequestedAuthnContexts(array $requestedAuthnContexts): void
     {
         Assert::minCount($requestedAuthnContexts, 1);
         Assert::allIsInstanceOfAny($requestedAuthnContexts, [AuthnContextClassRef::class, AuthnContextDeclRef::class]);
@@ -103,7 +103,7 @@ class RequestedAuthnContext extends \SAML2\XML\AbstractConvertable
      * @param string|null $comparison
      * @return void
      */
-    public function setComparison(?string $comparison): void
+    private function setComparison(?string $comparison): void
     {
         $this->Comparison = $comparison;
     }
@@ -117,17 +117,14 @@ class RequestedAuthnContext extends \SAML2\XML\AbstractConvertable
      */
     public static function fromXML(DOMElement $xml): object
     {
+        Assert::same($xml->tagName, 'samlp:RequestedAuthnContext');
+        Assert::same($xml->namespaceURI, Constants::NS_SAMLP);
+
         /** @var \DOMElement[] $authnContextClassRef */
         $authnContextClassRef = Utils::xpQuery($xml, './saml_assertion:AuthnContextClassRef');
 
         /** @var \DOMElement[] $authnContextDeclRef */
         $authnContextDeclRef = Utils::xpQuery($xml, './saml_assertion:AuthnContextDeclRef');
-
-        Assert::oneOf(
-            [],
-            [$authnContextClassRef, $authnContextDeclRef],
-            'You need either AuthnContextClassRef or AuthnContextDeclRef, not both.'
-        );
 
         $requestedAuthnContextClassRefs = array_filter(
             array_map([AuthnContextClassRef::class, 'fromXML'], $authnContextClassRef)

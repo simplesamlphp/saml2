@@ -56,7 +56,7 @@ class StatusCode extends \SAML2\XML\AbstractConvertable
      * @param string $Value
      * @return void
      */
-    public function setValue(string $Value): void
+    private function setValue(string $Value): void
     {
         Assert::stringNotEmpty($Value);
         $this->Value = $Value;
@@ -80,7 +80,7 @@ class StatusCode extends \SAML2\XML\AbstractConvertable
      * @param StatusCode[]|null $subCodes
      * @return void
      */
-    public function setSubCodes(?array $subCodes): void
+    private function setSubCodes(?array $subCodes): void
     {
         if (!is_null($subCodes)) {
             Assert::allIsInstanceOf($subCodes, StatusCode::class);
@@ -97,6 +97,9 @@ class StatusCode extends \SAML2\XML\AbstractConvertable
      */
     public static function fromXML(DOMElement $xml): object
     {
+        Assert::same($xml->tagName, 'samlp:StatusCode');
+        Assert::same($xml->namespaceURI, Constants::NS_SAMLP);
+
         $Value = $xml->hasAttribute('Value') ? $xml->getAttribute('Value') : null;
 
         Assert::notNull($Value, 'Missing mandatory Value-attribute for StatusCode');

@@ -7,6 +7,7 @@ namespace SAML2\XML\samlp;
 use DOMElement;
 use SAML2\Constants;
 use SAML2\DOMDocumentFactory;
+use SAML2\XML\Chunk;
 use Webmozart\Assert\Assert;
 
 /**
@@ -18,27 +19,27 @@ use Webmozart\Assert\Assert;
 
 class StatusDetail extends \SAML2\XML\AbstractConvertable
 {
-    /** @var \DOMElement|null */
+    /** @var \SAML2\XML\Chunk|null */
     private $detail = null;
 
 
     /**
      * Initialize a samlp:StatusDetail
      *
-     * @param \DOMElement $detail
+     * @param \SAML2\XML\Chunk $detail
      */
-    public function __construct(\DOMElement $detail = null)
+    public function __construct(Chunk $detail = null)
     {
-        $this->detail = $detail;
+        $this->setDetail($detail);
     }
 
 
     /**
      * Collect the detail
      *
-     * @return \DOMElement|null
+     * @return \SAML2\XML\Chunk|null
      */
-    public function getDetail(): ?DOMElement
+    public function getDetail(): ?Chunk
     {
         return $this->detail;
     }
@@ -47,10 +48,10 @@ class StatusDetail extends \SAML2\XML\AbstractConvertable
     /**
      * Set the value of the detail-property
      *
-     * @param \DOMElement|null $detail
+     * @param \SAML2\XML\Chunk|null $detail
      * @return void
      */
-    public function setDetail(?\DOMElement $detail): void
+    private function setDetail(?Chunk $detail): void
     {
         $this->detail = $detail;
     }
@@ -64,7 +65,11 @@ class StatusDetail extends \SAML2\XML\AbstractConvertable
      */
     public static function fromXML(DOMElement $xml): object
     {
-        return new self($xml);
+        Assert::same($xml->tagName, 'samlp:StatusDetail');
+        Assert::same($xml->namespaceURI, Constants::NS_SAMLP);
+
+        /** @psalm-var \DOMElement $xml->childNodes[1] */
+        return new self(new Chunk($xml->childNodes[1]));
     }
 
 
@@ -86,7 +91,7 @@ class StatusDetail extends \SAML2\XML\AbstractConvertable
         }
 
         if (!empty($this->detail)) {
-            $e->appendChild($e->ownerDocument->importNode($this->detail, true));
+            $e->appendChild($e->ownerDocument->importNode($this->detail->getXML(), true));
         }
 
         return $e;

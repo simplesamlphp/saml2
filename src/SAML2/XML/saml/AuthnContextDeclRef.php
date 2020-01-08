@@ -51,11 +51,9 @@ class AuthnContextDeclRef extends \SAML2\XML\AbstractConvertable
      * @param string $name
      * @return void
      */
-    public function setDeclRef(string $declRef): void
+    private function setDeclRef(string $declRef): void
     {
-        $declRef = trim($declRef);
-        Assert::stringNotEmpty($declRef);
-        $this->declRef = $declRef;
+        $this->declRef = trim($declRef);
     }
 
 
@@ -67,6 +65,9 @@ class AuthnContextDeclRef extends \SAML2\XML\AbstractConvertable
      */
     public static function fromXML(DOMElement $xml): object
     {
+        Assert::same($xml->tagName, 'saml:AuthnContextDeclRef');
+        Assert::same($xml->namespaceURI, Constants::NS_SAML);
+
         return new self($xml->textContent);
     }
 
@@ -79,8 +80,6 @@ class AuthnContextDeclRef extends \SAML2\XML\AbstractConvertable
      */
     public function toXML(DOMElement $parent = null): DOMElement
     {
-        Assert::stringNotEmpty($this->declRef, 'Cannot convert AuthnContextDeclRef to XML without a DeclRef set');
-
         if ($parent === null) {
             $doc = DOMDocumentFactory::create();
             $e = $doc->createElementNS(Constants::NS_SAML, 'saml:AuthnContextDeclRef');
