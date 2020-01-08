@@ -19,12 +19,11 @@ class AuthenticatingAuthorityTest extends \PHPUnit\Framework\TestCase
     public function testMarshalling(): void
     {
         $authority = new AuthenticatingAuthority('https://sp.example.com/SAML2');
-        $samlNamespace = Constants::NS_SAML;
 
         $this->assertEquals(
-            '<saml:AuthenticatingAuthority xmlns:saml="' . $samlNamespace
-                . '">https://sp.example.com/SAML2</saml:AuthenticatingAuthority>',
-            strval($authority)
+            strval($authority),
+            '<saml:AuthenticatingAuthority xmlns:saml="' . Constants::NS_SAML
+                . '">https://sp.example.com/SAML2</saml:AuthenticatingAuthority>'
         );
     }
 

@@ -28,13 +28,10 @@ class StatusDetailTest extends \PHPUnit\Framework\TestCase
 
         $statusDetail = new StatusDetail(new Chunk($document->documentElement));
 
-        /** @psalm-var \DOMElement $statusDetailElement->childNodes[0] */
-        $statusDetailElement = $statusDetail->toXML();
-
-        $this->assertEquals('Cause', $statusDetailElement->childNodes[0]->tagName);
         $this->assertEquals(
-            'org.sourceid.websso.profiles.idp.FailedAuthnSsoException',
-            $statusDetailElement->childNodes[0]->textContent
+            strval($statusDetail),
+            '<samlp:StatusDetail xmlns:samlp="' . Constants::NS_SAMLP
+                . '"><Cause>org.sourceid.websso.profiles.idp.FailedAuthnSsoException</Cause></samlp:StatusDetail>'
         );
     }
 

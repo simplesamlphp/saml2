@@ -22,12 +22,14 @@ class StatusMessageTest extends \PHPUnit\Framework\TestCase
     {
         $statusMessage = new StatusMessage('Something went horribly wrong');
 
-        $document = DOMDocumentFactory::fromString('<root />');
-        /** @psalm-var \DOMElement $document->firstChild */
-        $statusMessageElement = $statusMessage->toXML($document->firstChild);
-
-        $this->assertEquals('Something went horribly wrong', $statusMessageElement->textContent);
+        $this->assertEquals(
+            strval($statusMessage),
+            '<samlp:StatusMessage xmlns:samlp="' . Constants::NS_SAMLP
+                . '">Something went horribly wrong</samlp:StatusMessage>'
+        );
     }
+
+
     /**
      * @return void
      */

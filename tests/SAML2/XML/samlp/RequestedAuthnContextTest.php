@@ -25,21 +25,13 @@ class RequestedAuthnContextTest extends \PHPUnit\Framework\TestCase
 
         $requestedAuthnContext = new RequestedAuthnContext([], [$authnContextDeclRef], 'exact');
 
-        $document = DOMDocumentFactory::fromString('<root />');
-        /** @psalm-var \DOMElement $document->firstChild */
-        $requestedAuthnContextElement = $requestedAuthnContext->toXML($document->firstChild);
+        $this->assertEquals(
+            strval($requestedAuthnContext),
+            '<samlp:RequestedAuthnContext xmlns:samlp="' . Constants::NS_SAMLP . '" Comparison="exact">'
+                . '<saml:AuthnContextDeclRef xmlns:saml="' . Constants::NS_SAML . '">/relative/path/to/document.xml'
+                . '</saml:AuthnContextDeclRef></samlp:RequestedAuthnContext>'
 
-        $this->assertEquals('exact', $requestedAuthnContextElement->getAttribute('Comparison'));
-
-        $authnContextDeclRefElements = Utils::xpQuery(
-            $requestedAuthnContextElement,
-            './saml_assertion:AuthnContextDeclRef'
         );
-
-        $this->assertCount(1, $authnContextDeclRefElements);
-        $authnContextDeclRefElement = $authnContextDeclRefElements[0];
-
-        $this->assertEquals('/relative/path/to/document.xml', $authnContextDeclRefElement->textContent);
     }
 
 
