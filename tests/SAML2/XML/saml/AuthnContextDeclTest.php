@@ -18,7 +18,9 @@ class AuthnContextDeclTest extends \PHPUnit\Framework\TestCase
      */
     public function testMarshalling(): void
     {
+        $samlNamespace = Constants::NS_SAML;
         $document = DOMDocumentFactory::fromString(<<<XML
+            <saml:AuthnContextDecl xmlns:saml="{$samlNamespace}">
                 <samlacpass:AuthenticationContextDeclaration>
                     <samlacpass:Identification nym="verinymity">
                         <samlacpass:Extension>
@@ -26,6 +28,7 @@ class AuthnContextDeclTest extends \PHPUnit\Framework\TestCase
                         </samlacpass:Extension>
                     </samlacpass:Identification>
                 </samlacpass:AuthenticationContextDeclaration>
+            </saml:AuthnContextDecl>
 XML
         );
 
@@ -33,9 +36,9 @@ XML
         $authnContextDecl = AuthnContextDecl::fromXML($document->firstChild);
 
         /** @var \DOMElement $authnContextDeclElement->firstChild */
-        $authnContextDeclElement = $authnContextDecl->toXML();
+        $authnContextDeclElement = $authnContextDecl->getDecl()->getXML();
 
-        $this->assertEquals('samlacpass:AuthenticationContextDeclaration', $authnContextDeclElement->firstChild->tagName);
+        $this->assertEquals('samlacpass:AuthenticationContextDeclaration', $authnContextDeclElement->tagName);
     }
 
 
@@ -46,13 +49,15 @@ XML
     {
         $samlNamespace = Constants::NS_SAML;
         $document = DOMDocumentFactory::fromString(<<<XML
-            <samlacpass:AuthenticationContextDeclaration>
-                <samlacpass:Identification nym="verinymity">
-                    <samlacpass:Extension>
-                        <safeac:NoVerification/>
-                    </samlacpass:Extension>
-                </samlacpass:Identification>
-            </samlacpass:AuthenticationContextDeclaration>
+            <saml:AuthnContextDecl xmlns:saml="{$samlNamespace}">
+                <samlacpass:AuthenticationContextDeclaration>
+                    <samlacpass:Identification nym="verinymity">
+                        <samlacpass:Extension>
+                            <safeac:NoVerification/>
+                        </samlacpass:Extension>
+                    </samlacpass:Identification>
+                </samlacpass:AuthenticationContextDeclaration>
+            </saml:AuthnContextDecl>
 XML
         );
 
