@@ -21,9 +21,9 @@ class AuthnContextClassRefTest extends \PHPUnit\Framework\TestCase
         $authnContextClassRef = new AuthnContextClassRef(Constants::AC_PASSWORD_PROTECTED_TRANSPORT);
 
         $this->assertEquals(
-            strval($authnContextClassRef),
             '<saml:AuthnContextClassRef xmlns:saml="' . Constants::NS_SAML . '">'
-                . Constants::AC_PASSWORD_PROTECTED_TRANSPORT . '</saml:AuthnContextClassRef>'
+                . Constants::AC_PASSWORD_PROTECTED_TRANSPORT . '</saml:AuthnContextClassRef>',
+            strval($authnContextClassRef)
         );
 
         $document = DOMDocumentFactory::fromString('<root />');

@@ -28,11 +28,11 @@ class AuthnContextTest extends \PHPUnit\Framework\TestCase
         );
 
         $this->assertEquals(
-            strval($authnContext),
             '<saml:AuthnContext xmlns:saml="' . Constants::NS_SAML . '"><saml:AuthnContextClassRef>'
                 . Constants::AC_PASSWORD_PROTECTED_TRANSPORT . '</saml:AuthnContextClassRef><saml:AuthnContextDeclRef>'
                 . '/relative/path/to/document.xml</saml:AuthnContextDeclRef><saml:AuthenticatingAuthority>'
-                . 'https://sp.example.com/SAML2</saml:AuthenticatingAuthority></saml:AuthnContext>'
+                . 'https://sp.example.com/SAML2</saml:AuthenticatingAuthority></saml:AuthnContext>',
+            strval($authnContext)
         );
     }
 

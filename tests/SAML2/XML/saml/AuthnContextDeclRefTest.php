@@ -21,9 +21,9 @@ class AuthnContextDeclRefTest extends \PHPUnit\Framework\TestCase
         $authnContextDeclRef = new AuthnContextDeclRef('/relative/path/to/document.xml');
 
         $this->assertEquals(
-            strval($authnContextDeclRef),
             '<saml:AuthnContextDeclRef xmlns:saml="' . Constants::NS_SAML . '">/relative/path/to/document.xml'
-                . '</saml:AuthnContextDeclRef>'
+                . '</saml:AuthnContextDeclRef>',
+            strval($authnContextDeclRef)
         );
         $document = DOMDocumentFactory::fromString('<root />');
         /** @psalm-var \DOMElement $document->firstChild */
