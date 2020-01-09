@@ -8,6 +8,7 @@ use DOMElement;
 use DOMNodeList;
 use SAML2\Constants;
 use SAML2\DOMDocumentFactory;
+use SAML2\XML\Chunk;
 use Webmozart\Assert\Assert;
 
 /**
@@ -19,41 +20,42 @@ use Webmozart\Assert\Assert;
 
 class StatusDetail extends \SAML2\XML\AbstractConvertable
 {
-    /** @var \DOMNodeList|null */
-    private $detail = null;
+    /** @var \SAML2\XML\Chunk[]|null */
+    private $details = null;
 
 
     /**
      * Initialize a samlp:StatusDetail
      *
-     * @param \DOMNodeList $detail
+     * @param \SAML2\XML\Chunk[] $details
      */
-    public function __construct(DOMNodeList $detail = null)
+    public function __construct(array $details = null)
     {
-        $this->setDetail($detail);
+        $this->setDetails($details);
     }
 
 
     /**
-     * Collect the detail
+     * Collect the details
      *
-     * @return \DOMNodeList|null
+     * @return \SAML2\XML\Chunk[]|null
      */
-    public function getDetail(): ?DOMNodeList
+    public function getDetails(): ?array
     {
-        return $this->detail;
+        return $this->details;
     }
 
 
     /**
-     * Set the value of the detail-property
+     * Set the value of the details-property
      *
-     * @param \DOMNodeList|null $detail
+     * @param \SAML2\XML\Chunk[]|null $details
      * @return void
      */
-    private function setDetail(?DOMNodeList $detail): void
+    private function setDetails(?array $details): void
     {
-        $this->detail = $detail;
+        Assert::allIsInstanceOf($details, Chunk::class);
+        $this->details = $details;
     }
 
 
@@ -67,8 +69,15 @@ class StatusDetail extends \SAML2\XML\AbstractConvertable
     {
         Assert::same($xml->localName, 'StatusDetail');
         Assert::same($xml->namespaceURI, Constants::NS_SAMLP);
+        Assert::allIsInstanceOf($xml->childNodes, DOMElement::class);
 
-        return new self($xml->childNodes);
+        $details = [];
+        foreach ($xml->childNodes as $detail) {
+            /** @psalm-var \DOMElement $detail */
+            $details[] = new Chunk($detail);
+        }
+
+        return new self($details);
     }
 
 
@@ -89,9 +98,9 @@ class StatusDetail extends \SAML2\XML\AbstractConvertable
             $parent->appendChild($e);
         }
 
-        if (!empty($this->detail)) {
-            foreach ($this->detail as $node) {
-                $e->appendChild($e->ownerDocument->importNode($node, true));
+        if (!empty($this->details)) {
+            foreach ($this->details as $detail) {
+                $e->appendChild($e->ownerDocument->importNode($detail->getXML(), true));
             }
         }
 

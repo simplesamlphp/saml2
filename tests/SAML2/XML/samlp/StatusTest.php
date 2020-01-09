@@ -7,6 +7,7 @@ namespace SAML2\XML\samlp;
 use SAML2\Constants;
 use SAML2\DOMDocumentFactory;
 use SAML2\Utils;
+use SAML2\XML\Chunk;
 
 /**
  * Class \SAML2\XML\samlp\StatusTest
@@ -23,9 +24,7 @@ class StatusTest extends \PHPUnit\Framework\TestCase
     {
         /** @psalm-var \DOMElement $document->firstChild */
         $document = DOMDocumentFactory::fromString(
-            '<samlp:StatusDetail xmlns:samlp="' . Constants::NS_SAMLP . '">'
-                . '<Cause>org.sourceid.websso.profiles.idp.FailedAuthnSsoException</Cause>'
-                . '</samlp:StatusDetail>'
+            '<Cause>org.sourceid.websso.profiles.idp.FailedAuthnSsoException</Cause>'
         );
 
         $status = new Status(
@@ -39,7 +38,7 @@ class StatusTest extends \PHPUnit\Framework\TestCase
             ),
             new StatusMessage('Something went wrong'),
             [
-                new StatusDetail($document->documentElement->childNodes)
+                new StatusDetail([new Chunk($document->documentElement)])
             ]
         );
 
@@ -84,19 +83,13 @@ class StatusTest extends \PHPUnit\Framework\TestCase
      */
     public function testUnmarshalling(): void
     {
-        $samlpNamespace = Constants::NS_SAMLP;
-
-        $document = DOMDocumentFactory::fromString(<<<XML
-<samlp:Status xmlns:samlp="{$samlpNamespace}">
-    <samlp:StatusCode Value="urn:oasis:names:tc:SAML:2.0:status:Responder">
-        <samlp:StatusCode Value="urn:oasis:names:tc:SAML:2.0:status:RequestDenied"/>
-    </samlp:StatusCode>
-    <samlp:StatusMessage>Something went wrong</samlp:StatusMessage>
-    <samlp:StatusDetail>
-        <Cause>org.sourceid.websso.profiles.idp.FailedAuthnSsoException</Cause>
-    </samlp:StatusDetail>
-</samlp:Status>
-XML
+        $document = DOMDocumentFactory::fromString(
+            '<samlp:Status xmlns:samlp="' . Constants::NS_SAMLP . '">'
+                . '<samlp:StatusCode Value="urn:oasis:names:tc:SAML:2.0:status:Responder">'
+                . '<samlp:StatusCode Value="urn:oasis:names:tc:SAML:2.0:status:RequestDenied"/>'
+                . '</samlp:StatusCode><samlp:StatusMessage>Something went wrong</samlp:StatusMessage>'
+                . '<samlp:StatusDetail><Cause>org.sourceid.websso.profiles.idp.FailedAuthnSsoException</Cause>'
+                . '</samlp:StatusDetail></samlp:Status>'
         );
 
         /** @psalm-var \DOMElement $document->firstChild */
