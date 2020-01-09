@@ -33,12 +33,12 @@ class AuthnContextDeclTest extends \PHPUnit\Framework\TestCase
 XML
         );
 
-        $authnContextDecl = new AuthnContextDecl(new Chunk($document->documentElement));
+        $authnContextDecl = new AuthnContextDecl($document->documentElement->childNodes);
         /**
          * @psalm-var \DOMElement $authnContextDeclElement
          * @psalm-var \DOMElement $authnContextDeclElement->childNodes[1]
          */
-        $authnContextDeclElement = $authnContextDecl->toXML()->firstChild;
+        $authnContextDeclElement = $authnContextDecl->toXML();
 
         $this->assertEquals('samlacpass:AuthenticationContextDeclaration', $authnContextDeclElement->childNodes[1]->tagName);
     }
@@ -63,8 +63,11 @@ XML
 XML
         );
 
-        /** @var \DOMElement $document->firstChild */
-        $authnContextDecl = AuthnContextDecl::fromXML($document->firstChild);
-        $this->assertEquals('samlacpass:AuthenticationContextDeclaration', $authnContextDecl->getDecl()->getLocalName());
+        /**
+         * @psalm-var \DOMElement $document->firstChild
+         * @psalm-var \DOMNode $authnContextDecl[1]
+         */
+        $authnContextDecl = AuthnContextDecl::fromXML($document->firstChild)->getDecl();
+        $this->assertEquals('samlacpass:AuthenticationContextDeclaration', $authnContextDecl[1]->localName);
     }
 }

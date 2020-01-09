@@ -84,10 +84,9 @@ XML
         );
 
         $this->assertCount(1, $authnContextDeclElements);
-        /** @psalm-var \DOMElement $authnContextDeclElement->firstChild */
+        /** @psalm-var \DOMElement $authnContextDeclElement->childNodes[1] */
         $authnContextDeclElement = $authnContextDeclElements[0];
-
-        $this->assertEquals('samlacpass:AuthenticationContextDeclaration', $authnContextDeclElement->firstChild->tagName);
+        $this->assertEquals('samlacpass:AuthenticationContextDeclaration', $authnContextDeclElement->childNodes[1]->tagName);
 
         $authenticatingAuthorityElements = Utils::xpQuery(
             $authnContextElements[0],
@@ -168,8 +167,8 @@ XML
         $contextDeclObj = $authnContext->getAuthnContextDecl();
         $this->assertInstanceOf(AuthnContextDecl::class, $contextDeclObj);
 
-        /** @psalm-var \DOMElement $authnContextDecl->childNodes[1] */
-        $authnContextDecl = $contextDeclObj->getDecl()->getXML();
-        $this->assertEquals('samlacpass:AuthenticationContextDeclaration', $authnContextDecl->tagName);
+        /** @psalm-var \DOMElement $authnContextDecl[1] */
+        $authnContextDecl = $contextDeclObj->getDecl();
+        $this->assertEquals('samlacpass:AuthenticationContextDeclaration', $authnContextDecl[1]->tagName);
     }
 }
