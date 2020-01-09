@@ -23,10 +23,12 @@ class StatusDetailTest extends \PHPUnit\Framework\TestCase
     {
         /** @psalm-var \DOMElement $document->firstChild */
         $document = DOMDocumentFactory::fromString(
-            '<Cause>org.sourceid.websso.profiles.idp.FailedAuthnSsoException</Cause>'
+            '<samlp:StatusDetail xmlns:samlp="' . Constants::NS_SAMLP . '">'
+                . '<Cause>org.sourceid.websso.profiles.idp.FailedAuthnSsoException</Cause>'
+                . '</samlp:StatusDetail>'
         );
 
-        $statusDetail = new StatusDetail(new Chunk($document->documentElement));
+        $statusDetail = new StatusDetail($document->documentElement->childNodes);
 
         $this->assertEquals(
             '<samlp:StatusDetail xmlns:samlp="' . Constants::NS_SAMLP
@@ -53,10 +55,12 @@ XML
         /** @psalm-var \DOMElement $document->firstChild */
         $statusDetail = StatusDetail::fromXML($document->firstChild);
 
-        /** @psalm-var \SAML2\XML\Chunk $statusDetailElement */
+        /** @psalm-var \DOMNodeList $statusDetailElement */
         $statusDetailElement = $statusDetail->getDetail();
 
-        $statusDetailElement = $statusDetailElement->getXML();
+        /** @psalm-var \DOMElement $statusDetailElement */
+        $statusDetailElement = $statusDetailElement[1];
+
         $this->assertEquals('Cause', $statusDetailElement->tagName);
         $this->assertEquals('org.sourceid.websso.profiles.idp.FailedAuthnSsoException', $statusDetailElement->textContent);
     }

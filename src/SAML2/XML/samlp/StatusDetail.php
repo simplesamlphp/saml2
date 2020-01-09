@@ -5,6 +5,7 @@ declare(strict_types=1);
 namespace SAML2\XML\samlp;
 
 use DOMElement;
+use DOMNodeList;
 use SAML2\Constants;
 use SAML2\DOMDocumentFactory;
 use SAML2\XML\Chunk;
@@ -19,16 +20,16 @@ use Webmozart\Assert\Assert;
 
 class StatusDetail extends \SAML2\XML\AbstractConvertable
 {
-    /** @var \SAML2\XML\Chunk|null */
+    /** @var \DOMNodeList|null */
     private $detail = null;
 
 
     /**
      * Initialize a samlp:StatusDetail
      *
-     * @param \SAML2\XML\Chunk $detail
+     * @param \DOMNodeList $detail
      */
-    public function __construct(Chunk $detail = null)
+    public function __construct(DOMNodeList $detail = null)
     {
         $this->setDetail($detail);
     }
@@ -37,9 +38,9 @@ class StatusDetail extends \SAML2\XML\AbstractConvertable
     /**
      * Collect the detail
      *
-     * @return \SAML2\XML\Chunk|null
+     * @return \DOMNodeList|null
      */
-    public function getDetail(): ?Chunk
+    public function getDetail(): ?DOMNodeList
     {
         return $this->detail;
     }
@@ -48,10 +49,10 @@ class StatusDetail extends \SAML2\XML\AbstractConvertable
     /**
      * Set the value of the detail-property
      *
-     * @param \SAML2\XML\Chunk|null $detail
+     * @param \DOMNodeList|null $detail
      * @return void
      */
-    private function setDetail(?Chunk $detail): void
+    private function setDetail(?DOMNodeList $detail): void
     {
         $this->detail = $detail;
     }
@@ -68,8 +69,7 @@ class StatusDetail extends \SAML2\XML\AbstractConvertable
         Assert::same($xml->localName, 'StatusDetail');
         Assert::same($xml->namespaceURI, Constants::NS_SAMLP);
 
-        /** @psalm-var \DOMElement $xml->childNodes[1] */
-        return new self(new Chunk($xml->childNodes[1]));
+        return new self($xml->childNodes);
     }
 
 
@@ -91,7 +91,9 @@ class StatusDetail extends \SAML2\XML\AbstractConvertable
         }
 
         if (!empty($this->detail)) {
-            $e->appendChild($e->ownerDocument->importNode($this->detail->getXML(), true));
+            foreach ($this->detail as $node) {
+                $e->appendChild($e->ownerDocument->importNode($node, true));
+            }
         }
 
         return $e;
