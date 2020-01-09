@@ -44,12 +44,12 @@ XML
         );
 
         $this->assertEquals(
-            strval($status),
             '<samlp:Status xmlns:samlp="' . Constants::NS_SAMLP . '"><samlp:StatusCode Value="'
                 . Constants::STATUS_RESPONDER . '"><samlp:StatusCode Value="' . Constants::STATUS_REQUEST_DENIED
                 . '"/></samlp:StatusCode><samlp:StatusMessage>Something went wrong</samlp:StatusMessage>'
                 . '<samlp:StatusDetail><Cause>org.sourceid.websso.profiles.idp.FailedAuthnSsoException</Cause>'
-                . '</samlp:StatusDetail></samlp:Status>'
+                . '</samlp:StatusDetail></samlp:Status>',
+            strval($status)
         );
 
         $document = DOMDocumentFactory::fromString('<root />');

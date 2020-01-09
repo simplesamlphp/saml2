@@ -28,9 +28,9 @@ class NameIDTestPolicy extends \PHPUnit\Framework\TestCase
         );
 
         $this->assertEquals(
-            strval($nameIdPolicy),
             '<samlp:NameIDPolicy xmlns:samlp="' . Constants::NS_SAMLP . '" Format="' . Constants::NAMEID_TRANSIENT
-                . '" SPNameQualifier="TheSPNameQualifier" AllowCreate="true"/>'
+                . '" SPNameQualifier="TheSPNameQualifier" AllowCreate="true"/>',
+            strval($nameIdPolicy)
         );
     }
 

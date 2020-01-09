@@ -21,9 +21,9 @@ class AuthenticatingAuthorityTest extends \PHPUnit\Framework\TestCase
         $authority = new AuthenticatingAuthority('https://sp.example.com/SAML2');
 
         $this->assertEquals(
-            strval($authority),
             '<saml:AuthenticatingAuthority xmlns:saml="' . Constants::NS_SAML
-                . '">https://sp.example.com/SAML2</saml:AuthenticatingAuthority>'
+                . '">https://sp.example.com/SAML2</saml:AuthenticatingAuthority>',
+            strval($authority)
         );
     }
 

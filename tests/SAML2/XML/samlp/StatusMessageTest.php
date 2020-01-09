@@ -23,9 +23,9 @@ class StatusMessageTest extends \PHPUnit\Framework\TestCase
         $statusMessage = new StatusMessage('Something went horribly wrong');
 
         $this->assertEquals(
-            strval($statusMessage),
             '<samlp:StatusMessage xmlns:samlp="' . Constants::NS_SAMLP
-                . '">Something went horribly wrong</samlp:StatusMessage>'
+                . '">Something went horribly wrong</samlp:StatusMessage>',
+            strval($statusMessage)
         );
     }
 

@@ -29,9 +29,9 @@ class StatusDetailTest extends \PHPUnit\Framework\TestCase
         $statusDetail = new StatusDetail(new Chunk($document->documentElement));
 
         $this->assertEquals(
-            strval($statusDetail),
             '<samlp:StatusDetail xmlns:samlp="' . Constants::NS_SAMLP
-                . '"><Cause>org.sourceid.websso.profiles.idp.FailedAuthnSsoException</Cause></samlp:StatusDetail>'
+                . '"><Cause>org.sourceid.websso.profiles.idp.FailedAuthnSsoException</Cause></samlp:StatusDetail>',
+            strval($statusDetail)
         );
     }
 
