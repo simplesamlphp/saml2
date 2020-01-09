@@ -5,6 +5,8 @@ declare(strict_types=1);
 namespace SAML2\XML;
 
 use DOMElement;
+use SAML2\DOMDocumentFactory;
+use Serializable;
 
 /**
  * Abstract class to be implemented by all the classes in this namespace
@@ -13,7 +15,7 @@ use DOMElement;
  * @package SimpleSAMLphp
  */
 
-abstract class AbstractConvertable
+abstract class AbstractConvertable implements Serializable
 {
     /**
      * Output the class as an XML-formatted string
@@ -24,6 +26,37 @@ abstract class AbstractConvertable
     {
         $xml = $this->toXML();
         return $xml->ownerDocument->saveXML($xml);
+    }
+
+
+    /**
+     * Serialize this XML chunk
+     *
+     * @return string The serialized chunk.
+     */
+    public function serialize(): string
+    {
+        return $this->toXML()->ownerDocument->saveXML();
+    }
+
+
+    /**
+     * Un-serialize this XML chunk.
+     *
+     * @param string $serialized The serialized chunk.
+     * @return void
+     *
+     * Type hint not possible due to upstream method signature
+     */
+    public function unserialize($serialized): void
+    {
+        $doc = DOMDocumentFactory::fromString($serialized);
+        $obj = static::fromXML($doc->documentElement);
+
+        // For this to work, the properties have to be protected
+        foreach (get_object_vars($obj) as $property => $value) {
+            $this->{$property} = $value;
+        }
     }
 
 
