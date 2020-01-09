@@ -5,6 +5,7 @@ declare(strict_types=1);
 namespace SAML2\XML\saml;
 
 use DOMElement;
+use DOMNodeList;
 use SAML2\Constants;
 use SAML2\DOMDocumentFactory;
 use SAML2\Utils;
@@ -19,16 +20,16 @@ use Webmozart\Assert\Assert;
  */
 class AuthnContextDecl extends \SAML2\XML\AbstractConvertable
 {
-    /** @var \SAML2\XML\Chunk */
+    /** @var \DOMNodeList */
     private $decl;
 
 
     /**
      * Initialize an AuthnContextDecl.
      *
-     * @param \SAML2\XML\Chunk $decl
+     * @param \DOMNodeList $decl
      */
-    public function __construct(Chunk $decl)
+    public function __construct(DOMNodeList $decl)
     {
         $this->setDecl($decl);
     }
@@ -37,11 +38,11 @@ class AuthnContextDecl extends \SAML2\XML\AbstractConvertable
     /**
      * Collect the value of the decl-property
      *
-     * @return \SAML2\XML\Chunk
+     * @return \DOMNodeList
      *
      * @throws \InvalidArgumentException if assertions are false
      */
-    public function getDecl(): Chunk
+    public function getDecl(): DOMNodeList
     {
         return $this->decl;
     }
@@ -50,10 +51,10 @@ class AuthnContextDecl extends \SAML2\XML\AbstractConvertable
     /**
      * Set the value of the decl-property
      *
-     * @param \SAML2\XML\Chunk $decl
+     * @param \DOMNodeList $decl
      * @return void
      */
-    private function setDecl(Chunk $decl): void
+    private function setDecl(DOMNodeList $decl): void
     {
         $this->decl = $decl;
     }
@@ -70,8 +71,7 @@ class AuthnContextDecl extends \SAML2\XML\AbstractConvertable
         Assert::same($xml->localName, 'AuthnContextDecl');
         Assert::same($xml->namespaceURI, Constants::NS_SAML);
 
-        /** @psalm-var \DOMElement $xml->childNodes[1] */
-        return new self(new Chunk($xml->childNodes[1]));
+        return new self($xml->childNodes);
     }
 
 
@@ -92,7 +92,9 @@ class AuthnContextDecl extends \SAML2\XML\AbstractConvertable
             $parent->appendChild($e);
         }
 
-        $e->appendChild($e->ownerDocument->importNode($this->decl->getXML(), true));
+        foreach ($this->decl as $node) {
+            $e->appendChild($e->ownerDocument->importNode($node, true));
+        }
 
         return $e;
     }
