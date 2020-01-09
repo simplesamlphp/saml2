@@ -97,7 +97,7 @@ class StatusCode extends \SAML2\XML\AbstractConvertable
      */
     public static function fromXML(DOMElement $xml): object
     {
-        Assert::same($xml->tagName, 'samlp:StatusCode');
+        Assert::same($xml->localName, 'StatusCode');
         Assert::same($xml->namespaceURI, Constants::NS_SAMLP);
 
         $Value = $xml->hasAttribute('Value') ? $xml->getAttribute('Value') : null;

@@ -65,7 +65,7 @@ class AuthnContextDeclRef extends \SAML2\XML\AbstractConvertable
      */
     public static function fromXML(DOMElement $xml): object
     {
-        Assert::same($xml->tagName, 'saml:AuthnContextDeclRef');
+        Assert::same($xml->localName, 'AuthnContextDeclRef');
         Assert::same($xml->namespaceURI, Constants::NS_SAML);
 
         return new self($xml->textContent);

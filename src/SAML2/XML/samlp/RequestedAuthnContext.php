@@ -117,7 +117,7 @@ class RequestedAuthnContext extends \SAML2\XML\AbstractConvertable
      */
     public static function fromXML(DOMElement $xml): object
     {
-        Assert::same($xml->tagName, 'samlp:RequestedAuthnContext');
+        Assert::same($xml->localName, 'RequestedAuthnContext');
         Assert::same($xml->namespaceURI, Constants::NS_SAMLP);
 
         /** @var \DOMElement[] $authnContextClassRef */

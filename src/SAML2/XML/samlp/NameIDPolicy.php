@@ -107,7 +107,7 @@ class NameIDPolicy extends \SAML2\XML\AbstractConvertable
      */
     public static function fromXML(DOMElement $xml): object
     {
-        Assert::same($xml->tagName, 'samlp:NameIDPolicy');
+        Assert::same($xml->localName, 'NameIDPolicy');
         Assert::same($xml->namespaceURI, Constants::NS_SAMLP);
 
         $Format = $xml->hasAttribute('Format') ? $xml->getAttribute('Format') : null;

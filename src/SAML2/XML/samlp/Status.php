@@ -131,7 +131,7 @@ class Status extends \SAML2\XML\AbstractConvertable
      */
     public static function fromXML(DOMElement $xml): object
     {
-        Assert::same($xml->tagName, 'samlp:Status');
+        Assert::same($xml->localName, 'Status');
         Assert::same($xml->namespaceURI, Constants::NS_SAMLP);
 
         /** @var DOMElement[] $statusCode */

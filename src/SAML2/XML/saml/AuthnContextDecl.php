@@ -67,7 +67,7 @@ class AuthnContextDecl extends \SAML2\XML\AbstractConvertable
      */
     public static function fromXML(DOMElement $xml): object
     {
-        Assert::same($xml->tagName, 'saml:AuthnContextDecl');
+        Assert::same($xml->localName, 'AuthnContextDecl');
         Assert::same($xml->namespaceURI, Constants::NS_SAML);
 
         /** @psalm-var \DOMElement $xml->childNodes[1] */

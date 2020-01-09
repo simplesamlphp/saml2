@@ -64,7 +64,7 @@ class StatusMessage extends \SAML2\XML\AbstractConvertable
      */
     public static function fromXML(DOMElement $xml): object
     {
-        Assert::same($xml->tagName, 'samlp:StatusMessage');
+        Assert::same($xml->localName, 'StatusMessage');
         Assert::same($xml->namespaceURI, Constants::NS_SAMLP);
 
         return new self($xml->textContent);
