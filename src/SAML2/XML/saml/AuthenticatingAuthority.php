@@ -66,7 +66,7 @@ class AuthenticatingAuthority extends \SAML2\XML\AbstractConvertable
      */
     public static function fromXML(DOMElement $xml): object
     {
-        Assert::same($xml->tagName, 'saml:AuthenticatingAuthority');
+        Assert::same($xml->localName, 'AuthenticatingAuthority');
         Assert::same($xml->namespaceURI, Constants::NS_SAML);
 
         return new self($xml->textContent);

@@ -173,7 +173,7 @@ class AuthnContext extends \SAML2\XML\AbstractConvertable
      */
     public static function fromXML(DOMElement $xml): object
     {
-        Assert::same($xml->tagName, 'saml:AuthnContext');
+        Assert::same($xml->localName, 'AuthnContext');
         Assert::same($xml->namespaceURI, Constants::NS_SAML);
 
         /** @var \DOMElement[] $authnContextClassRef */

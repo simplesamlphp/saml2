@@ -65,7 +65,7 @@ class StatusDetail extends \SAML2\XML\AbstractConvertable
      */
     public static function fromXML(DOMElement $xml): object
     {
-        Assert::same($xml->tagName, 'samlp:StatusDetail');
+        Assert::same($xml->localName, 'StatusDetail');
         Assert::same($xml->namespaceURI, Constants::NS_SAMLP);
 
         /** @psalm-var \DOMElement $xml->childNodes[1] */
