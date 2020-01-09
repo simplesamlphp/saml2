@@ -119,11 +119,9 @@ XML
         $statusDetails = $status->getStatusDetails();
         $this->assertCount(1, $statusDetails);
 
-        /** @psalm-var \DOMNodeList $detailElement */
-        $detailElement = $statusDetails[0]->getDetail();
-
-        /** @psalm-var \DOMElement $detailElement */
-        $detailElement = $detailElement[1];
+        /** @psalm-var \SAML2\XML\Chunk[] $detailElement */
+        $detailElement = $statusDetails[0]->getDetails();
+        $detailElement = $detailElement[0]->getXML();
 
         $this->assertEquals('Cause', $detailElement->tagName);
         $this->assertEquals('org.sourceid.websso.profiles.idp.FailedAuthnSsoException', $detailElement->textContent);
