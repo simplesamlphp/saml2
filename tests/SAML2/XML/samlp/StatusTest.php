@@ -7,7 +7,6 @@ namespace SAML2\XML\samlp;
 use SAML2\Constants;
 use SAML2\DOMDocumentFactory;
 use SAML2\Utils;
-use SAML2\XML\Chunk;
 
 /**
  * Class \SAML2\XML\samlp\StatusTest
@@ -23,9 +22,10 @@ class StatusTest extends \PHPUnit\Framework\TestCase
     public function testMarshalling(): void
     {
         /** @psalm-var \DOMElement $document->firstChild */
-        $document = DOMDocumentFactory::fromString(<<<XML
-<Cause>org.sourceid.websso.profiles.idp.FailedAuthnSsoException</Cause>
-XML
+        $document = DOMDocumentFactory::fromString(
+            '<samlp:StatusDetail xmlns:samlp="' . Constants::NS_SAMLP . '">'
+                . '<Cause>org.sourceid.websso.profiles.idp.FailedAuthnSsoException</Cause>'
+                . '</samlp:StatusDetail>'
         );
 
         $status = new Status(
@@ -39,7 +39,7 @@ XML
             ),
             new StatusMessage('Something went wrong'),
             [
-                new StatusDetail(new Chunk($document->documentElement))
+                new StatusDetail($document->documentElement->childNodes)
             ]
         );
 
@@ -119,10 +119,12 @@ XML
         $statusDetails = $status->getStatusDetails();
         $this->assertCount(1, $statusDetails);
 
-        /** @psalm-var \SAML2\XML\Chunk $detailElement */
+        /** @psalm-var \DOMNodeList $detailElement */
         $detailElement = $statusDetails[0]->getDetail();
 
-        $detailElement = $detailElement->getXML();
+        /** @psalm-var \DOMElement $detailElement */
+        $detailElement = $detailElement[1];
+
         $this->assertEquals('Cause', $detailElement->tagName);
         $this->assertEquals('org.sourceid.websso.profiles.idp.FailedAuthnSsoException', $detailElement->textContent);
     }
