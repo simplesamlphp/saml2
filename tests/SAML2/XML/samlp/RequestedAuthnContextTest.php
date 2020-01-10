@@ -52,6 +52,25 @@ class RequestedAuthnContextTest extends \PHPUnit\Framework\TestCase
     /**
      * @return void
      */
+    public function testMarshallingWithInvalidContentFails(): void
+    {
+        $authnContextDeclRef = new AuthnContextDeclRef('/relative/path/to/document.xml');
+
+        $this->expectException(InvalidArgumentException::class);
+        $this->expectExceptionMessage('Expected an instance of any of "SAML2\XML\saml\AuthnContextClassRef", "SAML2\XML\saml\AuthnContextDeclRef". Got: DOMDocument');
+
+        /** @psalm-suppress InvalidArgument */
+        $requestedAuthnContext = new RequestedAuthnContext(
+            [DOMDocumentFactory::fromString('<root />')],
+            [$authnContextDeclRef],
+            'exact'
+        );
+    }
+
+
+    /**
+     * @return void
+     */
     public function testUnmarshalling(): void
     {
         $samlNamespace = Constants::NS_SAML;
