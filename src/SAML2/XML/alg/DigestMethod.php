@@ -14,14 +14,14 @@ use Webmozart\Assert\Assert;
  * @author Jaime Pérez Crespo, UNINETT AS <jaime.perez@uninett.no>
  * @package simplesamlphp/saml2
  */
-class DigestMethod
+final class DigestMethod
 {
     /**
      * An URI identifying an algorithm supported for digest operations.
      *
      * @var string
      */
-    private $Algorithm;
+    protected $Algorithm;
 
 
     /**
