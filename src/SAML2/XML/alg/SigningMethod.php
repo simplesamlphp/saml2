@@ -143,6 +143,26 @@ final class SigningMethod extends AbstractConvertable
 
 
     /**
+     * Convert XML into a SigningMethod
+     *
+     * @param \DOMElement $xml The XML element we should load
+     * @return self
+     */
+    public static function fromXML(DOMElement $xml): object
+    {
+        if (!$xml->hasAttribute('Algorithm')) {
+            throw new \Exception('Missing required attribute "Algorithm" in alg:SigningMethod element.');
+        }
+
+        $Algorithm = $xml->getAttribute('Algorithm');
+        $MinKeySize = $xml->hasAttribute('MinKeySize') ? intval($xml->getAttribute('MinKeySize')) : null;
+        $MaxKeySize = $xml->hasAttribute('MaxKeySize') ? intval($xml->getAttribute('MaxKeySize')) : null;
+
+        return new self($Algorithm, $MinKeySize, $MaxKeySize);
+    }
+
+
+    /**
      * Convert this element to XML.
      *
      * @param \DOMElement $parent The element we should append to.

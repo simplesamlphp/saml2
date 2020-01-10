@@ -73,6 +73,22 @@ final class DigestMethod extends AbstractConvertable
 
 
     /**
+     * Convert XML into a DigestMethod
+     *
+     * @param \DOMElement $xml The XML element we should load
+     * @return self
+     */
+    public static function fromXML(DOMElement $xml): object
+    {
+        if (!$xml->hasAttribute('Algorithm')) {
+            throw new \Exception('Missing required attribute "Algorithm" in alg:DigestMethod element.');
+        }
+
+        return new self($xml->getAttribute('Algorithm'));
+    }
+
+
+    /**
      * Convert this element to XML.
      *
      * @param \DOMElement $parent The element we should append to.
