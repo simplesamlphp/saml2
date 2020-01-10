@@ -54,8 +54,6 @@ final class DigestMethod extends AbstractConvertable
      */
     public function getAlgorithm(): string
     {
-        Assert::notEmpty($this->Algorithm);
-
         return $this->Algorithm;
     }
 
@@ -98,8 +96,6 @@ final class DigestMethod extends AbstractConvertable
      */
     public function toXML(DOMElement $parent): DOMElement
     {
-        Assert::notEmpty($this->Algorithm, 'Cannot convert DigestMethod to XML without an Algorithm set.');
-
         $doc = $parent->ownerDocument;
         $e = $doc->createElementNS(Common::NS, 'alg:DigestMethod');
         $parent->appendChild($e);
