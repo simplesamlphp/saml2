@@ -14,14 +14,14 @@ use Webmozart\Assert\Assert;
  * @author Jaime Pérez Crespo, UNINETT AS <jaime.perez@uninett.no>
  * @package simplesamlphp/saml2
  */
-class SigningMethod
+final class SigningMethod
 {
     /**
      * An URI identifying the algorithm supported for XML signature operations.
      *
      * @var string
      */
-    private $Algorithm;
+    protected $Algorithm;
 
     /**
      * The smallest key size, in bits, that the entity supports in conjunction with the algorithm. If omitted, no
@@ -29,7 +29,7 @@ class SigningMethod
      *
      * @var int|null
      */
-    private $MinKeySize = null;
+    protected $MinKeySize = null;
 
     /**
      * The largest key size, in bits, that the entity supports in conjunction with the algorithm. If omitted, no
@@ -37,7 +37,7 @@ class SigningMethod
      *
      * @var int|null
      */
-    private $MaxKeySize = null;
+    protected $MaxKeySize = null;
 
 
     /**
