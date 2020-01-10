@@ -16,14 +16,13 @@ use Webmozart\Assert\Assert;
  * @author Tim van Dijen, <tvdijen@gmail.com>
  * @package simplesamlphp/saml2
  */
-
-class StatusCode extends \SAML2\XML\AbstractConvertable
+final class StatusCode extends \SAML2\XML\AbstractConvertable
 {
     /** @var string */
-    private $Value;
+    protected $Value;
 
     /** @var StatusCode[]|null */
-    private $subCodes = null;
+    protected $subCodes = null;
 
 
     /**

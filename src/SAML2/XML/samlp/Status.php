@@ -8,7 +8,6 @@ use DOMElement;
 use SAML2\Constants;
 use SAML2\DOMDocumentFactory;
 use SAML2\Utils;
-use SAML2\XML\Chunk;
 use SAML2\XML\samlp\StatusCode;
 use SAML2\XML\samlp\StatusMessage;
 use SAML2\XML\samlp\StatusDetail;
@@ -20,17 +19,16 @@ use Webmozart\Assert\Assert;
  * @author Tim van Dijen, <tvdijen@gmail.com>
  * @package simplesamlphp/saml2
  */
-
-class Status extends \SAML2\XML\AbstractConvertable
+final class Status extends \SAML2\XML\AbstractConvertable
 {
     /** @var \SAML2\XML\samlp\StatusCode */
-    private $statusCode;
+    protected $statusCode;
 
     /** @var \SAML2\XML\samlp\StatusMessage|null */
-    private $statusMessage = null;
+    protected $statusMessage = null;
 
     /** @var \SAML2\XML\samlp\StatusDetail[]|null */
-    private $statusDetails = null;
+    protected $statusDetails = null;
 
 
     /**

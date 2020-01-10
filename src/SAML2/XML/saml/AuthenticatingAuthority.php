@@ -16,10 +16,10 @@ use Webmozart\Assert\Assert;
  * @author Tim van Dijen, <tvdijen@gmail.com>
  * @package SimpleSAMLphp
  */
-class AuthenticatingAuthority extends \SAML2\XML\AbstractConvertable
+final class AuthenticatingAuthority extends \SAML2\XML\AbstractConvertable
 {
     /** @var string */
-    private $authority;
+    protected $authority;
 
 
     /**

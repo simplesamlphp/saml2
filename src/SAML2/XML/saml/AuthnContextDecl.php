@@ -17,10 +17,10 @@ use Webmozart\Assert\Assert;
  * @author Tim van Dijen, <tvdijen@gmail.com>
  * @package SimpleSAMLphp
  */
-class AuthnContextDecl extends \SAML2\XML\AbstractConvertable
+final class AuthnContextDecl extends \SAML2\XML\AbstractConvertable
 {
     /** @var \DOMNodeList */
-    private $decl;
+    protected $decl;
 
 
     /**
