@@ -28,20 +28,11 @@ final class DigestMethod extends AbstractConvertable
     /**
      * Create/parse an alg:DigestMethod element.
      *
-     * @param \DOMElement|null $xml The XML element we should load or null to create a new one from scratch.
-     *
-     * @throws \Exception
+     * @param string $Algorithm
      */
-    public function __construct(DOMElement $xml = null)
+    public function __construct(string $Algorithm)
     {
-        if ($xml === null) {
-            return;
-        }
-
-        if (!$xml->hasAttribute('Algorithm')) {
-            throw new \Exception('Missing required attribute "Algorithm" in alg:DigestMethod element.');
-        }
-        $this->setAlgorithm($xml->getAttribute('Algorithm'));
+        $this->setAlgorithm($Algorithm);
     }
 
 

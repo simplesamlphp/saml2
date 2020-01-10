@@ -44,28 +44,15 @@ final class SigningMethod extends AbstractConvertable
     /**
      * Create/parse an alg:SigningMethod element.
      *
-     * @param \DOMElement|null $xml The XML element we should load or null to create a new one from scratch.
-     *
-     * @throws \Exception
+     * @param string $Algorithm
+     * @param int|null $MinKeySize
+     * @param int|null $MaxKeySize
      */
-    public function __construct(DOMElement $xml = null)
+    public function __construct(string $Algorithm, ?int $MinKeySize = null, ?int $MaxKeySize = null)
     {
-        if ($xml === null) {
-            return;
-        }
-
-        if (!$xml->hasAttribute('Algorithm')) {
-            throw new \Exception('Missing required attribute "Algorithm" in alg:SigningMethod element.');
-        }
-        $this->Algorithm = $xml->getAttribute('Algorithm');
-
-        if ($xml->hasAttribute('MinKeySize')) {
-            $this->MinKeySize = intval($xml->getAttribute('MinKeySize'));
-        }
-
-        if ($xml->hasAttribute('MaxKeySize')) {
-            $this->MaxKeySize = intval($xml->getAttribute('MaxKeySize'));
-        }
+        $this->setAlgorithm($Algorithm);
+        $this->setMinKeySize($MinKeySize);
+        $this->setMaxKeySize($MaxKeySize);
     }
 
 
