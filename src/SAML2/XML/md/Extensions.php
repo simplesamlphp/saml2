@@ -71,7 +71,11 @@ class Extensions
                 && array_key_exists($node->namespaceURI, $supported)
                 && array_key_exists($node->localName, $supported[$node->namespaceURI])
             ) {
-                $ret[] = new $supported[$node->namespaceURI][$node->localName]($node);
+                if ($node->namespaceURI === ALG::NS) {
+                    $ret[] = $supported[$node->namespaceURI][$node->localName]::fromXML($node);
+                } else {
+                    $ret[] = new $supported[$node->namespaceURI][$node->localName]($node);
+                }
             } else {
                 $ret[] = new Chunk($node);
             }
