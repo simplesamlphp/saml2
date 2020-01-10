@@ -78,8 +78,6 @@ final class SigningMethod extends AbstractConvertable
      */
     public function getAlgorithm(): string
     {
-        Assert::notEmpty($this->Algorithm);
-
         return $this->Algorithm;
     }
 
@@ -172,10 +170,6 @@ final class SigningMethod extends AbstractConvertable
      */
     public function toXML(DOMElement $parent): DOMElement
     {
-        Assert::notEmpty($this->Algorithm, 'Cannot convert SigningMethod to XML without an Algorithm set.');
-        Assert::nullOrInteger($this->MinKeySize);
-        Assert::nullOrInteger($this->MaxKeySize);
-
         $doc = $parent->ownerDocument;
         $e = $doc->createElementNS(Common::NS, 'alg:SigningMethod');
         $parent->appendChild($e);
