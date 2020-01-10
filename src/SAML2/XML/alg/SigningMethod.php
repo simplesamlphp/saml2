@@ -5,6 +5,7 @@ declare(strict_types=1);
 namespace SAML2\XML\alg;
 
 use DOMElement;
+use SAML2\XML\AbstractConvertable;
 use Webmozart\Assert\Assert;
 
 /**
@@ -14,7 +15,7 @@ use Webmozart\Assert\Assert;
  * @author Jaime Pérez Crespo, UNINETT AS <jaime.perez@uninett.no>
  * @package simplesamlphp/saml2
  */
-final class SigningMethod
+final class SigningMethod extends AbstractConvertable
 {
     /**
      * An URI identifying the algorithm supported for XML signature operations.
