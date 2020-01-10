@@ -78,8 +78,6 @@ class RequestedAuthnContext extends \SAML2\XML\AbstractConvertable
                 AuthnContextDeclRef::class,
                 'You need either AuthnContextClassRef or AuthnContextDeclRef, not both.'
             );
-        } else {
-            throw new \InvalidArgumentException('You need either AuthnContextClassRef or AuthnContextDeclRef.');
         }
 
         $this->requestedAuthnContexts = $requestedAuthnContexts;
