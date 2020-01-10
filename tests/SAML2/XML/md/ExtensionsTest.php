@@ -6,8 +6,15 @@ namespace SAML2\XML\md;
 
 use SAML2\Constants;
 use SAML2\DOMDocumentFactory;
-use SAML2\XML\shibmd\Scope;
 use SAML2\XML\alg\DigestMethod;
+use SAML2\XML\alg\SigningMethod;
+use SAML2\XML\Chunk;
+use SAML2\XML\mdattr\EntityAttributes;
+use SAML2\XML\mdrpi\PublicationInfo;
+use SAML2\XML\mdrpi\RegistrationInfo;
+use SAML2\XML\mdui\DiscoHints;
+use SAML2\XML\mdui\UIInfo;
+use SAML2\XML\shibmd\Scope;
 
 /**
  * Class \SAML2\XML\md\ExtensionsTest.
@@ -63,7 +70,7 @@ XML
             ,
             trim($d->saveXML())
         );
-        $this->assertInstanceOf(\SAML2\XML\Chunk::class, $list[0]);
+        $this->assertInstanceOf(Chunk::class, $list[0]);
     }
 
 
@@ -101,15 +108,15 @@ XML
         );
         $list = Extensions::getList($document->documentElement);
         $this->assertCount(9, $list);
-        $this->assertInstanceOf(\SAML2\XML\shibmd\Scope::class, $list[0]);
-        $this->assertInstanceOf(\SAML2\XML\mdattr\EntityAttributes::class, $list[1]);
-        $this->assertInstanceOf(\SAML2\XML\mdrpi\RegistrationInfo::class, $list[2]);
-        $this->assertInstanceOf(\SAML2\XML\mdrpi\PublicationInfo::class, $list[3]);
-        $this->assertInstanceOf(\SAML2\XML\mdui\UIInfo::class, $list[4]);
-        $this->assertInstanceOf(\SAML2\XML\mdui\DiscoHints::class, $list[5]);
-        $this->assertInstanceOf(\SAML2\XML\alg\DigestMethod::class, $list[6]);
-        $this->assertInstanceOf(\SAML2\XML\alg\SigningMethod::class, $list[7]);
-        $this->assertInstanceOf(\SAML2\XML\Chunk::class, $list[8]);
+        $this->assertInstanceOf(Scope::class, $list[0]);
+        $this->assertInstanceOf(EntityAttributes::class, $list[1]);
+        $this->assertInstanceOf(RegistrationInfo::class, $list[2]);
+        $this->assertInstanceOf(PublicationInfo::class, $list[3]);
+        $this->assertInstanceOf(UIInfo::class, $list[4]);
+        $this->assertInstanceOf(DiscoHints::class, $list[5]);
+        $this->assertInstanceOf(DigestMethod::class, $list[6]);
+        $this->assertInstanceOf(SigningMethod::class, $list[7]);
+        $this->assertInstanceOf(Chunk::class, $list[8]);
     }
 
 
@@ -125,8 +132,7 @@ XML
         $document->appendChild($r);
         $scope = new Scope();
         $scope->setScope('SomeScope');
-        $digest = new DigestMethod();
-        $digest->setAlgorithm('SomeAlgorithm');
+        $digest = new DigestMethod('SomeAlgorithm');
         $extensions = [
             $scope,
             $digest,
