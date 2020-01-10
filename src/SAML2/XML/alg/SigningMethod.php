@@ -90,7 +90,7 @@ final class SigningMethod extends AbstractConvertable
      * @param string $algorithm
      * @return void
      */
-    public function setAlgorithm(string $algorithm): void
+    private function setAlgorithm(string $algorithm): void
     {
         $this->Algorithm = $algorithm;
     }
@@ -113,7 +113,7 @@ final class SigningMethod extends AbstractConvertable
      * @param int|null $minKeySize
      * @return void
      */
-    public function setMinKeySize(int $minKeySize = null): void
+    private function setMinKeySize(int $minKeySize = null): void
     {
         $this->MinKeySize = $minKeySize;
     }
@@ -136,7 +136,7 @@ final class SigningMethod extends AbstractConvertable
      * @param int|null $maxKeySize
      * @return void
      */
-    public function setMaxKeySize(int $maxKeySize = null): void
+    private function setMaxKeySize(int $maxKeySize = null): void
     {
         $this->MaxKeySize = $maxKeySize;
     }
