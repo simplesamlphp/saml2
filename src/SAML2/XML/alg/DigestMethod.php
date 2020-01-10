@@ -88,14 +88,7 @@ final class DigestMethod extends AbstractConvertable
      */
     public function toXML(DOMElement $parent = null): DOMElement
     {
-        if ($parent === null) {
-            $doc = DOMDocumentFactory::create();
-            $e = $doc->createElementNS(Common::NS, 'alg:DigestMethod');
-            $doc->appendChild($e);
-        } else {
-            $e = $parent->ownerDocument->createElementNS(Common::NS, 'alg:DigestMethod');
-            $parent->appendChild($e);
-        }
+        $e = $this->instantiateParentElement($parent);
 
         $e->setAttribute('Algorithm', $this->Algorithm);
 

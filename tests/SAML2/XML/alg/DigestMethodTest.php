@@ -28,7 +28,7 @@ class DigestMethodTest extends \PHPUnit\Framework\TestCase
 
         $digestMethodElements = Utils::xpQuery(
             $xml,
-            '/root/*[local-name()=\'DigestMethod\' and namespace-uri()=\'urn:oasis:names:tc:SAML:metadata:algsupport\']'
+            '/root/*[local-name()=\'DigestMethod\' and namespace-uri()=\'' . DigestMethod::NS . '\']'
         );
         $this->assertCount(1, $digestMethodElements);
         $digestMethodElement = $digestMethodElements[0];
@@ -41,10 +41,8 @@ class DigestMethodTest extends \PHPUnit\Framework\TestCase
      */
     public function testUnmarshalling(): void
     {
-        $document = DOMDocumentFactory::fromString(<<<XML
-<alg:DigestMethod xmlns:alg="urn:oasis:names:tc:SAML:metadata:algsupport"
-                  Algorithm="http://exampleAlgorithm" />
-XML
+        $document = DOMDocumentFactory::fromString(
+            '<alg:DigestMethod xmlns:alg="' . DigestMethod::NS . '"Algorithm="http://exampleAlgorithm" />'
         );
 
         $digestMethod = DigestMethod::fromXML($document->firstChild);
@@ -57,9 +55,8 @@ XML
      */
     public function testMissingAlgorithmThrowsException(): void
     {
-        $document = DOMDocumentFactory::fromString(<<<XML
-<alg:DigestMethod xmlns:alg="urn:oasis:names:tc:SAML:metadata:algsupport" />
-XML
+        $document = DOMDocumentFactory::fromString(
+            '<alg:DigestMethod xmlns:alg="' . DigestMethod::NS . '" />'
         );
         $this->expectException(\Exception::class, 'Missing required attribute "Algorithm"');
         DigestMethod::fromXML($document->firstChild);
