@@ -66,7 +66,7 @@ final class DigestMethod extends AbstractConvertable
      * @param string $algorithm
      * @return void
      */
-    public function setAlgorithm(string $algorithm): void
+    private function setAlgorithm(string $algorithm): void
     {
         $this->Algorithm = $algorithm;
     }
