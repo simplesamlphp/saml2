@@ -15,16 +15,16 @@ use Webmozart\Assert\Assert;
  * @author Tim van Dijen, <tvdijen@gmail.com>
  * @package SimpleSAMLphp
  */
-class NameIDPolicy extends \SAML2\XML\AbstractConvertable
+final class NameIDPolicy extends \SAML2\XML\AbstractConvertable
 {
     /** @var string|null */
-    private $Format = null;
+    protected $Format = null;
 
     /** @var string|null */
-    private $SPNameQualifier = null;
+    protected $SPNameQualifier = null;
 
     /** @var bool|null */
-    private $AllowCreate = null;
+    protected $AllowCreate = null;
 
 
     /**

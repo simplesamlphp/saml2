@@ -17,11 +17,10 @@ use Webmozart\Assert\Assert;
  * @author Tim van Dijen, <tvdijen@gmail.com>
  * @package simplesamlphp/saml2
  */
-
-class StatusDetail extends \SAML2\XML\AbstractConvertable
+final class StatusDetail extends \SAML2\XML\AbstractConvertable
 {
     /** @var \SAML2\XML\Chunk[]|null */
-    private $details = null;
+    protected $details = null;
 
 
     /**

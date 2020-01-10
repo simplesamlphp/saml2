@@ -15,10 +15,10 @@ use Webmozart\Assert\Assert;
  * @author Tim van Dijen, <tvdijen@gmail.com>
  * @package SimpleSAMLphp
  */
-class AuthnContextClassRef extends \SAML2\XML\AbstractConvertable
+final class AuthnContextClassRef extends \SAML2\XML\AbstractConvertable
 {
     /** @var string */
-    private $classRef;
+    protected $classRef;
 
 
     /**

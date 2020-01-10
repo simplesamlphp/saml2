@@ -15,11 +15,10 @@ use Webmozart\Assert\Assert;
  * @author Tim van Dijen, <tvdijen@gmail.com>
  * @package simplesamlphp/saml2
  */
-
-class StatusMessage extends \SAML2\XML\AbstractConvertable
+final class StatusMessage extends \SAML2\XML\AbstractConvertable
 {
     /** @var string */
-    private $message;
+    protected $message;
 
 
     /**

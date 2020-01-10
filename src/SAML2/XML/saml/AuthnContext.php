@@ -20,19 +20,19 @@ use Webmozart\Assert\Assert;
  * @author Tim van Dijen, <tvdijen@gmail.com>
  * @package SimpleSAMLphp
  */
-class AuthnContext extends \SAML2\XML\AbstractConvertable
+final class AuthnContext extends \SAML2\XML\AbstractConvertable
 {
     /** @var \SAML2\XML\saml\AuthnContextClassRef|null */
-    private $authnContextClassRef = null;
+    protected $authnContextClassRef = null;
 
     /** @var \SAML2\XML\saml\AuthnContextDeclRef|null */
-    private $authnContextDeclRef = null;
+    protected $authnContextDeclRef = null;
 
     /** @var \SAML2\XML\saml\AuthnContextDecl|null */
-    private $authnContextDecl = null;
+    protected $authnContextDecl = null;
 
     /** @var \SAML2\XML\saml\AuthenticatingAuthority[]|null */
-    private $authenticatingAuthorities = null;
+    protected $authenticatingAuthorities = null;
 
 
     /**
