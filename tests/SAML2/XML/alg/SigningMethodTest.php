@@ -28,8 +28,7 @@ class SigningMethodTest extends \PHPUnit\Framework\TestCase
 
         $signingMethodElements = Utils::xpQuery(
             $xml,
-            '/root/*[local-name()=\'SigningMethod\' and ' .
-            'namespace-uri()=\'urn:oasis:names:tc:SAML:metadata:algsupport\']'
+            '/root/*[local-name()=\'SigningMethod\' and namespace-uri()=\'' . SigningMethod::NS . '\']'
         );
         $this->assertCount(1, $signingMethodElements);
         $signingMethodElement = $signingMethodElements[0];
@@ -45,12 +44,9 @@ class SigningMethodTest extends \PHPUnit\Framework\TestCase
      */
     public function testUnmarshalling(): void
     {
-        $document = DOMDocumentFactory::fromString(<<<XML
-<alg:SigningMethod xmlns:alg="urn:oasis:names:tc:SAML:metadata:algsupport"
-                   Algorithm="http://exampleAlgorithm"
-                   MinKeySize="1024"
-                   MaxKeySize="4096" />
-XML
+        $document = DOMDocumentFactory::fromString(
+            '<alg:SigningMethod xmlns:alg="' . SigningMethod::NS . '" Algorithm="http://exampleAlgorithm"'
+                . 'MinKeySize="1024" MaxKeySize="4096" />'
         );
 
         $signingMethod = SigningMethod::fromXML($document->firstChild);
@@ -66,11 +62,8 @@ XML
      */
     public function testMissingAlgorithmThrowsException(): void
     {
-        $document = DOMDocumentFactory::fromString(<<<XML
-<alg:SigningMethod xmlns:alg="urn:oasis:names:tc:SAML:metadata:algsupport" 
-                   MinKeySize="1024"
-                   MaxKeySize="4096" />
-XML
+        $document = DOMDocumentFactory::fromString(
+            '<alg:SigningMethod xmlns:alg="' . SigningMethod::NS . '" MinKeySize="1024" MaxKeySize="4096" />'
         );
         $this->expectException(\Exception::class, 'Missing required attribute "Algorithm"');
         SigningMethod::fromXML($document->firstChild);
