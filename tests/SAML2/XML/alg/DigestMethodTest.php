@@ -21,8 +21,7 @@ class DigestMethodTest extends \PHPUnit\Framework\TestCase
      */
     public function testMarshalling(): void
     {
-        $digestMethod = new DigestMethod();
-        $digestMethod->setAlgorithm('http://exampleAlgorithm');
+        $digestMethod = new DigestMethod('http://exampleAlgorithm');
 
         $document = DOMDocumentFactory::fromString('<root />');
         $xml = $digestMethod->toXML($document->firstChild);
@@ -48,7 +47,7 @@ class DigestMethodTest extends \PHPUnit\Framework\TestCase
 XML
         );
 
-        $digestMethod = new DigestMethod($document->firstChild);
+        $digestMethod = DigestMethod::fromXML($document->firstChild);
         $this->assertEquals('http://exampleAlgorithm', $digestMethod->getAlgorithm());
     }
 
@@ -63,6 +62,6 @@ XML
 XML
         );
         $this->expectException(\Exception::class, 'Missing required attribute "Algorithm"');
-        new DigestMethod($document->firstChild);
+        DigestMethod::fromXML($document->firstChild);
     }
 }
