@@ -150,16 +150,22 @@ final class SigningMethod extends AbstractConvertable
     /**
      * Convert this element to XML.
      *
-     * @param \DOMElement $parent The element we should append to.
+     * @param \DOMElement|null $parent The element we should append to.
      * @return \DOMElement
      *
      * @throws \InvalidArgumentException if assertions are false
      */
-    public function toXML(DOMElement $parent): DOMElement
+    public function toXML(DOMElement $parent = null): DOMElement
     {
-        $doc = $parent->ownerDocument;
-        $e = $doc->createElementNS(Common::NS, 'alg:SigningMethod');
-        $parent->appendChild($e);
+        if ($parent === null) {
+            $doc = DOMDocumentFactory::create();
+            $e = $doc->createElementNS(Common::NS, 'alg:SigningMethod');
+            $doc->appendChild($e);
+        } else {
+            $e = $parent->ownerDocument->createElementNS(Common::NS, 'alg:SigningMethod');
+            $parent->appendChild($e);
+        }
+
         $e->setAttribute('Algorithm', $this->Algorithm);
 
         if ($this->MinKeySize !== null) {

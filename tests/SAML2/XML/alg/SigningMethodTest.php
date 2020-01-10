@@ -21,8 +21,7 @@ class SigningMethodTest extends \PHPUnit\Framework\TestCase
      */
     public function testMarshalling(): void
     {
-        $signingMethod = new SigningMethod();
-        $signingMethod->setAlgorithm('http://exampleAlgorithm');
+        $signingMethod = new SigningMethod('http://exampleAlgorithm');
 
         $document = DOMDocumentFactory::fromString('<root />');
         $xml = $signingMethod->toXML($document->firstChild);
@@ -34,12 +33,12 @@ class SigningMethodTest extends \PHPUnit\Framework\TestCase
         );
         $this->assertCount(1, $signingMethodElements);
         $signingMethodElement = $signingMethodElements[0];
+
         $this->assertEquals('http://exampleAlgorithm', $signingMethodElement->getAttribute('Algorithm'));
         $this->assertFalse($signingMethodElement->hasAttribute('MinKeySize'));
         $this->assertFalse($signingMethodElement->hasAttribute('MaxKeySize'));
 
-        $signingMethod->setMinKeySize(1024);
-        $signingMethod->setMaxKeySize(4096);
+        $signingMethod = new SigningMethod('http://exampleAlgorithm', 1024, 4096);
 
         $document = DOMDocumentFactory::fromString('<root />');
         $xml = $signingMethod->toXML($document->firstChild);
@@ -51,8 +50,10 @@ class SigningMethodTest extends \PHPUnit\Framework\TestCase
         );
         $this->assertCount(1, $signingMethodElements);
         $signingMethodElement = $signingMethodElements[0];
-        $this->assertEquals(1024, $signingMethodElement->getAttribute('MinKeySize'));
-        $this->assertEquals(4096, $signingMethodElement->getAttribute('MaxKeySize'));
+
+        $this->assertEquals('http://exampleAlgorithm', $signingMethodElement->getAttribute('Algorithm'));
+        $this->assertEquals('1024', $signingMethodElement->getAttribute('MinKeySize'));
+        $this->assertEquals('4096', $signingMethodElement->getAttribute('MaxKeySize'));
     }
 
 
@@ -69,7 +70,8 @@ class SigningMethodTest extends \PHPUnit\Framework\TestCase
 XML
         );
 
-        $signingMethod = new SigningMethod($document->firstChild);
+        $signingMethod = SigningMethod::fromXML($document->firstChild);
+
         $this->assertEquals('http://exampleAlgorithm', $signingMethod->getAlgorithm());
         $this->assertEquals(1024, $signingMethod->getMinKeySize());
         $this->assertEquals(4096, $signingMethod->getMaxKeySize());
@@ -88,6 +90,6 @@ XML
 XML
         );
         $this->expectException(\Exception::class, 'Missing required attribute "Algorithm"');
-        new SigningMethod($document->firstChild);
+        SigningMethod::fromXML($document->firstChild);
     }
 }
