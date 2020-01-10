@@ -5,6 +5,7 @@ declare(strict_types=1);
 namespace SAML2\XML\alg;
 
 use DOMElement;
+use SAML2\DOMDocumentFactory;
 use SAML2\XML\AbstractConvertable;
 use Webmozart\Assert\Assert;
 
