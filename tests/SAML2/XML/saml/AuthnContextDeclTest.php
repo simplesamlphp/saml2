@@ -91,23 +91,9 @@ XML
 XML
         );
 
-        $document2 = DOMDocumentFactory::fromString(<<<XML
-            <saml:AuthnContextDecl xmlns:saml="{$samlNamespace}">SomeContent<with>more</with>
-            </saml:AuthnContextDecl>
-XML
-        );
-
         $authnContextDecl1 = new AuthnContextDecl($document1->documentElement->childNodes);
-        $ser = $authnContextDecl1->serialize();
+        $authnContextDecl2 = unserialize(serialize($authnContextDecl1));
 
-        $authnContextDecl2 = new AuthnContextDecl($document2->documentElement->childNodes);
-        $authnContextDecl2->unserialize($ser);
-
-        /**
-         * @psalm-var \DOMElement $authnContextDeclElement->childNodes[1]
-         */
-        $authnContextDeclElement = $authnContextDecl2->toXML();
-
-        $this->assertEquals('samlacpass:AuthenticationContextDeclaration', $authnContextDeclElement->childNodes[1]->tagName);
+        $this->assertEquals(strval($authnContextDecl1), strval($authnContextDecl2));
     }
 }
