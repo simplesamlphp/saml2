@@ -68,6 +68,29 @@ abstract class AbstractXMLElement implements Serializable
 
 
     /**
+     * Create a document structure for this element
+     *
+     * @param \DOMElement|null $parent The element we should append to.
+     * @return \DOMElement
+     */
+    public function instantiateParentElement(DOMElement $parent = null): DOMElement
+    {
+        $qualifiedName = join('', array_slice(explode('\\', get_class()), -1));
+
+        if ($parent === null) {
+            $doc = DOMDocumentFactory::create();
+            $e = $doc->createElementNS(self::NS, self::NS_PREFIX . ':' . $qualifiedName);
+            $doc->appendChild($e);
+        } else {
+            $e = $parent->ownerDocument->createElementNS(self::NS, self::NS_PREFIX . ':' . $qualifiedName);
+            $parent->appendChild($e);
+        }
+
+        return $e;
+    }
+
+
+    /**
      * Create a class from XML
      *
      * @param \DOMElement $xml
