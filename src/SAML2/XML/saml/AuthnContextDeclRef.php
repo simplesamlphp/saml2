@@ -15,7 +15,7 @@ use Webmozart\Assert\Assert;
  * @author Tim van Dijen, <tvdijen@gmail.com>
  * @package SimpleSAMLphp
  */
-final class AuthnContextDeclRef extends \SAML2\XML\AbstractConvertable
+final class AuthnContextDeclRef extends \SAML2\XML\AbstractXMLElement
 {
     /** @var string */
     protected $declRef;

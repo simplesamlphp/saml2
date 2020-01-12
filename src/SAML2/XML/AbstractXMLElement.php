@@ -14,8 +14,7 @@ use Serializable;
  * @author Tim van Dijen, <tvdijen@gmail.com>
  * @package SimpleSAMLphp
  */
-
-abstract class AbstractConvertable implements Serializable
+abstract class AbstractXMLElement implements Serializable
 {
     /**
      * Output the class as an XML-formatted string

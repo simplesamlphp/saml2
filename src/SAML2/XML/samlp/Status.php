@@ -19,7 +19,7 @@ use Webmozart\Assert\Assert;
  * @author Tim van Dijen, <tvdijen@gmail.com>
  * @package simplesamlphp/saml2
  */
-final class Status extends \SAML2\XML\AbstractConvertable
+final class Status extends \SAML2\XML\AbstractXMLElement
 {
     /** @var \SAML2\XML\samlp\StatusCode */
     protected $statusCode;
