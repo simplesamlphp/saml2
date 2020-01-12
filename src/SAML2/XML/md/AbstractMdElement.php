@@ -16,8 +16,8 @@ use SAML2\XML\AbstractXMLElement;
 abstract class AbstractMdElement extends AbstractXMLElement
 {
     /** @var string */
-    protected $namespace = Constants::NS_MD;
+    public const NS = Constants::NS_MD;
 
     /** @var string */
-    protected $ns_prefix = 'md';
+    public const NS_PREFIX = 'md';
 }

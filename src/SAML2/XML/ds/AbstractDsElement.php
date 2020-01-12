@@ -16,8 +16,8 @@ use SAML2\XML\AbstractXMLElement;
 abstract class AbstractDsElement extends AbstractXMLElement
 {
     /** @var string */
-    protected $namespace = XMLSecurityDSig::XMLDSIGNS;
+    public const NS = XMLSecurityDSig::XMLDSIGNS;
 
     /** @var string */
-    protected $ns_prefix = 'ds';
+    public const NS_PREFIX = 'ds';
 }

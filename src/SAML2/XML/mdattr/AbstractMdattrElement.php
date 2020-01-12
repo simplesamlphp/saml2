@@ -15,8 +15,8 @@ use SAML2\XML\AbstractXMLElement;
 abstract class AbstractMdattrElement extends AbstractXMLElement
 {
     /** @var string */
-    protected $namespace = 'urn:oasis:names:tc:SAML:metadata:attribute';
+    public const NS = 'urn:oasis:names:tc:SAML:metadata:attribute';
 
     /** @var string */
-    protected $ns_prefix = 'mdattr';
+    public const NS_PREFIX = 'mdattr';
 }

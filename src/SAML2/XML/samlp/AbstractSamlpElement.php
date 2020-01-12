@@ -16,8 +16,8 @@ use SAML2\XML\AbstractXMLElement;
 abstract class AbstractSamlpElement extends AbstractXMLElement
 {
     /** @var string */
-    protected $namespace = Constants::NS_SAMLP;
+    public const NS = Constants::NS_SAMLP;
 
     /** @var string */
-    protected $ns_prefix = 'samlp';
+    public const NS_PREFIX = 'samlp';
 }

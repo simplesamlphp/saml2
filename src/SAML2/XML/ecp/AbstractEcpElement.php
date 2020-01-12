@@ -16,8 +16,8 @@ use SAML2\XML\AbstractXMLElement;
 abstract class AbstractEcpElement extends AbstractXMLElement
 {
     /** @var string */
-    protected $namespace = Constants::NS_ECP;
+    public const NS = Constants::NS_ECP;
 
     /** @var string */
-    protected $ns_prefix = 'ecp';
+    public const NS_PREFIX = 'ecp';
 }

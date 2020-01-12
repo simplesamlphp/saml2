@@ -15,8 +15,8 @@ use SAML2\XML\AbstractXMLElement;
 abstract class AbstractAlgElement extends AbstractXMLElement
 {
     /** @var string */
-    protected $namespace = 'urn:oasis:names:tc:SAML:metadata:algsupport';
+    public const NS = 'urn:oasis:names:tc:SAML:metadata:algsupport';
 
     /** @var string */
-    protected $ns_prefix = 'alg';
+    public const NS_PREFIX = 'alg';
 }
