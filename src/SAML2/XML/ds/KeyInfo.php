@@ -135,7 +135,7 @@ final class KeyInfo extends AbstractDsElement
 
             switch ($n->localName) {
                 case 'KeyName':
-                    $info[] = new KeyName($n);
+                    $info[] = KeyName::fromXML($n);
                     break;
                 case 'X509Data':
                     $info[] = new X509Data($n);
