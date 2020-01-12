@@ -139,6 +139,43 @@ final class KeyInfo extends AbstractDsElement
 
 
     /**
+     * Convert XML into a KeyInfo
+     *
+     * @param \DOMElement $xml The XML element we should load
+     * @return self
+     */
+    public static function fromXML(DOMElement $xml): object
+    {
+        $Id = $xml->hasAttribute('Id') ? $xml->getAttribute('Id') : null;
+        $info = [];
+
+        foreach ($xml->childNodes as $n) {
+            if (!($n instanceof \DOMElement)) {
+                continue;
+            }
+
+            if ($n->namespaceURI !== XMLSecurityDSig::XMLDSIGNS) {
+                $info[] = new Chunk($n);
+                continue;
+            }
+
+            switch ($n->localName) {
+                case 'KeyName':
+                    $info[] = new KeyName($n);
+                    break;
+                case 'X509Data':
+                    $info[] = new X509Data($n);
+                    break;
+                default:
+                    $info[] = new Chunk($n);
+                    break;
+            }
+        }
+
+        return new self($info, $Id);
+    }
+
+    /**
      * Convert this KeyInfo to XML.
      *
      * @param \DOMElement $parent The element we should append this KeyInfo to.

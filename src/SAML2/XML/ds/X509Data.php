@@ -100,6 +100,40 @@ final class X509Data extends AbstractDsElement
 
 
     /**
+     * Convert XML into a X509Data
+     *
+     * @param \DOMElement $xml The XML element we should load
+     * @return self
+     */
+    public static function fromXML(DOMElement $xml): object
+    {
+        $data = []
+
+        for ($n = $xml->firstChild; $n !== null; $n = $n->nextSibling) {
+            if (!($n instanceof DOMElement)) {
+                continue;
+            }
+
+            if ($n->namespaceURI !== XMLSecurityDSig::XMLDSIGNS) {
+                $data[] = new Chunk($n);
+                continue;
+            }
+
+            switch ($n->localName) {
+                case 'X509Certificate':
+                    $data[] = new X509Certificate($n);
+                    break;
+                default:
+                    $data[] = new Chunk($n);
+                    break;
+            }
+        }
+
+        return new self($data);
+    }
+
+
+    /**
      * Convert this X509Data element to XML.
      *
      * @param \DOMElement $parent The element we should append this X509Data element to.

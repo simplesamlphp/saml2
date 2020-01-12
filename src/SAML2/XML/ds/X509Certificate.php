@@ -67,6 +67,18 @@ final class X509Certificate extends AbstractDsElement
 
 
     /**
+     * Convert XML into a X509Certificate
+     *
+     * @param \DOMElement $xml The XML element we should load
+     * @return self
+     */
+    public static function fromXML(DOMElement $xml): object
+    {
+        return new self($xml->textContent);
+    }
+
+
+    /**
      * Convert this X509Certificate element to XML.
      *
      * @param \DOMElement $parent The element we should append this X509Certificate element to.

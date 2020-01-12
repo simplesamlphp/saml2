@@ -65,6 +65,18 @@ final class KeyName extends AbstractDsElement
 
 
     /**
+     * Convert XML into a KeyName
+     *
+     * @param \DOMElement $xml The XML element we should load
+     * @return self
+     */
+    public static function fromXML(DOMElement $xml): object
+    {
+        return new self($xml->textContent);
+    }
+
+
+    /**
      * Convert this KeyName element to XML.
      *
      * @param \DOMElement $parent The element we should append this KeyName element to.
