@@ -14,7 +14,7 @@ use Webmozart\Assert\Assert;
  *
  * @package SimpleSAMLphp
  */
-class X509Certificate
+class X509Certificate extends AbstractDsElement
 {
     /**
      * The base64-encoded certificate.

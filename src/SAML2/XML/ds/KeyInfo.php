@@ -14,7 +14,7 @@ use Webmozart\Assert\Assert;
  *
  * @package SimpleSAMLphp
  */
-class KeyInfo
+class KeyInfo extends AbstractDsElement
 {
     /**
      * The Id attribute on this element.

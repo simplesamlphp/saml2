@@ -15,7 +15,7 @@ use Webmozart\Assert\Assert;
  *
  * @package SimpleSAMLphp
  */
-class X509Data
+class X509Data extends AbstractDsElement
 {
     /**
      * The various X509 data elements.

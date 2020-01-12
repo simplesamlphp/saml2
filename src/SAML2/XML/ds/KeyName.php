@@ -14,7 +14,7 @@ use Webmozart\Assert\Assert;
  *
  * @package SimpleSAMLphp
  */
-class KeyName
+class KeyName extends AbstractDsElement
 {
     /**
      * The key name.
