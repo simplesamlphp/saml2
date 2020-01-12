@@ -14,14 +14,14 @@ use Webmozart\Assert\Assert;
  *
  * @package SimpleSAMLphp
  */
-class X509Certificate extends AbstractDsElement
+final class X509Certificate extends AbstractDsElement
 {
     /**
      * The base64-encoded certificate.
      *
      * @var string
      */
-    private $certificate;
+    protected $certificate;
 
 
     /**

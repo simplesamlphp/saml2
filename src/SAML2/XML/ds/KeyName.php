@@ -14,14 +14,14 @@ use Webmozart\Assert\Assert;
  *
  * @package SimpleSAMLphp
  */
-class KeyName extends AbstractDsElement
+final class KeyName extends AbstractDsElement
 {
     /**
      * The key name.
      *
      * @var string
      */
-    public $name;
+    protected $name;
 
 
     /**

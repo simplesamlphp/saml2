@@ -14,14 +14,14 @@ use Webmozart\Assert\Assert;
  *
  * @package SimpleSAMLphp
  */
-class KeyInfo extends AbstractDsElement
+final class KeyInfo extends AbstractDsElement
 {
     /**
      * The Id attribute on this element.
      *
      * @var string|null
      */
-    private $Id = null;
+    protected $Id = null;
 
     /**
      * The various key information elements.
@@ -31,7 +31,7 @@ class KeyInfo extends AbstractDsElement
      *
      * @var (\SAML2\XML\Chunk|\SAML2\XML\ds\KeyName|\SAML2\XML\ds\X509Data)[]
      */
-    private $info = [];
+    protected $info = [];
 
 
     /**
