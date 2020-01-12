@@ -77,7 +77,7 @@ final class X509Data extends AbstractDsElement
      * @param array $data
      * @return void
      */
-    public function setData(array $data): void
+    private function setData(array $data): void
     {
         $this->data = $data;
     }

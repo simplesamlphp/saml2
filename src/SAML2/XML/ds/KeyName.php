@@ -58,7 +58,7 @@ final class KeyName extends AbstractDsElement
      * @param string $name
      * @return void
      */
-    public function setName(string $name): void
+    private function setName(string $name): void
     {
         $this->name = $name;
     }

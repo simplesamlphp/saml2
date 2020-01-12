@@ -60,7 +60,7 @@ final class X509Certificate extends AbstractDsElement
      * @param string $certificate
      * @return void
      */
-    public function setCertificate(string $certificate): void
+    private function setCertificate(string $certificate): void
     {
         $this->certificate = $certificate;
     }

@@ -90,7 +90,7 @@ final class KeyInfo extends AbstractDsElement
      * @param string|null $id
      * @return void
      */
-    public function setId(string $id = null): void
+    private function setId(string $id = null): void
     {
         $this->Id = $id;
     }
@@ -113,7 +113,7 @@ final class KeyInfo extends AbstractDsElement
      * @param array $info
      * @return void
      */
-    public function setInfo(array $info): void
+    private function setInfo(array $info): void
     {
         $this->info = $info;
     }
