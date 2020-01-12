@@ -25,33 +25,11 @@ final class Response extends AbstractEcpElement
     /**
      * Create a ECP Response element.
      *
-     * @param \DOMElement|null $xml The XML element we should load.
+     * @param string $assertionConsumerServiceURL
      */
-    public function __construct(DOMElement $xml = null)
+    public function __construct(string $assertionConsumerServiceURL)
     {
-        if ($xml === null) {
-            return;
-        }
-
-        if (!$xml->hasAttributeNS(Constants::NS_SOAP, 'mustUnderstand')) {
-            throw new \Exception('Missing SOAP-ENV:mustUnderstand attribute in <ecp:Response>.');
-        }
-        if ($xml->getAttributeNS(Constants::NS_SOAP, 'mustUnderstand') !== '1') {
-            throw new \Exception('Invalid value of SOAP-ENV:mustUnderstand attribute in <ecp:Response>.');
-        }
-
-        if (!$xml->hasAttributeNS(Constants::NS_SOAP, 'actor')) {
-            throw new \Exception('Missing SOAP-ENV:actor attribute in <ecp:Response>.');
-        }
-        if ($xml->getAttributeNS(Constants::NS_SOAP, 'actor') !== 'http://schemas.xmlsoap.org/soap/actor/next') {
-            throw new \Exception('Invalid value of SOAP-ENV:actor attribute in <ecp:Response>.');
-        }
-
-        if (!$xml->hasAttribute('AssertionConsumerServiceURL')) {
-            throw new \Exception('Missing AssertionConsumerServiceURL attribute in <ecp:Response>.');
-        }
-
-        $this->setAssertionConsumerServiceURL($xml->getAttribute('AssertionConsumerServiceURL'));
+        $this->setAssertionConsumerServiceURL($assertionConsumerServiceURL);
     }
 
 
@@ -97,6 +75,8 @@ final class Response extends AbstractEcpElement
             throw new \Exception('Missing SOAP-ENV:mustUnderstand attribute in <ecp:Response>.');
         } elseif (!$xml->hasAttributeNS(Constants::NS_SOAP, 'actor')) {
             throw new \Exception('Missing SOAP-ENV:actor attribute in <ecp:Response>.');
+        } elseif (!$xml->hasAttribute('AssertionConsumerServiceURL')) {
+            throw new \Exception('Missing AssertionConsumerServiceURL attribute in <ecp:Response>.');
         }
 
         $mustUnderstand = $xml->getAttributeNS(Constants::NS_SOAP, 'mustUnderstand');
@@ -108,10 +88,6 @@ final class Response extends AbstractEcpElement
             'http://schemas.xmlsoap.org/soap/actor/next',
             'Invalid value of SOAP-ENV:actor attribute in <ecp:Response>.'
         );
-
-        if (!$xml->hasAttribute('AssertionConsumerServiceURL')) {
-            throw new \Exception('Missing AssertionConsumerServiceURL attribute in <ecp:Response>.');
-        }
 
         return new self($xml->getAttribute('AssertionConsumerServiceURL'));
     }
