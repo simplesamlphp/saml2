@@ -42,7 +42,7 @@ class DigestMethodTest extends \PHPUnit\Framework\TestCase
     public function testUnmarshalling(): void
     {
         $document = DOMDocumentFactory::fromString(
-            '<alg:DigestMethod xmlns:alg="' . DigestMethod::NS . '"Algorithm="http://exampleAlgorithm" />'
+            '<alg:DigestMethod xmlns:alg="' . DigestMethod::NS . '" Algorithm="http://exampleAlgorithm" />'
         );
 
         $digestMethod = DigestMethod::fromXML($document->firstChild);
