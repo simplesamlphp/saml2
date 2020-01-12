@@ -676,8 +676,7 @@ class Utils
         $x509Data = new X509Data();
         $x509Data->addData($x509Certificate);
 
-        $keyInfo = new KeyInfo();
-        $keyInfo->addInfo($x509Data);
+        $keyInfo = new KeyInfo($x509Data);
 
         $keyDescriptor = new KeyDescriptor();
         $keyDescriptor->setKeyInfo($keyInfo);
