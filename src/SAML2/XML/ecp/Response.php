@@ -12,7 +12,7 @@ use Webmozart\Assert\Assert;
 /**
  * Class representing the ECP Response element.
  */
-class Response
+class Response extends AbstractEcpElement
 {
     /**
      * The AssertionConsumerServiceURL.
