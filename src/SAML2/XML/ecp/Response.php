@@ -64,8 +64,6 @@ final class Response extends AbstractEcpElement
      */
     public function getAssertionConsumerServiceURL(): string
     {
-        Assert::notEmpty($this->AssertionConsumerServiceURL);
-
         return $this->AssertionConsumerServiceURL;
     }
 
@@ -82,6 +80,7 @@ final class Response extends AbstractEcpElement
         if (!filter_var($assertionConsumerServiceURL, FILTER_VALIDATE_URL)) {
             throw new InvalidArgumentException('AssertionConsumerServiceURL is not a valid URL.');
         }
+
         $this->AssertionConsumerServiceURL = $assertionConsumerServiceURL;
     }
 
@@ -128,8 +127,6 @@ final class Response extends AbstractEcpElement
      */
     public function toXML(DOMElement $parent): DOMElement
     {
-        Assert::notEmpty($this->AssertionConsumerServiceURL);
-
         $doc = $parent->ownerDocument;
         $response = $doc->createElementNS(Constants::NS_ECP, 'ecp:Response');
 
