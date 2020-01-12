@@ -5,7 +5,6 @@ declare(strict_types=1);
 namespace SAML2\XML\ds;
 
 use DOMElement;
-use RobRichards\XMLSecLibs\XMLSecurityDSig;
 use SAML2\XML\Chunk;
 use SAML2\XML\ds\X509Certificate;
 use Webmozart\Assert\Assert;
@@ -95,7 +94,7 @@ final class X509Data extends AbstractDsElement
                 continue;
             }
 
-            if ($n->namespaceURI !== XMLSecurityDSig::XMLDSIGNS) {
+            if ($n->namespaceURI !== self::NS) {
                 $data[] = new Chunk($n);
                 continue;
             }

@@ -5,7 +5,6 @@ declare(strict_types=1);
 namespace SAML2\XML\ds;
 
 use DOMElement;
-use RobRichards\XMLSecLibs\XMLSecurityDSig;
 use SAML2\Utils;
 use Webmozart\Assert\Assert;
 
@@ -78,7 +77,7 @@ final class KeyName extends AbstractDsElement
      */
     public function toXML(DOMElement $parent = null): DOMElement
     {
-        $e = $this->instantiateParentElement($parent);
-        return Utils::addString($e->ownerDocument, XMLSecurityDSig::XMLDSIGNS, 'ds:KeyName', $this->name);
+//        $e = $this->instantiateParentElement($parent);
+        return Utils::addString($parent, self::NS, 'ds:KeyName', $this->name);
     }
 }

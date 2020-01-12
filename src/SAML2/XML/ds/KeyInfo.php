@@ -5,7 +5,6 @@ declare(strict_types=1);
 namespace SAML2\XML\ds;
 
 use DOMElement;
-use RobRichards\XMLSecLibs\XMLSecurityDSig;
 use SAML2\XML\Chunk;
 use Webmozart\Assert\Assert;
 
@@ -128,7 +127,7 @@ final class KeyInfo extends AbstractDsElement
                 continue;
             }
 
-            if ($n->namespaceURI !== XMLSecurityDSig::XMLDSIGNS) {
+            if ($n->namespaceURI !== self::NS) {
                 $info[] = new Chunk($n);
                 continue;
             }

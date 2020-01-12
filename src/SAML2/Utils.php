@@ -670,11 +670,13 @@ class Utils
      */
     public static function createKeyDescriptor(string $x509Data): KeyDescriptor
     {
-        $x509Certificate = new X509Certificate($x509Data);
+        $x509Data = new X509Data([
+            new X509Certificate($x509Data)
+        ]);
 
-        $x509Data = new X509Data($x509Certificate);
-
-        $keyInfo = new KeyInfo($x509Data);
+        $keyInfo = new KeyInfo([
+            $x509Data
+        ]);
 
         $keyDescriptor = new KeyDescriptor();
         $keyDescriptor->setKeyInfo($keyInfo);
