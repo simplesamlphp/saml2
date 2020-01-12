@@ -7,7 +7,7 @@ namespace SAML2\XML\md;
 use DOMElement;
 use SAML2\Constants;
 use SAML2\Utils;
-use SAML2\XML\alg\Common as ALG;
+use SAML2\XML\alg\AbstractAlgElement as ALG;
 use SAML2\XML\alg\DigestMethod;
 use SAML2\XML\alg\SigningMethod;
 use SAML2\XML\Chunk;
