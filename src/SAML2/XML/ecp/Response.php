@@ -96,17 +96,12 @@ final class Response extends AbstractEcpElement
     /**
      * Convert this ECP Response to XML.
      *
-     * @param \DOMElement $parent The element we should append this element to.
+     * @param \DOMElement|null $parent The element we should append this element to.
      * @return \DOMElement
-     *
-     * @throws \InvalidArgumentException if assertions are false
      */
-    public function toXML(DOMElement $parent): DOMElement
+    public function toXML(DOMElement $parent = null): DOMElement
     {
-        $doc = $parent->ownerDocument;
-        $response = $doc->createElementNS(Constants::NS_ECP, 'ecp:Response');
-
-        $parent->appendChild($response);
+        $response = $this->instantiateParentElement($parent);
 
         $response->setAttributeNS(Constants::NS_SOAP, 'SOAP-ENV:mustUnderstand', '1');
         $response->setAttributeNS(Constants::NS_SOAP, 'SOAP-ENV:actor', 'http://schemas.xmlsoap.org/soap/actor/next');
