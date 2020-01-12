@@ -79,6 +79,8 @@ final class X509Data extends AbstractDsElement
      */
     private function setData(array $data): void
     {
+        Assert::allIsInstanceOfAny($data, [Chunk::class, X509Certificate::class]);
+
         $this->data = $data;
     }
 
