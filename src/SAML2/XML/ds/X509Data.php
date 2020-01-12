@@ -102,7 +102,7 @@ final class X509Data extends AbstractDsElement
 
             switch ($n->localName) {
                 case 'X509Certificate':
-                    $data[] = new X509Certificate($n);
+                    $data[] = X509Certificate::fromXML($n);
                     break;
                 default:
                     $data[] = new Chunk($n);
