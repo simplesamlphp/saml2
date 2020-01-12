@@ -40,12 +40,11 @@ SOAP;
             /** @var \DOMElement $header */
             $header = $doc->getElementsByTagNameNS(Constants::NS_SOAP, 'Header')->item(0);
 
-            $response = new ECPResponse();
             $destination = $this->destination ?: $message->getDestination();
             if ($destination === null) {
                 throw new \Exception('No destination available for SOAP message.');
             }
-            $response->setAssertionConsumerServiceURL($destination);
+            $response = new ECPResponse($destination);
 
             $response->toXML($header);
 

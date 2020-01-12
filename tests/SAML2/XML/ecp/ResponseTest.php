@@ -4,8 +4,12 @@ declare(strict_types=1);
 
 namespace SAML2\XML\ecp;
 
-use stdClass;
+use DOMDocument;
+use DOMElement;
+use Exception;
+use InvalidArgumentException;
 use SAML2\Constants;
+use SAML2\DOMDocumentFactory;
 use SAML2\XML\ecp\Response;
 
 class ResponseTest extends \PHPUnit\Framework\TestCase
@@ -13,28 +17,15 @@ class ResponseTest extends \PHPUnit\Framework\TestCase
     /**
      * @return void
      */
-    public function testConstructorWithoutXML(): void
-    {
-        $this->expectException(\InvalidArgumentException::class);
-
-        $response = new Response();
-        $response->getAssertionConsumerServiceURL();
-    }
-
-
-    /**
-     * @return void
-     */
     public function testToXMLReturnsResponse(): void
     {
-        $doc = new \DOMDocument();
+        $doc = new DOMDocument();
         $element = $doc->createElement('Foobar');
 
-        $response = new Response();
-        $response->setAssertionConsumerServiceURL('https://example.com/ACS');
+        $response = new Response('https://example.com/ACS');
         $return = $response->toXML($element);
 
-        $this->assertInstanceOf(\DOMElement::class, $return);
+        $this->assertInstanceOf(DOMElement::class, $return);
         $this->assertEquals('ecp:Response', $return->tagName);
     }
 
@@ -46,11 +37,10 @@ class ResponseTest extends \PHPUnit\Framework\TestCase
     {
         $acs = 'https://example.com/ACS';
 
-        $doc = new \DOMDocument();
+        $doc = new DOMDocument();
         $element = $doc->createElement('Foobar');
 
-        $response = new Response();
-        $response->setAssertionConsumerServiceURL($acs);
+        $response = new Response($acs);
         $return = $response->toXML($element);
 
         $this->assertTrue($return->hasAttributeNS(Constants::NS_SOAP, 'mustUnderstand'));
@@ -61,7 +51,7 @@ class ResponseTest extends \PHPUnit\Framework\TestCase
             $return->getAttributeNS(Constants::NS_SOAP, 'actor')
         );
         $this->assertTrue($return->hasAttribute('AssertionConsumerServiceURL'));
-        $this->assertEquals($acs, $return->getAttribute('AssertionConsumerServiceURL'));
+        $this->assertEquals($response->getAssertionConsumerServiceURL(), $return->getAttribute('AssertionConsumerServiceURL'));
     }
 
 
@@ -70,16 +60,81 @@ class ResponseTest extends \PHPUnit\Framework\TestCase
      */
     public function testToXMLResponseAppended(): void
     {
-        $doc = new \DOMDocument();
+        $doc = new DOMDocument();
         $element = $doc->createElement('Foobar');
 
-        $response = new Response();
-        $response->setAssertionConsumerServiceURL('https://example.com/ACS');
+        $response = new Response('https://example.com/ACS');
         $return = $response->toXML($element);
 
         $elements = $element->getElementsByTagNameNS(Constants::NS_ECP, 'Response');
 
         $this->assertEquals(1, $elements->length);
         $this->assertEquals($return, $elements->item(0));
+    }
+
+
+    /**
+     * @return void
+     */
+    public function testInvalidACSThrowsException(): void
+    {
+        $this->expectException(InvalidArgumentException::class);
+        $this->expectExceptionMessage('AssertionConsumerServiceURL is not a valid URL.');
+
+        new Response('some non-url');
+    }
+
+
+    /**
+     * @return void
+     */
+    public function testUnmarshalling(): void
+    {
+        $document = DOMDocumentFactory::fromString(
+            '<ecp:Response xmlns:ecp="' . Response::NS . '" xmlns:SOAP-ENV="'. Constants::NS_SOAP
+                . '" SOAP-ENV:mustUnderstand="1"' . ' SOAP-ENV:actor="http://schemas.xmlsoap.org/soap/actor/next"'
+                . ' AssertionConsumerServiceURL="https://example.com/ACS"/>'
+        );
+        $response = Response::fromXML($document->firstChild);
+
+        $this->assertEquals($response->getAssertionConsumerServiceURL(), 'https://example.com/ACS');
+    }
+
+
+    /**
+     * @return void
+     */
+    public function testUnmarshallingWithMissingAttributesThrowsException(): void
+    {
+        // Missing mustUnderstand
+        $document = DOMDocumentFactory::fromString(
+            '<ecp:Response xmlns:ecp="' . Response::NS . '" xmlns:SOAP-ENV="'. Constants::NS_SOAP
+                . '" SOAP-ENV:actor="http://schemas.xmlsoap.org/soap/actor/next"'
+                . ' AssertionConsumerServiceURL="https://example.com/ACS"/>'
+        );
+
+        $this->expectException(Exception::class);
+        $this->expectExceptionMessage('Missing SOAP-ENV:mustUnderstand attribute in <ecp:Response>.');
+        Response::fromXML($document->firstChild);
+
+        // Missing actor
+        $document = DOMDocumentFactory::fromString(
+            '<ecp:Response xmlns:ecp="' . Response::NS . '" xmlns:SOAP-ENV="'. Constants::NS_SOAP
+                . '" SOAP-ENV:mustUnderstand="1"' . ' AssertionConsumerServiceURL="https://example.com/ACS"/>'
+        );
+
+        $this->expectException(Exception::class);
+        $this->expectExceptionMessage('Missing SOAP-ENV:actor attribute in <ecp:Response>.');
+        Response::fromXML($document->firstChild);
+
+        // Missing ACS URL
+        $document = DOMDocumentFactory::fromString(
+            '<ecp:Response xmlns:ecp="' . Response::NS . '" xmlns:SOAP-ENV="'. Constants::NS_SOAP
+                . '" SOAP-ENV:mustUnderstand="1"' . ' SOAP-ENV:actor="http://schemas.xmlsoap.org/soap/actor/next"/>'
+        );
+
+        $this->expectException(Exception::class);
+        $this->expectExceptionMessage('Missing AssertionConsumerServiceURL attribute in <ecp:Response>.');
+        Response::fromXML($document->firstChild);
     }
 }
