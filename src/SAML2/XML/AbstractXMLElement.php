@@ -75,14 +75,14 @@ abstract class AbstractXMLElement implements Serializable
      */
     public function instantiateParentElement(DOMElement $parent = null): DOMElement
     {
-        $qualifiedName = join('', array_slice(explode('\\', get_class()), -1));
+        $qualifiedName = join('', array_slice(explode('\\', get_class($this)), -1));
 
         if ($parent === null) {
             $doc = DOMDocumentFactory::create();
-            $e = $doc->createElementNS(self::NS, self::NS_PREFIX . ':' . $qualifiedName);
+            $e = $doc->createElementNS($this::NS, $this::NS_PREFIX . ':' . $qualifiedName);
             $doc->appendChild($e);
         } else {
-            $e = $parent->ownerDocument->createElementNS(self::NS, self::NS_PREFIX . ':' . $qualifiedName);
+            $e = $parent->ownerDocument->createElementNS($this::NS, $this::NS_PREFIX . ':' . $qualifiedName);
             $parent->appendChild($e);
         }
 
