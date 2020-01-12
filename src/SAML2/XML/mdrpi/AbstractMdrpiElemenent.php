@@ -15,8 +15,8 @@ use SAML2\XML\AbstractXMLElement;
 abstract class AbstractMdrpiElement extends AbstractXMLElement
 {
     /** @var string */
-    protected $namespace = 'urn:oasis:names:tc:SAML:metadata:rpi';
+    public const NS = 'urn:oasis:names:tc:SAML:metadata:rpi';
 
     /** @var string */
-    protected $ns_prefix = 'mdrpi';
+    public const NS_PREFIX = 'mdrpi';
 }

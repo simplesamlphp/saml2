@@ -15,8 +15,8 @@ use SAML2\XML\AbstractXMLElement;
 abstract class AbstractMduiElement extends AbstractXMLElement
 {
     /** @var string */
-    protected $namespace = 'urn:oasis:names:tc:SAML:metadata:ui';
+    public const NS = 'urn:oasis:names:tc:SAML:metadata:ui';
 
     /** @var string */
-    protected $ns_prefix = 'mdui';
+    public const NS_PREFIX = 'mdui';
 }

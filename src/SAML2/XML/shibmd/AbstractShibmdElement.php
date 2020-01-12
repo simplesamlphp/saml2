@@ -16,8 +16,8 @@ use SAML2\XML\AbstractXMLElement;
 abstract class AbstractShibmdElement extends AbstractXMLElement
 {
     /** @var string */
-    protected $namespace = 'urn:mace:shibboleth:metadata:1.0';
+    public const NS = 'urn:mace:shibboleth:metadata:1.0';
 
     /** @var string */
-    protected $ns_prefix = 'shibmd';
+    public const NS_PREFIX = 'shibmd';
 }

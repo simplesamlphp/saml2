@@ -18,10 +18,10 @@ use Serializable;
 abstract class AbstractXMLElement implements Serializable
 {
     /** @var string */
-    protected $namespace = Constants::NS_SAML;
+    public const NS = Constants::NS_SAML;
 
     /** @var string */
-    protected $ns_prefix = 'saml';
+    public const NS_PREFIX = 'saml';
 
 
     /**
