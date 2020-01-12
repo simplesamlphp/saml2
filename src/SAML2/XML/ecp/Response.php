@@ -77,7 +77,7 @@ final class Response extends AbstractEcpElement
      * @throws InvalidArgumentException
      * @return void
      */
-    public function setAssertionConsumerServiceURL(string $assertionConsumerServiceURL): void
+    private function setAssertionConsumerServiceURL(string $assertionConsumerServiceURL): void
     {
         if (!filter_var($assertionConsumerServiceURL, FILTER_VALIDATE_URL)) {
             throw new InvalidArgumentException('AssertionConsumerServiceURL is not a valid URL.');
