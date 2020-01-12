@@ -88,7 +88,7 @@ final class X509Data extends AbstractDsElement
      */
     public static function fromXML(DOMElement $xml): object
     {
-        $data = []
+        $data = [];
 
         for ($n = $xml->firstChild; $n !== null; $n = $n->nextSibling) {
             if (!($n instanceof DOMElement)) {

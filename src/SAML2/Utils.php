@@ -672,8 +672,7 @@ class Utils
     {
         $x509Certificate = new X509Certificate($x509Data);
 
-        $x509Data = new X509Data();
-        $x509Data->addData($x509Certificate);
+        $x509Data = new X509Data($x509Certificate);
 
         $keyInfo = new KeyInfo($x509Data);
 

@@ -138,7 +138,7 @@ final class KeyInfo extends AbstractDsElement
                     $info[] = KeyName::fromXML($n);
                     break;
                 case 'X509Data':
-                    $info[] = new X509Data($n);
+                    $info[] = X509Data::fromXML($n);
                     break;
                 default:
                     $info[] = new Chunk($n);
