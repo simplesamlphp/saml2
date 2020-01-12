@@ -5,6 +5,7 @@ declare(strict_types=1);
 namespace SAML2\XML;
 
 use DOMElement;
+use SAML2\Constants;
 use SAML2\DOMDocumentFactory;
 use Serializable;
 
@@ -16,6 +17,13 @@ use Serializable;
  */
 abstract class AbstractXMLElement implements Serializable
 {
+    /** @var string */
+    protected $namespace = Constants::NS_SAML;
+
+    /** @var string */
+    protected $ns_prefix = 'saml';
+
+
     /**
      * Output the class as an XML-formatted string
      *
