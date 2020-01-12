@@ -6,7 +6,6 @@ namespace SAML2\XML\alg;
 
 use DOMElement;
 use SAML2\DOMDocumentFactory;
-use SAML2\XML\AbstractConvertable;
 use Webmozart\Assert\Assert;
 
 /**
@@ -16,7 +15,7 @@ use Webmozart\Assert\Assert;
  * @author Jaime Pérez Crespo, UNINETT AS <jaime.perez@uninett.no>
  * @package simplesamlphp/saml2
  */
-final class DigestMethod extends AbstractConvertable
+final class DigestMethod extends AbstractAlgElement
 {
     /**
      * An URI identifying an algorithm supported for digest operations.
