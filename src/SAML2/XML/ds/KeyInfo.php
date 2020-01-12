@@ -152,15 +152,12 @@ final class KeyInfo extends AbstractDsElement
     /**
      * Convert this KeyInfo to XML.
      *
-     * @param \DOMElement $parent The element we should append this KeyInfo to.
+     * @param \DOMElement|null $parent The element we should append this KeyInfo to.
      * @return \DOMElement
      */
-    public function toXML(DOMElement $parent): DOMElement
+    public function toXML(DOMElement $parent = null): DOMElement
     {
-        $doc = $parent->ownerDocument;
-
-        $e = $doc->createElementNS(XMLSecurityDSig::XMLDSIGNS, 'ds:KeyInfo');
-        $parent->appendChild($e);
+        $e = $this->instantiateParentElement($parent);
 
         if ($this->Id !== null) {
             $e->setAttribute('Id', $this->Id);

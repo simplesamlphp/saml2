@@ -117,15 +117,12 @@ final class X509Data extends AbstractDsElement
     /**
      * Convert this X509Data element to XML.
      *
-     * @param \DOMElement $parent The element we should append this X509Data element to.
+     * @param \DOMElement|null $parent The element we should append this X509Data element to.
      * @return \DOMElement
      */
-    public function toXML(DOMElement $parent): DOMElement
+    public function toXML(DOMElement $parent = null): DOMElement
     {
-        $doc = $parent->ownerDocument;
-
-        $e = $doc->createElementNS(XMLSecurityDSig::XMLDSIGNS, 'ds:X509Data');
-        $parent->appendChild($e);
+        $e = $this->instantiateParentElement($parent);
 
         /** @var \SAML2\XML\Chunk|\SAML2\XML\ds\X509Certificate $n */
         foreach ($this->getData() as $n) {
