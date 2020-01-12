@@ -27,15 +27,11 @@ final class X509Certificate extends AbstractDsElement
     /**
      * Initialize an X509Certificate element.
      *
-     * @param \DOMElement|null $xml The XML element we should load.
+     * @param string $certificate
      */
-    public function __construct(DOMElement $xml = null)
+    public function __construct(string $certificate)
     {
-        if ($xml === null) {
-            return;
-        }
-
-        $this->setCertificate($xml->textContent);
+        $this->setCertificate($xml->certificate);
     }
 
 
@@ -43,13 +39,9 @@ final class X509Certificate extends AbstractDsElement
      * Collect the value of the certificate-property
      *
      * @return string
-     *
-     * @throws \InvalidArgumentException if assertions are false
      */
     public function getCertificate(): string
     {
-        Assert::notEmpty($this->certificate);
-
         return $this->certificate;
     }
 

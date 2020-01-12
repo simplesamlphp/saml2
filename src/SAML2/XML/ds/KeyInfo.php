@@ -37,39 +37,13 @@ final class KeyInfo extends AbstractDsElement
     /**
      * Initialize a KeyInfo element.
      *
-     * @param \DOMElement|null $xml The XML element we should load.
+     * @param (\SAML2\XML\Chunk|\SAML2\XML\ds\KeyName|\SAML2\XML\ds\X509Data)[] $info
+     * @param string|null $Id
      */
-    public function __construct(DOMElement $xml = null)
+    public function __construct(array $info, $Id = null)
     {
-        if ($xml === null) {
-            return;
-        }
-
-        if ($xml->hasAttribute('Id')) {
-            $this->Id = $xml->getAttribute('Id');
-        }
-
-        foreach ($xml->childNodes as $n) {
-            if (!($n instanceof \DOMElement)) {
-                continue;
-            }
-
-            if ($n->namespaceURI !== XMLSecurityDSig::XMLDSIGNS) {
-                $this->info[] = new Chunk($n);
-                continue;
-            }
-            switch ($n->localName) {
-                case 'KeyName':
-                    $this->info[] = new KeyName($n);
-                    break;
-                case 'X509Data':
-                    $this->info[] = new X509Data($n);
-                    break;
-                default:
-                    $this->info[] = new Chunk($n);
-                    break;
-            }
-        }
+        $this->setInfo($info);
+        $this->setId($Id);
     }
 
 

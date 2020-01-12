@@ -27,15 +27,11 @@ final class KeyName extends AbstractDsElement
     /**
      * Initialize a KeyName element.
      *
-     * @param \DOMElement|null $xml The XML element we should load.
+     * @param string $name
      */
-    public function __construct(DOMElement $xml = null)
+    public function __construct(string $name)
     {
-        if ($xml === null) {
-            return;
-        }
-
-        $this->setName($xml->textContent);
+        $this->setName($name);
     }
 
 
@@ -46,8 +42,6 @@ final class KeyName extends AbstractDsElement
      */
     public function getName(): string
     {
-        Assert::notEmpty($this->name);
-
         return $this->name;
     }
 

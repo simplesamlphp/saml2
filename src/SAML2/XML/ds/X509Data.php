@@ -31,32 +31,11 @@ final class X509Data extends AbstractDsElement
     /**
      * Initialize a X509Data.
      *
-     * @param \DOMElement|null $xml The XML element we should load.
+     * @param (\SAML2\XML\Chunk|\SAML2\XML\ds\X509Certificate)[] $data
      */
-    public function __construct(DOMElement $xml = null)
+    public function __construct(array $data)
     {
-        if ($xml === null) {
-            return;
-        }
-
-        for ($n = $xml->firstChild; $n !== null; $n = $n->nextSibling) {
-            if (!($n instanceof DOMElement)) {
-                continue;
-            }
-
-            if ($n->namespaceURI !== XMLSecurityDSig::XMLDSIGNS) {
-                $this->addData(new Chunk($n));
-                continue;
-            }
-            switch ($n->localName) {
-                case 'X509Certificate':
-                    $this->addData(new X509Certificate($n));
-                    break;
-                default:
-                    $this->addData(new Chunk($n));
-                    break;
-            }
-        }
+        $this->setData($data);
     }
 
 
