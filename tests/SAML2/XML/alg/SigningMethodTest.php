@@ -46,7 +46,7 @@ class SigningMethodTest extends \PHPUnit\Framework\TestCase
     {
         $document = DOMDocumentFactory::fromString(
             '<alg:SigningMethod xmlns:alg="' . SigningMethod::NS . '" Algorithm="http://exampleAlgorithm"'
-                . 'MinKeySize="1024" MaxKeySize="4096" />'
+                . ' MinKeySize="1024" MaxKeySize="4096" />'
         );
 
         $signingMethod = SigningMethod::fromXML($document->firstChild);
