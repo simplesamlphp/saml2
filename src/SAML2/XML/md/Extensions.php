@@ -72,6 +72,7 @@ class Extensions
                 && array_key_exists($node->localName, $supported[$node->namespaceURI])
             ) {
                 if ($node->namespaceURI === ALG::NS) {
+                    /** @psalm-suppress UndefinedMethod */
                     $ret[] = $supported[$node->namespaceURI][$node->localName]::fromXML($node);
                 } else {
                     $ret[] = new $supported[$node->namespaceURI][$node->localName]($node);
