@@ -88,7 +88,7 @@ final class RegistrationInfo extends AbstractMdrpiElement
      * @param string $registrationAuthority
      * @return void
      */
-    public function setRegistrationAuthority(string $registrationAuthority): void
+    private function setRegistrationAuthority(string $registrationAuthority): void
     {
         $this->registrationAuthority = $registrationAuthority;
     }
@@ -111,7 +111,7 @@ final class RegistrationInfo extends AbstractMdrpiElement
      * @param int|null $registrationInstant
      * @return void
      */
-    public function setRegistrationInstant(int $registrationInstant = null): void
+    private function setRegistrationInstant(int $registrationInstant = null): void
     {
         $this->registrationInstant = $registrationInstant;
     }
@@ -134,7 +134,7 @@ final class RegistrationInfo extends AbstractMdrpiElement
      * @param array $registrationPolicy
      * @return void
      */
-    public function setRegistrationPolicy(array $registrationPolicy): void
+    private function setRegistrationPolicy(array $registrationPolicy): void
     {
         $this->RegistrationPolicy = $registrationPolicy;
     }

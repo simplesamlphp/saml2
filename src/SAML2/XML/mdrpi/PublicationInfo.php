@@ -130,7 +130,7 @@ final class PublicationInfo extends AbstractMdrpiElement
      * @param string $publisher
      * @return void
      */
-    public function setPublisher(string $publisher): void
+    private function setPublisher(string $publisher): void
     {
         $this->publisher = $publisher;
     }
@@ -142,7 +142,7 @@ final class PublicationInfo extends AbstractMdrpiElement
      * @param int|null $creationInstant
      * @return void
      */
-    public function setCreationInstant(int $creationInstant = null): void
+    private function setCreationInstant(int $creationInstant = null): void
     {
         $this->creationInstant = $creationInstant;
     }
@@ -154,7 +154,7 @@ final class PublicationInfo extends AbstractMdrpiElement
      * @param string|null $publicationId
      * @return void
      */
-    public function setPublicationId(string $publicationId = null): void
+    private function setPublicationId(string $publicationId = null): void
     {
         $this->publicationId = $publicationId;
     }
@@ -166,7 +166,7 @@ final class PublicationInfo extends AbstractMdrpiElement
      * @param array $usagePolicy
      * @return void
      */
-    public function setUsagePolicy(array $usagePolicy): void
+    private function setUsagePolicy(array $usagePolicy): void
     {
         $this->UsagePolicy = $usagePolicy;
     }
