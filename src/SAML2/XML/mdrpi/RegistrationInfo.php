@@ -77,7 +77,7 @@ final class RegistrationInfo extends AbstractMdrpiElement
      * @param string $registrationAuthority
      * @return void
      */
-    private function setRegistrationAuthority(?string $registrationAuthority): void
+    private function setRegistrationAuthority(string $registrationAuthority): void
     {
         $this->registrationAuthority = $registrationAuthority;
     }
@@ -176,7 +176,9 @@ final class RegistrationInfo extends AbstractMdrpiElement
             $e->setAttribute('registrationInstant', gmdate('Y-m-d\TH:i:s\Z', $this->registrationInstant));
         }
 
-        Utils::addStrings($e, RegistrationInfo::NS, 'mdrpi:RegistrationPolicy', true, $this->RegistrationPolicy);
+        if (!empty($this->RegistrationPolicy)) {
+            Utils::addStrings($e, RegistrationInfo::NS, 'mdrpi:RegistrationPolicy', true, $this->RegistrationPolicy);
+        }
 
         return $e;
     }

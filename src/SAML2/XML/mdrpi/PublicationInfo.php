@@ -63,7 +63,7 @@ final class PublicationInfo extends AbstractMdrpiElement
         array $UsagePolicy = null
     ) {
         $this->setPublisher($publisher);
-        $this->setCreateInstant($createInstant);
+        $this->setCreationInstant($creationInstant);
         $this->setPublicationId($publicationId);
         $this->setUsagePolicy($UsagePolicy);
     }
@@ -214,7 +214,9 @@ final class PublicationInfo extends AbstractMdrpiElement
             $e->setAttribute('publicationId', $this->publicationId);
         }
 
-        Utils::addStrings($e, PublicationInfo::NS, 'mdrpi:UsagePolicy', true, $this->UsagePolicy);
+        if (!empty($this->UsagePolicy)) {
+            Utils::addStrings($e, PublicationInfo::NS, 'mdrpi:UsagePolicy', true, $this->UsagePolicy);
+        }
 
         return $e;
     }

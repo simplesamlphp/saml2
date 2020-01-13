@@ -18,14 +18,15 @@ class PublicationInfoTest extends \PHPUnit\Framework\TestCase
      */
     public function testMarshalling(): void
     {
-        $publicationInfo = new PublicationInfo();
-        $publicationInfo->setPublisher('TestPublisher');
-        $publicationInfo->setCreationInstant(1234567890);
-        $publicationInfo->setPublicationId('PublicationIdValue');
-        $publicationInfo->setUsagePolicy([
-            'en' => 'http://EnglishUsagePolicy',
-            'no' => 'http://NorwegianUsagePolicy',
-        ]);
+        $publicationInfo = new PublicationInfo(
+            'TestPublisher',
+            1234567890,
+            'PublicationIdValue',
+            [
+                'en' => 'http://EnglishUsagePolicy',
+                'no' => 'http://NorwegianUsagePolicy',
+            ]
+        );
 
         $document = DOMDocumentFactory::fromString('<root />');
         $xml = $publicationInfo->toXML($document->firstChild);
@@ -77,7 +78,7 @@ class PublicationInfoTest extends \PHPUnit\Framework\TestCase
 XML
         );
 
-        $publicationInfo = new PublicationInfo($document->firstChild);
+        $publicationInfo = PublicationInfo::fromXML($document->firstChild);
 
         $this->assertEquals('SomePublisher', $publicationInfo->getPublisher());
         $this->assertEquals(1293840000, $publicationInfo->getCreationInstant());
@@ -101,6 +102,6 @@ XML
         );
 
         $this->expectException(\Exception::class, 'Missing required attribute "publisher"');
-        $publicationInfo = new PublicationInfo($document->firstChild);
+        $publicationInfo = PublicationInfo::fromXML($document->firstChild);
     }
 }
