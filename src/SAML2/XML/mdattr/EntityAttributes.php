@@ -89,6 +89,29 @@ final class EntityAttributes extends AbstractMdattrElement
 
 
     /**
+     * Convert XML into a EntityAttributes
+     *
+     * @param \DOMElement $xml The XML element we should load
+     * @return self
+     */
+    public static function fromXML(DOMElement $xml): object
+    {
+        $children = [];
+
+        /** @var \DOMElement $node */
+        foreach (Utils::xpQuery($xml, './saml_assertion:Attribute|./saml_assertion:Assertion') as $node) {
+            if ($node->localName === 'Attribute') {
+                $children[] = new Attribute($node);
+            } else {
+                $children[] = new Chunk($node);
+            }
+        }
+
+        return new self($children);
+    }
+
+
+    /**
      * Convert this EntityAttributes to XML.
      *
      * @param \DOMElement $parent The element we should append to.
