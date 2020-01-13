@@ -182,6 +182,31 @@ final class Logo extends AbstractMduiElement
 
 
     /**
+     * Convert XML into a Logo
+     *
+     * @param \DOMElement $xml The XML element we should load
+     * @return self
+     */
+    public static function fromXML(DOMElement $xml): object
+    {
+        if (!$xml->hasAttribute('width')) {
+            throw new \Exception('Missing width of Logo.');
+        } elseif (!$xml->hasAttribute('height')) {
+            throw new \Exception('Missing height of Logo.');
+        } elseif (!strlen($xml->textContent)) {
+            throw new \Exception('Missing url value for Logo.');
+        }
+
+        $Url = $xml->textContent;
+        $Width = intval($xml->getAttribute('width'));
+        $Height = intval($xml->getAttribute('height'));
+        $lang = $xml->hasAttribute('xml:lang') ? $xml->getAttribute('xml:lang') : null;
+
+        return new self($Url, $Width, $Height, $lang);
+    }
+
+
+    /**
      * Convert this Logo to XML.
      *
      * @param \DOMElement $parent The element we should append this Logo to.

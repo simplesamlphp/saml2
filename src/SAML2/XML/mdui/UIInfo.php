@@ -303,6 +303,48 @@ final class UIInfo extends AbstractMduiElement
 
 
     /**
+     * Convert XML into a UIInfo
+     *
+     * @param \DOMElement $xml The XML element we should load
+     * @return self
+     */
+    public static function fromXML(DOMElement $xml): object
+    {
+        $DisplayName = Utils::extractLocalizedStrings($xml, UIInfo::NS, 'DisplayName');
+        $Description = Utils::extractLocalizedStrings($xml, UIInfo::NS, 'Description');
+        $InformationURL = Utils::extractLocalizedStrings($xml, UIInfo::NS, 'InformationURL');
+        $PrivacyStatementURL = Utils::extractLocalizedStrings($xml, UIInfo::NS, 'PrivacyStatementURL');
+        $Keywords = $Logo = $children = [];
+
+        /** @var \DOMElement $node */
+        foreach (Utils::xpQuery($xml, './*') as $node) {
+            if ($node->namespaceURI === UIInfo::NS) {
+                switch ($node->localName) {
+                    case 'Keywords':
+                        $Keywords[] = new Keywords($node);
+                        break;
+                    case 'Logo':
+                        $Logo[] = new Logo($node);
+                        break;
+                }
+            } else {
+                $children[] = new Chunk($node);
+            }
+        }
+
+        return new self(
+            $DisplayName,
+            $Description,
+            $InformationURL,
+            $PrivacyStatementURL,
+            $Keywords,
+            $Logo,
+            $children
+        );
+    }
+
+
+    /**
      * Convert this UIInfo to XML.
      *
      * @param \DOMElement $parent The element we should append to.

@@ -120,6 +120,32 @@ final class Keywords extends AbstractMduiElement
 
 
     /**
+     * Convert XML into a Keywords
+     *
+     * @param \DOMElement $xml The XML element we should load
+     * @return self
+     */
+    public static function fromXML(DOMElement $xml): object
+    {
+        if (!$xml->hasAttribute('xml:lang')) {
+            throw new \Exception('Missing lang on Keywords.');
+        }
+        $lang = $xml->getAttribute('xml:lang');
+
+        if (!strlen($xml->textContent)) {
+            throw new \Exception('Missing value for Keywords.');
+        }
+
+        $Keywords = [];
+        foreach (explode(' ', $xml->textContent) as $keyword) {
+            $Keywords[] = str_replace('+', ' ', $keyword);
+        }
+
+        return new self($lang, $Keywords);
+    }
+
+
+    /**
      * Convert this Keywords to XML.
      *
      * @param \DOMElement $parent The element we should append this Keywords to.

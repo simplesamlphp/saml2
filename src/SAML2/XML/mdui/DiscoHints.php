@@ -174,6 +174,28 @@ final class DiscoHints extends AbstractMduiElement
 
 
     /**
+     * Convert XML into a DiscoHints
+     *
+     * @param \DOMElement $xml The XML element we should load
+     * @return self
+     */
+    public static function fromXML(DOMElement $xml): object
+    {
+        $IPHint = Utils::extractStrings($xml, DiscoHints::NS, 'IPHint');
+        $DomainHint = Utils::extractStrings($xml, DiscoHints::NS, 'DomainHint');
+        $GeolocationHint = Utils::extractStrings($xml, DiscoHints::NS, 'GeolocationHint');
+        $children = [];
+
+        /** @var \DOMElement $node */
+        foreach (Utils::xpQuery($xml, "./*[namespace-uri()!='" . DiscoHints::NS . "']") as $node) {
+            $children[] = new Chunk($node);
+        }
+
+        return new self($IPHint, $DomainHint, $GeolocationHint, $children ?: null);
+    }
+
+
+    /**
      * Convert this DiscoHints to XML.
      *
      * @param \DOMElement $parent The element we should append to.
