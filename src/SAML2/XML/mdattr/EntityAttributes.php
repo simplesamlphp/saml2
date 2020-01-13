@@ -31,22 +31,11 @@ final class EntityAttributes extends AbstractMdattrElement
     /**
      * Create a EntityAttributes element.
      *
-     * @param \DOMElement|null $xml The XML element we should load.
+     * @param (\SAML2\XML\Chunk|\SAML2\XML\saml\Attribute)[] $children
      */
-    public function __construct(DOMElement $xml = null)
+    public function __construct(array $children)
     {
-        if ($xml === null) {
-            return;
-        }
-
-        /** @var \DOMElement $node */
-        foreach (Utils::xpQuery($xml, './saml_assertion:Attribute|./saml_assertion:Assertion') as $node) {
-            if ($node->localName === 'Attribute') {
-                $this->children[] = new Attribute($node);
-            } else {
-                $this->children[] = new Chunk($node);
-            }
-        }
+        $this->setChildren($children);
     }
 
 
@@ -69,6 +58,8 @@ final class EntityAttributes extends AbstractMdattrElement
      */
     private function setChildren(array $children): void
     {
+        Assert::allIsInstanceOfAny($children, [Chunk::class, Attribute::class]);
+
         $this->children = $children;
     }
 
@@ -81,9 +72,10 @@ final class EntityAttributes extends AbstractMdattrElement
      *
      * @throws \InvalidArgumentException if assertions are false
      */
-    public function addChildren($child): void
+    public function addChild($child): void
     {
         Assert::isInstanceOfAny($child, [Chunk::class, Attribute::class]);
+
         $this->children[] = $child;
     }
 

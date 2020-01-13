@@ -243,7 +243,7 @@ class EntitiesDescriptor extends SignedElementHelper
      *
      * @throws \InvalidArgumentException if assertions are false
      */
-    public function addChildren($child): void
+    public function addChild($child): void
     {
         Assert::isInstanceOfAny($child, [EntityDescriptor::class, EntitiesDescriptor::class]);
         $this->children[] = $child;

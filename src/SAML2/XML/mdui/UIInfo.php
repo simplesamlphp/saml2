@@ -296,7 +296,7 @@ class UIInfo
      * @param \SAML2\XML\Chunk $child
      * @return void
      */
-    public function addChildren(Chunk $child): void
+    public function addChild(Chunk $child): void
     {
         $this->children[] = $child;
     }
