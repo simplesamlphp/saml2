@@ -15,7 +15,7 @@ use Webmozart\Assert\Assert;
  * @author Tim van Dijen, <tvdijen@gmail.com>
  * @package SimpleSAMLphp
  */
-final class AuthnContextClassRef extends \SAML2\XML\AbstractXMLElement
+final class AuthnContextClassRef extends AbstractSamlElement
 {
     /** @var string */
     protected $classRef;

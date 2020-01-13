@@ -17,7 +17,7 @@ use Webmozart\Assert\Assert;
  * @author Tim van Dijen, <tvdijen@gmail.com>
  * @package simplesamlphp/saml2
  */
-final class StatusDetail extends \SAML2\XML\AbstractXMLElement
+final class StatusDetail extends AbstractSamlpElement
 {
     /** @var \SAML2\XML\Chunk[]|null */
     protected $details = null;

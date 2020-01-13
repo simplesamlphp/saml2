@@ -16,7 +16,7 @@ use Webmozart\Assert\Assert;
  * @author Tim van Dijen, <tvdijen@gmail.com>
  * @package SimpleSAMLphp
  */
-final class AuthenticatingAuthority extends \SAML2\XML\AbstractXMLElement
+final class AuthenticatingAuthority extends AbstractSamlElement
 {
     /** @var string */
     protected $authority;

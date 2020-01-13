@@ -15,7 +15,7 @@ use Webmozart\Assert\Assert;
  * @author Tim van Dijen, <tvdijen@gmail.com>
  * @package SimpleSAMLphp
  */
-final class NameIDPolicy extends \SAML2\XML\AbstractXMLElement
+final class NameIDPolicy extends AbstractSamlpElement
 {
     /** @var string|null */
     protected $Format = null;
