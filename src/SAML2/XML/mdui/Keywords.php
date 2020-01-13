@@ -134,14 +134,13 @@ final class Keywords extends AbstractMduiElement
     /**
      * Convert this Keywords to XML.
      *
-     * @param \DOMElement $parent The element we should append this Keywords to.
+     * @param \DOMElement|null $parent The element we should append this Keywords to.
      * @throws \Exception
      * @return \DOMElement
      */
-    public function toXML(DOMElement $parent): DOMElement
+    public function toXML(DOMElement $parent = null): DOMElement
     {
         $e = $this->instantiateParentElement($parent);
-
         $e->setAttribute('xml:lang', $this->lang);
 
         $value = '';

@@ -202,6 +202,8 @@ final class DiscoHints extends AbstractMduiElement
      */
     public function toXML(DOMElement $parent = null): ?DOMElement
     {
+        $e = $this->instantiateParentElement($parent);
+
         if (
             !empty($this->IPHint)
             || !empty($this->DomainHint)
@@ -231,6 +233,6 @@ final class DiscoHints extends AbstractMduiElement
             return $e;
         }
 
-        return null;
+        return $e;
     }
 }

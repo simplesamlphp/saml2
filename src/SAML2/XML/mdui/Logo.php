@@ -188,12 +188,10 @@ final class Logo extends AbstractMduiElement
     /**
      * Convert this Logo to XML.
      *
-     * @param \DOMElement $parent The element we should append this Logo to.
+     * @param \DOMElement|null $parent The element we should append this Logo to.
      * @return \DOMElement
-     *
-     * @throws \InvalidArgumentException if assertions are false
      */
-    public function toXML(DOMElement $parent): DOMElement
+    public function toXML(DOMElement $parent = null): DOMElement
     {
         $e = $this->instantiateParentElement($parent);
         $e->appendChild($e->ownerDocument->createTextNode($this->url));
