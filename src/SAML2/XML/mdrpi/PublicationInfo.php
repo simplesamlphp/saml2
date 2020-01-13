@@ -42,37 +42,30 @@ final class PublicationInfo extends AbstractMdrpiElement
      *
      * This is an associative array with language=>URL.
      *
-     * @var array
+     * @var array|null
      */
-    protected $UsagePolicy = [];
+    protected $UsagePolicy = null;
 
 
     /**
      * Create/parse a mdrpi:PublicationInfo element.
      *
-     * @param \DOMElement|null $xml The XML element we should load.
+     * @param string $publisher
+     * @param int|null $creationInstant
+     * @param string|null $publicationId
+     * @param array|null $UsagePolicy
      * @throws \Exception
      */
-    public function __construct(DOMElement $xml = null)
-    {
-        if ($xml === null) {
-            return;
-        }
-
-        if (!$xml->hasAttribute('publisher')) {
-            throw new \Exception('Missing required attribute "publisher" in mdrpi:PublicationInfo element.');
-        }
-        $this->publisher = $xml->getAttribute('publisher');
-
-        if ($xml->hasAttribute('creationInstant')) {
-            $this->creationInstant = Utils::xsDateTimeToTimestamp($xml->getAttribute('creationInstant'));
-        }
-
-        if ($xml->hasAttribute('publicationId')) {
-            $this->publicationId = $xml->getAttribute('publicationId');
-        }
-
-        $this->UsagePolicy = Utils::extractLocalizedStrings($xml, PublicationInfo::NS, 'UsagePolicy');
+    public function __construct(
+        string $publisher,
+        int $creationInstant = null,
+        string $publicationId = null,
+        array $UsagePolicy = null
+    ) {
+        $this->setPublisher($publisher);
+        $this->setCreateInstant($createInstant);
+        $this->setPublicationId($publicationId);
+        $this->setUsagePolicy($UsagePolicy);
     }
 
 
@@ -85,8 +78,6 @@ final class PublicationInfo extends AbstractMdrpiElement
      */
     public function getPublisher(): string
     {
-        Assert::notEmpty($this->publisher);
-
         return $this->publisher;
     }
 
@@ -116,9 +107,9 @@ final class PublicationInfo extends AbstractMdrpiElement
     /**
      * Collect the value of the UsagePolicy-property
      *
-     * @return array
+     * @return array|null
      */
-    public function getUsagePolicy(): array
+    public function getUsagePolicy(): ?array
     {
         return $this->UsagePolicy;
     }
@@ -142,7 +133,7 @@ final class PublicationInfo extends AbstractMdrpiElement
      * @param int|null $creationInstant
      * @return void
      */
-    private function setCreationInstant(int $creationInstant = null): void
+    private function setCreationInstant(?int $creationInstant): void
     {
         $this->creationInstant = $creationInstant;
     }
@@ -154,7 +145,7 @@ final class PublicationInfo extends AbstractMdrpiElement
      * @param string|null $publicationId
      * @return void
      */
-    private function setPublicationId(string $publicationId = null): void
+    private function setPublicationId(?string $publicationId): void
     {
         $this->publicationId = $publicationId;
     }
@@ -163,10 +154,10 @@ final class PublicationInfo extends AbstractMdrpiElement
     /**
      * Set the value of the UsagePolicy-property
      *
-     * @param array $usagePolicy
+     * @param array|null $usagePolicy
      * @return void
      */
-    private function setUsagePolicy(array $usagePolicy): void
+    private function setUsagePolicy(?array $usagePolicy): void
     {
         $this->UsagePolicy = $usagePolicy;
     }
@@ -192,7 +183,7 @@ final class PublicationInfo extends AbstractMdrpiElement
         $publicationId = $xml->hasAttribute('publicationId') ? $xml->getAttribute('publicationId') : null;
         $UsagePolicy = Utils::extractLocalizedStrings($xml, PublicationInfo::NS, 'UsagePolicy');
 
-        return new self($publisher, $creationInstant, $publicationId, $UsagePolicy);
+        return new self($publisher, $creationInstant, $publicationId, empty($UsagePolicy) ? null : $UsagePolicy);
     }
 
 
