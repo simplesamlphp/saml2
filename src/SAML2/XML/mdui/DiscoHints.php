@@ -14,7 +14,7 @@ use SAML2\XML\Chunk;
  * @link: http://docs.oasis-open.org/security/saml/Post2.0/sstc-saml-metadata-ui/v1.0/sstc-saml-metadata-ui-v1.0.pdf
  * @package SimpleSAMLphp
  */
-final class DiscoHints
+final class DiscoHints extends AbstractMduiElement
 {
     /**
      * Array with child elements.
@@ -58,12 +58,12 @@ final class DiscoHints
             return;
         }
 
-        $this->IPHint = Utils::extractStrings($xml, Common::NS, 'IPHint');
-        $this->DomainHint = Utils::extractStrings($xml, Common::NS, 'DomainHint');
-        $this->GeolocationHint = Utils::extractStrings($xml, Common::NS, 'GeolocationHint');
+        $this->IPHint = Utils::extractStrings($xml, DiscoHints::NS, 'IPHint');
+        $this->DomainHint = Utils::extractStrings($xml, DiscoHints::NS, 'DomainHint');
+        $this->GeolocationHint = Utils::extractStrings($xml, DiscoHints::NS, 'GeolocationHint');
 
         /** @var \DOMElement $node */
-        foreach (Utils::xpQuery($xml, "./*[namespace-uri()!='" . Common::NS . "']") as $node) {
+        foreach (Utils::xpQuery($xml, "./*[namespace-uri()!='" . DiscoHints::NS . "']") as $node) {
             $this->children[] = new Chunk($node);
         }
     }
@@ -189,16 +189,16 @@ final class DiscoHints
         ) {
             $doc = $parent->ownerDocument;
 
-            $e = $doc->createElementNS(Common::NS, 'mdui:DiscoHints');
+            $e = $doc->createElementNS(DiscoHints::NS, 'mdui:DiscoHints');
             $parent->appendChild($e);
 
             foreach ($this->getChildren() as $child) {
                 $child->toXML($e);
             }
 
-            Utils::addStrings($e, Common::NS, 'mdui:IPHint', false, $this->IPHint);
-            Utils::addStrings($e, Common::NS, 'mdui:DomainHint', false, $this->DomainHint);
-            Utils::addStrings($e, Common::NS, 'mdui:GeolocationHint', false, $this->GeolocationHint);
+            Utils::addStrings($e, DiscoHints::NS, 'mdui:IPHint', false, $this->IPHint);
+            Utils::addStrings($e, DiscoHints::NS, 'mdui:DomainHint', false, $this->DomainHint);
+            Utils::addStrings($e, DiscoHints::NS, 'mdui:GeolocationHint', false, $this->GeolocationHint);
 
             return $e;
         }

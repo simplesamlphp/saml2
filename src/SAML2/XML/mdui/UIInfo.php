@@ -15,7 +15,7 @@ use Webmozart\Assert\Assert;
  * @link: http://docs.oasis-open.org/security/saml/Post2.0/sstc-saml-metadata-ui/v1.0/sstc-saml-metadata-ui-v1.0.pdf
  * @package SimpleSAMLphp
  */
-final class UIInfo
+final class UIInfo extends AbstractMduiElement
 {
     /**
      * Array with child elements.
@@ -80,14 +80,14 @@ final class UIInfo
             return;
         }
 
-        $this->DisplayName = Utils::extractLocalizedStrings($xml, Common::NS, 'DisplayName');
-        $this->Description = Utils::extractLocalizedStrings($xml, Common::NS, 'Description');
-        $this->InformationURL = Utils::extractLocalizedStrings($xml, Common::NS, 'InformationURL');
-        $this->PrivacyStatementURL = Utils::extractLocalizedStrings($xml, Common::NS, 'PrivacyStatementURL');
+        $this->DisplayName = Utils::extractLocalizedStrings($xml, UIInfo::NS, 'DisplayName');
+        $this->Description = Utils::extractLocalizedStrings($xml, UIInfo::NS, 'Description');
+        $this->InformationURL = Utils::extractLocalizedStrings($xml, UIInfo::NS, 'InformationURL');
+        $this->PrivacyStatementURL = Utils::extractLocalizedStrings($xml, UIInfo::NS, 'PrivacyStatementURL');
 
         /** @var \DOMElement $node */
         foreach (Utils::xpQuery($xml, './*') as $node) {
-            if ($node->namespaceURI === Common::NS) {
+            if ($node->namespaceURI === UIInfo::NS) {
                 switch ($node->localName) {
                     case 'Keywords':
                         $this->Keywords[] = new Keywords($node);
@@ -322,13 +322,13 @@ final class UIInfo
         ) {
             $doc = $parent->ownerDocument;
 
-            $e = $doc->createElementNS(Common::NS, 'mdui:UIInfo');
+            $e = $doc->createElementNS(UIInfo::NS, 'mdui:UIInfo');
             $parent->appendChild($e);
 
-            Utils::addStrings($e, Common::NS, 'mdui:DisplayName', true, $this->DisplayName);
-            Utils::addStrings($e, Common::NS, 'mdui:Description', true, $this->Description);
-            Utils::addStrings($e, Common::NS, 'mdui:InformationURL', true, $this->InformationURL);
-            Utils::addStrings($e, Common::NS, 'mdui:PrivacyStatementURL', true, $this->PrivacyStatementURL);
+            Utils::addStrings($e, UIInfo::NS, 'mdui:DisplayName', true, $this->DisplayName);
+            Utils::addStrings($e, UIInfo::NS, 'mdui:Description', true, $this->Description);
+            Utils::addStrings($e, UIInfo::NS, 'mdui:InformationURL', true, $this->InformationURL);
+            Utils::addStrings($e, UIInfo::NS, 'mdui:PrivacyStatementURL', true, $this->PrivacyStatementURL);
 
             foreach ($this->Keywords as $child) {
                 $child->toXML($e);

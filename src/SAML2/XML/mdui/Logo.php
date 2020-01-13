@@ -13,7 +13,7 @@ use Webmozart\Assert\Assert;
  * @link: http://docs.oasis-open.org/security/saml/Post2.0/sstc-saml-metadata-ui/v1.0/sstc-saml-metadata-ui-v1.0.pdf
  * @package SimpleSAMLphp
  */
-final class Logo
+final class Logo extends AbstractMduiElement
 {
     /**
      * The url of this logo.
@@ -197,7 +197,7 @@ final class Logo
 
         $doc = $parent->ownerDocument;
 
-        $e = $doc->createElementNS(Common::NS, 'mdui:Logo');
+        $e = $doc->createElementNS(Logo::NS, 'mdui:Logo');
         $e->appendChild($doc->createTextNode($this->url));
         $e->setAttribute('width', strval($this->width));
         $e->setAttribute('height', strval($this->height));

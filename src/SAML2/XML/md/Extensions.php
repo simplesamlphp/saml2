@@ -15,7 +15,7 @@ use SAML2\XML\mdattr\EntityAttributes;
 use SAML2\XML\mdrpi\AbstractMdrpiElement as MDRPI;
 use SAML2\XML\mdrpi\PublicationInfo;
 use SAML2\XML\mdrpi\RegistrationInfo;
-use SAML2\XML\mdui\Common as MDUI;
+use SAML2\XML\mdui\AbstractMduiElement as MDUI;
 use SAML2\XML\mdui\DiscoHints;
 use SAML2\XML\mdui\UIInfo;
 use SAML2\XML\shibmd\Scope;

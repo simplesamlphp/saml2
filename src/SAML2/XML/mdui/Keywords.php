@@ -13,7 +13,7 @@ use Webmozart\Assert\Assert;
  * @link: http://docs.oasis-open.org/security/saml/Post2.0/sstc-saml-metadata-ui/v1.0/sstc-saml-metadata-ui-v1.0.pdf
  * @package SimpleSAMLphp
  */
-final class Keywords
+final class Keywords extends AbstractMduiElement
 {
     /**
      * The keywords of this item.
@@ -134,7 +134,7 @@ final class Keywords
 
         $doc = $parent->ownerDocument;
 
-        $e = $doc->createElementNS(Common::NS, 'mdui:Keywords');
+        $e = $doc->createElementNS(Keywords::NS, 'mdui:Keywords');
         $e->setAttribute('xml:lang', $this->lang);
         $value = '';
         foreach ($this->Keywords as $keyword) {
