@@ -16,13 +16,8 @@ use Webmozart\Assert\Assert;
  * @link: http://docs.oasis-open.org/security/saml/Post2.0/sstc-metadata-attr-cs-01.pdf
  * @package SimpleSAMLphp
  */
-final class EntityAttributes
+final class EntityAttributes extends AbstractMdattrElement
 {
-    /**
-     * The namespace used for the EntityAttributes extension.
-     */
-    public const NS = 'urn:oasis:names:tc:SAML:metadata:attribute';
-
     /**
      * Array with child elements.
      *
