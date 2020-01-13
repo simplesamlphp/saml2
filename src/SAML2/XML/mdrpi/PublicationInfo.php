@@ -14,28 +14,28 @@ use Webmozart\Assert\Assert;
  * @link: http://docs.oasis-open.org/security/saml/Post2.0/saml-metadata-rpi/v1.0/saml-metadata-rpi-v1.0.pdf
  * @package SimpleSAMLphp
  */
-class PublicationInfo
+final class PublicationInfo
 {
     /**
      * The identifier of the metadata publisher.
      *
      * @var string
      */
-    private $publisher;
+    protected $publisher;
 
     /**
      * The creation timestamp for the metadata, as a UNIX timestamp.
      *
      * @var int|null
      */
-    private $creationInstant = null;
+    protected $creationInstant = null;
 
     /**
      * Identifier for this metadata publication.
      *
      * @var string|null
      */
-    private $publicationId = null;
+    protected $publicationId = null;
 
     /**
      * Link to usage policy for this metadata.
@@ -44,7 +44,7 @@ class PublicationInfo
      *
      * @var array
      */
-    private $UsagePolicy = [];
+    protected $UsagePolicy = [];
 
 
     /**

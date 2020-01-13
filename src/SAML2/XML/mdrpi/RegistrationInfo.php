@@ -14,21 +14,21 @@ use Webmozart\Assert\Assert;
  * @link: http://docs.oasis-open.org/security/saml/Post2.0/saml-metadata-rpi/v1.0/saml-metadata-rpi-v1.0.pdf
  * @package SimpleSAMLphp
  */
-class RegistrationInfo
+final class RegistrationInfo
 {
     /**
      * The identifier of the metadata registration authority.
      *
      * @var string
      */
-    private $registrationAuthority;
+    protected $registrationAuthority;
 
     /**
      * The registration timestamp for the metadata, as a UNIX timestamp.
      *
      * @var int|null
      */
-    private $registrationInstant = null;
+    protected $registrationInstant = null;
 
     /**
      * Link to registration policy for this metadata.
@@ -37,7 +37,7 @@ class RegistrationInfo
      *
      * @var array
      */
-    private $RegistrationPolicy = [];
+    protected $RegistrationPolicy = [];
 
 
     /**
