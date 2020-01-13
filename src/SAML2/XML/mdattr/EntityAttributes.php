@@ -67,7 +67,7 @@ final class EntityAttributes extends AbstractMdattrElement
      * @param array $children
      * @return void
      */
-    public function setChildren(array $children): void
+    private function setChildren(array $children): void
     {
         $this->children = $children;
     }
