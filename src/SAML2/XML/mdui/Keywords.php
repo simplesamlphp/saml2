@@ -78,7 +78,7 @@ final class Keywords extends AbstractMduiElement
      * @param string $lang
      * @return void
      */
-    public function setLanguage(string $lang): void
+    private function setLanguage(string $lang): void
     {
         $this->lang = $lang;
     }
@@ -101,7 +101,7 @@ final class Keywords extends AbstractMduiElement
      * @param string[] $keywords
      * @return void
      */
-    public function setKeywords(array $keywords): void
+    private function setKeywords(array $keywords): void
     {
         $this->Keywords = $keywords;
     }

@@ -122,7 +122,7 @@ final class UIInfo extends AbstractMduiElement
      *
      * @throws \InvalidArgumentException if assertions are false
      */
-    public function setKeywords(array $keywords): void
+    private function setKeywords(array $keywords): void
     {
         Assert::allIsInstanceOf($keywords, Keywords::class);
         $this->Keywords = $keywords;
@@ -158,7 +158,7 @@ final class UIInfo extends AbstractMduiElement
      * @param array $displayName
      * @return void
      */
-    public function setDisplayName(array $displayName): void
+    private function setDisplayName(array $displayName): void
     {
         $this->DisplayName = $displayName;
     }
@@ -181,7 +181,7 @@ final class UIInfo extends AbstractMduiElement
      * @param array $description
      * @return void
      */
-    public function setDescription(array $description): void
+    private function setDescription(array $description): void
     {
         $this->Description = $description;
     }
@@ -203,7 +203,7 @@ final class UIInfo extends AbstractMduiElement
      * @param array $informationURL
      * @return void
      */
-    public function setInformationURL(array $informationURL): void
+    private function setInformationURL(array $informationURL): void
     {
         $this->InformationURL = $informationURL;
     }
@@ -226,7 +226,7 @@ final class UIInfo extends AbstractMduiElement
      * @param array $privacyStatementURL
      * @return void
      */
-    public function setPrivacyStatementURL(array $privacyStatementURL): void
+    private function setPrivacyStatementURL(array $privacyStatementURL): void
     {
         $this->PrivacyStatementURL = $privacyStatementURL;
     }
@@ -249,7 +249,7 @@ final class UIInfo extends AbstractMduiElement
      * @param \SAML2\XML\mdui\Logo[] $logo
      * @return void
      */
-    public function setLogo(array $logo): void
+    private function setLogo(array $logo): void
     {
         $this->Logo = $logo;
     }
@@ -284,7 +284,7 @@ final class UIInfo extends AbstractMduiElement
      * @param array $children
      * @return void
      */
-    public function setChildren(array $children): void
+    private function setChildren(array $children): void
     {
         $this->children = $children;
     }

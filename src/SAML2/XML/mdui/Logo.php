@@ -95,7 +95,7 @@ final class Logo extends AbstractMduiElement
      * @param string $url
      * @return void
      */
-    public function setUrl(string $url): void
+    private function setUrl(string $url): void
     {
         if (!filter_var(trim($url), FILTER_VALIDATE_URL) && substr(trim($url), 0, 5) !== 'data:') {
             throw new \InvalidArgumentException('mdui:Logo is not a valid URL.');
@@ -121,7 +121,7 @@ final class Logo extends AbstractMduiElement
      * @param string $lang
      * @return void
      */
-    public function setLanguage(string $lang): void
+    private function setLanguage(string $lang): void
     {
         $this->lang = $lang;
     }
@@ -148,7 +148,7 @@ final class Logo extends AbstractMduiElement
      * @param int $height
      * @return void
      */
-    public function setHeight(int $height): void
+    private function setHeight(int $height): void
     {
         $this->height = $height;
     }
@@ -175,7 +175,7 @@ final class Logo extends AbstractMduiElement
      * @param int $width
      * @return void
      */
-    public function setWidth(int $width): void
+    private function setWidth(int $width): void
     {
         $this->width = $width;
     }

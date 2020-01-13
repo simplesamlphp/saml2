@@ -86,7 +86,7 @@ final class DiscoHints extends AbstractMduiElement
      * @param string[] $hints
      * @return void
      */
-    public function setIPHint(array $hints): void
+    private function setIPHint(array $hints): void
     {
         $this->IPHint = $hints;
     }
@@ -109,7 +109,7 @@ final class DiscoHints extends AbstractMduiElement
      * @param string[] $hints
      * @return void
      */
-    public function setDomainHint(array $hints): void
+    private function setDomainHint(array $hints): void
     {
         $this->DomainHint = $hints;
     }
@@ -132,7 +132,7 @@ final class DiscoHints extends AbstractMduiElement
      * @param string[] $hints
      * @return void
      */
-    public function setGeolocationHint(array $hints): void
+    private function setGeolocationHint(array $hints): void
     {
         $this->GeolocationHint = $hints;
     }
@@ -155,7 +155,7 @@ final class DiscoHints extends AbstractMduiElement
      * @param array $children
      * @return void
      */
-    public function setChildren(array $children): void
+    private function setChildren(array $children): void
     {
         $this->children = $children;
     }
