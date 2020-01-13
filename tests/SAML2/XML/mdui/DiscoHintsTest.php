@@ -5,6 +5,7 @@ declare(strict_types=1);
 namespace SAML2\XML\mdui;
 
 use SAML2\DOMDocumentFactory;
+use SAML2\XML\Chunk;
 use SAML2\XML\mdui\DiscoHints;
 use SAML2\XML\mdui\Keywords;
 use SAML2\Utils;
@@ -20,10 +21,12 @@ class DiscoHintsTest extends \PHPUnit\Framework\TestCase
      */
     public function testMarshalling(): void
     {
-        $discoHints = new DiscoHints();
-        $discoHints->setIPHint(["192.168.6.0/24", "fd00:0123:aa:1001::/64"]);
-        $discoHints->setDomainHint(["example.org", "student.example.org"]);
-        $discoHints->setGeolocationHint(["geo:47.37328,8.531126", "geo:19.34343,12.342514"]);
+        $discoHints = new DiscoHints(
+            null,
+            ["192.168.6.0/24", "fd00:0123:aa:1001::/64"],
+            ["example.org", "student.example.org"],
+            ["geo:47.37328,8.531126", "geo:19.34343,12.342514"]
+        );
 
         $document = DOMDocumentFactory::fromString('<root />');
         $xml = $discoHints->toXML($document->firstChild);
@@ -94,7 +97,7 @@ class DiscoHintsTest extends \PHPUnit\Framework\TestCase
 XML
         );
 
-        $disco = new DiscoHints($document->firstChild);
+        $disco = DiscoHints::fromXML($document->firstChild);
 
         $this->assertCount(2, $disco->getIPHint());
         $this->assertEquals('130.59.0.0/16', $disco->getIPHint()[0]);
@@ -114,11 +117,9 @@ XML
      */
     public function testMarshallingChildren(): void
     {
+        $keywords = new Keywords("nl", ["voorbeeld", "specimen"]);
         $discoHints = new DiscoHints();
-        $keywords = new Keywords();
-        $keywords->setLanguage("nl");
-        $keywords->setKeywords(["voorbeeld", "specimen"]);
-        $discoHints->setChildren([$keywords]);
+        $discoHints->addChild(new Chunk($keywords->toXML()));
 
         $document = DOMDocumentFactory::fromString('<root />');
         $xml = $discoHints->toXML($document->firstChild);
@@ -148,7 +149,7 @@ XML
 XML
         );
 
-        $disco = new DiscoHints($document->firstChild);
+        $disco = DiscoHints::fromXML($document->firstChild);
 
         $this->assertCount(1, $disco->getGeolocationHint());
         $this->assertEquals('geo:47.37328,8.531126', $disco->getGeolocationHint()[0]);

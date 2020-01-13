@@ -19,9 +19,7 @@ class KeywordsTest extends \PHPUnit\Framework\TestCase
      */
     public function testMarshalling(): void
     {
-        $keywords = new Keywords();
-        $keywords->setLanguage("en");
-        $keywords->setKeywords(["KLM", "royal", "Dutch", "air lines"]);
+        $keywords = new Keywords("en", ["KLM", "royal", "Dutch", "air lines"]);
 
         $document = DOMDocumentFactory::fromString('<root />');
         $xml = $keywords->toXML($document->firstChild);
@@ -43,9 +41,7 @@ class KeywordsTest extends \PHPUnit\Framework\TestCase
      */
     public function testKeywordWithPlusSignThrowsException(): void
     {
-        $keywords = new Keywords();
-        $keywords->setLanguage("en");
-        $keywords->setKeywords(["csharp", "pascal", "c++"]);
+        $keywords = new Keywords("en", ["csharp", "pascal", "c++"]);
 
         $document = DOMDocumentFactory::fromString('<root />');
         
@@ -65,7 +61,7 @@ class KeywordsTest extends \PHPUnit\Framework\TestCase
 XML
         );
 
-        $keywords = new Keywords($document->firstChild);
+        $keywords = Keywords::fromXML($document->firstChild);
         $this->assertEquals("nl", $keywords->getLanguage());
         $this->assertCount(3, $keywords->getKeywords());
         $this->assertEquals("KLM", $keywords->getKeywords()[0]);
@@ -86,7 +82,7 @@ XML
         );
 
         $this->expectException(\Exception::class, 'Missing lang on Keywords');
-        $keywords = new Keywords($document->firstChild);
+        $keywords = Keywords::fromXML($document->firstChild);
     }
 
 
@@ -102,6 +98,6 @@ XML
         );
 
         $this->expectException(\Exception::class, 'Missing value for Keywords');
-        $keywords = new Keywords($document->firstChild);
+        $keywords = Keywords::fromXML($document->firstChild);
     }
 }

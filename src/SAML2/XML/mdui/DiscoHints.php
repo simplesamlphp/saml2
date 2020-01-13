@@ -190,17 +190,17 @@ final class DiscoHints extends AbstractMduiElement
             $children[] = new Chunk($node);
         }
 
-        return new self($IPHint ?: null, $DomainHint ?: null, $GeolocationHint ?: null, $children ?: null);
+        return new self($children ?: null, $IPHint ?: null, $DomainHint ?: null, $GeolocationHint ?: null);
     }
 
 
     /**
      * Convert this DiscoHints to XML.
      *
-     * @param \DOMElement $parent The element we should append to.
+     * @param \DOMElement|null $parent The element we should append to.
      * @return \DOMElement|null
      */
-    public function toXML(DOMElement $parent): ?DOMElement
+    public function toXML(DOMElement $parent = null): ?DOMElement
     {
         if (
             !empty($this->IPHint)
@@ -208,18 +208,25 @@ final class DiscoHints extends AbstractMduiElement
             || !empty($this->GeolocationHint)
             || !empty($this->children)
         ) {
-            $doc = $parent->ownerDocument;
+            $e = $this->instantiateParentElement($parent);
 
-            $e = $doc->createElementNS(DiscoHints::NS, 'mdui:DiscoHints');
-            $parent->appendChild($e);
-
-            foreach ($this->getChildren() as $child) {
-                $child->toXML($e);
+            if (!empty($this->children)) {
+                foreach ($this->children as $child) {
+                    $child->toXML($e);
+                }
             }
 
-            Utils::addStrings($e, DiscoHints::NS, 'mdui:IPHint', false, $this->IPHint);
-            Utils::addStrings($e, DiscoHints::NS, 'mdui:DomainHint', false, $this->DomainHint);
-            Utils::addStrings($e, DiscoHints::NS, 'mdui:GeolocationHint', false, $this->GeolocationHint);
+            if (!empty($this->IPHint)) {
+                Utils::addStrings($e, DiscoHints::NS, 'mdui:IPHint', false, $this->IPHint);
+            }
+
+            if (!empty($this->DomainHint)) {
+                Utils::addStrings($e, DiscoHints::NS, 'mdui:DomainHint', false, $this->DomainHint);
+            }
+
+            if (!empty($this->GeolocationHint)) {
+                Utils::addStrings($e, DiscoHints::NS, 'mdui:GeolocationHint', false, $this->GeolocationHint);
+            }
 
             return $e;
         }

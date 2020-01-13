@@ -75,6 +75,7 @@ class Extensions
                     $node->namespaceURI === ALG::NS
                     || $node->namespaceURI === EntityAttributes::NS
                     || $node->namespaceURI === MDRPI::NS
+                    || $node->namespaceURI === MDUI::NS
                     || $node->namespaceURI === Scope::NS
                 ) {
                     /** @psalm-suppress UndefinedMethod */

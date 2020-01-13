@@ -19,11 +19,7 @@ class LogoTest extends \PHPUnit\Framework\TestCase
      */
     public function testMarshalling(): void
     {
-        $logo = new Logo();
-        $logo->setLanguage("nl");
-        $logo->setWidth(300);
-        $logo->setHeight(200);
-        $logo->setUrl("https://static.example.org/images/logos/logo300x200.png");
+        $logo = new Logo("https://static.example.org/images/logos/logo300x200.png", 200, 300, "nl");
 
         $document = DOMDocumentFactory::fromString('<root />');
         $xml = $logo->toXML($document->firstChild);
@@ -36,8 +32,8 @@ class LogoTest extends \PHPUnit\Framework\TestCase
         $logoElement = $logoElements[0];
         $this->assertEquals("https://static.example.org/images/logos/logo300x200.png", $logoElement->textContent);
         $this->assertEquals("nl", $logoElement->getAttribute("xml:lang"));
-        $this->assertEquals(300, $logoElement->getAttribute("width"));
-        $this->assertEquals(200, $logoElement->getAttribute("height"));
+        $this->assertEquals('200', $logoElement->getAttribute("height"));
+        $this->assertEquals('300', $logoElement->getAttribute("width"));
     }
 
 
@@ -52,7 +48,7 @@ class LogoTest extends \PHPUnit\Framework\TestCase
 XML
         );
 
-        $logo = new Logo($document->firstChild);
+        $logo = Logo::fromXML($document->firstChild);
         $this->assertEquals("nl", $logo->getLanguage());
         $this->assertEquals(300, $logo->getWidth());
         $this->assertEquals(200, $logo->getHeight());
@@ -71,7 +67,7 @@ XML
 XML
         );
 
-        $logo = new Logo($document->firstChild);
+        $logo = Logo::fromXML($document->firstChild);
         $this->assertEquals(1, $logo->getWidth());
         $this->assertEquals(1, $logo->getHeight());
         $this->assertEquals(
@@ -93,7 +89,7 @@ XML
         );
 
         $this->expectException(\Exception::class, 'Missing url value for Logo');
-        $logo = new Logo($document->firstChild);
+        $logo = Logo::fromXML($document->firstChild);
     }
 
 
@@ -109,7 +105,7 @@ XML
         );
 
         $this->expectException(\Exception::class, 'Missing width of Logo');
-        $logo = new Logo($document->firstChild);
+        $logo = Logo::fromXML($document->firstChild);
     }
 
 
@@ -125,6 +121,6 @@ XML
         );
 
         $this->expectException(\Exception::class, 'Missing height of Logo');
-        $logo = new Logo($document->firstChild);
+        $logo = Logo::fromXML($document->firstChild);
     }
 }

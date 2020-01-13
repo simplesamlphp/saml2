@@ -181,7 +181,7 @@ final class Logo extends AbstractMduiElement
         $Height = intval($xml->getAttribute('height'));
         $lang = $xml->hasAttribute('xml:lang') ? $xml->getAttribute('xml:lang') : null;
 
-        return new self($Url, $Width, $Height, $lang);
+        return new self($Url, $Height, $Width, $lang);
     }
 
 
@@ -195,20 +195,14 @@ final class Logo extends AbstractMduiElement
      */
     public function toXML(DOMElement $parent): DOMElement
     {
-        Assert::notEmpty($this->url);
-        Assert::notEmpty($this->width);
-        Assert::notEmpty($this->height);
-
-        $doc = $parent->ownerDocument;
-
-        $e = $doc->createElementNS(Logo::NS, 'mdui:Logo');
-        $e->appendChild($doc->createTextNode($this->url));
+        $e = $this->instantiateParentElement($parent);
+        $e->appendChild($e->ownerDocument->createTextNode($this->url));
         $e->setAttribute('width', strval($this->width));
         $e->setAttribute('height', strval($this->height));
+
         if ($this->lang !== null) {
             $e->setAttribute('xml:lang', $this->lang);
         }
-        $parent->appendChild($e);
 
         return $e;
     }

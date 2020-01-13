@@ -120,7 +120,9 @@ final class UIInfo extends AbstractMduiElement
      */
     private function setKeywords(?array $keywords): void
     {
-        Assert::allIsInstanceOf($keywords, Keywords::class);
+        if (!is_null($keywords)) {
+            Assert::allIsInstanceOf($keywords, Keywords::class);
+        }
         $this->Keywords = $keywords;
     }
 
@@ -254,10 +256,10 @@ final class UIInfo extends AbstractMduiElement
     /**
      * Add the value to the Logo-property
      *
-     * @param \SAML2\XML\mdui\Logo|null $logo
+     * @param \SAML2\XML\mdui\Logo $logo
      * @return void
      */
-    public function addLogo(?Logo $logo): void
+    public function addLogo(Logo $logo): void
     {
         $this->Logo[] = $logo;
     }
@@ -294,7 +296,7 @@ final class UIInfo extends AbstractMduiElement
      */
     public function addChild(Chunk $child): void
     {
-        $this->children = empty($this->children) ? [$child] = array_merge($this->children, [$child]);
+        $this->children = empty($this->children) ? [$child] : array_merge($this->children, [$child]);
     }
 
 
@@ -317,10 +319,10 @@ final class UIInfo extends AbstractMduiElement
             if ($node->namespaceURI === UIInfo::NS) {
                 switch ($node->localName) {
                     case 'Keywords':
-                        $Keywords[] = new Keywords($node);
+                        $Keywords[] = Keywords::fromXML($node);
                         break;
                     case 'Logo':
-                        $Logo[] = new Logo($node);
+                        $Logo[] = Logo::fromXML($node);
                         break;
                 }
             } else {
@@ -343,12 +345,11 @@ final class UIInfo extends AbstractMduiElement
     /**
      * Convert this UIInfo to XML.
      *
-     * @param \DOMElement $parent The element we should append to.
+     * @param \DOMElement|null $parent The element we should append to.
      * @return \DOMElement|null
      */
-    public function toXML(DOMElement $parent): ?DOMElement
+    public function toXML(DOMElement $parent = null): ?DOMElement
     {
-        $e = null;
         if (
             !empty($this->DisplayName)
             || !empty($this->Description)
@@ -358,29 +359,45 @@ final class UIInfo extends AbstractMduiElement
             || !empty($this->Logo)
             || !empty($this->children)
         ) {
-            $doc = $parent->ownerDocument;
+            $e = $this->instantiateParentElement($parent);
 
-            $e = $doc->createElementNS(UIInfo::NS, 'mdui:UIInfo');
-            $parent->appendChild($e);
-
-            Utils::addStrings($e, UIInfo::NS, 'mdui:DisplayName', true, $this->DisplayName);
-            Utils::addStrings($e, UIInfo::NS, 'mdui:Description', true, $this->Description);
-            Utils::addStrings($e, UIInfo::NS, 'mdui:InformationURL', true, $this->InformationURL);
-            Utils::addStrings($e, UIInfo::NS, 'mdui:PrivacyStatementURL', true, $this->PrivacyStatementURL);
-
-            foreach ($this->Keywords as $child) {
-                $child->toXML($e);
+            if (!empty($this->DisplayName)) {
+                Utils::addStrings($e, UIInfo::NS, 'mdui:DisplayName', true, $this->DisplayName);
             }
 
-            foreach ($this->Logo as $child) {
-                $child->toXML($e);
+            if (!empty($this->Description)) {
+                Utils::addStrings($e, UIInfo::NS, 'mdui:Description', true, $this->Description);
             }
 
-            foreach ($this->children as $child) {
-                $child->toXML($e);
+            if (!empty($this->InformationURL)) {
+                Utils::addStrings($e, UIInfo::NS, 'mdui:InformationURL', true, $this->InformationURL);
             }
+
+            if (!empty($this->PrivacyStatementURL)) {
+                Utils::addStrings($e, UIInfo::NS, 'mdui:PrivacyStatementURL', true, $this->PrivacyStatementURL);
+            }
+
+            if (!empty($this->Keywords)) {
+                foreach ($this->Keywords as $child) {
+                    $child->toXML($e);
+                }
+            }
+
+            if (!empty($this->Logo)) {
+                foreach ($this->Logo as $child) {
+                    $child->toXML($e);
+                }
+            }
+
+            if (!empty($this->children)) {
+                foreach ($this->children as $child) {
+                    $child->toXML($e);
+                }
+            }
+
+            return $e;
         }
 
-        return $e;
+        return null;
     }
 }

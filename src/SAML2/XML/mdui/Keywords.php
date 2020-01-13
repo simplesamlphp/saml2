@@ -54,8 +54,6 @@ final class Keywords extends AbstractMduiElement
      */
     public function getLanguage(): string
     {
-        Assert::notEmpty($this->lang);
-
         return $this->lang;
     }
 
@@ -103,7 +101,9 @@ final class Keywords extends AbstractMduiElement
      */
     public function addKeyword(string $keyword): void
     {
-        $this->setKeywords(empty($this->Keywords) ? [$keyword] : array_merge($this->Keywords, [$keyword]));
+        $this->setKeywords(
+            empty($this->Keywords) ? [$keyword] : array_merge($this->Keywords, [$keyword])
+        );
     }
 
 
@@ -117,12 +117,10 @@ final class Keywords extends AbstractMduiElement
     {
         if (!$xml->hasAttribute('xml:lang')) {
             throw new \Exception('Missing lang on Keywords.');
-        }
-        $lang = $xml->getAttribute('xml:lang');
-
-        if (!strlen($xml->textContent)) {
+        } elseif (!strlen($xml->textContent)) {
             throw new \Exception('Missing value for Keywords.');
         }
+        $lang = $xml->getAttribute('xml:lang');
 
         $Keywords = [];
         foreach (explode(' ', $xml->textContent) as $keyword) {
@@ -139,27 +137,24 @@ final class Keywords extends AbstractMduiElement
      * @param \DOMElement $parent The element we should append this Keywords to.
      * @throws \Exception
      * @return \DOMElement
-     *
-     * @throws \InvalidArgumentException if assertions are false
      */
     public function toXML(DOMElement $parent): DOMElement
     {
-        Assert::notEmpty($this->lang, "Cannot convert Keywords to XML without a language set.");
+        $e = $this->instantiateParentElement($parent);
 
-        $doc = $parent->ownerDocument;
-
-        $e = $doc->createElementNS(Keywords::NS, 'mdui:Keywords');
         $e->setAttribute('xml:lang', $this->lang);
+
         $value = '';
-        foreach ($this->Keywords as $keyword) {
-            if (strpos($keyword, "+") !== false) {
-                throw new \Exception('Keywords may not contain a "+" character.');
+        if (!empty($this->Keywords)) {
+            foreach ($this->Keywords as $keyword) {
+                if (strpos($keyword, "+") !== false) {
+                    throw new \Exception('Keywords may not contain a "+" character.');
+                }
+                $value .= str_replace(' ', '+', $keyword) . ' ';
             }
-            $value .= str_replace(' ', '+', $keyword) . ' ';
         }
-        $value = rtrim($value);
-        $e->appendChild($doc->createTextNode($value));
-        $parent->appendChild($e);
+
+        $e->appendChild($e->ownerDocument->createTextNode(rtrim($value)));
 
         return $e;
     }

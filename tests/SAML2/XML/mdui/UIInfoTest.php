@@ -5,6 +5,7 @@ declare(strict_types=1);
 namespace SAML2\XML\mdui;
 
 use SAML2\DOMDocumentFactory;
+use SAML2\XML\Chunk;
 use SAML2\XML\mdui\DiscoHints;
 use SAML2\XML\mdui\Keywords;
 use SAML2\XML\mdui\Logo;
@@ -22,20 +23,17 @@ class UIInfoTest extends \PHPUnit\Framework\TestCase
      */
     public function testMarshalling(): void
     {
-        $logo = new Logo();
-        $logo->setLanguage("nl");
-        $logo->setWidth(30);
-        $logo->setHeight(20);
-        $logo->setUrl("https://example.edu/logo.png");
+        $logo = new Logo("https://example.edu/logo.png", 30, 20, "nl");
 
-        $uiinfo = new UIInfo();
-        $uiinfo->setDisplayName(["nl" => "Voorbeeld", "en" => "Example"]);
-        $uiinfo->setDescription(["nl" => "Omschrijving", "en" => "Description"]);
-        $uiinfo->setInformationURL(["nl" => "https://voorbeeld.nl/", "en" => "https://example.org"]);
-        $uiinfo->setPrivacyStatementURL(
-            ["nl" => "https://voorbeeld.nl/privacy", "en" => "https://example.org/privacy"]
+        $uiinfo = new UIInfo(
+            ["nl" => "Voorbeeld", "en" => "Example"],
+            ["nl" => "Omschrijving", "en" => "Description"],
+            ["nl" => "https://voorbeeld.nl/", "en" => "https://example.org"],
+            ["nl" => "https://voorbeeld.nl/privacy", "en" => "https://example.org/privacy"],
+            null,
+            [$logo],
+            null
         );
-        $uiinfo->setLogo([$logo]);
 
         $document = DOMDocumentFactory::fromString('<root />');
         $xml = $uiinfo->toXML($document->firstChild);
@@ -95,23 +93,28 @@ class UIInfoTest extends \PHPUnit\Framework\TestCase
      */
     public function testMarshallingChildren(): void
     {
-        $keywords = new Keywords();
-        $keywords->setLanguage("nl");
-        $keywords->setKeywords(["voorbeeld", "specimen"]);
-        $logo = new Logo();
-        $logo->setLanguage("nl");
-        $logo->setWidth(30);
-        $logo->setHeight(20);
-        $logo->setUrl("https://example.edu/logo.png");
-        $discohints = new DiscoHints();
-        $discohints->setIPHint(["192.168.6.0/24", "fd00:0123:aa:1001::/64"]);
-        // keywords appears twice, direcyly under UIinfo and as child of DiscoHints
-        $discohints->setChildren([$keywords]);
+        $keywords = new Keywords("nl", ["voorbeeld", "specimen"]);
+        $logo = new Logo("https://example.edu/logo.png", 30, 20, "nl");
 
-        $uiinfo = new UIInfo();
-        $uiinfo->setLogo([$logo]);
-        $uiinfo->setKeywords([$keywords]);
-        $uiinfo->setChildren([$discohints]);
+        $discohints = new DiscoHints(
+            null,
+            ["192.168.6.0/24", "fd00:0123:aa:1001::/64"],
+            null,
+            null
+        );
+
+        // keywords appears twice, direcyly under UIinfo and as child of DiscoHints
+        $discohints->addChild(new Chunk($keywords->toXML()));
+
+        $uiinfo = new UIInfo(
+            null,
+            null,
+            null,
+            null,
+            [$keywords],
+            [$logo],
+            [$discohints]
+        );
 
         $document = DOMDocumentFactory::fromString('<root />');
         $xml = $uiinfo->toXML($document->firstChild);
@@ -181,7 +184,7 @@ class UIInfoTest extends \PHPUnit\Framework\TestCase
 XML
         );
 
-        $uiinfo = new UIInfo($document->firstChild);
+        $uiinfo = UIInfo::fromXML($document->firstChild);
 
         $this->assertCount(2, $uiinfo->getDisplayName());
         $this->assertEquals('University of Examples', $uiinfo->getDisplayName()['en']);
@@ -214,7 +217,7 @@ XML
 XML
         );
 
-        $uiinfo = new UIInfo($document->firstChild);
+        $uiinfo = UIInfo::fromXML($document->firstChild);
 
         $this->assertCount(1, $uiinfo->getDisplayName());
         $this->assertEquals('University of Examples', $uiinfo->getDisplayName()['en']);
