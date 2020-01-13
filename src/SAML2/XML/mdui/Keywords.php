@@ -20,9 +20,9 @@ final class Keywords extends AbstractMduiElement
      *
      * Array of strings.
      *
-     * @var string[]
+     * @var string[]|null
      */
-    protected $Keywords = [];
+    protected $Keywords = null;
 
     /**
      * The language of this item.
@@ -35,25 +35,13 @@ final class Keywords extends AbstractMduiElement
     /**
      * Initialize a Keywords.
      *
-     * @param \DOMElement|null $xml The XML element we should load.
-     * @throws \Exception
+     * @param string $lang
+     * @param string[] $Keywords
      */
-    public function __construct(DOMElement $xml = null)
+    public function __construct(string $lang, array $Keywords = null)
     {
-        if ($xml === null) {
-            return;
-        }
-
-        if (!$xml->hasAttribute('xml:lang')) {
-            throw new \Exception('Missing lang on Keywords.');
-        }
-        if (!strlen($xml->textContent)) {
-            throw new \Exception('Missing value for Keywords.');
-        }
-        foreach (explode(' ', $xml->textContent) as $keyword) {
-            $this->Keywords[] = str_replace('+', ' ', $keyword);
-        }
-        $this->lang = $xml->getAttribute('xml:lang');
+        $this->setLanguage($lang);
+        $this->setKeywords($Keywords);
     }
 
 
@@ -87,9 +75,9 @@ final class Keywords extends AbstractMduiElement
     /**
      * Collect the value of the Keywords-property
      *
-     * @return string[]
+     * @return string[]|null
      */
-    public function getKeywords(): array
+    public function getKeywords(): ?array
     {
         return $this->Keywords;
     }
@@ -98,10 +86,10 @@ final class Keywords extends AbstractMduiElement
     /**
      * Set the value of the Keywords-property
      *
-     * @param string[] $keywords
+     * @param string[]|null $keywords
      * @return void
      */
-    private function setKeywords(array $keywords): void
+    private function setKeywords(?array $keywords): void
     {
         $this->Keywords = $keywords;
     }
@@ -115,7 +103,7 @@ final class Keywords extends AbstractMduiElement
      */
     public function addKeyword(string $keyword): void
     {
-        $this->Keywords[] = $keyword;
+        $this->setKeywords(empty($this->Keywords) ? [$keyword] : array_merge($this->Keywords, [$keyword]));
     }
 
 

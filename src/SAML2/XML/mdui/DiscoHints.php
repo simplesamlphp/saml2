@@ -21,60 +21,59 @@ final class DiscoHints extends AbstractMduiElement
      *
      * The elements can be any of the other \SAML2\XML\mdui\* elements.
      *
-     * @var \SAML2\XML\Chunk[]
+     * @var \SAML2\XML\Chunk[]|null
      */
-    protected $children = [];
+    protected $children = null;
 
     /**
      * The IPHint, as an array of strings.
      *
-     * @var string[]
+     * @var string[]|null
      */
-    protected $IPHint = [];
+    protected $IPHint = null;
 
     /**
      * The DomainHint, as an array of strings.
      *
-     * @var string[]
+     * @var string[]|null
      */
-    protected $DomainHint = [];
+    protected $DomainHint = null;
 
     /**
      * The GeolocationHint, as an array of strings.
      *
-     * @var string[]
+     * @var string[]|null
      */
-    protected $GeolocationHint = [];
+    protected $GeolocationHint = null;
 
 
     /**
      * Create a DiscoHints element.
      *
-     * @param \DOMElement|null $xml The XML element we should load.
+     * @param \SAML2\XML\Chunk[]|null $children
+     * @param string[]|null $IPHint
+     * @param string[]|null $DomainHint
+     * @param string[]|null $GeolocationHint
      */
-    public function __construct(DOMElement $xml = null)
-    {
-        if ($xml === null) {
-            return;
-        }
-
-        $this->IPHint = Utils::extractStrings($xml, DiscoHints::NS, 'IPHint');
-        $this->DomainHint = Utils::extractStrings($xml, DiscoHints::NS, 'DomainHint');
-        $this->GeolocationHint = Utils::extractStrings($xml, DiscoHints::NS, 'GeolocationHint');
-
-        /** @var \DOMElement $node */
-        foreach (Utils::xpQuery($xml, "./*[namespace-uri()!='" . DiscoHints::NS . "']") as $node) {
-            $this->children[] = new Chunk($node);
-        }
+    public function __construct(
+        array $children = null,
+        array $IPHint = null,
+        array $DomainHint = null,
+        array $GeolocationHint = null
+    ) {
+        $this->setChildren($children);
+        $this->setIPHint($IPHint);
+        $this->setDomainHint($DomainHint);
+        $this->setGeolocationHint($GeolocationHint);
     }
 
 
     /**
      * Collect the value of the IPHint-property
      *
-     * @return string[]
+     * @return string[]|null
      */
-    public function getIPHint(): array
+    public function getIPHint(): ?array
     {
         return $this->IPHint;
     }
@@ -83,10 +82,10 @@ final class DiscoHints extends AbstractMduiElement
     /**
      * Set the value of the IPHint-property
      *
-     * @param string[] $hints
+     * @param string[]|null $hints
      * @return void
      */
-    private function setIPHint(array $hints): void
+    private function setIPHint(?array $hints): void
     {
         $this->IPHint = $hints;
     }
@@ -95,9 +94,9 @@ final class DiscoHints extends AbstractMduiElement
     /**
      * Collect the value of the DomainHint-property
      *
-     * @return string[]
+     * @return string[]|null
      */
-    public function getDomainHint(): array
+    public function getDomainHint(): ?array
     {
         return $this->DomainHint;
     }
@@ -106,10 +105,10 @@ final class DiscoHints extends AbstractMduiElement
     /**
      * Set the value of the DomainHint-property
      *
-     * @param string[] $hints
+     * @param string[]|null $hints
      * @return void
      */
-    private function setDomainHint(array $hints): void
+    private function setDomainHint(?array $hints): void
     {
         $this->DomainHint = $hints;
     }
@@ -118,9 +117,9 @@ final class DiscoHints extends AbstractMduiElement
     /**
      * Collect the value of the GeolocationHint-property
      *
-     * @return string[]
+     * @return string[]|null
      */
-    public function getGeolocationHint(): array
+    public function getGeolocationHint(): ?array
     {
         return $this->GeolocationHint;
     }
@@ -129,10 +128,10 @@ final class DiscoHints extends AbstractMduiElement
     /**
      * Set the value of the GeolocationHint-property
      *
-     * @param string[] $hints
+     * @param string[]|null $hints
      * @return void
      */
-    private function setGeolocationHint(array $hints): void
+    private function setGeolocationHint(?array $hints): void
     {
         $this->GeolocationHint = $hints;
     }
@@ -141,9 +140,9 @@ final class DiscoHints extends AbstractMduiElement
     /**
      * Collect the value of the children-property
      *
-     * @return \SAML2\XML\Chunk[]
+     * @return \SAML2\XML\Chunk[]|null
      */
-    public function getChildren(): array
+    public function getChildren(): ?array
     {
         return $this->children;
     }
@@ -152,10 +151,10 @@ final class DiscoHints extends AbstractMduiElement
     /**
      * Set the value of the childen-property
      *
-     * @param array $children
+     * @param array|null $children
      * @return void
      */
-    private function setChildren(array $children): void
+    private function setChildren(?array $children): void
     {
         $this->children = $children;
     }
@@ -191,7 +190,7 @@ final class DiscoHints extends AbstractMduiElement
             $children[] = new Chunk($node);
         }
 
-        return new self($IPHint, $DomainHint, $GeolocationHint, $children ?: null);
+        return new self($IPHint ?: null, $DomainHint ?: null, $GeolocationHint ?: null, $children ?: null);
     }
 
 

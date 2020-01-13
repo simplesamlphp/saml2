@@ -47,30 +47,17 @@ final class Logo extends AbstractMduiElement
     /**
      * Initialize a Logo.
      *
-     * @param \DOMElement|null $xml The XML element we should load.
-     * @throws \Exception
+     * @param string $url
+     * @param int $height
+     * @param int $width
+     * @param string|null $lang
      */
-    public function __construct(DOMElement $xml = null)
+    public function __construct($url, $height, $width, $lang = null)
     {
-        if ($xml === null) {
-            return;
-        }
-
-        if (!$xml->hasAttribute('width')) {
-            throw new \Exception('Missing width of Logo.');
-        }
-        if (!$xml->hasAttribute('height')) {
-            throw new \Exception('Missing height of Logo.');
-        }
-        if (!strlen($xml->textContent)) {
-            throw new \Exception('Missing url value for Logo.');
-        }
-        $this->setUrl($xml->textContent);
-        $this->setWidth(intval($xml->getAttribute('width')));
-        $this->setHeight(intval($xml->getAttribute('height')));
-        if ($xml->hasAttribute('xml:lang')) {
-            $this->setLanguage($xml->getAttribute('xml:lang'));
-        }
+        $this->setUrl($url);
+        $this->setHeight($height);
+        $this->setWidth($width);
+        $this->setLanguage($lang);
     }
 
 
@@ -78,13 +65,9 @@ final class Logo extends AbstractMduiElement
      * Collect the value of the url-property
      *
      * @return string
-     *
-     * @throws \InvalidArgumentException if assertions are false
      */
     public function getUrl(): string
     {
-        Assert::notEmpty($this->url);
-
         return $this->url;
     }
 
@@ -118,10 +101,10 @@ final class Logo extends AbstractMduiElement
     /**
      * Set the value of the lang-property
      *
-     * @param string $lang
+     * @param string|null $lang
      * @return void
      */
-    private function setLanguage(string $lang): void
+    private function setLanguage(?string $lang): void
     {
         $this->lang = $lang;
     }
@@ -136,8 +119,6 @@ final class Logo extends AbstractMduiElement
      */
     public function getHeight(): int
     {
-        Assert::notEmpty($this->height);
-
         return $this->height;
     }
 
@@ -163,8 +144,6 @@ final class Logo extends AbstractMduiElement
      */
     public function getWidth(): int
     {
-        Assert::notEmpty($this->width);
-
         return $this->width;
     }
 
