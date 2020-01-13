@@ -12,7 +12,7 @@ use SAML2\XML\alg\DigestMethod;
 use SAML2\XML\alg\SigningMethod;
 use SAML2\XML\Chunk;
 use SAML2\XML\mdattr\EntityAttributes;
-use SAML2\XML\mdrpi\Common as MDRPI;
+use SAML2\XML\mdrpi\AbstractMdrpiElement as MDRPI;
 use SAML2\XML\mdrpi\PublicationInfo;
 use SAML2\XML\mdrpi\RegistrationInfo;
 use SAML2\XML\mdui\Common as MDUI;
@@ -50,7 +50,7 @@ class Extensions
             EntityAttributes::NS => [
                 'EntityAttributes' => EntityAttributes::class,
             ],
-            MDRPI::NS_MDRPI => [
+            MDRPI::NS => [
                 'RegistrationInfo' => RegistrationInfo::class,
                 'PublicationInfo' => PublicationInfo::class,
             ],

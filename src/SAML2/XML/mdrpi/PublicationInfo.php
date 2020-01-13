@@ -14,7 +14,7 @@ use Webmozart\Assert\Assert;
  * @link: http://docs.oasis-open.org/security/saml/Post2.0/saml-metadata-rpi/v1.0/saml-metadata-rpi-v1.0.pdf
  * @package SimpleSAMLphp
  */
-final class PublicationInfo
+final class PublicationInfo extends AbstractMdrpiElement
 {
     /**
      * The identifier of the metadata publisher.
@@ -72,7 +72,7 @@ final class PublicationInfo
             $this->publicationId = $xml->getAttribute('publicationId');
         }
 
-        $this->UsagePolicy = Utils::extractLocalizedStrings($xml, Common::NS_MDRPI, 'UsagePolicy');
+        $this->UsagePolicy = Utils::extractLocalizedStrings($xml, PublicationInfo::NS, 'UsagePolicy');
     }
 
 
@@ -186,7 +186,7 @@ final class PublicationInfo
 
         $doc = $parent->ownerDocument;
 
-        $e = $doc->createElementNS(Common::NS_MDRPI, 'mdrpi:PublicationInfo');
+        $e = $doc->createElementNS(PublicationInfo::NS, 'mdrpi:PublicationInfo');
         $parent->appendChild($e);
 
         $e->setAttribute('publisher', $this->publisher);
@@ -199,7 +199,7 @@ final class PublicationInfo
             $e->setAttribute('publicationId', $this->publicationId);
         }
 
-        Utils::addStrings($e, Common::NS_MDRPI, 'mdrpi:UsagePolicy', true, $this->UsagePolicy);
+        Utils::addStrings($e, PublicationInfo::NS, 'mdrpi:UsagePolicy', true, $this->UsagePolicy);
 
         return $e;
     }

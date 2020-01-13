@@ -14,7 +14,7 @@ use Webmozart\Assert\Assert;
  * @link: http://docs.oasis-open.org/security/saml/Post2.0/saml-metadata-rpi/v1.0/saml-metadata-rpi-v1.0.pdf
  * @package SimpleSAMLphp
  */
-final class RegistrationInfo
+final class RegistrationInfo extends AbstractMdrpiElement
 {
     /**
      * The identifier of the metadata registration authority.
@@ -63,7 +63,7 @@ final class RegistrationInfo
             $this->registrationInstant = Utils::xsDateTimeToTimestamp($xml->getAttribute('registrationInstant'));
         }
 
-        $this->RegistrationPolicy = Utils::extractLocalizedStrings($xml, Common::NS_MDRPI, 'RegistrationPolicy');
+        $this->RegistrationPolicy = Utils::extractLocalizedStrings($xml, RegistrationInfo::NS, 'RegistrationPolicy');
     }
 
 
@@ -154,7 +154,7 @@ final class RegistrationInfo
 
         $doc = $parent->ownerDocument;
 
-        $e = $doc->createElementNS(Common::NS_MDRPI, 'mdrpi:RegistrationInfo');
+        $e = $doc->createElementNS(RegistrationInfo::NS, 'mdrpi:RegistrationInfo');
         $parent->appendChild($e);
 
         $e->setAttribute('registrationAuthority', $this->registrationAuthority);
@@ -163,7 +163,7 @@ final class RegistrationInfo
             $e->setAttribute('registrationInstant', gmdate('Y-m-d\TH:i:s\Z', $this->registrationInstant));
         }
 
-        Utils::addStrings($e, Common::NS_MDRPI, 'mdrpi:RegistrationPolicy', true, $this->RegistrationPolicy);
+        Utils::addStrings($e, RegistrationInfo::NS, 'mdrpi:RegistrationPolicy', true, $this->RegistrationPolicy);
 
         return $e;
     }
