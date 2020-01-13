@@ -104,9 +104,8 @@ class ResponseTest extends \PHPUnit\Framework\TestCase
     /**
      * @return void
      */
-    public function testUnmarshallingWithMissingAttributesThrowsException(): void
+    public function testUnmarshallingWithMissingMustUnderstandThrowsException(): void
     {
-        // Missing mustUnderstand
         $document = DOMDocumentFactory::fromString(
             '<ecp:Response xmlns:ecp="' . Response::NS . '" xmlns:SOAP-ENV="'. Constants::NS_SOAP
                 . '" SOAP-ENV:actor="http://schemas.xmlsoap.org/soap/actor/next"'
@@ -116,8 +115,12 @@ class ResponseTest extends \PHPUnit\Framework\TestCase
         $this->expectException(Exception::class);
         $this->expectExceptionMessage('Missing SOAP-ENV:mustUnderstand attribute in <ecp:Response>.');
         Response::fromXML($document->firstChild);
-
-        // Missing actor
+    }
+    /**
+     * @return void
+     */
+    public function testUnmarshallingWithMissingActorThrowsException(): void
+    {
         $document = DOMDocumentFactory::fromString(
             '<ecp:Response xmlns:ecp="' . Response::NS . '" xmlns:SOAP-ENV="'. Constants::NS_SOAP
                 . '" SOAP-ENV:mustUnderstand="1"' . ' AssertionConsumerServiceURL="https://example.com/ACS"/>'
@@ -126,8 +129,14 @@ class ResponseTest extends \PHPUnit\Framework\TestCase
         $this->expectException(Exception::class);
         $this->expectExceptionMessage('Missing SOAP-ENV:actor attribute in <ecp:Response>.');
         Response::fromXML($document->firstChild);
+    }
 
-        // Missing ACS URL
+
+    /**
+     * @return void
+     */
+    public function testUnmarshallingWithMissingACSThrowsException(): void
+    {
         $document = DOMDocumentFactory::fromString(
             '<ecp:Response xmlns:ecp="' . Response::NS . '" xmlns:SOAP-ENV="'. Constants::NS_SOAP
                 . '" SOAP-ENV:mustUnderstand="1"' . ' SOAP-ENV:actor="http://schemas.xmlsoap.org/soap/actor/next"/>'
