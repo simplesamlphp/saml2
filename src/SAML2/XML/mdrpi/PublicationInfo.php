@@ -190,19 +190,14 @@ final class PublicationInfo extends AbstractMdrpiElement
     /**
      * Convert this element to XML.
      *
-     * @param \DOMElement $parent The element we should append to.
+     * @param \DOMElement|null $parent The element we should append to.
      * @return \DOMElement
      *
      * @throws \InvalidArgumentException if assertions are false
      */
-    public function toXML(DOMElement $parent): DOMElement
+    public function toXML(DOMElement $parent = null): DOMElement
     {
-        Assert::notEmpty($this->publisher, "Cannot convert PublicationInfo to XML without a publisher set.");
-
-        $doc = $parent->ownerDocument;
-
-        $e = $doc->createElementNS(PublicationInfo::NS, 'mdrpi:PublicationInfo');
-        $parent->appendChild($e);
+        $e = $this->instantiateParentElement($parent);
 
         $e->setAttribute('publisher', $this->publisher);
 
