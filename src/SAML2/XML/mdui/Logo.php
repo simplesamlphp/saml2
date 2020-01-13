@@ -13,35 +13,35 @@ use Webmozart\Assert\Assert;
  * @link: http://docs.oasis-open.org/security/saml/Post2.0/sstc-saml-metadata-ui/v1.0/sstc-saml-metadata-ui-v1.0.pdf
  * @package SimpleSAMLphp
  */
-class Logo
+final class Logo
 {
     /**
      * The url of this logo.
      *
      * @var string
      */
-    private $url;
+    protected $url;
 
     /**
      * The width of this logo.
      *
      * @var int
      */
-    private $width;
+    protected $width;
 
     /**
      * The height of this logo.
      *
      * @var int
      */
-    private $height;
+    protected $height;
 
     /**
      * The language of this item.
      *
      * @var string|null
      */
-    private $lang = null;
+    protected $lang = null;
 
 
     /**

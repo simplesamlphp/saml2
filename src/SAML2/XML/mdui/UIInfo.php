@@ -15,7 +15,7 @@ use Webmozart\Assert\Assert;
  * @link: http://docs.oasis-open.org/security/saml/Post2.0/sstc-saml-metadata-ui/v1.0/sstc-saml-metadata-ui-v1.0.pdf
  * @package SimpleSAMLphp
  */
-class UIInfo
+final class UIInfo
 {
     /**
      * Array with child elements.
@@ -24,49 +24,49 @@ class UIInfo
      *
      * @var \SAML2\XML\Chunk[]
      */
-    private $children = [];
+    protected $children = [];
 
     /**
      * The DisplayName, as an array of language => translation.
      *
      * @var array
      */
-    private $DisplayName = [];
+    protected $DisplayName = [];
 
     /**
      * The Description, as an array of language => translation.
      *
      * @var array
      */
-    private $Description = [];
+    protected $Description = [];
 
     /**
      * The InformationURL, as an array of language => url.
      *
      * @var array
      */
-    private $InformationURL = [];
+    protected $InformationURL = [];
 
     /**
      * The PrivacyStatementURL, as an array of language => url.
      *
      * @var array
      */
-    private $PrivacyStatementURL = [];
+    protected $PrivacyStatementURL = [];
 
     /**
      * The Keywords, as an array of Keywords objects
      *
      * @var \SAML2\XML\mdui\Keywords[]
      */
-    private $Keywords = [];
+    protected $Keywords = [];
 
     /**
      * The Logo, as an array of Logo objects
      *
      * @var \SAML2\XML\mdui\Logo[]
      */
-    private $Logo = [];
+    protected $Logo = [];
 
 
     /**

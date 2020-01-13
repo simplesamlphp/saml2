@@ -14,7 +14,7 @@ use SAML2\XML\Chunk;
  * @link: http://docs.oasis-open.org/security/saml/Post2.0/sstc-saml-metadata-ui/v1.0/sstc-saml-metadata-ui-v1.0.pdf
  * @package SimpleSAMLphp
  */
-class DiscoHints
+final class DiscoHints
 {
     /**
      * Array with child elements.
@@ -23,28 +23,28 @@ class DiscoHints
      *
      * @var \SAML2\XML\Chunk[]
      */
-    private $children = [];
+    protected $children = [];
 
     /**
      * The IPHint, as an array of strings.
      *
      * @var string[]
      */
-    private $IPHint = [];
+    protected $IPHint = [];
 
     /**
      * The DomainHint, as an array of strings.
      *
      * @var string[]
      */
-    private $DomainHint = [];
+    protected $DomainHint = [];
 
     /**
      * The GeolocationHint, as an array of strings.
      *
      * @var string[]
      */
-    private $GeolocationHint = [];
+    protected $GeolocationHint = [];
 
 
     /**
