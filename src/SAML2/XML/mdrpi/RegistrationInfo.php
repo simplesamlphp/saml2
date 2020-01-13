@@ -141,6 +141,30 @@ final class RegistrationInfo extends AbstractMdrpiElement
 
 
     /**
+     * Convert XML into a RegistrationInfo
+     *
+     * @param \DOMElement $xml The XML element we should load
+     * @return self
+     */
+    public static function fromXML(DOMElement $xml): object
+    {
+        if (!$xml->hasAttribute('registrationAuthority')) {
+            throw new \Exception(
+                'Missing required attribute "registrationAuthority" in mdrpi:RegistrationInfo element.'
+            );
+        }
+
+        $registrationAuthority = $xml->getAttribute('registrationAuthority');
+        $registrationInstant = $xml->hasAttribute('registrationInstant')
+            ? Utils::xsDateTimeToTimestamp($xml->getAttribute('registrationInstant'))
+            : null;
+        $RegistrationPolicy = Utils::extractLocalizedStrings($xml, RegistrationInfo::NS, 'RegistrationPolicy');
+
+        return new self($registrationAuthority, $registrationInstant, $RegistrationPolicy);
+    }
+
+
+    /**
      * Convert this element to XML.
      *
      * @param \DOMElement $parent The element we should append to.

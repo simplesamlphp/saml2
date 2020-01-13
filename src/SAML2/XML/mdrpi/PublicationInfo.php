@@ -173,6 +173,30 @@ final class PublicationInfo extends AbstractMdrpiElement
 
 
     /**
+     * Convert XML into a PublicationInfo
+     *
+     * @param \DOMElement $xml The XML element we should load
+     * @return self
+     */
+    public static function fromXML(DOMElement $xml): object
+    {
+        if (!$xml->hasAttribute('publisher')) {
+            throw new \Exception('Missing required attribute "publisher" in mdrpi:PublicationInfo element.');
+        }
+
+        $publisher = $xml->getAttribute('publisher');
+        $creationInstant = $xml->hasAttribute('creationInstant')
+            ? Utils::xsDateTimeToTimestamp($xml->getAttribute('creationInstant'))
+            : null;
+
+        $publicationId = $xml->hasAttribute('publicationId') ? $xml->getAttribute('publicationId') : null;
+        $UsagePolicy = Utils::extractLocalizedStrings($xml, PublicationInfo::NS, 'UsagePolicy');
+
+        return new self($publisher, $creationInstant, $publicationId, $UsagePolicy);
+    }
+
+
+    /**
      * Convert this element to XML.
      *
      * @param \DOMElement $parent The element we should append to.
