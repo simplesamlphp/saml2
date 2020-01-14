@@ -168,6 +168,9 @@ final class Logo extends AbstractMduiElement
      */
     public static function fromXML(DOMElement $xml): object
     {
+        Assert::same($xml->localName, 'Logo');
+        Assert::same($xml->namespaceURI, Logo::NS);
+
         if (!$xml->hasAttribute('width')) {
             throw new \Exception('Missing width of Logo.');
         } elseif (!$xml->hasAttribute('height')) {

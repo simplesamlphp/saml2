@@ -115,6 +115,9 @@ final class Keywords extends AbstractMduiElement
      */
     public static function fromXML(DOMElement $xml): object
     {
+        Assert::same($xml->localName, 'Keywords');
+        Assert::same($xml->namespaceURI, Keywords::NS);
+
         if (!$xml->hasAttribute('xml:lang')) {
             throw new \Exception('Missing lang on Keywords.');
         } elseif (!strlen($xml->textContent)) {

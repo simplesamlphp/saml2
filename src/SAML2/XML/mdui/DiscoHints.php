@@ -7,6 +7,7 @@ namespace SAML2\XML\mdui;
 use DOMElement;
 use SAML2\Utils;
 use SAML2\XML\Chunk;
+use Webmozart\Assert\Assert;
 
 /**
  * Class for handling the metadata extensions for login and discovery user interface
@@ -180,6 +181,9 @@ final class DiscoHints extends AbstractMduiElement
      */
     public static function fromXML(DOMElement $xml): object
     {
+        Assert::same($xml->localName, 'DiscoHints');
+        Assert::same($xml->namespaceURI, DiscoHints::NS);
+
         $IPHint = Utils::extractStrings($xml, DiscoHints::NS, 'IPHint');
         $DomainHint = Utils::extractStrings($xml, DiscoHints::NS, 'DomainHint');
         $GeolocationHint = Utils::extractStrings($xml, DiscoHints::NS, 'GeolocationHint');

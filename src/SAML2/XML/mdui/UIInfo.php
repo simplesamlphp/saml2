@@ -308,6 +308,9 @@ final class UIInfo extends AbstractMduiElement
      */
     public static function fromXML(DOMElement $xml): object
     {
+        Assert::same($xml->localName, 'UIInfo');
+        Assert::same($xml->namespaceURI, UIInfo::NS);
+
         $DisplayName = Utils::extractLocalizedStrings($xml, UIInfo::NS, 'DisplayName');
         $Description = Utils::extractLocalizedStrings($xml, UIInfo::NS, 'Description');
         $InformationURL = Utils::extractLocalizedStrings($xml, UIInfo::NS, 'InformationURL');
