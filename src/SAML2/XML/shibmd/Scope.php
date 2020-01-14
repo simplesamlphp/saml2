@@ -98,6 +98,24 @@ final class Scope extends AbstractShibmdElement
 
 
     /**
+     * Convert XML into a NameIDPolicy
+     *
+     * @param \DOMElement $xml The XML element we should load
+     * @return self
+     */
+    public static function fromXML(DOMElement $xml): object
+    {
+        Assert::same($xml->localName, 'Scope');
+        Assert::same($xml->namespaceURI, Scope::NS);
+
+        $scope = $xml->textContent;
+        $regexp = Utils::parseBoolean($xml, 'regexp', false);
+
+        return new self($scope, $regexp);
+    }
+
+
+    /**
      * Convert this Scope to XML.
      *
      * @param \DOMElement|null $parent The element we should append this Scope to.
