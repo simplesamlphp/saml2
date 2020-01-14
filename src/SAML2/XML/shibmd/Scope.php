@@ -14,26 +14,21 @@ use Webmozart\Assert\Assert;
  * @link https://wiki.shibboleth.net/confluence/display/SHIB/ShibbolethMetadataProfile
  * @package SimpleSAMLphp
  */
-class Scope
+final class Scope extends AbstractShibmdElement
 {
-    /**
-     * The namespace used for the Scope extension element.
-     */
-    public const NS = 'urn:mace:shibboleth:metadata:1.0';
-
     /**
      * The scope.
      *
      * @var string
      */
-    private $scope;
+    protected $scope;
 
     /**
      * Whether this is a regexp scope.
      *
      * @var bool
      */
-    private $regexp = false;
+    protected $regexp = false;
 
 
     /**
@@ -105,12 +100,12 @@ class Scope
     /**
      * Convert this Scope to XML.
      *
-     * @param \DOMElement $parent The element we should append this Scope to.
+     * @param \DOMElement|null $parent The element we should append this Scope to.
      * @return \DOMElement
      *
      * @throws \InvalidArgumentException if assertions are false
      */
-    public function toXML(DOMElement $parent): DOMElement
+    public function toXML(DOMElement $parent = null): DOMElement
     {
         Assert::notEmpty($this->scope);
 
