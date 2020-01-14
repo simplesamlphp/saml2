@@ -19,7 +19,8 @@ class KeywordsTest extends \PHPUnit\Framework\TestCase
      */
     public function testMarshalling(): void
     {
-        $keywords = new Keywords("en", ["KLM", "royal", "Dutch", "air lines"]);
+        $keywords = new Keywords("en", ["KLM", "royal", "Dutch"]);
+        $keywords->addKeyword("air lines");
 
         $document = DOMDocumentFactory::fromString('<root />');
         $xml = $keywords->toXML($document->firstChild);
@@ -56,9 +57,9 @@ class KeywordsTest extends \PHPUnit\Framework\TestCase
      */
     public function testUnmarshalling(): void
     {
-        $document = DOMDocumentFactory::fromString(<<<XML
-<mdui:Keywords xml:lang="nl">KLM koninklijke luchtvaart+maatschappij</mdui:Keywords>
-XML
+        $document = DOMDocumentFactory::fromString(
+            '<mdui:Keywords xmlns:mdui="' . Keywords::NS . '" xml:lang="nl">'
+                . 'KLM koninklijke luchtvaart+maatschappij</mdui:Keywords>'
         );
 
         $keywords = Keywords::fromXML($document->firstChild);
@@ -76,9 +77,9 @@ XML
      */
     public function testUnmarshallingFailsMissingLanguage(): void
     {
-        $document = DOMDocumentFactory::fromString(<<<XML
-<mdui:Keywords>KLM koninklijke luchtvaart+maatschappij</mdui:Keywords>
-XML
+        $document = DOMDocumentFactory::fromString(
+            '<mdui:Keywords xmlns:mdui="' . Keywords::NS . '">'
+                . 'KLM koninklijke luchtvaart+maatschappij</mdui:Keywords>'
         );
 
         $this->expectException(\Exception::class, 'Missing lang on Keywords');
@@ -92,9 +93,8 @@ XML
      */
     public function testUnmarshallingFailsMissingKeywords(): void
     {
-        $document = DOMDocumentFactory::fromString(<<<XML
-<mdui:Keywords xml:lang="nl"></mdui:Keywords>
-XML
+        $document = DOMDocumentFactory::fromString(
+            '<mdui:Keywords xmlns:mdui="' . Keywords::NS . '" xml:lang="nl"></mdui:Keywords>'
         );
 
         $this->expectException(\Exception::class, 'Missing value for Keywords');

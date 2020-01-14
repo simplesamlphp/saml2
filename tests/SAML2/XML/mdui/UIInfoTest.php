@@ -24,6 +24,7 @@ class UIInfoTest extends \PHPUnit\Framework\TestCase
     public function testMarshalling(): void
     {
         $logo = new Logo("https://example.edu/logo.png", 30, 20, "nl");
+        $keyword = new Keywords('en', ['keyword']);
 
         $uiinfo = new UIInfo(
             ["nl" => "Voorbeeld", "en" => "Example"],
@@ -31,9 +32,11 @@ class UIInfoTest extends \PHPUnit\Framework\TestCase
             ["nl" => "https://voorbeeld.nl/", "en" => "https://example.org"],
             ["nl" => "https://voorbeeld.nl/privacy", "en" => "https://example.org/privacy"],
             null,
-            [$logo],
+            null,
             null
         );
+        $uiinfo->addKeyword($keyword);
+        $uiinfo->addLogo($logo);
 
         $document = DOMDocumentFactory::fromString('<root />');
         $xml = $uiinfo->toXML($document->firstChild);
@@ -112,9 +115,10 @@ class UIInfoTest extends \PHPUnit\Framework\TestCase
             null,
             null,
             [$keywords],
-            [$logo],
+            null,
             [$discohints]
         );
+        $uiinfo->addLogo($logo);
 
         $document = DOMDocumentFactory::fromString('<root />');
         $xml = $uiinfo->toXML($document->firstChild);
@@ -163,6 +167,21 @@ class UIInfoTest extends \PHPUnit\Framework\TestCase
         $this->assertCount(1, $keywordElements);
         $this->assertEquals("voorbeeld specimen", $keywordElements[0]->textContent);
         $this->assertEquals("nl", $keywordElements[0]->getAttribute("xml:lang"));
+    }
+
+
+    /**
+     * Create an empty UIInfo element
+     * @return void
+     */
+    public function testMarshallingEmpty(): void
+    {
+        $uiinfo = new UIInfo();
+
+        $document = DOMDocumentFactory::fromString('<root />');
+        $xml = $uiinfo->toXML($document->firstChild);
+
+        $this->assertNull($xml);
     }
 
 
@@ -218,6 +237,9 @@ XML
         );
 
         $uiinfo = UIInfo::fromXML($document->firstChild);
+        $uiinfo->addChild(
+            new Chunk(DOMDocumentFactory::fromString('<child3 />')->firstChild)
+        );
 
         $this->assertCount(1, $uiinfo->getDisplayName());
         $this->assertEquals('University of Examples', $uiinfo->getDisplayName()['en']);
@@ -229,7 +251,7 @@ XML
         $this->assertCount(2, $uiinfo->getKeywords());
         $this->assertEquals('Fictional', $uiinfo->getKeywords()[0]->getKeywords()[1]);
         $this->assertEquals('fr', $uiinfo->getKeywords()[1]->getLanguage());
-        $this->assertCount(2, $uiinfo->getChildren());
+        $this->assertCount(3, $uiinfo->getChildren());
         $this->assertEquals('child2', $uiinfo->getChildren()[1]->getLocalName());
     }
 }

@@ -43,9 +43,9 @@ class LogoTest extends \PHPUnit\Framework\TestCase
      */
     public function testUnmarshalling(): void
     {
-        $document = DOMDocumentFactory::fromString(<<<XML
-<mdui:Logo height="200" width="300" xml:lang="nl">https://static.example.org/images/logos/logo300x200.png</mdui:Logo>
-XML
+        $document = DOMDocumentFactory::fromString(
+            '<mdui:Logo xmlns:mdui="' . Logo::NS . '" height="200" width="300" xml:lang="nl">'
+                . 'https://static.example.org/images/logos/logo300x200.png</mdui:Logo>'
         );
 
         $logo = Logo::fromXML($document->firstChild);
@@ -62,9 +62,10 @@ XML
      */
     public function testUnmarshallingDataURL(): void
     {
-        $document = DOMDocumentFactory::fromString(<<<XML
-<mdui:Logo height="1" width="1">data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAAEAAAABCAQAAAC1HAwCAAAAC0lEQVR42mNkYAAAAAYAAjCB0C8AAAAASUVORK5CYII=</mdui:Logo>
-XML
+        $document = DOMDocumentFactory::fromString(
+            '<mdui:Logo xmlns:mdui="' . Logo::NS . '" height="1" width="1">'
+                . 'data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAAEAAAABCAQAAAC1HAwCAAAAC0lEQVR42mNkYAAAAAYAAjCB0C8AAAAASUVORK5CYII='
+                . '</mdui:Logo>'
         );
 
         $logo = Logo::fromXML($document->firstChild);
@@ -89,6 +90,22 @@ XML
         );
 
         $this->expectException(\Exception::class, 'Missing url value for Logo');
+        $logo = Logo::fromXML($document->firstChild);
+    }
+
+
+    /**
+     * Unmarshalling fails if url attribute is invalid
+     * @return void
+     */
+    public function testUnmarshallingFailsInvalidURL(): void
+    {
+        $document = DOMDocumentFactory::fromString(<<<XML
+<mdui:Logo height="200" width="300">this is no url</mdui:Logo>
+XML
+        );
+
+        $this->expectException(\InvalidArgumentException::class, 'mdui:Logo is not a valid URL.');
         $logo = Logo::fromXML($document->firstChild);
     }
 
