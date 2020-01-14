@@ -69,7 +69,10 @@ XML
         );
 
         $document = DOMDocumentFactory::fromString('<root />');
-        /** @var \DOMElement $document->firstChild */
+        /**
+         * @var \DOMElement $document->firstChild
+         * @var \DOMElement $authnContextElement
+         */
         $authnContextElement = $authnContext->toXML($document->firstChild);
 
         $authnContextElements = Utils::xpQuery(
