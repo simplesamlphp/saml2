@@ -90,10 +90,10 @@ class X509DataTest extends \PHPUnit\Framework\TestCase
     public function testUnmarshalling(): void
     {
         $document = DOMDocumentFactory::fromString(
-            '<ds:X509CertData xmlns:ds="' . X509Data::NS . '">'
+            '<ds:X509Data xmlns:ds="' . X509Data::NS . '">'
                 . '<ds:X509UnknownTag>somevalue</ds:X509UnknownTag>'
                 . '<ds:X509Certificate>' . $this->certificate . '</ds:X509Certificate>'
-                . '<some>Chunk</some></ds:X509CertData>'
+                . '<some>Chunk</some></ds:X509Data>'
         );
 
         $X509data = X509Data::fromXML($document->firstChild);
