@@ -77,7 +77,9 @@ final class KeyName extends AbstractDsElement
      */
     public function toXML(DOMElement $parent = null): DOMElement
     {
-//        $e = $this->instantiateParentElement($parent);
-        return Utils::addString($parent, self::NS, 'ds:KeyName', $this->name);
+        $e = $this->instantiateParentElement($parent);
+        $e->textContent = $this->name;
+
+        return $e;
     }
 }

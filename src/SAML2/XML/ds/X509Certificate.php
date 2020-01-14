@@ -79,7 +79,9 @@ final class X509Certificate extends AbstractDsElement
      */
     public function toXML(DOMElement $parent = null): DOMElement
     {
-//        $e = $this->instantiateParentElement($parent);
-        return Utils::addString($parent, self::NS, 'ds:X509Certificate', $this->certificate);
+        $e = $this->instantiateParentElement($parent);
+        $e->textContent = $this->certificate;
+
+        return $e;
     }
 }
