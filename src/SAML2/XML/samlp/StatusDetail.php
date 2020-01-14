@@ -83,26 +83,21 @@ final class StatusDetail extends AbstractSamlpElement
     /**
      * Convert this StatusDetail to XML.
      *
-     * @param \DOMElement $element The element we are converting to XML.
-     * @return \DOMElement The XML element after adding the data corresponding to this StatusDetail.
+     * @param \DOMElement|null $element The element we are converting to XML.
+     * @return \DOMElement|null The XML element after adding the data corresponding to this StatusDetail.
      */
-    public function toXML(DOMElement $parent = null): DOMElement
+    public function toXML(DOMElement $parent = null): ?DOMElement
     {
-        if ($parent === null) {
-            $doc = DOMDocumentFactory::create();
-            $e = $doc->createElementNS(Constants::NS_SAMLP, 'samlp:StatusDetail');
-            $doc->appendChild($e);
-        } else {
-            $e = $parent->ownerDocument->createElementNS(Constants::NS_SAMLP, 'samlp:StatusDetail');
-            $parent->appendChild($e);
-        }
-
         if (!empty($this->details)) {
+            $e = $this->instantiateParentElement($parent);
+
             foreach ($this->details as $detail) {
                 $e->appendChild($e->ownerDocument->importNode($detail->getXML(), true));
             }
+
+            return $e;
         }
 
-        return $e;
+        return null;
     }
 }

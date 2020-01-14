@@ -170,14 +170,7 @@ final class Status extends AbstractSamlpElement
      */
     public function toXML(DOMElement $parent = null): DOMElement
     {
-        if ($parent === null) {
-            $doc = DOMDocumentFactory::create();
-            $e = $doc->createElementNS(Constants::NS_SAMLP, 'samlp:Status');
-            $doc->appendChild($e);
-        } else {
-            $e = $parent->ownerDocument->createElementNS(Constants::NS_SAMLP, 'samlp:Status');
-            $parent->appendChild($e);
-        }
+        $e = $this->instantiateParentElement($parent);
 
         $this->statusCode->toXML($e);
 

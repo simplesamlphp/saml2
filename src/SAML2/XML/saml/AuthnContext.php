@@ -204,37 +204,39 @@ final class AuthnContext extends AbstractSamlElement
      * Convert this AuthContextDeclRef to XML.
      *
      * @param \DOMElement|null $parent The element we should append this AuthnContextDeclRef to.
-     * @return \DOMElement
+     * @return \DOMElement|null
      */
-    public function toXML(DOMElement $parent = null): DOMElement
+    public function toXML(DOMElement $parent = null): ?DOMElement
     {
-        if ($parent === null) {
-            $doc = DOMDocumentFactory::create();
-            $e = $doc->createElementNS(Constants::NS_SAML, 'saml:AuthnContext');
-            $doc->appendChild($e);
-        } else {
-            $e = $parent->ownerDocument->createElementNS(Constants::NS_SAML, 'saml:AuthnContext');
-            $parent->appendChild($e);
-        }
+        if (
+            !empty($this->authnContextClassRef)
+            || !empty($this->authnContextDecl)
+            || !empty($this->authnContextDeclRef)
+            || !empty($this->authenticatingAuthorities)
+        ) {
+            $e = $this->instantiateParentElement($parent);
 
-        if (!empty($this->authnContextClassRef)) {
-            $this->authnContextClassRef->toXML($e);
-        }
-
-        if (!empty($this->authnContextDecl)) {
-            $this->authnContextDecl->toXML($e);
-        }
-
-        if (!empty($this->authnContextDeclRef)) {
-            $this->authnContextDeclRef->toXML($e);
-        }
-
-        if (!empty($this->authenticatingAuthorities)) {
-            foreach ($this->authenticatingAuthorities as $authority) {
-                $authority->toXML($e);
+            if (!empty($this->authnContextClassRef)) {
+                $this->authnContextClassRef->toXML($e);
             }
+
+            if (!empty($this->authnContextDecl)) {
+                $this->authnContextDecl->toXML($e);
+            }
+
+            if (!empty($this->authnContextDeclRef)) {
+                $this->authnContextDeclRef->toXML($e);
+            }
+
+            if (!empty($this->authenticatingAuthorities)) {
+                foreach ($this->authenticatingAuthorities as $authority) {
+                    $authority->toXML($e);
+                }
+            }
+
+            return $e;
         }
 
-        return $e;
+        return null;
     }
 }

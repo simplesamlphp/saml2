@@ -126,34 +126,28 @@ final class NameIDPolicy extends AbstractSamlpElement
      * Convert this NameIDPolicy to XML.
      *
      * @param \DOMElement|null $parent The element we should append this NameIDPolicy to.
-     * @throws \Exception
-     * @return \DOMElement
-     *
-     * @throws \InvalidArgumentException if assertions are false
+     * @return \DOMElement|null
      */
-    public function toXML(DOMElement $parent = null): DOMElement
+    public function toXML(DOMElement $parent = null): ?DOMElement
     {
-        if ($parent === null) {
-            $doc = DOMDocumentFactory::create();
-            $e = $doc->createElementNS(Constants::NS_SAMLP, 'samlp:NameIDPolicy');
-            $doc->appendChild($e);
-        } else {
-            $e = $parent->ownerDocument->createElementNS(Constants::NS_SAMLP, 'samlp:NameIDPolicy');
-            $parent->appendChild($e);
+        if (!empty($this->Format) || !empty($this->SPNameQualifier) || !empty($this->AllowCreate)) {
+            $e = $this->instantiateParentElement($parent);
+
+            if (isset($this->Format)) {
+                $e->setAttribute('Format', $this->Format);
+            }
+
+            if (isset($this->SPNameQualifier)) {
+                $e->setAttribute('SPNameQualifier', $this->SPNameQualifier);
+            }
+
+            if (isset($this->AllowCreate)) {
+                $e->setAttribute('AllowCreate', var_export($this->AllowCreate, true));
+            }
+
+            return $e;
         }
 
-        if (isset($this->Format)) {
-            $e->setAttribute('Format', $this->Format);
-        }
-
-        if (isset($this->SPNameQualifier)) {
-            $e->setAttribute('SPNameQualifier', $this->SPNameQualifier);
-        }
-
-        if (isset($this->AllowCreate)) {
-            $e->setAttribute('AllowCreate', var_export($this->AllowCreate, true));
-        }
-
-        return $e;
+        return null;
     }
 }

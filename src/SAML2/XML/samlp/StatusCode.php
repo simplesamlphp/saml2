@@ -132,15 +132,7 @@ final class StatusCode extends AbstractSamlpElement
      */
     public function toXML(DOMElement $parent = null): DOMElement
     {
-        if ($parent === null) {
-            $doc = DOMDocumentFactory::create();
-            $e = $doc->createElementNS(Constants::NS_SAMLP, 'samlp:StatusCode');
-            $doc->appendChild($e);
-        } else {
-            $e = $parent->ownerDocument->createElementNS(Constants::NS_SAMLP, 'samlp:StatusCode');
-            $parent->appendChild($e);
-        }
-
+        $e = $this->instantiateParentElement($parent);
         $e->setAttribute('Value', $this->getValue());
 
         if (!empty($this->subCodes)) {
