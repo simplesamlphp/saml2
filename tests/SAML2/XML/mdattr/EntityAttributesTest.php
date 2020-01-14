@@ -35,8 +35,8 @@ class EntityAttributesTest extends \PHPUnit\Framework\TestCase
              new AttributeValue('bar'),
         ]);
 
-        $entityAttributes = new EntityAttributes();
-        $entityAttributes->setChildren([$attribute1, $attribute2]);
+        $entityAttributes = new EntityAttributes([$attribute1]);
+        $entityAttributes->addChild($attribute2);
 
         $document = DOMDocumentFactory::fromString('<root />');
         $xml = $entityAttributes->toXML($document->firstChild);
@@ -72,7 +72,7 @@ class EntityAttributesTest extends \PHPUnit\Framework\TestCase
 XML
         );
 
-        $entityAttributes = new EntityAttributes($document->firstChild);
+        $entityAttributes = EntityAttributes::fromXML($document->firstChild);
         $this->assertCount(5, $entityAttributes->getChildren());
 
         $this->assertInstanceOf(Chunk::class, $entityAttributes->getChildren()[0]);
@@ -106,7 +106,7 @@ XML
 XML
         );
 
-        $entityAttributes = new EntityAttributes($document->firstChild);
+        $entityAttributes = EntityAttributes::fromXML($document->firstChild);
         $this->assertCount(2, $entityAttributes->getChildren());
 
         $this->assertEquals('urn:simplesamlphp:v1:simplesamlphp', $entityAttributes->getChildren()[0]->getName());
