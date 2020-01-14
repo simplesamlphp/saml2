@@ -137,6 +137,9 @@ final class RegistrationInfo extends AbstractMdrpiElement
      */
     public static function fromXML(DOMElement $xml): object
     {
+        Assert::same($xml->localName, 'RegistrationInfo');
+        Assert::same($xml->namespaceURI, RegistrationInfo::NS);
+
         if (!$xml->hasAttribute('registrationAuthority')) {
             throw new \Exception(
                 'Missing required attribute "registrationAuthority" in mdrpi:RegistrationInfo element.'

@@ -171,6 +171,9 @@ final class PublicationInfo extends AbstractMdrpiElement
      */
     public static function fromXML(DOMElement $xml): object
     {
+        Assert::same($xml->localName, 'PublicationInfo');
+        Assert::same($xml->namespaceURI, PublicationInfo::NS);
+
         if (!$xml->hasAttribute('publisher')) {
             throw new \Exception('Missing required attribute "publisher" in mdrpi:PublicationInfo element.');
         }
