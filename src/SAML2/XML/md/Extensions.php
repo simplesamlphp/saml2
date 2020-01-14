@@ -73,6 +73,7 @@ class Extensions
             ) {
                 if (
                     $node->namespaceURI === ALG::NS
+                    || $node->namespaceURI === EntityAttributes::NS
                     || $node->namespaceURI === MDRPI::NS
                 ) {
                     /** @psalm-suppress UndefinedMethod */

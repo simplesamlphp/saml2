@@ -16,13 +16,8 @@ use Webmozart\Assert\Assert;
  * @link: http://docs.oasis-open.org/security/saml/Post2.0/sstc-metadata-attr-cs-01.pdf
  * @package SimpleSAMLphp
  */
-class EntityAttributes
+final class EntityAttributes extends AbstractMdattrElement
 {
-    /**
-     * The namespace used for the EntityAttributes extension.
-     */
-    public const NS = 'urn:oasis:names:tc:SAML:metadata:attribute';
-
     /**
      * Array with child elements.
      *
@@ -30,28 +25,17 @@ class EntityAttributes
      *
      * @var (\SAML2\XML\saml\Attribute|\SAML2\XML\Chunk)[]
      */
-    private $children = [];
+    protected $children = [];
 
 
     /**
      * Create a EntityAttributes element.
      *
-     * @param \DOMElement|null $xml The XML element we should load.
+     * @param (\SAML2\XML\Chunk|\SAML2\XML\saml\Attribute)[] $children
      */
-    public function __construct(DOMElement $xml = null)
+    public function __construct(array $children)
     {
-        if ($xml === null) {
-            return;
-        }
-
-        /** @var \DOMElement $node */
-        foreach (Utils::xpQuery($xml, './saml_assertion:Attribute|./saml_assertion:Assertion') as $node) {
-            if ($node->localName === 'Attribute') {
-                $this->children[] = new Attribute($node);
-            } else {
-                $this->children[] = new Chunk($node);
-            }
-        }
+        $this->setChildren($children);
     }
 
 
@@ -72,8 +56,10 @@ class EntityAttributes
      * @param array $children
      * @return void
      */
-    public function setChildren(array $children): void
+    private function setChildren(array $children): void
     {
+        Assert::allIsInstanceOfAny($children, [Chunk::class, Attribute::class]);
+
         $this->children = $children;
     }
 
@@ -86,25 +72,46 @@ class EntityAttributes
      *
      * @throws \InvalidArgumentException if assertions are false
      */
-    public function addChildren($child): void
+    public function addChild($child): void
     {
         Assert::isInstanceOfAny($child, [Chunk::class, Attribute::class]);
+
         $this->children[] = $child;
+    }
+
+
+    /**
+     * Convert XML into a EntityAttributes
+     *
+     * @param \DOMElement $xml The XML element we should load
+     * @return self
+     */
+    public static function fromXML(DOMElement $xml): object
+    {
+        $children = [];
+
+        /** @var \DOMElement $node */
+        foreach (Utils::xpQuery($xml, './saml_assertion:Attribute|./saml_assertion:Assertion') as $node) {
+            if ($node->localName === 'Attribute') {
+                $children[] = new Attribute($node);
+            } else {
+                $children[] = new Chunk($node);
+            }
+        }
+
+        return new self($children);
     }
 
 
     /**
      * Convert this EntityAttributes to XML.
      *
-     * @param \DOMElement $parent The element we should append to.
+     * @param \DOMElement|null $parent The element we should append to.
      * @return \DOMElement
      */
-    public function toXML(DOMElement $parent): DOMElement
+    public function toXML(DOMElement $parent = null): DOMElement
     {
-        $doc = $parent->ownerDocument;
-
-        $e = $doc->createElementNS(EntityAttributes::NS, 'mdattr:EntityAttributes');
-        $parent->appendChild($e);
+        $e = $this->instantiateParentElement($parent);
 
         foreach ($this->children as $child) {
             $child->toXML($e);
