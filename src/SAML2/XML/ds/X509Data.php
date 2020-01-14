@@ -87,6 +87,9 @@ final class X509Data extends AbstractDsElement
      */
     public static function fromXML(DOMElement $xml): object
     {
+        Assert::same($xml->localName, 'X509Data');
+        Assert::same($xml->namespaceURI, X509Data::NS);
+
         $data = [];
 
         for ($n = $xml->firstChild; $n !== null; $n = $n->nextSibling) {

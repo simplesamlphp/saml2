@@ -124,6 +124,9 @@ final class KeyInfo extends AbstractDsElement
      */
     public static function fromXML(DOMElement $xml): object
     {
+        Assert::same($xml->localName, 'KeyInfo');
+        Assert::same($xml->namespaceURI, KeyInfo::NS);
+
         $Id = $xml->hasAttribute('Id') ? $xml->getAttribute('Id') : null;
         $info = [];
 

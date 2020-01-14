@@ -65,6 +65,9 @@ final class KeyName extends AbstractDsElement
      */
     public static function fromXML(DOMElement $xml): object
     {
+        Assert::same($xml->localName, 'KeyName');
+        Assert::same($xml->namespaceURI, KeyName::NS);
+
         return new self($xml->textContent);
     }
 

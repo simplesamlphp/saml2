@@ -65,6 +65,9 @@ final class X509Certificate extends AbstractDsElement
      */
     public static function fromXML(DOMElement $xml): object
     {
+        Assert::same($xml->localName, 'X509Certificate');
+        Assert::same($xml->namespaceURI, X509Certificate::NS);
+
         return new self($xml->textContent);
     }
 
