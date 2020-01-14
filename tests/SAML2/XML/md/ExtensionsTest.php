@@ -130,8 +130,7 @@ XML
         $document->formatOutput = true;
         $r = $document->createElement('root');
         $document->appendChild($r);
-        $scope = new Scope();
-        $scope->setScope('SomeScope');
+        $scope = new Scope('SomeScope');
         $digest = new DigestMethod('SomeAlgorithm');
         $extensions = [
             $scope,

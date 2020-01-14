@@ -28,22 +28,19 @@ final class Scope extends AbstractShibmdElement
      *
      * @var bool
      */
-    protected $regexp = false;
+    protected $regexp;
 
 
     /**
      * Create a Scope.
      *
-     * @param \DOMElement|null $xml The XML element we should load.
+     * @param string $scope
+     * @param bool $regexp
      */
-    public function __construct(DOMElement $xml = null)
+    public function __construct(string $scope, bool $regexp = false)
     {
-        if ($xml === null) {
-            return;
-        }
-
-        $this->scope = $xml->textContent;
-        $this->regexp = Utils::parseBoolean($xml, 'regexp', false);
+        $this->setScope($scope);
+        $this->setIsRegexpScope($regexp);
     }
 
 
@@ -51,13 +48,9 @@ final class Scope extends AbstractShibmdElement
      * Collect the value of the scope-property
      *
      * @return string
-     *
-     * @throws \InvalidArgumentException if assertions are false
      */
     public function getScope(): string
     {
-        Assert::notEmpty($this->scope);
-
         return $this->scope;
     }
 
