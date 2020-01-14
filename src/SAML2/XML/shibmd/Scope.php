@@ -61,7 +61,7 @@ final class Scope extends AbstractShibmdElement
      * @param string $scope
      * @return void
      */
-    public function setScope(string $scope): void
+    private function setScope(string $scope): void
     {
         $this->scope = $scope;
     }
@@ -84,7 +84,7 @@ final class Scope extends AbstractShibmdElement
      * @param bool $regexp
      * @return void
      */
-    public function setIsRegexpScope(bool $regexp): void
+    private function setIsRegexpScope(bool $regexp): void
     {
         $this->regexp = $regexp;
     }
