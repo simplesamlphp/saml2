@@ -135,6 +135,9 @@ final class SigningMethod extends AbstractAlgElement
      */
     public static function fromXML(DOMElement $xml): object
     {
+        Assert::same($xml->localName, 'SigningMethod');
+        Assert::same($xml->namespaceURI, SigningMethod::NS);
+
         if (!$xml->hasAttribute('Algorithm')) {
             throw new \Exception('Missing required attribute "Algorithm" in alg:SigningMethod element.');
         }

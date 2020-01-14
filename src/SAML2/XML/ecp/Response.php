@@ -71,6 +71,9 @@ final class Response extends AbstractEcpElement
      */
     public static function fromXML(DOMElement $xml): object
     {
+        Assert::same($xml->localName, 'Response');
+        Assert::same($xml->namespaceURI, Response::NS);
+
         if (!$xml->hasAttributeNS(Constants::NS_SOAP, 'mustUnderstand')) {
             throw new \Exception('Missing SOAP-ENV:mustUnderstand attribute in <ecp:Response>.');
         } elseif (!$xml->hasAttributeNS(Constants::NS_SOAP, 'actor')) {
