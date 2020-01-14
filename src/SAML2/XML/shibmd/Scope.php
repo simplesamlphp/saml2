@@ -118,14 +118,8 @@ final class Scope extends AbstractShibmdElement
      */
     public function toXML(DOMElement $parent = null): DOMElement
     {
-        Assert::notEmpty($this->scope);
-
-        $doc = $parent->ownerDocument;
-
-        $e = $doc->createElementNS(Scope::NS, 'shibmd:Scope');
-        $parent->appendChild($e);
-
-        $e->appendChild($doc->createTextNode($this->scope));
+        $e = $this->instantiateParentElement($parent);
+        $e->appendChild($e->ownerDocument->createTextNode($this->scope));
 
         if ($this->regexp === true) {
             $e->setAttribute('regexp', 'true');

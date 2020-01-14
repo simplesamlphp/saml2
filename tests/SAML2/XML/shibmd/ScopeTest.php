@@ -83,9 +83,8 @@ class ScopeTest extends \PHPUnit\Framework\TestCase
      */
     public function testUnmarshallingLiteral(): void
     {
-        $document = DOMDocumentFactory::fromString(<<<XML
-<shibmd:Scope regexp="false">example.org</shibmd:Scope>
-XML
+        $document = DOMDocumentFactory::fromString(
+            '<shibmd:Scope xmlns:shibmd="' . Scope::NS . '" regexp="false">example.org</shibmd:Scope>'
         );
         $scope = Scope::fromXML($document->firstChild);
 
@@ -101,9 +100,8 @@ XML
      */
     public function testUnmarshallingWithoutRegexpValue(): void
     {
-        $document = DOMDocumentFactory::fromString(<<<XML
-<shibmd:Scope>example.org</shibmd:Scope>
-XML
+        $document = DOMDocumentFactory::fromString(
+            '<shibmd:Scope xmlns:shibmd="' . Scope::NS . '">example.org</shibmd:Scope>'
         );
         $scope = Scope::fromXML($document->firstChild);
 
@@ -118,9 +116,8 @@ XML
      */
     public function testUnmarshallingRegexp(): void
     {
-        $document = DOMDocumentFactory::fromString(<<<XML
-<shibmd:Scope regexp="true">^(.*|)example.edu$</shibmd:Scope>
-XML
+        $document = DOMDocumentFactory::fromString(
+            '<shibmd:Scope xmlns:shibmd="' . Scope::NS . '" regexp="true">^(.*|)example.edu$</shibmd:Scope>'
         );
         $scope = Scope::fromXML($document->firstChild);
 
