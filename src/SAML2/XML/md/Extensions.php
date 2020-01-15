@@ -74,10 +74,12 @@ class Extensions
                 if (
                     $node->namespaceURI === ALG::NS
                     || $node->namespaceURI === EntityAttributes::NS
+                    || $node->namespaceURI === Scope::NS
                 ) {
                     /** @psalm-suppress UndefinedMethod */
                     $ret[] = $supported[$node->namespaceURI][$node->localName]::fromXML($node);
                 } else {
+                    /** @psalm-suppress InvalidArgument */
                     $ret[] = new $supported[$node->namespaceURI][$node->localName]($node);
                 }
             } else {

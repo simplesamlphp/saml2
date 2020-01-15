@@ -19,9 +19,7 @@ class ScopeTest extends \PHPUnit\Framework\TestCase
      */
     public function testMarshallingLiteral(): void
     {
-        $scope = new Scope();
-        $scope->setScope("example.org");
-        $scope->setIsRegexpScope(false);
+        $scope = new Scope("example.org", false);
 
         $document = DOMDocumentFactory::fromString('<root />');
         $scopeElement = $scope->toXML($document->firstChild);
@@ -43,8 +41,7 @@ class ScopeTest extends \PHPUnit\Framework\TestCase
      */
     public function testMarshallingImplicitRegexpValue(): void
     {
-        $scope = new Scope();
-        $scope->setScope("example.org");
+        $scope = new Scope("example.org");
 
         $document = DOMDocumentFactory::fromString('<root />');
         $scopeElement = $scope->toXML($document->firstChild);
@@ -65,9 +62,7 @@ class ScopeTest extends \PHPUnit\Framework\TestCase
      */
     public function testMarshallingRegexp(): void
     {
-        $scope = new Scope();
-        $scope->setScope("^(.*\.)?example\.edu$");
-        $scope->setIsRegexpScope(true);
+        $scope = new Scope("^(.*\.)?example\.edu$", true);
 
         $document = DOMDocumentFactory::fromString('<root />');
         $scopeElement = $scope->toXML($document->firstChild);
@@ -88,11 +83,10 @@ class ScopeTest extends \PHPUnit\Framework\TestCase
      */
     public function testUnmarshallingLiteral(): void
     {
-        $document = DOMDocumentFactory::fromString(<<<XML
-<shibmd:Scope regexp="false">example.org</shibmd:Scope>
-XML
+        $document = DOMDocumentFactory::fromString(
+            '<shibmd:Scope xmlns:shibmd="' . Scope::NS . '" regexp="false">example.org</shibmd:Scope>'
         );
-        $scope = new Scope($document->firstChild);
+        $scope = Scope::fromXML($document->firstChild);
 
         $this->assertEquals('example.org', $scope->getScope());
         $this->assertFalse($scope->isRegexpScope());
@@ -106,11 +100,10 @@ XML
      */
     public function testUnmarshallingWithoutRegexpValue(): void
     {
-        $document = DOMDocumentFactory::fromString(<<<XML
-<shibmd:Scope>example.org</shibmd:Scope>
-XML
+        $document = DOMDocumentFactory::fromString(
+            '<shibmd:Scope xmlns:shibmd="' . Scope::NS . '">example.org</shibmd:Scope>'
         );
-        $scope = new Scope($document->firstChild);
+        $scope = Scope::fromXML($document->firstChild);
 
         $this->assertEquals('example.org', $scope->getScope());
         $this->assertFalse($scope->isRegexpScope());
@@ -123,11 +116,10 @@ XML
      */
     public function testUnmarshallingRegexp(): void
     {
-        $document = DOMDocumentFactory::fromString(<<<XML
-<shibmd:Scope regexp="true">^(.*|)example.edu$</shibmd:Scope>
-XML
+        $document = DOMDocumentFactory::fromString(
+            '<shibmd:Scope xmlns:shibmd="' . Scope::NS . '" regexp="true">^(.*|)example.edu$</shibmd:Scope>'
         );
-        $scope = new Scope($document->firstChild);
+        $scope = Scope::fromXML($document->firstChild);
 
         $this->assertEquals('^(.*|)example.edu$', $scope->getScope());
         $this->assertTrue($scope->isRegexpScope());
