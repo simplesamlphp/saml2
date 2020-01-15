@@ -9,6 +9,8 @@ use SAML2\XML\AbstractXMLElement;
 /**
  * Abstract class to be implemented by all the classes in this namespace
  *
+ * @link: http://docs.oasis-open.org/security/saml/Post2.0/saml-metadata-rpi/v1.0/saml-metadata-rpi-v1.0.pdf
+ *
  * @author Tim van Dijen, <tvdijen@gmail.com>
  * @package SimpleSAMLphp
  */

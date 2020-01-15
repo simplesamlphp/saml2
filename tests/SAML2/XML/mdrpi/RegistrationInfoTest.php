@@ -18,13 +18,14 @@ class RegistrationInfoTest extends \PHPUnit\Framework\TestCase
      */
     public function testMarshalling(): void
     {
-        $registrationInfo = new RegistrationInfo();
-        $registrationInfo->setRegistrationAuthority('https://ExampleAuthority');
-        $registrationInfo->setRegistrationInstant(1234567890);
-        $registrationInfo->setRegistrationPolicy([
-            'en' => 'http://EnglishRegistrationPolicy',
-            'nl' => 'https://DutchRegistratiebeleid',
-        ]);
+        $registrationInfo = new RegistrationInfo(
+            'https://ExampleAuthority',
+            1234567890,
+            [
+                'en' => 'http://EnglishRegistrationPolicy',
+                'nl' => 'https://DutchRegistratiebeleid',
+            ]
+        );
 
         $document = DOMDocumentFactory::fromString('<root />');
         $xml = $registrationInfo->toXML($document->firstChild);
@@ -80,7 +81,7 @@ class RegistrationInfoTest extends \PHPUnit\Framework\TestCase
 XML
         );
 
-        $registrationInfo = new RegistrationInfo($document->firstChild);
+        $registrationInfo = RegistrationInfo::fromXML($document->firstChild);
 
         $this->assertEquals('urn:example:example.org', $registrationInfo->getRegistrationAuthority());
         $this->assertEquals(1148902467, $registrationInfo->getRegistrationInstant());
@@ -105,21 +106,6 @@ XML
         );
 
         $this->expectException(\Exception::class, 'Missing required attribute "registrationAuthority"');
-        $registrationInfo = new RegistrationInfo($document->firstChild);
-    }
-
-
-    /**
-     * @return void
-     */
-    public function testEmptyRegistrationAuthorityOutboundThrowsException(): void
-    {
-        $registrationInfo = new RegistrationInfo();
-        $registrationInfo->setRegistrationAuthority('');
-
-        $document = DOMDocumentFactory::fromString('<root />');
-
-        $this->expectException(\Exception::class, 'Missing required registration authority.');
-        $xml = $registrationInfo->toXML($document->firstChild);
+        $registrationInfo = RegistrationInfo::fromXML($document->firstChild);
     }
 }
