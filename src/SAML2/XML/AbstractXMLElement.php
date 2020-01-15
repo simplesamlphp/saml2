@@ -32,7 +32,7 @@ abstract class AbstractXMLElement implements Serializable
     public function __toString(): string
     {
         $xml = $this->toXML();
-        return is_null($xml) ? '' : $xml->ownerDocument->saveXML($xml);
+        return $xml->ownerDocument->saveXML($xml);
     }
 
 
@@ -44,7 +44,7 @@ abstract class AbstractXMLElement implements Serializable
     public function serialize(): string
     {
         $xml = $this->toXML();
-        return is_null($xml) ? '' : $xml->ownerDocument->saveXML();
+        return $xml->ownerDocument->saveXML();
     }
 
 
@@ -104,7 +104,7 @@ abstract class AbstractXMLElement implements Serializable
      * Create XML from this class
      *
      * @param \DOMElement|null $parent
-     * @return \DOMElement|null
+     * @return \DOMElement
      */
-    abstract public function toXML(DOMElement $parent = null): ?DOMElement;
+    abstract public function toXML(DOMElement $parent = null): DOMElement;
 }
