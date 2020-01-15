@@ -16,7 +16,7 @@ use Webmozart\Assert\Assert;
  *
  * @package SimpleSAMLphp
  */
-class RoleDescriptor extends SignedElementHelper
+abstract class RoleDescriptor extends SignedElementHelper
 {
     /**
      * The name of this descriptor element.
