@@ -5,7 +5,6 @@ declare(strict_types=1);
 namespace SAML2\XML\ds;
 
 use DOMElement;
-use RobRichards\XMLSecLibs\XMLSecurityDSig;
 use SAML2\XML\Chunk;
 use Webmozart\Assert\Assert;
 
@@ -14,14 +13,14 @@ use Webmozart\Assert\Assert;
  *
  * @package SimpleSAMLphp
  */
-class KeyInfo
+final class KeyInfo extends AbstractDsElement
 {
     /**
      * The Id attribute on this element.
      *
      * @var string|null
      */
-    private $Id = null;
+    protected $Id = null;
 
     /**
      * The various key information elements.
@@ -31,45 +30,19 @@ class KeyInfo
      *
      * @var (\SAML2\XML\Chunk|\SAML2\XML\ds\KeyName|\SAML2\XML\ds\X509Data)[]
      */
-    private $info = [];
+    protected $info = [];
 
 
     /**
      * Initialize a KeyInfo element.
      *
-     * @param \DOMElement|null $xml The XML element we should load.
+     * @param (\SAML2\XML\Chunk|\SAML2\XML\ds\KeyName|\SAML2\XML\ds\X509Data)[] $info
+     * @param string|null $Id
      */
-    public function __construct(DOMElement $xml = null)
+    public function __construct(array $info, $Id = null)
     {
-        if ($xml === null) {
-            return;
-        }
-
-        if ($xml->hasAttribute('Id')) {
-            $this->Id = $xml->getAttribute('Id');
-        }
-
-        foreach ($xml->childNodes as $n) {
-            if (!($n instanceof \DOMElement)) {
-                continue;
-            }
-
-            if ($n->namespaceURI !== XMLSecurityDSig::XMLDSIGNS) {
-                $this->info[] = new Chunk($n);
-                continue;
-            }
-            switch ($n->localName) {
-                case 'KeyName':
-                    $this->info[] = new KeyName($n);
-                    break;
-                case 'X509Data':
-                    $this->info[] = new X509Data($n);
-                    break;
-                default:
-                    $this->info[] = new Chunk($n);
-                    break;
-            }
-        }
+        $this->setInfo($info);
+        $this->setId($Id);
     }
 
 
@@ -90,7 +63,7 @@ class KeyInfo
      * @param string|null $id
      * @return void
      */
-    public function setId(string $id = null): void
+    private function setId(string $id = null): void
     {
         $this->Id = $id;
     }
@@ -113,8 +86,13 @@ class KeyInfo
      * @param array $info
      * @return void
      */
-    public function setInfo(array $info): void
+    private function setInfo(array $info): void
     {
+        Assert::allIsInstanceOfAny(
+            $info,
+            [Chunk::class, KeyName::class, X509Data::class],
+            'KeyInfo can only contain instances of KeyName, X509Data or Chunk.'
+        );
         $this->info = $info;
     }
 
@@ -139,17 +117,54 @@ class KeyInfo
 
 
     /**
+     * Convert XML into a KeyInfo
+     *
+     * @param \DOMElement $xml The XML element we should load
+     * @return self
+     */
+    public static function fromXML(DOMElement $xml): object
+    {
+        Assert::same($xml->localName, 'KeyInfo');
+        Assert::same($xml->namespaceURI, KeyInfo::NS);
+
+        $Id = $xml->hasAttribute('Id') ? $xml->getAttribute('Id') : null;
+        $info = [];
+
+        foreach ($xml->childNodes as $n) {
+            if (!($n instanceof \DOMElement)) {
+                continue;
+            }
+
+            if ($n->namespaceURI !== self::NS) {
+                $info[] = new Chunk($n);
+                continue;
+            }
+
+            switch ($n->localName) {
+                case 'KeyName':
+                    $info[] = KeyName::fromXML($n);
+                    break;
+                case 'X509Data':
+                    $info[] = X509Data::fromXML($n);
+                    break;
+                default:
+                    $info[] = new Chunk($n);
+                    break;
+            }
+        }
+
+        return new self($info, $Id);
+    }
+
+    /**
      * Convert this KeyInfo to XML.
      *
-     * @param \DOMElement $parent The element we should append this KeyInfo to.
+     * @param \DOMElement|null $parent The element we should append this KeyInfo to.
      * @return \DOMElement
      */
-    public function toXML(DOMElement $parent): DOMElement
+    public function toXML(DOMElement $parent = null): DOMElement
     {
-        $doc = $parent->ownerDocument;
-
-        $e = $doc->createElementNS(XMLSecurityDSig::XMLDSIGNS, 'ds:KeyInfo');
-        $parent->appendChild($e);
+        $e = $this->instantiateParentElement($parent);
 
         if ($this->Id !== null) {
             $e->setAttribute('Id', $this->Id);

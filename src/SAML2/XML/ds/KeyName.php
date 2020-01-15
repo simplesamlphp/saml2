@@ -5,7 +5,6 @@ declare(strict_types=1);
 namespace SAML2\XML\ds;
 
 use DOMElement;
-use RobRichards\XMLSecLibs\XMLSecurityDSig;
 use SAML2\Utils;
 use Webmozart\Assert\Assert;
 
@@ -14,28 +13,24 @@ use Webmozart\Assert\Assert;
  *
  * @package SimpleSAMLphp
  */
-class KeyName
+final class KeyName extends AbstractDsElement
 {
     /**
      * The key name.
      *
      * @var string
      */
-    public $name;
+    protected $name;
 
 
     /**
      * Initialize a KeyName element.
      *
-     * @param \DOMElement|null $xml The XML element we should load.
+     * @param string $name
      */
-    public function __construct(DOMElement $xml = null)
+    public function __construct(string $name)
     {
-        if ($xml === null) {
-            return;
-        }
-
-        $this->setName($xml->textContent);
+        $this->setName($name);
     }
 
 
@@ -46,8 +41,6 @@ class KeyName
      */
     public function getName(): string
     {
-        Assert::notEmpty($this->name);
-
         return $this->name;
     }
 
@@ -58,22 +51,38 @@ class KeyName
      * @param string $name
      * @return void
      */
-    public function setName(string $name): void
+    private function setName(string $name): void
     {
         $this->name = $name;
     }
 
 
     /**
+     * Convert XML into a KeyName
+     *
+     * @param \DOMElement $xml The XML element we should load
+     * @return self
+     */
+    public static function fromXML(DOMElement $xml): object
+    {
+        Assert::same($xml->localName, 'KeyName');
+        Assert::same($xml->namespaceURI, KeyName::NS);
+
+        return new self($xml->textContent);
+    }
+
+
+    /**
      * Convert this KeyName element to XML.
      *
-     * @param \DOMElement $parent The element we should append this KeyName element to.
+     * @param \DOMElement|null $parent The element we should append this KeyName element to.
      * @return \DOMElement
      */
-    public function toXML(DOMElement $parent): DOMElement
+    public function toXML(DOMElement $parent = null): DOMElement
     {
-        Assert::notEmpty($this->name);
+        $e = $this->instantiateParentElement($parent);
+        $e->textContent = $this->name;
 
-        return Utils::addString($parent, XMLSecurityDSig::XMLDSIGNS, 'ds:KeyName', $this->name);
+        return $e;
     }
 }

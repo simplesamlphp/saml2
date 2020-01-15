@@ -5,7 +5,6 @@ declare(strict_types=1);
 namespace SAML2\XML\ds;
 
 use DOMElement;
-use RobRichards\XMLSecLibs\XMLSecurityDSig;
 use SAML2\XML\Chunk;
 use SAML2\XML\ds\X509Certificate;
 use Webmozart\Assert\Assert;
@@ -15,7 +14,7 @@ use Webmozart\Assert\Assert;
  *
  * @package SimpleSAMLphp
  */
-class X509Data
+final class X509Data extends AbstractDsElement
 {
     /**
      * The various X509 data elements.
@@ -25,38 +24,17 @@ class X509Data
      *
      * @var (\SAML2\XML\Chunk|\SAML2\XML\ds\X509Certificate)[]
      */
-    private $data = [];
+    protected $data = [];
 
 
     /**
      * Initialize a X509Data.
      *
-     * @param \DOMElement|null $xml The XML element we should load.
+     * @param (\SAML2\XML\Chunk|\SAML2\XML\ds\X509Certificate)[] $data
      */
-    public function __construct(DOMElement $xml = null)
+    public function __construct(array $data)
     {
-        if ($xml === null) {
-            return;
-        }
-
-        for ($n = $xml->firstChild; $n !== null; $n = $n->nextSibling) {
-            if (!($n instanceof DOMElement)) {
-                continue;
-            }
-
-            if ($n->namespaceURI !== XMLSecurityDSig::XMLDSIGNS) {
-                $this->addData(new Chunk($n));
-                continue;
-            }
-            switch ($n->localName) {
-                case 'X509Certificate':
-                    $this->addData(new X509Certificate($n));
-                    break;
-                default:
-                    $this->addData(new Chunk($n));
-                    break;
-            }
-        }
+        $this->setData($data);
     }
 
 
@@ -77,8 +55,10 @@ class X509Data
      * @param array $data
      * @return void
      */
-    public function setData(array $data): void
+    private function setData(array $data): void
     {
+        Assert::allIsInstanceOfAny($data, [Chunk::class, X509Certificate::class]);
+
         $this->data = $data;
     }
 
@@ -100,17 +80,51 @@ class X509Data
 
 
     /**
+     * Convert XML into a X509Data
+     *
+     * @param \DOMElement $xml The XML element we should load
+     * @return self
+     */
+    public static function fromXML(DOMElement $xml): object
+    {
+        Assert::same($xml->localName, 'X509Data');
+        Assert::same($xml->namespaceURI, X509Data::NS);
+
+        $data = [];
+
+        for ($n = $xml->firstChild; $n !== null; $n = $n->nextSibling) {
+            if (!($n instanceof DOMElement)) {
+                continue;
+            }
+
+            if ($n->namespaceURI !== self::NS) {
+                $data[] = new Chunk($n);
+                continue;
+            }
+
+            switch ($n->localName) {
+                case 'X509Certificate':
+                    $data[] = X509Certificate::fromXML($n);
+                    break;
+                default:
+                    $data[] = new Chunk($n);
+                    break;
+            }
+        }
+
+        return new self($data);
+    }
+
+
+    /**
      * Convert this X509Data element to XML.
      *
-     * @param \DOMElement $parent The element we should append this X509Data element to.
+     * @param \DOMElement|null $parent The element we should append this X509Data element to.
      * @return \DOMElement
      */
-    public function toXML(DOMElement $parent): DOMElement
+    public function toXML(DOMElement $parent = null): DOMElement
     {
-        $doc = $parent->ownerDocument;
-
-        $e = $doc->createElementNS(XMLSecurityDSig::XMLDSIGNS, 'ds:X509Data');
-        $parent->appendChild($e);
+        $e = $this->instantiateParentElement($parent);
 
         /** @var \SAML2\XML\Chunk|\SAML2\XML\ds\X509Certificate $n */
         foreach ($this->getData() as $n) {

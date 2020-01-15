@@ -101,7 +101,7 @@ class SubjectConfirmationData
             }
             switch ($n->localName) {
                 case 'KeyInfo':
-                    $this->addInfo(new KeyInfo($n));
+                    $this->addInfo(KeyInfo::fromXML($n));
                     break;
                 default:
                     $this->addInfo(new Chunk($n));

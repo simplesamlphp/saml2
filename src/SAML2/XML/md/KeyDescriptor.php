@@ -67,7 +67,7 @@ class KeyDescriptor
             throw new \Exception('No ds:KeyInfo in the KeyDescriptor.');
         }
         /** @var \DOMElement $keyInfo[0] */
-        $this->KeyInfo = new KeyInfo($keyInfo[0]);
+        $this->KeyInfo = KeyInfo::fromXML($keyInfo[0]);
 
         /** @var \DOMElement $em */
         foreach (Utils::xpQuery($xml, './saml_metadata:EncryptionMethod') as $em) {
