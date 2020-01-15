@@ -182,7 +182,7 @@ final class Status extends AbstractSamlpElement
             foreach ($this->statusDetails as $sd) {
                 $x = $sd->toXML();
                 if (!Utils::isEmptyElement($x)) {
-                    $sd->toXML($e);
+                    $e->appendChild($e->ownerDocument->importNode($x, true));
                 }
             }
         }

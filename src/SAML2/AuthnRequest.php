@@ -780,7 +780,7 @@ class AuthnRequest extends Request
         if ($this->nameIdPolicy !== null) {
             $e = $this->nameIdPolicy->toXML();
             if (!Utils::isEmptyElement($e)) {
-                $this->nameIdPolicy->toXML($root);
+                $root->appendChild($root->ownerDocument->importNode($e, true));
             }
         }
 
