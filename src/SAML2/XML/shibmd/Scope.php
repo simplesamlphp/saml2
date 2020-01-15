@@ -14,41 +14,33 @@ use Webmozart\Assert\Assert;
  * @link https://wiki.shibboleth.net/confluence/display/SHIB/ShibbolethMetadataProfile
  * @package SimpleSAMLphp
  */
-class Scope
+final class Scope extends AbstractShibmdElement
 {
-    /**
-     * The namespace used for the Scope extension element.
-     */
-    public const NS = 'urn:mace:shibboleth:metadata:1.0';
-
     /**
      * The scope.
      *
      * @var string
      */
-    private $scope;
+    protected $scope;
 
     /**
      * Whether this is a regexp scope.
      *
      * @var bool
      */
-    private $regexp = false;
+    protected $regexp;
 
 
     /**
      * Create a Scope.
      *
-     * @param \DOMElement|null $xml The XML element we should load.
+     * @param string $scope
+     * @param bool $regexp
      */
-    public function __construct(DOMElement $xml = null)
+    public function __construct(string $scope, bool $regexp = false)
     {
-        if ($xml === null) {
-            return;
-        }
-
-        $this->scope = $xml->textContent;
-        $this->regexp = Utils::parseBoolean($xml, 'regexp', false);
+        $this->setScope($scope);
+        $this->setIsRegexpScope($regexp);
     }
 
 
@@ -56,13 +48,9 @@ class Scope
      * Collect the value of the scope-property
      *
      * @return string
-     *
-     * @throws \InvalidArgumentException if assertions are false
      */
     public function getScope(): string
     {
-        Assert::notEmpty($this->scope);
-
         return $this->scope;
     }
 
@@ -73,7 +61,7 @@ class Scope
      * @param string $scope
      * @return void
      */
-    public function setScope(string $scope): void
+    private function setScope(string $scope): void
     {
         $this->scope = $scope;
     }
@@ -96,30 +84,42 @@ class Scope
      * @param bool $regexp
      * @return void
      */
-    public function setIsRegexpScope(bool $regexp): void
+    private function setIsRegexpScope(bool $regexp): void
     {
         $this->regexp = $regexp;
     }
 
 
     /**
+     * Convert XML into a NameIDPolicy
+     *
+     * @param \DOMElement $xml The XML element we should load
+     * @return self
+     */
+    public static function fromXML(DOMElement $xml): object
+    {
+        Assert::same($xml->localName, 'Scope');
+        Assert::same($xml->namespaceURI, Scope::NS);
+
+        $scope = $xml->textContent;
+        $regexp = Utils::parseBoolean($xml, 'regexp', false);
+
+        return new self($scope, $regexp);
+    }
+
+
+    /**
      * Convert this Scope to XML.
      *
-     * @param \DOMElement $parent The element we should append this Scope to.
+     * @param \DOMElement|null $parent The element we should append this Scope to.
      * @return \DOMElement
      *
      * @throws \InvalidArgumentException if assertions are false
      */
-    public function toXML(DOMElement $parent): DOMElement
+    public function toXML(DOMElement $parent = null): DOMElement
     {
-        Assert::notEmpty($this->scope);
-
-        $doc = $parent->ownerDocument;
-
-        $e = $doc->createElementNS(Scope::NS, 'shibmd:Scope');
-        $parent->appendChild($e);
-
-        $e->appendChild($doc->createTextNode($this->scope));
+        $e = $this->instantiateParentElement($parent);
+        $e->appendChild($e->ownerDocument->createTextNode($this->scope));
 
         if ($this->regexp === true) {
             $e->setAttribute('regexp', 'true');
