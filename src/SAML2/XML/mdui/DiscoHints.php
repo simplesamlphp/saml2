@@ -202,39 +202,30 @@ final class DiscoHints extends AbstractMduiElement
      * Convert this DiscoHints to XML.
      *
      * @param \DOMElement|null $parent The element we should append to.
-     * @return \DOMElement|null
+     * @return \DOMElement
      */
-    public function toXML(DOMElement $parent = null): ?DOMElement
+    public function toXML(DOMElement $parent = null): DOMElement
     {
-        if (
-            !empty($this->IPHint)
-            || !empty($this->DomainHint)
-            || !empty($this->GeolocationHint)
-            || !empty($this->children)
-        ) {
-            $e = $this->instantiateParentElement($parent);
+        $e = $this->instantiateParentElement($parent);
 
-            if (!empty($this->children)) {
-                foreach ($this->children as $child) {
-                    $child->toXML($e);
-                }
+        if (!empty($this->children)) {
+            foreach ($this->children as $child) {
+                $child->toXML($e);
             }
-
-            if (!empty($this->IPHint)) {
-                Utils::addStrings($e, DiscoHints::NS, 'mdui:IPHint', false, $this->IPHint);
-            }
-
-            if (!empty($this->DomainHint)) {
-                Utils::addStrings($e, DiscoHints::NS, 'mdui:DomainHint', false, $this->DomainHint);
-            }
-
-            if (!empty($this->GeolocationHint)) {
-                Utils::addStrings($e, DiscoHints::NS, 'mdui:GeolocationHint', false, $this->GeolocationHint);
-            }
-
-            return $e;
         }
 
-        return null;
+        if (!empty($this->IPHint)) {
+            Utils::addStrings($e, DiscoHints::NS, 'mdui:IPHint', false, $this->IPHint);
+        }
+
+        if (!empty($this->DomainHint)) {
+            Utils::addStrings($e, DiscoHints::NS, 'mdui:DomainHint', false, $this->DomainHint);
+        }
+
+        if (!empty($this->GeolocationHint)) {
+            Utils::addStrings($e, DiscoHints::NS, 'mdui:GeolocationHint', false, $this->GeolocationHint);
+        }
+
+        return $e;
     }
 }

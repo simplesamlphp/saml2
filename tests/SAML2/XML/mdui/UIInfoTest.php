@@ -171,21 +171,6 @@ class UIInfoTest extends \PHPUnit\Framework\TestCase
 
 
     /**
-     * Create an empty UIInfo element
-     * @return void
-     */
-    public function testMarshallingEmpty(): void
-    {
-        $uiinfo = new UIInfo();
-
-        $document = DOMDocumentFactory::fromString('<root />');
-        $xml = $uiinfo->toXML($document->firstChild);
-
-        $this->assertNull($xml);
-    }
-
-
-    /**
      * Test unmarshalling a basic UIInfo element
      * @return void
      */

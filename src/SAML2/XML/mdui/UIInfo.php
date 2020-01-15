@@ -120,7 +120,7 @@ final class UIInfo extends AbstractMduiElement
      */
     private function setKeywords(?array $keywords): void
     {
-        if (!is_null($keywords)) {
+        if (!empty($keywords)) {
             Assert::allIsInstanceOf($keywords, Keywords::class);
         }
         $this->Keywords = $keywords;
@@ -349,58 +349,46 @@ final class UIInfo extends AbstractMduiElement
      * Convert this UIInfo to XML.
      *
      * @param \DOMElement|null $parent The element we should append to.
-     * @return \DOMElement|null
+     * @return \DOMElement
      */
-    public function toXML(DOMElement $parent = null): ?DOMElement
+    public function toXML(DOMElement $parent = null): DOMElement
     {
-        if (
-            !empty($this->DisplayName)
-            || !empty($this->Description)
-            || !empty($this->InformationURL)
-            || !empty($this->PrivacyStatementURL)
-            || !empty($this->Keywords)
-            || !empty($this->Logo)
-            || !empty($this->children)
-        ) {
-            $e = $this->instantiateParentElement($parent);
+        $e = $this->instantiateParentElement($parent);
 
-            if (!empty($this->DisplayName)) {
-                Utils::addStrings($e, UIInfo::NS, 'mdui:DisplayName', true, $this->DisplayName);
-            }
-
-            if (!empty($this->Description)) {
-                Utils::addStrings($e, UIInfo::NS, 'mdui:Description', true, $this->Description);
-            }
-
-            if (!empty($this->InformationURL)) {
-                Utils::addStrings($e, UIInfo::NS, 'mdui:InformationURL', true, $this->InformationURL);
-            }
-
-            if (!empty($this->PrivacyStatementURL)) {
-                Utils::addStrings($e, UIInfo::NS, 'mdui:PrivacyStatementURL', true, $this->PrivacyStatementURL);
-            }
-
-            if (!empty($this->Keywords)) {
-                foreach ($this->Keywords as $child) {
-                    $child->toXML($e);
-                }
-            }
-
-            if (!empty($this->Logo)) {
-                foreach ($this->Logo as $child) {
-                    $child->toXML($e);
-                }
-            }
-
-            if (!empty($this->children)) {
-                foreach ($this->children as $child) {
-                    $child->toXML($e);
-                }
-            }
-
-            return $e;
+        if (!empty($this->DisplayName)) {
+            Utils::addStrings($e, UIInfo::NS, 'mdui:DisplayName', true, $this->DisplayName);
         }
 
-        return null;
+        if (!empty($this->Description)) {
+            Utils::addStrings($e, UIInfo::NS, 'mdui:Description', true, $this->Description);
+        }
+
+        if (!empty($this->InformationURL)) {
+            Utils::addStrings($e, UIInfo::NS, 'mdui:InformationURL', true, $this->InformationURL);
+        }
+
+        if (!empty($this->PrivacyStatementURL)) {
+            Utils::addStrings($e, UIInfo::NS, 'mdui:PrivacyStatementURL', true, $this->PrivacyStatementURL);
+        }
+
+        if (!empty($this->Keywords)) {
+            foreach ($this->Keywords as $child) {
+                $child->toXML($e);
+            }
+        }
+
+        if (!empty($this->Logo)) {
+            foreach ($this->Logo as $child) {
+                $child->toXML($e);
+            }
+        }
+
+        if (!empty($this->children)) {
+            foreach ($this->children as $child) {
+                $child->toXML($e);
+            }
+        }
+
+        return $e;
     }
 }

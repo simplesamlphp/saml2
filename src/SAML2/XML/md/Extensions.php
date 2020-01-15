@@ -71,18 +71,9 @@ class Extensions
                 && array_key_exists($node->namespaceURI, $supported)
                 && array_key_exists($node->localName, $supported[$node->namespaceURI])
             ) {
-                if (
-                    $node->namespaceURI === ALG::NS
-                    || $node->namespaceURI === EntityAttributes::NS
-                    || $node->namespaceURI === MDRPI::NS
-                    || $node->namespaceURI === MDUI::NS
-                    || $node->namespaceURI === Scope::NS
-                ) {
-                    /** @psalm-suppress UndefinedMethod */
-                    $ret[] = $supported[$node->namespaceURI][$node->localName]::fromXML($node);
-                } else {
-                    /** @psalm-suppress InvalidArgument */
-                    $ret[] = new $supported[$node->namespaceURI][$node->localName]($node);
+                $result = $supported[$node->namespaceURI][$node->localName]::fromXML($node);
+                if (Utils::isEmptyElement($result)) {
+                    $ret[] = $result;
                 }
             } else {
                 $ret[] = new Chunk($node);
@@ -97,7 +88,15 @@ class Extensions
      * Add a list of Extensions to the given element.
      *
      * @param \DOMElement $parent The element we should add the extensions to.
-     * @param \SAML2\XML\Chunk[] $extensions List of extension objects.
+     * @param (\SAML2\XML\shibmd\Scope|
+     *          \SAML2\XML\mdattr\EntityAttributes|
+     *          \SAML2\XML\mdrpi\RegistrationInfo|
+     *          \SAML2\XML\mdrpi\PublicationInfo|
+     *          \SAML2\XML\mdui\UIInfo|
+     *          \SAML2\XML\mdui\DiscoHints|
+     *          \SAML2\XML\alg\DigestMethod|
+     *          \SAML2\XML\alg\SigningMethod|
+     *          \SAML2\XML\Chunk)[] $extensions List of extension objects.
      * @return void
      */
     public static function addList(DOMElement $parent, array $extensions): void
@@ -110,7 +109,9 @@ class Extensions
         $parent->appendChild($extElement);
 
         foreach ($extensions as $ext) {
-            $ext->toXML($extElement);
+            if (Utils::isEmptyElement($ext)) {
+                $ext->toXML($extElement);
+            }
         }
     }
 }

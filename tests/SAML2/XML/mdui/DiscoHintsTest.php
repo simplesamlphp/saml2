@@ -65,21 +65,6 @@ class DiscoHintsTest extends \PHPUnit\Framework\TestCase
 
 
     /**
-     * Create an empty discoHints element
-     * @return void
-     */
-    public function testMarshallingEmpty(): void
-    {
-        $discoHints = new DiscoHints();
-
-        $document = DOMDocumentFactory::fromString('<root />');
-        $xml = $discoHints->toXML($document->firstChild);
-
-        $this->assertNull($xml);
-    }
-
-
-    /**
      * Test unmarshalling a basic DiscoHints element
      * @return void
      */
