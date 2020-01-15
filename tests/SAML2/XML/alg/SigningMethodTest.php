@@ -36,7 +36,6 @@ class SigningMethodTest extends \PHPUnit\Framework\TestCase
         $this->assertEquals('http://exampleAlgorithm', $signingMethodElement->getAttribute('Algorithm'));
         $this->assertEquals('1024', $signingMethodElement->getAttribute('MinKeySize'));
         $this->assertEquals('2048', $signingMethodElement->getAttribute('MaxKeySize'));
-        $this->assertFalse($signingMethodElement->hasAttribute('MaxKeySize'));
     }
 
 
