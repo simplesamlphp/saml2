@@ -750,6 +750,6 @@ class Utils
      */
     public static function isEmptyElement(DOMElement $e): bool
     {
-        return !($e->hasAttributes() && $e->hasChildNodes());
+        return !$e->hasAttributes() && !$e->hasChildNodes();
     }
 }

@@ -180,7 +180,10 @@ final class Status extends AbstractSamlpElement
 
         if (!empty($this->statusDetails)) {
             foreach ($this->statusDetails as $sd) {
-                $sd->toXML($e);
+                $x = $sd->toXML();
+                if (!Utils::isEmptyElement($x)) {
+                    $sd->toXML($e);
+                }
             }
         }
 

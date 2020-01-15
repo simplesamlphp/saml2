@@ -126,28 +126,24 @@ final class NameIDPolicy extends AbstractSamlpElement
      * Convert this NameIDPolicy to XML.
      *
      * @param \DOMElement|null $parent The element we should append this NameIDPolicy to.
-     * @return \DOMElement|null
+     * @return \DOMElement
      */
-    public function toXML(DOMElement $parent = null): ?DOMElement
+    public function toXML(DOMElement $parent = null): DOMElement
     {
-        if (!empty($this->Format) || !empty($this->SPNameQualifier) || !empty($this->AllowCreate)) {
-            $e = $this->instantiateParentElement($parent);
+        $e = $this->instantiateParentElement($parent);
 
-            if (isset($this->Format)) {
-                $e->setAttribute('Format', $this->Format);
-            }
-
-            if (isset($this->SPNameQualifier)) {
-                $e->setAttribute('SPNameQualifier', $this->SPNameQualifier);
-            }
-
-            if (isset($this->AllowCreate)) {
-                $e->setAttribute('AllowCreate', var_export($this->AllowCreate, true));
-            }
-
-            return $e;
+        if (isset($this->Format)) {
+            $e->setAttribute('Format', $this->Format);
         }
 
-        return null;
+        if (isset($this->SPNameQualifier)) {
+            $e->setAttribute('SPNameQualifier', $this->SPNameQualifier);
+        }
+
+        if (isset($this->AllowCreate)) {
+            $e->setAttribute('AllowCreate', var_export($this->AllowCreate, true));
+        }
+
+        return $e;
     }
 }

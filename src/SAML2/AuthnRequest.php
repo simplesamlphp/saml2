@@ -778,7 +778,10 @@ class AuthnRequest extends Request
         $this->addSubject($root);
 
         if ($this->nameIdPolicy !== null) {
-            $this->nameIdPolicy->toXML($root);
+            $e = $this->nameIdPolicy->toXML();
+            if (!Utils::isEmptyElement($e)) {
+                $this->nameIdPolicy->toXML($root);
+            }
         }
 
         $this->addConditions($root);

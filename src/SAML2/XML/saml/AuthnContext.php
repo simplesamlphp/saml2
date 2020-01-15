@@ -204,39 +204,30 @@ final class AuthnContext extends AbstractSamlElement
      * Convert this AuthContextDeclRef to XML.
      *
      * @param \DOMElement|null $parent The element we should append this AuthnContextDeclRef to.
-     * @return \DOMElement|null
+     * @return \DOMElement
      */
-    public function toXML(DOMElement $parent = null): ?DOMElement
+    public function toXML(DOMElement $parent = null): DOMElement
     {
-        if (
-            !empty($this->authnContextClassRef)
-            || !empty($this->authnContextDecl)
-            || !empty($this->authnContextDeclRef)
-            || !empty($this->authenticatingAuthorities)
-        ) {
-            $e = $this->instantiateParentElement($parent);
+        $e = $this->instantiateParentElement($parent);
 
-            if (!empty($this->authnContextClassRef)) {
-                $this->authnContextClassRef->toXML($e);
-            }
-
-            if (!empty($this->authnContextDecl)) {
-                $this->authnContextDecl->toXML($e);
-            }
-
-            if (!empty($this->authnContextDeclRef)) {
-                $this->authnContextDeclRef->toXML($e);
-            }
-
-            if (!empty($this->authenticatingAuthorities)) {
-                foreach ($this->authenticatingAuthorities as $authority) {
-                    $authority->toXML($e);
-                }
-            }
-
-            return $e;
+        if (!empty($this->authnContextClassRef)) {
+            $this->authnContextClassRef->toXML($e);
         }
 
-        return null;
+        if (!empty($this->authnContextDecl)) {
+            $this->authnContextDecl->toXML($e);
+        }
+
+        if (!empty($this->authnContextDeclRef)) {
+            $this->authnContextDeclRef->toXML($e);
+        }
+
+        if (!empty($this->authenticatingAuthorities)) {
+            foreach ($this->authenticatingAuthorities as $authority) {
+                $authority->toXML($e);
+            }
+        }
+
+        return $e;
     }
 }

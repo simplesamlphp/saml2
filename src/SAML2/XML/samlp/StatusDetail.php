@@ -84,20 +84,18 @@ final class StatusDetail extends AbstractSamlpElement
      * Convert this StatusDetail to XML.
      *
      * @param \DOMElement|null $element The element we are converting to XML.
-     * @return \DOMElement|null The XML element after adding the data corresponding to this StatusDetail.
+     * @return \DOMElement The XML element after adding the data corresponding to this StatusDetail.
      */
-    public function toXML(DOMElement $parent = null): ?DOMElement
+    public function toXML(DOMElement $parent = null): DOMElement
     {
-        if (!empty($this->details)) {
-            $e = $this->instantiateParentElement($parent);
+        $e = $this->instantiateParentElement($parent);
 
+        if (!empty($this->details)) {
             foreach ($this->details as $detail) {
                 $e->appendChild($e->ownerDocument->importNode($detail->getXML(), true));
             }
-
-            return $e;
         }
 
-        return null;
+        return $e;
     }
 }
