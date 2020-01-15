@@ -740,4 +740,16 @@ class Utils
     {
         return ContainerSingleton::getInstance();
     }
+
+
+    /**
+     * Test if an object, at the state it's in, would produce an empty XML-element
+     *
+     * @param \DOMElement $e
+     * @return bool
+     */
+    public static function isEmptyElement(DOMElement $e): bool
+    {
+        return !($e->hasAttributes() && $e->hasChildNodes());
+    }
 }
