@@ -79,7 +79,7 @@ class AttributeValue extends AbstractSamlElement
      * @param \DOMElement $element
      * @return void
      */
-    public function setElement(DOMElement $element): void
+    private function setElement(DOMElement $element): void
     {
         $this->element = $element;
     }
