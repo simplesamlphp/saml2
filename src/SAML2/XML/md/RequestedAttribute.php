@@ -21,7 +21,7 @@ class RequestedAttribute extends AbstractMdElement
      *
      * @var bool|null
      */
-    private $isRequired = null;
+    protected $isRequired = null;
 
 
     /**
