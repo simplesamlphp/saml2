@@ -75,10 +75,10 @@ class RequestedAttribute extends AbstractMdElement
     /**
      * Convert this RequestedAttribute to XML.
      *
-     * @param \DOMElement $parent The element we should append this RequestedAttribute to.
+     * @param \DOMElement|null $parent The element we should append this RequestedAttribute to.
      * @return \DOMElement
      */
-    public function toXML(DOMElement $parent): DOMElement
+    public function toXML(DOMElement $parent = null): DOMElement
     {
         $e = $this->toXMLInternal($parent, Constants::NS_MD, 'md:RequestedAttribute');
 

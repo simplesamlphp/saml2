@@ -15,7 +15,7 @@ use Webmozart\Assert\Assert;
  *
  * @package SimpleSAMLphp
  */
-class AttributeValue implements \Serializable
+class AttributeValue extends AbstractSamlElement
 {
     /**
      * The raw \DOMElement representing this value.
