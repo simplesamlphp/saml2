@@ -22,7 +22,7 @@ class AttributeValue extends AbstractSamlElement
      *
      * @var \DOMElement
      */
-    private $element;
+    protected $element;
 
 
     /**
