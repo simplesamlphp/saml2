@@ -14,7 +14,7 @@ use Webmozart\Assert\Assert;
  *
  * @package SimpleSAMLphp
  */
-class Attribute
+class Attribute extends AbstractSamlElement
 {
     /**
      * The Name of this attribute.
