@@ -14,7 +14,7 @@ use SAML2\XML\saml\Attribute;
  *
  * @package SimpleSAMLphp
  */
-class RequestedAttribute extends Attribute
+class RequestedAttribute extends AbstractMdElement
 {
     /**
      * Whether this attribute is required.
