@@ -25,6 +25,14 @@ class RequestedAttribute extends AbstractMdElement
 
 
     /**
+     * The actual attribute
+     *
+     * @var \SAML2\XML\saml\Attribute
+     */
+    protected $attribute;
+
+
+    /**
      * Initialize an RequestedAttribute.
      *
      * @param \DOMElement|null $xml The XML element we should load.
