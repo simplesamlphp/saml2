@@ -99,7 +99,7 @@ class Attribute extends AbstractSamlElement
      * @param string $name
      * @return void
      */
-    public function setName(string $name): void
+    private function setName(string $name): void
     {
         $this->Name = $name;
     }
@@ -122,7 +122,7 @@ class Attribute extends AbstractSamlElement
      * @param string|null $nameFormat
      * @return void
      */
-    public function setNameFormat(string $nameFormat = null): void
+    private function setNameFormat(string $nameFormat = null): void
     {
         $this->NameFormat = $nameFormat;
     }
@@ -145,7 +145,7 @@ class Attribute extends AbstractSamlElement
      * @param string|null $friendlyName
      * @return void
      */
-    public function setFriendlyName(string $friendlyName = null): void
+    private function setFriendlyName(string $friendlyName = null): void
     {
         $this->FriendlyName = $friendlyName;
     }
@@ -168,7 +168,7 @@ class Attribute extends AbstractSamlElement
      * @param array $attributeValue
      * @return void
      */
-    public function setAttributeValue(array $attributeValue): void
+    private function setAttributeValue(array $attributeValue): void
     {
         $this->AttributeValue = $attributeValue;
     }
