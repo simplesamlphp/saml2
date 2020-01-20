@@ -103,8 +103,8 @@ class AttributeValue extends AbstractSamlElement
     /**
      * Append this attribute value to an element.
      *
-     * @param  DOMElement|null $parent The element we should append this attribute value to.
-     * @return DOMElement The generated AttributeValue element.
+     * @param \DOMElement|null $parent The element we should append this attribute value to.
+     * @return \DOMElement The generated AttributeValue element.
      */
     public function toXML(DOMElement $parent = null): DOMElement
     {

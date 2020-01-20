@@ -124,7 +124,7 @@ final class RequestedAttribute extends Attribute
         }
 
         foreach ($attribute->getAttributeValue() as $av) {
-            $parent->appendChild($parent->ownerDocument->importNode($av->toXML(), true));
+            $e->appendChild($e->ownerDocument->importNode($av->toXML(), true));
         }
 
         return $e;
