@@ -216,23 +216,14 @@ class Attribute extends AbstractSamlElement
 
 
     /**
-     * Internal implementation of toXML.
-     * This function allows RequestedAttribute to specify the element name and namespace.
+     * Convert this Attribute to XML.
      *
-     * @param \DOMElement $parent The element we should append this Attribute to.
-     * @param string $namespace The namespace the element should be created in.
-     * @param string $name The name of the element.
+     * @param \DOMElement|null $parent The element we should append this Attribute to.
      * @return \DOMElement
-     *
-     * @throws \InvalidArgumentException if assertions are false
      */
-    protected function toXMLInternal(DOMElement $parent, string $namespace, string $name): DOMElement
+    public function toXML(DOMElement $parent = null): DOMElement
     {
-        Assert::notEmpty($this->Name, 'Cannot convert Attribute to XML with no Name set.');
-
-        $e = $parent->ownerDocument->createElementNS($namespace, $name);
-        $parent->appendChild($e);
-
+        $e = $this->instantiateParentElement($parent);
         $e->setAttribute('Name', $this->Name);
 
         if ($this->NameFormat !== null) {
@@ -248,17 +239,5 @@ class Attribute extends AbstractSamlElement
         }
 
         return $e;
-    }
-
-
-    /**
-     * Convert this Attribute to XML.
-     *
-     * @param \DOMElement $parent The element we should append this Attribute to.
-     * @return \DOMElement
-     */
-    public function toXML(DOMElement $parent): DOMElement
-    {
-        return $this->toXMLInternal($parent, Constants::NS_SAML, 'saml:Attribute');
     }
 }
