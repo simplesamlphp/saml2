@@ -99,7 +99,8 @@ class RequestedAttribute extends AbstractMdElement
      */
     public function toXML(DOMElement $parent = null): DOMElement
     {
-        $e = $this->toXMLInternal($parent, Constants::NS_MD, 'md:RequestedAttribute');
+        $e = $this->instantiateParentElement($parent);
+        $attribute = $this->attribute;
 
         if (is_bool($this->isRequired)) {
             $e->setAttribute('isRequired', $this->isRequired ? 'true' : 'false');
@@ -118,7 +119,7 @@ class RequestedAttribute extends AbstractMdElement
         }
 
         foreach ($attribute->getAttributeValue() as $av) {
-            $parent->appendChild($parent->ownerDocument->importNode($av->toXML(), true));
+            $e->appendChild($e->ownerDocument->importNode($av->toXML(), true));
         }
 
         return $e;

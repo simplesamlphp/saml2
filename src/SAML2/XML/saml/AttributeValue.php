@@ -103,17 +103,13 @@ class AttributeValue extends AbstractSamlElement
     /**
      * Append this attribute value to an element.
      *
-     * @param  \DOMElement $parent The element we should append this attribute value to.
+     * @param  \DOMElement|null $parent The element we should append this attribute value to.
      * @return \DOMElement The generated AttributeValue element.
-     *
-     * @throws \InvalidArgumentException if assertions are false
      */
-    public function toXML(DOMElement $parent): DOMElement
+    public function toXML(DOMElement $parent = null): DOMElement
     {
-        Assert::same($this->element->namespaceURI, Constants::NS_SAML);
-        Assert::same($this->element->localName, "AttributeValue");
-
-        return Utils::copyElement($this->element, $parent);
+        $e = $this->instantiateParentElement($parent);
+        return Utils::copyElement($this->element, $e);
     }
 
 
