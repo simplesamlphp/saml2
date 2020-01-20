@@ -8,6 +8,7 @@ use DOMElement;
 use SAML2\Constants;
 use SAML2\Utils;
 use SAML2\XML\saml\Attribute;
+use Webmozart\Assert\Assert;
 
 /**
  * Class representing SAML 2 metadata RequestedAttribute.
@@ -73,6 +74,24 @@ class RequestedAttribute extends AbstractMdElement
 
 
     /**
+     * Convert XML into a RequestedAttribute
+     *
+     * @param \DOMElement $xml The XML element we should load
+     * @return \SAML2\XML\md\RequestedAttribute
+     */
+    public static function fromXML(DOMElement $xml): object
+    {
+        Assert::same($xml->localName, 'RequestedAttribute');
+        Assert::same($xml->namespaceURI, Constants::NS_MD);
+
+        $attribute = Attribute::fromXML($xml);
+        $isRequired = Utils::parseBoolean($xml, 'isRequired', null);
+
+        return new self($attribute, $isRequired);
+    }
+
+
+    /**
      * Convert this RequestedAttribute to XML.
      *
      * @param \DOMElement|null $parent The element we should append this RequestedAttribute to.
@@ -84,6 +103,22 @@ class RequestedAttribute extends AbstractMdElement
 
         if (is_bool($this->isRequired)) {
             $e->setAttribute('isRequired', $this->isRequired ? 'true' : 'false');
+        }
+
+        $e->setAttribute('Name', $attribute->getName());
+
+        $nameFormat = $attribute->getNameFormat();
+        if ($nameFormat !== null) {
+            $e->setAttribute('NameFormat', $nameFormat());
+        }
+
+        $friendlyName = $attribute->getFriendlyName();
+        if ($friendlyName !== null) {
+            $e->setAttribute('FriendlyName', $friendlyName);
+        }
+
+        foreach ($attribute->getAttributeValue() as $av) {
+            $parent->appendChild($parent->ownerDocument->importNode($av->toXML(), true));
         }
 
         return $e;
