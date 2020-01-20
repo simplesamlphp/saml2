@@ -186,6 +186,35 @@ class Attribute extends AbstractSamlElement
     }
 
 
+
+    /**
+     * Convert XML into a Attribute
+     *
+     * @param \DOMElement $xml The XML element we should load
+     * @return \SAML2\XML\saml\Attribute
+     */
+    public static function fromXML(DOMElement $xml): object
+    {
+        Assert::same($xml->localName, 'Attribute');
+        Assert::same($xml->namespaceURI, Constants::NS_SAML);
+
+        if (!$xml->hasAttribute('Name')) {
+            throw new \Exception('Missing Name on Attribute.');
+        }
+
+        $name = $xml->getAttribute('Name');
+        $nameFormat = $xml->hasAttribute('NameFormat') ? $xml->getAttribute('NameFormat') : null;
+        $friendlyName = $xml->hasAttribute('FriendlyName') ? $xml->getAttribute('FriendlyName') : null;
+
+        $attributeValues = [];
+        foreach (Utils::xpQuery($xml, './saml_assertion:AttributeValue') as $av) {
+            $attributeValues[] = AttributeValue::fromXML($av);
+        }
+
+        return new self($name, $nameFormat, $friendlyName, $attributeValues);
+    }
+
+
     /**
      * Internal implementation of toXML.
      * This function allows RequestedAttribute to specify the element name and namespace.
