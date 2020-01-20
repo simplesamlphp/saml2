@@ -111,6 +111,22 @@ final class RequestedAttribute extends Attribute
             $e->setAttribute('isRequired', $this->isRequired ? 'true' : 'false');
         }
 
+        $e->setAttribute('Name', $attribute->getName());
+
+        $nameFormat = $attribute->getNameFormat();
+        if ($nameFormat !== null) {
+            $e->setAttribute('NameFormat', $nameFormat());
+        }
+
+        $friendlyName = $attribute->getFriendlyName();
+        if ($friendlyName !== null) {
+            $e->setAttribute('FriendlyName', $friendlyName);
+        }
+
+        foreach ($attribute->getAttributeValue() as $av) {
+            $parent->appendChild($parent->ownerDocument->importNode($av->toXML(), true));
+        }
+
         return $e;
     }
 }
