@@ -67,7 +67,7 @@ class RequestedAttribute extends AbstractMdElement
      * @param bool|null $flag
      * @return void
      */
-    public function setIsRequired(bool $flag = null): void
+    private function setIsRequired(bool $flag = null): void
     {
         $this->isRequired = $flag;
     }
