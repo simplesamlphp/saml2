@@ -86,7 +86,7 @@ class AttributeConsumingService
 
         /** @var \DOMElement $ra */
         foreach (Utils::xpQuery($xml, './saml_metadata:RequestedAttribute') as $ra) {
-            $this->addRequestedAttribute(new RequestedAttribute($ra));
+            $this->addRequestedAttribute(RequestedAttribute::fromXML($ra));
         }
     }
 

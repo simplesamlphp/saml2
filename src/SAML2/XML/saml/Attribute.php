@@ -42,39 +42,29 @@ class Attribute extends AbstractSamlElement
      *
      * Array of \SAML2\XML\saml\AttributeValue elements.
      *
-     * @var \SAML2\XML\saml\AttributeValue[]
+     * @var \SAML2\XML\saml\AttributeValue[]|null
      */
-    private $AttributeValue = [];
+    protected $attributeValues = null;
 
 
     /**
      * Initialize an Attribute.
      *
-     * @param \DOMElement|null $xml The XML element we should load.
-     * @throws \Exception
+     * @param string $Name
+     * @param string|null $NameFormat
+     * @param string|null $FriendlyName
+     * @param array|null $AttributeValues
      */
-    public function __construct(DOMElement $xml = null)
-    {
-        if ($xml === null) {
-            return;
-        }
-
-        if (!$xml->hasAttribute('Name')) {
-            throw new \Exception('Missing Name on Attribute.');
-        }
-        $this->setName($xml->getAttribute('Name'));
-
-        if ($xml->hasAttribute('NameFormat')) {
-            $this->setNameFormat($xml->getAttribute('NameFormat'));
-        }
-
-        if ($xml->hasAttribute('FriendlyName')) {
-            $this->setFriendlyName($xml->getAttribute('FriendlyName'));
-        }
-
-        foreach (Utils::xpQuery($xml, './saml_assertion:AttributeValue') as $av) {
-            $this->addAttributeValue(new AttributeValue($av));
-        }
+    public function __construct(
+        string $Name,
+        string $NameFormat = null,
+        string $FriendlyName = null,
+        array $AttributeValues = null
+    ) {
+        $this->setName($Name);
+        $this->setNameFormat($NameFormat);
+        $this->setFriendlyName($FriendlyName);
+        $this->setAttributeValues($AttributeValues);
     }
 
 
@@ -82,13 +72,9 @@ class Attribute extends AbstractSamlElement
      * Collect the value of the Name-property
      *
      * @return string
-     *
-     * @throws \InvalidArgumentException if assertions are false
      */
     public function getName(): string
     {
-        Assert::notEmpty($this->Name);
-
         return $this->Name;
     }
 
@@ -99,9 +85,9 @@ class Attribute extends AbstractSamlElement
      * @param string $name
      * @return void
      */
-    private function setName(string $name): void
+    private function setName(string $Name): void
     {
-        $this->Name = $name;
+        $this->Name = $Name;
     }
 
 
@@ -119,12 +105,12 @@ class Attribute extends AbstractSamlElement
     /**
      * Set the value of the NameFormat-property
      *
-     * @param string|null $nameFormat
+     * @param string|null $NameFormat
      * @return void
      */
-    private function setNameFormat(string $nameFormat = null): void
+    private function setNameFormat(string $NameFormat = null): void
     {
-        $this->NameFormat = $nameFormat;
+        $this->NameFormat = $NameFormat;
     }
 
 
@@ -145,44 +131,46 @@ class Attribute extends AbstractSamlElement
      * @param string|null $friendlyName
      * @return void
      */
-    private function setFriendlyName(string $friendlyName = null): void
+    private function setFriendlyName(string $FriendlyName = null): void
     {
-        $this->FriendlyName = $friendlyName;
+        $this->FriendlyName = $FriendlyName;
     }
 
 
     /**
-     * Collect the value of the AttributeValue-property
+     * Collect the value of the attributeValues-property
      *
-     * @return \SAML2\XML\saml\AttributeValue[]
+     * @return \SAML2\XML\saml\AttributeValue[]|null
      */
-    public function getAttributeValue(): array
+    public function getAttributeValues(): ?array
     {
-        return $this->AttributeValue;
+        return $this->attributeValues;
     }
 
 
     /**
-     * Set the value of the AttributeValue-property
+     * Set the value of the AttributeValues-property
      *
-     * @param array $attributeValue
+     * @param array $attributeValues|null
      * @return void
      */
-    private function setAttributeValue(array $attributeValue): void
+    private function setAttributeValues(?array $attributeValues): void
     {
-        $this->AttributeValue = $attributeValue;
+        $this->attributeValues = $attributeValues;
     }
 
 
     /**
-     * Add the value to the AttributeValue-property
+     * Add the value to the AttributeValues-property
      *
      * @param \SAML2\XML\saml\AttributeValue $attributeValue
      * @return void
      */
     public function addAttributeValue(AttributeValue $attributeValue): void
     {
-        $this->AttributeValue[] = $attributeValue;
+        $this->setAttributeValues(
+            empty($this->attributeValues) ? [$attributeValue] : array_merge($this->attributeValues, [$attributeValue])
+        );
     }
 
 
@@ -202,16 +190,17 @@ class Attribute extends AbstractSamlElement
             throw new \Exception('Missing Name on Attribute.');
         }
 
-        $name = $xml->getAttribute('Name');
-        $nameFormat = $xml->hasAttribute('NameFormat') ? $xml->getAttribute('NameFormat') : null;
-        $friendlyName = $xml->hasAttribute('FriendlyName') ? $xml->getAttribute('FriendlyName') : null;
+        $Name = $xml->getAttribute('Name');
+        $NameFormat = $xml->hasAttribute('NameFormat') ? $xml->getAttribute('NameFormat') : null;
+        $FriendlyName = $xml->hasAttribute('FriendlyName') ? $xml->getAttribute('FriendlyName') : null;
 
         $attributeValues = [];
+        /** @psalm-var \DOMElement $av */
         foreach (Utils::xpQuery($xml, './saml_assertion:AttributeValue') as $av) {
             $attributeValues[] = AttributeValue::fromXML($av);
         }
 
-        return new self($name, $nameFormat, $friendlyName, $attributeValues);
+        return new self($Name, $NameFormat, $FriendlyName, $attributeValues);
     }
 
 
@@ -234,8 +223,10 @@ class Attribute extends AbstractSamlElement
             $e->setAttribute('FriendlyName', $this->FriendlyName);
         }
 
-        foreach ($this->AttributeValue as $av) {
-            $av->toXML($e);
+        if (!empty($this->attributeValues)) {
+            foreach ($this->attributeValues as $av) {
+                $av->toXML($e);
+            }
         }
 
         return $e;
