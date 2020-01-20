@@ -74,6 +74,29 @@ class RequestedAttribute extends AbstractMdElement
 
 
     /**
+     * Collect the value of the Attribute-property
+     *
+     * @return \SAML2\XML\saml\Attribute
+     */
+    public function getAttribute(): Attribute
+    {
+        return $this->attribute;
+    }
+
+
+    /**
+     * Set the value of the Attribute-property
+     *
+     * @param \SAML2\XML\saml\Attribute $attribute
+     * @return void
+     */
+    private function setAttribute(Attribute $attribute): void
+    {
+        $this->attribute = $attribute;
+    }
+
+
+    /**
      * Convert XML into a RequestedAttribute
      *
      * @param \DOMElement $xml The XML element we should load
