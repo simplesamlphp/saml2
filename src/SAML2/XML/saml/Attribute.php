@@ -157,7 +157,8 @@ class Attribute extends AbstractSamlElement
     /**
      * Set the value of the AttributeValues-property
      *
-     * @param \SAML2\XML\saml\AttributeValue[] $attributeValues|null
+     * @param \SAML2\XML\saml\AttributeValue[]|null $attributeValues
+     * @return void
      */
     protected function setAttributeValues(?array $attributeValues): void
     {
@@ -207,16 +208,17 @@ class Attribute extends AbstractSamlElement
             throw new \Exception('Missing Name on Attribute.');
         }
 
-        $name = $xml->getAttribute('Name');
-        $nameFormat = $xml->hasAttribute('NameFormat') ? $xml->getAttribute('NameFormat') : null;
-        $friendlyName = $xml->hasAttribute('FriendlyName') ? $xml->getAttribute('FriendlyName') : null;
+        $Name = $xml->getAttribute('Name');
+        $NameFormat = $xml->hasAttribute('NameFormat') ? $xml->getAttribute('NameFormat') : null;
+        $FriendlyName = $xml->hasAttribute('FriendlyName') ? $xml->getAttribute('FriendlyName') : null;
 
         $attributeValues = [];
+        /** @psalm-var \DOMElement $av */
         foreach (Utils::xpQuery($xml, './saml_assertion:AttributeValue') as $av) {
             $attributeValues[] = AttributeValue::fromXML($av);
         }
 
-        return new self($name, $nameFormat, $friendlyName, $attributeValues);
+        return new self($Name, $NameFormat, $FriendlyName, $attributeValues);
     }
 
 

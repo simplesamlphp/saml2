@@ -123,8 +123,11 @@ final class RequestedAttribute extends Attribute
             $e->setAttribute('FriendlyName', $friendlyName);
         }
 
-        foreach ($attribute->getAttributeValue() as $av) {
-            $e->appendChild($e->ownerDocument->importNode($av->toXML(), true));
+        $attributeValues = $attribute->getAttributeValues();
+        if (!empty($attributeValues)) {
+            foreach ($attributeValues as $av) {
+                $e->appendChild($e->ownerDocument->importNode($av->toXML(), true));
+            }
         }
 
         return $e;
