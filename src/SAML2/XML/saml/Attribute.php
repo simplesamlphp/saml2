@@ -133,7 +133,7 @@ class Attribute extends AbstractSamlElement
      *
      * @param string|null $friendlyName
      */
-    private function setFriendlyName(?string $friendlyName): void
+    protected function setFriendlyName(?string $friendlyName): void
     {
         if ($friendlyName === null) {
             return;

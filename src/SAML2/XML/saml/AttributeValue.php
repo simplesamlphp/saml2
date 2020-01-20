@@ -73,21 +73,6 @@ class AttributeValue extends AbstractSamlElement
     /**
      * Convert XML into a AttributeValue
      *
-     * @param DOMElement $xml The XML element we should load
-     * @return AttributeValue
-     */
-    public static function fromXML(DOMElement $xml): object
-    {
-        Assert::same($xml->localName, 'AttributeValue');
-        Assert::same($xml->namespaceURI, Constants::NS_SAML);
-
-        return new self($xml);
-    }
-
-
-    /**
-     * Convert XML into a AttributeValue
-     *
      * @param \DOMElement $xml The XML element we should load
      * @return \SAML2\XML\saml\AttributeValue
      */
