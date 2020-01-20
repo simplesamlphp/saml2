@@ -26,14 +26,18 @@ class ChunkTest extends \PHPUnit\Framework\TestCase
      */
     public function setUp(): void
     {
-        $attribute = new Attribute();
-        $attribute->setName('TheName');
-        $attribute->setNameFormat('TheNameFormat');
-        $attribute->setFriendlyName('TheFriendlyName');
-        $attribute->setAttributeValue([
-            new AttributeValue('FirstValue'),
-            new AttributeValue('SecondValue'),
-        ]);
+        $attribute = new Attribute(
+            'TheName',
+            'TheNameFormat',
+            'TheFriendlyName'
+        );
+
+        $attribute->addAttributeValue(
+            new AttributeValue('FirstValue')
+        );
+        $attribute->addAttributeValue(
+            new AttributeValue('SecondValue')
+        );
 
         $document = DOMDocumentFactory::fromString('<root />');
         $attributeElement = $attribute->toXML($document->firstChild);

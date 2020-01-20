@@ -4,6 +4,7 @@ declare(strict_types=1);
 
 namespace SAML2\XML\mdattr;
 
+use SAML2\Constants;
 use SAML2\DOMDocumentFactory;
 use SAML2\XML\Chunk;
 use SAML2\XML\saml\Attribute;
@@ -21,19 +22,23 @@ class EntityAttributesTest extends \PHPUnit\Framework\TestCase
      */
     public function testMarshalling(): void
     {
-        $attribute1 = new Attribute();
-        $attribute1->setName('urn:simplesamlphp:v1:simplesamlphp');
-        $attribute1->setNameFormat('urn:oasis:names:tc:SAML:2.0:attrname-format:uri');
-        $attribute1->setAttributeValue([
-             new AttributeValue('FirstValue'),
-             new AttributeValue('SecondValue'),
-        ]);
-        $attribute2 = new Attribute();
-        $attribute2->setName('foo');
-        $attribute2->setNameFormat('urn:simplesamlphp:v1');
-        $attribute2->setAttributeValue([
-             new AttributeValue('bar'),
-        ]);
+        $attribute1 = new Attribute(
+            'urn:simplesamlphp:v1:simplesamlphp',
+            Constants::NAMEFORMAT_URI,
+            null,
+            [
+                new AttributeValue('FirstValue'),
+                new AttributeValue('SecondValue'),
+            ]
+        );
+
+        $attribute2 = new Attribute(
+            'foo',
+            'urn:simplesamlphp:v1'
+        );
+        $attribute2->addAttributeValue(
+             new AttributeValue('bar')
+        );
 
         $entityAttributes = new EntityAttributes([$attribute1]);
         $entityAttributes->addChild($attribute2);
@@ -111,9 +116,9 @@ XML
 
         $this->assertEquals('urn:simplesamlphp:v1:simplesamlphp', $entityAttributes->getChildren()[0]->getName());
         $this->assertEquals('urn:oasis:names:tc:SAML:2.0:attrname-format:uri', $entityAttributes->getChildren()[0]->getNameFormat());
-        $this->assertCount(3, $entityAttributes->getChildren()[0]->getAttributeValue());
+        $this->assertCount(3, $entityAttributes->getChildren()[0]->getAttributeValues());
         $this->assertEquals('foo', $entityAttributes->getChildren()[1]->getName());
         $this->assertEquals('urn:simplesamlphp:v1', $entityAttributes->getChildren()[1]->getNameFormat());
-        $this->assertCount(1, $entityAttributes->getChildren()[1]->getAttributeValue());
+        $this->assertCount(1, $entityAttributes->getChildren()[1]->getAttributeValues());
     }
 }
