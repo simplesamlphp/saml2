@@ -93,7 +93,7 @@ final class EntityAttributes extends AbstractMdattrElement
         /** @var \DOMElement $node */
         foreach (Utils::xpQuery($xml, './saml_assertion:Attribute|./saml_assertion:Assertion') as $node) {
             if ($node->localName === 'Attribute') {
-                $children[] = new Attribute($node);
+                $children[] = Attribute::fromXML($node);
             } else {
                 $children[] = new Chunk($node);
             }

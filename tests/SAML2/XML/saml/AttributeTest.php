@@ -4,6 +4,7 @@ declare(strict_types=1);
 
 namespace SAML2\XML\md;
 
+use Exception;
 use SAML2\Constants;
 use SAML2\DOMDocumentFactory;
 use SAML2\Utils;
@@ -20,14 +21,15 @@ class AttributeTest extends \PHPUnit\Framework\TestCase
      */
     public function testMarshalling(): void
     {
-        $attribute = new Attribute();
-        $attribute->setName('TheName');
-        $attribute->setNameFormat('TheNameFormat');
-        $attribute->setFriendlyName('TheFriendlyName');
-        $attribute->setAttributeValue([
-            new AttributeValue('FirstValue'),
-            new AttributeValue('SecondValue'),
-        ]);
+        $attribute = new Attribute(
+            'TheName',
+            'TheNameFormat',
+            'TheFriendlyName',
+            [
+                new AttributeValue('FirstValue'),
+                new AttributeValue('SecondValue')
+            ]
+        );
 
         $document = DOMDocumentFactory::fromString('<root />');
         $attributeElement = $attribute->toXML($document->firstChild);
@@ -56,13 +58,13 @@ class AttributeTest extends \PHPUnit\Framework\TestCase
 XML
         );
 
-        $attribute = new Attribute($document->firstChild);
+        $attribute = Attribute::fromXML($document->firstChild);
         $this->assertEquals('TheName', $attribute->getName());
         $this->assertEquals('TheNameFormat', $attribute->getNameFormat());
         $this->assertEquals('TheFriendlyName', $attribute->getFriendlyName());
-        $this->assertCount(2, $attribute->getAttributeValue());
-        $this->assertEquals('FirstValue', strval($attribute->getAttributeValue()[0]));
-        $this->assertEquals('SecondValue', strval($attribute->getAttributeValue()[1]));
+        $this->assertCount(2, $attribute->getAttributeValues());
+        $this->assertEquals('FirstValue', strval($attribute->getAttributeValues()[0]));
+        $this->assertEquals('SecondValue', strval($attribute->getAttributeValues()[1]));
     }
 
 
@@ -79,7 +81,8 @@ XML
 </saml:Attribute>
 XML
         );
-        $this->expectException(\Exception::class, 'Missing Name on Attribute.');
-        new Attribute($document->firstChild);
+
+        $this->expectException(Exception::class, 'Missing Name on Attribute.');
+        Attribute::fromXML($document->firstChild);
     }
 }

@@ -22,13 +22,12 @@ class AttributeValueTest extends \PHPUnit\Framework\TestCase
      */
     public function testEmptyStringAttribute(): void
     {
-        $attribute = new Attribute();
-        $attribute->setName('TheName');
-        $attribute->setNameFormat('TheNameFormat');
-        $attribute->setFriendlyName('TheFriendlyName');
-        $attribute->setAttributeValue([
-            new AttributeValue(""),
-        ]);
+        $attribute = new Attribute(
+            'TheName',
+            'TheNameFormat',
+            'TheFriendlyName'
+        );
+        $attribute->addAttributeValue(new AttributeValue(""));
 
         $document = DOMDocumentFactory::fromString('<root />');
         $returnedStructure = $attribute->toXML($document->firstChild);
@@ -55,20 +54,20 @@ ATTRIBUTEVALUE
      */
     public function testCreateAttributeFromDOMElement(): void
     {
-        $attribute = new Attribute();
-        $attribute->setName('TheName');
-        $attribute->setNameFormat('TheNameFormat');
-        $attribute->setFriendlyName('TheFriendlyName');
-
         $element = new \DOMDocument();
         $element->loadXML(<<<ATTRIBUTEVALUE
 <NameID Format="urn:oasis:names:tc:SAML:1.1:nameid-format:unspecified">urn:collab:person:surftest.nl:example</NameID>
 ATTRIBUTEVALUE
         );
 
-        $attribute->setAttributeValue([
-            new AttributeValue($element->documentElement),
-        ]);
+        $attribute = new Attribute(
+            'TheName',
+            'TheNameFormat',
+            'TheFriendlyName',
+            [
+                new AttributeValue($element->documentElement)
+            ]
+        );
 
         $document = DOMDocumentFactory::fromString('<root />');
         $returnedStructure = $attribute->toXML($document->firstChild);
