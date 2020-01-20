@@ -103,7 +103,7 @@ class IDPSSODescriptor extends SSODescriptorType
 
         /** @var \DOMElement $a */
         foreach (Utils::xpQuery($xml, './saml_assertion:Attribute') as $a) {
-            $this->Attribute[] = new Attribute($a);
+            $this->Attribute[] = Attribute::fromXML($a);
         }
     }
 

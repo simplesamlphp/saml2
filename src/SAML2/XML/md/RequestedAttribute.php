@@ -36,17 +36,12 @@ class RequestedAttribute extends AbstractMdElement
     /**
      * Initialize an RequestedAttribute.
      *
-     * @param \DOMElement|null $xml The XML element we should load.
+     * @param \SAML2\XML\saml\Attribute $attribute
      */
-    public function __construct(DOMElement $xml = null)
+    public function __construct(Attribute $attribute, bool $isRequired = null)
     {
-        parent::__construct($xml);
-
-        if ($xml === null) {
-            return;
-        }
-
-        $this->isRequired = Utils::parseBoolean($xml, 'isRequired', null);
+        $this->setAttribute($attribute);
+        $this->setIsRequired($isRequired);
     }
 
 
@@ -67,7 +62,7 @@ class RequestedAttribute extends AbstractMdElement
      * @param bool|null $flag
      * @return void
      */
-    private function setIsRequired(bool $flag = null): void
+    private function setIsRequired(?bool $flag): void
     {
         $this->isRequired = $flag;
     }
@@ -141,8 +136,11 @@ class RequestedAttribute extends AbstractMdElement
             $e->setAttribute('FriendlyName', $friendlyName);
         }
 
-        foreach ($attribute->getAttributeValue() as $av) {
-            $e->appendChild($e->ownerDocument->importNode($av->toXML(), true));
+        $attributeValues = $attribute->getAttributeValues();
+        if (!empty($attributeValues)) {
+            foreach ($attributeValues as $av) {
+                $e->appendChild($e->ownerDocument->importNode($av->toXML(), true));
+            }
         }
 
         return $e;
