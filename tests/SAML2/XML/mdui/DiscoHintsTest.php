@@ -6,12 +6,10 @@ namespace SAML2\XML\mdui;
 
 use SAML2\DOMDocumentFactory;
 use SAML2\XML\Chunk;
-use SAML2\XML\mdui\DiscoHints;
-use SAML2\XML\mdui\Keywords;
 use SAML2\Utils;
 
 /**
- * Class \SAML2\XML\mdrpi\DiscoHintsTest
+ * Class \SAML2\XML\mdui\DiscoHintsTest
  */
 class DiscoHintsTest extends \PHPUnit\Framework\TestCase
 {

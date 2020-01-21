@@ -5,11 +5,10 @@ declare(strict_types=1);
 namespace SAML2\XML\mdui;
 
 use SAML2\DOMDocumentFactory;
-use SAML2\XML\mdui\Keywords;
 use SAML2\Utils;
 
 /**
- * Class \SAML2\XML\mdrpi\KeywordsTest
+ * Class \SAML2\XML\mdui\KeywordsTest
  */
 class KeywordsTest extends \PHPUnit\Framework\TestCase
 {

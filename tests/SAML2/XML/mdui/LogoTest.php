@@ -5,11 +5,10 @@ declare(strict_types=1);
 namespace SAML2\XML\mdui;
 
 use SAML2\DOMDocumentFactory;
-use SAML2\XML\mdui\Logo;
 use SAML2\Utils;
 
 /**
- * Class \SAML2\XML\mdrpi\LogoTest
+ * Class \SAML2\XML\mdui\LogoTest
  */
 class LogoTest extends \PHPUnit\Framework\TestCase
 {
