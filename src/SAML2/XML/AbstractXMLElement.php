@@ -43,8 +43,7 @@ abstract class AbstractXMLElement implements Serializable
      */
     public function serialize(): string
     {
-        $xml = $this->toXML();
-        return $xml->ownerDocument->saveXML();
+        return $this->toXML()->ownerDocument->saveXML();
     }
 
 
