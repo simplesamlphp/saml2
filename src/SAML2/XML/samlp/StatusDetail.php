@@ -59,6 +59,17 @@ final class StatusDetail extends AbstractSamlpElement
 
 
     /**
+     * Test if an object, at the state it's in, would produce an empty XML-element
+     *
+     * @return bool
+     */
+    public function isEmptyElement(): bool
+    {
+        return empty($this->details);
+    }
+
+
+    /**
      * Convert XML into a StatusDetail
      *
      * @param \DOMElement $xml The XML element we should load

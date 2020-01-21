@@ -100,6 +100,21 @@ final class NameIDPolicy extends AbstractSamlpElement
 
 
     /**
+     * Test if an object, at the state it's in, would produce an empty XML-element
+     *
+     * @return bool
+     */
+    public function isEmptyElement(): bool
+    {
+        return (
+            empty($this->Format)
+            && empty($this->SPNameQualifier)
+            && empty($this->AllowCreate)
+        );
+    }
+
+
+    /**
      * Convert XML into a NameIDPolicy
      *
      * @param \DOMElement $xml The XML element we should load
