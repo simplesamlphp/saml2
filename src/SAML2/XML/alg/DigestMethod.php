@@ -69,6 +69,9 @@ final class DigestMethod extends AbstractAlgElement
      */
     public static function fromXML(DOMElement $xml): object
     {
+        Assert::same($xml->localName, 'DigestMethod');
+        Assert::same($xml->namespaceURI, DigestMethod::NS);
+
         if (!$xml->hasAttribute('Algorithm')) {
             throw new \Exception('Missing required attribute "Algorithm" in alg:DigestMethod element.');
         }

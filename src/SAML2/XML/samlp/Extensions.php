@@ -14,7 +14,7 @@ use SAML2\XML\Chunk;
  *
  * @package SimpleSAMLphp
  */
-class Extensions
+final class Extensions
 {
     /**
      * Get a list of Extensions in the given element.
@@ -43,15 +43,13 @@ class Extensions
      */
     public static function addList(DOMElement $parent, array $extensions): void
     {
-        if (empty($extensions)) {
-            return;
-        }
+        if (!empty($extensions)) {
+            $extElement = $parent->ownerDocument->createElementNS(Constants::NS_SAMLP, 'samlp:Extensions');
+            $parent->appendChild($extElement);
 
-        $extElement = $parent->ownerDocument->createElementNS(Constants::NS_SAMLP, 'samlp:Extensions');
-        $parent->appendChild($extElement);
-
-        foreach ($extensions as $ext) {
-            $ext->toXML($extElement);
+            foreach ($extensions as $ext) {
+                $ext->toXML($extElement);
+            }
         }
     }
 }

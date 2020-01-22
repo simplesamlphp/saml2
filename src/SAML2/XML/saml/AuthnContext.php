@@ -166,6 +166,22 @@ final class AuthnContext extends AbstractSamlElement
 
 
     /**
+     * Test if an object, at the state it's in, would produce an empty XML-element
+     *
+     * @return bool
+     */
+    public function isEmptyElement(): bool
+    {
+        return (
+            empty($this->authnContextClassRef)
+            && empty($this->authnContextDecl)
+            && empty($this->authnContextDeclRef)
+            && empty($this->authenticatingAuthorities)
+        );
+    }
+
+
+    /**
      * Convert XML into a AuthnContext
      *
      * @param \DOMElement $xml The XML element we should load
@@ -208,14 +224,7 @@ final class AuthnContext extends AbstractSamlElement
      */
     public function toXML(DOMElement $parent = null): DOMElement
     {
-        if ($parent === null) {
-            $doc = DOMDocumentFactory::create();
-            $e = $doc->createElementNS(Constants::NS_SAML, 'saml:AuthnContext');
-            $doc->appendChild($e);
-        } else {
-            $e = $parent->ownerDocument->createElementNS(Constants::NS_SAML, 'saml:AuthnContext');
-            $parent->appendChild($e);
-        }
+        $e = $this->instantiateParentElement($parent);
 
         if (!empty($this->authnContextClassRef)) {
             $this->authnContextClassRef->toXML($e);
