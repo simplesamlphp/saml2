@@ -301,6 +301,25 @@ final class UIInfo extends AbstractMduiElement
 
 
     /**
+     * Test if an object, at the state it's in, would produce an empty XML-element
+     *
+     * @return bool
+     */
+    public function isEmptyElement(): bool
+    {
+        return (
+            empty($this->DisplayName)
+            && empty($this->Description)
+            && empty($this->InformationURL)
+            && empty($this->PrivacyStatementURL)
+            && empty($this->Keywords)
+            && empty($this->Logo)
+            && empty($this->children)
+        );
+    }
+
+
+    /**
      * Convert XML into a UIInfo
      *
      * @param \DOMElement $xml The XML element we should load
