@@ -72,7 +72,7 @@ class Extensions
                 && array_key_exists($node->localName, $supported[$node->namespaceURI])
             ) {
                 $result = $supported[$node->namespaceURI][$node->localName]::fromXML($node);
-                if ($result->isEmptyElement()) {
+                if (!$result->isEmptyElement()) {
                     $ret[] = $result;
                 }
             } else {
@@ -109,7 +109,7 @@ class Extensions
         $parent->appendChild($extElement);
 
         foreach ($extensions as $ext) {
-            if ($ext->isEmptyElement()) {
+            if (!($ext instanceof Chunk) && !$ext->isEmptyElement()) {
                 $ext->toXML($extElement);
             }
         }
