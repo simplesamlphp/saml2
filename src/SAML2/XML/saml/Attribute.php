@@ -5,6 +5,7 @@ declare(strict_types=1);
 namespace SAML2\XML\saml;
 
 use DOMElement;
+use Exception;
 use SAML2\Constants;
 use SAML2\Utils;
 use Webmozart\Assert\Assert;
@@ -42,9 +43,9 @@ class Attribute extends AbstractSamlElement
      *
      * Array of \SAML2\XML\saml\AttributeValue elements.
      *
-     * @var \SAML2\XML\saml\AttributeValue[]|null
+     * @var AttributeValue[]|null
      */
-    protected $AttributeValue = [];
+    protected $AttributeValues = [];
 
 
     /**
@@ -57,9 +58,9 @@ class Attribute extends AbstractSamlElement
      */
     public function __construct(
         string $Name,
-        string $NameFormat = null,
-        string $FriendlyName = null,
-        array $AttributeValues = null
+        ?string $NameFormat = null,
+        ?string $FriendlyName = null,
+        ?array $AttributeValues = null
     ) {
         $this->setName($Name);
         $this->setNameFormat($NameFormat);
@@ -83,11 +84,11 @@ class Attribute extends AbstractSamlElement
      * Set the value of the Name-property
      *
      * @param string $name
-     * @return void
      */
-    private function setName(string $Name): void
+    protected function setName(string $name): void
     {
-        $this->Name = $Name;
+        Assert::notEmpty($name, 'Cannot specify an empty name for an Attribute.');
+        $this->Name = $name;
     }
 
 
@@ -106,10 +107,13 @@ class Attribute extends AbstractSamlElement
      * Set the value of the NameFormat-property
      *
      * @param string|null $NameFormat
-     * @return void
      */
-    private function setNameFormat(string $NameFormat = null): void
+    protected function setNameFormat(?string $NameFormat): void
     {
+        if ($NameFormat === null) {
+            return;
+        }
+        Assert::notEmpty($NameFormat, 'Cannot specify an empty NameFormat for an Attribute.');
         $this->NameFormat = $NameFormat;
     }
 
@@ -129,22 +133,21 @@ class Attribute extends AbstractSamlElement
      * Set the value of the FriendlyName-property
      *
      * @param string|null $friendlyName
-     * @return void
      */
-    private function setFriendlyName(string $FriendlyName = null): void
+    private function setFriendlyName(?string $friendlyName): void
     {
-        $this->FriendlyName = $FriendlyName;
+        $this->FriendlyName = $friendlyName;
     }
 
 
     /**
      * Collect the value of the attributeValues-property
      *
-     * @return \SAML2\XML\saml\AttributeValue[]|null
+     * @return AttributeValue[]|null
      */
     public function getAttributeValues(): ?array
     {
-        return $this->attributeValues;
+        return $this->AttributeValues;
     }
 
 
@@ -152,34 +155,24 @@ class Attribute extends AbstractSamlElement
      * Set the value of the AttributeValues-property
      *
      * @param array $attributeValues|null
-     * @return void
      */
-    private function setAttributeValues(?array $attributeValues): void
+    protected function setAttributeValues(?array $attributeValues): void
     {
-        $this->attributeValues = $attributeValues;
+        if ($attributeValues === null) {
+            return;
+        }
+        Assert::allIsInstanceOf($attributeValues, AttributeValue::class, 'Invalid AttributeValue.');
+        $this->AttributeValues = $attributeValues;
     }
-
-
-    /**
-     * Add the value to the AttributeValues-property
-     *
-     * @param \SAML2\XML\saml\AttributeValue $attributeValue
-     * @return void
-     */
-    public function addAttributeValue(AttributeValue $attributeValue): void
-    {
-        $this->setAttributeValues(
-            empty($this->attributeValues) ? [$attributeValue] : array_merge($this->attributeValues, [$attributeValue])
-        );
-    }
-
 
 
     /**
      * Convert XML into a Attribute
      *
-     * @param \DOMElement $xml The XML element we should load
-     * @return \SAML2\XML\saml\Attribute
+     * @param DOMElement $xml The XML element we should load
+     *
+     * @return Attribute
+     * @throws Exception
      */
     public static function fromXML(DOMElement $xml): object
     {
@@ -187,7 +180,7 @@ class Attribute extends AbstractSamlElement
         Assert::same($xml->namespaceURI, Constants::NS_SAML);
 
         if (!$xml->hasAttribute('Name')) {
-            throw new \Exception('Missing Name on Attribute.');
+            throw new Exception('Missing Name on Attribute.');
         }
 
         $Name = $xml->getAttribute('Name');
@@ -207,8 +200,8 @@ class Attribute extends AbstractSamlElement
     /**
      * Convert this Attribute to XML.
      *
-     * @param \DOMElement|null $parent The element we should append this Attribute to.
-     * @return \DOMElement
+     * @param DOMElement|null $parent The element we should append this Attribute to.
+     * @return DOMElement
      */
     public function toXML(DOMElement $parent = null): DOMElement
     {
@@ -223,8 +216,8 @@ class Attribute extends AbstractSamlElement
             $e->setAttribute('FriendlyName', $this->FriendlyName);
         }
 
-        if (!empty($this->attributeValues)) {
-            foreach ($this->attributeValues as $av) {
+        if (!empty($this->AttributeValuess)) {
+            foreach ($this->AttributeValues as $av) {
                 $av->toXML($e);
             }
         }
