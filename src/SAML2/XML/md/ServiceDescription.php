@@ -12,4 +12,3 @@ namespace SAML2\XML\md;
 class ServiceDescription extends AbstractLocalizedName
 {
 }
-
