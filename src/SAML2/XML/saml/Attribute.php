@@ -216,7 +216,7 @@ class Attribute extends AbstractSamlElement
             $e->setAttribute('FriendlyName', $this->FriendlyName);
         }
 
-        if (!empty($this->AttributeValuess)) {
+        if (!empty($this->AttributeValues)) {
             foreach ($this->AttributeValues as $av) {
                 $av->toXML($e);
             }

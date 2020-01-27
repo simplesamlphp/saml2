@@ -14,6 +14,22 @@ use SAML2\DOMDocumentFactory;
  */
 class AttributeTest extends TestCase
 {
+    protected $document;
+
+
+    protected function setUp(): void
+    {
+        $samlNamespace = Constants::NS_SAML;
+        $this->document = DOMDocumentFactory::fromString(<<<XML
+<saml:Attribute xmlns:saml="{$samlNamespace}" Name="TheName" NameFormat="TheNameFormat" FriendlyName="TheFriendlyName">
+  <saml:AttributeValue xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:xs="http://www.w3.org/2001/XMLSchema" xsi:type="xs:string">FirstValue</saml:AttributeValue>
+  <saml:AttributeValue xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:xs="http://www.w3.org/2001/XMLSchema" xsi:type="xs:string">SecondValue</saml:AttributeValue>
+</saml:Attribute>
+XML
+        );
+    }
+
+
     /**
      * Test creating an Attribute from scratch.
      */
@@ -29,10 +45,16 @@ class AttributeTest extends TestCase
             ]
         );
 
+        $this->assertEquals(
+            $this->document->saveXML($this->document->documentElement),
+            strval($attribute)
+        );
         $attributeElement = $attribute->toXML();
         $this->assertEquals('TheName', $attributeElement->getAttribute('Name'));
         $this->assertEquals('TheNameFormat', $attributeElement->getAttribute('NameFormat'));
         $this->assertEquals('TheFriendlyName', $attributeElement->getAttribute('FriendlyName'));
+        $this->assertEquals('FirstValue', $attribute->getAttributeValues()[0]->getString());
+        $this->assertEquals('SecondValue', $attribute->getAttributeValues()[1]->getString());
     }
 
 
