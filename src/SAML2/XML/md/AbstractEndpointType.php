@@ -5,7 +5,7 @@ declare(strict_types=1);
 namespace SAML2\XML\md;
 
 use DOMElement;
-use SAML2\XML\ExtendableAttributes;
+use SAML2\XML\ExtendableAttributesTrait;
 use Webmozart\Assert\Assert;
 
 /**
@@ -25,7 +25,7 @@ use Webmozart\Assert\Assert;
  */
 abstract class AbstractEndpointType extends AbstractMdElement
 {
-    use ExtendableAttributes;
+    use ExtendableAttributesTrait;
 
     /**
      * The binding for this endpoint.

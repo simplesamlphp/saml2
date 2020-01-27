@@ -128,7 +128,7 @@ abstract class RoleDescriptor extends SignedElementHelper
             throw new \Exception('More than one Organization in the entity.');
         } elseif (!empty($organization)) {
             /** @var \DOMElement $organization[0] */
-            $this->Organization = new Organization($organization[0]);
+            $this->Organization = Organization::fromXML($organization[0]);
         }
 
         foreach (Utils::xpQuery($xml, './saml_metadata:ContactPerson') as $cp) {
