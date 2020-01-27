@@ -4,177 +4,284 @@ declare(strict_types=1);
 
 namespace SAML2\XML\md;
 
+use PHPUnit\Framework\TestCase;
 use SAML2\Constants;
 use SAML2\DOMDocumentFactory;
-use SAML2\XML\md\ContactPerson;
-use SAML2\Utils;
 
 /**
- * Class \SAML2\XML\md\ContactPersonTest
+ * Tests for the ContactPerson class.
+ *
+ * @package simplesamlphp/saml2
  */
-class ContactPersonTest extends \PHPUnit\Framework\TestCase
+class ContactPersonTest extends TestCase
 {
-    /**
-     * @return void
-     */
-    public function testContactPerson(): void
-    {
-        $contactType = "other";
-        $Company = "Test Company";
-        $GivenName = "John";
-        $SurName = "Doe";
-        $EmailAddress = ['jdoe@test.company', 'john.doe@test.company'];
-        $TelephoneNumber = ['1-234-567-8901'];
-        $ContactPersonAttributes = ['testattr' => 'testval', 'testattr2' => 'testval2'];
+    protected $document;
 
+
+    protected function setUp(): void
+    {
         $mdNamespace = Constants::NS_MD;
-        $document = DOMDocumentFactory::fromString(<<<XML
-<md:Test xmlns:md="{$mdNamespace}" Binding="urn:something" Location="https://whatever/" xmlns:test="urn:test" test:attr="value">
-</md:Test>
+        $this->document = DOMDocumentFactory::fromString(<<<XML
+<?xml version="1.0"?>
+<md:ContactPerson contactType="other" test:attr1="testval1" test:attr2="testval2" xmlns:md="{$mdNamespace}" xmlns:test="urn:test">
+  <md:Company>Test Company</md:Company>
+  <md:GivenName>John</md:GivenName>
+  <md:SurName>Doe</md:SurName>
+  <md:EmailAddress>jdoe@test.company</md:EmailAddress>
+  <md:EmailAddress>john.doe@test.company</md:EmailAddress>
+  <md:TelephoneNumber>1-234-567-8901</md:TelephoneNumber>
+</md:ContactPerson>
 XML
         );
-        $contactPerson = new ContactPerson();
-        $contactPerson->setContactType($contactType);
-        $contactPerson->setCompany($Company);
-        $contactPerson->setGivenName($GivenName);
-        $contactPerson->setSurName($SurName);
-        $contactPerson->setEmailAddress($EmailAddress);
-        $contactPerson->setTelephoneNumber($TelephoneNumber);
-        $contactPerson->setContactPersonAttributes($ContactPersonAttributes);
+    }
 
-        $contactPerson->toXML($document->firstChild);
 
-        $contactPersonElement = $document->getElementsByTagName('ContactPerson')->item(0);
+    // test marshalling
 
-        $this->assertEquals($contactType, $contactPersonElement->getAttribute('contactType'));
-        $this->assertEquals($Company, $contactPersonElement->getElementsByTagName('Company')->item(0)->nodeValue);
-        $this->assertEquals($GivenName, $contactPersonElement->getElementsByTagName('GivenName')->item(0)->nodeValue);
-        $this->assertEquals($SurName, $contactPersonElement->getElementsByTagName('SurName')->item(0)->nodeValue);
 
-        $this->assertEquals(count($EmailAddress), $contactPersonElement->getElementsByTagName('EmailAddress')->length);
-        foreach ($contactPersonElement->getElementsByTagName('EmailAddress') as $element) {
-            $this->assertTrue(in_array($element->nodeValue, $EmailAddress));
-        }
-
+    /**
+     * Test marshalling a ContactPerson from scratch.
+     */
+    public function testMarshalling(): void
+    {
+        $attr1 = $this->document->createAttributeNS('urn:test', 'test:attr1');
+        $attr1->value = 'testval1';
+        $attr2 = $this->document->createAttributeNS('urn:test', 'test:attr2');
+        $attr2->value = 'testval2';
+        $cp = new ContactPerson(
+            'other',
+            'Test Company',
+            'John',
+            'Doe',
+            ['jdoe@test.company', 'john.doe@test.company'],
+            ['1-234-567-8901'],
+            [$attr1, $attr2]
+        );
+        $this->assertEquals($this->document->saveXML($this->document->documentElement), strval($cp));
+        $this->assertEquals('other', $cp->getContactType());
+        $this->assertEquals('Test Company', $cp->getCompany());
+        $this->assertEquals('John', $cp->getGivenName());
+        $this->assertEquals('Doe', $cp->getSurName());
+        $this->assertEquals(['jdoe@test.company', 'john.doe@test.company'], $cp->getEmailAddresses());
+        $this->assertEquals(['1-234-567-8901'], $cp->getTelephoneNumbers());
         $this->assertEquals(
-            count($TelephoneNumber),
-            $contactPersonElement->getElementsByTagName('TelephoneNumber')->length
+            [
+                '{urn:test}attr1' => [
+                    'qualifiedName' => 'test:attr1',
+                    'namespaceURI' => 'urn:test',
+                    'value' => 'testval1'
+                ],
+                '{urn:test}attr2' => [
+                    'qualifiedName' => 'test:attr2',
+                    'namespaceURI' => 'urn:test',
+                    'value' => 'testval2'
+                ]
+            ],
+            $cp->getAttributesNS()
         );
-        foreach ($contactPersonElement->getElementsByTagName('TelephoneNumber') as $element) {
-            $this->assertTrue(in_array($element->nodeValue, $TelephoneNumber));
-        }
-
-        foreach ($ContactPersonAttributes as $attr => $val) {
-            $this->assertEquals($val, $contactPersonElement->getAttribute($attr));
-        }
+        $this->assertEquals('testval1', $cp->getAttributeNS('urn:test', 'attr1'));
+        $this->assertEquals('testval2', $cp->getAttributeNS('urn:test', 'attr2'));
     }
 
 
     /**
-     * @return void
+     * Test that creating a ContactPerson from scratch with the wrong type fails.
      */
-    public function testContactPersonFromXML(): void
+    public function testMarshallingWithWrongType(): void
     {
-        $mdNamespace = Constants::NS_MD;
-        $document = DOMDocumentFactory::fromString(<<<XML
-<?xml version="1.0"?>
-<md:Test xmlns:md="{$mdNamespace}" xmlns:test="urn:test" Binding="urn:something" Location="https://whatever/" test:attr="value">
-    <md:ContactPerson contactType="other" testattr="testval" testattr2="testval2">
-        <md:Company>Test Company</md:Company>
-        <md:GivenName>John</md:GivenName>
-        <md:SurName>Doe</md:SurName>
-        <md:EmailAddress>jdoe@test.company</md:EmailAddress>
-        <md:EmailAddress>john.doe@test.company</md:EmailAddress>
-        <md:TelephoneNumber>1-234-567-8901</md:TelephoneNumber>
-    </md:ContactPerson>
-</md:Test>
-XML
+        $this->expectException(\InvalidArgumentException::class);
+        $this->expectExceptionMessage(
+            'Expected one of: "technical", "support", "administrative", "billing", "other". Got: "wrong"'
         );
-
-        $contactPerson = new ContactPerson($document->getElementsByTagName('ContactPerson')->item(0));
-
-        $this->assertEquals('Test Company', $contactPerson->getCompany());
-        $this->assertEquals('John', $contactPerson->getGivenName());
-        $this->assertEquals('Doe', $contactPerson->getSurName());
-        $this->assertTrue(in_array('jdoe@test.company', $contactPerson->getEmailAddress()));
-        $this->assertTrue(in_array('john.doe@test.company', $contactPerson->getEmailAddress()));
-        $this->assertTrue(in_array('1-234-567-8901', $contactPerson->getTelephoneNumber()));
-        $this->assertEquals('testval', $contactPerson->getContactPersonAttributes()['testattr']);
-        $this->assertEquals('testval2', $contactPerson->getContactPersonAttributes()['testattr2']);
+        new ContactPerson('wrong');
     }
 
 
     /**
-     * @return void
+     * Test that creating a ContactPerson from scratch with an invalid email address fails.
      */
-    public function testMultipleNamesXML(): void
+    public function testMarshallingWithWrongEmail(): void
     {
-        $mdNamespace = Constants::NS_MD;
-        $document = DOMDocumentFactory::fromString(<<<XML
-<?xml version="1.0"?>
-<md:Test xmlns:md="{$mdNamespace}" xmlns:test="urn:test" Binding="urn:something" Location="https://whatever/" test:attr="value">
-    <md:ContactPerson contactType="other" testattr="testval" testattr2="testval2">
-        <md:Company>Test Company</md:Company>
-        <md:GivenName>John</md:GivenName>
-        <md:GivenName>Jonathon</md:GivenName>
-        <md:SurName>Doe</md:SurName>
-        <md:EmailAddress>jdoe@test.company</md:EmailAddress>
-        <md:EmailAddress>john.doe@test.company</md:EmailAddress>
-        <md:TelephoneNumber>1-234-567-8901</md:TelephoneNumber>
-    </md:ContactPerson>
-</md:Test>
-XML
+        $this->expectException(\InvalidArgumentException::class);
+        $this->expectExceptionMessage('Invalid email addresses found.');
+        new ContactPerson(
+            'other',
+            'Test Company',
+            'John',
+            'Doe',
+            ['this is wrong']
         );
-
-        $this->expectException(\Exception::class, 'More than one GivenName in md:ContactPerson');
-
-        $contactPerson = new ContactPerson($document->getElementsByTagName('ContactPerson')->item(0));
     }
 
 
     /**
-     * @return void
+     * Test that creating a ContactPerson from scratch without any optional arguments works.
      */
-    public function testEmptySurNameXML(): void
+    public function testMarshallingWithoutOptionalProperties(): void
     {
         $mdNamespace = Constants::NS_MD;
         $document = DOMDocumentFactory::fromString(<<<XML
 <?xml version="1.0"?>
-<md:Test xmlns:md="{$mdNamespace}" xmlns:test="urn:test" Binding="urn:something" Location="https://whatever/" test:attr="value">
-    <md:ContactPerson contactType="other">
-        <md:Company>Test Company</md:Company>
-        <md:GivenName>John</md:GivenName>
-        <md:EmailAddress>jdoe@test.company</md:EmailAddress>
-        <md:EmailAddress>john.doe@test.company</md:EmailAddress>
-        <md:TelephoneNumber>1-234-567-8901</md:TelephoneNumber>
-    </md:ContactPerson>
-</md:Test>
+<md:ContactPerson contactType="other" xmlns:md="{$mdNamespace}"></md:ContactPerson>
 XML
         );
+        $cp = new ContactPerson('other');
+        $this->assertEquals($document->saveXML($document->documentElement), strval($cp));
+        $this->assertNull($cp->getCompany());
+        $this->assertNull($cp->getGivenName());
+        $this->assertNull($cp->getSurName());
+        $this->assertEquals([], $cp->getEmailAddresses());
+        $this->assertEquals([], $cp->getTelephoneNumbers());
+        $this->assertEquals([], $cp->getAttributesNS());
+    }
 
-        $contactPerson = new ContactPerson($document->getElementsByTagName('ContactPerson')->item(0));
 
-        $this->assertNull($contactPerson->getSurName());
+    // test unmarshalling
+
+
+    /**
+     * Test creating a ContactPerson from XML.
+     */
+    public function testUnmarshalling(): void
+    {
+        $cp = ContactPerson::fromXML($this->document->documentElement);
+        $this->assertEquals('other', $cp->getContactType());
+        $this->assertEquals('Test Company', $cp->getCompany());
+        $this->assertEquals('John', $cp->getGivenName());
+        $this->assertEquals('Doe', $cp->getSurName());
+        $this->assertEquals(['jdoe@test.company', 'john.doe@test.company'], $cp->getEmailAddresses());
+        $this->assertEquals(['1-234-567-8901'], $cp->getTelephoneNumbers());
+        $this->assertEquals(
+            [
+                '{urn:test}attr1' => [
+                    'qualifiedName' => 'test:attr1',
+                    'namespaceURI' => 'urn:test',
+                    'value' => 'testval1'
+                ],
+                '{urn:test}attr2' => [
+                    'qualifiedName' => 'test:attr2',
+                    'namespaceURI' => 'urn:test',
+                    'value' => 'testval2'
+                ]
+            ],
+            $cp->getAttributesNS()
+        );
+        $this->assertEquals('testval1', $cp->getAttributeNS('urn:test', 'attr1'));
+        $this->assertEquals('testval2', $cp->getAttributeNS('urn:test', 'attr2'));
     }
 
 
     /**
-     * @return void
+     * Test that creating a ContactPerson from XML without a contactType attribute fails.
      */
-    public function testMissingContactTypeXML(): void
+    public function testUnmarshallingWithoutType(): void
+    {
+        $this->expectException(\Exception::class);
+        $this->expectExceptionMessage('Missing contactType on ContactPerson.');
+        $this->document->documentElement->removeAttribute('contactType');
+        ContactPerson::fromXML($this->document->documentElement);
+    }
+
+
+    /**
+     * Test that creating a ContactPerson from XML fails when the contact type is not supported.
+     */
+    public function testUnmarshallingWithWrongType(): void
+    {
+        $this->expectException(\InvalidArgumentException::class);
+        $this->expectExceptionMessage(
+            'Expected one of: "technical", "support", "administrative", "billing", "other". Got: "wrong"'
+        );
+        $this->document->documentElement->setAttribute('contactType', 'wrong');
+        ContactPerson::fromXML($this->document->documentElement);
+    }
+
+
+    /**
+     * Test that creating a ContactPerson from XML fails when multiple Company elements are found.
+     */
+    public function testUnmarshallingMultipleCompanies(): void
+    {
+        $company = $this->document->getElementsByTagNameNS(Constants::NS_MD, 'Company');
+        $newCompany = $this->document->createElementNS(Constants::NS_MD, 'Company', 'Alt. Co.');
+        $this->document->documentElement->insertBefore($newCompany, $company->item(0)->nextSibling);
+        $this->expectException(\Exception::class);
+        $this->expectExceptionMessage('More than one Company in md:ContactPerson');
+        ContactPerson::fromXML($this->document->documentElement);
+    }
+
+
+    /**
+     * Test that creating a ContactPerson from XML fails when multiple GivenName elements are found.
+     */
+    public function testUnmarshallingMultipleGivenNames(): void
+    {
+        $givenName = $this->document->getElementsByTagNameNS(Constants::NS_MD, 'GivenName');
+        $newName = $this->document->createElementNS(Constants::NS_MD, 'GivenName', 'New Name');
+        $this->document->documentElement->insertBefore($newName, $givenName->item(0)->nextSibling);
+        $this->expectException(\Exception::class);
+        $this->expectExceptionMessage('More than one GivenName in md:ContactPerson');
+        ContactPerson::fromXML($this->document->documentElement);
+    }
+
+
+    /**
+     * Test that creating a ContactPerson from XML fails when multiple SurName elements are found.
+     */
+    public function testUnmarshallingMultipleSurNames(): void
+    {
+        $surName = $this->document->getElementsByTagNameNS(Constants::NS_MD, 'SurName');
+        $newName = $this->document->createElementNS(Constants::NS_MD, 'SurName', 'New Name');
+        $this->document->documentElement->insertBefore($newName, $surName->item(0)->nextSibling);
+        $this->expectException(\Exception::class);
+        $this->expectExceptionMessage('More than one SurName in md:ContactPerson');
+        ContactPerson::fromXML($this->document->documentElement);
+    }
+
+
+    /**
+     * Test that creating a ContactPerson from XML fails when an invalid email address is found.
+     */
+    public function testUnmarshallingWithInvalidEmail(): void
+    {
+        $this->expectException(\InvalidArgumentException::class);
+        $this->expectExceptionMessage('Invalid email addresses found.');
+        $emails = $this->document->getElementsByTagNameNS(Constants::NS_MD, 'EmailAddress');
+        $emails->item(1)->textContent = 'this is not an email';
+        ContactPerson::fromXML($this->document->documentElement);
+    }
+
+
+    /**
+     * Test that creating a ContactPerson from XML works when all optional elements are missing.
+     */
+    public function testUnmarshallingWithoutOptionalArguments(): void
     {
         $mdNamespace = Constants::NS_MD;
         $document = DOMDocumentFactory::fromString(<<<XML
 <?xml version="1.0"?>
-<md:Test xmlns:md="{$mdNamespace}" xmlns:test="urn:test" Binding="urn:something" Location="https://whatever/" test:attr="value">
-    <md:ContactPerson>
-    </md:ContactPerson>
-</md:Test>
+<md:ContactPerson contactType="other" xmlns:md="{$mdNamespace}"/>
 XML
         );
+        $cp = ContactPerson::fromXML($document->documentElement);
+        $this->assertEquals($document->saveXML($document->documentElement), strval($cp));
+        $this->assertNull($cp->getCompany());
+        $this->assertNull($cp->getGivenName());
+        $this->assertNull($cp->getSurName());
+        $this->assertEquals([], $cp->getEmailAddresses());
+        $this->assertEquals([], $cp->getTelephoneNumbers());
+        $this->assertEquals([], $cp->getAttributesNS());
+    }
 
-        $this->expectException(\Exception::class, 'Missing contactType on ContactPerson.');
 
-        $contactPerson = new ContactPerson($document->getElementsByTagName('ContactPerson')->item(0));
+    /**
+     * Test that serialization / unserialization works.
+     */
+    public function testSerialize(): void
+    {
+        $this->assertEquals(
+            $this->document->saveXML($this->document->documentElement),
+            strval(unserialize(serialize(ContactPerson::fromXML($this->document->documentElement))))
+        );
     }
 }
