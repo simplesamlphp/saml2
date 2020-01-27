@@ -5,9 +5,12 @@ declare(strict_types=1);
 namespace SAML2\XML\md;
 
 use DOMElement;
+use Exception;
+use InvalidArgumentException;
 use SAML2\Constants;
 use SAML2\Utils;
-use SAML2\XML\Chunk;
+use SAML2\XML\ExtendableAttributes;
+use SAML2\XML\ExtendableElement;
 use Webmozart\Assert\Assert;
 
 /**
@@ -15,8 +18,11 @@ use Webmozart\Assert\Assert;
  *
  * @package SimpleSAMLphp
  */
-class Organization
+final class Organization extends AbstractMdElement
 {
+    use ExtendableAttributes;
+    use ExtendableElement;
+
     /**
      * Extensions on this element.
      *
@@ -24,103 +30,88 @@ class Organization
      *
      * @var array
      */
-    private $Extensions = [];
+    protected $Extensions = [];
 
     /**
      * The OrganizationName, as an array of language => translation.
      *
-     * @var array
+     * @var OrganizationName[]
      */
-    private $OrganizationName = [];
+    protected $OrganizationName = [];
 
     /**
      * The OrganizationDisplayName, as an array of language => translation.
      *
-     * @var array
+     * @var OrganizationDisplayName[]
      */
-    private $OrganizationDisplayName = [];
+    protected $OrganizationDisplayName = [];
 
     /**
      * The OrganizationURL, as an array of language => translation.
      *
      * @var array
      */
-    private $OrganizationURL = [];
+    protected $OrganizationURL = [];
+
+
+    /**
+     * Organization constructor.
+     *
+     * @param OrganizationName[]        $organizationName
+     * @param OrganizationDisplayName[] $organizationDisplayName
+     * @param array                     $organizationURL
+     * @param array|null                $extensions
+     */
+    public function __construct(
+        array $organizationName,
+        array $organizationDisplayName,
+        array $organizationURL,
+        ?array $extensions = null
+    ) {
+        $this->setOrganizationName($organizationName);
+        $this->setOrganizationDisplayName($organizationDisplayName);
+        $this->setOrganizationURL($organizationURL);
+        $this->setExtensions($extensions);
+    }
 
 
     /**
      * Initialize an Organization element.
      *
-     * @param \DOMElement|null $xml The XML element we should load.
-     */
-    public function __construct(DOMElement $xml = null)
-    {
-        if ($xml === null) {
-            return;
-        }
-
-        $this->Extensions = Extensions::getList($xml);
-
-        $this->OrganizationName = Utils::extractLocalizedStrings($xml, Constants::NS_MD, 'OrganizationName');
-        if (empty($this->OrganizationName)) {
-            $this->OrganizationName = ['invalid' => ''];
-        }
-
-        $this->OrganizationDisplayName = Utils::extractLocalizedStrings(
-            $xml,
-            Constants::NS_MD,
-            'OrganizationDisplayName'
-        );
-        if (empty($this->OrganizationDisplayName)) {
-            $this->OrganizationDisplayName = ['invalid' => ''];
-        }
-
-        $this->OrganizationURL = Utils::extractLocalizedStrings($xml, Constants::NS_MD, 'OrganizationURL');
-        if (empty($this->OrganizationURL)) {
-            $this->OrganizationURL = ['invalid' => ''];
-        }
-    }
-
-
-    /**
-     * Collect the value of the Extensions property.
+     * @param DOMElement|null $xml The XML element we should load.
      *
-     * @return \SAML2\XML\Chunk[]
+     * @return self
+     * @throws Exception if the XML lacks any of the mandatory elements.
      */
-    public function getExtensions(): array
+    public static function fromXML(DOMElement $xml): object
     {
-        return $this->Extensions;
-    }
+        $names = $xml->getElementsByTagNameNS(Constants::NS_MD, 'OrganizationName');
+        Assert::minCount($names, 1, 'Missing at least one OrganizationName.');
+        $orgNames = [];
+        foreach ($names as $name) {
+            $orgNames[] = OrganizationName::fromXML($name);
+        }
 
+        $displayNames = $xml->getElementsByTagNameNS(Constants::NS_MD, 'OrganizationDisplayName');
+        Assert::minCount($displayNames, 1, 'Missing at least one OrganizationDisplayName');
+        $orgDisplayNames = [];
+        foreach ($displayNames as $displayName) {
+            $orgDisplayNames[] = OrganizationDisplayName::fromXML($displayName);
+        }
 
-    /**
-     * Set the value of the Extensions property.
-     *
-     * @param array $extensions
-     * @return void
-     */
-    public function setExtensions(array $extensions): void
-    {
-        $this->Extensions = $extensions;
-    }
+        $url = Utils::extractLocalizedStrings($xml, Constants::NS_MD, 'OrganizationURL');
+        if (empty($url)) {
+            throw new Exception('No localized organization URL found.');
+        }
 
-
-    /**
-     * Add an Extension.
-     *
-     * @param \SAML2\XML\Chunk $extensions The Extensions
-     * @return void
-     */
-    public function addExtension(Extensions $extension): void
-    {
-        $this->Extensions[] = $extension;
+        return new self($orgNames, $orgDisplayNames, $url, self::getExtensionsFromXML($xml));
     }
 
 
     /**
      * Collect the value of the OrganizationName property.
      *
-     * @return string[]
+     * @return OrganizationName[]
      */
     public function getOrganizationName(): array
     {
@@ -131,11 +122,11 @@ class Organization
     /**
      * Set the value of the OrganizationName property.
      *
-     * @param array $organizationName
-     * @return void
+     * @param OrganizationName[] $organizationName
      */
-    public function setOrganizationName(array $organizationName): void
+    protected function setOrganizationName(array $organizationName): void
     {
+        Assert::allIsInstanceOf($organizationName, OrganizationName::class);
         $this->OrganizationName = $organizationName;
     }
 
@@ -143,7 +134,7 @@ class Organization
     /**
      * Collect the value of the OrganizationDisplayName property.
      *
-     * @return string[]
+     * @return OrganizationDisplayName[]
      */
     public function getOrganizationDisplayName(): array
     {
@@ -154,11 +145,11 @@ class Organization
     /**
      * Set the value of the OrganizationDisplayName property.
      *
-     * @param array $organizationDisplayName
-     * @return void
+     * @param OrganizationDisplayName[] $organizationDisplayName
      */
-    public function setOrganizationDisplayName(array $organizationDisplayName): void
+    protected function setOrganizationDisplayName(array $organizationDisplayName): void
     {
+        Assert::allIsInstanceOf($organizationDisplayName, OrganizationDisplayName::class);
         $this->OrganizationDisplayName = $organizationDisplayName;
     }
 
@@ -178,10 +169,10 @@ class Organization
      * Set the value of the OrganizationURL property.
      *
      * @param array $organizationURL
-     * @return void
      */
-    public function setOrganizationURL(array $organizationURL): void
+    protected function setOrganizationURL(array $organizationURL): void
     {
+        Assert::allStringNotEmpty($organizationURL, 'Incorrect OrganizationURL.');
         $this->OrganizationURL = $organizationURL;
     }
 
@@ -189,28 +180,26 @@ class Organization
     /**
      * Convert this Organization to XML.
      *
-     * @param  \DOMElement $parent The element we should add this organization to.
-     * @return \DOMElement This Organization-element.
+     * @param DOMElement $parent The element we should add this organization to.
      *
-     * @throws \InvalidArgumentException if assertions are false
+     * @return DOMElement This Organization-element.
+     *
+     * @throws InvalidArgumentException if assertions are false
      */
-    public function toXML(DOMElement $parent): DOMElement
+    public function toXML(DOMElement $parent = null): DOMElement
     {
-        Assert::notEmpty($this->OrganizationName);
-        Assert::notEmpty($this->OrganizationDisplayName);
-        Assert::notEmpty($this->OrganizationURL);
+        $e = $this->instantiateParentElement($parent);
 
-        $doc = $parent->ownerDocument;
+        foreach ($this->OrganizationName as $name) {
+            $name->toXML($e);
+        }
+        foreach ($this->OrganizationDisplayName as $displayName) {
+            $displayName->toXML($e);
+        }
 
-        $e = $doc->createElementNS(Constants::NS_MD, 'md:Organization');
-        $parent->appendChild($e);
-
-        Extensions::addList($e, $this->Extensions);
-
-        Utils::addStrings($e, Constants::NS_MD, 'md:OrganizationName', true, $this->OrganizationName);
-        Utils::addStrings($e, Constants::NS_MD, 'md:OrganizationDisplayName', true, $this->OrganizationDisplayName);
         Utils::addStrings($e, Constants::NS_MD, 'md:OrganizationURL', true, $this->OrganizationURL);
 
+        $this->addExtensionsToXML($e);
         return $e;
     }
 }
