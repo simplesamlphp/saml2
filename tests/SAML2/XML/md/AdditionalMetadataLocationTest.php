@@ -4,42 +4,53 @@ declare(strict_types=1);
 
 namespace SAML2\XML\md;
 
+use PHPUnit\Framework\TestCase;
 use SAML2\Constants;
 use SAML2\DOMDocumentFactory;
-use SAML2\XML\md\AdditionalMetadataLocation;
-use SAML2\Utils;
 
 /**
- * Class \SAML2\XML\md\AdditionalMetadataLocationTest
+ * Tests for the AdditionalMetadataLocation class
  */
-class AdditionalMetadataLocationTest extends \PHPUnit\Framework\TestCase
+final class AdditionalMetadataLocationTest extends TestCase
 {
     /**
-     * @return void
+     * Test creating an AdditionalMetadataLocation object from scratch.
      */
     public function testMarshalling(): void
     {
-        $document = DOMDocumentFactory::fromString('<root/>');
-
-        $additionalMetadataLocation = new AdditionalMetadataLocation();
-        $additionalMetadataLocation->setNamespace('NamespaceAttribute');
-        $additionalMetadataLocation->setLocation('TheLocation');
-        $additionalMetadataLocationElement = $additionalMetadataLocation->toXML($document->firstChild);
-
-        $additionalMetadataLocationElements = Utils::xpQuery(
-            $additionalMetadataLocationElement,
-            '/root/saml_metadata:AdditionalMetadataLocation'
-        );
-        $this->assertCount(1, $additionalMetadataLocationElements);
-        $additionalMetadataLocationElement = $additionalMetadataLocationElements[0];
-
+        $additionalMetadataLocation = new AdditionalMetadataLocation('NamespaceAttribute', 'TheLocation');
+        $additionalMetadataLocationElement = $additionalMetadataLocation->toXML();
+        $this->assertEquals('md:AdditionalMetadataLocation', $additionalMetadataLocationElement->tagName);
+        $this->assertEquals(Constants::NS_MD, $additionalMetadataLocationElement->namespaceURI);
         $this->assertEquals('TheLocation', $additionalMetadataLocationElement->textContent);
         $this->assertEquals('NamespaceAttribute', $additionalMetadataLocationElement->getAttribute("namespace"));
     }
 
 
     /**
-     * @return void
+     * Test that creating an AdditionalMetadataLocation from scratch with an empty namespace fails.
+     */
+    public function testMarshallingWithEmptyNamespace(): void
+    {
+        $this->expectException(\InvalidArgumentException::class);
+        $this->expectExceptionMessage('The namespace in AdditionalMetadataLocation must be a URI.');
+        new AdditionalMetadataLocation('', 'TheLocation');
+    }
+
+
+    /**
+     * Test that creating an AdditionalMetadataLocation from scratch with an empty location fails.
+     */
+    public function testMarshallingWithEmptyLocation(): void
+    {
+        $this->expectException(\InvalidArgumentException::class);
+        $this->expectExceptionMessage('AdditionalMetadataLocation must contain a URI.');
+        new AdditionalMetadataLocation('NamespaceAttribute', '');
+    }
+
+
+    /**
+     * Test creating an AdditionalMetadataLocation object from XML.
      */
     public function testUnmarshalling(): void
     {
@@ -47,15 +58,55 @@ class AdditionalMetadataLocationTest extends \PHPUnit\Framework\TestCase
             '<md:AdditionalMetadataLocation xmlns:md="' . Constants::NS_MD . '"' .
             ' namespace="TheNamespaceAttribute">LocationText</md:AdditionalMetadataLocation>'
         );
-        $additionalMetadataLocation = new AdditionalMetadataLocation($document->firstChild);
+        $additionalMetadataLocation = AdditionalMetadataLocation::fromXML($document->documentElement);
         $this->assertEquals('TheNamespaceAttribute', $additionalMetadataLocation->getNamespace());
         $this->assertEquals('LocationText', $additionalMetadataLocation->getLocation());
+    }
 
-        $document->loadXML(
+
+    /**
+     * Test that creating an AdditionalMetadataLocation from XML fails if "namespace" is missing.
+     */
+    public function testUnmarshallingWithoutNamespace(): void
+    {
+        $document = DOMDocumentFactory::fromString(
             '<md:AdditionalMetadataLocation xmlns:md="' . Constants::NS_MD . '"' .
             '>LocationText</md:AdditionalMetadataLocation>'
         );
-        $this->expectException(\Exception::class, 'Missing namespace attribute on AdditionalMetadataLocation element.');
-        new AdditionalMetadataLocation($document->firstChild);
+        $this->expectException(\Exception::class);
+        $this->expectExceptionMessage('Missing namespace attribute on AdditionalMetadataLocation element.');
+        AdditionalMetadataLocation::fromXML($document->documentElement);
+    }
+
+
+    /**
+     * Test that creating an AdditionalMetadataLocation from XML fails if the location is empty.
+     */
+    public function testUnmarshallingWithEmptyLocation(): void
+    {
+        $document = DOMDocumentFactory::fromString(
+            '<md:AdditionalMetadataLocation xmlns:md="' . Constants::NS_MD . '"' .
+            ' namespace="TheNamespaceAttribute"></md:AdditionalMetadataLocation>'
+        );
+        $this->expectException(\InvalidArgumentException::class);
+        $this->expectExceptionMessage('AdditionalMetadataLocation must contain a URI.');
+        AdditionalMetadataLocation::fromXML($document->documentElement);
+    }
+
+
+    /**
+     * Test serialization and unserialization of AdditionalMetadataLocation elements.
+     */
+    public function testSerialization(): void
+    {
+        $document = DOMDocumentFactory::fromString(
+            '<md:AdditionalMetadataLocation xmlns:md="' . Constants::NS_MD . '"' .
+            ' namespace="TheNamespaceAttribute">LocationText</md:AdditionalMetadataLocation>'
+        );
+        $aml = AdditionalMetadataLocation::fromXML($document->documentElement);
+        $this->assertEquals(
+            $document->saveXML($document->documentElement),
+            strval(unserialize(serialize($aml)))
+        );
     }
 }
