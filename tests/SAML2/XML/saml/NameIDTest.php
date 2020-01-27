@@ -2,15 +2,14 @@
 
 declare(strict_types=1);
 
-namespace SAML2\XML\md;
+namespace SAML2\XML\saml;
 
 use SAML2\Constants;
 use SAML2\DOMDocumentFactory;
 use SAML2\Utils;
-use SAML2\XML\saml\NameID;
 
 /**
- * Class \SAML2\XML\md\NameIDTest
+ * Class \SAML2\XML\saml\NameIDTest
  */
 class NameIDTest extends \PHPUnit\Framework\TestCase
 {
@@ -71,7 +70,7 @@ XML
         $nameId->setSPProvidedID('TheSPProvidedID');
         $nameId->setValue('TheNameIDValue');
 
-        $output = '<saml:NameID xmlns:saml="' . \SAML2\Constants::NS_SAML . '" NameQualifier="TheNameQualifier" ' .
+        $output = '<saml:NameID xmlns:saml="' . Constants::NS_SAML . '" NameQualifier="TheNameQualifier" ' .
                   'SPNameQualifier="TheSPNameQualifier" Format="TheFormat" SPProvidedID="TheSPProvidedID">' .
                   'TheNameIDValue</saml:NameID>';
 

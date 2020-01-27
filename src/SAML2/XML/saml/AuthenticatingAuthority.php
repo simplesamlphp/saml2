@@ -81,15 +81,7 @@ final class AuthenticatingAuthority extends AbstractSamlElement
      */
     public function toXML(DOMElement $parent = null): DOMElement
     {
-        if ($parent === null) {
-            $doc = DOMDocumentFactory::create();
-            $e = $doc->createElementNS(Constants::NS_SAML, 'saml:AuthenticatingAuthority');
-            $doc->appendChild($e);
-        } else {
-            $e = $parent->ownerDocument->createElementNS(Constants::NS_SAML, 'saml:AuthenticatingAuthority');
-            $parent->appendChild($e);
-        }
-
+        $e = $this->instantiateParentElement($parent);
         $e->textContent = $this->authority;
 
         return $e;

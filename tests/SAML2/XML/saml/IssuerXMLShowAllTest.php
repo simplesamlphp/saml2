@@ -2,15 +2,14 @@
 
 declare(strict_types=1);
 
-namespace SAML2\XML\md;
+namespace SAML2\XML\saml;
 
 use SAML2\Constants;
 use SAML2\DOMDocumentFactory;
 use SAML2\Utils;
-use SAML2\XML\saml\Issuer;
 
 /**
- * Class \SAML2\XML\md\issuerShowAllTest
+ * Class \SAML2\XML\saml\issuerShowAllTest
  */
 class IssuerShowAllTest extends \PHPUnit\Framework\TestCase
 {
@@ -72,7 +71,7 @@ XML
         $issuer->setSaml2IssuerShowAll(true);
 
         $output = '<saml:Issuer xmlns:saml="'
-                  . \SAML2\Constants::NS_SAML
+                  . Constants::NS_SAML
                   . '" NameQualifier="TheNameQualifier" SPNameQualifier="TheSPNameQualifier" Format="'
                   . Constants::NAMEID_ENTITY
                   . '" SPProvidedID="TheSPProvidedID">'
@@ -95,7 +94,7 @@ XML
         $issuer->setValue('TheIssuerValue');
         $issuer->setSaml2IssuerShowAll(false);
         
-        $output = '<saml:Issuer xmlns:saml="' . \SAML2\Constants::NS_SAML . '">TheIssuerValue</saml:Issuer>';
+        $output = '<saml:Issuer xmlns:saml="' . Constants::NS_SAML . '">TheIssuerValue</saml:Issuer>';
         
         $this->assertXmlStringEqualsXmlString($output, $issuer->__toString());
     }
@@ -114,7 +113,7 @@ XML
         $issuer->setValue('TheIssuerValue');
         $issuer->setSaml2IssuerShowAll(true);
                 
-        $output = '<saml:Issuer xmlns:saml="' . \SAML2\Constants::NS_SAML . '" NameQualifier="TheNameQualifier" ' .
+        $output = '<saml:Issuer xmlns:saml="' . Constants::NS_SAML . '" NameQualifier="TheNameQualifier" ' .
             'SPNameQualifier="TheSPNameQualifier" Format="TheFormat" SPProvidedID="TheSPProvidedID">' .
             'TheIssuerValue</saml:Issuer>';
         
@@ -135,7 +134,7 @@ XML
         $issuer->setValue('TheIssuerValue');
         //$issuer->setSaml2IssuerShowAll(false);
         
-        $output = '<saml:Issuer xmlns:saml="' . \SAML2\Constants::NS_SAML . '" NameQualifier="TheNameQualifier" ' .
+        $output = '<saml:Issuer xmlns:saml="' . Constants::NS_SAML . '" NameQualifier="TheNameQualifier" ' .
             'SPNameQualifier="TheSPNameQualifier" Format="TheFormat" SPProvidedID="TheSPProvidedID">' .
             'TheIssuerValue</saml:Issuer>';
         
@@ -157,7 +156,7 @@ XML
         //$issuer->setSaml2IssuerShowAll(false);
         
         
-        $output = '<saml:Issuer xmlns:saml="' . \SAML2\Constants::NS_SAML . '">TheIssuerValue</saml:Issuer>';
+        $output = '<saml:Issuer xmlns:saml="' . Constants::NS_SAML . '">TheIssuerValue</saml:Issuer>';
         
         $this->assertXmlStringEqualsXmlString($output, $issuer->__toString());
     }

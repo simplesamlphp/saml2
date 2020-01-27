@@ -12,7 +12,7 @@ use SAML2\XML\saml\AuthnContextClassRef;
 use SAML2\XML\saml\AuthnContextDeclRef;
 
 /**
- * Class \SAML2\XML\saml\RequestedAuthnContextTest
+ * Class \SAML2\XML\samlp\RequestedAuthnContextTest
  */
 class RequestedAuthnContextTest extends \PHPUnit\Framework\TestCase
 {

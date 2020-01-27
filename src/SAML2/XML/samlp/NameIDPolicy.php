@@ -100,6 +100,21 @@ final class NameIDPolicy extends AbstractSamlpElement
 
 
     /**
+     * Test if an object, at the state it's in, would produce an empty XML-element
+     *
+     * @return bool
+     */
+    public function isEmptyElement(): bool
+    {
+        return (
+            empty($this->Format)
+            && empty($this->SPNameQualifier)
+            && empty($this->AllowCreate)
+        );
+    }
+
+
+    /**
      * Convert XML into a NameIDPolicy
      *
      * @param \DOMElement $xml The XML element we should load
@@ -126,21 +141,11 @@ final class NameIDPolicy extends AbstractSamlpElement
      * Convert this NameIDPolicy to XML.
      *
      * @param \DOMElement|null $parent The element we should append this NameIDPolicy to.
-     * @throws \Exception
      * @return \DOMElement
-     *
-     * @throws \InvalidArgumentException if assertions are false
      */
     public function toXML(DOMElement $parent = null): DOMElement
     {
-        if ($parent === null) {
-            $doc = DOMDocumentFactory::create();
-            $e = $doc->createElementNS(Constants::NS_SAMLP, 'samlp:NameIDPolicy');
-            $doc->appendChild($e);
-        } else {
-            $e = $parent->ownerDocument->createElementNS(Constants::NS_SAMLP, 'samlp:NameIDPolicy');
-            $parent->appendChild($e);
-        }
+        $e = $this->instantiateParentElement($parent);
 
         if (isset($this->Format)) {
             $e->setAttribute('Format', $this->Format);

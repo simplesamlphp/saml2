@@ -2,16 +2,14 @@
 
 declare(strict_types=1);
 
-namespace SAML2\XML\md;
+namespace SAML2\XML\saml;
 
 use SAML2\Constants;
 use SAML2\DOMDocumentFactory;
 use SAML2\Utils;
-use SAML2\XML\saml\Attribute;
-use SAML2\XML\saml\AttributeValue;
 
 /**
- * Class \SAML2\XML\md\AttributeTest
+ * Class \SAML2\XML\saml\AttributeTest
  */
 class AttributeValueTest extends \PHPUnit\Framework\TestCase
 {

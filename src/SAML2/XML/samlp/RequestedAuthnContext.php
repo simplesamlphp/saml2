@@ -148,14 +148,7 @@ final class RequestedAuthnContext extends AbstractSamlpElement
      */
     public function toXML(DOMElement $parent = null): DOMElement
     {
-        if ($parent === null) {
-            $doc = DOMDocumentFactory::create();
-            $e = $doc->createElementNS(Constants::NS_SAMLP, 'samlp:RequestedAuthnContext');
-            $doc->appendChild($e);
-        } else {
-            $e = $parent->ownerDocument->createElementNS(Constants::NS_SAMLP, 'samlp:RequestedAuthnContext');
-            $parent->appendChild($e);
-        }
+        $e = $this->instantiateParentElement($parent);
 
         foreach ($this->requestedAuthnContexts as $context) {
             $e->appendChild($e->ownerDocument->importNode($context->toXML(), true));

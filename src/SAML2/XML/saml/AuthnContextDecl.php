@@ -82,14 +82,7 @@ final class AuthnContextDecl extends AbstractSamlElement
      */
     public function toXML(DOMElement $parent = null): DOMElement
     {
-        if ($parent === null) {
-            $doc = DOMDocumentFactory::create();
-            $e = $doc->createElementNS(Constants::NS_SAML, 'saml:AuthnContextDecl');
-            $doc->appendChild($e);
-        } else {
-            $e = $parent->ownerDocument->createElementNS(Constants::NS_SAML, 'saml:AuthnContextDecl');
-            $parent->appendChild($e);
-        }
+        $e = $this->instantiateParentElement($parent);
 
         foreach ($this->decl as $node) {
             $e->appendChild($e->ownerDocument->importNode($node, true));

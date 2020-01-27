@@ -59,6 +59,17 @@ final class StatusDetail extends AbstractSamlpElement
 
 
     /**
+     * Test if an object, at the state it's in, would produce an empty XML-element
+     *
+     * @return bool
+     */
+    public function isEmptyElement(): bool
+    {
+        return empty($this->details);
+    }
+
+
+    /**
      * Convert XML into a StatusDetail
      *
      * @param \DOMElement $xml The XML element we should load
@@ -83,19 +94,12 @@ final class StatusDetail extends AbstractSamlpElement
     /**
      * Convert this StatusDetail to XML.
      *
-     * @param \DOMElement $element The element we are converting to XML.
+     * @param \DOMElement|null $element The element we are converting to XML.
      * @return \DOMElement The XML element after adding the data corresponding to this StatusDetail.
      */
     public function toXML(DOMElement $parent = null): DOMElement
     {
-        if ($parent === null) {
-            $doc = DOMDocumentFactory::create();
-            $e = $doc->createElementNS(Constants::NS_SAMLP, 'samlp:StatusDetail');
-            $doc->appendChild($e);
-        } else {
-            $e = $parent->ownerDocument->createElementNS(Constants::NS_SAMLP, 'samlp:StatusDetail');
-            $parent->appendChild($e);
-        }
+        $e = $this->instantiateParentElement($parent);
 
         if (!empty($this->details)) {
             foreach ($this->details as $detail) {
