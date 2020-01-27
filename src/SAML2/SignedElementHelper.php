@@ -6,6 +6,7 @@ namespace SAML2;
 
 use DOMElement;
 use DOMNode;
+use RobRichards\XMLSecLibs\XMLSecurityDSig;
 use RobRichards\XMLSecLibs\XMLSecurityKey;
 
 /**
@@ -15,8 +16,15 @@ use RobRichards\XMLSecLibs\XMLSecurityKey;
  *
  * @package SimpleSAMLphp
  */
-class SignedElementHelper extends SignedElement
+trait SignedElementHelper
 {
+    /**
+     * SignedElement constructor.
+     *
+     * @param XMLSecurityDSig|null $signature
+     */
+    protected $signature;
+
     /**
      * Available methods for validating this message.
      *
@@ -24,45 +32,25 @@ class SignedElementHelper extends SignedElement
      */
     private $validators = [];
 
-    /**
-     * How long this element is valid, as a unix timestamp.
-     *
-     * @var int|null
-     */
-    public $validUntil;
 
     /**
-     * The length of time this element can be cached, as string.
+     * Initialize a signed element from XML.
      *
-     * @var string|null
+     * @param \DOMElement $xml The XML element which may be signed.
+     * @return static
      */
-    public $cacheDuration;
-
-
-    /**
-     * Initialize the helper class.
-     *
-     * @param \DOMElement|null $xml The XML element which may be signed.
-     */
-    protected function __construct(DOMElement $xml = null)
+    protected function getSignatureFromXML(DOMElement $xml): void
     {
-        if ($xml === null) {
-            return;
-        }
-
-        /* Validate the signature element of the message. */
+        // validate the signature element of the message
         try {
             $sig = Utils::validateElement($xml);
 
             if ($sig) {
-                $this->certificates = $sig['Certificates'];
-                $this->validators[] = [
-                    'Function' => [Utils::class, 'validateSignature'],
-                    'Data' => $sig,
-                ];
+                $this->setCertificates($sig['Certificates']);
+                $this->addValidator([Utils::class, 'validateSignature'], $sig);
             }
         } catch (\Exception $e) {
-            /* Ignore signature validation errors. */
+            // ignore signature validation errors
         }
     }
 
@@ -124,64 +112,15 @@ class SignedElementHelper extends SignedElement
 
 
     /**
-     * Retrieve the private key we should use to sign the message.
-     *
-     * @return XMLSecurityKey|null The key, or NULL if no key is specified.
-     */
-    public function getSignatureKey(): ?XMLSecurityKey
-    {
-        return $this->signatureKey;
-    }
-
-
-    /**
-     * Set the private key we should use to sign the message.
-     *
-     * If the key is null, the message will be sent unsigned.
-     *
-     * @param XMLSecurityKey|null $signatureKey
-     * @return void
-     */
-    public function setSignatureKey(XMLSecurityKey $signatureKey = null): void
-    {
-        $this->signatureKey = $signatureKey;
-    }
-
-
-    /**
-     * Set the certificates that should be included in the message.
-     *
-     * The certificates should be strings with the PEM encoded data.
-     *
-     * @param array $certificates An array of certificates.
-     * @return void
-     */
-    public function setCertificates(array $certificates): void
-    {
-        $this->certificates = $certificates;
-    }
-
-
-    /**
-     * Retrieve the certificates that are included in the message.
-     *
-     * @return array An array of certificates.
-     */
-    public function getCertificates(): array
-    {
-        return $this->certificates;
-    }
-
-
-    /**
      * Retrieve certificates that sign this element.
      *
      * @return array Array with certificates.
+     * @throws \Exception if an error occurs while trying to extract the public key from a certificate.
      */
     public function getValidatingCertificates(): array
     {
         $ret = [];
-        foreach ($this->certificates as $cert) {
+        foreach ($this->getCertificates() as $cert) {
             /* Construct a PEM formatted certificate */
             $pemCert = "-----BEGIN CERTIFICATE-----\n" .
                 chunk_split($cert, 64) .
@@ -202,51 +141,6 @@ class SignedElementHelper extends SignedElement
         }
 
         return $ret;
-    }
-
-
-    /**
-     * Collect the value of the validUntil property.
-     *
-     * @return int|null
-     */
-    public function getValidUntil(): ?int
-    {
-        return $this->validUntil;
-    }
-
-    /**
-     * Set the value of the validUntil property.
-     *
-     * @param int|null $validUntil
-     * @return void
-     */
-    public function setValidUntil(int $validUntil = null): void
-    {
-        $this->validUntil = $validUntil;
-    }
-
-
-    /**
-     * Collect the value of the cacheDuration property.
-     *
-     * @return string|null
-     */
-    public function getCacheDuration(): ?string
-    {
-        return $this->cacheDuration;
-    }
-
-
-    /**
-     * Set the value of the cacheDuration property.
-     *
-     * @param string|null $cacheDuration
-     * @return void
-     */
-    public function setCacheDuration(string $cacheDuration = null): void
-    {
-        $this->cacheDuration = $cacheDuration;
     }
 
 
