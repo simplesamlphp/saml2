@@ -87,8 +87,7 @@ XML
      */
     public function testExtensionsAddSome(): void
     {
-        $attribute = new Attribute();
-        $attribute->setName('TheName');
+        $attribute = new Attribute('TheName');
         $scope = new Scope("scope");
 
         Extensions::addList($this->testElement, [$attribute, $scope]);

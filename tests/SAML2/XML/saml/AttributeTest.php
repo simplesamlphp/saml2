@@ -4,36 +4,32 @@ declare(strict_types=1);
 
 namespace SAML2\XML\saml;
 
+use Exception;
+use PHPUnit\Framework\TestCase;
 use SAML2\Constants;
 use SAML2\DOMDocumentFactory;
-use SAML2\Utils;
 
 /**
  * Class \SAML2\XML\saml\AttributeTest
  */
-class AttributeTest extends \PHPUnit\Framework\TestCase
+class AttributeTest extends TestCase
 {
     /**
-     * @return void
+     * Test creating an Attribute from scratch.
      */
     public function testMarshalling(): void
     {
-        $attribute = new Attribute();
-        $attribute->setName('TheName');
-        $attribute->setNameFormat('TheNameFormat');
-        $attribute->setFriendlyName('TheFriendlyName');
-        $attribute->setAttributeValue([
-            new AttributeValue('FirstValue'),
-            new AttributeValue('SecondValue'),
-        ]);
+        $attribute = new Attribute(
+            'TheName',
+            'TheNameFormat',
+            'TheFriendlyName',
+            [
+                new AttributeValue('FirstValue'),
+                new AttributeValue('SecondValue')
+            ]
+        );
 
-        $document = DOMDocumentFactory::fromString('<root />');
-        $attributeElement = $attribute->toXML($document->firstChild);
-
-        $attributeElements = Utils::xpQuery($attributeElement, '/root/saml_assertion:Attribute');
-        $this->assertCount(1, $attributeElements);
-        $attributeElement = $attributeElements[0];
-
+        $attributeElement = $attribute->toXML();
         $this->assertEquals('TheName', $attributeElement->getAttribute('Name'));
         $this->assertEquals('TheNameFormat', $attributeElement->getAttribute('NameFormat'));
         $this->assertEquals('TheFriendlyName', $attributeElement->getAttribute('FriendlyName'));
@@ -41,7 +37,7 @@ class AttributeTest extends \PHPUnit\Framework\TestCase
 
 
     /**
-     * @return void
+     * Test creating of an Attribute from XML.
      */
     public function testUnmarshalling(): void
     {
@@ -54,20 +50,20 @@ class AttributeTest extends \PHPUnit\Framework\TestCase
 XML
         );
 
-        $attribute = new Attribute($document->firstChild);
+        $attribute = Attribute::fromXML($document->documentElement);
         $this->assertEquals('TheName', $attribute->getName());
         $this->assertEquals('TheNameFormat', $attribute->getNameFormat());
         $this->assertEquals('TheFriendlyName', $attribute->getFriendlyName());
-        $this->assertCount(2, $attribute->getAttributeValue());
-        $this->assertEquals('FirstValue', strval($attribute->getAttributeValue()[0]));
-        $this->assertEquals('SecondValue', strval($attribute->getAttributeValue()[1]));
+        $this->assertCount(2, $attribute->getAttributeValues());
+        $this->assertEquals('FirstValue', $attribute->getAttributeValues()[0]->getString());
+        $this->assertEquals('SecondValue', $attribute->getAttributeValues()[1]->getString());
     }
 
 
     /**
-     * @return void
+     * Test that creating an Attribute from XML fails if no Name is provided.
      */
-    public function testUnmarshallingFailure(): void
+    public function testUnmarshallingWithoutName(): void
     {
         $samlNamespace = Constants::NS_SAML;
         $document = DOMDocumentFactory::fromString(<<<XML
@@ -77,7 +73,8 @@ XML
 </saml:Attribute>
 XML
         );
-        $this->expectException(\Exception::class, 'Missing Name on Attribute.');
-        new Attribute($document->firstChild);
+
+        $this->expectException(Exception::class);
+        Attribute::fromXML($document->documentElement);
     }
 }

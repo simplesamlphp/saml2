@@ -5,9 +5,9 @@ declare(strict_types=1);
 namespace SAML2\XML\saml;
 
 use DOMElement;
+use InvalidArgumentException;
 use SAML2\Constants;
 use SAML2\DOMDocumentFactory;
-use SAML2\Utils;
 use Webmozart\Assert\Assert;
 
 /**
@@ -18,11 +18,11 @@ use Webmozart\Assert\Assert;
 class AttributeValue extends AbstractSamlElement
 {
     /**
-     * The raw \DOMElement representing this value.
+     * The raw DOMElement representing this value.
      *
-     * @var \DOMElement
+     * @var DOMElement
      */
-    private $element;
+    protected $element;
 
 
     /**
@@ -30,10 +30,10 @@ class AttributeValue extends AbstractSamlElement
      *
      * @param mixed $value The value of this element. Can be one of:
      *  - string                       Create an attribute value with a simple string.
-     *  - \DOMElement(AttributeValue)  Create an attribute value of the given DOMElement.
-     *  - \DOMElement                  Create an attribute value with the given DOMElement as a child.
+     *  - DOMElement(AttributeValue)  Create an attribute value of the given DOMElement.
+     *  - DOMElement                  Create an attribute value with the given DOMElement as a child.
      *
-     * @throws \InvalidArgumentException if assertions are false
+     * @throws InvalidArgumentException if assertions are false
      */
     public function __construct($value)
     {
@@ -52,20 +52,17 @@ class AttributeValue extends AbstractSamlElement
         }
 
         if ($value->namespaceURI === Constants::NS_SAML && $value->localName === 'AttributeValue') {
-            $this->element = Utils::copyElement($value);
-            return;
+            $this->element = $value;
         }
 
-        $doc = DOMDocumentFactory::create();
-        $this->element = $doc->createElementNS(Constants::NS_SAML, 'saml:AttributeValue');
-        Utils::copyElement($value, $this->element);
+        $this->element = $value;
     }
 
 
     /**
      * Collect the value of the element-property
      *
-     * @return \DOMElement
+     * @return DOMElement
      */
     public function getElement(): DOMElement
     {
@@ -74,22 +71,10 @@ class AttributeValue extends AbstractSamlElement
 
 
     /**
-     * Set the value of the element-property
-     *
-     * @param \DOMElement $element
-     * @return void
-     */
-    private function setElement(DOMElement $element): void
-    {
-        $this->element = $element;
-    }
-
-
-    /**
      * Convert XML into a AttributeValue
      *
-     * @param \DOMElement $xml The XML element we should load
-     * @return \SAML2\XML\saml\AttributeValue
+     * @param DOMElement $xml The XML element we should load
+     * @return AttributeValue
      */
     public static function fromXML(DOMElement $xml): object
     {
@@ -103,13 +88,19 @@ class AttributeValue extends AbstractSamlElement
     /**
      * Append this attribute value to an element.
      *
-     * @param  \DOMElement|null $parent The element we should append this attribute value to.
-     * @return \DOMElement The generated AttributeValue element.
+     * @param  DOMElement|null $parent The element we should append this attribute value to.
+     * @return DOMElement The generated AttributeValue element.
      */
     public function toXML(DOMElement $parent = null): DOMElement
     {
-        $e = $this->instantiateParentElement($parent);
-        return Utils::copyElement($this->element, $e);
+        if ($parent === null) {
+            return $this->element;
+        }
+
+        /** @var DOMElement $element */
+        $element = $parent->ownerDocument->importNode($this->element);
+        $parent->appendChild($element);
+        return $element;
     }
 
 
@@ -121,51 +112,5 @@ class AttributeValue extends AbstractSamlElement
     public function getString(): string
     {
         return $this->element->textContent;
-    }
-
-
-    /**
-     * Convert this attribute value to a string.
-     *
-     * If this element contains XML data, that data will be encoded as a string and returned.
-     *
-     * @return string This attribute value.
-     */
-    public function __toString(): string
-    {
-        $doc = $this->element->ownerDocument;
-
-        $ret = '';
-        foreach ($this->element->childNodes as $c) {
-            $ret .= $doc->saveXML($c);
-        }
-
-        return $ret;
-    }
-
-
-    /**
-     * Serialize this AttributeValue.
-     *
-     * @return string The AttributeValue serialized.
-     */
-    public function serialize(): string
-    {
-        return serialize($this->element->ownerDocument->saveXML($this->element));
-    }
-
-
-    /**
-     * Un-serialize this AttributeValue.
-     *
-     * @param string $serialized The serialized AttributeValue.
-     * @return void
-     *
-     * Type hint not possible due to upstream method signature
-     */
-    public function unserialize($serialized): void
-    {
-        $doc = DOMDocumentFactory::fromString(unserialize($serialized));
-        $this->element = $doc->documentElement;
     }
 }

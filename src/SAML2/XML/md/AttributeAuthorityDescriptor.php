@@ -96,7 +96,7 @@ class AttributeAuthorityDescriptor extends RoleDescriptor
 
         /** @var \DOMElement $a */
         foreach (Utils::xpQuery($xml, './saml_assertion:Attribute') as $a) {
-            $this->addAttribute(new Attribute($a));
+            $this->addAttribute(Attribute::fromXML($a));
         }
     }
 
