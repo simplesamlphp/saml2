@@ -15,6 +15,7 @@ use SAML2\Compat\ContainerInterface;
 use SAML2\Compat\ContainerSingleton;
 use SAML2\Compat\Ssp\Container;
 use SAML2\Exception\RuntimeException;
+use SAML2\XML\AbstractXMLElement;
 use SAML2\XML\ds\KeyInfo;
 use SAML2\XML\ds\X509Certificate;
 use SAML2\XML\ds\X509Data;
@@ -581,6 +582,35 @@ class Utils
             $ret[$language] = trim($node->textContent);
         }
 
+        return $ret;
+    }
+
+
+    /**
+     * Extract localized names from a the children of a given element.
+     *
+     * @param DOMElement $parent The element we want to search.
+     * @param string $class The class of the objects we want to extract.
+     *
+     * @return array An array of objects of class $class.
+     */
+    public static function extractLocalizedNames(\DOMElement $parent, string $class): array
+    {
+        if (!is_subclass_of($class, AbstractXMLElement::class)) {
+            throw new \InvalidArgumentException('$class must extend AbstractXMLElement.');
+        }
+        $qualifiedName = join('', array_slice(explode('\\', $class), -1));
+        $ret = [];
+        foreach ($parent->childNodes as $node) {
+            if ($node->namespaceURI !== $class::NS) {
+                continue;
+            }
+            if ($node->localName !== $qualifiedName) {
+                continue;
+            }
+
+            $ret[] = $class::fromXML($node);
+        }
         return $ret;
     }
 

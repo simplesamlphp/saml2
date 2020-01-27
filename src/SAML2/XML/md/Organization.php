@@ -85,26 +85,18 @@ final class Organization extends AbstractMdElement
      */
     public static function fromXML(DOMElement $xml): object
     {
-        $names = $xml->getElementsByTagNameNS(Constants::NS_MD, 'OrganizationName');
+        $names = Utils::extractLocalizedNames($xml, OrganizationName::class);
         Assert::minCount($names, 1, 'Missing at least one OrganizationName.');
-        $orgNames = [];
-        foreach ($names as $name) {
-            $orgNames[] = OrganizationName::fromXML($name);
-        }
 
-        $displayNames = $xml->getElementsByTagNameNS(Constants::NS_MD, 'OrganizationDisplayName');
+        $displayNames = Utils::extractLocalizedNames($xml, OrganizationDisplayName::class);
         Assert::minCount($displayNames, 1, 'Missing at least one OrganizationDisplayName');
-        $orgDisplayNames = [];
-        foreach ($displayNames as $displayName) {
-            $orgDisplayNames[] = OrganizationDisplayName::fromXML($displayName);
-        }
 
         $url = Utils::extractLocalizedStrings($xml, Constants::NS_MD, 'OrganizationURL');
         if (empty($url)) {
             throw new Exception('No localized organization URL found.');
         }
 
-        return new self($orgNames, $orgDisplayNames, $url, self::getExtensionsFromXML($xml));
+        return new self($names, $displayNames, $url, self::getExtensionsFromXML($xml));
     }
 
 
