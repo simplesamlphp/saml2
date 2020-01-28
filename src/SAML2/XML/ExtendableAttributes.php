@@ -66,7 +66,7 @@ trait ExtendableAttributes
     /**
      * Parse an XML document representing an EndpointType and get the namespaced attributes.
      *
-     * @param DOMElement $xml
+     * @param \DOMElement $xml
      *
      * @return array|null
      */
@@ -90,7 +90,7 @@ trait ExtendableAttributes
      * @param string $namespaceURI  The namespace URI.
      * @param string $qualifiedName The local name.
      * @param string $value The attribute value.
-     * @throws InvalidArgumentException
+     * @throws \InvalidArgumentException
      */
     protected function setAttributeNS(string $namespaceURI, string $qualifiedName, string $value): void
     {
@@ -109,9 +109,9 @@ trait ExtendableAttributes
 
 
     /**
-     * @param DOMAttr[] $attributes
+     * @param \DOMAttr[] $attributes
      *
-     * @throws InvalidArgumentException
+     * @throws \InvalidArgumentException
      */
     protected function setAttributesNS(?array $attributes): void
     {
@@ -119,7 +119,7 @@ trait ExtendableAttributes
             return;
         }
         Assert::allIsInstanceOf($attributes, DOMAttr::class);
-        /** @var DOMAttr $attribute */
+        /** @var \DOMAttr $attribute */
         foreach ($attributes as $attribute) {
             $this->setAttributeNS($attribute->namespaceURI, $attribute->nodeName, $attribute->value);
         }
