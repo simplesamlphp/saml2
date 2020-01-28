@@ -4,7 +4,6 @@ namespace SAML2\XML\md;
 
 use DOMElement;
 use SAML2\SignedElementHelper;
-use SAML2\Utils;
 use SAML2\XML\ExtendableElement;
 
 /**
@@ -45,13 +44,13 @@ abstract class AbstractMetadataDocument extends AbstractSignedMdElement
      * @param string|null $ID The ID for this document. Defaults to null.
      * @param int|null    $validUntil Unix time of validity for this document. Defaults to null.
      * @param string|null $cacheDuration Maximum time this document can be cached. Defaults to null.
-     * @param \SAML2\XML\md\Extensions[]|null $extensions An array of extensions. Defaults to null.
+     * @param \SAML2\XML\md\Extensions|null $extensions An array of extensions. Defaults to null.
      */
     public function __construct(
         ?string $ID = null,
         ?int $validUntil = null,
         ?string $cacheDuration = null,
-        ?array $extensions = null
+        ?Extensions $extensions = null
     ) {
         $this->ID = $ID;
         $this->setValidUntil($validUntil);
@@ -95,24 +94,6 @@ abstract class AbstractMetadataDocument extends AbstractSignedMdElement
     protected function setID(?string $id): void
     {
         $this->ID = $id;
-    }
-
-
-    /**
-     * Process an XML element and get its validUntil property, if any.
-     *
-     * @param \DOMElement $xml An element that may contain validUntil.
-     *
-     * @return int|null
-     *
-     * @throws \Exception If the processed validUntil from $xml is not a valid timestamp.
-     */
-    public static function getValidUntilFromXML(DOMElement $xml): ?int
-    {
-        if ($xml->hasAttribute('validUntil')) {
-            return Utils::xsDateTimeToTimestamp($xml->getAttribute('validUntil'));
-        }
-        return null;
     }
 
 
@@ -197,7 +178,10 @@ abstract class AbstractMetadataDocument extends AbstractSignedMdElement
             $e->setAttribute('cacheDuration', $this->cacheDuration);
         }
 
-        $this->addExtensionsToXML($e);
+        if ($this->Extensions !== null) {
+            $this->Extensions->toXML($e);
+        }
+        
         return $e;
     }
 }

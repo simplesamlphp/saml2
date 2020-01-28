@@ -6,7 +6,6 @@ namespace SAML2\XML\md;
 
 use DOMElement;
 use Exception;
-use InvalidArgumentException;
 use SAML2\Constants;
 use SAML2\Utils;
 use SAML2\XML\ExtendableAttributes;
@@ -22,15 +21,6 @@ final class Organization extends AbstractMdElement
 {
     use ExtendableAttributes;
     use ExtendableElement;
-
-    /**
-     * Extensions on this element.
-     *
-     * Array of extension elements.
-     *
-     * @var array
-     */
-    protected $Extensions = [];
 
     /**
      * The OrganizationName, as an array of language => translation.
@@ -57,16 +47,16 @@ final class Organization extends AbstractMdElement
     /**
      * Organization constructor.
      *
-     * @param \SAML2\XML\md\OrganizationName[]        $organizationName
+     * @param \SAML2\XML\md\OrganizationName[] $organizationName
      * @param \SAML2\XML\md\OrganizationDisplayName[] $organizationDisplayName
-     * @param array                                   $organizationURL
-     * @param array|null                              $extensions
+     * @param array $organizationURL
+     * @param \SAML2\XML\md\Extensions|null $extensions
      */
     public function __construct(
         array $organizationName,
         array $organizationDisplayName,
         array $organizationURL,
-        ?array $extensions = null
+        ?Extensions $extensions = null
     ) {
         $this->setOrganizationName($organizationName);
         $this->setOrganizationDisplayName($organizationDisplayName);
@@ -96,7 +86,10 @@ final class Organization extends AbstractMdElement
             throw new Exception('No localized organization URL found.');
         }
 
-        return new self($names, $displayNames, $url, self::getExtensionsFromXML($xml));
+        $extensions = Extensions::extractFromChildren($xml);
+        Assert::maxCount($extensions, 1, 'Cannot process more than one md:Extensions element.');
+
+        return new self($names, $displayNames, $url, !empty($extensions) ? $extensions[0] : null);
     }
 
 
@@ -191,7 +184,10 @@ final class Organization extends AbstractMdElement
 
         Utils::addStrings($e, Constants::NS_MD, 'md:OrganizationURL', true, $this->OrganizationURL);
 
-        $this->addExtensionsToXML($e);
+        if ($this->Extensions !== null) {
+            $this->Extensions->toXML($e);
+        }
+
         return $e;
     }
 }

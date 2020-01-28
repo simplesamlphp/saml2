@@ -31,15 +31,6 @@ final class ContactPerson extends AbstractMdElement
     protected $contactType;
 
     /**
-     * Extensions on this element.
-     *
-     * Array of extension elements.
-     *
-     * @var array
-     */
-    protected $Extensions = [];
-
-    /**
      * The Company of this contact.
      *
      * @var string|null
@@ -85,7 +76,7 @@ final class ContactPerson extends AbstractMdElement
      * @param string[]|null $email
      * @param string[]|null $telephone
      * @param string[]|null $namespacedAttributes
-     * @param array|null    $extensions
+     * @param \SAML2\XML\md\Extensions|null    $extensions
      */
     public function __construct(
         string $contactType,
@@ -95,7 +86,7 @@ final class ContactPerson extends AbstractMdElement
         ?array $email = null,
         ?array $telephone = null,
         ?array $namespacedAttributes = null,
-        ?array $extensions = null
+        ?Extensions $extensions = null
     ) {
         $this->setContactType($contactType);
         $this->setCompany($company);
@@ -111,10 +102,10 @@ final class ContactPerson extends AbstractMdElement
     /**
      * Initialize a ContactPerson element.
      *
-     * @param DOMElement|null $xml The XML element we should load.
+     * @param \DOMElement|null $xml The XML element we should load.
      *
      * @return self
-     * @throws Exception
+     * @throws \Exception
      */
     public static function fromXML(DOMElement $xml): object
     {
@@ -127,6 +118,8 @@ final class ContactPerson extends AbstractMdElement
         $surName = self::getStringElement($xml, 'SurName');
         $email = self::getStringElements($xml, 'EmailAddress');
         $telephone = self::getStringElements($xml, 'TelephoneNumber');
+        $extensions = Extensions::extractFromChildren($xml);
+        Assert::maxCount($extensions, 1, 'Only one md:Extensions element is allowed.');
 
         return new self(
             $contactType,
@@ -136,7 +129,7 @@ final class ContactPerson extends AbstractMdElement
             $email,
             $telephone,
             self::getAttributesNSFromXML($xml),
-            self::getExtensionsFromXML($xml)
+            (count($extensions) === 1) ? $extensions[0] : null
         );
     }
 
@@ -144,7 +137,7 @@ final class ContactPerson extends AbstractMdElement
     /**
      * Retrieve the value of a child \DOMElements as an array of strings.
      *
-     * @param DOMElement $parent The parent element.
+     * @param \DOMElement $parent The parent element.
      * @param string      $name The name of the child elements.
      *
      * @return array       The value of the child elements.
@@ -165,11 +158,11 @@ final class ContactPerson extends AbstractMdElement
     /**
      * Retrieve the value of a child \DOMElement as a string.
      *
-     * @param DOMElement $parent The parent element.
+     * @param \DOMElement $parent The parent element.
      * @param string      $name The name of the child element.
      *
      * @return string|null The value of the child element.
-     * @throws Exception
+     * @throws \Exception
      */
     private static function getStringElement(DOMElement $parent, string $name): ?string
     {
@@ -329,11 +322,9 @@ final class ContactPerson extends AbstractMdElement
     /**
      * Convert this ContactPerson to XML.
      *
-     * @param DOMElement $parent The element we should add this contact to.
+     * @param \DOMElement $parent The element we should add this contact to.
      *
-     * @return DOMElement The new ContactPerson-element.
-     *
-     * @throws InvalidArgumentException if assertions are false
+     * @return \DOMElement The new ContactPerson-element.
      */
     public function toXML(DOMElement $parent = null): DOMElement
     {
@@ -345,7 +336,9 @@ final class ContactPerson extends AbstractMdElement
             $e->setAttributeNS($attr['namespaceURI'], $attr['qualifiedName'], $attr['value']);
         }
 
-        $this->addExtensionsToXML($e);
+        if ($this->Extensions !== null) {
+            $this->Extensions->toXML($e);
+        }
 
         if ($this->Company !== null) {
             Utils::addString($e, Constants::NS_MD, 'md:Company', $this->Company);
