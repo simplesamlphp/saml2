@@ -35,14 +35,14 @@ final class Organization extends AbstractMdElement
     /**
      * The OrganizationName, as an array of language => translation.
      *
-     * @var OrganizationName[]
+     * @var \SAML2\XML\md\OrganizationName[]
      */
     protected $OrganizationName = [];
 
     /**
      * The OrganizationDisplayName, as an array of language => translation.
      *
-     * @var OrganizationDisplayName[]
+     * @var \SAML2\XML\md\OrganizationDisplayName[]
      */
     protected $OrganizationDisplayName = [];
 
@@ -57,10 +57,10 @@ final class Organization extends AbstractMdElement
     /**
      * Organization constructor.
      *
-     * @param OrganizationName[]        $organizationName
-     * @param OrganizationDisplayName[] $organizationDisplayName
-     * @param array                     $organizationURL
-     * @param array|null                $extensions
+     * @param \SAML2\XML\md\OrganizationName[]        $organizationName
+     * @param \SAML2\XML\md\OrganizationDisplayName[] $organizationDisplayName
+     * @param array                                   $organizationURL
+     * @param array|null                              $extensions
      */
     public function __construct(
         array $organizationName,
@@ -78,10 +78,10 @@ final class Organization extends AbstractMdElement
     /**
      * Initialize an Organization element.
      *
-     * @param DOMElement|null $xml The XML element we should load.
+     * @param \DOMElement|null $xml The XML element we should load.
      *
      * @return self
-     * @throws Exception if the XML lacks any of the mandatory elements.
+     * @throws \Exception if the XML lacks any of the mandatory elements.
      */
     public static function fromXML(DOMElement $xml): object
     {
@@ -111,7 +111,7 @@ final class Organization extends AbstractMdElement
     /**
      * Collect the value of the OrganizationName property.
      *
-     * @return OrganizationName[]
+     * @return \SAML2\XML\md\OrganizationName[]
      */
     public function getOrganizationName(): array
     {
@@ -122,7 +122,7 @@ final class Organization extends AbstractMdElement
     /**
      * Set the value of the OrganizationName property.
      *
-     * @param OrganizationName[] $organizationName
+     * @param \SAML2\XML\md\OrganizationName[] $organizationName
      */
     protected function setOrganizationName(array $organizationName): void
     {
@@ -134,7 +134,7 @@ final class Organization extends AbstractMdElement
     /**
      * Collect the value of the OrganizationDisplayName property.
      *
-     * @return OrganizationDisplayName[]
+     * @return \SAML2\XML\md\OrganizationDisplayName[]
      */
     public function getOrganizationDisplayName(): array
     {
@@ -145,7 +145,7 @@ final class Organization extends AbstractMdElement
     /**
      * Set the value of the OrganizationDisplayName property.
      *
-     * @param OrganizationDisplayName[] $organizationDisplayName
+     * @param \SAML2\XML\md\OrganizationDisplayName[] $organizationDisplayName
      */
     protected function setOrganizationDisplayName(array $organizationDisplayName): void
     {
@@ -180,11 +180,11 @@ final class Organization extends AbstractMdElement
     /**
      * Convert this Organization to XML.
      *
-     * @param DOMElement $parent The element we should add this organization to.
+     * @param \DOMElement $parent The element we should add this organization to.
      *
-     * @return DOMElement This Organization-element.
+     * @return \DOMElement This Organization-element.
      *
-     * @throws InvalidArgumentException if assertions are false
+     * @throws \InvalidArgumentException if assertions are false
      */
     public function toXML(DOMElement $parent = null): DOMElement
     {
