@@ -66,46 +66,6 @@ final class Organization extends AbstractMdElement
 
 
     /**
-     * Initialize an Organization element.
-     *
-     * @param \DOMElement|null $xml The XML element we should load.
-     *
-     * @return self
-     * @throws \Exception if the XML lacks any of the mandatory elements.
-     */
-    public static function fromXML(DOMElement $xml): object
-    {
-        $names = $xml->getElementsByTagNameNS(Constants::NS_MD, 'OrganizationName');
-        Assert::minCount($names, 1, 'Missing at least one OrganizationName.');
-        $orgNames = [];
-        foreach ($names as $name) {
-            $orgNames[] = OrganizationName::fromXML($name);
-        }
-
-        $displayNames = $xml->getElementsByTagNameNS(Constants::NS_MD, 'OrganizationDisplayName');
-        Assert::minCount($displayNames, 1, 'Missing at least one OrganizationDisplayName');
-        $orgDisplayNames = [];
-        foreach ($displayNames as $displayName) {
-            $orgDisplayNames[] = OrganizationDisplayName::fromXML($displayName);
-        }
-
-        $url = Utils::extractLocalizedStrings($xml, Constants::NS_MD, 'OrganizationURL');
-        if (empty($url)) {
-            throw new Exception('No localized organization URL found.');
-        }
-
-<<<<<<< HEAD
-        return new self($orgNames, $orgDisplayNames, $url, self::getExtensionsFromXML($xml));
-=======
-        $extensions = Extensions::extractFromChildren($xml);
-        Assert::maxCount($extensions, 1, 'Cannot process more than one md:Extensions element.');
-
-        return new self($names, $displayNames, $url, !empty($extensions) ? $extensions[0] : null);
->>>>>>> e6e1938... Simplify extensions
-    }
-
-
-    /**
      * Collect the value of the OrganizationName property.
      *
      * @return \SAML2\XML\md\OrganizationName[]
@@ -171,6 +131,34 @@ final class Organization extends AbstractMdElement
     {
         Assert::allStringNotEmpty($organizationURL, 'Incorrect OrganizationURL.');
         $this->OrganizationURL = $organizationURL;
+    }
+
+
+    /**
+     * Initialize an Organization element.
+     *
+     * @param \DOMElement|null $xml The XML element we should load.
+     *
+     * @return self
+     * @throws \Exception if the XML lacks any of the mandatory elements.
+     */
+    public static function fromXML(DOMElement $xml): object
+    {
+        $names = OrganizationName::getChildrenOfClass($xml);
+        Assert::minCount($names, 1, 'Missing at least one OrganizationName.');
+
+        $displayNames = OrganizationDisplayName::getChildrenOfClass($xml);
+        Assert::minCount($displayNames, 1, 'Missing at least one OrganizationDisplayName');
+
+        $url = Utils::extractLocalizedStrings($xml, Constants::NS_MD, 'OrganizationURL');
+        if (empty($url)) {
+            throw new Exception('No localized organization URL found.');
+        }
+
+        $extensions = Extensions::getChildrenOfClass($xml);
+        Assert::maxCount($extensions, 1, 'Cannot process more than one md:Extensions element.');
+
+        return new self($names, $displayNames, $url, !empty($extensions) ? $extensions[0] : null);
     }
 
 
