@@ -133,7 +133,7 @@ abstract class RoleDescriptor extends SignedElementHelper
 
         foreach (Utils::xpQuery($xml, './saml_metadata:ContactPerson') as $cp) {
             /** @var \DOMElement $cp */
-            $this->ContactPerson[] = new ContactPerson($cp);
+            $this->ContactPerson[] = ContactPerson::fromXML($cp);
         }
     }
 
