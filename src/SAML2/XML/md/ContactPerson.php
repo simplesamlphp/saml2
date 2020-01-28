@@ -75,7 +75,7 @@ final class ContactPerson extends AbstractMdElement
      * @param string|null   $surName
      * @param string[]|null $email
      * @param string[]|null $telephone
-     * @param string[]|null $namespacedAttributes
+     * @param \DOMAttr[]|null $namespacedAttributes
      * @param \SAML2\XML\md\Extensions|null    $extensions
      */
     public function __construct(
@@ -430,14 +430,7 @@ final class ContactPerson extends AbstractMdElement
      */
     public function toXML(DOMElement $parent = null): DOMElement
     {
-        Assert::notEmpty($this->contactType);
-        Assert::allEmail($this->EmailAddress);
-
-        $doc = $parent->ownerDocument;
-
-        $e = $doc->createElementNS(Constants::NS_MD, 'md:ContactPerson');
-        $parent->appendChild($e);
-
+        $e = $this->instantiateParentElement($parent);
         $e->setAttribute('contactType', $this->contactType);
 
         foreach ($this->ContactPersonAttributes as $attr => $val) {
