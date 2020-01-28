@@ -155,7 +155,7 @@ class EntityDescriptor extends SignedElementHelper
                     $this->ContactPerson[] = ContactPerson::fromXML($node);
                     break;
                 case 'AdditionalMetadataLocation':
-                    $this->AdditionalMetadataLocation[] = new AdditionalMetadataLocation($node);
+                    $this->AdditionalMetadataLocation[] = AdditionalMetadataLocation::fromXML($node);
                     break;
             }
         }
