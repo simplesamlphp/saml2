@@ -42,12 +42,22 @@ class StatusTest extends \PHPUnit\Framework\TestCase
             ]
         );
 
-        $this->assertEquals(
-            '<samlp:Status xmlns:samlp="' . Constants::NS_SAMLP . '"><samlp:StatusCode Value="'
-                . Constants::STATUS_RESPONDER . '"><samlp:StatusCode Value="' . Constants::STATUS_REQUEST_DENIED
-                . '"/></samlp:StatusCode><samlp:StatusMessage>Something went wrong</samlp:StatusMessage>'
-                . '<samlp:StatusDetail><Cause>org.sourceid.websso.profiles.idp.FailedAuthnSsoException</Cause>'
-                . '</samlp:StatusDetail></samlp:Status>',
+        $nssamlp = Status::NS;
+        $status_responder = Constants::STATUS_RESPONDER;
+        $status_request_denied = Constants::STATUS_REQUEST_DENIED;
+
+        $this->assertEquals(<<<XML
+<samlp:Status xmlns:samlp="{$nssamlp}">
+  <samlp:StatusCode Value="{$status_responder}">
+    <samlp:StatusCode Value="{$status_request_denied}"/>
+  </samlp:StatusCode>
+  <samlp:StatusMessage>Something went wrong</samlp:StatusMessage>
+  <samlp:StatusDetail>
+    <Cause>org.sourceid.websso.profiles.idp.FailedAuthnSsoException</Cause>
+  </samlp:StatusDetail>
+</samlp:Status>
+XML
+            ,
             strval($status)
         );
 
@@ -83,13 +93,18 @@ class StatusTest extends \PHPUnit\Framework\TestCase
      */
     public function testUnmarshalling(): void
     {
-        $document = DOMDocumentFactory::fromString(
-            '<samlp:Status xmlns:samlp="' . Constants::NS_SAMLP . '">'
-                . '<samlp:StatusCode Value="urn:oasis:names:tc:SAML:2.0:status:Responder">'
-                . '<samlp:StatusCode Value="urn:oasis:names:tc:SAML:2.0:status:RequestDenied"/>'
-                . '</samlp:StatusCode><samlp:StatusMessage>Something went wrong</samlp:StatusMessage>'
-                . '<samlp:StatusDetail><Cause>org.sourceid.websso.profiles.idp.FailedAuthnSsoException</Cause>'
-                . '</samlp:StatusDetail></samlp:Status>'
+        $nssamlp = StatusTest::NS;
+        $document = DOMDocumentFactory::fromString(<<<XML
+<samlp:Status xmlns:samlp="{$nssamlp}">
+  <samlp:StatusCode Value="urn:oasis:names:tc:SAML:2.0:status:Responder">
+    <samlp:StatusCode Value="urn:oasis:names:tc:SAML:2.0:status:RequestDenied"/>
+  </samlp:StatusCode>
+  <samlp:StatusMessage>Something went wrong</samlp:StatusMessage>
+  <samlp:StatusDetail>
+    <Cause>org.sourceid.websso.profiles.idp.FailedAuthnSsoException</Cause>
+  </samlp:StatusDetail>
+</samlp:Status>
+XML
         );
 
         /** @psalm-var \DOMElement $document->firstChild */
