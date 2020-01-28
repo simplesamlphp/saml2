@@ -9,9 +9,9 @@ use SAML2\Compat\Ssp\Container;
 class ContainerSingleton
 {
     /**
-     * @var \SAML2\Compat\ContainerInterface
+     * @var \SAML2\Compat\ContainerInterface|null
      */
-    protected static $container;
+    protected static $container = null;
 
 
     /**

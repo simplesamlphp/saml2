@@ -229,6 +229,7 @@ abstract class AbstractXMLElement implements Serializable
                 continue;
             }
 
+            /** @psalm-var \DOMElement $node */
             $ret[] = static::fromXML($node);
         }
         return $ret;
