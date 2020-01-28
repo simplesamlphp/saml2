@@ -68,37 +68,6 @@ final class AttributeConsumingService extends AbstractMdElement
 
 
     /**
-     * Initialize / parse an AttributeConsumingService.
-     *
-     * @param DOMElement $xml The XML element we should load.
-     *
-     * @return self
-     * @throws Exception
-     */
-    public static function fromXML(DOMElement $xml): object
-    {
-        $names = ServiceName::getChildrenOfClass($xml);
-        Assert::minCount($names, 1, 'Missing at least one ServiceName in AttributeConsumingService.');
-
-        $descriptions = ServiceDescription::getChildrenOfClass($xml);
-
-        $requestedAttrs = [];
-        /** @var DOMElement $ra */
-        foreach (Utils::xpQuery($xml, './saml_metadata:RequestedAttribute') as $ra) {
-            $requestedAttrs[] = RequestedAttribute::fromXML($ra);
-        }
-
-        return new self(
-            self::getIntegerAttribute($xml, 'index'),
-            $names,
-            $requestedAttrs,
-            self::getBooleanAttribute($xml, 'isDefault', null),
-            $descriptions
-        );
-    }
-
-
-    /**
      * Get the localized names of this service.
      *
      * @return ServiceName[]
@@ -186,6 +155,37 @@ final class AttributeConsumingService extends AbstractMdElement
             'Missing at least one RequestedAttribute in AttributeConsumingService.'
         );
         $this->requestedAttributes = $requestedAttributes;
+    }
+
+
+    /**
+     * Initialize / parse an AttributeConsumingService.
+     *
+     * @param DOMElement $xml The XML element we should load.
+     *
+     * @return self
+     * @throws Exception
+     */
+    public static function fromXML(DOMElement $xml): object
+    {
+        $names = ServiceName::getChildrenOfClass($xml);
+        Assert::minCount($names, 1, 'Missing at least one ServiceName in AttributeConsumingService.');
+
+        $descriptions = ServiceDescription::getChildrenOfClass($xml);
+
+        $requestedAttrs = [];
+        /** @var DOMElement $ra */
+        foreach (Utils::xpQuery($xml, './saml_metadata:RequestedAttribute') as $ra) {
+            $requestedAttrs[] = RequestedAttribute::fromXML($ra);
+        }
+
+        return new self(
+            self::getIntegerAttribute($xml, 'index'),
+            $names,
+            $requestedAttrs,
+            self::getBooleanAttribute($xml, 'isDefault', null),
+            $descriptions
+        );
     }
 
 
