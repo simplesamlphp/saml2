@@ -5,7 +5,8 @@ declare(strict_types=1);
 namespace SAML2\XML\md;
 
 use DOMElement;
-use SAML2\Constants;
+use Exception;
+use InvalidArgumentException;
 use SAML2\Utils;
 use Webmozart\Assert\Assert;
 
@@ -14,233 +15,192 @@ use Webmozart\Assert\Assert;
  *
  * @package SimpleSAMLphp
  */
-class AttributeConsumingService
+final class AttributeConsumingService extends AbstractMdElement
 {
-    /**
-     * The index of this AttributeConsumingService.
-     *
-     * @var int
-     */
-    private $index;
-
-    /**
-     * Whether this is the default AttributeConsumingService.
-     *
-     * @var bool|null
-     */
-    private $isDefault = null;
+    use IndexedElement;
 
     /**
      * The ServiceName of this AttributeConsumingService.
      *
-     * This is an associative array with language => translation.
-     *
-     * @var array
+     * @var ServiceName[]
      */
-    private $ServiceName = [];
+    protected $serviceNames = [];
 
     /**
      * The ServiceDescription of this AttributeConsumingService.
      *
-     * This is an associative array with language => translation.
-     *
-     * @var array
+     * @var ServiceDescription[]
      */
-    private $ServiceDescription = [];
+    protected $serviceDescriptions = [];
 
     /**
      * The RequestedAttribute elements.
      *
      * This is an array of SAML_RequestedAttributeType elements.
      *
-     * @var \SAML2\XML\md\RequestedAttribute[]
+     * @var RequestedAttribute[]
      */
-    private $RequestedAttribute = [];
+    protected $requestedAttributes = [];
+
+
+    /**
+     * AttributeConsumingService constructor.
+     *
+     * @param int                  $index
+     * @param string[]             $name
+     * @param RequestedAttribute[] $requestedAttributes
+     * @param bool|null            $isDefault
+     * @param array|null           $description
+     */
+    public function __construct(
+        int $index,
+        array $name,
+        array $requestedAttributes,
+        ?bool $isDefault = null,
+        ?array $description = null
+    ) {
+        $this->setIndex($index);
+        $this->setServiceNames($name);
+        $this->setRequestedAttributes($requestedAttributes);
+        $this->setIsDefault($isDefault);
+        $this->setServiceDescriptions($description);
+    }
 
 
     /**
      * Initialize / parse an AttributeConsumingService.
      *
-     * @param \DOMElement|null $xml The XML element we should load.
-     * @throws \Exception
+     * @param DOMElement|null $xml The XML element we should load.
+     *
+     * @return self
+     * @throws Exception
      */
-    public function __construct(DOMElement $xml = null)
+    public static function fromXML(DOMElement $xml): object
     {
-        if ($xml === null) {
-            return;
-        }
+        $names = ServiceName::extractFromChildren($xml);
+        Assert::minCount($names, 1, 'Missing at least one ServiceName in AttributeConsumingService.');
 
-        if (!$xml->hasAttribute('index')) {
-            throw new \Exception('Missing index on AttributeConsumingService.');
-        }
-        $this->setIndex(intval($xml->getAttribute('index')));
+        $descriptions = ServiceDescription::extractFromChildren($xml);
 
-        $this->setIsDefault(Utils::parseBoolean($xml, 'isDefault', null));
-
-        $this->setServiceName(Utils::extractLocalizedStrings($xml, Constants::NS_MD, 'ServiceName'));
-        if ($this->getServiceName() === []) {
-            throw new \Exception('Missing ServiceName in AttributeConsumingService.');
-        }
-
-        $this->setServiceDescription(Utils::extractLocalizedStrings($xml, Constants::NS_MD, 'ServiceDescription'));
-
-        /** @var \DOMElement $ra */
+        $requestedAttrs = [];
+        /** @var DOMElement $ra */
         foreach (Utils::xpQuery($xml, './saml_metadata:RequestedAttribute') as $ra) {
-            $this->addRequestedAttribute(RequestedAttribute::fromXML($ra));
+            $requestedAttrs[] = RequestedAttribute::fromXML($ra);
         }
+
+        return new self(
+            self::getIndexFromXML($xml),
+            $names,
+            $requestedAttrs,
+            self::getIsDefaultFromXML($xml),
+            $descriptions
+        );
     }
 
 
     /**
-     * Collect the value of the index-property
+     * Get the localized names of this service.
      *
-     * @return int
-     *
-     * @throws \InvalidArgumentException if assertions are false
+     * @return ServiceName[]
      */
-    public function getIndex(): int
+    public function getServiceNames(): array
     {
-        Assert::notEmpty($this->index);
-
-        return $this->index;
+        return $this->serviceNames;
     }
 
 
     /**
-     * Set the value of the index-property
+     * Set the localized names of this service.
      *
-     * @param int $index
+     * @param ServiceName[] $serviceNames
+     *
      * @return void
      */
-    public function setIndex(int $index): void
+    protected function setServiceNames(array $serviceNames): void
     {
-        $this->index = $index;
-    }
-
-
-    /**
-     * Collect the value of the isDefault-property
-     *
-     * @return bool|null
-     */
-    public function getIsDefault(): ?bool
-    {
-        return $this->isDefault;
-    }
-
-
-    /**
-     * Set the value of the isDefault-property
-     *
-     * @param bool|null $flag
-     * @return void
-     */
-    public function setIsDefault(bool $flag = null): void
-    {
-        $this->isDefault = $flag;
-    }
-
-
-    /**
-     * Collect the value of the ServiceName-property
-     *
-     * @return string[]
-     */
-    public function getServiceName(): array
-    {
-        return $this->ServiceName;
-    }
-
-
-    /**
-     * Set the value of the ServiceName-property
-     *
-     * @param string[] $serviceName
-     * @return void
-     */
-    public function setServiceName(array $serviceName): void
-    {
-        $this->ServiceName = $serviceName;
+        Assert::minCount($serviceNames, 1, 'Missing at least one ServiceName in AttributeConsumingService.');
+        Assert::allIsInstanceOf(
+            $serviceNames,
+            ServiceName::class,
+            'Service names must be specified as ServiceName objects.'
+        );
+        $this->serviceNames = $serviceNames;
     }
 
 
     /**
      * Collect the value of the ServiceDescription-property
      *
-     * @return string[]
+     * @return ServiceDescription[]
      */
-    public function getServiceDescription(): array
+    public function getServiceDescriptions(): array
     {
-        return $this->ServiceDescription;
+        return $this->serviceDescriptions;
     }
 
 
     /**
      * Set the value of the ServiceDescription-property
      *
-     * @param string[] $serviceDescription
+     * @param ServiceDescription[] $serviceDescriptions
+     *
      * @return void
      */
-    public function setServiceDescription(array $serviceDescription): void
+    protected function setServiceDescriptions(?array $serviceDescriptions): void
     {
-        $this->ServiceDescription = $serviceDescription;
+        if ($serviceDescriptions === null) {
+            return;
+        }
+        Assert::allIsInstanceOf(
+            $serviceDescriptions,
+            ServiceDescription::class,
+            'Service descriptions must be specified as ServiceDescription objects.'
+        );
+        $this->serviceDescriptions = $serviceDescriptions;
     }
 
 
     /**
      * Collect the value of the RequestedAttribute-property
      *
-     * @return \SAML2\XML\md\RequestedAttribute[]
+     * @return RequestedAttribute[]
      */
-    public function getRequestedAttribute(): array
+    public function getRequestedAttributes(): array
     {
-        return $this->RequestedAttribute;
+        return $this->requestedAttributes;
     }
 
 
     /**
      * Set the value of the RequestedAttribute-property
      *
-     * @param \SAML2\XML\md\RequestedAttribute[] $requestedAttribute
-     * @return void
-     */
-    public function setRequestedAttribute(array $requestedAttribute): void
-    {
-        $this->RequestedAttribute = $requestedAttribute;
-    }
-
-
-    /**
-     * Add the value to the RequestedAttribute-property
+     * @param RequestedAttribute[] $requestedAttributes
      *
-     * @param \SAML2\XML\md\RequestedAttribute $requestedAttribute
      * @return void
      */
-    public function addRequestedAttribute(RequestedAttribute $requestedAttribute): void
+    public function setRequestedAttributes(array $requestedAttributes): void
     {
-        $this->RequestedAttribute[] = $requestedAttribute;
+        Assert::minCount(
+            $requestedAttributes,
+            1,
+            'Missing at least one RequestedAttribute in AttributeConsumingService.'
+        );
+        $this->requestedAttributes = $requestedAttributes;
     }
 
 
     /**
      * Convert to \DOMElement.
      *
-     * @param \DOMElement $parent The element we should append this AttributeConsumingService to.
-     * @return \DOMElement
+     * @param DOMElement $parent The element we should append this AttributeConsumingService to.
      *
-     * @throws \InvalidArgumentException if assertions are false
+     * @return DOMElement
+     *
+     * @throws InvalidArgumentException if assertions are false
      */
-    public function toXML(DOMElement $parent): DOMElement
+    public function toXML(DOMElement $parent = null): DOMElement
     {
-        Assert::notEmpty($this->index);
-        Assert::notEmpty($this->ServiceName);
-        Assert::notEmpty($this->ServiceDescription);
-
-        $doc = $parent->ownerDocument;
-
-        $e = $doc->createElementNS(Constants::NS_MD, 'md:AttributeConsumingService');
-        $parent->appendChild($e);
-
+        $e = $this->instantiateParentElement($parent);
         $e->setAttribute('index', strval($this->index));
 
         if ($this->isDefault === true) {
@@ -249,10 +209,13 @@ class AttributeConsumingService
             $e->setAttribute('isDefault', 'false');
         }
 
-        Utils::addStrings($e, Constants::NS_MD, 'md:ServiceName', true, $this->ServiceName);
-        Utils::addStrings($e, Constants::NS_MD, 'md:ServiceDescription', true, $this->ServiceDescription);
-
-        foreach ($this->RequestedAttribute as $ra) {
+        foreach ($this->serviceNames as $name) {
+            $name->toXML($e);
+        }
+        foreach ($this->serviceDescriptions as $description) {
+            $description->toXML($e);
+        }
+        foreach ($this->requestedAttributes as $ra) {
             $ra->toXML($e);
         }
 
