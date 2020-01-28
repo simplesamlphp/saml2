@@ -76,14 +76,14 @@ abstract class AbstractXMLElement implements Serializable
      */
     public function instantiateParentElement(DOMElement $parent = null): DOMElement
     {
-        $qualifiedName = join('', array_slice(explode('\\', get_class($this)), -1));
+        $qualifiedName = $this->getQualifiedName();
 
         if ($parent === null) {
             $doc = DOMDocumentFactory::create();
-            $e = $doc->createElementNS($this::NS, $this::NS_PREFIX . ':' . $qualifiedName);
+            $e = $doc->createElementNS($this::NS, $qualifiedName);
             $doc->appendChild($e);
         } else {
-            $e = $parent->ownerDocument->createElementNS($this::NS, $this::NS_PREFIX . ':' . $qualifiedName);
+            $e = $parent->ownerDocument->createElementNS($this::NS, $qualifiedName);
             $parent->appendChild($e);
         }
 
@@ -99,6 +99,65 @@ abstract class AbstractXMLElement implements Serializable
     public function isEmptyElement(): bool
     {
         return false;
+    }
+
+
+    /**
+     * Static method that processes a fully namespaced class name and returns the name of the class from it.
+     *
+     * @param string $class
+     *
+     * @return string
+     */
+    protected static function getClassName(string $class): string
+    {
+        return join('', array_slice(explode('\\', $class), -1));
+    }
+
+
+    /**
+     * Get the XML local name of the element represented by this class.
+     *
+     * @return string
+     */
+    public function getLocalName(): string
+    {
+        return self::getClassName(get_class($this));
+    }
+
+
+    /**
+     * Get the XML qualified name (prefix:name) of the element represented by this class.
+     *
+     * @return string
+     */
+    public function getQualifiedName(): string
+    {
+        return static::NS_PREFIX . ':' . $this->getLocalName();
+    }
+
+
+    /**
+     * Extract localized names from a the children of a given element.
+     *
+     * @param DOMElement $parent The element we want to search.
+     *
+     * @return array An array of objects of class $class.
+     */
+    public static function extractFromChildren(\DOMElement $parent): array
+    {
+        $ret = [];
+        foreach ($parent->childNodes as $node) {
+            if ($node->namespaceURI !== static::NS) {
+                continue;
+            }
+            if ($node->localName !== self::getClassName(static::class)) {
+                continue;
+            }
+
+            $ret[] = static::fromXML($node);
+        }
+        return $ret;
     }
 
 

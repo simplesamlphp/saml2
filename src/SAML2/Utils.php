@@ -587,35 +587,6 @@ class Utils
 
 
     /**
-     * Extract localized names from a the children of a given element.
-     *
-     * @param DOMElement $parent The element we want to search.
-     * @param string $class The class of the objects we want to extract.
-     *
-     * @return array An array of objects of class $class.
-     */
-    public static function extractLocalizedNames(\DOMElement $parent, string $class): array
-    {
-        if (!is_subclass_of($class, AbstractXMLElement::class)) {
-            throw new \InvalidArgumentException('$class must extend AbstractXMLElement.');
-        }
-        $qualifiedName = join('', array_slice(explode('\\', $class), -1));
-        $ret = [];
-        foreach ($parent->childNodes as $node) {
-            if ($node->namespaceURI !== $class::NS) {
-                continue;
-            }
-            if ($node->localName !== $qualifiedName) {
-                continue;
-            }
-
-            $ret[] = $class::fromXML($node);
-        }
-        return $ret;
-    }
-
-
-    /**
      * Extract strings from a set of nodes.
      *
      * @param \DOMElement $parent The element that contains the localized strings.

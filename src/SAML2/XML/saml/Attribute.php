@@ -54,7 +54,7 @@ class Attribute extends AbstractSamlElement
      * @param string $Name
      * @param string|null $NameFormat
      * @param string|null $FriendlyName
-     * @param array|null $AttributeValues
+     * @param AttributeValue[]|null $AttributeValues
      */
     public function __construct(
         string $Name,
@@ -66,6 +66,22 @@ class Attribute extends AbstractSamlElement
         $this->setNameFormat($NameFormat);
         $this->setFriendlyName($FriendlyName);
         $this->setAttributeValues($AttributeValues);
+    }
+
+
+    /**
+     * Process the XML of an Attribute element and return its Name property.
+     *
+     * @param DOMElement $xml
+     *
+     * @return string
+     */
+    public static function getNameFromXML(DOMElement $xml): string
+    {
+        Assert::true($xml->hasAttribute('Name'), 'Missing Name attribute.');
+        $name = $xml->getAttribute('Name');
+        Assert::notEmpty($name, 'Cannot specify an empty name for an Attribute.');
+        return $name;
     }
 
 
@@ -89,6 +105,24 @@ class Attribute extends AbstractSamlElement
     {
         Assert::notEmpty($name, 'Cannot specify an empty name for an Attribute.');
         $this->Name = $name;
+    }
+
+
+    /**
+     * Process the XML of an Attribute element and return its NameFormat property.
+     *
+     * @param DOMElement $xml
+     *
+     * @return string|null
+     */
+    public static function getNameFormatFromXML(DOMElement $xml): ?string
+    {
+        if (!$xml->hasAttribute('NameFormat')) {
+            return null;
+        }
+        $nameFormat = $xml->getAttribute('NameFormat');
+        Assert::notEmpty($nameFormat, 'NameFormat must be a URI, not an empty string.');
+        return $nameFormat;
     }
 
 
@@ -119,6 +153,24 @@ class Attribute extends AbstractSamlElement
 
 
     /**
+     * Process the XML of an Attribute element and return its FriendlyName property.
+     *
+     * @param DOMElement $xml
+     *
+     * @return string|null
+     */
+    public static function getFriendlyNameFromXML(DOMElement $xml): ?string
+    {
+        if (!$xml->hasAttribute('FriendlyName')) {
+            return null;
+        }
+        $friendlyName = $xml->getAttribute('FriendlyName');
+        Assert::notEmpty($friendlyName, 'FriendlyName cannot be an empty string.');
+        return $friendlyName;
+    }
+
+
+    /**
      * Collect the value of the FriendlyName-property
      *
      * @return string|null
@@ -141,6 +193,17 @@ class Attribute extends AbstractSamlElement
 
 
     /**
+     * @param DOMElement $xml
+     *
+     * @return array
+     */
+    public static function getAttributeValuesFromXML(DOMElement $xml): array
+    {
+        return AttributeValue::extractFromChildren($xml);
+    }
+
+
+    /**
      * Collect the value of the attributeValues-property
      *
      * @return AttributeValue[]|null
@@ -154,7 +217,7 @@ class Attribute extends AbstractSamlElement
     /**
      * Set the value of the AttributeValues-property
      *
-     * @param array $attributeValues|null
+     * @param AttributeValue[] $attributeValues|null
      */
     protected function setAttributeValues(?array $attributeValues): void
     {
@@ -179,21 +242,12 @@ class Attribute extends AbstractSamlElement
         Assert::same($xml->localName, 'Attribute');
         Assert::same($xml->namespaceURI, Constants::NS_SAML);
 
-        if (!$xml->hasAttribute('Name')) {
-            throw new Exception('Missing Name on Attribute.');
-        }
-
-        $Name = $xml->getAttribute('Name');
-        $NameFormat = $xml->hasAttribute('NameFormat') ? $xml->getAttribute('NameFormat') : null;
-        $FriendlyName = $xml->hasAttribute('FriendlyName') ? $xml->getAttribute('FriendlyName') : null;
-
-        $attributeValues = [];
-        /** @psalm-var \DOMElement $av */
-        foreach (Utils::xpQuery($xml, './saml_assertion:AttributeValue') as $av) {
-            $attributeValues[] = AttributeValue::fromXML($av);
-        }
-
-        return new self($Name, $NameFormat, $FriendlyName, $attributeValues);
+        return new self(
+            self::getNameFromXML($xml),
+            self::getNameFormatFromXML($xml),
+            self::getFriendlyNameFromXML($xml),
+            self::getAttributeValuesFromXML($xml)
+        );
     }
 
 

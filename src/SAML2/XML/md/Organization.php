@@ -85,10 +85,10 @@ final class Organization extends AbstractMdElement
      */
     public static function fromXML(DOMElement $xml): object
     {
-        $names = Utils::extractLocalizedNames($xml, OrganizationName::class);
+        $names = OrganizationName::extractFromChildren($xml);
         Assert::minCount($names, 1, 'Missing at least one OrganizationName.');
 
-        $displayNames = Utils::extractLocalizedNames($xml, OrganizationDisplayName::class);
+        $displayNames = OrganizationDisplayName::extractFromChildren($xml);
         Assert::minCount($displayNames, 1, 'Missing at least one OrganizationDisplayName');
 
         $url = Utils::extractLocalizedStrings($xml, Constants::NS_MD, 'OrganizationURL');
