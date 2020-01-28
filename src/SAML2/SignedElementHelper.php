@@ -6,22 +6,19 @@ namespace SAML2;
 
 use DOMElement;
 use DOMNode;
-use RobRichards\XMLSecLibs\XMLSecurityDSig;
 use RobRichards\XMLSecLibs\XMLSecurityKey;
 
 /**
- * Helper class for processing signed elements.
- *
- * Can either be inherited from, or can be used by proxy.
+ * Helper trait for processing signed elements.
  *
  * @package SimpleSAMLphp
  */
 trait SignedElementHelper
 {
     /**
-     * SignedElement constructor.
+     * The signature of this element.
      *
-     * @param XMLSecurityDSig|null $signature
+     * @var \RobRichards\XMLSecLibs\XMLSecurityDSig|null $signature
      */
     protected $signature;
 
@@ -37,7 +34,6 @@ trait SignedElementHelper
      * Initialize a signed element from XML.
      *
      * @param \DOMElement $xml The XML element which may be signed.
-     * @return static
      */
     protected function getSignatureFromXML(DOMElement $xml): void
     {
@@ -80,7 +76,7 @@ trait SignedElementHelper
      * signature we can validate. An exception is thrown if the signature
      * validation fails.
      *
-     * @param  XMLSecurityKey $key The key we should check against.
+     * @param  \RobRichards\XMLSecLibs\XMLSecurityKey $key The key we should check against.
      * @return bool True on success, false when we don't have a signature.
      * @throws \Exception
      */
@@ -98,7 +94,7 @@ trait SignedElementHelper
 
             try {
                 call_user_func($function, $data, $key);
-                /* We were able to validate the message with this validator. */
+                // we were able to validate the message with this validator
 
                 return true;
             } catch (\Exception $e) {
@@ -106,7 +102,7 @@ trait SignedElementHelper
             }
         }
 
-        /* No validators were able to validate the message. */
+        // no validators were able to validate the message
         throw $exceptions[0];
     }
 
@@ -121,22 +117,22 @@ trait SignedElementHelper
     {
         $ret = [];
         foreach ($this->getCertificates() as $cert) {
-            /* Construct a PEM formatted certificate */
+            // construct a PEM formatted certificate
             $pemCert = "-----BEGIN CERTIFICATE-----\n" .
                 chunk_split($cert, 64) .
                 "-----END CERTIFICATE-----\n";
 
-            /* Extract the public key from the certificate for validation. */
+            // extract the public key from the certificate for validation
             $key = new XMLSecurityKey(XMLSecurityKey::RSA_SHA256, ['type' => 'public']);
             $key->loadKey($pemCert);
 
             try {
-                /* Check the signature. */
+                // check the signature
                 if ($this->validate($key)) {
                     $ret[] = $cert;
                 }
             } catch (\Exception $e) {
-                /* This certificate does not sign this element. */
+                // this certificate does not sign this element
             }
         }
 
@@ -154,7 +150,7 @@ trait SignedElementHelper
     protected function signElement(DOMElement $root, DOMNode $insertBefore = null): ?DOMElement
     {
         if ($this->signatureKey === null) {
-            /* We cannot sign this element. */
+            // we cannot sign this element
             return null;
         }
 
