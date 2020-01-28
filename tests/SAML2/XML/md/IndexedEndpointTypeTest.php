@@ -87,7 +87,7 @@ XML
     public function testUnmarshallingWithoutIndex(): void
     {
         $this->expectException(\InvalidArgumentException::class);
-        $this->expectExceptionMessage('Missing index attribute in AssertionConsumerService');
+        $this->expectExceptionMessage('Missing \'index\' attribute from md:AssertionConsumerService');
         $this->document->documentElement->removeAttribute('index');
         AssertionConsumerService::fromXML($this->document->documentElement);
     }
@@ -99,7 +99,7 @@ XML
     public function testUnmarshallingWithWrongIndex(): void
     {
         $this->expectException(\InvalidArgumentException::class);
-        $this->expectExceptionMessage('The index attribute of AssertionConsumerService must be numerical.');
+        $this->expectExceptionMessage('The \'index\' attribute of md:AssertionConsumerService must be numerical.');
         $this->document->documentElement->setAttribute('index', 'value');
         AssertionConsumerService::fromXML($this->document->documentElement);
     }
@@ -122,7 +122,7 @@ XML
     public function testUnmarshallingWithWrongIsDefault(): void
     {
         $this->expectException(\Exception::class);
-        $this->expectExceptionMessage('Invalid value of boolean attribute \'isDefault\': \'non-bool\'');
+        $this->expectExceptionMessage('The \'isDefault\' attribute of md:AssertionConsumerService must be boolean.');
         $this->document->documentElement->setAttribute('isDefault', 'non-bool');
         AssertionConsumerService::fromXML($this->document->documentElement);
     }
