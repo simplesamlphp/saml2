@@ -7,7 +7,9 @@ namespace SAML2\XML;
 use DOMElement;
 use SAML2\Constants;
 use SAML2\DOMDocumentFactory;
+use SAML2\Utils;
 use Serializable;
+use Webmozart\Assert\Assert;
 
 /**
  * Abstract class to be implemented by all the classes in this namespace
@@ -99,6 +101,78 @@ abstract class AbstractXMLElement implements Serializable
     public function isEmptyElement(): bool
     {
         return false;
+    }
+
+
+    /**
+     * Get the value of an attribute from a given element.
+     *
+     * @param DOMElement  $xml The element where we should search for the attribute.
+     * @param string      $name The name of the attribute.
+     * @param string|null $default The default to return in case the attribute does not exist and it is optional.
+     *
+     * @return string|null
+     * @throws \InvalidArgumentException
+     */
+    public static function getAttribute(DOMElement $xml, string $name, ?string $default = ''): ?string
+    {
+        if (!$xml->hasAttribute($name)) {
+            Assert::nullOrStringNotEmpty(
+                $default,
+                'Missing \'' . $name . '\' attribute from ' . static::NS_PREFIX . ':' .
+                self::getClassName(static::class) . '.'
+            );
+            return $default;
+        }
+        return $xml->getAttribute($name);
+    }
+
+
+    /**
+     * @param DOMElement  $xml The element where we should search for the attribute.
+     * @param string      $name The name of the attribute.
+     * @param string|null $default The default to return in case the attribute does not exist and it is optional.
+     *
+     * @return bool|null
+     * @throws \InvalidArgumentException
+     */
+    public static function getBooleanAttribute(DOMElement $xml, string $name, ?string $default = ''): ?bool
+    {
+        $value = self::getAttribute($xml, $name, $default);
+        if ($value === null) {
+            return null;
+        }
+        Assert::oneOf(
+            $value,
+            ['0', '1', 'false', 'true'],
+            'The \'' . $name . '\' attribute of ' . static::NS_PREFIX . ':' . self::getClassName(static::class) .
+            ' must be boolean.'
+        );
+        return in_array($value, ['1', 'true'], true);
+    }
+
+
+    /**
+     * Get the integer value of an attribute from a given element.
+     *
+     * @param DOMElement  $xml The element where we should search for the attribute.
+     * @param string      $name The name of the attribute.
+     * @param string|null $default The default to return in case the attribute does not exist and it is optional.
+     *
+     * @return int|null
+     */
+    public static function getIntegerAttribute(DOMElement $xml, string $name, ?string $default = ''): ?int
+    {
+        $value = self::getAttribute($xml, $name, $default);
+        if ($value === null) {
+            return null;
+        }
+        Assert::numeric(
+            $value,
+            'The \'' . $name . '\' attribute of ' . static::NS_PREFIX . ':' . self::getClassName(static::class) .
+            ' must be numerical.'
+        );
+        return intval($value);
     }
 
 
