@@ -7,7 +7,9 @@ namespace SAML2\XML;
 use DOMElement;
 use SAML2\Constants;
 use SAML2\DOMDocumentFactory;
+use SAML2\Utils;
 use Serializable;
+use Webmozart\Assert\Assert;
 
 /**
  * Abstract class to be implemented by all the classes in this namespace
@@ -228,6 +230,137 @@ abstract class AbstractXMLElement implements Serializable
                 /** @psalm-var \DOMElement $node */
                 $ret[] = static::fromXML($node);
             }
+        }
+        return $ret;
+    }
+
+
+    /**
+     * Get the value of an attribute from a given element.
+     *
+     * @param DOMElement  $xml The element where we should search for the attribute.
+     * @param string      $name The name of the attribute.
+     * @param string|null $default The default to return in case the attribute does not exist and it is optional.
+     *
+     * @return string|null
+     * @throws \InvalidArgumentException
+     */
+    public static function getAttribute(DOMElement $xml, string $name, ?string $default = ''): ?string
+    {
+        if (!$xml->hasAttribute($name)) {
+            Assert::nullOrStringNotEmpty(
+                $default,
+                'Missing \'' . $name . '\' attribute from ' . static::NS_PREFIX . ':' .
+                self::getClassName(static::class) . '.'
+            );
+            return $default;
+        }
+        return $xml->getAttribute($name);
+    }
+
+
+    /**
+     * @param DOMElement  $xml The element where we should search for the attribute.
+     * @param string      $name The name of the attribute.
+     * @param string|null $default The default to return in case the attribute does not exist and it is optional.
+     *
+     * @return bool|null
+     * @throws \InvalidArgumentException
+     */
+    public static function getBooleanAttribute(DOMElement $xml, string $name, ?string $default = ''): ?bool
+    {
+        $value = self::getAttribute($xml, $name, $default);
+        if ($value === null) {
+            return null;
+        }
+        Assert::oneOf(
+            $value,
+            ['0', '1', 'false', 'true'],
+            'The \'' . $name . '\' attribute of ' . static::NS_PREFIX . ':' . self::getClassName(static::class) .
+            ' must be boolean.'
+        );
+        return in_array($value, ['1', 'true'], true);
+    }
+
+
+    /**
+     * Get the integer value of an attribute from a given element.
+     *
+     * @param DOMElement  $xml The element where we should search for the attribute.
+     * @param string      $name The name of the attribute.
+     * @param string|null $default The default to return in case the attribute does not exist and it is optional.
+     *
+     * @return int|null
+     */
+    public static function getIntegerAttribute(DOMElement $xml, string $name, ?string $default = ''): ?int
+    {
+        $value = self::getAttribute($xml, $name, $default);
+        if ($value === null) {
+            return null;
+        }
+        Assert::numeric(
+            $value,
+            'The \'' . $name . '\' attribute of ' . static::NS_PREFIX . ':' . self::getClassName(static::class) .
+            ' must be numerical.'
+        );
+        return intval($value);
+    }
+
+
+    /**
+     * Static method that processes a fully namespaced class name and returns the name of the class from it.
+     *
+     * @param string $class
+     *
+     * @return string
+     */
+    protected static function getClassName(string $class): string
+    {
+        return join('', array_slice(explode('\\', $class), -1));
+    }
+
+
+    /**
+     * Get the XML local name of the element represented by this class.
+     *
+     * @return string
+     */
+    public function getLocalName(): string
+    {
+        return self::getClassName(get_class($this));
+    }
+
+
+    /**
+     * Get the XML qualified name (prefix:name) of the element represented by this class.
+     *
+     * @return string
+     */
+    public function getQualifiedName(): string
+    {
+        return static::NS_PREFIX . ':' . $this->getLocalName();
+    }
+
+
+    /**
+     * Extract localized names from a the children of a given element.
+     *
+     * @param DOMElement $parent The element we want to search.
+     *
+     * @return array An array of objects of class $class.
+     */
+    public static function extractFromChildren(\DOMElement $parent): array
+    {
+        $ret = [];
+        foreach ($parent->childNodes as $node) {
+            if ($node->namespaceURI !== static::NS) {
+                continue;
+            }
+            if ($node->localName !== self::getClassName(static::class)) {
+                continue;
+            }
+
+            $ret[] = static::fromXML($node);
         }
         return $ret;
     }
