@@ -28,7 +28,7 @@ trait SignedElementTrait
      *
      * @var array
      */
-    private $validators = [];
+    protected $validators = [];
 
 
     /**
