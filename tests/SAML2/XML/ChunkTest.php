@@ -4,45 +4,58 @@ declare(strict_types=1);
 
 namespace SAML2\XML;
 
-use SAML2\DOMDocumentFactory;
+use PHPUnit\Framework\TestCase;
 use SAML2\XML\saml\Attribute;
 use SAML2\XML\saml\AttributeValue;
-use SAML2\XML\Chunk;
 
 /**
  * Class \SAML2\XML\ChunkTest
+ *
+ * @package simplesamlphp/saml2
  */
-class ChunkTest extends \PHPUnit\Framework\TestCase
+class ChunkTest extends TestCase
 {
-    /**
-     * @var \SAML2\XML\Chunk
-     */
-    private $chunk;
+    /** @var \DOMDocument */
+    protected $document;
 
 
-    /**
-     * Make a new Chunk object to test with
-     * @return void
-     */
     public function setUp(): void
     {
         $attribute = new Attribute(
             'TheName',
             'TheNameFormat',
-            'TheFriendlyName'
+            'TheFriendlyName',
+            [
+                new AttributeValue('FirstValue'),
+                new AttributeValue('SecondValue')
+            ]
         );
 
-        $attribute->addAttributeValue(
-            new AttributeValue('FirstValue')
-        );
-        $attribute->addAttributeValue(
-            new AttributeValue('SecondValue')
-        );
+        $this->document = $attribute->toXML()->ownerDocument;
+    }
 
-        $document = DOMDocumentFactory::fromString('<root />');
-        $attributeElement = $attribute->toXML($document->firstChild);
 
-        $this->chunk = new Chunk($attributeElement);
+    /**
+     * Test creating a Chunk from scratch
+     */
+    public function testMarshalling(): void
+    {
+        $chunk = new Chunk($this->document->documentElement);
+        $this->assertEquals('urn:oasis:names:tc:SAML:2.0:assertion', $chunk->getNamespaceURI());
+        $this->assertEquals('Attribute', $chunk->getLocalName());
+        $this->assertEquals('saml:Attribute', $chunk->getQualifiedName());
+    }
+
+
+    /**
+     * Test creating a Chunk from XML
+     */
+    public function testUnmarshalling(): void
+    {
+        $chunk = Chunk::fromXML($this->document->documentElement);
+        $this->assertEquals('urn:oasis:names:tc:SAML:2.0:assertion', $chunk->getNamespaceURI());
+        $this->assertEquals('Attribute', $chunk->getLocalName());
+        $this->assertEquals('saml:Attribute', $chunk->getQualifiedName());
     }
 
 
@@ -52,11 +65,15 @@ class ChunkTest extends \PHPUnit\Framework\TestCase
      */
     public function testChunkSerializationLoop(): void
     {
-        $ser = $this->chunk->serialize();
-        $document = DOMDocumentFactory::fromString('<root />');
-        $newchunk = new Chunk($document->firstChild);
-        $newchunk->unserialize($ser);
-
-        $this->assertEqualXMLStructure($this->chunk->getXML(), $newchunk->getXML());
+        $this->assertEquals(
+            <<<XML
+<saml:Attribute xmlns:saml="urn:oasis:names:tc:SAML:2.0:assertion" Name="TheName" NameFormat="TheNameFormat" FriendlyName="TheFriendlyName">
+  <saml:AttributeValue xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:xs="http://www.w3.org/2001/XMLSchema" xsi:type="xs:string">FirstValue</saml:AttributeValue>
+  <saml:AttributeValue xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:xs="http://www.w3.org/2001/XMLSchema" xsi:type="xs:string">SecondValue</saml:AttributeValue>
+</saml:Attribute>
+XML
+            ,
+            strval(unserialize(serialize(Chunk::fromXML($this->document->documentElement))))
+        );
     }
 }

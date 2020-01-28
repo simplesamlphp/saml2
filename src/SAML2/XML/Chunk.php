@@ -5,36 +5,36 @@ declare(strict_types=1);
 namespace SAML2\XML;
 
 use DOMElement;
-use SAML2\DOMDocumentFactory;
 use SAML2\Utils;
+use Webmozart\Assert\Assert;
 
 /**
  * Serializable class used to hold an XML element.
  *
  * @package SimpleSAMLphp
  */
-class Chunk implements \Serializable
+final class Chunk extends AbstractXMLElement
 {
     /**
      * The localName of the element.
      *
      * @var string
      */
-    private $localName;
+    protected $localName;
 
     /**
      * The namespaceURI of this element.
      *
      * @var string|null
      */
-    private $namespaceURI;
+    protected $namespaceURI;
 
     /**
      * The \DOMElement we contain.
      *
      * @var \DOMElement
      */
-    private $xml;
+    protected $xml;
 
 
     /**
@@ -44,8 +44,8 @@ class Chunk implements \Serializable
      */
     public function __construct(DOMElement $xml)
     {
-        $this->localName = $xml->localName;
-        $this->namespaceURI = $xml->namespaceURI;
+        $this->setLocalName($xml->localName);
+        $this->setNamespaceURI($xml->namespaceURI);
 
         $this->xml = Utils::copyElement($xml);
     }
@@ -63,12 +63,23 @@ class Chunk implements \Serializable
 
 
     /**
+     * @param DOMElement $xml
+     *
+     * @return self
+     */
+    public static function fromXML(DOMElement $xml): object
+    {
+        return new self($xml);
+    }
+
+
+    /**
      * Append this XML element to a different XML element.
      *
      * @param  \DOMElement $parent The element we should append this element to.
      * @return \DOMElement The new element.
      */
-    public function toXML(DOMElement $parent): DOMElement
+    public function toXML(?DOMElement $parent = null): DOMElement
     {
         return Utils::copyElement($this->xml, $parent);
     }
@@ -93,6 +104,7 @@ class Chunk implements \Serializable
      */
     public function setLocalName(string $localName): void
     {
+        Assert::notEmpty($localName, 'A DOMElement cannot have an empty name.');
         $this->localName = $localName;
     }
 
@@ -114,36 +126,8 @@ class Chunk implements \Serializable
      * @param string|null $namespaceURI
      * @return void
      */
-    public function setNamespaceURI(string $namespaceURI = null): void
+    protected function setNamespaceURI(string $namespaceURI = null): void
     {
         $this->namespaceURI = $namespaceURI;
-    }
-
-
-    /**
-     * Serialize this XML chunk.
-     *
-     * @return string The serialized chunk.
-     */
-    public function serialize(): string
-    {
-        return serialize($this->xml->ownerDocument->saveXML($this->xml));
-    }
-
-    
-    /**
-     * Un-serialize this XML chunk.
-     *
-     * @param string $serialized The serialized chunk.
-     * @return void
-     *
-     * Type hint not possible due to upstream method signature
-     */
-    public function unserialize($serialized): void
-    {
-        $doc = DOMDocumentFactory::fromString(unserialize($serialized));
-        $this->xml = $doc->documentElement;
-        $this->setLocalName($this->xml->localName);
-        $this->setNamespaceURI($this->xml->namespaceURI);
     }
 }
