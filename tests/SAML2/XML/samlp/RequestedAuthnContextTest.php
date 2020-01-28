@@ -25,10 +25,14 @@ class RequestedAuthnContextTest extends \PHPUnit\Framework\TestCase
 
         $requestedAuthnContext = new RequestedAuthnContext([], [$authnContextDeclRef], 'exact');
 
-        $this->assertEquals(
-            '<samlp:RequestedAuthnContext xmlns:samlp="' . Constants::NS_SAMLP . '" Comparison="exact">'
-                . '<saml:AuthnContextDeclRef xmlns:saml="' . Constants::NS_SAML . '">/relative/path/to/document.xml'
-                . '</saml:AuthnContextDeclRef></samlp:RequestedAuthnContext>',
+        $nssamlp = RequestedAuthnContext::NS;
+        $nssaml = AuthnContextDeclRef::NS;
+        $this->assertEquals(<<<XML
+<samlp:RequestedAuthnContext xmlns:samlp="{$nssamlp}" Comparison="exact">
+  <saml:AuthnContextDeclRef xmlns:saml="{$nssaml}">/relative/path/to/document.xml</saml:AuthnContextDeclRef>
+</samlp:RequestedAuthnContext>
+XML
+            ,
             strval($requestedAuthnContext)
         );
     }

@@ -29,10 +29,16 @@ class StatusCodeTest extends \PHPUnit\Framework\TestCase
             ]
         );
 
-        $this->assertEquals(
-            '<samlp:StatusCode xmlns:samlp="' . Constants::NS_SAMLP . '" Value="'
-                . Constants::STATUS_RESPONDER . '"><samlp:StatusCode Value="'
-                . Constants::STATUS_REQUEST_DENIED . '"/></samlp:StatusCode>',
+        $nssamlp = StatusCode::NS;
+        $status_responder = Constants::STATUS_RESPONDER;
+        $status_request_denied = Constants::STATUS_REQUEST_DENIED;
+
+        $this->assertEquals(<<<XML
+<samlp:StatusCode xmlns:samlp="{$nssamlp}" Value="{$status_responder}">
+  <samlp:StatusCode Value="{$status_request_denied}"/>
+</samlp:StatusCode>
+XML
+            ,
             strval($statusCode)
         );
     }
