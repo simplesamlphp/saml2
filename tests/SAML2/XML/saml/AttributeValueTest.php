@@ -95,9 +95,8 @@ ATTRIBUTEXML
     public function testSerialize(): void
     {
         $av1 = new AttributeValue("Aap:noot:mies");
-        $ser = $av1->serialize();
         $av2 = new AttributeValue("Wim");
-        $av2->unserialize($ser);
+        $av2 = unserialize(serialize($av1));
 
         $this->assertEquals("Aap:noot:mies", $av2->getString());
 
@@ -108,9 +107,9 @@ ATTRIBUTEVALUE
         );
 
         $av3 = new AttributeValue($element->documentElement);
-        $ser = $av3->serialize();
         $av4 = new AttributeValue("Wim");
-        $av4->unserialize($ser);
+        $av4 = unserialize(serialize($av3));
+
         $this->assertEquals("urn:collab:person:surftest.nl:example", $av4->getString());
     }
 }
