@@ -210,7 +210,7 @@ XML
     {
         $this->document->documentElement->removeAttribute('index');
         $this->expectException(Exception::class);
-        $this->expectExceptionMessage('Missing index attribute in AttributeConsumingService.');
+        $this->expectExceptionMessage('Missing \'index\' attribute from md:AttributeConsumingService.');
         AttributeConsumingService::fromXML($this->document->documentElement);
     }
 
@@ -233,7 +233,7 @@ XML
     {
         $this->document->documentElement->setAttribute('isDefault', 'xxx');
         $this->expectException(Exception::class);
-        $this->expectExceptionMessage("Invalid value of boolean attribute 'isDefault': 'xxx'");
+        $this->expectExceptionMessage("The 'isDefault' attribute of md:AttributeConsumingService must be boolean.");
         AttributeConsumingService::fromXML($this->document->documentElement);
     }
 
@@ -245,7 +245,7 @@ XML
     {
         $this->document->documentElement->setAttribute('index', 'x');
         $this->expectException(Exception::class);
-        $this->expectExceptionMessage('The index attribute of AttributeConsumingService must be numerical.');
+        $this->expectExceptionMessage('The \'index\' attribute of md:AttributeConsumingService must be numerical.');
         AttributeConsumingService::fromXML($this->document->documentElement);
     }
 

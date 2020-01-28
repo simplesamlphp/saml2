@@ -89,10 +89,10 @@ final class AttributeConsumingService extends AbstractMdElement
         }
 
         return new self(
-            self::getIndexFromXML($xml),
+            self::getIntegerAttribute($xml, 'index'),
             $names,
             $requestedAttrs,
-            self::getIsDefaultFromXML($xml),
+            self::getBooleanAttribute($xml, 'isDefault', null),
             $descriptions
         );
     }

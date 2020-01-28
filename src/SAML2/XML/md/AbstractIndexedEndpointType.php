@@ -65,11 +65,11 @@ abstract class AbstractIndexedEndpointType extends AbstractEndpointType
         );
 
         return new static(
-            self::getIndexFromXML($xml),
-            self::getBindingFromXML($xml),
-            self::getLocationFromXML($xml),
-            self::getIsDefaultFromXML($xml),
-            self::getResponseLocationFromXML($xml),
+            self::getIntegerAttribute($xml, 'index'),
+            self::getAttribute($xml, 'Binding'),
+            self::getAttribute($xml, 'Location'),
+            self::getBooleanAttribute($xml, 'isDefault', null),
+            self::getAttribute($xml, 'ResponseLocation', null),
             self::getAttributesNSFromXML($xml)
         );
     }

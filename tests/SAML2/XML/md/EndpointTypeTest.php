@@ -117,7 +117,7 @@ XML
     {
         $this->document->documentElement->removeAttribute('Binding');
         $this->expectException(\InvalidArgumentException::class);
-        $this->expectExceptionMessage('Endpoint must have a Binding attribute.');
+        $this->expectExceptionMessage('Missing \'Binding\' attribute from md:AttributeService.');
         AttributeService::fromXML($this->document->documentElement);
     }
 
@@ -141,7 +141,7 @@ XML
     {
         $this->document->documentElement->removeAttribute('Location');
         $this->expectException(\InvalidArgumentException::class);
-        $this->expectExceptionMessage('Endpoint must have a Location attribute.');
+        $this->expectExceptionMessage('Missing \'Location\' attribute from md:AttributeService.');
         AttributeService::fromXML($this->document->documentElement);
     }
 
@@ -166,8 +166,9 @@ XML
         $document = DOMDocumentFactory::fromString(
             '<md:AttributeService xmlns:md="{$mdNamespace}" Binding="urn:something" Location="https://whatever/" />'
         );
-        AttributeService::fromXML($document->documentElement);
-        $this->assertTrue(true);
+        $as = AttributeService::fromXML($document->documentElement);
+        $this->assertNull($as->getResponseLocation());
+        $this->assertEmpty($as->getAttributesNS());
     }
 
 

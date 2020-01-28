@@ -4,8 +4,6 @@ declare(strict_types=1);
 
 namespace SAML2\XML\md;
 
-use DOMElement;
-use SAML2\Utils;
 use Webmozart\Assert\Assert;
 
 /**
@@ -28,25 +26,6 @@ trait IndexedElement
      * @var bool|null
      */
     protected $isDefault = null;
-
-
-    /**
-     * Process a given XML document and try to extract the index attribute out of it.
-     *
-     * @param \DOMElement $xml
-     *
-     * @return int
-     * @throws \InvalidArgumentException
-     */
-    public static function getIndexFromXML(DOMElement $xml): int
-    {
-        Assert::true($xml->hasAttribute('index'), 'Missing index attribute in ' . $xml->localName . '.');
-        Assert::numeric(
-            $xml->getAttribute('index'),
-            'The index attribute of ' . $xml->localName . ' must be numerical.'
-        );
-        return intval($xml->getAttribute('index'));
-    }
 
 
     /**
@@ -76,20 +55,6 @@ trait IndexedElement
 
 
     /**
-     * Process a given XML document and try to extract the isDefault attribute out of it.
-     *
-     * @param \DOMElement $xml
-     *
-     * @return bool|null
-     * @throws \Exception
-     */
-    public static function getIsDefaultFromXML(DOMElement $xml): ?bool
-    {
-        return Utils::parseBoolean($xml, 'isDefault', null);
-    }
-
-
-    /**
      * Collect the value of the isDefault property.
      *
      * @return bool|null
@@ -112,6 +77,4 @@ trait IndexedElement
         }
         $this->isDefault = $flag;
     }
-
-
 }

@@ -96,7 +96,7 @@ XML
     public function testUnmarshallingWithWrongIsRequired(): void
     {
         $this->expectException(\Exception::class);
-        $this->expectExceptionMessage('Invalid value of boolean attribute \'isRequired\': \'wrong\'');
+        $this->expectExceptionMessage('The \'isRequired\' attribute of md:RequestedAttribute must be boolean.');
         $this->document->documentElement->setAttribute('isRequired', 'wrong');
         RequestedAttribute::fromXML($this->document->documentElement);
     }

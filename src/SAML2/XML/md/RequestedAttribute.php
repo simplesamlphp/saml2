@@ -6,8 +6,8 @@ namespace SAML2\XML\md;
 
 use DOMElement;
 use SAML2\Constants;
-use SAML2\Utils;
 use SAML2\XML\saml\Attribute;
+use SAML2\XML\saml\AttributeValue;
 use Webmozart\Assert\Assert;
 
 /**
@@ -15,7 +15,7 @@ use Webmozart\Assert\Assert;
  *
  * @package SimpleSAMLphp
  */
-class RequestedAttribute extends Attribute
+final class RequestedAttribute extends Attribute
 {
     /** @var string */
     public const NS = Constants::NS_MD;
@@ -88,11 +88,11 @@ class RequestedAttribute extends Attribute
         Assert::same($xml->namespaceURI, Constants::NS_MD);
 
         return new self(
-            Attribute::getNameFromXML($xml),
-            Utils::parseBoolean($xml, 'isRequired', null),
-            Attribute::getNameFormatFromXML($xml),
-            Attribute::getFriendlyNameFromXML($xml),
-            Attribute::getAttributeValuesFromXML($xml)
+            self::getAttribute($xml, 'Name'),
+            self::getBooleanAttribute($xml, 'isRequired', null),
+            self::getAttribute($xml, 'NameFormat', null),
+            self::getAttribute($xml, 'FriendlyName', null),
+            AttributeValue::extractFromChildren($xml)
         );
     }
 
