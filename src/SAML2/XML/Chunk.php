@@ -11,7 +11,7 @@ use Webmozart\Assert\Assert;
 /**
  * Serializable class used to hold an XML element.
  *
- * @package SimpleSAMLphp
+ * @package simplesamlphp/saml2
  */
 final class Chunk extends AbstractXMLElement
 {
@@ -63,7 +63,7 @@ final class Chunk extends AbstractXMLElement
 
 
     /**
-     * @param DOMElement $xml
+     * @param \DOMElement $xml
      *
      * @return self
      */
@@ -100,7 +100,6 @@ final class Chunk extends AbstractXMLElement
      * Set the value of the localName-property
      *
      * @param string $localName
-     * @return void
      */
     public function setLocalName(string $localName): void
     {
@@ -124,7 +123,6 @@ final class Chunk extends AbstractXMLElement
      * Set the value of the namespaceURI-property
      *
      * @param string|null $namespaceURI
-     * @return void
      */
     protected function setNamespaceURI(string $namespaceURI = null): void
     {
