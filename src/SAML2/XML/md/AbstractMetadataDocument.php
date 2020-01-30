@@ -4,7 +4,6 @@ namespace SAML2\XML\md;
 
 use DOMElement;
 use SAML2\SignedElementTrait;
-use SAML2\Utils;
 use SAML2\XML\ExtendableElementTrait;
 
 /**
@@ -45,13 +44,13 @@ abstract class AbstractMetadataDocument extends AbstractSignedMdElement
      * @param string|null $ID The ID for this document. Defaults to null.
      * @param int|null    $validUntil Unix time of validity for this document. Defaults to null.
      * @param string|null $cacheDuration Maximum time this document can be cached. Defaults to null.
-     * @param \SAML2\XML\md\Extensions[]|null $extensions An array of extensions. Defaults to null.
+     * @param \SAML2\XML\md\Extensions|null $extensions An array of extensions. Defaults to null.
      */
     public function __construct(
         ?string $ID = null,
         ?int $validUntil = null,
         ?string $cacheDuration = null,
-        ?array $extensions = null
+        ?Extensions $extensions = null
     ) {
         $this->ID = $ID;
         $this->setValidUntil($validUntil);
@@ -91,8 +90,6 @@ abstract class AbstractMetadataDocument extends AbstractSignedMdElement
      * Set the value of the ID property.
      *
      * @param string|null $id
-     *
-     * @return void
      */
     protected function setID(?string $id): void
     {
@@ -134,8 +131,6 @@ abstract class AbstractMetadataDocument extends AbstractSignedMdElement
      * Set the value of the validUntil-property
      *
      * @param int|null $validUntil
-     *
-     * @return void
      */
     protected function setValidUntil(?int $validUntil): void
     {
@@ -175,14 +170,11 @@ abstract class AbstractMetadataDocument extends AbstractSignedMdElement
      * Set the value of the cacheDuration-property
      *
      * @param string|null $cacheDuration
-     *
-     * @return void
      */
     protected function setCacheDuration(?string $cacheDuration): void
     {
         $this->cacheDuration = $cacheDuration;
     }
-
 
 
     /**
@@ -206,7 +198,10 @@ abstract class AbstractMetadataDocument extends AbstractSignedMdElement
             $e->setAttribute('cacheDuration', $this->cacheDuration);
         }
 
-        $this->addExtensionsToXML($e);
+        if ($this->Extensions !== null) {
+            $this->Extensions->toXML($e);
+        }
+        
         return $e;
     }
 }
