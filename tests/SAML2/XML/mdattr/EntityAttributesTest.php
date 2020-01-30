@@ -34,10 +34,11 @@ class EntityAttributesTest extends \PHPUnit\Framework\TestCase
 
         $attribute2 = new Attribute(
             'foo',
-            'urn:simplesamlphp:v1'
-        );
-        $attribute2->addAttributeValue(
-             new AttributeValue('bar')
+            'urn:simplesamlphp:v1',
+            null,
+            [
+                new AttributeValue('bar')
+            ]
         );
 
         $entityAttributes = new EntityAttributes([$attribute1]);

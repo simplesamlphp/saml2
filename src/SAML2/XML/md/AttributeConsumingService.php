@@ -17,7 +17,7 @@ use Webmozart\Assert\Assert;
  */
 final class AttributeConsumingService extends AbstractMdElement
 {
-    use IndexedElement;
+    use IndexedElementTrait;
 
     /**
      * The ServiceName of this AttributeConsumingService.
@@ -70,7 +70,7 @@ final class AttributeConsumingService extends AbstractMdElement
     /**
      * Initialize / parse an AttributeConsumingService.
      *
-     * @param DOMElement|null $xml The XML element we should load.
+     * @param DOMElement $xml The XML element we should load.
      *
      * @return self
      * @throws Exception

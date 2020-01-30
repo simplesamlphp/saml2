@@ -93,13 +93,18 @@ XML
      */
     public function testUnmarshalling(): void
     {
-        $document = DOMDocumentFactory::fromString(
-            '<samlp:Status xmlns:samlp="' . Constants::NS_SAMLP . '">'
-                . '<samlp:StatusCode Value="urn:oasis:names:tc:SAML:2.0:status:Responder">'
-                . '<samlp:StatusCode Value="urn:oasis:names:tc:SAML:2.0:status:RequestDenied"/>'
-                . '</samlp:StatusCode><samlp:StatusMessage>Something went wrong</samlp:StatusMessage>'
-                . '<samlp:StatusDetail><Cause>org.sourceid.websso.profiles.idp.FailedAuthnSsoException</Cause>'
-                . '</samlp:StatusDetail></samlp:Status>'
+        $nssamlp = Status::NS;
+        $document = DOMDocumentFactory::fromString(<<<XML
+<samlp:Status xmlns:samlp="{$nssamlp}">
+  <samlp:StatusCode Value="urn:oasis:names:tc:SAML:2.0:status:Responder">
+    <samlp:StatusCode Value="urn:oasis:names:tc:SAML:2.0:status:RequestDenied"/>
+  </samlp:StatusCode>
+  <samlp:StatusMessage>Something went wrong</samlp:StatusMessage>
+  <samlp:StatusDetail>
+    <Cause>org.sourceid.websso.profiles.idp.FailedAuthnSsoException</Cause>
+  </samlp:StatusDetail>
+</samlp:Status>
+XML
         );
 
         /** @psalm-var \DOMElement $document->firstChild */

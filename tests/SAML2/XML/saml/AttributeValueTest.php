@@ -5,6 +5,7 @@ declare(strict_types=1);
 namespace SAML2\XML\saml;
 
 use PHPUnit\Framework\TestCase;
+use SAML2\Constants;
 use SAML2\DOMDocumentFactory;
 
 /**
@@ -19,8 +20,12 @@ final class AttributeValueTest extends TestCase
 
     protected function setUp(): void
     {
+        $nssaml = Constants::NS_SAML;
+        $nsxs = Constants::NS_XS;
+        $nsxsi = Constants::NS_XSI;
+
         $this->document = DOMDocumentFactory::fromString(<<<XML
-<saml:AttributeValue xmlns:saml="urn:oasis:names:tc:SAML:2.0:assertion" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:xs="http://www.w3.org/2001/XMLSchema" xsi:type="xs:string">value</saml:AttributeValue>
+<saml:AttributeValue xmlns:saml="{$nssaml}" xmlns:xsi="{$nsxsi}" xmlns:xs="{$nsxs}" xsi:type="xs:string">value</saml:AttributeValue>
 XML
         );
     }
@@ -80,3 +85,4 @@ XML
         );
     }
 }
+

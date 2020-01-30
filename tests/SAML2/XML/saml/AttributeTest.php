@@ -12,7 +12,7 @@ use SAML2\DOMDocumentFactory;
 /**
  * Class \SAML2\XML\saml\AttributeTest
  */
-class AttributeTest extends TestCase
+final class AttributeTest extends TestCase
 {
     protected $document;
 

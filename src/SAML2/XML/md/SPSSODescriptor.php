@@ -70,7 +70,7 @@ class SPSSODescriptor extends SSODescriptorType
 
         /** @var \DOMElement $acs */
         foreach (Utils::xpQuery($xml, './saml_metadata:AttributeConsumingService') as $acs) {
-            $this->AttributeConsumingService[] = new AttributeConsumingService($acs);
+            $this->AttributeConsumingService[] = AttributeConsumingService::fromXML($acs);
         }
     }
 
