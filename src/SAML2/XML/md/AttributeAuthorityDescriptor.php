@@ -6,7 +6,6 @@ namespace SAML2\XML\md;
 
 use DOMElement;
 use Exception;
-use InvalidArgumentException;
 use SAML2\Constants;
 use SAML2\Utils;
 use SAML2\XML\saml\Attribute;
@@ -15,7 +14,7 @@ use Webmozart\Assert\Assert;
 /**
  * Class representing SAML 2 metadata AttributeAuthorityDescriptor.
  *
- * @package SimpleSAMLphp
+ * @package simplesamlphp/saml2
  */
 final class AttributeAuthorityDescriptor extends AbstractRoleDescriptor
 {
@@ -25,7 +24,7 @@ final class AttributeAuthorityDescriptor extends AbstractRoleDescriptor
      *
      * Array with EndpointType objects.
      *
-     * @var AttributeService[]
+     * @var \SAML2\XML\md\AttributeService[]
      */
     protected $AttributeServices = [];
 
@@ -34,7 +33,7 @@ final class AttributeAuthorityDescriptor extends AbstractRoleDescriptor
      *
      * Array with EndpointType objects.
      *
-     * @var AssertionIDRequestService[]
+     * @var \SAML2\XML\md\AssertionIDRequestService[]
      */
     protected $AssertionIDRequestServices = [];
 
@@ -61,7 +60,7 @@ final class AttributeAuthorityDescriptor extends AbstractRoleDescriptor
      *
      * Array with \SAML2\XML\saml\Attribute objects.
      *
-     * @var Attribute[]
+     * @var \SAML2\XML\saml\Attribute[]
      */
     protected $Attributes = [];
 
@@ -69,20 +68,20 @@ final class AttributeAuthorityDescriptor extends AbstractRoleDescriptor
     /**
      * AttributeAuthorityDescriptor constructor.
      *
-     * @param AttributeService[] $attributeServices
+     * @param \SAML2\XML\md\AttributeService[] $attributeServices
      * @param string[] $protocolSupportEnumeration
-     * @param AssertionIDRequestService[]|null $assertionIDRequestService
+     * @param \SAML2\XML\md\AssertionIDRequestService[]|null $assertionIDRequestService
      * @param string[]|null $nameIDFormats
      * @param string[]|null $attributeProfiles
-     * @param Attribute[]|null $attributes
+     * @param \SAML2\XML\saml\Attribute[]|null $attributes
      * @param string|null $ID
      * @param int|null $validUntil
      * @param string|null $cacheDuration
-     * @param Extensions|null $extensions
+     * @param \SAML2\XML\md\Extensions|null $extensions
      * @param string|null $errorURL
-     * @param KeyDescriptor[]|null $keyDescriptors
-     * @param Organization|null $organization
-     * @param ContactPerson[]|null $contacts
+     * @param \SAML2\XML\md\KeyDescriptor[]|null $keyDescriptors
+     * @param \SAML2\XML\md\Organization|null $organization
+     * @param \SAML2\XML\md\ContactPerson[]|null $contacts
      */
     public function __construct(
         array $attributeServices,
@@ -122,10 +121,10 @@ final class AttributeAuthorityDescriptor extends AbstractRoleDescriptor
     /**
      * Initialize an IDPSSODescriptor.
      *
-     * @param DOMElement|null $xml The XML element we should load.
+     * @param \DOMElement|null $xml The XML element we should load.
      *
      * @return self
-     * @throws Exception
+     * @throws \Exception
      */
     public static function fromXML(DOMElement $xml = null): object
     {
@@ -183,7 +182,7 @@ final class AttributeAuthorityDescriptor extends AbstractRoleDescriptor
     /**
      * Collect the value of the AttributeService-property
      *
-     * @return AttributeService[]
+     * @return \SAML2\XML\md\AttributeService[]
      */
     public function getAttributeServices(): array
     {
@@ -194,9 +193,7 @@ final class AttributeAuthorityDescriptor extends AbstractRoleDescriptor
     /**
      * Set the value of the AttributeService-property
      *
-     * @param AttributeService[] $attributeServices
-     *
-     * @return void
+     * @param \SAML2\XML\md\AttributeService[] $attributeServices
      */
     protected function setAttributeServices(array $attributeServices): void
     {
@@ -229,8 +226,6 @@ final class AttributeAuthorityDescriptor extends AbstractRoleDescriptor
      * Set the value of the NameIDFormat-property
      *
      * @param string[]|null $nameIDFormats
-     *
-     * @return void
      */
     protected function setNameIDFormats(?array $nameIDFormats): void
     {
@@ -245,7 +240,7 @@ final class AttributeAuthorityDescriptor extends AbstractRoleDescriptor
     /**
      * Collect the value of the AssertionIDRequestService-property
      *
-     * @return AssertionIDRequestService[]
+     * @return \SAML2\XML\md\AssertionIDRequestService[]
      */
     public function getAssertionIDRequestServices(): array
     {
@@ -256,7 +251,7 @@ final class AttributeAuthorityDescriptor extends AbstractRoleDescriptor
     /**
      * Set the value of the AssertionIDRequestService-property
      *
-     * @param AssertionIDRequestService[] $assertionIDRequestServices
+     * @param \SAML2\XML\md\AssertionIDRequestService[] $assertionIDRequestServices
      */
     protected function setAssertionIDRequestServices(?array $assertionIDRequestServices): void
     {
@@ -298,7 +293,7 @@ final class AttributeAuthorityDescriptor extends AbstractRoleDescriptor
     /**
      * Collect the value of the Attribute-property
      *
-     * @return Attribute[]
+     * @return \SAML2\XML\saml\Attribute[]
      */
     public function getAttributes(): array
     {
@@ -309,7 +304,7 @@ final class AttributeAuthorityDescriptor extends AbstractRoleDescriptor
     /**
      * Set the value of the Attribute-property
      *
-     * @param Attribute[]|null $attributes
+     * @param \SAML2\XML\saml\Attribute[]|null $attributes
      */
     protected function setAttributes(?array $attributes): void
     {
@@ -324,12 +319,12 @@ final class AttributeAuthorityDescriptor extends AbstractRoleDescriptor
     /**
      * Add this AttributeAuthorityDescriptor to an EntityDescriptor.
      *
-     * @param DOMElement $parent The EntityDescriptor we should append this IDPSSODescriptor to.
+     * @param \DOMElement $parent The EntityDescriptor we should append this IDPSSODescriptor to.
      *
-     * @return DOMElement
+     * @return \DOMElement
      *
-     * @throws InvalidArgumentException if assertions are false
-     * @throws Exception
+     * @throws \InvalidArgumentException if assertions are false
+     * @throws \Exception
      */
     public function toXML(?DOMElement $parent = null): DOMElement
     {
