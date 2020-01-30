@@ -98,7 +98,7 @@ class AttributeValue extends AbstractSamlElement
         }
 
         /** @var DOMElement $element */
-        $element = $parent->ownerDocument->importNode($this->element);
+        $element = $parent->ownerDocument->importNode($this->element, true);
         $parent->appendChild($element);
         return $element;
     }
