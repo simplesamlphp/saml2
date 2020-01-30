@@ -6,7 +6,7 @@ namespace SAML2\XML\md;
 
 use DOMElement;
 use SAML2\Constants;
-use SAML2\SignedElementHelper;
+use SAML2\SignedElementTrait;
 use SAML2\Utils;
 use Webmozart\Assert\Assert;
 
@@ -15,8 +15,10 @@ use Webmozart\Assert\Assert;
  *
  * @package SimpleSAMLphp
  */
-class AffiliationDescriptor extends SignedElementHelper
+class AffiliationDescriptor extends AbstractSignedMdElement
 {
+    use SignedElementTrait;
+
     /**
      * The affiliationOwnerID.
      *

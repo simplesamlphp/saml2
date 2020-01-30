@@ -7,7 +7,7 @@ namespace SAML2\XML\md;
 use DOMElement;
 use SAML2\Constants;
 use SAML2\DOMDocumentFactory;
-use SAML2\SignedElementHelper;
+use SAML2\SignedElementTrait;
 use SAML2\Utils;
 use SAML2\XML\Chunk;
 use Webmozart\Assert\Assert;
@@ -17,8 +17,10 @@ use Webmozart\Assert\Assert;
  *
  * @package SimpleSAMLphp
  */
-class EntitiesDescriptor extends SignedElementHelper
+class EntitiesDescriptor extends AbstractSignedMdElement
 {
+    use SignedElementTrait;
+
     /**
      * The ID of this element.
      *
