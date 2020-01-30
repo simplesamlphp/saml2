@@ -7,6 +7,7 @@ namespace SAML2\XML\mdui;
 use DOMElement;
 use SAML2\Utils;
 use SAML2\XML\Chunk;
+use Webmozart\Assert\Assert;
 
 /**
  * Class for handling the metadata extensions for login and discovery user interface
@@ -14,67 +15,66 @@ use SAML2\XML\Chunk;
  * @link: http://docs.oasis-open.org/security/saml/Post2.0/sstc-saml-metadata-ui/v1.0/sstc-saml-metadata-ui-v1.0.pdf
  * @package SimpleSAMLphp
  */
-class DiscoHints
+final class DiscoHints extends AbstractMduiElement
 {
     /**
      * Array with child elements.
      *
      * The elements can be any of the other \SAML2\XML\mdui\* elements.
      *
-     * @var \SAML2\XML\Chunk[]
+     * @var \SAML2\XML\Chunk[]|null
      */
-    private $children = [];
+    protected $children = null;
 
     /**
      * The IPHint, as an array of strings.
      *
-     * @var string[]
+     * @var string[]|null
      */
-    private $IPHint = [];
+    protected $IPHint = null;
 
     /**
      * The DomainHint, as an array of strings.
      *
-     * @var string[]
+     * @var string[]|null
      */
-    private $DomainHint = [];
+    protected $DomainHint = null;
 
     /**
      * The GeolocationHint, as an array of strings.
      *
-     * @var string[]
+     * @var string[]|null
      */
-    private $GeolocationHint = [];
+    protected $GeolocationHint = null;
 
 
     /**
      * Create a DiscoHints element.
      *
-     * @param \DOMElement|null $xml The XML element we should load.
+     * @param \SAML2\XML\Chunk[]|null $children
+     * @param string[]|null $IPHint
+     * @param string[]|null $DomainHint
+     * @param string[]|null $GeolocationHint
      */
-    public function __construct(DOMElement $xml = null)
-    {
-        if ($xml === null) {
-            return;
-        }
-
-        $this->IPHint = Utils::extractStrings($xml, Common::NS, 'IPHint');
-        $this->DomainHint = Utils::extractStrings($xml, Common::NS, 'DomainHint');
-        $this->GeolocationHint = Utils::extractStrings($xml, Common::NS, 'GeolocationHint');
-
-        /** @var \DOMElement $node */
-        foreach (Utils::xpQuery($xml, "./*[namespace-uri()!='" . Common::NS . "']") as $node) {
-            $this->children[] = new Chunk($node);
-        }
+    public function __construct(
+        array $children = null,
+        array $IPHint = null,
+        array $DomainHint = null,
+        array $GeolocationHint = null
+    ) {
+        $this->setChildren($children);
+        $this->setIPHint($IPHint);
+        $this->setDomainHint($DomainHint);
+        $this->setGeolocationHint($GeolocationHint);
     }
 
 
     /**
      * Collect the value of the IPHint-property
      *
-     * @return string[]
+     * @return string[]|null
      */
-    public function getIPHint(): array
+    public function getIPHint(): ?array
     {
         return $this->IPHint;
     }
@@ -83,10 +83,10 @@ class DiscoHints
     /**
      * Set the value of the IPHint-property
      *
-     * @param string[] $hints
+     * @param string[]|null $hints
      * @return void
      */
-    public function setIPHint(array $hints): void
+    private function setIPHint(?array $hints): void
     {
         $this->IPHint = $hints;
     }
@@ -95,9 +95,9 @@ class DiscoHints
     /**
      * Collect the value of the DomainHint-property
      *
-     * @return string[]
+     * @return string[]|null
      */
-    public function getDomainHint(): array
+    public function getDomainHint(): ?array
     {
         return $this->DomainHint;
     }
@@ -106,10 +106,10 @@ class DiscoHints
     /**
      * Set the value of the DomainHint-property
      *
-     * @param string[] $hints
+     * @param string[]|null $hints
      * @return void
      */
-    public function setDomainHint(array $hints): void
+    private function setDomainHint(?array $hints): void
     {
         $this->DomainHint = $hints;
     }
@@ -118,9 +118,9 @@ class DiscoHints
     /**
      * Collect the value of the GeolocationHint-property
      *
-     * @return string[]
+     * @return string[]|null
      */
-    public function getGeolocationHint(): array
+    public function getGeolocationHint(): ?array
     {
         return $this->GeolocationHint;
     }
@@ -129,10 +129,10 @@ class DiscoHints
     /**
      * Set the value of the GeolocationHint-property
      *
-     * @param string[] $hints
+     * @param string[]|null $hints
      * @return void
      */
-    public function setGeolocationHint(array $hints): void
+    private function setGeolocationHint(?array $hints): void
     {
         $this->GeolocationHint = $hints;
     }
@@ -141,9 +141,9 @@ class DiscoHints
     /**
      * Collect the value of the children-property
      *
-     * @return \SAML2\XML\Chunk[]
+     * @return \SAML2\XML\Chunk[]|null
      */
-    public function getChildren(): array
+    public function getChildren(): ?array
     {
         return $this->children;
     }
@@ -152,10 +152,10 @@ class DiscoHints
     /**
      * Set the value of the childen-property
      *
-     * @param array $children
+     * @param array|null $children
      * @return void
      */
-    public function setChildren(array $children): void
+    private function setChildren(?array $children): void
     {
         $this->children = $children;
     }
@@ -174,35 +174,74 @@ class DiscoHints
 
 
     /**
-     * Convert this DiscoHints to XML.
+     * Test if an object, at the state it's in, would produce an empty XML-element
      *
-     * @param \DOMElement $parent The element we should append to.
-     * @return \DOMElement|null
+     * @return bool
      */
-    public function toXML(DOMElement $parent): ?DOMElement
+    public function isEmptyElement(): bool
     {
-        if (
-            !empty($this->IPHint)
-            || !empty($this->DomainHint)
-            || !empty($this->GeolocationHint)
-            || !empty($this->children)
-        ) {
-            $doc = $parent->ownerDocument;
+        return (
+            empty($this->children)
+            && empty($this->IPHint)
+            && empty($this->DomainHint)
+            && empty($this->GeolocationHint)
+        );
+    }
 
-            $e = $doc->createElementNS(Common::NS, 'mdui:DiscoHints');
-            $parent->appendChild($e);
 
-            foreach ($this->getChildren() as $child) {
-                $child->toXML($e);
-            }
+    /**
+     * Convert XML into a DiscoHints
+     *
+     * @param \DOMElement $xml The XML element we should load
+     * @return self
+     */
+    public static function fromXML(DOMElement $xml): object
+    {
+        Assert::same($xml->localName, 'DiscoHints');
+        Assert::same($xml->namespaceURI, DiscoHints::NS);
 
-            Utils::addStrings($e, Common::NS, 'mdui:IPHint', false, $this->IPHint);
-            Utils::addStrings($e, Common::NS, 'mdui:DomainHint', false, $this->DomainHint);
-            Utils::addStrings($e, Common::NS, 'mdui:GeolocationHint', false, $this->GeolocationHint);
+        $IPHint = Utils::extractStrings($xml, DiscoHints::NS, 'IPHint');
+        $DomainHint = Utils::extractStrings($xml, DiscoHints::NS, 'DomainHint');
+        $GeolocationHint = Utils::extractStrings($xml, DiscoHints::NS, 'GeolocationHint');
+        $children = [];
 
-            return $e;
+        /** @var \DOMElement $node */
+        foreach (Utils::xpQuery($xml, "./*[namespace-uri()!='" . DiscoHints::NS . "']") as $node) {
+            $children[] = new Chunk($node);
         }
 
-        return null;
+        return new self($children ?: null, $IPHint ?: null, $DomainHint ?: null, $GeolocationHint ?: null);
+    }
+
+
+    /**
+     * Convert this DiscoHints to XML.
+     *
+     * @param \DOMElement|null $parent The element we should append to.
+     * @return \DOMElement
+     */
+    public function toXML(DOMElement $parent = null): DOMElement
+    {
+        $e = $this->instantiateParentElement($parent);
+
+        if (!empty($this->children)) {
+            foreach ($this->children as $child) {
+                $child->toXML($e);
+            }
+        }
+
+        if (!empty($this->IPHint)) {
+            Utils::addStrings($e, DiscoHints::NS, 'mdui:IPHint', false, $this->IPHint);
+        }
+
+        if (!empty($this->DomainHint)) {
+            Utils::addStrings($e, DiscoHints::NS, 'mdui:DomainHint', false, $this->DomainHint);
+        }
+
+        if (!empty($this->GeolocationHint)) {
+            Utils::addStrings($e, DiscoHints::NS, 'mdui:GeolocationHint', false, $this->GeolocationHint);
+        }
+
+        return $e;
     }
 }

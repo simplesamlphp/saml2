@@ -13,47 +13,35 @@ use Webmozart\Assert\Assert;
  * @link: http://docs.oasis-open.org/security/saml/Post2.0/sstc-saml-metadata-ui/v1.0/sstc-saml-metadata-ui-v1.0.pdf
  * @package SimpleSAMLphp
  */
-class Keywords
+final class Keywords extends AbstractMduiElement
 {
     /**
      * The keywords of this item.
      *
      * Array of strings.
      *
-     * @var string[]
+     * @var string[]|null
      */
-    private $Keywords = [];
+    protected $Keywords = null;
 
     /**
      * The language of this item.
      *
      * @var string
      */
-    private $lang;
+    protected $lang;
 
 
     /**
      * Initialize a Keywords.
      *
-     * @param \DOMElement|null $xml The XML element we should load.
-     * @throws \Exception
+     * @param string $lang
+     * @param string[] $Keywords
      */
-    public function __construct(DOMElement $xml = null)
+    public function __construct(string $lang, array $Keywords = null)
     {
-        if ($xml === null) {
-            return;
-        }
-
-        if (!$xml->hasAttribute('xml:lang')) {
-            throw new \Exception('Missing lang on Keywords.');
-        }
-        if (!strlen($xml->textContent)) {
-            throw new \Exception('Missing value for Keywords.');
-        }
-        foreach (explode(' ', $xml->textContent) as $keyword) {
-            $this->Keywords[] = str_replace('+', ' ', $keyword);
-        }
-        $this->lang = $xml->getAttribute('xml:lang');
+        $this->setLanguage($lang);
+        $this->setKeywords($Keywords);
     }
 
 
@@ -66,8 +54,6 @@ class Keywords
      */
     public function getLanguage(): string
     {
-        Assert::notEmpty($this->lang);
-
         return $this->lang;
     }
 
@@ -78,7 +64,7 @@ class Keywords
      * @param string $lang
      * @return void
      */
-    public function setLanguage(string $lang): void
+    private function setLanguage(string $lang): void
     {
         $this->lang = $lang;
     }
@@ -87,9 +73,9 @@ class Keywords
     /**
      * Collect the value of the Keywords-property
      *
-     * @return string[]
+     * @return string[]|null
      */
-    public function getKeywords(): array
+    public function getKeywords(): ?array
     {
         return $this->Keywords;
     }
@@ -98,10 +84,10 @@ class Keywords
     /**
      * Set the value of the Keywords-property
      *
-     * @param string[] $keywords
+     * @param string[]|null $keywords
      * @return void
      */
-    public function setKeywords(array $keywords): void
+    private function setKeywords(?array $keywords): void
     {
         $this->Keywords = $keywords;
     }
@@ -115,37 +101,62 @@ class Keywords
      */
     public function addKeyword(string $keyword): void
     {
-        $this->Keywords[] = $keyword;
+        $this->setKeywords(
+            empty($this->Keywords) ? [$keyword] : array_merge($this->Keywords, [$keyword])
+        );
+    }
+
+
+    /**
+     * Convert XML into a Keywords
+     *
+     * @param \DOMElement $xml The XML element we should load
+     * @return self
+     */
+    public static function fromXML(DOMElement $xml): object
+    {
+        Assert::same($xml->localName, 'Keywords');
+        Assert::same($xml->namespaceURI, Keywords::NS);
+
+        if (!$xml->hasAttribute('xml:lang')) {
+            throw new \Exception('Missing lang on Keywords.');
+        } elseif (!strlen($xml->textContent)) {
+            throw new \Exception('Missing value for Keywords.');
+        }
+        $lang = $xml->getAttribute('xml:lang');
+
+        $Keywords = [];
+        foreach (explode(' ', $xml->textContent) as $keyword) {
+            $Keywords[] = str_replace('+', ' ', $keyword);
+        }
+
+        return new self($lang, $Keywords);
     }
 
 
     /**
      * Convert this Keywords to XML.
      *
-     * @param \DOMElement $parent The element we should append this Keywords to.
+     * @param \DOMElement|null $parent The element we should append this Keywords to.
      * @throws \Exception
      * @return \DOMElement
-     *
-     * @throws \InvalidArgumentException if assertions are false
      */
-    public function toXML(DOMElement $parent): DOMElement
+    public function toXML(DOMElement $parent = null): DOMElement
     {
-        Assert::notEmpty($this->lang, "Cannot convert Keywords to XML without a language set.");
-
-        $doc = $parent->ownerDocument;
-
-        $e = $doc->createElementNS(Common::NS, 'mdui:Keywords');
+        $e = $this->instantiateParentElement($parent);
         $e->setAttribute('xml:lang', $this->lang);
+
         $value = '';
-        foreach ($this->Keywords as $keyword) {
-            if (strpos($keyword, "+") !== false) {
-                throw new \Exception('Keywords may not contain a "+" character.');
+        if (!empty($this->Keywords)) {
+            foreach ($this->Keywords as $keyword) {
+                if (strpos($keyword, "+") !== false) {
+                    throw new \Exception('Keywords may not contain a "+" character.');
+                }
+                $value .= str_replace(' ', '+', $keyword) . ' ';
             }
-            $value .= str_replace(' ', '+', $keyword) . ' ';
         }
-        $value = rtrim($value);
-        $e->appendChild($doc->createTextNode($value));
-        $parent->appendChild($e);
+
+        $e->appendChild($e->ownerDocument->createTextNode(rtrim($value)));
 
         return $e;
     }
