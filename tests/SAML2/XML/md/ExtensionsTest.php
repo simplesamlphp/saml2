@@ -60,10 +60,13 @@ XML
         $scope = new Scope('SomeScope');
         $ra = new RegistrationInfo('SomeAuthority');
         $pubInfo = new PublicationInfo('SomePublisher');
-        $uiinfo = new UIInfo();
-        $uiinfo->setDisplayName(['en' => 'Example']);
-        $discoHints = new DiscoHints();
-        $discoHints->setIPHint(['127.0.0.1']);
+        $uiinfo = new UIInfo(
+            ['en' => 'Example']
+        );
+        $discoHints = new DiscoHints(
+            null,
+            ['127.0.0.1']
+        );
         $digestMethod = new DigestMethod('SomeAlgorithm');
         $signingMethod = new SigningMethod('SomeOtherAlgorithm', 1024, 4096);
         $extensions = new Extensions([
