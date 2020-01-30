@@ -32,9 +32,9 @@ trait SignedElementTrait
 
 
     /**
-     * The private key we should use to sign the message.
+     * The private key we should use to sign an unsigned message.
      *
-     * The private key can be null, in which case the message is sent unsigned.
+     * The private key can be null, in which case we can only validate an already signed message.
      *
      * @var \RobRichards\XMLSecLibs\XMLSecurityKey|null
      */
