@@ -148,31 +148,16 @@ final class Extensions extends AbstractMdElement
      *
      * @param \DOMElement|null $parent The element we should add this Extensions element to.
      *
-     * @param \DOMElement $parent The element we should add the extensions to.
-     * @param (\SAML2\XML\shibmd\Scope|
-     *          \SAML2\XML\mdattr\EntityAttributes|
-     *          \SAML2\XML\mdrpi\RegistrationInfo|
-     *          \SAML2\XML\mdrpi\PublicationInfo|
-     *          \SAML2\XML\mdui\UIInfo|
-     *          \SAML2\XML\mdui\DiscoHints|
-     *          \SAML2\XML\alg\DigestMethod|
-     *          \SAML2\XML\alg\SigningMethod|
-     *          \SAML2\XML\Chunk)[] $extensions List of extension objects.
-     * @return void
+     * @return \DOMElement The new md:Extensions XML element.
      */
     public function toXML(DOMElement $parent = null): DOMElement
     {
-        if (empty($extensions)) {
-            return;
-        }
-
-        $extElement = $parent->ownerDocument->createElementNS(Constants::NS_MD, 'md:Extensions');
-        $parent->appendChild($extElement);
-
-        foreach ($extensions as $ext) {
-            if (!($ext instanceof Chunk) && !$ext->isEmptyElement()) {
-                $ext->toXML($extElement);
+        $e = $this->instantiateParentElement($parent);
+        foreach ($this->extensions as $extension) {
+            if (!$extension->isEmptyElement()) {
+                $extension->toXML($e);
             }
         }
+        return $e;
     }
 }
