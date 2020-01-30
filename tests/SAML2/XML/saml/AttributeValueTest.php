@@ -98,3 +98,4 @@ ATTRIBUTEVALUE
         $this->assertEquals("urn:collab:person:surftest.nl:example", $av4->getString());
     }
 }
+
