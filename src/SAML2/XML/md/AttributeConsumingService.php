@@ -192,11 +192,11 @@ final class AttributeConsumingService extends AbstractMdElement
     /**
      * Convert to \DOMElement.
      *
-     * @param DOMElement $parent The element we should append this AttributeConsumingService to.
+     * @param \DOMElement|null $parent The element we should append this AttributeConsumingService to.
      *
-     * @return DOMElement
+     * @return \DOMElement
      *
-     * @throws InvalidArgumentException if assertions are false
+     * @throws \InvalidArgumentException if assertions are false
      */
     public function toXML(DOMElement $parent = null): DOMElement
     {

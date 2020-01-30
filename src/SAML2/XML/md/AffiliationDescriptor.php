@@ -6,7 +6,7 @@ namespace SAML2\XML\md;
 
 use DOMElement;
 use SAML2\Constants;
-use SAML2\SignedElementHelper;
+use SAML2\SignedElementTrait;
 use SAML2\Utils;
 use Webmozart\Assert\Assert;
 
@@ -15,8 +15,10 @@ use Webmozart\Assert\Assert;
  *
  * @package SimpleSAMLphp
  */
-class AffiliationDescriptor extends SignedElementHelper
+class AffiliationDescriptor extends AbstractSignedMdElement
 {
+    use SignedElementTrait;
+
     /**
      * The affiliationOwnerID.
      *
@@ -248,15 +250,30 @@ class AffiliationDescriptor extends SignedElementHelper
 
 
     /**
+     * Convert XML into a AffiliationDescriptor
+     *
+     * @param \DOMElement $xml The XML element we should load
+     * @return self
+     */
+    public static function fromXML(DOMElement $xml): object
+    {
+        // @TODO: Actually fill this method with something useful;  this is a dummy!!
+        return new self(new DOMElement('root'));
+    }
+
+
+    /**
      * Add this AffiliationDescriptor to an EntityDescriptor.
      *
-     * @param \DOMElement $parent The EntityDescriptor we should append this endpoint to.
+     * @param \DOMElement|null $parent The EntityDescriptor we should append this endpoint to.
      * @return \DOMElement
      *
      * @throws \InvalidArgumentException if assertions are false
      */
-    public function toXML(DOMElement $parent): DOMElement
+    public function toXML(DOMElement $parent = null): DOMElement
     {
+        // @TODO: Take care of a null parameter
+
         Assert::notEmpty($this->affiliationOwnerID);
 
         $e = $parent->ownerDocument->createElementNS(Constants::NS_MD, 'md:AffiliationDescriptor');

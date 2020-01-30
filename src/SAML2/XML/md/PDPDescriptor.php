@@ -169,15 +169,30 @@ class PDPDescriptor extends RoleDescriptor
 
 
     /**
+     * Convert XML into a PDPDescriptor
+     *
+     * @param \DOMElement $xml The XML element we should load
+     * @return self
+     */
+    public static function fromXML(DOMElement $xml): object
+    {
+        // @TODO: Actually fill this method with something useful;  this is a dummy!!
+        return new self(new DOMElement('root'));
+    }
+
+
+    /**
      * Add this PDPDescriptor to an EntityDescriptor.
      *
-     * @param \DOMElement $parent The EntityDescriptor we should append this IDPSSODescriptor to.
+     * @param \DOMElement|null $parent The EntityDescriptor we should append this IDPSSODescriptor to.
      * @return \DOMElement
      *
      * @throws \InvalidArgumentException if assertions are false
      */
-    public function toXML(DOMElement $parent): DOMElement
+    public function toXML(DOMElement $parent = null): DOMElement
     {
+        // @TODO: Take care of a null parameter
+
         Assert::notEmpty($this->AuthzService);
 
         $e = parent::toXML($parent);

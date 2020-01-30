@@ -216,11 +216,13 @@ abstract class SSODescriptorType extends RoleDescriptor
     /**
      * Add this SSODescriptorType to an EntityDescriptor.
      *
-     * @param  \DOMElement $parent The EntityDescriptor we should append this SSODescriptorType to.
+     * @param  \DOMElement|null $parent The EntityDescriptor we should append this SSODescriptorType to.
      * @return \DOMElement The generated SSODescriptor DOMElement.
      */
-    public function toXML(DOMElement $parent): DOMElement
+    public function toXML(DOMElement $parent = null): DOMElement
     {
+        // @TODO: Take care of a null parameter
+
         $e = parent::toXML($parent);
 
         foreach ($this->ArtifactResolutionService as $ep) {

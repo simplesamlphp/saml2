@@ -7,7 +7,7 @@ namespace SAML2\XML\md;
 use DOMElement;
 use SAML2\Constants;
 use SAML2\DOMDocumentFactory;
-use SAML2\SignedElementHelper;
+use SAML2\SignedElementTrait;
 use SAML2\Utils;
 use SAML2\XML\Chunk;
 use Webmozart\Assert\Assert;
@@ -17,8 +17,10 @@ use Webmozart\Assert\Assert;
  *
  * @package SimpleSAMLphp
  */
-class EntityDescriptor extends SignedElementHelper
+class EntityDescriptor extends AbstractSignedMdElement
 {
+    use SignedElementTrait;
+
     /**
      * The entityID this EntityDescriptor represents.
      *
@@ -446,6 +448,19 @@ class EntityDescriptor extends SignedElementHelper
     public function addAdditionalMetadataLocation(AdditionalMetadataLocation $additionalMetadataLocation): void
     {
         $this->AdditionalMetadataLocation[] = $additionalMetadataLocation;
+    }
+
+
+    /**
+     * Convert XML into a EntityDescriptor
+     *
+     * @param \DOMElement $xml The XML element we should load
+     * @return self
+     */
+    public static function fromXML(DOMElement $xml): object
+    {
+        // @TODO: Actually fill this method with something useful;  this is a dummy!!
+        return new self(new DOMElement('root'));
     }
 
 

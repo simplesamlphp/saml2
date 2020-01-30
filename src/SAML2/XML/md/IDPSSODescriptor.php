@@ -66,7 +66,7 @@ class IDPSSODescriptor extends SSODescriptorType
      *
      * @var \SAML2\XML\saml\Attribute[]
      */
-    private $Attribute = [];
+    private $Attributes = [];
 
 
     /**
@@ -103,7 +103,7 @@ class IDPSSODescriptor extends SSODescriptorType
 
         /** @var \DOMElement $a */
         foreach (Utils::xpQuery($xml, './saml_assertion:Attribute') as $a) {
-            $this->Attribute[] = Attribute::fromXML($a);
+            $this->Attributes[] = Attribute::fromXML($a);
         }
     }
 
@@ -263,44 +263,59 @@ class IDPSSODescriptor extends SSODescriptorType
      *
      * @return \SAML2\XML\saml\Attribute[]
      */
-    public function getAttribute(): array
+    public function getAttributes(): array
     {
-        return $this->Attribute;
+        return $this->Attributes;
     }
 
 
     /**
-     * Set the value of the Attribute-property
+     * Set the value of the Attributes-property
      *
-     * @param array $attribute
+     * @param array $attributes
      * @return void
      */
-    public function setAttribute(array $attribute): void
+    public function setAttributes(array $attributes): void
     {
-        $this->Attribute = $attribute;
+        $this->Attributes = $attributes;
     }
 
 
     /**
-     * Addthe value to the Attribute-property
+     * Add the value to the Attributes-property
      *
-     * @param \SAML2\XML\saml\Attribute $attribute
+     * @param \SAML2\XML\saml\Attribute $attributes
      * @return void
      */
-    public function addAttribute(Attribute $attribute): void
+    public function addAttributes(Attribute $attributes): void
     {
-        $this->Attribute[] = $attribute;
+        $this->Attributes[] = $attributes;
+    }
+
+
+    /**
+     * Convert XML into a IDPSSODescriptor
+     *
+     * @param \DOMElement $xml The XML element we should load
+     * @return self
+     */
+    public static function fromXML(DOMElement $xml): object
+    {
+        // @TODO: Actually fill this method with something useful;  this is a dummy!!
+        return new self(new DOMElement('root'));
     }
 
 
     /**
      * Add this IDPSSODescriptor to an EntityDescriptor.
      *
-     * @param \DOMElement $parent The EntityDescriptor we should append this IDPSSODescriptor to.
+     * @param \DOMElement|null $parent The EntityDescriptor we should append this IDPSSODescriptor to.
      * @return \DOMElement
      */
-    public function toXML(DOMElement $parent): DOMElement
+    public function toXML(?DOMElement $parent = null): DOMElement
     {
+        // @TODO: Take care of a null parameter
+
         $e = parent::toXML($parent);
 
         if (is_bool($this->WantAuthnRequestsSigned)) {
@@ -321,7 +336,7 @@ class IDPSSODescriptor extends SSODescriptorType
 
         Utils::addStrings($e, Constants::NS_MD, 'md:AttributeProfile', false, $this->AttributeProfile);
 
-        foreach ($this->Attribute as $a) {
+        foreach ($this->Attributes as $a) {
             $a->toXML($e);
         }
 

@@ -6,7 +6,7 @@ namespace SAML2\XML\md;
 
 use DOMElement;
 use SAML2\Constants;
-use SAML2\SignedElementHelper;
+use SAML2\SignedElementTrait;
 use SAML2\Utils;
 use SAML2\XML\Chunk;
 use Webmozart\Assert\Assert;
@@ -16,8 +16,10 @@ use Webmozart\Assert\Assert;
  *
  * @package SimpleSAMLphp
  */
-abstract class RoleDescriptor extends SignedElementHelper
+abstract class RoleDescriptor extends AbstractSignedMdElement
 {
+    use SignedElementTrait;
+
     /**
      * The name of this descriptor element.
      *
@@ -396,12 +398,12 @@ abstract class RoleDescriptor extends SignedElementHelper
     /**
      * Add this RoleDescriptor to an EntityDescriptor.
      *
-     * @param \DOMElement $parent The EntityDescriptor we should append this endpoint to.
+     * @param \DOMElement|null $parent The EntityDescriptor we should append this endpoint to.
      * @return \DOMElement
      *
      * @throws \InvalidArgumentException if assertions are false
      */
-    public function toXML(DOMElement $parent): DOMElement
+    public function toXML(DOMElement $parent = null): DOMElement
     {
         Assert::notEmpty($this->protocolSupportEnumeration);
 
