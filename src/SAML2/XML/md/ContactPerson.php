@@ -248,9 +248,8 @@ class ContactPerson
         $this->SurName = $surName;
     }
 
-
     /**
-     * Collect the value of the EmailAddress-property
+     * Collect the value of the EmailAddress-property.
      *
      * @return string[]
      */
@@ -259,6 +258,16 @@ class ContactPerson
         return $this->EmailAddress;
     }
 
+    /**
+     * Remove a "mailto:" prefix on an emailaddress, if present.
+     *
+     * @param string $emailAddress
+     * @return string
+     */
+    private function removeEmailMailtoPrefix(string $emailAddress): string
+    {
+        return preg_replace('/^mailto:/i', '', $emailAddress);
+    }
 
     /**
      * Set the value of the EmailAddress-property
@@ -268,9 +277,8 @@ class ContactPerson
      */
     public function setEmailAddress(array $emailAddress): void
     {
-        $this->EmailAddress = $emailAddress;
+        $this->EmailAddress = array_map([$this, 'removeEmailMailtoPrefix'], $emailAddress);
     }
-
 
     /**
      * Add the value to the EmailAddress-property
@@ -278,11 +286,10 @@ class ContactPerson
      * @param string $emailAddress
      * @return void
      */
-    public function addEmailAddress($emailAddress): void
+    public function addEmailAddress(string $emailAddress): void
     {
-        $this->EmailAddress[] = $emailAddress;
+        $this->EmailAddress[] = $this->removeEmailMailtoPrefix($emailAddress);
     }
-
 
     /**
      * Collect the value of the TelephoneNumber-property
@@ -426,7 +433,9 @@ class ContactPerson
             Utils::addString($e, Constants::NS_MD, 'md:SurName', $this->SurName);
         }
         if (!empty($this->EmailAddress)) {
-            Utils::addStrings($e, Constants::NS_MD, 'md:EmailAddress', false, $this->EmailAddress);
+            /** @var array $addresses */
+            $addresses = preg_filter('/^/', 'mailto:', $this->EmailAddress);
+            Utils::addStrings($e, Constants::NS_MD, 'md:EmailAddress', false, $addresses);
         }
         if (!empty($this->TelephoneNumber)) {
             Utils::addStrings($e, Constants::NS_MD, 'md:TelephoneNumber', false, $this->TelephoneNumber);
