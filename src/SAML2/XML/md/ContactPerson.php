@@ -54,16 +54,16 @@ final class ContactPerson extends AbstractMdElement
     /**
      * The EmailAddresses of this contact.
      *
-     * @var array
+     * @var string[]|null
      */
-    protected $EmailAddresses = [];
+    protected $EmailAddresses = null;
 
     /**
      * The TelephoneNumbers of this contact.
      *
-     * @var array
+     * @var string[]|null
      */
-    protected $TelephoneNumbers = [];
+    protected $TelephoneNumbers = null;
 
 
     /**
@@ -96,41 +96,6 @@ final class ContactPerson extends AbstractMdElement
         $this->setTelephoneNumbers($telephone);
         $this->setAttributesNS($namespacedAttributes);
         $this->setExtensions($extensions);
-    }
-
-
-    /**
-     * Initialize a ContactPerson element.
-     *
-     * @param \DOMElement|null $xml The XML element we should load.
-     *
-     * @return self
-     * @throws \Exception
-     */
-    public static function fromXML(DOMElement $xml): object
-    {
-        if (!$xml->hasAttribute('contactType')) {
-            throw new Exception('Missing contactType on ContactPerson.');
-        }
-        $contactType = $xml->getAttribute('contactType');
-        $company = self::getStringElement($xml, 'Company');
-        $givenName = self::getStringElement($xml, 'GivenName');
-        $surName = self::getStringElement($xml, 'SurName');
-        $email = self::getStringElements($xml, 'EmailAddress');
-        $telephone = self::getStringElements($xml, 'TelephoneNumber');
-        $extensions = Extensions::extractFromChildren($xml);
-        Assert::maxCount($extensions, 1, 'Only one md:Extensions element is allowed.');
-
-        return new self(
-            $contactType,
-            $company,
-            $givenName,
-            $surName,
-            $email,
-            $telephone,
-            self::getAttributesNSFromXML($xml),
-            (count($extensions) === 1) ? $extensions[0] : null
-        );
     }
 
 
@@ -267,11 +232,11 @@ final class ContactPerson extends AbstractMdElement
     }
 
     /**
-     * Collect the value of the EmailAddress-property.
+     * Collect the value of the EmailAddresses-property.
      *
-     * @return string[]
+     * @return string[]|null
      */
-    public function getEmailAddresses(): array
+    public function getEmailAddresses(): ?array
     {
         return $this->EmailAddresses;
     }
@@ -294,130 +259,94 @@ final class ContactPerson extends AbstractMdElement
     }
 
     /**
-     * Set the value of the EmailAddress-property
+     * Set the value of the EmailAddresses-property
      *
-     * @param string[] $emailAddress
+     * @param string[]|null $emailAddresses
      * @return void
      */
-    public function setEmailAddress(array $emailAddress): void
+    public function setEmailAddresses(?array $emailAddresses): void
     {
-        $this->EmailAddress = array_map([$this, 'validateEmailAddress'], $emailAddress);
+        $this->EmailAddresses = $emailAddresses ? array_map([$this, 'validateEmailAddress'], $emailAddresses) : null;
     }
 
     /**
-     * Add the value to the EmailAddress-property
+     * Add the value to the EmailAddresses-property
      *
      * @param string $emailAddress
      * @return void
      */
     public function addEmailAddress(string $emailAddress): void
     {
-        $this->EmailAddress[] = $this->validateEmailAddress($emailAddress);
+        $this->EmailAddresses[] = $this->validateEmailAddress($emailAddress);
     }
 
     /**
-     * Collect the value of the TelephoneNumber-property
+     * Collect the value of the TelephoneNumbers-property
      *
-     * @return string[]
+     * @return string[]|null
      */
-    public function getTelephoneNumber(): array
+    public function getTelephoneNumbers(): ?array
     {
-        return $this->TelephoneNumber;
+        return $this->TelephoneNumbers;
     }
 
 
     /**
-     * Set the value of the TelephoneNumber-property
+     * Set the value of the TelephoneNumbers-property
      *
-     * @param string[] $telephoneNumber
+     * @param string[]|null $telephoneNumbers
      * @return void
      */
-    public function setTelephoneNumber(array $telephoneNumber): void
+    public function setTelephoneNumbers(?array $telephoneNumbers): void
     {
-        $this->TelephoneNumber = $telephoneNumber;
+        $this->TelephoneNumbers = $telephoneNumbers;
     }
 
 
     /**
-     * Add the value to the TelephoneNumber-property
+     * Add the value to the TelephoneNumbers-property
      *
      * @param string $telephoneNumber
      * @return void
      */
     public function addTelephoneNumber($telephoneNumber): void
     {
-        $this->TelephoneNumber[] = $telephoneNumber;
+        $this->TelephoneNumbers[] = $telephoneNumber;
     }
 
 
     /**
-     * Collect the value of the Extensions-property
+     * Initialize a ContactPerson element.
      *
-     * @return \SAML2\XML\Chunk[]
-     */
-    public function getExtensions(): array
-    {
-        return $this->Extensions;
-    }
-
-
-    /**
-     * Set the value of the Extensions-property
+     * @param \DOMElement|null $xml The XML element we should load.
      *
-     * @param array $extensions
-     * @return void
+     * @return self
+     * @throws \Exception
      */
-    public function setExtensions(array $extensions): void
+    public static function fromXML(DOMElement $xml): object
     {
-        $this->Extensions = $extensions;
-    }
+        if (!$xml->hasAttribute('contactType')) {
+            throw new Exception('Missing contactType on ContactPerson.');
+        }
+        $contactType = $xml->getAttribute('contactType');
+        $company = self::getStringElement($xml, 'Company');
+        $givenName = self::getStringElement($xml, 'GivenName');
+        $surName = self::getStringElement($xml, 'SurName');
+        $email = self::getStringElements($xml, 'EmailAddress');
+        $telephone = self::getStringElements($xml, 'TelephoneNumber');
+        $extensions = Extensions::extractFromChildren($xml);
+        Assert::maxCount($extensions, 1, 'Only one md:Extensions element is allowed.');
 
-
-    /**
-     * Add an Extension.
-     *
-     * @param \SAML2\XML\Chunk $extensions The Extensions
-     * @return void
-     */
-    public function addExtension(Chunk $extension): void
-    {
-        $this->Extensions[] = $extension;
-    }
-
-
-    /**
-     * Collect the value of the ContactPersonAttributes-property
-     *
-     * @return string[]
-     */
-    public function getContactPersonAttributes(): array
-    {
-        return $this->ContactPersonAttributes;
-    }
-
-
-    /**
-     * Set the value of the ContactPersonAttributes-property
-     *
-     * @param string[] $contactPersonAttributes
-     * @return void
-     */
-    public function setContactPersonAttributes(array $contactPersonAttributes): void
-    {
-        $this->ContactPersonAttributes = $contactPersonAttributes;
-    }
-
-
-    /**
-     * Add the key/value of the ContactPersonAttributes-property
-     *
-     * @param string $attr
-     * @param string $value
-     * @return void
-     */
-    public function addContactPersonAttributes(string $attr, string $value): void
-    {
-        $this->ContactPersonAttributes[$attr] = $value;
+        return new self(
+            $contactType,
+            $company,
+            $givenName,
+            $surName,
+            $email,
+            $telephone,
+            self::getAttributesNSFromXML($xml),
+            (count($extensions) === 1) ? $extensions[0] : null
+        );
     }
 
 
@@ -433,8 +362,8 @@ final class ContactPerson extends AbstractMdElement
         $e = $this->instantiateParentElement($parent);
         $e->setAttribute('contactType', $this->contactType);
 
-        foreach ($this->ContactPersonAttributes as $attr => $val) {
-            $e->setAttribute($attr, $val);
+        foreach ($this->getAttributesNS() as $attr) {
+            $e->setAttributeNS($attr['namespaceURI'], $attr['qualifiedName'], $attr['value']);
         }
 
         Extensions::addList($e, $this->Extensions);
@@ -448,13 +377,13 @@ final class ContactPerson extends AbstractMdElement
         if ($this->SurName !== null) {
             Utils::addString($e, Constants::NS_MD, 'md:SurName', $this->SurName);
         }
-        if (!empty($this->EmailAddress)) {
+        if (!empty($this->EmailAddresses)) {
             /** @var array $addresses */
-            $addresses = preg_filter('/^/', 'mailto:', $this->EmailAddress);
+            $addresses = preg_filter('/^/', 'mailto:', $this->EmailAddresses);
             Utils::addStrings($e, Constants::NS_MD, 'md:EmailAddress', false, $addresses);
         }
-        if (!empty($this->TelephoneNumber)) {
-            Utils::addStrings($e, Constants::NS_MD, 'md:TelephoneNumber', false, $this->TelephoneNumber);
+        if (!empty($this->TelephoneNumbers)) {
+            Utils::addStrings($e, Constants::NS_MD, 'md:TelephoneNumber', false, $this->TelephoneNumbers);
         }
 
         return $e;

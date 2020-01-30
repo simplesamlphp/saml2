@@ -122,7 +122,7 @@ abstract class RoleDescriptor extends AbstractSignedMdElement
 
         foreach (Utils::xpQuery($xml, './saml_metadata:KeyDescriptor') as $kd) {
             /** @var \DOMElement $kd */
-            $this->KeyDescriptor[] = new KeyDescriptor($kd);
+            $this->KeyDescriptor[] = KeyDescriptor::fromXML($kd);
         }
 
         $organization = Utils::xpQuery($xml, './saml_metadata:Organization');
