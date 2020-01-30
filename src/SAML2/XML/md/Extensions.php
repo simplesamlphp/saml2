@@ -14,7 +14,7 @@ use SAML2\XML\mdattr\EntityAttributes;
 use SAML2\XML\mdrpi\AbstractMdrpiElement as MDRPI;
 use SAML2\XML\mdrpi\PublicationInfo;
 use SAML2\XML\mdrpi\RegistrationInfo;
-use SAML2\XML\mdui\Common as MDUI;
+use SAML2\XML\mdui\AbstractMduiElement as MDUI;
 use SAML2\XML\mdui\DiscoHints;
 use SAML2\XML\mdui\UIInfo;
 use SAML2\XML\shibmd\Scope;
@@ -80,6 +80,24 @@ final class Extensions extends AbstractMdElement
 
 
     /**
+     * @inheritDoc
+     */
+    public function isEmptyElement(): bool
+    {
+        if (empty($this->extensions)) {
+            return true;
+        }
+
+        $empty = false;
+        foreach ($this->extensions as $extension) {
+            $empty &= $extension->isEmptyElement();
+        }
+
+        return false;
+    }
+
+
+    /**
      * Create an Extensions object from its md:Extensions XML representation.
      *
      * For those supported extensions, an object of the corresponding class will be created. The rest will be added
@@ -103,22 +121,22 @@ final class Extensions extends AbstractMdElement
         );
         $ret = [];
         $supported = [
-            Scope::NS => [
+            Scope::NS            => [
                 'Scope' => Scope::class,
             ],
             EntityAttributes::NS => [
                 'EntityAttributes' => EntityAttributes::class,
             ],
-            MDRPI::NS => [
+            MDRPI::NS            => [
                 'RegistrationInfo' => RegistrationInfo::class,
-                'PublicationInfo' => PublicationInfo::class,
+                'PublicationInfo'  => PublicationInfo::class,
             ],
-            MDUI::NS => [
-                'UIInfo' => UIInfo::class,
+            MDUI::NS             => [
+                'UIInfo'     => UIInfo::class,
                 'DiscoHints' => DiscoHints::class,
             ],
-            ALG::NS => [
-                'DigestMethod' => DigestMethod::class,
+            ALG::NS              => [
+                'DigestMethod'  => DigestMethod::class,
                 'SigningMethod' => SigningMethod::class,
             ],
         ];
@@ -130,18 +148,7 @@ final class Extensions extends AbstractMdElement
                 && array_key_exists($node->namespaceURI, $supported)
                 && array_key_exists($node->localName, $supported[$node->namespaceURI])
             ) {
-                if (
-                    $node->namespaceURI === ALG::NS
-                    || $node->namespaceURI === EntityAttributes::NS
-                    || $node->namespaceURI === MDRPI::NS
-                    || $node->namespaceURI === Scope::NS
-                ) {
-                    /** @psalm-suppress UndefinedMethod */
-                    $ret[] = $supported[$node->namespaceURI][$node->localName]::fromXML($node);
-                } else {
-                    /** @psalm-suppress InvalidArgument */
-                    $ret[] = new $supported[$node->namespaceURI][$node->localName]($node);
-                }
+                $ret[] = $supported[$node->namespaceURI][$node->localName]::fromXML($node);
             } else {
                 $ret[] = new Chunk($node);
             }
@@ -162,7 +169,9 @@ final class Extensions extends AbstractMdElement
     {
         $e = $this->instantiateParentElement($parent);
         foreach ($this->extensions as $extension) {
-            $extension->toXML($e);
+            if (!$extension->isEmptyElement()) {
+                $extension->toXML($e);
+            }
         }
         return $e;
     }

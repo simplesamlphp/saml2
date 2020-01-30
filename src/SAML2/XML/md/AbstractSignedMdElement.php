@@ -5,7 +5,7 @@ declare(strict_types=1);
 namespace SAML2\XML\md;
 
 use RobRichards\XMLSecLibs\XMLSecurityKey;
-use SAML2\SignedElementHelper;
+use SAML2\SignedElementTrait;
 use SAML2\SignedElementInterface;
 
 /**
@@ -15,7 +15,7 @@ use SAML2\SignedElementInterface;
  */
 abstract class AbstractSignedMdElement extends AbstractMdElement implements SignedElementInterface
 {
-    use SignedElementHelper;
+    use SignedElementTrait;
 
     /**
      * List of certificates that should be included in the message.
@@ -23,15 +23,6 @@ abstract class AbstractSignedMdElement extends AbstractMdElement implements Sign
      * @var array
      */
     protected $certificates = [];
-
-    /**
-     * The private key we should use to sign the message.
-     *
-     * The private key can be null, in which case the message is sent unsigned.
-     *
-     * @var XMLSecurityKey|null
-     */
-    protected $signatureKey;
 
 
     /**
@@ -61,7 +52,7 @@ abstract class AbstractSignedMdElement extends AbstractMdElement implements Sign
     /**
      * Retrieve the private key we should use to sign the message.
      *
-     * @return XMLSecurityKey|null The key, or NULL if no key is specified
+     * @return \RobRichards\XMLSecLibs\XMLSecurityKey|null The key, or NULL if no key is specified
      */
     public function getSignatureKey(): ?XMLSecurityKey
     {
@@ -74,7 +65,7 @@ abstract class AbstractSignedMdElement extends AbstractMdElement implements Sign
      *
      * If the key is null, the message will be sent unsigned.
      *
-     * @param XMLSecurityKey|null $signatureKey
+     * @param \RobRichards\XMLSecLibs\XMLSecurityKey|null $signatureKey
      * @return void
      */
     public function setSignatureKey(XMLSecurityKey $signatureKey = null): void

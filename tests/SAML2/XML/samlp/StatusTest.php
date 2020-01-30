@@ -42,12 +42,22 @@ class StatusTest extends \PHPUnit\Framework\TestCase
             ]
         );
 
-        $this->assertEquals(
-            '<samlp:Status xmlns:samlp="' . Constants::NS_SAMLP . '"><samlp:StatusCode Value="'
-                . Constants::STATUS_RESPONDER . '"><samlp:StatusCode Value="' . Constants::STATUS_REQUEST_DENIED
-                . '"/></samlp:StatusCode><samlp:StatusMessage>Something went wrong</samlp:StatusMessage>'
-                . '<samlp:StatusDetail><Cause>org.sourceid.websso.profiles.idp.FailedAuthnSsoException</Cause>'
-                . '</samlp:StatusDetail></samlp:Status>',
+        $nssamlp = Status::NS;
+        $status_responder = Constants::STATUS_RESPONDER;
+        $status_request_denied = Constants::STATUS_REQUEST_DENIED;
+
+        $this->assertEquals(<<<XML
+<samlp:Status xmlns:samlp="{$nssamlp}">
+  <samlp:StatusCode Value="{$status_responder}">
+    <samlp:StatusCode Value="{$status_request_denied}"/>
+  </samlp:StatusCode>
+  <samlp:StatusMessage>Something went wrong</samlp:StatusMessage>
+  <samlp:StatusDetail>
+    <Cause>org.sourceid.websso.profiles.idp.FailedAuthnSsoException</Cause>
+  </samlp:StatusDetail>
+</samlp:Status>
+XML
+            ,
             strval($status)
         );
 

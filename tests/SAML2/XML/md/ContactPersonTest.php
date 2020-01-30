@@ -27,8 +27,8 @@ class ContactPersonTest extends TestCase
   <md:Company>Test Company</md:Company>
   <md:GivenName>John</md:GivenName>
   <md:SurName>Doe</md:SurName>
-  <md:EmailAddress>jdoe@test.company</md:EmailAddress>
-  <md:EmailAddress>john.doe@test.company</md:EmailAddress>
+  <md:EmailAddress>mailto:jdoe@test.company</md:EmailAddress>
+  <md:EmailAddress>mailto:john.doe@test.company</md:EmailAddress>
   <md:TelephoneNumber>1-234-567-8901</md:TelephoneNumber>
 </md:ContactPerson>
 XML
@@ -121,7 +121,6 @@ XML
     {
         $mdNamespace = Constants::NS_MD;
         $document = DOMDocumentFactory::fromString(<<<XML
-<?xml version="1.0"?>
 <md:ContactPerson contactType="other" xmlns:md="{$mdNamespace}"></md:ContactPerson>
 XML
         );
@@ -259,7 +258,6 @@ XML
     {
         $mdNamespace = Constants::NS_MD;
         $document = DOMDocumentFactory::fromString(<<<XML
-<?xml version="1.0"?>
 <md:ContactPerson contactType="other" xmlns:md="{$mdNamespace}"/>
 XML
         );

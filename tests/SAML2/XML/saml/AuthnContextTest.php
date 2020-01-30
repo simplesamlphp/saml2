@@ -27,11 +27,16 @@ class AuthnContextTest extends \PHPUnit\Framework\TestCase
             ]
         );
 
-        $this->assertEquals(
-            '<saml:AuthnContext xmlns:saml="' . Constants::NS_SAML . '"><saml:AuthnContextClassRef>'
-                . Constants::AC_PASSWORD_PROTECTED_TRANSPORT . '</saml:AuthnContextClassRef><saml:AuthnContextDeclRef>'
-                . '/relative/path/to/document.xml</saml:AuthnContextDeclRef><saml:AuthenticatingAuthority>'
-                . 'https://sp.example.com/SAML2</saml:AuthenticatingAuthority></saml:AuthnContext>',
+        $nssaml = AuthnContext::NS;
+        $ac_ppt = Constants::AC_PASSWORD_PROTECTED_TRANSPORT;
+        $this->assertEquals(<<<XML
+<saml:AuthnContext xmlns:saml="{$nssaml}">
+  <saml:AuthnContextClassRef>{$ac_ppt}</saml:AuthnContextClassRef>
+  <saml:AuthnContextDeclRef>/relative/path/to/document.xml</saml:AuthnContextDeclRef>
+  <saml:AuthenticatingAuthority>https://sp.example.com/SAML2</saml:AuthenticatingAuthority>
+</saml:AuthnContext>
+XML
+            ,
             strval($authnContext)
         );
     }
@@ -69,11 +74,7 @@ XML
         );
 
         $document = DOMDocumentFactory::fromString('<root />');
-        /**
-         * @var \DOMElement $document->firstChild
-         * @var \DOMElement $authnContextElement
-         */
-        $authnContextElement = $authnContext->toXML($document->firstChild);
+        $authnContextElement = $authnContext->toXML($document->documentElement);
 
         $authnContextElements = Utils::xpQuery(
             $authnContextElement,

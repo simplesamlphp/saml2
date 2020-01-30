@@ -6,7 +6,6 @@ namespace SAML2\XML\md;
 
 use DOMElement;
 use Exception;
-use InvalidArgumentException;
 use SAML2\Constants;
 use SAML2\Utils;
 use SAML2\XML\ExtendableAttributes;
@@ -118,7 +117,7 @@ final class ContactPerson extends AbstractMdElement
         $surName = self::getStringElement($xml, 'SurName');
         $email = self::getStringElements($xml, 'EmailAddress');
         $telephone = self::getStringElements($xml, 'TelephoneNumber');
-        $extensions = Extensions::extractFromChildren($xml);
+        $extensions = Extensions::getChildrenOfClass($xml);
         Assert::maxCount($extensions, 1, 'Only one md:Extensions element is allowed.');
 
         return new self(
@@ -266,9 +265,8 @@ final class ContactPerson extends AbstractMdElement
         $this->SurName = $surName;
     }
 
-
     /**
-     * Collect the value of the EmailAddress-property
+     * Collect the value of the EmailAddress-property.
      *
      * @return string[]
      */
@@ -277,19 +275,30 @@ final class ContactPerson extends AbstractMdElement
         return $this->EmailAddresses;
     }
 
+    /**
+     * Remove a "mailto:" prefix on an emailaddress, if present.
+     *
+     * @param string $emailAddress
+     * @return string
+     */
+    protected function removeEmailMailtoPrefix(string $emailAddress): string
+    {
+        return preg_replace('/^mailto:/i', '', $emailAddress);
+    }
 
     /**
      * Set the value of the EmailAddress-property
      *
-     * @param string[] $emailAddresses
+     * @param string[]|null $emailAddresses
      */
     protected function setEmailAddresses(?array $emailAddresses): void
     {
         if ($emailAddresses === null) {
             return;
         }
-        Assert::allEmail($emailAddresses, 'Invalid email addresses found.');
-        $this->EmailAddresses = $emailAddresses;
+        $addresses = array_map([$this, 'removeEmailMailtoPrefix'], $emailAddresses);
+        Assert::allEmail($addresses, 'Invalid email addresses found.');
+        $this->EmailAddresses = $addresses;
     }
 
 
@@ -349,8 +358,14 @@ final class ContactPerson extends AbstractMdElement
         if ($this->SurName !== null) {
             Utils::addString($e, Constants::NS_MD, 'md:SurName', $this->SurName);
         }
-        Utils::addStrings($e, Constants::NS_MD, 'md:EmailAddress', false, $this->EmailAddresses);
-        Utils::addStrings($e, Constants::NS_MD, 'md:TelephoneNumber', false, $this->TelephoneNumbers);
+        if (!empty($this->EmailAddresses)) {
+            /** @var array $addresses */
+            $addresses = preg_filter('/^/', 'mailto:', $this->EmailAddresses);
+            Utils::addStrings($e, Constants::NS_MD, 'md:EmailAddress', false, $addresses);
+        }
+        if (!empty($this->TelephoneNumbers)) {
+            Utils::addStrings($e, Constants::NS_MD, 'md:TelephoneNumber', false, $this->TelephoneNumbers);
+        }
 
         return $e;
     }

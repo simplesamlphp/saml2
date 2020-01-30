@@ -3,8 +3,8 @@
 namespace SAML2\XML\md;
 
 use DOMElement;
-use SAML2\SignedElementHelper;
-use SAML2\XML\ExtendableElement;
+use SAML2\SignedElementTrait;
+use SAML2\XML\ExtendableElementTrait;
 
 /**
  * Class to represent a metadata document
@@ -13,8 +13,8 @@ use SAML2\XML\ExtendableElement;
  */
 abstract class AbstractMetadataDocument extends AbstractSignedMdElement
 {
-    use ExtendableElement;
-    use SignedElementHelper;
+    use ExtendableElementTrait;
+    use SignedElementTrait;
 
     /**
      * The ID of this element.
@@ -60,22 +60,6 @@ abstract class AbstractMetadataDocument extends AbstractSignedMdElement
 
 
     /**
-     * Process an XML element and get its ID property, if any.
-     *
-     * @param \DOMElement $xml An element that may contain an ID.
-     *
-     * @return string|null
-     */
-    public static function getIDFromXML(DOMElement $xml): ?string
-    {
-        if ($xml->hasAttribute('ID')) {
-            return $xml->getAttribute('ID');
-        }
-        return null;
-    }
-
-
-    /**
      * Collect the value of the ID property.
      *
      * @return string|null
@@ -116,22 +100,6 @@ abstract class AbstractMetadataDocument extends AbstractSignedMdElement
     protected function setValidUntil(?int $validUntil): void
     {
         $this->validUntil = $validUntil;
-    }
-
-
-    /**
-     * Process an XML element and get its cacheDuration property, if any.
-     *
-     * @param \DOMElement $xml An element that may contain cacheDuration.
-     *
-     * @return string|null
-     */
-    public static function getCacheDurationFromXML(DOMElement $xml): ?string
-    {
-        if ($xml->hasAttribute('cacheDuration')) {
-            return $xml->getAttribute('cacheDuration');
-        }
-        return null;
     }
 
 
@@ -181,7 +149,7 @@ abstract class AbstractMetadataDocument extends AbstractSignedMdElement
         if ($this->Extensions !== null) {
             $this->Extensions->toXML($e);
         }
-        
+
         return $e;
     }
 }

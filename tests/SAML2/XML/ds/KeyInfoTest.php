@@ -65,11 +65,15 @@ class KeyInfoTest extends \PHPUnit\Framework\TestCase
         $doc = DOMDocumentFactory::fromString('<some>Chunk</some>');
         $keyInfo->addInfo(new Chunk($doc->firstChild));
 
-        $this->assertEquals(
-            '<ds:KeyInfo xmlns:ds="' . KeyInfo::NS . '" Id="abc123">'
-                . '<ds:KeyName>testkey</ds:KeyName>'
-                . '<ds:KeySomething>Some unknown tag within the ds-namespace</ds:KeySomething>'
-                . '<some>Chunk</some></ds:KeyInfo>',
+        $dsns = KeyInfo::NS;
+        $this->assertEquals(<<<XML
+<ds:KeyInfo xmlns:ds="{$dsns}" Id="abc123">
+  <ds:KeyName>testkey</ds:KeyName>
+  <ds:KeySomething>Some unknown tag within the ds-namespace</ds:KeySomething>
+  <some>Chunk</some>
+</ds:KeyInfo>
+XML
+            ,
             strval($keyInfo)
         );
     }
