@@ -77,10 +77,10 @@ final class AttributeConsumingService extends AbstractMdElement
      */
     public static function fromXML(DOMElement $xml): object
     {
-        $names = ServiceName::extractFromChildren($xml);
+        $names = ServiceName::getChildrenOfClass($xml);
         Assert::minCount($names, 1, 'Missing at least one ServiceName in AttributeConsumingService.');
 
-        $descriptions = ServiceDescription::extractFromChildren($xml);
+        $descriptions = ServiceDescription::getChildrenOfClass($xml);
 
         $requestedAttrs = [];
         /** @var DOMElement $ra */

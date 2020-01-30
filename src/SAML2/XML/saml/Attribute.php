@@ -186,7 +186,7 @@ class Attribute extends AbstractSamlElement
             self::getAttribute($xml, 'Name'),
             self::getAttribute($xml, 'NameFormat', null),
             self::getAttribute($xml, 'FriendlyName', null),
-            AttributeValue::extractFromChildren($xml)
+            AttributeValue::getChildrenOfClass($xml)
         );
     }
 

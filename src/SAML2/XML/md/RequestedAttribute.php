@@ -92,7 +92,7 @@ final class RequestedAttribute extends Attribute
             self::getBooleanAttribute($xml, 'isRequired', null),
             self::getAttribute($xml, 'NameFormat', null),
             self::getAttribute($xml, 'FriendlyName', null),
-            AttributeValue::extractFromChildren($xml)
+            AttributeValue::getChildrenOfClass($xml)
         );
     }
 
