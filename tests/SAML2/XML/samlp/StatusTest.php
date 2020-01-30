@@ -93,7 +93,7 @@ XML
      */
     public function testUnmarshalling(): void
     {
-        $nssamlp = StatusTest::NS;
+        $nssamlp = Status::NS;
         $document = DOMDocumentFactory::fromString(<<<XML
 <samlp:Status xmlns:samlp="{$nssamlp}">
   <samlp:StatusCode Value="urn:oasis:names:tc:SAML:2.0:status:Responder">
