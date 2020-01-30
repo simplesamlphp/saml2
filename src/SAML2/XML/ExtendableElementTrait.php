@@ -18,17 +18,17 @@ trait ExtendableElementTrait
      *
      * Array of extension elements.
      *
-     * @var \SAML2\XML\md\Extensions
+     * @var \SAML2\XML\md\Extensions|null
      */
-    protected $Extensions;
+    protected $Extensions = null;
 
 
     /**
      * Collect the value of the Extensions property.
      *
-     * @return \SAML2\XML\md\Extensions
+     * @return \SAML2\XML\md\Extensions|null
      */
-    public function getExtensions(): Extensions
+    public function getExtensions(): ?Extensions
     {
         return $this->Extensions;
     }
@@ -41,10 +41,6 @@ trait ExtendableElementTrait
      */
     protected function setExtensions(?Extensions $extensions): void
     {
-        if ($extensions === null) {
-            return;
-        }
-
         $this->Extensions = $extensions;
     }
 }
