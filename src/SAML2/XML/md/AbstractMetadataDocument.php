@@ -60,22 +60,6 @@ abstract class AbstractMetadataDocument extends AbstractSignedMdElement
 
 
     /**
-     * Process an XML element and get its ID property, if any.
-     *
-     * @param \DOMElement $xml An element that may contain an ID.
-     *
-     * @return string|null
-     */
-    public static function getIDFromXML(DOMElement $xml): ?string
-    {
-        if ($xml->hasAttribute('ID')) {
-            return $xml->getAttribute('ID');
-        }
-        return null;
-    }
-
-
-    /**
      * Collect the value of the ID property.
      *
      * @return string|null
@@ -98,25 +82,6 @@ abstract class AbstractMetadataDocument extends AbstractSignedMdElement
 
 
     /**
-     * Process an XML element and get its validUntil property, if any.
-     *
-     * @param \DOMElement $xml An element that may contain validUntil.
-     *
-     * @return int|null
-     *
-     * @throws \Exception If the processed validUntil from $xml is not a valid timestamp.
-     */
-    public static function getValidUntilFromXML(DOMElement $xml): ?int
-    {
-        if ($xml->hasAttribute('validUntil')) {
-            return Utils::xsDateTimeToTimestamp($xml->getAttribute('validUntil'));
-        }
-
-        return null;
-    }
-
-
-    /**
      * Collect the value of the validUntil property.
      *
      * @return int|null
@@ -135,23 +100,6 @@ abstract class AbstractMetadataDocument extends AbstractSignedMdElement
     protected function setValidUntil(?int $validUntil): void
     {
         $this->validUntil = $validUntil;
-    }
-
-
-    /**
-     * Process an XML element and get its cacheDuration property, if any.
-     *
-     * @param \DOMElement $xml An element that may contain cacheDuration.
-     *
-     * @return string|null
-     */
-    public static function getCacheDurationFromXML(DOMElement $xml): ?string
-    {
-        if ($xml->hasAttribute('cacheDuration')) {
-            return $xml->getAttribute('cacheDuration');
-        }
-
-        return null;
     }
 
 
