@@ -24,15 +24,6 @@ abstract class AbstractSignedMdElement extends AbstractMdElement implements Sign
      */
     protected $certificates = [];
 
-    /**
-     * The private key we should use to sign the message.
-     *
-     * The private key can be null, in which case the message is sent unsigned.
-     *
-     * @var \RobRichards\XMLSecLibs\XMLSecurityKey|null
-     */
-    protected $signatureKey;
-
 
     /**
      * Retrieve the certificates that are included in the message.
