@@ -32,6 +32,16 @@ trait SignedElementTrait
 
 
     /**
+     * The private key we should use to sign the message.
+     *
+     * The private key can be null, in which case the message is sent unsigned.
+     *
+     * @var \RobRichards\XMLSecLibs\XMLSecurityKey|null
+     */
+    protected $signatureKey;
+
+
+    /**
      * Initialize a signed element from XML.
      *
      * @param \DOMElement $xml The XML element which may be signed.
@@ -159,4 +169,22 @@ trait SignedElementTrait
 
         return $root;
     }
+
+
+    /**
+     * Retrieve the certificates that are included in the message.
+     *
+     * @return array An array of certificates
+     */
+    abstract public function getCertificates(): array;
+
+
+    /**
+     * Set the certificates that should be included in the element.
+     * The certificates should be strings with the PEM encoded data.
+     *
+     * @param array $certificates An array of certificates.
+     * @return void
+     */
+    abstract public function setCertificates(array $certificates): void;
 }
