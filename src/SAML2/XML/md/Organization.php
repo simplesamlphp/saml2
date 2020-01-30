@@ -75,10 +75,10 @@ final class Organization extends AbstractMdElement
      */
     public static function fromXML(DOMElement $xml): object
     {
-        $names = OrganizationName::extractFromChildren($xml);
+        $names = OrganizationName::getChildrenOfClass($xml);
         Assert::minCount($names, 1, 'Missing at least one OrganizationName.');
 
-        $displayNames = OrganizationDisplayName::extractFromChildren($xml);
+        $displayNames = OrganizationDisplayName::getChildrenOfClass($xml);
         Assert::minCount($displayNames, 1, 'Missing at least one OrganizationDisplayName');
 
         $url = Utils::extractLocalizedStrings($xml, Constants::NS_MD, 'OrganizationURL');
@@ -86,7 +86,7 @@ final class Organization extends AbstractMdElement
             throw new Exception('No localized organization URL found.');
         }
 
-        $extensions = Extensions::extractFromChildren($xml);
+        $extensions = Extensions::getChildrenOfClass($xml);
         Assert::maxCount($extensions, 1, 'Cannot process more than one md:Extensions element.');
 
         return new self($names, $displayNames, $url, !empty($extensions) ? $extensions[0] : null);
