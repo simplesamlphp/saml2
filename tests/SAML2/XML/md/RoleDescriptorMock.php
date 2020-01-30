@@ -30,4 +30,17 @@ class RoleDescriptorMock extends RoleDescriptor
         $xml->removeAttributeNS('http://example.org/mynsdefinition', 'tmp');
         return $xml;
     }
+
+
+    /**
+     * Convert XML into a RoleDescriptorMock
+     *
+     * @param \DOMElement $xml The XML element we should load
+     * @return self
+     */
+    public static function fromXML(DOMElement $xml): object
+    {
+        // @TODO: Actually fill this method with something useful;  this is a dummy!!
+        return new self(new DOMElement('root'));
+    }
 }
