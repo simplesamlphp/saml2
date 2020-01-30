@@ -266,7 +266,7 @@ class ContactPerson
      */
     private function removeEmailMailtoPrefix(string $emailAddress): string
     {
-        return substr(strtolower($emailAddress),0,7) === 'mailto:' ? substr($emailAddress,7) : $emailAddress;
+        return preg_replace('/^mailto:/i', '', $emailAddress);
     }
 
     /**
@@ -277,7 +277,7 @@ class ContactPerson
      */
     public function setEmailAddress(array $emailAddress): void
     {
-        $this->EmailAddress = array_map([$this,'removeEmailMailtoPrefix'], $emailAddress);
+        $this->EmailAddress = array_map([$this, 'removeEmailMailtoPrefix'], $emailAddress);
     }
 
     /**
@@ -433,8 +433,9 @@ class ContactPerson
             Utils::addString($e, Constants::NS_MD, 'md:SurName', $this->SurName);
         }
         if (!empty($this->EmailAddress)) {
-            Utils::addStrings($e, Constants::NS_MD, 'md:EmailAddress', false,
-                array_map(function(string $email) { return "mailto:$email"; }, $this->EmailAddress));
+            /** @var array $addresses */
+            $addresses = preg_filter('/^/', 'mailto:', $this->EmailAddress);
+            Utils::addStrings($e, Constants::NS_MD, 'md:EmailAddress', false, $addresses);
         }
         if (!empty($this->TelephoneNumber)) {
             Utils::addStrings($e, Constants::NS_MD, 'md:TelephoneNumber', false, $this->TelephoneNumber);
