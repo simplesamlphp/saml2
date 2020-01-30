@@ -212,9 +212,11 @@ final class AttributeConsumingService extends AbstractMdElement
         foreach ($this->serviceNames as $name) {
             $name->toXML($e);
         }
+
         foreach ($this->serviceDescriptions as $description) {
             $description->toXML($e);
         }
+
         foreach ($this->requestedAttributes as $ra) {
             $ra->toXML($e);
         }
