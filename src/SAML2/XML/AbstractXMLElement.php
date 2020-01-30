@@ -211,25 +211,23 @@ abstract class AbstractXMLElement implements Serializable
 
 
     /**
-     * Extract localized names from a the children of a given element.
+     * Extract localized names from the children of a given element.
      *
      * @param DOMElement $parent The element we want to search.
      *
-     * @return array An array of objects of class $class.
+     * @return array An array of objects of this class.
      */
-    public static function extractFromChildren(\DOMElement $parent): array
+    public static function getChildrenOfClass(\DOMElement $parent): array
     {
         $ret = [];
         foreach ($parent->childNodes as $node) {
-            if ($node->namespaceURI !== static::NS) {
-                continue;
+            if (
+                $node->namespaceURI === static::NS
+                && $node->localName === self::getClassName(static::class)
+            ) {
+                /** @psalm-var \DOMElement $node */
+                $ret[] = static::fromXML($node);
             }
-            if ($node->localName !== self::getClassName(static::class)) {
-                continue;
-            }
-
-            /** @psalm-var \DOMElement $node */
-            $ret[] = static::fromXML($node);
         }
         return $ret;
     }
