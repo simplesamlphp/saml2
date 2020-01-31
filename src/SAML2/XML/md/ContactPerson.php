@@ -286,7 +286,7 @@ final class ContactPerson extends AbstractMdElement
     private function validateEmailAddress(string $emailAddress): string
     {
         $address = preg_replace('/^mailto:/i', '', $emailAddress);
-        if (filter_var($address, FILTER_VALIDATE_EMAIL) === FALSE) {
+        if (filter_var($address, FILTER_VALIDATE_EMAIL) === false) {
             throw new \InvalidArgumentException("Invalid email address for ContactPerson: " . var_export($address, true));
         }
         return $address;
@@ -302,7 +302,7 @@ final class ContactPerson extends AbstractMdElement
         if ($emailAddresses === null) {
             return;
         }
-        $addresses = array_map([$this, 'removeEmailMailtoPrefix'], $emailAddresses);
+        $addresses = array_map([$this, 'validateEmailAddress'], $emailAddresses);
         Assert::allEmail($addresses, 'Invalid email addresses found.');
         $this->EmailAddresses = $addresses;
     }

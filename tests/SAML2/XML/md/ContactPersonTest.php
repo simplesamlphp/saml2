@@ -103,7 +103,7 @@ XML
     public function testMarshallingWithWrongEmail(): void
     {
         $this->expectException(\InvalidArgumentException::class);
-        $this->expectExceptionMessage('Invalid email addresses found.');
+        $this->expectExceptionMessage('Invalid email address for ContactPerson: \'this is wrong\'');
         new ContactPerson(
             'other',
             'Test Company',
@@ -244,7 +244,7 @@ XML
     public function testUnmarshallingWithInvalidEmail(): void
     {
         $this->expectException(\InvalidArgumentException::class);
-        $this->expectExceptionMessage('Invalid email addresses found.');
+        $this->expectExceptionMessage('Invalid email address for ContactPerson: \'this is not an email\'');
         $emails = $this->document->getElementsByTagNameNS(Constants::NS_MD, 'EmailAddress');
         $emails->item(1)->textContent = 'this is not an email';
         ContactPerson::fromXML($this->document->documentElement);
@@ -288,10 +288,9 @@ XML
      */
     public function testInvalidEmailThrowsException(): void
     {
-        $contactPerson = new ContactPerson();
-        $this->expectException(\InvalidArgumentException::class, 'Invalid email address for');
-
-        $contactPerson->addEmailAddress('not so valid');
+        $this->expectException(\InvalidArgumentException::class);
+        $this->expectExceptionMessage('Invalid email address for');
+        new ContactPerson('technical', null, null, null, ['not so valid']);
     }
 
     /**
@@ -299,9 +298,14 @@ XML
      */
     public function testInvalidEmailInSetThrowsException(): void
     {
-        $contactPerson = new ContactPerson();
-        $this->expectException(\InvalidArgumentException::class, 'Invalid email address for');
-
-        $contactPerson->setEmailAddress(['bob@alice.edu', 'user@example.org', 'not so valid', 'aap@noot.nl']);
+        $this->expectException(\InvalidArgumentException::class);
+        $this->expectExceptionMessage('Invalid email address for');
+        new ContactPerson(
+            'technical',
+            null,
+            null,
+            null,
+            ['bob@alice.edu', 'user@example.org', 'not so valid', 'aap@noot.nl']
+        );
     }
 }
