@@ -77,7 +77,7 @@ XML
                   . '" SPProvidedID="TheSPProvidedID">'
                   . 'TheIssuerValue</saml:Issuer>';
 
-        $this->assertXmlStringEqualsXmlString($output, $issuer->__toString());
+        $this->assertXmlStringEqualsXmlString($output, strval($issuer));
     }
 
 
@@ -96,7 +96,7 @@ XML
         
         $output = '<saml:Issuer xmlns:saml="' . Constants::NS_SAML . '">TheIssuerValue</saml:Issuer>';
         
-        $this->assertXmlStringEqualsXmlString($output, $issuer->__toString());
+        $this->assertXmlStringEqualsXmlString($output, strval($issuer));
     }
 
 
@@ -117,7 +117,7 @@ XML
             'SPNameQualifier="TheSPNameQualifier" Format="TheFormat" SPProvidedID="TheSPProvidedID">' .
             'TheIssuerValue</saml:Issuer>';
         
-        $this->assertXmlStringEqualsXmlString($output, $issuer->__toString());
+        $this->assertXmlStringEqualsXmlString($output, strval($issuer));
     }
 
 
@@ -138,7 +138,7 @@ XML
             'SPNameQualifier="TheSPNameQualifier" Format="TheFormat" SPProvidedID="TheSPProvidedID">' .
             'TheIssuerValue</saml:Issuer>';
         
-        $this->assertXmlStringEqualsXmlString($output, $issuer->__toString());
+        $this->assertXmlStringEqualsXmlString($output, strval($issuer));
     }
 
 
@@ -153,11 +153,11 @@ XML
         $issuer->setFormat(Constants::NAMEID_ENTITY);
         $issuer->setSPProvidedID('TheSPProvidedID');
         $issuer->setValue('TheIssuerValue');
-        //$issuer->setSaml2IssuerShowAll(false);
+        $issuer->setSaml2IssuerShowAll(false);
         
         
         $output = '<saml:Issuer xmlns:saml="' . Constants::NS_SAML . '">TheIssuerValue</saml:Issuer>';
         
-        $this->assertXmlStringEqualsXmlString($output, $issuer->__toString());
+        $this->assertXmlStringEqualsXmlString($output, strval($issuer));
     }
 }
