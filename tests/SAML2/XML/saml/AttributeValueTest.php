@@ -79,23 +79,10 @@ XML
      */
     public function testSerialize(): void
     {
-        $av1 = new AttributeValue("Aap:noot:mies");
-        $av2 = new AttributeValue("Wim");
-        $av2 = unserialize(serialize($av1));
-
-        $this->assertEquals("Aap:noot:mies", $av2->getString());
-
-        $element = new \DOMDocument();
-        $element->loadXML(<<<ATTRIBUTEVALUE
-<NameID Format="urn:oasis:names:tc:SAML:1.1:nameid-format:unspecified">urn:collab:person:surftest.nl:example</NameID>
-ATTRIBUTEVALUE
+        $this->assertEquals(
+            $this->document->saveXML($this->document->documentElement),
+            strval(unserialize(serialize(AttributeValue::fromXML($this->document->documentElement))))
         );
-
-        $av3 = new AttributeValue($element->documentElement);
-        $av4 = new AttributeValue("Wim");
-        $av4 = unserialize(serialize($av3));
-
-        $this->assertEquals("urn:collab:person:surftest.nl:example", $av4->getString());
     }
 }
 
