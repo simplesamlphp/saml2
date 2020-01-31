@@ -80,6 +80,24 @@ final class Extensions extends AbstractMdElement
 
 
     /**
+     * @inheritDoc
+     */
+    public function isEmptyElement(): bool
+    {
+        if (empty($this->extensions)) {
+            return true;
+        }
+
+        $empty = false;
+        foreach ($this->extensions as $extension) {
+            $empty &= $extension->isEmptyElement();
+        }
+
+        return $empty;
+    }
+
+
+    /**
      * Create an Extensions object from its md:Extensions XML representation.
      *
      * For those supported extensions, an object of the corresponding class will be created. The rest will be added
