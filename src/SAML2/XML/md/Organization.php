@@ -8,8 +8,8 @@ use DOMElement;
 use Exception;
 use SAML2\Constants;
 use SAML2\Utils;
-use SAML2\XML\ExtendableAttributes;
-use SAML2\XML\ExtendableElement;
+use SAML2\XML\ExtendableAttributesTrait;
+use SAML2\XML\ExtendableElementTrait;
 use Webmozart\Assert\Assert;
 
 /**
@@ -19,8 +19,8 @@ use Webmozart\Assert\Assert;
  */
 final class Organization extends AbstractMdElement
 {
-    use ExtendableAttributes;
-    use ExtendableElement;
+    use ExtendableAttributesTrait;
+    use ExtendableElementTrait;
 
     /**
      * The OrganizationName, as an array of language => translation.
