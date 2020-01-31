@@ -120,7 +120,11 @@ final class KeyDescriptor extends AbstractMdElement
      */
     protected function setUse(?string $use): void
     {
-        Assert::nullOrOneOf($use, ['encryption', 'signing']);
+        Assert::nullOrOneOf(
+            $use,
+            ['encryption', 'signing'],
+            'The "use" attribute of a KeyDescriptor can only be "encryption" or "signing".'
+        );
         $this->use = $use;
     }
 
