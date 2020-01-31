@@ -62,8 +62,7 @@ XML
 XML
         );
 
-        /** @var \DOMElement $document->firstChild */
-        $authnContextDecl = AuthnContextDecl::fromXML($document->firstChild);
+        $authnContextDecl = AuthnContextDecl::fromXML($document->documentElement);
         $authenticatingAuthority = new AuthenticatingAuthority('https://sp.example.com/SAML2');
 
         $authnContext = new AuthnContext(
@@ -107,6 +106,34 @@ XML
     /**
      * @return void
      */
+    public function testMarshallingEmptyElement(): void
+    {
+        $samlNamespace = Constants::NS_SAML;
+
+        $document = DOMDocumentFactory::fromString(<<<XML
+<saml:AuthnContextDecl xmlns:saml="{$samlNamespace}">
+</saml:AuthnContextDecl>
+XML
+        );
+
+        $authnContext = new AuthnContext(null, null, null, null);
+
+        $document = DOMDocumentFactory::fromString('<root />');
+        $authnContextElement = $authnContext->toXML($document->documentElement);
+
+        $this->assertEquals(<<<XML
+<saml:AuthnContextDecl xmlns:saml="{$samlNamespace}">
+</saml:AuthnContextDecl>
+XML
+            ,
+            strval($authnContextElement)
+        );
+    }
+
+
+    /**
+     * @return void
+     */
     public function testUnmarshallingWithClassRef(): void
     {
         $samlNamespace = Constants::NS_SAML;
@@ -126,8 +153,7 @@ XML
 XML
         );
 
-        /** @var \DOMElement $document->firstChild */
-        $authnContext = AuthnContext::fromXML($document->firstChild);
+        $authnContext = AuthnContext::fromXML($document->documentElement);
 
         /** @psalm-var \SAML2\XML\saml\AuthnContextClassRef $classRef */
         $classRef = $authnContext->getAuthnContextClassRef();
@@ -165,8 +191,7 @@ XML
 XML
         );
 
-        /** @var \DOMElement $document->firstChild */
-        $authnContext = AuthnContext::fromXML($document->firstChild);
+        $authnContext = AuthnContext::fromXML($document->documentElement);
 
         $contextDeclObj = $authnContext->getAuthnContextDecl();
         $this->assertInstanceOf(AuthnContextDecl::class, $contextDeclObj);
@@ -174,5 +199,23 @@ XML
         /** @psalm-var \DOMElement $authnContextDecl[1] */
         $authnContextDecl = $contextDeclObj->getDecl();
         $this->assertEquals('samlacpass:AuthenticationContextDeclaration', $authnContextDecl[1]->tagName);
+    }
+
+
+    /**
+     * @return void
+     */
+    public function testUnmarshallingEmptyElement(): void
+    {
+        $samlNamespace = Constants::NS_SAML;
+
+        $document = DOMDocumentFactory::fromString(<<<XML
+<saml:AuthnContext xmlns:saml="{$samlNamespace}">
+</saml:AuthnContext>
+XML
+        );
+
+        $authnContext = AuthnContext::fromXML($document->documentElement);
+        $this->assertTrue($authnContext->isEmptyElement());
     }
 }
