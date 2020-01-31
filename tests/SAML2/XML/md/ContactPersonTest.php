@@ -282,4 +282,26 @@ XML
             strval(unserialize(serialize(ContactPerson::fromXML($this->document->documentElement))))
         );
     }
+
+    /**
+     * @return void
+     */
+    public function testInvalidEmailThrowsException(): void
+    {
+        $contactPerson = new ContactPerson();
+        $this->expectException(\InvalidArgumentException::class, 'Invalid email address for');
+
+        $contactPerson->addEmailAddress('not so valid');
+    }
+
+    /**
+     * @return void
+     */
+    public function testInvalidEmailInSetThrowsException(): void
+    {
+        $contactPerson = new ContactPerson();
+        $this->expectException(\InvalidArgumentException::class, 'Invalid email address for');
+
+        $contactPerson->setEmailAddress(['bob@alice.edu', 'user@example.org', 'not so valid', 'aap@noot.nl']);
+    }
 }
