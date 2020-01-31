@@ -75,20 +75,6 @@ XML
         );
     }
 
-
-    /**
-     * Test that creating a KeyDescriptor from scratch with a wrong use fails.
-     */
-    public function testMarshallingWrongUse(): void
-    {
-        $this->expectException(\InvalidArgumentException::class);
-        $this->expectExceptionMessage('The "use" attribute of a KeyDescriptor can only be "encryption" or "signing".');
-        new KeyDescriptor(
-            new KeyInfo([new KeyName('IdentityProvider.com SSO Key')]),
-            'wrong'
-        );
-    }
-
     /**
      * Test that creating a KeyDescriptor from scratch without any optional argument works.
      */
