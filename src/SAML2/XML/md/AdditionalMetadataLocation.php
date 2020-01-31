@@ -36,7 +36,7 @@ final class AdditionalMetadataLocation extends AbstractMdElement
      *
      * @param string $namespace
      * @param string $location
-     * @throws InvalidArgumentException
+     * @throws \InvalidArgumentException
      */
     public function __construct(string $namespace, string $location)
     {
@@ -48,10 +48,10 @@ final class AdditionalMetadataLocation extends AbstractMdElement
     /**
      * Initialize an AdditionalMetadataLocation element.
      *
-     * @param DOMElement|null $xml The XML element we should load.
+     * @param \DOMElement $xml The XML element we should load.
      * @return self
-     * @throws Exception
-     * @throws InvalidArgumentException
+     * @throws \Exception
+     * @throws \InvalidArgumentException
      */
     public static function fromXML(DOMElement $xml): object
     {
@@ -101,7 +101,7 @@ final class AdditionalMetadataLocation extends AbstractMdElement
      * Set the value of the location-property
      *
      * @param string $location
-     * @throws InvalidArgumentException
+     * @throws \InvalidArgumentException
      */
     protected function setLocation(string $location): void
     {
@@ -113,8 +113,8 @@ final class AdditionalMetadataLocation extends AbstractMdElement
     /**
      * Convert this AdditionalMetadataLocation to XML.
      *
-     * @param  DOMElement $parent The element we should append to.
-     * @return DOMElement This AdditionalMetadataLocation-element.
+     * @param \DOMElement|null $parent The element we should append to.
+     * @return \DOMElement This AdditionalMetadataLocation-element.
      */
     public function toXML(DOMElement $parent = null): DOMElement
     {

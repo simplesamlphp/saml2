@@ -192,6 +192,7 @@ final class ContactPerson extends AbstractMdElement
      * Set the value of the contactType-property
      *
      * @param string $contactType
+     * @return void
      */
     protected function setContactType(string $contactType): void
     {
@@ -215,6 +216,7 @@ final class ContactPerson extends AbstractMdElement
      * Set the value of the Company-property
      *
      * @param string|null $company
+     * @return void
      */
     protected function setCompany(?string $company): void
     {
@@ -259,6 +261,7 @@ final class ContactPerson extends AbstractMdElement
      * Set the value of the SurName-property
      *
      * @param string|null $surName
+     * @return void
      */
     protected function setSurName(?string $surName): void
     {
@@ -287,7 +290,7 @@ final class ContactPerson extends AbstractMdElement
     {
         $address = preg_replace('/^mailto:/i', '', $emailAddress);
         if (filter_var($address, FILTER_VALIDATE_EMAIL) === false) {
-            throw new \InvalidArgumentException("Invalid email address for ContactPerson: " . var_export($address, true));
+            throw new InvalidArgumentException("Invalid email address for ContactPerson: " . var_export($address, true));
         }
         return $address;
     }

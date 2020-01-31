@@ -77,7 +77,7 @@ abstract class AbstractEndpointType extends AbstractMdElement
      *
      * Note: this method cannot be used when extending this class, if the constructor has a different signature.
      *
-     * @param \DOMElement|null $xml The XML element we should load.
+     * @param \DOMElement $xml The XML element we should load.
      * @return static
      * @throws \InvalidArgumentException
      */

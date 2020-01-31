@@ -62,46 +62,6 @@ final class KeyDescriptor extends AbstractMdElement
 
 
     /**
-     * Initialize an KeyDescriptor.
-     *
-     * @param \DOMElement|null $xml The XML element we should load.
-     * @return \SAML2\XML\md\KeyDescriptor
-     * @throws \Exception
-     */
-    public static function fromXML(DOMElement $xml): object
-    {
-        $use = null;
-        if ($xml->hasAttribute('use')) {
-            $use = $xml->getAttribute('use');
-        }
-
-        $keyInfo = Utils::xpQuery($xml, './ds:KeyInfo');
-        if (count($keyInfo) > 1) {
-            throw new Exception('More than one ds:KeyInfo in the KeyDescriptor.');
-        } elseif (empty($keyInfo)) {
-            throw new Exception('No ds:KeyInfo in the KeyDescriptor.');
-        }
-        /**
-         * @var \DOMElement $keyInfo[0]
-         * @var \SAML2\XML\ds\KeyInfo $keyInfo
-         */
-        $keyInfo = KeyInfo::fromXML($keyInfo[0]);
-
-        $encmethod = [];
-        /** @var \DOMElement $em */
-        foreach (Utils::xpQuery($xml, './saml_metadata:EncryptionMethod') as $em) {
-            $encmethod[] = new Chunk($em);
-        }
-
-        return new self(
-            $keyInfo,
-            self::getAttribute($xml, 'use', null),
-            EncryptionMethod::getChildrenOfClass($xml)
-        );
-    }
-
-
-    /**
      * Collect the value of the use property.
      *
      * @return string|null
@@ -178,9 +138,49 @@ final class KeyDescriptor extends AbstractMdElement
 
 
     /**
+     * Initialize an KeyDescriptor.
+     *
+     * @param \DOMElement $xml The XML element we should load.
+     * @return \SAML2\XML\md\KeyDescriptor
+     * @throws \Exception
+     */
+    public static function fromXML(DOMElement $xml): object
+    {
+        $use = null;
+        if ($xml->hasAttribute('use')) {
+            $use = $xml->getAttribute('use');
+        }
+
+        $keyInfo = Utils::xpQuery($xml, './ds:KeyInfo');
+        if (count($keyInfo) > 1) {
+            throw new Exception('More than one ds:KeyInfo in the KeyDescriptor.');
+        } elseif (empty($keyInfo)) {
+            throw new Exception('No ds:KeyInfo in the KeyDescriptor.');
+        }
+        /**
+         * @var \DOMElement $keyInfo[0]
+         * @var \SAML2\XML\ds\KeyInfo $keyInfo
+         */
+        $keyInfo = KeyInfo::fromXML($keyInfo[0]);
+
+        $encmethod = [];
+        /** @var \DOMElement $em */
+        foreach (Utils::xpQuery($xml, './saml_metadata:EncryptionMethod') as $em) {
+            $encmethod[] = new Chunk($em);
+        }
+
+        return new self(
+            $keyInfo,
+            self::getAttribute($xml, 'use', null),
+            EncryptionMethod::getChildrenOfClass($xml)
+        );
+    }
+
+
+    /**
      * Convert this KeyDescriptor to XML.
      *
-     * @param \DOMElement $parent The element we should append this KeyDescriptor to.
+     * @param \DOMElement|null $parent The element we should append this KeyDescriptor to.
      * @return \DOMElement
      */
     public function toXML(DOMElement $parent = null): DOMElement

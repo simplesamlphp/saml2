@@ -68,7 +68,7 @@ final class Organization extends AbstractMdElement
     /**
      * Initialize an Organization element.
      *
-     * @param \DOMElement|null $xml The XML element we should load.
+     * @param \DOMElement $xml The XML element we should load.
      *
      * @return self
      * @throws \Exception if the XML lacks any of the mandatory elements.
@@ -165,7 +165,7 @@ final class Organization extends AbstractMdElement
     /**
      * Convert this Organization to XML.
      *
-     * @param \DOMElement $parent The element we should add this organization to.
+     * @param \DOMElement|null $parent The element we should add this organization to.
      *
      * @return \DOMElement This Organization-element.
      *
