@@ -20,7 +20,7 @@ abstract class SSODescriptorType extends RoleDescriptor
      *
      * Array with IndexedEndpointType objects.
      *
-     * @var \SAML2\XML\md\IndexedEndpointType[]
+     * @var \SAML2\XML\md\AbstractIndexedEndpointType[]
      */
     private $ArtifactResolutionService = [];
 
@@ -29,7 +29,7 @@ abstract class SSODescriptorType extends RoleDescriptor
      *
      * Array with EndpointType objects.
      *
-     * @var \SAML2\XML\md\EndpointType[]
+     * @var \SAML2\XML\md\AbstractEndpointType[]
      */
     private $SingleLogoutService = [];
 
@@ -38,7 +38,7 @@ abstract class SSODescriptorType extends RoleDescriptor
      *
      * Array with EndpointType objects.
      *
-     * @var \SAML2\XML\md\EndpointType[]
+     * @var \SAML2\XML\md\AbstractEndpointType[]
      */
     private $ManageNameIDService = [];
 
@@ -88,7 +88,7 @@ abstract class SSODescriptorType extends RoleDescriptor
     /**
      * Collect the value of the ArtifactResolutionService-property
      *
-     * @return \SAML2\XML\md\IndexedEndpointType[]
+     * @return \SAML2\XML\md\AbstractIndexedEndpointType[]
      */
     public function getArtifactResolutionService(): array
     {
@@ -99,7 +99,7 @@ abstract class SSODescriptorType extends RoleDescriptor
     /**
      * Set the value of the ArtifactResolutionService-property
      *
-     * @param \SAML2\XML\md\IndexedEndpointType[] $artifactResolutionService
+     * @param \SAML2\XML\md\AbstractIndexedEndpointType[] $artifactResolutionService
      * @return void
      */
     public function setArtifactResolutionService(array $artifactResolutionService): void
@@ -111,10 +111,10 @@ abstract class SSODescriptorType extends RoleDescriptor
     /**
      * Add the value to the ArtifactResolutionService-property
      *
-     * @param \SAML2\XML\md\IndexedEndpointType $artifactResolutionService
+     * @param \SAML2\XML\md\AbstractIndexedEndpointType $artifactResolutionService
      * @return void
      */
-    public function addArtifactResolutionService(IndexedEndpointType $artifactResolutionService): void
+    public function addArtifactResolutionService(AbstractIndexedEndpointType $artifactResolutionService): void
     {
         $this->ArtifactResolutionService[] = $artifactResolutionService;
     }
@@ -123,7 +123,7 @@ abstract class SSODescriptorType extends RoleDescriptor
     /**
      * Collect the value of the SingleLogoutService-property
      *
-     * @return \SAML2\XML\md\EndpointType[]
+     * @return \SAML2\XML\md\AbstractEndpointType[]
      */
     public function getSingleLogoutService(): array
     {
@@ -134,7 +134,7 @@ abstract class SSODescriptorType extends RoleDescriptor
     /**
      * Set the value of the SingleLogoutService-property
      *
-     * @param \SAML2\XML\md\EndpointType[] $singleLogoutService
+     * @param \SAML2\XML\md\AbstractEndpointType[] $singleLogoutService
      * @return void
      */
     public function setSingleLogoutService(array $singleLogoutService): void
@@ -146,10 +146,10 @@ abstract class SSODescriptorType extends RoleDescriptor
     /**
      * Add the value to the SingleLogoutService-property
      *
-     * @param \SAML2\XML\md\EndpointType $singleLogoutService
+     * @param \SAML2\XML\md\AbstractEndpointType $singleLogoutService
      * @return void
      */
-    public function addSingleLogoutService(EndpointType $singleLogoutService): void
+    public function addSingleLogoutService(AbstractEndpointType $singleLogoutService): void
     {
         $this->SingleLogoutService[] = $singleLogoutService;
     }
@@ -158,7 +158,7 @@ abstract class SSODescriptorType extends RoleDescriptor
     /**
      * Collect the value of the ManageNameIDService-property
      *
-     * @return \SAML2\XML\md\EndpointType[]
+     * @return \SAML2\XML\md\AbstractEndpointType[]
      */
     public function getManageNameIDService(): array
     {
@@ -169,7 +169,7 @@ abstract class SSODescriptorType extends RoleDescriptor
     /**
      * Set the value of the ManageNameIDService-property
      *
-     * @param \SAML2\XML\md\EndpointType[] $manageNameIDService
+     * @param \SAML2\XML\md\AbstractEndpointType[] $manageNameIDService
      * @return void
      */
     public function setManageNameIDService(array $manageNameIDService): void
@@ -181,10 +181,10 @@ abstract class SSODescriptorType extends RoleDescriptor
     /**
      * Add the value to the ManageNameIDService-property
      *
-     * @param \SAML2\XML\md\EndpointType $manageNameIDService
+     * @param \SAML2\XML\md\AbstractEndpointType $manageNameIDService
      * @return void
      */
-    public function addManageNameIDService(EndpointType $manageNameIDService): void
+    public function addManageNameIDService(AbstractEndpointType $manageNameIDService): void
     {
         $this->ManageNameIDService[] = $manageNameIDService;
     }

@@ -21,7 +21,7 @@ class PDPDescriptor extends RoleDescriptor
      *
      * Array with EndpointType objects.
      *
-     * @var \SAML2\XML\md\EndpointType[]
+     * @var \SAML2\XML\md\AbstractEndpointType[]
      */
     private $AuthzService = [];
 
@@ -30,7 +30,7 @@ class PDPDescriptor extends RoleDescriptor
      *
      * Array with EndpointType objects.
      *
-     * @var \SAML2\XML\md\EndpointType[]
+     * @var \SAML2\XML\md\AbstractEndpointType[]
      */
     private $AssertionIDRequestService = [];
 
@@ -78,7 +78,7 @@ class PDPDescriptor extends RoleDescriptor
     /**
      * Collect the value of the AuthzService-property
      *
-     * @return \SAML2\XML\md\EndpointType[]
+     * @return \SAML2\XML\md\AbstractEndpointType[]
      */
     public function getAuthzService(): array
     {
@@ -89,7 +89,7 @@ class PDPDescriptor extends RoleDescriptor
     /**
      * Set the value of the AuthzService-property
      *
-     * @param \SAML2\XML\md\EndpointType[] $authzService
+     * @param \SAML2\XML\md\AbstractEndpointType[] $authzService
      * @return void
      */
     public function setAuthzService(array $authzService = []): void
@@ -101,10 +101,10 @@ class PDPDescriptor extends RoleDescriptor
     /**
      * Add the value to the AuthzService-property
      *
-     * @param \SAML2\XML\md\EndpointType $authzService
+     * @param \SAML2\XML\md\AbstractEndpointType $authzService
      * @return void
      */
-    public function addAuthzService(EndpointType $authzService): void
+    public function addAuthzService(AbstractEndpointType $authzService): void
     {
         $this->AuthzService[] = $authzService;
     }
@@ -113,7 +113,7 @@ class PDPDescriptor extends RoleDescriptor
     /**
      * Collect the value of the AssertionIDRequestService-property
      *
-     * @return \SAML2\XML\md\EndpointType[]
+     * @return \SAML2\XML\md\AbstractEndpointType[]
      */
     public function getAssertionIDRequestService(): array
     {
@@ -124,7 +124,7 @@ class PDPDescriptor extends RoleDescriptor
     /**
      * Set the value of the AssertionIDRequestService-property
      *
-     * @param \SAML2\XML\md\EndpointType[] $assertionIDRequestService
+     * @param \SAML2\XML\md\AbstractEndpointType[] $assertionIDRequestService
      * @return void
      */
     public function setAssertionIDRequestService(array $assertionIDRequestService): void
@@ -136,10 +136,10 @@ class PDPDescriptor extends RoleDescriptor
     /**
      * Add the value to the AssertionIDRequestService-property
      *
-     * @param \SAML2\XML\md\EndpointType $assertionIDRequestService
+     * @param \SAML2\XML\md\AbstractEndpointType $assertionIDRequestService
      * @return void
      */
-    public function addAssertionIDRequestService(EndpointType $assertionIDRequestService): void
+    public function addAssertionIDRequestService(AbstractEndpointType $assertionIDRequestService): void
     {
         $this->AssertionIDRequestService[] = $assertionIDRequestService;
     }

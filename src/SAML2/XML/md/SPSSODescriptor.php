@@ -33,7 +33,7 @@ class SPSSODescriptor extends SSODescriptorType
      *
      * Array with IndexedEndpointType objects.
      *
-     * @var \SAML2\XML\md\IndexedEndpointType[]
+     * @var \SAML2\XML\md\AbstractIndexedEndpointType[]
      */
     private $AssertionConsumerService = [];
 
@@ -147,10 +147,10 @@ class SPSSODescriptor extends SSODescriptorType
     /**
      * Add the value to the AssertionConsumerService-property
      *
-     * @param \SAML2\XML\md\IndexedEndpointType $acs
+     * @param \SAML2\XML\md\AbstractIndexedEndpointType $acs
      * @return void
      */
-    public function addAssertionConsumerService(IndexedEndpointType $acs): void
+    public function addAssertionConsumerService(AbstractIndexedEndpointType $acs): void
     {
         $this->AssertionConsumerService[] = $acs;
     }
