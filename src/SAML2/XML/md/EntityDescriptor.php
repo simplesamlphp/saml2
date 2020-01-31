@@ -124,7 +124,7 @@ class EntityDescriptor extends AbstractSignedMdElement
 
             switch ($node->localName) {
                 case 'RoleDescriptor':
-                    $this->RoleDescriptor[] = new UnknownRoleDescriptor($node);
+                    $this->RoleDescriptor[] = UnknownRoleDescriptor::fromXML($node);
                     break;
                 case 'IDPSSODescriptor':
                     $this->RoleDescriptor[] = new IDPSSODescriptor($node);
@@ -133,10 +133,10 @@ class EntityDescriptor extends AbstractSignedMdElement
                     $this->RoleDescriptor[] = new SPSSODescriptor($node);
                     break;
                 case 'AuthnAuthorityDescriptor':
-                    $this->RoleDescriptor[] = new AuthnAuthorityDescriptor($node);
+                    $this->RoleDescriptor[] = AuthnAuthorityDescriptor::fromXML($node);
                     break;
                 case 'AttributeAuthorityDescriptor':
-                    $this->RoleDescriptor[] = new AttributeAuthorityDescriptor($node);
+                    $this->RoleDescriptor[] = AttributeAuthorityDescriptor::fromXML($node);
                     break;
                 case 'PDPDescriptor':
                     $this->RoleDescriptor[] = new PDPDescriptor($node);
