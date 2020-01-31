@@ -14,7 +14,7 @@ use SAML2\XML\saml\Attribute;
  *
  * @package SimpleSAMLphp
  */
-class IDPSSODescriptor extends SSODescriptorType
+class IDPSSODescriptor extends AbstractSSODescriptor
 {
     /**
      * Whether AuthnRequests sent to this IdP should be signed.
@@ -86,17 +86,17 @@ class IDPSSODescriptor extends SSODescriptorType
 
         /** @var \DOMElement $ep */
         foreach (Utils::xpQuery($xml, './saml_metadata:SingleSignOnService') as $ep) {
-            $this->SingleSignOnService[] = new EndpointType($ep);
+            $this->SingleSignOnService[] = new AbstractEndpointType($ep);
         }
 
         /** @var \DOMElement $ep */
         foreach (Utils::xpQuery($xml, './saml_metadata:NameIDMappingService') as $ep) {
-            $this->NameIDMappingService[] = new EndpointType($ep);
+            $this->NameIDMappingService[] = new AbstractEndpointType($ep);
         }
 
         /** @var \DOMElement $ep */
         foreach (Utils::xpQuery($xml, './saml_metadata:AssertionIDRequestService') as $ep) {
-            $this->AssertionIDRequestService[] = new EndpointType($ep);
+            $this->AssertionIDRequestService[] = AssertionIDRequestService::fromXML($ep);
         }
 
         $this->AttributeProfile = Utils::extractStrings($xml, Constants::NS_MD, 'AttributeProfile');
@@ -158,6 +158,7 @@ class IDPSSODescriptor extends SSODescriptorType
      * Add the value to the SingleSignOnService-property
      *
      * @param \SAML2\XML\md\AbstractEndpointType $singleSignOnService
+     *
      * @return void
      */
     public function addSingleSignOnService(AbstractEndpointType $singleSignOnService): void
@@ -193,6 +194,7 @@ class IDPSSODescriptor extends SSODescriptorType
      * Add the value to the NameIDMappingService-property
      *
      * @param \SAML2\XML\md\AbstractEndpointType $nameIDMappingService
+     *
      * @return void
      */
     public function addNameIDMappingService(AbstractEndpointType $nameIDMappingService): void
@@ -228,6 +230,7 @@ class IDPSSODescriptor extends SSODescriptorType
      * Add the value to the AssertionIDRequestService-property
      *
      * @param \SAML2\XML\md\AbstractEndpointType $assertionIDRequestService
+     *
      * @return void
      */
     public function addAssertionIDRequestService(AbstractEndpointType $assertionIDRequestService): void
@@ -263,7 +266,7 @@ class IDPSSODescriptor extends SSODescriptorType
      *
      * @return \SAML2\XML\saml\Attribute[]
      */
-    public function getAttributes(): array
+    public function getSupportedAttributes(): array
     {
         return $this->Attributes;
     }
@@ -275,7 +278,7 @@ class IDPSSODescriptor extends SSODescriptorType
      * @param array $attributes
      * @return void
      */
-    public function setAttributes(array $attributes): void
+    public function setSupportedAttributes(array $attribute): void
     {
         $this->Attributes = $attributes;
     }
@@ -312,7 +315,7 @@ class IDPSSODescriptor extends SSODescriptorType
      * @param \DOMElement|null $parent The EntityDescriptor we should append this IDPSSODescriptor to.
      * @return \DOMElement
      */
-    public function toXML(?DOMElement $parent = null): DOMElement
+    public function toXML(DOMElement $parent = null): DOMElement
     {
         // @TODO: Take care of a null parameter
 
@@ -331,7 +334,7 @@ class IDPSSODescriptor extends SSODescriptorType
         }
 
         foreach ($this->AssertionIDRequestService as $ep) {
-            $ep->toXML($e, 'md:AssertionIDRequestService');
+            $ep->toXML($e);
         }
 
         Utils::addStrings($e, Constants::NS_MD, 'md:AttributeProfile', false, $this->AttributeProfile);
