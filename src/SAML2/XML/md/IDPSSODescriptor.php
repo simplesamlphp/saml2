@@ -14,7 +14,7 @@ use SAML2\XML\saml\Attribute;
  *
  * @package SimpleSAMLphp
  */
-class IDPSSODescriptor extends SSODescriptorType
+class IDPSSODescriptor extends AbstractSSODescriptor
 {
     /**
      * Whether AuthnRequests sent to this IdP should be signed.
@@ -28,7 +28,7 @@ class IDPSSODescriptor extends SSODescriptorType
      *
      * Array with EndpointType objects.
      *
-     * @var \SAML2\XML\md\EndpointType[]
+     * @var \SAML2\XML\md\AbstractEndpointType[]
      */
     private $SingleSignOnService = [];
 
@@ -37,7 +37,7 @@ class IDPSSODescriptor extends SSODescriptorType
      *
      * Array with EndpointType objects.
      *
-     * @var \SAML2\XML\md\EndpointType[]
+     * @var \SAML2\XML\md\AbstractEndpointType[]
      */
     private $NameIDMappingService = [];
 
@@ -46,7 +46,7 @@ class IDPSSODescriptor extends SSODescriptorType
      *
      * Array with EndpointType objects.
      *
-     * @var \SAML2\XML\md\EndpointType[]
+     * @var \SAML2\XML\md\AbstractEndpointType[]
      */
     private $AssertionIDRequestService = [];
 
@@ -86,17 +86,17 @@ class IDPSSODescriptor extends SSODescriptorType
 
         /** @var \DOMElement $ep */
         foreach (Utils::xpQuery($xml, './saml_metadata:SingleSignOnService') as $ep) {
-            $this->SingleSignOnService[] = new EndpointType($ep);
+            $this->SingleSignOnService[] = new AbstractEndpointType($ep);
         }
 
         /** @var \DOMElement $ep */
         foreach (Utils::xpQuery($xml, './saml_metadata:NameIDMappingService') as $ep) {
-            $this->NameIDMappingService[] = new EndpointType($ep);
+            $this->NameIDMappingService[] = new AbstractEndpointType($ep);
         }
 
         /** @var \DOMElement $ep */
         foreach (Utils::xpQuery($xml, './saml_metadata:AssertionIDRequestService') as $ep) {
-            $this->AssertionIDRequestService[] = new EndpointType($ep);
+            $this->AssertionIDRequestService[] = AssertionIDRequestService::fromXML($ep);
         }
 
         $this->AttributeProfile = Utils::extractStrings($xml, Constants::NS_MD, 'AttributeProfile');
@@ -134,7 +134,7 @@ class IDPSSODescriptor extends SSODescriptorType
     /**
      * Collect the value of the SingleSignOnService-property
      *
-     * @return \SAML2\XML\md\EndpointType[]
+     * @return \SAML2\XML\md\AbstractEndpointType[]
      */
     public function getSingleSignOnService(): array
     {
@@ -157,10 +157,11 @@ class IDPSSODescriptor extends SSODescriptorType
     /**
      * Add the value to the SingleSignOnService-property
      *
-     * @param \SAML2\XML\md\EndpointType $singleSignOnService
+     * @param \SAML2\XML\md\AbstractEndpointType $singleSignOnService
+     *
      * @return void
      */
-    public function addSingleSignOnService(EndpointType $singleSignOnService): void
+    public function addSingleSignOnService(AbstractEndpointType $singleSignOnService): void
     {
         $this->SingleSignOnService[] = $singleSignOnService;
     }
@@ -169,7 +170,7 @@ class IDPSSODescriptor extends SSODescriptorType
     /**
      * Collect the value of the NameIDMappingService-property
      *
-     * @return \SAML2\XML\md\EndpointType[]
+     * @return \SAML2\XML\md\AbstractEndpointType[]
      */
     public function getNameIDMappingService(): array
     {
@@ -192,10 +193,11 @@ class IDPSSODescriptor extends SSODescriptorType
     /**
      * Add the value to the NameIDMappingService-property
      *
-     * @param \SAML2\XML\md\EndpointType $nameIDMappingService
+     * @param \SAML2\XML\md\AbstractEndpointType $nameIDMappingService
+     *
      * @return void
      */
-    public function addNameIDMappingService(EndpointType $nameIDMappingService): void
+    public function addNameIDMappingService(AbstractEndpointType $nameIDMappingService): void
     {
         $this->NameIDMappingService[] = $nameIDMappingService;
     }
@@ -204,7 +206,7 @@ class IDPSSODescriptor extends SSODescriptorType
     /**
      * Collect the value of the AssertionIDRequestService-property
      *
-     * @return \SAML2\XML\md\EndpointType[]
+     * @return \SAML2\XML\md\AbstractEndpointType[]
      */
     public function getAssertionIDRequestService(): array
     {
@@ -227,10 +229,11 @@ class IDPSSODescriptor extends SSODescriptorType
     /**
      * Add the value to the AssertionIDRequestService-property
      *
-     * @param \SAML2\XML\md\EndpointType $assertionIDRequestService
+     * @param \SAML2\XML\md\AbstractEndpointType $assertionIDRequestService
+     *
      * @return void
      */
-    public function addAssertionIDRequestService(EndpointType $assertionIDRequestService): void
+    public function addAssertionIDRequestService(AbstractEndpointType $assertionIDRequestService): void
     {
         $this->AssertionIDRequestService[] = $assertionIDRequestService;
     }
@@ -263,7 +266,7 @@ class IDPSSODescriptor extends SSODescriptorType
      *
      * @return \SAML2\XML\saml\Attribute[]
      */
-    public function getAttribute(): array
+    public function getSupportedAttributes(): array
     {
         return $this->Attribute;
     }
@@ -275,7 +278,7 @@ class IDPSSODescriptor extends SSODescriptorType
      * @param array $attribute
      * @return void
      */
-    public function setAttribute(array $attribute): void
+    public function setSupportedAttributes(array $attribute): void
     {
         $this->Attribute = $attribute;
     }
@@ -299,7 +302,7 @@ class IDPSSODescriptor extends SSODescriptorType
      * @param \DOMElement $parent The EntityDescriptor we should append this IDPSSODescriptor to.
      * @return \DOMElement
      */
-    public function toXML(DOMElement $parent): DOMElement
+    public function toXML(DOMElement $parent = null): DOMElement
     {
         $e = parent::toXML($parent);
 
@@ -316,7 +319,7 @@ class IDPSSODescriptor extends SSODescriptorType
         }
 
         foreach ($this->AssertionIDRequestService as $ep) {
-            $ep->toXML($e, 'md:AssertionIDRequestService');
+            $ep->toXML($e);
         }
 
         Utils::addStrings($e, Constants::NS_MD, 'md:AttributeProfile', false, $this->AttributeProfile);
