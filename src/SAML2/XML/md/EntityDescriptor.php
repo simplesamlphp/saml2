@@ -103,10 +103,10 @@ final class EntityDescriptor extends AbstractMetadataDocument
 
         parent::__construct($id, $validUntil, $cacheDuration, $extensions);
 
-        $this->entityID = $entityID;
+        $this->setEntityID($entityID);
         $this->setRoleDescriptor($roleDescriptors);
-        $this->AffiliationDescriptor = $affiliationDescriptor;
-        $this->Organization = $organization;
+        $this->setAffiliationDescriptor($affiliationDescriptor);
+        $this->setOrganization($organization);
         $this->setContactPerson($contacts);
         $this->setAdditionalMetadataLocation($additionalMdLocations);
     }
