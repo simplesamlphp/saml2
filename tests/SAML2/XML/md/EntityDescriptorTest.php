@@ -28,8 +28,9 @@ class EntityDescriptorTest extends \PHPUnit\Framework\TestCase
 </EntityDescriptor>
 XML
         );
-        $this->expectException(\Exception::class, 'Missing affiliationOwnerID on AffiliationDescriptor.');
-        new EntityDescriptor($document->firstChild);
+        $this->expectException(\Exception::class);
+        $this->expectExceptionMessage('Missing affiliationOwnerID on AffiliationDescriptor.');
+        EntityDescriptor::fromXML($document->documentElement);
     }
 
 
@@ -46,8 +47,9 @@ XML
 </EntityDescriptor>
 XML
         );
-        $this->expectException(\Exception::class, 'Missing required attribute entityID on EntityDescriptor.');
-        new EntityDescriptor($document->firstChild);
+        $this->expectException(\Exception::class);
+        $this->expectExceptionMessage('Missing required attribute entityID on EntityDescriptor.');
+        EntityDescriptor::fromXML($document->documentElement);
     }
 
 
@@ -63,8 +65,9 @@ XML
 </EntityDescriptor>
 XML
         );
-        $this->expectException(\Exception::class, 'Missing AffiliateMember in AffiliationDescriptor.');
-        new EntityDescriptor($document->firstChild);
+        $this->expectException(\Exception::class);
+        $this->expectExceptionMessage('List of affiliated members must not be empty.');
+        EntityDescriptor::fromXML($document->documentElement);
     }
 
 
@@ -78,11 +81,11 @@ XML
 </EntityDescriptor>
 XML
         );
-        $this->expectException(
-            \Exception::class,
+        $this->expectException(\Exception::class);
+        $this->expectExceptionMessage(
             'Must have either one of the RoleDescriptors or an AffiliationDescriptor in EntityDescriptor.'
         );
-        new EntityDescriptor($document->firstChild);
+        EntityDescriptor::fromXML($document->documentElement);
     }
 
 
@@ -99,8 +102,9 @@ XML
 </EntityDescriptor>
 XML
         );
-        $this->expectException(\Exception::Class, 'Invalid SAML2 timestamp passed to xsDateTimeToTimestamp: asdf');
-        new EntityDescriptor($document->firstChild);
+        $this->expectException(\Exception::class);
+        $this->expectExceptionMessage('Invalid SAML2 timestamp passed to xsDateTimeToTimestamp: asdf');
+        EntityDescriptor::fromXML($document->documentElement);
     }
 
 
@@ -118,7 +122,7 @@ XML
 </EntityDescriptor>
 XML
         );
-        $entityDescriptor = new EntityDescriptor($document->firstChild);
+        $entityDescriptor = EntityDescriptor::fromXML($document->documentElement);
 
         $this->assertTrue($entityDescriptor instanceof EntityDescriptor);
         $this->assertEquals('theEntityID', $entityDescriptor->getEntityID());
@@ -132,10 +136,10 @@ XML
         $this->assertEquals('theAffiliationDescriptorID', $affiliationDescriptor->getID());
         $this->assertEquals(1265027696, $affiliationDescriptor->getValidUntil());
         $this->assertEquals('PT9000S', $affiliationDescriptor->getCacheDuration());
-        $affiliateMember = $affiliationDescriptor->getAffiliateMember();
-        $this->assertCount(2, $affiliateMember);
-        $this->assertEquals('test', $affiliateMember[0]);
-        $this->assertEquals('test2', $affiliateMember[1]);
+        $affiliateMembers = $affiliationDescriptor->getAffiliateMembers();
+        $this->assertCount(2, $affiliateMembers);
+        $this->assertEquals('test', $affiliateMembers[0]);
+        $this->assertEquals('test2', $affiliateMembers[1]);
     }
 
 
@@ -162,7 +166,7 @@ XML
 </EntityDescriptor>
 XML
         );
-        $entityDescriptor = new EntityDescriptor($document->firstChild);
+        $entityDescriptor = EntityDescriptor::fromXML($document->documentElement);
 
         $this->assertTrue($entityDescriptor instanceof EntityDescriptor);
         $this->assertEquals('theEntityID', $entityDescriptor->getEntityID());
@@ -177,11 +181,15 @@ XML
         $o = $entityDescriptor->getOrganization();
         $this->assertTrue($o instanceof Organization);
         $this->assertCount(2, $o->getOrganizationName());
-        $this->assertEquals('orgNameTest (no)', $o->getOrganizationName()["no"]);
-        $this->assertEquals('orgNameTest (en)', $o->getOrganizationName()["en"]);
+        $this->assertInstanceOf(OrganizationName::class, $o->getOrganizationName()[0]);
+        $this->assertEquals('orgNameTest (no)', $o->getOrganizationName()[0]->getValue());
+        $this->assertInstanceOf(OrganizationName::class, $o->getOrganizationName()[1]);
+        $this->assertEquals('orgNameTest (en)', $o->getOrganizationName()[1]->getValue());
         $this->assertCount(2, $o->getOrganizationDisplayName());
-        $this->assertEquals('orgDispNameTest (no)', $o->getOrganizationDisplayName()["no"]);
-        $this->assertEquals('orgDispNameTest (en)', $o->getOrganizationDisplayName()["en"]);
+        $this->assertInstanceOf(OrganizationDisplayName::class, $o->getOrganizationDisplayName()[0]);
+        $this->assertEquals('orgDispNameTest (no)', $o->getOrganizationDisplayName()[0]->getValue());
+        $this->assertInstanceOf(OrganizationDisplayName::class, $o->getOrganizationDisplayName()[1]);
+        $this->assertEquals('orgDispNameTest (en)', $o->getOrganizationDisplayName()[1]->getValue());
         $this->assertCount(2, $o->getOrganizationURL());
         $this->assertEquals('orgURL (no)', $o->getOrganizationURL()["no"]);
         $this->assertEquals('orgURL (en)', $o->getOrganizationURL()["en"]);
