@@ -93,7 +93,7 @@ final class Extensions extends AbstractMdElement
             $empty &= $extension->isEmptyElement();
         }
 
-        return false;
+        return $empty;
     }
 
 
