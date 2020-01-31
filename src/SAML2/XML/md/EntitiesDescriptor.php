@@ -17,32 +17,14 @@ use Webmozart\Assert\Assert;
  *
  * @package SimpleSAMLphp
  */
-class EntitiesDescriptor extends AbstractSignedMdElement
+final class EntitiesDescriptor extends AbstractMetadataDocument
 {
-    use SignedElementTrait;
-
-    /**
-     * The ID of this element.
-     *
-     * @var string|null
-     */
-    private $ID = null;
-
     /**
      * The name of this entity collection.
      *
      * @var string|null
      */
     private $Name = null;
-
-    /**
-     * Extensions on this element.
-     *
-     * Array of extension elements.
-     *
-     * @var array
-     */
-    private $Extensions = [];
 
     /**
      * Child EntityDescriptor and EntitiesDescriptor elements.
@@ -78,12 +60,13 @@ class EntitiesDescriptor extends AbstractSignedMdElement
             $this->Name = $xml->getAttribute('Name');
         }
 
-        $this->Extensions = Extensions::getList($xml);
+        $this->Extensions = Extensions::getChildrenOfClass($xml);
+        Assert::maxCount($this->Extensions, 1, 'Only one md:Extensions element is allowed.');
 
         /** @var \DOMElement $node */
         foreach (Utils::xpQuery($xml, './saml_metadata:EntityDescriptor|./saml_metadata:EntitiesDescriptor') as $node) {
             if ($node->localName === 'EntityDescriptor') {
-                $this->children[] = new EntityDescriptor($node);
+                $this->children[] = EntityDescriptor::fromXML($node);
             } else {
                 $this->children[] = new EntitiesDescriptor($node);
             }
@@ -111,106 +94,6 @@ class EntitiesDescriptor extends AbstractSignedMdElement
     public function setName(string $name = null): void
     {
         $this->Name = $name;
-    }
-
-
-    /**
-     * Collect the value of the ID property.
-     *
-     * @return string|null
-     */
-    public function getID(): ?string
-    {
-        return $this->ID;
-    }
-
-
-    /**
-     * Set the value of the ID property.
-     *
-     * @param string|null $Id
-     * @return void
-     */
-    public function setID(string $Id = null): void
-    {
-        $this->ID = $Id;
-    }
-
-
-    /**
-     * Collect the value of the validUntil-property
-     * @return int|null
-     */
-    public function getValidUntil(): ?int
-    {
-        return $this->validUntil;
-    }
-
-
-    /**
-     * Set the value of the validUntil-property
-     * @param int|null $validUntil
-     * @return void
-     */
-    public function setValidUntil(int $validUntil = null): void
-    {
-        $this->validUntil = $validUntil;
-    }
-
-
-    /**
-     * Collect the value of the cacheDuration-property
-     * @return string|null
-     */
-    public function getCacheDuration(): ?string
-    {
-        return $this->cacheDuration;
-    }
-
-
-    /**
-     * Set the value of the cacheDuration-property
-     * @param string|null $cacheDuration
-     * @return void
-     */
-    public function setCacheDuration(string $cacheDuration = null): void
-    {
-        $this->cacheDuration = $cacheDuration;
-    }
-
-
-    /**
-     * Collect the value of the Extensions property.
-     *
-     * @return \SAML2\XML\Chunk[]
-     */
-    public function getExtensions(): array
-    {
-        return $this->Extensions;
-    }
-
-
-    /**
-     * Set the value of the Extensions property.
-     *
-     * @param array $extensions
-     * @return void
-     */
-    public function setExtensions(array $extensions): void
-    {
-        $this->Extensions = $extensions;
-    }
-
-
-    /**
-     * Add an Extension.
-     *
-     * @param \SAML2\XML\Chunk $extensions The Extensions
-     * @return void
-     */
-    public function addExtension(Extensions $extension): void
-    {
-        $this->Extensions[] = $extension;
     }
 
 
@@ -285,7 +168,9 @@ class EntitiesDescriptor extends AbstractSignedMdElement
             $e->setAttribute('Name', $this->Name);
         }
 
-        Extensions::addList($e, $this->Extensions);
+        if (!empty($this->Extensions)) {
+            $this->Extensions->toXML($e);
+        }
 
         foreach ($this->children as $node) {
             $node->toXML($e);
