@@ -43,7 +43,7 @@ class ExtensionsTest extends TestCase
     <mdui:IPHint>127.0.0.1</mdui:IPHint>
   </mdui:DiscoHints>
   <alg:DigestMethod Algorithm="SomeAlgorithm" xmlns:alg="urn:oasis:names:tc:SAML:metadata:algsupport"></alg:DigestMethod>
-  <alg:SigningMethod xmlns:alg="urn:oasis:names:tc:SAML:metadata:algsupport" Algorithm="SomeOtherAlgorithm" 
+  <alg:SigningMethod xmlns:alg="urn:oasis:names:tc:SAML:metadata:algsupport" Algorithm="SomeOtherAlgorithm"
   MinKeySize="1024" MaxKeySize="4096"></alg:SigningMethod>
 </md:Extensions>
 XML
