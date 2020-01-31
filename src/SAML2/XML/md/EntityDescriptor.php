@@ -113,113 +113,6 @@ final class EntityDescriptor extends AbstractMetadataDocument
 
 
     /**
-     * Convert an existing XML into an EntityDescriptor object
-     *
-     * @param \DOMElement $xml An existing EntityDescriptor XML document.
-     *
-     * @return \SAML2\XML\md\EntityDescriptor An object representing the given document.
-     * @throws \Exception If an error occurs while processing the XML document.
-     */
-    public static function fromXML(DOMElement $xml): object
-    {
-        if (!$xml->hasAttribute('entityID')) {
-            throw new \Exception('Missing required attribute entityID on EntityDescriptor.');
-        }
-        $entityID = $xml->getAttribute('entityID');
-
-        $ID = null;
-        if ($xml->hasAttribute('ID')) {
-            $ID = $xml->getAttribute('ID');
-        }
-        $validUntil = null;
-        if ($xml->hasAttribute('validUntil')) {
-            $validUntil = Utils::xsDateTimeToTimestamp($xml->getAttribute('validUntil'));
-        }
-        $cacheDuration = null;
-        if ($xml->hasAttribute('cacheDuration')) {
-            $cacheDuration = $xml->getAttribute('cacheDuration');
-        }
-
-        $roleDescriptors = [];
-        $affiliationDescriptor = null;
-        $organization = null;
-        $contactPersons = [];
-        $additionalMetadataLocation = [];
-        foreach ($xml->childNodes as $node) {
-            if (!($node instanceof DOMElement)) {
-                continue;
-            }
-
-            if ($node->namespaceURI !== Constants::NS_MD) {
-                continue;
-            }
-
-            switch ($node->localName) {
-                case 'RoleDescriptor':
-                    $roleDescriptors[] = UnknownRoleDescriptor::fromXML($node);
-                    break;
-                case 'IDPSSODescriptor':
-                    $roleDescriptors[] = new IDPSSODescriptor($node);
-                    break;
-                case 'SPSSODescriptor':
-                    $roleDescriptors[] = new SPSSODescriptor($node);
-                    break;
-                case 'AuthnAuthorityDescriptor':
-                    $roleDescriptors[] = AuthnAuthorityDescriptor::fromXML($node);
-                    break;
-                case 'AttributeAuthorityDescriptor':
-                    $roleDescriptors[] = AttributeAuthorityDescriptor::fromXML($node);
-                    break;
-                case 'PDPDescriptor':
-                    $roleDescriptors[] = new PDPDescriptor($node);
-                    break;
-                case 'AffiliationDescriptor':
-                    if ($affiliationDescriptor !== null) {
-                        throw new \Exception('More than one AffiliationDescriptor in the entity.');
-                    }
-                    $affiliationDescriptor = AffiliationDescriptor::fromXML($node);
-                    break;
-                case 'Organization':
-                    if ($organization !== null) {
-                        throw new \Exception('More than one Organization in the entity.');
-                    }
-                    $organization = Organization::fromXML($node);
-                    break;
-                case 'ContactPerson':
-                    $contactPersons[] = ContactPerson::fromXML($node);
-                    break;
-                case 'AdditionalMetadataLocation':
-                    $additionalMetadataLocation[] = AdditionalMetadataLocation::fromXML($node);
-                    break;
-            }
-        }
-
-        if (empty($roleDescriptors) && is_null($affiliationDescriptor)) {
-            throw new \Exception(
-                'Must have either one of the RoleDescriptors or an AffiliationDescriptor in EntityDescriptor.'
-            );
-        } elseif (!empty($roleDescriptors) && !is_null($affiliationDescriptor)) {
-            throw new \Exception(
-                'AffiliationDescriptor cannot be combined with other RoleDescriptor elements in EntityDescriptor.'
-            );
-        }
-
-        return new self(
-            $entityID,
-            $ID,
-            $validUntil,
-            $cacheDuration,
-            !empty($extensions) ? $extensions[0] : null,
-            $roleDescriptors,
-            $affiliationDescriptor,
-            $organization,
-            $contactPersons,
-            $additionalMetadataLocation
-        );
-    }
-
-
-    /**
      * Collect the value of the entityID property.
      *
      * @return string
@@ -399,15 +292,109 @@ final class EntityDescriptor extends AbstractMetadataDocument
 
 
     /**
-     * Convert XML into a EntityDescriptor
+     * Convert an existing XML into an EntityDescriptor object
      *
-     * @param \DOMElement $xml The XML element we should load
-     * @return self
+     * @param \DOMElement $xml An existing EntityDescriptor XML document.
+     *
+     * @return \SAML2\XML\md\EntityDescriptor An object representing the given document.
+     * @throws \Exception If an error occurs while processing the XML document.
      */
     public static function fromXML(DOMElement $xml): object
     {
-        // @TODO: Actually fill this method with something useful;  this is a dummy!!
-        return new self(new DOMElement('root'));
+        if (!$xml->hasAttribute('entityID')) {
+            throw new \Exception('Missing required attribute entityID on EntityDescriptor.');
+        }
+        $entityID = $xml->getAttribute('entityID');
+
+        $ID = null;
+        if ($xml->hasAttribute('ID')) {
+            $ID = $xml->getAttribute('ID');
+        }
+        $validUntil = null;
+        if ($xml->hasAttribute('validUntil')) {
+            $validUntil = Utils::xsDateTimeToTimestamp($xml->getAttribute('validUntil'));
+        }
+        $cacheDuration = null;
+        if ($xml->hasAttribute('cacheDuration')) {
+            $cacheDuration = $xml->getAttribute('cacheDuration');
+        }
+
+        $roleDescriptors = [];
+        $affiliationDescriptor = null;
+        $organization = null;
+        $contactPersons = [];
+        $additionalMetadataLocation = [];
+        foreach ($xml->childNodes as $node) {
+            if (!($node instanceof DOMElement)) {
+                continue;
+            }
+
+            if ($node->namespaceURI !== Constants::NS_MD) {
+                continue;
+            }
+
+            switch ($node->localName) {
+                case 'RoleDescriptor':
+                    $roleDescriptors[] = UnknownRoleDescriptor::fromXML($node);
+                    break;
+                case 'IDPSSODescriptor':
+                    $roleDescriptors[] = new IDPSSODescriptor($node);
+                    break;
+                case 'SPSSODescriptor':
+                    $roleDescriptors[] = new SPSSODescriptor($node);
+                    break;
+                case 'AuthnAuthorityDescriptor':
+                    $roleDescriptors[] = AuthnAuthorityDescriptor::fromXML($node);
+                    break;
+                case 'AttributeAuthorityDescriptor':
+                    $roleDescriptors[] = AttributeAuthorityDescriptor::fromXML($node);
+                    break;
+                case 'PDPDescriptor':
+                    $roleDescriptors[] = new PDPDescriptor($node);
+                    break;
+                case 'AffiliationDescriptor':
+                    if ($affiliationDescriptor !== null) {
+                        throw new \Exception('More than one AffiliationDescriptor in the entity.');
+                    }
+                    $affiliationDescriptor = AffiliationDescriptor::fromXML($node);
+                    break;
+                case 'Organization':
+                    if ($organization !== null) {
+                        throw new \Exception('More than one Organization in the entity.');
+                    }
+                    $organization = Organization::fromXML($node);
+                    break;
+                case 'ContactPerson':
+                    $contactPersons[] = ContactPerson::fromXML($node);
+                    break;
+                case 'AdditionalMetadataLocation':
+                    $additionalMetadataLocation[] = AdditionalMetadataLocation::fromXML($node);
+                    break;
+            }
+        }
+
+        if (empty($roleDescriptors) && is_null($affiliationDescriptor)) {
+            throw new \Exception(
+                'Must have either one of the RoleDescriptors or an AffiliationDescriptor in EntityDescriptor.'
+            );
+        } elseif (!empty($roleDescriptors) && !is_null($affiliationDescriptor)) {
+            throw new \Exception(
+                'AffiliationDescriptor cannot be combined with other RoleDescriptor elements in EntityDescriptor.'
+            );
+        }
+
+        return new self(
+            $entityID,
+            $ID,
+            $validUntil,
+            $cacheDuration,
+            !empty($extensions) ? $extensions[0] : null,
+            $roleDescriptors,
+            $affiliationDescriptor,
+            $organization,
+            $contactPersons,
+            $additionalMetadataLocation
+        );
     }
 
 
