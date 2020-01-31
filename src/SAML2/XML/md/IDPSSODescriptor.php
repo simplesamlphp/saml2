@@ -278,7 +278,7 @@ class IDPSSODescriptor extends AbstractSSODescriptor
      * @param array $attributes
      * @return void
      */
-    public function setSupportedAttributes(array $attribute): void
+    public function setSupportedAttributes(array $attributes): void
     {
         $this->Attributes = $attributes;
     }
@@ -287,12 +287,12 @@ class IDPSSODescriptor extends AbstractSSODescriptor
     /**
      * Add the value to the Attributes-property
      *
-     * @param \SAML2\XML\saml\Attribute $attributes
+     * @param \SAML2\XML\saml\Attribute $attribute
      * @return void
      */
-    public function addAttributes(Attribute $attributes): void
+    public function addAttribute(Attribute $attribute): void
     {
-        $this->Attributes[] = $attributes;
+        $this->Attributes[] = $attribute;
     }
 
 

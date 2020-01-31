@@ -4,6 +4,8 @@ declare(strict_types=1);
 
 namespace SAML2\XML\md;
 
+use DOMDocument;
+use InvalidArgumentException;
 use PHPUnit\Framework\TestCase;
 use SAML2\Constants;
 use SAML2\DOMDocumentFactory;
@@ -15,9 +17,13 @@ use SAML2\DOMDocumentFactory;
  */
 class ContactPersonTest extends TestCase
 {
+    /** @var \DOMDocument */
     protected $document;
 
 
+    /**
+     * @return void
+     */
     protected function setUp(): void
     {
         $mdNamespace = Constants::NS_MD;
@@ -36,11 +42,9 @@ XML
     }
 
 
-    // test marshalling
-
-
     /**
      * Test marshalling a ContactPerson from scratch.
+     * @return void
      */
     public function testMarshalling(): void
     {
@@ -86,10 +90,11 @@ XML
 
     /**
      * Test that creating a ContactPerson from scratch with the wrong type fails.
+     * @return void
      */
     public function testMarshallingWithWrongType(): void
     {
-        $this->expectException(\InvalidArgumentException::class);
+        $this->expectException(InvalidArgumentException::class);
         $this->expectExceptionMessage(
             'Expected one of: "technical", "support", "administrative", "billing", "other". Got: "wrong"'
         );
@@ -99,11 +104,13 @@ XML
 
     /**
      * Test that creating a ContactPerson from scratch with an invalid email address fails.
+     * @return void
      */
     public function testMarshallingWithWrongEmail(): void
     {
-        $this->expectException(\InvalidArgumentException::class);
-        $this->expectExceptionMessage('Invalid email addresses found.');
+        $this->expectException(InvalidArgumentException::class);
+        $this->expectExceptionMessage('Invalid email address for ContactPerson: \'this is wrong\'');
+
         new ContactPerson(
             'other',
             'Test Company',
@@ -116,6 +123,7 @@ XML
 
     /**
      * Test that creating a ContactPerson from scratch without any optional arguments works.
+     * @return void
      */
     public function testMarshallingWithoutOptionalProperties(): void
     {
@@ -135,11 +143,9 @@ XML
     }
 
 
-    // test unmarshalling
-
-
     /**
      * Test creating a ContactPerson from XML.
+     * @return void
      */
     public function testUnmarshalling(): void
     {
@@ -172,6 +178,7 @@ XML
 
     /**
      * Test that creating a ContactPerson from XML without a contactType attribute fails.
+     * @return void
      */
     public function testUnmarshallingWithoutType(): void
     {
@@ -184,10 +191,11 @@ XML
 
     /**
      * Test that creating a ContactPerson from XML fails when the contact type is not supported.
+     * @return void
      */
     public function testUnmarshallingWithWrongType(): void
     {
-        $this->expectException(\InvalidArgumentException::class);
+        $this->expectException(InvalidArgumentException::class);
         $this->expectExceptionMessage(
             'Expected one of: "technical", "support", "administrative", "billing", "other". Got: "wrong"'
         );
@@ -212,6 +220,7 @@ XML
 
     /**
      * Test that creating a ContactPerson from XML fails when multiple GivenName elements are found.
+     * @return void
      */
     public function testUnmarshallingMultipleGivenNames(): void
     {
@@ -240,11 +249,12 @@ XML
 
     /**
      * Test that creating a ContactPerson from XML fails when an invalid email address is found.
+     * @return void
      */
     public function testUnmarshallingWithInvalidEmail(): void
     {
-        $this->expectException(\InvalidArgumentException::class);
-        $this->expectExceptionMessage('Invalid email addresses found.');
+        $this->expectException(InvalidArgumentException::class);
+        $this->expectExceptionMessage('Invalid email address for ContactPerson: \'this is not an email\'');
         $emails = $this->document->getElementsByTagNameNS(Constants::NS_MD, 'EmailAddress');
         $emails->item(1)->textContent = 'this is not an email';
         ContactPerson::fromXML($this->document->documentElement);
@@ -253,6 +263,7 @@ XML
 
     /**
      * Test that creating a ContactPerson from XML works when all optional elements are missing.
+     * @return void
      */
     public function testUnmarshallingWithoutOptionalArguments(): void
     {
@@ -274,6 +285,7 @@ XML
 
     /**
      * Test that serialization / unserialization works.
+     * @return void
      */
     public function testSerialize(): void
     {
@@ -290,7 +302,7 @@ XML
     public function testInvalidEmailThrowsException(): void
     {
         $contactPerson = new ContactPerson('support');
-        $this->expectException(\InvalidArgumentException::class, 'Invalid email address for');
+        $this->expectException(InvalidArgumentException::class, 'Invalid email address for');
 
         $contactPerson->addEmailAddress('not so valid');
     }
@@ -301,7 +313,7 @@ XML
     public function testInvalidEmailInSetThrowsException(): void
     {
         $contactPerson = new ContactPerson('technical');
-        $this->expectException(\InvalidArgumentException::class, 'Invalid email address for');
+        $this->expectException(InvalidArgumentException::class, 'Invalid email address for');
 
         $contactPerson->setEmailAddress(['bob@alice.edu', 'user@example.org', 'not so valid', 'aap@noot.nl']);
     }

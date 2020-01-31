@@ -117,15 +117,13 @@ trait ExtendableAttributesTrait
      */
     protected function setAttributesNS(?array $attributes): void
     {
-        if ($attributes === null) {
-            return;
-        }
+        if (!empty($attributes)) {
+            Assert::allIsInstanceOf($attributes, DOMAttr::class);
 
-        Assert::allIsInstanceOf($attributes, DOMAttr::class);
-
-        /** @var \DOMAttr $attribute */
-        foreach ($attributes as $attribute) {
-            $this->setAttributeNS($attribute->namespaceURI, $attribute->nodeName, $attribute->value);
+            /** @var \DOMAttr $attribute */
+            foreach ($attributes as $attribute) {
+                $this->setAttributeNS($attribute->namespaceURI, $attribute->nodeName, $attribute->value);
+            }
         }
     }
 }

@@ -264,9 +264,13 @@ final class ContactPerson extends AbstractMdElement
      * @param string[]|null $emailAddresses
      * @return void
      */
-    public function setEmailAddresses(?array $emailAddresses): void
+    protected function setEmailAddresses(?array $emailAddresses): void
     {
-        $this->EmailAddresses = $emailAddresses ? array_map([$this, 'validateEmailAddress'], $emailAddresses) : null;
+        if ($emailAddresses !== null) {
+            $addresses = array_map([$this, 'validateEmailAddress'], $emailAddresses);
+            Assert::allEmail($addresses, 'Invalid email addresses found.');
+            $this->EmailAddresses = $addresses;
+        }
     }
 
     /**
@@ -297,8 +301,11 @@ final class ContactPerson extends AbstractMdElement
      * @param string[]|null $telephoneNumbers
      * @return void
      */
-    public function setTelephoneNumbers(?array $telephoneNumbers): void
+    protected function setTelephoneNumbers(?array $telephoneNumbers): void
     {
+        if ($telephoneNumbers !== null) {
+            Assert::allString($telephoneNumbers, 'Incorrect type for telephone number.');
+        }
         $this->TelephoneNumbers = $telephoneNumbers;
     }
 
