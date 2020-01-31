@@ -79,10 +79,12 @@ final class StatusDetail extends AbstractSamlpElement
     {
         Assert::same($xml->localName, 'StatusDetail');
         Assert::same($xml->namespaceURI, Constants::NS_SAMLP);
-        Assert::allIsInstanceOf($xml->childNodes, DOMElement::class);
 
         $details = [];
         foreach ($xml->childNodes as $detail) {
+            if (!$detail instanceof DOMElement) {
+                continue;
+            }
             /** @psalm-var \DOMElement $detail */
             $details[] = new Chunk($detail);
         }
