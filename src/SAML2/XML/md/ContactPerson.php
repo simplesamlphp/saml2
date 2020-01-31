@@ -259,14 +259,20 @@ class ContactPerson
     }
 
     /**
-     * Remove a "mailto:" prefix on an emailaddress, if present.
+     * Remove a "mailto:" prefix on an email address, if present.
+     * Check the address for syntactical validity. If not, throw an exception.
      *
      * @param string $emailAddress
      * @return string
+     * @throws \InvalidArgumentException if supplied email address is not valid
      */
-    private function removeEmailMailtoPrefix(string $emailAddress): string
+    private function validateEmailAddress(string $emailAddress): string
     {
-        return preg_replace('/^mailto:/i', '', $emailAddress);
+        $address = preg_replace('/^mailto:/i', '', $emailAddress);
+        if (filter_var($address, FILTER_VALIDATE_EMAIL) === FALSE) {
+            throw new \InvalidArgumentException("Invalid email address for ContactPerson: " . var_export($address, true));
+        }
+        return $address;
     }
 
     /**
@@ -277,7 +283,7 @@ class ContactPerson
      */
     public function setEmailAddress(array $emailAddress): void
     {
-        $this->EmailAddress = array_map([$this, 'removeEmailMailtoPrefix'], $emailAddress);
+        $this->EmailAddress = array_map([$this, 'validateEmailAddress'], $emailAddress);
     }
 
     /**
@@ -288,7 +294,7 @@ class ContactPerson
      */
     public function addEmailAddress(string $emailAddress): void
     {
-        $this->EmailAddress[] = $this->removeEmailMailtoPrefix($emailAddress);
+        $this->EmailAddress[] = $this->validateEmailAddress($emailAddress);
     }
 
     /**

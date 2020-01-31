@@ -243,6 +243,7 @@ abstract class RoleDescriptor extends SignedElementHelper
      *
      * @param string|null $errorURL
      * @return void
+     * @throws \InvalidArgumentException if supplied URL is not a valid URL
      */
     public function setErrorURL(string $errorURL = null): void
     {
