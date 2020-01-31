@@ -13,7 +13,6 @@ use RobRichards\XMLSecLibs\XMLSecurityDSig;
 use RobRichards\XMLSecLibs\XMLSecurityKey;
 use SAML2\Compat\ContainerInterface;
 use SAML2\Compat\ContainerSingleton;
-use SAML2\Compat\Ssp\Container;
 use SAML2\Exception\RuntimeException;
 use SAML2\XML\ds\KeyInfo;
 use SAML2\XML\ds\X509Certificate;
