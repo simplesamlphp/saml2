@@ -19,7 +19,7 @@ final class AuthnAuthorityDescriptor extends AbstractRoleDescriptor
     /**
      * List of AuthnQueryService endpoints.
      *
-     * @var \SAML2\XML\md\AuthnQueryService[]
+     * @var \SAML2\XML\md\AbstractEndpointType[]
      */
     protected $AuthnQueryServices = [];
 
