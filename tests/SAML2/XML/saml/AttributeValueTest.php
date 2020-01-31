@@ -15,9 +15,13 @@ use SAML2\DOMDocumentFactory;
  */
 final class AttributeValueTest extends TestCase
 {
+    /** @var \DOMDocument */
     protected $document;
 
 
+    /**
+     * @return void
+     */
     protected function setUp(): void
     {
         $nssaml = Constants::NS_SAML;
@@ -32,9 +36,11 @@ XML
 
 
     /**
-     * Test creating an AttributeValue from scratch.
+     * Test creating an AttributeValue from scratch using a string.
+     *
+     * @return void
      */
-    public function testMarshalling(): void
+    public function testMarshallingString(): void
     {
         $av = new AttributeValue('value');
         $this->assertEquals('value', $av->getString());
@@ -42,8 +48,21 @@ XML
 
 
     /**
+     * Test creating an AttributeValue from scratch using a DOMElement.
+     *
+     * @return void
+     */
+    public function testMarshallingDOMElement(): void
+    {
+        $av = new AttributeValue($this->document->documentElement);
+        $this->assertEquals($this->document->documentElement, $av->getElement());
+    }
+
+
+    /**
      * Verifies that supplying an empty string as attribute value will
      * generate a tag with no content (instead of e.g. an empty tag).
+     *
      * @return void
      */
     public function testEmptyStringAttribute(): void
@@ -58,8 +77,9 @@ XML
     }
 
 
-    /**4
+    /**
      * Verifies that we can create an AttributeValue from a DOMElement.
+     *
      * @return void
      */
     public function testUnmarshalling(): void
@@ -75,6 +95,7 @@ XML
 
     /**
      * Serialize an AttributeValue and Unserialize that again.
+     *
      * @return void
      */
     public function testSerialize(): void
