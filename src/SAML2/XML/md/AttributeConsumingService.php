@@ -22,14 +22,14 @@ final class AttributeConsumingService extends AbstractMdElement
     /**
      * The ServiceName of this AttributeConsumingService.
      *
-     * @var ServiceName[]
+     * @var \SAML2\XML\md\ServiceName[]
      */
     protected $serviceNames = [];
 
     /**
      * The ServiceDescription of this AttributeConsumingService.
      *
-     * @var ServiceDescription[]
+     * @var \SAML2\XML\md\ServiceDescription[]
      */
     protected $serviceDescriptions = [];
 
@@ -38,7 +38,7 @@ final class AttributeConsumingService extends AbstractMdElement
      *
      * This is an array of SAML_RequestedAttributeType elements.
      *
-     * @var RequestedAttribute[]
+     * @var \SAML2\XML\md\RequestedAttribute[]
      */
     protected $requestedAttributes = [];
 
@@ -164,7 +164,7 @@ final class AttributeConsumingService extends AbstractMdElement
      * @param DOMElement $xml The XML element we should load.
      *
      * @return self
-     * @throws Exception
+     * @throws \Exception
      */
     public static function fromXML(DOMElement $xml): object
     {
@@ -174,7 +174,7 @@ final class AttributeConsumingService extends AbstractMdElement
         $descriptions = ServiceDescription::getChildrenOfClass($xml);
 
         $requestedAttrs = [];
-        /** @var DOMElement $ra */
+        /** @var \DOMElement $ra */
         foreach (Utils::xpQuery($xml, './saml_metadata:RequestedAttribute') as $ra) {
             $requestedAttrs[] = RequestedAttribute::fromXML($ra);
         }

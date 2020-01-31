@@ -152,19 +152,21 @@ final class AffiliationDescriptor extends AbstractMetadataDocument
     /**
      * Initialize a AffiliationDescriptor.
      *
-     * @param \DOMElement|null $xml The XML element we should load.
+     * @param \DOMElement $xml The XML element we should load.
      * @return \SAML2\XML\md\AffiliationDescriptor
      * @throws \Exception
      */
-    public static function fromXML(DOMElement $xml = null): object
+    public static function fromXML(DOMElement $xml): object
     {
         if (!$xml->hasAttribute('affiliationOwnerID')) {
             throw new Exception('Missing affiliationOwnerID on AffiliationDescriptor.');
         }
+
         $owner = $xml->getAttribute('affiliationOwnerID');
         $members = Utils::extractStrings($xml, Constants::NS_MD, 'AffiliateMember');
         $keyDescriptors = [];
-        /** @var DOMElement $kd */
+
+        /** @var \DOMElement $kd */
         foreach (Utils::xpQuery($xml, './saml_metadata:KeyDescriptor') as $kd) {
             $keyDescriptors[] = new KeyDescriptor($kd);
         }
@@ -185,6 +187,7 @@ final class AffiliationDescriptor extends AbstractMetadataDocument
             self::getAttribute($xml, 'cacheDuration', null),
             !empty($extensions) ? $extensions[0] : null
         );
+
         $afd->getSignatureFromXML($xml);
         return $afd;
     }

@@ -128,7 +128,7 @@ final class AttributeAuthorityDescriptor extends AbstractRoleDescriptor
     public static function fromXML(DOMElement $xml = null): object
     {
         $attrServices = [];
-        /** @var DOMElement $ep */
+        /** @var \DOMElement $ep */
         foreach (Utils::xpQuery($xml, './saml_metadata:AttributeService') as $ep) {
             $attrServices[] = AttributeService::fromXML($ep);
         }
@@ -137,7 +137,7 @@ final class AttributeAuthorityDescriptor extends AbstractRoleDescriptor
         }
 
         $assertIDReqServices = [];
-        /** @var DOMElement $ep */
+        /** @var \DOMElement $ep */
         foreach (Utils::xpQuery($xml, './saml_metadata:AssertionIDRequestService') as $ep) {
             $assertIDReqServices[] = AssertionIDRequestService::fromXML($ep);
         }
@@ -146,7 +146,7 @@ final class AttributeAuthorityDescriptor extends AbstractRoleDescriptor
         $attrProfiles = Utils::extractStrings($xml, Constants::NS_MD, 'AttributeProfile');
 
         $attributes = [];
-        /** @var DOMElement $a */
+        /** @var \DOMElement $a */
         foreach (Utils::xpQuery($xml, './saml_assertion:Attribute') as $a) {
             $attributes[] = Attribute::fromXML($a);
         }
