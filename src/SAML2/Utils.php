@@ -13,9 +13,7 @@ use RobRichards\XMLSecLibs\XMLSecurityDSig;
 use RobRichards\XMLSecLibs\XMLSecurityKey;
 use SAML2\Compat\ContainerInterface;
 use SAML2\Compat\ContainerSingleton;
-use SAML2\Compat\Ssp\Container;
 use SAML2\Exception\RuntimeException;
-use SAML2\XML\AbstractXMLElement;
 use SAML2\XML\ds\KeyInfo;
 use SAML2\XML\ds\X509Certificate;
 use SAML2\XML\ds\X509Data;
@@ -679,10 +677,7 @@ class Utils
             $x509Data
         ]);
 
-        $keyDescriptor = new KeyDescriptor();
-        $keyDescriptor->setKeyInfo($keyInfo);
-
-        return $keyDescriptor;
+        return new KeyDescriptor($keyInfo);
     }
 
 
