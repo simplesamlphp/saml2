@@ -318,7 +318,7 @@ final class ContactPerson extends AbstractMdElement
     /**
      * Initialize a ContactPerson element.
      *
-     * @param \DOMElement|null $xml The XML element we should load.
+     * @param \DOMElement $xml The XML element we should load.
      *
      * @return self
      * @throws \Exception
@@ -334,7 +334,7 @@ final class ContactPerson extends AbstractMdElement
         $surName = self::getStringElement($xml, 'SurName');
         $email = self::getStringElements($xml, 'EmailAddress');
         $telephone = self::getStringElements($xml, 'TelephoneNumber');
-        $extensions = Extensions::extractFromChildren($xml);
+        $extensions = Extensions::getChildrenOfClass($xml);
         Assert::maxCount($extensions, 1, 'Only one md:Extensions element is allowed.');
 
         return new self(
@@ -353,7 +353,7 @@ final class ContactPerson extends AbstractMdElement
     /**
      * Convert this ContactPerson to XML.
      *
-     * @param \DOMElement $parent The element we should add this contact to.
+     * @param \DOMElement|null $parent The element we should add this contact to.
      *
      * @return \DOMElement The new ContactPerson-element.
      */
@@ -366,7 +366,9 @@ final class ContactPerson extends AbstractMdElement
             $e->setAttributeNS($attr['namespaceURI'], $attr['qualifiedName'], $attr['value']);
         }
 
-        Extensions::addList($e, $this->Extensions);
+        if ($this->Extensions !== null) {
+            $this->Extensions->toXML($e);
+        }
 
         if ($this->Company !== null) {
             Utils::addString($e, Constants::NS_MD, 'md:Company', $this->Company);
