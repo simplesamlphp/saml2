@@ -173,6 +173,19 @@ class PDPDescriptor extends AbstractRoleDescriptor
 
 
     /**
+     * Convert XML into a PDPDescriptor
+     *
+     * @param \DOMElement $xml The XML element we should load
+     * @return self
+     */
+    public static function fromXML(DOMElement $xml): object
+    {
+        // @TODO: Actually fill this method with something useful;  this is a dummy!!
+        return new self(new DOMElement('root'));
+    }
+
+
+    /**
      * Add this PDPDescriptor to an EntityDescriptor.
      *
      * @param \DOMElement $parent The EntityDescriptor we should append this IDPSSODescriptor to.
