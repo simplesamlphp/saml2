@@ -137,6 +137,7 @@ XML
         $this->assertInstanceOf(DigestMethod::class, $list[6]);
         $this->assertInstanceOf(SigningMethod::class, $list[7]);
         $this->assertInstanceOf(Chunk::class, $list[8]);
+        $this->assertFalse($extensions->isEmptyElement());
     }
 
 
