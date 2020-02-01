@@ -49,7 +49,7 @@ class HTTPArtifact extends Binding
             throw new \Exception('Cannot get redirect URL, no Issuer set in the message.');
         }
         $artifact = base64_encode("\x00\x04\x00\x00" . sha1($issuer->getValue(), true) . $generatedId);
-        $artifactData = $message->toUnsignedXML();
+        $artifactData = $message->toXML();
         $artifactDataString = $artifactData->ownerDocument->saveXML($artifactData);
 
         $store->set('artifact', $artifact, $artifactDataString, Temporal::getTime() + 15 * 60);

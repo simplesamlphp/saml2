@@ -744,9 +744,9 @@ class AuthnRequest extends Request
      *
      * @return \DOMElement This authentication request.
      */
-    public function toUnsignedXML(): DOMElement
+    public function toXML(): DOMElement
     {
-        $root = parent::toUnsignedXML();
+        $root = parent::toXML();
 
         if ($this->forceAuthn) {
             $root->setAttribute('ForceAuthn', 'true');

@@ -32,7 +32,7 @@ class UtilsTest extends \PHPUnit\Framework\TestCase
         $aq = new AttributeQuery();
         $aq->setNameID($nameId_before);
 
-        $xml = $aq->toUnsignedXML();
+        $xml = $aq->toXML();
 
         $nameId_after = Utils::xpQuery($xml, './saml_assertion:Subject/saml_assertion:NameID');
         $this->assertTrue(count($nameId_after) === 1);

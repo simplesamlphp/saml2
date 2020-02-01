@@ -26,7 +26,7 @@ class ResponseTest extends \PHPUnit\Framework\TestCase
         $response = new Response();
         $response->setConsent(Constants::CONSENT_EXPLICIT);
         $response->setIssuer($issuer);
-        $responseElement = $response->toUnsignedXML();
+        $responseElement = $response->toXML();
 
         $this->assertTrue($responseElement->hasAttribute('Consent'));
         $this->assertEquals($responseElement->getAttribute('Consent'), Constants::CONSENT_EXPLICIT);
@@ -126,7 +126,7 @@ XML;
         $fixtureResponseDom = DOMDocumentFactory::fromString($xml);
         $request            = new Response($fixtureResponseDom->firstChild);
 
-        $requestXml = $requestDocument = $request->toUnsignedXML()->ownerDocument->C14N();
+        $requestXml = $requestDocument = $request->toXML()->ownerDocument->C14N();
         $fixtureXml = $fixtureResponseDom->C14N();
 
         $this->assertXmlStringEqualsXmlString(

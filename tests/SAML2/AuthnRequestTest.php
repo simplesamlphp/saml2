@@ -35,7 +35,7 @@ class AuthnRequestTest extends \PHPUnit\Framework\TestCase
         $authnRequest = new AuthnRequest();
         $authnRequest->setRequestedAuthnContext($rac);
 
-        $authnRequestElement = $authnRequest->toUnsignedXML();
+        $authnRequestElement = $authnRequest->toXML();
 
         $requestedAuthnContextElements = Utils::xpQuery(
             $authnRequestElement,
@@ -119,7 +119,7 @@ AUTHNREQUEST;
         $document     = DOMDocumentFactory::fromString($xml);
         $authnRequest = new AuthnRequest($document->documentElement);
 
-        $this->assertXmlStringEqualsXmlString($document->C14N(), $authnRequest->toUnsignedXML()->C14N());
+        $this->assertXmlStringEqualsXmlString($document->C14N(), $authnRequest->toXML()->C14N());
     }
 
 
@@ -157,7 +157,7 @@ AUTHNREQUEST;
         $nameId->setFormat(Constants::NAMEID_UNSPECIFIED);
         $request->setNameId($nameId);
 
-        $requestAsXML = $request->toUnsignedXML()->ownerDocument->saveXML();
+        $requestAsXML = $request->toXML()->ownerDocument->saveXML();
         $expected = '<saml:Subject><saml:NameID Format="urn:oasis:names:tc:SAML:1.1:nameid-format:unspecified">user@example.org</saml:NameID></saml:Subject>';
         $this->assertStringContainsString($expected, $requestAsXML);
     }
@@ -263,7 +263,7 @@ AUTHNREQUEST;
 AUTHNREQUEST;
 
         $expectedStructure = DOMDocumentFactory::fromString($expectedXml)->documentElement;
-        $requestStructure = $request->toUnsignedXML();
+        $requestStructure = $request->toXML();
 
         $this->assertEqualXMLStructure($expectedStructure, $requestStructure);
     }
@@ -307,7 +307,7 @@ AUTHNREQUEST;
 AUTHNREQUEST;
 
         $expectedStructure = DOMDocumentFactory::fromString($expectedStructureDocument)->documentElement;
-        $requestStructure = $request->toUnsignedXML();
+        $requestStructure = $request->toXML();
 
         $this->assertEqualXMLStructure($expectedStructure, $requestStructure);
     }
@@ -410,7 +410,7 @@ AUTHNREQUEST;
 AUTHNREQUEST;
 
         $expectedStructure = DOMDocumentFactory::fromString($expectedStructureDocument)->documentElement;
-        $requestStructure = $request->toUnsignedXML();
+        $requestStructure = $request->toXML();
 
         $this->assertEqualXMLStructure($expectedStructure, $requestStructure);
     }
@@ -483,7 +483,7 @@ AUTHNREQUEST;
 AUTHNREQUEST;
 
         $expectedStructure = DOMDocumentFactory::fromString($expectedStructureDocument)->documentElement;
-        $requestStructure = $request->toUnsignedXML();
+        $requestStructure = $request->toXML();
 
         $this->assertEqualXMLStructure($expectedStructure, $requestStructure);
         $this->assertXmlStringEqualsXmlString($expectedStructure->ownerDocument->saveXML(), $requestStructure->ownerDocument->saveXML());
@@ -594,7 +594,7 @@ AUTHNREQUEST;
 AUTHNREQUEST;
 
         $expectedStructure = DOMDocumentFactory::fromString($expectedStructureDocument)->documentElement;
-        $requestStructure = $request->toUnsignedXML();
+        $requestStructure = $request->toXML();
 
         $this->assertEqualXMLStructure($expectedStructure, $requestStructure);
 
@@ -634,7 +634,7 @@ AUTHNREQUEST;
 AUTHNREQUEST;
 
         $expectedStructure = DOMDocumentFactory::fromString($expectedStructureDocument)->documentElement;
-        $requestStructure = $request->toUnsignedXML();
+        $requestStructure = $request->toXML();
 
         $this->assertEqualXMLStructure($expectedStructure, $requestStructure);
 
@@ -718,7 +718,7 @@ AUTHNREQUEST;
 AUTHNREQUEST;
 
         $expectedStructure = DOMDocumentFactory::fromString($expectedStructureDocument)->documentElement;
-        $requestStructure = $request->toUnsignedXML();
+        $requestStructure = $request->toXML();
 
         $this->assertEqualXMLStructure($expectedStructure, $requestStructure);
 
@@ -819,7 +819,7 @@ AUTHNREQUEST;
 AUTHNREQUEST;
 
         $expectedStructure = DOMDocumentFactory::fromString($expectedStructureDocument)->documentElement;
-        $requestStructure = $request->toUnsignedXML();
+        $requestStructure = $request->toXML();
 
         $this->assertEqualXMLStructure($expectedStructure, $requestStructure);
 
@@ -858,7 +858,7 @@ AUTHNREQUEST;
 AUTHNREQUEST;
 
         $expectedStructure = DOMDocumentFactory::fromString($expectedStructureDocument)->documentElement;
-        $requestStructure = $request->toUnsignedXML();
+        $requestStructure = $request->toXML();
 
         $this->assertEqualXMLStructure($expectedStructure, $requestStructure);
 
@@ -927,7 +927,7 @@ AUTHNREQUEST;
 AUTHNREQUEST;
 
         $expectedStructure = DOMDocumentFactory::fromString($expectedStructureDocument)->documentElement;
-        $requestStructure = $request->toUnsignedXML();
+        $requestStructure = $request->toXML();
 
         $this->assertEqualXMLStructure($expectedStructure, $requestStructure);
 
@@ -1052,7 +1052,7 @@ AUTHNREQUEST;
 AUTHNREQUEST;
 
         $expectedStructure = DOMDocumentFactory::fromString($expectedStructureDocument)->documentElement;
-        $requestStructure = $request->toUnsignedXML();
+        $requestStructure = $request->toXML();
 
         $this->assertEqualXMLStructure($expectedStructure, $requestStructure);
     }

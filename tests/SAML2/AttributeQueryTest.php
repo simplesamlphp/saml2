@@ -34,7 +34,7 @@ class AttributeQueryTest extends \PHPUnit\Framework\TestCase
                 'test4' => [ 4, 23 ],
             ]
         );
-        $attributeQueryElement = $attributeQuery->toUnsignedXML();
+        $attributeQueryElement = $attributeQuery->toXML();
 
         // Test Attribute Names
         $attributes = Utils::xpQuery($attributeQueryElement, './saml_assertion:Attribute');
@@ -141,7 +141,7 @@ XML;
             ]
         );
         $attributeQuery->setAttributeNameFormat($fmt_uri);
-        $attributeQueryElement = $attributeQuery->toUnsignedXML();
+        $attributeQueryElement = $attributeQuery->toXML();
 
         // Test Attribute Names
         $attributes = Utils::xpQuery($attributeQueryElement, './saml_assertion:Attribute');

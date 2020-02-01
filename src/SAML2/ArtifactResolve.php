@@ -70,11 +70,11 @@ class ArtifactResolve extends Request
      *
      * @throws \InvalidArgumentException if assertions are false
      */
-    public function toUnsignedXML(): DOMElement
+    public function toXML(): DOMElement
     {
         Assert::notEmpty($this->artifact, 'Cannot convert ArtifactResolve to XML without an Artifact set.');
 
-        $root = parent::toUnsignedXML();
+        $root = parent::toXML();
         $artifactelement = $this->document->createElementNS(Constants::NS_SAMLP, 'Artifact', $this->artifact);
         $root->appendChild($artifactelement);
 

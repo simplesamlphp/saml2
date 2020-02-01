@@ -24,7 +24,7 @@ class ArtifactResolveTest extends \PHPUnit\Framework\TestCase
         $artifactResolve->setIssuer($issuer);
         $artifactResolve->setArtifact($artifact);
 
-        $artifactResolveElement = $artifactResolve->toUnsignedXML();
+        $artifactResolveElement = $artifactResolve->toXML();
         $artelement = Utils::xpQuery($artifactResolveElement, './saml_protocol:Artifact');
 
         $this->assertCount(1, $artelement);

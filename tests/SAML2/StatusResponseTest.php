@@ -39,7 +39,7 @@ class StatusResponseTest extends \PHPUnit\Framework\TestCase
         $response = new Response();
         $response->setStatus($status);
 
-        $responseElement = $response->toUnsignedXML();
+        $responseElement = $response->toXML();
 
         $statusElements = Utils::xpQuery($responseElement, './saml_protocol:Status');
         $this->assertCount(1, $statusElements);
@@ -178,7 +178,7 @@ XML;
 
         $response->setStatus($status);
         $response->setInResponseTo('aabb12234');
-        $responseElement = $response->toUnsignedXML();
+        $responseElement = $response->toXML();
 
         $expectedStructureDocument = new \DOMDocument();
         $expectedStructureDocument->loadXML(<<<STATUSXML

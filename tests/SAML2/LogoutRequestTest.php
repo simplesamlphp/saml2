@@ -66,7 +66,7 @@ XML;
         $logoutRequest->setNameID($nameId);
         $logoutRequest->setSessionIndex('SessionIndexValue');
 
-        $logoutRequestElement = $logoutRequest->toUnsignedXML();
+        $logoutRequestElement = $logoutRequest->toXML();
         $this->assertEquals('LogoutRequest', $logoutRequestElement->localName);
         $this->assertEquals(Constants::NS_SAMLP, $logoutRequestElement->namespaceURI);
 
@@ -84,7 +84,7 @@ XML;
         $logoutRequest = new LogoutRequest();
         $logoutRequest->setNameID($nameId);
         $logoutRequest->setSessionIndexes(['SessionIndexValue1', 'SessionIndexValue2']);
-        $logoutRequestElement = $logoutRequest->toUnsignedXML();
+        $logoutRequestElement = $logoutRequest->toXML();
 
         $sessionIndexElements = Utils::xpQuery($logoutRequestElement, './saml_protocol:SessionIndex');
         $this->assertCount(2, $sessionIndexElements);
@@ -127,7 +127,7 @@ XML;
         $logoutRequest->setNameID($nameId);
         $logoutRequest->encryptNameId(CertificatesMock::getPublicKey());
 
-        $logoutRequestElement = $logoutRequest->toUnsignedXML();
+        $logoutRequestElement = $logoutRequest->toXML();
         $this->assertCount(
             1,
             Utils::xpQuery($logoutRequestElement, './saml_assertion:EncryptedID/xenc:EncryptedData')
@@ -264,7 +264,7 @@ XML;
         $logoutRequest = new LogoutRequest();
         $logoutRequest->setNameID($nameId);
         $logoutRequest->setNotOnOrAfter($time);
-        $logoutRequestElement = $logoutRequest->toUnsignedXML();
+        $logoutRequestElement = $logoutRequest->toXML();
 
         $logoutRequest2 = new LogoutRequest($logoutRequestElement);
         $this->assertEquals($time, $logoutRequest2->getNotOnOrAfter());

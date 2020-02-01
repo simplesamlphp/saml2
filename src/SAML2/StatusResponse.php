@@ -132,9 +132,9 @@ abstract class StatusResponse extends Message
      *
      * @return \DOMElement This status response.
      */
-    public function toUnsignedXML(): DOMElement
+    public function toXML(): DOMElement
     {
-        $root = parent::toUnsignedXML();
+        $root = parent::toXML();
 
         if ($this->inResponseTo !== null) {
             $root->setAttribute('InResponseTo', $this->inResponseTo);

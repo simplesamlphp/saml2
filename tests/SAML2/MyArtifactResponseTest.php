@@ -28,9 +28,9 @@ class ArtifactResponseTest extends \PHPUnit\Framework\TestCase
         $authnRequest = new AuthnRequest();
         $authnRequest->setIssuer($issuer2);
 
-        $artifactResponse->setAny($authnRequest->toUnsignedXML());
+        $artifactResponse->setAny($authnRequest->toXML());
 
-        $artifactResponseElement = $artifactResponse->toUnsignedXML();
+        $artifactResponseElement = $artifactResponse->toXML();
 
         $artifactIssuer = Utils::xpQuery($artifactResponseElement, './saml:Issuer');
         $this->assertCount(1, $artifactIssuer);

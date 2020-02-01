@@ -431,7 +431,7 @@ abstract class Message extends SignedElement
      *
      * @return \DOMElement The root element of the DOM tree
      */
-    public function toUnsignedXML(): DOMElement
+    public function toXML(): DOMElement
     {
         $this->document = DOMDocumentFactory::create();
 
@@ -472,7 +472,7 @@ abstract class Message extends SignedElement
      */
     public function toSignedXML(): DOMElement
     {
-        $root = $this->toUnsignedXML();
+        $root = $this->toXML();
 
         if ($this->signatureKey === null) {
             /* We don't have a key to sign it with. */
