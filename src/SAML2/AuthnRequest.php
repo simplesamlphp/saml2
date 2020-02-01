@@ -213,7 +213,7 @@ class AuthnRequest extends Request
         /** @var \DOMElement[] $subjectConfirmation */
         $subjectConfirmation = Utils::xpQuery($subject, './saml_assertion:SubjectConfirmation');
         foreach ($subjectConfirmation as $sc) {
-            $this->subjectConfirmation[] = new SubjectConfirmation($sc);
+            $this->subjectConfirmation[] = SubjectConfirmation::fromXML($sc);
         }
     }
 

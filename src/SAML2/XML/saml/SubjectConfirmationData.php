@@ -17,7 +17,7 @@ use Webmozart\Assert\Assert;
  *
  * @package SimpleSAMLphp
  */
-class SubjectConfirmationData
+final class SubjectConfirmationData extends AbstractSamlElement
 {
     /**
      * The time before this element is valid, as an unix timestamp.
@@ -60,54 +60,35 @@ class SubjectConfirmationData
      * Array with various elements describing this key.
      * Unknown elements will be represented by \SAML2\XML\Chunk.
      *
-     * @var (\SAML2\XML\ds\KeyInfo|\SAML2\XML\Chunk)[]
+     * @var (\SAML2\XML\ds\KeyInfo|\SAML2\XML\Chunk)[]|null
      */
-    private $info = [];
+    private $info = null;
 
 
     /**
      * Initialize (and parse) a SubjectConfirmationData element.
      *
-     * @param \DOMElement|null $xml The XML element we should load.
+     * @param int|null $notBefore
+     * @param int|null $notOnOrAfter
+     * @param string|null $recipient
+     * @param string|null $inResponseTo
+     * @param string|null $address
+     * @param (\SAML2\XML\ds\KeyInfo|\SAML2\XML\Chunk)[]|null $info
      */
-    public function __construct(DOMElement $xml = null)
-    {
-        if ($xml === null) {
-            return;
-        }
-
-        if ($xml->hasAttribute('NotBefore')) {
-            $this->setNotBefore(Utils::xsDateTimeToTimestamp($xml->getAttribute('NotBefore')));
-        }
-        if ($xml->hasAttribute('NotOnOrAfter')) {
-            $this->setNotOnOrAfter(Utils::xsDateTimeToTimestamp($xml->getAttribute('NotOnOrAfter')));
-        }
-        if ($xml->hasAttribute('Recipient')) {
-            $this->setRecipient($xml->getAttribute('Recipient'));
-        }
-        if ($xml->hasAttribute('InResponseTo')) {
-            $this->setInResponseTo($xml->getAttribute('InResponseTo'));
-        }
-        if ($xml->hasAttribute('Address')) {
-            $this->setAddress($xml->getAttribute('Address'));
-        }
-        foreach ($xml->childNodes as $n) {
-            if (!($n instanceof DOMElement)) {
-                continue;
-            }
-            if ($n->namespaceURI !== XMLSecurityDSig::XMLDSIGNS) {
-                $this->addInfo(new Chunk($n));
-                continue;
-            }
-            switch ($n->localName) {
-                case 'KeyInfo':
-                    $this->addInfo(KeyInfo::fromXML($n));
-                    break;
-                default:
-                    $this->addInfo(new Chunk($n));
-                    break;
-            }
-        }
+    public function __construct(
+        ?int $notBefore = null,
+        ?int $notOnOrAfter = null,
+        ?string $recipient = null,
+        ?string $inResponseTo = null,
+        ?string $address = null,
+        ?array $info = null
+    ) {
+        $this->setNotBefore($notBefore);
+        $this->setNotOnOrAfter($notOnOrAfter);
+        $this->setRecipient($recipient);
+        $this->setInResponseTo($inResponseTo);
+        $this->setAddress($address);
+        $this->setInfo($info);
     }
 
 
@@ -128,7 +109,7 @@ class SubjectConfirmationData
      * @param int|null $notBefore
      * @return void
      */
-    public function setNotBefore(int $notBefore = null): void
+    private function setNotBefore(?int $notBefore): void
     {
         $this->NotBefore = $notBefore;
     }
@@ -151,7 +132,7 @@ class SubjectConfirmationData
      * @param int|null $notOnOrAfter
      * @return void
      */
-    public function setNotOnOrAfter(int $notOnOrAfter = null): void
+    private function setNotOnOrAfter(?int $notOnOrAfter): void
     {
         $this->NotOnOrAfter = $notOnOrAfter;
     }
@@ -174,7 +155,7 @@ class SubjectConfirmationData
      * @param string|null $recipient
      * @return void
      */
-    public function setRecipient(string $recipient = null): void
+    private function setRecipient(?string $recipient): void
     {
         $this->Recipient = $recipient;
     }
@@ -197,7 +178,7 @@ class SubjectConfirmationData
      * @param string|null $inResponseTo
      * @return void
      */
-    public function setInResponseTo(string $inResponseTo = null): void
+    private function setInResponseTo(?string $inResponseTo): void
     {
         $this->InResponseTo = $inResponseTo;
     }
@@ -220,7 +201,7 @@ class SubjectConfirmationData
      * @param string|null $address
      * @return void
      */
-    public function setAddress(string $address = null): void
+    private function setAddress(?string $address): void
     {
         if (!is_null($address) && !filter_var($address, FILTER_VALIDATE_IP, FILTER_FLAG_IPV4 | FILTER_FLAG_IPV6)) {
             Utils::getContainer()->getLogger()->warning(
@@ -234,9 +215,9 @@ class SubjectConfirmationData
     /**
      * Collect the value of the info-property
      *
-     * @return (\SAML2\XML\ds\KeyInfo|\SAML2\XML\Chunk)[]
+     * @return (\SAML2\XML\ds\KeyInfo|\SAML2\XML\Chunk)[]|null
      */
-    public function getInfo(): array
+    public function getInfo(): ?array
     {
         return $this->info;
     }
@@ -245,10 +226,10 @@ class SubjectConfirmationData
     /**
      * Set the value of the info-property
      *
-     * @param (\SAML2\XML\ds\KeyInfo|\SAML2\XML\Chunk)[] $info
+     * @param (\SAML2\XML\ds\KeyInfo|\SAML2\XML\Chunk)[]|null $info
      * @return void
      */
-    public function setInfo(array $info): void
+    private function setInfo(?array $info): void
     {
         $this->info = $info;
     }
@@ -262,23 +243,93 @@ class SubjectConfirmationData
      *
      * @throws \InvalidArgumentException if assertions are false
      */
-    public function addInfo($info): void
+    public function addInfo(object $info): void
     {
         Assert::isInstanceOfAny($info, [Chunk::class, KeyInfo::class]);
-        $this->info[] = $info;
+        $this->info = empty($this->info) ? [$info] : array_merge($this->info, [$info]);
+    }
+
+
+    /**
+     * Test if an object, at the state it's in, would produce an empty XML-element
+     *
+     * @return bool
+     */
+    public function isEmptyElement(): bool
+    {
+        return (
+            empty($this->NotBefore)
+            && empty($this->NotOnOrAfter)
+            && empty($this->Recipient)
+            && empty($this->InResponseTo)
+            && empty($this->Address)
+            && empty($this->info)
+        );
+    }
+
+
+    /**
+     * Convert XML into a SubjectConfirmationData
+     *
+     * @param \DOMElement $xml The XML element we should load
+     * @return self
+     */
+    public static function fromXML(DOMElement $xml): object
+    {
+        Assert::same($xml->localName, 'SubjectConfirmationData');
+        Assert::same($xml->namespaceURI, SubjectConfirmationData::NS);
+
+        $NotBefore = $xml->hasAttribute('NotBefore')
+            ? Utils::xsDateTimeToTimestamp($xml->getAttribute('NotBefore'))
+            : null;
+
+        $NotOnOrAfter = $xml->hasAttribute('NotOnOrAfter')
+            ? Utils::xsDateTimeToTimestamp($xml->getAttribute('NotOnOrAfter'))
+            : null;
+
+        $Recipient = $xml->hasAttribute('Recipient') ? $xml->getAttribute('Recipient') : null;
+        $InResponseTo = $xml->hasAttribute('InResponseTo') ? $xml->getAttribute('InResponseTo') : null;
+        $Address = $xml->hasAttribute('Address') ? $xml->getAttribute('Address') : null;
+
+        $info = [];
+        foreach ($xml->childNodes as $n) {
+            if (!($n instanceof DOMElement)) {
+                continue;
+            } elseif ($n->namespaceURI !== XMLSecurityDSig::XMLDSIGNS) {
+                $info[] = new Chunk($n);
+                continue;
+            }
+
+            switch ($n->localName) {
+                case 'KeyInfo':
+                    $info[] = KeyInfo::fromXML($n);
+                    break;
+                default:
+                    $info[] = new Chunk($n);
+                    break;
+            }
+        }
+
+        return new self(
+            $NotBefore,
+            $NotOnOrAfter,
+            $Recipient,
+            $InResponseTo,
+            $Address,
+            empty($info) ? null : $info
+        );
     }
 
 
     /**
      * Convert this element to XML.
      *
-     * @param  \DOMElement $parent The parent element we should append this element to.
+     * @param  \DOMElement|null $parent The parent element we should append this element to.
      * @return \DOMElement This element, as XML.
      */
-    public function toXML(DOMElement $parent): DOMElement
+    public function toXML(?DOMElement $parent = null): DOMElement
     {
-        $e = $parent->ownerDocument->createElementNS(Constants::NS_SAML, 'saml:SubjectConfirmationData');
-        $parent->appendChild($e);
+        $e = $this->instantiateParentElement($parent);
 
         if ($this->NotBefore !== null) {
             $e->setAttribute('NotBefore', gmdate('Y-m-d\TH:i:s\Z', $this->NotBefore));
@@ -295,8 +346,11 @@ class SubjectConfirmationData
         if ($this->Address !== null) {
             $e->setAttribute('Address', $this->Address);
         }
-        foreach ($this->getInfo() as $n) {
-            $n->toXML($e);
+
+        if (!empty($this->info)) {
+            foreach ($this->getInfo() as $n) {
+                $n->toXML($e);
+            }
         }
 
         return $e;

@@ -25,10 +25,11 @@ class SubjectConfirmationTest extends \PHPUnit\Framework\TestCase
         $nameId = new NameID();
         $nameId->setValue('SomeNameIDValue');
 
-        $subjectConfirmation = new SubjectConfirmation();
-        $subjectConfirmation->setMethod('SomeMethod');
-        $subjectConfirmation->setNameID($nameId);
-        $subjectConfirmation->setSubjectConfirmationData(new SubjectConfirmationData());
+        $subjectConfirmation = new SubjectConfirmation(
+            'SomeMethod',
+            $nameId,
+            new SubjectConfirmationData()
+        );
 
         $document = DOMDocumentFactory::fromString('<root />');
         $subjectConfirmationElement = $subjectConfirmation->toXML($document->firstChild);
@@ -56,7 +57,7 @@ class SubjectConfirmationTest extends \PHPUnit\Framework\TestCase
 XML
         );
 
-        $subjectConfirmation = new SubjectConfirmation($document->firstChild);
+        $subjectConfirmation = SubjectConfirmation::fromXML($document->firstChild);
         $this->assertEquals('SomeMethod', $subjectConfirmation->getMethod());
         $this->assertTrue($subjectConfirmation->getNameID() instanceof NameID);
         $this->assertEquals('SomeNameIDValue', $subjectConfirmation->getNameID()->getValue());
@@ -80,7 +81,7 @@ XML
 
         $this->expectException(Exception::class);
         $this->expectExceptionMessage('SubjectConfirmation element without Method attribute');
-        $subjectConfirmation = new SubjectConfirmation($document->firstChild);
+        $subjectConfirmation = SubjectConfirmation::fromXML($document->firstChild);
     }
 
 
@@ -101,7 +102,7 @@ XML
 
         $this->expectException(Exception::class);
         $this->expectExceptionMessage('More than one NameID in a SubjectConfirmation element');
-        $subjectConfirmation = new SubjectConfirmation($document->firstChild);
+        $subjectConfirmation = SubjectConfirmation::fromXML($document->firstChild);
     }
 
 
@@ -124,6 +125,6 @@ XML
         $this->expectExceptionMessage(
             'More than one SubjectConfirmationData child in a SubjectConfirmation element'
         );
-        $subjectConfirmation = new SubjectConfirmation($document->firstChild);
+        $subjectConfirmation = SubjectConfirmation::fromXML($document->firstChild);
     }
 }
