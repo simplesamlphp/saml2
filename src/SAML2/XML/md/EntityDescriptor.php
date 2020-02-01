@@ -98,6 +98,11 @@ final class EntityDescriptor extends AbstractMetadataDocument
             );
         }
 
+        Assert::false(
+            is_null($validUntil) && is_null($cacheDuration),
+            'You need either validUntil or cacheDuration set'
+        );
+
         parent::__construct($id, $validUntil, $cacheDuration, $extensions);
 
         $this->entityID = $entityID;

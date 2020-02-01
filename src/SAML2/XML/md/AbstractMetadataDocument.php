@@ -5,6 +5,7 @@ namespace SAML2\XML\md;
 use DOMElement;
 use SAML2\SignedElementTrait;
 use SAML2\XML\ExtendableElementTrait;
+use Webmozart\Assert\Assert;
 
 /**
  * Class to represent a metadata document
@@ -52,11 +53,6 @@ abstract class AbstractMetadataDocument extends AbstractSignedMdElement
         ?string $cacheDuration = null,
         ?Extensions $extensions = null
     ) {
-        Assert::false(
-            is_null($validUntil) && is_null($cacheDuration),
-            'You need either validUntil or cacheDuration set'
-        );
-
         $this->setID($ID);
         $this->setValidUntil($validUntil);
         $this->setCacheDuration($cacheDuration);

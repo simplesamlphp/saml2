@@ -114,7 +114,7 @@ XML
     public function testUnmarshalling(): void
     {
         $document = DOMDocumentFactory::fromString(<<<XML
-<EntityDescriptor entityID="theEntityID" xmlns="urn:oasis:names:tc:SAML:2.0:metadata">
+<EntityDescriptor entityID="theEntityID" xmlns="urn:oasis:names:tc:SAML:2.0:metadata" validUntil="2010-02-01T12:34:56Z">
     <AffiliationDescriptor affiliationOwnerID="asdf" ID="theAffiliationDescriptorID" validUntil="2010-02-01T12:34:56Z" cacheDuration="PT9000S" >
         <AffiliateMember>test</AffiliateMember>
         <AffiliateMember>test2</AffiliateMember>
