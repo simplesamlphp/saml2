@@ -5,7 +5,6 @@ namespace SAML2\XML\md;
 use DOMElement;
 use SAML2\SignedElementTrait;
 use SAML2\XML\ExtendableElementTrait;
-use Webmozart\Assert\Assert;
 
 /**
  * Class to represent a metadata document
