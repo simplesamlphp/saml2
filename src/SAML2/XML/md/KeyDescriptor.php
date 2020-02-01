@@ -55,7 +55,7 @@ final class KeyDescriptor extends AbstractMdElement
         ?string $use = null,
         ?array $encryptionMethod = null
     ) {
-        $this->KeyInfo = $keyInfo;
+        $this->setKeyInfo($keyInfo);
         $this->setUse($use);
         $this->setEncryptionMethods($encryptionMethod);
     }

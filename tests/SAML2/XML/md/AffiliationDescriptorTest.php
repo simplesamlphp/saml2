@@ -8,6 +8,8 @@ use PHPUnit\Framework\TestCase;
 use SAML2\Constants;
 use SAML2\DOMDocumentFactory;
 use SAML2\Utils;
+use SAML2\XML\ds\KeyInfo;
+use SAML2\XML\ds\KeyName;
 
 /**
  * Tests for the AffiliationDescriptor class.
@@ -26,6 +28,11 @@ final class AffiliationDescriptorTest extends TestCase
 <md:AffiliationDescriptor xmlns:md="{$mdNamespace}" ID="TheID" validUntil="2009-02-13T23:31:30Z" cacheDuration="PT5000S" affiliationOwnerID="TheOwner">
   <md:AffiliateMember>Member</md:AffiliateMember>
   <md:AffiliateMember>OtherMember</md:AffiliateMember>
+  <md:KeyDescriptor use="signing">
+    <ds:KeyInfo xmlns:ds="http://www.w3.org/2000/09/xmldsig#">
+      <ds:KeyName>IdentityProvider.com SSO Key</ds:KeyName>
+    </ds:KeyInfo>
+  </md:KeyDescriptor>
 </md:AffiliationDescriptor>
 XML
         );
@@ -40,7 +47,16 @@ XML
         $ad = new AffiliationDescriptor(
             'TheOwner',
             ['Member', 'OtherMember'],
-            null,
+            [
+                new KeyDescriptor(
+                    new KeyInfo(
+                        [
+                            new KeyName('IdentityProvider.com SSO Key')
+                        ]
+                    ),
+                    'signing'
+                )
+            ],
             'TheID',
             1234567890,
             'PT5000S'
@@ -54,6 +70,8 @@ XML
         $this->assertCount(2, $affiliateMembers);
         $this->assertEquals('Member', $affiliateMembers[0]);
         $this->assertEquals('OtherMember', $affiliateMembers[1]);
+        $keyDescriptors = $ad->getKeyDescriptors();
+        $this->assertCount(1, $keyDescriptors);
         $this->assertEquals($this->document->saveXML($this->document->documentElement), strval($ad));
     }
 
@@ -117,16 +135,7 @@ XML
      */
     public function testUnmarshalling(): void
     {
-        $mdNamespace = Constants::NS_MD;
-        $document = DOMDocumentFactory::fromString(<<<XML
-<md:AffiliationDescriptor xmlns:md="{$mdNamespace}" affiliationOwnerID="TheOwner" ID="TheID" validUntil="2009-02-13T23:31:30Z" cacheDuration="PT5000S">
-    <md:AffiliateMember>Member</md:AffiliateMember>
-    <md:AffiliateMember>OtherMember</md:AffiliateMember>
-</md:AffiliationDescriptor>
-XML
-        );
-
-        $affiliateDescriptor = AffiliationDescriptor::fromXML($document->documentElement);
+        $affiliateDescriptor = AffiliationDescriptor::fromXML($this->document->documentElement);
         $this->assertEquals('TheOwner', $affiliateDescriptor->getAffiliationOwnerID());
         $this->assertEquals('TheID', $affiliateDescriptor->getID());
         $this->assertEquals(1234567890, $affiliateDescriptor->getValidUntil());
@@ -135,6 +144,8 @@ XML
         $this->assertCount(2, $affiliateMember);
         $this->assertEquals('Member', $affiliateMember[0]);
         $this->assertEquals('OtherMember', $affiliateMember[1]);
+        $keyDescriptors = $affiliateDescriptor->getKeyDescriptors();
+        $this->assertCount(1, $keyDescriptors);
     }
 
 
