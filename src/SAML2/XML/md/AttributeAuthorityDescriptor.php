@@ -119,67 +119,6 @@ final class AttributeAuthorityDescriptor extends AbstractRoleDescriptor
 
 
     /**
-     * Initialize an IDPSSODescriptor.
-     *
-     * @param \DOMElement|null $xml The XML element we should load.
-     *
-     * @return self
-     * @throws \Exception
-     */
-    public static function fromXML(DOMElement $xml = null): object
-    {
-        $attrServices = [];
-        /** @var DOMElement $ep */
-        foreach (Utils::xpQuery($xml, './saml_metadata:AttributeService') as $ep) {
-            $attrServices[] = AttributeService::fromXML($ep);
-        }
-        if ($attrServices === []) {
-            throw new Exception('Must have at least one AttributeService in AttributeAuthorityDescriptor.');
-        }
-
-        $assertIDReqServices = [];
-        /** @var DOMElement $ep */
-        foreach (Utils::xpQuery($xml, './saml_metadata:AssertionIDRequestService') as $ep) {
-            $assertIDReqServices[] = AssertionIDRequestService::fromXML($ep);
-        }
-
-        $nameIDFormats = Utils::extractStrings($xml, Constants::NS_MD, 'NameIDFormat');
-        $attrProfiles = Utils::extractStrings($xml, Constants::NS_MD, 'AttributeProfile');
-
-        $attributes = [];
-        /** @var DOMElement $a */
-        foreach (Utils::xpQuery($xml, './saml_assertion:Attribute') as $a) {
-            $attributes[] = Attribute::fromXML($a);
-        }
-
-        $validUntil = self::getAttribute($xml, 'validUntil', null);
-
-        $orgs = Organization::getChildrenOfClass($xml);
-        Assert::maxCount($orgs, 1, 'More than one Organization found in this descriptor');
-
-        $extensions = Extensions::getChildrenOfClass($xml);
-        Assert::maxCount($extensions, 1, 'Only one md:Extensions element is allowed.');
-
-        return new self(
-            $attrServices,
-            preg_split('/[\s]+/', trim(self::getAttribute($xml, 'protocolSupportEnumeration'))),
-            $assertIDReqServices,
-            $nameIDFormats,
-            $attrProfiles,
-            $attributes,
-            self::getAttribute($xml, 'ID', null),
-            $validUntil !== null ? Utils::xsDateTimeToTimestamp($validUntil) : null,
-            self::getAttribute($xml, 'cacheDuration', null),
-            !empty($extensions) ? $extensions[0] : null,
-            self::getAttribute($xml, 'errorURL', null),
-            KeyDescriptor::getChildrenOfClass($xml),
-            !empty($orgs) ? $orgs[0] : null,
-            ContactPerson::getChildrenOfClass($xml)
-        );
-    }
-
-
-    /**
      * Collect the value of the AttributeService-property
      *
      * @return \SAML2\XML\md\AttributeService[]
@@ -313,6 +252,65 @@ final class AttributeAuthorityDescriptor extends AbstractRoleDescriptor
         }
         Assert::allIsInstanceOf($attributes, Attribute::class);
         $this->Attributes = $attributes;
+    }
+
+
+    /**
+     * Initialize an IDPSSODescriptor.
+     *
+     * @param \DOMElement|null $xml The XML element we should load.
+     *
+     * @return self
+     * @throws \Exception
+     */
+    public static function fromXML(DOMElement $xml = null): object
+    {
+        $attrServices = [];
+        /** @var DOMElement $ep */
+        foreach (Utils::xpQuery($xml, './saml_metadata:AttributeService') as $ep) {
+            $attrServices[] = AttributeService::fromXML($ep);
+        }
+        Assert::notEmpty($attrServices, 'Must have at least one AttributeService in AttributeAuthorityDescriptor.');
+
+        $assertIDReqServices = [];
+        /** @var DOMElement $ep */
+        foreach (Utils::xpQuery($xml, './saml_metadata:AssertionIDRequestService') as $ep) {
+            $assertIDReqServices[] = AssertionIDRequestService::fromXML($ep);
+        }
+
+        $nameIDFormats = Utils::extractStrings($xml, Constants::NS_MD, 'NameIDFormat');
+        $attrProfiles = Utils::extractStrings($xml, Constants::NS_MD, 'AttributeProfile');
+
+        $attributes = [];
+        /** @var DOMElement $a */
+        foreach (Utils::xpQuery($xml, './saml_assertion:Attribute') as $a) {
+            $attributes[] = Attribute::fromXML($a);
+        }
+
+        $validUntil = self::getAttribute($xml, 'validUntil', null);
+
+        $orgs = Organization::getChildrenOfClass($xml);
+        Assert::maxCount($orgs, 1, 'More than one Organization found in this descriptor');
+
+        $extensions = Extensions::getChildrenOfClass($xml);
+        Assert::maxCount($extensions, 1, 'Only one md:Extensions element is allowed.');
+
+        return new self(
+            $attrServices,
+            preg_split('/[\s]+/', trim(self::getAttribute($xml, 'protocolSupportEnumeration'))),
+            $assertIDReqServices,
+            $nameIDFormats,
+            $attrProfiles,
+            $attributes,
+            self::getAttribute($xml, 'ID', null),
+            $validUntil !== null ? Utils::xsDateTimeToTimestamp($validUntil) : null,
+            self::getAttribute($xml, 'cacheDuration', null),
+            !empty($extensions) ? $extensions[0] : null,
+            self::getAttribute($xml, 'errorURL', null),
+            KeyDescriptor::getChildrenOfClass($xml),
+            !empty($orgs) ? $orgs[0] : null,
+            ContactPerson::getChildrenOfClass($xml)
+        );
     }
 
 

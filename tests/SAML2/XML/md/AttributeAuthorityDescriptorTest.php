@@ -246,6 +246,13 @@ XML
         foreach ($attrs as $attr) {
             $this->assertInstanceOf(Attribute::class, $attr);
         }
+        $this->assertEquals(
+            [
+                'profile1',
+                'profile2',
+            ],
+            $aad->getAttributeProfiles()
+        );
     }
 
 
