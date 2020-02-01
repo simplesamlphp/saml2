@@ -1,0 +1,97 @@
+<?php
+
+declare(strict_types=1);
+
+namespace SAML2\XML\md;
+
+use PHPUnit\Framework\TestCase;
+use SAML2\Constants;
+use SAML2\DOMDocumentFactory;
+
+/**
+ * Tests for md:NameIDMappingService.
+ */
+class NameIDMappingServiceTest extends TestCase
+{
+    protected $document;
+
+
+    protected function setUp(): void
+    {
+        $mdNamespace = Constants::NS_MD;
+        $this->document = DOMDocumentFactory::fromString(<<<XML
+<md:NameIDMappingService xmlns:md="{$mdNamespace}" Binding="urn:something" Location="https://whatever/" />
+XML
+        );
+    }
+
+
+    // test marshalling
+
+
+    /**
+     * Test creating a NameIDMappingService from scratch.
+     */
+    public function testMarshalling(): void
+    {
+        $nidmsep = new NameIDMappingService('urn:something', 'https://whatever/');
+        $this->assertEquals('urn:something', $nidmsep->getBinding());
+        $this->assertEquals('https://whatever/', $nidmsep->getLocation());
+        $this->assertEquals($this->document->saveXML($this->document->documentElement), strval($nidmsep));
+    }
+
+
+    /**
+     * Test that creating a NameIDMappingService from scratch with a ResponseLocation fails.
+     */
+    public function testMarshallingWithResponseLocation(): void
+    {
+        $this->expectException(\InvalidArgumentException::class);
+        $this->expectExceptionMessage(
+            'The \'ResponseLocation\' attribute must be omitted for md:NameIDMappingService.'
+        );
+        new NameIDMappingService('urn:something', 'https://whatever/', 'https://response.location/');
+    }
+
+
+    // test unmarshalling
+
+
+    /**
+     * Test creating a NameIDMappingService from XML.
+     */
+    public function testUnmarshalling(): void
+    {
+        $nidmsep = NameIDMappingService::fromXML($this->document->documentElement);
+        $this->assertEquals('urn:something', $nidmsep->getBinding());
+        $this->assertEquals('https://whatever/', $nidmsep->getLocation());
+        $this->assertEquals($this->document->saveXML($this->document->documentElement), strval($nidmsep));
+    }
+
+
+    /**
+     * Test that creating a NameIDMappingService from XML fails when ResponseLocation is present.
+     */
+    public function testUnmarshallingWithResponseLocation(): void
+    {
+        $this->expectException(\InvalidArgumentException::class);
+        $this->expectExceptionMessage(
+            'The \'ResponseLocation\' attribute must be omitted for md:NameIDMappingService.'
+        );
+        $this->document->documentElement->setAttribute('ResponseLocation', 'https://response.location/');
+        NameIDMappingService::fromXML($this->document->documentElement);
+    }
+
+
+    /**
+     * Test that serialization / unserialization works.
+     */
+    public function testSerialization(): void
+    {
+        $ep = NameIDMappingService::fromXML($this->document->documentElement);
+        $this->assertEquals(
+            $this->document->saveXML($this->document->documentElement),
+            strval(unserialize(serialize($ep)))
+        );
+    }
+}
