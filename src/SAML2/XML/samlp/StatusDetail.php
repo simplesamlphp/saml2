@@ -82,9 +82,10 @@ final class StatusDetail extends AbstractSamlpElement
 
         $details = [];
         foreach ($xml->childNodes as $detail) {
-            if (!$detail instanceof DOMElement) {
+            if (!($detail instanceof DOMElement)) {
                 continue;
             }
+
             /** @psalm-var \DOMElement $detail */
             $details[] = new Chunk($detail);
         }
