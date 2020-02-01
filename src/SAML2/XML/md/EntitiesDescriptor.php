@@ -61,34 +61,6 @@ final class EntitiesDescriptor extends AbstractMetadataDocument
 
 
     /**
-     * Initialize an EntitiesDescriptor from an existing XML document.
-     *
-     * @param \DOMElement $xml The XML element we should load.
-     * @return \SAML2\XML\md\EntitiesDescriptor
-     * @throws \Exception
-     */
-    public static function fromXML(DOMElement $xml): object
-    {
-        $validUntil = self::getAttribute($xml, 'validUntil', null);
-        $orgs = Organization::getChildrenOfClass($xml);
-        Assert::maxCount($orgs, 1, 'More than one Organization found in this descriptor');
-
-        $extensions = Extensions::getChildrenOfClass($xml);
-        Assert::maxCount($extensions, 1, 'Only one md:Extensions element is allowed.');
-
-        return new self(
-            self::getAttribute($xml, 'Name'),
-            EntityDescriptor::getChildrenOfClass($xml),
-            EntitiesDescriptor::getChildrenOfClass($xml),
-            self::getAttribute($xml, 'ID', null),
-            $validUntil !== null ? Utils::xsDateTimeToTimestamp($validUntil) : null,
-            self::getAttribute($xml, 'cacheDuration', null),
-            !empty($extensions) ? $extensions[0] : null
-        );
-    }
-
-
-    /**
      * Get the EntitiesDescriptor children objects
      *
      * @return \SAML2\XML\md\EntitiesDescriptor[]
@@ -167,18 +139,31 @@ final class EntitiesDescriptor extends AbstractMetadataDocument
     }
 
 
-
-
     /**
-     * Convert XML into a EntitiesDescriptor
+     * Initialize an EntitiesDescriptor from an existing XML document.
      *
-     * @param \DOMElement $xml The XML element we should load
-     * @return self
+     * @param \DOMElement $xml The XML element we should load.
+     * @return \SAML2\XML\md\EntitiesDescriptor
+     * @throws \Exception
      */
     public static function fromXML(DOMElement $xml): object
     {
-        // @TODO: Actually fill this method with something useful;  this is a dummy!!
-        return new self(new DOMElement('root'));
+        $validUntil = self::getAttribute($xml, 'validUntil', null);
+        $orgs = Organization::getChildrenOfClass($xml);
+        Assert::maxCount($orgs, 1, 'More than one Organization found in this descriptor');
+
+        $extensions = Extensions::getChildrenOfClass($xml);
+        Assert::maxCount($extensions, 1, 'Only one md:Extensions element is allowed.');
+
+        return new self(
+            self::getAttribute($xml, 'Name'),
+            EntityDescriptor::getChildrenOfClass($xml),
+            EntitiesDescriptor::getChildrenOfClass($xml),
+            self::getAttribute($xml, 'ID', null),
+            $validUntil !== null ? Utils::xsDateTimeToTimestamp($validUntil) : null,
+            self::getAttribute($xml, 'cacheDuration', null),
+            !empty($extensions) ? $extensions[0] : null
+        );
     }
 
 
