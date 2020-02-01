@@ -151,17 +151,15 @@ final class KeyDescriptor extends AbstractMdElement
             $use = $xml->getAttribute('use');
         }
 
-        $keyInfo = Utils::xpQuery($xml, './ds:KeyInfo');
-        if (count($keyInfo) > 1) {
-            throw new Exception('More than one ds:KeyInfo in the KeyDescriptor.');
-        } elseif (empty($keyInfo)) {
-            throw new Exception('No ds:KeyInfo in the KeyDescriptor.');
-        }
+        $keyInfoElements = Utils::xpQuery($xml, './ds:KeyInfo');
+        Assert::minCount($keyInfoElements, 1, 'No ds:KeyInfo in the KeyDescriptor.');
+        Assert::maxCount($keyInfoElements, 1, 'More than one ds:KeyInfo in the KeyDescriptor.');
+
         /**
-         * @var \DOMElement $keyInfo[0]
+         * @var \DOMElement $keyInfoElements[0]
          * @var \SAML2\XML\ds\KeyInfo $keyInfo
          */
-        $keyInfo = KeyInfo::fromXML($keyInfo[0]);
+        $keyInfo = KeyInfo::fromXML($keyInfoElements[0]);
 
         $encmethod = [];
         /** @var \DOMElement $em */
