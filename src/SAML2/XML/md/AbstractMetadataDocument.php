@@ -52,9 +52,14 @@ abstract class AbstractMetadataDocument extends AbstractSignedMdElement
         ?string $cacheDuration = null,
         ?Extensions $extensions = null
     ) {
-        $this->ID = $ID;
+        Assert::false(
+            is_null($validUntil) && is_null($cacheDuration),
+            'You need either validUntil or cacheDuration set'
+        );
+
+        $this->setID($ID);
         $this->setValidUntil($validUntil);
-        $this->cacheDuration = $cacheDuration;
+        $this->setCacheDuration($cacheDuration);
         $this->setExtensions($extensions);
     }
 
