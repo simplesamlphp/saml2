@@ -88,7 +88,7 @@ final class AffiliationDescriptor extends AbstractMetadataDocument
         $keyDescriptors = [];
         /** @var DOMElement $kd */
         foreach (Utils::xpQuery($xml, './saml_metadata:KeyDescriptor') as $kd) {
-            $keyDescriptors[] = new KeyDescriptor($kd);
+            $keyDescriptors[] = KeyDescriptor::fromXML($kd);
         }
 
         $validUntil = self::getAttribute($xml, 'validUntil', null);
