@@ -173,18 +173,19 @@ final class Organization extends AbstractMdElement
     {
         $e = $this->instantiateParentElement($parent);
 
+        if ($this->Extensions !== null) {
+            $this->Extensions->toXML($e);
+        }
+
         foreach ($this->OrganizationName as $name) {
             $name->toXML($e);
         }
+
         foreach ($this->OrganizationDisplayName as $displayName) {
             $displayName->toXML($e);
         }
 
         Utils::addStrings($e, Constants::NS_MD, 'md:OrganizationURL', true, $this->OrganizationURL);
-
-        if ($this->Extensions !== null) {
-            $this->Extensions->toXML($e);
-        }
 
         return $e;
     }

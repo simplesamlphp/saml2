@@ -7,6 +7,7 @@ namespace SAML2\XML\md;
 use PHPUnit\Framework\TestCase;
 use SAML2\Constants;
 use SAML2\DOMDocumentFactory;
+use SAML2\XML\Chunk;
 
 /**
  * Tests for the ContactPerson class.
@@ -24,15 +25,15 @@ class ContactPersonTest extends TestCase
         $this->document = DOMDocumentFactory::fromString(<<<XML
 <?xml version="1.0"?>
 <md:ContactPerson contactType="other" test:attr1="testval1" test:attr2="testval2" xmlns:md="{$mdNamespace}" xmlns:test="urn:test">
+  <md:Extensions>
+    <some:Ext xmlns:some="urn:mace:some:metadata:1.0">SomeExtension</some:Ext>
+  </md:Extensions>
   <md:Company>Test Company</md:Company>
   <md:GivenName>John</md:GivenName>
   <md:SurName>Doe</md:SurName>
   <md:EmailAddress>mailto:jdoe@test.company</md:EmailAddress>
   <md:EmailAddress>mailto:john.doe@test.company</md:EmailAddress>
   <md:TelephoneNumber>1-234-567-8901</md:TelephoneNumber>
-  <md:Extensions>
-    <some:Ext xmlns:some="urn:mace:some:metadata:1.0">SomeExtension</some:Ext>
-  </md:Extensions>
 </md:ContactPerson>
 XML
         );
@@ -47,6 +48,10 @@ XML
      */
     public function testMarshalling(): void
     {
+        $ext = DOMDocumentFactory::fromString(
+            '<some:Ext xmlns:some="urn:mace:some:metadata:1.0">SomeExtension</some:Ext>'
+        );
+
         $attr1 = $this->document->createAttributeNS('urn:test', 'test:attr1');
         $attr1->value = 'testval1';
         $attr2 = $this->document->createAttributeNS('urn:test', 'test:attr2');
@@ -58,7 +63,12 @@ XML
             'Doe',
             ['jdoe@test.company', 'john.doe@test.company'],
             ['1-234-567-8901'],
-            [$attr1, $attr2]
+            [$attr1, $attr2],
+            new Extensions(
+                [
+                    new Chunk($ext->documentElement)
+                ]
+            )
         );
         $this->assertEquals($this->document->saveXML($this->document->documentElement), strval($cp));
         $this->assertEquals('other', $cp->getContactType());
