@@ -59,6 +59,9 @@ class EncryptionMethod extends AbstractMdElement
      */
     public static function fromXML(DOMElement $xml): object
     {
+        Assert::same($xml->localName, 'EncryptionMethod');
+        Assert::same($xml->namespaceURI, EncryptionMethod::NS);
+
         $keySize = null;
         $oaepParams = null;
         $children = [];

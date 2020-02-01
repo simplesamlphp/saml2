@@ -71,6 +71,7 @@ final class AffiliationDescriptor extends AbstractMetadataDocument
         $this->setKeyDescriptors($keyDescriptors);
     }
 
+
     /**
      * Initialize a AffiliationDescriptor.
      *
@@ -80,6 +81,9 @@ final class AffiliationDescriptor extends AbstractMetadataDocument
      */
     public static function fromXML(DOMElement $xml = null): object
     {
+        Assert::same($xml->localName, 'AffiliationDescriptor');
+        Assert::same($xml->namespaceURI, AffiliationDescriptor::NS);
+
         if (!$xml->hasAttribute('affiliationOwnerID')) {
             throw new Exception('Missing affiliationOwnerID on AffiliationDescriptor.');
         }

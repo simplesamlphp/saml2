@@ -146,6 +146,9 @@ final class KeyDescriptor extends AbstractMdElement
      */
     public static function fromXML(DOMElement $xml): object
     {
+        Assert::same($xml->localName, 'KeyDescriptor');
+        Assert::same($xml->namespaceURI, KeyDescriptor::NS);
+
         $use = null;
         if ($xml->hasAttribute('use')) {
             $use = $xml->getAttribute('use');

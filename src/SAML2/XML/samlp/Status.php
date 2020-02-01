@@ -130,7 +130,7 @@ final class Status extends AbstractSamlpElement
     public static function fromXML(DOMElement $xml): object
     {
         Assert::same($xml->localName, 'Status');
-        Assert::same($xml->namespaceURI, Constants::NS_SAMLP);
+        Assert::same($xml->namespaceURI, Status::NS);
 
         /** @var DOMElement[] $statusCode */
         $statusCode = Utils::xpQuery($xml, './saml_protocol:StatusCode');

@@ -96,6 +96,9 @@ final class AuthnAuthorityDescriptor extends AbstractRoleDescriptor
      */
     public static function fromXML(DOMElement $xml = null): object
     {
+        Assert::same($xml->localName, 'AuthnAuthorityDescriptor');
+        Assert::same($xml->namespaceURI, AuthnAuthorityDescriptor::NS);
+
         $authnQueryServices = [];
         /** @var DOMElement $ep */
         foreach (Utils::xpQuery($xml, './saml_metadata:AuthnQueryService') as $ep) {

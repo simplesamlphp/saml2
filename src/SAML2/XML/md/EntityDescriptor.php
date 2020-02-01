@@ -124,6 +124,9 @@ final class EntityDescriptor extends AbstractMetadataDocument
      */
     public static function fromXML(DOMElement $xml): object
     {
+        Assert::same($xml->localName, 'EntityDescriptor');
+        Assert::same($xml->namespaceURI, EntityDescriptor::NS);
+
         $validUntil = self::getAttribute($xml, 'validUntil', null);
         $extensions = Extensions::getChildrenOfClass($xml);
         Assert::maxCount($extensions, 1, 'Only one md:Extensions element is allowed.');

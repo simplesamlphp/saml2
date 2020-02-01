@@ -137,6 +137,9 @@ final class IDPSSODescriptor extends AbstractSSODescriptor
      */
     public static function fromXML(DOMElement $xml): object
     {
+        Assert::same($xml->localName, 'IDPSSODescriptor');
+        Assert::same($xml->namespaceURI, IDPSSODescriptor::NS);
+
         $validUntil = self::getAttribute($xml, 'validUntil', null);
         $orgs = Organization::getChildrenOfClass($xml);
         Assert::maxCount($orgs, 1, 'More than one Organization found in this descriptor');

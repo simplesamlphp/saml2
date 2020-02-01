@@ -180,7 +180,7 @@ class Attribute extends AbstractSamlElement
     public static function fromXML(DOMElement $xml): object
     {
         Assert::same($xml->localName, 'Attribute');
-        Assert::same($xml->namespaceURI, Constants::NS_SAML);
+        Assert::same($xml->namespaceURI, Attribute::NS);
 
         return new self(
             self::getAttribute($xml, 'Name'),

@@ -144,6 +144,9 @@ final class Organization extends AbstractMdElement
      */
     public static function fromXML(DOMElement $xml): object
     {
+        Assert::same($xml->localName, 'Organization');
+        Assert::same($xml->namespaceURI, Organization::NS);
+
         $names = OrganizationName::getChildrenOfClass($xml);
         Assert::minCount($names, 1, 'Missing at least one OrganizationName.');
 

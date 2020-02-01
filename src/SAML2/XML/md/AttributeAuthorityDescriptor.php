@@ -18,7 +18,6 @@ use Webmozart\Assert\Assert;
  */
 final class AttributeAuthorityDescriptor extends AbstractRoleDescriptor
 {
-
     /**
      * List of AttributeService endpoints.
      *
@@ -265,6 +264,9 @@ final class AttributeAuthorityDescriptor extends AbstractRoleDescriptor
      */
     public static function fromXML(DOMElement $xml = null): object
     {
+        Assert::same($xml->localName, 'AttributeAuthorityDescriptor');
+        Assert::same($xml->namespaceURI, AttributeAuthorityDescriptor::NS);
+
         $attrServices = [];
         /** @var DOMElement $ep */
         foreach (Utils::xpQuery($xml, './saml_metadata:AttributeService') as $ep) {

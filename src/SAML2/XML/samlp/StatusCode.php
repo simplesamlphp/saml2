@@ -97,7 +97,7 @@ final class StatusCode extends AbstractSamlpElement
     public static function fromXML(DOMElement $xml): object
     {
         Assert::same($xml->localName, 'StatusCode');
-        Assert::same($xml->namespaceURI, Constants::NS_SAMLP);
+        Assert::same($xml->namespaceURI, StatusCode::NS);
 
         $Value = $xml->hasAttribute('Value') ? $xml->getAttribute('Value') : null;
 

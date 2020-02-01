@@ -64,7 +64,7 @@ final class StatusMessage extends AbstractSamlpElement
     public static function fromXML(DOMElement $xml): object
     {
         Assert::same($xml->localName, 'StatusMessage');
-        Assert::same($xml->namespaceURI, Constants::NS_SAMLP);
+        Assert::same($xml->namespaceURI, StatusMessage::NS);
 
         return new self($xml->textContent);
     }

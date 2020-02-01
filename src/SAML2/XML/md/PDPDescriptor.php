@@ -94,6 +94,9 @@ final class PDPDescriptor extends AbstractRoleDescriptor
      */
     public static function fromXML(DOMElement $xml): object
     {
+        Assert::same($xml->localName, 'PDPDescriptor');
+        Assert::same($xml->namespaceURI, PDPDescriptor::NS);
+
         $validUntil = self::getAttribute($xml, 'validUntil', null);
         $orgs = Organization::getChildrenOfClass($xml);
         Assert::maxCount($orgs, 1, 'More than one Organization found in this descriptor');

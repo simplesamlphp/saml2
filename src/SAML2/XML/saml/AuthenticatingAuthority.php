@@ -67,7 +67,7 @@ final class AuthenticatingAuthority extends AbstractSamlElement
     public static function fromXML(DOMElement $xml): object
     {
         Assert::same($xml->localName, 'AuthenticatingAuthority');
-        Assert::same($xml->namespaceURI, Constants::NS_SAML);
+        Assert::same($xml->namespaceURI, AuthenticatingAuthority::NS);
 
         return new self($xml->textContent);
     }

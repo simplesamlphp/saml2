@@ -79,7 +79,7 @@ class AttributeValue extends AbstractSamlElement
     public static function fromXML(DOMElement $xml): object
     {
         Assert::same($xml->localName, 'AttributeValue');
-        Assert::same($xml->namespaceURI, Constants::NS_SAML);
+        Assert::same($xml->namespaceURI, AttributeValue::NS);
 
         return new self($xml);
     }

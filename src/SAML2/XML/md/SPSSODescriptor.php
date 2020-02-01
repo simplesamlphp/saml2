@@ -199,6 +199,9 @@ class SPSSODescriptor extends AbstractSSODescriptor
      */
     public static function fromXML(DOMElement $xml): object
     {
+        Assert::same($xml->localName, 'SPSSODescriptor');
+        Assert::same($xml->namespaceURI, SPSSODescriptor::NS);
+
         // @TODO: Actually fill this method with something useful;  this is a dummy!!
         return new self(new DOMElement('root'));
     }

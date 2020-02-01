@@ -109,9 +109,13 @@ final class ContactPerson extends AbstractMdElement
      */
     public static function fromXML(DOMElement $xml): object
     {
+        Assert::same($xml->localName, 'ContactPerson');
+        Assert::same($xml->namespaceURI, ContactPerson::NS);
+
         if (!$xml->hasAttribute('contactType')) {
             throw new Exception('Missing contactType on ContactPerson.');
         }
+
         $contactType = $xml->getAttribute('contactType');
         $company = self::getStringElement($xml, 'Company');
         $givenName = self::getStringElement($xml, 'GivenName');

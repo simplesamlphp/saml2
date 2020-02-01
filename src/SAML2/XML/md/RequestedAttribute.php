@@ -85,7 +85,7 @@ final class RequestedAttribute extends Attribute
     public static function fromXML(DOMElement $xml): object
     {
         Assert::same($xml->localName, 'RequestedAttribute');
-        Assert::same($xml->namespaceURI, Constants::NS_MD);
+        Assert::same($xml->namespaceURI, RequestedAttribute::NS);
 
         return new self(
             self::getAttribute($xml, 'Name'),

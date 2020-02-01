@@ -123,7 +123,7 @@ final class NameIDPolicy extends AbstractSamlpElement
     public static function fromXML(DOMElement $xml): object
     {
         Assert::same($xml->localName, 'NameIDPolicy');
-        Assert::same($xml->namespaceURI, Constants::NS_SAMLP);
+        Assert::same($xml->namespaceURI, NameIDPolicy::NS);
 
         $Format = $xml->hasAttribute('Format') ? $xml->getAttribute('Format') : null;
         $SPNameQualifier = $xml->hasAttribute('SPNameQualifier') ? $xml->getAttribute('SPNameQualifier') : null;
