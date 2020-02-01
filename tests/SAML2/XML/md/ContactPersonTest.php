@@ -4,6 +4,8 @@ declare(strict_types=1);
 
 namespace SAML2\XML\md;
 
+use Exception;
+use InvalidArgumentException;
 use SAML2\Constants;
 use SAML2\DOMDocumentFactory;
 use SAML2\XML\md\ContactPerson;
@@ -197,7 +199,8 @@ XML
 XML
         );
 
-        $this->expectException(\Exception::class, 'More than one GivenName in md:ContactPerson');
+        $this->expectException(Exception::class);
+        $this->expectExceptionMessage('More than one GivenName in md:ContactPerson');
 
         $contactPerson = new ContactPerson($document->getElementsByTagName('ContactPerson')->item(0));
     }
@@ -244,7 +247,8 @@ XML
 XML
         );
 
-        $this->expectException(\Exception::class, 'Missing contactType on ContactPerson.');
+        $this->expectException(Exception::class);
+        $this->expectExceptionMessage('Missing contactType on ContactPerson.');
 
         $contactPerson = new ContactPerson($document->getElementsByTagName('ContactPerson')->item(0));
     }
@@ -255,7 +259,8 @@ XML
     public function testInvalidEmailThrowsException(): void
     {
         $contactPerson = new ContactPerson();
-        $this->expectException(\InvalidArgumentException::class, 'Invalid email address for');
+        $this->expectException(InvalidArgumentException::class);
+        $this->expectExceptionMessage('Invalid email address for');
 
         $contactPerson->addEmailAddress('not so valid');
     }
@@ -266,7 +271,8 @@ XML
     public function testInvalidEmailInSetThrowsException(): void
     {
         $contactPerson = new ContactPerson();
-        $this->expectException(\InvalidArgumentException::class, 'Invalid email address for');
+        $this->expectException(InvalidArgumentException::class);
+        $this->expectExceptionMessage('Invalid email address for');
 
         $contactPerson->setEmailAddress(['bob@alice.edu', 'user@example.org', 'not so valid', 'aap@noot.nl']);
     }

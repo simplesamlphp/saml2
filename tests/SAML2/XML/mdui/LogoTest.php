@@ -4,6 +4,8 @@ declare(strict_types=1);
 
 namespace SAML2\XML\mdui;
 
+use Exception;
+use InvalidArgumentException;
 use SAML2\DOMDocumentFactory;
 use SAML2\Utils;
 
@@ -21,7 +23,7 @@ class LogoTest extends \PHPUnit\Framework\TestCase
         $logo = new Logo("https://static.example.org/images/logos/logo300x200.png", 200, 300, "nl");
 
         $document = DOMDocumentFactory::fromString('<root />');
-        $xml = $logo->toXML($document->firstChild);
+        $xml = $logo->toXML($document->documentElement);
 
         $logoElements = Utils::xpQuery(
             $xml,
@@ -47,7 +49,7 @@ class LogoTest extends \PHPUnit\Framework\TestCase
                 . 'https://static.example.org/images/logos/logo300x200.png</mdui:Logo>'
         );
 
-        $logo = Logo::fromXML($document->firstChild);
+        $logo = Logo::fromXML($document->documentElement);
         $this->assertEquals("nl", $logo->getLanguage());
         $this->assertEquals(300, $logo->getWidth());
         $this->assertEquals(200, $logo->getHeight());
@@ -67,7 +69,7 @@ class LogoTest extends \PHPUnit\Framework\TestCase
                 . '</mdui:Logo>'
         );
 
-        $logo = Logo::fromXML($document->firstChild);
+        $logo = Logo::fromXML($document->documentElement);
         $this->assertEquals(1, $logo->getWidth());
         $this->assertEquals(1, $logo->getHeight());
         $this->assertEquals(
@@ -83,13 +85,15 @@ class LogoTest extends \PHPUnit\Framework\TestCase
      */
     public function testUnmarshallingFailsEmptyURL(): void
     {
+        $nslogo = Logo::NS;
         $document = DOMDocumentFactory::fromString(<<<XML
-<mdui:Logo height="200" width="300"></mdui:Logo>
+<mdui:Logo xmlns:mdui="{$nslogo}" height="200" width="300"></mdui:Logo>
 XML
         );
 
-        $this->expectException(\Exception::class, 'Missing url value for Logo');
-        $logo = Logo::fromXML($document->firstChild);
+        $this->expectException(Exception::class);
+        $this->expectExceptionMessage('Missing url value for Logo');
+        $logo = Logo::fromXML($document->documentElement);
     }
 
 
@@ -99,13 +103,15 @@ XML
      */
     public function testUnmarshallingFailsInvalidURL(): void
     {
+        $nslogo = Logo::NS;
         $document = DOMDocumentFactory::fromString(<<<XML
-<mdui:Logo height="200" width="300">this is no url</mdui:Logo>
+<mdui:Logo  xmlns:mdui="{$nslogo}" height="200" width="300">this is no url</mdui:Logo>
 XML
         );
 
-        $this->expectException(\InvalidArgumentException::class, 'mdui:Logo is not a valid URL.');
-        $logo = Logo::fromXML($document->firstChild);
+        $this->expectException(InvalidArgumentException::class);
+        $this->expectExceptionMessage('mdui:Logo is not a valid URL.');
+        $logo = Logo::fromXML($document->documentElement);
     }
 
 
@@ -115,13 +121,15 @@ XML
      */
     public function testUnmarshallingFailsMissingWidth(): void
     {
+        $nslogo = Logo::NS;
         $document = DOMDocumentFactory::fromString(<<<XML
-<mdui:Logo height="200">https://static.example.org/images/logos/logo300x200.png</mdui:Logo>
+<mdui:Logo xmlns:mdui="{$nslogo}" height="200">https://static.example.org/images/logos/logo300x200.png</mdui:Logo>
 XML
         );
 
-        $this->expectException(\Exception::class, 'Missing width of Logo');
-        $logo = Logo::fromXML($document->firstChild);
+        $this->expectException(Exception::class);
+        $this->expectExceptionMessage('Missing width of Logo');
+        $logo = Logo::fromXML($document->documentElement);
     }
 
 
@@ -131,12 +139,14 @@ XML
      */
     public function testUnmarshallingFailsMissingHeight(): void
     {
+        $nslogo = Logo::NS;
         $document = DOMDocumentFactory::fromString(<<<XML
-<mdui:Logo width="300" xml:lang="nl">https://static.example.org/images/logos/logo300x200.png</mdui:Logo>
+<mdui:Logo  xmlns:mdui="{$nslogo}" width="300" xml:lang="nl">https://static.example.org/images/logos/logo300x200.png</mdui:Logo>
 XML
         );
 
-        $this->expectException(\Exception::class, 'Missing height of Logo');
-        $logo = Logo::fromXML($document->firstChild);
+        $this->expectException(Exception::class);
+        $this->expectExceptionMessage('Missing height of Logo');
+        $logo = Logo::fromXML($document->documentElement);
     }
 }

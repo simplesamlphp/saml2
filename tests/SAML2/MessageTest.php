@@ -4,6 +4,7 @@ declare(strict_types=1);
 
 namespace SAML2;
 
+use Exception;
 use SAML2\Message;
 use SAML2\Response;
 use SAML2\DOMDocumentFactory;
@@ -264,10 +265,8 @@ AUTHNREQUEST
 </saml:Assertion>
 XML;
         $document  = DOMDocumentFactory::fromString($xml);
-        $this->expectException(
-            \Exception::class,
-            "Unknown namespace of SAML message: 'urn:oasis:names:tc:SAML:2.0:assertion'"
-        );
+        $this->expectException(Exception::class);
+        $this->expectExceptionMessage("Unknown namespace of SAML message: 'urn:oasis:names:tc:SAML:2.0:assertion'");
         $message = Message::fromXML($document->documentElement);
     }
 
@@ -295,7 +294,8 @@ XML;
 XML;
 
         $document  = DOMDocumentFactory::fromString($xml);
-        $this->expectException(\Exception::class, "Unsupported version: 2.1");
+        $this->expectException(Exception::class);
+        $this->expectExceptionMessage("Unsupported version: 2.1");
         $message = Message::fromXML($document->documentElement);
     }
 
@@ -316,7 +316,8 @@ XML;
 </samlp:LogoutRequest>
 XML;
         $document  = DOMDocumentFactory::fromString($xml);
-        $this->expectException(\Exception::class, "Missing ID attribute on SAML message.");
+        $this->expectException(Exception::class);
+        $this->expectExceptionMessage("Missing ID attribute on SAML message.");
         $message = Message::fromXML($document->documentElement);
     }
 
@@ -381,7 +382,8 @@ XML;
 </samlp:MyFantasy>
 XML;
         $document  = DOMDocumentFactory::fromString($xml);
-        $this->expectException(\Exception::class, "Unknown SAML message: 'MyFantasy'");
+        $this->expectException(Exception::class);
+        $this->expectExceptionMessage("Unknown SAML message: 'MyFantasy'");
         $message = Message::fromXML($document->documentElement);
     }
 }

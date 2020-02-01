@@ -4,6 +4,8 @@ declare(strict_types=1);
 
 namespace SAML2\Certificate;
 
+use InvalidArgumentException;
+
 class KeyCollectionTest extends \Mockery\Adapter\Phpunit\MockeryTestCase
 {
     /**
@@ -13,7 +15,7 @@ class KeyCollectionTest extends \Mockery\Adapter\Phpunit\MockeryTestCase
      */
     public function testKeyCollectionAddWrongType(): void
     {
-        $this->expectException(\InvalidArgumentException::class);
+        $this->expectException(InvalidArgumentException::class);
         $kc = new KeyCollection();
         $kc->add("not a key, just a string");
     }

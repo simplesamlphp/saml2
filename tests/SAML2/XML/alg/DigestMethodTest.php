@@ -4,6 +4,7 @@ declare(strict_types=1);
 
 namespace SAML2\XML\alg;
 
+use Exception;
 use SAML2\DOMDocumentFactory;
 use SAML2\XML\alg\DigestMethod;
 use SAML2\Utils;
@@ -58,7 +59,8 @@ class DigestMethodTest extends \PHPUnit\Framework\TestCase
         $document = DOMDocumentFactory::fromString(
             '<alg:DigestMethod xmlns:alg="' . DigestMethod::NS . '" />'
         );
-        $this->expectException(\Exception::class, 'Missing required attribute "Algorithm"');
+        $this->expectException(Exception::class);
+        $this->expectExceptionMessage('Missing required attribute "Algorithm"');
         DigestMethod::fromXML($document->firstChild);
     }
 }

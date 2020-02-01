@@ -4,6 +4,8 @@ declare(strict_types=1);
 
 namespace SAML2;
 
+use Exception;
+use InvalidArgumentException;
 use SAML2\DOMDocumentFactory;
 use SAML2\Response;
 use SAML2\Utils;
@@ -203,7 +205,8 @@ STATUSXML
      */
     public function testNoStatusElementThrowsException(): void
     {
-        $this->expectException(\Exception::class, 'Missing status code on response');
+        $this->expectException(Exception::class);
+        $this->expectExceptionMessage('Missing status code on response');
 
         $xml = <<<XML
 <samlp:Response xmlns:samlp="urn:oasis:names:tc:SAML:2.0:protocol"
@@ -236,7 +239,7 @@ XML;
      */
     public function testNoStatusCodeThrowsException(): void
     {
-        $this->expectException(\Exception::class, 'Missing status code in status element');
+        $this->expectException(InvalidArgumentException::class);
 
         $xml = <<<XML
 <samlp:Response xmlns:samlp="urn:oasis:names:tc:SAML:2.0:protocol"

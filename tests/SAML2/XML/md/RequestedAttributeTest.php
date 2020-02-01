@@ -4,6 +4,7 @@ declare(strict_types=1);
 
 namespace SAML2\XML\md;
 
+use Exception;
 use PHPUnit\Framework\TestCase;
 use SAML2\Constants;
 use SAML2\DOMDocumentFactory;
@@ -95,7 +96,7 @@ XML
      */
     public function testUnmarshallingWithWrongIsRequired(): void
     {
-        $this->expectException(\Exception::class);
+        $this->expectException(Exception::class);
         $this->expectExceptionMessage('The \'isRequired\' attribute of md:RequestedAttribute must be boolean.');
         $this->document->documentElement->setAttribute('isRequired', 'wrong');
         RequestedAttribute::fromXML($this->document->documentElement);

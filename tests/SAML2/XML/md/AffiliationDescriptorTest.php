@@ -4,6 +4,7 @@ declare(strict_types=1);
 
 namespace SAML2\XML\md;
 
+use Exception;
 use SAML2\Constants;
 use SAML2\DOMDocumentFactory;
 use SAML2\XML\md\AffiliationDescriptor;
@@ -89,7 +90,8 @@ XML
 </md:AffiliationDescriptor>
 XML
         );
-        $this->expectException(\Exception::class, 'Missing AffiliateMember in AffiliationDescriptor.');
+        $this->expectException(Exception::class);
+        $this->expectExceptionMessage('Missing AffiliateMember in AffiliationDescriptor.');
         new AffiliationDescriptor($document->firstChild);
     }
 
@@ -109,7 +111,8 @@ XML
 XML
         );
 
-        $this->expectException(\Exception::class, 'Missing affiliationOwnerID on AffiliationDescriptor.');
+        $this->expectException(Exception::class);
+        $this->expectExceptionMessage('Missing affiliationOwnerID on AffiliationDescriptor.');
         new AffiliationDescriptor($document->firstChild);
     }
 }
