@@ -123,7 +123,6 @@ trait ExtendableAttributesTrait
 
         Assert::allIsInstanceOf($attributes, DOMAttr::class);
 
-        /** @var DOMAttr $attribute */
         foreach ($attributes as $attribute) {
             $this->setAttributeNS($attribute->namespaceURI, $attribute->nodeName, $attribute->value);
         }

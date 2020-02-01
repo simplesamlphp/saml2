@@ -160,7 +160,6 @@ final class KeyDescriptor extends AbstractMdElement
 
         /**
          * @var \DOMElement $keyInfoElements[0]
-         * @var \SAML2\XML\ds\KeyInfo $keyInfo
          */
         $keyInfo = KeyInfo::fromXML($keyInfoElements[0]);
 
