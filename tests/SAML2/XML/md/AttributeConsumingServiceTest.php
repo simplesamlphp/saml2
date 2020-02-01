@@ -80,12 +80,13 @@ XML
             2,
             [new ServiceName('en', 'Academic Journals R US')],
             [$this->getRequestedAttribute()],
-            true
+            false
         );
         $descr = $this->document->documentElement->getElementsByTagNameNS(Constants::NS_MD, 'ServiceDescription');
         $space = $descr->item(0)->previousSibling;
         $this->document->documentElement->removeChild($descr->item(0));
         $this->document->documentElement->removeChild($space);
+        $this->document->documentElement->setAttribute('isDefault', 'false');
         $this->assertEquals($this->document->saveXML($this->document->documentElement), strval($acs));
     }
 

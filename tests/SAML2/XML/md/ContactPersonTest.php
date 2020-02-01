@@ -30,6 +30,9 @@ class ContactPersonTest extends TestCase
   <md:EmailAddress>mailto:jdoe@test.company</md:EmailAddress>
   <md:EmailAddress>mailto:john.doe@test.company</md:EmailAddress>
   <md:TelephoneNumber>1-234-567-8901</md:TelephoneNumber>
+  <md:Extensions>
+    <some:Ext xmlns:some="urn:mace:some:metadata:1.0">SomeExtension</some:Ext>
+  </md:Extensions>
 </md:ContactPerson>
 XML
         );
