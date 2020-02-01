@@ -48,7 +48,7 @@ XML
 XML
         );
         $this->expectException(\Exception::class);
-        $this->expectExceptionMessage('Missing required attribute entityID on EntityDescriptor.');
+        $this->expectExceptionMessage('Missing \'entityID\' attribute from md:EntityDescriptor.');
         EntityDescriptor::fromXML($document->documentElement);
     }
 
