@@ -7,6 +7,7 @@ namespace SAML2\XML\md;
 use DOMElement;
 use SAML2\Constants;
 use SAML2\Utils;
+use Webmozart\Assert\Assert;
 
 /**
  * Class representing SAML 2 SSODescriptorType.
@@ -18,29 +19,23 @@ abstract class AbstractSSODescriptor extends AbstractRoleDescriptor
     /**
      * List of ArtifactResolutionService endpoints.
      *
-     * Array with IndexedEndpointType objects.
-     *
      * @var \SAML2\XML\md\AbstractIndexedEndpointType[]
      */
-    private $ArtifactResolutionService = [];
+    private $artifactResolutionServiceEndpoints = [];
 
     /**
      * List of SingleLogoutService endpoints.
      *
-     * Array with EndpointType objects.
-     *
-     * @var \SAML2\XML\md\AbstractEndpointType[]
+     * @var \SAML2\XML\md\SingleLogoutService[]
      */
-    private $SingleLogoutService = [];
+    private $sloServiceEndpoints = [];
 
     /**
      * List of ManageNameIDService endpoints.
      *
-     * Array with EndpointType objects.
-     *
-     * @var \SAML2\XML\md\AbstractEndpointType[]
+     * @var \SAML2\XML\md\ManageNameIDService[]
      */
-    private $ManageNameIDService = [];
+    private $manageNameIDServiceEndpoints = [];
 
     /**
      * List of supported NameID formats.
@@ -49,33 +44,37 @@ abstract class AbstractSSODescriptor extends AbstractRoleDescriptor
      *
      * @var string[]
      */
-    private $NameIDFormat = [];
+    private $nameIDFormats = [];
 
 
     /**
      * Initialize a RoleDescriptor.
      *
-     * @param string[]                           $protocolSupportEnumeration A set of URI specifying the protocols supported.
-     * @param string|null                        $ID The ID for this document. Defaults to null.
-     * @param int|null                           $validUntil Unix time of validity for this document. Defaults to null.
-     * @param string|null                        $cacheDuration Maximum time this document can be cached. Defaults to null.
-     * @param Extensions[]|null                  $extensions An array of extensions. Defaults to an empty array.
-     * @param string|null                        $errorURL An URI where to redirect users for support. Defaults to null.
-     * @param KeyDescriptor[]|null               $keyDescriptors An array of KeyDescriptor elements. Defaults to an empty array.
-     * @param Organization|null                  $organization The organization running this entity. Defaults to null.
-     * @param ContactPerson[]|null               $contacts An array of contacts for this entity. Defaults to an empty array.
-     * @param AbstractIndexedEndpointType[]|null $artifactResolutionService An array of ArtifactResolutionEndpoint. Defaults
+     * @param string[] $protocolSupportEnumeration A set of URI specifying the protocols supported.
+     * @param string|null $ID The ID for this document. Defaults to null.
+     * @param int|null $validUntil Unix time of validity for this document. Defaults to null.
+     * @param string|null $cacheDuration Maximum time this document can be cached. Defaults to null.
+     * @param \SAML2\XML\md\Extensions|null $extensions An array of extensions. Defaults to an empty array.
+     * @param string|null $errorURL An URI where to redirect users for support. Defaults to null.
+     * @param \SAML2\XML\md\KeyDescriptor[]|null $keyDescriptors An array of KeyDescriptor elements. Defaults to an
+     * empty array.
+     * @param \SAML2\XML\md\Organization|null $organization The organization running this entity. Defaults to null.
+     * @param \SAML2\XML\md\ContactPerson[]|null $contacts An array of contacts for this entity. Defaults to an empty
+     * array.
+     * @param \SAML2\XML\md\ArtifactResolutionService[]|null $artifactResolutionService An array of
+     * ArtifactResolutionEndpoint. Defaults to an empty array.
+     * @param \SAML2\XML\md\SingleLogoutService[]|null $singleLogoutService An array of SingleLogoutEndpoint. Defaults
      * to an empty array.
-     * @param AbstractEndpointType[]|null        $singleLogoutService An array of SingleLogoutEndpoint. Defaults to an empty array.
-     * @param AbstractEndpointType[]|null        $manageNameIDService An array of ManageNameIDService. Defaults to an empty array.
-     * @param string[]|null                      $nameIDFormat An array of supported NameID formats. Defaults to an empty array.
+     * @param \SAML2\XML\md\ManageNameIDService[]|null $manageNameIDService An array of ManageNameIDService. Defaults
+     * to an empty array.
+     * @param string[]|null $nameIDFormat An array of supported NameID formats. Defaults to an empty array.
      */
     public function __construct(
         array $protocolSupportEnumeration,
         ?string $ID = null,
         ?int $validUntil = null,
         ?string $cacheDuration = null,
-        ?array $extensions = [],
+        ?Extensions $extensions = null,
         ?string $errorURL = null,
         ?array $keyDescriptors = [],
         ?Organization $organization = null,
@@ -97,191 +96,102 @@ abstract class AbstractSSODescriptor extends AbstractRoleDescriptor
             $contacts
         );
 
-        $this->setArtifactResolutionService($artifactResolutionService);
-        $this->setSingleLogoutService($singleLogoutService);
-        $this->setManageNameIDService($manageNameIDService);
-        $this->setNameIDFormat($nameIDFormat);
-    }
-
-
-    /**
-     * Process an XML element and get ArtifactResolutionService elements from it, if any.
-     *
-     * @param DOMElement $xml An element that may contain ArtifactResolutionService elements.
-     *
-     * @return array
-     * @throws \Exception
-     */
-    public static function getArtifactResolutionServiceFromXML(DOMElement $xml): array
-    {
-        $ars = [];
-        /** @var \DOMElement $ep */
-        foreach (Utils::xpQuery($xml, './saml_metadata:ArtifactResolutionService') as $ep) {
-            $ars[] = ArtifactResolutionService::fromXML($ep);
-        }
-        return $ars;
+        $this->setArtifactResolutionServices($artifactResolutionService);
+        $this->setSingleLogoutServices($singleLogoutService);
+        $this->setManageNameIDServices($manageNameIDService);
+        $this->setNameIDFormats($nameIDFormat);
     }
 
 
     /**
      * Collect the value of the ArtifactResolutionService-property
      *
-     * @return \SAML2\XML\md\AbstractIndexedEndpointType[]
+     * @return \SAML2\XML\md\ArtifactResolutionService[]
      */
-    public function getArtifactResolutionService(): array
+    public function getArtifactResolutionServices(): array
     {
-        return $this->ArtifactResolutionService;
+        return $this->artifactResolutionServiceEndpoints;
     }
 
 
     /**
      * Set the value of the ArtifactResolutionService-property
      *
-     * @param \SAML2\XML\md\AbstractIndexedEndpointType[] $artifactResolutionService
+     * @param \SAML2\XML\md\ArtifactResolutionService[] $artifactResolutionServices
      *
      * @return void
      */
-    protected function setArtifactResolutionService(array $artifactResolutionService): void
+    protected function setArtifactResolutionServices(?array $artifactResolutionServices): void
     {
-        $this->ArtifactResolutionService = $artifactResolutionService;
-    }
-
-
-    /**
-     * Add the value to the ArtifactResolutionService-property
-     *
-     * @param \SAML2\XML\md\AbstractIndexedEndpointType $artifactResolutionService
-     *
-     * @return void
-     */
-    public function addArtifactResolutionService(AbstractIndexedEndpointType $artifactResolutionService): void
-    {
-        $this->ArtifactResolutionService[] = $artifactResolutionService;
-    }
-
-
-    /**
-     * Process an XML element and get SingleLogoutService elements from it, if any.
-     *
-     * @param DOMElement $xml An element that may contain ArtifactResolutionService elements.
-     *
-     * @return array
-     * @throws \Exception
-     */
-    public static function getSingleLogoutServiceFromXML(DOMElement $xml): array
-    {
-        $slo = [];
-        /** @var \DOMElement $ep */
-        foreach (Utils::xpQuery($xml, './saml_metadata:SingleLogoutService') as $ep) {
-            $slo[] = new AbstractEndpointType($ep);
+        if ($artifactResolutionServices === null) {
+            return;
         }
-        return $slo;
+        Assert::allIsInstanceOf(
+            $artifactResolutionServices,
+            ArtifactResolutionService::class,
+            'All md:ArtifactResolutionService endpoints must be an instance of ArtifactResolutionService.'
+        );
+        $this->artifactResolutionServiceEndpoints = $artifactResolutionServices;
     }
 
 
     /**
      * Collect the value of the SingleLogoutService-property
      *
-     * @return \SAML2\XML\md\AbstractEndpointType[]
+     * @return \SAML2\XML\md\SingleLogoutService[]
      */
-    public function getSingleLogoutService(): array
+    public function getSingleLogoutServices(): array
     {
-        return $this->SingleLogoutService;
+        return $this->sloServiceEndpoints;
     }
 
 
     /**
      * Set the value of the SingleLogoutService-property
      *
-     * @param \SAML2\XML\md\AbstractEndpointType[] $singleLogoutService
-     *
-     * @return void
+     * @param \SAML2\XML\md\SingleLogoutService[] $singleLogoutServices
      */
-    protected function setSingleLogoutService(array $singleLogoutService): void
+    protected function setSingleLogoutServices(?array $singleLogoutServices): void
     {
-        $this->SingleLogoutService = $singleLogoutService;
-    }
-
-
-    /**
-     * Add the value to the SingleLogoutService-property
-     *
-     * @param \SAML2\XML\md\AbstractEndpointType $singleLogoutService
-     *
-     * @return void
-     */
-    public function addSingleLogoutService(AbstractEndpointType $singleLogoutService): void
-    {
-        $this->SingleLogoutService[] = $singleLogoutService;
-    }
-
-
-    /**
-     * Process an XML element and get ManageNameIDService elements from it, if any.
-     *
-     * @param DOMElement $xml An element that may contain ManageNameIDService elements.
-     *
-     * @return array
-     * @throws \Exception
-     */
-    public static function getManageNameIDServiceFromXML(DOMElement $xml): array
-    {
-        $mnids = [];
-        /** @var \DOMElement $ep */
-        foreach (Utils::xpQuery($xml, './saml_metadata:ManageNameIDService') as $ep) {
-            $mnids[] = new AbstractEndpointType($ep);
+        if ($singleLogoutServices === null) {
+            return;
         }
-        return $mnids;
+        Assert::allIsInstanceOf(
+            $singleLogoutServices,
+            SingleLogoutService::class,
+            'All md:SingleLogoutService endpoints must be an instance of SingleLogoutService.'
+        );
+        $this->sloServiceEndpoints = $singleLogoutServices;
     }
 
 
     /**
      * Collect the value of the ManageNameIDService-property
      *
-     * @return \SAML2\XML\md\AbstractEndpointType[]
+     * @return \SAML2\XML\md\ManageNameIDService[]
      */
-    public function getManageNameIDService(): array
+    public function getManageNameIDServices(): array
     {
-        return $this->ManageNameIDService;
+        return $this->manageNameIDServiceEndpoints;
     }
 
 
     /**
      * Set the value of the ManageNameIDService-property
      *
-     * @param \SAML2\XML\md\AbstractEndpointType[] $manageNameIDService
-     *
-     * @return void
+     * @param \SAML2\XML\md\ManageNameIDService[] $manageNameIDServices
      */
-    protected function setManageNameIDService(array $manageNameIDService): void
+    protected function setManageNameIDServices(?array $manageNameIDServices): void
     {
-        $this->ManageNameIDService = $manageNameIDService;
-    }
-
-
-    /**
-     * Add the value to the ManageNameIDService-property
-     *
-     * @param \SAML2\XML\md\AbstractEndpointType $manageNameIDService
-     *
-     * @return void
-     */
-    public function addManageNameIDService(AbstractEndpointType $manageNameIDService): void
-    {
-        $this->ManageNameIDService[] = $manageNameIDService;
-    }
-
-
-    /**
-     * Process an XML element and get its NameIDFormat elements, if any.
-     *
-     * @param DOMElement $xml An element that may contain NameIDFormat elements.
-     *
-     * @return array
-     */
-    public static function getNameIDFormatsFromXML(DOMElement $xml): array
-    {
-        return Utils::extractStrings($xml, Constants::NS_MD, 'NameIDFormat');
+        if ($manageNameIDServices === null) {
+            return;
+        }
+        Assert::allIsInstanceOf(
+            $manageNameIDServices,
+            ManageNameIDService::class,
+            'All md:ManageNameIDService endpoints must be an instance of ManageNameIDService.'
+        );
+        $this->manageNameIDServiceEndpoints = $manageNameIDServices;
     }
 
 
@@ -290,21 +200,21 @@ abstract class AbstractSSODescriptor extends AbstractRoleDescriptor
      *
      * @return string[]
      */
-    public function getNameIDFormat(): array
+    public function getNameIDFormats(): array
     {
-        return $this->NameIDFormat;
+        return $this->nameIDFormats;
     }
 
 
     /**
      * Set the value of the NameIDFormat-property
      *
-     * @param string[] $nameIDFormat
-     * @return void
+     * @param string[] $nameIDFormats
      */
-    protected function setNameIDFormat(array $nameIDFormat): void
+    protected function setNameIDFormats(?array $nameIDFormats): void
     {
-        $this->NameIDFormat = $nameIDFormat;
+        Assert::allStringNotEmpty($nameIDFormats, 'All NameIDFormat must be a non-empty string.');
+        $this->nameIDFormats = $nameIDFormats;
     }
 
 
@@ -319,19 +229,19 @@ abstract class AbstractSSODescriptor extends AbstractRoleDescriptor
     {
         $e = parent::toXML($parent);
 
-        foreach ($this->ArtifactResolutionService as $ep) {
+        foreach ($this->artifactResolutionServiceEndpoints as $ep) {
             $ep->toXML($e);
         }
 
-        foreach ($this->SingleLogoutService as $ep) {
-            $ep->toXML($e, 'md:SingleLogoutService');
+        foreach ($this->sloServiceEndpoints as $ep) {
+            $ep->toXML($e);
         }
 
-        foreach ($this->ManageNameIDService as $ep) {
-            $ep->toXML($e, 'md:ManageNameIDService');
+        foreach ($this->manageNameIDServiceEndpoints as $ep) {
+            $ep->toXML($e);
         }
 
-        Utils::addStrings($e, Constants::NS_MD, 'md:NameIDFormat', false, $this->NameIDFormat);
+        Utils::addStrings($e, Constants::NS_MD, 'md:NameIDFormat', false, $this->nameIDFormats);
 
         return $e;
     }
