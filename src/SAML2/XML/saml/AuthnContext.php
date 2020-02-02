@@ -174,7 +174,7 @@ final class AuthnContext extends AbstractSamlElement
     public static function fromXML(DOMElement $xml): object
     {
         Assert::same($xml->localName, 'AuthnContext');
-        Assert::same($xml->namespaceURI, Constants::NS_SAML);
+        Assert::same($xml->namespaceURI, AuthnContext::NS);
 
         /** @var \DOMElement[] $authnContextClassRef */
         $authnContextClassRef = Utils::xpQuery($xml, './saml_assertion:AuthnContextClassRef');

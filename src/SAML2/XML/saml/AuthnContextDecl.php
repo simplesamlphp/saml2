@@ -68,7 +68,7 @@ final class AuthnContextDecl extends AbstractSamlElement
     public static function fromXML(DOMElement $xml): object
     {
         Assert::same($xml->localName, 'AuthnContextDecl');
-        Assert::same($xml->namespaceURI, Constants::NS_SAML);
+        Assert::same($xml->namespaceURI, AuthnContextDecl::NS);
 
         return new self($xml->childNodes);
     }
