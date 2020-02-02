@@ -274,7 +274,7 @@ final class SPSSODescriptor extends AbstractSSODescriptor
             KeyDescriptor::getChildrenOfClass($xml),
             !empty($orgs) ? $orgs[0] : null,
             ContactPerson::getChildrenOfClass($xml),
-            AttributeConsumingService::getChildrenOfClass($xml),
+            AttributeConsumingService::getChildrenOfClass($xml)
         );
     }
 

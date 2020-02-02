@@ -322,7 +322,7 @@ final class IDPSSODescriptor extends AbstractSSODescriptor
     /**
      * Add this IDPSSODescriptor to an EntityDescriptor.
      *
-     * @param \DOMElement $parent The EntityDescriptor we should append this IDPSSODescriptor to.
+     * @param \DOMElement|null $parent The EntityDescriptor we should append this IDPSSODescriptor to.
      * @return \DOMElement
      * @throws \Exception
      */
