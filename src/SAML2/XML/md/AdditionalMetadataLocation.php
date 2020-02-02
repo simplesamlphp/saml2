@@ -48,7 +48,7 @@ final class AdditionalMetadataLocation extends AbstractMdElement
     /**
      * Initialize an AdditionalMetadataLocation element.
      *
-     * @param DOMElement|null $xml The XML element we should load.
+     * @param DOMElement $xml The XML element we should load.
      * @return self
      * @throws Exception
      * @throws InvalidArgumentException

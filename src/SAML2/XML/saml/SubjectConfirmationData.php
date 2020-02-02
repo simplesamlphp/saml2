@@ -348,7 +348,7 @@ final class SubjectConfirmationData extends AbstractSamlElement
         }
 
         if (!empty($this->info)) {
-            foreach ($this->getInfo() as $n) {
+            foreach ($this->info as $n) {
                 $n->toXML($e);
             }
         }

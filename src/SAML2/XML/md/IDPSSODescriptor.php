@@ -131,7 +131,7 @@ final class IDPSSODescriptor extends AbstractSSODescriptor
     /**
      * Initialize an IDPSSODescriptor.
      *
-     * @param \DOMElement|null $xml The XML element we should load.
+     * @param \DOMElement $xml The XML element we should load.
      * @return \SAML2\XML\md\IDPSSODescriptor
      * @throws \Exception
      */

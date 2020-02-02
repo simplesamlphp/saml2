@@ -49,7 +49,7 @@ abstract class AbstractIndexedEndpointType extends AbstractEndpointType
     /**
      * Initialize an IndexedEndpointType.
      *
-     * @param \DOMElement|null $xml The XML element we should load.
+     * @param \DOMElement $xml The XML element we should load.
      *
      * @return self
      * @throws \InvalidArgumentException

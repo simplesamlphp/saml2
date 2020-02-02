@@ -64,7 +64,7 @@ final class KeyDescriptor extends AbstractMdElement
     /**
      * Initialize an KeyDescriptor.
      *
-     * @param \DOMElement|null $xml The XML element we should load.
+     * @param \DOMElement $xml The XML element we should load.
      * @return \SAML2\XML\md\KeyDescriptor
      * @throws \Exception
      */
