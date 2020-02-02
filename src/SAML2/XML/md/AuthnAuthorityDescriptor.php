@@ -90,11 +90,11 @@ final class AuthnAuthorityDescriptor extends AbstractRoleDescriptor
     /**
      * Initialize an IDPSSODescriptor from an existing XML document.
      *
-     * @param \DOMElement|null $xml The XML element we should load.
+     * @param \DOMElement $xml The XML element we should load.
      * @return self
      * @throws \Exception
      */
-    public static function fromXML(DOMElement $xml = null): object
+    public static function fromXML(DOMElement $xml): object
     {
         Assert::same($xml->localName, 'AuthnAuthorityDescriptor');
         Assert::same($xml->namespaceURI, AuthnAuthorityDescriptor::NS);
@@ -225,12 +225,12 @@ final class AuthnAuthorityDescriptor extends AbstractRoleDescriptor
     /**
      * Add this IDPSSODescriptor to an EntityDescriptor.
      *
-     * @param \DOMElement $parent The EntityDescriptor we should append this AuthnAuthorityDescriptor to.
+     * @param \DOMElement|null $parent The EntityDescriptor we should append this AuthnAuthorityDescriptor to.
      *
      * @return \DOMElement
      * @throws \Exception
      */
-    public function toXML(DOMElement $parent = null): DOMElement
+    public function toXML(?DOMElement $parent = null): DOMElement
     {
         $e = parent::toXML($parent);
 

@@ -324,7 +324,7 @@ final class AttributeAuthorityDescriptor extends AbstractRoleDescriptor
     /**
      * Add this AttributeAuthorityDescriptor to an EntityDescriptor.
      *
-     * @param \DOMElement $parent The EntityDescriptor we should append this IDPSSODescriptor to.
+     * @param \DOMElement|null $parent The EntityDescriptor we should append this IDPSSODescriptor to.
      *
      * @return \DOMElement
      *

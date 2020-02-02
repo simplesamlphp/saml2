@@ -34,16 +34,16 @@ final class IDPSSODescriptor extends AbstractSSODescriptor
     /**
      * List of NameIDMappingService endpoints.
      *
-     * @var \SAML2\XML\md\NameIDMappingService[]
+     * @var \SAML2\XML\md\NameIDMappingService[]|null
      */
-    protected $nameIDMappingServiceEndpoints = [];
+    protected $nameIDMappingServiceEndpoints = null;
 
     /**
      * List of AssertionIDRequestService endpoints.
      *
-     * @var \SAML2\XML\md\AssertionIDRequestService[]
+     * @var \SAML2\XML\md\AssertionIDRequestService[]|null
      */
-    protected $assertionIDRequestServiceEndpoints = [];
+    protected $assertionIDRequestServiceEndpoints = null;
 
     /**
      * List of supported attribute profiles.
@@ -220,9 +220,9 @@ final class IDPSSODescriptor extends AbstractSSODescriptor
     /**
      * Get the NameIDMappingService endpoints
      *
-     * @return \SAML2\XML\md\NameIDMappingService[]
+     * @return \SAML2\XML\md\NameIDMappingService[]|null
      */
-    public function getNameIDMappingServices(): array
+    public function getNameIDMappingServices(): ?array
     {
         return $this->nameIDMappingServiceEndpoints;
     }
@@ -231,15 +231,17 @@ final class IDPSSODescriptor extends AbstractSSODescriptor
     /**
      * Set the NameIDMappingService endpoints
      *
-     * @param array $nameIDMappingServices
+     * @param array|null $nameIDMappingServices
      */
-    protected function setNameIDMappingServices(array $nameIDMappingServices): void
+    protected function setNameIDMappingServices(?array $nameIDMappingServices): void
     {
-        Assert::allIsInstanceOf(
-            $nameIDMappingServices,
-            NameIDMappingService::class,
-            'All md:NameIDMappingService endpoints must be an instance of NameIDMappingService.'
-        );
+        if ($nameIDMappingServices !== null) {
+            Assert::allIsInstanceOf(
+                $nameIDMappingServices,
+                NameIDMappingService::class,
+                'All md:NameIDMappingService endpoints must be an instance of NameIDMappingService.'
+            );
+        }
         $this->nameIDMappingServiceEndpoints = $nameIDMappingServices;
     }
 
@@ -247,9 +249,9 @@ final class IDPSSODescriptor extends AbstractSSODescriptor
     /**
      * Collect the AssertionIDRequestService endpoints
      *
-     * @return \SAML2\XML\md\AssertionIDRequestService[]
+     * @return \SAML2\XML\md\AssertionIDRequestService[]|null
      */
-    public function getAssertionIDRequestServices(): array
+    public function getAssertionIDRequestServices(): ?array
     {
         return $this->assertionIDRequestServiceEndpoints;
     }
@@ -258,15 +260,17 @@ final class IDPSSODescriptor extends AbstractSSODescriptor
     /**
      * Set the AssertionIDRequestService endpoints
      *
-     * @param array $assertionIDRequestServices
+     * @param array $assertionIDRequestServices|null
      */
-    protected function setAssertionIDRequestService(array $assertionIDRequestServices): void
+    protected function setAssertionIDRequestService(?array $assertionIDRequestServices): void
     {
-        Assert::allIsInstanceOf(
-            $assertionIDRequestServices,
-            AssertionIDRequestService::class,
-            'All md:AssertionIDRequestService endpoints must be an instance of AssertionIDRequestService.'
-        );
+        if ($assertionIDRequestServices !== null) {
+            Assert::allIsInstanceOf(
+                $assertionIDRequestServices,
+                AssertionIDRequestService::class,
+                'All md:AssertionIDRequestService endpoints must be an instance of AssertionIDRequestService.'
+            );
+        }
         $this->assertionIDRequestServiceEndpoints = $assertionIDRequestServices;
     }
 

@@ -193,4 +193,3 @@ final class Organization extends AbstractMdElement
         return $e;
     }
 }
-
