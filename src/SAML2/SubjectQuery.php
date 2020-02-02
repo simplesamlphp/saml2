@@ -24,7 +24,7 @@ abstract class SubjectQuery extends Request
     /**
      * The NameId of the subject in the query.
      *
-     * @var \SAML2\XML\saml\NameID
+     * @var \SAML2\XML\saml\NameIDType
      */
     private $nameId;
 

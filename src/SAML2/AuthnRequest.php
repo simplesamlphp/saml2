@@ -125,7 +125,7 @@ class AuthnRequest extends Request
     private $encryptedNameId = null;
 
     /**
-     * @var \SAML2\XML\saml\NameID|null
+     * @var \SAML2\XML\saml\NameIDType|null
      */
     private $nameId = null;
 

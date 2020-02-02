@@ -36,7 +36,7 @@ class LogoutRequest extends Request
     /**
      * The name identifier of the session that should be terminated.
      *
-     * @var \SAML2\XML\saml\NameID|null
+     * @var \SAML2\XML\saml\NameIDType|null
      */
     private $nameId = null;
 

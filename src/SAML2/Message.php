@@ -66,7 +66,7 @@ abstract class Message extends SignedElement
     /**
      * The entity id of the issuer of this message, or null if unknown.
      *
-     * @var \SAML2\XML\saml\Issuer|null
+     * @var \SAML2\XML\saml\NameIDType|null
      */
     private $issuer = null;
 

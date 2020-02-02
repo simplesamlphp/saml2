@@ -44,7 +44,7 @@ class Assertion extends SignedElement
      * If the issuer's format is \SAML2\Constants::NAMEID_ENTITY, this property will just take the issuer's string
      * value.
      *
-     * @var \SAML2\XML\saml\Issuer
+     * @var \SAML2\XML\saml\NameIDType
      */
     private $issuer;
 
@@ -53,7 +53,7 @@ class Assertion extends SignedElement
      *
      * If the NameId is null, no subject was included in the assertion.
      *
-     * @var \SAML2\XML\saml\NameID|null
+     * @var \SAML2\XML\saml\NameIDType|null
      */
     private $nameId;
 
