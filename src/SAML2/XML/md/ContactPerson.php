@@ -259,6 +259,7 @@ class ContactPerson
      */
     public function setEmailAddress(array $emailAddress)
     {
+        $emailAddress = preg_replace('/^mailto:/i', '', $emailAddress);
         $this->EmailAddress = $emailAddress;
     }
 
@@ -270,6 +271,7 @@ class ContactPerson
      */
     public function addEmailAddress($emailAddress)
     {
+        $emailAddress = preg_replace('/^mailto:/i', '', $emailAddress);
         $this->EmailAddress[] = $emailAddress;
     }
 
@@ -414,7 +416,10 @@ class ContactPerson
             Utils::addString($e, Constants::NS_MD, 'md:SurName', $this->getSurName());
         }
         if ($this->getEmailAddress() !== null) {
-            Utils::addStrings($e, Constants::NS_MD, 'md:EmailAddress', false, $this->getEmailAddress());
+            /** @var array $addresses */
+            $addresses = preg_filter('/^/', 'mailto:', $this->EmailAddress);
+
+            Utils::addStrings($e, Constants::NS_MD, 'md:EmailAddress', false, $addresses);
         }
         if ($this->getTelephoneNumber() !== null) {
             Utils::addStrings($e, Constants::NS_MD, 'md:TelephoneNumber', false, $this->getTelephoneNumber());
