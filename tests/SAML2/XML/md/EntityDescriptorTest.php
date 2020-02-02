@@ -4,7 +4,6 @@ declare(strict_types=1);
 
 namespace SAML2\XML\md;
 
-use Exception;
 use SAML2\DOMDocumentFactory;
 use SAML2\XML\md\EntityDescriptor;
 use SAML2\XML\md\AffiliationDescriptor;
@@ -29,7 +28,7 @@ class EntityDescriptorTest extends \PHPUnit\Framework\TestCase
 </EntityDescriptor>
 XML
         );
-        $this->expectException(Exception::class);
+        $this->expectException(\Exception::class);
         $this->expectExceptionMessage('Missing affiliationOwnerID on AffiliationDescriptor.');
         EntityDescriptor::fromXML($document->documentElement);
     }
@@ -48,8 +47,8 @@ XML
 </EntityDescriptor>
 XML
         );
-        $this->expectException(Exception::class);
-        $this->expectExceptionMessage('Missing required attribute entityID on EntityDescriptor.');
+        $this->expectException(\Exception::class);
+        $this->expectExceptionMessage('Missing \'entityID\' attribute from md:EntityDescriptor.');
         EntityDescriptor::fromXML($document->documentElement);
     }
 
@@ -66,7 +65,7 @@ XML
 </EntityDescriptor>
 XML
         );
-        $this->expectException(Exception::class);
+        $this->expectException(\Exception::class);
         $this->expectExceptionMessage('List of affiliated members must not be empty.');
         EntityDescriptor::fromXML($document->documentElement);
     }
@@ -82,7 +81,7 @@ XML
 </EntityDescriptor>
 XML
         );
-        $this->expectException(Exception::class);
+        $this->expectException(\Exception::class);
         $this->expectExceptionMessage(
             'Must have either one of the RoleDescriptors or an AffiliationDescriptor in EntityDescriptor.'
         );
@@ -103,7 +102,7 @@ XML
 </EntityDescriptor>
 XML
         );
-        $this->expectException(Exception::class);
+        $this->expectException(\Exception::class);
         $this->expectExceptionMessage('Invalid SAML2 timestamp passed to xsDateTimeToTimestamp: asdf');
         EntityDescriptor::fromXML($document->documentElement);
     }
@@ -115,7 +114,7 @@ XML
     public function testUnmarshalling(): void
     {
         $document = DOMDocumentFactory::fromString(<<<XML
-<EntityDescriptor entityID="theEntityID" xmlns="urn:oasis:names:tc:SAML:2.0:metadata">
+<EntityDescriptor entityID="theEntityID" xmlns="urn:oasis:names:tc:SAML:2.0:metadata" validUntil="2010-02-01T12:34:56Z">
     <AffiliationDescriptor affiliationOwnerID="asdf" ID="theAffiliationDescriptorID" validUntil="2010-02-01T12:34:56Z" cacheDuration="PT9000S" >
         <AffiliateMember>test</AffiliateMember>
         <AffiliateMember>test2</AffiliateMember>

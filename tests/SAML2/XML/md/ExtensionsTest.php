@@ -43,7 +43,7 @@ class ExtensionsTest extends TestCase
     <mdui:IPHint>127.0.0.1</mdui:IPHint>
   </mdui:DiscoHints>
   <alg:DigestMethod Algorithm="SomeAlgorithm" xmlns:alg="urn:oasis:names:tc:SAML:metadata:algsupport"></alg:DigestMethod>
-  <alg:SigningMethod xmlns:alg="urn:oasis:names:tc:SAML:metadata:algsupport" Algorithm="SomeOtherAlgorithm" 
+  <alg:SigningMethod xmlns:alg="urn:oasis:names:tc:SAML:metadata:algsupport" Algorithm="SomeOtherAlgorithm"
   MinKeySize="1024" MaxKeySize="4096"></alg:SigningMethod>
 </md:Extensions>
 XML
@@ -60,10 +60,8 @@ XML
         $scope = new Scope('SomeScope');
         $ra = new RegistrationInfo('SomeAuthority');
         $pubInfo = new PublicationInfo('SomePublisher');
-        $uiinfo = new UIInfo();
-        $uiinfo->setDisplayName(['en' => 'Example']);
-        $discoHints = new DiscoHints();
-        $discoHints->setIPHint(['127.0.0.1']);
+        $uiinfo = new UIInfo(['en' => 'Example']);
+        $discoHints = new DiscoHints(null, ['127.0.0.1']);
         $digestMethod = new DigestMethod('SomeAlgorithm');
         $signingMethod = new SigningMethod('SomeOtherAlgorithm', 1024, 4096);
         $extensions = new Extensions([
@@ -139,6 +137,7 @@ XML
         $this->assertInstanceOf(DigestMethod::class, $list[6]);
         $this->assertInstanceOf(SigningMethod::class, $list[7]);
         $this->assertInstanceOf(Chunk::class, $list[8]);
+        $this->assertFalse($extensions->isEmptyElement());
     }
 
 
