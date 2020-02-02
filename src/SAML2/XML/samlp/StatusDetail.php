@@ -78,7 +78,7 @@ final class StatusDetail extends AbstractSamlpElement
     public static function fromXML(DOMElement $xml): object
     {
         Assert::same($xml->localName, 'StatusDetail');
-        Assert::same($xml->namespaceURI, Constants::NS_SAMLP);
+        Assert::same($xml->namespaceURI, StatusDetail::NS);
 
         $details = [];
         foreach ($xml->childNodes as $detail) {

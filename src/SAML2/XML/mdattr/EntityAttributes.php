@@ -88,6 +88,9 @@ final class EntityAttributes extends AbstractMdattrElement
      */
     public static function fromXML(DOMElement $xml): object
     {
+        Assert::same($xml->localName, 'EntityAttributes');
+        Assert::same($xml->namespaceURI, EntityAttributes::NS);
+
         $children = [];
 
         /** @var \DOMElement $node */
