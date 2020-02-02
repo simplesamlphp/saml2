@@ -74,11 +74,11 @@ final class AffiliationDescriptor extends AbstractMetadataDocument
     /**
      * Initialize a AffiliationDescriptor.
      *
-     * @param \DOMElement|null $xml The XML element we should load.
+     * @param \DOMElement $xml The XML element we should load.
      * @return \SAML2\XML\md\AffiliationDescriptor
      * @throws \Exception
      */
-    public static function fromXML(DOMElement $xml = null): object
+    public static function fromXML(DOMElement $xml): object
     {
         if (!$xml->hasAttribute('affiliationOwnerID')) {
             throw new Exception('Missing affiliationOwnerID on AffiliationDescriptor.');
@@ -192,10 +192,10 @@ final class AffiliationDescriptor extends AbstractMetadataDocument
     /**
      * Add this AffiliationDescriptor to an EntityDescriptor.
      *
-     * @param \DOMElement $parent The EntityDescriptor we should append this endpoint to.
+     * @param \DOMElement|null $parent The EntityDescriptor we should append this endpoint to.
      * @return \DOMElement
      */
-    public function toXML(DOMElement $parent = null): DOMElement
+    public function toXML(?DOMElement $parent = null): DOMElement
     {
         $e = parent::toXML($parent);
         $e->setAttribute('affiliationOwnerID', $this->affiliationOwnerID);

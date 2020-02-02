@@ -112,6 +112,4 @@ trait IndexedElement
         }
         $this->isDefault = $flag;
     }
-
-
 }

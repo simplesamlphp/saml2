@@ -33,7 +33,7 @@ final class UnknownRoleDescriptor extends AbstractRoleDescriptor
      *
      * @throws \Exception
      */
-    public static function fromXML(DOMElement $xml = null): object
+    public static function fromXML(DOMElement $xml): object
     {
         $validUntil = self::getAttribute($xml, 'validUntil', null);
         $orgs = Organization::getChildrenOfClass($xml);
@@ -72,7 +72,7 @@ final class UnknownRoleDescriptor extends AbstractRoleDescriptor
     /**
      * Add this RoleDescriptor to an EntityDescriptor.
      *
-     * @param \DOMElement $parent The EntityDescriptor we should append this RoleDescriptor to.
+     * @param \DOMElement|null $parent The EntityDescriptor we should append this RoleDescriptor to.
      * @return \DOMElement
      */
     public function toXML(?DOMElement $parent = null): DOMElement

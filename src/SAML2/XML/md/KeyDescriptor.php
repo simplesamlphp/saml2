@@ -70,11 +70,6 @@ final class KeyDescriptor extends AbstractMdElement
      */
     public static function fromXML(DOMElement $xml): object
     {
-        $use = null;
-        if ($xml->hasAttribute('use')) {
-            $use = $xml->getAttribute('use');
-        }
-
         $keyInfo = Utils::xpQuery($xml, './ds:KeyInfo');
         if (count($keyInfo) > 1) {
             throw new Exception('More than one ds:KeyInfo in the KeyDescriptor.');

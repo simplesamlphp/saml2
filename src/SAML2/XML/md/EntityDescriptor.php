@@ -151,7 +151,7 @@ final class EntityDescriptor extends AbstractMetadataDocument
                     $roleDescriptors[] = AttributeAuthorityDescriptor::fromXML($node);
                     break;
                 case 'PDPDescriptor':
-                    $roleDescriptors[] = new PDPDescriptor($node);
+                    $roleDescriptors[] = PDPDescriptor::fromXML($node);
                     break;
                 case 'AffiliationDescriptor':
                     if ($affiliationDescriptor !== null) {
