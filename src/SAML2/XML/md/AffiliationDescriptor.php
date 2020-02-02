@@ -38,9 +38,9 @@ final class AffiliationDescriptor extends AbstractMetadataDocument
      *
      * Array of \SAML2\XML\md\KeyDescriptor elements.
      *
-     * @var \SAML2\XML\md\KeyDescriptor[]
+     * @var \SAML2\XML\md\KeyDescriptor[]|null
      */
-    protected $KeyDescriptors = [];
+    protected $KeyDescriptors = null;
 
 
     /**
@@ -50,7 +50,7 @@ final class AffiliationDescriptor extends AbstractMetadataDocument
      * @param array $members A non-empty array of members of this affiliation.
      * @param \SAML2\XML\md\KeyDescriptor[]|null $keyDescriptors An optional array of KeyDescriptors. Defaults to an empty array.
      * @param string|null $ID The ID for this document. Defaults to null.
-     * @param int|null    $validUntil Unix time of validity for this document. Defaults to null.
+     * @param int|null $validUntil Unix time of validity for this document. Defaults to null.
      * @param string|null $cacheDuration Maximum time this document can be cached. Defaults to null.
      * @param \SAML2\XML\md\Extensions|null An array of extensions. Defaults to an empty array.
      *
@@ -201,11 +201,14 @@ final class AffiliationDescriptor extends AbstractMetadataDocument
     public function toXML(?DOMElement $parent = null): DOMElement
     {
         $e = parent::toXML($parent);
+
         $e->setAttribute('affiliationOwnerID', $this->affiliationOwnerID);
         Utils::addStrings($e, Constants::NS_MD, 'md:AffiliateMember', false, $this->AffiliateMembers);
 
-        foreach ($this->KeyDescriptors as $kd) {
-            $kd->toXML($e);
+        if (!empty($this->KeyDescriptors)) {
+            foreach ($this->KeyDescriptors as $kd) {
+                $kd->toXML($e);
+            }
         }
 
         $this->signElement($e, $e->firstChild);

@@ -193,8 +193,10 @@ final class KeyDescriptor extends AbstractMdElement
 
         $this->KeyInfo->toXML($e);
 
-        foreach ($this->EncryptionMethods as $em) {
-            $em->toXML($e);
+        if (!empty($this->EncryptionMethods)) {
+            foreach ($this->EncryptionMethods as $em) {
+                $em->toXML($e);
+            }
         }
 
         return $e;

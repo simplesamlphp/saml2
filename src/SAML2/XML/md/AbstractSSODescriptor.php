@@ -213,7 +213,9 @@ abstract class AbstractSSODescriptor extends AbstractRoleDescriptor
      */
     protected function setNameIDFormats(?array $nameIDFormats): void
     {
-        Assert::allStringNotEmpty($nameIDFormats, 'All NameIDFormat must be a non-empty string.');
+        if ($nameIDFormats !== null) {
+            Assert::allStringNotEmpty($nameIDFormats, 'All NameIDFormat must be a non-empty string.');
+        }
         $this->nameIDFormats = $nameIDFormats;
     }
 
