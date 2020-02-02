@@ -23,7 +23,7 @@ class ContactPersonTest extends \PHPUnit\Framework\TestCase
         $Company = "Test Company";
         $GivenName = "John";
         $SurName = "Doe";
-        $EmailAddress = ['jdoe@test.company', 'john.doe@test.company'];
+        $EmailAddress = ['jdoe@test.company', 'mailto:john.doe@test.company'];
         $TelephoneNumber = ['1-234-567-8901'];
         $ContactPersonAttributes = ['testattr' => 'testval', 'testattr2' => 'testval2'];
 
@@ -54,7 +54,10 @@ XML
 
         $this->assertEquals(count($EmailAddress), $contactPersonElement->getElementsByTagName('EmailAddress')->length);
         foreach ($contactPersonElement->getElementsByTagName('EmailAddress') as $element) {
-            $this->assertTrue(in_array($element->nodeValue, $EmailAddress));
+            $this->assertTrue(
+                in_array($element->nodeValue, $EmailAddress) ||
+                in_array(preg_replace('/^mailto:/', '', $element->nodeValue), $EmailAddress)
+            );
         }
 
         $this->assertEquals(count($TelephoneNumber), $contactPersonElement->getElementsByTagName('TelephoneNumber')->length);
@@ -63,6 +66,72 @@ XML
         }
 
         foreach ($ContactPersonAttributes as $attr => $val) {
+            $this->assertEquals($val, $contactPersonElement->getAttribute($attr));
+        }
+    }
+
+
+    /**
+     * Test more methods inside ContactPerson
+     *
+     * @return void
+     */
+    public function testContactPersonExtraMethods(): void
+    {
+        $contactType = "administrative";
+        $Company = "Test Company";
+        $GivenName = "John";
+        $SurName = "Doe";
+        $EmailAddress = ['jdoe@test.company', 'mailto:john.doe@test.company'];
+        $AnotherEmail = 'john@doe.xyz';
+        $TelephoneNumber = ['1-234-567-8901'];
+        $MoreTelephoneNumber = '+31-887874000';
+        $ContactPersonAttributes = ['testattr' => 'testval', 'testattr2' => 'testval2'];
+        $ExtraAttribute = ['another' => 'this'];
+
+        $mdNamespace = Constants::NS_MD;
+        $document = DOMDocumentFactory::fromString(<<<XML
+<md:Test xmlns:md="{$mdNamespace}" Binding="urn:something" Location="https://whatever/" xmlns:test="urn:test" test:attr="value">
+</md:Test>
+XML
+        );
+        $contactPerson = new ContactPerson();
+        $contactPerson->setContactType($contactType);
+        $contactPerson->setCompany($Company);
+        $contactPerson->setGivenName($GivenName);
+        $contactPerson->setSurName($SurName);
+        $contactPerson->setEmailAddress($EmailAddress);
+        $contactPerson->setTelephoneNumber($TelephoneNumber);
+        $contactPerson->setContactPersonAttributes($ContactPersonAttributes);
+
+        $contactPerson->addEmailAddress($AnotherEmail);
+        $contactPerson->addTelephoneNumber($MoreTelephoneNumber);
+        $contactPerson->addContactPersonAttributes(key($ExtraAttribute), array_pop($ExtraAttribute));
+
+        $contactPerson->toXML($document->firstChild);
+
+        $contactPersonElement = $document->getElementsByTagName('ContactPerson')->item(0);
+
+        $this->assertEquals(count($EmailAddress) + 1, $contactPersonElement->getElementsByTagName('EmailAddress')->length);
+        foreach ($contactPersonElement->getElementsByTagName('EmailAddress') as $element) {
+            $this->assertTrue(
+                in_array($element->nodeValue, $EmailAddress) ||
+                in_array(preg_replace('/^mailto:/', '', $element->nodeValue), $EmailAddress) ||
+                preg_replace('/^mailto:/', '', $element->nodeValue) === $AnotherEmail
+            );
+        }
+
+        $this->assertEquals(
+            count($TelephoneNumber) + 1,
+            $contactPersonElement->getElementsByTagName('TelephoneNumber')->length
+        );
+        foreach ($contactPersonElement->getElementsByTagName('TelephoneNumber') as $element) {
+            $this->assertTrue(in_array($element->nodeValue, $TelephoneNumber) ||
+                $element->nodeValue === $MoreTelephoneNumber
+            );
+        }
+
+        foreach ($ContactPersonAttributes + $ExtraAttribute as $attr => $val) {
             $this->assertEquals($val, $contactPersonElement->getAttribute($attr));
         }
     }
@@ -83,7 +152,7 @@ XML
         <md:GivenName>John</md:GivenName>
         <md:SurName>Doe</md:SurName>
         <md:EmailAddress>jdoe@test.company</md:EmailAddress>
-        <md:EmailAddress>john.doe@test.company</md:EmailAddress>
+        <md:EmailAddress>mailto:john.doe@test.company</md:EmailAddress>
         <md:TelephoneNumber>1-234-567-8901</md:TelephoneNumber>
     </md:ContactPerson>
 </md:Test>
@@ -118,8 +187,8 @@ XML
         <md:GivenName>John</md:GivenName>
         <md:GivenName>Jonathon</md:GivenName>
         <md:SurName>Doe</md:SurName>
-        <md:EmailAddress>jdoe@test.company</md:EmailAddress>
-        <md:EmailAddress>john.doe@test.company</md:EmailAddress>
+        <md:EmailAddress>mailto:jdoe@test.company</md:EmailAddress>
+        <md:EmailAddress>mailto:john.doe@test.company</md:EmailAddress>
         <md:TelephoneNumber>1-234-567-8901</md:TelephoneNumber>
     </md:ContactPerson>
 </md:Test>
@@ -145,8 +214,8 @@ XML
     <md:ContactPerson contactType="other">
         <md:Company>Test Company</md:Company>
         <md:GivenName>John</md:GivenName>
-        <md:EmailAddress>jdoe@test.company</md:EmailAddress>
-        <md:EmailAddress>john.doe@test.company</md:EmailAddress>
+        <md:EmailAddress>mailto:jdoe@test.company</md:EmailAddress>
+        <md:EmailAddress>mailto:john.doe@test.company</md:EmailAddress>
         <md:TelephoneNumber>1-234-567-8901</md:TelephoneNumber>
     </md:ContactPerson>
 </md:Test>
