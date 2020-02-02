@@ -7,6 +7,7 @@ namespace SAML2\XML\saml;
 use DOMElement;
 use SAML2\Constants;
 use SAML2\DOMDocumentFactory;
+use Webmozart\Assert\Assert;
 
 /**
  * Class representing the saml:Issuer element.
@@ -16,11 +17,6 @@ use SAML2\DOMDocumentFactory;
  */
 class Issuer extends NameIDType
 {
-    /**
-     * @var string
-     */
-    protected $nodeName = 'saml:Issuer';
-
     /**
      * if $this->SAML2IssuerShowAll is set false
      * From saml-core-2.0-os 8.3.6, when the entity Format is used: "The NameQualifier, SPNameQualifier, and
@@ -32,16 +28,27 @@ class Issuer extends NameIDType
      *
      * @var boolean
      */
-    private $Saml2IssuerShowAll = false; //setting true breaks saml-core-2.0-os 8.3.6
+    private $Saml2IssuerShowAll; //setting true breaks saml-core-2.0-os 8.3.6
 
 
     /**
-     * Initialize a saml:NameIDType, either from scratch or from an existing \DOMElement.
+     * Initialize a saml:NameIDType
      *
-     * @param \DOMElement|null $xml The XML element we should load, if any.
+     * @param \DOMElement|string $element
+     * @param string|null $Format
+     * @param string|null $SPProvidedID
+     * @param string|null $NameQualifier
+     * @param string|null $SPNameQualifier
+     * @param bool $Saml2IssuerShowAll
      */
-    public function __construct(DOMElement $xml = null)
-    {
+    public function __construct(
+        $element,
+        ?string $Format = null,
+        ?string $SPProvidedID = null,
+        ?string $NameQualifier = null,
+        ?string $SPNameQualifier = null,
+        bool $Saml2IssuerShowAll = false
+    ) {
         /**
          * The format of this NameIDType.
          *
@@ -62,9 +69,9 @@ class Issuer extends NameIDType
          *
          * @var string
          */
-        $this->setFormat(Constants::NAMEID_ENTITY);
+        parent::__construct($element, $Format, $SPProvidedID, $NameQualifier, $SPNameQualifier);
 
-        parent::__construct($xml);
+        $this->setSaml2IssuerShowAll($Saml2IssuerShowAll);
     }
 
 
@@ -85,9 +92,31 @@ class Issuer extends NameIDType
      * @param bool $saml2IssuerShowAll
      * @return void
      */
-    public function setSaml2IssuerShowAll(bool $saml2IssuerShowAll): void
+    private function setSaml2IssuerShowAll(bool $saml2IssuerShowAll): void
     {
         $this->Saml2IssuerShowAll = $saml2IssuerShowAll;
+    }
+ 	
+
+    /**
+     * Convert XML into an Issuer
+     *
+     * @param \DOMElement $xml The XML element we should load
+     *
+     * @return \SAML2\XML\saml\Issuer
+     * @throws \InvalidArgumentException
+     */
+    public static function fromXML(DOMElement $xml): object
+    {
+        Assert::same($xml->localName, 'Issuer');
+        Assert::same($xml->namespaceURI, Issuer::NS);
+
+        $Format = $xml->hasAttribute('Format') ? $xml->getAttribute('Format') : null;
+        $SPProvidedID = $xml->hasAttribute('SPProvidedID') ? $xml->getAttribute('SPProvidedID') : null;
+        $NameQualifier = $xml->hasAttribute('NameQualifier') ? $xml->getAttribute('NameQualifier') : null;
+        $SPNameQualifier = $xml->hasAttribute('SPNameQualifier') ? $xml->getAttribute('SPNameQualifier') : null;
+
+        return new self($xml, $Format, $SPProvidedID, $NameQualifier, $SPNameQualifier);
     }
 
 
@@ -99,13 +128,7 @@ class Issuer extends NameIDType
      */
     public function toXML(DOMElement $parent = null): DOMElement
     {
-        if (
-            ($this->Saml2IssuerShowAll
-            && ($this->Format === Constants::NAMEID_ENTITY))
-            || ($this->Format !== Constants::NAMEID_ENTITY)
-        ) {
-            return parent::toXML($parent);
-        }
+        $element = parent::toXML($parent);
 
         /*
          * if $this->Saml2IssuerShowAll is set false
@@ -114,18 +137,17 @@ class Issuer extends NameIDType
          * if $this->isSaml2IssuerShowAll() is set true when the entity Format is used: "The NameQualifier,
          * SPNameQualifier, and SPProvidedID attributes are not omitted."
          */
-
-        if ($parent === null) {
-            $parent = DOMDocumentFactory::create();
-            $doc = $parent;
-        } else {
-            $doc = $parent->ownerDocument;
+        if (
+            (
+                ($this->Format === Constants::NAMEID_ENTITY)
+                && !$this->isSaml2IssuerShowAll()
+            )
+            || ($this->Format === null)
+        ) {
+            $element->removeAttribute('SPProvidedID');
+            $element->removeAttribute('NameQualifier');
+            $element->removeAttribute('SPNameQualifier');
         }
-        $element = $doc->createElementNS(Constants::NS_SAML, 'saml:Issuer');
-        $parent->appendChild($element);
-
-        $value = $element->ownerDocument->createTextNode($this->value);
-        $element->appendChild($value);
 
         return $element;
     }

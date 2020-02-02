@@ -15,7 +15,7 @@ use SAML2\DOMDocumentFactory;
  * @package simplesamlphp/saml2
  */
 
-abstract class BaseIDType
+abstract class BaseIDType extends AbstractSamlElement
 {
     /**
      * The security or administrative domain that qualifies the identifier.
@@ -37,41 +37,17 @@ abstract class BaseIDType
      */
     protected $SPNameQualifier = null;
 
-    /**
-     * The name for this BaseID.
-     *
-     * Override in classes extending this class to get the desired name.
-     *
-     * @var string
-     */
-    protected $nodeName;
 
     /**
-     * @var \DOMElement
-     */
-    protected $element;
-
-
-    /**
-     * Initialize a saml:BaseID, either from scratch or from an existing \DOMElement.
+     * Initialize a saml:BaseID
      *
-     * @param \DOMElement|null $xml The XML element we should load, if any.
+     * @param string|null $NameQualifier
+     * @param string|null $SPNameQualifier
      */
-    public function __construct(DOMElement $xml = null)
+    public function __construct(?string $NameQualifier = null, ?string $SPNameQualifier = null)
     {
-        if ($xml === null) {
-            return;
-        }
-
-        $this->element = $xml;
-
-        if ($xml->hasAttribute('NameQualifier')) {
-            $this->NameQualifier = $xml->getAttribute('NameQualifier');
-        }
-
-        if ($xml->hasAttribute('SPNameQualifier')) {
-            $this->SPNameQualifier = $xml->getAttribute('SPNameQualifier');
-        }
+        $this->setNameQualifier($NameQualifier);
+        $this->setSPNameQualifier($SPNameQualifier);
     }
 
 
@@ -92,7 +68,7 @@ abstract class BaseIDType
      * @param string|null $nameQualifier
      * @return void
      */
-    public function setNameQualifier(string $nameQualifier = null): void
+    protected function setNameQualifier(?string $nameQualifier): void
     {
         $this->NameQualifier = $nameQualifier;
     }
@@ -115,7 +91,7 @@ abstract class BaseIDType
      * @param string|null $spNameQualifier
      * @return void
      */
-    public function setSPNameQualifier(string $spNameQualifier = null): void
+    protected function setSPNameQualifier(?string $spNameQualifier): void
     {
         $this->SPNameQualifier = $spNameQualifier;
     }
@@ -129,14 +105,7 @@ abstract class BaseIDType
      */
     public function toXML(DOMElement $parent = null): DOMElement
     {
-        if ($parent === null) {
-            $parent = DOMDocumentFactory::create();
-            $doc = $parent;
-        } else {
-            $doc = $parent->ownerDocument;
-        }
-        $element = $doc->createElementNS(Constants::NS_SAML, $this->nodeName);
-        $parent->appendChild($element);
+        $element = $this->instantiateParentElement($parent);
 
         if ($this->NameQualifier !== null) {
             $element->setAttribute('NameQualifier', $this->NameQualifier);

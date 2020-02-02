@@ -55,27 +55,31 @@ abstract class NameIDType extends BaseIDType
 
 
     /**
-     * Initialize a saml:NameIDType, either from scratch or from an existing \DOMElement.
+     * Initialize a saml:NameIDType from scratch
      *
-     * @param \DOMElement|null $xml The XML element we should load, if any.
+     * @param \DOMElement|string $element
+     * @param string|null $Format
+     * @param string|null $SPProvidedID
+     * @param string|null $NameQualifier
+     * @param string|null $SPNameQualifier
      */
-    public function __construct(DOMElement $xml = null)
-    {
-        parent::__construct($xml);
+    public function __construct(
+        $element,
+        ?string $Format = null,
+        ?string $SPProvidedID = null,
+        ?string $NameQualifier = null,
+        ?string $SPNameQualifier = null
+    ) {
+        parent::__construct($NameQualifier, $SPNameQualifier);
 
-        if ($xml === null) {
-            return;
+        $this->setFormat($Format);
+        $this->setSPProvidedID($SPProvidedID);
+
+        if (is_string($element)) {
+            $this->setValue(trim($element));
+        } else {
+            $this->setValue(trim($element->textContent));
         }
-
-        if ($xml->hasAttribute('Format')) {
-            $this->Format = $xml->getAttribute('Format');
-        }
-
-        if ($xml->hasAttribute('SPProvidedID')) {
-            $this->SPProvidedID = $xml->getAttribute('SPProvidedID');
-        }
-
-        $this->value = trim($xml->textContent);
     }
 
 
@@ -96,7 +100,7 @@ abstract class NameIDType extends BaseIDType
      * @param string|null $format
      * @return void
      */
-    public function setFormat(string $format = null): void
+    public function setFormat(?string $format): void
     {
         $this->Format = $format;
     }
@@ -146,7 +150,7 @@ abstract class NameIDType extends BaseIDType
      * @param string|null $spProvidedID
      * @return void
      */
-    public function setSPProvidedID(string $spProvidedID = null): void
+    public function setSPProvidedID(?string $spProvidedID): void
     {
         $this->SPProvidedID = $spProvidedID;
     }

@@ -77,7 +77,7 @@ class LogoutRequest extends Request
             /* The NameID element is encrypted. */
             $this->encryptedNameId = $nameId[0];
         } else {
-            $this->nameId = new NameID($nameId[0]);
+            $this->nameId = NameID::fromXML($nameId[0]);
         }
 
         /** @var \DOMElement[] $sessionIndexes */

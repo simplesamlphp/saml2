@@ -23,11 +23,13 @@ class UtilsTest extends \PHPUnit\Framework\TestCase
      */
     public function testXpQuery(): void
     {
-        $nameId_before = new NameID();
-        $nameId_before->setValue('NameIDValue');
-        $nameId_before->setFormat('SomeNameIDFormat');
-        $nameId_before->setNameQualifier('OurNameQualifier');
-        $nameId_before->setSPNameQualifier('TheSPNameQualifier');
+        $nameId_before = new NameID(
+            'NameIDValue',
+            'SomeNameIDFormat',
+            null,
+            'OurNameQualifier',
+            'TheSPNameQualifier'
+        );
 
         $aq = new AttributeQuery();
         $aq->setNameID($nameId_before);

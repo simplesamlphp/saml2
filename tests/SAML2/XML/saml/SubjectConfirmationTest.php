@@ -22,8 +22,7 @@ class SubjectConfirmationTest extends \PHPUnit\Framework\TestCase
      */
     public function testMarshalling(): void
     {
-        $nameId = new NameID();
-        $nameId->setValue('SomeNameIDValue');
+        $nameId = new NameID('SomeNameIDValue');
 
         $subjectConfirmation = new SubjectConfirmation(
             'SomeMethod',

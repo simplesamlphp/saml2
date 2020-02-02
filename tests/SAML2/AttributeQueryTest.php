@@ -16,8 +16,7 @@ class AttributeQueryTest extends \PHPUnit\Framework\TestCase
     public function testMarshalling(): void
     {
         $attributeQuery = new AttributeQuery();
-        $nameId = new NameID();
-        $nameId->setValue('NameIDValue');
+        $nameId = new NameID('NameIDValue');
         $attributeQuery->setNameID($nameId);
         $attributeQuery->setAttributes(
             [
@@ -123,8 +122,7 @@ XML;
         $fmt_uri = 'urn:oasis:names:tc:SAML:2.0:attrname-format:uri';
 
         $attributeQuery = new AttributeQuery();
-        $nameId = new NameID();
-        $nameId->setValue('NameIDValue');
+        $nameId = new NameID('NameIDValue');
         $attributeQuery->setNameID($nameId);
         $attributeQuery->setAttributes(
             [

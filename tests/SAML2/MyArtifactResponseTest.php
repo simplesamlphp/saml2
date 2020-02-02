@@ -17,10 +17,8 @@ class ArtifactResponseTest extends \PHPUnit\Framework\TestCase
      */
     public function testMarshalling(): void
     {
-        $issuer1 = new Issuer();
-        $issuer2 = new Issuer();
-        $issuer1->setValue('urn:example:issuer');
-        $issuer2->setValue('urn:example:other');
+        $issuer1 = new Issuer('urn:example:issuer');
+        $issuer2 = new Issuer('urn:example:other');
 
         $artifactResponse = new ArtifactResponse();
         $artifactResponse->setIssuer($issuer1);

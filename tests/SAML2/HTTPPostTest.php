@@ -121,8 +121,7 @@ class HTTPPostTest extends \Mockery\Adapter\Phpunit\MockeryTestCase
      */
     public function testSendAuthnResponse(): void
     {
-        $issuer  = new Issuer();
-        $issuer->setValue('testIssuer');
+        $issuer  = new Issuer('testIssuer');
 
         $response = new Response();
         $response->setIssuer($issuer);

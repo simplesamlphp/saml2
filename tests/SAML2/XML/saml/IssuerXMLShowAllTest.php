@@ -18,12 +18,7 @@ class IssuerShowAllTest extends \PHPUnit\Framework\TestCase
      */
     public function testMarshalling(): void
     {
-        $issuer = new Issuer();
-        $issuer->setNameQualifier('TheNameQualifier');
-        $issuer->setSPNameQualifier('TheSPNameQualifier');
-        $issuer->setFormat('TheFormat');
-        $issuer->setSPProvidedID('TheSPProvidedID');
-        $issuer->setValue('TheIssuerValue');
+        $issuer = new Issuer('TheIssuerValue', 'TheFormat', 'TheSPProvidedID', 'TheNameQualifier', 'TheSPNameQualifier');
         $issuerElement = $issuer->toXML();
         $issuerElements = Utils::xpQuery($issuerElement, '/saml_assertion:Issuer');
         $this->assertCount(1, $issuerElements);
@@ -48,7 +43,7 @@ class IssuerShowAllTest extends \PHPUnit\Framework\TestCase
 XML
         );
 
-        $issuer = new Issuer($document->firstChild);
+        $issuer = Issuer::fromXML($document->firstChild);
         $this->assertEquals('TheNameQualifier', $issuer->getNameQualifier());
         $this->assertEquals('TheSPNameQualifier', $issuer->getSPNameQualifier());
         $this->assertEquals('TheFormat', $issuer->getFormat());
@@ -63,13 +58,7 @@ XML
      */
     public function testToStringShowAllTrueFormatNameID(): void
     {
-        $issuer = new Issuer();
-        $issuer->setNameQualifier('TheNameQualifier');
-        $issuer->setSPNameQualifier('TheSPNameQualifier');
-        $issuer->setFormat(Constants::NAMEID_ENTITY);
-        $issuer->setSPProvidedID('TheSPProvidedID');
-        $issuer->setvalue('TheIssuerValue');
-        $issuer->setSaml2IssuerShowAll(true);
+        $issuer = new Issuer('TheIssuerValue', Constants::NAMEID_ENTITY, 'TheSPProvidedID', 'TheNameQualifier', 'TheSPNameQualifier', true);
 
         $output = '<saml:Issuer xmlns:saml="'
                   . Constants::NS_SAML
@@ -87,14 +76,7 @@ XML
      */
     public function testToStringShowAllFalseFormatNameID(): void
     {
-        $issuer = new Issuer();
-        $issuer->setNameQualifier('TheNameQualifier');
-        $issuer->setSPNameQualifier('TheSPNameQualifier');
-        $issuer->setFormat(Constants::NAMEID_ENTITY);
-        $issuer->setSPProvidedID('TheSPProvidedID');
-        $issuer->setValue('TheIssuerValue');
-        $issuer->setSaml2IssuerShowAll(false);
-        
+        $issuer = new Issuer('TheIssuerValue', null, 'TheSPProvidedID', 'TheNameQualifier', 'TheSPNameQualifier', false);
         $output = '<saml:Issuer xmlns:saml="' . Constants::NS_SAML . '">TheIssuerValue</saml:Issuer>';
         
         $this->assertXmlStringEqualsXmlString($output, strval($issuer));
@@ -106,13 +88,7 @@ XML
      */
     public function testToStringShowAllTrueNOTNameIDFormat(): void
     {
-        $issuer = new Issuer();
-        $issuer->setNameQualifier('TheNameQualifier');
-        $issuer->setSPNameQualifier('TheSPNameQualifier');
-        $issuer->setFormat('TheFormat');
-        $issuer->setSPProvidedID('TheSPProvidedID');
-        $issuer->setValue('TheIssuerValue');
-        $issuer->setSaml2IssuerShowAll(true);
+        $issuer = new Issuer('TheIssuerValue', 'TheFormat', 'TheSPProvidedID', 'TheNameQualifier', 'TheSPNameQualifier', true);
                 
         $output = '<saml:Issuer xmlns:saml="' . Constants::NS_SAML . '" NameQualifier="TheNameQualifier" ' .
             'SPNameQualifier="TheSPNameQualifier" Format="TheFormat" SPProvidedID="TheSPProvidedID">' .
@@ -127,13 +103,7 @@ XML
      */
     public function testToStringShowAllDefaultNOTNameIDFormat(): void
     {
-        $issuer = new Issuer();
-        $issuer->setNameQualifier('TheNameQualifier');
-        $issuer->setSPNameQualifier('TheSPNameQualifier');
-        $issuer->setFormat('TheFormat');
-        $issuer->setSPProvidedID('TheSPProvidedID');
-        $issuer->setValue('TheIssuerValue');
-        //$issuer->setSaml2IssuerShowAll(false);
+        $issuer = new Issuer('TheIssuerValue', 'TheFormat', 'TheSPProvidedID', 'TheNameQualifier', 'TheSPNameQualifier');
         
         $output = '<saml:Issuer xmlns:saml="' . Constants::NS_SAML . '" NameQualifier="TheNameQualifier" ' .
             'SPNameQualifier="TheSPNameQualifier" Format="TheFormat" SPProvidedID="TheSPProvidedID">' .
@@ -148,15 +118,8 @@ XML
      */
     public function testToStringShowAllDefaultNameIDFormat(): void
     {
-        $issuer = new Issuer();
-        $issuer->setNameQualifier('TheNameQualifier');
-        $issuer->setSPNameQualifier('TheSPNameQualifier');
-        $issuer->setFormat(Constants::NAMEID_ENTITY);
-        $issuer->setSPProvidedID('TheSPProvidedID');
-        $issuer->setValue('TheIssuerValue');
-        $issuer->setSaml2IssuerShowAll(false);
-        
-        
+        $issuer = new Issuer('TheIssuerValue', Constants::NAMEID_ENTITY, 'TheSPProvidedID', 'TheNameQualifier', 'TheSPNameQualifier');
+
         $output = '<saml:Issuer xmlns:saml="' . Constants::NS_SAML . '">TheIssuerValue</saml:Issuer>';
         
         $this->assertXmlStringEqualsXmlString($output, strval($issuer));
