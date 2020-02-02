@@ -213,7 +213,7 @@ class AuthnRequest extends Request
         /** @var \DOMElement[] $subjectConfirmation */
         $subjectConfirmation = Utils::xpQuery($subject, './saml_assertion:SubjectConfirmation');
         foreach ($subjectConfirmation as $sc) {
-            $this->subjectConfirmation[] = new SubjectConfirmation($sc);
+            $this->subjectConfirmation[] = SubjectConfirmation::fromXML($sc);
         }
     }
 
@@ -744,9 +744,9 @@ class AuthnRequest extends Request
      *
      * @return \DOMElement This authentication request.
      */
-    public function toUnsignedXML(): DOMElement
+    public function toXML(): DOMElement
     {
-        $root = parent::toUnsignedXML();
+        $root = parent::toXML();
 
         if ($this->forceAuthn) {
             $root->setAttribute('ForceAuthn', 'true');

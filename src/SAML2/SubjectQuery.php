@@ -109,11 +109,11 @@ abstract class SubjectQuery extends Request
      *
      * @throws \InvalidArgumentException if assertions are false
      */
-    public function toUnsignedXML(): DOMElement
+    public function toXML(): DOMElement
     {
         Assert::notEmpty($this->nameId, 'Cannot convert SubjectQuery to XML without a NameID set.');
 
-        $root = parent::toUnsignedXML();
+        $root = parent::toXML();
 
         $subject = $root->ownerDocument->createElementNS(Constants::NS_SAML, 'saml:Subject');
         $root->appendChild($subject);

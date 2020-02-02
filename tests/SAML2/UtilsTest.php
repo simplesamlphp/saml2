@@ -4,6 +4,7 @@ declare(strict_types=1);
 
 namespace SAML2;
 
+use Exception;
 use SAML2\AttributeQuery;
 use SAML2\Constants;
 use SAML2\DOMDocumentFactory;
@@ -31,7 +32,7 @@ class UtilsTest extends \PHPUnit\Framework\TestCase
         $aq = new AttributeQuery();
         $aq->setNameID($nameId_before);
 
-        $xml = $aq->toUnsignedXML();
+        $xml = $aq->toXML();
 
         $nameId_after = Utils::xpQuery($xml, './saml_assertion:Subject/saml_assertion:NameID');
         $this->assertTrue(count($nameId_after) === 1);
@@ -291,7 +292,8 @@ class UtilsTest extends \PHPUnit\Framework\TestCase
         $this->assertEquals($result, '404');
 
         // Exception on invalid value
-        $this->expectException(\Exception::class, "Invalid value of boolean attribute 'anattribute': 'yes'");
+        $this->expectException(Exception::class);
+        $this->expectExceptionMessage("Invalid value of boolean attribute 'anattribute': 'yes'");
 
         $document = DOMDocumentFactory::fromString(
             '<somenode anattribute="yes"></somenode>'

@@ -4,6 +4,7 @@ declare(strict_types=1);
 
 namespace SAML2\XML\md;
 
+use Exception;
 use PHPUnit\Framework\TestCase;
 use SAML2\Constants;
 use SAML2\DOMDocumentFactory;
@@ -136,6 +137,7 @@ XML
     public function testUnmarshalling(): void
     {
         $affiliateDescriptor = AffiliationDescriptor::fromXML($this->document->documentElement);
+
         $this->assertEquals('TheOwner', $affiliateDescriptor->getAffiliationOwnerID());
         $this->assertEquals('TheID', $affiliateDescriptor->getID());
         $this->assertEquals(1234567890, $affiliateDescriptor->getValidUntil());

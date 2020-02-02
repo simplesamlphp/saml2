@@ -4,6 +4,7 @@ declare(strict_types=1);
 
 namespace SAML2\XML\alg;
 
+use Exception;
 use SAML2\DOMDocumentFactory;
 use SAML2\XML\alg\SigningMethod;
 use SAML2\Utils;
@@ -65,7 +66,8 @@ class SigningMethodTest extends \PHPUnit\Framework\TestCase
         $document = DOMDocumentFactory::fromString(
             '<alg:SigningMethod xmlns:alg="' . SigningMethod::NS . '" MinKeySize="1024" MaxKeySize="4096" />'
         );
-        $this->expectException(\Exception::class, 'Missing required attribute "Algorithm"');
+        $this->expectException(Exception::class);
+        $this->expectExceptionMessage('Missing required attribute "Algorithm"');
         SigningMethod::fromXML($document->firstChild);
     }
 }

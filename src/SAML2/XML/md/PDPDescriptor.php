@@ -88,7 +88,7 @@ final class PDPDescriptor extends AbstractRoleDescriptor
     /**
      * Initialize an IDPSSODescriptor from a given XML document.
      *
-     * @param \DOMElement|null $xml The XML element we should load.
+     * @param \DOMElement $xml The XML element we should load.
      * @return \SAML2\XML\md\PDPDescriptor
      * @throws \Exception
      */

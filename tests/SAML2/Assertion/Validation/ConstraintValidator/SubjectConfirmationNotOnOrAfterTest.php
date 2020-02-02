@@ -7,7 +7,10 @@ namespace SAML2\Assertion\Validation\ConstraintValidator;
 use SAML2\Assertion\Validation\ConstraintValidator\SubjectConfirmationNotOnOrAfter;
 use SAML2\Assertion\Validation\ConstraintValidator\SubjectConfirmationNotBefore;
 use SAML2\Assertion\Validation\Result;
+use SAML2\Constants;
 use SAML2\ControlledTimeTest;
+use SAML2\XML\saml\SubjectConfirmation;
+use SAML2\XML\saml\SubjectConfirmationData;
 
 /**
  * Because we're mocking a static call, we have to run it in separate processes so as to not contaminate the other
@@ -15,29 +18,6 @@ use SAML2\ControlledTimeTest;
  */
 class SubjectConfirmationNotOnOrAfterTest extends ControlledTimeTest
 {
-    /**
-     * @var \Mockery\MockInterface
-     */
-    private $subjectConfirmation;
-
-    /**
-     * @var \Mockery\MockInterface
-     */
-    private $subjectConfirmationData;
-
-
-    /**
-     * @return void
-     */
-    public function setUp(): void
-    {
-        parent::setUp();
-        $this->subjectConfirmation = new \SAML2\XML\saml\SubjectConfirmation();
-        $this->subjectConfirmationData = new \SAML2\XML\saml\SubjectConfirmationData();
-        $this->subjectConfirmation->setSubjectConfirmationData($this->subjectConfirmationData);
-    }
-
-
     /**
      * @group assertion-validation
      * @test
@@ -48,12 +28,13 @@ class SubjectConfirmationNotOnOrAfterTest extends ControlledTimeTest
      */
     public function timestamp_in_the_past_before_graceperiod_is_not_valid(): void
     {
-        $this->subjectConfirmationData->setNotOnOrAfter($this->currentTime - 60);
+        $subjectConfirmationData = new SubjectConfirmationData(null, $this->currentTime - 60);
+        $subjectConfirmation = new SubjectConfirmation(Constants::CM_HOK, null, $subjectConfirmationData);
 
         $validator = new SubjectConfirmationNotOnOrAfter();
         $result    = new Result();
 
-        $validator->validate($this->subjectConfirmation, $result);
+        $validator->validate($subjectConfirmation, $result);
 
         $this->assertFalse($result->isValid());
         $this->assertCount(1, $result->getErrors());
@@ -70,12 +51,13 @@ class SubjectConfirmationNotOnOrAfterTest extends ControlledTimeTest
      */
     public function time_within_graceperiod_is_valid(): void
     {
-        $this->subjectConfirmationData->setNotOnOrAfter($this->currentTime - 59);
+        $subjectConfirmationData = new SubjectConfirmationData(null, $this->currentTime - 59);
+        $subjectConfirmation = new SubjectConfirmation(Constants::CM_HOK, null, $subjectConfirmationData);
 
         $validator = new SubjectConfirmationNotOnOrAfter();
         $result    = new Result();
 
-        $validator->validate($this->subjectConfirmation, $result);
+        $validator->validate($subjectConfirmation, $result);
 
         $this->assertTrue($result->isValid());
     }
@@ -91,12 +73,13 @@ class SubjectConfirmationNotOnOrAfterTest extends ControlledTimeTest
      */
     public function current_time_is_valid(): void
     {
-        $this->subjectConfirmationData->setNotOnOrAfter($this->currentTime);
+        $subjectConfirmationData = new SubjectConfirmationData(null, $this->currentTime);
+        $subjectConfirmation = new SubjectConfirmation(Constants::CM_HOK, null, $subjectConfirmationData);
 
         $validator = new SubjectConfirmationNotBefore();
         $result    = new Result();
 
-        $validator->validate($this->subjectConfirmation, $result);
+        $validator->validate($subjectConfirmation, $result);
 
         $this->assertTrue($result->isValid());
     }

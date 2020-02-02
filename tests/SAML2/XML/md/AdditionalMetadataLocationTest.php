@@ -4,6 +4,8 @@ declare(strict_types=1);
 
 namespace SAML2\XML\md;
 
+use Exception;
+use InvalidArgumentException;
 use PHPUnit\Framework\TestCase;
 use SAML2\Constants;
 use SAML2\DOMDocumentFactory;
@@ -32,7 +34,7 @@ final class AdditionalMetadataLocationTest extends TestCase
      */
     public function testMarshallingWithEmptyNamespace(): void
     {
-        $this->expectException(\InvalidArgumentException::class);
+        $this->expectException(InvalidArgumentException::class);
         $this->expectExceptionMessage('The namespace in AdditionalMetadataLocation must be a URI.');
         new AdditionalMetadataLocation('', 'TheLocation');
     }
@@ -43,7 +45,7 @@ final class AdditionalMetadataLocationTest extends TestCase
      */
     public function testMarshallingWithEmptyLocation(): void
     {
-        $this->expectException(\InvalidArgumentException::class);
+        $this->expectException(InvalidArgumentException::class);
         $this->expectExceptionMessage('AdditionalMetadataLocation must contain a URI.');
         new AdditionalMetadataLocation('NamespaceAttribute', '');
     }
@@ -73,7 +75,7 @@ final class AdditionalMetadataLocationTest extends TestCase
             '<md:AdditionalMetadataLocation xmlns:md="' . Constants::NS_MD . '"' .
             '>LocationText</md:AdditionalMetadataLocation>'
         );
-        $this->expectException(\Exception::class);
+        $this->expectException(Exception::class);
         $this->expectExceptionMessage('Missing namespace attribute on AdditionalMetadataLocation element.');
         AdditionalMetadataLocation::fromXML($document->documentElement);
     }
@@ -88,7 +90,7 @@ final class AdditionalMetadataLocationTest extends TestCase
             '<md:AdditionalMetadataLocation xmlns:md="' . Constants::NS_MD . '"' .
             ' namespace="TheNamespaceAttribute"></md:AdditionalMetadataLocation>'
         );
-        $this->expectException(\InvalidArgumentException::class);
+        $this->expectException(InvalidArgumentException::class);
         $this->expectExceptionMessage('AdditionalMetadataLocation must contain a URI.');
         AdditionalMetadataLocation::fromXML($document->documentElement);
     }

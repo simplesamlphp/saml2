@@ -78,9 +78,9 @@ class Response extends StatusResponse
      *
      * @return \DOMElement This response.
      */
-    public function toUnsignedXML(): DOMElement
+    public function toXML(): DOMElement
     {
-        $root = parent::toUnsignedXML();
+        $root = parent::toXML();
 
         foreach ($this->assertions as $assertion) {
             $assertion->toXML($root);

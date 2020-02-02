@@ -14,7 +14,7 @@ use Webmozart\Assert\Assert;
  *
  * @package SimpleSAMLphp
  */
-class SubjectConfirmation
+final class SubjectConfirmation extends AbstractSamlElement
 {
     /**
      * The method we can use to verify this Subject.
@@ -41,35 +41,15 @@ class SubjectConfirmation
     /**
      * Initialize (and parse? a SubjectConfirmation element.
      *
-     * @param \DOMElement|null $xml The XML element we should load.
-     * @throws \Exception
+     * @param string $Method
+     * @param \SAML2\XML\saml\NameID|null $nid
+     * @param \SAML2\XML\saml\SubjectConfirmationData|null $scd
      */
-    public function __construct(DOMElement $xml = null)
+    public function __construct(string $method, NameID $nid = null, SubjectConfirmationData $scd = null)
     {
-        if ($xml === null) {
-            return;
-        }
-
-        if (!$xml->hasAttribute('Method')) {
-            throw new \Exception('SubjectConfirmation element without Method attribute.');
-        }
-        $this->Method = $xml->getAttribute('Method');
-
-        /** @var \DOMElement[] $nid */
-        $nid = Utils::xpQuery($xml, './saml_assertion:NameID');
-        if (count($nid) > 1) {
-            throw new \Exception('More than one NameID in a SubjectConfirmation element.');
-        } elseif (!empty($nid)) {
-            $this->NameID = new NameID($nid[0]);
-        }
-
-        /** @var \DOMElement[] $scd */
-        $scd = Utils::xpQuery($xml, './saml_assertion:SubjectConfirmationData');
-        if (count($scd) > 1) {
-            throw new \Exception('More than one SubjectConfirmationData child in a SubjectConfirmation element.');
-        } elseif (!empty($scd)) {
-            $this->SubjectConfirmationData = new SubjectConfirmationData($scd[0]);
-        }
+        $this->setMethod($method);
+        $this->setNameID($nid);
+        $this->setSubjectConfirmationData($scd);
     }
 
 
@@ -94,7 +74,7 @@ class SubjectConfirmation
      * @param string $method
      * @return void
      */
-    public function setMethod(string $method): void
+    private function setMethod(string $method): void
     {
         $this->Method = $method;
     }
@@ -117,7 +97,7 @@ class SubjectConfirmation
      * @param \SAML2\XML\saml\NameID $nameId
      * @return void
      */
-    public function setNameID(NameID $nameId = null): void
+    private function setNameID(?NameID $nameId): void
     {
         $this->NameID = $nameId;
     }
@@ -140,26 +120,57 @@ class SubjectConfirmation
      * @param \SAML2\XML\saml\SubjectConfirmationData|null $subjectConfirmationData
      * @return void
      */
-    public function setSubjectConfirmationData(SubjectConfirmationData $subjectConfirmationData = null): void
+    private function setSubjectConfirmationData(?SubjectConfirmationData $subjectConfirmationData): void
     {
         $this->SubjectConfirmationData = $subjectConfirmationData;
     }
 
 
     /**
+     * Convert XML into a SubjectConfirmation
+     *
+     * @param \DOMElement $xml The XML element we should load
+     * @return self
+     */
+    public static function fromXML(DOMElement $xml): object
+    {
+        Assert::same($xml->localName, 'SubjectConfirmation');
+        Assert::same($xml->namespaceURI, SubjectConfirmation::NS);
+
+        if (!$xml->hasAttribute('Method')) {
+            throw new \Exception('SubjectConfirmation element without Method attribute.');
+        }
+        $Method = $xml->getAttribute('Method');
+
+        /** @var \DOMElement[] $nid */
+        $nid = Utils::xpQuery($xml, './saml_assertion:NameID');
+        Assert::maxCount($nid, 1, 'More than one NameID in a SubjectConfirmation element.');
+
+        /** @var \DOMElement[] $scd */
+        $scd = Utils::xpQuery($xml, './saml_assertion:SubjectConfirmationData');
+        Assert::maxCount($scd, 1, 'More than one SubjectConfirmationData child in a SubjectConfirmation element.');
+
+        return new self(
+            $Method,
+            empty($nid) ? null : new NameID($nid[0]),
+            empty($scd) ? null : SubjectConfirmationData::fromXML($scd[0])
+        );
+    }
+
+
+    /**
      * Convert this element to XML.
      *
-     * @param  \DOMElement $parent The parent element we should append this element to.
+     * @param  \DOMElement|null $parent The parent element we should append this element to.
      * @return \DOMElement This element, as XML.
      *
      * @throws \InvalidArgumentException if assertions are false
      */
-    public function toXML(DOMElement $parent): DOMElement
+    public function toXML(?DOMElement $parent = null): DOMElement
     {
         Assert::notEmpty($this->Method, "Cannot convert SubjectConfirmation to XML without a Method set.");
 
-        $e = $parent->ownerDocument->createElementNS(Constants::NS_SAML, 'saml:SubjectConfirmation');
-        $parent->appendChild($e);
+        $e = $this->instantiateParentElement($parent);
 
         /** @psalm-suppress PossiblyNullArgument */
         $e->setAttribute('Method', $this->Method);

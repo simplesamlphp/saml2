@@ -334,7 +334,7 @@ class Assertion extends SignedElement
         }
 
         foreach ($subjectConfirmation as $sc) {
-            $this->SubjectConfirmation[] = new SubjectConfirmation($sc);
+            $this->SubjectConfirmation[] = SubjectConfirmation::fromXML($sc);
         }
     }
 

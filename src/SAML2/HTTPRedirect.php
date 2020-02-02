@@ -37,7 +37,7 @@ class HTTPRedirect extends Binding
 
         $key = $message->getSignatureKey();
 
-        $msgStr = $message->toUnsignedXML();
+        $msgStr = $message->toXML();
 
         Utils::getContainer()->debugMessage($msgStr, 'out');
         $msgStr = $msgStr->ownerDocument->saveXML($msgStr);

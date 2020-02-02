@@ -142,9 +142,9 @@ class AttributeQuery extends SubjectQuery
      *
      * @return \DOMElement This attribute query.
      */
-    public function toUnsignedXML(): DOMElement
+    public function toXML(): DOMElement
     {
-        $root = parent::toUnsignedXML();
+        $root = parent::toXML();
 
         foreach ($this->attributes as $name => $values) {
             $attribute = $root->ownerDocument->createElementNS(Constants::NS_SAML, 'saml:Attribute');

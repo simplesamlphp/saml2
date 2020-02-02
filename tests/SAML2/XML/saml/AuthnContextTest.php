@@ -62,8 +62,7 @@ XML
 XML
         );
 
-        /** @var \DOMElement $document->firstChild */
-        $authnContextDecl = AuthnContextDecl::fromXML($document->firstChild);
+        $authnContextDecl = AuthnContextDecl::fromXML($document->documentElement);
         $authenticatingAuthority = new AuthenticatingAuthority('https://sp.example.com/SAML2');
 
         $authnContext = new AuthnContext(
@@ -126,8 +125,7 @@ XML
 XML
         );
 
-        /** @var \DOMElement $document->firstChild */
-        $authnContext = AuthnContext::fromXML($document->firstChild);
+        $authnContext = AuthnContext::fromXML($document->documentElement);
 
         /** @psalm-var \SAML2\XML\saml\AuthnContextClassRef $classRef */
         $classRef = $authnContext->getAuthnContextClassRef();
@@ -165,8 +163,8 @@ XML
 XML
         );
 
-        /** @var \DOMElement $document->firstChild */
-        $authnContext = AuthnContext::fromXML($document->firstChild);
+        $authnContext = AuthnContext::fromXML($document->documentElement);
+        $this->assertFalse($authnContext->isEmptyElement());
 
         $contextDeclObj = $authnContext->getAuthnContextDecl();
         $this->assertInstanceOf(AuthnContextDecl::class, $contextDeclObj);

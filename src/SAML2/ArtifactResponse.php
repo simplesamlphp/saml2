@@ -74,9 +74,9 @@ class ArtifactResponse extends StatusResponse
      *
      * @return \DOMElement This response.
      */
-    public function toUnsignedXML(): DOMElement
+    public function toXML(): DOMElement
     {
-        $root = parent::toUnsignedXML();
+        $root = parent::toXML();
         if (isset($this->any)) {
             $node = $root->ownerDocument->importNode($this->any, true);
             $root->appendChild($node);

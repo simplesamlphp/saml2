@@ -45,10 +45,13 @@ XML
      */
     public function testUnmarshalling(): void
     {
-        $document = DOMDocumentFactory::fromString(
-            '<samlp:StatusDetail xmlns:samlp="' . Constants::NS_SAMLP . '">'
-                . '<Cause>org.sourceid.websso.profiles.idp.FailedAuthnSsoException</Cause>'
-                . '</samlp:StatusDetail>'
+        $samlNamespace = Constants::NS_SAMLP;
+
+        $document = DOMDocumentFactory::fromString(<<<XML
+<samlp:StatusDetail xmlns:samlp="{$samlNamespace}">
+  <Cause>org.sourceid.websso.profiles.idp.FailedAuthnSsoException</Cause>
+</samlp:StatusDetail>
+XML
         );
 
         /** @psalm-var \DOMElement $document->firstChild */

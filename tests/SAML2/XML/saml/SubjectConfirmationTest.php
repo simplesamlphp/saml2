@@ -4,6 +4,7 @@ declare(strict_types=1);
 
 namespace SAML2\XML\saml;
 
+use Exception;
 use SAML2\Constants;
 use SAML2\DOMDocumentFactory;
 use SAML2\XML\saml\SubjectConfirmationData;
@@ -24,10 +25,11 @@ class SubjectConfirmationTest extends \PHPUnit\Framework\TestCase
         $nameId = new NameID();
         $nameId->setValue('SomeNameIDValue');
 
-        $subjectConfirmation = new SubjectConfirmation();
-        $subjectConfirmation->setMethod('SomeMethod');
-        $subjectConfirmation->setNameID($nameId);
-        $subjectConfirmation->setSubjectConfirmationData(new SubjectConfirmationData());
+        $subjectConfirmation = new SubjectConfirmation(
+            'SomeMethod',
+            $nameId,
+            new SubjectConfirmationData()
+        );
 
         $document = DOMDocumentFactory::fromString('<root />');
         $subjectConfirmationElement = $subjectConfirmation->toXML($document->firstChild);
@@ -55,7 +57,7 @@ class SubjectConfirmationTest extends \PHPUnit\Framework\TestCase
 XML
         );
 
-        $subjectConfirmation = new SubjectConfirmation($document->firstChild);
+        $subjectConfirmation = SubjectConfirmation::fromXML($document->firstChild);
         $this->assertEquals('SomeMethod', $subjectConfirmation->getMethod());
         $this->assertTrue($subjectConfirmation->getNameID() instanceof NameID);
         $this->assertEquals('SomeNameIDValue', $subjectConfirmation->getNameID()->getValue());
@@ -77,8 +79,9 @@ XML
 XML
         );
 
-        $this->expectException(\Exception::class, 'SubjectConfirmation element without Method attribute');
-        $subjectConfirmation = new SubjectConfirmation($document->firstChild);
+        $this->expectException(Exception::class);
+        $this->expectExceptionMessage('SubjectConfirmation element without Method attribute');
+        $subjectConfirmation = SubjectConfirmation::fromXML($document->firstChild);
     }
 
 
@@ -97,8 +100,9 @@ XML
 XML
         );
 
-        $this->expectException(\Exception::class, 'More than one NameID in a SubjectConfirmation element');
-        $subjectConfirmation = new SubjectConfirmation($document->firstChild);
+        $this->expectException(Exception::class);
+        $this->expectExceptionMessage('More than one NameID in a SubjectConfirmation element');
+        $subjectConfirmation = SubjectConfirmation::fromXML($document->firstChild);
     }
 
 
@@ -117,10 +121,10 @@ XML
 XML
         );
 
-        $this->expectException(
-            \Exception::class,
+        $this->expectException(Exception::class);
+        $this->expectExceptionMessage(
             'More than one SubjectConfirmationData child in a SubjectConfirmation element'
         );
-        $subjectConfirmation = new SubjectConfirmation($document->firstChild);
+        $subjectConfirmation = SubjectConfirmation::fromXML($document->firstChild);
     }
 }

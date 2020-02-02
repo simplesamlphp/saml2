@@ -124,9 +124,6 @@ class Issuer extends NameIDType
         $element = $doc->createElementNS(Constants::NS_SAML, 'saml:Issuer');
         $parent->appendChild($element);
 
-        if (empty($this->value)) {
-            throw new \Exception("Cannot convert Issuer to XML with no value.");
-        }
         $value = $element->ownerDocument->createTextNode($this->value);
         $element->appendChild($value);
 

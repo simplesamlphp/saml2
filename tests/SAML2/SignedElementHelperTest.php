@@ -4,6 +4,7 @@ declare(strict_types=1);
 
 namespace SAML2;
 
+use Exception;
 use SAML2\SignedElementHelperMock;
 use SAML2\CertificatesMock;
 use RobRichards\XMLSecLibs\XMLSecurityDSig;
@@ -71,7 +72,8 @@ class SignedElementHelperTest extends \Mockery\Adapter\Phpunit\MockeryTestCase
         $digestValueElements[0]->firstChild->data = 'invalid';
         $tmp = new SignedElementHelperMock($signedMockElementCopy);
 
-        $this->expectException(\Exception::class, 'Unable to validate Signature');
+        $this->expectException(Exception::class);
+        $this->expectExceptionMessage('Unable to validate Signature');
         $tmp->validate(CertificatesMock::getPublicKey());
     }
 

@@ -5,7 +5,7 @@ declare(strict_types=1);
 namespace SAML2;
 
 use DOMDocument;
-use Exception;
+use InvalidArgumentException;
 use SAML2\Message;
 use SAML2\ArtifactResolve;
 
@@ -16,7 +16,8 @@ class SOAPTest extends \Mockery\Adapter\Phpunit\MockeryTestCase
      */
     public function testRequestParsingEmptyMessage(): void
     {
-        $this->expectException(Exception::class, 'Invalid message received');
+        $this->expectException(InvalidArgumentException::class);
+        $this->expectExceptionMessage('Invalid Argument type: "non-empty string" expected, "string" given');
 
         $stub = $this->getStubWithInput('');
         $stub->receive();

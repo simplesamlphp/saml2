@@ -123,7 +123,6 @@ final class AffiliationDescriptor extends AbstractMetadataDocument
      */
     public function getAffiliationOwnerID(): string
     {
-
         return $this->affiliationOwnerID;
     }
 

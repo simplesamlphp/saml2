@@ -274,13 +274,13 @@ class LogoutRequest extends Request
      *
      * @return \DOMElement This logout request.
      */
-    public function toUnsignedXML(): DOMElement
+    public function toXML(): DOMElement
     {
         if ($this->encryptedNameId === null && $this->nameId === null) {
             throw new \Exception('Cannot convert LogoutRequest to XML without a NameID set.');
         }
 
-        $root = parent::toUnsignedXML();
+        $root = parent::toXML();
 
         if ($this->notOnOrAfter !== null) {
             $root->setAttribute('NotOnOrAfter', gmdate('Y-m-d\TH:i:s\Z', $this->notOnOrAfter));

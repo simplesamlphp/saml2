@@ -5,6 +5,7 @@ declare(strict_types=1);
 namespace SAML2;
 
 use DOMDocument;
+use Exception;
 use SAML2\AuthnRequest;
 use SAML2\Constants;
 use SAML2\DOMDocumentFactory;
@@ -34,7 +35,7 @@ class AuthnRequestTest extends \PHPUnit\Framework\TestCase
         $authnRequest = new AuthnRequest();
         $authnRequest->setRequestedAuthnContext($rac);
 
-        $authnRequestElement = $authnRequest->toUnsignedXML();
+        $authnRequestElement = $authnRequest->toXML();
 
         $requestedAuthnContextElements = Utils::xpQuery(
             $authnRequestElement,
@@ -118,7 +119,7 @@ AUTHNREQUEST;
         $document     = DOMDocumentFactory::fromString($xml);
         $authnRequest = new AuthnRequest($document->documentElement);
 
-        $this->assertXmlStringEqualsXmlString($document->C14N(), $authnRequest->toUnsignedXML()->C14N());
+        $this->assertXmlStringEqualsXmlString($document->C14N(), $authnRequest->toXML()->C14N());
     }
 
 
@@ -156,7 +157,7 @@ AUTHNREQUEST;
         $nameId->setFormat(Constants::NAMEID_UNSPECIFIED);
         $request->setNameId($nameId);
 
-        $requestAsXML = $request->toUnsignedXML()->ownerDocument->saveXML();
+        $requestAsXML = $request->toXML()->ownerDocument->saveXML();
         $expected = '<saml:Subject><saml:NameID Format="urn:oasis:names:tc:SAML:1.1:nameid-format:unspecified">user@example.org</saml:NameID></saml:Subject>';
         $this->assertStringContainsString($expected, $requestAsXML);
     }
@@ -262,7 +263,7 @@ AUTHNREQUEST;
 AUTHNREQUEST;
 
         $expectedStructure = DOMDocumentFactory::fromString($expectedXml)->documentElement;
-        $requestStructure = $request->toUnsignedXML();
+        $requestStructure = $request->toXML();
 
         $this->assertEqualXMLStructure($expectedStructure, $requestStructure);
     }
@@ -306,7 +307,7 @@ AUTHNREQUEST;
 AUTHNREQUEST;
 
         $expectedStructure = DOMDocumentFactory::fromString($expectedStructureDocument)->documentElement;
-        $requestStructure = $request->toUnsignedXML();
+        $requestStructure = $request->toXML();
 
         $this->assertEqualXMLStructure($expectedStructure, $requestStructure);
     }
@@ -368,7 +369,8 @@ AUTHNREQUEST;
 </samlp:AuthnRequest>
 AUTHNREQUEST;
 
-        $this->expectException(\Exception::class, 'Could not get ProviderID');
+        $this->expectException(Exception::class);
+        $this->expectExceptionMessage('Could not get ProviderID');
         $authnRequest = new AuthnRequest(DOMDocumentFactory::fromString($xmlRequest)->firstChild);
     }
 
@@ -408,7 +410,7 @@ AUTHNREQUEST;
 AUTHNREQUEST;
 
         $expectedStructure = DOMDocumentFactory::fromString($expectedStructureDocument)->documentElement;
-        $requestStructure = $request->toUnsignedXML();
+        $requestStructure = $request->toXML();
 
         $this->assertEqualXMLStructure($expectedStructure, $requestStructure);
     }
@@ -481,7 +483,7 @@ AUTHNREQUEST;
 AUTHNREQUEST;
 
         $expectedStructure = DOMDocumentFactory::fromString($expectedStructureDocument)->documentElement;
-        $requestStructure = $request->toUnsignedXML();
+        $requestStructure = $request->toXML();
 
         $this->assertEqualXMLStructure($expectedStructure, $requestStructure);
         $this->assertXmlStringEqualsXmlString($expectedStructure->ownerDocument->saveXML(), $requestStructure->ownerDocument->saveXML());
@@ -592,7 +594,7 @@ AUTHNREQUEST;
 AUTHNREQUEST;
 
         $expectedStructure = DOMDocumentFactory::fromString($expectedStructureDocument)->documentElement;
-        $requestStructure = $request->toUnsignedXML();
+        $requestStructure = $request->toXML();
 
         $this->assertEqualXMLStructure($expectedStructure, $requestStructure);
 
@@ -632,7 +634,7 @@ AUTHNREQUEST;
 AUTHNREQUEST;
 
         $expectedStructure = DOMDocumentFactory::fromString($expectedStructureDocument)->documentElement;
-        $requestStructure = $request->toUnsignedXML();
+        $requestStructure = $request->toXML();
 
         $this->assertEqualXMLStructure($expectedStructure, $requestStructure);
 
@@ -716,7 +718,7 @@ AUTHNREQUEST;
 AUTHNREQUEST;
 
         $expectedStructure = DOMDocumentFactory::fromString($expectedStructureDocument)->documentElement;
-        $requestStructure = $request->toUnsignedXML();
+        $requestStructure = $request->toXML();
 
         $this->assertEqualXMLStructure($expectedStructure, $requestStructure);
 
@@ -817,7 +819,7 @@ AUTHNREQUEST;
 AUTHNREQUEST;
 
         $expectedStructure = DOMDocumentFactory::fromString($expectedStructureDocument)->documentElement;
-        $requestStructure = $request->toUnsignedXML();
+        $requestStructure = $request->toXML();
 
         $this->assertEqualXMLStructure($expectedStructure, $requestStructure);
 
@@ -856,7 +858,7 @@ AUTHNREQUEST;
 AUTHNREQUEST;
 
         $expectedStructure = DOMDocumentFactory::fromString($expectedStructureDocument)->documentElement;
-        $requestStructure = $request->toUnsignedXML();
+        $requestStructure = $request->toXML();
 
         $this->assertEqualXMLStructure($expectedStructure, $requestStructure);
 
@@ -925,7 +927,7 @@ AUTHNREQUEST;
 AUTHNREQUEST;
 
         $expectedStructure = DOMDocumentFactory::fromString($expectedStructureDocument)->documentElement;
-        $requestStructure = $request->toUnsignedXML();
+        $requestStructure = $request->toXML();
 
         $this->assertEqualXMLStructure($expectedStructure, $requestStructure);
 
@@ -957,7 +959,8 @@ AUTHNREQUEST;
 </samlp:AuthnRequest>
 AUTHNREQUEST;
 
-        $this->expectException(\Exception::class, 'More than one <saml:Subject> in <saml:AuthnRequest>');
+        $this->expectException(Exception::class);
+        $this->expectExceptionMessage('More than one <saml:Subject> in <saml:AuthnRequest>');
         $authnRequest = new AuthnRequest(DOMDocumentFactory::fromString($xml)->documentElement);
     }
 
@@ -984,7 +987,8 @@ AUTHNREQUEST;
 </samlp:AuthnRequest>
 AUTHNREQUEST;
 
-        $this->expectException(\Exception::class, 'More than one <saml:NameID> or <saml:EncryptedID> in <saml:Subject>');
+        $this->expectException(Exception::class);
+        $this->expectExceptionMessage('More than one <saml:NameID> or <saml:EncryptedID> in <saml:Subject>');
         $authnRequest = new AuthnRequest(DOMDocumentFactory::fromString($xml)->documentElement);
     }
 
@@ -1009,7 +1013,8 @@ AUTHNREQUEST;
 </samlp:AuthnRequest>
 AUTHNREQUEST;
 
-        $this->expectException(\Exception::class, 'Missing <saml:NameID> or <saml:EncryptedID> in <saml:Subject>');
+        $this->expectException(Exception::class);
+        $this->expectExceptionMessage('Missing <saml:NameID> or <saml:EncryptedID> in <saml:Subject>');
         $authnRequest = new AuthnRequest(DOMDocumentFactory::fromString($xml)->documentElement);
     }
 
@@ -1047,7 +1052,7 @@ AUTHNREQUEST;
 AUTHNREQUEST;
 
         $expectedStructure = DOMDocumentFactory::fromString($expectedStructureDocument)->documentElement;
-        $requestStructure = $request->toUnsignedXML();
+        $requestStructure = $request->toXML();
 
         $this->assertEqualXMLStructure($expectedStructure, $requestStructure);
     }

@@ -134,6 +134,7 @@ final class EntitiesDescriptor extends AbstractMetadataDocument
     }
 
 
+
     /**
      * Set the EntityDescriptor children objects
      *
@@ -174,8 +175,6 @@ final class EntitiesDescriptor extends AbstractMetadataDocument
         Assert::notEmpty($name, 'Cannot assign an empty name to an md:EntitiesDescriptor.');
         $this->Name = $name;
     }
-
-
 
 
     /**

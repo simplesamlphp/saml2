@@ -6,6 +6,7 @@ namespace SAML2\XML\md;
 
 use DOMElement;
 use Exception;
+use InvalidArgumentException;
 use SAML2\Constants;
 use SAML2\Utils;
 use SAML2\XML\saml\Attribute;
@@ -59,7 +60,7 @@ final class AttributeAuthorityDescriptor extends AbstractRoleDescriptor
      *
      * Array with \SAML2\XML\saml\Attribute objects.
      *
-     * @var \SAML2\XML\saml\Attribute[]
+     * @var Attribute[]
      */
     protected $Attributes = [];
 
@@ -132,6 +133,7 @@ final class AttributeAuthorityDescriptor extends AbstractRoleDescriptor
      * Set the value of the AttributeService-property
      *
      * @param \SAML2\XML\md\AttributeService[] $attributeServices
+     * @return void
      */
     protected function setAttributeServices(array $attributeServices): void
     {
@@ -164,6 +166,7 @@ final class AttributeAuthorityDescriptor extends AbstractRoleDescriptor
      * Set the value of the NameIDFormat-property
      *
      * @param string[]|null $nameIDFormats
+     * @return void
      */
     protected function setNameIDFormats(?array $nameIDFormats): void
     {
@@ -190,6 +193,7 @@ final class AttributeAuthorityDescriptor extends AbstractRoleDescriptor
      * Set the value of the AssertionIDRequestService-property
      *
      * @param \SAML2\XML\md\AssertionIDRequestService[] $assertionIDRequestServices
+     * @return void
      */
     protected function setAssertionIDRequestServices(?array $assertionIDRequestServices): void
     {
@@ -217,6 +221,7 @@ final class AttributeAuthorityDescriptor extends AbstractRoleDescriptor
      * Set the value of the AttributeProfile-property
      *
      * @param string[]|null $attributeProfiles
+     * @return void
      */
     protected function setAttributeProfiles(?array $attributeProfiles): void
     {
@@ -231,7 +236,7 @@ final class AttributeAuthorityDescriptor extends AbstractRoleDescriptor
     /**
      * Collect the value of the Attribute-property
      *
-     * @return \SAML2\XML\saml\Attribute[]
+     * @return Attribute[]
      */
     public function getAttributes(): array
     {

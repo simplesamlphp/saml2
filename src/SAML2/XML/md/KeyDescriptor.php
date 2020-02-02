@@ -39,7 +39,7 @@ final class KeyDescriptor extends AbstractMdElement
      *
      * @var \SAML2\XML\md\EncryptionMethod[]
      */
-    protected $EncryptionMethods = [];
+     protected $EncryptionMethods = [];
 
 
     /**
