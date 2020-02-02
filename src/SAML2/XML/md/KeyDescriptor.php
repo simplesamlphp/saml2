@@ -37,9 +37,9 @@ final class KeyDescriptor extends AbstractMdElement
     /**
      * Supported EncryptionMethods.
      *
-     * @var \SAML2\XML\md\EncryptionMethod[]
+     * @var \SAML2\XML\md\EncryptionMethod[]|null
      */
-    protected $EncryptionMethods = [];
+    protected $EncryptionMethods = null;
 
 
     /**
@@ -70,11 +70,6 @@ final class KeyDescriptor extends AbstractMdElement
      */
     public static function fromXML(DOMElement $xml): object
     {
-        $use = null;
-        if ($xml->hasAttribute('use')) {
-            $use = $xml->getAttribute('use');
-        }
-
         $keyInfo = Utils::xpQuery($xml, './ds:KeyInfo');
         if (count($keyInfo) > 1) {
             throw new Exception('More than one ds:KeyInfo in the KeyDescriptor.');
@@ -150,9 +145,9 @@ final class KeyDescriptor extends AbstractMdElement
     /**
      * Collect the value of the EncryptionMethod property.
      *
-     * @return \SAML2\XML\md\EncryptionMethod[]
+     * @return \SAML2\XML\md\EncryptionMethod[]|null
      */
-    public function getEncryptionMethods(): array
+    public function getEncryptionMethods(): ?array
     {
         return $this->EncryptionMethods;
     }
@@ -168,8 +163,8 @@ final class KeyDescriptor extends AbstractMdElement
     {
         if ($encryptionMethods !== null) {
             Assert::allIsInstanceOf($encryptionMethods, EncryptionMethod::class);
-            $this->EncryptionMethods = $encryptionMethods;
         }
+        $this->EncryptionMethods = $encryptionMethods;
     }
 
 

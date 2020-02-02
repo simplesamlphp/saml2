@@ -122,12 +122,12 @@ final class AttributeAuthorityDescriptor extends AbstractRoleDescriptor
     /**
      * Initialize an IDPSSODescriptor.
      *
-     * @param DOMElement|null $xml The XML element we should load.
+     * @param DOMElement $xml The XML element we should load.
      *
      * @return self
      * @throws Exception
      */
-    public static function fromXML(DOMElement $xml = null): object
+    public static function fromXML(DOMElement $xml): object
     {
         $attrServices = [];
         /** @var DOMElement $ep */
@@ -324,7 +324,7 @@ final class AttributeAuthorityDescriptor extends AbstractRoleDescriptor
     /**
      * Add this AttributeAuthorityDescriptor to an EntityDescriptor.
      *
-     * @param DOMElement $parent The EntityDescriptor we should append this IDPSSODescriptor to.
+     * @param DOMElement|null $parent The EntityDescriptor we should append this IDPSSODescriptor to.
      *
      * @return DOMElement
      *
