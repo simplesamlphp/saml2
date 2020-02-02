@@ -46,7 +46,7 @@ final class AdditionalMetadataLocation extends AbstractMdElement
 
 
     /**
-     * Create a new instance of AdditionalMetadataLocation
+     * Initialize an AdditionalMetadataLocation element.
      *
      * @param \DOMElement $xml The XML element we should load.
      * @return self
@@ -57,19 +57,7 @@ final class AdditionalMetadataLocation extends AbstractMdElement
     {
         Assert::same($xml->localName, 'AdditionalMetadataLocation');
         Assert::same($xml->namespaceURI, AdditionalMetadataLocation::NS);
-    }
 
-
-    /**
-     * Initialize an AdditionalMetadataLocation element.
-     *
-     * @param DOMElement $xml The XML element we should load.
-     * @return self
-     * @throws Exception
-     * @throws InvalidArgumentException
-     */
-    public static function fromXML(DOMElement $xml): object
-    {
         if (!$xml->hasAttribute('namespace')) {
             throw new Exception('Missing namespace attribute on AdditionalMetadataLocation element.');
         }
