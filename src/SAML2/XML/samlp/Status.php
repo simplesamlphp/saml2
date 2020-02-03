@@ -36,7 +36,7 @@ final class Status extends AbstractSamlpElement
      *
      * @param \SAML2\XML\samlp\StatusCode $statusCode
      * @param \SAML2\XML\samlp\StatusMessage|null $statusMessage
-     * @param \SAML2\XML\samlp\StatusDetail[]|null $statusDetails
+     * @param \SAML2\XML\samlp\StatusDetail[] $statusDetails
      */
     public function __construct(StatusCode $statusCode, ?StatusMessage $statusMessage = null, array $statusDetails = [])
     {
@@ -110,6 +110,7 @@ final class Status extends AbstractSamlpElement
      *
      * @param \SAML2\XML\samlp\StatusDetail[] $statusDetails
      * @return void
+     * @throws \InvalidArgumentException if the supplied array contains anything other than StatusDetail objects
      */
     private function setStatusDetails(array $statusDetails): void
     {
@@ -124,6 +125,7 @@ final class Status extends AbstractSamlpElement
      *
      * @param \DOMElement $xml The XML element we should load
      * @return \SAML2\XML\samlp\Status
+     * @throws \InvalidArgumentException if the qualified name of the supplied element is wrong
      */
     public static function fromXML(DOMElement $xml): object
     {
@@ -159,6 +161,7 @@ final class Status extends AbstractSamlpElement
             $statusDetails
         );
     }
+
 
     /**
      * Convert this Status to XML.

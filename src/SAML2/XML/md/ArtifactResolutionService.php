@@ -23,7 +23,7 @@ final class ArtifactResolutionService extends AbstractIndexedEndpointType
      * @param string $location
      * @param bool|null $isDefault
      * @param string|null $unused
-     * @param array|null $attributes
+     * @param array $attributes
      */
     public function __construct(
         int $index,
@@ -31,7 +31,7 @@ final class ArtifactResolutionService extends AbstractIndexedEndpointType
         string $location,
         ?bool $isDefault = null,
         ?string $unused = null,
-        ?array $attributes = null
+        array $attributes = []
     ) {
         Assert::null(
             $unused,

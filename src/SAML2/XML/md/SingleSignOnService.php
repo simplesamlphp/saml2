@@ -21,13 +21,13 @@ final class SingleSignOnService extends AbstractEndpointType
      * @param string $binding
      * @param string $location
      * @param string|null $unused
-     * @param array|null $attributes
+     * @param array $attributes
      */
     public function __construct(
         string $binding,
         string $location,
         ?string $unused = null,
-        ?array $attributes = null
+        array $attributes = []
     ) {
         Assert::null(
             $unused,

@@ -13,7 +13,7 @@ use Webmozart\Assert\Assert;
 /**
  * Serializable class representing an AttributeValue.
  *
- * @package SimpleSAMLphp
+ * @package simplesamlphp/saml2
  */
 class AttributeValue extends AbstractSamlElement
 {
@@ -33,7 +33,7 @@ class AttributeValue extends AbstractSamlElement
      *  - \DOMElement(AttributeValue)  Create an attribute value of the given DOMElement.
      *  - \DOMElement                  Create an attribute value with the given DOMElement as a child.
      *
-     * @throws \InvalidArgumentException if assertions are false
+     * @throws \InvalidArgumentException if the supplied value is neither a string or a DOMElement
      */
     public function __construct($value)
     {
@@ -75,6 +75,7 @@ class AttributeValue extends AbstractSamlElement
      *
      * @param \DOMElement $xml The XML element we should load
      * @return \SAML2\XML\saml\AttributeValue
+     * @throws \InvalidArgumentException if the qualified name of the supplied element is wrong
      */
     public static function fromXML(DOMElement $xml): object
     {

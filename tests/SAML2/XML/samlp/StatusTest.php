@@ -113,7 +113,6 @@ XML
         $statusCode = $status->getStatusCode();
         $this->assertEquals(Constants::STATUS_RESPONDER, $statusCode->getValue());
 
-        /** @psalm-var StatusCode[] $subCodes */
         $subCodes = $status->getStatusCode()->getSubCodes();
         $this->assertCount(1, $subCodes);
 
@@ -123,11 +122,9 @@ XML
         $statusMessage = $status->getStatusMessage();
         $this->assertEquals('Something went wrong', $statusMessage->getMessage());
 
-        /** @psalm-var \SAML2\XML\samlp\StatusDetail[] $statusDetails */
         $statusDetails = $status->getStatusDetails();
         $this->assertCount(1, $statusDetails);
 
-        /** @psalm-var \SAML2\XML\Chunk[] $detailElement */
         $detailElement = $statusDetails[0]->getDetails();
         $detailElement = $detailElement[0]->getXML();
 

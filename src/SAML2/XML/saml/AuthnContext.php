@@ -18,7 +18,7 @@ use Webmozart\Assert\Assert;
  * Class representing SAML2 AuthnContext
  *
  * @author Tim van Dijen, <tvdijen@gmail.com>
- * @package SimpleSAMLphp
+ * @package simplesamlphp
  */
 final class AuthnContext extends AbstractSamlElement
 {
@@ -42,6 +42,7 @@ final class AuthnContext extends AbstractSamlElement
      * @param \SAML2\XML\saml\AuthnContextDecl|null $authnContextDecl
      * @param \SAML2\XML\saml\AuthnContextDeclRef|null $authnContextDeclRef
      * @param \SAML2\XML\saml\AuthenticatingAuthority[] $authenticatingAuthorities
+     * @throws \InvalidArgumentException
      */
     public function __construct(
         ?AuthnContextClassRef $authnContextClassRef,
@@ -154,6 +155,7 @@ final class AuthnContext extends AbstractSamlElement
      *
      * @param \SAML2\XML\saml\AuthenticatingAuthority[] $authenticatingAuthorities
      * @return void
+     * @throws \InvalidArgumentException
      */
     private function setAuthenticatingAuthorities(array $authenticatingAuthorities): void
     {
@@ -167,6 +169,7 @@ final class AuthnContext extends AbstractSamlElement
      *
      * @param \DOMElement $xml The XML element we should load
      * @return \SAML2\XML\saml\AuthnContext
+     * @throws \InvalidArgumentException if the qualified name of the supplied element is wrong
      */
     public static function fromXML(DOMElement $xml): object
     {
@@ -216,10 +219,8 @@ final class AuthnContext extends AbstractSamlElement
             $this->authnContextDeclRef->toXML($e);
         }
 
-        if (!empty($this->authenticatingAuthorities)) {
-            foreach ($this->authenticatingAuthorities as $authority) {
-                $authority->toXML($e);
-            }
+        foreach ($this->authenticatingAuthorities as $authority) {
+            $authority->toXML($e);
         }
 
         return $e;

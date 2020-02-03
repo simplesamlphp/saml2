@@ -12,7 +12,7 @@ use Webmozart\Assert\Assert;
  * Class which represents the Scope element found in Shibboleth metadata.
  *
  * @link https://wiki.shibboleth.net/confluence/display/SHIB/ShibbolethMetadataProfile
- * @package SimpleSAMLphp
+ * @package simplesamlphp/saml2
  */
 final class Scope extends AbstractShibmdElement
 {
@@ -95,8 +95,7 @@ final class Scope extends AbstractShibmdElement
      *
      * @param \DOMElement $xml The XML element we should load
      * @return self
-     *
-     * @throws \InvalidArgumentException if assertions are false
+     * @throws \InvalidArgumentException if the qualified name of the supplied element is wrong
      */
     public static function fromXML(DOMElement $xml): object
     {

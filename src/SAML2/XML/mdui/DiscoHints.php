@@ -13,7 +13,7 @@ use Webmozart\Assert\Assert;
  * Class for handling the metadata extensions for login and discovery user interface
  *
  * @link: http://docs.oasis-open.org/security/saml/Post2.0/sstc-saml-metadata-ui/v1.0/sstc-saml-metadata-ui-v1.0.pdf
- * @package SimpleSAMLphp
+ * @package simplesamlphp/saml2
  */
 final class DiscoHints extends AbstractMduiElement
 {
@@ -97,7 +97,7 @@ final class DiscoHints extends AbstractMduiElement
      *
      * @return string[]
      */
-    public function getDomainHint(): ?array
+    public function getDomainHint(): array
     {
         return $this->DomainHint;
     }
@@ -194,8 +194,7 @@ final class DiscoHints extends AbstractMduiElement
      *
      * @param \DOMElement $xml The XML element we should load
      * @return self
-     *
-     * @throws \InvalidArgumentException
+     * @throws \InvalidArgumentException if the qualified name of the supplied element is wrong
      */
     public static function fromXML(DOMElement $xml): object
     {
@@ -230,17 +229,9 @@ final class DiscoHints extends AbstractMduiElement
             $child->toXML($e);
         }
 
-        if (!empty($this->IPHint)) {
-            Utils::addStrings($e, DiscoHints::NS, 'mdui:IPHint', false, $this->IPHint);
-        }
-
-        if (!empty($this->DomainHint)) {
-            Utils::addStrings($e, DiscoHints::NS, 'mdui:DomainHint', false, $this->DomainHint);
-        }
-
-        if (!empty($this->GeolocationHint)) {
-            Utils::addStrings($e, DiscoHints::NS, 'mdui:GeolocationHint', false, $this->GeolocationHint);
-        }
+        Utils::addStrings($e, DiscoHints::NS, 'mdui:IPHint', false, $this->IPHint);
+        Utils::addStrings($e, DiscoHints::NS, 'mdui:DomainHint', false, $this->DomainHint);
+        Utils::addStrings($e, DiscoHints::NS, 'mdui:GeolocationHint', false, $this->GeolocationHint);
 
         return $e;
     }

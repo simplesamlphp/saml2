@@ -14,7 +14,7 @@ use Webmozart\Assert\Assert;
  * Class representing SAML2 AuthenticatingAuthority
  *
  * @author Tim van Dijen, <tvdijen@gmail.com>
- * @package SimpleSAMLphp
+ * @package simplesamlphp/saml2
  */
 final class AuthenticatingAuthority extends AbstractSamlElement
 {
@@ -61,8 +61,7 @@ final class AuthenticatingAuthority extends AbstractSamlElement
      *
      * @param \DOMElement $xml The XML element we should load
      * @return \SAML2\XML\saml\AuthenticatingAuthority
-     *
-     * @throws \InvalidArgumentException if assertions are false
+     * @throws \InvalidArgumentException if the qualified name of the supplied element is wrong
      */
     public static function fromXML(DOMElement $xml): object
     {

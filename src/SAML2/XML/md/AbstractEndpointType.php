@@ -55,7 +55,7 @@ abstract class AbstractEndpointType extends AbstractMdElement
      * @param string      $binding
      * @param string      $location
      * @param string|null $responseLocation
-     * @param array|null  $attributes
+     * @param array       $attributes
      *
      * @throws \InvalidArgumentException
      */
@@ -63,7 +63,7 @@ abstract class AbstractEndpointType extends AbstractMdElement
         string $binding,
         string $location,
         ?string $responseLocation = null,
-        ?array $attributes = null
+        array $attributes = []
     ) {
         $this->setBinding($binding);
         $this->setLocation($location);
@@ -114,7 +114,7 @@ abstract class AbstractEndpointType extends AbstractMdElement
      * Set the value of the Binding property.
      *
      * @param string $binding
-     * @throws \InvalidArgumentException
+     * @throws \InvalidArgumentException if the Binding is empty
      */
     protected function setBinding(string $binding): void
     {
@@ -138,7 +138,7 @@ abstract class AbstractEndpointType extends AbstractMdElement
      * Set the value of the Location property.
      *
      * @param string $location
-     * @throws \InvalidArgumentException
+     * @throws \InvalidArgumentException if the Location is empty
      */
     protected function setLocation(string $location): void
     {
@@ -162,14 +162,11 @@ abstract class AbstractEndpointType extends AbstractMdElement
      * Set the value of the ResponseLocation property.
      *
      * @param string|null $responseLocation
-     * @throws \InvalidArgumentException
+     * @throws \InvalidArgumentException if the ResponseLocation is empty
      */
     protected function setResponseLocation(?string $responseLocation = null): void
     {
-        if ($responseLocation === null) {
-            return;
-        }
-        Assert::notEmpty($responseLocation, 'The ResponseLocation of an endpoint cannot be empty.');
+        Assert::nullOrNotEmpty($responseLocation, 'The ResponseLocation of an endpoint cannot be empty.');
         $this->ResponseLocation = $responseLocation;
     }
 
@@ -179,7 +176,6 @@ abstract class AbstractEndpointType extends AbstractMdElement
      *
      * @param \DOMElement $parent The element we should append this endpoint to.
      * @return \DOMElement
-     * @throws \Exception
      */
     public function toXML(DOMElement $parent = null): DOMElement
     {

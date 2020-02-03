@@ -61,7 +61,6 @@ XML
         $statusCode = StatusCode::fromXML($document->firstChild);
         $this->assertEquals(Constants::STATUS_RESPONDER, $statusCode->getValue());
 
-        /** @psalm-var \SAML2\XML\samlp\StatusCode[] $subCodes */
         $subCodes = $statusCode->getSubCodes();
         $this->assertCount(1, $subCodes);
 

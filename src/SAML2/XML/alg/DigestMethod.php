@@ -66,15 +66,17 @@ final class DigestMethod extends AbstractAlgElement
      *
      * @param \DOMElement $xml The XML element we should load
      * @return self
+     * @throws \InvalidArgumentException if the qualified name of the supplied element is wrong
+     * @throws \InvalidArgumentException if the supplied element is missing the Algorithm attribute
      */
     public static function fromXML(DOMElement $xml): object
     {
         Assert::same($xml->localName, 'DigestMethod');
         Assert::same($xml->namespaceURI, DigestMethod::NS);
-
-        if (!$xml->hasAttribute('Algorithm')) {
-            throw new \Exception('Missing required attribute "Algorithm" in alg:DigestMethod element.');
-        }
+        Assert::true(
+            $xml->hasAttribute('Algorithm'),
+            'Missing required attribute "Algorithm" in alg:DigestMethod element.'
+        );
 
         return new self($xml->getAttribute('Algorithm'));
     }
@@ -85,13 +87,10 @@ final class DigestMethod extends AbstractAlgElement
      *
      * @param \DOMElement|null $parent The element we should append to.
      * @return \DOMElement
-     *
-     * @throws \InvalidArgumentException if assertions are false
      */
     public function toXML(DOMElement $parent = null): DOMElement
     {
         $e = $this->instantiateParentElement($parent);
-
         $e->setAttribute('Algorithm', $this->Algorithm);
 
         return $e;

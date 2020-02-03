@@ -30,7 +30,7 @@ abstract class AbstractIndexedEndpointType extends AbstractEndpointType
      * @param string      $location
      * @param bool|null   $isDefault
      * @param string|null $responseLocation
-     * @param array|null  $attributes
+     * @param array       $attributes
      */
     public function __construct(
         int $index,
@@ -38,7 +38,7 @@ abstract class AbstractIndexedEndpointType extends AbstractEndpointType
         string $location,
         ?bool $isDefault = null,
         ?string $responseLocation = null,
-        ?array $attributes = null
+        array $attributes = []
     ) {
         parent::__construct($binding, $location, $responseLocation, $attributes);
         $this->setIndex($index);
@@ -81,9 +81,6 @@ abstract class AbstractIndexedEndpointType extends AbstractEndpointType
      * @param \DOMElement $parent The element we should append this endpoint to.
      *
      * @return \DOMElement
-     *
-     * @throws \InvalidArgumentException if assertions are false
-     * @throws \Exception
      */
     public function toXML(DOMElement $parent = null): DOMElement
     {

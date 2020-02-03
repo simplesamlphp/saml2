@@ -12,7 +12,7 @@ use SAML2\XML\AbstractXMLElement;
  * @link: http://docs.oasis-open.org/security/saml/Post2.0/saml-metadata-rpi/v1.0/saml-metadata-rpi-v1.0.pdf
  *
  * @author Tim van Dijen, <tvdijen@gmail.com>
- * @package SimpleSAMLphp
+ * @package simplesamlphp/saml2
  */
 abstract class AbstractMdrpiElement extends AbstractXMLElement
 {

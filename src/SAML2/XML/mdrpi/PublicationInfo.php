@@ -12,7 +12,7 @@ use Webmozart\Assert\Assert;
  * Class for handling the mdrpi:PublicationInfo element.
  *
  * @link: http://docs.oasis-open.org/security/saml/Post2.0/saml-metadata-rpi/v1.0/saml-metadata-rpi-v1.0.pdf
- * @package SimpleSAMLphp
+ * @package simplesamlphp/saml2
  */
 final class PublicationInfo extends AbstractMdrpiElement
 {
@@ -53,8 +53,7 @@ final class PublicationInfo extends AbstractMdrpiElement
      * @param string $publisher
      * @param int|null $creationInstant
      * @param string|null $publicationId
-     * @param array|null $UsagePolicy
-     * @throws \Exception
+     * @param array $UsagePolicy
      */
     public function __construct(
         string $publisher,
@@ -73,8 +72,6 @@ final class PublicationInfo extends AbstractMdrpiElement
      * Collect the value of the publisher-property
      *
      * @return string
-     *
-     * @throws \InvalidArgumentException if assertions are false
      */
     public function getPublisher(): string
     {
@@ -168,17 +165,16 @@ final class PublicationInfo extends AbstractMdrpiElement
      *
      * @param \DOMElement $xml The XML element we should load
      * @return self
-     *
-     * @throws \InvalidArgumentException
+     * @throws \InvalidArgumentException if the qualified name of the supplied element is wrong
      */
     public static function fromXML(DOMElement $xml): object
     {
         Assert::same($xml->localName, 'PublicationInfo');
         Assert::same($xml->namespaceURI, PublicationInfo::NS);
-
-        if (!$xml->hasAttribute('publisher')) {
-            throw new \Exception('Missing required attribute "publisher" in mdrpi:PublicationInfo element.');
-        }
+        Assert::true(
+            $xml->hasAttribute('publisher'),
+            'Missing required attribute "publisher" in mdrpi:PublicationInfo element.'
+        );
 
         $publisher = $xml->getAttribute('publisher');
         $creationInstant = $xml->hasAttribute('creationInstant')
@@ -197,13 +193,10 @@ final class PublicationInfo extends AbstractMdrpiElement
      *
      * @param \DOMElement|null $parent The element we should append to.
      * @return \DOMElement
-     *
-     * @throws \InvalidArgumentException if assertions are false
      */
     public function toXML(DOMElement $parent = null): DOMElement
     {
         $e = $this->instantiateParentElement($parent);
-
         $e->setAttribute('publisher', $this->publisher);
 
         if ($this->creationInstant !== null) {

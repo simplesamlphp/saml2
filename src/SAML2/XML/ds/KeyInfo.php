@@ -11,7 +11,7 @@ use Webmozart\Assert\Assert;
 /**
  * Class representing a ds:KeyInfo element.
  *
- * @package SimpleSAMLphp
+ * @package simplesamlphp/saml2
  */
 final class KeyInfo extends AbstractDsElement
 {
@@ -85,6 +85,7 @@ final class KeyInfo extends AbstractDsElement
      *
      * @param (\SAML2\XML\Chunk|\SAML2\XML\ds\KeyName|\SAML2\XML\ds\X509Data)[] $info
      * @return void
+     * @throws \InvalidArgumentException if $info contains anything other than KeyName, X509Data or Chunk
      */
     private function setInfo(array $info): void
     {
@@ -102,8 +103,7 @@ final class KeyInfo extends AbstractDsElement
      *
      * @param \SAML2\XML\Chunk|\SAML2\XML\ds\KeyName|\SAML2\XML\ds\X509Data $info
      * @return void
-     *
-     * @throws \InvalidArgumentException if assertions are false
+     * @throws \InvalidArgumentException if $info is anything other than KeyName, X509Data or Chunk
      */
     public function addInfo($info): void
     {
@@ -121,6 +121,7 @@ final class KeyInfo extends AbstractDsElement
      *
      * @param \DOMElement $xml The XML element we should load
      * @return self
+     * @throws \InvalidArgumentException if the qualified name of the supplied element is wrong
      */
     public static function fromXML(DOMElement $xml): object
     {
@@ -133,9 +134,7 @@ final class KeyInfo extends AbstractDsElement
         foreach ($xml->childNodes as $n) {
             if (!($n instanceof \DOMElement)) {
                 continue;
-            }
-
-            if ($n->namespaceURI !== self::NS) {
+            } elseif ($n->namespaceURI !== self::NS) {
                 $info[] = new Chunk($n);
                 continue;
             }

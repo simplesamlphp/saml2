@@ -11,7 +11,7 @@ use Webmozart\Assert\Assert;
  * Class for handling the Keywords metadata extensions for login and discovery user interface
  *
  * @link: http://docs.oasis-open.org/security/saml/Post2.0/sstc-saml-metadata-ui/v1.0/sstc-saml-metadata-ui-v1.0.pdf
- * @package SimpleSAMLphp
+ * @package simplesamlphp/saml2
  */
 final class Keywords extends AbstractMduiElement
 {
@@ -49,8 +49,6 @@ final class Keywords extends AbstractMduiElement
      * Collect the value of the lang-property
      *
      * @return string
-     *
-     * @throws \InvalidArgumentException if assertions are false
      */
     public function getLanguage(): string
     {
@@ -87,7 +85,7 @@ final class Keywords extends AbstractMduiElement
      * @param string[] $keywords
      * @return void
      *
-     * @throws \InvalidArgumentException
+     * @throws \InvalidArgumentException if one of the keywords contains `+`
      */
     private function setKeywords(array $keywords): void
     {
@@ -102,7 +100,7 @@ final class Keywords extends AbstractMduiElement
      * @param string $keyword
      * @return void
      *
-     * @throws \InvalidArgumentException
+     * @throws \InvalidArgumentException if the keyword contains a `+`
      */
     public function addKeyword(string $keyword): void
     {
@@ -116,8 +114,7 @@ final class Keywords extends AbstractMduiElement
      *
      * @param \DOMElement $xml The XML element we should load
      * @return self
-     *
-     * @throws \InvalidArgumentException
+     * @throws \InvalidArgumentException if the qualified name of the supplied element is wrong
      */
     public static function fromXML(DOMElement $xml): object
     {

@@ -12,7 +12,7 @@ use Webmozart\Assert\Assert;
 /**
  * Class representing SAML 2 Attribute.
  *
- * @package SimpleSAMLphp
+ * @package simplesamlphp/saml2
  */
 class Attribute extends AbstractSamlElement
 {
@@ -108,13 +108,11 @@ class Attribute extends AbstractSamlElement
      *
      * @param string|null $NameFormat
      * @return void
+     * @throws \InvalidArgumentException if the NameFormat is empty
      */
     protected function setNameFormat(?string $NameFormat): void
     {
-        if ($NameFormat === null) {
-            return;
-        }
-        Assert::notEmpty($NameFormat, 'Cannot specify an empty NameFormat for an Attribute.');
+        Assert::nullOrNotEmpty($NameFormat, 'Cannot specify an empty NameFormat for an Attribute.');
         $this->NameFormat = $NameFormat;
     }
 
@@ -135,13 +133,11 @@ class Attribute extends AbstractSamlElement
      *
      * @param string|null $friendlyName
      * @return void
+     * @throws \InvalidArgumentException if the FriendlyName is empty
      */
     private function setFriendlyName(?string $friendlyName): void
     {
-        if ($friendlyName === null) {
-            return;
-        }
-        Assert::notEmpty($friendlyName, 'FriendlyName cannot be an empty string.');
+        Assert::nullOrNotEmpty($friendlyName, 'FriendlyName cannot be an empty string.');
         $this->FriendlyName = $friendlyName;
     }
 
@@ -175,8 +171,7 @@ class Attribute extends AbstractSamlElement
      *
      * @param \DOMElement $xml The XML element we should load
      * @return \SAML2\XML\saml\Attribute
-     *
-     * @throws \InvalidArgumentException
+     * @throws \InvalidArgumentException if the qualified name of the supplied element is wrong
      */
     public static function fromXML(DOMElement $xml): object
     {

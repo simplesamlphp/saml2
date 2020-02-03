@@ -64,7 +64,6 @@ final class Chunk extends AbstractXMLElement
 
     /**
      * @param \DOMElement $xml
-     *
      * @return self
      */
     public static function fromXML(DOMElement $xml): object
@@ -76,10 +75,10 @@ final class Chunk extends AbstractXMLElement
     /**
      * Append this XML element to a different XML element.
      *
-     * @param  \DOMElement $parent The element we should append this element to.
+     * @param  \DOMElement|null $parent The element we should append this element to.
      * @return \DOMElement The new element.
      */
-    public function toXML(?DOMElement $parent = null): DOMElement
+    public function toXML(DOMElement $parent = null): DOMElement
     {
         return Utils::copyElement($this->xml, $parent);
     }
@@ -100,6 +99,8 @@ final class Chunk extends AbstractXMLElement
      * Set the value of the localName-property
      *
      * @param string $localName
+     * @return void
+     * @throws \InvalidArgumentException if $localName is an empty string
      */
     public function setLocalName(string $localName): void
     {
@@ -123,6 +124,7 @@ final class Chunk extends AbstractXMLElement
      * Set the value of the namespaceURI-property
      *
      * @param string|null $namespaceURI
+     * @return void
      */
     protected function setNamespaceURI(string $namespaceURI = null): void
     {

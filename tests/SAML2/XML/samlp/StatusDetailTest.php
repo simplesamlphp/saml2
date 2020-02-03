@@ -57,7 +57,6 @@ XML
         /** @psalm-var \DOMElement $document->firstChild */
         $statusDetail = StatusDetail::fromXML($document->firstChild);
 
-        /** @psalm-var \SAML2\XML\Chunk[] $statusDetailElement */
         $statusDetailElement = $statusDetail->getDetails();
         $statusDetailElement = $statusDetailElement[0]->getXML();
 

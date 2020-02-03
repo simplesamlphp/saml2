@@ -12,7 +12,7 @@ use SAML2\XML\Chunk;
 /**
  * Class for handling SAML2 extensions.
  *
- * @package SimpleSAMLphp
+ * @package simplesamlphp/saml2
  */
 final class Extensions
 {
@@ -20,7 +20,7 @@ final class Extensions
      * Get a list of Extensions in the given element.
      *
      * @param  \DOMElement $parent The element that may contain the samlp:Extensions element.
-     * @return array Array of extensions.
+     * @return \SAML2\XML\Chunk[]  Array of extensions.
      */
     public static function getList(DOMElement $parent): array
     {

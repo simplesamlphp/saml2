@@ -71,12 +71,12 @@ final class EntityDescriptor extends AbstractMetadataDocument
      * @param string|null $cacheDuration Maximum time this document can be cached. Defaults to null.
      * @param \SAML2\XML\md\Extensions|null $extensions An array of extensions.
      * @param \SAML2\XML\md\AbstractRoleDescriptor[]|null $roleDescriptors An array of role descriptors.
-     * @param \SAML2\XML\md\AffiliationDescriptor|null $affiliationDescriptor An affiliation descriptor to use instead
-     * of role descriptors.
+     * @param \SAML2\XML\md\AffiliationDescriptor|null $affiliationDescriptor An affiliation descriptor to
+     *   use instead of role descriptors.
      * @param \SAML2\XML\md\Organization|null $organization The organization responsible for the SAML entity.
-     * @param \SAML2\XML\md\ContactPerson[]|null $contacts A list of contact persons for this SAML entity.
-     * @param \SAML2\XML\md\AdditionalMetadataLocation[]|null $additionalMdLocations A list of additional metadata
-     * locations.
+     * @param \SAML2\XML\md\ContactPerson[] $contacts A list of contact persons for this SAML entity.
+     * @param \SAML2\XML\md\AdditionalMetadataLocation[] $additionalMdLocations A list of
+     *   additional metadata locations.
      *
      * @throws \Exception
      */

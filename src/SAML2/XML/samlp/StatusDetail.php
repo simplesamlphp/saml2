@@ -50,6 +50,7 @@ final class StatusDetail extends AbstractSamlpElement
      *
      * @param \SAML2\XML\Chunk[] $details
      * @return void
+     * @throws \InvalidArgumentException if the supplied array contains anything other than Chunk objects
      */
     private function setDetails(array $details): void
     {
@@ -74,6 +75,7 @@ final class StatusDetail extends AbstractSamlpElement
      *
      * @param \DOMElement $xml The XML element we should load
      * @return \SAML2\XML\samlp\StatusDetail
+     * @throws \InvalidArgumentException if the qualified name of the supplied element is wrong
      */
     public static function fromXML(DOMElement $xml): object
     {

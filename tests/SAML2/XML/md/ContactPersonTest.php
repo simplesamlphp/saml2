@@ -61,14 +61,14 @@ XML
             'Test Company',
             'John',
             'Doe',
-            ['jdoe@test.company', 'john.doe@test.company'],
-            ['1-234-567-8901'],
-            [$attr1, $attr2],
             new Extensions(
                 [
                     new Chunk($ext->documentElement)
                 ]
-            )
+            ),
+            ['jdoe@test.company', 'john.doe@test.company'],
+            ['1-234-567-8901'],
+            [$attr1, $attr2]
         );
         $this->assertEquals($this->document->saveXML($this->document->documentElement), strval($cp));
         $this->assertEquals('other', $cp->getContactType());
@@ -122,6 +122,7 @@ XML
             'Test Company',
             'John',
             'Doe',
+            null,
             ['this is wrong']
         );
     }
@@ -303,7 +304,7 @@ XML
     {
         $this->expectException(\InvalidArgumentException::class);
         $this->expectExceptionMessage('Invalid email address for');
-        new ContactPerson('technical', null, null, null, ['not so valid']);
+        new ContactPerson('technical', null, null, null, null, ['not so valid']);
     }
 
     /**
@@ -315,6 +316,7 @@ XML
         $this->expectExceptionMessage('Invalid email address for');
         new ContactPerson(
             'technical',
+            null,
             null,
             null,
             null,

@@ -54,6 +54,7 @@ final class StatusCode extends AbstractSamlpElement
      *
      * @param string $Value
      * @return void
+     * @throws \InvalidArgumentException if the supplied $Value is empty
      */
     private function setValue(string $Value): void
     {
@@ -78,6 +79,7 @@ final class StatusCode extends AbstractSamlpElement
      *
      * @param \SAML2\XML\samlp\StatusCode[] $subCodes
      * @return void
+     * @throws \InvalidArgumentException if the supplied array contains anything other than StatusCode objects
      */
     private function setSubCodes(array $subCodes): void
     {
@@ -91,8 +93,7 @@ final class StatusCode extends AbstractSamlpElement
      *
      * @param \DOMElement $xml The XML element we should load
      * @return \SAML2\XML\samlp\StatusCode
-     *
-     * @throws \InvalidArgumentException
+     * @throws \InvalidArgumentException if the qualified name of the supplied element is wrong
      */
     public static function fromXML(DOMElement $xml): object
     {
@@ -117,8 +118,6 @@ final class StatusCode extends AbstractSamlpElement
      *
      * @param \DOMElement|null $parent The element we should append this NameIDPolicy to.
      * @return \DOMElement
-     *
-     * @throws \InvalidArgumentException if assertions are false
      */
     public function toXML(DOMElement $parent = null): DOMElement
     {

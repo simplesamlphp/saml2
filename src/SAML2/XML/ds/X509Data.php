@@ -12,7 +12,7 @@ use Webmozart\Assert\Assert;
 /**
  * Class representing a ds:X509Data element.
  *
- * @package SimpleSAMLphp
+ * @package simplesamlphp/saml2
  */
 final class X509Data extends AbstractDsElement
 {
@@ -54,8 +54,7 @@ final class X509Data extends AbstractDsElement
      *
      * @param (\SAML2\XML\Chunk|\SAML2\XML\ds\X509Certificate)[] $data
      * @return void
-     *
-     * @throws \InvalidArgumentException if assertions are false
+     * @throws \InvalidArgumentException if $data contains anything other than X509Certificate or Chunk
      */
     private function setData(array $data): void
     {
@@ -70,8 +69,7 @@ final class X509Data extends AbstractDsElement
      *
      * @param \SAML2\XML\Chunk|\SAML2\XML\ds\X509Certificate $data
      * @return void
-     *
-     * @throws \InvalidArgumentException if assertions are false
+     * @throws \InvalidArgumentException if $data is anything other than X509Certificate or Chunk
      */
     public function addData($data): void
     {
@@ -86,6 +84,7 @@ final class X509Data extends AbstractDsElement
      *
      * @param \DOMElement $xml The XML element we should load
      * @return self
+     * @throws \InvalidArgumentException if the qualified name of the supplied element is wrong
      */
     public static function fromXML(DOMElement $xml): object
     {
@@ -97,9 +96,7 @@ final class X509Data extends AbstractDsElement
         for ($n = $xml->firstChild; $n !== null; $n = $n->nextSibling) {
             if (!($n instanceof DOMElement)) {
                 continue;
-            }
-
-            if ($n->namespaceURI !== self::NS) {
+            } elseif ($n->namespaceURI !== self::NS) {
                 $data[] = new Chunk($n);
                 continue;
             }
@@ -128,7 +125,6 @@ final class X509Data extends AbstractDsElement
     {
         $e = $this->instantiateParentElement($parent);
 
-        /** @var \SAML2\XML\Chunk|\SAML2\XML\ds\X509Certificate $n */
         foreach ($this->getData() as $n) {
             $n->toXML($e);
         }

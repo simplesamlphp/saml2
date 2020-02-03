@@ -92,16 +92,14 @@ trait ExtendableAttributesTrait
      * @param string $namespaceURI  The namespace URI.
      * @param string $qualifiedName The local name.
      * @param string $value The attribute value.
-     * @throws \InvalidArgumentException
+     * @throws \InvalidArgumentException if a non-qualified name is being passed
      */
     protected function setAttributeNS(string $namespaceURI, string $qualifiedName, string $value): void
     {
         $name = explode(':', $qualifiedName, 2);
-        if (count($name) < 2) {
-            throw new InvalidArgumentException('Not a qualified name.');
-        }
-        $localName = $name[1];
+        Assert::minCount($name, 2, 'Not a qualified name.');
 
+        $localName = $name[1];
         $this->namespacedAttributes['{' . $namespaceURI . '}' . $localName] = [
             'qualifiedName' => $qualifiedName,
             'namespaceURI' => $namespaceURI,
@@ -112,15 +110,10 @@ trait ExtendableAttributesTrait
 
     /**
      * @param \DOMAttr[] $attributes
-     *
-     * @throws \InvalidArgumentException
+     * @throws \InvalidArgumentException if $attributes contains anything other than \DOMAttr objects
      */
-    protected function setAttributesNS(?array $attributes): void
+    protected function setAttributesNS(array $attributes): void
     {
-        if ($attributes === null) {
-            return;
-        }
-
         Assert::allIsInstanceOf($attributes, DOMAttr::class);
 
         foreach ($attributes as $attribute) {

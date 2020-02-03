@@ -11,7 +11,7 @@ use Webmozart\Assert\Assert;
  * Class for handling the Logo metadata extensions for login and discovery user interface
  *
  * @link: http://docs.oasis-open.org/security/saml/Post2.0/sstc-saml-metadata-ui/v1.0/sstc-saml-metadata-ui-v1.0.pdf
- * @package SimpleSAMLphp
+ * @package simplesamlphp/saml2
  */
 final class Logo extends AbstractMduiElement
 {
@@ -77,12 +77,14 @@ final class Logo extends AbstractMduiElement
      *
      * @param string $url
      * @return void
+     * @throws \InvalidArgumentException if the supplied value is not a valid URL
      */
     private function setUrl(string $url): void
     {
         if (!filter_var(trim($url), FILTER_VALIDATE_URL) && substr(trim($url), 0, 5) !== 'data:') {
             throw new \InvalidArgumentException('mdui:Logo is not a valid URL.');
         }
+
         $this->url = $url;
     }
 
@@ -114,8 +116,6 @@ final class Logo extends AbstractMduiElement
      * Collect the value of the height-property
      *
      * @return int
-     *
-     * @throws \InvalidArgumentException if assertions are false
      */
     public function getHeight(): int
     {
@@ -139,8 +139,6 @@ final class Logo extends AbstractMduiElement
      * Collect the value of the width-property
      *
      * @return int
-     *
-     * @throws \InvalidArgumentException if assertions are false
      */
     public function getWidth(): int
     {
@@ -165,8 +163,7 @@ final class Logo extends AbstractMduiElement
      *
      * @param \DOMElement $xml The XML element we should load
      * @return self
-     *
-     * @throws \InvalidArgumentException
+     * @throws \InvalidArgumentException if the qualified name of the supplied element is wrong
      */
     public static function fromXML(DOMElement $xml): object
     {

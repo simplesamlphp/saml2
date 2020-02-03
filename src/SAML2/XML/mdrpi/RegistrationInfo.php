@@ -12,7 +12,7 @@ use Webmozart\Assert\Assert;
  * Class for handling the mdrpi:RegistrationInfo element.
  *
  * @link: http://docs.oasis-open.org/security/saml/Post2.0/saml-metadata-rpi/v1.0/saml-metadata-rpi-v1.0.pdf
- * @package SimpleSAMLphp
+ * @package simplesamlphp/saml2
  */
 final class RegistrationInfo extends AbstractMdrpiElement
 {
@@ -132,19 +132,16 @@ final class RegistrationInfo extends AbstractMdrpiElement
      *
      * @param \DOMElement $xml The XML element we should load
      * @return self
-     *
-     * @throws \InvalidArgumentException if assertions are false
+     * @throws \InvalidArgumentException if the qualified name of the supplied element is wrong
      */
     public static function fromXML(DOMElement $xml): object
     {
         Assert::same($xml->localName, 'RegistrationInfo');
         Assert::same($xml->namespaceURI, RegistrationInfo::NS);
-
-        if (!$xml->hasAttribute('registrationAuthority')) {
-            throw new \Exception(
-                'Missing required attribute "registrationAuthority" in mdrpi:RegistrationInfo element.'
-            );
-        }
+        Assert::true(
+            $xml->hasAttribute('registrationAuthority'),
+            'Missing required attribute "registrationAuthority" in mdrpi:RegistrationInfo element.'
+        );
 
         $registrationAuthority = $xml->getAttribute('registrationAuthority');
         $registrationInstant = $xml->hasAttribute('registrationInstant')
@@ -165,7 +162,6 @@ final class RegistrationInfo extends AbstractMdrpiElement
     public function toXML(DOMElement $parent = null): DOMElement
     {
         $e = $this->instantiateParentElement($parent);
-
         $e->setAttribute('registrationAuthority', $this->registrationAuthority);
 
         if ($this->registrationInstant !== null) {
