@@ -53,10 +53,6 @@ final class EntitiesDescriptor extends AbstractMetadataDocument
             !empty($entitiesDescriptors) || !empty($entityDescriptors),
             'At least one md:EntityDescriptor or md:EntitiesDescriptor element is required.'
         );
-        Assert::false(
-            is_null($validUntil) && is_null($cacheDuration),
-            'You need either validUntil or cacheDuration set'
-        );
 
         parent::__construct($ID, $validUntil, $cacheDuration, $extensions);
 
