@@ -140,8 +140,7 @@ XML
         );
         $childEntityd = EntityDescriptor::fromXML($entitydElement->item(1));
         $entitiesd = new EntitiesDescriptor(
-            [$childEntityd],
-            []
+            [$childEntityd]
         );
         $this->assertNull($entitiesd->getName());
         $this->assertIsArray($entitiesd->getEntitiesDescriptors());
@@ -160,7 +159,7 @@ XML
         );
         $childEntitiesd = EntitiesDescriptor::fromXML($entitiesdChildElement->item(0));
         $entitiesd = new EntitiesDescriptor(
-            [],
+            null,
             [$childEntitiesd]
         );
         $this->assertIsArray($entitiesd->getEntityDescriptors());
