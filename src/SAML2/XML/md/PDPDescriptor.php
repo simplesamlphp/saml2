@@ -137,11 +137,9 @@ final class PDPDescriptor extends AbstractRoleDescriptor
      *
      * @param \SAML2\XML\md\AuthzService[] $authzServices
      */
-    protected function setAuthzServiceEndpoints(?array $authzServices = []): void
+    protected function setAuthzServiceEndpoints(array $authzServices = []): void
     {
-        if ($authzServices === null) {
-            return;
-        }
+        Assert::minCount($authzServices, 1, 'At least one md:AuthzService endpoint must be present.');
         Assert::allIsInstanceOf(
             $authzServices,
             AuthzService::class,
@@ -199,6 +197,9 @@ final class PDPDescriptor extends AbstractRoleDescriptor
      */
     public function setNameIDFormats(?array $nameIDFormats): void
     {
+        if ($nameIDFormats === null) {
+            return;
+        }
         Assert::allStringNotEmpty($nameIDFormats, 'All NameIDFormat must be a non-empty string.');
         $this->nameIDFormats = $nameIDFormats;
     }
