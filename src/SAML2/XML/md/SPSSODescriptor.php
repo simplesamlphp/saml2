@@ -179,7 +179,7 @@ final class SPSSODescriptor extends AbstractSSODescriptor
         Assert::allIsInstanceOf(
             $acs,
             AssertionConsumerService::class,
-            'All md:AssertionConsumerService endpoints must be an instance of AssertionConsumerOnService.'
+            'All md:AssertionConsumerService endpoints must be an instance of AssertionConsumerService.'
         );
         $this->assertionConsumerService = $acs;
     }
