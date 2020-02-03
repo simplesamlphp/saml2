@@ -21,7 +21,7 @@ use Webmozart\Assert\Assert;
  *     fromXML() in this class. In order to process an XML document, you can use the get*Attribute() static methods
  *     from AbstractXMLElement, and reimplement the fromXML() method with them to suit your new constructor.
  *
- * @package SimpleSAMLphp
+ * @package simplesamlphp/saml2
  */
 abstract class AbstractEndpointType extends AbstractMdElement
 {
@@ -79,7 +79,7 @@ abstract class AbstractEndpointType extends AbstractMdElement
      *
      * @param \DOMElement $xml The XML element we should load.
      * @return static
-     * @throws \InvalidArgumentException
+     * @throws \InvalidArgumentException if the qualified name of the supplied element is wrong
      */
     public static function fromXML(DOMElement $xml): object
     {

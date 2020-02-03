@@ -69,7 +69,6 @@ class AuthnRequest extends Request
      *
      * @var array
      */
-
     private $RequesterID = [];
 
     /**
@@ -818,9 +817,8 @@ class AuthnRequest extends Request
                 }
                 $scoping->appendChild($idplist);
             }
-            if (count($this->RequesterID) > 0) {
-                Utils::addStrings($scoping, Constants::NS_SAMLP, 'RequesterID', false, $this->RequesterID);
-            }
+
+            Utils::addStrings($scoping, Constants::NS_SAMLP, 'RequesterID', false, $this->RequesterID);
         }
 
         return $root;
@@ -865,7 +863,7 @@ class AuthnRequest extends Request
      */
     private function addConditions(DOMElement $root): void
     {
-        if ($this->audiences !== []) {
+        if (!empty($this->audiences)) {
             $document = $root->ownerDocument;
 
             $conditions = $document->createElementNS(Constants::NS_SAML, 'saml:Conditions');

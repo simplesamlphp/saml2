@@ -52,9 +52,9 @@ final class AuthnAuthorityDescriptor extends AbstractRoleDescriptor
      * @param string|null $cacheDuration
      * @param \SAML2\XML\md\Extensions|null $extensions
      * @param string|null $errorURL
-     * @param array|null $keyDescriptors
      * @param \SAML2\XML\md\Organization|null $organization
-     * @param array|null $contacts
+     * @param array $keyDescriptors
+     * @param array $contacts
      */
     public function __construct(
         array $authnQueryServices,
@@ -66,9 +66,9 @@ final class AuthnAuthorityDescriptor extends AbstractRoleDescriptor
         ?string $cacheDuration = null,
         ?Extensions $extensions = null,
         ?string $errorURL = null,
-        ?array $keyDescriptors = [],
         ?Organization $organization = null,
-        ?array $contacts = []
+        array $keyDescriptors = [],
+        array $contacts = []
     ) {
         parent::__construct(
             $protocolSupportEnumeration,
@@ -92,7 +92,7 @@ final class AuthnAuthorityDescriptor extends AbstractRoleDescriptor
      *
      * @param \DOMElement $xml The XML element we should load.
      * @return self
-     * @throws \Exception
+     * @throws \InvalidArgumentException if the qualified name of the supplied element is wrong
      */
     public static function fromXML(DOMElement $xml): object
     {
@@ -131,8 +131,8 @@ final class AuthnAuthorityDescriptor extends AbstractRoleDescriptor
             self::getAttribute($xml, 'cacheDuration', null),
             !empty($extensions) ? $extensions[0] : null,
             self::getAttribute($xml, 'errorURL', null),
-            KeyDescriptor::getChildrenOfClass($xml),
             !empty($orgs) ? $orgs[0] : null,
+            KeyDescriptor::getChildrenOfClass($xml),
             ContactPerson::getChildrenOfClass($xml)
         );
     }
@@ -153,6 +153,8 @@ final class AuthnAuthorityDescriptor extends AbstractRoleDescriptor
      * Set the AuthnQueryService endpoints
      *
      * @param \SAML2\XML\md\AbstractEndpointType[] $authnQueryServices
+     * @return void
+     * @throws \InvalidArgumentException
      */
     protected function setAuthnQueryServices(array $authnQueryServices): void
     {
@@ -181,6 +183,8 @@ final class AuthnAuthorityDescriptor extends AbstractRoleDescriptor
      * Set the AssertionIDRequestService endpoints
      *
      * @param \SAML2\XML\md\AbstractEndpointType[] $assertionIDRequestServices
+     * @return void
+     * @throws \InvalidArgumentException
      */
     protected function setAssertionIDRequestService(?array $assertionIDRequestServices): void
     {
@@ -211,6 +215,8 @@ final class AuthnAuthorityDescriptor extends AbstractRoleDescriptor
      * Set the values of the NameIDFormat
      *
      * @param string[] $nameIDFormats
+     * @return void
+     * @throws \InvalidArgumentException
      */
     protected function setNameIDFormat(?array $nameIDFormats): void
     {
@@ -226,11 +232,10 @@ final class AuthnAuthorityDescriptor extends AbstractRoleDescriptor
      * Add this IDPSSODescriptor to an EntityDescriptor.
      *
      * @param \DOMElement|null $parent The EntityDescriptor we should append this AuthnAuthorityDescriptor to.
-     *
      * @return \DOMElement
-     * @throws \Exception
+     * @throws \InvalidArgumentException if the qualified name of the supplied element is wrong
      */
-    public function toXML(?DOMElement $parent = null): DOMElement
+    public function toXML(DOMElement $parent = null): DOMElement
     {
         $e = parent::toXML($parent);
 

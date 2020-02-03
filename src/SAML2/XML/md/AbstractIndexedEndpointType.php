@@ -50,10 +50,8 @@ abstract class AbstractIndexedEndpointType extends AbstractEndpointType
      * Initialize an IndexedEndpointType.
      *
      * @param \DOMElement $xml The XML element we should load.
-     *
      * @return self
-     * @throws \InvalidArgumentException
-     * @throws \Exception
+     * @throws \InvalidArgumentException if the qualified name of the supplied element is wrong
      */
     public static function fromXML(DOMElement $xml): object
     {
@@ -79,7 +77,6 @@ abstract class AbstractIndexedEndpointType extends AbstractEndpointType
      * Add this endpoint to an XML element.
      *
      * @param \DOMElement $parent The element we should append this endpoint to.
-     *
      * @return \DOMElement
      */
     public function toXML(DOMElement $parent = null): DOMElement

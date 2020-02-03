@@ -168,10 +168,7 @@ final class RegistrationInfo extends AbstractMdrpiElement
             $e->setAttribute('registrationInstant', gmdate('Y-m-d\TH:i:s\Z', $this->registrationInstant));
         }
 
-        if (!empty($this->RegistrationPolicy)) {
-            Utils::addStrings($e, RegistrationInfo::NS, 'mdrpi:RegistrationPolicy', true, $this->RegistrationPolicy);
-        }
-
+        Utils::addStrings($e, RegistrationInfo::NS, 'mdrpi:RegistrationPolicy', true, $this->RegistrationPolicy);
         return $e;
     }
 }

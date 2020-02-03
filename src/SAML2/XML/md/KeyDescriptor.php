@@ -44,13 +44,12 @@ final class KeyDescriptor extends AbstractMdElement
      *
      * @param \SAML2\XML\ds\KeyInfo     $keyInfo
      * @param string|null $use
-     * @param \SAML2\XML\md\EncryptionMethod[]|null  $encryptionMethod
-     * @throws \InvalidArgumentException
+     * @param \SAML2\XML\md\EncryptionMethod[]  $encryptionMethod
      */
     public function __construct(
         KeyInfo $keyInfo,
         ?string $use = null,
-        ?array $encryptionMethod = null
+        array $encryptionMethod = []
     ) {
         $this->setKeyInfo($keyInfo);
         $this->setUse($use);
@@ -111,9 +110,9 @@ final class KeyDescriptor extends AbstractMdElement
     /**
      * Collect the value of the EncryptionMethod property.
      *
-     * @return \SAML2\XML\md\EncryptionMethod[]|null
+     * @return \SAML2\XML\md\EncryptionMethod[]
      */
-    public function getEncryptionMethods(): ?array
+    public function getEncryptionMethods(): array
     {
         return $this->EncryptionMethods;
     }
@@ -122,15 +121,13 @@ final class KeyDescriptor extends AbstractMdElement
     /**
      * Set the value of the EncryptionMethod property.
      *
-     * @param \SAML2\XML\md\EncryptionMethod[]|null $encryptionMethods
+     * @param \SAML2\XML\md\EncryptionMethod[] $encryptionMethods
      * @throws \InvalidArgumentException
      */
-    protected function setEncryptionMethods(?array $encryptionMethods): void
+    protected function setEncryptionMethods(array $encryptionMethods): void
     {
-        if ($encryptionMethods !== null) {
-            Assert::allIsInstanceOf($encryptionMethods, EncryptionMethod::class);
-            $this->EncryptionMethods = $encryptionMethods;
-        }
+        Assert::allIsInstanceOf($encryptionMethods, EncryptionMethod::class);
+        $this->EncryptionMethods = $encryptionMethods;
     }
 
 
@@ -139,7 +136,7 @@ final class KeyDescriptor extends AbstractMdElement
      *
      * @param \DOMElement $xml The XML element we should load.
      * @return \SAML2\XML\md\KeyDescriptor
-     * @throws \Exception
+     * @throws \InvalidArgumentException if the qualified name of the supplied element is wrong
      */
     public static function fromXML(DOMElement $xml): object
     {

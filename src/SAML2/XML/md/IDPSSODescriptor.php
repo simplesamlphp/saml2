@@ -133,7 +133,7 @@ final class IDPSSODescriptor extends AbstractSSODescriptor
      *
      * @param \DOMElement $xml The XML element we should load.
      * @return \SAML2\XML\md\IDPSSODescriptor
-     * @throws \Exception
+     * @throws \InvalidArgumentException if the qualified name of the supplied element is wrong
      */
     public static function fromXML(DOMElement $xml): object
     {
@@ -186,6 +186,7 @@ final class IDPSSODescriptor extends AbstractSSODescriptor
      * Set the value of the WantAuthnRequestsSigned-property
      *
      * @param bool|null $flag
+     * @return void
      */
     protected function setWantAuthnRequestsSigned(?bool $flag = null): void
     {
@@ -207,7 +208,8 @@ final class IDPSSODescriptor extends AbstractSSODescriptor
     /**
      * Set the SingleSignOnService endpoints
      *
-     * @param array $singleSignOnServices
+     * @param \SAML2\XML\md\SingleSignOnService[] $singleSignOnServices
+     * @return void
      */
     protected function setSingleSignOnServices(array $singleSignOnServices): void
     {
@@ -235,7 +237,8 @@ final class IDPSSODescriptor extends AbstractSSODescriptor
     /**
      * Set the NameIDMappingService endpoints
      *
-     * @param array|null $nameIDMappingServices
+     * @param \SAML2\XML\md\NameIDMappingService[]|null $nameIDMappingServices
+     * @return void
      */
     protected function setNameIDMappingServices(?array $nameIDMappingServices): void
     {
@@ -264,7 +267,8 @@ final class IDPSSODescriptor extends AbstractSSODescriptor
     /**
      * Set the AssertionIDRequestService endpoints
      *
-     * @param array $assertionIDRequestServices|null
+     * @param \SAML2\XML\md\AssertionIDRequestService[]|null $assertionIDRequestServices
+     * @return void
      */
     protected function setAssertionIDRequestService(?array $assertionIDRequestServices): void
     {
@@ -293,7 +297,8 @@ final class IDPSSODescriptor extends AbstractSSODescriptor
     /**
      * Set the attribute profiles supported
      *
-     * @param array $attributeProfiles
+     * @param string[] $attributeProfiles
+     * @return void
      */
     protected function setAttributeProfiles(array $attributeProfiles): void
     {
@@ -333,7 +338,6 @@ final class IDPSSODescriptor extends AbstractSSODescriptor
      *
      * @param \DOMElement|null $parent The EntityDescriptor we should append this IDPSSODescriptor to.
      * @return \DOMElement
-     * @throws \Exception
      */
     public function toXML(DOMElement $parent = null): DOMElement
     {

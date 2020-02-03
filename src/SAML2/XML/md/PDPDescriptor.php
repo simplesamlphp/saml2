@@ -12,7 +12,7 @@ use Webmozart\Assert\Assert;
 /**
  * Class representing SAML 2 metadata PDPDescriptor.
  *
- * @package SimpleSAMLphp
+ * @package simplesamlphp/saml2
  */
 final class PDPDescriptor extends AbstractRoleDescriptor
 {
@@ -50,9 +50,9 @@ final class PDPDescriptor extends AbstractRoleDescriptor
      * @param string|null $cacheDuration
      * @param \SAML2\XML\md\Extensions|null $extensions
      * @param string|null $errorURL
-     * @param \SAML2\XML\md\KeyDescriptor[]|null $keyDescriptors
      * @param \SAML2\XML\md\Organization|null $organization
-     * @param \SAML2\XML\md\ContactPerson[]|null $contacts
+     * @param \SAML2\XML\md\KeyDescriptor[] $keyDescriptors
+     * @param \SAML2\XML\md\ContactPerson[] $contacts
      */
     public function __construct(
         array $authServiceEndpoints,
@@ -64,9 +64,9 @@ final class PDPDescriptor extends AbstractRoleDescriptor
         ?string $cacheDuration = null,
         ?Extensions $extensions = null,
         ?string $errorURL = null,
-        ?array $keyDescriptors = null,
         ?Organization $organization = null,
-        ?array $contacts = null
+        array $keyDescriptors = [],
+        array $contacts = []
     ) {
         parent::__construct(
             $protocolSupportEnumeration,
@@ -90,7 +90,7 @@ final class PDPDescriptor extends AbstractRoleDescriptor
      *
      * @param \DOMElement $xml The XML element we should load.
      * @return \SAML2\XML\md\PDPDescriptor
-     * @throws \Exception
+     * @throws \InvalidArgumentException if the qualified name of the supplied element is wrong
      */
     public static function fromXML(DOMElement $xml): object
     {
@@ -114,8 +114,8 @@ final class PDPDescriptor extends AbstractRoleDescriptor
             self::getAttribute($xml, 'cacheDuration', null),
             !empty($extensions) ? $extensions[0] : null,
             self::getAttribute($xml, 'errorURL', null),
-            KeyDescriptor::getChildrenOfClass($xml),
             !empty($orgs) ? $orgs[0] : null,
+            KeyDescriptor::getChildrenOfClass($xml),
             ContactPerson::getChildrenOfClass($xml)
         );
     }
@@ -136,6 +136,8 @@ final class PDPDescriptor extends AbstractRoleDescriptor
      * Set the AuthzService endpoints for this PDPDescriptor
      *
      * @param \SAML2\XML\md\AuthzService[] $authzServices
+     * @return void
+     * @throws \InvalidArgumentException
      */
     protected function setAuthzServiceEndpoints(array $authzServices = []): void
     {
@@ -152,9 +154,9 @@ final class PDPDescriptor extends AbstractRoleDescriptor
     /**
      * Get the AssertionIDRequestService endpoints of this PDPDescriptor
      *
-     * @return \SAML2\XML\md\AssertionIDRequestService[]
+     * @return \SAML2\XML\md\AssertionIDRequestService[]|null
      */
-    public function getAssertionIDRequestServices(): array
+    public function getAssertionIDRequestServices(): ?array
     {
         return $this->assertionIDRequestServiceEndpoints;
     }
@@ -163,7 +165,9 @@ final class PDPDescriptor extends AbstractRoleDescriptor
     /**
      * Set the AssertionIDRequestService endpoints for this PDPDescriptor
      *
-     * @param \SAML2\XML\md\AssertionIDRequestService[] $assertionIDRequestServices
+     * @param \SAML2\XML\md\AssertionIDRequestService[]|null $assertionIDRequestServices
+     * @return void
+     * @throws \InvalidArgumentException
      */
     public function setAssertionIDRequestServices(?array $assertionIDRequestServices): void
     {
@@ -210,7 +214,6 @@ final class PDPDescriptor extends AbstractRoleDescriptor
      *
      * @param \DOMElement $parent The EntityDescriptor we should append this IDPSSODescriptor to.
      * @return \DOMElement
-     * @throws \Exception
      */
     public function toXML(DOMElement $parent = null): DOMElement
     {
@@ -225,7 +228,6 @@ final class PDPDescriptor extends AbstractRoleDescriptor
         }
 
         Utils::addStrings($e, Constants::NS_MD, 'md:NameIDFormat', false, $this->nameIDFormats);
-
         return $e;
     }
 }

@@ -67,7 +67,7 @@ final class EntitiesDescriptor extends AbstractMetadataDocument
      *
      * @param \DOMElement $xml The XML element we should load.
      * @return \SAML2\XML\md\EntitiesDescriptor
-     * @throws \Exception
+     * @throws \InvalidArgumentException if the qualified name of the supplied element is wrong
      */
     public static function fromXML(DOMElement $xml): object
     {
@@ -195,7 +195,6 @@ final class EntitiesDescriptor extends AbstractMetadataDocument
         }
 
         $this->signElement($e, $e->firstChild);
-
         return $e;
     }
 }

@@ -12,7 +12,7 @@ use Webmozart\Assert\Assert;
 /**
  * Class representing unknown RoleDescriptors.
  *
- * @package SimpleSAMLphp
+ * @package simplesamlphp/saml2
  */
 final class UnknownRoleDescriptor extends AbstractRoleDescriptor
 {
@@ -28,10 +28,8 @@ final class UnknownRoleDescriptor extends AbstractRoleDescriptor
      * Initialize an unknown RoleDescriptor.
      *
      * @param \DOMElement $xml The XML element we should load.
-     *
      * @return \SAML2\XML\md\UnknownRoleDescriptor
-     *
-     * @throws \Exception
+     * @throws \InvalidArgumentException if the qualified name of the supplied element is wrong
      */
     public static function fromXML(DOMElement $xml): object
     {
@@ -61,7 +59,7 @@ final class UnknownRoleDescriptor extends AbstractRoleDescriptor
     /**
      * Get the original XML of this descriptor as a Chunk object.
      *
-     * @return Chunk
+     * @return \SAML2\XML\Chunk
      */
     public function getXML(): Chunk
     {
@@ -75,7 +73,7 @@ final class UnknownRoleDescriptor extends AbstractRoleDescriptor
      * @param \DOMElement|null $parent The EntityDescriptor we should append this RoleDescriptor to.
      * @return \DOMElement
      */
-    public function toXML(?DOMElement $parent = null): DOMElement
+    public function toXML(DOMElement $parent = null): DOMElement
     {
         return $this->xml->toXML($parent);
     }

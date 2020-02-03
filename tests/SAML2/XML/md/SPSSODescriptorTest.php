@@ -104,10 +104,10 @@ XML
             null,
             [$kd],
             null,
-            null,
-            null,
+            [],
+            [],
             [$slo1, $slo2],
-            null,
+            [],
             ['urn:oasis:names:tc:SAML:2.0:nameid-format:transient']
         );
         $this->assertCount(2, $spssod->getAssertionConsumerService());

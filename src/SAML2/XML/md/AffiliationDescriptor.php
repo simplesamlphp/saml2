@@ -29,7 +29,7 @@ final class AffiliationDescriptor extends AbstractMetadataDocument
      *
      * Array of entity ID strings.
      *
-     * @var array
+     * @var string[]
      */
     protected $AffiliateMembers = [];
 
@@ -38,7 +38,7 @@ final class AffiliationDescriptor extends AbstractMetadataDocument
      *
      * Array of \SAML2\XML\md\KeyDescriptor elements.
      *
-     * @var \SAML2\XML\md\KeyDescriptor[]|null
+     * @var \SAML2\XML\md\KeyDescriptor[]
      */
     protected $KeyDescriptors = [];
 
@@ -48,22 +48,20 @@ final class AffiliationDescriptor extends AbstractMetadataDocument
      *
      * @param string $ownerID The ID of the owner of this affiliation.
      * @param array $members A non-empty array of members of this affiliation.
-     * @param \SAML2\XML\md\KeyDescriptor[]|null $keyDescriptors An optional array of KeyDescriptors. Defaults to an empty array.
      * @param string|null $ID The ID for this document. Defaults to null.
      * @param int|null $validUntil Unix time of validity for this document. Defaults to null.
      * @param string|null $cacheDuration Maximum time this document can be cached. Defaults to null.
      * @param \SAML2\XML\md\Extensions|null An array of extensions. Defaults to an empty array.
-     *
-     * @throws \Exception
+     * @param \SAML2\XML\md\KeyDescriptor[] $keyDescriptors An optional array of KeyDescriptors. Defaults to an empty array.
      */
     public function __construct(
         string $ownerID,
         array $members,
-        ?array $keyDescriptors = null,
         ?string $ID = null,
         ?int $validUntil = null,
         ?string $cacheDuration = null,
-        ?Extensions $extensions = null
+        ?Extensions $extensions = null,
+        array $keyDescriptors = []
     ) {
         parent::__construct($ID, $validUntil, $cacheDuration, $extensions);
         $this->setAffiliationOwnerID($ownerID);
@@ -77,7 +75,7 @@ final class AffiliationDescriptor extends AbstractMetadataDocument
      *
      * @param \DOMElement $xml The XML element we should load.
      * @return \SAML2\XML\md\AffiliationDescriptor
-     * @throws \Exception
+     * @throws \InvalidArgumentException if the qualified name of the supplied element is wrong
      */
     public static function fromXML(DOMElement $xml): object
     {
@@ -101,11 +99,11 @@ final class AffiliationDescriptor extends AbstractMetadataDocument
         $afd = new self(
             $owner,
             $members,
-            $keyDescriptors,
             self::getAttribute($xml, 'ID', null),
             $validUntil !== null ? Utils::xsDateTimeToTimestamp($validUntil) : null,
             self::getAttribute($xml, 'cacheDuration', null),
-            !empty($extensions) ? $extensions[0] : null
+            !empty($extensions) ? $extensions[0] : null,
+            $keyDescriptors
         );
         $afd->getSignatureFromXML($xml);
         return $afd;
@@ -150,7 +148,9 @@ final class AffiliationDescriptor extends AbstractMetadataDocument
     /**
      * Set the value of the AffiliateMember-property
      *
-     * @param array $affiliateMembers
+     * @param string[] $affiliateMembers
+     * @return void
+     * @throws \InvalidArgumentException
      */
     protected function setAffiliateMembers(array $affiliateMembers): void
     {
@@ -177,14 +177,13 @@ final class AffiliationDescriptor extends AbstractMetadataDocument
     /**
      * Set the value of the KeyDescriptor-property
      *
-     * @param \SAML2\XML\md\KeyDescriptor[]|null $keyDescriptors
+     * @param \SAML2\XML\md\KeyDescriptor[] $keyDescriptors
+     * @return void
      */
-    protected function setKeyDescriptors(?array $keyDescriptors): void
+    protected function setKeyDescriptors(array $keyDescriptors): void
     {
-        if ($keyDescriptors !== null) {
-            Assert::allIsInstanceOf($keyDescriptors, KeyDescriptor::class);
-            $this->KeyDescriptors = $keyDescriptors;
-        }
+        Assert::allIsInstanceOf($keyDescriptors, KeyDescriptor::class);
+        $this->KeyDescriptors = $keyDescriptors;
     }
 
 
@@ -194,7 +193,7 @@ final class AffiliationDescriptor extends AbstractMetadataDocument
      * @param \DOMElement|null $parent The EntityDescriptor we should append this endpoint to.
      * @return \DOMElement
      */
-    public function toXML(?DOMElement $parent = null): DOMElement
+    public function toXML(DOMElement $parent = null): DOMElement
     {
         $e = parent::toXML($parent);
 

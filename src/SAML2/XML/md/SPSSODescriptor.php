@@ -65,11 +65,11 @@ final class SPSSODescriptor extends AbstractSSODescriptor
      * @param string|null $errorURL
      * @param \SAML2\XML\md\KeyDescriptor[]|null $keyDescriptors
      * @param \SAML2\XML\md\Organization|null $organization
-     * @param \SAML2\XML\md\ContactPerson[]|null $contacts
-     * @param \SAML2\XML\md\ArtifactResolutionService[]|null $artifactResolutionService
-     * @param \SAML2\XML\md\SingleLogoutService[]|null $singleLogoutService
-     * @param \SAML2\XML\md\ManageNameIDService[]|null $manageNameIDService
-     * @param string[]|null $nameIDFormat
+     * @param \SAML2\XML\md\ContactPerson[] $contacts
+     * @param \SAML2\XML\md\ArtifactResolutionService[] $artifactResolutionService
+     * @param \SAML2\XML\md\SingleLogoutService[] $singleLogoutService
+     * @param \SAML2\XML\md\ManageNameIDService[] $manageNameIDService
+     * @param string[] $nameIDFormat
      */
     public function __construct(
         array $assertionConsumerService,
@@ -84,11 +84,11 @@ final class SPSSODescriptor extends AbstractSSODescriptor
         ?string $errorURL = null,
         ?array $keyDescriptors = [],
         ?Organization $organization = null,
-        ?array $contacts = [],
-        ?array $artifactResolutionService = [],
-        ?array $singleLogoutService = [],
-        ?array $manageNameIDService = [],
-        ?array $nameIDFormat = []
+        array $contacts = [],
+        array $artifactResolutionService = [],
+        array $singleLogoutService = [],
+        array $manageNameIDService = [],
+        array $nameIDFormat = []
     ) {
         parent::__construct(
             $protocolSupportEnumeration,
@@ -128,6 +128,7 @@ final class SPSSODescriptor extends AbstractSSODescriptor
      * Set the value of the AuthnRequestsSigned-property
      *
      * @param bool|null $flag
+     * @return void
      */
     private function setAuthnRequestsSigned(?bool $flag): void
     {
@@ -150,6 +151,7 @@ final class SPSSODescriptor extends AbstractSSODescriptor
      * Set the value of the WantAssertionsSigned-property
      *
      * @param bool|null $flag
+     * @return void
      */
     private function setWantAssertionsSigned(?bool $flag): void
     {
@@ -172,6 +174,8 @@ final class SPSSODescriptor extends AbstractSSODescriptor
      * Set the value of the AssertionConsumerService-property
      *
      * @param \SAML2\XML\md\AssertionConsumerService[] $acs
+     * @return void
+     * @throws \InvalidArgumentException
      */
     private function setAssertionConsumerService(array $acs): void
     {
@@ -199,18 +203,18 @@ final class SPSSODescriptor extends AbstractSSODescriptor
     /**
      * Set the value of the AttributeConsumingService-property
      *
-     * @param \SAML2\XML\md\AttributeConsumingService[]|null $acs
+     * @param \SAML2\XML\md\AttributeConsumingService[] $acs
+     * @return void
+     * @throws \InvalidArgumentException
      */
-    private function setAttributeConsumingService(?array $acs): void
+    private function setAttributeConsumingService(array $acs): void
     {
-        if ($acs !== null) {
-            Assert::allIsInstanceOf(
-                $acs,
-                AttributeConsumingService::class,
-                'All md:AttributeConsumingService endpoints must be an instance of AttributeConsumingService.'
-            );
-            $this->attributeConsumingService = $acs;
-        }
+        Assert::allIsInstanceOf(
+            $acs,
+            AttributeConsumingService::class,
+            'All md:AttributeConsumingService endpoints must be an instance of AttributeConsumingService.'
+        );
+        $this->attributeConsumingService = $acs;
     }
 
 
@@ -218,9 +222,8 @@ final class SPSSODescriptor extends AbstractSSODescriptor
      * Convert XML into a SPSSODescriptor
      *
      * @param \DOMElement $xml The XML element we should load
-     *
-     * @return self
-     * @throws \Exception
+     * @throws \InvalidArgumentException
+     * @throws \InvalidArgumentException if the qualified name of the supplied element is wrong
      */
     public static function fromXML(DOMElement $xml): object
     {
@@ -260,11 +263,9 @@ final class SPSSODescriptor extends AbstractSSODescriptor
      * Add this SPSSODescriptor to an EntityDescriptor.
      *
      * @param \DOMElement|null $parent The EntityDescriptor we should append this SPSSODescriptor to.
-     *
      * @return \DOMElement
-     * @throws \Exception
      */
-    public function toXML(?DOMElement $parent = null): DOMElement
+    public function toXML(DOMElement $parent = null): DOMElement
     {
         $e = parent::toXML($parent);
 

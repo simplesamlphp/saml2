@@ -80,7 +80,7 @@ final class Extensions extends AbstractMdElement
 
 
     /**
-     * @inheritDoc
+     * @return bool
      */
     public function isEmptyElement(): bool
     {
@@ -104,8 +104,8 @@ final class Extensions extends AbstractMdElement
      * as a \SAML2\XML\Chunk object.
      *
      * @param \DOMElement $xml
-     *
      * @return \SAML2\XML\md\Extensions
+     * @throws \InvalidArgumentException if the qualified name of the supplied element is wrong
      */
     public static function fromXML(DOMElement $xml): object
     {
@@ -162,7 +162,6 @@ final class Extensions extends AbstractMdElement
      * Convert this object into its md:Extensions XML representation.
      *
      * @param \DOMElement|null $parent The element we should add this Extensions element to.
-     *
      * @return \DOMElement The new md:Extensions XML element.
      */
     public function toXML(DOMElement $parent = null): DOMElement

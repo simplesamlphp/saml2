@@ -106,7 +106,7 @@ final class PublicationInfo extends AbstractMdrpiElement
      *
      * @return array
      */
-    public function getUsagePolicy(): ?array
+    public function getUsagePolicy(): array
     {
         return $this->UsagePolicy;
     }
@@ -207,10 +207,7 @@ final class PublicationInfo extends AbstractMdrpiElement
             $e->setAttribute('publicationId', $this->publicationId);
         }
 
-        if (!empty($this->UsagePolicy)) {
-            Utils::addStrings($e, PublicationInfo::NS, 'mdrpi:UsagePolicy', true, $this->UsagePolicy);
-        }
-
+        Utils::addStrings($e, PublicationInfo::NS, 'mdrpi:UsagePolicy', true, $this->UsagePolicy);
         return $e;
     }
 }

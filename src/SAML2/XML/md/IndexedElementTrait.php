@@ -32,8 +32,6 @@ trait IndexedElementTrait
      * Collect the value of the index property.
      *
      * @return int
-     *
-     * @throws \InvalidArgumentException if assertions are false
      */
     public function getIndex(): int
     {
@@ -45,10 +43,12 @@ trait IndexedElementTrait
      * Set the value of the index property.
      *
      * @param int $index
+     * @return void
+     * @throws \InvalidArgumentException
      */
     protected function setIndex(int $index): void
     {
-        Assert::numeric($index, '\'index\' must be a natural number.');
+        Assert::natural($index, '\'index\' must be a natural number.');
         $this->index = $index;
     }
 
@@ -71,10 +71,6 @@ trait IndexedElementTrait
      */
     protected function setIsDefault(?bool $flag): void
     {
-        if ($flag === null) {
-            return;
-        }
-
         $this->isDefault = $flag;
     }
 }

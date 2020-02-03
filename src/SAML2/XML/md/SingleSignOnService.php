@@ -22,6 +22,7 @@ final class SingleSignOnService extends AbstractEndpointType
      * @param string $location
      * @param string|null $unused
      * @param array $attributes
+     * @throws \InvalidArgumentException
      */
     public function __construct(
         string $binding,

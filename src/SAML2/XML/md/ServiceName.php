@@ -9,6 +9,6 @@ namespace SAML2\XML\md;
  *
  * @package simplesamlphp/saml2
  */
-class ServiceName extends AbstractLocalizedName
+final class ServiceName extends AbstractLocalizedName
 {
 }

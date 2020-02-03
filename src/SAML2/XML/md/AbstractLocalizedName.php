@@ -51,10 +51,9 @@ abstract class AbstractLocalizedName extends AbstractMdElement
     /**
      * Create an instance of this object from its XML representation.
      *
-     * @param DOMElement $xml
-     *
+     * @param \DOMElement $xml
      * @return static
-     * @throws InvalidArgumentException
+     * @throws \InvalidArgumentException if the qualified name of the supplied element is wrong
      */
     public static function fromXML(DOMElement $xml): object
     {
@@ -88,6 +87,7 @@ abstract class AbstractLocalizedName extends AbstractMdElement
      * Set the language this string is localized in.
      *
      * @param string $language
+     * @return void
      */
     protected function setLanguage(string $language): void
     {
@@ -111,6 +111,7 @@ abstract class AbstractLocalizedName extends AbstractMdElement
      * Set the localized string.
      *
      * @param string $value
+     * @return void
      */
     protected function setValue(string $value): void
     {
@@ -119,9 +120,8 @@ abstract class AbstractLocalizedName extends AbstractMdElement
 
 
     /**
-     * @param DOMElement|null $parent
-     *
-     * @return DOMElement
+     * @param \DOMElement|null $parent
+     * @return \DOMElement
      */
     final public function toXML(DOMElement $parent = null): DOMElement
     {

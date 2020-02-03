@@ -77,9 +77,9 @@ final class AttributeAuthorityDescriptor extends AbstractRoleDescriptor
      * @param string|null $cacheDuration
      * @param \SAML2\XML\md\Extensions|null $extensions
      * @param string|null $errorURL
-     * @param \SAML2\XML\md\KeyDescriptor[]|null $keyDescriptors
      * @param \SAML2\XML\md\Organization|null $organization
-     * @param \SAML2\XML\md\ContactPerson[]|null $contacts
+     * @param \SAML2\XML\md\KeyDescriptor[] $keyDescriptors
+     * @param \SAML2\XML\md\ContactPerson[] $contacts
      */
     public function __construct(
         array $attributeServices,
@@ -93,9 +93,9 @@ final class AttributeAuthorityDescriptor extends AbstractRoleDescriptor
         ?string $cacheDuration = null,
         ?Extensions $extensions = null,
         ?string $errorURL = null,
-        ?array $keyDescriptors = null,
         ?Organization $organization = null,
-        ?array $contacts = null
+        array $keyDescriptors = [],
+        array $contacts = []
     ) {
         parent::__construct(
             $protocolSupportEnumeration,
@@ -261,9 +261,8 @@ final class AttributeAuthorityDescriptor extends AbstractRoleDescriptor
      * Initialize an IDPSSODescriptor.
      *
      * @param \DOMElement|null $xml The XML element we should load.
-     *
      * @return self
-     * @throws \Exception
+     * @throws \InvalidArgumentException if the qualified name of the supplied element is wrong
      */
     public static function fromXML(DOMElement $xml = null): object
     {
@@ -312,8 +311,8 @@ final class AttributeAuthorityDescriptor extends AbstractRoleDescriptor
             self::getAttribute($xml, 'cacheDuration', null),
             !empty($extensions) ? $extensions[0] : null,
             self::getAttribute($xml, 'errorURL', null),
-            KeyDescriptor::getChildrenOfClass($xml),
             !empty($orgs) ? $orgs[0] : null,
+            KeyDescriptor::getChildrenOfClass($xml),
             ContactPerson::getChildrenOfClass($xml)
         );
     }
@@ -323,13 +322,9 @@ final class AttributeAuthorityDescriptor extends AbstractRoleDescriptor
      * Add this AttributeAuthorityDescriptor to an EntityDescriptor.
      *
      * @param \DOMElement|null $parent The EntityDescriptor we should append this IDPSSODescriptor to.
-     *
      * @return \DOMElement
-     *
-     * @throws \InvalidArgumentException if assertions are false
-     * @throws \Exception
      */
-    public function toXML(?DOMElement $parent = null): DOMElement
+    public function toXML(DOMElement $parent = null): DOMElement
     {
         $e = parent::toXML($parent);
 

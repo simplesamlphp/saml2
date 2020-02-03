@@ -11,5 +11,4 @@ namespace SAML2\XML\md;
  */
 final class AuthnQueryService extends AbstractEndpointType
 {
-
 }

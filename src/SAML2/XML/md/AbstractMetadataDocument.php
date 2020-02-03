@@ -74,6 +74,7 @@ abstract class AbstractMetadataDocument extends AbstractSignedMdElement
      * Set the value of the ID property.
      *
      * @param string|null $id
+     * @return void
      */
     protected function setID(?string $id): void
     {
@@ -96,6 +97,7 @@ abstract class AbstractMetadataDocument extends AbstractSignedMdElement
      * Set the value of the validUntil-property
      *
      * @param int|null $validUntil
+     * @return void
      */
     protected function setValidUntil(?int $validUntil): void
     {
@@ -118,6 +120,7 @@ abstract class AbstractMetadataDocument extends AbstractSignedMdElement
      * Set the value of the cacheDuration-property
      *
      * @param string|null $cacheDuration
+     * @return void
      */
     protected function setCacheDuration(?string $cacheDuration): void
     {

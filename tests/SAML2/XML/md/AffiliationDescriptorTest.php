@@ -48,6 +48,10 @@ XML
         $ad = new AffiliationDescriptor(
             'TheOwner',
             ['Member', 'OtherMember'],
+            'TheID',
+            1234567890,
+            'PT5000S',
+            null,
             [
                 new KeyDescriptor(
                     new KeyInfo(
@@ -57,10 +61,7 @@ XML
                     ),
                     'signing'
                 )
-            ],
-            'TheID',
-            1234567890,
-            'PT5000S'
+            ]
         );
 
         $this->assertEquals('TheOwner', $ad->getAffiliationOwnerID());
@@ -87,10 +88,11 @@ XML
         new AffiliationDescriptor(
             '',
             ['Member1', 'Member2'],
-            [Utils::createKeyDescriptor("testCert")],
             'TheID',
             1234567890,
-            'PT5000S'
+            'PT5000S',
+            null,
+            [Utils::createKeyDescriptor("testCert")]
         );
     }
 
@@ -105,10 +107,11 @@ XML
         new AffiliationDescriptor(
             'TheOwner',
             [],
-            [Utils::createKeyDescriptor("testCert")],
             'TheID',
             1234567890,
-            'PT5000S'
+            'PT5000S',
+            null,
+            [Utils::createKeyDescriptor("testCert")]
         );
     }
 
@@ -123,10 +126,11 @@ XML
         new AffiliationDescriptor(
             'TheOwner',
             ['Member1', ''],
-            [Utils::createKeyDescriptor("testCert")],
             'TheID',
             1234567890,
-            'PT5000S'
+            'PT5000S',
+            null,
+            [Utils::createKeyDescriptor("testCert")]
         );
     }
 

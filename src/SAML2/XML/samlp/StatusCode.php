@@ -31,7 +31,7 @@ final class StatusCode extends AbstractSamlpElement
      * @param string $Value
      * @param \SAML2\XML\samlp\StatusCode[] $subCodes
      */
-    public function __construct(string $Value = Constants::STATUS_SUCCESS, ?array $subCodes = [])
+    public function __construct(string $Value = Constants::STATUS_SUCCESS, array $subCodes = [])
     {
         $this->setValue($Value);
         $this->setSubCodes($subCodes);

@@ -11,7 +11,7 @@ use SAML2\SignedElementInterface;
 /**
  * Abstract class that represents a signed metadata element.
  *
- * @package SAML2\XML\md
+ * @package simplesamlphp/saml2
  */
 abstract class AbstractSignedMdElement extends AbstractMdElement implements SignedElementInterface
 {
@@ -20,7 +20,7 @@ abstract class AbstractSignedMdElement extends AbstractMdElement implements Sign
     /**
      * List of certificates that should be included in the message.
      *
-     * @var array
+     * @var string[]
      */
     protected $certificates = [];
 
@@ -28,7 +28,7 @@ abstract class AbstractSignedMdElement extends AbstractMdElement implements Sign
     /**
      * Retrieve the certificates that are included in the message.
      *
-     * @return array An array of certificates
+     * @return string[] An array of certificates
      */
     public function getCertificates(): array
     {
@@ -40,7 +40,7 @@ abstract class AbstractSignedMdElement extends AbstractMdElement implements Sign
      * Set the certificates that should be included in the element.
      * The certificates should be strings with the PEM encoded data.
      *
-     * @param array $certificates An array of certificates.
+     * @param string[] $certificates An array of certificates.
      * @return void
      */
     public function setCertificates(array $certificates): void
