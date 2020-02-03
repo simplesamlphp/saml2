@@ -42,9 +42,9 @@ final class PublicationInfo extends AbstractMdrpiElement
      *
      * This is an associative array with language=>URL.
      *
-     * @var array|null
+     * @var array
      */
-    protected $UsagePolicy = null;
+    protected $UsagePolicy = [];
 
 
     /**
@@ -60,7 +60,7 @@ final class PublicationInfo extends AbstractMdrpiElement
         string $publisher,
         int $creationInstant = null,
         string $publicationId = null,
-        array $UsagePolicy = null
+        array $UsagePolicy = []
     ) {
         $this->setPublisher($publisher);
         $this->setCreationInstant($creationInstant);
@@ -107,7 +107,7 @@ final class PublicationInfo extends AbstractMdrpiElement
     /**
      * Collect the value of the UsagePolicy-property
      *
-     * @return array|null
+     * @return array
      */
     public function getUsagePolicy(): ?array
     {
@@ -154,10 +154,10 @@ final class PublicationInfo extends AbstractMdrpiElement
     /**
      * Set the value of the UsagePolicy-property
      *
-     * @param array|null $usagePolicy
+     * @param array $usagePolicy
      * @return void
      */
-    private function setUsagePolicy(?array $usagePolicy): void
+    private function setUsagePolicy(array $usagePolicy): void
     {
         $this->UsagePolicy = $usagePolicy;
     }
@@ -168,6 +168,8 @@ final class PublicationInfo extends AbstractMdrpiElement
      *
      * @param \DOMElement $xml The XML element we should load
      * @return self
+     *
+     * @throws \InvalidArgumentException
      */
     public static function fromXML(DOMElement $xml): object
     {
@@ -186,7 +188,7 @@ final class PublicationInfo extends AbstractMdrpiElement
         $publicationId = $xml->hasAttribute('publicationId') ? $xml->getAttribute('publicationId') : null;
         $UsagePolicy = Utils::extractLocalizedStrings($xml, PublicationInfo::NS, 'UsagePolicy');
 
-        return new self($publisher, $creationInstant, $publicationId, empty($UsagePolicy) ? null : $UsagePolicy);
+        return new self($publisher, $creationInstant, $publicationId, $UsagePolicy);
     }
 
 

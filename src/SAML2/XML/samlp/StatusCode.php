@@ -21,17 +21,17 @@ final class StatusCode extends AbstractSamlpElement
     /** @var string */
     protected $Value;
 
-    /** @var StatusCode[]|null */
-    protected $subCodes = null;
+    /** @var \SAML2\XML\samlp\StatusCode[] */
+    protected $subCodes = [];
 
 
     /**
      * Initialize a samlp:StatusCode
      *
      * @param string $Value
-     * @param StatusCode[]|null $subCodes
+     * @param \SAML2\XML\samlp\StatusCode[] $subCodes
      */
-    public function __construct(string $Value = Constants::STATUS_SUCCESS, ?array $subCodes = null)
+    public function __construct(string $Value = Constants::STATUS_SUCCESS, ?array $subCodes = [])
     {
         $this->setValue($Value);
         $this->setSubCodes($subCodes);
@@ -65,9 +65,9 @@ final class StatusCode extends AbstractSamlpElement
     /**
      * Collect the subcodes
      *
-     * @return StatusCode[]|null
+     * @return \SAML2\XML\samlp\StatusCode[]
      */
-    public function getSubCodes(): ?array
+    public function getSubCodes(): array
     {
         return $this->subCodes;
     }
@@ -76,14 +76,12 @@ final class StatusCode extends AbstractSamlpElement
     /**
      * Set the value of the subCodes-property
      *
-     * @param StatusCode[]|null $subCodes
+     * @param \SAML2\XML\samlp\StatusCode[] $subCodes
      * @return void
      */
-    private function setSubCodes(?array $subCodes): void
+    private function setSubCodes(array $subCodes): void
     {
-        if (!is_null($subCodes)) {
-            Assert::allIsInstanceOf($subCodes, StatusCode::class);
-        }
+        Assert::allIsInstanceOf($subCodes, StatusCode::class);
         $this->subCodes = $subCodes;
     }
 
@@ -93,6 +91,8 @@ final class StatusCode extends AbstractSamlpElement
      *
      * @param \DOMElement $xml The XML element we should load
      * @return \SAML2\XML\samlp\StatusCode
+     *
+     * @throws \InvalidArgumentException
      */
     public static function fromXML(DOMElement $xml): object
     {
@@ -103,20 +103,11 @@ final class StatusCode extends AbstractSamlpElement
 
         Assert::notNull($Value, 'Missing mandatory Value-attribute for StatusCode');
 
-        /** @var \DOMElement[] $subCodes */
-        $subCodes = Utils::xpQuery($xml, './saml_protocol:StatusCode');
-
-        $subCodeObjs = null;
-        if (!empty($subCodes)) {
-            $subCodeObjs = [];
-            foreach ($subCodes as $subCode) {
-                $subCodeObjs[] = StatusCode::fromXML($subCode);
-            }
-        }
+        $subCodes = StatusCode::getChildrenOfClass($xml);
 
         return new self(
             $Value,
-            $subCodeObjs
+            $subCodes
         );
     }
 
@@ -125,7 +116,6 @@ final class StatusCode extends AbstractSamlpElement
      * Convert this StatusCode to XML.
      *
      * @param \DOMElement|null $parent The element we should append this NameIDPolicy to.
-     * @throws \Exception
      * @return \DOMElement
      *
      * @throws \InvalidArgumentException if assertions are false
@@ -135,10 +125,8 @@ final class StatusCode extends AbstractSamlpElement
         $e = $this->instantiateParentElement($parent);
         $e->setAttribute('Value', $this->getValue());
 
-        if (!empty($this->subCodes)) {
-            foreach ($this->subCodes as $subCode) {
-                $subCode->toXML($e);
-            }
+        foreach ($this->subCodes as $subCode) {
+            $subCode->toXML($e);
         }
 
         return $e;

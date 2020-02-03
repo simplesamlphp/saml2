@@ -62,6 +62,8 @@ final class AuthnContextClassRef extends AbstractSamlElement
      *
      * @param \DOMElement $xml The XML element we should load
      * @return \SAML2\XML\saml\AuthnContextClassRef
+     *
+     * @throws \InvalidArgumentException if assertions are false
      */
     public static function fromXML(DOMElement $xml): object
     {

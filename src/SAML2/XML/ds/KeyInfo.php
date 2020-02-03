@@ -72,7 +72,7 @@ final class KeyInfo extends AbstractDsElement
     /**
      * Collect the value of the info-property
      *
-     * @return array
+     * @return (\SAML2\XML\Chunk|\SAML2\XML\ds\KeyName|\SAML2\XML\ds\X509Data)[]
      */
     public function getInfo(): array
     {
@@ -83,7 +83,7 @@ final class KeyInfo extends AbstractDsElement
     /**
      * Set the value of the info-property
      *
-     * @param array $info
+     * @param (\SAML2\XML\Chunk|\SAML2\XML\ds\KeyName|\SAML2\XML\ds\X509Data)[] $info
      * @return void
      */
     private function setInfo(array $info): void

@@ -165,19 +165,17 @@ final class Logo extends AbstractMduiElement
      *
      * @param \DOMElement $xml The XML element we should load
      * @return self
+     *
+     * @throws \InvalidArgumentException
      */
     public static function fromXML(DOMElement $xml): object
     {
         Assert::same($xml->localName, 'Logo');
         Assert::same($xml->namespaceURI, Logo::NS);
 
-        if (!$xml->hasAttribute('width')) {
-            throw new \Exception('Missing width of Logo.');
-        } elseif (!$xml->hasAttribute('height')) {
-            throw new \Exception('Missing height of Logo.');
-        } elseif (!strlen($xml->textContent)) {
-            throw new \Exception('Missing url value for Logo.');
-        }
+        Assert::true($xml->hasAttribute('width'), 'Missing width of Logo.');
+        Assert::true($xml->hasAttribute('height'), 'Missing height of Logo.');
+        Assert::stringNotEmpty($xml->textContent, 'Missing url value for Logo.');
 
         $Url = $xml->textContent;
         $Width = intval($xml->getAttribute('width'));

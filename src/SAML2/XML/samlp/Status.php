@@ -27,8 +27,8 @@ final class Status extends AbstractSamlpElement
     /** @var \SAML2\XML\samlp\StatusMessage|null */
     protected $statusMessage = null;
 
-    /** @var \SAML2\XML\samlp\StatusDetail[]|null */
-    protected $statusDetails = null;
+    /** @var \SAML2\XML\samlp\StatusDetail[] */
+    protected $statusDetails = [];
 
 
     /**
@@ -38,7 +38,7 @@ final class Status extends AbstractSamlpElement
      * @param \SAML2\XML\samlp\StatusMessage|null $statusMessage
      * @param \SAML2\XML\samlp\StatusDetail[]|null $statusDetails
      */
-    public function __construct(StatusCode $statusCode, ?StatusMessage $statusMessage = null, ?array $statusDetails = null)
+    public function __construct(StatusCode $statusCode, ?StatusMessage $statusMessage = null, array $statusDetails = [])
     {
         $this->setStatusCode($statusCode);
         $this->setStatusMessage($statusMessage);
@@ -97,9 +97,9 @@ final class Status extends AbstractSamlpElement
     /**
      * Collect the value of the statusDetails-property
      *
-     * @return \SAML2\XML\samlp\StatusDetail[]|null
+     * @return \SAML2\XML\samlp\StatusDetail[]
      */
-    public function getStatusDetails(): ?array
+    public function getStatusDetails(): array
     {
         return $this->statusDetails;
     }
@@ -108,14 +108,12 @@ final class Status extends AbstractSamlpElement
     /**
      * Set the value of the statusDetails-property
      *
-     * @param \SAML2\XML\samlp\StatusDetail[]|null $statusDetails
+     * @param \SAML2\XML\samlp\StatusDetail[] $statusDetails
      * @return void
      */
-    private function setStatusDetails(?array $statusDetails): void
+    private function setStatusDetails(array $statusDetails): void
     {
-        if (!is_null($statusDetails)) {
-            Assert::allIsInstanceOf($statusDetails, StatusDetail::class);
-        }
+        Assert::allIsInstanceOf($statusDetails, StatusDetail::class);
         $this->statusDetails = $statusDetails;
     }
 
@@ -132,13 +130,13 @@ final class Status extends AbstractSamlpElement
         Assert::same($xml->localName, 'Status');
         Assert::same($xml->namespaceURI, Status::NS);
 
-        /** @var DOMElement[] $statusCode */
+        /** @var \DOMElement[] $statusCode */
         $statusCode = Utils::xpQuery($xml, './saml_protocol:StatusCode');
         Assert::count($statusCode, 1);
 
         $statusCode = StatusCode::fromXML($statusCode[0]);
 
-        /** @var DOMElement[] $message */
+        /** @var \DOMElement[] $message */
         $message = Utils::xpQuery($xml, './saml_protocol:StatusMessage');
         Assert::maxCount($message, 1);
 
@@ -147,7 +145,7 @@ final class Status extends AbstractSamlpElement
             $statusMessage = StatusMessage::fromXML($message[0]);
         }
 
-        /** @var DOMElement[] $details */
+        /** @var \DOMElement[] $details */
         $details = Utils::xpQuery($xml, './saml_protocol:StatusDetail');
 
         $statusDetails = [];
@@ -158,7 +156,7 @@ final class Status extends AbstractSamlpElement
         return new self(
             $statusCode,
             $statusMessage,
-            empty($statusDetails) ? null : $statusDetails
+            $statusDetails
         );
     }
 
@@ -178,11 +176,9 @@ final class Status extends AbstractSamlpElement
             $this->statusMessage->toXML($e);
         }
 
-        if (!empty($this->statusDetails)) {
-            foreach ($this->statusDetails as $sd) {
-                if (!$sd->isEmptyElement()) {
-                    $sd->toXML($e);
-                }
+        foreach ($this->statusDetails as $sd) {
+            if (!$sd->isEmptyElement()) {
+                $sd->toXML($e);
             }
         }
 

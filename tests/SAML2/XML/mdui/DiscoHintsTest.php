@@ -20,7 +20,7 @@ class DiscoHintsTest extends \PHPUnit\Framework\TestCase
     public function testMarshalling(): void
     {
         $discoHints = new DiscoHints(
-            null,
+            [],
             ["192.168.6.0/24", "fd00:0123:aa:1001::/64"],
             ["example.org", "student.example.org"],
             ["geo:47.37328,8.531126", "geo:19.34343,12.342514"]

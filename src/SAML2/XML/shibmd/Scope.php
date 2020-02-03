@@ -95,6 +95,8 @@ final class Scope extends AbstractShibmdElement
      *
      * @param \DOMElement $xml The XML element we should load
      * @return self
+     *
+     * @throws \InvalidArgumentException if assertions are false
      */
     public static function fromXML(DOMElement $xml): object
     {
@@ -113,8 +115,6 @@ final class Scope extends AbstractShibmdElement
      *
      * @param \DOMElement|null $parent The element we should append this Scope to.
      * @return \DOMElement
-     *
-     * @throws \InvalidArgumentException if assertions are false
      */
     public function toXML(DOMElement $parent = null): DOMElement
     {

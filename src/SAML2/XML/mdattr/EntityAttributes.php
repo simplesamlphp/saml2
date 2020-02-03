@@ -53,7 +53,7 @@ final class EntityAttributes extends AbstractMdattrElement
     /**
      * Set the value of the childen-property
      *
-     * @param array $children
+     * @param (\SAML2\XML\Chunk|\SAML2\XML\saml\Attribute)[] $children
      * @return void
      */
     private function setChildren(array $children): void

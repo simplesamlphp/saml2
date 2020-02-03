@@ -37,8 +37,6 @@ final class AuthenticatingAuthority extends AbstractSamlElement
      * Collect the value of the authority-property
      *
      * @return string
-     *
-     * @throws \InvalidArgumentException if assertions are false
      */
     public function getAuthority(): string
     {
@@ -63,6 +61,8 @@ final class AuthenticatingAuthority extends AbstractSamlElement
      *
      * @param \DOMElement $xml The XML element we should load
      * @return \SAML2\XML\saml\AuthenticatingAuthority
+     *
+     * @throws \InvalidArgumentException if assertions are false
      */
     public static function fromXML(DOMElement $xml): object
     {

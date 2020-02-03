@@ -26,10 +26,7 @@ class UIInfoTest extends \PHPUnit\Framework\TestCase
             ["nl" => "Voorbeeld", "en" => "Example"],
             ["nl" => "Omschrijving", "en" => "Description"],
             ["nl" => "https://voorbeeld.nl/", "en" => "https://example.org"],
-            ["nl" => "https://voorbeeld.nl/privacy", "en" => "https://example.org/privacy"],
-            null,
-            null,
-            null
+            ["nl" => "https://voorbeeld.nl/privacy", "en" => "https://example.org/privacy"]
         );
         $uiinfo->addKeyword($keyword);
         $uiinfo->addLogo($logo);
@@ -96,22 +93,20 @@ class UIInfoTest extends \PHPUnit\Framework\TestCase
         $logo = new Logo("https://example.edu/logo.png", 30, 20, "nl");
 
         $discohints = new DiscoHints(
-            null,
-            ["192.168.6.0/24", "fd00:0123:aa:1001::/64"],
-            null,
-            null
+            [],
+            ["192.168.6.0/24", "fd00:0123:aa:1001::/64"]
         );
 
         // keywords appears twice, direcyly under UIinfo and as child of DiscoHints
         $discohints->addChild(new Chunk($keywords->toXML()));
 
         $uiinfo = new UIInfo(
-            null,
-            null,
-            null,
-            null,
+            [],
+            [],
+            [],
+            [],
             [$keywords],
-            null,
+            [],
             [$discohints]
         );
         $uiinfo->addLogo($logo);

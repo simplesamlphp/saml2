@@ -41,7 +41,7 @@ final class X509Data extends AbstractDsElement
     /**
      * Collect the value of the data-property
      *
-     * @return array
+     * @return (\SAML2\XML\Chunk|\SAML2\XML\ds\X509Certificate)[]
      */
     public function getData(): array
     {
@@ -52,8 +52,10 @@ final class X509Data extends AbstractDsElement
     /**
      * Set the value of the data-property
      *
-     * @param array $data
+     * @param (\SAML2\XML\Chunk|\SAML2\XML\ds\X509Certificate)[] $data
      * @return void
+     *
+     * @throws \InvalidArgumentException if assertions are false
      */
     private function setData(array $data): void
     {

@@ -61,7 +61,7 @@ XML
         $ra = new RegistrationInfo('SomeAuthority');
         $pubInfo = new PublicationInfo('SomePublisher');
         $uiinfo = new UIInfo(['en' => 'Example']);
-        $discoHints = new DiscoHints(null, ['127.0.0.1']);
+        $discoHints = new DiscoHints([], ['127.0.0.1']);
         $digestMethod = new DigestMethod('SomeAlgorithm');
         $signingMethod = new SigningMethod('SomeOtherAlgorithm', 1024, 4096);
         $extensions = new Extensions([

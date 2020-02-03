@@ -38,14 +38,14 @@ final class RequestedAttribute extends Attribute
      * @param bool|null   $isRequired
      * @param string|null $NameFormat
      * @param string|null $FriendlyName
-     * @param \SAML2\XML\saml\AttributeValue[]|null  $AttributeValues
+     * @param \SAML2\XML\saml\AttributeValue[]  $AttributeValues
      */
     public function __construct(
         string $Name,
         ?bool $isRequired = null,
         ?string $NameFormat = null,
         ?string $FriendlyName = null,
-        ?array $AttributeValues = null
+        array $AttributeValues = []
     ) {
         parent::__construct($Name, $NameFormat, $FriendlyName, $AttributeValues);
         $this->setIsRequired($isRequired);

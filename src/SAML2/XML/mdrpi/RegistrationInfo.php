@@ -35,9 +35,9 @@ final class RegistrationInfo extends AbstractMdrpiElement
      *
      * This is an associative array with language=>URL.
      *
-     * @var array|null
+     * @var array
      */
-    protected $RegistrationPolicy = null;
+    protected $RegistrationPolicy = [];
 
 
     /**
@@ -45,12 +45,12 @@ final class RegistrationInfo extends AbstractMdrpiElement
      *
      * @param string $registrationAuthority
      * @param int|null $registrationInstant
-     * @param array|null $RegistrationPolicy
+     * @param array $RegistrationPolicy
      */
     public function __construct(
         string $registrationAuthority,
         int $registrationInstant = null,
-        array $RegistrationPolicy = null
+        array $RegistrationPolicy = []
     ) {
         $this->setRegistrationAuthority($registrationAuthority);
         $this->setRegistrationInstant($registrationInstant);
@@ -62,8 +62,6 @@ final class RegistrationInfo extends AbstractMdrpiElement
      * Collect the value of the RegistrationAuthority property
      *
      * @return string
-     *
-     * @throws \InvalidArgumentException if assertions are false
      */
     public function getRegistrationAuthority(): string
     {
@@ -109,9 +107,9 @@ final class RegistrationInfo extends AbstractMdrpiElement
     /**
      * Collect the value of the RegistrationPolicy property
      *
-     * @return array|null
+     * @return array
      */
-    public function getRegistrationPolicy(): ?array
+    public function getRegistrationPolicy(): array
     {
         return $this->RegistrationPolicy;
     }
@@ -120,10 +118,10 @@ final class RegistrationInfo extends AbstractMdrpiElement
     /**
      * Set the value of the RegistrationPolicy property
      *
-     * @param array|null $registrationPolicy
+     * @param array $registrationPolicy
      * @return void
      */
-    private function setRegistrationPolicy(?array $registrationPolicy): void
+    private function setRegistrationPolicy(array $registrationPolicy): void
     {
         $this->RegistrationPolicy = $registrationPolicy;
     }
@@ -134,6 +132,8 @@ final class RegistrationInfo extends AbstractMdrpiElement
      *
      * @param \DOMElement $xml The XML element we should load
      * @return self
+     *
+     * @throws \InvalidArgumentException if assertions are false
      */
     public static function fromXML(DOMElement $xml): object
     {
@@ -152,7 +152,7 @@ final class RegistrationInfo extends AbstractMdrpiElement
             : null;
         $RegistrationPolicy = Utils::extractLocalizedStrings($xml, RegistrationInfo::NS, 'RegistrationPolicy');
 
-        return new self($registrationAuthority, $registrationInstant, empty($RegistrationPolicy) ? null : $RegistrationPolicy);
+        return new self($registrationAuthority, $registrationInstant, $RegistrationPolicy);
     }
 
 
@@ -161,8 +161,6 @@ final class RegistrationInfo extends AbstractMdrpiElement
      *
      * @param \DOMElement|null $parent The element we should append to.
      * @return \DOMElement
-     *
-     * @throws \InvalidArgumentException if assertions are false
      */
     public function toXML(DOMElement $parent = null): DOMElement
     {

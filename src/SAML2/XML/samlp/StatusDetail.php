@@ -19,8 +19,8 @@ use Webmozart\Assert\Assert;
  */
 final class StatusDetail extends AbstractSamlpElement
 {
-    /** @var \SAML2\XML\Chunk[]|null */
-    protected $details = null;
+    /** @var \SAML2\XML\Chunk[] */
+    protected $details = [];
 
 
     /**
@@ -28,7 +28,7 @@ final class StatusDetail extends AbstractSamlpElement
      *
      * @param \SAML2\XML\Chunk[] $details
      */
-    public function __construct(array $details = null)
+    public function __construct(array $details = [])
     {
         $this->setDetails($details);
     }
@@ -37,9 +37,9 @@ final class StatusDetail extends AbstractSamlpElement
     /**
      * Collect the details
      *
-     * @return \SAML2\XML\Chunk[]|null
+     * @return \SAML2\XML\Chunk[]
      */
-    public function getDetails(): ?array
+    public function getDetails(): array
     {
         return $this->details;
     }
@@ -48,10 +48,10 @@ final class StatusDetail extends AbstractSamlpElement
     /**
      * Set the value of the details-property
      *
-     * @param \SAML2\XML\Chunk[]|null $details
+     * @param \SAML2\XML\Chunk[] $details
      * @return void
      */
-    private function setDetails(?array $details): void
+    private function setDetails(array $details): void
     {
         Assert::allIsInstanceOf($details, Chunk::class);
         $this->details = $details;
@@ -103,10 +103,8 @@ final class StatusDetail extends AbstractSamlpElement
     {
         $e = $this->instantiateParentElement($parent);
 
-        if (!empty($this->details)) {
-            foreach ($this->details as $detail) {
-                $e->appendChild($e->ownerDocument->importNode($detail->getXML(), true));
-            }
+        foreach ($this->details as $detail) {
+            $e->appendChild($e->ownerDocument->importNode($detail->getXML(), true));
         }
 
         return $e;

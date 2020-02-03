@@ -38,8 +38,6 @@ final class AuthnContextDecl extends AbstractSamlElement
      * Collect the value of the decl-property
      *
      * @return \DOMNodeList
-     *
-     * @throws \InvalidArgumentException if assertions are false
      */
     public function getDecl(): DOMNodeList
     {
@@ -64,6 +62,8 @@ final class AuthnContextDecl extends AbstractSamlElement
      *
      * @param \DOMElement $xml The XML element we should load
      * @return \SAML2\XML\saml\AuthnContextDecl
+     *
+     * @throws \InvalidArgumentException if assertions are false
      */
     public static function fromXML(DOMElement $xml): object
     {
