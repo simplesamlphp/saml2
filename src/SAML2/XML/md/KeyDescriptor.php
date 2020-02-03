@@ -5,9 +5,6 @@ declare(strict_types=1);
 namespace SAML2\XML\md;
 
 use DOMElement;
-use Exception;
-use SAML2\Utils;
-use SAML2\XML\Chunk;
 use SAML2\XML\ds\KeyInfo;
 use Webmozart\Assert\Assert;
 
@@ -37,9 +34,9 @@ final class KeyDescriptor extends AbstractMdElement
     /**
      * Supported EncryptionMethods.
      *
-     * @var \SAML2\XML\md\EncryptionMethod[]|null
+     * @var \SAML2\XML\md\EncryptionMethod[]
      */
-    protected $EncryptionMethods = null;
+    protected $EncryptionMethods = [];
 
 
     /**
@@ -132,8 +129,8 @@ final class KeyDescriptor extends AbstractMdElement
     {
         if ($encryptionMethods !== null) {
             Assert::allIsInstanceOf($encryptionMethods, EncryptionMethod::class);
+            $this->EncryptionMethods = $encryptionMethods;
         }
-        $this->EncryptionMethods = $encryptionMethods;
     }
 
 
@@ -149,28 +146,12 @@ final class KeyDescriptor extends AbstractMdElement
         Assert::same($xml->localName, 'KeyDescriptor');
         Assert::same($xml->namespaceURI, KeyDescriptor::NS);
 
-        $use = null;
-        if ($xml->hasAttribute('use')) {
-            $use = $xml->getAttribute('use');
-        }
-
-        $keyInfoElements = Utils::xpQuery($xml, './ds:KeyInfo');
+        $keyInfoElements = KeyInfo::getChildrenOfClass($xml);
         Assert::minCount($keyInfoElements, 1, 'No ds:KeyInfo in the KeyDescriptor.');
         Assert::maxCount($keyInfoElements, 1, 'More than one ds:KeyInfo in the KeyDescriptor.');
 
-        /**
-         * @var \DOMElement $keyInfoElements[0]
-         */
-        $keyInfo = KeyInfo::fromXML($keyInfoElements[0]);
-
-        $encmethod = [];
-        /** @var \DOMElement $em */
-        foreach (Utils::xpQuery($xml, './saml_metadata:EncryptionMethod') as $em) {
-            $encmethod[] = new Chunk($em);
-        }
-
         return new self(
-            $keyInfo,
+            $keyInfoElements[0],
             self::getAttribute($xml, 'use', null),
             EncryptionMethod::getChildrenOfClass($xml)
         );
@@ -193,10 +174,8 @@ final class KeyDescriptor extends AbstractMdElement
 
         $this->KeyInfo->toXML($e);
 
-        if (!empty($this->EncryptionMethods)) {
-            foreach ($this->EncryptionMethods as $em) {
-                $em->toXML($e);
-            }
+        foreach ($this->EncryptionMethods as $em) {
+            $em->toXML($e);
         }
 
         return $e;

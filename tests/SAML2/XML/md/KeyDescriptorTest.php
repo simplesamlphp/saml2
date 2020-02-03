@@ -83,7 +83,7 @@ XML
     {
         $kd = new KeyDescriptor(new KeyInfo([new KeyName('IdentityProvider.com SSO Key')]));
         $this->assertNull($kd->getUse());
-        $this->assertNull($kd->getEncryptionMethods());
+        $this->assertEmpty($kd->getEncryptionMethods());
         $this->assertEmpty($kd->getEncryptionMethods());
         $this->assertEquals(
             <<<XML

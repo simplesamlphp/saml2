@@ -40,7 +40,7 @@ final class AffiliationDescriptor extends AbstractMetadataDocument
      *
      * @var \SAML2\XML\md\KeyDescriptor[]|null
      */
-    protected $KeyDescriptors = null;
+    protected $KeyDescriptors = [];
 
 
     /**
@@ -89,11 +89,7 @@ final class AffiliationDescriptor extends AbstractMetadataDocument
         }
         $owner = $xml->getAttribute('affiliationOwnerID');
         $members = Utils::extractStrings($xml, Constants::NS_MD, 'AffiliateMember');
-        $keyDescriptors = [];
-        /** @var DOMElement $kd */
-        foreach (Utils::xpQuery($xml, './saml_metadata:KeyDescriptor') as $kd) {
-            $keyDescriptors[] = KeyDescriptor::fromXML($kd);
-        }
+        $keyDescriptors = KeyDescriptor::getChildrenOfClass($xml);
 
         $validUntil = self::getAttribute($xml, 'validUntil', null);
         $orgs = Organization::getChildrenOfClass($xml);
@@ -205,10 +201,8 @@ final class AffiliationDescriptor extends AbstractMetadataDocument
         $e->setAttribute('affiliationOwnerID', $this->affiliationOwnerID);
         Utils::addStrings($e, Constants::NS_MD, 'md:AffiliateMember', false, $this->AffiliateMembers);
 
-        if (!empty($this->KeyDescriptors)) {
-            foreach ($this->KeyDescriptors as $kd) {
-                $kd->toXML($e);
-            }
+        foreach ($this->KeyDescriptors as $kd) {
+            $kd->toXML($e);
         }
 
         $this->signElement($e, $e->firstChild);
