@@ -37,8 +37,6 @@ trait IndexedElementTrait
      */
     public function getIndex(): int
     {
-        Assert::notEmpty($this->index);
-
         return $this->index;
     }
 
@@ -50,6 +48,7 @@ trait IndexedElementTrait
      */
     protected function setIndex(int $index): void
     {
+        Assert::numeric($index, '\'index\' must be a natural number.');
         $this->index = $index;
     }
 
