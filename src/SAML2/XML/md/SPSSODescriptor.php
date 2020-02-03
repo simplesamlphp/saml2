@@ -34,7 +34,7 @@ final class SPSSODescriptor extends AbstractSSODescriptor
      *
      * Array with IndexedEndpointType objects.
      *
-     * @var \SAML2\XML\md\IndexedEndpointType[]
+     * @var \SAML2\XML\md\AssertionConsumerService[]
      */
     protected $assertionConsumerService = [];
 
@@ -43,9 +43,9 @@ final class SPSSODescriptor extends AbstractSSODescriptor
      *
      * Array with \SAML2\XML\md\AttributeConsumingService objects.
      *
-     * @var \SAML2\XML\md\AttributeConsumingService[]|null
+     * @var \SAML2\XML\md\AttributeConsumingService[]
      */
-    protected $attributeConsumingService = null;
+    protected $attributeConsumingService = [];
 
 
 
@@ -106,7 +106,7 @@ final class SPSSODescriptor extends AbstractSSODescriptor
         );
 
         $this->setAssertionConsumerService($assertionConsumerService);
-        $this->setAuthnRequestSigned($authnRequestsSigned);
+        $this->setAuthnRequestsSigned($authnRequestsSigned);
         $this->setWantAssertionsSigned($wantAssertionsSigned);
         $this->setAttributeConsumingService($attributeConsumingService);
     }
@@ -127,7 +127,6 @@ final class SPSSODescriptor extends AbstractSSODescriptor
      * Set the value of the AuthnRequestsSigned-property
      *
      * @param bool|null $flag
-     * @return void
      */
     private function setAuthnRequestsSigned(?bool $flag): void
     {
@@ -150,7 +149,6 @@ final class SPSSODescriptor extends AbstractSSODescriptor
      * Set the value of the WantAssertionsSigned-property
      *
      * @param bool|null $flag
-     * @return void
      */
     private function setWantAssertionsSigned(?bool $flag): void
     {
@@ -173,7 +171,6 @@ final class SPSSODescriptor extends AbstractSSODescriptor
      * Set the value of the AssertionConsumerService-property
      *
      * @param \SAML2\XML\md\AssertionConsumerService[] $acs
-     * @return void
      */
     private function setAssertionConsumerService(array $acs): void
     {
@@ -184,18 +181,6 @@ final class SPSSODescriptor extends AbstractSSODescriptor
             'All md:AssertionConsumerService endpoints must be an instance of AssertionConsumerOnService.'
         );
         $this->assertionConsumerService = $acs;
-    }
-
-
-    /**
-     * Add the value to the AssertionConsumerService-property
-     *
-     * @param \SAML2\XML\md\IndexedEndpointType $acs
-     * @return void
-     */
-    public function addAssertionConsumerService(IndexedEndpointType $acs): void
-    {
-        $this->assertionConsumerService[] = $acs;
     }
 
 
@@ -211,24 +196,9 @@ final class SPSSODescriptor extends AbstractSSODescriptor
 
 
     /**
-     * Add the value to the AttributeConsumingService-property
-     *
-     * @param \SAML2\XML\md\AttributeConsumingService $acs
-     * @return void
-     */
-    public function addAttributeConsumingService(AttributeConsumingService $acs): void
-    {
-        $this->attributeConsumingService = empty($this->attributeConsumingService)
-            ? [$acs]
-            : array_merge($this->attributeConsumingService, [$acs]);
-    }
-
-
-    /**
      * Set the value of the AttributeConsumingService-property
      *
      * @param \SAML2\XML\md\AttributeConsumingService[]|null $acs
-     * @return void
      */
     private function setAttributeConsumingService(?array $acs): void
     {
@@ -238,8 +208,8 @@ final class SPSSODescriptor extends AbstractSSODescriptor
                 AttributeConsumingService::class,
                 'All md:AttributeConsumingService endpoints must be an instance of AttributeConsumingService.'
             );
+            $this->attributeConsumingService = $acs;
         }
-        $this->attributeConsumingService = $acs;
     }
 
 
@@ -247,7 +217,9 @@ final class SPSSODescriptor extends AbstractSSODescriptor
      * Convert XML into a SPSSODescriptor
      *
      * @param \DOMElement $xml The XML element we should load
+     *
      * @return self
+     * @throws \Exception
      */
     public static function fromXML(DOMElement $xml): object
     {
@@ -283,28 +255,28 @@ final class SPSSODescriptor extends AbstractSSODescriptor
      * Add this SPSSODescriptor to an EntityDescriptor.
      *
      * @param \DOMElement|null $parent The EntityDescriptor we should append this SPSSODescriptor to.
+     *
      * @return \DOMElement
+     * @throws \Exception
      */
     public function toXML(?DOMElement $parent = null): DOMElement
     {
         $e = parent::toXML($parent);
 
-        if (is_bool($this->AuthnRequestsSigned)) {
-            $e->setAttribute('AuthnRequestsSigned', $this->AuthnRequestsSigned ? 'true' : 'false');
+        if (is_bool($this->authnRequestsSigned)) {
+            $e->setAttribute('AuthnRequestsSigned', $this->authnRequestsSigned ? 'true' : 'false');
         }
 
-        if (is_bool($this->WantAssertionsSigned)) {
-            $e->setAttribute('WantAssertionsSigned', $this->WantAssertionsSigned ? 'true' : 'false');
+        if (is_bool($this->wantAssertionsSigned)) {
+            $e->setAttribute('WantAssertionsSigned', $this->wantAssertionsSigned ? 'true' : 'false');
         }
 
-        foreach ($this->AssertionConsumerService as $ep) {
-            $ep->toXML($e, 'md:AssertionConsumerService');
+        foreach ($this->assertionConsumerService as $ep) {
+            $ep->toXML($e);
         }
 
-        if (!empty($this->AttributeConsumingService)) {
-            foreach ($this->AttributeConsumingService as $acs) {
-                $acs->toXML($e);
-            }
+        foreach ($this->attributeConsumingService as $acs) {
+            $acs->toXML($e);
         }
 
         return $e;

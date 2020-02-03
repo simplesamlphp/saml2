@@ -150,7 +150,7 @@ final class EntityDescriptor extends AbstractMetadataDocument
                     $roleDescriptors[] = IDPSSODescriptor::fromXML($node);
                     break;
                 case 'SPSSODescriptor':
-                    $roleDescriptors[] = new SPSSODescriptor($node);
+                    $roleDescriptors[] = SPSSODescriptor::fromXML($node);
                     break;
                 case 'AuthnAuthorityDescriptor':
                     $roleDescriptors[] = AuthnAuthorityDescriptor::fromXML($node);
