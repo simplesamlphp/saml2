@@ -8,6 +8,8 @@ use PHPUnit\Framework\TestCase;
 use RobRichards\XMLSecLibs\XMLSecurityDSig;
 use SAML2\Constants;
 use SAML2\DOMDocumentFactory;
+use SAML2\Utils;
+use SAML2\XML\mdrpi\PublicationInfo;
 
 /**
  * Tests for the md:EntitiesDescriptor element.
@@ -78,6 +80,110 @@ XML
     }
 
 
+    // test marshalling
+
+
+    /**
+     * Test creating an EntitiesDescriptor from scratch.
+     */
+    public function testMarshalling(): void
+    {
+        $extensions = new Extensions(
+            [
+                new PublicationInfo(
+                    'http://publisher.ra/',
+                    Utils::xsDateTimeToTimestamp('2020-02-03T13:46:24Z'),
+                    null,
+                    ['en' => 'http://publisher.ra/policy.txt']
+                )
+            ]
+        );
+        $entitiesdChildElement = $this->document->documentElement->getElementsByTagNameNS(
+            Constants::NS_MD,
+            'EntitiesDescriptor'
+        );
+        $entitydElement = $this->document->documentElement->getElementsByTagNameNS(
+            Constants::NS_MD,
+            'EntityDescriptor'
+        );
+        $childEntitiesd = EntitiesDescriptor::fromXML($entitiesdChildElement->item(0));
+        $childEntityd = EntityDescriptor::fromXML($entitydElement->item(1));
+        $entitiesd = new EntitiesDescriptor(
+            [$childEntityd],
+            [$childEntitiesd],
+            'Federation',
+            null,
+            null,
+            null,
+            $extensions
+        );
+        $this->assertInstanceOf(Extensions::class, $entitiesd->getExtensions());
+        $this->assertCount(1, $entitiesd->getEntitiesDescriptors());
+        $this->assertInstanceOf(EntitiesDescriptor::class, $entitiesd->getEntitiesDescriptors()[0]);
+        $this->assertCount(1, $entitiesd->getEntityDescriptors());
+        $this->assertInstanceOf(EntityDescriptor::class, $entitiesd->getEntityDescriptors()[0]);
+        $this->assertEquals(
+            $this->document->saveXML($this->document->documentElement),
+            strval($entitiesd)
+        );
+    }
+
+
+    /**
+     * Test that creating an EntitiesDescriptor from scratch with no Name works.
+     */
+    public function testMarshallingWithNoName(): void
+    {
+        $entitydElement = $this->document->documentElement->getElementsByTagNameNS(
+            Constants::NS_MD,
+            'EntityDescriptor'
+        );
+        $childEntityd = EntityDescriptor::fromXML($entitydElement->item(1));
+        $entitiesd = new EntitiesDescriptor(
+            [$childEntityd],
+            []
+        );
+        $this->assertNull($entitiesd->getName());
+        $this->assertIsArray($entitiesd->getEntitiesDescriptors());
+        $this->assertEmpty($entitiesd->getEntitiesDescriptors());
+    }
+
+
+    /**
+     * Test that creating an EntitiesDescriptor from scratch with only a nested EntitiesDescriptor works.
+     */
+    public function testMarshallingWithOnlyEntitiesDescriptor(): void
+    {
+        $entitiesdChildElement = $this->document->documentElement->getElementsByTagNameNS(
+            Constants::NS_MD,
+            'EntitiesDescriptor'
+        );
+        $childEntitiesd = EntitiesDescriptor::fromXML($entitiesdChildElement->item(0));
+        $entitiesd = new EntitiesDescriptor(
+            [],
+            [$childEntitiesd]
+        );
+        $this->assertIsArray($entitiesd->getEntityDescriptors());
+        $this->assertEmpty($entitiesd->getEntityDescriptors());
+    }
+
+
+    /**
+     * Test that creating an empty EntitiesDescriptor from scratch fails.
+     */
+    public function testMarshallingEmpty(): void
+    {
+        $this->expectException(\InvalidArgumentException::class);
+        $this->expectExceptionMessage(
+            'At least one md:EntityDescriptor or md:EntitiesDescriptor element is required.'
+        );
+        new EntitiesDescriptor();
+    }
+
+
+    // test unmarshalling
+
+
     /**
      * Test creating an EntitiesDescriptor from XML.
      */
@@ -90,6 +196,80 @@ XML
         $this->assertInstanceOf(EntitiesDescriptor::class, $entitiesd->getEntitiesDescriptors()[0]);
         $this->assertCount(1, $entitiesd->getEntityDescriptors());
         $this->assertInstanceOf(EntityDescriptor::class, $entitiesd->getEntityDescriptors()[0]);
+    }
+
+
+    /**
+     * Test that creating an EntitiesDescriptor without Name from XML works.
+     */
+    public function testUnmarshallingWithoutName(): void
+    {
+        $this->document->documentElement->removeAttribute('Name');
+        $entitiesd = EntitiesDescriptor::fromXML($this->document->documentElement);
+        $this->assertNull($entitiesd->getName());
+    }
+
+
+    /**
+     * Test that creating an EntitiesDescriptor with an empty Name from XML works.
+     */
+    public function testUnmarshallingWithEmptyName(): void
+    {
+        $this->document->documentElement->setAttribute('Name', '');
+        $entitiesd = EntitiesDescriptor::fromXML($this->document->documentElement);
+        $this->assertEquals('', $entitiesd->getName());
+    }
+
+
+    /**
+     * Test that creating an EntitiesDescriptor without nested EntitiesDescriptor elements from XML works.
+     */
+    public function testUnmarshallingWithoutEntities(): void
+    {
+        $entities = $this->document->documentElement->getElementsByTagNameNS(Constants::NS_MD, 'EntitiesDescriptor');
+        $this->document->documentElement->removeChild($entities->item(0));
+        $entitiesd = EntitiesDescriptor::fromXML($this->document->documentElement);
+        $this->assertEquals([], $entitiesd->getEntitiesDescriptors());
+        $this->assertCount(1, $entitiesd->getEntityDescriptors());
+    }
+
+
+    /**
+     * Test that creating an EntitiesDescriptor from XML without any EntityDescriptor works.
+     */
+    public function testUnmarshallingWithoutEntity(): void
+    {
+        $entity = $this->document->documentElement->getElementsByTagNameNS(Constants::NS_MD, 'EntityDescriptor');
+        /*
+         *  getElementsByTagNameNS() searches recursively. Therefore, it finds first the EntityDescriptor that's
+         * inside the nested EntitiesDescriptor. We then need to fetch the second result of the search, which will be
+         *  the child of the parent EntitiesDescriptor.
+         */
+        $this->document->documentElement->removeChild($entity->item(1));
+        $entitiesd = EntitiesDescriptor::fromXML($this->document->documentElement);
+        $this->assertEquals([], $entitiesd->getEntityDescriptors());
+        $this->assertCount(1, $entitiesd->getEntitiesDescriptors());
+    }
+
+
+    /**
+     * Test that creating an empty EntitiesDescriptor from XML fails.
+     */
+    public function testUnmarshallingEmpty(): void
+    {
+        // remove child EntitiesDescriptor
+        $entities = $this->document->documentElement->getElementsByTagNameNS(Constants::NS_MD, 'EntitiesDescriptor');
+        $this->document->documentElement->removeChild($entities->item(0));
+
+        // remove child EntityDescriptor
+        $entity = $this->document->documentElement->getElementsByTagNameNS(Constants::NS_MD, 'EntityDescriptor');
+        $this->document->documentElement->removeChild($entity->item(0));
+
+        $this->expectException(\InvalidArgumentException::class);
+        $this->expectExceptionMessage(
+            'At least one md:EntityDescriptor or md:EntitiesDescriptor element is required.'
+        );
+        EntitiesDescriptor::fromXML($this->document->documentElement);
     }
 
 
