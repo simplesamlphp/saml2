@@ -32,18 +32,18 @@ final class EntitiesDescriptor extends AbstractMetadataDocument
     /**
      * EntitiesDescriptor constructor.
      *
-     * @param string|null $name
      * @param \SAML2\XML\md\EntityDescriptor[]|null $entityDescriptors
      * @param \SAML2\XML\md\EntitiesDescriptor[]|null $entitiesDescriptors
+     * @param string|null $name
      * @param string|null $ID
      * @param int|null $validUntil
      * @param string|null $cacheDuration
      * @param \SAML2\XML\md\Extensions|null $extensions
      */
     public function __construct(
-        ?string $name = null,
         ?array $entityDescriptors = null,
         ?array $entitiesDescriptors = null,
+        ?string $name = null,
         ?string $ID = null,
         ?int $validUntil = null,
         ?string $cacheDuration = null,
@@ -82,9 +82,9 @@ final class EntitiesDescriptor extends AbstractMetadataDocument
         Assert::maxCount($extensions, 1, 'Only one md:Extensions element is allowed.');
 
         return new self(
-            self::getAttribute($xml, 'Name'),
             EntityDescriptor::getChildrenOfClass($xml),
             EntitiesDescriptor::getChildrenOfClass($xml),
+            self::getAttribute($xml, 'Name', null),
             self::getAttribute($xml, 'ID', null),
             $validUntil !== null ? Utils::xsDateTimeToTimestamp($validUntil) : null,
             self::getAttribute($xml, 'cacheDuration', null),
@@ -168,7 +168,6 @@ final class EntitiesDescriptor extends AbstractMetadataDocument
         if ($name === null) {
             return;
         }
-        Assert::notEmpty($name, 'Cannot assign an empty name to an md:EntitiesDescriptor.');
         $this->Name = $name;
     }
 

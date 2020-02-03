@@ -26,6 +26,23 @@ class EntitiesDescriptorTest extends TestCase
         $samlns = Constants::NS_SAML;
         $this->document = DOMDocumentFactory::fromString(<<<XML
 <md:EntitiesDescriptor xmlns:md="{$mdns}" Name="Federation">
+  <md:Extensions>
+    <mdrpi:PublicationInfo xmlns:mdrpi="urn:oasis:names:tc:SAML:metadata:rpi" publisher="http://publisher.ra/" creationInstant="2020-02-03T13:46:24Z">
+      <mdrpi:UsagePolicy xml:lang="en">http://publisher.ra/policy.txt</mdrpi:UsagePolicy>
+    </mdrpi:PublicationInfo>
+  </md:Extensions>
+  <md:EntitiesDescriptor Name="subfederation">
+    <md:EntityDescriptor entityID="https://ServiceProvider.com/SAML">
+      <md:SPSSODescriptor protocolSupportEnumeration="urn:oasis:names:tc:SAML:2.0:protocol" AuthnRequestsSigned="true">
+        <md:AssertionConsumerService Binding="urn:oasis:names:tc:SAML:2.0:bindings:HTTP-Artifact" Location="https://ServiceProvider.com/SAML/SSO/Artifact" index="0" isDefault="true"/>
+      </md:SPSSODescriptor>
+      <md:Organization>
+        <md:OrganizationName xml:lang="en">Academic Journals R US</md:OrganizationName>
+        <md:OrganizationDisplayName xml:lang="en">Academic Journals R US, a Division of Dirk Corp.</md:OrganizationDisplayName>
+        <md:OrganizationURL xml:lang="en">https://ServiceProvider.com</md:OrganizationURL>
+      </md:Organization>
+    </md:EntityDescriptor>
+  </md:EntitiesDescriptor>
   <md:EntityDescriptor entityID="https://IdentityProvider.com/SAML">
     <md:IDPSSODescriptor protocolSupportEnumeration="urn:oasis:names:tc:SAML:2.0:protocol" WantAuthnRequestsSigned="true">
       <md:KeyDescriptor use="signing">
@@ -58,6 +75,21 @@ class EntitiesDescriptorTest extends TestCase
 </md:EntitiesDescriptor>
 XML
         );
+    }
+
+
+    /**
+     * Test creating an EntitiesDescriptor from XML.
+     */
+    public function testUnmarshalling(): void
+    {
+        $entitiesd = EntitiesDescriptor::fromXML($this->document->documentElement);
+        $this->assertEquals('Federation', $entitiesd->getName());
+        $this->assertInstanceOf(Extensions::class, $entitiesd->getExtensions());
+        $this->assertCount(1, $entitiesd->getEntitiesDescriptors());
+        $this->assertInstanceOf(EntitiesDescriptor::class, $entitiesd->getEntitiesDescriptors()[0]);
+        $this->assertCount(1, $entitiesd->getEntityDescriptors());
+        $this->assertInstanceOf(EntityDescriptor::class, $entitiesd->getEntityDescriptors()[0]);
     }
 
 
