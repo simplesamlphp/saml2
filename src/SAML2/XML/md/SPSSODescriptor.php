@@ -5,6 +5,7 @@ declare(strict_types=1);
 namespace SAML2\XML\md;
 
 use DOMElement;
+use SAML2\Constants;
 use SAML2\Utils;
 use Webmozart\Assert\Assert;
 
@@ -56,6 +57,7 @@ final class SPSSODescriptor extends AbstractSSODescriptor
      * @param string[] $protocolSupportEnumeration
      * @param bool|null $authnRequestsSigned
      * @param bool|null $wantAssertionsSigned
+     * @param \SAML2\XML\md\AttributeConsumingService[]|null $attributeConsumingService
      * @param string|null $ID
      * @param int|null $validUntil
      * @param string|null $cacheDuration
@@ -64,7 +66,6 @@ final class SPSSODescriptor extends AbstractSSODescriptor
      * @param \SAML2\XML\md\KeyDescriptor[]|null $keyDescriptors
      * @param \SAML2\XML\md\Organization|null $organization
      * @param \SAML2\XML\md\ContactPerson[]|null $contacts
-     * @param \SAML2\XML\md\AttributeConsumingService[]|null $attributeConsumingService
      * @param \SAML2\XML\md\ArtifactResolutionService[]|null $artifactResolutionService
      * @param \SAML2\XML\md\SingleLogoutService[]|null $singleLogoutService
      * @param \SAML2\XML\md\ManageNameIDService[]|null $manageNameIDService
@@ -75,6 +76,7 @@ final class SPSSODescriptor extends AbstractSSODescriptor
         array $protocolSupportEnumeration,
         ?bool $authnRequestsSigned = null,
         ?bool $wantAssertionsSigned = null,
+        ?array $attributeConsumingService = [],
         ?string $ID = null,
         ?int $validUntil = null,
         ?string $cacheDuration = null,
@@ -83,7 +85,6 @@ final class SPSSODescriptor extends AbstractSSODescriptor
         ?array $keyDescriptors = [],
         ?Organization $organization = null,
         ?array $contacts = [],
-        ?array $attributeConsumingService = [],
         ?array $artifactResolutionService = [],
         ?array $singleLogoutService = [],
         ?array $manageNameIDService = [],
@@ -238,6 +239,7 @@ final class SPSSODescriptor extends AbstractSSODescriptor
             preg_split('/[\s]+/', trim(self::getAttribute($xml, 'protocolSupportEnumeration'))),
             self::getBooleanAttribute($xml, 'AuthnRequestsSigned', null),
             self::getBooleanAttribute($xml, 'WantAssertionsSigned', null),
+            AttributeConsumingService::getChildrenOfClass($xml),
             self::getAttribute($xml, 'ID', null),
             $validUntil !== null ? Utils::xsDateTimeToTimestamp($validUntil) : null,
             self::getAttribute($xml, 'cacheDuration', null),
@@ -246,7 +248,10 @@ final class SPSSODescriptor extends AbstractSSODescriptor
             KeyDescriptor::getChildrenOfClass($xml),
             !empty($orgs) ? $orgs[0] : null,
             ContactPerson::getChildrenOfClass($xml),
-            AttributeConsumingService::getChildrenOfClass($xml)
+            ArtifactResolutionService::getChildrenOfClass($xml),
+            SingleLogoutService::getChildrenOfClass($xml),
+            ManageNameIDService::getChildrenOfClass($xml),
+            Utils::extractStrings($xml, Constants::NS_MD, 'NameIDFormat')
         );
     }
 
