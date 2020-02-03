@@ -16,9 +16,13 @@ use SAML2\DOMDocumentFactory;
  */
 class IDPSSODescriptorTest extends TestCase
 {
+    /** @var \DOMDocument */
     protected $document;
 
 
+    /**
+     * @return void
+     */
     protected function setUp(): void
     {
         $mdns = Constants::NS_MD;
@@ -57,6 +61,8 @@ XML
 
     /**
      * Test serialization / unserialization.
+     *
+     * @return void
      */
     public function testSerialize(): void
     {
