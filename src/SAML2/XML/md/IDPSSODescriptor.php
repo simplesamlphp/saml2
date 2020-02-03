@@ -162,7 +162,11 @@ final class IDPSSODescriptor extends AbstractSSODescriptor
             self::getAttribute($xml, 'errorURL', null),
             KeyDescriptor::getChildrenOfClass($xml),
             !empty($orgs) ? $orgs[0] : null,
-            ContactPerson::getChildrenOfClass($xml)
+            ContactPerson::getChildrenOfClass($xml),
+            ArtifactResolutionService::getChildrenOfClass($xml),
+            SingleLogoutService::getChildrenOfClass($xml),
+            ManageNameIDService::getChildrenOfClass($xml),
+            Utils::extractStrings($xml, Constants::NS_MD, 'NameIDFormat')
         );
     }
 
