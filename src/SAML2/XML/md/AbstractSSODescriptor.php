@@ -21,21 +21,21 @@ abstract class AbstractSSODescriptor extends AbstractRoleDescriptor
      *
      * @var \SAML2\XML\md\AbstractIndexedEndpointType[]
      */
-    private $artifactResolutionServiceEndpoints = [];
+    protected $artifactResolutionServiceEndpoints = [];
 
     /**
      * List of SingleLogoutService endpoints.
      *
      * @var \SAML2\XML\md\SingleLogoutService[]
      */
-    private $sloServiceEndpoints = [];
+    protected $sloServiceEndpoints = [];
 
     /**
      * List of ManageNameIDService endpoints.
      *
      * @var \SAML2\XML\md\ManageNameIDService[]
      */
-    private $manageNameIDServiceEndpoints = [];
+    protected $manageNameIDServiceEndpoints = [];
 
     /**
      * List of supported NameID formats.
@@ -44,7 +44,7 @@ abstract class AbstractSSODescriptor extends AbstractRoleDescriptor
      *
      * @var string[]
      */
-    private $nameIDFormats = [];
+    protected $nameIDFormats = [];
 
 
     /**

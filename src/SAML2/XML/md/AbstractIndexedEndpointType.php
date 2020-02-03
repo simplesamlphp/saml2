@@ -87,7 +87,7 @@ abstract class AbstractIndexedEndpointType extends AbstractEndpointType
      */
     public function toXML(DOMElement $parent = null): DOMElement
     {
-        Assert::notEmpty($this->index);
+        Assert::numeric($this->index);
 
         $e = parent::toXML($parent);
         $e->setAttribute('index', strval($this->index));
