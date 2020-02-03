@@ -14,7 +14,7 @@ use Webmozart\Assert\Assert;
  */
 abstract class AbstractIndexedEndpointType extends AbstractEndpointType
 {
-    use IndexedElement;
+    use IndexedElementTrait;
 
 
     /**
