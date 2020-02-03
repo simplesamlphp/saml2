@@ -319,6 +319,11 @@ final class IDPSSODescriptor extends AbstractSSODescriptor
      */
     protected function setSupportedAttributes(array $attributes): void
     {
+        Assert::allIsInstanceOf(
+            $attributes,
+            Attribute::class,
+            'All md:Attribute elements must be an instance of Attribute.'
+        );
         $this->attributes = $attributes;
     }
 
