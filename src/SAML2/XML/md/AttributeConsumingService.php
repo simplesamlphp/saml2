@@ -5,15 +5,13 @@ declare(strict_types=1);
 namespace SAML2\XML\md;
 
 use DOMElement;
-use Exception;
-use InvalidArgumentException;
 use SAML2\Utils;
 use Webmozart\Assert\Assert;
 
 /**
  * Class representing SAML 2 Metadata AttributeConsumingService element.
  *
- * @package SimpleSAMLphp
+ * @package simplesamlphp/saml2
  */
 final class AttributeConsumingService extends AbstractMdElement
 {
@@ -36,9 +34,7 @@ final class AttributeConsumingService extends AbstractMdElement
     /**
      * The RequestedAttribute elements.
      *
-     * This is an array of SAML_RequestedAttributeType elements.
-     *
-     * @var RequestedAttribute[]
+     * @var \SAML2\XML\md\RequestedAttribute[]
      */
     protected $requestedAttributes = [];
 
@@ -46,11 +42,11 @@ final class AttributeConsumingService extends AbstractMdElement
     /**
      * AttributeConsumingService constructor.
      *
-     * @param int                  $index
-     * @param string[]             $name
-     * @param RequestedAttribute[] $requestedAttributes
-     * @param bool|null            $isDefault
-     * @param array|null           $description
+     * @param int $index
+     * @param \SAML2\XML\md\ServiceName[] $name
+     * @param \SAML2\XML\md\RequestedAttribute[] $requestedAttributes
+     * @param bool|null $isDefault
+     * @param \SAML2\XML\md\ServiceDescription[]|null $description
      */
     public function __construct(
         int $index,
@@ -70,10 +66,10 @@ final class AttributeConsumingService extends AbstractMdElement
     /**
      * Initialize / parse an AttributeConsumingService.
      *
-     * @param DOMElement $xml The XML element we should load.
+     * @param \DOMElement $xml The XML element we should load.
      *
      * @return self
-     * @throws Exception
+     * @throws \Exception
      */
     public static function fromXML(DOMElement $xml): object
     {
@@ -86,7 +82,7 @@ final class AttributeConsumingService extends AbstractMdElement
         $descriptions = ServiceDescription::getChildrenOfClass($xml);
 
         $requestedAttrs = [];
-        /** @var DOMElement $ra */
+        /** @var \DOMElement $ra */
         foreach (Utils::xpQuery($xml, './saml_metadata:RequestedAttribute') as $ra) {
             $requestedAttrs[] = RequestedAttribute::fromXML($ra);
         }
@@ -104,7 +100,7 @@ final class AttributeConsumingService extends AbstractMdElement
     /**
      * Get the localized names of this service.
      *
-     * @return ServiceName[]
+     * @return \SAML2\XML\md\ServiceName[]
      */
     public function getServiceNames(): array
     {
@@ -115,9 +111,7 @@ final class AttributeConsumingService extends AbstractMdElement
     /**
      * Set the localized names of this service.
      *
-     * @param ServiceName[] $serviceNames
-     *
-     * @return void
+     * @param \SAML2\XML\md\ServiceName[] $serviceNames
      */
     protected function setServiceNames(array $serviceNames): void
     {
@@ -134,7 +128,7 @@ final class AttributeConsumingService extends AbstractMdElement
     /**
      * Collect the value of the ServiceDescription-property
      *
-     * @return ServiceDescription[]
+     * @return \SAML2\XML\md\ServiceDescription[]
      */
     public function getServiceDescriptions(): array
     {
@@ -145,9 +139,7 @@ final class AttributeConsumingService extends AbstractMdElement
     /**
      * Set the value of the ServiceDescription-property
      *
-     * @param ServiceDescription[] $serviceDescriptions
-     *
-     * @return void
+     * @param \SAML2\XML\md\ServiceDescription[] $serviceDescriptions
      */
     protected function setServiceDescriptions(?array $serviceDescriptions): void
     {
@@ -166,7 +158,7 @@ final class AttributeConsumingService extends AbstractMdElement
     /**
      * Collect the value of the RequestedAttribute-property
      *
-     * @return RequestedAttribute[]
+     * @return \SAML2\XML\md\RequestedAttribute[]
      */
     public function getRequestedAttributes(): array
     {
@@ -177,9 +169,7 @@ final class AttributeConsumingService extends AbstractMdElement
     /**
      * Set the value of the RequestedAttribute-property
      *
-     * @param RequestedAttribute[] $requestedAttributes
-     *
-     * @return void
+     * @param \SAML2\XML\md\RequestedAttribute[] $requestedAttributes
      */
     public function setRequestedAttributes(array $requestedAttributes): void
     {
@@ -195,11 +185,11 @@ final class AttributeConsumingService extends AbstractMdElement
     /**
      * Convert to \DOMElement.
      *
-     * @param DOMElement $parent The element we should append this AttributeConsumingService to.
+     * @param \DOMElement $parent The element we should append this AttributeConsumingService to.
      *
-     * @return DOMElement
+     * @return \DOMElement
      *
-     * @throws InvalidArgumentException if assertions are false
+     * @throws \InvalidArgumentException if assertions are false
      */
     public function toXML(DOMElement $parent = null): DOMElement
     {
