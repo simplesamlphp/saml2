@@ -8,7 +8,6 @@ use PHPUnit\Framework\TestCase;
 use RobRichards\XMLSecLibs\XMLSecurityDSig;
 use SAML2\Constants;
 use SAML2\DOMDocumentFactory;
-use SAML2\XML\AbstractXMLElement;
 use SAML2\XML\ds\KeyInfo;
 use SAML2\XML\ds\KeyName;
 use SAML2\XML\saml\AttributeValue;
@@ -29,7 +28,7 @@ class SPSSODescriptorTest extends TestCase
         $dsns = XMLSecurityDSig::XMLDSIGNS;
         $samlns = Constants::NS_SAML;
         $this->document = DOMDocumentFactory::fromString(<<<XML
-<md:SPSSODescriptor xmlns:md="{$mdns}" protocolSupportEnumeration="urn:oasis:names:tc:SAML:2.0:protocol" AuthnRequestsSigned="true">
+<md:SPSSODescriptor xmlns:md="{$mdns}" protocolSupportEnumeration="urn:oasis:names:tc:SAML:2.0:protocol" AuthnRequestsSigned="true" WantAssertionsSigned="false">
   <md:KeyDescriptor use="signing">
     <ds:KeyInfo xmlns:ds="{$dsns}">
       <ds:KeyName>ServiceProvider.com SSO Key</ds:KeyName>
@@ -96,7 +95,7 @@ XML
             [$acs1, $acs2],
             ['urn:oasis:names:tc:SAML:2.0:protocol'],
             true,
-            null,
+            false,
             [$attrcs],
             null,
             null,
@@ -115,7 +114,7 @@ XML
         $this->assertInstanceOf(AssertionConsumerService::class, $spssod->getAssertionConsumerService()[0]);
         $this->assertInstanceOf(AssertionConsumerService::class, $spssod->getAssertionConsumerService()[1]);
         $this->assertTrue($spssod->getAuthnRequestsSigned());
-        $this->assertNull($spssod->getWantAssertionsSigned());
+        $this->assertFalse($spssod->getWantAssertionsSigned());
         $this->assertCount(1, $spssod->getAttributeConsumingService());
         $this->assertInstanceOf(AttributeConsumingService::class, $spssod->getAttributeConsumingService()[0]);
         $this->assertEquals(
@@ -200,7 +199,7 @@ XML
         $this->assertInstanceOf(AssertionConsumerService::class, $spssod->getAssertionConsumerService()[0]);
         $this->assertInstanceOf(AssertionConsumerService::class, $spssod->getAssertionConsumerService()[1]);
         $this->assertTrue($spssod->getAuthnRequestsSigned());
-        $this->assertNull($spssod->getWantAssertionsSigned());
+        $this->assertFalse($spssod->getWantAssertionsSigned());
         $this->assertCount(1, $spssod->getAttributeConsumingService());
         $this->assertInstanceOf(AttributeConsumingService::class, $spssod->getAttributeConsumingService()[0]);
         $this->assertEquals(
