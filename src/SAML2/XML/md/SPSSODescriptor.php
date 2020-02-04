@@ -57,13 +57,13 @@ final class SPSSODescriptor extends AbstractSSODescriptor
      * @param string[] $protocolSupportEnumeration
      * @param bool|null $authnRequestsSigned
      * @param bool|null $wantAssertionsSigned
-     * @param \SAML2\XML\md\AttributeConsumingService[]|null $attributeConsumingService
+     * @param \SAML2\XML\md\AttributeConsumingService[] $attributeConsumingService
      * @param string|null $ID
      * @param int|null $validUntil
      * @param string|null $cacheDuration
      * @param \SAML2\XML\md\Extensions|null $extensions
      * @param string|null $errorURL
-     * @param \SAML2\XML\md\KeyDescriptor[]|null $keyDescriptors
+     * @param \SAML2\XML\md\KeyDescriptor[] $keyDescriptors
      * @param \SAML2\XML\md\Organization|null $organization
      * @param \SAML2\XML\md\ContactPerson[] $contacts
      * @param \SAML2\XML\md\ArtifactResolutionService[] $artifactResolutionService
@@ -76,13 +76,13 @@ final class SPSSODescriptor extends AbstractSSODescriptor
         array $protocolSupportEnumeration,
         ?bool $authnRequestsSigned = null,
         ?bool $wantAssertionsSigned = null,
-        ?array $attributeConsumingService = [],
+        array $attributeConsumingService = [],
         ?string $ID = null,
         ?int $validUntil = null,
         ?string $cacheDuration = null,
         ?Extensions $extensions = null,
         ?string $errorURL = null,
-        ?array $keyDescriptors = [],
+        array $keyDescriptors = [],
         ?Organization $organization = null,
         array $contacts = [],
         array $artifactResolutionService = [],
@@ -222,8 +222,10 @@ final class SPSSODescriptor extends AbstractSSODescriptor
      * Convert XML into a SPSSODescriptor
      *
      * @param \DOMElement $xml The XML element we should load
-     * @throws \InvalidArgumentException
-     * @throws \InvalidArgumentException if the qualified name of the supplied element is wrong
+     *
+     * @return self
+     * @throws \InvalidArgumentException if the qualified name of the supplied element is wrong*@throws \Exception
+     * @throws \Exception
      */
     public static function fromXML(DOMElement $xml): object
     {
