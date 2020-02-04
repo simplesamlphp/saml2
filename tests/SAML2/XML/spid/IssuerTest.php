@@ -15,22 +15,67 @@ use SAML2\Utils;
  */
 class IssuerTest extends TestCase
 {
+    /** @var \DOMDocument $document */
+    private $document;
+
+
+    /**
+     * @return void
+     */
+    public function setup(): void
+    {
+        $samlNamespace = Issuer::NS;
+        $nameidEntity = Constants::NAMEID_ENTITY;
+        $this->document = DOMDocumentFactory::fromString(<<<XML
+<saml:Issuer
+  xmlns:saml="{$samlNamespace}"
+  Format="{$nameidEntity}"
+  NameQualifier="TheNameQualifier">TheIssuerValue</saml:Issuer>
+XML
+        );
+    }
+
+
     /**
      * @return void
      */
     public function testMarshalling(): void
     {
-        $issuer = new Issuer('TheIssuerValue', Constants::NAMEID_ENTITY, 'TheSPProvidedID', 'TheNameQualifier', 'TheSPNameQualifier');
-        $issuerElement = $issuer->toXML();
-        $issuerElements = Utils::xpQuery($issuerElement, '/saml_assertion:Issuer');
-        $this->assertCount(1, $issuerElements);
-        $issuerElement = $issuerElements[0];
+        $issuer = new Issuer(
+            'TheIssuerValue',
+            Constants::NAMEID_ENTITY,
+            null,
+            'TheNameQualifier',
+            null
+        );
 
-        $this->assertEquals('TheNameQualifier', $issuerElement->getAttribute("NameQualifier"));
-        $this->assertEquals('TheSPNameQualifier', $issuerElement->getAttribute("SPNameQualifier"));
-        $this->assertEquals(Constants::NAMEID_ENTITY, $issuerElement->getAttribute("Format"));
-        $this->assertEquals('TheSPProvidedID', $issuerElement->getAttribute("SPProvidedID"));
-        $this->assertEquals('TheIssuerValue', $issuerElement->textContent);
+        $this->assertEquals('TheIssuerValue', $issuer->getValue());
+        $this->assertEquals(Constants::NAMEID_ENTITY, $issuer->getFormat());
+        $this->assertNull($issuer->getSPProvidedID());
+        $this->assertEquals('TheNameQualifier', $issuer->getNameQualifier());
+        $this->assertNull($issuer->getSPNameQualifier());
+        $this->assertEquals(
+            $this->document->saveXML($this->document->documentElement),
+            strval($issuer)
+        );
+    }
+
+
+    /**
+     * @return void
+     */
+    public function testMarshallingInvalidAttr(): void
+    {
+        $this->expectException(InvalidArgumentException::class);
+        $this->expectExceptionMessage('Illegal combination of attributes being used');
+
+        $issuer = new Issuer(
+            'TheIssuerValue',
+            Constants::NAMEID_ENTITY,
+            'TheSPProvidedID',
+            'TheNameQualifier',
+            'TheSPNameQualifier'
+        );
     }
 
 
@@ -39,18 +84,28 @@ class IssuerTest extends TestCase
      */
     public function testUnmarshalling(): void
     {
-        $samlNamespace = Constants::NS_SAML;
-        $nameid_entity = Constants::NAMEID_ENTITY;
-        $document = DOMDocumentFactory::fromString(<<<XML
-<saml:Issuer xmlns:saml="{$samlNamespace}" NameQualifier="TheNameQualifier" SPNameQualifier="TheSPNameQualifier" Format="{$nameid_entity}" SPProvidedID="TheSPProvidedID">TheIssuerValue</saml:Issuer>
-XML
-        );
+        $issuer = Issuer::fromXML($this->document->documentElement);
 
-        $issuer = Issuer::fromXML($document->firstChild);
-        $this->assertEquals('TheNameQualifier', $issuer->getNameQualifier());
-        $this->assertEquals('TheSPNameQualifier', $issuer->getSPNameQualifier());
-        $this->assertEquals(Constants::NAMEID_ENTITY, $issuer->getFormat());
-        $this->assertEquals('TheSPProvidedID', $issuer->getSPProvidedID());
         $this->assertEquals('TheIssuerValue', $issuer->getValue());
+        $this->assertEquals(Constants::NAMEID_ENTITY, $issuer->getFormat());
+        $this->assertNull($issuer->getSPProvidedID());
+        $this->assertEquals('TheNameQualifier', $issuer->getNameQualifier());
+        $this->assertNull($issuer->getSPNameQualifier());
+    }
+
+
+    /**
+     * @return void
+     */
+    public function testUnmarshallingInvalidAttr(): void
+    {
+        $element = $this->document->documentElement;
+        $element->setAttribute('SPProvidedID', 'TheSPProvidedID');
+        $element->setAttribute('SPNameQualifier', 'TheSPNameQualifier');
+
+        $this->expectException(InvalidArgumentException::class);
+        $this->expectExceptionMessage('Illegal combination of attributes being used');
+
+        $issuer = Issuer::fromXML($element);
     }
 }

@@ -5,6 +5,8 @@ declare(strict_types=1);
 namespace SAML2\XML\saml;
 
 use DOMElement;
+use SAML2\Constants;
+use SAML2\DOMDocumentFactory;
 use Webmozart\Assert\Assert;
 
 /**
@@ -14,7 +16,7 @@ use Webmozart\Assert\Assert;
  * @package simplesamlphp/saml2
  */
 
-abstract class NameIDType extends BaseIDType
+abstract class NameIDType extends AbstractSamlElement
 {
     /**
      * A URI reference representing the classification of string-based identifier information. See Section 8.3 for the
@@ -35,6 +37,16 @@ abstract class NameIDType extends BaseIDType
     protected $Format = null;
 
     /**
+     * The security or administrative domain that qualifies the identifier.
+     * This attribute provides a means to federate identifiers from disparate user stores without collision.
+     *
+     * @see saml-core-2.0-os
+     *
+     * @var string|null
+     */
+    protected $NameQualifier = null;
+
+    /**
      * A name identifier established by a service provider or affiliation of providers for the entity, if different from
      * the primary name identifier given in the content of the element. This attribute provides a means of integrating
      * the use of SAML with existing identifiers already in use by a service provider. For example, an existing
@@ -45,6 +57,16 @@ abstract class NameIDType extends BaseIDType
      * @see saml-core-2.0-os
      */
     protected $SPProvidedID = null;
+
+    /**
+     * Further qualifies an identifier with the name of a service provider or affiliation of providers.
+     * This attribute provides an additional means to federate identifiers on the basis of the relying party or parties.
+     *
+     * @see saml-core-2.0-os
+     *
+     * @var string|null
+     */
+    protected $SPNameQualifier = null;
 
     /**
      * The NameIDType complex type is used when an element serves to represent an entity by a string-valued name.
@@ -70,10 +92,10 @@ abstract class NameIDType extends BaseIDType
         ?string $NameQualifier = null,
         ?string $SPNameQualifier = null
     ) {
-        parent::__construct($NameQualifier, $SPNameQualifier);
-
         $this->setFormat($Format);
         $this->setSPProvidedID($SPProvidedID);
+        $this->setNameQualifier($NameQualifier);
+        $this->setSPNameQualifier($SPNameQualifier);
         $this->setValue($value);
     }
 
@@ -99,6 +121,75 @@ abstract class NameIDType extends BaseIDType
     {
         Assert::nullOrNotWhitespaceOnly($format);
         $this->Format = $format;
+    }
+
+
+    /**
+     * Collect the value of the SPProvidedID-property
+     *
+     * @return string|null
+     */
+    public function getSPProvidedID(): ?string
+    {
+        return $this->SPProvidedID;
+    }
+
+
+    /**
+     * Set the value of the SPProvidedID-property
+     *
+     * @param string|null $spProvidedID
+     * @return void
+     */
+    public function setSPProvidedID(?string $spProvidedID): void
+    {
+        $this->SPProvidedID = $spProvidedID;
+    }
+
+
+    /**
+     * Collect the value of the NameQualifier-property
+     *
+     * @return string|null
+     */
+    public function getNameQualifier(): ?string
+    {
+        return $this->NameQualifier;
+    }
+
+
+    /**
+     * Set the value of the NameQualifier-property
+     *
+     * @param string|null $nameQualifier
+     * @return void
+     */
+    private function setNameQualifier(?string $nameQualifier): void
+    {
+        $this->NameQualifier = $nameQualifier;
+    }
+
+
+    /**
+     * Collect the value of the SPNameQualifier-property
+     *
+     * @return string|null
+     */
+    public function getSPNameQualifier(): ?string
+    {
+        return $this->SPNameQualifier;
+    }
+
+
+    /**
+     * Set the value of the SPNameQualifier-property
+     *
+     * @param string|null $spNameQualifier
+     * @return void
+     */
+    private function setSPNameQualifier(?string $spNameQualifier): void
+    {
+        $this->SPNameQualifier = $spNameQualifier;
     }
 
 
@@ -129,29 +220,6 @@ abstract class NameIDType extends BaseIDType
 
 
     /**
-     * Collect the value of the SPProvidedID-property
-     *
-     * @return string|null
-     */
-    public function getSPProvidedID(): ?string
-    {
-        return $this->SPProvidedID;
-    }
-
-
-    /**
-     * Set the value of the SPProvidedID-property
-     *
-     * @param string|null $spProvidedID
-     * @return void
-     */
-    private function setSPProvidedID(?string $spProvidedID): void
-    {
-        $this->SPProvidedID = $spProvidedID;
-    }
-
-
-    /**
      * Convert this NameIDType to XML.
      *
      * @param \DOMElement $parent The element we are converting to XML.
@@ -159,7 +227,7 @@ abstract class NameIDType extends BaseIDType
      */
     public function toXML(DOMElement $parent = null): DOMElement
     {
-        $element = parent::toXML($parent);
+        $element = $this->instantiateParentElement($parent);
 
         if ($this->Format !== null) {
             $element->setAttribute('Format', $this->Format);
@@ -169,9 +237,32 @@ abstract class NameIDType extends BaseIDType
             $element->setAttribute('SPProvidedID', $this->SPProvidedID);
         }
 
+        if ($this->NameQualifier !== null) {
+            $element->setAttribute('NameQualifier', $this->NameQualifier);
+        }
+
+        if ($this->SPNameQualifier !== null) {
+            $element->setAttribute('SPNameQualifier', $this->SPNameQualifier);
+        }
+
         $value = $element->ownerDocument->createTextNode($this->value);
         $element->appendChild($value);
 
         return $element;
+    }
+
+
+    /**
+     * Get a string representation of this NameIDType object.
+     *
+     * @return string The resulting XML, as a string.
+     */
+    public function __toString(): string
+    {
+        $doc = DOMDocumentFactory::create();
+        $root = $doc->createElementNS(Constants::NS_SAML, 'root');
+        $element = $this->toXML($root);
+
+        return $doc->saveXML($element);
     }
 }

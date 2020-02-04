@@ -15,33 +15,68 @@ use SAML2\Utils;
  */
 class IssuerTest extends TestCase
 {
+    /** @var \DOMDocument $document */
+    private $document;
+
+
     /**
      * @return void
      */
-    public function testMarshalling(): void
+    public function setup(): void
     {
-        $issuer = new Issuer('TheIssuerValue', 'TheFormat', 'TheSPProvidedID', 'TheNameQualifier', 'TheSPNameQualifier');
-        $issuerElement = $issuer->toXML();
-        $issuerElements = Utils::xpQuery($issuerElement, '/saml_assertion:Issuer');
-        $this->assertCount(1, $issuerElements);
-        $issuerElement = $issuerElements[0];
-
-        $this->assertEquals('TheNameQualifier', $issuerElement->getAttribute("NameQualifier"));
-        $this->assertEquals('TheSPNameQualifier', $issuerElement->getAttribute("SPNameQualifier"));
-        $this->assertEquals('TheFormat', $issuerElement->getAttribute("Format"));
-        $this->assertEquals('TheSPProvidedID', $issuerElement->getAttribute("SPProvidedID"));
-        $this->assertEquals('TheIssuerValue', $issuerElement->textContent);
+        $samlNamespace = Issuer::NS;
+        $this->document = DOMDocumentFactory::fromString(<<<XML
+<saml:Issuer
+  xmlns:saml="{$samlNamespace}"
+  Format="TheFormat"
+  SPProvidedID="TheSPProvidedID"
+  NameQualifier="TheNameQualifier"
+  SPNameQualifier="TheSPNameQualifier">TheIssuerValue</saml:Issuer>
+XML
+        );
     }
 
 
     /**
      * @return void
      */
-    public function testMarshallingWithIllegalAttributes(): void
+    public function testMarshalling(): void
+    {
+        $issuer = new Issuer(
+            'TheIssuerValue',
+            'TheFormat',
+            'TheSPProvidedID',
+            'TheNameQualifier',
+            'TheSPNameQualifier'
+        );
+
+        $this->assertEquals('TheNameQualifier', $issuer->getNameQualifier());
+        $this->assertEquals('TheSPNameQualifier', $issuer->getSPNameQualifier());
+        $this->assertEquals('TheFormat', $issuer->getFormat());
+        $this->assertEquals('TheSPProvidedID', $issuer->getSPProvidedID());
+        $this->assertEquals('TheIssuerValue', $issuer->getValue());
+        $this->assertEquals(
+            $this->document->saveXML($this->document->documentElement),
+            strval($issuer)
+        );
+    }
+
+
+    /**
+     * @return void
+     */
+    public function testMarshallingEntityFormat(): void
     {
         $this->expectException(InvalidArgumentException::class);
         $this->expectExceptionMessage('Illegal combination of attributes being used');
-        new Issuer('TheIssuerValue', Constants::NAMEID_ENTITY, 'TheSPProvidedID', 'TheNameQualifier', 'TheSPNameQualifier');
+
+        $issuer = new Issuer(
+            'TheIssuerValue',
+            Constants::NAMEID_ENTITY,
+            'TheSPProvidedID',
+            'TheNameQualifier',
+            'TheSPNameQualifier'
+        );
     }
 
 
@@ -50,35 +85,27 @@ class IssuerTest extends TestCase
      */
     public function testUnmarshalling(): void
     {
-        $samlNamespace = Constants::NS_SAML;
-        $document = DOMDocumentFactory::fromString(<<<XML
-<saml:Issuer xmlns:saml="{$samlNamespace}" NameQualifier="TheNameQualifier" SPNameQualifier="TheSPNameQualifier" Format="TheFormat" SPProvidedID="TheSPProvidedID">TheIssuerValue</saml:Issuer>
-XML
-        );
+        $issuer = Issuer::fromXML($this->document->documentElement);
 
-        $issuer = Issuer::fromXML($document->firstChild);
-        $this->assertEquals('TheNameQualifier', $issuer->getNameQualifier());
-        $this->assertEquals('TheSPNameQualifier', $issuer->getSPNameQualifier());
+        $this->assertEquals('TheIssuerValue', $issuer->getValue());
         $this->assertEquals('TheFormat', $issuer->getFormat());
         $this->assertEquals('TheSPProvidedID', $issuer->getSPProvidedID());
-        $this->assertEquals('TheIssuerValue', $issuer->getValue());
+        $this->assertEquals('TheNameQualifier', $issuer->getNameQualifier());
+        $this->assertEquals('TheSPNameQualifier', $issuer->getSPNameQualifier());
     }
 
 
     /**
      * @return void
      */
-    public function testUnmarshallingWithIllegalAttributes(): void
+    public function testUnmarshallingEntityFormat(): void
     {
-        $samlNamespace = Constants::NS_SAML;
-        $nameid_entity = Constants::NAMEID_ENTITY;
-        $document = DOMDocumentFactory::fromString(<<<XML
-<saml:Issuer xmlns:saml="{$samlNamespace}" NameQualifier="TheNameQualifier" SPNameQualifier="TheSPNameQualifier" Format="{$nameid_entity}" SPProvidedID="TheSPProvidedID">TheIssuerValue</saml:Issuer>
-XML
-        );
+        $document = $this->document->documentElement;
+        $document->setAttribute('Format', Constants::NAMEID_ENTITY);
 
         $this->expectException(InvalidArgumentException::class);
         $this->expectExceptionMessage('Illegal combination of attributes being used');
-        Issuer::fromXML($document->firstChild);
+
+        $issuer = Issuer::fromXML($this->document->documentElement);
     }
 }

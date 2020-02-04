@@ -5,6 +5,7 @@ declare(strict_types=1);
 namespace SAML2\XML\spid;
 
 use DOMElement;
+use SAML2\Constants;
 use SAML2\XML\saml\NameIDType;
 use Webmozart\Assert\Assert;
 
@@ -16,6 +17,34 @@ use Webmozart\Assert\Assert;
  */
 final class Issuer extends NameIDType
 {
+    /**
+     * Initialize a saml:Issuer conforming to SPID specification
+     *
+     * @param string $value
+     * @param string|null $Format
+     * @param string|null $SPProvidedID
+     * @param string|null $NameQualifier
+     * @param string|null $SPNameQualifier
+     */
+    public function __construct(
+        string $value,
+        ?string $Format = null,
+        ?string $SPProvidedID = null,
+        ?string $NameQualifier = null,
+        ?string $SPNameQualifier = null
+    ) {
+        Assert::same(
+            $Format,
+            Constants::NAMEID_ENTITY,
+            'Invalid Format; must be \'' . Constants::NAMEID_ENTITY . '\''
+        );
+        Assert::notNull($NameQualifier, 'Missing mandatory NameQualifier attribute');
+        Assert::allNull([$SPProvidedID, $SPNameQualifier], 'Illegal combination of attributes being used');
+
+        parent::__construct($value, $Format, $SPProvidedID, $NameQualifier, $SPNameQualifier);
+    }
+
+
     /**
      * Convert XML into an Issuer
      *
@@ -34,6 +63,7 @@ final class Issuer extends NameIDType
         $NameQualifier = self::getAttribute($xml, 'NameQualifier', null);
         $SPNameQualifier = self::getAttribute($xml, 'SPNameQualifier', null);
 
+        Assert::allNull([$SPProvidedID, $SPNameQualifier], 'Illegal combination of attributes being used');
         return new self($xml->textContent, $Format, $SPProvidedID, $NameQualifier, $SPNameQualifier);
     }
 }
