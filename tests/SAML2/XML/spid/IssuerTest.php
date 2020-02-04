@@ -29,8 +29,8 @@ class IssuerTest extends TestCase
         $this->document = DOMDocumentFactory::fromString(<<<XML
 <saml:Issuer
   xmlns:saml="{$samlNamespace}"
-  Format="{$nameidEntity}"
-  NameQualifier="TheNameQualifier">TheIssuerValue</saml:Issuer>
+  NameQualifier="TheNameQualifier"
+  Format="{$nameidEntity}">TheIssuerValue</saml:Issuer>
 XML
         );
     }
@@ -43,17 +43,17 @@ XML
     {
         $issuer = new Issuer(
             'TheIssuerValue',
-            Constants::NAMEID_ENTITY,
-            null,
             'TheNameQualifier',
+            null,
+            Constants::NAMEID_ENTITY,
             null
         );
 
         $this->assertEquals('TheIssuerValue', $issuer->getValue());
-        $this->assertEquals(Constants::NAMEID_ENTITY, $issuer->getFormat());
-        $this->assertNull($issuer->getSPProvidedID());
         $this->assertEquals('TheNameQualifier', $issuer->getNameQualifier());
         $this->assertNull($issuer->getSPNameQualifier());
+        $this->assertEquals(Constants::NAMEID_ENTITY, $issuer->getFormat());
+        $this->assertNull($issuer->getSPProvidedID());
         $this->assertEquals(
             $this->document->saveXML($this->document->documentElement),
             strval($issuer)
@@ -71,10 +71,10 @@ XML
 
         $issuer = new Issuer(
             'TheIssuerValue',
-            Constants::NAMEID_ENTITY,
-            'TheSPProvidedID',
             'TheNameQualifier',
-            'TheSPNameQualifier'
+            'TheSPNameQualifier',
+            Constants::NAMEID_ENTITY,
+            'TheSPProvidedID'
         );
     }
 
@@ -87,10 +87,10 @@ XML
         $issuer = Issuer::fromXML($this->document->documentElement);
 
         $this->assertEquals('TheIssuerValue', $issuer->getValue());
-        $this->assertEquals(Constants::NAMEID_ENTITY, $issuer->getFormat());
-        $this->assertNull($issuer->getSPProvidedID());
         $this->assertEquals('TheNameQualifier', $issuer->getNameQualifier());
         $this->assertNull($issuer->getSPNameQualifier());
+        $this->assertEquals(Constants::NAMEID_ENTITY, $issuer->getFormat());
+        $this->assertNull($issuer->getSPProvidedID());
     }
 
 

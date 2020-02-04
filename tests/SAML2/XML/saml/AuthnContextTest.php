@@ -4,6 +4,7 @@ declare(strict_types=1);
 
 namespace SAML2\XML\saml;
 
+use InvalidArgumentException;
 use SAML2\Constants;
 use SAML2\DOMDocumentFactory;
 use SAML2\Utils;
@@ -11,8 +12,64 @@ use SAML2\Utils;
 /**
  * Class \SAML2\XML\saml\AuthnContextTest
  */
-class AuthnContextTest extends \PHPUnit\Framework\TestCase
+final class AuthnContextTest extends \PHPUnit\Framework\TestCase
 {
+    /** @var \DOMDocument */
+    private $document;
+
+    /** @var \DOMDocument */
+    private $classRef;
+
+    /** @var \DOMDocument */
+    private $declRef;
+
+    /** @var \DOMDocument */
+    private $decl;
+
+    /** @var \DOMDocument */
+    private $authority;
+
+    protected function setUp(): void
+    {
+        $samlNamespace = Constants::NS_SAML;
+        $ac_ppt = Constants::AC_PASSWORD_PROTECTED_TRANSPORT;
+
+        $this->document = DOMDocumentFactory::fromString(<<<XML
+<saml:AuthnContext xmlns:saml="{$samlNamespace}">
+</saml:AuthnContext>
+XML
+        );
+
+        $this->classRef = DOMDocumentFactory::fromString(<<<XML
+<saml:AuthnContextClassRef xmlns:saml="{$samlNamespace}">{$ac_ppt}</saml:AuthnContextClassRef>
+XML
+        );
+
+        $this->declRef = DOMDocumentFactory::fromString(<<<XML
+<saml:AuthnContextDeclRef xmlns:saml="{$samlNamespace}">/relative/path/to/document.xml</saml:AuthnContextDeclRef>
+XML
+        );
+
+        $this->decl = DOMDocumentFactory::fromString(<<<XML
+<saml:AuthnContextDecl xmlns:saml="{$samlNamespace}">
+  <samlacpass:AuthenticationContextDeclaration>
+    <samlacpass:Identification nym="verinymity">
+      <samlacpass:Extension>
+        <safeac:NoVerification/>
+      </samlacpass:Extension>
+    </samlacpass:Identification>
+  </samlacpass:AuthenticationContextDeclaration>
+</saml:AuthnContextDecl>
+XML
+        );
+
+        $this->authority = DOMDocumentFactory::fromString(<<<XML
+<saml:AuthenticatingAuthority xmlns:saml="{$samlNamespace}">https://sp.example.com/SAML2</saml:AuthenticatingAuthority>
+XML
+        );
+    }
+
+
     /**
      * @return void
      */
@@ -27,18 +84,12 @@ class AuthnContextTest extends \PHPUnit\Framework\TestCase
             ]
         );
 
-        $nssaml = AuthnContext::NS;
-        $ac_ppt = Constants::AC_PASSWORD_PROTECTED_TRANSPORT;
-        $this->assertEquals(<<<XML
-<saml:AuthnContext xmlns:saml="{$nssaml}">
-  <saml:AuthnContextClassRef>{$ac_ppt}</saml:AuthnContextClassRef>
-  <saml:AuthnContextDeclRef>/relative/path/to/document.xml</saml:AuthnContextDeclRef>
-  <saml:AuthenticatingAuthority>https://sp.example.com/SAML2</saml:AuthenticatingAuthority>
-</saml:AuthnContext>
-XML
-            ,
-            strval($authnContext)
-        );
+        $document = $this->document;
+        $document->documentElement->appendChild($document->importNode($this->classRef->documentElement, true));
+        $document->documentElement->appendChild($document->importNode($this->declRef->documentElement, true));
+        $document->documentElement->appendChild($document->importNode($this->authority->documentElement, true));
+
+        $this->assertXmlStringEqualsXmlString($document->saveXML(), strval($authnContext));
     }
 
 
@@ -47,22 +98,7 @@ XML
      */
     public function testMarshallingWithoutClassRef(): void
     {
-        $samlNamespace = Constants::NS_SAML;
-
-        $document = DOMDocumentFactory::fromString(<<<XML
-<saml:AuthnContextDecl xmlns:saml="{$samlNamespace}">
-  <samlacpass:AuthenticationContextDeclaration>
-    <samlacpass:Identification nym="verinymity">
-      <samlacpass:Extension>
-         <safeac:NoVerification/>
-      </samlacpass:Extension>
-    </samlacpass:Identification>
-  </samlacpass:AuthenticationContextDeclaration>
-</saml:AuthnContextDecl>
-XML
-        );
-
-        $authnContextDecl = AuthnContextDecl::fromXML($document->documentElement);
+        $authnContextDecl = AuthnContextDecl::fromXML($this->decl->documentElement);
         $authenticatingAuthority = new AuthenticatingAuthority('https://sp.example.com/SAML2');
 
         $authnContext = new AuthnContext(
@@ -72,34 +108,46 @@ XML
             [$authenticatingAuthority]
         );
 
-        $document = DOMDocumentFactory::fromString('<root />');
-        $authnContextElement = $authnContext->toXML($document->documentElement);
+        $document = $this->document;
+        $document->documentElement->appendChild($document->importNode($this->decl->documentElement, true));
+        $document->documentElement->appendChild($document->importNode($this->authority->documentElement, true));
 
-        $authnContextElements = Utils::xpQuery(
-            $authnContextElement,
-            '/root/saml_assertion:AuthnContext'
+        $this->assertXmlStringEqualsXmlString($document->saveXML(), strval($authnContext));
+    }
+
+
+    /**
+     * @return void
+     */
+    public function testMarshallingIllegalCombination(): void
+    {
+        $authnContextClassRef = new AuthnContextClassRef(Constants::AC_PASSWORD_PROTECTED_TRANSPORT);
+        $authnContextDecl = AuthnContextDecl::fromXML($this->decl->documentElement);
+        $authnContextDeclRef = new AuthnContextDeclRef('/relative/path/to/document.xml');
+
+        $this->expectException(InvalidArgumentException::class);
+        $this->expectExceptionMessage('Can only have one of AuthnContextDecl/AuthnContextDeclRef');
+
+        $authnContext = new AuthnContext(
+            $authnContextClassRef,
+            $authnContextDecl,
+            $authnContextDeclRef,
+            [
+                new AuthenticatingAuthority('https://sp.example.com/SAML2')
+            ]
         );
-        $this->assertCount(1, $authnContextElements);
+    }
 
-        $authnContextDeclElements = Utils::xpQuery(
-            $authnContextElements[0],
-            './saml_assertion:AuthnContextDecl'
-        );
 
-        $this->assertCount(1, $authnContextDeclElements);
-        /** @psalm-var \DOMElement $authnContextDeclElement->childNodes[1] */
-        $authnContextDeclElement = $authnContextDeclElements[0];
-        $this->assertEquals('samlacpass:AuthenticationContextDeclaration', $authnContextDeclElement->childNodes[1]->tagName);
+    /**
+     * @return void
+     */
+    public function testMarshallingEmpty(): void
+    {
+        $this->expectException(InvalidArgumentException::class);
+        $this->expectExceptionMessage('You need either an AuthnContextDecl or an AuthnContextDeclRef');
 
-        $authenticatingAuthorityElements = Utils::xpQuery(
-            $authnContextElements[0],
-            './saml_assertion:AuthenticatingAuthority'
-        );
-
-        $this->assertCount(1, $authenticatingAuthorityElements);
-        $authenticatingAuthorityElement = $authenticatingAuthorityElements[0];
-
-        $this->assertEquals('https://sp.example.com/SAML2', $authenticatingAuthorityElement->textContent);
+        new AuthnContext(null, null, null, null);
     }
 
 
@@ -108,22 +156,10 @@ XML
      */
     public function testUnmarshallingWithClassRef(): void
     {
-        $samlNamespace = Constants::NS_SAML;
-
-        $document = DOMDocumentFactory::fromString(<<<XML
-<saml:AuthnContext xmlns:saml="{$samlNamespace}">
-  <saml:AuthnContextClassRef>
-    urn:oasis:names:tc:SAML:2.0:ac:classes:PasswordProtectedTransport
-  </saml:AuthnContextClassRef>
-  <saml:AuthnContextDeclRef>
-    /relative/path/to/document.xml
-  </saml:AuthnContextDeclRef>
-  <saml:AuthenticatingAuthority>
-    https://sp.example.com/SAML2
-  </saml:AuthenticatingAuthority>
-</saml:AuthnContext>
-XML
-        );
+        $document = $this->document;
+        $document->documentElement->appendChild($document->importNode($this->classRef->documentElement, true));
+        $document->documentElement->appendChild($document->importNode($this->declRef->documentElement, true));
+        $document->documentElement->appendChild($document->importNode($this->authority->documentElement, true));
 
         $authnContext = AuthnContext::fromXML($document->documentElement);
 
@@ -146,22 +182,9 @@ XML
      */
     public function testUnmarshallingWithoutClassRef(): void
     {
-        $samlNamespace = Constants::NS_SAML;
-
-        $document = DOMDocumentFactory::fromString(<<<XML
-<saml:AuthnContext xmlns:saml="{$samlNamespace}">
-  <saml:AuthnContextDecl>
-    <samlacpass:AuthenticationContextDeclaration>
-      <samlacpass:Identification nym="verinymity">
-        <samlacpass:Extension>
-          <safeac:NoVerification/>
-        </samlacpass:Extension>
-      </samlacpass:Identification>
-    </samlacpass:AuthenticationContextDeclaration>
-  </saml:AuthnContextDecl>
-</saml:AuthnContext>
-XML
-        );
+        $document = $this->document;
+        $document->documentElement->appendChild($document->importNode($this->decl->documentElement, true));
+        $document->documentElement->appendChild($document->importNode($this->authority->documentElement, true));
 
         $authnContext = AuthnContext::fromXML($document->documentElement);
         $this->assertFalse($authnContext->isEmptyElement());
@@ -172,5 +195,54 @@ XML
         /** @psalm-var \DOMElement $authnContextDecl[1] */
         $authnContextDecl = $contextDeclObj->getDecl();
         $this->assertEquals('samlacpass:AuthenticationContextDeclaration', $authnContextDecl[1]->tagName);
+    }
+
+
+    /**
+     * @return void
+     */
+    public function testUnmarshallingIllegalCombination(): void
+    {
+        $document = $this->document;
+        $document->documentElement->appendChild($document->importNode($this->classRef->documentElement, true));
+        $document->documentElement->appendChild($document->importNode($this->decl->documentElement, true));
+        $document->documentElement->appendChild($document->importNode($this->declRef->documentElement, true));
+        $document->documentElement->appendChild($document->importNode($this->authority->documentElement, true));
+
+        $this->expectException(InvalidArgumentException::class);
+        $this->expectExceptionMessage('Can only have one of AuthnContextDecl/AuthnContextDeclRef');
+
+        $authnContext = AuthnContext::fromXML($document->documentElement);
+    }
+
+
+    /**
+     * @return void
+     */
+    public function testUnmarshallingEmpty(): void
+    {
+        $document = $this->document;
+
+        $this->expectException(InvalidArgumentException::class);
+        $this->expectExceptionMessage('You need either an AuthnContextDecl or an AuthnContextDeclRef');
+
+        AuthnContext::fromXML($document->documentElement);
+    }
+
+
+    /**
+     * Test serialization / unserialization
+     */
+    public function testSerialization(): void
+    {
+        $document = $this->document;
+        $document->documentElement->appendChild($document->importNode($this->classRef->documentElement, true));
+        $document->documentElement->appendChild($document->importNode($this->declRef->documentElement, true));
+        $document->documentElement->appendChild($document->importNode($this->authority->documentElement, true));
+
+        $this->assertXmlStringEqualsXmlString(
+            $this->document->saveXML($document->documentElement),
+            strval(unserialize(serialize(AuthnContext::fromXML($document->documentElement))))
+        );
     }
 }

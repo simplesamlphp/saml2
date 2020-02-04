@@ -4,7 +4,7 @@ declare(strict_types=1);
 
 namespace SAML2\XML\saml;
 
-use Exception;
+use InvalidArgumentException;
 use SAML2\Constants;
 use SAML2\DOMDocumentFactory;
 use SAML2\XML\saml\SubjectConfirmationData;
@@ -15,30 +15,44 @@ use SAML2\Utils;
 /**
  * Class \SAML2\XML\saml\SubjectConfirmationTest
  */
-class SubjectConfirmationTest extends \PHPUnit\Framework\TestCase
+final class SubjectConfirmationTest extends \PHPUnit\Framework\TestCase
 {
+    /** @var \DOMDocument */
+    private $document;
+
+
+    public function setup(): void
+    {
+        $samlNamespace = SubjectConfirmation::NS;
+
+        $this->document = DOMDocumentFactory::fromString(<<<XML
+<saml:SubjectConfirmation xmlns:saml="{$samlNamespace}" Method="SomeMethod">
+  <saml:NameID>SomeNameIDValue</saml:NameID>
+  <saml:SubjectConfirmationData/>
+</saml:SubjectConfirmation>
+XML
+        );
+    }
+
+
     /**
      * @return void
      */
     public function testMarshalling(): void
     {
-        $nameId = new NameID('SomeNameIDValue');
-
         $subjectConfirmation = new SubjectConfirmation(
             'SomeMethod',
-            $nameId,
+            new NameID('SomeNameIDValue'),
             new SubjectConfirmationData()
         );
 
-        $document = DOMDocumentFactory::fromString('<root />');
-        $subjectConfirmationElement = $subjectConfirmation->toXML($document->firstChild);
-        $subjectConfirmationElements = Utils::xpQuery($subjectConfirmationElement, '//saml_assertion:SubjectConfirmation');
-        $this->assertCount(1, $subjectConfirmationElements);
-        $subjectConfirmationElement = $subjectConfirmationElements[0];
-
-        $this->assertEquals('SomeMethod', $subjectConfirmationElement->getAttribute("Method"));
-        $this->assertCount(1, Utils::xpQuery($subjectConfirmationElement, "./saml_assertion:NameID"));
-        $this->assertCount(1, Utils::xpQuery($subjectConfirmationElement, "./saml_assertion:SubjectConfirmationData"));
+        $this->assertEquals('SomeMethod', $subjectConfirmation->getMethod());
+        $this->assertNotNull($subjectConfirmation->getNameID());
+        $this->assertNotNull($subjectConfirmation->getSubjectConfirmationData());
+        $this->assertEquals(
+            $this->document->saveXML($this->document->documentElement),
+            strval($subjectConfirmation)
+        );
     }
 
 
@@ -47,20 +61,16 @@ class SubjectConfirmationTest extends \PHPUnit\Framework\TestCase
      */
     public function testUnmarshalling(): void
     {
-        $samlNamespace = Constants::NS_SAML;
-        $document = DOMDocumentFactory::fromString(<<<XML
-<saml:SubjectConfirmation xmlns:saml="{$samlNamespace}" Method="SomeMethod">
-  <saml:NameID>SomeNameIDValue</saml:NameID>
-  <saml:SubjectConfirmationData/>
-</saml:SubjectConfirmation>
-XML
-        );
+        $subjectConfirmation = SubjectConfirmation::fromXML($this->document->documentElement);
 
-        $subjectConfirmation = SubjectConfirmation::fromXML($document->firstChild);
         $this->assertEquals('SomeMethod', $subjectConfirmation->getMethod());
         $this->assertTrue($subjectConfirmation->getNameID() instanceof NameID);
         $this->assertEquals('SomeNameIDValue', $subjectConfirmation->getNameID()->getValue());
         $this->assertTrue($subjectConfirmation->getSubjectConfirmationData() instanceof SubjectConfirmationData);
+        $this->assertEquals(
+            $this->document->saveXML($this->document->documentElement),
+            strval($subjectConfirmation)
+        );
     }
 
 
@@ -69,18 +79,13 @@ XML
      */
     public function testMethodMissingThrowsException(): void
     {
-        $samlNamespace = Constants::NS_SAML;
-        $document = DOMDocumentFactory::fromString(<<<XML
-<saml:SubjectConfirmation xmlns:saml="{$samlNamespace}">
-  <saml:NameID>SomeNameIDValue</saml:NameID>
-  <saml:SubjectConfirmationData/>
-</saml:SubjectConfirmation>
-XML
-        );
+        $document = $this->document->documentElement;
+        $document->removeAttribute('Method');
 
-        $this->expectException(Exception::class);
+        $this->expectException(InvalidArgumentException::class);
         $this->expectExceptionMessage('SubjectConfirmation element without Method attribute');
-        $subjectConfirmation = SubjectConfirmation::fromXML($document->firstChild);
+
+        $subjectConfirmation = SubjectConfirmation::fromXML($document);
     }
 
 
@@ -99,9 +104,9 @@ XML
 XML
         );
 
-        $this->expectException(Exception::class);
+        $this->expectException(InvalidArgumentException::class);
         $this->expectExceptionMessage('More than one NameID in a SubjectConfirmation element');
-        $subjectConfirmation = SubjectConfirmation::fromXML($document->firstChild);
+        SubjectConfirmation::fromXML($document->documentElement);
     }
 
 
@@ -120,10 +125,22 @@ XML
 XML
         );
 
-        $this->expectException(Exception::class);
+        $this->expectException(InvalidArgumentException::class);
         $this->expectExceptionMessage(
             'More than one SubjectConfirmationData child in a SubjectConfirmation element'
         );
-        $subjectConfirmation = SubjectConfirmation::fromXML($document->firstChild);
+        SubjectConfirmation::fromXML($document->documentElement);
+    }
+
+
+    /**
+     * Test serialization / unserialization
+     */
+    public function testSerialization(): void
+    {
+        $this->assertEquals(
+            $this->document->saveXML($this->document->documentElement),
+            strval(unserialize(serialize(SubjectConfirmation::fromXML($this->document->documentElement))))
+        );
     }
 }

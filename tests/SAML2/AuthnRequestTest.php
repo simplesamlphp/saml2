@@ -152,7 +152,7 @@ AUTHNREQUEST;
     public function testThatTheSubjectCanBeSetBySettingTheNameId(): void
     {
         $request = new AuthnRequest();
-        $nameId = new NameID('user@example.org', Constants::NAMEID_UNSPECIFIED);
+        $nameId = new NameID('user@example.org', null, null, Constants::NAMEID_UNSPECIFIED);
         $request->setNameId($nameId);
 
         $requestAsXML = $request->toXML()->ownerDocument->saveXML();

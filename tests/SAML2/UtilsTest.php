@@ -25,10 +25,10 @@ class UtilsTest extends \PHPUnit\Framework\TestCase
     {
         $nameId_before = new NameID(
             'NameIDValue',
-            'SomeNameIDFormat',
-            null,
             'OurNameQualifier',
-            'TheSPNameQualifier'
+            'TheSPNameQualifier',
+            'SomeNameIDFormat',
+            null
         );
 
         $aq = new AttributeQuery();
@@ -38,10 +38,10 @@ class UtilsTest extends \PHPUnit\Framework\TestCase
 
         $nameId_after = Utils::xpQuery($xml, './saml_assertion:Subject/saml_assertion:NameID');
         $this->assertTrue(count($nameId_after) === 1);
+        $this->assertEquals('NameIDValue', $nameId_after[0]->textContent);
         $this->assertEquals('SomeNameIDFormat', $nameId_after[0]->getAttribute("Format"));
         $this->assertEquals('OurNameQualifier', $nameId_after[0]->getAttribute("NameQualifier"));
         $this->assertEquals('TheSPNameQualifier', $nameId_after[0]->getAttribute("SPNameQualifier"));
-        $this->assertEquals('NameIDValue', $nameId_after[0]->textContent);
     }
 
 

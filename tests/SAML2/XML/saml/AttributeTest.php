@@ -14,6 +14,7 @@ use SAML2\DOMDocumentFactory;
  */
 final class AttributeTest extends TestCase
 {
+    /** @var \DOMDocument */
     protected $document;
 
 
@@ -98,5 +99,17 @@ XML
 
         $this->expectException(Exception::class);
         Attribute::fromXML($document->documentElement);
+    }
+
+
+    /**
+     * Test serialization / unserialization
+     */
+    public function testSerialization(): void
+    {
+        $this->assertEquals(
+            $this->document->saveXML($this->document->documentElement),
+            strval(unserialize(serialize(Attribute::fromXML($this->document->documentElement))))
+        );
     }
 }

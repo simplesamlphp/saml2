@@ -21,21 +21,21 @@ final class SubjectConfirmation extends AbstractSamlElement
      *
      * @var string
      */
-    private $Method;
+    protected $Method;
 
     /**
      * The NameID of the entity that can use this element to verify the Subject.
      *
      * @var \SAML2\XML\saml\NameID|null
      */
-    private $NameID = null;
+    protected $NameID = null;
 
     /**
      * SubjectConfirmationData element with extra data for verification of the Subject.
      *
      * @var \SAML2\XML\saml\SubjectConfirmationData|null
      */
-    private $SubjectConfirmationData = null;
+    protected $SubjectConfirmationData = null;
 
 
     /**
@@ -168,7 +168,6 @@ final class SubjectConfirmation extends AbstractSamlElement
     {
         $e = $this->instantiateParentElement($parent);
         $e->setAttribute('Method', $this->Method);
-
         if ($this->NameID !== null) {
             $this->NameID->toXML($e);
         }

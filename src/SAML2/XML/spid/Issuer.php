@@ -21,17 +21,17 @@ final class Issuer extends NameIDType
      * Initialize a saml:Issuer conforming to SPID specification
      *
      * @param string $value
-     * @param string|null $Format
-     * @param string|null $SPProvidedID
      * @param string|null $NameQualifier
      * @param string|null $SPNameQualifier
+     * @param string|null $Format
+     * @param string|null $SPProvidedID
      */
     public function __construct(
         string $value,
-        ?string $Format = null,
-        ?string $SPProvidedID = null,
         ?string $NameQualifier = null,
-        ?string $SPNameQualifier = null
+        ?string $SPNameQualifier = null,
+        ?string $Format = null,
+        ?string $SPProvidedID = null
     ) {
         Assert::same(
             $Format,
@@ -41,7 +41,7 @@ final class Issuer extends NameIDType
         Assert::notNull($NameQualifier, 'Missing mandatory NameQualifier attribute');
         Assert::allNull([$SPProvidedID, $SPNameQualifier], 'Illegal combination of attributes being used');
 
-        parent::__construct($value, $Format, $SPProvidedID, $NameQualifier, $SPNameQualifier);
+        parent::__construct($value, $NameQualifier, $SPNameQualifier, $Format, $SPProvidedID);
     }
 
 
@@ -64,6 +64,6 @@ final class Issuer extends NameIDType
         $SPNameQualifier = self::getAttribute($xml, 'SPNameQualifier', null);
 
         Assert::allNull([$SPProvidedID, $SPNameQualifier], 'Illegal combination of attributes being used');
-        return new self($xml->textContent, $Format, $SPProvidedID, $NameQualifier, $SPNameQualifier);
+        return new self($xml->textContent, $NameQualifier, $SPNameQualifier, $Format, $SPProvidedID);
     }
 }

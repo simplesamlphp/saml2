@@ -28,11 +28,11 @@ final class NameID extends NameIDType
         Assert::same($xml->localName, 'NameID');
         Assert::same($xml->namespaceURI, NameID::NS);
 
-        $Format = self::getAttribute($xml, 'Format', null);
-        $SPProvidedID = self::getAttribute($xml, 'SPProvidedID', null);
         $NameQualifier = self::getAttribute($xml, 'NameQualifier', null);
         $SPNameQualifier = self::getAttribute($xml, 'SPNameQualifier', null);
+        $Format = self::getAttribute($xml, 'Format', null);
+        $SPProvidedID = self::getAttribute($xml, 'SPProvidedID', null);
 
-        return new self($xml->textContent, $Format, $SPProvidedID, $NameQualifier, $SPNameQualifier);
+        return new self($xml->textContent, $NameQualifier, $SPNameQualifier, $Format, $SPProvidedID);
     }
 }

@@ -11,32 +11,29 @@ use SAML2\Utils;
 /**
  * Class \SAML2\XML\saml\AuthnContextDeclRefTest
  */
-class AuthnContextDeclRefTest extends \PHPUnit\Framework\TestCase
+final class AuthnContextDeclRefTest extends \PHPUnit\Framework\TestCase
 {
+    /** @var \DOMDocument */
+    private $document;
+
+
+    protected function setUp(): void
+    {
+        $samlNamespace = Constants::NS_SAML;
+        $this->document = DOMDocumentFactory::fromString(<<<XML
+<saml:AuthnContextDeclRef xmlns:saml="{$samlNamespace}">/relative/path/to/document.xml</saml:AuthnContextDeclRef>
+XML
+        );
+    }
+
+
     /**
      * @return void
      */
     public function testMarshalling(): void
     {
         $authnContextDeclRef = new AuthnContextDeclRef('/relative/path/to/document.xml');
-
-        $this->assertEquals(
-            '<saml:AuthnContextDeclRef xmlns:saml="' . Constants::NS_SAML . '">/relative/path/to/document.xml'
-                . '</saml:AuthnContextDeclRef>',
-            strval($authnContextDeclRef)
-        );
-        $document = DOMDocumentFactory::fromString('<root />');
-        /** @psalm-var \DOMElement $document->firstChild */
-        $authnContextDeclRefElement = $authnContextDeclRef->toXML($document->firstChild);
-
-        $authnContextDeclRefElements = Utils::xpQuery(
-            $authnContextDeclRefElement,
-            '/root/saml_assertion:AuthnContextDeclRef'
-        );
-        $this->assertCount(1, $authnContextDeclRefElements);
-        $auhtnContextDeclRefElement = $authnContextDeclRefElements[0];
-
-        $this->assertEquals('/relative/path/to/document.xml', $authnContextDeclRefElement->textContent);
+        $this->assertEquals($this->document->saveXML($this->document->documentElement), strval($authnContextDeclRef));
     }
 
 
@@ -45,18 +42,19 @@ class AuthnContextDeclRefTest extends \PHPUnit\Framework\TestCase
      */
     public function testUnmarshalling(): void
     {
-        $samlNamespace = Constants::NS_SAML;
-        $document = DOMDocumentFactory::fromString(<<<XML
-<saml:AuthnContextDeclRef xmlns:saml="{$samlNamespace}">
-    /relative/path/to/document.xml
-</saml:AuthnContextDeclRef>
-XML
-        );
-
-        /**
-         * @psalm-var \DOMElement $document->firstChild
-         */
-        $authnContextDeclRef = AuthnContextDeclRef::fromXML($document->firstChild);
+        $authnContextDeclRef = AuthnContextDeclRef::fromXML($this->document->documentElement);
         $this->assertEquals('/relative/path/to/document.xml', $authnContextDeclRef->getDeclRef());
+    }
+
+
+    /**
+     * Test serialization / unserialization
+     */
+    public function testSerialization(): void
+    {
+        $this->assertEquals(
+            $this->document->saveXML($this->document->documentElement),
+            strval(unserialize(serialize(AuthnContextDeclRef::fromXML($this->document->documentElement))))
+        );
     }
 }

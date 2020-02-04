@@ -11,15 +11,16 @@ use SAML2\Utils;
 /**
  * Class \SAML2\XML\saml\AuthnContextDeclTest
  */
-class AuthnContextDeclTest extends \PHPUnit\Framework\TestCase
+final class AuthnContextDeclTest extends \PHPUnit\Framework\TestCase
 {
-    /**
-     * @return void
-     */
-    public function testMarshalling(): void
+    /** @var \DOMDocument */
+    private $document;
+
+
+    protected function setUp(): void
     {
         $samlNamespace = Constants::NS_SAML;
-        $document = DOMDocumentFactory::fromString(<<<XML
+        $this->document = DOMDocumentFactory::fromString(<<<XML
             <saml:AuthnContextDecl xmlns:saml="{$samlNamespace}">
                 <samlacpass:AuthenticationContextDeclaration>
                     <samlacpass:Identification nym="verinymity">
@@ -31,8 +32,15 @@ class AuthnContextDeclTest extends \PHPUnit\Framework\TestCase
             </saml:AuthnContextDecl>
 XML
         );
+    }
 
-        $authnContextDecl = new AuthnContextDecl($document->documentElement->childNodes);
+
+    /**
+     * @return void
+     */
+    public function testMarshalling(): void
+    {
+        $authnContextDecl = new AuthnContextDecl($this->document->documentElement->childNodes);
         /**
          * @psalm-var \DOMElement $authnContextDeclElement->childNodes[1]
          */
@@ -47,53 +55,23 @@ XML
      */
     public function testUnmarshalling(): void
     {
-        $samlNamespace = Constants::NS_SAML;
-        $document = DOMDocumentFactory::fromString(<<<XML
-            <saml:AuthnContextDecl xmlns:saml="{$samlNamespace}">
-                <samlacpass:AuthenticationContextDeclaration>
-                    <samlacpass:Identification nym="verinymity">
-                        <samlacpass:Extension>
-                            <safeac:NoVerification/>
-                        </samlacpass:Extension>
-                    </samlacpass:Identification>
-                </samlacpass:AuthenticationContextDeclaration>
-            </saml:AuthnContextDecl>
-XML
-        );
-
         /**
          * @psalm-var \DOMElement $document->firstChild
          * @psalm-var \DOMNode $authnContextDecl[1]
          */
-        $authnContextDecl = AuthnContextDecl::fromXML($document->firstChild)->getDecl();
+        $authnContextDecl = AuthnContextDecl::fromXML($this->document->firstChild)->getDecl();
         $this->assertEquals('samlacpass:AuthenticationContextDeclaration', $authnContextDecl[1]->localName);
     }
 
 
     /**
-     * Serialize an AuthnContextDecl and Unserialize that again.
-     * @return void
+     * Test serialization / unserialization
      */
-    public function testSerialize(): void
+    public function testSerialization(): void
     {
-        $samlNamespace = Constants::NS_SAML;
-
-        $document1 = DOMDocumentFactory::fromString(<<<XML
-            <saml:AuthnContextDecl xmlns:saml="{$samlNamespace}">
-                <samlacpass:AuthenticationContextDeclaration>
-                    <samlacpass:Identification nym="verinymity">
-                        <samlacpass:Extension>
-                            <safeac:NoVerification/>
-                        </samlacpass:Extension>
-                    </samlacpass:Identification>
-                </samlacpass:AuthenticationContextDeclaration>
-            </saml:AuthnContextDecl>
-XML
+        $this->assertEquals(
+            $this->document->saveXML($this->document->documentElement),
+            strval(unserialize(serialize(AuthnContextDecl::fromXML($this->document->documentElement))))
         );
-
-        $authnContextDecl1 = new AuthnContextDecl($document1->documentElement->childNodes);
-        $authnContextDecl2 = unserialize(serialize($authnContextDecl1));
-
-        $this->assertEquals(strval($authnContextDecl1), strval($authnContextDecl2));
     }
 }

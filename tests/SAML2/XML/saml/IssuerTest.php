@@ -13,7 +13,7 @@ use SAML2\Utils;
 /**
  * Class \SAML2\XML\saml\IssuerTest
  */
-class IssuerTest extends TestCase
+final class IssuerTest extends TestCase
 {
     /** @var \DOMDocument $document */
     private $document;
@@ -28,10 +28,10 @@ class IssuerTest extends TestCase
         $this->document = DOMDocumentFactory::fromString(<<<XML
 <saml:Issuer
   xmlns:saml="{$samlNamespace}"
-  Format="TheFormat"
-  SPProvidedID="TheSPProvidedID"
   NameQualifier="TheNameQualifier"
-  SPNameQualifier="TheSPNameQualifier">TheIssuerValue</saml:Issuer>
+  SPNameQualifier="TheSPNameQualifier"
+  Format="TheFormat"
+  SPProvidedID="TheSPProvidedID">TheIssuerValue</saml:Issuer>
 XML
         );
     }
@@ -44,17 +44,17 @@ XML
     {
         $issuer = new Issuer(
             'TheIssuerValue',
-            'TheFormat',
-            'TheSPProvidedID',
             'TheNameQualifier',
-            'TheSPNameQualifier'
+            'TheSPNameQualifier',
+            'TheFormat',
+            'TheSPProvidedID'
         );
 
+        $this->assertEquals('TheIssuerValue', $issuer->getValue());
         $this->assertEquals('TheNameQualifier', $issuer->getNameQualifier());
         $this->assertEquals('TheSPNameQualifier', $issuer->getSPNameQualifier());
-        $this->assertEquals('TheFormat', $issuer->getFormat());
         $this->assertEquals('TheSPProvidedID', $issuer->getSPProvidedID());
-        $this->assertEquals('TheIssuerValue', $issuer->getValue());
+        $this->assertEquals('TheFormat', $issuer->getFormat());
         $this->assertEquals(
             $this->document->saveXML($this->document->documentElement),
             strval($issuer)
@@ -72,10 +72,10 @@ XML
 
         $issuer = new Issuer(
             'TheIssuerValue',
-            Constants::NAMEID_ENTITY,
-            'TheSPProvidedID',
             'TheNameQualifier',
-            'TheSPNameQualifier'
+            'TheSPNameQualifier',
+            Constants::NAMEID_ENTITY,
+            'TheSPProvidedID'
         );
     }
 
@@ -88,10 +88,10 @@ XML
         $issuer = Issuer::fromXML($this->document->documentElement);
 
         $this->assertEquals('TheIssuerValue', $issuer->getValue());
-        $this->assertEquals('TheFormat', $issuer->getFormat());
-        $this->assertEquals('TheSPProvidedID', $issuer->getSPProvidedID());
         $this->assertEquals('TheNameQualifier', $issuer->getNameQualifier());
         $this->assertEquals('TheSPNameQualifier', $issuer->getSPNameQualifier());
+        $this->assertEquals('TheFormat', $issuer->getFormat());
+        $this->assertEquals('TheSPProvidedID', $issuer->getSPProvidedID());
     }
 
 

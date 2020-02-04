@@ -11,7 +11,7 @@ use SAML2\Utils;
 /**
  * Class \SAML2\XML\saml\NameIDTest
  */
-class NameIDTest extends \PHPUnit\Framework\TestCase
+final class NameIDTest extends \PHPUnit\Framework\TestCase
 {
     /** @var \DOMDocument $document */
     private $document;
@@ -27,10 +27,10 @@ class NameIDTest extends \PHPUnit\Framework\TestCase
         $this->document = DOMDocumentFactory::fromString(<<<XML
 <saml:NameID
   xmlns:saml="{$samlNamespace}"
-  Format="TheFormat"
-  SPProvidedID="TheSPProvidedID"
   NameQualifier="TheNameQualifier"
-  SPNameQualifier="TheSPNameQualifier">TheNameIDValue</saml:NameID>
+  SPNameQualifier="TheSPNameQualifier"
+  Format="TheFormat"
+  SPProvidedID="TheSPProvidedID">TheNameIDValue</saml:NameID>
 XML
         );
     }
@@ -43,16 +43,16 @@ XML
     {
         $nameId = new NameID(
             'TheNameIDValue',
-            'TheFormat',
-            'TheSPProvidedID',
             'TheNameQualifier',
-            'TheSPNameQualifier'
+            'TheSPNameQualifier',
+            'TheFormat',
+            'TheSPProvidedID'
         );
 
         $this->assertEquals('TheNameIDValue', $nameId->getValue());
-        $this->assertEquals('TheFormat', $nameId->getFormat());
-        $this->assertEquals('TheSPProvidedID', $nameId->getSPProvidedID());
         $this->assertEquals('TheNameQualifier', $nameId->getNameQualifier());
+        $this->assertEquals('TheSPProvidedID', $nameId->getSPProvidedID());
+        $this->assertEquals('TheFormat', $nameId->getFormat());
         $this->assertEquals('TheSPNameQualifier', $nameId->getSPNameQualifier());
         $this->assertEquals(
             $this->document->saveXML($this->document->documentElement),
@@ -68,11 +68,11 @@ XML
     {
         $nameId = NameID::fromXML($this->document->documentElement);
 
+        $this->assertEquals('TheNameIDValue', $nameId->getValue());
         $this->assertEquals('TheNameQualifier', $nameId->getNameQualifier());
         $this->assertEquals('TheSPNameQualifier', $nameId->getSPNameQualifier());
         $this->assertEquals('TheFormat', $nameId->getFormat());
         $this->assertEquals('TheSPProvidedID', $nameId->getSPProvidedID());
-        $this->assertEquals('TheNameIDValue', $nameId->getValue());
         $this->assertEquals(
             $this->document->saveXML($this->document->documentElement),
             strval($nameId)

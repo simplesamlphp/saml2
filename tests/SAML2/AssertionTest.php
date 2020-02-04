@@ -1917,7 +1917,7 @@ XML;
         $assertion->setValidAudiences(['audience1', 'audience2']);
         $assertion->setAuthnContextClassRef('someAuthnContext');
 
-        $nameId = new NameID("just_a_basic_identifier", Constants::NAMEID_TRANSIENT);
+        $nameId = new NameID("just_a_basic_identifier", null, null, Constants::NAMEID_TRANSIENT);
         $assertion->setNameId($nameId);
         $this->assertFalse($assertion->isNameIdEncrypted());
 
