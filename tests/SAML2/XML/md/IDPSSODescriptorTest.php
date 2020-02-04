@@ -196,6 +196,17 @@ XML
         $this->assertInstanceOf(ArtifactResolutionService::class, $idpssod->getArtifactResolutionServices()[0]);
         $this->assertCount(1, $idpssod->getManageNameIDServices());
         $this->assertInstanceOf(ManageNameIDService::class, $idpssod->getManageNameIDServices()[0]);
+        $this->assertCount(2, $idpssod->getSingleLogoutServices());
+        $this->assertInstanceOf(SingleLogoutService::class, $idpssod->getSingleLogoutServices()[0]);
+        $this->assertInstanceOf(SingleLogoutService::class, $idpssod->getSingleLogoutServices()[1]);
+        $this->assertEquals(
+            [
+                'urn:oasis:names:tc:SAML:1.1:nameid-format:X509SubjectName',
+                'urn:oasis:names:tc:SAML:2.0:nameid-format:persistent',
+                'urn:oasis:names:tc:SAML:2.0:nameid-format:transient'
+            ],
+            $idpssod->getNameIDFormats()
+        );
         $this->assertEquals(
             $this->document->saveXML($this->document->documentElement),
             strval($idpssod)
