@@ -68,7 +68,7 @@ abstract class BaseIDType extends AbstractSamlElement
      * @param string|null $nameQualifier
      * @return void
      */
-    protected function setNameQualifier(?string $nameQualifier): void
+    private function setNameQualifier(?string $nameQualifier): void
     {
         $this->NameQualifier = $nameQualifier;
     }
@@ -91,7 +91,7 @@ abstract class BaseIDType extends AbstractSamlElement
      * @param string|null $spNameQualifier
      * @return void
      */
-    protected function setSPNameQualifier(?string $spNameQualifier): void
+    private function setSPNameQualifier(?string $spNameQualifier): void
     {
         $this->SPNameQualifier = $spNameQualifier;
     }
