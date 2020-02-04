@@ -24,35 +24,35 @@ final class SubjectConfirmationData extends AbstractSamlElement
      *
      * @var int|null
      */
-    private $NotBefore = null;
+    protected $NotBefore = null;
 
     /**
      * The time after which this element is invalid, as an unix timestamp.
      *
      * @var int|null
      */
-    private $NotOnOrAfter = null;
+    protected $NotOnOrAfter = null;
 
     /**
      * The Recipient this Subject is valid for. Either an entity or a location.
      *
      * @var string|null
      */
-    private $Recipient = null;
+    protected $Recipient = null;
 
     /**
      * The ID of the AuthnRequest this is a response to.
      *
      * @var string|null
      */
-    private $InResponseTo = null;
+    protected $InResponseTo = null;
 
     /**
      * The IP(v6) address of the user.
      *
      * @var string|null
      */
-    private $Address = null;
+    protected $Address = null;
 
     /**
      * The various key information elements.
@@ -62,7 +62,7 @@ final class SubjectConfirmationData extends AbstractSamlElement
      *
      * @var (\SAML2\XML\ds\KeyInfo|\SAML2\XML\Chunk)[]
      */
-    private $info = [];
+    protected $info = [];
 
 
     /**
@@ -231,6 +231,7 @@ final class SubjectConfirmationData extends AbstractSamlElement
      */
     private function setInfo(array $info): void
     {
+        Assert::allIsInstanceOfAny($info, [Chunk::class, KeyInfo::class]);
         $this->info = $info;
     }
 
@@ -327,7 +328,7 @@ final class SubjectConfirmationData extends AbstractSamlElement
      * @param  \DOMElement|null $parent The parent element we should append this element to.
      * @return \DOMElement This element, as XML.
      */
-    public function toXML(?DOMElement $parent = null): DOMElement
+    public function toXML(DOMElement $parent = null): DOMElement
     {
         $e = $this->instantiateParentElement($parent);
 

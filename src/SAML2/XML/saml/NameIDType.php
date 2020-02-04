@@ -97,6 +97,7 @@ abstract class NameIDType extends BaseIDType
      */
     private function setFormat(?string $format): void
     {
+        Assert::nullOrNotWhitespaceOnly($format);
         $this->Format = $format;
     }
 
@@ -122,7 +123,7 @@ abstract class NameIDType extends BaseIDType
      */
     private function setValue(string $value): void
     {
-        Assert::notEmpty($value);
+        Assert::notWhitespaceOnly($value);
         $this->value = trim($value);
     }
 
@@ -160,8 +161,6 @@ abstract class NameIDType extends BaseIDType
      */
     public static function fromXML(DOMElement $xml): object
     {
-        Assert::NotEmpty($xml->textContent);
-
         $Format = self::getAttribute($xml, 'Format', null);
         $SPProvidedID = self::getAttribute($xml, 'SPProvidedID', null);
         $NameQualifier = self::getAttribute($xml, 'NameQualifier', null);

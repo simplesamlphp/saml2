@@ -137,9 +137,7 @@ final class SubjectConfirmation extends AbstractSamlElement
         Assert::same($xml->localName, 'SubjectConfirmation');
         Assert::same($xml->namespaceURI, SubjectConfirmation::NS);
 
-        if (!$xml->hasAttribute('Method')) {
-            throw new \InvalidArgumentException('SubjectConfirmation element without Method attribute.');
-        }
+        Assert::true($xml->hasAttribute('Method'), 'SubjectConfirmation element without Method attribute.');
         $Method = $xml->getAttribute('Method');
 
         /** @var \DOMElement[] $nid */
@@ -166,7 +164,7 @@ final class SubjectConfirmation extends AbstractSamlElement
      *
      * @throws \InvalidArgumentException if assertions are false
      */
-    public function toXML(?DOMElement $parent = null): DOMElement
+    public function toXML(DOMElement $parent = null): DOMElement
     {
         $e = $this->instantiateParentElement($parent);
         $e->setAttribute('Method', $this->Method);
