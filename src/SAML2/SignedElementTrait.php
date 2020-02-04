@@ -174,7 +174,7 @@ trait SignedElementTrait
     /**
      * Retrieve the certificates that are included in the message.
      *
-     * @return array An array of certificates
+     * @return string[] An array of certificates
      */
     abstract public function getCertificates(): array;
 
@@ -183,7 +183,7 @@ trait SignedElementTrait
      * Set the certificates that should be included in the element.
      * The certificates should be strings with the PEM encoded data.
      *
-     * @param array $certificates An array of certificates.
+     * @param string[] $certificates An array of certificates.
      * @return void
      */
     abstract public function setCertificates(array $certificates): void;
