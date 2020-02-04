@@ -4,6 +4,7 @@ declare(strict_types=1);
 
 namespace SAML2\XML\md;
 
+use PHPUnit\Framework\TestCase;
 use SAML2\DOMDocumentFactory;
 use SAML2\XML\md\EntityDescriptor;
 use SAML2\XML\md\AffiliationDescriptor;
@@ -13,8 +14,21 @@ use SAML2\XML\md\AttributeAuthorityDescriptor;
 /**
  * Class \SAML2\XML\md\EntityDescriptorTest
  */
-class EntityDescriptorTest extends \PHPUnit\Framework\TestCase
+class EntityDescriptorTest extends TestCase
 {
+
+    /**
+     * Test that creating an EntityDescriptor without any descriptors fails.
+     */
+    public function testMarshallingWithoutDescriptors(): void
+    {
+        $this->expectExceptionMessage(
+            'Must have either one of the RoleDescriptors or an AffiliationDescriptor in EntityDescriptor.'
+        );
+        new EntityDescriptor('entityID');
+    }
+
+
     /**
      * @return void
      */
@@ -150,11 +164,9 @@ XML
     {
         $document = DOMDocumentFactory::fromString(<<<XML
 <EntityDescriptor entityID="theEntityID" ID="theID" validUntil="2010-01-01T12:34:56Z" cacheDuration="PT5000S" xmlns="urn:oasis:names:tc:SAML:2.0:metadata">
-
     <AttributeAuthorityDescriptor protocolSupportEnumeration="urn:oasis:names:tc:SAML:2.0:protocol">
         <AttributeService Binding="urn:oasis:names:tc:SAML:2.0:bindings:SOAP" Location="https://idp.example.org/AttributeService" />
     </AttributeAuthorityDescriptor>
-
     <Organization>
         <OrganizationName xml:lang="no">orgNameTest (no)</OrganizationName>
         <OrganizationName xml:lang="en">orgNameTest (en)</OrganizationName>

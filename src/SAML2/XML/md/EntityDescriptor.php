@@ -6,7 +6,6 @@ namespace SAML2\XML\md;
 
 use DOMElement;
 use SAML2\Constants;
-use SAML2\DOMDocumentFactory;
 use SAML2\Utils;
 use Webmozart\Assert\Assert;
 
@@ -115,6 +114,7 @@ final class EntityDescriptor extends AbstractMetadataDocument
      * @param \DOMElement $xml An existing EntityDescriptor XML document.
      * @return \SAML2\XML\md\EntityDescriptor An object representing the given document.
      * @throws \InvalidArgumentException if the qualified name of the supplied element is wrong
+     * @throws \Exception
      */
     public static function fromXML(DOMElement $xml): object
     {
