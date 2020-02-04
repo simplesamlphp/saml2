@@ -30,7 +30,7 @@ class SPSSODescriptorTest extends TestCase
         $dsns = XMLSecurityDSig::XMLDSIGNS;
         $samlns = Constants::NS_SAML;
         $this->document = DOMDocumentFactory::fromString(<<<XML
-<md:SPSSODescriptor xmlns:md="{$mdns}" protocolSupportEnumeration="urn:oasis:names:tc:SAML:2.0:protocol" errorURL="https://error.url/" AuthnRequestsSigned="true" WantAssertionsSigned="false">
+<md:SPSSODescriptor xmlns:md="{$mdns}" ID="someID" validUntil="2010-02-01T12:34:56Z" cacheDuration="PT9000S" protocolSupportEnumeration="urn:oasis:names:tc:SAML:2.0:protocol" errorURL="https://error.url/" AuthnRequestsSigned="true" WantAssertionsSigned="false">
   <md:Extensions>
     <mdrpi:PublicationInfo xmlns:mdrpi="urn:oasis:names:tc:SAML:metadata:rpi" publisher="http://publisher.ra/" creationInstant="2020-02-03T13:46:24Z">
       <mdrpi:UsagePolicy xml:lang="en">http://publisher.ra/policy.txt</mdrpi:UsagePolicy>
@@ -41,12 +41,28 @@ class SPSSODescriptorTest extends TestCase
       <ds:KeyName>ServiceProvider.com SSO Key</ds:KeyName>
     </ds:KeyInfo>
   </md:KeyDescriptor>
+  <md:Organization>
+    <md:OrganizationName xml:lang="en">Identity Providers R US</md:OrganizationName>
+    <md:OrganizationDisplayName xml:lang="en">Identity Providers R US, a Division of Lerxst Corp.</md:OrganizationDisplayName>
+    <md:OrganizationURL xml:lang="en">https://IdentityProvider.com</md:OrganizationURL>
+  </md:Organization>
+  <md:ContactPerson contactType="other">
+    <md:EmailAddress>mailto:john.doe@test.company</md:EmailAddress>
+  </md:ContactPerson>
+  <md:ArtifactResolutionService Binding="binding1" Location="location1" index="0"/>
   <md:SingleLogoutService Binding="urn:oasis:names:tc:SAML:2.0:bindings:SOAP" Location="https://ServiceProvider.com/SAML/SLO/SOAP"/>
   <md:SingleLogoutService Binding="urn:oasis:names:tc:SAML:2.0:bindings:HTTP-Redirect" Location="https://ServiceProvider.com/SAML/SLO/Browser" ResponseLocation="https://ServiceProvider.com/SAML/SLO/Response"/>
+  <md:ManageNameIDService Binding="binding1" Location="location1"></md:ManageNameIDService>
   <md:NameIDFormat>urn:oasis:names:tc:SAML:2.0:nameid-format:transient</md:NameIDFormat>
   <md:AssertionConsumerService Binding="urn:oasis:names:tc:SAML:2.0:bindings:HTTP-Artifact" Location="https://ServiceProvider.com/SAML/SSO/Artifact" index="0" isDefault="true"/>
   <md:AssertionConsumerService Binding="urn:oasis:names:tc:SAML:2.0:bindings:HTTP-POST" Location="https://ServiceProvider.com/SAML/SSO/POST" index="1"/>
-  <md:AttributeConsumingService index="0">
+  <md:AttributeConsumingService index="0" isDefault="true">
+    <md:ServiceName xml:lang="en">Academic Journals R US</md:ServiceName>
+    <md:RequestedAttribute Name="urn:oid:1.3.6.1.4.1.5923.1.1.1.7" NameFormat="urn:oasis:names:tc:SAML:2.0:attrname-format:uri" FriendlyName="eduPersonEntitlement">
+      <saml:AttributeValue xmlns:saml="{$samlns}" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:xs="http://www.w3.org/2001/XMLSchema" xsi:type="xs:string">https://ServiceProvider.com/entitlements/123456789</saml:AttributeValue>
+    </md:RequestedAttribute>
+  </md:AttributeConsumingService>
+  <md:AttributeConsumingService index="1">
     <md:ServiceName xml:lang="en">Academic Journals R US</md:ServiceName>
     <md:RequestedAttribute Name="urn:oid:1.3.6.1.4.1.5923.1.1.1.7" NameFormat="urn:oasis:names:tc:SAML:2.0:attrname-format:uri" FriendlyName="eduPersonEntitlement">
       <saml:AttributeValue xmlns:saml="{$samlns}" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:xs="http://www.w3.org/2001/XMLSchema" xsi:type="xs:string">https://ServiceProvider.com/entitlements/123456789</saml:AttributeValue>
@@ -90,8 +106,14 @@ XML
             'eduPersonEntitlement',
             [new AttributeValue('https://ServiceProvider.com/entitlements/123456789')]
         );
-        $attrcs = new AttributeConsumingService(
+        $attrcs1 = new AttributeConsumingService(
             0,
+            [new ServiceName('en', 'Academic Journals R US')],
+            [$reqAttr],
+            true
+        );
+        $attrcs2 = new AttributeConsumingService(
+            1,
             [new ServiceName('en', 'Academic Journals R US')],
             [$reqAttr]
         );
@@ -104,23 +126,39 @@ XML
             )
         ]);
         $kd = new KeyDescriptor(new KeyInfo([new KeyName('ServiceProvider.com SSO Key')]), 'signing');
+        $org = new Organization(
+            [new OrganizationName('en', 'Identity Providers R US')],
+            [new OrganizationDisplayName('en', 'Identity Providers R US, a Division of Lerxst Corp.')],
+            ['en' => 'https://IdentityProvider.com']
+        );
+        $contact = new ContactPerson(
+            'other',
+            null,
+            null,
+            null,
+            null,
+            ['john.doe@test.company']
+        );
+        $ars = new ArtifactResolutionService(0, 'binding1', 'location1');
+        $mnids = new ManageNameIDService('binding1', 'location1');
+
         $spssod = new SPSSODescriptor(
             [$acs1, $acs2],
             ['urn:oasis:names:tc:SAML:2.0:protocol'],
             true,
             false,
-            [$attrcs],
-            null,
-            null,
-            null,
+            [$attrcs1, $attrcs2],
+            'someID',
+            Utils::xsDateTimeToTimestamp('2010-02-01T12:34:56Z'),
+            'PT9000S',
             $extensions,
             'https://error.url/',
             [$kd],
-            null,
-            [],
-            [],
+            $org,
+            [$contact],
+            [$ars],
             [$slo1, $slo2],
-            [],
+            [$mnids],
             ['urn:oasis:names:tc:SAML:2.0:nameid-format:transient']
         );
         $this->assertCount(2, $spssod->getAssertionConsumerService());
@@ -128,8 +166,9 @@ XML
         $this->assertInstanceOf(AssertionConsumerService::class, $spssod->getAssertionConsumerService()[1]);
         $this->assertTrue($spssod->getAuthnRequestsSigned());
         $this->assertFalse($spssod->getWantAssertionsSigned());
-        $this->assertCount(1, $spssod->getAttributeConsumingService());
+        $this->assertCount(2, $spssod->getAttributeConsumingService());
         $this->assertInstanceOf(AttributeConsumingService::class, $spssod->getAttributeConsumingService()[0]);
+        $this->assertInstanceOf(AttributeConsumingService::class, $spssod->getAttributeConsumingService()[1]);
         $this->assertEquals(
             $this->document->saveXML($this->document->documentElement),
             strval($spssod)
@@ -213,8 +252,9 @@ XML
         $this->assertInstanceOf(AssertionConsumerService::class, $spssod->getAssertionConsumerService()[1]);
         $this->assertTrue($spssod->getAuthnRequestsSigned());
         $this->assertFalse($spssod->getWantAssertionsSigned());
-        $this->assertCount(1, $spssod->getAttributeConsumingService());
+        $this->assertCount(2, $spssod->getAttributeConsumingService());
         $this->assertInstanceOf(AttributeConsumingService::class, $spssod->getAttributeConsumingService()[0]);
+        $this->assertInstanceOf(AttributeConsumingService::class, $spssod->getAttributeConsumingService()[1]);
         $this->assertEquals(
             $this->document->saveXML($this->document->documentElement),
             strval($spssod)
@@ -277,6 +317,20 @@ XML
         $this->assertNull($spssod->getWantAssertionsSigned());
         $this->assertIsArray($spssod->getAttributeConsumingService());
         $this->assertEmpty($spssod->getAttributeConsumingService());
+    }
+
+
+    /**
+     * Test that creating an SPSSODescriptor from XML fails when more than one AttributeConsumingService is set to be
+     * the default.
+     */
+    public function testUnmarshallingTwoDefaultACS(): void
+    {
+        $acs = $this->document->getElementsByTagNameNS(Constants::NS_MD, 'AttributeConsumingService');
+        $acs->item(1)->setAttribute('isDefault', 'true');
+        $this->expectException(\InvalidArgumentException::class);
+        $this->expectExceptionMessage('Only one md:AttributeConsumingService can be set as default.');
+        SPSSODescriptor::fromXML($this->document->documentElement);
     }
 
 
