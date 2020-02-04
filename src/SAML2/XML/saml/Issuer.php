@@ -111,10 +111,10 @@ class Issuer extends NameIDType
         Assert::same($xml->localName, 'Issuer');
         Assert::same($xml->namespaceURI, Issuer::NS);
 
-        $Format = $xml->hasAttribute('Format') ? $xml->getAttribute('Format') : null;
-        $SPProvidedID = $xml->hasAttribute('SPProvidedID') ? $xml->getAttribute('SPProvidedID') : null;
-        $NameQualifier = $xml->hasAttribute('NameQualifier') ? $xml->getAttribute('NameQualifier') : null;
-        $SPNameQualifier = $xml->hasAttribute('SPNameQualifier') ? $xml->getAttribute('SPNameQualifier') : null;
+        $Format = self::getAttribute($xml, 'Format', null);
+        $SPProvidedID = self::getAttribute($xml, 'SPProvidedID', null);
+        $NameQualifier = self::getAttribute($xml, 'NameQualifier', null);
+        $SPNameQualifier = self::getAttribute($xml, 'SPNameQualifier', null);
 
         return new self($xml, $Format, $SPProvidedID, $NameQualifier, $SPNameQualifier);
     }

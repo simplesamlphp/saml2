@@ -60,9 +60,9 @@ final class SubjectConfirmationData extends AbstractSamlElement
      * Array with various elements describing this key.
      * Unknown elements will be represented by \SAML2\XML\Chunk.
      *
-     * @var (\SAML2\XML\ds\KeyInfo|\SAML2\XML\Chunk)[]|null
+     * @var (\SAML2\XML\ds\KeyInfo|\SAML2\XML\Chunk)[]
      */
-    private $info = null;
+    private $info = [];
 
 
     /**
@@ -73,7 +73,7 @@ final class SubjectConfirmationData extends AbstractSamlElement
      * @param string|null $recipient
      * @param string|null $inResponseTo
      * @param string|null $address
-     * @param (\SAML2\XML\ds\KeyInfo|\SAML2\XML\Chunk)[]|null $info
+     * @param (\SAML2\XML\ds\KeyInfo|\SAML2\XML\Chunk)[] $info
      */
     public function __construct(
         ?int $notBefore = null,
@@ -81,7 +81,7 @@ final class SubjectConfirmationData extends AbstractSamlElement
         ?string $recipient = null,
         ?string $inResponseTo = null,
         ?string $address = null,
-        ?array $info = null
+        array $info = []
     ) {
         $this->setNotBefore($notBefore);
         $this->setNotOnOrAfter($notOnOrAfter);
@@ -215,9 +215,9 @@ final class SubjectConfirmationData extends AbstractSamlElement
     /**
      * Collect the value of the info-property
      *
-     * @return (\SAML2\XML\ds\KeyInfo|\SAML2\XML\Chunk)[]|null
+     * @return (\SAML2\XML\ds\KeyInfo|\SAML2\XML\Chunk)[]
      */
-    public function getInfo(): ?array
+    public function getInfo(): array
     {
         return $this->info;
     }
@@ -226,10 +226,10 @@ final class SubjectConfirmationData extends AbstractSamlElement
     /**
      * Set the value of the info-property
      *
-     * @param (\SAML2\XML\ds\KeyInfo|\SAML2\XML\Chunk)[]|null $info
+     * @param (\SAML2\XML\ds\KeyInfo|\SAML2\XML\Chunk)[] $info
      * @return void
      */
-    private function setInfo(?array $info): void
+    private function setInfo(array $info): void
     {
         $this->info = $info;
     }
@@ -246,7 +246,7 @@ final class SubjectConfirmationData extends AbstractSamlElement
     public function addInfo(object $info): void
     {
         Assert::isInstanceOfAny($info, [Chunk::class, KeyInfo::class]);
-        $this->info = empty($this->info) ? [$info] : array_merge($this->info, [$info]);
+        $this->info[] = $info;
     }
 
 
@@ -287,9 +287,9 @@ final class SubjectConfirmationData extends AbstractSamlElement
             ? Utils::xsDateTimeToTimestamp($xml->getAttribute('NotOnOrAfter'))
             : null;
 
-        $Recipient = $xml->hasAttribute('Recipient') ? $xml->getAttribute('Recipient') : null;
-        $InResponseTo = $xml->hasAttribute('InResponseTo') ? $xml->getAttribute('InResponseTo') : null;
-        $Address = $xml->hasAttribute('Address') ? $xml->getAttribute('Address') : null;
+        $Recipient = self::getAttribute($xml, 'Recipient', null);
+        $InResponseTo = self::getAttribute($xml, 'InResponseTo', null);
+        $Address = self::getAttribute($xml, 'Address', null);
 
         $info = [];
         foreach ($xml->childNodes as $n) {
@@ -316,7 +316,7 @@ final class SubjectConfirmationData extends AbstractSamlElement
             $Recipient,
             $InResponseTo,
             $Address,
-            empty($info) ? null : $info
+            $info
         );
     }
 
@@ -347,10 +347,8 @@ final class SubjectConfirmationData extends AbstractSamlElement
             $e->setAttribute('Address', $this->Address);
         }
 
-        if (!empty($this->info)) {
-            foreach ($this->getInfo() as $n) {
-                $n->toXML($e);
-            }
+        foreach ($this->getInfo() as $n) {
+            $n->toXML($e);
         }
 
         return $e;
