@@ -56,7 +56,7 @@ abstract class AbstractSSODescriptor extends AbstractRoleDescriptor
      * @param string|null $cacheDuration Maximum time this document can be cached. Defaults to null.
      * @param \SAML2\XML\md\Extensions|null $extensions An array of extensions. Defaults to an empty array.
      * @param string|null $errorURL An URI where to redirect users for support. Defaults to null.
-     * @param \SAML2\XML\md\KeyDescriptor[]|null $keyDescriptors An array of KeyDescriptor elements.
+     * @param \SAML2\XML\md\KeyDescriptor[] $keyDescriptors An array of KeyDescriptor elements.
      *   Defaults to an empty array.
      * @param \SAML2\XML\md\Organization|null $organization The organization running this entity. Defaults to null.
      * @param \SAML2\XML\md\ContactPerson[] $contacts An array of contacts for this entity.
