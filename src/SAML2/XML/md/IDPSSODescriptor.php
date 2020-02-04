@@ -34,16 +34,16 @@ final class IDPSSODescriptor extends AbstractSSODescriptor
     /**
      * List of NameIDMappingService endpoints.
      *
-     * @var \SAML2\XML\md\NameIDMappingService[]|null
+     * @var \SAML2\XML\md\NameIDMappingService[]
      */
-    protected $nameIDMappingServiceEndpoints = null;
+    protected $nameIDMappingServiceEndpoints = [];
 
     /**
      * List of AssertionIDRequestService endpoints.
      *
-     * @var \SAML2\XML\md\AssertionIDRequestService[]|null
+     * @var \SAML2\XML\md\AssertionIDRequestService[]
      */
-    protected $assertionIDRequestServiceEndpoints = null;
+    protected $assertionIDRequestServiceEndpoints = [];
 
     /**
      * List of supported attribute profiles.
@@ -87,10 +87,10 @@ final class IDPSSODescriptor extends AbstractSSODescriptor
         array $ssoServiceEndpoints,
         array $protocolSupportEnumeration,
         bool $wantAuthnRequestsSigned = null,
-        ?array $nameIDMappingServiceEndpoints = null,
-        ?array $assertionIDRequestServiceEndpoints = null,
-        ?array $attributeProfiles = null,
-        ?array $attributes = null,
+        ?array $nameIDMappingServiceEndpoints = [],
+        ?array $assertionIDRequestServiceEndpoints = [],
+        ?array $attributeProfiles = [],
+        ?array $attributes = [],
         ?string $ID = null,
         ?int $validUntil = null,
         ?string $cacheDuration = null,
@@ -226,9 +226,9 @@ final class IDPSSODescriptor extends AbstractSSODescriptor
     /**
      * Get the NameIDMappingService endpoints
      *
-     * @return \SAML2\XML\md\NameIDMappingService[]|null
+     * @return \SAML2\XML\md\NameIDMappingService[]
      */
-    public function getNameIDMappingServices(): ?array
+    public function getNameIDMappingServices(): array
     {
         return $this->nameIDMappingServiceEndpoints;
     }
@@ -256,9 +256,9 @@ final class IDPSSODescriptor extends AbstractSSODescriptor
     /**
      * Collect the AssertionIDRequestService endpoints
      *
-     * @return \SAML2\XML\md\AssertionIDRequestService[]|null
+     * @return \SAML2\XML\md\AssertionIDRequestService[]
      */
-    public function getAssertionIDRequestServices(): ?array
+    public function getAssertionIDRequestServices(): array
     {
         return $this->assertionIDRequestServiceEndpoints;
     }
@@ -297,11 +297,17 @@ final class IDPSSODescriptor extends AbstractSSODescriptor
     /**
      * Set the attribute profiles supported
      *
-     * @param string[] $attributeProfiles
-     * @return void
+     * @param string[]|null $attributeProfiles
      */
-    protected function setAttributeProfiles(array $attributeProfiles): void
+    protected function setAttributeProfiles(?array $attributeProfiles): void
     {
+        if ($attributeProfiles === null) {
+            return;
+        }
+        Assert::allStringNotEmpty(
+            $attributeProfiles,
+            'All md:AttributeProfile elements must be a URI, not an empty string.'
+        );
         $this->attributeProfiles = $attributeProfiles;
     }
 
@@ -320,10 +326,13 @@ final class IDPSSODescriptor extends AbstractSSODescriptor
     /**
      * Set the attributes supported by this IdP
      *
-     * @param \SAML2\XML\saml\Attribute[] $attributes
+     * @param \SAML2\XML\saml\Attribute[]|null $attributes
      */
-    protected function setSupportedAttributes(array $attributes): void
+    protected function setSupportedAttributes(?array $attributes): void
     {
+        if ($attributes === null) {
+            return;
+        }
         Assert::allIsInstanceOf(
             $attributes,
             Attribute::class,
