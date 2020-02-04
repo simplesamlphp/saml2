@@ -110,6 +110,18 @@ final class SPSSODescriptor extends AbstractSSODescriptor
         $this->setAuthnRequestsSigned($authnRequestsSigned);
         $this->setWantAssertionsSigned($wantAssertionsSigned);
         $this->setAttributeConsumingService($attributeConsumingService);
+
+        // test that only one ACS is marked as default
+        Assert::maxCount(
+            array_filter(
+                $this->getAttributeConsumingService(),
+                function (AttributeConsumingService $acs) {
+                    return $acs->getIsDefault() === true;
+                }
+            ),
+            1,
+            'Only one md:AttributeConsumingService can be set as default.'
+        );
     }
 
 
