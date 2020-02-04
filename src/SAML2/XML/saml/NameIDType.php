@@ -152,25 +152,6 @@ abstract class NameIDType extends BaseIDType
 
 
     /**
-     * Convert XML into an NameIDType
-     *
-     * @param \DOMElement $xml The XML element we should load
-     *
-     * @return \SAML2\XML\saml\NameIDType
-     * @throws \InvalidArgumentException
-     */
-    public static function fromXML(DOMElement $xml): object
-    {
-        $Format = self::getAttribute($xml, 'Format', null);
-        $SPProvidedID = self::getAttribute($xml, 'SPProvidedID', null);
-        $NameQualifier = self::getAttribute($xml, 'NameQualifier', null);
-        $SPNameQualifier = self::getAttribute($xml, 'SPNameQualifier', null);
-
-        return new static($xml->textContent, $Format, $SPProvidedID, $NameQualifier, $SPNameQualifier);
-    }
-
-
-    /**
      * Convert this NameIDType to XML.
      *
      * @param \DOMElement $parent The element we are converting to XML.
