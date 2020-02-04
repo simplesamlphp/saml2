@@ -290,8 +290,7 @@ XML;
     public function testSetReason(): void
     {
         $reason = "urn:simplesamlphp:reason-test";
-        $nameId = new XML\saml\NameID();
-        $nameId->setValue('NameIDValue');
+        $nameId = new XML\saml\NameID('NameIDValue');
 
         $logoutRequest = new LogoutRequest();
         $logoutRequest->setNameID($nameId);
