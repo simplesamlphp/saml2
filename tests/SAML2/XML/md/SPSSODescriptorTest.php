@@ -8,8 +8,10 @@ use PHPUnit\Framework\TestCase;
 use RobRichards\XMLSecLibs\XMLSecurityDSig;
 use SAML2\Constants;
 use SAML2\DOMDocumentFactory;
+use SAML2\Utils;
 use SAML2\XML\ds\KeyInfo;
 use SAML2\XML\ds\KeyName;
+use SAML2\XML\mdrpi\PublicationInfo;
 use SAML2\XML\saml\AttributeValue;
 
 /**
@@ -28,7 +30,12 @@ class SPSSODescriptorTest extends TestCase
         $dsns = XMLSecurityDSig::XMLDSIGNS;
         $samlns = Constants::NS_SAML;
         $this->document = DOMDocumentFactory::fromString(<<<XML
-<md:SPSSODescriptor xmlns:md="{$mdns}" protocolSupportEnumeration="urn:oasis:names:tc:SAML:2.0:protocol" AuthnRequestsSigned="true" WantAssertionsSigned="false">
+<md:SPSSODescriptor xmlns:md="{$mdns}" protocolSupportEnumeration="urn:oasis:names:tc:SAML:2.0:protocol" errorURL="https://error.url/" AuthnRequestsSigned="true" WantAssertionsSigned="false">
+  <md:Extensions>
+    <mdrpi:PublicationInfo xmlns:mdrpi="urn:oasis:names:tc:SAML:metadata:rpi" publisher="http://publisher.ra/" creationInstant="2020-02-03T13:46:24Z">
+      <mdrpi:UsagePolicy xml:lang="en">http://publisher.ra/policy.txt</mdrpi:UsagePolicy>
+    </mdrpi:PublicationInfo>
+  </md:Extensions>
   <md:KeyDescriptor use="signing">
     <ds:KeyInfo xmlns:ds="{$dsns}">
       <ds:KeyName>ServiceProvider.com SSO Key</ds:KeyName>
@@ -48,8 +55,6 @@ class SPSSODescriptorTest extends TestCase
 </md:SPSSODescriptor>
 XML
         );
-
-
     }
 
 
@@ -90,6 +95,14 @@ XML
             [new ServiceName('en', 'Academic Journals R US')],
             [$reqAttr]
         );
+        $extensions = new Extensions([
+            new PublicationInfo(
+                'http://publisher.ra/',
+                Utils::xsDateTimeToTimestamp('2020-02-03T13:46:24Z'),
+                null,
+                ['en' => 'http://publisher.ra/policy.txt']
+            )
+        ]);
         $kd = new KeyDescriptor(new KeyInfo([new KeyName('ServiceProvider.com SSO Key')]), 'signing');
         $spssod = new SPSSODescriptor(
             [$acs1, $acs2],
@@ -100,8 +113,8 @@ XML
             null,
             null,
             null,
-            null,
-            null,
+            $extensions,
+            'https://error.url/',
             [$kd],
             null,
             [],

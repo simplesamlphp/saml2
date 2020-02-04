@@ -84,7 +84,7 @@ abstract class AbstractRoleDescriptor extends AbstractMetadataDocument
         $this->setProtocolSupportEnumeration($protocolSupportEnumeration);
         $this->setErrorURL($errorURL);
         $this->setKeyDescriptors($keyDescriptors);
-        $this->Organization = $organization;
+        $this->setOrganization($organization);
         $this->setContactPersons($contacts);
     }
 
@@ -238,10 +238,6 @@ abstract class AbstractRoleDescriptor extends AbstractMetadataDocument
 
         if ($this->errorURL !== null) {
             $e->setAttribute('errorURL', $this->errorURL);
-        }
-
-        if ($this->Extensions !== null && !$this->Extensions->isEmptyElement()) {
-            $this->Extensions->toXML($e);
         }
 
         foreach ($this->KeyDescriptors as $kd) {
