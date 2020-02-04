@@ -4,6 +4,7 @@ declare(strict_types=1);
 
 namespace SAML2\XML\md;
 
+use PHPUnit\Framework\TestCase;
 use SAML2\Constants;
 use SAML2\DOMDocumentFactory;
 use SAML2\XML\alg\DigestMethod;
@@ -23,90 +24,109 @@ use SAML2\XML\shibmd\Scope;
  *
  * @package simplesamlphp/saml2
  */
-class ExtensionsTest extends \PHPUnit\Framework\TestCase
+class ExtensionsTest extends TestCase
 {
+    protected $document;
+
+
+    protected function setUp(): void
+    {
+        $this->document = DOMDocumentFactory::fromString(<<<XML
+<md:Extensions xmlns:md="urn:oasis:names:tc:SAML:2.0:metadata">
+  <shibmd:Scope xmlns:shibmd="urn:mace:shibboleth:metadata:1.0" regexp="false">SomeScope</shibmd:Scope>
+  <mdrpi:RegistrationInfo xmlns:mdrpi="urn:oasis:names:tc:SAML:metadata:rpi" registrationAuthority="SomeAuthority"></mdrpi:RegistrationInfo>
+  <mdrpi:PublicationInfo xmlns:mdrpi="urn:oasis:names:tc:SAML:metadata:rpi" publisher="SomePublisher"></mdrpi:PublicationInfo>
+  <mdui:UIInfo xmlns:mdui="urn:oasis:names:tc:SAML:metadata:ui">
+    <mdui:DisplayName xml:lang="en">Example</mdui:DisplayName>
+  </mdui:UIInfo>
+  <mdui:DiscoHints xmlns:mdui="urn:oasis:names:tc:SAML:metadata:ui">
+    <mdui:IPHint>127.0.0.1</mdui:IPHint>
+  </mdui:DiscoHints>
+  <alg:DigestMethod Algorithm="SomeAlgorithm" xmlns:alg="urn:oasis:names:tc:SAML:metadata:algsupport"></alg:DigestMethod>
+  <alg:SigningMethod xmlns:alg="urn:oasis:names:tc:SAML:metadata:algsupport" Algorithm="SomeOtherAlgorithm"
+  MinKeySize="1024" MaxKeySize="4096"></alg:SigningMethod>
+</md:Extensions>
+XML
+        );
+        $this->document->normalizeDocument();
+    }
+
+
+    /**
+     * Test creating an Extensions object from scratch.
+     */
+    public function testMarshalling(): void
+    {
+        $scope = new Scope('SomeScope');
+        $ra = new RegistrationInfo('SomeAuthority');
+        $pubInfo = new PublicationInfo('SomePublisher');
+        $uiinfo = new UIInfo(['en' => 'Example']);
+        $discoHints = new DiscoHints(null, ['127.0.0.1']);
+        $digestMethod = new DigestMethod('SomeAlgorithm');
+        $signingMethod = new SigningMethod('SomeOtherAlgorithm', 1024, 4096);
+        $extensions = new Extensions([
+            $scope,
+            $ra,
+            $pubInfo,
+            $uiinfo,
+            $discoHints,
+            $digestMethod,
+            $signingMethod
+        ]);
+        $this->assertEquals(
+            $this->document->saveXML($this->document->documentElement),
+            strval($extensions)
+        );
+    }
+
+
     /**
      * Adding an empty list to an Extensions element should yield an empty element. If there were contents already
      * there, those should be left untouched.
-     * @return void
      */
-    public function testExtensionAddEmpty(): void
+    public function testMarshallingWithNoExtensions(): void
     {
-        $d = DOMDocumentFactory::create();
-        $r = $d->createElementNS(Constants::NS_MD, 'md:Extensions');
-        $r = $d->createElement('root');
-        $d->appendChild($r);
-        $d->formatOutput = true;
-
-        // add an empty list on an empty Extensions element
-        Extensions::addList($r, []);
-        $list = Extensions::getList($r);
-        $this->assertCount(0, $list);
-        $this->assertEquals(<<<XML
-<?xml version="1.0"?>
-<root/>
-XML
-            ,
-            trim($d->saveXML())
+        $mdns = Constants::NS_MD;
+        $extensions = new Extensions([]);
+        $this->assertEquals(
+            "<md:Extensions xmlns:md=\"$mdns\"/>",
+            strval($extensions)
         );
-
-        // add an empty list on a non-empty Extensions element
-        $e = $d->createElementNS(Constants::NS_MD, 'md:Extensions');
-        $chunk = $d->createElementNS("urn:some:ns", 'ns:SomeChunk', 'Contents');
-        $chunk->setAttribute('foo', 'bar');
-        $e->appendChild($chunk);
-        $r->appendChild($e);
-        Extensions::addList($r, []);
-        $list = Extensions::getList($r);
-        $this->assertCount(1, $list);
-        $this->assertEquals(<<<XML
-<?xml version="1.0"?>
-<root>
-  <md:Extensions xmlns:md="urn:oasis:names:tc:SAML:2.0:metadata" xmlns:ns="urn:some:ns">
-    <ns:SomeChunk xmlns:ns="urn:some:ns" foo="bar">Contents</ns:SomeChunk>
-  </md:Extensions>
-</root>
-XML
-            ,
-            trim($d->saveXML())
-        );
-        $this->assertInstanceOf(Chunk::class, $list[0]);
+        $this->assertTrue($extensions->isEmptyElement());
     }
 
 
     /**
      * This method tests for known extensions.
-     * @return void
      */
-    public function testSupportedExtensions(): void
+    public function testUnmarshalling(): void
     {
         $document = DOMDocumentFactory::fromString(<<<XML
-<root>
-  <md:Extensions xmlns:md="urn:oasis:names:tc:SAML:2.0:metadata"
-                 xmlns:shibmd="urn:mace:shibboleth:metadata:1.0"
-                 xmlns:mdattr="urn:oasis:names:tc:SAML:metadata:attribute"
-                 xmlns:mdrpi="urn:oasis:names:tc:SAML:metadata:rpi"
-                 xmlns:mdui="urn:oasis:names:tc:SAML:metadata:ui"
-                 xmlns:ns="urn:some:ns"
-                 xmlns:alg="urn:oasis:names:tc:SAML:metadata:algsupport">
-    <shibmd:Scope>SomeScope</shibmd:Scope>
-    <mdattr:EntityAttributes>SomeAttribute</mdattr:EntityAttributes>
-    <mdrpi:RegistrationInfo registrationAuthority="SomeAuthority"/>
-    <mdrpi:PublicationInfo publisher="SomePublisher"/>
-    <mdui:UIInfo>
-      <mdui:DisplayName xml:lang="en">Example</mdui:DisplayName>
-    </mdui:UIInfo>
-    <mdui:DiscoHints>
-      <mdui:IPHint>127.0.0.1</mdui:IPHint>
-    </mdui:DiscoHints>
-    <alg:DigestMethod Algorithm="SomeAlgorithm"/>
-    <alg:SigningMethod Algorithm="SomeOtherAlgorithm" MinKeySize="1024" MaxKeySize="4096"/>
-    <ns:SomeChunk foo="bar">SomeText</ns:SomeChunk>
-  </md:Extensions>
-</root>
+<md:Extensions xmlns:md="urn:oasis:names:tc:SAML:2.0:metadata"
+               xmlns:shibmd="urn:mace:shibboleth:metadata:1.0"
+               xmlns:mdattr="urn:oasis:names:tc:SAML:metadata:attribute"
+               xmlns:mdrpi="urn:oasis:names:tc:SAML:metadata:rpi"
+               xmlns:mdui="urn:oasis:names:tc:SAML:metadata:ui"
+               xmlns:ns="urn:some:ns"
+               xmlns:alg="urn:oasis:names:tc:SAML:metadata:algsupport">
+  <shibmd:Scope>SomeScope</shibmd:Scope>
+  <mdattr:EntityAttributes>SomeAttribute</mdattr:EntityAttributes>
+  <mdrpi:RegistrationInfo registrationAuthority="SomeAuthority"/>
+  <mdrpi:PublicationInfo publisher="SomePublisher"/>
+  <mdui:UIInfo>
+    <mdui:DisplayName xml:lang="en">Example</mdui:DisplayName>
+  </mdui:UIInfo>
+  <mdui:DiscoHints>
+    <mdui:IPHint>127.0.0.1</mdui:IPHint>
+  </mdui:DiscoHints>
+  <alg:DigestMethod Algorithm="SomeAlgorithm"/>
+  <alg:SigningMethod Algorithm="SomeOtherAlgorithm" MinKeySize="1024" MaxKeySize="4096"/>
+  <ns:SomeChunk foo="bar">SomeText</ns:SomeChunk>
+</md:Extensions>
 XML
         );
-        $list = Extensions::getList($document->documentElement);
+        $extensions = Extensions::fromXML($document->documentElement);
+        $list = $extensions->getList();
         $this->assertCount(9, $list);
         $this->assertInstanceOf(Scope::class, $list[0]);
         $this->assertInstanceOf(EntityAttributes::class, $list[1]);
@@ -117,37 +137,30 @@ XML
         $this->assertInstanceOf(DigestMethod::class, $list[6]);
         $this->assertInstanceOf(SigningMethod::class, $list[7]);
         $this->assertInstanceOf(Chunk::class, $list[8]);
+        $this->assertFalse($extensions->isEmptyElement());
     }
 
 
     /**
-     * This methods tests adding an md:Extensions element to a DOMElement.
-     * @return void
+     * Test that creating an Extensions object from XML works even if no extensions are specified.
      */
-    public function testAddExtensions(): void
+    public function testUnmarshallingWithNoExtensions(): void
     {
-        $document = DOMDocumentFactory::create();
-        $document->formatOutput = true;
-        $r = $document->createElement('root');
-        $document->appendChild($r);
-        $scope = new Scope('SomeScope');
-        $digest = new DigestMethod('SomeAlgorithm');
-        $extensions = [
-            $scope,
-            $digest,
-        ];
-        Extensions::addList($r, $extensions);
-        $this->assertEquals(<<<XML
-<?xml version="1.0"?>
-<root>
-  <md:Extensions xmlns:md="urn:oasis:names:tc:SAML:2.0:metadata">
-    <shibmd:Scope xmlns:shibmd="urn:mace:shibboleth:metadata:1.0" regexp="false">SomeScope</shibmd:Scope>
-    <alg:DigestMethod xmlns:alg="urn:oasis:names:tc:SAML:metadata:algsupport" Algorithm="SomeAlgorithm"/>
-  </md:Extensions>
-</root>
-XML
-            ,
-            trim($r->ownerDocument->saveXML())
+        $mdns = Constants::NS_MD;
+        $document = DOMDocumentFactory::fromString("<md:Extensions xmlns:md=\"$mdns\"/>");
+        $extensions = Extensions::fromXML($document->documentElement);
+        $this->assertEmpty($extensions->getList());
+    }
+
+
+    /**
+     * Test that serialization / unserialization works.
+     */
+    public function testSerialization(): void
+    {
+        $this->assertEquals(
+            $this->document->saveXML($this->document->documentElement),
+            strval(unserialize(serialize(Extensions::fromXML($this->document->documentElement))))
         );
     }
 }

@@ -153,6 +153,16 @@ class Constants
     public const EPTI_URN_OID = 'urn:oid:1.3.6.1.4.1.5923.1.1.1.10';
 
     /**
+     * LogoutRequest Reason - user wishes to terminate the session
+     */
+    public const LOGOUT_REASON_USER = 'urn:oasis:names:tc:SAML:2.0:logout:user';
+
+    /**
+     * LogoutRequest Reason - admin wishes to terminate the session
+     */
+    public const LOGOUT_REASON_ADMIN = 'urn:oasis:names:tc:SAML:2.0:logout:admin';
+
+    /**
      * The interpretation of the attribute name is left to individual implementations.
      */
     public const NAMEFORMAT_UNSPECIFIED = 'urn:oasis:names:tc:SAML:2.0:attrname-format:unspecified';
@@ -256,6 +266,11 @@ class Constants
      * The namespace for the SAML 2 HoK Web Browser SSO Profile.
      */
     public const NS_HOK = 'urn:oasis:names:tc:SAML:2.0:profiles:holder-of-key:SSO:browser';
+
+    /**
+     * The namespace for the XML encryption schema.
+     */
+    public const NS_XENC = 'http://www.w3.org/2001/04/xmlenc#';
 
     /**
      * The status namespace

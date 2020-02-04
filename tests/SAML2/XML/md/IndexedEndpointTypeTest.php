@@ -4,50 +4,139 @@ declare(strict_types=1);
 
 namespace SAML2\XML\md;
 
+use PHPUnit\Framework\TestCase;
+use SAML2\Constants;
 use SAML2\DOMDocumentFactory;
-use SAML2\XML\md\IndexedEndpointType;
-use SAML2\Utils;
 
 /**
  * Class \SAML2\XML\md\IndexedEndpointTypeTest
  */
-class IndexedEndpointTypeTest extends \PHPUnit\Framework\TestCase
+class IndexedEndpointTypeTest extends TestCase
 {
+    protected $document;
+
+
+    protected function setUp(): void
+    {
+        $mdNamespace = Constants::NS_MD;
+        $this->document = DOMDocumentFactory::fromString(<<<XML
+<md:AssertionConsumerService xmlns:md="{$mdNamespace}" Binding="urn:something" Location="https://whatever/" index="42" isDefault="false" />
+XML
+        );
+    }
+
+
+    // test marshalling
+
+
     /**
-     * @return void
+     * Test creating an IndexedEndpointType from scratch.
      */
     public function testMarshalling(): void
     {
-        $indexedEndpointType = new IndexedEndpointType();
-        $indexedEndpointType->setBinding('TestBinding');
-        $indexedEndpointType->setLocation('TestLocation');
-        $indexedEndpointType->setIndex(42);
-        $indexedEndpointType->setIsDefault(false);
+        $idxep = new AssertionConsumerService(42, 'urn:something', 'https://whatever/', false);
+        $this->assertEquals($this->document->saveXML($this->document->documentElement), strval($idxep));
+        $this->assertEquals(42, $idxep->getIndex());
+        $this->assertFalse($idxep->getIsDefault());
+    }
 
-        $document = DOMDocumentFactory::fromString('<root />');
-        $indexedEndpointTypeElement = $indexedEndpointType->toXML($document->firstChild, 'md:Test');
 
-        $indexedEndpointElements = Utils::xpQuery($indexedEndpointTypeElement, '/root/saml_metadata:Test');
-        $this->assertCount(1, $indexedEndpointElements);
-        $indexedEndpointElement = $indexedEndpointElements[0];
+    /**
+     * Test that creating an IndexedEndpointType from scratch without specifying isDefault works.
+     */
+    public function testMarshallingWithoutIsDefault(): void
+    {
+        $idxep = new AssertionConsumerService(42, 'urn:something', 'https://whatever/');
+        $this->document->documentElement->removeAttribute('isDefault');
+        $this->assertEquals($this->document->saveXML($this->document->documentElement), strval($idxep));
+        $this->assertNull($idxep->getIsDefault());
+    }
 
-        $this->assertEquals('TestBinding', $indexedEndpointElement->getAttribute('Binding'));
-        $this->assertEquals('TestLocation', $indexedEndpointElement->getAttribute('Location'));
-        $this->assertEquals('42', $indexedEndpointElement->getAttribute('index'));
-        $this->assertEquals('false', $indexedEndpointElement->getAttribute('isDefault'));
 
-        $indexedEndpointType->setIsDefault(true);
-        $document->loadXML('<root />');
-        $indexedEndpointTypeElement = $indexedEndpointType->toXML($document->firstChild, 'md:Test');
-        $indexedEndpointTypeElement = Utils::xpQuery($indexedEndpointTypeElement, '/root/saml_metadata:Test');
-        $this->assertCount(1, $indexedEndpointTypeElement);
-        $this->assertEquals('true', $indexedEndpointTypeElement[0]->getAttribute('isDefault'));
+    // test unmarshalling
 
-        $indexedEndpointType->setIsDefault(null);
-        $document->loadXML('<root />');
-        $indexedEndpointTypeElement = $indexedEndpointType->toXML($document->firstChild, 'md:Test');
-        $indexedEndpointTypeElement = Utils::xpQuery($indexedEndpointTypeElement, '/root/saml_metadata:Test');
-        $this->assertCount(1, $indexedEndpointTypeElement);
-        $this->assertTrue(!$indexedEndpointTypeElement[0]->hasAttribute('isDefault'));
+
+    /**
+     * Test creating an IndexedEndpointType from XML.
+     */
+    public function testUnmarshalling(): void
+    {
+        $idxep = AssertionConsumerService::fromXML($this->document->documentElement);
+        $this->assertEquals(42, $idxep->getIndex());
+        $this->assertFalse($idxep->getIsDefault());
+        $this->assertEquals($this->document->saveXML($this->document->documentElement), strval($idxep));
+    }
+
+
+    /**
+     * Test that creating an EndpointType from XML checks the actual name of the endpoint.
+     */
+    public function testUnmarshallingUnexpectedEndpoint(): void
+    {
+        $this->expectException(\Exception::class);
+        $this->expectExceptionMessage(
+            'Unexpected name for endpoint: AssertionConsumerService. Expected: ArtifactResolutionService.'
+        );
+        ArtifactResolutionService::fromXML($this->document->documentElement);
+    }
+
+
+    /**
+     * Test that creating an IndexedEndpointType from XML without an index fails.
+     */
+    public function testUnmarshallingWithoutIndex(): void
+    {
+        $this->expectException(\InvalidArgumentException::class);
+        $this->expectExceptionMessage('Missing index attribute in AssertionConsumerService');
+        $this->document->documentElement->removeAttribute('index');
+        AssertionConsumerService::fromXML($this->document->documentElement);
+    }
+
+
+    /**
+     * Test that creating an IndexedEndpointType from XML with a non-numeric index fails.
+     */
+    public function testUnmarshallingWithWrongIndex(): void
+    {
+        $this->expectException(\InvalidArgumentException::class);
+        $this->expectExceptionMessage('The index attribute of AssertionConsumerService must be numerical.');
+        $this->document->documentElement->setAttribute('index', 'value');
+        AssertionConsumerService::fromXML($this->document->documentElement);
+    }
+
+
+    /**
+     * Test that creating an IndexedEndpointType from XML without isDefault works.
+     */
+    public function testUnmarshallingWithoutIsDefault(): void
+    {
+        $this->document->documentElement->removeAttribute('isDefault');
+        AssertionConsumerService::fromXML($this->document->documentElement);
+        $this->assertTrue(true);
+    }
+
+
+    /**
+     * Test that creating an IndexedEndpointType from XML with isDefault of a non-boolean value fails.
+     */
+    public function testUnmarshallingWithWrongIsDefault(): void
+    {
+        $this->expectException(\Exception::class);
+        $this->expectExceptionMessage('Invalid value of boolean attribute \'isDefault\': \'non-bool\'');
+        $this->document->documentElement->setAttribute('isDefault', 'non-bool');
+        AssertionConsumerService::fromXML($this->document->documentElement);
+    }
+
+
+    /**
+     * Test that serialization / unserialization works.
+     */
+    public function testSerialization(): void
+    {
+        $ep = AssertionConsumerService::fromXML($this->document->documentElement);
+        $this->assertEquals(
+            $this->document->saveXML($this->document->documentElement),
+            strval(unserialize(serialize($ep)))
+        );
     }
 }

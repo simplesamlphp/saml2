@@ -5,6 +5,8 @@ declare(strict_types=1);
 namespace SAML2\XML\md;
 
 use DOMElement;
+use Exception;
+use InvalidArgumentException;
 use SAML2\Constants;
 use SAML2\Utils;
 use SAML2\XML\saml\Attribute;
@@ -15,25 +17,26 @@ use Webmozart\Assert\Assert;
  *
  * @package SimpleSAMLphp
  */
-class AttributeAuthorityDescriptor extends RoleDescriptor
+final class AttributeAuthorityDescriptor extends AbstractRoleDescriptor
 {
+
     /**
      * List of AttributeService endpoints.
      *
      * Array with EndpointType objects.
      *
-     * @var \SAML2\XML\md\EndpointType[]
+     * @var AttributeService[]
      */
-    private $AttributeService = [];
+    protected $AttributeServices = [];
 
     /**
      * List of AssertionIDRequestService endpoints.
      *
      * Array with EndpointType objects.
      *
-     * @var \SAML2\XML\md\EndpointType[]
+     * @var AssertionIDRequestService[]
      */
-    private $AssertionIDRequestService = [];
+    protected $AssertionIDRequestServices = [];
 
     /**
      * List of supported NameID formats.
@@ -42,7 +45,7 @@ class AttributeAuthorityDescriptor extends RoleDescriptor
      *
      * @var string[]
      */
-    private $NameIDFormat = [];
+    protected $NameIDFormats = [];
 
     /**
      * List of supported attribute profiles.
@@ -51,88 +54,163 @@ class AttributeAuthorityDescriptor extends RoleDescriptor
      *
      * @var array
      */
-    private $AttributeProfile = [];
+    protected $AttributeProfiles = [];
 
     /**
      * List of supported attributes.
      *
      * Array with \SAML2\XML\saml\Attribute objects.
      *
-     * @var \SAML2\XML\saml\Attribute[]
+     * @var Attribute[]
      */
-    private $Attribute = [];
+    protected $Attributes = [];
+
+
+    /**
+     * AttributeAuthorityDescriptor constructor.
+     *
+     * @param AttributeService[] $attributeServices
+     * @param string[] $protocolSupportEnumeration
+     * @param AssertionIDRequestService[]|null $assertionIDRequestService
+     * @param string[]|null $nameIDFormats
+     * @param string[]|null $attributeProfiles
+     * @param Attribute[]|null $attributes
+     * @param string|null $ID
+     * @param int|null $validUntil
+     * @param string|null $cacheDuration
+     * @param Extensions|null $extensions
+     * @param string|null $errorURL
+     * @param KeyDescriptor[]|null $keyDescriptors
+     * @param Organization|null $organization
+     * @param ContactPerson[]|null $contacts
+     */
+    public function __construct(
+        array $attributeServices,
+        array $protocolSupportEnumeration,
+        ?array $assertionIDRequestService = null,
+        ?array $nameIDFormats = null,
+        ?array $attributeProfiles = null,
+        ?array $attributes = null,
+        ?string $ID = null,
+        ?int $validUntil = null,
+        ?string $cacheDuration = null,
+        ?Extensions $extensions = null,
+        ?string $errorURL = null,
+        ?array $keyDescriptors = null,
+        ?Organization $organization = null,
+        ?array $contacts = null
+    ) {
+        parent::__construct(
+            $protocolSupportEnumeration,
+            $ID,
+            $validUntil,
+            $cacheDuration,
+            $extensions,
+            $errorURL,
+            $keyDescriptors,
+            $organization,
+            $contacts
+        );
+        $this->setAttributeServices($attributeServices);
+        $this->setAssertionIDRequestServices($assertionIDRequestService);
+        $this->setNameIDFormats($nameIDFormats);
+        $this->setAttributeProfiles($attributeProfiles);
+        $this->setAttributes($attributes);
+    }
 
 
     /**
      * Initialize an IDPSSODescriptor.
      *
-     * @param \DOMElement|null $xml The XML element we should load.
-     * @throws \Exception
+     * @param DOMElement $xml The XML element we should load.
+     *
+     * @return self
+     * @throws Exception
      */
-    public function __construct(DOMElement $xml = null)
+    public static function fromXML(DOMElement $xml): object
     {
-        parent::__construct('md:AttributeAuthorityDescriptor', $xml);
-
-        if ($xml === null) {
-            return;
-        }
-
-        /** @var \DOMElement $ep */
+        $attrServices = [];
+        /** @var DOMElement $ep */
         foreach (Utils::xpQuery($xml, './saml_metadata:AttributeService') as $ep) {
-            $this->addAttributeService(new EndpointType($ep));
+            $attrServices[] = AttributeService::fromXML($ep);
         }
-        if ($this->getAttributeService() === []) {
-            throw new \Exception('Must have at least one AttributeService in AttributeAuthorityDescriptor.');
+        if ($attrServices === []) {
+            throw new Exception('Must have at least one AttributeService in AttributeAuthorityDescriptor.');
         }
 
-        /** @var \DOMElement $ep */
+        $assertIDReqServices = [];
+        /** @var DOMElement $ep */
         foreach (Utils::xpQuery($xml, './saml_metadata:AssertionIDRequestService') as $ep) {
-            $this->addAssertionIDRequestService(new EndpointType($ep));
+            $assertIDReqServices[] = AssertionIDRequestService::fromXML($ep);
         }
 
-        $this->setNameIDFormat(Utils::extractStrings($xml, Constants::NS_MD, 'NameIDFormat'));
+        $nameIDFormats = Utils::extractStrings($xml, Constants::NS_MD, 'NameIDFormat');
+        $attrProfiles = Utils::extractStrings($xml, Constants::NS_MD, 'AttributeProfile');
 
-        $this->setAttributeProfile(Utils::extractStrings($xml, Constants::NS_MD, 'AttributeProfile'));
-
-        /** @var \DOMElement $a */
+        $attributes = [];
+        /** @var DOMElement $a */
         foreach (Utils::xpQuery($xml, './saml_assertion:Attribute') as $a) {
-            $this->addAttribute(Attribute::fromXML($a));
+            $attributes[] = Attribute::fromXML($a);
         }
+
+        $validUntil = self::getAttribute($xml, 'validUntil', null);
+
+        $orgs = Organization::getChildrenOfClass($xml);
+        Assert::maxCount($orgs, 1, 'More than one Organization found in this descriptor');
+
+        $extensions = Extensions::getChildrenOfClass($xml);
+        Assert::maxCount($extensions, 1, 'Only one md:Extensions element is allowed.');
+
+        return new self(
+            $attrServices,
+            preg_split('/[\s]+/', trim(self::getAttribute($xml, 'protocolSupportEnumeration'))),
+            $assertIDReqServices,
+            $nameIDFormats,
+            $attrProfiles,
+            $attributes,
+            self::getAttribute($xml, 'ID', null),
+            $validUntil !== null ? Utils::xsDateTimeToTimestamp($validUntil) : null,
+            self::getAttribute($xml, 'cacheDuration', null),
+            !empty($extensions) ? $extensions[0] : null,
+            self::getAttribute($xml, 'errorURL', null),
+            KeyDescriptor::getChildrenOfClass($xml),
+            !empty($orgs) ? $orgs[0] : null,
+            ContactPerson::getChildrenOfClass($xml)
+        );
     }
 
 
     /**
      * Collect the value of the AttributeService-property
      *
-     * @return \SAML2\XML\md\EndpointType[]
+     * @return AttributeService[]
      */
-    public function getAttributeService(): array
+    public function getAttributeServices(): array
     {
-        return $this->AttributeService;
+        return $this->AttributeServices;
     }
 
 
     /**
      * Set the value of the AttributeService-property
      *
-     * @param \SAML2\XML\md\EndpointType[] $attributeService
-     * @return void
-     */
-    public function setAttributeService(array $attributeService): void
-    {
-        $this->AttributeService = $attributeService;
-    }
-
-
-    /**
-     * Add the value to the AttributeService-property
+     * @param AttributeService[] $attributeServices
      *
-     * @param \SAML2\XML\md\EndpointType $attributeService
      * @return void
      */
-    public function addAttributeService(EndpointType $attributeService): void
+    protected function setAttributeServices(array $attributeServices): void
     {
-        $this->AttributeService[] = $attributeService;
+        Assert::minCount(
+            $attributeServices,
+            1,
+            'AttributeAuthorityDescriptor must contain at least one AttributeService.'
+        );
+        Assert::allIsInstanceOf(
+            $attributeServices,
+            AttributeService::class,
+            'AttributeService is not an instance of EndpointType.'
+        );
+        $this->AttributeServices = $attributeServices;
     }
 
 
@@ -141,56 +219,53 @@ class AttributeAuthorityDescriptor extends RoleDescriptor
      *
      * @return string[]
      */
-    public function getNameIDFormat(): array
+    public function getNameIDFormats(): array
     {
-        return $this->NameIDFormat;
+        return $this->NameIDFormats;
     }
 
 
     /**
      * Set the value of the NameIDFormat-property
      *
-     * @param string[] $nameIDFormat
+     * @param string[]|null $nameIDFormats
+     *
      * @return void
      */
-    public function setNameIDFormat(array $nameIDFormat): void
+    protected function setNameIDFormats(?array $nameIDFormats): void
     {
-        $this->NameIDFormat = $nameIDFormat;
+        if ($nameIDFormats === null) {
+            return;
+        }
+        Assert::allStringNotEmpty($nameIDFormats, 'NameIDFormat cannot be an empty string.');
+        $this->NameIDFormats = $nameIDFormats;
     }
 
 
     /**
      * Collect the value of the AssertionIDRequestService-property
      *
-     * @return \SAML2\XML\md\EndpointType[]
+     * @return AssertionIDRequestService[]
      */
-    public function getAssertionIDRequestService(): array
+    public function getAssertionIDRequestServices(): array
     {
-        return $this->AssertionIDRequestService;
+        return $this->AssertionIDRequestServices;
     }
 
 
     /**
      * Set the value of the AssertionIDRequestService-property
      *
-     * @param \SAML2\XML\md\EndpointType[] $assertionIDRequestService
-     * @return void
+     * @param AssertionIDRequestService[] $assertionIDRequestServices
      */
-    public function setAssertionIDRequestService(array $assertionIDRequestService): void
+    protected function setAssertionIDRequestServices(?array $assertionIDRequestServices): void
     {
-        $this->AssertionIDRequestService = $assertionIDRequestService;
-    }
+        if ($assertionIDRequestServices === null) {
+            return;
+        }
 
-
-    /**
-     * Add the value to the AssertionIDRequestService-property
-     *
-     * @param \SAML2\XML\md\EndpointType $assertionIDRequestService
-     * @return void
-     */
-    public function addAssertionIDRequestService(EndpointType $assertionIDRequestService): void
-    {
-        $this->AssertionIDRequestService[] = $assertionIDRequestService;
+        Assert::allIsInstanceOf($assertionIDRequestServices, AssertionIDRequestService::class);
+        $this->AssertionIDRequestServices = $assertionIDRequestServices;
     }
 
 
@@ -199,86 +274,79 @@ class AttributeAuthorityDescriptor extends RoleDescriptor
      *
      * @return string[]
      */
-    public function getAttributeProfile(): array
+    public function getAttributeProfiles(): array
     {
-        return $this->AttributeProfile;
+        return $this->AttributeProfiles;
     }
 
 
     /**
      * Set the value of the AttributeProfile-property
      *
-     * @param string[] $attributeProfile
-     * @return void
+     * @param string[]|null $attributeProfiles
      */
-    public function setAttributeProfile(array $attributeProfile): void
+    protected function setAttributeProfiles(?array $attributeProfiles): void
     {
-        $this->AttributeProfile = $attributeProfile;
+        if ($attributeProfiles === null) {
+            return;
+        }
+        Assert::allStringNotEmpty($attributeProfiles, 'AttributeProfile cannot be an empty string.');
+        $this->AttributeProfiles = $attributeProfiles;
     }
 
 
     /**
      * Collect the value of the Attribute-property
      *
-     * @return \SAML2\XML\saml\Attribute[]
+     * @return Attribute[]
      */
-    public function getAttribute(): array
+    public function getAttributes(): array
     {
-        return $this->Attribute;
+        return $this->Attributes;
     }
 
 
     /**
      * Set the value of the Attribute-property
      *
-     * @param \SAML2\XML\saml\Attribute[] $attribute
-     * @return void
+     * @param Attribute[]|null $attributes
      */
-    public function setAttribute(array $attribute): void
+    protected function setAttributes(?array $attributes): void
     {
-        $this->Attribute = $attribute;
-    }
-
-
-    /**
-     * Add the value to the Attribute-property
-     *
-     * @param \SAML2\XML\saml\Attribute $attribute
-     * @return void
-     */
-    public function addAttribute(Attribute $attribute): void
-    {
-        $this->Attribute[] = $attribute;
+        if ($attributes === null) {
+            return;
+        }
+        Assert::allIsInstanceOf($attributes, Attribute::class);
+        $this->Attributes = $attributes;
     }
 
 
     /**
      * Add this AttributeAuthorityDescriptor to an EntityDescriptor.
      *
-     * @param \DOMElement $parent The EntityDescriptor we should append this IDPSSODescriptor to.
-     * @return \DOMElement
+     * @param DOMElement|null $parent The EntityDescriptor we should append this IDPSSODescriptor to.
      *
-     * @throws \InvalidArgumentException if assertions are false
+     * @return DOMElement
+     *
+     * @throws InvalidArgumentException if assertions are false
+     * @throws Exception
      */
-    public function toXML(DOMElement $parent): DOMElement
+    public function toXML(?DOMElement $parent = null): DOMElement
     {
-        Assert::notEmpty($this->AttributeService);
-
         $e = parent::toXML($parent);
 
-        foreach ($this->AttributeService as $ep) {
-            $ep->toXML($e, 'md:AttributeService');
+        foreach ($this->AttributeServices as $ep) {
+            $ep->toXML($e);
         }
 
-        foreach ($this->AssertionIDRequestService as $ep) {
-            $ep->toXML($e, 'md:AssertionIDRequestService');
+        foreach ($this->AssertionIDRequestServices as $ep) {
+            $ep->toXML($e);
         }
 
-        Utils::addStrings($e, Constants::NS_MD, 'md:NameIDFormat', false, $this->NameIDFormat);
+        Utils::addStrings($e, Constants::NS_MD, 'md:NameIDFormat', false, $this->NameIDFormats);
+        Utils::addStrings($e, Constants::NS_MD, 'md:AttributeProfile', false, $this->AttributeProfiles);
 
-        Utils::addStrings($e, Constants::NS_MD, 'md:AttributeProfile', false, $this->AttributeProfile);
-
-        foreach ($this->Attribute as $a) {
+        foreach ($this->Attributes as $a) {
             $a->toXML($e);
         }
 

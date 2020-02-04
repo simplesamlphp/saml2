@@ -347,7 +347,7 @@ final class SubjectConfirmationData extends AbstractSamlElement
             $e->setAttribute('Address', $this->Address);
         }
 
-        foreach ($this->getInfo() as $n) {
+        foreach ($this->info as $n) {
             $n->toXML($e);
         }
 

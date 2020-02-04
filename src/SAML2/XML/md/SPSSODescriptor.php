@@ -12,7 +12,7 @@ use SAML2\Utils;
  *
  * @package SimpleSAMLphp
  */
-class SPSSODescriptor extends SSODescriptorType
+class SPSSODescriptor extends AbstractSSODescriptor
 {
     /**
      * Whether this SP signs authentication requests.
@@ -192,13 +192,28 @@ class SPSSODescriptor extends SSODescriptorType
 
 
     /**
+     * Convert XML into a SPSSODescriptor
+     *
+     * @param \DOMElement $xml The XML element we should load
+     * @return self
+     */
+    public static function fromXML(DOMElement $xml): object
+    {
+        // @TODO: Actually fill this method with something useful;  this is a dummy!!
+        return new self(new DOMElement('root'));
+    }
+
+
+    /**
      * Add this SPSSODescriptor to an EntityDescriptor.
      *
-     * @param \DOMElement $parent The EntityDescriptor we should append this SPSSODescriptor to.
+     * @param \DOMElement|null $parent The EntityDescriptor we should append this SPSSODescriptor to.
      * @return \DOMElement
      */
-    public function toXML(DOMElement $parent): DOMElement
+    public function toXML(?DOMElement $parent = null): DOMElement
     {
+        // @TODO: handle null argument
+
         $e = parent::toXML($parent);
 
         if (is_bool($this->AuthnRequestsSigned)) {
