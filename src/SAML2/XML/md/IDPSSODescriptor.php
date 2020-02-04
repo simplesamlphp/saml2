@@ -81,7 +81,7 @@ final class IDPSSODescriptor extends AbstractSSODescriptor
      * @param \SAML2\XML\md\ArtifactResolutionService[] $artifactResolutionService
      * @param \SAML2\XML\md\SingleLogoutService[] $singleLogoutService
      * @param \SAML2\XML\md\ManageNameIDService[] $manageNameIDService
-     * @param string[]|null $nameIDFormat
+     * @param string[] $nameIDFormat
      */
     public function __construct(
         array $ssoServiceEndpoints,
