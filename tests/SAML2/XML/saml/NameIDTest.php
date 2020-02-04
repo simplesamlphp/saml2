@@ -13,23 +13,51 @@ use SAML2\Utils;
  */
 class NameIDTest extends \PHPUnit\Framework\TestCase
 {
+    /** @var \DOMDocument $document */
+    private $document;
+
+
+    /**
+     * @return void
+     */
+    public function setup(): void
+    {
+        $samlNamespace = Issuer::NS;
+
+        $this->document = DOMDocumentFactory::fromString(<<<XML
+<saml:NameID
+  xmlns:saml="{$samlNamespace}"
+  Format="TheFormat"
+  SPProvidedID="TheSPProvidedID"
+  NameQualifier="TheNameQualifier"
+  SPNameQualifier="TheSPNameQualifier">TheNameIDValue</saml:NameID>
+XML
+        );
+    }
+
+
     /**
      * @return void
      */
     public function testMarshalling(): void
     {
-        $nameId = new NameID('TheNameIDValue', 'TheFormat', 'TheSPProvidedID', 'TheNameQualifier', 'TheSPNameQualifier');
-        $nameIdElement = $nameId->toXML();
+        $nameId = new NameID(
+            'TheNameIDValue',
+            'TheFormat',
+            'TheSPProvidedID',
+            'TheNameQualifier',
+            'TheSPNameQualifier'
+        );
 
-        $nameIdElements = Utils::xpQuery($nameIdElement, '/saml_assertion:NameID');
-        $this->assertCount(1, $nameIdElements);
-        $nameIdElement = $nameIdElements[0];
-
-        $this->assertEquals('TheNameQualifier', $nameIdElement->getAttribute("NameQualifier"));
-        $this->assertEquals('TheSPNameQualifier', $nameIdElement->getAttribute("SPNameQualifier"));
-        $this->assertEquals('TheFormat', $nameIdElement->getAttribute("Format"));
-        $this->assertEquals('TheSPProvidedID', $nameIdElement->getAttribute("SPProvidedID"));
-        $this->assertEquals('TheNameIDValue', $nameIdElement->textContent);
+        $this->assertEquals('TheNameIDValue', $nameId->getValue());
+        $this->assertEquals('TheFormat', $nameId->getFormat());
+        $this->assertEquals('TheSPProvidedID', $nameId->getSPProvidedID());
+        $this->assertEquals('TheNameQualifier', $nameId->getNameQualifier());
+        $this->assertEquals('TheSPNameQualifier', $nameId->getSPNameQualifier());
+        $this->assertEquals(
+            $this->document->saveXML($this->document->documentElement),
+            strval($nameId)
+        );
     }
 
 
@@ -38,32 +66,28 @@ class NameIDTest extends \PHPUnit\Framework\TestCase
      */
     public function testUnmarshalling(): void
     {
-        $samlNamespace = Constants::NS_SAML;
-        $document = DOMDocumentFactory::fromString(<<<XML
-<saml:NameID xmlns:saml="{$samlNamespace}" NameQualifier="TheNameQualifier" SPNameQualifier="TheSPNameQualifier" Format="TheFormat" SPProvidedID="TheSPProvidedID">TheNameIDValue</saml:NameID>
-XML
-        );
+        $nameId = NameID::fromXML($this->document->documentElement);
 
-        $nameId = NameID::fromXML($document->firstChild);
         $this->assertEquals('TheNameQualifier', $nameId->getNameQualifier());
         $this->assertEquals('TheSPNameQualifier', $nameId->getSPNameQualifier());
         $this->assertEquals('TheFormat', $nameId->getFormat());
         $this->assertEquals('TheSPProvidedID', $nameId->getSPProvidedID());
         $this->assertEquals('TheNameIDValue', $nameId->getValue());
+        $this->assertEquals(
+            $this->document->saveXML($this->document->documentElement),
+            strval($nameId)
+        );
     }
 
 
     /**
-     * @return void
+     * Test serialization / unserialization
      */
-    public function testToString(): void
+    public function testSerialization(): void
     {
-        $nameId = new NameID('TheNameIDValue', 'TheFormat', 'TheSPProvidedID', 'TheNameQualifier', 'TheSPNameQualifier');
-
-        $output = '<saml:NameID xmlns:saml="' . Constants::NS_SAML . '" NameQualifier="TheNameQualifier" ' .
-                  'SPNameQualifier="TheSPNameQualifier" Format="TheFormat" SPProvidedID="TheSPProvidedID">' .
-                  'TheNameIDValue</saml:NameID>';
-
-        $this->assertXmlStringEqualsXmlString($output, $nameId->__toString());
+        $this->assertEquals(
+            $this->document->saveXML($this->document->documentElement),
+            strval(unserialize(serialize(NameID::fromXML($this->document->documentElement))))
+        );
     }
 }

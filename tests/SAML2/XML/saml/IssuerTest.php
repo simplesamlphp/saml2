@@ -108,4 +108,16 @@ XML
 
         $issuer = Issuer::fromXML($this->document->documentElement);
     }
+
+
+    /**
+     * Test serialization / unserialization
+     */
+    public function testSerialization(): void
+    {
+        $this->assertEquals(
+            $this->document->saveXML($this->document->documentElement),
+            strval(unserialize(serialize(Issuer::fromXML($this->document->documentElement))))
+        );
+    }
 }
