@@ -66,43 +66,43 @@ final class IDPSSODescriptor extends AbstractSSODescriptor
      * @param \SAML2\XML\md\SingleSignOnService[] $ssoServiceEndpoints
      * @param string[] $protocolSupportEnumeration
      * @param bool|null $wantAuthnRequestsSigned
-     * @param \SAML2\XML\md\NameIDMappingService[]|null $nameIDMappingServiceEndpoints
-     * @param \SAML2\XML\md\AssertionIDRequestService[]|null $assertionIDRequestServiceEndpoints
-     * @param string[]|null $attributeProfiles
-     * @param \SAML2\XML\saml\Attribute[]|null $attributes
+     * @param \SAML2\XML\md\NameIDMappingService[] $nameIDMappingServiceEndpoints
+     * @param \SAML2\XML\md\AssertionIDRequestService[] $assertionIDRequestServiceEndpoints
+     * @param string[] $attributeProfiles
+     * @param \SAML2\XML\saml\Attribute[] $attributes
      * @param string|null $ID
      * @param int|null $validUntil
      * @param string|null $cacheDuration
      * @param \SAML2\XML\md\Extensions|null $extensions
      * @param string|null $errorURL
-     * @param \SAML2\XML\md\KeyDescriptor[]|null $keyDescriptors
+     * @param \SAML2\XML\md\KeyDescriptor[] $keyDescriptors
      * @param \SAML2\XML\md\Organization|null $organization
-     * @param \SAML2\XML\md\ContactPerson[]|null $contacts
-     * @param \SAML2\XML\md\ArtifactResolutionService[]|null $artifactResolutionService
-     * @param \SAML2\XML\md\SingleLogoutService[]|null $singleLogoutService
-     * @param \SAML2\XML\md\ManageNameIDService[]|null $manageNameIDService
+     * @param \SAML2\XML\md\ContactPerson[] $contacts
+     * @param \SAML2\XML\md\ArtifactResolutionService[] $artifactResolutionService
+     * @param \SAML2\XML\md\SingleLogoutService[] $singleLogoutService
+     * @param \SAML2\XML\md\ManageNameIDService[] $manageNameIDService
      * @param string[]|null $nameIDFormat
      */
     public function __construct(
         array $ssoServiceEndpoints,
         array $protocolSupportEnumeration,
-        bool $wantAuthnRequestsSigned = null,
-        ?array $nameIDMappingServiceEndpoints = [],
-        ?array $assertionIDRequestServiceEndpoints = [],
-        ?array $attributeProfiles = [],
-        ?array $attributes = [],
+        ?bool $wantAuthnRequestsSigned = null,
+        array $nameIDMappingServiceEndpoints = [],
+        array $assertionIDRequestServiceEndpoints = [],
+        array $attributeProfiles = [],
+        array $attributes = [],
         ?string $ID = null,
         ?int $validUntil = null,
         ?string $cacheDuration = null,
         ?Extensions $extensions = null,
         ?string $errorURL = null,
-        ?array $keyDescriptors = [],
+        array $keyDescriptors = [],
         ?Organization $organization = null,
-        ?array $contacts = [],
-        ?array $artifactResolutionService = [],
-        ?array $singleLogoutService = [],
-        ?array $manageNameIDService = [],
-        ?array $nameIDFormat = []
+        array $contacts = [],
+        array $artifactResolutionService = [],
+        array $singleLogoutService = [],
+        array $manageNameIDService = [],
+        array $nameIDFormat = []
     ) {
         parent::__construct(
             $protocolSupportEnumeration,
@@ -134,6 +134,7 @@ final class IDPSSODescriptor extends AbstractSSODescriptor
      * @param \DOMElement $xml The XML element we should load.
      * @return \SAML2\XML\md\IDPSSODescriptor
      * @throws \InvalidArgumentException if the qualified name of the supplied element is wrong
+     * @throws \Exception
      */
     public static function fromXML(DOMElement $xml): object
     {
@@ -297,13 +298,10 @@ final class IDPSSODescriptor extends AbstractSSODescriptor
     /**
      * Set the attribute profiles supported
      *
-     * @param string[]|null $attributeProfiles
+     * @param string[] $attributeProfiles
      */
-    protected function setAttributeProfiles(?array $attributeProfiles): void
+    protected function setAttributeProfiles(array $attributeProfiles): void
     {
-        if ($attributeProfiles === null) {
-            return;
-        }
         Assert::allStringNotEmpty(
             $attributeProfiles,
             'All md:AttributeProfile elements must be a URI, not an empty string.'
@@ -326,13 +324,10 @@ final class IDPSSODescriptor extends AbstractSSODescriptor
     /**
      * Set the attributes supported by this IdP
      *
-     * @param \SAML2\XML\saml\Attribute[]|null $attributes
+     * @param \SAML2\XML\saml\Attribute[] $attributes
      */
-    protected function setSupportedAttributes(?array $attributes): void
+    protected function setSupportedAttributes(array $attributes): void
     {
-        if ($attributes === null) {
-            return;
-        }
         Assert::allIsInstanceOf(
             $attributes,
             Attribute::class,

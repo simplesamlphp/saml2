@@ -76,7 +76,7 @@ abstract class AbstractSSODescriptor extends AbstractRoleDescriptor
         ?string $cacheDuration = null,
         ?Extensions $extensions = null,
         ?string $errorURL = null,
-        ?array $keyDescriptors = [],
+        array $keyDescriptors = [],
         ?Organization $organization = null,
         array $contacts = [],
         array $artifactResolutionService = [],
