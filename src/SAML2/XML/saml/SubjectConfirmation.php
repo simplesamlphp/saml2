@@ -152,7 +152,7 @@ final class SubjectConfirmation extends AbstractSamlElement
 
         return new self(
             $Method,
-            empty($nid) ? null : new NameID($nid[0]),
+            empty($nid) ? null : NameID::fromXML($nid[0]),
             empty($scd) ? null : SubjectConfirmationData::fromXML($scd[0])
         );
     }

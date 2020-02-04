@@ -15,39 +15,23 @@ use Webmozart\Assert\Assert;
  * @author Jaime Pérez Crespo, UNINETT AS <jaime.perez@uninett.no>
  * @package simplesamlphp/saml2
  */
-class Issuer extends NameIDType
+final class Issuer extends NameIDType
 {
     /**
-     * if $this->SAML2IssuerShowAll is set false
-     * From saml-core-2.0-os 8.3.6, when the entity Format is used: "The NameQualifier, SPNameQualifier, and
-     * SPProvidedID attributes MUST be omitted."
+     * Initialize a saml:Issuer
      *
-     * if $this->SAML2IssuerShowAll is set true
-     * when the entity Format is used: "The NameQualifier, SPNameQualifier, and SPProvidedID attributes are not omitted"
-     * @see saml-core-2.0-os 8.3.6
-     *
-     * @var boolean
-     */
-    private $Saml2IssuerShowAll; //setting true breaks saml-core-2.0-os 8.3.6
-
-
-    /**
-     * Initialize a saml:NameIDType
-     *
-     * @param \DOMElement|string $element
+     * @param string $value
      * @param string|null $Format
      * @param string|null $SPProvidedID
      * @param string|null $NameQualifier
      * @param string|null $SPNameQualifier
-     * @param bool $Saml2IssuerShowAll
      */
     public function __construct(
-        $element,
+        string $value,
         ?string $Format = null,
         ?string $SPProvidedID = null,
         ?string $NameQualifier = null,
-        ?string $SPNameQualifier = null,
-        bool $Saml2IssuerShowAll = false
+        ?string $SPNameQualifier = null
     ) {
         /**
          * The format of this NameIDType.
@@ -67,36 +51,18 @@ class Issuer extends NameIDType
          *
          * @see saml-core-2.0-os
          *
+         * From saml-core-2.0-os 8.3.6, when the entity Format is used: "The NameQualifier, SPNameQualifier, and
+         * SPProvidedID attributes MUST be omitted."
+         *
          * @var string
          */
-        parent::__construct($element, $Format, $SPProvidedID, $NameQualifier, $SPNameQualifier);
+        if ($Format === Constants::NAMEID_ENTITY) {
+            Assert::allNull([$SPProvidedID, $NameQualifier, $SPNameQualifier], 'Illegal combination of attributes being used');
+        }
 
-        $this->setSaml2IssuerShowAll($Saml2IssuerShowAll);
+        parent::__construct($value, $Format, $SPProvidedID, $NameQualifier, $SPNameQualifier);
     }
 
-
-    /**
-     * Collect the value of the Saml2IssuerShowAll-property
-     *
-     * @return bool
-     */
-    public function isSaml2IssuerShowAll(): bool
-    {
-        return $this->Saml2IssuerShowAll;
-    }
-
-
-    /**
-     * Set the value of the Saml2IssuerShowAll-property
-     *
-     * @param bool $saml2IssuerShowAll
-     * @return void
-     */
-    private function setSaml2IssuerShowAll(bool $saml2IssuerShowAll): void
-    {
-        $this->Saml2IssuerShowAll = $saml2IssuerShowAll;
-    }
- 	
 
     /**
      * Convert XML into an Issuer
@@ -111,44 +77,6 @@ class Issuer extends NameIDType
         Assert::same($xml->localName, 'Issuer');
         Assert::same($xml->namespaceURI, Issuer::NS);
 
-        $Format = self::getAttribute($xml, 'Format', null);
-        $SPProvidedID = self::getAttribute($xml, 'SPProvidedID', null);
-        $NameQualifier = self::getAttribute($xml, 'NameQualifier', null);
-        $SPNameQualifier = self::getAttribute($xml, 'SPNameQualifier', null);
-
-        return new self($xml, $Format, $SPProvidedID, $NameQualifier, $SPNameQualifier);
-    }
-
-
-    /**
-     * Convert this Issuer to XML.
-     *
-     * @param \DOMElement|null $parent The element we should append to.
-     * @return \DOMElement The current Issuer object converted into a \DOMElement.
-     */
-    public function toXML(DOMElement $parent = null): DOMElement
-    {
-        $element = parent::toXML($parent);
-
-        /*
-         * if $this->Saml2IssuerShowAll is set false
-         * From saml-core-2.0-os 8.3.6, when the entity Format is used: "The NameQualifier, SPNameQualifier, and
-         * SPProvidedID attributes MUST be omitted."
-         * if $this->isSaml2IssuerShowAll() is set true when the entity Format is used: "The NameQualifier,
-         * SPNameQualifier, and SPProvidedID attributes are not omitted."
-         */
-        if (
-            (
-                ($this->Format === Constants::NAMEID_ENTITY)
-                && !$this->isSaml2IssuerShowAll()
-            )
-            || ($this->Format === null)
-        ) {
-            $element->removeAttribute('SPProvidedID');
-            $element->removeAttribute('NameQualifier');
-            $element->removeAttribute('SPNameQualifier');
-        }
-
-        return $element;
+        return parent::fromXML($xml);
     }
 }

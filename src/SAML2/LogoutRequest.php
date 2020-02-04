@@ -182,7 +182,7 @@ class LogoutRequest extends Request
 
         $nameId = Utils::decryptElement($this->encryptedNameId, $key, $blacklist);
         Utils::getContainer()->debugMessage($nameId, 'decrypt');
-        $this->nameId = new NameID($nameId);
+        $this->nameId = NameID::fromXML($nameId);
         $this->encryptedNameId = null;
     }
 

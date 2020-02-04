@@ -13,33 +13,21 @@ use Webmozart\Assert\Assert;
  * @author Jaime Pérez Crespo, UNINETT AS <jaime.perez@uninett.no>
  * @package SimpleSAMLphp
  */
-class NameID extends NameIDType
+final class NameID extends NameIDType
 {
     /**
-     * Convert XML into a NameID
+     * Convert XML into an NameID
      *
      * @param \DOMElement $xml The XML element we should load
      *
      * @return \SAML2\XML\saml\NameID
-     * @throws \Exception
+     * @throws \InvalidArgumentException
      */
     public static function fromXML(DOMElement $xml): object
     {
         Assert::same($xml->localName, 'NameID');
         Assert::same($xml->namespaceURI, NameID::NS);
 
-        $Format = self::getAttribute($xml, 'Format', null);
-        $SPProvidedID = self::getAttribute($xml, 'SPProvidedID', null);
-        $NameQualifier = self::getAttribute($xml, 'NameQualifier', null);
-        $SPNameQualifier = self::getAttribute($xml, 'SPNameQualifier', null);
-
-        return new self(
-            $xml,
-            $Format,
-            $SPProvidedID,
-            $NameQualifier,
-            $SPNameQualifier
-        );
-
+        return parent::fromXML($xml);
     }
 }

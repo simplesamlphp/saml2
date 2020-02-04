@@ -57,14 +57,14 @@ abstract class NameIDType extends BaseIDType
     /**
      * Initialize a saml:NameIDType from scratch
      *
-     * @param \DOMElement|string $element
+     * @param string $value
      * @param string|null $Format
      * @param string|null $SPProvidedID
      * @param string|null $NameQualifier
      * @param string|null $SPNameQualifier
      */
     public function __construct(
-        $element,
+        string $value,
         ?string $Format = null,
         ?string $SPProvidedID = null,
         ?string $NameQualifier = null,
@@ -74,12 +74,7 @@ abstract class NameIDType extends BaseIDType
 
         $this->setFormat($Format);
         $this->setSPProvidedID($SPProvidedID);
-
-        if (is_string($element)) {
-            $this->setValue(trim($element));
-        } else {
-            $this->setValue(trim($element->textContent));
-        }
+        $this->setValue($value);
     }
 
 
@@ -115,8 +110,6 @@ abstract class NameIDType extends BaseIDType
      */
     public function getValue(): string
     {
-        Assert::notEmpty($this->value);
-
         return $this->value;
     }
 
@@ -129,7 +122,8 @@ abstract class NameIDType extends BaseIDType
      */
     public function setValue(string $value): void
     {
-        $this->value = $value;
+        Assert::notEmpty($value);
+        $this->value = trim($value);
     }
 
 
@@ -153,6 +147,27 @@ abstract class NameIDType extends BaseIDType
     public function setSPProvidedID(?string $spProvidedID): void
     {
         $this->SPProvidedID = $spProvidedID;
+    }
+
+
+    /**
+     * Convert XML into an NameIDType
+     *
+     * @param \DOMElement $xml The XML element we should load
+     *
+     * @return \SAML2\XML\saml\NameIDType
+     * @throws \InvalidArgumentException
+     */
+    public static function fromXML(DOMElement $xml): object
+    {
+        Assert::NotEmpty($xml->textContent);
+
+        $Format = self::getAttribute($xml, 'Format', null);
+        $SPProvidedID = self::getAttribute($xml, 'SPProvidedID', null);
+        $NameQualifier = self::getAttribute($xml, 'NameQualifier', null);
+        $SPNameQualifier = self::getAttribute($xml, 'SPNameQualifier', null);
+
+        return new static($xml->textContent, $Format, $SPProvidedID, $NameQualifier, $SPNameQualifier);
     }
 
 
