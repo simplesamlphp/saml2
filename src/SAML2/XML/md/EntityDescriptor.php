@@ -138,6 +138,8 @@ final class EntityDescriptor extends AbstractMetadataDocument
             }
 
             switch ($node->localName) {
+                case 'Extensions':
+                    continue 2;
                 case 'IDPSSODescriptor':
                     $roleDescriptors[] = IDPSSODescriptor::fromXML($node);
                     break;
