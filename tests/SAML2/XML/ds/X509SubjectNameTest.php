@@ -9,12 +9,12 @@ use SAML2\DOMDocumentFactory;
 use SAML2\Utils;
 
 /**
- * Class \SAML2\XML\ds\KeyNameTest
+ * Class \SAML2\XML\ds\X509SubjectNameTest
  *
  * @author Tim van Dijen, <tvdijen@gmail.com>
  * @package simplesamlphp/saml2
  */
-final class KeyNameTest extends \PHPUnit\Framework\TestCase
+final class X509SubjectNameTest extends \PHPUnit\Framework\TestCase
 {
     /** @var \DOMDocument */
     private $document;
@@ -24,9 +24,9 @@ final class KeyNameTest extends \PHPUnit\Framework\TestCase
      */
     protected function setUp(): void
     {
-        $ns = KeyName::NS;
+        $ns = X509SubjectName::NS;
         $this->document = DOMDocumentFactory::fromString(<<<XML
-<ds:KeyName xmlns:ds="{$ns}">testkey</ds:KeyName>
+<ds:X509SubjectName xmlns:ds="{$ns}">some name</ds:X509SubjectName>
 XML
         );
     }
@@ -37,8 +37,8 @@ XML
      */
     public function testMarshalling(): void
     {
-        $keyName = new KeyName('testkey');
-        $this->assertEquals($this->document->saveXML($this->document->documentElement), strval($keyName));
+        $subjectName = new X509SubjectName('some name');
+        $this->assertEquals($this->document->saveXML($this->document->documentElement), strval($subjectName));
     }
 
 
@@ -47,8 +47,8 @@ XML
      */
     public function testUnmarshalling(): void
     {
-        $keyName = keyName::fromXML($this->document->documentElement);
-        $this->assertEquals('testkey', $keyName->getName());
+        $subjectName = X509SubjectName::fromXML($this->document->documentElement);
+        $this->assertEquals('some name', $subjectName->getName());
     }
 
 
@@ -59,7 +59,7 @@ XML
     {
         $this->assertEquals(
             $this->document->saveXML($this->document->documentElement),
-            strval(unserialize(serialize(KeyName::fromXML($this->document->documentElement))))
+            strval(unserialize(serialize(X509SubjectName::fromXML($this->document->documentElement))))
         );
     }
 }

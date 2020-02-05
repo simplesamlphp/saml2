@@ -88,6 +88,7 @@ final class KeyInfo extends AbstractDsElement
      */
     private function setInfo(array $info): void
     {
+        Assert::notEmpty($info, 'ds:KeyInfo cannot be empty');
         Assert::allIsInstanceOfAny(
             $info,
             [Chunk::class, KeyName::class, X509Data::class],
