@@ -159,8 +159,98 @@ XML
         $this->assertInstanceOf(AttributeAuthorityDescriptor::class, $ed->getRoleDescriptors()[1]);
         $this->assertInstanceOf(AuthnAuthorityDescriptor::class, $ed->getRoleDescriptors()[2]);
         $this->assertInstanceOf(PDPDescriptor::class, $ed->getRoleDescriptors()[3]);
+        $this->assertNull($ed->getAffiliationDescriptor());
         $this->assertEquals(
             $this->document->saveXML($this->document->documentElement),
+            strval($ed)
+        );
+    }
+
+
+    /**
+     * Test that creating an EntityDescriptor from scratch works when we are using an AffiliationDescriptor.
+     */
+    public function testMarshallingWithAffiliationDescriptor(): void
+    {
+        $mdns = Constants::NS_MD;
+        $document = DOMDocumentFactory::fromString(<<<XML
+<md:EntityDescriptor xmlns:md="{$mdns}" entityID="urn:example:entity" ID="_5A3CHB081" validUntil="2020-02-05T09:39:25Z" cacheDuration="P2Y6M5DT12H35M30S">
+  <md:Extensions>
+    <mdrpi:PublicationInfo xmlns:mdrpi="urn:oasis:names:tc:SAML:metadata:rpi" publisher="http://publisher.ra/" creationInstant="2020-02-03T13:46:24Z">
+      <mdrpi:UsagePolicy xml:lang="en">http://publisher.ra/policy.txt</mdrpi:UsagePolicy>
+    </mdrpi:PublicationInfo>
+  </md:Extensions>
+  <md:AffiliationDescriptor affiliationOwnerID="asdf">
+    <md:AffiliateMember>test</md:AffiliateMember>
+  </md:AffiliationDescriptor>
+  <md:Organization>
+    <md:OrganizationName xml:lang="en">orgNameTest (en)</md:OrganizationName>
+    <md:OrganizationDisplayName xml:lang="en">orgDispNameTest (en)</md:OrganizationDisplayName>
+    <md:OrganizationURL xml:lang="en">orgURL (en)</md:OrganizationURL>
+  </md:Organization>
+  <md:ContactPerson contactType="support">
+    <md:EmailAddress>mailto:help@example.edu</md:EmailAddress>
+  </md:ContactPerson>
+  <md:ContactPerson contactType="technical">
+    <md:EmailAddress>mailto:root@example.edu</md:EmailAddress>
+  </md:ContactPerson>
+  <md:ContactPerson contactType="administrative">
+    <md:EmailAddress>mailto:info@example.edu</md:EmailAddress>
+  </md:ContactPerson>
+  <md:AdditionalMetadataLocation namespace="somemd">https://example.edu/some/metadata.xml</md:AdditionalMetadataLocation>
+  <md:AdditionalMetadataLocation namespace="mymd">https://example.edu/more/metadata.xml</md:AdditionalMetadataLocation>
+</md:EntityDescriptor>
+XML
+        );
+
+        $entityid = "urn:example:entity";
+        $id = "_5A3CHB081";
+        $now = 1580895565;
+        $duration = "P2Y6M5DT12H35M30S";
+        $ad = new AffiliationDescriptor('asdf', ['test']);
+        $org = new Organization(
+            [new OrganizationName('en', 'orgNameTest (en)')],
+            [new OrganizationDisplayName('en', 'orgDispNameTest (en)')],
+            ['en' => 'orgURL (en)']
+        );
+        $contacts = [
+            new ContactPerson('support', null, null, null, null, ['help@example.edu']),
+            new ContactPerson('technical', null, null, null, null, ['root@example.edu']),
+            new ContactPerson('administrative', null, null, null, null, ['info@example.edu']),
+        ];
+        $mdloc = [
+            new AdditionalMetadataLocation('somemd', 'https://example.edu/some/metadata.xml'),
+            new AdditionalMetadataLocation('mymd', 'https://example.edu/more/metadata.xml'),
+        ];
+        $extensions = new Extensions([
+            new PublicationInfo(
+                'http://publisher.ra/',
+                Utils::xsDateTimeToTimestamp('2020-02-03T13:46:24Z'),
+                null,
+                ['en' => 'http://publisher.ra/policy.txt']
+            )
+        ]);
+
+        $ed = new EntityDescriptor(
+            $entityid,
+            $id,
+            $now,
+            $duration,
+            $extensions,
+            [],
+            $ad,
+            $org,
+            $contacts,
+            $mdloc
+        );
+        $this->assertEquals($entityid, $ed->getEntityID());
+        $this->assertEquals($id, $ed->getID());
+        $this->assertEquals($now, $ed->getValidUntil());
+        $this->assertEquals($duration, $ed->getCacheDuration());
+        $this->assertEmpty($ed->getRoleDescriptors());
+        $this->assertInstanceOf(AffiliationDescriptor::class, $ed->getAffiliationDescriptor());
+        $this->assertEquals(
+            $document->saveXML($document->documentElement),
             strval($ed)
         );
     }
@@ -175,6 +265,50 @@ XML
             'Must have either one of the RoleDescriptors or an AffiliationDescriptor in EntityDescriptor.'
         );
         new EntityDescriptor('entityID');
+    }
+
+
+    /**
+     * Test that creating an EntityDescriptor from scratch with both RoleDescriptors and an AffiliationDescriptor fails.
+     */
+    public function testMarshallingWithAffiliationAndRoleDescriptors(): void
+    {
+        (new AffiliationDescriptor('asdf', ['test']))->toXML($this->document->documentElement);
+        $this->expectException(\InvalidArgumentException::class);
+        $this->expectExceptionMessage(
+            'AffiliationDescriptor cannot be combined with other RoleDescriptor elements in EntityDescriptor.'
+        );
+        EntityDescriptor::fromXML($this->document->documentElement);
+    }
+
+
+    /**
+     * Test that creating an EntityDescriptor from scratch fails if an empty entityID is provided.
+     */
+    public function testMarshallingWithEmptyEntityID(): void
+    {
+        $this->expectException(\InvalidArgumentException::class);
+        $this->expectExceptionMessage('The entityID attribute cannot be empty.');
+        new EntityDescriptor('', null, null, null, null, [], new AffiliationDescriptor('asdf', ['test']));
+    }
+
+
+    /**
+     * Test that creating an EntityDescriptor from scratch with a very long entityID fails.
+     */
+    public function testMarshallingWithLongEntityID(): void
+    {
+        $this->expectException(\InvalidArgumentException::class);
+        $this->expectExceptionMessage('The entityID attribute cannot be longer than 1024 characters.');
+        new EntityDescriptor(
+            str_repeat('x', 1025),
+            null,
+            null,
+            null,
+            null,
+            [],
+            new AffiliationDescriptor('asdf', ['test'])
+        );
     }
 
 
