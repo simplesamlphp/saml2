@@ -100,11 +100,11 @@ final class EntityDescriptor extends AbstractMetadataDocument
         parent::__construct($id, $validUntil, $cacheDuration, $extensions);
 
         $this->setEntityID($entityID);
-        $this->setRoleDescriptor($roleDescriptors);
+        $this->setRoleDescriptors($roleDescriptors);
         $this->setAffiliationDescriptor($affiliationDescriptor);
         $this->setOrganization($organization);
-        $this->setContactPerson($contacts);
-        $this->setAdditionalMetadataLocation($additionalMdLocations);
+        $this->setContactPersons($contacts);
+        $this->setAdditionalMetadataLocations($additionalMdLocations);
     }
 
 
@@ -231,7 +231,7 @@ final class EntityDescriptor extends AbstractMetadataDocument
      *
      * @return \SAML2\XML\md\AbstractRoleDescriptor[]
      */
-    public function getRoleDescriptor(): array
+    public function getRoleDescriptors(): array
     {
         return $this->RoleDescriptor;
     }
@@ -240,12 +240,17 @@ final class EntityDescriptor extends AbstractMetadataDocument
     /**
      * Set the value of the RoleDescriptor property.
      *
-     * @param \SAML2\XML\md\AbstractRoleDescriptor[] $roleDescriptor
+     * @param \SAML2\XML\md\AbstractRoleDescriptor[] $roleDescriptors
      * @return void
      */
-    protected function setRoleDescriptor(array $roleDescriptor): void
+    protected function setRoleDescriptors(array $roleDescriptors): void
     {
-        $this->RoleDescriptor = $roleDescriptor;
+        Assert::allIsInstanceOf(
+            $roleDescriptors,
+            AbstractRoleDescriptor::class,
+            'All role descriptors must extend AbstractRoleDescriptor.'
+        );
+        $this->RoleDescriptor = $roleDescriptors;
     }
 
 
@@ -266,7 +271,7 @@ final class EntityDescriptor extends AbstractMetadataDocument
      * @param \SAML2\XML\md\AffiliationDescriptor|null $affiliationDescriptor
      * @return void
      */
-    protected function setAffiliationDescriptor(AffiliationDescriptor $affiliationDescriptor = null): void
+    protected function setAffiliationDescriptor(?AffiliationDescriptor $affiliationDescriptor = null): void
     {
         $this->AffiliationDescriptor = $affiliationDescriptor;
     }
@@ -289,7 +294,7 @@ final class EntityDescriptor extends AbstractMetadataDocument
      * @param \SAML2\XML\md\Organization|null $organization
      * @return void
      */
-    protected function setOrganization(Organization $organization = null): void
+    protected function setOrganization(?Organization $organization = null): void
     {
         $this->Organization = $organization;
     }
@@ -300,7 +305,7 @@ final class EntityDescriptor extends AbstractMetadataDocument
      *
      * @return \SAML2\XML\md\ContactPerson[]
      */
-    public function getContactPerson(): array
+    public function getContactPersons(): array
     {
         return $this->ContactPerson;
     }
@@ -312,8 +317,13 @@ final class EntityDescriptor extends AbstractMetadataDocument
      * @param array $contactPerson
      * @return void
      */
-    protected function setContactPerson(array $contactPerson): void
+    protected function setContactPersons(array $contactPerson): void
     {
+        Assert::allIsInstanceOf(
+            $contactPerson,
+            ContactPerson::class,
+            'All md:ContactPerson elements must be an instance of ContactPerson.'
+        );
         $this->ContactPerson = $contactPerson;
     }
 
@@ -323,7 +333,7 @@ final class EntityDescriptor extends AbstractMetadataDocument
      *
      * @return \SAML2\XML\md\AdditionalMetadataLocation[]
      */
-    public function getAdditionalMetadataLocation(): array
+    public function getAdditionalMetadataLocations(): array
     {
         return $this->AdditionalMetadataLocation;
     }
@@ -335,8 +345,13 @@ final class EntityDescriptor extends AbstractMetadataDocument
      * @param array $additionalMetadataLocation
      * @return void
      */
-    protected function setAdditionalMetadataLocation(array $additionalMetadataLocation): void
+    protected function setAdditionalMetadataLocations(array $additionalMetadataLocation): void
     {
+        Assert::allIsInstanceOf(
+            $additionalMetadataLocation,
+            AdditionalMetadataLocation::class,
+            'All md:AdditionalMetadataLocation elements must be an instance of AdditionalMetadataLocation'
+        );
         $this->AdditionalMetadataLocation = $additionalMetadataLocation;
     }
 
