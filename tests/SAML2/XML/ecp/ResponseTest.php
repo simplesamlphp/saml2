@@ -77,7 +77,7 @@ XML
     public function testUnmarshalling(): void
     {
         $response = Response::fromXML($this->document->documentElement);
-        $this->assertEquals($response->getAssertionConsumerServiceURL(), 'https://example.com/ACS');
+        $this->assertEquals('https://example.com/ACS', $response->getAssertionConsumerServiceURL());
     }
 
 
