@@ -5,20 +5,154 @@ declare(strict_types=1);
 namespace SAML2\XML\md;
 
 use PHPUnit\Framework\TestCase;
+use SAML2\Constants;
 use SAML2\DOMDocumentFactory;
-use SAML2\XML\md\EntityDescriptor;
-use SAML2\XML\md\AffiliationDescriptor;
-use SAML2\XML\md\Organization;
-use SAML2\XML\md\AttributeAuthorityDescriptor;
 
 /**
  * Class \SAML2\XML\md\EntityDescriptorTest
  */
 class EntityDescriptorTest extends TestCase
 {
+    protected $document;
+
+
+    protected function setUp(): void
+    {
+        $mdns = Constants::NS_MD;
+        $this->document = DOMDocumentFactory::fromString(<<<XML
+<md:EntityDescriptor xmlns:md="{$mdns}" entityID="urn:example:entity" ID="_5A3CHB081" validUntil="2020-02-05T09:39:25Z" cacheDuration="P2Y6M5DT12H35M30S">
+  <md:IDPSSODescriptor protocolSupportEnumeration="urn:oasis:names:tc:SAML:2.0:protocol">
+    <md:SingleSignOnService Binding="urn:oasis:names:tc:SAML:2.0:bindings:HTTP-Redirect" Location="https://engine.test.example.edu/authentication/idp/single-sign-on"/>
+  </md:IDPSSODescriptor>
+  <md:AttributeAuthorityDescriptor protocolSupportEnumeration="urn:oasis:names:tc:SAML:2.0:protocol">
+    <md:AttributeService Binding="urn:oasis:names:tc:SAML:2.0:bindings:SOAP" Location="https://idp.example.org/AttributeService" />
+  </md:AttributeAuthorityDescriptor>
+  <md:AuthnAuthorityDescriptor protocolSupportEnumeration="protocol1">
+    <md:AuthnQueryService Binding="uri:binding:aqs" Location="http://www.example.com/aqs" />
+  </md:AuthnAuthorityDescriptor>
+  <md:PDPDescriptor protocolSupportEnumeration="urn:oasis:names:tc:SAML:2.0:protocol">
+    <md:AuthzService Binding="urn:oasis:names:tc:SAML:2.0:bindings:SOAP" Location="https://IdentityProvider.com/SAML/AA/SOAP"/>
+  </md:PDPDescriptor>
+  <md:Organization>
+    <md:OrganizationName xml:lang="en">orgNameTest (en)</md:OrganizationName>
+    <md:OrganizationDisplayName xml:lang="en">orgDispNameTest (en)</md:OrganizationDisplayName>
+    <md:OrganizationURL xml:lang="en">orgURL (en)</md:OrganizationURL>
+  </md:Organization>
+  <md:ContactPerson contactType="support">
+    <md:EmailAddress>mailto:help@example.edu</md:EmailAddress>
+  </md:ContactPerson>
+  <md:ContactPerson contactType="technical">
+    <md:EmailAddress>mailto:root@example.edu</md:EmailAddress>
+  </md:ContactPerson>
+  <md:ContactPerson contactType="administrative">
+    <md:EmailAddress>mailto:info@example.edu</md:EmailAddress>
+  </md:ContactPerson>
+  <md:AdditionalMetadataLocation namespace="somemd">https://example.edu/some/metadata.xml</md:AdditionalMetadataLocation>
+  <md:AdditionalMetadataLocation namespace="mymd">https://example.edu/more/metadata.xml</md:AdditionalMetadataLocation>
+</md:EntityDescriptor>
+XML
+        );
+    }
+
+
+    // test marshalling
+
 
     /**
-     * Test that creating an EntityDescriptor without any descriptors fails.
+     * Test creating an EntityDescriptor from scratch.
+     */
+    public function testMarshalling(): void
+    {
+        $entityid = "urn:example:entity";
+        $id = "_5A3CHB081";
+        $now = 1580895565;
+        $duration = "P2Y6M5DT12H35M30S";
+        $idpssod = new IDPSSODescriptor(
+            [
+                new SingleSignOnService(
+                    'urn:oasis:names:tc:SAML:2.0:bindings:HTTP-Redirect',
+                    'https://engine.test.example.edu/authentication/idp/single-sign-on'
+                )
+            ],
+            ['urn:oasis:names:tc:SAML:2.0:protocol']
+        );
+        $attrad = new AttributeAuthorityDescriptor(
+            [
+                new AttributeService(
+                    'urn:oasis:names:tc:SAML:2.0:bindings:SOAP',
+                    'https://idp.example.org/AttributeService'
+                )
+            ],
+            ['urn:oasis:names:tc:SAML:2.0:protocol']
+        );
+        $authnad = new AuthnAuthorityDescriptor(
+            [
+                new AuthnQueryService(
+                    'uri:binding:aqs',
+                    'http://www.example.com/aqs'
+                )
+            ],
+            ['protocol1']
+        );
+        $pdpd = new PDPDescriptor(
+            [
+                new AuthzService(
+                    'urn:oasis:names:tc:SAML:2.0:bindings:SOAP',
+                    'https://IdentityProvider.com/SAML/AA/SOAP'
+                )
+            ],
+            ['urn:oasis:names:tc:SAML:2.0:protocol']
+        );
+        $org = new Organization(
+            [new OrganizationName('en', 'orgNameTest (en)')],
+            [new OrganizationDisplayName('en', 'orgDispNameTest (en)')],
+            ['en' => 'orgURL (en)']
+        );
+        $contacts = [
+            new ContactPerson('support', null, null, null, null, ['help@example.edu']),
+            new ContactPerson('technical', null, null, null, null, ['root@example.edu']),
+            new ContactPerson('administrative', null, null, null, null, ['info@example.edu']),
+        ];
+        $mdloc = [
+            new AdditionalMetadataLocation('somemd', 'https://example.edu/some/metadata.xml'),
+            new AdditionalMetadataLocation('mymd', 'https://example.edu/more/metadata.xml'),
+        ];
+
+        $ed = new EntityDescriptor(
+            $entityid,
+            $id,
+            $now,
+            $duration,
+            null,
+            [
+                $idpssod,
+                $attrad,
+                $authnad,
+                $pdpd,
+            ],
+            null,
+            $org,
+            $contacts,
+            $mdloc
+        );
+        $this->assertEquals($entityid, $ed->getEntityID());
+        $this->assertEquals($id, $ed->getID());
+        $this->assertEquals($now, $ed->getValidUntil());
+        $this->assertEquals($duration, $ed->getCacheDuration());
+        $this->assertCount(4, $ed->getRoleDescriptors());
+        $this->assertInstanceOf(IDPSSODescriptor::class, $ed->getRoleDescriptors()[0]);
+        $this->assertInstanceOf(AttributeAuthorityDescriptor::class, $ed->getRoleDescriptors()[1]);
+        $this->assertInstanceOf(AuthnAuthorityDescriptor::class, $ed->getRoleDescriptors()[2]);
+        $this->assertInstanceOf(PDPDescriptor::class, $ed->getRoleDescriptors()[3]);
+        $this->assertEquals(
+            $this->document->saveXML($this->document->documentElement),
+            strval($ed)
+        );
+    }
+
+
+    /**
+     * Test that creating an EntityDescriptor from scratch without any descriptors fails.
      */
     public function testMarshallingWithoutDescriptors(): void
     {
@@ -29,29 +163,63 @@ class EntityDescriptorTest extends TestCase
     }
 
 
+    // test unmarshalling
+
+
     /**
-     * @return void
+     * Test creating an EntityDescriptor from XML.
      */
-    public function testMissingAffiliationId(): void
+    public function testUnmarshalling(): void
     {
-        $document = DOMDocumentFactory::fromString(<<<XML
-<EntityDescriptor entityID="theEntityID" xmlns="urn:oasis:names:tc:SAML:2.0:metadata">
-    <AffiliationDescriptor>
-        <AffiliateMember>test</AffiliateMember>
-    </AffiliationDescriptor>
-</EntityDescriptor>
-XML
+        $pdpd = $this->document->getElementsByTagNameNS(Constants::NS_MD, 'PDPDescriptor')->item(0);
+        $customd = $this->document->createElementNS(Constants::NS_MD, 'md:CustomRoleDescriptor');
+        $customd->setAttribute('protocolSupportEnumeration', 'urn:oasis:names:tc:SAML:2.0:protocol');
+        $newline = new \DOMText("\n  ");
+        $pdpd->parentNode->insertBefore($customd, $pdpd->nextSibling);
+        $pdpd->parentNode->insertBefore($newline, $customd);
+        $entityDescriptor = EntityDescriptor::fromXML($this->document->documentElement);
+
+        $this->assertInstanceOf(EntityDescriptor::class, $entityDescriptor);
+        $this->assertEquals('urn:example:entity', $entityDescriptor->getEntityID());
+        $this->assertEquals('_5A3CHB081', $entityDescriptor->getID());
+        $this->assertEquals(1580895565, $entityDescriptor->getValidUntil());
+        $this->assertEquals('P2Y6M5DT12H35M30S', $entityDescriptor->getCacheDuration());
+
+        $roleDescriptors = $entityDescriptor->getRoleDescriptors();
+        $this->assertCount(5, $roleDescriptors);
+        $this->assertInstanceOf(IDPSSODescriptor::class, $roleDescriptors[0]);
+        $this->assertInstanceOf(AttributeAuthorityDescriptor::class, $roleDescriptors[1]);
+        $this->assertInstanceOf(AuthnAuthorityDescriptor::class, $roleDescriptors[2]);
+        $this->assertInstanceOf(PDPDescriptor::class, $roleDescriptors[3]);
+        $this->assertInstanceOf(UnknownRoleDescriptor::class, $roleDescriptors[4]);
+
+        $this->assertInstanceOf(Organization::class, $entityDescriptor->getOrganization());
+
+        $this->assertCount(3, $entityDescriptor->getContactPersons());
+        $this->assertInstanceOf(ContactPerson::class, $entityDescriptor->getContactPersons()[0]);
+        $this->assertInstanceOf(ContactPerson::class, $entityDescriptor->getContactPersons()[1]);
+        $this->assertInstanceOf(ContactPerson::class, $entityDescriptor->getContactPersons()[2]);
+
+        $this->assertCount(2, $entityDescriptor->getAdditionalMetadataLocations());
+        $this->assertInstanceOf(
+            AdditionalMetadataLocation::class,
+            $entityDescriptor->getAdditionalMetadataLocations()[0]
         );
-        $this->expectException(\Exception::class);
-        $this->expectExceptionMessage('Missing affiliationOwnerID on AffiliationDescriptor.');
-        EntityDescriptor::fromXML($document->documentElement);
+        $this->assertInstanceOf(
+            AdditionalMetadataLocation::class,
+            $entityDescriptor->getAdditionalMetadataLocations()[1]
+        );
+
+        $this->assertEquals(
+            $this->document->saveXML($this->document->documentElement),
+            strval($entityDescriptor)
+        );
     }
 
-
     /**
-     * @return void
+     * Test that creating an EntityDescriptor from XML fails if no entityID is provided.
      */
-    public function testMissingEntityId(): void
+    public function testUnmarshallingWithoutEntityId(): void
     {
         $document = DOMDocumentFactory::fromString(<<<XML
 <EntityDescriptor xmlns="urn:oasis:names:tc:SAML:2.0:metadata">
@@ -68,32 +236,12 @@ XML
 
 
     /**
-     * @return void
+     * Test that creating an EntityDescriptor from XML fails if no RoleDescriptors are found.
      */
-    public function testMissingAffiliateMember(): void
+    public function testUnmarshallingWithoutDescriptors(): void
     {
-        $document = DOMDocumentFactory::fromString(<<<XML
-<EntityDescriptor entityID="theEntityID" xmlns="urn:oasis:names:tc:SAML:2.0:metadata">
-    <AffiliationDescriptor affiliationOwnerID="asdf">
-    </AffiliationDescriptor>
-</EntityDescriptor>
-XML
-        );
-        $this->expectException(\Exception::class);
-        $this->expectExceptionMessage('List of affiliated members must not be empty.');
-        EntityDescriptor::fromXML($document->documentElement);
-    }
-
-
-    /**
-     * @return void
-     */
-    public function testMissingDescriptor(): void
-    {
-        $document = DOMDocumentFactory::fromString(<<<XML
-<EntityDescriptor entityID="theEntityID" xmlns="urn:oasis:names:tc:SAML:2.0:metadata">
-</EntityDescriptor>
-XML
+        $document = DOMDocumentFactory::fromString(
+            '<EntityDescriptor entityID="theEntityID" xmlns="urn:oasis:names:tc:SAML:2.0:metadata"></EntityDescriptor>'
         );
         $this->expectException(\Exception::class);
         $this->expectExceptionMessage(
@@ -104,9 +252,9 @@ XML
 
 
     /**
-     * @return void
+     * Test that creating an EntityDescriptor from XML fails with an invalid validUntil attribute.
      */
-    public function testInvalidValidUntil(): void
+    public function testUnmarshallingWithInvalidValidUntil(): void
     {
         $document = DOMDocumentFactory::fromString(<<<XML
 <EntityDescriptor validUntil="asdf" entityID="theEntityID" xmlns="urn:oasis:names:tc:SAML:2.0:metadata">
@@ -123,9 +271,9 @@ XML
 
 
     /**
-     * @return void
+     * Test that creating an EntityDescriptor from XML works when an AffiliationDescriptor is used.
      */
-    public function testUnmarshalling(): void
+    public function testUnmarshallingWithAffiliationDescriptor(): void
     {
         $document = DOMDocumentFactory::fromString(<<<XML
 <EntityDescriptor entityID="theEntityID" xmlns="urn:oasis:names:tc:SAML:2.0:metadata" validUntil="2010-02-01T12:34:56Z">
@@ -137,30 +285,38 @@ XML
 XML
         );
         $entityDescriptor = EntityDescriptor::fromXML($document->documentElement);
-
-        $this->assertTrue($entityDescriptor instanceof EntityDescriptor);
-        $this->assertEquals('theEntityID', $entityDescriptor->getEntityID());
-
-        $roleDescriptor = $entityDescriptor->getRoleDescriptor();
-        $this->assertTrue(empty($roleDescriptor));
-
-        $affiliationDescriptor = $entityDescriptor->getAffiliationDescriptor();
-        $this->assertTrue($affiliationDescriptor instanceof AffiliationDescriptor);
-        $this->assertEquals('asdf', $affiliationDescriptor->getAffiliationOwnerID());
-        $this->assertEquals('theAffiliationDescriptorID', $affiliationDescriptor->getID());
-        $this->assertEquals(1265027696, $affiliationDescriptor->getValidUntil());
-        $this->assertEquals('PT9000S', $affiliationDescriptor->getCacheDuration());
-        $affiliateMembers = $affiliationDescriptor->getAffiliateMembers();
-        $this->assertCount(2, $affiliateMembers);
-        $this->assertEquals('test', $affiliateMembers[0]);
-        $this->assertEquals('test2', $affiliateMembers[1]);
+        $this->assertInstanceOf(EntityDescriptor::class, $entityDescriptor);
+        $this->assertEquals([], $entityDescriptor->getRoleDescriptors());
+        $this->assertInstanceOf(AffiliationDescriptor::class, $entityDescriptor->getAffiliationDescriptor());
     }
 
 
     /**
-     * @return void
+     * Test that creating an EntityDescriptor from XML fails when multiple AffiliationDescriptors are found.
      */
-    public function testUnmarshalling2(): void
+    public function testUnmarshallingWithSeveralAffiliationDescriptors(): void
+    {
+        $document = DOMDocumentFactory::fromString(<<<XML
+<EntityDescriptor entityID="theEntityID" xmlns="urn:oasis:names:tc:SAML:2.0:metadata" validUntil="2010-02-01T12:34:56Z">
+    <AffiliationDescriptor affiliationOwnerID="asdf" ID="theAffiliationDescriptorID1" validUntil="2010-02-01T12:34:56Z" cacheDuration="PT9000S" >
+        <AffiliateMember>test</AffiliateMember>
+    </AffiliationDescriptor>
+    <AffiliationDescriptor affiliationOwnerID="asdf" ID="theAffiliationDescriptorID2" validUntil="2010-02-01T12:34:56Z" cacheDuration="PT9000S" >
+        <AffiliateMember>test2</AffiliateMember>
+    </AffiliationDescriptor>
+</EntityDescriptor>
+XML
+        );
+        $this->expectException(\InvalidArgumentException::class);
+        $this->expectExceptionMessage('More than one AffiliationDescriptor in the entity.');
+        EntityDescriptor::fromXML($document->documentElement);
+    }
+
+
+    /**
+     * Test that creating an EntityDescriptor from XML fails if multiple Organization objects are included.
+     */
+    public function testUnmarshallingWithMultipleOrganizations(): void
     {
         $document = DOMDocumentFactory::fromString(<<<XML
 <EntityDescriptor entityID="theEntityID" ID="theID" validUntil="2010-01-01T12:34:56Z" cacheDuration="PT5000S" xmlns="urn:oasis:names:tc:SAML:2.0:metadata">
@@ -168,178 +324,50 @@ XML
         <AttributeService Binding="urn:oasis:names:tc:SAML:2.0:bindings:SOAP" Location="https://idp.example.org/AttributeService" />
     </AttributeAuthorityDescriptor>
     <Organization>
-        <OrganizationName xml:lang="no">orgNameTest (no)</OrganizationName>
         <OrganizationName xml:lang="en">orgNameTest (en)</OrganizationName>
-        <OrganizationDisplayName xml:lang="no">orgDispNameTest (no)</OrganizationDisplayName>
         <OrganizationDisplayName xml:lang="en">orgDispNameTest (en)</OrganizationDisplayName>
+        <OrganizationURL xml:lang="en">orgURL (en)</OrganizationURL>
+    </Organization>
+    <Organization>
+        <OrganizationName xml:lang="no">orgNameTest (no)</OrganizationName>
+        <OrganizationDisplayName xml:lang="no">orgDispNameTest (no)</OrganizationDisplayName>
         <OrganizationURL xml:lang="no">orgURL (no)</OrganizationURL>
+    </Organization>
+</EntityDescriptor>
+XML
+        );
+        $this->expectException(\InvalidArgumentException::class);
+        $this->expectExceptionMessage('More than one Organization in the entity.');
+        EntityDescriptor::fromXML($document->documentElement);
+    }
+
+
+    /**
+     * Test that creating an EntityDescriptor from XML fails if both a RoleDescriptor and an AffiliationDescriptor
+     * are included.
+     */
+    public function testUnmarshallingWithRoleandAffiliationDescriptors(): void
+    {
+        $document = DOMDocumentFactory::fromString(<<<XML
+<EntityDescriptor entityID="theEntityID" ID="theID" validUntil="2010-01-01T12:34:56Z" cacheDuration="PT5000S" xmlns="urn:oasis:names:tc:SAML:2.0:metadata">
+    <AttributeAuthorityDescriptor protocolSupportEnumeration="urn:oasis:names:tc:SAML:2.0:protocol">
+        <AttributeService Binding="urn:oasis:names:tc:SAML:2.0:bindings:SOAP" Location="https://idp.example.org/AttributeService" />
+    </AttributeAuthorityDescriptor>
+    <AffiliationDescriptor affiliationOwnerID="asdf" ID="theAffiliationDescriptorID" validUntil="2010-02-01T12:34:56Z" cacheDuration="PT9000S" >
+        <AffiliateMember>test</AffiliateMember>
+    </AffiliationDescriptor>
+    <Organization>
+        <OrganizationName xml:lang="en">orgNameTest (en)</OrganizationName>
+        <OrganizationDisplayName xml:lang="en">orgDispNameTest (en)</OrganizationDisplayName>
         <OrganizationURL xml:lang="en">orgURL (en)</OrganizationURL>
     </Organization>
 </EntityDescriptor>
 XML
         );
-        $entityDescriptor = EntityDescriptor::fromXML($document->documentElement);
-
-        $this->assertTrue($entityDescriptor instanceof EntityDescriptor);
-        $this->assertEquals('theEntityID', $entityDescriptor->getEntityID());
-        $this->assertEquals('theID', $entityDescriptor->getID());
-        $this->assertEquals(1262349296, $entityDescriptor->getValidUntil());
-        $this->assertEquals('PT5000S', $entityDescriptor->getCacheDuration());
-
-        $roleDescriptor = $entityDescriptor->getRoleDescriptor();
-        $this->assertCount(1, $roleDescriptor);
-        $this->assertTrue($roleDescriptor[0] instanceof AttributeAuthorityDescriptor);
-
-        $o = $entityDescriptor->getOrganization();
-        $this->assertTrue($o instanceof Organization);
-        $this->assertCount(2, $o->getOrganizationName());
-        $this->assertInstanceOf(OrganizationName::class, $o->getOrganizationName()[0]);
-        $this->assertEquals('orgNameTest (no)', $o->getOrganizationName()[0]->getValue());
-        $this->assertInstanceOf(OrganizationName::class, $o->getOrganizationName()[1]);
-        $this->assertEquals('orgNameTest (en)', $o->getOrganizationName()[1]->getValue());
-        $this->assertCount(2, $o->getOrganizationDisplayName());
-        $this->assertInstanceOf(OrganizationDisplayName::class, $o->getOrganizationDisplayName()[0]);
-        $this->assertEquals('orgDispNameTest (no)', $o->getOrganizationDisplayName()[0]->getValue());
-        $this->assertInstanceOf(OrganizationDisplayName::class, $o->getOrganizationDisplayName()[1]);
-        $this->assertEquals('orgDispNameTest (en)', $o->getOrganizationDisplayName()[1]->getValue());
-        $this->assertCount(2, $o->getOrganizationURL());
-        $this->assertEquals('orgURL (no)', $o->getOrganizationURL()["no"]);
-        $this->assertEquals('orgURL (en)', $o->getOrganizationURL()["en"]);
-    }
-
-    /**
-     * @return void
-     */
-    public function testUnmarshalling3(): void
-    {
-        $document = DOMDocumentFactory::fromString(<<<XML
-<md:EntityDescriptor xmlns:md="urn:oasis:names:tc:SAML:2.0:metadata" ID="EBc60ffd0dd599c012758d159a8b8495d1aba5cdf6" entityID="https://engine.test.example.edu/authentication/idp/metadata" validUntil="2020-02-05T15:01:31Z">
-  <md:IDPSSODescriptor protocolSupportEnumeration="urn:oasis:names:tc:SAML:2.0:protocol">
-    <md:Extensions>
-      <mdui:UIInfo xmlns:mdui="urn:oasis:names:tc:SAML:metadata:ui">
-        <mdui:DisplayName xml:lang="nl">Example TEST EB nl</mdui:DisplayName>
-        <mdui:DisplayName xml:lang="en">Example TEST EB en</mdui:DisplayName>
-        <mdui:Description xml:lang="nl">Example TEST</mdui:Description>
-        <mdui:Description xml:lang="en">Example TEST</mdui:Description>
-        <mdui:Logo height="96" width="96">https://engine.test.example.edu/images/logo.png</mdui:Logo>
-      </mdui:UIInfo>
-    </md:Extensions>
-    <md:KeyDescriptor use="signing">
-      <ds:KeyInfo xmlns:ds="http://www.w3.org/2000/09/xmldsig#">
-        <ds:X509Data>
-          <ds:X509Certificate>MIIDXzCCAkegAwIBAgIJAO/SRRMh1qu5MA0GCSqGSIb3DQEBBQUAMEYxDzANBgNVBAMMBkVuZ2luZTERMA8GA1UECwwIU2VydmljZXMxEzARBgNVBAoMCk9wZW5Db25leHQxCzAJBgNVBAYTAk5MMB4XDTE0MTAyMzA4MDIwMloXDTI0MTAyMjA4MDIwMlowRjEPMA0GA1UEAwwGRW5naW5lMREwDwYDVQQLDAhTZXJ2aWNlczETMBEGA1UECgwKT3BlbkNvbmV4dDELMAkGA1UEBhMCTkwwggEiMA0GCSqGSIb3DQEBAQUAA4IBDwAwggEKAoIBAQC8k23xFL7q2I13NgI0qpv7idgfQv1VyEoANY1+ot1Mkt30dDjGeUPd5A+KqDZpH+NA/oOrgG9dXSyrx4vAhTqomJ1RlMnoohTj3fAQC5+eMP5mlmzzzvme8dY4wOOq1ynGtpVDqqmBz1gzhzin0++0XOuRideo3/H6jZX0QSOwVe/KH7RJjW08+ECHLVZYPhFdLVTkQhGl0sox1HaV2O+CQhokrJzSjquf/WOAmv3vNWVZbvf2n9ICPSvY5A0Q4aXLScvx8qxJ3FrY9xCd07sGdGV2BTog+LEgBDvrnM/E9Wy7HQE8c/dIQ9WguV1kk1ApVYeSOrs9XnURW4zFP/sRAgMBAAGjUDBOMB0GA1UdDgQWBBSgDb9JMhj9nS9IgLn5Z63cpI/CLjAfBgNVHSMEGDAWgBSgDb9JMhj9nS9IgLn5Z63cpI/CLjAMBgNVHRMEBTADAQH/MA0GCSqGSIb3DQEBBQUAA4IBAQBZO+zUTIJnIBmGG0s/8AQhkeJixx9ow413uZSMhPYFMkj+Zxoxl9g1y63BVzchxXKjVqOkV2gMGCw1n5vDzsPTZRbzuXkbTk9fWp9+CYOc+hcOT29xGWNwORF+p7yGK4BRQx2VemQE9IoAo6h7Mcz83k3KXzAyOWvfpI9HNM3K/my7+cO3TY3ua/gzkS70pqANJZHZXcKmnbzsimIL7N1ro9pk2M9XChHqrFwVXBESwpc3Ff3AsARGQsMO4SjywuwJ2Wr7HeWp1YHFucpYekNuE9UMfZE1Zd0f/TAcv8nr7c4rdt1vRwk8lPXZ8LaAtnfbAi6sC9gIfB6hHmFukEyC</ds:X509Certificate>
-        </ds:X509Data>
-      </ds:KeyInfo>
-    </md:KeyDescriptor>
-    <md:NameIDFormat>urn:oasis:names:tc:SAML:2.0:nameid-format:persistent</md:NameIDFormat>
-    <md:NameIDFormat>urn:oasis:names:tc:SAML:2.0:nameid-format:transient</md:NameIDFormat>
-    <md:NameIDFormat>urn:oasis:names:tc:SAML:1.1:nameid-format:unspecified</md:NameIDFormat>
-    <md:SingleSignOnService Binding="urn:oasis:names:tc:SAML:2.0:bindings:HTTP-Redirect" Location="https://engine.test.example.edu/authentication/idp/single-sign-on"/>
-  </md:IDPSSODescriptor>
-  <md:Organization>
-    <md:OrganizationName xml:lang="nl">Example TEST nl</md:OrganizationName>
-    <md:OrganizationName xml:lang="en">Example TEST en</md:OrganizationName>
-    <md:OrganizationDisplayName xml:lang="nl">Example TEST org nl</md:OrganizationDisplayName>
-    <md:OrganizationDisplayName xml:lang="en">Example TEST org en</md:OrganizationDisplayName>
-    <md:OrganizationURL xml:lang="nl">https://support.example.edu/</md:OrganizationURL>
-    <md:OrganizationURL xml:lang="en">https://support.example.edu/en</md:OrganizationURL>
-  </md:Organization>
-  <md:ContactPerson contactType="support">
-    <md:GivenName>Example TEST help</md:GivenName>
-    <md:SurName>desk</md:SurName>
-    <md:EmailAddress>mailto:help@example.edu</md:EmailAddress>
-  </md:ContactPerson>
-  <md:ContactPerson contactType="technical">
-    <md:GivenName>Example Tech</md:GivenName>
-    <md:SurName>BOFH</md:SurName>
-    <md:EmailAddress>mailto:root@example.edu</md:EmailAddress>
-  </md:ContactPerson>
-  <md:ContactPerson contactType="administrative">
-    <md:GivenName>Example admin</md:GivenName>
-    <md:SurName>admin</md:SurName>
-    <md:EmailAddress>mailto:info@example.edu</md:EmailAddress>
-  </md:ContactPerson>
-  <md:AdditionalMetadataLocation namespace="somemd">https://example.edu/some/metadata.xml</md:AdditionalMetadataLocation>
-  <md:AdditionalMetadataLocation namespace="mymd">https://example.edu/more/metadata.xml</md:AdditionalMetadataLocation>
-</md:EntityDescriptor>
-XML
+        $this->expectException(\InvalidArgumentException::class);
+        $this->expectExceptionMessage(
+            'AffiliationDescriptor cannot be combined with other RoleDescriptor elements in EntityDescriptor.'
         );
-        $entityDescriptor = EntityDescriptor::fromXML($document->documentElement);
-
-        $this->assertTrue($entityDescriptor instanceof EntityDescriptor);
-        $this->assertEquals('https://engine.test.example.edu/authentication/idp/metadata', $entityDescriptor->getEntityID());
-        $this->assertEquals('EBc60ffd0dd599c012758d159a8b8495d1aba5cdf6', $entityDescriptor->getID());
-        $this->assertEquals(1580914891, $entityDescriptor->getValidUntil());
-        $this->assertNull($entityDescriptor->getCacheDuration());
-
-        $roleDescriptor = $entityDescriptor->getRoleDescriptor();
-        $this->assertCount(1, $roleDescriptor);
-        $this->assertTrue($roleDescriptor[0] instanceof IDPSSODescriptor);
-
-        $o = $entityDescriptor->getOrganization();
-        $this->assertTrue($o instanceof Organization);
-        $this->assertCount(2, $o->getOrganizationName());
-        $this->assertCount(2, $o->getOrganizationDisplayName());
-        $this->assertInstanceOf(OrganizationDisplayName::class, $o->getOrganizationDisplayName()[0]);
-        $this->assertEquals('Example TEST org nl', $o->getOrganizationDisplayName()[0]->getValue());
-        $this->assertInstanceOf(OrganizationDisplayName::class, $o->getOrganizationDisplayName()[1]);
-        $this->assertEquals('Example TEST org en', $o->getOrganizationDisplayName()[1]->getValue());
-        $this->assertCount(2, $o->getOrganizationURL());
-        $this->assertEquals('https://support.example.edu/', $o->getOrganizationURL()["nl"]);
-        $this->assertEquals('https://support.example.edu/en', $o->getOrganizationURL()["en"]);
-
-
-        $cp = $entityDescriptor->getContactPerson();
-
-        $this->assertCount(3, $cp);
-
-        $this->assertInstanceOf(ContactPerson::class, $cp[0]);
-        $this->assertEquals("desk", $cp[0]->getSurName());
-        $this->assertEquals("root@example.edu", $cp[1]->getEmailAddresses()[0]);
-        $this->assertEquals("administrative", $cp[2]->getContactType());
-
-        $aml = $entityDescriptor->getAdditionalMetadataLocation();
-        $this->assertCount(2, $aml);
-        $this->assertInstanceOf(AdditionalMetadataLocation::class, $aml[1]);
-        $this->assertEquals("mymd", $aml[1]->getNamespace());
-        $this->assertEquals("https://example.edu/more/metadata.xml", $aml[1]->getLocation());
-    }
-
-    /**
-     * @return void
-     */
-    public function testMarshallingBasic(): void
-    {
-        $entityid = "urn:example:entity";
-        $id = "_5A3CHB081";
-        $now = time();
-        $duration = "P2Y6M5DT12H35M30S";
-
-        $idpssod = new IDPSSODescriptor(
-            [
-                new SingleSignOnService(
-                    'urn:oasis:names:tc:SAML:2.0:bindings:HTTP-Redirect',
-                    'https://IdentityProvider.com/SAML/SSO/Browser'
-                ),
-                new SingleSignOnService(
-                    'urn:oasis:names:tc:SAML:2.0:bindings:HTTP-POST',
-                    'https://IdentityProvider.com/SAML/SSO/Browser'
-                )
-            ],
-            ['urn:oasis:names:tc:SAML:2.0:protocol'],
-            true);
-
-        $ed = new EntityDescriptor($entityid, $id, $now, $duration, null, [$idpssod]);
-
-        $element = $ed->toXML();
-
-        $this->assertEquals("md:EntityDescriptor", $element->tagName);
-        $this->assertEquals($entityid, $element->getAttribute("entityID"));
-        $this->assertEquals($id, $element->getAttribute("ID"));
-        $this->assertEquals(substr(gmdate('c', $now),0,19)."Z", $element->getAttribute("validUntil"));
-        $this->assertEquals($duration, $element->getAttribute("cacheDuration"));
-
-        $this->assertCount(1, $element->childNodes);
-        $this->assertEquals("md:IDPSSODescriptor", $element->childNodes[0]->tagName);
+        EntityDescriptor::fromXML($document->documentElement);
     }
 }
