@@ -224,6 +224,7 @@ final class EntityDescriptor extends AbstractMetadataDocument
      */
     protected function setEntityID(string $entityId): void
     {
+        Assert::notEmpty($entityId, 'The entityID attribute cannot be empty.');
         $this->entityID = $entityId;
     }
 
