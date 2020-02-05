@@ -34,17 +34,11 @@ final class KeyInfoTest extends \PHPUnit\Framework\TestCase
     public function setUp(): void
     {
         $ns = KeyInfo::NS;
-        $this->document = DOMDocumentFactory::fromString(<<<XML
-<ds:KeyInfo xmlns:ds="{$ns}" Id="abc123">
-  <ds:KeyName>testkey</ds:KeyName>
-  <ds:KeySomething>Some unknown tag within the ds-namespace</ds:KeySomething>
-  <some>Chunk</some>
-</ds:KeyInfo>
-XML
-        );
 
         $this->certificate = str_replace(
             [
+                '-----BEGIN CERTIFICATE-----',
+                '-----END CERTIFICATE-----',
                 '-----BEGIN RSA PUBLIC KEY-----',
                 '-----END RSA PUBLIC KEY-----',
                 "\r\n",
@@ -53,10 +47,29 @@ XML
             [
                 '',
                 '',
+                '',
+                '',
                 "\n",
                 ''
             ],
             file_get_contents(self::FRAMEWORK . '/certificates/pem/selfsigned.example.org.crt')
+        );
+
+        $this->certData = openssl_x509_parse(
+            file_get_contents(self::FRAMEWORK . '/certificates/pem/selfsigned.example.org.crt')
+        );
+
+        $this->document = DOMDocumentFactory::fromString(<<<XML
+<ds:KeyInfo xmlns:ds="{$ns}" Id="abc123">
+  <ds:KeyName>testkey</ds:KeyName>
+  <ds:X509Data>
+    <ds:X509Certificate>{$this->certificate}</ds:X509Certificate>
+    <ds:X509SubjectName>{$this->certData['name']}</ds:X509SubjectName>
+  </ds:X509Data>
+  <ds:KeySomething>Some unknown tag within the ds-namespace</ds:KeySomething>
+  <some>Chunk</some>
+</ds:KeyInfo>
+XML
         );
     }
 
@@ -99,10 +112,11 @@ XML
         $this->assertEquals('abc123', $keyInfo->getId());
 
         $info = $keyInfo->getInfo();
-        $this->assertCount(3, $info);
+        $this->assertCount(4, $info);
         $this->assertInstanceOf(KeyName::class, $info[0]);
-        $this->assertInstanceOf(Chunk::class, $info[1]);
+        $this->assertInstanceOf(X509Data::class, $info[1]);
         $this->assertInstanceOf(Chunk::class, $info[2]);
+        $this->assertInstanceOf(Chunk::class, $info[3]);
     }
 
 
