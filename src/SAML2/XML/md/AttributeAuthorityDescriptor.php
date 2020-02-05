@@ -260,11 +260,11 @@ final class AttributeAuthorityDescriptor extends AbstractRoleDescriptor
     /**
      * Initialize an IDPSSODescriptor.
      *
-     * @param \DOMElement|null $xml The XML element we should load.
+     * @param \DOMElement $xml The XML element we should load.
      * @return self
      * @throws \InvalidArgumentException if the qualified name of the supplied element is wrong
      */
-    public static function fromXML(DOMElement $xml = null): object
+    public static function fromXML(DOMElement $xml): object
     {
         Assert::same($xml->localName, 'AttributeAuthorityDescriptor');
         Assert::same($xml->namespaceURI, AttributeAuthorityDescriptor::NS);

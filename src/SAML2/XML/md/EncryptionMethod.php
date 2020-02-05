@@ -83,6 +83,7 @@ class EncryptionMethod extends AbstractMdElement
                 }
             }
 
+            /** @var \DOMElement $node */
             $children[] = Chunk::fromXML($node);
         }
 

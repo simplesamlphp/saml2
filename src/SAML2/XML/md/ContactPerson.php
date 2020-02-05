@@ -20,8 +20,10 @@ use Webmozart\Assert\Assert;
  */
 final class ContactPerson extends AbstractMdElement
 {
-    use ExtendableAttributesTrait;
     use ExtendableElementTrait;
+    use ExtendableAttributesTrait {
+        ExtendableAttributesTrait::setAttributesNS as setAttributesNSConflict;
+    }
 
     /**
      * The contact type.
@@ -76,7 +78,7 @@ final class ContactPerson extends AbstractMdElement
      * @param \SAML2\XML\md\Extensions|null  $extensions
      * @param string[]                       $email
      * @param string[]                       $telephone
-     * @param string[]                       $namespacedAttributes
+     * @param \DOMAttr[]                     $namespacedAttributes
      */
     public function __construct(
         string $contactType,

@@ -26,14 +26,14 @@ abstract class AbstractSSODescriptor extends AbstractRoleDescriptor
     /**
      * List of SingleLogoutService endpoints.
      *
-     * @var \SAML2\XML\md\SingleLogoutService[]
+     * @var \SAML2\XML\md\AbstractEndpointType[]
      */
     protected $sloServiceEndpoints = [];
 
     /**
      * List of ManageNameIDService endpoints.
      *
-     * @var \SAML2\XML\md\ManageNameIDService[]
+     * @var \SAML2\XML\md\AbstractEndpointType[]
      */
     protected $manageNameIDServiceEndpoints = [];
 
@@ -61,11 +61,11 @@ abstract class AbstractSSODescriptor extends AbstractRoleDescriptor
      * @param \SAML2\XML\md\Organization|null $organization The organization running this entity. Defaults to null.
      * @param \SAML2\XML\md\ContactPerson[] $contacts An array of contacts for this entity.
      *   Defaults to an empty array.
-     * @param \SAML2\XML\md\ArtifactResolutionService[] $artifactResolutionService An array of
+     * @param \SAML2\XML\md\AbstractIndexedEndpointType[] $artifactResolutionService An array of
      *   ArtifactResolutionEndpoint. Defaults to an empty array.
-     * @param \SAML2\XML\md\SingleLogoutService[] $singleLogoutService An array of SingleLogoutEndpoint.
+     * @param \SAML2\XML\md\AbstractEndpointType[] $singleLogoutService An array of SingleLogoutEndpoint.
      *   Defaults to an empty array.
-     * @param \SAML2\XML\md\ManageNameIDService[] $manageNameIDService An array of ManageNameIDService.
+     * @param \SAML2\XML\md\AbstractEndpointType[] $manageNameIDService An array of ManageNameIDService.
      *   Defaults to an empty array.
      * @param string[] $nameIDFormat An array of supported NameID formats. Defaults to an empty array.
      */
@@ -106,7 +106,7 @@ abstract class AbstractSSODescriptor extends AbstractRoleDescriptor
     /**
      * Collect the value of the ArtifactResolutionService-property
      *
-     * @return \SAML2\XML\md\ArtifactResolutionService[]
+     * @return \SAML2\XML\md\AbstractIndexedEndpointType[]
      */
     public function getArtifactResolutionServices(): array
     {
@@ -117,7 +117,7 @@ abstract class AbstractSSODescriptor extends AbstractRoleDescriptor
     /**
      * Set the value of the ArtifactResolutionService-property
      *
-     * @param \SAML2\XML\md\ArtifactResolutionService[] $artifactResolutionServices
+     * @param \SAML2\XML\md\AbstractIndexedEndpointType[] $artifactResolutionServices
      * @return void
      * @throws \InvalidArgumentException
      */
@@ -135,7 +135,7 @@ abstract class AbstractSSODescriptor extends AbstractRoleDescriptor
     /**
      * Collect the value of the SingleLogoutService-property
      *
-     * @return \SAML2\XML\md\SingleLogoutService[]
+     * @return \SAML2\XML\md\AbstractEndpointType[]
      */
     public function getSingleLogoutServices(): array
     {
@@ -146,7 +146,7 @@ abstract class AbstractSSODescriptor extends AbstractRoleDescriptor
     /**
      * Set the value of the SingleLogoutService-property
      *
-     * @param \SAML2\XML\md\SingleLogoutService[] $singleLogoutServices
+     * @param \SAML2\XML\md\AbstractEndpointType[] $singleLogoutServices
      * @throws \InvalidArgumentException if the qualified name of the supplied element is wrong
      */
     protected function setSingleLogoutServices(array $singleLogoutServices): void
@@ -163,7 +163,7 @@ abstract class AbstractSSODescriptor extends AbstractRoleDescriptor
     /**
      * Collect the value of the ManageNameIDService-property
      *
-     * @return \SAML2\XML\md\ManageNameIDService[]
+     * @return \SAML2\XML\md\AbstractEndpointType[]
      */
     public function getManageNameIDServices(): array
     {
@@ -174,7 +174,7 @@ abstract class AbstractSSODescriptor extends AbstractRoleDescriptor
     /**
      * Set the value of the ManageNameIDService-property
      *
-     * @param \SAML2\XML\md\ManageNameIDService[] $manageNameIDServices
+     * @param \SAML2\XML\md\AbstractEndpointType[] $manageNameIDServices
      * @throws \InvalidArgumentException if the qualified name of the supplied element is wrong
      */
     protected function setManageNameIDServices(array $manageNameIDServices): void
@@ -214,7 +214,7 @@ abstract class AbstractSSODescriptor extends AbstractRoleDescriptor
     /**
      * Add this SSODescriptorType to an EntityDescriptor.
      *
-     * @param  \DOMElement $parent The EntityDescriptor we should append this SSODescriptorType to.
+     * @param  \DOMElement|null $parent The EntityDescriptor we should append this SSODescriptorType to.
      * @return \DOMElement The generated SSODescriptor DOMElement.
      */
     public function toXML(DOMElement $parent = null): DOMElement

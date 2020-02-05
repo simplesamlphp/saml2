@@ -48,7 +48,7 @@ trait IndexedElementTrait
      */
     protected function setIndex(int $index): void
     {
-        Assert::natural($index, '\'index\' must be a natural number.');
+        Assert::greaterThanEq($index, 0, '\'index\' must be a natural number.');
         $this->index = $index;
     }
 

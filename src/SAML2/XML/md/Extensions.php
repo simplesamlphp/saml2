@@ -112,7 +112,7 @@ final class Extensions extends AbstractMdElement
         Assert::eq(
             $xml->namespaceURI,
             self::NS,
-            'Unknown namespace \'' . $xml->namespaceURI . '\' for Extensions element.'
+            'Unknown namespace \'' . strval($xml->namespaceURI) . '\' for Extensions element.'
         );
         Assert::eq(
             $xml->localName,
