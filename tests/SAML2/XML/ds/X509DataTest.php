@@ -67,6 +67,7 @@ final class X509DataTest extends \PHPUnit\Framework\TestCase
   <ds:X509UnknownTag>somevalue</ds:X509UnknownTag>
   <ds:X509Certificate>{$this->certificate}</ds:X509Certificate>
   <ds:X509SubjectName>{$this->certData['name']}</ds:X509SubjectName>
+  <some>Chunk</some>
 </ds:X509Data>
 XML
         );
@@ -82,7 +83,8 @@ XML
             [
                 new Chunk(DOMDocumentFactory::fromString('<ds:X509UnknownTag>somevalue</ds:X509UnknownTag>')->documentElement),
                 new X509Certificate($this->certificate),
-                new X509SubjectName($this->certData['name'])
+                new X509SubjectName($this->certData['name']),
+                new Chunk(DOMDocumentFactory::fromString('<some>Chunk</some>')->documentElement)
             ]
         );
         $this->assertEquals($this->document->saveXML($this->document->documentElement), strval($X509data));
