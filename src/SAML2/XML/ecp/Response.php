@@ -74,13 +74,18 @@ final class Response extends AbstractEcpElement
         Assert::same($xml->localName, 'Response');
         Assert::same($xml->namespaceURI, Response::NS);
 
-        if (!$xml->hasAttributeNS(Constants::NS_SOAP, 'mustUnderstand')) {
-            throw new \Exception('Missing SOAP-ENV:mustUnderstand attribute in <ecp:Response>.');
-        } elseif (!$xml->hasAttributeNS(Constants::NS_SOAP, 'actor')) {
-            throw new \Exception('Missing SOAP-ENV:actor attribute in <ecp:Response>.');
-        } elseif (!$xml->hasAttribute('AssertionConsumerServiceURL')) {
-            throw new \Exception('Missing AssertionConsumerServiceURL attribute in <ecp:Response>.');
-        }
+        Assert::true(
+            $xml->hasAttributeNS(Constants::NS_SOAP, 'mustUnderstand'),
+            'Missing SOAP-ENV:mustUnderstand attribute in <ecp:Response>.'
+        );
+        Assert::true(
+            $xml->hasAttributeNS(Constants::NS_SOAP, 'actor'),
+            'Missing SOAP-ENV:actor attribute in <ecp:Response>.'
+        );
+        Assert::true(
+            $xml->hasAttribute('AssertionConsumerServiceURL'),
+            'Missing AssertionConsumerServiceURL attribute in <ecp:Response>.'
+        );
 
         $mustUnderstand = $xml->getAttributeNS(Constants::NS_SOAP, 'mustUnderstand');
         $actor = $xml->getAttributeNS(Constants::NS_SOAP, 'actor');
