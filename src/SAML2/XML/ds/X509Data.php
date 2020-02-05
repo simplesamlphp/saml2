@@ -64,22 +64,6 @@ final class X509Data extends AbstractDsElement
 
 
     /**
-     * Add the value to the data-property
-     *
-     * @param \SAML2\XML\Chunk|\SAML2\XML\ds\X509Certificate|\SAML2\XML\ds\X509SubjectName $data
-     * @return void
-     *
-     * @throws \InvalidArgumentException if assertions are false
-     */
-    public function addData($data): void
-    {
-        Assert::isInstanceOfAny($data, [Chunk::class, X509Certificate::class, X509SubjectName]);
-
-        $this->data[] = $data;
-    }
-
-
-    /**
      * Convert XML into a X509Data
      *
      * @param \DOMElement $xml The XML element we should load
