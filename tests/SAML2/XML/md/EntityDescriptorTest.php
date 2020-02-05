@@ -7,6 +7,8 @@ namespace SAML2\XML\md;
 use PHPUnit\Framework\TestCase;
 use SAML2\Constants;
 use SAML2\DOMDocumentFactory;
+use SAML2\Utils;
+use SAML2\XML\mdrpi\PublicationInfo;
 
 /**
  * Class \SAML2\XML\md\EntityDescriptorTest
@@ -21,6 +23,11 @@ class EntityDescriptorTest extends TestCase
         $mdns = Constants::NS_MD;
         $this->document = DOMDocumentFactory::fromString(<<<XML
 <md:EntityDescriptor xmlns:md="{$mdns}" entityID="urn:example:entity" ID="_5A3CHB081" validUntil="2020-02-05T09:39:25Z" cacheDuration="P2Y6M5DT12H35M30S">
+  <md:Extensions>
+    <mdrpi:PublicationInfo xmlns:mdrpi="urn:oasis:names:tc:SAML:metadata:rpi" publisher="http://publisher.ra/" creationInstant="2020-02-03T13:46:24Z">
+      <mdrpi:UsagePolicy xml:lang="en">http://publisher.ra/policy.txt</mdrpi:UsagePolicy>
+    </mdrpi:PublicationInfo>
+  </md:Extensions>
   <md:IDPSSODescriptor protocolSupportEnumeration="urn:oasis:names:tc:SAML:2.0:protocol">
     <md:SingleSignOnService Binding="urn:oasis:names:tc:SAML:2.0:bindings:HTTP-Redirect" Location="https://engine.test.example.edu/authentication/idp/single-sign-on"/>
   </md:IDPSSODescriptor>
@@ -117,13 +124,21 @@ XML
             new AdditionalMetadataLocation('somemd', 'https://example.edu/some/metadata.xml'),
             new AdditionalMetadataLocation('mymd', 'https://example.edu/more/metadata.xml'),
         ];
+        $extensions = new Extensions([
+            new PublicationInfo(
+                'http://publisher.ra/',
+                Utils::xsDateTimeToTimestamp('2020-02-03T13:46:24Z'),
+                null,
+                ['en' => 'http://publisher.ra/policy.txt']
+            )
+        ]);
 
         $ed = new EntityDescriptor(
             $entityid,
             $id,
             $now,
             $duration,
-            null,
+            $extensions,
             [
                 $idpssod,
                 $attrad,
@@ -192,6 +207,9 @@ XML
         $this->assertInstanceOf(AuthnAuthorityDescriptor::class, $roleDescriptors[2]);
         $this->assertInstanceOf(PDPDescriptor::class, $roleDescriptors[3]);
         $this->assertInstanceOf(UnknownRoleDescriptor::class, $roleDescriptors[4]);
+        /** @var \SAML2\XML\Chunk $chunk */
+        $chunk = $roleDescriptors[4]->getXML();
+        $this->assertEquals('CustomRoleDescriptor', $chunk->getLocalName());
 
         $this->assertInstanceOf(Organization::class, $entityDescriptor->getOrganization());
 
