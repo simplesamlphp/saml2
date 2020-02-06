@@ -63,13 +63,10 @@ XML
 
 
     /**
-     * @return void
+     * Test that creating an Issuer from scratch contains no attributes when format is "entity".
      */
     public function testMarshallingEntityFormat(): void
     {
-        $this->expectException(InvalidArgumentException::class);
-        $this->expectExceptionMessage('Illegal combination of attributes being used');
-
         $issuer = new Issuer(
             'TheIssuerValue',
             'TheNameQualifier',
@@ -77,6 +74,32 @@ XML
             Constants::NAMEID_ENTITY,
             'TheSPProvidedID'
         );
+        $this->assertEquals('TheIssuerValue', $issuer->getValue());
+        $this->assertEquals(Constants::NAMEID_ENTITY, $issuer->getFormat());
+        $this->assertNull($issuer->getNameQualifier());
+        $this->assertNull($issuer->getSPNameQualifier());
+        $this->assertNull($issuer->getSPProvidedID());
+    }
+
+
+    /**
+     * Test that creating an Issuer from scratch with no format defaults to "entity", and it therefore contains no other
+     * attributes.
+     */
+    public function testMarshallingNoFormat(): void
+    {
+        $issuer = new Issuer(
+            'TheIssuerValue',
+            'TheNameQualifier',
+            'TheSPNameQualifier',
+            null,
+            'TheSPProvidedID'
+        );
+        $this->assertEquals('TheIssuerValue', $issuer->getValue());
+        $this->assertNull($issuer->getFormat());
+        $this->assertNull($issuer->getNameQualifier());
+        $this->assertNull($issuer->getSPNameQualifier());
+        $this->assertNull($issuer->getSPProvidedID());
     }
 
 
@@ -96,17 +119,34 @@ XML
 
 
     /**
-     * @return void
+     * Test that creating an Issuer from XML contains no attributes when format is "entity".
      */
     public function testUnmarshallingEntityFormat(): void
     {
-        $document = $this->document->documentElement;
-        $document->setAttribute('Format', Constants::NAMEID_ENTITY);
-
-        $this->expectException(InvalidArgumentException::class);
-        $this->expectExceptionMessage('Illegal combination of attributes being used');
+        $this->document->documentElement->setAttribute('Format', Constants::NAMEID_ENTITY);
 
         $issuer = Issuer::fromXML($this->document->documentElement);
+        $this->assertEquals('TheIssuerValue', $issuer->getValue());
+        $this->assertEquals(Constants::NAMEID_ENTITY, $issuer->getFormat());
+        $this->assertNull($issuer->getNameQualifier());
+        $this->assertNull($issuer->getSPNameQualifier());
+        $this->assertNull($issuer->getSPProvidedID());
+    }
+
+
+    /**
+     * Test that creating an Issuer from XML contains no attributes when there's no format (defaults to "entity").
+     */
+    public function testUnmarshallingNoFormat(): void
+    {
+        $this->document->documentElement->removeAttribute('Format');
+
+        $issuer = Issuer::fromXML($this->document->documentElement);
+        $this->assertEquals('TheIssuerValue', $issuer->getValue());
+        $this->assertNull($issuer->getFormat());
+        $this->assertNull($issuer->getNameQualifier());
+        $this->assertNull($issuer->getSPNameQualifier());
+        $this->assertNull($issuer->getSPProvidedID());
     }
 
 
