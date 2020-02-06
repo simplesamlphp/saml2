@@ -4,6 +4,7 @@ declare(strict_types=1);
 
 namespace SAML2\XML\ds;
 
+use InvalidArgumentException;
 use RobRichards\XMLSecLibs\XMLSecurityDSig;
 use SAML2\DOMDocumentFactory;
 use SAML2\Utils;
@@ -14,8 +15,11 @@ use SAML2\Utils;
  * @author Tim van Dijen, <tvdijen@gmail.com>
  * @package simplesamlphp/saml2
  */
-class X509CertificateTest extends \PHPUnit\Framework\TestCase
+final class X509CertificateTest extends \PHPUnit\Framework\TestCase
 {
+    /** @var \DOMDocument */
+    private $document;
+
     /** @var string */
     private const FRAMEWORK = 'vendor/simplesamlphp/simplesamlphp-test-framework';
 
@@ -28,6 +32,8 @@ class X509CertificateTest extends \PHPUnit\Framework\TestCase
      */
     public function setUp(): void
     {
+        $ns = X509Certificate::NS;
+
         $this->certificate = str_replace(
             [
                 '-----BEGIN RSA PUBLIC KEY-----',
@@ -43,6 +49,11 @@ class X509CertificateTest extends \PHPUnit\Framework\TestCase
             ],
             file_get_contents(self::FRAMEWORK . '/certificates/pem/selfsigned.example.org.crt')
         );
+
+        $this->document = DOMDocumentFactory::fromString(<<<XML
+<ds:X509Certificate xmlns:ds="{$ns}">{$this->certificate}</ds:X509Certificate>
+XML
+        );
     }
 
 
@@ -53,16 +64,9 @@ class X509CertificateTest extends \PHPUnit\Framework\TestCase
     {
         $X509cert = new X509Certificate($this->certificate);
 
-        $document = DOMDocumentFactory::fromString('<root />');
-        $xml = $X509cert->toXML($document->firstChild);
+        $this->assertEquals($this->certificate, $X509cert->getCertificate());
 
-        $X509CertElements = Utils::xpQuery(
-            $xml,
-            '/root/*[local-name()=\'X509Certificate\' and namespace-uri()=\'' . X509Certificate::NS . '\']'
-        );
-        $this->assertCount(1, $X509CertElements);
-        $X509CertElement = $X509CertElements[0];
-        $this->assertEquals($this->certificate, $X509CertElement->textContent);
+        $this->assertEquals($this->document->saveXML($this->document->documentElement), strval($X509cert));
     }
 
 
@@ -71,11 +75,20 @@ class X509CertificateTest extends \PHPUnit\Framework\TestCase
      */
     public function testUnmarshalling(): void
     {
-        $document = DOMDocumentFactory::fromString(
-            '<ds:X509Certificate xmlns:ds="' . X509Certificate::NS . '">' . $this->certificate . '</ds:X509Certificate>'
-        );
+        $X509cert = X509Certificate::fromXML($this->document->documentElement);
 
-        $X509cert = X509Certificate::fromXML($document->firstChild);
         $this->assertEquals($this->certificate, $X509cert->getCertificate());
+    }
+
+
+    /**
+     * Test serialization / unserialization
+     */
+    public function testSerialization(): void
+    {
+        $this->assertEquals(
+            $this->document->saveXML($this->document->documentElement),
+            strval(unserialize(serialize(X509Certificate::fromXML($this->document->documentElement))))
+        );
     }
 }

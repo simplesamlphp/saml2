@@ -22,7 +22,7 @@ final class X509Data extends AbstractDsElement
      * Array with various elements describing this certificate.
      * Unknown elements will be represented by \SAML2\XML\Chunk.
      *
-     * @var (\SAML2\XML\Chunk|\SAML2\XML\ds\X509Certificate)[]
+     * @var (\SAML2\XML\Chunk|\SAML2\XML\ds\X509Certificate\SAML2\XML\ds\X509SubjectName)[]
      */
     protected $data = [];
 
@@ -30,7 +30,7 @@ final class X509Data extends AbstractDsElement
     /**
      * Initialize a X509Data.
      *
-     * @param (\SAML2\XML\Chunk|\SAML2\XML\ds\X509Certificate)[] $data
+     * @param (\SAML2\XML\Chunk|\SAML2\XML\ds\X509Certificate|\SAML2\XML\ds\X509SubjectName)[] $data
      */
     public function __construct(array $data)
     {
@@ -57,25 +57,9 @@ final class X509Data extends AbstractDsElement
      */
     private function setData(array $data): void
     {
-        Assert::allIsInstanceOfAny($data, [Chunk::class, X509Certificate::class]);
+        Assert::allIsInstanceOfAny($data, [Chunk::class, X509Certificate::class, X509SubjectName::class]);
 
         $this->data = $data;
-    }
-
-
-    /**
-     * Add the value to the data-property
-     *
-     * @param \SAML2\XML\Chunk|\SAML2\XML\ds\X509Certificate $data
-     * @return void
-     *
-     * @throws \InvalidArgumentException if assertions are false
-     */
-    public function addData($data): void
-    {
-        Assert::isInstanceOfAny($data, [Chunk::class, X509Certificate::class]);
-
-        $this->data[] = $data;
     }
 
 
@@ -106,6 +90,9 @@ final class X509Data extends AbstractDsElement
                 case 'X509Certificate':
                     $data[] = X509Certificate::fromXML($n);
                     break;
+                case 'X509SubjectName':
+                    $data[] = X509SubjectName::fromXML($n);
+                    break;
                 default:
                     $data[] = new Chunk($n);
                     break;
@@ -126,7 +113,7 @@ final class X509Data extends AbstractDsElement
     {
         $e = $this->instantiateParentElement($parent);
 
-        /** @var \SAML2\XML\Chunk|\SAML2\XML\ds\X509Certificate $n */
+        /** @var \SAML2\XML\Chunk|\SAML2\XML\ds\X509Certificate|\SAML2\XML\ds\X509SubjectName $n */
         foreach ($this->getData() as $n) {
             $n->toXML($e);
         }

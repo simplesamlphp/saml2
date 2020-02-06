@@ -88,31 +88,13 @@ final class KeyInfo extends AbstractDsElement
      */
     private function setInfo(array $info): void
     {
+        Assert::notEmpty($info, 'ds:KeyInfo cannot be empty');
         Assert::allIsInstanceOfAny(
             $info,
             [Chunk::class, KeyName::class, X509Data::class],
             'KeyInfo can only contain instances of KeyName, X509Data or Chunk.'
         );
         $this->info = $info;
-    }
-
-
-    /**
-     * Add the value to the info-property
-     *
-     * @param \SAML2\XML\Chunk|\SAML2\XML\ds\KeyName|\SAML2\XML\ds\X509Data $info
-     * @return void
-     *
-     * @throws \InvalidArgumentException if assertions are false
-     */
-    public function addInfo($info): void
-    {
-        Assert::isInstanceOfAny(
-            $info,
-            [Chunk::class, KeyName::class, X509Data::class],
-            'KeyInfo can only contain instances of KeyName, X509Data or Chunk.'
-        );
-        $this->info[] = $info;
     }
 
 

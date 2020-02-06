@@ -4,6 +4,7 @@ declare(strict_types=1);
 
 namespace SAML2\XML\ds;
 
+use InvalidArgumentException;
 use RobRichards\XMLSecLibs\XMLSecurityDSig;
 use SAML2\DOMDocumentFactory;
 use SAML2\Utils;
@@ -15,8 +16,11 @@ use SAML2\XML\Chunk;
  * @author Tim van Dijen, <tvdijen@gmail.com>
  * @package simplesamlphp/saml2
  */
-class X509DataTest extends \PHPUnit\Framework\TestCase
+final class X509DataTest extends \PHPUnit\Framework\TestCase
 {
+    /** @var \DOMDocument */
+    private $document;
+
     /** @var string */
     private const FRAMEWORK = 'vendor/simplesamlphp/simplesamlphp-test-framework';
 
@@ -32,14 +36,20 @@ class X509DataTest extends \PHPUnit\Framework\TestCase
      */
     public function setUp(): void
     {
+        $ns = X509Data::NS;
+
         $this->certificate = str_replace(
             [
+                '-----BEGIN CERTIFICATE-----',
+                '-----END CERTIFICATE-----',
                 '-----BEGIN RSA PUBLIC KEY-----',
                 '-----END RSA PUBLIC KEY-----',
                 "\r\n",
                 "\n",
             ],
             [
+                '',
+                '',
                 '',
                 '',
                 "\n",
@@ -51,6 +61,16 @@ class X509DataTest extends \PHPUnit\Framework\TestCase
         $this->certData = openssl_x509_parse(
             file_get_contents(self::FRAMEWORK . '/certificates/pem/selfsigned.example.org.crt')
         );
+
+        $this->document = DOMDocumentFactory::fromString(<<<XML
+<ds:X509Data xmlns:ds="{$ns}">
+  <ds:X509UnknownTag>somevalue</ds:X509UnknownTag>
+  <ds:X509Certificate>{$this->certificate}</ds:X509Certificate>
+  <ds:X509SubjectName>{$this->certData['name']}</ds:X509SubjectName>
+  <some>Chunk</some>
+</ds:X509Data>
+XML
+        );
     }
 
 
@@ -59,28 +79,23 @@ class X509DataTest extends \PHPUnit\Framework\TestCase
      */
     public function testMarshalling(): void
     {
-        $subject = DOMDocumentFactory::fromString(
-            '<ds:X509SubjectName xmlns:ds="' . X509Data::NS . '">' . $this->certData['name'] . '</ds:X509SubjectName>'
-        );
-
         $X509data = new X509Data(
             [
+                new Chunk(DOMDocumentFactory::fromString('<ds:X509UnknownTag>somevalue</ds:X509UnknownTag>')->documentElement),
                 new X509Certificate($this->certificate),
+                new X509SubjectName($this->certData['name']),
+                new Chunk(DOMDocumentFactory::fromString('<some>Chunk</some>')->documentElement)
             ]
         );
-        $X509data->addData(new Chunk($subject->firstChild));
 
-        $document = DOMDocumentFactory::fromString('<root />');
-        $xml = $X509data->toXML($document->firstChild);
+        $data = $X509data->getData();
 
-        $X509DataElements = Utils::xpQuery(
-            $xml,
-            '/root/*[local-name()=\'X509Data\' and namespace-uri()=\'' . X509Data::NS . '\']'
-        );
-        $this->assertCount(1, $X509DataElements);
-        $X509DataElement = $X509DataElements[0];
-        $this->assertEquals($this->certificate, $X509DataElement->childNodes[0]->textContent);
-        $this->assertEquals($this->certData['name'], $X509DataElement->childNodes[1]->textContent);
+        $this->assertInstanceOf(Chunk::class, $data[0]);
+        $this->assertInstanceOf(X509Certificate::class, $data[1]);
+        $this->assertInstanceOf(X509SubjectName::class, $data[2]);
+        $this->assertInstanceOf(Chunk::class, $data[3]);
+
+        $this->assertEquals($this->document->saveXML($this->document->documentElement), strval($X509data));
     }
 
 
@@ -89,14 +104,24 @@ class X509DataTest extends \PHPUnit\Framework\TestCase
      */
     public function testUnmarshalling(): void
     {
-        $document = DOMDocumentFactory::fromString(
-            '<ds:X509Data xmlns:ds="' . X509Data::NS . '">'
-                . '<ds:X509UnknownTag>somevalue</ds:X509UnknownTag>'
-                . '<ds:X509Certificate>' . $this->certificate . '</ds:X509Certificate>'
-                . '<some>Chunk</some></ds:X509Data>'
-        );
+        $X509data = X509Data::fromXML($this->document->documentElement);
 
-        $X509data = X509Data::fromXML($document->firstChild);
-        $this->assertEquals($this->certificate, $X509data->getData()[1]->getCertificate());
+        $data = $X509data->getData();
+        $this->assertInstanceOf(Chunk::class, $data[0]);
+        $this->assertInstanceOf(X509Certificate::class, $data[1]);
+        $this->assertInstanceOf(X509SubjectName::class, $data[2]);
+        $this->assertInstanceOf(Chunk::class, $data[3]);
+    }
+
+
+    /**
+     * Test serialization / unserialization
+     */
+    public function testSerialization(): void
+    {
+        $this->assertEquals(
+            $this->document->saveXML($this->document->documentElement),
+            strval(unserialize(serialize(X509Data::fromXML($this->document->documentElement))))
+        );
     }
 }
