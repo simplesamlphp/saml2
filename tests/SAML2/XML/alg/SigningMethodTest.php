@@ -38,6 +38,11 @@ XML
     public function testMarshalling(): void
     {
         $signingMethod = new SigningMethod('http://exampleAlgorithm', 1024, 4096);
+
+        $this->assertEquals('http://exampleAlgorithm', $signingMethod->getAlgorithm());
+        $this->assertEquals(1024, $signingMethod->getMinKeySize());
+        $this->assertEquals(4096, $signingMethod->getMaxKeySize());
+
         $this->assertEquals($this->document->saveXML($this->document->documentElement), strval($signingMethod));
     }
 

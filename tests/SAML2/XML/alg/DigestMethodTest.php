@@ -38,6 +38,9 @@ final class DigestMethodTest extends \PHPUnit\Framework\TestCase
     public function testMarshalling(): void
     {
         $digestMethod = new DigestMethod('http://exampleAlgorithm');
+
+        $this->assertEquals('http://exampleAlgorithm', $digestMethod->getAlgorithm());
+
         $this->assertEquals($this->document->saveXML($this->document->documentElement), strval($digestMethod));
     }
 
@@ -48,6 +51,7 @@ final class DigestMethodTest extends \PHPUnit\Framework\TestCase
     public function testUnmarshalling(): void
     {
         $digestMethod = DigestMethod::fromXML($this->document->documentElement);
+
         $this->assertEquals('http://exampleAlgorithm', $digestMethod->getAlgorithm());
     }
 
