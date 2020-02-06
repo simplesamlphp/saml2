@@ -10,11 +10,19 @@ use SAML2\DOMDocumentFactory;
 
 final class AuthnAuthorityDescriptorTest extends TestCase
 {
+    /** @var \SAML2\XML\md\AssertionIDRequestService */
     protected $aidrs;
+
+    /** @var \SAML2\XML\md\AuthnQueryService */
     protected $aqs;
+
+    /** @var \DOMDocument */
     protected $document;
 
 
+    /**
+     * @return void
+     */
     protected function setUp(): void
     {
         $mdns = Constants::NS_MD;

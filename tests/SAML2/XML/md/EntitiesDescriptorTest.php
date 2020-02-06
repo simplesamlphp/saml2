@@ -4,6 +4,7 @@ declare(strict_types=1);
 
 namespace SAML2\XML\md;
 
+use InvalidArgumentException;
 use PHPUnit\Framework\TestCase;
 use RobRichards\XMLSecLibs\XMLSecurityDSig;
 use SAML2\Constants;
@@ -16,16 +17,21 @@ use SAML2\XML\mdrpi\PublicationInfo;
  *
  * @package simplesamlphp/saml2
  */
-class EntitiesDescriptorTest extends TestCase
+final class EntitiesDescriptorTest extends TestCase
 {
+    /** @var \DOMDocument */
     protected $document;
 
 
+    /**
+     * @return void
+     */
     protected function setUp(): void
     {
         $mdns = Constants::NS_MD;
         $dsns = XMLSecurityDSig::XMLDSIGNS;
         $samlns = Constants::NS_SAML;
+
         $this->document = DOMDocumentFactory::fromString(<<<XML
 <md:EntitiesDescriptor xmlns:md="{$mdns}" Name="Federation">
   <md:Extensions>
@@ -172,7 +178,7 @@ XML
      */
     public function testMarshallingEmpty(): void
     {
-        $this->expectException(\InvalidArgumentException::class);
+        $this->expectException(InvalidArgumentException::class);
         $this->expectExceptionMessage(
             'At least one md:EntityDescriptor or md:EntitiesDescriptor element is required.'
         );
@@ -264,7 +270,7 @@ XML
         $entity = $this->document->documentElement->getElementsByTagNameNS(Constants::NS_MD, 'EntityDescriptor');
         $this->document->documentElement->removeChild($entity->item(0));
 
-        $this->expectException(\InvalidArgumentException::class);
+        $this->expectException(InvalidArgumentException::class);
         $this->expectExceptionMessage(
             'At least one md:EntityDescriptor or md:EntitiesDescriptor element is required.'
         );

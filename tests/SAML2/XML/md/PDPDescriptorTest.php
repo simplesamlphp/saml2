@@ -4,6 +4,7 @@ declare(strict_types=1);
 
 namespace SAML2\XML\md;
 
+use InvalidArgumentException;
 use PHPUnit\Framework\TestCase;
 use SAML2\Constants;
 use SAML2\DOMDocumentFactory;
@@ -13,13 +14,21 @@ use SAML2\DOMDocumentFactory;
  *
  * @package simplesamlphp/saml2
  */
-class PDPDescriptorTest extends TestCase
+final class PDPDescriptorTest extends TestCase
 {
+    /** @var \DOMDocument */
     protected $document;
+
+    /** @var \SAML2\XML\md\AuthzService */
     protected $authzService;
+
+    /** @var \SAML2\XML\md\AssertionIDRequestService */
     protected $assertionIDRequestService;
 
 
+    /**
+     * @return void
+     */
     protected function setUp(): void
     {
         $mdns = Constants::NS_MD;
@@ -88,7 +97,7 @@ XML
      */
     public function testMarshallingWithWrongAuthzService(): void
     {
-        $this->expectException(\InvalidArgumentException::class);
+        $this->expectException(InvalidArgumentException::class);
         $this->expectExceptionMessage('All md:AuthzService endpoints must be an instance of AuthzService.');
         new PDPDescriptor(
             [$this->authzService, $this->assertionIDRequestService],
@@ -102,7 +111,7 @@ XML
      */
     public function testMarshallingWithWrongAssertionIDRequestService(): void
     {
-        $this->expectException(\InvalidArgumentException::class);
+        $this->expectException(InvalidArgumentException::class);
         $this->expectExceptionMessage(
             'All md:AssertionIDRequestService endpoints must be an instance of AssertionIDRequestService.'
         );
@@ -119,7 +128,7 @@ XML
      */
     public function testMarshallingWithWrongNameIDFormat(): void
     {
-        $this->expectException(\InvalidArgumentException::class);
+        $this->expectException(InvalidArgumentException::class);
         $this->expectExceptionMessage('All NameIDFormat must be a non-empty string.');
         new PDPDescriptor(
             [$this->authzService],
@@ -175,7 +184,9 @@ XML
     public function testUnmarshallingWithoutAuthzServiceDescriptors(): void
     {
         $this->document->documentElement->removeChild($this->document->documentElement->firstChild->nextSibling);
-        $this->expectException(\InvalidArgumentException::class);
+
+        $this->expectException(InvalidArgumentException::class);
+
         $this->expectExceptionMessage('At least one md:AuthzService endpoint must be present.');
         PDPDescriptor::fromXML($this->document->documentElement);
     }

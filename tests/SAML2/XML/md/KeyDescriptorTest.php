@@ -4,6 +4,7 @@ declare(strict_types=1);
 
 namespace SAML2\XML\md;
 
+use InvalidArgumentException;
 use PHPUnit\Framework\TestCase;
 use SAML2\Constants;
 use SAML2\DOMDocumentFactory;
@@ -18,13 +19,18 @@ use SAML2\XML\ds\KeyName;
  */
 final class KeyDescriptorTest extends TestCase
 {
+    /** @var \DOMDocument */
     protected $document;
 
 
+    /**
+     * @return void
+     */
     protected function setUp(): void
     {
         $mdns = Constants::NS_MD;
         $dsns = AbstractDsElement::NS;
+
         $this->document = DOMDocumentFactory::fromString(<<<XML
 <md:KeyDescriptor xmlns:md="{$mdns}" use="signing">
   <ds:KeyInfo xmlns:ds="{$dsns}">
@@ -48,6 +54,7 @@ XML
             [new EncryptionMethod('http://www.w3.org/2001/04/xmlenc#rsa-1_5')]
         );
         $this->assertEquals('signing', $kd->getUse());
+
         $knfo = $kd->getKeyInfo();
         $this->assertInstanceOf(KeyInfo::class, $knfo);
         $this->assertCount(1, $knfo->getInfo());
@@ -55,6 +62,7 @@ XML
         $this->assertCount(1, $kd->getEncryptionMethods());
         $this->assertInstanceOf(EncryptionMethod::class, $kd->getEncryptionMethods()[0]);
         $this->assertEquals('http://www.w3.org/2001/04/xmlenc#rsa-1_5', $kd->getEncryptionMethods()[0]->getAlgorithm());
+
         $this->assertEquals(
             $this->document->saveXML($this->document->documentElement),
             strval($kd)
@@ -67,8 +75,9 @@ XML
      */
     public function testMarshallingWrongUse(): void
     {
-        $this->expectException(\InvalidArgumentException::class);
+        $this->expectException(InvalidArgumentException::class);
         $this->expectExceptionMessage('The "use" attribute of a KeyDescriptor can only be "encryption" or "signing".');
+
         new KeyDescriptor(
             new KeyInfo([new KeyName('IdentityProvider.com SSO Key')]),
             'wrong'
@@ -82,9 +91,11 @@ XML
     public function testMarshallingWithoutOptionalParameters(): void
     {
         $kd = new KeyDescriptor(new KeyInfo([new KeyName('IdentityProvider.com SSO Key')]));
+
         $this->assertNull($kd->getUse());
         $this->assertEmpty($kd->getEncryptionMethods());
         $this->assertEmpty($kd->getEncryptionMethods());
+
         $this->assertEquals(
             <<<XML
 <md:KeyDescriptor xmlns:md="urn:oasis:names:tc:SAML:2.0:metadata">
@@ -106,6 +117,7 @@ XML
     {
         $kd = KeyDescriptor::fromXML($this->document->documentElement);
         $this->assertEquals('signing', $kd->getUse());
+
         $knfo = $kd->getKeyInfo();
         $this->assertInstanceOf(KeyInfo::class, $knfo);
         $this->assertCount(1, $knfo->getInfo());
@@ -122,8 +134,10 @@ XML
     public function testUnmarshallingWithWrongUse(): void
     {
         $this->document->documentElement->setAttribute('use', 'wrong');
-        $this->expectException(\InvalidArgumentException::class);
+
+        $this->expectException(InvalidArgumentException::class);
         $this->expectExceptionMessage('The "use" attribute of a KeyDescriptor can only be "encryption" or "signing".');
+
         KeyDescriptor::fromXML($this->document->documentElement);
     }
 
@@ -141,6 +155,7 @@ XML
 </md:KeyDescriptor>
 XML
         );
+
         $kd = KeyDescriptor::fromXML($document->documentElement);
         $this->assertNull($kd->getUse());
         $this->assertIsArray($kd->getEncryptionMethods());

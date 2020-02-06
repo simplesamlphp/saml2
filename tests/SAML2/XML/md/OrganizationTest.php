@@ -17,9 +17,13 @@ use SAML2\XML\Chunk;
  */
 final class OrganizationTest extends TestCase
 {
+    /** @var \DOMDocument */
     protected $document;
 
 
+    /**
+     * @return void
+     */
     protected function setUp(): void
     {
         $mdns = Constants::NS_MD;
@@ -108,5 +112,18 @@ XML
         $this->expectExceptionMessage('No localized organization URL found.');
 
         Organization::fromXML($document->documentElement);
+    }
+
+
+    /**
+     * Test serialization and unserialization of AdditionalMetadataLocation elements.
+     */
+    public function testSerialization(): void
+    {
+        $org = Organization::fromXML($this->document->documentElement);
+        $this->assertEquals(
+            $this->document->saveXML($this->document->documentElement),
+            strval(unserialize(serialize($org)))
+        );
     }
 }

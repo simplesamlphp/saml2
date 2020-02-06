@@ -1443,7 +1443,7 @@ class Assertion extends SignedElement
     /**
      * Retrieve the certificates that are included in the assertion.
      *
-     * @return stringp[ An array of certificates.
+     * @return string[] An array of certificates.
      */
     public function getCertificates(): array
     {

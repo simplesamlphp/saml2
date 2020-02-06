@@ -4,6 +4,7 @@ declare(strict_types=1);
 
 namespace SAML2\XML\md;
 
+use InvalidArgumentException;
 use PHPUnit\Framework\TestCase;
 use SAML2\Constants;
 use SAML2\DOMDocumentFactory;
@@ -13,14 +14,19 @@ use SAML2\XML\mdrpi\PublicationInfo;
 /**
  * Class \SAML2\XML\md\EntityDescriptorTest
  */
-class EntityDescriptorTest extends TestCase
+final class EntityDescriptorTest extends TestCase
 {
+    /** @var \DOMDocument */
     protected $document;
 
 
+    /**
+     * @return void
+     */
     protected function setUp(): void
     {
         $mdns = Constants::NS_MD;
+
         $this->document = DOMDocumentFactory::fromString(<<<XML
 <md:EntityDescriptor xmlns:md="{$mdns}" entityID="urn:example:entity" ID="_5A3CHB081" validUntil="2020-02-05T09:39:25Z" cacheDuration="P2Y6M5DT12H35M30S">
   <md:Extensions>
@@ -261,6 +267,7 @@ XML
      */
     public function testMarshallingWithoutDescriptors(): void
     {
+        $this->expectException(InvalidArgumentException::class);
         $this->expectExceptionMessage(
             'Must have either one of the RoleDescriptors or an AffiliationDescriptor in EntityDescriptor.'
         );
@@ -274,7 +281,7 @@ XML
     public function testMarshallingWithAffiliationAndRoleDescriptors(): void
     {
         (new AffiliationDescriptor('asdf', ['test']))->toXML($this->document->documentElement);
-        $this->expectException(\InvalidArgumentException::class);
+        $this->expectException(InvalidArgumentException::class);
         $this->expectExceptionMessage(
             'AffiliationDescriptor cannot be combined with other RoleDescriptor elements in EntityDescriptor.'
         );
@@ -287,7 +294,7 @@ XML
      */
     public function testMarshallingWithEmptyEntityID(): void
     {
-        $this->expectException(\InvalidArgumentException::class);
+        $this->expectException(InvalidArgumentException::class);
         $this->expectExceptionMessage('The entityID attribute cannot be empty.');
         new EntityDescriptor('', null, null, null, null, [], new AffiliationDescriptor('asdf', ['test']));
     }
@@ -298,7 +305,7 @@ XML
      */
     public function testMarshallingWithLongEntityID(): void
     {
-        $this->expectException(\InvalidArgumentException::class);
+        $this->expectException(InvalidArgumentException::class);
         $this->expectExceptionMessage('The entityID attribute cannot be longer than 1024 characters.');
         new EntityDescriptor(
             str_repeat('x', 1025),
@@ -381,7 +388,7 @@ XML
 </EntityDescriptor>
 XML
         );
-        $this->expectException(\Exception::class);
+        $this->expectException(InvalidArgumentException::class);
         $this->expectExceptionMessage('Missing \'entityID\' attribute from md:EntityDescriptor.');
         EntityDescriptor::fromXML($document->documentElement);
     }
@@ -395,7 +402,7 @@ XML
         $document = DOMDocumentFactory::fromString(
             '<EntityDescriptor entityID="theEntityID" xmlns="urn:oasis:names:tc:SAML:2.0:metadata"></EntityDescriptor>'
         );
-        $this->expectException(\Exception::class);
+        $this->expectException(InvalidArgumentException::class);
         $this->expectExceptionMessage(
             'Must have either one of the RoleDescriptors or an AffiliationDescriptor in EntityDescriptor.'
         );
@@ -416,7 +423,7 @@ XML
 </EntityDescriptor>
 XML
         );
-        $this->expectException(\Exception::class);
+        $this->expectException(InvalidArgumentException::class);
         $this->expectExceptionMessage('Invalid SAML2 timestamp passed to xsDateTimeToTimestamp: asdf');
         EntityDescriptor::fromXML($document->documentElement);
     }
@@ -459,7 +466,7 @@ XML
 </EntityDescriptor>
 XML
         );
-        $this->expectException(\InvalidArgumentException::class);
+        $this->expectException(InvalidArgumentException::class);
         $this->expectExceptionMessage('More than one AffiliationDescriptor in the entity.');
         EntityDescriptor::fromXML($document->documentElement);
     }
@@ -488,7 +495,7 @@ XML
 </EntityDescriptor>
 XML
         );
-        $this->expectException(\InvalidArgumentException::class);
+        $this->expectException(InvalidArgumentException::class);
         $this->expectExceptionMessage('More than one Organization in the entity.');
         EntityDescriptor::fromXML($document->documentElement);
     }
@@ -516,7 +523,7 @@ XML
 </EntityDescriptor>
 XML
         );
-        $this->expectException(\InvalidArgumentException::class);
+        $this->expectException(InvalidArgumentException::class);
         $this->expectExceptionMessage(
             'AffiliationDescriptor cannot be combined with other RoleDescriptor elements in EntityDescriptor.'
         );

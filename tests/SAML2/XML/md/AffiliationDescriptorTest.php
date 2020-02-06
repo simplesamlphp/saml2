@@ -19,9 +19,13 @@ use SAML2\XML\ds\KeyName;
  */
 final class AffiliationDescriptorTest extends TestCase
 {
+    /** @var \DOMDocument */
     protected $document;
 
 
+    /**
+     * @return void
+     */
     protected function setUp(): void
     {
         $mdNamespace = Constants::NS_MD;
@@ -68,12 +72,15 @@ XML
         $this->assertEquals('TheID', $ad->getID());
         $this->assertEquals('2009-02-13T23:31:30Z', gmdate('Y-m-d\TH:i:s\Z', $ad->getValidUntil()));
         $this->assertEquals('PT5000S', $ad->getCacheDuration());
+
         $affiliateMembers = $ad->getAffiliateMembers();
         $this->assertCount(2, $affiliateMembers);
         $this->assertEquals('Member', $affiliateMembers[0]);
         $this->assertEquals('OtherMember', $affiliateMembers[1]);
+
         $keyDescriptors = $ad->getKeyDescriptors();
         $this->assertCount(1, $keyDescriptors);
+
         $this->assertEquals($this->document->saveXML($this->document->documentElement), strval($ad));
     }
 
@@ -83,7 +90,7 @@ XML
      */
     public function testMarhsallingWithEmptyOwnerID(): void
     {
-        $this->expectException(\Exception::class);
+        $this->expectException(Exception::class);
         $this->expectExceptionMessage('AffiliationOwnerID must not be empty.');
         new AffiliationDescriptor(
             '',
@@ -102,7 +109,7 @@ XML
      */
     public function testMarshallingWithEmptyMemberList(): void
     {
-        $this->expectException(\Exception::class);
+        $this->expectException(Exception::class);
         $this->expectExceptionMessage('List of affiliated members must not be empty.');
         new AffiliationDescriptor(
             'TheOwner',
@@ -121,7 +128,7 @@ XML
      */
     public function testMarshallingWithEmptyMemberID(): void
     {
-        $this->expectException(\Exception::class);
+        $this->expectException(Exception::class);
         $this->expectExceptionMessage('Cannot specify an empty string as an affiliation member entityID.');
         new AffiliationDescriptor(
             'TheOwner',
@@ -146,10 +153,12 @@ XML
         $this->assertEquals('TheID', $affiliateDescriptor->getID());
         $this->assertEquals(1234567890, $affiliateDescriptor->getValidUntil());
         $this->assertEquals('PT5000S', $affiliateDescriptor->getCacheDuration());
+
         $affiliateMember = $affiliateDescriptor->getAffiliateMembers();
         $this->assertCount(2, $affiliateMember);
         $this->assertEquals('Member', $affiliateMember[0]);
         $this->assertEquals('OtherMember', $affiliateMember[1]);
+
         $keyDescriptors = $affiliateDescriptor->getKeyDescriptors();
         $this->assertCount(1, $keyDescriptors);
     }
@@ -166,7 +175,7 @@ XML
 </md:AffiliationDescriptor>
 XML
         );
-        $this->expectException(\Exception::class);
+        $this->expectException(Exception::class);
         $this->expectExceptionMessage('List of affiliated members must not be empty.');
         AffiliationDescriptor::fromXML($document->documentElement);
     }
@@ -185,7 +194,7 @@ XML
 </md:AffiliationDescriptor>
 XML
         );
-        $this->expectException(\Exception::class);
+        $this->expectException(Exception::class);
         $this->expectExceptionMessage('Cannot specify an empty string as an affiliation member entityID.');
         AffiliationDescriptor::fromXML($document->documentElement);
     }
@@ -205,7 +214,7 @@ XML
 XML
         );
 
-        $this->expectException(\Exception::class);
+        $this->expectException(Exception::class);
         $this->expectExceptionMessage('Missing affiliationOwnerID on AffiliationDescriptor.');
         AffiliationDescriptor::fromXML($document->documentElement);
     }
@@ -216,15 +225,7 @@ XML
      */
     public function testSerialization(): void
     {
-        $mdNamespace = Constants::NS_MD;
-        $document = DOMDocumentFactory::fromString(<<<XML
-<md:AffiliationDescriptor xmlns:md="{$mdNamespace}" ID="TheID" validUntil="2009-02-13T23:31:30Z" cacheDuration="PT5000S" affiliationOwnerID="TheOwner">
-  <md:AffiliateMember>Member</md:AffiliateMember>
-  <md:AffiliateMember>OtherMember</md:AffiliateMember>
-</md:AffiliationDescriptor>
-XML
-        );
-        $ad = AffiliationDescriptor::fromXML($document->documentElement);
-        $this->assertEquals($document->saveXML($document->documentElement), strval(unserialize(serialize($ad))));
+        $ad = AffiliationDescriptor::fromXML($this->document->documentElement);
+        $this->assertEquals($this->document->saveXML($this->document->documentElement), strval(unserialize(serialize($ad))));
     }
 }

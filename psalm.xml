@@ -13,6 +13,7 @@
     <file name="tests/SAML2/XML/saml/AuthnContextDeclTest.php" />
     <file name="tests/SAML2/XML/saml/AuthnContextTest.php" />
     <file name="tests/SAML2/XML/samlp/RequestedAuthnContextTest.php" />
+    <directory name="tests/SAML2/XML/md" />
     <file name="tests/SAML2/XML/samlp/StatusTest.php" />
     <file name="tests/SAML2/XML/samlp/StatusCodeTest.php" />
     <file name="tests/SAML2/XML/samlp/StatusMessageTest.php" />

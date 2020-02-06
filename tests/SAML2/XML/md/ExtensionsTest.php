@@ -24,11 +24,15 @@ use SAML2\XML\shibmd\Scope;
  *
  * @package simplesamlphp/saml2
  */
-class ExtensionsTest extends TestCase
+final class ExtensionsTest extends TestCase
 {
+    /** @var \DOMDocument */
     protected $document;
 
 
+    /**
+     * @return void
+     */
     protected function setUp(): void
     {
         $this->document = DOMDocumentFactory::fromString(<<<XML

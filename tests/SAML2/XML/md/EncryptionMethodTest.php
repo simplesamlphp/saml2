@@ -4,6 +4,7 @@ declare(strict_types=1);
 
 namespace SAML2\XML\md;
 
+use InvalidArgumentException;
 use PHPUnit\Framework\TestCase;
 use SAML2\Constants;
 use SAML2\DOMDocumentFactory;
@@ -14,15 +15,20 @@ use SAML2\XML\Chunk;
  *
  * @package simplesamlphp/saml2
  */
-class EncryptionMethodTest extends TestCase
+final class EncryptionMethodTest extends TestCase
 {
+    /** @var \DOMDocument */
     protected $document;
 
 
+    /**
+     * @return void
+     */
     protected function setUp(): void
     {
         $mdns = Constants::NS_MD;
         $xencns = Constants::NS_XENC;
+
         $this->document = DOMDocumentFactory::fromString(<<<XML
 <md:EncryptionMethod xmlns:md="{$mdns}" Algorithm="http://www.w3.org/2001/04/xmlenc#rsa-oaep-mgf1p">
   <xenc:KeySize xmlns:xenc="{$xencns}">10</xenc:KeySize>
@@ -42,6 +48,7 @@ XML
         $alg = 'http://www.w3.org/2001/04/xmlenc#rsa-oaep-mgf1p';
         $chunkXml = DOMDocumentFactory::fromString('<other:Element xmlns:other="urn:other">Value</other:Element>');
         $chunk = Chunk::fromXML($chunkXml->documentElement);
+
         $em = new EncryptionMethod($alg, 10, '9lWu3Q==', [$chunk]);
         $this->assertEquals($alg, $em->getAlgorithm());
         $this->assertEquals(10, $em->getKeySize());
@@ -65,6 +72,7 @@ XML
             '<md:EncryptionMethod xmlns:md="' . Constants::NS_MD .
             '" Algorithm="http://www.w3.org/2001/04/xmlenc#rsa-oaep-mgf1p"/>'
         );
+
         $this->assertNull($em->getKeySize());
         $this->assertNull($em->getOAEPParams());
         $this->assertEmpty($em->getChildren());
@@ -82,6 +90,7 @@ XML
     {
         $em = EncryptionMethod::fromXML($this->document->documentElement);
         $alg = 'http://www.w3.org/2001/04/xmlenc#rsa-oaep-mgf1p';
+
         $this->assertEquals($alg, $em->getAlgorithm());
         $this->assertEquals(10, $em->getKeySize());
         $this->assertEquals('9lWu3Q==', $em->getOAEPParams());
@@ -95,7 +104,7 @@ XML
      */
     public function testUnmarshallingWithoutAlgorithm(): void
     {
-        $this->expectException(\InvalidArgumentException::class);
+        $this->expectException(InvalidArgumentException::class);
         $this->expectExceptionMessage('Missing \'Algorithm\' attribute from md:EncryptionMethod.');
         $this->document->documentElement->removeAttribute('Algorithm');
         EncryptionMethod::fromXML($this->document->documentElement);
@@ -112,6 +121,7 @@ XML
 <md:EncryptionMethod xmlns:md="{$mdns}" Algorithm="http://www.w3.org/2001/04/xmlenc#rsa-oaep-mgf1p"/>
 XML
         );
+
         $em = EncryptionMethod::fromXML($document->documentElement);
         $this->assertNull($em->getKeySize());
         $this->assertNull($em->getOAEPParams());

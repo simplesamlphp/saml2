@@ -4,6 +4,7 @@ declare(strict_types=1);
 
 namespace SAML2\XML\md;
 
+use InvalidArgumentException;
 use PHPUnit\Framework\TestCase;
 use RobRichards\XMLSecLibs\XMLSecurityDSig;
 use SAML2\Constants;
@@ -18,16 +19,21 @@ use SAML2\XML\Chunk;
  *
  * @package simplesamlphp/saml2
  */
-class UnknownRoleDescriptorTest extends TestCase
+final class UnknownRoleDescriptorTest extends TestCase
 {
+    /** @var \DOMDocument */
     protected $document;
 
 
+    /**
+     * @return void
+     */
     public function setUp(): void
     {
         $namespace = 'namespace:uri';
         $mdns = Constants::NS_MD;
         $dsns = XMLSecurityDSig::XMLDSIGNS;
+
         $this->document = DOMDocumentFactory::fromString(<<<XML
 <ns:SomeRoleDescriptor xmlns:ns="{$namespace}" xmlns:md="{$mdns}" ID="TheID" validUntil="2009-02-13T23:31:30Z" cacheDuration="PT5000S" protocolSupportEnumeration="protocol1 protocol2" errorURL="https://error.reporting/">
   <md:KeyDescriptor use="signing">
@@ -73,6 +79,7 @@ XML
     public function testUnmarshalling(): void
     {
         $descriptor = UnknownRoleDescriptor::fromXML($this->document->documentElement);
+
         $this->assertCount(2, $descriptor->getKeyDescriptors());
         $this->assertInstanceOf(KeyDescriptor::class, $descriptor->getKeyDescriptors()[0]);
         $this->assertInstanceOf(KeyDescriptor::class, $descriptor->getKeyDescriptors()[1]);
@@ -88,10 +95,12 @@ XML
         $this->assertEquals(1234567890, $descriptor->getValidUntil());
         $this->assertEquals('PT5000S', $descriptor->getCacheDuration());
         $this->assertEquals('https://error.reporting/', $descriptor->getErrorURL());
+
         $xml = $descriptor->getXML();
         $this->assertInstanceOf(Chunk::class, $xml);
         $this->assertEquals($this->document->saveXML($this->document->documentElement), strval($descriptor));
         $this->assertInstanceOf(Extensions::class, $descriptor->getExtensions());
+
         $extensions = $descriptor->getExtensions()->getList();
         $this->assertCount(1, $extensions);
         $this->assertInstanceOf(Chunk::class, $extensions[0]);
@@ -105,11 +114,13 @@ XML
      */
     public function testUnmarshallingWithoutSupportedProtocols(): void
     {
-        $this->expectException(\Exception::class);
+        $this->document->documentElement->removeAttribute('protocolSupportEnumeration');
+
+        $this->expectException(InvalidArgumentException::class);
         $this->expectExceptionMessage(
             'Missing \'protocolSupportEnumeration\' attribute from md:UnknownRoleDescriptor.'
         );
-        $this->document->documentElement->removeAttribute('protocolSupportEnumeration');
+
         UnknownRoleDescriptor::fromXML($this->document->documentElement);
     }
 
@@ -119,9 +130,11 @@ XML
      */
     public function testUnmarshallingWithEmptySupportedProtocols(): void
     {
-        $this->expectException(\Exception::class);
-        $this->expectExceptionMessage('Cannot specify an empty string as a supported protocol.');
         $this->document->documentElement->setAttribute('protocolSupportEnumeration', '');
+
+        $this->expectException(InvalidArgumentException::class);
+        $this->expectExceptionMessage('Cannot specify an empty string as a supported protocol.');
+
         UnknownRoleDescriptor::fromXML($this->document->documentElement);
     }
 
@@ -131,9 +144,11 @@ XML
      */
     public function testUnmarshallingWithInvalidErrorURL(): void
     {
-        $this->expectException(\InvalidArgumentException::class);
-        $this->expectExceptionMessage('RoleDescriptor errorURL is not a valid URL.');
         $this->document->documentElement->setAttribute('errorURL', 'not a URL');
+
+        $this->expectException(InvalidArgumentException::class);
+        $this->expectExceptionMessage('RoleDescriptor errorURL is not a valid URL.');
+
         UnknownRoleDescriptor::fromXML($this->document->documentElement);
     }
 

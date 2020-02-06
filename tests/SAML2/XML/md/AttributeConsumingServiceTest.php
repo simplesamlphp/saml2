@@ -17,9 +17,13 @@ use SAML2\XML\saml\AttributeValue;
  */
 final class AttributeConsumingServiceTest extends TestCase
 {
+    /** @var \DOMDocument */
     protected $document;
 
 
+    /**
+     * @return void
+     */
     protected function setUp(): void
     {
         $mdns = Constants::NS_MD;
