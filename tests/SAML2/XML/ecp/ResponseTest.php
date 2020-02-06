@@ -37,6 +37,9 @@ XML
     public function testMarshalling(): void
     {
         $response = new Response('https://example.com/ACS');
+
+        $this->assertEquals('https://example.com/ACS', $response->getAssertionConsumerServiceURL())
+
         $this->assertEquals($this->document->saveXML($this->document->documentElement), strval($response));
     }
 
@@ -77,6 +80,7 @@ XML
     public function testUnmarshalling(): void
     {
         $response = Response::fromXML($this->document->documentElement);
+
         $this->assertEquals('https://example.com/ACS', $response->getAssertionConsumerServiceURL());
     }
 
