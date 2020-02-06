@@ -43,10 +43,7 @@ XML
     {
         $issuer = new Issuer(
             'TheIssuerValue',
-            'TheNameQualifier',
-            null,
-            Constants::NAMEID_ENTITY,
-            null
+            'TheNameQualifier'
         );
 
         $this->assertEquals('TheIssuerValue', $issuer->getValue());
@@ -57,24 +54,6 @@ XML
         $this->assertEquals(
             $this->document->saveXML($this->document->documentElement),
             strval($issuer)
-        );
-    }
-
-
-    /**
-     * @return void
-     */
-    public function testMarshallingInvalidAttr(): void
-    {
-        $this->expectException(InvalidArgumentException::class);
-        $this->expectExceptionMessage('Illegal combination of attributes being used');
-
-        $issuer = new Issuer(
-            'TheIssuerValue',
-            'TheNameQualifier',
-            'TheSPNameQualifier',
-            Constants::NAMEID_ENTITY,
-            'TheSPProvidedID'
         );
     }
 
@@ -103,10 +82,13 @@ XML
         $element->setAttribute('SPProvidedID', 'TheSPProvidedID');
         $element->setAttribute('SPNameQualifier', 'TheSPNameQualifier');
 
-        $this->expectException(InvalidArgumentException::class);
-        $this->expectExceptionMessage('Illegal combination of attributes being used');
-
         $issuer = Issuer::fromXML($element);
+
+        $this->assertEquals('TheIssuerValue', $issuer->getValue());
+        $this->assertEquals('TheNameQualifier', $issuer->getNameQualifier());
+        $this->assertNull($issuer->getSPNameQualifier());
+        $this->assertEquals(Constants::NAMEID_ENTITY, $issuer->getFormat());
+        $this->assertNull($issuer->getSPProvidedID());
     }
 
 
