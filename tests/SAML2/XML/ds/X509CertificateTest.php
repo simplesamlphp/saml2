@@ -63,6 +63,9 @@ XML
     public function testMarshalling(): void
     {
         $X509cert = new X509Certificate($this->certificate);
+
+        $this->assertEquals($this->certificate, $X509cert->getCertificate());
+
         $this->assertEquals($this->document->saveXML($this->document->documentElement), strval($X509cert));
     }
 
@@ -73,6 +76,7 @@ XML
     public function testUnmarshalling(): void
     {
         $X509cert = X509Certificate::fromXML($this->document->documentElement);
+
         $this->assertEquals($this->certificate, $X509cert->getCertificate());
     }
 

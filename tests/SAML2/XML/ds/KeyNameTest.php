@@ -38,6 +38,9 @@ XML
     public function testMarshalling(): void
     {
         $keyName = new KeyName('testkey');
+
+        $this->assertEquals('testkey', $keyName->getName());
+
         $this->assertEquals($this->document->saveXML($this->document->documentElement), strval($keyName));
     }
 
@@ -48,6 +51,7 @@ XML
     public function testUnmarshalling(): void
     {
         $keyName = keyName::fromXML($this->document->documentElement);
+
         $this->assertEquals('testkey', $keyName->getName());
     }
 

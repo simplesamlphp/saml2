@@ -87,6 +87,14 @@ XML
                 new Chunk(DOMDocumentFactory::fromString('<some>Chunk</some>')->documentElement)
             ]
         );
+
+        $data = $X509data->getData();
+
+        $this->assertInstanceOf(Chunk::class, $data[0]);
+        $this->assertInstanceOf(X509Certificate::class, $data[1]);
+        $this->assertInstanceOf(X509SubjectName::class, $data[2]);
+        $this->assertInstanceOf(Chunk::class, $data[3]);
+
         $this->assertEquals($this->document->saveXML($this->document->documentElement), strval($X509data));
     }
 
@@ -99,10 +107,10 @@ XML
         $X509data = X509Data::fromXML($this->document->documentElement);
 
         $data = $X509data->getData();
-
         $this->assertInstanceOf(Chunk::class, $data[0]);
         $this->assertInstanceOf(X509Certificate::class, $data[1]);
         $this->assertInstanceOf(X509SubjectName::class, $data[2]);
+        $this->assertInstanceOf(Chunk::class, $data[3]);
     }
 
 

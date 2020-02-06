@@ -38,6 +38,9 @@ XML
     public function testMarshalling(): void
     {
         $subjectName = new X509SubjectName('some name');
+
+        $this->assertEquals('some name', $subjectName->getName());
+
         $this->assertEquals($this->document->saveXML($this->document->documentElement), strval($subjectName));
     }
 
@@ -48,6 +51,7 @@ XML
     public function testUnmarshalling(): void
     {
         $subjectName = X509SubjectName::fromXML($this->document->documentElement);
+
         $this->assertEquals('some name', $subjectName->getName());
     }
 
