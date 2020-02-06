@@ -38,7 +38,7 @@ XML
     {
         $response = new Response('https://example.com/ACS');
 
-        $this->assertEquals('https://example.com/ACS', $response->getAssertionConsumerServiceURL())
+        $this->assertEquals('https://example.com/ACS', $response->getAssertionConsumerServiceURL());
 
         $this->assertEquals($this->document->saveXML($this->document->documentElement), strval($response));
     }
