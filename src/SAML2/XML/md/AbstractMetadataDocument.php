@@ -87,7 +87,7 @@ abstract class AbstractMetadataDocument extends AbstractSignedMdElement
      *
      * @return int|null
      */
-    public function getValidUntil()
+    public function getValidUntil(): ?int
     {
         return $this->validUntil;
     }
@@ -110,7 +110,7 @@ abstract class AbstractMetadataDocument extends AbstractSignedMdElement
      *
      * @return string|null
      */
-    public function getCacheDuration()
+    public function getCacheDuration(): ?string
     {
         return $this->cacheDuration;
     }

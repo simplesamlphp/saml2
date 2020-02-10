@@ -97,11 +97,13 @@ XML
         $this->assertEquals('https://error.reporting/', $descriptor->getErrorURL());
 
         $xml = $descriptor->getXML();
-        $this->assertInstanceOf(Chunk::class, $xml);
         $this->assertEquals($this->document->saveXML($this->document->documentElement), strval($descriptor));
         $this->assertInstanceOf(Extensions::class, $descriptor->getExtensions());
 
-        $extensions = $descriptor->getExtensions()->getList();
+        $extElement = $descriptor->getExtensions();
+        $this->assertNotNull($extElement);
+
+        $extensions = $extElement->getList();
         $this->assertCount(1, $extensions);
         $this->assertInstanceOf(Chunk::class, $extensions[0]);
         $this->assertEquals(Constants::NS_MD, $extensions[0]->getNamespaceURI());

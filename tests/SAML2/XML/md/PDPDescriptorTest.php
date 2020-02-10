@@ -99,6 +99,8 @@ XML
     {
         $this->expectException(InvalidArgumentException::class);
         $this->expectExceptionMessage('All md:AuthzService endpoints must be an instance of AuthzService.');
+
+        /** @psalm-suppress InvalidArgument */
         new PDPDescriptor(
             [$this->authzService, $this->assertionIDRequestService],
             ["urn:oasis:names:tc:SAML:2.0:protocol"]
@@ -115,6 +117,8 @@ XML
         $this->expectExceptionMessage(
             'All md:AssertionIDRequestService endpoints must be an instance of AssertionIDRequestService.'
         );
+
+        /** @psalm-suppress InvalidArgument */
         new PDPDescriptor(
             [$this->authzService],
             ["urn:oasis:names:tc:SAML:2.0:protocol"],
@@ -130,6 +134,8 @@ XML
     {
         $this->expectException(InvalidArgumentException::class);
         $this->expectExceptionMessage('All NameIDFormat must be a non-empty string.');
+
+        /** @psalm-suppress InvalidScalarArgument */
         new PDPDescriptor(
             [$this->authzService],
             ["urn:oasis:names:tc:SAML:2.0:protocol"],
@@ -183,6 +189,10 @@ XML
      */
     public function testUnmarshallingWithoutAuthzServiceDescriptors(): void
     {
+        /**
+         * @psalm-suppress PossiblyNullArgument
+         * @psalm-suppress PossiblyNullPropertyFetch
+         */
         $this->document->documentElement->removeChild($this->document->documentElement->firstChild->nextSibling);
 
         $this->expectException(InvalidArgumentException::class);

@@ -70,7 +70,9 @@ XML
 
         $this->assertEquals('TheOwner', $ad->getAffiliationOwnerID());
         $this->assertEquals('TheID', $ad->getID());
+        /** @psalm-suppress PossiblyNullArgument */
         $this->assertEquals('2009-02-13T23:31:30Z', gmdate('Y-m-d\TH:i:s\Z', $ad->getValidUntil()));
+        /** @psalm-suppress PossiblyNullArgument */
         $this->assertEquals('PT5000S', $ad->getCacheDuration());
 
         $affiliateMembers = $ad->getAffiliateMembers();

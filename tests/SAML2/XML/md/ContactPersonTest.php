@@ -222,6 +222,7 @@ XML
     {
         $company = $this->document->getElementsByTagNameNS(Constants::NS_MD, 'Company');
         $newCompany = $this->document->createElementNS(Constants::NS_MD, 'Company', 'Alt. Co.');
+        /** @psalm-suppress PossiblyNullPropertyFetch */
         $this->document->documentElement->insertBefore($newCompany, $company->item(0)->nextSibling);
         $this->expectException(InvalidArgumentException::class);
         $this->expectExceptionMessage('More than one Company in md:ContactPerson');
@@ -236,6 +237,7 @@ XML
     {
         $givenName = $this->document->getElementsByTagNameNS(Constants::NS_MD, 'GivenName');
         $newName = $this->document->createElementNS(Constants::NS_MD, 'GivenName', 'New Name');
+        /** @psalm-suppress PossiblyNullPropertyFetch */
         $this->document->documentElement->insertBefore($newName, $givenName->item(0)->nextSibling);
         $this->expectException(InvalidArgumentException::class);
         $this->expectExceptionMessage('More than one GivenName in md:ContactPerson');
@@ -250,6 +252,7 @@ XML
     {
         $surName = $this->document->getElementsByTagNameNS(Constants::NS_MD, 'SurName');
         $newName = $this->document->createElementNS(Constants::NS_MD, 'SurName', 'New Name');
+        /** @psalm-suppress PossiblyNullPropertyFetch */
         $this->document->documentElement->insertBefore($newName, $surName->item(0)->nextSibling);
         $this->expectException(InvalidArgumentException::class);
         $this->expectExceptionMessage('More than one SurName in md:ContactPerson');
@@ -265,6 +268,7 @@ XML
         $this->expectException(InvalidArgumentException::class);
         $this->expectExceptionMessage('Invalid email address for ContactPerson: \'this is not an email\'');
         $emails = $this->document->getElementsByTagNameNS(Constants::NS_MD, 'EmailAddress');
+        /** @psalm-suppress PossiblyNullPropertyAssignment */
         $emails->item(1)->textContent = 'this is not an email';
         ContactPerson::fromXML($this->document->documentElement);
     }

@@ -154,6 +154,8 @@ XML
     {
         $this->expectException(InvalidArgumentException::class);
         $this->expectExceptionMessage('AttributeService is not an instance of EndpointType.');
+
+        /** @psalm-suppress InvalidArgument */
         new AttributeAuthorityDescriptor(['string'], ['protocol1']);
     }
 
@@ -203,6 +205,8 @@ XML
     {
         $this->expectException(InvalidArgumentException::class);
         $this->expectExceptionMessage('Expected an instance of SAML2\XML\md\AssertionIDRequestService. Got: string');
+
+        /** @psalm-suppress InvalidArgument */
         new AttributeAuthorityDescriptor([$this->as], ['x'], ['x']);
     }
 
@@ -236,6 +240,8 @@ XML
     {
         $this->expectException(InvalidArgumentException::class);
         $this->expectExceptionMessage('Expected an instance of SAML2\XML\saml\Attribute. Got: string');
+
+        /** @psalm-suppress InvalidArgument */
         new AttributeAuthorityDescriptor([$this->as], ['x'], [$this->aidrs], ['x'], ['x'], ['x']);
     }
 
@@ -253,14 +259,12 @@ XML
         /** @var AttributeService[] $as */
         $as = $aad->getAttributeServices();
         $this->assertCount(1, $as, "Wrong number of AttributeService elements.");
-        $this->assertInstanceOf(AttributeService::class, $as[0]);
         $this->assertEquals('urn:oasis:names:tc:SAML:2.0:bindings:SOAP', $as[0]->getBinding());
         $this->assertEquals('https://IdentityProvider.com/SAML/AA/SOAP', $as[0]->getLocation());
 
         /** @var AssertionIDRequestService[] $aidrs */
         $aidrs = $aad->getAssertionIDRequestServices();
         $this->assertCount(1, $aidrs, "Wrong number of AssertionIDRequestService elements.");
-        $this->assertInstanceOf(AssertionIDRequestService::class, $aidrs[0]);
         $this->assertEquals('urn:oasis:names:tc:SAML:2.0:bindings:URI', $aidrs[0]->getBinding());
         $this->assertEquals('https://IdentityProvider.com/SAML/AA/URI', $aidrs[0]->getLocation());
         $this->assertEquals(
@@ -273,9 +277,6 @@ XML
         );
         $attrs = $aad->getAttributes();
         $this->assertCount(2, $attrs, "Wrong number of attributes.");
-        foreach ($attrs as $attr) {
-            $this->assertInstanceOf(Attribute::class, $attr);
-        }
         $this->assertEquals(
             [
                 'profile1',

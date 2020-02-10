@@ -112,8 +112,13 @@ XML
             Constants::NS_MD,
             'EntityDescriptor'
         );
+
+        /** @psalm-suppress PossiblyNullArgument */
         $childEntitiesd = EntitiesDescriptor::fromXML($entitiesdChildElement->item(0));
+
+        /** @psalm-suppress PossiblyNullArgument */
         $childEntityd = EntityDescriptor::fromXML($entitydElement->item(1));
+
         $entitiesd = new EntitiesDescriptor(
             [$childEntityd],
             [$childEntitiesd],
@@ -144,6 +149,7 @@ XML
             Constants::NS_MD,
             'EntityDescriptor'
         );
+        /** @psalm-suppress PossiblyNullArgument */
         $childEntityd = EntityDescriptor::fromXML($entitydElement->item(1));
         $entitiesd = new EntitiesDescriptor(
             [$childEntityd]
@@ -163,6 +169,7 @@ XML
             Constants::NS_MD,
             'EntitiesDescriptor'
         );
+        /** @psalm-suppress PossiblyNullArgument */
         $childEntitiesd = EntitiesDescriptor::fromXML($entitiesdChildElement->item(0));
         $entitiesd = new EntitiesDescriptor(
             null,
@@ -232,6 +239,7 @@ XML
     public function testUnmarshallingWithoutEntities(): void
     {
         $entities = $this->document->documentElement->getElementsByTagNameNS(Constants::NS_MD, 'EntitiesDescriptor');
+        /** @psalm-suppress PossiblyNullArgument */
         $this->document->documentElement->removeChild($entities->item(0));
         $entitiesd = EntitiesDescriptor::fromXML($this->document->documentElement);
         $this->assertEquals([], $entitiesd->getEntitiesDescriptors());
@@ -250,6 +258,8 @@ XML
          * inside the nested EntitiesDescriptor. We then need to fetch the second result of the search, which will be
          *  the child of the parent EntitiesDescriptor.
          */
+
+        /** @psalm-suppress PossiblyNullArgument */
         $this->document->documentElement->removeChild($entity->item(1));
         $entitiesd = EntitiesDescriptor::fromXML($this->document->documentElement);
         $this->assertEquals([], $entitiesd->getEntityDescriptors());
@@ -264,10 +274,12 @@ XML
     {
         // remove child EntitiesDescriptor
         $entities = $this->document->documentElement->getElementsByTagNameNS(Constants::NS_MD, 'EntitiesDescriptor');
+        /** @psalm-suppress PossiblyNullArgument */
         $this->document->documentElement->removeChild($entities->item(0));
 
         // remove child EntityDescriptor
         $entity = $this->document->documentElement->getElementsByTagNameNS(Constants::NS_MD, 'EntityDescriptor');
+        /** @psalm-suppress PossiblyNullArgument */
         $this->document->documentElement->removeChild($entity->item(0));
 
         $this->expectException(InvalidArgumentException::class);

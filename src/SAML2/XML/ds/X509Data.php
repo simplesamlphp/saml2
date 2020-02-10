@@ -22,7 +22,7 @@ final class X509Data extends AbstractDsElement
      * Array with various elements describing this certificate.
      * Unknown elements will be represented by \SAML2\XML\Chunk.
      *
-     * @var (\SAML2\XML\Chunk|\SAML2\XML\ds\X509Certificate\SAML2\XML\ds\X509SubjectName)[]
+     * @var (\SAML2\XML\Chunk|\SAML2\XML\ds\X509Certificate|\SAML2\XML\ds\X509SubjectName)[]
      */
     protected $data = [];
 
@@ -41,7 +41,7 @@ final class X509Data extends AbstractDsElement
     /**
      * Collect the value of the data-property
      *
-     * @return (\SAML2\XML\Chunk|\SAML2\XML\ds\X509Certificate)[]
+     * @return (\SAML2\XML\Chunk|\SAML2\XML\ds\X509Certificate|\SAML2\XML\ds\X509SubjectName)[]
      */
     public function getData(): array
     {
@@ -52,7 +52,7 @@ final class X509Data extends AbstractDsElement
     /**
      * Set the value of the data-property
      *
-     * @param (\SAML2\XML\Chunk|\SAML2\XML\ds\X509Certificate)[] $data
+     * @param (\SAML2\XML\Chunk|\SAML2\XML\ds\X509Certificate|\SAML2\XML\ds\X509SubjectName)[] $data
      * @return void
      * @throws \InvalidArgumentException if $data contains anything other than X509Certificate or Chunk
      */

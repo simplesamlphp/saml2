@@ -46,7 +46,7 @@ abstract class SignedElement implements SignedElementInterface
      * Set the certificates that should be included in the element.
      * The certificates should be strings with the PEM encoded data.
      *
-     * @param array $certificates An array of certificates.
+     * @param string[] $certificates An array of certificates.
      * @return void
      */
     public function setCertificates(array $certificates): void
@@ -58,7 +58,7 @@ abstract class SignedElement implements SignedElementInterface
     /**
      * Retrieve the certificates that are included in the message.
      *
-     * @return array An array of certificates
+     * @return string[] An array of certificates
      */
     public function getCertificates(): array
     {

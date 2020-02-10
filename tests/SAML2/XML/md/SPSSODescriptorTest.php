@@ -206,6 +206,8 @@ XML
         $this->expectExceptionMessage(
             'All md:AssertionConsumerService endpoints must be an instance of AssertionConsumerService.'
         );
+
+        /** @psalm-suppress InvalidArgument */
         new SPSSODescriptor(
             [new ArtifactResolutionService(0, 'x', 'x')],
             ['x']
@@ -222,6 +224,8 @@ XML
         $this->expectExceptionMessage(
             'All md:AttributeConsumingService endpoints must be an instance of AttributeConsumingService.'
         );
+
+        /** @psalm-suppress InvalidArgument */
         new SPSSODescriptor(
             [new AssertionConsumerService(0, 'x', 'x')],
             ['x'],
@@ -275,7 +279,11 @@ XML
     public function testUnmarshallingWithoutAssertionConsumerService(): void
     {
         $acseps = $this->document->getElementsByTagNameNS(Constants::NS_MD, 'AssertionConsumerService');
+
+        /** @psalm-suppress PossiblyNullArgument */
         $this->document->documentElement->removeChild($acseps->item(1));
+
+        /** @psalm-suppress PossiblyNullArgument */
         $this->document->documentElement->removeChild($acseps->item(0));
 
         $this->expectException(InvalidArgumentException::class);
@@ -341,6 +349,7 @@ XML
     public function testUnmarshallingTwoDefaultACS(): void
     {
         $acs = $this->document->getElementsByTagNameNS(Constants::NS_MD, 'AttributeConsumingService');
+        /** @psalm-suppress PossiblyNullReference */
         $acs->item(1)->setAttribute('isDefault', 'true');
 
         $this->expectException(InvalidArgumentException::class);

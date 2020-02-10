@@ -331,11 +331,14 @@ XML
         $customd = $this->document->createElementNS(Constants::NS_MD, 'md:CustomRoleDescriptor');
         $customd->setAttribute('protocolSupportEnumeration', 'urn:oasis:names:tc:SAML:2.0:protocol');
         $newline = new \DOMText("\n  ");
+        /**
+         * @psalm-suppress PossiblyNullPropertyFetch
+         * @psalm-suppress PossiblyNullReference
+         */
         $pdpd->parentNode->insertBefore($customd, $pdpd->nextSibling);
         $pdpd->parentNode->insertBefore($newline, $customd);
         $entityDescriptor = EntityDescriptor::fromXML($this->document->documentElement);
 
-        $this->assertInstanceOf(EntityDescriptor::class, $entityDescriptor);
         $this->assertEquals('urn:example:entity', $entityDescriptor->getEntityID());
         $this->assertEquals('_5A3CHB081', $entityDescriptor->getID());
         $this->assertEquals(1580895565, $entityDescriptor->getValidUntil());
@@ -444,7 +447,6 @@ XML
 XML
         );
         $entityDescriptor = EntityDescriptor::fromXML($document->documentElement);
-        $this->assertInstanceOf(EntityDescriptor::class, $entityDescriptor);
         $this->assertEquals([], $entityDescriptor->getRoleDescriptors());
         $this->assertInstanceOf(AffiliationDescriptor::class, $entityDescriptor->getAffiliationDescriptor());
     }

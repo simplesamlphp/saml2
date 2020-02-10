@@ -34,17 +34,17 @@ final class KeyDescriptor extends AbstractMdElement
     /**
      * Supported EncryptionMethods.
      *
-     * @var \SAML2\XML\md\EncryptionMethod[]|null
+     * @var \SAML2\XML\md\EncryptionMethod[]
      */
-    protected $EncryptionMethods = null;
+    protected $EncryptionMethods = [];
 
 
     /**
      * KeyDescriptor constructor.
      *
-     * @param \SAML2\XML\ds\KeyInfo     $keyInfo
+     * @param \SAML2\XML\ds\KeyInfo $keyInfo
      * @param string|null $use
-     * @param \SAML2\XML\md\EncryptionMethod[]  $encryptionMethod
+     * @param \SAML2\XML\md\EncryptionMethod[] $encryptionMethod
      */
     public function __construct(
         KeyInfo $keyInfo,
@@ -110,9 +110,9 @@ final class KeyDescriptor extends AbstractMdElement
     /**
      * Collect the value of the EncryptionMethod property.
      *
-     * @return \SAML2\XML\md\EncryptionMethod[]|null
+     * @return \SAML2\XML\md\EncryptionMethod[]
      */
-    public function getEncryptionMethods(): ?array
+    public function getEncryptionMethods(): array
     {
         return $this->EncryptionMethods;
     }

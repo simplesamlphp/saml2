@@ -43,8 +43,8 @@ final class PDPDescriptor extends AbstractRoleDescriptor
      *
      * @param \SAML2\XML\md\AuthzService[] $authServiceEndpoints
      * @param string[] $protocolSupportEnumeration
-     * @param \SAML2\XML\md\AssertionIDRequestService[]|null $assertionIDRequestService
-     * @param string[]|null $nameIDFormats
+     * @param \SAML2\XML\md\AssertionIDRequestService[] $assertionIDRequestService
+     * @param string[] $nameIDFormats
      * @param string|null $ID
      * @param int|null $validUntil
      * @param string|null $cacheDuration
@@ -57,8 +57,8 @@ final class PDPDescriptor extends AbstractRoleDescriptor
     public function __construct(
         array $authServiceEndpoints,
         array $protocolSupportEnumeration,
-        ?array $assertionIDRequestService = null,
-        ?array $nameIDFormats = null,
+        array $assertionIDRequestService = [],
+        array $nameIDFormats = [],
         ?string $ID = null,
         ?int $validUntil = null,
         ?string $cacheDuration = null,
@@ -154,9 +154,9 @@ final class PDPDescriptor extends AbstractRoleDescriptor
     /**
      * Get the AssertionIDRequestService endpoints of this PDPDescriptor
      *
-     * @return \SAML2\XML\md\AssertionIDRequestService[]|null
+     * @return \SAML2\XML\md\AssertionIDRequestService[]
      */
-    public function getAssertionIDRequestServices(): ?array
+    public function getAssertionIDRequestServices(): array
     {
         return $this->assertionIDRequestServiceEndpoints;
     }
@@ -165,15 +165,12 @@ final class PDPDescriptor extends AbstractRoleDescriptor
     /**
      * Set the AssertionIDRequestService endpoints for this PDPDescriptor
      *
-     * @param \SAML2\XML\md\AssertionIDRequestService[]|null $assertionIDRequestServices
+     * @param \SAML2\XML\md\AssertionIDRequestService[] $assertionIDRequestServices
      * @return void
      * @throws \InvalidArgumentException
      */
-    public function setAssertionIDRequestServices(?array $assertionIDRequestServices): void
+    public function setAssertionIDRequestServices(array $assertionIDRequestServices): void
     {
-        if ($assertionIDRequestServices === null) {
-            return;
-        }
         Assert::allIsInstanceOf(
             $assertionIDRequestServices,
             AssertionIDRequestService::class,
@@ -199,11 +196,8 @@ final class PDPDescriptor extends AbstractRoleDescriptor
      *
      * @param string[] $nameIDFormats
      */
-    public function setNameIDFormats(?array $nameIDFormats): void
+    public function setNameIDFormats(array $nameIDFormats): void
     {
-        if ($nameIDFormats === null) {
-            return;
-        }
         Assert::allStringNotEmpty($nameIDFormats, 'All NameIDFormat must be a non-empty string.');
         $this->nameIDFormats = $nameIDFormats;
     }

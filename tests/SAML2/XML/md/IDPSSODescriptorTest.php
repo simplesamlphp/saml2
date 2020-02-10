@@ -236,6 +236,8 @@ XML
         $this->expectExceptionMessage(
             'All md:SingleSignOnService endpoints must be an instance of SingleSignOnService.'
         );
+
+        /** @psalm-suppress InvalidArgument */
         new IDPSSODescriptor(
             [new AssertionIDRequestService('binding1', 'location1')],
             ['protocol1']
@@ -253,6 +255,8 @@ XML
         $this->expectExceptionMessage(
             'All md:NameIDMappingService endpoints must be an instance of NameIDMappingService.'
         );
+
+        /** @psalm-suppress InvalidArgument */
         new IDPSSODescriptor(
             [new SingleSignOnService('binding1', 'location1')],
             ['protocol1'],
@@ -272,6 +276,8 @@ XML
         $this->expectExceptionMessage(
             'All md:AssertionIDRequestService endpoints must be an instance of AssertionIDRequestService.'
         );
+
+        /** @psalm-suppress InvalidArgument */
         new IDPSSODescriptor(
             [new SingleSignOnService('binding1', 'location1')],
             ['protocol1'],
@@ -307,6 +313,8 @@ XML
     {
         $this->expectException(InvalidArgumentException::class);
         $this->expectExceptionMessage('All md:Attribute elements must be an instance of Attribute.');
+
+        /** @psalm-suppress InvalidArgument */
         new IDPSSODescriptor(
             [new SingleSignOnService('binding1', 'location1')],
             ['protocol1'],
@@ -379,7 +387,9 @@ XML
         $this->expectException(InvalidArgumentException::class);
         $this->expectExceptionMessage('At least one SingleSignOnService must be specified.');
         $ssoServiceEps = $this->document->getElementsByTagNameNS(Constants::NS_MD, 'SingleSignOnService');
+        /** @psalm-suppress PossiblyNullArgument */
         $this->document->documentElement->removeChild($ssoServiceEps->item(1));
+        /** @psalm-suppress PossiblyNullArgument */
         $this->document->documentElement->removeChild($ssoServiceEps->item(0));
         IDPSSODescriptor::fromXML($this->document->documentElement);
     }
@@ -403,6 +413,7 @@ XML
     public function testUnmarshallingWithEmptyAttributeProfile(): void
     {
         $attrProfiles = $this->document->getElementsByTagNameNS(Constants::NS_MD, 'AttributeProfile');
+        /** @psalm-suppress PossiblyNullPropertyAssignment */
         $attrProfiles->item(0)->textContent = '';
         $this->expectException(InvalidArgumentException::class);
         $this->expectExceptionMessage('All md:AttributeProfile elements must be a URI, not an empty string.');
