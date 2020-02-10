@@ -13,7 +13,7 @@ use SAML2\XML\ecp\Response;
 
 final class ResponseTest extends \PHPUnit\Framework\TestCase
 {
-    /** @var \DOMElement */
+    /** @var \DOMDocument */
     private $document;
 
 

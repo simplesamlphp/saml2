@@ -32,7 +32,7 @@ class UIInfoTest extends \PHPUnit\Framework\TestCase
         $uiinfo->addLogo($logo);
 
         $document = DOMDocumentFactory::fromString('<root />');
-        $xml = $uiinfo->toXML($document->firstChild);
+        $xml = $uiinfo->toXML($document->documentElement);
 
         $infoElements = Utils::xpQuery(
             $xml,
@@ -41,6 +41,7 @@ class UIInfoTest extends \PHPUnit\Framework\TestCase
         $this->assertCount(1, $infoElements);
         $infoElement = $infoElements[0];
 
+        /** @var \DOMElement[] $displaynameElements */
         $displaynameElements = Utils::xpQuery(
             $infoElement,
             './*[local-name()=\'DisplayName\' and namespace-uri()=\'urn:oasis:names:tc:SAML:metadata:ui\']'
@@ -51,6 +52,7 @@ class UIInfoTest extends \PHPUnit\Framework\TestCase
         $this->assertEquals("nl", $displaynameElements[0]->getAttribute("xml:lang"));
         $this->assertEquals("en", $displaynameElements[1]->getAttribute("xml:lang"));
 
+        /** @var \DOMElement[] $descriptionElements */
         $descriptionElements = Utils::xpQuery(
             $infoElement,
             './*[local-name()=\'Description\' and namespace-uri()=\'urn:oasis:names:tc:SAML:metadata:ui\']'
@@ -61,6 +63,7 @@ class UIInfoTest extends \PHPUnit\Framework\TestCase
         $this->assertEquals("nl", $descriptionElements[0]->getAttribute("xml:lang"));
         $this->assertEquals("en", $descriptionElements[1]->getAttribute("xml:lang"));
 
+        /** @var \DOMElement[] $infourlElements */
         $infourlElements = Utils::xpQuery(
             $infoElement,
             './*[local-name()=\'InformationURL\' and namespace-uri()=\'urn:oasis:names:tc:SAML:metadata:ui\']'
@@ -71,6 +74,7 @@ class UIInfoTest extends \PHPUnit\Framework\TestCase
         $this->assertEquals("nl", $infourlElements[0]->getAttribute("xml:lang"));
         $this->assertEquals("en", $infourlElements[1]->getAttribute("xml:lang"));
 
+        /** @var \DOMElement[] $privurlElements */
         $privurlElements = Utils::xpQuery(
             $infoElement,
             './*[local-name()=\'PrivacyStatementURL\' and namespace-uri()=\'urn:oasis:names:tc:SAML:metadata:ui\']'
@@ -107,12 +111,12 @@ class UIInfoTest extends \PHPUnit\Framework\TestCase
             [],
             [$keywords],
             [],
-            [$discohints]
+            [new Chunk($discohints->toXML())]
         );
         $uiinfo->addLogo($logo);
 
         $document = DOMDocumentFactory::fromString('<root />');
-        $xml = $uiinfo->toXML($document->firstChild);
+        $xml = $uiinfo->toXML($document->documentElement);
 
         $infoElements = Utils::xpQuery(
             $xml,
@@ -128,6 +132,7 @@ class UIInfoTest extends \PHPUnit\Framework\TestCase
         $this->assertCount(1, $logoElements);
         $this->assertEquals("https://example.edu/logo.png", $logoElements[0]->textContent);
 
+        /** @var \DOMElement[] $keywordElements */
         $keywordElements = Utils::xpQuery(
             $infoElement,
             './*[local-name()=\'Keywords\' and namespace-uri()=\'urn:oasis:names:tc:SAML:metadata:ui\']'
@@ -151,6 +156,7 @@ class UIInfoTest extends \PHPUnit\Framework\TestCase
         $this->assertEquals("192.168.6.0/24", $iphintElements[0]->textContent);
         $this->assertEquals("fd00:0123:aa:1001::/64", $iphintElements[1]->textContent);
 
+        /** @var \DOMElement[] $keywordElements */
         $keywordElements = Utils::xpQuery(
             $discoElement,
             './*[local-name()=\'Keywords\' and namespace-uri()=\'urn:oasis:names:tc:SAML:metadata:ui\']'
@@ -179,7 +185,7 @@ class UIInfoTest extends \PHPUnit\Framework\TestCase
 XML
         );
 
-        $uiinfo = UIInfo::fromXML($document->firstChild);
+        $uiinfo = UIInfo::fromXML($document->documentElement);
 
         $this->assertCount(2, $uiinfo->getDisplayName());
         $this->assertEquals('University of Examples', $uiinfo->getDisplayName()['en']);
@@ -212,9 +218,9 @@ XML
 XML
         );
 
-        $uiinfo = UIInfo::fromXML($document->firstChild);
+        $uiinfo = UIInfo::fromXML($document->documentElement);
         $uiinfo->addChild(
-            new Chunk(DOMDocumentFactory::fromString('<child3 />')->firstChild)
+            new Chunk(DOMDocumentFactory::fromString('<child3 />')->documentElement)
         );
 
         $this->assertCount(1, $uiinfo->getDisplayName());

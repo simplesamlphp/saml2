@@ -23,13 +23,15 @@ class KeywordsTest extends \PHPUnit\Framework\TestCase
         $keywords->addKeyword("air lines");
 
         $document = DOMDocumentFactory::fromString('<root />');
-        $xml = $keywords->toXML($document->firstChild);
+        $xml = $keywords->toXML($document->documentElement);
 
         $keywordElements = Utils::xpQuery(
             $xml,
             '/root/*[local-name()=\'Keywords\' and namespace-uri()=\'urn:oasis:names:tc:SAML:metadata:ui\']'
         );
         $this->assertCount(1, $keywordElements);
+
+        /** @var \DOMElement $keywordElement */
         $keywordElement = $keywordElements[0];
         $this->assertEquals("KLM royal Dutch air+lines", $keywordElement->textContent);
         $this->assertEquals("en", $keywordElement->getAttribute('xml:lang'));
@@ -60,7 +62,7 @@ class KeywordsTest extends \PHPUnit\Framework\TestCase
                 . 'KLM koninklijke luchtvaart+maatschappij</mdui:Keywords>'
         );
 
-        $keywords = Keywords::fromXML($document->firstChild);
+        $keywords = Keywords::fromXML($document->documentElement);
         $this->assertEquals("nl", $keywords->getLanguage());
         $this->assertCount(3, $keywords->getKeywords());
         $this->assertEquals("KLM", $keywords->getKeywords()[0]);
@@ -82,7 +84,7 @@ class KeywordsTest extends \PHPUnit\Framework\TestCase
 
         $this->expectException(InvalidArgumentException::class);
         $this->expectExceptionMessage('Missing lang on Keywords');
-        $keywords = Keywords::fromXML($document->firstChild);
+        $keywords = Keywords::fromXML($document->documentElement);
     }
 
 
@@ -98,6 +100,6 @@ class KeywordsTest extends \PHPUnit\Framework\TestCase
 
         $this->expectException(InvalidArgumentException::class);
         $this->expectExceptionMessage('Missing value for Keywords');
-        $keywords = Keywords::fromXML($document->firstChild);
+        $keywords = Keywords::fromXML($document->documentElement);
     }
 }

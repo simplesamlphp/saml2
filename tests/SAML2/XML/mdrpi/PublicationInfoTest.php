@@ -30,8 +30,9 @@ class PublicationInfoTest extends \PHPUnit\Framework\TestCase
         );
 
         $document = DOMDocumentFactory::fromString('<root />');
-        $xml = $publicationInfo->toXML($document->firstChild);
+        $xml = $publicationInfo->toXML($document->documentElement);
 
+        /** @var \DOMElement[] $publicationInfoElements */
         $publicationInfoElements = Utils::xpQuery(
             $xml,
             '/root/*[local-name()=\'PublicationInfo\' and namespace-uri()=\'urn:oasis:names:tc:SAML:metadata:rpi\']'
@@ -43,6 +44,7 @@ class PublicationInfoTest extends \PHPUnit\Framework\TestCase
         $this->assertEquals('2009-02-13T23:31:30Z', $publicationInfoElement->getAttribute("creationInstant"));
         $this->assertEquals('PublicationIdValue', $publicationInfoElement->getAttribute("publicationId"));
 
+        /** @var \DOMElement[] $usagePolicyElements */
         $usagePolicyElements = Utils::xpQuery(
             $publicationInfoElement,
             './*[local-name()=\'UsagePolicy\' and namespace-uri()=\'urn:oasis:names:tc:SAML:metadata:rpi\']'
@@ -79,7 +81,7 @@ class PublicationInfoTest extends \PHPUnit\Framework\TestCase
 XML
         );
 
-        $publicationInfo = PublicationInfo::fromXML($document->firstChild);
+        $publicationInfo = PublicationInfo::fromXML($document->documentElement);
 
         $this->assertEquals('SomePublisher', $publicationInfo->getPublisher());
         $this->assertEquals(1293840000, $publicationInfo->getCreationInstant());
@@ -92,6 +94,9 @@ XML
     }
 
 
+    /**
+     * @return void
+     */
     public function testMissingPublisherThrowsException()
     {
         $document = DOMDocumentFactory::fromString(<<<XML
@@ -104,6 +109,6 @@ XML
 
         $this->expectException(Exception::class);
         $this->expectExceptionMessage('Missing required attribute "publisher"');
-        $publicationInfo = PublicationInfo::fromXML($document->firstChild);
+        $publicationInfo = PublicationInfo::fromXML($document->documentElement);
     }
 }

@@ -24,6 +24,9 @@ final class KeyInfoTest extends \PHPUnit\Framework\TestCase
     /** @var string */
     private $certificate;
 
+    /** @var string[] */
+    private $certData;
+
     /** @var \DOMDocument */
     private $document;
 

@@ -13,6 +13,23 @@ use SAML2\Utils;
  */
 class ScopeTest extends \PHPUnit\Framework\TestCase
 {
+    /** @var \DOMDocument */
+    private $document;
+
+
+    /**
+     * @return void
+     */
+    public function setUp(): void
+    {
+        $ns = Scope::NS;
+        $this->document = DOMDocumentFactory::fromString(<<<XML
+<shibmd:Scope xmlns:shibmd="{$ns}" regexp="false">example.org</shibmd:Scope>
+XML
+        );
+    }
+
+
     /**
      * Marshalling a scope in literal (non-regexp) form.
      * @return void
@@ -22,8 +39,9 @@ class ScopeTest extends \PHPUnit\Framework\TestCase
         $scope = new Scope("example.org", false);
 
         $document = DOMDocumentFactory::fromString('<root />');
-        $scopeElement = $scope->toXML($document->firstChild);
+        $scopeElement = $scope->toXML($document->documentElement);
 
+        /** @var \DOMElement[] $scopeElements */
         $scopeElements = Utils::xpQuery($scopeElement, '/root/shibmd:Scope');
         $this->assertCount(1, $scopeElements);
         $scopeElement = $scopeElements[0];
@@ -44,8 +62,9 @@ class ScopeTest extends \PHPUnit\Framework\TestCase
         $scope = new Scope("example.org");
 
         $document = DOMDocumentFactory::fromString('<root />');
-        $scopeElement = $scope->toXML($document->firstChild);
+        $scopeElement = $scope->toXML($document->documentElement);
 
+        /** @var \DOMElement[] $scopeElements */
         $scopeElements = Utils::xpQuery($scopeElement, '/root/shibmd:Scope');
         $this->assertCount(1, $scopeElements);
         $scopeElement = $scopeElements[0];
@@ -65,8 +84,9 @@ class ScopeTest extends \PHPUnit\Framework\TestCase
         $scope = new Scope("^(.*\.)?example\.edu$", true);
 
         $document = DOMDocumentFactory::fromString('<root />');
-        $scopeElement = $scope->toXML($document->firstChild);
+        $scopeElement = $scope->toXML($document->documentElement);
 
+        /** @var \DOMElement[] $scopeElements */
         $scopeElements = Utils::xpQuery($scopeElement, '/root/shibmd:Scope');
         $this->assertCount(1, $scopeElements);
         $scopeElement = $scopeElements[0];
@@ -83,10 +103,7 @@ class ScopeTest extends \PHPUnit\Framework\TestCase
      */
     public function testUnmarshallingLiteral(): void
     {
-        $document = DOMDocumentFactory::fromString(
-            '<shibmd:Scope xmlns:shibmd="' . Scope::NS . '" regexp="false">example.org</shibmd:Scope>'
-        );
-        $scope = Scope::fromXML($document->firstChild);
+        $scope = Scope::fromXML($this->document->documentElement);
 
         $this->assertEquals('example.org', $scope->getScope());
         $this->assertFalse($scope->isRegexpScope());
@@ -100,10 +117,7 @@ class ScopeTest extends \PHPUnit\Framework\TestCase
      */
     public function testUnmarshallingWithoutRegexpValue(): void
     {
-        $document = DOMDocumentFactory::fromString(
-            '<shibmd:Scope xmlns:shibmd="' . Scope::NS . '">example.org</shibmd:Scope>'
-        );
-        $scope = Scope::fromXML($document->firstChild);
+        $scope = Scope::fromXML($this->document->documentElement);
 
         $this->assertEquals('example.org', $scope->getScope());
         $this->assertFalse($scope->isRegexpScope());
@@ -116,12 +130,22 @@ class ScopeTest extends \PHPUnit\Framework\TestCase
      */
     public function testUnmarshallingRegexp(): void
     {
-        $document = DOMDocumentFactory::fromString(
-            '<shibmd:Scope xmlns:shibmd="' . Scope::NS . '" regexp="true">^(.*|)example.edu$</shibmd:Scope>'
-        );
-        $scope = Scope::fromXML($document->firstChild);
+        $document = $this->document;
+        $document->documentElement->setAttribute('regexp', 'true');
+        $document->documentElement->textContent = '^(.*|)example.edu$';
 
+        $scope = Scope::fromXML($document->documentElement);
         $this->assertEquals('^(.*|)example.edu$', $scope->getScope());
         $this->assertTrue($scope->isRegexpScope());
+    }
+
+
+    /**
+     * Test serialization and unserialization of Scope elements.
+     */
+    public function testSerialization(): void
+    {
+        $scope = Scope::fromXML($this->document->documentElement);
+        $this->assertEquals($this->document->saveXML($this->document->documentElement), strval(unserialize(serialize($scope))));
     }
 }

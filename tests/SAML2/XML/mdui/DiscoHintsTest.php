@@ -27,7 +27,7 @@ class DiscoHintsTest extends \PHPUnit\Framework\TestCase
         );
 
         $document = DOMDocumentFactory::fromString('<root />');
-        $xml = $discoHints->toXML($document->firstChild);
+        $xml = $discoHints->toXML($document->documentElement);
 
         $discoElements = Utils::xpQuery(
             $xml,
@@ -80,7 +80,7 @@ class DiscoHintsTest extends \PHPUnit\Framework\TestCase
 XML
         );
 
-        $disco = DiscoHints::fromXML($document->firstChild);
+        $disco = DiscoHints::fromXML($document->documentElement);
 
         $this->assertCount(2, $disco->getIPHint());
         $this->assertEquals('130.59.0.0/16', $disco->getIPHint()[0]);
@@ -105,16 +105,19 @@ XML
         $discoHints->addChild(new Chunk($keywords->toXML()));
 
         $document = DOMDocumentFactory::fromString('<root />');
-        $xml = $discoHints->toXML($document->firstChild);
+        $xml = $discoHints->toXML($document->documentElement);
 
+        /** @var \DOMElement[] $discoElements */
         $discoElements = Utils::xpQuery(
             $xml,
             '/root/*[local-name()=\'DiscoHints\' and namespace-uri()=\'urn:oasis:names:tc:SAML:metadata:ui\']'
         );
         $this->assertCount(1, $discoElements);
-        $discoElement = $discoElements[0];
-        $this->assertEquals("mdui:Keywords", $discoElement->firstChild->nodeName);
-        $this->assertEquals("voorbeeld specimen", $discoElement->firstChild->textContent);
+        /** @var \DOMNode $discoElement */
+        $discoElement = $discoElements[0]->firstChild;
+
+        $this->assertEquals("mdui:Keywords", $discoElement->nodeName);
+        $this->assertEquals("voorbeeld specimen", $discoElement->textContent);
     }
 
 
@@ -132,7 +135,7 @@ XML
 XML
         );
 
-        $disco = DiscoHints::fromXML($document->firstChild);
+        $disco = DiscoHints::fromXML($document->documentElement);
 
         $this->assertCount(1, $disco->getGeolocationHint());
         $this->assertEquals('geo:47.37328,8.531126', $disco->getGeolocationHint()[0]);

@@ -30,6 +30,8 @@ class LogoTest extends \PHPUnit\Framework\TestCase
             '/root/*[local-name()=\'Logo\' and namespace-uri()=\'urn:oasis:names:tc:SAML:metadata:ui\']'
         );
         $this->assertCount(1, $logoElements);
+
+        /** @var \DOMElement $logoElement */
         $logoElement = $logoElements[0];
         $this->assertEquals("https://static.example.org/images/logos/logo300x200.png", $logoElement->textContent);
         $this->assertEquals("nl", $logoElement->getAttribute("xml:lang"));

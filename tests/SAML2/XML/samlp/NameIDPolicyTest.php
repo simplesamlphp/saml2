@@ -47,7 +47,7 @@ class NameIDTestPolicy extends \PHPUnit\Framework\TestCase
 XML
         );
 
-        $nameIdPolicy = NameIDPolicy::fromXML($document->firstChild);
+        $nameIdPolicy = NameIDPolicy::fromXML($document->documentElement);
         $this->assertEquals('TheSPNameQualifier', $nameIdPolicy->getSPNameQualifier());
         $this->assertEquals('TheFormat', $nameIdPolicy->getFormat());
         $this->assertEquals(true, $nameIdPolicy->getAllowCreate());

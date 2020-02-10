@@ -27,7 +27,7 @@ final class X509DataTest extends \PHPUnit\Framework\TestCase
     /** @var string */
     private $certificate;
 
-    /** @var string */
+    /** @var string[] */
     private $certData;
 
 

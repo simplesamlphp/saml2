@@ -29,8 +29,9 @@ class RegistrationInfoTest extends \PHPUnit\Framework\TestCase
         );
 
         $document = DOMDocumentFactory::fromString('<root />');
-        $xml = $registrationInfo->toXML($document->firstChild);
+        $xml = $registrationInfo->toXML($document->documentElement);
 
+        /** @var \DOMElement[] $registrationInfoElements */
         $registrationInfoElements = Utils::xpQuery(
             $xml,
             '/root/*[local-name()=\'RegistrationInfo\' and namespace-uri()=\'urn:oasis:names:tc:SAML:metadata:rpi\']'
@@ -44,6 +45,7 @@ class RegistrationInfoTest extends \PHPUnit\Framework\TestCase
         );
         $this->assertEquals('2009-02-13T23:31:30Z', $registrationInfoElement->getAttribute("registrationInstant"));
 
+        /** @var \DOMElement[] $usagePolicyElements */
         $usagePolicyElements = Utils::xpQuery(
             $registrationInfoElement,
             './*[local-name()=\'RegistrationPolicy\' and namespace-uri()=\'urn:oasis:names:tc:SAML:metadata:rpi\']'
@@ -82,7 +84,7 @@ class RegistrationInfoTest extends \PHPUnit\Framework\TestCase
 XML
         );
 
-        $registrationInfo = RegistrationInfo::fromXML($document->firstChild);
+        $registrationInfo = RegistrationInfo::fromXML($document->documentElement);
 
         $this->assertEquals('urn:example:example.org', $registrationInfo->getRegistrationAuthority());
         $this->assertEquals(1148902467, $registrationInfo->getRegistrationInstant());
@@ -108,6 +110,6 @@ XML
 
         $this->expectException(Exception::class);
         $this->expectExceptionMessage('Missing required attribute "registrationAuthority"');
-        $registrationInfo = RegistrationInfo::fromXML($document->firstChild);
+        $registrationInfo = RegistrationInfo::fromXML($document->documentElement);
     }
 }
