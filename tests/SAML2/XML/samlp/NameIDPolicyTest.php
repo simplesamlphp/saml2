@@ -52,4 +52,16 @@ XML
         $this->assertEquals('TheFormat', $nameIdPolicy->getFormat());
         $this->assertEquals(true, $nameIdPolicy->getAllowCreate());
     }
+
+
+    /**
+     * Test serialization / unserialization
+     */
+    public function testSerialization(): void
+    {
+        $this->assertEquals(
+            $this->document->saveXML($this->document->documentElement),
+            strval(unserialize(serialize(NameIDPolicy::fromXML($this->document->documentElement))))
+        );
+    }
 }

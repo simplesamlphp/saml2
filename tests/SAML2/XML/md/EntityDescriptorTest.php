@@ -531,4 +531,16 @@ XML
         );
         EntityDescriptor::fromXML($document->documentElement);
     }
+
+
+    /**
+     * Test serialization / unserialization
+     */
+    public function testSerialization(): void
+    {
+        $this->assertEquals(
+            $this->document->saveXML($this->document->documentElement),
+            strval(unserialize(serialize(EntityDescriptor::fromXML($this->document->documentElement))))
+        );
+    }
 }

@@ -111,4 +111,16 @@ XML
         $this->expectExceptionMessage('Missing required attribute "publisher"');
         $publicationInfo = PublicationInfo::fromXML($document->documentElement);
     }
+
+
+    /**
+     * Test serialization / unserialization
+     */
+    public function testSerialization(): void
+    {
+        $this->assertEquals(
+            $this->document->saveXML($this->document->documentElement),
+            strval(unserialize(serialize(PublicationInfo::fromXML($this->document->documentElement))))
+        );
+    }
 }

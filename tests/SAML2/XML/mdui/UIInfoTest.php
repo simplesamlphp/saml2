@@ -236,4 +236,16 @@ XML
         $this->assertCount(3, $uiinfo->getChildren());
         $this->assertEquals('child2', $uiinfo->getChildren()[1]->getLocalName());
     }
+
+
+    /**
+     * Test serialization / unserialization
+     */
+    public function testSerialization(): void
+    {
+        $this->assertEquals(
+            $this->document->saveXML($this->document->documentElement),
+            strval(unserialize(serialize(UIInfo::fromXML($this->document->documentElement))))
+        );
+    }
 }

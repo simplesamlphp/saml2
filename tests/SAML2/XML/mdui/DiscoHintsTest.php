@@ -142,4 +142,16 @@ XML
         $this->assertCount(1, $disco->getChildren());
         $this->assertEquals('content of tag', $disco->getChildren()[0]->getXML()->textContent);
     }
+
+
+    /**
+     * Test serialization / unserialization
+     */
+    public function testSerialization(): void
+    {
+        $this->assertEquals(
+            $this->document->saveXML($this->document->documentElement),
+            strval(unserialize(serialize(DiscoHints::fromXML($this->document->documentElement))))
+        );
+    }
 }

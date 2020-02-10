@@ -102,4 +102,16 @@ class KeywordsTest extends \PHPUnit\Framework\TestCase
         $this->expectExceptionMessage('Missing value for Keywords');
         $keywords = Keywords::fromXML($document->documentElement);
     }
+
+
+    /**
+     * Test serialization / unserialization
+     */
+    public function testSerialization(): void
+    {
+        $this->assertEquals(
+            $this->document->saveXML($this->document->documentElement),
+            strval(unserialize(serialize(Keywords::fromXML($this->document->documentElement))))
+        );
+    }
 }

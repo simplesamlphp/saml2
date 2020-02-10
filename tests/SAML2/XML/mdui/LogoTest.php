@@ -151,4 +151,16 @@ XML
         $this->expectExceptionMessage('Missing height of Logo');
         $logo = Logo::fromXML($document->documentElement);
     }
+
+
+    /**
+     * Test serialization / unserialization
+     */
+    public function testSerialization(): void
+    {
+        $this->assertEquals(
+            $this->document->saveXML($this->document->documentElement),
+            strval(unserialize(serialize(Logo::fromXML($this->document->documentElement))))
+        );
+    }
 }

@@ -112,4 +112,16 @@ XML
         $this->expectExceptionMessage('Missing required attribute "registrationAuthority"');
         $registrationInfo = RegistrationInfo::fromXML($document->documentElement);
     }
+
+
+    /**
+     * Test serialization / unserialization
+     */
+    public function testSerialization(): void
+    {
+        $this->assertEquals(
+            $this->document->saveXML($this->document->documentElement),
+            strval(unserialize(serialize(RegistrationInfo::fromXML($this->document->documentElement))))
+        );
+    }
 }

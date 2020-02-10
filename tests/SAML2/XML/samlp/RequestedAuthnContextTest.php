@@ -16,6 +16,26 @@ use SAML2\XML\saml\AuthnContextDeclRef;
  */
 class RequestedAuthnContextTest extends \PHPUnit\Framework\TestCase
 {
+    /** @var \DOMDocument */
+    private $document;
+
+
+    /**
+     * @return void
+     */
+    public function setUp(): void
+    {
+        $nssamlp = RequestedAuthnContext::NS;
+        $nssaml = AuthnContextDeclRef::NS;
+
+        $this->document = DOMDocumentFactory::fromString(<<<XML
+<samlp:RequestedAuthnContext xmlns:samlp="{$nssamlp}" Comparison="exact">
+  <saml:AuthnContextDeclRef xmlns:saml="{$nssaml}">/relative/path/to/document.xml</saml:AuthnContextDeclRef>
+</samlp:RequestedAuthnContext>
+XML
+        );
+    }
+
     /**
      * @return void
      */
@@ -25,14 +45,8 @@ class RequestedAuthnContextTest extends \PHPUnit\Framework\TestCase
 
         $requestedAuthnContext = new RequestedAuthnContext([], [$authnContextDeclRef], 'exact');
 
-        $nssamlp = RequestedAuthnContext::NS;
-        $nssaml = AuthnContextDeclRef::NS;
-        $this->assertEquals(<<<XML
-<samlp:RequestedAuthnContext xmlns:samlp="{$nssamlp}" Comparison="exact">
-  <saml:AuthnContextDeclRef xmlns:saml="{$nssaml}">/relative/path/to/document.xml</saml:AuthnContextDeclRef>
-</samlp:RequestedAuthnContext>
-XML
-            ,
+        $this->assertEquals(
+            $this->document->documentElement,
             strval($requestedAuthnContext)
         );
     }
@@ -79,20 +93,9 @@ XML
     {
         $samlNamespace = Constants::NS_SAML;
         $samlpNamespace = Constants::NS_SAMLP;
-        $document = DOMDocumentFactory::fromString(<<<XML
-<samlp:RequestedAuthnContext xmlns:samlp="{$samlpNamespace}" Comparison="minimum">
-  <saml:AuthnContextClassRef xmlns:saml="{$samlNamespace}">
-    urn:oasis:names:tc:SAML:2.0:ac:classes:PasswordProtectedTransport
-  </saml:AuthnContextClassRef>
-</samlp:RequestedAuthnContext>
-XML
-        );
 
-        /**
-         * @psalm-var \DOMElement $document->firstChild
-         */
-        $requestedAuthnContext = RequestedAuthnContext::fromXML($document->firstChild);
-        $this->assertEquals('minimum', $requestedAuthnContext->getComparison());
+        $requestedAuthnContext = RequestedAuthnContext::fromXML($this->document->documentElement);
+        $this->assertEquals('exact', $requestedAuthnContext->getComparison());
 
         $contexts = $requestedAuthnContext->getRequestedAuthnContexts();
         $this->assertCount(1, $contexts);
@@ -126,5 +129,17 @@ XML
 
         /** @psalm-var \DOMElement $document->firstChild */
         $requestedAuthnContext = RequestedAuthnContext::fromXML($document->firstChild);
+    }
+
+
+    /**
+     * Test serialization / unserialization
+     */
+    public function testSerialization(): void
+    {
+        $this->assertEquals(
+            $this->document->saveXML($this->document->documentElement),
+            strval(unserialize(serialize(RequestedAuthnContext::fromXML($this->document->documentElement))))
+        );
     }
 }

@@ -107,4 +107,16 @@ XML
         $this->assertEquals("Attribute", $list[2]->getLocalName());
         $this->assertEquals("urn:mace:shibboleth:metadata:1.0", $list[3]->getNamespaceURI());
     }
+
+
+    /**
+     * Test serialization / unserialization
+     */
+    public function testSerialization(): void
+    {
+        $this->assertEquals(
+            $this->document->saveXML($this->document->documentElement),
+            strval(unserialize(serialize(Extensions::fromXML($this->document->documentElement))))
+        );
+    }
 }
