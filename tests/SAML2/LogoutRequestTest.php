@@ -270,6 +270,45 @@ XML;
         $this->assertEquals($time, $logoutRequest2->getNotOnOrAfter());
     }
 
+    /**
+     * @return void
+     */
+    public function testGetReason(): void
+    {
+        $reason = "urn:simplesamlphp:reason-test";
+        $xml = <<<XML
+<samlp:LogoutRequest xmlns:samlp="urn:oasis:names:tc:SAML:2.0:protocol" xmlns:saml="urn:oasis:names:tc:SAML:2.0:assertion" ID="SomeIDValue" Version="2.0" IssueInstant="2010-07-22T11:30:19Z" NotOnOrAfter="2018-11-28T19:33:12Z" Reason="$reason">
+  <saml:Issuer>TheIssuer</saml:Issuer>
+  <saml:NameID Format="urn:oasis:names:tc:SAML:2.0:nameid-format:unspecified">frits</saml:NameID>
+</samlp:LogoutRequest>
+XML;
+        $document = DOMDocumentFactory::fromString($xml);
+        $this->logoutRequestElement = $document->firstChild;
+
+        $logoutRequest = new LogoutRequest($this->logoutRequestElement);
+        $this->assertEquals($reason, $logoutRequest->getReason());
+    }
+
+
+    /**
+     * @return void
+     */
+    public function testSetReason(): void
+    {
+        $reason = "urn:simplesamlphp:reason-test";
+        $nameId = new XML\saml\NameID();
+        $nameId->setValue('NameIDValue');
+
+        $logoutRequest = new LogoutRequest();
+        $logoutRequest->setNameID($nameId);
+        $logoutRequest->setReason($reason);
+        $logoutRequestElement = $logoutRequest->toXML();
+
+        $logoutRequest2 = new LogoutRequest($logoutRequestElement);
+        $this->assertEquals($reason, $logoutRequest2->getReason());
+    }
+
+
 
     /**
      * @return void

@@ -5,6 +5,7 @@ declare(strict_types=1);
 namespace SAML2\XML\alg;
 
 use Exception;
+use PHPUnit\Framework\TestCase;
 use SAML2\DOMDocumentFactory;
 use SAML2\XML\alg\SigningMethod;
 use SAML2\Utils;
@@ -15,28 +16,34 @@ use SAML2\Utils;
  * @author Jaime Pérez Crespo, UNINETT AS <jaime.perez@uninett.no>
  * @package simplesamlphp/saml2
  */
-class SigningMethodTest extends \PHPUnit\Framework\TestCase
+final class SigningMethodTest extends TestCase
 {
+    /** @var \DOMDocument */
+    private $document;
+
+
+    protected function setUp(): void
+    {
+        $ns = SigningMethod::NS;
+        $this->document = DOMDocumentFactory::fromString(<<<XML
+<alg:SigningMethod xmlns:alg="{$ns}" Algorithm="http://exampleAlgorithm" MinKeySize="1024" MaxKeySize="4096" />
+XML
+        );
+    }
+
+
     /**
      * @return void
      */
     public function testMarshalling(): void
     {
-        $signingMethod = new SigningMethod('http://exampleAlgorithm', 1024, 2048);
+        $signingMethod = new SigningMethod('http://exampleAlgorithm', 1024, 4096);
 
-        $document = DOMDocumentFactory::fromString('<root />');
-        $xml = $signingMethod->toXML($document->firstChild);
+        $this->assertEquals('http://exampleAlgorithm', $signingMethod->getAlgorithm());
+        $this->assertEquals(1024, $signingMethod->getMinKeySize());
+        $this->assertEquals(4096, $signingMethod->getMaxKeySize());
 
-        $signingMethodElements = Utils::xpQuery(
-            $xml,
-            '/root/*[local-name()=\'SigningMethod\' and namespace-uri()=\'' . SigningMethod::NS . '\']'
-        );
-        $this->assertCount(1, $signingMethodElements);
-        $signingMethodElement = $signingMethodElements[0];
-
-        $this->assertEquals('http://exampleAlgorithm', $signingMethodElement->getAttribute('Algorithm'));
-        $this->assertEquals('1024', $signingMethodElement->getAttribute('MinKeySize'));
-        $this->assertEquals('2048', $signingMethodElement->getAttribute('MaxKeySize'));
+        $this->assertEquals($this->document->saveXML($this->document->documentElement), strval($signingMethod));
     }
 
 
@@ -45,12 +52,7 @@ class SigningMethodTest extends \PHPUnit\Framework\TestCase
      */
     public function testUnmarshalling(): void
     {
-        $document = DOMDocumentFactory::fromString(
-            '<alg:SigningMethod xmlns:alg="' . SigningMethod::NS . '" Algorithm="http://exampleAlgorithm"'
-                . ' MinKeySize="1024" MaxKeySize="4096" />'
-        );
-
-        $signingMethod = SigningMethod::fromXML($document->firstChild);
+        $signingMethod = SigningMethod::fromXML($this->document->documentElement);
 
         $this->assertEquals('http://exampleAlgorithm', $signingMethod->getAlgorithm());
         $this->assertEquals(1024, $signingMethod->getMinKeySize());
@@ -63,11 +65,24 @@ class SigningMethodTest extends \PHPUnit\Framework\TestCase
      */
     public function testMissingAlgorithmThrowsException(): void
     {
-        $document = DOMDocumentFactory::fromString(
-            '<alg:SigningMethod xmlns:alg="' . SigningMethod::NS . '" MinKeySize="1024" MaxKeySize="4096" />'
-        );
+        $document = $this->document->documentElement;
+        $document->removeAttribute('Algorithm');
+
         $this->expectException(Exception::class);
         $this->expectExceptionMessage('Missing required attribute "Algorithm"');
-        SigningMethod::fromXML($document->firstChild);
+
+        SigningMethod::fromXML($document);
+    }
+
+
+    /**
+     * Test serialization / unserialization
+     */
+    public function testSerialization(): void
+    {
+        $this->assertEquals(
+            $this->document->saveXML($this->document->documentElement),
+            strval(unserialize(serialize(SigningMethod::fromXML($this->document->documentElement))))
+        );
     }
 }

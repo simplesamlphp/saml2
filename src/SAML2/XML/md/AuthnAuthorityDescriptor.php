@@ -232,10 +232,11 @@ final class AuthnAuthorityDescriptor extends AbstractRoleDescriptor
      * Add this IDPSSODescriptor to an EntityDescriptor.
      *
      * @param \DOMElement|null $parent The EntityDescriptor we should append this AuthnAuthorityDescriptor to.
+     *
      * @return \DOMElement
      * @throws \InvalidArgumentException if the qualified name of the supplied element is wrong
      */
-    public function toXML(DOMElement $parent = null): DOMElement
+    public function toXML(?DOMElement $parent = null): DOMElement
     {
         $e = parent::toXML($parent);
 

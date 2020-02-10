@@ -34,16 +34,16 @@ final class IDPSSODescriptor extends AbstractSSODescriptor
     /**
      * List of NameIDMappingService endpoints.
      *
-     * @var \SAML2\XML\md\NameIDMappingService[]
+     * @var \SAML2\XML\md\NameIDMappingService[]|null
      */
-    protected $nameIDMappingServiceEndpoints = [];
+    protected $nameIDMappingServiceEndpoints = null;
 
     /**
      * List of AssertionIDRequestService endpoints.
      *
-     * @var \SAML2\XML\md\AssertionIDRequestService[]
+     * @var \SAML2\XML\md\AssertionIDRequestService[]|null
      */
-    protected $assertionIDRequestServiceEndpoints = [];
+    protected $assertionIDRequestServiceEndpoints = null;
 
     /**
      * List of supported attribute profiles.
@@ -227,9 +227,9 @@ final class IDPSSODescriptor extends AbstractSSODescriptor
     /**
      * Get the NameIDMappingService endpoints
      *
-     * @return \SAML2\XML\md\NameIDMappingService[]
+     * @return \SAML2\XML\md\NameIDMappingService[]|null
      */
-    public function getNameIDMappingServices(): array
+    public function getNameIDMappingServices(): ?array
     {
         return $this->nameIDMappingServiceEndpoints;
     }
@@ -257,9 +257,9 @@ final class IDPSSODescriptor extends AbstractSSODescriptor
     /**
      * Collect the AssertionIDRequestService endpoints
      *
-     * @return \SAML2\XML\md\AssertionIDRequestService[]
+     * @return \SAML2\XML\md\AssertionIDRequestService[]|null
      */
-    public function getAssertionIDRequestServices(): array
+    public function getAssertionIDRequestServices(): ?array
     {
         return $this->assertionIDRequestServiceEndpoints;
     }

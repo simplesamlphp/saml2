@@ -47,6 +47,15 @@ class LogoutRequest extends Request
      */
     private $sessionIndexes = [];
 
+    /**
+     * The optional reason for the logout, typically a URN
+     * See \SAML2\Constants::LOGOUT_REASON_*
+     * From the standard section 3.7.3: "other values MAY be agreed on between participants"
+     *
+     * @var string|null
+     */
+    protected $reason = null;
+
 
     /**
      * Constructor for SAML 2 logout request messages.
@@ -64,6 +73,10 @@ class LogoutRequest extends Request
 
         if ($xml->hasAttribute('NotOnOrAfter')) {
             $this->notOnOrAfter = Utils::xsDateTimeToTimestamp($xml->getAttribute('NotOnOrAfter'));
+        }
+
+        if ($xml->hasAttribute('Reason')) {
+            $this->reason = $xml->getAttribute('Reason');
         }
 
         /** @var \DOMElement[] $nameId */
@@ -108,6 +121,28 @@ class LogoutRequest extends Request
     public function setNotOnOrAfter(int $notOnOrAfter = null): void
     {
         $this->notOnOrAfter = $notOnOrAfter;
+    }
+
+    /**
+     * Retrieve the reason for this request.
+     *
+     * @return string|null The reason for this request.
+     */
+    public function getReason(): ?string
+    {
+        return $this->reason;
+    }
+
+
+    /**
+     * Set the reason for this request.
+     *
+     * @param string|null $reason The optional reason for this request in URN format
+     * @return void
+     */
+    public function setReason($reason = null): void
+    {
+        $this->reason = $reason;
     }
 
 
@@ -284,6 +319,10 @@ class LogoutRequest extends Request
 
         if ($this->notOnOrAfter !== null) {
             $root->setAttribute('NotOnOrAfter', gmdate('Y-m-d\TH:i:s\Z', $this->notOnOrAfter));
+        }
+
+        if ($this->reason !== null) {
+            $root->setAttribute('Reason', $this->reason);
         }
 
         if ($this->encryptedNameId === null) {
