@@ -13,11 +13,14 @@
     <file name="tests/SAML2/XML/saml/AuthnContextDeclTest.php" />
     <file name="tests/SAML2/XML/saml/AuthnContextTest.php" />
     <file name="tests/SAML2/XML/samlp/RequestedAuthnContextTest.php" />
+    <directory name="tests/SAML2/XML/alg" />
+    <directory name="tests/SAML2/XML/ds" />
+    <directory name="tests/SAML2/XML/ecp" />
     <directory name="tests/SAML2/XML/md" />
-    <file name="tests/SAML2/XML/samlp/StatusTest.php" />
-    <file name="tests/SAML2/XML/samlp/StatusCodeTest.php" />
-    <file name="tests/SAML2/XML/samlp/StatusMessageTest.php" />
-    <file name="tests/SAML2/XML/samlp/StatusDetailTest.php" />
+    <directory name="tests/SAML2/XML/mdrpi" />
+    <directory name="tests/SAML2/XML/mdui" />
+    <directory name="tests/SAML2/XML/samlp" />
+    <directory name="tests/SAML2/XML/shibmd" />
     <ignoreFiles>
       <directory name="vendor" />
     </ignoreFiles>
