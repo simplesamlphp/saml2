@@ -85,6 +85,16 @@ XML
         $keyInfo = new KeyInfo(
             [
                 new KeyName('testkey'),
+                new X509Data(
+                    [
+                        new X509Certificate($this->certificate),
+                        new X509SubjectName($this->certData['name'])
+                    ]
+                ),
+                new Chunk(DOMDocumentFactory::fromString(
+                    '<ds:KeySomething>Some unknown tag within the ds-namespace</ds:KeySomething>'
+                )->documentElement),
+                new Chunk(DOMDocumentFactory::fromString('<some>Chunk</some>')->documentElement)
             ],
             'abc123'
         );
