@@ -5,6 +5,7 @@ declare(strict_types=1);
 namespace SAML2\XML\md;
 
 use DOMElement;
+use SAML2\ExtensionsTrait;
 use SAML2\Utils;
 use SAML2\XML\alg\AbstractAlgElement as ALG;
 use SAML2\XML\alg\DigestMethod;
@@ -27,74 +28,7 @@ use Webmozart\Assert\Assert;
  */
 final class Extensions extends AbstractMdElement
 {
-    /**
-     * @var (\SAML2\XML\shibmd\Scope|
-     *       \SAML2\XML\mdattr\EntityAttributes|
-     *       \SAML2\XML\mdrpi\RegistrationInfo|
-     *       \SAML2\XML\mdrpi\PublicationInfo|
-     *       \SAML2\XML\mdui\UIInfo|
-     *       \SAML2\XML\mdui\DiscoHints|
-     *       \SAML2\XML\alg\DigestMethod|
-     *       \SAML2\XML\alg\SigningMethod|
-     *       \SAML2\XML\Chunk)[]
-     */
-    protected $extensions = [];
-
-
-    /**
-     * Extensions constructor.
-     *
-     * @param (\SAML2\XML\shibmd\Scope|
-     *         \SAML2\XML\mdattr\EntityAttributes|
-     *         \SAML2\XML\mdrpi\RegistrationInfo|
-     *         \SAML2\XML\mdrpi\PublicationInfo|
-     *         \SAML2\XML\mdui\UIInfo|
-     *         \SAML2\XML\mdui\DiscoHints|
-     *         \SAML2\XML\alg\DigestMethod|
-     *         \SAML2\XML\alg\SigningMethod|
-     *         \SAML2\XML\Chunk)[] $extensions
-     */
-    public function __construct(array $extensions)
-    {
-        $this->extensions = $extensions;
-    }
-
-
-    /**
-     * Get an array with all extensions present.
-     *
-     * @return (\SAML2\XML\shibmd\Scope|
-     *          \SAML2\XML\mdattr\EntityAttributes|
-     *          \SAML2\XML\mdrpi\RegistrationInfo|
-     *          \SAML2\XML\mdrpi\PublicationInfo|
-     *          \SAML2\XML\mdui\UIInfo|
-     *          \SAML2\XML\mdui\DiscoHints|
-     *          \SAML2\XML\alg\DigestMethod|
-     *          \SAML2\XML\alg\SigningMethod|
-     *          \SAML2\XML\Chunk)[]  Array of extensions.
-     */
-    public function getList(): array
-    {
-        return $this->extensions;
-    }
-
-
-    /**
-     * @return bool
-     */
-    public function isEmptyElement(): bool
-    {
-        if (empty($this->extensions)) {
-            return true;
-        }
-
-        $empty = false;
-        foreach ($this->extensions as $extension) {
-            $empty &= $extension->isEmptyElement();
-        }
-
-        return boolval($empty);
-    }
+    use ExtensionsTrait;
 
 
     /**
@@ -155,23 +89,5 @@ final class Extensions extends AbstractMdElement
         }
 
         return new self($ret);
-    }
-
-
-    /**
-     * Convert this object into its md:Extensions XML representation.
-     *
-     * @param \DOMElement|null $parent The element we should add this Extensions element to.
-     * @return \DOMElement The new md:Extensions XML element.
-     */
-    public function toXML(DOMElement $parent = null): DOMElement
-    {
-        $e = $this->instantiateParentElement($parent);
-        foreach ($this->extensions as $extension) {
-            if (!$extension->isEmptyElement()) {
-                $extension->toXML($e);
-            }
-        }
-        return $e;
     }
 }
