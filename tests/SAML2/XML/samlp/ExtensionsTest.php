@@ -16,9 +16,9 @@ use SAML2\XML\shibmd\Scope;
 class ExtensionsTest extends \PHPUnit\Framework\TestCase
 {
     /**
-     * @var \DOMElement
+     * @var \DOMDocument
      */
-    private $testElement;
+    private $document;
 
 
     /**
@@ -27,7 +27,7 @@ class ExtensionsTest extends \PHPUnit\Framework\TestCase
      */
     public function setUp(): void
     {
-        $document = DOMDocumentFactory::fromString(<<<XML
+        $this->document = DOMDocumentFactory::fromString(<<<XML
 <samlp:Response xmlns:samlp="urn:oasis:names:tc:SAML:2.0:protocol"
                 xmlns:saml="urn:oasis:names:tc:SAML:2.0:assertion"
                 ID="s2a0da3504aff978b0f8c80f6a62c713c4a2f64c5b"
@@ -48,7 +48,6 @@ class ExtensionsTest extends \PHPUnit\Framework\TestCase
 </samlp:Response>
 XML
         );
-        $this->testElement = $document->documentElement;
     }
 
 
@@ -58,7 +57,7 @@ XML
      */
     public function testExtensionsGet(): void
     {
-        $list = Extensions::getList($this->testElement);
+        $list = Extensions::getList($this->document->documentElement);
 
         $this->assertCount(2, $list);
         $this->assertEquals("urn:mynamespace", $list[0]->getNamespaceURI());
@@ -92,14 +91,14 @@ XML
         $scope = new Scope("scope");
 
         Extensions::addList(
-            $this->testElement,
+            $this->document->documentElement,
             [
                 new Chunk($attribute->toXML()),
                 new Chunk($scope->toXML())
             ]
         );
 
-        $list = Extensions::getList($this->testElement);
+        $list = Extensions::getList($this->document->documentElement);
 
         $this->assertCount(4, $list);
         $this->assertEquals("urn:mynamespace", $list[0]->getNamespaceURI());

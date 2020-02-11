@@ -193,8 +193,8 @@ final class Logo extends AbstractMduiElement
     {
         $e = $this->instantiateParentElement($parent);
         $e->appendChild($e->ownerDocument->createTextNode($this->url));
-        $e->setAttribute('width', strval($this->width));
         $e->setAttribute('height', strval($this->height));
+        $e->setAttribute('width', strval($this->width));
 
         if ($this->lang !== null) {
             $e->setAttribute('xml:lang', $this->lang);

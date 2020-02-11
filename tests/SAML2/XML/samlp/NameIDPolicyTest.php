@@ -16,20 +16,38 @@ use SAML2\XML\samlp\NameIDPolicy;
  */
 class NameIDTestPolicy extends \PHPUnit\Framework\TestCase
 {
+    /** @var \DOMDocument */
+    private $document;
+
+
+    /**
+     * @return void
+     */
+    public function setUp(): void
+    {
+        $this->document = DOMDocumentFactory::fromString(<<<XML
+<samlp:NameIDPolicy xmlns:samlp="{$samlNamespace}" AllowCreate="true" SPNameQualifier="TheSPNameQualifier" Format="TheFormat" />
+XML
+        );
+    }
+
     /**
      * @return void
      */
     public function testMarshalling(): void
     {
         $nameIdPolicy = new NameIDPolicy(
-            Constants::NAMEID_TRANSIENT,
+            'TheFormat',
             'TheSPNameQualifier',
             true
         );
 
+        $this->assertEquals('TheSPNameQualifier', $nameIdPolicy->getSPNameQualifier());
+        $this->assertEquals('TheFormat', $nameIdPolicy->getFormat());
+        $this->assertEquals(true, $nameIdPolicy->getAllowCreate());
+
         $this->assertEquals(
-            '<samlp:NameIDPolicy xmlns:samlp="' . Constants::NS_SAMLP . '" Format="' . Constants::NAMEID_TRANSIENT
-                . '" SPNameQualifier="TheSPNameQualifier" AllowCreate="true"/>',
+            $this->document->saveXML($this->document->documentElement),
             strval($nameIdPolicy)
         );
     }
@@ -40,14 +58,8 @@ class NameIDTestPolicy extends \PHPUnit\Framework\TestCase
      */
     public function testUnmarshalling(): void
     {
-        $samlNamespace = Constants::NS_SAMLP;
+        $nameIdPolicy = NameIDPolicy::fromXML($this->document->documentElement);
 
-        $document = DOMDocumentFactory::fromString(<<<XML
-<samlp:NameIDPolicy xmlns:samlp="{$samlNamespace}" AllowCreate="true" SPNameQualifier="TheSPNameQualifier" Format="TheFormat" />
-XML
-        );
-
-        $nameIdPolicy = NameIDPolicy::fromXML($document->documentElement);
         $this->assertEquals('TheSPNameQualifier', $nameIdPolicy->getSPNameQualifier());
         $this->assertEquals('TheFormat', $nameIdPolicy->getFormat());
         $this->assertEquals(true, $nameIdPolicy->getAllowCreate());

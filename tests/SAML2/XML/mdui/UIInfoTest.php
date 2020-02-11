@@ -13,6 +13,29 @@ use SAML2\Utils;
  */
 class UIInfoTest extends \PHPUnit\Framework\TestCase
 {
+    /** @var \DOMDocment */
+    private $document;
+
+
+    /**
+     * @return void
+     */
+    public function setUp(): void
+    {
+        $this->document = DOMDocumentFactory::fromString(<<<XML
+<mdui:UIInfo xmlns:mdui="urn:oasis:names:tc:SAML:metadata:ui">
+  <mdui:DisplayName xml:lang="en">University of Examples</mdui:DisplayName>
+  <mdui:DisplayName xml:lang="el">Univërsitä øf Exåmpleß</mdui:DisplayName>
+  <mdui:Description xml:lang="en">Just an example</mdui:Description>
+  <mdui:InformationURL xml:lang="en">http://www.example.edu/en/</mdui:InformationURL>
+  <mdui:InformationURL xml:lang="el">http://www.example.edu/</mdui:InformationURL>
+  <mdui:PrivacyStatementURL xml:lang="en">https://example.org/privacy</mdui:PrivacyStatementURL>
+</mdui:UIInfo>
+XML
+        );
+    }
+
+
     /**
      * Test creating a basic UIInfo element.
      * @return void
@@ -173,19 +196,7 @@ class UIInfoTest extends \PHPUnit\Framework\TestCase
      */
     public function testUnmarshalling(): void
     {
-        $document = DOMDocumentFactory::fromString(<<<XML
-<mdui:UIInfo xmlns:mdui="urn:oasis:names:tc:SAML:metadata:ui">
-  <mdui:DisplayName xml:lang="en">University of Examples</mdui:DisplayName>
-  <mdui:DisplayName xml:lang="el">Univërsitä øf Exåmpleß</mdui:DisplayName>
-  <mdui:InformationURL xml:lang="en">http://www.example.edu/en/</mdui:InformationURL>
-  <mdui:InformationURL xml:lang="el">http://www.example.edu/</mdui:InformationURL>
-  <mdui:Description xml:lang="en">Just an example</mdui:Description>
-  <mdui:PrivacyStatementURL xml:lang="en">https://example.org/privacy</mdui:PrivacyStatementURL>
-</mdui:UIInfo>
-XML
-        );
-
-        $uiinfo = UIInfo::fromXML($document->documentElement);
+        $uiinfo = UIInfo::fromXML($this->document->documentElement);
 
         $this->assertCount(2, $uiinfo->getDisplayName());
         $this->assertEquals('University of Examples', $uiinfo->getDisplayName()['en']);
