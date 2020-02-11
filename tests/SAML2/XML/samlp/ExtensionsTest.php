@@ -4,16 +4,16 @@ declare(strict_types=1);
 
 namespace SAML2\XML\samlp;
 
+use PHPUnit\Framework\TestCase;
 use SAML2\DOMDocumentFactory;
 use SAML2\XML\Chunk;
 use SAML2\XML\saml\Attribute;
-use SAML2\XML\samlp\Extensions;
 use SAML2\XML\shibmd\Scope;
 
 /**
  * Class \SAML2\XML\samlp\ExtensionsTest
  */
-class ExtensionsTest extends \PHPUnit\Framework\TestCase
+class ExtensionsTest extends TestCase
 {
     /**
      * @var \DOMDocument
@@ -22,7 +22,7 @@ class ExtensionsTest extends \PHPUnit\Framework\TestCase
 
 
     /**
-     * Prepare a basic DOMelement to test against
+     * Prepare a basic DOMElement to test against
      * @return void
      */
     public function setUp(): void
