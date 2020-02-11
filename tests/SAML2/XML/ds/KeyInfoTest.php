@@ -89,8 +89,6 @@ XML
             'abc123'
         );
 
-        $keyInfo = KeyInfo::fromXML($this->document->documentElement);
-
         $info = $keyInfo->getInfo();
         $this->assertCount(4, $info);
         $this->assertInstanceOf(KeyName::class, $info[0]);
