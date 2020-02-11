@@ -13,7 +13,7 @@ use SAML2\Utils;
  */
 class UIInfoTest extends \PHPUnit\Framework\TestCase
 {
-    /** @var \DOMDocment */
+    /** @var \DOMDocument */
     private $document;
 
 

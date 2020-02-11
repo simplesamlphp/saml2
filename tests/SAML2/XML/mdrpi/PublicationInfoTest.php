@@ -14,9 +14,13 @@ use SAML2\Utils;
  */
 class PublicationInfoTest extends TestCase
 {
+    /** @var \DOMDocument */
     protected $document;
 
 
+    /**
+     * @return void
+     */
     protected function setUp(): void
     {
         $this->document = DOMDocumentFactory::fromString(<<<XML
