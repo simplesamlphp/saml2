@@ -28,7 +28,7 @@ final class EntityDescriptorTest extends TestCase
         $mdns = Constants::NS_MD;
 
         $this->document = DOMDocumentFactory::fromString(<<<XML
-<md:EntityDescriptor xmlns:md="{$mdns}" entityID="urn:example:entity" ID="_5A3CHB081" validUntil="2020-02-05T09:39:25Z" cacheDuration="P2Y6M5DT12H35M30S">
+<md:EntityDescriptor xmlns:md="{$mdns}" ID="_5A3CHB081" validUntil="2020-02-05T09:39:25Z" cacheDuration="P2Y6M5DT12H35M30S" entityID="urn:example:entity">
   <md:Extensions>
     <mdrpi:PublicationInfo xmlns:mdrpi="urn:oasis:names:tc:SAML:metadata:rpi" publisher="http://publisher.ra/" creationInstant="2020-02-03T13:46:24Z">
       <mdrpi:UsagePolicy xml:lang="en">http://publisher.ra/policy.txt</mdrpi:UsagePolicy>
@@ -180,7 +180,7 @@ XML
     {
         $mdns = Constants::NS_MD;
         $document = DOMDocumentFactory::fromString(<<<XML
-<md:EntityDescriptor xmlns:md="{$mdns}" entityID="urn:example:entity" ID="_5A3CHB081" validUntil="2020-02-05T09:39:25Z" cacheDuration="P2Y6M5DT12H35M30S">
+<md:EntityDescriptor xmlns:md="{$mdns}" ID="_5A3CHB081" validUntil="2020-02-05T09:39:25Z" cacheDuration="P2Y6M5DT12H35M30S" entityID="urn:example:entity">
   <md:Extensions>
     <mdrpi:PublicationInfo xmlns:mdrpi="urn:oasis:names:tc:SAML:metadata:rpi" publisher="http://publisher.ra/" creationInstant="2020-02-03T13:46:24Z">
       <mdrpi:UsagePolicy xml:lang="en">http://publisher.ra/policy.txt</mdrpi:UsagePolicy>

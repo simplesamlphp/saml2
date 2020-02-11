@@ -368,24 +368,8 @@ final class EntityDescriptor extends AbstractMetadataDocument
      */
     public function toXML(DOMElement $parent = null): DOMElement
     {
-        $e = $this->instantiateParentElement($parent);
+        $e = parent::toXML($parent);
         $e->setAttribute('entityID', $this->entityID);
-
-        if ($this->ID !== null) {
-            $e->setAttribute('ID', $this->ID);
-        }
-
-        if ($this->validUntil !== null) {
-            $e->setAttribute('validUntil', gmdate('Y-m-d\TH:i:s\Z', $this->validUntil));
-        }
-
-        if ($this->cacheDuration !== null) {
-            $e->setAttribute('cacheDuration', $this->cacheDuration);
-        }
-
-        if (!empty($this->Extensions)) {
-            $this->Extensions->toXML($e);
-        }
 
         foreach ($this->RoleDescriptor as $n) {
             $n->toXML($e);
