@@ -2,11 +2,11 @@
 
 declare(strict_types=1);
 
-namespace SAML2\XML\md;
+namespace SAML2\XML\samlp;
 
+use PHPUnit\Framework\TestCase;
 use SAML2\Constants;
 use SAML2\DOMDocumentFactory;
-use SAML2\XML\samlp\NameIDPolicy;
 
 /**
  * Class \SAML2\XML\md\NameIDPolicyTest
@@ -14,7 +14,7 @@ use SAML2\XML\samlp\NameIDPolicy;
  * @author Tim van Dijen, <tvdijen@gmail.com>
  * @package simplesamlphp/saml2
  */
-class NameIDTestPolicy extends \PHPUnit\Framework\TestCase
+class NameIDPolicyTest extends TestCase
 {
     /** @var \DOMDocument */
     private $document;
@@ -25,8 +25,9 @@ class NameIDTestPolicy extends \PHPUnit\Framework\TestCase
      */
     public function setUp(): void
     {
+        $samlNamespace = Constants::NS_SAMLP;
         $this->document = DOMDocumentFactory::fromString(<<<XML
-<samlp:NameIDPolicy xmlns:samlp="{$samlNamespace}" AllowCreate="true" SPNameQualifier="TheSPNameQualifier" Format="TheFormat" />
+<samlp:NameIDPolicy xmlns:samlp="{$samlNamespace}" Format="TheFormat" SPNameQualifier="TheSPNameQualifier" AllowCreate="true"/>
 XML
         );
     }
