@@ -71,9 +71,9 @@ XML
      */
     public function testExtensionsAddEmpty(): void
     {
-        Extensions::addList($this->testElement, []);
+        Extensions::addList($this->document->documentElement, []);
 
-        $list = Extensions::getList($this->testElement);
+        $list = Extensions::getList($this->document->documentElement);
 
         $this->assertCount(2, $list);
         $this->assertEquals("urn:mynamespace", $list[0]->getNamespaceURI());
@@ -105,17 +105,5 @@ XML
         $this->assertEquals("ExampleElement", $list[1]->getLocalName());
         $this->assertEquals("Attribute", $list[2]->getLocalName());
         $this->assertEquals("urn:mace:shibboleth:metadata:1.0", $list[3]->getNamespaceURI());
-    }
-
-
-    /**
-     * Test serialization / unserialization
-     */
-    public function testSerialization(): void
-    {
-        $this->assertEquals(
-            $this->document->saveXML($this->document->documentElement),
-            strval(unserialize(serialize(Extensions::fromXML($this->document->documentElement))))
-        );
     }
 }

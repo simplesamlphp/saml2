@@ -5,15 +5,33 @@ declare(strict_types=1);
 namespace SAML2\XML\mdrpi;
 
 use Exception;
+use PHPUnit\Framework\TestCase;
 use SAML2\DOMDocumentFactory;
-use SAML2\XML\mdrpi\PublicationInfo;
 use SAML2\Utils;
 
 /**
  * Class \SAML2\XML\mdrpi\PublicationInfoTest
  */
-class PublicationInfoTest extends \PHPUnit\Framework\TestCase
+class PublicationInfoTest extends TestCase
 {
+    protected $document;
+
+
+    protected function setUp(): void
+    {
+        $this->document = DOMDocumentFactory::fromString(<<<XML
+<mdrpi:PublicationInfo xmlns:mdrpi="urn:oasis:names:tc:SAML:metadata:rpi"
+                       publisher="SomePublisher"
+                       creationInstant="2011-01-01T00:00:00Z"
+                       publicationId="SomePublicationId">
+  <mdrpi:UsagePolicy xml:lang="en">http://TheEnglishUsagePolicy</mdrpi:UsagePolicy>
+  <mdrpi:UsagePolicy xml:lang="no">http://TheNorwegianUsagePolicy</mdrpi:UsagePolicy>
+</mdrpi:PublicationInfo>
+XML
+        );
+    }
+
+
     /**
      * @return void
      */
@@ -59,7 +77,7 @@ class PublicationInfoTest extends \PHPUnit\Framework\TestCase
         $this->assertEquals(
             'no',
             $usagePolicyElements[1]->getAttributeNS("http://www.w3.org/XML/1998/namespace", "lang")
-        
+
 );
         $this->assertEquals('http://NorwegianUsagePolicy', $usagePolicyElements[1]->textContent);
     }
@@ -70,18 +88,7 @@ class PublicationInfoTest extends \PHPUnit\Framework\TestCase
      */
     public function testUnmarshalling(): void
     {
-        $document = DOMDocumentFactory::fromString(<<<XML
-<mdrpi:PublicationInfo xmlns:mdrpi="urn:oasis:names:tc:SAML:metadata:rpi"
-                       publisher="SomePublisher"
-                       creationInstant="2011-01-01T00:00:00Z"
-                       publicationId="SomePublicationId">
-    <mdrpi:UsagePolicy xml:lang="en">http://TheEnglishUsagePolicy</mdrpi:UsagePolicy>
-    <mdrpi:UsagePolicy xml:lang="no">http://TheNorwegianUsagePolicy</mdrpi:UsagePolicy>
-</mdrpi:PublicationInfo>
-XML
-        );
-
-        $publicationInfo = PublicationInfo::fromXML($document->documentElement);
+        $publicationInfo = PublicationInfo::fromXML($this->document->documentElement);
 
         $this->assertEquals('SomePublisher', $publicationInfo->getPublisher());
         $this->assertEquals(1293840000, $publicationInfo->getCreationInstant());

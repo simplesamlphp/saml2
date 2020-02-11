@@ -5,13 +5,14 @@ declare(strict_types=1);
 namespace SAML2\XML\mdui;
 
 use InvalidArgumentException;
+use PHPUnit\Framework\TestCase;
 use SAML2\DOMDocumentFactory;
 use SAML2\Utils;
 
 /**
  * Class \SAML2\XML\mdui\KeywordsTest
  */
-class KeywordsTest extends \PHPUnit\Framework\TestCase
+class KeywordsTest extends TestCase
 {
     /**
      * Test creating a basic Keywords element.
@@ -47,7 +48,7 @@ class KeywordsTest extends \PHPUnit\Framework\TestCase
         $this->expectException(InvalidArgumentException::class);
         $this->expectExceptionMessage('Keywords may not contain a "+" character');
 
-        $keywords = new Keywords("en", ["csharp", "pascal", "c++"]);
+        new Keywords("en", ["csharp", "pascal", "c++"]);
     }
 
 
@@ -84,7 +85,7 @@ class KeywordsTest extends \PHPUnit\Framework\TestCase
 
         $this->expectException(InvalidArgumentException::class);
         $this->expectExceptionMessage('Missing lang on Keywords');
-        $keywords = Keywords::fromXML($document->documentElement);
+        Keywords::fromXML($document->documentElement);
     }
 
 
@@ -100,7 +101,7 @@ class KeywordsTest extends \PHPUnit\Framework\TestCase
 
         $this->expectException(InvalidArgumentException::class);
         $this->expectExceptionMessage('Missing value for Keywords');
-        $keywords = Keywords::fromXML($document->documentElement);
+        Keywords::fromXML($document->documentElement);
     }
 
 
@@ -109,9 +110,13 @@ class KeywordsTest extends \PHPUnit\Framework\TestCase
      */
     public function testSerialization(): void
     {
+        $document = DOMDocumentFactory::fromString(
+            '<mdui:Keywords xmlns:mdui="' . Keywords::NS . '" xml:lang="nl">' .
+            'KLM koninklijke luchtvaart+maatschappij</mdui:Keywords>'
+        );
         $this->assertEquals(
-            $this->document->saveXML($this->document->documentElement),
-            strval(unserialize(serialize(Keywords::fromXML($this->document->documentElement))))
+            $document->saveXML($document->documentElement),
+            strval(unserialize(serialize(Keywords::fromXML($document->documentElement))))
         );
     }
 }

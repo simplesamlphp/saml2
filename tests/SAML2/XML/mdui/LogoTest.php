@@ -6,13 +6,14 @@ namespace SAML2\XML\mdui;
 
 use Exception;
 use InvalidArgumentException;
+use PHPUnit\Framework\TestCase;
 use SAML2\DOMDocumentFactory;
 use SAML2\Utils;
 
 /**
  * Class \SAML2\XML\mdui\LogoTest
  */
-class LogoTest extends \PHPUnit\Framework\TestCase
+class LogoTest extends TestCase
 {
     /** @var \DOMDocument */
     private $document;
@@ -105,11 +106,11 @@ XML
     public function testUnmarshallingFailsEmptyURL(): void
     {
         $document = $this->document;
-        $document->documentElement = '';
+        $document->documentElement->textContent = '';
 
         $this->expectException(Exception::class);
         $this->expectExceptionMessage('Missing url value for Logo');
-        $logo = Logo::fromXML($document->documentElement);
+        Logo::fromXML($document->documentElement);
     }
 
 
@@ -120,11 +121,11 @@ XML
     public function testUnmarshallingFailsInvalidURL(): void
     {
         $document = $this->document;
-        $document->documentElement = 'this is no url';
+        $document->documentElement->textContent = 'this is no url';
 
         $this->expectException(InvalidArgumentException::class);
         $this->expectExceptionMessage('mdui:Logo is not a valid URL.');
-        $logo = Logo::fromXML($document->documentElement);
+        Logo::fromXML($document->documentElement);
     }
 
 
@@ -134,12 +135,12 @@ XML
      */
     public function testUnmarshallingFailsMissingWidth(): void
     {
-        $document = $this->docuement;
+        $document = $this->document;
         $document->documentElement->removeAttribute('width');
 
         $this->expectException(Exception::class);
         $this->expectExceptionMessage('Missing width of Logo');
-        $logo = Logo::fromXML($document->documentElement);
+        Logo::fromXML($document->documentElement);
     }
 
 
@@ -149,12 +150,12 @@ XML
      */
     public function testUnmarshallingFailsMissingHeight(): void
     {
-        $document = $this->docuement;
+        $document = $this->document;
         $document->documentElement->removeAttribute('height');
 
         $this->expectException(Exception::class);
         $this->expectExceptionMessage('Missing height of Logo');
-        $logo = Logo::fromXML($document->documentElement);
+        Logo::fromXML($document->documentElement);
     }
 
 
