@@ -73,6 +73,9 @@ XML
     }
 
 
+    // test unmarshalling
+
+
     /**
      * Test unmarshalling an unknown object as a RoleDescriptor.
      */
@@ -97,9 +100,9 @@ XML
         $this->assertEquals('https://error.reporting/', $descriptor->getErrorURL());
 
         $xml = $descriptor->getXML();
-        $this->assertEquals($this->document->saveXML($this->document->documentElement), strval($descriptor));
-        $this->assertInstanceOf(Extensions::class, $descriptor->getExtensions());
+        $this->assertEquals('SomeRoleDescriptor', $xml->getLocalName());
 
+        $this->assertInstanceOf(Extensions::class, $descriptor->getExtensions());
         $extElement = $descriptor->getExtensions();
         $this->assertNotNull($extElement);
 
@@ -108,6 +111,8 @@ XML
         $this->assertInstanceOf(Chunk::class, $extensions[0]);
         $this->assertEquals(Constants::NS_MD, $extensions[0]->getNamespaceURI());
         $this->assertEquals('SomeUnknownExtension', $extensions[0]->getLocalName());
+
+        $this->assertEquals($this->document->saveXML($this->document->documentElement), strval($descriptor));
     }
 
 

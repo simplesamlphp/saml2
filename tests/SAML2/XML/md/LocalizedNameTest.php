@@ -33,6 +33,9 @@ XML
     }
 
 
+    // test marshalling
+
+
     /**
      * Test creating a LocalizedName object from scratch.
      */
@@ -42,6 +45,7 @@ XML
 
         $this->assertEquals('en', $name->getLanguage());
         $this->assertEquals('Names R US', $name->getValue());
+
         $this->assertEquals($this->document->saveXML($this->document->documentElement), strval($name));
     }
 
@@ -69,6 +73,9 @@ XML
 
         $this->assertEquals($this->document->saveXML($this->document->documentElement), strval($name));
     }
+
+
+    // test unmarshalling
 
 
     /**

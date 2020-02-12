@@ -36,6 +36,7 @@ final class AttributeAuthorityDescriptorTest extends TestCase
     {
         $mdns = Constants::NS_MD;
         $samlns = Constants::NS_SAML;
+
         $this->document = DOMDocumentFactory::fromString(<<<XML
 <md:AttributeAuthorityDescriptor protocolSupportEnumeration="urn:oasis:names:tc:SAML:2.0:protocol" xmlns:md="{$mdns}">
   <md:AttributeService Binding="urn:oasis:names:tc:SAML:2.0:bindings:SOAP" Location="https://IdentityProvider.com/SAML/AA/SOAP"/>
@@ -97,7 +98,11 @@ XML
         );
         $aad = new AttributeAuthorityDescriptor(
             [$this->as],
-            ["urn:oasis:names:tc:SAML:2.0:protocol"],
+            [
+                'urn:oasis:names:tc:SAML:1.1:nameid-format:X509SubjectName',
+                'urn:oasis:names:tc:SAML:2.0:nameid-format:persistent',
+                'urn:oasis:names:tc:SAML:2.0:nameid-format:transient',
+            ],
             [$this->aidrs],
             [
                 'urn:oasis:names:tc:SAML:1.1:nameid-format:X509SubjectName',
@@ -110,6 +115,20 @@ XML
             ],
             [$attr1, $attr2]
         );
+
+        $this->assertEquals([$this->as], $aad->getAttributeServices());
+        $this->assertEquals(
+            [
+                'urn:oasis:names:tc:SAML:1.1:nameid-format:X509SubjectName',
+                'urn:oasis:names:tc:SAML:2.0:nameid-format:persistent',
+                'urn:oasis:names:tc:SAML:2.0:nameid-format:transient',
+            ],
+            $aad->getNameIDFormats()
+        );
+        $this->assertEquals([$this->aidrs], $aad->getAssertionIDRequestServices());
+        $this->assertEquals(['profile1', 'profile2'], $aad->getAttributeProfiles());
+        $this->assertEquals([$attr1, $attr2], $aad->getAttributes());
+
         $this->assertEqualXMLStructure($this->document->documentElement, $aad->toXML());
     }
 

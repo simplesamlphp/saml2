@@ -82,6 +82,9 @@ XML
     }
 
 
+    // test marshalling
+
+
     /**
      * Test creating an SPSSODescriptor from scratch.
      */
@@ -169,6 +172,7 @@ XML
             [$mnids],
             ['urn:oasis:names:tc:SAML:2.0:nameid-format:transient']
         );
+
         $this->assertCount(2, $spssod->getAssertionConsumerService());
         $this->assertInstanceOf(AssertionConsumerService::class, $spssod->getAssertionConsumerService()[0]);
         $this->assertInstanceOf(AssertionConsumerService::class, $spssod->getAssertionConsumerService()[1]);
@@ -177,6 +181,7 @@ XML
         $this->assertCount(2, $spssod->getAttributeConsumingService());
         $this->assertInstanceOf(AttributeConsumingService::class, $spssod->getAttributeConsumingService()[0]);
         $this->assertInstanceOf(AttributeConsumingService::class, $spssod->getAttributeConsumingService()[1]);
+
         $this->assertEquals(
             $this->document->saveXML($this->document->documentElement),
             strval($spssod)
@@ -252,6 +257,9 @@ XML
         $this->assertIsArray($spssod->getAttributeConsumingService());
         $this->assertEmpty($spssod->getAttributeConsumingService());
     }
+
+
+    // test unmarshalling
 
 
     /**

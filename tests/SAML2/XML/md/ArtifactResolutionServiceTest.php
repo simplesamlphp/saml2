@@ -6,7 +6,6 @@ namespace SAML2\XML\md;
 
 use InvalidArgumentException;
 use PHPUnit\Framework\TestCase;
-use SAML2\Constants;
 use SAML2\DOMDocumentFactory;
 
 /**
@@ -23,7 +22,7 @@ final class ArtifactResolutionServiceTest extends TestCase
      */
     protected function setUp(): void
     {
-        $mdNamespace = Constants::NS_MD;
+        $mdNamespace = ArtifactResolutionService::NS;
         $this->document = DOMDocumentFactory::fromString(<<<XML
 <md:ArtifactResolutionService xmlns:md="{$mdNamespace}" Binding="urn:something" Location="https://whatever/" index="42" isDefault="false"/>
 XML

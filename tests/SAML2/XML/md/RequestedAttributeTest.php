@@ -38,6 +38,9 @@ XML
     }
 
 
+    // test marshalling
+
+
     /**
      * Test creating a RequestedAttribute object from scratch
      */
@@ -50,6 +53,13 @@ XML
             'Attribute',
             [new AttributeValue('value1')]
         );
+
+        $this->assertEquals('attr', $ra->getName());
+        $this->assertTrue($ra->getIsRequired());
+        $this->assertEquals('urn:format', $ra->getNameFormat());
+        $this->assertEquals('Attribute', $ra->getFriendlyName());
+        $this->assertEquals([new AttributeValue('value1')], $ra->getAttributeValues());
+
         $this->assertEquals(
             $this->document->saveXML($this->document->documentElement),
             strval($ra)
@@ -69,6 +79,9 @@ XML
         $this->assertNull($ra->getFriendlyName());
         $this->assertEquals([], $ra->getAttributeValues());
     }
+
+
+    // test unmarshalling
 
 
     /**

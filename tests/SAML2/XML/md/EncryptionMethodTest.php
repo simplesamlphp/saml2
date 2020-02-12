@@ -40,6 +40,9 @@ XML
     }
 
 
+    // test marshalling
+
+
     /**
      * Test creating an EncryptionMethod object from scratch.
      */
@@ -55,6 +58,7 @@ XML
         $this->assertEquals('9lWu3Q==', $em->getOAEPParams());
         $this->assertCount(1, $em->getChildren());
         $this->assertInstanceOf(Chunk::class, $em->getChildren()[0]);
+
         $this->assertEquals(
             $this->document->saveXML($this->document->documentElement),
             strval($em)
@@ -81,6 +85,9 @@ XML
             strval($em)
         );
     }
+
+
+    // test unmarshalling
 
 
     /**

@@ -7,7 +7,6 @@ namespace SAML2\XML\md;
 use Exception;
 use InvalidArgumentException;
 use PHPUnit\Framework\TestCase;
-use SAML2\Constants;
 use SAML2\DOMDocumentFactory;
 
 /**
@@ -18,12 +17,13 @@ final class AdditionalMetadataLocationTest extends TestCase
     /** @var \DOMDocument */
     private $document;
 
+
     /**
      * @return void
      */
     public function setUp(): void
     {
-        $ns = Constants::NS_MD;
+        $ns = AdditionalMetadataLocation::NS;
         $this->document = DOMDocumentFactory::fromString(<<<XML
 <md:AdditionalMetadataLocation xmlns:md="{$ns}" namespace="TheNamespaceAttribute">LocationText</md:AdditionalMetadataLocation>
 XML
@@ -31,17 +31,20 @@ XML
     }
 
 
+    // test marshalling
+
+
     /**
      * Test creating an AdditionalMetadataLocation object from scratch.
      */
     public function testMarshalling(): void
     {
-        $additionalMetadataLocation = new AdditionalMetadataLocation('NamespaceAttribute', 'TheLocation');
-        $additionalMetadataLocationElement = $additionalMetadataLocation->toXML();
-        $this->assertEquals('md:AdditionalMetadataLocation', $additionalMetadataLocationElement->tagName);
-        $this->assertEquals(Constants::NS_MD, $additionalMetadataLocationElement->namespaceURI);
-        $this->assertEquals('TheLocation', $additionalMetadataLocationElement->textContent);
-        $this->assertEquals('NamespaceAttribute', $additionalMetadataLocationElement->getAttribute("namespace"));
+        $additionalMetadataLocation = new AdditionalMetadataLocation('TheNamespaceAttribute', 'LocationText');
+
+        $this->assertEquals('TheNamespaceAttribute', $additionalMetadataLocation->getNamespace());
+        $this->assertEquals('LocationText', $additionalMetadataLocation->getLocation());
+
+        $this->assertEquals($this->document->saveXML($this->document->documentElement), strval($additionalMetadataLocation));
     }
 
 
@@ -65,6 +68,9 @@ XML
         $this->expectExceptionMessage('AdditionalMetadataLocation must contain a URI.');
         new AdditionalMetadataLocation('NamespaceAttribute', '');
     }
+
+
+    // test unmarshalling
 
 
     /**

@@ -43,6 +43,7 @@ XML
 
         $this->assertEquals('urn:something', $ssoep->getBinding());
         $this->assertEquals('https://whatever/', $ssoep->getLocation());
+
         $this->assertEquals($this->document->saveXML($this->document->documentElement), strval($ssoep));
     }
 

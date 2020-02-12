@@ -41,6 +41,9 @@ XML
     }
 
 
+    // test marshalling
+
+
     /**
      * Test creating an Organization object from scratch
      */
@@ -62,11 +65,16 @@ XML
         );
         $root = DOMDocumentFactory::fromString('<root/>');
         $root->formatOutput = true;
+
         $this->assertEquals(
             $this->document->saveXML($this->document->documentElement),
-            $org->toXML($root->documentElement)->ownerDocument->saveXML($root->documentElement->firstChild)
+            strval($org)
+//            $org->toXML($root->documentElement)->ownerDocument->saveXML($root->documentElement->firstChild)
         );
     }
+
+
+    // test unmarshalling
 
 
     /**

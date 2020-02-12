@@ -43,6 +43,9 @@ XML
     }
 
 
+    // test marshalling
+
+
     /**
      * Test creating a KeyDescriptor from scratch.
      */
@@ -53,6 +56,7 @@ XML
             'signing',
             [new EncryptionMethod('http://www.w3.org/2001/04/xmlenc#rsa-1_5')]
         );
+
         $this->assertEquals('signing', $kd->getUse());
 
         $knfo = $kd->getKeyInfo();
@@ -107,6 +111,9 @@ XML
             strval($kd)
         );
     }
+
+
+    // test unmarshalling
 
 
     /**

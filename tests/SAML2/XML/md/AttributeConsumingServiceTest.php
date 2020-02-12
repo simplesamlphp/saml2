@@ -71,6 +71,13 @@ XML
             true,
             [new ServiceDescription('en', 'Academic Journals R US and only us')]
         );
+
+        $this->assertEquals(2, $acs->getIndex());
+        $this->assertEquals([new ServiceName('en', 'Academic Journals R US')], $acs->getServiceNames());
+        $this->assertEquals([$this->getRequestedAttribute()], $acs->getRequestedAttributes());
+        $this->assertTrue($acs->getIsDefault());
+        $this->assertEquals([new ServiceDescription('en', 'Academic Journals R US and only us')], $acs->getServiceDescriptions());
+
         $this->assertEquals($this->document->saveXML($this->document->documentElement), strval($acs));
     }
 

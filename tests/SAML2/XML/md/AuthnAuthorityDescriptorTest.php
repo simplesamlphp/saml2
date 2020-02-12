@@ -57,6 +57,12 @@ XML
             [$this->aidrs],
             ['http://www.example1.com/', 'http://www.example2.com/']
         );
+
+        $this->assertEquals([$this->aqs], $aad->getAuthnQueryServices());
+        $this->assertEquals(['protocol1', 'protocol2'], $aad->getProtocolSupportEnumeration());
+        $this->assertEquals([$this->aidrs], $aad->getAssertionIDRequestServices());
+        $this->assertEquals(['http://www.example1.com/', 'http://www.example2.com/'], $aad->getNameIDFormats());
+
         $this->assertEquals(
             $this->document->saveXML($this->document->documentElement),
             strval($aad)

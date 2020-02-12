@@ -56,6 +56,9 @@ XML
     }
 
 
+    // test marshalling
+
+
     /**
      * Test creating an Extensions object from scratch.
      */
@@ -68,6 +71,7 @@ XML
         $discoHints = new DiscoHints([], ['127.0.0.1']);
         $digestMethod = new DigestMethod('SomeAlgorithm');
         $signingMethod = new SigningMethod('SomeOtherAlgorithm', 1024, 4096);
+
         $extensions = new Extensions([
             $scope,
             $ra,
@@ -77,6 +81,7 @@ XML
             $digestMethod,
             $signingMethod
         ]);
+
         $this->assertEquals(
             $this->document->saveXML($this->document->documentElement),
             strval($extensions)
@@ -98,6 +103,9 @@ XML
         );
         $this->assertTrue($extensions->isEmptyElement());
     }
+
+
+    // test unmarshalling
 
 
     /**

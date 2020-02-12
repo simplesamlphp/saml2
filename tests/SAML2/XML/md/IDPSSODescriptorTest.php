@@ -178,6 +178,7 @@ XML
                 'urn:oasis:names:tc:SAML:2.0:nameid-format:transient'
             ]
         );
+
         $this->assertCount(2, $idpssod->getSingleSignOnServices());
         $this->assertInstanceOf(SingleSignOnService::class, $idpssod->getSingleSignOnServices()[0]);
         $this->assertInstanceOf(SingleSignOnService::class, $idpssod->getSingleSignOnServices()[1]);
@@ -210,6 +211,7 @@ XML
             ],
             $idpssod->getNameIDFormats()
         );
+
         $this->assertEquals(
             $this->document->saveXML($this->document->documentElement),
             strval($idpssod)

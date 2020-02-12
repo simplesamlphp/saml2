@@ -40,9 +40,11 @@ XML
     public function testMarshalling(): void
     {
         $idxep = new AssertionConsumerService(42, 'urn:something', 'https://whatever/', false);
-        $this->assertEquals($this->document->saveXML($this->document->documentElement), strval($idxep));
+
         $this->assertEquals(42, $idxep->getIndex());
         $this->assertFalse($idxep->getIsDefault());
+
+        $this->assertEquals($this->document->saveXML($this->document->documentElement), strval($idxep));
     }
 
 

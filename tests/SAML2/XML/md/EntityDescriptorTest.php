@@ -158,6 +158,7 @@ XML
             $contacts,
             $mdloc
         );
+
         $this->assertEquals($entityid, $ed->getEntityID());
         $this->assertEquals($id, $ed->getID());
         $this->assertEquals($now, $ed->getValidUntil());
@@ -168,6 +169,7 @@ XML
         $this->assertInstanceOf(AuthnAuthorityDescriptor::class, $ed->getRoleDescriptors()[2]);
         $this->assertInstanceOf(PDPDescriptor::class, $ed->getRoleDescriptors()[3]);
         $this->assertNull($ed->getAffiliationDescriptor());
+
         $this->assertEquals(
             $this->document->saveXML($this->document->documentElement),
             strval($ed)

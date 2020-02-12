@@ -43,6 +43,7 @@ XML
 
         $this->assertEquals('urn:something', $nidmsep->getBinding());
         $this->assertEquals('https://whatever/', $nidmsep->getLocation());
+
         $this->assertEquals($this->document->saveXML($this->document->documentElement), strval($nidmsep));
     }
 

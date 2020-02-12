@@ -75,7 +75,7 @@ XML
             ['1-234-567-8901'],
             [$attr1, $attr2]
         );
-        $this->assertEquals($this->document->saveXML($this->document->documentElement), strval($cp));
+
         $this->assertEquals('other', $cp->getContactType());
         $this->assertEquals('Test Company', $cp->getCompany());
         $this->assertEquals('John', $cp->getGivenName());
@@ -99,6 +99,8 @@ XML
         );
         $this->assertEquals('testval1', $cp->getAttributeNS('urn:test', 'attr1'));
         $this->assertEquals('testval2', $cp->getAttributeNS('urn:test', 'attr2'));
+
+        $this->assertEquals($this->document->saveXML($this->document->documentElement), strval($cp));
     }
 
 

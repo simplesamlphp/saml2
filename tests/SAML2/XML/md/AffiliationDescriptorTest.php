@@ -6,7 +6,6 @@ namespace SAML2\XML\md;
 
 use Exception;
 use PHPUnit\Framework\TestCase;
-use SAML2\Constants;
 use SAML2\DOMDocumentFactory;
 use SAML2\SignedElementTestTrait;
 use SAML2\Utils;
@@ -28,7 +27,7 @@ final class AffiliationDescriptorTest extends TestCase
      */
     protected function setUp(): void
     {
-        $mdNamespace = Constants::NS_MD;
+        $mdNamespace = AffiliationDescriptor::NS;
         $this->document = DOMDocumentFactory::fromString(<<<XML
 <md:AffiliationDescriptor xmlns:md="{$mdNamespace}" ID="TheID" validUntil="2009-02-13T23:31:30Z" cacheDuration="PT5000S" affiliationOwnerID="TheOwner">
   <md:AffiliateMember>Member</md:AffiliateMember>
@@ -44,6 +43,9 @@ XML
 
         $this->testedClass = AffiliationDescriptor::class;
     }
+
+
+    // test marshalling
 
 
     /**
@@ -72,8 +74,10 @@ XML
 
         $this->assertEquals('TheOwner', $ad->getAffiliationOwnerID());
         $this->assertEquals('TheID', $ad->getID());
+
         /** @psalm-suppress PossiblyNullArgument */
         $this->assertEquals('2009-02-13T23:31:30Z', gmdate('Y-m-d\TH:i:s\Z', $ad->getValidUntil()));
+
         /** @psalm-suppress PossiblyNullArgument */
         $this->assertEquals('PT5000S', $ad->getCacheDuration());
 
@@ -146,6 +150,9 @@ XML
     }
 
 
+    // test unmarshalling
+
+
     /**
      * Test creating an AffiliationDescriptor from XML.
      */
@@ -173,7 +180,7 @@ XML
      */
     public function testUnmarshallingWithoutMembers(): void
     {
-        $mdNamespace = Constants::NS_MD;
+        $mdNamespace = AffiliationDescriptor::NS;
         $document = DOMDocumentFactory::fromString(<<<XML
 <md:AffiliationDescriptor xmlns:md="{$mdNamespace}" affiliationOwnerID="TheOwner" ID="TheID" validUntil="2009-02-13T23:31:30Z" cacheDuration="PT5000S">
 </md:AffiliationDescriptor>
@@ -190,7 +197,7 @@ XML
      */
     public function testUnmarshallingWithEmptyMember(): void
     {
-        $mdNamespace = Constants::NS_MD;
+        $mdNamespace = AffiliationDescriptor::NS;
         $document = DOMDocumentFactory::fromString(<<<XML
 <md:AffiliationDescriptor xmlns:md="{$mdNamespace}" affiliationOwnerID="TheOwner" ID="TheID" validUntil="2009-02-13T23:31:30Z" cacheDuration="PT5000S">
     <md:AffiliateMember></md:AffiliateMember>
@@ -209,7 +216,7 @@ XML
      */
     public function testUnmarshallingWithoutOwner(): void
     {
-        $mdNamespace = Constants::NS_MD;
+        $mdNamespace = AffiliationDescriptor::NS;
         $document = DOMDocumentFactory::fromString(<<<XML
 <md:AffiliationDescriptor xmlns:md="{$mdNamespace}" ID="TheID" validUntil="2009-02-13T23:31:30Z" cacheDuration="PT5000S">
     <md:AffiliateMember>Member</md:AffiliateMember>

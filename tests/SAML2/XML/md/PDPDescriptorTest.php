@@ -72,6 +72,7 @@ XML
                 'urn:oasis:names:tc:SAML:2.0:nameid-format:transient',
             ]
         );
+
         $this->assertCount(1, $pdpd->getAuthzServiceEndpoints());
         $this->assertInstanceOf(AuthzService::class, $pdpd->getAuthzServiceEndpoints()[0]);
         $this->assertCount(1, $pdpd->getAssertionIDRequestServices());
@@ -85,6 +86,7 @@ XML
             ],
             $pdpd->getNameIDFormats()
         );
+
         $this->assertEquals(
             $this->document->saveXML($this->document->documentElement),
             strval($pdpd)
