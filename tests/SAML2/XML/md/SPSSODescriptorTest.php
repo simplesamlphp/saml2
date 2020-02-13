@@ -9,6 +9,7 @@ use PHPUnit\Framework\TestCase;
 use RobRichards\XMLSecLibs\XMLSecurityDSig;
 use SAML2\Constants;
 use SAML2\DOMDocumentFactory;
+use SAML2\SignedElementTestTrait;
 use SAML2\Utils;
 use SAML2\XML\ds\KeyInfo;
 use SAML2\XML\ds\KeyName;
@@ -22,8 +23,7 @@ use SAML2\XML\saml\AttributeValue;
  */
 final class SPSSODescriptorTest extends TestCase
 {
-    /** @var \DOMDocument */
-    protected $document;
+    use SignedElementTestTrait;
 
 
     /**
@@ -77,6 +77,8 @@ final class SPSSODescriptorTest extends TestCase
 </md:SPSSODescriptor>
 XML
         );
+
+        $this->testedClass = SPSSODescriptor::class;
     }
 
 

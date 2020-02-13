@@ -8,17 +8,17 @@ use InvalidArgumentException;
 use PHPUnit\Framework\TestCase;
 use SAML2\Constants;
 use SAML2\DOMDocumentFactory;
+use SAML2\SignedElementTestTrait;
 
 final class AuthnAuthorityDescriptorTest extends TestCase
 {
+    use SignedElementTestTrait;
+
     /** @var \SAML2\XML\md\AssertionIDRequestService */
     protected $aidrs;
 
     /** @var \SAML2\XML\md\AuthnQueryService */
     protected $aqs;
-
-    /** @var \DOMDocument */
-    protected $document;
 
 
     /**
@@ -39,6 +39,7 @@ XML
 
         $this->aqs = new AuthnQueryService('uri:binding:aqs', 'http://www.example.com/aqs');
         $this->aidrs = new AssertionIDRequestService('uri:binding:aidrs', 'http://www.example.com/aidrs');
+        $this->testedClass = AuthnAuthorityDescriptor::class;
     }
 
 

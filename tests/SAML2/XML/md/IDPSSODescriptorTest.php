@@ -9,6 +9,7 @@ use PHPUnit\Framework\TestCase;
 use RobRichards\XMLSecLibs\XMLSecurityDSig;
 use SAML2\Constants;
 use SAML2\DOMDocumentFactory;
+use SAML2\SignedElementTestTrait;
 use SAML2\XML\ds\KeyInfo;
 use SAML2\XML\ds\KeyName;
 use SAML2\XML\saml\Attribute;
@@ -21,8 +22,7 @@ use SAML2\XML\saml\AttributeValue;
  */
 final class IDPSSODescriptorTest extends TestCase
 {
-    /** @var \DOMDocument */
-    protected $document;
+    use SignedElementTestTrait;
 
 
     /**
@@ -66,6 +66,8 @@ final class IDPSSODescriptorTest extends TestCase
 </md:IDPSSODescriptor>
 XML
         );
+
+        $this->testedClass = IDPSSODescriptor::class;
     }
 
 

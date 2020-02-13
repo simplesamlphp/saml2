@@ -9,6 +9,7 @@ use InvalidArgumentException;
 use PHPUnit\Framework\TestCase;
 use SAML2\Constants;
 use SAML2\DOMDocumentFactory;
+use SAML2\SignedElementTestTrait;
 use SAML2\XML\saml\Attribute;
 use SAML2\XML\saml\AttributeValue;
 
@@ -19,14 +20,13 @@ use SAML2\XML\saml\AttributeValue;
  */
 final class AttributeAuthorityDescriptorTest extends TestCase
 {
+    use SignedElementTestTrait;
+
     /** @var \SAML2\XML\md\AttributeService */
     protected $as;
 
     /** @var \SAML2\XML\md\AssertionIDRequestService */
     protected $aidrs;
-
-    /** @var \DOMDocument */
-    protected $document;
 
 
     /**
@@ -65,6 +65,7 @@ XML
             "urn:oasis:names:tc:SAML:2.0:bindings:URI",
             "https://IdentityProvider.com/SAML/AA/URI"
         );
+        $this->testedClass = AttributeAuthorityDescriptor::class;
     }
 
 

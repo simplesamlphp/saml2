@@ -8,6 +8,7 @@ use Exception;
 use PHPUnit\Framework\TestCase;
 use SAML2\Constants;
 use SAML2\DOMDocumentFactory;
+use SAML2\SignedElementTestTrait;
 use SAML2\Utils;
 use SAML2\XML\ds\KeyInfo;
 use SAML2\XML\ds\KeyName;
@@ -19,8 +20,7 @@ use SAML2\XML\ds\KeyName;
  */
 final class AffiliationDescriptorTest extends TestCase
 {
-    /** @var \DOMDocument */
-    protected $document;
+    use SignedElementTestTrait;
 
 
     /**
@@ -41,6 +41,8 @@ final class AffiliationDescriptorTest extends TestCase
 </md:AffiliationDescriptor>
 XML
         );
+
+        $this->testedClass = AffiliationDescriptor::class;
     }
 
 

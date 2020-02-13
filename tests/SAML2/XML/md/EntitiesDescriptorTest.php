@@ -9,6 +9,7 @@ use PHPUnit\Framework\TestCase;
 use RobRichards\XMLSecLibs\XMLSecurityDSig;
 use SAML2\Constants;
 use SAML2\DOMDocumentFactory;
+use SAML2\SignedElementTestTrait;
 use SAML2\Utils;
 use SAML2\XML\mdrpi\PublicationInfo;
 
@@ -19,8 +20,7 @@ use SAML2\XML\mdrpi\PublicationInfo;
  */
 final class EntitiesDescriptorTest extends TestCase
 {
-    /** @var \DOMDocument */
-    protected $document;
+    use SignedElementTestTrait;
 
 
     /**
@@ -83,6 +83,8 @@ final class EntitiesDescriptorTest extends TestCase
 </md:EntitiesDescriptor>
 XML
         );
+
+        $this->testedClass = EntitiesDescriptor::class;
     }
 
 
