@@ -35,6 +35,9 @@ XML
     }
 
 
+    // marshalling
+
+
     /**
      * Test creating an AttributeValue from scratch using a string.
      *
@@ -43,7 +46,13 @@ XML
     public function testMarshallingString(): void
     {
         $av = new AttributeValue('value');
+
         $this->assertEquals('value', $av->getString());
+
+        $this->assertEquals(
+            $this->document->saveXML($this->document->documentElement),
+            strval($av)
+        );
     }
 
 
@@ -77,6 +86,9 @@ XML
     }
 
 
+    // unmarshalling
+
+
     /**
      * Verifies that we can create an AttributeValue from a DOMElement.
      *
@@ -106,4 +118,3 @@ XML
         );
     }
 }
-

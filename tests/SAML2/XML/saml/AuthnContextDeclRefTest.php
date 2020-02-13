@@ -17,6 +17,9 @@ final class AuthnContextDeclRefTest extends \PHPUnit\Framework\TestCase
     private $document;
 
 
+    /**
+     * @return void
+     */
     protected function setUp(): void
     {
         $samlNamespace = Constants::NS_SAML;
@@ -27,14 +30,21 @@ XML
     }
 
 
+    // marshalling
+
+
     /**
      * @return void
      */
     public function testMarshalling(): void
     {
         $authnContextDeclRef = new AuthnContextDeclRef('/relative/path/to/document.xml');
+        $this->assertEquals('/relative/path/to/document.xml', $authnContextDeclRef->getDeclRef());
         $this->assertEquals($this->document->saveXML($this->document->documentElement), strval($authnContextDeclRef));
     }
+
+
+    // unmarshalling
 
 
     /**

@@ -29,6 +29,10 @@ final class AuthnContextTest extends \PHPUnit\Framework\TestCase
     /** @var \DOMDocument */
     private $authority;
 
+
+    /**
+     * @return void
+     */
     protected function setUp(): void
     {
         $samlNamespace = Constants::NS_SAML;
@@ -70,6 +74,9 @@ XML
     }
 
 
+    // marshalling
+
+
     /**
      * @return void
      */
@@ -79,10 +86,13 @@ XML
             new AuthnContextClassRef(Constants::AC_PASSWORD_PROTECTED_TRANSPORT),
             null,
             new AuthnContextDeclRef('/relative/path/to/document.xml'),
-            [
-                new AuthenticatingAuthority('https://sp.example.com/SAML2')
-            ]
+            [new AuthenticatingAuthority('https://sp.example.com/SAML2')]
         );
+
+        $this->assertEquals(new AuthnContextClassRef(Constants::AC_PASSWORD_PROTECTED_TRANSPORT), $authnContext->getAuthnContextClassRef());
+        $this->assertNull($authnContext->getAuthnContextDecl());
+        $this->assertEquals(new AuthnContextDeclRef('/relative/path/to/document.xml'), $authnContext->getAuthnContextDeclRef());
+        $this->assertEquals([new AuthenticatingAuthority('https://sp.example.com/SAML2')], $authnContext->getAuthenticatingAuthorities());
 
         $document = $this->document;
         $document->documentElement->appendChild($document->importNode($this->classRef->documentElement, true));
@@ -107,6 +117,11 @@ XML
             null,
             [$authenticatingAuthority]
         );
+
+        $this->assertNull($authnContext->getAuthnContextClassRef());
+        $this->assertEquals($authnContextDecl, $authnContext->getAuthnContextDecl());
+        $this->assertNull($authnContext->getAuthnContextDeclRef());
+        $this->assertEquals([new AuthenticatingAuthority('https://sp.example.com/SAML2')], $authnContext->getAuthenticatingAuthorities());
 
         $document = $this->document;
         $document->documentElement->appendChild($document->importNode($this->decl->documentElement, true));
@@ -151,6 +166,9 @@ XML
     }
 
 
+    // unmarshalling
+
+
     /**
      * @return void
      */
@@ -172,7 +190,7 @@ XML
         $this->assertEquals('/relative/path/to/document.xml', $declRef->getDeclRef());
 
         /** @psalm-var \SAML2\XML\saml\AuthenticatingAuthority[] $authorities */
-        $authorities = $authnContext->getAuthticatingAuthorities();
+        $authorities = $authnContext->getAuthenticatingAuthorities();
         $this->assertEquals('https://sp.example.com/SAML2', $authorities[0]->getAuthority());
     }
 

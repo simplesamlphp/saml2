@@ -39,6 +39,9 @@ XML
     }
 
 
+    // marshalling
+
+
     /**
      * @return void
      */
@@ -60,7 +63,15 @@ XML
         $this->assertEquals('https://sp.example.org/asdf', $subjectConfirmationData->getRecipient());
         $this->assertEquals('SomeRequestID', $subjectConfirmationData->getInResponseTo());
         $this->assertEquals('127.0.0.1', $subjectConfirmationData->getAddress());
+
+        $this->assertEquals(
+            $this->document->saveXML($this->document->documentElement),
+            strval($subjectConfirmationData)
+        );
     }
+
+
+    // unmarshalling
 
 
     /**

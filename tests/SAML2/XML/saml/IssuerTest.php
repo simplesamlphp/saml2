@@ -37,6 +37,9 @@ XML
     }
 
 
+    // marshalling
+
+
     /**
      * @return void
      */
@@ -55,6 +58,7 @@ XML
         $this->assertEquals('TheSPNameQualifier', $issuer->getSPNameQualifier());
         $this->assertEquals('TheSPProvidedID', $issuer->getSPProvidedID());
         $this->assertEquals('TheFormat', $issuer->getFormat());
+
         $this->assertEquals(
             $this->document->saveXML($this->document->documentElement),
             strval($issuer)
@@ -67,6 +71,9 @@ XML
      */
     public function testMarshallingEntityFormat(): void
     {
+        $this->expectException(InvalidArgumentException::class);
+        $this->expectExceptionMessage('Illegal combination of attributes being used');
+
         $issuer = new Issuer(
             'TheIssuerValue',
             'TheNameQualifier',
@@ -74,11 +81,6 @@ XML
             Constants::NAMEID_ENTITY,
             'TheSPProvidedID'
         );
-        $this->assertEquals('TheIssuerValue', $issuer->getValue());
-        $this->assertEquals(Constants::NAMEID_ENTITY, $issuer->getFormat());
-        $this->assertNull($issuer->getNameQualifier());
-        $this->assertNull($issuer->getSPNameQualifier());
-        $this->assertNull($issuer->getSPProvidedID());
     }
 
 
@@ -88,6 +90,9 @@ XML
      */
     public function testMarshallingNoFormat(): void
     {
+        $this->expectException(InvalidArgumentException::class);
+        $this->expectExceptionMessage('Illegal combination of attributes being used');
+
         $issuer = new Issuer(
             'TheIssuerValue',
             'TheNameQualifier',
@@ -95,12 +100,10 @@ XML
             null,
             'TheSPProvidedID'
         );
-        $this->assertEquals('TheIssuerValue', $issuer->getValue());
-        $this->assertNull($issuer->getFormat());
-        $this->assertNull($issuer->getNameQualifier());
-        $this->assertNull($issuer->getSPNameQualifier());
-        $this->assertNull($issuer->getSPProvidedID());
     }
+
+
+    // unmarshalling
 
 
     /**
@@ -125,12 +128,10 @@ XML
     {
         $this->document->documentElement->setAttribute('Format', Constants::NAMEID_ENTITY);
 
+        $this->expectException(InvalidArgumentException::class);
+        $this->expectExceptionMessage('Illegal combination of attributes being used');
+
         $issuer = Issuer::fromXML($this->document->documentElement);
-        $this->assertEquals('TheIssuerValue', $issuer->getValue());
-        $this->assertEquals(Constants::NAMEID_ENTITY, $issuer->getFormat());
-        $this->assertNull($issuer->getNameQualifier());
-        $this->assertNull($issuer->getSPNameQualifier());
-        $this->assertNull($issuer->getSPProvidedID());
     }
 
 
@@ -141,12 +142,10 @@ XML
     {
         $this->document->documentElement->removeAttribute('Format');
 
+        $this->expectException(InvalidArgumentException::class);
+        $this->expectExceptionMessage('Illegal combination of attributes being used');
+
         $issuer = Issuer::fromXML($this->document->documentElement);
-        $this->assertEquals('TheIssuerValue', $issuer->getValue());
-        $this->assertNull($issuer->getFormat());
-        $this->assertNull($issuer->getNameQualifier());
-        $this->assertNull($issuer->getSPNameQualifier());
-        $this->assertNull($issuer->getSPProvidedID());
     }
 
 

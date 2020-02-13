@@ -17,6 +17,9 @@ final class AuthnContextDeclTest extends \PHPUnit\Framework\TestCase
     private $document;
 
 
+    /**
+     * @return void
+     */
     protected function setUp(): void
     {
         $samlNamespace = Constants::NS_SAML;
@@ -35,19 +38,23 @@ XML
     }
 
 
+    // marshalling
+
+
     /**
      * @return void
      */
     public function testMarshalling(): void
     {
         $authnContextDecl = new AuthnContextDecl($this->document->documentElement->childNodes);
-        /**
-         * @psalm-var \DOMElement $authnContextDeclElement->childNodes[1]
-         */
-        $authnContextDeclElement = $authnContextDecl->toXML();
 
-        $this->assertEquals('samlacpass:AuthenticationContextDeclaration', $authnContextDeclElement->childNodes[1]->tagName);
+        $this->assertEquals($this->document->documentElement->childNodes, $authnContextDecl->getDecl());
+
+        $this->assertEquals($this->document->saveXML($this->document->documentElement), strval($authnContextDecl));
     }
+
+
+    // unmarshalling
 
 
     /**

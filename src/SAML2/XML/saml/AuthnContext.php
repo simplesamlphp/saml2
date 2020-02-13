@@ -143,7 +143,7 @@ final class AuthnContext extends AbstractSamlElement
      *
      * @return \SAML2\XML\saml\AuthenticatingAuthority[]|null
      */
-    public function getAuthticatingAuthorities(): ?array
+    public function getAuthenticatingAuthorities(): ?array
     {
         return $this->authenticatingAuthorities;
     }

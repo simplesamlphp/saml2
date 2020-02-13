@@ -35,6 +35,9 @@ XML
     }
 
 
+    // marshalling
+
+
     /**
      * @return void
      */
@@ -49,11 +52,15 @@ XML
         $this->assertEquals('SomeMethod', $subjectConfirmation->getMethod());
         $this->assertNotNull($subjectConfirmation->getNameID());
         $this->assertNotNull($subjectConfirmation->getSubjectConfirmationData());
+
         $this->assertEquals(
             $this->document->saveXML($this->document->documentElement),
             strval($subjectConfirmation)
         );
     }
+
+
+    // unmarshalling
 
 
     /**

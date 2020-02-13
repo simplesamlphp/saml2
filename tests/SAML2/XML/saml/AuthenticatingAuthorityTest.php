@@ -16,15 +16,24 @@ final class AuthenticatingAuthorityTest extends \PHPUnit\Framework\TestCase
     /** @var \DOMDocument */
     private $document;
 
+    /** @var string */
+    private $uri = 'https://sp.example.com/SAML2';
 
+
+    /**
+     * @return void
+     */
     protected function setUp(): void
     {
         $samlNamespace = Constants::NS_SAML;
         $this->document = DOMDocumentFactory::fromString(<<<XML
-<saml:AuthenticatingAuthority xmlns:saml="{$samlNamespace}">https://sp.example.com/SAML2</saml:AuthenticatingAuthority>
+<saml:AuthenticatingAuthority xmlns:saml="{$samlNamespace}">{$this->uri}</saml:AuthenticatingAuthority>
 XML
         );
     }
+
+
+    // marshalling
 
 
     /**
@@ -32,9 +41,12 @@ XML
      */
     public function testMarshalling(): void
     {
-        $authority = new AuthenticatingAuthority('https://sp.example.com/SAML2');
-        $this->assertEquals($authority->getAuthority(), 'https://sp.example.com/SAML2');
+        $authority = new AuthenticatingAuthority($this->uri);
+        $this->assertEquals($authority->getAuthority(), $this->uri);
     }
+
+
+    // unmarshalling
 
 
     /**
@@ -43,7 +55,7 @@ XML
     public function testUnmarshalling(): void
     {
         $authority = AuthenticatingAuthority::fromXML($this->document->documentElement);
-        $this->assertEquals('https://sp.example.com/SAML2', $authority->getAuthority());
+        $this->assertEquals($this->uri, $authority->getAuthority());
     }
 
 

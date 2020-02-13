@@ -18,6 +18,9 @@ final class AttributeTest extends TestCase
     protected $document;
 
 
+    /**
+     * @return void
+     */
     protected function setUp(): void
     {
         $samlNamespace = Constants::NS_SAML;
@@ -29,6 +32,9 @@ final class AttributeTest extends TestCase
 XML
         );
     }
+
+
+    // marshalling
 
 
     /**
@@ -46,17 +52,23 @@ XML
             ]
         );
 
+        $this->assertEquals('TheName', $attribute->getName());
+        $this->assertEquals('TheNameFormat', $attribute->getNameFormat());
+        $this->assertEquals('TheFriendlyName', $attribute->getFriendlyName());
+
+        $values = $attribute->getAttributeValues();
+        $this->assertCount(2, $values);
+        $this->assertEquals('FirstValue', $values[0]->getElement()->textContent);
+        $this->assertEquals('SecondValue', $values[1]->getElement()->textContent);
+
         $this->assertEquals(
             $this->document->saveXML($this->document->documentElement),
             strval($attribute)
         );
-        $attributeElement = $attribute->toXML();
-        $this->assertEquals('TheName', $attributeElement->getAttribute('Name'));
-        $this->assertEquals('TheNameFormat', $attributeElement->getAttribute('NameFormat'));
-        $this->assertEquals('TheFriendlyName', $attributeElement->getAttribute('FriendlyName'));
-        $this->assertEquals('FirstValue', $attribute->getAttributeValues()[0]->getString());
-        $this->assertEquals('SecondValue', $attribute->getAttributeValues()[1]->getString());
     }
+
+
+    // unmarshalling
 
 
     /**
@@ -64,16 +76,8 @@ XML
      */
     public function testUnmarshalling(): void
     {
-        $samlNamespace = Constants::NS_SAML;
-        $document = DOMDocumentFactory::fromString(<<<XML
-<saml:Attribute xmlns:saml="{$samlNamespace}" Name="TheName" NameFormat="TheNameFormat" FriendlyName="TheFriendlyName">
-    <saml:AttributeValue>FirstValue</saml:AttributeValue>
-    <saml:AttributeValue>SecondValue</saml:AttributeValue>
-</saml:Attribute>
-XML
-        );
+        $attribute = Attribute::fromXML($this->document->documentElement);
 
-        $attribute = Attribute::fromXML($document->documentElement);
         $this->assertEquals('TheName', $attribute->getName());
         $this->assertEquals('TheNameFormat', $attribute->getNameFormat());
         $this->assertEquals('TheFriendlyName', $attribute->getFriendlyName());
@@ -88,16 +92,11 @@ XML
      */
     public function testUnmarshallingWithoutName(): void
     {
-        $samlNamespace = Constants::NS_SAML;
-        $document = DOMDocumentFactory::fromString(<<<XML
-<saml:Attribute xmlns:saml="{$samlNamespace}" NameFormat="TheNameFormat" FriendlyName="TheFriendlyName">
-    <saml:AttributeValue>FirstValue</saml:AttributeValue>
-    <saml:AttributeValue>SecondValue</saml:AttributeValue>
-</saml:Attribute>
-XML
-        );
+        $document = $this->document;
+        $document->documentElement->removeAttribute('Name');
 
         $this->expectException(Exception::class);
+
         Attribute::fromXML($document->documentElement);
     }
 

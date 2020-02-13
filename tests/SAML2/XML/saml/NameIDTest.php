@@ -36,6 +36,9 @@ XML
     }
 
 
+    // marshalling
+
+
     /**
      * @return void
      */
@@ -54,11 +57,15 @@ XML
         $this->assertEquals('TheSPProvidedID', $nameId->getSPProvidedID());
         $this->assertEquals('TheFormat', $nameId->getFormat());
         $this->assertEquals('TheSPNameQualifier', $nameId->getSPNameQualifier());
+
         $this->assertEquals(
             $this->document->saveXML($this->document->documentElement),
             strval($nameId)
         );
     }
+
+
+    // unmarshalling
 
 
     /**
@@ -73,6 +80,7 @@ XML
         $this->assertEquals('TheSPNameQualifier', $nameId->getSPNameQualifier());
         $this->assertEquals('TheFormat', $nameId->getFormat());
         $this->assertEquals('TheSPProvidedID', $nameId->getSPProvidedID());
+
         $this->assertEquals(
             $this->document->saveXML($this->document->documentElement),
             strval($nameId)
