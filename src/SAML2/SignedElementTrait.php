@@ -131,9 +131,9 @@ trait SignedElementTrait
         // check the signature
         if ($signer->verify($key) === 1) {
             return true;
-
         }
-        throw new \Exception("Unable to validate Signature");
+
+        throw new Exception("Unable to validate Signature");
     }
 
 
