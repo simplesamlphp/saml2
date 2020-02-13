@@ -37,7 +37,6 @@
     <InvalidDocblock errorLevel="info" />
     <MisplacedRequiredParam errorLevel="info" />
 
-    <PropertyNotSetInConstructor errorLevel="info" />
     <MissingConstructor errorLevel="info" />
     <MissingClosureParamType errorLevel="info" />
     <MissingParamType errorLevel="info" />
@@ -45,5 +44,21 @@
     <PossiblyUnusedMethod errorLevel="info" />
     <PropertyNotSetInConstructor errorLevel="suppress" />
     <MissingClosureReturnType errorLevel="suppress" />
+
+    <PropertyNotSetInConstructor>
+      <errorLevel type="info">
+        <directory name="tests/SAML2/XML" />
+      </errorLevel>
+      <errorLevel type="suppress">
+        <directory name="tests" />
+      </errorLevel>
+    <PropertyNotSetInConstructor />
+
+    <InternalMethod>
+      <errorLevel type="suppress">
+        <directory name="tests" />
+      </errorLevel>
+    <InternalMethod />
+
   </issueHandlers>
 </psalm>
