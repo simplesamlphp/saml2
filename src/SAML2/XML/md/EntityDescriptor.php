@@ -7,6 +7,7 @@ namespace SAML2\XML\md;
 use DOMElement;
 use SAML2\Constants;
 use SAML2\Utils;
+use SAML2\XML\ds\Signature;
 use Webmozart\Assert\Assert;
 
 /**
@@ -125,6 +126,9 @@ final class EntityDescriptor extends AbstractMetadataDocument
         $extensions = Extensions::getChildrenOfClass($xml);
         Assert::maxCount($extensions, 1, 'Only one md:Extensions element is allowed.');
 
+        $signature = Signature::getChildrenOfClass($xml);
+        Assert::maxCount($signature, 1, 'Only one ds:Signature element is allowed.');
+
         $roleDescriptors = [];
         $affiliationDescriptor = null;
         $organization = null;
@@ -188,7 +192,7 @@ final class EntityDescriptor extends AbstractMetadataDocument
             );
         }
 
-        return new self(
+        $entity = new self(
             self::getAttribute($xml, 'entityID'),
             self::getAttribute($xml, 'ID', null),
             $validUntil !== null ? Utils::xsDateTimeToTimestamp($validUntil) : null,
@@ -200,6 +204,10 @@ final class EntityDescriptor extends AbstractMetadataDocument
             $contactPersons,
             $additionalMetadataLocation
         );
+        if (!empty($signature)) {
+            $entity->setSignature($signature[0]);
+        }
+        return $entity;
     }
 
 
@@ -365,6 +373,7 @@ final class EntityDescriptor extends AbstractMetadataDocument
      *
      * @param \DOMElement|null $parent The EntitiesDescriptor we should append this EntityDescriptor to.
      * @return \DOMElement
+     * @throws \Exception
      */
     public function toXML(DOMElement $parent = null): DOMElement
     {
@@ -391,10 +400,6 @@ final class EntityDescriptor extends AbstractMetadataDocument
             $n->toXML($e);
         }
 
-        /** @var \DOMElement $child */
-        $child = $e->firstChild;
-        $this->signElement($e, $child);
-
-        return $e;
+        return $this->signElement($e);
     }
 }

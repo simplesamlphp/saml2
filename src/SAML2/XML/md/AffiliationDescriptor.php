@@ -8,6 +8,7 @@ use DOMElement;
 use Exception;
 use SAML2\Constants;
 use SAML2\Utils;
+use SAML2\XML\ds\Signature;
 use Webmozart\Assert\Assert;
 
 /**
@@ -96,6 +97,9 @@ final class AffiliationDescriptor extends AbstractMetadataDocument
         $extensions = Extensions::getChildrenOfClass($xml);
         Assert::maxCount($extensions, 1, 'Only one md:Extensions element is allowed.');
 
+        $signature = Signature::getChildrenOfClass($xml);
+        Assert::maxCount($signature, 1, 'Only one ds:Signature element is allowed.');
+
         $afd = new self(
             $owner,
             $members,
@@ -105,7 +109,9 @@ final class AffiliationDescriptor extends AbstractMetadataDocument
             !empty($extensions) ? $extensions[0] : null,
             $keyDescriptors
         );
-        $afd->getSignatureFromXML($xml);
+        if (!empty($signature)) {
+            $afd->setSignature($signature[0]);
+        }
         return $afd;
     }
 
@@ -192,6 +198,7 @@ final class AffiliationDescriptor extends AbstractMetadataDocument
      *
      * @param \DOMElement|null $parent The EntityDescriptor we should append this endpoint to.
      * @return \DOMElement
+     * @throws \Exception
      */
     public function toXML(?DOMElement $parent = null): DOMElement
     {
@@ -204,8 +211,6 @@ final class AffiliationDescriptor extends AbstractMetadataDocument
             $kd->toXML($e);
         }
 
-        $this->signElement($e, $e->firstChild);
-
-        return $e;
+        return $this->signElement($e);
     }
 }

@@ -7,6 +7,7 @@ namespace SAML2\XML\md;
 use DOMElement;
 use SAML2\Constants;
 use SAML2\Utils;
+use SAML2\XML\ds\Signature;
 use Webmozart\Assert\Assert;
 
 /**
@@ -121,7 +122,10 @@ final class AuthnAuthorityDescriptor extends AbstractRoleDescriptor
         $extensions = Extensions::getChildrenOfClass($xml);
         Assert::maxCount($extensions, 1, 'Only one md:Extensions element is allowed.');
 
-        return new self(
+        $signature = Signature::getChildrenOfClass($xml);
+        Assert::maxCount($signature, 1, 'Only one ds:Signature element is allowed.');
+
+        $authority = new self(
             $authnQueryServices,
             preg_split('/[\s]+/', trim(self::getAttribute($xml, 'protocolSupportEnumeration'))),
             $assertionIDRequestServices,
@@ -135,6 +139,10 @@ final class AuthnAuthorityDescriptor extends AbstractRoleDescriptor
             KeyDescriptor::getChildrenOfClass($xml),
             ContactPerson::getChildrenOfClass($xml)
         );
+        if (!empty($signature)) {
+            $authority->setSignature($signature[0]);
+        }
+        return $authority;
     }
 
 
@@ -234,6 +242,7 @@ final class AuthnAuthorityDescriptor extends AbstractRoleDescriptor
      * @param \DOMElement|null $parent The EntityDescriptor we should append this AuthnAuthorityDescriptor to.
      *
      * @return \DOMElement
+     * @throws \Exception
      * @throws \InvalidArgumentException if the qualified name of the supplied element is wrong
      */
     public function toXML(?DOMElement $parent = null): DOMElement
@@ -250,6 +259,6 @@ final class AuthnAuthorityDescriptor extends AbstractRoleDescriptor
 
         Utils::addStrings($e, Constants::NS_MD, 'md:NameIDFormat', false, $this->NameIDFormats);
 
-        return $e;
+        return $this->signElement($e);
     }
 }

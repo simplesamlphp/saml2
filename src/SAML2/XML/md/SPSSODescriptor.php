@@ -7,6 +7,7 @@ namespace SAML2\XML\md;
 use DOMElement;
 use SAML2\Constants;
 use SAML2\Utils;
+use SAML2\XML\ds\Signature;
 use Webmozart\Assert\Assert;
 
 /**
@@ -251,7 +252,10 @@ final class SPSSODescriptor extends AbstractSSODescriptor
         $extensions = Extensions::getChildrenOfClass($xml);
         Assert::maxCount($extensions, 1, 'Only one md:Extensions element is allowed.');
 
-        return new self(
+        $signature = Signature::getChildrenOfClass($xml);
+        Assert::maxCount($signature, 1, 'Only one ds:Signature element is allowed.');
+
+        $spssod = new self(
             AssertionConsumerService::getChildrenOfClass($xml),
             preg_split('/[\s]+/', trim(self::getAttribute($xml, 'protocolSupportEnumeration'))),
             self::getBooleanAttribute($xml, 'AuthnRequestsSigned', null),
@@ -270,6 +274,10 @@ final class SPSSODescriptor extends AbstractSSODescriptor
             ManageNameIDService::getChildrenOfClass($xml),
             Utils::extractStrings($xml, Constants::NS_MD, 'NameIDFormat')
         );
+        if (!empty($signature)) {
+            $spssod->setSignature($signature[0]);
+        }
+        return $spssod;
     }
 
 
@@ -278,6 +286,7 @@ final class SPSSODescriptor extends AbstractSSODescriptor
      *
      * @param \DOMElement|null $parent The EntityDescriptor we should append this SPSSODescriptor to.
      * @return \DOMElement
+     * @throws \Exception
      */
     public function toXML(DOMElement $parent = null): DOMElement
     {
@@ -299,6 +308,6 @@ final class SPSSODescriptor extends AbstractSSODescriptor
             $acs->toXML($e);
         }
 
-        return $e;
+        return $this->signElement($e);
     }
 }

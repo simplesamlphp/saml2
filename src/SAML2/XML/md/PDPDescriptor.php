@@ -208,6 +208,7 @@ final class PDPDescriptor extends AbstractRoleDescriptor
      *
      * @param \DOMElement $parent The EntityDescriptor we should append this IDPSSODescriptor to.
      * @return \DOMElement
+     * @throws \Exception
      */
     public function toXML(DOMElement $parent = null): DOMElement
     {
@@ -222,6 +223,7 @@ final class PDPDescriptor extends AbstractRoleDescriptor
         }
 
         Utils::addStrings($e, Constants::NS_MD, 'md:NameIDFormat', false, $this->nameIDFormats);
-        return $e;
+
+        return $this->signElement($e);
     }
 }

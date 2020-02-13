@@ -7,6 +7,7 @@ namespace SAML2\XML\md;
 use DOMElement;
 use SAML2\Constants;
 use SAML2\Utils;
+use SAML2\XML\ds\Signature;
 use SAML2\XML\saml\Attribute;
 use Webmozart\Assert\Assert;
 
@@ -299,7 +300,10 @@ final class AttributeAuthorityDescriptor extends AbstractRoleDescriptor
         $extensions = Extensions::getChildrenOfClass($xml);
         Assert::maxCount($extensions, 1, 'Only one md:Extensions element is allowed.');
 
-        return new self(
+        $signature = Signature::getChildrenOfClass($xml);
+        Assert::maxCount($signature, 1, 'Only one ds:Signature element is allowed.');
+
+        $authority = new self(
             $attrServices,
             preg_split('/[\s]+/', trim(self::getAttribute($xml, 'protocolSupportEnumeration'))),
             $assertIDReqServices,
@@ -315,6 +319,10 @@ final class AttributeAuthorityDescriptor extends AbstractRoleDescriptor
             KeyDescriptor::getChildrenOfClass($xml),
             ContactPerson::getChildrenOfClass($xml)
         );
+        if (!empty($signature)) {
+            $authority->setSignature($signature[0]);
+        }
+        return $authority;
     }
 
 
@@ -323,6 +331,7 @@ final class AttributeAuthorityDescriptor extends AbstractRoleDescriptor
      *
      * @param \DOMElement|null $parent The EntityDescriptor we should append this IDPSSODescriptor to.
      * @return \DOMElement
+     * @throws \Exception
      */
     public function toXML(DOMElement $parent = null): DOMElement
     {
@@ -343,6 +352,6 @@ final class AttributeAuthorityDescriptor extends AbstractRoleDescriptor
             $a->toXML($e);
         }
 
-        return $e;
+        return $this->signElement($e);
     }
 }

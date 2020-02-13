@@ -7,6 +7,7 @@ namespace SAML2\XML\md;
 use DOMElement;
 use SAML2\Constants;
 use SAML2\Utils;
+use SAML2\XML\ds\Signature;
 use SAML2\XML\saml\Attribute;
 use Webmozart\Assert\Assert;
 
@@ -148,7 +149,10 @@ final class IDPSSODescriptor extends AbstractSSODescriptor
         $extensions = Extensions::getChildrenOfClass($xml);
         Assert::maxCount($extensions, 1, 'Only one md:Extensions element is allowed.');
 
-        return new self(
+        $signature = Signature::getChildrenOfClass($xml);
+        Assert::maxCount($signature, 1, 'Only one ds:Signature element is allowed.');
+
+        $idpssod = new self(
             SingleSignOnService::getChildrenOfClass($xml),
             preg_split('/[\s]+/', trim(self::getAttribute($xml, 'protocolSupportEnumeration'))),
             self::getBooleanAttribute($xml, 'WantAuthnRequestsSigned', null),
@@ -169,6 +173,10 @@ final class IDPSSODescriptor extends AbstractSSODescriptor
             ManageNameIDService::getChildrenOfClass($xml),
             Utils::extractStrings($xml, Constants::NS_MD, 'NameIDFormat')
         );
+        if (!empty($signature)) {
+            $idpssod->setSignature($signature[0]);
+        }
+        return $idpssod;
     }
 
 
@@ -338,6 +346,7 @@ final class IDPSSODescriptor extends AbstractSSODescriptor
      *
      * @param \DOMElement|null $parent The EntityDescriptor we should append this IDPSSODescriptor to.
      * @return \DOMElement
+     * @throws \Exception
      */
     public function toXML(DOMElement $parent = null): DOMElement
     {
@@ -365,6 +374,6 @@ final class IDPSSODescriptor extends AbstractSSODescriptor
             $a->toXML($e);
         }
 
-        return $e;
+        return $this->signElement($e);
     }
 }

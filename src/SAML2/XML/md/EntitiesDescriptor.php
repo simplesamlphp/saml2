@@ -6,6 +6,7 @@ namespace SAML2\XML\md;
 
 use DOMElement;
 use SAML2\Utils;
+use SAML2\XML\ds\Signature;
 use Webmozart\Assert\Assert;
 
 /**
@@ -81,7 +82,10 @@ final class EntitiesDescriptor extends AbstractMetadataDocument
         $extensions = Extensions::getChildrenOfClass($xml);
         Assert::maxCount($extensions, 1, 'Only one md:Extensions element is allowed.');
 
-        return new self(
+        $signature = Signature::getChildrenOfClass($xml);
+        Assert::maxCount($signature, 1, 'Only one ds:Signature element is allowed.');
+
+        $entities = new self(
             EntityDescriptor::getChildrenOfClass($xml),
             EntitiesDescriptor::getChildrenOfClass($xml),
             self::getAttribute($xml, 'Name', null),
@@ -90,6 +94,10 @@ final class EntitiesDescriptor extends AbstractMetadataDocument
             self::getAttribute($xml, 'cacheDuration', null),
             !empty($extensions) ? $extensions[0] : null
         );
+        if (!empty($signature)) {
+            $entities->setSignature($signature[0]);
+        }
+        return $entities;
     }
 
 
@@ -177,6 +185,7 @@ final class EntitiesDescriptor extends AbstractMetadataDocument
      *
      * @param \DOMElement|null $parent The EntitiesDescriptor we should append this EntitiesDescriptor to.
      * @return \DOMElement
+     * @throws \Exception
      */
     public function toXML(DOMElement $parent = null): DOMElement
     {
@@ -194,7 +203,6 @@ final class EntitiesDescriptor extends AbstractMetadataDocument
             $entityDescriptor->toXML($e);
         }
 
-        $this->signElement($e, $e->firstChild);
-        return $e;
+        return $this->signElement($e);
     }
 }
