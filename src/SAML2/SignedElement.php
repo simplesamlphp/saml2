@@ -9,7 +9,7 @@ use RobRichards\XMLSecLibs\XMLSecurityKey;
 /**
  * Abstract class to a SAML 2 element which may be signed.
  *
- * @package SimpleSAMLphp
+ * @package simplesamlphp/saml2
  */
 abstract class SignedElement implements SignedElementInterface
 {
@@ -28,6 +28,17 @@ abstract class SignedElement implements SignedElementInterface
      * @var array
      */
     protected $certificates = [];
+
+
+    /**
+     * Retrieve certificates that sign this element.
+     *
+     * @return array Array with certificates.
+     * @throws \Exception if an error occurs while trying to extract the public key from a certificate.
+     */
+    public function getValidatingCertificates(): array
+    {
+    }
 
 
     /**
@@ -67,26 +78,15 @@ abstract class SignedElement implements SignedElementInterface
 
 
     /**
-     * Retrieve the private key we should use to sign the message.
-     *
-     * @return XMLSecurityKey|null The key, or NULL if no key is specified
-     */
-    public function getSignatureKey(): ?XMLSecurityKey
-    {
-        return $this->signatureKey;
-    }
-
-
-    /**
      * Set the private key we should use to sign the message.
      *
      * If the key is null, the message will be sent unsigned.
      *
-     * @param XMLSecurityKey|null $signatureKey
+     * @param XMLSecurityKey|null $signingKey
      * @return void
      */
-    public function setSignatureKey(XMLSecurityKey $signatureKey = null): void
+    public function setSigningKey(XMLSecurityKey $signingKey = null): void
     {
-        $this->signatureKey = $signatureKey;
+        $this->signatureKey = $signingKey;
     }
 }

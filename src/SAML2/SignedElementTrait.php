@@ -126,16 +126,14 @@ trait SignedElementTrait
      */
     public function getValidatingCertificates(): array
     {
+        if ($this->signature === null) {
+            return [];
+        }
         $ret = [];
-        foreach ($this->getCertificates() as $cert) {
-            // construct a PEM formatted certificate
-            $pemCert = "-----BEGIN CERTIFICATE-----\n" .
-                chunk_split($cert, 64) .
-                "-----END CERTIFICATE-----\n";
-
+        foreach ($this->signature->getCertificates() as $cert) {
             // extract the public key from the certificate for validation.
-            $key = new XMLSecurityKey(XMLSecurityKey::RSA_SHA256, ['type' => 'public']);
-            $key->loadKey($pemCert);
+            $key = new XMLSecurityKey($this->signature->getAlgorithm(), ['type' => 'public']);
+            $key->loadKey($cert);
 
             try {
                 // check the signature.

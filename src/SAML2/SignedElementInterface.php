@@ -7,7 +7,7 @@ use RobRichards\XMLSecLibs\XMLSecurityKey;
 /**
  * An interface describing signed elements.
  *
- * @package SimpleSAMLphp
+ * @package simplesamlphp/saml2
  */
 interface SignedElementInterface
 {
@@ -30,11 +30,12 @@ interface SignedElementInterface
 
 
     /**
-     * Retrieve the private key we should use to sign the message.
+     * Retrieve certificates that sign this element.
      *
-     * @return \RobRichards\XMLSecLibs\XMLSecurityKey|null The key, or NULL if no key is specified
+     * @return array Array with certificates.
+     * @throws \Exception if an error occurs while trying to extract the public key from a certificate.
      */
-    public function getSignatureKey(): ?XMLSecurityKey;
+    public function getValidatingCertificates(): array;
 
 
     /**
@@ -42,10 +43,10 @@ interface SignedElementInterface
      *
      * If the key is null, the message will be sent unsigned.
      *
-     * @param \RobRichards\XMLSecLibs\XMLSecurityKey|null $signatureKey
+     * @param \RobRichards\XMLSecLibs\XMLSecurityKey|null $signingKey
      * @return void
      */
-    public function setSignatureKey(XMLSecurityKey $signatureKey = null): void;
+    public function setSigningKey(XMLSecurityKey $signingKey = null): void;
 
 
     /**
