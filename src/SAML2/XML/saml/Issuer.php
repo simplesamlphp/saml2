@@ -57,9 +57,10 @@ final class Issuer extends NameIDType
          * @var string
          */
         if ($Format === Constants::NAMEID_ENTITY || $Format === null) {
-            $NameQualifier = null;
-            $SPNameQualifier = null;
-            $SPProvidedID = null;
+            Assert::allNull(
+                [$NameQualifier, $SPNameQualifier, $SPProvidedID],
+                'Illegal combination of attributes being used'
+            );
         }
 
         parent::__construct($value, $NameQualifier, $SPNameQualifier, $Format, $SPProvidedID);
