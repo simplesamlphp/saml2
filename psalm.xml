@@ -40,7 +40,5 @@
     <MissingParamType errorLevel="info" />
     <UnusedClass errorLevel="info" />
     <PossiblyUnusedMethod errorLevel="info" />
-    <PropertyNotSetInConstructor errorLevel="suppress" />
-    <MissingClosureReturnType errorLevel="suppress" />
   </issueHandlers>
 </psalm>
