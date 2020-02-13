@@ -8,6 +8,7 @@ use DOMElement;
 use RobRichards\XMLSecLibs\XMLSecurityKey;
 use SAML2\Utilities\Temporal;
 use SAML2\XML\saml\Issuer;
+use SAML2\XML\saml\NameIDType;
 use SAML2\XML\samlp\Extensions;
 use Webmozart\Assert\Assert;
 
@@ -371,9 +372,9 @@ abstract class Message extends SignedElement
     /**
      * Retrieve the issuer if this message.
      *
-     * @return \SAML2\XML\saml\Issuer|null The issuer of this message, or NULL if no issuer is given
+     * @return \SAML2\XML\saml\NameIDType|null The issuer of this message, or NULL if no issuer is given
      */
-    public function getIssuer(): ?Issuer
+    public function getIssuer(): ?NameIDType
     {
         return $this->issuer;
     }
@@ -382,10 +383,10 @@ abstract class Message extends SignedElement
     /**
      * Set the issuer of this message.
      *
-     * @param \SAML2\XML\saml\Issuer|null $issuer The new issuer of this message
+     * @param \SAML2\XML\saml\NameIDType|null $issuer The new issuer of this message
      * @return void
      */
-    public function setIssuer(Issuer $issuer = null): void
+    public function setIssuer(NameIDType $issuer = null): void
     {
         $this->issuer = $issuer;
     }

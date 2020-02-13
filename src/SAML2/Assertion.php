@@ -14,6 +14,7 @@ use SAML2\Utilities\Temporal;
 use SAML2\XML\Chunk;
 use SAML2\XML\saml\Issuer;
 use SAML2\XML\saml\NameID;
+use SAML2\XML\saml\NameIDType;
 use SAML2\XML\saml\SubjectConfirmation;
 use Webmozart\Assert\Assert;
 
@@ -721,9 +722,9 @@ class Assertion extends SignedElement
     /**
      * Retrieve the issuer if this assertion.
      *
-     * @return \SAML2\XML\saml\Issuer The issuer of this assertion.
+     * @return \SAML2\XML\saml\NameIDType The issuer of this assertion.
      */
-    public function getIssuer(): Issuer
+    public function getIssuer(): NameIDType
     {
         return $this->issuer;
     }
@@ -732,10 +733,10 @@ class Assertion extends SignedElement
     /**
      * Set the issuer of this message.
      *
-     * @param \SAML2\XML\saml\Issuer $issuer The new issuer of this assertion.
+     * @param \SAML2\XML\saml\NameIDType $issuer The new issuer of this assertion.
      * @return void
      */
-    public function setIssuer(Issuer $issuer): void
+    public function setIssuer(NameIDType $issuer): void
     {
         $this->issuer = $issuer;
     }
@@ -745,9 +746,9 @@ class Assertion extends SignedElement
      * Retrieve the NameId of the subject in the assertion.
      *
      * @throws \Exception
-     * @return \SAML2\XML\saml\NameID|null The name identifier of the assertion.
+     * @return \SAML2\XML\saml\NameIDType|null The name identifier of the assertion.
      */
-    public function getNameId(): ?NameID
+    public function getNameId(): ?NameIDType
     {
         if ($this->encryptedNameId !== null) {
             throw new \Exception('Attempted to retrieve encrypted NameID without decrypting it first.');
@@ -760,13 +761,13 @@ class Assertion extends SignedElement
     /**
      * Set the NameId of the subject in the assertion.
      *
-     * The NameId must be a \SAML2\XML\saml\NameID object.
+     * The NameId must be a \SAML2\XML\saml\NameIDType object.
      *
      * @see \SAML2\Utils::addNameId()
-     * @param \SAML2\XML\saml\NameID|null $nameId The name identifier of the assertion.
+     * @param \SAML2\XML\saml\NameIDType|null $nameId The name identifier of the assertion.
      * @return void
      */
-    public function setNameId(NameID $nameId = null): void
+    public function setNameId(NameIDType $nameId = null): void
     {
         $this->nameId = $nameId;
     }
