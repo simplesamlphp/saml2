@@ -110,8 +110,9 @@ XML
         $this->assertEquals('SomeRequestID', $subjectConfirmationData->getInResponseTo());
         $this->assertEquals('127.0.0.1', $subjectConfirmationData->getAddress());
 
-        $info = $subjectConfirmationData->getInfo();
-        $this->assertEquals('SomeKey', $info[0]->getInfo()[0]->getName());
+        /** @psalm-var \SAML2\XML\md\KeyName $info */
+        $info = $subjectConfirmationData->getInfo()[0];
+        $this->assertEquals('SomeKey', $info->getInfo()[0]->getName());
     }
 
 
