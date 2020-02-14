@@ -135,9 +135,10 @@ final class EntityDescriptor extends AbstractMetadataDocument
         $contactPersons = [];
         $additionalMetadataLocation = [];
         foreach ($xml->childNodes as $node) {
-            if (!($node instanceof DOMElement)) {
-                continue;
-            } elseif ($node->namespaceURI !== Constants::NS_MD) {
+            if (
+                !($node instanceof DOMElement)
+                || ($node->namespaceURI !== Constants::NS_MD)
+            ) {
                 continue;
             }
 
