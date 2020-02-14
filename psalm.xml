@@ -7,18 +7,13 @@
 >
   <projectFiles>
     <directory name="src/SAML2" />
-    <file name="tests/SAML2/XML/saml/AuthenticatingAuthorityTest.php" />
-    <file name="tests/SAML2/XML/saml/AuthnContextClassRefTest.php" />
-    <file name="tests/SAML2/XML/saml/AuthnContextDeclRefTest.php" />
-    <file name="tests/SAML2/XML/saml/AuthnContextDeclTest.php" />
-    <file name="tests/SAML2/XML/saml/AuthnContextTest.php" />
-    <file name="tests/SAML2/XML/samlp/RequestedAuthnContextTest.php" />
     <directory name="tests/SAML2/XML/alg" />
     <directory name="tests/SAML2/XML/ds" />
     <directory name="tests/SAML2/XML/ecp" />
     <directory name="tests/SAML2/XML/md" />
     <directory name="tests/SAML2/XML/mdrpi" />
     <directory name="tests/SAML2/XML/mdui" />
+    <directory name="tests/SAML2/XML/saml" />
     <directory name="tests/SAML2/XML/samlp" />
     <directory name="tests/SAML2/XML/shibmd" />
     <ignoreFiles>
@@ -46,9 +41,6 @@
     <MissingClosureReturnType errorLevel="suppress" />
 
     <PropertyNotSetInConstructor>
-      <errorLevel type="info">
-        <directory name="tests/SAML2/XML" />
-      </errorLevel>
       <errorLevel type="suppress">
         <directory name="tests" />
       </errorLevel>
