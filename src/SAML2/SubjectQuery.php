@@ -6,7 +6,6 @@ namespace SAML2;
 
 use DOMElement;
 use SAML2\XML\saml\NameID;
-use SAML2\XML\saml\NameIDType;
 use Webmozart\Assert\Assert;
 
 /**
@@ -25,7 +24,7 @@ abstract class SubjectQuery extends Request
     /**
      * The NameId of the subject in the query.
      *
-     * @var \SAML2\XML\saml\NameIDType
+     * @var \SAML2\XML\saml\NameID
      */
     private $nameId;
 
@@ -79,11 +78,11 @@ abstract class SubjectQuery extends Request
     /**
      * Retrieve the NameId of the subject in the query.
      *
-     * @return \SAML2\XML\saml\NameIDType The name identifier of the assertion.
+     * @return \SAML2\XML\saml\NameID The name identifier of the assertion.
      *
      * @throws \InvalidArgumentException if assertions are false
      */
-    public function getNameId(): NameIDType
+    public function getNameId(): NameID
     {
         Assert::notEmpty($this->nameId);
 
@@ -94,10 +93,10 @@ abstract class SubjectQuery extends Request
     /**
      * Set the NameId of the subject in the query.
      *
-     * @param \SAML2\XML\saml\NameIDType $nameId The name identifier of the assertion.
+     * @param \SAML2\XML\saml\NameID $nameId The name identifier of the assertion.
      * @return void
      */
-    public function setNameId(NameIDType $nameId): void
+    public function setNameId(NameID $nameId): void
     {
         $this->nameId = $nameId;
     }

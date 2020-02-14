@@ -8,7 +8,6 @@ use DOMElement;
 use RobRichards\XMLSecLibs\XMLSecEnc;
 use RobRichards\XMLSecLibs\XMLSecurityKey;
 use SAML2\XML\saml\NameID;
-use SAML2\XML\saml\NameIDType;
 use Webmozart\Assert\Assert;
 
 /**
@@ -37,7 +36,7 @@ class LogoutRequest extends Request
     /**
      * The name identifier of the session that should be terminated.
      *
-     * @var \SAML2\XML\saml\NameIDType|null
+     * @var \SAML2\XML\saml\NameID|null
      */
     private $nameId = null;
 
@@ -226,11 +225,11 @@ class LogoutRequest extends Request
     /**
      * Retrieve the name identifier of the session that should be terminated.
      *
-     * @return \SAML2\XML\saml\NameIDType The name identifier of the session that should be terminated.
+     * @return \SAML2\XML\saml\NameID The name identifier of the session that should be terminated.
      *
      * @throws \InvalidArgumentException if assertions are false
      */
-    public function getNameId(): NameIDType
+    public function getNameId(): NameID
     {
         Assert::null($this->encryptedNameId, 'Attempted to retrieve encrypted NameID without decrypting it first.');
         Assert::notNull($this->nameId);
@@ -242,10 +241,10 @@ class LogoutRequest extends Request
     /**
      * Set the name identifier of the session that should be terminated.
      *
-     * @param \SAML2\XML\saml\NameIDType $nameId The name identifier of the session that should be terminated.
+     * @param \SAML2\XML\saml\NameID $nameId The name identifier of the session that should be terminated.
      * @return void
      */
-    public function setNameId(NameIDType $nameId): void
+    public function setNameId(NameID $nameId): void
     {
         $this->nameId = $nameId;
     }

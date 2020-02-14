@@ -9,7 +9,6 @@ use DOMElement;
 use RobRichards\XMLSecLibs\XMLSecEnc;
 use RobRichards\XMLSecLibs\XMLSecurityKey;
 use SAML2\XML\saml\NameID;
-use SAML2\XML\saml\NameIDType;
 use SAML2\XML\saml\SubjectConfirmation;
 use SAML2\XML\samlp\NameIDPolicy;
 use SAML2\XML\samlp\RequestedAuthnContext;
@@ -126,7 +125,7 @@ class AuthnRequest extends Request
     private $encryptedNameId = null;
 
     /**
-     * @var \SAML2\XML\saml\NameIDType|null
+     * @var \SAML2\XML\saml\NameID|null
      */
     private $nameId = null;
 
@@ -626,9 +625,9 @@ class AuthnRequest extends Request
      * Retrieve the NameId of the subject in the assertion.
      *
      * @throws \Exception
-     * @return \SAML2\XML\saml\NameIDType|null The name identifier of the assertion.
+     * @return \SAML2\XML\saml\NameID|null The name identifier of the assertion.
      */
-    public function getNameId(): ?NameIDType
+    public function getNameId(): ?NameID
     {
         if ($this->encryptedNameId !== null) {
             throw new \Exception('Attempted to retrieve encrypted NameID without decrypting it first.');
@@ -641,10 +640,10 @@ class AuthnRequest extends Request
     /**
      * Set the NameId of the subject in the assertion.
      *
-     * @param \SAML2\XML\saml\NameIDType|null $nameId The name identifier of the assertion.
+     * @param \SAML2\XML\saml\NameID|null $nameId The name identifier of the assertion.
      * @return void
      */
-    public function setNameId(NameIDType $nameId = null): void
+    public function setNameId(NameID $nameId = null): void
     {
         $this->nameId = $nameId;
     }
