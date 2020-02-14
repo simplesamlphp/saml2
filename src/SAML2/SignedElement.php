@@ -18,14 +18,14 @@ abstract class SignedElement implements SignedElementInterface
      *
      * The private key can be null, in which case the message is sent unsigned.
      *
-     * @var XMLSecurityKey|null
+     * @var \RobRichards\XMLSecLibs\XMLSecurityKey|null
      */
     protected $signatureKey;
 
     /**
      * List of certificates that should be included in the message.
      *
-     * @var array
+     * @var string[]
      */
     protected $certificates = [];
 
@@ -33,7 +33,7 @@ abstract class SignedElement implements SignedElementInterface
     /**
      * Retrieve certificates that sign this element.
      *
-     * @return array Array with certificates.
+     * @return string[] Array with certificates.
      * @throws \Exception if an error occurs while trying to extract the public key from a certificate.
      */
     public function getValidatingCertificates(): array
@@ -47,7 +47,7 @@ abstract class SignedElement implements SignedElementInterface
      * If no signature is present, false is returned. If a signature is present,
      * but cannot be verified, an exception will be thrown.
      *
-     * @param  XMLSecurityKey $key The key we should check against.
+     * @param \RobRichards\XMLSecLibs\XMLSecurityKey $key The key we should check against.
      * @return bool True if successful, false if we don't have a signature that can be verified.
      */
     abstract public function validate(XMLSecurityKey $key): bool;
@@ -82,7 +82,7 @@ abstract class SignedElement implements SignedElementInterface
      *
      * If the key is null, the message will be sent unsigned.
      *
-     * @param XMLSecurityKey|null $signingKey
+     * @param \RobRichards\XMLSecLibs\XMLSecurityKey|null $signingKey
      * @return void
      */
     public function setSigningKey(XMLSecurityKey $signingKey = null): void

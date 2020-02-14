@@ -37,7 +37,7 @@ final class Signature extends AbstractDsElement
      *
      * @param string $algorithm
      * @param string[] $certificates
-     * @param XMLSecurityKey|null $key
+     * @param \RobRichards\XMLSecLibs\XMLSecurityKey|null $key
      *
      * @throws \Exception
      */
@@ -81,7 +81,7 @@ final class Signature extends AbstractDsElement
     /**
      * Get the array of certificates attached to this signature.
      *
-     * @return array
+     * @return string[]
      */
     public function getCertificates(): array
     {
@@ -106,7 +106,7 @@ final class Signature extends AbstractDsElement
 
 
     /**
-     * @param XMLSecurityKey $key
+     * @param \RobRichards\XMLSecLibs\XMLSecurityKey|null $key
      */
     protected function setKey(?XMLSecurityKey $key): void
     {
