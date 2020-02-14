@@ -17,6 +17,13 @@ use SAML2\Utils;
  */
 final class SubjectConfirmationDataTest extends \PHPUnit\Framework\TestCase
 {
+    /** @var \DOMDocument */
+    private $document;
+
+
+    /**
+     * @return void
+     */
     public function setup(): void
     {
         $samlNamespace = SubjectConfirmationData::NS;
