@@ -12,7 +12,7 @@ use Webmozart\Assert\Assert;
  * Class for handling the mdrpi:RegistrationInfo element.
  *
  * @link: http://docs.oasis-open.org/security/saml/Post2.0/saml-metadata-rpi/v1.0/saml-metadata-rpi-v1.0.pdf
- * @package SimpleSAMLphp
+ * @package simplesamlphp/saml2
  */
 final class RegistrationInfo extends AbstractMdrpiElement
 {
@@ -35,9 +35,9 @@ final class RegistrationInfo extends AbstractMdrpiElement
      *
      * This is an associative array with language=>URL.
      *
-     * @var array|null
+     * @var array
      */
-    protected $RegistrationPolicy = null;
+    protected $RegistrationPolicy = [];
 
 
     /**
@@ -45,12 +45,12 @@ final class RegistrationInfo extends AbstractMdrpiElement
      *
      * @param string $registrationAuthority
      * @param int|null $registrationInstant
-     * @param array|null $RegistrationPolicy
+     * @param array $RegistrationPolicy
      */
     public function __construct(
         string $registrationAuthority,
         int $registrationInstant = null,
-        array $RegistrationPolicy = null
+        array $RegistrationPolicy = []
     ) {
         $this->setRegistrationAuthority($registrationAuthority);
         $this->setRegistrationInstant($registrationInstant);
@@ -62,8 +62,6 @@ final class RegistrationInfo extends AbstractMdrpiElement
      * Collect the value of the RegistrationAuthority property
      *
      * @return string
-     *
-     * @throws \InvalidArgumentException if assertions are false
      */
     public function getRegistrationAuthority(): string
     {
@@ -109,9 +107,9 @@ final class RegistrationInfo extends AbstractMdrpiElement
     /**
      * Collect the value of the RegistrationPolicy property
      *
-     * @return array|null
+     * @return array
      */
-    public function getRegistrationPolicy(): ?array
+    public function getRegistrationPolicy(): array
     {
         return $this->RegistrationPolicy;
     }
@@ -120,10 +118,10 @@ final class RegistrationInfo extends AbstractMdrpiElement
     /**
      * Set the value of the RegistrationPolicy property
      *
-     * @param array|null $registrationPolicy
+     * @param array $registrationPolicy
      * @return void
      */
-    private function setRegistrationPolicy(?array $registrationPolicy): void
+    private function setRegistrationPolicy(array $registrationPolicy): void
     {
         $this->RegistrationPolicy = $registrationPolicy;
     }
@@ -134,17 +132,16 @@ final class RegistrationInfo extends AbstractMdrpiElement
      *
      * @param \DOMElement $xml The XML element we should load
      * @return self
+     * @throws \InvalidArgumentException if the qualified name of the supplied element is wrong
      */
     public static function fromXML(DOMElement $xml): object
     {
         Assert::same($xml->localName, 'RegistrationInfo');
         Assert::same($xml->namespaceURI, RegistrationInfo::NS);
-
-        if (!$xml->hasAttribute('registrationAuthority')) {
-            throw new \Exception(
-                'Missing required attribute "registrationAuthority" in mdrpi:RegistrationInfo element.'
-            );
-        }
+        Assert::true(
+            $xml->hasAttribute('registrationAuthority'),
+            'Missing required attribute "registrationAuthority" in mdrpi:RegistrationInfo element.'
+        );
 
         $registrationAuthority = $xml->getAttribute('registrationAuthority');
         $registrationInstant = $xml->hasAttribute('registrationInstant')
@@ -152,7 +149,7 @@ final class RegistrationInfo extends AbstractMdrpiElement
             : null;
         $RegistrationPolicy = Utils::extractLocalizedStrings($xml, RegistrationInfo::NS, 'RegistrationPolicy');
 
-        return new self($registrationAuthority, $registrationInstant, empty($RegistrationPolicy) ? null : $RegistrationPolicy);
+        return new self($registrationAuthority, $registrationInstant, $RegistrationPolicy);
     }
 
 
@@ -161,23 +158,17 @@ final class RegistrationInfo extends AbstractMdrpiElement
      *
      * @param \DOMElement|null $parent The element we should append to.
      * @return \DOMElement
-     *
-     * @throws \InvalidArgumentException if assertions are false
      */
     public function toXML(DOMElement $parent = null): DOMElement
     {
         $e = $this->instantiateParentElement($parent);
-
         $e->setAttribute('registrationAuthority', $this->registrationAuthority);
 
         if ($this->registrationInstant !== null) {
             $e->setAttribute('registrationInstant', gmdate('Y-m-d\TH:i:s\Z', $this->registrationInstant));
         }
 
-        if (!empty($this->RegistrationPolicy)) {
-            Utils::addStrings($e, RegistrationInfo::NS, 'mdrpi:RegistrationPolicy', true, $this->RegistrationPolicy);
-        }
-
+        Utils::addStrings($e, RegistrationInfo::NS, 'mdrpi:RegistrationPolicy', true, $this->RegistrationPolicy);
         return $e;
     }
 }

@@ -24,6 +24,9 @@ final class KeyInfoTest extends \PHPUnit\Framework\TestCase
     /** @var string */
     private $certificate;
 
+    /** @var string[] */
+    private $certData;
+
     /** @var \DOMDocument */
     private $document;
 
@@ -82,11 +85,19 @@ XML
         $keyInfo = new KeyInfo(
             [
                 new KeyName('testkey'),
+                new X509Data(
+                    [
+                        new X509Certificate($this->certificate),
+                        new X509SubjectName($this->certData['name'])
+                    ]
+                ),
+                new Chunk(DOMDocumentFactory::fromString(
+                    '<ds:KeySomething>Some unknown tag within the ds-namespace</ds:KeySomething>'
+                )->documentElement),
+                new Chunk(DOMDocumentFactory::fromString('<some>Chunk</some>')->documentElement)
             ],
             'abc123'
         );
-
-        $keyInfo = KeyInfo::fromXML($this->document->documentElement);
 
         $info = $keyInfo->getInfo();
         $this->assertCount(4, $info);

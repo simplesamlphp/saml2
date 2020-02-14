@@ -13,7 +13,7 @@ use Webmozart\Assert\Assert;
 /**
  * Class representing SAML 2 metadata RequestedAttribute.
  *
- * @package SimpleSAMLphp
+ * @package simplesamlphp/saml2
  */
 final class RequestedAttribute extends Attribute
 {
@@ -38,14 +38,14 @@ final class RequestedAttribute extends Attribute
      * @param bool|null   $isRequired
      * @param string|null $NameFormat
      * @param string|null $FriendlyName
-     * @param \SAML2\XML\saml\AttributeValue[]|null  $AttributeValues
+     * @param \SAML2\XML\saml\AttributeValue[]  $AttributeValues
      */
     public function __construct(
         string $Name,
         ?bool $isRequired = null,
         ?string $NameFormat = null,
         ?string $FriendlyName = null,
-        ?array $AttributeValues = null
+        array $AttributeValues = []
     ) {
         parent::__construct($Name, $NameFormat, $FriendlyName, $AttributeValues);
         $this->setIsRequired($isRequired);
@@ -67,6 +67,7 @@ final class RequestedAttribute extends Attribute
      * Set the value of the isRequired-property
      *
      * @param bool|null $flag
+     * @return void
      */
     protected function setIsRequired(?bool $flag): void
     {
@@ -80,12 +81,12 @@ final class RequestedAttribute extends Attribute
      * @param \DOMElement $xml The XML element we should load
      * @return self
      * @throws \Exception
-     * @throws \InvalidArgumentException
+     * @throws \InvalidArgumentException if the qualified name of the supplied element is wrong
      */
     public static function fromXML(DOMElement $xml): object
     {
         Assert::same($xml->localName, 'RequestedAttribute');
-        Assert::same($xml->namespaceURI, Constants::NS_MD);
+        Assert::same($xml->namespaceURI, RequestedAttribute::NS);
 
         return new self(
             self::getAttribute($xml, 'Name'),

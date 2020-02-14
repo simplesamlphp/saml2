@@ -12,7 +12,7 @@ use Webmozart\Assert\Assert;
 /**
  * Class representing SAML 2 metadata PDPDescriptor.
  *
- * @package SimpleSAMLphp
+ * @package simplesamlphp/saml2
  */
 final class PDPDescriptor extends AbstractRoleDescriptor
 {
@@ -43,30 +43,30 @@ final class PDPDescriptor extends AbstractRoleDescriptor
      *
      * @param \SAML2\XML\md\AuthzService[] $authServiceEndpoints
      * @param string[] $protocolSupportEnumeration
-     * @param \SAML2\XML\md\AssertionIDRequestService[]|null $assertionIDRequestService
-     * @param string[]|null $nameIDFormats
+     * @param \SAML2\XML\md\AssertionIDRequestService[] $assertionIDRequestService
+     * @param string[] $nameIDFormats
      * @param string|null $ID
      * @param int|null $validUntil
      * @param string|null $cacheDuration
      * @param \SAML2\XML\md\Extensions|null $extensions
      * @param string|null $errorURL
-     * @param \SAML2\XML\md\KeyDescriptor[]|null $keyDescriptors
      * @param \SAML2\XML\md\Organization|null $organization
-     * @param \SAML2\XML\md\ContactPerson[]|null $contacts
+     * @param \SAML2\XML\md\KeyDescriptor[] $keyDescriptors
+     * @param \SAML2\XML\md\ContactPerson[] $contacts
      */
     public function __construct(
         array $authServiceEndpoints,
         array $protocolSupportEnumeration,
-        ?array $assertionIDRequestService = null,
-        ?array $nameIDFormats = null,
+        array $assertionIDRequestService = [],
+        array $nameIDFormats = [],
         ?string $ID = null,
         ?int $validUntil = null,
         ?string $cacheDuration = null,
         ?Extensions $extensions = null,
         ?string $errorURL = null,
-        ?array $keyDescriptors = null,
         ?Organization $organization = null,
-        ?array $contacts = null
+        array $keyDescriptors = [],
+        array $contacts = []
     ) {
         parent::__construct(
             $protocolSupportEnumeration,
@@ -90,10 +90,13 @@ final class PDPDescriptor extends AbstractRoleDescriptor
      *
      * @param \DOMElement $xml The XML element we should load.
      * @return \SAML2\XML\md\PDPDescriptor
-     * @throws \Exception
+     * @throws \InvalidArgumentException if the qualified name of the supplied element is wrong
      */
     public static function fromXML(DOMElement $xml): object
     {
+        Assert::same($xml->localName, 'PDPDescriptor');
+        Assert::same($xml->namespaceURI, PDPDescriptor::NS);
+
         $validUntil = self::getAttribute($xml, 'validUntil', null);
         $orgs = Organization::getChildrenOfClass($xml);
         Assert::maxCount($orgs, 1, 'More than one Organization found in this descriptor');
@@ -111,8 +114,8 @@ final class PDPDescriptor extends AbstractRoleDescriptor
             self::getAttribute($xml, 'cacheDuration', null),
             !empty($extensions) ? $extensions[0] : null,
             self::getAttribute($xml, 'errorURL', null),
-            KeyDescriptor::getChildrenOfClass($xml),
             !empty($orgs) ? $orgs[0] : null,
+            KeyDescriptor::getChildrenOfClass($xml),
             ContactPerson::getChildrenOfClass($xml)
         );
     }
@@ -133,12 +136,12 @@ final class PDPDescriptor extends AbstractRoleDescriptor
      * Set the AuthzService endpoints for this PDPDescriptor
      *
      * @param \SAML2\XML\md\AuthzService[] $authzServices
+     * @return void
+     * @throws \InvalidArgumentException
      */
-    protected function setAuthzServiceEndpoints(?array $authzServices = []): void
+    protected function setAuthzServiceEndpoints(array $authzServices = []): void
     {
-        if ($authzServices === null) {
-            return;
-        }
+        Assert::minCount($authzServices, 1, 'At least one md:AuthzService endpoint must be present.');
         Assert::allIsInstanceOf(
             $authzServices,
             AuthzService::class,
@@ -163,12 +166,11 @@ final class PDPDescriptor extends AbstractRoleDescriptor
      * Set the AssertionIDRequestService endpoints for this PDPDescriptor
      *
      * @param \SAML2\XML\md\AssertionIDRequestService[] $assertionIDRequestServices
+     * @return void
+     * @throws \InvalidArgumentException
      */
-    public function setAssertionIDRequestServices(?array $assertionIDRequestServices): void
+    public function setAssertionIDRequestServices(array $assertionIDRequestServices): void
     {
-        if ($assertionIDRequestServices === null) {
-            return;
-        }
         Assert::allIsInstanceOf(
             $assertionIDRequestServices,
             AssertionIDRequestService::class,
@@ -194,7 +196,7 @@ final class PDPDescriptor extends AbstractRoleDescriptor
      *
      * @param string[] $nameIDFormats
      */
-    public function setNameIDFormats(?array $nameIDFormats): void
+    public function setNameIDFormats(array $nameIDFormats): void
     {
         Assert::allStringNotEmpty($nameIDFormats, 'All NameIDFormat must be a non-empty string.');
         $this->nameIDFormats = $nameIDFormats;
@@ -222,6 +224,6 @@ final class PDPDescriptor extends AbstractRoleDescriptor
 
         Utils::addStrings($e, Constants::NS_MD, 'md:NameIDFormat', false, $this->nameIDFormats);
 
-        return $e;
+        return $this->signElement($e);
     }
 }

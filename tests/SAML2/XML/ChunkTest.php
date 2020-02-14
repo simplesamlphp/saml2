@@ -5,6 +5,8 @@ declare(strict_types=1);
 namespace SAML2\XML;
 
 use PHPUnit\Framework\TestCase;
+use SAML2\Constants;
+use SAML2\DOMDocumentFactory;
 use SAML2\XML\saml\Attribute;
 use SAML2\XML\saml\AttributeValue;
 
@@ -75,5 +77,45 @@ XML
             ,
             strval(unserialize(serialize(Chunk::fromXML($this->document->documentElement))))
         );
+    }
+
+    /**
+     * Test fetching various types.
+     */
+    public function testTypesUnmarshalling(): void
+    {
+        $mdNamespace = Constants::NS_MD;
+        $document = DOMDocumentFactory::fromString(<<<XML
+<md:ExampleService xmlns:md="{$mdNamespace}" URLattr="https://whatever/" someInteger="13" isInteresting="true" />
+XML
+        );
+        $elt = $document->documentElement;
+
+        $c = Chunk::fromXML($document->documentElement);
+        $this->assertEquals("https://whatever/", Chunk::getAttribute($elt, 'URLattr'));
+        $this->assertEquals(13, Chunk::getIntegerAttribute($elt, 'someInteger'));
+        $this->assertTrue(Chunk::getBooleanAttribute($elt, 'isInteresting'));
+        // should still return the same if a default is passed
+        $this->assertEquals("https://whatever/", Chunk::getAttribute($elt, 'URLattr', 'default'));
+        $this->assertEquals(13, Chunk::getIntegerAttribute($elt, 'someInteger', '25'));
+        $this->assertTrue(Chunk::getBooleanAttribute($elt, 'isInteresting', 'false'));
+    }
+
+    /**
+     * Test returning defaults for various types.
+     */
+    public function testTypesUnmarshallingDefaults(): void
+    {
+        $mdNamespace = Constants::NS_MD;
+        $document = DOMDocumentFactory::fromString(<<<XML
+<md:ExampleService xmlns:md="{$mdNamespace}" URLattr="https://whatever/" someInteger="13" isInteresting="true" />
+XML
+        );
+        $elt = $document->documentElement;
+
+        $c = Chunk::fromXML($document->documentElement);
+        $this->assertEquals("http://example.org", Chunk::getAttribute($elt, 'nonURLattr', "http://example.org"));
+        $this->assertEquals(null, Chunk::getIntegerAttribute($elt, 'someiInteger', null));
+        $this->assertFalse(Chunk::getBooleanAttribute($elt, 'isUnInteresting', "false"));
     }
 }

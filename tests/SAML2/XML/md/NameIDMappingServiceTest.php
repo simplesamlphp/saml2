@@ -4,6 +4,7 @@ declare(strict_types=1);
 
 namespace SAML2\XML\md;
 
+use InvalidArgumentException;
 use PHPUnit\Framework\TestCase;
 use SAML2\Constants;
 use SAML2\DOMDocumentFactory;
@@ -11,11 +12,15 @@ use SAML2\DOMDocumentFactory;
 /**
  * Tests for md:NameIDMappingService.
  */
-class NameIDMappingServiceTest extends TestCase
+final class NameIDMappingServiceTest extends TestCase
 {
+    /** @var \DOMDocument */
     protected $document;
 
 
+    /**
+     * @return void
+     */
     protected function setUp(): void
     {
         $mdNamespace = Constants::NS_MD;
@@ -35,8 +40,10 @@ XML
     public function testMarshalling(): void
     {
         $nidmsep = new NameIDMappingService('urn:something', 'https://whatever/');
+
         $this->assertEquals('urn:something', $nidmsep->getBinding());
         $this->assertEquals('https://whatever/', $nidmsep->getLocation());
+
         $this->assertEquals($this->document->saveXML($this->document->documentElement), strval($nidmsep));
     }
 
@@ -46,7 +53,7 @@ XML
      */
     public function testMarshallingWithResponseLocation(): void
     {
-        $this->expectException(\InvalidArgumentException::class);
+        $this->expectException(InvalidArgumentException::class);
         $this->expectExceptionMessage(
             'The \'ResponseLocation\' attribute must be omitted for md:NameIDMappingService.'
         );
@@ -63,6 +70,7 @@ XML
     public function testUnmarshalling(): void
     {
         $nidmsep = NameIDMappingService::fromXML($this->document->documentElement);
+
         $this->assertEquals('urn:something', $nidmsep->getBinding());
         $this->assertEquals('https://whatever/', $nidmsep->getLocation());
         $this->assertEquals($this->document->saveXML($this->document->documentElement), strval($nidmsep));
@@ -74,10 +82,11 @@ XML
      */
     public function testUnmarshallingWithResponseLocation(): void
     {
-        $this->expectException(\InvalidArgumentException::class);
+        $this->expectException(InvalidArgumentException::class);
         $this->expectExceptionMessage(
             'The \'ResponseLocation\' attribute must be omitted for md:NameIDMappingService.'
         );
+
         $this->document->documentElement->setAttribute('ResponseLocation', 'https://response.location/');
         NameIDMappingService::fromXML($this->document->documentElement);
     }

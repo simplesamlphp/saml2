@@ -7,6 +7,7 @@ namespace SAML2;
 use DOMElement;
 use RobRichards\XMLSecLibs\XMLSecurityKey;
 use SAML2\Utilities\Temporal;
+use SAML2\XML\ExtendableElementTrait;
 use SAML2\XML\saml\Issuer;
 use SAML2\XML\samlp\Extensions;
 use Webmozart\Assert\Assert;
@@ -19,12 +20,7 @@ use Webmozart\Assert\Assert;
  */
 abstract class Message extends SignedElement
 {
-    /**
-     * Request extensions.
-     *
-     * @var array
-     */
-    protected $extensions = [];
+    use ExtendableElementTrait;
 
     /**
      * The name of the root element of the DOM tree for the message.
@@ -175,7 +171,11 @@ abstract class Message extends SignedElement
 
         $this->validateSignature($xml);
 
-        $this->extensions = Extensions::getList($xml);
+        $extensions = Extensions::getChildrenOfClass($xml);
+        Assert::maxCount($extensions, 1, 'Only one saml:Extensions element is allowed.');
+        if (!empty($extensions)) {
+            $this->Extensions = $extensions[0];
+        }
     }
 
 
@@ -457,7 +457,9 @@ abstract class Message extends SignedElement
             $this->issuer->toXML($root);
         }
 
-        Extensions::addList($root, $this->extensions);
+        if ($this->Extensions !== null && !$this->Extensions->isEmptyElement()) {
+            $this->Extensions->toXML($root);
+        }
 
         return $root;
     }
@@ -528,7 +530,7 @@ abstract class Message extends SignedElement
      * Set the certificates that should be included in the message.
      * The certificates should be strings with the PEM encoded data.
      *
-     * @param array $certificates An array of certificates
+     * @param string[] $certificates An array of certificates
      * @return void
      */
     public function setCertificates(array $certificates): void
@@ -540,7 +542,7 @@ abstract class Message extends SignedElement
     /**
      * Retrieve the certificates that are included in the message.
      *
-     * @return array An array of certificates
+     * @return string[] An array of certificates
      */
     public function getCertificates(): array
     {
@@ -583,41 +585,6 @@ abstract class Message extends SignedElement
             default:
                 throw new \Exception('Unknown SAML message: ' . var_export($xml->localName, true));
         }
-    }
-
-
-    /**
-     * Retrieve the Extensions.
-     *
-     * @return \SAML2\XML\samlp\Extensions[]
-     */
-    public function getExtensions(): array
-    {
-        return $this->extensions;
-    }
-
-
-    /**
-     * Set the Extensions.
-     *
-     * @param array $extensions The Extensions
-     * @return void
-     */
-    public function setExtensions(array $extensions): void
-    {
-        $this->extensions = $extensions;
-    }
-
-
-    /**
-     * Add an Extension.
-     *
-     * @param \SAML2\XML\samlp\Extensions $extensions The Extensions
-     * @return void
-     */
-    public function addExtension(Extensions $extension): void
-    {
-        $this->extensions[] = $extension;
     }
 
 

@@ -33,7 +33,7 @@ class Certificate
     public static function convertToCertificate(string $X509CertificateContents): string
     {
         return "-----BEGIN CERTIFICATE-----\n"
-                . chunk_split($X509CertificateContents, 64)
-                . "-----END CERTIFICATE-----\n";
+                . chunk_split($X509CertificateContents, 64, "\n")
+                . "-----END CERTIFICATE-----";
     }
 }

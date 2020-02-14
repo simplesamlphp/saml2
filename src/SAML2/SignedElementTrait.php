@@ -5,30 +5,31 @@ declare(strict_types=1);
 namespace SAML2;
 
 use DOMElement;
-use DOMNode;
 use Exception;
 use RobRichards\XMLSecLibs\XMLSecurityKey;
+use SAML2\XML\ds\Signature;
+use Webmozart\Assert\Assert;
 
 /**
  * Helper trait for processing signed elements.
  *
- * @package SimpleSAMLphp
+ * @package simplesamlphp/saml2
  */
 trait SignedElementTrait
 {
     /**
-     * The signature of this element.
+     * List of certificates that should be included in the message.
      *
-     * @var \RobRichards\XMLSecLibs\XMLSecurityDSig|null $signature
+     * @var string[]
      */
-    protected $signature;
+    protected $certificates = [];
 
     /**
-     * Available methods for validating this message.
+     * The signature of this element.
      *
-     * @var array
+     * @var \SAML2\XML\ds\Signature|null $signature
      */
-    protected $validators = [];
+    protected $signature;
 
 
     /**
@@ -38,45 +39,68 @@ trait SignedElementTrait
      *
      * @var \RobRichards\XMLSecLibs\XMLSecurityKey|null
      */
-    protected $signatureKey;
+    protected $signingKey;
+
+
+    /**
+     * Get the signature element of this object.
+     *
+     * @return \SAML2\XML\ds\Signature|null
+     */
+    public function getSignature(): ?Signature
+    {
+        return $this->signature;
+    }
 
 
     /**
      * Initialize a signed element from XML.
      *
-     * @param \DOMElement $xml The XML element which may be signed.
+     * @param \SAML2\XML\ds\Signature|null $signature The ds:Signature object
      */
-    protected function getSignatureFromXML(DOMElement $xml): void
+    protected function setSignature(?Signature $signature): void
     {
-        // validate the signature element of the message
-        try {
-            $sig = Utils::validateElement($xml);
-
-            if ($sig) {
-                $this->setCertificates($sig['Certificates']);
-                $this->addValidator([Utils::class, 'validateSignature'], $sig);
-            }
-        } catch (Exception $e) {
-            // ignore signature validation errors
+        if ($signature) {
+            $this->signature = $signature;
         }
     }
 
 
     /**
-     * Add a method for validating this element.
+     * Retrieve the certificates that are included in the message.
      *
-     * This function is used for custom validation extensions
+     * @return string[] An array of certificates
+     */
+    public function getCertificates(): array
+    {
+        return $this->certificates;
+    }
+
+
+    /**
+     * Set the certificates that should be included in the element.
+     * The certificates should be strings with the PEM encoded data.
      *
-     * @param callable $function The function which should be called.
-     * @param mixed $data The data that should be included as the first parameter to the function.
+     * @param string[] $certificates An array of certificates.
      * @return void
      */
-    public function addValidator(callable $function, $data): void
+    public function setCertificates(array $certificates): void
     {
-        $this->validators[] = [
-            'Function' => $function,
-            'Data' => $data,
-        ];
+        $this->certificates = $certificates;
+    }
+
+
+    /**
+     * Set the private key we should use to sign the message.
+     *
+     * If the key is null, the message will be sent unsigned.
+     *
+     * @param \RobRichards\XMLSecLibs\XMLSecurityKey|null $signingKey
+     * @return void
+     */
+    public function setSigningKey(XMLSecurityKey $signingKey = null): void
+    {
+        $this->signingKey = $signingKey;
     }
 
 
@@ -93,28 +117,23 @@ trait SignedElementTrait
      */
     public function validate(XMLSecurityKey $key): bool
     {
-        if (count($this->validators) === 0) {
+        if ($this->signature === null) {
             return false;
         }
 
-        $exceptions = [];
+        $signer = $this->signature->getSigner();
+        Assert::eq(
+            $key->getAlgorithm(),
+            $this->signature->getAlgorithm(),
+            'Algorithm provided in key does not match algorithm used in signature.'
+        );
 
-        foreach ($this->validators as $validator) {
-            $function = $validator['Function'];
-            $data = $validator['Data'];
-
-            try {
-                call_user_func($function, $data, $key);
-                // we were able to validate the message with this validator.
-
-                return true;
-            } catch (Exception $e) {
-                $exceptions[] = $e;
-            }
+        // check the signature
+        if ($signer->verify($key) === 1) {
+            return true;
         }
 
-        // no validators were able to validate the message.
-        throw $exceptions[0];
+        throw new Exception("Unable to validate Signature");
     }
 
 
@@ -126,16 +145,14 @@ trait SignedElementTrait
      */
     public function getValidatingCertificates(): array
     {
+        if ($this->signature === null) {
+            return [];
+        }
         $ret = [];
-        foreach ($this->getCertificates() as $cert) {
-            // construct a PEM formatted certificate
-            $pemCert = "-----BEGIN CERTIFICATE-----\n" .
-                chunk_split($cert, 64) .
-                "-----END CERTIFICATE-----\n";
-
+        foreach ($this->signature->getCertificates() as $cert) {
             // extract the public key from the certificate for validation.
-            $key = new XMLSecurityKey(XMLSecurityKey::RSA_SHA256, ['type' => 'public']);
-            $key->loadKey($pemCert);
+            $key = new XMLSecurityKey($this->signature->getAlgorithm(), ['type' => 'public']);
+            $key->loadKey($cert);
 
             try {
                 // check the signature.
@@ -155,36 +172,15 @@ trait SignedElementTrait
      * Sign the given XML element.
      *
      * @param \DOMElement $root The element we should sign.
-     * @param \DOMNode|null $insertBefore The element we should insert the signature node before.
-     * @return \DOMElement|null
+     * @return \DOMElement|null The signed element.
+     * @throws \Exception If an error occurs while trying to sign.
      */
-    protected function signElement(DOMElement $root, DOMNode $insertBefore = null): ?DOMElement
+    protected function signElement(DOMElement $root): ?DOMElement
     {
-        if ($this->signatureKey === null) {
-            // we cannot sign this element.
-            return null;
+        if ($this->signingKey instanceof XMLSecurityKey) {
+            $this->signature = new Signature($this->signingKey->getAlgorithm(), $this->certificates, $this->signingKey);
+            $this->signature->toXML($root);
         }
-
-        Utils::insertSignature($this->signatureKey, $this->certificates, $root, $insertBefore);
-
         return $root;
     }
-
-
-    /**
-     * Retrieve the certificates that are included in the message.
-     *
-     * @return array An array of certificates
-     */
-    abstract public function getCertificates(): array;
-
-
-    /**
-     * Set the certificates that should be included in the element.
-     * The certificates should be strings with the PEM encoded data.
-     *
-     * @param array $certificates An array of certificates.
-     * @return void
-     */
-    abstract public function setCertificates(array $certificates): void;
 }

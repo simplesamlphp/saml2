@@ -7,7 +7,6 @@ namespace SAML2\XML;
 use DOMElement;
 use SAML2\Constants;
 use SAML2\DOMDocumentFactory;
-use SAML2\Utils;
 use Serializable;
 use Webmozart\Assert\Assert;
 
@@ -15,7 +14,7 @@ use Webmozart\Assert\Assert;
  * Abstract class to be implemented by all the classes in this namespace
  *
  * @author Tim van Dijen, <tvdijen@gmail.com>
- * @package SimpleSAMLphp
+ * @package simplesamlphp/saml2
  */
 abstract class AbstractXMLElement implements Serializable
 {
@@ -108,34 +107,34 @@ abstract class AbstractXMLElement implements Serializable
     /**
      * Get the value of an attribute from a given element.
      *
-     * @param DOMElement  $xml The element where we should search for the attribute.
+     * @param \DOMElement $xml The element where we should search for the attribute.
      * @param string      $name The name of the attribute.
      * @param string|null $default The default to return in case the attribute does not exist and it is optional.
-     *
      * @return string|null
-     * @throws \InvalidArgumentException
+     * @throws \InvalidArgumentException if the attribute is missing from the element
      */
     public static function getAttribute(DOMElement $xml, string $name, ?string $default = ''): ?string
     {
         if (!$xml->hasAttribute($name)) {
             Assert::nullOrStringNotEmpty(
                 $default,
-                'Missing \'' . $name . '\' attribute from ' . static::NS_PREFIX . ':' .
-                self::getClassName(static::class) . '.'
+                'Missing \'' . $name . '\' attribute from ' . static::NS_PREFIX . ':'
+                    . self::getClassName(static::class) . '.'
             );
+
             return $default;
         }
+
         return $xml->getAttribute($name);
     }
 
 
     /**
-     * @param DOMElement  $xml The element where we should search for the attribute.
+     * @param \DOMElement $xml The element where we should search for the attribute.
      * @param string      $name The name of the attribute.
      * @param string|null $default The default to return in case the attribute does not exist and it is optional.
-     *
      * @return bool|null
-     * @throws \InvalidArgumentException
+     * @throws \InvalidArgumentException if the attribute is not a boolean
      */
     public static function getBooleanAttribute(DOMElement $xml, string $name, ?string $default = ''): ?bool
     {
@@ -143,12 +142,14 @@ abstract class AbstractXMLElement implements Serializable
         if ($value === null) {
             return null;
         }
+
         Assert::oneOf(
             $value,
             ['0', '1', 'false', 'true'],
             'The \'' . $name . '\' attribute of ' . static::NS_PREFIX . ':' . self::getClassName(static::class) .
             ' must be boolean.'
         );
+
         return in_array($value, ['1', 'true'], true);
     }
 
@@ -156,11 +157,12 @@ abstract class AbstractXMLElement implements Serializable
     /**
      * Get the integer value of an attribute from a given element.
      *
-     * @param DOMElement  $xml The element where we should search for the attribute.
+     * @param \DOMElement  $xml The element where we should search for the attribute.
      * @param string      $name The name of the attribute.
      * @param string|null $default The default to return in case the attribute does not exist and it is optional.
      *
      * @return int|null
+     * @throws \InvalidArgumentException if the attribute is not an integer
      */
     public static function getIntegerAttribute(DOMElement $xml, string $name, ?string $default = ''): ?int
     {
@@ -168,11 +170,13 @@ abstract class AbstractXMLElement implements Serializable
         if ($value === null) {
             return null;
         }
+
         Assert::numeric(
             $value,
-            'The \'' . $name . '\' attribute of ' . static::NS_PREFIX . ':' . self::getClassName(static::class) .
-            ' must be numerical.'
+            'The \'' . $name . '\' attribute of ' . static::NS_PREFIX . ':' . self::getClassName(static::class)
+                . ' must be numerical.'
         );
+
         return intval($value);
     }
 
@@ -181,7 +185,6 @@ abstract class AbstractXMLElement implements Serializable
      * Static method that processes a fully namespaced class name and returns the name of the class from it.
      *
      * @param string $class
-     *
      * @return string
      */
     protected static function getClassName(string $class): string
@@ -215,11 +218,10 @@ abstract class AbstractXMLElement implements Serializable
     /**
      * Extract localized names from the children of a given element.
      *
-     * @param DOMElement $parent The element we want to search.
-     *
-     * @return array An array of objects of this class.
+     * @param \DOMElement $parent The element we want to search.
+     * @return static[] An array of objects of this class.
      */
-    public static function getChildrenOfClass(\DOMElement $parent): array
+    public static function getChildrenOfClass(DOMElement $parent): array
     {
         $ret = [];
         foreach ($parent->childNodes as $node) {

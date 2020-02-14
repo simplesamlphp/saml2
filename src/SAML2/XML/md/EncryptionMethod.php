@@ -41,7 +41,7 @@ class EncryptionMethod extends AbstractMdElement
         string $algorithm,
         ?int $keySize = null,
         ?string $oaepParams = null,
-        ?array $children = []
+        array $children = []
     ) {
         $this->setAlgorithm($algorithm);
         $this->setKeySize($keySize);
@@ -54,20 +54,21 @@ class EncryptionMethod extends AbstractMdElement
      * Initialize an EncryptionMethod object from an existing XML.
      *
      * @param \DOMElement $xml
-     *
      * @return \SAML2\XML\md\EncryptionMethod
+     * @throws \InvalidArgumentException if the qualified name of the supplied element is wrong
      */
     public static function fromXML(DOMElement $xml): object
     {
+        Assert::same($xml->localName, 'EncryptionMethod');
+        Assert::same($xml->namespaceURI, EncryptionMethod::NS);
+
         $keySize = null;
         $oaepParams = null;
         $children = [];
         foreach ($xml->childNodes as $node) {
             if (!$node instanceof DOMElement) {
                 continue;
-            }
-
-            if ($node->namespaceURI === Constants::NS_XENC) {
+            } elseif ($node->namespaceURI === Constants::NS_XENC) {
                 if ($node->localName === 'KeySize') {
                     Assert::null($keySize, $node->tagName . ' cannot be set more than once.');
                     Assert::numeric($node->textContent, $node->tagName . ' must be numerical.');
@@ -82,6 +83,7 @@ class EncryptionMethod extends AbstractMdElement
                 }
             }
 
+            /** @var \DOMElement $node */
             $children[] = Chunk::fromXML($node);
         }
 
@@ -104,6 +106,8 @@ class EncryptionMethod extends AbstractMdElement
      * Set the URI identifying the algorithm used by this encryption method.
      *
      * @param string $algorithm
+     * @return void
+     * @throws \InvalidArgumentException
      */
     protected function setAlgorithm(string $algorithm): void
     {
@@ -127,12 +131,11 @@ class EncryptionMethod extends AbstractMdElement
      * Set the size of the key used by this encryption method.
      *
      * @param int|null $keySize
+     * @return void
      */
     protected function setKeySize(?int $keySize): void
     {
-        if ($keySize !== null) {
-            $this->keySize = $keySize;
-        }
+        $this->keySize = $keySize;
     }
 
 
@@ -151,13 +154,15 @@ class EncryptionMethod extends AbstractMdElement
      * Set the OAEP parameters.
      *
      * @param string|null $oaepParams The OAEP parameters, base64-encoded.
+     * @return void
+     * @throws \InvalidArgumentException
      */
     protected function setOAEPParams(?string $oaepParams): void
     {
         if ($oaepParams === null) {
             return;
         }
-        Assert::eq(
+        Assert::Eq(
             $oaepParams,
             base64_encode(base64_decode($oaepParams, true)),
             'OAEPParams must be base64-encoded.'
@@ -181,6 +186,8 @@ class EncryptionMethod extends AbstractMdElement
      * Set an array of chunks as children of this encryption method.
      *
      * @param \SAML2\XML\Chunk[] $children
+     * @return void
+     * @throws \InvalidArgumentException
      */
     protected function setChildren(array $children): void
     {
@@ -197,7 +204,6 @@ class EncryptionMethod extends AbstractMdElement
      * Convert this EncryptionMethod object to XML.
      *
      * @param \DOMElement|null $parent The element we should append this EncryptionMethod to.
-     *
      * @return \DOMElement
      */
     public function toXML(DOMElement $parent = null): DOMElement

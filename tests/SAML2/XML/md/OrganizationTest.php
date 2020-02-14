@@ -4,9 +4,11 @@ declare(strict_types=1);
 
 namespace SAML2\XML\md;
 
+use InvalidArgumentException;
 use PHPUnit\Framework\TestCase;
 use SAML2\Constants;
 use SAML2\DOMDocumentFactory;
+use SAML2\XML\Chunk;
 
 /**
  * Test for the Organization metadata element.
@@ -15,14 +17,21 @@ use SAML2\DOMDocumentFactory;
  */
 final class OrganizationTest extends TestCase
 {
+    /** @var \DOMDocument */
     protected $document;
 
 
+    /**
+     * @return void
+     */
     protected function setUp(): void
     {
         $mdns = Constants::NS_MD;
         $this->document = DOMDocumentFactory::fromString(<<<XML
 <md:Organization xmlns:md="{$mdns}">
+  <md:Extensions>
+    <some:Ext xmlns:some="urn:mace:some:metadata:1.0">SomeExtension</some:Ext>
+  </md:Extensions>
   <md:OrganizationName xml:lang="en">Identity Providers R US</md:OrganizationName>
   <md:OrganizationDisplayName xml:lang="en">Identity Providers R US, a Division of Lerxst Corp.</md:OrganizationDisplayName>
   <md:OrganizationURL xml:lang="en">https://IdentityProvider.com</md:OrganizationURL>
@@ -32,23 +41,40 @@ XML
     }
 
 
+    // test marshalling
+
+
     /**
      * Test creating an Organization object from scratch
      */
     public function testMarshalling(): void
     {
+        $ext = DOMDocumentFactory::fromString(
+            '<some:Ext xmlns:some="urn:mace:some:metadata:1.0">SomeExtension</some:Ext>'
+        );
+
         $org = new Organization(
             [new OrganizationName('en', 'Identity Providers R US')],
             [new OrganizationDisplayName('en', 'Identity Providers R US, a Division of Lerxst Corp.')],
-            ['en' => 'https://IdentityProvider.com']
+            ['en' => 'https://IdentityProvider.com'],
+            new Extensions(
+                [
+                    new Chunk($ext->documentElement)
+                ]
+            )
         );
         $root = DOMDocumentFactory::fromString('<root/>');
         $root->formatOutput = true;
+
         $this->assertEquals(
             $this->document->saveXML($this->document->documentElement),
-            $org->toXML($root->documentElement)->ownerDocument->saveXML($root->documentElement->firstChild)
+            strval($org)
+//            $org->toXML($root->documentElement)->ownerDocument->saveXML($root->documentElement->firstChild)
         );
     }
+
+
+    // test unmarshalling
 
 
     /**
@@ -71,6 +97,41 @@ XML
                 'en' => 'https://IdentityProvider.com',
             ],
             $org->getOrganizationURL()
+        );
+    }
+
+
+    /**
+     * Test creating an Organization object from XML containing no url
+     */
+    public function testUnmarshallingEmptyUrl(): void
+    {
+        $mdns = Constants::NS_MD;
+        $document = DOMDocumentFactory::fromString(<<<XML
+<md:Organization xmlns:md="{$mdns}">
+  <md:OrganizationName xml:lang="en">Identity Providers R US</md:OrganizationName>
+  <md:OrganizationDisplayName xml:lang="en">Identity Providers R US, a Division of Lerxst Corp.</md:OrganizationDisplayName>
+  <md:OrganizationURL xml:lang="en"></md:OrganizationURL>
+</md:Organization>
+XML
+        );
+
+        $this->expectException(InvalidArgumentException::class);
+        $this->expectExceptionMessage('No localized organization URL found.');
+
+        Organization::fromXML($document->documentElement);
+    }
+
+
+    /**
+     * Test serialization and unserialization of AdditionalMetadataLocation elements.
+     */
+    public function testSerialization(): void
+    {
+        $org = Organization::fromXML($this->document->documentElement);
+        $this->assertEquals(
+            $this->document->saveXML($this->document->documentElement),
+            strval(unserialize(serialize($org)))
         );
     }
 }

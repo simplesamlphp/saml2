@@ -18,10 +18,10 @@ use Webmozart\Assert\Assert;
  *
  *   - Alternatively, you may want to extend the type to add new attributes (e.g look at IndexedEndpointType). In that
  *     case, you cannot use this class normally, as if you change the signature of the constructor, you cannot call
- *     fromXML() in this class. In order to process an XML document, you can use the get*FromXML() static methods from
- *     your class, and reimplement the fromXML() method with them to suit your new constructor.
+ *     fromXML() in this class. In order to process an XML document, you can use the get*Attribute() static methods
+ *     from AbstractXMLElement, and reimplement the fromXML() method with them to suit your new constructor.
  *
- * @package SimpleSAMLphp
+ * @package simplesamlphp/saml2
  */
 abstract class AbstractEndpointType extends AbstractMdElement
 {
@@ -55,7 +55,7 @@ abstract class AbstractEndpointType extends AbstractMdElement
      * @param string      $binding
      * @param string      $location
      * @param string|null $responseLocation
-     * @param array|null  $attributes
+     * @param array       $attributes
      *
      * @throws \InvalidArgumentException
      */
@@ -63,7 +63,7 @@ abstract class AbstractEndpointType extends AbstractMdElement
         string $binding,
         string $location,
         ?string $responseLocation = null,
-        ?array $attributes = null
+        array $attributes = []
     ) {
         $this->setBinding($binding);
         $this->setLocation($location);
@@ -79,7 +79,7 @@ abstract class AbstractEndpointType extends AbstractMdElement
      *
      * @param \DOMElement $xml The XML element we should load.
      * @return static
-     * @throws \InvalidArgumentException
+     * @throws \InvalidArgumentException if the qualified name of the supplied element is wrong
      */
     public static function fromXML(DOMElement $xml): object
     {
@@ -91,9 +91,9 @@ abstract class AbstractEndpointType extends AbstractMdElement
         );
 
         return new static(
-            self::getBindingFromXML($xml),
-            self::getLocationFromXML($xml),
-            self::getResponseLocationFromXML($xml),
+            self::getAttribute($xml, 'Binding'),
+            self::getAttribute($xml, 'Location'),
+            self::getAttribute($xml, 'ResponseLocation', null),
             self::getAttributesNSFromXML($xml)
         );
     }
@@ -111,26 +111,10 @@ abstract class AbstractEndpointType extends AbstractMdElement
 
 
     /**
-     * Parse an XML document representing an EndpointType and get the Binding attribute.
-     *
-     * @param \DOMElement $xml
-     *
-     * @return string
-     * @throws \InvalidArgumentException
-     */
-    protected static function getBindingFromXML(DOMElement $xml): string
-    {
-        Assert::true($xml->hasAttribute('Binding'), 'Endpoint must have a Binding attribute.');
-        Assert::notEmpty($xml->getAttribute('Binding'), 'The Binding of an endpoint cannot be empty.');
-        return $xml->getAttribute('Binding');
-    }
-
-
-    /**
      * Set the value of the Binding property.
      *
      * @param string $binding
-     * @throws \InvalidArgumentException
+     * @throws \InvalidArgumentException if the Binding is empty
      */
     protected function setBinding(string $binding): void
     {
@@ -151,26 +135,10 @@ abstract class AbstractEndpointType extends AbstractMdElement
 
 
     /**
-     * Parse an XML document representing an EndpointType and get the Location attribute.
-     *
-     * @param DOMElement $xml
-     *
-     * @return string
-     * @throws \InvalidArgumentException
-     */
-    protected static function getLocationFromXML(DOMElement $xml): string
-    {
-        Assert::true($xml->hasAttribute('Location'), 'Endpoint must have a Location attribute.');
-        Assert::notEmpty($xml->getAttribute('Location'), 'The Location of an endpoint cannot be empty.');
-        return $xml->getAttribute('Location');
-    }
-
-
-    /**
      * Set the value of the Location property.
      *
      * @param string $location
-     * @throws \InvalidArgumentException
+     * @throws \InvalidArgumentException if the Location is empty
      */
     protected function setLocation(string $location): void
     {
@@ -191,39 +159,14 @@ abstract class AbstractEndpointType extends AbstractMdElement
 
 
     /**
-     * Parse an XML document representing an EndpointType and get the ResponseLocation attribute.
-     *
-     * @param \DOMElement $xml
-     *
-     * @return string|null
-     * @throws \InvalidArgumentException
-     */
-    protected static function getResponseLocationFromXML(DOMElement $xml): ?string
-    {
-        if (!$xml->hasAttribute('ResponseLocation')) {
-            return null;
-        }
-
-        Assert::notEmpty(
-            $xml->getAttribute('ResponseLocation'),
-            'The ResponseLocation of an endpoint cannot be empty.'
-        );
-        return $xml->getAttribute('ResponseLocation');
-    }
-
-
-    /**
      * Set the value of the ResponseLocation property.
      *
      * @param string|null $responseLocation
-     * @throws \InvalidArgumentException
+     * @throws \InvalidArgumentException if the ResponseLocation is empty
      */
     protected function setResponseLocation(?string $responseLocation = null): void
     {
-        if ($responseLocation === null) {
-            return;
-        }
-        Assert::notEmpty($responseLocation, 'The ResponseLocation of an endpoint cannot be empty.');
+        Assert::nullOrNotEmpty($responseLocation, 'The ResponseLocation of an endpoint cannot be empty.');
         $this->ResponseLocation = $responseLocation;
     }
 
@@ -233,7 +176,6 @@ abstract class AbstractEndpointType extends AbstractMdElement
      *
      * @param \DOMElement $parent The element we should append this endpoint to.
      * @return \DOMElement
-     * @throws \Exception
      */
     public function toXML(DOMElement $parent = null): DOMElement
     {

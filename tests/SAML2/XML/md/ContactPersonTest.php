@@ -4,6 +4,7 @@ declare(strict_types=1);
 
 namespace SAML2\XML\md;
 
+use InvalidArgumentException;
 use PHPUnit\Framework\TestCase;
 use SAML2\Constants;
 use SAML2\DOMDocumentFactory;
@@ -14,11 +15,15 @@ use SAML2\XML\Chunk;
  *
  * @package simplesamlphp/saml2
  */
-class ContactPersonTest extends TestCase
+final class ContactPersonTest extends TestCase
 {
+    /** @var \DOMDocument */
     protected $document;
 
 
+    /**
+     * @return void
+     */
     protected function setUp(): void
     {
         $mdNamespace = Constants::NS_MD;
@@ -61,16 +66,16 @@ XML
             'Test Company',
             'John',
             'Doe',
-            ['jdoe@test.company', 'john.doe@test.company'],
-            ['1-234-567-8901'],
-            [$attr1, $attr2],
             new Extensions(
                 [
                     new Chunk($ext->documentElement)
                 ]
-            )
+            ),
+            ['jdoe@test.company', 'john.doe@test.company'],
+            ['1-234-567-8901'],
+            [$attr1, $attr2]
         );
-        $this->assertEquals($this->document->saveXML($this->document->documentElement), strval($cp));
+
         $this->assertEquals('other', $cp->getContactType());
         $this->assertEquals('Test Company', $cp->getCompany());
         $this->assertEquals('John', $cp->getGivenName());
@@ -94,6 +99,8 @@ XML
         );
         $this->assertEquals('testval1', $cp->getAttributeNS('urn:test', 'attr1'));
         $this->assertEquals('testval2', $cp->getAttributeNS('urn:test', 'attr2'));
+
+        $this->assertEquals($this->document->saveXML($this->document->documentElement), strval($cp));
     }
 
 
@@ -102,7 +109,7 @@ XML
      */
     public function testMarshallingWithWrongType(): void
     {
-        $this->expectException(\InvalidArgumentException::class);
+        $this->expectException(InvalidArgumentException::class);
         $this->expectExceptionMessage(
             'Expected one of: "technical", "support", "administrative", "billing", "other". Got: "wrong"'
         );
@@ -115,13 +122,14 @@ XML
      */
     public function testMarshallingWithWrongEmail(): void
     {
-        $this->expectException(\InvalidArgumentException::class);
+        $this->expectException(InvalidArgumentException::class);
         $this->expectExceptionMessage('Invalid email address for ContactPerson: \'this is wrong\'');
         new ContactPerson(
             'other',
             'Test Company',
             'John',
             'Doe',
+            null,
             ['this is wrong']
         );
     }
@@ -188,7 +196,7 @@ XML
      */
     public function testUnmarshallingWithoutType(): void
     {
-        $this->expectException(\Exception::class);
+        $this->expectException(InvalidArgumentException::class);
         $this->expectExceptionMessage('Missing contactType on ContactPerson.');
         $this->document->documentElement->removeAttribute('contactType');
         ContactPerson::fromXML($this->document->documentElement);
@@ -200,7 +208,7 @@ XML
      */
     public function testUnmarshallingWithWrongType(): void
     {
-        $this->expectException(\InvalidArgumentException::class);
+        $this->expectException(InvalidArgumentException::class);
         $this->expectExceptionMessage(
             'Expected one of: "technical", "support", "administrative", "billing", "other". Got: "wrong"'
         );
@@ -216,8 +224,9 @@ XML
     {
         $company = $this->document->getElementsByTagNameNS(Constants::NS_MD, 'Company');
         $newCompany = $this->document->createElementNS(Constants::NS_MD, 'Company', 'Alt. Co.');
+        /** @psalm-suppress PossiblyNullPropertyFetch */
         $this->document->documentElement->insertBefore($newCompany, $company->item(0)->nextSibling);
-        $this->expectException(\Exception::class);
+        $this->expectException(InvalidArgumentException::class);
         $this->expectExceptionMessage('More than one Company in md:ContactPerson');
         ContactPerson::fromXML($this->document->documentElement);
     }
@@ -230,8 +239,9 @@ XML
     {
         $givenName = $this->document->getElementsByTagNameNS(Constants::NS_MD, 'GivenName');
         $newName = $this->document->createElementNS(Constants::NS_MD, 'GivenName', 'New Name');
+        /** @psalm-suppress PossiblyNullPropertyFetch */
         $this->document->documentElement->insertBefore($newName, $givenName->item(0)->nextSibling);
-        $this->expectException(\Exception::class);
+        $this->expectException(InvalidArgumentException::class);
         $this->expectExceptionMessage('More than one GivenName in md:ContactPerson');
         ContactPerson::fromXML($this->document->documentElement);
     }
@@ -244,8 +254,9 @@ XML
     {
         $surName = $this->document->getElementsByTagNameNS(Constants::NS_MD, 'SurName');
         $newName = $this->document->createElementNS(Constants::NS_MD, 'SurName', 'New Name');
+        /** @psalm-suppress PossiblyNullPropertyFetch */
         $this->document->documentElement->insertBefore($newName, $surName->item(0)->nextSibling);
-        $this->expectException(\Exception::class);
+        $this->expectException(InvalidArgumentException::class);
         $this->expectExceptionMessage('More than one SurName in md:ContactPerson');
         ContactPerson::fromXML($this->document->documentElement);
     }
@@ -256,9 +267,10 @@ XML
      */
     public function testUnmarshallingWithInvalidEmail(): void
     {
-        $this->expectException(\InvalidArgumentException::class);
+        $this->expectException(InvalidArgumentException::class);
         $this->expectExceptionMessage('Invalid email address for ContactPerson: \'this is not an email\'');
         $emails = $this->document->getElementsByTagNameNS(Constants::NS_MD, 'EmailAddress');
+        /** @psalm-suppress PossiblyNullPropertyAssignment */
         $emails->item(1)->textContent = 'this is not an email';
         ContactPerson::fromXML($this->document->documentElement);
     }
@@ -286,6 +298,35 @@ XML
 
 
     /**
+     * @return void
+     */
+    public function testInvalidEmailThrowsException(): void
+    {
+        $this->expectException(InvalidArgumentException::class);
+        $this->expectExceptionMessage('Invalid email address for');
+        new ContactPerson('technical', null, null, null, null, ['not so valid']);
+    }
+
+
+    /**
+     * @return void
+     */
+    public function testInvalidEmailInSetThrowsException(): void
+    {
+        $this->expectException(InvalidArgumentException::class);
+        $this->expectExceptionMessage('Invalid email address for');
+        new ContactPerson(
+            'technical',
+            null,
+            null,
+            null,
+            null,
+            ['bob@alice.edu', 'user@example.org', 'not so valid', 'aap@noot.nl']
+        );
+    }
+
+
+    /**
      * Test that serialization / unserialization works.
      */
     public function testSerialize(): void
@@ -293,32 +334,6 @@ XML
         $this->assertEquals(
             $this->document->saveXML($this->document->documentElement),
             strval(unserialize(serialize(ContactPerson::fromXML($this->document->documentElement))))
-        );
-    }
-
-    /**
-     * @return void
-     */
-    public function testInvalidEmailThrowsException(): void
-    {
-        $this->expectException(\InvalidArgumentException::class);
-        $this->expectExceptionMessage('Invalid email address for');
-        new ContactPerson('technical', null, null, null, ['not so valid']);
-    }
-
-    /**
-     * @return void
-     */
-    public function testInvalidEmailInSetThrowsException(): void
-    {
-        $this->expectException(\InvalidArgumentException::class);
-        $this->expectExceptionMessage('Invalid email address for');
-        new ContactPerson(
-            'technical',
-            null,
-            null,
-            null,
-            ['bob@alice.edu', 'user@example.org', 'not so valid', 'aap@noot.nl']
         );
     }
 }

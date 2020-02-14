@@ -36,7 +36,6 @@ final class AdditionalMetadataLocation extends AbstractMdElement
      *
      * @param string $namespace
      * @param string $location
-     * @throws InvalidArgumentException
      */
     public function __construct(string $namespace, string $location)
     {
@@ -48,16 +47,18 @@ final class AdditionalMetadataLocation extends AbstractMdElement
     /**
      * Initialize an AdditionalMetadataLocation element.
      *
-     * @param DOMElement $xml The XML element we should load.
+     * @param \DOMElement $xml The XML element we should load.
      * @return self
-     * @throws Exception
-     * @throws InvalidArgumentException
+     * @throws \InvalidArgumentException if the qualified name of the supplied element is wrong
      */
     public static function fromXML(DOMElement $xml): object
     {
-        if (!$xml->hasAttribute('namespace')) {
-            throw new Exception('Missing namespace attribute on AdditionalMetadataLocation element.');
-        }
+        Assert::same($xml->localName, 'AdditionalMetadataLocation');
+        Assert::same($xml->namespaceURI, AdditionalMetadataLocation::NS);
+        Assert::true(
+            $xml->hasAttribute('namespace'),
+            'Missing namespace attribute on AdditionalMetadataLocation element.'
+        );
         return new self($xml->getAttribute('namespace'), trim($xml->textContent));
     }
 
@@ -77,7 +78,8 @@ final class AdditionalMetadataLocation extends AbstractMdElement
      * Set the value of the namespace-property
      *
      * @param string $namespace
-     * @throws InvalidArgumentException
+     * @return void
+     * @throws \InvalidArgumentException
      */
     protected function setNamespace(string $namespace): void
     {
@@ -101,7 +103,8 @@ final class AdditionalMetadataLocation extends AbstractMdElement
      * Set the value of the location-property
      *
      * @param string $location
-     * @throws InvalidArgumentException
+     * @return void
+     * @throws \InvalidArgumentException
      */
     protected function setLocation(string $location): void
     {
@@ -113,8 +116,8 @@ final class AdditionalMetadataLocation extends AbstractMdElement
     /**
      * Convert this AdditionalMetadataLocation to XML.
      *
-     * @param  DOMElement $parent The element we should append to.
-     * @return DOMElement This AdditionalMetadataLocation-element.
+     * @param \DOMElement|null $parent The element we should append to.
+     * @return \DOMElement This AdditionalMetadataLocation-element.
      */
     public function toXML(DOMElement $parent = null): DOMElement
     {

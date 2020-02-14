@@ -11,6 +11,8 @@ use Webmozart\Assert\Assert;
 
 /**
  * Class representing the ECP Response element.
+ *
+ * @package simplesamlphp/saml2
  */
 final class Response extends AbstractEcpElement
 {
@@ -26,6 +28,7 @@ final class Response extends AbstractEcpElement
      * Create a ECP Response element.
      *
      * @param string $assertionConsumerServiceURL
+     * @return void
      */
     public function __construct(string $assertionConsumerServiceURL)
     {
@@ -37,8 +40,6 @@ final class Response extends AbstractEcpElement
      * Collect the value of the AssertionConsumerServiceURL-property
      *
      * @return string
-     *
-     * @throws \InvalidArgumentException if assertions are false
      */
     public function getAssertionConsumerServiceURL(): string
     {
@@ -50,7 +51,7 @@ final class Response extends AbstractEcpElement
      * Set the value of the AssertionConsumerServiceURL-property
      *
      * @param string $assertionConsumerServiceURL
-     * @throws InvalidArgumentException
+     * @throws \InvalidArgumentException if provided string is not a valid URL
      * @return void
      */
     private function setAssertionConsumerServiceURL(string $assertionConsumerServiceURL): void
@@ -68,12 +69,15 @@ final class Response extends AbstractEcpElement
      *
      * @param \DOMElement $xml The XML element we should load
      * @return self
+     * @throws \InvalidArgumentException if the qualified name of the supplied element is wrong
+     * @throws \InvalidArgumentException if the supplied element lacks the required attributes
      */
     public static function fromXML(DOMElement $xml): object
     {
         Assert::same($xml->localName, 'Response');
         Assert::same($xml->namespaceURI, Response::NS);
 
+        // Assert required attributes
         Assert::true(
             $xml->hasAttributeNS(Constants::NS_SOAP, 'mustUnderstand'),
             'Missing SOAP-ENV:mustUnderstand attribute in <ecp:Response>.'

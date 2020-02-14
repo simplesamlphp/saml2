@@ -13,14 +13,14 @@ use Webmozart\Assert\Assert;
 /**
  * Serializable class representing an AttributeValue.
  *
- * @package SimpleSAMLphp
+ * @package simplesamlphp/saml2
  */
 class AttributeValue extends AbstractSamlElement
 {
     /**
      * The raw DOMElement representing this value.
      *
-     * @var DOMElement
+     * @var \DOMElement
      */
     protected $element;
 
@@ -30,10 +30,10 @@ class AttributeValue extends AbstractSamlElement
      *
      * @param mixed $value The value of this element. Can be one of:
      *  - string                       Create an attribute value with a simple string.
-     *  - DOMElement(AttributeValue)  Create an attribute value of the given DOMElement.
-     *  - DOMElement                  Create an attribute value with the given DOMElement as a child.
+     *  - \DOMElement(AttributeValue)  Create an attribute value of the given DOMElement.
+     *  - \DOMElement                  Create an attribute value with the given DOMElement as a child.
      *
-     * @throws InvalidArgumentException if assertions are false
+     * @throws \InvalidArgumentException if the supplied value is neither a string or a DOMElement
      */
     public function __construct($value)
     {
@@ -62,7 +62,7 @@ class AttributeValue extends AbstractSamlElement
     /**
      * Collect the value of the element-property
      *
-     * @return DOMElement
+     * @return \DOMElement
      */
     public function getElement(): DOMElement
     {
@@ -73,8 +73,9 @@ class AttributeValue extends AbstractSamlElement
     /**
      * Convert XML into a AttributeValue
      *
-     * @param DOMElement $xml The XML element we should load
-     * @return AttributeValue
+     * @param \DOMElement $xml The XML element we should load
+     * @return \SAML2\XML\saml\AttributeValue
+     * @throws \InvalidArgumentException if the qualified name of the supplied element is wrong
      */
     public static function fromXML(DOMElement $xml): object
     {
@@ -88,8 +89,8 @@ class AttributeValue extends AbstractSamlElement
     /**
      * Append this attribute value to an element.
      *
-     * @param  DOMElement|null $parent The element we should append this attribute value to.
-     * @return DOMElement The generated AttributeValue element.
+     * @param \DOMElement|null $parent The element we should append this attribute value to.
+     * @return \DOMElement The generated AttributeValue element.
      */
     public function toXML(DOMElement $parent = null): DOMElement
     {
@@ -97,7 +98,7 @@ class AttributeValue extends AbstractSamlElement
             return $this->element;
         }
 
-        /** @var DOMElement $element */
+        /** @var \DOMElement $element */
         $element = $parent->ownerDocument->importNode($this->element, true);
         $parent->appendChild($element);
         return $element;

@@ -60,8 +60,6 @@ final class SigningMethod extends AbstractAlgElement
      * Collect the value of the Algorithm-property
      *
      * @return string
-     *
-     * @throws \InvalidArgumentException if assertions are false
      */
     public function getAlgorithm(): string
     {
@@ -100,6 +98,7 @@ final class SigningMethod extends AbstractAlgElement
      */
     private function setMinKeySize(int $minKeySize = null): void
     {
+        Assert::nullOrNatural($minKeySize);
         $this->MinKeySize = $minKeySize;
     }
 
@@ -132,15 +131,17 @@ final class SigningMethod extends AbstractAlgElement
      *
      * @param \DOMElement $xml The XML element we should load
      * @return self
+     * @throws \InvalidArgumentException if the qualified name of the supplied element is wrong
+     * @throws \InvalidArgumentException if the supplied argument is missing the Algorithm attribute
      */
     public static function fromXML(DOMElement $xml): object
     {
         Assert::same($xml->localName, 'SigningMethod');
         Assert::same($xml->namespaceURI, SigningMethod::NS);
-
-        if (!$xml->hasAttribute('Algorithm')) {
-            throw new \Exception('Missing required attribute "Algorithm" in alg:SigningMethod element.');
-        }
+        Assert::true(
+            $xml->hasAttribute('Algorithm'),
+            'Missing required attribute "Algorithm" in alg:SigningMethod element.'
+        );
 
         $Algorithm = $xml->getAttribute('Algorithm');
         $MinKeySize = $xml->hasAttribute('MinKeySize') ? intval($xml->getAttribute('MinKeySize')) : null;
@@ -155,8 +156,6 @@ final class SigningMethod extends AbstractAlgElement
      *
      * @param \DOMElement|null $parent The element we should append to.
      * @return \DOMElement
-     *
-     * @throws \InvalidArgumentException if assertions are false
      */
     public function toXML(DOMElement $parent = null): DOMElement
     {

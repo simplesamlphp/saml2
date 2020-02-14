@@ -5,15 +5,37 @@ declare(strict_types=1);
 namespace SAML2\XML\mdrpi;
 
 use Exception;
+use PHPUnit\Framework\TestCase;
 use SAML2\DOMDocumentFactory;
-use SAML2\XML\mdrpi\PublicationInfo;
 use SAML2\Utils;
 
 /**
  * Class \SAML2\XML\mdrpi\PublicationInfoTest
  */
-class PublicationInfoTest extends \PHPUnit\Framework\TestCase
+class PublicationInfoTest extends TestCase
 {
+    /** @var \DOMDocument */
+    protected $document;
+
+
+    /**
+     * @return void
+     */
+    protected function setUp(): void
+    {
+        $this->document = DOMDocumentFactory::fromString(<<<XML
+<mdrpi:PublicationInfo xmlns:mdrpi="urn:oasis:names:tc:SAML:metadata:rpi"
+                       publisher="SomePublisher"
+                       creationInstant="2011-01-01T00:00:00Z"
+                       publicationId="SomePublicationId">
+  <mdrpi:UsagePolicy xml:lang="en">http://TheEnglishUsagePolicy</mdrpi:UsagePolicy>
+  <mdrpi:UsagePolicy xml:lang="no">http://TheNorwegianUsagePolicy</mdrpi:UsagePolicy>
+</mdrpi:PublicationInfo>
+XML
+        );
+    }
+
+
     /**
      * @return void
      */
@@ -30,8 +52,9 @@ class PublicationInfoTest extends \PHPUnit\Framework\TestCase
         );
 
         $document = DOMDocumentFactory::fromString('<root />');
-        $xml = $publicationInfo->toXML($document->firstChild);
+        $xml = $publicationInfo->toXML($document->documentElement);
 
+        /** @var \DOMElement[] $publicationInfoElements */
         $publicationInfoElements = Utils::xpQuery(
             $xml,
             '/root/*[local-name()=\'PublicationInfo\' and namespace-uri()=\'urn:oasis:names:tc:SAML:metadata:rpi\']'
@@ -43,6 +66,7 @@ class PublicationInfoTest extends \PHPUnit\Framework\TestCase
         $this->assertEquals('2009-02-13T23:31:30Z', $publicationInfoElement->getAttribute("creationInstant"));
         $this->assertEquals('PublicationIdValue', $publicationInfoElement->getAttribute("publicationId"));
 
+        /** @var \DOMElement[] $usagePolicyElements */
         $usagePolicyElements = Utils::xpQuery(
             $publicationInfoElement,
             './*[local-name()=\'UsagePolicy\' and namespace-uri()=\'urn:oasis:names:tc:SAML:metadata:rpi\']'
@@ -57,7 +81,7 @@ class PublicationInfoTest extends \PHPUnit\Framework\TestCase
         $this->assertEquals(
             'no',
             $usagePolicyElements[1]->getAttributeNS("http://www.w3.org/XML/1998/namespace", "lang")
-        
+
 );
         $this->assertEquals('http://NorwegianUsagePolicy', $usagePolicyElements[1]->textContent);
     }
@@ -68,18 +92,7 @@ class PublicationInfoTest extends \PHPUnit\Framework\TestCase
      */
     public function testUnmarshalling(): void
     {
-        $document = DOMDocumentFactory::fromString(<<<XML
-<mdrpi:PublicationInfo xmlns:mdrpi="urn:oasis:names:tc:SAML:metadata:rpi"
-                       publisher="SomePublisher"
-                       creationInstant="2011-01-01T00:00:00Z"
-                       publicationId="SomePublicationId">
-    <mdrpi:UsagePolicy xml:lang="en">http://TheEnglishUsagePolicy</mdrpi:UsagePolicy>
-    <mdrpi:UsagePolicy xml:lang="no">http://TheNorwegianUsagePolicy</mdrpi:UsagePolicy>
-</mdrpi:PublicationInfo>
-XML
-        );
-
-        $publicationInfo = PublicationInfo::fromXML($document->firstChild);
+        $publicationInfo = PublicationInfo::fromXML($this->document->documentElement);
 
         $this->assertEquals('SomePublisher', $publicationInfo->getPublisher());
         $this->assertEquals(1293840000, $publicationInfo->getCreationInstant());
@@ -92,6 +105,9 @@ XML
     }
 
 
+    /**
+     * @return void
+     */
     public function testMissingPublisherThrowsException()
     {
         $document = DOMDocumentFactory::fromString(<<<XML
@@ -104,6 +120,18 @@ XML
 
         $this->expectException(Exception::class);
         $this->expectExceptionMessage('Missing required attribute "publisher"');
-        $publicationInfo = PublicationInfo::fromXML($document->firstChild);
+        $publicationInfo = PublicationInfo::fromXML($document->documentElement);
+    }
+
+
+    /**
+     * Test serialization / unserialization
+     */
+    public function testSerialization(): void
+    {
+        $this->assertEquals(
+            $this->document->saveXML($this->document->documentElement),
+            strval(unserialize(serialize(PublicationInfo::fromXML($this->document->documentElement))))
+        );
     }
 }

@@ -62,8 +62,6 @@ final class SubjectConfirmation extends AbstractSamlElement
      */
     public function getMethod(): string
     {
-        Assert::notEmpty($this->Method);
-
         return $this->Method;
     }
 
@@ -131,6 +129,7 @@ final class SubjectConfirmation extends AbstractSamlElement
      *
      * @param \DOMElement $xml The XML element we should load
      * @return self
+     * @throws \InvalidArgumentException if the qualified name of the supplied element is wrong
      */
     public static function fromXML(DOMElement $xml): object
     {
@@ -163,16 +162,10 @@ final class SubjectConfirmation extends AbstractSamlElement
      *
      * @param  \DOMElement|null $parent The parent element we should append this element to.
      * @return \DOMElement This element, as XML.
-     *
-     * @throws \InvalidArgumentException if assertions are false
      */
-    public function toXML(?DOMElement $parent = null): DOMElement
+    public function toXML(DOMElement $parent = null): DOMElement
     {
-        Assert::notEmpty($this->Method, "Cannot convert SubjectConfirmation to XML without a Method set.");
-
         $e = $this->instantiateParentElement($parent);
-
-        /** @psalm-suppress PossiblyNullArgument */
         $e->setAttribute('Method', $this->Method);
 
         if ($this->NameID !== null) {

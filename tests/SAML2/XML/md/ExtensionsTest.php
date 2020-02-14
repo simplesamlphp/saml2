@@ -24,11 +24,15 @@ use SAML2\XML\shibmd\Scope;
  *
  * @package simplesamlphp/saml2
  */
-class ExtensionsTest extends TestCase
+final class ExtensionsTest extends TestCase
 {
+    /** @var \DOMDocument */
     protected $document;
 
 
+    /**
+     * @return void
+     */
     protected function setUp(): void
     {
         $this->document = DOMDocumentFactory::fromString(<<<XML
@@ -52,6 +56,9 @@ XML
     }
 
 
+    // test marshalling
+
+
     /**
      * Test creating an Extensions object from scratch.
      */
@@ -61,9 +68,10 @@ XML
         $ra = new RegistrationInfo('SomeAuthority');
         $pubInfo = new PublicationInfo('SomePublisher');
         $uiinfo = new UIInfo(['en' => 'Example']);
-        $discoHints = new DiscoHints(null, ['127.0.0.1']);
+        $discoHints = new DiscoHints([], ['127.0.0.1']);
         $digestMethod = new DigestMethod('SomeAlgorithm');
         $signingMethod = new SigningMethod('SomeOtherAlgorithm', 1024, 4096);
+
         $extensions = new Extensions([
             $scope,
             $ra,
@@ -73,6 +81,7 @@ XML
             $digestMethod,
             $signingMethod
         ]);
+
         $this->assertEquals(
             $this->document->saveXML($this->document->documentElement),
             strval($extensions)
@@ -94,6 +103,9 @@ XML
         );
         $this->assertTrue($extensions->isEmptyElement());
     }
+
+
+    // test unmarshalling
 
 
     /**

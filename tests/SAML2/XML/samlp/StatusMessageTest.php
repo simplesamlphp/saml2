@@ -15,6 +15,23 @@ use SAML2\DOMDocumentFactory;
  */
 class StatusMessageTest extends \PHPUnit\Framework\TestCase
 {
+    /** @var \DOMDocument */
+    private $document;
+
+
+    /**
+     * @return void
+     */
+    public function setUp(): void
+    {
+        $ns = StatusMessage::NS;
+        $this->document = DOMDocumentFactory::fromString(<<<XML
+<samlp:StatusMessage xmlns:samlp="{$ns}">Something went horribly wrong</samlp:StatusMessage>
+XML
+        );
+    }
+
+
     /**
      * @return void
      */
@@ -23,8 +40,7 @@ class StatusMessageTest extends \PHPUnit\Framework\TestCase
         $statusMessage = new StatusMessage('Something went horribly wrong');
 
         $this->assertEquals(
-            '<samlp:StatusMessage xmlns:samlp="' . Constants::NS_SAMLP
-                . '">Something went horribly wrong</samlp:StatusMessage>',
+            $this->document->saveXML($this->document->documentElement),
             strval($statusMessage)
         );
     }
@@ -35,16 +51,19 @@ class StatusMessageTest extends \PHPUnit\Framework\TestCase
      */
     public function testUnmarshalling(): void
     {
-        $samlNamespace = Constants::NS_SAMLP;
-
-        $document = DOMDocumentFactory::fromString(<<<XML
-<samlp:StatusMessage xmlns:samlp="{$samlNamespace}">Something went horribly wrong</samlp:StatusMessage>
-XML
-        );
-
-        /** @psalm-var \DOMElement $document->firstChild */
-        $statusMessage = StatusMessage::fromXML($document->firstChild);
+        $statusMessage = StatusMessage::fromXML($this->document->documentElement);
         $this->assertEquals('Something went horribly wrong', $statusMessage->getMessage());
     }
-}
 
+
+    /**
+     * Test serialization / unserialization
+     */
+    public function testSerialization(): void
+    {
+        $this->assertEquals(
+            $this->document->saveXML($this->document->documentElement),
+            strval(unserialize(serialize(StatusMessage::fromXML($this->document->documentElement))))
+        );
+    }
+}

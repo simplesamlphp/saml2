@@ -5,51 +5,49 @@ declare(strict_types=1);
 namespace SAML2\XML\samlp;
 
 use DOMElement;
-use SAML2\Constants;
+use SAML2\ExtensionsTrait;
 use SAML2\Utils;
 use SAML2\XML\Chunk;
+use Webmozart\Assert\Assert;
 
 /**
  * Class for handling SAML2 extensions.
  *
- * @package SimpleSAMLphp
+ * @package simplesamlphp/saml2
  */
-final class Extensions
+final class Extensions extends AbstractSamlpElement
 {
+    use ExtensionsTrait;
+
     /**
-     * Get a list of Extensions in the given element.
+     * Create an Extensions object from its md:Extensions XML representation.
      *
-     * @param  \DOMElement $parent The element that may contain the samlp:Extensions element.
-     * @return array Array of extensions.
+     * For those supported extensions, an object of the corresponding class will be created. The rest will be added
+     * as a \SAML2\XML\Chunk object.
+     *
+     * @param \DOMElement $xml
+     * @return \SAML2\XML\md\Extensions
+     * @throws \InvalidArgumentException if the qualified name of the supplied element is wrong
      */
-    public static function getList(DOMElement $parent): array
+    public static function fromXML(DOMElement $xml): object
     {
+        Assert::eq(
+            $xml->namespaceURI,
+            self::NS,
+            'Unknown namespace \'' . strval($xml->namespaceURI) . '\' for Extensions element.'
+        );
+        Assert::eq(
+            $xml->localName,
+            static::getClassName(static::class),
+            'Invalid Extensions element \'' . $xml->localName . '\''
+        );
         $ret = [];
+
         /** @var \DOMElement $node */
-        foreach (Utils::xpQuery($parent, './saml_protocol:Extensions/*') as $node) {
+        foreach (Utils::xpQuery($xml, './*') as $node) {
             $ret[] = new Chunk($node);
         }
 
-        return $ret;
-    }
-
-
-    /**
-     * Add a list of Extensions to the given element.
-     *
-     * @param \DOMElement $parent The element we should add the extensions to.
-     * @param \SAML2\XML\Chunk[] $extensions List of extension objects.
-     * @return void
-     */
-    public static function addList(DOMElement $parent, array $extensions): void
-    {
-        if (!empty($extensions)) {
-            $extElement = $parent->ownerDocument->createElementNS(Constants::NS_SAMLP, 'samlp:Extensions');
-            $parent->appendChild($extElement);
-
-            foreach ($extensions as $ext) {
-                $ext->toXML($extElement);
-            }
-        }
+        return new self($ret);
     }
 }

@@ -52,9 +52,9 @@ abstract class AbstractMetadataDocument extends AbstractSignedMdElement
         ?string $cacheDuration = null,
         ?Extensions $extensions = null
     ) {
-        $this->ID = $ID;
+        $this->setID($ID);
         $this->setValidUntil($validUntil);
-        $this->cacheDuration = $cacheDuration;
+        $this->setCacheDuration($cacheDuration);
         $this->setExtensions($extensions);
     }
 
@@ -74,6 +74,7 @@ abstract class AbstractMetadataDocument extends AbstractSignedMdElement
      * Set the value of the ID property.
      *
      * @param string|null $id
+     * @return void
      */
     protected function setID(?string $id): void
     {
@@ -86,7 +87,7 @@ abstract class AbstractMetadataDocument extends AbstractSignedMdElement
      *
      * @return int|null
      */
-    public function getValidUntil()
+    public function getValidUntil(): ?int
     {
         return $this->validUntil;
     }
@@ -96,6 +97,7 @@ abstract class AbstractMetadataDocument extends AbstractSignedMdElement
      * Set the value of the validUntil-property
      *
      * @param int|null $validUntil
+     * @return void
      */
     protected function setValidUntil(?int $validUntil): void
     {
@@ -108,7 +110,7 @@ abstract class AbstractMetadataDocument extends AbstractSignedMdElement
      *
      * @return string|null
      */
-    public function getCacheDuration()
+    public function getCacheDuration(): ?string
     {
         return $this->cacheDuration;
     }
@@ -118,6 +120,7 @@ abstract class AbstractMetadataDocument extends AbstractSignedMdElement
      * Set the value of the cacheDuration-property
      *
      * @param string|null $cacheDuration
+     * @return void
      */
     protected function setCacheDuration(?string $cacheDuration): void
     {
@@ -146,10 +149,10 @@ abstract class AbstractMetadataDocument extends AbstractSignedMdElement
             $e->setAttribute('cacheDuration', $this->cacheDuration);
         }
 
-        if ($this->Extensions !== null) {
+        if ($this->Extensions !== null && !$this->Extensions->isEmptyElement()) {
             $this->Extensions->toXML($e);
         }
-        
+
         return $e;
     }
 }

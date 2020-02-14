@@ -135,7 +135,6 @@ XML
         $declRef = $authnContext->getAuthnContextDeclRef();
         $this->assertEquals('/relative/path/to/document.xml', $declRef->getDeclRef());
 
-        /** @psalm-var \SAML2\XML\saml\AuthenticatingAuthority[] $authorities */
         $authorities = $authnContext->getAuthticatingAuthorities();
         $this->assertEquals('https://sp.example.com/SAML2', $authorities[0]->getAuthority());
     }

@@ -4,7 +4,7 @@ declare(strict_types=1);
 
 namespace SAML2\XML\md;
 
-use Exception;
+use InvalidArgumentException;
 use PHPUnit\Framework\TestCase;
 use SAML2\Constants;
 use SAML2\DOMDocumentFactory;
@@ -17,13 +17,18 @@ use SAML2\XML\saml\AttributeValue;
  */
 final class RequestedAttributeTest extends TestCase
 {
+    /** @var \DOMDocument */
     protected $document;
 
 
+    /**
+     * @return void
+     */
     protected function setUp(): void
     {
         $mdns = Constants::NS_MD;
         $samlns = Constants::NS_SAML;
+
         $this->document = DOMDocumentFactory::fromString(<<<XML
 <md:RequestedAttribute xmlns:md="{$mdns}" Name="attr" NameFormat="urn:format" FriendlyName="Attribute" isRequired="true">
   <saml:AttributeValue xmlns:saml="{$samlns}" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:xs="http://www.w3.org/2001/XMLSchema" xsi:type="xs:string">value1</saml:AttributeValue>
@@ -31,6 +36,9 @@ final class RequestedAttributeTest extends TestCase
 XML
         );
     }
+
+
+    // test marshalling
 
 
     /**
@@ -45,6 +53,13 @@ XML
             'Attribute',
             [new AttributeValue('value1')]
         );
+
+        $this->assertEquals('attr', $ra->getName());
+        $this->assertTrue($ra->getIsRequired());
+        $this->assertEquals('urn:format', $ra->getNameFormat());
+        $this->assertEquals('Attribute', $ra->getFriendlyName());
+        $this->assertEquals([new AttributeValue('value1')], $ra->getAttributeValues());
+
         $this->assertEquals(
             $this->document->saveXML($this->document->documentElement),
             strval($ra)
@@ -66,12 +81,16 @@ XML
     }
 
 
+    // test unmarshalling
+
+
     /**
      * Test creating a RequestedAttribute object from XML
      */
     public function testUnmarshalling(): void
     {
         $ra = RequestedAttribute::fromXML($this->document->documentElement);
+
         $this->assertEquals('attr', $ra->getName());
         $this->assertEquals('urn:format', $ra->getNameFormat());
         $this->assertEquals('Attribute', $ra->getFriendlyName());
@@ -96,7 +115,7 @@ XML
      */
     public function testUnmarshallingWithWrongIsRequired(): void
     {
-        $this->expectException(Exception::class);
+        $this->expectException(InvalidArgumentException::class);
         $this->expectExceptionMessage('The \'isRequired\' attribute of md:RequestedAttribute must be boolean.');
         $this->document->documentElement->setAttribute('isRequired', 'wrong');
         RequestedAttribute::fromXML($this->document->documentElement);

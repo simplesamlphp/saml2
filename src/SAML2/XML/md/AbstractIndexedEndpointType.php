@@ -14,7 +14,7 @@ use Webmozart\Assert\Assert;
  */
 abstract class AbstractIndexedEndpointType extends AbstractEndpointType
 {
-    use IndexedElement;
+    use IndexedElementTrait;
 
 
     /**
@@ -30,7 +30,7 @@ abstract class AbstractIndexedEndpointType extends AbstractEndpointType
      * @param string      $location
      * @param bool|null   $isDefault
      * @param string|null $responseLocation
-     * @param array|null  $attributes
+     * @param array       $attributes
      */
     public function __construct(
         int $index,
@@ -38,7 +38,7 @@ abstract class AbstractIndexedEndpointType extends AbstractEndpointType
         string $location,
         ?bool $isDefault = null,
         ?string $responseLocation = null,
-        ?array $attributes = null
+        array $attributes = []
     ) {
         parent::__construct($binding, $location, $responseLocation, $attributes);
         $this->setIndex($index);
@@ -50,10 +50,8 @@ abstract class AbstractIndexedEndpointType extends AbstractEndpointType
      * Initialize an IndexedEndpointType.
      *
      * @param \DOMElement $xml The XML element we should load.
-     *
      * @return self
-     * @throws \InvalidArgumentException
-     * @throws \Exception
+     * @throws \InvalidArgumentException if the qualified name of the supplied element is wrong
      */
     public static function fromXML(DOMElement $xml): object
     {
@@ -65,29 +63,24 @@ abstract class AbstractIndexedEndpointType extends AbstractEndpointType
         );
 
         return new static(
-            self::getIndexFromXML($xml),
-            self::getBindingFromXML($xml),
-            self::getLocationFromXML($xml),
-            self::getIsDefaultFromXML($xml),
-            self::getResponseLocationFromXML($xml),
+            self::getIntegerAttribute($xml, 'index'),
+            self::getAttribute($xml, 'Binding'),
+            self::getAttribute($xml, 'Location'),
+            self::getBooleanAttribute($xml, 'isDefault', null),
+            self::getAttribute($xml, 'ResponseLocation', null),
             self::getAttributesNSFromXML($xml)
         );
     }
+
 
     /**
      * Add this endpoint to an XML element.
      *
      * @param \DOMElement $parent The element we should append this endpoint to.
-     *
      * @return \DOMElement
-     *
-     * @throws \InvalidArgumentException if assertions are false
-     * @throws \Exception
      */
     public function toXML(DOMElement $parent = null): DOMElement
     {
-        Assert::notEmpty($this->index);
-
         $e = parent::toXML($parent);
         $e->setAttribute('index', strval($this->index));
 

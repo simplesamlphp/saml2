@@ -50,7 +50,7 @@ XML
      */
     public function testUnmarshalling(): void
     {
-        $keyName = keyName::fromXML($this->document->documentElement);
+        $keyName = KeyName::fromXML($this->document->documentElement);
 
         $this->assertEquals('testkey', $keyName->getName());
     }

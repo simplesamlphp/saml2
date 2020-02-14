@@ -16,6 +16,28 @@ use SAML2\Utils;
  */
 class StatusCodeTest extends \PHPUnit\Framework\TestCase
 {
+    /** @var \DOMDocument */
+    private $document;
+
+
+    /**
+     * @return void
+     */
+    public function setUp(): void
+    {
+        $nssamlp = StatusCode::NS;
+        $status_responder = Constants::STATUS_RESPONDER;
+        $status_request_denied = Constants::STATUS_REQUEST_DENIED;
+
+        $this->document = DOMDocumentFactory::fromString(<<<XML
+<samlp:StatusCode xmlns:samlp="{$nssamlp}" Value="{$status_responder}">
+  <samlp:StatusCode Value="{$status_request_denied}"/>
+</samlp:StatusCode>
+XML
+        );
+    }
+
+
     /**
      * @return void
      */
@@ -33,12 +55,8 @@ class StatusCodeTest extends \PHPUnit\Framework\TestCase
         $status_responder = Constants::STATUS_RESPONDER;
         $status_request_denied = Constants::STATUS_REQUEST_DENIED;
 
-        $this->assertEquals(<<<XML
-<samlp:StatusCode xmlns:samlp="{$nssamlp}" Value="{$status_responder}">
-  <samlp:StatusCode Value="{$status_request_denied}"/>
-</samlp:StatusCode>
-XML
-            ,
+        $this->assertEquals(
+            $this->document->saveXML($this->document->documentElement),
             strval($statusCode)
         );
     }
@@ -49,23 +67,24 @@ XML
      */
     public function testUnmarshalling(): void
     {
-        $samlpNamespace = Constants::NS_SAMLP;
-        $document = DOMDocumentFactory::fromString(<<<XML
-<samlp:StatusCode Value="urn:oasis:names:tc:SAML:2.0:status:Responder" xmlns:samlp="{$samlpNamespace}">
-    <samlp:StatusCode Value="urn:oasis:names:tc:SAML:2.0:status:RequestDenied" xmlns:samlp="{$samlpNamespace}"/>
-</samlp:StatusCode>
-XML
-        );
-
-        /** @psalm-var \DOMElement $document->firstChild */
-        $statusCode = StatusCode::fromXML($document->firstChild);
+        $statusCode = StatusCode::fromXML($this->document->documentElement);
         $this->assertEquals(Constants::STATUS_RESPONDER, $statusCode->getValue());
 
-        /** @psalm-var \SAML2\XML\samlp\StatusCode[] $subCodes */
         $subCodes = $statusCode->getSubCodes();
         $this->assertCount(1, $subCodes);
 
         $this->assertEquals(Constants::STATUS_REQUEST_DENIED, $subCodes[0]->getValue());
     }
-}
 
+
+    /**
+     * Test serialization / unserialization
+     */
+    public function testSerialization(): void
+    {
+        $this->assertEquals(
+            $this->document->saveXML($this->document->documentElement),
+            strval(unserialize(serialize(StatusCode::fromXML($this->document->documentElement))))
+        );
+    }
+}

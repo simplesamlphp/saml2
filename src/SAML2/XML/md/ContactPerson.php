@@ -20,8 +20,10 @@ use Webmozart\Assert\Assert;
  */
 final class ContactPerson extends AbstractMdElement
 {
-    use ExtendableAttributesTrait;
     use ExtendableElementTrait;
+    use ExtendableAttributesTrait {
+        ExtendableAttributesTrait::setAttributesNS as setAttributesNSConflict;
+    }
 
     /**
      * The contact type.
@@ -69,24 +71,24 @@ final class ContactPerson extends AbstractMdElement
     /**
      * ContactPerson constructor.
      *
-     * @param string        $contactType
-     * @param string|null   $company
-     * @param string|null   $givenName
-     * @param string|null   $surName
-     * @param string[]|null $email
-     * @param string[]|null $telephone
-     * @param string[]|null $namespacedAttributes
-     * @param \SAML2\XML\md\Extensions|null    $extensions
+     * @param string                         $contactType
+     * @param string|null                    $company
+     * @param string|null                    $givenName
+     * @param string|null                    $surName
+     * @param \SAML2\XML\md\Extensions|null  $extensions
+     * @param string[]                       $email
+     * @param string[]                       $telephone
+     * @param \DOMAttr[]                     $namespacedAttributes
      */
     public function __construct(
         string $contactType,
         ?string $company = null,
         ?string $givenName = null,
         ?string $surName = null,
-        ?array $email = null,
-        ?array $telephone = null,
-        ?array $namespacedAttributes = null,
-        ?Extensions $extensions = null
+        ?Extensions $extensions = null,
+        array $email = [],
+        array $telephone = [],
+        array $namespacedAttributes = []
     ) {
         $this->setContactType($contactType);
         $this->setCompany($company);
@@ -94,27 +96,25 @@ final class ContactPerson extends AbstractMdElement
         $this->setSurName($surName);
         $this->setEmailAddresses($email);
         $this->setTelephoneNumbers($telephone);
-        $this->setAttributesNS($namespacedAttributes);
         $this->setExtensions($extensions);
+        $this->setAttributesNS($namespacedAttributes);
     }
 
 
     /**
      * Initialize a ContactPerson element.
      *
-     * @param \DOMElement|null $xml The XML element we should load.
+     * @param \DOMElement $xml The XML element we should load.
      *
      * @return self
-     * @throws \Exception
+     * @throws \InvalidArgumentException if the qualified name of the supplied element is wrong
+     * @throws \InvalidArgumentException if the mandatory contactType attribute is missing
      */
     public static function fromXML(DOMElement $xml): object
     {
         Assert::same($xml->localName, 'ContactPerson');
         Assert::same($xml->namespaceURI, ContactPerson::NS);
-
-        if (!$xml->hasAttribute('contactType')) {
-            throw new Exception('Missing contactType on ContactPerson.');
-        }
+        Assert::true($xml->hasAttribute('contactType'), 'Missing contactType on ContactPerson.');
 
         $contactType = $xml->getAttribute('contactType');
         $company = self::getStringElement($xml, 'Company');
@@ -130,10 +130,10 @@ final class ContactPerson extends AbstractMdElement
             $company,
             $givenName,
             $surName,
+            (count($extensions) === 1) ? $extensions[0] : null,
             $email,
             $telephone,
-            self::getAttributesNSFromXML($xml),
-            (count($extensions) === 1) ? $extensions[0] : null
+            self::getAttributesNSFromXML($xml)
         );
     }
 
@@ -144,7 +144,7 @@ final class ContactPerson extends AbstractMdElement
      * @param \DOMElement $parent The parent element.
      * @param string      $name The name of the child elements.
      *
-     * @return array       The value of the child elements.
+     * @return string[]   The value of the child elements.
      */
     private static function getStringElements(DOMElement $parent, string $name): array
     {
@@ -166,7 +166,7 @@ final class ContactPerson extends AbstractMdElement
      * @param string      $name The name of the child element.
      *
      * @return string|null The value of the child element.
-     * @throws \Exception
+     * @throws \InvalidArgumentException
      */
     private static function getStringElement(DOMElement $parent, string $name): ?string
     {
@@ -174,10 +174,8 @@ final class ContactPerson extends AbstractMdElement
         if (empty($e)) {
             return null;
         }
-        if (count($e) > 1) {
-            throw new Exception('More than one ' . $name . ' in ' . $parent->tagName);
-        }
 
+        Assert::maxCount($e, 1, 'More than one ' . $name . ' in ' . $parent->tagName);
         return $e[0];
     }
 
@@ -198,6 +196,7 @@ final class ContactPerson extends AbstractMdElement
      *
      * @param string $contactType
      * @return void
+     * @throws \InvalidArgumentException if $contactType is not one of the predefined values
      */
     protected function setContactType(string $contactType): void
     {
@@ -244,6 +243,7 @@ final class ContactPerson extends AbstractMdElement
      * Set the value of the GivenName-property
      *
      * @param string|null $givenName
+     * @return void
      */
     protected function setGivenName(?string $givenName): void
     {
@@ -303,13 +303,12 @@ final class ContactPerson extends AbstractMdElement
     /**
      * Set the value of the EmailAddress-property
      *
-     * @param string[]|null $emailAddresses
+     * @param string[] $emailAddresses
+     * @return void
+     * @throws \InvalidArgumentException
      */
-    protected function setEmailAddresses(?array $emailAddresses): void
+    protected function setEmailAddresses(array $emailAddresses): void
     {
-        if ($emailAddresses === null) {
-            return;
-        }
         $addresses = array_map([$this, 'validateEmailAddress'], $emailAddresses);
         Assert::allEmail($addresses, 'Invalid email addresses found.');
         $this->EmailAddresses = $addresses;
@@ -331,12 +330,10 @@ final class ContactPerson extends AbstractMdElement
      * Set the value of the TelephoneNumber property
      *
      * @param string[] $telephoneNumbers
+     * @throws \InvalidArgumentException
      */
-    protected function setTelephoneNumbers(?array $telephoneNumbers): void
+    protected function setTelephoneNumbers(array $telephoneNumbers): void
     {
-        if ($telephoneNumbers === null) {
-            return;
-        }
         Assert::allString($telephoneNumbers, 'Incorrect type for telephone number.');
         $this->TelephoneNumbers = $telephoneNumbers;
     }
@@ -345,7 +342,7 @@ final class ContactPerson extends AbstractMdElement
     /**
      * Convert this ContactPerson to XML.
      *
-     * @param \DOMElement $parent The element we should add this contact to.
+     * @param \DOMElement|null $parent The element we should add this contact to.
      *
      * @return \DOMElement The new ContactPerson-element.
      */
@@ -372,14 +369,12 @@ final class ContactPerson extends AbstractMdElement
         if ($this->SurName !== null) {
             Utils::addString($e, Constants::NS_MD, 'md:SurName', $this->SurName);
         }
-        if (!empty($this->EmailAddresses)) {
-            /** @var array $addresses */
-            $addresses = preg_filter('/^/', 'mailto:', $this->EmailAddresses);
-            Utils::addStrings($e, Constants::NS_MD, 'md:EmailAddress', false, $addresses);
-        }
-        if (!empty($this->TelephoneNumbers)) {
-            Utils::addStrings($e, Constants::NS_MD, 'md:TelephoneNumber', false, $this->TelephoneNumbers);
-        }
+
+        /** @var string[] $addresses */
+        $addresses = preg_filter('/^/', 'mailto:', $this->EmailAddresses);
+        Utils::addStrings($e, Constants::NS_MD, 'md:EmailAddress', false, $addresses);
+
+        Utils::addStrings($e, Constants::NS_MD, 'md:TelephoneNumber', false, $this->TelephoneNumbers);
 
         return $e;
     }

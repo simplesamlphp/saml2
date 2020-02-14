@@ -4,9 +4,12 @@ declare(strict_types=1);
 
 namespace SAML2\XML\md;
 
+use Exception;
+use InvalidArgumentException;
 use PHPUnit\Framework\TestCase;
 use SAML2\Constants;
 use SAML2\DOMDocumentFactory;
+use SAML2\SignedElementTestTrait;
 use SAML2\XML\saml\Attribute;
 use SAML2\XML\saml\AttributeValue;
 
@@ -17,15 +20,23 @@ use SAML2\XML\saml\AttributeValue;
  */
 final class AttributeAuthorityDescriptorTest extends TestCase
 {
+    use SignedElementTestTrait;
+
+    /** @var \SAML2\XML\md\AttributeService */
     protected $as;
+
+    /** @var \SAML2\XML\md\AssertionIDRequestService */
     protected $aidrs;
-    protected $document;
 
 
+    /**
+     * @return void
+     */
     protected function setUp(): void
     {
         $mdns = Constants::NS_MD;
         $samlns = Constants::NS_SAML;
+
         $this->document = DOMDocumentFactory::fromString(<<<XML
 <md:AttributeAuthorityDescriptor protocolSupportEnumeration="urn:oasis:names:tc:SAML:2.0:protocol" xmlns:md="{$mdns}">
   <md:AttributeService Binding="urn:oasis:names:tc:SAML:2.0:bindings:SOAP" Location="https://IdentityProvider.com/SAML/AA/SOAP"/>
@@ -55,6 +66,7 @@ XML
             "urn:oasis:names:tc:SAML:2.0:bindings:URI",
             "https://IdentityProvider.com/SAML/AA/URI"
         );
+        $this->testedClass = AttributeAuthorityDescriptor::class;
     }
 
 
@@ -86,7 +98,11 @@ XML
         );
         $aad = new AttributeAuthorityDescriptor(
             [$this->as],
-            ["urn:oasis:names:tc:SAML:2.0:protocol"],
+            [
+                'urn:oasis:names:tc:SAML:1.1:nameid-format:X509SubjectName',
+                'urn:oasis:names:tc:SAML:2.0:nameid-format:persistent',
+                'urn:oasis:names:tc:SAML:2.0:nameid-format:transient',
+            ],
             [$this->aidrs],
             [
                 'urn:oasis:names:tc:SAML:1.1:nameid-format:X509SubjectName',
@@ -99,6 +115,20 @@ XML
             ],
             [$attr1, $attr2]
         );
+
+        $this->assertEquals([$this->as], $aad->getAttributeServices());
+        $this->assertEquals(
+            [
+                'urn:oasis:names:tc:SAML:1.1:nameid-format:X509SubjectName',
+                'urn:oasis:names:tc:SAML:2.0:nameid-format:persistent',
+                'urn:oasis:names:tc:SAML:2.0:nameid-format:transient',
+            ],
+            $aad->getNameIDFormats()
+        );
+        $this->assertEquals([$this->aidrs], $aad->getAssertionIDRequestServices());
+        $this->assertEquals(['profile1', 'profile2'], $aad->getAttributeProfiles());
+        $this->assertEquals([$attr1, $attr2], $aad->getAttributes());
+
         $this->assertEqualXMLStructure($this->document->documentElement, $aad->toXML());
     }
 
@@ -107,7 +137,7 @@ XML
      */
     public function testMarshallingWithoutSupportedProtocols(): void
     {
-        $this->expectException(\Exception::class);
+        $this->expectException(Exception::class);
         $this->expectExceptionMessage(
             'At least one protocol must be supported by this SAML2\XML\md\AttributeAuthorityDescriptor.'
         );
@@ -120,7 +150,7 @@ XML
      */
     public function testMarshallingWithEmptySupportedProtocols(): void
     {
-        $this->expectException(\Exception::class);
+        $this->expectException(Exception::class);
         $this->expectExceptionMessage('Cannot specify an empty string as a supported protocol.');
         new AttributeAuthorityDescriptor([$this->as], ['']);
     }
@@ -131,7 +161,7 @@ XML
      */
     public function testMarshallingWithoutAttributeServices(): void
     {
-        $this->expectException(\InvalidArgumentException::class);
+        $this->expectException(InvalidArgumentException::class);
         $this->expectExceptionMessage('AttributeAuthorityDescriptor must contain at least one AttributeService.');
         new AttributeAuthorityDescriptor([], ['protocol1']);
     }
@@ -142,8 +172,10 @@ XML
      */
     public function testMarshallingWithWrongAttributeService(): void
     {
-        $this->expectException(\InvalidArgumentException::class);
+        $this->expectException(InvalidArgumentException::class);
         $this->expectExceptionMessage('AttributeService is not an instance of EndpointType.');
+
+        /** @psalm-suppress InvalidArgument */
         new AttributeAuthorityDescriptor(['string'], ['protocol1']);
     }
 
@@ -153,8 +185,17 @@ XML
      */
     public function testMarshallingWithoutOptionalParameters(): void
     {
-        new AttributeAuthorityDescriptor([$this->as], ['x']);
-        $this->assertTrue(true);
+        $aad = new AttributeAuthorityDescriptor([$this->as], ['x']);
+        $this->assertEmpty($aad->getAssertionIDRequestServices());
+        $this->assertEmpty($aad->getNameIDFormats());
+        $this->assertEmpty($aad->getID());
+        $this->assertEmpty($aad->getValidUntil());
+        $this->assertEmpty($aad->getCacheDuration());
+        $this->assertEmpty($aad->getExtensions());
+        $this->assertEmpty($aad->getErrorURL());
+        $this->assertEmpty($aad->getOrganization());
+        $this->assertEmpty($aad->getKeyDescriptors());
+        $this->assertEmpty($aad->getContactPersons());
     }
 
 
@@ -163,8 +204,17 @@ XML
      */
     public function testMarshallingWithEmptyAssertionIDRequestService(): void
     {
-        new AttributeAuthorityDescriptor([$this->as], ['x'], []);
-        $this->assertTrue(true);
+        $aad = new AttributeAuthorityDescriptor([$this->as], ['x'], []);
+        $this->assertEmpty($aad->getAssertionIDRequestServices());
+        $this->assertEmpty($aad->getNameIDFormats());
+        $this->assertEmpty($aad->getID());
+        $this->assertEmpty($aad->getValidUntil());
+        $this->assertEmpty($aad->getCacheDuration());
+        $this->assertEmpty($aad->getExtensions());
+        $this->assertEmpty($aad->getErrorURL());
+        $this->assertEmpty($aad->getOrganization());
+        $this->assertEmpty($aad->getKeyDescriptors());
+        $this->assertEmpty($aad->getContactPersons());
     }
 
 
@@ -173,8 +223,10 @@ XML
      */
     public function testMarshallingWithWrongAssertionIDRequestService(): void
     {
-        $this->expectException(\InvalidArgumentException::class);
+        $this->expectException(InvalidArgumentException::class);
         $this->expectExceptionMessage('Expected an instance of SAML2\XML\md\AssertionIDRequestService. Got: string');
+
+        /** @psalm-suppress InvalidArgument */
         new AttributeAuthorityDescriptor([$this->as], ['x'], ['x']);
     }
 
@@ -184,7 +236,7 @@ XML
      */
     public function testMarshallingWithEmptyNameIDFormat(): void
     {
-        $this->expectException(\InvalidArgumentException::class);
+        $this->expectException(InvalidArgumentException::class);
         $this->expectExceptionMessage('NameIDFormat cannot be an empty string.');
         new AttributeAuthorityDescriptor([$this->as], ['x'], [$this->aidrs], ['']);
     }
@@ -195,7 +247,7 @@ XML
      */
     public function testMarshallingWithEmptyAttributeProfile(): void
     {
-        $this->expectException(\InvalidArgumentException::class);
+        $this->expectException(InvalidArgumentException::class);
         $this->expectExceptionMessage('AttributeProfile cannot be an empty string.');
         new AttributeAuthorityDescriptor([$this->as], ['x'], [$this->aidrs], ['x'], ['']);
     }
@@ -206,8 +258,10 @@ XML
      */
     public function testMarshallingWithWrongAttribute(): void
     {
-        $this->expectException(\InvalidArgumentException::class);
+        $this->expectException(InvalidArgumentException::class);
         $this->expectExceptionMessage('Expected an instance of SAML2\XML\saml\Attribute. Got: string');
+
+        /** @psalm-suppress InvalidArgument */
         new AttributeAuthorityDescriptor([$this->as], ['x'], [$this->aidrs], ['x'], ['x'], ['x']);
     }
 
@@ -221,16 +275,16 @@ XML
     public function testUnmarshalling(): void
     {
         $aad = AttributeAuthorityDescriptor::fromXML($this->document->documentElement);
+
         /** @var AttributeService[] $as */
         $as = $aad->getAttributeServices();
         $this->assertCount(1, $as, "Wrong number of AttributeService elements.");
-        $this->assertInstanceOf(AttributeService::class, $as[0]);
         $this->assertEquals('urn:oasis:names:tc:SAML:2.0:bindings:SOAP', $as[0]->getBinding());
         $this->assertEquals('https://IdentityProvider.com/SAML/AA/SOAP', $as[0]->getLocation());
+
         /** @var AssertionIDRequestService[] $aidrs */
         $aidrs = $aad->getAssertionIDRequestServices();
         $this->assertCount(1, $aidrs, "Wrong number of AssertionIDRequestService elements.");
-        $this->assertInstanceOf(AssertionIDRequestService::class, $aidrs[0]);
         $this->assertEquals('urn:oasis:names:tc:SAML:2.0:bindings:URI', $aidrs[0]->getBinding());
         $this->assertEquals('https://IdentityProvider.com/SAML/AA/URI', $aidrs[0]->getLocation());
         $this->assertEquals(
@@ -243,9 +297,13 @@ XML
         );
         $attrs = $aad->getAttributes();
         $this->assertCount(2, $attrs, "Wrong number of attributes.");
-        foreach ($attrs as $attr) {
-            $this->assertInstanceOf(Attribute::class, $attr);
-        }
+        $this->assertEquals(
+            [
+                'profile1',
+                'profile2',
+            ],
+            $aad->getAttributeProfiles()
+        );
     }
 
 
@@ -261,8 +319,18 @@ XML
 </md:AttributeAuthorityDescriptor>
 XML
         );
-        AttributeAuthorityDescriptor::fromXML($document->documentElement);
-        $this->assertTrue(true);
+
+        $aad = AttributeAuthorityDescriptor::fromXML($document->documentElement);
+        $this->assertEmpty($aad->getAssertionIDRequestServices());
+        $this->assertEmpty($aad->getNameIDFormats());
+        $this->assertEmpty($aad->getID());
+        $this->assertEmpty($aad->getValidUntil());
+        $this->assertEmpty($aad->getCacheDuration());
+        $this->assertEmpty($aad->getExtensions());
+        $this->assertEmpty($aad->getErrorURL());
+        $this->assertEmpty($aad->getOrganization());
+        $this->assertEmpty($aad->getKeyDescriptors());
+        $this->assertEmpty($aad->getContactPersons());
     }
 
 
@@ -279,6 +347,7 @@ XML
 </md:AttributeAuthorityDescriptor>
 XML
         );
+        $this->expectException(InvalidArgumentException::class);
         $this->expectExceptionMessage('NameIDFormat cannot be an empty string.');
         AttributeAuthorityDescriptor::fromXML($document->documentElement);
     }
@@ -297,6 +366,7 @@ XML
 </md:AttributeAuthorityDescriptor>
 XML
         );
+        $this->expectException(InvalidArgumentException::class);
         $this->expectExceptionMessage('AttributeProfile cannot be an empty string.');
         AttributeAuthorityDescriptor::fromXML($document->documentElement);
     }

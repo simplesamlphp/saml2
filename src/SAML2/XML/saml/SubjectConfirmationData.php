@@ -15,7 +15,7 @@ use Webmozart\Assert\Assert;
 /**
  * Class representing SAML 2 SubjectConfirmationData element.
  *
- * @package SimpleSAMLphp
+ * @package simplesamlphp/saml2
  */
 final class SubjectConfirmationData extends AbstractSamlElement
 {
@@ -60,9 +60,9 @@ final class SubjectConfirmationData extends AbstractSamlElement
      * Array with various elements describing this key.
      * Unknown elements will be represented by \SAML2\XML\Chunk.
      *
-     * @var (\SAML2\XML\ds\KeyInfo|\SAML2\XML\Chunk)[]|null
+     * @var (\SAML2\XML\ds\KeyInfo|\SAML2\XML\Chunk)[]
      */
-    private $info = null;
+    private $info = [];
 
 
     /**
@@ -73,7 +73,7 @@ final class SubjectConfirmationData extends AbstractSamlElement
      * @param string|null $recipient
      * @param string|null $inResponseTo
      * @param string|null $address
-     * @param (\SAML2\XML\ds\KeyInfo|\SAML2\XML\Chunk)[]|null $info
+     * @param (\SAML2\XML\ds\KeyInfo|\SAML2\XML\Chunk)[] $info
      */
     public function __construct(
         ?int $notBefore = null,
@@ -81,7 +81,7 @@ final class SubjectConfirmationData extends AbstractSamlElement
         ?string $recipient = null,
         ?string $inResponseTo = null,
         ?string $address = null,
-        ?array $info = null
+        array $info = []
     ) {
         $this->setNotBefore($notBefore);
         $this->setNotOnOrAfter($notOnOrAfter);
@@ -215,9 +215,9 @@ final class SubjectConfirmationData extends AbstractSamlElement
     /**
      * Collect the value of the info-property
      *
-     * @return (\SAML2\XML\ds\KeyInfo|\SAML2\XML\Chunk)[]|null
+     * @return (\SAML2\XML\ds\KeyInfo|\SAML2\XML\Chunk)[]
      */
-    public function getInfo(): ?array
+    public function getInfo(): array
     {
         return $this->info;
     }
@@ -226,10 +226,10 @@ final class SubjectConfirmationData extends AbstractSamlElement
     /**
      * Set the value of the info-property
      *
-     * @param (\SAML2\XML\ds\KeyInfo|\SAML2\XML\Chunk)[]|null $info
+     * @param (\SAML2\XML\ds\KeyInfo|\SAML2\XML\Chunk)[] $info
      * @return void
      */
-    private function setInfo(?array $info): void
+    private function setInfo(array $info): void
     {
         $this->info = $info;
     }
@@ -240,13 +240,12 @@ final class SubjectConfirmationData extends AbstractSamlElement
      *
      * @param \SAML2\XML\Chunk|\SAML2\XML\ds\KeyInfo $info
      * @return void
-     *
-     * @throws \InvalidArgumentException if assertions are false
+     * @throws \InvalidArgumentException
      */
     public function addInfo(object $info): void
     {
         Assert::isInstanceOfAny($info, [Chunk::class, KeyInfo::class]);
-        $this->info = empty($this->info) ? [$info] : array_merge($this->info, [$info]);
+        $this->info[] = $info;
     }
 
 
@@ -273,6 +272,7 @@ final class SubjectConfirmationData extends AbstractSamlElement
      *
      * @param \DOMElement $xml The XML element we should load
      * @return self
+     * @throws \InvalidArgumentException if the qualified name of the supplied element is wrong
      */
     public static function fromXML(DOMElement $xml): object
     {
@@ -316,7 +316,7 @@ final class SubjectConfirmationData extends AbstractSamlElement
             $Recipient,
             $InResponseTo,
             $Address,
-            empty($info) ? null : $info
+            $info
         );
     }
 
@@ -327,7 +327,7 @@ final class SubjectConfirmationData extends AbstractSamlElement
      * @param  \DOMElement|null $parent The parent element we should append this element to.
      * @return \DOMElement This element, as XML.
      */
-    public function toXML(?DOMElement $parent = null): DOMElement
+    public function toXML(DOMElement $parent = null): DOMElement
     {
         $e = $this->instantiateParentElement($parent);
 
@@ -347,10 +347,8 @@ final class SubjectConfirmationData extends AbstractSamlElement
             $e->setAttribute('Address', $this->Address);
         }
 
-        if (!empty($this->info)) {
-            foreach ($this->info as $n) {
-                $n->toXML($e);
-            }
+        foreach ($this->info as $n) {
+            $n->toXML($e);
         }
 
         return $e;
