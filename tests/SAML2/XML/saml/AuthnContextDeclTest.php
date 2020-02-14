@@ -62,11 +62,8 @@ XML
      */
     public function testUnmarshalling(): void
     {
-        /**
-         * @psalm-var \DOMElement $document->firstChild
-         * @psalm-var \DOMNode $authnContextDecl[1]
-         */
-        $authnContextDecl = AuthnContextDecl::fromXML($this->document->firstChild)->getDecl();
+        /** @psalm-var \DOMNode $authnContextDecl[1] */
+        $authnContextDecl = AuthnContextDecl::fromXML($this->document->documentElement)->getDecl();
         $this->assertEquals('samlacpass:AuthenticationContextDeclaration', $authnContextDecl[1]->localName);
     }
 
