@@ -4,10 +4,10 @@ declare(strict_types=1);
 
 namespace SAML2\Utilities;
 
+use PHPUnit\Framework\TestCase;
 use SAML2\CertificatesMock;
-use SAML2\Utilities\Certificate;
 
-class CertificateTest extends \PHPUnit\Framework\TestCase
+class CertificateTest extends TestCase
 {
     /**
      * @group utilities
@@ -32,6 +32,6 @@ class CertificateTest extends \PHPUnit\Framework\TestCase
     {
         $result = Certificate::convertToCertificate(CertificatesMock::getPlainPublicKeyContents());
         // the formatted public key in CertificatesMock is stored with unix newlines
-        $this->assertEquals(CertificatesMock::getPlainPublicKey() . "\n", str_replace("\r", "", $result));
+        $this->assertEquals(CertificatesMock::getPlainPublicKey(), str_replace("\r", "", $result));
     }
 }

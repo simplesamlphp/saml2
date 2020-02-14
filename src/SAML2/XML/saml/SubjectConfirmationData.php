@@ -15,7 +15,7 @@ use Webmozart\Assert\Assert;
 /**
  * Class representing SAML 2 SubjectConfirmationData element.
  *
- * @package SimpleSAMLphp
+ * @package simplesamlphp/saml2
  */
 final class SubjectConfirmationData extends AbstractSamlElement
 {
@@ -241,8 +241,7 @@ final class SubjectConfirmationData extends AbstractSamlElement
      *
      * @param \SAML2\XML\Chunk|\SAML2\XML\ds\KeyInfo $info
      * @return void
-     *
-     * @throws \InvalidArgumentException if assertions are false
+     * @throws \InvalidArgumentException
      */
     public function addInfo(object $info): void
     {
@@ -274,6 +273,7 @@ final class SubjectConfirmationData extends AbstractSamlElement
      *
      * @param \DOMElement $xml The XML element we should load
      * @return self
+     * @throws \InvalidArgumentException if the qualified name of the supplied element is wrong
      */
     public static function fromXML(DOMElement $xml): object
     {

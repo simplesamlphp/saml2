@@ -5,37 +5,40 @@ declare(strict_types=1);
 namespace SAML2\XML\md;
 
 use DOMElement;
+use SAML2\Constants;
 use SAML2\Utils;
+use SAML2\XML\ds\Signature;
+use Webmozart\Assert\Assert;
 
 /**
  * Class representing SAML 2 SPSSODescriptor.
  *
- * @package SimpleSAMLphp
+ * @package simplesamlphp/saml2
  */
-class SPSSODescriptor extends AbstractSSODescriptor
+final class SPSSODescriptor extends AbstractSSODescriptor
 {
     /**
      * Whether this SP signs authentication requests.
      *
      * @var bool|null
      */
-    private $AuthnRequestsSigned = null;
+    protected $authnRequestsSigned = null;
 
     /**
      * Whether this SP wants the Assertion elements to be signed.
      *
      * @var bool|null
      */
-    private $WantAssertionsSigned = null;
+    protected $wantAssertionsSigned = null;
 
     /**
      * List of AssertionConsumerService endpoints for this SP.
      *
      * Array with IndexedEndpointType objects.
      *
-     * @var \SAML2\XML\md\IndexedEndpointType[]
+     * @var \SAML2\XML\md\AssertionConsumerService[]
      */
-    private $AssertionConsumerService = [];
+    protected $assertionConsumerService = [];
 
     /**
      * List of AttributeConsumingService descriptors for this SP.
@@ -44,34 +47,82 @@ class SPSSODescriptor extends AbstractSSODescriptor
      *
      * @var \SAML2\XML\md\AttributeConsumingService[]
      */
-    private $AttributeConsumingService = [];
+    protected $attributeConsumingService = [];
+
 
 
     /**
-     * Initialize a SPSSODescriptor.
+     * SPSSODescriptor constructor.
      *
-     * @param \DOMElement|null $xml The XML element we should load.
+     * @param \SAML2\XML\md\AssertionConsumerService[] $assertionConsumerService
+     * @param string[] $protocolSupportEnumeration
+     * @param bool|null $authnRequestsSigned
+     * @param bool|null $wantAssertionsSigned
+     * @param \SAML2\XML\md\AttributeConsumingService[] $attributeConsumingService
+     * @param string|null $ID
+     * @param int|null $validUntil
+     * @param string|null $cacheDuration
+     * @param \SAML2\XML\md\Extensions|null $extensions
+     * @param string|null $errorURL
+     * @param \SAML2\XML\md\KeyDescriptor[] $keyDescriptors
+     * @param \SAML2\XML\md\Organization|null $organization
+     * @param \SAML2\XML\md\ContactPerson[] $contacts
+     * @param \SAML2\XML\md\ArtifactResolutionService[] $artifactResolutionService
+     * @param \SAML2\XML\md\SingleLogoutService[] $singleLogoutService
+     * @param \SAML2\XML\md\ManageNameIDService[] $manageNameIDService
+     * @param string[] $nameIDFormat
      */
-    public function __construct(DOMElement $xml = null)
-    {
-        parent::__construct('md:SPSSODescriptor', $xml);
+    public function __construct(
+        array $assertionConsumerService,
+        array $protocolSupportEnumeration,
+        ?bool $authnRequestsSigned = null,
+        ?bool $wantAssertionsSigned = null,
+        array $attributeConsumingService = [],
+        ?string $ID = null,
+        ?int $validUntil = null,
+        ?string $cacheDuration = null,
+        ?Extensions $extensions = null,
+        ?string $errorURL = null,
+        array $keyDescriptors = [],
+        ?Organization $organization = null,
+        array $contacts = [],
+        array $artifactResolutionService = [],
+        array $singleLogoutService = [],
+        array $manageNameIDService = [],
+        array $nameIDFormat = []
+    ) {
+        parent::__construct(
+            $protocolSupportEnumeration,
+            $ID,
+            $validUntil,
+            $cacheDuration,
+            $extensions,
+            $errorURL,
+            $keyDescriptors,
+            $organization,
+            $contacts,
+            $artifactResolutionService,
+            $singleLogoutService,
+            $manageNameIDService,
+            $nameIDFormat
+        );
 
-        if ($xml === null) {
-            return;
-        }
+        $this->setAssertionConsumerService($assertionConsumerService);
+        $this->setAuthnRequestsSigned($authnRequestsSigned);
+        $this->setWantAssertionsSigned($wantAssertionsSigned);
+        $this->setAttributeConsumingService($attributeConsumingService);
 
-        $this->AuthnRequestsSigned = Utils::parseBoolean($xml, 'AuthnRequestsSigned', null);
-        $this->WantAssertionsSigned = Utils::parseBoolean($xml, 'WantAssertionsSigned', null);
-
-        /** @var \DOMElement $ep */
-        foreach (Utils::xpQuery($xml, './saml_metadata:AssertionConsumerService') as $ep) {
-            $this->AssertionConsumerService[] = new IndexedEndpointType($ep);
-        }
-
-        /** @var \DOMElement $acs */
-        foreach (Utils::xpQuery($xml, './saml_metadata:AttributeConsumingService') as $acs) {
-            $this->AttributeConsumingService[] = AttributeConsumingService::fromXML($acs);
-        }
+        // test that only one ACS is marked as default
+        Assert::maxCount(
+            array_filter(
+                $this->getAttributeConsumingService(),
+                function (AttributeConsumingService $acs) {
+                    return $acs->getIsDefault() === true;
+                }
+            ),
+            1,
+            'Only one md:AttributeConsumingService can be set as default.'
+        );
     }
 
 
@@ -82,7 +133,7 @@ class SPSSODescriptor extends AbstractSSODescriptor
      */
     public function getAuthnRequestsSigned(): ?bool
     {
-        return $this->AuthnRequestsSigned;
+        return $this->authnRequestsSigned;
     }
 
 
@@ -92,9 +143,9 @@ class SPSSODescriptor extends AbstractSSODescriptor
      * @param bool|null $flag
      * @return void
      */
-    public function setAuthnRequestsSigned(bool $flag = null): void
+    private function setAuthnRequestsSigned(?bool $flag): void
     {
-        $this->AuthnRequestsSigned = $flag;
+        $this->authnRequestsSigned = $flag;
     }
 
 
@@ -103,9 +154,9 @@ class SPSSODescriptor extends AbstractSSODescriptor
      *
      * @return bool|null
      */
-    public function wantAssertionsSigned(): ?bool
+    public function getWantAssertionsSigned(): ?bool
     {
-        return $this->WantAssertionsSigned;
+        return $this->wantAssertionsSigned;
     }
 
 
@@ -115,79 +166,68 @@ class SPSSODescriptor extends AbstractSSODescriptor
      * @param bool|null $flag
      * @return void
      */
-    public function setWantAssertionsSigned(bool $flag = null): void
+    private function setWantAssertionsSigned(?bool $flag): void
     {
-        $this->WantAssertionsSigned = $flag;
+        $this->wantAssertionsSigned = $flag;
     }
 
 
     /**
      * Collect the value of the AssertionConsumerService-property
      *
-     * @return array
+     * @return \SAML2\XML\md\AssertionConsumerService[]
      */
     public function getAssertionConsumerService(): array
     {
-        return $this->AssertionConsumerService;
+        return $this->assertionConsumerService;
     }
 
 
     /**
      * Set the value of the AssertionConsumerService-property
      *
-     * @param array $acs
+     * @param \SAML2\XML\md\AssertionConsumerService[] $acs
      * @return void
+     * @throws \InvalidArgumentException
      */
-    public function setAssertionConsumerService(array $acs): void
+    private function setAssertionConsumerService(array $acs): void
     {
-        $this->AssertionConsumerService = $acs;
-    }
-
-
-    /**
-     * Add the value to the AssertionConsumerService-property
-     *
-     * @param \SAML2\XML\md\IndexedEndpointType $acs
-     * @return void
-     */
-    public function addAssertionConsumerService(IndexedEndpointType $acs): void
-    {
-        $this->AssertionConsumerService[] = $acs;
+        Assert::minCount($acs, 1, 'At least one AssertionConsumerService must be specified.');
+        Assert::allIsInstanceOf(
+            $acs,
+            AssertionConsumerService::class,
+            'All md:AssertionConsumerService endpoints must be an instance of AssertionConsumerService.'
+        );
+        $this->assertionConsumerService = $acs;
     }
 
 
     /**
      * Collect the value of the AttributeConsumingService-property
      *
-     * @return array
+     * @return \SAML2\XML\md\AttributeConsumingService[]
      */
     public function getAttributeConsumingService(): array
     {
-        return $this->AttributeConsumingService;
-    }
-
-
-    /**
-     * Add the value to the AttributeConsumingService-property
-     *
-     * @param \SAML2\XML\md\AttributeConsumingService $acs
-     * @return void
-     */
-    public function addAttributeConsumingService(AttributeConsumingService $acs): void
-    {
-        $this->AttributeConsumingService[] = $acs;
+        return $this->attributeConsumingService;
     }
 
 
     /**
      * Set the value of the AttributeConsumingService-property
      *
-     * @param array $acs
+     * @param \SAML2\XML\md\AttributeConsumingService[] $acs
      * @return void
+     * @throws \InvalidArgumentException
      */
-    public function setAttributeConsumingService(array $acs): void
+    private function setAttributeConsumingService(array $acs): void
     {
-        $this->AttributeConsumingService = $acs;
+        Assert::allIsInstanceOf(
+            $acs,
+            AttributeConsumingService::class,
+            'All md:AttributeConsumingService endpoints must be an instance of AttributeConsumingService.'
+        );
+        $this->attributeConsumingService = $acs;
     }
 
 
@@ -195,12 +235,49 @@ class SPSSODescriptor extends AbstractSSODescriptor
      * Convert XML into a SPSSODescriptor
      *
      * @param \DOMElement $xml The XML element we should load
+     *
      * @return self
+     * @throws \InvalidArgumentException if the qualified name of the supplied element is wrong*@throws \Exception
+     * @throws \Exception
      */
     public static function fromXML(DOMElement $xml): object
     {
-        // @TODO: Actually fill this method with something useful;  this is a dummy!!
-        return new self(new DOMElement('root'));
+        Assert::same($xml->localName, 'SPSSODescriptor');
+        Assert::same($xml->namespaceURI, SPSSODescriptor::NS);
+
+        $validUntil = self::getAttribute($xml, 'validUntil', null);
+        $orgs = Organization::getChildrenOfClass($xml);
+        Assert::maxCount($orgs, 1, 'More than one Organization found in this descriptor');
+
+        $extensions = Extensions::getChildrenOfClass($xml);
+        Assert::maxCount($extensions, 1, 'Only one md:Extensions element is allowed.');
+
+        $signature = Signature::getChildrenOfClass($xml);
+        Assert::maxCount($signature, 1, 'Only one ds:Signature element is allowed.');
+
+        $spssod = new self(
+            AssertionConsumerService::getChildrenOfClass($xml),
+            preg_split('/[\s]+/', trim(self::getAttribute($xml, 'protocolSupportEnumeration'))),
+            self::getBooleanAttribute($xml, 'AuthnRequestsSigned', null),
+            self::getBooleanAttribute($xml, 'WantAssertionsSigned', null),
+            AttributeConsumingService::getChildrenOfClass($xml),
+            self::getAttribute($xml, 'ID', null),
+            $validUntil !== null ? Utils::xsDateTimeToTimestamp($validUntil) : null,
+            self::getAttribute($xml, 'cacheDuration', null),
+            !empty($extensions) ? $extensions[0] : null,
+            self::getAttribute($xml, 'errorURL', null),
+            KeyDescriptor::getChildrenOfClass($xml),
+            !empty($orgs) ? $orgs[0] : null,
+            ContactPerson::getChildrenOfClass($xml),
+            ArtifactResolutionService::getChildrenOfClass($xml),
+            SingleLogoutService::getChildrenOfClass($xml),
+            ManageNameIDService::getChildrenOfClass($xml),
+            Utils::extractStrings($xml, Constants::NS_MD, 'NameIDFormat')
+        );
+        if (!empty($signature)) {
+            $spssod->setSignature($signature[0]);
+        }
+        return $spssod;
     }
 
 
@@ -209,29 +286,28 @@ class SPSSODescriptor extends AbstractSSODescriptor
      *
      * @param \DOMElement|null $parent The EntityDescriptor we should append this SPSSODescriptor to.
      * @return \DOMElement
+     * @throws \Exception
      */
-    public function toXML(?DOMElement $parent = null): DOMElement
+    public function toXML(DOMElement $parent = null): DOMElement
     {
-        // @TODO: handle null argument
-
         $e = parent::toXML($parent);
 
-        if (is_bool($this->AuthnRequestsSigned)) {
-            $e->setAttribute('AuthnRequestsSigned', $this->AuthnRequestsSigned ? 'true' : 'false');
+        if (is_bool($this->authnRequestsSigned)) {
+            $e->setAttribute('AuthnRequestsSigned', $this->authnRequestsSigned ? 'true' : 'false');
         }
 
-        if (is_bool($this->WantAssertionsSigned)) {
-            $e->setAttribute('WantAssertionsSigned', $this->WantAssertionsSigned ? 'true' : 'false');
+        if (is_bool($this->wantAssertionsSigned)) {
+            $e->setAttribute('WantAssertionsSigned', $this->wantAssertionsSigned ? 'true' : 'false');
         }
 
-        foreach ($this->AssertionConsumerService as $ep) {
-            $ep->toXML($e, 'md:AssertionConsumerService');
+        foreach ($this->assertionConsumerService as $ep) {
+            $ep->toXML($e);
         }
 
-        foreach ($this->AttributeConsumingService as $acs) {
+        foreach ($this->attributeConsumingService as $acs) {
             $acs->toXML($e);
         }
 
-        return $e;
+        return $this->signElement($e);
     }
 }

@@ -13,7 +13,7 @@ use Webmozart\Assert\Assert;
  * Class representing SAML2 AuthnContextDeclRef
  *
  * @author Tim van Dijen, <tvdijen@gmail.com>
- * @package SimpleSAMLphp
+ * @package simplesamlphp/saml2
  */
 final class AuthnContextDeclRef extends AbstractSamlElement
 {
@@ -36,8 +36,6 @@ final class AuthnContextDeclRef extends AbstractSamlElement
      * Collect the value of the declRef-property
      *
      * @return string
-     *
-     * @throws \InvalidArgumentException if assertions are false
      */
     public function getDeclRef(): string
     {
@@ -62,6 +60,7 @@ final class AuthnContextDeclRef extends AbstractSamlElement
      *
      * @param \DOMElement $xml The XML element we should load
      * @return \SAML2\XML\saml\AuthnContextDeclRef
+     * @throws \InvalidArgumentException if the qualified name of the supplied element is wrong
      */
     public static function fromXML(DOMElement $xml): object
     {

@@ -12,7 +12,7 @@ use Webmozart\Assert\Assert;
  * Class for handling the mdrpi:PublicationInfo element.
  *
  * @link: http://docs.oasis-open.org/security/saml/Post2.0/saml-metadata-rpi/v1.0/saml-metadata-rpi-v1.0.pdf
- * @package SimpleSAMLphp
+ * @package simplesamlphp/saml2
  */
 final class PublicationInfo extends AbstractMdrpiElement
 {
@@ -42,9 +42,9 @@ final class PublicationInfo extends AbstractMdrpiElement
      *
      * This is an associative array with language=>URL.
      *
-     * @var array|null
+     * @var array
      */
-    protected $UsagePolicy = null;
+    protected $UsagePolicy = [];
 
 
     /**
@@ -53,14 +53,13 @@ final class PublicationInfo extends AbstractMdrpiElement
      * @param string $publisher
      * @param int|null $creationInstant
      * @param string|null $publicationId
-     * @param array|null $UsagePolicy
-     * @throws \Exception
+     * @param array $UsagePolicy
      */
     public function __construct(
         string $publisher,
         int $creationInstant = null,
         string $publicationId = null,
-        array $UsagePolicy = null
+        array $UsagePolicy = []
     ) {
         $this->setPublisher($publisher);
         $this->setCreationInstant($creationInstant);
@@ -73,8 +72,6 @@ final class PublicationInfo extends AbstractMdrpiElement
      * Collect the value of the publisher-property
      *
      * @return string
-     *
-     * @throws \InvalidArgumentException if assertions are false
      */
     public function getPublisher(): string
     {
@@ -107,9 +104,9 @@ final class PublicationInfo extends AbstractMdrpiElement
     /**
      * Collect the value of the UsagePolicy-property
      *
-     * @return array|null
+     * @return array
      */
-    public function getUsagePolicy(): ?array
+    public function getUsagePolicy(): array
     {
         return $this->UsagePolicy;
     }
@@ -154,10 +151,10 @@ final class PublicationInfo extends AbstractMdrpiElement
     /**
      * Set the value of the UsagePolicy-property
      *
-     * @param array|null $usagePolicy
+     * @param array $usagePolicy
      * @return void
      */
-    private function setUsagePolicy(?array $usagePolicy): void
+    private function setUsagePolicy(array $usagePolicy): void
     {
         $this->UsagePolicy = $usagePolicy;
     }
@@ -168,15 +165,16 @@ final class PublicationInfo extends AbstractMdrpiElement
      *
      * @param \DOMElement $xml The XML element we should load
      * @return self
+     * @throws \InvalidArgumentException if the qualified name of the supplied element is wrong
      */
     public static function fromXML(DOMElement $xml): object
     {
         Assert::same($xml->localName, 'PublicationInfo');
         Assert::same($xml->namespaceURI, PublicationInfo::NS);
-
-        if (!$xml->hasAttribute('publisher')) {
-            throw new \Exception('Missing required attribute "publisher" in mdrpi:PublicationInfo element.');
-        }
+        Assert::true(
+            $xml->hasAttribute('publisher'),
+            'Missing required attribute "publisher" in mdrpi:PublicationInfo element.'
+        );
 
         $publisher = $xml->getAttribute('publisher');
         $creationInstant = $xml->hasAttribute('creationInstant')
@@ -186,7 +184,7 @@ final class PublicationInfo extends AbstractMdrpiElement
         $publicationId = $xml->hasAttribute('publicationId') ? $xml->getAttribute('publicationId') : null;
         $UsagePolicy = Utils::extractLocalizedStrings($xml, PublicationInfo::NS, 'UsagePolicy');
 
-        return new self($publisher, $creationInstant, $publicationId, empty($UsagePolicy) ? null : $UsagePolicy);
+        return new self($publisher, $creationInstant, $publicationId, $UsagePolicy);
     }
 
 
@@ -195,13 +193,10 @@ final class PublicationInfo extends AbstractMdrpiElement
      *
      * @param \DOMElement|null $parent The element we should append to.
      * @return \DOMElement
-     *
-     * @throws \InvalidArgumentException if assertions are false
      */
     public function toXML(DOMElement $parent = null): DOMElement
     {
         $e = $this->instantiateParentElement($parent);
-
         $e->setAttribute('publisher', $this->publisher);
 
         if ($this->creationInstant !== null) {
@@ -212,10 +207,7 @@ final class PublicationInfo extends AbstractMdrpiElement
             $e->setAttribute('publicationId', $this->publicationId);
         }
 
-        if (!empty($this->UsagePolicy)) {
-            Utils::addStrings($e, PublicationInfo::NS, 'mdrpi:UsagePolicy', true, $this->UsagePolicy);
-        }
-
+        Utils::addStrings($e, PublicationInfo::NS, 'mdrpi:UsagePolicy', true, $this->UsagePolicy);
         return $e;
     }
 }

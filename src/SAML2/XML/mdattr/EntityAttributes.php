@@ -14,7 +14,7 @@ use Webmozart\Assert\Assert;
  * Class for handling the EntityAttributes metadata extension.
  *
  * @link: http://docs.oasis-open.org/security/saml/Post2.0/sstc-metadata-attr-cs-01.pdf
- * @package SimpleSAMLphp
+ * @package simplesamlphp/saml2
  */
 final class EntityAttributes extends AbstractMdattrElement
 {
@@ -53,8 +53,9 @@ final class EntityAttributes extends AbstractMdattrElement
     /**
      * Set the value of the childen-property
      *
-     * @param array $children
+     * @param (\SAML2\XML\Chunk|\SAML2\XML\saml\Attribute)[] $children
      * @return void
+     * @throws \InvalidArgumentException
      */
     private function setChildren(array $children): void
     {
@@ -69,8 +70,7 @@ final class EntityAttributes extends AbstractMdattrElement
      *
      * @param \SAML2\XML\Chunk|\SAML2\XML\saml\Attribute $child
      * @return void
-     *
-     * @throws \InvalidArgumentException if assertions are false
+     * @throws \InvalidArgumentException
      */
     public function addChild($child): void
     {
@@ -85,6 +85,7 @@ final class EntityAttributes extends AbstractMdattrElement
      *
      * @param \DOMElement $xml The XML element we should load
      * @return self
+     * @throws \InvalidArgumentException if the qualified name of the supplied element is wrong
      */
     public static function fromXML(DOMElement $xml): object
     {

@@ -8,6 +8,7 @@ use DOMDocument;
 use DOMElement;
 use DOMNode;
 use DOMXPath;
+use InvalidArgumentException;
 use RobRichards\XMLSecLibs\XMLSecEnc;
 use RobRichards\XMLSecLibs\XMLSecurityDSig;
 use RobRichards\XMLSecLibs\XMLSecurityKey;
@@ -707,7 +708,7 @@ class Utils
         // We use a very strict regex to parse the timestamp.
         $regex = '/^(\\d\\d\\d\\d)-(\\d\\d)-(\\d\\d)T(\\d\\d):(\\d\\d):(\\d\\d)(?:\\.\\d{1,9})?Z$/D';
         if (preg_match($regex, $time, $matches) == 0) {
-            throw new \Exception(
+            throw new InvalidArgumentException(
                 'Invalid SAML2 timestamp passed to xsDateTimeToTimestamp: ' . $time
             );
         }

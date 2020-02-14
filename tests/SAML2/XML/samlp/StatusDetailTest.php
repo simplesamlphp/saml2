@@ -16,25 +16,37 @@ use SAML2\XML\Chunk;
  */
 class StatusDetailTest extends \PHPUnit\Framework\TestCase
 {
+    /** @var \DOMDocument */
+    private $document;
+
+
+    /**
+     * @return void
+     */
+    public function setUp(): void
+    {
+        $nssamlp = StatusDetail::NS;
+        $this->document = DOMDocumentFactory::fromString(<<<XML
+<samlp:StatusDetail xmlns:samlp="{$nssamlp}">
+  <Cause>org.sourceid.websso.profiles.idp.FailedAuthnSsoException</Cause>
+</samlp:StatusDetail>
+XML
+        );
+    }
+
+
     /**
      * @return void
      */
     public function testMarshalling(): void
     {
-        /** @psalm-var \DOMElement $document->firstChild */
         $document = DOMDocumentFactory::fromString(
             '<Cause>org.sourceid.websso.profiles.idp.FailedAuthnSsoException</Cause>'
         );
 
         $statusDetail = new StatusDetail([new Chunk($document->documentElement)]);
-        $nssamlp = StatusDetail::NS;
-
-        $this->assertEquals(<<<XML
-<samlp:StatusDetail xmlns:samlp="{$nssamlp}">
-  <Cause>org.sourceid.websso.profiles.idp.FailedAuthnSsoException</Cause>
-</samlp:StatusDetail>
-XML
-            ,
+        $this->assertEquals(
+            $this->document->saveXML($this->document->documentElement),
             strval($statusDetail)
         );
     }
@@ -45,19 +57,8 @@ XML
      */
     public function testUnmarshalling(): void
     {
-        $samlNamespace = Constants::NS_SAMLP;
+        $statusDetail = StatusDetail::fromXML($this->document->documentElement);
 
-        $document = DOMDocumentFactory::fromString(<<<XML
-<samlp:StatusDetail xmlns:samlp="{$samlNamespace}">
-  <Cause>org.sourceid.websso.profiles.idp.FailedAuthnSsoException</Cause>
-</samlp:StatusDetail>
-XML
-        );
-
-        /** @psalm-var \DOMElement $document->firstChild */
-        $statusDetail = StatusDetail::fromXML($document->firstChild);
-
-        /** @psalm-var \SAML2\XML\Chunk[] $statusDetailElement */
         $statusDetailElement = $statusDetail->getDetails();
         $statusDetailElement = $statusDetailElement[0]->getXML();
 
@@ -67,21 +68,13 @@ XML
 
 
     /**
-     * Serialize an StatusDetail and Unserialize that again.
-     * @return void
+     * Test serialization / unserialization
      */
-    public function testSerialize(): void
+    public function testSerialization(): void
     {
-        $samlNamespace = Constants::NS_SAMLP;
-
-        $document1 = DOMDocumentFactory::fromString(
-            '<Cause>org.sourceid.websso.profiles.idp.FailedAuthnSsoException</Cause>'
+        $this->assertEquals(
+            $this->document->saveXML($this->document->documentElement),
+            strval(unserialize(serialize(StatusDetail::fromXML($this->document->documentElement))))
         );
-
-        $statusDetail1 = new StatusDetail([new Chunk($document1->documentElement)]);
-        $statusDetail2 = unserialize(serialize($statusDetail1));
-
-        $this->assertEquals(strval($statusDetail1), strval($statusDetail2));
     }
 }
-

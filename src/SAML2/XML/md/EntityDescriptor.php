@@ -6,8 +6,8 @@ namespace SAML2\XML\md;
 
 use DOMElement;
 use SAML2\Constants;
-use SAML2\DOMDocumentFactory;
 use SAML2\Utils;
+use SAML2\XML\ds\Signature;
 use Webmozart\Assert\Assert;
 
 /**
@@ -71,12 +71,12 @@ final class EntityDescriptor extends AbstractMetadataDocument
      * @param string|null $cacheDuration Maximum time this document can be cached. Defaults to null.
      * @param \SAML2\XML\md\Extensions|null $extensions An array of extensions.
      * @param \SAML2\XML\md\AbstractRoleDescriptor[]|null $roleDescriptors An array of role descriptors.
-     * @param \SAML2\XML\md\AffiliationDescriptor|null $affiliationDescriptor An affiliation descriptor to use instead
-     * of role descriptors.
+     * @param \SAML2\XML\md\AffiliationDescriptor|null $affiliationDescriptor An affiliation descriptor to
+     *   use instead of role descriptors.
      * @param \SAML2\XML\md\Organization|null $organization The organization responsible for the SAML entity.
-     * @param \SAML2\XML\md\ContactPerson[]|null $contacts A list of contact persons for this SAML entity.
-     * @param \SAML2\XML\md\AdditionalMetadataLocation[]|null $additionalMdLocations A list of additional metadata
-     * locations.
+     * @param \SAML2\XML\md\ContactPerson[] $contacts A list of contact persons for this SAML entity.
+     * @param \SAML2\XML\md\AdditionalMetadataLocation[] $additionalMdLocations A list of
+     *   additional metadata locations.
      *
      * @throws \Exception
      */
@@ -86,26 +86,26 @@ final class EntityDescriptor extends AbstractMetadataDocument
         ?int $validUntil = null,
         ?string $cacheDuration = null,
         Extensions $extensions = null,
-        array $roleDescriptors = [],
+        ?array $roleDescriptors = [],
         ?AffiliationDescriptor $affiliationDescriptor = null,
         ?Organization $organization = null,
         array $contacts = [],
         array $additionalMdLocations = []
     ) {
         if (empty($roleDescriptors) && $affiliationDescriptor === null) {
-            throw new \Exception(
+            throw new \InvalidArgumentException(
                 'Must have either one of the RoleDescriptors or an AffiliationDescriptor in EntityDescriptor.'
             );
         }
 
         parent::__construct($id, $validUntil, $cacheDuration, $extensions);
 
-        $this->entityID = $entityID;
-        $this->setRoleDescriptor($roleDescriptors);
-        $this->AffiliationDescriptor = $affiliationDescriptor;
-        $this->Organization = $organization;
-        $this->setContactPerson($contacts);
-        $this->setAdditionalMetadataLocation($additionalMdLocations);
+        $this->setEntityID($entityID);
+        $this->setRoleDescriptors($roleDescriptors);
+        $this->setAffiliationDescriptor($affiliationDescriptor);
+        $this->setOrganization($organization);
+        $this->setContactPersons($contacts);
+        $this->setAdditionalMetadataLocations($additionalMdLocations);
     }
 
 
@@ -113,15 +113,21 @@ final class EntityDescriptor extends AbstractMetadataDocument
      * Convert an existing XML into an EntityDescriptor object
      *
      * @param \DOMElement $xml An existing EntityDescriptor XML document.
-     *
      * @return \SAML2\XML\md\EntityDescriptor An object representing the given document.
-     * @throws \Exception If an error occurs while processing the XML document.
+     * @throws \InvalidArgumentException if the qualified name of the supplied element is wrong
+     * @throws \Exception
      */
     public static function fromXML(DOMElement $xml): object
     {
+        Assert::same($xml->localName, 'EntityDescriptor');
+        Assert::same($xml->namespaceURI, EntityDescriptor::NS);
+
         $validUntil = self::getAttribute($xml, 'validUntil', null);
         $extensions = Extensions::getChildrenOfClass($xml);
         Assert::maxCount($extensions, 1, 'Only one md:Extensions element is allowed.');
+
+        $signature = Signature::getChildrenOfClass($xml);
+        Assert::maxCount($signature, 1, 'Only one ds:Signature element is allowed.');
 
         $roleDescriptors = [];
         $affiliationDescriptor = null;
@@ -131,18 +137,18 @@ final class EntityDescriptor extends AbstractMetadataDocument
         foreach ($xml->childNodes as $node) {
             if (!($node instanceof DOMElement)) {
                 continue;
-            }
-
-            if ($node->namespaceURI !== Constants::NS_MD) {
+            } elseif ($node->namespaceURI !== Constants::NS_MD) {
                 continue;
             }
 
             switch ($node->localName) {
+                case 'Extensions':
+                    continue 2;
                 case 'IDPSSODescriptor':
                     $roleDescriptors[] = IDPSSODescriptor::fromXML($node);
                     break;
                 case 'SPSSODescriptor':
-                    $roleDescriptors[] = new SPSSODescriptor($node);
+                    $roleDescriptors[] = SPSSODescriptor::fromXML($node);
                     break;
                 case 'AuthnAuthorityDescriptor':
                     $roleDescriptors[] = AuthnAuthorityDescriptor::fromXML($node);
@@ -155,13 +161,13 @@ final class EntityDescriptor extends AbstractMetadataDocument
                     break;
                 case 'AffiliationDescriptor':
                     if ($affiliationDescriptor !== null) {
-                        throw new \Exception('More than one AffiliationDescriptor in the entity.');
+                        throw new \InvalidArgumentException('More than one AffiliationDescriptor in the entity.');
                     }
                     $affiliationDescriptor = AffiliationDescriptor::fromXML($node);
                     break;
                 case 'Organization':
                     if ($organization !== null) {
-                        throw new \Exception('More than one Organization in the entity.');
+                        throw new \InvalidArgumentException('More than one Organization in the entity.');
                     }
                     $organization = Organization::fromXML($node);
                     break;
@@ -177,16 +183,16 @@ final class EntityDescriptor extends AbstractMetadataDocument
         }
 
         if (empty($roleDescriptors) && is_null($affiliationDescriptor)) {
-            throw new \Exception(
+            throw new \InvalidArgumentException(
                 'Must have either one of the RoleDescriptors or an AffiliationDescriptor in EntityDescriptor.'
             );
         } elseif (!empty($roleDescriptors) && !is_null($affiliationDescriptor)) {
-            throw new \Exception(
+            throw new \InvalidArgumentException(
                 'AffiliationDescriptor cannot be combined with other RoleDescriptor elements in EntityDescriptor.'
             );
         }
 
-        return new self(
+        $entity = new self(
             self::getAttribute($xml, 'entityID'),
             self::getAttribute($xml, 'ID', null),
             $validUntil !== null ? Utils::xsDateTimeToTimestamp($validUntil) : null,
@@ -198,6 +204,10 @@ final class EntityDescriptor extends AbstractMetadataDocument
             $contactPersons,
             $additionalMetadataLocation
         );
+        if (!empty($signature)) {
+            $entity->setSignature($signature[0]);
+        }
+        return $entity;
     }
 
 
@@ -205,8 +215,7 @@ final class EntityDescriptor extends AbstractMetadataDocument
      * Collect the value of the entityID property.
      *
      * @return string
-     *
-     * @throws \InvalidArgumentException if assertions are false
+     * @throws \InvalidArgumentException
      */
     public function getEntityID(): string
     {
@@ -223,6 +232,8 @@ final class EntityDescriptor extends AbstractMetadataDocument
      */
     protected function setEntityID(string $entityId): void
     {
+        Assert::notEmpty($entityId, 'The entityID attribute cannot be empty.');
+        Assert::maxLength($entityId, 1024, 'The entityID attribute cannot be longer than 1024 characters.');
         $this->entityID = $entityId;
     }
 
@@ -232,7 +243,7 @@ final class EntityDescriptor extends AbstractMetadataDocument
      *
      * @return \SAML2\XML\md\AbstractRoleDescriptor[]
      */
-    public function getRoleDescriptor(): array
+    public function getRoleDescriptors(): array
     {
         return $this->RoleDescriptor;
     }
@@ -241,13 +252,17 @@ final class EntityDescriptor extends AbstractMetadataDocument
     /**
      * Set the value of the RoleDescriptor property.
      *
-     * @param \SAML2\XML\md\AbstractRoleDescriptor[] $roleDescriptor
-     *
+     * @param \SAML2\XML\md\AbstractRoleDescriptor[] $roleDescriptors
      * @return void
      */
-    protected function setRoleDescriptor(array $roleDescriptor): void
+    protected function setRoleDescriptors(array $roleDescriptors): void
     {
-        $this->RoleDescriptor = $roleDescriptor;
+        Assert::allIsInstanceOf(
+            $roleDescriptors,
+            AbstractRoleDescriptor::class,
+            'All role descriptors must extend AbstractRoleDescriptor.'
+        );
+        $this->RoleDescriptor = $roleDescriptors;
     }
 
 
@@ -268,7 +283,7 @@ final class EntityDescriptor extends AbstractMetadataDocument
      * @param \SAML2\XML\md\AffiliationDescriptor|null $affiliationDescriptor
      * @return void
      */
-    protected function setAffiliationDescriptor(AffiliationDescriptor $affiliationDescriptor = null): void
+    protected function setAffiliationDescriptor(?AffiliationDescriptor $affiliationDescriptor = null): void
     {
         $this->AffiliationDescriptor = $affiliationDescriptor;
     }
@@ -291,7 +306,7 @@ final class EntityDescriptor extends AbstractMetadataDocument
      * @param \SAML2\XML\md\Organization|null $organization
      * @return void
      */
-    protected function setOrganization(Organization $organization = null): void
+    protected function setOrganization(?Organization $organization = null): void
     {
         $this->Organization = $organization;
     }
@@ -302,7 +317,7 @@ final class EntityDescriptor extends AbstractMetadataDocument
      *
      * @return \SAML2\XML\md\ContactPerson[]
      */
-    public function getContactPerson(): array
+    public function getContactPersons(): array
     {
         return $this->ContactPerson;
     }
@@ -314,8 +329,13 @@ final class EntityDescriptor extends AbstractMetadataDocument
      * @param array $contactPerson
      * @return void
      */
-    protected function setContactPerson(array $contactPerson): void
+    protected function setContactPersons(array $contactPerson): void
     {
+        Assert::allIsInstanceOf(
+            $contactPerson,
+            ContactPerson::class,
+            'All md:ContactPerson elements must be an instance of ContactPerson.'
+        );
         $this->ContactPerson = $contactPerson;
     }
 
@@ -325,7 +345,7 @@ final class EntityDescriptor extends AbstractMetadataDocument
      *
      * @return \SAML2\XML\md\AdditionalMetadataLocation[]
      */
-    public function getAdditionalMetadataLocation(): array
+    public function getAdditionalMetadataLocations(): array
     {
         return $this->AdditionalMetadataLocation;
     }
@@ -337,8 +357,13 @@ final class EntityDescriptor extends AbstractMetadataDocument
      * @param array $additionalMetadataLocation
      * @return void
      */
-    protected function setAdditionalMetadataLocation(array $additionalMetadataLocation): void
+    protected function setAdditionalMetadataLocations(array $additionalMetadataLocation): void
     {
+        Assert::allIsInstanceOf(
+            $additionalMetadataLocation,
+            AdditionalMetadataLocation::class,
+            'All md:AdditionalMetadataLocation elements must be an instance of AdditionalMetadataLocation'
+        );
         $this->AdditionalMetadataLocation = $additionalMetadataLocation;
     }
 
@@ -348,39 +373,12 @@ final class EntityDescriptor extends AbstractMetadataDocument
      *
      * @param \DOMElement|null $parent The EntitiesDescriptor we should append this EntityDescriptor to.
      * @return \DOMElement
-     *
-     * @throws \InvalidArgumentException if assertions are false
+     * @throws \Exception
      */
     public function toXML(DOMElement $parent = null): DOMElement
     {
-        Assert::notEmpty($this->entityID, 'Cannot convert EntityDescriptor to XML without an EntityID set.');
-
-        if ($parent === null) {
-            $doc = DOMDocumentFactory::create();
-            $e = $doc->createElementNS(Constants::NS_MD, 'md:EntityDescriptor');
-            $doc->appendChild($e);
-        } else {
-            $e = $parent->ownerDocument->createElementNS(Constants::NS_MD, 'md:EntityDescriptor');
-            $parent->appendChild($e);
-        }
-
+        $e = parent::toXML($parent);
         $e->setAttribute('entityID', $this->entityID);
-
-        if ($this->ID !== null) {
-            $e->setAttribute('ID', $this->ID);
-        }
-
-        if ($this->validUntil !== null) {
-            $e->setAttribute('validUntil', gmdate('Y-m-d\TH:i:s\Z', $this->validUntil));
-        }
-
-        if ($this->cacheDuration !== null) {
-            $e->setAttribute('cacheDuration', $this->cacheDuration);
-        }
-
-        if (!empty($this->Extensions)) {
-            $this->Extensions->toXML($e);
-        }
 
         foreach ($this->RoleDescriptor as $n) {
             $n->toXML($e);
@@ -402,10 +400,6 @@ final class EntityDescriptor extends AbstractMetadataDocument
             $n->toXML($e);
         }
 
-        /** @var \DOMElement $child */
-        $child = $e->firstChild;
-        $this->signElement($e, $child);
-
-        return $e;
+        return $this->signElement($e);
     }
 }

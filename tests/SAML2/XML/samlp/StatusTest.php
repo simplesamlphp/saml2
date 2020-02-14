@@ -17,16 +17,47 @@ use SAML2\XML\Chunk;
  */
 class StatusTest extends \PHPUnit\Framework\TestCase
 {
+    /** @var \DOMDocument */
+    private $document;
+
+    /** @var \DOMDocument */
+    private $detail;
+
+
+    /**
+     * @return void
+     */
+    public function setUp(): void
+    {
+        $nssamlp = Status::NS;
+        $status_responder = Constants::STATUS_RESPONDER;
+        $status_request_denied = Constants::STATUS_REQUEST_DENIED;
+
+        $this->document = DOMDocumentFactory::fromString(<<<XML
+<samlp:Status xmlns:samlp="{$nssamlp}">
+  <samlp:StatusCode Value="{$status_responder}">
+    <samlp:StatusCode Value="{$status_request_denied}"/>
+  </samlp:StatusCode>
+  <samlp:StatusMessage>Something went wrong</samlp:StatusMessage>
+  <samlp:StatusDetail>
+    <Cause>org.sourceid.websso.profiles.idp.FailedAuthnSsoException</Cause>
+  </samlp:StatusDetail>
+</samlp:Status>
+XML
+        );
+
+        $this->detail = DOMDocumentFactory::fromString(<<<XML
+<Cause>org.sourceid.websso.profiles.idp.FailedAuthnSsoException</Cause>
+XML
+        );
+    }
+
+
     /**
      * @return void
      */
     public function testMarshalling(): void
     {
-        /** @psalm-var \DOMElement $document->firstChild */
-        $document = DOMDocumentFactory::fromString(
-            '<Cause>org.sourceid.websso.profiles.idp.FailedAuthnSsoException</Cause>'
-        );
-
         $status = new Status(
             new StatusCode(
                 Constants::STATUS_RESPONDER,
@@ -38,27 +69,8 @@ class StatusTest extends \PHPUnit\Framework\TestCase
             ),
             new StatusMessage('Something went wrong'),
             [
-                new StatusDetail([new Chunk($document->documentElement)])
+                new StatusDetail([new Chunk($this->detail->documentElement)])
             ]
-        );
-
-        $nssamlp = Status::NS;
-        $status_responder = Constants::STATUS_RESPONDER;
-        $status_request_denied = Constants::STATUS_REQUEST_DENIED;
-
-        $this->assertEquals(<<<XML
-<samlp:Status xmlns:samlp="{$nssamlp}">
-  <samlp:StatusCode Value="{$status_responder}">
-    <samlp:StatusCode Value="{$status_request_denied}"/>
-  </samlp:StatusCode>
-  <samlp:StatusMessage>Something went wrong</samlp:StatusMessage>
-  <samlp:StatusDetail>
-    <Cause>org.sourceid.websso.profiles.idp.FailedAuthnSsoException</Cause>
-  </samlp:StatusDetail>
-</samlp:Status>
-XML
-            ,
-            strval($status)
         );
 
         $document = DOMDocumentFactory::fromString('<root />');
@@ -85,6 +97,11 @@ XML
         $this->assertCount(1, $statusDetailElements);
         $this->assertEquals('Cause', $statusDetailElements[0]->childNodes[0]->tagName);
         $this->assertEquals('org.sourceid.websso.profiles.idp.FailedAuthnSsoException', $statusDetailElements[0]->childNodes[0]->textContent);
+
+        $this->assertEquals(
+            $this->document->saveXML($this->document->documentElement),
+            strval($status)
+        );
     }
 
 
@@ -93,27 +110,11 @@ XML
      */
     public function testUnmarshalling(): void
     {
-        $nssamlp = Status::NS;
-        $document = DOMDocumentFactory::fromString(<<<XML
-<samlp:Status xmlns:samlp="{$nssamlp}">
-  <samlp:StatusCode Value="urn:oasis:names:tc:SAML:2.0:status:Responder">
-    <samlp:StatusCode Value="urn:oasis:names:tc:SAML:2.0:status:RequestDenied"/>
-  </samlp:StatusCode>
-  <samlp:StatusMessage>Something went wrong</samlp:StatusMessage>
-  <samlp:StatusDetail>
-    <Cause>org.sourceid.websso.profiles.idp.FailedAuthnSsoException</Cause>
-  </samlp:StatusDetail>
-</samlp:Status>
-XML
-        );
-
-        /** @psalm-var \DOMElement $document->firstChild */
-        $status = Status::fromXML($document->firstChild);
+        $status = Status::fromXML($this->document->documentElement);
 
         $statusCode = $status->getStatusCode();
         $this->assertEquals(Constants::STATUS_RESPONDER, $statusCode->getValue());
 
-        /** @psalm-var StatusCode[] $subCodes */
         $subCodes = $status->getStatusCode()->getSubCodes();
         $this->assertCount(1, $subCodes);
 
@@ -123,16 +124,25 @@ XML
         $statusMessage = $status->getStatusMessage();
         $this->assertEquals('Something went wrong', $statusMessage->getMessage());
 
-        /** @psalm-var \SAML2\XML\samlp\StatusDetail[] $statusDetails */
         $statusDetails = $status->getStatusDetails();
         $this->assertCount(1, $statusDetails);
 
-        /** @psalm-var \SAML2\XML\Chunk[] $detailElement */
         $detailElement = $statusDetails[0]->getDetails();
         $detailElement = $detailElement[0]->getXML();
 
         $this->assertEquals('Cause', $detailElement->tagName);
         $this->assertEquals('org.sourceid.websso.profiles.idp.FailedAuthnSsoException', $detailElement->textContent);
     }
-}
 
+
+    /**
+     * Test serialization / unserialization
+     */
+    public function testSerialization(): void
+    {
+        $this->assertEquals(
+            $this->document->saveXML($this->document->documentElement),
+            strval(unserialize(serialize(Status::fromXML($this->document->documentElement))))
+        );
+    }
+}

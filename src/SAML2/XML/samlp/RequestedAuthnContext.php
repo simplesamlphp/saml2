@@ -16,7 +16,7 @@ use Webmozart\Assert\Assert;
  * Class representing SAML2 RequestedAuthnContext
  *
  * @author Tim van Dijen, <tvdijen@gmail.com>
- * @package SimpleSAMLphp
+ * @package simplesamlphp/saml2
  */
 final class RequestedAuthnContext extends AbstractSamlpElement
 {
@@ -60,6 +60,7 @@ final class RequestedAuthnContext extends AbstractSamlpElement
      *
      * @param (\SAML2\XML\saml\AuthnContextClassRef|\SAML2\XML\saml\AuthnContextDeclRef|mixed)[] $requestedAuthnContexts
      * @return void
+     * @throws \InvalidArgumentException
      */
     private function setRequestedAuthnContexts(array $requestedAuthnContexts): void
     {
@@ -112,6 +113,7 @@ final class RequestedAuthnContext extends AbstractSamlpElement
      *
      * @param \DOMElement $xml The XML element we should load
      * @return \SAML2\XML\samlp\RequestedAuthnContext
+     * @throws \InvalidArgumentException if the qualified name of the supplied element is wrong
      */
     public static function fromXML(DOMElement $xml): object
     {

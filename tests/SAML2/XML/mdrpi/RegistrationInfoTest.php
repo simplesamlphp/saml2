@@ -5,15 +5,36 @@ declare(strict_types=1);
 namespace SAML2\XML\mdrpi;
 
 use Exception;
+use PHPUnit\Framework\TestCase;
 use SAML2\DOMDocumentFactory;
-use SAML2\XML\mdrpi\RegistrationInfo;
 use SAML2\Utils;
 
 /**
  * Class \SAML2\XML\mdrpi\RegistrationInfoTest
  */
-class RegistrationInfoTest extends \PHPUnit\Framework\TestCase
+class RegistrationInfoTest extends TestCase
 {
+    /** @var \DOMDocument */
+    protected $document;
+
+
+    /**
+     * @return void
+     */
+    protected function setUp(): void
+    {
+        $this->document = DOMDocumentFactory::fromString(<<<XML
+<mdrpi:RegistrationInfo xmlns:mdrpi="urn:oasis:names:tc:SAML:metadata:rpi"
+                        registrationAuthority="urn:example:example.org"
+                        registrationInstant="2006-05-29T11:34:27Z">
+  <mdrpi:RegistrationPolicy xml:lang="en">http://www.example.org/aai/metadata/en_registration.html</mdrpi:RegistrationPolicy>
+  <mdrpi:RegistrationPolicy xml:lang="de">http://www.example.org/aai/metadata/de_registration.html</mdrpi:RegistrationPolicy>
+</mdrpi:RegistrationInfo>
+XML
+        );
+    }
+
+
     /**
      * @return void
      */
@@ -29,8 +50,9 @@ class RegistrationInfoTest extends \PHPUnit\Framework\TestCase
         );
 
         $document = DOMDocumentFactory::fromString('<root />');
-        $xml = $registrationInfo->toXML($document->firstChild);
+        $xml = $registrationInfo->toXML($document->documentElement);
 
+        /** @var \DOMElement[] $registrationInfoElements */
         $registrationInfoElements = Utils::xpQuery(
             $xml,
             '/root/*[local-name()=\'RegistrationInfo\' and namespace-uri()=\'urn:oasis:names:tc:SAML:metadata:rpi\']'
@@ -44,6 +66,7 @@ class RegistrationInfoTest extends \PHPUnit\Framework\TestCase
         );
         $this->assertEquals('2009-02-13T23:31:30Z', $registrationInfoElement->getAttribute("registrationInstant"));
 
+        /** @var \DOMElement[] $usagePolicyElements */
         $usagePolicyElements = Utils::xpQuery(
             $registrationInfoElement,
             './*[local-name()=\'RegistrationPolicy\' and namespace-uri()=\'urn:oasis:names:tc:SAML:metadata:rpi\']'
@@ -68,21 +91,7 @@ class RegistrationInfoTest extends \PHPUnit\Framework\TestCase
      */
     public function testUnmarshalling(): void
     {
-        $document = DOMDocumentFactory::fromString(<<<XML
-<mdrpi:RegistrationInfo xmlns:mdrpi="urn:oasis:names:tc:SAML:metadata:rpi"
-                        registrationAuthority="urn:example:example.org"
-                        registrationInstant="2006-05-29T11:34:27Z">
-        <mdrpi:RegistrationPolicy xml:lang="en">
-          http://www.example.org/aai/metadata/en_registration.html
-        </mdrpi:RegistrationPolicy>
-        <mdrpi:RegistrationPolicy xml:lang="de">
-          http://www.example.org/aai/metadata/de_registration.html
-        </mdrpi:RegistrationPolicy>
-</mdrpi:RegistrationInfo>
-XML
-        );
-
-        $registrationInfo = RegistrationInfo::fromXML($document->firstChild);
+        $registrationInfo = RegistrationInfo::fromXML($this->document->documentElement);
 
         $this->assertEquals('urn:example:example.org', $registrationInfo->getRegistrationAuthority());
         $this->assertEquals(1148902467, $registrationInfo->getRegistrationInstant());
@@ -108,6 +117,18 @@ XML
 
         $this->expectException(Exception::class);
         $this->expectExceptionMessage('Missing required attribute "registrationAuthority"');
-        $registrationInfo = RegistrationInfo::fromXML($document->firstChild);
+        RegistrationInfo::fromXML($document->documentElement);
+    }
+
+
+    /**
+     * Test serialization / unserialization
+     */
+    public function testSerialization(): void
+    {
+        $this->assertEquals(
+            $this->document->saveXML($this->document->documentElement),
+            strval(unserialize(serialize(RegistrationInfo::fromXML($this->document->documentElement))))
+        );
     }
 }

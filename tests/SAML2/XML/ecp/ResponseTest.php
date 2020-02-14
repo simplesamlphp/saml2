@@ -6,52 +6,41 @@ namespace SAML2\XML\ecp;
 
 use DOMDocument;
 use DOMElement;
-use Exception;
 use InvalidArgumentException;
 use SAML2\Constants;
 use SAML2\DOMDocumentFactory;
 use SAML2\XML\ecp\Response;
 
-class ResponseTest extends \PHPUnit\Framework\TestCase
+final class ResponseTest extends \PHPUnit\Framework\TestCase
 {
+    /** @var \DOMDocument */
+    private $document;
+
+
     /**
      * @return void
      */
-    public function testToXMLReturnsResponse(): void
+    public function setUp(): void
     {
-        $doc = new DOMDocument();
-        $element = $doc->createElement('Foobar');
-
-        $response = new Response('https://example.com/ACS');
-        $return = $response->toXML($element);
-
-        $this->assertInstanceOf(DOMElement::class, $return);
-        $this->assertEquals('ecp:Response', $return->tagName);
+        $ns = Response::NS;
+        $ns_soap = Constants::NS_SOAP;
+        $this->document = DOMDocumentFactory::fromString(<<<XML
+<ecp:Response xmlns:ecp="{$ns}" xmlns:SOAP-ENV="{$ns_soap}" SOAP-ENV:mustUnderstand="1" SOAP-ENV:actor="http://schemas.xmlsoap.org/soap/actor/next" AssertionConsumerServiceURL="https://example.com/ACS"/>
+XML
+        );
     }
 
 
     /**
      * @return void
      */
-    public function testToXMLResponseAttributes(): void
+    public function testMarshalling(): void
     {
-        $acs = 'https://example.com/ACS';
+        $response = new Response('https://example.com/ACS');
 
-        $doc = new DOMDocument();
-        $element = $doc->createElement('Foobar');
+        $this->assertEquals('https://example.com/ACS', $response->getAssertionConsumerServiceURL());
 
-        $response = new Response($acs);
-        $return = $response->toXML($element);
-
-        $this->assertTrue($return->hasAttributeNS(Constants::NS_SOAP, 'mustUnderstand'));
-        $this->assertEquals('1', $return->getAttributeNS(Constants::NS_SOAP, 'mustUnderstand'));
-        $this->assertTrue($return->hasAttributeNS(Constants::NS_SOAP, 'actor'));
-        $this->assertEquals(
-            'http://schemas.xmlsoap.org/soap/actor/next',
-            $return->getAttributeNS(Constants::NS_SOAP, 'actor')
-        );
-        $this->assertTrue($return->hasAttribute('AssertionConsumerServiceURL'));
-        $this->assertEquals($response->getAssertionConsumerServiceURL(), $return->getAttribute('AssertionConsumerServiceURL'));
+        $this->assertEquals($this->document->saveXML($this->document->documentElement), strval($response));
     }
 
 
@@ -90,14 +79,9 @@ class ResponseTest extends \PHPUnit\Framework\TestCase
      */
     public function testUnmarshalling(): void
     {
-        $document = DOMDocumentFactory::fromString(
-            '<ecp:Response xmlns:ecp="' . Response::NS . '" xmlns:SOAP-ENV="'. Constants::NS_SOAP
-                . '" SOAP-ENV:mustUnderstand="1"' . ' SOAP-ENV:actor="http://schemas.xmlsoap.org/soap/actor/next"'
-                . ' AssertionConsumerServiceURL="https://example.com/ACS"/>'
-        );
-        $response = Response::fromXML($document->firstChild);
+        $response = Response::fromXML($this->document->documentElement);
 
-        $this->assertEquals($response->getAssertionConsumerServiceURL(), 'https://example.com/ACS');
+        $this->assertEquals('https://example.com/ACS', $response->getAssertionConsumerServiceURL());
     }
 
 
@@ -106,29 +90,26 @@ class ResponseTest extends \PHPUnit\Framework\TestCase
      */
     public function testUnmarshallingWithMissingMustUnderstandThrowsException(): void
     {
-        $document = DOMDocumentFactory::fromString(
-            '<ecp:Response xmlns:ecp="' . Response::NS . '" xmlns:SOAP-ENV="'. Constants::NS_SOAP
-                . '" SOAP-ENV:actor="http://schemas.xmlsoap.org/soap/actor/next"'
-                . ' AssertionConsumerServiceURL="https://example.com/ACS"/>'
-        );
+        $document = $this->document->documentElement;
+        $document->removeAttributeNS(Constants::NS_SOAP, 'mustUnderstand');
 
-        $this->expectException(Exception::class);
+        $this->expectException(InvalidArgumentException::class);
         $this->expectExceptionMessage('Missing SOAP-ENV:mustUnderstand attribute in <ecp:Response>.');
-        Response::fromXML($document->firstChild);
+
+        Response::fromXML($document);
     }
     /**
      * @return void
      */
     public function testUnmarshallingWithMissingActorThrowsException(): void
     {
-        $document = DOMDocumentFactory::fromString(
-            '<ecp:Response xmlns:ecp="' . Response::NS . '" xmlns:SOAP-ENV="'. Constants::NS_SOAP
-                . '" SOAP-ENV:mustUnderstand="1"' . ' AssertionConsumerServiceURL="https://example.com/ACS"/>'
-        );
+        $document = $this->document->documentElement;
+        $document->removeAttributeNS(Constants::NS_SOAP, 'actor');
 
-        $this->expectException(Exception::class);
+        $this->expectException(InvalidArgumentException::class);
         $this->expectExceptionMessage('Missing SOAP-ENV:actor attribute in <ecp:Response>.');
-        Response::fromXML($document->firstChild);
+
+        Response::fromXML($document);
     }
 
 
@@ -137,13 +118,24 @@ class ResponseTest extends \PHPUnit\Framework\TestCase
      */
     public function testUnmarshallingWithMissingACSThrowsException(): void
     {
-        $document = DOMDocumentFactory::fromString(
-            '<ecp:Response xmlns:ecp="' . Response::NS . '" xmlns:SOAP-ENV="'. Constants::NS_SOAP
-                . '" SOAP-ENV:mustUnderstand="1"' . ' SOAP-ENV:actor="http://schemas.xmlsoap.org/soap/actor/next"/>'
-        );
+        $document = $this->document->documentElement;
+        $document->removeAttribute('AssertionConsumerServiceURL');
 
-        $this->expectException(Exception::class);
+        $this->expectException(InvalidArgumentException::class);
         $this->expectExceptionMessage('Missing AssertionConsumerServiceURL attribute in <ecp:Response>.');
-        Response::fromXML($document->firstChild);
+
+        Response::fromXML($document);
+    }
+
+
+    /**
+     * Test serialization / unserialization
+     */
+    public function testSerialization(): void
+    {
+        $this->assertEquals(
+            $this->document->saveXML($this->document->documentElement),
+            strval(unserialize(serialize(Response::fromXML($this->document->documentElement))))
+        );
     }
 }

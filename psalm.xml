@@ -13,10 +13,14 @@
     <file name="tests/SAML2/XML/saml/AuthnContextDeclTest.php" />
     <file name="tests/SAML2/XML/saml/AuthnContextTest.php" />
     <file name="tests/SAML2/XML/samlp/RequestedAuthnContextTest.php" />
-    <file name="tests/SAML2/XML/samlp/StatusTest.php" />
-    <file name="tests/SAML2/XML/samlp/StatusCodeTest.php" />
-    <file name="tests/SAML2/XML/samlp/StatusMessageTest.php" />
-    <file name="tests/SAML2/XML/samlp/StatusDetailTest.php" />
+    <directory name="tests/SAML2/XML/alg" />
+    <directory name="tests/SAML2/XML/ds" />
+    <directory name="tests/SAML2/XML/ecp" />
+    <directory name="tests/SAML2/XML/md" />
+    <directory name="tests/SAML2/XML/mdrpi" />
+    <directory name="tests/SAML2/XML/mdui" />
+    <directory name="tests/SAML2/XML/samlp" />
+    <directory name="tests/SAML2/XML/shibmd" />
     <ignoreFiles>
       <directory name="vendor" />
     </ignoreFiles>
@@ -29,12 +33,10 @@
     <DeprecatedMethod errorLevel="info" />
 
     <MissingClosureReturnType errorLevel="info" />
-    <MissingReturnType errorLevel="info" />
     <MissingPropertyType errorLevel="info" />
     <InvalidDocblock errorLevel="info" />
     <MisplacedRequiredParam errorLevel="info" />
 
-    <PropertyNotSetInConstructor errorLevel="info" />
     <MissingConstructor errorLevel="info" />
     <MissingClosureParamType errorLevel="info" />
     <MissingParamType errorLevel="info" />
@@ -42,5 +44,21 @@
     <PossiblyUnusedMethod errorLevel="info" />
     <PropertyNotSetInConstructor errorLevel="suppress" />
     <MissingClosureReturnType errorLevel="suppress" />
+
+    <PropertyNotSetInConstructor>
+      <errorLevel type="info">
+        <directory name="tests/SAML2/XML" />
+      </errorLevel>
+      <errorLevel type="suppress">
+        <directory name="tests" />
+      </errorLevel>
+    <PropertyNotSetInConstructor />
+
+    <InternalMethod>
+      <errorLevel type="suppress">
+        <directory name="tests" />
+      </errorLevel>
+    <InternalMethod />
+
   </issueHandlers>
 </psalm>

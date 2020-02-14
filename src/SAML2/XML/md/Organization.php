@@ -49,7 +49,7 @@ final class Organization extends AbstractMdElement
      *
      * @param \SAML2\XML\md\OrganizationName[] $organizationName
      * @param \SAML2\XML\md\OrganizationDisplayName[] $organizationDisplayName
-     * @param array $organizationURL
+     * @param string[] $organizationURL
      * @param \SAML2\XML\md\Extensions|null $extensions
      */
     public function __construct(
@@ -80,6 +80,8 @@ final class Organization extends AbstractMdElement
      * Set the value of the OrganizationName property.
      *
      * @param \SAML2\XML\md\OrganizationName[] $organizationName
+     * @return void
+     * @throws \InvalidArgumentException
      */
     protected function setOrganizationName(array $organizationName): void
     {
@@ -103,6 +105,8 @@ final class Organization extends AbstractMdElement
      * Set the value of the OrganizationDisplayName property.
      *
      * @param \SAML2\XML\md\OrganizationDisplayName[] $organizationDisplayName
+     * @return void
+     * @throws \InvalidArgumentException
      */
     protected function setOrganizationDisplayName(array $organizationDisplayName): void
     {
@@ -125,7 +129,8 @@ final class Organization extends AbstractMdElement
     /**
      * Set the value of the OrganizationURL property.
      *
-     * @param array $organizationURL
+     * @param string[] $organizationURL
+     * @throws \InvalidArgumentException
      */
     protected function setOrganizationURL(array $organizationURL): void
     {
@@ -140,7 +145,8 @@ final class Organization extends AbstractMdElement
      * @param \DOMElement $xml The XML element we should load.
      *
      * @return self
-     * @throws \Exception if the XML lacks any of the mandatory elements.
+     * @throws \InvalidArgumentException if the qualified name of the supplied element is wrong
+     * @throws \InvalidArgumentException if the XML lacks any of the mandatory elements.
      */
     public static function fromXML(DOMElement $xml): object
     {
@@ -167,10 +173,7 @@ final class Organization extends AbstractMdElement
      * Convert this Organization to XML.
      *
      * @param \DOMElement|null $parent The element we should add this organization to.
-     *
      * @return \DOMElement This Organization-element.
-     *
-     * @throws \InvalidArgumentException if assertions are false
      */
     public function toXML(DOMElement $parent = null): DOMElement
     {

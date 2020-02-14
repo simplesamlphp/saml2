@@ -12,7 +12,7 @@ use Webmozart\Assert\Assert;
 /**
  * Class representing a ds:X509Data element.
  *
- * @package SimpleSAMLphp
+ * @package simplesamlphp/saml2
  */
 final class X509Data extends AbstractDsElement
 {
@@ -22,7 +22,7 @@ final class X509Data extends AbstractDsElement
      * Array with various elements describing this certificate.
      * Unknown elements will be represented by \SAML2\XML\Chunk.
      *
-     * @var (\SAML2\XML\Chunk|\SAML2\XML\ds\X509Certificate)[]
+     * @var (\SAML2\XML\Chunk|\SAML2\XML\ds\X509Certificate|\SAML2\XML\ds\X509SubjectName)[]
      */
     protected $data = [];
 
@@ -30,7 +30,7 @@ final class X509Data extends AbstractDsElement
     /**
      * Initialize a X509Data.
      *
-     * @param (\SAML2\XML\Chunk|\SAML2\XML\ds\X509Certificate)[] $data
+     * @param (\SAML2\XML\Chunk|\SAML2\XML\ds\X509Certificate|\SAML2\XML\ds\X509SubjectName)[] $data
      */
     public function __construct(array $data)
     {
@@ -41,7 +41,7 @@ final class X509Data extends AbstractDsElement
     /**
      * Collect the value of the data-property
      *
-     * @return array
+     * @return (\SAML2\XML\Chunk|\SAML2\XML\ds\X509Certificate|\SAML2\XML\ds\X509SubjectName)[]
      */
     public function getData(): array
     {
@@ -52,30 +52,15 @@ final class X509Data extends AbstractDsElement
     /**
      * Set the value of the data-property
      *
-     * @param array $data
+     * @param (\SAML2\XML\Chunk|\SAML2\XML\ds\X509Certificate|\SAML2\XML\ds\X509SubjectName)[] $data
      * @return void
+     * @throws \InvalidArgumentException if $data contains anything other than X509Certificate or Chunk
      */
     private function setData(array $data): void
     {
-        Assert::allIsInstanceOfAny($data, [Chunk::class, X509Certificate::class]);
+        Assert::allIsInstanceOfAny($data, [Chunk::class, X509Certificate::class, X509SubjectName::class]);
 
         $this->data = $data;
-    }
-
-
-    /**
-     * Add the value to the data-property
-     *
-     * @param \SAML2\XML\Chunk|\SAML2\XML\ds\X509Certificate $data
-     * @return void
-     *
-     * @throws \InvalidArgumentException if assertions are false
-     */
-    public function addData($data): void
-    {
-        Assert::isInstanceOfAny($data, [Chunk::class, X509Certificate::class]);
-
-        $this->data[] = $data;
     }
 
 
@@ -84,6 +69,7 @@ final class X509Data extends AbstractDsElement
      *
      * @param \DOMElement $xml The XML element we should load
      * @return self
+     * @throws \InvalidArgumentException if the qualified name of the supplied element is wrong
      */
     public static function fromXML(DOMElement $xml): object
     {
@@ -95,9 +81,7 @@ final class X509Data extends AbstractDsElement
         for ($n = $xml->firstChild; $n !== null; $n = $n->nextSibling) {
             if (!($n instanceof DOMElement)) {
                 continue;
-            }
-
-            if ($n->namespaceURI !== self::NS) {
+            } elseif ($n->namespaceURI !== self::NS) {
                 $data[] = new Chunk($n);
                 continue;
             }
@@ -105,6 +89,9 @@ final class X509Data extends AbstractDsElement
             switch ($n->localName) {
                 case 'X509Certificate':
                     $data[] = X509Certificate::fromXML($n);
+                    break;
+                case 'X509SubjectName':
+                    $data[] = X509SubjectName::fromXML($n);
                     break;
                 default:
                     $data[] = new Chunk($n);
@@ -126,7 +113,6 @@ final class X509Data extends AbstractDsElement
     {
         $e = $this->instantiateParentElement($parent);
 
-        /** @var \SAML2\XML\Chunk|\SAML2\XML\ds\X509Certificate $n */
         foreach ($this->getData() as $n) {
             $n->toXML($e);
         }

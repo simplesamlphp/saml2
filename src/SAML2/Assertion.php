@@ -1425,7 +1425,7 @@ class Assertion extends SignedElement
      *
      * The certificates should be strings with the PEM encoded data.
      *
-     * @param array $certificates An array of certificates.
+     * @param string[] $certificates An array of certificates.
      * @return void
      */
     public function setCertificates(array $certificates): void
@@ -1437,7 +1437,7 @@ class Assertion extends SignedElement
     /**
      * Retrieve the certificates that are included in the assertion.
      *
-     * @return array An array of certificates.
+     * @return string[] An array of certificates.
      */
     public function getCertificates(): array
     {

@@ -5,8 +5,8 @@ declare(strict_types=1);
 namespace SAML2\XML\md;
 
 use DOMElement;
-use SAML2\DOMDocumentFactory;
 use SAML2\Utils;
+use SAML2\XML\ds\Signature;
 use Webmozart\Assert\Assert;
 
 /**
@@ -33,18 +33,18 @@ final class EntitiesDescriptor extends AbstractMetadataDocument
     /**
      * EntitiesDescriptor constructor.
      *
-     * @param string|null $name
      * @param \SAML2\XML\md\EntityDescriptor[]|null $entityDescriptors
      * @param \SAML2\XML\md\EntitiesDescriptor[]|null $entitiesDescriptors
+     * @param string|null $name
      * @param string|null $ID
      * @param int|null $validUntil
      * @param string|null $cacheDuration
      * @param \SAML2\XML\md\Extensions|null $extensions
      */
     public function __construct(
-        ?string $name = null,
         ?array $entityDescriptors = null,
         ?array $entitiesDescriptors = null,
+        ?string $name = null,
         ?string $ID = null,
         ?int $validUntil = null,
         ?string $cacheDuration = null,
@@ -54,10 +54,50 @@ final class EntitiesDescriptor extends AbstractMetadataDocument
             !empty($entitiesDescriptors) || !empty($entityDescriptors),
             'At least one md:EntityDescriptor or md:EntitiesDescriptor element is required.'
         );
+
         parent::__construct($ID, $validUntil, $cacheDuration, $extensions);
+
         $this->setName($name);
         $this->setEntityDescriptors($entityDescriptors);
         $this->setEntitiesDescriptors($entitiesDescriptors);
+    }
+
+
+    /**
+     * Initialize an EntitiesDescriptor from an existing XML document.
+     *
+     * @param \DOMElement $xml The XML element we should load.
+     * @return \SAML2\XML\md\EntitiesDescriptor
+     * @throws \InvalidArgumentException if the qualified name of the supplied element is wrong
+     */
+    public static function fromXML(DOMElement $xml): object
+    {
+        Assert::same($xml->localName, 'EntitiesDescriptor');
+        Assert::same($xml->namespaceURI, EntitiesDescriptor::NS);
+
+        $validUntil = self::getAttribute($xml, 'validUntil', null);
+        $orgs = Organization::getChildrenOfClass($xml);
+        Assert::maxCount($orgs, 1, 'More than one Organization found in this descriptor');
+
+        $extensions = Extensions::getChildrenOfClass($xml);
+        Assert::maxCount($extensions, 1, 'Only one md:Extensions element is allowed.');
+
+        $signature = Signature::getChildrenOfClass($xml);
+        Assert::maxCount($signature, 1, 'Only one ds:Signature element is allowed.');
+
+        $entities = new self(
+            EntityDescriptor::getChildrenOfClass($xml),
+            EntitiesDescriptor::getChildrenOfClass($xml),
+            self::getAttribute($xml, 'Name', null),
+            self::getAttribute($xml, 'ID', null),
+            $validUntil !== null ? Utils::xsDateTimeToTimestamp($validUntil) : null,
+            self::getAttribute($xml, 'cacheDuration', null),
+            !empty($extensions) ? $extensions[0] : null
+        );
+        if (!empty($signature)) {
+            $entities->setSignature($signature[0]);
+        }
+        return $entities;
     }
 
 
@@ -98,6 +138,7 @@ final class EntitiesDescriptor extends AbstractMetadataDocument
     }
 
 
+
     /**
      * Set the EntityDescriptor children objects
      *
@@ -135,36 +176,7 @@ final class EntitiesDescriptor extends AbstractMetadataDocument
         if ($name === null) {
             return;
         }
-        Assert::notEmpty($name, 'Cannot assign an empty name to an md:EntitiesDescriptor.');
         $this->Name = $name;
-    }
-
-
-    /**
-     * Initialize an EntitiesDescriptor from an existing XML document.
-     *
-     * @param \DOMElement $xml The XML element we should load.
-     * @return \SAML2\XML\md\EntitiesDescriptor
-     * @throws \Exception
-     */
-    public static function fromXML(DOMElement $xml): object
-    {
-        $validUntil = self::getAttribute($xml, 'validUntil', null);
-        $orgs = Organization::getChildrenOfClass($xml);
-        Assert::maxCount($orgs, 1, 'More than one Organization found in this descriptor');
-
-        $extensions = Extensions::getChildrenOfClass($xml);
-        Assert::maxCount($extensions, 1, 'Only one md:Extensions element is allowed.');
-
-        return new self(
-            self::getAttribute($xml, 'Name'),
-            EntityDescriptor::getChildrenOfClass($xml),
-            EntitiesDescriptor::getChildrenOfClass($xml),
-            self::getAttribute($xml, 'ID', null),
-            $validUntil !== null ? Utils::xsDateTimeToTimestamp($validUntil) : null,
-            self::getAttribute($xml, 'cacheDuration', null),
-            !empty($extensions) ? $extensions[0] : null
-        );
     }
 
 
@@ -173,6 +185,7 @@ final class EntitiesDescriptor extends AbstractMetadataDocument
      *
      * @param \DOMElement|null $parent The EntitiesDescriptor we should append this EntitiesDescriptor to.
      * @return \DOMElement
+     * @throws \Exception
      */
     public function toXML(DOMElement $parent = null): DOMElement
     {
@@ -190,8 +203,6 @@ final class EntitiesDescriptor extends AbstractMetadataDocument
             $entityDescriptor->toXML($e);
         }
 
-        $this->signElement($e, $e->firstChild);
-
-        return $e;
+        return $this->signElement($e);
     }
 }

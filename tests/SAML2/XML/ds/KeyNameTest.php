@@ -14,8 +14,24 @@ use SAML2\Utils;
  * @author Tim van Dijen, <tvdijen@gmail.com>
  * @package simplesamlphp/saml2
  */
-class KeyNameTest extends \PHPUnit\Framework\TestCase
+final class KeyNameTest extends \PHPUnit\Framework\TestCase
 {
+    /** @var \DOMDocument */
+    private $document;
+
+    /**
+     * @return void
+     */
+    protected function setUp(): void
+    {
+        $ns = KeyName::NS;
+        $this->document = DOMDocumentFactory::fromString(<<<XML
+<ds:KeyName xmlns:ds="{$ns}">testkey</ds:KeyName>
+XML
+        );
+    }
+
+
     /**
      * @return void
      */
@@ -23,16 +39,9 @@ class KeyNameTest extends \PHPUnit\Framework\TestCase
     {
         $keyName = new KeyName('testkey');
 
-        $document = DOMDocumentFactory::fromString('<root />');
-        $xml = $keyName->toXML($document->firstChild);
+        $this->assertEquals('testkey', $keyName->getName());
 
-        $keyNameElements = Utils::xpQuery(
-            $xml,
-            '/root/*[local-name()=\'KeyName\' and namespace-uri()=\'' . KeyName::NS . '\']'
-        );
-        $this->assertCount(1, $keyNameElements);
-        $keyNameElement = $keyNameElements[0];
-        $this->assertEquals('testkey', $keyNameElement->textContent);
+        $this->assertEquals($this->document->saveXML($this->document->documentElement), strval($keyName));
     }
 
 
@@ -41,11 +50,20 @@ class KeyNameTest extends \PHPUnit\Framework\TestCase
      */
     public function testUnmarshalling(): void
     {
-        $document = DOMDocumentFactory::fromString(
-            '<ds:KeyName xmlns:ds="' . KeyName::NS . '">testkey</ds:KeyName>'
-        );
+        $keyName = KeyName::fromXML($this->document->documentElement);
 
-        $keyInfo = keyName::fromXML($document->firstChild);
-        $this->assertEquals('testkey', $keyInfo->getName());
+        $this->assertEquals('testkey', $keyName->getName());
+    }
+
+
+    /**
+     * Test serialization / unserialization
+     */
+    public function testSerialization(): void
+    {
+        $this->assertEquals(
+            $this->document->saveXML($this->document->documentElement),
+            strval(unserialize(serialize(KeyName::fromXML($this->document->documentElement))))
+        );
     }
 }

@@ -11,7 +11,7 @@ use Webmozart\Assert\Assert;
  * Class for handling the Keywords metadata extensions for login and discovery user interface
  *
  * @link: http://docs.oasis-open.org/security/saml/Post2.0/sstc-saml-metadata-ui/v1.0/sstc-saml-metadata-ui-v1.0.pdf
- * @package SimpleSAMLphp
+ * @package simplesamlphp/saml2
  */
 final class Keywords extends AbstractMduiElement
 {
@@ -20,9 +20,9 @@ final class Keywords extends AbstractMduiElement
      *
      * Array of strings.
      *
-     * @var string[]|null
+     * @var string[]
      */
-    protected $Keywords = null;
+    protected $Keywords = [];
 
     /**
      * The language of this item.
@@ -38,7 +38,7 @@ final class Keywords extends AbstractMduiElement
      * @param string $lang
      * @param string[] $Keywords
      */
-    public function __construct(string $lang, array $Keywords = null)
+    public function __construct(string $lang, array $Keywords = [])
     {
         $this->setLanguage($lang);
         $this->setKeywords($Keywords);
@@ -49,8 +49,6 @@ final class Keywords extends AbstractMduiElement
      * Collect the value of the lang-property
      *
      * @return string
-     *
-     * @throws \InvalidArgumentException if assertions are false
      */
     public function getLanguage(): string
     {
@@ -73,9 +71,9 @@ final class Keywords extends AbstractMduiElement
     /**
      * Collect the value of the Keywords-property
      *
-     * @return string[]|null
+     * @return string[]
      */
-    public function getKeywords(): ?array
+    public function getKeywords(): array
     {
         return $this->Keywords;
     }
@@ -84,11 +82,14 @@ final class Keywords extends AbstractMduiElement
     /**
      * Set the value of the Keywords-property
      *
-     * @param string[]|null $keywords
+     * @param string[] $keywords
      * @return void
+     *
+     * @throws \InvalidArgumentException if one of the keywords contains `+`
      */
-    private function setKeywords(?array $keywords): void
+    private function setKeywords(array $keywords): void
     {
+        Assert::allNotContains($keywords, '+', 'Keywords may not contain a "+" character.');
         $this->Keywords = $keywords;
     }
 
@@ -98,12 +99,13 @@ final class Keywords extends AbstractMduiElement
      *
      * @param string $keyword
      * @return void
+     *
+     * @throws \InvalidArgumentException if the keyword contains a `+`
      */
     public function addKeyword(string $keyword): void
     {
-        $this->setKeywords(
-            empty($this->Keywords) ? [$keyword] : array_merge($this->Keywords, [$keyword])
-        );
+        Assert::NotContains($keyword, '+', 'Keyword may not contain a "+" character.');
+        $this->Keywords[] = $keyword;
     }
 
 
@@ -112,17 +114,16 @@ final class Keywords extends AbstractMduiElement
      *
      * @param \DOMElement $xml The XML element we should load
      * @return self
+     * @throws \InvalidArgumentException if the qualified name of the supplied element is wrong
      */
     public static function fromXML(DOMElement $xml): object
     {
         Assert::same($xml->localName, 'Keywords');
         Assert::same($xml->namespaceURI, Keywords::NS);
 
-        if (!$xml->hasAttribute('xml:lang')) {
-            throw new \Exception('Missing lang on Keywords.');
-        } elseif (!strlen($xml->textContent)) {
-            throw new \Exception('Missing value for Keywords.');
-        }
+        Assert::true($xml->hasAttribute('xml:lang'), 'Missing lang on Keywords.');
+        Assert::stringNotEmpty($xml->textContent, 'Missing value for Keywords.');
+
         $lang = $xml->getAttribute('xml:lang');
 
         $Keywords = [];
@@ -147,13 +148,8 @@ final class Keywords extends AbstractMduiElement
         $e->setAttribute('xml:lang', $this->lang);
 
         $value = '';
-        if (!empty($this->Keywords)) {
-            foreach ($this->Keywords as $keyword) {
-                if (strpos($keyword, "+") !== false) {
-                    throw new \Exception('Keywords may not contain a "+" character.');
-                }
-                $value .= str_replace(' ', '+', $keyword) . ' ';
-            }
+        foreach ($this->Keywords as $keyword) {
+            $value .= str_replace(' ', '+', $keyword) . ' ';
         }
 
         $e->appendChild($e->ownerDocument->createTextNode(rtrim($value)));

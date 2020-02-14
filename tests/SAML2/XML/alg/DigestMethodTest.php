@@ -15,8 +15,23 @@ use SAML2\Utils;
  * @author Jaime Pérez Crespo, UNINETT AS <jaime.perez@uninett.no>
  * @package simplesamlphp/saml2
  */
-class DigestMethodTest extends \PHPUnit\Framework\TestCase
+final class DigestMethodTest extends \PHPUnit\Framework\TestCase
 {
+    /** @var \DOMDocument */
+    private $document;
+
+
+    /**
+     * @return void
+     */
+    protected function setUp(): void
+    {
+        $this->document = DOMDocumentFactory::fromString(
+            '<alg:DigestMethod xmlns:alg="' . DigestMethod::NS . '" Algorithm="http://exampleAlgorithm" />'
+        );
+    }
+
+
     /**
      * @return void
      */
@@ -24,16 +39,9 @@ class DigestMethodTest extends \PHPUnit\Framework\TestCase
     {
         $digestMethod = new DigestMethod('http://exampleAlgorithm');
 
-        $document = DOMDocumentFactory::fromString('<root />');
-        $xml = $digestMethod->toXML($document->firstChild);
+        $this->assertEquals('http://exampleAlgorithm', $digestMethod->getAlgorithm());
 
-        $digestMethodElements = Utils::xpQuery(
-            $xml,
-            '/root/*[local-name()=\'DigestMethod\' and namespace-uri()=\'' . DigestMethod::NS . '\']'
-        );
-        $this->assertCount(1, $digestMethodElements);
-        $digestMethodElement = $digestMethodElements[0];
-        $this->assertEquals('http://exampleAlgorithm', $digestMethodElement->getAttribute('Algorithm'));
+        $this->assertEquals($this->document->saveXML($this->document->documentElement), strval($digestMethod));
     }
 
 
@@ -42,11 +50,8 @@ class DigestMethodTest extends \PHPUnit\Framework\TestCase
      */
     public function testUnmarshalling(): void
     {
-        $document = DOMDocumentFactory::fromString(
-            '<alg:DigestMethod xmlns:alg="' . DigestMethod::NS . '" Algorithm="http://exampleAlgorithm" />'
-        );
+        $digestMethod = DigestMethod::fromXML($this->document->documentElement);
 
-        $digestMethod = DigestMethod::fromXML($document->firstChild);
         $this->assertEquals('http://exampleAlgorithm', $digestMethod->getAlgorithm());
     }
 
@@ -54,13 +59,25 @@ class DigestMethodTest extends \PHPUnit\Framework\TestCase
     /**
      * @return void
      */
-    public function testMissingAlgorithmThrowsException(): void
+    public function testUnmarshallingMissingAlgorithmThrowsException(): void
     {
-        $document = DOMDocumentFactory::fromString(
-            '<alg:DigestMethod xmlns:alg="' . DigestMethod::NS . '" />'
-        );
+        $document = $this->document->documentElement;
+        $document->removeAttribute('Algorithm');
+
         $this->expectException(Exception::class);
         $this->expectExceptionMessage('Missing required attribute "Algorithm"');
-        DigestMethod::fromXML($document->firstChild);
+
+        DigestMethod::fromXML($document);
+    }
+
+    /**
+     * Test serialization / unserialization
+     */
+    public function testSerialization(): void
+    {
+        $this->assertEquals(
+            $this->document->saveXML($this->document->documentElement),
+            strval(unserialize(serialize(DigestMethod::fromXML($this->document->documentElement))))
+        );
     }
 }

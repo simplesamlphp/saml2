@@ -11,7 +11,7 @@ use Webmozart\Assert\Assert;
 /**
  * Class representing a ds:KeyName element.
  *
- * @package SimpleSAMLphp
+ * @package simplesamlphp/saml2
  */
 final class KeyName extends AbstractDsElement
 {
@@ -62,6 +62,7 @@ final class KeyName extends AbstractDsElement
      *
      * @param \DOMElement $xml The XML element we should load
      * @return self
+     * @throws \InvalidArgumentException if the qualified name of the supplied element is wrong
      */
     public static function fromXML(DOMElement $xml): object
     {

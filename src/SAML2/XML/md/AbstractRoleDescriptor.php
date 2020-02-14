@@ -11,14 +11,14 @@ use Webmozart\Assert\Assert;
 /**
  * Class representing SAML 2 RoleDescriptor element.
  *
- * @package SimpleSAMLphp
+ * @package simplesamlphp/saml2
  */
 abstract class AbstractRoleDescriptor extends AbstractMetadataDocument
 {
     /**
      * List of supported protocols.
      *
-     * @var array
+     * @var string[]
      */
     protected $protocolSupportEnumeration = [];
 
@@ -64,9 +64,9 @@ abstract class AbstractRoleDescriptor extends AbstractMetadataDocument
      * @param string|null $cacheDuration Maximum time this document can be cached. Defaults to null.
      * @param \SAML2\XML\md\Extensions|null $extensions An Extensions object. Defaults to null.
      * @param string|null $errorURL An URI where to redirect users for support. Defaults to null.
-     * @param \SAML2\XML\md\KeyDescriptor[]|null $keyDescriptors An array of KeyDescriptor elements. Defaults to an empty array.
+     * @param \SAML2\XML\md\KeyDescriptor[] $keyDescriptors An array of KeyDescriptor elements. Defaults to an empty array.
      * @param \SAML2\XML\md\Organization|null $organization The organization running this entity. Defaults to null.
-     * @param \SAML2\XML\md\ContactPerson[]|null $contacts An array of contacts for this entity. Defaults to an empty array.
+     * @param \SAML2\XML\md\ContactPerson[] $contacts An array of contacts for this entity. Defaults to an empty array.
      */
     public function __construct(
         array $protocolSupportEnumeration,
@@ -75,16 +75,16 @@ abstract class AbstractRoleDescriptor extends AbstractMetadataDocument
         ?string $cacheDuration = null,
         ?Extensions $extensions = null,
         ?string $errorURL = null,
-        ?array $keyDescriptors = [],
+        array $keyDescriptors = [],
         ?Organization $organization = null,
-        ?array $contacts = []
+        array $contacts = []
     ) {
         parent::__construct($ID, $validUntil, $cacheDuration, $extensions);
 
         $this->setProtocolSupportEnumeration($protocolSupportEnumeration);
         $this->setErrorURL($errorURL);
         $this->setKeyDescriptors($keyDescriptors);
-        $this->Organization = $organization;
+        $this->setOrganization($organization);
         $this->setContactPersons($contacts);
     }
 
@@ -129,7 +129,9 @@ abstract class AbstractRoleDescriptor extends AbstractMetadataDocument
     /**
      * Set the value of the ProtocolSupportEnumeration property.
      *
-     * @param array $protocols
+     * @param string[] $protocols
+     * @return void
+     * @throws \InvalidArgumentException if the qualified name of the supplied element is wrong
      */
     protected function setProtocolSupportEnumeration(array $protocols): void
     {
@@ -154,6 +156,7 @@ abstract class AbstractRoleDescriptor extends AbstractMetadataDocument
      * Set the value of the Organization property.
      *
      * @param \SAML2\XML\md\Organization|null $organization
+     * @return void
      */
     protected function setOrganization(?Organization $organization = null): void
     {
@@ -164,7 +167,7 @@ abstract class AbstractRoleDescriptor extends AbstractMetadataDocument
     /**
      * Collect the value of the ContactPersons property.
      *
-     * @return ContactPerson[]
+     * @return \SAML2\XML\md\ContactPerson[]
      */
     public function getContactPersons()
     {
@@ -175,13 +178,12 @@ abstract class AbstractRoleDescriptor extends AbstractMetadataDocument
     /**
      * Set the value of the ContactPerson property.
      *
-     * @param ContactPerson[]|null $contactPersons
+     * @param \SAML2\XML\md\ContactPerson[] $contactPersons
+     * @return void
+     * @throws \InvalidArgumentException
      */
-    protected function setContactPersons(?array $contactPersons): void
+    protected function setContactPersons(array $contactPersons): void
     {
-        if ($contactPersons === null) {
-            return;
-        }
         Assert::allIsInstanceOf(
             $contactPersons,
             ContactPerson::class,
@@ -205,13 +207,10 @@ abstract class AbstractRoleDescriptor extends AbstractMetadataDocument
     /**
      * Set the value of the KeyDescriptor property.
      *
-     * @param \SAML2\XML\md\KeyDescriptor[]|null $keyDescriptor
+     * @param \SAML2\XML\md\KeyDescriptor[] $keyDescriptor
      */
-    protected function setKeyDescriptors(?array $keyDescriptor): void
+    protected function setKeyDescriptors(array $keyDescriptor): void
     {
-        if ($keyDescriptor === null) {
-            return;
-        }
         Assert::allIsInstanceOf(
             $keyDescriptor,
             KeyDescriptor::class,
@@ -225,10 +224,8 @@ abstract class AbstractRoleDescriptor extends AbstractMetadataDocument
      * Add this RoleDescriptor to an EntityDescriptor.
      *
      * @param \DOMElement $parent The EntityDescriptor we should append this endpoint to.
-     *
      * @return \DOMElement
-     *
-     * @throws \InvalidArgumentException if assertions are false
+     * @throws \InvalidArgumentException if the qualified name of the supplied element is wrong
      */
     public function toXML(?DOMElement $parent = null): DOMElement
     {
@@ -238,10 +235,6 @@ abstract class AbstractRoleDescriptor extends AbstractMetadataDocument
 
         if ($this->errorURL !== null) {
             $e->setAttribute('errorURL', $this->errorURL);
-        }
-
-        if ($this->Extensions !== null && !$this->Extensions->isEmptyElement()) {
-            $this->Extensions->toXML($e);
         }
 
         foreach ($this->KeyDescriptors as $kd) {

@@ -11,7 +11,7 @@ use Webmozart\Assert\Assert;
 /**
  * Class representing a ds:KeyInfo element.
  *
- * @package SimpleSAMLphp
+ * @package simplesamlphp/saml2
  */
 final class KeyInfo extends AbstractDsElement
 {
@@ -72,7 +72,7 @@ final class KeyInfo extends AbstractDsElement
     /**
      * Collect the value of the info-property
      *
-     * @return array
+     * @return (\SAML2\XML\Chunk|\SAML2\XML\ds\KeyName|\SAML2\XML\ds\X509Data)[]
      */
     public function getInfo(): array
     {
@@ -83,11 +83,13 @@ final class KeyInfo extends AbstractDsElement
     /**
      * Set the value of the info-property
      *
-     * @param array $info
+     * @param (\SAML2\XML\Chunk|\SAML2\XML\ds\KeyName|\SAML2\XML\ds\X509Data)[] $info
      * @return void
+     * @throws \InvalidArgumentException if $info contains anything other than KeyName, X509Data or Chunk
      */
     private function setInfo(array $info): void
     {
+        Assert::notEmpty($info, 'ds:KeyInfo cannot be empty');
         Assert::allIsInstanceOfAny(
             $info,
             [Chunk::class, KeyName::class, X509Data::class],
@@ -98,29 +100,11 @@ final class KeyInfo extends AbstractDsElement
 
 
     /**
-     * Add the value to the info-property
-     *
-     * @param \SAML2\XML\Chunk|\SAML2\XML\ds\KeyName|\SAML2\XML\ds\X509Data $info
-     * @return void
-     *
-     * @throws \InvalidArgumentException if assertions are false
-     */
-    public function addInfo($info): void
-    {
-        Assert::isInstanceOfAny(
-            $info,
-            [Chunk::class, KeyName::class, X509Data::class],
-            'KeyInfo can only contain instances of KeyName, X509Data or Chunk.'
-        );
-        $this->info[] = $info;
-    }
-
-
-    /**
      * Convert XML into a KeyInfo
      *
      * @param \DOMElement $xml The XML element we should load
      * @return self
+     * @throws \InvalidArgumentException if the qualified name of the supplied element is wrong
      */
     public static function fromXML(DOMElement $xml): object
     {
@@ -133,9 +117,7 @@ final class KeyInfo extends AbstractDsElement
         foreach ($xml->childNodes as $n) {
             if (!($n instanceof \DOMElement)) {
                 continue;
-            }
-
-            if ($n->namespaceURI !== self::NS) {
+            } elseif ($n->namespaceURI !== self::NS) {
                 $info[] = new Chunk($n);
                 continue;
             }
