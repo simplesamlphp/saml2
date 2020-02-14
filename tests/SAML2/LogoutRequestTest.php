@@ -59,8 +59,7 @@ XML;
      */
     public function testMarshalling(): void
     {
-        $nameId = new NameID();
-        $nameId->setValue('NameIDValue');
+        $nameId = new NameID('NameIDValue');
 
         $logoutRequest = new LogoutRequest();
         $logoutRequest->setNameID($nameId);
@@ -79,8 +78,7 @@ XML;
         $this->assertCount(1, $sessionIndexElements);
         $this->assertEquals('SessionIndexValue', $sessionIndexElements[0]->textContent);
 
-        $nameId = new NameID();
-        $nameId->setValue('NameIDValue');
+        $nameId = new NameID('NameIDValue');
         $logoutRequest = new LogoutRequest();
         $logoutRequest->setNameID($nameId);
         $logoutRequest->setSessionIndexes(['SessionIndexValue1', 'SessionIndexValue2']);
@@ -120,8 +118,7 @@ XML;
      */
     public function testEncryptedNameId(): void
     {
-        $nameId = new NameID();
-        $nameId->setValue('NameIdValue');
+        $nameId = new NameID('NameIdValue');
 
         $logoutRequest = new LogoutRequest();
         $logoutRequest->setNameID($nameId);
@@ -255,11 +252,8 @@ XML;
      */
     public function testSetNotOnOrAfter(): void
     {
-        $nameId = new NameID();
-        $nameId->setValue('NameIDValue');
+        $nameId = new NameID('NameIDValue');
         $time = time();
-        $nameId = new XML\saml\NameID();
-        $nameId->setValue('NameIDValue');
 
         $logoutRequest = new LogoutRequest();
         $logoutRequest->setNameID($nameId);
@@ -296,8 +290,7 @@ XML;
     public function testSetReason(): void
     {
         $reason = "urn:simplesamlphp:reason-test";
-        $nameId = new XML\saml\NameID();
-        $nameId->setValue('NameIDValue');
+        $nameId = new XML\saml\NameID('NameIDValue');
 
         $logoutRequest = new LogoutRequest();
         $logoutRequest->setNameID($nameId);

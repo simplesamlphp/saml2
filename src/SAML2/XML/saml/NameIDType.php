@@ -5,6 +5,8 @@ declare(strict_types=1);
 namespace SAML2\XML\saml;
 
 use DOMElement;
+use SAML2\Constants;
+use SAML2\DOMDocumentFactory;
 use Webmozart\Assert\Assert;
 
 /**
@@ -55,27 +57,26 @@ abstract class NameIDType extends BaseIDType
 
 
     /**
-     * Initialize a saml:NameIDType, either from scratch or from an existing \DOMElement.
+     * Initialize a saml:NameIDType from scratch
      *
-     * @param \DOMElement|null $xml The XML element we should load, if any.
+     * @param string $value
+     * @param string|null $Format
+     * @param string|null $SPProvidedID
+     * @param string|null $NameQualifier
+     * @param string|null $SPNameQualifier
      */
-    public function __construct(DOMElement $xml = null)
-    {
-        parent::__construct($xml);
+    public function __construct(
+        string $value,
+        ?string $NameQualifier = null,
+        ?string $SPNameQualifier = null,
+        ?string $Format = null,
+        ?string $SPProvidedID = null
+    ) {
+        parent::__construct($NameQualifier, $SPNameQualifier);
 
-        if ($xml === null) {
-            return;
-        }
-
-        if ($xml->hasAttribute('Format')) {
-            $this->Format = $xml->getAttribute('Format');
-        }
-
-        if ($xml->hasAttribute('SPProvidedID')) {
-            $this->SPProvidedID = $xml->getAttribute('SPProvidedID');
-        }
-
-        $this->value = trim($xml->textContent);
+        $this->setFormat($Format);
+        $this->setSPProvidedID($SPProvidedID);
+        $this->setValue($value);
     }
 
 
@@ -96,36 +97,10 @@ abstract class NameIDType extends BaseIDType
      * @param string|null $format
      * @return void
      */
-    public function setFormat(string $format = null): void
+    private function setFormat(?string $format): void
     {
+        Assert::nullOrNotWhitespaceOnly($format);
         $this->Format = $format;
-    }
-
-
-    /**
-     * Collect the value of the value-property
-     *
-     * @return string
-     *
-     * @throws \InvalidArgumentException if assertions are false
-     */
-    public function getValue(): string
-    {
-        Assert::notEmpty($this->value);
-
-        return $this->value;
-    }
-
-
-    /**
-     * Set the value of the value-property
-     * @param string $value
-     *
-     * @return void
-     */
-    public function setValue(string $value): void
-    {
-        $this->value = $value;
     }
 
 
@@ -146,9 +121,35 @@ abstract class NameIDType extends BaseIDType
      * @param string|null $spProvidedID
      * @return void
      */
-    public function setSPProvidedID(string $spProvidedID = null): void
+    public function setSPProvidedID(?string $spProvidedID): void
     {
         $this->SPProvidedID = $spProvidedID;
+    }
+
+
+    /**
+     * Collect the value of the value-property
+     *
+     * @return string
+     *
+     * @throws \InvalidArgumentException if assertions are false
+     */
+    public function getValue(): string
+    {
+        return $this->value;
+    }
+
+
+    /**
+     * Set the value of the value-property
+     * @param string $value
+     *
+     * @return void
+     */
+    private function setValue(string $value): void
+    {
+        Assert::notWhitespaceOnly($value);
+        $this->value = trim($value);
     }
 
 

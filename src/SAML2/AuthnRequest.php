@@ -206,7 +206,7 @@ class AuthnRequest extends Request
         if ($nameId->localName === 'EncryptedData') { // the NameID element is encrypted
             $this->encryptedNameId = $nameId;
         } else {
-            $this->nameId = new NameID($nameId);
+            $this->nameId = NameID::fromXML($nameId);
         }
 
         /** @var \DOMElement[] $subjectConfirmation */
@@ -230,9 +230,7 @@ class AuthnRequest extends Request
             return;
         }
 
-        $nameIdPolicy = $nameIdPolicy[0];
-
-        $this->nameIdPolicy = NameIDPolicy::fromXML($nameIdPolicy);
+        $this->nameIdPolicy = NameIDPolicy::fromXML($nameIdPolicy[0]);
     }
 
 
@@ -676,9 +674,7 @@ class AuthnRequest extends Request
         /* Encrypt the NameID. */
         $enc = new XMLSecEnc();
         $enc->setNode($nameId);
-        // @codingStandardsIgnoreStart
         $enc->type = XMLSecEnc::Element;
-        // @codingStandardsIgnoreEnd
 
         $symmetricKey = new XMLSecurityKey(XMLSecurityKey::AES128_CBC);
         $symmetricKey->generateSessionKey();
@@ -709,7 +705,7 @@ class AuthnRequest extends Request
 
         $nameId = Utils::decryptElement($this->encryptedNameId, $key, $blacklist);
         Utils::getContainer()->debugMessage($nameId, 'decrypt');
-        $this->nameId = new NameID($nameId);
+        $this->nameId = NameID::fromXML($nameId);
 
         $this->encryptedNameId = null;
     }

@@ -11,8 +11,26 @@ use SAML2\Utils;
 /**
  * Class \SAML2\XML\saml\AuthnContextClassRefTest
  */
-class AuthnContextClassRefTest extends \PHPUnit\Framework\TestCase
+final class AuthnContextClassRefTest extends \PHPUnit\Framework\TestCase
 {
+    /** @var \DOMDocument */
+    private $document;
+
+
+    protected function setUp(): void
+    {
+        $samlNamespace = Constants::NS_SAML;
+        $ac_ppt = Constants::AC_PASSWORD_PROTECTED_TRANSPORT;
+        $this->document = DOMDocumentFactory::fromString(<<<XML
+<saml:AuthnContextClassRef xmlns:saml="{$samlNamespace}">{$ac_ppt}</saml:AuthnContextClassRef>
+XML
+        );
+    }
+
+
+    // marshalling
+
+
     /**
      * @return void
      */
@@ -20,25 +38,12 @@ class AuthnContextClassRefTest extends \PHPUnit\Framework\TestCase
     {
         $authnContextClassRef = new AuthnContextClassRef(Constants::AC_PASSWORD_PROTECTED_TRANSPORT);
 
-        $this->assertEquals(
-            '<saml:AuthnContextClassRef xmlns:saml="' . Constants::NS_SAML . '">'
-                . Constants::AC_PASSWORD_PROTECTED_TRANSPORT . '</saml:AuthnContextClassRef>',
-            strval($authnContextClassRef)
-        );
-
-        $document = DOMDocumentFactory::fromString('<root />');
-        /** @psalm-var \DOMElement $document->firstChild */
-        $authnContextClassRefElement = $authnContextClassRef->toXML($document->firstChild);
-
-        $authnContextClassRefElements = Utils::xpQuery(
-            $authnContextClassRefElement,
-            '/root/saml_assertion:AuthnContextClassRef'
-        );
-        $this->assertCount(1, $authnContextClassRefElements);
-        $authnContextClassRefElement = $authnContextClassRefElements[0];
-
-        $this->assertEquals(Constants::AC_PASSWORD_PROTECTED_TRANSPORT, $authnContextClassRefElement->textContent);
+        $this->assertEquals(Constants::AC_PASSWORD_PROTECTED_TRANSPORT, $authnContextClassRef->getClassRef());
+        $this->assertEquals($this->document->saveXML($this->document->documentElement), strval($authnContextClassRef));
     }
+
+
+    // unmarshalling
 
 
     /**
@@ -46,18 +51,19 @@ class AuthnContextClassRefTest extends \PHPUnit\Framework\TestCase
      */
     public function testUnmarshalling(): void
     {
-        $samlNamespace = Constants::NS_SAML;
-        $document = DOMDocumentFactory::fromString(<<<XML
-<saml:AuthnContextClassRef xmlns:saml="{$samlNamespace}">
-    urn:oasis:names:tc:SAML:2.0:ac:classes:PasswordProtectedTransport
-</saml:AuthnContextClassRef>
-XML
-        );
-
-        /**
-         * @psalm-var \DOMElement $document->firstChild
-         */
-        $authnContextClassRef = AuthnContextClassRef::fromXML($document->firstChild);
+        $authnContextClassRef = AuthnContextClassRef::fromXML($this->document->documentElement);
         $this->assertEquals(Constants::AC_PASSWORD_PROTECTED_TRANSPORT, $authnContextClassRef->getClassRef());
+    }
+
+
+    /**
+     * Test serialization / unserialization
+     */
+    public function testSerialization(): void
+    {
+        $this->assertEquals(
+            $this->document->saveXML($this->document->documentElement),
+            strval(unserialize(serialize(AuthnContextClassRef::fromXML($this->document->documentElement))))
+        );
     }
 }

@@ -99,8 +99,7 @@ AUTHNREQUEST
     {
         // first, try with common Issuer objects (Format=entity)
         $response = new Response();
-        $issuer = new Issuer();
-        $issuer->setValue('https://gateway.stepup.org/saml20/sp/metadata');
+        $issuer = new Issuer('https://gateway.stepup.org/saml20/sp/metadata');
         $response->setIssuer($issuer);
         $xml = $response->toXML();
         $xml_issuer = Utils::xpQuery($xml, './saml_assertion:Issuer');
@@ -110,10 +109,13 @@ AUTHNREQUEST
         $this->assertEquals($issuer->getValue(), $xml_issuer->textContent);
 
         // now, try an Issuer with another format and attributes
-        $issuer->setFormat(Constants::NAMEID_UNSPECIFIED);
-        $issuer->setNameQualifier('SomeNameQualifier');
-        $issuer->setSPNameQualifier('SomeSPNameQualifier');
-        $issuer->setSPProvidedID('SomeSPProvidedID');
+        $issuer = new Issuer(
+            'https://gateway.stepup.org/saml20/sp/metadata',
+            Constants::NAMEID_UNSPECIFIED,
+            'SomeSPProvidedID',
+            'SomeNameQualifier',
+            'SomeSPNameQualifier'
+        );
         $response->setIssuer($issuer);
         $xml = $response->toXML();
         $xml_issuer = Utils::xpQuery($xml, './saml_assertion:Issuer');

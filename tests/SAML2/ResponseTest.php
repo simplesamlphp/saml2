@@ -20,8 +20,7 @@ class ResponseTest extends \PHPUnit\Framework\TestCase
      */
     public function testMarshalling(): void
     {
-        $issuer = new Issuer();
-        $issuer->setValue('SomeIssuer');
+        $issuer = new Issuer('SomeIssuer');
 
         $response = new Response();
         $response->setConsent(Constants::CONSENT_EXPLICIT);

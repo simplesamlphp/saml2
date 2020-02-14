@@ -11,21 +11,42 @@ use SAML2\Utils;
 /**
  * Class \SAML2\XML\saml\AuthenticatingAuthorityTest
  */
-class AuthenticatingAuthorityTest extends \PHPUnit\Framework\TestCase
+final class AuthenticatingAuthorityTest extends \PHPUnit\Framework\TestCase
 {
+    /** @var \DOMDocument */
+    private $document;
+
+    /** @var string */
+    private $uri = 'https://sp.example.com/SAML2';
+
+
+    /**
+     * @return void
+     */
+    protected function setUp(): void
+    {
+        $samlNamespace = Constants::NS_SAML;
+        $this->document = DOMDocumentFactory::fromString(<<<XML
+<saml:AuthenticatingAuthority xmlns:saml="{$samlNamespace}">{$this->uri}</saml:AuthenticatingAuthority>
+XML
+        );
+    }
+
+
+    // marshalling
+
+
     /**
      * @return void
      */
     public function testMarshalling(): void
     {
-        $authority = new AuthenticatingAuthority('https://sp.example.com/SAML2');
-
-        $this->assertEquals(
-            '<saml:AuthenticatingAuthority xmlns:saml="' . Constants::NS_SAML
-                . '">https://sp.example.com/SAML2</saml:AuthenticatingAuthority>',
-            strval($authority)
-        );
+        $authority = new AuthenticatingAuthority($this->uri);
+        $this->assertEquals($authority->getAuthority(), $this->uri);
     }
+
+
+    // unmarshalling
 
 
     /**
@@ -33,16 +54,19 @@ class AuthenticatingAuthorityTest extends \PHPUnit\Framework\TestCase
      */
     public function testUnmarshalling(): void
     {
-        $samlNamespace = Constants::NS_SAML;
-        $document = DOMDocumentFactory::fromString(<<<XML
-<saml:AuthenticatingAuthority xmlns:saml="{$samlNamespace}">
-    https://sp.example.com/SAML2
-</saml:AuthenticatingAuthority>
-XML
-        );
+        $authority = AuthenticatingAuthority::fromXML($this->document->documentElement);
+        $this->assertEquals($this->uri, $authority->getAuthority());
+    }
 
-        /** @var \DOMElement $document->firstChild */
-        $authority = AuthenticatingAuthority::fromXML($document->firstChild);
-        $this->assertEquals('https://sp.example.com/SAML2', $authority->getAuthority());
+
+    /**
+     * Test serialization / unserialization
+     */
+    public function testSerialization(): void
+    {
+        $this->assertEquals(
+            $this->document->saveXML($this->document->documentElement),
+            strval(unserialize(serialize(AuthenticatingAuthority::fromXML($this->document->documentElement))))
+        );
     }
 }

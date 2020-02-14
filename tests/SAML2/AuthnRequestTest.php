@@ -152,9 +152,7 @@ AUTHNREQUEST;
     public function testThatTheSubjectCanBeSetBySettingTheNameId(): void
     {
         $request = new AuthnRequest();
-        $nameId = new NameID();
-        $nameId->setValue('user@example.org');
-        $nameId->setFormat(Constants::NAMEID_UNSPECIFIED);
+        $nameId = new NameID('user@example.org', null, null, Constants::NAMEID_UNSPECIFIED);
         $request->setNameId($nameId);
 
         $requestAsXML = $request->toXML()->ownerDocument->saveXML();
@@ -214,13 +212,13 @@ AUTHNREQUEST;
     public function testThatAnEncryptedNameIdResultsInTheCorrectXmlStructure(): void
     {
         // the NameID we're going to encrypt
-        $nameId = new NameID();
-        $nameId->setValue(md5('Arthur Dent'));
-        $nameId->setFormat(Constants::NAMEID_ENCRYPTED);
+        $nameId = new NameID(
+            md5('Arthur Dent'),
+            Constants::NAMEID_ENCRYPTED
+        );
 
         // the Issuer
-        $issuer = new Issuer();
-        $issuer->setValue('https://gateway.example.org/saml20/sp/metadata');
+        $issuer = new Issuer('https://gateway.example.org/saml20/sp/metadata');
 
         // basic AuthnRequest
         $request = new AuthnRequest();
@@ -276,8 +274,7 @@ AUTHNREQUEST;
     public function testIDPlistAttributes(): void
     {
         // the Issuer
-        $issuer = new Issuer();
-        $issuer->setValue('https://gateway.example.org/saml20/sp/metadata');
+        $issuer = new Issuer('https://gateway.example.org/saml20/sp/metadata');
 
         // basic AuthnRequest
         $request = new AuthnRequest();
@@ -381,8 +378,7 @@ AUTHNREQUEST;
     public function testRequesterIdIsAddedCorrectly(): void
     {
         // the Issuer
-        $issuer = new Issuer();
-        $issuer->setValue('https://gateway.example.org/saml20/sp/metadata');
+        $issuer = new Issuer('https://gateway.example.org/saml20/sp/metadata');
 
         // basic AuthnRequest
         $request = new AuthnRequest();
@@ -454,8 +450,7 @@ AUTHNREQUEST;
     public function testProxyCountIsAddedCorrectly(): void
     {
         // the Issuer
-        $issuer = new Issuer();
-        $issuer->setValue('https://gateway.example.org/saml20/sp/metadata');
+        $issuer = new Issuer('https://gateway.example.org/saml20/sp/metadata');
 
         // basic AuthnRequest
         $request = new AuthnRequest();
@@ -561,8 +556,7 @@ AUTHNREQUEST;
     public function testSettingNameIDPolicy(): void
     {
         // the Issuer
-        $issuer = new Issuer();
-        $issuer->setValue('https://gateway.example.org/saml20/sp/metadata');
+        $issuer = new Issuer('https://gateway.example.org/saml20/sp/metadata');
 
         // basic AuthnRequest
         $request = new AuthnRequest();
@@ -608,8 +602,7 @@ AUTHNREQUEST;
     public function testSettingNameIDPolicyFormatOnly(): void
     {
         // the Issuer
-        $issuer = new Issuer();
-        $issuer->setValue('https://gateway.example.org/saml20/sp/metadata');
+        $issuer = new Issuer('https://gateway.example.org/saml20/sp/metadata');
 
         // basic AuthnRequest
         $request = new AuthnRequest();
@@ -693,8 +686,7 @@ AUTHNREQUEST;
     public function testSettingForceAuthnResultsInCorrectXML(): void
     {
         // the Issuer
-        $issuer = new Issuer();
-        $issuer->setValue('https://gateway.example.org/saml20/sp/metadata');
+        $issuer = new Issuer('https://gateway.example.org/saml20/sp/metadata');
 
         // basic AuthnRequest
         $request = new AuthnRequest();
@@ -794,8 +786,7 @@ AUTHNREQUEST;
     public function testSettingIsPassiveResultsInCorrectXML(): void
     {
         // the Issuer
-        $issuer = new Issuer();
-        $issuer->setValue('https://gateway.example.org/saml20/sp/metadata');
+        $issuer = new Issuer('https://gateway.example.org/saml20/sp/metadata');
 
         // basic AuthnRequest
         $request = new AuthnRequest();
@@ -833,8 +824,7 @@ AUTHNREQUEST;
     public function testSettingProviderNameResultsInCorrectXml(): void
     {
         // the Issuer
-        $issuer = new Issuer();
-        $issuer->setValue('https://gateway.example.org/saml20/sp/metadata');
+        $issuer = new Issuer('https://gateway.example.org/saml20/sp/metadata');
 
         // basic AuthnRequest
         $request = new AuthnRequest();
@@ -899,8 +889,7 @@ AUTHNREQUEST;
     public function testSettingProtocolBindingAndACSUrl(): void
     {
         // the Issuer
-        $issuer = new Issuer();
-        $issuer->setValue('https://sp.example.org/saml20/sp/metadata');
+        $issuer = new Issuer('https://sp.example.org/saml20/sp/metadata');
 
         // basic AuthnRequest
         $request = new AuthnRequest();
@@ -1024,8 +1013,7 @@ AUTHNREQUEST;
      */
     public function testAudiencesAreAddedCorrectly(): void
     {
-        $issuer = new Issuer();
-        $issuer->setValue('https://gateway.example.org/saml20/sp/metadata');
+        $issuer = new Issuer('https://gateway.example.org/saml20/sp/metadata');
 
         // basic AuthnRequest
         $request = new AuthnRequest();

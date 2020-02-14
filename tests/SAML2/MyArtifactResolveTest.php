@@ -16,8 +16,7 @@ class ArtifactResolveTest extends \PHPUnit\Framework\TestCase
      */
     public function testMarshalling(): void
     {
-        $issuer = new Issuer();
-        $issuer->setValue('urn:example:issuer');
+        $issuer = new Issuer('urn:example:issuer');
         $artifact = 'AAQAADWNEw5VT47wcO4zX/iEzMmFQvGknDfws2ZtqSGdkNSbsW1cmVR0bzU=';
 
         $artifactResolve = new ArtifactResolve();
@@ -40,8 +39,7 @@ class ArtifactResolveTest extends \PHPUnit\Framework\TestCase
         $id = '_6c3a4f8b9c2d';
         $artifact = 'AAQAADWNEw5VT47wcO4zX/iEzMmFQvGknDfws2ZtqSGdkNSbsW1cmVR0bzU=';
 
-        $issuer = new Issuer();
-        $issuer->setValue('https://ServiceProvider.com/SAML');
+        $issuer = new Issuer('https://ServiceProvider.com/SAML');
 
         $xml = <<<XML
 <samlp:ArtifactResolve

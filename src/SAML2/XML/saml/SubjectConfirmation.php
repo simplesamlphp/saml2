@@ -21,21 +21,21 @@ final class SubjectConfirmation extends AbstractSamlElement
      *
      * @var string
      */
-    private $Method;
+    protected $Method;
 
     /**
      * The NameID of the entity that can use this element to verify the Subject.
      *
      * @var \SAML2\XML\saml\NameID|null
      */
-    private $NameID = null;
+    protected $NameID = null;
 
     /**
      * SubjectConfirmationData element with extra data for verification of the Subject.
      *
      * @var \SAML2\XML\saml\SubjectConfirmationData|null
      */
-    private $SubjectConfirmationData = null;
+    protected $SubjectConfirmationData = null;
 
 
     /**
@@ -136,9 +136,7 @@ final class SubjectConfirmation extends AbstractSamlElement
         Assert::same($xml->localName, 'SubjectConfirmation');
         Assert::same($xml->namespaceURI, SubjectConfirmation::NS);
 
-        if (!$xml->hasAttribute('Method')) {
-            throw new \Exception('SubjectConfirmation element without Method attribute.');
-        }
+        Assert::true($xml->hasAttribute('Method'), 'SubjectConfirmation element without Method attribute.');
         $Method = $xml->getAttribute('Method');
 
         /** @var \DOMElement[] $nid */
@@ -151,7 +149,7 @@ final class SubjectConfirmation extends AbstractSamlElement
 
         return new self(
             $Method,
-            empty($nid) ? null : new NameID($nid[0]),
+            empty($nid) ? null : NameID::fromXML($nid[0]),
             empty($scd) ? null : SubjectConfirmationData::fromXML($scd[0])
         );
     }
@@ -167,7 +165,6 @@ final class SubjectConfirmation extends AbstractSamlElement
     {
         $e = $this->instantiateParentElement($parent);
         $e->setAttribute('Method', $this->Method);
-
         if ($this->NameID !== null) {
             $this->NameID->toXML($e);
         }

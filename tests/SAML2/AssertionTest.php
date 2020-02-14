@@ -25,8 +25,7 @@ class AssertionTest extends \Mockery\Adapter\Phpunit\MockeryTestCase
     public function testMarshalling(): void
     {
         // Create an Issuer
-        $issuer = new Issuer();
-        $issuer->setValue('testIssuer');
+        $issuer = new Issuer('testIssuer');
 
         // Create an assertion
         $assertion = new Assertion();
@@ -115,8 +114,7 @@ XML;
     public function testMarshallingUnmarshallingChristmas(): void
     {
         // Create an Issuer
-        $issuer = new Issuer();
-        $issuer->setValue('testIssuer');
+        $issuer = new Issuer('testIssuer');
 
         // Create an assertion
         $assertion = new Assertion();
@@ -183,8 +181,7 @@ XML;
     public function testMarshallingUnmarshallingAttributeValTypes(): void
     {
         // Create an Issuer
-        $issuer = new Issuer();
-        $issuer->setValue('testIssuer');
+        $issuer = new Issuer('testIssuer');
 
         // Create an assertion
         $assertion = new Assertion();
@@ -251,8 +248,7 @@ XML;
     public function testMarshallingWrongAttributeValTypes(): void
     {
         // Create an Issuer
-        $issuer = new Issuer();
-        $issuer->setValue('testIssuer');
+        $issuer = new Issuer('testIssuer');
 
         // Create an assertion
         $assertion = new Assertion();
@@ -369,8 +365,7 @@ XML;
         $assertion = new Assertion();
 
         $assertion->setAuthnContextDecl(new Chunk($document->documentElement));
-        $issuer = new Issuer();
-        $issuer->setValue('example:issuer');
+        $issuer = new Issuer('example:issuer');
         $assertion->setIssuer($issuer);
         $documentParent  = DOMDocumentFactory::fromString("<root />");
         $assertionElement = $assertion->toXML($documentParent->firstChild);
@@ -388,8 +383,7 @@ XML;
     public function testConvertIssuerToXML(): void
     {
         // Create an Issuer
-        $issuer = new Issuer();
-        $issuer->setValue('https://gateway.stepup.org/saml20/sp/metadata');
+        $issuer = new Issuer('https://gateway.stepup.org/saml20/sp/metadata');
 
         // first, try with common Issuer objects (Format=entity)
         $assertion = new Assertion();
@@ -403,10 +397,13 @@ XML;
         $this->assertEquals($issuer->getValue(), $xml_issuer->textContent);
 
         // now, try an Issuer with another format and attributes
-        $issuer->setFormat(Constants::NAMEID_UNSPECIFIED);
-        $issuer->setNameQualifier('SomeNameQualifier');
-        $issuer->setSPNameQualifier('SomeSPNameQualifier');
-        $issuer->setSPProvidedID('SomeSPProvidedID');
+        $issuer = new Issuer(
+            'https://gateway.stepup.org/saml20/sp/metadata',
+            Constants::NAMEID_UNSPECIFIED,
+            'SomeNameQualifier',
+            'SomeSPNameQualifier',
+            'SomeSPProvidedID'
+        );
 
         $assertion->setIssuer($issuer);
         $xml = $assertion->toXML();
@@ -1912,8 +1909,7 @@ XML;
     public function testNameIdEncryption(): void
     {
         // Create an Issuer
-        $issuer = new Issuer();
-        $issuer->setValue('testIssuer');
+        $issuer = new Issuer('testIssuer');
 
         // Create an assertion
         $assertion = new Assertion();
@@ -1921,9 +1917,7 @@ XML;
         $assertion->setValidAudiences(['audience1', 'audience2']);
         $assertion->setAuthnContextClassRef('someAuthnContext');
 
-        $nameId = new NameID();
-        $nameId->setValue("just_a_basic_identifier");
-        $nameId->setFormat("urn:oasis:names:tc:SAML:2.0:nameid-format:transient");
+        $nameId = new NameID("just_a_basic_identifier", null, null, Constants::NAMEID_TRANSIENT);
         $assertion->setNameId($nameId);
         $this->assertFalse($assertion->isNameIdEncrypted());
 
@@ -1989,8 +1983,7 @@ XML;
     public function testMarshallingElementOrdering(): void
     {
         // Create an Issuer
-        $issuer = new Issuer();
-        $issuer->setValue('testIssuer');
+        $issuer = new Issuer('testIssuer');
 
         // Create an assertion
         $assertion = new Assertion();
@@ -2002,9 +1995,7 @@ XML;
         $assertion->setAttributeNameFormat("urn:oasis:names:tc:SAML:2.0:attrname-format:unspecified");
         $assertion->setSignatureKey(CertificatesMock::getPrivateKey());
 
-        $nameId = new NameID();
-        $nameId->setValue("just_a_basic_identifier");
-        $nameId->setFormat("urn:oasis:names:tc:SAML:2.0:nameid-format:transient");
+        $nameId = new NameID("just_a_basic_identifier", Constants::NAMEID_TRANSIENT);
         $assertion->setNameId($nameId);
         $assertion->setAuthnContextClassRef('someAuthnContext');
 
@@ -2036,8 +2027,7 @@ XML;
         // Create an assertion
         $assertion = new Assertion();
 
-        $issuer = new Issuer();
-        $issuer->setValue('testIssuer');
+        $issuer = new Issuer('testIssuer');
         $assertion->setIssuer($issuer);
 
         $assertion->setAttributes([
