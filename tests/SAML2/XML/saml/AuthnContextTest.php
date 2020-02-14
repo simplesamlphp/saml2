@@ -162,7 +162,7 @@ XML
         $this->expectException(InvalidArgumentException::class);
         $this->expectExceptionMessage('You need either an AuthnContextDecl or an AuthnContextDeclRef');
 
-        new AuthnContext(null, null, null, null);
+        new AuthnContext(null, null, null);
     }
 
 
