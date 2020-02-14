@@ -355,7 +355,7 @@ XML
         $this->assertInstanceOf(AuthnAuthorityDescriptor::class, $roleDescriptors[2]);
         $this->assertInstanceOf(PDPDescriptor::class, $roleDescriptors[3]);
         $this->assertInstanceOf(UnknownRoleDescriptor::class, $roleDescriptors[4]);
-        /** @var \SAML2\XML\Chunk $chunk */
+
         $chunk = $roleDescriptors[4]->getXML();
         $this->assertEquals('CustomRoleDescriptor', $chunk->getLocalName());
 
