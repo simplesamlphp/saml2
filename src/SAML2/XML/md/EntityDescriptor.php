@@ -70,7 +70,7 @@ final class EntityDescriptor extends AbstractMetadataDocument
      * @param int|null $validUntil Unix time of validify for this document. Defaults to null.
      * @param string|null $cacheDuration Maximum time this document can be cached. Defaults to null.
      * @param \SAML2\XML\md\Extensions|null $extensions An array of extensions.
-     * @param \SAML2\XML\md\AbstractRoleDescriptor[]|null $roleDescriptors An array of role descriptors.
+     * @param \SAML2\XML\md\AbstractRoleDescriptor[] $roleDescriptors An array of role descriptors.
      * @param \SAML2\XML\md\AffiliationDescriptor|null $affiliationDescriptor An affiliation descriptor to
      *   use instead of role descriptors.
      * @param \SAML2\XML\md\Organization|null $organization The organization responsible for the SAML entity.
@@ -86,7 +86,7 @@ final class EntityDescriptor extends AbstractMetadataDocument
         ?int $validUntil = null,
         ?string $cacheDuration = null,
         Extensions $extensions = null,
-        ?array $roleDescriptors = [],
+        array $roleDescriptors = [],
         ?AffiliationDescriptor $affiliationDescriptor = null,
         ?Organization $organization = null,
         array $contacts = [],
@@ -128,6 +128,9 @@ final class EntityDescriptor extends AbstractMetadataDocument
 
         $signature = Signature::getChildrenOfClass($xml);
         Assert::maxCount($signature, 1, 'Only one ds:Signature element is allowed.');
+
+        /** @var string $entityID */
+        $entityID = self::getAttribute($xml, 'entityID');
 
         $roleDescriptors = [];
         $affiliationDescriptor = null;
@@ -194,7 +197,7 @@ final class EntityDescriptor extends AbstractMetadataDocument
         }
 
         $entity = new self(
-            self::getAttribute($xml, 'entityID'),
+            $entityID,
             self::getAttribute($xml, 'ID', null),
             $validUntil !== null ? Utils::xsDateTimeToTimestamp($validUntil) : null,
             self::getAttribute($xml, 'cacheDuration', null),

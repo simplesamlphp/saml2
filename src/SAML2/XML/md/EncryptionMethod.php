@@ -62,6 +62,9 @@ class EncryptionMethod extends AbstractMdElement
         Assert::same($xml->localName, 'EncryptionMethod');
         Assert::same($xml->namespaceURI, EncryptionMethod::NS);
 
+        /** @var string $algorithm */
+        $algorithm = self::getAttribute($xml, 'Algorithm');
+
         $keySize = null;
         $oaepParams = null;
         $children = [];
@@ -87,7 +90,7 @@ class EncryptionMethod extends AbstractMdElement
             $children[] = Chunk::fromXML($node);
         }
 
-        return new self(self::getAttribute($xml, 'Algorithm'), $keySize, $oaepParams, $children);
+        return new self($algorithm, $keySize, $oaepParams, $children);
     }
 
 

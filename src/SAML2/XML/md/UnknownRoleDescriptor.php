@@ -34,6 +34,9 @@ final class UnknownRoleDescriptor extends AbstractRoleDescriptor
      */
     public static function fromXML(DOMElement $xml): object
     {
+        /** @var string $protocols */
+        $protocols = self::getAttribute($xml, 'protocolSupportEnumeration');
+
         $validUntil = self::getAttribute($xml, 'validUntil', null);
         $orgs = Organization::getChildrenOfClass($xml);
         Assert::maxCount($orgs, 1, 'More than one Organization found in this descriptor');
@@ -42,7 +45,7 @@ final class UnknownRoleDescriptor extends AbstractRoleDescriptor
         Assert::maxCount($extensions, 1, 'Only one md:Extensions element is allowed.');
 
         $object = new self(
-            preg_split('/[\s]+/', trim(self::getAttribute($xml, 'protocolSupportEnumeration'))),
+            preg_split('/[\s]+/', trim($protocols)),
             self::getAttribute($xml, 'ID', null),
             $validUntil !== null ? Utils::xsDateTimeToTimestamp($validUntil) : null,
             self::getAttribute($xml, 'cacheDuration', null),

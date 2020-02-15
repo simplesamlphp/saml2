@@ -178,8 +178,11 @@ class Attribute extends AbstractSamlElement
         Assert::same($xml->localName, 'Attribute');
         Assert::same($xml->namespaceURI, Attribute::NS);
 
+        /** @var string $name */
+        $name = self::getAttribute($xml, 'Name');
+
         return new self(
-            self::getAttribute($xml, 'Name'),
+            $name,
             self::getAttribute($xml, 'NameFormat', null),
             self::getAttribute($xml, 'FriendlyName', null),
             AttributeValue::getChildrenOfClass($xml)

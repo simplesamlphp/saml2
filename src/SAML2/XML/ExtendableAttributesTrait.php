@@ -68,9 +68,9 @@ trait ExtendableAttributesTrait
      *
      * @param \DOMElement $xml
      *
-     * @return array|null
+     * @return array
      */
-    protected static function getAttributesNSFromXML(DOMElement $xml): ?array
+    protected static function getAttributesNSFromXML(DOMElement $xml): array
     {
         $attributes = [];
 
@@ -114,9 +114,15 @@ trait ExtendableAttributesTrait
      */
     protected function setAttributesNS(array $attributes): void
     {
-        Assert::allIsInstanceOf($attributes, DOMAttr::class);
+        Assert::allIsInstanceOf(
+            $attributes,
+            DOMAttr::class,
+            'Arbitrary XML attributes can only be an instance of DOMAttr.'
+        );
 
         foreach ($attributes as $attribute) {
+            Assert::stringNotEmpty($attribute->namespaceURI, 'Arbitrary XML attributes must be namespaced.');
+            /** @psalm-suppress PossiblyNullArgument */
             $this->setAttributeNS($attribute->namespaceURI, $attribute->nodeName, $attribute->value);
         }
     }

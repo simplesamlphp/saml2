@@ -242,6 +242,9 @@ final class SPSSODescriptor extends AbstractSSODescriptor
      */
     public static function fromXML(DOMElement $xml): object
     {
+        /** @var string $protocols */
+        $protocols = self::getAttribute($xml, 'protocolSupportEnumeration');
+
         Assert::same($xml->localName, 'SPSSODescriptor');
         Assert::same($xml->namespaceURI, SPSSODescriptor::NS);
 
@@ -257,7 +260,7 @@ final class SPSSODescriptor extends AbstractSSODescriptor
 
         $spssod = new self(
             AssertionConsumerService::getChildrenOfClass($xml),
-            preg_split('/[\s]+/', trim(self::getAttribute($xml, 'protocolSupportEnumeration'))),
+            preg_split('/[\s]+/', trim($protocols)),
             self::getBooleanAttribute($xml, 'AuthnRequestsSigned', null),
             self::getBooleanAttribute($xml, 'WantAssertionsSigned', null),
             AttributeConsumingService::getChildrenOfClass($xml),

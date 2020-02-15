@@ -142,6 +142,9 @@ final class IDPSSODescriptor extends AbstractSSODescriptor
         Assert::same($xml->localName, 'IDPSSODescriptor');
         Assert::same($xml->namespaceURI, IDPSSODescriptor::NS);
 
+        /** @var string $protocols */
+        $protocols = self::getAttribute($xml, 'protocolSupportEnumeration');
+
         $validUntil = self::getAttribute($xml, 'validUntil', null);
         $orgs = Organization::getChildrenOfClass($xml);
         Assert::maxCount($orgs, 1, 'More than one Organization found in this descriptor');
@@ -154,7 +157,7 @@ final class IDPSSODescriptor extends AbstractSSODescriptor
 
         $idpssod = new self(
             SingleSignOnService::getChildrenOfClass($xml),
-            preg_split('/[\s]+/', trim(self::getAttribute($xml, 'protocolSupportEnumeration'))),
+            preg_split('/[\s]+/', trim($protocols)),
             self::getBooleanAttribute($xml, 'WantAuthnRequestsSigned', null),
             NameIDMappingService::getChildrenOfClass($xml),
             AssertionIDRequestService::getChildrenOfClass($xml),

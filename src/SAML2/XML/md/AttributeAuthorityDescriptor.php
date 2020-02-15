@@ -270,6 +270,9 @@ final class AttributeAuthorityDescriptor extends AbstractRoleDescriptor
         Assert::same($xml->localName, 'AttributeAuthorityDescriptor');
         Assert::same($xml->namespaceURI, AttributeAuthorityDescriptor::NS);
 
+        /** @var string $protocols */
+        $protocols = self::getAttribute($xml, 'protocolSupportEnumeration');
+
         $attrServices = [];
         /** @var DOMElement $ep */
         foreach (Utils::xpQuery($xml, './saml_metadata:AttributeService') as $ep) {
@@ -305,7 +308,7 @@ final class AttributeAuthorityDescriptor extends AbstractRoleDescriptor
 
         $authority = new self(
             $attrServices,
-            preg_split('/[\s]+/', trim(self::getAttribute($xml, 'protocolSupportEnumeration'))),
+            preg_split('/[\s]+/', trim($protocols)),
             $assertIDReqServices,
             $nameIDFormats,
             $attrProfiles,

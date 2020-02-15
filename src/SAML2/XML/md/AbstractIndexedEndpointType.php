@@ -62,10 +62,19 @@ abstract class AbstractIndexedEndpointType extends AbstractEndpointType
             'Unexpected name for endpoint: ' . $xml->localName . '. Expected: ' . $qualifiedName . '.'
         );
 
+        /** @var int $index */
+        $index = self::getIntegerAttribute($xml, 'index');
+
+        /** @var string $binding */
+        $binding = self::getAttribute($xml, 'Binding');
+
+        /** @var string $location */
+        $location = self::getAttribute($xml, 'Location');
+
         return new static(
-            self::getIntegerAttribute($xml, 'index'),
-            self::getAttribute($xml, 'Binding'),
-            self::getAttribute($xml, 'Location'),
+            $index,
+            $binding,
+            $location,
             self::getBooleanAttribute($xml, 'isDefault', null),
             self::getAttribute($xml, 'ResponseLocation', null),
             self::getAttributesNSFromXML($xml)

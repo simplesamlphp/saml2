@@ -172,10 +172,10 @@ trait SignedElementTrait
      * Sign the given XML element.
      *
      * @param \DOMElement $root The element we should sign.
-     * @return \DOMElement|null The signed element.
+     * @return \DOMElement The signed element.
      * @throws \Exception If an error occurs while trying to sign.
      */
-    protected function signElement(DOMElement $root): ?DOMElement
+    protected function signElement(DOMElement $root): DOMElement
     {
         if ($this->signingKey instanceof XMLSecurityKey) {
             $this->signature = new Signature($this->signingKey->getAlgorithm(), $this->certificates, $this->signingKey);

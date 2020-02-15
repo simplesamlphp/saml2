@@ -90,9 +90,15 @@ abstract class AbstractEndpointType extends AbstractMdElement
             'Unexpected name for endpoint: ' . $xml->localName . '. Expected: ' . $qualifiedName . '.'
         );
 
+        /** @var string $binding */
+        $binding = self::getAttribute($xml, 'Binding');
+
+        /** @var string $location */
+        $location = self::getAttribute($xml, 'Location');
+
         return new static(
-            self::getAttribute($xml, 'Binding'),
-            self::getAttribute($xml, 'Location'),
+            $binding,
+            $location,
             self::getAttribute($xml, 'ResponseLocation', null),
             self::getAttributesNSFromXML($xml)
         );

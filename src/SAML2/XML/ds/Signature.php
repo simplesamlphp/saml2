@@ -10,6 +10,7 @@ use RobRichards\XMLSecLibs\XMLSecurityDSig;
 use RobRichards\XMLSecLibs\XMLSecurityKey;
 use SAML2\Utilities\Certificate;
 use SAML2\Utils;
+use SAML2\XML\AbstractXMLElement;
 use Webmozart\Assert\Assert;
 
 /**
@@ -25,7 +26,7 @@ final class Signature extends AbstractDsElement
     /** @var string[] */
     protected $certificates = [];
 
-    /** @var \RobRichards\XMLSecLibs\XMLSecurityKey */
+    /** @var \RobRichards\XMLSecLibs\XMLSecurityKey|null */
     protected $key;
 
     /** @var \RobRichards\XMLSecLibs\XMLSecurityDSig */
@@ -129,7 +130,7 @@ final class Signature extends AbstractDsElement
     /**
      * @param DOMElement $xml
      *
-     * @return object
+     * @return AbstractXMLElement
      * @throws \Exception
      */
     public static function fromXML(DOMElement $xml): object
@@ -193,6 +194,8 @@ final class Signature extends AbstractDsElement
      * @param DOMElement|null $parent
      *
      * @return DOMElement
+     *
+     * @psalm-suppress MoreSpecificReturnType
      */
     public function toXML(DOMElement $parent = null): DOMElement
     {
@@ -207,6 +210,7 @@ final class Signature extends AbstractDsElement
         }
 
         Utils::insertSignature($this->key, $this->certificates, $parent, $firstChildElement);
+        /** @psalm-suppress LessSpecificReturnStatement */
         return Utils::xpQuery($parent, './ds:Signature')[0];
     }
 }

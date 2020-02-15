@@ -75,6 +75,9 @@ final class AttributeConsumingService extends AbstractMdElement
         Assert::same($xml->localName, 'AttributeConsumingService');
         Assert::same($xml->namespaceURI, AttributeConsumingService::NS);
 
+        /** @var int $index */
+        $index = self::getIntegerAttribute($xml, 'index');
+
         $names = ServiceName::getChildrenOfClass($xml);
         Assert::minCount($names, 1, 'Missing at least one ServiceName in AttributeConsumingService.');
 
@@ -87,7 +90,7 @@ final class AttributeConsumingService extends AbstractMdElement
         }
 
         return new self(
-            self::getIntegerAttribute($xml, 'index'),
+            $index,
             $names,
             $requestedAttrs,
             self::getBooleanAttribute($xml, 'isDefault', null),

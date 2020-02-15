@@ -88,8 +88,11 @@ final class RequestedAttribute extends Attribute
         Assert::same($xml->localName, 'RequestedAttribute');
         Assert::same($xml->namespaceURI, RequestedAttribute::NS);
 
+        /** @var string $name */
+        $name = self::getAttribute($xml, 'Name');
+
         return new self(
-            self::getAttribute($xml, 'Name'),
+            $name,
             self::getBooleanAttribute($xml, 'isRequired', null),
             self::getAttribute($xml, 'NameFormat', null),
             self::getAttribute($xml, 'FriendlyName', null),

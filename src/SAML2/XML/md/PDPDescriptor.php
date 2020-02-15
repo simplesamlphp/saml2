@@ -97,6 +97,9 @@ final class PDPDescriptor extends AbstractRoleDescriptor
         Assert::same($xml->localName, 'PDPDescriptor');
         Assert::same($xml->namespaceURI, PDPDescriptor::NS);
 
+        /** @var string $protocols */
+        $protocols = self::getAttribute($xml, 'protocolSupportEnumeration');
+
         $validUntil = self::getAttribute($xml, 'validUntil', null);
         $orgs = Organization::getChildrenOfClass($xml);
         Assert::maxCount($orgs, 1, 'More than one Organization found in this descriptor');
@@ -106,7 +109,7 @@ final class PDPDescriptor extends AbstractRoleDescriptor
 
         return new self(
             AuthzService::getChildrenOfClass($xml),
-            preg_split('/[\s]+/', trim(self::getAttribute($xml, 'protocolSupportEnumeration'))),
+            preg_split('/[\s]+/', trim($protocols)),
             AssertionIDRequestService::getChildrenOfClass($xml),
             Utils::extractStrings($xml, Constants::NS_MD, 'NameIDFormat'),
             self::getAttribute($xml, 'ID', null),
