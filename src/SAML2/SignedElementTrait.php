@@ -91,6 +91,19 @@ trait SignedElementTrait
 
 
     /**
+     * Get the private key we should use to sign the message.
+     *
+     * If the key is null, the message will be sent unsigned.
+     *
+     * @return \RobRichards\XMLSecLibs\XMLSecurityKey|null
+     */
+    public function getSigningKey(): ?XMLSecurityKey
+    {
+        return $this->signingKey;
+    }
+
+
+    /**
      * Set the private key we should use to sign the message.
      *
      * If the key is null, the message will be sent unsigned.

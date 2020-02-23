@@ -6,7 +6,8 @@ namespace SAML2\Signature;
 
 use Psr\Log\LoggerInterface;
 use RobRichards\XMLSecLibs\XMLSecurityKey;
-use SAML2\SignedElement;
+use SAML2\SignedElementInterface;
+use SAML2\Utilities\ArrayCollection;
 
 abstract class AbstractChainedValidator implements ChainedValidator
 {
@@ -30,7 +31,7 @@ abstract class AbstractChainedValidator implements ChainedValidator
     /**
      * BC compatible version of the signature check
      *
-     * @param \SAML2\SignedElement      $element
+     * @param \SAML2\SignedElementInterface    $element
      * @param \SAML2\Utilities\ArrayCollection $pemCandidates
      *
      * @throws \Exception
@@ -38,8 +39,8 @@ abstract class AbstractChainedValidator implements ChainedValidator
      * @return bool
      */
     protected function validateElementWithKeys(
-        SignedElement $element,
-        \SAML2\Utilities\ArrayCollection $pemCandidates
+        SignedElementInterface $element,
+        ArrayCollection $pemCandidates
     ): bool {
         $lastException = null;
         foreach ($pemCandidates as $index => $candidateKey) {

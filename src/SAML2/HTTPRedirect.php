@@ -35,7 +35,7 @@ class HTTPRedirect extends Binding
 
         $relayState = $message->getRelayState();
 
-        $key = $message->getSignatureKey();
+        $key = $message->getSigningKey();
 
         $msgStr = $message->toXML();
 

@@ -18,9 +18,10 @@ use Webmozart\Assert\Assert;
  * Implements what is common between the samlp:RequestAbstractType and
  * samlp:StatusResponseType element types.
  */
-abstract class Message extends SignedElement
+abstract class Message implements SignedElementInterface
 {
     use ExtendableElementTrait;
+    use SignedElementTrait;
 
     /**
      * The name of the root element of the DOM tree for the message.
@@ -84,25 +85,9 @@ abstract class Message extends SignedElement
     protected $document;
 
     /**
-     * The private key we should use to sign the message.
-     *
-     * The private key can be null, in which case the message is sent unsigned.
-     *
-     * @var XMLSecurityKey|null
-     */
-    protected $signatureKey;
-
-    /**
      * @var bool
      */
     protected $messageContainedSignatureUponConstruction = false;
-
-    /**
-     * List of certificates that should be included in the message.
-     *
-     * @var array
-     */
-    protected $certificates = [];
 
     /**
      * Available methods for validating this message.
@@ -476,7 +461,7 @@ abstract class Message extends SignedElement
     {
         $root = $this->toXML();
 
-        if ($this->signatureKey === null) {
+        if ($this->signingKey === null) {
             /* We don't have a key to sign it with. */
 
             return $root;
@@ -496,57 +481,9 @@ abstract class Message extends SignedElement
             $insertBefore = $root->firstChild;
         }
 
-        Utils::insertSignature($this->signatureKey, $this->certificates, $root, $insertBefore);
+        Utils::insertSignature($this->signingKey, $this->certificates, $root, $insertBefore);
 
         return $root;
-    }
-
-
-    /**
-     * Retrieve the private key we should use to sign the message.
-     *
-     * @return XMLSecurityKey|null The key, or NULL if no key is specified
-     */
-    public function getSignatureKey(): ?XMLSecurityKey
-    {
-        return $this->signatureKey;
-    }
-
-
-    /**
-     * Set the private key we should use to sign the message.
-     * If the key is null, the message will be sent unsigned.
-     *
-     * @param XMLSecurityKey|null $signatureKey
-     * @return void
-     */
-    public function setSignatureKey(XMLSecurityKey $signatureKey = null): void
-    {
-        $this->signatureKey = $signatureKey;
-    }
-
-
-    /**
-     * Set the certificates that should be included in the message.
-     * The certificates should be strings with the PEM encoded data.
-     *
-     * @param string[] $certificates An array of certificates
-     * @return void
-     */
-    public function setCertificates(array $certificates): void
-    {
-        $this->certificates = $certificates;
-    }
-
-
-    /**
-     * Retrieve the certificates that are included in the message.
-     *
-     * @return string[] An array of certificates
-     */
-    public function getCertificates(): array
-    {
-        return $this->certificates;
     }
 
 
