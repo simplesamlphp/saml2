@@ -2,11 +2,15 @@
 
 declare(strict_types=1);
 
-namespace SAML2;
+namespace SAML2\XML\samlp;
 
 use DOMElement;
+use Exception;
 use RobRichards\XMLSecLibs\XMLSecEnc;
 use RobRichards\XMLSecLibs\XMLSecurityKey;
+use SAML2\DOMDocumentFactory;
+use SAML2\Constants;
+use SAML2\Utils;
 use SAML2\XML\saml\NameID;
 use Webmozart\Assert\Assert;
 
@@ -15,7 +19,7 @@ use Webmozart\Assert\Assert;
  *
  * @package SimpleSAMLphp
  */
-class LogoutRequest extends Request
+class LogoutRequest extends AbstractRequest
 {
     /**
      * The expiration time of this request.
@@ -82,9 +86,9 @@ class LogoutRequest extends Request
         /** @var \DOMElement[] $nameId */
         $nameId = Utils::xpQuery($xml, './saml_assertion:NameID | ./saml_assertion:EncryptedID/xenc:EncryptedData');
         if (empty($nameId)) {
-            throw new \Exception('Missing <saml:NameID> or <saml:EncryptedID> in <samlp:LogoutRequest>.');
+            throw new Exception('Missing <saml:NameID> or <saml:EncryptedID> in <samlp:LogoutRequest>.');
         } elseif (count($nameId) > 1) {
-            throw new \Exception('More than one <saml:NameID> or <saml:EncryptedD> in <samlp:LogoutRequest>.');
+            throw new Exception('More than one <saml:NameID> or <saml:EncryptedD> in <samlp:LogoutRequest>.');
         }
         if ($nameId[0]->localName === 'EncryptedData') {
             /* The NameID element is encrypted. */
@@ -305,6 +309,17 @@ class LogoutRequest extends Request
 
 
     /**
+     * Create a class from XML
+     *
+     * @param \DOMElement $xml
+     * @return \SAML2\XML\samlp\LogoutRequest
+     */
+    public static function fromXML(DOMElement $xml): object
+    {
+    }
+
+
+    /**
      * Convert this logout request message to an XML element.
      *
      * @return \DOMElement This logout request.
@@ -312,7 +327,7 @@ class LogoutRequest extends Request
     public function toXML(?DOMElement $parent = null): DOMElement
     {
         if ($this->encryptedNameId === null && $this->nameId === null) {
-            throw new \Exception('Cannot convert LogoutRequest to XML without a NameID set.');
+            throw new Exception('Cannot convert LogoutRequest to XML without a NameID set.');
         }
 
         $root = parent::toXML();

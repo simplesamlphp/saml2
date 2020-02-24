@@ -2,9 +2,11 @@
 
 declare(strict_types=1);
 
-namespace SAML2;
+namespace SAML2\XML\samlp;
 
 use DOMElement;
+use SAML2\Constants;
+use SAML2\Utils;
 use SAML2\XML\samlp\AbstractMessage;
 use SAML2\XML\samlp\Status;
 use SAML2\XML\samlp\StatusCode;
@@ -20,7 +22,7 @@ use Webmozart\Assert\Assert;
  *
  * @package SimpleSAMLphp
  */
-abstract class StatusResponse extends AbstractMessage
+abstract class AbstractStatusResponse extends AbstractMessage
 {
     /**
      * The ID of the request this is a response to, or null if this is an unsolicited response.

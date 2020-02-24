@@ -136,7 +136,7 @@ final class NameIDPolicy extends AbstractSamlpElement
             ($AllowCreate === 'true') ? true : false
         );
     }
-     
+
 
     /**
      * Convert this NameIDPolicy to XML.

@@ -6,7 +6,7 @@ namespace SAML2\Signature;
 
 use SAML2\Configuration\IdentityProvider;
 use SAML2\Signature\ValidatorChain;
-use SAML2\Response;
+use SAML2\XML\samlp\Response;
 use SAML2\Signature\MissingConfigurationException;
 
 class ValidatorChainTest extends \PHPUnit\Framework\TestCase

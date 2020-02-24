@@ -10,6 +10,7 @@ use RobRichards\XMLSecLibs\XMLSecEnc;
 use RobRichards\XMLSecLibs\XMLSecurityKey;
 use SAML2\XML\saml\NameID;
 use SAML2\XML\saml\SubjectConfirmation;
+use SAML2\XML\samlp\AbstractRequest;
 use SAML2\XML\samlp\NameIDPolicy;
 use SAML2\XML\samlp\RequestedAuthnContext;
 use SAML2\Exception\InvalidArgumentException;
@@ -20,7 +21,7 @@ use Webmozart\Assert\Assert;
  *
  * @package SimpleSAMLphp
  */
-class AuthnRequest extends Request
+class AuthnRequest extends AbstractRequest
 {
     /**
      * The options for what type of name identifier should be returned.
@@ -731,6 +732,18 @@ class AuthnRequest extends Request
     public function setSubjectConfirmation(array $subjectConfirmation): void
     {
         $this->subjectConfirmation = $subjectConfirmation;
+    }
+
+
+    /**
+     * Convert XML into an AuthnRequest
+     *
+     * @param \DOMElement $xml The XML element we should load
+     * @return \SAML2\AuthnRequest
+     * @throws \InvalidArgumentException if the qualified name of the supplied element is wrong
+     */
+    public static function fromXML(DOMElement $xml): object
+    {
     }
 
 

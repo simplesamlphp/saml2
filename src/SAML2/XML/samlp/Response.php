@@ -2,9 +2,10 @@
 
 declare(strict_types=1);
 
-namespace SAML2;
+namespace SAML2\XML\samlp;
 
 use DOMElement;
+use SAML2\Constants;
 use Webmozart\Assert\Assert;
 
 /**
@@ -12,12 +13,12 @@ use Webmozart\Assert\Assert;
  *
  * @package SimpleSAMLphp
  */
-class Response extends StatusResponse
+class Response extends AbstractStatusResponse
 {
     /**
      * The assertions in this response.
      *
-     * @var (Assertion|EncryptedAssertion)[]
+     * @var (\SAML2\Assertion|\SAML2\EncryptedAssertion)[]
      */
     private $assertions = [];
 
@@ -71,6 +72,18 @@ class Response extends StatusResponse
     public function setAssertions(array $assertions): void
     {
         $this->assertions = $assertions;
+    }
+
+
+    /**
+     * Convert XML into a Response
+     *
+     * @param \DOMElement $xml The XML element we should load
+     * @return \SAML2\XML\samlp\Response
+     * @throws \InvalidArgumentException if the qualified name of the supplied element is wrong
+     */
+    public static function fromXML(DOMElement $xml): object
+    {
     }
 
 
