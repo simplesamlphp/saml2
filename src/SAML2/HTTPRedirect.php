@@ -5,6 +5,7 @@ declare(strict_types=1);
 namespace SAML2;
 
 use RobRichards\XMLSecLibs\XMLSecurityKey;
+use SAML2\XML\samlp\AbstractMessage;
 use Webmozart\Assert\Assert;
 
 /**
@@ -19,10 +20,10 @@ class HTTPRedirect extends Binding
     /**
      * Create the redirect URL for a message.
      *
-     * @param \SAML2\Message $message The message.
+     * @param \SAML2\XML\samlp\AbstractMessage $message The message.
      * @return string The URL the user should be redirected to in order to send a message.
      */
-    public function getRedirectURL(Message $message): string
+    public function getRedirectURL(AbstractMessage $message): string
     {
         if ($this->destination === null) {
             $destination = $message->getDestination();
@@ -80,10 +81,10 @@ class HTTPRedirect extends Binding
      * Send a SAML 2 message using the HTTP-Redirect binding.
      * Note: This function never returns.
      *
-     * @param \SAML2\Message $message The message we should send.
+     * @param \SAML2\XML\samlp\AbstractMessage $message The message we should send.
      * @return void
      */
-    public function send(Message $message): void
+    public function send(AbstractMessage $message): void
     {
         $destination = $this->getRedirectURL($message);
         Utils::getContainer()->getLogger()->debug('Redirect to ' . strlen($destination) . ' byte URL: ' . $destination);
@@ -97,11 +98,11 @@ class HTTPRedirect extends Binding
      * Throws an exception if it is unable receive the message.
      *
      * @throws \Exception
-     * @return \SAML2\Message The received message.
+     * @return \SAML2\XML\samlp\AbstractMessage The received message.
      *
      * NPath is currently too high but solving that just moves code around.
      */
-    public function receive(): Message
+    public function receive(): AbstractMessage
     {
         $data = self::parseQuery();
         if (array_key_exists('SAMLRequest', $data)) {
@@ -131,7 +132,7 @@ class HTTPRedirect extends Binding
         if (!$document->firstChild instanceof \DOMElement) {
             throw new \Exception('Malformed SAML message received.');
         }
-        $message = Message::fromXML($document->firstChild);
+        $message = AbstractMessage::fromXML($document->firstChild);
 
         if (array_key_exists('RelayState', $data)) {
             $message->setRelayState($data['RelayState']);

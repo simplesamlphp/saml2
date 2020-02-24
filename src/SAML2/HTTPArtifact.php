@@ -6,6 +6,7 @@ namespace SAML2;
 
 use RobRichards\XMLSecLibs\XMLSecurityKey;
 use SAML2\Utilities\Temporal;
+use SAML2\XML\samlp\AbstractMessage;
 use SimpleSAML\Configuration;
 use SimpleSAML\Metadata\MetaDataStorageHandler;
 use SimpleSAML\Module\saml\Message as MSG;
@@ -31,11 +32,11 @@ class HTTPArtifact extends Binding
     /**
      * Create the redirect URL for a message.
      *
-     * @param  \SAML2\Message $message The message.
+     * @param  \SAML2\XML\samlp\AbstractMessage $message The message.
      * @throws \Exception
      * @return string        The URL the user should be redirected to in order to send a message.
      */
-    public function getRedirectURL(Message $message): string
+    public function getRedirectURL(AbstractMessage $message): string
     {
         /** @psalm-suppress UndefinedClass */
         $store = Store::getInstance();
@@ -76,10 +77,10 @@ class HTTPArtifact extends Binding
      *
      * Note: This function never returns.
      *
-     * @param \SAML2\Message $message The message we should send.
+     * @param \SAML2\XML\samlp\AbstractMessage $message The message we should send.
      * @return void
      */
-    public function send(Message $message): void
+    public function send(AbstractMessage $message): void
     {
         $destination = $this->getRedirectURL($message);
         Utils::getContainer()->redirect($destination);
@@ -92,11 +93,11 @@ class HTTPArtifact extends Binding
      * Throws an exception if it is unable receive the message.
      *
      * @throws \Exception
-     * @return \SAML2\Message The received message.
+     * @return \SAML2\XML\samlp\AbstractMessage The received message.
      *
      * @throws \InvalidArgumentException if assertions are false
      */
-    public function receive(): Message
+    public function receive(): AbstractMessage
     {
         if (array_key_exists('SAMLart', $_REQUEST)) {
             $artifact = base64_decode($_REQUEST['SAMLart']);

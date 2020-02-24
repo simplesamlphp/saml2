@@ -3,7 +3,7 @@
 namespace SAML2\XML\md;
 
 use DOMElement;
-use SAML2\SignedElementTrait;
+use SAML2\XML\SignedElementTrait;
 use SAML2\XML\ExtendableElementTrait;
 
 /**

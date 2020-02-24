@@ -4,6 +4,8 @@ declare(strict_types=1);
 
 namespace SAML2;
 
+use SAML2\XML\samlp\AbstractMessage;
+
 /**
  * Class which implements the HTTP-POST binding.
  *
@@ -16,10 +18,10 @@ class HTTPPost extends Binding
      *
      * Note: This function never returns.
      *
-     * @param \SAML2\Message $message The message we should send.
+     * @param \SAML2\XML\samlp\AbstractMessage $message The message we should send.
      * @return void
      */
-    public function send(Message $message): void
+    public function send(AbstractMessage $message): void
     {
         if ($this->destination === null) {
             $destination = $message->getDestination();
@@ -60,10 +62,10 @@ class HTTPPost extends Binding
      *
      * Throws an exception if it is unable receive the message.
      *
-     * @return \SAML2\Message The received message.
+     * @return \SAML2\XML\samlp\AbstractMessage The received message.
      * @throws \Exception
      */
-    public function receive(): Message
+    public function receive(): AbstractMessage
     {
         if (array_key_exists('SAMLRequest', $_POST)) {
             $msgStr = $_POST['SAMLRequest'];
@@ -85,7 +87,7 @@ class HTTPPost extends Binding
             throw new \Exception('Malformed SAML message received.');
         }
 
-        $msg = Message::fromXML($document->firstChild);
+        $msg = AbstractMessage::fromXML($document->firstChild);
 
         if (array_key_exists('RelayState', $_POST)) {
             $msg->setRelayState($_POST['RelayState']);

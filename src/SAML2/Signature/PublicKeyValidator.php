@@ -9,7 +9,7 @@ use SAML2\Certificate\Key;
 use SAML2\Certificate\KeyLoader;
 use SAML2\Certificate\X509;
 use SAML2\Configuration\CertificateProvider;
-use SAML2\SignedElementInterface;
+use SAML2\XML\SignedElementInterface;
 use Webmozart\Assert\Assert;
 
 class PublicKeyValidator extends AbstractChainedValidator
@@ -28,8 +28,8 @@ class PublicKeyValidator extends AbstractChainedValidator
     /**
      * Constructor for PublicKeyValidator
      *
-     * @param LoggerInterface $logger
-     * @param KeyLoader $keyLoader
+     * @param \Psr\Log\LoggerInterface $logger
+     * @param \SAML2\Certificate\KeyLoader $keyLoader
      */
     public function __construct(LoggerInterface $logger, KeyLoader $keyLoader)
     {
@@ -40,7 +40,7 @@ class PublicKeyValidator extends AbstractChainedValidator
 
 
     /**
-     * @param \SAML2\SignedElementInterface $signedElement
+     * @param \SAML2\XML\SignedElementInterface $signedElement
      * @param \SAML2\Configuration\CertificateProvider $configuration
      *
      * @return bool
@@ -56,7 +56,7 @@ class PublicKeyValidator extends AbstractChainedValidator
 
 
     /**
-     * @param \SAML2\SignedElementInterface $signedElement
+     * @param \SAML2\XML\SignedElementInterface $signedElement
      * @param \SAML2\Configuration\CertificateProvider $configuration
      *
      * @return bool

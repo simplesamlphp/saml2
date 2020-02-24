@@ -1,6 +1,6 @@
 <?php
 
-namespace SAML2;
+namespace SAML2\XML;
 
 use RobRichards\XMLSecLibs\XMLSecurityKey;
 
