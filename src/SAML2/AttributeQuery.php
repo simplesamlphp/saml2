@@ -5,6 +5,7 @@ declare(strict_types=1);
 namespace SAML2;
 
 use DOMElement;
+use Webmozart\Assert\Assert;
 
 /**
  * Class for SAML 2 attribute query messages.
@@ -142,13 +143,15 @@ class AttributeQuery extends SubjectQuery
      *
      * @return \DOMElement This attribute query.
      */
-    public function toXML(): DOMElement
+    public function toXML(?DOMElement $parent = null): DOMElement
     {
-        $root = parent::toXML();
+        Assert::null($parent);
+
+        $parent = parent::toXML();
 
         foreach ($this->attributes as $name => $values) {
-            $attribute = $root->ownerDocument->createElementNS(Constants::NS_SAML, 'saml:Attribute');
-            $root->appendChild($attribute);
+            $attribute = $parent->ownerDocument->createElementNS(Constants::NS_SAML, 'saml:Attribute');
+            $parent->appendChild($attribute);
             $attribute->setAttribute('Name', $name);
 
             if ($this->nameFormat !== Constants::NAMEFORMAT_UNSPECIFIED) {
@@ -176,6 +179,6 @@ class AttributeQuery extends SubjectQuery
             }
         }
 
-        return $root;
+        return $parent;
     }
 }

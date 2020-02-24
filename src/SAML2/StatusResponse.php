@@ -133,16 +133,18 @@ abstract class StatusResponse extends AbstractMessage
      *
      * @return \DOMElement This status response.
      */
-    public function toXML(): DOMElement
+    public function toXML(?DOMElement $parent = null): DOMElement
     {
-        $root = parent::toXML();
+        Assert::null($parent);
+
+        $parent = parent::toXML();
 
         if ($this->inResponseTo !== null) {
-            $root->setAttribute('InResponseTo', $this->inResponseTo);
+            $parent->setAttribute('InResponseTo', $this->inResponseTo);
         }
 
-        $this->status->toXML($root);
+        $this->status->toXML($parent);
 
-        return $root;
+        return $parent;
     }
 }

@@ -309,7 +309,7 @@ class LogoutRequest extends Request
      *
      * @return \DOMElement This logout request.
      */
-    public function toXML(): DOMElement
+    public function toXML(?DOMElement $parent = null): DOMElement
     {
         if ($this->encryptedNameId === null && $this->nameId === null) {
             throw new \Exception('Cannot convert LogoutRequest to XML without a NameID set.');

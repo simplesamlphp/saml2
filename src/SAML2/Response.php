@@ -5,6 +5,7 @@ declare(strict_types=1);
 namespace SAML2;
 
 use DOMElement;
+use Webmozart\Assert\Assert;
 
 /**
  * Class for SAML 2 Response messages.
@@ -78,14 +79,16 @@ class Response extends StatusResponse
      *
      * @return \DOMElement This response.
      */
-    public function toXML(): DOMElement
+    public function toXML(?DOMElement $parent = null): DOMElement
     {
-        $root = parent::toXML();
+        Assert::null($parent);
+
+        $parent = parent::toXML();
 
         foreach ($this->assertions as $assertion) {
-            $assertion->toXML($root);
+            $assertion->toXML($parent);
         }
 
-        return $root;
+        return $parent;
     }
 }

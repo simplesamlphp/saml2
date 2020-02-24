@@ -739,54 +739,56 @@ class AuthnRequest extends Request
      *
      * @return \DOMElement This authentication request.
      */
-    public function toXML(): DOMElement
+    public function toXML(?DOMElement $parent = null): DOMElement
     {
-        $root = parent::toXML();
+        Assert::null($parent);
+
+        $parent = parent::toXML();
 
         if ($this->forceAuthn) {
-            $root->setAttribute('ForceAuthn', 'true');
+            $parent->setAttribute('ForceAuthn', 'true');
         }
 
         if (!empty($this->ProviderName)) {
-            $root->setAttribute('ProviderName', $this->ProviderName);
+            $parent->setAttribute('ProviderName', $this->ProviderName);
         }
 
         if ($this->isPassive) {
-            $root->setAttribute('IsPassive', 'true');
+            $parent->setAttribute('IsPassive', 'true');
         }
 
         if ($this->assertionConsumerServiceIndex !== null) {
-            $root->setAttribute('AssertionConsumerServiceIndex', strval($this->assertionConsumerServiceIndex));
+            $parent->setAttribute('AssertionConsumerServiceIndex', strval($this->assertionConsumerServiceIndex));
         } else {
             if ($this->assertionConsumerServiceURL !== null) {
-                $root->setAttribute('AssertionConsumerServiceURL', $this->assertionConsumerServiceURL);
+                $parent->setAttribute('AssertionConsumerServiceURL', $this->assertionConsumerServiceURL);
             }
             if ($this->protocolBinding !== null) {
-                $root->setAttribute('ProtocolBinding', $this->protocolBinding);
+                $parent->setAttribute('ProtocolBinding', $this->protocolBinding);
             }
         }
 
         if ($this->attributeConsumingServiceIndex !== null) {
-            $root->setAttribute('AttributeConsumingServiceIndex', strval($this->attributeConsumingServiceIndex));
+            $parent->setAttribute('AttributeConsumingServiceIndex', strval($this->attributeConsumingServiceIndex));
         }
 
-        $this->addSubject($root);
+        $this->addSubject($parent);
 
         if ($this->nameIdPolicy !== null) {
             if (!$this->nameIdPolicy->isEmptyElement()) {
-                $this->nameIdPolicy->toXML($root);
+                $this->nameIdPolicy->toXML($parent);
             }
         }
 
-        $this->addConditions($root);
+        $this->addConditions($parent);
 
         if (!empty($this->requestedAuthnContext)) {
-            $this->requestedAuthnContext->toXML($root);
+            $this->requestedAuthnContext->toXML($parent);
         }
 
         if ($this->ProxyCount !== null || count($this->IDPList) > 0 || count($this->RequesterID) > 0) {
             $scoping = $this->document->createElementNS(Constants::NS_SAMLP, 'Scoping');
-            $root->appendChild($scoping);
+            $parent->appendChild($scoping);
             if ($this->ProxyCount !== null) {
                 $scoping->setAttribute('ProxyCount', strval($this->ProxyCount));
             }
@@ -817,7 +819,7 @@ class AuthnRequest extends Request
             Utils::addStrings($scoping, Constants::NS_SAMLP, 'RequesterID', false, $this->RequesterID);
         }
 
-        return $root;
+        return $parent;
     }
 
 

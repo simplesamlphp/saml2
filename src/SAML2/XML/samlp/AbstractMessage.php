@@ -429,8 +429,10 @@ abstract class AbstractMessage extends AbstractSamlpElement implements SignedEle
      *
      * @return \DOMElement The root element of the DOM tree
      */
-    public function toXML(): DOMElement
+    public function toXML(?DOMElement $parent = null): DOMElement
     {
+        Assert::null($parent);
+
         $this->document = DOMDocumentFactory::create();
 
         $root = $this->document->createElementNS(Constants::NS_SAMLP, 'samlp:' . $this->tagName);

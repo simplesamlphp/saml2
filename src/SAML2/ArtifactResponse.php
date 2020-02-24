@@ -6,6 +6,7 @@ namespace SAML2;
 
 use DOMElement;
 use DOMNode;
+use Webmozart\Assert\Assert;
 
 /**
  * The \SAML2\ArtifactResponse, is the response to the \SAML2\ArtifactResolve.
@@ -74,14 +75,17 @@ class ArtifactResponse extends StatusResponse
      *
      * @return \DOMElement This response.
      */
-    public function toXML(): DOMElement
+    public function toXML(?DOMElement $parent = null): DOMElement
     {
-        $root = parent::toXML();
+        Assert::null($parent);
+
+        $parent = parent::toXML();
+
         if (isset($this->any)) {
-            $node = $root->ownerDocument->importNode($this->any, true);
-            $root->appendChild($node);
+            $node = $parent->ownerDocument->importNode($this->any, true);
+            $parent->appendChild($node);
         }
 
-        return $root;
+        return $parent;
     }
 }
