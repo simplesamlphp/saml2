@@ -68,7 +68,7 @@ class XmlSignatureWrappingTest extends \Mockery\Adapter\Phpunit\MockeryTestCase
 
 
     /**
-     * @return \SAML2\Assertion
+     * @return \SAML2\XML\saml\Assertion
      */
     private function getSignedAssertionWithSignatureThatReferencesAnotherAssertion(): Assertion
     {
@@ -80,7 +80,7 @@ class XmlSignatureWrappingTest extends \Mockery\Adapter\Phpunit\MockeryTestCase
 
 
     /**
-     * @return \SAML2\Assertion
+     * @return \SAML2\XML\saml\Assertion
      */
     private function getSignedAssertionWithEmbeddedAssertionReferencedInSignature(): Assertion
     {
