@@ -4,6 +4,8 @@ declare(strict_types=1);
 
 namespace SAML2;
 
+use SAML2\XML\samlp\AbstractMessage;
+
 /**
  * Base class for SAML 2 bindings.
  *
@@ -139,10 +141,10 @@ abstract class Binding
      * This function will send a message using the specified binding.
      * The message will be delivered to the destination set in the message.
      *
-     * @param \SAML2\Message $message The message which should be sent.
+     * @param \SAML2\XML\samlp\AbstractMessage $message The message which should be sent.
      * @return void
      */
-    abstract public function send(Message $message): void;
+    abstract public function send(AbstractMessage $message): void;
 
 
     /**
@@ -151,7 +153,7 @@ abstract class Binding
      * This function will extract the message from the current request.
      * An exception will be thrown if we are unable to process the message.
      *
-     * @return \SAML2\Message The received message.
+     * @return \SAML2\XML\samlp\AbstractMessage The received message.
      */
-    abstract public function receive(): Message;
+    abstract public function receive(): AbstractMessage;
 }

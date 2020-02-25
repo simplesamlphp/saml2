@@ -2,22 +2,20 @@
 
 declare(strict_types=1);
 
-namespace SAML2;
+namespace SAML2\XML\saml;
 
 use Exception;
-use SAML2\Assertion;
+use Mockery\Adapter\Phpunit\MockeryTestCase;
+use SAML2\CertificatesMock;
 use SAML2\Constants;
 use SAML2\DOMDocumentFactory;
 use SAML2\Utils;
 use SAML2\XML\Chunk;
-use SAML2\XML\saml\Issuer;
-use SAML2\XML\saml\NameID;
-use SAML2\XML\saml\SubjectConfirmation;
 
 /**
  * Class \SAML2\AssertionTest
  */
-class AssertionTest extends \Mockery\Adapter\Phpunit\MockeryTestCase
+class AssertionTest extends MockeryTestCase
 {
     /**
      * Test to build a basic assertion
@@ -1088,7 +1086,7 @@ XML;
     public function testVerifySignedAssertion(): void
     {
         $doc = new \DOMDocument();
-        $doc->load(__DIR__ . '/signedassertion.xml');
+        $doc->load(__DIR__ . '../../../signedassertion.xml');
 
         $publicKey = CertificatesMock::getPublicKeySha256();
 
@@ -1120,7 +1118,7 @@ XML;
     public function testCommentsInSignedAssertion(): void
     {
         $doc = new \DOMDocument();
-        $doc->load(__DIR__ . '/signedassertion_with_comments.xml');
+        $doc->load(__DIR__ . '../../../signedassertion_with_comments.xml');
 
         $publicKey = CertificatesMock::getPublicKeySha256();
 
@@ -1139,7 +1137,7 @@ XML;
     public function testVerifySignedAssertionChangedBody(): void
     {
         $doc = new \DOMDocument();
-        $doc->load(__DIR__ . '/signedassertion_tampered.xml');
+        $doc->load(__DIR__ . '../../../signedassertion_tampered.xml');
 
         $publicKey = CertificatesMock::getPublicKeySha256();
 
@@ -1156,7 +1154,7 @@ XML;
     public function testVerifySignedAssertionWrongKey(): void
     {
         $doc = new \DOMDocument();
-        $doc->load(__DIR__ . '/signedassertion.xml');
+        $doc->load(__DIR__ . '../../../signedassertion.xml');
 
         $publicKey = CertificatesMock::getPublicKey2Sha256();
 
@@ -1174,7 +1172,7 @@ XML;
     public function testVerifySignedAssertionWrongKeyDSA(): void
     {
         $doc = new \DOMDocument();
-        $doc->load(__DIR__ . '/signedassertion.xml');
+        $doc->load(__DIR__ . '../../../signedassertion.xml');
 
         $publicKey = CertificatesMock::getPublicKeyDSAasRSA();
 
@@ -1896,7 +1894,7 @@ XML;
 
         // Not encrypted, should be a no-op
         $privateKey = CertificatesMock::getPrivateKey();
-        $decrypted = $assertion->decryptNameId($privateKey);
+        $assertion->decryptNameId($privateKey);
         $this->assertEquals('b7de81420a19416', $nameID->getValue());
         $this->assertEquals('urn:oasis:names:tc:SAML:2.0:nameid-format:transient', $nameID->getFormat());
         $this->assertFalse($assertion->isNameIdEncrypted());

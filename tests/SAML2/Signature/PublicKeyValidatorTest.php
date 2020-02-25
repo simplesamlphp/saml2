@@ -13,11 +13,11 @@ use SAML2\Certificate\KeyLoader;
 use SAML2\Configuration\IdentityProvider;
 use SAML2\Configuration\CertificateProvider;
 use SAML2\DOMDocumentFactory;
-use SAML2\Message;
-use SAML2\Response;
 use SAML2\Signature\PublicKeyValidator;
 use SAML2\SimpleTestLogger;
 use SAML2\Utilities\Certificate;
+use SAML2\XML\samlp\AbstractMessage;
+use SAML2\XML\samlp\Response;
 
 class PublicKeyValidatorTest extends \Mockery\Adapter\Phpunit\MockeryTestCase
 {
@@ -31,7 +31,7 @@ class PublicKeyValidatorTest extends \Mockery\Adapter\Phpunit\MockeryTestCase
     public function setUp(): void
     {
         $this->mockConfiguration = Mockery::mock(CertificateProvider::class);
-        $this->mockSignedElement = Mockery::mock(Message::class);
+        $this->mockSignedElement = Mockery::mock(AbstractMessage::class);
     }
 
 

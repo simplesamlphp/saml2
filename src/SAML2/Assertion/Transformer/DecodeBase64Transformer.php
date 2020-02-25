@@ -4,13 +4,13 @@ declare(strict_types=1);
 
 namespace SAML2\Assertion\Transformer;
 
-use SAML2\Assertion;
+use SAML2\XML\saml\Assertion;
 use SAML2\Configuration\IdentityProvider;
 use SAML2\Configuration\IdentityProviderAware;
 use Webmozart\Assert\Assert;
 
 class DecodeBase64Transformer implements
-    Transformer,
+    TransformerInterface,
     IdentityProviderAware
 {
     /**
@@ -20,7 +20,7 @@ class DecodeBase64Transformer implements
 
 
     /**
-     * @param IdentityProvider $identityProvider
+     * @param \SAML2\Configuration\IdentityProvider $identityProvider
      * @return void
      */
     public function setIdentityProvider(IdentityProvider $identityProvider): void
@@ -30,8 +30,8 @@ class DecodeBase64Transformer implements
 
 
     /**
-     * @param Assertion $assertion
-     * @return Assertion
+     * @param \SAML2\XML\saml\Assertion $assertion
+     * @return \SAML2\XML\saml\Assertion
      *
      * @throws \InvalidArgumentException if assertions are false
      */

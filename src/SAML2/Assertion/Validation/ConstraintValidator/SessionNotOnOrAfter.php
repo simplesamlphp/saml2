@@ -4,7 +4,7 @@ declare(strict_types=1);
 
 namespace SAML2\Assertion\Validation\ConstraintValidator;
 
-use SAML2\Assertion;
+use SAML2\XML\saml\Assertion;
 use SAML2\Assertion\Validation\AssertionConstraintValidator;
 use SAML2\Assertion\Validation\Result;
 use SAML2\Utilities\Temporal;
@@ -13,8 +13,8 @@ class SessionNotOnOrAfter implements
     AssertionConstraintValidator
 {
     /**
-     * @param Assertion $assertion
-     * @param Result $result
+     * @param \SAML2\XML\saml\Assertion $assertion
+     * @param \SAML2\Assertion\Validation\Result $result
      * @return void
      */
     public function validate(Assertion $assertion, Result $result): void

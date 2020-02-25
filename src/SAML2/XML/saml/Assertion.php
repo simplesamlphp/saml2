@@ -2,19 +2,21 @@
 
 declare(strict_types=1);
 
-namespace SAML2;
+namespace SAML2\XML\saml;
 
 use DOMElement;
 use DOMNode;
 use DOMNodeList;
 use RobRichards\XMLSecLibs\XMLSecEnc;
 use RobRichards\XMLSecLibs\XMLSecurityKey;
+use SAML2\Constants;
+use SAML2\DOMDocumentFactory;
 use SAML2\Exception\RuntimeException;
 use SAML2\Utilities\Temporal;
+use SAML2\Utils;
 use SAML2\XML\Chunk;
-use SAML2\XML\saml\Issuer;
-use SAML2\XML\saml\NameID;
-use SAML2\XML\saml\SubjectConfirmation;
+use SAML2\XML\SignedElementInterface;
+use SAML2\XML\SignedElementTrait;
 use Webmozart\Assert\Assert;
 
 /**

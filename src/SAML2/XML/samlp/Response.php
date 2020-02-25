@@ -2,21 +2,25 @@
 
 declare(strict_types=1);
 
-namespace SAML2;
+namespace SAML2\XML\samlp;
 
 use DOMElement;
+use SAML2\Constants;
+use SAML2\EncryptedAssertion;
+use SAML2\XML\saml\Assertion;
+use Webmozart\Assert\Assert;
 
 /**
  * Class for SAML 2 Response messages.
  *
  * @package SimpleSAMLphp
  */
-class Response extends StatusResponse
+class Response extends AbstractStatusResponse
 {
     /**
      * The assertions in this response.
      *
-     * @var (Assertion|EncryptedAssertion)[]
+     * @var (\SAML2\XML\saml\Assertion|\SAML2\EncryptedAssertion)[]
      */
     private $assertions = [];
 
@@ -53,7 +57,7 @@ class Response extends StatusResponse
     /**
      * Retrieve the assertions in this response.
      *
-     * @return \SAML2\Assertion[]|\SAML2\EncryptedAssertion[]
+     * @return \SAML2\XML\saml\Assertion[]|\SAML2\EncryptedAssertion[]
      */
     public function getAssertions(): array
     {
@@ -64,7 +68,7 @@ class Response extends StatusResponse
     /**
      * Set the assertions that should be included in this response.
      *
-     * @param \SAML2\Assertion[]|\SAML2\EncryptedAssertion[] $assertions The assertions.
+     * @param \SAML2\XML\saml\Assertion[]|\SAML2\EncryptedAssertion[] $assertions The assertions.
      * @return void
      */
     public function setAssertions(array $assertions): void
@@ -78,14 +82,16 @@ class Response extends StatusResponse
      *
      * @return \DOMElement This response.
      */
-    public function toXML(): DOMElement
+    public function toXML(?DOMElement $parent = null): DOMElement
     {
-        $root = parent::toXML();
+        Assert::null($parent);
+
+        $parent = parent::toXML();
 
         foreach ($this->assertions as $assertion) {
-            $assertion->toXML($root);
+            $assertion->toXML($parent);
         }
 
-        return $root;
+        return $parent;
     }
 }

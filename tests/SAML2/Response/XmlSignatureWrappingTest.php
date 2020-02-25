@@ -6,10 +6,10 @@ namespace SAML2\Response;
 
 use Exception;
 use SAML2\CertificatesMock;
-use SAML2\Assertion;
 use SAML2\Configuration\IdentityProvider;
 use SAML2\DOMDocumentFactory;
 use SAML2\Signature\Validator;
+use SAML2\XML\saml\Assertion;
 use SAML2\Utilities\Certificate;
 
 class XmlSignatureWrappingTest extends \Mockery\Adapter\Phpunit\MockeryTestCase
@@ -68,7 +68,7 @@ class XmlSignatureWrappingTest extends \Mockery\Adapter\Phpunit\MockeryTestCase
 
 
     /**
-     * @return \SAML2\Assertion
+     * @return \SAML2\XML\saml\Assertion
      */
     private function getSignedAssertionWithSignatureThatReferencesAnotherAssertion(): Assertion
     {
@@ -80,7 +80,7 @@ class XmlSignatureWrappingTest extends \Mockery\Adapter\Phpunit\MockeryTestCase
 
 
     /**
-     * @return \SAML2\Assertion
+     * @return \SAML2\XML\saml\Assertion
      */
     private function getSignedAssertionWithEmbeddedAssertionReferencedInSignature(): Assertion
     {

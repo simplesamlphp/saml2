@@ -7,10 +7,10 @@ namespace SAML2;
 use Exception;
 use PHPUnit\Framework\Error\Warning;
 use PHPUnit\Framework\TestCase;
-use SAML2\AuthnRequest;
 use SAML2\HTTPPost;
-use SAML2\Response;
 use SAML2\XML\saml\Issuer;
+use SAML2\XML\samlp\AuthnRequest;
+use SAML2\XML\samlp\Response;
 use SimpleSAML\Utils\HTTP;
 
 class HTTPPostTest extends \Mockery\Adapter\Phpunit\MockeryTestCase

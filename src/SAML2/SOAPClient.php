@@ -8,6 +8,7 @@ use DOMDocument;
 use RobRichards\XMLSecLibs\XMLSecurityKey;
 use SAML2\Compat\ContainerSingleton;
 use SAML2\Exception\RuntimeException;
+use SAML2\XML\samlp\AbstractMessage;
 use SimpleSAML\Configuration;
 use SimpleSAML\Utils\Config;
 use SimpleSAML\Utils\Crypto;
@@ -29,15 +30,15 @@ class SOAPClient
     /**
      * This function sends the SOAP message to the service location and returns SOAP response
      *
-     * @param \SAML2\Message $msg The request that should be sent.
+     * @param \SAML2\XML\samlp\AbstractMessage $msg The request that should be sent.
      * @param \SimpleSAML\Configuration $srcMetadata The metadata of the issuer of the message.
      * @param \SimpleSAML\Configuration $dstMetadata The metadata of the destination of the message.
      * @throws \Exception
-     * @return \SAML2\Message The response we received.
+     * @return \SAML2\XML\samlp\AbstractMessage The response we received.
      *
      * @psalm-suppress UndefinedClass
      */
-    public function send(Message $msg, Configuration $srcMetadata, Configuration $dstMetadata = null): Message
+    public function send(AbstractMessage $msg, Configuration $srcMetadata, Configuration $dstMetadata = null): AbstractMessage
     {
         $issuer = $msg->getIssuer();
 
@@ -143,7 +144,7 @@ class SOAPClient
 
         Utils::getContainer()->debugMessage($soapresponsexml, 'in');
 
-        // Convert to SAML2\Message (\DOMElement)
+        // Convert to SAML2\XML\samlp\AbstractMessage (\DOMElement)
         try {
             $dom = DOMDocumentFactory::fromString($soapresponsexml);
         } catch (RuntimeException $e) {
@@ -172,11 +173,11 @@ class SOAPClient
     /**
      * Add a signature validator based on a SSL context.
      *
-     * @param \SAML2\Message $msg The message we should add a validator to.
+     * @param \SAML2\XML\samlp\AbstractMessage $msg The message we should add a validator to.
      * @param resource $context The stream context.
      * @return void
      */
-    private static function addSSLValidator(Message $msg, $context): void
+    private static function addSSLValidator(AbstractMessage $msg, $context): void
     {
         $options = stream_context_get_options($context);
         if (!isset($options['ssl']['peer_certificate'])) {

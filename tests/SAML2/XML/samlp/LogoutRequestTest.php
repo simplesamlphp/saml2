@@ -2,17 +2,17 @@
 
 declare(strict_types=1);
 
-namespace SAML2;
+namespace SAML2\XML\samlp;
 
 use Exception;
-use SAML2\DOMDocumentFactory;
+use SAML2\CertificatesMock;
 use SAML2\Constants;
+use SAML2\DOMDocumentFactory;
 use SAML2\Utils;
-use SAML2\LogoutRequest;
 use SAML2\XML\saml\NameID;
 
 /**
- * Class \SAML2\LogoutRequestTest
+ * Class \SAML2\XML\samlp\LogoutRequestTest
  */
 class LogoutRequestTest extends \Mockery\Adapter\Phpunit\MockeryTestCase
 {
@@ -290,7 +290,7 @@ XML;
     public function testSetReason(): void
     {
         $reason = "urn:simplesamlphp:reason-test";
-        $nameId = new XML\saml\NameID('NameIDValue');
+        $nameId = new NameID('NameIDValue');
 
         $logoutRequest = new LogoutRequest();
         $logoutRequest->setNameID($nameId);

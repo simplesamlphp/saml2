@@ -5,12 +5,12 @@ declare(strict_types=1);
 namespace SAML2\XML\md;
 
 use DOMElement;
-use SAML2\ExtensionsTrait;
 use SAML2\Utils;
 use SAML2\XML\alg\AbstractAlgElement as ALG;
 use SAML2\XML\alg\DigestMethod;
 use SAML2\XML\alg\SigningMethod;
 use SAML2\XML\Chunk;
+use SAML2\XML\ExtensionsTrait;
 use SAML2\XML\mdattr\EntityAttributes;
 use SAML2\XML\mdrpi\AbstractMdrpiElement as MDRPI;
 use SAML2\XML\mdrpi\PublicationInfo;

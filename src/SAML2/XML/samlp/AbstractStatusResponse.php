@@ -2,11 +2,11 @@
 
 declare(strict_types=1);
 
-namespace SAML2;
+namespace SAML2\XML\samlp;
 
 use DOMElement;
-use SAML2\XML\samlp\Status;
-use SAML2\XML\samlp\StatusCode;
+use SAML2\Constants;
+use SAML2\Utils;
 use Webmozart\Assert\Assert;
 
 /**
@@ -19,7 +19,7 @@ use Webmozart\Assert\Assert;
  *
  * @package SimpleSAMLphp
  */
-abstract class StatusResponse extends Message
+abstract class AbstractStatusResponse extends AbstractMessage
 {
     /**
      * The ID of the request this is a response to, or null if this is an unsolicited response.
@@ -132,16 +132,18 @@ abstract class StatusResponse extends Message
      *
      * @return \DOMElement This status response.
      */
-    public function toXML(): DOMElement
+    public function toXML(?DOMElement $parent = null): DOMElement
     {
-        $root = parent::toXML();
+        Assert::null($parent);
+
+        $parent = parent::toXML();
 
         if ($this->inResponseTo !== null) {
-            $root->setAttribute('InResponseTo', $this->inResponseTo);
+            $parent->setAttribute('InResponseTo', $this->inResponseTo);
         }
 
-        $this->status->toXML($root);
+        $this->status->toXML($parent);
 
-        return $root;
+        return $parent;
     }
 }

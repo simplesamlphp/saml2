@@ -2,24 +2,23 @@
 
 declare(strict_types=1);
 
-namespace SAML2;
+namespace SAML2\XML\samlp;
 
 use DOMDocument;
 use Exception;
-use SAML2\AuthnRequest;
+use PHPUnit\Framework\TestCase;
+use SAML2\CertificatesMock;
 use SAML2\Constants;
 use SAML2\DOMDocumentFactory;
 use SAML2\XML\saml\AuthnContextClassRef;
 use SAML2\XML\saml\Issuer;
 use SAML2\XML\saml\NameID;
-use SAML2\XML\samlp\NameIDPolicy;
-use SAML2\XML\samlp\RequestedAuthnContext;
 use SAML2\Utils;
 
 /**
- * Class \SAML2\AuthnRequestTest
+ * Class \SAML2\XML\samlp\AuthnRequestTest
  */
-class AuthnRequestTest extends \PHPUnit\Framework\TestCase
+class AuthnRequestTest extends TestCase
 {
     public function testUnmarshalling(): void
     {

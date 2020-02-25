@@ -6,6 +6,9 @@ namespace SAML2;
 
 use RobRichards\XMLSecLibs\XMLSecurityKey;
 use SAML2\Utilities\Temporal;
+use SAML2\XML\samlp\AbstractMessage;
+use SAML2\XML\samlp\ArtifactResolve;
+use SAML2\XML\samlp\ArtifactResponse;
 use SimpleSAML\Configuration;
 use SimpleSAML\Metadata\MetaDataStorageHandler;
 use SimpleSAML\Module\saml\Message as MSG;
@@ -31,11 +34,11 @@ class HTTPArtifact extends Binding
     /**
      * Create the redirect URL for a message.
      *
-     * @param  \SAML2\Message $message The message.
+     * @param  \SAML2\XML\samlp\AbstractMessage $message The message.
      * @throws \Exception
      * @return string        The URL the user should be redirected to in order to send a message.
      */
-    public function getRedirectURL(Message $message): string
+    public function getRedirectURL(AbstractMessage $message): string
     {
         /** @psalm-suppress UndefinedClass */
         $store = Store::getInstance();
@@ -76,10 +79,10 @@ class HTTPArtifact extends Binding
      *
      * Note: This function never returns.
      *
-     * @param \SAML2\Message $message The message we should send.
+     * @param \SAML2\XML\samlp\AbstractMessage $message The message we should send.
      * @return void
      */
-    public function send(Message $message): void
+    public function send(AbstractMessage $message): void
     {
         $destination = $this->getRedirectURL($message);
         Utils::getContainer()->redirect($destination);
@@ -92,11 +95,11 @@ class HTTPArtifact extends Binding
      * Throws an exception if it is unable receive the message.
      *
      * @throws \Exception
-     * @return \SAML2\Message The received message.
+     * @return \SAML2\XML\samlp\AbstractMessage The received message.
      *
      * @throws \InvalidArgumentException if assertions are false
      */
-    public function receive(): Message
+    public function receive(): AbstractMessage
     {
         if (array_key_exists('SAMLart', $_REQUEST)) {
             $artifact = base64_decode($_REQUEST['SAMLart']);
@@ -155,7 +158,7 @@ class HTTPArtifact extends Binding
         $soap = new SOAPClient();
 
         // Send message through SoapClient
-        /** @var \SAML2\ArtifactResponse $artifactResponse */
+        /** @var \SAML2\XML\samlp\ArtifactResponse $artifactResponse */
         $artifactResponse = $soap->send($ar, $this->spMetadata);
 
         if (!$artifactResponse->isSuccess()) {
@@ -169,7 +172,7 @@ class HTTPArtifact extends Binding
             throw new \Exception('Empty ArtifactResponse received, maybe a replay?');
         }
 
-        $samlResponse = Message::fromXML($xml);
+        $samlResponse = AbstractMessage::fromXML($xml);
         $samlResponse->addValidator([get_class($this), 'validateSignature'], $artifactResponse);
 
         if (isset($_REQUEST['RelayState'])) {
@@ -196,7 +199,7 @@ class HTTPArtifact extends Binding
     /**
      * A validator which returns true if the ArtifactResponse was signed with the given key
      *
-     * @param \SAML2\ArtifactResponse $message
+     * @param \SAML2\XML\samlp\ArtifactResponse $message
      * @param XMLSecurityKey $key
      * @return bool
      */

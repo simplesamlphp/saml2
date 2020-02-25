@@ -2,9 +2,13 @@
 
 declare(strict_types=1);
 
-namespace SAML2;
+namespace SAML2\XML\samlp;
 
 use DOMElement;
+use Exception;
+use SAML2\Constants;
+use SAML2\Utils;
+use Webmozart\Assert\Assert;
 
 /**
  * Class for SAML 2 attribute query messages.
@@ -21,7 +25,7 @@ use DOMElement;
  *
  * @package SimpleSAMLphp
  */
-class AttributeQuery extends SubjectQuery
+class AttributeQuery extends AbstractSubjectQuery
 {
     /**
      * The attributes, as an associative array.
@@ -60,7 +64,7 @@ class AttributeQuery extends SubjectQuery
         $attributes = Utils::xpQuery($xml, './saml_assertion:Attribute');
         foreach ($attributes as $attribute) {
             if (!$attribute->hasAttribute('Name')) {
-                throw new \Exception('Missing name on <saml:Attribute> element.');
+                throw new Exception('Missing name on <saml:Attribute> element.');
             }
             $name = $attribute->getAttribute('Name');
 
@@ -142,13 +146,15 @@ class AttributeQuery extends SubjectQuery
      *
      * @return \DOMElement This attribute query.
      */
-    public function toXML(): DOMElement
+    public function toXML(?DOMElement $parent = null): DOMElement
     {
-        $root = parent::toXML();
+        Assert::null($parent);
+
+        $parent = parent::toXML();
 
         foreach ($this->attributes as $name => $values) {
-            $attribute = $root->ownerDocument->createElementNS(Constants::NS_SAML, 'saml:Attribute');
-            $root->appendChild($attribute);
+            $attribute = $parent->ownerDocument->createElementNS(Constants::NS_SAML, 'saml:Attribute');
+            $parent->appendChild($attribute);
             $attribute->setAttribute('Name', $name);
 
             if ($this->nameFormat !== Constants::NAMEFORMAT_UNSPECIFIED) {
@@ -176,6 +182,6 @@ class AttributeQuery extends SubjectQuery
             }
         }
 
-        return $root;
+        return $parent;
     }
 }

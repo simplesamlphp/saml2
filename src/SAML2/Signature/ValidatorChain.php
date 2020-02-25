@@ -6,7 +6,7 @@ namespace SAML2\Signature;
 
 use Psr\Log\LoggerInterface;
 use SAML2\Configuration\CertificateProvider;
-use SAML2\SignedElementInterface;
+use SAML2\XML\SignedElementInterface;
 
 /**
  * Allows for validation of a signature trying different validators till a validator is found
@@ -53,7 +53,7 @@ class ValidatorChain implements ValidatorInterface
 
 
     /**
-     * @param \SAML2\SignedElementInterface $signedElement
+     * @param \SAML2\XML\SignedElementInterface $signedElement
      * @param \SAML2\Configuration\CertificateProvider $configuration
      *
      * @return bool

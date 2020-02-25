@@ -2,16 +2,19 @@
 
 declare(strict_types=1);
 
-namespace SAML2;
+namespace SAML2\XML\samlp;
 
 use Exception;
+use PHPUnit\Framework\TestCase;
+use SAML2\DOMDocumentFactory;
+use SAML2\Utils;
 use SAML2\XML\saml\Issuer;
 use SAML2\XML\saml\NameID;
 
 /**
  * Class \SAML2\AttributeQueryTest
  */
-class AttributeQueryTest extends \PHPUnit\Framework\TestCase
+class AttributeQueryTest extends TestCase
 {
     public function testMarshalling(): void
     {
@@ -104,7 +107,6 @@ XML;
         $this->assertEquals('https://example.org/', $aq->getIssuer()->getValue());
 
         $nameid = $aq->getNameId();
-        $this->assertInstanceOf(NameID::class, $nameid);
         $this->assertEquals('urn:example:subject', $nameid->getValue());
 
         $attributes = array_keys($aq->getAttributes());

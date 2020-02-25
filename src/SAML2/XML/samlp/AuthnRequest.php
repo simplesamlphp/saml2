@@ -2,17 +2,18 @@
 
 declare(strict_types=1);
 
-namespace SAML2;
+namespace SAML2\XML\samlp;
 
 use DOMDocument;
 use DOMElement;
+use Exception;
 use RobRichards\XMLSecLibs\XMLSecEnc;
 use RobRichards\XMLSecLibs\XMLSecurityKey;
+use SAML2\Constants;
+use SAML2\Exception\InvalidArgumentException;
 use SAML2\XML\saml\NameID;
 use SAML2\XML\saml\SubjectConfirmation;
-use SAML2\XML\samlp\NameIDPolicy;
-use SAML2\XML\samlp\RequestedAuthnContext;
-use SAML2\Exception\InvalidArgumentException;
+use SAML2\Utils;
 use Webmozart\Assert\Assert;
 
 /**
@@ -20,7 +21,7 @@ use Webmozart\Assert\Assert;
  *
  * @package SimpleSAMLphp
  */
-class AuthnRequest extends Request
+class AuthnRequest extends AbstractRequest
 {
     /**
      * The options for what type of name identifier should be returned.
@@ -188,7 +189,7 @@ class AuthnRequest extends Request
         }
 
         if (count($subject) > 1) {
-            throw new \Exception('More than one <saml:Subject> in <saml:AuthnRequest>.');
+            throw new Exception('More than one <saml:Subject> in <saml:AuthnRequest>.');
         }
         $subject = $subject[0];
 
@@ -198,9 +199,9 @@ class AuthnRequest extends Request
             './saml_assertion:NameID | ./saml_assertion:EncryptedID/xenc:EncryptedData'
         );
         if (empty($nameId)) {
-            throw new \Exception('Missing <saml:NameID> or <saml:EncryptedID> in <saml:Subject>.');
+            throw new Exception('Missing <saml:NameID> or <saml:EncryptedID> in <saml:Subject>.');
         } elseif (count($nameId) > 1) {
-            throw new \Exception('More than one <saml:NameID> or <saml:EncryptedID> in <saml:Subject>.');
+            throw new Exception('More than one <saml:NameID> or <saml:EncryptedID> in <saml:Subject>.');
         }
         $nameId = $nameId[0];
         if ($nameId->localName === 'EncryptedData') { // the NameID element is encrypted
@@ -273,7 +274,7 @@ class AuthnRequest extends Request
 
         foreach ($idpEntries as $idpEntry) {
             if (!$idpEntry->hasAttribute('ProviderID')) {
-                throw new \Exception("Could not get ProviderID from Scoping/IDPEntry element in AuthnRequest object");
+                throw new Exception("Could not get ProviderID from Scoping/IDPEntry element in AuthnRequest object");
             }
             $this->IDPList[] = $idpEntry->getAttribute('ProviderID');
         }
@@ -629,7 +630,7 @@ class AuthnRequest extends Request
     public function getNameId(): ?NameID
     {
         if ($this->encryptedNameId !== null) {
-            throw new \Exception('Attempted to retrieve encrypted NameID without decrypting it first.');
+            throw new Exception('Attempted to retrieve encrypted NameID without decrypting it first.');
         }
 
         return $this->nameId;
@@ -735,58 +736,72 @@ class AuthnRequest extends Request
 
 
     /**
+     * Convert XML into an AuthnRequest
+     *
+     * @param \DOMElement $xml The XML element we should load
+     * @return \SAML2\XML\samlp\AuthnRequest
+     * @throws \InvalidArgumentException if the qualified name of the supplied element is wrong
+     */
+    public static function fromXML(DOMElement $xml): object
+    {
+    }
+
+
+    /**
      * Convert this authentication request to an XML element.
      *
      * @return \DOMElement This authentication request.
      */
-    public function toXML(): DOMElement
+    public function toXML(?DOMElement $parent = null): DOMElement
     {
-        $root = parent::toXML();
+        Assert::null($parent);
+
+        $parent = parent::toXML();
 
         if ($this->forceAuthn) {
-            $root->setAttribute('ForceAuthn', 'true');
+            $parent->setAttribute('ForceAuthn', 'true');
         }
 
         if (!empty($this->ProviderName)) {
-            $root->setAttribute('ProviderName', $this->ProviderName);
+            $parent->setAttribute('ProviderName', $this->ProviderName);
         }
 
         if ($this->isPassive) {
-            $root->setAttribute('IsPassive', 'true');
+            $parent->setAttribute('IsPassive', 'true');
         }
 
         if ($this->assertionConsumerServiceIndex !== null) {
-            $root->setAttribute('AssertionConsumerServiceIndex', strval($this->assertionConsumerServiceIndex));
+            $parent->setAttribute('AssertionConsumerServiceIndex', strval($this->assertionConsumerServiceIndex));
         } else {
             if ($this->assertionConsumerServiceURL !== null) {
-                $root->setAttribute('AssertionConsumerServiceURL', $this->assertionConsumerServiceURL);
+                $parent->setAttribute('AssertionConsumerServiceURL', $this->assertionConsumerServiceURL);
             }
             if ($this->protocolBinding !== null) {
-                $root->setAttribute('ProtocolBinding', $this->protocolBinding);
+                $parent->setAttribute('ProtocolBinding', $this->protocolBinding);
             }
         }
 
         if ($this->attributeConsumingServiceIndex !== null) {
-            $root->setAttribute('AttributeConsumingServiceIndex', strval($this->attributeConsumingServiceIndex));
+            $parent->setAttribute('AttributeConsumingServiceIndex', strval($this->attributeConsumingServiceIndex));
         }
 
-        $this->addSubject($root);
+        $this->addSubject($parent);
 
         if ($this->nameIdPolicy !== null) {
             if (!$this->nameIdPolicy->isEmptyElement()) {
-                $this->nameIdPolicy->toXML($root);
+                $this->nameIdPolicy->toXML($parent);
             }
         }
 
-        $this->addConditions($root);
+        $this->addConditions($parent);
 
         if (!empty($this->requestedAuthnContext)) {
-            $this->requestedAuthnContext->toXML($root);
+            $this->requestedAuthnContext->toXML($parent);
         }
 
         if ($this->ProxyCount !== null || count($this->IDPList) > 0 || count($this->RequesterID) > 0) {
             $scoping = $this->document->createElementNS(Constants::NS_SAMLP, 'Scoping');
-            $root->appendChild($scoping);
+            $parent->appendChild($scoping);
             if ($this->ProxyCount !== null) {
                 $scoping->setAttribute('ProxyCount', strval($this->ProxyCount));
             }
@@ -817,7 +832,7 @@ class AuthnRequest extends Request
             Utils::addStrings($scoping, Constants::NS_SAMLP, 'RequesterID', false, $this->RequesterID);
         }
 
-        return $root;
+        return $parent;
     }
 
 

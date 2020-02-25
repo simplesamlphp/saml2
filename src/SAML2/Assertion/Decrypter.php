@@ -5,7 +5,7 @@ declare(strict_types=1);
 namespace SAML2\Assertion;
 
 use Psr\Log\LoggerInterface;
-use SAML2\Assertion;
+use SAML2\XML\saml\Assertion;
 use SAML2\Assertion\Exception\NotDecryptedException;
 use SAML2\Certificate\PrivateKeyLoader;
 use SAML2\Configuration\IdentityProvider;
@@ -38,10 +38,10 @@ class Decrypter
     /**
      * Constructor for Decrypter.
      *
-     * @param LoggerInterface $logger
-     * @param IdentityProvider $identityProvider
-     * @param ServiceProvider $serviceProvider
-     * @param PrivateKeyLoader $privateKeyLoader
+     * @param \Psr\Log\LoggerInterface $logger
+     * @param \SAML2\Configuration\IdentityProvider $identityProvider
+     * @param \SAML2\Configuration\ServiceProvider $serviceProvider
+     * @param \SAML2\Certificate\PrivateKeyLoader $privateKeyLoader
      */
     public function __construct(
         LoggerInterface $logger,
@@ -71,7 +71,7 @@ class Decrypter
     /**
      * @param \SAML2\EncryptedAssertion $assertion
      *
-     * @return \SAML2\Assertion
+     * @return \SAML2\XML\saml\Assertion
      */
     public function decrypt(EncryptedAssertion $assertion): Assertion
     {

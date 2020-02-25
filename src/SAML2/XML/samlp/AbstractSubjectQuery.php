@@ -2,9 +2,12 @@
 
 declare(strict_types=1);
 
-namespace SAML2;
+namespace SAML2\XML\samlp;
 
 use DOMElement;
+use Exception;
+use SAML2\Constants;
+use SAML2\Utils;
 use SAML2\XML\saml\NameID;
 use Webmozart\Assert\Assert;
 
@@ -19,7 +22,7 @@ use Webmozart\Assert\Assert;
  *
  * @package SimpleSAMLphp
  */
-abstract class SubjectQuery extends Request
+abstract class AbstractSubjectQuery extends AbstractRequest
 {
     /**
      * The NameId of the subject in the query.
@@ -54,22 +57,22 @@ abstract class SubjectQuery extends Request
      * @throws \Exception
      * @return void
      */
-    private function parseSubject(\DOMElement $xml): void
+    private function parseSubject(DOMElement $xml): void
     {
         /** @var \DOMElement[] $subject */
         $subject = Utils::xpQuery($xml, './saml_assertion:Subject');
         if (empty($subject)) {
-            throw new \Exception('Missing subject in subject query.');
+            throw new Exception('Missing subject in subject query.');
         } elseif (count($subject) > 1) {
-            throw new \Exception('More than one <saml:Subject> in subject query.');
+            throw new Exception('More than one <saml:Subject> in subject query.');
         }
 
         /** @var \DOMElement[] $nameId */
         $nameId = Utils::xpQuery($subject[0], './saml_assertion:NameID');
         if (empty($nameId)) {
-            throw new \Exception('Missing <saml:NameID> in <saml:Subject>.');
+            throw new Exception('Missing <saml:NameID> in <saml:Subject>.');
         } elseif (count($nameId) > 1) {
-            throw new \Exception('More than one <saml:NameID> in <saml:Subject>.');
+            throw new Exception('More than one <saml:NameID> in <saml:Subject>.');
         }
         $this->nameId = NameID::fromXML($nameId[0]);
     }
@@ -109,17 +112,18 @@ abstract class SubjectQuery extends Request
      *
      * @throws \InvalidArgumentException if assertions are false
      */
-    public function toXML(): DOMElement
+    public function toXML(?DOMElement $parent = null): DOMElement
     {
+        Assert::null($parent);
         Assert::notEmpty($this->nameId, 'Cannot convert SubjectQuery to XML without a NameID set.');
 
-        $root = parent::toXML();
+        $parent = parent::toXML();
 
-        $subject = $root->ownerDocument->createElementNS(Constants::NS_SAML, 'saml:Subject');
-        $root->appendChild($subject);
+        $subject = $parent->ownerDocument->createElementNS(Constants::NS_SAML, 'saml:Subject');
+        $parent->appendChild($subject);
 
         $this->nameId->toXML($subject);
 
-        return $root;
+        return $parent;
     }
 }

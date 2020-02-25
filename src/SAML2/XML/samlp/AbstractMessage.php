@@ -2,14 +2,18 @@
 
 declare(strict_types=1);
 
-namespace SAML2;
+namespace SAML2\XML\samlp;
 
 use DOMElement;
 use RobRichards\XMLSecLibs\XMLSecurityKey;
+use SAML2\Constants;
+use SAML2\DOMDocumentFactory;
 use SAML2\Utilities\Temporal;
+use SAML2\Utils;
 use SAML2\XML\ExtendableElementTrait;
 use SAML2\XML\saml\Issuer;
-use SAML2\XML\samlp\Extensions;
+use SAML2\XML\SignedElementInterface;
+use SAML2\XML\SignedElementTrait;
 use Webmozart\Assert\Assert;
 
 /**
@@ -18,7 +22,7 @@ use Webmozart\Assert\Assert;
  * Implements what is common between the samlp:RequestAbstractType and
  * samlp:StatusResponseType element types.
  */
-abstract class Message implements SignedElementInterface
+abstract class AbstractMessage extends AbstractSamlpElement implements SignedElementInterface
 {
     use ExtendableElementTrait;
     use SignedElementTrait;
@@ -416,8 +420,10 @@ abstract class Message implements SignedElementInterface
      *
      * @return \DOMElement The root element of the DOM tree
      */
-    public function toXML(): DOMElement
+    public function toXML(?DOMElement $parent = null): DOMElement
     {
+        Assert::null($parent);
+
         $this->document = DOMDocumentFactory::create();
 
         $root = $this->document->createElementNS(Constants::NS_SAMLP, 'samlp:' . $this->tagName);
@@ -492,11 +498,11 @@ abstract class Message implements SignedElementInterface
      *
      * @param \DOMElement $xml The root XML element
      * @throws \Exception
-     * @return \SAML2\Message The message
+     * @return \SAML2\XML\samlp\AbstractMessage The message
      *
      * @throws \InvalidArgumentException if assertions are false
      */
-    public static function fromXML(\DOMElement $xml): Message
+    public static function fromXML(\DOMElement $xml): object
     {
         Assert::same(
             $xml->namespaceURI,

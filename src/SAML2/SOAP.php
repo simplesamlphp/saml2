@@ -6,6 +6,8 @@ namespace SAML2;
 
 use DOMDocument;
 use SAML2\XML\ecp\Response as ECPResponse;
+use SAML2\XML\samlp\AbstractMessage;
+use SAML2\XML\samlp\Response;
 
 /**
  * Class which implements the SOAP binding.
@@ -15,11 +17,11 @@ use SAML2\XML\ecp\Response as ECPResponse;
 class SOAP extends Binding
 {
     /**
-     * @param Message $message
+     * @param \SAML2\XML\samlp\AbstractMessage $message
      * @throws \Exception
      * @return string|false The XML or false on error
      */
-    public function getOutputToSend(Message $message)
+    public function getOutputToSend(AbstractMessage $message)
     {
         $envelope = <<<SOAP
 <?xml version="1.0" encoding="utf-8"?>
@@ -71,10 +73,10 @@ SOAP;
      *
      * Note: This function never returns.
      *
-     * @param \SAML2\Message $message The message we should send.
+     * @param \SAML2\XML\samlp\AbstractMessage $message The message we should send.
      * @return void
      */
-    public function send(Message $message): void
+    public function send(AbstractMessage $message): void
     {
         header('Content-Type: text/xml', true);
 
@@ -93,9 +95,9 @@ SOAP;
      * Receive a SAML 2 message sent using the HTTP-POST binding.
      *
      * @throws \Exception If unable to receive the message
-     * @return \SAML2\Message The received message.
+     * @return \SAML2\XML\samlp\AbstractMessage The received message.
      */
-    public function receive(): Message
+    public function receive(): AbstractMessage
     {
         $postText = $this->getInputStream();
 
@@ -110,7 +112,7 @@ SOAP;
         /** @var \DOMElement[] $results */
         $results = Utils::xpQuery($xml, '/soap-env:Envelope/soap-env:Body/*[1]');
 
-        return Message::fromXML($results[0]);
+        return AbstractMessage::fromXML($results[0]);
     }
 
     /**

@@ -5,7 +5,7 @@ declare(strict_types=1);
 namespace SAML2\Assertion\Transformer;
 
 use Psr\Log\LoggerInterface;
-use SAML2\Assertion;
+use SAML2\XML\saml\Assertion;
 use SAML2\Assertion\Exception\NotDecryptedException;
 use SAML2\Certificate\PrivateKeyLoader;
 use SAML2\Configuration\IdentityProvider;
@@ -14,7 +14,7 @@ use SAML2\Configuration\ServiceProvider;
 use SAML2\Configuration\ServiceProviderAware;
 
 final class NameIdDecryptionTransformer implements
-    Transformer,
+    TransformerInterface,
     IdentityProviderAware,
     ServiceProviderAware
 {
@@ -42,8 +42,8 @@ final class NameIdDecryptionTransformer implements
     /**
      * Constructor for NameIdDecryptionTransformer
      *
-     * @param LoggerInterface $logger
-     * @param PrivateKeyLoader $privateKeyLoader
+     * @param \Psr\Log\LoggerInterface $logger
+     * @param \SAML2\Certificate\PrivateKeyLoader $privateKeyLoader
      */
     public function __construct(
         LoggerInterface $logger,
@@ -55,9 +55,9 @@ final class NameIdDecryptionTransformer implements
 
 
     /**
-     * @param Assertion $assertion
+     * @param \SAML2\XML\saml\Assertion $assertion
      * @throws \Exception
-     * @return Assertion
+     * @return \SAML2\XML\saml\Assertion
      */
     public function transform(Assertion $assertion): Assertion
     {
@@ -96,7 +96,7 @@ final class NameIdDecryptionTransformer implements
 
 
     /**
-     * @param IdentityProvider $identityProvider
+     * @param \SAML2\Configuration\IdentityProvider $identityProvider
      * @return void
      */
     public function setIdentityProvider(IdentityProvider $identityProvider): void
@@ -106,7 +106,7 @@ final class NameIdDecryptionTransformer implements
 
 
     /**
-     * @param ServiceProvider $serviceProvider
+     * @param \SAML2\Configuration\ServiceProvider $serviceProvider
      * @return void
      */
     public function setServiceProvider(ServiceProvider $serviceProvider): void

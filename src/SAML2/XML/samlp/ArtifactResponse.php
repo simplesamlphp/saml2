@@ -2,10 +2,12 @@
 
 declare(strict_types=1);
 
-namespace SAML2;
+namespace SAML2\XML\samlp;
 
 use DOMElement;
 use DOMNode;
+use SAML2\Utils;
+use Webmozart\Assert\Assert;
 
 /**
  * The \SAML2\ArtifactResponse, is the response to the \SAML2\ArtifactResolve.
@@ -13,7 +15,7 @@ use DOMNode;
  * @author Danny Bollaert, UGent AS. <danny.bollaert@ugent.be>
  * @package SimpleSAMLphp
  */
-class ArtifactResponse extends StatusResponse
+class ArtifactResponse extends AbstractStatusResponse
 {
     /**
      * The \DOMElement with the message the artifact refers
@@ -74,14 +76,17 @@ class ArtifactResponse extends StatusResponse
      *
      * @return \DOMElement This response.
      */
-    public function toXML(): DOMElement
+    public function toXML(?DOMElement $parent = null): DOMElement
     {
-        $root = parent::toXML();
+        Assert::null($parent);
+
+        $parent = parent::toXML();
+
         if (isset($this->any)) {
-            $node = $root->ownerDocument->importNode($this->any, true);
-            $root->appendChild($node);
+            $node = $parent->ownerDocument->importNode($this->any, true);
+            $parent->appendChild($node);
         }
 
-        return $root;
+        return $parent;
     }
 }

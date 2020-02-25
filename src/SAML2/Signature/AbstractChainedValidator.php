@@ -6,7 +6,7 @@ namespace SAML2\Signature;
 
 use Psr\Log\LoggerInterface;
 use RobRichards\XMLSecLibs\XMLSecurityKey;
-use SAML2\SignedElementInterface;
+use SAML2\XML\SignedElementInterface;
 use SAML2\Utilities\ArrayCollection;
 
 abstract class AbstractChainedValidator implements ChainedValidator
@@ -31,7 +31,7 @@ abstract class AbstractChainedValidator implements ChainedValidator
     /**
      * BC compatible version of the signature check
      *
-     * @param \SAML2\SignedElementInterface    $element
+     * @param \SAML2\XML\SignedElementInterface    $element
      * @param \SAML2\Utilities\ArrayCollection $pemCandidates
      *
      * @throws \Exception
