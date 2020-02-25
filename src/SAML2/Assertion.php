@@ -22,8 +22,10 @@ use Webmozart\Assert\Assert;
  *
  * @package SimpleSAMLphp
  */
-class Assertion extends SignedElement
+class Assertion implements SignedElementInterface
 {
+    use SignedElementTrait;
+
     /**
      * The identifier of this assertion.
      *
@@ -598,7 +600,7 @@ class Assertion extends SignedElement
                 $this->attributes[$attributeName][] = $value->childNodes;
                 continue;
             }
-            
+
             if ($type === 'xs:integer') {
                 $this->attributes[$attributeName][] = (int) $value->textContent;
             } else {
@@ -1372,31 +1374,6 @@ class Assertion extends SignedElement
 
 
     /**
-     * Retrieve the private key we should use to sign the assertion.
-     *
-     * @return XMLSecurityKey|null The key, or NULL if no key is specified.
-     */
-    public function getSignatureKey(): ?XMLSecurityKey
-    {
-        return $this->signatureKey;
-    }
-
-
-    /**
-     * Set the private key we should use to sign the assertion.
-     *
-     * If the key is null, the assertion will be sent unsigned.
-     *
-     * @param XMLSecurityKey|null $signatureKey
-     * @return void
-     */
-    public function setSignatureKey(XMLSecurityKey $signatureKey = null): void
-    {
-        $this->signatureKey = $signatureKey;
-    }
-
-
-    /**
      * Return the key we should use to encrypt the assertion.
      *
      * @return XMLSecurityKey|null The key, or NULL if no key is specified..
@@ -1499,8 +1476,8 @@ class Assertion extends SignedElement
             $this->addEncryptedAttributeStatement($root);
         }
 
-        if ($this->signatureKey !== null) {
-            Utils::insertSignature($this->signatureKey, $this->certificates, $root, $issuer->nextSibling);
+        if ($this->signingKey !== null) {
+            Utils::insertSignature($this->signingKey, $this->certificates, $root, $issuer->nextSibling);
         }
 
         return $root;

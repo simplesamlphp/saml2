@@ -7,7 +7,7 @@ namespace SAML2\Signature;
 use Psr\Log\LoggerInterface;
 use SAML2\Certificate\KeyLoader;
 use SAML2\Configuration\CertificateProvider;
-use SAML2\SignedElement;
+use SAML2\SignedElementInterface;
 
 /**
  * Signature Validator.
@@ -23,7 +23,7 @@ class Validator
     /**
      * Constructor for Validator
      *
-     * @param LoggerInterface $logger
+     * @param \Psr\Log\LoggerInterface $logger
      */
     public function __construct(LoggerInterface $logger)
     {
@@ -32,13 +32,13 @@ class Validator
 
 
     /**
-     * @param SignedElement $signedElement
-     * @param CertificateProvider $configuration
+     * @param \SAML2\SignedElementInterface $signedElement
+     * @param \SAML2\Configuration\CertificateProvider $configuration
      *
      * @return bool
      */
     public function hasValidSignature(
-        SignedElement $signedElement,
+        SignedElementInterface $signedElement,
         CertificateProvider $configuration
     ): bool {
         // should be DI

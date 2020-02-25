@@ -102,9 +102,8 @@ XML
         $xml = $descriptor->getXML();
         $this->assertEquals('SomeRoleDescriptor', $xml->getLocalName());
 
-        $this->assertInstanceOf(Extensions::class, $descriptor->getExtensions());
         $extElement = $descriptor->getExtensions();
-        $this->assertNotNull($extElement);
+        $this->assertInstanceOf(Extensions::class, $extElement);
 
         $extensions = $extElement->getList();
         $this->assertCount(1, $extensions);

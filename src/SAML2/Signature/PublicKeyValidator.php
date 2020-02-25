@@ -9,7 +9,7 @@ use SAML2\Certificate\Key;
 use SAML2\Certificate\KeyLoader;
 use SAML2\Certificate\X509;
 use SAML2\Configuration\CertificateProvider;
-use SAML2\SignedElement;
+use SAML2\SignedElementInterface;
 use Webmozart\Assert\Assert;
 
 class PublicKeyValidator extends AbstractChainedValidator
@@ -40,13 +40,13 @@ class PublicKeyValidator extends AbstractChainedValidator
 
 
     /**
-     * @param \SAML2\SignedElement $signedElement
+     * @param \SAML2\SignedElementInterface $signedElement
      * @param \SAML2\Configuration\CertificateProvider $configuration
      *
      * @return bool
      */
     public function canValidate(
-        SignedElement $signedElement,
+        SignedElementInterface $signedElement,
         CertificateProvider $configuration
     ): bool {
         $this->configuredKeys = $this->keyLoader->extractPublicKeys($configuration);
@@ -56,7 +56,7 @@ class PublicKeyValidator extends AbstractChainedValidator
 
 
     /**
-     * @param \SAML2\SignedElement $signedElement
+     * @param \SAML2\SignedElementInterface $signedElement
      * @param \SAML2\Configuration\CertificateProvider $configuration
      *
      * @return bool
@@ -64,7 +64,7 @@ class PublicKeyValidator extends AbstractChainedValidator
      * @throws \InvalidArgumentException if assertions are false
      */
     public function hasValidSignature(
-        SignedElement $signedElement,
+        SignedElementInterface $signedElement,
         CertificateProvider $configuration
     ): bool {
         Assert::notEmpty($this->configuredKeys);

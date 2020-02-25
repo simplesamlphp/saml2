@@ -6,7 +6,7 @@ namespace SAML2\Signature;
 
 use SAML2\Signature\AbstractChainedValidator;
 use SAML2\Configuration\CertificateProvider;
-use SAML2\SignedElement;
+use SAML2\SignedElementInterface;
 
 /**
  * MockChainedValidator, to be able to test the validatorchain without having to use
@@ -44,7 +44,7 @@ class MockChainedValidator extends AbstractChainedValidator
      * @return bool
      */
     public function canValidate(
-        SignedElement $signedElement,
+        SignedElementInterface $signedElement,
         CertificateProvider $configuration
     ): bool {
         return $this->canValidate;
@@ -55,7 +55,7 @@ class MockChainedValidator extends AbstractChainedValidator
      * @return bool
      */
     public function hasValidSignature(
-        SignedElement $signedElement,
+        SignedElementInterface $signedElement,
         CertificateProvider $configuration
     ): bool {
         return $this->isValid;

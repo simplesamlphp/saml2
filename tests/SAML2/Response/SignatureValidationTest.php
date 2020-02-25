@@ -179,7 +179,7 @@ class SignatureValidationTest extends \Mockery\Adapter\Phpunit\MockeryTestCase
         $doc = new \DOMDocument();
         $doc->load(__DIR__ . '/response.xml');
         $response = new Response($doc->firstChild);
-        $response->setSignatureKey(CertificatesMock::getPrivateKey());
+        $response->setSigningKey(CertificatesMock::getPrivateKey());
         $response->setCertificates([CertificatesMock::PUBLIC_KEY_PEM]);
 
         // convert to signed response
@@ -198,7 +198,7 @@ class SignatureValidationTest extends \Mockery\Adapter\Phpunit\MockeryTestCase
 
         $assertions = $response->getAssertions();
         $assertion = $assertions[0];
-        $assertion->setSignatureKey(CertificatesMock::getPrivateKey());
+        $assertion->setSigningKey(CertificatesMock::getPrivateKey());
         $assertion->setCertificates([CertificatesMock::PUBLIC_KEY_PEM]);
         $signedAssertion = new Assertion($assertion->toXML());
 
@@ -216,12 +216,12 @@ class SignatureValidationTest extends \Mockery\Adapter\Phpunit\MockeryTestCase
         $doc = new \DOMDocument();
         $doc->load(__DIR__ . '/response.xml');
         $response = new Response($doc->firstChild);
-        $response->setSignatureKey(CertificatesMock::getPrivateKey());
+        $response->setSigningKey(CertificatesMock::getPrivateKey());
         $response->setCertificates([CertificatesMock::PUBLIC_KEY_PEM]);
 
         $assertions = $response->getAssertions();
         $assertion  = $assertions[0];
-        $assertion->setSignatureKey(CertificatesMock::getPrivateKey());
+        $assertion->setSigningKey(CertificatesMock::getPrivateKey());
         $assertion->setCertificates([CertificatesMock::PUBLIC_KEY_PEM]);
 
         return new Response($response->toSignedXML());

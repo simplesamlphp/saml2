@@ -733,10 +733,10 @@ XML
         $privateKey = CertificatesMock::getPrivateKey();
 
         $unsignedAssertion = new Assertion($document->firstChild);
-        $unsignedAssertion->setSignatureKey($privateKey);
+        $unsignedAssertion->setSigningKey($privateKey);
         $unsignedAssertion->setCertificates([CertificatesMock::PUBLIC_KEY_PEM]);
         $this->assertFalse($unsignedAssertion->wasSignedAtConstruction());
-        $this->assertEquals($privateKey, $unsignedAssertion->getSignatureKey());
+        $this->assertEquals($privateKey, $unsignedAssertion->getSigningKey());
 
         $signedAssertion = new Assertion($unsignedAssertion->toXML());
 
@@ -1993,7 +1993,7 @@ XML;
             "name2" => ["value3"],
         ]);
         $assertion->setAttributeNameFormat("urn:oasis:names:tc:SAML:2.0:attrname-format:unspecified");
-        $assertion->setSignatureKey(CertificatesMock::getPrivateKey());
+        $assertion->setSigningKey(CertificatesMock::getPrivateKey());
 
         $nameId = new NameID("just_a_basic_identifier", Constants::NAMEID_TRANSIENT);
         $assertion->setNameId($nameId);
