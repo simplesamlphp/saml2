@@ -7,9 +7,6 @@ namespace SAML2\XML\samlp;
 use DOMElement;
 use SAML2\Constants;
 use SAML2\Utils;
-use SAML2\XML\samlp\AbstractMessage;
-use SAML2\XML\samlp\Status;
-use SAML2\XML\samlp\StatusCode;
 use Webmozart\Assert\Assert;
 
 /**

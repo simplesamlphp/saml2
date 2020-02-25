@@ -2,18 +2,18 @@
 
 declare(strict_types=1);
 
-namespace SAML2;
+namespace SAML2\XML\samlp;
 
 use DOMDocument;
 use DOMElement;
+use Exception;
 use RobRichards\XMLSecLibs\XMLSecEnc;
 use RobRichards\XMLSecLibs\XMLSecurityKey;
+use SAML2\Constants;
+use SAML2\Exception\InvalidArgumentException;
 use SAML2\XML\saml\NameID;
 use SAML2\XML\saml\SubjectConfirmation;
-use SAML2\XML\samlp\AbstractRequest;
-use SAML2\XML\samlp\NameIDPolicy;
-use SAML2\XML\samlp\RequestedAuthnContext;
-use SAML2\Exception\InvalidArgumentException;
+use SAML2\Utils;
 use Webmozart\Assert\Assert;
 
 /**
@@ -189,7 +189,7 @@ class AuthnRequest extends AbstractRequest
         }
 
         if (count($subject) > 1) {
-            throw new \Exception('More than one <saml:Subject> in <saml:AuthnRequest>.');
+            throw new Exception('More than one <saml:Subject> in <saml:AuthnRequest>.');
         }
         $subject = $subject[0];
 
@@ -199,9 +199,9 @@ class AuthnRequest extends AbstractRequest
             './saml_assertion:NameID | ./saml_assertion:EncryptedID/xenc:EncryptedData'
         );
         if (empty($nameId)) {
-            throw new \Exception('Missing <saml:NameID> or <saml:EncryptedID> in <saml:Subject>.');
+            throw new Exception('Missing <saml:NameID> or <saml:EncryptedID> in <saml:Subject>.');
         } elseif (count($nameId) > 1) {
-            throw new \Exception('More than one <saml:NameID> or <saml:EncryptedID> in <saml:Subject>.');
+            throw new Exception('More than one <saml:NameID> or <saml:EncryptedID> in <saml:Subject>.');
         }
         $nameId = $nameId[0];
         if ($nameId->localName === 'EncryptedData') { // the NameID element is encrypted
@@ -274,7 +274,7 @@ class AuthnRequest extends AbstractRequest
 
         foreach ($idpEntries as $idpEntry) {
             if (!$idpEntry->hasAttribute('ProviderID')) {
-                throw new \Exception("Could not get ProviderID from Scoping/IDPEntry element in AuthnRequest object");
+                throw new Exception("Could not get ProviderID from Scoping/IDPEntry element in AuthnRequest object");
             }
             $this->IDPList[] = $idpEntry->getAttribute('ProviderID');
         }
@@ -630,7 +630,7 @@ class AuthnRequest extends AbstractRequest
     public function getNameId(): ?NameID
     {
         if ($this->encryptedNameId !== null) {
-            throw new \Exception('Attempted to retrieve encrypted NameID without decrypting it first.');
+            throw new Exception('Attempted to retrieve encrypted NameID without decrypting it first.');
         }
 
         return $this->nameId;
@@ -739,7 +739,7 @@ class AuthnRequest extends AbstractRequest
      * Convert XML into an AuthnRequest
      *
      * @param \DOMElement $xml The XML element we should load
-     * @return \SAML2\AuthnRequest
+     * @return \SAML2\XML\samlp\AuthnRequest
      * @throws \InvalidArgumentException if the qualified name of the supplied element is wrong
      */
     public static function fromXML(DOMElement $xml): object

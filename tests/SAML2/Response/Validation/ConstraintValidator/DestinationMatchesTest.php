@@ -4,6 +4,7 @@ declare(strict_types=1);
 
 namespace SAML2\Response\Validation\ConstraintValidator;
 
+use Mockery;
 use SAML2\Configuration\Destination;
 use SAML2\Response\Validation\Result;
 use SAML2\Response\Validation\ConstraintValidator\DestinationMatches;
@@ -21,7 +22,7 @@ class DestinationMatchesTest extends \Mockery\Adapter\Phpunit\MockeryTestCase
      */
     public function setUp(): void
     {
-        $this->response = \Mockery::mock('SAML2\Response');
+        $this->response = Mockery::mock('SAML2\XML\samlp\Response');
     }
 
 

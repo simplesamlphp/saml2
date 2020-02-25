@@ -6,6 +6,7 @@ namespace SAML2\XML\samlp;
 
 use DOMDocument;
 use Exception;
+use SAML2\CertificatesMock;
 use SAML2\Constants;
 use SAML2\DOMDocumentFactory;
 use SAML2\Utils;
@@ -143,7 +144,7 @@ AUTHNREQUEST
     public function testCorrectSignatureMethodCanBeExtractedFromResponse(): void
     {
         $response = new DOMDocument();
-        $response->load(__DIR__ . '/../Response/response.xml');
+        $response->load(__DIR__ . '../../../Response/response.xml');
 
         $privateKey = CertificatesMock::getPrivateKey();
 

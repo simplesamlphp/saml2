@@ -5,9 +5,9 @@ declare(strict_types=1);
 namespace SAML2\XML\samlp;
 
 use DOMElement;
-use SAML2\ExtensionsTrait;
 use SAML2\Utils;
 use SAML2\XML\Chunk;
+use SAML2\XML\ExtensionsTrait;
 use Webmozart\Assert\Assert;
 
 /**

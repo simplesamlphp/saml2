@@ -21,7 +21,7 @@ class SubjectConfirmationRecipientMatches implements
 
     /**
      * Constructor for SubjectConfirmationRecipientMatches
-     * @param Destination $destination
+     * @param \SAML2\Configuration\Destination $destination
      */
     public function __construct(Destination $destination)
     {
@@ -30,8 +30,8 @@ class SubjectConfirmationRecipientMatches implements
 
 
     /**
-     * @param SubjectConfirmation $subjectConfirmation
-     * @param Result $result
+     * @param \SAML2\XML\saml\SubjectConfirmation $subjectConfirmation
+     * @param \SAML2\Assertion\Validation\Result $result
      * @return void
      *
      * @throws \InvalidArgumentException if assertions are false

@@ -6,14 +6,16 @@ namespace SAML2\Response;
 
 use DOMDocument;
 use Mockery;
-use SAML2\Assertion;
+use SAML2\Assertion\Processor as AssertionProcessor;
 use SAML2\CertificatesMock;
 use SAML2\Configuration\Destination;
 use SAML2\Configuration\IdentityProvider;
 use SAML2\Configuration\ServiceProvider;
 use SAML2\Response\Exception\UnsignedResponseException;
+use SAML2\Response\Processor as ResponseProcessor;
 use SAML2\Utilities\ArrayCollection;
 use SAML2\Utilities\Certificate;
+use SAML2\XML\saml\Assertion;
 use SAML2\XML\samlp\Response;
 
 /**
@@ -55,7 +57,7 @@ class SignatureValidationTest extends \Mockery\Adapter\Phpunit\MockeryTestCase
     public function setUp(): void
     {
         $this->assertionProcessorBuilder = Mockery::mock('alias:SAML2\Assertion\ProcessorBuilder');
-        $this->assertionProcessor = Mockery::mock(Assertion\Processor::class);
+        $this->assertionProcessor = Mockery::mock(AssertionProcessor::class);
         $this->assertionProcessorBuilder
             ->shouldReceive('build')
             ->once()
@@ -84,7 +86,7 @@ class SignatureValidationTest extends \Mockery\Adapter\Phpunit\MockeryTestCase
 
         $this->assertionProcessor->shouldReceive('processAssertions')->once();
 
-        $processor = new Processor(new \Psr\Log\NullLogger());
+        $processor = new ResponseProcessor(new \Psr\Log\NullLogger());
 
         $processor->process(
             $this->serviceProviderConfiguration,
@@ -108,7 +110,7 @@ class SignatureValidationTest extends \Mockery\Adapter\Phpunit\MockeryTestCase
 
         $this->assertionProcessor->shouldReceive('processAssertions')->once();
 
-        $processor = new Response\Processor(new \Psr\Log\NullLogger());
+        $processor = new ResponseProcessor(new \Psr\Log\NullLogger());
 
         $processor->process(
             $this->serviceProviderConfiguration,
@@ -132,7 +134,7 @@ class SignatureValidationTest extends \Mockery\Adapter\Phpunit\MockeryTestCase
 
         $this->assertionProcessor->shouldReceive('processAssertions')->once();
 
-        $processor = new Response\Processor(new \Psr\Log\NullLogger());
+        $processor = new ResponseProcessor(new \Psr\Log\NullLogger());
 
         $processor->process(
             $this->serviceProviderConfiguration,
@@ -162,7 +164,7 @@ class SignatureValidationTest extends \Mockery\Adapter\Phpunit\MockeryTestCase
                 $assertion
             ]));
 
-        $processor = new Processor(new \Psr\Log\NullLogger());
+        $processor = new ResponseProcessor(new \Psr\Log\NullLogger());
 
         $processor->process(
             $this->serviceProviderConfiguration,

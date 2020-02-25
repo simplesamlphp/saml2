@@ -2,15 +2,14 @@
 
 declare(strict_types=1);
 
-namespace SAML2;
+namespace SAML2\XML\samlp;
 
+use PHPUnit\Framework\TestCase;
 use SAML2\XML\saml\Issuer;
-use SAML2\ArtifactResponse;
-use SAML2\AuthnRequest;
 use SAML2\DOMDocumentFactory;
 use SAML2\Utils;
 
-class ArtifactResponseTest extends \PHPUnit\Framework\TestCase
+class ArtifactResponseTest extends TestCase
 {
     /**
      * @return void
@@ -74,7 +73,6 @@ XML;
         $document = DOMDocumentFactory::fromString($xml);
         $ar = new ArtifactResponse($document->firstChild);
 
-        $this->assertInstanceOf(ArtifactResponse::class, $ar);
         $this->assertEquals(true, $ar->isSuccess());
         $this->assertEquals("_d84a49e5958803dedcff4c984c2b0d95", $ar->getId());
 

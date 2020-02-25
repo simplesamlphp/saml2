@@ -5,9 +5,9 @@ declare(strict_types=1);
 namespace SAML2\Response\Validation\ConstraintValidator;
 
 use SAML2\Configuration\Destination;
-use SAML2\Response;
 use SAML2\Response\Validation\ConstraintValidator;
 use SAML2\Response\Validation\Result;
+use SAML2\XML\samlp\Response;
 
 final class DestinationMatches implements ConstraintValidator
 {
@@ -28,8 +28,8 @@ final class DestinationMatches implements ConstraintValidator
 
 
     /**
-     * @param Response $response
-     * @param Result $result
+     * @param \SAML2\XML\samlp\Response $response
+     * @param \SAML2\Response\Validation\Result $result
      * @return void
      */
     public function validate(Response $response, Result $result): void

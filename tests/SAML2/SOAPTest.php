@@ -7,7 +7,7 @@ namespace SAML2;
 use DOMDocument;
 use InvalidArgumentException;
 use SAML2\XML\samlp\AbstractMessage;
-use SAML2\ArtifactResolve;
+use SAML2\XML\samlp\ArtifactResolve;
 use Webmozart\Assert\Assert;
 
 class SOAPTest extends \Mockery\Adapter\Phpunit\MockeryTestCase

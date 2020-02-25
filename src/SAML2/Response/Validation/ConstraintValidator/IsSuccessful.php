@@ -5,15 +5,15 @@ declare(strict_types=1);
 namespace SAML2\Response\Validation\ConstraintValidator;
 
 use SAML2\Constants;
-use SAML2\Response;
 use SAML2\Response\Validation\ConstraintValidator;
 use SAML2\Response\Validation\Result;
+use SAML2\XML\samlp\Response;
 use SAML2\XML\samlp\Status;
 
 class IsSuccessful implements ConstraintValidator
 {
     /**
-     * @param \SAML2\Response $response
+     * @param \SAML2\XML\samlp\Response $response
      * @param \SAML2\Response\Validation\Result $result
      * @return void
      */

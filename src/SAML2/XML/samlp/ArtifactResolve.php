@@ -2,9 +2,11 @@
 
 declare(strict_types=1);
 
-namespace SAML2;
+namespace SAML2\XML\samlp;
 
 use DOMElement;
+use SAML2\Constants;
+use SAML2\Utils;
 use Webmozart\Assert\Assert;
 
 /**
@@ -15,7 +17,7 @@ use Webmozart\Assert\Assert;
  * @author Danny Bollaert, UGent AS. <danny.bollaert@ugent.be>
  * @package SimpleSAMLphp
  */
-class ArtifactResolve extends Request
+class ArtifactResolve extends AbstractRequest
 {
     /** @var string */
     private $artifact;

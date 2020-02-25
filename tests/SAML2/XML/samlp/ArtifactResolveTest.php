@@ -2,14 +2,14 @@
 
 declare(strict_types=1);
 
-namespace SAML2;
+namespace SAML2\XML\samlp;
 
+use PHPUnit\Framework\TestCase;
 use SAML2\XML\saml\Issuer;
 use SAML2\DOMDocumentFactory;
-use SAML2\ArtifactResolve;
 use SAML2\Utils;
 
-class ArtifactResolveTest extends \PHPUnit\Framework\TestCase
+class ArtifactResolveTest extends TestCase
 {
     /**
      * @return void
@@ -54,7 +54,6 @@ XML;
         $document = DOMDocumentFactory::fromString($xml);
         $ar = new ArtifactResolve($document->firstChild);
 
-        $this->assertInstanceOf(ArtifactResolve::class, $ar);
         $this->assertEquals($artifact, $ar->getArtifact());
         $this->assertEquals($id, $ar->getId());
         $this->assertEquals($issuer->getValue(), $ar->getIssuer()->getValue());

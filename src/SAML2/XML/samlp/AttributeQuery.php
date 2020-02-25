@@ -2,9 +2,12 @@
 
 declare(strict_types=1);
 
-namespace SAML2;
+namespace SAML2\XML\samlp;
 
 use DOMElement;
+use Exception;
+use SAML2\Constants;
+use SAML2\Utils;
 use Webmozart\Assert\Assert;
 
 /**
@@ -22,7 +25,7 @@ use Webmozart\Assert\Assert;
  *
  * @package SimpleSAMLphp
  */
-class AttributeQuery extends SubjectQuery
+class AttributeQuery extends AbstractSubjectQuery
 {
     /**
      * The attributes, as an associative array.
@@ -61,7 +64,7 @@ class AttributeQuery extends SubjectQuery
         $attributes = Utils::xpQuery($xml, './saml_assertion:Attribute');
         foreach ($attributes as $attribute) {
             if (!$attribute->hasAttribute('Name')) {
-                throw new \Exception('Missing name on <saml:Attribute> element.');
+                throw new Exception('Missing name on <saml:Attribute> element.');
             }
             $name = $attribute->getAttribute('Name');
 

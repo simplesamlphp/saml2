@@ -9,7 +9,6 @@ use SAML2\Assertion\ProcessorBuilder;
 use SAML2\Configuration\Destination;
 use SAML2\Configuration\IdentityProvider;
 use SAML2\Configuration\ServiceProvider;
-use SAML2\Response;
 use SAML2\Response\Exception\InvalidResponseException;
 use SAML2\Response\Exception\NoAssertionsFoundException;
 use SAML2\Response\Exception\PreconditionNotMetException;
@@ -17,6 +16,7 @@ use SAML2\Response\Exception\UnsignedResponseException;
 use SAML2\Response\Validation\PreconditionValidator;
 use SAML2\Signature\Validator;
 use SAML2\Utilities\ArrayCollection;
+use SAML2\XML\samlp\Response;
 
 class Processor
 {
@@ -64,9 +64,9 @@ class Processor
      * @param \SAML2\Configuration\ServiceProvider  $serviceProviderConfiguration
      * @param \SAML2\Configuration\IdentityProvider $identityProviderConfiguration
      * @param \SAML2\Configuration\Destination $currentDestination
-     * @param \SAML2\Response $response
+     * @param \SAML2\XML\samlp\Response $response
      *
-     * @return \SAML2\Utilities\ArrayCollection Collection of \SAML2\Assertion objects
+     * @return \SAML2\Utilities\ArrayCollection Collection of \SAML2\XML\saml\Assertion objects
      */
     public function process(
         ServiceProvider $serviceProviderConfiguration,
@@ -93,7 +93,7 @@ class Processor
     /**
      * Checks the preconditions that must be valid in order for the response to be processed.
      *
-     * @param \SAML2\Response $response
+     * @param \SAML2\XML\samlp\Response $response
      * @throws PreconditionNotMetException
      * @return void
      */
@@ -108,7 +108,7 @@ class Processor
 
 
     /**
-     * @param \SAML2\Response $response
+     * @param \SAML2\XML\samlp\Response $response
      * @param \SAML2\Configuration\IdentityProvider $identityProviderConfiguration
      * @throws InvalidResponseException
      * @return void
@@ -141,7 +141,7 @@ class Processor
 
 
     /**
-     * @param \SAML2\Response $response
+     * @param \SAML2\XML\samlp\Response $response
      * @throws UnsignedResponseException
      * @throws NoAssertionsFoundException
      * @return \SAML2\Utilities\ArrayCollection

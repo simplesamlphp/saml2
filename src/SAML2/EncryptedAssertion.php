@@ -8,6 +8,7 @@ use DOMElement;
 use DOMNode;
 use RobRichards\XMLSecLibs\XMLSecEnc;
 use RobRichards\XMLSecLibs\XMLSecurityKey;
+use SAML2\XML\saml\Assertion;
 use Webmozart\Assert\Assert;
 
 /**
@@ -64,7 +65,7 @@ class EncryptedAssertion
     /**
      * Set the assertion.
      *
-     * @param \SAML2\Assertion $assertion The assertion.
+     * @param \SAML2\XML\saml\Assertion $assertion The assertion.
      * @param XMLSecurityKey  $key       The key we should use to encrypt the assertion.
      * @throws \Exception
      * @return void
@@ -113,7 +114,7 @@ class EncryptedAssertion
      *
      * @param  XMLSecurityKey  $inputKey  The key we should use to decrypt the assertion.
      * @param  array           $blacklist Blacklisted decryption algorithms.
-     * @return \SAML2\Assertion The decrypted assertion.
+     * @return \SAML2\XML\saml\Assertion The decrypted assertion.
      */
     public function getAssertion(XMLSecurityKey $inputKey, array $blacklist = []): Assertion
     {

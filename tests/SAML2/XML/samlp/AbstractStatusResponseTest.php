@@ -2,22 +2,20 @@
 
 declare(strict_types=1);
 
-namespace SAML2;
+namespace SAML2\XML\samlp;
 
 use Exception;
 use InvalidArgumentException;
+use PHPUnit\Framework\TestCase;
+use SAML2\Constants;
 use SAML2\DOMDocumentFactory;
-use SAML2\Response;
+use SAML2\XML\samlp\AbstractResponse;
 use SAML2\Utils;
-use SAML2\XML\samlp\Status;
-use SAML2\XML\samlp\StatusCode;
-use SAML2\XML\samlp\StatusMessage;
-use SAML2\XML\samlp\StatusDetail;
 
 /**
- * Class \SAML2\StatusResponseTest
+ * Class \SAML2\XML\samlp\AbstractStatusResponseTest
  */
-class StatusResponseTest extends \PHPUnit\Framework\TestCase
+class AbstractStatusResponseTest extends TestCase
 {
     /**
      * @return void

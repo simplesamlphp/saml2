@@ -6,6 +6,8 @@ namespace SAML2\XML\samlp;
 
 use DOMElement;
 use SAML2\Constants;
+use SAML2\EncryptedAssertion;
+use SAML2\XML\saml\Assertion;
 use Webmozart\Assert\Assert;
 
 /**
@@ -18,7 +20,7 @@ class Response extends AbstractStatusResponse
     /**
      * The assertions in this response.
      *
-     * @var (\SAML2\Assertion|\SAML2\EncryptedAssertion)[]
+     * @var (\SAML2\XML\saml\Assertion|\SAML2\EncryptedAssertion)[]
      */
     private $assertions = [];
 
@@ -55,7 +57,7 @@ class Response extends AbstractStatusResponse
     /**
      * Retrieve the assertions in this response.
      *
-     * @return \SAML2\Assertion[]|\SAML2\EncryptedAssertion[]
+     * @return \SAML2\XML\saml\Assertion[]|\SAML2\EncryptedAssertion[]
      */
     public function getAssertions(): array
     {
@@ -66,24 +68,12 @@ class Response extends AbstractStatusResponse
     /**
      * Set the assertions that should be included in this response.
      *
-     * @param \SAML2\Assertion[]|\SAML2\EncryptedAssertion[] $assertions The assertions.
+     * @param \SAML2\XML\saml\Assertion[]|\SAML2\EncryptedAssertion[] $assertions The assertions.
      * @return void
      */
     public function setAssertions(array $assertions): void
     {
         $this->assertions = $assertions;
-    }
-
-
-    /**
-     * Convert XML into a Response
-     *
-     * @param \DOMElement $xml The XML element we should load
-     * @return \SAML2\XML\samlp\Response
-     * @throws \InvalidArgumentException if the qualified name of the supplied element is wrong
-     */
-    public static function fromXML(DOMElement $xml): object
-    {
     }
 
 

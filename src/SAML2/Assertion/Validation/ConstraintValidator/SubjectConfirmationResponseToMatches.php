@@ -6,8 +6,8 @@ namespace SAML2\Assertion\Validation\ConstraintValidator;
 
 use SAML2\Assertion\Validation\Result;
 use SAML2\Assertion\Validation\SubjectConfirmationConstraintValidator;
-use SAML2\Response;
 use SAML2\XML\saml\SubjectConfirmation;
+use SAML2\XML\samlp\Response;
 use Webmozart\Assert\Assert;
 
 class SubjectConfirmationResponseToMatches implements
@@ -19,7 +19,7 @@ class SubjectConfirmationResponseToMatches implements
 
     /**
      * Constructor for SubjectConfirmationResponseToMatches
-     * @param Response $response
+     * @param \SAML2\XML\samlp\Response $response
      */
     public function __construct(Response $response)
     {
@@ -29,7 +29,7 @@ class SubjectConfirmationResponseToMatches implements
 
     /**
      * @param \SAML2\XML\saml\SubjectConfirmation $subjectConfirmation
-     * @param Result $result
+     * @param \SAML2\Assertion\Validation\Result $result
      * @return void
      *
      * @throws \InvalidArgumentException if assertions are false

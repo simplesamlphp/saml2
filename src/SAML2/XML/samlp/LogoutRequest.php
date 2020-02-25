@@ -309,17 +309,6 @@ class LogoutRequest extends AbstractRequest
 
 
     /**
-     * Create a class from XML
-     *
-     * @param \DOMElement $xml
-     * @return \SAML2\XML\samlp\LogoutRequest
-     */
-    public static function fromXML(DOMElement $xml): object
-    {
-    }
-
-
-    /**
      * Convert this logout request message to an XML element.
      *
      * @return \DOMElement This logout request.

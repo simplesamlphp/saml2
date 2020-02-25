@@ -2,10 +2,11 @@
 
 declare(strict_types=1);
 
-namespace SAML2;
+namespace SAML2\XML\samlp;
 
 use DOMElement;
 use DOMNode;
+use SAML2\Utils;
 use Webmozart\Assert\Assert;
 
 /**
@@ -14,7 +15,7 @@ use Webmozart\Assert\Assert;
  * @author Danny Bollaert, UGent AS. <danny.bollaert@ugent.be>
  * @package SimpleSAMLphp
  */
-class ArtifactResponse extends StatusResponse
+class ArtifactResponse extends AbstractStatusResponse
 {
     /**
      * The \DOMElement with the message the artifact refers

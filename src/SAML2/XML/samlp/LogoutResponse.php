@@ -2,7 +2,7 @@
 
 declare(strict_types=1);
 
-namespace SAML2;
+namespace SAML2\XML\samlp;
 
 use DOMElement;
 
@@ -11,7 +11,7 @@ use DOMElement;
  *
  * @package SimpleSAMLphp
  */
-class LogoutResponse extends StatusResponse
+class LogoutResponse extends AbstractStatusResponse
 {
     /**
      * Constructor for SAML 2 response messages.

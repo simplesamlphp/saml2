@@ -4,16 +4,17 @@ declare(strict_types=1);
 
 namespace SAML2;
 
-use SAML2\XML\saml\Issuer;
-use SAML2\DOMDocumentFactory;
-use SAML2\Response;
-use SAML2\Utils;
+use PHPUnit\Framework\TestCase;
 use SAML2\Constants;
+use SAML2\DOMDocumentFactory;
+use SAML2\XML\samlp\Response;
+use SAML2\XML\saml\Issuer;
+use SAML2\Utils;
 
 /**
- * Class \SAML2\ResponseTest
+ * Class \SAML2\XML\samlp\ResponseTest
  */
-class ResponseTest extends \PHPUnit\Framework\TestCase
+class ResponseTest extends TestCase
 {
     /**
      * @return void

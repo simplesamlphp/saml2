@@ -23,8 +23,8 @@ use SAML2\Certificate\PrivateKeyLoader;
 use SAML2\Configuration\Destination;
 use SAML2\Configuration\IdentityProvider;
 use SAML2\Configuration\ServiceProvider;
-use SAML2\Response;
 use SAML2\Signature\Validator;
+use SAML2\XML\samlp\Response;
 
 /**
  * Simple Builder that allows to build a new Assertion Processor.
@@ -34,13 +34,13 @@ use SAML2\Signature\Validator;
 class ProcessorBuilder
 {
     /**
-     * @param LoggerInterface $logger
-     * @param Validator $signatureValidator
-     * @param Destination $currentDestination
-     * @param IdentityProvider $identityProvider
-     * @param ServiceProvider $serviceProvider
-     * @param Response $response
-     * @return Processor
+     * @param \Psr\Log\LoggerInterface $logger
+     * @param \SAML2\Signature\Validator $signatureValidator
+     * @param \SAML2\Configuration\Destination $currentDestination
+     * @param \SAML2\Configuration\IdentityProvider $identityProvider
+     * @param \SAML2\Configuration\ServiceProvider $serviceProvider
+     * @param \SAML2\XML\samlp\Response $response
+     * @return \SAML2\Assertion\Processor
      */
     public static function build(
         LoggerInterface $logger,
@@ -80,9 +80,9 @@ class ProcessorBuilder
 
 
     /**
-     * @param IdentityProvider $identityProvider
-     * @param ServiceProvider $serviceProvider
-     * @return AssertionValidator
+     * @param \SAML2\Configuration\IdentityProvider $identityProvider
+     * @param \SAML2\Configuration\ServiceProvider $serviceProvider
+     * @return \SAML2\Assertion\Validation\AssertionValidator
      */
     private static function createAssertionValidator(
         IdentityProvider $identityProvider,
@@ -99,11 +99,11 @@ class ProcessorBuilder
 
 
     /**
-     * @param IdentityProvider $identityProvider
-     * @param ServiceProvider $serviceProvider
-     * @param Destination $currentDestination
-     * @param Response $response
-     * @return SubjectConfirmationValidator
+     * @param \SAML2\Configuration\IdentityProvider $identityProvider
+     * @param \SAML2\Configuration\ServiceProvider $serviceProvider
+     * @param \SAML2\Configuration\Destination $currentDestination
+     * @param \SAML2\XML\samlp\Response $response
+     * @return \SAML2\Assertion\Validation\SubjectConfirmationValidator
      */
     private static function createSubjectConfirmationValidator(
         IdentityProvider $identityProvider,
@@ -136,11 +136,11 @@ class ProcessorBuilder
     }
 
     /**
-     * @param LoggerInterface $logger
-     * @param PrivateKeyLoader $keyLoader
-     * @param IdentityProvider $identityProvider
-     * @param ServiceProvider $serviceProvider
-     * @return TransformerChain
+     * @param \Psr\Log\LoggerInterface $logger
+     * @param \SAML2\Certificate\PrivateKeyLoader $keyLoader
+     * @param \SAML2\Configuration\IdentityProvider $identityProvider
+     * @param \SAML2\Configuration\ServiceProvider $serviceProvider
+     * @return \SAML2\Assertion\Transformer\TransformerChain
      */
     private static function createAssertionTransformerChain(
         LoggerInterface $logger,

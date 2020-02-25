@@ -7,6 +7,8 @@ namespace SAML2;
 use RobRichards\XMLSecLibs\XMLSecurityKey;
 use SAML2\Utilities\Temporal;
 use SAML2\XML\samlp\AbstractMessage;
+use SAML2\XML\samlp\ArtifactResolve;
+use SAML2\XML\samlp\ArtifactResponse;
 use SimpleSAML\Configuration;
 use SimpleSAML\Metadata\MetaDataStorageHandler;
 use SimpleSAML\Module\saml\Message as MSG;
@@ -156,7 +158,7 @@ class HTTPArtifact extends Binding
         $soap = new SOAPClient();
 
         // Send message through SoapClient
-        /** @var \SAML2\ArtifactResponse $artifactResponse */
+        /** @var \SAML2\XML\samlp\ArtifactResponse $artifactResponse */
         $artifactResponse = $soap->send($ar, $this->spMetadata);
 
         if (!$artifactResponse->isSuccess()) {
@@ -170,7 +172,7 @@ class HTTPArtifact extends Binding
             throw new \Exception('Empty ArtifactResponse received, maybe a replay?');
         }
 
-        $samlResponse = Message::fromXML($xml);
+        $samlResponse = AbstractMessage::fromXML($xml);
         $samlResponse->addValidator([get_class($this), 'validateSignature'], $artifactResponse);
 
         if (isset($_REQUEST['RelayState'])) {
@@ -197,7 +199,7 @@ class HTTPArtifact extends Binding
     /**
      * A validator which returns true if the ArtifactResponse was signed with the given key
      *
-     * @param \SAML2\ArtifactResponse $message
+     * @param \SAML2\XML\samlp\ArtifactResponse $message
      * @param XMLSecurityKey $key
      * @return bool
      */

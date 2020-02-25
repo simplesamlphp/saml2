@@ -2,15 +2,16 @@
 
 declare(strict_types=1);
 
-namespace SAML2;
+namespace SAML2\XML\samlp;
 
+use PHPUnit\Framework\TestCase;
 use SAML2\DOMDocumentFactory;
-use SAML2\LogoutResponse;
+use SAML2\XML\samlp\LogoutResponse;
 
 /**
- * Class \SAML2\LogoutResponseTest
+ * Class \SAML2\XML\samlp\LogoutResponseTest
  */
-class LogoutResponseTest extends \PHPUnit\Framework\TestCase
+class LogoutResponseTest extends TestCase
 {
     /**
      * @return void

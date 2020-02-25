@@ -4,7 +4,7 @@ declare(strict_types=1);
 
 namespace SAML2\Assertion\Validation;
 
-use SAML2\Assertion;
+use SAML2\XML\saml\Assertion;
 use SAML2\Configuration\IdentityProvider;
 use SAML2\Configuration\IdentityProviderAware;
 use SAML2\Configuration\ServiceProvider;
@@ -42,7 +42,7 @@ class AssertionValidator
 
 
     /**
-     * @param AssertionConstraintValidator $constraint
+     * @param \SAML2\Assertion\Validation\AssertionConstraintValidator $constraint
      * @return void
      */
     public function addConstraintValidator(AssertionConstraintValidator $constraint): void
@@ -60,8 +60,8 @@ class AssertionValidator
 
 
     /**
-     * @param Assertion $assertion
-     * @return Result
+     * @param \SAML2\XML\saml\Assertion $assertion
+     * @return \SAML2\Assertion\Validation\Result
      */
     public function validate(Assertion $assertion): Result
     {

@@ -4,8 +4,10 @@ declare(strict_types=1);
 
 namespace SAML2;
 
+use Exception;
 use RobRichards\XMLSecLibs\XMLSecurityKey;
 use SAML2\XML\samlp\AbstractMessage;
+use SAML2\XML\samlp\AbstractRequest;
 use Webmozart\Assert\Assert;
 
 /**
@@ -28,7 +30,7 @@ class HTTPRedirect extends Binding
         if ($this->destination === null) {
             $destination = $message->getDestination();
             if ($destination === null) {
-                throw new \Exception('Cannot build a redirect URL, no destination set.');
+                throw new Exception('Cannot build a redirect URL, no destination set.');
             }
         } else {
             $destination = $this->destination;
@@ -48,7 +50,7 @@ class HTTPRedirect extends Binding
 
         /* Build the query string. */
 
-        if ($message instanceof Request) {
+        if ($message instanceof AbstractRequest) {
             $msg = 'SAMLRequest=';
         } else {
             $msg = 'SAMLResponse=';
@@ -110,27 +112,27 @@ class HTTPRedirect extends Binding
         } elseif (array_key_exists('SAMLResponse', $data)) {
             $message = $data['SAMLResponse'];
         } else {
-            throw new \Exception('Missing SAMLRequest or SAMLResponse parameter.');
+            throw new Exception('Missing SAMLRequest or SAMLResponse parameter.');
         }
 
         if (isset($data['SAMLEncoding']) && $data['SAMLEncoding'] !== self::DEFLATE) {
-            throw new \Exception('Unknown SAMLEncoding: ' . var_export($data['SAMLEncoding'], true));
+            throw new Exception('Unknown SAMLEncoding: ' . var_export($data['SAMLEncoding'], true));
         }
 
         $message = base64_decode($message);
         if ($message === false) {
-            throw new \Exception('Error while base64 decoding SAML message.');
+            throw new Exception('Error while base64 decoding SAML message.');
         }
 
         $message = gzinflate($message);
         if ($message === false) {
-            throw new \Exception('Error while inflating SAML message.');
+            throw new Exception('Error while inflating SAML message.');
         }
 
         $document = DOMDocumentFactory::fromString($message);
         Utils::getContainer()->debugMessage($document->documentElement, 'in');
         if (!$document->firstChild instanceof \DOMElement) {
-            throw new \Exception('Malformed SAML message received.');
+            throw new Exception('Malformed SAML message received.');
         }
         $message = AbstractMessage::fromXML($document->firstChild);
 
@@ -143,7 +145,7 @@ class HTTPRedirect extends Binding
         }
 
         if (!array_key_exists('SigAlg', $data)) {
-            throw new \Exception('Missing signature algorithm.');
+            throw new Exception('Missing signature algorithm.');
         }
 
         $signData = [
@@ -240,7 +242,7 @@ class HTTPRedirect extends Binding
         }
 
         if ($key->verifySignature($query, $signature) !== 1) {
-            throw new \Exception('Unable to validate signature on query string.');
+            throw new Exception('Unable to validate signature on query string.');
         }
     }
 }
