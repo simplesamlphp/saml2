@@ -79,16 +79,6 @@ abstract class AbstractMessage extends AbstractSamlpElement implements SignedEle
     private $relayState = null;
 
     /**
-     * The \DOMDocument we are currently building.
-     *
-     * This variable is used while generating XML from this message. It holds the
-     * \DOMDocument of the XML we are generating.
-     *
-     * @var \DOMDocument
-     */
-    protected $document;
-
-    /**
      * @var bool
      */
     protected $messageContainedSignatureUponConstruction = false;
@@ -422,12 +412,7 @@ abstract class AbstractMessage extends AbstractSamlpElement implements SignedEle
      */
     public function toXML(?DOMElement $parent = null): DOMElement
     {
-        Assert::null($parent);
-
-        $this->document = DOMDocumentFactory::create();
-
-        $root = $this->document->createElementNS(Constants::NS_SAMLP, 'samlp:' . $this->tagName);
-        $this->document->appendChild($root);
+        $root = $this->instantiateParentElement($parent);
 
         /* Ugly hack to add another namespace declaration to the root element. */
         $root->setAttributeNS(Constants::NS_SAML, 'saml:tmp', 'tmp');

@@ -78,7 +78,7 @@ class ArtifactResolve extends AbstractRequest
         Assert::notEmpty($this->artifact, 'Cannot convert ArtifactResolve to XML without an Artifact set.');
 
         $parent = parent::toXML();
-        $artifactelement = $this->document->createElementNS(Constants::NS_SAMLP, 'Artifact', $this->artifact);
+        $artifactelement = $parent->ownerDocument->createElementNS(Constants::NS_SAMLP, 'Artifact', $this->artifact);
         $parent->appendChild($artifactelement);
 
         return $parent;

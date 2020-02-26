@@ -8,6 +8,10 @@ use DOMElement;
 use Exception;
 use SAML2\Constants;
 use SAML2\Utils;
+use SAML2\XML\ds\Signature;
+use SAML2\XML\saml\Issuer;
+use SAML2\XML\saml\NameID;
+use SAML2\XML\samlp\Extensions;
 use Webmozart\Assert\Assert;
 
 /**
@@ -42,53 +46,23 @@ class AttributeQuery extends AbstractSubjectQuery
      *
      * @var string
      */
-    private $nameFormat = Constants::NAMEFORMAT_UNSPECIFIED;
+    private $nameFormat;
 
 
     /**
      * Constructor for SAML 2 attribute query messages.
      *
-     * @param \DOMElement|null $xml The input message.
+     * @param \SAML2\XML\saml\NameIDType $subject
+     * @param array $attributes
+     * @param string $nameFormat
      * @throws \Exception
      */
-    public function __construct(DOMElement $xml = null)
+    public function __construct(NameID $subject, array $attributes, string $nameFormat = Constants::NAMEFORMAT_UNSPECIFIED)
     {
-        parent::__construct('AttributeQuery', $xml);
+        parent::__construct($subject);
 
-        if ($xml === null) {
-            return;
-        }
-
-        $firstAttribute = true;
-        /** @var \DOMElement[] $attributes */
-        $attributes = Utils::xpQuery($xml, './saml_assertion:Attribute');
-        foreach ($attributes as $attribute) {
-            if (!$attribute->hasAttribute('Name')) {
-                throw new Exception('Missing name on <saml:Attribute> element.');
-            }
-            $name = $attribute->getAttribute('Name');
-
-            $nameFormat = $this->nameFormat;
-            if ($attribute->hasAttribute('NameFormat')) {
-                $nameFormat = $attribute->getAttribute('NameFormat');
-            }
-
-            if ($firstAttribute) {
-                $this->nameFormat = $nameFormat;
-                $firstAttribute = false;
-            } elseif ($this->nameFormat !== $nameFormat) {
-                $this->nameFormat = Constants::NAMEFORMAT_UNSPECIFIED;
-            }
-
-            if (!array_key_exists($name, $this->attributes)) {
-                $this->attributes[$name] = [];
-            }
-
-            $values = Utils::xpQuery($attribute, './saml_assertion:AttributeValue');
-            foreach ($values as $value) {
-                $this->attributes[$name][] = trim($value->textContent);
-            }
-        }
+        $this->setAttributes($attributes);
+        $this->setAttributeNameFormat($nameFormat);
     }
 
 
@@ -142,19 +116,77 @@ class AttributeQuery extends AbstractSubjectQuery
 
 
     /**
+     * Convert XML into an AttributeQuery
+     *
+     * @param \DOMElement $xml The XML element we should load
+     * @return \SAML2\XML\samlp\AttributeQuery
+     * @throws \InvalidArgumentException if the qualified name of the supplied element is wrong
+     */
+    public static function fromXML(DOMElement $xml): object
+    {
+        Assert::same($xml->localName, 'AttributeQuery');
+        Assert::same($xml->namespaceURI, AttributeQuery::NS);
+
+        $ID = self::getAttribute($xml, 'ID');
+        $Version = self::getAttribute($xml, 'Version');
+        $IssueInstant = self::getAttribute($xml, 'IssueInstant');
+        $Destination = self::getAttribute($xml, 'Destination', null);
+        $Consent = self::getAttribute($xml, 'Consent', null);
+
+        $issuer = Issuer::getChildrenOfClass($xml);
+        $signature = Signature::getChildrenOfClass($xml);
+        $extensions = Extensions::getChildrenOfClass($xml);
+
+        $firstAttribute = true;
+        $attributes = [];
+        $nameFormat = Constants::NAMEFORMAT_UNSPECIFIED;
+
+        /** @var \DOMElement[] $attributes */
+        $attributeElts = Utils::xpQuery($xml, './saml_assertion:Attribute');
+        foreach ($attributeElts as $attribute) {
+            Assert::true($attribute->hasAttribute('Name'), 'Missing name on <saml:Attribute> element.');
+
+            $name = $attribute->getAttribute('Name');
+
+            $givenNameFormat = $nameFormat;
+            if ($attribute->hasAttribute('NameFormat')) {
+                $givenNameFormat = $attribute->getAttribute('NameFormat');
+            }
+
+            if ($firstAttribute) {
+                $nameFormat = $givenNameFormat;
+                $firstAttribute = false;
+            } elseif ($nameFormat !== $givenNameFormat) {
+                $nameFormat = Constants::NAMEFORMAT_UNSPECIFIED;
+            }
+
+            if (!array_key_exists($name, $attributes)) {
+                $attributes[$name] = [];
+            }
+
+            $values = Utils::xpQuery($attribute, './saml_assertion:AttributeValue');
+            foreach ($values as $value) {
+                $attributes[$name][] = trim($value->textContent);
+            }
+        }
+        $subject = AbstractSubjectQuery::parseSubject($xml);
+
+        return new self($subject, $attributes, $nameFormat);
+    }
+
+
+    /**
      * Convert the attribute query message to an XML element.
      *
      * @return \DOMElement This attribute query.
      */
     public function toXML(?DOMElement $parent = null): DOMElement
     {
-        Assert::null($parent);
-
-        $parent = parent::toXML();
+        $e = parent::toXML($parent);
 
         foreach ($this->attributes as $name => $values) {
-            $attribute = $parent->ownerDocument->createElementNS(Constants::NS_SAML, 'saml:Attribute');
-            $parent->appendChild($attribute);
+            $attribute = $e->ownerDocument->createElementNS(Constants::NS_SAML, 'saml:Attribute');
+            $e->appendChild($attribute);
             $attribute->setAttribute('Name', $name);
 
             if ($this->nameFormat !== Constants::NAMEFORMAT_UNSPECIFIED) {
@@ -182,6 +214,6 @@ class AttributeQuery extends AbstractSubjectQuery
             }
         }
 
-        return $parent;
+        return $e;
     }
 }

@@ -800,15 +800,15 @@ class AuthnRequest extends AbstractRequest
         }
 
         if ($this->ProxyCount !== null || count($this->IDPList) > 0 || count($this->RequesterID) > 0) {
-            $scoping = $this->document->createElementNS(Constants::NS_SAMLP, 'Scoping');
+            $scoping = $parent->ownerDocument->createElementNS(Constants::NS_SAMLP, 'Scoping');
             $parent->appendChild($scoping);
             if ($this->ProxyCount !== null) {
                 $scoping->setAttribute('ProxyCount', strval($this->ProxyCount));
             }
             if (count($this->IDPList) > 0) {
-                $idplist = $this->document->createElementNS(Constants::NS_SAMLP, 'IDPList');
+                $idplist = $parent->ownerDocument->createElementNS(Constants::NS_SAMLP, 'IDPList');
                 foreach ($this->IDPList as $provider) {
-                    $idpEntry = $this->document->createElementNS(Constants::NS_SAMLP, 'IDPEntry');
+                    $idpEntry = $parent->ownerDocument->createElementNS(Constants::NS_SAMLP, 'IDPEntry');
                     if (is_string($provider)) {
                         $idpEntry->setAttribute('ProviderID', $provider);
                     } elseif (is_array($provider)) {

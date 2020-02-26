@@ -31,8 +31,7 @@ class UtilsTest extends \PHPUnit\Framework\TestCase
             null
         );
 
-        $aq = new AttributeQuery();
-        $aq->setNameID($nameId_before);
+        $aq = new AttributeQuery($nameId_before, []);
 
         $xml = $aq->toXML();
 

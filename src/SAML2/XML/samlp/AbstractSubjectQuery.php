@@ -35,18 +35,11 @@ abstract class AbstractSubjectQuery extends AbstractRequest
     /**
      * Constructor for SAML 2 subject query messages.
      *
-     * @param string $tagName The tag name of the root element.
-     * @param \DOMElement|null $xml The input message.
+     * @param \SAML2\XML\saml\NameID $subject.
      */
-    protected function __construct(string $tagName, DOMElement $xml = null)
+    protected function __construct(NameID $subject)
     {
-        parent::__construct($tagName, $xml);
-
-        if ($xml === null) {
-            return;
-        }
-
-        $this->parseSubject($xml);
+        $this->setNameId($subject);
     }
 
 
@@ -55,9 +48,9 @@ abstract class AbstractSubjectQuery extends AbstractRequest
      *
      * @param \DOMElement $xml The SubjectQuery XML element.
      * @throws \Exception
-     * @return void
+     * @return \SAML2\XML\saml\NameID
      */
-    private function parseSubject(DOMElement $xml): void
+    protected static function parseSubject(DOMElement $xml): NameID
     {
         /** @var \DOMElement[] $subject */
         $subject = Utils::xpQuery($xml, './saml_assertion:Subject');
@@ -74,7 +67,8 @@ abstract class AbstractSubjectQuery extends AbstractRequest
         } elseif (count($nameId) > 1) {
             throw new Exception('More than one <saml:NameID> in <saml:Subject>.');
         }
-        $this->nameId = NameID::fromXML($nameId[0]);
+
+        return NameID::fromXML($nameId[0]);
     }
 
 
@@ -114,16 +108,15 @@ abstract class AbstractSubjectQuery extends AbstractRequest
      */
     public function toXML(?DOMElement $parent = null): DOMElement
     {
-        Assert::null($parent);
         Assert::notEmpty($this->nameId, 'Cannot convert SubjectQuery to XML without a NameID set.');
 
-        $parent = parent::toXML();
+        $e = parent::toXML($parent);
 
-        $subject = $parent->ownerDocument->createElementNS(Constants::NS_SAML, 'saml:Subject');
-        $parent->appendChild($subject);
+        $subject = $e->ownerDocument->createElementNS(Constants::NS_SAML, 'saml:Subject');
+        $e->appendChild($subject);
 
         $this->nameId->toXML($subject);
 
-        return $parent;
+        return $e;
     }
 }

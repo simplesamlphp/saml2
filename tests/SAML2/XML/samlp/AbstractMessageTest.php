@@ -12,8 +12,9 @@ use SAML2\DOMDocumentFactory;
 use SAML2\Utils;
 use SAML2\XML\saml\Issuer;
 use SAML2\XML\samlp\AbstractMessage;
-use SAML2\XML\samlp\Response;
 use SAML2\XML\samlp\Extensions;
+use SAML2\XML\samlp\MessageFactory;
+use SAML2\XML\samlp\Response;
 
 class AbstractMessageTest extends \Mockery\Adapter\Phpunit\MockeryTestCase
 {
@@ -357,7 +358,7 @@ XML;
 </samlp:AttributeQuery>
 XML;
         $document  = DOMDocumentFactory::fromString($xml);
-        $message = AbstractMessage::fromXML($document->documentElement);
+        $message = MessageFactory::fromXML($document->documentElement);
 
         $this->assertEquals('https://example.org/', $message->getIssuer()->getValue());
         $this->assertEquals('aaf23196-1773-2113-474a-fe114412ab72', $message->getId());

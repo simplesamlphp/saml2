@@ -5,6 +5,7 @@ declare(strict_types=1);
 namespace SAML2\XML\samlp;
 
 use Exception;
+use InvalidArgumentException;
 use PHPUnit\Framework\TestCase;
 use SAML2\DOMDocumentFactory;
 use SAML2\Utils;
@@ -18,24 +19,22 @@ class AttributeQueryTest extends TestCase
 {
     public function testMarshalling(): void
     {
-        $attributeQuery = new AttributeQuery();
         $nameId = new NameID('NameIDValue');
-        $attributeQuery->setNameID($nameId);
-        $attributeQuery->setAttributes(
-            [
-                'test1' => [
-                    'test1_attrv1',
-                    'test1_attrv2',
-                ],
-                'test2' => [
-                    'test2_attrv1',
-                    'test2_attrv2',
-                    'test2_attrv3',
-                ],
-                'test3' => [],
-                'test4' => [ 4, 23 ],
-            ]
-        );
+        $attributes = [
+            'test1' => [
+                'test1_attrv1',
+                'test1_attrv2',
+            ],
+            'test2' => [
+                'test2_attrv1',
+                'test2_attrv2',
+                'test2_attrv3',
+            ],
+            'test3' => [],
+            'test4' => [ 4, 23 ],
+        ];
+
+        $attributeQuery = new AttributeQuery($nameId, $attributes);
         $attributeQueryElement = $attributeQuery->toXML();
 
         // Test Attribute Names
@@ -101,7 +100,7 @@ class AttributeQueryTest extends TestCase
 </samlp:AttributeQuery>
 XML;
         $document = DOMDocumentFactory::fromString($xml);
-        $aq = new AttributeQuery($document->firstChild);
+        $aq = AttributeQuery::fromXML($document->firstChild);
 
         // Sanity check
         $this->assertEquals('https://example.org/', $aq->getIssuer()->getValue());
@@ -123,23 +122,20 @@ XML;
     {
         $fmt_uri = 'urn:oasis:names:tc:SAML:2.0:attrname-format:uri';
 
-        $attributeQuery = new AttributeQuery();
         $nameId = new NameID('NameIDValue');
-        $attributeQuery->setNameID($nameId);
-        $attributeQuery->setAttributes(
-            [
-                'test1' => [
-                    'test1_attrv1',
-                    'test1_attrv2',
-                    ],
-                'test2' => [
-                    'test2_attrv1',
-                    'test2_attrv2',
-                    'test2_attrv3',
-                    ],
-                'test3' => [],
-            ]
-        );
+        $attributes = [
+            'test1' => [
+                'test1_attrv1',
+                'test1_attrv2',
+            ],
+            'test2' => [
+                'test2_attrv1',
+                'test2_attrv2',
+                'test2_attrv3',
+            ],
+            'test3' => [],
+        ];
+        $attributeQuery = new AttributeQuery($nameId, $attributes);
         $attributeQuery->setAttributeNameFormat($fmt_uri);
         $attributeQueryElement = $attributeQuery->toXML();
 
@@ -176,10 +172,12 @@ XML;
 </samlp:AttributeQuery>
 XML;
         $document = DOMDocumentFactory::fromString($xml);
-        $aq = new AttributeQuery($document->firstChild);
+        $aq = AttributeQuery::fromXML($document->firstChild);
 
         // Sanity check
-        $this->assertEquals('https://example.org/', $aq->getIssuer()->getValue());
+        $issuer = $aq->getIssuer();
+        $this->assertNotNull($issuer);
+        $this->assertEquals('https://example.org/', $issuer->getValue());
 
         $this->assertEquals('urn:oasis:names:tc:SAML:2.0:attrname-format:unspecified', $aq->getAttributeNameFormat());
     }
@@ -211,10 +209,12 @@ XML;
 </samlp:AttributeQuery>
 XML;
         $document = DOMDocumentFactory::fromString($xml);
-        $aq = new AttributeQuery($document->firstChild);
+        $aq = AttributeQuery::fromXML($document->firstChild);
 
         // Sanity check
-        $this->assertEquals('https://example.org/', $aq->getIssuer()->getValue());
+        $issuer = $aq->getIssuer();
+        $this->assertNotNull($issuer);
+        $this->assertEquals('https://example.org/', $issuer->getValue());
 
         $this->assertEquals('urn:oasis:names:tc:SAML:2.0:attrname-format:unspecified', $aq->getAttributeNameFormat());
     }
@@ -250,9 +250,9 @@ XML;
 XML;
         $document = DOMDocumentFactory::fromString($xml);
 
-        $this->expectException(Exception::class);
+        $this->expectException(InvalidArgumentException::class);
         $this->expectExceptionMessage('Missing name on <saml:Attribute> element.');
-        $aq = new AttributeQuery($document->firstChild);
+        $aq = AttributeQuery::fromXML($document->firstChild);
     }
 
 
@@ -271,7 +271,7 @@ XML;
         $document = DOMDocumentFactory::fromString($xml);
         $this->expectException(Exception::class);
         $this->expectExceptionMessage('Missing subject in subject');
-        $aq = new AttributeQuery($document->firstChild);
+        $aq = AttributeQuery::fromXML($document->firstChild);
     }
 
 
@@ -296,7 +296,7 @@ XML;
         $document = DOMDocumentFactory::fromString($xml);
         $this->expectException(Exception::class);
         $this->expectExceptionMessage('More than one <saml:Subject> in subject');
-        $aq = new AttributeQuery($document->firstChild);
+        $aq = AttributeQuery::fromXML($document->firstChild);
     }
 
 
@@ -318,7 +318,7 @@ XML;
         $document = DOMDocumentFactory::fromString($xml);
         $this->expectException(Exception::class);
         $this->expectExceptionMessage('Missing <saml:NameID> in <saml:Subject>');
-        $aq = new AttributeQuery($document->firstChild);
+        $aq = AttributeQuery::fromXML($document->firstChild);
     }
 
 
@@ -341,6 +341,6 @@ XML;
         $document = DOMDocumentFactory::fromString($xml);
         $this->expectException(Exception::class);
         $this->expectExceptionMessage('More than one <saml:NameID> in <saml:Subject>');
-        $aq = new AttributeQuery($document->firstChild);
+        $aq = AttributeQuery::fromXML($document->firstChild);
     }
 }
