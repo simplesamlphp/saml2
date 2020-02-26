@@ -92,7 +92,7 @@ XML
         $this->expectException(InvalidArgumentException::class);
         $this->expectExceptionMessage('SubjectConfirmation element without Method attribute');
 
-        $subjectConfirmation = SubjectConfirmation::fromXML($document);
+        SubjectConfirmation::fromXML($document);
     }
 
 
