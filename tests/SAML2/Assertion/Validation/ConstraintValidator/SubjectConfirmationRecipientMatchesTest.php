@@ -13,7 +13,7 @@ use SAML2\XML\saml\SubjectConfirmation;
 use SAML2\XML\saml\SubjectConfirmationData;
 use SAML2\XML\saml\SubjectConfirmationMatches;
 
-class SubjectConfirmationRecipientMathchesTest extends \Mockery\Adapter\Phpunit\MockeryTestCase
+class SubjectConfirmationRecipientMatchesTest extends \Mockery\Adapter\Phpunit\MockeryTestCase
 {
     /**
      * @group assertion-validation
