@@ -64,9 +64,9 @@ final class IdentityProvider extends ArrayAdapter implements CertificateProvider
 
 
     /**
-     * @return mixed|null
+     * @return bool|null
      */
-    public function hasBase64EncodedAttributes()
+    public function hasBase64EncodedAttributes(): ?bool
     {
         return $this->get('base64EncodedAttributes');
     }
