@@ -11,6 +11,9 @@ use SAML2\Utils;
 
 /**
  * Class \SAML2\XML\saml\BaseIDTest
+ *
+ * @author Tim van Dijen, <tvdijen@gmail.com>
+ * @package SimpleSAMLphp
  */
 final class BaseIDTest extends TestCase
 {

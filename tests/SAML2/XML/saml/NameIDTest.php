@@ -10,12 +10,14 @@ use SAML2\Utils;
 
 /**
  * Class \SAML2\XML\saml\NameIDTest
+ *
+ * @author Tim van Dijen, <tvdijen@gmail.com>
+ * @package SimpleSAMLphp
  */
 final class NameIDTest extends \PHPUnit\Framework\TestCase
 {
     /** @var \DOMDocument $document */
     private $document;
-
 
     /**
      * @return void
