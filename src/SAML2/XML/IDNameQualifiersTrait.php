@@ -2,20 +2,15 @@
 
 declare(strict_types=1);
 
-namespace SAML2\XML\saml;
-
-use DOMElement;
-use SAML2\Constants;
-use SAML2\DOMDocumentFactory;
-use Webmozart\Assert\Assert;
+namespace SAML2\XML;
 
 /**
- * SAML BaseIDType abstract data type.
+ * Trait grouping common functionality for elements implementing BaseIDAbstractType and NameIDType.
  *
- * @author Jaime Pérez Crespo, UNINETT AS <jaime.perez@uninett.no>
+ * @author Tim van Dijen, <tvdijen@gmail.com>
  * @package simplesamlphp/saml2
  */
-abstract class BaseIDType extends AbstractSamlElement
+trait IDNameQualifiersTrait
 {
     /**
      * The security or administrative domain that qualifies the identifier.
@@ -36,21 +31,6 @@ abstract class BaseIDType extends AbstractSamlElement
      * @var string|null
      */
     protected $SPNameQualifier = null;
-
-
-    /**
-     * Initialize a saml:BaseIDType from scratch
-     *
-     * @param string|null $NameQualifier
-     * @param string|null $SPNameQualifier
-     */
-    public function __construct(
-        ?string $NameQualifier = null,
-        ?string $SPNameQualifier = null
-    ) {
-        $this->setNameQualifier($NameQualifier);
-        $this->setSPNameQualifier($SPNameQualifier);
-    }
 
 
     /**
@@ -75,7 +55,6 @@ abstract class BaseIDType extends AbstractSamlElement
         $this->NameQualifier = $nameQualifier;
     }
 
-
     /**
      * Collect the value of the SPNameQualifier-property
      *
@@ -96,27 +75,5 @@ abstract class BaseIDType extends AbstractSamlElement
     private function setSPNameQualifier(?string $spNameQualifier): void
     {
         $this->SPNameQualifier = $spNameQualifier;
-    }
-
-
-    /**
-     * Convert this NameIDType to XML.
-     *
-     * @param \DOMElement $parent The element we are converting to XML.
-     * @return \DOMElement The XML element after adding the data corresponding to this NameIDType.
-     */
-    public function toXML(DOMElement $parent = null): DOMElement
-    {
-        $element = $this->instantiateParentElement($parent);
-
-        if ($this->NameQualifier !== null) {
-            $element->setAttribute('NameQualifier', $this->NameQualifier);
-        }
-
-        if ($this->SPNameQualifier !== null) {
-            $element->setAttribute('SPNameQualifier', $this->SPNameQualifier);
-        }
-
-        return $element;
     }
 }

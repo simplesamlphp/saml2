@@ -7,6 +7,7 @@ namespace SAML2\XML\saml;
 use DOMElement;
 use SAML2\Constants;
 use SAML2\DOMDocumentFactory;
+use SAML2\XML\IDNameQualifiersTrait;
 use Webmozart\Assert\Assert;
 
 /**
@@ -16,8 +17,10 @@ use Webmozart\Assert\Assert;
  * @package simplesamlphp/saml2
  */
 
-abstract class NameIDType extends BaseIDType
+abstract class NameIDType extends AbstractSamlElement
 {
+    use IDNameQualifiersTrait;
+
     /**
      * A URI reference representing the classification of string-based identifier information. See Section 8.3 for the
      * SAML-defined URI references that MAY be used as the value of the Format attribute and their associated
@@ -65,18 +68,18 @@ abstract class NameIDType extends BaseIDType
      * @param string|null $NameQualifier
      * @param string|null $SPNameQualifier
      */
-    public function __construct(
+    protected function __construct(
         string $value,
         ?string $NameQualifier = null,
         ?string $SPNameQualifier = null,
         ?string $Format = null,
         ?string $SPProvidedID = null
     ) {
-        parent::__construct($NameQualifier, $SPNameQualifier);
-
+        $this->setValue($value);
+        $this->setNameQualifier($NameQualifier);
+        $this->setSPNameQualifier($SPNameQualifier);
         $this->setFormat($Format);
         $this->setSPProvidedID($SPProvidedID);
-        $this->setValue($value);
     }
 
 
@@ -161,7 +164,15 @@ abstract class NameIDType extends BaseIDType
      */
     public function toXML(DOMElement $parent = null): DOMElement
     {
-        $element = parent::toXML($parent);
+        $element = $this->instantiateParentElement($parent);
+
+        if ($this->NameQualifier !== null) {
+            $element->setAttribute('NameQualifier', $this->NameQualifier);
+        }
+
+        if ($this->SPNameQualifier !== null) {
+            $element->setAttribute('SPNameQualifier', $this->SPNameQualifier);
+        }
 
         if ($this->Format !== null) {
             $element->setAttribute('Format', $this->Format);
