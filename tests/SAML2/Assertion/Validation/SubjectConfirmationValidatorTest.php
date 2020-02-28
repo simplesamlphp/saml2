@@ -43,7 +43,7 @@ final class SubjectConfirmationValidatorTest extends TestCase
      * @var \Psr\Log\LoggerInterface
      */
     protected $logger;
-   
+
     /**
      * @var \SAML2\Response\Validation\Validator
      */
@@ -138,7 +138,7 @@ XML
     public function testSubjectConfirmationNonValidation(): void
     {
         $assertion = new Assertion($this->document->firstChild);
-    
+
         $sc = $assertion->getSubjectConfirmation()[0];
         $scd = $sc->getSubjectConfirmationData();
         $newscd = new SubjectConfirmationData(
@@ -149,9 +149,9 @@ XML
             $scd->getAddress(),
             $scd->getInfo()
         );
-        $newsc = new SubjectConfirmation($sc->getMethod(), $sc->getNameId(), $newscd);
+        $newsc = new SubjectConfirmation($sc->getMethod(), null, $sc->getNameId(), null, $newscd);
         $assertion->setSubjectConfirmation([$newsc]);
-    
+
         $this->expectException(InvalidSubjectConfirmationException::class);
         $this->expectExceptionMessage('Invalid SubjectConfirmation in Assertion, errors: "Recipient in SubjectConfirmationData ("https://elsewhere.example.edu") does not match the current destination ("https://example.org/authentication/sp/consume-assertion")');
         $result = $this->assertionProcessor->validateAssertion($assertion);

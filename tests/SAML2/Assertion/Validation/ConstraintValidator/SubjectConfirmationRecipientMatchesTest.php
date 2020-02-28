@@ -23,7 +23,7 @@ class SubjectConfirmationRecipientMatchesTest extends \Mockery\Adapter\Phpunit\M
     public function when_the_subject_confirmation_recipient_differs_from_the_destination_the_sc_is_invalid(): void
     {
         $subjectConfirmationData = new SubjectConfirmationData(null, null, 'someDestination');
-        $subjectConfirmation = new SubjectConfirmation(Constants::CM_HOK, null, $subjectConfirmationData);
+        $subjectConfirmation = new SubjectConfirmation(Constants::CM_HOK, null, null, null, $subjectConfirmationData);
 
         $validator = new SubjectConfirmationRecipientMatches(
             new Destination('anotherDestination')
@@ -45,7 +45,7 @@ class SubjectConfirmationRecipientMatchesTest extends \Mockery\Adapter\Phpunit\M
     public function when_the_subject_confirmation_recipient_equals_the_destination_the_sc_is_invalid(): void
     {
         $subjectConfirmationData = new SubjectConfirmationData(null, null, 'theSameDestination');
-        $subjectConfirmation = new SubjectConfirmation(Constants::CM_HOK, null, $subjectConfirmationData);
+        $subjectConfirmation = new SubjectConfirmation(Constants::CM_HOK, null, null, null, $subjectConfirmationData);
 
         $validator = new SubjectConfirmationRecipientMatches(
             new Destination('theSameDestination')

@@ -39,7 +39,7 @@ class SubjectConfirmationResponseToMatchesTest extends \Mockery\Adapter\Phpunit\
     {
         $this->response->shouldReceive('getInResponseTo')->andReturnNull();
         $subjectConfirmationData = new SubjectConfirmationData(null, null, null, 'someValue');
-        $subjectConfirmation = new SubjectConfirmation(Constants::CM_HOK, null, $subjectConfirmationData);
+        $subjectConfirmation = new SubjectConfirmation(Constants::CM_HOK, null, null, null, $subjectConfirmationData);
 
         $validator = new SubjectConfirmationResponseToMatches(
             $this->response
@@ -61,7 +61,7 @@ class SubjectConfirmationResponseToMatchesTest extends \Mockery\Adapter\Phpunit\
     {
         $this->response->shouldReceive('getInResponseTo')->andReturn('someValue');
         $subjectConfirmationData = new SubjectConfirmationData();
-        $subjectConfirmation = new SubjectConfirmation(Constants::CM_HOK, null, $subjectConfirmationData);
+        $subjectConfirmation = new SubjectConfirmation(Constants::CM_HOK, null, null, null, $subjectConfirmationData);
 
         $validator = new SubjectConfirmationResponseToMatches(
             $this->response
@@ -83,7 +83,7 @@ class SubjectConfirmationResponseToMatchesTest extends \Mockery\Adapter\Phpunit\
     {
         $this->response->shouldReceive('getInResponseTo')->andReturnNull();
         $subjectConfirmationData = new SubjectConfirmationData();
-        $subjectConfirmation = new SubjectConfirmation(Constants::CM_HOK, null, $subjectConfirmationData);
+        $subjectConfirmation = new SubjectConfirmation(Constants::CM_HOK, null, null, null, $subjectConfirmationData);
 
         $validator = new SubjectConfirmationResponseToMatches(
             $this->response
@@ -105,7 +105,7 @@ class SubjectConfirmationResponseToMatchesTest extends \Mockery\Adapter\Phpunit\
     {
         $this->response->shouldReceive('getInResponseTo')->andReturn('theSameValue');
         $subjectConfirmationData = new SubjectConfirmationData(null, null, null, 'theSameValue');
-        $subjectConfirmation = new SubjectConfirmation(Constants::CM_HOK, null, $subjectConfirmationData);
+        $subjectConfirmation = new SubjectConfirmation(Constants::CM_HOK, null, null, null, $subjectConfirmationData);
 
         $validator = new SubjectConfirmationResponseToMatches(
             $this->response
@@ -127,7 +127,7 @@ class SubjectConfirmationResponseToMatchesTest extends \Mockery\Adapter\Phpunit\
     {
         $this->response->shouldReceive('getInResponseTo')->andReturn('someValue');
         $subjectConfirmationData = new SubjectConfirmationData(null, null, null, 'anotherValue');
-        $subjectConfirmation = new SubjectConfirmation(Constants::CM_HOK, null, $subjectConfirmationData);
+        $subjectConfirmation = new SubjectConfirmation(Constants::CM_HOK, null, null, null, $subjectConfirmationData);
 
         $validator = new SubjectConfirmationResponseToMatches(
             $this->response

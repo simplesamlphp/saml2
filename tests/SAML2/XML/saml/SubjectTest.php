@@ -24,7 +24,16 @@ final class SubjectTest extends TestCase
     private $document;
 
     /** @var \DOMDocument */
+    private $subject;
+
+    /** @var \DOMDocument */
     private $baseId;
+
+    /** @var \DOMDocument */
+    private $nameId;
+
+    /** @var \DOMDocument */
+    private $subjectConfirmation;
 
 
     public function setup(): void
@@ -90,6 +99,7 @@ XML
             [
                 new SubjectConfirmation(
                     'urn:oasis:names:tc:SAML:2.0:cm:bearer',
+                    null,
                     new NameID(
                         'SomeOtherNameIDValue',
                         null,
@@ -97,6 +107,7 @@ XML
                         Constants::NAMEID_TRANSIENT,
                         null
                     ),
+                    null,
                     new SubjectConfirmationData(
                         null,
                         1582802796,
@@ -137,6 +148,7 @@ XML
             [
                 new SubjectConfirmation(
                     'urn:oasis:names:tc:SAML:2.0:cm:bearer',
+                    null,
                     new NameID(
                         'SomeOtherNameIDValue',
                         null,
@@ -144,6 +156,7 @@ XML
                         Constants::NAMEID_TRANSIENT,
                         null
                     ),
+                    null,
                     new SubjectConfirmationData(
                         null,
                         1582802796,

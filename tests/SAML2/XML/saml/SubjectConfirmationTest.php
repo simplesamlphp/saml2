@@ -45,12 +45,16 @@ XML
     {
         $subjectConfirmation = new SubjectConfirmation(
             'SomeMethod',
+            null,
             new NameID('SomeNameIDValue'),
+            null,
             new SubjectConfirmationData()
         );
 
         $this->assertEquals('SomeMethod', $subjectConfirmation->getMethod());
+        $this->assertNull($subjectConfirmation->getBaseID());
         $this->assertNotNull($subjectConfirmation->getNameID());
+        $this->assertNull($subjectConfirmation->getEncryptedID());
         $this->assertNotNull($subjectConfirmation->getSubjectConfirmationData());
 
         $this->assertEquals(
@@ -71,9 +75,11 @@ XML
         $subjectConfirmation = SubjectConfirmation::fromXML($this->document->documentElement);
 
         $this->assertEquals('SomeMethod', $subjectConfirmation->getMethod());
-        $this->assertTrue($subjectConfirmation->getNameID() instanceof NameID);
+        $this->assertNull($subjectConfirmation->getBaseID());
+        $this->assertInstanceOf(NameID::class, $subjectConfirmation->getNameID());
+        $this->assertNull($subjectConfirmation->getEncryptedID());
         $this->assertEquals('SomeNameIDValue', $subjectConfirmation->getNameID()->getValue());
-        $this->assertTrue($subjectConfirmation->getSubjectConfirmationData() instanceof SubjectConfirmationData);
+        $this->assertInstanceOf(SubjectConfirmationData::class, $subjectConfirmation->getSubjectConfirmationData());
         $this->assertEquals(
             $this->document->saveXML($this->document->documentElement),
             strval($subjectConfirmation)
@@ -112,7 +118,7 @@ XML
         );
 
         $this->expectException(InvalidArgumentException::class);
-        $this->expectExceptionMessage('More than one NameID in a SubjectConfirmation element');
+        $this->expectExceptionMessage('More than one <saml:NameID> in <saml:SubjectConfirmation>.');
         SubjectConfirmation::fromXML($document->documentElement);
     }
 
@@ -134,7 +140,7 @@ XML
 
         $this->expectException(InvalidArgumentException::class);
         $this->expectExceptionMessage(
-            'More than one SubjectConfirmationData child in a SubjectConfirmation element'
+            'More than one <saml:SubjectConfirmationData> in <saml:SubjectConfirmation>.'
         );
         SubjectConfirmation::fromXML($document->documentElement);
     }
