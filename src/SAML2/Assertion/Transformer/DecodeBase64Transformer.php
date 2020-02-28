@@ -67,8 +67,8 @@ class DecodeBase64Transformer implements
         $elements = explode('_', $value);
         $decoded = [];
         foreach ($elements as $element) {
-            $result = base64_decode($element, TRUE);
-            if ($result === FALSE) {
+            $result = base64_decode($element, true);
+            if ($result === false) {
                 throw new InvalidAssertionException(sprintf('Invalid base64 encoded attribute value "%s"', $element));
             }
             $decoded[] = $result;
