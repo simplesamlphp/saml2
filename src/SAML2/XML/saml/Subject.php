@@ -70,7 +70,7 @@ final class Subject extends AbstractSamlElement
                 $identifiers,
                 1,
                 'A <saml:Subject> not containing <saml:SubjectConfirmation> should provide exactly one of '
-                  . '<saml:BaseID>, <saml:NameID> or <saml:EncryptedID>'
+                    . '<saml:BaseID>, <saml:NameID> or <saml:EncryptedID>'
             );
         } else {
             Assert::countBetween(
@@ -216,7 +216,7 @@ final class Subject extends AbstractSamlElement
                 $identifiers,
                 1,
                 'A <saml:Subject> not containing <saml:SubjectConfirmation> should provide exactly one of '
-                  . '<saml:BaseID>, <saml:NameID> or <saml:EncryptedID>'
+                    . '<saml:BaseID>, <saml:NameID> or <saml:EncryptedID>'
             );
         }
 
