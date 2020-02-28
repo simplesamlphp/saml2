@@ -36,7 +36,10 @@ final class SubjectConfirmationDataTest extends \PHPUnit\Framework\TestCase
     NotOnOrAfter="2009-02-13T23:31:30Z"
     Recipient="https://sp.example.org/asdf"
     InResponseTo="SomeRequestID"
-    Address="127.0.0.1">
+    Address="127.0.0.1"
+    test:attr1="testval1"
+    test:attr2="testval2"
+    xmlns:test="urn:test">
   <ds:KeyInfo xmlns:ds="{$dsNamespace}">
     <ds:KeyName>SomeKey</ds:KeyName>
   </ds:KeyInfo>
@@ -54,12 +57,19 @@ XML
      */
     public function testMarshalling(): void
     {
+        $attr1 = $this->document->createAttributeNS('urn:test', 'test:attr1');
+        $attr1->value = 'testval1';
+        $attr2 = $this->document->createAttributeNS('urn:test', 'test:attr2');
+        $attr2->value = 'testval2';
+
         $subjectConfirmationData = new SubjectConfirmationData(
             987654321,
             1234567890,
             'https://sp.example.org/asdf',
             'SomeRequestID',
-            '127.0.0.1'
+            '127.0.0.1',
+            [],
+            [$attr1, $attr2]
         );
         $subjectConfirmationData->addInfo(
             new KeyInfo([new KeyName('SomeKey')])
@@ -70,6 +80,9 @@ XML
         $this->assertEquals('https://sp.example.org/asdf', $subjectConfirmationData->getRecipient());
         $this->assertEquals('SomeRequestID', $subjectConfirmationData->getInResponseTo());
         $this->assertEquals('127.0.0.1', $subjectConfirmationData->getAddress());
+
+        $this->assertEquals('testval1', $subjectConfirmationData->getAttributeNS('urn:test', 'attr1'));
+        $this->assertEquals('testval2', $subjectConfirmationData->getAttributeNS('urn:test', 'attr2'));
 
         $this->assertEquals(
             $this->document->saveXML($this->document->documentElement),
@@ -95,7 +108,10 @@ XML
     NotOnOrAfter="2009-02-13T23:31:30Z"
     Recipient="https://sp.example.org/asdf"
     InResponseTo="SomeRequestID"
-    Address="127.0.0.1">
+    Address="127.0.0.1"
+    test:attr1="testval1"
+    test:attr2="testval2"
+    xmlns:test="urn:test">
   <ds:KeyInfo xmlns:ds="{$dsNamespace}">
     <ds:KeyName>SomeKey</ds:KeyName>
   </ds:KeyInfo>
@@ -109,6 +125,24 @@ XML
         $this->assertEquals('https://sp.example.org/asdf', $subjectConfirmationData->getRecipient());
         $this->assertEquals('SomeRequestID', $subjectConfirmationData->getInResponseTo());
         $this->assertEquals('127.0.0.1', $subjectConfirmationData->getAddress());
+
+        $this->assertEquals(
+            [
+                '{urn:test}attr1' => [
+                    'qualifiedName' => 'test:attr1',
+                    'namespaceURI' => 'urn:test',
+                    'value' => 'testval1'
+                ],
+                '{urn:test}attr2' => [
+                    'qualifiedName' => 'test:attr2',
+                    'namespaceURI' => 'urn:test',
+                    'value' => 'testval2'
+                ]
+            ],
+            $subjectConfirmationData->getAttributesNS()
+        );
+        $this->assertEquals('testval1', $subjectConfirmationData->getAttributeNS('urn:test', 'attr1'));
+        $this->assertEquals('testval2', $subjectConfirmationData->getAttributeNS('urn:test', 'attr2'));
 
         /** @psalm-var \SAML2\XML\ds\KeyInfo $info */
         $info = $subjectConfirmationData->getInfo()[0];
