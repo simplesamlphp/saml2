@@ -103,7 +103,7 @@ final class Scope extends AbstractShibmdElement
         Assert::same($xml->namespaceURI, Scope::NS);
 
         $scope = $xml->textContent;
-        $regexp = Utils::parseBoolean($xml, 'regexp', false);
+        $regexp = self::getBooleanAttribute($xml, 'regexp', 'false');
 
         return new self($scope, $regexp);
     }

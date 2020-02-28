@@ -180,7 +180,7 @@ class Utils
 
         /** @var XMLSecurityDSig $objXMLSecDSig */
         $objXMLSecDSig = $info['Signature'];
-        
+
         /**
          * @var \DOMElement[] $sigMethod
          * @var \DOMElement $objXMLSecDSig->sigNode
@@ -285,36 +285,6 @@ class Utils
         }
 
         return $newElement;
-    }
-
-
-    /**
-     * Parse a boolean attribute.
-     *
-     * @param \DOMElement $node The element we should fetch the attribute from.
-     * @param string $attributeName The name of the attribute.
-     * @param mixed|null $default The value that should be returned if the attribute doesn't exist.
-     * @return bool|mixed The value of the attribute, or $default if the attribute doesn't exist.
-     */
-    public static function parseBoolean(DOMElement $node, string $attributeName, $default = null)
-    {
-        if (!$node->hasAttribute($attributeName)) {
-            return $default;
-        }
-        $value = $node->getAttribute($attributeName);
-        switch (strtolower($value)) {
-            case '0':
-            case 'false':
-                return false;
-            case '1':
-            case 'true':
-                return true;
-            default:
-                throw new \Exception(
-                    'Invalid value of boolean attribute ' . var_export($attributeName, true) . ': ' .
-                    var_export($value, true)
-                );
-        }
     }
 
 

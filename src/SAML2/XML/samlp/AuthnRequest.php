@@ -144,8 +144,8 @@ class AuthnRequest extends AbstractRequest
             return;
         }
 
-        $this->forceAuthn = Utils::parseBoolean($xml, 'ForceAuthn', false);
-        $this->isPassive = Utils::parseBoolean($xml, 'IsPassive', false);
+        $this->forceAuthn = self::getBooleanAttribute($xml, 'ForceAuthn', 'false');
+        $this->isPassive = self::getBooleanAttribute($xml, 'IsPassive', 'false');
 
         if ($xml->hasAttribute('AssertionConsumerServiceURL')) {
             $this->assertionConsumerServiceURL = $xml->getAttribute('AssertionConsumerServiceURL');
