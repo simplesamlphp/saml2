@@ -5,6 +5,10 @@ declare(strict_types=1);
 namespace SAML2\XML\saml;
 
 use DOMElement;
+use InvalidArgumentException;
+use SAML2\Compat\ContainerSingleton;
+use SAML2\Constants;
+use SAML2\Utils;
 use Webmozart\Assert\Assert;
 
 /**
@@ -20,17 +24,27 @@ final class BaseID extends AbstractBaseIDType
      *
      * @param \DOMElement $xml The XML element we should load
      *
-     * @return \SAML2\XML\saml\BaseID
-     * @throws \InvalidArgumentException
+     * @return \SAML2\XML\AbstractXMLElement
+     * @throws \InvalidArgumentException  If xsi:type is not defined or matches the AbstractBaseIDType
      */
     public static function fromXML(DOMElement $xml): object
     {
         Assert::same($xml->localName, 'BaseID');
         Assert::same($xml->namespaceURI, BaseID::NS);
+        Assert::true($xml->hasAttributeNS(Constants::NS_XSI, 'type'), 'Missing required xsi:type in <saml:BaseID> element.');
 
-        $NameQualifier = self::getAttribute($xml, 'NameQualifier', null);
-        $SPNameQualifier = self::getAttribute($xml, 'SPNameQualifier', null);
+        $type = $xml->getAttributeNS(Constants::NS_XSI, 'type');
+        Assert::notSame($type, 'AbstractBaseIDType', 'Cannot inherit from AbstractBaseIDType directly;  please define your own sub-class.');
 
-        return new self($NameQualifier, $SPNameQualifier);
+        $registeredClass = ContainerSingleton::getRegisteredClass($type);
+        if ($registeredClass !== false) {
+            if (is_subclass_of($registeredClass, AbstractBaseIDType::class)) {
+                return $registeredClass::fromXML($xml);
+            }
+
+            throw new InvalidArgumentException('The type \'' . $type . '\' was not found as a descendant of AbstractBaseIDType.');
+        }
+
+        throw new InvalidArgumentException('The type \'' . $type . '\' was not found as a registered extension.');
     }
 }

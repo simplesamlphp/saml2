@@ -4,6 +4,7 @@ declare(strict_types=1);
 
 namespace SAML2\XML;
 
+use SAML2\XML\saml\AbstractBaseIDType;
 use SAML2\XML\saml\BaseID;
 use SAML2\XML\saml\NameID;
 use SAML2\XML\saml\EncryptedID;
@@ -19,7 +20,7 @@ trait IdentifiersTrait
     /**
      * The BaseID this Subject.
      *
-     * @var \SAML2\XML\saml\BaseID|null
+     * @var \SAML2\XML\saml\AbstractBaseIDType|null
      */
     protected $baseId = null;
 
@@ -41,9 +42,9 @@ trait IdentifiersTrait
     /**
      * Collect the value of the baseId-property
      *
-     * @return \SAML2\XML\saml\BaseID|null
+     * @return \SAML2\XML\saml\AbstractBaseIDType|null
      */
-    public function getBaseID(): ?BaseID
+    public function getBaseID(): ?AbstractBaseIDType
     {
         return $this->baseId;
     }
@@ -52,10 +53,10 @@ trait IdentifiersTrait
     /**
      * Set the value of the baseId-property
      *
-     * @param \SAML2\XML\saml\BaseID|null
+     * @param \SAML2\XML\saml\AbstractBaseIDType|null
      * @return void
      */
-    private function setBaseID(?BaseID $baseId): void
+    private function setBaseID(?AbstractBaseIDType $baseId): void
     {
         $this->baseId = $baseId;
     }

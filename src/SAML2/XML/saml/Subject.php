@@ -31,13 +31,13 @@ final class Subject extends AbstractSamlElement
     /**
      * Initialize a Subject element.
      *
-     * @param \SAML2\XML\saml\BaseID|null $baseId
+     * @param \SAML2\XML\saml\AbstractBaseIDType|null $baseId
      * @param \SAML2\XML\saml\NameID|null $nameId
      * @param \SAML2\XML\saml\EncryptedID|null $encryptedId
      * @param \SAML2\XML\saml\SubjectConfirmation[] $SubjectConfirmation
      */
     public function __construct(
-        ?BaseID $baseId,
+        ?AbstractBaseIDType $baseId,
         ?NameID $nameId,
         ?EncryptedID $encryptedId,
         array $SubjectConfirmation = []

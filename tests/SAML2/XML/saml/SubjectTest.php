@@ -7,6 +7,7 @@ namespace SAML2\XML\saml;
 use InvalidArgumentException;
 use PHPUnit\Framework\TestCase;
 use SAML2\Constants;
+use SAML2\CustomBaseID;
 use SAML2\DOMDocumentFactory;
 use SAML2\XML\saml\Subject;
 use SAML2\XML\saml\NameID;
@@ -39,6 +40,7 @@ final class SubjectTest extends TestCase
     public function setup(): void
     {
         $samlNamespace = Subject::NS;
+        $xsiNamespace = Constants::NS_XSI;
         $nameid_transient = Constants::NAMEID_TRANSIENT;
 
         $this->document = DOMDocumentFactory::fromString(<<<XML
@@ -59,7 +61,7 @@ XML
         );
 
         $this->baseId = DOMDocumentFactory::fromString(<<<XML
-<saml:BaseID xmlns:saml="{$samlNamespace}" SPNameQualifier="https://sp.example.org/authentication/sp/metadata"/>
+<saml:BaseID xmlns:saml="{$samlNamespace}" SPNameQualifier="https://sp.example.org/authentication/sp/metadata" xmlns:xsi="{$xsiNamespace}" xsi:type="CustomBaseID">123.456</saml:BaseID>
 XML
         );
 
@@ -139,8 +141,8 @@ XML
     public function testMarshallingBaseID(): void
     {
         $subject = new Subject(
-            new BaseID(
-                null,
+            new CustomBaseID(
+                123.456,
                 'https://sp.example.org/authentication/sp/metadata'
             ),
             null,
@@ -191,7 +193,7 @@ XML
         $this->expectExceptionMessage('A <saml:Subject> not containing <saml:SubjectConfirmation> should provide exactly one of <saml:BaseID>, <saml:NameID> or <saml:EncryptedID>');
 
         new Subject(
-            new BaseID('https://sp.example.org/authentication/sp/metadata'),
+            new CustomBaseID(123.456, 'https://sp.example.org/authentication/sp/metadata'),
             new NameID(
                 'SomeNameIDValue',
                 null,

@@ -36,6 +36,18 @@ abstract class AbstractBaseIDType extends AbstractSamlElement
 
 
     /**
+     * Get the XML local name of the element represented by this class.
+     *
+     * @return string
+     */
+    public function getLocalName(): string
+    {
+        // All descendants of this class are supposed to be <saml:BaseID /> elements and shouldn't define a new element
+        return self::getClassName(BaseID::class);
+    }
+
+
+    /**
      * Convert this NameIDType to XML.
      *
      * @param \DOMElement $parent The element we are converting to XML.
