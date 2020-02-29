@@ -8,10 +8,11 @@ use SAML2\Compat\Ssp\Container;
 
 class ContainerSingleton
 {
-    /**
-     * @var \SAML2\Compat\ContainerInterface|null
-     */
+    /** @var \SAML2\Compat\ContainerInterface|null */
     protected static $container = null;
+
+    /** @var array */
+    protected static $registry = [];
 
 
     /**
@@ -44,5 +45,26 @@ class ContainerSingleton
     public static function initSspContainer(): Container
     {
         return new Container();
+    }
+
+
+    /**
+     * @param string $className
+     * @param array $qualifiedName
+     * @return void
+     */
+    public static function registerClass(string $className, array $qualifiedName): void
+    {
+        $this->registry[$qualifiedName] = $className;
+    }
+
+
+    /**
+     * @param string $className
+     * @return array|false
+     */
+    public static function getRegisteredClass(string $className)
+    {
+        return array_search($className, $this->registry);
     }
 }
