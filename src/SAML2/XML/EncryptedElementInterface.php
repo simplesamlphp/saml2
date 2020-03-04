@@ -17,20 +17,20 @@ interface EncryptedElementInterface
     /**
      * Create an EncryptedID from XML
      *
-     * @param \SAML2\XML\EncryptedElementType $xml
+     * @param \DOMElement $xml
      * @param \RobRichards\XMLSecLibs\XMLSecurityKey $key
      * @param string[] $blacklist
      * @return \DOMElement
      */
-    public static function decryptElement(EncryptedElementType $xml, XMLSecurityKey $key, array $blacklist = []): DOMElement;
+    public static function decryptElement(DOMElement $xml, XMLSecurityKey $key, array $blacklist = []): DOMElement;
 
 
     /**
      * Create XML from this class
      *
-     * @param \SAML2\XML\EncryptedElementType $parent
+     * @param \DOMElement $parent
      * @param \RobRichards\XMLSecLibs\XMLSecurityKey $key
      * @return void
      */
-    public function encryptElement(EncryptedElementType $xml, XMLSecurityKey $key): void;
+    public function encryptElement(DOMElement $xml, XMLSecurityKey $key): void;
 }
