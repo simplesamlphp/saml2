@@ -103,3 +103,7 @@ jobs:
       script:
         - vendor/bin/psalm
         - vendor/bin/psalter --issues=UnnecessaryVarAnnotation --dry-run
+
+notifications:
+  slack:
+    secure: jgkeIXi7Hzkc907ZKGpuJZ9va+KjHNV0LZoWc22skkDqNIu2wshvqx4wOMFK8CXtRcRgCambtXxyTio17Q4B4mFu1uf7qVN6x18QyLNhfypB/d808kLoJCzlmGB7477jrw5xvgSVOMxWmic8QTjkcMOWSiG4fJE86zIthZP0OOY=
