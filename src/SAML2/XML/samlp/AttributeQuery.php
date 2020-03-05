@@ -52,17 +52,28 @@ class AttributeQuery extends AbstractSubjectQuery
     /**
      * Constructor for SAML 2 attribute query messages.
      *
-     * @param \SAML2\XML\saml\NameIDType $subject
+     * @param \SAML2\XML\saml\NameID $subject
+     * @param string $version
+     * @param string $destination
+     * @param string $consent
+     * @param \SAML2\XML\saml\Issuer $issuer
      * @param array $attributes
      * @param string $nameFormat
      * @throws \Exception
      */
-    public function __construct(NameID $subject, array $attributes, string $nameFormat = Constants::NAMEFORMAT_UNSPECIFIED)
-    {
-        parent::__construct($subject);
+    public function __construct(
+        NameID $subject,
+        string $version,
+        string $destination = null,
+        string $consent = null,
+        Issuer $issuer = null,
+        array $attributes,
+        string $attributeNameFormat = Constants::NAMEFORMAT_UNSPECIFIED
+    ) {
+        parent::__construct($subject, $version, $destination, $consent, $issuer);
 
         $this->setAttributes($attributes);
-        $this->setAttributeNameFormat($nameFormat);
+        $this->setAttributeNameFormat($attributeNameFormat);
     }
 
 

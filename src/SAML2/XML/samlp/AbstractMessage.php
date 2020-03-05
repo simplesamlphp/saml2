@@ -5,6 +5,7 @@ declare(strict_types=1);
 namespace SAML2\XML\samlp;
 
 use DOMElement;
+use Exception;
 use RobRichards\XMLSecLibs\XMLSecurityKey;
 use SAML2\Constants;
 use SAML2\DOMDocumentFactory;
@@ -27,14 +28,6 @@ abstract class AbstractMessage extends AbstractSamlpElement implements SignedEle
     use ExtendableElementTrait;
     use SignedElementTrait;
 
-    /**
-     * The name of the root element of the DOM tree for the message.
-     *
-     * Used when creating a DOM tree from the message.
-     *
-     * @var string
-     */
-    private $tagName;
 
     /**
      * The identifier of this message.
@@ -55,13 +48,6 @@ abstract class AbstractMessage extends AbstractSamlpElement implements SignedEle
      *
      * @var string|null
      */
-    private $destination = null;
-
-    /**
-     * The destination URL of this message if it is known.
-     *
-     * @var string
-     */
     private $consent = Constants::CONSENT_UNSPECIFIED;
 
     /**
@@ -70,6 +56,13 @@ abstract class AbstractMessage extends AbstractSamlpElement implements SignedEle
      * @var \SAML2\XML\saml\Issuer|null
      */
     private $issuer = null;
+
+    /**
+     * The destination URL of this message if it is known.
+     *
+     * @var string|null
+     */
+    private $destination = null;
 
     /**
      * The RelayState associated with this message.
@@ -115,7 +108,7 @@ abstract class AbstractMessage extends AbstractSamlpElement implements SignedEle
     {
         $this->tagName = $tagName;
 
-        $this->id = Utils::getContainer()->generateId();
+        $this->setId(Utils::getContainer()->generateId());
         $this->issueInstant = Temporal::getTime();
 
         if ($xml === null) {
@@ -123,13 +116,14 @@ abstract class AbstractMessage extends AbstractSamlpElement implements SignedEle
         }
 
         if (!$xml->hasAttribute('ID')) {
-            throw new \Exception('Missing ID attribute on SAML message.');
+            throw new Exception('Missing ID attribute on SAML message.');
         }
-        $this->id = $xml->getAttribute('ID');
+
+        $this->id = self::getAttribute($xml, 'ID');
 
         if ($xml->getAttribute('Version') !== '2.0') {
             /* Currently a very strict check. */
-            throw new \Exception('Unsupported version: ' . $xml->getAttribute('Version'));
+            throw new Exception('Unsupported version: ' . $xml->getAttribute('Version'));
         }
 
         $this->issueInstant = Utils::xsDateTimeToTimestamp($xml->getAttribute('IssueInstant'));
@@ -174,7 +168,7 @@ abstract class AbstractMessage extends AbstractSamlpElement implements SignedEle
             /** @var \DOMAttr[] $signatureMethod */
             $signatureMethod = Utils::xpQuery($xml, './ds:Signature/ds:SignedInfo/ds:SignatureMethod/@Algorithm');
             if (empty($signatureMethod)) {
-                throw new \Exception('No Algorithm specified in signature.');
+                throw new Exception('No Algorithm specified in signature.');
             }
 
             $sig = Utils::validateElement($xml);
@@ -188,7 +182,7 @@ abstract class AbstractMessage extends AbstractSamlpElement implements SignedEle
                 ];
                 $this->signatureMethod = $signatureMethod[0]->value;
             }
-        } catch (\Exception $e) {
+        } catch (Exception $e) {
             // ignore signature validation errors
         }
     }
@@ -241,13 +235,24 @@ abstract class AbstractMessage extends AbstractSamlpElement implements SignedEle
                 /* We were able to validate the message with this validator. */
 
                 return true;
-            } catch (\Exception $e) {
+            } catch (Exception $e) {
                 $exceptions[] = $e;
             }
         }
 
         /* No validators were able to validate the message. */
         throw $exceptions[0];
+    }
+
+
+    /**
+     * Query whether or not the message contained a signature at the root level when the object was constructed.
+     *
+     * @return bool
+     */
+    public function isMessageConstructedWithSignature(): bool
+    {
+        return $this->messageContainedSignatureUponConstruction;
     }
 
 
@@ -298,25 +303,15 @@ abstract class AbstractMessage extends AbstractSamlpElement implements SignedEle
 
 
     /**
-     * Retrieve the destination of this message.
+     * Get the given consent for this message.
+     * Most likely (though not required) a value of urn:oasis:names:tc:SAML:2.0:consent.
      *
-     * @return string|null The destination of this message, or NULL if no destination is given
+     * @see \SAML2\Constants
+     * @return string|null Consent
      */
-    public function getDestination(): ?string
+    public function getConsent(): ?string
     {
-        return $this->destination;
-    }
-
-
-    /**
-     * Set the destination of this message.
-     *
-     * @param string|null $destination The new destination of this message
-     * @return void
-     */
-    public function setDestination(string $destination = null): void
-    {
-        $this->destination = $destination;
+        return $this->consent;
     }
 
 
@@ -328,22 +323,9 @@ abstract class AbstractMessage extends AbstractSamlpElement implements SignedEle
      * @param string $consent
      * @return void
      */
-    public function setConsent(string $consent): void
+    public function setConsent(?string $consent): void
     {
         $this->consent = $consent;
-    }
-
-
-    /**
-     * Get the given consent for this message.
-     * Most likely (though not required) a value of urn:oasis:names:tc:SAML:2.0:consent.
-     *
-     * @see \SAML2\Constants
-     * @return string|null Consent
-     */
-    public function getConsent(): ?string
-    {
-        return $this->consent;
     }
 
 
@@ -371,13 +353,25 @@ abstract class AbstractMessage extends AbstractSamlpElement implements SignedEle
 
 
     /**
-     * Query whether or not the message contained a signature at the root level when the object was constructed.
+     * Retrieve the destination of this message.
      *
-     * @return bool
+     * @return string|null The destination of this message, or NULL if no destination is given
      */
-    public function isMessageConstructedWithSignature(): bool
+    public function getDestination(): ?string
     {
-        return $this->messageContainedSignatureUponConstruction;
+        return $this->destination;
+    }
+
+
+    /**
+     * Set the destination of this message.
+     *
+     * @param string|null $destination The new destination of this message
+     * @return void
+     */
+    public function setDestination(string $destination = null): void
+    {
+        $this->destination = $destination;
     }
 
 
@@ -425,6 +419,7 @@ abstract class AbstractMessage extends AbstractSamlpElement implements SignedEle
         if ($this->destination !== null) {
             $root->setAttribute('Destination', $this->destination);
         }
+
         if ($this->consent !== Constants::CONSENT_UNSPECIFIED) {
             $root->setAttribute('Consent', $this->consent);
         }
@@ -487,7 +482,7 @@ abstract class AbstractMessage extends AbstractSamlpElement implements SignedEle
      *
      * @throws \InvalidArgumentException if assertions are false
      */
-    public static function fromXML(\DOMElement $xml): object
+    public static function fromXML(DOMElement $xml): object
     {
         Assert::same(
             $xml->namespaceURI,
@@ -497,7 +492,7 @@ abstract class AbstractMessage extends AbstractSamlpElement implements SignedEle
 
         switch ($xml->localName) {
             case 'AttributeQuery':
-                return new AttributeQuery($xml);
+                return AttributeQuery::fromXML($xml);
             case 'AuthnRequest':
                 return new AuthnRequest($xml);
             case 'LogoutResponse':
@@ -511,7 +506,7 @@ abstract class AbstractMessage extends AbstractSamlpElement implements SignedEle
             case 'ArtifactResolve':
                 return new ArtifactResolve($xml);
             default:
-                throw new \Exception('Unknown SAML message: ' . var_export($xml->localName, true));
+                throw new Exception('Unknown SAML message: ' . var_export($xml->localName, true));
         }
     }
 

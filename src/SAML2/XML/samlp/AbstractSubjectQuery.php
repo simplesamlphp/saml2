@@ -35,10 +35,21 @@ abstract class AbstractSubjectQuery extends AbstractRequest
     /**
      * Constructor for SAML 2 subject query messages.
      *
-     * @param \SAML2\XML\saml\NameID $subject.
+     * @param \SAML2\XML\saml\NameID $subject
+     * @param string $version
+     * @param string|null $destination
+     * @param string|null $consent
+     * @param \SAML2\XML\saml\Issuer|null $issuer
      */
-    protected function __construct(NameID $subject)
-    {
+    protected function __construct(
+        NameID $subject,
+        string $version,
+        string $destination = null,
+        string $consent = null,
+        Issuer $issuer = null
+    ) {
+        parent::__construct($version, $destination, $consent, $issuer);
+
         $this->setNameId($subject);
     }
 
