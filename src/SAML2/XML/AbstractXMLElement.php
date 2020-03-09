@@ -187,7 +187,7 @@ abstract class AbstractXMLElement implements Serializable
      * @param string $class
      * @return string
      */
-    protected static function getClassName(string $class): string
+    public static function getClassName(string $class): string
     {
         return join('', array_slice(explode('\\', $class), -1));
     }
