@@ -76,4 +76,6 @@ trait ExtensionsTrait
         }
         return $e;
     }
+
+    abstract public function instantiateParentElement(DOMElement $parent = null): DOMElement;
 }
