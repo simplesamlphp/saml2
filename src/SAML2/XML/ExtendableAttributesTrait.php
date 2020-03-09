@@ -122,6 +122,7 @@ trait ExtendableAttributesTrait
 
         foreach ($attributes as $attribute) {
             Assert::stringNotEmpty($attribute->namespaceURI, 'Arbitrary XML attributes must be namespaced.');
+
             /** @psalm-suppress PossiblyNullArgument */
             $this->setAttributeNS($attribute->namespaceURI, $attribute->nodeName, $attribute->value);
         }

@@ -21,9 +21,7 @@ use Webmozart\Assert\Assert;
 final class ContactPerson extends AbstractMdElement
 {
     use ExtendableElementTrait;
-    use ExtendableAttributesTrait {
-        ExtendableAttributesTrait::setAttributesNS as setAttributesNSConflict;
-    }
+    use ExtendableAttributesTrait;
 
     /**
      * The contact type.
