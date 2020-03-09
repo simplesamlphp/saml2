@@ -5,6 +5,8 @@ declare(strict_types=1);
 namespace SAML2\Compat;
 
 use SAML2\Compat\Ssp\Container;
+use SAML2\XML\AbstractXMLElement;
+use Webmozart\Assert\Assert;
 
 class ContainerSingleton
 {
@@ -49,22 +51,24 @@ class ContainerSingleton
 
 
     /**
-     * @param string $className
-     * @param array $qualifiedName
+     * @param class-string $class
      * @return void
      */
-    public static function registerClass(string $className, array $qualifiedName): void
+    public static function registerClass(string $class): void
     {
-        $this->registry[$qualifiedName] = $className;
+        Assert::subclassOf($class, AbstractXMLElement::class);
+
+        self::$registry[$class] = [$class::NS, $class::getClassName()];
     }
 
 
     /**
-     * @param string $className
-     * @return array|false
+     * @param string $namespace
+     * @param string $element
+     * @return class-string|false
      */
-    public static function getRegisteredClass(string $className)
+    public static function getRegisteredClass(string $namespace, string $element)
     {
-        return array_search($className, $this->registry);
+        return array_search([$namespace, $element], self::$registry);
     }
 }
