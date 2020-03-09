@@ -51,7 +51,8 @@ class ContainerSingleton
 
 
     /**
-     * @param class-string $class
+     * @param string $class
+     * @psalm-param classstring $class
      * @return void
      */
     public static function registerClass(string $class): void
@@ -65,7 +66,8 @@ class ContainerSingleton
     /**
      * @param string $namespace
      * @param string $element
-     * @return class-string|false
+     * @return string|false
+     * @psalm-return class-string|false
      */
     public static function getRegisteredClass(string $namespace, string $element)
     {
