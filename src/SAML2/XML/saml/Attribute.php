@@ -7,6 +7,7 @@ namespace SAML2\XML\saml;
 use DOMElement;
 use Exception;
 use SAML2\Constants;
+use SAML2\XML\ExtendableAttributesTrait;
 use Webmozart\Assert\Assert;
 
 /**
@@ -16,6 +17,8 @@ use Webmozart\Assert\Assert;
  */
 class Attribute extends AbstractSamlElement
 {
+    use ExtendableAttributesTrait;
+
     /**
      * The Name of this attribute.
      *
@@ -54,17 +57,20 @@ class Attribute extends AbstractSamlElement
      * @param string|null $NameFormat
      * @param string|null $FriendlyName
      * @param \SAML2\XML\saml\AttributeValue[] $AttributeValues
+     * @param \DOMAttr[] $namespacedAttributes
      */
     public function __construct(
         string $Name,
         ?string $NameFormat = null,
         ?string $FriendlyName = null,
-        array $AttributeValues = []
+        array $AttributeValues = [],
+        array $namespacedAttributes = []
     ) {
         $this->setName($Name);
         $this->setNameFormat($NameFormat);
         $this->setFriendlyName($FriendlyName);
         $this->setAttributeValues($AttributeValues);
+        $this->setAttributesNS($namespacedAttributes);
     }
 
 
@@ -185,7 +191,8 @@ class Attribute extends AbstractSamlElement
             $name,
             self::getAttribute($xml, 'NameFormat', null),
             self::getAttribute($xml, 'FriendlyName', null),
-            AttributeValue::getChildrenOfClass($xml)
+            AttributeValue::getChildrenOfClass($xml),
+            self::getAttributesNSFromXML($xml)
         );
     }
 
@@ -207,6 +214,10 @@ class Attribute extends AbstractSamlElement
 
         if ($this->FriendlyName !== null) {
             $e->setAttribute('FriendlyName', $this->FriendlyName);
+        }
+
+        foreach ($this->getAttributesNS() as $attr) {
+            $e->setAttributeNS($attr['namespaceURI'], $attr['qualifiedName'], $attr['value']);
         }
 
         foreach ($this->AttributeValues as $av) {
