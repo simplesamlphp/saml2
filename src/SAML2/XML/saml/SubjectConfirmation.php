@@ -117,14 +117,15 @@ final class SubjectConfirmation extends AbstractSamlElement
 
         $baseId = BaseID::getChildrenOfClass($xml);
         $nameId = NameID::getChildrenOfClass($xml);
-        $encryptedId = EncryptedID::getChildrenOfClass($xml);
+//        $encryptedId = EncryptedID::getChildrenOfClass($xml);
 
         // We accept only one of BaseID, NameID or EncryptedID
         Assert::countBetween($baseId, 0, 1, 'More than one <saml:BaseID> in <saml:SubjectConfirmation>.');
         Assert::countBetween($nameId, 0, 1, 'More than one <saml:NameID> in <saml:SubjectConfirmation>.');
-        Assert::countBetween($encryptedId, 0, 1, 'More than one <saml:EncryptedID> in <saml:SubjectConfirmation>.');
+//        Assert::countBetween($encryptedId, 0, 1, 'More than one <saml:EncryptedID> in <saml:SubjectConfirmation>.');
 
-        $identifiers = [$baseId, $nameId, $encryptedId];
+        $identifiers = [$baseId, $nameId];
+//        $identifiers = [$baseId, $nameId, $encryptedId];
         Assert::count($identifiers, 1);
 
         $subjectConfirmationData = SubjectConfirmationData::getChildrenOfClass($xml);
