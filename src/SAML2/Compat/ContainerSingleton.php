@@ -59,7 +59,7 @@ class ContainerSingleton
     {
         Assert::subclassOf($class, AbstractXMLElement::class);
 
-        $key = join(':', [urlencode($class::NS), $class::getClassName()]);
+        $key = join(':', [urlencode($class::NS), $class::getClassName($class)]);
         self::$registry[$key] = $class;
     }
 
