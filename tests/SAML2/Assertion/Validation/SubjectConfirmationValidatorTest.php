@@ -149,7 +149,7 @@ XML
             $scd->getAddress(),
             $scd->getInfo()
         );
-        $newsc = new SubjectConfirmation($sc->getMethod(), null, $sc->getNameId(), null, $newscd);
+        $newsc = new SubjectConfirmation($sc->getMethod(), null, $sc->getIdentifier(), null, $newscd);
         $assertion->setSubjectConfirmation([$newsc]);
 
         $this->expectException(InvalidSubjectConfirmationException::class);

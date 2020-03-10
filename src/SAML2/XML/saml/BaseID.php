@@ -24,7 +24,7 @@ class BaseID extends AbstractSamlElement implements IdentifierInterface
 {
     use IDNameQualifiersTrait;
 
-    /** @var string|null */
+    /** @var string */
     protected $value;
 
     /** @var string */
@@ -35,7 +35,7 @@ class BaseID extends AbstractSamlElement implements IdentifierInterface
      * Initialize a saml:BaseID from scratch
      *
      * @param string $type
-     * @param string|null $value
+     * @param string $value
      * @param string|null $NameQualifier
      * @param string|null $SPNameQualifier
      */
@@ -113,6 +113,7 @@ class BaseID extends AbstractSamlElement implements IdentifierInterface
     public static function fromXML(DOMElement $xml): object
     {
         Assert::same($xml->localName, 'BaseID');
+        Assert::notNull($xml->namespaceURI);
         Assert::same($xml->namespaceURI, BaseID::NS);
         Assert::true($xml->hasAttributeNS(Constants::NS_XSI, 'type'), 'Missing required xsi:type in <saml:BaseID> element.');
 
@@ -149,9 +150,7 @@ class BaseID extends AbstractSamlElement implements IdentifierInterface
             $element->setAttribute('SPNameQualifier', $this->SPNameQualifier);
         }
 
-        if ($this->value !== null) {
-            $element->textContent = $this->value;
-        }
+        $element->textContent = $this->value;
 
         $element->setAttributeNS(Constants::NS_XSI, 'xsi:type', $this->type);
 

@@ -124,9 +124,12 @@ final class SubjectConfirmation extends AbstractSamlElement
         Assert::countBetween($nameId, 0, 1, 'More than one <saml:NameID> in <saml:SubjectConfirmation>.');
 //        Assert::countBetween($encryptedId, 0, 1, 'More than one <saml:EncryptedID> in <saml:SubjectConfirmation>.');
 
-        $identifiers = [$baseId, $nameId];
-//        $identifiers = [$baseId, $nameId, $encryptedId];
-        Assert::count($identifiers, 1);
+        $identifiers = array_filter([$baseId, $nameId]);
+//        $identifiers = array_filter([$baseId, $nameId, $encryptedId]);
+        Assert::countBetween($identifiers, 0, 1, 'More than one <saml:SubjectConfirmationData> in <saml:SubjectConfirmation>.');
+
+        /** @psalm-var \SAML2\XML\saml\IdentifierInterface|null $identifier */
+        $identifier = empty($identifiers) ? null : $identifiers[0];
 
         $subjectConfirmationData = SubjectConfirmationData::getChildrenOfClass($xml);
         Assert::maxCount(
@@ -137,7 +140,7 @@ final class SubjectConfirmation extends AbstractSamlElement
 
         return new self(
             $Method,
-            $identifiers[0],
+            $identifier,
             empty($subjectConfirmationData) ? null : $subjectConfirmationData[0]
         );
     }
@@ -154,7 +157,9 @@ final class SubjectConfirmation extends AbstractSamlElement
         $e = $this->instantiateParentElement($parent);
         $e->setAttribute('Method', $this->Method);
 
-        $this->getIdentifier()->toXML($e);
+        if ($this->identifier !== null) {
+            $this->identifier->toXML($e);
+        }
 
         if ($this->SubjectConfirmationData !== null) {
             $this->SubjectConfirmationData->toXML($e);

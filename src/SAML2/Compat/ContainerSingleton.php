@@ -52,7 +52,7 @@ class ContainerSingleton
 
     /**
      * @param string $class
-     * @psalm-param classstring $class
+     * @psalm-param class-string $class
      * @return void
      */
     public static function registerClass(string $class): void

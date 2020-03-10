@@ -106,10 +106,10 @@ final class Subject extends AbstractSamlElement
             'A <saml:Subject> can contain exactly one of <saml:BaseID>, <saml:NameID> or <saml:EncryptedID>.'
         );
 
-        $identifier = empty($identifiers) ? null : $identifier[0];
+        $identifier = empty($identifiers) ? null : $identifiers[0];
 
         return new self(
-            empty($identifier),
+            $identifier,
             $subjectConfirmation
         );
     }
@@ -125,7 +125,9 @@ final class Subject extends AbstractSamlElement
     {
         $e = $this->instantiateParentElement($parent);
 
-        $this->getIdentifier()->toXML($e);
+        if ($this->identifier !== null) {
+            $this->identifier->toXML($e);
+        }
 
         foreach ($this->SubjectConfirmation as $sc) {
             $sc->toXML($e);
