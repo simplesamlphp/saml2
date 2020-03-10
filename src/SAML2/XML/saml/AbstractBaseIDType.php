@@ -62,7 +62,7 @@ abstract class AbstractBaseIDType extends AbstractSamlElement implements Identif
     public function getLocalName(): string
     {
         // All descendants of this class are supposed to be <saml:BaseID /> elements and shouldn't define a new element
-        return self::getClassName(BaseID::class);
+        return 'BaseID';
     }
 
 
