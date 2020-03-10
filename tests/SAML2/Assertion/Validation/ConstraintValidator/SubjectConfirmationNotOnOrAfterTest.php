@@ -29,7 +29,7 @@ class SubjectConfirmationNotOnOrAfterTest extends ControlledTimeTest
     public function timestamp_in_the_past_before_graceperiod_is_not_valid(): void
     {
         $subjectConfirmationData = new SubjectConfirmationData(null, $this->currentTime - 60);
-        $subjectConfirmation = new SubjectConfirmation(Constants::CM_HOK, null, null, null, $subjectConfirmationData);
+        $subjectConfirmation = new SubjectConfirmation(Constants::CM_HOK, null, $subjectConfirmationData);
 
         $validator = new SubjectConfirmationNotOnOrAfter();
         $result    = new Result();
@@ -52,7 +52,7 @@ class SubjectConfirmationNotOnOrAfterTest extends ControlledTimeTest
     public function time_within_graceperiod_is_valid(): void
     {
         $subjectConfirmationData = new SubjectConfirmationData(null, $this->currentTime - 59);
-        $subjectConfirmation = new SubjectConfirmation(Constants::CM_HOK, null, null, null, $subjectConfirmationData);
+        $subjectConfirmation = new SubjectConfirmation(Constants::CM_HOK, null, $subjectConfirmationData);
 
         $validator = new SubjectConfirmationNotOnOrAfter();
         $result    = new Result();
@@ -74,7 +74,7 @@ class SubjectConfirmationNotOnOrAfterTest extends ControlledTimeTest
     public function current_time_is_valid(): void
     {
         $subjectConfirmationData = new SubjectConfirmationData(null, $this->currentTime);
-        $subjectConfirmation = new SubjectConfirmation(Constants::CM_HOK, null, null, null, $subjectConfirmationData);
+        $subjectConfirmation = new SubjectConfirmation(Constants::CM_HOK, null, $subjectConfirmationData);
 
         $validator = new SubjectConfirmationNotBefore();
         $result    = new Result();

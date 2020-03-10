@@ -45,16 +45,13 @@ XML
     {
         $subjectConfirmation = new SubjectConfirmation(
             'SomeMethod',
-            null,
             new NameID('SomeNameIDValue'),
-            null,
             new SubjectConfirmationData()
         );
 
         $this->assertEquals('SomeMethod', $subjectConfirmation->getMethod());
-        $this->assertNull($subjectConfirmation->getBaseID());
-        $this->assertNotNull($subjectConfirmation->getNameID());
-        $this->assertNull($subjectConfirmation->getEncryptedID());
+        $this->assertNotNull($subjectConfirmation->getIdentifier());
+        $this->assertInstanceOf(NameID::class, $subjectConfirmation->getIdentifier());
         $this->assertNotNull($subjectConfirmation->getSubjectConfirmationData());
 
         $this->assertEquals(

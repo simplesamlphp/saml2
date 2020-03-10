@@ -7,7 +7,7 @@ namespace SAML2\XML\saml;
 use DOMElement;
 use SAML2\Constants;
 use SAML2\Utils;
-use SAML2\XML\IdentifiersTrait;
+use SAML2\XML\IdentifierTrait;
 use Webmozart\Assert\Assert;
 
 /**
@@ -18,7 +18,7 @@ use Webmozart\Assert\Assert;
  */
 final class Subject extends AbstractSamlElement
 {
-    use IdentifiersTrait;
+    use IdentifierTrait;
 
     /**
      * SubjectConfirmation element with extra data for verification of the Subject.
@@ -31,41 +31,22 @@ final class Subject extends AbstractSamlElement
     /**
      * Initialize a Subject element.
      *
-     * @param \SAML2\XML\saml\AbstractBaseIDType|null $baseId
-     * @param \SAML2\XML\saml\NameID|null $nameId
-     * @param \SAML2\XML\saml\EncryptedID|null $encryptedId
+     * @param \SAML2\XML\saml\IdentifierInterface|null $identifier
      * @param \SAML2\XML\saml\SubjectConfirmation[] $SubjectConfirmation
      */
     public function __construct(
-        ?AbstractBaseIDType $baseId,
-        ?NameID $nameId,
-        ?EncryptedID $encryptedId,
+        ?IdentifierInterface $identifier,
         array $SubjectConfirmation = []
     ) {
-        $identifiers = array_diff(
-            [$baseId, $nameId, $encryptedId],
-            [null]
-        );
-
         if (empty($SubjectConfirmation)) {
-            Assert::count(
-                $identifiers,
-                1,
+            Assert::notNull(
+                $identifier,
                 'A <saml:Subject> not containing <saml:SubjectConfirmation> should provide exactly one of '
                     . '<saml:BaseID>, <saml:NameID> or <saml:EncryptedID>'
             );
-        } else {
-            Assert::countBetween(
-                $identifiers,
-                0,
-                1,
-                'A <saml:Subject> may contain only one of <saml:BaseID>, <saml:NameID> or <saml:EncryptedID>'
-            );
         }
 
-        $this->setBaseId($baseId);
-        $this->setNameId($nameId);
-        $this->setEncryptedId($encryptedId);
+        $this->setIdentifier($identifier);
         $this->setSubjectConfirmation($SubjectConfirmation);
     }
 
@@ -124,19 +105,10 @@ final class Subject extends AbstractSamlElement
             'A <saml:Subject> can contain exactly one of <saml:BaseID>, <saml:NameID> or <saml:EncryptedID>.'
         );
 
-        if (empty($subjectConfirmation)) {
-            Assert::count(
-                $identifiers,
-                1,
-                'A <saml:Subject> not containing <saml:SubjectConfirmation> should provide exactly one of '
-                    . '<saml:BaseID>, <saml:NameID> or <saml:EncryptedID>'
-            );
-        }
+        $identifier = empty($identifiers) ? null : $identifier[0];
 
         return new self(
-            empty($baseId) ? null : $baseId[0],
-            empty($nameId) ? null : $nameId[0],
-            empty($encryptedId) ? null : $encryptedId[0],
+            empty($identifier),
             $subjectConfirmation
         );
     }
@@ -152,17 +124,7 @@ final class Subject extends AbstractSamlElement
     {
         $e = $this->instantiateParentElement($parent);
 
-        if ($this->baseId !== null) {
-            $this->baseId->toXML($e);
-        }
-
-        if ($this->nameId !== null) {
-            $this->nameId->toXML($e);
-        }
-
-        if ($this->encryptedId !== null) {
-            $this->encryptedId->toXML($e);
-        }
+        $this->getIdentifier()->toXML($e);
 
         foreach ($this->SubjectConfirmation as $sc) {
             $sc->toXML($e);

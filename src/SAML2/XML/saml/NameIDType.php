@@ -17,7 +17,7 @@ use Webmozart\Assert\Assert;
  * @package simplesamlphp/saml2
  */
 
-abstract class NameIDType extends AbstractSamlElement
+abstract class NameIDType extends AbstractSamlElement implements IdentifierInterface
 {
     use IDNameQualifiersTrait;
 

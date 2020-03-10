@@ -89,7 +89,6 @@ XML
     public function testMarshallingNameID(): void
     {
         $subject = new Subject(
-            null,
             new NameID(
                 'SomeNameIDValue',
                 null,
@@ -97,11 +96,9 @@ XML
                 Constants::NAMEID_TRANSIENT,
                 null
             ),
-            null,
             [
                 new SubjectConfirmation(
                     'urn:oasis:names:tc:SAML:2.0:cm:bearer',
-                    null,
                     new NameID(
                         'SomeOtherNameIDValue',
                         null,
@@ -109,7 +106,6 @@ XML
                         Constants::NAMEID_TRANSIENT,
                         null
                     ),
-                    null,
                     new SubjectConfirmationData(
                         null,
                         1582802796,
@@ -120,9 +116,8 @@ XML
             ]
         );
 
-        $this->assertNull($subject->getBaseID());
-        $this->assertNotNull($subject->getNameID());
-        $this->assertNull($subject->getEncryptedID());
+        $this->assertNotNull($subject->getIdentifier());
+        $this->assertInstanceOf(NameID::class, $subject->getIdentifier());
 
         $subjectConfirmation = $subject->getSubjectConfirmation();
         $this->assertNotEmpty($subjectConfirmation);
@@ -145,12 +140,9 @@ XML
                 123.456,
                 'https://sp.example.org/authentication/sp/metadata'
             ),
-            null,
-            null,
             [
                 new SubjectConfirmation(
                     'urn:oasis:names:tc:SAML:2.0:cm:bearer',
-                    null,
                     new NameID(
                         'SomeOtherNameIDValue',
                         null,
@@ -158,7 +150,6 @@ XML
                         Constants::NAMEID_TRANSIENT,
                         null
                     ),
-                    null,
                     new SubjectConfirmationData(
                         null,
                         1582802796,
@@ -169,9 +160,8 @@ XML
             ]
         );
 
-        $this->assertNotNull($subject->getBaseID());
-        $this->assertNull($subject->getNameID());
-        $this->assertNull($subject->getEncryptedID());
+        $this->assertNotNull($subject->getIdentifier());
+        $this->assertInstanceOf(CustomBaseID::class, $subject->getIdentifier());
 
         $subjectConfirmation = $subject->getSubjectConfirmation();
         $this->assertNotEmpty($subjectConfirmation);
@@ -181,29 +171,6 @@ XML
         $document->documentElement->appendChild($document->importNode($this->subjectConfirmation->documentElement, true));
 
         $this->assertEqualXMLStructure($document->documentElement, $subject->toXML());
-    }
-
-
-    /**
-     * @return void
-     */
-    public function testMarshallingMultipleIdentifiersAndEmptySubjectConfirmation(): void
-    {
-        $this->expectException(InvalidArgumentException::class);
-        $this->expectExceptionMessage('A <saml:Subject> not containing <saml:SubjectConfirmation> should provide exactly one of <saml:BaseID>, <saml:NameID> or <saml:EncryptedID>');
-
-        new Subject(
-            new CustomBaseID(123.456, 'https://sp.example.org/authentication/sp/metadata'),
-            new NameID(
-                'SomeNameIDValue',
-                null,
-                'https://sp.example.org/authentication/sp/metadata',
-                Constants::NAMEID_TRANSIENT,
-                null
-            ),
-            null,
-            []
-        );
     }
 
 
@@ -222,10 +189,8 @@ XML
 
         $subject = Subject::fromXML($document->documentElement);
 
-        $this->assertNull($subject->getBaseID());
-        $this->assertInstanceOf(NameID::class, $subject->getNameID());
-        $this->assertNull($subject->getEncryptedID());
-        $this->assertNotNull($subject->getSubjectConfirmation());
+        $this->assertNotNull($subject->getIdentifier());
+        $this->assertInstanceOf(NameID::class, $subject->getIdentifier());
 
         $this->assertEqualXMLStructure($document->documentElement, $subject->toXML());
     }
