@@ -9,26 +9,9 @@ use Webmozart\Assert\Assert;
 
 class CustomBaseID extends AbstractBaseIDType
 {
-    /** @var float $value */
-    private $value;
-
-
     public function __construct(float $value, string $NameQualifier = null, string $SPNameQualifier = null)
     {
-        parent::__construct($NameQualifier, $SPNameQualifier);
-        $this->setValue($value);
-    }
-
-
-    public function getValue(): float
-    {
-        return $this->value;
-    }
-
-
-    public function setValue(float $value): void
-    {
-        $this->value = $value;
+        parent::__construct(strval($value), $NameQualifier, $SPNameQualifier);
     }
 
 
@@ -52,7 +35,6 @@ class CustomBaseID extends AbstractBaseIDType
     {
         $e = parent::toXML($parent);
         $e->setAttributeNS(Constants::NS_XSI, 'xsi:type', 'CustomBaseID');
-        $e->textContent = strval($this->value);
 
         return $e;
     }

@@ -36,7 +36,7 @@ final class BaseID extends AbstractBaseIDType
         $type = $xml->getAttributeNS(Constants::NS_XSI, 'type');
         Assert::notSame($type, 'AbstractBaseIDType', 'Cannot inherit from AbstractBaseIDType directly;  please define your own sub-class.');
 
-        $registeredClass = ContainerSingleton::getRegisteredClass($type);
+        $registeredClass = ContainerSingleton::getRegisteredClass($xml->namespaceURI, $type);
         if ($registeredClass !== false) {
             if (is_subclass_of($registeredClass, AbstractBaseIDType::class)) {
                 return $registeredClass::fromXML($xml);

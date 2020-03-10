@@ -5,6 +5,7 @@ declare(strict_types=1);
 namespace SAML2\XML\saml;
 
 use PHPUnit\Framework\TestCase;
+use SAML2\Compat\ContainerSingleton;
 use SAML2\Constants;
 use SAML2\CustomBaseID;
 use SAML2\DOMDocumentFactory;
@@ -38,6 +39,8 @@ final class BaseIDTest extends TestCase
   xsi:type="CustomBaseID">123.456</saml:BaseID>
 XML
         );
+
+        ContainerSingleton::registerClass(CustomBaseID::class);
     }
 
 
@@ -55,7 +58,7 @@ XML
             'TheSPNameQualifier'
         );
 
-        $this->assertEquals(123.456, $baseId->getValue());
+        $this->assertEquals('123.456', $baseId->getValue());
         $this->assertEquals('TheNameQualifier', $baseId->getNameQualifier());
         $this->assertEquals('TheSPNameQualifier', $baseId->getSPNameQualifier());
 
@@ -76,7 +79,7 @@ XML
     {
         $baseId = BaseID::fromXML($this->document->documentElement);
 
-        $this->assertEquals(123.456, $baseId->getValue());
+        $this->assertEquals('123.456', $baseId->getValue());
         $this->assertEquals('TheNameQualifier', $baseId->getNameQualifier());
         $this->assertEquals('TheSPNameQualifier', $baseId->getSPNameQualifier());
 

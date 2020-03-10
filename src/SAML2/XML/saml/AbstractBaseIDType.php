@@ -20,18 +20,37 @@ abstract class AbstractBaseIDType extends AbstractSamlElement implements Identif
 {
     use IDNameQualifiersTrait;
 
+    /** @var string|null */
+    protected $value;
+
+
     /**
      * Initialize a saml:BaseIDType from scratch
      *
+     * @param string|null $value
      * @param string|null $NameQualifier
      * @param string|null $SPNameQualifier
      */
     protected function __construct(
+        ?string $value = null,
         ?string $NameQualifier = null,
         ?string $SPNameQualifier = null
     ) {
+        $this->setValue($value);
         $this->setNameQualifier($NameQualifier);
         $this->setSPNameQualifier($SPNameQualifier);
+    }
+
+
+    public function getValue(): string
+    {
+        return $this->value;
+    }
+
+
+    protected function setValue(string $value): void
+    {
+        $this->value = $value;
     }
 
 
@@ -63,6 +82,10 @@ abstract class AbstractBaseIDType extends AbstractSamlElement implements Identif
 
         if ($this->SPNameQualifier !== null) {
             $element->setAttribute('SPNameQualifier', $this->SPNameQualifier);
+        }
+
+        if ($this->value !== null) {
+            $element->textContent = $this->value;
         }
 
         return $element;
