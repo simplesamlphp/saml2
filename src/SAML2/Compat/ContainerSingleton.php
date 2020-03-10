@@ -59,7 +59,8 @@ class ContainerSingleton
     {
         Assert::subclassOf($class, AbstractXMLElement::class);
 
-        self::$registry[$class] = [$class::NS, $class::getClassName()];
+        $key = join(':', [urlencode($class::NS), $class::getClassName()]);
+        self::$registry[$key] = $class;
     }
 
 
@@ -71,6 +72,13 @@ class ContainerSingleton
      */
     public static function getRegisteredClass(string $namespace, string $element)
     {
-        return array_search([$namespace, $element], self::$registry);
+        $key = join(':', [urlencode($namespace), $element]);
+        Assert::keyExists(
+            self::$registry,
+            $key,
+            'No registered class `' . $element . '` found within given namespace `' . $namespace . '`'
+        );
+
+        return self::$registry[$key];
     }
 }
