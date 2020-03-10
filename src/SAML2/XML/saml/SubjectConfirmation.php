@@ -134,7 +134,6 @@ final class SubjectConfirmation extends AbstractSamlElement
             'More than one <saml:SubjectConfirmationData> in <saml:SubjectConfirmation>.'
         );
 
-        
         return new self(
             $Method,
             $identifiers[0],
