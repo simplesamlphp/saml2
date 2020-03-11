@@ -5,6 +5,7 @@ declare(strict_types=1);
 namespace SAML2\XML\saml;
 
 use DOMElement;
+use SAML2\Compat\ContainerSingleton;
 use SAML2\Constants;
 use SAML2\Utils;
 use SAML2\XML\IdentifierTrait;
@@ -130,6 +131,21 @@ final class SubjectConfirmation extends AbstractSamlElement
 
         /** @psalm-var \SAML2\XML\saml\IdentifierInterface|null $identifier */
         $identifier = array_pop($identifiers);
+
+        // check if the identifier is a BaseID that we can process
+        if ($identifier instanceof BaseID) {
+            $type = $identifier->getType();
+            $container = ContainerSingleton::getInstance();
+            /** @var \SAML2\XML\saml\CustomIdentifierInterface $handler */
+            $handler = $container->getIdentifierHandler($type);
+            if ($handler !== null) {
+                // we have a handler, use it for this id
+                $list = $xml->getElementsByTagNameNS(BaseID::NS, 'BaseID');
+                /** @var \DOMElement $element */
+                $element = $list->item(0);
+                $identifier = $handler::fromXML($element);
+            }
+        }
 
         $subjectConfirmationData = SubjectConfirmationData::getChildrenOfClass($xml);
         Assert::maxCount(
