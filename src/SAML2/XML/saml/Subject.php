@@ -87,41 +87,15 @@ final class Subject extends AbstractSamlElement
         Assert::same($xml->localName, 'Subject');
         Assert::same($xml->namespaceURI, Subject::NS);
 
-        $baseId = BaseID::getChildrenOfClass($xml);
-        $nameId = NameID::getChildrenOfClass($xml);
-//        $encryptedId = EncryptedID::getChildrenOfClass($xml);
-
-        // We accept only one of BaseID, NameID or EncryptedID
-        Assert::countBetween($baseId, 0, 1, 'More than one <saml:BaseID> in <saml:Subject>.');
-        Assert::countBetween($nameId, 0, 1, 'More than one <saml:NameID> in <saml:Subject>.');
-//        Assert::countBetween($encryptedId, 0, 1, 'More than one <saml:EncryptedID> in <saml:Subject>.');
-
+        $identifier = self::getIdentifierFromXML($xml);
         $subjectConfirmation = SubjectConfirmation::getChildrenOfClass($xml);
 
-//        $identifiers = array_merge($baseId, $nameId, $encryptedId);
-        $identifiers = array_merge($baseId, $nameId);
-        Assert::maxCount(
-            $identifiers,
-            1,
-            'A <saml:Subject> can contain exactly one of <saml:BaseID>, <saml:NameID> or <saml:EncryptedID>.'
-        );
-
-        /** @psalm-var \SAML2\XML\saml\IdentifierInterface|null $identifier */
-        $identifier = array_pop($identifiers);
-
-        // check if the identifier is a BaseID that we can process
-        if ($identifier instanceof BaseID) {
-            $type = $identifier->getType();
-            $container = ContainerSingleton::getInstance();
-            /** @var \SAML2\XML\saml\CustomIdentifierInterface $handler */
-            $handler = $container->getIdentifierHandler($type);
-            if ($handler !== null) {
-                // we have a handler, use it for this id
-                $list = $xml->getElementsByTagNameNS(BaseID::NS, 'BaseID');
-                /** @var \DOMElement $element */
-                $element = $list->item(0);
-                $identifier = $handler::fromXML($element);
-            }
+        if (empty($subjectConfirmation)) {
+            Assert::notNull(
+                $identifier,
+                'A <saml:Subject> not containing <saml:SubjectConfirmation> should provide' .
+                ' exactly one of <saml:BaseID>, <saml:NameID> or <saml:EncryptedID>'
+            );
         }
 
         return new self(

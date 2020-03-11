@@ -40,7 +40,7 @@ final class NameID extends NameIDType
      *
      * @param \DOMElement $xml The XML element we should load
      *
-     * @return \SAML2\XML\saml\NameID
+     * @return self
      * @throws \InvalidArgumentException
      */
     public static function fromXML(DOMElement $xml): object

@@ -114,40 +114,11 @@ final class SubjectConfirmation extends AbstractSamlElement
         Assert::same($xml->namespaceURI, SubjectConfirmation::NS);
 
         Assert::true($xml->hasAttribute('Method'), 'SubjectConfirmation element without Method attribute.');
+
         $Method = $xml->getAttribute('Method');
-
-        $baseId = BaseID::getChildrenOfClass($xml);
-        $nameId = NameID::getChildrenOfClass($xml);
-//        $encryptedId = EncryptedID::getChildrenOfClass($xml);
-
-        // We accept only one of BaseID, NameID or EncryptedID
-        Assert::countBetween($baseId, 0, 1, 'More than one <saml:BaseID> in <saml:SubjectConfirmation>.');
-        Assert::countBetween($nameId, 0, 1, 'More than one <saml:NameID> in <saml:SubjectConfirmation>.');
-//        Assert::countBetween($encryptedId, 0, 1, 'More than one <saml:EncryptedID> in <saml:SubjectConfirmation>.');
-
-        $identifiers = array_merge($baseId, $nameId);
-//        $identifiers = array_filter([$baseId, $nameId, $encryptedId]);
-        Assert::maxCount($identifiers, 1, 'More than one identifier found in <saml:SubjectConfirmation>.');
-
-        /** @psalm-var \SAML2\XML\saml\IdentifierInterface|null $identifier */
-        $identifier = array_pop($identifiers);
-
-        // check if the identifier is a BaseID that we can process
-        if ($identifier instanceof BaseID) {
-            $type = $identifier->getType();
-            $container = ContainerSingleton::getInstance();
-            /** @var \SAML2\XML\saml\CustomIdentifierInterface $handler */
-            $handler = $container->getIdentifierHandler($type);
-            if ($handler !== null) {
-                // we have a handler, use it for this id
-                $list = $xml->getElementsByTagNameNS(BaseID::NS, 'BaseID');
-                /** @var \DOMElement $element */
-                $element = $list->item(0);
-                $identifier = $handler::fromXML($element);
-            }
-        }
-
+        $identifier = self::getIdentifierFromXML($xml);
         $subjectConfirmationData = SubjectConfirmationData::getChildrenOfClass($xml);
+
         Assert::maxCount(
             $subjectConfirmationData,
             1,
@@ -157,7 +128,7 @@ final class SubjectConfirmation extends AbstractSamlElement
         return new self(
             $Method,
             $identifier,
-            empty($subjectConfirmationData) ? null : $subjectConfirmationData[0]
+            array_pop($subjectConfirmationData)
         );
     }
 

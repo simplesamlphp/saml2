@@ -139,7 +139,7 @@ XML
         );
 
         $this->expectException(InvalidArgumentException::class);
-        $this->expectExceptionMessage('More than one identifier found in <saml:SubjectConfirmation>.');
+        $this->expectExceptionMessage('A <saml:SubjectConfirmation> can contain exactly one of <saml:BaseID>, <saml:NameID> or <saml:EncryptedID>.');
         SubjectConfirmation::fromXML($document->documentElement);
     }
 

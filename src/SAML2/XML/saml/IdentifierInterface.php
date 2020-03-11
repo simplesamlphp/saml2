@@ -23,9 +23,9 @@ interface IdentifierInterface
     /**
      * @param \DOMElement $xml
      *
-     * @return BaseID
+     * @return self
      */
-    public static function fromXML(\DOMElement $xml): object;
+    public static function fromXML(DOMElement $xml): object;
 
 
     /**
