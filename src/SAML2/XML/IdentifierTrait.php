@@ -39,7 +39,7 @@ trait IdentifierTrait
      * @param \SAML2\XML\saml\IdentifierInterface|null
      * @return void
      */
-    private function setIdentifier(?IdentifierInterface $identifier): void
+    protected function setIdentifier(?IdentifierInterface $identifier): void
     {
         $this->identifier = $identifier;
     }

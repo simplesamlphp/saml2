@@ -14,5 +14,5 @@ use DOMElement;
  */
 interface IdentifierInterface
 {
-    public function toXML(DOMElement $parent = null): DOMElement;
+    public function getValue(): string;
 }
