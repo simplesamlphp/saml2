@@ -129,7 +129,7 @@ class Container implements ContainerInterface
     {
         Assert::subclassOf($class, AbstractXMLElement::class);
 
-        if ($class instanceof CustomIdentifierInterface) {
+        if (is_subclass_of($class, CustomIdentifierInterface::class, true)) {
             $key = $class::getXsiType() . ':BaseID';
         } else {
             $key = join(':', [urlencode($class::NS), AbstractXMLElement::getClassName($class)]);
