@@ -71,6 +71,7 @@ XML
 
     /**
      * @return void
+     */
     public function testUnmarshalling(): void
     {
         $baseId = BaseID::fromXML($this->document->documentElement);
@@ -84,17 +85,38 @@ XML
             strval($baseId)
         );
     }
+
+
+    /**
+     * @return void
      */
+    public function testUnmarshallingCustomClass(): void
+    {
+        $baseId = CustomBaseID::fromXML($this->document->documentElement);
+
+        $this->assertEquals(123.456, $baseId->getValue());
+        $this->assertEquals('TheNameQualifier', $baseId->getNameQualifier());
+        $this->assertEquals('TheSPNameQualifier', $baseId->getSPNameQualifier());
+
+        $this->assertEquals(
+            $this->document->saveXML($this->document->documentElement),
+            strval($baseId)
+        );
+    }
 
 
     /**
      * Test serialization / unserialization
+     */
     public function testSerialization(): void
     {
         $this->assertEquals(
             $this->document->saveXML($this->document->documentElement),
             strval(unserialize(serialize(BaseID::fromXML($this->document->documentElement))))
         );
+        $this->assertEquals(
+            $this->document->saveXML($this->document->documentElement),
+            strval(unserialize(serialize(CustomBaseID::fromXML($this->document->documentElement))))
+        );
     }
-     */
 }

@@ -5,13 +5,8 @@ declare(strict_types=1);
 namespace SAML2\XML\saml;
 
 use DOMElement;
-use InvalidArgumentException;
-use SAML2\Compat\ContainerSingleton;
 use SAML2\Constants;
-use SAML2\DOMDocumentFactory;
-use SAML2\Utils;
 use SAML2\XML\IDNameQualifiersTrait;
-use SAML2\XML\saml\IdentifierInterface;
 use Webmozart\Assert\Assert;
 
 /**
@@ -20,7 +15,7 @@ use Webmozart\Assert\Assert;
  * @author Tim van Dijen, <tvdijen@gmail.com>
  * @package simplesamlphp/saml2
  */
-class BaseID extends AbstractSamlElement implements IdentifierInterface
+class BaseID extends AbstractSamlElement implements BaseIdentifierInterface
 {
     use IDNameQualifiersTrait;
 
@@ -49,6 +44,16 @@ class BaseID extends AbstractSamlElement implements IdentifierInterface
         $this->setValue($value);
         $this->setNameQualifier($NameQualifier);
         $this->setSPNameQualifier($SPNameQualifier);
+    }
+
+
+    /**
+     * @inheritDoc
+     */
+    final public function getLocalName(): string
+    {
+        // All descendants of this class are supposed to be <saml:BaseID /> elements and shouldn't define a new element
+        return 'BaseID';
     }
 
 
@@ -88,18 +93,6 @@ class BaseID extends AbstractSamlElement implements IdentifierInterface
     protected function setValue(string $value): void
     {
         $this->value = $value;
-    }
-
-
-    /**
-     * Get the XML local name of the element represented by this class.
-     *
-     * @return string
-     */
-    final public function getLocalName(): string
-    {
-        // All descendants of this class are supposed to be <saml:BaseID /> elements and shouldn't define a new element
-        return 'BaseID';
     }
 
 
