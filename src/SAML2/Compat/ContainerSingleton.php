@@ -13,9 +13,6 @@ class ContainerSingleton
     /** @var \SAML2\Compat\ContainerInterface|null */
     protected static $container = null;
 
-    /** @var array */
-    protected static $registry = [];
-
 
     /**
      * @return \SAML2\Compat\ContainerInterface
@@ -47,38 +44,5 @@ class ContainerSingleton
     public static function initSspContainer(): Container
     {
         return new Container();
-    }
-
-
-    /**
-     * @param string $class
-     * @psalm-param class-string $class
-     * @return void
-     */
-    public static function registerClass(string $class): void
-    {
-        Assert::subclassOf($class, AbstractXMLElement::class);
-
-        $key = join(':', [urlencode($class::NS), $class::getClassName($class)]);
-        self::$registry[$key] = $class;
-    }
-
-
-    /**
-     * @param string $namespace
-     * @param string $element
-     * @return string|false
-     * @psalm-return class-string|false
-     */
-    public static function getRegisteredClass(string $namespace, string $element)
-    {
-        $key = join(':', [urlencode($namespace), $element]);
-        Assert::keyExists(
-            self::$registry,
-            $key,
-            'No registered class `' . $element . '` found within given namespace `' . $namespace . '`'
-        );
-
-        return self::$registry[$key];
     }
 }

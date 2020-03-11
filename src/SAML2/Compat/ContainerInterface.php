@@ -5,6 +5,7 @@ declare(strict_types=1);
 namespace SAML2\Compat;
 
 use Psr\Log\LoggerInterface;
+use SAML2\XML\AbstractXMLElement;
 
 interface ContainerInterface
 {
@@ -81,4 +82,45 @@ interface ContainerInterface
      * @return void
      */
     public function writeFile(string $filename, string $data, int $mode = null): void;
+
+
+    /**
+     * Register a class that can handle given extension points of the standard.
+     *
+     * @param string $class The class name of a class extending AbstractXMLElement or BaseID.
+     * @psalm-param class-string $class
+     * @return void
+     */
+    public function registerExtensionHandler(string $class): void;
+
+
+    /**
+     * Search for a class that implements an $element in the given $namespace.
+     *
+     * Such classes must have been registered previously by calling registerExtensionHandler(), and they must
+     * extend \SAML2\XML\AbstractXMLElement.
+     *
+     * @param string $namespace The namespace URI for the given element.
+     * @param string $element The local name of the element.
+     *
+     * @return string|null The fully-qualified name of a class extending \SAML2\XML\AbstractXMLElement and
+     * implementing support for the given element, or null if no such class has been registered before.
+     * @psalm-return class-string|null
+     */
+    public function getElementHandler(string $namespace, string $element): ?string;
+
+
+    /**
+     * Search for a class that implements a custom identifier type.
+     *
+     * Such classes must have been registered previously by calling registerExtensionHandler(), and they must
+     * implement \SAML2\XML\saml\CustomIdentifierInterface.
+     *
+     * @param string $type The type of the identifier (xsi:type of the BaseID element).
+     *
+     * @return string|null The fully-qualified name of a class implementing \SAML2\XML\saml\CustomIdentifierInterface
+     * or null if no such class has been registered before.
+     * @psalm-return class-string|null
+     */
+    public function getIdentifierHandler(string $type): ?string;
 }

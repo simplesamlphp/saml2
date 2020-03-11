@@ -5,22 +5,21 @@ declare(strict_types=1);
 namespace SAML2\XML\saml;
 
 use PHPUnit\Framework\TestCase;
-use SAML2\Compat\ContainerSingleton;
 use SAML2\Constants;
 use SAML2\CustomBaseID;
 use SAML2\DOMDocumentFactory;
-use SAML2\Utils;
 
 /**
  * Class \SAML2\XML\saml\BaseIDTest
  *
  * @author Tim van Dijen, <tvdijen@gmail.com>
- * @package SimpleSAMLphp
+ * @package simplesamlphp/saml2
  */
 final class BaseIDTest extends TestCase
 {
     /** @var \DOMDocument $document */
     private $document;
+
 
     /**
      * @return void
@@ -39,8 +38,6 @@ final class BaseIDTest extends TestCase
   xsi:type="CustomBaseID">123.456</saml:BaseID>
 XML
         );
-
-        ContainerSingleton::registerClass(CustomBaseID::class);
     }
 
 
