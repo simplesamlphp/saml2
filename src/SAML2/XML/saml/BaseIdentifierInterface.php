@@ -23,26 +23,4 @@ interface BaseIdentifierInterface extends IdentifierInterface
      * @return string|null
      */
     public function getSPNameQualifier(): ?string;
-
-
-    /**
-     * @return string
-     */
-    public function getValue(): string;
-
-
-    /**
-     * @param \DOMElement $xml
-     *
-     * @return BaseID
-     */
-    public static function fromXML(\DOMElement $xml): object;
-
-
-    /**
-     * @param \DOMElement|null $parent
-     *
-     * @return \DOMElement
-     */
-    public function toXML(DOMElement $parent = null): DOMElement;
 }
