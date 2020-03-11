@@ -37,9 +37,9 @@ final class SubjectConfirmation extends AbstractSamlElement
     /**
      * Initialize (and parse) a SubjectConfirmation element.
      *
-     * @param string $Method
+     * @param string $method
      * @param \SAML2\XML\saml\IdentifierInterface|null $identifier
-     * @param \SAML2\XML\saml\SubjectConfirmationData|null $scd
+     * @param \SAML2\XML\saml\SubjectConfirmationData|null $subjectConfirmationData
      */
     public function __construct(
         string $method,
@@ -124,12 +124,12 @@ final class SubjectConfirmation extends AbstractSamlElement
         Assert::countBetween($nameId, 0, 1, 'More than one <saml:NameID> in <saml:SubjectConfirmation>.');
 //        Assert::countBetween($encryptedId, 0, 1, 'More than one <saml:EncryptedID> in <saml:SubjectConfirmation>.');
 
-        $identifiers = array_filter([$baseId, $nameId]);
+        $identifiers = array_merge($baseId, $nameId);
 //        $identifiers = array_filter([$baseId, $nameId, $encryptedId]);
-        Assert::countBetween($identifiers, 0, 1, 'More than one <saml:SubjectConfirmationData> in <saml:SubjectConfirmation>.');
+        Assert::maxCount($identifiers, 1, 'More than one identifier found in <saml:SubjectConfirmation>.');
 
         /** @psalm-var \SAML2\XML\saml\IdentifierInterface|null $identifier */
-        $identifier = empty($identifiers) ? null : $identifiers[0];
+        $identifier = array_pop($identifiers);
 
         $subjectConfirmationData = SubjectConfirmationData::getChildrenOfClass($xml);
         Assert::maxCount(

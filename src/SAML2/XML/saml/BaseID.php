@@ -67,6 +67,7 @@ class BaseID extends AbstractSamlElement implements IdentifierInterface
      */
     protected function setType(string $type): void
     {
+        Assert::notEmpty($type, 'The "xsi:type" attribute of an identifier cannot be empty.');
         $this->type = $type;
     }
 
@@ -95,7 +96,7 @@ class BaseID extends AbstractSamlElement implements IdentifierInterface
      *
      * @return string
      */
-    public function getLocalName(): string
+    final public function getLocalName(): string
     {
         // All descendants of this class are supposed to be <saml:BaseID /> elements and shouldn't define a new element
         return 'BaseID';
@@ -107,7 +108,7 @@ class BaseID extends AbstractSamlElement implements IdentifierInterface
      *
      * @param \DOMElement $xml The XML element we should load
      *
-     * @return \SAML2\XML\AbstractXMLElement
+     * @return \SAML2\XML\saml\BaseID
      * @throws \InvalidArgumentException  If xsi:type is not defined or does not implement IdentifierInterface
      */
     public static function fromXML(DOMElement $xml): object
@@ -118,17 +119,13 @@ class BaseID extends AbstractSamlElement implements IdentifierInterface
         Assert::true($xml->hasAttributeNS(Constants::NS_XSI, 'type'), 'Missing required xsi:type in <saml:BaseID> element.');
 
         $type = $xml->getAttributeNS(Constants::NS_XSI, 'type');
-        Assert::notSame($type, 'BaseID', 'Cannot inherit from tBaseID directly;  please define your own sub-class.');
 
-        $registeredClass = ContainerSingleton::getRegisteredClass($xml->namespaceURI, $type);
-        if ($registeredClass !== false) {
-            if (in_array(IdentifierInterface::class, class_implements($registeredClass))) {
-                return $registeredClass::fromXML($xml);
-            }
-            throw new InvalidArgumentException('The type \'' . $type . '\' was not found as a descendant of BaseID.');
-        }
-
-        throw new InvalidArgumentException('The type \'' . $type . '\' was not found as a registered extension.');
+        return new self(
+            $type,
+            trim($xml->textContent),
+            $xml->hasAttribute('NameQualifier') ? $xml->getAttribute('NameQualifier') : null,
+            $xml->hasAttribute('SPNameQualifier') ? $xml->getAttribute('SPNameQualifier') : null
+        );
     }
 
 

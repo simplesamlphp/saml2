@@ -72,10 +72,8 @@ XML
         $subjectConfirmation = SubjectConfirmation::fromXML($this->document->documentElement);
 
         $this->assertEquals('SomeMethod', $subjectConfirmation->getMethod());
-        $this->assertNull($subjectConfirmation->getBaseID());
-        $this->assertInstanceOf(NameID::class, $subjectConfirmation->getNameID());
-        $this->assertNull($subjectConfirmation->getEncryptedID());
-        $this->assertEquals('SomeNameIDValue', $subjectConfirmation->getNameID()->getValue());
+        $this->assertInstanceOf(NameID::class, $subjectConfirmation->getIdentifier());
+        $this->assertEquals('SomeNameIDValue', $subjectConfirmation->getIdentifier()->getValue());
         $this->assertInstanceOf(SubjectConfirmationData::class, $subjectConfirmation->getSubjectConfirmationData());
         $this->assertEquals(
             $this->document->saveXML($this->document->documentElement),
