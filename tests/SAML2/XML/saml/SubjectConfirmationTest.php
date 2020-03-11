@@ -5,11 +5,8 @@ declare(strict_types=1);
 namespace SAML2\XML\saml;
 
 use InvalidArgumentException;
-use Mockery\Mock;
 use SAML2\Compat\ContainerInterface;
 use SAML2\Compat\ContainerSingleton;
-use SAML2\Compat\MockContainer;
-use SAML2\Compat\Ssp\Container;
 use SAML2\Constants;
 use SAML2\CustomBaseID;
 use SAML2\DOMDocumentFactory;
@@ -36,10 +33,12 @@ XML
         );
     }
 
+
     public function tearDown(): void
     {
         \Mockery::close();
     }
+
 
     // marshalling
 
@@ -176,7 +175,7 @@ XML
         $samlNamespace = Constants::NS_SAML;
         $document = DOMDocumentFactory::fromString(<<<XML
 <saml:SubjectConfirmation xmlns:saml="{$samlNamespace}" Method="SomeMethod">
-  <saml:BaseID xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:type="someType">SomeIDValue</saml:BaseID>
+  <saml:BaseID xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:type="CustomBaseID">SomeIDValue</saml:BaseID>
   <saml:SubjectConfirmationData Recipient="Me" />
 </saml:SubjectConfirmation>
 XML
@@ -184,7 +183,8 @@ XML
 
         $subjectConfirmation = SubjectConfirmation::fromXML($document->documentElement);
         $this->assertEquals('SomeMethod', $subjectConfirmation->getMethod());
-        $this->assertInstanceOf(BaseID::class, $subjectConfirmation->getIdentifier());
+        $this->assertEquals(BaseID::class, get_class($subjectConfirmation->getIdentifier()));
+        $this->assertEquals('CustomBaseID', $subjectConfirmation->getIdentifier()->getType());
         $this->assertEquals('SomeIDValue', $subjectConfirmation->getIdentifier()->getValue());
         $this->assertInstanceOf(SubjectConfirmationData::class, $subjectConfirmation->getSubjectConfirmationData());
         $this->assertEquals(
