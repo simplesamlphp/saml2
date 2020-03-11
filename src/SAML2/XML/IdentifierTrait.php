@@ -4,7 +4,7 @@ declare(strict_types=1);
 
 namespace SAML2\XML;
 
-use SAML2\XML\saml\IdentifierInterface;;
+use SAML2\XML\saml\IdentifierInterface;
 
 /**
  * Trait grouping common functionality for elements that can hold identifiers.
