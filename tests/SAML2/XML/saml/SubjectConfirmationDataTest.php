@@ -71,14 +71,11 @@ XML
             'https://sp.example.org/asdf',
             'SomeRequestID',
             '127.0.0.1',
-            [],
+            [
+                new KeyInfo([new KeyName('SomeKey')]),
+                new Chunk($arbitrary->documentElement),
+            ],
             [$attr1, $attr2]
-        );
-        $subjectConfirmationData->addInfo(
-            new KeyInfo([new KeyName('SomeKey')])
-        );
-        $subjectConfirmationData->addInfo(
-            new Chunk($arbitrary->documentElement)
         );
 
         $this->assertEquals(987654321, $subjectConfirmationData->getNotBefore());
@@ -115,14 +112,11 @@ XML
             'https://sp.example.org/asdf',
             'SomeRequestID',
             'non-IP',
-            [],
+            [
+                new KeyInfo([new KeyName('SomeKey')]),
+                new Chunk($arbitrary->documentElement),
+            ],
             [$attr1, $attr2]
-        );
-        $subjectConfirmationData->addInfo(
-            new KeyInfo([new KeyName('SomeKey')])
-        );
-        $subjectConfirmationData->addInfo(
-            new Chunk($arbitrary->documentElement)
         );
 
         $this->assertEquals(987654321, $subjectConfirmationData->getNotBefore());
