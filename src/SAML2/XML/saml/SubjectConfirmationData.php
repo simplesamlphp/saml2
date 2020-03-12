@@ -243,20 +243,6 @@ final class SubjectConfirmationData extends AbstractSamlElement
 
 
     /**
-     * Add the value to the info-property
-     *
-     * @param \SAML2\XML\Chunk|\SAML2\XML\ds\KeyInfo $info
-     * @return void
-     * @throws \InvalidArgumentException
-     */
-    public function addInfo(object $info): void
-    {
-        Assert::isInstanceOfAny($info, [Chunk::class, KeyInfo::class]);
-        $this->info[] = $info;
-    }
-
-
-    /**
      * Test if an object, at the state it's in, would produce an empty XML-element
      *
      * @return bool
@@ -281,6 +267,7 @@ final class SubjectConfirmationData extends AbstractSamlElement
      * @param \DOMElement $xml The XML element we should load
      * @return self
      * @throws \InvalidArgumentException if the qualified name of the supplied element is wrong
+     * @throws \Exception if NotBefore or NotOnOrAfter contain an invalid date.
      */
     public static function fromXML(DOMElement $xml): object
     {
