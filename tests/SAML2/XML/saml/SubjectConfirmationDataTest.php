@@ -4,18 +4,17 @@ declare(strict_types=1);
 
 namespace SAML2\XML\saml;
 
+use PHPUnit\Framework\TestCase;
 use SAML2\Constants;
 use SAML2\DOMDocumentFactory;
 use SAML2\XML\Chunk;
 use SAML2\XML\ds\KeyInfo;
 use SAML2\XML\ds\KeyName;
-use SAML2\XML\saml\SubjectConfirmationData;
-use SAML2\Utils;
 
 /**
  * Class \SAML2\XML\saml\SubjectConfirmationDataTest
  */
-final class SubjectConfirmationDataTest extends \PHPUnit\Framework\TestCase
+final class SubjectConfirmationDataTest extends TestCase
 {
     /** @var \DOMDocument */
     private $document;

@@ -15,23 +15,29 @@ use DOMElement;
 interface IdentifierInterface
 {
     /**
-     * @return string
+     * Get the string value of this identifier.,
+     *
+     * @return string The actual value of the identifier.
      */
     public function getValue(): string;
 
 
     /**
-     * @param \DOMElement $xml
+     * Create an identifier from XML.
      *
-     * @return self
+     * @param \DOMElement $xml The XML element describing an identifier.
+     *
+     * @return self An instance of an identifier matching the given XML element.
      */
     public static function fromXML(DOMElement $xml): object;
 
 
     /**
-     * @param \DOMElement|null $parent
+     * Create XML from a given identifier.
      *
-     * @return \DOMElement
+     * @param \DOMElement|null $parent The parent element for the new XML element created.
+     *
+     * @return \DOMElement The XML element created.
      */
     public function toXML(DOMElement $parent = null): DOMElement;
 }

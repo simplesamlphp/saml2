@@ -5,6 +5,7 @@ declare(strict_types=1);
 namespace SAML2\XML\saml;
 
 use InvalidArgumentException;
+use PHPUnit\Framework\TestCase;
 use SAML2\Compat\ContainerInterface;
 use SAML2\Compat\ContainerSingleton;
 use SAML2\Constants;
@@ -14,7 +15,7 @@ use SAML2\DOMDocumentFactory;
 /**
  * Class \SAML2\XML\saml\SubjectConfirmationTest
  */
-final class SubjectConfirmationTest extends \PHPUnit\Framework\TestCase
+final class SubjectConfirmationTest extends TestCase
 {
     /** @var \DOMDocument */
     private $document;
