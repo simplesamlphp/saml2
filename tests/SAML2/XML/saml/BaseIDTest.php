@@ -92,6 +92,7 @@ XML
      */
     public function testUnmarshallingCustomClass(): void
     {
+        /** @var \SAML2\CustomBaseID $baseId */
         $baseId = CustomBaseID::fromXML($this->document->documentElement);
 
         $this->assertEquals(123.456, $baseId->getValue());
