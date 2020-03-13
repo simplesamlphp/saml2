@@ -135,7 +135,7 @@ class EncryptedData extends AbstractXencElement
      *
      * @return string
      */
-    public function getID(): string
+    public function getID(): ?string
     {
         return $this->id;
     }
