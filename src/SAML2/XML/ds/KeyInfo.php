@@ -73,7 +73,7 @@ final class KeyInfo extends AbstractDsElement
     /**
      * Collect the value of the info-property
      *
-     * @return (\SAML2\XML\Chunk|\SAML2\XML\ds\KeyName|\SAML2\XML\ds\X509Data)[]
+     * @return (\SAML2\XML\Chunk|\SAML2\XML\ds\KeyName|\SAML2\XML\ds\X509Data|\SAML2\XML\xenc\EncryptedKey)[]
      */
     public function getInfo(): array
     {
@@ -84,17 +84,17 @@ final class KeyInfo extends AbstractDsElement
     /**
      * Set the value of the info-property
      *
-     * @param (\SAML2\XML\Chunk|\SAML2\XML\ds\KeyName|\SAML2\XML\ds\X509Data)[] $info
+     * @param (\SAML2\XML\Chunk|\SAML2\XML\ds\KeyName|\SAML2\XML\ds\X509Data|\SAML2\XML\xenc\EncryptedKey)[] $info
      * @return void
-     * @throws \InvalidArgumentException if $info contains anything other than KeyName, X509Data or Chunk
+     * @throws \InvalidArgumentException if $info contains anything other than KeyName, X509Data, EncryptedKey or Chunk
      */
     private function setInfo(array $info): void
     {
         Assert::notEmpty($info, 'ds:KeyInfo cannot be empty');
         Assert::allIsInstanceOfAny(
             $info,
-            [Chunk::class, KeyName::class, X509Data::class],
-            'KeyInfo can only contain instances of KeyName, X509Data or Chunk.'
+            [Chunk::class, KeyName::class, X509Data::class, EncryptedKey::class],
+            'KeyInfo can only contain instances of KeyName, X509Data, EncryptedKey or Chunk.'
         );
         $this->info = $info;
     }
