@@ -168,6 +168,16 @@ class EncryptedKey extends EncryptedData
     {
         $e = parent::toXML($parent);
 
+        if ($this->referenceList !== null) {
+            $this->referenceList->toXML($e);
+        }
+
+        if ($this->carriedKeyName !== null) {
+            $ckn = $e->ownerDocument->createElementNS(self::NS, self::NS_PREFIX . ':CarriedKeyName');
+            $ckn->textContent = $this->carriedKeyName;
+            $e->appendChild($ckn);
+        }
+
         if ($this->recipient !== null) {
             $e->setAttribute('Recipient', $this->recipient);
         }
