@@ -6,9 +6,7 @@ namespace SAML2\XML;
 
 use DOMElement;
 use SAML2\Compat\ContainerSingleton;
-use SAML2\Exception\InvalidArgumentException;
 use SAML2\XML\saml\BaseID;
-//use SAML2\XML\saml\EncryptedID;
 use SAML2\XML\saml\NameID;
 use SAML2\XML\saml\IdentifierInterface;
 use Webmozart\Assert\Assert;
@@ -64,14 +62,11 @@ trait IdentifierTrait
 
         $baseId = BaseID::getChildrenOfClass($xml);
         $nameId = NameID::getChildrenOfClass($xml);
-//        $encryptedId = EncryptedID::getChildrenOfClass($xml);
 
         // We accept only one of BaseID, NameID or EncryptedID
         Assert::maxCount($baseId, 1, 'More than one <saml:BaseID> in <' . $class . '>.');
         Assert::maxCount($nameId, 1, 'More than one <saml:NameID> in <' . $class . '>.');
-//        Assert::maxCount($encryptedId, 1, 'More than one <saml:EncryptedID> in <' . $class . '>.');
 
-//        $identifiers = array_merge($baseId, $nameId, $encryptedId);
         $identifiers = array_merge($baseId, $nameId);
         Assert::maxCount(
             $identifiers,
@@ -104,12 +99,4 @@ trait IdentifierTrait
 
         return $identifier;
     }
-
-
-    /**
-     * Implemented by AbstractXMLElement
-     *
-     * @return string
-     */
-    abstract public function getQualifiedName(): string;
 }
