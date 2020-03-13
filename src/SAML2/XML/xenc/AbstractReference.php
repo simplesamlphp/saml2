@@ -56,7 +56,7 @@ abstract class AbstractReference extends AbstractXencElement
     public static function fromXML(DOMElement $xml): object
     {
         Assert::same($xml->localName, static::getClassName(static::class));
-        Assert::same($xml->localName, static::NS);
+        Assert::same($xml->namespaceURI, static::NS);
 
         return new static(self::getAttribute($xml, 'URI'));
     }
