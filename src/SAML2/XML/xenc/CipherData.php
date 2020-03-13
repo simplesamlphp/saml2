@@ -46,7 +46,7 @@ class CipherData extends AbstractXencElement
      */
     protected function setCipherValue(string $cipherValue)
     {
-        Assert::regex($cipherValue, '/[a-zA-Z0-9_-=+\/]/', 'Invalid data in <xenc:CipherValue>.');
+        Assert::regex($cipherValue, '/[a-zA-Z0-9_\-=\+\/]/', 'Invalid data in <xenc:CipherValue>.');
         $this->cipherValue = $cipherValue;
     }
 
