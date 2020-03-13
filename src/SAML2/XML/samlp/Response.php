@@ -6,8 +6,12 @@ namespace SAML2\XML\samlp;
 
 use DOMElement;
 use SAML2\Constants;
-use SAML2\XML\saml\EncryptedAssertion;
+use SAML2\EncryptedAssertion;
+use SAML2\Utils;
+use SAML2\XML\ds\Signature;
 use SAML2\XML\saml\Assertion;
+use SAML2\XML\saml\EncryptedAssertion;
+use SAML2\XML\saml\Issuer;
 use Webmozart\Assert\Assert;
 
 /**
@@ -22,35 +26,51 @@ class Response extends AbstractStatusResponse
      *
      * @var (\SAML2\XML\saml\Assertion|\SAML2\XML\saml\EncryptedAssertion)[]
      */
-    private $assertions = [];
+    protected $assertions = [];
 
 
     /**
-     * Constructor for SAML 2 response messages.
+     * Constructor for SAML 2 ArtifactResponse.
      *
-     * @param \DOMElement|null $xml The input message.
+     * @param \SAML2\XML\samlp\Status $status
+     * @param \SAML2\XML\saml\Issuer $issuer
+     * @param string $id
+     * @param string $version
+     * @param int $issueInstant
+     * @param string $inResponseTo
+     * @param string|null $destination
+     * @param string|null $consent
+     * @param \SAML2\XML\samlp\Extensions $extensions
+     * @param (\SAML2\XML\saml\Assertion|\SAML2\EncryptedAssertion) $assertions
+     * @param string|null $relayState
      */
-    public function __construct(DOMElement $xml = null)
-    {
-        parent::__construct('Response', $xml);
+    public function __construct(
+        Status $status,
+        ?Issuer $issuer = null,
+        ?string $id = null,
+        ?string $version = null,
+        ?int $issueInstant = null,
+        ?string $inResponseTo = null,
+        ?string $destination = null,
+        ?string $consent = null,
+        ?Extensions $extensions = null,
+        array $assertions = [],
+        string $relayState = null
+    ) {
+        parent::__construct(
+            $status,
+            $issuer,
+            $id,
+            $version,
+            $issueInstant,
+            $inResponseTo,
+            $destination,
+            $consent,
+            $extensions,
+            $relayState
+        );
 
-        if ($xml === null) {
-            return;
-        }
-
-        foreach ($xml->childNodes as $node) {
-            if ($node->namespaceURI !== Constants::NS_SAML) {
-                continue;
-            } elseif (!($node instanceof DOMElement)) {
-                continue;
-            }
-
-            if ($node->localName === 'Assertion') {
-                $this->assertions[] = new Assertion($node);
-            } elseif ($node->localName === 'EncryptedAssertion') {
-                $this->assertions[] = EncryptedAssertion::fromXML($node);
-            }
-        }
+        $this->setAssertions($assertions);
     }
 
 
@@ -71,9 +91,75 @@ class Response extends AbstractStatusResponse
      * @param \SAML2\XML\saml\Assertion[]|\SAML2\XML\saml\EncryptedAssertion[] $assertions The assertions.
      * @return void
      */
-    public function setAssertions(array $assertions): void
+    protected function setAssertions(array $assertions): void
     {
         $this->assertions = $assertions;
+    }
+
+
+    /**
+     * Convert XML into a Response element.
+     *
+     * @param \DOMElement $xml The input message.
+     * @return self
+     */
+    public static function fromXML(DOMElement $xml): object
+    {
+        Assert::same($xml->localName, 'Response');
+        Assert::same($xml->namespaceURI, Response::NS);
+
+        $id = self::getAttribute($xml, 'ID');
+        $version = self::getAttribute($xml, 'Version');
+        $issueInstant = Utils::xsDateTimeToTimestamp(self::getAttribute($xml, 'IssueInstant'));
+        $inResponseTo = self::getAttribute($xml, 'InResponseTo', null);
+        $destination = self::getAttribute($xml, 'Destination', null);
+        $consent = self::getAttribute($xml, 'Consent', null);
+
+        $issuer = Issuer::getChildrenOfClass($xml);
+        Assert::countBetween($issuer, 0, 1);
+
+        $status = Status::getChildrenOfClass($xml);
+        Assert::count($status, 1);
+
+        $extensions = Extensions::getChildrenOfClass($xml);
+        Assert::maxCount($extensions, 1, 'Only one saml:Extensions element is allowed.');
+
+        $assertions = [];
+        foreach ($xml->childNodes as $node) {
+            if ($node->namespaceURI !== Constants::NS_SAML) {
+                continue;
+            } elseif (!($node instanceof DOMElement)) {
+                continue;
+            }
+
+            if ($node->localName === 'Assertion') {
+                $assertions[] = new Assertion($node);
+            } elseif ($node->localName === 'EncryptedAssertion') {
+                $assertions[] = EncryptedAssertion::fromXML($node);
+            }
+        }
+
+        $signature = Signature::getChildrenOfClass($xml);
+        Assert::maxCount($signature, 1, 'Only one ds:Signature element is allowed.');
+
+        $response = new self(
+            array_pop($status),
+            empty($issuer) ? null : array_pop($issuer),
+            $id,
+            $version,
+            $issueInstant,
+            $inResponseTo,
+            $destination,
+            $consent,
+            empty($extensions) ? null : array_pop($extensions),
+            $assertions
+        );
+
+        if (!empty($signature)) {
+            $response->setSignature($signature[0]);
+        }
+
+        return $response;
     }
 
 
@@ -84,14 +170,12 @@ class Response extends AbstractStatusResponse
      */
     public function toXML(?DOMElement $parent = null): DOMElement
     {
-        Assert::null($parent);
-
-        $parent = parent::toXML();
+        $e = parent::toXML($parent);
 
         foreach ($this->assertions as $assertion) {
-            $assertion->toXML($parent);
+            $assertion->toXML($e);
         }
 
-        return $parent;
+        return $this->signElement($e);
     }
 }

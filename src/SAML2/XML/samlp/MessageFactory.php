@@ -1,0 +1,53 @@
+<?php
+
+declare(strict_types=1);
+
+namespace SAML2\XML\samlp;
+
+use DOMElement;
+use Exception;
+use SAML2\Constants;
+use Webmozart\Assert\Assert;
+
+/**
+ * Factory class for all SAML 2 messages.
+ */
+abstract class MessageFactory
+{
+    /**
+     * Convert an XML element into a message.
+     *
+     * @param \DOMElement $xml The root XML element
+     * @throws \Exception
+     * @return \SAML2\XML\samlp\AbstractMessage The message
+     *
+     * @throws \InvalidArgumentException if assertions are false
+     */
+    public static function fromXML(DOMElement $xml): object
+    {
+        Assert::same(
+            $xml->namespaceURI,
+            Constants::NS_SAMLP,
+            'Unknown namespace of SAML message: ' . var_export($xml->namespaceURI, true)
+        );
+
+        switch ($xml->localName) {
+            case 'AttributeQuery':
+                return new AttributeQuery($xml);
+            case 'AuthnRequest':
+                return new AuthnRequest($xml);
+            case 'LogoutResponse':
+                return LogoutResponse::fromXML($xml);
+            case 'LogoutRequest':
+                return new LogoutRequest($xml);
+            case 'Response':
+                return Response::fromXML($xml);
+            case 'ArtifactResponse':
+                return ArtifactResponse::fromXML($xml);
+            case 'ArtifactResolve':
+                return new ArtifactResolve($xml);
+            default:
+                throw new Exception('Unknown SAML message: ' . var_export($xml->localName, true));
+        }
+    }
+}

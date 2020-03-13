@@ -6,8 +6,8 @@ namespace SAML2;
 
 use DOMDocument;
 use InvalidArgumentException;
-use SAML2\XML\samlp\AbstractMessage;
 use SAML2\XML\samlp\ArtifactResolve;
+use SAML2\XML\samlp\MessageFactory;
 use Webmozart\Assert\Assert;
 
 class SOAPTest extends \Mockery\Adapter\Phpunit\MockeryTestCase
@@ -93,7 +93,7 @@ SOAP
 XML
         );
 
-        $message = AbstractMessage::fromXML($doc->getElementsByTagName('ArtifactResponse')->item(0));
+        $message = MessageFactory::fromXML($doc->getElementsByTagName('ArtifactResponse')->item(0));
 
         $expected = <<<SOAP
 <?xml version="1.0" encoding="utf-8"?>
@@ -163,7 +163,7 @@ SOAP;
 XML
         );
 
-        $message = AbstractMessage::fromXML($doc->getElementsByTagName('Response')->item(0));
+        $message = MessageFactory::fromXML($doc->getElementsByTagName('Response')->item(0));
 
         $expected = <<<SOAP
 <?xml version="1.0" encoding="utf-8"?>

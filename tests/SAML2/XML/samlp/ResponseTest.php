@@ -8,6 +8,8 @@ use PHPUnit\Framework\TestCase;
 use SAML2\Constants;
 use SAML2\DOMDocumentFactory;
 use SAML2\XML\samlp\Response;
+use SAML2\XML\samlp\Status;
+use SAML2\XML\samlp\StatusCode;
 use SAML2\XML\saml\Issuer;
 use SAML2\Utils;
 
@@ -21,11 +23,10 @@ class ResponseTest extends TestCase
      */
     public function testMarshalling(): void
     {
+        $status = new Status(new StatusCode());
         $issuer = new Issuer('SomeIssuer');
 
-        $response = new Response();
-        $response->setConsent(Constants::CONSENT_EXPLICIT);
-        $response->setIssuer($issuer);
+        $response = new Response($status, $issuer, null, null, null, null, null, Constants::CONSENT_EXPLICIT);
         $responseElement = $response->toXML();
 
         $this->assertTrue($responseElement->hasAttribute('Consent'));
@@ -124,7 +125,7 @@ class ResponseTest extends TestCase
 XML;
 
         $fixtureResponseDom = DOMDocumentFactory::fromString($xml);
-        $request            = new Response($fixtureResponseDom->firstChild);
+        $request            = Response::fromXML($fixtureResponseDom->firstChild);
 
         $requestXml = $requestDocument = $request->toXML()->ownerDocument->C14N();
         $fixtureXml = $fixtureResponseDom->C14N();

@@ -8,6 +8,7 @@ use DOMDocument;
 use Exception;
 use SAML2\XML\samlp\AbstractMessage;
 use SAML2\XML\samlp\AbstractRequest;
+use SAML2\XML\samlp\MessageFactory;
 
 /**
  * Class which implements the HTTP-POST binding.
@@ -90,7 +91,7 @@ class HTTPPost extends Binding
             throw new Exception('Malformed SAML message received.');
         }
 
-        $msg = AbstractMessage::fromXML($document->firstChild);
+        $msg = MessageFactory::fromXML($document->firstChild);
 
         if (array_key_exists('RelayState', $_POST)) {
             $msg->setRelayState($_POST['RelayState']);

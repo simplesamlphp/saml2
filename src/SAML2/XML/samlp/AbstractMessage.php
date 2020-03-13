@@ -28,55 +28,53 @@ abstract class AbstractMessage extends AbstractSamlpElement implements SignedEle
     use SignedElementTrait;
 
     /**
-     * The name of the root element of the DOM tree for the message.
-     *
-     * Used when creating a DOM tree from the message.
-     *
-     * @var string
-     */
-    private $tagName;
-
-    /**
      * The identifier of this message.
      *
      * @var string
      */
-    private $id;
+    protected $id;
+
+    /**
+     * The version of this message.
+     *
+     * @var string
+     */
+    protected $version;
 
     /**
      * The issue timestamp of this message, as an UNIX timestamp.
      *
      * @var int
      */
-    private $issueInstant;
+    protected $issueInstant;
 
     /**
      * The destination URL of this message if it is known.
      *
      * @var string|null
      */
-    private $destination = null;
+    protected $destination = null;
 
     /**
      * The destination URL of this message if it is known.
      *
-     * @var string
+     * @var string|null
      */
-    private $consent = Constants::CONSENT_UNSPECIFIED;
+    protected $consent;
 
     /**
      * The entity id of the issuer of this message, or null if unknown.
      *
      * @var \SAML2\XML\saml\Issuer|null
      */
-    private $issuer = null;
+    protected $issuer = null;
 
     /**
      * The RelayState associated with this message.
      *
      * @var string|null
      */
-    private $relayState = null;
+    protected $relayState = null;
 
     /**
      * The \DOMDocument we are currently building.
@@ -109,62 +107,35 @@ abstract class AbstractMessage extends AbstractSamlpElement implements SignedEle
     /**
      * Initialize a message.
      *
-     * This constructor takes an optional parameter with a \DOMElement. If this
-     * parameter is given, the message will be initialized with data from that
-     * XML element.
-     *
-     * If no XML element is given, the message is initialized with suitable
-     * default values.
-     *
-     * @param string $tagName The tag name of the root element
-     * @param \DOMElement|null $xml The input message
+     * @param \SAML2\XML\saml\Issuer|null $issuer
+     * @param string|null $id
+     * @param string|null $version
+     * @param int|null $issueInstant
+     * @param string|null $destination
+     * @param string|null $consent
+     * @param \SAML2\XML\samlp\Extensions $extensions
+     * @param string|null $relayState
      *
      * @throws \Exception
      */
-    protected function __construct(string $tagName, DOMElement $xml = null)
-    {
-        $this->tagName = $tagName;
-
-        $this->id = Utils::getContainer()->generateId();
-        $this->issueInstant = Temporal::getTime();
-
-        if ($xml === null) {
-            return;
-        }
-
-        if (!$xml->hasAttribute('ID')) {
-            throw new \Exception('Missing ID attribute on SAML message.');
-        }
-        $this->id = $xml->getAttribute('ID');
-
-        if ($xml->getAttribute('Version') !== '2.0') {
-            /* Currently a very strict check. */
-            throw new \Exception('Unsupported version: ' . $xml->getAttribute('Version'));
-        }
-
-        $this->issueInstant = Utils::xsDateTimeToTimestamp($xml->getAttribute('IssueInstant'));
-
-        if ($xml->hasAttribute('Destination')) {
-            $this->destination = $xml->getAttribute('Destination');
-        }
-
-        if ($xml->hasAttribute('Consent')) {
-            $this->consent = $xml->getAttribute('Consent');
-        }
-
-        /** @var \DOMElement[] $issuer */
-        $issuer = Utils::xpQuery($xml, './saml_assertion:Issuer');
-        if (!empty($issuer)) {
-            $this->issuer = Issuer::fromXML($issuer[0]);
-        }
-
-        $this->validateSignature($xml);
-
-        $extensions = Extensions::getChildrenOfClass($xml);
-        Assert::maxCount($extensions, 1, 'Only one saml:Extensions element is allowed.');
-        if (!empty($extensions)) {
-            $this->Extensions = $extensions[0];
-        }
+    protected function __construct(
+        ?Issuer $issuer = null,
+        ?string $id = null,
+        ?string $version = null,
+        ?int $issueInstant = null,
+        ?string $destination = null,
+        ?string $consent = null,
+        ?Extensions $extensions = null,
+        ?string $relayState = null
+    ) {
+        $this->setIssuer($issuer);
+        $this->setId($id);
+        $this->setVersion($version);
+        $this->setIssueInstant($issueInstant);
+        $this->setDestination($destination);
+        $this->setConsent($consent);
+        $this->setRelayState($relayState);
+        $this->setExtensions($extensions);
     }
 
 
@@ -178,7 +149,7 @@ abstract class AbstractMessage extends AbstractSamlpElement implements SignedEle
      * @param \DOMElement $xml The SAML message whose signature we want to validate.
      * @return void
      */
-    private function validateSignature(DOMElement $xml): void
+    protected function validateSignature(DOMElement $xml): void
     {
         try {
             /** @var \DOMAttr[] $signatureMethod */
@@ -275,12 +246,44 @@ abstract class AbstractMessage extends AbstractSamlpElement implements SignedEle
     /**
      * Set the identifier of this message.
      *
-     * @param string $id The new identifier of this message
+     * @param string|null $id The new identifier of this message
      * @return void
      */
-    public function setId(string $id): void
+    private function setId(?string $id): void
     {
+        if ($id === null) {
+            $id = Utils::getContainer()->generateId();
+        }
+
         $this->id = $id;
+    }
+
+
+    /**
+     * Retrieve the version of this message.
+     *
+     * @return string The version of this message
+     */
+    public function getVersion(): string
+    {
+        return $this->version;
+    }
+
+
+    /**
+     * Set the version of this message.
+     *
+     * @param string|null $id The version of this message
+     * @return void
+     */
+    private function setVersion(?string $version): void
+    {
+        if ($version === null) {
+            $version = '2.0';
+        }
+
+        Assert::same($version, '2.0');
+        $this->version = $version;
     }
 
 
@@ -298,11 +301,15 @@ abstract class AbstractMessage extends AbstractSamlpElement implements SignedEle
     /**
      * Set the issue timestamp of this message.
      *
-     * @param int $issueInstant The new issue timestamp of this message, as an UNIX timestamp
+     * @param int|null $issueInstant The new issue timestamp of this message, as an UNIX timestamp
      * @return void
      */
-    public function setIssueInstant(int $issueInstant): void
+    private function setIssueInstant(?int $issueInstant): void
     {
+        if ($issueInstant === null) {
+            $issueInstant = Temporal::getTime();
+        }
+
         $this->issueInstant = $issueInstant;
     }
 
@@ -324,23 +331,9 @@ abstract class AbstractMessage extends AbstractSamlpElement implements SignedEle
      * @param string|null $destination The new destination of this message
      * @return void
      */
-    public function setDestination(string $destination = null): void
+    private function setDestination(string $destination = null): void
     {
         $this->destination = $destination;
-    }
-
-
-    /**
-     * Set the given consent for this message.
-     * Most likely (though not required) a value of urn:oasis:names:tc:SAML:2.0:consent.
-     *
-     * @see \SAML2\Constants
-     * @param string $consent
-     * @return void
-     */
-    public function setConsent(string $consent): void
-    {
-        $this->consent = $consent;
     }
 
 
@@ -354,6 +347,20 @@ abstract class AbstractMessage extends AbstractSamlpElement implements SignedEle
     public function getConsent(): ?string
     {
         return $this->consent;
+    }
+
+
+    /**
+     * Set the given consent for this message.
+     * Most likely (though not required) a value of urn:oasis:names:tc:SAML:2.0:consent.
+     *
+     * @see \SAML2\Constants
+     * @param string|null $consent
+     * @return void
+     */
+    private function setConsent(?string $consent): void
+    {
+        $this->consent = $consent;
     }
 
 
@@ -374,7 +381,7 @@ abstract class AbstractMessage extends AbstractSamlpElement implements SignedEle
      * @param \SAML2\XML\saml\Issuer|null $issuer The new issuer of this message
      * @return void
      */
-    public function setIssuer(Issuer $issuer = null): void
+    private function setIssuer(Issuer $issuer = null): void
     {
         $this->issuer = $issuer;
     }
@@ -422,12 +429,7 @@ abstract class AbstractMessage extends AbstractSamlpElement implements SignedEle
      */
     public function toXML(?DOMElement $parent = null): DOMElement
     {
-        Assert::null($parent);
-
-        $this->document = DOMDocumentFactory::create();
-
-        $root = $this->document->createElementNS(Constants::NS_SAMLP, 'samlp:' . $this->tagName);
-        $this->document->appendChild($root);
+        $root = $this->instantiateParentElement($parent);
 
         /* Ugly hack to add another namespace declaration to the root element. */
         $root->setAttributeNS(Constants::NS_SAML, 'saml:tmp', 'tmp');
@@ -440,7 +442,7 @@ abstract class AbstractMessage extends AbstractSamlpElement implements SignedEle
         if ($this->destination !== null) {
             $root->setAttribute('Destination', $this->destination);
         }
-        if ($this->consent !== Constants::CONSENT_UNSPECIFIED) {
+        if ($this->consent !== null && $this->consent !== Constants::CONSENT_UNSPECIFIED) {
             $root->setAttribute('Consent', $this->consent);
         }
 
@@ -490,44 +492,6 @@ abstract class AbstractMessage extends AbstractSamlpElement implements SignedEle
         Utils::insertSignature($this->signingKey, $this->certificates, $root, $insertBefore);
 
         return $root;
-    }
-
-
-    /**
-     * Convert an XML element into a message.
-     *
-     * @param \DOMElement $xml The root XML element
-     * @throws \Exception
-     * @return \SAML2\XML\samlp\AbstractMessage The message
-     *
-     * @throws \InvalidArgumentException if assertions are false
-     */
-    public static function fromXML(\DOMElement $xml): object
-    {
-        Assert::same(
-            $xml->namespaceURI,
-            Constants::NS_SAMLP,
-            'Unknown namespace of SAML message: ' . var_export($xml->namespaceURI, true)
-        );
-
-        switch ($xml->localName) {
-            case 'AttributeQuery':
-                return new AttributeQuery($xml);
-            case 'AuthnRequest':
-                return new AuthnRequest($xml);
-            case 'LogoutResponse':
-                return new LogoutResponse($xml);
-            case 'LogoutRequest':
-                return new LogoutRequest($xml);
-            case 'Response':
-                return new Response($xml);
-            case 'ArtifactResponse':
-                return new ArtifactResponse($xml);
-            case 'ArtifactResolve':
-                return new ArtifactResolve($xml);
-            default:
-                throw new \Exception('Unknown SAML message: ' . var_export($xml->localName, true));
-        }
     }
 
 

@@ -35,7 +35,7 @@ class LogoutResponseTest extends TestCase
 XML;
 
         $fixtureResponseDom = DOMDocumentFactory::fromString($xml);
-        $response           = new LogoutResponse($fixtureResponseDom->firstChild);
+        $response           = LogoutResponse::fromXML($fixtureResponseDom->firstChild);
 
         $this->assertFalse($response->isSuccess());
 
@@ -70,7 +70,7 @@ XML;
 XML;
 
         $fixtureResponseDom = DOMDocumentFactory::fromString($xml);
-        $response           = new LogoutResponse($fixtureResponseDom->firstChild);
+        $response           = LogoutResponse::fromXML($fixtureResponseDom->firstChild);
 
         $this->assertTrue($response->isSuccess());
 

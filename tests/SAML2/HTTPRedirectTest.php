@@ -12,6 +12,8 @@ use SAML2\XML\saml\Issuer;
 use SAML2\XML\samlp\AbstractRequest;
 use SAML2\XML\samlp\AuthnRequest;
 use SAML2\XML\samlp\Response;
+use SAML2\XML\samlp\Status;
+use SAML2\XML\samlp\StatusCode;
 
 class HTTPRedirectTest extends \Mockery\Adapter\Phpunit\MockeryTestCase
 {
@@ -232,12 +234,11 @@ class HTTPRedirectTest extends \Mockery\Adapter\Phpunit\MockeryTestCase
      */
     public function testSendAuthnResponse(): void
     {
+        $status = new Status(new StatusCode());
         $issuer = new Issuer('testIssuer');
 
-        $response = new Response();
-        $response->setIssuer($issuer);
+        $response = new Response($status, $issuer, null, null, null, null, 'http://example.org/login?success=yes');
         $response->setRelayState('http://example.org');
-        $response->setDestination('http://example.org/login?success=yes');
         $response->setSigningKey(CertificatesMock::getPrivateKey());
         $hr = new HTTPRedirect();
         $hr->send($response);
@@ -251,10 +252,10 @@ class HTTPRedirectTest extends \Mockery\Adapter\Phpunit\MockeryTestCase
      */
     public function testSendAuthnResponseBespokeDestination(): void
     {
+        $status = new Status(new StatusCode());
         $issuer = new Issuer('testIssuer');
 
-        $response = new Response();
-        $response->setIssuer($issuer);
+        $response = new Response($status, $issuer);
         $hr = new HTTPRedirect();
         $hr->setDestination('gopher://myurl');
         $hr->send($response);

@@ -6,6 +6,8 @@ namespace SAML2\XML\samlp;
 
 use PHPUnit\Framework\TestCase;
 use SAML2\XML\saml\Issuer;
+use SAML2\XML\samlp\Status;
+use SAML2\XML\samlp\StatusCode;
 use SAML2\DOMDocumentFactory;
 use SAML2\Utils;
 
@@ -16,24 +18,22 @@ class ArtifactResponseTest extends TestCase
      */
     public function testMarshalling(): void
     {
+        $status = new Status(new StatusCode());
         $issuer1 = new Issuer('urn:example:issuer');
         $issuer2 = new Issuer('urn:example:other');
-
-        $artifactResponse = new ArtifactResponse();
-        $artifactResponse->setIssuer($issuer1);
 
         $authnRequest = new AuthnRequest();
         $authnRequest->setIssuer($issuer2);
 
-        $artifactResponse->setAny($authnRequest->toXML());
+        $artifactResponse = new ArtifactResponse($status, null, null, null, null, null, null, $issuer1, null, $authnRequest->toXML());
 
         $artifactResponseElement = $artifactResponse->toXML();
 
-        $artifactIssuer = Utils::xpQuery($artifactResponseElement, './saml:Issuer');
+        $artifactIssuer = Utils::xpQuery($artifactResponseElement, './saml_assertion:Issuer');
         $this->assertCount(1, $artifactIssuer);
         $this->assertEquals($issuer1->getValue(), $artifactIssuer[0]->textContent);
 
-        $authnelement = Utils::xpQuery($artifactResponseElement, './saml_protocol:AuthnRequest/saml:Issuer');
+        $authnelement = Utils::xpQuery($artifactResponseElement, './saml_protocol:AuthnRequest/saml_assertion:Issuer');
         $this->assertCount(1, $authnelement);
         $this->assertEquals($issuer2->getValue(), $authnelement[0]->textContent);
     }
@@ -71,7 +71,7 @@ class ArtifactResponseTest extends TestCase
 </samlp:ArtifactResponse>
 XML;
         $document = DOMDocumentFactory::fromString($xml);
-        $ar = new ArtifactResponse($document->firstChild);
+        $ar = ArtifactResponse::fromXML($document->firstChild);
 
         $this->assertEquals(true, $ar->isSuccess());
         $this->assertEquals("_d84a49e5958803dedcff4c984c2b0d95", $ar->getId());

@@ -10,6 +10,7 @@ use SAML2\XML\saml\Issuer;
 use SAML2\XML\samlp\AbstractMessage;
 use SAML2\XML\samlp\ArtifactResolve;
 use SAML2\XML\samlp\ArtifactResponse;
+use SAML2\XML\samlp\MessageFactory;
 use SimpleSAML\Configuration;
 use SimpleSAML\Metadata\MetaDataStorageHandler;
 use SimpleSAML\Module\saml\Message as MSG;
@@ -174,7 +175,7 @@ class HTTPArtifact extends Binding
             throw new \Exception('Empty ArtifactResponse received, maybe a replay?');
         }
 
-        $samlResponse = AbstractMessage::fromXML($xml);
+        $samlResponse = MessageFactory::fromXML($xml);
         $samlResponse->addValidator([get_class($this), 'validateSignature'], $artifactResponse);
 
         if (isset($_REQUEST['RelayState'])) {

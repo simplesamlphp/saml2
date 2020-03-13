@@ -7,6 +7,8 @@ namespace SAML2\XML\samlp;
 use DOMElement;
 use SAML2\Constants;
 use SAML2\Utils;
+use SAML2\XML\ExtensionsTrait;
+use SAML2\XML\saml\Issuer;
 use Webmozart\Assert\Assert;
 
 /**
@@ -21,12 +23,14 @@ use Webmozart\Assert\Assert;
  */
 abstract class AbstractStatusResponse extends AbstractMessage
 {
+    use ExtensionsTrait;
+
     /**
      * The ID of the request this is a response to, or null if this is an unsolicited response.
      *
      * @var string|null
      */
-    private $inResponseTo;
+    protected $inResponseTo;
 
 
     /**
@@ -34,37 +38,39 @@ abstract class AbstractStatusResponse extends AbstractMessage
      *
      * @var \SAML2\XML\samlp\Status
      */
-    private $status;
+    protected $status;
 
 
     /**
      * Constructor for SAML 2 response messages.
      *
-     * @param string $tagName The tag name of the root element.
-     * @param \DOMElement|null $xml The input message.
-     * @throws \Exception
+     * @param \SAML2\XML\samlp\Status $status
+     * @param \SAML2\XML\saml\Issuer $issuer
+     * @param string $id
+     * @param string $version
+     * @param int $issueInstant
+     * @param string $inResponseTo
+     * @param string|null $destination
+     * @param string|null $consent
+     * @param \SAML2\XML\samlp\Extensions $extensions
+     * @param string|null $relayState
      */
-    protected function __construct(string $tagName, DOMElement $xml = null)
-    {
-        parent::__construct($tagName, $xml);
+    protected function __construct(
+        Status $status,
+        ?Issuer $issuer = null,
+        ?string $id = null,
+        ?string $version = '2.0',
+        ?int $issueInstant = null,
+        ?string $inResponseTo = null,
+        ?string $destination = null,
+        ?string $consent = null,
+        ?Extensions $extensions = null,
+        ?string $relayState = null
+    ) {
+        parent::__construct($issuer, $id, $version, $issueInstant, $destination, $consent, $extensions, $relayState);
 
-        if ($xml === null) {
-            $this->status = new Status(
-                new StatusCode(Constants::STATUS_SUCCESS)
-            );
-
-            return;
-        }
-
-        if ($xml->hasAttribute('InResponseTo')) {
-            $this->inResponseTo = $xml->getAttribute('InResponseTo');
-        }
-        /** @var \DOMElement[] $status */
-        $status = Utils::xpQuery($xml, './saml_protocol:Status');
-        if (empty($status)) {
-            throw new \Exception('Missing status code on response.');
-        }
-        $this->status = Status::fromXML($status[0]);
+        $this->setStatus($status);
+        $this->setInResponseTo($inResponseTo);
     }
 
 
@@ -96,7 +102,7 @@ abstract class AbstractStatusResponse extends AbstractMessage
      * @param string|null $inResponseTo The ID of the request.
      * @return void
      */
-    public function setInResponseTo(string $inResponseTo = null): void
+    protected function setInResponseTo(?string $inResponseTo): void
     {
         $this->inResponseTo = $inResponseTo;
     }
@@ -121,7 +127,7 @@ abstract class AbstractStatusResponse extends AbstractMessage
      *
      * @throws \InvalidArgumentException if assertions are false
      */
-    public function setStatus(Status $status): void
+    protected function setStatus(Status $status): void
     {
         $this->status = $status;
     }
@@ -134,8 +140,6 @@ abstract class AbstractStatusResponse extends AbstractMessage
      */
     public function toXML(?DOMElement $parent = null): DOMElement
     {
-        Assert::null($parent);
-
         $parent = parent::toXML();
 
         if ($this->inResponseTo !== null) {
