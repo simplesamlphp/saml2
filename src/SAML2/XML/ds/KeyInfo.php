@@ -6,6 +6,7 @@ namespace SAML2\XML\ds;
 
 use DOMElement;
 use SAML2\XML\Chunk;
+use SAML2\XML\xenc\EncryptedKey;
 use Webmozart\Assert\Assert;
 
 /**
@@ -128,6 +129,9 @@ final class KeyInfo extends AbstractDsElement
                     break;
                 case 'X509Data':
                     $info[] = X509Data::fromXML($n);
+                    break;
+                case 'EncryptedKey':
+                    $info[] = EncryptedKey::fromXML($n);
                     break;
                 default:
                     $info[] = new Chunk($n);
