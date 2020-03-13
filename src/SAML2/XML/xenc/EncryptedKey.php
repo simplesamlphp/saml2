@@ -156,7 +156,7 @@ class EncryptedKey extends EncryptedData
             count($carriedKeyNames) === 1 ? $carriedKeyNames[0] : null,
             count($encryptionMethod) === 1 ? $encryptionMethod[0] : null,
             count($keyInfo) === 1 ? $keyInfo[0] : null,
-            count($referenceLists === 1) ? $referenceLists[0] : null
+            count($referenceLists) === 1 ? $referenceLists[0] : null
         );
     }
 
