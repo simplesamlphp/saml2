@@ -58,6 +58,8 @@ class BaseID extends AbstractSamlElement implements BaseIdentifierInterface
 
 
     /**
+     * Get the type of this BaseID (expressed in the xsi:type attribute).
+     *
      * @return string
      */
     public function getType(): string
@@ -67,6 +69,8 @@ class BaseID extends AbstractSamlElement implements BaseIdentifierInterface
 
 
     /**
+     * Set the type of this BaseID (in the xsi:type attribute)
+     *
      * @param string $type
      * @return void
      */
@@ -78,6 +82,8 @@ class BaseID extends AbstractSamlElement implements BaseIdentifierInterface
 
 
     /**
+     * Get the string value of this BaseID.
+     *
      * @return string
      */
     public function getValue(): string
@@ -87,6 +93,8 @@ class BaseID extends AbstractSamlElement implements BaseIdentifierInterface
 
 
     /**
+     * Set the string value of this BaseID.
+     *
      * @param string $value
      * @return void
      */
@@ -123,7 +131,7 @@ class BaseID extends AbstractSamlElement implements BaseIdentifierInterface
 
 
     /**
-     * Convert this NameIDType to XML.
+     * Convert this BaseID to XML.
      *
      * @param \DOMElement $parent The element we are converting to XML.
      * @return \DOMElement The XML element after adding the data corresponding to this NameIDType.
