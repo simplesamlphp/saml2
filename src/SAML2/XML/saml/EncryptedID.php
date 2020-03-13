@@ -35,8 +35,8 @@ class EncryptedID extends AbstractSamlElement
     /**
      * EncryptedID constructor.
      *
-     * @param EncryptedData $encryptedData The EncryptedData object.
-     * @param array $encryptedKeys An array of zero or more EncryptedKey objects.
+     * @param \SAML2\XML\xenc\EncryptedData $encryptedData The EncryptedData object.
+     * @param \SAML2\XML\xenc\EncryptedKey[] $encryptedKeys An array of zero or more EncryptedKey objects.
      */
     public function __construct(EncryptedData $encryptedData, array $encryptedKeys)
     {
@@ -48,7 +48,7 @@ class EncryptedID extends AbstractSamlElement
     /**
      * Get the EncryptedData object.
      *
-     * @return EncryptedData
+     * @return \SAML2\XML\xenc\EncryptedData
      */
     public function getEncryptedData(): EncryptedData
     {
@@ -57,7 +57,7 @@ class EncryptedID extends AbstractSamlElement
 
 
     /**
-     * @param EncryptedData $encryptedData
+     * @param \SAML2\XML\xenc\EncryptedData $encryptedData
      */
     protected function setEncryptedData(EncryptedData $encryptedData): void
     {
@@ -68,7 +68,7 @@ class EncryptedID extends AbstractSamlElement
     /**
      * Get the array of EncryptedKey objects
      *
-     * @return array
+     * @return \SAML2\XML\xenc\EncryptedKey[]
      */
     public function getEncryptedKeys(): array
     {
@@ -77,7 +77,7 @@ class EncryptedID extends AbstractSamlElement
 
 
     /**
-     * @param array $encryptedKeys
+     * @param \SAML2\XML\xenc\EncryptedKey[] $encryptedKeys
      */
     protected function setEncryptedKeys(array $encryptedKeys): void
     {
