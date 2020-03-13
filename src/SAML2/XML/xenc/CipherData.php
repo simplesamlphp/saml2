@@ -77,7 +77,7 @@ class CipherData extends AbstractXencElement
 
         $cv = $e->ownerDocument->createElementNS($this::NS, $this::NS_PREFIX . ':CipherValue');
         $cv->textContent = $this->cipherValue;
-        $e->appendChild($e);
+        $e->appendChild($cv);
 
         return $e;
     }
