@@ -133,4 +133,30 @@ class MockContainer implements ContainerInterface
         file_put_contents($filename, $data);
         chmod($filename, $mode);
     }
+
+
+    /**
+     * @inheritDoc
+     */
+    public function registerExtensionHandler(string $class): void
+    {
+    }
+
+
+    /**
+     * @inheritDoc
+     */
+    public function getElementHandler(string $namespace, string $element): ?string
+    {
+        return null;
+    }
+
+
+    /**
+     * @inheritDoc
+     */
+    public function getIdentifierHandler(string $type): ?string
+    {
+        return null;
+    }
 }

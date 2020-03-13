@@ -4,18 +4,19 @@ declare(strict_types=1);
 
 namespace SAML2\XML\saml;
 
-use SAML2\Constants;
+use PHPUnit\Framework\TestCase;
 use SAML2\DOMDocumentFactory;
-use SAML2\Utils;
 
 /**
  * Class \SAML2\XML\saml\NameIDTest
+ *
+ * @author Tim van Dijen, <tvdijen@gmail.com>
+ * @package simplesamlphp/saml2
  */
-final class NameIDTest extends \PHPUnit\Framework\TestCase
+final class NameIDTest extends TestCase
 {
     /** @var \DOMDocument $document */
     private $document;
-
 
     /**
      * @return void
