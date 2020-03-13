@@ -42,15 +42,15 @@ class EncryptedKey extends EncryptedData
      */
     public function __construct(
         CipherData $cipherData,
-        ?string $id,
-        ?string $type,
-        ?string $mimeType,
-        ?string $encoding,
-        ?string $recipient,
-        ?string $carriedKeyName,
-        ?EncryptionMethod $encryptionMethod,
-        ?KeyInfo $keyInfo,
-        ?ReferenceList $referenceList
+        ?string $id = null,
+        ?string $type = null,
+        ?string $mimeType = null,
+        ?string $encoding = null,
+        ?string $recipient = null,
+        ?string $carriedKeyName = null,
+        ?EncryptionMethod $encryptionMethod = null,
+        ?KeyInfo $keyInfo = null,
+        ?ReferenceList $referenceList = null
     ) {
         parent::__construct($cipherData, $id, $type, $mimeType, $encoding, $encryptionMethod, $keyInfo);
         $this->setRecipient($recipient);

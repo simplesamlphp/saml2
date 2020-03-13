@@ -52,12 +52,12 @@ class EncryptedData extends AbstractXencElement
      */
     public function __construct(
         CipherData $cipherData,
-        ?string $id,
-        ?string $type,
-        ?string $mimeType,
-        ?string $encoding,
-        ?EncryptionMethod $encryptionMethod,
-        ?KeyInfo $keyInfo
+        ?string $id = null,
+        ?string $type = null,
+        ?string $mimeType = null,
+        ?string $encoding = null,
+        ?EncryptionMethod $encryptionMethod = null,
+        ?KeyInfo $keyInfo = null
     ) {
         $this->setCipherData($cipherData);
         $this->setEncoding($encoding);
