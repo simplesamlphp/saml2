@@ -19,9 +19,7 @@ class ArtifactResolveTest extends TestCase
         $issuer = new Issuer('urn:example:issuer');
         $artifact = 'AAQAADWNEw5VT47wcO4zX/iEzMmFQvGknDfws2ZtqSGdkNSbsW1cmVR0bzU=';
 
-        $artifactResolve = new ArtifactResolve();
-        $artifactResolve->setIssuer($issuer);
-        $artifactResolve->setArtifact($artifact);
+        $artifactResolve = new ArtifactResolve($artifact, $issuer);
 
         $artifactResolveElement = $artifactResolve->toXML();
         $artelement = Utils::xpQuery($artifactResolveElement, './saml_protocol:Artifact');
@@ -52,7 +50,7 @@ class ArtifactResolveTest extends TestCase
 </samlp:ArtifactResolve>
 XML;
         $document = DOMDocumentFactory::fromString($xml);
-        $ar = new ArtifactResolve($document->firstChild);
+        $ar = ArtifactResolve::fromXML($document->firstChild);
 
         $this->assertEquals($artifact, $ar->getArtifact());
         $this->assertEquals($id, $ar->getId());

@@ -7,6 +7,8 @@ namespace SAML2\XML\samlp;
 use DOMElement;
 use SAML2\Constants;
 use SAML2\Utils;
+use SAML2\XML\ds\Signature;
+use SAML2\XML\saml\Issuer;
 use Webmozart\Assert\Assert;
 
 /**
@@ -20,23 +22,40 @@ use Webmozart\Assert\Assert;
 class ArtifactResolve extends AbstractRequest
 {
     /** @var string */
-    private $artifact;
+    protected $artifact;
 
 
     /**
-     * Constructor for SAML 2 ArtifactResolve.
+     * Initialize an ArtifactResolve.
      *
-     * @param \DOMElement|null $xml The input assertion.
+     * @param string $artifact
+     * @param \SAML2\XML\saml\Issuer|null $issuer
+     * @param string|null $id
+     * @param string|null $version
+     * @param int|null $issueInstant
+     * @param string|null $destination
+     * @param string|null $consent
+     * @param \SAML2\XML\samlp\Extensions $extensions
+     * @param string|null $relayState
+     *
+     * @throws \Exception
      */
-    public function __construct(DOMElement $xml = null)
-    {
-        parent::__construct('ArtifactResolve', $xml);
+    public function __construct(
+        string $artifact,
+        ?Issuer $issuer = null,
+        ?string $id = null,
+        ?string $version = null,
+        ?int $issueInstant = null,
+        ?string $destination = null,
+        ?string $consent = null,
+        ?Extensions $extensions = null,
+        ?string $relayState = null
+    ) {
+        parent::__construct($issuer, $id, $version, $issueInstant, $destination, $consent, $relayState, $extensions);
 
-        if (!is_null($xml)) {
-            $results = Utils::xpQuery($xml, './saml_protocol:Artifact');
-            $this->artifact = $results[0]->textContent;
-        }
+        $this->setArtifact($artifact);
     }
+
 
     /**
      * Retrieve the Artifact in this response.
@@ -66,6 +85,54 @@ class ArtifactResolve extends AbstractRequest
 
 
     /**
+     * Create a class from XML
+     *
+     * @param \DOMElement $xml
+     * @return self
+     */
+    public static function fromXML(DOMElement $xml): object
+    {
+        Assert::same($xml->localName, 'ArtifactResolve');
+        Assert::same($xml->namespaceURI, ArtifactResolve::NS);
+
+        $id = self::getAttribute($xml, 'ID');
+        $version = self::getAttribute($xml, 'Version');
+        $issueInstant = Utils::xsDateTimeToTimestamp(self::getAttribute($xml, 'IssueInstant'));
+        $destination = self::getAttribute($xml, 'Destination', null);
+        $consent = self::getAttribute($xml, 'Consent', null);
+
+        $issuer = Issuer::getChildrenOfClass($xml);
+        Assert::countBetween($issuer, 0, 1);
+
+        $extensions = Extensions::getChildrenOfClass($xml);
+        Assert::maxCount($extensions, 1, 'Only one saml:Extensions element is allowed.');
+
+        $signature = Signature::getChildrenOfClass($xml);
+        Assert::maxCount($signature, 1, 'Only one ds:Signature element is allowed.');
+
+        $results = Utils::xpQuery($xml, './saml_protocol:Artifact');
+        $artifact = $results[0]->textContent;
+
+        $resolve = new self(
+            $artifact,
+            empty($issuer) ? null : array_pop($issuer),
+            $id,
+            $version,
+            $issueInstant,
+            $destination,
+            $consent,
+            empty($extensions) ? null : array_pop($extensions)
+        );
+
+        if (!empty($signature)) {
+            $resolve->setSignature($signature[0]);
+        }
+
+        return $resolve;
+    }
+
+
+    /**
      * Convert the response message to an XML element.
      *
      * @return \DOMElement This response.
@@ -74,13 +141,12 @@ class ArtifactResolve extends AbstractRequest
      */
     public function toXML(?DOMElement $parent = null): DOMElement
     {
-        Assert::null($parent);
         Assert::notEmpty($this->artifact, 'Cannot convert ArtifactResolve to XML without an Artifact set.');
 
-        $parent = parent::toXML();
-        $artifactelement = $this->document->createElementNS(Constants::NS_SAMLP, 'Artifact', $this->artifact);
-        $parent->appendChild($artifactelement);
+        $e = parent::toXML($parent);
+        $artifactelement = $e->ownerDocument->createElementNS(Constants::NS_SAMLP, 'Artifact', $this->artifact);
+        $e->appendChild($artifactelement);
 
-        return $parent;
+        return $this->signElement($e);
     }
 }

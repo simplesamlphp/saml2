@@ -136,7 +136,7 @@ AUTHNREQUEST
         $this->assertEquals($issuer->getSPProvidedID(), $xml_issuer->getAttribute('SPProvidedID'));
 
         // finally, make sure we can skip the Issuer by setting it to null
-        $response->setIssuer(null);
+        $response = new Response($status);
         $xml = $response->toXML();
 
         $this->assertEmpty(Utils::xpQuery($xml, './saml_assertion:Issuer'));
@@ -330,7 +330,7 @@ XML;
 XML;
         $document  = DOMDocumentFactory::fromString($xml);
         $this->expectException(Exception::class);
-        $this->expectExceptionMessage("Missing ID attribute on SAML message.");
+        $this->expectExceptionMessage('Missing \'ID\' attribute from samlp:LogoutRequest.');
         $message = MessageFactory::fromXML($document->documentElement);
     }
 

@@ -6,10 +6,14 @@ namespace SAML2\XML\samlp;
 
 use Exception;
 use PHPUnit\Framework\TestCase;
+use SAML2\Constants;
 use SAML2\DOMDocumentFactory;
 use SAML2\Utils;
+use SAML2\XML\saml\Attribute;
+use SAML2\XML\saml\AttributeValue;
 use SAML2\XML\saml\Issuer;
 use SAML2\XML\saml\NameID;
+use SAML2\XML\saml\Subject;
 
 /**
  * Class \SAML2\AttributeQueryTest
@@ -18,22 +22,41 @@ class AttributeQueryTest extends TestCase
 {
     public function testMarshalling(): void
     {
-        $attributeQuery = new AttributeQuery();
         $nameId = new NameID('NameIDValue');
-        $attributeQuery->setNameID($nameId);
-        $attributeQuery->setAttributes(
+        $attributeQuery = new AttributeQuery(
+            new Subject($nameId),
             [
-                'test1' => [
-                    'test1_attrv1',
-                    'test1_attrv2',
-                ],
-                'test2' => [
-                    'test2_attrv1',
-                    'test2_attrv2',
-                    'test2_attrv3',
-                ],
-                'test3' => [],
-                'test4' => [ 4, 23 ],
+                new Attribute(
+                    'test1',
+                    null,
+                    null,
+                    [
+                        new AttributeValue('test1_attrv1'),
+                        new AttributeValue('test1_attrv2')
+                    ]
+                ),
+                new Attribute(
+                    'test2',
+                    null,
+                    null,
+                    [
+                        new AttributeValue('test2_attrv1'),
+                        new AttributeValue('test2_attrv2'),
+                        new AttributeValue('test2_attrv3')
+                    ]
+                ),
+                new Attribute(
+                    'test3'
+                ),
+                new Attribute(
+                    'test4',
+                    null,
+                    null,
+                    [
+                        new AttributeValue(4),
+                        new AttributeValue(23)
+                    ]
+                )
             ]
         );
         $attributeQueryElement = $attributeQuery->toXML();
@@ -101,57 +124,59 @@ class AttributeQueryTest extends TestCase
 </samlp:AttributeQuery>
 XML;
         $document = DOMDocumentFactory::fromString($xml);
-        $aq = new AttributeQuery($document->firstChild);
+        $aq = AttributeQuery::fromXML($document->firstChild);
 
         // Sanity check
         $this->assertEquals('https://example.org/', $aq->getIssuer()->getValue());
+        $this->assertEquals('urn:example:subject', $aq->getSubject()->getIdentifier()->getValue());
 
-        $nameid = $aq->getNameId();
-        $this->assertEquals('urn:example:subject', $nameid->getValue());
-
-        $attributes = array_keys($aq->getAttributes());
+        $attributes = $aq->getAttributes();
         $this->assertCount(3, $attributes);
-        $this->assertEquals('urn:oid:1.3.6.1.4.1.5923.1.1.1.7', $attributes[0]);
-        $this->assertEquals('urn:oid:2.5.4.4', $attributes[1]);
-        $this->assertEquals('urn:oid:2.16.840.1.113730.3.1.39', $attributes[2]);
-
-        $this->assertEquals('urn:oasis:names:tc:SAML:2.0:attrname-format:uri', $aq->getAttributeNameFormat());
+        $this->assertEquals('urn:oid:1.3.6.1.4.1.5923.1.1.1.7', $attributes[0]->getName());
+        $this->assertEquals('urn:oid:2.5.4.4', $attributes[1]->getName());
+        $this->assertEquals('urn:oid:2.16.840.1.113730.3.1.39', $attributes[2]->getName());
     }
 
 
     public function testAttributeNameFormat(): void
     {
-        $fmt_uri = 'urn:oasis:names:tc:SAML:2.0:attrname-format:uri';
-
-        $attributeQuery = new AttributeQuery();
         $nameId = new NameID('NameIDValue');
-        $attributeQuery->setNameID($nameId);
-        $attributeQuery->setAttributes(
+        $attributeQuery = new AttributeQuery(
+            new Subject($nameId),
             [
-                'test1' => [
-                    'test1_attrv1',
-                    'test1_attrv2',
-                    ],
-                'test2' => [
-                    'test2_attrv1',
-                    'test2_attrv2',
-                    'test2_attrv3',
-                    ],
-                'test3' => [],
+                new Attribute(
+                    'test1',
+                    Constants::NAMEFORMAT_URI,
+                    null,
+                    [
+                        new AttributeValue('test1_attrv1'),
+                        new AttributeValue('test1_attrv2')
+                    ]
+                ),
+                new Attribute(
+                    'test2',
+                    Constants::NAMEFORMAT_URI,
+                    null,
+                    [
+                        new AttributeValue('test2_attrv1'),
+                        new AttributeValue('test2_attrv2'),
+                        new AttributeValue('test2_attrv3')
+                    ]
+                ),
+                new Attribute('test3', Constants::NAMEFORMAT_URI)
             ]
         );
-        $attributeQuery->setAttributeNameFormat($fmt_uri);
         $attributeQueryElement = $attributeQuery->toXML();
 
         // Test Attribute Names
         $attributes = Utils::xpQuery($attributeQueryElement, './saml_assertion:Attribute');
         $this->assertCount(3, $attributes);
         $this->assertEquals('test1', $attributes[0]->getAttribute('Name'));
-        $this->assertEquals($fmt_uri, $attributes[0]->getAttribute('NameFormat'));
+        $this->assertEquals(Constants::NAMEFORMAT_URI, $attributes[0]->getAttribute('NameFormat'));
         $this->assertEquals('test2', $attributes[1]->getAttribute('Name'));
-        $this->assertEquals($fmt_uri, $attributes[1]->getAttribute('NameFormat'));
+        $this->assertEquals(Constants::NAMEFORMAT_URI, $attributes[1]->getAttribute('NameFormat'));
         $this->assertEquals('test3', $attributes[2]->getAttribute('Name'));
-        $this->assertEquals($fmt_uri, $attributes[2]->getAttribute('NameFormat'));
+        $this->assertEquals(Constants::NAMEFORMAT_URI, $attributes[2]->getAttribute('NameFormat'));
 
         // Sanity check: test if values are still ok
         $av1 = Utils::xpQuery($attributes[0], './saml_assertion:AttributeValue');
@@ -176,12 +201,10 @@ XML;
 </samlp:AttributeQuery>
 XML;
         $document = DOMDocumentFactory::fromString($xml);
-        $aq = new AttributeQuery($document->firstChild);
+        $aq = AttributeQuery::fromXML($document->firstChild);
 
         // Sanity check
         $this->assertEquals('https://example.org/', $aq->getIssuer()->getValue());
-
-        $this->assertEquals('urn:oasis:names:tc:SAML:2.0:attrname-format:unspecified', $aq->getAttributeNameFormat());
     }
 
 
@@ -211,12 +234,10 @@ XML;
 </samlp:AttributeQuery>
 XML;
         $document = DOMDocumentFactory::fromString($xml);
-        $aq = new AttributeQuery($document->firstChild);
+        $aq = AttributeQuery::fromXML($document->firstChild);
 
         // Sanity check
         $this->assertEquals('https://example.org/', $aq->getIssuer()->getValue());
-
-        $this->assertEquals('urn:oasis:names:tc:SAML:2.0:attrname-format:unspecified', $aq->getAttributeNameFormat());
     }
 
 
@@ -251,8 +272,8 @@ XML;
         $document = DOMDocumentFactory::fromString($xml);
 
         $this->expectException(Exception::class);
-        $this->expectExceptionMessage('Missing name on <saml:Attribute> element.');
-        $aq = new AttributeQuery($document->firstChild);
+        $this->expectExceptionMessage('Missing \'Name\' attribute from saml:Attribute.');
+        $aq = AttributeQuery::fromXML($document->firstChild);
     }
 
 
@@ -271,7 +292,7 @@ XML;
         $document = DOMDocumentFactory::fromString($xml);
         $this->expectException(Exception::class);
         $this->expectExceptionMessage('Missing subject in subject');
-        $aq = new AttributeQuery($document->firstChild);
+        $aq = AttributeQuery::fromXML($document->firstChild);
     }
 
 
@@ -296,7 +317,7 @@ XML;
         $document = DOMDocumentFactory::fromString($xml);
         $this->expectException(Exception::class);
         $this->expectExceptionMessage('More than one <saml:Subject> in subject');
-        $aq = new AttributeQuery($document->firstChild);
+        $aq = AttributeQuery::fromXML($document->firstChild);
     }
 
 
@@ -317,8 +338,8 @@ XML;
 XML;
         $document = DOMDocumentFactory::fromString($xml);
         $this->expectException(Exception::class);
-        $this->expectExceptionMessage('Missing <saml:NameID> in <saml:Subject>');
-        $aq = new AttributeQuery($document->firstChild);
+        $this->expectExceptionMessage('A <saml:Subject> not containing <saml:SubjectConfirmation> should provide exactly one of <saml:BaseID>, <saml:NameID> or <saml:EncryptedID>');
+        $aq = AttributeQuery::fromXML($document->firstChild);
     }
 
 
@@ -341,6 +362,6 @@ XML;
         $document = DOMDocumentFactory::fromString($xml);
         $this->expectException(Exception::class);
         $this->expectExceptionMessage('More than one <saml:NameID> in <saml:Subject>');
-        $aq = new AttributeQuery($document->firstChild);
+        $aq = AttributeQuery::fromXML($document->firstChild);
     }
 }

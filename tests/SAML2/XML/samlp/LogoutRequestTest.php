@@ -61,9 +61,7 @@ XML;
     {
         $nameId = new NameID('NameIDValue');
 
-        $logoutRequest = new LogoutRequest();
-        $logoutRequest->setNameID($nameId);
-        $logoutRequest->setSessionIndex('SessionIndexValue');
+        $logoutRequest = new LogoutRequest($nameId, null, null, ['SessionIndexValue']);
 
         $logoutRequestElement = $logoutRequest->toXML();
         $this->assertEquals('LogoutRequest', $logoutRequestElement->localName);
@@ -79,9 +77,12 @@ XML;
         $this->assertEquals('SessionIndexValue', $sessionIndexElements[0]->textContent);
 
         $nameId = new NameID('NameIDValue');
-        $logoutRequest = new LogoutRequest();
-        $logoutRequest->setNameID($nameId);
-        $logoutRequest->setSessionIndexes(['SessionIndexValue1', 'SessionIndexValue2']);
+        $logoutRequest = new LogoutRequest(
+            $nameId,
+            null,
+            null,
+            ['SessionIndexValue1', 'SessionIndexValue2']
+        );
         $logoutRequestElement = $logoutRequest->toXML();
 
         $sessionIndexElements = Utils::xpQuery($logoutRequestElement, './saml_protocol:SessionIndex');
@@ -96,7 +97,9 @@ XML;
      */
     public function testUnmarshalling(): void
     {
-        $logoutRequest = new LogoutRequest($this->logoutRequestElement);
+        $this->markTestSkipped('Relies on unmerged PR #225');
+
+        $logoutRequest = LogoutRequest::fromXML($this->logoutRequestElement);
         $this->assertEquals('TheIssuer', $logoutRequest->getIssuer()->getValue());
         $this->assertTrue($logoutRequest->isNameIdEncrypted());
 
@@ -108,7 +111,7 @@ XML;
 
         $logoutRequest->decryptNameId(CertificatesMock::getPrivateKey());
 
-        $nameId = $logoutRequest->getNameId();
+        $nameId = $logoutRequest->getIdentifier();
         $this->assertEquals('TheNameIDValue', $nameId->getValue());
     }
 
@@ -118,47 +121,40 @@ XML;
      */
     public function testEncryptedNameId(): void
     {
-        $nameId = new NameID('NameIdValue');
+        $this->markTestSkipped('Relies on unmerged PR #225');
 
-        $logoutRequest = new LogoutRequest();
-        $logoutRequest->setNameID($nameId);
-        $logoutRequest->encryptNameId(CertificatesMock::getPublicKey());
+        $ed = new EncryptedData(
+            new CipherData('Nk4W4mx...'),
+            'Encrypted_DATA_ID',
+            'http://www.w3.org/2001/04/xmlenc#Element',
+            "key-type",
+            'base64-encoded',
+            new EncryptionMethod('http://www.w3.org/2001/04/xmlenc#aes128-cbc'),
+            new KeyInfo([new Chunk($this->retrievalMethod->documentElement)])
+        );
 
+        $ek = new EncryptedKey(
+            new CipherData('PzA5X...'),
+            'Encrypted_KEY_ID',
+            null,
+            null,
+            null,
+            'some_ENTITY_ID',
+            'Name of the key',
+            new EncryptionMethod('http://www.w3.org/2001/04/xmlenc#rsa-1_5'),
+            null,
+            new ReferenceList(
+                [new DataReference('#Encrypted_DATA_ID')]
+            )
+        );
+        $eid = new EncryptedID($ed, [$ek]);
+
+        $logoutRequest = new LogoutRequest($eid);
         $logoutRequestElement = $logoutRequest->toXML();
         $this->assertCount(
             1,
             Utils::xpQuery($logoutRequestElement, './saml_assertion:EncryptedID/xenc:EncryptedData')
         );
-    }
-
-
-    /**
-     * @return void
-     */
-    public function testDecryptingNameId(): void
-    {
-        $logoutRequest = new LogoutRequest($this->logoutRequestElement);
-        $this->assertTrue($logoutRequest->isNameIdEncrypted());
-
-        $logoutRequest->decryptNameId(CertificatesMock::getPrivateKey());
-        $nameId = $logoutRequest->getNameId();
-        $this->assertEquals('TheNameIDValue', $nameId->getValue());
-    }
-
-
-    /**
-     * @return void
-     */
-    public function testDecryptingNameIdForgotToDecryptThrowsException(): void
-    {
-        $logoutRequest = new LogoutRequest($this->logoutRequestElement);
-        $this->assertTrue($logoutRequest->isNameIdEncrypted());
-
-        $this->expectException(Exception::class);
-        $this->expectExceptionMessage(
-            "Attempted to retrieve encrypted NameID without decrypting it first."
-        );
-        $nameId = $logoutRequest->getNameId();
     }
 
 
@@ -176,15 +172,12 @@ XML;
         $document = DOMDocumentFactory::fromString($xml);
         $this->logoutRequestElement = $document->firstChild;
 
-        $logoutRequest = new LogoutRequest($this->logoutRequestElement);
-        $this->assertEquals("frits", $logoutRequest->getNameId()->getValue());
+        $logoutRequest = LogoutRequest::fromXML($this->logoutRequestElement);
+        $this->assertEquals("frits", $logoutRequest->getIdentifier()->getValue());
         $this->assertEquals(
             "urn:oasis:names:tc:SAML:2.0:nameid-format:unspecified",
-            $logoutRequest->getNameId()->getFormat()
+            $logoutRequest->getIdentifier()->getFormat()
         );
-
-        $this->assertFalse($logoutRequest->isNameIdEncrypted());
-        $this->assertNull($logoutRequest->decryptNameId(CertificatesMock::getPrivateKey()));
     }
 
 
@@ -202,8 +195,8 @@ XML;
         $this->logoutRequestElement = $document->firstChild;
 
         $this->expectException(Exception::class);
-        $this->expectExceptionMessage("Missing <saml:NameID> or <saml:EncryptedID> in <samlp:LogoutRequest>.");
-        $logoutRequest = new LogoutRequest($this->logoutRequestElement);
+        $this->expectExceptionMessage("Missing <saml:NameID>, <saml:BaseID> or <saml:EncryptedID> in <samlp:LogoutRequest>.");
+        $logoutRequest = LogoutRequest::fromXML($this->logoutRequestElement);
     }
 
 
@@ -223,8 +216,8 @@ XML;
         $this->logoutRequestElement = $document->firstChild;
 
         $this->expectException(Exception::class);
-        $this->expectExceptionMessage("More than one <saml:NameID> or <saml:EncryptedD> in <samlp:LogoutRequest>.");
-        $logoutRequest = new LogoutRequest($this->logoutRequestElement);
+        $this->expectExceptionMessage("More than one <saml:NameID> in <samlp:LogoutRequest>.");
+        $logoutRequest = LogoutRequest::fromXML($this->logoutRequestElement);
     }
 
 
@@ -242,7 +235,7 @@ XML;
         $document = DOMDocumentFactory::fromString($xml);
         $this->logoutRequestElement = $document->firstChild;
 
-        $logoutRequest = new LogoutRequest($this->logoutRequestElement);
+        $logoutRequest = LogoutRequest::fromXML($this->logoutRequestElement);
         $this->assertEquals(1543433592, $logoutRequest->getNotOnOrAfter());
     }
 
@@ -255,12 +248,10 @@ XML;
         $nameId = new NameID('NameIDValue');
         $time = time();
 
-        $logoutRequest = new LogoutRequest();
-        $logoutRequest->setNameID($nameId);
-        $logoutRequest->setNotOnOrAfter($time);
+        $logoutRequest = new LogoutRequest($nameId, $time);
         $logoutRequestElement = $logoutRequest->toXML();
 
-        $logoutRequest2 = new LogoutRequest($logoutRequestElement);
+        $logoutRequest2 = LogoutRequest::fromXML($logoutRequestElement);
         $this->assertEquals($time, $logoutRequest2->getNotOnOrAfter());
     }
 
@@ -279,7 +270,7 @@ XML;
         $document = DOMDocumentFactory::fromString($xml);
         $this->logoutRequestElement = $document->firstChild;
 
-        $logoutRequest = new LogoutRequest($this->logoutRequestElement);
+        $logoutRequest = LogoutRequest::fromXML($this->logoutRequestElement);
         $this->assertEquals($reason, $logoutRequest->getReason());
     }
 
@@ -292,12 +283,10 @@ XML;
         $reason = "urn:simplesamlphp:reason-test";
         $nameId = new NameID('NameIDValue');
 
-        $logoutRequest = new LogoutRequest();
-        $logoutRequest->setNameID($nameId);
-        $logoutRequest->setReason($reason);
+        $logoutRequest = new LogoutRequest($nameId, null, $reason);
         $logoutRequestElement = $logoutRequest->toXML();
 
-        $logoutRequest2 = new LogoutRequest($logoutRequestElement);
+        $logoutRequest2 = LogoutRequest::fromXML($logoutRequestElement);
         $this->assertEquals($reason, $logoutRequest2->getReason());
     }
 
@@ -317,9 +306,8 @@ XML;
         $document = DOMDocumentFactory::fromString($xml);
         $this->logoutRequestElement = $document->firstChild;
 
-        $logoutRequest = new LogoutRequest($this->logoutRequestElement);
+        $logoutRequest = LogoutRequest::fromXML($this->logoutRequestElement);
         $this->assertCount(0, $logoutRequest->getSessionIndexes());
-        $this->assertNull($logoutRequest->getSessionIndex());
     }
 
 
@@ -328,15 +316,16 @@ XML;
      */
     public function testSetSessionIndicesVariants(): void
     {
-        $logoutRequest = new LogoutRequest();
-        $logoutRequest->setSessionIndexes(['SessionIndexValue1', 'SessionIndexValue2']);
+        $nameId = new NameID('test');
+        $sessionIndexes = [
+            'SessionIndexValue1',
+            'SessionIndexValue2'
+        ];
+
+        $logoutRequest = new LogoutRequest($nameId, null, null, $sessionIndexes);
+
         $this->assertCount(2, $logoutRequest->getSessionIndexes());
-        $logoutRequest->setSessionIndex(null);
-        $this->assertCount(0, $logoutRequest->getSessionIndexes());
-        $logoutRequest->setSessionIndexes(['SessionIndexValue1', 'SessionIndexValue2']);
-        $this->assertCount(2, $logoutRequest->getSessionIndexes());
-        $logoutRequest->setSessionIndex('SessionIndexValue3');
-        $this->assertCount(1, $logoutRequest->getSessionIndexes());
-        $this->assertEquals('SessionIndexValue3', $logoutRequest->getSessionIndex());
+        $this->assertEquals('SessionIndexValue1', $logoutRequest->getSessionIndexes()[0]);
+        $this->assertEquals('SessionIndexValue2', $logoutRequest->getSessionIndexes()[1]);
     }
 }

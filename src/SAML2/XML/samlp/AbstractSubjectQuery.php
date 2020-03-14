@@ -8,7 +8,10 @@ use DOMElement;
 use Exception;
 use SAML2\Constants;
 use SAML2\Utils;
+use SAML2\XML\IdentifierTrait;
+use SAML2\XML\saml\Issuer;
 use SAML2\XML\saml\NameID;
+use SAML2\XML\saml\Subject;
 use Webmozart\Assert\Assert;
 
 /**
@@ -24,84 +27,61 @@ use Webmozart\Assert\Assert;
  */
 abstract class AbstractSubjectQuery extends AbstractRequest
 {
-    /**
-     * The NameId of the subject in the query.
-     *
-     * @var \SAML2\XML\saml\NameID
-     */
-    private $nameId;
+    /** @var \SAML2\XML\saml\Subject */
+    protected $subject;
+
 
 
     /**
-     * Constructor for SAML 2 subject query messages.
+     * Constructor for SAML 2 response messages.
      *
-     * @param string $tagName The tag name of the root element.
-     * @param \DOMElement|null $xml The input message.
+     * @param \SAML2\XML\saml\Subject $subject
+     * @param \SAML2\XML\saml\Issuer $issuer
+     * @param string $id
+     * @param string $version
+     * @param int $issueInstant
+     * @param string|null $destination
+     * @param string|null $consent
+     * @param \SAML2\XML\samlp\Extensions $extensions
+     * @param string|null $relayState
      */
-    protected function __construct(string $tagName, DOMElement $xml = null)
-    {
-        parent::__construct($tagName, $xml);
+    protected function __construct(
+        Subject $subject,
+        ?Issuer $issuer = null,
+        ?string $id = null,
+        ?string $version = '2.0',
+        ?int $issueInstant = null,
+        ?string $destination = null,
+        ?string $consent = null,
+        ?Extensions $extensions = null,
+        ?string $relayState = null
+    ) {
+        parent::__construct($issuer, $id, $version, $issueInstant, $destination, $consent, $extensions, $relayState);
 
-        if ($xml === null) {
-            return;
-        }
-
-        $this->parseSubject($xml);
+        $this->setSubject($subject);
     }
 
 
     /**
-     * Parse subject in query.
+     * Collect the value of the subject
      *
-     * @param \DOMElement $xml The SubjectQuery XML element.
-     * @throws \Exception
+     * @return \SAML2\XML\saml\Subject
+     */
+    public function getSubject(): Subject
+    {
+        return $this->subject;
+    }
+
+
+    /**
+     * Set the value of the subject-property
+     * @param \SAML2\XML\saml\Subject $value
+     *
      * @return void
      */
-    private function parseSubject(DOMElement $xml): void
+    private function setSubject(Subject $subject): void
     {
-        /** @var \DOMElement[] $subject */
-        $subject = Utils::xpQuery($xml, './saml_assertion:Subject');
-        if (empty($subject)) {
-            throw new Exception('Missing subject in subject query.');
-        } elseif (count($subject) > 1) {
-            throw new Exception('More than one <saml:Subject> in subject query.');
-        }
-
-        /** @var \DOMElement[] $nameId */
-        $nameId = Utils::xpQuery($subject[0], './saml_assertion:NameID');
-        if (empty($nameId)) {
-            throw new Exception('Missing <saml:NameID> in <saml:Subject>.');
-        } elseif (count($nameId) > 1) {
-            throw new Exception('More than one <saml:NameID> in <saml:Subject>.');
-        }
-        $this->nameId = NameID::fromXML($nameId[0]);
-    }
-
-
-    /**
-     * Retrieve the NameId of the subject in the query.
-     *
-     * @return \SAML2\XML\saml\NameID The name identifier of the assertion.
-     *
-     * @throws \InvalidArgumentException if assertions are false
-     */
-    public function getNameId(): NameID
-    {
-        Assert::notEmpty($this->nameId);
-
-        return $this->nameId;
-    }
-
-
-    /**
-     * Set the NameId of the subject in the query.
-     *
-     * @param \SAML2\XML\saml\NameID $nameId The name identifier of the assertion.
-     * @return void
-     */
-    public function setNameId(NameID $nameId): void
-    {
-        $this->nameId = $nameId;
+        $this->subject = $subject;
     }
 
 
@@ -115,14 +95,11 @@ abstract class AbstractSubjectQuery extends AbstractRequest
     public function toXML(?DOMElement $parent = null): DOMElement
     {
         Assert::null($parent);
-        Assert::notEmpty($this->nameId, 'Cannot convert SubjectQuery to XML without a NameID set.');
+        Assert::notEmpty($this->subject, 'Cannot convert SubjectQuery to XML without a Subject set.');
 
         $parent = parent::toXML();
 
-        $subject = $parent->ownerDocument->createElementNS(Constants::NS_SAML, 'saml:Subject');
-        $parent->appendChild($subject);
-
-        $this->nameId->toXML($subject);
+        $this->subject->toXML($parent);
 
         return $parent;
     }

@@ -33,19 +33,19 @@ abstract class MessageFactory
 
         switch ($xml->localName) {
             case 'AttributeQuery':
-                return new AttributeQuery($xml);
+                return AttributeQuery::fromXML($xml);
             case 'AuthnRequest':
-                return new AuthnRequest($xml);
+                return AuthnRequest::fromXML($xml);
             case 'LogoutResponse':
                 return LogoutResponse::fromXML($xml);
             case 'LogoutRequest':
-                return new LogoutRequest($xml);
+                return LogoutRequest::fromXML($xml);
             case 'Response':
                 return Response::fromXML($xml);
             case 'ArtifactResponse':
                 return ArtifactResponse::fromXML($xml);
             case 'ArtifactResolve':
-                return new ArtifactResolve($xml);
+                return ArtifactResolve::fromXML($xml);
             default:
                 throw new Exception('Unknown SAML message: ' . var_export($xml->localName, true));
         }
