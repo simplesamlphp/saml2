@@ -116,7 +116,7 @@ final class StatusCode extends AbstractSamlpElement
     /**
      * Convert this StatusCode to XML.
      *
-     * @param \DOMElement|null $parent The element we should append this NameIDPolicy to.
+     * @param \DOMElement|null $parent The element we should append this StatusCode to.
      * @return \DOMElement
      */
     public function toXML(DOMElement $parent = null): DOMElement
