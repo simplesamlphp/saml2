@@ -125,7 +125,7 @@ class ResponseTest extends TestCase
 XML;
 
         $fixtureResponseDom = DOMDocumentFactory::fromString($xml);
-        $request            = Response::fromXML($fixtureResponseDom->firstChild);
+        $request            = Response::fromXML($fixtureResponseDom->documentElement);
 
         $requestXml = $requestDocument = $request->toXML()->ownerDocument->C14N();
         $fixtureXml = $fixtureResponseDom->C14N();

@@ -16,6 +16,9 @@ use SAML2\XML\saml\NameID;
  */
 class LogoutRequestTest extends \Mockery\Adapter\Phpunit\MockeryTestCase
 {
+    /** @var \DOMDocument $document */
+    private $document;
+
     /** @var \DOMElement */
     private $logoutRequestElement;
 
@@ -50,7 +53,8 @@ class LogoutRequestTest extends \Mockery\Adapter\Phpunit\MockeryTestCase
 </samlp:LogoutRequest>
 XML;
         $document = DOMDocumentFactory::fromString($xml);
-        $this->logoutRequestElement = $document->firstChild;
+        $this->document = $document;
+        $this->logoutRequestElement = $document->documentElement;
     }
 
 
@@ -89,6 +93,7 @@ XML;
         $this->assertCount(2, $sessionIndexElements);
         $this->assertEquals('SessionIndexValue1', $sessionIndexElements[0]->textContent);
         $this->assertEquals('SessionIndexValue2', $sessionIndexElements[1]->textContent);
+
     }
 
 
@@ -170,7 +175,7 @@ XML;
 </samlp:LogoutRequest>
 XML;
         $document = DOMDocumentFactory::fromString($xml);
-        $this->logoutRequestElement = $document->firstChild;
+        $this->logoutRequestElement = $document->documentElement;
 
         $logoutRequest = LogoutRequest::fromXML($this->logoutRequestElement);
         $this->assertEquals("frits", $logoutRequest->getIdentifier()->getValue());
@@ -192,7 +197,7 @@ XML;
 </samlp:LogoutRequest>
 XML;
         $document = DOMDocumentFactory::fromString($xml);
-        $this->logoutRequestElement = $document->firstChild;
+        $this->logoutRequestElement = $document->documentElement;
 
         $this->expectException(Exception::class);
         $this->expectExceptionMessage("Missing <saml:NameID>, <saml:BaseID> or <saml:EncryptedID> in <samlp:LogoutRequest>.");
@@ -213,7 +218,7 @@ XML;
 </samlp:LogoutRequest>
 XML;
         $document = DOMDocumentFactory::fromString($xml);
-        $this->logoutRequestElement = $document->firstChild;
+        $this->logoutRequestElement = $document->documentElement;
 
         $this->expectException(Exception::class);
         $this->expectExceptionMessage("More than one <saml:NameID> in <samlp:LogoutRequest>.");
@@ -233,7 +238,7 @@ XML;
 </samlp:LogoutRequest>
 XML;
         $document = DOMDocumentFactory::fromString($xml);
-        $this->logoutRequestElement = $document->firstChild;
+        $this->logoutRequestElement = $document->documentElement;
 
         $logoutRequest = LogoutRequest::fromXML($this->logoutRequestElement);
         $this->assertEquals(1543433592, $logoutRequest->getNotOnOrAfter());
@@ -268,7 +273,7 @@ XML;
 </samlp:LogoutRequest>
 XML;
         $document = DOMDocumentFactory::fromString($xml);
-        $this->logoutRequestElement = $document->firstChild;
+        $this->logoutRequestElement = $document->documentElement;
 
         $logoutRequest = LogoutRequest::fromXML($this->logoutRequestElement);
         $this->assertEquals($reason, $logoutRequest->getReason());
@@ -304,7 +309,7 @@ XML;
 </samlp:LogoutRequest>
 XML;
         $document = DOMDocumentFactory::fromString($xml);
-        $this->logoutRequestElement = $document->firstChild;
+        $this->logoutRequestElement = $document->documentElement;
 
         $logoutRequest = LogoutRequest::fromXML($this->logoutRequestElement);
         $this->assertCount(0, $logoutRequest->getSessionIndexes());
@@ -327,5 +332,19 @@ XML;
         $this->assertCount(2, $logoutRequest->getSessionIndexes());
         $this->assertEquals('SessionIndexValue1', $logoutRequest->getSessionIndexes()[0]);
         $this->assertEquals('SessionIndexValue2', $logoutRequest->getSessionIndexes()[1]);
+    }
+
+
+    /**
+     * Test serialization / unserialization
+     */
+    public function testSerialization(): void
+    {
+        $this->markTestSkipped('Relies on unmerged PR #225');
+
+        $this->assertEquals(
+            $this->document->saveXML($this->document->documentElement),
+            strval(unserialize(serialize(LogoutRequest::fromXML($this->document->documentElement))))
+        );
     }
 }

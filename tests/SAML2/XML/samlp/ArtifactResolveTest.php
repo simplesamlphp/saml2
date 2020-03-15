@@ -11,21 +11,44 @@ use SAML2\Utils;
 
 class ArtifactResolveTest extends TestCase
 {
+    /** @var \DOMDocument $document */
+    private $document;
+
+    /**
+     * @return void
+     */
+    public function setup(): void
+    {
+        $this->document = DOMDocumentFactory::fromString(<<<XML
+<samlp:ArtifactResolve
+        xmlns:samlp="urn:oasis:names:tc:SAML:2.0:protocol"
+        xmlns:saml="urn:oasis:names:tc:SAML:2.0:assertion"
+        ID="_6c3a4f8b9c2d" Version="2.0"
+        IssueInstant="2004-01-21T19:00:49Z">
+  <saml:Issuer>https://ServiceProvider.com/SAML</saml:Issuer>
+  <samlp:Artifact>AAQAADWNEw5VT47wcO4zX/iEzMmFQvGknDfws2ZtqSGdkNSbsW1cmVR0bzU=</samlp:Artifact>
+</samlp:ArtifactResolve>
+XML
+        );
+    }
+
+
     /**
      * @return void
      */
     public function testMarshalling(): void
     {
-        $issuer = new Issuer('urn:example:issuer');
+        $issuer = new Issuer('https://ServiceProvider.com/SAML');
         $artifact = 'AAQAADWNEw5VT47wcO4zX/iEzMmFQvGknDfws2ZtqSGdkNSbsW1cmVR0bzU=';
 
-        $artifactResolve = new ArtifactResolve($artifact, $issuer);
+        $artifactResolve = new ArtifactResolve($artifact, $issuer, '_6c3a4f8b9c2d', '2.0', 1074711649);
 
-        $artifactResolveElement = $artifactResolve->toXML();
-        $artelement = Utils::xpQuery($artifactResolveElement, './saml_protocol:Artifact');
+        $this->assertEquals($artifact, $artifactResolve->getArtifact());
 
-        $this->assertCount(1, $artelement);
-        $this->assertEquals($artifact, $artelement[0]->textContent);
+        $this->assertEquals(
+            $this->document->saveXML($this->document->documentElement),
+            strval($artifactResolve)
+        );
     }
 
 
@@ -36,24 +59,23 @@ class ArtifactResolveTest extends TestCase
     {
         $id = '_6c3a4f8b9c2d';
         $artifact = 'AAQAADWNEw5VT47wcO4zX/iEzMmFQvGknDfws2ZtqSGdkNSbsW1cmVR0bzU=';
-
         $issuer = new Issuer('https://ServiceProvider.com/SAML');
 
-        $xml = <<<XML
-<samlp:ArtifactResolve
-	xmlns:samlp="urn:oasis:names:tc:SAML:2.0:protocol"
-	xmlns="urn:oasis:names:tc:SAML:2.0:assertion"
-	ID="{$id}" Version="2.0"
-	IssueInstant="2004-01-21T19:00:49Z">
-	<Issuer>{$issuer}</Issuer>
-	<samlp:Artifact>{$artifact}</samlp:Artifact>
-</samlp:ArtifactResolve>
-XML;
-        $document = DOMDocumentFactory::fromString($xml);
-        $ar = ArtifactResolve::fromXML($document->firstChild);
-
+        $ar = ArtifactResolve::fromXML($this->document->documentElement);
         $this->assertEquals($artifact, $ar->getArtifact());
         $this->assertEquals($id, $ar->getId());
         $this->assertEquals($issuer->getValue(), $ar->getIssuer()->getValue());
+    }
+
+
+    /**
+     * Test serialization / unserialization
+     */
+    public function testSerialization(): void
+    {
+        $this->assertEquals(
+            $this->document->saveXML($this->document->documentElement),
+            strval(unserialize(serialize(ArtifactResolve::fromXML($this->document->documentElement))))
+        );
     }
 }

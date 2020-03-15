@@ -138,14 +138,14 @@ AUTHNREQUEST;
     Version="2.0">
   <saml:Issuer>https://gateway.example.org/saml20/sp/metadata</saml:Issuer>
   <saml:Subject>
-        <saml:NameID Format="urn:oasis:names:tc:SAML:1.1:nameid-format:unspecified">user@example.org</saml:NameID>
+    <saml:NameID Format="urn:oasis:names:tc:SAML:1.1:nameid-format:unspecified">user@example.org</saml:NameID>
   </saml:Subject>
 </samlp:AuthnRequest>
 AUTHNREQUEST;
 
         $authnRequest = AuthnRequest::fromXML(DOMDocumentFactory::fromString($xml)->documentElement);
 
-        $nameId = $authnRequest->getNameId();
+        $nameId = $authnRequest->getSubject()->getIdentifier();
         $this->assertEquals("user@example.org", $nameId->getValue());
         $this->assertEquals(Constants::NAMEID_UNSPECIFIED, $nameId->getFormat());
     }
@@ -947,8 +947,8 @@ AUTHNREQUEST;
 </samlp:AuthnRequest>
 AUTHNREQUEST;
 
-        $this->expectException(Exception::class);
-        $this->expectExceptionMessage('More than one <saml:Subject> in <saml:AuthnRequest>');
+        $this->expectException(InvalidArgumentException::class);
+        $this->expectExceptionMessage('Only one saml:Subject element is allowed.');
         $authnRequest = AuthnRequest::fromXML(DOMDocumentFactory::fromString($xml)->documentElement);
     }
 
@@ -976,7 +976,7 @@ AUTHNREQUEST;
 AUTHNREQUEST;
 
         $this->expectException(InvalidArgumentException::class);
-        $this->expectExceptionMessage('More than one <saml:NameID> in <samlp:AuthnRequest>.');
+        $this->expectExceptionMessage('More than one <saml:NameID> in <saml:Subject>.');
         $authnRequest = AuthnRequest::fromXML(DOMDocumentFactory::fromString($xml)->documentElement);
     }
 

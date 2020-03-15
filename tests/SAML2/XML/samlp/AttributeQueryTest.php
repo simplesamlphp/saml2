@@ -20,6 +20,44 @@ use SAML2\XML\saml\Subject;
  */
 class AttributeQueryTest extends TestCase
 {
+    /** @var \DOMDocument $document */
+    private $document;
+
+
+    /**
+     * @return void
+     */
+    public function setup(): void
+    {
+        $samlpNamespace = AttributeQuery::NS;
+
+        $this->document = DOMDocumentFactory::fromString(<<<XML
+<samlp:AttributeQuery xmlns:samlp="urn:oasis:names:tc:SAML:2.0:protocol" xmlns:saml="urn:oasis:names:tc:SAML:2.0:assertion" ID="aaf23196-1773-2113-474a-fe114412ab72" Version="2.0" IssueInstant="2017-09-06T11:49:27Z">
+  <saml:Issuer Format="urn:oasis:names:tc:SAML:2.0:nameid-format:entity">https://example.org/</saml:Issuer>
+  <saml:Subject>
+    <saml:NameID Format="urn:oasis:names:tc:SAML:2.0:nameid-format:unspecified">urn:example:subject</saml:NameID>
+  </saml:Subject>
+  <saml:Attribute
+    Name="urn:oid:1.3.6.1.4.1.5923.1.1.1.7"
+    NameFormat="urn:oasis:names:tc:SAML:2.0:attrname-format:uri"
+    FriendlyName="entitlements"/>
+  <saml:Attribute
+    Name="urn:oid:2.5.4.4"
+    NameFormat="urn:oasis:names:tc:SAML:2.0:attrname-format:uri"
+    FriendlyName="sn"/>
+  <saml:Attribute
+    Name="urn:oid:2.16.840.1.113730.3.1.39"
+    NameFormat="urn:oasis:names:tc:SAML:2.0:attrname-format:uri"
+    FriendlyName="preferredLanguage"/>
+</samlp:AttributeQuery>
+XML
+        );
+    }
+
+
+    /**
+     * @return void
+     */
     public function testMarshalling(): void
     {
         $nameId = new NameID('NameIDValue');
@@ -100,31 +138,7 @@ class AttributeQueryTest extends TestCase
 
     public function testUnmarshalling(): void
     {
-        $xml = <<<XML
-  <samlp:AttributeQuery xmlns:saml="urn:oasis:names:tc:SAML:2.0:assertion" xmlns:samlp="urn:oasis:names:tc:SAML:2.0:protocol" ID="aaf23196-1773-2113-474a-fe114412ab72" Version="2.0" IssueInstant="2017-09-06T11:49:27Z">
-	<saml:Issuer Format="urn:oasis:names:tc:SAML:2.0:nameid-format:entity">https://example.org/</saml:Issuer>
-	<saml:Subject>
-	  <saml:NameID Format="urn:oasis:names:tc:SAML:2.0:nameid-format:unspecified">urn:example:subject</saml:NameID>
-	</saml:Subject>
-	<saml:Attribute
-	  NameFormat="urn:oasis:names:tc:SAML:2.0:attrname-format:uri"
-	  Name="urn:oid:1.3.6.1.4.1.5923.1.1.1.7"
-	  FriendlyName="entitlements">
-	</saml:Attribute>
-	<saml:Attribute
-	  NameFormat="urn:oasis:names:tc:SAML:2.0:attrname-format:uri"
-	  Name="urn:oid:2.5.4.4"
-	  FriendlyName="sn">
-	</saml:Attribute>
-	<saml:Attribute
-	  NameFormat="urn:oasis:names:tc:SAML:2.0:attrname-format:uri"
-	  Name="urn:oid:2.16.840.1.113730.3.1.39"
-	  FriendlyName="preferredLanguage">
-	</saml:Attribute>
-</samlp:AttributeQuery>
-XML;
-        $document = DOMDocumentFactory::fromString($xml);
-        $aq = AttributeQuery::fromXML($document->firstChild);
+        $aq = AttributeQuery::fromXML($this->document->documentElement);
 
         // Sanity check
         $this->assertEquals('https://example.org/', $aq->getIssuer()->getValue());
@@ -201,7 +215,7 @@ XML;
 </samlp:AttributeQuery>
 XML;
         $document = DOMDocumentFactory::fromString($xml);
-        $aq = AttributeQuery::fromXML($document->firstChild);
+        $aq = AttributeQuery::fromXML($document->documentElement);
 
         // Sanity check
         $this->assertEquals('https://example.org/', $aq->getIssuer()->getValue());
@@ -234,7 +248,7 @@ XML;
 </samlp:AttributeQuery>
 XML;
         $document = DOMDocumentFactory::fromString($xml);
-        $aq = AttributeQuery::fromXML($document->firstChild);
+        $aq = AttributeQuery::fromXML($document->documentElement);
 
         // Sanity check
         $this->assertEquals('https://example.org/', $aq->getIssuer()->getValue());
@@ -273,7 +287,7 @@ XML;
 
         $this->expectException(Exception::class);
         $this->expectExceptionMessage('Missing \'Name\' attribute from saml:Attribute.');
-        $aq = AttributeQuery::fromXML($document->firstChild);
+        $aq = AttributeQuery::fromXML($document->documentElement);
     }
 
 
@@ -292,7 +306,7 @@ XML;
         $document = DOMDocumentFactory::fromString($xml);
         $this->expectException(Exception::class);
         $this->expectExceptionMessage('Missing subject in subject');
-        $aq = AttributeQuery::fromXML($document->firstChild);
+        $aq = AttributeQuery::fromXML($document->documentElement);
     }
 
 
@@ -316,8 +330,8 @@ XML;
 XML;
         $document = DOMDocumentFactory::fromString($xml);
         $this->expectException(Exception::class);
-        $this->expectExceptionMessage('More than one <saml:Subject> in subject');
-        $aq = AttributeQuery::fromXML($document->firstChild);
+        $this->expectExceptionMessage('More than one <saml:Subject> in AttributeQuery');
+        $aq = AttributeQuery::fromXML($document->documentElement);
     }
 
 
@@ -339,7 +353,7 @@ XML;
         $document = DOMDocumentFactory::fromString($xml);
         $this->expectException(Exception::class);
         $this->expectExceptionMessage('A <saml:Subject> not containing <saml:SubjectConfirmation> should provide exactly one of <saml:BaseID>, <saml:NameID> or <saml:EncryptedID>');
-        $aq = AttributeQuery::fromXML($document->firstChild);
+        $aq = AttributeQuery::fromXML($document->documentElement);
     }
 
 
@@ -362,6 +376,18 @@ XML;
         $document = DOMDocumentFactory::fromString($xml);
         $this->expectException(Exception::class);
         $this->expectExceptionMessage('More than one <saml:NameID> in <saml:Subject>');
-        $aq = AttributeQuery::fromXML($document->firstChild);
+        $aq = AttributeQuery::fromXML($document->documentElement);
+    }
+
+
+    /**
+     * Test serialization / unserialization
+     */
+    public function testSerialization(): void
+    {
+        $this->assertEquals(
+            $this->document->saveXML($this->document->documentElement),
+            strval(unserialize(serialize(AttributeQuery::fromXML($this->document->documentElement))))
+        );
     }
 }
