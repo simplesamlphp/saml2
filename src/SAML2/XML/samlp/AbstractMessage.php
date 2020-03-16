@@ -114,7 +114,6 @@ abstract class AbstractMessage extends AbstractSamlpElement implements SignedEle
      * @param string|null $destination
      * @param string|null $consent
      * @param \SAML2\XML\samlp\Extensions $extensions
-     * @param string|null $relayState
      *
      * @throws \Exception
      */
@@ -125,8 +124,7 @@ abstract class AbstractMessage extends AbstractSamlpElement implements SignedEle
         ?int $issueInstant = null,
         ?string $destination = null,
         ?string $consent = null,
-        ?Extensions $extensions = null,
-        ?string $relayState = null
+        ?Extensions $extensions = null
     ) {
         $this->setIssuer($issuer);
         $this->setId($id);
@@ -134,7 +132,6 @@ abstract class AbstractMessage extends AbstractSamlpElement implements SignedEle
         $this->setIssueInstant($issueInstant);
         $this->setDestination($destination);
         $this->setConsent($consent);
-        $this->setRelayState($relayState);
         $this->setExtensions($extensions);
     }
 

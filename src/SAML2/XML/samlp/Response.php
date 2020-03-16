@@ -42,7 +42,6 @@ class Response extends AbstractStatusResponse
      * @param string|null $consent
      * @param \SAML2\XML\samlp\Extensions $extensions
      * @param (\SAML2\XML\saml\Assertion|\SAML2\EncryptedAssertion) $assertions
-     * @param string|null $relayState
      */
     public function __construct(
         Status $status,
@@ -54,8 +53,7 @@ class Response extends AbstractStatusResponse
         ?string $destination = null,
         ?string $consent = null,
         ?Extensions $extensions = null,
-        array $assertions = [],
-        string $relayState = null
+        array $assertions = []
     ) {
         parent::__construct(
             $status,
@@ -66,8 +64,7 @@ class Response extends AbstractStatusResponse
             $inResponseTo,
             $destination,
             $consent,
-            $extensions,
-            $relayState
+            $extensions
         );
 
         $this->setAssertions($assertions);

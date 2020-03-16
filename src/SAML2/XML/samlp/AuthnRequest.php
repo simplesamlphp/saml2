@@ -12,6 +12,7 @@ use RobRichards\XMLSecLibs\XMLSecurityKey;
 use SAML2\Constants;
 use SAML2\Exception\InvalidArgumentException;
 use SAML2\XML\ds\Signature;
+use SAML2\XML\saml\Conditions;
 use SAML2\XML\saml\Issuer;
 use SAML2\XML\saml\NameID;
 use SAML2\XML\saml\Subject;
@@ -116,11 +117,9 @@ class AuthnRequest extends AbstractRequest
     protected $requestedAuthnContext;
 
     /**
-     * Audiences to send in the request.
-     *
-     * @var array
+     * @var \SAML2\XML\saml\Conditions|null
      */
-    protected $audiences = [];
+    protected $conditions = null;
 
     /**
      * @var \SAML2\XML\saml\SubjectConfirmation[]
@@ -133,13 +132,14 @@ class AuthnRequest extends AbstractRequest
      *
      * @param \SAML2\XML\samlp\RequestedAuthnContext $requestedAuthnContext
      * @param \SAML2\XML\saml\Subject $subject
+     * @param \SAML2\XML\samlp\NameIDPolicy $nameIdPolicy
+     * @param \SAML2\XML\saml\Conditions $conditions
      * @param bool $forceAuthn
      * @param bool $isPassive
      * @param string $assertionConsumerServiceUrl
      * @param string $protocolBinding
      * @param int $attributeConsumingServiceIndex
      * @param string $providerName
-
      * @param \SAML2\XML\saml\Issuer|null $issuer
      * @param string|null $id
      * @param string|null $version
@@ -147,11 +147,13 @@ class AuthnRequest extends AbstractRequest
      * @param string|null $destination
      * @param string|null $consent
      * @param \SAML2\XML\samlp\Extensions $extensions
-     * @param string|null $relayState
      */
     public function __construct(
         ?RequestedAuthnContext $requestedAuthnContext = null,
         ?Subject $subject = null,
+        ?NameIDPolicy $nameIdPolicy = null,
+        Conditions $conditions = null,
+
         ?bool $forceAuthn = null,
         ?bool $isPassive = null,
         ?string $assertionConsumerServiceUrl = null,
@@ -165,13 +167,15 @@ class AuthnRequest extends AbstractRequest
         ?int $issueInstant = null,
         ?string $destination = null,
         ?string $consent = null,
-        ?Extensions $extensions = null,
-        ?string $relayState = null
+        ?Extensions $extensions = null
     ) {
-        parent::__construct($issuer, $id, $version, $issueInstant, $destination, $consent, $extensions, $relayState);
+        parent::__construct($issuer, $id, $version, $issueInstant, $destination, $consent, $extensions);
 
         $this->setRequestedAuthnContext($requestedAuthnContext);
         $this->setSubject($subject);
+        $this->setNameIdPolicy($nameIdPolicy);
+        $this->setConditions($conditions);
+
         $this->setForceAuthn($forceAuthn);
         $this->setIsPassive($isPassive);
         $this->setAssertionConsumerServiceUrl($assertionConsumerServiceUrl);
@@ -182,13 +186,21 @@ class AuthnRequest extends AbstractRequest
 
 
     /**
-     * @param $xml
-     * @throws \Exception
+     * @param \SAML2\XML\saml\Subject|null $subject
      * @return void
      */
-    private function parseSubject(DOMElement $xml): void
+    private function setSubject(?Subject $subject): void
     {
-        $this->subject = array_pop(Subject::getChildrenOfClass($xml));
+        $this->subject = $subject;
+    }
+
+
+    /**
+     * @return \SAML2\XML\saml\Subject|null
+     */
+    private function getSubject(): ?Subject
+    {
+        return $this->subject;
     }
 
 
@@ -196,10 +208,9 @@ class AuthnRequest extends AbstractRequest
      * @param \DOMElement $xml
      * @throws \Exception
      * @return void
-     */
     protected function parseNameIdPolicy(DOMElement $xml): void
     {
-        /** @var \DOMElement[] $nameIdPolicy */
+        \/** @var \DOMElement[] $nameIdPolicy *\/
         $nameIdPolicy = Utils::xpQuery($xml, './saml_protocol:NameIDPolicy');
         if (empty($nameIdPolicy)) {
             return;
@@ -207,15 +218,15 @@ class AuthnRequest extends AbstractRequest
 
         $this->nameIdPolicy = NameIDPolicy::fromXML($nameIdPolicy[0]);
     }
+     */
 
 
     /**
      * @param \DOMElement $xml
      * @return void
-     */
     protected function parseRequestedAuthnContext(DOMElement $xml): void
     {
-        /** @var \DOMElement[] $requestedAuthnContext */
+        \/** @var \DOMElement[] $requestedAuthnContext *\/
         $requestedAuthnContext = Utils::xpQuery($xml, './saml_protocol:RequestedAuthnContext');
         if (empty($requestedAuthnContext)) {
             return;
@@ -223,6 +234,7 @@ class AuthnRequest extends AbstractRequest
 
         $this->requestedAuthnContext = RequestedAuthnContext::fromXML($requestedAuthnContext[0]);
     }
+     */
 
 
     /**
@@ -287,29 +299,6 @@ class AuthnRequest extends AbstractRequest
         foreach ($audiences as $a) {
             $this->audiences[] = trim($a->textContent);
         }
-    }
-
-
-    /**
-     * Retrieve the Subject.
-     *
-     * @return \SAML2\XML\saml\Subject|null The Subject.
-     */
-    public function getSubject(): ?Subject
-    {
-        return $this->subject;
-    }
-
-
-    /**
-     * Set the Subject.
-     *
-     * @param \SAML2\XML\saml\Subject|null $subject The Subject.
-     * @return void
-     */
-    private function setSubject(?Subject $subject): void
-    {
-        $this->subect = $subject;
     }
 
 
@@ -678,6 +667,12 @@ class AuthnRequest extends AbstractRequest
 
         $providerName = self::getAttribute($xml, 'ProviderName', null);
 
+        $conditions = Conditions::getChildrenOfClass($xml);
+        Assert::maxCount($conditions, 1, 'Only one saml:Conditions element is allowed.');
+
+        $nameIdPolicy = NameIDPolicy::getChildrenOfClass($xml);
+        Assert::maxCount($nameIdPolicy, 1, 'Only one samlp:NameIDPolicy element is allowed.');
+
         $subject = Subject::getChildrenOfClass($xml);
         Assert::maxCount($subject, 1, 'Only one saml:Subject element is allowed.');
 
@@ -696,12 +691,16 @@ class AuthnRequest extends AbstractRequest
         $request = new self(
             array_pop($requestedAuthnContext),
             array_pop($subject),
+            array_pop($nameIdPolicy),
+            array_pop($conditions),
+
             $forceAuthn,
             $isPassive,
             $assertionConsumerServiceUrl,
             $protocolBinding,
             $attributeConsumingServiceIndex,
             $providerName,
+
             array_pop($issuer),
             $id,
             $version,
@@ -768,7 +767,11 @@ class AuthnRequest extends AbstractRequest
             }
         }
 
-        $this->addConditions($parent);
+        if ($this->conditions !== null) {
+            if (!$this->conditions->isEmptyElement()) {
+                $this->conditions->toXML($parent);
+            }
+        }
 
         if (!empty($this->requestedAuthnContext)) {
             $this->requestedAuthnContext->toXML($parent);
@@ -816,7 +819,6 @@ class AuthnRequest extends AbstractRequest
      *
      * @param \DOMElement $root The request element we should add the conditions to.
      * @return void
-     */
     private function addConditions(DOMElement $root): void
     {
         if (!empty($this->audiences)) {
@@ -831,4 +833,5 @@ class AuthnRequest extends AbstractRequest
             Utils::addStrings($ar, Constants::NS_SAML, 'saml:Audience', false, $this->getAudiences());
         }
     }
+     */
 }

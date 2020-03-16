@@ -43,7 +43,6 @@ abstract class AbstractSubjectQuery extends AbstractRequest
      * @param string|null $destination
      * @param string|null $consent
      * @param \SAML2\XML\samlp\Extensions $extensions
-     * @param string|null $relayState
      */
     protected function __construct(
         Subject $subject,
@@ -53,10 +52,9 @@ abstract class AbstractSubjectQuery extends AbstractRequest
         ?int $issueInstant = null,
         ?string $destination = null,
         ?string $consent = null,
-        ?Extensions $extensions = null,
-        ?string $relayState = null
+        ?Extensions $extensions = null
     ) {
-        parent::__construct($issuer, $id, $version, $issueInstant, $destination, $consent, $extensions, $relayState);
+        parent::__construct($issuer, $id, $version, $issueInstant, $destination, $consent, $extensions);
 
         $this->setSubject($subject);
     }

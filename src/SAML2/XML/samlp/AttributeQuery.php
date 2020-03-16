@@ -51,7 +51,6 @@ class AttributeQuery extends AbstractSubjectQuery
      * @param string|null $destination
      * @param string|null $consent
      * @param \SAML2\XML\samlp\Extensions $extensions
-     * @param string|null $relayState
      */
     public function __construct(
         Subject $subject,
@@ -62,10 +61,9 @@ class AttributeQuery extends AbstractSubjectQuery
         ?int $issueInstant = null,
         ?string $destination = null,
         ?string $consent = null,
-        ?Extensions $extensions = null,
-        ?string $relayState = null
+        ?Extensions $extensions = null
     ) {
-        parent::__construct($subject, $issuer, $id, $version, $issueInstant, $destination, $consent, $extensions, $relayState);
+        parent::__construct($subject, $issuer, $id, $version, $issueInstant, $destination, $consent, $extensions);
 
         $this->setAttributes($attributes);
     }

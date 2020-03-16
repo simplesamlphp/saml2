@@ -37,7 +37,6 @@ class ArtifactResponse extends AbstractStatusResponse
      * @param string|null $consent
      * @param \SAML2\XML\samlp\Extensions|null $extensions
      * @param \DOMElement $any
-     * @param string|null $relayState
      */
     public function __construct(
         Status $status,
@@ -49,8 +48,7 @@ class ArtifactResponse extends AbstractStatusResponse
         ?string $destination = null,
         ?string $consent = null,
         ?Extensions $extensions = null,
-        ?DOMElement $any = null,
-        ?string $relayState = null
+        ?DOMElement $any = null
     ) {
         parent::__construct(
             $status,
@@ -61,8 +59,7 @@ class ArtifactResponse extends AbstractStatusResponse
             $inResponseTo,
             $destination,
             $consent,
-            $extensions,
-            $relayState
+            $extensions
         );
 
         $this->setAny($any);

@@ -64,7 +64,6 @@ class LogoutRequest extends AbstractRequest
      * @param string|null $destination
      * @param string|null $consent
      * @param \SAML2\XML\samlp\Extensions $extensions
-     * @param string|null $relayState
      */
     public function __construct(
         IdentifierInterface $identifier,
@@ -77,10 +76,9 @@ class LogoutRequest extends AbstractRequest
         ?int $issueInstant = null,
         ?string $destination = null,
         ?string $consent = null,
-        ?Extensions $extensions = null,
-        ?string $relayState = null
+        ?Extensions $extensions = null
     ) {
-        parent::__construct($issuer, $id, $version, $issueInstant, $destination, $consent, $extensions, $relayState);
+        parent::__construct($issuer, $id, $version, $issueInstant, $destination, $consent, $extensions);
 
         $this->setIdentifier($identifier);
         $this->setNotOnOrAfter($notOnOrAfter);

@@ -36,7 +36,6 @@ class ArtifactResolve extends AbstractRequest
      * @param string|null $destination
      * @param string|null $consent
      * @param \SAML2\XML\samlp\Extensions $extensions
-     * @param string|null $relayState
      *
      * @throws \Exception
      */
@@ -48,10 +47,9 @@ class ArtifactResolve extends AbstractRequest
         ?int $issueInstant = null,
         ?string $destination = null,
         ?string $consent = null,
-        ?Extensions $extensions = null,
-        ?string $relayState = null
+        ?Extensions $extensions = null
     ) {
-        parent::__construct($issuer, $id, $version, $issueInstant, $destination, $consent, $relayState, $extensions);
+        parent::__construct($issuer, $id, $version, $issueInstant, $destination, $consent, $extensions);
 
         $this->setArtifact($artifact);
     }
