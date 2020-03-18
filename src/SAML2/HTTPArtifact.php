@@ -12,6 +12,7 @@ use SimpleSAML\Store;
 use SimpleSAML\Utils\HTTP;
 
 use SAML2\Utilities\Temporal;
+use SAML2\XML\saml\Issuer;
 
 /**
  * Class which implements the HTTP-Artifact binding.
@@ -130,9 +131,9 @@ class HTTPArtifact extends Binding
         $ar = new ArtifactResolve();
 
         /* Set the request attributes */
+        $issuer = new Issuer($this->spMetadata->getString('entityid'));
 
-        /** @psalm-suppress UndefinedClass */
-        $ar->setIssuer($this->spMetadata->getString('entityid'));
+        $ar->setIssuer($issuer);
         $ar->setArtifact($_REQUEST['SAMLart']);
         $ar->setDestination($endpoint['Location']);
 
