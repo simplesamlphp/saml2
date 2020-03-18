@@ -6,6 +6,7 @@ namespace SAML2;
 
 use RobRichards\XMLSecLibs\XMLSecurityKey;
 use SAML2\Utilities\Temporal;
+use SAML2\XML\saml\Issuer;
 use SAML2\XML\samlp\AbstractMessage;
 use SAML2\XML\samlp\ArtifactResolve;
 use SAML2\XML\samlp\ArtifactResponse;
@@ -145,9 +146,10 @@ class HTTPArtifact extends Binding
 
         /**
          * Set the request attributes
-         * @psalm-suppress UndefinedClass
          */
-        $ar->setIssuer($this->spMetadata->getString('entityid'));
+        $isser = new Issuer($this->spMetadata->getString('entityid'));
+
+        $ar->setIssuer($issuer);
         $ar->setArtifact($_REQUEST['SAMLart']);
         $ar->setDestination($endpoint['Location']);
 
