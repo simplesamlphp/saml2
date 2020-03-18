@@ -370,8 +370,8 @@ XML;
 
         $acElements = Utils::xpQuery($assertionElement, './saml_assertion:AuthnStatement/saml_assertion:AuthnContext');
         $this->assertCount(1, $acElements);
-        $this->assertEquals('samlac:AuthenticationContextDeclaration', $acElements[0]->documentElement->tagName);
-        $this->assertEquals('urn:oasis:names:tc:SAML:2.0:ac', $acElements[0]->documentElement->namespaceURI);
+        $this->assertEquals('samlac:AuthenticationContextDeclaration', $acElements[0]->firstChild->tagName);
+        $this->assertEquals('urn:oasis:names:tc:SAML:2.0:ac', $acElements[0]->firstChild->namespaceURI);
     }
 
 
