@@ -333,7 +333,7 @@ AUTHNREQUEST;
 </samlp:AuthnRequest>
 AUTHNREQUEST;
 
-        $authnRequest = new AuthnRequest(DOMDocumentFactory::fromString($xmlRequest)->firstChild);
+        $authnRequest = new AuthnRequest(DOMDocumentFactory::fromString($xmlRequest)->documentElement);
 
         $expectedList = ["Legacy1", "http://example.org/AAP", "urn:example:1"];
 
@@ -367,7 +367,7 @@ AUTHNREQUEST;
 
         $this->expectException(Exception::class);
         $this->expectExceptionMessage('Could not get ProviderID');
-        $authnRequest = new AuthnRequest(DOMDocumentFactory::fromString($xmlRequest)->firstChild);
+        $authnRequest = new AuthnRequest(DOMDocumentFactory::fromString($xmlRequest)->documentElement);
     }
 
 
@@ -437,7 +437,7 @@ AUTHNREQUEST;
 </samlp:AuthnRequest>
 AUTHNREQUEST;
 
-        $authnRequest = new AuthnRequest(DOMDocumentFactory::fromString($xmlRequest)->firstChild);
+        $authnRequest = new AuthnRequest(DOMDocumentFactory::fromString($xmlRequest)->documentElement);
 
         $this->assertEquals($requesterId, $authnRequest->getRequesterID());
     }
@@ -509,7 +509,7 @@ AUTHNREQUEST;
 </samlp:AuthnRequest>
 AUTHNREQUEST;
 
-        $authnRequest = new AuthnRequest(DOMDocumentFactory::fromString($xmlRequest)->firstChild);
+        $authnRequest = new AuthnRequest(DOMDocumentFactory::fromString($xmlRequest)->documentElement);
 
         $this->assertEquals($proxyCount, $authnRequest->getProxyCount());
     }
@@ -1070,7 +1070,7 @@ AUTHNREQUEST;
 </samlp:AuthnRequest>
 AUTHNREQUEST;
 
-        $authnRequest = new AuthnRequest(DOMDocumentFactory::fromString($xmlRequest)->firstChild);
+        $authnRequest = new AuthnRequest(DOMDocumentFactory::fromString($xmlRequest)->documentElement);
 
         $this->assertEquals($expectedAudiences, $authnRequest->getAudiences());
     }
