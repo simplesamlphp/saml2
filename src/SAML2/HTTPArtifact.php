@@ -131,7 +131,8 @@ class HTTPArtifact extends Binding
         $ar = new ArtifactResolve();
 
         /* Set the request attributes */
-        $issuer = new Issuer($this->spMetadata->getString('entityid'));
+        $issuer = new Issuer();
+        $issuer->setValue($this->spMetadata->getString('entityid'));
 
         $ar->setIssuer($issuer);
         $ar->setArtifact($_REQUEST['SAMLart']);
