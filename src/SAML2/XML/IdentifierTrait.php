@@ -41,7 +41,7 @@ trait IdentifierTrait
     /**
      * Set the value of the identifier-property
      *
-     * @param \SAML2\XML\saml\IdentifierInterface|null
+     * @param \SAML2\XML\saml\IdentifierInterface|null $identifier
      * @return void
      */
     protected function setIdentifier(?IdentifierInterface $identifier): void
