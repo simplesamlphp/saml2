@@ -38,9 +38,9 @@ final class Conditions extends AbstractSamlElement
     protected $audienceRestriction;
 
     /**
-     * @var \SAML2\XML\saml\OneTimeUse|null
+     * @var bool
      */
-    protected $oneTimeUse;
+    protected $oneTimeUse = false;
 
     /**
      * @var \SAML2\XML\saml\ProxyRestriction|null
@@ -55,7 +55,7 @@ final class Conditions extends AbstractSamlElement
      * @param int|null $notOnOrAfter
      * @param \SAML2\XML\saml\Condition[] $condition
      * @param \SAML2\XML\saml\AudienceRestriction[] $audienceRestriction
-     * @param \SAML2\XML\saml\OneTimeUse|null $oneTimeUse
+     * @param bool $oneTimeUse
      * @param \SAML2\XML\saml\ProxyRestriction|null $proxyRestriction
      */
     public function __construct(
@@ -63,14 +63,16 @@ final class Conditions extends AbstractSamlElement
         ?int $notOnOrAfter = null,
         array $condition = [],
         array $audienceRestriction = [],
-        ?OneTimeUse $oneTimeUse = null,
+        ?bool $oneTimeUse = null,
         ?ProxyRestriction $proxyRestriction = null
     ) {
         $this->setNotBefore($notBefore);
         $this->setNotOnOrAfter($notOnOrAfter);
         $this->setCondition($condition);
         $this->setAudienceRestriction($audienceRestriction);
-        $this->setOneTimeUse($oneTimeUse);
+        if (is_bool($oneTimeUse)) {
+            $this->setOneTimeUse($oneTimeUse);
+        }
         $this->setProxyRestriction($proxyRestriction);
     }
 
@@ -174,9 +176,9 @@ final class Conditions extends AbstractSamlElement
     /**
      * Collect the value of the oneTimeUse-property
      *
-     * @return \SAML2\XML\saml\OneTimeUse|null
+     * @return bool
      */
-    public function getOneTimeUse(): ?OneTimeUse
+    public function getOneTimeUse(): bool
     {
         return $this->oneTimeUse;
     }
@@ -185,10 +187,10 @@ final class Conditions extends AbstractSamlElement
     /**
      * Set the value of the oneTimeUse-property
      *
-     * @param \SAML2\XML\saml\OneTimeUse|null $oneTimeUse
+     * @param bool $oneTimeUse
      * @return void
      */
-    private function setOneTimeUse(?OneTimeUse $oneTimeUse): void
+    private function setOneTimeUse(?bool $oneTimeUse): void
     {
         $this->oneTimeUse = $oneTimeUse;
     }
@@ -252,7 +254,7 @@ final class Conditions extends AbstractSamlElement
 
         $condition = Condition::getChildrenOfClass($xml);
         $audienceRestriction = AudienceRestriction::getChildrenOfClass($xml);
-        $oneTimeUse = OneTimeUse::getChildrenOfClass($xml);
+        $oneTimeUse = Utils::extractStrings($xml, AbstractSamlElement::NS, 'OneTimeUse');
         $proxyRestriction = ProxyRestriction::getChildrenOfClass($xml);
 
         return new self(
@@ -260,7 +262,7 @@ final class Conditions extends AbstractSamlElement
             $notOnOrAfter !== null ? Utils::xsDateTimeToTimestamp($notOnOrAfter) : null,
             $condition,
             $audienceRestriction,
-            array_pop($oneTimeUse),
+            !empty($oneTimeUse),
             array_pop($proxyRestriction)
         );
     }
@@ -292,8 +294,10 @@ final class Conditions extends AbstractSamlElement
             $audienceRestriction->toXML($e);
         }
 
-        if ($this->oneTimeUse !== null) {
-            $this->oneTimeUse->toXML($e);
+        if (!empty($this->oneTimeUse)) {
+            $e->appendChild(
+                $e->ownerDocument->createElementNS(AbstractSamlElement::NS, 'OneTimeUse')
+            );
         }
 
         if ($this->proxyRestriction !== null) {

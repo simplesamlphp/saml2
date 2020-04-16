@@ -65,7 +65,7 @@ XML
                     ]
                 ),
             ],
-            new OneTimeUse(),
+            true,
             new ProxyRestriction(
                 [
                     new Audience('http://sp.example.com/demo2/metadata.php')
@@ -85,7 +85,7 @@ XML
         $this->assertCount(1, $audiences);
         $this->assertEquals('http://sp.example.com/demo1/metadata.php', $audiences[0]->getAudience());
 
-        $this->assertInstanceOf(OneTimeUse::class, $conditions->getOneTimeUse());
+        $this->assertTrue($conditions->getOneTimeUse());
 
         $proxyRestriction = $conditions->getProxyRestriction();
         $this->assertInstanceOf(ProxyRestriction::class, $proxyRestriction);
@@ -122,7 +122,7 @@ XML
         $this->assertCount(1, $audiences);
         $this->assertEquals('http://sp.example.com/demo1/metadata.php', $audiences[0]->getAudience());
 
-        $this->assertInstanceOf(OneTimeUse::class, $conditions->getOneTimeUse());
+        $this->assertTrue($conditions->getOneTimeUse());
 
         $proxyRestriction = $conditions->getProxyRestriction();
         $this->assertInstanceOf(ProxyRestriction::class, $proxyRestriction);
