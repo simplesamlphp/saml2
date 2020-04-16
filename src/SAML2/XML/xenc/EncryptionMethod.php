@@ -86,7 +86,6 @@ class EncryptionMethod extends AbstractXencElement
                 }
             }
 
-            /** @var \DOMElement $node */
             $children[] = Chunk::fromXML($node);
         }
 
