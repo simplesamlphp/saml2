@@ -15,7 +15,7 @@ use Webmozart\Assert\Assert;
  * @author Tim van Dijen, <tvdijen@gmail.com>
  * @package simplesamlphp/saml2
  */
-final class AudienceRestriction extends AbstractSamlElement
+final class AudienceRestriction extends AbstractConditionType
 {
     /** @var \SAML2\XML\saml\Audience[] */
     protected $audience = [];
@@ -28,6 +28,8 @@ final class AudienceRestriction extends AbstractSamlElement
      */
     public function __construct(array $audience)
     {
+        parent::__construct('');
+
         $this->setAudience($audience);
     }
 
@@ -83,7 +85,7 @@ final class AudienceRestriction extends AbstractSamlElement
      */
     public function toXML(DOMElement $parent = null): DOMElement
     {
-        $e = $this->instantiateParentElement($parent);
+        $e = parent::toXML($parent);
 
         foreach ($this->audience as $audience) {
             $audience->toXML($e);
