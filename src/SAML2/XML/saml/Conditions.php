@@ -55,7 +55,7 @@ final class Conditions extends AbstractSamlElement
      * @param int|null $notOnOrAfter
      * @param \SAML2\XML\saml\Condition[] $condition
      * @param \SAML2\XML\saml\AudienceRestriction[] $audienceRestriction
-     * @param bool $oneTimeUse
+     * @param bool|null $oneTimeUse
      * @param \SAML2\XML\saml\ProxyRestriction|null $proxyRestriction
      */
     public function __construct(
@@ -190,7 +190,7 @@ final class Conditions extends AbstractSamlElement
      * @param bool $oneTimeUse
      * @return void
      */
-    private function setOneTimeUse(?bool $oneTimeUse): void
+    private function setOneTimeUse(bool $oneTimeUse): void
     {
         $this->oneTimeUse = $oneTimeUse;
     }
