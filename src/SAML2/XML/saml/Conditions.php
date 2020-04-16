@@ -295,6 +295,7 @@ final class Conditions extends AbstractSamlElement
         }
 
         if (!empty($this->oneTimeUse)) {
+            /** @psalm-suppress PossiblyNullReference */
             $e->appendChild(
                 $e->ownerDocument->createElementNS(AbstractSamlElement::NS, 'OneTimeUse')
             );
