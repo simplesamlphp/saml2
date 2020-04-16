@@ -165,7 +165,7 @@ final class Conditions extends AbstractSamlElement
      */
     private function setAudienceRestriction(array $audienceRestriction): void
     {
-        Assert::allIsInstanceOf($condition, AudienceRestriction::class);
+        Assert::allIsInstanceOf($audienceRestriction, AudienceRestriction::class);
 
         $this->audienceRestriction = $audienceRestriction;
     }
