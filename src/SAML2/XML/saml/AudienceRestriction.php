@@ -51,6 +51,8 @@ final class AudienceRestriction extends AbstractSamlElement
      */
     private function setAudience(array $audience): void
     {
+        Assert::allIsInstanceOf($audience, Audience::class);
+
         $this->audience = $audience;
     }
 

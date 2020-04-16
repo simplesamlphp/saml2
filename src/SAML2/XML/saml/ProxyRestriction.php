@@ -79,6 +79,8 @@ final class ProxyRestriction extends AbstractConditionType
      */
     protected function setAudience(array $audience): void
     {
+        Assert::allIsInstanceOf($audience, Audience::class);
+
         $this->audience = $audience;
     }
 

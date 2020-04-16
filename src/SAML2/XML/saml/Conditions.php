@@ -140,6 +140,8 @@ final class Conditions extends AbstractSamlElement
      */
     private function setCondition(array $condition): void
     {
+        Assert::allIsInstanceOf($condition, Condition::class);
+
         $this->condition = $condition;
     }
 
@@ -158,11 +160,13 @@ final class Conditions extends AbstractSamlElement
     /**
      * Set the value of the audienceRestriction-property
      *
-     * @param \SAML2\XML\saml\AudienceRestriction $audienceRestriction
+     * @param \SAML2\XML\saml\AudienceRestriction[] $audienceRestriction
      * @return void
      */
     private function setAudienceRestriction(array $audienceRestriction): void
     {
+        Assert::allIsInstanceOf($condition, AudienceRestriction::class);
+
         $this->audienceRestriction = $audienceRestriction;
     }
 
