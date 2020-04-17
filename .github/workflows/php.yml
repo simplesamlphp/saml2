@@ -103,11 +103,11 @@ jobs:
 
       - name: PHPUnit
         if: ${{ matrix.php-versions }} != '7.3'
-        run: vendor/bin/phpunit --no-coverage
+        run: php vendor/bin/phpunit --no-coverage
 
       - name: PHPUnit
         if: ${{ matrix.php-versions }} == '7.3'
-        run: vendor/bin/phpunit
+        run: php vendor/bin/phpunit
 
       - name: Save coverage data
         if: ${{ matrix.php-versions }} == '7.3'
@@ -142,9 +142,9 @@ jobs:
         run: bash <(curl -s https://codecov.io/bash)
         
       - name: PHP Code Sniffer
-        run: vendor/bin/phpcs src/
+        run: php vendor/bin/phpcs src/
         
       - name: Psalm
         run: |
-          vendor/bin/psalm
-          vendor/bin/psalter --issues=UnnecessaryVarAnnotation --dry-run
+          php vendor/bin/psalm
+          php vendor/bin/psalter --issues=UnnecessaryVarAnnotation --dry-run
