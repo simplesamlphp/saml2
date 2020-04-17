@@ -42,9 +42,9 @@ jobs:
       - name: Install Composer dependencies
         run: composer install --no-progress --no-suggest --prefer-dist --optimize-autoloader
       
-      - use: action/upload-artifact@v1
+      - uses: action/upload-artifact@v1
         with:
-          name: saml2
+          name: ${{ runner.os }}-${{ matrix.php-versions }}-saml2
           path: ${{ github.workspace }}
         
   sanity-check:
@@ -66,7 +66,7 @@ jobs:
 
       - uses: actions/download-artifact@v1
         with:
-          name: saml2
+          name: ${{ runner.os }}-${{ matrix.php-versions }}-saml2
 
       - name: Install test framework
         run: composer require simplesamlphp/simplesamlphp-test-framework --dev
@@ -98,6 +98,10 @@ jobs:
           extensions: mbstring, xml
           coverage: xdebug
 
+      - uses: actions/download-artifact@v1
+        with:
+          name: ${{ runner.os }}-${{ matrix.php-versions }}-saml2
+
       - name: PHPUnit
         if: ${{ matrix.php-versions }} != '7.3'
         run: vendor/bin/phpunit --no-coverage
@@ -127,7 +131,12 @@ jobs:
 
       - uses: actions/download-artifact@v1
         with:
+          name: ${{ runner.os }}-${{ matrix.php-versions }}-saml2
+
+      - uses: actions/download-artifact@v1
+        with:
           name: build-data
+          path: ${{ github.workspace }}/build
 
       - name: Codecov
         run: bash <(curl -s https://codecov.io/bash)
