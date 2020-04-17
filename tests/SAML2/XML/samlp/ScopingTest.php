@@ -6,6 +6,7 @@ namespace SAML2\XML\samlp;
 
 use InvalidArgumentException;
 use PHPUnit\Framework\TestCase;
+use SAML2\Constants;
 use SAML2\DOMDocumentFactory;
 use SAML2\XML\samlp\IDPEntry;
 use SAML2\XML\samlp\IDPList;
@@ -73,6 +74,22 @@ XML
         $this->assertEquals('urn:some:requester', $requesterId[0]);
 
         $this->assertEquals($this->document->saveXML($this->document->documentElement), strval($scoping));
+    }
+
+
+    /**
+     * Adding no contents to a Scoping element should yield an empty element. If there were contents already
+     * there, those should be left untouched.
+     */
+    public function testMarshallingWithNoElements(): void
+    {
+        $samlpns = Constants::NS_SAMLP;
+        $scoping = new Scoping();
+        $this->assertEquals(
+            "<samlp:Scoping xmlns:samlp=\"$samlpns\"/>",
+            strval($scoping)
+        );
+        $this->assertTrue($scoping->isEmptyElement());
     }
 
 
