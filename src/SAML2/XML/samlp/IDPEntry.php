@@ -33,7 +33,7 @@ final class IDPEntry extends AbstractSamlpElement
      * @param string|null $name
      * @param string|null $loc
      */
-    public function __construct(string $providerId, string $name = null, string $loc = null)
+    public function __construct(string $providerId, ?string $name = null, ?string $loc = null)
     {
         $this->setProviderId($providerId);
         $this->setName($name);
