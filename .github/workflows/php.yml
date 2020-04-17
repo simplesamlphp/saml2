@@ -67,6 +67,7 @@ jobs:
       - uses: actions/download-artifact@v1
         with:
           name: ${{ runner.os }}-${{ matrix.php-versions }}-saml2
+          path: ${{ github.workspace }}
 
       - name: Install test framework
         run: composer require simplesamlphp/simplesamlphp-test-framework --dev
@@ -101,6 +102,7 @@ jobs:
       - uses: actions/download-artifact@v1
         with:
           name: ${{ runner.os }}-${{ matrix.php-versions }}-saml2
+          path: ${{ github.workspace }}
 
       - name: PHPUnit
         if: ${{ matrix.php-versions }} != '7.3'
@@ -132,6 +134,7 @@ jobs:
       - uses: actions/download-artifact@v1
         with:
           name: ${{ runner.os }}-${{ matrix.php-versions }}-saml2
+          path: ${{ github.workspace }}
 
       - uses: actions/download-artifact@v1
         with:
