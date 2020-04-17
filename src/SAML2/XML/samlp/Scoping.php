@@ -132,7 +132,7 @@ final class Scoping extends AbstractSamlpElement
         $requesterId = Utils::extractStrings($xml, AbstractSamlpElement::NS, 'RequesterID');
 
         return new self(
-            intval($proxyCount),
+            is_null($proxyCount) ? null : intval($proxyCount),
             array_pop($idpList),
             $requesterId
         );
