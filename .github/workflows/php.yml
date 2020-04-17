@@ -47,7 +47,7 @@ jobs:
         run: composer require simplesamlphp/simplesamlphp-test-framework --dev
 
       - name: Syntax check PHP
-        run: sh vendor/bin/check-syntax-php.sh
+        run: bash vendor/bin/check-syntax-php.sh
     
       - uses: actions/upload-artifact@v1
         with:
