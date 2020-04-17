@@ -8,7 +8,7 @@ on:
 
 jobs:
   build:
-    name: Building for PHP ${{ matrix.php-versions }} on ${{ matrix.operating-system }}
+    name: Build, PHP ${{ matrix.php-versions }}, ${{ matrix.operating-system }}
     runs-on: ${{ matrix.operating-system }}
     strategy:
       fail-fast: false
@@ -42,21 +42,27 @@ jobs:
 
       - name: Install Composer dependencies
         run: composer install --no-progress --no-suggest --prefer-dist --optimize-autoloader
-      
+
+      - name: Install test framework
+        run: composer require simplesamlphp/simplesamlphp-test-framework --dev
+
+      - name: Syntax check PHP
+        run: sh vendor/bin/check-syntax-php.sh
+    
       - uses: actions/upload-artifact@v1
         with:
           name: ${{ runner.os }}-${{ matrix.php-versions }}-saml2
           path: ${{ github.workspace }}
         
   sanity-check:
-    name: Sanity checks for PHP ${{ matrix.php-versions }} on ${{ matrix.operating-system }}
+    name: Sanity checks, PHP ${{ matrix.php-versions }}, ${{ matrix.operating-system }}
     runs-on: ${{ matrix.operating-system }}
     needs: [build]
     strategy:
       fail-fast: false
       matrix:
-        operating-system: [ubuntu-latest, windows-latest]
-        php-versions: ['7.2', '7.3', '7.4']
+        operating-system: [ubuntu-latest]
+        php-version: '7.3'
 
     steps:
       - name: Setup PHP, with composer and extensions
@@ -71,22 +77,16 @@ jobs:
           name: ${{ runner.os }}-${{ matrix.php-versions }}-saml2
           path: ${{ github.workspace }}
 
-      - name: Install test framework
-        run: composer require simplesamlphp/simplesamlphp-test-framework --dev
-
-      - name: Syntax check PHP
-        run: sh vendor/bin/check-syntax-php.sh
-    
       - name: Syntax check YAML / XML / JSON
         run: |
-          sh vendor/bin/check-syntax-yaml.sh
-          sh vendor/bin/check-syntax-xml.sh
-          sh vendor/bin/check-syntax-json.sh
+          bash vendor/bin/check-syntax-yaml.sh
+          bash vendor/bin/check-syntax-xml.sh
+          bash vendor/bin/check-syntax-json.sh
         
   unit-tests:
     name: Unit tests for PHP ${{ matrix.php-versions }} on ${{ matrix.operating-system }}
     runs-on: ${{ matrix.operating-system }}
-    needs: [sanity-check]
+    needs: [build]
     strategy:
       fail-fast: false
       matrix:
