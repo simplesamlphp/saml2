@@ -32,7 +32,7 @@ final class Scoping extends AbstractSamlpElement
      * Initialize a Scoping element.
      *
      * @param int|null $proxyCount
-     * @param \SAML2\XML\samlp\IDPList $idpList
+     * @param \SAML2\XML\samlp\IDPList|null $idpList
      * @param string[] $requesterId
      */
     public function __construct(?int $proxyCount = null, ?IDPList $idpList = null, array $requesterId = [])
