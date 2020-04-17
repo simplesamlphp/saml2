@@ -22,6 +22,7 @@ jobs:
         with:
           php-version: ${{ matrix.php-versions }}
           extensions: mbstring, xml
+          coverage: none
 
       - uses: actions/checkout@v2
       
@@ -63,6 +64,7 @@ jobs:
         with:
           php-version: ${{ matrix.php-versions }}
           extensions: mbstring, xml
+          coverage: none
 
       - uses: actions/download-artifact@v1
         with:
@@ -97,7 +99,7 @@ jobs:
         with:
           php-version: ${{ matrix.php-versions }}
           extensions: mbstring, xml
-          coverage: xdebug
+          coverage: pcov
 
       - uses: actions/download-artifact@v1
         with:
