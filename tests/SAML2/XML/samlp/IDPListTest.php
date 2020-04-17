@@ -70,6 +70,35 @@ XML
     /**
      * @return void
      */
+    public function testMarshallingNullables(): void
+    {
+        $ns = IDPList::NS;
+        $document = DOMDocumentFactory::fromString(<<<XML
+<samlp:IDPList xmlns:samlp="{$ns}">
+  <samlp:IDPEntry ProviderID="urn:some:requester1" Name="testName1" Loc="testLoc1"/>
+</samlp:IDPList>
+XML
+        );
+
+        $entry1 = new IDPEntry('urn:some:requester1', 'testName1', 'testLoc1');
+        $list = new IDPList([$entry1], null);
+
+        $entries = $list->getIdpEntry();
+        $this->assertCount(1, $entries);
+
+        $this->assertEquals('urn:some:requester1', $entries[0]->getProviderID());
+        $this->assertEquals('testName1', $entries[0]->getName());
+        $this->assertEquals('testLoc1', $entries[0]->getLoc());
+
+        $this->assertNull($list->getGetComplete());
+
+        $this->assertEquals($document->saveXML($document->documentElement), strval($list));
+    }
+
+
+    /**
+     * @return void
+     */
     public function testUnmarshalling(): void
     {
         $list = IDPList::fromXML($this->document->documentElement);
