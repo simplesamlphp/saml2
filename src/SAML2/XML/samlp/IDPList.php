@@ -31,7 +31,7 @@ final class IDPList extends AbstractSamlpElement
      * @param \SAML2\XML\samlp\IDPEntry[] $idpEntry
      * @param string|null $getComplete
      */
-    public function __construct(array $idpEntry, string $getComplete = null)
+    public function __construct(array $idpEntry, ?string $getComplete = null)
     {
         $this->setIdpEntry($idpEntry);
         $this->setGetComplete($getComplete);
@@ -72,7 +72,7 @@ final class IDPList extends AbstractSamlpElement
      * @param string|null $getComplete
      * @return void
      */
-    private function setGetComplete(string $getComplete = null): void
+    private function setGetComplete(?string $getComplete = null): void
     {
         $this->getComplete = $getComplete;
     }
