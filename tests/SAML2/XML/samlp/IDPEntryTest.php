@@ -48,6 +48,26 @@ XML
         $this->assertEquals($this->document->saveXML($this->document->documentElement), strval($entry));
     }
 
+    /**
+     * @return void
+     */
+    public function testMarshallingNullables(): void
+    {
+        $ns = IDPEntry::NS;
+        $document = DOMDocumentFactory::fromString(<<<XML
+<samlp:IDPEntry xmlns:samlp="{$ns}" ProviderID="urn:some:requester"/>
+XML
+        );
+
+        $entry = new IDPEntry('urn:some:requester', null, null);
+
+        $this->assertEquals('urn:some:requester', $entry->getProviderID());
+        $this->assertNull($entry->getName());
+        $this->assertNull($entry->getLoc());
+
+        $this->assertEquals($document->saveXML($document->documentElement), strval($entry));
+    }
+
 
     /**
      * @return void
