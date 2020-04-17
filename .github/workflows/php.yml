@@ -42,7 +42,7 @@ jobs:
       - name: Install Composer dependencies
         run: composer install --no-progress --no-suggest --prefer-dist --optimize-autoloader
       
-      - uses: action/upload-artifact@v1
+      - uses: actions/upload-artifact@v1
         with:
           name: ${{ runner.os }}-${{ matrix.php-versions }}-saml2
           path: ${{ github.workspace }}
@@ -112,7 +112,7 @@ jobs:
 
       - name: Save coverage data
         if: ${{ matrix.php-versions }} == '7.3'
-        uses: action/upload-artifact@v1
+        uses: actions/upload-artifact@v1
         with:
           name: build-data
           path: ${{ github.workspace }}/build
