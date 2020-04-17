@@ -73,13 +73,13 @@ jobs:
         run: composer require simplesamlphp/simplesamlphp-test-framework --dev
 
       - name: Syntax check PHP
-        run: vendor/bin/check-syntax-php.sh
+        run: sh vendor/bin/check-syntax-php.sh
     
       - name: Syntax check YAML / XML / JSON
         run: |
-          vendor/bin/check-syntax-yaml.sh
-          vendor/bin/check-syntax-xml.sh
-          vendor/bin/check-syntax-json.sh
+          sh vendor/bin/check-syntax-yaml.sh
+          sh vendor/bin/check-syntax-xml.sh
+          sh vendor/bin/check-syntax-json.sh
         
   unit-tests:
     name: Unit tests for PHP ${{ matrix.php-versions }} on ${{ matrix.operating-system }}
