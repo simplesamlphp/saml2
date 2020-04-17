@@ -58,17 +58,12 @@ jobs:
     name: Sanity checks, PHP ${{ matrix.php-versions }}, ${{ matrix.operating-system }}
     runs-on: ${{ matrix.operating-system }}
     needs: [build]
-    strategy:
-      fail-fast: false
-      matrix:
-        operating-system: [ubuntu-latest]
-        php-version: '7.3'
 
     steps:
       - name: Setup PHP, with composer and extensions
         uses: shivammathur/setup-php@v2 #https://github.com/shivammathur/setup-php
         with:
-          php-version: ${{ matrix.php-versions }}
+          php-version: '7.3'
           extensions: mbstring, xml
           coverage: none
 
