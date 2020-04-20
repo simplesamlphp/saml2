@@ -2,7 +2,7 @@ name: CI
 
 on:
   push:
-    branches: [ master, release-*, github-actions ]
+    branches: [ * ]
   pull_request:
     branches: [ master, release-* ]
 
