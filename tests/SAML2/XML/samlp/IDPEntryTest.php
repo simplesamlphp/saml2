@@ -54,10 +54,10 @@ XML
     public function testMarshallingNullables(): void
     {
         $ns = IDPEntry::NS;
-        $document = DOMDocumentFactory::fromString(<<<XML
+        $document = <<<XML
 <samlp:IDPEntry xmlns:samlp="{$ns}" ProviderID="urn:some:requester"/>
 XML
-        );
+        ;
 
         $entry = new IDPEntry('urn:some:requester', null, null);
 
@@ -65,7 +65,7 @@ XML
         $this->assertNull($entry->getName());
         $this->assertNull($entry->getLoc());
 
-        $this->assertEquals($document->saveXML($document->documentElement), strval($entry));
+        $this->assertEquals($document, strval($entry));
     }
 
 
