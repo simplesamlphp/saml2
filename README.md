@@ -1,6 +1,8 @@
 SimpleSAMLphp SAML2 library
 ===========================
-[![Build Status](https://travis-ci.org/simplesamlphp/saml2.png?branch=feature/fix-build)](https://travis-ci.org/simplesamlphp/saml2) [![Coverage Status](https://codecov.io/gh/simplesamlphp/saml2/branch/master/graph/badge.svg)](https://codecov.io/gh/simplesamlphp/saml2)
+![CI](https://github.com/simplesamlphp/saml2/workflows/CI/badge.svg?branch=master)
+[![Build Status](https://travis-ci.org/simplesamlphp/saml2.png?branch=feature/fix-build)](https://travis-ci.org/simplesamlphp/saml2)
+[![Coverage Status](https://codecov.io/gh/simplesamlphp/saml2/branch/master/graph/badge.svg)](https://codecov.io/gh/simplesamlphp/saml2)
 
 A PHP library for SAML2 related functionality. Extracted from [SimpleSAMLphp](https://www.simplesamlphp.org),
 used by [OpenConext](https://www.openconext.org).
