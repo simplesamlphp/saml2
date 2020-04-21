@@ -10,7 +10,7 @@ use SAML2\Assertion\Exception\NotDecryptedException;
 use SAML2\Certificate\PrivateKeyLoader;
 use SAML2\Configuration\IdentityProvider;
 use SAML2\Configuration\ServiceProvider;
-use SAML2\EncryptedAssertion;
+use SAML2\XML\saml\EncryptedAssertion;
 
 class Decrypter
 {
@@ -69,7 +69,7 @@ class Decrypter
 
 
     /**
-     * @param \SAML2\EncryptedAssertion $assertion
+     * @param \SAML2\XML\saml\EncryptedAssertion $assertion
      *
      * @return \SAML2\XML\saml\Assertion
      */
