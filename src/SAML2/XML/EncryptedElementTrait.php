@@ -2,12 +2,11 @@
 
 declare(strict_types=1);
 
-namespace SAML2;
+namespace SAML2\XML;
 
 use DOMElement;
 use RobRichards\XMLSecLibs\XMLSecEnc;
 use RobRichards\XMLSecLibs\XMLSecurityKey;
-use SAML2\XML\AbstractXMLElement;
 use SAML2\XML\xenc\EncryptedData;
 use SAML2\XML\xenc\EncryptedKey;
 use Webmozart\Assert\Assert;
@@ -145,7 +144,7 @@ trait EncryptedElementTrait
 
     /**
      * @inheritDoc
-     * @return AbstractXMLElement
+     * @return \SAML2\XML\AbstractXMLElement
      */
     public static function fromXML(DOMElement $xml): object
     {

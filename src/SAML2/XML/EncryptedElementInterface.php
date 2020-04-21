@@ -2,10 +2,9 @@
 
 declare(strict_types=1);
 
-namespace SAML2;
+namespace SAML2\XML;
 
 use RobRichards\XMLSecLibs\XMLSecurityKey;
-use SAML2\XML\AbstractXMLElement;
 use SAML2\XML\xenc\EncryptedData;
 
 /**
@@ -28,7 +27,7 @@ interface EncryptedElementInterface
      * @param \RobRichards\XMLSecLibs\XMLSecurityKey $key The key we should use to decrypt the element.
      * @param string[] $blacklist List of blacklisted encryption algorithms.
      *
-     * @return AbstractXMLElement The decrypted element.
+     * @return \SAML2\XML\AbstractXMLElement The decrypted element.
      */
     public function decrypt(XMLSecurityKey $key, array $blacklist = []): AbstractXMLElement;
 

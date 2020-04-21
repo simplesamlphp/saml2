@@ -5,8 +5,8 @@ declare(strict_types=1);
 namespace SAML2\XML\saml;
 
 use RobRichards\XMLSecLibs\XMLSecurityKey;
-use SAML2\EncryptedElementInterface;
-use SAML2\EncryptedElementTrait;
+use SAML2\XML\EncryptedElementInterface;
+use SAML2\XML\EncryptedElementTrait;
 use SAML2\Utils;
 use SAML2\XML\AbstractXMLElement;
 
