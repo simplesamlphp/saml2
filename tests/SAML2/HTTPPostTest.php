@@ -108,8 +108,23 @@ class HTTPPostTest extends \Mockery\Adapter\Phpunit\MockeryTestCase
      */
     public function testSendAuthnRequestWithDestination(): void
     {
-        $request = new AuthnRequest();
-        $request->setDestination('https://example.org');
+        $request = new AuthnRequest(
+            null,
+            null,
+            null,
+            null,
+            null,
+            null,
+            null,
+            null,
+            null,
+            null,
+            null,
+            null,
+            null,
+            null,
+            'https://example.org'
+        );
         $hp = new HTTPPost();
         $hp->send($request);
     }
