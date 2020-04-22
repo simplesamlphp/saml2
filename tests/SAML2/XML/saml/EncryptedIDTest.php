@@ -5,8 +5,15 @@ declare(strict_types=1);
 namespace SAML2\XML\saml;
 
 use PHPUnit\Framework\TestCase;
+use RobRichards\XMLSecLibs\XMLSecurityKey;
+use SAML2\CertificatesMock;
+use SAML2\Compat\ContainerSingleton;
+use SAML2\Compat\MockContainer;
+use SAML2\Compat\Ssp\Container;
 use SAML2\Constants;
+use SAML2\CustomBaseID;
 use SAML2\DOMDocumentFactory;
+use SAML2\Exception\InvalidArgumentException;
 use SAML2\XML\Chunk;
 use SAML2\XML\ds\KeyInfo;
 use SAML2\XML\xenc\CipherData;
@@ -15,6 +22,7 @@ use SAML2\XML\xenc\EncryptedData;
 use SAML2\XML\xenc\EncryptedKey;
 use SAML2\XML\xenc\EncryptionMethod;
 use SAML2\XML\xenc\ReferenceList;
+use SimpleSAML\Configuration;
 
 /**
  * Class EncryptedIDTest
@@ -72,6 +80,15 @@ XML
             '<ds:RetrievalMethod xmlns:ds="http://www.w3.org/2000/09/xmldsig#" URI="#Encrypted_KEY_ID" ' .
             'Type="http://www.w3.org/2001/04/xmlenc#EncryptedKey"/>'
         );
+    }
+
+
+    /**
+     * @return void
+     */
+    public function tearDown(): void
+    {
+        ContainerSingleton::setContainer(new MockContainer());
     }
 
 
@@ -141,6 +158,58 @@ XML
         );
     }
 
+
+    /**
+     * Test encryption / decryption
+     */
+    public function testEncryption(): void
+    {
+        Configuration::loadFromArray([], '[ARRAY]', 'simplesaml');
+
+        // test with a NameID
+        $nameid = new NameID('value', 'name_qualifier');
+        $pubkey = new XMLSecurityKey(XMLSecurityKey::RSA_SHA256, ['type' => 'public']);
+        $pubkey->loadKey(CertificatesMock::PUBLIC_KEY_PEM);
+        $encid = EncryptedID::fromUnencryptedElement($nameid, $pubkey);
+        $str = (string) $encid;
+        $doc = DOMDocumentFactory::fromString($str);
+        $encid = EncryptedID::fromXML($doc->documentElement);
+        $privkey = new XMLSecurityKey(XMLSecurityKey::RSA_SHA256, ['type' => 'private']);
+        $privkey->loadKey(CertificatesMock::PRIVATE_KEY_PEM);
+        $id = $encid->decrypt($privkey);
+        $this->assertEquals((string) $nameid, (string) $id);
+
+        // test with Issuer
+        $issuer = new Issuer('entityID');
+        $encid = EncryptedID::fromUnencryptedElement($issuer, $pubkey);
+        $id = $encid->decrypt($privkey);
+        $this->assertInstanceOf(Issuer::class, $id);
+        $this->assertEquals((string) $issuer, (string) $id);
+
+        // test a custom BaseID without registering it
+        $customid = new CustomBaseID(1.0, 'name_qualifier');
+        $encid = EncryptedID::fromUnencryptedElement($customid, $pubkey);
+        $id = $encid->decrypt($privkey);
+        $this->assertInstanceOf(BaseID::class, $id);
+        $this->assertEquals((string) $customid, (string) $id);
+
+        // test a custom BaseID with a registered handler
+        $container = $this->createMock(Container::class);
+        $container->method('getIdentifierHandler')->willReturn(CustomBaseID::class);
+        ContainerSingleton::setContainer($container);
+
+        $encid = EncryptedID::fromUnencryptedElement($customid, $pubkey);
+        $id = $encid->decrypt($privkey);
+        $this->assertInstanceOf(CustomBaseID::class, $id);
+        $this->assertEquals((string) $customid, (string) $id);
+
+        // test with unsupported ID
+        $attr = new Attribute('name');
+        $encid = EncryptedID::fromUnencryptedElement($attr, $pubkey);
+        $this->expectException(InvalidArgumentException::class);
+        $this->expectExceptionMessage('Unknown or unsupported encrypted identifier.');
+        $encid->decrypt($privkey);
+    }
 
 
     /**
