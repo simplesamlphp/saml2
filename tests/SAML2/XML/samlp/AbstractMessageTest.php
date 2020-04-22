@@ -53,7 +53,7 @@ AUTHNREQUEST
 
         $signedMessage = MessageFactory::fromXML($unsignedMessage->toXML());
 
-        $this->assertEquals($privateKey->getAlgorith(), $signedMessage->getSignatureMethod());
+        $this->assertEquals($privateKey->getAlgorithm(), $signedMessage->getSignature()->getAlgorithm());
     }
 
 
@@ -160,7 +160,7 @@ AUTHNREQUEST
 
         $signedMessage = MessageFactory::fromXML($unsignedMessage->toXML());
 
-        $this->assertEquals($privateKey->getAlgorith(), $signedMessage->getSignatureMethod());
+        $this->assertEquals($privateKey->getAlgorithm(), $signedMessage->getSignature()->getAlgorithm());
     }
 
 
