@@ -14,6 +14,9 @@ use SAML2\Utils;
 use SAML2\XML\IdentifierTrait;
 use SAML2\XML\ds\Signature;
 use SAML2\XML\saml\IdentifierInterface;
+use SAML2\XML\saml\BaseID;
+use SAML2\XML\saml\EncryptedID;
+use SAML2\XML\saml\NameID;
 use SAML2\XML\saml\Issuer;
 use Webmozart\Assert\Assert;
 
