@@ -198,9 +198,28 @@ class AuthnRequest extends AbstractRequest
     /**
      * @return \SAML2\XML\saml\Subject|null
      */
-    private function getSubject(): ?Subject
+    public function getSubject(): ?Subject
     {
         return $this->subject;
+    }
+
+
+    /**
+     * @param \SAML2\XML\saml\Conditions|null $conditions
+     * @return void
+     */
+    private function setConditions(?Conditions $conditions): void
+    {
+        $this->conditions = $conditions;
+    }
+
+
+    /**
+     * @return \SAML2\XML\saml\Conditions|null
+     */
+    public function getConditions(): ?Conditions
+    {
+        return $this->conditions;
     }
 
 
@@ -392,31 +411,6 @@ class AuthnRequest extends AbstractRequest
     private function setIsPassive(?bool $isPassive): void
     {
         $this->isPassive = $isPassive;
-    }
-
-
-    /**
-     * Retrieve the audiences from the request.
-     * This may be an empty string, in which case no audience is included.
-     *
-     * @return array The audiences.
-     */
-    public function getAudiences(): array
-    {
-        return $this->audiences;
-    }
-
-
-    /**
-     * Set the audiences to send in the request.
-     * This may be an empty string, in which case no audience will be sent.
-     *
-     * @param array $audiences The audiences.
-     * @return void
-     */
-    private function setAudiences(array $audiences): void
-    {
-        $this->audiences = $audiences;
     }
 
 

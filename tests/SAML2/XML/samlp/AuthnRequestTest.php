@@ -1029,10 +1029,7 @@ AUTHNREQUEST;
         );
 
         // basic AuthnRequest
-        $request = new AuthnRequest();
-        $request->setIssuer($issuer);
-        $request->setDestination('https://tiqr.example.org/idp/profile/saml2/Redirect/SSO');
-        $request->setAudiences(array('https://sp1.example.org', 'https://sp2.example.org'));
+        $request = new AuthnRequest(null, null, null, null, null, null, null, null, null, null, $issuer, null, null, null, $destination);
 
         $expectedStructureDocument = <<<AUTHNREQUEST
 <samlp:AuthnRequest
@@ -1056,36 +1053,5 @@ AUTHNREQUEST;
         $requestStructure = $request->toXML();
 
         $this->assertEqualXMLStructure($expectedStructure, $requestStructure);
-    }
-
-
-    /**
-     * Test reading audiences.
-     */
-    public function testAudiencesAreReadCorrectly(): void
-    {
-        $expectedAudiences = ['https://sp1.example.org', 'https://sp2.example.org'];
-
-        $xmlRequest = <<<AUTHNREQUEST
-<samlp:AuthnRequest
-    xmlns:samlp="urn:oasis:names:tc:SAML:2.0:protocol"
-    xmlns:saml="urn:oasis:names:tc:SAML:2.0:assertion"
-    ID="_1234567890abvdefghijkl"
-    Version="2.0"
-    IssueInstant="2015-05-11T09:02:36Z"
-    Destination="https://tiqr.example.org/idp/profile/saml2/Redirect/SSO">
-    <saml:Issuer>https://gateway.example.org/saml20/sp/metadata</saml:Issuer>
-    <saml:Conditions>
-      <saml:AudienceRestriction>
-        <saml:Audience>https://sp1.example.org</saml:Audience>
-        <saml:Audience>https://sp2.example.org</saml:Audience>
-      </saml:AudienceRestriction>
-    </saml:Conditions>
-</samlp:AuthnRequest>
-AUTHNREQUEST;
-
-        $authnRequest = AuthnRequest::fromXML(DOMDocumentFactory::fromString($xmlRequest)->documentElement);
-
-        $this->assertEquals($expectedAudiences, $authnRequest->getAudiences());
     }
 }
