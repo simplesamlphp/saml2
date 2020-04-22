@@ -49,7 +49,7 @@ class IsSuccessful implements ConstraintValidator
             '%s%s%s',
             $this->truncateStatus($statusCode->getValue()),
             $subCodes ? '/' . implode('/', $subCodes) : '',
-            $statusMessage ? ' ' . $statusMessage->getMessage() : ''
+            $statusMessage ? ' ' . $statusMessage : ''
         );
     }
 

@@ -63,7 +63,7 @@ class IsSuccessfulTest extends \Mockery\Adapter\Phpunit\MockeryTestCase
                     )
                 ]
             ),
-            new StatusMessage('this is a test message')
+            'this is a test message'
         );
 
         $this->response->shouldReceive('isSuccess')->once()->andReturn(false);

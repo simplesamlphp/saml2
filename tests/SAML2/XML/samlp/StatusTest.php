@@ -67,7 +67,7 @@ XML
                     )
                 ]
             ),
-            new StatusMessage('Something went wrong'),
+            'Something went wrong',
             [
                 new StatusDetail([new Chunk($this->detail->documentElement)])
             ]
@@ -120,9 +120,8 @@ XML
 
         $this->assertEquals(Constants::STATUS_REQUEST_DENIED, $subCodes[0]->getValue());
 
-        /** @psalm-var \SAML2\XML\samlp\StatusMessage $statusMessage */
         $statusMessage = $status->getStatusMessage();
-        $this->assertEquals('Something went wrong', $statusMessage->getMessage());
+        $this->assertEquals('Something went wrong', $statusMessage);
 
         $statusDetails = $status->getStatusDetails();
         $this->assertCount(1, $statusDetails);

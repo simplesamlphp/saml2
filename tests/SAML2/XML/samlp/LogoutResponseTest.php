@@ -42,7 +42,7 @@ XML;
         $status = $response->getStatus();
         $this->assertEquals("urn:oasis:names:tc:SAML:2.0:status:Responder", $status->getStatusCode()->getValue());
         $this->assertEmpty($status->getStatusCode()->getSubCodes());
-        $this->assertEquals("Something is wrong...", $status->getStatusMessage()->getMessage());
+        $this->assertEquals("Something is wrong...", $status->getStatusMessage());
 
         $this->assertEquals("_bec424fa5103428909a30ff1e31168327f79474984", $response->getInResponseTo());
     }

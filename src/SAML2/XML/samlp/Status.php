@@ -9,7 +9,6 @@ use SAML2\Constants;
 use SAML2\DOMDocumentFactory;
 use SAML2\Utils;
 use SAML2\XML\samlp\StatusCode;
-use SAML2\XML\samlp\StatusMessage;
 use SAML2\XML\samlp\StatusDetail;
 use Webmozart\Assert\Assert;
 
@@ -24,8 +23,8 @@ final class Status extends AbstractSamlpElement
     /** @var \SAML2\XML\samlp\StatusCode */
     protected $statusCode;
 
-    /** @var \SAML2\XML\samlp\StatusMessage|null */
-    protected $statusMessage = null;
+    /** @var string|null */
+    protected $statusMessage;
 
     /** @var \SAML2\XML\samlp\StatusDetail[] */
     protected $statusDetails = [];
@@ -35,10 +34,10 @@ final class Status extends AbstractSamlpElement
      * Initialize a samlp:Status
      *
      * @param \SAML2\XML\samlp\StatusCode $statusCode
-     * @param \SAML2\XML\samlp\StatusMessage|null $statusMessage
+     * @param string|null $statusMessage
      * @param \SAML2\XML\samlp\StatusDetail[] $statusDetails
      */
-    public function __construct(StatusCode $statusCode, ?StatusMessage $statusMessage = null, array $statusDetails = [])
+    public function __construct(StatusCode $statusCode, ?string $statusMessage = null, array $statusDetails = [])
     {
         $this->setStatusCode($statusCode);
         $this->setStatusMessage($statusMessage);
@@ -74,9 +73,9 @@ final class Status extends AbstractSamlpElement
     /**
      * Collect the value of the statusMessage
      *
-     * @return \SAML2\XML\samlp\StatusMessage|null
+     * @return string
      */
-    public function getStatusMessage(): ?StatusMessage
+    public function getStatusMessage(): ?string
     {
         return $this->statusMessage;
     }
@@ -84,11 +83,11 @@ final class Status extends AbstractSamlpElement
 
     /**
      * Set the value of the statusMessage-property
-     * @param \SAML2\XML\samlp\StatusMessage|null $value
+     * @param string|null $value
      *
      * @return void
      */
-    private function setStatusMessage(?StatusMessage $statusMessage): void
+    private function setStatusMessage(?string $statusMessage): void
     {
         $this->statusMessage = $statusMessage;
     }
@@ -132,32 +131,17 @@ final class Status extends AbstractSamlpElement
         Assert::same($xml->localName, 'Status');
         Assert::same($xml->namespaceURI, Status::NS);
 
-        /** @var \DOMElement[] $statusCode */
-        $statusCode = Utils::xpQuery($xml, './saml_protocol:StatusCode');
+        $statusCode = StatusCode::getChildrenOfClass($xml);
         Assert::count($statusCode, 1);
 
-        $statusCode = StatusCode::fromXML($statusCode[0]);
+        $statusMessage = Utils::extractStrings($xml, AbstractSamlpElement::NS, 'StatusMessage');
+        Assert::maxCount($statusMessage, 1);
 
-        /** @var \DOMElement[] $message */
-        $message = Utils::xpQuery($xml, './saml_protocol:StatusMessage');
-        Assert::maxCount($message, 1);
-
-        $statusMessage = null;
-        if (!empty($message)) {
-            $statusMessage = StatusMessage::fromXML($message[0]);
-        }
-
-        /** @var \DOMElement[] $details */
-        $details = Utils::xpQuery($xml, './saml_protocol:StatusDetail');
-
-        $statusDetails = [];
-        foreach ($details as $detail) {
-            $statusDetails[] = StatusDetail::fromXML($detail);
-        }
+        $statusDetails = StatusDetail::getChildrenOfClass($xml);
 
         return new self(
-            $statusCode,
-            $statusMessage,
+            array_pop($statusCode),
+            array_pop($statusMessage),
             $statusDetails
         );
     }
@@ -175,8 +159,8 @@ final class Status extends AbstractSamlpElement
 
         $this->statusCode->toXML($e);
 
-        if ($this->statusMessage !== null) {
-            $this->statusMessage->toXML($e);
+        if (!is_null($this->statusMessage)) {
+            Utils::addString($e, AbstractSamlpElement::NS, 'samlp:StatusMessage', $this->statusMessage);
         }
 
         foreach ($this->statusDetails as $sd) {
