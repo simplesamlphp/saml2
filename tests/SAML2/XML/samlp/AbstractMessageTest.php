@@ -11,6 +11,7 @@ use SAML2\CertificatesMock;
 use SAML2\Constants;
 use SAML2\DOMDocumentFactory;
 use SAML2\Utils;
+use SAML2\XML\Chunk;
 use SAML2\XML\saml\Issuer;
 use SAML2\XML\samlp\AbstractMessage;
 use SAML2\XML\samlp\Extensions;
@@ -216,8 +217,7 @@ AUTHNREQUEST
      */
     public function testSetExtensions(): void
     {
-        $this->markTestSkipped();
-        $authnRequest = new \DOMDocument();
+        $authnRequest = new DOMDocument();
         $authnRequest->loadXML(<<<'AUTHNREQUEST'
 <samlp:AuthnRequest
     xmlns:samlp="urn:oasis:names:tc:SAML:2.0:protocol"
@@ -242,18 +242,19 @@ AUTHNREQUEST
 
         $message = MessageFactory::fromXML($authnRequest->documentElement);
         $exts = $message->getExtensions();
-        $this->assertCount(0, $exts);
+        $this->assertNull($exts);
 
-        $dom = \SAML2\DOMDocumentFactory::create();
+        $dom = DOMDocumentFactory::create();
         $ce = $dom->createElementNS('http://www.example.com/XFoo', 'xfoo:test', 'Test data!');
-        $newexts[] = new \SAML2\XML\Chunk($ce);
+        $newexts[] = new Chunk($ce);
 
         $message->setExtensions($newexts);
 
         $exts = $message->getExtensions();
-        $this->assertCount(1, $exts);
-        $this->assertEquals("test", $exts[0]->getLocalName());
-        $this->assertEquals("Test data!", $exts[0]->getXML()->textContent);
+        $list = $exts->getList();
+        $this->assertCount(1, $list);
+        $this->assertEquals("test", $list[0]->getLocalName());
+        $this->assertEquals("Test data!", $list[0]->getXML()->textContent);
 
         $xml = $message->toXML();
         $xml_exts = Utils::xpQuery($xml, './samlp:Extensions');
