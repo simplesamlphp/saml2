@@ -197,9 +197,8 @@ AUTHNREQUEST;
         $authnRequest = AuthnRequest::fromXML(DOMDocumentFactory::fromString($xml)->documentElement);
 
         $key = CertificatesMock::getPrivateKey();
-        $authnRequest->decryptNameId($key);
+        $nameId = $authnRequest->getSubject()->getIdentifier()->decrypt($key);
 
-        $nameId = $authnRequest->getNameId();
         $this->assertEquals(md5('Arthur Dent'), $nameId->getValue());
         $this->assertEquals(Constants::NAMEID_ENCRYPTED, $nameId->getFormat());
     }
