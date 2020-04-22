@@ -10,6 +10,7 @@ use PHPUnit\Framework\TestCase;
 use SAML2\CertificatesMock;
 use SAML2\Constants;
 use SAML2\DOMDocumentFactory;
+use SAML2\XML\saml\AudienceRestriction;
 use SAML2\XML\saml\AuthnContextClassRef;
 use SAML2\XML\saml\Issuer;
 use SAML2\XML\saml\NameID;
@@ -1013,6 +1014,20 @@ AUTHNREQUEST;
     public function testAudiencesAreAddedCorrectly(): void
     {
         $issuer = new Issuer('https://gateway.example.org/saml20/sp/metadata');
+        $destination = 'https://tiqr.example.org/idp/profile/saml2/Redirect/SSO';
+        $conditions = new Conditions(
+            null,
+            null,
+            [],
+            [
+                new AudienceRestriction(
+                    [
+                        'https://sp1.example.org',
+                        'https://sp2.example.org'
+                    ]
+                )
+            ]
+        );
 
         // basic AuthnRequest
         $request = new AuthnRequest();
