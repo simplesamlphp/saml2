@@ -223,7 +223,7 @@ AUTHNREQUEST;
         $destination = 'https://tiqr.example.org/idp/profile/saml2/Redirect/SSO';
 
         // basic AuthnRequest
-        $request = new AuthnRequest(null, new Subject($nameId), null, null, null, null, null, null, $issuer, null, null, null, $destination);
+        $request = new AuthnRequest(null, new Subject($nameId), null, null, null, null, null, null, null, null, $issuer, null, null, null, $destination);
 
         // encrypt the NameID
         $key = CertificatesMock::getPublicKey();
@@ -274,16 +274,21 @@ AUTHNREQUEST;
     {
         // the Issuer
         $issuer = new Issuer('https://gateway.example.org/saml20/sp/metadata');
+        $destination = 'https://tiqr.example.org/idp/profile/saml2/Redirect/SSO';
+
+        $scoping = new Scoping(
+            null,
+            new IDPList(
+                [
+                    new IDPEntry('Legacy1'),
+                    new IDPEntry('http://example.org/AAP', 'N00T', 'https://mies'),
+                    new IDPEntry('urn:example:1', 'Voorbeeld', 'Else')
+                ]
+            )
+        );
 
         // basic AuthnRequest
-        $request = new AuthnRequest();
-        $request->setIssuer($issuer);
-        $request->setDestination('https://tiqr.example.org/idp/profile/saml2/Redirect/SSO');
-        $request->setIDPList([
-            'Legacy1',
-            ['ProviderID' => 'http://example.org/AAP', 'Name' => 'N00T', 'Loc' => 'https://mies'],
-            ['ProviderID' => 'urn:example:1', 'Name' => 'Voorbeeld', 'Something' => 'Else']
-        ]);
+        $request = new AuthnRequest(null, null, null, null, null, null, null, null, null, null, $issuer, null, null, null, $destination, null, null, $scoping);
 
         $expectedStructureDocument = <<<AUTHNREQUEST
 <samlp:AuthnRequest

@@ -60,8 +60,7 @@ XML
         $issuer1 = new Issuer('https://sp.example.com/SAML2');
         $issuer2 = new Issuer('urn:example:other');
 
-        $authnRequest = new AuthnRequest();
-        $authnRequest->setIssuer($issuer2);
+        $authnRequest = new AuthnRequest(null, null, null, null, null, null, null, null, null, null, $issuer2);
 
         $artifactResponse = new ArtifactResponse(
             $status,
@@ -104,7 +103,7 @@ XML
         $this->assertEquals("_d84a49e5958803dedcff4c984c2b0d95", $ar->getId());
 
         $any = $ar->getAny();
-        $authnRequest = new AuthnRequest($any);
+        $authnRequest = AuthnRequest::fromXML($any);
         $this->assertEquals('_306f8ec5b618f361c70b6ffb1480eade', $authnRequest->getId());
         $this->assertEquals(
             'https://sp.example.com/SAML2/SSO/Artifact',
