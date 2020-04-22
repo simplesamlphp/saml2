@@ -175,17 +175,17 @@ AUTHNREQUEST;
     Destination="https://tiqr.example.org/idp/profile/saml2/Redirect/SSO">
     <saml:Issuer>https://gateway.example.org/saml20/sp/metadata</saml:Issuer>
     <saml:Subject>
-        <saml:EncryptedID xmlns:xenc="http://www.w3.org/2001/04/xmlenc#" xmlns:dsig="http://www.w3.org/2000/09/xmldsig#">
-            <xenc:EncryptedData xmlns:xenc="http://www.w3.org/2001/04/xmlenc#" xmlns:dsig="http://www.w3.org/2000/09/xmldsig#" Type="http://www.w3.org/2001/04/xmlenc#Element">
+        <saml:EncryptedID xmlns:xenc="http://www.w3.org/2001/04/xmlenc#" xmlns:ds="http://www.w3.org/2000/09/xmldsig#">
+            <xenc:EncryptedData xmlns:xenc="http://www.w3.org/2001/04/xmlenc#" xmlns:ds="http://www.w3.org/2000/09/xmldsig#" Type="http://www.w3.org/2001/04/xmlenc#Element">
                 <xenc:EncryptionMethod Algorithm="http://www.w3.org/2001/04/xmlenc#aes128-cbc"/>
-                <dsig:KeyInfo xmlns:dsig="http://www.w3.org/2000/09/xmldsig#">
+                <ds:KeyInfo xmlns:ds="http://www.w3.org/2000/09/xmldsig#">
                     <xenc:EncryptedKey>
                         <xenc:EncryptionMethod Algorithm="http://www.w3.org/2001/04/xmlenc#rsa-1_5"/>
                         <xenc:CipherData>
                             <xenc:CipherValue>Kzb231F/6iLrDG9KP99h1C08eV2WfRqasU0c3y9AG+nb0JFdQgqip5+5FN+ypi1zPz4FIdoPufXdQDIRi4tm1UMyaiA5MBHjk2GOw5GDc6idnzFAoy4uWlofELeeT2ftcP4c6ETDsu++iANi5XUU1A+WPxxel2NMss6F6MjOuCg=</xenc:CipherValue>
                         </xenc:CipherData>
                     </xenc:EncryptedKey>
-                </dsig:KeyInfo>
+                </ds:KeyInfo>
                 <xenc:CipherData>
                     <xenc:CipherValue>EHj4x8ZwXvxIHFo4uenQcXZsUnS0VPyhevIMwE6YfejFwW0V3vUImCVKfdEtMJgNS/suukvc/HmF2wHptBqk3yjwbRfdFX2axO7UPqyThiGkVTkccOpIv7RzN8mkiDe9cjOztIQYd1DfKrjgh+FFL10o08W+HSZFgp4XQGOAruLj+JVyoDlx6FMyTIRgeLxlW4K2G1++Xmp8wyLyoMCccdDRzX3KT/Ph2RVIDpE/XLznpQd19sgwaEguUerqdHwo</xenc:CipherValue>
                 </xenc:CipherData>
@@ -238,17 +238,17 @@ AUTHNREQUEST;
     Destination="">
     <saml:Issuer></saml:Issuer>
     <saml:Subject>
-        <saml:EncryptedID xmlns:xenc="http://www.w3.org/2001/04/xmlenc#" xmlns:dsig="http://www.w3.org/2000/09/xmldsig#">
-            <xenc:EncryptedData xmlns:xenc="http://www.w3.org/2001/04/xmlenc#" xmlns:dsig="http://www.w3.org/2000/09/xmldsig#" Type="http://www.w3.org/2001/04/xmlenc#Element">
+        <saml:EncryptedID xmlns:xenc="http://www.w3.org/2001/04/xmlenc#" xmlns:ds="http://www.w3.org/2000/09/xmldsig#">
+            <xenc:EncryptedData xmlns:xenc="http://www.w3.org/2001/04/xmlenc#" xmlns:ds="http://www.w3.org/2000/09/xmldsig#" Type="http://www.w3.org/2001/04/xmlenc#Element">
                 <xenc:EncryptionMethod Algorithm="http://www.w3.org/2001/04/xmlenc#aes128-cbc"/>
-                <dsig:KeyInfo xmlns:dsig="http://www.w3.org/2000/09/xmldsig#">
+                <ds:KeyInfo xmlns:ds="http://www.w3.org/2000/09/xmldsig#">
                     <xenc:EncryptedKey>
                         <xenc:EncryptionMethod Algorithm="http://www.w3.org/2001/04/xmlenc#rsa-1_5"/>
                         <xenc:CipherData>
                             <xenc:CipherValue></xenc:CipherValue>
                         </xenc:CipherData>
                     </xenc:EncryptedKey>
-                </dsig:KeyInfo>
+                </ds:KeyInfo>
                 <xenc:CipherData>
                     <xenc:CipherValue></xenc:CipherValue>
                 </xenc:CipherData>
@@ -880,7 +880,7 @@ AUTHNREQUEST;
         );
 
         // basic AuthnRequest
-        $request = new AuthnRequest(null, null, null, null, null, null, null, null, null, null, $issuer, null, null, null, $destination);
+        $request = new AuthnRequest(null, null, null, $conditions, null, null, null, null, null, null, $issuer, null, null, null, $destination);
 
         $expectedStructureDocument = <<<AUTHNREQUEST
 <samlp:AuthnRequest

@@ -37,7 +37,7 @@ class AttributeValue extends AbstractSamlElement
      */
     public function __construct($value)
     {
-        Assert::true(is_string($value) || $value instanceof DOMElement);
+        Assert::true(is_string($value) || is_int($value) || $value instanceof DOMElement);
 
         if (is_string($value)) {
             $doc = DOMDocumentFactory::create();
@@ -46,6 +46,16 @@ class AttributeValue extends AbstractSamlElement
             $this->element->appendChild($doc->createTextNode($value));
 
             /* Make sure that the xs-namespace is available in the AttributeValue (for xs:string). */
+            $this->element->setAttributeNS(Constants::NS_XS, 'xs:tmp', 'tmp');
+            $this->element->removeAttributeNS(Constants::NS_XS, 'tmp');
+            return;
+        } elseif (is_int($value)) {
+            $doc = DOMDocumentFactory::create();
+            $this->element = $doc->createElementNS(Constants::NS_SAML, 'saml:AttributeValue');
+            $this->element->setAttributeNS(Constants::NS_XSI, 'xsi:int', 'xs:int');
+            $this->element->appendChild($doc->createTextNode($value));
+
+            /* Make sure that the xs-namespace is available in the AttributeValue (for xs:int). */
             $this->element->setAttributeNS(Constants::NS_XS, 'xs:tmp', 'tmp');
             $this->element->removeAttributeNS(Constants::NS_XS, 'tmp');
             return;

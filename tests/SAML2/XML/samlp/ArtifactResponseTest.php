@@ -5,6 +5,7 @@ declare(strict_types=1);
 namespace SAML2\XML\samlp;
 
 use PHPUnit\Framework\TestCase;
+use SAML2\Constants;
 use SAML2\XML\saml\Issuer;
 use SAML2\XML\samlp\Status;
 use SAML2\XML\samlp\StatusCode;
@@ -30,6 +31,7 @@ class ArtifactResponseTest extends TestCase
     Version="2.0"
     IssueInstant="2004-12-05T09:21:59Z"
     InResponseTo="_cce4ee769ed970b501d680f697989d14">
+  <saml:Issuer>https://sp.example.com/SAML2</saml:Issuer>
   <samlp:Status>
     <samlp:StatusCode Value="urn:oasis:names:tc:SAML:2.0:status:Success"/>
   </samlp:Status>
@@ -38,12 +40,12 @@ class ArtifactResponseTest extends TestCase
       Version="2.0"
       IssueInstant="2004-12-05T09:21:59Z"
       Destination="https://idp.example.org/SAML2/SSO/Artifact"
-      ProtocolBinding="urn:oasis:names:tc:SAML:2.0:bindings:HTTP-Artifact"
-      AssertionConsumerServiceURL="https://sp.example.com/SAML2/SSO/Artifact">
-    <saml:Issuer>https://sp.example.com/SAML2</saml:Issuer>
+      AssertionConsumerServiceURL="https://sp.example.com/SAML2/SSO/Artifact"
+      ProtocolBinding="urn:oasis:names:tc:SAML:2.0:bindings:HTTP-Artifact">
+    <saml:Issuer>urn:example:other</saml:Issuer>
     <samlp:NameIDPolicy
-        AllowCreate="false"
-        Format="urn:oasis:names:tc:SAML:1.1:nameid-format:emailAddress"/>
+        Format="urn:oasis:names:tc:SAML:1.1:nameid-format:emailAddress"
+        AllowCreate="false"/>
   </samlp:AuthnRequest>
 </samlp:ArtifactResponse>
 XML
@@ -56,12 +58,34 @@ XML
      */
     public function testMarshalling(): void
     {
+        $issuer2 = new Issuer('urn:example:other');
+        $id = '_306f8ec5b618f361c70b6ffb1480eade';
+        $issueInstant = Utils::xsDateTimeToTimestamp('2004-12-05T09:21:59Z');
+        $destination = 'https://idp.example.org/SAML2/SSO/Artifact';
+        $protocolBinding = Constants::BINDING_HTTP_ARTIFACT;
+        $assertionConsumerServiceURL = 'https://sp.example.com/SAML2/SSO/Artifact';
+        $nameIdPolicy = new NameIDPolicy(Constants::NAMEID_EMAIL_ADDRESS, null, false);
+
+        $authnRequest = new AuthnRequest(
+            null,
+            null,
+            $nameIdPolicy,
+            null,
+            null,
+            null,
+            $assertionConsumerServiceURL,
+            $protocolBinding,
+            null,
+            null,
+            $issuer2,
+            $id,
+            '2.0',
+            $issueInstant,
+            $destination
+        );
+
         $status = new Status(new StatusCode());
         $issuer1 = new Issuer('https://sp.example.com/SAML2');
-        $issuer2 = new Issuer('urn:example:other');
-
-        $authnRequest = new AuthnRequest(null, null, null, null, null, null, null, null, null, null, $issuer2);
-
         $artifactResponse = new ArtifactResponse(
             $status,
             $issuer1,

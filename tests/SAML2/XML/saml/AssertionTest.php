@@ -1955,13 +1955,13 @@ XML;
   <saml:Issuer>testIssuer</saml:Issuer>
   <saml:Subject>
   <saml:EncryptedID>
-    <xenc:EncryptedData xmlns:xenc="http://www.w3.org/2001/04/xmlenc#" xmlns:dsig="http://www.w3.org/2000/09/xmldsig#" Type="http://www.w3.org/2001/04/xmlenc#Element">
+    <xenc:EncryptedData xmlns:xenc="http://www.w3.org/2001/04/xmlenc#" xmlns:ds="http://www.w3.org/2000/09/xmldsig#" Type="http://www.w3.org/2001/04/xmlenc#Element">
     <xenc:EncryptionMethod Algorithm="http://www.w3.org/2001/04/xmlenc#aes128-cbc"/>
-    <dsig:KeyInfo xmlns:dsig="http://www.w3.org/2000/09/xmldsig#">
+    <ds:KeyInfo xmlns:ds="http://www.w3.org/2000/09/xmldsig#">
       <xenc:EncryptedKey><xenc:EncryptionMethod Algorithm="http://www.w3.org/2001/04/xmlenc#rsa-1_5"/>
       <xenc:CipherData><xenc:CipherValue>Y78/DDeSkI4qECUPXJM1cWUTaYVglxnqDRpjcqd6zdIR6yWMwIzUCd+fa9KhKutN4kN1i/koSMNmk+c6uOXSi0Xuohth61eU9oIwLl6mKZwThXEQiuphAtMVPXtooKfU1l58+xWiiO2IidYmtb1vCcVD0hZwnVv28kxrMQdQmzw=</xenc:CipherValue></xenc:CipherData>
       </xenc:EncryptedKey>
-   </dsig:KeyInfo>
+   </ds:KeyInfo>
    <xenc:CipherData>
      <xenc:CipherValue>cfQoRV0xf+D5bOQs+8icVEkWX4MRNxl1MhImqO/GwYxjCwj0AH/9O4kr2v4WZ4MC3zHhUjcq4HO70/xrkzQVMN9pBsF2yv9sUuN2rEPd8k/Oj/OA3X4xGNywxoJILioh56OyNkFK/q4WRptvvSQV1vPc0G5y65MZBiR2fy+L+ukBJ8mnzxL7aIIEKRxNa0beKdrrZ2twWH3Uwn3UW5LcSefaY+VHcM/9I4Xb7U5QWxRXzBOEa6v/a3cZ/TmlXYkj</xenc:CipherValue>
    </xenc:CipherData>
