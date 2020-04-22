@@ -164,8 +164,6 @@ XML
      */
     public function testEncryption(): void
     {
-        Configuration::loadFromArray([], '[ARRAY]', 'simplesaml');
-
         // test with a NameID
         $nameid = new NameID('value', 'name_qualifier');
         $pubkey = new XMLSecurityKey(XMLSecurityKey::RSA_SHA256, ['type' => 'public']);
