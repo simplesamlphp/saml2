@@ -6,7 +6,6 @@ namespace SAML2\XML\samlp;
 
 use DOMElement;
 use SAML2\Constants;
-use SAML2\EncryptedAssertion;
 use SAML2\Utils;
 use SAML2\XML\ds\Signature;
 use SAML2\XML\saml\Assertion;
