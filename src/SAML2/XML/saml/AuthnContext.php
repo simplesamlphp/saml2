@@ -31,7 +31,7 @@ final class AuthnContext extends AbstractSamlElement
     /** @var \SAML2\XML\saml\AuthnContextDecl|null */
     protected $authnContextDecl = null;
 
-    /** @var \SAML2\XML\saml\AuthenticatingAuthority[] */
+    /** @var string[] */
     protected $authenticatingAuthorities = [];
 
 
@@ -41,7 +41,7 @@ final class AuthnContext extends AbstractSamlElement
      * @param \SAML2\XML\saml\AuthnContextClassRef|null $authnContextClassRef
      * @param \SAML2\XML\saml\AuthnContextDecl|null $authnContextDecl
      * @param \SAML2\XML\saml\AuthnContextDeclRef|null $authnContextDeclRef
-     * @param \SAML2\XML\saml\AuthenticatingAuthority[] $authenticatingAuthorities
+     * @param string[] $authenticatingAuthorities
      * @throws \InvalidArgumentException
      */
     public function __construct(
@@ -142,7 +142,7 @@ final class AuthnContext extends AbstractSamlElement
     /**
      * Collect the value of the authenticatingAuthorities-property
      *
-     * @return \SAML2\XML\saml\AuthenticatingAuthority[]
+     * @return string[]
      */
     public function getAuthenticatingAuthorities(): array
     {
@@ -153,13 +153,13 @@ final class AuthnContext extends AbstractSamlElement
     /**
      * Set the value of the authenticatingAuthorities-property
      *
-     * @param \SAML2\XML\saml\AuthenticatingAuthority[] $authenticatingAuthorities
+     * @param string[] $authenticatingAuthorities
      * @return void
      * @throws \InvalidArgumentException
      */
     private function setAuthenticatingAuthorities(array $authenticatingAuthorities): void
     {
-        Assert::allIsInstanceof($authenticatingAuthorities, AuthenticatingAuthority::class);
+        Assert::allStringNotEmpty($authenticatingAuthorities);
         $this->authenticatingAuthorities = $authenticatingAuthorities;
     }
 
@@ -176,23 +176,22 @@ final class AuthnContext extends AbstractSamlElement
         Assert::same($xml->localName, 'AuthnContext');
         Assert::same($xml->namespaceURI, AuthnContext::NS);
 
-        /** @var \DOMElement[] $authnContextClassRef */
-        $authnContextClassRef = Utils::xpQuery($xml, './saml_assertion:AuthnContextClassRef');
+        $authnContextClassRef = AuthnContextClassRef::getChildrenOfClass($xml);
         Assert::maxCount($authnContextClassRef, 1);
 
-        /** @var \DOMElement[] $authnContextDeclRef */
-        $authnContextDeclRef = Utils::xpQuery($xml, './saml_assertion:AuthnContextDeclRef');
+        $authnContextDeclRef = AuthnContextDeclRef::getChildrenOfClass($xml);
         Assert::maxCount($authnContextDeclRef, 1);
 
-        /** @var \DOMElement[] $authnContextDecl */
-        $authnContextDecl = Utils::xpQuery($xml, './saml_assertion:AuthnContextDecl');
+        $authnContextDecl = AuthnContextDecl::getChildrenOfClass($xml);
         Assert::maxCount($authnContextDecl, 1);
 
+        $authorities = Utils::extractStrings($xml, AbstractSamlElement::NS, 'AuthenticatingAuthority');
+
         return new self(
-            empty($authnContextClassRef) ? null : AuthnContextClassRef::fromXML($authnContextClassRef[0]),
-            empty($authnContextDecl) ? null : AuthnContextDecl::fromXML($authnContextDecl[0]),
-            empty($authnContextDeclRef) ? null : AuthnContextDeclRef::fromXML($authnContextDeclRef[0]),
-            AuthenticatingAuthority::getChildrenOfClass($xml)
+            array_pop($authnContextClassRef),
+            array_pop($authnContextDecl),
+            array_pop($authnContextDeclRef),
+            $authorities
         );
     }
 
@@ -219,9 +218,7 @@ final class AuthnContext extends AbstractSamlElement
             $this->authnContextDeclRef->toXML($e);
         }
 
-        foreach ($this->authenticatingAuthorities as $authority) {
-            $authority->toXML($e);
-        }
+        Utils::addStrings($e, AbstractSamlElement::NS, 'saml:AuthenticatingAuthority', false, $this->authenticatingAuthorities);
 
         return $e;
     }

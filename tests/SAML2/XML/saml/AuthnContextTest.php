@@ -68,7 +68,7 @@ XML
         );
 
         $this->authority = DOMDocumentFactory::fromString(<<<XML
-<saml:AuthenticatingAuthority xmlns:saml="{$samlNamespace}">https://sp.example.com/SAML2</saml:AuthenticatingAuthority>
+<saml:AuthenticatingAuthority xmlns:saml="{$samlNamespace}">https://idp.example.com/SAML2</saml:AuthenticatingAuthority>
 XML
         );
     }
@@ -86,13 +86,13 @@ XML
             new AuthnContextClassRef(Constants::AC_PASSWORD_PROTECTED_TRANSPORT),
             null,
             new AuthnContextDeclRef('/relative/path/to/document.xml'),
-            [new AuthenticatingAuthority('https://sp.example.com/SAML2')]
+            ['https://idp.example.com/SAML2']
         );
 
         $this->assertEquals(new AuthnContextClassRef(Constants::AC_PASSWORD_PROTECTED_TRANSPORT), $authnContext->getAuthnContextClassRef());
         $this->assertNull($authnContext->getAuthnContextDecl());
         $this->assertEquals(new AuthnContextDeclRef('/relative/path/to/document.xml'), $authnContext->getAuthnContextDeclRef());
-        $this->assertEquals([new AuthenticatingAuthority('https://sp.example.com/SAML2')], $authnContext->getAuthenticatingAuthorities());
+        $this->assertEquals(['https://idp.example.com/SAML2'], $authnContext->getAuthenticatingAuthorities());
 
         $document = $this->document;
         $document->documentElement->appendChild($document->importNode($this->classRef->documentElement, true));
@@ -109,7 +109,7 @@ XML
     public function testMarshallingWithoutClassRef(): void
     {
         $authnContextDecl = AuthnContextDecl::fromXML($this->decl->documentElement);
-        $authenticatingAuthority = new AuthenticatingAuthority('https://sp.example.com/SAML2');
+        $authenticatingAuthority = 'https://idp.example.com/SAML2';
 
         $authnContext = new AuthnContext(
             null,
@@ -121,7 +121,7 @@ XML
         $this->assertNull($authnContext->getAuthnContextClassRef());
         $this->assertEquals($authnContextDecl, $authnContext->getAuthnContextDecl());
         $this->assertNull($authnContext->getAuthnContextDeclRef());
-        $this->assertEquals([new AuthenticatingAuthority('https://sp.example.com/SAML2')], $authnContext->getAuthenticatingAuthorities());
+        $this->assertEquals(['https://idp.example.com/SAML2'], $authnContext->getAuthenticatingAuthorities());
 
         $document = $this->document;
         $document->documentElement->appendChild($document->importNode($this->decl->documentElement, true));
@@ -148,7 +148,7 @@ XML
             $authnContextDecl,
             $authnContextDeclRef,
             [
-                new AuthenticatingAuthority('https://sp.example.com/SAML2')
+                'https://idp.example.com/SAML2'
             ]
         );
     }
@@ -190,7 +190,7 @@ XML
         $this->assertEquals('/relative/path/to/document.xml', $declRef->getDeclRef());
 
         $authorities = $authnContext->getAuthenticatingAuthorities();
-        $this->assertEquals('https://sp.example.com/SAML2', $authorities[0]->getAuthority());
+        $this->assertEquals('https://idp.example.com/SAML2', $authorities[0]);
     }
 
 
