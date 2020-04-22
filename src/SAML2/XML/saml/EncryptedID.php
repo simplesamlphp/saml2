@@ -18,7 +18,7 @@ use SAML2\XML\AbstractXMLElement;
  *
  * @package simplesamlphp/saml2
  */
-class EncryptedID extends AbstractSamlElement implements EncryptedElementInterface
+class EncryptedID extends AbstractSamlElement implements EncryptedElementInterface, IdentifierInterface
 {
     use EncryptedElementTrait;
 

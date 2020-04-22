@@ -15,14 +15,6 @@ use DOMElement;
 interface IdentifierInterface
 {
     /**
-     * Get the string value of this identifier.,
-     *
-     * @return string The actual value of the identifier.
-     */
-    public function getValue(): string;
-
-
-    /**
      * Create an identifier from XML.
      *
      * @param \DOMElement $xml The XML element describing an identifier.
