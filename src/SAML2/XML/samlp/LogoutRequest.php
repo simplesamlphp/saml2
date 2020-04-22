@@ -190,6 +190,7 @@ class LogoutRequest extends AbstractRequest
 
         $identifier = self::getIdentifierFromXML($xml);
         Assert::notNull($identifier, 'Missing <saml:NameID>, <saml:BaseID> or <saml:EncryptedID> in <samlp:LogoutRequest>.');
+        Assert::isInstanceOfAny($identifier, [BaseID::class, NameID::class, EncryptedID::class]);
 
         $signature = Signature::getChildrenOfClass($xml);
         Assert::maxCount($signature, 1, 'Only one ds:Signature element is allowed.');

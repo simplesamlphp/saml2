@@ -100,7 +100,7 @@ class ArtifactResolve extends AbstractRequest
         $consent = self::getAttribute($xml, 'Consent', null);
 
         $issuer = Issuer::getChildrenOfClass($xml);
-        Assert::countBetween($issuer, 0, 1);
+        Assert::maxCount($issuer, 1);
 
         $extensions = Extensions::getChildrenOfClass($xml);
         Assert::maxCount($extensions, 1, 'Only one saml:Extensions element is allowed.');

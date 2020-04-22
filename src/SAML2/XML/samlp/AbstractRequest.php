@@ -4,13 +4,6 @@ declare(strict_types=1);
 
 namespace SAML2\XML\samlp;
 
-use DOMElement;
-use Exception;
-use SAML2\Utilities\Temporal;
-use SAML2\Utils;
-use SAML2\XML\saml\Issuer;
-use Webmozart\Assert\Assert;
-
 /**
  * Base class for all SAML 2 request messages.
  *
