@@ -6,6 +6,8 @@ namespace SAML2\XML\saml;
 
 use Exception;
 use PHPUnit\Framework\TestCase;
+use RobRichards\XMLSecLibs\XMLSecurityKey;
+use SAML2\CertificatesMock;
 use SAML2\Constants;
 use SAML2\DOMDocumentFactory;
 
@@ -125,6 +127,25 @@ XML
         $this->expectException(Exception::class);
 
         Attribute::fromXML($document->documentElement);
+    }
+
+
+    /**
+     * Test encryption / decryption
+     */
+    public function testEncryption(): void
+    {
+        $attribute = Attribute::fromXML($this->document->documentElement);
+        $pubkey = new XMLSecurityKey(XMLSecurityKey::RSA_SHA256, ['type' => 'public']);
+        $pubkey->loadKey(CertificatesMock::PUBLIC_KEY_PEM);
+        $encattr = EncryptedAttribute::fromUnencryptedElement($attribute, $pubkey);
+        $str = (string) $encattr;
+        $doc = DOMDocumentFactory::fromString($str);
+        $encattr = EncryptedAttribute::fromXML($doc->documentElement);
+        $privkey = new XMLSecurityKey(XMLSecurityKey::RSA_SHA256, ['type' => 'private']);
+        $privkey->loadKey(CertificatesMock::PRIVATE_KEY_PEM);
+        $attr = $encattr->decrypt($privkey);
+        $this->assertEquals((string) $attribute, (string) $attr);
     }
 
 

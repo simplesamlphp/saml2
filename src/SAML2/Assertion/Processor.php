@@ -11,12 +11,11 @@ use SAML2\Assertion\Transformer\TransformerInterface;
 use SAML2\Assertion\Validation\AssertionValidator;
 use SAML2\Assertion\Validation\SubjectConfirmationValidator;
 use SAML2\Configuration\IdentityProvider;
-use SAML2\EncryptedAssertion;
 use SAML2\Response\Exception\InvalidSignatureException;
-use SAML2\Response\Exception\UnencryptedAssertionFoundException;
 use SAML2\Signature\Validator;
 use SAML2\Utilities\ArrayCollection;
 use SAML2\XML\saml\Assertion;
+use SAML2\XML\saml\EncryptedAssertion;
 
 class Processor
 {
@@ -145,7 +144,7 @@ class Processor
 
 
     /**
-     * @param \SAML2\EncryptedAssertion $assertion
+     * @param \SAML2\XML\saml\EncryptedAssertion $assertion
      * @return \SAML2\XML\saml\Assertion
      */
     private function decryptAssertion(EncryptedAssertion $assertion): Assertion

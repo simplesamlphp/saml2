@@ -6,6 +6,7 @@ namespace SAML2\XML\saml;
 
 use Exception;
 use Mockery\Adapter\Phpunit\MockeryTestCase;
+use RobRichards\XMLSecLibs\XMLSecurityKey;
 use SAML2\CertificatesMock;
 use SAML2\Constants;
 use SAML2\DOMDocumentFactory;
@@ -2059,5 +2060,49 @@ XML;
         $this->assertEquals('value5', $assertionElements[2]->childNodes->item(2)->nodeValue);
         $this->assertEquals('xsi:type', $assertionElements[2]->childNodes->item(2)->attributes->item(0)->nodeName);
         $this->assertEquals('xs:string', $assertionElements[2]->childNodes->item(2)->attributes->item(0)->value);
+    }
+
+
+    /**
+     * Test that encryption / decryption of assertions works.
+     */
+    public function testEncryption(): void
+    {
+        $this->markTestSkipped('This test is not ready to run since Assertion does not extend AbstractXMLElement');
+        $xml = <<<XML
+<saml:Assertion xmlns:saml="urn:oasis:names:tc:SAML:2.0:assertion"
+                ID="_593e33ddf86449ce4d4c22b60ac48e067d98a0b2bf"
+                Version="2.0"
+                IssueInstant="2010-03-05T13:34:28Z"
+>
+  <saml:Issuer>testIssuer</saml:Issuer>
+  <saml:Conditions>
+    <saml:AudienceRestriction>
+      <saml:Audience>audience1</saml:Audience>
+      <saml:Audience>audience2</saml:Audience>
+    </saml:AudienceRestriction>
+  </saml:Conditions>
+  <saml:AuthnStatement AuthnInstant="2010-03-05T13:34:28Z">
+    <saml:AuthnContext>
+      <saml:AuthnContextClassRef>someAuthnContext</saml:AuthnContextClassRef>
+      <saml:AuthenticatingAuthority>someIdP1</saml:AuthenticatingAuthority>
+      <saml:AuthenticatingAuthority>someIdP2</saml:AuthenticatingAuthority>
+    </saml:AuthnContext>
+  </saml:AuthnStatement>
+</saml:Assertion>
+XML;
+        $document  = DOMDocumentFactory::fromString($xml);
+        $assertion = new Assertion($document->documentElement);
+
+        $pubkey = new XMLSecurityKey(XMLSecurityKey::RSA_SHA256, ['type' => 'public']);
+        $pubkey->loadKey(CertificatesMock::PUBLIC_KEY_PEM);
+
+        $encass = EncryptedAssertion::fromUnencryptedElement($assertion, $pubkey);
+        $doc = DOMDocumentFactory::fromString((string) $encass);
+        $encass = EncryptedAssertion::fromXML($doc->documentElement);
+        $privkey = new XMLSecurityKey(XMLSecurityKey::RSA_SHA256, ['type' => 'private']);
+        $privkey->loadKey(CertificatesMock::PRIVATE_KEY_PEM);
+        $decrypted = $encass->decrypt($privkey);
+        $this->assertEquals((string) $assertion, (string) $decrypted);
     }
 }
