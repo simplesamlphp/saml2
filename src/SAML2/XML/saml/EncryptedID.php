@@ -39,7 +39,7 @@ class EncryptedID extends AbstractSamlElement implements EncryptedElementInterfa
         switch ($id) {
             case NameID::NS . ':NameID':
                 return NameID::fromXML($xml);
-            case Issuer::NS . 'Issuer':
+            case Issuer::NS . ':Issuer':
                 return Issuer::fromXML($xml);
             case BaseID::NS . ':BaseID':
                 $xsiType = $xml->getAttributeNS(Constants::NS_XSI, 'type');
