@@ -52,8 +52,8 @@ class AttributeValue extends AbstractSamlElement
         } elseif (is_int($value)) {
             $doc = DOMDocumentFactory::create();
             $this->element = $doc->createElementNS(Constants::NS_SAML, 'saml:AttributeValue');
-            $this->element->setAttributeNS(Constants::NS_XSI, 'xsi:int', 'xs:int');
-            $this->element->appendChild($doc->createTextNode($value));
+            $this->element->setAttributeNS(Constants::NS_XSI, 'xsi:type', 'xs:integer');
+            $this->element->appendChild($doc->createTextNode(strval($value)));
 
             /* Make sure that the xs-namespace is available in the AttributeValue (for xs:int). */
             $this->element->setAttributeNS(Constants::NS_XS, 'xs:tmp', 'tmp');
