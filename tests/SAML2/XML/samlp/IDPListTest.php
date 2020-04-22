@@ -133,7 +133,7 @@ XML
         );
 
         $this->expectException(InvalidArgumentException::class);
-        $this->expectExceptionMessage('At least one samlp:IDPEntry must be specified.');
+        $this->expectExceptionMessage('At least one <samlp:IDPEntry> must be specified.');
 
         IDPList::fromXML($this->document->documentElement);
     }

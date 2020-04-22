@@ -33,6 +33,11 @@ class AuthnRequest extends AbstractRequest
     protected $subject = null;
 
     /**
+     * @var \SAML2\XML\saml\Scoping|null
+     */
+    protected $scoping = null;
+
+    /**
      * The options for what type of name identifier should be returned.
      *
      * @var \SAML2\XML\samlp\NameIDPolicy|null
@@ -59,27 +64,6 @@ class AuthnRequest extends AbstractRequest
      * @var bool|null
      */
     protected $isPassive = false;
-
-    /**
-     * The list of providerIDs in this request's scoping element
-     *
-     * @var array
-     */
-    protected $IDPList = [];
-
-    /**
-     * The ProxyCount in this request's scoping element
-     *
-     * @var int|null
-     */
-    protected $ProxyCount = null;
-
-    /**
-     * The RequesterID list in this request's scoping element
-     *
-     * @var array
-     */
-    protected $RequesterID = [];
 
     /**
      * The URL of the assertion consumer service where the response should be delivered.
@@ -146,7 +130,8 @@ class AuthnRequest extends AbstractRequest
      * @param int|null $issueInstant
      * @param string|null $destination
      * @param string|null $consent
-     * @param \SAML2\XML\samlp\Extensions $extensions
+     * @param \SAML2\XML\samlp\Extensions|null $extensions
+     * @param \SAML2\XML\samlp\Scoping|null $scoping
      */
     public function __construct(
         ?RequestedAuthnContext $requestedAuthnContext = null,
@@ -167,7 +152,8 @@ class AuthnRequest extends AbstractRequest
         ?int $issueInstant = null,
         ?string $destination = null,
         ?string $consent = null,
-        ?Extensions $extensions = null
+        ?Extensions $extensions = null,
+        ?Scoping $scoping = null
     ) {
         parent::__construct($issuer, $id, $version, $issueInstant, $destination, $consent, $extensions);
 
@@ -182,6 +168,7 @@ class AuthnRequest extends AbstractRequest
         $this->setProtocolBinding($protocolBinding);
         $this->setAttributeConsumingServiceIndex($attributeConsumingServiceIndex);
         $this->setProviderName($providerName);
+        $this->setScoping($scoping);
     }
 
 
@@ -205,6 +192,25 @@ class AuthnRequest extends AbstractRequest
 
 
     /**
+     * @param \SAML2\XML\saml\Scoping|null $scoping
+     * @return void
+     */
+    private function setScoping(?Scoping $scoping): void
+    {
+        $this->scoping = $scoping;
+    }
+
+
+    /**
+     * @return \SAML2\XML\saml\Scoping|null
+     */
+    public function getScoping(): ?Scoping
+    {
+        return $this->scoping;
+    }
+
+
+    /**
      * @param \SAML2\XML\saml\Conditions|null $conditions
      * @return void
      */
@@ -220,104 +226,6 @@ class AuthnRequest extends AbstractRequest
     public function getConditions(): ?Conditions
     {
         return $this->conditions;
-    }
-
-
-    /**
-     * @param \DOMElement $xml
-     * @throws \Exception
-     * @return void
-    protected function parseNameIdPolicy(DOMElement $xml): void
-    {
-        \/** @var \DOMElement[] $nameIdPolicy *\/
-        $nameIdPolicy = Utils::xpQuery($xml, './saml_protocol:NameIDPolicy');
-        if (empty($nameIdPolicy)) {
-            return;
-        }
-
-        $this->nameIdPolicy = NameIDPolicy::fromXML($nameIdPolicy[0]);
-    }
-     */
-
-
-    /**
-     * @param \DOMElement $xml
-     * @return void
-    protected function parseRequestedAuthnContext(DOMElement $xml): void
-    {
-        \/** @var \DOMElement[] $requestedAuthnContext *\/
-        $requestedAuthnContext = Utils::xpQuery($xml, './saml_protocol:RequestedAuthnContext');
-        if (empty($requestedAuthnContext)) {
-            return;
-        }
-
-        $this->requestedAuthnContext = RequestedAuthnContext::fromXML($requestedAuthnContext[0]);
-    }
-     */
-
-
-    /**
-     * @param \DOMElement $xml
-     * @throws \Exception
-     * @return void
-     */
-    protected function parseScoping(DOMElement $xml): void
-    {
-        /** @var \DOMElement[] $scoping */
-        $scoping = Utils::xpQuery($xml, './saml_protocol:Scoping');
-        if (empty($scoping)) {
-            return;
-        }
-
-        $scoping = $scoping[0];
-
-        if ($scoping->hasAttribute('ProxyCount')) {
-            $this->ProxyCount = (int) $scoping->getAttribute('ProxyCount');
-        }
-        /** @var \DOMElement[] $idpEntries */
-        $idpEntries = Utils::xpQuery($scoping, './saml_protocol:IDPList/saml_protocol:IDPEntry');
-
-        foreach ($idpEntries as $idpEntry) {
-            if (!$idpEntry->hasAttribute('ProviderID')) {
-                throw new Exception("Could not get ProviderID from Scoping/IDPEntry element in AuthnRequest object");
-            }
-            $this->IDPList[] = $idpEntry->getAttribute('ProviderID');
-        }
-
-        /** @var \DOMElement[] $requesterIDs */
-        $requesterIDs = Utils::xpQuery($scoping, './saml_protocol:RequesterID');
-        foreach ($requesterIDs as $requesterID) {
-            $this->RequesterID[] = trim($requesterID->textContent);
-        }
-    }
-
-
-    /**
-     * @param \DOMElement $xml
-     * @return void
-     */
-    protected function parseConditions(DOMElement $xml): void
-    {
-        /** @var \DOMElement[] $conditions */
-        $conditions = Utils::xpQuery($xml, './saml_assertion:Conditions');
-        if (empty($conditions)) {
-            return;
-        }
-        $conditions = $conditions[0];
-
-        /** @var \DOMElement[] $ar */
-        $ar = Utils::xpQuery($conditions, './saml_assertion:AudienceRestriction');
-        if (empty($ar)) {
-            return;
-        }
-        $ar = $ar[0];
-
-        /** @var \DOMElement[] $audiences */
-        $audiences = Utils::xpQuery($ar, './saml_assertion:Audience');
-        $this->audiences = array();
-        foreach ($audiences as $a) {
-            $this->audiences[] = trim($a->textContent);
-        }
     }
 
 
@@ -411,78 +319,6 @@ class AuthnRequest extends AbstractRequest
     private function setIsPassive(?bool $isPassive): void
     {
         $this->isPassive = $isPassive;
-    }
-
-
-    /**
-     * This function sets the scoping for the request.
-     * See Core 3.4.1.2 for the definition of scoping.
-     * Currently we support an IDPList of idpEntries.
-     *
-     * Each idpEntries consists of an array, containing
-     * keys (mapped to attributes) and corresponding values.
-     * Allowed attributes: Loc, Name, ProviderID.
-     *
-     * For backward compatibility, an idpEntries can also
-     * be a string instead of an array, where each string
-     * is mapped to the value of attribute ProviderID.
-     *
-     * @param array $IDPList List of idpEntries to scope the request to.
-     * @return void
-     */
-    private function setIDPList(array $IDPList): void
-    {
-        $this->IDPList = $IDPList;
-    }
-
-
-    /**
-     * This function retrieves the list of providerIDs from this authentication request.
-     * Currently we only support a list of ipd ientity id's.
-     *
-     * @return array List of idp EntityIDs from the request
-     */
-    public function getIDPList(): array
-    {
-        return $this->IDPList;
-    }
-
-
-    /**
-     * @param int $ProxyCount
-     * @return void
-     */
-    private function setProxyCount(int $ProxyCount): void
-    {
-        $this->ProxyCount = $ProxyCount;
-    }
-
-
-    /**
-     * @return int|null
-     */
-    public function getProxyCount(): ?int
-    {
-        return $this->ProxyCount;
-    }
-
-
-    /**
-     * @param array $RequesterID
-     * @return void
-     */
-    private function setRequesterID(array $RequesterID): void
-    {
-        $this->RequesterID = $RequesterID;
-    }
-
-
-    /**
-     * @return array
-     */
-    public function getRequesterID(): array
-    {
-        return $this->RequesterID;
     }
 
 
@@ -662,25 +498,29 @@ class AuthnRequest extends AbstractRequest
         $providerName = self::getAttribute($xml, 'ProviderName', null);
 
         $conditions = Conditions::getChildrenOfClass($xml);
-        Assert::maxCount($conditions, 1, 'Only one saml:Conditions element is allowed.');
+        Assert::maxCount($conditions, 1, 'Only one <saml:Conditions> element is allowed.');
 
         $nameIdPolicy = NameIDPolicy::getChildrenOfClass($xml);
-        Assert::maxCount($nameIdPolicy, 1, 'Only one samlp:NameIDPolicy element is allowed.');
+        Assert::maxCount($nameIdPolicy, 1, 'Only one <samlp:NameIDPolicy> element is allowed.');
 
         $subject = Subject::getChildrenOfClass($xml);
-        Assert::maxCount($subject, 1, 'Only one saml:Subject element is allowed.');
+        Assert::maxCount($subject, 1, 'Only one <saml:Subject> element is allowed.');
 
         $issuer = Issuer::getChildrenOfClass($xml);
-        Assert::maxCount($issuer, 1, 'Only one saml:Issuer element is allowed.');
+        Assert::maxCount($issuer, 1, 'Only one <saml:Issuer> element is allowed.');
 
         $requestedAuthnContext = RequestedAuthnContext::getChildrenOfClass($xml);
-        Assert::maxCount($requestedAuthnContext, 1, 'Only one samlp:RequestedAuthnContext element is allowed.');
+        Assert::maxCount($requestedAuthnContext, 1, 'Only one <samlp:RequestedAuthnContext> element is allowed.');
 
         $extensions = Extensions::getChildrenOfClass($xml);
-        Assert::maxCount($extensions, 1, 'Only one samlp:Extensions element is allowed.');
+        Assert::maxCount($extensions, 1, 'Only one <samlp:Extensions> element is allowed.');
 
         $signature = Signature::getChildrenOfClass($xml);
-        Assert::maxCount($signature, 1, 'Only one ds:Signature element is allowed.');
+        Assert::maxCount($signature, 1, 'Only one <ds:Signature> element is allowed.');
+
+        $scoping = Scoping::getChildrenOfClass($xml);
+        Assert::maxCount($scoping, 1, 'Only one <samlp:Scoping> element is allowed.');
+
 
         $request = new self(
             array_pop($requestedAuthnContext),
@@ -701,7 +541,8 @@ class AuthnRequest extends AbstractRequest
             $issueInstant,
             $destination,
             $consent,
-            array_pop($extensions)
+            array_pop($extensions),
+            array_pop($scoping)
         );
 
         if (!empty($signature)) {
@@ -771,61 +612,12 @@ class AuthnRequest extends AbstractRequest
             $this->requestedAuthnContext->toXML($parent);
         }
 
-        if ($this->ProxyCount !== null || count($this->IDPList) > 0 || count($this->RequesterID) > 0) {
-            $scoping = $this->document->createElementNS(Constants::NS_SAMLP, 'Scoping');
-            $parent->appendChild($scoping);
-            if ($this->ProxyCount !== null) {
-                $scoping->setAttribute('ProxyCount', strval($this->ProxyCount));
+        if ($this->scoping !== null) {
+            if (!$this->scoping->isEmptyElement()) {
+                $this->scoping->toXML($parent);
             }
-            if (count($this->IDPList) > 0) {
-                $idplist = $this->document->createElementNS(Constants::NS_SAMLP, 'IDPList');
-                foreach ($this->IDPList as $provider) {
-                    $idpEntry = $this->document->createElementNS(Constants::NS_SAMLP, 'IDPEntry');
-                    if (is_string($provider)) {
-                        $idpEntry->setAttribute('ProviderID', $provider);
-                    } elseif (is_array($provider)) {
-                        foreach ($provider as $attribute => $value) {
-                            if (
-                                in_array($attribute, [
-                                    'ProviderID',
-                                    'Loc',
-                                    'Name'
-                                ], true)
-                            ) {
-                                $idpEntry->setAttribute($attribute, $value);
-                            }
-                        }
-                    }
-                    $idplist->appendChild($idpEntry);
-                }
-                $scoping->appendChild($idplist);
-            }
-
-            Utils::addStrings($scoping, Constants::NS_SAMLP, 'RequesterID', false, $this->RequesterID);
         }
 
         return $this->signElement($parent);
     }
-
-
-    /**
-     * Add a Conditions-node to the request.
-     *
-     * @param \DOMElement $root The request element we should add the conditions to.
-     * @return void
-    private function addConditions(DOMElement $root): void
-    {
-        if (!empty($this->audiences)) {
-            $document = $root->ownerDocument;
-
-            $conditions = $document->createElementNS(Constants::NS_SAML, 'saml:Conditions');
-            $root->appendChild($conditions);
-
-            $ar = $document->createElementNS(Constants::NS_SAML, 'saml:AudienceRestriction');
-            $conditions->appendChild($ar);
-
-            Utils::addStrings($ar, Constants::NS_SAML, 'saml:Audience', false, $this->getAudiences());
-        }
-    }
-     */
 }

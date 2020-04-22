@@ -91,7 +91,7 @@ final class IDPList extends AbstractSamlpElement
         Assert::same($xml->namespaceURI, IDPList::NS);
 
         $idpEntry = IDPEntry::getChildrenOfClass($xml);
-        Assert::minCount($idpEntry, 1, 'At least one samlp:IDPEntry must be specified.');
+        Assert::minCount($idpEntry, 1, 'At least one <samlp:IDPEntry> must be specified.');
 
         $getComplete = Utils::extractStrings($xml, AbstractSamlpElement::NS, 'GetComplete');
         Assert::maxCount($getComplete, 1, 'Only one <samlp:GetComplete> element is allowed.');
