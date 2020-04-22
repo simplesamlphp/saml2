@@ -49,6 +49,12 @@ trait EncryptedElementTrait
     }
 
 
+    abstract public function instantiateParentElement(DOMElement $parent = null): DOMElement;
+
+
+    abstract public function getQualifiedName(): string;
+
+
     /**
      * Get the EncryptedData object.
      *
@@ -100,7 +106,7 @@ trait EncryptedElementTrait
      * @param \SAML2\XML\AbstractXMLElement $element
      * @param \RobRichards\XMLSecLibs\XMLSecurityKey $key
      *
-     * @return \SAML2\EncryptedElementInterface
+     * @return \SAML2\XML\EncryptedElementInterface
      * @throws \Exception
      */
     public static function fromUnencryptedElement(
@@ -153,7 +159,7 @@ trait EncryptedElementTrait
      */
     public static function fromXML(DOMElement $xml): object
     {
-        Assert::same($xml->localName, self::getClassName(static::class));
+        Assert::same($xml->localName, AbstractXMLElement::getClassName(static::class));
         Assert::same($xml->namespaceURI, static::NS);
 
         $ed = EncryptedData::getChildrenOfClass($xml);
