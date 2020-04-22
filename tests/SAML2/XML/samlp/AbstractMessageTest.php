@@ -51,7 +51,7 @@ AUTHNREQUEST
         $unsignedMessage->setSigningKey($privateKey);
         $unsignedMessage->setCertificates([CertificatesMock::PUBLIC_KEY_PEM]);
 
-        $signedMessage = MessageFactory::fromXML($unsignedMessage->toSignedXML());
+        $signedMessage = MessageFactory::fromXML($unsignedMessage->toXML());
 
         $this->assertEquals($privateKey->getAlgorith(), $signedMessage->getSignatureMethod());
     }
@@ -158,7 +158,7 @@ AUTHNREQUEST
         $unsignedMessage->setSigningKey($privateKey);
         $unsignedMessage->setCertificates([CertificatesMock::PUBLIC_KEY_PEM]);
 
-        $signedMessage = MessageFactory::fromXML($unsignedMessage->toSignedXML());
+        $signedMessage = MessageFactory::fromXML($unsignedMessage->toXML());
 
         $this->assertEquals($privateKey->getAlgorith(), $signedMessage->getSignatureMethod());
     }

@@ -37,7 +37,7 @@ class HTTPPost extends Binding
         }
         $relayState = $message->getRelayState();
 
-        $msgStr = $message->toSignedXML();
+        $msgStr = $message->toXML();
 
         Utils::getContainer()->debugMessage($msgStr, 'out');
         $msgStr = $msgStr->ownerDocument->saveXML($msgStr);

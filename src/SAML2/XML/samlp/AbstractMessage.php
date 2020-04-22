@@ -10,6 +10,7 @@ use SAML2\Constants;
 use SAML2\DOMDocumentFactory;
 use SAML2\Utilities\Temporal;
 use SAML2\Utils;
+use SAML2\XML\ds\Signature;
 use SAML2\XML\ExtendableElementTrait;
 use SAML2\XML\saml\Issuer;
 use SAML2\XML\SignedElementInterface;
@@ -25,7 +26,9 @@ use Webmozart\Assert\Assert;
 abstract class AbstractMessage extends AbstractSamlpElement implements SignedElementInterface
 {
     use ExtendableElementTrait;
-    use SignedElementTrait;
+    use SignedElementTrait {
+        SignedElementTrait::validate as validateEnvelopedXmlSignature;
+    }
 
     /**
      * The identifier of this message.
@@ -133,6 +136,7 @@ abstract class AbstractMessage extends AbstractSamlpElement implements SignedEle
         $this->setDestination($destination);
         $this->setConsent($consent);
         $this->setExtensions($extensions);
+        $this->addValidator([$this, 'xmlSignatureValidatorWrapper'], []);
     }
 
 
@@ -225,7 +229,7 @@ abstract class AbstractMessage extends AbstractSamlpElement implements SignedEle
         }
 
         /* No validators were able to validate the message. */
-        throw $exceptions[0];
+        throw array_pop($exceptions);
     }
 
 
@@ -419,6 +423,22 @@ abstract class AbstractMessage extends AbstractSamlpElement implements SignedEle
 
 
     /**
+     * Wrapper method over SignedElementTrait to use as a validator for enveloped XML signatures.
+     *
+     * @param array $_
+     * @param XMLSecurityKey $key The key to use to verify the enveloped signature.
+     *
+     * @throws \Exception If there's no enveloped signature, or it fails to validate.
+     */
+    protected function xmlSignatureValidatorWrapper(array $_, XMLSecurityKey $key): void
+    {
+        if ($this->validateEnvelopedXmlSignature($key) === false) {
+            throw new \Exception('No enveloped signature found');
+        }
+    }
+
+
+    /**
      * Convert this message to an unsigned XML document.
      * This method does not sign the resulting XML document.
      *
@@ -450,43 +470,6 @@ abstract class AbstractMessage extends AbstractSamlpElement implements SignedEle
         if ($this->Extensions !== null && !$this->Extensions->isEmptyElement()) {
             $this->Extensions->toXML($root);
         }
-
-        return $root;
-    }
-
-
-    /**
-     * Convert this message to a signed XML document.
-     * This method sign the resulting XML document if the private key for
-     * the signature is set.
-     *
-     * @return \DOMElement The root element of the DOM tree
-     */
-    public function toSignedXML(): DOMElement
-    {
-        $root = $this->toXML();
-
-        if ($this->signingKey === null) {
-            /* We don't have a key to sign it with. */
-
-            return $root;
-        }
-
-        /* Find the position we should insert the signature node at. */
-        if ($this->issuer !== null) {
-            /*
-             * We have an issuer node. The signature node should come
-             * after the issuer node.
-             */
-            $issuerNode = $root->firstChild;
-            /** @psalm-suppress PossiblyNullPropertyFetch */
-            $insertBefore = $issuerNode->nextSibling;
-        } else {
-            /* No issuer node - the signature element should be the first element. */
-            $insertBefore = $root->firstChild;
-        }
-
-        Utils::insertSignature($this->signingKey, $this->certificates, $root, $insertBefore);
 
         return $root;
     }

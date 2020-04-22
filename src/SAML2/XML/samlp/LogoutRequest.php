@@ -214,6 +214,7 @@ class LogoutRequest extends AbstractRequest
 
         if (!empty($signature)) {
             $request->setSignature($signature[0]);
+            $request->messageContainedSignatureUponConstruction = true;
         }
 
         return $request;

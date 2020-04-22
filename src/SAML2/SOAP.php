@@ -63,7 +63,7 @@ SOAP;
         /** @var \DOMElement $body */
         $body = $doc->getElementsByTagNameNs(Constants::NS_SOAP, 'Body')->item(0);
 
-        $body->appendChild($doc->importNode($message->toSignedXML(), true));
+        $body->appendChild($doc->importNode($message->toXML(), true));
 
         return $doc->saveXML();
     }

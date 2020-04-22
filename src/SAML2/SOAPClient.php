@@ -124,7 +124,7 @@ class SOAPClient
         $x = new \SoapClient(null, $options);
 
         // Add soap-envelopes
-        $request = $msg->toSignedXML();
+        $request = $msg->toXML();
         $request = self::START_SOAP_ENVELOPE . $request->ownerDocument->saveXML($request) . self::END_SOAP_ENVELOPE;
 
         $container->debugMessage($request, 'out');

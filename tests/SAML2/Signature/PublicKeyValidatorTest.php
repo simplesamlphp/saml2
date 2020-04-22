@@ -106,7 +106,7 @@ class PublicKeyValidatorTest extends \Mockery\Adapter\Phpunit\MockeryTestCase
         $response->setCertificates([CertificatesMock::PUBLIC_KEY_PEM]);
 
         // convert to signed response
-        $response = Response::fromXML($response->toSignedXML());
+        $response = Response::fromXML($response->toXML());
 
         $this->assertTrue($validator->canValidate($response, $config), 'Cannot validate the element');
         $this->assertTrue($validator->hasValidSignature($response, $config), 'The signature is not valid');
