@@ -7,6 +7,7 @@ namespace SAML2\XML;
 use DOMElement;
 use RobRichards\XMLSecLibs\XMLSecEnc;
 use RobRichards\XMLSecLibs\XMLSecurityKey;
+use SAML2\Utils;
 use SAML2\XML\xenc\EncryptedData;
 use SAML2\XML\xenc\EncryptedKey;
 use Webmozart\Assert\Assert;
