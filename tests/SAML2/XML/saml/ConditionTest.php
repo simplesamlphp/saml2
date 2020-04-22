@@ -51,6 +51,7 @@ XML
             'SomeCondition'
         );
 
+        $this->assertEquals('CustomCondition', $condition->getType());
         $this->assertEquals('SomeCondition', $condition->getValue());
 
         $this->assertEquals(
@@ -70,6 +71,7 @@ XML
     {
         $condition = Condition::fromXML($this->document->documentElement);
 
+        $this->assertEquals('CustomCondition', $condition->getType());
         $this->assertEquals('SomeCondition', $condition->getValue());
 
         $this->assertEquals(
@@ -87,6 +89,7 @@ XML
         /** @var \SAML2\CustomCondition $condition */
         $condition = CustomCondition::fromXML($this->document->documentElement);
 
+        $this->assertEquals('CustomCondition', $condition->getType());
         $this->assertEquals('SomeCondition', $condition->getValue());
 
         $this->assertEquals(
