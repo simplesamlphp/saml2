@@ -101,6 +101,22 @@ XML
     }
 
 
+    /**
+     * Adding no contents to a Conditions element should yield an empty element. If there were contents already
+     * there, those should be left untouched.
+     */
+    public function testMarshallingWithNoElements(): void
+    {
+        $samlns = Constants::NS_SAML;
+        $conditions = new Conditions();
+        $this->assertEquals(
+            "<saml:Conditions xmlns:saml=\"$samlns\"/>",
+            strval($conditions)
+        );
+        $this->assertTrue($conditions->isEmptyElement());
+    }
+
+
     // unmarshalling
 
 
