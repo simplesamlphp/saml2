@@ -61,14 +61,14 @@ XML
             [
                 new AudienceRestriction(
                     [
-                        new Audience('http://sp.example.com/demo1/metadata.php')
+                        'http://sp.example.com/demo1/metadata.php'
                     ]
                 ),
             ],
             true,
             new ProxyRestriction(
                 [
-                    new Audience('http://sp.example.com/demo2/metadata.php')
+                    'http://sp.example.com/demo2/metadata.php'
                 ],
                 2
             )
@@ -83,7 +83,7 @@ XML
 
         $audiences = $audienceRestriction[0]->getAudience();
         $this->assertCount(1, $audiences);
-        $this->assertEquals('http://sp.example.com/demo1/metadata.php', $audiences[0]->getAudience());
+        $this->assertEquals('http://sp.example.com/demo1/metadata.php', $audiences[0]);
 
         $this->assertTrue($conditions->getOneTimeUse());
 
@@ -92,7 +92,7 @@ XML
 
         $audiences = $proxyRestriction->getAudience();
         $this->assertCount(1, $audiences);
-        $this->assertEquals('http://sp.example.com/demo2/metadata.php', $audiences[0]->getAudience());
+        $this->assertEquals('http://sp.example.com/demo2/metadata.php', $audiences[0]);
 
         $this->assertEquals(
             $this->document->saveXML($this->document->documentElement),
@@ -120,7 +120,7 @@ XML
 
         $audiences = $audienceRestriction[0]->getAudience();
         $this->assertCount(1, $audiences);
-        $this->assertEquals('http://sp.example.com/demo1/metadata.php', $audiences[0]->getAudience());
+        $this->assertEquals('http://sp.example.com/demo1/metadata.php', $audiences[0]);
 
         $this->assertTrue($conditions->getOneTimeUse());
 
@@ -129,7 +129,7 @@ XML
 
         $audiences = $proxyRestriction->getAudience();
         $this->assertCount(1, $audiences);
-        $this->assertEquals('http://sp.example.com/demo2/metadata.php', $audiences[0]->getAudience());
+        $this->assertEquals('http://sp.example.com/demo2/metadata.php', $audiences[0]);
 
         $this->assertEquals(
             $this->document->saveXML($this->document->documentElement),

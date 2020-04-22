@@ -48,8 +48,8 @@ XML
     {
         $condition = new ProxyRestriction(
             [
-                new Audience('urn:audience1'),
-                new Audience('urn:audience2')
+                'urn:audience1',
+                'urn:audience2'
             ],
             2
         );
@@ -59,8 +59,8 @@ XML
 
         $audiences = $condition->getAudience();
         $this->assertCount(2, $audiences);
-        $this->assertEquals('urn:audience1', $audiences[0]->getAudience());
-        $this->assertEquals('urn:audience2', $audiences[1]->getAudience());
+        $this->assertEquals('urn:audience1', $audiences[0]);
+        $this->assertEquals('urn:audience2', $audiences[1]);
 
         $this->assertEquals(
             $this->document->saveXML($this->document->documentElement),
@@ -84,8 +84,8 @@ XML
 
         $audiences = $condition->getAudience();
         $this->assertCount(2, $audiences);
-        $this->assertEquals('urn:audience1', $audiences[0]->getAudience());
-        $this->assertEquals('urn:audience2', $audiences[1]->getAudience());
+        $this->assertEquals('urn:audience1', $audiences[0]);
+        $this->assertEquals('urn:audience2', $audiences[1]);
 
         $this->assertEquals(
             $this->document->saveXML($this->document->documentElement),

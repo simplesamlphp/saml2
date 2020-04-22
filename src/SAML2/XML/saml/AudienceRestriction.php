@@ -7,6 +7,7 @@ namespace SAML2\XML\saml;
 use DOMElement;
 use SAML2\Constants;
 use SAML2\DOMDocumentFactory;
+use SAML2\Utils;
 use Webmozart\Assert\Assert;
 
 /**
@@ -17,14 +18,14 @@ use Webmozart\Assert\Assert;
  */
 final class AudienceRestriction extends AbstractConditionType
 {
-    /** @var \SAML2\XML\saml\Audience[] */
+    /** @var string[] */
     protected $audience = [];
 
 
     /**
      * Initialize a saml:AudienceRestriction
      *
-     * @param \SAML2\XML\saml\Audience[] $audience
+     * @param string[] $audience
      */
     public function __construct(array $audience)
     {
@@ -37,7 +38,7 @@ final class AudienceRestriction extends AbstractConditionType
     /**
      * Collect the audience
      *
-     * @return \SAML2\XML\saml\Audience[]
+     * @return string[]
      */
     public function getAudience(): array
     {
@@ -48,12 +49,12 @@ final class AudienceRestriction extends AbstractConditionType
     /**
      * Set the value of the Audience-property
      *
-     * @param \SAML2\XML\saml\Audience[] $audience
+     * @param string[] $audience
      * @return void
      */
     private function setAudience(array $audience): void
     {
-        Assert::allIsInstanceOf($audience, Audience::class);
+        Assert::allStringNotEmpty($audience);
 
         $this->audience = $audience;
     }
@@ -71,7 +72,7 @@ final class AudienceRestriction extends AbstractConditionType
         Assert::same($xml->localName, 'AudienceRestriction');
         Assert::same($xml->namespaceURI, AudienceRestriction::NS);
 
-        $audience = Audience::getChildrenOfClass($xml);
+        $audience = Utils::extractStrings($xml, AbstractSamlElement::NS, 'Audience');
 
         return new self($audience);
     }
@@ -87,9 +88,7 @@ final class AudienceRestriction extends AbstractConditionType
     {
         $e = parent::toXML($parent);
 
-        foreach ($this->audience as $audience) {
-            $audience->toXML($e);
-        }
+        Utils::addStrings($e, AbstractSamlElement::NS, 'saml:Audience', false, $this->audience);
 
         return $e;
     }

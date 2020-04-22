@@ -4,6 +4,7 @@ namespace SAML2\XML\saml;
 
 use DOMElement;
 use SAML2\Constants;
+use SAML2\Utils;
 use Webmozart\Assert\Assert;
 
 final class ProxyRestriction extends AbstractConditionType
@@ -11,7 +12,7 @@ final class ProxyRestriction extends AbstractConditionType
     protected const XSI_TYPE = 'ProxyRestriction';
 
     /**
-     * @param \SAML2\XML\saml\Audience[]
+     * @param string[]
      */
     protected $audience = [];
 
@@ -24,7 +25,7 @@ final class ProxyRestriction extends AbstractConditionType
     /**
      * ProxyRestriction constructor.
      *
-     * @param \SAML2\XML\saml\Audience[] $audience
+     * @param string[] $audience
      * @param int|null $count
      */
     public function __construct(array $audience = [], ?int $count = null)
@@ -63,7 +64,7 @@ final class ProxyRestriction extends AbstractConditionType
     /**
      * Get the value of the audience-attribute.
      *
-     * @return \SAML2\XML\saml\Audience[]
+     * @return string[]
      */
     public function getAudience(): array
     {
@@ -74,12 +75,12 @@ final class ProxyRestriction extends AbstractConditionType
     /**
      * Set the value of the audience-attribute
      *
-     * @param \SAML2\XML\saml\Audience[] $audience
+     * @param string[] $audience
      * @return void
      */
     protected function setAudience(array $audience): void
     {
-        Assert::allIsInstanceOf($audience, Audience::class);
+        Assert::allStringNotEmpty($audience);
 
         $this->audience = $audience;
     }
@@ -99,7 +100,7 @@ final class ProxyRestriction extends AbstractConditionType
             $count = intval($count);
         }
 
-        $audience = Audience::getChildrenOfClass($xml);
+        $audience = Utils::extractStrings($xml, AbstractSamlElement::NS, 'Audience');
 
         return new self($audience, $count);
     }
@@ -113,16 +114,14 @@ final class ProxyRestriction extends AbstractConditionType
      */
     public function toXML(DOMElement $parent = null): DOMElement
     {
-        $element = parent::toXML($parent);
+        $e = parent::toXML($parent);
 
         if ($this->count !== null) {
-            $element->setAttribute('Count', $this->count);
+            $e->setAttribute('Count', $this->count);
         }
 
-        foreach ($this->audience as $audience) {
-            $audience->toXML($element);
-        }
+        Utils::addStrings($e, AbstractSamlElement::NS, 'saml:Audience', false, $this->audience);
 
-        return $element;
+        return $e;
     }
 }
