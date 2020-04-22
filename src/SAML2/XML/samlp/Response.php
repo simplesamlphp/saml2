@@ -6,7 +6,7 @@ namespace SAML2\XML\samlp;
 
 use DOMElement;
 use SAML2\Constants;
-use SAML2\EncryptedAssertion;
+use SAML2\XML\saml\EncryptedAssertion;
 use SAML2\XML\saml\Assertion;
 use Webmozart\Assert\Assert;
 
@@ -20,7 +20,7 @@ class Response extends AbstractStatusResponse
     /**
      * The assertions in this response.
      *
-     * @var (\SAML2\XML\saml\Assertion|\SAML2\EncryptedAssertion)[]
+     * @var (\SAML2\XML\saml\Assertion|\SAML2\XML\saml\EncryptedAssertion)[]
      */
     private $assertions = [];
 
@@ -57,7 +57,7 @@ class Response extends AbstractStatusResponse
     /**
      * Retrieve the assertions in this response.
      *
-     * @return \SAML2\XML\saml\Assertion[]|\SAML2\EncryptedAssertion[]
+     * @return \SAML2\XML\saml\Assertion[]|\SAML2\XML\saml\EncryptedAssertion[]
      */
     public function getAssertions(): array
     {
@@ -68,7 +68,7 @@ class Response extends AbstractStatusResponse
     /**
      * Set the assertions that should be included in this response.
      *
-     * @param \SAML2\XML\saml\Assertion[]|\SAML2\EncryptedAssertion[] $assertions The assertions.
+     * @param \SAML2\XML\saml\Assertion[]|\SAML2\XML\saml\EncryptedAssertion[] $assertions The assertions.
      * @return void
      */
     public function setAssertions(array $assertions): void
