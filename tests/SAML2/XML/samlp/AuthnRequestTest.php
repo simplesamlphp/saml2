@@ -14,6 +14,7 @@ use SAML2\DOMDocumentFactory;
 use SAML2\XML\saml\AudienceRestriction;
 use SAML2\XML\saml\AuthnContextClassRef;
 use SAML2\XML\saml\Conditions;
+use SAML2\XML\saml\EncryptedID;
 use SAML2\XML\saml\Issuer;
 use SAML2\XML\saml\NameID;
 use SAML2\XML\saml\Subject;
@@ -211,10 +212,11 @@ AUTHNREQUEST;
      */
     public function testThatAnEncryptedNameIdResultsInTheCorrectXmlStructure(): void
     {
-        // the NameID we're going to encrypt
-        $nameId = new NameID(
-            md5('Arthur Dent'),
-            Constants::NAMEID_ENCRYPTED
+        // create an encrypted NameID
+        $key = CertificatesMock::getPublicKey();
+        $nameId = EncryptedID::fromUnencryptedElement(
+            new NameID(md5('Arthur Dent'), Constants::NAMEID_ENCRYPTED),
+            $key
         );
 
         // the Issuer
@@ -224,9 +226,7 @@ AUTHNREQUEST;
         // basic AuthnRequest
         $request = new AuthnRequest(null, new Subject($nameId), null, null, null, null, null, null, null, null, $issuer, null, null, null, $destination);
 
-        // encrypt the NameID
-        $key = CertificatesMock::getPublicKey();
-        $request->encryptNameId($key);
+
 
         $expectedXml = <<<AUTHNREQUEST
 <samlp:AuthnRequest
