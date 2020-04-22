@@ -136,8 +136,8 @@ class HTTPArtifact extends Binding
             "ArtifactResolutionService endpoint being used is := " . $endpoint['Location']
         );
 
-        // Construct the ArtifactResolve Request
-        $ar = new ArtifactResolve();
+
+
 
         /**
          * @psalm-suppress UndefinedClass
@@ -148,11 +148,10 @@ class HTTPArtifact extends Binding
         /**
          * Set the request attributes
          */
-        $isser = new Issuer($this->spMetadata->getString('entityid'));
+        $issuer = new Issuer($this->spMetadata->getString('entityid'));
 
-        $ar->setIssuer($issuer);
-        $ar->setArtifact($_REQUEST['SAMLart']);
-        $ar->setDestination($endpoint['Location']);
+        // Construct the ArtifactResolve Request
+        $ar = new ArtifactResolve($_REQUEST['SAMLart'], $issuer, null, null, null, $endpoint['Location']);
 
         // sign the request
         /** @psalm-suppress UndefinedClass */
