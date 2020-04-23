@@ -9,6 +9,7 @@ use SAML2\XML\ds\Signature;
 use SAML2\XML\saml\Conditions;
 use SAML2\XML\saml\Issuer;
 use SAML2\XML\saml\Subject;
+use SAML2\XML\saml\SubjectConfirmation;
 use SAML2\Utils;
 use Webmozart\Assert\Assert;
 
@@ -182,7 +183,7 @@ class AuthnRequest extends AbstractRequest
 
 
     /**
-     * @param \SAML2\XML\saml\Scoping|null $scoping
+     * @param \SAML2\XML\samlp\Scoping|null $scoping
      * @return void
      */
     private function setScoping(?Scoping $scoping): void
@@ -192,7 +193,7 @@ class AuthnRequest extends AbstractRequest
 
 
     /**
-     * @return \SAML2\XML\saml\Scoping|null
+     * @return \SAML2\XML\samlp\Scoping|null
      */
     public function getScoping(): ?Scoping
     {

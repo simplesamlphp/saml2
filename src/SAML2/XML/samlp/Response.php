@@ -39,7 +39,7 @@ class Response extends AbstractStatusResponse
      * @param string|null $destination
      * @param string|null $consent
      * @param \SAML2\XML\samlp\Extensions $extensions
-     * @param (\SAML2\XML\saml\Assertion|\SAML2\EncryptedAssertion) $assertions
+     * @param (\SAML2\XML\saml\Assertion|\SAML2\XML\saml\EncryptedAssertion) $assertions
      */
     public function __construct(
         Status $status,

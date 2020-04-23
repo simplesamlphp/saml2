@@ -7,6 +7,7 @@ namespace SAML2\XML\samlp;
 use DOMElement;
 use DOMNode;
 use SAML2\Utils;
+use SAML2\XML\Chunk;
 use SAML2\XML\ds\Signature;
 use SAML2\XML\saml\Issuer;
 use Webmozart\Assert\Assert;
@@ -19,7 +20,7 @@ use Webmozart\Assert\Assert;
  */
 class ArtifactResponse extends AbstractStatusResponse
 {
-    /** @var \DOMElement */
+    /** @var \SAML2\XML\Chunk[] */
     protected $any;
 
 
