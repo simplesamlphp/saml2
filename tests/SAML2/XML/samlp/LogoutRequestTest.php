@@ -45,7 +45,7 @@ class LogoutRequestTest extends \Mockery\Adapter\Phpunit\MockeryTestCase
 <samlp:LogoutRequest xmlns:samlp="urn:oasis:names:tc:SAML:2.0:protocol" xmlns:saml="urn:oasis:names:tc:SAML:2.0:assertion" ID="SomeIDValue" Version="2.0" IssueInstant="2010-07-22T11:30:19Z">
   <saml:Issuer>TheIssuer</saml:Issuer>
   <saml:EncryptedID>
-    <xenc:EncryptedData xmlns:xenc="http://www.w3.org/2001/04/xmlenc#" xmlns:ds="http://www.w3.org/2000/09/xmldsig#" Type="http://www.w3.org/2001/04/xmlenc#Element">
+    <xenc:EncryptedData xmlns:xenc="http://www.w3.org/2001/04/xmlenc#" Type="http://www.w3.org/2001/04/xmlenc#Element">
       <xenc:EncryptionMethod Algorithm="http://www.w3.org/2001/04/xmlenc#aes128-cbc"/>
       <ds:KeyInfo xmlns:ds="http://www.w3.org/2000/09/xmldsig#">
         <xenc:EncryptedKey>
@@ -348,8 +348,6 @@ XML;
      */
     public function testSerialization(): void
     {
-        $this->markTestSkipped('Relies on unmerged PR #225');
-
         $this->assertEquals(
             $this->document->saveXML($this->document->documentElement),
             strval(unserialize(serialize(LogoutRequest::fromXML($this->document->documentElement))))
