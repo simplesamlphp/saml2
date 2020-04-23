@@ -9,7 +9,16 @@ use SAML2\CertificatesMock;
 use SAML2\Constants;
 use SAML2\DOMDocumentFactory;
 use SAML2\Utils;
+use SAML2\XML\Chunk;
+use SAML2\XML\ds\KeyInfo;
+use SAML2\XML\saml\EncryptedID;
 use SAML2\XML\saml\NameID;
+use SAML2\XML\xenc\CipherData;
+use SAML2\XML\xenc\DataReference;
+use SAML2\XML\xenc\EncryptedData;
+use SAML2\XML\xenc\EncryptedKey;
+use SAML2\XML\xenc\EncryptionMethod;
+use SAML2\XML\xenc\ReferenceList;
 
 /**
  * Class \SAML2\XML\samlp\LogoutRequestTest
@@ -21,6 +30,9 @@ class LogoutRequestTest extends \Mockery\Adapter\Phpunit\MockeryTestCase
 
     /** @var \DOMElement */
     private $logoutRequestElement;
+
+    /** @var \DOMDocument $retrievalMethod */
+    private $retrievalMethod;
 
 
     /**
@@ -55,6 +67,11 @@ XML;
         $document = DOMDocumentFactory::fromString($xml);
         $this->document = $document;
         $this->logoutRequestElement = $document->documentElement;
+
+        $this->retrievalMethod = DOMDocumentFactory::fromString(
+            '<ds:RetrievalMethod xmlns:ds="http://www.w3.org/2000/09/xmldsig#" URI="#Encrypted_KEY_ID" ' .
+            'Type="http://www.w3.org/2001/04/xmlenc#EncryptedKey"/>'
+        );
     }
 
 
@@ -93,7 +110,6 @@ XML;
         $this->assertCount(2, $sessionIndexElements);
         $this->assertEquals('SessionIndexValue1', $sessionIndexElements[0]->textContent);
         $this->assertEquals('SessionIndexValue2', $sessionIndexElements[1]->textContent);
-
     }
 
 
@@ -102,21 +118,15 @@ XML;
      */
     public function testUnmarshalling(): void
     {
-        $this->markTestSkipped('Relies on unmerged PR #225');
-
         $logoutRequest = LogoutRequest::fromXML($this->logoutRequestElement);
         $this->assertEquals('TheIssuer', $logoutRequest->getIssuer()->getValue());
-        $this->assertTrue($logoutRequest->isNameIdEncrypted());
+        $this->assertInstanceOf(EncryptedID::class, $logoutRequest->getIdentifier());
 
-        $sessionIndexElements = $logoutRequest->getSessionIndexes();
-        $this->assertCount(2, $sessionIndexElements);
-        $this->assertEquals('SomeSessionIndex1', $sessionIndexElements[0]);
-        $this->assertEquals('SomeSessionIndex2', $sessionIndexElements[1]);
-        $this->assertEquals('SomeSessionIndex1', $logoutRequest->getSessionIndex());
+        $this->assertEquals(['SomeSessionIndex1', 'SomeSessionIndex2'], $logoutRequest->getSessionIndexes());
 
-        $logoutRequest->decryptNameId(CertificatesMock::getPrivateKey());
-
-        $nameId = $logoutRequest->getIdentifier();
+        /** @var EncryptedID $encid */
+        $encid = $logoutRequest->getIdentifier();
+        $nameId = $encid->decrypt(CertificatesMock::getPrivateKey());
         $this->assertEquals('TheNameIDValue', $nameId->getValue());
     }
 
@@ -126,8 +136,6 @@ XML;
      */
     public function testEncryptedNameId(): void
     {
-        $this->markTestSkipped('Relies on unmerged PR #225');
-
         $ed = new EncryptedData(
             new CipherData('Nk4W4mx...'),
             'Encrypted_DATA_ID',
