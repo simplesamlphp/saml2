@@ -37,7 +37,10 @@ class AttributeValue extends AbstractSamlElement
      */
     public function __construct($value)
     {
-        Assert::true(is_string($value) || is_int($value) || $value instanceof DOMElement);
+        Assert::true(
+            is_string($value) || is_int($value) || $value instanceof DOMElement,
+            'Value must be of type `string`, `int` or `DOMElement`.'
+        );
 
         if (is_string($value)) {
             $doc = DOMDocumentFactory::create();
