@@ -7,7 +7,6 @@ namespace SAML2\XML\samlp;
 use DOMElement;
 use DOMNode;
 use SAML2\Utils;
-use SAML2\XML\ExtendableElementTrait;
 use SAML2\XML\ds\Signature;
 use SAML2\XML\saml\Issuer;
 use Webmozart\Assert\Assert;
