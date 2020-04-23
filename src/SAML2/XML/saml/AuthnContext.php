@@ -8,7 +8,6 @@ use DOMElement;
 use SAML2\Constants;
 use SAML2\DOMDocumentFactory;
 use SAML2\Utils;
-use SAML2\XML\saml\AuthenticatingAuthority;
 use SAML2\XML\saml\AuthnContextClassRef;
 use SAML2\XML\saml\AuthnContextDecl;
 use SAML2\XML\saml\AuthnContextDeclRef;
