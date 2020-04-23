@@ -133,7 +133,7 @@ XML
     {
         $assertion = new Assertion($this->document->documentElement);
 
-        $sc = $assertion->getSubjectConfirmation()[0];
+        $sc = $assertion->getSubject()->getSubjectConfirmation()[0];
         $scd = $sc->getSubjectConfirmationData();
         $newscd = new SubjectConfirmationData(
             $scd->getNotBefore(),

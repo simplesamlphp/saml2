@@ -62,7 +62,8 @@ final class NameIdDecryptionTransformer implements
      */
     public function transform(Assertion $assertion): Assertion
     {
-        if (!$assertion->isNameIdEncrypted()) {
+        $identifier = $assertion->getIdentifier();
+        if (!($identifier instanceof EncryptedID)) {
             return $assertion;
         }
 
@@ -72,10 +73,12 @@ final class NameIdDecryptionTransformer implements
             $blacklistedKeys = $this->serviceProvider->getBlacklistedAlgorithms();
         }
 
+        $decrypted = null;
         foreach ($decryptionKeys as $index => $key) {
             try {
-                $assertion->decryptNameId($key, $blacklistedKeys);
+                $decrypted = $identifier->decrypt($key, $blacklistedKeys);
                 $this->logger->debug(sprintf('Decrypted assertion NameId with key "#%d"', $index));
+                break;
             } catch (Exception $e) {
                 $this->logger->debug(sprintf(
                     'Decrypting assertion NameId with key "#%d" failed, "%s" thrown: "%s"',
@@ -86,7 +89,7 @@ final class NameIdDecryptionTransformer implements
             }
         }
 
-        if ($assertion->isNameIdEncrypted()) {
+        if ($decrypted === null) {
             throw new NotDecryptedException(
                 'Could not decrypt the assertion NameId with the configured keys, see the debug log for information'
             );

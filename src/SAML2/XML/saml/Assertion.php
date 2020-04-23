@@ -31,6 +31,7 @@ use SimpleSAML\XMLSecurity\XMLSecurityKey;
  */
 class Assertion implements SignedElementInterface
 {
+    use IdentifierTrait;
     use SignedElementTrait;
 
     /**
@@ -58,7 +59,14 @@ class Assertion implements SignedElementInterface
     private Issuer $issuer;
 
     /**
-     * The NameId of the subject in the assertion.
+     * The subject of this assertion
+     *
+     * @var \SAML2\XML\saml\Subject|null
+     */
+    protected ?Subject $subject;
+
+    /**
+     * The subject of this assertion
      *
      * If the NameId is null, no subject was included in the assertion.
      *
@@ -138,6 +146,13 @@ class Assertion implements SignedElementInterface
      * @var int|null
      */
     private ?int $authnInstant = null;
+
+    /**
+     * The authentication statement for this assertion.
+     *
+     * @var \SAML2\XML\saml\AuthnStatement[]
+     */
+    protected $authnStatement = [];
 
     /**
      * The authentication context reference for this assertion.
@@ -277,15 +292,14 @@ class Assertion implements SignedElementInterface
 
         $this->issueInstant = XMLUtils::xsDateTimeToTimestamp($xml->getAttribute('IssueInstant'));
 
-        /** @var \DOMElement[] $issuer */
-        $issuer = XMLUtils::xpQuery($xml, './saml_assertion:Issuer');
-        if (empty($issuer)) {
-            throw new Exception('Missing <saml:Issuer> in assertion.');
-        }
+        $issuer = Issuer::getChildrenOfClass($xml);
+        Assert::minCount($issuer, 1, 'Missing <saml:Issuer> in assertion.');
+        $this->issuer = $issuer[0];
 
-        $this->issuer = Issuer::fromXML($issuer[0]);
+        $subject = Subject::getChildrenOfClass($xml);
+        Assert::maxCount($subject, 1, 'More than one <saml:Subject> in <saml:Assertion>');
+        $this->subject = array_pop($subject);
 
-        $this->parseSubject($xml);
         $this->parseConditions($xml);
         $this->parseAuthnStatement($xml);
         $this->parseAttributes($xml);
@@ -295,51 +309,25 @@ class Assertion implements SignedElementInterface
 
 
     /**
-     * Parse subject in assertion.
+     * Collect the value of the subject
      *
-     * @param \DOMElement $xml The assertion XML element.
-     * @throws \Exception
+     * @return \SAML2\XML\saml\Subject
+     */
+    public function getSubject(): Subject
+    {
+        return $this->subject;
+    }
+
+
+    /**
+     * Set the value of the subject-property
+     * @param \SAML2\XML\saml\Subject $subject
+     *
      * @return void
      */
-    private function parseSubject(DOMElement $xml): void
+    public function setSubject(Subject $subject): void
     {
-        /** @var \DOMElement[] $subject */
-        $subject = XMLUtils::xpQuery($xml, './saml_assertion:Subject');
-        if (empty($subject)) {
-            /* No Subject node. */
-
-            return;
-        } elseif (count($subject) > 1) {
-            throw new Exception('More than one <saml:Subject> in <saml:Assertion>.');
-        }
-        $subject = $subject[0];
-
-        /** @var \DOMElement[] $nameId */
-        $nameId = XMLUtils::xpQuery(
-            $subject,
-            './saml_assertion:NameID | ./saml_assertion:EncryptedID/xenc:EncryptedData'
-        );
-        if (count($nameId) > 1) {
-            throw new Exception('More than one <saml:NameID> or <saml:EncryptedID> in <saml:Subject>.');
-        } elseif (!empty($nameId)) {
-            $nameId = $nameId[0];
-            if ($nameId->localName === 'EncryptedData') {
-                /* The NameID element is encrypted. */
-                $this->encryptedNameId = $nameId;
-            } else {
-                $this->nameId = NameID::fromXML($nameId);
-            }
-        }
-
-        /** @var \DOMElement[] $subjectConfirmation */
-        $subjectConfirmation = XMLUtils::xpQuery($subject, './saml_assertion:SubjectConfirmation');
-        if (empty($subjectConfirmation) && empty($nameId)) {
-            throw new Exception('Missing <saml:SubjectConfirmation> in <saml:Subject>.');
-        }
-
-        foreach ($subjectConfirmation as $sc) {
-            $this->SubjectConfirmation[] = SubjectConfirmation::fromXML($sc);
-        }
+        $this->subject = $subject;
     }
 
 
@@ -608,7 +596,7 @@ class Assertion implements SignedElementInterface
             }
 
             if ($type === 'xs:integer') {
-                $this->attributes[$attributeName][] = (int) $value->textContent;
+                $this->attributes[$attributeName][] = intval($value->textContent);
             } else {
                 $this->attributes[$attributeName][] = trim($value->textContent);
             }
@@ -746,113 +734,6 @@ class Assertion implements SignedElementInterface
     public function setIssuer(Issuer $issuer): void
     {
         $this->issuer = $issuer;
-    }
-
-
-    /**
-     * Retrieve the NameId of the subject in the assertion.
-     *
-     * @throws \Exception
-     * @return \SimpleSAML\SAML2\XML\saml\NameID|null The name identifier of the assertion.
-     */
-    public function getNameId(): ?NameID
-    {
-        if ($this->encryptedNameId !== null) {
-            throw new \Exception('Attempted to retrieve encrypted NameID without decrypting it first.');
-        }
-
-        return $this->nameId;
-    }
-
-
-    /**
-     * Set the NameId of the subject in the assertion.
-     *
-     * The NameId must be a \SAML2\XML\saml\NameID object.
-     *
-     * @param \SimpleSAML\SAML2\XML\saml\NameID|null $nameId The name identifier of the assertion.
-     * @return void
-     */
-    public function setNameId(NameID $nameId = null): void
-    {
-        $this->nameId = $nameId;
-    }
-
-
-    /**
-     * Check whether the NameId is encrypted.
-     *
-     * @return bool True if the NameId is encrypted, false if not.
-     */
-    public function isNameIdEncrypted(): bool
-    {
-        return $this->encryptedNameId !== null;
-    }
-
-
-    /**
-     * Encrypt the NameID in the Assertion.
-     *
-     * @param \SimpleSAML\XMLSecurity\XMLSecurityKey $key The encryption key.
-     * @return void
-     *
-     * @throws \InvalidArgumentException if assertions are false
-     */
-    public function encryptNameId(XMLSecurityKey $key): void
-    {
-        Assert::notEmpty($this->nameId, 'Cannot encrypt NameID, no NameID set.');
-
-        /* First create an XML representation of the NameID. */
-        $doc = DOMDocumentFactory::create();
-        $root = $doc->createElement('root');
-        $doc->appendChild($root);
-        $this->nameId->toXML($root);
-        /** @var \DOMElement $nameId */
-        $nameId = $root->firstChild;
-
-        Utils::getContainer()->debugMessage($nameId, 'encrypt');
-
-        /* Encrypt the NameID. */
-        $enc = new XMLSecEnc();
-        $enc->setNode($nameId);
-        // @codingStandardsIgnoreStart
-        $enc->type = XMLSecEnc::Element;
-        // @codingStandardsIgnoreEnd
-
-        $symmetricKey = new XMLSecurityKey(XMLSecurityKey::AES128_CBC);
-        $symmetricKey->generateSessionKey();
-        $enc->encryptKey($key, $symmetricKey);
-
-        /**
-         * @psalm-suppress UndefinedClass
-         */
-        $this->encryptedNameId = $enc->encryptNode($symmetricKey);
-        $this->nameId = null;
-    }
-
-
-    /**
-     * Decrypt the NameId of the subject in the assertion.
-     *
-     * @param \SimpleSAML\XMLSecurity\XMLSecurityKey $key       The decryption key.
-     * @param array          $blacklist Blacklisted decryption algorithms.
-     * @return void
-     *
-     * @throws \SimpleSAML\Assert\AssertionFailedException if assertions are false
-     */
-    public function decryptNameId(XMLSecurityKey $key, array $blacklist = []): void
-    {
-        if ($this->encryptedNameId === null) {
-            /* No NameID to decrypt. */
-
-            return;
-        }
-
-        $nameId = SecurityUtils::decryptElement($this->encryptedNameId, $key, $blacklist);
-        Utils::getContainer()->debugMessage($nameId, 'decrypt');
-        $this->nameId = NameID::fromXML($nameId);
-
-        $this->encryptedNameId = null;
     }
 
 
@@ -1480,7 +1361,10 @@ class Assertion implements SignedElementInterface
 
         $issuer = $this->issuer->toXML($root);
 
-        $this->addSubject($root);
+        if ($this->subject !== null) {
+            $this->subject->toXML($root);
+        }
+
         $this->addConditions($root);
         $this->addAuthnStatement($root);
         if ($this->getRequiredEncAttributes() === false) {
@@ -1494,37 +1378,6 @@ class Assertion implements SignedElementInterface
         }
 
         return $root;
-    }
-
-
-    /**
-     * Add a Subject-node to the assertion.
-     *
-     * @param \DOMElement $root The assertion element we should add the subject to.
-     * @return void
-     */
-    private function addSubject(DOMElement $root): void
-    {
-        if ($this->nameId === null && $this->encryptedNameId === null) {
-            /* We don't have anything to create a Subject node for. */
-
-            return;
-        }
-
-        $subject = $root->ownerDocument->createElementNS(Constants::NS_SAML, 'saml:Subject');
-        $root->appendChild($subject);
-
-        if ($this->encryptedNameId === null) {
-            $this->nameId->toXML($subject);
-        } else {
-            $eid = $subject->ownerDocument->createElementNS(Constants::NS_SAML, 'saml:' . 'EncryptedID');
-            $subject->appendChild($eid);
-            $eid->appendChild($subject->ownerDocument->importNode($this->encryptedNameId, true));
-        }
-
-        foreach ($this->SubjectConfirmation as $sc) {
-            $sc->toXML($subject);
-        }
     }
 
 

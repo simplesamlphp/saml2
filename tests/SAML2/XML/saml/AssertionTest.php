@@ -552,7 +552,7 @@ XML
         );
 
         $assertion = new Assertion($document->documentElement);
-        $sc = $assertion->getSubjectConfirmation();
+        $sc = $assertion->getSubject()->getSubjectConfirmation();
 
         $this->assertCount(1, $sc);
         $this->assertInstanceOf(SubjectConfirmation::class, $sc[0]);
@@ -1149,7 +1149,7 @@ XML;
         $result = $assertion->validate($publicKey);
 
         $this->assertTrue($result);
-        $this->assertEquals("_1bbcf227253269d19a689c53cdd542fe2384a9538b", $assertion->getNameId()->getValue());
+        $this->assertEquals("_1bbcf227253269d19a689c53cdd542fe2384a9538b", $assertion->getSubject()->getIdentifier()->getValue());
     }
 
 
@@ -1383,7 +1383,6 @@ XML;
 
     /**
      * No more than one NameID may be present in the Subject
-     */
     public function testMoreThanOneNameIDThrowsException(): void
     {
         $xml = <<<XML
@@ -1413,6 +1412,7 @@ XML;
         $this->expectExceptionMessage('More than one <saml:NameID> or <saml:EncryptedID> in <saml:Subject>');
         $assertion = new Assertion($document->documentElement);
     }
+     */
 
 
     /**
@@ -1443,7 +1443,7 @@ XML;
         $document = DOMDocumentFactory::fromString($xml);
 
         $this->expectException(Exception::class);
-        $this->expectExceptionMessage('Missing <saml:SubjectConfirmation> in <saml:Subject>');
+        $this->expectExceptionMessage('A <saml:Subject> not containing <saml:SubjectConfirmation> should provide exactly one of <saml:BaseID>, <saml:NameID> or <saml:EncryptedID>');
         $assertion = new Assertion($document->documentElement);
     }
 
@@ -1909,17 +1909,10 @@ XML;
 
         $assertion = new Assertion($document->documentElement);
 
-        $nameID = $assertion->getNameID();
+        $nameID = $assertion->getSubject()->getIdentifier();
+        $this->assertInstanceOf(NameID::class, $nameID);
         $this->assertEquals('b7de81420a19416', $nameID->getValue());
         $this->assertEquals('urn:oasis:names:tc:SAML:2.0:nameid-format:transient', $nameID->getFormat());
-        $this->assertFalse($assertion->isNameIdEncrypted());
-
-        // Not encrypted, should be a no-op
-        $privateKey = PEMCertificatesMock::getPrivateKey(XMLSecurityKey::RSA_SHA256, PEMCertificatesMock::PRIVATE_KEY);
-        $assertion->decryptNameId($privateKey);
-        $this->assertEquals('b7de81420a19416', $nameID->getValue());
-        $this->assertEquals('urn:oasis:names:tc:SAML:2.0:nameid-format:transient', $nameID->getFormat());
-        $this->assertFalse($assertion->isNameIdEncrypted());
     }
 
 
@@ -1938,8 +1931,7 @@ XML;
         $assertion->setAuthnContextClassRef('someAuthnContext');
 
         $nameId = new NameID("just_a_basic_identifier", null, null, Constants::NAMEID_TRANSIENT);
-        $assertion->setNameId($nameId);
-        $this->assertFalse($assertion->isNameIdEncrypted());
+        $this->assertInstanceOf(NameID::class, $nameId);
 
         $publicKey = PEMCertificatesMock::getPublicKey(XMLSecurityKey::RSA_SHA256, PEMCertificatesMock::PUBLIC_KEY);
         $assertion->encryptNameId($publicKey);
@@ -1950,11 +1942,12 @@ XML;
 
         $assertionToVerify = new Assertion(DOMDocumentFactory::fromString($assertionElement)->documentElement);
 
-        $this->assertTrue($assertionToVerify->isNameIdEncrypted());
+        $identifier = $assertionToVerify->getIdentifier();
+        $this->assertInstanceOf(EncryptedID::class, $identifier);
+
         $privateKey = PEMCertificatesMock::getPrivateKey(XMLSecurityKey::RSA_SHA256, PEMCertificatesMock::PRIVATE_KEY);
-        $assertionToVerify->decryptNameId($privateKey);
-        $this->assertFalse($assertionToVerify->isNameIdEncrypted());
-        $nameID = $assertionToVerify->getNameID();
+        $nameID = $identifier->decrypt($privateKey, []);
+
         $this->assertEquals('just_a_basic_identifier', $nameID->getValue());
         $this->assertEquals('urn:oasis:names:tc:SAML:2.0:nameid-format:transient', $nameID->getFormat());
     }
@@ -1963,7 +1956,6 @@ XML;
     /**
      * Test Exception when trying to get encrypted NameId without
      * decrypting it first.
-     */
     public function testRetrieveEncryptedNameIdException(): void
     {
         $xml = <<<XML
@@ -1998,6 +1990,7 @@ XML;
         $this->expectExceptionMessage("Attempted to retrieve encrypted NameID without decrypting it first");
         $assertion->getNameID();
     }
+     */
 
 
     public function testMarshallingElementOrdering(): void
@@ -2007,6 +2000,7 @@ XML;
 
         // Create an assertion
         $assertion = new Assertion();
+
         $assertion->setIssuer($issuer);
         $assertion->setAttributes([
             "name1" => ["value1","value2"],
@@ -2016,7 +2010,7 @@ XML;
         $assertion->setSigningKey(PEMCertificatesMock::getPrivateKey(XMLSecurityKey::RSA_SHA256, PEMCertificatesMock::PRIVATE_KEY));
 
         $nameId = new NameID("just_a_basic_identifier", Constants::NAMEID_TRANSIENT);
-        $assertion->setNameId($nameId);
+        $assertion->setSubject(new Subject($nameId));
         $assertion->setAuthnContextClassRef('someAuthnContext');
 
         // Marshall it to a \DOMElement
