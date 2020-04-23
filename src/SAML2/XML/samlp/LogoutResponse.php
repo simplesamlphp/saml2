@@ -30,11 +30,7 @@ class LogoutResponse extends AbstractStatusResponse
         Assert::same($xml->namespaceURI, LogoutResponse::NS);
         Assert::same('2.0', self::getAttribute($xml, 'Version'));
 
-        $id = self::getAttribute($xml, 'ID');
         $issueInstant = Utils::xsDateTimeToTimestamp(self::getAttribute($xml, 'IssueInstant'));
-        $inResponseTo = self::getAttribute($xml, 'InResponseTo', null);
-        $destination = self::getAttribute($xml, 'Destination', null);
-        $consent = self::getAttribute($xml, 'Consent', null);
 
         $issuer = Issuer::getChildrenOfClass($xml);
         Assert::countBetween($issuer, 0, 1);
@@ -50,12 +46,12 @@ class LogoutResponse extends AbstractStatusResponse
 
         $response = new self(
             array_pop($status),
-            empty($issuer) ? null : array_pop($issuer),
-            $id,
+            array_pop($issuer),
+            self::getAttribute($xml, 'ID'),
             $issueInstant,
-            $inResponseTo,
-            $destination,
-            $consent,
+            self::getAttribute($xml, 'InResponseTo', null),
+            self::getAttribute($xml, 'Destination', null),
+            self::getAttribute($xml, 'Consent', null),
             empty($extensions) ? null : array_pop($extensions)
         );
 
