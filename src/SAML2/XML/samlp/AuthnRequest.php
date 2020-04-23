@@ -4,19 +4,11 @@ declare(strict_types=1);
 
 namespace SAML2\XML\samlp;
 
-use DOMDocument;
 use DOMElement;
-use Exception;
-use RobRichards\XMLSecLibs\XMLSecEnc;
-use RobRichards\XMLSecLibs\XMLSecurityKey;
-use SAML2\Constants;
-use SAML2\Exception\InvalidArgumentException;
 use SAML2\XML\ds\Signature;
 use SAML2\XML\saml\Conditions;
 use SAML2\XML\saml\Issuer;
-use SAML2\XML\saml\NameID;
 use SAML2\XML\saml\Subject;
-use SAML2\XML\saml\SubjectConfirmation;
 use SAML2\Utils;
 use Webmozart\Assert\Assert;
 
@@ -33,7 +25,7 @@ class AuthnRequest extends AbstractRequest
     protected $subject = null;
 
     /**
-     * @var \SAML2\XML\saml\Scoping|null
+     * @var \SAML2\XML\samlp\Scoping|null
      */
     protected $scoping = null;
 
@@ -489,12 +481,6 @@ class AuthnRequest extends AbstractRequest
         if ($attributeConsumingServiceIndex !== null) {
             $attributeConsumingServiceIndex = intval($attributeConsumingServiceIndex);
         }
-
-        $assertionConsumerServiceIndex = self::getAttribute($xml, 'AssertionConsumerServiceIndex', null);
-        if ($assertionConsumerServiceIndex !== null) {
-            $assertionConsumerServiceIndex = intval($assertionConsumerServiceIndex);
-        }
-
         $providerName = self::getAttribute($xml, 'ProviderName', null);
 
         $conditions = Conditions::getChildrenOfClass($xml);
@@ -551,7 +537,6 @@ class AuthnRequest extends AbstractRequest
         }
 
         return $request;
-
     }
 
 

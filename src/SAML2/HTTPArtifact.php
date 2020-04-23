@@ -207,6 +207,7 @@ class HTTPArtifact extends Binding
      */
     public static function validateSignature(ArtifactResponse $message, XMLSecurityKey $key): bool
     {
+        // @todo verify if this works and/or needs to do anything more. Ref. HTTPRedirect binding
         return $message->validate($key);
     }
 }

@@ -7,10 +7,8 @@ namespace SAML2\XML\samlp;
 use DOMElement;
 use RobRichards\XMLSecLibs\XMLSecurityKey;
 use SAML2\Constants;
-use SAML2\DOMDocumentFactory;
 use SAML2\Utilities\Temporal;
 use SAML2\Utils;
-use SAML2\XML\ds\Signature;
 use SAML2\XML\ExtendableElementTrait;
 use SAML2\XML\saml\Issuer;
 use SAML2\XML\SignedElementInterface;
@@ -117,6 +115,7 @@ abstract class AbstractMessage extends AbstractSamlpElement implements SignedEle
      * @param string|null $destination
      * @param string|null $consent
      * @param \SAML2\XML\samlp\Extensions $extensions
+     * @param string|null $relayState
      *
      * @throws \Exception
      */
@@ -127,7 +126,8 @@ abstract class AbstractMessage extends AbstractSamlpElement implements SignedEle
         ?int $issueInstant = null,
         ?string $destination = null,
         ?string $consent = null,
-        ?Extensions $extensions = null
+        ?Extensions $extensions = null,
+        ?string $relayState = null
     ) {
         $this->setIssuer($issuer);
         $this->setId($id);
@@ -136,6 +136,7 @@ abstract class AbstractMessage extends AbstractSamlpElement implements SignedEle
         $this->setDestination($destination);
         $this->setConsent($consent);
         $this->setExtensions($extensions);
+        $this->setRelayState($relayState);
         $this->addValidator([$this, 'xmlSignatureValidatorWrapper'], []);
     }
 
@@ -472,14 +473,5 @@ abstract class AbstractMessage extends AbstractSamlpElement implements SignedEle
         }
 
         return $root;
-    }
-
-
-    /**
-     * @return null|string
-     */
-    public function getSignatureMethod(): ?string
-    {
-        return $this->signatureMethod;
     }
 }

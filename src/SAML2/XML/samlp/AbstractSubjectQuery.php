@@ -5,12 +5,7 @@ declare(strict_types=1);
 namespace SAML2\XML\samlp;
 
 use DOMElement;
-use Exception;
-use SAML2\Constants;
-use SAML2\Utils;
-use SAML2\XML\IdentifierTrait;
 use SAML2\XML\saml\Issuer;
-use SAML2\XML\saml\NameID;
 use SAML2\XML\saml\Subject;
 use Webmozart\Assert\Assert;
 
@@ -73,7 +68,7 @@ abstract class AbstractSubjectQuery extends AbstractRequest
 
     /**
      * Set the value of the subject-property
-     * @param \SAML2\XML\saml\Subject $value
+     * @param \SAML2\XML\saml\Subject $subject
      *
      * @return void
      */

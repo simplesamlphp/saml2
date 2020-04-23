@@ -6,10 +6,8 @@ namespace SAML2\XML\samlp;
 
 use DOMElement;
 use SAML2\Constants;
-use SAML2\Utils;
 use SAML2\XML\ExtensionsTrait;
 use SAML2\XML\saml\Issuer;
-use Webmozart\Assert\Assert;
 
 /**
  * Base class for all SAML 2 response messages.
@@ -54,6 +52,8 @@ abstract class AbstractStatusResponse extends AbstractMessage
      * @param string|null $consent
      * @param \SAML2\XML\samlp\Extensions $extensions
      * @param string|null $relayState
+     *
+     * @throws \Exception
      */
     protected function __construct(
         Status $status,
@@ -136,6 +136,7 @@ abstract class AbstractStatusResponse extends AbstractMessage
     /**
      * Convert status response message to an XML element.
      *
+     * @inheritDoc
      * @return \DOMElement This status response.
      */
     public function toXML(?DOMElement $parent = null): DOMElement
