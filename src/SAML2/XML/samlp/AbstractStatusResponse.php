@@ -43,13 +43,13 @@ abstract class AbstractStatusResponse extends AbstractMessage
      * Constructor for SAML 2 response messages.
      *
      * @param \SAML2\XML\samlp\Status $status
-     * @param \SAML2\XML\saml\Issuer $issuer
-     * @param string $id
-     * @param int $issueInstant
-     * @param string $inResponseTo
+     * @param \SAML2\XML\saml\Issuer|null $issuer
+     * @param string|null $id
+     * @param int|null $issueInstant
+     * @param string|null $inResponseTo
      * @param string|null $destination
      * @param string|null $consent
-     * @param \SAML2\XML\samlp\Extensions $extensions
+     * @param \SAML2\XML\samlp\Extensions|null $extensions
      * @param string|null $relayState
      *
      * @throws \Exception
