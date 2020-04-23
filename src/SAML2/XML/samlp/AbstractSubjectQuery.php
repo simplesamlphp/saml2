@@ -33,7 +33,6 @@ abstract class AbstractSubjectQuery extends AbstractRequest
      * @param \SAML2\XML\saml\Subject $subject
      * @param \SAML2\XML\saml\Issuer $issuer
      * @param string $id
-     * @param string $version
      * @param int $issueInstant
      * @param string|null $destination
      * @param string|null $consent
@@ -43,13 +42,12 @@ abstract class AbstractSubjectQuery extends AbstractRequest
         Subject $subject,
         ?Issuer $issuer = null,
         ?string $id = null,
-        ?string $version = '2.0',
         ?int $issueInstant = null,
         ?string $destination = null,
         ?string $consent = null,
         ?Extensions $extensions = null
     ) {
-        parent::__construct($issuer, $id, $version, $issueInstant, $destination, $consent, $extensions);
+        parent::__construct($issuer, $id, $issueInstant, $destination, $consent, $extensions);
 
         $this->setSubject($subject);
     }

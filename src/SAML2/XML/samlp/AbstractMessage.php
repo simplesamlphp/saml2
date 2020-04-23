@@ -5,6 +5,7 @@ declare(strict_types=1);
 namespace SAML2\XML\samlp;
 
 use DOMElement;
+use Exception;
 use RobRichards\XMLSecLibs\XMLSecurityKey;
 use SAML2\Constants;
 use SAML2\Utilities\Temporal;
@@ -40,7 +41,7 @@ abstract class AbstractMessage extends AbstractSamlpElement implements SignedEle
      *
      * @var string
      */
-    protected $version;
+    protected $version = '2.0';
 
     /**
      * The issue timestamp of this message, as an UNIX timestamp.
@@ -110,7 +111,6 @@ abstract class AbstractMessage extends AbstractSamlpElement implements SignedEle
      *
      * @param \SAML2\XML\saml\Issuer|null $issuer
      * @param string|null $id
-     * @param string|null $version
      * @param int|null $issueInstant
      * @param string|null $destination
      * @param string|null $consent
@@ -122,7 +122,6 @@ abstract class AbstractMessage extends AbstractSamlpElement implements SignedEle
     protected function __construct(
         ?Issuer $issuer = null,
         ?string $id = null,
-        ?string $version = null,
         ?int $issueInstant = null,
         ?string $destination = null,
         ?string $consent = null,
@@ -131,7 +130,6 @@ abstract class AbstractMessage extends AbstractSamlpElement implements SignedEle
     ) {
         $this->setIssuer($issuer);
         $this->setId($id);
-        $this->setVersion($version);
         $this->setIssueInstant($issueInstant);
         $this->setDestination($destination);
         $this->setConsent($consent);
@@ -157,7 +155,7 @@ abstract class AbstractMessage extends AbstractSamlpElement implements SignedEle
             /** @var \DOMAttr[] $signatureMethod */
             $signatureMethod = Utils::xpQuery($xml, './ds:Signature/ds:SignedInfo/ds:SignatureMethod/@Algorithm');
             if (empty($signatureMethod)) {
-                throw new \Exception('No Algorithm specified in signature.');
+                throw new Exception('No Algorithm specified in signature.');
             }
 
             $sig = Utils::validateElement($xml);
@@ -171,7 +169,7 @@ abstract class AbstractMessage extends AbstractSamlpElement implements SignedEle
                 ];
                 $this->signatureMethod = $signatureMethod[0]->value;
             }
-        } catch (\Exception $e) {
+        } catch (Exception $e) {
             // ignore signature validation errors
         }
     }
@@ -269,23 +267,6 @@ abstract class AbstractMessage extends AbstractSamlpElement implements SignedEle
     public function getVersion(): string
     {
         return $this->version;
-    }
-
-
-    /**
-     * Set the version of this message.
-     *
-     * @param string|null $id The version of this message
-     * @return void
-     */
-    private function setVersion(?string $version): void
-    {
-        if ($version === null) {
-            $version = '2.0';
-        }
-
-        Assert::same($version, '2.0');
-        $this->version = $version;
     }
 
 
@@ -434,7 +415,7 @@ abstract class AbstractMessage extends AbstractSamlpElement implements SignedEle
     protected function xmlSignatureValidatorWrapper(array $_, XMLSecurityKey $key): void
     {
         if ($this->validateEnvelopedXmlSignature($key) === false) {
-            throw new \Exception('No enveloped signature found');
+            throw new Exception('No enveloped signature found');
         }
     }
 
@@ -454,7 +435,7 @@ abstract class AbstractMessage extends AbstractSamlpElement implements SignedEle
         $root->removeAttributeNS(Constants::NS_SAML, 'tmp');
 
         $root->setAttribute('ID', $this->id);
-        $root->setAttribute('Version', '2.0');
+        $root->setAttribute('Version', $this->version);
         $root->setAttribute('IssueInstant', gmdate('Y-m-d\TH:i:s\Z', $this->issueInstant));
 
         if ($this->destination !== null) {

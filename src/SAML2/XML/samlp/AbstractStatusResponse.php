@@ -45,7 +45,6 @@ abstract class AbstractStatusResponse extends AbstractMessage
      * @param \SAML2\XML\samlp\Status $status
      * @param \SAML2\XML\saml\Issuer $issuer
      * @param string $id
-     * @param string $version
      * @param int $issueInstant
      * @param string $inResponseTo
      * @param string|null $destination
@@ -59,7 +58,6 @@ abstract class AbstractStatusResponse extends AbstractMessage
         Status $status,
         ?Issuer $issuer = null,
         ?string $id = null,
-        ?string $version = '2.0',
         ?int $issueInstant = null,
         ?string $inResponseTo = null,
         ?string $destination = null,
@@ -67,7 +65,7 @@ abstract class AbstractStatusResponse extends AbstractMessage
         ?Extensions $extensions = null,
         ?string $relayState = null
     ) {
-        parent::__construct($issuer, $id, $version, $issueInstant, $destination, $consent, $extensions, $relayState);
+        parent::__construct($issuer, $id, $issueInstant, $destination, $consent, $extensions, $relayState);
 
         $this->setStatus($status);
         $this->setInResponseTo($inResponseTo);

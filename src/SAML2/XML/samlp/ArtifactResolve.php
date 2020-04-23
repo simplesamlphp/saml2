@@ -31,7 +31,6 @@ class ArtifactResolve extends AbstractRequest
      * @param string $artifact
      * @param \SAML2\XML\saml\Issuer|null $issuer
      * @param string|null $id
-     * @param string|null $version
      * @param int|null $issueInstant
      * @param string|null $destination
      * @param string|null $consent
@@ -43,13 +42,12 @@ class ArtifactResolve extends AbstractRequest
         string $artifact,
         ?Issuer $issuer = null,
         ?string $id = null,
-        ?string $version = null,
         ?int $issueInstant = null,
         ?string $destination = null,
         ?string $consent = null,
         ?Extensions $extensions = null
     ) {
-        parent::__construct($issuer, $id, $version, $issueInstant, $destination, $consent, $extensions);
+        parent::__construct($issuer, $id, $issueInstant, $destination, $consent, $extensions);
 
         $this->setArtifact($artifact);
     }
@@ -92,12 +90,9 @@ class ArtifactResolve extends AbstractRequest
     {
         Assert::same($xml->localName, 'ArtifactResolve');
         Assert::same($xml->namespaceURI, ArtifactResolve::NS);
+        Assert::same('2.0', self::getAttribute($xml, 'Version'));
 
-        $id = self::getAttribute($xml, 'ID');
-        $version = self::getAttribute($xml, 'Version');
         $issueInstant = Utils::xsDateTimeToTimestamp(self::getAttribute($xml, 'IssueInstant'));
-        $destination = self::getAttribute($xml, 'Destination', null);
-        $consent = self::getAttribute($xml, 'Consent', null);
 
         $issuer = Issuer::getChildrenOfClass($xml);
         Assert::maxCount($issuer, 1);
@@ -113,13 +108,12 @@ class ArtifactResolve extends AbstractRequest
 
         $resolve = new self(
             $artifact,
-            empty($issuer) ? null : array_pop($issuer),
-            $id,
-            $version,
+            array_pop($issuer),
+            self::getAttribute($xml, 'ID'),
             $issueInstant,
-            $destination,
-            $consent,
-            empty($extensions) ? null : array_pop($extensions)
+            self::getAttribute($xml, 'Destination', null),
+            self::getAttribute($xml, 'Consent', null),
+            array_pop($extensions)
         );
 
         if (!empty($signature)) {

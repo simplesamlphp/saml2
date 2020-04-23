@@ -57,7 +57,6 @@ class LogoutRequest extends AbstractRequest
      * @param string[] $sessionIndexes
      * @param \SAML2\XML\saml\Issuer|null $issuer
      * @param string|null $id
-     * @param string|null $version
      * @param int|null $issueInstant
      * @param string|null $destination
      * @param string|null $consent
@@ -71,13 +70,12 @@ class LogoutRequest extends AbstractRequest
         array $sessionIndexes = [],
         ?Issuer $issuer = null,
         ?string $id = null,
-        ?string $version = null,
         ?int $issueInstant = null,
         ?string $destination = null,
         ?string $consent = null,
         ?Extensions $extensions = null
     ) {
-        parent::__construct($issuer, $id, $version, $issueInstant, $destination, $consent, $extensions);
+        parent::__construct($issuer, $id, $issueInstant, $destination, $consent, $extensions);
 
         $this->setIdentifier($identifier);
         $this->setNotOnOrAfter($notOnOrAfter);
@@ -167,6 +165,7 @@ class LogoutRequest extends AbstractRequest
     {
         Assert::same($xml->localName, 'LogoutRequest');
         Assert::same($xml->namespaceURI, LogoutRequest::NS);
+        Assert::same('2.0', self::getAttribute($xml, 'Version'));
 
         $issueInstant = Utils::xsDateTimeToTimestamp(self::getAttribute($xml, 'IssueInstant'));
 
@@ -195,7 +194,6 @@ class LogoutRequest extends AbstractRequest
             Utils::extractStrings($xml, AbstractSamlpElement::NS, 'SessionIndex'),
             array_pop($issuer),
             self::getAttribute($xml, 'ID'),
-            self::getAttribute($xml, 'Version'),
             $issueInstant,
             self::getAttribute($xml, 'Destination', null),
             self::getAttribute($xml, 'Consent', null),

@@ -29,7 +29,6 @@ class ArtifactResponse extends AbstractStatusResponse
      * @param \SAML2\XML\samlp\Status $status
      * @param \SAML2\XML\saml\Issuer|null $issuer
      * @param string|null $id
-     * @param string $version
      * @param int|null $issueInstant
      * @param string|null $inResponseTo
      * @param string|null $destination
@@ -41,7 +40,6 @@ class ArtifactResponse extends AbstractStatusResponse
         Status $status,
         ?Issuer $issuer = null,
         ?string $id = null,
-        ?string $version = '2.0',
         ?int $issueInstant = null,
         ?string $inResponseTo = null,
         ?string $destination = null,
@@ -53,7 +51,6 @@ class ArtifactResponse extends AbstractStatusResponse
             $status,
             $issuer,
             $id,
-            $version,
             $issueInstant,
             $inResponseTo,
             $destination,
@@ -99,9 +96,9 @@ class ArtifactResponse extends AbstractStatusResponse
     {
         Assert::same($xml->localName, 'ArtifactResponse');
         Assert::same($xml->namespaceURI, ArtifactResponse::NS);
+        Assert::same('2.0', self::getAttribute($xml, 'Version'));
 
         $id = self::getAttribute($xml, 'ID');
-        $version = self::getAttribute($xml, 'Version');
         $issueInstant = Utils::xsDateTimeToTimestamp(self::getAttribute($xml, 'IssueInstant'));
         $inResponseTo = self::getAttribute($xml, 'InResponseTo', null);
         $destination = self::getAttribute($xml, 'Destination', null);
@@ -135,7 +132,6 @@ class ArtifactResponse extends AbstractStatusResponse
             array_pop($status),
             empty($issuer) ? null : array_pop($issuer),
             $id,
-            $version,
             $issueInstant,
             $inResponseTo,
             $destination,

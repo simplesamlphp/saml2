@@ -122,7 +122,6 @@ class HTTPPostTest extends \Mockery\Adapter\Phpunit\MockeryTestCase
             null,
             null,
             null,
-            null,
             'https://example.org'
         );
         $hp = new HTTPPost();
@@ -144,7 +143,6 @@ class HTTPPostTest extends \Mockery\Adapter\Phpunit\MockeryTestCase
         $response = new Response(
             $status,
             $issuer,
-            null,
             null,
             null,
             null,

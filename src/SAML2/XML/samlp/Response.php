@@ -29,12 +29,11 @@ class Response extends AbstractStatusResponse
 
 
     /**
-     * Constructor for SAML 2 ArtifactResponse.
+     * Constructor for SAML 2 response messages.
      *
      * @param \SAML2\XML\samlp\Status $status
      * @param \SAML2\XML\saml\Issuer $issuer
      * @param string $id
-     * @param string $version
      * @param int $issueInstant
      * @param string $inResponseTo
      * @param string|null $destination
@@ -46,7 +45,6 @@ class Response extends AbstractStatusResponse
         Status $status,
         ?Issuer $issuer = null,
         ?string $id = null,
-        ?string $version = null,
         ?int $issueInstant = null,
         ?string $inResponseTo = null,
         ?string $destination = null,
@@ -58,7 +56,6 @@ class Response extends AbstractStatusResponse
             $status,
             $issuer,
             $id,
-            $version,
             $issueInstant,
             $inResponseTo,
             $destination,
@@ -89,6 +86,7 @@ class Response extends AbstractStatusResponse
      */
     protected function setAssertions(array $assertions): void
     {
+        Assert::allIsInstanceOfAny($assertions, [Assertion::class, EncryptedAssertion::class]);
         $this->assertions = $assertions;
     }
 
@@ -103,9 +101,9 @@ class Response extends AbstractStatusResponse
     {
         Assert::same($xml->localName, 'Response');
         Assert::same($xml->namespaceURI, Response::NS);
+        Assert::same('2.0', self::getAttribute($xml, 'Version'));
 
         $id = self::getAttribute($xml, 'ID');
-        $version = self::getAttribute($xml, 'Version');
         $issueInstant = Utils::xsDateTimeToTimestamp(self::getAttribute($xml, 'IssueInstant'));
         $inResponseTo = self::getAttribute($xml, 'InResponseTo', null);
         $destination = self::getAttribute($xml, 'Destination', null);
@@ -142,7 +140,6 @@ class Response extends AbstractStatusResponse
             array_pop($status),
             empty($issuer) ? null : array_pop($issuer),
             $id,
-            $version,
             $issueInstant,
             $inResponseTo,
             $destination,

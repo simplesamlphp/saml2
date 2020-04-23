@@ -28,9 +28,9 @@ class LogoutResponse extends AbstractStatusResponse
     {
         Assert::same($xml->localName, 'LogoutResponse');
         Assert::same($xml->namespaceURI, LogoutResponse::NS);
+        Assert::same('2.0', self::getAttribute($xml, 'Version'));
 
         $id = self::getAttribute($xml, 'ID');
-        $version = self::getAttribute($xml, 'Version');
         $issueInstant = Utils::xsDateTimeToTimestamp(self::getAttribute($xml, 'IssueInstant'));
         $inResponseTo = self::getAttribute($xml, 'InResponseTo', null);
         $destination = self::getAttribute($xml, 'Destination', null);
@@ -52,7 +52,6 @@ class LogoutResponse extends AbstractStatusResponse
             array_pop($status),
             empty($issuer) ? null : array_pop($issuer),
             $id,
-            $version,
             $issueInstant,
             $inResponseTo,
             $destination,

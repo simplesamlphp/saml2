@@ -118,7 +118,6 @@ class AuthnRequest extends AbstractRequest
      * @param string $providerName
      * @param \SAML2\XML\saml\Issuer|null $issuer
      * @param string|null $id
-     * @param string|null $version
      * @param int|null $issueInstant
      * @param string|null $destination
      * @param string|null $consent
@@ -140,14 +139,13 @@ class AuthnRequest extends AbstractRequest
 
         ?Issuer $issuer = null,
         ?string $id = null,
-        ?string $version = null,
         ?int $issueInstant = null,
         ?string $destination = null,
         ?string $consent = null,
         ?Extensions $extensions = null,
         ?Scoping $scoping = null
     ) {
-        parent::__construct($issuer, $id, $version, $issueInstant, $destination, $consent, $extensions);
+        parent::__construct($issuer, $id, $issueInstant, $destination, $consent, $extensions);
 
         $this->setRequestedAuthnContext($requestedAuthnContext);
         $this->setSubject($subject);
@@ -448,6 +446,7 @@ class AuthnRequest extends AbstractRequest
      */
     private function setSubjectConfirmation(array $subjectConfirmation): void
     {
+        Assert::allIsInstanceOf($subjectConfirmation, SubjectConfirmation::class);
         $this->subjectConfirmation = $subjectConfirmation;
     }
 
@@ -463,25 +462,14 @@ class AuthnRequest extends AbstractRequest
     {
         Assert::same($xml->localName, 'AuthnRequest');
         Assert::same($xml->namespaceURI, AuthnRequest::NS);
+        Assert::same('2.0', self::getAttribute($xml, 'Version'));
 
-        $id = self::getAttribute($xml, 'ID');
-        $version = self::getAttribute($xml, 'Version');
         $issueInstant = Utils::xsDateTimeToTimestamp(self::getAttribute($xml, 'IssueInstant'));
-        $inResponseTo = self::getAttribute($xml, 'InResponseTo', null);
-        $destination = self::getAttribute($xml, 'Destination', null);
-        $consent = self::getAttribute($xml, 'Consent', null);
-
-        $forceAuthn = self::getBooleanAttribute($xml, 'ForceAuthn', 'false');
-        $isPassive = self::getBooleanAttribute($xml, 'IsPassive', 'false');
-
-        $assertionConsumerServiceUrl = self::getAttribute($xml, 'AssertionConsumerServiceURL', null);
-        $protocolBinding = self::getAttribute($xml, 'ProtocolBinding', null);
 
         $attributeConsumingServiceIndex = self::getAttribute($xml, 'AttributeConsumingServiceIndex', null);
         if ($attributeConsumingServiceIndex !== null) {
             $attributeConsumingServiceIndex = intval($attributeConsumingServiceIndex);
         }
-        $providerName = self::getAttribute($xml, 'ProviderName', null);
 
         $conditions = Conditions::getChildrenOfClass($xml);
         Assert::maxCount($conditions, 1, 'Only one <saml:Conditions> element is allowed.');
@@ -514,19 +502,18 @@ class AuthnRequest extends AbstractRequest
             array_pop($nameIdPolicy),
             array_pop($conditions),
 
-            $forceAuthn,
-            $isPassive,
-            $assertionConsumerServiceUrl,
-            $protocolBinding,
+            self::getBooleanAttribute($xml, 'ForceAuthn', null),
+            self::getBooleanAttribute($xml, 'IsPassive', null),
+            self::getAttribute($xml, 'AssertionConsumerServiceURL', null),
+            self::getAttribute($xml, 'ProtocolBinding', null),
             $attributeConsumingServiceIndex,
-            $providerName,
+            self::getAttribute($xml, 'ProviderName', null),
 
             array_pop($issuer),
-            $id,
-            $version,
+            self::getAttribute($xml, 'ID'),
             $issueInstant,
-            $destination,
-            $consent,
+            self::getAttribute($xml, 'Destination', null),
+            self::getAttribute($xml, 'Consent', null),
             array_pop($extensions),
             array_pop($scoping)
         );
@@ -551,7 +538,7 @@ class AuthnRequest extends AbstractRequest
 
         $parent = parent::toXML($parent);
 
-        if ($this->forceAuthn) {
+        if ($this->forceAuthn == true) {
             $parent->setAttribute('ForceAuthn', 'true');
         }
 
@@ -559,7 +546,7 @@ class AuthnRequest extends AbstractRequest
             $parent->setAttribute('ProviderName', $this->ProviderName);
         }
 
-        if ($this->isPassive) {
+        if ($this->isPassive === true) {
             $parent->setAttribute('IsPassive', 'true');
         }
 

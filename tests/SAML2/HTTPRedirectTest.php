@@ -237,7 +237,7 @@ class HTTPRedirectTest extends \Mockery\Adapter\Phpunit\MockeryTestCase
         $status = new Status(new StatusCode());
         $issuer = new Issuer('testIssuer');
 
-        $response = new Response($status, $issuer, null, null, null, null, 'http://example.org/login?success=yes');
+        $response = new Response($status, $issuer, null, null, null, 'http://example.org/login?success=yes');
         $response->setRelayState('http://example.org');
         $response->setSigningKey(CertificatesMock::getPrivateKey());
         $hr = new HTTPRedirect();

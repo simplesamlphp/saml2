@@ -169,7 +169,7 @@ XML;
             new StatusCode('OurStatusCode')
         );
 
-        $response = new Response($status, null, null, null, 1453323439, 'aabb12234');
+        $response = new Response($status, null, null, 1453323439, 'aabb12234');
 
         $responseElement = $response->toXML();
 

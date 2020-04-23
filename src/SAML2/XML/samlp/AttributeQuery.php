@@ -44,7 +44,6 @@ class AttributeQuery extends AbstractSubjectQuery
      * @param \SAML2\XML\saml\Attribute[] $attributes
      * @param \SAML2\XML\saml\Issuer $issuer
      * @param string $id
-     * @param string $version
      * @param int $issueInstant
      * @param string|null $destination
      * @param string|null $consent
@@ -55,13 +54,12 @@ class AttributeQuery extends AbstractSubjectQuery
         array $attributes = [],
         ?Issuer $issuer = null,
         ?string $id = null,
-        ?string $version = '2.0',
         ?int $issueInstant = null,
         ?string $destination = null,
         ?string $consent = null,
         ?Extensions $extensions = null
     ) {
-        parent::__construct($subject, $issuer, $id, $version, $issueInstant, $destination, $consent, $extensions);
+        parent::__construct($subject, $issuer, $id, $issueInstant, $destination, $consent, $extensions);
 
         $this->setAttributes($attributes);
     }
@@ -101,9 +99,9 @@ class AttributeQuery extends AbstractSubjectQuery
     {
         Assert::same($xml->localName, 'AttributeQuery');
         Assert::same($xml->namespaceURI, AttributeQuery::NS);
+        Assert::same('2.0', self::getAttribute($xml, 'Version'));
 
         $id = self::getAttribute($xml, 'ID');
-        $version = self::getAttribute($xml, 'Version');
         $issueInstant = Utils::xsDateTimeToTimestamp(self::getAttribute($xml, 'IssueInstant'));
         $destination = self::getAttribute($xml, 'Destination', null);
         $consent = self::getAttribute($xml, 'Consent', null);
@@ -126,7 +124,6 @@ class AttributeQuery extends AbstractSubjectQuery
             Attribute::getChildrenOfClass($xml),
             array_pop($issuer),
             $id,
-            $version,
             $issueInstant,
             $destination,
             $consent,
