@@ -212,60 +212,6 @@ AUTHNREQUEST
 
     /**
      * @group Message
-     * @covers \SAML2\XML\samlp\AbstractMessage::setExtensions()
-     * @return void
-     */
-    public function testSetExtensions(): void
-    {
-        $authnRequest = new DOMDocument();
-        $authnRequest->loadXML(<<<'AUTHNREQUEST'
-<samlp:AuthnRequest
-    xmlns:samlp="urn:oasis:names:tc:SAML:2.0:protocol"
-    xmlns:saml="urn:oasis:names:tc:SAML:2.0:assertion"
-    AssertionConsumerServiceIndex="1"
-    Destination="https://tiqr.stepup.org/idp/profile/saml2/Redirect/SSO"
-    ID="_2b0226190ca1c22de6f66e85f5c95158"
-    IssueInstant="2014-09-22T13:42:00Z"
-    Version="2.0">
-  <saml:Issuer NameQualifier="https://gateway.stepup.org/saml20/sp/metadata"
-    SPNameQualifier="https://spnamequalifier.com"
-    SPProvidedID="ProviderID"
-    Format="urn:oasis:names:tc:SAML:1.1:nameid-format:unspecified">
-        https://gateway.stepup.org/saml20/sp/metadata
-  </saml:Issuer>
-  <saml:Subject>
-        <saml:NameID Format="urn:oasis:names:tc:SAML:1.1:nameid-format:unspecified">user@example.org</saml:NameID>
-  </saml:Subject>
-</samlp:AuthnRequest>
-AUTHNREQUEST
-        );
-
-        $message = MessageFactory::fromXML($authnRequest->documentElement);
-        $exts = $message->getExtensions();
-        $this->assertNull($exts);
-
-        $dom = DOMDocumentFactory::create();
-        $ce = $dom->createElementNS('http://www.example.com/XFoo', 'xfoo:test', 'Test data!');
-        $newexts[] = new Chunk($ce);
-
-        $message->setExtensions($newexts);
-
-        $exts = $message->getExtensions();
-        $list = $exts->getList();
-        $this->assertCount(1, $list);
-        $this->assertEquals("test", $list[0]->getLocalName());
-        $this->assertEquals("Test data!", $list[0]->getXML()->textContent);
-
-        $xml = $message->toXML();
-        $xml_exts = Utils::xpQuery($xml, './samlp:Extensions');
-        $this->assertCount(1, $xml_exts);
-        $this->assertEquals("test", $xml_exts[0]->childNodes->item(0)->localName);
-        $this->assertEquals("Test data!", $xml_exts[0]->childNodes->item(0)->textContent);
-    }
-
-
-    /**
-     * @group Message
      * @return void
      */
     public function testNamespaceMustBeProtocol(): void
