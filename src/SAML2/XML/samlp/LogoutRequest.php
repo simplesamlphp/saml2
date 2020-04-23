@@ -168,10 +168,7 @@ class LogoutRequest extends AbstractRequest
         Assert::same($xml->localName, 'LogoutRequest');
         Assert::same($xml->namespaceURI, LogoutRequest::NS);
 
-        $issueInstant = self::getAttribute($xml, 'IssueInstant', null);
-        if ($issueInstant !== null) {
-            $issueInstant = Utils::xsDateTimeToTimestamp($issueInstant);
-        }
+        $issueInstant = Utils::xsDateTimeToTimestamp(self::getAttribute($xml, 'IssueInstant'));
 
         $notOnOrAfter = self::getAttribute($xml, 'NotOnOrAfter', null);
         if ($notOnOrAfter !== null) {
@@ -197,8 +194,8 @@ class LogoutRequest extends AbstractRequest
             self::getAttribute($xml, 'Reason', null),
             Utils::extractStrings($xml, AbstractSamlpElement::NS, 'SessionIndex'),
             array_pop($issuer),
-            self::getAttribute($xml, 'ID', null),
-            self::getAttribute($xml, 'Version', null),
+            self::getAttribute($xml, 'ID'),
+            self::getAttribute($xml, 'Version'),
             $issueInstant,
             self::getAttribute($xml, 'Destination', null),
             self::getAttribute($xml, 'Consent', null),
