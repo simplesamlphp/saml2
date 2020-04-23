@@ -29,14 +29,14 @@ class LogoutRequest extends AbstractRequest
      *
      * @var int|null
      */
-    private $notOnOrAfter = null;
+    protected $notOnOrAfter = null;
 
     /**
      * The SessionIndexes of the sessions that should be terminated.
      *
      * @var string[]
      */
-    private $sessionIndexes = [];
+    protected $sessionIndexes = [];
 
     /**
      * The optional reason for the logout, typically a URN
@@ -236,7 +236,7 @@ class LogoutRequest extends AbstractRequest
 
         foreach ($this->sessionIndexes as $sessionIndex) {
             $e->appendChild(
-                $e->ownerDocument->createElementNS(AbstractSamlpElement::NS, 'saml:SessionIndex', $sessionIndex)
+                $e->ownerDocument->createElementNS(AbstractSamlpElement::NS, 'samlp:SessionIndex', $sessionIndex)
             );
         }
 
