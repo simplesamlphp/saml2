@@ -197,18 +197,8 @@ class SignatureValidationTest extends \Mockery\Adapter\Phpunit\MockeryTestCase
     private function getUnsignedResponseWithSignedAssertion(): Response
     {
         $doc = new DOMDocument();
-        $doc->load(__DIR__ . '/response.xml');
-        $response = Response::fromXML($doc->documentElement);
-
-        $assertions = $response->getAssertions();
-        $assertion = $assertions[0];
-        $assertion->setSigningKey(CertificatesMock::getPrivateKey());
-        $assertion->setCertificates([CertificatesMock::PUBLIC_KEY_PEM]);
-        $signedAssertion = new Assertion($assertion->toXML());
-
-        $response->setAssertions([$signedAssertion]);
-
-        return $response;
+        $doc->load(__DIR__ . '/unsignedResponseWithSignedAssertion.xml');
+        return Response::fromXML($doc->documentElement);
     }
 
 
