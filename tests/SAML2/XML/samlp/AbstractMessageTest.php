@@ -228,7 +228,7 @@ XML;
         $document  = DOMDocumentFactory::fromString($xml);
         $this->expectException(Exception::class);
         $this->expectExceptionMessage("Unknown namespace of SAML message: 'urn:oasis:names:tc:SAML:2.0:assertion'");
-        $message = MessageFactory::fromXML($document->documentElement);
+        MessageFactory::fromXML($document->documentElement);
     }
 
 
@@ -256,7 +256,7 @@ XML;
 
         $document  = DOMDocumentFactory::fromString($xml);
         $this->expectException(InvalidArgumentException::class);
-        $message = MessageFactory::fromXML($document->documentElement);
+        MessageFactory::fromXML($document->documentElement);
     }
 
 
@@ -277,8 +277,10 @@ XML;
 XML;
         $document  = DOMDocumentFactory::fromString($xml);
         $this->expectException(Exception::class);
-        $this->expectExceptionMessage('Missing \'ID\' attribute from samlp:LogoutRequest.');
-        $message = MessageFactory::fromXML($document->documentElement);
+        $this->expectExceptionMessage(
+            'Missing <saml:NameID>, <saml:BaseID> or <saml:EncryptedID> in <samlp:LogoutRequest>.'
+        );
+        MessageFactory::fromXML($document->documentElement);
     }
 
 
@@ -345,6 +347,6 @@ XML;
         $document  = DOMDocumentFactory::fromString($xml);
         $this->expectException(Exception::class);
         $this->expectExceptionMessage("Unknown SAML message: 'MyFantasy'");
-        $message = MessageFactory::fromXML($document->documentElement);
+        MessageFactory::fromXML($document->documentElement);
     }
 }
