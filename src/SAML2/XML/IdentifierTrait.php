@@ -77,14 +77,10 @@ trait IdentifierTrait
             'A <' . $class . '> can contain exactly one of <saml:BaseID>, <saml:NameID> or <saml:EncryptedID>.'
         );
 
-        /** @psalm-var \SAML2\XML\saml\IdentifierInterface|\SAML2\XML\EncryptedElementInterface|null $identifier */
+        /** @psalm-var \SAML2\XML\saml\IdentifierInterface|null $identifier */
         $identifier = array_pop($identifiers);
 
         if ($identifier !== null) {
-            if ($identifier instanceof EncryptedElementInterface) {
-                // @TODO: decrypt encrypted ID's
-            }
-
             // check if the identifier is a BaseID that we can process
             if ($identifier instanceof BaseID) {
                 $type = $identifier->getType();
