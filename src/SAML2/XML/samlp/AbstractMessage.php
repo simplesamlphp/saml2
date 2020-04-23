@@ -140,42 +140,6 @@ abstract class AbstractMessage extends AbstractSamlpElement implements SignedEle
 
 
     /**
-     * Validate the signature element of a SAML message, and configure this object appropriately to perform the
-     * signature verification afterwards.
-     *
-     * Please note this method does NOT verify the signature, it just validates the signature construction and prepares
-     * this object to do the verification.
-     *
-     * @param \DOMElement $xml The SAML message whose signature we want to validate.
-     * @return void
-     */
-    protected function validateSignature(DOMElement $xml): void
-    {
-        try {
-            /** @var \DOMAttr[] $signatureMethod */
-            $signatureMethod = Utils::xpQuery($xml, './ds:Signature/ds:SignedInfo/ds:SignatureMethod/@Algorithm');
-            if (empty($signatureMethod)) {
-                throw new Exception('No Algorithm specified in signature.');
-            }
-
-            $sig = Utils::validateElement($xml);
-
-            if ($sig !== false) {
-                $this->messageContainedSignatureUponConstruction = true;
-                $this->certificates = $sig['Certificates'];
-                $this->validators[] = [
-                    'Function' => ['\SAML2\Utils', 'validateSignature'],
-                    'Data' => $sig,
-                ];
-                $this->signatureMethod = $signatureMethod[0]->value;
-            }
-        } catch (Exception $e) {
-            // ignore signature validation errors
-        }
-    }
-
-
-    /**
      * Add a method for validating this message.
      *
      * This function is used by the HTTP-Redirect binding, to make it possible to
