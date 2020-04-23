@@ -39,7 +39,7 @@ class Assertion implements SignedElementInterface
      *
      * @var string
      */
-    private string $id;
+    protected string $id;
 
     /**
      * The issue timestamp of this assertion, as an UNIX timestamp.
@@ -56,7 +56,7 @@ class Assertion implements SignedElementInterface
      *
      * @var \SimpleSAML\SAML2\XML\saml\Issuer
      */
-    private Issuer $issuer;
+    protected Issuer $issuer;
 
     /**
      * The subject of this assertion
@@ -72,7 +72,7 @@ class Assertion implements SignedElementInterface
      *
      * @var \SimpleSAML\SAML2\XML\saml\NameID|null
      */
-    private ?NameID $nameId = null;
+    protected ?NameID $nameId = null;
 
     /**
      * The encrypted NameId of the subject.
@@ -81,7 +81,7 @@ class Assertion implements SignedElementInterface
      *
      * @var \DOMElement|null
      */
-    private ?DOMElement $encryptedNameId = null;
+    protected ?DOMElement $encryptedNameId = null;
 
     /**
      * The encrypted Attributes.
@@ -90,28 +90,28 @@ class Assertion implements SignedElementInterface
      *
      * @var \DOMElement[]
      */
-    private array $encryptedAttributes;
+    protected array $encryptedAttributes;
 
     /**
      * Private key we should use to encrypt the attributes.
      *
      * @var \SimpleSAML\XMLSecurity\XMLSecurityKey|null
      */
-    private ?XMLSecurityKey $encryptionKey;
+    protected ?XMLSecurityKey $encryptionKey;
 
     /**
      * The earliest time this assertion is valid, as an UNIX timestamp.
      *
      * @var int|null
      */
-    private ?int $notBefore = null;
+    protected ?int $notBefore = null;
 
     /**
      * The time this assertion expires, as an UNIX timestamp.
      *
      * @var int|null
      */
-    private ?int $notOnOrAfter = null;
+    protected ?int $notOnOrAfter = null;
 
     /**
      * The set of audiences that are allowed to receive this assertion.
@@ -122,14 +122,14 @@ class Assertion implements SignedElementInterface
      *
      * @var array|null
      */
-    private ?array $validAudiences = null;
+    protected ?array $validAudiences = null;
 
     /**
      * The session expiration timestamp.
      *
      * @var int|null
      */
-    private ?int $sessionNotOnOrAfter = null;
+    protected ?int $sessionNotOnOrAfter = null;
 
     /**
      * The session index for this user on the IdP.
@@ -138,28 +138,28 @@ class Assertion implements SignedElementInterface
      *
      * @var string|null
      */
-    private ?string $sessionIndex = null;
+    protected ?string $sessionIndex = null;
 
     /**
      * The timestamp the user was authenticated, as an UNIX timestamp.
      *
      * @var int|null
      */
-    private ?int $authnInstant = null;
+    protected ?int $authnInstant = null;
 
     /**
      * The authentication statement for this assertion.
      *
      * @var \SAML2\XML\saml\AuthnStatement[]
      */
-    protected $authnStatement = [];
+    protected array $authnStatement = [];
 
     /**
      * The authentication context reference for this assertion.
      *
      * @var string|null
      */
-    private ?string $authnContextClassRef = null;
+    protected ?string $authnContextClassRef = null;
 
     /**
      * Authentication context declaration provided by value.
@@ -169,7 +169,7 @@ class Assertion implements SignedElementInterface
      *
      * @var \SimpleSAML\XML\Chunk|null
      */
-    private ?Chunk $authnContextDecl = null;
+    protected ?Chunk $authnContextDecl = null;
 
     /**
      * URI reference that identifies an authentication context declaration.
@@ -178,14 +178,14 @@ class Assertion implements SignedElementInterface
      *
      * @var string|null
      */
-    private ?string $authnContextDeclRef = null;
+    protected ?string $authnContextDeclRef = null;
 
     /**
      * The list of AuthenticatingAuthorities for this assertion.
      *
-     * @var array
+     * @var string[]
      */
-    private array $AuthenticatingAuthority = [];
+    protected array $AuthenticatingAuthority = [];
 
     /**
      * The attributes, as an associative array, indexed by attribute name
@@ -203,7 +203,7 @@ class Assertion implements SignedElementInterface
      *
      * @var array multi-dimensional array of \DOMNodeList|\SAML2\XML\saml\NameID|string|int|array
      */
-    private array $attributes = [];
+    protected array $attributes = [];
 
     /**
      * The attributes values types as per http://www.w3.org/2001/XMLSchema definitions
@@ -221,7 +221,7 @@ class Assertion implements SignedElementInterface
      *
      * @var array multi-dimensional array of array
      */
-    private array $attributesValueTypes = [];
+    protected array $attributesValueTypes = [];
 
     /**
      * The NameFormat used on all attributes.
@@ -230,28 +230,28 @@ class Assertion implements SignedElementInterface
      *
      * @var string
      */
-    private string $nameFormat = Constants::NAMEFORMAT_UNSPECIFIED;
+    protected string $nameFormat = Constants::NAMEFORMAT_UNSPECIFIED;
 
     /**
      * The data needed to verify the signature.
      *
      * @var array|null
      */
-    private ?array $signatureData = null;
+    protected ?array $signatureData = null;
 
     /**
      * Boolean that indicates if attributes are encrypted in the assertion or not.
      *
      * @var boolean
      */
-    private bool $requiredEncAttributes = false;
+    protected bool $requiredEncAttributes = false;
 
     /**
      * The SubjectConfirmation elements of the Subject in the assertion.
      *
      * @var \SimpleSAML\SAML2\XML\saml\SubjectConfirmation[]
      */
-    private array $SubjectConfirmation = [];
+    protected array $SubjectConfirmation = [];
 
     /**
      * @var bool
@@ -261,7 +261,7 @@ class Assertion implements SignedElementInterface
     /**
      * @var string|null
      */
-    private ?string $signatureMethod;
+    protected ?string $signatureMethod;
 
 
     /**
