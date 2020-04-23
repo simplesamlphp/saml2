@@ -5,11 +5,6 @@ declare(strict_types=1);
 namespace SAML2\XML\samlp;
 
 use DOMElement;
-use Exception;
-use RobRichards\XMLSecLibs\XMLSecEnc;
-use RobRichards\XMLSecLibs\XMLSecurityKey;
-use SAML2\DOMDocumentFactory;
-use SAML2\Constants;
 use SAML2\Utils;
 use SAML2\XML\IdentifierTrait;
 use SAML2\XML\ds\Signature;
@@ -59,7 +54,7 @@ class LogoutRequest extends AbstractRequest
      * @param \SAML2\XML\saml\IdentifierInterface $identifier
      * @param int|null $notOnOrAfter
      * @param string|null $reason
-     * @param string[]|null $sessionIndexes
+     * @param string[] $sessionIndexes
      * @param \SAML2\XML\saml\Issuer|null $issuer
      * @param string|null $id
      * @param string|null $version
@@ -67,11 +62,12 @@ class LogoutRequest extends AbstractRequest
      * @param string|null $destination
      * @param string|null $consent
      * @param \SAML2\XML\samlp\Extensions $extensions
+     * @throws \Exception
      */
     public function __construct(
         IdentifierInterface $identifier,
-        int $notOnOrAfter = null,
-        string $reason = null,
+        ?int $notOnOrAfter = null,
+        ?string $reason = null,
         array $sessionIndexes = [],
         ?Issuer $issuer = null,
         ?string $id = null,
@@ -107,7 +103,7 @@ class LogoutRequest extends AbstractRequest
      * @param int|null $notOnOrAfter The expiration time of this request.
      * @return void
      */
-    public function setNotOnOrAfter(int $notOnOrAfter = null): void
+    public function setNotOnOrAfter(?int $notOnOrAfter = null): void
     {
         $this->notOnOrAfter = $notOnOrAfter;
     }
@@ -129,7 +125,7 @@ class LogoutRequest extends AbstractRequest
      * @param string|null $reason The optional reason for this request in URN format
      * @return void
      */
-    public function setReason($reason = null): void
+    public function setReason(?string $reason = null): void
     {
         $this->reason = $reason;
     }
@@ -154,6 +150,7 @@ class LogoutRequest extends AbstractRequest
      */
     public function setSessionIndexes(array $sessionIndexes): void
     {
+        Assert::allStringNotEmpty($sessionIndexes);
         $this->sessionIndexes = $sessionIndexes;
     }
 
@@ -164,26 +161,22 @@ class LogoutRequest extends AbstractRequest
      * @param \DOMElement $xml The XML element we should load
      * @return \SAML2\XML\samlp\LogoutRequest
      * @throws \InvalidArgumentException if the qualified name of the supplied element is wrong
+     * @throws \Exception
      */
     public static function fromXML(DOMElement $xml): object
     {
         Assert::same($xml->localName, 'LogoutRequest');
         Assert::same($xml->namespaceURI, LogoutRequest::NS);
 
-        $id = self::getAttribute($xml, 'ID');
-        $version = self::getAttribute($xml, 'Version');
-        $issueInstant = Utils::xsDateTimeToTimestamp(self::getAttribute($xml, 'IssueInstant'));
-        $inResponseTo = self::getAttribute($xml, 'InResponseTo', null);
-        $destination = self::getAttribute($xml, 'Destination', null);
-        $consent = self::getAttribute($xml, 'Consent', null);
+        $issueInstant = self::getAttribute($xml, 'IssueInstant', null);
+        if ($issueInstant !== null) {
+            $issueInstant = Utils::xsDateTimeToTimestamp($issueInstant);
+        }
 
         $notOnOrAfter = self::getAttribute($xml, 'NotOnOrAfter', null);
         if ($notOnOrAfter !== null) {
             $notOnOrAfter = Utils::xsDateTimeToTimestamp($notOnOrAfter);
         }
-
-        $reason = self::getAttribute($xml, 'Reason', null);
-        $sessionIndexes = Utils::extractStrings($xml, AbstractSamlpElement::NS, 'SessionIndex');
 
         $issuer = Issuer::getChildrenOfClass($xml);
         Assert::countBetween($issuer, 0, 1);
@@ -201,14 +194,14 @@ class LogoutRequest extends AbstractRequest
         $request = new self(
             $identifier,
             $notOnOrAfter,
-            $reason,
-            $sessionIndexes,
+            self::getAttribute($xml, 'Reason', null),
+            Utils::extractStrings($xml, AbstractSamlpElement::NS, 'SessionIndex'),
             array_pop($issuer),
-            $id,
-            $version,
+            self::getAttribute($xml, 'ID', null),
+            self::getAttribute($xml, 'Version', null),
             $issueInstant,
-            $destination,
-            $consent,
+            self::getAttribute($xml, 'Destination', null),
+            self::getAttribute($xml, 'Consent', null),
             array_pop($extensions)
         );
 
@@ -222,9 +215,8 @@ class LogoutRequest extends AbstractRequest
 
 
     /**
-     * Convert this logout request message to an XML element.
-     *
-     * @return \DOMElement This logout request.
+     * @inheritDoc
+     * @throws \Exception
      */
     public function toXML(?DOMElement $parent = null): DOMElement
     {
@@ -243,7 +235,6 @@ class LogoutRequest extends AbstractRequest
         $this->identifier->toXML($e);
 
         foreach ($this->sessionIndexes as $sessionIndex) {
-            /** @psalm-suppress PossiblyNullReference */
             $e->appendChild(
                 $e->ownerDocument->createElementNS(AbstractSamlpElement::NS, 'saml:SessionIndex', $sessionIndex)
             );
