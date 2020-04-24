@@ -4,7 +4,6 @@ declare(strict_types=1);
 
 namespace SAML2\XML\samlp;
 
-use DOMDocument;
 use Exception;
 use InvalidArgumentException;
 use PHPUnit\Framework\TestCase;
@@ -32,7 +31,6 @@ class AuthnRequestTest extends TestCase
                 new AuthnContextClassRef('accr1'),
                 new AuthnContextClassRef('accr2')
             ],
-            [],
             'better'
         );
         $authnRequest = new AuthnRequest($rac);
