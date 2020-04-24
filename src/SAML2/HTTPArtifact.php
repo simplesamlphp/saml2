@@ -10,7 +10,6 @@ use SAML2\XML\saml\Issuer;
 use SAML2\XML\samlp\AbstractMessage;
 use SAML2\XML\samlp\ArtifactResolve;
 use SAML2\XML\samlp\ArtifactResponse;
-use SAML2\XML\samlp\MessageFactory;
 use SimpleSAML\Configuration;
 use SimpleSAML\Metadata\MetaDataStorageHandler;
 use SimpleSAML\Module\saml\Message as MSG;
@@ -83,6 +82,7 @@ class HTTPArtifact extends Binding
      *
      * @param \SAML2\XML\samlp\AbstractMessage $message The message we should send.
      * @return void
+     * @throws \Exception
      */
     public function send(AbstractMessage $message): void
     {
@@ -135,9 +135,6 @@ class HTTPArtifact extends Binding
         Utils::getContainer()->getLogger()->debug(
             "ArtifactResolutionService endpoint being used is := " . $endpoint['Location']
         );
-
-
-
 
         /**
          * @psalm-suppress UndefinedClass
