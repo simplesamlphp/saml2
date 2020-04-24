@@ -223,7 +223,7 @@ final class AuthnStatement extends AbstractStatement
         $e->setAttribute('AuthnInstant', gmdate('Y-m-d\TH:i:s\Z', $this->authnInstant));
 
         if ($this->sessionIndex !== null) {
-            $e->setAttribute('SessionIndex', $this->sessionIndex);
+            $e->setAttribute('SessionIndex', gmdate('Y-m-d\TH:i:s\Z', $this->sessionIndex));
         }
 
         if ($this->sessionNotOnOrAfter !== null) {
