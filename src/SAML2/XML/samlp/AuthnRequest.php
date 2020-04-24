@@ -124,20 +124,19 @@ class AuthnRequest extends AbstractRequest
      * @param string|null $consent
      * @param \SAML2\XML\samlp\Extensions|null $extensions
      * @param \SAML2\XML\samlp\Scoping|null $scoping
+     * @throws \Exception
      */
     public function __construct(
         ?RequestedAuthnContext $requestedAuthnContext = null,
         ?Subject $subject = null,
         ?NameIDPolicy $nameIdPolicy = null,
         Conditions $conditions = null,
-
         ?bool $forceAuthn = null,
         ?bool $isPassive = null,
         ?string $assertionConsumerServiceUrl = null,
         ?string $protocolBinding = null,
         ?int $attributeConsumingServiceIndex = null,
         ?string $providerName = null,
-
         ?Issuer $issuer = null,
         ?string $id = null,
         ?int $issueInstant = null,
@@ -458,6 +457,7 @@ class AuthnRequest extends AbstractRequest
      * @param \DOMElement $xml The XML element we should load
      * @return \SAML2\XML\samlp\AuthnRequest
      * @throws \InvalidArgumentException if the qualified name of the supplied element is wrong
+     * @throws \Exception
      */
     public static function fromXML(DOMElement $xml): object
     {
@@ -502,14 +502,12 @@ class AuthnRequest extends AbstractRequest
             array_pop($subject),
             array_pop($nameIdPolicy),
             array_pop($conditions),
-
             self::getBooleanAttribute($xml, 'ForceAuthn', null),
             self::getBooleanAttribute($xml, 'IsPassive', null),
             self::getAttribute($xml, 'AssertionConsumerServiceURL', null),
             self::getAttribute($xml, 'ProtocolBinding', null),
             $attributeConsumingServiceIndex,
             self::getAttribute($xml, 'ProviderName', null),
-
             array_pop($issuer),
             self::getAttribute($xml, 'ID'),
             $issueInstant,
@@ -532,6 +530,7 @@ class AuthnRequest extends AbstractRequest
      * Convert this authentication request to an XML element.
      *
      * @return \DOMElement This authentication request.
+     * @throws \Exception
      */
     public function toXML(?DOMElement $parent = null): DOMElement
     {
