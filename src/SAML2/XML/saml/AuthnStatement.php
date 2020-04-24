@@ -191,13 +191,15 @@ final class AuthnStatement extends AbstractSamlElement
         Assert::minCount($authnContext, 1);
 
         $authnInstant = Utils::xsDateTimeToTimestamp(self::getAttribute($xml, 'AuthnInstant'));
+        $sessionNotOnOrAfter = self::getAttribute($xml, 'SessionNotOnOrAfter', null);
+        $sessionIndex = self::getAttribute($xml, 'SessionIndex', null);
         $subjectLocality = SubjectLocality::getChildrenOfClass($xml);
 
         return new self(
             array_pop($authnContext),
             $authnInstant,
-            self::getAttribute($xml, 'SessionNotOnOrAfter', null),
-            self::getAttribute($xml, 'SessionIndex', null),
+            is_null($sessionNotOnOrAfter) ? $sesssionNotOnOrAfter : Utils::xsDateTimeToTimestamp($sessionNotOnOrAfter),
+            is_null($sessionIndex) ? $sessionIndex : Utils::xsDateTimeToStamp($sessionIndex),
             array_pop($subjectLocality)
         );
     }
@@ -222,11 +224,11 @@ final class AuthnStatement extends AbstractSamlElement
         $e->setAttribute('AuthnInstant', gmdate('Y-m-d\TH:i:s\Z', $this->authnInstant));
 
         if ($this->sessionIndex !== null) {
-            $e->setAttribute('SessionIndex', $this->sessionIndex);
+            $e->setAttribute('SessionIndex', gmdate('Y-m-d\TH:i:s\Z', $this->sessionIndex));
         }
 
         if ($this->sessionNotOnOrAfter !== null) {
-            $e->setAttribute('SessionNotOnOrAfter', $this->sessionNotOnOrAfter);
+            $e->setAttribute('SessionNotOnOrAfter', gmdate('Y-m-d\TH:i:s\Z', $this->sessionNotOnOrAfter));
         }
 
         return $e;

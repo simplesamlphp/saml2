@@ -138,39 +138,6 @@ class Assertion implements SignedElementInterface
     private $authnInstant = null;
 
     /**
-     * The authentication context reference for this assertion.
-     *
-     * @var string|null
-     */
-    private $authnContextClassRef = null;
-
-    /**
-     * Authentication context declaration provided by value.
-     *
-     * See:
-     * @url http://docs.oasis-open.org/security/saml/v2.0/saml-authn-context-2.0-os.pdf
-     *
-     * @var \SAML2\XML\Chunk|null
-     */
-    private $authnContextDecl = null;
-
-    /**
-     * URI reference that identifies an authentication context declaration.
-     *
-     * The URI reference MAY directly resolve into an XML document containing the referenced declaration.
-     *
-     * @var string|null
-     */
-    private $authnContextDeclRef = null;
-
-    /**
-     * The list of AuthenticatingAuthorities for this assertion.
-     *
-     * @var array
-     */
-    private $AuthenticatingAuthority = [];
-
-    /**
      * The attributes, as an associative array, indexed by attribute name
      *
      * To ease handling, all attribute values are represented as an array of values, also for values with a multiplicity
@@ -285,7 +252,8 @@ class Assertion implements SignedElementInterface
 
         $this->parseSubject($xml);
         $this->parseConditions($xml);
-        $this->parseAuthnStatement($xml);
+        $this->authnStatement = AuthnStatement::getChildrenOfClass($xml);
+
         $this->parseAttributes($xml);
         $this->parseEncryptedAttributes($xml);
         $this->parseSignature($xml);
@@ -409,106 +377,26 @@ class Assertion implements SignedElementInterface
 
 
     /**
-     * Parse AuthnStatement in assertion.
+     * Collect the value of the authnStatement
      *
-     * @param \DOMElement $xml The assertion XML element.
-     * @throws \Exception
-     * @return void
+     * @return \SAML2\XML\saml\AuthnStatement[]
      */
-    private function parseAuthnStatement(DOMElement $xml): void
+    public function getAuthnStatement(): array
     {
-        /** @var \DOMElement[] $authnStatements */
-        $authnStatements = Utils::xpQuery($xml, './saml_assertion:AuthnStatement');
-        if (empty($authnStatements)) {
-            $this->authnInstant = null;
-
-            return;
-        } elseif (count($authnStatements) > 1) {
-            throw new Exception('More than one <saml:AuthnStatement> in <saml:Assertion> not supported.');
-        }
-        $authnStatement = $authnStatements[0];
-
-        if (!$authnStatement->hasAttribute('AuthnInstant')) {
-            throw new Exception('Missing required AuthnInstant attribute on <saml:AuthnStatement>.');
-        }
-        $this->authnInstant = Utils::xsDateTimeToTimestamp($authnStatement->getAttribute('AuthnInstant'));
-
-        if ($authnStatement->hasAttribute('SessionNotOnOrAfter')) {
-            $this->sessionNotOnOrAfter = Utils::xsDateTimeToTimestamp(
-                $authnStatement->getAttribute('SessionNotOnOrAfter')
-            );
-        }
-
-        if ($authnStatement->hasAttribute('SessionIndex')) {
-            $this->sessionIndex = $authnStatement->getAttribute('SessionIndex');
-        }
-
-        $this->parseAuthnContext($authnStatement);
+        return $this->authnStatement;
     }
 
 
     /**
-     * Parse AuthnContext in AuthnStatement.
+     * Set the value of the authnStatement-property
+     * @param \SAML2\XML\saml\AuthnStatement[] $authnStatement
      *
-     * @param \DOMElement $authnStatementEl
-     * @throws \Exception
      * @return void
      */
-    private function parseAuthnContext(DOMElement $authnStatementEl): void
+    public function setAuthnStatement(array $authnStatement): void
     {
-        // Get the AuthnContext element
-        /** @var \DOMElement[] $authnContexts */
-        $authnContexts = Utils::xpQuery($authnStatementEl, './saml_assertion:AuthnContext');
-        if (count($authnContexts) > 1) {
-            throw new Exception('More than one <saml:AuthnContext> in <saml:AuthnStatement>.');
-        } elseif (empty($authnContexts)) {
-            throw new Exception('Missing required <saml:AuthnContext> in <saml:AuthnStatement>.');
-        }
-        $authnContextEl = $authnContexts[0];
-
-        // Get the AuthnContextDeclRef (if available)
-        /** @var \DOMElement[] $authnContextDeclRefs */
-        $authnContextDeclRefs = Utils::xpQuery($authnContextEl, './saml_assertion:AuthnContextDeclRef');
-        if (count($authnContextDeclRefs) > 1) {
-            throw new Exception(
-                'More than one <saml:AuthnContextDeclRef> found?'
-            );
-        } elseif (count($authnContextDeclRefs) === 1) {
-            $this->setAuthnContextDeclRef(trim($authnContextDeclRefs[0]->textContent));
-        }
-
-        // Get the AuthnContextDecl (if available)
-        /** @var \DOMElement[] $authnContextDecls */
-        $authnContextDecls = Utils::xpQuery($authnContextEl, './saml_assertion:AuthnContextDecl');
-        if (count($authnContextDecls) > 1) {
-            throw new Exception(
-                'More than one <saml:AuthnContextDecl> found?'
-            );
-        } elseif (count($authnContextDecls) === 1) {
-            $this->setAuthnContextDecl(new Chunk($authnContextDecls[0]));
-        }
-
-        // Get the AuthnContextClassRef (if available)
-        /** @var \DOMElement[] $authnContextClassRefs */
-        $authnContextClassRefs = Utils::xpQuery($authnContextEl, './saml_assertion:AuthnContextClassRef');
-        if (count($authnContextClassRefs) > 1) {
-            throw new Exception('More than one <saml:AuthnContextClassRef> in <saml:AuthnContext>.');
-        } elseif (count($authnContextClassRefs) === 1) {
-            $this->setAuthnContextClassRef(trim($authnContextClassRefs[0]->textContent));
-        }
-
-        // Constraint from XSD: MUST have one of the three
-        if (empty($this->authnContextClassRef) && empty($this->authnContextDecl) && empty($this->authnContextDeclRef)) {
-            throw new Exception(
-                'Missing either <saml:AuthnContextClassRef> or <saml:AuthnContextDeclRef> or <saml:AuthnContextDecl>'
-            );
-        }
-
-        $this->AuthenticatingAuthority = Utils::extractStrings(
-            $authnContextEl,
-            Constants::NS_SAML,
-            'AuthenticatingAuthority'
-        );
+        Assert::allIsInstanceOf($authnStatement, AuthnStatement::class);
+        $this->authnStatement = $authnStatement;
     }
 
 
@@ -1084,61 +972,6 @@ class Assertion implements SignedElementInterface
 
 
     /**
-     * Retrieve the session index of the user at the IdP.
-     *
-     * @return string|null The session index of the user at the IdP.
-     */
-    public function getSessionIndex(): ?string
-    {
-        return $this->sessionIndex;
-    }
-
-
-    /**
-     * Set the session index of the user at the IdP.
-     *
-     * Note that the authentication context must be set before the
-     * session index can be inluded in the assertion.
-     *
-     * @param string|null $sessionIndex The session index of the user at the IdP.
-     * @return void
-     */
-    public function setSessionIndex(string $sessionIndex = null): void
-    {
-        $this->sessionIndex = $sessionIndex;
-    }
-
-
-    /**
-     * Retrieve the authentication method used to authenticate the user.
-     *
-     * This will return null if no authentication statement was
-     * included in the assertion.
-     *
-     * @return string|null The authentication method.
-     */
-    public function getAuthnContextClassRef(): ?string
-    {
-        return $this->authnContextClassRef;
-    }
-
-
-    /**
-     * Set the authentication method used to authenticate the user.
-     *
-     * If this is set to null, no authentication statement will be
-     * included in the assertion. The default is null.
-     *
-     * @param string|null $authnContextClassRef The authentication method.
-     * @return void
-     */
-    public function setAuthnContextClassRef(string $authnContextClassRef = null): void
-    {
-        $this->authnContextClassRef = $authnContextClassRef;
-    }
-
-
-    /**
      * Retrieve the signature method.
      *
      * @return string|null The signature method.
@@ -1158,95 +991,6 @@ class Assertion implements SignedElementInterface
     public function setSignatureMethod(string $signatureMethod = null): void
     {
         $this->signatureMethod = $signatureMethod;
-    }
-
-
-    /**
-     * Set the authentication context declaration.
-     *
-     * @param \SAML2\XML\Chunk $authnContextDecl
-     * @throws \Exception
-     * @return void
-     */
-    public function setAuthnContextDecl(Chunk $authnContextDecl): void
-    {
-        if (!empty($this->authnContextDeclRef)) {
-            throw new Exception(
-                'AuthnContextDeclRef is already registered! May only have either a Decl or a DeclRef, not both!'
-            );
-        }
-
-        $this->authnContextDecl = $authnContextDecl;
-    }
-
-
-    /**
-     * Get the authentication context declaration.
-     *
-     * See:
-     * @url http://docs.oasis-open.org/security/saml/v2.0/saml-authn-context-2.0-os.pdf
-     *
-     * @return \SAML2\XML\Chunk|null
-     */
-    public function getAuthnContextDecl(): ?Chunk
-    {
-        return $this->authnContextDecl;
-    }
-
-
-    /**
-     * Set the authentication context declaration reference.
-     *
-     * @param string|null $authnContextDeclRef
-     * @throws \Exception
-     * @return void
-     */
-    public function setAuthnContextDeclRef(string $authnContextDeclRef = null): void
-    {
-        if (!empty($this->authnContextDecl)) {
-            throw new Exception(
-                'AuthnContextDecl is already registered! May only have either a Decl or a DeclRef, not both!'
-            );
-        }
-
-        $this->authnContextDeclRef = $authnContextDeclRef;
-    }
-
-
-    /**
-     * Get the authentication context declaration reference.
-     * URI reference that identifies an authentication context declaration.
-     *
-     * The URI reference MAY directly resolve into an XML document containing the referenced declaration.
-     *
-     * @return string|null
-     */
-    public function getAuthnContextDeclRef(): ?string
-    {
-        return $this->authnContextDeclRef;
-    }
-
-
-    /**
-     * Retrieve the AuthenticatingAuthority.
-     *
-     * @return array
-     */
-    public function getAuthenticatingAuthority(): array
-    {
-        return $this->AuthenticatingAuthority;
-    }
-
-
-    /**
-     * Set the AuthenticatingAuthority
-     *
-     * @param array $authenticatingAuthority
-     * @return void
-     */
-    public function setAuthenticatingAuthority(array $authenticatingAuthority): void
-    {
-        $this->AuthenticatingAuthority = $authenticatingAuthority;
     }
 
 
@@ -1482,7 +1226,11 @@ class Assertion implements SignedElementInterface
 
         $this->addSubject($root);
         $this->addConditions($root);
-        $this->addAuthnStatement($root);
+
+        foreach ($this->authnStatement as $authnStatement) {
+            $authnStatement->toXML($root);
+        }
+
         if ($this->getRequiredEncAttributes() === false) {
             $this->addAttributeStatement($root);
         } else {
@@ -1554,77 +1302,6 @@ class Assertion implements SignedElementInterface
 
             Utils::addStrings($ar, Constants::NS_SAML, 'saml:Audience', false, $this->validAudiences);
         }
-    }
-
-
-    /**
-     * Add a AuthnStatement-node to the assertion.
-     *
-     * @param \DOMElement $root The assertion element we should add the authentication statement to.
-     * @return void
-     */
-    private function addAuthnStatement(DOMElement $root): void
-    {
-        if (
-            $this->authnInstant === null
-            || (
-                $this->authnContextClassRef === null
-                && $this->authnContextDecl === null
-                && $this->authnContextDeclRef === null
-            )
-        ) {
-            /* No authentication context or AuthnInstant => no authentication statement. */
-
-            return;
-        }
-
-        $document = $root->ownerDocument;
-
-        $authnStatementEl = $document->createElementNS(Constants::NS_SAML, 'saml:AuthnStatement');
-        $root->appendChild($authnStatementEl);
-
-        $authnStatementEl->setAttribute('AuthnInstant', gmdate('Y-m-d\TH:i:s\Z', $this->authnInstant));
-
-        if ($this->sessionNotOnOrAfter !== null) {
-            $authnStatementEl->setAttribute(
-                'SessionNotOnOrAfter',
-                gmdate('Y-m-d\TH:i:s\Z', $this->sessionNotOnOrAfter)
-            );
-        }
-        if ($this->sessionIndex !== null) {
-            $authnStatementEl->setAttribute('SessionIndex', $this->sessionIndex);
-        }
-
-        $authnContextEl = $document->createElementNS(Constants::NS_SAML, 'saml:AuthnContext');
-        $authnStatementEl->appendChild($authnContextEl);
-
-        if (!empty($this->authnContextClassRef)) {
-            Utils::addString(
-                $authnContextEl,
-                Constants::NS_SAML,
-                'saml:AuthnContextClassRef',
-                $this->authnContextClassRef
-            );
-        }
-        if (!empty($this->authnContextDecl)) {
-            $this->authnContextDecl->toXML($authnContextEl);
-        }
-        if (!empty($this->authnContextDeclRef)) {
-            Utils::addString(
-                $authnContextEl,
-                Constants::NS_SAML,
-                'saml:AuthnContextDeclRef',
-                $this->authnContextDeclRef
-            );
-        }
-
-        Utils::addStrings(
-            $authnContextEl,
-            Constants::NS_SAML,
-            'saml:AuthenticatingAuthority',
-            false,
-            $this->AuthenticatingAuthority
-        );
     }
 
 
