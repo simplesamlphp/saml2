@@ -82,6 +82,7 @@ class HTTPArtifact extends Binding
      *
      * @param \SAML2\XML\samlp\AbstractMessage $message The message we should send.
      * @return void
+     * @throws \Exception
      */
     public function send(AbstractMessage $message): void
     {
@@ -135,9 +136,6 @@ class HTTPArtifact extends Binding
             "ArtifactResolutionService endpoint being used is := " . $endpoint['Location']
         );
 
-        // Construct the ArtifactResolve Request
-        $ar = new ArtifactResolve();
-
         /**
          * @psalm-suppress UndefinedClass
          * @psalm-suppress DocblockTypeContradiction
@@ -147,11 +145,10 @@ class HTTPArtifact extends Binding
         /**
          * Set the request attributes
          */
-        $isser = new Issuer($this->spMetadata->getString('entityid'));
+        $issuer = new Issuer($this->spMetadata->getString('entityid'));
 
-        $ar->setIssuer($issuer);
-        $ar->setArtifact($_REQUEST['SAMLart']);
-        $ar->setDestination($endpoint['Location']);
+        // Construct the ArtifactResolve Request
+        $ar = new ArtifactResolve($_REQUEST['SAMLart'], $issuer, null, null, null, $endpoint['Location']);
 
         // sign the request
         /** @psalm-suppress UndefinedClass */
@@ -167,14 +164,13 @@ class HTTPArtifact extends Binding
             throw new \Exception('Received error from ArtifactResolutionService.');
         }
 
-        $xml = $artifactResponse->getAny();
-        if ($xml === null) {
+        $samlResponse = $artifactResponse->getMessage();
+        if ($samlResponse === null) {
             /* Empty ArtifactResponse - possibly because of Artifact replay? */
 
             throw new \Exception('Empty ArtifactResponse received, maybe a replay?');
         }
 
-        $samlResponse = AbstractMessage::fromXML($xml);
         $samlResponse->addValidator([get_class($this), 'validateSignature'], $artifactResponse);
 
         if (isset($_REQUEST['RelayState'])) {
@@ -207,6 +203,7 @@ class HTTPArtifact extends Binding
      */
     public static function validateSignature(ArtifactResponse $message, XMLSecurityKey $key): bool
     {
+        // @todo verify if this works and/or needs to do anything more. Ref. HTTPRedirect binding
         return $message->validate($key);
     }
 }

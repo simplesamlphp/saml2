@@ -9,6 +9,7 @@ use SAML2\Constants;
 use SAML2\DOMDocumentFactory;
 use SAML2\XML\ds\X509Data;
 use SAML2\XML\saml\NameID;
+use SAML2\XML\saml\Subject;
 use SAML2\XML\samlp\AttributeQuery;
 use SAML2\Utils;
 
@@ -31,8 +32,7 @@ class UtilsTest extends \PHPUnit\Framework\TestCase
             null
         );
 
-        $aq = new AttributeQuery();
-        $aq->setNameID($nameId_before);
+        $aq = new AttributeQuery(new Subject($nameId_before));
 
         $xml = $aq->toXML();
 

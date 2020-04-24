@@ -6,14 +6,19 @@ namespace SAML2\XML\samlp;
 
 use DOMDocument;
 use Exception;
+use InvalidArgumentException;
 use SAML2\CertificatesMock;
 use SAML2\Constants;
 use SAML2\DOMDocumentFactory;
 use SAML2\Utils;
+use SAML2\XML\Chunk;
 use SAML2\XML\saml\Issuer;
 use SAML2\XML\samlp\AbstractMessage;
-use SAML2\XML\samlp\Response;
 use SAML2\XML\samlp\Extensions;
+use SAML2\XML\samlp\MessageFactory;
+use SAML2\XML\samlp\Response;
+use SAML2\XML\samlp\Status;
+use SAML2\XML\samlp\StatusCode;
 
 class AbstractMessageTest extends \Mockery\Adapter\Phpunit\MockeryTestCase
 {
@@ -43,13 +48,13 @@ AUTHNREQUEST
 
         $privateKey = CertificatesMock::getPrivateKey();
 
-        $unsignedMessage = AbstractMessage::fromXML($authnRequest->documentElement);
+        $unsignedMessage = MessageFactory::fromXML($authnRequest->documentElement);
         $unsignedMessage->setSigningKey($privateKey);
         $unsignedMessage->setCertificates([CertificatesMock::PUBLIC_KEY_PEM]);
 
-        $signedMessage = AbstractMessage::fromXML($unsignedMessage->toSignedXML());
+        $signedMessage = MessageFactory::fromXML($unsignedMessage->toXML());
 
-        $this->assertEquals($privateKey->getAlgorith(), $signedMessage->getSignatureMethod());
+        $this->assertEquals($privateKey->getAlgorithm(), $signedMessage->getSignature()->getAlgorithm());
     }
 
 
@@ -82,7 +87,7 @@ AUTHNREQUEST
 AUTHNREQUEST
         );
 
-        $message = AbstractMessage::fromXML($authnRequest->documentElement);
+        $message = MessageFactory::fromXML($authnRequest->documentElement);
         $issuer = $message->getIssuer();
         $this->assertInstanceOf(Issuer::class, $issuer);
         $this->assertEquals('https://gateway.stepup.org/saml20/sp/metadata', $issuer->getNameQualifier());
@@ -99,10 +104,12 @@ AUTHNREQUEST
      */
     public function testConvertIssuerToXML(): void
     {
+        $status = new Status(new StatusCode());
+
         // first, try with common Issuer objects (Format=entity)
-        $response = new Response();
         $issuer = new Issuer('https://gateway.stepup.org/saml20/sp/metadata');
-        $response->setIssuer($issuer);
+
+        $response = new Response($status, $issuer);
         $xml = $response->toXML();
         $xml_issuer = Utils::xpQuery($xml, './saml_assertion:Issuer');
         $xml_issuer = $xml_issuer[0];
@@ -118,7 +125,7 @@ AUTHNREQUEST
             'SomeNameQualifier',
             'SomeSPNameQualifier'
         );
-        $response->setIssuer($issuer);
+        $response = new Response($status, $issuer);
         $xml = $response->toXML();
         $xml_issuer = Utils::xpQuery($xml, './saml_assertion:Issuer');
         $xml_issuer = $xml_issuer[0];
@@ -130,7 +137,7 @@ AUTHNREQUEST
         $this->assertEquals($issuer->getSPProvidedID(), $xml_issuer->getAttribute('SPProvidedID'));
 
         // finally, make sure we can skip the Issuer by setting it to null
-        $response->setIssuer(null);
+        $response = new Response($status);
         $xml = $response->toXML();
 
         $this->assertEmpty(Utils::xpQuery($xml, './saml_assertion:Issuer'));
@@ -148,13 +155,13 @@ AUTHNREQUEST
 
         $privateKey = CertificatesMock::getPrivateKey();
 
-        $unsignedMessage = AbstractMessage::fromXML($response->documentElement);
+        $unsignedMessage = MessageFactory::fromXML($response->documentElement);
         $unsignedMessage->setSigningKey($privateKey);
         $unsignedMessage->setCertificates([CertificatesMock::PUBLIC_KEY_PEM]);
 
-        $signedMessage = AbstractMessage::fromXML($unsignedMessage->toSignedXML());
+        $signedMessage = MessageFactory::fromXML($unsignedMessage->toXML());
 
-        $this->assertEquals($privateKey->getAlgorith(), $signedMessage->getSignatureMethod());
+        $this->assertEquals($privateKey->getAlgorithm(), $signedMessage->getSignature()->getAlgorithm());
     }
 
 
@@ -192,7 +199,7 @@ AUTHNREQUEST
 AUTHNREQUEST
         );
 
-        $message = AbstractMessage::fromXML($authnRequest->documentElement);
+        $message = MessageFactory::fromXML($authnRequest->documentElement);
         $exts = $message->getExtensions();
         $this->assertInstanceOf(Extensions::class, $exts);
         $exts = $exts->getList();
@@ -200,60 +207,6 @@ AUTHNREQUEST
         $this->assertEquals("myextElt", $exts[0]->getLocalName());
         $this->assertEquals("example1", $exts[0]->getXML()->textContent);
         $this->assertEquals("myextElt", $exts[1]->getLocalName());
-    }
-
-
-    /**
-     * @group Message
-     * @covers \SAML2\XML\samlp\AbstractMessage::setExtensions()
-     * @return void
-     */
-    public function testSetExtensions(): void
-    {
-        $this->markTestSkipped();
-        $authnRequest = new \DOMDocument();
-        $authnRequest->loadXML(<<<'AUTHNREQUEST'
-<samlp:AuthnRequest
-    xmlns:samlp="urn:oasis:names:tc:SAML:2.0:protocol"
-    xmlns:saml="urn:oasis:names:tc:SAML:2.0:assertion"
-    AssertionConsumerServiceIndex="1"
-    Destination="https://tiqr.stepup.org/idp/profile/saml2/Redirect/SSO"
-    ID="_2b0226190ca1c22de6f66e85f5c95158"
-    IssueInstant="2014-09-22T13:42:00Z"
-    Version="2.0">
-  <saml:Issuer NameQualifier="https://gateway.stepup.org/saml20/sp/metadata"
-    SPNameQualifier="https://spnamequalifier.com"
-    SPProvidedID="ProviderID"
-    Format="urn:oasis:names:tc:SAML:1.1:nameid-format:unspecified">
-        https://gateway.stepup.org/saml20/sp/metadata
-  </saml:Issuer>
-  <saml:Subject>
-        <saml:NameID Format="urn:oasis:names:tc:SAML:1.1:nameid-format:unspecified">user@example.org</saml:NameID>
-  </saml:Subject>
-</samlp:AuthnRequest>
-AUTHNREQUEST
-        );
-
-        $message = AbstractMessage::fromXML($authnRequest->documentElement);
-        $exts = $message->getExtensions();
-        $this->assertCount(0, $exts);
-
-        $dom = \SAML2\DOMDocumentFactory::create();
-        $ce = $dom->createElementNS('http://www.example.com/XFoo', 'xfoo:test', 'Test data!');
-        $newexts[] = new \SAML2\XML\Chunk($ce);
-
-        $message->setExtensions($newexts);
-
-        $exts = $message->getExtensions();
-        $this->assertCount(1, $exts);
-        $this->assertEquals("test", $exts[0]->getLocalName());
-        $this->assertEquals("Test data!", $exts[0]->getXML()->textContent);
-
-        $xml = $message->toXML();
-        $xml_exts = Utils::xpQuery($xml, './samlp:Extensions');
-        $this->assertCount(1, $xml_exts);
-        $this->assertEquals("test", $xml_exts[0]->childNodes->item(0)->localName);
-        $this->assertEquals("Test data!", $xml_exts[0]->childNodes->item(0)->textContent);
     }
 
 
@@ -275,7 +228,7 @@ XML;
         $document  = DOMDocumentFactory::fromString($xml);
         $this->expectException(Exception::class);
         $this->expectExceptionMessage("Unknown namespace of SAML message: 'urn:oasis:names:tc:SAML:2.0:assertion'");
-        $message = AbstractMessage::fromXML($document->documentElement);
+        MessageFactory::fromXML($document->documentElement);
     }
 
 
@@ -302,9 +255,8 @@ XML;
 XML;
 
         $document  = DOMDocumentFactory::fromString($xml);
-        $this->expectException(Exception::class);
-        $this->expectExceptionMessage("Unsupported version: 2.1");
-        $message = AbstractMessage::fromXML($document->documentElement);
+        $this->expectException(InvalidArgumentException::class);
+        MessageFactory::fromXML($document->documentElement);
     }
 
 
@@ -325,8 +277,10 @@ XML;
 XML;
         $document  = DOMDocumentFactory::fromString($xml);
         $this->expectException(Exception::class);
-        $this->expectExceptionMessage("Missing ID attribute on SAML message.");
-        $message = AbstractMessage::fromXML($document->documentElement);
+        $this->expectExceptionMessage(
+            'Missing <saml:NameID>, <saml:BaseID> or <saml:EncryptedID> in <samlp:LogoutRequest>.'
+        );
+        MessageFactory::fromXML($document->documentElement);
     }
 
 
@@ -357,12 +311,13 @@ XML;
 </samlp:AttributeQuery>
 XML;
         $document  = DOMDocumentFactory::fromString($xml);
-        $message = AbstractMessage::fromXML($document->documentElement);
+        $message = MessageFactory::fromXML($document->documentElement);
 
         $this->assertEquals('https://example.org/', $message->getIssuer()->getValue());
         $this->assertEquals('aaf23196-1773-2113-474a-fe114412ab72', $message->getId());
 
-        $message->setId('somethingNEW');
+        $document->documentElement->setAttribute('ID', 'somethingNEW');
+        $message = MessageFactory::fromXML($document->documentElement);
 
         $this->assertEquals('https://example.org/', $message->getIssuer()->getValue());
         $this->assertEquals('somethingNEW', $message->getId());
@@ -392,6 +347,6 @@ XML;
         $document  = DOMDocumentFactory::fromString($xml);
         $this->expectException(Exception::class);
         $this->expectExceptionMessage("Unknown SAML message: 'MyFantasy'");
-        $message = AbstractMessage::fromXML($document->documentElement);
+        MessageFactory::fromXML($document->documentElement);
     }
 }

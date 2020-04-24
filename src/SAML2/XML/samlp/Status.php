@@ -5,11 +5,7 @@ declare(strict_types=1);
 namespace SAML2\XML\samlp;
 
 use DOMElement;
-use SAML2\Constants;
-use SAML2\DOMDocumentFactory;
 use SAML2\Utils;
-use SAML2\XML\samlp\StatusCode;
-use SAML2\XML\samlp\StatusDetail;
 use Webmozart\Assert\Assert;
 
 /**
@@ -82,8 +78,8 @@ final class Status extends AbstractSamlpElement
 
 
     /**
-     * Set the value of the statusMessage-property
-     * @param string|null $value
+     * Set the value of the statusMessage property
+     * @param string|null $statusMessage
      *
      * @return void
      */
@@ -94,7 +90,7 @@ final class Status extends AbstractSamlpElement
 
 
     /**
-     * Collect the value of the statusDetails-property
+     * Collect the value of the statusDetails property
      *
      * @return \SAML2\XML\samlp\StatusDetail[]
      */
@@ -105,7 +101,7 @@ final class Status extends AbstractSamlpElement
 
 
     /**
-     * Set the value of the statusDetails-property
+     * Set the value of the statusDetails property
      *
      * @param \SAML2\XML\samlp\StatusDetail[] $statusDetails
      * @return void

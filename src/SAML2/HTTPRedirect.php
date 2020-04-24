@@ -8,6 +8,7 @@ use Exception;
 use RobRichards\XMLSecLibs\XMLSecurityKey;
 use SAML2\XML\samlp\AbstractMessage;
 use SAML2\XML\samlp\AbstractRequest;
+use SAML2\XML\samlp\MessageFactory;
 use Webmozart\Assert\Assert;
 
 /**
@@ -134,7 +135,7 @@ class HTTPRedirect extends Binding
         if (!$document->firstChild instanceof \DOMElement) {
             throw new Exception('Malformed SAML message received.');
         }
-        $message = AbstractMessage::fromXML($document->firstChild);
+        $message = MessageFactory::fromXML($document->firstChild);
 
         if (array_key_exists('RelayState', $data)) {
             $message->setRelayState($data['RelayState']);

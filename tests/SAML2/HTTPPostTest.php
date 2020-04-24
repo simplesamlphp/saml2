@@ -11,6 +11,8 @@ use SAML2\HTTPPost;
 use SAML2\XML\saml\Issuer;
 use SAML2\XML\samlp\AuthnRequest;
 use SAML2\XML\samlp\Response;
+use SAML2\XML\samlp\Status;
+use SAML2\XML\samlp\StatusCode;
 use SimpleSAML\Utils\HTTP;
 
 class HTTPPostTest extends \Mockery\Adapter\Phpunit\MockeryTestCase
@@ -106,8 +108,22 @@ class HTTPPostTest extends \Mockery\Adapter\Phpunit\MockeryTestCase
      */
     public function testSendAuthnRequestWithDestination(): void
     {
-        $request = new AuthnRequest();
-        $request->setDestination('https://example.org');
+        $request = new AuthnRequest(
+            null,
+            null,
+            null,
+            null,
+            null,
+            null,
+            null,
+            null,
+            null,
+            null,
+            null,
+            null,
+            null,
+            'https://example.org'
+        );
         $hp = new HTTPPost();
         $hp->send($request);
     }
@@ -121,12 +137,21 @@ class HTTPPostTest extends \Mockery\Adapter\Phpunit\MockeryTestCase
      */
     public function testSendAuthnResponse(): void
     {
+        $status = new Status(new StatusCode());
         $issuer  = new Issuer('testIssuer');
 
-        $response = new Response();
-        $response->setIssuer($issuer);
+        $response = new Response(
+            $status,
+            $issuer,
+            null,
+            null,
+            null,
+            'http://example.org/login?success=yes',
+            null,
+            null,
+            []
+        );
         $response->setRelayState('http://example.org');
-        $response->setDestination('http://example.org/login?success=yes');
         $response->setSigningKey(CertificatesMock::getPrivateKey());
 
         $hr = new HTTPPost();

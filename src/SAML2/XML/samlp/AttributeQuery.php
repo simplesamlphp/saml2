@@ -5,9 +5,11 @@ declare(strict_types=1);
 namespace SAML2\XML\samlp;
 
 use DOMElement;
-use Exception;
-use SAML2\Constants;
 use SAML2\Utils;
+use SAML2\XML\ds\Signature;
+use SAML2\XML\saml\Attribute;
+use SAML2\XML\saml\Issuer;
+use SAML2\XML\saml\Subject;
 use Webmozart\Assert\Assert;
 
 /**
@@ -30,72 +32,43 @@ class AttributeQuery extends AbstractSubjectQuery
     /**
      * The attributes, as an associative array.
      *
-     * @var array
+     * @var \SAML2\XML\saml\Attribute[]
      */
-    private $attributes = [];
-
-    /**
-     * The NameFormat used on all attributes.
-     *
-     * If more than one NameFormat is used, this will contain
-     * the unspecified nameformat.
-     *
-     * @var string
-     */
-    private $nameFormat = Constants::NAMEFORMAT_UNSPECIFIED;
+    protected $attributes = [];
 
 
     /**
-     * Constructor for SAML 2 attribute query messages.
+     * Constructor for SAML 2 AttributeQuery.
      *
-     * @param \DOMElement|null $xml The input message.
-     * @throws \Exception
+     * @param \SAML2\XML\saml\Subject $subject
+     * @param \SAML2\XML\saml\Attribute[] $attributes
+     * @param \SAML2\XML\saml\Issuer $issuer
+     * @param string $id
+     * @param int $issueInstant
+     * @param string|null $destination
+     * @param string|null $consent
+     * @param \SAML2\XML\samlp\Extensions $extensions
      */
-    public function __construct(DOMElement $xml = null)
-    {
-        parent::__construct('AttributeQuery', $xml);
+    public function __construct(
+        Subject $subject,
+        array $attributes = [],
+        ?Issuer $issuer = null,
+        ?string $id = null,
+        ?int $issueInstant = null,
+        ?string $destination = null,
+        ?string $consent = null,
+        ?Extensions $extensions = null
+    ) {
+        parent::__construct($subject, $issuer, $id, $issueInstant, $destination, $consent, $extensions);
 
-        if ($xml === null) {
-            return;
-        }
-
-        $firstAttribute = true;
-        /** @var \DOMElement[] $attributes */
-        $attributes = Utils::xpQuery($xml, './saml_assertion:Attribute');
-        foreach ($attributes as $attribute) {
-            if (!$attribute->hasAttribute('Name')) {
-                throw new Exception('Missing name on <saml:Attribute> element.');
-            }
-            $name = $attribute->getAttribute('Name');
-
-            $nameFormat = $this->nameFormat;
-            if ($attribute->hasAttribute('NameFormat')) {
-                $nameFormat = $attribute->getAttribute('NameFormat');
-            }
-
-            if ($firstAttribute) {
-                $this->nameFormat = $nameFormat;
-                $firstAttribute = false;
-            } elseif ($this->nameFormat !== $nameFormat) {
-                $this->nameFormat = Constants::NAMEFORMAT_UNSPECIFIED;
-            }
-
-            if (!array_key_exists($name, $this->attributes)) {
-                $this->attributes[$name] = [];
-            }
-
-            $values = Utils::xpQuery($attribute, './saml_assertion:AttributeValue');
-            foreach ($values as $value) {
-                $this->attributes[$name][] = trim($value->textContent);
-            }
-        }
+        $this->setAttributes($attributes);
     }
 
 
     /**
      * Retrieve all requested attributes.
      *
-     * @return array All requested attributes, as an associative array.
+     * @return \SAML2\XML\saml\Attribute[] All requested attributes, as an associative array.
      */
     public function getAttributes(): array
     {
@@ -106,38 +79,62 @@ class AttributeQuery extends AbstractSubjectQuery
     /**
      * Set all requested attributes.
      *
-     * @param array $attributes All requested attributes, as an associative array.
+     * @param \SAML2\XML\saml\Attribute[] $attributes All requested attributes, as an associative array.
      * @return void
      */
     public function setAttributes(array $attributes): void
     {
+        Assert::allIsInstanceOf($attributes, Attribute::class);
         $this->attributes = $attributes;
     }
 
 
     /**
-     * Retrieve the NameFormat used on all attributes.
+     * Create a class from XML
      *
-     * If more than one NameFormat is used in the received attributes, this
-     * returns the unspecified NameFormat.
-     *
-     * @return string The NameFormat used on all attributes.
+     * @param \DOMElement $xml
+     * @return self
      */
-    public function getAttributeNameFormat(): string
+    public static function fromXML(DOMElement $xml): object
     {
-        return $this->nameFormat;
-    }
+        Assert::same($xml->localName, 'AttributeQuery');
+        Assert::same($xml->namespaceURI, AttributeQuery::NS);
+        Assert::same('2.0', self::getAttribute($xml, 'Version'));
 
+        $id = self::getAttribute($xml, 'ID');
+        $issueInstant = Utils::xsDateTimeToTimestamp(self::getAttribute($xml, 'IssueInstant'));
+        $destination = self::getAttribute($xml, 'Destination', null);
+        $consent = self::getAttribute($xml, 'Consent', null);
 
-    /**
-     * Set the NameFormat used on all attributes.
-     *
-     * @param string $nameFormat The NameFormat used on all attributes.
-     * @return void
-     */
-    public function setAttributeNameFormat(string $nameFormat): void
-    {
-        $this->nameFormat = $nameFormat;
+        $issuer = Issuer::getChildrenOfClass($xml);
+        Assert::countBetween($issuer, 0, 1);
+
+        $extensions = Extensions::getChildrenOfClass($xml);
+        Assert::maxCount($extensions, 1, 'Only one saml:Extensions element is allowed.');
+
+        $subject = Subject::getChildrenOfClass($xml);
+        Assert::notEmpty($subject, 'Missing subject in subject query.');
+        Assert::maxCount($subject, 1, 'More than one <saml:Subject> in AttributeQuery');
+
+        $signature = Signature::getChildrenOfClass($xml);
+        Assert::maxCount($signature, 1, 'Only one ds:Signature element is allowed.');
+
+        $request = new self(
+            array_pop($subject),
+            Attribute::getChildrenOfClass($xml),
+            array_pop($issuer),
+            $id,
+            $issueInstant,
+            $destination,
+            $consent,
+            array_pop($extensions)
+        );
+
+        if (!empty($signature)) {
+            $request->setSignature($signature[0]);
+        }
+
+        return $request;
     }
 
 
@@ -148,40 +145,12 @@ class AttributeQuery extends AbstractSubjectQuery
      */
     public function toXML(?DOMElement $parent = null): DOMElement
     {
-        Assert::null($parent);
+        $parent = parent::toXML($parent);
 
-        $parent = parent::toXML();
-
-        foreach ($this->attributes as $name => $values) {
-            $attribute = $parent->ownerDocument->createElementNS(Constants::NS_SAML, 'saml:Attribute');
-            $parent->appendChild($attribute);
-            $attribute->setAttribute('Name', $name);
-
-            if ($this->nameFormat !== Constants::NAMEFORMAT_UNSPECIFIED) {
-                $attribute->setAttribute('NameFormat', $this->nameFormat);
-            }
-
-            foreach ($values as $value) {
-                if (is_string($value)) {
-                    $type = 'xs:string';
-                } elseif (is_int($value)) {
-                    $type = 'xs:integer';
-                } else {
-                    $type = null;
-                }
-
-                $attributeValue = Utils::addString(
-                    $attribute,
-                    Constants::NS_SAML,
-                    'saml:AttributeValue',
-                    strval($value)
-                );
-                if ($type !== null) {
-                    $attributeValue->setAttributeNS(Constants::NS_XSI, 'xsi:type', $type);
-                }
-            }
+        foreach ($this->attributes as $attribute) {
+            $attribute->toXML($parent);
         }
 
-        return $parent;
+        return $this->signElement($parent);
     }
 }

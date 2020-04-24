@@ -14,6 +14,8 @@ use SAML2\DOMDocumentFactory;
 use SAML2\Signature\Validator;
 use SAML2\Utilities\ArrayCollection;
 use SAML2\XML\samlp\Response;
+use SAML2\XML\samlp\Status;
+use SAML2\XML\samlp\StatusCode;
 
 /**
  * Tests for decoding base64 encoded attributes.
@@ -44,7 +46,7 @@ final class DecodeBase64TransformerTest extends TestCase
      * @var \Psr\Log\LoggerInterface
      */
     protected $logger;
-   
+
     /**
      * @var \SAML2\Response\Validation\Validator
      */
@@ -70,7 +72,7 @@ final class DecodeBase64TransformerTest extends TestCase
         $this->logger = new \Psr\Log\NullLogger();
         $this->validator = new Validator($this->logger);
         $this->destination = new Destination($spentity);
-        $this->response = new Response();
+        $this->response = new Response(new Status(new StatusCode()));
 
         $this->identityProviderConfiguration
             = new IdentityProvider(['base64EncodedAttributes' => true]);

@@ -5,8 +5,6 @@ declare(strict_types=1);
 namespace SAML2\XML\samlp;
 
 use DOMElement;
-use SAML2\Constants;
-use SAML2\DOMDocumentFactory;
 use SAML2\Utils;
 use SAML2\XML\saml\AuthnContextClassRef;
 use SAML2\XML\saml\AuthnContextDeclRef;
@@ -30,16 +28,14 @@ final class RequestedAuthnContext extends AbstractSamlpElement
     /**
      * Initialize a RequestedAuthnContext.
      *
-     * @param \SAML2\XML\saml\AuthnContextClassRef[] $requestedAuthnContextClassRefs
-     * @param \SAML2\XML\saml\AuthnContextDeclRef[] $requestedAuthnContextDeclRefs
+     * @param (\SAML2\XML\saml\AuthnContextClassRef|\SAML2\XML\saml\AuthnContextDeclRef)[] $requestedAuthnContexts
      * @param string $Comparison
      */
     public function __construct(
-        array $requestedAuthnContextClassRefs = [],
-        array $requestedAuthnContextDeclRefs = [],
+        array $requestedAuthnContexts = [],
         string $Comparison = null
     ) {
-        $this->setRequestedAuthnContexts(array_merge($requestedAuthnContextClassRefs, $requestedAuthnContextDeclRefs));
+        $this->setRequestedAuthnContexts($requestedAuthnContexts);
         $this->setComparison($Comparison);
     }
 
@@ -58,7 +54,7 @@ final class RequestedAuthnContext extends AbstractSamlpElement
     /**
      * Set the value of the requestedAuthnContexts-property
      *
-     * @param (\SAML2\XML\saml\AuthnContextClassRef|\SAML2\XML\saml\AuthnContextDeclRef|mixed)[] $requestedAuthnContexts
+     * @param (\SAML2\XML\saml\AuthnContextClassRef|\SAML2\XML\saml\AuthnContextDeclRef)[] $requestedAuthnContexts
      * @return void
      * @throws \InvalidArgumentException
      */
@@ -120,25 +116,13 @@ final class RequestedAuthnContext extends AbstractSamlpElement
         Assert::same($xml->localName, 'RequestedAuthnContext');
         Assert::same($xml->namespaceURI, RequestedAuthnContext::NS);
 
-        /** @var \DOMElement[] $authnContextClassRef */
-        $authnContextClassRef = Utils::xpQuery($xml, './saml_assertion:AuthnContextClassRef');
-
-        /** @var \DOMElement[] $authnContextDeclRef */
-        $authnContextDeclRef = Utils::xpQuery($xml, './saml_assertion:AuthnContextDeclRef');
-
-        $requestedAuthnContextClassRefs = array_filter(
-            array_map([AuthnContextClassRef::class, 'fromXML'], $authnContextClassRef)
+        return new self(
+            array_merge(
+                AuthnContextClassRef::getChildrenOfClass($xml),
+                AuthnContextDeclRef::getChildrenOfClass($xml)
+            ),
+            self::getAttribute($xml, 'Comparison', null)
         );
-        $requestedAuthnContextDeclRefs = array_filter(
-            array_map([AuthnContextDeclRef::class, 'fromXML'], $authnContextDeclRef)
-        );
-
-        $Comparison = null;
-        if ($xml->hasAttribute('Comparison')) {
-            $Comparison = $xml->getAttribute('Comparison');
-        }
-
-        return new self($requestedAuthnContextClassRefs, $requestedAuthnContextDeclRefs, $Comparison);
     }
 
 

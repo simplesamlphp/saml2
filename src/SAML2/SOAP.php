@@ -7,6 +7,7 @@ namespace SAML2;
 use DOMDocument;
 use SAML2\XML\ecp\Response as ECPResponse;
 use SAML2\XML\samlp\AbstractMessage;
+use SAML2\XML\samlp\MessageFactory;
 use SAML2\XML\samlp\Response;
 
 /**
@@ -62,7 +63,7 @@ SOAP;
         /** @var \DOMElement $body */
         $body = $doc->getElementsByTagNameNs(Constants::NS_SOAP, 'Body')->item(0);
 
-        $body->appendChild($doc->importNode($message->toSignedXML(), true));
+        $body->appendChild($doc->importNode($message->toXML(), true));
 
         return $doc->saveXML();
     }
@@ -112,7 +113,7 @@ SOAP;
         /** @var \DOMElement[] $results */
         $results = Utils::xpQuery($xml, '/soap-env:Envelope/soap-env:Body/*[1]');
 
-        return AbstractMessage::fromXML($results[0]);
+        return MessageFactory::fromXML($results[0]);
     }
 
     /**

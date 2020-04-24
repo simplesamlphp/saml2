@@ -13,6 +13,8 @@ use SAML2\Configuration\ServiceProvider;
 use SAML2\DOMDocumentFactory;
 use SAML2\Signature\Validator;
 use SAML2\XML\samlp\Response;
+use SAML2\XML\samlp\Status;
+use SAML2\XML\samlp\StatusCode;
 
 /**
  * Tests for the Assertion validators
@@ -43,7 +45,7 @@ final class AssertionValidatorTest extends TestCase
      * @var \Psr\Log\LoggerInterface
      */
     protected $logger;
-   
+
     /**
      * @var \SAML2\Response\Validation\Validator
      */
@@ -72,7 +74,7 @@ final class AssertionValidatorTest extends TestCase
         $this->logger = new \Psr\Log\NullLogger();
         $this->validator = new Validator($this->logger);
         $this->destination = new Destination($destination);
-        $this->response = new Response();
+        $this->response = new Response(new Status(new StatusCode()));
 
         $this->identityProviderConfiguration
             = new IdentityProvider(['entityId' => $idpentity]);
@@ -133,7 +135,7 @@ XML
     {
         $assertion = new Assertion($this->document->firstChild);
         $assertion->setValidAudiences(['https://example.edu/not-the-sp-entity-id']);
-    
+
         $this->expectException(InvalidAssertionException::class);
         $this->expectExceptionMessage('The configured Service Provider [urn:mace:feide.no:services:no.feide.moodle] is not a valid audience for the assertion. Audiences: [https://example.edu/not-the-sp-entity-id]"');
         $result = $this->assertionProcessor->validateAssertion($assertion);

@@ -6,6 +6,7 @@ namespace SAML2\Signature;
 
 use Psr\Log\LoggerInterface;
 use RobRichards\XMLSecLibs\XMLSecurityKey;
+use SAML2\Utils;
 use SAML2\XML\SignedElementInterface;
 use SAML2\Utilities\ArrayCollection;
 
@@ -46,6 +47,7 @@ abstract class AbstractChainedValidator implements ChainedValidator
         foreach ($pemCandidates as $index => $candidateKey) {
             $key = new XMLSecurityKey(XMLSecurityKey::RSA_SHA256, ['type' => 'public']);
             $key->loadKey($candidateKey->getCertificate());
+            $key = Utils::castKey($key, $element->getSignature()->getAlgorithm(), 'public');
 
             try {
                 /*

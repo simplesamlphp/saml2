@@ -35,13 +35,12 @@ abstract class Binding
     {
         switch ($urn) {
             case Constants::BINDING_HTTP_POST:
+            case Constants::BINDING_HOK_SSO:
                 return new HTTPPost();
             case Constants::BINDING_HTTP_REDIRECT:
                 return new HTTPRedirect();
             case Constants::BINDING_HTTP_ARTIFACT:
                 return new HTTPArtifact();
-            case Constants::BINDING_HOK_SSO:
-                return new HTTPPost();
             // ECP ACS is defined with the PAOS binding, but as the IdP, we
             // talk to the ECP using SOAP -- if support for ECP as an SP is
             // implemented, this logic may need to change

@@ -34,8 +34,7 @@ class AbstractStatusResponseTest extends TestCase
             'OurMessageText'
         );
 
-        $response = new Response();
-        $response->setStatus($status);
+        $response = new Response($status);
 
         $responseElement = $response->toXML();
 
@@ -78,7 +77,7 @@ class AbstractStatusResponseTest extends TestCase
 XML;
 
         $fixtureResponseDom = DOMDocumentFactory::fromString($xml);
-        $response           = new Response($fixtureResponseDom->firstChild);
+        $response           = Response::fromXML($fixtureResponseDom->firstChild);
 
         $this->assertFalse($response->isSuccess());
 
@@ -113,7 +112,7 @@ XML;
 XML;
 
         $fixtureResponseDom = DOMDocumentFactory::fromString($xml);
-        $response           = new Response($fixtureResponseDom->firstChild);
+        $response           = Response::fromXML($fixtureResponseDom->firstChild);
 
         $this->assertTrue($response->isSuccess());
 
@@ -149,7 +148,7 @@ XML;
 XML;
 
         $fixtureResponseDom = DOMDocumentFactory::fromString($xml);
-        $response           = new Response($fixtureResponseDom->firstChild);
+        $response           = Response::fromXML($fixtureResponseDom->firstChild);
 
         $this->assertFalse($response->isSuccess());
 
@@ -166,16 +165,12 @@ XML;
      */
     public function testResponseTo(): void
     {
-        $response = new Response();
-        $response->setIssueInstant(1453323439);
-
-
         $status = new Status(
             new StatusCode('OurStatusCode')
         );
 
-        $response->setStatus($status);
-        $response->setInResponseTo('aabb12234');
+        $response = new Response($status, null, null, 1453323439, 'aabb12234');
+
         $responseElement = $response->toXML();
 
         $expectedStructureDocument = new \DOMDocument();
@@ -203,8 +198,7 @@ STATUSXML
      */
     public function testNoStatusElementThrowsException(): void
     {
-        $this->expectException(Exception::class);
-        $this->expectExceptionMessage('Missing status code on response');
+        $this->expectException(InvalidArgumentException::class);
 
         $xml = <<<XML
 <samlp:Response xmlns:samlp="urn:oasis:names:tc:SAML:2.0:protocol"
@@ -227,7 +221,7 @@ STATUSXML
 XML;
 
         $fixtureResponseDom = DOMDocumentFactory::fromString($xml);
-        $response           = new Response($fixtureResponseDom->firstChild);
+        $response           = Response::fromXML($fixtureResponseDom->firstChild);
     }
 
 
@@ -255,6 +249,6 @@ XML;
 XML;
 
         $fixtureResponseDom = DOMDocumentFactory::fromString($xml);
-        $response           = new Response($fixtureResponseDom->firstChild);
+        $response           = Response::fromXML($fixtureResponseDom->firstChild);
     }
 }

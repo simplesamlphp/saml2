@@ -5,8 +5,9 @@ declare(strict_types=1);
 namespace SAML2\XML\samlp;
 
 use DOMElement;
-use DOMNode;
 use SAML2\Utils;
+use SAML2\XML\ds\Signature;
+use SAML2\XML\saml\Issuer;
 use Webmozart\Assert\Assert;
 
 /**
@@ -17,76 +18,150 @@ use Webmozart\Assert\Assert;
  */
 class ArtifactResponse extends AbstractStatusResponse
 {
-    /**
-     * The \DOMElement with the message the artifact refers
-     * to, or null if we don't refer to any artifact.
-     *
-     * @var \DOMElement|null
-     */
-    private $any = null;
+    /** @var \SAML2\XML\samlp\AbstractMessage */
+    protected $message;
 
 
     /**
      * Constructor for SAML 2 ArtifactResponse.
      *
-     * @param \DOMElement|null $xml The input assertion.
-     * @throws \Exception
+     * @param \SAML2\XML\samlp\Status $status
+     * @param \SAML2\XML\saml\Issuer|null $issuer
+     * @param string|null $id
+     * @param int|null $issueInstant
+     * @param string|null $inResponseTo
+     * @param string|null $destination
+     * @param string|null $consent
+     * @param \SAML2\XML\samlp\Extensions|null $extensions
+     * @param \SAML2\XML\samlp\AbstractMessage|null $message
      */
-    public function __construct(DOMElement $xml = null)
-    {
-        parent::__construct('ArtifactResponse', $xml);
+    public function __construct(
+        Status $status,
+        ?Issuer $issuer = null,
+        ?string $id = null,
+        ?int $issueInstant = null,
+        ?string $inResponseTo = null,
+        ?string $destination = null,
+        ?string $consent = null,
+        ?Extensions $extensions = null,
+        ?AbstractMessage $message = null
+    ) {
+        parent::__construct(
+            $status,
+            $issuer,
+            $id,
+            $issueInstant,
+            $inResponseTo,
+            $destination,
+            $consent,
+            $extensions
+        );
 
-        if (!is_null($xml)) {
-            $status = Utils::xpQuery($xml, './saml_protocol:Status');
-            $status = $status[0];
-
-            /** @psalm-suppress RedundantCondition */
-            for ($any = $status->nextSibling; $any instanceof DOMNode; $any = $any->nextSibling) {
-                if ($any instanceof DOMElement) {
-                    $this->any = $any;
-                    break;
-                }
-                /* Ignore comments and text nodes. */
-            }
-        }
+        $this->setMessage($message);
     }
 
 
     /**
-     * @param \DOMElement|null $any
+     * Collect the value of the any-property
+     *
+     * @return \SAML2\XML\samlp\AbstractMessage|null
+     */
+    public function getMessage(): ?AbstractMessage
+    {
+        return $this->message;
+    }
+
+
+    /**
+     * Set the value of the any-property
+     *
+     * @param \SAML2\XML\samlp\AbstractMessage|null $message
      * @return void
      */
-    public function setAny(DOMElement $any = null): void
+    private function setMessage(?AbstractMessage $message): void
     {
-        $this->any = $any;
+        $this->message = $message;
     }
 
 
     /**
-     * @return \DOMElement|null
+     * Convert XML into an ArtifactResponse
+     *
+     * @param \DOMElement $xml
+     * @return self
+     * @throws \Exception
      */
-    public function getAny(): ?DOMElement
+    public static function fromXML(DOMElement $xml): object
     {
-        return $this->any;
+        Assert::same($xml->localName, 'ArtifactResponse');
+        Assert::same($xml->namespaceURI, ArtifactResponse::NS);
+        Assert::same('2.0', self::getAttribute($xml, 'Version'));
+
+        $id = self::getAttribute($xml, 'ID');
+        $issueInstant = Utils::xsDateTimeToTimestamp(self::getAttribute($xml, 'IssueInstant'));
+        $inResponseTo = self::getAttribute($xml, 'InResponseTo', null);
+        $destination = self::getAttribute($xml, 'Destination', null);
+        $consent = self::getAttribute($xml, 'Consent', null);
+
+        $issuer = Issuer::getChildrenOfClass($xml);
+        Assert::countBetween($issuer, 0, 1);
+
+        // find message; it should come last, after the Status-element
+        $status = Utils::xpQuery($xml, './saml_protocol:Status');
+        $status = $status[0];
+        $message = null;
+
+        /** @psalm-suppress RedundantCondition */
+        for ($child = $status->nextSibling; $child !== null; $child = $child->nextSibling) {
+            if ($child instanceof DOMElement) {
+                $message = MessageFactory::fromXML($child);
+                break;
+            }
+            /* Ignore comments and text nodes. */
+        }
+
+        $status = Status::getChildrenOfClass($xml);
+        Assert::count($status, 1);
+
+        $extensions = Extensions::getChildrenOfClass($xml);
+        Assert::maxCount($extensions, 1, 'Only one saml:Extensions element is allowed.');
+
+        $signature = Signature::getChildrenOfClass($xml);
+        Assert::maxCount($signature, 1, 'Only one ds:Signature element is allowed.');
+
+        $response = new self(
+            array_pop($status),
+            empty($issuer) ? null : array_pop($issuer),
+            $id,
+            $issueInstant,
+            $inResponseTo,
+            $destination,
+            $consent,
+            empty($extensions) ? null : array_pop($extensions),
+            $message
+        );
+
+        if (!empty($signature)) {
+            $response->setSignature($signature[0]);
+        }
+
+        return $response;
     }
 
 
     /**
-     * Convert the response message to an XML element.
+     * Convert the ArtifactResponse message to an XML element.
      *
      * @return \DOMElement This response.
      */
     public function toXML(?DOMElement $parent = null): DOMElement
     {
-        Assert::null($parent);
+        $e = parent::toXML($parent);
 
-        $parent = parent::toXML();
-
-        if (isset($this->any)) {
-            $node = $parent->ownerDocument->importNode($this->any, true);
-            $parent->appendChild($node);
+        if ($this->message !== null) {
+            $this->message->toXML($e);
         }
 
-        return $parent;
+        return $this->signElement($e);
     }
 }

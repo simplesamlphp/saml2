@@ -9,6 +9,7 @@ use RobRichards\XMLSecLibs\XMLSecurityKey;
 use SAML2\Compat\ContainerSingleton;
 use SAML2\Exception\RuntimeException;
 use SAML2\XML\samlp\AbstractMessage;
+use SAML2\XML\samlp\MessageFactory;
 use SimpleSAML\Configuration;
 use SimpleSAML\Utils\Config;
 use SimpleSAML\Utils\Crypto;
@@ -124,7 +125,7 @@ class SOAPClient
         $x = new \SoapClient(null, $options);
 
         // Add soap-envelopes
-        $request = $msg->toSignedXML();
+        $request = $msg->toXML();
         $request = self::START_SOAP_ENVELOPE . $request->ownerDocument->saveXML($request) . self::END_SOAP_ENVELOPE;
 
         $container->debugMessage($request, 'out');
@@ -159,7 +160,7 @@ class SOAPClient
         //Extract the message from the response
         /** @var \DOMElement[] $samlresponse */
         $samlresponse = Utils::xpQuery($dom->firstChild, '/soap-env:Envelope/soap-env:Body/*[1]');
-        $samlresponse = Message::fromXML($samlresponse[0]);
+        $samlresponse = MessageFactory::fromXML($samlresponse[0]);
 
         /* Add validator to message which uses the SSL context. */
         self::addSSLValidator($samlresponse, $context);

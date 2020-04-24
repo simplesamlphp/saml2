@@ -7,6 +7,8 @@ namespace SAML2\Signature;
 use SAML2\Configuration\IdentityProvider;
 use SAML2\Signature\ValidatorChain;
 use SAML2\XML\samlp\Response;
+use SAML2\XML\samlp\Status;
+use SAML2\XML\samlp\StatusCode;
 use SAML2\Signature\MissingConfigurationException;
 
 class ValidatorChainTest extends \PHPUnit\Framework\TestCase
@@ -37,7 +39,7 @@ class ValidatorChainTest extends \PHPUnit\Framework\TestCase
         $this->chain->appendValidator(new MockChainedValidator(false, true));
 
         $this->expectException(MissingConfigurationException::class);
-        $this->chain->hasValidSignature(new Response(), new IdentityProvider([]));
+        $this->chain->hasValidSignature(new Response(new Status(new StatusCode())), new IdentityProvider([]));
     }
 
 
@@ -53,7 +55,7 @@ class ValidatorChainTest extends \PHPUnit\Framework\TestCase
         $this->chain->appendValidator(new MockChainedValidator(true, false));
 
         $validationResult = $this->chain->hasValidSignature(
-            new Response(),
+            new Response(new Status(new StatusCode())),
             new IdentityProvider([])
         );
         $this->assertFalse($validationResult, 'The validation result is not what is expected');
@@ -72,7 +74,7 @@ class ValidatorChainTest extends \PHPUnit\Framework\TestCase
         $this->chain->appendValidator(new MockChainedValidator(false, true));
 
         $validationResult = $this->chain->hasValidSignature(
-            new Response(),
+            new Response(new Status(new StatusCode())),
             new IdentityProvider([])
         );
         $this->assertFalse($validationResult, 'The validation result is not what is expected');

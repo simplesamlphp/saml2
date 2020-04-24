@@ -13,6 +13,8 @@ use SAML2\Configuration\ServiceProvider;
 use SAML2\DOMDocumentFactory;
 use SAML2\Signature\Validator;
 use SAML2\XML\samlp\Response;
+use SAML2\XML\samlp\Status;
+use SAML2\XML\samlp\StatusCode;
 
 /**
  * Tests for the SubjectConfirmation validators
@@ -71,7 +73,7 @@ final class SubjectConfirmationValidatorTest extends TestCase
         $this->logger = new \Psr\Log\NullLogger();
         $this->validator = new Validator($this->logger);
         $this->destination = new Destination($destination);
-        $this->response = new Response();
+        $this->response = new Response(new Status(new StatusCode()));
 
         $this->identityProviderConfiguration
             = new IdentityProvider(['entityId' => $idpentity]);
