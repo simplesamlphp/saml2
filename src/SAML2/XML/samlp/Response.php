@@ -39,7 +39,7 @@ class Response extends AbstractStatusResponse
      * @param string|null $destination
      * @param string|null $consent
      * @param \SAML2\XML\samlp\Extensions $extensions
-     * @param (\SAML2\XML\saml\Assertion|\SAML2\XML\saml\EncryptedAssertion) $assertions
+     * @param (\SAML2\XML\saml\Assertion|\SAML2\XML\saml\EncryptedAssertion)[] $assertions
      */
     public function __construct(
         Status $status,
@@ -81,7 +81,7 @@ class Response extends AbstractStatusResponse
     /**
      * Set the assertions that should be included in this response.
      *
-     * @param \SAML2\XML\saml\Assertion[]|\SAML2\XML\saml\EncryptedAssertion[] $assertions The assertions.
+     * @param (\SAML2\XML\saml\Assertion|\SAML2\XML\saml\EncryptedAssertion)[] $assertions The assertions.
      * @return void
      */
     protected function setAssertions(array $assertions): void
@@ -104,6 +104,7 @@ class Response extends AbstractStatusResponse
         Assert::same('2.0', self::getAttribute($xml, 'Version'));
 
         $id = self::getAttribute($xml, 'ID');
+        /** @psalm-suppress PossiblyNullArgument */
         $issueInstant = Utils::xsDateTimeToTimestamp(self::getAttribute($xml, 'IssueInstant'));
         $inResponseTo = self::getAttribute($xml, 'InResponseTo', null);
         $destination = self::getAttribute($xml, 'Destination', null);
