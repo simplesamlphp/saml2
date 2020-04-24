@@ -43,7 +43,7 @@ XML
     {
         $authnContextDeclRef = new AuthnContextDeclRef('/relative/path/to/document.xml');
 
-        $requestedAuthnContext = new RequestedAuthnContext([], [$authnContextDeclRef], 'exact');
+        $requestedAuthnContext = new RequestedAuthnContext([$authnContextDeclRef], 'exact');
 
         $this->assertEquals(
             $this->document->saveXML($this->document->documentElement),
@@ -63,7 +63,7 @@ XML
         $this->expectException(InvalidArgumentException::class);
         $this->expectExceptionMessage('You need either AuthnContextClassRef or AuthnContextDeclRef, not both.');
 
-        new RequestedAuthnContext([$authnContextClassRef], [$authnContextDeclRef], 'exact');
+        new RequestedAuthnContext([$authnContextClassRef, $authnContextDeclRef], 'exact');
     }
 
 
@@ -82,8 +82,10 @@ XML
 
         /** @psalm-suppress InvalidArgument */
          new RequestedAuthnContext(
-             [DOMDocumentFactory::fromString('<root />')],
-             [$authnContextDeclRef],
+             [
+                 DOMDocumentFactory::fromString('<root />'),
+                $authnContextDeclRef
+             ],
              'exact'
          );
     }
