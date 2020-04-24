@@ -926,6 +926,54 @@ class Assertion implements SignedElementInterface
 
 
     /**
+     * Convert XML into an Assertion
+     *
+     * @param \DOMElement $xml The XML element we should load
+     *
+     * @return \SAML2\XML\saml\Assertion
+     */
+    public static function fromXML(DOMElement $xml): object
+    {
+        Assert::same($xml->localName, 'Assertion');
+        Assert::same($xml->namespaceURI, Assertion::NS);
+        Assert::same('2.0', self::getAttribute($xml, 'Version'));
+
+        $issueInstant = Utils::xsDateTimeToTimestamp(self::getAttribute($xml, 'IssueInstant'));
+
+        $issuer = Issuer::getChildrenOfClass($xml);
+        Assert::minCount($issuer, 1, 'Missing <saml:Issuer> in assertion.');
+
+        $subject = Subject::getChildrenOfClass($xml);
+        Assert::maxCount($subject, 1, 'More than one <saml:Subject> in <saml:Assertion>');
+
+        $conditions = Conditions::getChildrenOfClass($xml);
+        Assert::maxCount($conditions, 1, 'More than one <saml:Conditions> in <saml:Assertion>.');
+
+        $authnStatement = AuthnStatement::getChildrenOfClass($xml);
+
+        $this->parseAttributes($xml);
+        $this->parseEncryptedAttributes($xml);
+        $this->parseSignature($xml);
+
+
+        return = new self(
+            self::getAttribute($xml, 'ID'),
+            $issueInstant,
+            array_pop($issuer),
+//            $signature,
+            array_pop($subject),
+            array_pop($conditions),
+//            $advice,
+//            $statement,
+            $authnStatement
+//            ,
+//            $authzDecisionStatement,
+//            $attributeStatement
+        );
+    }
+
+
+    /**
      * Convert this assertion to an XML element.
      *
      * @param  \DOMElement|null $parentElement The DOM node the assertion should be created in.
