@@ -167,14 +167,13 @@ class HTTPArtifact extends Binding
             throw new \Exception('Received error from ArtifactResolutionService.');
         }
 
-        $xml = $artifactResponse->getAny();
-        if ($xml === null) {
+        $samlResponse = $artifactResponse->getMessage();
+        if ($samlResponse === null) {
             /* Empty ArtifactResponse - possibly because of Artifact replay? */
 
             throw new \Exception('Empty ArtifactResponse received, maybe a replay?');
         }
 
-        $samlResponse = MessageFactory::fromXML($xml);
         $samlResponse->addValidator([get_class($this), 'validateSignature'], $artifactResponse);
 
         if (isset($_REQUEST['RelayState'])) {
