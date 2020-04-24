@@ -29,7 +29,7 @@ final class AuthnStatement extends AbstractSamlElement
     /** @var int|null */
     protected $sessionNotOnOrAfter;
 
-    /** @var int|null */
+    /** @var string|null */
     protected $sessionIndex = null;
 
     /** @var \SAML2\XML\saml\SubjectLocality|null */
@@ -42,14 +42,14 @@ final class AuthnStatement extends AbstractSamlElement
      * @param \SAML2\XML\saml\AuthnContext $authnContext
      * @param int $authnInstant
      * @param int|null $sessionNotOnOrAfter
-     * @param int|null $sessionIndex
+     * @param string|null $sessionIndex
      * @param \SAML2\XML\saml\SubjectLocality|null $subjectLocality
      */
     public function __construct(
         AuthnContext $authnContext,
         int $authnInstant,
         ?int $sessionNotOnOrAfter = null,
-        ?int $sessionIndex = null,
+        ?string $sessionIndex = null,
         SubjectLocality $subjectLocality = null
     ) {
         $this->setAuthnContext($authnContext);
@@ -131,9 +131,9 @@ final class AuthnStatement extends AbstractSamlElement
     /**
      * Collect the value of the sessionIndex-property
      *
-     * @return ?int
+     * @return ?string
      */
-    public function getSessionIndex(): ?int
+    public function getSessionIndex(): ?string
     {
         return $this->sessionIndex;
     }
@@ -142,11 +142,11 @@ final class AuthnStatement extends AbstractSamlElement
     /**
      * Set the value of the sessionIndex-property
      *
-     * @param int|null $sessionIndex
+     * @param string|null $sessionIndex
      * @return void
      * @throws \InvalidArgumentException
      */
-    private function setSessionIndex(?int $sessionIndex): void
+    private function setSessionIndex(?string $sessionIndex): void
     {
         $this->sessionIndex = $sessionIndex;
     }
@@ -192,14 +192,13 @@ final class AuthnStatement extends AbstractSamlElement
 
         $authnInstant = Utils::xsDateTimeToTimestamp(self::getAttribute($xml, 'AuthnInstant'));
         $sessionNotOnOrAfter = self::getAttribute($xml, 'SessionNotOnOrAfter', null);
-        $sessionIndex = self::getAttribute($xml, 'SessionIndex', null);
         $subjectLocality = SubjectLocality::getChildrenOfClass($xml);
 
         return new self(
             array_pop($authnContext),
             $authnInstant,
             is_null($sessionNotOnOrAfter) ? $sessionNotOnOrAfter : Utils::xsDateTimeToTimestamp($sessionNotOnOrAfter),
-            is_null($sessionIndex) ? $sessionIndex : Utils::xsDateTimeToTimestamp($sessionIndex),
+            self::getAttribute($xml, 'SessionIndex', null),
             array_pop($subjectLocality)
         );
     }
