@@ -42,18 +42,31 @@ class SpIsValidAudience implements
     {
         Assert::notEmpty($this->serviceProvider);
 
-        $intendedAudiences = $assertion->getValidAudiences();
-        if ($intendedAudiences === null) {
+        $conditions = $assertion->getConditions();
+        if ($conditions === null) {
+            return;
+        }
+
+        $audienceRestrictions = $conditions->getAudienceRestriction();
+        if (empty($audienceRestrictions)) {
             return;
         }
 
         $entityId = $this->serviceProvider->getEntityId();
-        if (!in_array($entityId, $intendedAudiences, true)) {
-            $result->addError(sprintf(
-                'The configured Service Provider [%s] is not a valid audience for the assertion. Audiences: [%s]',
-                strval($entityId),
-                implode('], [', $intendedAudiences)
-            ));
+
+        $all = [];
+        foreach ($audienceRestrictions as $audienceRestriction) {
+            $audiences = $audienceRestriction->getAudience();
+            if (in_array($entityId, $audiences, true)) {
+                return;
+            }
+            $all[] = $audiences;
         }
+
+        $result->addError(sprintf(
+            'The configured Service Provider [%s] is not a valid audience for the assertion. Audiences: [%s]',
+            strval($entityId),
+            var_export($all, true)
+        ));
     }
 }

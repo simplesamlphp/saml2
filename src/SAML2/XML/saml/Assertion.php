@@ -100,31 +100,6 @@ class Assertion implements SignedElementInterface
     protected ?XMLSecurityKey $encryptionKey;
 
     /**
-     * The earliest time this assertion is valid, as an UNIX timestamp.
-     *
-     * @var int|null
-     */
-    protected ?int $notBefore = null;
-
-    /**
-     * The time this assertion expires, as an UNIX timestamp.
-     *
-     * @var int|null
-     */
-    protected ?int $notOnOrAfter = null;
-
-    /**
-     * The set of audiences that are allowed to receive this assertion.
-     *
-     * This is an array of valid service providers.
-     *
-     * If no restrictions on the audience are present, this variable contains null.
-     *
-     * @var array|null
-     */
-    protected ?array $validAudiences = null;
-
-    /**
      * The session expiration timestamp.
      *
      * @var int|null
@@ -263,6 +238,11 @@ class Assertion implements SignedElementInterface
      */
     protected ?string $signatureMethod;
 
+    /**
+     * @var \SAML2\XML\saml\Conditions|null
+     */
+    protected $conditions;
+
 
     /**
      * Constructor for SAML 2 assertions.
@@ -300,7 +280,10 @@ class Assertion implements SignedElementInterface
         Assert::maxCount($subject, 1, 'More than one <saml:Subject> in <saml:Assertion>');
         $this->subject = array_pop($subject);
 
-        $this->parseConditions($xml);
+        $conditions = Conditions::getChildrenOfClass($xml);
+        Assert::maxCount($conditions, 1, 'More than one <saml:Conditions> in <saml:Assertion>.');
+        $this->conditions = array_pop($conditions);
+
         $this->parseAuthnStatement($xml);
         $this->parseAttributes($xml);
         $this->parseEncryptedAttributes($xml);
@@ -332,69 +315,25 @@ class Assertion implements SignedElementInterface
 
 
     /**
-     * Parse conditions in assertion.
+     * Collect the value of the conditions-property
      *
-     * @param \DOMElement $xml The assertion XML element.
-     * @throws \Exception
+     * @return \SAML2\XML\saml\Conditions|null
+     */
+    public function getConditions(): ?Conditions
+    {
+        return $this->conditions;
+    }
+
+
+    /**
+     * Set the value of the conditions-property
+     * @param \SAML2\XML\saml\Conditions|null $conditions
+     *
      * @return void
      */
-    private function parseConditions(DOMElement $xml): void
+    public function setConditions(?Conditions $conditions): void
     {
-        /** @var \DOMElement[] $conditions */
-        $conditions = XMLUtils::xpQuery($xml, './saml_assertion:Conditions');
-        if (empty($conditions)) {
-            /* No <saml:Conditions> node. */
-
-            return;
-        } elseif (count($conditions) > 1) {
-            throw new Exception('More than one <saml:Conditions> in <saml:Assertion>.');
-        }
-        $conditions = $conditions[0];
-
-        if ($conditions->hasAttribute('NotBefore')) {
-            $notBefore = XMLUtils::xsDateTimeToTimestamp($conditions->getAttribute('NotBefore'));
-            if ($this->getNotBefore() === null || $this->getNotBefore() < $notBefore) {
-                $this->setNotBefore($notBefore);
-            }
-        }
-        if ($conditions->hasAttribute('NotOnOrAfter')) {
-            $notOnOrAfter = XMLUtils::xsDateTimeToTimestamp($conditions->getAttribute('NotOnOrAfter'));
-            if ($this->getNotOnOrAfter() === null || $this->getNotOnOrAfter() > $notOnOrAfter) {
-                $this->setNotOnOrAfter($notOnOrAfter);
-            }
-        }
-
-        foreach ($conditions->childNodes as $node) {
-            if (!$node instanceof DOMElement) {
-                continue;
-            }
-            if ($node->namespaceURI !== Constants::NS_SAML) {
-                throw new Exception('Unknown namespace of condition: ' . var_export($node->namespaceURI, true));
-            }
-            switch ($node->localName) {
-                case 'AudienceRestriction':
-                    $audiences = XMLUtils::extractStrings($node, Constants::NS_SAML, 'Audience');
-                    if ($this->validAudiences === null) {
-                        /* The first (and probably last) AudienceRestriction element. */
-                        $this->validAudiences = $audiences;
-                    } else {
-                        /*
-                         * The set of AudienceRestriction are ANDed together, so we need
-                         * the subset that are present in all of them.
-                         */
-                        $this->validAudiences = array_intersect($this->validAudiences, $audiences);
-                    }
-                    break;
-                case 'OneTimeUse':
-                    /* Currently ignored. */
-                    break;
-                case 'ProxyRestriction':
-                    /* Currently ignored. */
-                    break;
-                default:
-                    throw new Exception('Unknown condition: ' . var_export($node->localName, true));
-            }
-        }
+        $this->conditions = $conditions;
     }
 
 
@@ -806,63 +745,6 @@ class Assertion implements SignedElementInterface
     }
      */
 
-
-    /**
-     * Retrieve the earliest timestamp this assertion is valid.
-     *
-     * This function returns null if there are no restrictions on how early the
-     * assertion can be used.
-     *
-     * @return int|null The earliest timestamp this assertion is valid.
-     */
-    public function getNotBefore(): ?int
-    {
-        return $this->notBefore;
-    }
-
-
-    /**
-     * Set the earliest timestamp this assertion can be used.
-     *
-     * Set this to null if no limit is required.
-     *
-     * @param int|null $notBefore The earliest timestamp this assertion is valid.
-     * @return void
-     */
-    public function setNotBefore(int $notBefore = null): void
-    {
-        $this->notBefore = $notBefore;
-    }
-
-
-    /**
-     * Retrieve the expiration timestamp of this assertion.
-     *
-     * This function returns null if there are no restrictions on how
-     * late the assertion can be used.
-     *
-     * @return int|null The latest timestamp this assertion is valid.
-     */
-    public function getNotOnOrAfter(): ?int
-    {
-        return $this->notOnOrAfter;
-    }
-
-
-    /**
-     * Set the expiration timestamp of this assertion.
-     *
-     * Set this to null if no limit is required.
-     *
-     * @param int|null $notOnOrAfter The latest timestamp this assertion is valid.
-     * @return void
-     */
-    public function setNotOnOrAfter(int $notOnOrAfter = null): void
-    {
-        $this->notOnOrAfter = $notOnOrAfter;
-    }
-
-
     /**
      * Retrieve $requiredEncAttributes if attributes will be send encrypted
      *
@@ -883,33 +765,6 @@ class Assertion implements SignedElementInterface
     public function setRequiredEncAttributes(bool $ea): void
     {
         $this->requiredEncAttributes = $ea;
-    }
-
-
-    /**
-     * Retrieve the audiences that are allowed to receive this assertion.
-     *
-     * This may be null, in which case all audiences are allowed.
-     *
-     * @return array|null The allowed audiences.
-     */
-    public function getValidAudiences(): ?array
-    {
-        return $this->validAudiences;
-    }
-
-
-    /**
-     * Set the audiences that are allowed to receive this assertion.
-     *
-     * This may be null, in which case all audiences are allowed.
-     *
-     * @param array|null $validAudiences The allowed audiences.
-     * @return void
-     */
-    public function setValidAudiences(array $validAudiences = null): void
-    {
-        $this->validAudiences = $validAudiences;
     }
 
 
@@ -1365,7 +1220,10 @@ class Assertion implements SignedElementInterface
             $this->subject->toXML($root);
         }
 
-        $this->addConditions($root);
+        if ($this->conditions !== null) {
+            $this->conditions->toXML($root);
+        }
+
         $this->addAuthnStatement($root);
         if ($this->getRequiredEncAttributes() === false) {
             $this->addAttributeStatement($root);
@@ -1378,35 +1236,6 @@ class Assertion implements SignedElementInterface
         }
 
         return $root;
-    }
-
-
-    /**
-     * Add a Conditions-node to the assertion.
-     *
-     * @param \DOMElement $root The assertion element we should add the conditions to.
-     * @return void
-     */
-    private function addConditions(DOMElement $root): void
-    {
-        $document = $root->ownerDocument;
-
-        $conditions = $document->createElementNS(Constants::NS_SAML, 'saml:Conditions');
-        $root->appendChild($conditions);
-
-        if ($this->notBefore !== null) {
-            $conditions->setAttribute('NotBefore', gmdate('Y-m-d\TH:i:s\Z', $this->notBefore));
-        }
-        if ($this->notOnOrAfter !== null) {
-            $conditions->setAttribute('NotOnOrAfter', gmdate('Y-m-d\TH:i:s\Z', $this->notOnOrAfter));
-        }
-
-        if ($this->validAudiences !== null) {
-            $ar = $document->createElementNS(Constants::NS_SAML, 'saml:AudienceRestriction');
-            $conditions->appendChild($ar);
-
-            XMLUtils::addStrings($ar, Constants::NS_SAML, 'saml:Audience', false, $this->validAudiences);
-        }
     }
 
 

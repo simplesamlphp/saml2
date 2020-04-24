@@ -125,7 +125,18 @@ XML
     public function testAssertionNonValidation(): void
     {
         $assertion = new Assertion($this->document->firstChild);
-        $assertion->setValidAudiences(['https://example.edu/not-the-sp-entity-id']);
+        $assertion->setConditions(
+            new Conditions(
+                null,
+                null,
+                [],
+                [
+                    new AudienceRestriction(
+                        ['https://example.edu/not-the-sp-entity-id']
+                    )
+                ]
+            )
+        );
 
         $this->expectException(InvalidAssertionException::class);
         $this->expectExceptionMessage(

@@ -19,11 +19,14 @@ class NotBefore implements
      */
     public function validate(Assertion $assertion, Result $result): void
     {
-        $notBeforeTimestamp = $assertion->getNotBefore();
-        if (($notBeforeTimestamp !== null) && ($notBeforeTimestamp > (Temporal::getTime() + 60))) {
-            $result->addError(
-                'Received an assertion that is valid in the future. Check clock synchronization on IdP and SP.'
-            );
+        $conditions = $assertion->getConditions();
+        if ($conditions !== null) {
+            $notBeforeTimestamp = $conditions->getNotBefore();
+            if (($notBeforeTimestamp !== null) && ($notBeforeTimestamp > (Temporal::getTime() + 60))) {
+                $result->addError(
+                    'Received an assertion that is valid in the future. Check clock synchronization on IdP and SP.'
+                );
+            }
         }
     }
 }

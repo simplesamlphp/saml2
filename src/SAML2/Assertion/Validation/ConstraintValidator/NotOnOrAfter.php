@@ -19,11 +19,14 @@ class NotOnOrAfter implements
      */
     public function validate(Assertion $assertion, Result $result): void
     {
-        $notValidOnOrAfterTimestamp = $assertion->getNotOnOrAfter();
-        if (($notValidOnOrAfterTimestamp !== null) && ($notValidOnOrAfterTimestamp <= (Temporal::getTime() - 60))) {
-            $result->addError(
-                'Received an assertion that has expired. Check clock synchronization on IdP and SP.'
-            );
+        $conditions = $assertion->getConditions();
+        if ($conditions !== null) {
+            $notValidOnOrAfterTimestamp = $conditions->getNotOnOrAfter();
+            if (($notValidOnOrAfterTimestamp !== null) && ($notValidOnOrAfterTimestamp <= (Temporal::getTime() - 60))) {
+                $result->addError(
+                    'Received an assertion that has expired. Check clock synchronization on IdP and SP.'
+                );
+            }
         }
     }
 }
