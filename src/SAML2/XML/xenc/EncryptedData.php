@@ -17,19 +17,19 @@ use Webmozart\Assert\Assert;
  */
 class EncryptedData extends AbstractXencElement
 {
-    /** @var CipherData */
+    /** @var \SAML2\XML\xenc\CipherData */
     protected $cipherData;
 
     /** @var string|null */
     protected $encoding;
 
-    /** @var EncryptionMethod|null */
+    /** @var \SAML2\XML\xenc\EncryptionMethod|null */
     protected $encryptionMethod;
 
     /** @var string|null */
     protected $id;
 
-    /** @var KeyInfo|null */
+    /** @var \SAML2\XML\ds\KeyInfo|null */
     protected $keyInfo;
 
     /** @var string|null */
@@ -42,13 +42,13 @@ class EncryptedData extends AbstractXencElement
     /**
      * EncryptedData constructor.
      *
-     * @param CipherData $cipherData The CipherData object of this EncryptedData.
+     * @param \SAML2\XML\xenc\CipherData $cipherData The CipherData object of this EncryptedData.
      * @param string|null $id The Id attribute of this object. Optional.
      * @param string|null $type The Type attribute of this object. Optional.
      * @param string|null $mimeType The MimeType attribute of this object. Optional.
      * @param string|null $encoding The Encoding attribute of this object. Optional.
-     * @param EncryptionMethod|null $encryptionMethod The EncryptionMethod object of this EncryptedData. Optional.
-     * @param KeyInfo|null $keyInfo The KeyInfo object of this EncryptedData. Optional.
+     * @param \SAML2\XML\xenc\EncryptionMethod|null $encryptionMethod The EncryptionMethod object of this EncryptedData. Optional.
+     * @param \SAML2\XML\ds\KeyInfo|null $keyInfo The KeyInfo object of this EncryptedData. Optional.
      */
     public function __construct(
         CipherData $cipherData,
@@ -72,7 +72,7 @@ class EncryptedData extends AbstractXencElement
     /**
      * Get the CipherData object.
      *
-     * @return CipherData
+     * @return \SAML2\XML\xenc\CipherData
      */
     public function getCipherData(): CipherData
     {
@@ -81,9 +81,9 @@ class EncryptedData extends AbstractXencElement
 
 
     /**
-     * @param CipherData $cipherData
+     * @param \SAML2\XML\xenc\CipherData $cipherData
      */
-    protected function setCipherData(CipherData $cipherData)
+    protected function setCipherData(CipherData $cipherData): void
     {
         $this->cipherData = $cipherData;
     }
@@ -113,7 +113,7 @@ class EncryptedData extends AbstractXencElement
     /**
      * Get the EncryptionMethod object.
      *
-     * @return EncryptionMethod|null
+     * @return \SAML2\XML\xenc\EncryptionMethod|null
      */
     public function getEncryptionMethod(): ?EncryptionMethod
     {
@@ -122,7 +122,7 @@ class EncryptedData extends AbstractXencElement
 
 
     /**
-     * @param EncryptionMethod|null $encryptionMethod
+     * @param \SAML2\XML\xenc\EncryptionMethod|null $encryptionMethod
      */
     protected function setEncryptionMethod(?EncryptionMethod $encryptionMethod): void
     {
@@ -154,7 +154,7 @@ class EncryptedData extends AbstractXencElement
     /**
      * Get the KeyInfo object.
      *
-     * @return KeyInfo|null
+     * @return \SAML2\XML\ds\KeyInfo|null
      */
     public function getKeyInfo(): ?KeyInfo
     {
@@ -163,7 +163,7 @@ class EncryptedData extends AbstractXencElement
 
 
     /**
-     * @param KeyInfo|null $keyInfo
+     * @param \SAML2\XML\ds\KeyInfo|null $keyInfo
      */
     protected function setKeyInfo(?KeyInfo $keyInfo): void
     {
