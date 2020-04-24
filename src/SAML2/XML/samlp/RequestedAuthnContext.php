@@ -33,11 +33,10 @@ final class RequestedAuthnContext extends AbstractSamlpElement
      * @param string $Comparison
      */
     public function __construct(
-        array $requestedAuthnContextClassRefs = [],
-        array $requestedAuthnContextDeclRefs = [],
+        array $requestedAuthnContexts = [],
         string $Comparison = null
     ) {
-        $this->setRequestedAuthnContexts(array_merge($requestedAuthnContextClassRefs, $requestedAuthnContextDeclRefs));
+        $this->setRequestedAuthnContexts($requestedAuthnContexts);
         $this->setComparison($Comparison);
     }
 
