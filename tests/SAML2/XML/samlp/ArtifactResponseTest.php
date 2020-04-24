@@ -94,7 +94,7 @@ XML
             null,
             null,
             null,
-            $authnRequest->toXML()
+            $authnRequest
         );
 
         $artifactResponseElement = $artifactResponse->toXML();
@@ -124,12 +124,12 @@ XML
         $this->assertEquals(true, $ar->isSuccess());
         $this->assertEquals("_d84a49e5958803dedcff4c984c2b0d95", $ar->getId());
 
-        $any = $ar->getAny();
-        $authnRequest = AuthnRequest::fromXML($any);
-        $this->assertEquals('_306f8ec5b618f361c70b6ffb1480eade', $authnRequest->getId());
+        $message = $ar->getMessage();
+        $this->assertInstanceOf(AuthnRequest::class, $message);
+        $this->assertEquals('_306f8ec5b618f361c70b6ffb1480eade', $message->getId());
         $this->assertEquals(
             'https://sp.example.com/SAML2/SSO/Artifact',
-            $authnRequest->getAssertionConsumerServiceURL()
+            $message->getAssertionConsumerServiceURL()
         );
     }
 

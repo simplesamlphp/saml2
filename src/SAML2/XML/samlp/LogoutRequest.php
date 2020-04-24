@@ -215,8 +215,6 @@ class LogoutRequest extends AbstractRequest
      */
     public function toXML(?DOMElement $parent = null): DOMElement
     {
-        Assert::null($parent);
-
         $e = parent::toXML($parent);
 
         if ($this->notOnOrAfter !== null) {

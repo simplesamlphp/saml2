@@ -535,8 +535,6 @@ class AuthnRequest extends AbstractRequest
      */
     public function toXML(?DOMElement $parent = null): DOMElement
     {
-        Assert::null($parent);
-
         $parent = parent::toXML($parent);
 
         if ($this->forceAuthn == true) {

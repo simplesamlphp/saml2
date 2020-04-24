@@ -139,7 +139,7 @@ abstract class AbstractStatusResponse extends AbstractMessage
      */
     public function toXML(?DOMElement $parent = null): DOMElement
     {
-        $parent = parent::toXML();
+        $parent = parent::toXML($parent);
 
         if ($this->inResponseTo !== null) {
             $parent->setAttribute('InResponseTo', $this->inResponseTo);

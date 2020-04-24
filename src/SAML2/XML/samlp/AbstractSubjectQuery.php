@@ -85,10 +85,9 @@ abstract class AbstractSubjectQuery extends AbstractRequest
      */
     public function toXML(?DOMElement $parent = null): DOMElement
     {
-        Assert::null($parent);
         Assert::notEmpty($this->subject, 'Cannot convert SubjectQuery to XML without a Subject set.');
 
-        $parent = parent::toXML();
+        $parent = parent::toXML($parent);
 
         $this->subject->toXML($parent);
 

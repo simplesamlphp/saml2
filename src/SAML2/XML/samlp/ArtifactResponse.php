@@ -5,9 +5,7 @@ declare(strict_types=1);
 namespace SAML2\XML\samlp;
 
 use DOMElement;
-use DOMNode;
 use SAML2\Utils;
-use SAML2\XML\Chunk;
 use SAML2\XML\ds\Signature;
 use SAML2\XML\saml\Issuer;
 use Webmozart\Assert\Assert;
@@ -20,8 +18,8 @@ use Webmozart\Assert\Assert;
  */
 class ArtifactResponse extends AbstractStatusResponse
 {
-    /** @var \SAML2\XML\Chunk[] */
-    protected $any;
+    /** @var \SAML2\XML\samlp\AbstractMessage */
+    protected $message;
 
 
     /**
@@ -35,7 +33,7 @@ class ArtifactResponse extends AbstractStatusResponse
      * @param string|null $destination
      * @param string|null $consent
      * @param \SAML2\XML\samlp\Extensions|null $extensions
-     * @param \DOMElement $any
+     * @param \SAML2\XML\samlp\AbstractMessage|null $message
      */
     public function __construct(
         Status $status,
@@ -46,7 +44,7 @@ class ArtifactResponse extends AbstractStatusResponse
         ?string $destination = null,
         ?string $consent = null,
         ?Extensions $extensions = null,
-        ?DOMElement $any = null
+        ?AbstractMessage $message = null
     ) {
         parent::__construct(
             $status,
@@ -59,30 +57,30 @@ class ArtifactResponse extends AbstractStatusResponse
             $extensions
         );
 
-        $this->setAny($any);
+        $this->setMessage($message);
     }
 
 
     /**
      * Collect the value of the any-property
      *
-     * @return \DOMElement|null
+     * @return \SAML2\XML\samlp\AbstractMessage|null
      */
-    public function getAny(): ?DOMElement
+    public function getMessage(): ?AbstractMessage
     {
-        return $this->any;
+        return $this->message;
     }
 
 
     /**
      * Set the value of the any-property
      *
-     * @param \DOMElement|null $any
+     * @param \SAML2\XML\samlp\AbstractMessage|null $message
      * @return void
      */
-    private function setAny(?DOMElement $any): void
+    private function setMessage(?AbstractMessage $message): void
     {
-        $this->any = $any;
+        $this->message = $message;
     }
 
 
@@ -108,13 +106,15 @@ class ArtifactResponse extends AbstractStatusResponse
         $issuer = Issuer::getChildrenOfClass($xml);
         Assert::countBetween($issuer, 0, 1);
 
-        // Find children; they should come last, after the Status-element
+        // find message; it should come last, after the Status-element
         $status = Utils::xpQuery($xml, './saml_protocol:Status');
         $status = $status[0];
+        $message = null;
 
         /** @psalm-suppress RedundantCondition */
-        for ($any = $status->nextSibling; $any instanceof DOMNode; $any = $any->nextSibling) {
-            if ($any instanceof DOMElement) {
+        for ($child = $status->nextSibling; $child !== null; $child = $child->nextSibling) {
+            if ($child instanceof DOMElement) {
+                $message = MessageFactory::fromXML($child);
                 break;
             }
             /* Ignore comments and text nodes. */
@@ -138,7 +138,7 @@ class ArtifactResponse extends AbstractStatusResponse
             $destination,
             $consent,
             empty($extensions) ? null : array_pop($extensions),
-            $any
+            $message
         );
 
         if (!empty($signature)) {
@@ -158,9 +158,8 @@ class ArtifactResponse extends AbstractStatusResponse
     {
         $e = parent::toXML($parent);
 
-        if ($this->any !== null) {
-            $node = $e->ownerDocument->importNode($this->any, true);
-            $e->appendChild($node);
+        if ($this->message !== null) {
+            $this->message->toXML($e);
         }
 
         return $this->signElement($e);

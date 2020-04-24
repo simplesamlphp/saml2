@@ -145,8 +145,6 @@ class AttributeQuery extends AbstractSubjectQuery
      */
     public function toXML(?DOMElement $parent = null): DOMElement
     {
-        Assert::null($parent);
-
         $parent = parent::toXML($parent);
 
         foreach ($this->attributes as $attribute) {

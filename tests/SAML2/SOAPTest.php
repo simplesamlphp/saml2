@@ -93,18 +93,13 @@ SOAP
 XML
         );
 
-        $message = MessageFactory::fromXML($doc->getElementsByTagName('ArtifactResponse')->item(0));
+        $message = MessageFactory::fromXML($doc->documentElement);
 
         $expected = <<<SOAP
 <?xml version="1.0" encoding="utf-8"?>
 <SOAP-ENV:Envelope xmlns:SOAP-ENV="http://schemas.xmlsoap.org/soap/envelope/">
     <SOAP-ENV:Header/>
-    <SOAP-ENV:Body><samlp:ArtifactResponse xmlns:samlp="urn:oasis:names:tc:SAML:2.0:protocol" xmlns:saml="urn:oasis:names:tc:SAML:2.0:assertion" ID="_FQvGknDfws2Z" Version="2.0" IssueInstant="2004-01-21T19:00:49Z" InResponseTo="_6c3a4f8b9c2d"><saml:Issuer>https://IdentityProvider.com/SAML</saml:Issuer><samlp:Status><samlp:StatusCode Value="urn:oasis:names:tc:SAML:2.0:status:Success"/></samlp:Status><samlp:LogoutResponse ID="_b0730d21b628110d8b7e004005b13a2b" InResponseTo="_d2b7c388cec36fa7c39c28fd298644a8" IssueInstant="2004-01-21T19:05:49Z" Version="2.0">
-        <saml:Issuer>https://ServiceProvider.com/SAML</saml:Issuer>
-        <samlp:Status>
-            <samlp:StatusCode Value="urn:oasis:names:tc:SAML:2.0:status:Success"/>
-        </samlp:Status>
-    </samlp:LogoutResponse></samlp:ArtifactResponse></SOAP-ENV:Body>
+    <SOAP-ENV:Body><samlp:ArtifactResponse xmlns:samlp="urn:oasis:names:tc:SAML:2.0:protocol" xmlns:saml="urn:oasis:names:tc:SAML:2.0:assertion" ID="_FQvGknDfws2Z" Version="2.0" IssueInstant="2004-01-21T19:00:49Z" InResponseTo="_6c3a4f8b9c2d"><saml:Issuer>https://IdentityProvider.com/SAML</saml:Issuer><samlp:Status><samlp:StatusCode Value="urn:oasis:names:tc:SAML:2.0:status:Success"/></samlp:Status><samlp:LogoutResponse ID="_b0730d21b628110d8b7e004005b13a2b" Version="2.0" IssueInstant="2004-01-21T19:05:49Z" InResponseTo="_d2b7c388cec36fa7c39c28fd298644a8"><saml:Issuer>https://ServiceProvider.com/SAML</saml:Issuer><samlp:Status><samlp:StatusCode Value="urn:oasis:names:tc:SAML:2.0:status:Success"/></samlp:Status></samlp:LogoutResponse></samlp:ArtifactResponse></SOAP-ENV:Body>
 </SOAP-ENV:Envelope>
 
 SOAP;
