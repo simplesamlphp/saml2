@@ -57,6 +57,7 @@ final class SubjectLocality extends AbstractSamlElement
      */
     private function setAddress(?string $address): void
     {
+        Assert::nullOrIp($address, 'Invalid IP address');
         $this->address = $address;
     }
 
@@ -80,6 +81,7 @@ final class SubjectLocality extends AbstractSamlElement
      */
     private function setDnsName(?string $dnsName): void
     {
+        Assert::nullOrStringNotEmpty($dnsName, 'Invalid DNS name');
         $this->dnsName = $dnsName;
     }
 
