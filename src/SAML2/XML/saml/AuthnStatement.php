@@ -199,7 +199,7 @@ final class AuthnStatement extends AbstractSamlElement
             array_pop($authnContext),
             $authnInstant,
             is_null($sessionNotOnOrAfter) ? $sessionNotOnOrAfter : Utils::xsDateTimeToTimestamp($sessionNotOnOrAfter),
-            is_null($sessionIndex) ? $sessionIndex : Utils::xsDateTimeToStamp($sessionIndex),
+            is_null($sessionIndex) ? $sessionIndex : Utils::xsDateTimeToTimestamp($sessionIndex),
             array_pop($subjectLocality)
         );
     }
