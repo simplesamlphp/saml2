@@ -28,8 +28,7 @@ final class RequestedAuthnContext extends AbstractSamlpElement
     /**
      * Initialize a RequestedAuthnContext.
      *
-     * @param \SAML2\XML\saml\AuthnContextClassRef[] $requestedAuthnContextClassRefs
-     * @param \SAML2\XML\saml\AuthnContextDeclRef[] $requestedAuthnContextDeclRefs
+     * @param (\SAML2\XML\saml\AuthnContextClassRef|\SAML2\XML\saml\AuthnContextDeclRef)[] $requestedAuthnContexts
      * @param string $Comparison
      */
     public function __construct(
@@ -55,7 +54,7 @@ final class RequestedAuthnContext extends AbstractSamlpElement
     /**
      * Set the value of the requestedAuthnContexts-property
      *
-     * @param (\SAML2\XML\saml\AuthnContextClassRef|\SAML2\XML\saml\AuthnContextDeclRef|mixed)[] $requestedAuthnContexts
+     * @param (\SAML2\XML\saml\AuthnContextClassRef|\SAML2\XML\saml\AuthnContextDeclRef)[] $requestedAuthnContexts
      * @return void
      * @throws \InvalidArgumentException
      */
@@ -118,8 +117,10 @@ final class RequestedAuthnContext extends AbstractSamlpElement
         Assert::same($xml->namespaceURI, RequestedAuthnContext::NS);
 
         return new self(
-            AuthnContextClassRef::getChildrenOfClass($xml),
-            AuthnContextDeclRef::getChildrenOfClass($xml),
+            array_merge(
+                AuthnContextClassRef::getChildrenOfClass($xml),
+                AuthnContextDeclRef::getChildrenOfClass($xml)
+            ),
             self::getAttribute($xml, 'Comparison', null)
         );
     }
