@@ -639,7 +639,7 @@ class AuthnRequest extends Request
      */
     public function setAssertionConsumerServiceIndex($assertionConsumerServiceIndex)
     {
-        Assert::nullOrString($assertionConsumerServiceIndex);
+        Assert::nullOrInteger($assertionConsumerServiceIndex);
 
         $this->assertionConsumerServiceIndex = $assertionConsumerServiceIndex;
     }
