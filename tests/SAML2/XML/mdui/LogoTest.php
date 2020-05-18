@@ -22,7 +22,7 @@ class LogoTest extends TestCase
     private $data = 'data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAAEAAAABCAQAAAC1HAwCAAAAC0lEQVR42mNkYAAAAAYAAjCB0C8AAAAASUVORK5CYII=';
 
     /** @var string */
-    private $url = 'https://static.example.org/images/lofos/logo300x200.png';
+    private $url = 'https://static.example.org/images/logos/logo300x200.png';
 
 
     /**
