@@ -54,11 +54,16 @@ Example:
     require 'container.php';
     SAML2\Compat\ContainerSingleton::setContainer($container);
 
+    // Create Issuer
+    $issuer = new SAML2\XML\saml\Issuer('https://sp.example.edu');
+
     // Set up an AuthnRequest
-    $request = new SAML2\AuthnRequest();
-    $request->setId($container->generateId());
-    $request->setIssuer('https://sp.example.edu');
-    $request->setDestination('https://idp.example.edu');
+    $request = new SAML2\XML\samlp\AuthnRequest(
+        $issuer,
+        $container->generateId(),
+        null,
+        'https://idp.example.edu'
+    );
 
     // Send it off using the HTTP-Redirect binding
     $binding = new SAML2\HTTPRedirect();
