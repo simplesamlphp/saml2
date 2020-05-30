@@ -8,6 +8,7 @@ use DOMDocument;
 use DOMElement;
 use DOMNode;
 use DOMXPath;
+use Exception;
 use InvalidArgumentException;
 use RobRichards\XMLSecLibs\XMLSecEnc;
 use RobRichards\XMLSecLibs\XMLSecurityDSig;
@@ -63,7 +64,7 @@ class Utils
 
             return false;
         } elseif (count($signatureElement) > 1) {
-            throw new \Exception('XMLSec: more than one signature element in root.');
+            throw new Exception('XMLSec: more than one signature element in root.');
         }
         $signatureElement = $signatureElement[0];
         $objXMLSecDSig->sigNode = $signatureElement;
@@ -73,7 +74,7 @@ class Utils
 
         /* Validate referenced xml nodes. */
         if (!$objXMLSecDSig->validateReference()) {
-            throw new \Exception('XMLsec: digest validation failed');
+            throw new Exception('XMLsec: digest validation failed');
         }
 
         /* Check that $root is one of the signed nodes. */
@@ -83,7 +84,7 @@ class Utils
             if ($signedNode->isSameNode($root)) {
                 $rootSigned = true;
                 break;
-            } elseif ($root->parentNode instanceof \DOMDocument && $signedNode->isSameNode($root->ownerDocument)) {
+            } elseif ($root->parentNode instanceof DOMDocument && $signedNode->isSameNode($root->ownerDocument)) {
                 /* $root is the root element of a signed document. */
                 $rootSigned = true;
                 break;
@@ -143,16 +144,16 @@ class Utils
                 true
             )
         ) {
-            throw new \Exception('Unsupported signing algorithm.');
+            throw new Exception('Unsupported signing algorithm.');
         }
 
         /** @psalm-suppress PossiblyNullArgument */
         $keyInfo = openssl_pkey_get_details($key->key);
         if ($keyInfo === false) {
-            throw new \Exception('Unable to get key details from XMLSecurityKey.');
+            throw new Exception('Unable to get key details from XMLSecurityKey.');
         }
         if (!isset($keyInfo['key'])) {
-            throw new \Exception('Missing key in public key details.');
+            throw new Exception('Missing key in public key details.');
         }
 
         $newKey = new XMLSecurityKey($algorithm, ['type' => $type]);
@@ -187,11 +188,11 @@ class Utils
          */
         $sigMethod = self::xpQuery($objXMLSecDSig->sigNode, './ds:SignedInfo/ds:SignatureMethod');
         if (empty($sigMethod)) {
-            throw new \Exception('Missing SignatureMethod element.');
+            throw new Exception('Missing SignatureMethod element.');
         }
         $sigMethod = $sigMethod[0];
         if (!$sigMethod->hasAttribute('Algorithm')) {
-            throw new \Exception('Missing Algorithm-attribute on SignatureMethod element.');
+            throw new Exception('Missing Algorithm-attribute on SignatureMethod element.');
         }
         $algo = $sigMethod->getAttribute('Algorithm');
 
@@ -201,7 +202,7 @@ class Utils
 
         /* Check the signature. */
         if ($objXMLSecDSig->verify($key) !== 1) {
-            throw new \Exception("Unable to validate Signature");
+            throw new Exception("Unable to validate Signature");
         }
     }
 
@@ -360,12 +361,12 @@ class Utils
 
         $symmetricKey = $enc->locateKey($encryptedData);
         if (!$symmetricKey) {
-            throw new \Exception('Could not locate key algorithm in encrypted data.');
+            throw new Exception('Could not locate key algorithm in encrypted data.');
         }
 
         $symmetricKeyInfo = $enc->locateKeyInfo($symmetricKey);
         if (!$symmetricKeyInfo) {
-            throw new \Exception('Could not locate <dsig:KeyInfo> for the encrypted key.');
+            throw new Exception('Could not locate <dsig:KeyInfo> for the encrypted key.');
         }
 
         $inputKeyAlgo = $inputKey->getAlgorithm();
@@ -373,7 +374,7 @@ class Utils
             $symKeyInfoAlgo = $symmetricKeyInfo->getAlgorithm();
 
             if (in_array($symKeyInfoAlgo, $blacklist, true)) {
-                throw new \Exception('Algorithm disabled: ' . var_export($symKeyInfoAlgo, true));
+                throw new Exception('Algorithm disabled: ' . var_export($symKeyInfoAlgo, true));
             }
 
             if ($symKeyInfoAlgo === XMLSecurityKey::RSA_OAEP_MGF1P && $inputKeyAlgo === XMLSecurityKey::RSA_1_5) {
@@ -388,7 +389,7 @@ class Utils
 
             /* Make sure that the input key format is the same as the one used to encrypt the key. */
             if ($inputKeyAlgo !== $symKeyInfoAlgo) {
-                throw new \Exception(
+                throw new Exception(
                     'Algorithm mismatch between input key and key used to encrypt ' .
                     ' the symmetric key for the message. Key was: ' .
                     var_export($inputKeyAlgo, true) . '; message was: ' .
@@ -405,7 +406,7 @@ class Utils
                 /* To protect against "key oracle" attacks, we need to be able to create a
                  * symmetric key, and for that we need to know the key size.
                  */
-                throw new \Exception(
+                throw new Exception(
                     'Unknown key size for encryption algorithm: ' . var_export($symmetricKey->type, true)
                 );
             }
@@ -417,12 +418,12 @@ class Utils
                  */
                 $key = $encKey->decryptKey($symmetricKeyInfo);
                 if (strlen($key) !== $keySize) {
-                    throw new \Exception(
+                    throw new Exception(
                         'Unexpected key size (' . strval(strlen($key) * 8) . 'bits) for encryption algorithm: ' .
                         var_export($symmetricKey->type, true)
                     );
                 }
-            } catch (\Exception $e) {
+            } catch (Exception $e) {
                 /* We failed to decrypt this key. Log it, and substitute a "random" key. */
                 Utils::getContainer()->getLogger()->error('Failed to decrypt symmetric key: ' . $e->getMessage());
                 /* Create a replacement key, so that it looks like we fail in the same way as if the key was correctly
@@ -433,7 +434,7 @@ class Utils
                  */
                 $encryptedKey = $encKey->getCipherValue();
                 if ($encryptedKey === null) {
-                    throw new \Exception('No CipherValue available in the encrypted element.');
+                    throw new Exception('No CipherValue available in the encrypted element.');
                 }
 
                 /** @psalm-suppress PossiblyNullArgument */
@@ -453,7 +454,7 @@ class Utils
             $symKeyAlgo = $symmetricKey->getAlgorithm();
             /* Make sure that the input key has the correct format. */
             if ($inputKeyAlgo !== $symKeyAlgo) {
-                throw new \Exception(
+                throw new Exception(
                     'Algorithm mismatch between input key and key in message. ' .
                     'Key was: ' . var_export($inputKeyAlgo, true) . '; message was: ' .
                     var_export($symKeyAlgo, true)
@@ -464,7 +465,7 @@ class Utils
 
         $algorithm = $symmetricKey->getAlgorithm();
         if (in_array($algorithm, $blacklist, true)) {
-            throw new \Exception('Algorithm disabled: ' . var_export($algorithm, true));
+            throw new Exception('Algorithm disabled: ' . var_export($algorithm, true));
         }
 
         /**
@@ -485,13 +486,13 @@ class Utils
         try {
             $newDoc = DOMDocumentFactory::fromString($xml);
         } catch (RuntimeException $e) {
-            throw new \Exception('Failed to parse decrypted XML. Maybe the wrong sharedkey was used?', 0, $e);
+            throw new Exception('Failed to parse decrypted XML. Maybe the wrong sharedkey was used?', 0, $e);
         }
 
         /** @psalm-suppress PossiblyNullPropertyFetch */
         $decryptedElement = $newDoc->firstChild->firstChild;
         if (!($decryptedElement instanceof DOMElement)) {
-            throw new \Exception('Missing decrypted element or it was not actually a DOMElement.');
+            throw new Exception('Missing decrypted element or it was not actually a DOMElement.');
         }
 
         return $decryptedElement;
@@ -514,13 +515,13 @@ class Utils
     ): DOMElement {
         try {
             return self::doDecryptElement($encryptedData, $inputKey, $blacklist);
-        } catch (\Exception $e) {
+        } catch (Exception $e) {
             /*
              * Something went wrong during decryption, but for security
              * reasons we cannot tell the user what failed.
              */
             Utils::getContainer()->getLogger()->error('Decryption failed: ' . $e->getMessage());
-            throw new \Exception('Failed to decrypt XML element.', 0, $e);
+            throw new Exception('Failed to decrypt XML element.', 0, $e);
         }
     }
 
