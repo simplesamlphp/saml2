@@ -28,8 +28,8 @@ final class AttributeTest extends TestCase
         $samlNamespace = Constants::NS_SAML;
         $this->document = DOMDocumentFactory::fromString(<<<XML
 <saml:Attribute xmlns:saml="{$samlNamespace}" Name="TheName" NameFormat="TheNameFormat" FriendlyName="TheFriendlyName" test:attr1="testval1" test:attr2="testval2" xmlns:test="urn:test">
-  <saml:AttributeValue xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:xs="http://www.w3.org/2001/XMLSchema" xsi:type="xs:string">FirstValue</saml:AttributeValue>
-  <saml:AttributeValue xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:xs="http://www.w3.org/2001/XMLSchema" xsi:type="xs:string">SecondValue</saml:AttributeValue>
+  <saml:AttributeValue>FirstValue</saml:AttributeValue>
+  <saml:AttributeValue>SecondValue</saml:AttributeValue>
 </saml:Attribute>
 XML
         );
@@ -69,8 +69,8 @@ XML
 
         $values = $attribute->getAttributeValues();
         $this->assertCount(2, $values);
-        $this->assertEquals('FirstValue', $values[0]->getElement()->textContent);
-        $this->assertEquals('SecondValue', $values[1]->getElement()->textContent);
+        $this->assertEquals('FirstValue', $values[0]->getValue());
+        $this->assertEquals('SecondValue', $values[1]->getValue());
 
         $this->assertEquals(
             $this->document->saveXML($this->document->documentElement),
@@ -93,8 +93,8 @@ XML
         $this->assertEquals('TheNameFormat', $attribute->getNameFormat());
         $this->assertEquals('TheFriendlyName', $attribute->getFriendlyName());
         $this->assertCount(2, $attribute->getAttributeValues());
-        $this->assertEquals('FirstValue', $attribute->getAttributeValues()[0]->getString());
-        $this->assertEquals('SecondValue', $attribute->getAttributeValues()[1]->getString());
+        $this->assertEquals('FirstValue', $attribute->getAttributeValues()[0]->getValue());
+        $this->assertEquals('SecondValue', $attribute->getAttributeValues()[1]->getValue());
 
         $this->assertEquals(
             [

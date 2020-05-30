@@ -57,11 +57,11 @@ final class IDPSSODescriptorTest extends TestCase
   <md:AttributeProfile>urn:attribute:profile2</md:AttributeProfile>
   <saml:Attribute xmlns:saml="{$samlns}" Name="urn:oid:1.3.6.1.4.1.5923.1.1.1.6" NameFormat="urn:oasis:names:tc:SAML:2.0:attrname-format:uri" FriendlyName="eduPersonPrincipalName"></saml:Attribute>
   <saml:Attribute xmlns:saml="{$samlns}" Name="urn:oid:1.3.6.1.4.1.5923.1.1.1.1" NameFormat="urn:oasis:names:tc:SAML:2.0:attrname-format:uri" FriendlyName="eduPersonAffiliation">
-    <saml:AttributeValue xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:xs="http://www.w3.org/2001/XMLSchema" xsi:type="xs:string">member</saml:AttributeValue>
-    <saml:AttributeValue xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:xs="http://www.w3.org/2001/XMLSchema" xsi:type="xs:string">student</saml:AttributeValue>
-    <saml:AttributeValue xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:xs="http://www.w3.org/2001/XMLSchema" xsi:type="xs:string">faculty</saml:AttributeValue>
-    <saml:AttributeValue xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:xs="http://www.w3.org/2001/XMLSchema" xsi:type="xs:string">employee</saml:AttributeValue>
-    <saml:AttributeValue xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:xs="http://www.w3.org/2001/XMLSchema" xsi:type="xs:string">staff</saml:AttributeValue>
+    <saml:AttributeValue>member</saml:AttributeValue>
+    <saml:AttributeValue>student</saml:AttributeValue>
+    <saml:AttributeValue>faculty</saml:AttributeValue>
+    <saml:AttributeValue>employee</saml:AttributeValue>
+    <saml:AttributeValue>staff</saml:AttributeValue>
   </saml:Attribute>
 </md:IDPSSODescriptor>
 XML

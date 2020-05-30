@@ -31,7 +31,7 @@ final class RequestedAttributeTest extends TestCase
 
         $this->document = DOMDocumentFactory::fromString(<<<XML
 <md:RequestedAttribute xmlns:md="{$mdns}" Name="attr" NameFormat="urn:format" FriendlyName="Attribute" isRequired="true">
-  <saml:AttributeValue xmlns:saml="{$samlns}" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:xs="http://www.w3.org/2001/XMLSchema" xsi:type="xs:string">value1</saml:AttributeValue>
+  <saml:AttributeValue xmlns:saml="{$samlns}">value1</saml:AttributeValue>
 </md:RequestedAttribute>
 XML
         );
@@ -94,7 +94,7 @@ XML
         $this->assertEquals('attr', $ra->getName());
         $this->assertEquals('urn:format', $ra->getNameFormat());
         $this->assertEquals('Attribute', $ra->getFriendlyName());
-        $this->assertEquals('value1', $ra->getAttributeValues()[0]->getString());
+        $this->assertEquals('value1', $ra->getAttributeValues()[0]->getValue());
         $this->assertTrue($ra->getIsRequired());
     }
 

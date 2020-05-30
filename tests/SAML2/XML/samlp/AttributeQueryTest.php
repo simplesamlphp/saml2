@@ -115,11 +115,8 @@ XML
         // Test Attribute Values for Attribute 2
         $av2 = Utils::xpQuery($attributes[1], './saml_assertion:AttributeValue');
         $this->assertCount(3, $av2);
-        $this->assertEquals('xs:string', $av2[0]->getAttribute('xsi:type'));
         $this->assertEquals('test2_attrv1', $av2[0]->textContent);
-        $this->assertEquals('xs:string', $av2[1]->getAttribute('xsi:type'));
         $this->assertEquals('test2_attrv2', $av2[1]->textContent);
-        $this->assertEquals('xs:string', $av2[2]->getAttribute('xsi:type'));
         $this->assertEquals('test2_attrv3', $av2[2]->textContent);
 
         // Test Attribute Values for Attribute 3

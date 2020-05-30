@@ -70,8 +70,8 @@ class ChunkTest extends TestCase
         $this->assertEquals(
             <<<XML
 <saml:Attribute xmlns:saml="urn:oasis:names:tc:SAML:2.0:assertion" Name="TheName" NameFormat="TheNameFormat" FriendlyName="TheFriendlyName">
-  <saml:AttributeValue xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:xs="http://www.w3.org/2001/XMLSchema" xsi:type="xs:string">FirstValue</saml:AttributeValue>
-  <saml:AttributeValue xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:xs="http://www.w3.org/2001/XMLSchema" xsi:type="xs:string">SecondValue</saml:AttributeValue>
+  <saml:AttributeValue>FirstValue</saml:AttributeValue>
+  <saml:AttributeValue>SecondValue</saml:AttributeValue>
 </saml:Attribute>
 XML
             ,
