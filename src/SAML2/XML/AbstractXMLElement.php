@@ -220,6 +220,7 @@ abstract class AbstractXMLElement implements Serializable
      *
      * @param \DOMElement $parent The element we want to search.
      * @return static[] An array of objects of this class.
+     * @psalm-return array
      */
     public static function getChildrenOfClass(DOMElement $parent): array
     {
