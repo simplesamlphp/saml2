@@ -29,7 +29,7 @@ final class AttributeValueTest extends TestCase
         $nsxsi = Constants::NS_XSI;
 
         $this->document = DOMDocumentFactory::fromString(<<<XML
-<saml:AttributeValue xmlns:saml="{$nssaml}" xmlns:xsi="{$nsxsi}" xmlns:xs="{$nsxs}" xsi:type="xs:string">value</saml:AttributeValue>
+<saml:AttributeValue xmlns:saml="$nssaml" xmlns:xs="$nsxs" xmlns:xsi="$nsxsi" xsi:type="xs:integer">2</saml:AttributeValue>
 XML
         );
     }
@@ -47,8 +47,22 @@ XML
     {
         $av = new AttributeValue('value');
 
-        $this->assertEquals('value', $av->getString());
+        $this->assertEquals('value', $av->getValue());
+        $this->assertEquals('xs:string', $av->getXsiType());
+    }
 
+
+    /**
+     * Test creating an AttributeValue from scratch using an integer.
+     *
+     * @return void
+     */
+    public function testMarshallingInteger(): void
+    {
+        $av = new AttributeValue(2);
+        $this->assertIsInt($av->getValue());
+        $this->assertEquals(2, $av->getValue());
+        $this->assertEquals('xs:integer', $av->getXsiType());
         $this->assertEquals(
             $this->document->saveXML($this->document->documentElement),
             strval($av)
@@ -56,15 +70,19 @@ XML
     }
 
 
-    /**
-     * Test creating an AttributeValue from scratch using a DOMElement.
-     *
-     * @return void
-     */
-    public function testMarshallingDOMElement(): void
+    public function testMarshallingNull(): void
     {
-        $av = new AttributeValue($this->document->documentElement);
-        $this->assertEquals($this->document->documentElement, $av->getElement());
+        $av = new AttributeValue(null);
+        $this->assertNull($av->getValue());
+        $this->assertEquals('xs:nil', $av->getXsiType());
+        $nssaml = Constants::NS_SAML;
+        $nsxsi = Constants::NS_XSI;
+        $this->assertEquals(
+            <<<XML
+<saml:AttributeValue xmlns:saml="$nssaml" xmlns:xsi="$nsxsi" xsi:nil="1"/>
+XML,
+            strval($av)
+        );
     }
 
 
@@ -82,7 +100,8 @@ XML
             $this->document->documentElement,
             $av->toXML()
         );
-        $this->assertEquals('', $av->getString());
+        $this->assertEquals('', $av->getValue());
+        $this->assertEquals('xs:string', $av->getXsiType());
     }
 
 
@@ -97,7 +116,8 @@ XML
     public function testUnmarshalling(): void
     {
         $av = AttributeValue::fromXML($this->document->documentElement);
-        $this->assertEquals('value', $av->getString());
+        $this->assertIsInt($av->getValue());
+        $this->assertEquals(2, $av->getValue());
         $this->assertEquals(
             $this->document->saveXML($this->document->documentElement),
             strval($av)
