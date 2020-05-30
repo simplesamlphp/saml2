@@ -77,10 +77,10 @@ XML
         $this->assertEquals('xs:nil', $av->getXsiType());
         $nssaml = Constants::NS_SAML;
         $nsxsi = Constants::NS_XSI;
-        $this->assertEquals(
-            <<<XML
+        $this->assertEquals(<<<XML
 <saml:AttributeValue xmlns:saml="$nssaml" xmlns:xsi="$nsxsi" xsi:nil="1"/>
-XML,
+XML
+            ,
             strval($av)
         );
     }
