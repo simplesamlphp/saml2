@@ -11,6 +11,7 @@ use SAML2\XML\alg\DigestMethod;
 use SAML2\XML\alg\SigningMethod;
 use SAML2\XML\Chunk;
 use SAML2\XML\ExtensionsTrait;
+use SAML2\XML\init\RequestInitiator;
 use SAML2\XML\mdattr\EntityAttributes;
 use SAML2\XML\mdrpi\AbstractMdrpiElement as MDRPI;
 use SAML2\XML\mdrpi\PublicationInfo;
@@ -72,6 +73,9 @@ final class Extensions extends AbstractMdElement
             ALG::NS              => [
                 'DigestMethod'  => DigestMethod::class,
                 'SigningMethod' => SigningMethod::class,
+            ],
+            RequestInitiator::NS             => [
+                'RequestInitiator' => RequestInitiator::class,
             ],
         ];
 
