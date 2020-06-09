@@ -34,7 +34,11 @@ final class RequestInitiator extends AbstractEndpointType
     protected function setBinding(string $binding): void
     {
         Assert::notEmpty($binding, 'The Binding of an endpoint cannot be empty.');
-        Assert::eq($binding, self::NS, "The Binding of a RequestInitiator must be 'urn:oasis:names:tc:SAML:profiles:SSO:request-init'.");
+        Assert::eq(
+            $binding,
+            self::NS,
+            "The Binding of a RequestInitiator must be 'urn:oasis:names:tc:SAML:profiles:SSO:request-init'."
+        );
 
         $this->Binding = $binding;
     }
