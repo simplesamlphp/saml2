@@ -6,7 +6,7 @@ namespace SAML2\XML\alg;
 
 use DOMElement;
 use SAML2\DOMDocumentFactory;
-use Webmozart\Assert\Assert;
+use SimpleSAML\Assert\Assert;
 
 /**
  * Class for handling the alg:DigestMethod element.

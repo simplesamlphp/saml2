@@ -4,12 +4,12 @@ declare(strict_types=1);
 
 namespace SAML2\XML\samlp;
 
-use InvalidArgumentException;
 use PHPUnit\Framework\TestCase;
 use SAML2\Constants;
 use SAML2\DOMDocumentFactory;
 use SAML2\XML\saml\AuthnContextClassRef;
 use SAML2\XML\saml\AuthnContextDeclRef;
+use SimpleSAML\Assert\AssertionFailedException;
 
 /**
  * Class \SAML2\XML\samlp\RequestedAuthnContextTest
@@ -60,7 +60,7 @@ XML
         $authnContextDeclRef = new AuthnContextDeclRef('/relative/path/to/document.xml');
         $authnContextClassRef = new AuthnContextClassRef(Constants::AC_PASSWORD_PROTECTED_TRANSPORT);
 
-        $this->expectException(InvalidArgumentException::class);
+        $this->expectException(AssertionFailedException::class);
         $this->expectExceptionMessage('You need either AuthnContextClassRef or AuthnContextDeclRef, not both.');
 
         new RequestedAuthnContext([$authnContextClassRef, $authnContextDeclRef], 'exact');
@@ -74,7 +74,7 @@ XML
     {
         $authnContextDeclRef = new AuthnContextDeclRef('/relative/path/to/document.xml');
 
-        $this->expectException(InvalidArgumentException::class);
+        $this->expectException(AssertionFailedException::class);
         $this->expectExceptionMessage(
             'Expected an instance of any of "' . AuthnContextClassRef::class . '", "' . AuthnContextDeclRef::class .
             '". Got: DOMDocument'
@@ -126,7 +126,7 @@ XML
 XML
         );
 
-        $this->expectException(InvalidArgumentException::class);
+        $this->expectException(AssertionFailedException::class);
         $this->expectExceptionMessage('You need either AuthnContextClassRef or AuthnContextDeclRef, not both.');
         RequestedAuthnContext::fromXML($document->documentElement);
     }

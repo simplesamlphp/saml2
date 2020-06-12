@@ -9,6 +9,7 @@ use PHPUnit\Framework\TestCase;
 use SAML2\Constants;
 use SAML2\DOMDocumentFactory;
 use SAML2\XML\Chunk;
+use SimpleSAML\Assert\AssertionFailedException;
 
 /**
  * Tests for the ContactPerson class.
@@ -109,7 +110,7 @@ XML
      */
     public function testMarshallingWithWrongType(): void
     {
-        $this->expectException(InvalidArgumentException::class);
+        $this->expectException(AssertionFailedException::class);
         $this->expectExceptionMessage(
             'Expected one of: "technical", "support", "administrative", "billing", "other". Got: "wrong"'
         );
@@ -196,7 +197,7 @@ XML
      */
     public function testUnmarshallingWithoutType(): void
     {
-        $this->expectException(InvalidArgumentException::class);
+        $this->expectException(AssertionFailedException::class);
         $this->expectExceptionMessage('Missing contactType on ContactPerson.');
         $this->document->documentElement->removeAttribute('contactType');
         ContactPerson::fromXML($this->document->documentElement);
@@ -208,7 +209,7 @@ XML
      */
     public function testUnmarshallingWithWrongType(): void
     {
-        $this->expectException(InvalidArgumentException::class);
+        $this->expectException(AssertionFailedException::class);
         $this->expectExceptionMessage(
             'Expected one of: "technical", "support", "administrative", "billing", "other". Got: "wrong"'
         );
@@ -226,7 +227,7 @@ XML
         $newCompany = $this->document->createElementNS(Constants::NS_MD, 'Company', 'Alt. Co.');
         /** @psalm-suppress PossiblyNullPropertyFetch */
         $this->document->documentElement->insertBefore($newCompany, $company->item(0)->nextSibling);
-        $this->expectException(InvalidArgumentException::class);
+        $this->expectException(AssertionFailedException::class);
         $this->expectExceptionMessage('More than one Company in md:ContactPerson');
         ContactPerson::fromXML($this->document->documentElement);
     }
@@ -241,7 +242,7 @@ XML
         $newName = $this->document->createElementNS(Constants::NS_MD, 'GivenName', 'New Name');
         /** @psalm-suppress PossiblyNullPropertyFetch */
         $this->document->documentElement->insertBefore($newName, $givenName->item(0)->nextSibling);
-        $this->expectException(InvalidArgumentException::class);
+        $this->expectException(AssertionFailedException::class);
         $this->expectExceptionMessage('More than one GivenName in md:ContactPerson');
         ContactPerson::fromXML($this->document->documentElement);
     }
@@ -256,7 +257,7 @@ XML
         $newName = $this->document->createElementNS(Constants::NS_MD, 'SurName', 'New Name');
         /** @psalm-suppress PossiblyNullPropertyFetch */
         $this->document->documentElement->insertBefore($newName, $surName->item(0)->nextSibling);
-        $this->expectException(InvalidArgumentException::class);
+        $this->expectException(AssertionFailedException::class);
         $this->expectExceptionMessage('More than one SurName in md:ContactPerson');
         ContactPerson::fromXML($this->document->documentElement);
     }

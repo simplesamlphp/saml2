@@ -7,7 +7,7 @@ namespace SAML2\XML\samlp;
 use DOMElement;
 use SAML2\XML\saml\Issuer;
 use SAML2\XML\saml\Subject;
-use Webmozart\Assert\Assert;
+use SimpleSAML\Assert\Assert;
 
 /**
  * Base class for SAML 2 subject query messages.

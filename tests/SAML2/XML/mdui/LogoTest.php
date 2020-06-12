@@ -4,11 +4,11 @@ declare(strict_types=1);
 
 namespace SAML2\XML\mdui;
 
-use Exception;
 use InvalidArgumentException;
 use PHPUnit\Framework\TestCase;
 use SAML2\DOMDocumentFactory;
 use SAML2\Utils;
+use SimpleSAML\Assert\AssertionFailedException;
 
 /**
  * Class \SAML2\XML\mdui\LogoTest
@@ -108,7 +108,7 @@ XML
         $document = $this->document;
         $document->documentElement->textContent = '';
 
-        $this->expectException(Exception::class);
+        $this->expectException(AssertionFailedException::class);
         $this->expectExceptionMessage('Missing url value for Logo');
         Logo::fromXML($document->documentElement);
     }
@@ -138,7 +138,7 @@ XML
         $document = $this->document;
         $document->documentElement->removeAttribute('width');
 
-        $this->expectException(Exception::class);
+        $this->expectException(AssertionFailedException::class);
         $this->expectExceptionMessage('Missing width of Logo');
         Logo::fromXML($document->documentElement);
     }
@@ -153,7 +153,7 @@ XML
         $document = $this->document;
         $document->documentElement->removeAttribute('height');
 
-        $this->expectException(Exception::class);
+        $this->expectException(AssertionFailedException::class);
         $this->expectExceptionMessage('Missing height of Logo');
         Logo::fromXML($document->documentElement);
     }

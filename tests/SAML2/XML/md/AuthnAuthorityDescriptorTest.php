@@ -4,11 +4,11 @@ declare(strict_types=1);
 
 namespace SAML2\XML\md;
 
-use InvalidArgumentException;
 use PHPUnit\Framework\TestCase;
 use SAML2\Constants;
 use SAML2\DOMDocumentFactory;
 use SAML2\SignedElementTestTrait;
+use SimpleSAML\Assert\AssertionFailedException;
 
 final class AuthnAuthorityDescriptorTest extends TestCase
 {
@@ -75,7 +75,7 @@ XML
      */
     public function testMarshallingWithoutAuthnQueryServices(): void
     {
-        $this->expectException(InvalidArgumentException::class);
+        $this->expectException(AssertionFailedException::class);
         $this->expectExceptionMessage('Missing at least one AuthnQueryService in AuthnAuthorityDescriptor.');
         new AuthnAuthorityDescriptor(
             [],
@@ -105,7 +105,7 @@ XML
      */
     public function testMarshallWithEmptyNameIDFormat(): void
     {
-        $this->expectException(InvalidArgumentException::class);
+        $this->expectException(AssertionFailedException::class);
         $this->expectExceptionMessage('NameIDFormat cannot be an empty string.');
         new AuthnAuthorityDescriptor(
             [$this->aqs],
@@ -121,7 +121,7 @@ XML
      */
     public function testMarshallingWithWrongAuthnQueryService(): void
     {
-        $this->expectException(InvalidArgumentException::class);
+        $this->expectException(AssertionFailedException::class);
         $this->expectExceptionMessage('AuthnQueryService must be an instance of EndpointType');
         new AuthnAuthorityDescriptor(
             [$this->aqs, ''],
@@ -137,7 +137,7 @@ XML
      */
     public function testMarshallingWithWrongAssertionIDRequestService(): void
     {
-        $this->expectException(InvalidArgumentException::class);
+        $this->expectException(AssertionFailedException::class);
         $this->expectExceptionMessage('AssertionIDRequestServices must be an instance of EndpointType');
         new AuthnAuthorityDescriptor(
             [$this->aqs],
@@ -175,7 +175,7 @@ XML
         $aqs = $this->document->getElementsByTagNameNS(Constants::NS_MD, 'AuthnQueryService');
         /** @psalm-suppress PossiblyNullArgument */
         $this->document->documentElement->removeChild($aqs->item(0));
-        $this->expectException(InvalidArgumentException::class);
+        $this->expectException(AssertionFailedException::class);
         $this->expectExceptionMessage('Missing at least one AuthnQueryService in AuthnAuthorityDescriptor.');
         AuthnAuthorityDescriptor::fromXML($this->document->documentElement);
     }
@@ -189,7 +189,7 @@ XML
         $nidf = $this->document->getElementsByTagNameNS(Constants::NS_MD, 'NameIDFormat');
         /** @psalm-suppress PossiblyNullPropertyAssignment */
         $nidf->item(0)->textContent = '';
-        $this->expectException(InvalidArgumentException::class);
+        $this->expectException(AssertionFailedException::class);
         $this->expectExceptionMessage('NameIDFormat cannot be an empty string.');
         AuthnAuthorityDescriptor::fromXML($this->document->documentElement);
     }

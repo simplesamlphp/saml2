@@ -4,7 +4,6 @@ declare(strict_types=1);
 
 namespace SAML2\XML\md;
 
-use InvalidArgumentException;
 use PHPUnit\Framework\TestCase;
 use RobRichards\XMLSecLibs\XMLSecurityDSig;
 use SAML2\Constants;
@@ -12,6 +11,7 @@ use SAML2\DOMDocumentFactory;
 use SAML2\SignedElementTestTrait;
 use SAML2\Utils;
 use SAML2\XML\mdrpi\PublicationInfo;
+use SimpleSAML\Assert\AssertionFailedException;
 
 /**
  * Tests for the md:EntitiesDescriptor element.
@@ -189,7 +189,7 @@ XML
      */
     public function testMarshallingEmpty(): void
     {
-        $this->expectException(InvalidArgumentException::class);
+        $this->expectException(AssertionFailedException::class);
         $this->expectExceptionMessage(
             'At least one md:EntityDescriptor or md:EntitiesDescriptor element is required.'
         );
@@ -286,7 +286,7 @@ XML
         /** @psalm-suppress PossiblyNullArgument */
         $this->document->documentElement->removeChild($entity->item(0));
 
-        $this->expectException(InvalidArgumentException::class);
+        $this->expectException(AssertionFailedException::class);
         $this->expectExceptionMessage(
             'At least one md:EntityDescriptor or md:EntitiesDescriptor element is required.'
         );

@@ -7,7 +7,7 @@ namespace SAML2\XML;
 use DOMAttr;
 use DOMElement;
 use InvalidArgumentException;
-use Webmozart\Assert\Assert;
+use SimpleSAML\Assert\Assert;
 
 /**
  * Trait for elements that can have arbitrary namespaced attributes.

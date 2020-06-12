@@ -5,7 +5,7 @@ declare(strict_types=1);
 namespace SAML2\XML\samlp;
 
 use DOMElement;
-use Webmozart\Assert\Assert;
+use SimpleSAML\Assert\Assert;
 
 /**
  * Class for handling SAML2 IDPEntry.

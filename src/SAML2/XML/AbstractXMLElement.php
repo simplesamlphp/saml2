@@ -8,7 +8,7 @@ use DOMElement;
 use SAML2\Constants;
 use SAML2\DOMDocumentFactory;
 use Serializable;
-use Webmozart\Assert\Assert;
+use SimpleSAML\Assert\Assert;
 
 /**
  * Abstract class to be implemented by all the classes in this namespace

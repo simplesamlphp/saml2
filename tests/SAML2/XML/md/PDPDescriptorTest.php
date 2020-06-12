@@ -4,10 +4,10 @@ declare(strict_types=1);
 
 namespace SAML2\XML\md;
 
-use InvalidArgumentException;
 use PHPUnit\Framework\TestCase;
 use SAML2\Constants;
 use SAML2\DOMDocumentFactory;
+use SimpleSAML\Assert\AssertionFailedException;
 
 /**
  * Tests for md:PDPDescriptor
@@ -99,7 +99,7 @@ XML
      */
     public function testMarshallingWithWrongAuthzService(): void
     {
-        $this->expectException(InvalidArgumentException::class);
+        $this->expectException(AssertionFailedException::class);
         $this->expectExceptionMessage('All md:AuthzService endpoints must be an instance of AuthzService.');
 
         /** @psalm-suppress InvalidArgument */
@@ -115,7 +115,7 @@ XML
      */
     public function testMarshallingWithWrongAssertionIDRequestService(): void
     {
-        $this->expectException(InvalidArgumentException::class);
+        $this->expectException(AssertionFailedException::class);
         $this->expectExceptionMessage(
             'All md:AssertionIDRequestService endpoints must be an instance of AssertionIDRequestService.'
         );
@@ -134,7 +134,7 @@ XML
      */
     public function testMarshallingWithWrongNameIDFormat(): void
     {
-        $this->expectException(InvalidArgumentException::class);
+        $this->expectException(AssertionFailedException::class);
         $this->expectExceptionMessage('All NameIDFormat must be a non-empty string.');
 
         /** @psalm-suppress InvalidScalarArgument */
@@ -197,7 +197,7 @@ XML
          */
         $this->document->documentElement->removeChild($this->document->documentElement->firstChild->nextSibling);
 
-        $this->expectException(InvalidArgumentException::class);
+        $this->expectException(AssertionFailedException::class);
 
         $this->expectExceptionMessage('At least one md:AuthzService endpoint must be present.');
         PDPDescriptor::fromXML($this->document->documentElement);

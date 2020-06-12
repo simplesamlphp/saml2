@@ -10,7 +10,7 @@ use RobRichards\XMLSecLibs\XMLSecurityKey;
 use SAML2\Utils;
 use SAML2\XML\xenc\EncryptedData;
 use SAML2\XML\xenc\EncryptedKey;
-use Webmozart\Assert\Assert;
+use SimpleSAML\Assert\Assert;
 
 /**
  * Trait aggregating functionality for encrypted elements.

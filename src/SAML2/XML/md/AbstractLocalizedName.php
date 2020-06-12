@@ -6,7 +6,7 @@ namespace SAML2\XML\md;
 
 use DOMElement;
 use InvalidArgumentException;
-use Webmozart\Assert\Assert;
+use SimpleSAML\Assert\Assert;
 
 /**
  * Abstract class implementing LocalizedNameType.

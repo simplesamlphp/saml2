@@ -4,10 +4,10 @@ declare(strict_types=1);
 
 namespace SAML2\XML\saml;
 
-use InvalidArgumentException;
 use SAML2\Constants;
 use SAML2\DOMDocumentFactory;
 use SAML2\Utils;
+use SimpleSAML\Assert\AssertionFailedException;
 
 /**
  * Class \SAML2\XML\saml\AuthnContextTest
@@ -140,7 +140,7 @@ XML
         $authnContextDecl = AuthnContextDecl::fromXML($this->decl->documentElement);
         $authnContextDeclRef = new AuthnContextDeclRef('/relative/path/to/document.xml');
 
-        $this->expectException(InvalidArgumentException::class);
+        $this->expectException(AssertionFailedException::class);
         $this->expectExceptionMessage('Can only have one of AuthnContextDecl/AuthnContextDeclRef');
 
         $authnContext = new AuthnContext(
@@ -159,7 +159,7 @@ XML
      */
     public function testMarshallingEmpty(): void
     {
-        $this->expectException(InvalidArgumentException::class);
+        $this->expectException(AssertionFailedException::class);
         $this->expectExceptionMessage('You need either an AuthnContextDecl or an AuthnContextDeclRef');
 
         new AuthnContext(null, null, null);
@@ -226,7 +226,7 @@ XML
         $document->documentElement->appendChild($document->importNode($this->declRef->documentElement, true));
         $document->documentElement->appendChild($document->importNode($this->authority->documentElement, true));
 
-        $this->expectException(InvalidArgumentException::class);
+        $this->expectException(AssertionFailedException::class);
         $this->expectExceptionMessage('Can only have one of AuthnContextDecl/AuthnContextDeclRef');
 
         $authnContext = AuthnContext::fromXML($document->documentElement);
@@ -240,7 +240,7 @@ XML
     {
         $document = $this->document;
 
-        $this->expectException(InvalidArgumentException::class);
+        $this->expectException(AssertionFailedException::class);
         $this->expectExceptionMessage('You need either an AuthnContextDecl or an AuthnContextDeclRef');
 
         AuthnContext::fromXML($document->documentElement);

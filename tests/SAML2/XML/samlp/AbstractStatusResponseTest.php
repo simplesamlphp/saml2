@@ -4,13 +4,12 @@ declare(strict_types=1);
 
 namespace SAML2\XML\samlp;
 
-use Exception;
-use InvalidArgumentException;
 use PHPUnit\Framework\TestCase;
 use SAML2\Constants;
 use SAML2\DOMDocumentFactory;
 use SAML2\XML\samlp\AbstractResponse;
 use SAML2\Utils;
+use SimpleSAML\Assert\AssertionFailedException;
 
 /**
  * Class \SAML2\XML\samlp\AbstractStatusResponseTest
@@ -198,7 +197,7 @@ STATUSXML
      */
     public function testNoStatusElementThrowsException(): void
     {
-        $this->expectException(InvalidArgumentException::class);
+        $this->expectException(AssertionFailedException::class);
 
         $xml = <<<XML
 <samlp:Response xmlns:samlp="urn:oasis:names:tc:SAML:2.0:protocol"
@@ -231,7 +230,7 @@ XML;
      */
     public function testNoStatusCodeThrowsException(): void
     {
-        $this->expectException(InvalidArgumentException::class);
+        $this->expectException(AssertionFailedException::class);
 
         $xml = <<<XML
 <samlp:Response xmlns:samlp="urn:oasis:names:tc:SAML:2.0:protocol"

@@ -4,11 +4,11 @@ declare(strict_types=1);
 
 namespace SAML2\XML\ds;
 
-use InvalidArgumentException;
 use RobRichards\XMLSecLibs\XMLSecurityDSig;
 use SAML2\DOMDocumentFactory;
 use SAML2\Utils;
 use SAML2\XML\Chunk;
+use SimpleSAML\Assert\AssertionFailedException;
 
 /**
  * Class \SAML2\XML\ds\X509DataTest

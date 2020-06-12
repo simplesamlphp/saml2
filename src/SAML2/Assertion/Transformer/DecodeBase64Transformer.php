@@ -8,7 +8,7 @@ use SAML2\XML\saml\Assertion;
 use SAML2\Configuration\IdentityProvider;
 use SAML2\Configuration\IdentityProviderAware;
 use SAML2\Assertion\Exception\InvalidAssertionException;
-use Webmozart\Assert\Assert;
+use SimpleSAML\Assert\Assert;
 
 class DecodeBase64Transformer implements
     TransformerInterface,

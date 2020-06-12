@@ -6,7 +6,7 @@ namespace SAML2\XML\md;
 
 use DOMElement;
 use SAML2\XML\ExtendableAttributesTrait;
-use Webmozart\Assert\Assert;
+use SimpleSAML\Assert\Assert;
 
 /**
  * Class representing SAML 2 EndpointType.

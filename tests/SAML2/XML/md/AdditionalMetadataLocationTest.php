@@ -5,9 +5,9 @@ declare(strict_types=1);
 namespace SAML2\XML\md;
 
 use Exception;
-use InvalidArgumentException;
 use PHPUnit\Framework\TestCase;
 use SAML2\DOMDocumentFactory;
+use SimpleSAML\Assert\AssertionFailedException;
 
 /**
  * Tests for the AdditionalMetadataLocation class
@@ -53,7 +53,7 @@ XML
      */
     public function testMarshallingWithEmptyNamespace(): void
     {
-        $this->expectException(InvalidArgumentException::class);
+        $this->expectException(AssertionFailedException::class);
         $this->expectExceptionMessage('The namespace in AdditionalMetadataLocation must be a URI.');
         new AdditionalMetadataLocation('', 'TheLocation');
     }
@@ -64,7 +64,7 @@ XML
      */
     public function testMarshallingWithEmptyLocation(): void
     {
-        $this->expectException(InvalidArgumentException::class);
+        $this->expectException(AssertionFailedException::class);
         $this->expectExceptionMessage('AdditionalMetadataLocation must contain a URI.');
         new AdditionalMetadataLocation('NamespaceAttribute', '');
     }
@@ -106,7 +106,7 @@ XML
         $document = $this->document->documentElement;
         $document->textContent = '';
 
-        $this->expectException(InvalidArgumentException::class);
+        $this->expectException(AssertionFailedException::class);
         $this->expectExceptionMessage('AdditionalMetadataLocation must contain a URI.');
         AdditionalMetadataLocation::fromXML($document);
     }

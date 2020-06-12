@@ -11,7 +11,7 @@ use SAML2\Utils;
 use SAML2\XML\saml\AuthnContextClassRef;
 use SAML2\XML\saml\AuthnContextDecl;
 use SAML2\XML\saml\AuthnContextDeclRef;
-use Webmozart\Assert\Assert;
+use SimpleSAML\Assert\Assert;
 
 /**
  * Class representing SAML2 AuthnContext

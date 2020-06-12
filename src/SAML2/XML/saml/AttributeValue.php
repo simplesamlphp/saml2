@@ -7,7 +7,7 @@ namespace SAML2\XML\saml;
 use DOMElement;
 use SAML2\Constants;
 use SAML2\XML\AbstractXMLElement;
-use Webmozart\Assert\Assert;
+use SimpleSAML\Assert\Assert;
 
 /**
  * Serializable class representing an AttributeValue.

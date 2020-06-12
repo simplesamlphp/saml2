@@ -5,7 +5,7 @@ declare(strict_types=1);
 namespace SAML2\XML\xenc;
 
 use DOMElement;
-use Webmozart\Assert\Assert;
+use SimpleSAML\Assert\Assert;
 
 /**
  * Abstract class representing references. No custom elements are allowed.

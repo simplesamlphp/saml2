@@ -18,7 +18,7 @@ use SAML2\Utils;
 use SAML2\XML\Chunk;
 use SAML2\XML\SignedElementInterface;
 use SAML2\XML\SignedElementTrait;
-use Webmozart\Assert\Assert;
+use SimpleSAML\Assert\Assert;
 
 /**
  * Class representing a SAML 2 assertion.

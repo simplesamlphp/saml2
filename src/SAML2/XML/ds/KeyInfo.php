@@ -7,7 +7,7 @@ namespace SAML2\XML\ds;
 use DOMElement;
 use SAML2\XML\Chunk;
 use SAML2\XML\xenc\EncryptedKey;
-use Webmozart\Assert\Assert;
+use SimpleSAML\Assert\Assert;
 
 /**
  * Class representing a ds:KeyInfo element.

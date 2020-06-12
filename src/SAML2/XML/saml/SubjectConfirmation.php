@@ -9,7 +9,7 @@ use SAML2\Compat\ContainerSingleton;
 use SAML2\Constants;
 use SAML2\Utils;
 use SAML2\XML\IdentifierTrait;
-use Webmozart\Assert\Assert;
+use SimpleSAML\Assert\Assert;
 
 /**
  * Class representing SAML 2 SubjectConfirmation element.

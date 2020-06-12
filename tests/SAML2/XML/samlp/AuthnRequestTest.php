@@ -4,8 +4,6 @@ declare(strict_types=1);
 
 namespace SAML2\XML\samlp;
 
-use Exception;
-use InvalidArgumentException;
 use PHPUnit\Framework\TestCase;
 use SAML2\CertificatesMock;
 use SAML2\Constants;
@@ -18,6 +16,7 @@ use SAML2\XML\saml\Issuer;
 use SAML2\XML\saml\NameID;
 use SAML2\XML\saml\Subject;
 use SAML2\Utils;
+use SimpleSAML\Assert\AssertionFailedException;
 
 /**
  * Class \SAML2\XML\samlp\AuthnRequestTest
@@ -370,7 +369,7 @@ AUTHNREQUEST;
 </samlp:AuthnRequest>
 AUTHNREQUEST;
 
-        $this->expectException(InvalidArgumentException::class);
+        $this->expectException(AssertionFailedException::class);
         $this->expectExceptionMessage('Missing \'ProviderID\' attribute from samlp:IDPEntry.');
         $authnRequest = AuthnRequest::fromXML(DOMDocumentFactory::fromString($xmlRequest)->documentElement);
     }
@@ -795,7 +794,7 @@ AUTHNREQUEST;
 </samlp:AuthnRequest>
 AUTHNREQUEST;
 
-        $this->expectException(InvalidArgumentException::class);
+        $this->expectException(AssertionFailedException::class);
         $this->expectExceptionMessage('Only one <saml:Subject> element is allowed.');
         $authnRequest = AuthnRequest::fromXML(DOMDocumentFactory::fromString($xml)->documentElement);
     }
@@ -823,7 +822,7 @@ AUTHNREQUEST;
 </samlp:AuthnRequest>
 AUTHNREQUEST;
 
-        $this->expectException(InvalidArgumentException::class);
+        $this->expectException(AssertionFailedException::class);
         $this->expectExceptionMessage('More than one <saml:NameID> in <saml:Subject>.');
         $authnRequest = AuthnRequest::fromXML(DOMDocumentFactory::fromString($xml)->documentElement);
     }
@@ -849,7 +848,7 @@ AUTHNREQUEST;
 </samlp:AuthnRequest>
 AUTHNREQUEST;
 
-        $this->expectException(Exception::class);
+        $this->expectException(AssertionFailedException::class);
         $this->expectExceptionMessage('A <saml:Subject> not containing <saml:SubjectConfirmation> should provide exactly one of <saml:BaseID>, <saml:NameID> or <saml:EncryptedID>');
         $authnRequest = AuthnRequest::fromXML(DOMDocumentFactory::fromString($xml)->documentElement);
     }

@@ -7,7 +7,7 @@ namespace SAML2\XML\saml;
 use DOMElement;
 use SAML2\Constants;
 use SAML2\DOMDocumentFactory;
-use Webmozart\Assert\Assert;
+use SimpleSAML\Assert\Assert;
 
 /**
  * Class representing the saml:Issuer element.

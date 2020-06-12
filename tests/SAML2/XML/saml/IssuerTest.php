@@ -4,11 +4,11 @@ declare(strict_types=1);
 
 namespace SAML2\XML\saml;
 
-use InvalidArgumentException;
 use PHPUnit\Framework\TestCase;
 use SAML2\Constants;
 use SAML2\DOMDocumentFactory;
 use SAML2\Utils;
+use SimpleSAML\Assert\AssertionFailedException;
 
 /**
  * Class \SAML2\XML\saml\IssuerTest
@@ -71,7 +71,7 @@ XML
      */
     public function testMarshallingEntityFormat(): void
     {
-        $this->expectException(InvalidArgumentException::class);
+        $this->expectException(AssertionFailedException::class);
         $this->expectExceptionMessage('Illegal combination of attributes being used');
 
         $issuer = new Issuer(
@@ -90,7 +90,7 @@ XML
      */
     public function testMarshallingNoFormat(): void
     {
-        $this->expectException(InvalidArgumentException::class);
+        $this->expectException(AssertionFailedException::class);
         $this->expectExceptionMessage('Illegal combination of attributes being used');
 
         $issuer = new Issuer(
@@ -128,7 +128,7 @@ XML
     {
         $this->document->documentElement->setAttribute('Format', Constants::NAMEID_ENTITY);
 
-        $this->expectException(InvalidArgumentException::class);
+        $this->expectException(AssertionFailedException::class);
         $this->expectExceptionMessage('Illegal combination of attributes being used');
 
         $issuer = Issuer::fromXML($this->document->documentElement);
@@ -142,7 +142,7 @@ XML
     {
         $this->document->documentElement->removeAttribute('Format');
 
-        $this->expectException(InvalidArgumentException::class);
+        $this->expectException(AssertionFailedException::class);
         $this->expectExceptionMessage('Illegal combination of attributes being used');
 
         $issuer = Issuer::fromXML($this->document->documentElement);

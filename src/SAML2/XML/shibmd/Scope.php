@@ -6,7 +6,7 @@ namespace SAML2\XML\shibmd;
 
 use DOMElement;
 use SAML2\Utils;
-use Webmozart\Assert\Assert;
+use SimpleSAML\Assert\Assert;
 
 /**
  * Class which represents the Scope element found in Shibboleth metadata.

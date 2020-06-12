@@ -6,7 +6,7 @@ namespace SAML2\Compat;
 
 use SAML2\Compat\Ssp\Container;
 use SAML2\XML\AbstractXMLElement;
-use Webmozart\Assert\Assert;
+use SimpleSAML\Assert\Assert;
 
 class ContainerSingleton
 {

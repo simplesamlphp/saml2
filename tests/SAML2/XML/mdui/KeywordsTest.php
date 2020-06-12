@@ -4,10 +4,10 @@ declare(strict_types=1);
 
 namespace SAML2\XML\mdui;
 
-use InvalidArgumentException;
 use PHPUnit\Framework\TestCase;
 use SAML2\DOMDocumentFactory;
 use SAML2\Utils;
+use SimpleSAML\Assert\AssertionFailedException;
 
 /**
  * Class \SAML2\XML\mdui\KeywordsTest
@@ -45,7 +45,7 @@ class KeywordsTest extends TestCase
      */
     public function testKeywordWithPlusSignThrowsException(): void
     {
-        $this->expectException(InvalidArgumentException::class);
+        $this->expectException(AssertionFailedException::class);
         $this->expectExceptionMessage('Keywords may not contain a "+" character');
 
         new Keywords("en", ["csharp", "pascal", "c++"]);
@@ -83,7 +83,7 @@ class KeywordsTest extends TestCase
                 . 'KLM koninklijke luchtvaart+maatschappij</mdui:Keywords>'
         );
 
-        $this->expectException(InvalidArgumentException::class);
+        $this->expectException(AssertionFailedException::class);
         $this->expectExceptionMessage('Missing lang on Keywords');
         Keywords::fromXML($document->documentElement);
     }
@@ -99,7 +99,7 @@ class KeywordsTest extends TestCase
             '<mdui:Keywords xmlns:mdui="' . Keywords::NS . '" xml:lang="nl"></mdui:Keywords>'
         );
 
-        $this->expectException(InvalidArgumentException::class);
+        $this->expectException(AssertionFailedException::class);
         $this->expectExceptionMessage('Missing value for Keywords');
         Keywords::fromXML($document->documentElement);
     }

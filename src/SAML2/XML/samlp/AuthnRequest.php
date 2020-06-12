@@ -11,7 +11,7 @@ use SAML2\XML\saml\Issuer;
 use SAML2\XML\saml\Subject;
 use SAML2\XML\saml\SubjectConfirmation;
 use SAML2\Utils;
-use Webmozart\Assert\Assert;
+use SimpleSAML\Assert\Assert;
 
 /**
  * Class for SAML 2 authentication request messages.

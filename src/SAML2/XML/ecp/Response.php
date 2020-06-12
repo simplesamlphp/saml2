@@ -7,7 +7,7 @@ namespace SAML2\XML\ecp;
 use DOMElement;
 use InvalidArgumentException;
 use SAML2\Constants;
-use Webmozart\Assert\Assert;
+use SimpleSAML\Assert\Assert;
 
 /**
  * Class representing the ECP Response element.

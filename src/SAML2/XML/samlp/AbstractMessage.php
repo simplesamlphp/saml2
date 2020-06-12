@@ -14,7 +14,7 @@ use SAML2\XML\ExtendableElementTrait;
 use SAML2\XML\saml\Issuer;
 use SAML2\XML\SignedElementInterface;
 use SAML2\XML\SignedElementTrait;
-use Webmozart\Assert\Assert;
+use SimpleSAML\Assert\Assert;
 
 /**
  * Base class for all SAML 2 messages.

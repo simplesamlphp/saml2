@@ -6,7 +6,7 @@ namespace SAML2\Configuration;
 
 use SAML2\Exception\InvalidArgumentException;
 use SAML2\Exception\RuntimeException;
-use Webmozart\Assert\Assert;
+use SimpleSAML\Assert\Assert;
 
 /**
  * Configuration of a private key.

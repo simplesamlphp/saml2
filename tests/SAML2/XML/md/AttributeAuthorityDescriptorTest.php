@@ -5,13 +5,13 @@ declare(strict_types=1);
 namespace SAML2\XML\md;
 
 use Exception;
-use InvalidArgumentException;
 use PHPUnit\Framework\TestCase;
 use SAML2\Constants;
 use SAML2\DOMDocumentFactory;
 use SAML2\SignedElementTestTrait;
 use SAML2\XML\saml\Attribute;
 use SAML2\XML\saml\AttributeValue;
+use SimpleSAML\Assert\AssertionFailedException;
 
 /**
  * Tests for the AttributeAuthorityDescriptor class.
@@ -161,7 +161,7 @@ XML
      */
     public function testMarshallingWithoutAttributeServices(): void
     {
-        $this->expectException(InvalidArgumentException::class);
+        $this->expectException(AssertionFailedException::class);
         $this->expectExceptionMessage('AttributeAuthorityDescriptor must contain at least one AttributeService.');
         new AttributeAuthorityDescriptor([], ['protocol1']);
     }
@@ -172,7 +172,7 @@ XML
      */
     public function testMarshallingWithWrongAttributeService(): void
     {
-        $this->expectException(InvalidArgumentException::class);
+        $this->expectException(AssertionFailedException::class);
         $this->expectExceptionMessage('AttributeService is not an instance of EndpointType.');
 
         /** @psalm-suppress InvalidArgument */
@@ -223,7 +223,7 @@ XML
      */
     public function testMarshallingWithWrongAssertionIDRequestService(): void
     {
-        $this->expectException(InvalidArgumentException::class);
+        $this->expectException(AssertionFailedException::class);
         $this->expectExceptionMessage('Expected an instance of SAML2\XML\md\AssertionIDRequestService. Got: string');
 
         /** @psalm-suppress InvalidArgument */
@@ -236,7 +236,7 @@ XML
      */
     public function testMarshallingWithEmptyNameIDFormat(): void
     {
-        $this->expectException(InvalidArgumentException::class);
+        $this->expectException(AssertionFailedException::class);
         $this->expectExceptionMessage('NameIDFormat cannot be an empty string.');
         new AttributeAuthorityDescriptor([$this->as], ['x'], [$this->aidrs], ['']);
     }
@@ -247,7 +247,7 @@ XML
      */
     public function testMarshallingWithEmptyAttributeProfile(): void
     {
-        $this->expectException(InvalidArgumentException::class);
+        $this->expectException(AssertionFailedException::class);
         $this->expectExceptionMessage('AttributeProfile cannot be an empty string.');
         new AttributeAuthorityDescriptor([$this->as], ['x'], [$this->aidrs], ['x'], ['']);
     }
@@ -258,7 +258,7 @@ XML
      */
     public function testMarshallingWithWrongAttribute(): void
     {
-        $this->expectException(InvalidArgumentException::class);
+        $this->expectException(AssertionFailedException::class);
         $this->expectExceptionMessage('Expected an instance of SAML2\XML\saml\Attribute. Got: string');
 
         /** @psalm-suppress InvalidArgument */
@@ -345,7 +345,7 @@ XML
 </md:AttributeAuthorityDescriptor>
 XML
         );
-        $this->expectException(InvalidArgumentException::class);
+        $this->expectException(AssertionFailedException::class);
         $this->expectExceptionMessage('NameIDFormat cannot be an empty string.');
         AttributeAuthorityDescriptor::fromXML($document->documentElement);
     }
@@ -364,7 +364,7 @@ XML
 </md:AttributeAuthorityDescriptor>
 XML
         );
-        $this->expectException(InvalidArgumentException::class);
+        $this->expectException(AssertionFailedException::class);
         $this->expectExceptionMessage('AttributeProfile cannot be an empty string.');
         AttributeAuthorityDescriptor::fromXML($document->documentElement);
     }

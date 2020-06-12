@@ -7,7 +7,7 @@ namespace SAML2\XML\md;
 use DOMElement;
 use Exception;
 use InvalidArgumentException;
-use Webmozart\Assert\Assert;
+use SimpleSAML\Assert\Assert;
 
 /**
  * Class representing SAML 2 metadata AdditionalMetadataLocation element.

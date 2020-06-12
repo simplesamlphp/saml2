@@ -11,7 +11,7 @@ use SAML2\Utils;
 use SAML2\XML\Chunk;
 use SAML2\XML\ds\KeyInfo;
 use SAML2\XML\ExtendableAttributesTrait;
-use Webmozart\Assert\Assert;
+use SimpleSAML\Assert\Assert;
 
 /**
  * Class representing SAML 2 SubjectConfirmationData element.

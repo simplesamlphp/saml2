@@ -4,10 +4,10 @@ declare(strict_types=1);
 
 namespace SAML2\XML\md;
 
-use InvalidArgumentException;
 use PHPUnit\Framework\TestCase;
 use SAML2\Constants;
 use SAML2\DOMDocumentFactory;
+use SimpleSAML\Assert\AssertionFailedException;
 
 /**
  * Tests for localized names.
@@ -55,7 +55,7 @@ XML
      */
     public function testMarshallingWithEmptyLang(): void
     {
-        $this->expectException(InvalidArgumentException::class);
+        $this->expectException(AssertionFailedException::class);
         $this->expectExceptionMessage('xml:lang cannot be empty.');
 
         new OrganizationName('', 'Names R US');
@@ -95,7 +95,7 @@ XML
     {
         $this->document->documentElement->removeAttributeNS(AbstractLocalizedName::XML_NS, 'lang');
 
-        $this->expectException(InvalidArgumentException::class);
+        $this->expectException(AssertionFailedException::class);
         $this->expectExceptionMessage('Missing xml:lang from OrganizationName');
 
         OrganizationName::fromXML($this->document->documentElement);
@@ -109,7 +109,7 @@ XML
     {
         $this->document->documentElement->setAttributeNS(AbstractLocalizedName::XML_NS, 'lang', '');
 
-        $this->expectException(InvalidArgumentException::class);
+        $this->expectException(AssertionFailedException::class);
         $this->expectExceptionMessage('xml:lang cannot be empty.');
 
         OrganizationName::fromXML($this->document->documentElement);
