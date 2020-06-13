@@ -6,6 +6,7 @@ namespace SAML2\XML\md;
 
 use DOMElement;
 use SAML2\Constants;
+use SAML2\Exception\InvalidDOMElementException;
 use SAML2\Utils;
 use SimpleSAML\Assert\Assert;
 
@@ -90,12 +91,13 @@ final class PDPDescriptor extends AbstractRoleDescriptor
      *
      * @param \DOMElement $xml The XML element we should load.
      * @return \SAML2\XML\md\PDPDescriptor
-     * @throws \InvalidArgumentException if the qualified name of the supplied element is wrong
+     *
+     * @throws \SAML2\Exception\InvalidDOMElementException if the qualified name of the supplied element is wrong
      */
     public static function fromXML(DOMElement $xml): object
     {
-        Assert::same($xml->localName, 'PDPDescriptor');
-        Assert::same($xml->namespaceURI, PDPDescriptor::NS);
+        Assert::same($xml->localName, 'PDPDescriptor', InvalidDOMElementException::class);
+        Assert::same($xml->namespaceURI, PDPDescriptor::NS, InvalidDOMElementException::class);
 
         /** @var string $protocols */
         $protocols = self::getAttribute($xml, 'protocolSupportEnumeration');

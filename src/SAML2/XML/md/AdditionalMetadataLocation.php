@@ -7,6 +7,7 @@ namespace SAML2\XML\md;
 use DOMElement;
 use Exception;
 use InvalidArgumentException;
+use SAML2\Exception\InvalidDOMElementException;
 use SimpleSAML\Assert\Assert;
 
 /**
@@ -49,12 +50,13 @@ final class AdditionalMetadataLocation extends AbstractMdElement
      *
      * @param \DOMElement $xml The XML element we should load.
      * @return self
-     * @throws \InvalidArgumentException if the qualified name of the supplied element is wrong
+     *
+     * @throws \SAML2\Exception\InvalidDOMElementException if the qualified name of the supplied element is wrong
      */
     public static function fromXML(DOMElement $xml): object
     {
-        Assert::same($xml->localName, 'AdditionalMetadataLocation');
-        Assert::same($xml->namespaceURI, AdditionalMetadataLocation::NS);
+        Assert::same($xml->localName, 'AdditionalMetadataLocation', InvalidDOMElementException::class);
+        Assert::same($xml->namespaceURI, AdditionalMetadataLocation::NS, InvalidDOMElementException::class);
         Assert::true(
             $xml->hasAttribute('namespace'),
             'Missing namespace attribute on AdditionalMetadataLocation element.'

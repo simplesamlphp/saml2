@@ -5,6 +5,7 @@ declare(strict_types=1);
 namespace SAML2\XML\saml;
 
 use DOMElement;
+use SAML2\Exception\InvalidDOMElementException;
 use SimpleSAML\Assert\Assert;
 
 /**
@@ -39,14 +40,14 @@ final class NameID extends NameIDType
      * Convert XML into an NameID
      *
      * @param \DOMElement $xml The XML element we should load
-     *
      * @return self
-     * @throws \InvalidArgumentException
+     *
+     * @throws \SAML2\Exception\InvalidDOMElementException if the qualified name of the supplied element is wrong
      */
     public static function fromXML(DOMElement $xml): object
     {
-        Assert::same($xml->localName, 'NameID');
-        Assert::same($xml->namespaceURI, NameID::NS);
+        Assert::same($xml->localName, 'NameID', InvalidDOMElementException::class);
+        Assert::same($xml->namespaceURI, NameID::NS, InvalidDOMElementException::class);
 
         $NameQualifier = self::getAttribute($xml, 'NameQualifier', null);
         $SPNameQualifier = self::getAttribute($xml, 'SPNameQualifier', null);

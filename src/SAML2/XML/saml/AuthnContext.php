@@ -7,6 +7,7 @@ namespace SAML2\XML\saml;
 use DOMElement;
 use SAML2\Constants;
 use SAML2\DOMDocumentFactory;
+use SAML2\Exception\InvalidDOMElementException;
 use SAML2\Utils;
 use SAML2\XML\saml\AuthnContextClassRef;
 use SAML2\XML\saml\AuthnContextDecl;
@@ -168,12 +169,13 @@ final class AuthnContext extends AbstractSamlElement
      *
      * @param \DOMElement $xml The XML element we should load
      * @return \SAML2\XML\saml\AuthnContext
-     * @throws \InvalidArgumentException if the qualified name of the supplied element is wrong
+     *
+     * @throws \SAML2\Exception\InvalidDOMElementException if the qualified name of the supplied element is wrong
      */
     public static function fromXML(DOMElement $xml): object
     {
-        Assert::same($xml->localName, 'AuthnContext');
-        Assert::same($xml->namespaceURI, AuthnContext::NS);
+        Assert::same($xml->localName, 'AuthnContext', InvalidDOMElementException::class);
+        Assert::same($xml->namespaceURI, AuthnContext::NS, InvalidDOMElementException::class);
 
         $authnContextClassRef = AuthnContextClassRef::getChildrenOfClass($xml);
         Assert::maxCount($authnContextClassRef, 1);

@@ -5,6 +5,7 @@ declare(strict_types=1);
 namespace SAML2\XML\xenc;
 
 use DOMElement;
+use SAML2\Exception\InvalidDOMElementException;
 use SimpleSAML\Assert\Assert;
 
 /**
@@ -52,11 +53,13 @@ abstract class AbstractReference extends AbstractXencElement
 
     /**
      * @inheritDoc
+     *
+     * @throws \SAML2\Exception\InvalidDOMElementException if the qualified name of the supplied element is wrong
      */
     public static function fromXML(DOMElement $xml): object
     {
-        Assert::same($xml->localName, static::getClassName(static::class));
-        Assert::same($xml->namespaceURI, static::NS);
+        Assert::same($xml->localName, static::getClassName(static::class), InvalidDOMElementException::class);
+        Assert::same($xml->namespaceURI, static::NS, InvalidDOMElementException::class);
 
         return new static(self::getAttribute($xml, 'URI'));
     }

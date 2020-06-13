@@ -4,6 +4,7 @@ namespace SAML2\XML\saml;
 
 use DOMElement;
 use SAML2\Constants;
+use SAML2\Exception\InvalidDOMElementException;
 use SAML2\Utils;
 use SimpleSAML\Assert\Assert;
 
@@ -89,11 +90,13 @@ final class ProxyRestriction extends AbstractConditionType
     /**
      * @param \DOMElement $xml
      * @return self
+     *
+     * @throws \SAML2\Exception\InvalidDOMElementException if the qualified name of the supplied element is wrong
      */
     public static function fromXML(DOMElement $xml): object
     {
-        Assert::same($xml->localName, 'ProxyRestriction');
-        Assert::same($xml->namespaceURI, ProxyRestriction::NS);
+        Assert::same($xml->localName, 'ProxyRestriction', InvalidDOMElementException::class);
+        Assert::same($xml->namespaceURI, ProxyRestriction::NS, InvalidDOMElementException::class);
 
         $count = self::getAttribute($xml, 'Count', null);
         if ($count !== null) {

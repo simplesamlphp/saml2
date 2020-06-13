@@ -5,6 +5,7 @@ declare(strict_types=1);
 namespace SAML2\XML\samlp;
 
 use DOMElement;
+use SAML2\Exception\InvalidDOMElementException;
 use SAML2\Utils;
 use SimpleSAML\Assert\Assert;
 
@@ -118,12 +119,13 @@ final class Scoping extends AbstractSamlpElement
      *
      * @param \DOMElement $xml The XML element we should load
      * @return \SAML2\XML\samlp\Scoping
-     * @throws \InvalidArgumentException if the qualified name of the supplied element is wrong
+     *
+     * @throws \SAML2\Exception\InvalidDOMElementException if the qualified name of the supplied element is wrong
      */
     public static function fromXML(DOMElement $xml): object
     {
-        Assert::same($xml->localName, 'Scoping');
-        Assert::same($xml->namespaceURI, Scoping::NS);
+        Assert::same($xml->localName, 'Scoping', InvalidDOMElementException::class);
+        Assert::same($xml->namespaceURI, Scoping::NS, InvalidDOMElementException::class);
 
         $proxyCount = self::getAttribute($xml, 'ProxyCount', null);
         $idpList = IDPList::getChildrenOfClass($xml);

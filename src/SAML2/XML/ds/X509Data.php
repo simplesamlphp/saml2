@@ -5,6 +5,7 @@ declare(strict_types=1);
 namespace SAML2\XML\ds;
 
 use DOMElement;
+use SAML2\Exception\InvalidDOMElementException;
 use SAML2\XML\Chunk;
 use SAML2\XML\ds\X509Certificate;
 use SimpleSAML\Assert\Assert;
@@ -69,12 +70,13 @@ final class X509Data extends AbstractDsElement
      *
      * @param \DOMElement $xml The XML element we should load
      * @return self
-     * @throws \InvalidArgumentException if the qualified name of the supplied element is wrong
+     *
+     * @throws \SAML2\Exception\InvalidDOMElementException if the qualified name of the supplied element is wrong
      */
     public static function fromXML(DOMElement $xml): object
     {
-        Assert::same($xml->localName, 'X509Data');
-        Assert::same($xml->namespaceURI, X509Data::NS);
+        Assert::same($xml->localName, 'X509Data', InvalidDOMElementException::class);
+        Assert::same($xml->namespaceURI, X509Data::NS, InvalidDOMElementException::class);
 
         $data = [];
 

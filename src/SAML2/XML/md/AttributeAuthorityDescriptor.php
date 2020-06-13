@@ -6,6 +6,7 @@ namespace SAML2\XML\md;
 
 use DOMElement;
 use SAML2\Constants;
+use SAML2\Exception\InvalidDOMElementException;
 use SAML2\Utils;
 use SAML2\XML\ds\Signature;
 use SAML2\XML\saml\Attribute;
@@ -263,12 +264,13 @@ final class AttributeAuthorityDescriptor extends AbstractRoleDescriptor
      *
      * @param \DOMElement $xml The XML element we should load.
      * @return self
-     * @throws \InvalidArgumentException if the qualified name of the supplied element is wrong
+     *
+     * @throws \SAML2\Exception\InvalidDOMElementException if the qualified name of the supplied element is wrong
      */
     public static function fromXML(DOMElement $xml): object
     {
-        Assert::same($xml->localName, 'AttributeAuthorityDescriptor');
-        Assert::same($xml->namespaceURI, AttributeAuthorityDescriptor::NS);
+        Assert::same($xml->localName, 'AttributeAuthorityDescriptor', InvalidDOMElementException::class);
+        Assert::same($xml->namespaceURI, AttributeAuthorityDescriptor::NS, InvalidDOMElementException::class);
 
         /** @var string $protocols */
         $protocols = self::getAttribute($xml, 'protocolSupportEnumeration');

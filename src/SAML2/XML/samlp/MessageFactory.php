@@ -7,6 +7,7 @@ namespace SAML2\XML\samlp;
 use DOMElement;
 use Exception;
 use SAML2\Constants;
+use SAML2\Exception\InvalidDOMElementException;
 use SimpleSAML\Assert\Assert;
 
 /**
@@ -21,14 +22,16 @@ abstract class MessageFactory
      * @throws \Exception
      * @return \SAML2\XML\samlp\AbstractMessage The message
      *
-     * @throws \InvalidArgumentException if assertions are false
+     * @throws \Exception
+     * @throws \SAML2\Exception\InvalidDOMElementException if the qualified name of the supplied element is wrong
      */
     public static function fromXML(DOMElement $xml): object
     {
         Assert::same(
             $xml->namespaceURI,
             Constants::NS_SAMLP,
-            'Unknown namespace of SAML message: ' . var_export($xml->namespaceURI, true)
+            'Unknown namespace of SAML message: ' . var_export($xml->namespaceURI, true),
+            InvalidDOMElementException::class
         );
 
         switch ($xml->localName) {

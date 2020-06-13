@@ -6,6 +6,7 @@ namespace SAML2\XML\samlp;
 
 use DOMElement;
 use SAML2\Constants;
+use SAML2\Exception\InvalidDOMElementException;
 use SAML2\Utils;
 use SAML2\XML\ds\Signature;
 use SAML2\XML\saml\Assertion;
@@ -96,11 +97,13 @@ class Response extends AbstractStatusResponse
      *
      * @param \DOMElement $xml The input message.
      * @return self
+     *
+     * @throws \SAML2\Exception\InvalidDOMElementException if the qualified name of the supplied element is wrong
      */
     public static function fromXML(DOMElement $xml): object
     {
-        Assert::same($xml->localName, 'Response');
-        Assert::same($xml->namespaceURI, Response::NS);
+        Assert::same($xml->localName, 'Response', InvalidDOMElementException::class);
+        Assert::same($xml->namespaceURI, Response::NS, InvalidDOMElementException::class);
         Assert::same('2.0', self::getAttribute($xml, 'Version'));
 
         $id = self::getAttribute($xml, 'ID');

@@ -5,6 +5,7 @@ declare(strict_types=1);
 namespace SAML2\XML\md;
 
 use DOMElement;
+use SAML2\Exception\InvalidDOMElementException;
 use SimpleSAML\Assert\Assert;
 
 /**
@@ -51,7 +52,8 @@ abstract class AbstractIndexedEndpointType extends AbstractEndpointType
      *
      * @param \DOMElement $xml The XML element we should load.
      * @return self
-     * @throws \InvalidArgumentException if the qualified name of the supplied element is wrong
+     *
+     * @throws \SAML2\Exception\InvalidDOMElementException if the qualified name of the supplied element is wrong
      */
     public static function fromXML(DOMElement $xml): object
     {
@@ -59,7 +61,8 @@ abstract class AbstractIndexedEndpointType extends AbstractEndpointType
         Assert::eq(
             $xml->localName,
             $qualifiedName,
-            'Unexpected name for endpoint: ' . $xml->localName . '. Expected: ' . $qualifiedName . '.'
+            'Unexpected name for endpoint: ' . $xml->localName . '. Expected: ' . $qualifiedName . '.',
+            InvalidDOMElementException::class
         );
 
         /** @var int $index */

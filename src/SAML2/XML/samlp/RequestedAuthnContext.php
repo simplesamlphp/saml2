@@ -5,6 +5,7 @@ declare(strict_types=1);
 namespace SAML2\XML\samlp;
 
 use DOMElement;
+use SAML2\Exception\InvalidDOMElementException;
 use SAML2\Utils;
 use SAML2\XML\saml\AuthnContextClassRef;
 use SAML2\XML\saml\AuthnContextDeclRef;
@@ -56,7 +57,9 @@ final class RequestedAuthnContext extends AbstractSamlpElement
      *
      * @param (\SAML2\XML\saml\AuthnContextClassRef|\SAML2\XML\saml\AuthnContextDeclRef)[] $requestedAuthnContexts
      * @return void
-     * @throws \InvalidArgumentException
+     *
+     * @throws \SAML2\Exception\InvalidDOMElementException if the qualified name of the supplied element is wrong
+     * @throws \SAML2\Exception\InvalidDOMElementException if the supplied element is missing the Algorithm attribute
      */
     private function setRequestedAuthnContexts(array $requestedAuthnContexts): void
     {
@@ -109,12 +112,13 @@ final class RequestedAuthnContext extends AbstractSamlpElement
      *
      * @param \DOMElement $xml The XML element we should load
      * @return \SAML2\XML\samlp\RequestedAuthnContext
-     * @throws \InvalidArgumentException if the qualified name of the supplied element is wrong
+     *
+     * @throws \SAML2\Exception\InvalidDOMElementException if the qualified name of the supplied element is wrong
      */
     public static function fromXML(DOMElement $xml): object
     {
-        Assert::same($xml->localName, 'RequestedAuthnContext');
-        Assert::same($xml->namespaceURI, RequestedAuthnContext::NS);
+        Assert::same($xml->localName, 'RequestedAuthnContext', InvalidDOMElementException::class);
+        Assert::same($xml->namespaceURI, RequestedAuthnContext::NS, InvalidDOMElementException::class);
 
         return new self(
             array_merge(

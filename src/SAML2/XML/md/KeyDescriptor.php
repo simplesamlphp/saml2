@@ -5,6 +5,7 @@ declare(strict_types=1);
 namespace SAML2\XML\md;
 
 use DOMElement;
+use SAML2\Exception\InvalidDOMElementException;
 use SAML2\XML\ds\KeyInfo;
 use SimpleSAML\Assert\Assert;
 
@@ -136,12 +137,13 @@ final class KeyDescriptor extends AbstractMdElement
      *
      * @param \DOMElement $xml The XML element we should load.
      * @return \SAML2\XML\md\KeyDescriptor
-     * @throws \InvalidArgumentException if the qualified name of the supplied element is wrong
+     *
+     * @throws \SAML2\Exception\InvalidDOMElementException if the qualified name of the supplied element is wrong
      */
     public static function fromXML(DOMElement $xml): object
     {
-        Assert::same($xml->localName, 'KeyDescriptor');
-        Assert::same($xml->namespaceURI, KeyDescriptor::NS);
+        Assert::same($xml->localName, 'KeyDescriptor', InvalidDOMElementException::class);
+        Assert::same($xml->namespaceURI, KeyDescriptor::NS, InvalidDOMElementException::class);
 
         $keyInfoElements = KeyInfo::getChildrenOfClass($xml);
         Assert::minCount($keyInfoElements, 1, 'No ds:KeyInfo in the KeyDescriptor.');

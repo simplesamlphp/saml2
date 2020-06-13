@@ -5,6 +5,7 @@ declare(strict_types=1);
 namespace SAML2\XML\samlp;
 
 use DOMElement;
+use SAML2\Exception\InvalidDOMElementException;
 use SAML2\XML\ds\Signature;
 use SAML2\XML\saml\Issuer;
 use SAML2\Utils;
@@ -22,12 +23,13 @@ class LogoutResponse extends AbstractStatusResponse
      *
      * @param \DOMElement $xml
      * @return self
-     * @throws \Exception
+     *
+     * @throws \SAML2\Exception\InvalidDOMElementException if the qualified name of the supplied element is wrong
      */
     public static function fromXML(DOMElement $xml): object
     {
-        Assert::same($xml->localName, 'LogoutResponse');
-        Assert::same($xml->namespaceURI, LogoutResponse::NS);
+        Assert::same($xml->localName, 'LogoutResponse', InvalidDOMElementException::class);
+        Assert::same($xml->namespaceURI, LogoutResponse::NS, InvalidDOMElementException::class);
         Assert::same('2.0', self::getAttribute($xml, 'Version'));
 
         $issueInstant = Utils::xsDateTimeToTimestamp(self::getAttribute($xml, 'IssueInstant'));

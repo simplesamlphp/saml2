@@ -6,6 +6,7 @@ namespace SAML2\XML\saml;
 
 use DOMElement;
 use SAML2\Constants;
+use SAML2\Exception\InvalidDOMElementException;
 use SAML2\Utils;
 use SimpleSAML\Assert\Assert;
 
@@ -242,12 +243,13 @@ final class Conditions extends AbstractSamlElement
      *
      * @param \DOMElement $xml The XML element we should load
      * @return self
-     * @throws \InvalidArgumentException if the qualified name of the supplied element is wrong
+     *
+     * @throws \SAML2\Exception\InvalidDOMElementException if the qualified name of the supplied element is wrong
      */
     public static function fromXML(DOMElement $xml): object
     {
-        Assert::same($xml->localName, 'Conditions');
-        Assert::same($xml->namespaceURI, Conditions::NS);
+        Assert::same($xml->localName, 'Conditions', InvalidDOMElementException::class);
+        Assert::same($xml->namespaceURI, Conditions::NS, InvalidDOMElementException::class);
 
         $notBefore = self::getAttribute($xml, 'NotBefore', null);
         $notOnOrAfter = self::getAttribute($xml, 'NotOnOrAfter', null);

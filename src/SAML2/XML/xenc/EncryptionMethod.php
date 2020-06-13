@@ -6,6 +6,7 @@ namespace SAML2\XML\xenc;
 
 use DOMElement;
 use SAML2\Constants;
+use SAML2\Exception\InvalidDOMElementException;
 use SAML2\XML\Chunk;
 use SimpleSAML\Assert\Assert;
 
@@ -55,12 +56,13 @@ class EncryptionMethod extends AbstractXencElement
      *
      * @param \DOMElement $xml
      * @return \SAML2\XML\md\EncryptionMethod
-     * @throws \InvalidArgumentException if the qualified name of the supplied element is wrong
+     *
+     * @throws \SAML2\Exception\InvalidDOMElementException if the qualified name of the supplied element is wrong
      */
     public static function fromXML(DOMElement $xml): object
     {
-        Assert::same($xml->localName, 'EncryptionMethod');
-        Assert::same($xml->namespaceURI, static::NS);
+        Assert::same($xml->localName, 'EncryptionMethod', InvalidDOMElementException::class);
+        Assert::same($xml->namespaceURI, static::NS, InvalidDOMElementException::class);
 
         /** @var string $algorithm */
         $algorithm = self::getAttribute($xml, 'Algorithm');

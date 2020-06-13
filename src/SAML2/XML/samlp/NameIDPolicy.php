@@ -5,6 +5,7 @@ declare(strict_types=1);
 namespace SAML2\XML\samlp;
 
 use DOMElement;
+use SAML2\Exception\InvalidDOMElementException;
 use SimpleSAML\Assert\Assert;
 
 /**
@@ -117,12 +118,13 @@ final class NameIDPolicy extends AbstractSamlpElement
      *
      * @param \DOMElement $xml The XML element we should load
      * @return \SAML2\XML\samlp\NameIDPolicy
-     * @throws \InvalidArgumentException if the qualified name of the supplied element is wrong
+     *
+     * @throws \SAML2\Exception\InvalidDOMElementException if the qualified name of the supplied element is wrong
      */
     public static function fromXML(DOMElement $xml): object
     {
-        Assert::same($xml->localName, 'NameIDPolicy');
-        Assert::same($xml->namespaceURI, NameIDPolicy::NS);
+        Assert::same($xml->localName, 'NameIDPolicy', InvalidDOMElementException::class);
+        Assert::same($xml->namespaceURI, NameIDPolicy::NS, InvalidDOMElementException::class);
 
         $Format = $xml->hasAttribute('Format') ? $xml->getAttribute('Format') : null;
         $SPNameQualifier = $xml->hasAttribute('SPNameQualifier') ? $xml->getAttribute('SPNameQualifier') : null;

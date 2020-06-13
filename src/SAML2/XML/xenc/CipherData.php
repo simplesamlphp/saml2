@@ -5,6 +5,7 @@ declare(strict_types=1);
 namespace SAML2\XML\xenc;
 
 use DOMElement;
+use SAML2\Exception\InvalidDOMElementException;
 use SAML2\Utils;
 use SimpleSAML\Assert\Assert;
 
@@ -53,12 +54,13 @@ class CipherData extends AbstractXencElement
 
     /**
      * @inheritDoc
-     * @throws \Exception
+     *
+     * @throws \SAML2\Exception\InvalidDOMElementException if the qualified name of the supplied element is wrong
      */
     public static function fromXML(DOMElement $xml): object
     {
-        Assert::same($xml->localName, 'CipherData');
-        Assert::same($xml->namespaceURI, CipherData::NS);
+        Assert::same($xml->localName, 'CipherData', InvalidDOMElementException::class);
+        Assert::same($xml->namespaceURI, CipherData::NS, InvalidDOMElementException::class);
 
         $cv = Utils::xpQuery($xml, './xenc:CipherValue');
         Assert::notEmpty($cv, 'Missing CipherValue element in <xenc:CipherData>');

@@ -6,6 +6,7 @@ namespace SAML2\XML\md;
 
 use DOMElement;
 use InvalidArgumentException;
+use SAML2\Exception\InvalidDOMElementException;
 use SimpleSAML\Assert\Assert;
 
 /**
@@ -53,7 +54,8 @@ abstract class AbstractLocalizedName extends AbstractMdElement
      *
      * @param \DOMElement $xml
      * @return static
-     * @throws \InvalidArgumentException if the qualified name of the supplied element is wrong
+     *
+     * @throws \SAML2\Exception\InvalidDOMElementException if the qualified name of the supplied element is wrong
      */
     public static function fromXML(DOMElement $xml): object
     {
@@ -61,7 +63,8 @@ abstract class AbstractLocalizedName extends AbstractMdElement
         Assert::eq(
             $xml->localName,
             $qualifiedName,
-            'Unexpected name for localized name: ' . $xml->localName . '. Expected: ' . $qualifiedName . '.'
+            'Unexpected name for localized name: ' . $xml->localName . '. Expected: ' . $qualifiedName . '.',
+            InvalidDOMElementException::class
         );
         Assert::true(
             $xml->hasAttributeNS(self::XML_NS, 'lang'),

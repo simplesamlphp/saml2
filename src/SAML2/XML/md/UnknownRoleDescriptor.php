@@ -5,6 +5,7 @@ declare(strict_types=1);
 namespace SAML2\XML\md;
 
 use DOMElement;
+use SAML2\Exception\InvalidDOMElementException;
 use SAML2\Utils;
 use SAML2\XML\Chunk;
 use SimpleSAML\Assert\Assert;
@@ -30,7 +31,8 @@ final class UnknownRoleDescriptor extends AbstractRoleDescriptor
      *
      * @param \DOMElement $xml The XML element we should load.
      * @return \SAML2\XML\md\UnknownRoleDescriptor
-     * @throws \InvalidArgumentException if the qualified name of the supplied element is wrong
+     *
+     * @throws \SAML2\Exception\InvalidDOMElementException if the qualified name of the supplied element is wrong
      */
     public static function fromXML(DOMElement $xml): object
     {

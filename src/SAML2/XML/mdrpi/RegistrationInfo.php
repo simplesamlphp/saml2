@@ -5,6 +5,7 @@ declare(strict_types=1);
 namespace SAML2\XML\mdrpi;
 
 use DOMElement;
+use SAML2\Exception\InvalidDOMElementException;
 use SAML2\Utils;
 use SimpleSAML\Assert\Assert;
 
@@ -132,12 +133,13 @@ final class RegistrationInfo extends AbstractMdrpiElement
      *
      * @param \DOMElement $xml The XML element we should load
      * @return self
-     * @throws \InvalidArgumentException if the qualified name of the supplied element is wrong
+     *
+     * @throws \SAML2\Exception\InvalidDOMElementException if the qualified name of the supplied element is wrong
      */
     public static function fromXML(DOMElement $xml): object
     {
-        Assert::same($xml->localName, 'RegistrationInfo');
-        Assert::same($xml->namespaceURI, RegistrationInfo::NS);
+        Assert::same($xml->localName, 'RegistrationInfo', InvalidDOMElementException::class);
+        Assert::same($xml->namespaceURI, RegistrationInfo::NS, InvalidDOMElementException::class);
         Assert::true(
             $xml->hasAttribute('registrationAuthority'),
             'Missing required attribute "registrationAuthority" in mdrpi:RegistrationInfo element.'

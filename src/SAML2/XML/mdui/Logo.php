@@ -5,6 +5,7 @@ declare(strict_types=1);
 namespace SAML2\XML\mdui;
 
 use DOMElement;
+use SAML2\Exception\InvalidDOMElementException;
 use SimpleSAML\Assert\Assert;
 
 /**
@@ -163,12 +164,13 @@ final class Logo extends AbstractMduiElement
      *
      * @param \DOMElement $xml The XML element we should load
      * @return self
-     * @throws \InvalidArgumentException if the qualified name of the supplied element is wrong
+     *
+     * @throws \SAML2\Exception\InvalidDOMElementException if the qualified name of the supplied element is wrong
      */
     public static function fromXML(DOMElement $xml): object
     {
-        Assert::same($xml->localName, 'Logo');
-        Assert::same($xml->namespaceURI, Logo::NS);
+        Assert::same($xml->localName, 'Logo', InvalidDOMElementException::class);
+        Assert::same($xml->namespaceURI, Logo::NS, InvalidDOMElementException::class);
 
         Assert::true($xml->hasAttribute('width'), 'Missing width of Logo.');
         Assert::true($xml->hasAttribute('height'), 'Missing height of Logo.');

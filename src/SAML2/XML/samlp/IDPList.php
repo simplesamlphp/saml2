@@ -5,6 +5,7 @@ declare(strict_types=1);
 namespace SAML2\XML\samlp;
 
 use DOMElement;
+use SAML2\Exception\InvalidDOMElementException;
 use SAML2\Utils;
 use SimpleSAML\Assert\Assert;
 
@@ -81,12 +82,13 @@ final class IDPList extends AbstractSamlpElement
      *
      * @param \DOMElement $xml The XML element we should load
      * @return \SAML2\XML\samlp\IDPList
-     * @throws \InvalidArgumentException if the qualified name of the supplied element is wrong
+     *
+     * @throws \SAML2\Exception\InvalidDOMElementException if the qualified name of the supplied element is wrong
      */
     public static function fromXML(DOMElement $xml): object
     {
-        Assert::same($xml->localName, 'IDPList');
-        Assert::same($xml->namespaceURI, IDPList::NS);
+        Assert::same($xml->localName, 'IDPList', InvalidDOMElementException::class);
+        Assert::same($xml->namespaceURI, IDPList::NS, InvalidDOMElementException::class);
 
         $idpEntry = IDPEntry::getChildrenOfClass($xml);
         Assert::minCount($idpEntry, 1, 'At least one <samlp:IDPEntry> must be specified.');

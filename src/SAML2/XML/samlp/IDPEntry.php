@@ -5,6 +5,7 @@ declare(strict_types=1);
 namespace SAML2\XML\samlp;
 
 use DOMElement;
+use SAML2\Exception\InvalidDOMElementException;
 use SimpleSAML\Assert\Assert;
 
 /**
@@ -101,12 +102,13 @@ final class IDPEntry extends AbstractSamlpElement
      *
      * @param \DOMElement $xml The XML element we should load
      * @return \SAML2\XML\samlp\IDPEntry
-     * @throws \InvalidArgumentException if the qualified name of the supplied element is wrong
+     *
+     * @throws \SAML2\Exception\InvalidDOMElementException if the qualified name of the supplied element is wrong
      */
     public static function fromXML(DOMElement $xml): object
     {
-        Assert::same($xml->localName, 'IDPEntry');
-        Assert::same($xml->namespaceURI, IDPEntry::NS);
+        Assert::same($xml->localName, 'IDPEntry', InvalidDOMElementException::class);
+        Assert::same($xml->namespaceURI, IDPEntry::NS, InvalidDOMElementException::class);
 
         /** @psalm-var string $providerId */
         $providerId = self::getAttribute($xml, 'ProviderID');

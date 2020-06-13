@@ -6,6 +6,7 @@ namespace SAML2\XML\md;
 
 use DOMElement;
 use SAML2\Constants;
+use SAML2\Exception\InvalidDOMElementException;
 use SAML2\XML\saml\Attribute;
 use SAML2\XML\saml\AttributeValue;
 use SimpleSAML\Assert\Assert;
@@ -80,13 +81,13 @@ final class RequestedAttribute extends Attribute
      *
      * @param \DOMElement $xml The XML element we should load
      * @return self
-     * @throws \Exception
-     * @throws \InvalidArgumentException if the qualified name of the supplied element is wrong
+     *
+     * @throws \SAML2\Exception\InvalidDOMElementException if the qualified name of the supplied element is wrong
      */
     public static function fromXML(DOMElement $xml): object
     {
-        Assert::same($xml->localName, 'RequestedAttribute');
-        Assert::same($xml->namespaceURI, RequestedAttribute::NS);
+        Assert::same($xml->localName, 'RequestedAttribute', InvalidDOMElementException::class);
+        Assert::same($xml->namespaceURI, RequestedAttribute::NS, InvalidDOMElementException::class);
 
         /** @var string $name */
         $name = self::getAttribute($xml, 'Name');

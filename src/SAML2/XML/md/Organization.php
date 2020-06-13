@@ -7,6 +7,7 @@ namespace SAML2\XML\md;
 use DOMElement;
 use Exception;
 use SAML2\Constants;
+use SAML2\Exception\InvalidDOMElementException;
 use SAML2\Utils;
 use SAML2\XML\ExtendableAttributesTrait;
 use SAML2\XML\ExtendableElementTrait;
@@ -143,15 +144,14 @@ final class Organization extends AbstractMdElement
      * Initialize an Organization element.
      *
      * @param \DOMElement $xml The XML element we should load.
-     *
      * @return self
-     * @throws \InvalidArgumentException if the qualified name of the supplied element is wrong
-     * @throws \InvalidArgumentException if the XML lacks any of the mandatory elements.
+     *
+     * @throws \SAML2\Exception\InvalidDOMElementException if the qualified name of the supplied element is wrong
      */
     public static function fromXML(DOMElement $xml): object
     {
-        Assert::same($xml->localName, 'Organization');
-        Assert::same($xml->namespaceURI, Organization::NS);
+        Assert::same($xml->localName, 'Organization', InvalidDOMElementException::class);
+        Assert::same($xml->namespaceURI, Organization::NS, InvalidDOMElementException::class);
 
         $names = OrganizationName::getChildrenOfClass($xml);
         Assert::minCount($names, 1, 'Missing at least one OrganizationName.');

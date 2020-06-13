@@ -6,6 +6,7 @@ namespace SAML2\XML\saml;
 
 use DOMElement;
 use SAML2\Constants;
+use SAML2\Exception\InvalidDOMElementException;
 use SAML2\XML\IDNameQualifiersTrait;
 use SimpleSAML\Assert\Assert;
 
@@ -110,14 +111,19 @@ class BaseID extends AbstractSamlElement implements BaseIdentifierInterface
      * @param \DOMElement $xml The XML element we should load
      *
      * @return \SAML2\XML\saml\BaseID
-     * @throws \InvalidArgumentException  If xsi:type is not defined or does not implement IdentifierInterface
+     *
+     * @throws \SAML2\Exception\InvalidDOMElementException if the qualified name of the supplied element is wrong
      */
     public static function fromXML(DOMElement $xml): object
     {
-        Assert::same($xml->localName, 'BaseID');
-        Assert::notNull($xml->namespaceURI);
-        Assert::same($xml->namespaceURI, BaseID::NS);
-        Assert::true($xml->hasAttributeNS(Constants::NS_XSI, 'type'), 'Missing required xsi:type in <saml:BaseID> element.');
+        Assert::same($xml->localName, 'BaseID', InvalidDOMElementException::class);
+        Assert::notNull($xml->namespaceURI, InvalidDOMElementException::class);
+        Assert::same($xml->namespaceURI, BaseID::NS, InvalidDOMElementException::class);
+        Assert::true(
+            $xml->hasAttributeNS(Constants::NS_XSI, 'type'),
+            'Missing required xsi:type in <saml:BaseID> element.',
+            InvalidDOMElementException::class
+        );
 
         $type = $xml->getAttributeNS(Constants::NS_XSI, 'type');
 

@@ -7,6 +7,7 @@ namespace SAML2\XML\saml;
 use DOMElement;
 use RobRichards\XMLSecLibs\XMLSecurityDSig;
 use SAML2\Constants;
+use SAML2\Exception\InvalidDOMElementException;
 use SAML2\Utils;
 use SAML2\XML\Chunk;
 use SAML2\XML\ds\KeyInfo;
@@ -266,13 +267,14 @@ final class SubjectConfirmationData extends AbstractSamlElement
      *
      * @param \DOMElement $xml The XML element we should load
      * @return self
-     * @throws \InvalidArgumentException if the qualified name of the supplied element is wrong
-     * @throws \Exception if NotBefore or NotOnOrAfter contain an invalid date.
+     *
+     * @throws \SAML2\Exception\InvalidDOMElementException if the qualified name of the supplied element is wrong
+     * @throws \SimpleSAML\Assert\AssertionFailedException if NotBefore or NotOnOrAfter contain an invalid date.
      */
     public static function fromXML(DOMElement $xml): object
     {
-        Assert::same($xml->localName, 'SubjectConfirmationData');
-        Assert::same($xml->namespaceURI, SubjectConfirmationData::NS);
+        Assert::same($xml->localName, 'SubjectConfirmationData', InvalidDOMElementException::class);
+        Assert::same($xml->namespaceURI, SubjectConfirmationData::NS, InvalidDOMElementException::class);
 
         $NotBefore = $xml->hasAttribute('NotBefore')
             ? Utils::xsDateTimeToTimestamp($xml->getAttribute('NotBefore'))

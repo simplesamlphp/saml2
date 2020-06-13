@@ -6,6 +6,7 @@ namespace SAML2\XML\samlp;
 
 use DOMElement;
 use SAML2\Constants;
+use SAML2\Exception\InvalidDOMElementException;
 use SAML2\Utils;
 use SAML2\XML\ds\Signature;
 use SAML2\XML\saml\Issuer;
@@ -85,11 +86,13 @@ class ArtifactResolve extends AbstractRequest
      *
      * @param \DOMElement $xml
      * @return self
+     *
+     * @throws \SAML2\Exception\InvalidDOMElementException if the qualified name of the supplied element is wrong
      */
     public static function fromXML(DOMElement $xml): object
     {
-        Assert::same($xml->localName, 'ArtifactResolve');
-        Assert::same($xml->namespaceURI, ArtifactResolve::NS);
+        Assert::same($xml->localName, 'ArtifactResolve', InvalidDOMElementException::class);
+        Assert::same($xml->namespaceURI, ArtifactResolve::NS, InvalidDOMElementException::class);
         Assert::same('2.0', self::getAttribute($xml, 'Version'));
 
         $issueInstant = Utils::xsDateTimeToTimestamp(self::getAttribute($xml, 'IssueInstant'));

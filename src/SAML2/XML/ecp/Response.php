@@ -7,6 +7,7 @@ namespace SAML2\XML\ecp;
 use DOMElement;
 use InvalidArgumentException;
 use SAML2\Constants;
+use SAML2\Exception\InvalidDOMElementException;
 use SimpleSAML\Assert\Assert;
 
 /**
@@ -69,13 +70,13 @@ final class Response extends AbstractEcpElement
      *
      * @param \DOMElement $xml The XML element we should load
      * @return self
-     * @throws \InvalidArgumentException if the qualified name of the supplied element is wrong
-     * @throws \InvalidArgumentException if the supplied element lacks the required attributes
+     *
+     * @throws \SAML2\Exception\InvalidDOMElementException if the qualified name of the supplied element is wrong
      */
     public static function fromXML(DOMElement $xml): object
     {
-        Assert::same($xml->localName, 'Response');
-        Assert::same($xml->namespaceURI, Response::NS);
+        Assert::same($xml->localName, 'Response', InvalidDOMElementException::class);
+        Assert::same($xml->namespaceURI, Response::NS, InvalidDOMElementException::class);
 
         // Assert required attributes
         Assert::true(

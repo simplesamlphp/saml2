@@ -16,7 +16,7 @@ trait ExtendableElementTrait
      *
      * Array of extension elements.
      *
-     * @var AbstractXMLElement|null
+     * @var \SAML2\XML\AbstractXMLElement|null
      */
     protected $Extensions = null;
 
@@ -24,7 +24,7 @@ trait ExtendableElementTrait
     /**
      * Collect the value of the Extensions property.
      *
-     * @return AbstractXMLElement|null
+     * @return \SAML2\XML\AbstractXMLElement|null
      */
     public function getExtensions(): ?AbstractXMLElement
     {
@@ -35,7 +35,7 @@ trait ExtendableElementTrait
     /**
      * Set the value of the Extensions property.
      *
-     * @param AbstractXMLElement|null $extensions
+     * @param \SAML2\XML\AbstractXMLElement|null $extensions
      */
     protected function setExtensions(?AbstractXMLElement $extensions): void
     {

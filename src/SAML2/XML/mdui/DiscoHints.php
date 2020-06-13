@@ -5,6 +5,7 @@ declare(strict_types=1);
 namespace SAML2\XML\mdui;
 
 use DOMElement;
+use SAML2\Exception\InvalidDOMElementException;
 use SAML2\Utils;
 use SAML2\XML\Chunk;
 use SimpleSAML\Assert\Assert;
@@ -194,12 +195,13 @@ final class DiscoHints extends AbstractMduiElement
      *
      * @param \DOMElement $xml The XML element we should load
      * @return self
-     * @throws \InvalidArgumentException if the qualified name of the supplied element is wrong
+     *
+     * @throws \SAML2\Exception\InvalidDOMElementException if the qualified name of the supplied element is wrong
      */
     public static function fromXML(DOMElement $xml): object
     {
-        Assert::same($xml->localName, 'DiscoHints');
-        Assert::same($xml->namespaceURI, DiscoHints::NS);
+        Assert::same($xml->localName, 'DiscoHints', InvalidDOMElementException::class);
+        Assert::same($xml->namespaceURI, DiscoHints::NS, InvalidDOMElementException::class);
 
         $IPHint = Utils::extractStrings($xml, DiscoHints::NS, 'IPHint');
         $DomainHint = Utils::extractStrings($xml, DiscoHints::NS, 'DomainHint');

@@ -7,6 +7,7 @@ namespace SAML2\XML\saml;
 use DOMElement;
 use SAML2\Constants;
 use SAML2\DOMDocumentFactory;
+use SAML2\Exception\InvalidDOMElementException;
 use SimpleSAML\Assert\Assert;
 
 /**
@@ -71,14 +72,14 @@ final class Issuer extends NameIDType
      * Convert XML into an Issuer
      *
      * @param \DOMElement $xml The XML element we should load
-     *
      * @return \SAML2\XML\saml\Issuer
-     * @throws \InvalidArgumentException
+     *
+     * @throws \SAML2\Exception\InvalidDOMElementException if the qualified name of the supplied element is wrong
      */
     public static function fromXML(DOMElement $xml): object
     {
-        Assert::same($xml->localName, 'Issuer');
-        Assert::same($xml->namespaceURI, Issuer::NS);
+        Assert::same($xml->localName, 'Issuer', InvalidDOMElementException::class);
+        Assert::same($xml->namespaceURI, Issuer::NS, InvalidDOMElementException::class);
 
         $Format = self::getAttribute($xml, 'Format', null);
         $SPProvidedID = self::getAttribute($xml, 'SPProvidedID', null);

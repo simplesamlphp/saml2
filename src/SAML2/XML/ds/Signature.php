@@ -8,6 +8,7 @@ use DOMElement;
 use Exception;
 use RobRichards\XMLSecLibs\XMLSecurityDSig;
 use RobRichards\XMLSecLibs\XMLSecurityKey;
+use SAML2\Exception\InvalidDOMElementException;
 use SAML2\Utilities\Certificate;
 use SAML2\Utils;
 use SAML2\XML\AbstractXMLElement;
@@ -132,11 +133,13 @@ final class Signature extends AbstractDsElement
      *
      * @return AbstractXMLElement
      * @throws \Exception
+     *
+     * @throws \SAML2\Exception\InvalidDOMElementException if the qualified name of the supplied element is wrong
      */
     public static function fromXML(DOMElement $xml): object
     {
-        Assert::same($xml->localName, 'Signature');
-        Assert::same($xml->namespaceURI, Signature::NS);
+        Assert::same($xml->localName, 'Signature', InvalidDOMElementException::class);
+        Assert::same($xml->namespaceURI, Signature::NS, InvalidDOMElementException::class);
 
         $parent = $xml->parentNode;
 

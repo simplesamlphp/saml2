@@ -7,6 +7,7 @@ namespace SAML2\XML;
 use DOMElement;
 use RobRichards\XMLSecLibs\XMLSecEnc;
 use RobRichards\XMLSecLibs\XMLSecurityKey;
+use SAML2\Exception\InvalidDOMElementException;
 use SAML2\Utils;
 use SAML2\XML\xenc\EncryptedData;
 use SAML2\XML\xenc\EncryptedKey;
@@ -156,11 +157,13 @@ trait EncryptedElementTrait
     /**
      * @inheritDoc
      * @return \SAML2\XML\AbstractXMLElement
+     *
+     * @throws \SAML2\Exception\InvalidDOMElementException if the qualified name of the supplied element is wrong
      */
     public static function fromXML(DOMElement $xml): object
     {
-        Assert::same($xml->localName, AbstractXMLElement::getClassName(static::class));
-        Assert::same($xml->namespaceURI, static::NS);
+        Assert::same($xml->localName, AbstractXMLElement::getClassName(static::class), InvalidDOMElementException::class);
+        Assert::same($xml->namespaceURI, static::NS, InvalidDOMElementException::class);
 
         $ed = EncryptedData::getChildrenOfClass($xml);
         Assert::count($ed, 1, 'No more or less than one EncryptedData element allowed in ' .

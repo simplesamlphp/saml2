@@ -5,6 +5,7 @@ declare(strict_types=1);
 namespace SAML2\XML\ds;
 
 use DOMElement;
+use SAML2\Exception\InvalidDOMElementException;
 use SAML2\XML\Chunk;
 use SAML2\XML\xenc\EncryptedKey;
 use SimpleSAML\Assert\Assert;
@@ -105,12 +106,13 @@ final class KeyInfo extends AbstractDsElement
      *
      * @param \DOMElement $xml The XML element we should load
      * @return self
-     * @throws \InvalidArgumentException if the qualified name of the supplied element is wrong
+     *
+     * @throws \SAML2\Exception\InvalidDOMElementException if the qualified name of the supplied element is wrong
      */
     public static function fromXML(DOMElement $xml): object
     {
-        Assert::same($xml->localName, 'KeyInfo');
-        Assert::same($xml->namespaceURI, KeyInfo::NS);
+        Assert::same($xml->localName, 'KeyInfo', InvalidDOMElementException::class);
+        Assert::same($xml->namespaceURI, KeyInfo::NS, InvalidDOMElementException::class);
 
         $Id = $xml->hasAttribute('Id') ? $xml->getAttribute('Id') : null;
         $info = [];

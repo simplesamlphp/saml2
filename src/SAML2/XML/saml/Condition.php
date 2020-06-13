@@ -6,6 +6,7 @@ namespace SAML2\XML\saml;
 
 use DOMElement;
 use SAML2\Constants;
+use SAML2\Exception\InvalidDOMElementException;
 use SimpleSAML\Assert\Assert;
 
 /**
@@ -90,16 +91,20 @@ class Condition extends AbstractConditionType
      * Convert XML into an Condition
      *
      * @param \DOMElement $xml The XML element we should load
-     *
      * @return \SAML2\XML\saml\Condition
-     * @throws \InvalidArgumentException  If xsi:type is not defined or does not implement IdentifierInterface
+     *
+     * @throws \SAML2\Exception\InvalidDOMElementException if the qualified name of the supplied element is wrong
      */
     public static function fromXML(DOMElement $xml): object
     {
-        Assert::same($xml->localName, 'Condition');
-        Assert::notNull($xml->namespaceURI);
-        Assert::same($xml->namespaceURI, Condition::NS);
-        Assert::true($xml->hasAttributeNS(Constants::NS_XSI, 'type'), 'Missing required xsi:type in <saml:Condition> element.');
+        Assert::same($xml->localName, 'Condition', InvalidDOMElementException::class);
+        Assert::notNull($xml->namespaceURI, InvalidDOMElementException::class);
+        Assert::same($xml->namespaceURI, Condition::NS, InvalidDOMElementException::class);
+        Assert::true(
+            $xml->hasAttributeNS(Constants::NS_XSI, 'type'),
+            'Missing required xsi:type in <saml:Condition> element.',
+            InvalidDOMElementException::class
+        );
 
         $type = $xml->getAttributeNS(Constants::NS_XSI, 'type');
 

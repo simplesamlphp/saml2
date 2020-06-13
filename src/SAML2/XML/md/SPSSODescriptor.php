@@ -6,6 +6,7 @@ namespace SAML2\XML\md;
 
 use DOMElement;
 use SAML2\Constants;
+use SAML2\Exception\InvalidDOMElementException;
 use SAML2\Utils;
 use SAML2\XML\ds\Signature;
 use SimpleSAML\Assert\Assert;
@@ -237,16 +238,16 @@ final class SPSSODescriptor extends AbstractSSODescriptor
      * @param \DOMElement $xml The XML element we should load
      *
      * @return self
-     * @throws \InvalidArgumentException if the qualified name of the supplied element is wrong*@throws \Exception
-     * @throws \Exception
+     *
+     * @throws \SAML2\Exception\InvalidDOMElementException if the qualified name of the supplied element is wrong
      */
     public static function fromXML(DOMElement $xml): object
     {
         /** @var string $protocols */
         $protocols = self::getAttribute($xml, 'protocolSupportEnumeration');
 
-        Assert::same($xml->localName, 'SPSSODescriptor');
-        Assert::same($xml->namespaceURI, SPSSODescriptor::NS);
+        Assert::same($xml->localName, 'SPSSODescriptor', InvalidDOMElementException::class);
+        Assert::same($xml->namespaceURI, SPSSODescriptor::NS, InvalidDOMElementException::class);
 
         $validUntil = self::getAttribute($xml, 'validUntil', null);
         $orgs = Organization::getChildrenOfClass($xml);

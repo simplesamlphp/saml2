@@ -5,6 +5,7 @@ declare(strict_types=1);
 namespace SAML2\XML\samlp;
 
 use DOMElement;
+use SAML2\Exception\InvalidDOMElementException;
 use SAML2\XML\Chunk;
 use SimpleSAML\Assert\Assert;
 
@@ -72,12 +73,13 @@ final class StatusDetail extends AbstractSamlpElement
      *
      * @param \DOMElement $xml The XML element we should load
      * @return \SAML2\XML\samlp\StatusDetail
-     * @throws \InvalidArgumentException if the qualified name of the supplied element is wrong
+     *
+     * @throws \SAML2\Exception\InvalidDOMElementException if the qualified name of the supplied element is wrong
      */
     public static function fromXML(DOMElement $xml): object
     {
-        Assert::same($xml->localName, 'StatusDetail');
-        Assert::same($xml->namespaceURI, StatusDetail::NS);
+        Assert::same($xml->localName, 'StatusDetail', InvalidDOMElementException::class);
+        Assert::same($xml->namespaceURI, StatusDetail::NS, InvalidDOMElementException::class);
 
         $details = [];
         foreach ($xml->childNodes as $detail) {

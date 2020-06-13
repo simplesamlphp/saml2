@@ -7,6 +7,7 @@ namespace SAML2\XML\md;
 use DOMElement;
 use Exception;
 use SAML2\Constants;
+use SAML2\Exception\InvalidDOMElementException;
 use SAML2\Utils;
 use SAML2\XML\ds\Signature;
 use SimpleSAML\Assert\Assert;
@@ -76,12 +77,13 @@ final class AffiliationDescriptor extends AbstractMetadataDocument
      *
      * @param \DOMElement $xml The XML element we should load.
      * @return \SAML2\XML\md\AffiliationDescriptor
-     * @throws \InvalidArgumentException if the qualified name of the supplied element is wrong
+     *
+     * @throws \SAML2\Exception\InvalidDOMElementException if the qualified name of the supplied element is wrong
      */
     public static function fromXML(DOMElement $xml): object
     {
-        Assert::same($xml->localName, 'AffiliationDescriptor');
-        Assert::same($xml->namespaceURI, AffiliationDescriptor::NS);
+        Assert::same($xml->localName, 'AffiliationDescriptor', InvalidDOMElementException::class);
+        Assert::same($xml->namespaceURI, AffiliationDescriptor::NS, InvalidDOMElementException::class);
 
         if (!$xml->hasAttribute('affiliationOwnerID')) {
             throw new Exception('Missing affiliationOwnerID on AffiliationDescriptor.');

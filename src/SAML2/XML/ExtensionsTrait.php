@@ -15,7 +15,7 @@ use SAML2\XML\AbstractXMLElement;
 trait ExtensionsTrait
 {
     /**
-     * @var AbstractXMLElement[]
+     * @var \SAML2\XML\AbstractXMLElement[]
      */
     protected $extensions = [];
 
@@ -23,7 +23,7 @@ trait ExtensionsTrait
     /**
      * Extensions constructor.
      *
-     * @var AbstractXMLElement[]
+     * @var \SAML2\XML\AbstractXMLElement[]
      */
     public function __construct(array $extensions)
     {
@@ -34,7 +34,7 @@ trait ExtensionsTrait
     /**
      * Get an array with all extensions present.
      *
-     * @return AbstractXMLElement[]
+     * @return \SAML2\XML\AbstractXMLElement[]
      */
     public function getList(): array
     {
@@ -77,5 +77,10 @@ trait ExtensionsTrait
         return $e;
     }
 
+
+    /**
+     * @param \DOMElement|null $parent
+     * @return \DOMElement
+     */
     abstract public function instantiateParentElement(DOMElement $parent = null): DOMElement;
 }

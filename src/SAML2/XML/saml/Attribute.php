@@ -7,6 +7,7 @@ namespace SAML2\XML\saml;
 use DOMElement;
 use Exception;
 use SAML2\Constants;
+use SAML2\Exception\InvalidDOMElementException;
 use SAML2\XML\ExtendableAttributesTrait;
 use SimpleSAML\Assert\Assert;
 
@@ -177,12 +178,13 @@ class Attribute extends AbstractSamlElement
      *
      * @param \DOMElement $xml The XML element we should load
      * @return \SAML2\XML\saml\Attribute
-     * @throws \InvalidArgumentException if the qualified name of the supplied element is wrong
+     *
+     * @throws \SAML2\Exception\InvalidDOMElementException if the qualified name of the supplied element is wrong
      */
     public static function fromXML(DOMElement $xml): object
     {
-        Assert::same($xml->localName, 'Attribute');
-        Assert::same($xml->namespaceURI, Attribute::NS);
+        Assert::same($xml->localName, 'Attribute', InvalidDOMElementException::class);
+        Assert::same($xml->namespaceURI, Attribute::NS, InvalidDOMElementException::class);
 
         /** @var string $name */
         $name = self::getAttribute($xml, 'Name');

@@ -8,6 +8,7 @@ use DOMElement;
 use Exception;
 use InvalidArgumentException;
 use SAML2\Constants;
+use SAML2\Exception\InvalidDOMElementException;
 use SAML2\Utils;
 use SAML2\XML\ExtendableAttributesTrait;
 use SAML2\XML\ExtendableElementTrait;
@@ -103,15 +104,14 @@ final class ContactPerson extends AbstractMdElement
      * Initialize a ContactPerson element.
      *
      * @param \DOMElement $xml The XML element we should load.
-     *
      * @return self
-     * @throws \InvalidArgumentException if the qualified name of the supplied element is wrong
-     * @throws \InvalidArgumentException if the mandatory contactType attribute is missing
+     *
+     * @throws \SAML2\Exception\InvalidDOMElementException if the qualified name of the supplied element is wrong
      */
     public static function fromXML(DOMElement $xml): object
     {
-        Assert::same($xml->localName, 'ContactPerson');
-        Assert::same($xml->namespaceURI, ContactPerson::NS);
+        Assert::same($xml->localName, 'ContactPerson', InvalidDOMElementException::class);
+        Assert::same($xml->namespaceURI, ContactPerson::NS, InvalidDOMElementException::class);
         Assert::true($xml->hasAttribute('contactType'), 'Missing contactType on ContactPerson.');
 
         $contactType = $xml->getAttribute('contactType');

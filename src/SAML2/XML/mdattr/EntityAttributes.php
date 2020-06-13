@@ -5,6 +5,7 @@ declare(strict_types=1);
 namespace SAML2\XML\mdattr;
 
 use DOMElement;
+use SAML2\Exception\InvalidDOMElementException;
 use SAML2\Utils;
 use SAML2\XML\Chunk;
 use SAML2\XML\saml\Attribute;
@@ -85,12 +86,13 @@ final class EntityAttributes extends AbstractMdattrElement
      *
      * @param \DOMElement $xml The XML element we should load
      * @return self
-     * @throws \InvalidArgumentException if the qualified name of the supplied element is wrong
+     *
+     * @throws \SAML2\Exception\InvalidDOMElementException if the qualified name of the supplied element is wrong
      */
     public static function fromXML(DOMElement $xml): object
     {
-        Assert::same($xml->localName, 'EntityAttributes');
-        Assert::same($xml->namespaceURI, EntityAttributes::NS);
+        Assert::same($xml->localName, 'EntityAttributes', InvalidDOMElementException::class);
+        Assert::same($xml->namespaceURI, EntityAttributes::NS, InvalidDOMElementException::class);
 
         $children = [];
 

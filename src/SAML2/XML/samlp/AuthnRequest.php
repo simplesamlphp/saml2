@@ -5,6 +5,7 @@ declare(strict_types=1);
 namespace SAML2\XML\samlp;
 
 use DOMElement;
+use SAML2\Exception\InvalidDOMElementException;
 use SAML2\XML\ds\Signature;
 use SAML2\XML\saml\Conditions;
 use SAML2\XML\saml\Issuer;
@@ -456,13 +457,13 @@ class AuthnRequest extends AbstractRequest
      *
      * @param \DOMElement $xml The XML element we should load
      * @return \SAML2\XML\samlp\AuthnRequest
-     * @throws \InvalidArgumentException if the qualified name of the supplied element is wrong
-     * @throws \Exception
+     *
+     * @throws \SAML2\Exception\InvalidDOMElementException if the qualified name of the supplied element is wrong
      */
     public static function fromXML(DOMElement $xml): object
     {
-        Assert::same($xml->localName, 'AuthnRequest');
-        Assert::same($xml->namespaceURI, AuthnRequest::NS);
+        Assert::same($xml->localName, 'AuthnRequest', InvalidDOMElementException::class);
+        Assert::same($xml->namespaceURI, AuthnRequest::NS, InvalidDOMElementException::class);
         Assert::same('2.0', self::getAttribute($xml, 'Version'));
 
         $issueInstant = Utils::xsDateTimeToTimestamp(self::getAttribute($xml, 'IssueInstant'));

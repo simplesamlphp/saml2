@@ -5,6 +5,7 @@ declare(strict_types=1);
 namespace SAML2\XML\samlp;
 
 use DOMElement;
+use SAML2\Exception\InvalidDOMElementException;
 use SAML2\Utils;
 use SimpleSAML\Assert\Assert;
 
@@ -120,12 +121,13 @@ final class Status extends AbstractSamlpElement
      *
      * @param \DOMElement $xml The XML element we should load
      * @return \SAML2\XML\samlp\Status
-     * @throws \InvalidArgumentException if the qualified name of the supplied element is wrong
+     *
+     * @throws \SAML2\Exception\InvalidDOMElementException if the qualified name of the supplied element is wrong
      */
     public static function fromXML(DOMElement $xml): object
     {
-        Assert::same($xml->localName, 'Status');
-        Assert::same($xml->namespaceURI, Status::NS);
+        Assert::same($xml->localName, 'Status', InvalidDOMElementException::class);
+        Assert::same($xml->namespaceURI, Status::NS, InvalidDOMElementException::class);
 
         $statusCode = StatusCode::getChildrenOfClass($xml);
         Assert::count($statusCode, 1);

@@ -5,6 +5,7 @@ declare(strict_types=1);
 namespace SAML2\XML\mdui;
 
 use DOMElement;
+use SAML2\Exception\InvalidDOMElementException;
 use SimpleSAML\Assert\Assert;
 
 /**
@@ -114,12 +115,13 @@ final class Keywords extends AbstractMduiElement
      *
      * @param \DOMElement $xml The XML element we should load
      * @return self
-     * @throws \InvalidArgumentException if the qualified name of the supplied element is wrong
+     *
+     * @throws \SAML2\Exception\InvalidDOMElementException if the qualified name of the supplied element is wrong
      */
     public static function fromXML(DOMElement $xml): object
     {
-        Assert::same($xml->localName, 'Keywords');
-        Assert::same($xml->namespaceURI, Keywords::NS);
+        Assert::same($xml->localName, 'Keywords', InvalidDOMElementException::class);
+        Assert::same($xml->namespaceURI, Keywords::NS, InvalidDOMElementException::class);
 
         Assert::true($xml->hasAttribute('xml:lang'), 'Missing lang on Keywords.');
         Assert::stringNotEmpty($xml->textContent, 'Missing value for Keywords.');

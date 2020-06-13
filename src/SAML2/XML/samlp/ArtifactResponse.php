@@ -5,6 +5,7 @@ declare(strict_types=1);
 namespace SAML2\XML\samlp;
 
 use DOMElement;
+use SAML2\Exception\InvalidDOMElementException;
 use SAML2\Utils;
 use SAML2\XML\ds\Signature;
 use SAML2\XML\saml\Issuer;
@@ -89,12 +90,13 @@ class ArtifactResponse extends AbstractStatusResponse
      *
      * @param \DOMElement $xml
      * @return self
-     * @throws \Exception
+     *
+     * @throws \SAML2\Exception\InvalidDOMElementException if the qualified name of the supplied element is wrong
      */
     public static function fromXML(DOMElement $xml): object
     {
-        Assert::same($xml->localName, 'ArtifactResponse');
-        Assert::same($xml->namespaceURI, ArtifactResponse::NS);
+        Assert::same($xml->localName, 'ArtifactResponse', InvalidDOMElementException::class);
+        Assert::same($xml->namespaceURI, ArtifactResponse::NS, InvalidDOMElementException::class);
         Assert::same('2.0', self::getAttribute($xml, 'Version'));
 
         $id = self::getAttribute($xml, 'ID');

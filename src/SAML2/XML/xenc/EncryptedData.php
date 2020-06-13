@@ -5,6 +5,7 @@ declare(strict_types=1);
 namespace SAML2\XML\xenc;
 
 use DOMElement;
+use SAML2\Exception\InvalidDOMElementException;
 use SAML2\XML\ds\KeyInfo;
 use SimpleSAML\Assert\Assert;
 
@@ -214,11 +215,13 @@ class EncryptedData extends AbstractXencElement
 
     /**
      * @inheritDoc
+     *
+     * @throws \SAML2\Exception\InvalidDOMElementException if the qualified name of the supplied element is wrong
      */
     public static function fromXML(DOMElement $xml): object
     {
-        Assert::same($xml->localName, 'EncryptedData');
-        Assert::same($xml->namespaceURI, EncryptedData::NS);
+        Assert::same($xml->localName, 'EncryptedData', InvalidDOMElementException::class);
+        Assert::same($xml->namespaceURI, EncryptedData::NS, InvalidDOMElementException::class);
 
         $cipherData = CipherData::getChildrenOfClass($xml);
         Assert::count($cipherData, 1, 'No or more than one CipherData element found in <xenc:EncryptedData>.');

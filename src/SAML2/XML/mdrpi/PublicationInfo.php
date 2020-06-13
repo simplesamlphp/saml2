@@ -5,6 +5,7 @@ declare(strict_types=1);
 namespace SAML2\XML\mdrpi;
 
 use DOMElement;
+use SAML2\Exception\InvalidDOMElementException;
 use SAML2\Utils;
 use SimpleSAML\Assert\Assert;
 
@@ -165,12 +166,13 @@ final class PublicationInfo extends AbstractMdrpiElement
      *
      * @param \DOMElement $xml The XML element we should load
      * @return self
-     * @throws \InvalidArgumentException if the qualified name of the supplied element is wrong
+     *
+     * @throws \SAML2\Exception\InvalidDOMElementException if the qualified name of the supplied element is wrong
      */
     public static function fromXML(DOMElement $xml): object
     {
-        Assert::same($xml->localName, 'PublicationInfo');
-        Assert::same($xml->namespaceURI, PublicationInfo::NS);
+        Assert::same($xml->localName, 'PublicationInfo', InvalidDOMElementException::class);
+        Assert::same($xml->namespaceURI, PublicationInfo::NS, InvalidDOMElementException::class);
         Assert::true(
             $xml->hasAttribute('publisher'),
             'Missing required attribute "publisher" in mdrpi:PublicationInfo element.'
