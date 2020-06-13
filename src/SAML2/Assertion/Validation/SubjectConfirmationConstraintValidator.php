@@ -9,8 +9,8 @@ use SAML2\XML\saml\SubjectConfirmation;
 interface SubjectConfirmationConstraintValidator
 {
     /**
-     * @param SubjectConfirmation $subjectConfirmation
-     * @param Result $result
+     * @param \SAML2\XML\saml\SubjectConfirmation $subjectConfirmation
+     * @param \SAML2\Assertion\Validation\Result $result
      * @return void
      */
     public function validate(

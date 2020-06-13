@@ -19,7 +19,7 @@ final class DestinationMatches implements ConstraintValidator
     /**
      * DestinationMatches constructor.
      *
-     * @param Destination $destination
+     * @param \SAML2\Configuration\Destination $destination
      */
     public function __construct(Destination $destination)
     {

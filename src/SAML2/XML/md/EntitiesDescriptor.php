@@ -43,8 +43,8 @@ final class EntitiesDescriptor extends AbstractMetadataDocument
      * @param \SAML2\XML\md\Extensions|null $extensions
      */
     public function __construct(
-        ?array $entityDescriptors = null,
-        ?array $entitiesDescriptors = null,
+        array $entityDescriptors = [],
+        array $entitiesDescriptors = [],
         ?string $name = null,
         ?string $ID = null,
         ?int $validUntil = null,
@@ -117,13 +117,10 @@ final class EntitiesDescriptor extends AbstractMetadataDocument
     /**
      * Set the EntitiesDescriptor children objects
      *
-     * @param \SAML2\XML\md\EntitiesDescriptor[]|null $entitiesDescriptors
+     * @param \SAML2\XML\md\EntitiesDescriptor[] $entitiesDescriptors
      */
-    protected function setEntitiesDescriptors(?array $entitiesDescriptors): void
+    protected function setEntitiesDescriptors(array $entitiesDescriptors): void
     {
-        if ($entitiesDescriptors === null) {
-            return;
-        }
         Assert::allIsInstanceOf($entitiesDescriptors, EntitiesDescriptor::class);
         $this->entitiesDescriptors = $entitiesDescriptors;
     }
@@ -144,13 +141,10 @@ final class EntitiesDescriptor extends AbstractMetadataDocument
     /**
      * Set the EntityDescriptor children objects
      *
-     * @param \SAML2\XML\md\EntityDescriptor[]|null $entityDescriptors
+     * @param \SAML2\XML\md\EntityDescriptor[] $entityDescriptors
      */
-    protected function setEntityDescriptors(?array $entityDescriptors): void
+    protected function setEntityDescriptors(array $entityDescriptors): void
     {
-        if ($entityDescriptors === null) {
-            return;
-        }
         Assert::allIsInstanceOf($entityDescriptors, EntityDescriptor::class);
         $this->entityDescriptors = $entityDescriptors;
     }

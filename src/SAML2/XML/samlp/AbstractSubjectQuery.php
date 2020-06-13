@@ -26,7 +26,6 @@ abstract class AbstractSubjectQuery extends AbstractRequest
     protected $subject;
 
 
-
     /**
      * Constructor for SAML 2 response messages.
      *

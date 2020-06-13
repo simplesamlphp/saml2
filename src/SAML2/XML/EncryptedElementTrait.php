@@ -20,7 +20,6 @@ use SimpleSAML\Assert\Assert;
  */
 trait EncryptedElementTrait
 {
-
     /**
      * The current encrypted ID.
      *
@@ -97,6 +96,7 @@ trait EncryptedElementTrait
             EncryptedKey::class,
             'All encrypted keys in <' . $this->getQualifiedName() . '> must be an instance of EncryptedKey.'
         );
+
         $this->encryptedKeys = $encryptedKeys;
     }
 

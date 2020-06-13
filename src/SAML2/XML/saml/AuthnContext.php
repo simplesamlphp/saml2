@@ -160,6 +160,7 @@ final class AuthnContext extends AbstractSamlElement
     private function setAuthenticatingAuthorities(array $authenticatingAuthorities): void
     {
         Assert::allStringNotEmpty($authenticatingAuthorities);
+
         $this->authenticatingAuthorities = $authenticatingAuthorities;
     }
 

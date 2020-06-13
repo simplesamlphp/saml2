@@ -4,6 +4,7 @@ declare(strict_types=1);
 
 namespace SAML2\Signature;
 
+use Exception;
 use Psr\Log\LoggerInterface;
 use RobRichards\XMLSecLibs\XMLSecurityKey;
 use SAML2\Utils;
@@ -59,7 +60,7 @@ abstract class AbstractChainedValidator implements ChainedValidator
                     return true;
                 }
                 $this->logger->debug(sprintf('Validation with key "#%d" failed without exception.', $index));
-            } catch (\Exception $e) {
+            } catch (Exception $e) {
                 $this->logger->debug(sprintf(
                     'Validation with key "#%d" failed with exception: %s',
                     $index,

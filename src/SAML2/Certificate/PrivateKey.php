@@ -11,8 +11,8 @@ class PrivateKey extends Key
     /**
      * @param string $keyContents
      * @param string|null $passphrase
-     * @throws InvalidArgumentException
-     * @return PrivateKey
+     * @throws \SAML2\Exception\InvalidArgumentException
+     * @return \SAML2\Certificate\PrivateKey
      */
     public static function create(string $keyContents, string $passphrase = null): PrivateKey
     {

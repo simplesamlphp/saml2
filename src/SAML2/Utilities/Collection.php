@@ -4,9 +4,12 @@ declare(strict_types=1);
 
 namespace SAML2\Utilities;
 
+use ArrayAccess;
 use Closure;
+use Countable;
+use IteratorAggregate;
 
-interface Collection extends \ArrayAccess, \Countable, \IteratorAggregate
+interface Collection extends ArrayAccess, Countable, IteratorAggregate
 {
     /**
      * Add an element to the collection

@@ -83,6 +83,7 @@ final class StatusCode extends AbstractSamlpElement
     private function setSubCodes(array $subCodes): void
     {
         Assert::allIsInstanceOf($subCodes, StatusCode::class);
+
         $this->subCodes = $subCodes;
     }
 

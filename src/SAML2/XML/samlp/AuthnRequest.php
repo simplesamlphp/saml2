@@ -448,6 +448,7 @@ class AuthnRequest extends AbstractRequest
     private function setSubjectConfirmation(array $subjectConfirmation): void
     {
         Assert::allIsInstanceOf($subjectConfirmation, SubjectConfirmation::class);
+
         $this->subjectConfirmation = $subjectConfirmation;
     }
 

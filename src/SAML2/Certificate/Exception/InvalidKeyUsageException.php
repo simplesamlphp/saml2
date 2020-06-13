@@ -4,13 +4,14 @@ declare(strict_types=1);
 
 namespace SAML2\Certificate\Exception;
 
+use InvalidArgumentException;
 use SAML2\Certificate\Key;
 use SAML2\Exception\Throwable;
 
 /**
  * Named exception for when a non-existent key-usage is given
  */
-class InvalidKeyUsageException extends \InvalidArgumentException implements
+class InvalidKeyUsageException extends InvalidArgumentException implements
     Throwable
 {
     /**

@@ -18,7 +18,7 @@ class SubjectConfirmationNotOnOrAfter implements
      * @param \SAML2\Assertion\Validation\Result $result
      * @return void
      *
-     * @throws \InvalidArgumentException if assertions are false
+     * @throws \SimpleSAML\Assert\AssertionFailedException if assertions are false
      */
     public function validate(
         SubjectConfirmation $subjectConfirmation,

@@ -61,7 +61,7 @@ class PublicKeyValidator extends AbstractChainedValidator
      *
      * @return bool
      *
-     * @throws \InvalidArgumentException if assertions are false
+     * @throws \SimpleSAML\Assert\AssertionFailedException if assertions are false
      */
     public function hasValidSignature(
         SignedElementInterface $signedElement,

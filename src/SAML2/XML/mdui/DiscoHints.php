@@ -89,6 +89,8 @@ final class DiscoHints extends AbstractMduiElement
      */
     private function setIPHint(array $hints): void
     {
+        Assert::allStringNotEmpty($hints);
+
         $this->IPHint = $hints;
     }
 
@@ -112,6 +114,8 @@ final class DiscoHints extends AbstractMduiElement
      */
     private function setDomainHint(array $hints): void
     {
+        Assert::allStringNotEmpty($hints);
+
         $this->DomainHint = $hints;
     }
 
@@ -158,6 +162,8 @@ final class DiscoHints extends AbstractMduiElement
      */
     private function setChildren(array $children): void
     {
+        Assert::allIsInstanceOf($children, Chunk::class);
+
         $this->children = $children;
     }
 

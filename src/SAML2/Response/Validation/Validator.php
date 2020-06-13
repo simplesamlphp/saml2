@@ -15,7 +15,7 @@ class Validator
 
 
     /**
-     * @param ConstraintValidator $constraint
+     * @param \SAML2\Response\Validation\ConstraintValidator $constraint
      * @return void
      */
     public function addConstraintValidator(ConstraintValidator $constraint): void
@@ -25,8 +25,8 @@ class Validator
 
 
     /**
-     * @param Response $response
-     * @return Result
+     * @param \SAML2\XML\samlp\Response $response
+     * @return \SAML2\Response\Validation\Result
      */
     public function validate(Response $response): Result
     {

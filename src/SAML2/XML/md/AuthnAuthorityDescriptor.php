@@ -61,9 +61,9 @@ final class AuthnAuthorityDescriptor extends AbstractRoleDescriptor
     public function __construct(
         array $authnQueryServices,
         array $protocolSupportEnumeration,
-        ?array $assertionIDRequestServices = null,
-        ?array $nameIDFormats = null,
-        ?string $ID = null,
+        array $assertionIDRequestServices = [],
+        array $nameIDFormats = [],
+        string $ID = null,
         ?int $validUntil = null,
         ?string $cacheDuration = null,
         ?Extensions $extensions = null,
@@ -199,11 +199,8 @@ final class AuthnAuthorityDescriptor extends AbstractRoleDescriptor
      * @return void
      * @throws \InvalidArgumentException
      */
-    protected function setAssertionIDRequestService(?array $assertionIDRequestServices): void
+    protected function setAssertionIDRequestService(?array $assertionIDRequestServices = []): void
     {
-        if ($assertionIDRequestServices === null) {
-            return;
-        }
         Assert::allIsInstanceOf(
             $assertionIDRequestServices,
             AbstractEndpointType::class,

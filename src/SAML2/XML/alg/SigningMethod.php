@@ -134,6 +134,7 @@ final class SigningMethod extends AbstractAlgElement
      * @return self
      *
      * @throws \SAML2\Exception\InvalidDOMElementException if the qualified name of the supplied element is wrong
+     * @throws \SimpleSAML\Exception\AssertionFailedException if the supplied argument is missing the Algorithm attribute
      */
     public static function fromXML(DOMElement $xml): object
     {

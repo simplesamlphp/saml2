@@ -61,6 +61,7 @@ class ReferenceList extends AbstractXencElement
             DataReference::class,
             'All data references must be an instance of <xenc:DataReference>.'
         );
+
         $this->dataReferences = $dataReferences;
     }
 
@@ -86,6 +87,7 @@ class ReferenceList extends AbstractXencElement
             KeyReference::class,
             'All key references must be an instance of <xenc:KeyReference>.'
         );
+
         $this->keyreferences = $keyReferences;
     }
 

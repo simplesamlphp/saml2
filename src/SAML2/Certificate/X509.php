@@ -9,6 +9,10 @@ namespace SAML2\Certificate;
  */
 class X509 extends Key
 {
+    /**
+     * @param string $certificateContents
+     * @return \SAML2\Certificate\X509
+     */
     public static function createFromCertificateData(string $certificateContents): X509
     {
         $data = [

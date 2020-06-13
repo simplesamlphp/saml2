@@ -86,6 +86,7 @@ class AttributeQuery extends AbstractSubjectQuery
     public function setAttributes(array $attributes): void
     {
         Assert::allIsInstanceOf($attributes, Attribute::class);
+
         $this->attributes = $attributes;
     }
 

@@ -53,6 +53,7 @@ final class StatusDetail extends AbstractSamlpElement
     private function setDetails(array $details): void
     {
         Assert::allIsInstanceOf($details, Chunk::class);
+
         $this->details = $details;
     }
 

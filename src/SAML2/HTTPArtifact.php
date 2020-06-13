@@ -4,6 +4,7 @@ declare(strict_types=1);
 
 namespace SAML2;
 
+use Exception;
 use RobRichards\XMLSecLibs\XMLSecurityKey;
 use SAML2\Utilities\Temporal;
 use SAML2\XML\saml\Issuer;
@@ -44,13 +45,13 @@ class HTTPArtifact extends Binding
         /** @psalm-suppress UndefinedClass */
         $store = Store::getInstance();
         if ($store === false) {
-            throw new \Exception('Unable to send artifact without a datastore configured.');
+            throw new Exception('Unable to send artifact without a datastore configured.');
         }
 
         $generatedId = pack('H*', bin2hex(openssl_random_pseudo_bytes(20)));
         $issuer = $message->getIssuer();
         if ($issuer === null) {
-            throw new \Exception('Cannot get redirect URL, no Issuer set in the message.');
+            throw new Exception('Cannot get redirect URL, no Issuer set in the message.');
         }
         $artifact = base64_encode("\x00\x04\x00\x00" . sha1($issuer->getValue(), true) . $generatedId);
         $artifactData = $message->toXML();
@@ -68,7 +69,7 @@ class HTTPArtifact extends Binding
 
         $destination = $message->getDestination();
         if ($destination === null) {
-            throw new \Exception('Cannot get redirect URL, no destination set in the message.');
+            throw new Exception('Cannot get redirect URL, no destination set in the message.');
         }
         /** @psalm-suppress UndefinedClass */
         return HTTP::addURLparameters($destination, $params);
@@ -108,7 +109,7 @@ class HTTPArtifact extends Binding
             $endpointIndex = bin2hex(substr($artifact, 2, 2));
             $sourceId = bin2hex(substr($artifact, 4, 20));
         } else {
-            throw new \Exception('Missing SAMLart parameter.');
+            throw new Exception('Missing SAMLart parameter.');
         }
 
         /** @psalm-suppress UndefinedClass */
@@ -117,7 +118,7 @@ class HTTPArtifact extends Binding
         $idpMetadata = $metadataHandler->getMetaDataConfigForSha1($sourceId, 'saml20-idp-remote');
 
         if ($idpMetadata === null) {
-            throw new \Exception('No metadata found for remote provider with SHA1 ID: ' . var_export($sourceId, true));
+            throw new Exception('No metadata found for remote provider with SHA1 ID: ' . var_export($sourceId, true));
         }
 
         $endpoint = null;
@@ -129,7 +130,7 @@ class HTTPArtifact extends Binding
         }
 
         if ($endpoint === null) {
-            throw new \Exception('No ArtifactResolutionService with the correct index.');
+            throw new Exception('No ArtifactResolutionService with the correct index.');
         }
 
         Utils::getContainer()->getLogger()->debug(
@@ -161,14 +162,14 @@ class HTTPArtifact extends Binding
         $artifactResponse = $soap->send($ar, $this->spMetadata);
 
         if (!$artifactResponse->isSuccess()) {
-            throw new \Exception('Received error from ArtifactResolutionService.');
+            throw new Exception('Received error from ArtifactResolutionService.');
         }
 
         $samlResponse = $artifactResponse->getMessage();
         if ($samlResponse === null) {
             /* Empty ArtifactResponse - possibly because of Artifact replay? */
 
-            throw new \Exception('Empty ArtifactResponse received, maybe a replay?');
+            throw new Exception('Empty ArtifactResponse received, maybe a replay?');
         }
 
         $samlResponse->addValidator([get_class($this), 'validateSignature'], $artifactResponse);

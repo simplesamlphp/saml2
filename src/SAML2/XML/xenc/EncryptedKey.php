@@ -17,13 +17,13 @@ use SimpleSAML\Assert\Assert;
  */
 class EncryptedKey extends EncryptedData
 {
-    /** @var string */
+    /** @var string|null */
     protected $carriedKeyName;
 
-    /** @var string */
+    /** @var string|null */
     protected $recipient;
 
-    /** @var ReferenceList */
+    /** @var ReferenceList|null */
     protected $referenceList;
 
 

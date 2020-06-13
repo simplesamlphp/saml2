@@ -159,7 +159,7 @@ class Logger implements LoggerInterface
      * @param array $context
      * @return void
      *
-     * @throws \InvalidArgumentException if assertions are false
+     * @throws \SimpleSAML\Assert\AssertionFailedException if assertions are false
      *
      * Type hint not possible due to upstream method signature
      */

@@ -31,8 +31,8 @@ class SubjectConfirmationValidator
     /**
      * Constructor for SubjectConfirmationValidator
      *
-     * @param IdentityProvider $identityProvider
-     * @param ServiceProvider $serviceProvider
+     * @param \SAML2\Configuration\IdentityProvider $identityProvider
+     * @param \SAML2\Configuration\ServiceProvider $serviceProvider
      */
     public function __construct(
         IdentityProvider $identityProvider,
@@ -44,7 +44,7 @@ class SubjectConfirmationValidator
 
 
     /**
-     * @param SubjectConfirmationConstraintValidator $constraint
+     * @param \SAML2\Assertion\Validation\SubjectConfirmationConstraintValidator $constraint
      * @return void
      */
     public function addConstraintValidator(
@@ -63,8 +63,8 @@ class SubjectConfirmationValidator
 
 
     /**
-     * @param SubjectConfirmation $subjectConfirmation
-     * @return Result
+     * @param \SAML2\XML\saml\SubjectConfirmation $subjectConfirmation
+     * @return \SAML2\Assertion\Validation\Result
      */
     public function validate(SubjectConfirmation $subjectConfirmation): Result
     {

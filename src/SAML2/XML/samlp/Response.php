@@ -88,6 +88,7 @@ class Response extends AbstractStatusResponse
     protected function setAssertions(array $assertions): void
     {
         Assert::allIsInstanceOfAny($assertions, [Assertion::class, EncryptedAssertion::class]);
+
         $this->assertions = $assertions;
     }
 

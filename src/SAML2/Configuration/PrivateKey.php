@@ -13,8 +13,10 @@ use SimpleSAML\Assert\Assert;
  */
 class PrivateKey extends ArrayAdapter
 {
+    /** @var string */
     public const NAME_NEW     = 'new';
 
+    /** @var string */
     public const NAME_DEFAULT = 'default';
 
     /**
@@ -36,6 +38,7 @@ class PrivateKey extends ArrayAdapter
      * @var bool
      */
     private $isFile;
+
 
     /**
      * Constructor for PrivateKey.

@@ -4,6 +4,7 @@ declare(strict_types=1);
 
 namespace SAML2;
 
+use Exception;
 use SAML2\XML\samlp\AbstractMessage;
 
 /**
@@ -47,7 +48,7 @@ abstract class Binding
             case Constants::BINDING_PAOS:
                 return new SOAP();
             default:
-                throw new \Exception('Unsupported binding: ' . var_export($urn, true));
+                throw new Exception('Unsupported binding: ' . var_export($urn, true));
         }
     }
 
@@ -105,7 +106,7 @@ abstract class Binding
             $logger->warning('Content-Type: ' . var_export($_SERVER['CONTENT_TYPE'], true));
         }
 
-        throw new \Exception('Unable to find the SAML 2 binding used for this request.');
+        throw new Exception('Unable to find the SAML 2 binding used for this request.');
     }
 
 

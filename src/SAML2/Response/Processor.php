@@ -94,7 +94,7 @@ class Processor
      * Checks the preconditions that must be valid in order for the response to be processed.
      *
      * @param \SAML2\XML\samlp\Response $response
-     * @throws PreconditionNotMetException
+     * @throws \SAML2\Response\Exception\PreconditionNotMetException
      * @return void
      */
     private function enforcePreconditions(Response $response): void
@@ -110,7 +110,7 @@ class Processor
     /**
      * @param \SAML2\XML\samlp\Response $response
      * @param \SAML2\Configuration\IdentityProvider $identityProviderConfiguration
-     * @throws InvalidResponseException
+     * @throws \SAML2\Response\Exception\InvalidResponseException
      * @return void
      */
     private function verifySignature(Response $response, IdentityProvider $identityProviderConfiguration): void
@@ -142,8 +142,8 @@ class Processor
 
     /**
      * @param \SAML2\XML\samlp\Response $response
-     * @throws UnsignedResponseException
-     * @throws NoAssertionsFoundException
+     * @throws \SAML2\Response\Exception\UnsignedResponseException
+     * @throws \SAML2\Response\Exception\NoAssertionsFoundException
      * @return \SAML2\Utilities\ArrayCollection
      */
     private function processAssertions(Response $response): ArrayCollection

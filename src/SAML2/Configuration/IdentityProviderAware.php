@@ -10,7 +10,7 @@ namespace SAML2\Configuration;
 interface IdentityProviderAware
 {
     /**
-     * @param IdentityProvider $identityProvider
+     * @param \SAML2\Configuration\IdentityProvider $identityProvider
      *
      * @return void
      */

@@ -157,6 +157,8 @@ final class PublicationInfo extends AbstractMdrpiElement
      */
     private function setUsagePolicy(array $usagePolicy): void
     {
+        Assert::allStringNotEmpty($usagePolicy);
+
         $this->UsagePolicy = $usagePolicy;
     }
 

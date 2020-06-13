@@ -165,7 +165,7 @@ abstract class AbstractMessage extends AbstractSamlpElement implements SignedEle
      * signature we can validate. An exception is thrown if the signature
      * validation fails.
      *
-     * @param XMLSecurityKey $key The key we should check against
+     * @param \RobRichards\XMLSecLibs\XMLSecurityKey $key The key we should check against
      * @throws \Exception
      * @return bool true on success, false when we don't have a signature
      */
@@ -372,7 +372,7 @@ abstract class AbstractMessage extends AbstractSamlpElement implements SignedEle
      * Wrapper method over SignedElementTrait to use as a validator for enveloped XML signatures.
      *
      * @param array $_
-     * @param XMLSecurityKey $key The key to use to verify the enveloped signature.
+     * @param \RobRichards\XMLSecLibs\XMLSecurityKey $key The key to use to verify the enveloped signature.
      *
      * @throws \Exception If there's no enveloped signature, or it fails to validate.
      */

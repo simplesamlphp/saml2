@@ -239,6 +239,7 @@ final class SubjectConfirmationData extends AbstractSamlElement
     private function setInfo(array $info): void
     {
         Assert::allIsInstanceOfAny($info, [Chunk::class, KeyInfo::class]);
+
         $this->info = $info;
     }
 

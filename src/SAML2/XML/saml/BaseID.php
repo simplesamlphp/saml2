@@ -78,6 +78,7 @@ class BaseID extends AbstractSamlElement implements BaseIdentifierInterface
     protected function setType(string $type): void
     {
         Assert::notEmpty($type, 'The "xsi:type" attribute of an identifier cannot be empty.');
+
         $this->type = $type;
     }
 

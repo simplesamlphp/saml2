@@ -5,6 +5,7 @@ declare(strict_types=1);
 namespace SAML2;
 
 use DOMDocument;
+use Exception;
 use SAML2\XML\ecp\Response as ECPResponse;
 use SAML2\XML\samlp\AbstractMessage;
 use SAML2\XML\samlp\MessageFactory;
@@ -45,7 +46,7 @@ SOAP;
 
             $destination = $this->destination ?: $message->getDestination();
             if ($destination === null) {
-                throw new \Exception('No destination available for SOAP message.');
+                throw new Exception('No destination available for SOAP message.');
             }
             $response = new ECPResponse($destination);
 
@@ -88,7 +89,7 @@ SOAP;
         }
 
         // DOMDocument::saveXML() returned false. Something is seriously wrong here. Not much we can do.
-        throw new \Exception('Error while generating XML for SAML message.');
+        throw new Exception('Error while generating XML for SAML message.');
     }
 
 
@@ -103,7 +104,7 @@ SOAP;
         $postText = $this->getInputStream();
 
         if ($postText === false) {
-            throw new \Exception('Invalid message received to AssertionConsumerService endpoint.');
+            throw new Exception('Invalid message received to AssertionConsumerService endpoint.');
         }
 
         $document = DOMDocumentFactory::fromString($postText);

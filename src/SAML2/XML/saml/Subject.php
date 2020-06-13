@@ -72,6 +72,8 @@ final class Subject extends AbstractSamlElement
      */
     private function setSubjectConfirmation(array $subjectConfirmation): void
     {
+        Assert::allIsInstanceOf($subjectConfirmation, SubjectConfirmation::class);
+
         $this->SubjectConfirmation = $subjectConfirmation;
     }
 

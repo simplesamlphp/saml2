@@ -124,6 +124,8 @@ final class RegistrationInfo extends AbstractMdrpiElement
      */
     private function setRegistrationPolicy(array $registrationPolicy): void
     {
+        Assert::allStringNotEmpty($registrationPolicy);
+
         $this->RegistrationPolicy = $registrationPolicy;
     }
 

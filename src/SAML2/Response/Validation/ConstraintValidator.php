@@ -10,7 +10,7 @@ interface ConstraintValidator
 {
     /**
      * @param \SAML2\XML\samlp\Response $response
-     * @param Result $result
+     * @param \SAML2\Response\Validation\Result $result
      * @return void
      */
     public function validate(Response $response, Result $result): void;

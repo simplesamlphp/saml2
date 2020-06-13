@@ -91,7 +91,7 @@ class Utils
             }
         }
         if (!$rootSigned) {
-            throw new \Exception('XMLSec: The root element is not signed.');
+            throw new Exception('XMLSec: The root element is not signed.');
         }
 
         /* Now we extract all available X509 certificates in the signature element. */
@@ -114,12 +114,12 @@ class Utils
     /**
      * Helper function to convert a XMLSecurityKey to the correct algorithm.
      *
-     * @param XMLSecurityKey $key The key.
+     * @param \RobRichards\XMLSecLibs\XMLSecurityKey $key The key.
      * @param string $algorithm The desired algorithm.
      * @param string $type Public or private key, defaults to public.
-     * @return XMLSecurityKey The new key.
+     * @return \RobRichards\XMLSecLibs\XMLSecurityKey The new key.
      *
-     * @throws \InvalidArgumentException if assertions are false
+     * @throws \SimpleSAML\Assert\AssertionFailedException if assertions are false
      */
     public static function castKey(XMLSecurityKey $key, string $algorithm, string $type = null): XMLSecurityKey
     {
@@ -169,11 +169,11 @@ class Utils
      * An exception is thrown if we are unable to validate the signature.
      *
      * @param array $info The information returned by the validateElement() function.
-     * @param XMLSecurityKey $key The publickey that should validate the Signature object.
+     * @param \RobRichards\XMLSecLibs\XMLSecurityKey $key The publickey that should validate the Signature object.
      * @throws \Exception
      * @return void
      *
-     * @throws \InvalidArgumentException if assertions are false
+     * @throws \SimpleSAML\Assert\AssertionFailedException if assertions are false
      */
     public static function validateSignature(array $info, XMLSecurityKey $key): void
     {
@@ -292,7 +292,7 @@ class Utils
     /**
      * Insert a Signature node.
      *
-     * @param XMLSecurityKey $key The key we should use to sign the message.
+     * @param \RobRichards\XMLSecLibs\XMLSecurityKey $key The key we should use to sign the message.
      * @param array $certificates The certificates we should add to the signature node.
      * @param \DOMElement $root The XML node we should sign.
      * @param \DOMNode $insertBefore  The XML element we should insert the signature element before.
@@ -344,7 +344,7 @@ class Utils
      * This is an internal helper function.
      *
      * @param \DOMElement $encryptedData The encrypted data.
-     * @param XMLSecurityKey $inputKey The decryption key.
+     * @param \RobRichards\XMLSecLibs\XMLSecurityKey $inputKey The decryption key.
      * @param array &$blacklist Blacklisted decryption algorithms.
      * @throws \Exception
      * @return \DOMElement The decrypted element.
@@ -503,7 +503,7 @@ class Utils
      * Decrypt an encrypted element.
      *
      * @param \DOMElement $encryptedData The encrypted data.
-     * @param XMLSecurityKey $inputKey The decryption key.
+     * @param \RobRichards\XMLSecLibs\XMLSecurityKey $inputKey The decryption key.
      * @param array $blacklist Blacklisted decryption algorithms.
      * @throws \Exception
      * @return \DOMElement The decrypted element.

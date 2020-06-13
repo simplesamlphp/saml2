@@ -76,6 +76,8 @@ final class Scoping extends AbstractSamlpElement
      */
     private function setRequesterId(array $requesterId): void
     {
+        Assert::allStringNotEmpty($requesterId);
+
         $this->requesterId = $requesterId;
     }
 

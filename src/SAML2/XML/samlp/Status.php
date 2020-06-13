@@ -111,6 +111,7 @@ final class Status extends AbstractSamlpElement
     private function setStatusDetails(array $statusDetails): void
     {
         Assert::allIsInstanceOf($statusDetails, StatusDetail::class);
+
         $this->statusDetails = $statusDetails;
     }
 

@@ -53,6 +53,7 @@ final class IDPList extends AbstractSamlpElement
     private function setIdpEntry(array $idpEntry): void
     {
         Assert::minCount($idpEntry, 1, 'At least one samlp:IDPEntry must be specified.');
+        Assert::allIsInstanceOf($idpEntry, IDPEntry::class);
 
         $this->IDPEntry = $idpEntry;
     }

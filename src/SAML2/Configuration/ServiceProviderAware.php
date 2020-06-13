@@ -10,7 +10,7 @@ namespace SAML2\Configuration;
 interface ServiceProviderAware
 {
     /**
-     * @param ServiceProvider $serviceProvider
+     * @param \SAML2\Configuration\ServiceProvider $serviceProvider
      * @return void
      */
     public function setServiceProvider(ServiceProvider $serviceProvider): void;

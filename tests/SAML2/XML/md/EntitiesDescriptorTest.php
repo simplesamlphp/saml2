@@ -176,7 +176,7 @@ XML
         /** @psalm-suppress PossiblyNullArgument */
         $childEntitiesd = EntitiesDescriptor::fromXML($entitiesdChildElement->item(0));
         $entitiesd = new EntitiesDescriptor(
-            null,
+            [],
             [$childEntitiesd]
         );
         $this->assertIsArray($entitiesd->getEntityDescriptors());

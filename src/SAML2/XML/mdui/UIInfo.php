@@ -122,6 +122,7 @@ final class UIInfo extends AbstractMduiElement
     private function setKeywords(array $keywords): void
     {
         Assert::allIsInstanceOf($keywords, Keywords::class);
+
         $this->Keywords = $keywords;
     }
 
@@ -157,6 +158,8 @@ final class UIInfo extends AbstractMduiElement
      */
     private function setDisplayName(array $displayName): void
     {
+        Assert::allStringNotEmpty($displayName);
+
         $this->DisplayName = $displayName;
     }
 
@@ -180,6 +183,8 @@ final class UIInfo extends AbstractMduiElement
      */
     private function setDescription(array $description): void
     {
+        Assert::allStringNotEmpty($description);
+
         $this->Description = $description;
     }
 
@@ -202,6 +207,8 @@ final class UIInfo extends AbstractMduiElement
      */
     private function setInformationURL(array $informationURL): void
     {
+        Assert::allStringNotEmpty($informationURL);
+
         $this->InformationURL = $informationURL;
     }
 
@@ -225,6 +232,8 @@ final class UIInfo extends AbstractMduiElement
      */
     private function setPrivacyStatementURL(array $privacyStatementURL): void
     {
+        Assert::allStringNotEmpty($privacyStatementURL);
+
         $this->PrivacyStatementURL = $privacyStatementURL;
     }
 
@@ -248,6 +257,8 @@ final class UIInfo extends AbstractMduiElement
      */
     private function setLogo(array $logo): void
     {
+        Assert::allIsInstanceOf($logo, Logo::class);
+
         $this->Logo = $logo;
     }
 
@@ -283,6 +294,8 @@ final class UIInfo extends AbstractMduiElement
      */
     private function setChildren(array $children): void
     {
+        Assert::allIsInstanceOf($children, Chunk::class);
+
         $this->children = $children;
     }
 

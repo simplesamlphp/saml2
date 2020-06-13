@@ -86,6 +86,8 @@ trait SignedElementTrait
      */
     public function setCertificates(array $certificates): void
     {
+        Assert::allStringNotEmpty($certificates);
+
         $this->certificates = $certificates;
     }
 

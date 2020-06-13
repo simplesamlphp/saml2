@@ -177,6 +177,11 @@ final class AttributeConsumingService extends AbstractMdElement
      */
     public function setRequestedAttributes(array $requestedAttributes): void
     {
+        Assert::allIsInstanceOf(
+            $requestedAttributes,
+            RequestedAttribute::class,
+            'Requested attributes must be specified as RequestedAttribute objects.'
+        );
         Assert::minCount(
             $requestedAttributes,
             1,

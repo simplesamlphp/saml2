@@ -6,6 +6,7 @@ namespace SAML2\XML;
 
 use DOMElement;
 use SAML2\XML\AbstractXMLElement;
+use SimpleSAML\Assert\Assert;
 
 /**
  * Trait grouping common functionality for elements implementing ExtensionType.
@@ -27,6 +28,7 @@ trait ExtensionsTrait
      */
     public function __construct(array $extensions)
     {
+        Assert::allIsInstanceOf($extensions, AbstractXMLElement::class);
         $this->extensions = $extensions;
     }
 

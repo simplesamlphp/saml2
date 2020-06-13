@@ -19,7 +19,7 @@ class KeyCollection extends ArrayCollection
      * @param \SAML2\Certificate\Key $key
      * @return void
      *
-     * @throws \InvalidArgumentException if assertions are false
+     * @throws \SimpleSAML\Assert\AssertionFailedException if assertions are false
      *
      * Type hint not possible due to upstream method signature
      */
