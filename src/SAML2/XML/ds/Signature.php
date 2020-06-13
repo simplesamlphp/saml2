@@ -11,7 +11,7 @@ use RobRichards\XMLSecLibs\XMLSecurityKey;
 use SAML2\Utilities\Certificate;
 use SAML2\Utils;
 use SAML2\XML\AbstractXMLElement;
-use Webmozart\Assert\Assert;
+use SimpleSAML\Assert\Assert;
 
 /**
  * Wrapper class for XML signatures

@@ -5,7 +5,7 @@ declare(strict_types=1);
 namespace SAML2\XML\md;
 
 use DOMElement;
-use Webmozart\Assert\Assert;
+use SimpleSAML\Assert\Assert;
 
 /**
  * Class representing a SAML2 IndexedEndpointType.

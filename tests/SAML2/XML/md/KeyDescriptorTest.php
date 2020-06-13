@@ -4,13 +4,13 @@ declare(strict_types=1);
 
 namespace SAML2\XML\md;
 
-use InvalidArgumentException;
 use PHPUnit\Framework\TestCase;
 use SAML2\Constants;
 use SAML2\DOMDocumentFactory;
 use SAML2\XML\ds\AbstractDsElement;
 use SAML2\XML\ds\KeyInfo;
 use SAML2\XML\ds\KeyName;
+use SimpleSAML\Assert\AssertionFailedException;
 
 /**
  * A set of tests for the md:KeyDescriptor element
@@ -78,7 +78,7 @@ XML
      */
     public function testMarshallingWrongUse(): void
     {
-        $this->expectException(InvalidArgumentException::class);
+        $this->expectException(AssertionFailedException::class);
         $this->expectExceptionMessage('The "use" attribute of a KeyDescriptor can only be "encryption" or "signing".');
 
         new KeyDescriptor(
@@ -142,7 +142,7 @@ XML
     {
         $this->document->documentElement->setAttribute('use', 'wrong');
 
-        $this->expectException(InvalidArgumentException::class);
+        $this->expectException(AssertionFailedException::class);
         $this->expectExceptionMessage('The "use" attribute of a KeyDescriptor can only be "encryption" or "signing".');
 
         KeyDescriptor::fromXML($this->document->documentElement);

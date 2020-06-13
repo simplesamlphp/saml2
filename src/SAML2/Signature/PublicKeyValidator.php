@@ -10,7 +10,7 @@ use SAML2\Certificate\KeyLoader;
 use SAML2\Certificate\X509;
 use SAML2\Configuration\CertificateProvider;
 use SAML2\XML\SignedElementInterface;
-use Webmozart\Assert\Assert;
+use SimpleSAML\Assert\Assert;
 
 class PublicKeyValidator extends AbstractChainedValidator
 {

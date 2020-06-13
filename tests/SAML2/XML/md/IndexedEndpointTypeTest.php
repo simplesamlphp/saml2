@@ -4,10 +4,10 @@ declare(strict_types=1);
 
 namespace SAML2\XML\md;
 
-use InvalidArgumentException;
 use PHPUnit\Framework\TestCase;
 use SAML2\Constants;
 use SAML2\DOMDocumentFactory;
+use SimpleSAML\Assert\AssertionFailedException;
 
 /**
  * Class \SAML2\XML\md\IndexedEndpointTypeTest
@@ -80,7 +80,7 @@ XML
      */
     public function testUnmarshallingUnexpectedEndpoint(): void
     {
-        $this->expectException(InvalidArgumentException::class);
+        $this->expectException(AssertionFailedException::class);
         $this->expectExceptionMessage(
             'Unexpected name for endpoint: AssertionConsumerService. Expected: ArtifactResolutionService.'
         );
@@ -93,7 +93,7 @@ XML
      */
     public function testUnmarshallingWithoutIndex(): void
     {
-        $this->expectException(InvalidArgumentException::class);
+        $this->expectException(AssertionFailedException::class);
         $this->expectExceptionMessage('Missing \'index\' attribute from md:AssertionConsumerService');
         $this->document->documentElement->removeAttribute('index');
         AssertionConsumerService::fromXML($this->document->documentElement);
@@ -105,7 +105,7 @@ XML
      */
     public function testUnmarshallingWithWrongIndex(): void
     {
-        $this->expectException(InvalidArgumentException::class);
+        $this->expectException(AssertionFailedException::class);
         $this->expectExceptionMessage('The \'index\' attribute of md:AssertionConsumerService must be numerical.');
         $this->document->documentElement->setAttribute('index', 'value');
         AssertionConsumerService::fromXML($this->document->documentElement);
@@ -128,7 +128,7 @@ XML
      */
     public function testUnmarshallingWithWrongIsDefault(): void
     {
-        $this->expectException(InvalidArgumentException::class);
+        $this->expectException(AssertionFailedException::class);
         $this->expectExceptionMessage('The \'isDefault\' attribute of md:AssertionConsumerService must be boolean.');
         $this->document->documentElement->setAttribute('isDefault', 'non-bool');
         AssertionConsumerService::fromXML($this->document->documentElement);

@@ -8,7 +8,7 @@ use DOMElement;
 use Exception;
 use SAML2\Constants;
 use SAML2\XML\ExtendableAttributesTrait;
-use Webmozart\Assert\Assert;
+use SimpleSAML\Assert\Assert;
 
 /**
  * Class representing SAML 2 Attribute.

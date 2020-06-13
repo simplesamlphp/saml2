@@ -6,7 +6,7 @@ namespace SAML2\XML;
 
 use DOMElement;
 use SAML2\Utils;
-use Webmozart\Assert\Assert;
+use SimpleSAML\Assert\Assert;
 
 /**
  * Serializable class used to hold an XML element.

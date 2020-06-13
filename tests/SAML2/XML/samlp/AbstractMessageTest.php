@@ -6,7 +6,6 @@ namespace SAML2\XML\samlp;
 
 use DOMDocument;
 use Exception;
-use InvalidArgumentException;
 use SAML2\CertificatesMock;
 use SAML2\Constants;
 use SAML2\DOMDocumentFactory;
@@ -19,6 +18,7 @@ use SAML2\XML\samlp\MessageFactory;
 use SAML2\XML\samlp\Response;
 use SAML2\XML\samlp\Status;
 use SAML2\XML\samlp\StatusCode;
+use SimpleSAML\Assert\AssertionFailedException;
 
 class AbstractMessageTest extends \Mockery\Adapter\Phpunit\MockeryTestCase
 {
@@ -255,7 +255,7 @@ XML;
 XML;
 
         $document  = DOMDocumentFactory::fromString($xml);
-        $this->expectException(InvalidArgumentException::class);
+        $this->expectException(AssertionFailedException::class);
         MessageFactory::fromXML($document->documentElement);
     }
 
@@ -276,7 +276,7 @@ XML;
 </samlp:LogoutRequest>
 XML;
         $document  = DOMDocumentFactory::fromString($xml);
-        $this->expectException(Exception::class);
+        $this->expectException(AssertionFailedException::class);
         $this->expectExceptionMessage(
             'Missing <saml:NameID>, <saml:BaseID> or <saml:EncryptedID> in <samlp:LogoutRequest>.'
         );

@@ -7,7 +7,7 @@ namespace SAML2\XML\samlp;
 use DOMElement;
 use Exception;
 use SAML2\Constants;
-use Webmozart\Assert\Assert;
+use SimpleSAML\Assert\Assert;
 
 /**
  * Factory class for all SAML 2 messages.

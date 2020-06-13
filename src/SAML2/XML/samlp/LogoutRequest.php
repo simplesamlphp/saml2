@@ -13,7 +13,7 @@ use SAML2\XML\saml\BaseID;
 use SAML2\XML\saml\EncryptedID;
 use SAML2\XML\saml\NameID;
 use SAML2\XML\saml\Issuer;
-use Webmozart\Assert\Assert;
+use SimpleSAML\Assert\Assert;
 
 /**
  * Class for SAML 2 logout request messages.

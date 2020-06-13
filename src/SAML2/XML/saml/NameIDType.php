@@ -6,7 +6,7 @@ namespace SAML2\XML\saml;
 
 use DOMElement;
 use SAML2\XML\IDNameQualifiersTrait;
-use Webmozart\Assert\Assert;
+use SimpleSAML\Assert\Assert;
 
 /**
  * SAML NameIDType abstract data type.

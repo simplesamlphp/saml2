@@ -5,10 +5,11 @@ declare(strict_types=1);
 namespace SAML2\XML\md;
 
 use DOMElement;
+use InvalidArgumentException;
 use SAML2\Constants;
 use SAML2\Utils;
 use SAML2\XML\ds\Signature;
-use Webmozart\Assert\Assert;
+use SimpleSAML\Assert\Assert;
 
 /**
  * Class representing SAML 2 EntityDescriptor element.
@@ -93,7 +94,7 @@ final class EntityDescriptor extends AbstractMetadataDocument
         array $additionalMdLocations = []
     ) {
         if (empty($roleDescriptors) && $affiliationDescriptor === null) {
-            throw new \InvalidArgumentException(
+            throw new InvalidArgumentException(
                 'Must have either one of the RoleDescriptors or an AffiliationDescriptor in EntityDescriptor.'
             );
         }
@@ -165,13 +166,13 @@ final class EntityDescriptor extends AbstractMetadataDocument
                     break;
                 case 'AffiliationDescriptor':
                     if ($affiliationDescriptor !== null) {
-                        throw new \InvalidArgumentException('More than one AffiliationDescriptor in the entity.');
+                        throw new InvalidArgumentException('More than one AffiliationDescriptor in the entity.');
                     }
                     $affiliationDescriptor = AffiliationDescriptor::fromXML($node);
                     break;
                 case 'Organization':
                     if ($organization !== null) {
-                        throw new \InvalidArgumentException('More than one Organization in the entity.');
+                        throw new InvalidArgumentException('More than one Organization in the entity.');
                     }
                     $organization = Organization::fromXML($node);
                     break;
@@ -187,11 +188,11 @@ final class EntityDescriptor extends AbstractMetadataDocument
         }
 
         if (empty($roleDescriptors) && is_null($affiliationDescriptor)) {
-            throw new \InvalidArgumentException(
+            throw new InvalidArgumentException(
                 'Must have either one of the RoleDescriptors or an AffiliationDescriptor in EntityDescriptor.'
             );
         } elseif (!empty($roleDescriptors) && !is_null($affiliationDescriptor)) {
-            throw new \InvalidArgumentException(
+            throw new InvalidArgumentException(
                 'AffiliationDescriptor cannot be combined with other RoleDescriptor elements in EntityDescriptor.'
             );
         }

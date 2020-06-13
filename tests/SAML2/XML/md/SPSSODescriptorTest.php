@@ -4,7 +4,6 @@ declare(strict_types=1);
 
 namespace SAML2\XML\md;
 
-use InvalidArgumentException;
 use PHPUnit\Framework\TestCase;
 use RobRichards\XMLSecLibs\XMLSecurityDSig;
 use SAML2\Constants;
@@ -15,6 +14,7 @@ use SAML2\XML\ds\KeyInfo;
 use SAML2\XML\ds\KeyName;
 use SAML2\XML\mdrpi\PublicationInfo;
 use SAML2\XML\saml\AttributeValue;
+use SimpleSAML\Assert\AssertionFailedException;
 
 /**
  * Tests for the md:SPSSODescriptor element.
@@ -194,7 +194,7 @@ XML
      */
     public function testMarshallingWithoutAssertionConsumerService(): void
     {
-        $this->expectException(InvalidArgumentException::class);
+        $this->expectException(AssertionFailedException::class);
         $this->expectExceptionMessage('At least one AssertionConsumerService must be specified.');
 
         new SPSSODescriptor(
@@ -209,7 +209,7 @@ XML
      */
     public function testMarshallingWithWrongAssertionConsumerService(): void
     {
-        $this->expectException(InvalidArgumentException::class);
+        $this->expectException(AssertionFailedException::class);
         $this->expectExceptionMessage(
             'All md:AssertionConsumerService endpoints must be an instance of AssertionConsumerService.'
         );
@@ -227,7 +227,7 @@ XML
      */
     public function testMarshallingWithWrongAttributeConsumingService(): void
     {
-        $this->expectException(InvalidArgumentException::class);
+        $this->expectException(AssertionFailedException::class);
         $this->expectExceptionMessage(
             'All md:AttributeConsumingService endpoints must be an instance of AttributeConsumingService.'
         );
@@ -296,7 +296,7 @@ XML
         /** @psalm-suppress PossiblyNullArgument */
         $this->document->documentElement->removeChild($acseps->item(0));
 
-        $this->expectException(InvalidArgumentException::class);
+        $this->expectException(AssertionFailedException::class);
         $this->expectExceptionMessage('At least one AssertionConsumerService must be specified.');
 
         SPSSODescriptor::fromXML($this->document->documentElement);
@@ -310,7 +310,7 @@ XML
     {
         $this->document->documentElement->setAttribute('AuthnRequestsSigned', 'not a boolean');
 
-        $this->expectException(InvalidArgumentException::class);
+        $this->expectException(AssertionFailedException::class);
         $this->expectExceptionMessage('The \'AuthnRequestsSigned\' attribute of md:SPSSODescriptor must be boolean.');
 
         SPSSODescriptor::fromXML($this->document->documentElement);
@@ -324,7 +324,7 @@ XML
     {
         $this->document->documentElement->setAttribute('WantAssertionsSigned', 'not a boolean');
 
-        $this->expectException(InvalidArgumentException::class);
+        $this->expectException(AssertionFailedException::class);
         $this->expectExceptionMessage('The \'WantAssertionsSigned\' attribute of md:SPSSODescriptor must be boolean.');
 
         SPSSODescriptor::fromXML($this->document->documentElement);
@@ -362,7 +362,7 @@ XML
         /** @psalm-suppress PossiblyNullReference */
         $acs->item(1)->setAttribute('isDefault', 'true');
 
-        $this->expectException(InvalidArgumentException::class);
+        $this->expectException(AssertionFailedException::class);
         $this->expectExceptionMessage('Only one md:AttributeConsumingService can be set as default.');
 
         SPSSODescriptor::fromXML($this->document->documentElement);

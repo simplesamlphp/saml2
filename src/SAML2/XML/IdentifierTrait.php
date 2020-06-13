@@ -10,7 +10,7 @@ use SAML2\XML\saml\BaseID;
 use SAML2\XML\saml\EncryptedID;
 use SAML2\XML\saml\NameID;
 use SAML2\XML\saml\IdentifierInterface;
-use Webmozart\Assert\Assert;
+use SimpleSAML\Assert\Assert;
 
 /**
  * Trait grouping common functionality for elements that can hold identifiers.

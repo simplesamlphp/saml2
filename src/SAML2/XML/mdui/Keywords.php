@@ -5,7 +5,7 @@ declare(strict_types=1);
 namespace SAML2\XML\mdui;
 
 use DOMElement;
-use Webmozart\Assert\Assert;
+use SimpleSAML\Assert\Assert;
 
 /**
  * Class for handling the Keywords metadata extensions for login and discovery user interface
@@ -104,7 +104,7 @@ final class Keywords extends AbstractMduiElement
      */
     public function addKeyword(string $keyword): void
     {
-        Assert::NotContains($keyword, '+', 'Keyword may not contain a "+" character.');
+        Assert::notContains($keyword, '+', 'Keyword may not contain a "+" character.');
         $this->Keywords[] = $keyword;
     }
 

@@ -9,7 +9,7 @@ use SAML2\Constants;
 use SAML2\Utils;
 use SAML2\XML\ds\Signature;
 use SAML2\XML\saml\Attribute;
-use Webmozart\Assert\Assert;
+use SimpleSAML\Assert\Assert;
 
 /**
  * Class representing SAML 2 IDPSSODescriptor.

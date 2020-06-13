@@ -4,13 +4,13 @@ declare(strict_types=1);
 
 namespace SAML2\XML\saml;
 
-use InvalidArgumentException;
 use PHPUnit\Framework\TestCase;
 use SAML2\Compat\ContainerInterface;
 use SAML2\Compat\ContainerSingleton;
 use SAML2\Constants;
 use SAML2\CustomBaseID;
 use SAML2\DOMDocumentFactory;
+use SimpleSAML\Assert\AssertionFailedException;
 
 /**
  * Class \SAML2\XML\saml\SubjectTest
@@ -208,7 +208,7 @@ XML
     {
         $document = DOMDocumentFactory::fromString('<saml:Subject xmlns:saml="' . Subject::NS . '"/>');
 
-        $this->expectException(InvalidArgumentException::class);
+        $this->expectException(AssertionFailedException::class);
         $this->expectExceptionMessage('A <saml:Subject> not containing <saml:SubjectConfirmation> should provide exactly one of <saml:BaseID>, <saml:NameID> or <saml:EncryptedID>');
 
         Subject::fromXML($document->documentElement);
@@ -228,7 +228,7 @@ XML
         $nameId->documentElement->textContent = 'AnotherNameIDValue';
         $document->documentElement->appendChild($document->importNode($nameId->documentElement, true));
 
-        $this->expectException(InvalidArgumentException::class);
+        $this->expectException(AssertionFailedException::class);
         $this->expectExceptionMessage('More than one <saml:NameID> in <saml:Subject>.');
 
         Subject::fromXML($document->documentElement);
@@ -254,7 +254,7 @@ XML
 XML
         );
 
-        $this->expectException(InvalidArgumentException::class);
+        $this->expectException(AssertionFailedException::class);
         $this->expectExceptionMessage(
             'A <saml:Subject> can contain exactly one of <saml:BaseID>, <saml:NameID> or <saml:EncryptedID>.'
         );

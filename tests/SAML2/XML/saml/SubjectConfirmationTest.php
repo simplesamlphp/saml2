@@ -4,13 +4,13 @@ declare(strict_types=1);
 
 namespace SAML2\XML\saml;
 
-use InvalidArgumentException;
 use PHPUnit\Framework\TestCase;
 use SAML2\Compat\ContainerInterface;
 use SAML2\Compat\ContainerSingleton;
 use SAML2\Constants;
 use SAML2\CustomBaseID;
 use SAML2\DOMDocumentFactory;
+use SimpleSAML\Assert\AssertionFailedException;
 
 /**
  * Class \SAML2\XML\saml\SubjectConfirmationTest
@@ -96,7 +96,7 @@ XML
         $document = $this->document->documentElement;
         $document->removeAttribute('Method');
 
-        $this->expectException(InvalidArgumentException::class);
+        $this->expectException(AssertionFailedException::class);
         $this->expectExceptionMessage('SubjectConfirmation element without Method attribute');
 
         SubjectConfirmation::fromXML($document);
@@ -118,7 +118,7 @@ XML
 XML
         );
 
-        $this->expectException(InvalidArgumentException::class);
+        $this->expectException(AssertionFailedException::class);
         $this->expectExceptionMessage('More than one <saml:NameID> in <saml:SubjectConfirmation>.');
         SubjectConfirmation::fromXML($document->documentElement);
     }
@@ -139,7 +139,7 @@ XML
 XML
         );
 
-        $this->expectException(InvalidArgumentException::class);
+        $this->expectException(AssertionFailedException::class);
         $this->expectExceptionMessage('A <saml:SubjectConfirmation> can contain exactly one of <saml:BaseID>, <saml:NameID> or <saml:EncryptedID>.');
         SubjectConfirmation::fromXML($document->documentElement);
     }
@@ -160,7 +160,7 @@ XML
 XML
         );
 
-        $this->expectException(InvalidArgumentException::class);
+        $this->expectException(AssertionFailedException::class);
         $this->expectExceptionMessage(
             'More than one <saml:SubjectConfirmationData> in <saml:SubjectConfirmation>.'
         );

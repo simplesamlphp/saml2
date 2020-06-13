@@ -8,11 +8,11 @@ use Psr\Log\LoggerInterface;
 use SAML2\Compat\ContainerInterface;
 use SAML2\XML\AbstractXMLElement;
 use SAML2\XML\saml\CustomIdentifierInterface;
+use SimpleSAML\Assert\Assert;
 use SimpleSAML\Utils\HTTP;
 use SimpleSAML\Utils\Random;
 use SimpleSAML\Utils\System;
 use SimpleSAML\Utils\XML;
-use Webmozart\Assert\Assert;
 
 class Container implements ContainerInterface
 {

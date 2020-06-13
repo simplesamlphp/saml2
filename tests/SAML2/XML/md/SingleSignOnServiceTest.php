@@ -4,10 +4,10 @@ declare(strict_types=1);
 
 namespace SAML2\XML\md;
 
-use InvalidArgumentException;
 use PHPUnit\Framework\TestCase;
 use SAML2\Constants;
 use SAML2\DOMDocumentFactory;
+use SimpleSAML\Assert\AssertionFailedException;
 
 /**
  * Tests for md:SingleSignOnService.
@@ -53,7 +53,7 @@ XML
      */
     public function testMarshallingWithResponseLocation(): void
     {
-        $this->expectException(InvalidArgumentException::class);
+        $this->expectException(AssertionFailedException::class);
         $this->expectExceptionMessage('The \'ResponseLocation\' attribute must be omitted for md:SingleSignOnService.');
 
         new SingleSignOnService('urn:something', 'https://whatever/', 'https://response.location/');
@@ -83,7 +83,7 @@ XML
     {
         $this->document->documentElement->setAttribute('ResponseLocation', 'https://response.location/');
 
-        $this->expectException(InvalidArgumentException::class);
+        $this->expectException(AssertionFailedException::class);
         $this->expectExceptionMessage('The \'ResponseLocation\' attribute must be omitted for md:SingleSignOnService.');
 
         SingleSignOnService::fromXML($this->document->documentElement);

@@ -7,7 +7,7 @@ namespace SAML2\XML\xenc;
 use DOMElement;
 use SAML2\Constants;
 use SAML2\XML\Chunk;
-use Webmozart\Assert\Assert;
+use SimpleSAML\Assert\Assert;
 
 /**
  * A class implementing the xenc:EncryptionMethod element.

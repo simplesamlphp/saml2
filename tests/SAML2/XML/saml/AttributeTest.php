@@ -4,12 +4,12 @@ declare(strict_types=1);
 
 namespace SAML2\XML\saml;
 
-use Exception;
 use PHPUnit\Framework\TestCase;
 use RobRichards\XMLSecLibs\XMLSecurityKey;
 use SAML2\CertificatesMock;
 use SAML2\Constants;
 use SAML2\DOMDocumentFactory;
+use SimpleSAML\Assert\AssertionFailedException;
 
 /**
  * Class \SAML2\XML\saml\AttributeTest
@@ -124,7 +124,7 @@ XML
         $document = $this->document;
         $document->documentElement->removeAttribute('Name');
 
-        $this->expectException(Exception::class);
+        $this->expectException(AssertionFailedException::class);
 
         Attribute::fromXML($document->documentElement);
     }

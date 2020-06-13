@@ -4,7 +4,6 @@ declare(strict_types=1);
 
 namespace SAML2\XML\md;
 
-use InvalidArgumentException;
 use PHPUnit\Framework\TestCase;
 use RobRichards\XMLSecLibs\XMLSecurityDSig;
 use SAML2\Constants;
@@ -14,6 +13,7 @@ use SAML2\XML\ds\KeyInfo;
 use SAML2\XML\ds\KeyName;
 use SAML2\XML\saml\Attribute;
 use SAML2\XML\saml\AttributeValue;
+use SimpleSAML\Assert\AssertionFailedException;
 
 /**
  * Tests for IDPSSODescriptor.
@@ -224,7 +224,7 @@ XML
      */
     public function testMarshallingWithEmptySingleSignOnService(): void
     {
-        $this->expectException(InvalidArgumentException::class);
+        $this->expectException(AssertionFailedException::class);
         $this->expectExceptionMessage('At least one SingleSignOnService must be specified.');
         new IDPSSODescriptor([], ['protocol1']);
     }
@@ -236,7 +236,7 @@ XML
      */
     public function testMarshallingWithWrongSingleSignOnService(): void
     {
-        $this->expectException(InvalidArgumentException::class);
+        $this->expectException(AssertionFailedException::class);
         $this->expectExceptionMessage(
             'All md:SingleSignOnService endpoints must be an instance of SingleSignOnService.'
         );
@@ -255,7 +255,7 @@ XML
      */
     public function testMarshallingWithWrongNameIDMappingService(): void
     {
-        $this->expectException(InvalidArgumentException::class);
+        $this->expectException(AssertionFailedException::class);
         $this->expectExceptionMessage(
             'All md:NameIDMappingService endpoints must be an instance of NameIDMappingService.'
         );
@@ -276,7 +276,7 @@ XML
      */
     public function testMarshallingWithWrongAssertionIDRequestService(): void
     {
-        $this->expectException(InvalidArgumentException::class);
+        $this->expectException(AssertionFailedException::class);
         $this->expectExceptionMessage(
             'All md:AssertionIDRequestService endpoints must be an instance of AssertionIDRequestService.'
         );
@@ -297,7 +297,7 @@ XML
      */
     public function testMarshallingWithEmptyAttributeProfile(): void
     {
-        $this->expectException(InvalidArgumentException::class);
+        $this->expectException(AssertionFailedException::class);
         $this->expectExceptionMessage('All md:AttributeProfile elements must be a URI, not an empty string.');
         new IDPSSODescriptor(
             [new SingleSignOnService('binding1', 'location1')],
@@ -315,7 +315,7 @@ XML
      */
     public function testMarshallingWithWrongAttributes(): void
     {
-        $this->expectException(InvalidArgumentException::class);
+        $this->expectException(AssertionFailedException::class);
         $this->expectExceptionMessage('All md:Attribute elements must be an instance of Attribute.');
 
         /** @psalm-suppress InvalidArgument */
@@ -388,7 +388,7 @@ XML
      */
     public function testUnmarshallingWithoutSingleSignOnService(): void
     {
-        $this->expectException(InvalidArgumentException::class);
+        $this->expectException(AssertionFailedException::class);
         $this->expectExceptionMessage('At least one SingleSignOnService must be specified.');
         $ssoServiceEps = $this->document->getElementsByTagNameNS(Constants::NS_MD, 'SingleSignOnService');
         /** @psalm-suppress PossiblyNullArgument */
@@ -404,7 +404,7 @@ XML
      */
     public function testUnmarshallingWithWrongWantAuthnRequestsSigned(): void
     {
-        $this->expectException(InvalidArgumentException::class);
+        $this->expectException(AssertionFailedException::class);
         $this->expectExceptionMessage('The \'WantAuthnRequestsSigned\' attribute of md:IDPSSODescriptor must be boolean.');
         $this->document->documentElement->setAttribute('WantAuthnRequestsSigned', 'not a boolean');
         IDPSSODescriptor::fromXML($this->document->documentElement);
@@ -419,7 +419,7 @@ XML
         $attrProfiles = $this->document->getElementsByTagNameNS(Constants::NS_MD, 'AttributeProfile');
         /** @psalm-suppress PossiblyNullPropertyAssignment */
         $attrProfiles->item(0)->textContent = '';
-        $this->expectException(InvalidArgumentException::class);
+        $this->expectException(AssertionFailedException::class);
         $this->expectExceptionMessage('All md:AttributeProfile elements must be a URI, not an empty string.');
         IDPSSODescriptor::fromXML($this->document->documentElement);
     }

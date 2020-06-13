@@ -4,7 +4,7 @@ declare(strict_types=1);
 
 namespace SAML2\XML\md;
 
-use Webmozart\Assert\Assert;
+use SimpleSAML\Assert\Assert;
 
 /**
  * Class representing an md:SingleSignOnService element.

@@ -4,6 +4,7 @@ declare(strict_types=1);
 
 namespace SAML2\XML\saml;
 
+use DOMDocument;
 use Exception;
 use Mockery\Adapter\Phpunit\MockeryTestCase;
 use RobRichards\XMLSecLibs\XMLSecurityKey;
@@ -431,7 +432,7 @@ XML;
         try {
             $assertion->setAuthnContextDecl(new Chunk($document->documentElement));
             $assertion->setAuthnContextDeclRef('/relative/path/to/document.xml');
-        } catch (\Exception $e) {
+        } catch (Exception $e) {
         }
         $this->assertNotEmpty($e);
 
@@ -442,7 +443,7 @@ XML;
         try {
             $assertion->setAuthnContextDeclRef('/relative/path/to/document.xml');
             $assertion->setAuthnContextDecl(new Chunk($document->documentElement));
-        } catch (\Exception $e) {
+        } catch (Exception $e) {
         }
         $this->assertNotEmpty($e);
 
@@ -472,7 +473,7 @@ XML;
         $e = null;
         try {
             new Assertion($document->documentElement);
-        } catch (\Exception $e) {
+        } catch (Exception $e) {
         }
         $this->assertNotEmpty($e);
 
@@ -502,7 +503,7 @@ XML
         $e = null;
         try {
             $assertion = new Assertion($document->documentElement);
-        } catch (\Exception $e) {
+        } catch (Exception $e) {
         }
         $this->assertNotEmpty($e);
     }
@@ -578,7 +579,7 @@ XML
 
     public function testHasEncryptedAttributes(): void
     {
-        $document = new \DOMDocument();
+        $document = new DOMDocument();
         $document->loadXML(<<<XML
     <saml:Assertion xmlns:saml="urn:oasis:names:tc:SAML:2.0:assertion"
                     Version="2.0"
@@ -642,7 +643,7 @@ XML
 
     public function testHasEncryptedAttributes2(): void
     {
-        $document = new \DOMDocument();
+        $document = new DOMDocument();
         $document->loadXML(<<<XML
     <saml:Assertion xmlns:saml="urn:oasis:names:tc:SAML:2.0:assertion"
                     Version="2.0"
@@ -690,7 +691,7 @@ XML
      */
     public function testCorrectSignatureMethodCanBeExtracted(): void
     {
-        $document = new \DOMDocument();
+        $document = new DOMDocument();
         $document->loadXML(<<<XML
     <saml:Assertion xmlns:saml="urn:oasis:names:tc:SAML:2.0:assertion"
                     Version="2.0"
@@ -1086,7 +1087,7 @@ XML;
      */
     public function testVerifySignedAssertion(): void
     {
-        $doc = new \DOMDocument();
+        $doc = new DOMDocument();
         $doc->load(__DIR__ . '../../../signedassertion.xml');
 
         $publicKey = CertificatesMock::getPublicKeySha256();
@@ -1118,7 +1119,7 @@ XML;
      */
     public function testCommentsInSignedAssertion(): void
     {
-        $doc = new \DOMDocument();
+        $doc = new DOMDocument();
         $doc->load(__DIR__ . '../../../signedassertion_with_comments.xml');
 
         $publicKey = CertificatesMock::getPublicKeySha256();
@@ -1137,7 +1138,7 @@ XML;
      */
     public function testVerifySignedAssertionChangedBody(): void
     {
-        $doc = new \DOMDocument();
+        $doc = new DOMDocument();
         $doc->load(__DIR__ . '../../../signedassertion_tampered.xml');
 
         $publicKey = CertificatesMock::getPublicKeySha256();
@@ -1154,7 +1155,7 @@ XML;
      */
     public function testVerifySignedAssertionWrongKey(): void
     {
-        $doc = new \DOMDocument();
+        $doc = new DOMDocument();
         $doc->load(__DIR__ . '../../../signedassertion.xml');
 
         $publicKey = CertificatesMock::getPublicKey2Sha256();
@@ -1172,7 +1173,7 @@ XML;
      */
     public function testVerifySignedAssertionWrongKeyDSA(): void
     {
-        $doc = new \DOMDocument();
+        $doc = new DOMDocument();
         $doc->load(__DIR__ . '../../../signedassertion.xml');
 
         $publicKey = CertificatesMock::getPublicKeyDSAasRSA();
@@ -1799,7 +1800,7 @@ XML;
      */
     public function testMissingNameOnAttribute(): void
     {
-        $document = new \DOMDocument();
+        $document = new DOMDocument();
         $document->loadXML(<<<XML
     <saml:Assertion xmlns:saml="urn:oasis:names:tc:SAML:2.0:assertion"
                     Version="2.0"

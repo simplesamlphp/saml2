@@ -6,7 +6,7 @@ namespace SAML2\XML\mdrpi;
 
 use DOMElement;
 use SAML2\Utils;
-use Webmozart\Assert\Assert;
+use SimpleSAML\Assert\Assert;
 
 /**
  * Class for handling the mdrpi:RegistrationInfo element.

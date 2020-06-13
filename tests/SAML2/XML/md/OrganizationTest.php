@@ -4,11 +4,11 @@ declare(strict_types=1);
 
 namespace SAML2\XML\md;
 
-use InvalidArgumentException;
 use PHPUnit\Framework\TestCase;
 use SAML2\Constants;
 use SAML2\DOMDocumentFactory;
 use SAML2\XML\Chunk;
+use SimpleSAML\Assert\AssertionFailedException;
 
 /**
  * Test for the Organization metadata element.
@@ -116,7 +116,7 @@ XML
 XML
         );
 
-        $this->expectException(InvalidArgumentException::class);
+        $this->expectException(AssertionFailedException::class);
         $this->expectExceptionMessage('No localized organization URL found.');
 
         Organization::fromXML($document->documentElement);

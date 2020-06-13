@@ -9,7 +9,7 @@ use SAML2\Constants;
 use SAML2\Utils;
 use SAML2\XML\ds\Signature;
 use SAML2\XML\saml\Issuer;
-use Webmozart\Assert\Assert;
+use SimpleSAML\Assert\Assert;
 
 /**
  * The Artifact is part of the SAML 2.0 IdP code, and it builds an artifact object.

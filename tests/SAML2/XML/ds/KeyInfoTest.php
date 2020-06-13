@@ -4,11 +4,11 @@ declare(strict_types=1);
 
 namespace SAML2\XML\ds;
 
-use InvalidArgumentException;
 use RobRichards\XMLSecLibs\XMLSecurityDSig;
 use SAML2\DOMDocumentFactory;
 use SAML2\Utils;
 use SAML2\XML\Chunk;
+use SimpleSAML\Assert\AssertionFailedException;
 
 /**
  * Class \SAML2\XML\ds\KeyInfoTest
@@ -116,7 +116,7 @@ XML
      */
     public function testMarshallingEmpty(): void
     {
-        $this->expectException(InvalidArgumentException::class);
+        $this->expectException(AssertionFailedException::class);
         $this->expectExceptionMessage('ds:KeyInfo cannot be empty');
 
         $keyInfo = new KeyInfo([]);
@@ -148,7 +148,7 @@ XML
     {
         $document = DOMDocumentFactory::fromString('<ds:KeyInfo xmlns:ds="' . KeyInfo::NS . '"/>');
 
-        $this->expectException(InvalidArgumentException::class);
+        $this->expectException(AssertionFailedException::class);
         $this->expectExceptionMessage('ds:KeyInfo cannot be empty');
 
         $keyInfo = KeyInfo::fromXML($document->documentElement);

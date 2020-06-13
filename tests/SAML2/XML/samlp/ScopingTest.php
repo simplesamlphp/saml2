@@ -4,7 +4,6 @@ declare(strict_types=1);
 
 namespace SAML2\XML\samlp;
 
-use InvalidArgumentException;
 use PHPUnit\Framework\TestCase;
 use SAML2\Constants;
 use SAML2\DOMDocumentFactory;

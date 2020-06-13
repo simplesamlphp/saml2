@@ -8,7 +8,7 @@ use DOMElement;
 use Exception;
 use RobRichards\XMLSecLibs\XMLSecurityKey;
 use SAML2\XML\ds\Signature;
-use Webmozart\Assert\Assert;
+use SimpleSAML\Assert\Assert;
 
 /**
  * Helper trait for processing signed elements.

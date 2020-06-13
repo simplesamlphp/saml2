@@ -6,7 +6,7 @@ namespace SAML2\XML\md;
 
 use DOMElement;
 use SAML2\XML\ds\KeyInfo;
-use Webmozart\Assert\Assert;
+use SimpleSAML\Assert\Assert;
 
 /**
  * Class representing a KeyDescriptor element.

@@ -8,7 +8,7 @@ use DOMElement;
 use SAML2\Utils;
 use SAML2\XML\ds\Signature;
 use SAML2\XML\saml\Issuer;
-use Webmozart\Assert\Assert;
+use SimpleSAML\Assert\Assert;
 
 /**
  * The \SAML2\ArtifactResponse, is the response to the \SAML2\ArtifactResolve.

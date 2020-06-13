@@ -7,8 +7,8 @@ namespace SAML2\Compat\Ssp;
 use Psr\Log\InvalidArgumentException;
 use Psr\Log\LoggerInterface;
 use Psr\Log\LogLevel;
+use SimpleSAML\Assert\Assert;
 use SimpleSAML\Logger as SspLogger;
-use Webmozart\Assert\Assert;
 
 class Logger implements LoggerInterface
 {

@@ -4,11 +4,11 @@ declare(strict_types=1);
 
 namespace SAML2\XML\md;
 
-use InvalidArgumentException;
 use PHPUnit\Framework\TestCase;
 use SAML2\Constants;
 use SAML2\DOMDocumentFactory;
 use SAML2\XML\Chunk;
+use SimpleSAML\Assert\AssertionFailedException;
 
 /**
  * Tests for the md:EncryptionMethod element.
@@ -111,7 +111,7 @@ XML
      */
     public function testUnmarshallingWithoutAlgorithm(): void
     {
-        $this->expectException(InvalidArgumentException::class);
+        $this->expectException(AssertionFailedException::class);
         $this->expectExceptionMessage('Missing \'Algorithm\' attribute from md:EncryptionMethod.');
         $this->document->documentElement->removeAttribute('Algorithm');
         EncryptionMethod::fromXML($this->document->documentElement);

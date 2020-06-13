@@ -8,7 +8,7 @@ use DOMElement;
 use SAML2\Constants;
 use SAML2\DOMDocumentFactory;
 use SAML2\Utils;
-use Webmozart\Assert\Assert;
+use SimpleSAML\Assert\Assert;
 
 /**
  * SAML AudienceRestriction data type.

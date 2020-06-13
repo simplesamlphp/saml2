@@ -6,7 +6,7 @@ namespace SAML2\XML\xenc;
 
 use DOMElement;
 use SAML2\Utils;
-use Webmozart\Assert\Assert;
+use SimpleSAML\Assert\Assert;
 
 /**
  * Class representing <xenc:CipherData>.

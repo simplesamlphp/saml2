@@ -6,7 +6,7 @@ namespace SAML2\XML\saml;
 
 use DOMElement;
 use SAML2\Constants;
-use Webmozart\Assert\Assert;
+use SimpleSAML\Assert\Assert;
 
 /**
  * SAML Condition data type.

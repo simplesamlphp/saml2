@@ -11,7 +11,7 @@ use SAML2\XML\ds\Signature;
 use SAML2\XML\saml\Assertion;
 use SAML2\XML\saml\EncryptedAssertion;
 use SAML2\XML\saml\Issuer;
-use Webmozart\Assert\Assert;
+use SimpleSAML\Assert\Assert;
 
 /**
  * Class for SAML 2 Response messages.

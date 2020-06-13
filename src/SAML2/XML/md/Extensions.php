@@ -19,7 +19,7 @@ use SAML2\XML\mdui\AbstractMduiElement as MDUI;
 use SAML2\XML\mdui\DiscoHints;
 use SAML2\XML\mdui\UIInfo;
 use SAML2\XML\shibmd\Scope;
-use Webmozart\Assert\Assert;
+use SimpleSAML\Assert\Assert;
 
 /**
  * Class for handling SAML2 metadata extensions.

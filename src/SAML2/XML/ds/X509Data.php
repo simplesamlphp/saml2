@@ -7,7 +7,7 @@ namespace SAML2\XML\ds;
 use DOMElement;
 use SAML2\XML\Chunk;
 use SAML2\XML\ds\X509Certificate;
-use Webmozart\Assert\Assert;
+use SimpleSAML\Assert\Assert;
 
 /**
  * Class representing a ds:X509Data element.

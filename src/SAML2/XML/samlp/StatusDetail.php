@@ -6,7 +6,7 @@ namespace SAML2\XML\samlp;
 
 use DOMElement;
 use SAML2\XML\Chunk;
-use Webmozart\Assert\Assert;
+use SimpleSAML\Assert\Assert;
 
 /**
  * SAML StatusDetail data type.
