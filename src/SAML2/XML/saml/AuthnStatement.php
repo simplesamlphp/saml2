@@ -5,20 +5,16 @@ declare(strict_types=1);
 namespace SAML2\XML\saml;
 
 use DOMElement;
-use SAML2\Constants;
-use SAML2\DOMDocumentFactory;
 use SAML2\Utils;
-use SAML2\XML\saml\AuthnContext;
-use SAML2\XML\saml\SubjectLocality;
 use Webmozart\Assert\Assert;
 
 /**
- * Class representing SAML2 AuthnStatement
+ * Class representing a SAML2 AuthnStatement
  *
  * @author Tim van Dijen, <tvdijen@gmail.com>
- * @package simplesamlphp
+ * @package simplesamlphp/saml2
  */
-final class AuthnStatement extends AbstractSamlElement
+final class AuthnStatement extends AbstractStatement
 {
     /** @var \SAML2\XML\saml\AuthnContext */
     protected $authnContext;
@@ -56,6 +52,7 @@ final class AuthnStatement extends AbstractSamlElement
         $this->setAuthnInstant($authnInstant);
         $this->setSessionNotOnOrAfter($sessionNotOnOrAfter);
         $this->setSessionIndex($sessionIndex);
+        $this->setSubjectLocality($subjectLocality);
     }
 
 
@@ -179,8 +176,10 @@ final class AuthnStatement extends AbstractSamlElement
      * Convert XML into a AuthnContext
      *
      * @param \DOMElement $xml The XML element we should load
+     *
      * @return \SAML2\XML\saml\AuthnContext
-     * @throws \InvalidArgumentException if the qualified name of the supplied element is wrong
+     * @throws \InvalidArgumentException if the qualified name of the supplied element is wrong*@throws \Exception
+     * @throws \Exception if the authentication instant is not a valid timestamp.
      */
     public static function fromXML(DOMElement $xml): object
     {
