@@ -154,6 +154,65 @@ XML
 
 
     /**
+     * @return void
+     */
+    public function testUnmarshallingMissingAuthnInstantThrowsException(): void
+    {
+        $document = $this->document->documentElement;
+        $document->removeAttribute('AuthnInstant');
+
+        $this->expectException(AssertionFailedException::class);
+        $this->expectExceptionMessage("Missing 'AuthnInstant' attribute on saml:AuthnStatement.");
+
+        AuthnStatement::fromXML($document);
+    }
+
+
+    /**
+     * More than one AuthnContext inside AuthnStatement will throw Exception.
+     */
+    public function testMoreThanOneAuthnContextThrowsException(): void
+    {
+        $xml = <<<XML
+<saml:AuthnStatement AuthnInstant="2010-03-05T13:34:28Z">
+  <saml:AuthnContext>
+    <saml:AuthnContextClassRef>someAuthnContext</saml:AuthnContextClassRef>
+    <saml:AuthenticatingAuthority>someIdP1</saml:AuthenticatingAuthority>
+  </saml:AuthnContext>
+  <saml:AuthnContext>
+    <saml:AuthnContextClassRef>someAuthnContext</saml:AuthnContextClassRef>
+    <saml:AuthenticatingAuthority>someIdP2</saml:AuthenticatingAuthority>
+  </saml:AuthnContext>
+</saml:AuthnStatement>
+XML;
+        $document = DOMDocumentFactory::fromString($xml);
+
+        $this->expectException(Exception::class);
+        $this->expectExceptionMessage("Missing or more than one <saml:AuthnContext> in <saml:AuthnStatement>");
+
+        AuthnStatement::fromXML($document->documentElement);
+    }
+
+
+    /**
+     * Missing AuthnContext inside AuthnStatement will throw Exception.
+     */
+    public function testMissingAuthnContextThrowsException(): void
+    {
+        $xml = <<<XML
+<saml:AuthnStatement AuthnInstant="2010-03-05T13:34:28Z">
+</saml:AuthnStatement>
+XML;
+        $document = DOMDocumentFactory::fromString($xml);
+
+        $this->expectException(Exception::class);
+        $this->expectExceptionMessage("Missing or more than one <saml:AuthnContext> in <saml:AuthnStatement>");
+
+        AuthnStatement::fromXML($document->documentElement);
+    }
+
+
+    /**
      * Test serialization / unserialization
      */
     public function testSerialization(): void
