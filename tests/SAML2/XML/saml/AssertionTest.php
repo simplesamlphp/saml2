@@ -5,6 +5,7 @@ declare(strict_types=1);
 namespace SimpleSAML\SAML2\XML\saml;
 
 use DOMDocument;
+use DOMNodeList;
 use Exception;
 use Mockery\Adapter\Phpunit\MockeryTestCase;
 use SimpleSAML\SAML2\Constants;
@@ -47,20 +48,26 @@ final class AssertionTest extends MockeryTestCase
         // Create an Issuer
         $issuer = new Issuer('testIssuer');
 
-        // Create an assertion
-        $assertion = new Assertion();
-        $assertion->setIssuer($issuer);
-        $assertion->setConditions(
+        // Create the conditions
+        $conditions = new Conditions(
             null,
             null,
             [],
-            [
-                new AudienceRestriction(
-                    ['audience1', 'audience2']
-                )
-            ]
+            [new AudienceRestriction(['audience1', 'audience2'])]
         );
-        $assertion->setAuthnContextClassRef('someAuthnContext');
+
+        // Create the statements
+        $authnStatement = new AuthnStatement(
+            new AuthnContext(
+                new AuthnContextClassRef('someAuthnContext'),
+                null,
+                null
+            ),
+            time()
+        );
+
+        // Create an assertion
+        $assertion = new Assertion($issuer, null, null, null, $conditions, [$authnStatement]);
 
         // Marshall it to a \DOMElement
         $assertionElement = $assertion->toXML();
@@ -118,7 +125,7 @@ final class AssertionTest extends MockeryTestCase
 </saml:Assertion>
 XML;
         $document  = DOMDocumentFactory::fromString($xml);
-        $assertion = new Assertion($document->documentElement);
+        $assertion = Assertion::fromXML($document->documentElement);
 
         // Was not signed
         $this->assertFalse($assertion->wasSignedAtConstruction());
@@ -135,7 +142,7 @@ XML;
         $this->assertEquals(['audience1', 'audience2'], $restriction1->getAudience());
 
         // Test for Authenticating Authorities
-        $assertionAuthenticatingAuthorities = $assertion->getAuthenticatingAuthority();
+        $assertionAuthenticatingAuthorities = $assertion->getAuthnStatements()[0]->getAuthnContext()->getAuthenticatingAuthorities();
         $this->assertCount(2, $assertionAuthenticatingAuthorities);
         $this->assertEquals('someIdP1', $assertionAuthenticatingAuthorities[0]);
         $this->assertEquals('someIdP2', $assertionAuthenticatingAuthorities[1]);
@@ -191,7 +198,7 @@ XML;
 
         $assertionElement = $assertion->toXML()->ownerDocument->saveXML();
 
-        $assertionToVerify = new Assertion(DOMDocumentFactory::fromString($assertionElement)->documentElement);
+        $assertionToVerify = Assertion::fromXML(DOMDocumentFactory::fromString($assertionElement)->documentElement);
         $conditions = $assertionToVerify->getConditions();
         $this->assertNotNull($conditions);
 
@@ -261,7 +268,7 @@ XML;
 
         $assertionElement = $assertion->toXML()->ownerDocument->saveXML();
 
-        $assertionToVerify = new Assertion(DOMDocumentFactory::fromString($assertionElement)->documentElement);
+        $assertionToVerify = Assertion::fromXML(DOMDocumentFactory::fromString($assertionElement)->documentElement);
 
         $authauth = $assertionToVerify->getAuthenticatingAuthority();
         $this->assertCount(2, $authauth);
@@ -370,7 +377,7 @@ XML;
         // Try with unmarshalling
         $document = DOMDocumentFactory::fromString($xml);
 
-        $assertion = new Assertion($document->documentElement);
+        $assertion = Assertion::fromXML($document->documentElement);
         $authnContextDecl = $assertion->getAuthnContextDecl();
         $this->assertNotEmpty($authnContextDecl);
         $this->assertEquals('AuthnContextDecl', $authnContextDecl->getLocalName());
@@ -406,7 +413,7 @@ XML;
 
         $document = DOMDocumentFactory::fromString($xml);
 
-        $assertion = new Assertion($document->documentElement);
+        $assertion = Assertion::fromXML($document->documentElement);
         $this->assertEquals('/relative/path/to/document.xml', $assertion->getAuthnContextDeclRef());
         $this->assertEquals('someAuthnContext', $assertion->getAuthnContextClassRef());
     }
@@ -533,7 +540,7 @@ XML;
 
         $e = null;
         try {
-            new Assertion($document->documentElement);
+            Assertion::fromXML($document->documentElement);
         } catch (Exception $e) {
         }
         $this->assertNotEmpty($e);
@@ -563,7 +570,7 @@ XML
         );
         $e = null;
         try {
-            $assertion = new Assertion($document->documentElement);
+            $assertion = Assertion::fromXML($document->documentElement);
         } catch (Exception $e) {
         }
         $this->assertNotEmpty($e);
@@ -592,7 +599,7 @@ XML
 XML
         );
 
-        $assertion = new Assertion($document->documentElement);
+        $assertion = Assertion::fromXML($document->documentElement);
         $sc = $assertion->getSubject()->getSubjectConfirmation();
 
         $this->assertCount(1, $sc);
@@ -632,7 +639,7 @@ XML
 </saml:Assertion>
 XML
         );
-        $assertion = new Assertion($document->documentElement);
+        $assertion = Assertion::fromXML($document->documentElement);
         $this->assertEmpty($assertion->getAuthnContextClassRef());
         $this->assertEquals($authnContextDeclRef, $assertion->getAuthnContextDeclRef());
     }
@@ -697,7 +704,7 @@ XML
     </saml:Assertion>
 XML
         );
-        $assertion = new Assertion($document->documentElement);
+        $assertion = Assertion::fromXML($document->documentElement);
         $this->assertTrue($assertion->hasEncryptedAttributes());
     }
 
@@ -742,7 +749,7 @@ XML
     </saml:Assertion>
 XML
         );
-        $assertion = new Assertion($document->documentElement);
+        $assertion = Assertion::fromXML($document->documentElement);
         $this->assertFalse($assertion->hasEncryptedAttributes());
     }
 
@@ -793,13 +800,13 @@ XML
 
         $privateKey = PEMCertificatesMock::getPrivateKey(XMLSecurityKey::RSA_SHA256, PEMCertificatesMock::PRIVATE_KEY);
 
-        $unsignedAssertion = new Assertion($document->documentElement);
+        $unsignedAssertion = Assertion::fromXML($document->documentElement);
         $unsignedAssertion->setSigningKey($privateKey);
         $unsignedAssertion->setCertificates([PEMCertificatesMock::getPlainPublicKey(PEMCertificatesMock::PUBLIC_KEY)]);
         $this->assertFalse($unsignedAssertion->wasSignedAtConstruction());
         $this->assertEquals($privateKey, $unsignedAssertion->getSigningKey());
 
-        $signedAssertion = new Assertion($unsignedAssertion->toXML());
+        $signedAssertion = Assertion::fromXML($unsignedAssertion->toXML());
 
         $signatureMethod = $signedAssertion->getSignatureMethod();
 
@@ -840,7 +847,7 @@ XML
     </saml:Assertion>
 XML;
 
-        $assertion = new Assertion(DOMDocumentFactory::fromString($xml)->documentElement);
+        $assertion = Assertion::fromXML(DOMDocumentFactory::fromString($xml)->documentElement);
 
         $attributes = $assertion->getAttributes();
 
@@ -909,7 +916,7 @@ XML;
     </saml:Assertion>
 XML;
 
-        $assertion = new Assertion(DOMDocumentFactory::fromString($xml)->documentElement);
+        $assertion = Assertion::fromXML(DOMDocumentFactory::fromString($xml)->documentElement);
         $attributes = $assertion->getAttributes();
         $maceValue = $attributes['urn:mace:dir:attribute-def:eduPersonTargetedID'][0];
         $oidValue = $attributes['urn:oid:1.3.6.1.4.1.5923.1.1.1.10'][0];
@@ -956,7 +963,7 @@ XML;
     </saml:Assertion>
 XML;
 
-        $assertion = new Assertion(DOMDocumentFactory::fromString($xml)->documentElement);
+        $assertion = Assertion::fromXML(DOMDocumentFactory::fromString($xml)->documentElement);
 
         $attributes = $assertion->getAttributes();
 
@@ -1003,11 +1010,11 @@ XML;
             </saml:Assertion>
 XML;
 
-        $assertion = new Assertion(DOMDocumentFactory::fromString($xml)->documentElement);
+        $assertion = Assertion::fromXML(DOMDocumentFactory::fromString($xml)->documentElement);
 
         $attributes = $assertion->getAttributes();
         $this->assertInstanceOf(
-            \DOMNodeList::class,
+            DOMNodeList::class,
             $attributes['urn:some:custom:outer:element'][0]
         );
         $this->assertXmlStringEqualsXmlString($xml, $assertion->toXML()->ownerDocument->saveXML());
@@ -1038,7 +1045,7 @@ XML;
     </saml:Assertion>
 XML;
 
-        $assertion = new Assertion(DOMDocumentFactory::fromString($xml)->documentElement);
+        $assertion = Assertion::fromXML(DOMDocumentFactory::fromString($xml)->documentElement);
 
         $attributes = $assertion->getAttributes();
         $this->assertIsInt($attributes['urn:some:integer'][0]);
@@ -1077,14 +1084,14 @@ XML;
 
         $privateKey = PEMCertificatesMock::getPublicKey(XMLSecurityKey::RSA_SHA256);
 
-        $assertion = new Assertion(DOMDocumentFactory::fromString($xml)->documentElement);
+        $assertion = Assertion::fromXML(DOMDocumentFactory::fromString($xml)->documentElement);
         $assertion->setEncryptionKey($privateKey);
         $assertion->setRequiredEncAttributes(true);
         $this->assertEquals($privateKey, $assertion->getEncryptionKey());
 
         $encryptedAssertion = $assertion->toXML()->ownerDocument->saveXML();
 
-        $assertionToVerify = new Assertion(DOMDocumentFactory::fromString($encryptedAssertion)->documentElement);
+        $assertionToVerify = Assertion::fromXML(DOMDocumentFactory::fromString($encryptedAssertion)->documentElement);
 
         $this->assertTrue($assertionToVerify->hasEncryptedAttributes());
 
@@ -1092,7 +1099,7 @@ XML;
 
         $attributes = $assertionToVerify->getAttributes();
         $this->assertInstanceOf(
-            \DOMNodeList::class,
+            DOMNodeList::class,
             $attributes['urn:some:custom:outer:element'][0]
         );
         $this->assertXmlStringEqualsXmlString($xml, $assertionToVerify->toXML()->ownerDocument->saveXML());
@@ -1126,12 +1133,12 @@ XML;
 
         $privateKey = PEMCertificatesMock::getPublicKey(XMLSecurityKey::RSA_SHA256);
 
-        $assertion = new Assertion(DOMDocumentFactory::fromString($xml)->documentElement);
+        $assertion = Assertion::fromXML(DOMDocumentFactory::fromString($xml)->documentElement);
         $assertion->setEncryptionKey($privateKey);
         $assertion->setRequiredEncAttributes(true);
         $encryptedAssertion = $assertion->toXML()->ownerDocument->saveXML();
 
-        $assertionToVerify = new Assertion(DOMDocumentFactory::fromString($encryptedAssertion)->documentElement);
+        $assertionToVerify = Assertion::fromXML(DOMDocumentFactory::fromString($encryptedAssertion)->documentElement);
 
         $this->assertTrue($assertionToVerify->hasEncryptedAttributes());
 
@@ -1154,7 +1161,7 @@ XML;
 
         $publicKey = PEMCertificatesMock::getPublicKey(XMLSecurityKey::RSA_SHA256, PEMCertificatesMock::SELFSIGNED_PUBLIC_KEY);
 
-        $assertion = new Assertion($doc->documentElement);
+        $assertion = Assertion::fromXML($doc->documentElement);
         $result = $assertion->validate($publicKey);
 
         $this->assertTrue($result);
@@ -1186,7 +1193,7 @@ XML;
 
         $publicKey = PEMCertificatesMock::getPublicKey(XMLSecurityKey::RSA_SHA256, PEMCertificatesMock::SELFSIGNED_PUBLIC_KEY);
 
-        $assertion = new Assertion($doc->documentElement);
+        $assertion = Assertion::fromXML($doc->documentElement);
         $result = $assertion->validate($publicKey);
 
         $this->assertTrue($result);
@@ -1221,7 +1228,7 @@ XML;
 
         $publicKey = PEMCertificatesMock::getPublicKey(XMLSecurityKey::RSA_SHA256, PEMCertificatesMock::OTHER_PUBLIC_KEY);
 
-        $assertion = new Assertion($doc->documentElement);
+        $assertion = Assertion::fromXML($doc->documentElement);
         $this->expectException(Exception::class);
         $this->expectExceptionMessage('Unable to validate Signature');
         $assertion->validate($publicKey);
@@ -1239,7 +1246,7 @@ XML;
 
         $publicKey = PEMCertificatesMock::getPublicKey(XMLSecurityKey::RSA_SHA256, PEMCertificatesMock::SELFSIGNED_PUBLIC_KEY, PEMCertificatesMock::ALG_SIG_DSA);
 
-        $assertion = new Assertion($doc->documentElement);
+        $assertion = Assertion::fromXML($doc->documentElement);
         $this->expectException(Exception::class);
         $this->expectExceptionMessage('Unable to validate Signature');
         $assertion->validate($publicKey);
@@ -1275,7 +1282,7 @@ XML;
 </saml:Assertion>
 XML;
         $document  = DOMDocumentFactory::fromString($xml);
-        $assertion = new Assertion($document->documentElement);
+        $assertion = Assertion::fromXML($document->documentElement);
 
         // Was not signed
         $this->assertFalse($assertion->wasSignedAtConstruction());
@@ -1315,8 +1322,8 @@ XML;
 XML;
         $document  = DOMDocumentFactory::fromString($xml);
         $this->expectException(Exception::class);
-        $this->expectExceptionMessage('Unsupported version: 1.3');
-        $assertion = new Assertion($document->documentElement);
+        $this->expectExceptionMessage('Unsupported version: "1.3"');
+        Assertion::fromXML($document->documentElement);
     }
 
 
@@ -1348,8 +1355,8 @@ XML;
 XML;
         $document  = DOMDocumentFactory::fromString($xml);
         $this->expectException(Exception::class);
-        $this->expectExceptionMessage('Missing ID attribute on SAML assertion');
-        $assertion = new Assertion($document->documentElement);
+        $this->expectExceptionMessage('Missing \'ID\' attribute on saml:Assertion');
+        Assertion::fromXML($document->documentElement);
     }
 
 
@@ -1381,8 +1388,8 @@ XML;
 XML;
         $document  = DOMDocumentFactory::fromString($xml);
         $this->expectException(Exception::class);
-        $this->expectExceptionMessage('Missing <saml:Issuer> in assertion');
-        $assertion = new Assertion($document->documentElement);
+        $this->expectExceptionMessage('Missing or more than one <saml:Issuer> in assertion.');
+        Assertion::fromXML($document->documentElement);
     }
 
 
@@ -1418,7 +1425,7 @@ XML;
 
         $this->expectException(Exception::class);
         $this->expectExceptionMessage('More than one <saml:Subject> in <saml:Assertion>');
-        $assertion = new Assertion($document->documentElement);
+        Assertion::fromXML($document->documentElement);
     }
 
 
@@ -1451,7 +1458,7 @@ XML;
 
         $this->expectException(Exception::class);
         $this->expectExceptionMessage('More than one <saml:NameID> or <saml:EncryptedID> in <saml:Subject>');
-        $assertion = new Assertion($document->documentElement);
+        Assertion::fromXML($document->documentElement);
     }
      */
 
@@ -1485,7 +1492,7 @@ XML;
 
         $this->expectException(Exception::class);
         $this->expectExceptionMessage('A <saml:Subject> not containing <saml:SubjectConfirmation> should provide exactly one of <saml:BaseID>, <saml:NameID> or <saml:EncryptedID>');
-        $assertion = new Assertion($document->documentElement);
+        Assertion::fromXML($document->documentElement);
     }
 
 
@@ -1523,7 +1530,7 @@ XML;
 
         $this->expectException(Exception::class);
         $this->expectExceptionMessage('More than one <saml:Conditions> in <saml:Assertion>');
-        $assertion = new Assertion($document->documentElement);
+        Assertion::fromXML($document->documentElement);
     }
 
 
@@ -1558,7 +1565,7 @@ XML;
 
         $this->expectException(Exception::class);
         $this->expectExceptionMessage('Unknown namespace of condition:');
-        $assertion = new Assertion($document->documentElement);
+        Assertion::fromXML($document->documentElement);
     }
 
 
@@ -1601,7 +1608,7 @@ XML;
 XML;
         $document  = DOMDocumentFactory::fromString($xml);
 
-        $assertion = new Assertion($document->documentElement);
+        $assertion = Assertion::fromXML($document->documentElement);
         $conditions = $assertion->getConditions();
         $this->assertNotNull($conditions);
 
@@ -1650,7 +1657,7 @@ XML;
 
         $this->expectException(Exception::class);
         $this->expectExceptionMessage("Unknown condition: 'OtherCondition'");
-        $assertion = new Assertion($document->documentElement);
+        Assertion::fromXML($document->documentElement);
     }
 
 
@@ -1684,7 +1691,7 @@ XML;
 
         $this->expectException(Exception::class);
         $this->expectExceptionMessage("More than one <saml:AuthnStatement> in <saml:Assertion> not supported");
-        $assertion = new Assertion($document->documentElement);
+        Assertion::fromXML($document->documentElement);
     }
 
 
@@ -1712,8 +1719,8 @@ XML;
         $document  = DOMDocumentFactory::fromString($xml);
 
         $this->expectException(Exception::class);
-        $this->expectExceptionMessage("Missing required AuthnInstant attribute on <saml:AuthnStatement>");
-        $assertion = new Assertion($document->documentElement);
+        $this->expectExceptionMessage("Missing 'AuthnInstant' attribute on saml:AuthnStatement.");
+        Assertion::fromXML($document->documentElement);
     }
 
 
@@ -1745,7 +1752,7 @@ XML;
 
         $this->expectException(Exception::class);
         $this->expectExceptionMessage("More than one <saml:AuthnContext> in <saml:AuthnStatement>");
-        $assertion = new Assertion($document->documentElement);
+        Assertion::fromXML($document->documentElement);
     }
 
 
@@ -1769,7 +1776,7 @@ XML;
 
         $this->expectException(Exception::class);
         $this->expectExceptionMessage("Missing required <saml:AuthnContext> in <saml:AuthnStatement>");
-        $assertion = new Assertion($document->documentElement);
+        Assertion::fromXML($document->documentElement);
     }
 
 
@@ -1798,7 +1805,7 @@ XML;
 
         $this->expectException(Exception::class);
         $this->expectExceptionMessage("More than one <saml:AuthnContextDeclRef> found");
-        $assertion = new Assertion($document->documentElement);
+        Assertion::fromXML($document->documentElement);
     }
 
 
@@ -1832,7 +1839,7 @@ XML;
 
         $this->expectException(Exception::class);
         $this->expectExceptionMessage("More than one <saml:AuthnContextDecl> found?");
-        $assertion = new Assertion($document->documentElement);
+        $assertion = Assertion::fromXML($document->documentElement);
     }
 
 
@@ -1861,7 +1868,7 @@ XML;
 
         $this->expectException(Exception::class);
         $this->expectExceptionMessage("More than one <saml:AuthnContextClassRef> in <saml:AuthnContext>");
-        $assertion = new Assertion($document->documentElement);
+        Assertion::fromXML($document->documentElement);
     }
 
 
@@ -1890,8 +1897,8 @@ XML
         );
 
         $this->expectException(Exception::class);
-        $this->expectExceptionMessage("Missing name on <saml:Attribute> element");
-        $assertion = new Assertion($document->documentElement);
+        $this->expectExceptionMessage("Missing 'Name' attribute on saml:Attribute.");
+        Assertion::fromXML($document->documentElement);
     }
 
 
@@ -1923,7 +1930,7 @@ XML
     </saml:Assertion>
 XML;
 
-        $assertion = new Assertion(DOMDocumentFactory::fromString($xml)->documentElement);
+        $assertion = Assertion::fromXML(DOMDocumentFactory::fromString($xml)->documentElement);
 
         $nameFormat = $assertion->getAttributeNameFormat();
         $this->assertEquals('urn:oasis:names:tc:SAML:2.0:attrname-format:unspecified', $nameFormat);
@@ -1957,7 +1964,7 @@ XML;
 
         $document = DOMDocumentFactory::fromString($xml);
 
-        $assertion = new Assertion($document->documentElement);
+        $assertion = Assertion::fromXML($document->documentElement);
 
         $nameID = $assertion->getSubject()->getIdentifier();
         $this->assertInstanceOf(NameID::class, $nameID);
@@ -2001,7 +2008,7 @@ XML;
         // Marshall it to a \DOMElement
         $assertionElement = $assertion->toXML()->ownerDocument->saveXML();
 
-        $assertionToVerify = new Assertion(DOMDocumentFactory::fromString($assertionElement)->documentElement);
+        $assertionToVerify = Assertion::fromXML(DOMDocumentFactory::fromString($assertionElement)->documentElement);
 
         $identifier = $assertionToVerify->getIdentifier();
         $this->assertInstanceOf(EncryptedID::class, $identifier);
@@ -2046,7 +2053,7 @@ XML;
 XML;
         $document = DOMDocumentFactory::fromString($xml);
 
-        $assertion = new Assertion($document->documentElement);
+        $assertion = Assertion::fromXML($document->documentElement);
         $this->expectException(Exception::class);
         $this->expectExceptionMessage("Attempted to retrieve encrypted NameID without decrypting it first");
         $assertion->getNameID();
@@ -2168,7 +2175,7 @@ XML;
 </saml:Assertion>
 XML;
         $document  = DOMDocumentFactory::fromString($xml);
-        $assertion = new Assertion($document->documentElement);
+        $assertion = Assertion::fromXML($document->documentElement);
 
         $pubkey = new XMLSecurityKey(XMLSecurityKey::RSA_SHA256, ['type' => 'public']);
         $pubkey->loadKey(PEMCertificatesMock::PUBLIC_KEY_PEM);

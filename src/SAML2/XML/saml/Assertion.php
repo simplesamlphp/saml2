@@ -261,7 +261,7 @@ class Assertion extends AbstractSamlElement implements SignedElementInterface
      */
     protected function setStatements(array $statements): void
     {
-        Assert::allInInstanceOf($statements, AbstractStatement::class);
+        Assert::allIsInstanceOf($statements, AbstractStatement::class);
 
         $this->statements = $statements;
     }
@@ -391,7 +391,7 @@ class Assertion extends AbstractSamlElement implements SignedElementInterface
     {
         Assert::same($xml->localName, 'Assertion', InvalidDOMElementException::class);
         Assert::same($xml->namespaceURI, Assertion::NS , InvalidDOMElementException::class);
-        Assert::same('2.0', self::getAttribute($xml, 'Version'));
+        Assert::same(self::getAttribute($xml, 'Version'), '2.0', 'Unsupported version: %s');
 
         $issueInstant = Utils::xsDateTimeToTimestamp(self::getAttribute($xml, 'IssueInstant'));
 
