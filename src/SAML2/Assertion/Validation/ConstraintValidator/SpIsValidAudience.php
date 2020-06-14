@@ -9,7 +9,7 @@ use SAML2\Assertion\Validation\AssertionConstraintValidator;
 use SAML2\Assertion\Validation\Result;
 use SAML2\Configuration\ServiceProvider;
 use SAML2\Configuration\ServiceProviderAware;
-use Webmozart\Assert\Assert;
+use SimpleSAML\Assert\Assert;
 
 class SpIsValidAudience implements
     AssertionConstraintValidator,

@@ -20,7 +20,7 @@ use SAML2\XML\ds\KeyInfo;
 use SAML2\XML\ds\X509Certificate;
 use SAML2\XML\ds\X509Data;
 use SAML2\XML\md\KeyDescriptor;
-use Webmozart\Assert\Assert;
+use SimpleSAML\Assert\Assert;
 
 /**
  * Helper functions for the SAML2 library.

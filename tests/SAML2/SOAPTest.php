@@ -8,7 +8,7 @@ use DOMDocument;
 use InvalidArgumentException;
 use SAML2\XML\samlp\ArtifactResolve;
 use SAML2\XML\samlp\MessageFactory;
-use Webmozart\Assert\Assert;
+use SimpleSAML\Assert\Assert;
 
 class SOAPTest extends \Mockery\Adapter\Phpunit\MockeryTestCase
 {

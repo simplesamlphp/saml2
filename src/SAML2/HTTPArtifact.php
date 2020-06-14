@@ -16,7 +16,7 @@ use SimpleSAML\Metadata\MetaDataStorageHandler;
 use SimpleSAML\Module\saml\Message as MSG;
 use SimpleSAML\Store;
 use SimpleSAML\Utils\HTTP;
-use Webmozart\Assert\Assert;
+use SimpleSAML\Assert\Assert;
 
 /**
  * Class which implements the HTTP-Artifact binding.

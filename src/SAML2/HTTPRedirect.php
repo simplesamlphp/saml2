@@ -9,7 +9,7 @@ use RobRichards\XMLSecLibs\XMLSecurityKey;
 use SAML2\XML\samlp\AbstractMessage;
 use SAML2\XML\samlp\AbstractRequest;
 use SAML2\XML\samlp\MessageFactory;
-use Webmozart\Assert\Assert;
+use SimpleSAML\Assert\Assert;
 
 /**
  * Class which implements the HTTP-Redirect binding.

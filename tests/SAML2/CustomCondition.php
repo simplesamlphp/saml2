@@ -4,7 +4,7 @@ namespace SAML2;
 
 use DOMElement;
 use SAML2\XML\saml\Condition;
-use Webmozart\Assert\Assert;
+use SimpleSAML\Assert\Assert;
 
 final class CustomCondition extends Condition
 {

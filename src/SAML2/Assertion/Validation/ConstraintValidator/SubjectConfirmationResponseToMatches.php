@@ -8,7 +8,7 @@ use SAML2\Assertion\Validation\Result;
 use SAML2\Assertion\Validation\SubjectConfirmationConstraintValidator;
 use SAML2\XML\saml\SubjectConfirmation;
 use SAML2\XML\samlp\Response;
-use Webmozart\Assert\Assert;
+use SimpleSAML\Assert\Assert;
 
 class SubjectConfirmationResponseToMatches implements
     SubjectConfirmationConstraintValidator
