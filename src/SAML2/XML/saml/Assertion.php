@@ -548,7 +548,8 @@ class Assertion implements SignedElementInterface
      * Otherwise, true will be returned. An exception is thrown if the
      * signature validation fails.
      *
-     * @param  XMLSecurityKey $key The key we should check against.
+     * @param \RobRichards\XMLSecLibs\XMLSecurityKey $key The key we should check against.
+     *
      * @return boolean        true if successful, false if it is unsigned.
      *
      * @throws \SimpleSAML\Assert\AssertionFailedException if assertions are false
@@ -758,6 +759,7 @@ class Assertion implements SignedElementInterface
     /**
      * Decrypt the assertion attributes.
      *
+<<<<<<< HEAD
      * @param XMLSecurityKey $key
      * @param array $blacklist
      * @return \SAML2\XML\saml\Assertion
@@ -832,6 +834,7 @@ class Assertion implements SignedElementInterface
      * Set the earliest timestamp this assertion can be used.
      *
      * Set this to null if no limit is required.
+     * @param \RobRichards\XMLSecLibs\XMLSecurityKey $key
      *
      * @param int|null $notBefore The earliest timestamp this assertion is valid.
      * @return void
@@ -1103,6 +1106,7 @@ class Assertion implements SignedElementInterface
      */
     public function setSubjectConfirmation(array $SubjectConfirmation): void
     {
+        Assert::allIsInstanceOf($SubjectConfirmation, SubjectConfirmation::class);
         $this->SubjectConfirmation = $SubjectConfirmation;
     }
 

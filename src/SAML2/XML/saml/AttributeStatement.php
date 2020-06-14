@@ -6,7 +6,8 @@ namespace SAML2\XML\saml;
 
 use DOMElement;
 use RobRichards\XMLSecLibs\XMLSecurityKey;
-use Webmozart\Assert\Assert;
+use SAML2\Exception\InvalidDOMElementException;
+use SimpleSAML\Assert\Assert;
 
 /**
  * Class representing a SAML2 AttributeStatement
@@ -25,8 +26,8 @@ class AttributeStatement extends AbstractStatement
     /**
      * AttributeStatement constructor.
      *
-     * @param \SAML2\XML\saml\Attribute[]|null $attributes
-     * @param \SAML2\XML\saml\EncryptedAttribute[]|null $encryptedAttributes
+     * @param \SAML2\XML\saml\Attribute[] $attributes
+     * @param \SAML2\XML\saml\EncryptedAttribute[] $encryptedAttributes
      */
     public function __construct(
         array $attributes = [],
@@ -67,13 +68,15 @@ class AttributeStatement extends AbstractStatement
 
 
     /**
-     * @param XMLSecurityKey $key
+     * @param \RobRichards\XMLSecLibs\XMLSecurityKey $key
      * @param array $blacklist
      *
      * @throws \Exception
      */
     public function decryptAttributes(XMLSecurityKey $key, array $blacklist = []): void
     {
+        Assert::allStringNotEmpty($blacklist);
+
         foreach ($this->encryptedAttributes as $encryptedAttribute) {
             $this->attributes[] = $encryptedAttribute->decrypt($key, $blacklist);
         }
@@ -100,14 +103,15 @@ class AttributeStatement extends AbstractStatement
 
 
     /**
-     * @param DOMElement $xml
-     *
+     * @param \DOMElement $xml
      * @return object
+     *
+     * @throws \SAML2\Exception\InvalidDOMElementException if the qualified name of the supplied element is wrong
      */
     public static function fromXML(DOMElement $xml): object
     {
-        Assert::same($xml->localName, 'AttributeStatement');
-        Assert::same($xml->namespaceURI, AttributeStatement::NS);
+        Assert::same($xml->localName, 'AttributeStatement', InvalidDOMElementException::class);
+        Assert::same($xml->namespaceURI, AttributeStatement::NS, InvalidDOMElementException::class);
 
         return new self(
             Attribute::getChildrenOfClass($xml),
@@ -116,6 +120,12 @@ class AttributeStatement extends AbstractStatement
     }
 
 
+    /**
+     * Convert this Attribute to XML.
+     *
+     * @param \DOMElement|null $parent The element we should append this Attribute to.
+     * @return \DOMElement
+     */
     public function toXML(DOMElement $parent = null): DOMElement
     {
         $e = $this->instantiateParentElement($parent);

@@ -5,8 +5,9 @@ declare(strict_types=1);
 namespace SAML2\XML\saml;
 
 use DOMElement;
+use SAML2\Exception\InvalidDOMElementException;
 use SAML2\Utils;
-use Webmozart\Assert\Assert;
+use SimpleSAML\Assert\Assert;
 
 /**
  * Class representing a SAML2 AuthnStatement
@@ -141,7 +142,6 @@ final class AuthnStatement extends AbstractStatement
      *
      * @param string|null $sessionIndex
      * @return void
-     * @throws \InvalidArgumentException
      */
     private function setSessionIndex(?string $sessionIndex): void
     {
@@ -178,13 +178,13 @@ final class AuthnStatement extends AbstractStatement
      * @param \DOMElement $xml The XML element we should load
      *
      * @return \SAML2\XML\saml\AuthnContext
-     * @throws \InvalidArgumentException if the qualified name of the supplied element is wrong*@throws \Exception
+     * @throws \SAML2\Exception\InvalidDOMElementException if the qualified name of the supplied element is wrong
      * @throws \Exception if the authentication instant is not a valid timestamp.
      */
     public static function fromXML(DOMElement $xml): object
     {
-        Assert::same($xml->localName, 'AuthnStatement');
-        Assert::same($xml->namespaceURI, AuthnStatement::NS);
+        Assert::same($xml->localName, 'AuthnStatement', InvalidDOMElementException::class);
+        Assert::same($xml->namespaceURI, AuthnStatement::NS, InvalidDOMElementException::class);
 
         $authnContext = AuthnContext::getChildrenOfClass($xml);
         Assert::minCount($authnContext, 1);

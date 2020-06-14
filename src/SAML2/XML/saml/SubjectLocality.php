@@ -5,6 +5,7 @@ declare(strict_types=1);
 namespace SAML2\XML\saml;
 
 use DOMElement;
+use SAML2\Exception\InvalidDOMElementException;
 use SAML2\Utils;
 use Webmozart\Assert\Assert;
 
@@ -105,12 +106,13 @@ final class SubjectLocality extends AbstractSamlElement
      *
      * @param \DOMElement $xml The XML element we should load
      * @return \SAML2\XML\saml\SubjectLocality
-     * @throws \InvalidArgumentException if the qualified name of the supplied element is wrong
+     *
+     * @throws \SAML2\Exception\InvalidDOMElementException if the qualified name of the supplied element is wrong
      */
     public static function fromXML(DOMElement $xml): object
     {
-        Assert::same($xml->localName, 'SubjectLocality');
-        Assert::same($xml->namespaceURI, SubjectLocality::NS);
+        Assert::same($xml->localName, 'SubjectLocality', InvalidDOMElementException::class);
+        Assert::same($xml->namespaceURI, SubjectLocality::NS, InvalidDOMElementException::class);
 
         return new self(
             $address = self::getAttribute($xml, 'Address', null),

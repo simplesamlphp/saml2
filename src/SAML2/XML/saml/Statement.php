@@ -6,7 +6,8 @@ namespace SAML2\XML\saml;
 
 use DOMElement;
 use SAML2\Constants;
-use Webmozart\Assert\Assert;
+use SAML2\Exception\InvalidDOMElementException;
+use SimpleSAML\Assert\Assert;
 
 /**
  * Class implementing the <saml:Statement> extension point.
@@ -15,7 +16,6 @@ use Webmozart\Assert\Assert;
  */
 class Statement extends AbstractStatement
 {
-
     /** @var string */
     protected $type;
 
@@ -71,13 +71,12 @@ class Statement extends AbstractStatement
      * @param \DOMElement $xml The XML element we should load
      *
      * @return \SAML2\XML\saml\Statement
-     * @throws \InvalidArgumentException  If xsi:type is not defined or does not implement IdentifierInterface
+     * @throws \SAML2\Exception\InvalidDOMElementException  If xsi:type is not defined or does not implement IdentifierInterface
      */
     public static function fromXML(DOMElement $xml): object
     {
-        Assert::same($xml->localName, 'Statement');
-        Assert::notNull($xml->namespaceURI);
-        Assert::same($xml->namespaceURI, Statement::NS);
+        Assert::same($xml->localName, 'Statement', InvalidDOMElementException::class);
+        Assert::same($xml->namespaceURI, Statement::NS, InvalidDOMElementException::class);
         Assert::true(
             $xml->hasAttributeNS(Constants::NS_XSI, 'type'),
             'Missing required xsi:type in <saml:Statement> element.'
