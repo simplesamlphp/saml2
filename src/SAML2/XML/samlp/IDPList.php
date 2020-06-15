@@ -6,6 +6,7 @@ namespace SAML2\XML\samlp;
 
 use DOMElement;
 use SAML2\Exception\InvalidDOMElementException;
+use SAML2\Exception\MissingElementException;
 use SAML2\Utils;
 use SimpleSAML\Assert\Assert;
 
@@ -85,6 +86,7 @@ final class IDPList extends AbstractSamlpElement
      * @return \SAML2\XML\samlp\IDPList
      *
      * @throws \SAML2\Exception\InvalidDOMElementException if the qualified name of the supplied element is wrong
+     * @throws \SAML2\Exception\MissingElementException if one of the mandatory child-elements is missing
      */
     public static function fromXML(DOMElement $xml): object
     {
@@ -92,7 +94,7 @@ final class IDPList extends AbstractSamlpElement
         Assert::same($xml->namespaceURI, IDPList::NS, InvalidDOMElementException::class);
 
         $idpEntry = IDPEntry::getChildrenOfClass($xml);
-        Assert::minCount($idpEntry, 1, 'At least one <samlp:IDPEntry> must be specified.');
+        Assert::minCount($idpEntry, 1, 'At least one <samlp:IDPEntry> must be specified.', MissingElementException::class);
 
         $getComplete = Utils::extractStrings($xml, AbstractSamlpElement::NS, 'GetComplete');
         Assert::maxCount($getComplete, 1, 'Only one <samlp:GetComplete> element is allowed.');

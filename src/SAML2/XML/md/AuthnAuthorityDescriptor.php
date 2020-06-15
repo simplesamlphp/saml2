@@ -103,20 +103,10 @@ final class AuthnAuthorityDescriptor extends AbstractRoleDescriptor
         Assert::same($xml->localName, 'AuthnAuthorityDescriptor', InvalidDOMElementException::class);
         Assert::same($xml->namespaceURI, AuthnAuthorityDescriptor::NS, InvalidDOMElementException::class);
 
-        /** @var string $protocols */
         $protocols = self::getAttribute($xml, 'protocolSupportEnumeration');
 
-        $authnQueryServices = [];
-        /** @var DOMElement $ep */
-        foreach (Utils::xpQuery($xml, './saml_metadata:AuthnQueryService') as $ep) {
-            $authnQueryServices[] = AuthnQueryService::fromXML($ep);
-        }
-
-        $assertionIDRequestServices = [];
-        /** @var DOMElement $ep */
-        foreach (Utils::xpQuery($xml, './saml_metadata:AssertionIDRequestService') as $ep) {
-            $assertionIDRequestServices[] = AssertionIDRequestService::fromXML($ep);
-        }
+        $authnQueryServices = AuthnQueryServices::getChildrenOfClass($xml);
+        $assertionIDRequestServices = AssertionIDRequestServices::getChildrenOfClass($xml);
 
         $nameIDFormats = Utils::extractStrings($xml, Constants::NS_MD, 'NameIDFormat');
 

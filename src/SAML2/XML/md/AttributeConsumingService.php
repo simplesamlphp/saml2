@@ -71,25 +71,25 @@ final class AttributeConsumingService extends AbstractMdElement
      * @return self
      *
      * @throws \SAML2\Exception\InvalidDOMElementException if the qualified name of the supplied element is wrong
+     * @throws \SAML2\Exception\MissingElementException if one of the mandatory child-elements is missing
      */
     public static function fromXML(DOMElement $xml): object
     {
         Assert::same($xml->localName, 'AttributeConsumingService', InvalidDOMElementException::class);
         Assert::same($xml->namespaceURI, AttributeConsumingService::NS, InvalidDOMElementException::class);
 
-        /** @var int $index */
         $index = self::getIntegerAttribute($xml, 'index');
-
         $names = ServiceName::getChildrenOfClass($xml);
-        Assert::minCount($names, 1, 'Missing at least one ServiceName in AttributeConsumingService.');
+        Assert::minCount(
+            $names,
+            1,
+            'Missing at least one ServiceName in AttributeConsumingService.',
+            MissingElementException::class
+        );
 
         $descriptions = ServiceDescription::getChildrenOfClass($xml);
 
-        $requestedAttrs = [];
-        /** @var \DOMElement $ra */
-        foreach (Utils::xpQuery($xml, './saml_metadata:RequestedAttribute') as $ra) {
-            $requestedAttrs[] = RequestedAttribute::fromXML($ra);
-        }
+        $requestedAttrs = RequestedAttribute::getChildrenOfClass($xml);
 
         return new self(
             $index,
