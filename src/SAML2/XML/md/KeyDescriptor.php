@@ -75,7 +75,7 @@ final class KeyDescriptor extends AbstractMdElement
      * Set the value of the use property.
      *
      * @param string|null $use
-     * @throws \InvalidArgumentException
+     * @throws \SimpleSAML\Assert\AssertionFailedException
      */
     protected function setUse(?string $use): void
     {
@@ -125,7 +125,7 @@ final class KeyDescriptor extends AbstractMdElement
      * Set the value of the EncryptionMethod property.
      *
      * @param \SAML2\XML\md\EncryptionMethod[] $encryptionMethods
-     * @throws \InvalidArgumentException
+     * @throws \SimpleSAML\Assert\AssertionFailedException
      */
     protected function setEncryptionMethods(array $encryptionMethods): void
     {

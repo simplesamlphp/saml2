@@ -22,7 +22,7 @@ final class SingleSignOnService extends AbstractEndpointType
      * @param string $location
      * @param string|null $unused
      * @param array $attributes
-     * @throws \InvalidArgumentException
+     * @throws \SimpleSAML\Assert\AssertionFailedException
      */
     public function __construct(
         string $binding,

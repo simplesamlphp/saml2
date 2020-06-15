@@ -5,12 +5,14 @@ declare(strict_types=1);
 namespace SAML2\XML\samlp;
 
 use DOMDocument;
+use DOMElement;
 use Exception;
 use SAML2\CertificatesMock;
 use SAML2\Constants;
 use SAML2\DOMDocumentFactory;
 use SAML2\Utils;
 use SAML2\XML\Chunk;
+use SAML2\XML\ds\Signature;
 use SAML2\XML\saml\Issuer;
 use SAML2\XML\samlp\AbstractMessage;
 use SAML2\XML\samlp\Extensions;
@@ -53,8 +55,10 @@ AUTHNREQUEST
         $unsignedMessage->setCertificates([CertificatesMock::PUBLIC_KEY_PEM]);
 
         $signedMessage = MessageFactory::fromXML($unsignedMessage->toXML());
+        $signature = $signedMessage->getSignature();
 
-        $this->assertEquals($privateKey->getAlgorithm(), $signedMessage->getSignature()->getAlgorithm());
+        $this->assertInstanceOf(Signature::class, $signature);
+        $this->assertEquals($privateKey->getAlgorithm(), $signature->getAlgorithm());
     }
 
 
@@ -129,6 +133,7 @@ AUTHNREQUEST
         $xml = $response->toXML();
         $xml_issuer = Utils::xpQuery($xml, './saml_assertion:Issuer');
         $xml_issuer = $xml_issuer[0];
+        $this->assertInstanceOf(DOMElement::class, $xml_issuer);
 
         $this->assertTrue($xml_issuer->hasAttributes());
         $this->assertEquals($issuer->getValue(), $xml_issuer->textContent);
@@ -161,7 +166,9 @@ AUTHNREQUEST
 
         $signedMessage = MessageFactory::fromXML($unsignedMessage->toXML());
 
-        $this->assertEquals($privateKey->getAlgorithm(), $signedMessage->getSignature()->getAlgorithm());
+        $signature = $signedMessage->getSignature();
+        $this->assertInstanceOf(Signature::class, $signature);
+        $this->assertEquals($privateKey->getAlgorithm(), $signature->getAlgorithm());
     }
 
 
@@ -204,6 +211,9 @@ AUTHNREQUEST
         $this->assertInstanceOf(Extensions::class, $exts);
         $exts = $exts->getList();
         $this->assertCount(2, $exts);
+
+        $this->assertInstanceOf(Chunk::class, $exts[0]);
+        $this->assertInstanceOf(Chunk::class, $exts[1]);
         $this->assertEquals("myextElt", $exts[0]->getLocalName());
         $this->assertEquals("example1", $exts[0]->getXML()->textContent);
         $this->assertEquals("myextElt", $exts[1]->getLocalName());
@@ -312,20 +322,27 @@ XML;
 XML;
         $document  = DOMDocumentFactory::fromString($xml);
         $message = MessageFactory::fromXML($document->documentElement);
+        $issuer = $message->getIssuer();
 
-        $this->assertEquals('https://example.org/', $message->getIssuer()->getValue());
+        $this->assertInstanceOf(Issuer::class, $issuer);
+        $this->assertEquals('https://example.org/', $issuer->getValue());
         $this->assertEquals('aaf23196-1773-2113-474a-fe114412ab72', $message->getId());
 
         $document->documentElement->setAttribute('ID', 'somethingNEW');
         $message = MessageFactory::fromXML($document->documentElement);
+        $issuer = $message->getIssuer();
 
-        $this->assertEquals('https://example.org/', $message->getIssuer()->getValue());
+        $this->assertInstanceOf(Issuer::class, $issuer);
+        $this->assertEquals('https://example.org/', $issuer->getValue());
         $this->assertEquals('somethingNEW', $message->getId());
         $this->assertEquals(Constants::CONSENT_PRIOR, $message->getConsent());
 
         $messageElement = $message->toXML();
         $xp = Utils::xpQuery($messageElement, '.');
-        $this->assertEquals('somethingNEW', $xp[0]->getAttribute('ID'));
+
+        /** @psalm-var \DOMElement $query */
+        $query = $xp[0];
+        $this->assertEquals('somethingNEW', $query->getAttribute('ID'));
     }
 
 

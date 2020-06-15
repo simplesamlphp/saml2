@@ -124,7 +124,7 @@ abstract class AbstractEndpointType extends AbstractMdElement
      * Set the value of the Binding property.
      *
      * @param string $binding
-     * @throws \InvalidArgumentException if the Binding is empty
+     * @throws \SimpleSAML\Assert\AssertionFailedException if the Binding is empty
      */
     protected function setBinding(string $binding): void
     {
@@ -148,7 +148,7 @@ abstract class AbstractEndpointType extends AbstractMdElement
      * Set the value of the Location property.
      *
      * @param string $location
-     * @throws \InvalidArgumentException if the Location is empty
+     * @throws \SimpleSAML\Assert\AssertionFailedException if the Location is empty
      */
     protected function setLocation(string $location): void
     {
@@ -172,7 +172,7 @@ abstract class AbstractEndpointType extends AbstractMdElement
      * Set the value of the ResponseLocation property.
      *
      * @param string|null $responseLocation
-     * @throws \InvalidArgumentException if the ResponseLocation is empty
+     * @throws \SimpleSAML\Assert\AssertionFailedException if the ResponseLocation is empty
      */
     protected function setResponseLocation(?string $responseLocation = null): void
     {

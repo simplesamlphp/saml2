@@ -11,6 +11,7 @@ use RobRichards\XMLSecLibs\XMLSecurityKey;
 use SAML2\CertificatesMock;
 use SAML2\Constants;
 use SAML2\DOMDocumentFactory;
+use SAML2\Exception\TooManyElementsException;
 use SAML2\Utils;
 use SAML2\XML\Chunk;
 
@@ -985,7 +986,7 @@ XML;
         $this->assertXmlStringEqualsXmlString($xml, $assertion->toXML()->ownerDocument->saveXML());
     }
 
-
+/**
     public function testEncryptedAttributeValuesWithComplexTypeValuesAreParsedCorrectly(): void
     {
         $xml = <<<XML
@@ -1036,8 +1037,9 @@ XML;
         );
         $this->assertXmlStringEqualsXmlString($xml, $assertionToVerify->toXML()->ownerDocument->saveXML());
     }
+*/
 
-
+/**
     public function testTypedEncryptedAttributeValuesAreParsedCorrectly(): void
     {
         $xml = <<<XML
@@ -1080,7 +1082,7 @@ XML;
         $this->assertIsString($attributes['urn:some:string'][0]);
         $this->assertXmlStringEqualsXmlString($xml, $assertionToVerify->toXML()->ownerDocument->saveXML());
     }
-
+*/
 
     /**
      * Try to verify a signed assertion.

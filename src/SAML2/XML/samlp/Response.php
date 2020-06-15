@@ -126,7 +126,7 @@ class Response extends AbstractStatusResponse
         Assert::maxCount($status, 1, TooManyElementsException::class);
 
         $extensions = Extensions::getChildrenOfClass($xml);
-        Assert::maxCount($extensions, 1, 'Only one saml:Extensions element is allowed.', TooManyElementsException:class);
+        Assert::maxCount($extensions, 1, 'Only one saml:Extensions element is allowed.', TooManyElementsException::class);
 
         $assertions = [];
         foreach ($xml->childNodes as $node) {

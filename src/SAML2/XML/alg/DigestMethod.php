@@ -41,8 +41,6 @@ final class DigestMethod extends AbstractAlgElement
      * Collect the value of the algorithm-property
      *
      * @return string
-     *
-     * @throws \InvalidArgumentException if assertions are false
      */
     public function getAlgorithm(): string
     {

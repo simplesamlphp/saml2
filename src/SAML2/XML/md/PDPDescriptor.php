@@ -143,7 +143,7 @@ final class PDPDescriptor extends AbstractRoleDescriptor
      *
      * @param \SAML2\XML\md\AuthzService[] $authzServices
      * @return void
-     * @throws \InvalidArgumentException
+     * @throws \SimpleSAML\Assert\AssertionFailedException
      */
     protected function setAuthzServiceEndpoints(array $authzServices = []): void
     {
@@ -173,7 +173,7 @@ final class PDPDescriptor extends AbstractRoleDescriptor
      *
      * @param \SAML2\XML\md\AssertionIDRequestService[] $assertionIDRequestServices
      * @return void
-     * @throws \InvalidArgumentException
+     * @throws \SimpleSAML\Assert\AssertionFailedException
      */
     public function setAssertionIDRequestServices(array $assertionIDRequestServices): void
     {

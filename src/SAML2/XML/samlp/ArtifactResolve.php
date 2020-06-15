@@ -60,7 +60,7 @@ class ArtifactResolve extends AbstractRequest
      *
      * @return string artifact.
      *
-     * @throws \InvalidArgumentException if assertions are false
+     * @throws \SimpleSAML\Assert\AssertionFailedException if assertions are false
      */
     public function getArtifact(): string
     {
@@ -135,12 +135,13 @@ class ArtifactResolve extends AbstractRequest
      *
      * @return \DOMElement This response.
      *
-     * @throws \InvalidArgumentException if assertions are false
+     * @throws \SimpleSAML\Assert\AssertionFailedException if assertions are false
      */
     public function toXML(?DOMElement $parent = null): DOMElement
     {
         Assert::notEmpty($this->artifact, 'Cannot convert ArtifactResolve to XML without an Artifact set.');
 
+        /** @psalm-var \DOMDocument $e->ownerDocument */
         $e = parent::toXML($parent);
         $artifactelement = $e->ownerDocument->createElementNS(Constants::NS_SAMLP, 'Artifact', $this->artifact);
         $e->appendChild($artifactelement);

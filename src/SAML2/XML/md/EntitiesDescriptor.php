@@ -35,8 +35,8 @@ final class EntitiesDescriptor extends AbstractMetadataDocument
     /**
      * EntitiesDescriptor constructor.
      *
-     * @param \SAML2\XML\md\EntityDescriptor[]|null $entityDescriptors
-     * @param \SAML2\XML\md\EntitiesDescriptor[]|null $entitiesDescriptors
+     * @param \SAML2\XML\md\EntityDescriptor[] $entityDescriptors
+     * @param \SAML2\XML\md\EntitiesDescriptor[] $entitiesDescriptors
      * @param string|null $name
      * @param string|null $ID
      * @param int|null $validUntil

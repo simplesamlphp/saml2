@@ -59,8 +59,6 @@ final class SubjectConfirmation extends AbstractSamlElement
      * Collect the value of the Method-property
      *
      * @return string
-     *
-     * @throws \InvalidArgumentException if assertions are false
      */
     public function getMethod(): string
     {
@@ -125,7 +123,7 @@ final class SubjectConfirmation extends AbstractSamlElement
         Assert::maxCount(
             $subjectConfirmationData,
             1,
-            'More than one <saml:SubjectConfirmationData> in <saml:SubjectConfirmation>.'
+            'More than one <saml:SubjectConfirmationData> in <saml:SubjectConfirmation>.',
             TooManyElementsException::class
         );
 

@@ -84,7 +84,7 @@ final class Organization extends AbstractMdElement
      *
      * @param \SAML2\XML\md\OrganizationName[] $organizationName
      * @return void
-     * @throws \InvalidArgumentException
+     * @throws \SimpleSAML\Assert\AssertionFailedException
      */
     protected function setOrganizationName(array $organizationName): void
     {
@@ -109,7 +109,7 @@ final class Organization extends AbstractMdElement
      *
      * @param \SAML2\XML\md\OrganizationDisplayName[] $organizationDisplayName
      * @return void
-     * @throws \InvalidArgumentException
+     * @throws \SimpleSAML\Assert\AssertionFailedException
      */
     protected function setOrganizationDisplayName(array $organizationDisplayName): void
     {
@@ -133,7 +133,7 @@ final class Organization extends AbstractMdElement
      * Set the value of the OrganizationURL property.
      *
      * @param string[] $organizationURL
-     * @throws \InvalidArgumentException
+     * @throws \SimpleSAML\Assert\AssertionFailedException
      */
     protected function setOrganizationURL(array $organizationURL): void
     {

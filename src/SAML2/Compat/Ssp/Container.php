@@ -156,6 +156,8 @@ class Container implements ContainerInterface
     public function getIdentifierHandler(string $type): ?string
     {
         Assert::notEmpty($type, 'Cannot search for identifier handlers with an empty type.');
-        return $this->registry[$type . ':BaseID'];
+
+        $handler = $type . ':BaseID';
+        return array_key_exists($handler, $this->registry) ? $this->registry[$handler] : null;
     }
 }

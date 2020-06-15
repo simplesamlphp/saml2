@@ -43,7 +43,7 @@ final class AuthnContext extends AbstractSamlElement
      * @param \SAML2\XML\saml\AuthnContextDecl|null $authnContextDecl
      * @param \SAML2\XML\saml\AuthnContextDeclRef|null $authnContextDeclRef
      * @param string[] $authenticatingAuthorities
-     * @throws \InvalidArgumentException
+     * @throws \SimpleSAML\Assert\AssertionFailedException
      */
     public function __construct(
         ?AuthnContextClassRef $authnContextClassRef,
@@ -156,7 +156,7 @@ final class AuthnContext extends AbstractSamlElement
      *
      * @param string[] $authenticatingAuthorities
      * @return void
-     * @throws \InvalidArgumentException
+     * @throws \SimpleSAML\Assert\AssertionFailedException
      */
     private function setAuthenticatingAuthorities(array $authenticatingAuthorities): void
     {

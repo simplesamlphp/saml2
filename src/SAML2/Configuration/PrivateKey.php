@@ -60,7 +60,7 @@ class PrivateKey extends ArrayAdapter
     /**
      * @return string
      *
-     * @throws \InvalidArgumentException if assertions are false
+     * @throws \SimpleSAML\Assert\AssertionFailedException if assertions are false
      */
     public function getFilePath(): string
     {
@@ -99,7 +99,7 @@ class PrivateKey extends ArrayAdapter
     /**
      * @return string
      *
-     * @throws \InvalidArgumentException if assertions are false
+     * @throws \SimpleSAML\Assert\AssertionFailedException if assertions are false
      */
     public function getContents(): string
     {

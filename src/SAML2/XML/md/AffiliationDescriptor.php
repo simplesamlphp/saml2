@@ -88,7 +88,7 @@ final class AffiliationDescriptor extends AbstractMetadataDocument
         Assert::same($xml->localName, 'AffiliationDescriptor', InvalidDOMElementException::class);
         Assert::same($xml->namespaceURI, AffiliationDescriptor::NS, InvalidDOMElementException::class);
 
-        $owner = $self::getAttribute($xml, 'affiliationOwnerID');
+        $owner = self::getAttribute($xml, 'affiliationOwnerID');
         $members = Utils::extractStrings($xml, Constants::NS_MD, 'AffiliateMember');
         $keyDescriptors = KeyDescriptor::getChildrenOfClass($xml);
 
@@ -133,7 +133,7 @@ final class AffiliationDescriptor extends AbstractMetadataDocument
      * Set the value of the affiliationOwnerId-property
      *
      * @param string $affiliationOwnerId
-     * @throws \InvalidArgumentException
+     * @throws \SimpleSAML\Assert\AssertionFailedException
      */
     protected function setAffiliationOwnerID(string $affiliationOwnerId): void
     {
@@ -158,7 +158,7 @@ final class AffiliationDescriptor extends AbstractMetadataDocument
      *
      * @param string[] $affiliateMembers
      * @return void
-     * @throws \InvalidArgumentException
+     * @throws \SimpleSAML\Assert\AssertionFailedException
      */
     protected function setAffiliateMembers(array $affiliateMembers): void
     {

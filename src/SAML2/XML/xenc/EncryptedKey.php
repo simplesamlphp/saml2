@@ -169,6 +169,7 @@ class EncryptedKey extends EncryptedData
      */
     public function toXML(DOMElement $parent = null): DOMElement
     {
+        /** @psalm-var \DOMDocument $e->ownerDocument */
         $e = parent::toXML($parent);
 
         if ($this->referenceList !== null) {

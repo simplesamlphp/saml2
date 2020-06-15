@@ -115,7 +115,7 @@ class Attribute extends AbstractSamlElement
      *
      * @param string|null $NameFormat
      * @return void
-     * @throws \InvalidArgumentException if the NameFormat is empty
+     * @throws \SimpleSAML\Assert\AssertionFailedException if the NameFormat is empty
      */
     protected function setNameFormat(?string $NameFormat): void
     {
@@ -140,7 +140,7 @@ class Attribute extends AbstractSamlElement
      *
      * @param string|null $friendlyName
      * @return void
-     * @throws \InvalidArgumentException if the FriendlyName is empty
+     * @throws \SimpleSAML\Assert\AssertionFailedException if the FriendlyName is empty
      */
     private function setFriendlyName(?string $friendlyName): void
     {

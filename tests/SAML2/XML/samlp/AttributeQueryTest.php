@@ -136,10 +136,16 @@ XML
     public function testUnmarshalling(): void
     {
         $aq = AttributeQuery::fromXML($this->document->documentElement);
+        /** @psalm-var \SAML2\XML\saml\Issuer $issuer */
+        $issuer = $aq->getIssuer();
+        /** @psalm-var \SAML2\XML\saml\Subject $subject */
+        $subject = $aq->getSubject();
+        /** @psalm-var \SAML2\XML\saml\NameID $identifier */
+        $identifier = $subject->getIdentifier();
 
         // Sanity check
-        $this->assertEquals('https://example.org/', $aq->getIssuer()->getValue());
-        $this->assertEquals('urn:example:subject', $aq->getSubject()->getIdentifier()->getValue());
+        $this->assertEquals('https://example.org/', $issuer->getValue());
+        $this->assertEquals('urn:example:subject', $identifier->getValue());
 
         $attributes = $aq->getAttributes();
         $this->assertCount(3, $attributes);
@@ -213,9 +219,11 @@ XML
 XML;
         $document = DOMDocumentFactory::fromString($xml);
         $aq = AttributeQuery::fromXML($document->documentElement);
+        /** @psalm-var \SAML2\XML\saml\Issuer $issuer */
+        $issuer = $aq->getIssuer();
 
         // Sanity check
-        $this->assertEquals('https://example.org/', $aq->getIssuer()->getValue());
+        $this->assertEquals('https://example.org/', $issuer->getValue());
     }
 
 
@@ -246,9 +254,11 @@ XML;
 XML;
         $document = DOMDocumentFactory::fromString($xml);
         $aq = AttributeQuery::fromXML($document->documentElement);
+        /** @psalm-var \SAML2\XML\saml\Issuer $issuer */
+        $issuer = $aq->getIssuer();
 
         // Sanity check
-        $this->assertEquals('https://example.org/', $aq->getIssuer()->getValue());
+        $this->assertEquals('https://example.org/', $issuer->getValue());
     }
 
 

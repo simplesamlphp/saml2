@@ -4,9 +4,9 @@ declare(strict_types=1);
 
 namespace SAML2\XML\mdrpi;
 
-use Exception;
 use PHPUnit\Framework\TestCase;
 use SAML2\DOMDocumentFactory;
+use SAML2\Exception\MissingAttributeException;
 use SAML2\Utils;
 
 /**
@@ -118,8 +118,8 @@ XML
 XML
         );
 
-        $this->expectException(Exception::class);
-        $this->expectExceptionMessage('Missing required attribute "publisher"');
+        $this->expectException(MissingAttributeException::class);
+        $this->expectExceptionMessage("Missing 'publisher' attribute on mdrpi:PublicationInfo.");
         $publicationInfo = PublicationInfo::fromXML($document->documentElement);
     }
 

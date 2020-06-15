@@ -7,7 +7,7 @@ namespace SAML2\XML\xenc;
 use DOMElement;
 use SAML2\Constants;
 use SAML2\Exception\InvalidDOMElementException;
-use SAML2\Exception\TooManyElementException;
+use SAML2\Exception\TooManyElementsException;
 use SAML2\XML\Chunk;
 use SimpleSAML\Assert\Assert;
 
@@ -56,7 +56,7 @@ class EncryptionMethod extends AbstractXencElement
      * Initialize an EncryptionMethod object from an existing XML.
      *
      * @param \DOMElement $xml
-     * @return \SAML2\XML\md\EncryptionMethod
+     * @return static
      *
      * @throws \SAML2\Exception\InvalidDOMElementException if the qualified name of the supplied element is wrong
      * @throws \SAML2\Exception\MissingAttributeException if the supplied element is missing one of the mandatory attributes
@@ -113,7 +113,7 @@ class EncryptionMethod extends AbstractXencElement
      *
      * @param string $algorithm
      * @return void
-     * @throws \InvalidArgumentException
+     * @throws \SimpleSAML\Assert\AssertionFailedException
      */
     protected function setAlgorithm(string $algorithm): void
     {
@@ -161,14 +161,14 @@ class EncryptionMethod extends AbstractXencElement
      *
      * @param string|null $oaepParams The OAEP parameters, base64-encoded.
      * @return void
-     * @throws \InvalidArgumentException
+     * @throws \SimpleSAML\Assert\AssertionFailedException
      */
     protected function setOAEPParams(?string $oaepParams): void
     {
         if ($oaepParams === null) {
             return;
         }
-        Assert::Eq(
+        Assert::eq(
             $oaepParams,
             base64_encode(base64_decode($oaepParams, true)),
             'OAEPParams must be base64-encoded.'
@@ -193,7 +193,7 @@ class EncryptionMethod extends AbstractXencElement
      *
      * @param \SAML2\XML\Chunk[] $children
      * @return void
-     * @throws \InvalidArgumentException
+     * @throws \SimpleSAML\Assert\AssertionFailedException
      */
     protected function setChildren(array $children): void
     {
@@ -214,6 +214,7 @@ class EncryptionMethod extends AbstractXencElement
      */
     public function toXML(DOMElement $parent = null): DOMElement
     {
+        /** @psalm-var \DOMDocument $e->ownerDocument */
         $e = $this->instantiateParentElement($parent);
         $e->setAttribute('Algorithm', $this->algorithm);
 

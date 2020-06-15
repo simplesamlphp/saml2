@@ -7,6 +7,7 @@ namespace SAML2\XML\mdui;
 use InvalidArgumentException;
 use PHPUnit\Framework\TestCase;
 use SAML2\DOMDocumentFactory;
+use SAML2\Exception\MissingAttributeException;
 use SAML2\Utils;
 use SimpleSAML\Assert\AssertionFailedException;
 
@@ -138,8 +139,8 @@ XML
         $document = $this->document;
         $document->documentElement->removeAttribute('width');
 
-        $this->expectException(AssertionFailedException::class);
-        $this->expectExceptionMessage('Missing width of Logo');
+        $this->expectException(MissingAttributeException::class);
+        $this->expectExceptionMessage("Missing 'width' attribute on mdui:Logo.");
         Logo::fromXML($document->documentElement);
     }
 
@@ -153,8 +154,8 @@ XML
         $document = $this->document;
         $document->documentElement->removeAttribute('height');
 
-        $this->expectException(AssertionFailedException::class);
-        $this->expectExceptionMessage('Missing height of Logo');
+        $this->expectException(MissingAttributeException::class);
+        $this->expectExceptionMessage("Missing 'height' attribute on mdui:Logo.");
         Logo::fromXML($document->documentElement);
     }
 

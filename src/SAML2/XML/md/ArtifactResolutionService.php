@@ -24,7 +24,7 @@ final class ArtifactResolutionService extends AbstractIndexedEndpointType
      * @param bool|null $isDefault
      * @param string|null $unused
      * @param array $attributes
-     * @throws \InvalidArgumentException
+     * @throws \SimpleSAML\Assert\AssertionFailedException
      */
     public function __construct(
         int $index,

@@ -4,6 +4,7 @@ declare(strict_types=1);
 
 namespace SAML2\XML\saml;
 
+use Mockery;
 use PHPUnit\Framework\TestCase;
 use SAML2\Compat\ContainerInterface;
 use SAML2\Compat\ContainerSingleton;
@@ -81,7 +82,7 @@ XML
 
     public function tearDown(): void
     {
-        \Mockery::close();
+        Mockery::close();
     }
 
 
@@ -282,8 +283,9 @@ XML
         );
 
         $subject = Subject::fromXML($document->documentElement);
-        $this->assertEquals(BaseID::class, get_class($subject->getIdentifier()));
-        $this->assertEquals('CustomBaseID', $subject->getIdentifier()->getType());
+        $identifier = $subject->getIdentifier();
+        $this->assertInstanceOf(BaseID::class, $identifier);
+        $this->assertEquals('CustomBaseID', $identifier->getType());
         $this->assertEquals(
             $document->saveXML($document->documentElement),
             strval($subject)
@@ -298,8 +300,13 @@ XML
     public function testCustomIDHandler(): void
     {
         $container = ContainerSingleton::getInstance();
-        $mock = \Mockery::mock(ContainerInterface::class);
+        $mock = Mockery::mock(ContainerInterface::class);
+        /**
+         * @psalm-suppress InvalidArgument
+         * @psalm-suppress UndefinedMagicMethod
+         */
         $mock->shouldReceive('getIdentifierHandler')->andReturn(CustomBaseID::class);
+        /** @psalm-suppress InvalidArgument */
         ContainerSingleton::setContainer($mock);
 
         $samlNamespace = Subject::NS;
@@ -316,7 +323,9 @@ XML
         );
 
         $subject = Subject::fromXML($document->documentElement);
-        $this->assertEquals(CustomBaseID::class, get_class($subject->getIdentifier()));
+        $identifier = $subject->getIdentifier();
+        $this->assertInstanceOf(BaseID::class, $identifier);
+        $this->assertEquals(CustomBaseID::class, get_class($identifier));
         $this->assertEquals(
             $document->saveXML($document->documentElement),
             strval($subject)

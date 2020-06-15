@@ -48,8 +48,8 @@ final class AuthnAuthorityDescriptor extends AbstractRoleDescriptor
      *
      * @param array $authnQueryServices
      * @param array $protocolSupportEnumeration
-     * @param array|null $assertionIDRequestServices
-     * @param array|null $nameIDFormats
+     * @param array $assertionIDRequestServices
+     * @param array $nameIDFormats
      * @param string|null $ID
      * @param int|null $validUntil
      * @param string|null $cacheDuration
@@ -107,8 +107,8 @@ final class AuthnAuthorityDescriptor extends AbstractRoleDescriptor
 
         $protocols = self::getAttribute($xml, 'protocolSupportEnumeration');
 
-        $authnQueryServices = AuthnQueryServices::getChildrenOfClass($xml);
-        $assertionIDRequestServices = AssertionIDRequestServices::getChildrenOfClass($xml);
+        $authnQueryServices = AuthnQueryService::getChildrenOfClass($xml);
+        $assertionIDRequestServices = AssertionIDRequestService::getChildrenOfClass($xml);
 
         $nameIDFormats = Utils::extractStrings($xml, Constants::NS_MD, 'NameIDFormat');
 
@@ -160,7 +160,7 @@ final class AuthnAuthorityDescriptor extends AbstractRoleDescriptor
      *
      * @param \SAML2\XML\md\AbstractEndpointType[] $authnQueryServices
      * @return void
-     * @throws \InvalidArgumentException
+     * @throws \SimpleSAML\Assert\AssertionFailedException
      */
     protected function setAuthnQueryServices(array $authnQueryServices): void
     {
@@ -190,7 +190,7 @@ final class AuthnAuthorityDescriptor extends AbstractRoleDescriptor
      *
      * @param \SAML2\XML\md\AbstractEndpointType[] $assertionIDRequestServices
      * @return void
-     * @throws \InvalidArgumentException
+     * @throws \SimpleSAML\Assert\AssertionFailedException
      */
     protected function setAssertionIDRequestService(?array $assertionIDRequestServices = []): void
     {
@@ -219,7 +219,7 @@ final class AuthnAuthorityDescriptor extends AbstractRoleDescriptor
      *
      * @param string[] $nameIDFormats
      * @return void
-     * @throws \InvalidArgumentException
+     * @throws \SimpleSAML\Assert\AssertionFailedException
      */
     protected function setNameIDFormat(?array $nameIDFormats): void
     {
@@ -238,7 +238,6 @@ final class AuthnAuthorityDescriptor extends AbstractRoleDescriptor
      *
      * @return \DOMElement
      * @throws \Exception
-     * @throws \InvalidArgumentException if the qualified name of the supplied element is wrong
      */
     public function toXML(?DOMElement $parent = null): DOMElement
     {

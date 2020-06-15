@@ -122,8 +122,6 @@ abstract class AbstractStatusResponse extends AbstractMessage
      *
      * @param \SAML2\XML\samlp\Status $status The status code.
      * @return void
-     *
-     * @throws \InvalidArgumentException if assertions are false
      */
     protected function setStatus(Status $status): void
     {

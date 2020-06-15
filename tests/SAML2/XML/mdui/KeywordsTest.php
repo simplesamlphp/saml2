@@ -6,6 +6,7 @@ namespace SAML2\XML\mdui;
 
 use PHPUnit\Framework\TestCase;
 use SAML2\DOMDocumentFactory;
+use SAML2\Exception\MissingAttributeException;
 use SAML2\Utils;
 use SimpleSAML\Assert\AssertionFailedException;
 
@@ -83,8 +84,8 @@ class KeywordsTest extends TestCase
                 . 'KLM koninklijke luchtvaart+maatschappij</mdui:Keywords>'
         );
 
-        $this->expectException(AssertionFailedException::class);
-        $this->expectExceptionMessage('Missing lang on Keywords');
+        $this->expectException(MissingAttributeException::class);
+        $this->expectExceptionMessage("Missing 'xml:lang' attribute on mdui:Keywords.");
         Keywords::fromXML($document->documentElement);
     }
 

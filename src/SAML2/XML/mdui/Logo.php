@@ -5,6 +5,7 @@ declare(strict_types=1);
 namespace SAML2\XML\mdui;
 
 use DOMElement;
+use InvalidArgumentException;
 use SAML2\Exception\InvalidDOMElementException;
 use SimpleSAML\Assert\Assert;
 
@@ -83,7 +84,7 @@ final class Logo extends AbstractMduiElement
     private function setUrl(string $url): void
     {
         if (!filter_var(trim($url), FILTER_VALIDATE_URL) && substr(trim($url), 0, 5) !== 'data:') {
-            throw new \InvalidArgumentException('mdui:Logo is not a valid URL.');
+            throw new InvalidArgumentException('mdui:Logo is not a valid URL.');
         }
 
         $this->url = $url;
@@ -176,7 +177,7 @@ final class Logo extends AbstractMduiElement
 
         $Url = $xml->textContent;
         $Width = self::getIntegerAttribute($xml, 'width');
-        $Height = self::getIntegerAttribute($xml, height');
+        $Height = self::getIntegerAttribute($xml, 'height');
         $lang = self::getAttribute($xml, 'xml:lang');
 
         return new self($Url, $Height, $Width, $lang);
@@ -191,6 +192,7 @@ final class Logo extends AbstractMduiElement
      */
     public function toXML(DOMElement $parent = null): DOMElement
     {
+        /** @psalm-var \DOMDocument $e->ownerDocument */
         $e = $this->instantiateParentElement($parent);
         $e->appendChild($e->ownerDocument->createTextNode($this->url));
         $e->setAttribute('height', strval($this->height));

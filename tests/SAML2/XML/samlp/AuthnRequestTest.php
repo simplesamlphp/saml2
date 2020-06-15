@@ -8,6 +8,8 @@ use PHPUnit\Framework\TestCase;
 use SAML2\CertificatesMock;
 use SAML2\Constants;
 use SAML2\DOMDocumentFactory;
+use SAML2\Exception\MissingAttributeException;
+use SAML2\Exception\TooManyElementsException;
 use SAML2\XML\saml\AudienceRestriction;
 use SAML2\XML\saml\AuthnContextClassRef;
 use SAML2\XML\saml\Conditions;
@@ -36,10 +38,7 @@ class AuthnRequestTest extends TestCase
 
         $authnRequestElement = $authnRequest->toXML();
 
-        $requestedAuthnContextElements = Utils::xpQuery(
-            $authnRequestElement,
-            './saml_protocol:RequestedAuthnContext'
-        );
+        $requestedAuthnContextElements = RequestedAuthnContext::getChildrenOfClass($authnRequestElement);
         $this->assertCount(1, $requestedAuthnContextElements);
 
         $requestedAuthnConextElement = $requestedAuthnContextElements[0];
@@ -72,7 +71,7 @@ class AuthnRequestTest extends TestCase
 AUTHNREQUEST;
 
         $authnRequest = AuthnRequest::fromXML(DOMDocumentFactory::fromString($xml)->documentElement);
-
+        $issuer = $authnRequest->getIssuer();
         $expectedIssueInstant = Utils::xsDateTimeToTimestamp('2004-12-05T09:21:59Z');
         $this->assertEquals($expectedIssueInstant, $authnRequest->getIssueInstant());
         $this->assertEquals('https://idp.example.org/SAML2/SSO/Artifact', $authnRequest->getDestination());
@@ -81,7 +80,8 @@ AUTHNREQUEST;
             'https://sp.example.com/SAML2/SSO/Artifact',
             $authnRequest->getAssertionConsumerServiceURL()
         );
-        $this->assertEquals('https://sp.example.com/SAML2', $authnRequest->getIssuer()->getValue());
+        $this->assertInstanceOf(Issuer::class, $issuer);
+        $this->assertEquals('https://sp.example.com/SAML2', $issuer->getValue());
     }
 
 
@@ -142,7 +142,11 @@ AUTHNREQUEST;
 
         $authnRequest = AuthnRequest::fromXML(DOMDocumentFactory::fromString($xml)->documentElement);
 
-        $nameId = $authnRequest->getSubject()->getIdentifier();
+        $subject = $authnRequest->getSubject();
+        $this->assertInstanceOf(Subject::class, $subject);
+
+        $nameId = $subject->getIdentifier();
+        $this->assertInstanceOf(NameID::class, $nameId);
         $this->assertEquals("user@example.org", $nameId->getValue());
         $this->assertEquals(Constants::NAMEID_UNSPECIFIED, $nameId->getFormat());
     }
@@ -152,10 +156,11 @@ AUTHNREQUEST;
     {
         $nameId = new NameID('user@example.org', null, null, Constants::NAMEID_UNSPECIFIED);
         $request = new AuthnRequest(null, new Subject($nameId));
+        /** @psalm-var \DOMDocument $document */
+        $document = $request->toXML()->ownerDocument;
 
-        $requestAsXML = $request->toXML()->ownerDocument->saveXML();
         $expected = '<saml:Subject><saml:NameID Format="urn:oasis:names:tc:SAML:1.1:nameid-format:unspecified">user@example.org</saml:NameID></saml:Subject>';
-        $this->assertStringContainsString($expected, $requestAsXML);
+        $this->assertStringContainsString($expected, $document->saveXML());
     }
 
 
@@ -194,7 +199,14 @@ AUTHNREQUEST;
         $authnRequest = AuthnRequest::fromXML(DOMDocumentFactory::fromString($xml)->documentElement);
 
         $key = CertificatesMock::getPrivateKey();
-        $nameId = $authnRequest->getSubject()->getIdentifier()->decrypt($key);
+        $subject = $authnRequest->getSubject();
+        $this->assertInstanceOf(Subject::class, $subject);
+
+        $identifier = $subject->getIdentifier();
+        $this->assertInstanceOf(EncryptedID::class, $identifier);
+
+        $nameId = $identifier->decrypt($key);
+        $this->assertInstanceOf(NameID::class, $nameId);
 
         $this->assertEquals(md5('Arthur Dent'), $nameId->getValue());
         $this->assertEquals(Constants::NAMEID_ENCRYPTED, $nameId->getFormat());
@@ -210,6 +222,8 @@ AUTHNREQUEST;
     {
         // create an encrypted NameID
         $key = CertificatesMock::getPublicKey();
+
+        /** @psalm-var \SAML2\XML\saml\IdentifierInterface $nameId */
         $nameId = EncryptedID::fromUnencryptedElement(
             new NameID(md5('Arthur Dent'), Constants::NAMEID_ENCRYPTED),
             $key
@@ -341,9 +355,15 @@ AUTHNREQUEST;
             new IDPEntry('urn:example:1', 'Voorbeeld')
         ];
 
-        $list = $authnRequest->getScoping()->getIDPList()->getIdpEntry();
-        $this->assertCount(3, $list);
-        $this->assertEquals($expectedList, $list);
+        $scoping = $authnRequest->getScoping();
+        $this->assertInstanceOf(Scoping::class, $scoping);
+
+        $list = $scoping->getIDPList();
+        $this->assertInstanceOf(IDPList::class, $list);
+
+        $entries = $list->getIdpEntry();
+        $this->assertCount(3, $entries);
+        $this->assertEquals($expectedList, $entries);
     }
 
 
@@ -369,8 +389,8 @@ AUTHNREQUEST;
 </samlp:AuthnRequest>
 AUTHNREQUEST;
 
-        $this->expectException(AssertionFailedException::class);
-        $this->expectExceptionMessage('Missing \'ProviderID\' attribute from samlp:IDPEntry.');
+        $this->expectException(MissingAttributeException::class);
+        $this->expectExceptionMessage('Missing \'ProviderID\' attribute on samlp:IDPEntry.');
         $authnRequest = AuthnRequest::fromXML(DOMDocumentFactory::fromString($xmlRequest)->documentElement);
     }
 
@@ -403,6 +423,7 @@ AUTHNREQUEST;
 
         $nameIdPolicy = $authnRequest->getNameIdPolicy();
 
+        $this->assertInstanceOf(NameIDPolicy::class, $nameIdPolicy);
         $this->assertEquals(true, $nameIdPolicy->getAllowCreate());
         $this->assertEquals("https://sp.example.com/SAML2", $nameIdPolicy->getSPNameQualifier());
         $this->assertEquals(Constants::NAMEID_TRANSIENT, $nameIdPolicy->getFormat());
@@ -444,7 +465,9 @@ AUTHNREQUEST;
 </samlp:AuthnRequest>
 AUTHNREQUEST;
 
+        /** @psalm-var \DOMDocument $expectedStructure->ownerDocument */
         $expectedStructure = DOMDocumentFactory::fromString($expectedStructureDocument)->documentElement;
+        /** @psalm-var \DOMDocument $requestStructure->ownerDocument */
         $requestStructure = $request->toXML();
 
         $this->assertEqualXMLStructure($expectedStructure, $requestStructure);
@@ -480,7 +503,9 @@ AUTHNREQUEST;
 </samlp:AuthnRequest>
 AUTHNREQUEST;
 
+        /** @psalm-var \DOMDocument $expectedStructure->ownerDocument */
         $expectedStructure = DOMDocumentFactory::fromString($expectedStructureDocument)->documentElement;
+        /** @psalm-var \DOMDocument $requestStructure->ownerDocument */
         $requestStructure = $request->toXML();
 
         $this->assertEqualXMLStructure($expectedStructure, $requestStructure);
@@ -561,7 +586,9 @@ AUTHNREQUEST;
 </samlp:AuthnRequest>
 AUTHNREQUEST;
 
+        /** @psalm-var \DOMDocument $expectedStructure->ownerDocument */
         $expectedStructure = DOMDocumentFactory::fromString($expectedStructureDocument)->documentElement;
+        /** @psalm-var \DOMDocument $requestStructure->ownerDocument */
         $requestStructure = $request->toXML();
 
         $this->assertEqualXMLStructure($expectedStructure, $requestStructure);
@@ -659,7 +686,9 @@ AUTHNREQUEST;
 </samlp:AuthnRequest>
 AUTHNREQUEST;
 
+        /** @psalm-var \DOMDocument $expectedStructure->ownerDocument */
         $expectedStructure = DOMDocumentFactory::fromString($expectedStructureDocument)->documentElement;
+        /** @psalm-var \DOMDocument $requestStructure->ownerDocument */
         $requestStructure = $request->toXML();
 
         $this->assertEqualXMLStructure($expectedStructure, $requestStructure);
@@ -695,7 +724,9 @@ AUTHNREQUEST;
 </samlp:AuthnRequest>
 AUTHNREQUEST;
 
+        /** @psalm-var \DOMDocument $expectedStructure->ownerDocument */
         $expectedStructure = DOMDocumentFactory::fromString($expectedStructureDocument)->documentElement;
+        /** @psalm-var \DOMDocument $requestStructure->ownerDocument */
         $requestStructure = $request->toXML();
 
         $this->assertEqualXMLStructure($expectedStructure, $requestStructure);
@@ -761,7 +792,9 @@ AUTHNREQUEST;
 </samlp:AuthnRequest>
 AUTHNREQUEST;
 
+        /** @psalm-var \DOMDocument $expectedStructure->ownerDocument */
         $expectedStructure = DOMDocumentFactory::fromString($expectedStructureDocument)->documentElement;
+        /** @psalm-var \DOMDocument $requestStructure->ownerDocument */
         $requestStructure = $request->toXML();
 
         $this->assertEqualXMLStructure($expectedStructure, $requestStructure);
@@ -794,7 +827,7 @@ AUTHNREQUEST;
 </samlp:AuthnRequest>
 AUTHNREQUEST;
 
-        $this->expectException(AssertionFailedException::class);
+        $this->expectException(TooManyElementsException::class);
         $this->expectExceptionMessage('Only one <saml:Subject> element is allowed.');
         $authnRequest = AuthnRequest::fromXML(DOMDocumentFactory::fromString($xml)->documentElement);
     }
@@ -822,7 +855,7 @@ AUTHNREQUEST;
 </samlp:AuthnRequest>
 AUTHNREQUEST;
 
-        $this->expectException(AssertionFailedException::class);
+        $this->expectException(TooManyElementsException::class);
         $this->expectExceptionMessage('More than one <saml:NameID> in <saml:Subject>.');
         $authnRequest = AuthnRequest::fromXML(DOMDocumentFactory::fromString($xml)->documentElement);
     }
@@ -896,7 +929,9 @@ AUTHNREQUEST;
 </samlp:AuthnRequest>
 AUTHNREQUEST;
 
+        /** @psalm-var \DOMDocument $expectedStructure->ownerDocument */
         $expectedStructure = DOMDocumentFactory::fromString($expectedStructureDocument)->documentElement;
+        /** @psalm-var \DOMDocument $requestStructure->ownerDocument */
         $requestStructure = $request->toXML();
 
         $this->assertEqualXMLStructure($expectedStructure, $requestStructure);

@@ -145,7 +145,7 @@ final class RegistrationInfo extends AbstractMdrpiElement
         Assert::same($xml->namespaceURI, RegistrationInfo::NS, InvalidDOMElementException::class);
 
         $registrationAuthority = self::getAttribute($xml, 'registrationAuthority');
-        $registrationInstant = self::getAttribute($xml, 'registrationInstant');
+        $registrationInstant = self::getAttribute($xml, 'registrationInstant', null);
         if ($registrationInstant !== null) {
             $registrationInstant = Utils::xsDateTimeToTimestamp($registrationInstant);
         }

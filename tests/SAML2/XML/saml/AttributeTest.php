@@ -138,14 +138,15 @@ XML
         $attribute = Attribute::fromXML($this->document->documentElement);
         $pubkey = new XMLSecurityKey(XMLSecurityKey::RSA_SHA256, ['type' => 'public']);
         $pubkey->loadKey(CertificatesMock::PUBLIC_KEY_PEM);
+        /** @psalm-var \SAML2\XML\saml\EncryptedAttribute $encattr */
         $encattr = EncryptedAttribute::fromUnencryptedElement($attribute, $pubkey);
-        $str = (string) $encattr;
+        $str = strval($encattr);
         $doc = DOMDocumentFactory::fromString($str);
         $encattr = EncryptedAttribute::fromXML($doc->documentElement);
         $privkey = new XMLSecurityKey(XMLSecurityKey::RSA_SHA256, ['type' => 'private']);
         $privkey->loadKey(CertificatesMock::PRIVATE_KEY_PEM);
         $attr = $encattr->decrypt($privkey);
-        $this->assertEquals((string) $attribute, (string) $attr);
+        $this->assertEquals(strval($attribute), strval($attr));
     }
 
 

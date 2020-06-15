@@ -116,7 +116,7 @@ final class ContactPerson extends AbstractMdElement
         Assert::same($xml->localName, 'ContactPerson', InvalidDOMElementException::class);
         Assert::same($xml->namespaceURI, ContactPerson::NS, InvalidDOMElementException::class);
 
-        $contactType = self::getAttribute('contactType');
+        $contactType = self::getAttribute($xml, 'contactType');
         $company = self::getStringElement($xml, 'Company');
         $givenName = self::getStringElement($xml, 'GivenName');
         $surName = self::getStringElement($xml, 'SurName');
@@ -166,7 +166,7 @@ final class ContactPerson extends AbstractMdElement
      * @param string      $name The name of the child element.
      *
      * @return string|null The value of the child element.
-     * @throws \InvalidArgumentException
+     * @throws \SimpleSAML\Assert\AssertionFailedException
      */
     private static function getStringElement(DOMElement $parent, string $name): ?string
     {
@@ -196,7 +196,7 @@ final class ContactPerson extends AbstractMdElement
      *
      * @param string $contactType
      * @return void
-     * @throws \InvalidArgumentException if $contactType is not one of the predefined values
+     * @throws \SimpleSAML\Assert\AssertionFailedException if $contactType is not one of the predefined values
      */
     protected function setContactType(string $contactType): void
     {
@@ -305,7 +305,7 @@ final class ContactPerson extends AbstractMdElement
      *
      * @param string[] $emailAddresses
      * @return void
-     * @throws \InvalidArgumentException
+     * @throws \SimpleSAML\Assert\AssertionFailedException
      */
     protected function setEmailAddresses(array $emailAddresses): void
     {
@@ -330,7 +330,7 @@ final class ContactPerson extends AbstractMdElement
      * Set the value of the TelephoneNumber property
      *
      * @param string[] $telephoneNumbers
-     * @throws \InvalidArgumentException
+     * @throws \SimpleSAML\Assert\AssertionFailedException
      */
     protected function setTelephoneNumbers(array $telephoneNumbers): void
     {

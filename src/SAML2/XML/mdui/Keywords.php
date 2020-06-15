@@ -86,7 +86,7 @@ final class Keywords extends AbstractMduiElement
      * @param string[] $keywords
      * @return void
      *
-     * @throws \InvalidArgumentException if one of the keywords contains `+`
+     * @throws \SimpleSAML\Assert\AssertionFailedException if one of the keywords contains `+`
      */
     private function setKeywords(array $keywords): void
     {
@@ -101,7 +101,7 @@ final class Keywords extends AbstractMduiElement
      * @param string $keyword
      * @return void
      *
-     * @throws \InvalidArgumentException if the keyword contains a `+`
+     * @throws \SimpleSAML\Assert\AssertionFailedException if the keyword contains a `+`
      */
     public function addKeyword(string $keyword): void
     {
@@ -145,6 +145,7 @@ final class Keywords extends AbstractMduiElement
      */
     public function toXML(DOMElement $parent = null): DOMElement
     {
+        /** @psalm-var \DOMDocument $e->ownerDocument */
         $e = $this->instantiateParentElement($parent);
         $e->setAttribute('xml:lang', $this->lang);
 

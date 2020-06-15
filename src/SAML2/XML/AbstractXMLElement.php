@@ -112,7 +112,7 @@ abstract class AbstractXMLElement implements Serializable
      * @param string      $name The name of the attribute.
      * @param string|null $default The default to return in case the attribute does not exist and it is optional.
      * @return string|null
-     * @throws \InvalidArgumentException if the attribute is missing from the element
+     * @throws \SimpleSAML\Assert\AssertionFailedException if the attribute is missing from the element
      */
     public static function getAttribute(DOMElement $xml, string $name, ?string $default = ''): ?string
     {
@@ -136,7 +136,7 @@ abstract class AbstractXMLElement implements Serializable
      * @param string      $name The name of the attribute.
      * @param string|null $default The default to return in case the attribute does not exist and it is optional.
      * @return bool|null
-     * @throws \InvalidArgumentException if the attribute is not a boolean
+     * @throws \SimpleSAML\Assert\AssertionFailedException if the attribute is not a boolean
      */
     public static function getBooleanAttribute(DOMElement $xml, string $name, ?string $default = ''): ?bool
     {
@@ -164,7 +164,7 @@ abstract class AbstractXMLElement implements Serializable
      * @param string|null $default The default to return in case the attribute does not exist and it is optional.
      *
      * @return int|null
-     * @throws \InvalidArgumentException if the attribute is not an integer
+     * @throws \SimpleSAML\Assert\AssertionFailedException if the attribute is not an integer
      */
     public static function getIntegerAttribute(DOMElement $xml, string $name, ?string $default = ''): ?int
     {

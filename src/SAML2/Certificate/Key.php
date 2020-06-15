@@ -41,6 +41,7 @@ class Key implements \ArrayAccess
      *
      * @param string $usage
      * @return bool
+     * @throws \SAML2\Exception\InvalidArgumentException
      */
     public function canBeUsedFor(string $usage): bool
     {
@@ -67,7 +68,7 @@ class Key implements \ArrayAccess
 
     /**
      * @param mixed $offset
-     * @throws InvalidArgumentException
+     * @throws \SAML2\Exception\InvalidArgumentException
      * @return bool
      *
      * Type hint not possible due to upstream method signature
@@ -83,7 +84,7 @@ class Key implements \ArrayAccess
 
     /**
      * @param mixed $offset
-     * @throws InvalidArgumentException
+     * @throws \SAML2\Exception\InvalidArgumentException
      * @return mixed
      *
      * Type hint not possible due to upstream method signature
@@ -100,7 +101,7 @@ class Key implements \ArrayAccess
     /**
      * @param mixed $offset
      * @param mixed $value
-     * @throws InvalidArgumentException
+     * @throws \SAML2\Exception\InvalidArgumentException
      * @return void
      */
     public function offsetSet($offset, $value): void
@@ -114,7 +115,7 @@ class Key implements \ArrayAccess
 
     /**
      * @param mixed $offset
-     * @throws InvalidArgumentException
+     * @throws \SAML2\Exception\InvalidArgumentException
      * @return void
      *
      * Type hint not possible due to upstream method signature

@@ -190,7 +190,7 @@ final class SPSSODescriptor extends AbstractSSODescriptor
      *
      * @param \SAML2\XML\md\AssertionConsumerService[] $acs
      * @return void
-     * @throws \InvalidArgumentException
+     * @throws \SimpleSAML\Assert\AssertionFailedException
      */
     private function setAssertionConsumerService(array $acs): void
     {
@@ -220,7 +220,7 @@ final class SPSSODescriptor extends AbstractSSODescriptor
      *
      * @param \SAML2\XML\md\AttributeConsumingService[] $acs
      * @return void
-     * @throws \InvalidArgumentException
+     * @throws \SimpleSAML\Assert\AssertionFailedException
      */
     private function setAttributeConsumingService(array $acs): void
     {

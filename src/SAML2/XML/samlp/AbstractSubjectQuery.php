@@ -80,7 +80,7 @@ abstract class AbstractSubjectQuery extends AbstractRequest
      *
      * @return \DOMElement This subject query.
      *
-     * @throws \InvalidArgumentException if assertions are false
+     * @throws \SimpleSAML\Assert\AssertionFailedException if assertions are false
      */
     public function toXML(?DOMElement $parent = null): DOMElement
     {

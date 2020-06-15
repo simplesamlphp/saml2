@@ -131,7 +131,7 @@ abstract class AbstractRoleDescriptor extends AbstractMetadataDocument
      *
      * @param string[] $protocols
      * @return void
-     * @throws \InvalidArgumentException if the qualified name of the supplied element is wrong
+     * @throws \SimpleSAML\Assert\AssertionFailedException if the qualified name of the supplied element is wrong
      */
     protected function setProtocolSupportEnumeration(array $protocols): void
     {
@@ -180,7 +180,7 @@ abstract class AbstractRoleDescriptor extends AbstractMetadataDocument
      *
      * @param \SAML2\XML\md\ContactPerson[] $contactPersons
      * @return void
-     * @throws \InvalidArgumentException
+     * @throws \SimpleSAML\Assert\AssertionFailedException
      */
     protected function setContactPersons(array $contactPersons): void
     {
@@ -225,7 +225,6 @@ abstract class AbstractRoleDescriptor extends AbstractMetadataDocument
      *
      * @param \DOMElement $parent The EntityDescriptor we should append this endpoint to.
      * @return \DOMElement
-     * @throws \InvalidArgumentException if the qualified name of the supplied element is wrong
      */
     public function toXML(?DOMElement $parent = null): DOMElement
     {

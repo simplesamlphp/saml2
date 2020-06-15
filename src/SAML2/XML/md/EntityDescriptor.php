@@ -222,7 +222,7 @@ final class EntityDescriptor extends AbstractMetadataDocument
      * Collect the value of the entityID property.
      *
      * @return string
-     * @throws \InvalidArgumentException
+     * @throws \SimpleSAML\Assert\AssertionFailedException
      */
     public function getEntityID(): string
     {
@@ -261,6 +261,7 @@ final class EntityDescriptor extends AbstractMetadataDocument
      *
      * @param \SAML2\XML\md\AbstractRoleDescriptor[] $roleDescriptors
      * @return void
+     * @throws \SimpleSAML\Assert\AssertionFailedException
      */
     protected function setRoleDescriptors(array $roleDescriptors): void
     {
@@ -335,6 +336,7 @@ final class EntityDescriptor extends AbstractMetadataDocument
      *
      * @param array $contactPerson
      * @return void
+     * @throws \SimpleSAML\Assert\AssertionFailedException
      */
     protected function setContactPersons(array $contactPerson): void
     {
@@ -363,6 +365,7 @@ final class EntityDescriptor extends AbstractMetadataDocument
      *
      * @param array $additionalMetadataLocation
      * @return void
+     * @throws \SimpleSAML\Assert\AssertionFailedException
      */
     protected function setAdditionalMetadataLocations(array $additionalMetadataLocation): void
     {

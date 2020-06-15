@@ -56,7 +56,7 @@ final class EntityAttributes extends AbstractMdattrElement
      *
      * @param (\SAML2\XML\Chunk|\SAML2\XML\saml\Attribute)[] $children
      * @return void
-     * @throws \InvalidArgumentException
+     * @throws \SimpleSAML\Assert\AssertionFailedException
      */
     private function setChildren(array $children): void
     {
@@ -71,7 +71,7 @@ final class EntityAttributes extends AbstractMdattrElement
      *
      * @param \SAML2\XML\Chunk|\SAML2\XML\saml\Attribute $child
      * @return void
-     * @throws \InvalidArgumentException
+     * @throws \SimpleSAML\Assert\AssertionFailedException
      */
     public function addChild($child): void
     {

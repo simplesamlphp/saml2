@@ -30,7 +30,7 @@ final class KeyInfo extends AbstractDsElement
      * Array with various elements describing this key.
      * Unknown elements will be represented by \SAML2\XML\Chunk.
      *
-     * @var (\SAML2\XML\Chunk|\SAML2\XML\ds\KeyName|\SAML2\XML\ds\X509Data)[]
+     * @var (\SAML2\XML\Chunk|\SAML2\XML\ds\KeyName|\SAML2\XML\ds\X509Data|\SAML2\XML\xenc\EncryptedKey)[]
      */
     protected $info = [];
 
@@ -38,7 +38,7 @@ final class KeyInfo extends AbstractDsElement
     /**
      * Initialize a KeyInfo element.
      *
-     * @param (\SAML2\XML\Chunk|\SAML2\XML\ds\KeyName|\SAML2\XML\ds\X509Data)[] $info
+     * @param (\SAML2\XML\Chunk|\SAML2\XML\ds\KeyName|\SAML2\XML\ds\X509Data|\SAML2\XML\xenc\EncryptedKey)[] $info
      * @param string|null $Id
      */
     public function __construct(array $info, $Id = null)
@@ -87,7 +87,7 @@ final class KeyInfo extends AbstractDsElement
      *
      * @param (\SAML2\XML\Chunk|\SAML2\XML\ds\KeyName|\SAML2\XML\ds\X509Data|\SAML2\XML\xenc\EncryptedKey)[] $info
      * @return void
-     * @throws \InvalidArgumentException if $info contains anything other than KeyName, X509Data, EncryptedKey or Chunk
+     * @throws \SimpleSAML\Assert\AssertionFailedException if $info contains anything other than KeyName, X509Data, EncryptedKey or Chunk
      */
     private function setInfo(array $info): void
     {
@@ -118,7 +118,7 @@ final class KeyInfo extends AbstractDsElement
         $info = [];
 
         foreach ($xml->childNodes as $n) {
-            if (!($n instanceof \DOMElement)) {
+            if (!($n instanceof DOMElement)) {
                 continue;
             } elseif ($n->namespaceURI !== self::NS) {
                 $info[] = new Chunk($n);

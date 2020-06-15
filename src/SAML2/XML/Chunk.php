@@ -100,7 +100,7 @@ final class Chunk extends AbstractXMLElement
      *
      * @param string $localName
      * @return void
-     * @throws \InvalidArgumentException if $localName is an empty string
+     * @throws \SimpleSAML\Assert\AssertionFailedException if $localName is an empty string
      */
     public function setLocalName(string $localName): void
     {

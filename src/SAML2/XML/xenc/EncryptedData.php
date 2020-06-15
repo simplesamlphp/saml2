@@ -6,6 +6,8 @@ namespace SAML2\XML\xenc;
 
 use DOMElement;
 use SAML2\Exception\InvalidDOMElementException;
+use SAML2\Exception\MissingElementException;
+use SAML2\Exception\TooManyElementsException;
 use SAML2\XML\ds\KeyInfo;
 use SimpleSAML\Assert\Assert;
 
@@ -238,7 +240,7 @@ class EncryptedData extends AbstractXencElement
         );
 
         $keyInfo = KeyInfo::getChildrenOfClass($xml);
-        Assert::maxCount($keyInfo, 1, 'No more than one KeyInfo element allowed in <xenc:EncryptedData>.', TooManyElementsException:class);
+        Assert::maxCount($keyInfo, 1, 'No more than one KeyInfo element allowed in <xenc:EncryptedData>.', TooManyElementsException::class);
 
         return new self(
             $cipherData[0],

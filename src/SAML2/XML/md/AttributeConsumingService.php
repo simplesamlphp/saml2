@@ -6,6 +6,7 @@ namespace SAML2\XML\md;
 
 use DOMElement;
 use SAML2\Exception\InvalidDOMElementException;
+use SAML2\Exception\MissingElementException;
 use SAML2\Utils;
 use SimpleSAML\Assert\Assert;
 
@@ -116,7 +117,7 @@ final class AttributeConsumingService extends AbstractMdElement
      * Set the localized names of this service.
      *
      * @param \SAML2\XML\md\ServiceName[] $serviceNames
-     * @throws \InvalidArgumentException
+     * @throws \SimpleSAML\Assert\AssertionFailedException
      */
     protected function setServiceNames(array $serviceNames): void
     {
@@ -145,7 +146,7 @@ final class AttributeConsumingService extends AbstractMdElement
      * Set the value of the ServiceDescription-property
      *
      * @param \SAML2\XML\md\ServiceDescription[] $serviceDescriptions
-     * @throws \InvalidArgumentException
+     * @throws \SimpleSAML\Assert\AssertionFailedException
      */
     protected function setServiceDescriptions(array $serviceDescriptions): void
     {
@@ -173,7 +174,7 @@ final class AttributeConsumingService extends AbstractMdElement
      * Set the value of the RequestedAttribute-property
      *
      * @param \SAML2\XML\md\RequestedAttribute[] $requestedAttributes
-     * @throws \InvalidArgumentException
+     * @throws \SimpleSAML\Assert\AssertionFailedException
      */
     public function setRequestedAttributes(array $requestedAttributes): void
     {
@@ -196,7 +197,6 @@ final class AttributeConsumingService extends AbstractMdElement
      *
      * @param \DOMElement $parent The element we should append this AttributeConsumingService to.
      * @return \DOMElement
-     * @throws \InvalidArgumentException if the qualified name of the supplied element is wrong
      */
     public function toXML(DOMElement $parent = null): DOMElement
     {

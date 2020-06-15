@@ -55,7 +55,7 @@ final class X509Data extends AbstractDsElement
      *
      * @param (\SAML2\XML\Chunk|\SAML2\XML\ds\X509Certificate|\SAML2\XML\ds\X509SubjectName)[] $data
      * @return void
-     * @throws \InvalidArgumentException if $data contains anything other than X509Certificate or Chunk
+     * @throws \SimpleSAML\Assert\AssertionFailedException if $data contains anything other than X509Certificate or Chunk
      */
     private function setData(array $data): void
     {

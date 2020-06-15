@@ -663,7 +663,7 @@ class Assertion implements SignedElementInterface
      * @param  XMLSecurityKey $key The key we should check against.
      * @return boolean        true if successful, false if it is unsigned.
      *
-     * @throws \InvalidArgumentException if assertions are false
+     * @throws \SimpleSAML\Assert\AssertionFailedException if assertions are false
      */
     public function validate(XMLSecurityKey $key): bool
     {
@@ -838,6 +838,8 @@ class Assertion implements SignedElementInterface
      * @param XMLSecurityKey $key       The decryption key.
      * @param array          $blacklist Blacklisted decryption algorithms.
      * @return void
+     *
+     * @throws \SimpleSAML\Assert\AssertionFailedException if assertions are false
      */
     public function decryptNameId(XMLSecurityKey $key, array $blacklist = []): void
     {
@@ -872,6 +874,8 @@ class Assertion implements SignedElementInterface
      * @param XMLSecurityKey $key
      * @param array $blacklist
      * @return \SAML2\XML\saml\Assertion
+     *
+     * @throws \SimpleSAML\Assert\AssertionFailedException if assertions are false
      * @throws \SAML2\Exception\InvalidDOMElementException if the qualified name of the supplied element is wrong
      * @throws \SAML2\Exception\MissingAttributeException if the supplied element is missing one of the mandatory attributes
      * @throws \SAML2\Exception\MissingElementException if one of the mandatory child-elements is missing

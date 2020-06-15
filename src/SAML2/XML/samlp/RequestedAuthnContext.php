@@ -138,6 +138,7 @@ final class RequestedAuthnContext extends AbstractSamlpElement
      */
     public function toXML(DOMElement $parent = null): DOMElement
     {
+        /** @psalm-var \DOMDocument $e->ownerDocument */
         $e = $this->instantiateParentElement($parent);
 
         foreach ($this->requestedAuthnContexts as $context) {

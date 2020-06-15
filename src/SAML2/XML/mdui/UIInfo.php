@@ -117,7 +117,7 @@ final class UIInfo extends AbstractMduiElement
      * @param \SAML2\XML\mdui\Keywords[] $keywords
      * @return void
      *
-     * @throws \InvalidArgumentException if assertions are false
+     * @throws \SimpleSAML\Assert\AssertionFailedException if assertions are false
      */
     private function setKeywords(array $keywords): void
     {

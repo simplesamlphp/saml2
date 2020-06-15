@@ -9,6 +9,7 @@ use Exception;
 use RobRichards\XMLSecLibs\XMLSecurityDSig;
 use RobRichards\XMLSecLibs\XMLSecurityKey;
 use SAML2\Exception\InvalidDOMElementException;
+use SAML2\Exception\MissingAttributeException;
 use SAML2\Utilities\Certificate;
 use SAML2\Utils;
 use SAML2\XML\AbstractXMLElement;

@@ -12,6 +12,7 @@ use SAML2\Utils;
 use SAML2\XML\Chunk;
 use SAML2\XML\ds\KeyInfo;
 use SAML2\XML\saml\EncryptedID;
+use SAML2\XML\saml\Issuer;
 use SAML2\XML\saml\NameID;
 use SAML2\XML\xenc\CipherData;
 use SAML2\XML\xenc\DataReference;
@@ -120,15 +121,19 @@ XML;
     public function testUnmarshalling(): void
     {
         $logoutRequest = LogoutRequest::fromXML($this->logoutRequestElement);
-        $this->assertEquals('TheIssuer', $logoutRequest->getIssuer()->getValue());
-        $this->assertInstanceOf(EncryptedID::class, $logoutRequest->getIdentifier());
+        $issuer = $logoutRequest->getIssuer();
+
+        $this->assertInstanceOf(Issuer::class, $issuer);
+        $this->assertEquals('TheIssuer', $issuer->getValue());
+
+        $encid = $logoutRequest->getIdentifier();
+        $this->assertInstanceOf(EncryptedID::class, $encid);
 
         $this->assertEquals(['SomeSessionIndex1', 'SomeSessionIndex2'], $logoutRequest->getSessionIndexes());
 
-        /** @var EncryptedID $encid */
-        $encid = $logoutRequest->getIdentifier();
-        $nameId = $encid->decrypt(CertificatesMock::getPrivateKey());
-        $this->assertEquals('TheNameIDValue', $nameId->getValue());
+        $identifier = $encid->decrypt(CertificatesMock::getPrivateKey());
+        $this->assertInstanceOf(NameID::class, $identifier);
+        $this->assertEquals('TheNameIDValue', $identifier->getValue());
     }
 
 
@@ -187,11 +192,11 @@ XML;
         $this->logoutRequestElement = $document->documentElement;
 
         $logoutRequest = LogoutRequest::fromXML($this->logoutRequestElement);
-        $this->assertEquals("frits", $logoutRequest->getIdentifier()->getValue());
-        $this->assertEquals(
-            "urn:oasis:names:tc:SAML:2.0:nameid-format:unspecified",
-            $logoutRequest->getIdentifier()->getFormat()
-        );
+        $identifier = $logoutRequest->getIdentifier();
+
+        $this->assertInstanceOf(NameID::class, $identifier);
+        $this->assertEquals("frits", $identifier->getValue());
+        $this->assertEquals('urn:oasis:names:tc:SAML:2.0:nameid-format:unspecified', $identifier->getFormat());
     }
 
 

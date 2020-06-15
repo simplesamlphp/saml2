@@ -48,7 +48,7 @@ final class StatusDetail extends AbstractSamlpElement
      *
      * @param \SAML2\XML\Chunk[] $details
      * @return void
-     * @throws \InvalidArgumentException if the supplied array contains anything other than Chunk objects
+     * @throws \SimpleSAML\Assert\AssertionFailedException if the supplied array contains anything other than Chunk objects
      */
     private function setDetails(array $details): void
     {
@@ -103,6 +103,7 @@ final class StatusDetail extends AbstractSamlpElement
      */
     public function toXML(DOMElement $parent = null): DOMElement
     {
+        /** @psalm-var \DOMDocument $e->ownerDocument */
         $e = $this->instantiateParentElement($parent);
 
         foreach ($this->details as $detail) {

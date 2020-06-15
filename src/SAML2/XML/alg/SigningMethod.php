@@ -7,6 +7,7 @@ namespace SAML2\XML\alg;
 use DOMElement;
 use SAML2\DOMDocumentFactory;
 use SAML2\Exception\InvalidDOMElementException;
+use SAML2\Exception\MissingAttributeException;
 use SimpleSAML\Assert\Assert;
 
 /**
@@ -142,8 +143,8 @@ final class SigningMethod extends AbstractAlgElement
         Assert::same($xml->namespaceURI, SigningMethod::NS, InvalidDOMElementException::class);
 
         $Algorithm = self::getAttribute($xml, 'Algorithm');
-        $MinKeySize = self::getAttribute($xml, 'MinKeySize', null);
-        $MaxKeySize = self::getAttribute($xml, 'MaxKeySize', null);
+        $MinKeySize = self::getIntegerAttribute($xml, 'MinKeySize', null);
+        $MaxKeySize = self::getIntegerAttribute($xml, 'MaxKeySize', null);
 
         return new self($Algorithm, $MinKeySize, $MaxKeySize);
     }
