@@ -6,6 +6,7 @@ namespace SAML2\XML\samlp;
 
 use DOMElement;
 use SAML2\Exception\InvalidDOMElementException;
+use SAML2\Exception\TooManyElementsException;
 use SAML2\Utils;
 use SAML2\XML\ds\Signature;
 use SAML2\XML\saml\Attribute;
@@ -99,6 +100,8 @@ class AttributeQuery extends AbstractSubjectQuery
      *
      * @throws \SAML2\Exception\InvalidDOMElementException if the qualified name of the supplied element is wrong
      * @throws \SAML2\Exception\MissingAttributeException if the supplied element is missing one of the mandatory attributes
+     * @throws \SAML2\Excecption\MissingElementException if one of the mandatory child-elements is missing
+     * @throws \SAML2\Exception\TooManyElementsException if too many child-elements of a type are specified
      */
     public static function fromXML(DOMElement $xml): object
     {
@@ -115,14 +118,14 @@ class AttributeQuery extends AbstractSubjectQuery
         Assert::countBetween($issuer, 0, 1);
 
         $extensions = Extensions::getChildrenOfClass($xml);
-        Assert::maxCount($extensions, 1, 'Only one saml:Extensions element is allowed.');
+        Assert::maxCount($extensions, 1, 'Only one saml:Extensions element is allowed.', TooManyElementsException::class);
 
         $subject = Subject::getChildrenOfClass($xml);
-        Assert::notEmpty($subject, 'Missing subject in subject query.');
-        Assert::maxCount($subject, 1, 'More than one <saml:Subject> in AttributeQuery');
+        Assert::notEmpty($subject, 'Missing subject in subject query.', MissingElementException::class);
+        Assert::maxCount($subject, 1, 'More than one <saml:Subject> in AttributeQuery', TooManyElementsException::class);
 
         $signature = Signature::getChildrenOfClass($xml);
-        Assert::maxCount($signature, 1, 'Only one ds:Signature element is allowed.');
+        Assert::maxCount($signature, 1, 'Only one ds:Signature element is allowed.', TooManyElementsException::class);
 
         $request = new self(
             array_pop($subject),

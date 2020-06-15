@@ -8,6 +8,7 @@ use DOMElement;
 use SAML2\Compat\ContainerSingleton;
 use SAML2\Constants;
 use SAML2\Exception\InvalidDOMElementException;
+use SAML2\Exception\TooManyElementsException;
 use SAML2\Utils;
 use SAML2\XML\IdentifierTrait;
 use SimpleSAML\Assert\Assert;
@@ -110,6 +111,7 @@ final class SubjectConfirmation extends AbstractSamlElement
      *
      * @throws \SAML2\Exception\InvalidDOMElementException if the qualified name of the supplied element is wrong
      * @throws \SAML2\Exception\MissingAttributeException if the supplied element is missing one of the mandatory attributes
+     * @throws \SAML2\Exception\TooManyElementsException if too many child-elements of a type are specified
      */
     public static function fromXML(DOMElement $xml): object
     {
@@ -124,6 +126,7 @@ final class SubjectConfirmation extends AbstractSamlElement
             $subjectConfirmationData,
             1,
             'More than one <saml:SubjectConfirmationData> in <saml:SubjectConfirmation>.'
+            TooManyElementsException::class
         );
 
         return new self(

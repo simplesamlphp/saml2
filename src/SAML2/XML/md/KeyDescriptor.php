@@ -7,6 +7,7 @@ namespace SAML2\XML\md;
 use DOMElement;
 use SAML2\Exception\InvalidDOMElementException;
 use SAML2\Exception\MissingElementException;
+use SAML2\Exception\TooManyElementsException;
 use SAML2\XML\ds\KeyInfo;
 use SimpleSAML\Assert\Assert;
 
@@ -141,6 +142,7 @@ final class KeyDescriptor extends AbstractMdElement
      *
      * @throws \SAML2\Exception\InvalidDOMElementException if the qualified name of the supplied element is wrong
      * @throws \SAML2\Exception\MissingElementException if one of the mandatory child-elements is missing
+     * @throws \SAML2\Exception\TooManyElementsException if too many child-elements of a type are specified
      */
     public static function fromXML(DOMElement $xml): object
     {
@@ -149,7 +151,7 @@ final class KeyDescriptor extends AbstractMdElement
 
         $keyInfoElements = KeyInfo::getChildrenOfClass($xml);
         Assert::minCount($keyInfoElements, 1, 'No ds:KeyInfo in the KeyDescriptor.', MissingElementException::class);
-        Assert::maxCount($keyInfoElements, 1, 'More than one ds:KeyInfo in the KeyDescriptor.');
+        Assert::maxCount($keyInfoElements, 1, 'More than one ds:KeyInfo in the KeyDescriptor.', TooManyElementsException::class);
 
         return new self(
             $keyInfoElements[0],

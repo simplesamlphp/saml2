@@ -6,6 +6,7 @@ namespace SAML2\XML\samlp;
 
 use DOMElement;
 use SAML2\Exception\InvalidDOMElementException;
+use SAML2\Exception\TooManyElementsException;
 use SAML2\Utils;
 use SAML2\XML\ds\Signature;
 use SAML2\XML\saml\Issuer;
@@ -127,10 +128,10 @@ class ArtifactResponse extends AbstractStatusResponse
         Assert::count($status, 1);
 
         $extensions = Extensions::getChildrenOfClass($xml);
-        Assert::maxCount($extensions, 1, 'Only one saml:Extensions element is allowed.');
+        Assert::maxCount($extensions, 1, 'Only one saml:Extensions element is allowed.', TooManyElementsException::class);
 
         $signature = Signature::getChildrenOfClass($xml);
-        Assert::maxCount($signature, 1, 'Only one ds:Signature element is allowed.');
+        Assert::maxCount($signature, 1, 'Only one ds:Signature element is allowed.', TooManyElementsException::class);
 
         $response = new self(
             array_pop($status),

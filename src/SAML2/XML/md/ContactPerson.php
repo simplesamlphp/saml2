@@ -9,6 +9,7 @@ use Exception;
 use InvalidArgumentException;
 use SAML2\Constants;
 use SAML2\Exception\InvalidDOMElementException;
+use SAML2\Exception\TooManyElementsException;
 use SAML2\Utils;
 use SAML2\XML\ExtendableAttributesTrait;
 use SAML2\XML\ExtendableElementTrait;
@@ -108,6 +109,7 @@ final class ContactPerson extends AbstractMdElement
      *
      * @throws \SAML2\Exception\InvalidDOMElementException if the qualified name of the supplied element is wrong
      * @throws \SAML2\Exception\MissingAttributeException if the supplied element is missing one of the mandatory attributes
+     * @throws \SAML2\Exception\TooManyElementsException if too many child-elements of a type are specified
      */
     public static function fromXML(DOMElement $xml): object
     {
@@ -121,7 +123,7 @@ final class ContactPerson extends AbstractMdElement
         $email = self::getStringElements($xml, 'EmailAddress');
         $telephone = self::getStringElements($xml, 'TelephoneNumber');
         $extensions = Extensions::getChildrenOfClass($xml);
-        Assert::maxCount($extensions, 1, 'Only one md:Extensions element is allowed.');
+        Assert::maxCount($extensions, 1, 'Only one md:Extensions element is allowed.', TooManyElementsException::class);
 
         return new self(
             $contactType,

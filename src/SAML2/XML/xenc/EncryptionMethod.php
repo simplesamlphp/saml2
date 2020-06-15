@@ -7,6 +7,7 @@ namespace SAML2\XML\xenc;
 use DOMElement;
 use SAML2\Constants;
 use SAML2\Exception\InvalidDOMElementException;
+use SAML2\Exception\TooManyElementException;
 use SAML2\XML\Chunk;
 use SimpleSAML\Assert\Assert;
 
@@ -59,6 +60,7 @@ class EncryptionMethod extends AbstractXencElement
      *
      * @throws \SAML2\Exception\InvalidDOMElementException if the qualified name of the supplied element is wrong
      * @throws \SAML2\Exception\MissingAttributeException if the supplied element is missing one of the mandatory attributes
+     * @throws \SAML2\Exception\TooManyElementsException if too many child-elements of a type are specified
      */
     public static function fromXML(DOMElement $xml): object
     {
@@ -75,14 +77,14 @@ class EncryptionMethod extends AbstractXencElement
                 continue;
             } elseif ($node->namespaceURI === Constants::NS_XENC) {
                 if ($node->localName === 'KeySize') {
-                    Assert::null($keySize, $node->tagName . ' cannot be set more than once.');
+                    Assert::null($keySize, $node->tagName . ' cannot be set more than once.', TooManyElementsException::class);
                     Assert::numeric($node->textContent, $node->tagName . ' must be numerical.');
                     $keySize = intval($node->textContent);
                     continue;
                 }
 
                 if ($node->localName === 'OAEPParams') {
-                    Assert::null($oaepParams, $node->tagName . ' cannot be set more than once.');
+                    Assert::null($oaepParams, $node->tagName . ' cannot be set more than once.', TooManyElementsException::class);
                     $oaepParams = trim($node->textContent);
                     continue;
                 }

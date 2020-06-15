@@ -9,6 +9,7 @@ use Exception;
 use SAML2\Constants;
 use SAML2\Exception\InvalidDOMElementException;
 use SAML2\Exception\MissingElementException;
+use SAML2\Exception\TooManyElementsException;
 use SAML2\Utils;
 use SAML2\XML\ExtendableAttributesTrait;
 use SAML2\XML\ExtendableElementTrait;
@@ -165,7 +166,7 @@ final class Organization extends AbstractMdElement
         Assert::allStringNotEmpty($url, 'No localized organization URL found.', MissingElementException::class);
 
         $extensions = Extensions::getChildrenOfClass($xml);
-        Assert::maxCount($extensions, 1, 'Cannot process more than one md:Extensions element.');
+        Assert::maxCount($extensions, 1, 'Cannot process more than one md:Extensions element.', TooManyElementsException::class);
 
         return new self($names, $displayNames, $url, !empty($extensions) ? $extensions[0] : null);
     }

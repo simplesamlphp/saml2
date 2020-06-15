@@ -7,6 +7,7 @@ namespace SAML2\XML\md;
 use DOMElement;
 use SAML2\Constants;
 use SAML2\Exception\InvalidDOMElementException;
+use SAML2\Exception\TooManyElementsException;
 use SAML2\Utils;
 use SAML2\XML\ds\Signature;
 use SimpleSAML\Assert\Assert;
@@ -97,6 +98,7 @@ final class AuthnAuthorityDescriptor extends AbstractRoleDescriptor
      *
      * @throws \SAML2\Exception\InvalidDOMElementException if the qualified name of the supplied element is wrong
      * @throws \SAML2\Exception\MissingAttributeException if the supplied element is missing one of the mandatory attributes
+     * @throws \SAML2\Exception\TooManyElementsException if too many child-elements of a type are specified
      */
     public static function fromXML(DOMElement $xml): object
     {
@@ -113,13 +115,13 @@ final class AuthnAuthorityDescriptor extends AbstractRoleDescriptor
         $validUntil = self::getAttribute($xml, 'validUntil', null);
 
         $orgs = Organization::getChildrenOfClass($xml);
-        Assert::maxCount($orgs, 1, 'More than one Organization found in this descriptor');
+        Assert::maxCount($orgs, 1, 'More than one Organization found in this descriptor', TooManyElementsException::class);
 
         $extensions = Extensions::getChildrenOfClass($xml);
-        Assert::maxCount($extensions, 1, 'Only one md:Extensions element is allowed.');
+        Assert::maxCount($extensions, 1, 'Only one md:Extensions element is allowed.', TooManyElementsException::class);
 
         $signature = Signature::getChildrenOfClass($xml);
-        Assert::maxCount($signature, 1, 'Only one ds:Signature element is allowed.');
+        Assert::maxCount($signature, 1, 'Only one ds:Signature element is allowed.', TooManyElementsException::class);
 
         $authority = new self(
             $authnQueryServices,

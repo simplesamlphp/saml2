@@ -6,6 +6,7 @@ namespace SAML2\XML\samlp;
 
 use DOMElement;
 use SAML2\Exception\InvalidDOMElementException;
+use SAML2\Exception\TooManyElementsException;
 use SAML2\Utils;
 use SimpleSAML\Assert\Assert;
 
@@ -124,6 +125,7 @@ final class Status extends AbstractSamlpElement
      * @return \SAML2\XML\samlp\Status
      *
      * @throws \SAML2\Exception\InvalidDOMElementException if the qualified name of the supplied element is wrong
+     * @throws \SAML2\Exception\TooManyElementsException if too many child-elements of a type are specified
      */
     public static function fromXML(DOMElement $xml): object
     {
@@ -134,7 +136,7 @@ final class Status extends AbstractSamlpElement
         Assert::count($statusCode, 1);
 
         $statusMessage = Utils::extractStrings($xml, AbstractSamlpElement::NS, 'StatusMessage');
-        Assert::maxCount($statusMessage, 1);
+        Assert::maxCount($statusMessage, 1, TooManyElementsException::class);
 
         $statusDetails = StatusDetail::getChildrenOfClass($xml);
 
