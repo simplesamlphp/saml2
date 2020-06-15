@@ -128,6 +128,7 @@ final class AttributeQueryTest extends TestCase
         $aq = AttributeQuery::fromXML($this->document->documentElement);
         /** @psalm-var \SimpleSAML\SAML2\XML\saml\Issuer $issuer */
         $issuer = $aq->getIssuer();
+
         $subject = $aq->getSubject();
         /** @psalm-var \SimpleSAML\SAML2\XML\saml\NameID $identifier */
         $identifier = $subject->getIdentifier();

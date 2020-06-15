@@ -176,9 +176,9 @@ class Assertion extends AbstractSamlElement implements SignedElementInterface
     /**
      * Collect the value of the subject
      *
-     * @return \SAML2\XML\saml\Subject
+     * @return \SAML2\XML\saml\Subject|null
      */
-    public function getSubject(): Subject
+    public function getSubject(): ?Subject
     {
         return $this->subject;
     }
@@ -314,7 +314,7 @@ class Assertion extends AbstractSamlElement implements SignedElementInterface
      */
     public function setIssueInstant(?int $issueInstant): void
     {
-        if ($this->issueInstant === null) {
+        if ($issueInstant === null) {
             $issueInstant = Temporal::getTime();
         }
 
@@ -361,6 +361,8 @@ class Assertion extends AbstractSamlElement implements SignedElementInterface
      *
      * @param array $SubjectConfirmation Array of \SimpleSAML\SAML2\XML\saml\SubjectConfirmation elements.
      * @return void
+     *
+     * @throws \SimpleSAML\Assert\AssertionFailedException if assertions are false
      */
     public function setSubjectConfirmation(array $SubjectConfirmation): void
     {
@@ -382,9 +384,13 @@ class Assertion extends AbstractSamlElement implements SignedElementInterface
      * Convert XML into an Assertion
      *
      * @param \DOMElement $xml The XML element we should load
-     *
      * @return \SAML2\XML\saml\Assertion
+     *
+     * @throws \SimpleSAML\Assert\AssertionFailedException if assertions are false
      * @throws \SAML2\Exception\InvalidDOMElementException if the qualified name of the supplied element is wrong
+     * @throws \SAML2\Exception\MissingAttributeException if the supplied element is missing one of the mandatory attributes
+     * @throws \SAML2\Exception\MissingElementException if one of the mandatory child-elements is missing
+     * @throws \SAML2\Exception\TooManyElementsException if too many child-elements of a type are specified
      * @throws \Exception
      */
     public static function fromXML(DOMElement $xml): object
@@ -396,16 +402,17 @@ class Assertion extends AbstractSamlElement implements SignedElementInterface
         $issueInstant = Utils::xsDateTimeToTimestamp(self::getAttribute($xml, 'IssueInstant'));
 
         $issuer = Issuer::getChildrenOfClass($xml);
-        Assert::count($issuer, 1, 'Missing or more than one <saml:Issuer> in assertion.');
+        Assert::minCount($issuer, 1, 'Missing <saml:Issuer> in assertion.', MissingElementException::class);
+        Assert::maxCount($issuer, 1, 'More than one <saml:Issuer> in assertion.', TooManyElementsException::class);
 
         $subject = Subject::getChildrenOfClass($xml);
-        Assert::maxCount($subject, 1, 'More than one <saml:Subject> in <saml:Assertion>');
+        Assert::maxCount($subject, 1, 'More than one <saml:Subject> in <saml:Assertion>', TooManyElementsException::class);
 
         $conditions = Conditions::getChildrenOfClass($xml);
-        Assert::maxCount($conditions, 1, 'More than one <saml:Conditions> in <saml:Assertion>.');
+        Assert::maxCount($conditions, 1, 'More than one <saml:Conditions> in <saml:Assertion>.', TooManyElementsException::class);
 
         $signature = Signature::getChildrenOfClass($xml);
-        Assert::maxCount($signature, 1, 'Only one <ds:Signature> element is allowed.');
+        Assert::maxCount($signature, 1, 'Only one <ds:Signature> element is allowed.', TooManyElementsException::class);
 
         $authnStatement = AuthnStatement::getChildrenOfClass($xml);
         $attrStatement = AttributeStatement::getChildrenOfClass($xml);
@@ -435,8 +442,6 @@ class Assertion extends AbstractSamlElement implements SignedElementInterface
      * @param \DOMElement|null $parentElement The DOM node the assertion should be created in.
      *
      * @return \DOMElement This assertion.
-     *
-     * @throws \InvalidArgumentException if assertions are false
      * @throws \Exception
      */
     public function toXML(DOMElement $parentElement = null): DOMElement

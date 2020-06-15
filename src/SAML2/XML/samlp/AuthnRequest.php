@@ -473,7 +473,6 @@ class AuthnRequest extends AbstractRequest
         $scoping = Scoping::getChildrenOfClass($xml);
         Assert::maxCount($scoping, 1, 'Only one <samlp:Scoping> element is allowed.', TooManyElementsException::class);
 
-
         $request = new self(
             array_pop($requestedAuthnContext),
             array_pop($subject),
