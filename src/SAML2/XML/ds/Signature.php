@@ -135,6 +135,7 @@ final class Signature extends AbstractDsElement
      * @throws \Exception
      *
      * @throws \SAML2\Exception\InvalidDOMElementException if the qualified name of the supplied element is wrong
+     * @throws \SAML2\Excption\MissingAttributeException if the supplied signature is missing an Algorithm attribute
      */
     public static function fromXML(DOMElement $xml): object
     {
@@ -160,7 +161,7 @@ final class Signature extends AbstractDsElement
             );
         }
 
-        $signature = new self($sigMethod->getAttribute('Algorithm'), $certificates);
+        $signature = new self(self::getAttribute($sigMethod, 'Algorithm'), $certificates);
 
         $signature->signer->sigNode = $xml;
 

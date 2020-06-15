@@ -104,13 +104,13 @@ final class IDPEntry extends AbstractSamlpElement
      * @return \SAML2\XML\samlp\IDPEntry
      *
      * @throws \SAML2\Exception\InvalidDOMElementException if the qualified name of the supplied element is wrong
+     * @throws \SAML2\Exception\MissingAttributeException if the supplied element is missing one of the mandatory attributes
      */
     public static function fromXML(DOMElement $xml): object
     {
         Assert::same($xml->localName, 'IDPEntry', InvalidDOMElementException::class);
         Assert::same($xml->namespaceURI, IDPEntry::NS, InvalidDOMElementException::class);
 
-        /** @psalm-var string $providerId */
         $providerId = self::getAttribute($xml, 'ProviderID');
         $name = self::getAttribute($xml, 'Name', null);
         $loc = self::getAttribute($xml, 'Loc', null);

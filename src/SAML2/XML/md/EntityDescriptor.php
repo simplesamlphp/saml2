@@ -118,6 +118,7 @@ final class EntityDescriptor extends AbstractMetadataDocument
      * @return \SAML2\XML\md\EntityDescriptor An object representing the given document.
      *
      * @throws \SAML2\Exception\InvalidDOMElementException if the qualified name of the supplied element is wrong
+     * @throws \SAML2\Exception\MissingAttributeException if the supplied element is missing one of the mandatory attributes
      */
     public static function fromXML(DOMElement $xml): object
     {
@@ -131,9 +132,7 @@ final class EntityDescriptor extends AbstractMetadataDocument
         $signature = Signature::getChildrenOfClass($xml);
         Assert::maxCount($signature, 1, 'Only one ds:Signature element is allowed.');
 
-        /** @var string $entityID */
         $entityID = self::getAttribute($xml, 'entityID');
-
         $roleDescriptors = [];
         $affiliationDescriptor = null;
         $organization = null;

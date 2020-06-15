@@ -137,20 +137,18 @@ final class RegistrationInfo extends AbstractMdrpiElement
      * @return self
      *
      * @throws \SAML2\Exception\InvalidDOMElementException if the qualified name of the supplied element is wrong
+     * @throws \SAML2\Exception\MissingAttributeException if the supplied element is missing one of the mandatory attributes
      */
     public static function fromXML(DOMElement $xml): object
     {
         Assert::same($xml->localName, 'RegistrationInfo', InvalidDOMElementException::class);
         Assert::same($xml->namespaceURI, RegistrationInfo::NS, InvalidDOMElementException::class);
-        Assert::true(
-            $xml->hasAttribute('registrationAuthority'),
-            'Missing required attribute "registrationAuthority" in mdrpi:RegistrationInfo element.'
-        );
 
-        $registrationAuthority = $xml->getAttribute('registrationAuthority');
-        $registrationInstant = $xml->hasAttribute('registrationInstant')
-            ? Utils::xsDateTimeToTimestamp($xml->getAttribute('registrationInstant'))
-            : null;
+        $registrationAuthority = self::getAttribute($xml, 'registrationAuthority');
+        $registrationInstant = self::getAttribute($xml, 'registrationInstant');
+        if ($registrationInstant !== null) {
+            $registrationInstant = Utils::xsDateTimeToTimestamp($registrationInstant);
+        }
         $RegistrationPolicy = Utils::extractLocalizedStrings($xml, RegistrationInfo::NS, 'RegistrationPolicy');
 
         return new self($registrationAuthority, $registrationInstant, $RegistrationPolicy);

@@ -95,16 +95,14 @@ final class StatusCode extends AbstractSamlpElement
      * @return \SAML2\XML\samlp\StatusCode
      *
      * @throws \SAML2\Exception\InvalidDOMElementException if the qualified name of the supplied element is wrong
+     * @throws \SAML2\Exception\MissingAttributeException if the supplied element is missing one of the mandatory attributes
      */
     public static function fromXML(DOMElement $xml): object
     {
         Assert::same($xml->localName, 'StatusCode', InvalidDOMElementException::class);
         Assert::same($xml->namespaceURI, StatusCode::NS, InvalidDOMElementException::class);
 
-        $Value = $xml->hasAttribute('Value') ? $xml->getAttribute('Value') : null;
-
-        Assert::notNull($Value, 'Missing mandatory Value-attribute for StatusCode');
-
+        $Value = self::getAttribute($xml, 'Value');
         $subCodes = StatusCode::getChildrenOfClass($xml);
 
         return new self(

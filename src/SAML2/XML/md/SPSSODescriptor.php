@@ -240,15 +240,14 @@ final class SPSSODescriptor extends AbstractSSODescriptor
      * @return self
      *
      * @throws \SAML2\Exception\InvalidDOMElementException if the qualified name of the supplied element is wrong
+     * @throws \SAML2\Exception\MissingAttributeException if the supplied element is missing one of the mandatory attributes
      */
     public static function fromXML(DOMElement $xml): object
     {
-        /** @var string $protocols */
-        $protocols = self::getAttribute($xml, 'protocolSupportEnumeration');
-
         Assert::same($xml->localName, 'SPSSODescriptor', InvalidDOMElementException::class);
         Assert::same($xml->namespaceURI, SPSSODescriptor::NS, InvalidDOMElementException::class);
 
+        $protocols = self::getAttribute($xml, 'protocolSupportEnumeration');
         $validUntil = self::getAttribute($xml, 'validUntil', null);
         $orgs = Organization::getChildrenOfClass($xml);
         Assert::maxCount($orgs, 1, 'More than one Organization found in this descriptor');

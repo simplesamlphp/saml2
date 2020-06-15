@@ -166,20 +166,18 @@ final class Logo extends AbstractMduiElement
      * @return self
      *
      * @throws \SAML2\Exception\InvalidDOMElementException if the qualified name of the supplied element is wrong
+     * @throws \SAML2\Exception\MissingAttributeException if the supplied element is missing one of the mandatory attributes
      */
     public static function fromXML(DOMElement $xml): object
     {
         Assert::same($xml->localName, 'Logo', InvalidDOMElementException::class);
         Assert::same($xml->namespaceURI, Logo::NS, InvalidDOMElementException::class);
-
-        Assert::true($xml->hasAttribute('width'), 'Missing width of Logo.');
-        Assert::true($xml->hasAttribute('height'), 'Missing height of Logo.');
         Assert::stringNotEmpty($xml->textContent, 'Missing url value for Logo.');
 
         $Url = $xml->textContent;
-        $Width = intval($xml->getAttribute('width'));
-        $Height = intval($xml->getAttribute('height'));
-        $lang = $xml->hasAttribute('xml:lang') ? $xml->getAttribute('xml:lang') : null;
+        $Width = self::getIntegerAttribute($xml, 'width');
+        $Height = self::getIntegerAttribute($xml, height');
+        $lang = self::getAttribute($xml, 'xml:lang');
 
         return new self($Url, $Height, $Width, $lang);
     }

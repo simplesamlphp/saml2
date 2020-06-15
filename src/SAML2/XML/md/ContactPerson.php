@@ -107,14 +107,14 @@ final class ContactPerson extends AbstractMdElement
      * @return self
      *
      * @throws \SAML2\Exception\InvalidDOMElementException if the qualified name of the supplied element is wrong
+     * @throws \SAML2\Exception\MissingAttributeException if the supplied element is missing one of the mandatory attributes
      */
     public static function fromXML(DOMElement $xml): object
     {
         Assert::same($xml->localName, 'ContactPerson', InvalidDOMElementException::class);
         Assert::same($xml->namespaceURI, ContactPerson::NS, InvalidDOMElementException::class);
-        Assert::true($xml->hasAttribute('contactType'), 'Missing contactType on ContactPerson.');
 
-        $contactType = $xml->getAttribute('contactType');
+        $contactType = self::getAttribute('contactType');
         $company = self::getStringElement($xml, 'Company');
         $givenName = self::getStringElement($xml, 'GivenName');
         $surName = self::getStringElement($xml, 'SurName');

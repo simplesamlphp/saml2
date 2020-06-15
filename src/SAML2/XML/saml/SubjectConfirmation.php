@@ -109,15 +109,14 @@ final class SubjectConfirmation extends AbstractSamlElement
      * @return self
      *
      * @throws \SAML2\Exception\InvalidDOMElementException if the qualified name of the supplied element is wrong
+     * @throws \SAML2\Exception\MissingAttributeException if the supplied element is missing one of the mandatory attributes
      */
     public static function fromXML(DOMElement $xml): object
     {
         Assert::same($xml->localName, 'SubjectConfirmation', InvalidDOMElementException::class);
         Assert::same($xml->namespaceURI, SubjectConfirmation::NS, InvalidDOMElementException::class);
 
-        Assert::true($xml->hasAttribute('Method'), 'SubjectConfirmation element without Method attribute.');
-
-        $Method = $xml->getAttribute('Method');
+        $Method = self::getAttribute($xml, 'Method');
         $identifier = self::getIdentifierFromXML($xml);
         $subjectConfirmationData = SubjectConfirmationData::getChildrenOfClass($xml);
 

@@ -79,16 +79,14 @@ final class AffiliationDescriptor extends AbstractMetadataDocument
      * @return \SAML2\XML\md\AffiliationDescriptor
      *
      * @throws \SAML2\Exception\InvalidDOMElementException if the qualified name of the supplied element is wrong
+     * @throws \SAML2\Exception\MissingAttributeException if the supplied element is missing one of the mandatory attributes
      */
     public static function fromXML(DOMElement $xml): object
     {
         Assert::same($xml->localName, 'AffiliationDescriptor', InvalidDOMElementException::class);
         Assert::same($xml->namespaceURI, AffiliationDescriptor::NS, InvalidDOMElementException::class);
 
-        if (!$xml->hasAttribute('affiliationOwnerID')) {
-            throw new Exception('Missing affiliationOwnerID on AffiliationDescriptor.');
-        }
-        $owner = $xml->getAttribute('affiliationOwnerID');
+        $owner = $self::getAttribute($xml, 'affiliationOwnerID');
         $members = Utils::extractStrings($xml, Constants::NS_MD, 'AffiliateMember');
         $keyDescriptors = KeyDescriptor::getChildrenOfClass($xml);
 

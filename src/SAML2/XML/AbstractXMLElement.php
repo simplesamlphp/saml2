@@ -7,6 +7,7 @@ namespace SAML2\XML;
 use DOMElement;
 use SAML2\Constants;
 use SAML2\DOMDocumentFactory;
+use SAML2\Exception\MissingAttributeException;
 use Serializable;
 use SimpleSAML\Assert\Assert;
 
@@ -118,8 +119,9 @@ abstract class AbstractXMLElement implements Serializable
         if (!$xml->hasAttribute($name)) {
             Assert::nullOrStringNotEmpty(
                 $default,
-                'Missing \'' . $name . '\' attribute from ' . static::NS_PREFIX . ':'
-                    . self::getClassName(static::class) . '.'
+                'Missing \'' . $name . '\' attribute on ' . static::NS_PREFIX . ':'
+                    . self::getClassName(static::class) . '.',
+                MissingAttributeException::class
             );
 
             return $default;

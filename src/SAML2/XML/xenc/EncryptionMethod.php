@@ -58,15 +58,15 @@ class EncryptionMethod extends AbstractXencElement
      * @return \SAML2\XML\md\EncryptionMethod
      *
      * @throws \SAML2\Exception\InvalidDOMElementException if the qualified name of the supplied element is wrong
+     * @throws \SAML2\Exception\MissingAttributeException if the supplied element is missing one of the mandatory attributes
      */
     public static function fromXML(DOMElement $xml): object
     {
         Assert::same($xml->localName, 'EncryptionMethod', InvalidDOMElementException::class);
         Assert::same($xml->namespaceURI, static::NS, InvalidDOMElementException::class);
 
-        /** @var string $algorithm */
-        $algorithm = self::getAttribute($xml, 'Algorithm');
 
+        $algorithm = self::getAttribute($xml, 'Algorithm');
         $keySize = null;
         $oaepParams = null;
         $children = [];

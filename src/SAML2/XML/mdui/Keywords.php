@@ -117,16 +117,15 @@ final class Keywords extends AbstractMduiElement
      * @return self
      *
      * @throws \SAML2\Exception\InvalidDOMElementException if the qualified name of the supplied element is wrong
+     * @throws \SAML2\Exception\MissingAttributeException if the supplied element is missing one of the mandatory attributes
      */
     public static function fromXML(DOMElement $xml): object
     {
         Assert::same($xml->localName, 'Keywords', InvalidDOMElementException::class);
         Assert::same($xml->namespaceURI, Keywords::NS, InvalidDOMElementException::class);
-
-        Assert::true($xml->hasAttribute('xml:lang'), 'Missing lang on Keywords.');
         Assert::stringNotEmpty($xml->textContent, 'Missing value for Keywords.');
 
-        $lang = $xml->getAttribute('xml:lang');
+        $lang = self::getAttribute($xml, 'xml:lang');
 
         $Keywords = [];
         foreach (explode(' ', $xml->textContent) as $keyword) {

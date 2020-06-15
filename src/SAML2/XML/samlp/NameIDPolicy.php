@@ -126,9 +126,9 @@ final class NameIDPolicy extends AbstractSamlpElement
         Assert::same($xml->localName, 'NameIDPolicy', InvalidDOMElementException::class);
         Assert::same($xml->namespaceURI, NameIDPolicy::NS, InvalidDOMElementException::class);
 
-        $Format = $xml->hasAttribute('Format') ? $xml->getAttribute('Format') : null;
-        $SPNameQualifier = $xml->hasAttribute('SPNameQualifier') ? $xml->getAttribute('SPNameQualifier') : null;
-        $AllowCreate = $xml->hasAttribute('AllowCreate') ? $xml->getAttribute('AllowCreate') : null;
+        $Format = self::getAttribute($xml, 'Format', null);
+        $SPNameQualifier = self::getAttribute($xml, 'SPNameQualifier', null);
+        $AllowCreate = self::getAttribute($xml, 'AllowCreate', null);
 
         return new self(
             $Format,

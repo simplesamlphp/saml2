@@ -134,20 +134,16 @@ final class SigningMethod extends AbstractAlgElement
      * @return self
      *
      * @throws \SAML2\Exception\InvalidDOMElementException if the qualified name of the supplied element is wrong
-     * @throws \SimpleSAML\Exception\AssertionFailedException if the supplied argument is missing the Algorithm attribute
+     * @throws \SimpleSAML\Assert\MissingAttributeException if the supplied argument is missing the Algorithm attribute
      */
     public static function fromXML(DOMElement $xml): object
     {
         Assert::same($xml->localName, 'SigningMethod', InvalidDOMElementException::class);
         Assert::same($xml->namespaceURI, SigningMethod::NS, InvalidDOMElementException::class);
-        Assert::true(
-            $xml->hasAttribute('Algorithm'),
-            'Missing required attribute "Algorithm" in alg:SigningMethod element.'
-        );
 
-        $Algorithm = $xml->getAttribute('Algorithm');
-        $MinKeySize = $xml->hasAttribute('MinKeySize') ? intval($xml->getAttribute('MinKeySize')) : null;
-        $MaxKeySize = $xml->hasAttribute('MaxKeySize') ? intval($xml->getAttribute('MaxKeySize')) : null;
+        $Algorithm = self::getAttribute($xml, 'Algorithm');
+        $MinKeySize = self::getAttribute($xml, 'MinKeySize', null);
+        $MaxKeySize = self::getAttribute($xml, 'MaxKeySize', null);
 
         return new self($Algorithm, $MinKeySize, $MaxKeySize);
     }
