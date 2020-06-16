@@ -229,7 +229,9 @@ AUTHNREQUEST;
         $document     = DOMDocumentFactory::fromString($xml);
         $authnRequest = AuthnRequest::fromXML($document->documentElement);
 
-        $this->assertXmlStringEqualsXmlString($document->C14N(), $authnRequest->toXML()->C14N());
+        /** @psalm-var \DOMDocument $e->ownerDocument */
+        $e = $authnRequest->toXML();
+        $this->assertXmlStringEqualsXmlString($document->C14N(), $e->ownerDocument->C14N());
     }
 
 
