@@ -157,44 +157,50 @@ XML;
         // Create an Issuer
         $issuer = new Issuer('testIssuer');
 
-        // Create an assertion
-        $assertion = new Assertion();
-
-        $assertion->setIssuer($issuer);
-        $assertion->setConditions(
-            new Conditions(
-                1234567880,
-                1234567990,
-                [],
-                [
-                    new AudienceRestriction(
-                        ['audience1', 'audience2']
-                    )
-                ]
-            )
+        // Create Conditions
+        $conditions = new Conditions(
+            1234567880,
+            1234567990,
+            [],
+            [
+                new AudienceRestriction(
+                    ['audience1', 'audience2']
+                )
+            ]
         );
 
-        $this->assertNull($assertion->getAuthnContextClassRef());
+        // Create AuthnStatement
+        $authnStatement = new AuthnStatement(
+            new AuthnContext(
+                new AuthnContextClassRef('someAuthnContext'),
+                null,
+                new AuthnContextDeclRef('/relative/path/to/document.xml'),
+                ["idp1", "idp2"]
+            ),
+            1234567890 - 1,
+            1234568890 + 200,
+            'idx1'
+//            'idx1',
+//            new SubjectLocality('127.0.0.1', 'no.place.like.home')
+        );
 
-        $assertion->setAuthnContextClassRef('someAuthnContext');
-        $assertion->setAuthnContextDeclRef('/relative/path/to/document.xml');
+        // Create AttributeStatement
+        $attributeStatement = new AttributeStatement(
+            // Attribute
+            [
+                new Attribute('name1', null, null, [new AttributeValue('value1'), new AttributeValue('value2')]),
+                new Attribute('name2', null, null, [new AttributeValue(2)]),
+                new Attribute('name3', null, null, [new AttributeValue(null)])
+            ],
+            // EncryptedAttribute
+            []
+        );
 
-        $assertion->setID("_123abc");
+        // Create an assertion
+        $statements = [$authnStatement, $attributeStatement];
+        $assertion = new Assertion($issuer, '_123abc', 1234567890, null, $conditions, $statements);
 
-        $assertion->setIssueInstant(1234567890);
-        $assertion->setAuthnInstant(1234567890 - 1);
-        $assertion->setSessionNotOnOrAfter(1234568890 + 200);
-
-        $assertion->setSessionIndex("idx1");
-
-        $assertion->setAuthenticatingAuthority(["idp1", "idp2"]);
-
-        $assertion->setAttributes([
-            "name1" => ["value1", "value2"],
-            "name2" => [2],
-            "name3" => [null]
-        ]);
-        $assertion->setAttributeNameFormat("urn:oasis:names:tc:SAML:2.0:attrname-format:unspecified");
+//        $assertion->setAttributeNameFormat("urn:oasis:names:tc:SAML:2.0:attrname-format:unspecified");
 
         $assertionElement = $assertion->toXML()->ownerDocument->saveXML();
 
