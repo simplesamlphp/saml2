@@ -150,7 +150,6 @@ XML
         $document = $this->document;
         $document->documentElement->appendChild($document->importNode($this->attributeXML->documentElement, true));
 
-        /** @psalm-var \SAML2\XML\saml\AttributeStatement */
         $attrStatement = AttributeStatement::fromXML($document->documentElement);
 
         $attributes = $attrStatement->getAttributes();
@@ -171,7 +170,6 @@ XML
         $document->documentElement->appendChild($document->importNode($this->attributeXML->documentElement, true));
         $document->documentElement->appendChild($document->importNode($this->encryptedAttributeXML->documentElement, true));
 
-        /** @psalm-var \SAML2\XML\saml\AttributeStatement */
         $attrStatement = AttributeStatement::fromXML($document->documentElement);
 
         $attributes = $attrStatement->getAttributes();
