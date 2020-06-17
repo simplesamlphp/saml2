@@ -5,7 +5,7 @@ declare(strict_types=1);
 namespace SAML2\Response\Exception;
 
 use RuntimeException;
-use SAML2\Exception\Throwable;
+use Throwable;
 
 class InvalidResponseException extends RuntimeException implements Throwable
 {
