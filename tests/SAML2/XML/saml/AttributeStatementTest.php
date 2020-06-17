@@ -66,6 +66,7 @@ XML
 </saml:EncryptedAttribute>
 XML
         );
+
         $pubkey = new XMLSecurityKey(XMLSecurityKey::RSA_SHA256, ['type' => 'public']);
         $pubkey->loadKey(CertificatesMock::PUBLIC_KEY_PEM);
 
@@ -223,11 +224,32 @@ XML
      */
     public function testSerialization(): void
     {
-        $document = $this->document;
-        $document->documentElement->appendChild($document->importNode($this->attributeXML->documentElement, true));
-        $document->documentElement->appendChild($document->importNode($this->encryptedAttributeXML->documentElement, true));
+        $document = DOMDocumentFactory::fromString(<<<XML
+<saml:AttributeStatement xmlns:saml="urn:oasis:names:tc:SAML:2.0:assertion">
+  <saml:Attribute Name="urn:ServiceID">
+    <saml:AttributeValue>1</saml:AttributeValue>
+  </saml:Attribute>
+  <saml:EncryptedAttribute>
+    <xenc:EncryptedData xmlns:xenc="http://www.w3.org/2001/04/xmlenc#" Type="http://www.w3.org/2001/04/xmlenc#Element">
+      <xenc:EncryptionMethod Algorithm="http://www.w3.org/2001/04/xmlenc#aes128-cbc"/>
+      <ds:KeyInfo xmlns:ds="http://www.w3.org/2000/09/xmldsig#">
+        <xenc:EncryptedKey xmlns:dsig="http://www.w3.org/2000/09/xmldsig#">
+          <xenc:EncryptionMethod Algorithm="http://www.w3.org/2001/04/xmldsig-more#rsa-sha256"/>
+          <xenc:CipherData>
+            <xenc:CipherValue>nxf0bJ/1UECkfZBkKrEKU0phPpwUi6sS3bP5SovqVg/ohvgnnmpePNB6/CYyXbnatyhZ8bdgoKcpOJwYiQU5fKkY8ONFHnqWu13S8A8bBIL9ye6ceCKjHtCPiBzYwwOSjSsb+xJHSDzrfFbXDNzYBuyhuW1+uTqcmpoe+PdYyv4=</xenc:CipherValue>
+          </xenc:CipherData>
+        </xenc:EncryptedKey>
+      </ds:KeyInfo>
+      <xenc:CipherData>
+        <xenc:CipherValue>iaDc7XVor2+y5PtFsASE1FKbC/l6BJd33JhA0EufLA2AMnijQNIZgWmXzP2CUI6dPYSmqECBQbuGgelQlEes8REAgxDJrqpqmzHDEXZ+XjWsD1pHBP2mQrG0hOlWc2YQOgHjh4pKc1IZJ45s85aFsiGU3kLiBMhR15vxHyHjOXOef9RXbZe3RChgB/st75iHxDFY6l/ojC6OmT0Vn1IBPGbMynAPP5g/REPHzhSDoHJBSqIzSVJb7wZlRmDd3itk</xenc:CipherValue>
+      </xenc:CipherData>
+    </xenc:EncryptedData>
+  </saml:EncryptedAttribute>
+</saml:AttributeStatement>
+XML
+        );
 
-        $this->assertXmlStringEqualsXmlString(
+        $this->assertEquals(
             $document->saveXML($document->documentElement),
             strval(unserialize(serialize(AttributeStatement::fromXML($document->documentElement))))
         );
