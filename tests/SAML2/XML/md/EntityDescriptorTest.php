@@ -8,6 +8,8 @@ use InvalidArgumentException;
 use PHPUnit\Framework\TestCase;
 use SAML2\Constants;
 use SAML2\DOMDocumentFactory;
+use SAML2\Exception\MissingAttributeException;
+use SAML2\Exception\TooManyElementsException;
 use SAML2\SignedElementTestTrait;
 use SAML2\Utils;
 use SAML2\XML\mdrpi\PublicationInfo;
@@ -396,8 +398,8 @@ XML
 </EntityDescriptor>
 XML
         );
-        $this->expectException(AssertionFailedException::class);
-        $this->expectExceptionMessage('Missing \'entityID\' attribute from md:EntityDescriptor.');
+        $this->expectException(MissingAttributeException::class);
+        $this->expectExceptionMessage('Missing \'entityID\' attribute on md:EntityDescriptor.');
         EntityDescriptor::fromXML($document->documentElement);
     }
 
@@ -473,7 +475,7 @@ XML
 </EntityDescriptor>
 XML
         );
-        $this->expectException(InvalidArgumentException::class);
+        $this->expectException(TooManyElementsException::class);
         $this->expectExceptionMessage('More than one AffiliationDescriptor in the entity.');
         EntityDescriptor::fromXML($document->documentElement);
     }
@@ -502,7 +504,7 @@ XML
 </EntityDescriptor>
 XML
         );
-        $this->expectException(InvalidArgumentException::class);
+        $this->expectException(TooManyElementsException::class);
         $this->expectExceptionMessage('More than one Organization in the entity.');
         EntityDescriptor::fromXML($document->documentElement);
     }

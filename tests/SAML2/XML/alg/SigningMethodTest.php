@@ -4,9 +4,9 @@ declare(strict_types=1);
 
 namespace SAML2\XML\alg;
 
-use Exception;
 use PHPUnit\Framework\TestCase;
 use SAML2\DOMDocumentFactory;
+use SAML2\Exception\MissingAttributeException;
 use SAML2\XML\alg\SigningMethod;
 use SAML2\Utils;
 
@@ -68,8 +68,8 @@ XML
         $document = $this->document->documentElement;
         $document->removeAttribute('Algorithm');
 
-        $this->expectException(Exception::class);
-        $this->expectExceptionMessage('Missing required attribute "Algorithm"');
+        $this->expectException(MissingAttributeException::class);
+        $this->expectExceptionMessage("Missing 'Algorithm' attribute on alg:SigningMethod.");
 
         SigningMethod::fromXML($document);
     }

@@ -12,7 +12,9 @@ use RobRichards\XMLSecLibs\XMLSecEnc;
 use RobRichards\XMLSecLibs\XMLSecurityKey;
 use SAML2\Constants;
 use SAML2\DOMDocumentFactory;
-use SAML2\Exception\RuntimeException;
+use SAML2\Exception\InvalidDOMElementException;
+use SAML2\Exception\MissingElementException;
+use SAML2\Exception\TooManyElementsException;
 use SAML2\Utilities\Temporal;
 use SAML2\Utils;
 use SAML2\XML\Chunk;
@@ -661,7 +663,7 @@ class Assertion implements SignedElementInterface
      * @param  XMLSecurityKey $key The key we should check against.
      * @return boolean        true if successful, false if it is unsigned.
      *
-     * @throws \InvalidArgumentException if assertions are false
+     * @throws \SimpleSAML\Assert\AssertionFailedException if assertions are false
      */
     public function validate(XMLSecurityKey $key): bool
     {
@@ -822,7 +824,6 @@ class Assertion implements SignedElementInterface
         $enc->encryptKey($key, $symmetricKey);
 
         /**
-         * @var \DOMElement encryptedNameId
          * @psalm-suppress UndefinedClass
          */
         $this->encryptedNameId = $enc->encryptNode($symmetricKey);
@@ -836,6 +837,8 @@ class Assertion implements SignedElementInterface
      * @param XMLSecurityKey $key       The decryption key.
      * @param array          $blacklist Blacklisted decryption algorithms.
      * @return void
+     *
+     * @throws \SimpleSAML\Assert\AssertionFailedException if assertions are false
      */
     public function decryptNameId(XMLSecurityKey $key, array $blacklist = []): void
     {
@@ -869,9 +872,15 @@ class Assertion implements SignedElementInterface
      *
      * @param XMLSecurityKey $key
      * @param array $blacklist
+     * @return \SAML2\XML\saml\Assertion
+     *
+     * @throws \SimpleSAML\Assert\AssertionFailedException if assertions are false
+     * @throws \SAML2\Exception\InvalidDOMElementException if the qualified name of the supplied element is wrong
+     * @throws \SAML2\Exception\MissingAttributeException if the supplied element is missing one of the mandatory attributes
+     * @throws \SAML2\Exception\MissingElementException if one of the mandatory child-elements is missing
+     * @throws \SAML2\Exception\TooManyElementsException if too many child-elements of a type are specified
      * @throws \Exception
      * @return void
-     */
     public function decryptAttributes(XMLSecurityKey $key, array $blacklist = []): void
     {
         if (!$this->hasEncryptedAttributes()) {
@@ -880,7 +889,7 @@ class Assertion implements SignedElementInterface
         $firstAttribute = true;
         $attributes = $this->getEncryptedAttributes();
         foreach ($attributes as $attributeEnc) {
-            /* Decrypt node <EncryptedAttribute> */
+            // Decrypt node <EncryptedAttribute>
             $attribute = Utils::decryptElement(
                 $attributeEnc->getElementsByTagName('EncryptedData')->item(0),
                 $key,
@@ -914,6 +923,7 @@ class Assertion implements SignedElementInterface
             $this->parseAttributeValue($attribute, $name);
         }
     }
+     */
 
 
     /**

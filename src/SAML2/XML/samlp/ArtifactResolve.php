@@ -7,6 +7,7 @@ namespace SAML2\XML\samlp;
 use DOMElement;
 use SAML2\Constants;
 use SAML2\Exception\InvalidDOMElementException;
+use SAML2\Exception\TooManyElementsException;
 use SAML2\Utils;
 use SAML2\XML\ds\Signature;
 use SAML2\XML\saml\Issuer;
@@ -59,7 +60,7 @@ class ArtifactResolve extends AbstractRequest
      *
      * @return string artifact.
      *
-     * @throws \InvalidArgumentException if assertions are false
+     * @throws \SimpleSAML\Assert\AssertionFailedException if assertions are false
      */
     public function getArtifact(): string
     {
@@ -88,6 +89,8 @@ class ArtifactResolve extends AbstractRequest
      * @return self
      *
      * @throws \SAML2\Exception\InvalidDOMElementException if the qualified name of the supplied element is wrong
+     * @throws \SAML2\Exception\MissingAttributeException if the supplied element is missing one of the mandatory attributes
+     * @throws \SAML2\Exception\TooManyElementsException if too many child-elements of a type are specified
      */
     public static function fromXML(DOMElement $xml): object
     {
@@ -101,10 +104,10 @@ class ArtifactResolve extends AbstractRequest
         Assert::maxCount($issuer, 1);
 
         $extensions = Extensions::getChildrenOfClass($xml);
-        Assert::maxCount($extensions, 1, 'Only one saml:Extensions element is allowed.');
+        Assert::maxCount($extensions, 1, 'Only one saml:Extensions element is allowed.', TooManyElementsException::class);
 
         $signature = Signature::getChildrenOfClass($xml);
-        Assert::maxCount($signature, 1, 'Only one ds:Signature element is allowed.');
+        Assert::maxCount($signature, 1, 'Only one ds:Signature element is allowed.', TooManyElementsException::class);
 
         $results = Utils::xpQuery($xml, './saml_protocol:Artifact');
         $artifact = $results[0]->textContent;
@@ -132,12 +135,13 @@ class ArtifactResolve extends AbstractRequest
      *
      * @return \DOMElement This response.
      *
-     * @throws \InvalidArgumentException if assertions are false
+     * @throws \SimpleSAML\Assert\AssertionFailedException if assertions are false
      */
     public function toXML(?DOMElement $parent = null): DOMElement
     {
         Assert::notEmpty($this->artifact, 'Cannot convert ArtifactResolve to XML without an Artifact set.');
 
+        /** @psalm-var \DOMDocument $e->ownerDocument */
         $e = parent::toXML($parent);
         $artifactelement = $e->ownerDocument->createElementNS(Constants::NS_SAMLP, 'Artifact', $this->artifact);
         $e->appendChild($artifactelement);

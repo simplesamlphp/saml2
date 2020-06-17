@@ -86,7 +86,7 @@ final class Keywords extends AbstractMduiElement
      * @param string[] $keywords
      * @return void
      *
-     * @throws \InvalidArgumentException if one of the keywords contains `+`
+     * @throws \SimpleSAML\Assert\AssertionFailedException if one of the keywords contains `+`
      */
     private function setKeywords(array $keywords): void
     {
@@ -101,7 +101,7 @@ final class Keywords extends AbstractMduiElement
      * @param string $keyword
      * @return void
      *
-     * @throws \InvalidArgumentException if the keyword contains a `+`
+     * @throws \SimpleSAML\Assert\AssertionFailedException if the keyword contains a `+`
      */
     public function addKeyword(string $keyword): void
     {
@@ -117,16 +117,15 @@ final class Keywords extends AbstractMduiElement
      * @return self
      *
      * @throws \SAML2\Exception\InvalidDOMElementException if the qualified name of the supplied element is wrong
+     * @throws \SAML2\Exception\MissingAttributeException if the supplied element is missing one of the mandatory attributes
      */
     public static function fromXML(DOMElement $xml): object
     {
         Assert::same($xml->localName, 'Keywords', InvalidDOMElementException::class);
         Assert::same($xml->namespaceURI, Keywords::NS, InvalidDOMElementException::class);
-
-        Assert::true($xml->hasAttribute('xml:lang'), 'Missing lang on Keywords.');
         Assert::stringNotEmpty($xml->textContent, 'Missing value for Keywords.');
 
-        $lang = $xml->getAttribute('xml:lang');
+        $lang = self::getAttribute($xml, 'xml:lang');
 
         $Keywords = [];
         foreach (explode(' ', $xml->textContent) as $keyword) {
@@ -146,6 +145,7 @@ final class Keywords extends AbstractMduiElement
      */
     public function toXML(DOMElement $parent = null): DOMElement
     {
+        /** @psalm-var \DOMDocument $e->ownerDocument */
         $e = $this->instantiateParentElement($parent);
         $e->setAttribute('xml:lang', $this->lang);
 

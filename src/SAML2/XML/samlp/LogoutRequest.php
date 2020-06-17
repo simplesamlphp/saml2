@@ -6,6 +6,8 @@ namespace SAML2\XML\samlp;
 
 use DOMElement;
 use SAML2\Exception\InvalidDOMElementException;
+use SAML2\Exception\MissingElementException;
+use SAML2\Exception\TooManyElementsException;
 use SAML2\Utils;
 use SAML2\XML\IdentifierTrait;
 use SAML2\XML\ds\Signature;
@@ -161,6 +163,9 @@ class LogoutRequest extends AbstractRequest
      * @return \SAML2\XML\samlp\LogoutRequest
      *
      * @throws \SAML2\Exception\InvalidDOMElementException if the qualified name of the supplied element is wrong
+     * @throws \SAML2\Exception\MissingAttributeException if the supplied element is missing one of the mandatory attributes
+     * @throws \SAML2\Exception\MissingElementException if one of the mandatory child-elements is missing
+     * @throws \SAML2\Exception\TooManyElementsException if too many child-elements of a type are specified
      */
     public static function fromXML(DOMElement $xml): object
     {
@@ -179,10 +184,14 @@ class LogoutRequest extends AbstractRequest
         Assert::countBetween($issuer, 0, 1);
 
         $extensions = Extensions::getChildrenOfClass($xml);
-        Assert::maxCount($extensions, 1, 'Only one saml:Extensions element is allowed.');
+        Assert::maxCount($extensions, 1, 'Only one saml:Extensions element is allowed.', TooManyElementsException::class);
 
         $identifier = self::getIdentifierFromXML($xml);
-        Assert::notNull($identifier, 'Missing <saml:NameID>, <saml:BaseID> or <saml:EncryptedID> in <samlp:LogoutRequest>.');
+        Assert::notNull(
+            $identifier,
+            'Missing <saml:NameID>, <saml:BaseID> or <saml:EncryptedID> in <samlp:LogoutRequest>.',
+            MissingElementException::class
+        );
         Assert::isInstanceOfAny($identifier, [BaseID::class, NameID::class, EncryptedID::class]);
 
         $signature = Signature::getChildrenOfClass($xml);
@@ -216,6 +225,7 @@ class LogoutRequest extends AbstractRequest
      */
     public function toXML(?DOMElement $parent = null): DOMElement
     {
+        /** @psalm-var \DOMDocument $e->ownerDocument */
         $e = parent::toXML($parent);
 
         if ($this->notOnOrAfter !== null) {

@@ -219,11 +219,11 @@ class HTTPRedirect extends Binding
      * Throws an exception if we are unable to validate the signature.
      *
      * @param array          $data The data we need to validate the query string.
-     * @param XMLSecurityKey $key  The key we should validate the query against.
+     * @param \RobRichards\XMLSecLibs\XMLSecurityKey $key  The key we should validate the query against.
      * @return void
      *
      * @throws \Exception
-     * @throws \InvalidArgumentException if assertions are false
+     * @throws \SimpleSAML\Assert\AssertionFailedException if assertions are false
      */
     public static function validateSignature(array $data, XMLSecurityKey $key): void
     {

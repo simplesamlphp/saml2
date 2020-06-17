@@ -52,16 +52,16 @@ final class AdditionalMetadataLocation extends AbstractMdElement
      * @return self
      *
      * @throws \SAML2\Exception\InvalidDOMElementException if the qualified name of the supplied element is wrong
+     * @throws \SAML2\Exception\MissingAttributeException if the supplied element is missing any of the mandatory attributes
      */
     public static function fromXML(DOMElement $xml): object
     {
         Assert::same($xml->localName, 'AdditionalMetadataLocation', InvalidDOMElementException::class);
         Assert::same($xml->namespaceURI, AdditionalMetadataLocation::NS, InvalidDOMElementException::class);
-        Assert::true(
-            $xml->hasAttribute('namespace'),
-            'Missing namespace attribute on AdditionalMetadataLocation element.'
-        );
-        return new self($xml->getAttribute('namespace'), trim($xml->textContent));
+
+        $namespace = self::getAttribute($xml, 'namespace');
+
+        return new self($namespace, trim($xml->textContent));
     }
 
 
@@ -81,7 +81,7 @@ final class AdditionalMetadataLocation extends AbstractMdElement
      *
      * @param string $namespace
      * @return void
-     * @throws \InvalidArgumentException
+     * @throws \SimpleSAML\Assert\AssertionFailedException
      */
     protected function setNamespace(string $namespace): void
     {
@@ -106,7 +106,7 @@ final class AdditionalMetadataLocation extends AbstractMdElement
      *
      * @param string $location
      * @return void
-     * @throws \InvalidArgumentException
+     * @throws \SimpleSAML\Assert\AssertionFailedException
      */
     protected function setLocation(string $location): void
     {

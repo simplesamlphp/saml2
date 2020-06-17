@@ -4,6 +4,7 @@ declare(strict_types=1);
 
 namespace SAML2\XML\saml;
 
+use InvalidArgumentException;
 use PHPUnit\Framework\TestCase;
 use RobRichards\XMLSecLibs\XMLSecurityKey;
 use SAML2\CertificatesMock;
@@ -13,7 +14,6 @@ use SAML2\Compat\Ssp\Container;
 use SAML2\Constants;
 use SAML2\CustomBaseID;
 use SAML2\DOMDocumentFactory;
-use SAML2\Exception\InvalidArgumentException;
 use SAML2\XML\Chunk;
 use SAML2\XML\ds\KeyInfo;
 use SAML2\XML\xenc\CipherData;
@@ -131,7 +131,9 @@ XML
         $this->assertEquals('http://www.w3.org/2001/04/xmlenc#Element', $ed->getType());
         $this->assertEquals('key-type', $ed->getMimeType());
         $this->assertEquals('base64-encoded', $ed->getEncoding());
-        $this->assertEquals('http://www.w3.org/2001/04/xmlenc#aes128-cbc', $ed->getEncryptionMethod()->getAlgorithm());
+        $encMethod = $ed->getEncryptionMethod();
+        $this->assertInstanceOf(EncryptionMethod::class, $encMethod);
+        $this->assertEquals('http://www.w3.org/2001/04/xmlenc#aes128-cbc', $encMethod->getAlgorithm());
         $this->assertInstanceOf(KeyInfo::class, $ed->getKeyInfo());
 
         $eks = $eid->getEncryptedKeys();
@@ -144,7 +146,9 @@ XML
         $this->assertNull($ek->getEncoding());
         $this->assertEquals('some_ENTITY_ID', $ek->getRecipient());
         $this->assertEquals('Name of the key', $ek->getCarriedKeyName());
-        $this->assertEquals('http://www.w3.org/2001/04/xmlenc#rsa-1_5', $ek->getEncryptionMethod()->getAlgorithm());
+        $encMethod = $ek->getEncryptionMethod();
+        $this->assertInstanceOf(EncryptionMethod::class, $encMethod);
+        $this->assertEquals('http://www.w3.org/2001/04/xmlenc#rsa-1_5', $encMethod->getAlgorithm());
         $this->assertNull($ek->getKeyInfo());
         $rl = $ek->getReferenceList();
         $this->assertInstanceOf(ReferenceList::class, $rl);
@@ -168,28 +172,30 @@ XML
         $nameid = new NameID('value', 'name_qualifier');
         $pubkey = new XMLSecurityKey(XMLSecurityKey::RSA_SHA256, ['type' => 'public']);
         $pubkey->loadKey(CertificatesMock::PUBLIC_KEY_PEM);
+        /** \SAML2\XML\saml\AbstractSamlElement $encid */
         $encid = EncryptedID::fromUnencryptedElement($nameid, $pubkey);
-        $str = (string) $encid;
+        $str = strval($encid);
         $doc = DOMDocumentFactory::fromString($str);
+        /** \SAML2\XML\EncryptedElementInterface $encid */
         $encid = EncryptedID::fromXML($doc->documentElement);
         $privkey = new XMLSecurityKey(XMLSecurityKey::RSA_SHA256, ['type' => 'private']);
         $privkey->loadKey(CertificatesMock::PRIVATE_KEY_PEM);
         $id = $encid->decrypt($privkey);
-        $this->assertEquals((string) $nameid, (string) $id);
+        $this->assertEquals(strval($nameid), strval($id));
 
         // test with Issuer
         $issuer = new Issuer('entityID');
         $encid = EncryptedID::fromUnencryptedElement($issuer, $pubkey);
         $id = $encid->decrypt($privkey);
         $this->assertInstanceOf(Issuer::class, $id);
-        $this->assertEquals((string) $issuer, (string) $id);
+        $this->assertEquals(strval($issuer), strval($id));
 
         // test a custom BaseID without registering it
         $customid = new CustomBaseID(1.0, 'name_qualifier');
         $encid = EncryptedID::fromUnencryptedElement($customid, $pubkey);
         $id = $encid->decrypt($privkey);
         $this->assertInstanceOf(BaseID::class, $id);
-        $this->assertEquals((string) $customid, (string) $id);
+        $this->assertEquals(strval($customid), strval($id));
 
         // test a custom BaseID with a registered handler
         $container = $this->createMock(Container::class);
@@ -199,7 +205,7 @@ XML
         $encid = EncryptedID::fromUnencryptedElement($customid, $pubkey);
         $id = $encid->decrypt($privkey);
         $this->assertInstanceOf(CustomBaseID::class, $id);
-        $this->assertEquals((string) $customid, (string) $id);
+        $this->assertEquals(strval($customid), strval($id));
 
         // test with unsupported ID
         $attr = new Attribute('name');

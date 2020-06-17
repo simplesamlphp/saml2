@@ -7,13 +7,15 @@ namespace SAML2\XML\samlp;
 use PHPUnit\Framework\TestCase;
 use SAML2\Constants;
 use SAML2\DOMDocumentFactory;
+use SAML2\Exception\MissingElementException;
+use SAML2\Exception\MissingAttributeException;
+use SAML2\Exception\TooManyElementsException;
 use SAML2\Utils;
 use SAML2\XML\saml\Attribute;
 use SAML2\XML\saml\AttributeValue;
 use SAML2\XML\saml\Issuer;
 use SAML2\XML\saml\NameID;
 use SAML2\XML\saml\Subject;
-use SimpleSAML\Assert\AssertionFailedException;
 
 /**
  * Class \SAML2\AttributeQueryTest
@@ -136,10 +138,15 @@ XML
     public function testUnmarshalling(): void
     {
         $aq = AttributeQuery::fromXML($this->document->documentElement);
+        /** @psalm-var \SAML2\XML\saml\Issuer $issuer */
+        $issuer = $aq->getIssuer();
+        $subject = $aq->getSubject();
+        /** @psalm-var \SAML2\XML\saml\NameID $identifier */
+        $identifier = $subject->getIdentifier();
 
         // Sanity check
-        $this->assertEquals('https://example.org/', $aq->getIssuer()->getValue());
-        $this->assertEquals('urn:example:subject', $aq->getSubject()->getIdentifier()->getValue());
+        $this->assertEquals('https://example.org/', $issuer->getValue());
+        $this->assertEquals('urn:example:subject', $identifier->getValue());
 
         $attributes = $aq->getAttributes();
         $this->assertCount(3, $attributes);
@@ -213,9 +220,11 @@ XML
 XML;
         $document = DOMDocumentFactory::fromString($xml);
         $aq = AttributeQuery::fromXML($document->documentElement);
+        /** @psalm-var \SAML2\XML\saml\Issuer $issuer */
+        $issuer = $aq->getIssuer();
 
         // Sanity check
-        $this->assertEquals('https://example.org/', $aq->getIssuer()->getValue());
+        $this->assertEquals('https://example.org/', $issuer->getValue());
     }
 
 
@@ -246,9 +255,11 @@ XML;
 XML;
         $document = DOMDocumentFactory::fromString($xml);
         $aq = AttributeQuery::fromXML($document->documentElement);
+        /** @psalm-var \SAML2\XML\saml\Issuer $issuer */
+        $issuer = $aq->getIssuer();
 
         // Sanity check
-        $this->assertEquals('https://example.org/', $aq->getIssuer()->getValue());
+        $this->assertEquals('https://example.org/', $issuer->getValue());
     }
 
 
@@ -282,8 +293,8 @@ XML;
 XML;
         $document = DOMDocumentFactory::fromString($xml);
 
-        $this->expectException(AssertionFailedException::class);
-        $this->expectExceptionMessage('Missing \'Name\' attribute from saml:Attribute.');
+        $this->expectException(MissingAttributeException::class);
+        $this->expectExceptionMessage('Missing \'Name\' attribute on saml:Attribute.');
         $aq = AttributeQuery::fromXML($document->documentElement);
     }
 
@@ -301,7 +312,7 @@ XML;
 </samlp:AttributeQuery>
 XML;
         $document = DOMDocumentFactory::fromString($xml);
-        $this->expectException(AssertionFailedException::class);
+        $this->expectException(MissingElementException::class);
         $this->expectExceptionMessage('Missing subject in subject');
         $aq = AttributeQuery::fromXML($document->documentElement);
     }
@@ -326,7 +337,7 @@ XML;
 </samlp:AttributeQuery>
 XML;
         $document = DOMDocumentFactory::fromString($xml);
-        $this->expectException(AssertionFailedException::class);
+        $this->expectException(TooManyElementsException::class);
         $this->expectExceptionMessage('More than one <saml:Subject> in AttributeQuery');
         $aq = AttributeQuery::fromXML($document->documentElement);
     }
@@ -348,7 +359,7 @@ XML;
 </samlp:AttributeQuery>
 XML;
         $document = DOMDocumentFactory::fromString($xml);
-        $this->expectException(AssertionFailedException::class);
+        $this->expectException(TooManyElementsException::class);
         $this->expectExceptionMessage('A <saml:Subject> not containing <saml:SubjectConfirmation> should provide exactly one of <saml:BaseID>, <saml:NameID> or <saml:EncryptedID>');
         $aq = AttributeQuery::fromXML($document->documentElement);
     }
@@ -371,7 +382,7 @@ XML;
 </samlp:AttributeQuery>
 XML;
         $document = DOMDocumentFactory::fromString($xml);
-        $this->expectException(AssertionFailedException::class);
+        $this->expectException(TooManyElementsException::class);
         $this->expectExceptionMessage('More than one <saml:NameID> in <saml:Subject>');
         $aq = AttributeQuery::fromXML($document->documentElement);
     }

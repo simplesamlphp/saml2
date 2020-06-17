@@ -131,8 +131,8 @@ class BaseID extends AbstractSamlElement implements BaseIdentifierInterface
         return new self(
             $type,
             trim($xml->textContent),
-            $xml->hasAttribute('NameQualifier') ? $xml->getAttribute('NameQualifier') : null,
-            $xml->hasAttribute('SPNameQualifier') ? $xml->getAttribute('SPNameQualifier') : null
+            self::getAttribute($xml, 'NameQualifier', null),
+            self::getAttribute($xml, 'SPNameQualifier', null)
         );
     }
 

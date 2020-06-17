@@ -9,6 +9,7 @@ use Exception;
 use RobRichards\XMLSecLibs\XMLSecurityDSig;
 use RobRichards\XMLSecLibs\XMLSecurityKey;
 use SAML2\Exception\InvalidDOMElementException;
+use SAML2\Exception\MissingAttributeException;
 use SAML2\Utilities\Certificate;
 use SAML2\Utils;
 use SAML2\XML\AbstractXMLElement;
@@ -135,6 +136,7 @@ final class Signature extends AbstractDsElement
      * @throws \Exception
      *
      * @throws \SAML2\Exception\InvalidDOMElementException if the qualified name of the supplied element is wrong
+     * @throws \SAML2\Exception\MissingAttributeException if the supplied signature is missing an Algorithm attribute
      */
     public static function fromXML(DOMElement $xml): object
     {
@@ -160,7 +162,7 @@ final class Signature extends AbstractDsElement
             );
         }
 
-        $signature = new self($sigMethod->getAttribute('Algorithm'), $certificates);
+        $signature = new self(self::getAttribute($sigMethod, 'Algorithm'), $certificates);
 
         $signature->signer->sigNode = $xml;
 

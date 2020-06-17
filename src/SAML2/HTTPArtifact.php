@@ -100,7 +100,7 @@ class HTTPArtifact extends Binding
      * @throws \Exception
      * @return \SAML2\XML\samlp\AbstractMessage The received message.
      *
-     * @throws \InvalidArgumentException if assertions are false
+     * @throws \SimpleSAML\Assert\AssertionFailedException if assertions are false
      */
     public function receive(): AbstractMessage
     {
@@ -199,7 +199,7 @@ class HTTPArtifact extends Binding
      * A validator which returns true if the ArtifactResponse was signed with the given key
      *
      * @param \SAML2\XML\samlp\ArtifactResponse $message
-     * @param XMLSecurityKey $key
+     * @param \RobRichards\XMLSecLibs\XMLSecurityKey $key
      * @return bool
      */
     public static function validateSignature(ArtifactResponse $message, XMLSecurityKey $key): bool

@@ -5,6 +5,7 @@ declare(strict_types=1);
 namespace SAML2\XML\mdui;
 
 use DOMElement;
+use InvalidArgumentException;
 use SAML2\Exception\InvalidDOMElementException;
 use SimpleSAML\Assert\Assert;
 
@@ -83,7 +84,7 @@ final class Logo extends AbstractMduiElement
     private function setUrl(string $url): void
     {
         if (!filter_var(trim($url), FILTER_VALIDATE_URL) && substr(trim($url), 0, 5) !== 'data:') {
-            throw new \InvalidArgumentException('mdui:Logo is not a valid URL.');
+            throw new InvalidArgumentException('mdui:Logo is not a valid URL.');
         }
 
         $this->url = $url;
@@ -166,20 +167,18 @@ final class Logo extends AbstractMduiElement
      * @return self
      *
      * @throws \SAML2\Exception\InvalidDOMElementException if the qualified name of the supplied element is wrong
+     * @throws \SAML2\Exception\MissingAttributeException if the supplied element is missing one of the mandatory attributes
      */
     public static function fromXML(DOMElement $xml): object
     {
         Assert::same($xml->localName, 'Logo', InvalidDOMElementException::class);
         Assert::same($xml->namespaceURI, Logo::NS, InvalidDOMElementException::class);
-
-        Assert::true($xml->hasAttribute('width'), 'Missing width of Logo.');
-        Assert::true($xml->hasAttribute('height'), 'Missing height of Logo.');
         Assert::stringNotEmpty($xml->textContent, 'Missing url value for Logo.');
 
         $Url = $xml->textContent;
-        $Width = intval($xml->getAttribute('width'));
-        $Height = intval($xml->getAttribute('height'));
-        $lang = $xml->hasAttribute('xml:lang') ? $xml->getAttribute('xml:lang') : null;
+        $Width = self::getIntegerAttribute($xml, 'width');
+        $Height = self::getIntegerAttribute($xml, 'height');
+        $lang = self::getAttribute($xml, 'xml:lang');
 
         return new self($Url, $Height, $Width, $lang);
     }
@@ -193,6 +192,7 @@ final class Logo extends AbstractMduiElement
      */
     public function toXML(DOMElement $parent = null): DOMElement
     {
+        /** @psalm-var \DOMDocument $e->ownerDocument */
         $e = $this->instantiateParentElement($parent);
         $e->appendChild($e->ownerDocument->createTextNode($this->url));
         $e->setAttribute('height', strval($this->height));

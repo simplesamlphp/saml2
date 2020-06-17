@@ -119,7 +119,7 @@ abstract class AbstractSSODescriptor extends AbstractRoleDescriptor
      *
      * @param \SAML2\XML\md\AbstractIndexedEndpointType[] $artifactResolutionServices
      * @return void
-     * @throws \InvalidArgumentException
+     * @throws \SimpleSAML\Assert\AssertionFailedException
      */
     protected function setArtifactResolutionServices(array $artifactResolutionServices): void
     {
@@ -147,7 +147,7 @@ abstract class AbstractSSODescriptor extends AbstractRoleDescriptor
      * Set the value of the SingleLogoutService-property
      *
      * @param \SAML2\XML\md\AbstractEndpointType[] $singleLogoutServices
-     * @throws \InvalidArgumentException if the qualified name of the supplied element is wrong
+     * @throws \SimpleSAML\Assert\AssertionFailedException
      */
     protected function setSingleLogoutServices(array $singleLogoutServices): void
     {
@@ -175,7 +175,7 @@ abstract class AbstractSSODescriptor extends AbstractRoleDescriptor
      * Set the value of the ManageNameIDService-property
      *
      * @param \SAML2\XML\md\AbstractEndpointType[] $manageNameIDServices
-     * @throws \InvalidArgumentException if the qualified name of the supplied element is wrong
+     * @throws \SimpleSAML\Assert\AssertionFailedException
      */
     protected function setManageNameIDServices(array $manageNameIDServices): void
     {

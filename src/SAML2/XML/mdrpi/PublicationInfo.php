@@ -170,22 +170,20 @@ final class PublicationInfo extends AbstractMdrpiElement
      * @return self
      *
      * @throws \SAML2\Exception\InvalidDOMElementException if the qualified name of the supplied element is wrong
+     * @throws \SAML2\Exception\MissingAttributeException if the supplied element is missing one of the mandatory attributes
      */
     public static function fromXML(DOMElement $xml): object
     {
         Assert::same($xml->localName, 'PublicationInfo', InvalidDOMElementException::class);
         Assert::same($xml->namespaceURI, PublicationInfo::NS, InvalidDOMElementException::class);
-        Assert::true(
-            $xml->hasAttribute('publisher'),
-            'Missing required attribute "publisher" in mdrpi:PublicationInfo element.'
-        );
 
-        $publisher = $xml->getAttribute('publisher');
-        $creationInstant = $xml->hasAttribute('creationInstant')
-            ? Utils::xsDateTimeToTimestamp($xml->getAttribute('creationInstant'))
-            : null;
+        $publisher = self::getAttribute($xml, 'publisher');
+        $creationInstant = self::getAttribute($xml, 'creationInstant', null);
+        if ($creationInstant !== null) {
+            $creationInstant = Utils::xsDateTimeToTimestamp($creationInstant);
+        }
 
-        $publicationId = $xml->hasAttribute('publicationId') ? $xml->getAttribute('publicationId') : null;
+        $publicationId = self::getAttribute($xml, 'publicationId', null);
         $UsagePolicy = Utils::extractLocalizedStrings($xml, PublicationInfo::NS, 'UsagePolicy');
 
         return new self($publisher, $creationInstant, $publicationId, $UsagePolicy);

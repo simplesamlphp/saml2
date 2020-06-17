@@ -7,6 +7,7 @@ namespace SAML2\XML\md;
 use DOMElement;
 use SAML2\Constants;
 use SAML2\Exception\InvalidDOMElementException;
+use SAML2\Exception\TooManyElementsException;
 use SAML2\Utils;
 use SimpleSAML\Assert\Assert;
 
@@ -93,21 +94,21 @@ final class PDPDescriptor extends AbstractRoleDescriptor
      * @return \SAML2\XML\md\PDPDescriptor
      *
      * @throws \SAML2\Exception\InvalidDOMElementException if the qualified name of the supplied element is wrong
+     * @throws \SAML2\Exception\MissingAttributeException if the supplied element is missing one of the mandatory attributes
+     * @throws \SAML2\Exception\TooManyElementsException if too many child-elements of a type are specified
      */
     public static function fromXML(DOMElement $xml): object
     {
         Assert::same($xml->localName, 'PDPDescriptor', InvalidDOMElementException::class);
         Assert::same($xml->namespaceURI, PDPDescriptor::NS, InvalidDOMElementException::class);
 
-        /** @var string $protocols */
         $protocols = self::getAttribute($xml, 'protocolSupportEnumeration');
-
         $validUntil = self::getAttribute($xml, 'validUntil', null);
         $orgs = Organization::getChildrenOfClass($xml);
-        Assert::maxCount($orgs, 1, 'More than one Organization found in this descriptor');
+        Assert::maxCount($orgs, 1, 'More than one Organization found in this descriptor', TooManyElementsException::class);
 
         $extensions = Extensions::getChildrenOfClass($xml);
-        Assert::maxCount($extensions, 1, 'Only one md:Extensions element is allowed.');
+        Assert::maxCount($extensions, 1, 'Only one md:Extensions element is allowed.', TooManyElementsException::class);
 
         return new self(
             AuthzService::getChildrenOfClass($xml),
@@ -142,7 +143,7 @@ final class PDPDescriptor extends AbstractRoleDescriptor
      *
      * @param \SAML2\XML\md\AuthzService[] $authzServices
      * @return void
-     * @throws \InvalidArgumentException
+     * @throws \SimpleSAML\Assert\AssertionFailedException
      */
     protected function setAuthzServiceEndpoints(array $authzServices = []): void
     {
@@ -172,7 +173,7 @@ final class PDPDescriptor extends AbstractRoleDescriptor
      *
      * @param \SAML2\XML\md\AssertionIDRequestService[] $assertionIDRequestServices
      * @return void
-     * @throws \InvalidArgumentException
+     * @throws \SimpleSAML\Assert\AssertionFailedException
      */
     public function setAssertionIDRequestServices(array $assertionIDRequestServices): void
     {

@@ -6,6 +6,8 @@ namespace SAML2\XML\xenc;
 
 use DOMElement;
 use SAML2\Exception\InvalidDOMElementException;
+use SAML2\Exception\MissingElementException;
+use SAML2\Exception\TooManyElementsException;
 use SAML2\XML\ds\KeyInfo;
 use SimpleSAML\Assert\Assert;
 
@@ -217,6 +219,8 @@ class EncryptedData extends AbstractXencElement
      * @inheritDoc
      *
      * @throws \SAML2\Exception\InvalidDOMElementException if the qualified name of the supplied element is wrong
+     * @throws \SAML2\Exception\MissingElementException if one of the mandatory child-elements is missing
+     * @throws \SAML2\Exception\TooManyElementsException if too many child-elements of a type are specified
      */
     public static function fromXML(DOMElement $xml): object
     {
@@ -224,17 +228,34 @@ class EncryptedData extends AbstractXencElement
         Assert::same($xml->namespaceURI, EncryptedData::NS, InvalidDOMElementException::class);
 
         $cipherData = CipherData::getChildrenOfClass($xml);
-        Assert::count($cipherData, 1, 'No or more than one CipherData element found in <xenc:EncryptedData>.');
+        Assert::minCount(
+            $cipherData,
+            1,
+            'At least one CipherData element found in <xenc:EncryptedData>.',
+            MissingElementException::class
+        );
+        Assert::maxCount(
+            $cipherData,
+            1,
+            'No or more than one CipherData element found in <xenc:EncryptedData>.',
+            TooManyElementsException::class
+        );
 
         $encryptionMethod = EncryptionMethod::getChildrenOfClass($xml);
         Assert::maxCount(
             $encryptionMethod,
             1,
-            'No more than one EncryptionMethod element allowed in <xenc:EncryptedData>.'
+            'No more than one EncryptionMethod element allowed in <xenc:EncryptedData>.',
+            TooManyElementsException::class
         );
 
         $keyInfo = KeyInfo::getChildrenOfClass($xml);
-        Assert::maxCount($keyInfo, 1, 'No more than one KeyInfo element allowed in <xenc:EncryptedData>.');
+        Assert::maxCount(
+            $keyInfo,
+            1,
+            'No more than one KeyInfo element allowed in <xenc:EncryptedData>.',
+            TooManyElementsException::class
+        );
 
         return new self(
             $cipherData[0],

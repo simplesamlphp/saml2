@@ -4,10 +4,10 @@ declare(strict_types=1);
 
 namespace SAML2\Assertion\Transformer;
 
-use SAML2\XML\saml\Assertion;
+use SAML2\Assertion\Exception\InvalidAssertionException;
 use SAML2\Configuration\IdentityProvider;
 use SAML2\Configuration\IdentityProviderAware;
-use SAML2\Assertion\Exception\InvalidAssertionException;
+use SAML2\XML\saml\Assertion;
 use SimpleSAML\Assert\Assert;
 
 class DecodeBase64Transformer implements
@@ -34,7 +34,7 @@ class DecodeBase64Transformer implements
      * @param \SAML2\XML\saml\Assertion $assertion
      * @return \SAML2\XML\saml\Assertion
      *
-     * @throws \InvalidArgumentException if assertions are false
+     * @throws \SimpleSAML\Assert\AssertionFailedException if assertions are false
      */
     public function transform(Assertion $assertion): Assertion
     {

@@ -156,7 +156,7 @@ trait EncryptedElementTrait
 
     /**
      * @inheritDoc
-     * @return \SAML2\XML\AbstractXMLElement
+     * @return \SAML2\XML\EncryptedElementInterface
      *
      * @throws \SAML2\Exception\InvalidDOMElementException if the qualified name of the supplied element is wrong
      */

@@ -7,8 +7,8 @@ namespace SAML2\XML\md;
 use PHPUnit\Framework\TestCase;
 use SAML2\Constants;
 use SAML2\DOMDocumentFactory;
+use SAML2\Exception\MissingElementException;
 use SAML2\XML\Chunk;
-use SimpleSAML\Assert\AssertionFailedException;
 
 /**
  * Test for the Organization metadata element.
@@ -116,7 +116,7 @@ XML
 XML
         );
 
-        $this->expectException(AssertionFailedException::class);
+        $this->expectException(MissingElementException::class);
         $this->expectExceptionMessage('No localized organization URL found.');
 
         Organization::fromXML($document->documentElement);

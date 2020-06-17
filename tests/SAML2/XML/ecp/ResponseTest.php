@@ -9,6 +9,7 @@ use DOMElement;
 use InvalidArgumentException;
 use SAML2\Constants;
 use SAML2\DOMDocumentFactory;
+use SAML2\Exception\MissingAttributeException;
 use SAML2\XML\ecp\Response;
 use SimpleSAML\Assert\AssertionFailedException;
 
@@ -122,7 +123,7 @@ XML
         $document = $this->document->documentElement;
         $document->removeAttribute('AssertionConsumerServiceURL');
 
-        $this->expectException(AssertionFailedException::class);
+        $this->expectException(MissingAttributeException::class);
         $this->expectExceptionMessage('Missing AssertionConsumerServiceURL attribute in <ecp:Response>.');
 
         Response::fromXML($document);

@@ -32,7 +32,7 @@ class AttributeValue extends AbstractSamlElement
      *  - null
      *  - \SAML2\XML\AbstractXMLElement
      *
-     * @throws \InvalidArgumentException if the supplied value is neither a string or a DOMElement
+     * @throws \SimpleSAML\Assert\AssertionFailedException if the supplied value is neither a string or a DOMElement
      */
     public function __construct($value)
     {

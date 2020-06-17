@@ -7,9 +7,9 @@ namespace SAML2\XML\samlp;
 use PHPUnit\Framework\TestCase;
 use SAML2\Constants;
 use SAML2\DOMDocumentFactory;
-use SAML2\XML\samlp\AbstractResponse;
+use SAML2\Exception\MissingElementException;
 use SAML2\Utils;
-use SimpleSAML\Assert\AssertionFailedException;
+use SAML2\XML\samlp\AbstractResponse;
 
 /**
  * Class \SAML2\XML\samlp\AbstractStatusResponseTest
@@ -76,7 +76,7 @@ class AbstractStatusResponseTest extends TestCase
 XML;
 
         $fixtureResponseDom = DOMDocumentFactory::fromString($xml);
-        $response           = Response::fromXML($fixtureResponseDom->firstChild);
+        $response           = Response::fromXML($fixtureResponseDom->documentElement);
 
         $this->assertFalse($response->isSuccess());
 
@@ -111,7 +111,7 @@ XML;
 XML;
 
         $fixtureResponseDom = DOMDocumentFactory::fromString($xml);
-        $response           = Response::fromXML($fixtureResponseDom->firstChild);
+        $response           = Response::fromXML($fixtureResponseDom->documentElement);
 
         $this->assertTrue($response->isSuccess());
 
@@ -147,7 +147,7 @@ XML;
 XML;
 
         $fixtureResponseDom = DOMDocumentFactory::fromString($xml);
-        $response           = Response::fromXML($fixtureResponseDom->firstChild);
+        $response           = Response::fromXML($fixtureResponseDom->documentElement);
 
         $this->assertFalse($response->isSuccess());
 
@@ -197,7 +197,7 @@ STATUSXML
      */
     public function testNoStatusElementThrowsException(): void
     {
-        $this->expectException(AssertionFailedException::class);
+        $this->expectException(MissingElementException::class);
 
         $xml = <<<XML
 <samlp:Response xmlns:samlp="urn:oasis:names:tc:SAML:2.0:protocol"
@@ -220,7 +220,7 @@ STATUSXML
 XML;
 
         $fixtureResponseDom = DOMDocumentFactory::fromString($xml);
-        $response           = Response::fromXML($fixtureResponseDom->firstChild);
+        $response           = Response::fromXML($fixtureResponseDom->documentElement);
     }
 
 
@@ -230,7 +230,7 @@ XML;
      */
     public function testNoStatusCodeThrowsException(): void
     {
-        $this->expectException(AssertionFailedException::class);
+        $this->expectException(MissingElementException::class);
 
         $xml = <<<XML
 <samlp:Response xmlns:samlp="urn:oasis:names:tc:SAML:2.0:protocol"
@@ -248,6 +248,6 @@ XML;
 XML;
 
         $fixtureResponseDom = DOMDocumentFactory::fromString($xml);
-        $response           = Response::fromXML($fixtureResponseDom->firstChild);
+        $response           = Response::fromXML($fixtureResponseDom->documentElement);
     }
 }

@@ -8,6 +8,7 @@ use DOMElement;
 use SAML2\Compat\ContainerSingleton;
 use SAML2\Constants;
 use SAML2\Exception\InvalidDOMElementException;
+use SAML2\Exception\TooManyElementsException;
 use SAML2\Utils;
 use SAML2\XML\IdentifierTrait;
 use SimpleSAML\Assert\Assert;
@@ -58,8 +59,6 @@ final class SubjectConfirmation extends AbstractSamlElement
      * Collect the value of the Method-property
      *
      * @return string
-     *
-     * @throws \InvalidArgumentException if assertions are false
      */
     public function getMethod(): string
     {
@@ -109,22 +108,23 @@ final class SubjectConfirmation extends AbstractSamlElement
      * @return self
      *
      * @throws \SAML2\Exception\InvalidDOMElementException if the qualified name of the supplied element is wrong
+     * @throws \SAML2\Exception\MissingAttributeException if the supplied element is missing one of the mandatory attributes
+     * @throws \SAML2\Exception\TooManyElementsException if too many child-elements of a type are specified
      */
     public static function fromXML(DOMElement $xml): object
     {
         Assert::same($xml->localName, 'SubjectConfirmation', InvalidDOMElementException::class);
         Assert::same($xml->namespaceURI, SubjectConfirmation::NS, InvalidDOMElementException::class);
 
-        Assert::true($xml->hasAttribute('Method'), 'SubjectConfirmation element without Method attribute.');
-
-        $Method = $xml->getAttribute('Method');
+        $Method = self::getAttribute($xml, 'Method');
         $identifier = self::getIdentifierFromXML($xml);
         $subjectConfirmationData = SubjectConfirmationData::getChildrenOfClass($xml);
 
         Assert::maxCount(
             $subjectConfirmationData,
             1,
-            'More than one <saml:SubjectConfirmationData> in <saml:SubjectConfirmation>.'
+            'More than one <saml:SubjectConfirmationData> in <saml:SubjectConfirmation>.',
+            TooManyElementsException::class
         );
 
         return new self(

@@ -98,11 +98,7 @@ final class ProxyRestriction extends AbstractConditionType
         Assert::same($xml->localName, 'ProxyRestriction', InvalidDOMElementException::class);
         Assert::same($xml->namespaceURI, ProxyRestriction::NS, InvalidDOMElementException::class);
 
-        $count = self::getAttribute($xml, 'Count', null);
-        if ($count !== null) {
-            $count = intval($count);
-        }
-
+        $count = self::getIntegerAttribute($xml, 'Count', null);
         $audience = Utils::extractStrings($xml, AbstractSamlElement::NS, 'Audience');
 
         return new self($audience, $count);

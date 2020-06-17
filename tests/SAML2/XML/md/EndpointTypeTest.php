@@ -7,6 +7,8 @@ namespace SAML2\XML\md;
 use PHPUnit\Framework\TestCase;
 use SAML2\Constants;
 use SAML2\DOMDocumentFactory;
+use SAML2\Exception\InvalidDOMElementException;
+use SAML2\Exception\MissingAttributeException;
 use SimpleSAML\Assert\AssertionFailedException;
 
 /**
@@ -111,7 +113,7 @@ XML
      */
     public function testUnmarshallingUnexpectedEndpoint(): void
     {
-        $this->expectException(AssertionFailedException::class);
+        $this->expectException(InvalidDOMElementException::class);
         $this->expectExceptionMessage(
             'Unexpected name for endpoint: AttributeService. Expected: AssertionIDRequestService.'
         );
@@ -125,8 +127,8 @@ XML
     public function testUnmarshallingWithoutBinding(): void
     {
         $this->document->documentElement->removeAttribute('Binding');
-        $this->expectException(AssertionFailedException::class);
-        $this->expectExceptionMessage('Missing \'Binding\' attribute from md:AttributeService.');
+        $this->expectException(MissingAttributeException::class);
+        $this->expectExceptionMessage('Missing \'Binding\' attribute on md:AttributeService.');
         AttributeService::fromXML($this->document->documentElement);
     }
 
@@ -149,8 +151,8 @@ XML
     public function testUnmarshallingWithoutLocation(): void
     {
         $this->document->documentElement->removeAttribute('Location');
-        $this->expectException(AssertionFailedException::class);
-        $this->expectExceptionMessage('Missing \'Location\' attribute from md:AttributeService.');
+        $this->expectException(MissingAttributeException::class);
+        $this->expectExceptionMessage('Missing \'Location\' attribute on md:AttributeService.');
         AttributeService::fromXML($this->document->documentElement);
     }
 

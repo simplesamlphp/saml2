@@ -83,6 +83,7 @@ final class AuthnContextDecl extends AbstractSamlElement
      */
     public function toXML(DOMElement $parent = null): DOMElement
     {
+        /** @psalm-var \DOMDocument $e->ownerDocument */
         $e = $this->instantiateParentElement($parent);
 
         foreach ($this->decl as $node) {

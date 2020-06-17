@@ -49,6 +49,8 @@ XML
         $list = $extensions->getList();
 
         $this->assertCount(2, $list);
+        $this->assertInstanceOf(Chunk::class, $list[0]);
+        $this->assertInstanceOf(Chunk::class, $list[1]);
         $this->assertEquals("urn:mynamespace", $list[0]->getNamespaceURI());
         $this->assertEquals("ExampleElement", $list[1]->getLocalName());
     }
@@ -65,6 +67,8 @@ XML
         $list = $extensions->getList();
 
         $this->assertCount(2, $list);
+        $this->assertInstanceOf(Chunk::class, $list[0]);
+        $this->assertInstanceOf(Chunk::class, $list[1]);
         $this->assertEquals("urn:mynamespace", $list[0]->getNamespaceURI());
         $this->assertEquals("ExampleElement", $list[1]->getLocalName());
     }
@@ -86,6 +90,8 @@ XML
         $list = $extensions->getList();
 
         $this->assertCount(2, $list);
+        $this->assertInstanceOf(Chunk::class, $list[0]);
+        $this->assertInstanceOf(Chunk::class, $list[1]);
         $this->assertEquals("Attribute", $list[0]->getLocalName());
         $this->assertEquals("urn:mace:shibboleth:metadata:1.0", $list[1]->getNamespaceURI());
     }

@@ -44,7 +44,7 @@ trait IndexedElementTrait
      *
      * @param int $index
      * @return void
-     * @throws \InvalidArgumentException
+     * @throws \SimpleSAML\Assert\AssertionFailedException
      */
     protected function setIndex(int $index): void
     {

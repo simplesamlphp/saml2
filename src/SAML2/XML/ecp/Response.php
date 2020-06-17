@@ -8,6 +8,7 @@ use DOMElement;
 use InvalidArgumentException;
 use SAML2\Constants;
 use SAML2\Exception\InvalidDOMElementException;
+use SAML2\Exception\MissingAttributeException;
 use SimpleSAML\Assert\Assert;
 
 /**
@@ -72,6 +73,7 @@ final class Response extends AbstractEcpElement
      * @return self
      *
      * @throws \SAML2\Exception\InvalidDOMElementException if the qualified name of the supplied element is wrong
+     * @throws \SAML2\Exception\MissingAttributeException if the supplied element is missing any of the mandatory attributes
      */
     public static function fromXML(DOMElement $xml): object
     {
@@ -89,7 +91,8 @@ final class Response extends AbstractEcpElement
         );
         Assert::true(
             $xml->hasAttribute('AssertionConsumerServiceURL'),
-            'Missing AssertionConsumerServiceURL attribute in <ecp:Response>.'
+            'Missing AssertionConsumerServiceURL attribute in <ecp:Response>.',
+            MissingAttributeException::class
         );
 
         $mustUnderstand = $xml->getAttributeNS(Constants::NS_SOAP, 'mustUnderstand');
@@ -102,7 +105,7 @@ final class Response extends AbstractEcpElement
             'Invalid value of SOAP-ENV:actor attribute in <ecp:Response>.'
         );
 
-        return new self($xml->getAttribute('AssertionConsumerServiceURL'));
+        return new self(self::getAttribute($xml, 'AssertionConsumerServiceURL'));
     }
 
 

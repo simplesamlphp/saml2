@@ -270,6 +270,7 @@ final class SubjectConfirmationData extends AbstractSamlElement
      * @return self
      *
      * @throws \SAML2\Exception\InvalidDOMElementException if the qualified name of the supplied element is wrong
+     * @throws \SAML2\Exception\MissingAttributeException if the supplied element is missing any of the mandatory attributes
      * @throws \SimpleSAML\Assert\AssertionFailedException if NotBefore or NotOnOrAfter contain an invalid date.
      */
     public static function fromXML(DOMElement $xml): object
@@ -277,13 +278,15 @@ final class SubjectConfirmationData extends AbstractSamlElement
         Assert::same($xml->localName, 'SubjectConfirmationData', InvalidDOMElementException::class);
         Assert::same($xml->namespaceURI, SubjectConfirmationData::NS, InvalidDOMElementException::class);
 
-        $NotBefore = $xml->hasAttribute('NotBefore')
-            ? Utils::xsDateTimeToTimestamp($xml->getAttribute('NotBefore'))
-            : null;
+        $NotBefore = self::getAttribute($xml, 'NotBefore', null);
+        if ($NotBefore !== null) {
+            $NotBefore = Utils::xsDateTimeToTimestamp($NotBefore);
+        }
 
-        $NotOnOrAfter = $xml->hasAttribute('NotOnOrAfter')
-            ? Utils::xsDateTimeToTimestamp($xml->getAttribute('NotOnOrAfter'))
-            : null;
+        $NotOnOrAfter = self::getAttribute($xml, 'NotOnOrAfter', null);
+        if ($NotOnOrAfter !== null) {
+            $NotOnOrAfter = Utils::xsDateTimeToTimestamp($NotOnOrAfter);
+        }
 
         $Recipient = self::getAttribute($xml, 'Recipient', null);
         $InResponseTo = self::getAttribute($xml, 'InResponseTo', null);

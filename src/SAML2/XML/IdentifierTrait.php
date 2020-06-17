@@ -6,6 +6,7 @@ namespace SAML2\XML;
 
 use DOMElement;
 use SAML2\Compat\ContainerSingleton;
+use SAML2\Exception\TooManyElementsException;
 use SAML2\XML\saml\BaseID;
 use SAML2\XML\saml\EncryptedID;
 use SAML2\XML\saml\NameID;
@@ -56,6 +57,7 @@ trait IdentifierTrait
      *
      * @param \DOMElement $xml
      * @return \SAML2\XML\saml\IdentifierInterface|null
+     * @throws \SAML2\Exception\TooManyElementsException if too many child-elements of a type are specified
      */
     protected static function getIdentifierFromXML(DOMElement $xml): ?IdentifierInterface
     {
@@ -66,15 +68,31 @@ trait IdentifierTrait
         $encryptedId = EncryptedID::getChildrenOfClass($xml);
 
         // We accept only one of BaseID, NameID or EncryptedID
-        Assert::maxCount($baseId, 1, 'More than one <saml:BaseID> in <' . $class . '>.');
-        Assert::maxCount($nameId, 1, 'More than one <saml:NameID> in <' . $class . '>.');
-        Assert::maxCount($encryptedId, 1, 'More than one <saml:EncryptedID> in <' . $class . '>.');
+        Assert::maxCount(
+            $baseId,
+            1,
+            'More than one <saml:BaseID> in <' . $class . '>.',
+            TooManyElementsException::class
+        );
+        Assert::maxCount(
+            $nameId,
+            1,
+            'More than one <saml:NameID> in <' . $class . '>.',
+            TooManyElementsException::class
+        );
+        Assert::maxCount(
+            $encryptedId,
+            1,
+            'More than one <saml:EncryptedID> in <' . $class . '>.',
+            TooManyElementsException::class
+        );
 
         $identifiers = array_merge($baseId, $nameId, $encryptedId);
         Assert::maxCount(
             $identifiers,
             1,
-            'A <' . $class . '> can contain exactly one of <saml:BaseID>, <saml:NameID> or <saml:EncryptedID>.'
+            'A <' . $class . '> can contain exactly one of <saml:BaseID>, <saml:NameID> or <saml:EncryptedID>.',
+            TooManyElementsException::class
         );
 
         /** @psalm-var \SAML2\XML\saml\IdentifierInterface|null $identifier */

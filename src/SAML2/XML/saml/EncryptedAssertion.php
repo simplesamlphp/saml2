@@ -40,7 +40,7 @@ class EncryptedAssertion extends AbstractSamlElement implements EncryptedElement
 
         Utils::getContainer()->debugMessage($assertionXML, 'decrypt');
 
-        return new Assertion($assertionXML);
+        return Assertion::fromXML($assertionXML);
     }
 
 

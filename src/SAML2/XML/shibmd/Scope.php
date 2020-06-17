@@ -120,6 +120,7 @@ final class Scope extends AbstractShibmdElement
      */
     public function toXML(DOMElement $parent = null): DOMElement
     {
+        /** @psalm-var \DOMDocument $e->ownerDocument */
         $e = $this->instantiateParentElement($parent);
         $e->appendChild($e->ownerDocument->createTextNode($this->scope));
 

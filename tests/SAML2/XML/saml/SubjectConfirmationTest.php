@@ -4,13 +4,15 @@ declare(strict_types=1);
 
 namespace SAML2\XML\saml;
 
+use Mockery;
 use PHPUnit\Framework\TestCase;
 use SAML2\Compat\ContainerInterface;
 use SAML2\Compat\ContainerSingleton;
 use SAML2\Constants;
 use SAML2\CustomBaseID;
 use SAML2\DOMDocumentFactory;
-use SimpleSAML\Assert\AssertionFailedException;
+use SAML2\Exception\MissingAttributeException;
+use SAML2\Exception\TooManyElementsException;
 
 /**
  * Class \SAML2\XML\saml\SubjectConfirmationTest
@@ -37,7 +39,7 @@ XML
 
     public function tearDown(): void
     {
-        \Mockery::close();
+        Mockery::close();
     }
 
 
@@ -76,10 +78,11 @@ XML
     public function testUnmarshalling(): void
     {
         $subjectConfirmation = SubjectConfirmation::fromXML($this->document->documentElement);
+        $identifier = $subjectConfirmation->getIdentifier();
 
         $this->assertEquals('SomeMethod', $subjectConfirmation->getMethod());
-        $this->assertInstanceOf(NameID::class, $subjectConfirmation->getIdentifier());
-        $this->assertEquals('SomeNameIDValue', $subjectConfirmation->getIdentifier()->getValue());
+        $this->assertInstanceOf(NameID::class, $identifier);
+        $this->assertEquals('SomeNameIDValue', $identifier->getValue());
         $this->assertInstanceOf(SubjectConfirmationData::class, $subjectConfirmation->getSubjectConfirmationData());
         $this->assertEquals(
             $this->document->saveXML($this->document->documentElement),
@@ -96,8 +99,8 @@ XML
         $document = $this->document->documentElement;
         $document->removeAttribute('Method');
 
-        $this->expectException(AssertionFailedException::class);
-        $this->expectExceptionMessage('SubjectConfirmation element without Method attribute');
+        $this->expectException(MissingAttributeException::class);
+        $this->expectExceptionMessage("Missing 'Method' attribute on saml:SubjectConfirmation.");
 
         SubjectConfirmation::fromXML($document);
     }
@@ -118,7 +121,7 @@ XML
 XML
         );
 
-        $this->expectException(AssertionFailedException::class);
+        $this->expectException(TooManyElementsException::class);
         $this->expectExceptionMessage('More than one <saml:NameID> in <saml:SubjectConfirmation>.');
         SubjectConfirmation::fromXML($document->documentElement);
     }
@@ -139,7 +142,7 @@ XML
 XML
         );
 
-        $this->expectException(AssertionFailedException::class);
+        $this->expectException(TooManyElementsException::class);
         $this->expectExceptionMessage('A <saml:SubjectConfirmation> can contain exactly one of <saml:BaseID>, <saml:NameID> or <saml:EncryptedID>.');
         SubjectConfirmation::fromXML($document->documentElement);
     }
@@ -160,7 +163,7 @@ XML
 XML
         );
 
-        $this->expectException(AssertionFailedException::class);
+        $this->expectException(TooManyElementsException::class);
         $this->expectExceptionMessage(
             'More than one <saml:SubjectConfirmationData> in <saml:SubjectConfirmation>.'
         );
@@ -183,10 +186,12 @@ XML
         );
 
         $subjectConfirmation = SubjectConfirmation::fromXML($document->documentElement);
+        /** @psalm-var \SAML2\XML\saml\BaseID $identifier */
+        $identifier = $subjectConfirmation->getIdentifier();
         $this->assertEquals('SomeMethod', $subjectConfirmation->getMethod());
-        $this->assertEquals(BaseID::class, get_class($subjectConfirmation->getIdentifier()));
-        $this->assertEquals('CustomBaseID', $subjectConfirmation->getIdentifier()->getType());
-        $this->assertEquals('SomeIDValue', $subjectConfirmation->getIdentifier()->getValue());
+        $this->assertEquals(BaseID::class, get_class($identifier));
+        $this->assertEquals('CustomBaseID', $identifier->getType());
+        $this->assertEquals('SomeIDValue', $identifier->getValue());
         $this->assertInstanceOf(SubjectConfirmationData::class, $subjectConfirmation->getSubjectConfirmationData());
         $this->assertEquals(
             $document->saveXML($document->documentElement),
@@ -201,8 +206,13 @@ XML
     public function testCustomIDHandler(): void
     {
         $container = ContainerSingleton::getInstance();
-        $mock = \Mockery::mock(ContainerInterface::class);
+        $mock = Mockery::mock(ContainerInterface::class);
+        /**
+         * @psalm-suppress UndefinedMagicMethod
+         * @psalm-suppress InvalidArgument
+         */
         $mock->shouldReceive('getIdentifierHandler')->andReturn(CustomBaseID::class);
+        /** @psalm-suppress InvalidArgument */
         ContainerSingleton::setContainer($mock);
 
         $samlNamespace = Constants::NS_SAML;
@@ -215,9 +225,10 @@ XML
         );
 
         $subjectConfirmation = SubjectConfirmation::fromXML($document->documentElement);
+        $identifier = $subjectConfirmation->getIdentifier();
         $this->assertEquals('SomeMethod', $subjectConfirmation->getMethod());
-        $this->assertInstanceOf(CustomBaseID::class, $subjectConfirmation->getIdentifier());
-        $this->assertEquals('123.456', $subjectConfirmation->getIdentifier()->getValue());
+        $this->assertInstanceOf(CustomBaseID::class, $identifier);
+        $this->assertEquals('123.456', $identifier->getValue());
         $this->assertInstanceOf(SubjectConfirmationData::class, $subjectConfirmation->getSubjectConfirmationData());
         $this->assertEquals(
             $document->saveXML($document->documentElement),

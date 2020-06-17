@@ -115,7 +115,7 @@ class Attribute extends AbstractSamlElement
      *
      * @param string|null $NameFormat
      * @return void
-     * @throws \InvalidArgumentException if the NameFormat is empty
+     * @throws \SimpleSAML\Assert\AssertionFailedException if the NameFormat is empty
      */
     protected function setNameFormat(?string $NameFormat): void
     {
@@ -140,7 +140,7 @@ class Attribute extends AbstractSamlElement
      *
      * @param string|null $friendlyName
      * @return void
-     * @throws \InvalidArgumentException if the FriendlyName is empty
+     * @throws \SimpleSAML\Assert\AssertionFailedException if the FriendlyName is empty
      */
     private function setFriendlyName(?string $friendlyName): void
     {
@@ -180,17 +180,15 @@ class Attribute extends AbstractSamlElement
      * @return \SAML2\XML\saml\Attribute
      *
      * @throws \SAML2\Exception\InvalidDOMElementException if the qualified name of the supplied element is wrong
+     * @throws \SAML2\Exception\MissingAttributeException if the supplied element is missing one of the mandatory attributes
      */
     public static function fromXML(DOMElement $xml): object
     {
         Assert::same($xml->localName, 'Attribute', InvalidDOMElementException::class);
         Assert::same($xml->namespaceURI, Attribute::NS, InvalidDOMElementException::class);
 
-        /** @var string $name */
-        $name = self::getAttribute($xml, 'Name');
-
         return new self(
-            $name,
+            self::getAttribute($xml, 'Name'),
             self::getAttribute($xml, 'NameFormat', null),
             self::getAttribute($xml, 'FriendlyName', null),
             AttributeValue::getChildrenOfClass($xml),

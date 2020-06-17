@@ -45,7 +45,7 @@ class CipherData extends AbstractXencElement
     /**
      * @param string $cipherValue
      */
-    protected function setCipherValue(string $cipherValue)
+    protected function setCipherValue(string $cipherValue): void
     {
         Assert::regex($cipherValue, '/[a-zA-Z0-9_\-=\+\/]/', 'Invalid data in <xenc:CipherValue>.');
         $this->cipherValue = $cipherValue;
@@ -75,6 +75,7 @@ class CipherData extends AbstractXencElement
      */
     public function toXML(DOMElement $parent = null): DOMElement
     {
+        /** @psalm-var \DOMDocument $e->ownerDocument */
         $e = $this->instantiateParentElement($parent);
 
         $cv = $e->ownerDocument->createElementNS($this::NS, $this::NS_PREFIX . ':CipherValue');

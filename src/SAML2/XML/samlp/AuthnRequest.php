@@ -6,6 +6,7 @@ namespace SAML2\XML\samlp;
 
 use DOMElement;
 use SAML2\Exception\InvalidDOMElementException;
+use SAML2\Exception\TooManyElementsException;
 use SAML2\XML\ds\Signature;
 use SAML2\XML\saml\Conditions;
 use SAML2\XML\saml\Issuer;
@@ -460,6 +461,8 @@ class AuthnRequest extends AbstractRequest
      * @return \SAML2\XML\samlp\AuthnRequest
      *
      * @throws \SAML2\Exception\InvalidDOMElementException if the qualified name of the supplied element is wrong
+     * @throws \SAML2\Exception\MissingAttributeException if the supplied element is missing one of the mandatory attributes
+     * @throws \SAML2\Exception\TooManyElementsException if too many child-elements of a type are specified
      */
     public static function fromXML(DOMElement $xml): object
     {
@@ -469,34 +472,36 @@ class AuthnRequest extends AbstractRequest
 
         $issueInstant = Utils::xsDateTimeToTimestamp(self::getAttribute($xml, 'IssueInstant'));
 
-        $attributeConsumingServiceIndex = self::getAttribute($xml, 'AttributeConsumingServiceIndex', null);
-        if ($attributeConsumingServiceIndex !== null) {
-            $attributeConsumingServiceIndex = intval($attributeConsumingServiceIndex);
-        }
+        $attributeConsumingServiceIndex = self::getIntegerAttribute($xml, 'AttributeConsumingServiceIndex', null);
 
         $conditions = Conditions::getChildrenOfClass($xml);
-        Assert::maxCount($conditions, 1, 'Only one <saml:Conditions> element is allowed.');
+        Assert::maxCount($conditions, 1, 'Only one <saml:Conditions> element is allowed.', TooManyElementsException::class);
 
         $nameIdPolicy = NameIDPolicy::getChildrenOfClass($xml);
-        Assert::maxCount($nameIdPolicy, 1, 'Only one <samlp:NameIDPolicy> element is allowed.');
+        Assert::maxCount($nameIdPolicy, 1, 'Only one <samlp:NameIDPolicy> element is allowed.', TooManyElementsException::class);
 
         $subject = Subject::getChildrenOfClass($xml);
-        Assert::maxCount($subject, 1, 'Only one <saml:Subject> element is allowed.');
+        Assert::maxCount($subject, 1, 'Only one <saml:Subject> element is allowed.', TooManyElementsException::class);
 
         $issuer = Issuer::getChildrenOfClass($xml);
-        Assert::maxCount($issuer, 1, 'Only one <saml:Issuer> element is allowed.');
+        Assert::maxCount($issuer, 1, 'Only one <saml:Issuer> element is allowed.', TooManyElementsException::class);
 
         $requestedAuthnContext = RequestedAuthnContext::getChildrenOfClass($xml);
-        Assert::maxCount($requestedAuthnContext, 1, 'Only one <samlp:RequestedAuthnContext> element is allowed.');
+        Assert::maxCount(
+            $requestedAuthnContext,
+            1,
+            'Only one <samlp:RequestedAuthnContext> element is allowed.',
+            TooManyElementsException::class
+        );
 
         $extensions = Extensions::getChildrenOfClass($xml);
-        Assert::maxCount($extensions, 1, 'Only one <samlp:Extensions> element is allowed.');
+        Assert::maxCount($extensions, 1, 'Only one <samlp:Extensions> element is allowed.', TooManyElementsException::class);
 
         $signature = Signature::getChildrenOfClass($xml);
-        Assert::maxCount($signature, 1, 'Only one <ds:Signature> element is allowed.');
+        Assert::maxCount($signature, 1, 'Only one <ds:Signature> element is allowed.', TooManyElementsException::class);
 
         $scoping = Scoping::getChildrenOfClass($xml);
-        Assert::maxCount($scoping, 1, 'Only one <samlp:Scoping> element is allowed.');
+        Assert::maxCount($scoping, 1, 'Only one <samlp:Scoping> element is allowed.', TooManyElementsException::class);
 
 
         $request = new self(

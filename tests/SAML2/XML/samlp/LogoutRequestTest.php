@@ -8,10 +8,13 @@ use Mockery\Adapter\Phpunit\MockeryTestCase;
 use SAML2\CertificatesMock;
 use SAML2\Constants;
 use SAML2\DOMDocumentFactory;
+use SAML2\Exception\MissingElementException;
+use SAML2\Exception\TooManyElementsException;
 use SAML2\Utils;
 use SAML2\XML\Chunk;
 use SAML2\XML\ds\KeyInfo;
 use SAML2\XML\saml\EncryptedID;
+use SAML2\XML\saml\Issuer;
 use SAML2\XML\saml\NameID;
 use SAML2\XML\xenc\CipherData;
 use SAML2\XML\xenc\DataReference;
@@ -19,7 +22,6 @@ use SAML2\XML\xenc\EncryptedData;
 use SAML2\XML\xenc\EncryptedKey;
 use SAML2\XML\xenc\EncryptionMethod;
 use SAML2\XML\xenc\ReferenceList;
-use SimpleSAML\Assert\AssertionFailedException;
 
 /**
  * Class \SAML2\XML\samlp\LogoutRequestTest
@@ -120,15 +122,19 @@ XML;
     public function testUnmarshalling(): void
     {
         $logoutRequest = LogoutRequest::fromXML($this->logoutRequestElement);
-        $this->assertEquals('TheIssuer', $logoutRequest->getIssuer()->getValue());
-        $this->assertInstanceOf(EncryptedID::class, $logoutRequest->getIdentifier());
+        $issuer = $logoutRequest->getIssuer();
+
+        $this->assertInstanceOf(Issuer::class, $issuer);
+        $this->assertEquals('TheIssuer', $issuer->getValue());
+
+        $encid = $logoutRequest->getIdentifier();
+        $this->assertInstanceOf(EncryptedID::class, $encid);
 
         $this->assertEquals(['SomeSessionIndex1', 'SomeSessionIndex2'], $logoutRequest->getSessionIndexes());
 
-        /** @var EncryptedID $encid */
-        $encid = $logoutRequest->getIdentifier();
-        $nameId = $encid->decrypt(CertificatesMock::getPrivateKey());
-        $this->assertEquals('TheNameIDValue', $nameId->getValue());
+        $identifier = $encid->decrypt(CertificatesMock::getPrivateKey());
+        $this->assertInstanceOf(NameID::class, $identifier);
+        $this->assertEquals('TheNameIDValue', $identifier->getValue());
     }
 
 
@@ -187,11 +193,11 @@ XML;
         $this->logoutRequestElement = $document->documentElement;
 
         $logoutRequest = LogoutRequest::fromXML($this->logoutRequestElement);
-        $this->assertEquals("frits", $logoutRequest->getIdentifier()->getValue());
-        $this->assertEquals(
-            "urn:oasis:names:tc:SAML:2.0:nameid-format:unspecified",
-            $logoutRequest->getIdentifier()->getFormat()
-        );
+        $identifier = $logoutRequest->getIdentifier();
+
+        $this->assertInstanceOf(NameID::class, $identifier);
+        $this->assertEquals("frits", $identifier->getValue());
+        $this->assertEquals('urn:oasis:names:tc:SAML:2.0:nameid-format:unspecified', $identifier->getFormat());
     }
 
 
@@ -208,7 +214,7 @@ XML;
         $document = DOMDocumentFactory::fromString($xml);
         $this->logoutRequestElement = $document->documentElement;
 
-        $this->expectException(AssertionFailedException::class);
+        $this->expectException(MissingElementException::class);
         $this->expectExceptionMessage("Missing <saml:NameID>, <saml:BaseID> or <saml:EncryptedID> in <samlp:LogoutRequest>.");
         $logoutRequest = LogoutRequest::fromXML($this->logoutRequestElement);
     }
@@ -229,7 +235,7 @@ XML;
         $document = DOMDocumentFactory::fromString($xml);
         $this->logoutRequestElement = $document->documentElement;
 
-        $this->expectException(AssertionFailedException::class);
+        $this->expectException(TooManyElementsException::class);
         $this->expectExceptionMessage("More than one <saml:NameID> in <samlp:LogoutRequest>.");
         $logoutRequest = LogoutRequest::fromXML($this->logoutRequestElement);
     }

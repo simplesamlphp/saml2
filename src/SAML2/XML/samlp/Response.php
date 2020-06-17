@@ -7,6 +7,8 @@ namespace SAML2\XML\samlp;
 use DOMElement;
 use SAML2\Constants;
 use SAML2\Exception\InvalidDOMElementException;
+use SAML2\Exception\MissingElementException;
+use SAML2\Exception\TooManyElementsException;
 use SAML2\Utils;
 use SAML2\XML\ds\Signature;
 use SAML2\XML\saml\Assertion;
@@ -100,6 +102,8 @@ class Response extends AbstractStatusResponse
      * @return self
      *
      * @throws \SAML2\Exception\InvalidDOMElementException if the qualified name of the supplied element is wrong
+     * @throws \SAML2\Exception\MissingAttributeException if the supplied element is missing one of the mandatory attributes
+     * @throws \SAML2\Exception\MissingElementException if one of the mandatory child-elements is missing
      */
     public static function fromXML(DOMElement $xml): object
     {
@@ -118,10 +122,11 @@ class Response extends AbstractStatusResponse
         Assert::countBetween($issuer, 0, 1);
 
         $status = Status::getChildrenOfClass($xml);
-        Assert::count($status, 1);
+        Assert::minCount($status, 1, MissingElementException::class);
+        Assert::maxCount($status, 1, TooManyElementsException::class);
 
         $extensions = Extensions::getChildrenOfClass($xml);
-        Assert::maxCount($extensions, 1, 'Only one saml:Extensions element is allowed.');
+        Assert::maxCount($extensions, 1, 'Only one saml:Extensions element is allowed.', TooManyElementsException::class);
 
         $assertions = [];
         foreach ($xml->childNodes as $node) {
@@ -139,7 +144,7 @@ class Response extends AbstractStatusResponse
         }
 
         $signature = Signature::getChildrenOfClass($xml);
-        Assert::maxCount($signature, 1, 'Only one ds:Signature element is allowed.');
+        Assert::maxCount($signature, 1, 'Only one ds:Signature element is allowed.', TooManyElementsException::class);
 
         $response = new self(
             array_pop($status),

@@ -8,6 +8,7 @@ use InvalidArgumentException;
 use PHPUnit\Framework\TestCase;
 use SAML2\Constants;
 use SAML2\DOMDocumentFactory;
+use SAML2\Exception\MissingAttributeException;
 use SAML2\XML\Chunk;
 use SimpleSAML\Assert\AssertionFailedException;
 
@@ -197,8 +198,8 @@ XML
      */
     public function testUnmarshallingWithoutType(): void
     {
-        $this->expectException(AssertionFailedException::class);
-        $this->expectExceptionMessage('Missing contactType on ContactPerson.');
+        $this->expectException(MissingAttributeException::class);
+        $this->expectExceptionMessage("Missing 'contactType' attribute on md:ContactPerson.");
         $this->document->documentElement->removeAttribute('contactType');
         ContactPerson::fromXML($this->document->documentElement);
     }

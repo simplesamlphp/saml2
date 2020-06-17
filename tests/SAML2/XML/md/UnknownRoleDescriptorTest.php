@@ -9,6 +9,7 @@ use PHPUnit\Framework\TestCase;
 use RobRichards\XMLSecLibs\XMLSecurityDSig;
 use SAML2\Constants;
 use SAML2\DOMDocumentFactory;
+use SAML2\Exception\MissingAttributeException;
 use SAML2\XML\Chunk;
 use SimpleSAML\Assert\AssertionFailedException;
 
@@ -123,9 +124,9 @@ XML
     {
         $this->document->documentElement->removeAttribute('protocolSupportEnumeration');
 
-        $this->expectException(AssertionFailedException::class);
+        $this->expectException(MissingAttributeException::class);
         $this->expectExceptionMessage(
-            'Missing \'protocolSupportEnumeration\' attribute from md:UnknownRoleDescriptor.'
+            'Missing \'protocolSupportEnumeration\' attribute on md:UnknownRoleDescriptor.'
         );
 
         UnknownRoleDescriptor::fromXML($this->document->documentElement);

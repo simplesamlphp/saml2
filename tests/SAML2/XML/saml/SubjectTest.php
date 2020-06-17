@@ -4,13 +4,14 @@ declare(strict_types=1);
 
 namespace SAML2\XML\saml;
 
+use Mockery;
 use PHPUnit\Framework\TestCase;
 use SAML2\Compat\ContainerInterface;
 use SAML2\Compat\ContainerSingleton;
 use SAML2\Constants;
 use SAML2\CustomBaseID;
 use SAML2\DOMDocumentFactory;
-use SimpleSAML\Assert\AssertionFailedException;
+use SAML2\Exception\TooManyElementsException;
 
 /**
  * Class \SAML2\XML\saml\SubjectTest
@@ -81,7 +82,7 @@ XML
 
     public function tearDown(): void
     {
-        \Mockery::close();
+        Mockery::close();
     }
 
 
@@ -208,7 +209,7 @@ XML
     {
         $document = DOMDocumentFactory::fromString('<saml:Subject xmlns:saml="' . Subject::NS . '"/>');
 
-        $this->expectException(AssertionFailedException::class);
+        $this->expectException(TooManyElementsException::class);
         $this->expectExceptionMessage('A <saml:Subject> not containing <saml:SubjectConfirmation> should provide exactly one of <saml:BaseID>, <saml:NameID> or <saml:EncryptedID>');
 
         Subject::fromXML($document->documentElement);
@@ -228,7 +229,7 @@ XML
         $nameId->documentElement->textContent = 'AnotherNameIDValue';
         $document->documentElement->appendChild($document->importNode($nameId->documentElement, true));
 
-        $this->expectException(AssertionFailedException::class);
+        $this->expectException(TooManyElementsException::class);
         $this->expectExceptionMessage('More than one <saml:NameID> in <saml:Subject>.');
 
         Subject::fromXML($document->documentElement);
@@ -254,7 +255,7 @@ XML
 XML
         );
 
-        $this->expectException(AssertionFailedException::class);
+        $this->expectException(TooManyElementsException::class);
         $this->expectExceptionMessage(
             'A <saml:Subject> can contain exactly one of <saml:BaseID>, <saml:NameID> or <saml:EncryptedID>.'
         );
@@ -282,8 +283,9 @@ XML
         );
 
         $subject = Subject::fromXML($document->documentElement);
-        $this->assertEquals(BaseID::class, get_class($subject->getIdentifier()));
-        $this->assertEquals('CustomBaseID', $subject->getIdentifier()->getType());
+        $identifier = $subject->getIdentifier();
+        $this->assertInstanceOf(BaseID::class, $identifier);
+        $this->assertEquals('CustomBaseID', $identifier->getType());
         $this->assertEquals(
             $document->saveXML($document->documentElement),
             strval($subject)
@@ -298,8 +300,13 @@ XML
     public function testCustomIDHandler(): void
     {
         $container = ContainerSingleton::getInstance();
-        $mock = \Mockery::mock(ContainerInterface::class);
+        $mock = Mockery::mock(ContainerInterface::class);
+        /**
+         * @psalm-suppress InvalidArgument
+         * @psalm-suppress UndefinedMagicMethod
+         */
         $mock->shouldReceive('getIdentifierHandler')->andReturn(CustomBaseID::class);
+        /** @psalm-suppress InvalidArgument */
         ContainerSingleton::setContainer($mock);
 
         $samlNamespace = Subject::NS;
@@ -316,7 +323,9 @@ XML
         );
 
         $subject = Subject::fromXML($document->documentElement);
-        $this->assertEquals(CustomBaseID::class, get_class($subject->getIdentifier()));
+        $identifier = $subject->getIdentifier();
+        $this->assertInstanceOf(BaseID::class, $identifier);
+        $this->assertEquals(CustomBaseID::class, get_class($identifier));
         $this->assertEquals(
             $document->saveXML($document->documentElement),
             strval($subject)

@@ -9,6 +9,7 @@ use Exception;
 use InvalidArgumentException;
 use SAML2\Constants;
 use SAML2\Exception\InvalidDOMElementException;
+use SAML2\Exception\TooManyElementsException;
 use SAML2\Utils;
 use SAML2\XML\ExtendableAttributesTrait;
 use SAML2\XML\ExtendableElementTrait;
@@ -107,21 +108,22 @@ final class ContactPerson extends AbstractMdElement
      * @return self
      *
      * @throws \SAML2\Exception\InvalidDOMElementException if the qualified name of the supplied element is wrong
+     * @throws \SAML2\Exception\MissingAttributeException if the supplied element is missing one of the mandatory attributes
+     * @throws \SAML2\Exception\TooManyElementsException if too many child-elements of a type are specified
      */
     public static function fromXML(DOMElement $xml): object
     {
         Assert::same($xml->localName, 'ContactPerson', InvalidDOMElementException::class);
         Assert::same($xml->namespaceURI, ContactPerson::NS, InvalidDOMElementException::class);
-        Assert::true($xml->hasAttribute('contactType'), 'Missing contactType on ContactPerson.');
 
-        $contactType = $xml->getAttribute('contactType');
+        $contactType = self::getAttribute($xml, 'contactType');
         $company = self::getStringElement($xml, 'Company');
         $givenName = self::getStringElement($xml, 'GivenName');
         $surName = self::getStringElement($xml, 'SurName');
         $email = self::getStringElements($xml, 'EmailAddress');
         $telephone = self::getStringElements($xml, 'TelephoneNumber');
         $extensions = Extensions::getChildrenOfClass($xml);
-        Assert::maxCount($extensions, 1, 'Only one md:Extensions element is allowed.');
+        Assert::maxCount($extensions, 1, 'Only one md:Extensions element is allowed.', TooManyElementsException::class);
 
         return new self(
             $contactType,
@@ -164,7 +166,7 @@ final class ContactPerson extends AbstractMdElement
      * @param string      $name The name of the child element.
      *
      * @return string|null The value of the child element.
-     * @throws \InvalidArgumentException
+     * @throws \SimpleSAML\Assert\AssertionFailedException
      */
     private static function getStringElement(DOMElement $parent, string $name): ?string
     {
@@ -194,7 +196,7 @@ final class ContactPerson extends AbstractMdElement
      *
      * @param string $contactType
      * @return void
-     * @throws \InvalidArgumentException if $contactType is not one of the predefined values
+     * @throws \SimpleSAML\Assert\AssertionFailedException if $contactType is not one of the predefined values
      */
     protected function setContactType(string $contactType): void
     {
@@ -303,7 +305,7 @@ final class ContactPerson extends AbstractMdElement
      *
      * @param string[] $emailAddresses
      * @return void
-     * @throws \InvalidArgumentException
+     * @throws \SimpleSAML\Assert\AssertionFailedException
      */
     protected function setEmailAddresses(array $emailAddresses): void
     {
@@ -328,7 +330,7 @@ final class ContactPerson extends AbstractMdElement
      * Set the value of the TelephoneNumber property
      *
      * @param string[] $telephoneNumbers
-     * @throws \InvalidArgumentException
+     * @throws \SimpleSAML\Assert\AssertionFailedException
      */
     protected function setTelephoneNumbers(array $telephoneNumbers): void
     {

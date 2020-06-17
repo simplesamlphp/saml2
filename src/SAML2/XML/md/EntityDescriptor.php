@@ -8,6 +8,7 @@ use DOMElement;
 use InvalidArgumentException;
 use SAML2\Constants;
 use SAML2\Exception\InvalidDOMElementException;
+use SAML2\Exception\TooManyElementsException;
 use SAML2\Utils;
 use SAML2\XML\ds\Signature;
 use SimpleSAML\Assert\Assert;
@@ -118,6 +119,8 @@ final class EntityDescriptor extends AbstractMetadataDocument
      * @return \SAML2\XML\md\EntityDescriptor An object representing the given document.
      *
      * @throws \SAML2\Exception\InvalidDOMElementException if the qualified name of the supplied element is wrong
+     * @throws \SAML2\Exception\MissingAttributeException if the supplied element is missing one of the mandatory attributes
+     * @throws \SAML2\Exception\TooManyElementsException if too many child-elements of a type are specified
      */
     public static function fromXML(DOMElement $xml): object
     {
@@ -126,14 +129,12 @@ final class EntityDescriptor extends AbstractMetadataDocument
 
         $validUntil = self::getAttribute($xml, 'validUntil', null);
         $extensions = Extensions::getChildrenOfClass($xml);
-        Assert::maxCount($extensions, 1, 'Only one md:Extensions element is allowed.');
+        Assert::maxCount($extensions, 1, 'Only one md:Extensions element is allowed.', TooManyElementsException::class);
 
         $signature = Signature::getChildrenOfClass($xml);
-        Assert::maxCount($signature, 1, 'Only one ds:Signature element is allowed.');
+        Assert::maxCount($signature, 1, 'Only one ds:Signature element is allowed.', TooManyElementsException::class);
 
-        /** @var string $entityID */
         $entityID = self::getAttribute($xml, 'entityID');
-
         $roleDescriptors = [];
         $affiliationDescriptor = null;
         $organization = null;
@@ -167,13 +168,13 @@ final class EntityDescriptor extends AbstractMetadataDocument
                     break;
                 case 'AffiliationDescriptor':
                     if ($affiliationDescriptor !== null) {
-                        throw new InvalidArgumentException('More than one AffiliationDescriptor in the entity.');
+                        throw new TooManyElementsException('More than one AffiliationDescriptor in the entity.');
                     }
                     $affiliationDescriptor = AffiliationDescriptor::fromXML($node);
                     break;
                 case 'Organization':
                     if ($organization !== null) {
-                        throw new InvalidArgumentException('More than one Organization in the entity.');
+                        throw new TooManyElementsException('More than one Organization in the entity.');
                     }
                     $organization = Organization::fromXML($node);
                     break;
@@ -221,7 +222,7 @@ final class EntityDescriptor extends AbstractMetadataDocument
      * Collect the value of the entityID property.
      *
      * @return string
-     * @throws \InvalidArgumentException
+     * @throws \SimpleSAML\Assert\AssertionFailedException
      */
     public function getEntityID(): string
     {
@@ -260,6 +261,7 @@ final class EntityDescriptor extends AbstractMetadataDocument
      *
      * @param \SAML2\XML\md\AbstractRoleDescriptor[] $roleDescriptors
      * @return void
+     * @throws \SimpleSAML\Assert\AssertionFailedException
      */
     protected function setRoleDescriptors(array $roleDescriptors): void
     {
@@ -334,6 +336,7 @@ final class EntityDescriptor extends AbstractMetadataDocument
      *
      * @param array $contactPerson
      * @return void
+     * @throws \SimpleSAML\Assert\AssertionFailedException
      */
     protected function setContactPersons(array $contactPerson): void
     {
@@ -362,6 +365,7 @@ final class EntityDescriptor extends AbstractMetadataDocument
      *
      * @param array $additionalMetadataLocation
      * @return void
+     * @throws \SimpleSAML\Assert\AssertionFailedException
      */
     protected function setAdditionalMetadataLocations(array $additionalMetadataLocation): void
     {

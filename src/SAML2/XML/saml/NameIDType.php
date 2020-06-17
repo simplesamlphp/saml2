@@ -132,8 +132,6 @@ abstract class NameIDType extends AbstractSamlElement implements IdentifierInter
      * Collect the value of the value-property
      *
      * @return string
-     *
-     * @throws \InvalidArgumentException if assertions are false
      */
     public function getValue(): string
     {
@@ -144,8 +142,9 @@ abstract class NameIDType extends AbstractSamlElement implements IdentifierInter
     /**
      * Set the value of the value-property
      * @param string $value
-     *
      * @return void
+     *
+     * @throws \SimpleSAML\Assert\AssertionFailedException if assertions are false
      */
     private function setValue(string $value): void
     {
@@ -162,6 +161,7 @@ abstract class NameIDType extends AbstractSamlElement implements IdentifierInter
      */
     public function toXML(DOMElement $parent = null): DOMElement
     {
+        /** @psalm-var \DOMDocument $element->ownerDocument */
         $element = $this->instantiateParentElement($parent);
 
         if ($this->NameQualifier !== null) {
