@@ -181,6 +181,7 @@ XML
         $this->assertTrue($attrStatement->hasEncryptedAttributes());
     }
 
+
     /**
      * @return void
      */
@@ -192,7 +193,34 @@ XML
 
 
     /**
+     * @return void
+     */
+    public function testDecryptAttributes(): void
+    {
+        $attrStatement = new AttributeStatement(
+            [
+                new Attribute('urn:ServiceID', null, null, [new AttributeValue('1')])
+            ],
+            [
+                $this->encryptedAttribute
+            ]
+        );
+
+        $privkey = new XMLSecurityKey(XMLSecurityKey::RSA_SHA256, ['type' => 'private']);
+        $privkey->loadKey(CertificatesMock::PRIVATE_KEY_PEM);
+        $attrStatement->decryptAttributes($privkey, []);
+
+        $attributes = $attrStatement->getAttributes();
+        $this->assertCount(2, $attributes);
+
+        $this->assertEquals('urn:ServiceID', $attributes[0]->getName());
+        $this->assertEquals('urn:encrypted:attribute', $attributes[1]->getName());
+    }
+
+
+    /**
      * Test serialization / unserialization
+     */
     public function testSerialization(): void
     {
         $document = $this->document;
@@ -204,5 +232,4 @@ XML
             strval(unserialize(serialize(AttributeStatement::fromXML($document->documentElement))))
         );
     }
-     */
 }
