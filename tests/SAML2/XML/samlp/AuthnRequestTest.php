@@ -59,7 +59,10 @@ final class AuthnRequestTest extends TestCase
 
         $authnRequestElement = $authnRequest->toXML();
 
-        $requestedAuthnContextElements = RequestedAuthnContext::getChildrenOfClass($authnRequestElement);
+        $requestedAuthnContextElements = Utils::xpQuery(
+            $authnRequestElement,
+            './saml_protocol:RequestedAuthnContext'
+        );
         $this->assertCount(1, $requestedAuthnContextElements);
 
         $requestedAuthnConextElement = $requestedAuthnContextElements[0];
