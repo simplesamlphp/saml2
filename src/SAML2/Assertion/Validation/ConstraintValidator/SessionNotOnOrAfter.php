@@ -19,7 +19,7 @@ class SessionNotOnOrAfter implements
      */
     public function validate(Assertion $assertion, Result $result): void
     {
-        $sessionNotOnOrAfterTimestamp = $assertion->getSessionNotOnOrAfter();
+        $sessionNotOnOrAfterTimestamp = $assertion->getAuthnStatements()[0]->getSessionNotOnOrAfter();
         $currentTime = Temporal::getTime();
         if (($sessionNotOnOrAfterTimestamp !== null) && ($sessionNotOnOrAfterTimestamp <= ($currentTime - 60))) {
             $result->addError(
