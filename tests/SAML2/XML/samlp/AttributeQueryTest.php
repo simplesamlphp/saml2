@@ -140,7 +140,6 @@ XML
         $aq = AttributeQuery::fromXML($this->document->documentElement);
         /** @psalm-var \SAML2\XML\saml\Issuer $issuer */
         $issuer = $aq->getIssuer();
-        /** @psalm-var \SAML2\XML\saml\Subject $subject */
         $subject = $aq->getSubject();
         /** @psalm-var \SAML2\XML\saml\NameID $identifier */
         $identifier = $subject->getIdentifier();

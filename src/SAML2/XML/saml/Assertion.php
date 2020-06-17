@@ -824,7 +824,6 @@ class Assertion implements SignedElementInterface
         $enc->encryptKey($key, $symmetricKey);
 
         /**
-         * @var \DOMElement encryptedNameId
          * @psalm-suppress UndefinedClass
          */
         $this->encryptedNameId = $enc->encryptNode($symmetricKey);
