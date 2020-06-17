@@ -121,7 +121,12 @@ final class AttributeConsumingService extends AbstractMdElement
      */
     protected function setServiceNames(array $serviceNames): void
     {
-        Assert::minCount($serviceNames, 1, 'Missing at least one ServiceName in AttributeConsumingService.', MissingElementException::class);
+        Assert::minCount(
+            $serviceNames,
+            1,
+            'Missing at least one ServiceName in AttributeConsumingService.',
+            MissingElementException::class
+        );
         Assert::allIsInstanceOf(
             $serviceNames,
             ServiceName::class,

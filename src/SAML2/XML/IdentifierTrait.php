@@ -68,9 +68,24 @@ trait IdentifierTrait
         $encryptedId = EncryptedID::getChildrenOfClass($xml);
 
         // We accept only one of BaseID, NameID or EncryptedID
-        Assert::maxCount($baseId, 1, 'More than one <saml:BaseID> in <' . $class . '>.', TooManyElementsException::class);
-        Assert::maxCount($nameId, 1, 'More than one <saml:NameID> in <' . $class . '>.', TooManyElementsException::class);
-        Assert::maxCount($encryptedId, 1, 'More than one <saml:EncryptedID> in <' . $class . '>.', TooManyElementsException::class);
+        Assert::maxCount(
+            $baseId,
+            1,
+            'More than one <saml:BaseID> in <' . $class . '>.',
+            TooManyElementsException::class
+        );
+        Assert::maxCount(
+            $nameId,
+            1,
+            'More than one <saml:NameID> in <' . $class . '>.',
+            TooManyElementsException::class
+        );
+        Assert::maxCount(
+            $encryptedId,
+            1,
+            'More than one <saml:EncryptedID> in <' . $class . '>.',
+            TooManyElementsException::class
+        );
 
         $identifiers = array_merge($baseId, $nameId, $encryptedId);
         Assert::maxCount(

@@ -228,8 +228,18 @@ class EncryptedData extends AbstractXencElement
         Assert::same($xml->namespaceURI, EncryptedData::NS, InvalidDOMElementException::class);
 
         $cipherData = CipherData::getChildrenOfClass($xml);
-        Assert::minCount($cipherData, 1, 'At least one CipherData element found in <xenc:EncryptedData>.', MissingElementException::class);
-        Assert::maxCount($cipherData, 1, 'No or more than one CipherData element found in <xenc:EncryptedData>.', TooManyElementsException::class);
+        Assert::minCount(
+            $cipherData,
+            1,
+            'At least one CipherData element found in <xenc:EncryptedData>.',
+            MissingElementException::class
+        );
+        Assert::maxCount(
+            $cipherData,
+            1,
+            'No or more than one CipherData element found in <xenc:EncryptedData>.',
+            TooManyElementsException::class
+        );
 
         $encryptionMethod = EncryptionMethod::getChildrenOfClass($xml);
         Assert::maxCount(
@@ -240,7 +250,12 @@ class EncryptedData extends AbstractXencElement
         );
 
         $keyInfo = KeyInfo::getChildrenOfClass($xml);
-        Assert::maxCount($keyInfo, 1, 'No more than one KeyInfo element allowed in <xenc:EncryptedData>.', TooManyElementsException::class);
+        Assert::maxCount(
+            $keyInfo,
+            1,
+            'No more than one KeyInfo element allowed in <xenc:EncryptedData>.',
+            TooManyElementsException::class
+        );
 
         return new self(
             $cipherData[0],

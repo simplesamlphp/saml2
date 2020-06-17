@@ -487,7 +487,12 @@ class AuthnRequest extends AbstractRequest
         Assert::maxCount($issuer, 1, 'Only one <saml:Issuer> element is allowed.', TooManyElementsException::class);
 
         $requestedAuthnContext = RequestedAuthnContext::getChildrenOfClass($xml);
-        Assert::maxCount($requestedAuthnContext, 1, 'Only one <samlp:RequestedAuthnContext> element is allowed.', TooManyElementsException::class);
+        Assert::maxCount(
+            $requestedAuthnContext,
+            1,
+            'Only one <samlp:RequestedAuthnContext> element is allowed.',
+            TooManyElementsException::class
+        );
 
         $extensions = Extensions::getChildrenOfClass($xml);
         Assert::maxCount($extensions, 1, 'Only one <samlp:Extensions> element is allowed.', TooManyElementsException::class);

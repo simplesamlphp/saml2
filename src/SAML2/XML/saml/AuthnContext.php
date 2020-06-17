@@ -180,13 +180,28 @@ final class AuthnContext extends AbstractSamlElement
         Assert::same($xml->namespaceURI, AuthnContext::NS, InvalidDOMElementException::class);
 
         $authnContextClassRef = AuthnContextClassRef::getChildrenOfClass($xml);
-        Assert::maxCount($authnContextClassRef, 1, "More than one <saml:AuthnContextClassRef> found", TooManyElementsException::class);
+        Assert::maxCount(
+            $authnContextClassRef,
+            1,
+            "More than one <saml:AuthnContextClassRef> found",
+            TooManyElementsException::class
+        );
 
         $authnContextDeclRef = AuthnContextDeclRef::getChildrenOfClass($xml);
-        Assert::maxCount($authnContextDeclRef, 1, "More than one <saml:AuthnContextDeclRef> found", TooManyElementsException::class);
+        Assert::maxCount(
+            $authnContextDeclRef,
+            1,
+            "More than one <saml:AuthnContextDeclRef> found",
+            TooManyElementsException::class
+        );
 
         $authnContextDecl = AuthnContextDecl::getChildrenOfClass($xml);
-        Assert::maxCount($authnContextDecl, 1, "More than one <saml:AuthnContextDecl> found", TooManyElementsException::class);
+        Assert::maxCount(
+            $authnContextDecl,
+            1,
+            "More than one <saml:AuthnContextDecl> found",
+            TooManyElementsException::class
+        );
 
         $authorities = Utils::extractStrings($xml, AbstractSamlElement::NS, 'AuthenticatingAuthority');
 
