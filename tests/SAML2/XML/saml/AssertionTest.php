@@ -200,8 +200,6 @@ XML;
         $statements = [$authnStatement, $attributeStatement];
         $assertion = new Assertion($issuer, '_123abc', 1234567890, null, $conditions, $statements);
 
-//        $assertion->setAttributeNameFormat("urn:oasis:names:tc:SAML:2.0:attrname-format:unspecified");
-
         $assertionElement = $assertion->toXML()->ownerDocument->saveXML();
 
         $assertionToVerify = Assertion::fromXML(DOMDocumentFactory::fromString($assertionElement)->documentElement);
@@ -239,11 +237,8 @@ XML;
         // Create an Issuer
         $issuer = new Issuer('testIssuer');
 
-        // Create an assertion
-        $assertion = new Assertion();
-
-        $assertion->setIssuer($issuer);
-        $assertion->setConditions(
+        // Create Conditions
+        $conditions = new Conditions(
             null,
             null,
             [],
@@ -254,16 +249,31 @@ XML;
             ]
         );
 
-        $assertion->setAuthnContextClassRef('someAuthnContext');
+        // Create AuthnStatement
+        $authnStatement = new AuthnStatement(
+            new AuthnContext(
+                new AuthnContextClassRef('someAuthnContext'),
+                null,
+                null,
+                ["idp1", "idp2"]
+            )
+        );
 
-        $assertion->setAuthenticatingAuthority(["idp1", "idp2"]);
+        // Create AttributeStatement
+        $attributeStatement = new AttributeStatement(
+            // Attribute
+            [
+                new Attribute('name1', null, null, [new AttributeValue('value1'), new AttributeValues(123), new AttributeValue('2017-31-12')]),
+                new Attribute('name2', null, null, [new AttributeValue(2)]),
+                new Attribute('name3', null, null, [new AttributeValue(1234), new AttributeValue('+2345')])
+            ],
+            // EncryptedAttribute
+            []
+        );
 
-        $assertion->setAttributes([
-            "name1" => ["value1",123,"2017-31-12"],
-            "name2" => [2],
-            "name3" => [1234, "+2345"]
-        ]);
-        $assertion->setAttributeNameFormat(Constants::NAMEFORMAT_UNSPECIFIED);
+        // Create an assertion
+        $assertion = new Assertion($issuer, null, null, null, $conditions, [$authnStatement, $attributeStatement]);
+
 
         // set xs:type for first and third name1 values, and all name3 values.
         // second name1 value and all name2 values will use default behaviour
@@ -315,11 +325,8 @@ XML;
         // Create an Issuer
         $issuer = new Issuer('testIssuer');
 
-        // Create an assertion
-        $assertion = new Assertion();
-
-        $assertion->setIssuer($issuer);
-        $assertion->setConditions(
+        // Create Conditions
+        $conditions = new Conditions(
             null,
             null,
             [],
@@ -330,16 +337,29 @@ XML;
             ]
         );
 
-        $assertion->setAuthnContextClassRef('someAuthnContext');
+        // Create AuthnStatement
+        $authnStatement = new AuthnStatement(
+            new AuthnContext(
+                new AuthnContextClassRef('someAuthnContext'),
+                null,
+                ["idp1", "idp2"]
+            )
+        );
 
-        $assertion->setAuthenticatingAuthority(["idp1", "idp2"]);
+        // Create AttributeStatement
+        $attributeStatement = new AttributeStatement(
+            // Attribute
+            [
+                new Attribute('name1', null, null, [new AttributeValue('value1'), new AttributeValue('2017-31-12')]),
+                new Attribute('name2', null, null, [new AttributeValue(2)]),
+                new Attribute('name3', null, null, [new AttributeValue(1234), new AttributeValue('+2345')])
+            ],
+            // EncryptedAttribute
+            []
+        );
 
-        $assertion->setAttributes([
-            "name1" => ["value1", "2017-31-12"],
-            "name2" => [2],
-            "name3" => [1234, "+2345"]
-        ]);
-        $assertion->setAttributeNameFormat(Constants::NAMEFORMAT_UNSPECIFIED);
+        // Create an assertion
+        $assertion = new Assertion($issuer, null, null, null, $conditions, [$authnStatement, $attributeStatement]);
 
         // set wrong number elements in name1
         $assertion->setAttributesValueTypes([
@@ -352,115 +372,6 @@ XML;
             "Array of value types and array of values have different size for attribute 'name1'"
         );
         $assertionElement = $assertion->toXML()->ownerDocument->saveXML();
-    }
-
-
-    public function testHasEncryptedAttributes(): void
-    {
-        $document = new DOMDocument();
-        $document->loadXML(<<<XML
-    <saml:Assertion xmlns:saml="urn:oasis:names:tc:SAML:2.0:assertion"
-                    Version="2.0"
-                    ID="_93af655219464fb403b34436cfb0c5cb1d9a5502"
-                    IssueInstant="1970-01-01T01:33:31Z">
-      <saml:Issuer>Provider</saml:Issuer>
-      <saml:Subject>
-        <saml:NameID Format="urn:oasis:names:tc:SAML:2.0:nameid-format:persistent">s00000000:123456789</saml:NameID>
-        <saml:SubjectConfirmation Method="urn:oasis:names:tc:SAML:2.0:cm:bearer">
-          <saml:SubjectConfirmationData NotOnOrAfter="2011-08-31T08:51:05Z" Recipient="https://sp.example.com/assertion_consumer" InResponseTo="_13603a6565a69297e9809175b052d115965121c8" />
-        </saml:SubjectConfirmation>
-      </saml:Subject>
-      <saml:Conditions NotOnOrAfter="2011-08-31T08:51:05Z" NotBefore="2011-08-31T08:51:05Z">
-        <saml:AudienceRestriction>
-          <saml:Audience>ServiceProvider</saml:Audience>
-        </saml:AudienceRestriction>
-      </saml:Conditions>
-      <saml:AuthnStatement AuthnInstant="2011-08-31T08:51:05Z" SessionIndex="_93af655219464fb403b34436cfb0c5cb1d9a5502">
-        <saml:AuthnContext>
-          <saml:AuthnContextClassRef>urn:oasis:names:tc:SAML:2.0:ac:classes:PasswordProtectedTransport</saml:AuthnContextClassRef>
-        </saml:AuthnContext>
-        <saml:SubjectLocality Address="127.0.0.1"/>
-      </saml:AuthnStatement>
-      <saml:AttributeStatement>
-        <saml:Attribute Name="urn:ServiceID">
-          <saml:AttributeValue xmlns:xs="http://www.w3.org/2001/XMLSchema" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:type="xs:string">1</saml:AttributeValue>
-        </saml:Attribute>
-        <saml:Attribute Name="urn:EntityConcernedID">
-          <saml:AttributeValue xmlns:xs="http://www.w3.org/2001/XMLSchema" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:type="xs:string">1</saml:AttributeValue>
-        </saml:Attribute>
-        <saml:Attribute Name="urn:EntityConcernedSubID">
-          <saml:AttributeValue xmlns:xs="http://www.w3.org/2001/XMLSchema" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:type="xs:string">1</saml:AttributeValue>
-        </saml:Attribute>
-        <saml:EncryptedAttribute xmlns:saml="urn:oasis:names:tc:SAML:2.0:assertion">
-          <xenc:EncryptedData xmlns:xenc="http://www.w3.org/2001/04/xmlenc#" Type="http://www.w3.org/2001/04/xmlenc#Element" Id="_F39625AF68B4FC078CC7582D28D05D9C">
-            <xenc:EncryptionMethod Algorithm="http://www.w3.org/2001/04/xmlenc#aes256-cbc"/>
-            <ds:KeyInfo xmlns:ds="http://www.w3.org/2000/09/xmldsig#">
-              <xenc:EncryptedKey>
-                <xenc:EncryptionMethod Algorithm="http://www.w3.org/2001/04/xmlenc#rsa-oaep-mgf1p"/>
-                <ds:KeyInfo>
-                  <ds:KeyName>62355fbd1f624503c5c9677402ecca00ef1f6277</ds:KeyName>
-                </ds:KeyInfo>
-                <xenc:CipherData>
-                  <xenc:CipherValue>K0mBLxfLziKVUKEAOYe7D6uVSCPy8vyWVh3RecnPES+8QkAhOuRSuE/LQpFr0huI/iCEy9pde1QgjYDLtjHcujKi2xGqW6jkXW/EuKomqWPPA2xYs1fpB1su4aXUOQB6OJ70/oDcOsy834ghFaBWilE8fqyDBUBvW+2IvaMUZabwN/s9mVkWzM3r30tlkhLK7iOrbGAldIHwFU5z7PPR6RO3Y3fIxjHU40OnLsJc3xIqdLH3fXpC0kgi5UspLdq14e5OoXjLoPG3BO3zwOAIJ8XNBWY5uQof6KrKbcvtZSY0fMvPYhYfNjtRFy8y49ovL9fwjCRTDlT5+aHqsCTBrw==</xenc:CipherValue>
-                </xenc:CipherData>
-              </xenc:EncryptedKey>
-            </ds:KeyInfo>
-            <xenc:CipherData>
-              <xenc:CipherValue>ZzCu6axGgAYZHVf77NX8apZKB/GJDeuV6bFByBS0AIgiXkvDUAmLCpabTAWBM+yz19olA6rryuOfr82ev2bzPNURvm4SYxahvuL4Pibn5wJky0Bl54VqmcU+Aqj0dAvOgqG1y3X4wO9n9bRsTv6921m0eqRAFph8kK8L9hirK1BxYBYj2RyFCoFDPxVZ5wyra3q4qmE4/ELQpFP6mfU8LXb0uoWJUjGUelS2Aa7bZis8zEpwov4CwtlNjltQih4mv7ttCAfYqcQIFzBTB+DAa0+XggxCLcdB3+mQiRcECBfwHHJ7gRmnuBEgeWT3CGKa3Nb7GMXOfuxFKF5pIehWgo3kdNQLalor8RVW6I8P/I8fQ33Fe+NsHVnJ3zwSA//a</xenc:CipherValue>
-            </xenc:CipherData>
-          </xenc:EncryptedData>
-        </saml:EncryptedAttribute>
-      </saml:AttributeStatement>
-    </saml:Assertion>
-XML
-        );
-        $assertion = Assertion::fromXML($document->documentElement);
-        $this->assertTrue($assertion->hasEncryptedAttributes());
-    }
-
-
-    public function testHasEncryptedAttributes2(): void
-    {
-        $document = new DOMDocument();
-        $document->loadXML(<<<XML
-    <saml:Assertion xmlns:saml="urn:oasis:names:tc:SAML:2.0:assertion"
-                    Version="2.0"
-                    ID="_93af655219464fb403b34436cfb0c5cb1d9a5502"
-                    IssueInstant="1970-01-01T01:33:31Z">
-      <saml:Issuer>Provider</saml:Issuer>
-      <saml:Subject>
-        <saml:NameID Format="urn:oasis:names:tc:SAML:2.0:nameid-format:persistent">s00000000:123456789</saml:NameID>
-        <saml:SubjectConfirmation Method="urn:oasis:names:tc:SAML:2.0:cm:bearer">
-          <saml:SubjectConfirmationData NotOnOrAfter="2011-08-31T08:51:05Z" Recipient="https://sp.example.com/assertion_consumer" InResponseTo="_13603a6565a69297e9809175b052d115965121c8" />
-        </saml:SubjectConfirmation>
-      </saml:Subject>
-      <saml:Conditions NotOnOrAfter="2011-08-31T08:51:05Z" NotBefore="2011-08-31T08:51:05Z">
-        <saml:AudienceRestriction>
-          <saml:Audience>ServiceProvider</saml:Audience>
-        </saml:AudienceRestriction>
-      </saml:Conditions>
-      <saml:AuthnStatement AuthnInstant="2011-08-31T08:51:05Z" SessionIndex="_93af655219464fb403b34436cfb0c5cb1d9a5502">
-        <saml:AuthnContext>
-          <saml:AuthnContextClassRef>urn:oasis:names:tc:SAML:2.0:ac:classes:PasswordProtectedTransport</saml:AuthnContextClassRef>
-        </saml:AuthnContext>
-        <saml:SubjectLocality Address="127.0.0.1"/>
-      </saml:AuthnStatement>
-      <saml:AttributeStatement>
-        <saml:Attribute Name="urn:ServiceID">
-          <saml:AttributeValue xmlns:xs="http://www.w3.org/2001/XMLSchema" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:type="xs:string">1</saml:AttributeValue>
-        </saml:Attribute>
-        <saml:Attribute Name="urn:EntityConcernedID">
-          <saml:AttributeValue xmlns:xs="http://www.w3.org/2001/XMLSchema" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:type="xs:string">1</saml:AttributeValue>
-        </saml:Attribute>
-        <saml:Attribute Name="urn:EntityConcernedSubID">
-          <saml:AttributeValue xmlns:xs="http://www.w3.org/2001/XMLSchema" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:type="xs:string">1</saml:AttributeValue>
-        </saml:Attribute>
-      </saml:AttributeStatement>
-    </saml:Assertion>
-XML
-        );
-        $assertion = Assertion::fromXML($document->documentElement);
-        $this->assertFalse($assertion->hasEncryptedAttributes());
     }
 
 
