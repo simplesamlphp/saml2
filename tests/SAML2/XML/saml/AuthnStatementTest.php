@@ -8,6 +8,7 @@ use InvalidArgumentException;
 use PHPUnit\Framework\TestCase;
 use SAML2\Constants;
 use SAML2\DOMDocumentFactory;
+use SAML2\Exception\MissingElementException;
 use SAML2\Utils;
 
 /**
@@ -95,6 +96,25 @@ XML
         $this->assertInstanceOf(SubjectLocality::class, $subjLocality);
 
         $authnContext = $authnStatement->getAuthnContext();
+    }
+
+
+    /**
+     * @return void
+     */
+    public function testUnmarshallingWithoutAuthnContextThrowsException(): void
+    {
+        $samlNamespace = Constants::NS_SAML;
+        $document = DOMDocumentFactory::fromString(<<<XML
+<saml:AuthnStatement xmlns:saml="{$samlNamespace}" AuthnInstant="2020-03-23T23:37:24Z" SessionIndex="123" SessionNotOnOrAfter="2020-03-23T23:37:24Z">
+</saml:AuthnStatement>
+XML
+        );
+
+        $this->expectException(MissingElementException::class);
+        $this->expectExceptionMessage('At least one saml:AuthnContext must be specified.');
+
+        AuthnStatement::fromXML($document->documentElement);
     }
 
 

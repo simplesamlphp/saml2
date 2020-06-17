@@ -6,6 +6,7 @@ namespace SAML2\XML\saml;
 
 use DOMElement;
 use SAML2\Exception\InvalidDOMElementException;
+use SAML2\Exception\MissingElementException;
 use SAML2\Utils;
 use SimpleSAML\Assert\Assert;
 
@@ -179,6 +180,7 @@ final class AuthnStatement extends AbstractStatement
      *
      * @return \SAML2\XML\saml\AuthnStatement
      * @throws \SAML2\Exception\InvalidDOMElementException if the qualified name of the supplied element is wrong
+     * @throws \SAML2\Exception\MissingElementException if one of the mandatory child-elements is missing
      * @throws \Exception if the authentication instant is not a valid timestamp.
      */
     public static function fromXML(DOMElement $xml): object
@@ -187,7 +189,7 @@ final class AuthnStatement extends AbstractStatement
         Assert::same($xml->namespaceURI, AuthnStatement::NS, InvalidDOMElementException::class);
 
         $authnContext = AuthnContext::getChildrenOfClass($xml);
-        Assert::minCount($authnContext, 1);
+        Assert::minCount($authnContext, 1, 'At least one saml:AuthnContext must be specified.', MissingElementException::class);
 
         $authnInstant = Utils::xsDateTimeToTimestamp(self::getAttribute($xml, 'AuthnInstant'));
         $sessionNotOnOrAfter = self::getAttribute($xml, 'SessionNotOnOrAfter', null);
