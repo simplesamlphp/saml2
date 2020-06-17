@@ -8,6 +8,7 @@ use DOMElement;
 use SAML2\Compat\ContainerSingleton;
 use SAML2\Constants;
 use SAML2\Exception\InvalidDOMElementException;
+use SAML2\Exception\TooManyElementsException;
 use SAML2\Utils;
 use SAML2\XML\IdentifierTrait;
 use SimpleSAML\Assert\Assert;
@@ -98,7 +99,8 @@ final class Subject extends AbstractSamlElement
             Assert::notNull(
                 $identifier,
                 'A <saml:Subject> not containing <saml:SubjectConfirmation> should provide' .
-                ' exactly one of <saml:BaseID>, <saml:NameID> or <saml:EncryptedID>'
+                ' exactly one of <saml:BaseID>, <saml:NameID> or <saml:EncryptedID>',
+                TooManyElementsException::class
             );
         }
 

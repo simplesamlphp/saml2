@@ -8,6 +8,8 @@ use Mockery\Adapter\Phpunit\MockeryTestCase;
 use SAML2\CertificatesMock;
 use SAML2\Constants;
 use SAML2\DOMDocumentFactory;
+use SAML2\Exception\MissingElementException;
+use SAML2\Exception\TooManyElementsException;
 use SAML2\Utils;
 use SAML2\XML\Chunk;
 use SAML2\XML\ds\KeyInfo;
@@ -20,7 +22,6 @@ use SAML2\XML\xenc\EncryptedData;
 use SAML2\XML\xenc\EncryptedKey;
 use SAML2\XML\xenc\EncryptionMethod;
 use SAML2\XML\xenc\ReferenceList;
-use SimpleSAML\Assert\AssertionFailedException;
 
 /**
  * Class \SAML2\XML\samlp\LogoutRequestTest
@@ -213,7 +214,7 @@ XML;
         $document = DOMDocumentFactory::fromString($xml);
         $this->logoutRequestElement = $document->documentElement;
 
-        $this->expectException(AssertionFailedException::class);
+        $this->expectException(MissingElementException::class);
         $this->expectExceptionMessage("Missing <saml:NameID>, <saml:BaseID> or <saml:EncryptedID> in <samlp:LogoutRequest>.");
         $logoutRequest = LogoutRequest::fromXML($this->logoutRequestElement);
     }
@@ -234,7 +235,7 @@ XML;
         $document = DOMDocumentFactory::fromString($xml);
         $this->logoutRequestElement = $document->documentElement;
 
-        $this->expectException(AssertionFailedException::class);
+        $this->expectException(TooManyElementsException::class);
         $this->expectExceptionMessage("More than one <saml:NameID> in <samlp:LogoutRequest>.");
         $logoutRequest = LogoutRequest::fromXML($this->logoutRequestElement);
     }

@@ -38,7 +38,10 @@ class AuthnRequestTest extends TestCase
 
         $authnRequestElement = $authnRequest->toXML();
 
-        $requestedAuthnContextElements = RequestedAuthnContext::getChildrenOfClass($authnRequestElement);
+        $requestedAuthnContextElements = Utils::xpQuery(
+            $authnRequestElement,
+            './saml_protocol:RequestedAuthnContext'
+        );
         $this->assertCount(1, $requestedAuthnContextElements);
 
         $requestedAuthnConextElement = $requestedAuthnContextElements[0];
@@ -881,7 +884,7 @@ AUTHNREQUEST;
 </samlp:AuthnRequest>
 AUTHNREQUEST;
 
-        $this->expectException(AssertionFailedException::class);
+        $this->expectException(TooManyElementsException::class);
         $this->expectExceptionMessage('A <saml:Subject> not containing <saml:SubjectConfirmation> should provide exactly one of <saml:BaseID>, <saml:NameID> or <saml:EncryptedID>');
         $authnRequest = AuthnRequest::fromXML(DOMDocumentFactory::fromString($xml)->documentElement);
     }

@@ -7,6 +7,8 @@ namespace SAML2\XML\md;
 use PHPUnit\Framework\TestCase;
 use SAML2\Constants;
 use SAML2\DOMDocumentFactory;
+use SAML2\Exception\InvalidDOMElementException;
+use SAML2\Exception\MissingAttributeException;
 use SimpleSAML\Assert\AssertionFailedException;
 
 /**
@@ -80,7 +82,7 @@ XML
      */
     public function testUnmarshallingUnexpectedEndpoint(): void
     {
-        $this->expectException(AssertionFailedException::class);
+        $this->expectException(InvalidDOMElementException::class);
         $this->expectExceptionMessage(
             'Unexpected name for endpoint: AssertionConsumerService. Expected: ArtifactResolutionService.'
         );
@@ -93,8 +95,8 @@ XML
      */
     public function testUnmarshallingWithoutIndex(): void
     {
-        $this->expectException(AssertionFailedException::class);
-        $this->expectExceptionMessage('Missing \'index\' attribute from md:AssertionConsumerService');
+        $this->expectException(MissingAttributeException::class);
+        $this->expectExceptionMessage('Missing \'index\' attribute on md:AssertionConsumerService');
         $this->document->documentElement->removeAttribute('index');
         AssertionConsumerService::fromXML($this->document->documentElement);
     }

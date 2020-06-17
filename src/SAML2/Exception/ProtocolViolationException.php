@@ -7,11 +7,11 @@ namespace SAML2\Exception;
 use InvalidArgumentException;
 
 /**
- * This exception may be raised when the passed DOMElement is of the wrong type
+ * This exception may be raised when a violation of the SAML2 is detected
  *
  * @author Tim van Dijen, <tvdijen@gmail.com>
  * @package simplesamlphp/saml2
  */
-class InvalidDOMElementException extends InvalidArgumentException
+class ProtocolViolationException extends InvalidArgumentException
 {
 }

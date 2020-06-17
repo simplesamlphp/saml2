@@ -9,7 +9,7 @@ use RobRichards\XMLSecLibs\XMLSecurityKey;
 use SAML2\CertificatesMock;
 use SAML2\Constants;
 use SAML2\DOMDocumentFactory;
-use SimpleSAML\Assert\AssertionFailedException;
+use SAML2\Exception\MissingAttributeException;
 
 /**
  * Class \SAML2\XML\saml\AttributeTest
@@ -124,7 +124,7 @@ XML
         $document = $this->document;
         $document->documentElement->removeAttribute('Name');
 
-        $this->expectException(AssertionFailedException::class);
+        $this->expectException(MissingAttributeException::class);
 
         Attribute::fromXML($document->documentElement);
     }

@@ -6,9 +6,9 @@ namespace SAML2\XML\samlp;
 
 use PHPUnit\Framework\TestCase;
 use SAML2\DOMDocumentFactory;
+use SAML2\Exception\MissingElementException;
 use SAML2\XML\samlp\IDPEntry;
 use SAML2\XML\samlp\IDPList;
-use SimpleSAML\Assert\AssertionFailedException;
 
 /**
  * Class \SAML2\XML\samlp\IDPListTest
@@ -132,7 +132,7 @@ XML
 XML
         );
 
-        $this->expectException(AssertionFailedException::class);
+        $this->expectException(MissingElementException::class);
         $this->expectExceptionMessage('At least one <samlp:IDPEntry> must be specified.');
 
         IDPList::fromXML($this->document->documentElement);

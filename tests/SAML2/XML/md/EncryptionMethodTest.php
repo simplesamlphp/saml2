@@ -8,6 +8,7 @@ use PHPUnit\Framework\TestCase;
 use SAML2\Constants;
 use SAML2\DOMDocumentFactory;
 use SAML2\XML\Chunk;
+use SAML2\Exception\MissingAttributeException;
 use SimpleSAML\Assert\AssertionFailedException;
 
 /**
@@ -111,8 +112,8 @@ XML
      */
     public function testUnmarshallingWithoutAlgorithm(): void
     {
-        $this->expectException(AssertionFailedException::class);
-        $this->expectExceptionMessage('Missing \'Algorithm\' attribute from md:EncryptionMethod.');
+        $this->expectException(MissingAttributeException::class);
+        $this->expectExceptionMessage('Missing \'Algorithm\' attribute on md:EncryptionMethod.');
         $this->document->documentElement->removeAttribute('Algorithm');
         EncryptionMethod::fromXML($this->document->documentElement);
     }

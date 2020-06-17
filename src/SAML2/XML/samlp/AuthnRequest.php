@@ -496,7 +496,7 @@ class AuthnRequest extends AbstractRequest
         Assert::maxCount($signature, 1, 'Only one <ds:Signature> element is allowed.', TooManyElementsException::class);
 
         $scoping = Scoping::getChildrenOfClass($xml);
-        Assert::maxCount($scoping, 1, 'Only one <samlp:Scoping> element is allowed.', TooManyElementsExceeption::class);
+        Assert::maxCount($scoping, 1, 'Only one <samlp:Scoping> element is allowed.', TooManyElementsException::class);
 
 
         $request = new self(

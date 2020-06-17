@@ -136,7 +136,7 @@ final class Signature extends AbstractDsElement
      * @throws \Exception
      *
      * @throws \SAML2\Exception\InvalidDOMElementException if the qualified name of the supplied element is wrong
-     * @throws \SAML2\Excption\MissingAttributeException if the supplied signature is missing an Algorithm attribute
+     * @throws \SAML2\Exception\MissingAttributeException if the supplied signature is missing an Algorithm attribute
      */
     public static function fromXML(DOMElement $xml): object
     {
