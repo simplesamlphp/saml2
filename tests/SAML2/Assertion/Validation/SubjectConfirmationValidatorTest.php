@@ -116,7 +116,7 @@ XML
      */
     public function testBasicValidation(): void
     {
-        $assertion = new Assertion($this->document->documentElement);
+        $assertion = Assertion::fromXML($this->document->documentElement);
 
         $result = $this->assertionProcessor->validateAssertion($assertion);
         $this->assertNull($result);
@@ -131,7 +131,7 @@ XML
      */
     public function testSubjectConfirmationNonValidation(): void
     {
-        $assertion = new Assertion($this->document->documentElement);
+        $assertion = Assertion::fromXML($this->document->documentElement);
 
         $sc = $assertion->getSubject()->getSubjectConfirmation()[0];
         $scd = $sc->getSubjectConfirmationData();

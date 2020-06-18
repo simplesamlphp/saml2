@@ -256,14 +256,15 @@ XML;
                 null,
                 null,
                 ["idp1", "idp2"]
-            )
+            ),
+            time()
         );
 
         // Create AttributeStatement
         $attributeStatement = new AttributeStatement(
             // Attribute
             [
-                new Attribute('name1', null, null, [new AttributeValue('value1'), new AttributeValues(123), new AttributeValue('2017-31-12')]),
+                new Attribute('name1', null, null, [new AttributeValue('value1'), new AttributeValue(123), new AttributeValue('2017-31-12')]),
                 new Attribute('name2', null, null, [new AttributeValue(2)]),
                 new Attribute('name3', null, null, [new AttributeValue(1234), new AttributeValue('+2345')])
             ],
@@ -342,8 +343,10 @@ XML;
             new AuthnContext(
                 new AuthnContextClassRef('someAuthnContext'),
                 null,
+                null,
                 ["idp1", "idp2"]
-            )
+            ),
+            time()
         );
 
         // Create AttributeStatement
@@ -1257,10 +1260,10 @@ XML;
     }
 
 
+    /** @TODO: should probably be moved to AttributeStatementTest */
     /**
      * If this assertion mixes Attribute NameFormats, the AttributeNameFormat
      * of this assertion will be set to unspecified.
-     */
     public function testMixedAttributeNameFormats(): void
     {
         $xml = <<<XML
@@ -1290,7 +1293,7 @@ XML;
         $nameFormat = $assertion->getAttributeNameFormat();
         $this->assertEquals('urn:oasis:names:tc:SAML:2.0:attrname-format:unspecified', $nameFormat);
     }
-
+    */
 
     /**
      * Test basic NameID unmarshalling.
@@ -1421,20 +1424,38 @@ XML;
         // Create an Issuer
         $issuer = new Issuer('testIssuer');
 
+        // Create AttributeStatement
+        $attributeStatement = new AttributeStatement(
+            // Attribute
+            [
+                new Attribute('name1', Constants::NAMEFORMAT_UNSPECIFIED, null, [new AttributeValue('value1'), new AttributeValue('value2')]),
+                new Attribute('name2', Constants::NAMEFORMAT_UNSPECIFIED, null, [new AttributeValue('value3')]),
+            ],
+            // EncryptedAttribute
+            []
+        );
+
+        // Create the statements
+        $authnStatement = new AuthnStatement(
+            new AuthnContext(
+                new AuthnContextClassRef('someAuthnContext'),
+                null,
+                null
+            ),
+            time()
+        );
+
+        // Create Subject
+        $subject = new Subject(
+            new NameID("just_a_basic_identifier", Constants::NAMEID_TRANSIENT)
+        );
+
+        $statements = [$authnStatement, $attributeStatement];
+
         // Create an assertion
-        $assertion = new Assertion();
+        $assertion = new Assertion($issuer, null, null, $subject, null, $statements);
 
-        $assertion->setIssuer($issuer);
-        $assertion->setAttributes([
-            "name1" => ["value1","value2"],
-            "name2" => ["value3"],
-        ]);
-        $assertion->setAttributeNameFormat("urn:oasis:names:tc:SAML:2.0:attrname-format:unspecified");
-        $assertion->setSigningKey(PEMCertificatesMock::getPrivateKey(XMLSecurityKey::RSA_SHA256, PEMCertificatesMock::PRIVATE_KEY));
-
-        $nameId = new NameID("just_a_basic_identifier", Constants::NAMEID_TRANSIENT);
-        $assertion->setSubject(new Subject($nameId));
-        $assertion->setAuthnContextClassRef('someAuthnContext');
+        $assertion->setSigningKey(CertificatesMock::getPrivateKey());
 
         // Marshall it to a \DOMElement
         $assertionElement = $assertion->toXML();
