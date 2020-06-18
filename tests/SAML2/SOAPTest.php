@@ -134,12 +134,7 @@ SOAP;
   <samlp:Status>
     <samlp:StatusCode Value="urn:oasis:names:tc:SAML:2.0:status:Success"/>
   </samlp:Status>
-  <saml:Assertion
-      xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
-      xmlns:xs="http://www.w3.org/2001/XMLSchema"
-      ID="_d71a3a8e9fcc45c9e9d248ef7049393fc8f04e5f75"
-      Version="2.0"
-      IssueInstant="2014-07-17T01:01:48Z">
+  <saml:Assertion ID="_d71a3a8e9fcc45c9e9d248ef7049393fc8f04e5f75" Version="2.0" IssueInstant="2014-07-17T01:01:48Z">
     <saml:Issuer>http://idp.example.com/metadata.php</saml:Issuer>
     <saml:Subject>
       <saml:NameID

@@ -983,8 +983,8 @@ XML;
 </saml:Assertion>
 XML;
         $document  = DOMDocumentFactory::fromString($xml);
-        $this->expectException(Exception::class);
-        $this->expectExceptionMessage('Missing or more than one <saml:Issuer> in assertion.');
+        $this->expectException(MissingElementException::class);
+        $this->expectExceptionMessage('Missing <saml:Issuer> in assertion.');
         Assertion::fromXML($document->documentElement);
     }
 
