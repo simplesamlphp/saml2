@@ -89,6 +89,11 @@ final class DecodeBase64TransformerTest extends TestCase
                     >
         <saml:Issuer>urn:thki:sid:idp2</saml:Issuer>
         <saml:Conditions/>
+        <saml:AuthnStatement AuthnInstant="2010-03-05T13:34:28Z">
+          <saml:AuthnContext>
+            <saml:AuthnContextClassRef>someAuthnContext</saml:AuthnContextClassRef>
+          </saml:AuthnContext>
+        </saml:AuthnStatement>
         <saml:AttributeStatement>
             <saml:Attribute Name="urn:mace:dir:attribute-def:eduPersonAffiliation"
                             NameFormat="urn:oasis:names:tc:SAML:2.0:attrname-format:uri"

@@ -114,8 +114,8 @@ final class SubjectLocality extends AbstractSamlElement
         Assert::same($xml->namespaceURI, SubjectLocality::NS, InvalidDOMElementException::class);
 
         return new self(
-            $address = self::getAttribute($xml, 'Address', null),
-            $dnsName = self::getAttribute($xml, 'DNSName', null)
+            self::getAttribute($xml, 'Address', null),
+            self::getAttribute($xml, 'DNSName', null)
         );
     }
 

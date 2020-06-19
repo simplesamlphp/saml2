@@ -58,6 +58,7 @@ final class ArtifactResponseTest extends TestCase
             null,
             null,
             $assertionConsumerServiceURL,
+            null,
             $protocolBinding,
             null,
             null,

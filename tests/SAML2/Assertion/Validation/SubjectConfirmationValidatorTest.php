@@ -102,6 +102,11 @@ final class SubjectConfirmationValidatorTest extends TestCase
                                               />
             </saml:SubjectConfirmation>
         </saml:Subject>
+        <saml:AuthnStatement AuthnInstant="2010-03-05T13:34:28Z">
+            <saml:AuthnContext>
+                <saml:AuthnContextClassRef>someAuthnContext</saml:AuthnContextClassRef>
+            </saml:AuthnContext>
+        </saml:AuthnStatement>
     </saml:Assertion>
 XML
         );

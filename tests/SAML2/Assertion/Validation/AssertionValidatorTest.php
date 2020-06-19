@@ -98,6 +98,11 @@ final class AssertionValidatorTest extends TestCase
             <saml:Audience>$audience</saml:Audience>
           </saml:AudienceRestriction>
         </saml:Conditions>
+        <saml:AuthnStatement AuthnInstant="2010-03-05T13:34:28Z">
+          <saml:AuthnContext>
+            <saml:AuthnContextClassRef>someAuthnContext</saml:AuthnContextClassRef>
+          </saml:AuthnContext>
+        </saml:AuthnStatement>
     </saml:Assertion>
 XML
         );
@@ -144,6 +149,11 @@ XML
             <saml:Audience>https://example.edu/not-the-sp-entity-id</saml:Audience>
           </saml:AudienceRestriction>
         </saml:Conditions>
+        <saml:AuthnStatement AuthnInstant="2010-03-05T13:34:28Z">
+          <saml:AuthnContext>
+            <saml:AuthnContextClassRef>someAuthnContext</saml:AuthnContextClassRef>
+          </saml:AuthnContext>
+        </saml:AuthnStatement>
     </saml:Assertion>
 XML
         );

@@ -60,13 +60,13 @@ class SpIsValidAudience implements
             if (in_array($entityId, $audiences, true)) {
                 return;
             }
-            $all[] = $audiences;
+            $all = array_merge($all, $audiences);
         }
 
         $result->addError(sprintf(
             'The configured Service Provider [%s] is not a valid audience for the assertion. Audiences: [%s]',
             strval($entityId),
-            var_export($all, true)
+            implode(', ', $all)
         ));
     }
 }
