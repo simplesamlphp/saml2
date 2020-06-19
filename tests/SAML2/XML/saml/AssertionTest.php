@@ -829,7 +829,7 @@ XML;
 
         $assertion = Assertion::fromXML($doc->documentElement);
         $this->expectException(Exception::class);
-        $this->expectExceptionMessage('Unable to validate Signature');
+        $this->expectExceptionMessage('Algorithm provided in key does not match algorithm used in signature.');
         $assertion->validate($publicKey);
     }
 
@@ -847,7 +847,7 @@ XML;
 
         $assertion = Assertion::fromXML($doc->documentElement);
         $this->expectException(Exception::class);
-        $this->expectExceptionMessage('Unable to validate Signature');
+        $this->expectExceptionMessage('Algorithm provided in key does not match algorithm used in signature.');
         $assertion->validate($publicKey);
     }
 

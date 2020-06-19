@@ -90,6 +90,9 @@ final class AssertionValidatorTest extends TestCase
                     IssueInstant="2020-02-26T12:04:42Z"
                     >
         <saml:Issuer>$idpentity</saml:Issuer>
+        <saml:Subject>
+          <saml:NameID SPNameQualifier="https://sp.example.org/authentication/sp/metadata" Format="urn:oasis:names:tc:SAML:2.0:nameid-format:transient">SomeOtherNameIDValue</saml:NameID>
+        </saml:Subject>
         <saml:Conditions>
           <saml:AudienceRestriction>
             <saml:Audience>$audience</saml:Audience>
@@ -109,7 +112,7 @@ XML
      */
     public function testBasicValidation(): void
     {
-        $assertion = new Assertion($this->document->firstChild);
+        $assertion = Assertion::fromXML($this->document->firstChild);
 
         $result = $this->assertionProcessor->validateAssertion($assertion);
         $this->assertNull($result);
@@ -124,19 +127,28 @@ XML
      */
     public function testAssertionNonValidation(): void
     {
-        $assertion = new Assertion($this->document->firstChild);
-        $assertion->setConditions(
-            new Conditions(
-                null,
-                null,
-                [],
-                [
-                    new AudienceRestriction(
-                        ['https://example.edu/not-the-sp-entity-id']
-                    )
-                ]
-            )
+        $document = DOMDocumentFactory::fromString(<<<XML
+    <saml:Assertion xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+                    xmlns:xs="http://www.w3.org/2001/XMLSchema"
+                    xmlns:saml="urn:oasis:names:tc:SAML:2.0:assertion"
+                    ID="_45e42090d8cbbfa52d5a394b01049fc2221e274182"
+                    Version="2.0"
+                    IssueInstant="2020-02-26T12:04:42Z"
+                    >
+        <saml:Issuer>urn:thki:sid:idp2</saml:Issuer>
+        <saml:Subject>
+          <saml:NameID SPNameQualifier="https://sp.example.org/authentication/sp/metadata" Format="urn:oasis:names:tc:SAML:2.0:nameid-format:transient">SomeOtherNameIDValue</saml:NameID>
+        </saml:Subject>
+        <saml:Conditions>
+          <saml:AudienceRestriction>
+            <saml:Audience>https://example.edu/not-the-sp-entity-id</saml:Audience>
+          </saml:AudienceRestriction>
+        </saml:Conditions>
+    </saml:Assertion>
+XML
         );
+
+        $assertion = Assertion::fromXML($document->firstChild);
 
         $this->expectException(InvalidAssertionException::class);
         $this->expectExceptionMessage(
