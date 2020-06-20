@@ -5,7 +5,7 @@ declare(strict_types=1);
 namespace SAML2\Utilities;
 
 use PHPUnit\Framework\TestCase;
-use SAML2\CertificatesMock;
+use SimpleSAML\TestUtils\PEMCertificatesMock;
 
 class CertificateTest extends TestCase
 {
@@ -16,9 +16,9 @@ class CertificateTest extends TestCase
      */
     public function testValidStructure(): void
     {
-        $result = Certificate::hasValidStructure(CertificatesMock::getPlainPublicKey());
+        $result = Certificate::hasValidStructure(PEMCertificatesMock::getPlainPublicKey(PEMCertificatesMock::PUBLIC_KEY));
         $this->assertTrue($result);
-        $result = Certificate::hasValidStructure(CertificatesMock::getPlainInvalidPublicKey());
+        $result = Certificate::hasValidStructure(PEMCertificatesMock::getPlainPublicKey(PEMCertificatesMock::BROKEN_PUBLIC_KEY));
         $this->assertFalse($result);
     }
 
@@ -30,8 +30,8 @@ class CertificateTest extends TestCase
      */
     public function testConvertToCertificate(): void
     {
-        $result = Certificate::convertToCertificate(CertificatesMock::getPlainPublicKeyContents());
+        $result = Certificate::convertToCertificate(PEMCertificatesMock::getPlainPublicKeyContents());
         // the formatted public key in CertificatesMock is stored with unix newlines
-        $this->assertEquals(CertificatesMock::getPlainPublicKey(), str_replace("\r", "", $result));
+        $this->assertEquals(trim(PEMCertificatesMock::getPlainPublicKey()), $result);
     }
 }

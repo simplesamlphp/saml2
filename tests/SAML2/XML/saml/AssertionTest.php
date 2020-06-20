@@ -8,12 +8,12 @@ use DOMDocument;
 use Exception;
 use Mockery\Adapter\Phpunit\MockeryTestCase;
 use RobRichards\XMLSecLibs\XMLSecurityKey;
-use SAML2\CertificatesMock;
 use SAML2\Constants;
 use SAML2\DOMDocumentFactory;
 use SAML2\Exception\TooManyElementsException;
 use SAML2\Utils;
 use SAML2\XML\Chunk;
+use SimpleSAML\TestUtils\PEMCertificatesMock;
 
 /**
  * Class \SAML2\AssertionTest
@@ -731,11 +731,11 @@ XML
 XML
         );
 
-        $privateKey = CertificatesMock::getPrivateKey();
+        $privateKey = PEMCertificatesMock::getPrivateKey(XMLSecurityKey::RSA_SHA256, PEMCertificatesMock::PRIVATE_KEY);
 
         $unsignedAssertion = new Assertion($document->documentElement);
         $unsignedAssertion->setSigningKey($privateKey);
-        $unsignedAssertion->setCertificates([CertificatesMock::PUBLIC_KEY_PEM]);
+        $unsignedAssertion->setCertificates([PEMCertificatesMock::getPlainPublicKey(PEMCertificatesMock::PUBLIC_KEY)]);
         $this->assertFalse($unsignedAssertion->wasSignedAtConstruction());
         $this->assertEquals($privateKey, $unsignedAssertion->getSigningKey());
 
@@ -1015,7 +1015,7 @@ XML;
     </saml:Assertion>
 XML;
 
-        $privateKey = CertificatesMock::getPublicKey();
+        $privateKey = PEMCertificatesMock::getPublicKey(XMLSecurityKey::RSA_SHA256);
 
         $assertion = new Assertion(DOMDocumentFactory::fromString($xml)->documentElement);
         $assertion->setEncryptionKey($privateKey);
@@ -1028,7 +1028,7 @@ XML;
 
         $this->assertTrue($assertionToVerify->hasEncryptedAttributes());
 
-        $assertionToVerify->decryptAttributes(CertificatesMock::getPrivateKey());
+        $assertionToVerify->decryptAttributes(PEMCertificatesMock::getPrivateKey(XMLSecurityKey::RSA_SHA256, PEMCertificatesMock::PRIVATE_KEY));
 
         $attributes = $assertionToVerify->getAttributes();
         $this->assertInstanceOf(
@@ -1064,7 +1064,7 @@ XML;
     </saml:Assertion>
 XML;
 
-        $privateKey = CertificatesMock::getPublicKey();
+        $privateKey = PEMCertificatesMock::getPublicKey(XMLSecurityKey::RSA_SHA256);
 
         $assertion = new Assertion(DOMDocumentFactory::fromString($xml)->documentElement);
         $assertion->setEncryptionKey($privateKey);
@@ -1075,7 +1075,7 @@ XML;
 
         $this->assertTrue($assertionToVerify->hasEncryptedAttributes());
 
-        $assertionToVerify->decryptAttributes(CertificatesMock::getPrivateKey());
+        $assertionToVerify->decryptAttributes(PEMCertificatesMock::getPrivateKey(XMLSecurityKey::RSA_SHA256, PEMCertificatesMock::PRIVATE_KEY));
         $attributes = $assertionToVerify->getAttributes();
 
         $this->assertIsInt($attributes['urn:some:integer'][0]);
@@ -1092,7 +1092,7 @@ XML;
         $doc = new DOMDocument();
         $doc->load(__DIR__ . '../../../signedassertion.xml');
 
-        $publicKey = CertificatesMock::getPublicKeySha256();
+        $publicKey = PEMCertificatesMock::getPublicKey(XMLSecurityKey::RSA_SHA256, PEMCertificatesMock::PUBLIC_KEY);
 
         $assertion = new Assertion($doc->documentElement);
         $result = $assertion->validate($publicKey);
@@ -1108,7 +1108,7 @@ XML;
 
         $certs = $assertion->getCertificates();
         $this->assertCount(1, $certs);
-        $this->assertEquals(CertificatesMock::getPlainPublicKeyContents(), $certs[0]);
+        $this->assertEquals(PEMCertificatesMock::getPlainPublicKeyContents(PEMCertificatesMock::PUBLIC_KEY), $certs[0]);
 
         // Was signed
         $this->assertTrue($assertion->wasSignedAtConstruction());
@@ -1124,7 +1124,7 @@ XML;
         $doc = new DOMDocument();
         $doc->load(__DIR__ . '../../../signedassertion_with_comments.xml');
 
-        $publicKey = CertificatesMock::getPublicKeySha256();
+        $publicKey = PEMCertificatesMock::getPublicKey(XMLSecurityKey::RSA_SHA256, PEMCertificatesMock::PUBLIC_KEY);
 
         $assertion = new Assertion($doc->documentElement);
         $result = $assertion->validate($publicKey);
@@ -1143,7 +1143,7 @@ XML;
         $doc = new DOMDocument();
         $doc->load(__DIR__ . '../../../signedassertion_tampered.xml');
 
-        $publicKey = CertificatesMock::getPublicKeySha256();
+        $publicKey = PEMCertificatesMock::getPublicKey(XMLSecurityKey::RSA_SHA256, PEMCertificatesMock::PUBLIC_KEY);
 
         $this->expectException(Exception::class);
         $this->expectExceptionMessage('Reference validation failed');
@@ -1160,7 +1160,7 @@ XML;
         $doc = new DOMDocument();
         $doc->load(__DIR__ . '../../../signedassertion.xml');
 
-        $publicKey = CertificatesMock::getPublicKey2Sha256();
+        $publicKey = PEMCertificatesMock::getPublicKey(XMLSecurityKey::RSA_SHA256, PEMCertificatesMock::OTHER_PUBLIC_KEY);
 
         $assertion = new Assertion($doc->documentElement);
         $this->expectException(Exception::class);
@@ -1178,7 +1178,7 @@ XML;
         $doc = new DOMDocument();
         $doc->load(__DIR__ . '../../../signedassertion.xml');
 
-        $publicKey = CertificatesMock::getPublicKeyDSAasRSA();
+        $publicKey = PEMCertificatesMock::getPublicKeyDSAasRSA();
 
         $assertion = new Assertion($doc->documentElement);
         $this->expectException(Exception::class);
@@ -1221,7 +1221,7 @@ XML;
         // Was not signed
         $this->assertFalse($assertion->wasSignedAtConstruction());
 
-        $publicKey = CertificatesMock::getPublicKeySha256();
+        $publicKey = PEMCertificatesMock::getPublicKey(XMLSecurityKey::RSA_SHA256, PEMCertificatesMock::PUBLIC_KEY);
         $result = $assertion->validate($publicKey);
         $this->assertFalse($result);
     }
@@ -1897,7 +1897,7 @@ XML;
         $this->assertFalse($assertion->isNameIdEncrypted());
 
         // Not encrypted, should be a no-op
-        $privateKey = CertificatesMock::getPrivateKey();
+        $privateKey = PEMCertificatesMock::getPrivateKey(XMLSecurityKey::RSA_SHA256, PEMCertificatesMock::PRIVATE_KEY);
         $assertion->decryptNameId($privateKey);
         $this->assertEquals('b7de81420a19416', $nameID->getValue());
         $this->assertEquals('urn:oasis:names:tc:SAML:2.0:nameid-format:transient', $nameID->getFormat());
@@ -1923,7 +1923,7 @@ XML;
         $assertion->setNameId($nameId);
         $this->assertFalse($assertion->isNameIdEncrypted());
 
-        $publicKey = CertificatesMock::getPublicKey();
+        $publicKey = PEMCertificatesMock::getPublicKey(XMLSecurityKey::RSA_SHA256, PEMCertificatesMock::PUBLIC_KEY);
         $assertion->encryptNameId($publicKey);
         $this->assertTrue($assertion->isNameIdEncrypted());
 
@@ -1933,7 +1933,7 @@ XML;
         $assertionToVerify = new Assertion(DOMDocumentFactory::fromString($assertionElement)->documentElement);
 
         $this->assertTrue($assertionToVerify->isNameIdEncrypted());
-        $privateKey = CertificatesMock::getPrivateKey();
+        $privateKey = PEMCertificatesMock::getPrivateKey(XMLSecurityKey::RSA_SHA256, PEMCertificatesMock::PRIVATE_KEY);
         $assertionToVerify->decryptNameId($privateKey);
         $this->assertFalse($assertionToVerify->isNameIdEncrypted());
         $nameID = $assertionToVerify->getNameID();
@@ -1995,7 +1995,7 @@ XML;
             "name2" => ["value3"],
         ]);
         $assertion->setAttributeNameFormat("urn:oasis:names:tc:SAML:2.0:attrname-format:unspecified");
-        $assertion->setSigningKey(CertificatesMock::getPrivateKey());
+        $assertion->setSigningKey(PEMCertificatesMock::getPrivateKey(XMLSecurityKey::RSA_SHA256, PEMCertificatesMock::PRIVATE_KEY));
 
         $nameId = new NameID("just_a_basic_identifier", Constants::NAMEID_TRANSIENT);
         $assertion->setNameId($nameId);
@@ -2098,13 +2098,13 @@ XML;
         $assertion = new Assertion($document->documentElement);
 
         $pubkey = new XMLSecurityKey(XMLSecurityKey::RSA_SHA256, ['type' => 'public']);
-        $pubkey->loadKey(CertificatesMock::PUBLIC_KEY_PEM);
+        $pubkey->loadKey(PEMCertificatesMock::PUBLIC_KEY_PEM);
 
         $encass = EncryptedAssertion::fromUnencryptedElement($assertion, $pubkey);
         $doc = DOMDocumentFactory::fromString((string) $encass);
         $encass = EncryptedAssertion::fromXML($doc->documentElement);
         $privkey = new XMLSecurityKey(XMLSecurityKey::RSA_SHA256, ['type' => 'private']);
-        $privkey->loadKey(CertificatesMock::PRIVATE_KEY_PEM);
+        $privkey->loadKey(PEMCertificatesMock::PRIVATE_KEY_PEM);
         $decrypted = $encass->decrypt($privkey);
         $this->assertEquals((string) $assertion, (string) $decrypted);
     }

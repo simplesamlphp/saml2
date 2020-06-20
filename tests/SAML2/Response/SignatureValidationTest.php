@@ -6,8 +6,10 @@ namespace SAML2\Response;
 
 use DOMDocument;
 use Mockery;
+use Mockery\Adapter\Phpunit\MockeryTestCase;
+use Psr\Log\NullLogger;
+use RobRichards\XMLSecLibs\XMLSecurityKey;
 use SAML2\Assertion\Processor as AssertionProcessor;
-use SAML2\CertificatesMock;
 use SAML2\Configuration\Destination;
 use SAML2\Configuration\IdentityProvider;
 use SAML2\Configuration\ServiceProvider;
@@ -17,11 +19,12 @@ use SAML2\Utilities\ArrayCollection;
 use SAML2\Utilities\Certificate;
 use SAML2\XML\saml\Assertion;
 use SAML2\XML\samlp\Response;
+use SimpleSAML\TestUtils\PEMCertificatesMock;
 
 /**
  * Test that ensures that either the response or the assertion(s) or both must be signed.
  */
-class SignatureValidationTest extends \Mockery\Adapter\Phpunit\MockeryTestCase
+class SignatureValidationTest extends MockeryTestCase
 {
     /**
      * @var \SAML2\Configuration\IdentityProvider
@@ -64,7 +67,7 @@ class SignatureValidationTest extends \Mockery\Adapter\Phpunit\MockeryTestCase
             ->andReturn($this->assertionProcessor);
 
         $pattern = Certificate::CERTIFICATE_PATTERN;
-        preg_match($pattern, CertificatesMock::PUBLIC_KEY_PEM, $matches);
+        preg_match($pattern, PEMCertificatesMock::getPlainPublicKey(PEMCertificatesMock::PUBLIC_KEY), $matches);
 
         $this->identityProviderConfiguration
             = new IdentityProvider(['certificateData' => $matches[1]]);
@@ -86,7 +89,7 @@ class SignatureValidationTest extends \Mockery\Adapter\Phpunit\MockeryTestCase
 
         $this->assertionProcessor->shouldReceive('processAssertions')->once();
 
-        $processor = new ResponseProcessor(new \Psr\Log\NullLogger());
+        $processor = new ResponseProcessor(new NullLogger());
 
         $processor->process(
             $this->serviceProviderConfiguration,
@@ -110,7 +113,7 @@ class SignatureValidationTest extends \Mockery\Adapter\Phpunit\MockeryTestCase
 
         $this->assertionProcessor->shouldReceive('processAssertions')->once();
 
-        $processor = new ResponseProcessor(new \Psr\Log\NullLogger());
+        $processor = new ResponseProcessor(new NullLogger());
 
         $processor->process(
             $this->serviceProviderConfiguration,
@@ -134,7 +137,7 @@ class SignatureValidationTest extends \Mockery\Adapter\Phpunit\MockeryTestCase
 
         $this->assertionProcessor->shouldReceive('processAssertions')->once();
 
-        $processor = new ResponseProcessor(new \Psr\Log\NullLogger());
+        $processor = new ResponseProcessor(new NullLogger());
 
         $processor->process(
             $this->serviceProviderConfiguration,
@@ -164,7 +167,7 @@ class SignatureValidationTest extends \Mockery\Adapter\Phpunit\MockeryTestCase
                 $assertion
             ]));
 
-        $processor = new ResponseProcessor(new \Psr\Log\NullLogger());
+        $processor = new ResponseProcessor(new NullLogger());
 
         $processor->process(
             $this->serviceProviderConfiguration,
@@ -183,8 +186,8 @@ class SignatureValidationTest extends \Mockery\Adapter\Phpunit\MockeryTestCase
         $doc = new DOMDocument();
         $doc->load(__DIR__ . '/response.xml');
         $response = Response::fromXML($doc->documentElement);
-        $response->setSigningKey(CertificatesMock::getPrivateKey());
-        $response->setCertificates([CertificatesMock::PUBLIC_KEY_PEM]);
+        $response->setSigningKey(PEMCertificatesMock::getPrivateKey(XMLSecurityKey::RSA_SHA256, PEMCertificatesMock::PRIVATE_KEY));
+        $response->setCertificates([PEMCertificatesMock::getPlainPublicKey(PEMCertificatesMock::PUBLIC_KEY)]);
 
         // convert to signed response
         return Response::fromXML($response->toXML());
@@ -210,8 +213,8 @@ class SignatureValidationTest extends \Mockery\Adapter\Phpunit\MockeryTestCase
         $doc = new DOMDocument();
         $doc->load(__DIR__ . '/unsignedResponseWithSignedAssertion.xml');
         $response = Response::fromXML($doc->documentElement);
-        $response->setSigningKey(CertificatesMock::getPrivateKey());
-        $response->setCertificates([CertificatesMock::PUBLIC_KEY_PEM]);
+        $response->setSigningKey(PEMCertificatesMock::getPrivateKey(XMLSecurityKey::RSA_SHA256, PEMCertificatesMock::PRIVATE_KEY));
+        $response->setCertificates([PEMCertificatesMock::getPlainPublicKey(PEMCertificatesMock::PUBLIC_KEY)]);
 
         return Response::fromXML($response->toXML());
     }

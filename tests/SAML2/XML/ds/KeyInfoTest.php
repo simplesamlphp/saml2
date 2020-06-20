@@ -4,11 +4,13 @@ declare(strict_types=1);
 
 namespace SAML2\XML\ds;
 
+use PHPUnit\Framework\TestCase;
 use RobRichards\XMLSecLibs\XMLSecurityDSig;
 use SAML2\DOMDocumentFactory;
 use SAML2\Utils;
 use SAML2\XML\Chunk;
 use SimpleSAML\Assert\AssertionFailedException;
+use SimpleSAML\TestUtils\PEMCertificatesMock;
 
 /**
  * Class \SAML2\XML\ds\KeyInfoTest
@@ -16,11 +18,8 @@ use SimpleSAML\Assert\AssertionFailedException;
  * @author Tim van Dijen, <tvdijen@gmail.com>
  * @package simplesamlphp/saml2
  */
-final class KeyInfoTest extends \PHPUnit\Framework\TestCase
+final class KeyInfoTest extends TestCase
 {
-    /** @var string */
-    private const FRAMEWORK = 'vendor/simplesamlphp/simplesamlphp-test-framework';
-
     /** @var string */
     private $certificate;
 
@@ -55,11 +54,11 @@ final class KeyInfoTest extends \PHPUnit\Framework\TestCase
                 "\n",
                 ''
             ],
-            file_get_contents(self::FRAMEWORK . '/certificates/pem/selfsigned.example.org.crt')
+            PEMCertificatesMock::getPlainPublicKey(PEMCertificatesMock::SELFSIGNED_PUBLIC_KEY)
         );
 
         $this->certData = openssl_x509_parse(
-            file_get_contents(self::FRAMEWORK . '/certificates/pem/selfsigned.example.org.crt')
+            PEMCertificatesMock::getPlainPublicKey(PEMCertificatesMock::SELFSIGNED_PUBLIC_KEY)
         );
 
         $this->document = DOMDocumentFactory::fromString(<<<XML
