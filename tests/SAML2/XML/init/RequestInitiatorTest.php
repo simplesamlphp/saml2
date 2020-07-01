@@ -49,7 +49,7 @@ XML
         $attr = $this->document->createAttributeNS('urn:test', 'test:attr');
         $attr->value = 'value';
 
-        $requestInitiator = new RequestInitiator('urn:oasis:names:tc:SAML:profiles:SSO:request-init', 'https://whatever/', 'https://foo.bar/', [$attr]);
+        $requestInitiator = new RequestInitiator('https://whatever/', 'https://foo.bar/', [$attr]);
 
         $this->assertEquals('urn:oasis:names:tc:SAML:profiles:SSO:request-init', $requestInitiator->getBinding());
         $this->assertEquals('https://whatever/', $requestInitiator->getLocation());
@@ -61,18 +61,6 @@ XML
         $this->assertNull($requestInitiator->getAttributeNS('urn:test', 'invalid'));
 
         $this->assertEquals($this->document->saveXML($this->document->documentElement), strval($requestInitiator));
-    }
-
-
-    /**
-     * Test creating a RequestInitiator from scratch with an invalid Binding.
-     */
-    public function testMarshallingWithInvalidBinding(): void
-    {
-        $this->expectException(InvalidArgumentException::class);
-        $this->expectExceptionMessage("The Binding of a RequestInitiator must be 'urn:oasis:names:tc:SAML:profiles:SSO:request-init'.");
-
-        new RequestInitiator('urn:something', 'https://whatever/', 'https://foo.bar/');
     }
 
 

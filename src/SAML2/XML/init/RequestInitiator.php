@@ -44,20 +44,37 @@ final class RequestInitiator extends AbstractEndpointType
 
 
     /**
-     * Set the value of the Binding property.
+     * Initialize an EndpointType.
      *
-     * @param string $binding
-     * @throws \InvalidArgumentException if the Binding is empty
+     * Note: this method cannot be used when extending this class, if the constructor has a different signature.
+     *
+     * @param \DOMElement $xml The XML element we should load.
+     * @return static
+     * @throws \InvalidArgumentException if the qualified name of the supplied element is wrong
      */
-    protected function setBinding(string $binding): void
+    public static function fromXML(DOMElement $xml): object
     {
-        Assert::notEmpty($binding, 'The Binding of an endpoint cannot be empty.');
+        $qualifiedName = static::getClassName(static::class);
         Assert::eq(
-            $binding,
+            $xml->localName,
+            $qualifiedName,
+            'Unexpected name for endpoint: ' . $xml->localName . '. Expected: ' . $qualifiedName . '.'
+        );
+
+        Assert::eq(
+            /** @var string $binding */
+            self::getAttribute($xml, 'Binding'),
             self::NS,
             "The Binding of a RequestInitiator must be 'urn:oasis:names:tc:SAML:profiles:SSO:request-init'."
         );
 
-        $this->Binding = $binding;
+        /** @var string $location */
+        $location = self::getAttribute($xml, 'Location');
+
+        return new static(
+            $location,
+            self::getAttribute($xml, 'ResponseLocation', null),
+            self::getAttributesNSFromXML($xml)
+        );
     }
 }
