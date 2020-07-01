@@ -26,6 +26,24 @@ final class RequestInitiator extends AbstractEndpointType
 
 
     /**
+     * EndpointType constructor.
+     *
+     * @param string      $location
+     * @param string|null $responseLocation
+     * @param array       $attributes
+     *
+     * @throws \InvalidArgumentException
+     */
+    public function __construct(
+        string $location,
+        ?string $responseLocation = null,
+        array $attributes = []
+    ) {
+        parent::__construct(self::NS, $location, $responseLocation, $attributes);
+    }
+
+
+    /**
      * Set the value of the Binding property.
      *
      * @param string $binding
