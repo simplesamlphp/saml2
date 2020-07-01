@@ -56,25 +56,25 @@ final class Extensions extends AbstractMdElement
         );
         $ret = [];
         $supported = [
-            Scope::NS            => [
+            Scope::NS => [
                 'Scope' => Scope::class,
             ],
             EntityAttributes::NS => [
                 'EntityAttributes' => EntityAttributes::class,
             ],
-            MDRPI::NS            => [
+            MDRPI::NS => [
                 'RegistrationInfo' => RegistrationInfo::class,
-                'PublicationInfo'  => PublicationInfo::class,
+                'PublicationInfo' => PublicationInfo::class,
             ],
-            MDUI::NS             => [
-                'UIInfo'     => UIInfo::class,
+            MDUI::NS => [
+                'UIInfo' => UIInfo::class,
                 'DiscoHints' => DiscoHints::class,
             ],
-            ALG::NS              => [
-                'DigestMethod'  => DigestMethod::class,
+            ALG::NS => [
+                'DigestMethod' => DigestMethod::class,
                 'SigningMethod' => SigningMethod::class,
             ],
-            RequestInitiator::NS             => [
+            RequestInitiator::NS => [
                 'RequestInitiator' => RequestInitiator::class,
             ],
         ];
