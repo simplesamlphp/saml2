@@ -12,6 +12,7 @@ use SAML2\XML\alg\DigestMethod;
 use SAML2\XML\alg\SigningMethod;
 use SAML2\XML\Chunk;
 use SAML2\XML\ExtensionsTrait;
+use SAML2\XML\init\RequestInitiator;
 use SAML2\XML\mdattr\EntityAttributes;
 use SAML2\XML\mdrpi\AbstractMdrpiElement as MDRPI;
 use SAML2\XML\mdrpi\PublicationInfo;
@@ -59,23 +60,26 @@ final class Extensions extends AbstractMdElement
         );
         $ret = [];
         $supported = [
-            Scope::NS            => [
+            Scope::NS => [
                 'Scope' => Scope::class,
             ],
             EntityAttributes::NS => [
                 'EntityAttributes' => EntityAttributes::class,
             ],
-            MDRPI::NS            => [
+            MDRPI::NS => [
                 'RegistrationInfo' => RegistrationInfo::class,
-                'PublicationInfo'  => PublicationInfo::class,
+                'PublicationInfo' => PublicationInfo::class,
             ],
-            MDUI::NS             => [
-                'UIInfo'     => UIInfo::class,
+            MDUI::NS => [
+                'UIInfo' => UIInfo::class,
                 'DiscoHints' => DiscoHints::class,
             ],
-            ALG::NS              => [
-                'DigestMethod'  => DigestMethod::class,
+            ALG::NS => [
+                'DigestMethod' => DigestMethod::class,
                 'SigningMethod' => SigningMethod::class,
+            ],
+            RequestInitiator::NS => [
+                'RequestInitiator' => RequestInitiator::class,
             ],
         ];
 
