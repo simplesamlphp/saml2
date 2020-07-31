@@ -9,7 +9,7 @@
         }
     ],
     "require": {
-        "php": ">=7.2",
+        "php": ">=7.1",
         "ext-openssl": "*",
         "ext-dom": "*",
         "ext-zlib": "*",
@@ -20,7 +20,7 @@
     },
     "require-dev": {
         "mockery/mockery": "~1.2",
-        "phpunit/phpunit": "^8.3",
+        "phpunit/phpunit": "^7.5",
         "simplesamlphp/simplesamlphp-test-framework": "~0.1.0",
         "sensiolabs/security-checker": "~6.0",
         "sebastian/phpcpd": "~4.1",
