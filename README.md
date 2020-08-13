@@ -20,8 +20,8 @@ Note that the **HTTP Artifact Binding and SOAP client do not work** outside of S
 
 Which version to pick?
 ----------------------
-The latest released version (`4.x` range) is the _preffered version_.
-The `3.x branch` is our LTS branch and will be supported as long as [SimpleSAMLphp](https://www.simplesamlphp.org) hasn't migrated to the `4.x` branch.
+The latest released version (`4.x` range) is the _preferred version_.
+The `3.x branch` is our LTS branch and will be supported as long as supported releases of [SimpleSAMLphp](https://www.simplesamlphp.org) are using this branch.
 
 All other branches (`2.x` and earlier) are no longer supported and will not receive any maintenance or
 (security) fixes. Do not use these versions.
@@ -76,7 +76,7 @@ Security
   either a string (`SAML2\DOMDocumentFactory::fromString($theXmlAsString)`), a file (`SAML2\DOMDocumentFactory::fromFile($pathToTheFile)`)
   or just a new instance (`SAML2\DOMDocumentFactory::create()`). This in order to protect yourself against the
   [XXE Processing Vulnerability](https://www.owasp.org/index.php/XML_External_Entity_(XXE)_Processing), as well as
-  [XML Entity Expansion](https://phpsecurity.readthedocs.org/en/latest/Injection-Attacks.html#defenses-against-xml-entity-expansion) attacks
+  [XML Entity Expansion](https://phpsecurity.readthedocs.org/en/latest/Injection-Attacks.html#defenses-against-xml-entity-expansion) attacks.
 
 License
 -------
