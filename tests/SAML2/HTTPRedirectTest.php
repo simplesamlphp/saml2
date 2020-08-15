@@ -6,6 +6,7 @@ namespace SAML2;
 
 use Exception;
 use PHPUnit\Framework\Error\Warning;
+use RobRichards\XMLSecLibs\XMLSecurityKey;
 use SAML2\DOMDocumentFactory;
 use SAML2\HTTPRedirect;
 use SAML2\XML\saml\Issuer;
@@ -100,22 +101,20 @@ class HTTPRedirectTest extends \Mockery\Adapter\Phpunit\MockeryTestCase
      */
     public function testSignedRequestValidation(): void
     {
-//        $qs = 'SAMLRequest=nVLBauMwEP0Vo7sjW7FpKpJA2rBsoNuGOruHXhZFHm8EsuRqxtv27yvbWWgvYelFgjfvzbx5zBJVazu56enkHuG5B6TktbUO5VhYsT446RUalE61gJK0rDY%2F7qSYZbILnrz2ln2QXFYoRAhkvGPJbrtiv7VoygJEoTJ9LOusXDSFuJ4vdH6cxwoIEGUjsrqoFUt%2BQcCoXLHYKMoRe9g5JOUoQlleprlI8%2FyQz6W4ksXiiSXbuI1xikbViahDyfkRSM2wD40DmjnL0bSdhcE6Hx7BTd3xqnqoIPw1GmbdqWPJNx80jCGtGIUeWLL5t8mtd9i3EM78n493%2FzWr9XVvx%2B58mj39IlUaR%2FQmKOPq4Dtkyf4c9E1EjPtzOePjREL5%2FXDYp%2FuH6sDWy6G3HDML66%2B5ayO7VlHx2dySf2y9nM7pPprabffeGv02ZNcquux5QEydNiNVUlAODTiKMVvrX24DKIJz8nw9jfx8tOt3&RelayState=https%3A%2F%2Fbeta.surfnet.nl%2Fsimplesaml%2Fmodule.php%2Fcore%2Fauthenticate.php%3Fas%3DBraindrops&SigAlg=http%3A%2F%2Fwww.w3.org%2F2000%2F09%2Fxmldsig%23rsa-sha1&Signature=b%2Bqe%2FXGgICOrEL1v9dwuoy0RJtJ%2FGNAr7gJGYSJzLG0riPKwo7v5CH8GPC2P9IRikaeaNeQrnhBAaf8FCWrO0cLFw4qR6msK9bxRBGk%2BhIaTUYCh54ETrVCyGlmBneMgC5%2FiCRvtEW3ESPXCCqt8Ncu98yZmv9LIVyHSl67Se%2BfbB9sDw3%2FfzwYIHRMqK2aS8jnsnqlgnBGGOXqIqN3%2Bd%2F2dwtCfz14s%2F9odoYzSUv32qfNPiPez6PSNqwhwH7dWE3TlO%2FjZmz0DnOeQ2ft6qdZEi5ZN5KCV6VmNKpkrLMq6DDPnuwPm%2F8oCAoT88R2jG7uf9QZB%2BArWJKMEhDLsCA%3D%3D';
-//$qs = 'SAMLRequest=fVJda9tAEPwr4t6lk%2BTYFodlMDEFQ9uUuuQhL2V9WuGD%2B%2BrtXuL%2B%2B0pKA8lLXmd2bmZnb0fgbFSHzFf%2FE%2F9kJC5uznpSC9GLnLwKQIaUB4ekWKvz4dtX1Va1iilw0MGKd5LPFUCEiU3wojgde%2FF7vdqMqHXb4BZW9XgBaC7daq27u0ZjvW2360vXgd6OrSgeMdGk7MX00CQnynjyxOB5guq2LutN2da%2Fmo26W6umexLFcdrGeOBFdWWOpKQ0Q6xcCCUkfTXPWHkr59ztTMjz%2BeGM6dlorOI1iuLwlvc%2BeMoO03%2F25Ae89aKpxX43q9USJ%2B3fTKZmRmOxopxGHTzeePExLlqc56ULQ7aLyeIuKUqHDAMwLOCAI2TLJcWdfG%2Bwe73X96nZ0%2FFHsEb%2FLb6E5IA%2FL35GzFCOy6jiBJ4Mep42tDa83CcExl5wyijk%2FtXy46%2FY%2FwM%3D&RelayState=https%3A%2F%2Fdemo.moo-archive.nl%2Fmodule.php%2Fcore%2Flogin%2Fdefault-sp&SigAlg=http%3A%2F%2Fwww.w3.org%2F2001%2F04%2Fxmldsig-more%23rsa-sha256&Signature=iWSr8623z0k45Ul55wauMAXDjZCOAO7q5YDlodCqfLJy5g4C6wl1bIoZyATGEDlMbgGSyMBdI7J5lFJlggEjxike7XY60NuTPfro%2F6vNTdTbYa5YRzFrtztFbs0ExFInKM7M0b8%2F6w0s0XhJx1DcD5o3poMfMqEnbWbOkUEH%2Fqo%3D';
-$qs = 'SAMLRequest=fVLLbtswEPwVgXeJlOpICWEZMGIUMNCmRV3kkEtBkyuYAF%2FlLhP37yspDZBecp3Z4czOcovKuyT3hS7hB%2FwugFRdvQsoV2JkJQcZFVqUQXlASVqe9l%2B%2FyK4RMuVIUUfH3kk%2BVihEyGRjYNXxMLJf0yA28KkV5la302D6c98LvbnrTdsNcHNnlDIb3d6ehzOrHiHjrBzZ%2FNAsRyxwDEgq0AyJTtSirzvxs%2B3ljZDt8MSqw7yNDYpW1YUooeTcmtT4GGuV9cU%2BQxMcX3J3C8FPp28nyM9WQ5MuiVX7t7z3MWDxkP%2Bxx2DgOrJWsN12Ucs1Tt69mczNTNZBgyVPOga40upjfXKwzHMfTXGryerOMXEPpIwitYIGJlUc1Zi2%2FL3B9vVeD3Ozx8P36Kz%2BU32O2Sv6uPgFsaae1lFJWQW0EGje0Ln4cp9BEYyMcgHGd6%2BW%2F%2F%2BK3V8%3D&RelayState=https%3A%2F%2Fdemo.moo-archive.nl%2Fmodule.php%2Fcore%2Flogin%2Fdefault-sp&SigAlg=http%3A%2F%2Fwww.w3.org%2F2001%2F04%2Fxmldsig-more%23rsa-sha256&Signature=KJ5wl4jn9va3C0OQ02Q1UBUzgxLuQX9DRpw8uT4YYRrHPrxxSpASR6aD4w98XM4r%2FjM7DDo%2B1uyiPL67RsLE4jKrwzdtRpMlC3EfUeh9ntaTKFmq1gk8WUJZqM2RPdXKUBd0Cw0Cp6WHkZpx5E7Zu4Zqipnt5GwLPhtDTCKFOew%3D';
+        $qs = 'SAMLRequest=fZJPi9swEMW%2FitHdlhXnn0UcCBsKgd1SuqWHXoqQJolAGrma8Tb99lW8LGx72OtIv3nz3syOTAyjPkx8xa%2FwawLi6hYDkp4fBjFl1MmQJ40mAmm2%2Bvnw9KgXTavHnDjZFMQ75GPCEEFmn1BUp%2BMgftp%2B69ZtZ9Yb0y%2FdduVsd%2B7XqlOd6zdKtctF36nWrrYbUX2HTIUcRGlUcKIJTkhskEupXbR1u63V6ptaatXp5eqHqI7FjUfDM3VlHklLCXjxCE0aAW1CuHETU6pNtlf%2FAg0GaUoWgOztDErvRkkeLwFq8hes77Mf3mw8JKQpQn6G%2FOJtmcfBbRCqFfvdPQw9T5n3b9oOYvpfLiY3BWjGa5EpiKRRRmDjDJu56OBspsA1jTv5vufudXOfS8an45cUvP1TfUo5Gv54BfeKd%2FV5%2Fqo5GyRf7BZTIaTfDxkMwyA4TyDk%2FlXy3%2FvY%2FwU%3D&RelayState=https%3A%2F%2Fdemo.moo-archive.nl%2Fmodule.php%2Fcore%2Flogin%2Fdefault-sp&SigAlg=http%3A%2F%2Fwww.w3.org%2F2001%2F04%2Fxmldsig-more%23rsa-sha256&Signature=u812YO4zCcw4EdfxxnYgS51AuPX%2BuMl0IZvAxHhk5FJj5%2BAbF5krHG%2BCXMSqd%2FWD6OWM2Q5pvnKinHL7h2gjT%2FxlZDAKVfKk4rxh5b67Vo5z0%2FqvJjASTNj4jp9qsDjFdgVgZoLR4lJoJhueRDWviSSC4t5T%2BsE2G%2FXvDjXL5OI%3D';
         $_SERVER['QUERY_STRING'] = $qs;
 
         $hr = new HTTPRedirect();
         $request = $hr->receive();
 
         // validate with the correct certificate, should verify
-        $result = $request->validate(CertificatesMock::getPublicKeySha256());
+        $result = $request->validate(PEMCertificatesMock::getPublicKey(XMLSecurityKey::RSA_SHA256, PEMCertificatesMock::SELFSIGNED_PUBLIC_KEY));
         $this->assertTrue($result);
 
         // validate with another cert, should fail
         $this->expectException(Exception::class);
         $this->expectExceptionMessage('Unable to validate signature');
-        $result = $request->validate(CertificatesMock::getPublicKey2Sha256());
+        $result = $request->validate(PEMCertificatesMock::getPublicKey(XMLSecurityKey::RSA_SHA256, PEMCertificatesMock::OTHER_PUBLIC_KEY));
     }
 
 

@@ -18,8 +18,10 @@ use SimpleSAML\TestUtils\PEMCertificatesMock;
 /**
  * Class \SAML2\AssertionTest
  */
-class AssertionTest extends MockeryTestCase
+final class AssertionTest extends MockeryTestCase
 {
+    private const FRAMEWORK = 'vendor/simplesamlphp/simplesamlphp-test-framework';
+
     /**
      * Test to build a basic assertion
      */
@@ -1090,9 +1092,9 @@ XML;
     public function testVerifySignedAssertion(): void
     {
         $doc = new DOMDocument();
-        $doc->load(__DIR__ . '../../../signedassertion.xml');
+        $doc->load(self::FRAMEWORK . '/assertions/signedassertion.xml');
 
-        $publicKey = PEMCertificatesMock::getPublicKey(XMLSecurityKey::RSA_SHA256, PEMCertificatesMock::PUBLIC_KEY);
+        $publicKey = PEMCertificatesMock::getPublicKey(XMLSecurityKey::RSA_SHA256, PEMCertificatesMock::SELFSIGNED_PUBLIC_KEY);
 
         $assertion = new Assertion($doc->documentElement);
         $result = $assertion->validate($publicKey);
@@ -1101,14 +1103,14 @@ XML;
         // Double-check that we can actually retrieve some basics.
         $this->assertEquals("_d908a49b8b63665738430d1c5b655f297b91331864", $assertion->getId());
         $this->assertEquals(
-            "https://thki-sid.pt-48.utr.surfcloud.nl/ssp/saml2/idp/metadata.php",
+            "https://idp.example.org/simplesaml/saml2/idp/metadata.php",
             $assertion->getIssuer()->getValue()
         );
         $this->assertEquals("1457707995", $assertion->getIssueInstant());
 
         $certs = $assertion->getCertificates();
         $this->assertCount(1, $certs);
-        $this->assertEquals(PEMCertificatesMock::getPlainPublicKeyContents(PEMCertificatesMock::PUBLIC_KEY), $certs[0]);
+        $this->assertEquals(PEMCertificatesMock::getPlainPublicKeyContents(PEMCertificatesMock::SELFSIGNED_PUBLIC_KEY), $certs[0]);
 
         // Was signed
         $this->assertTrue($assertion->wasSignedAtConstruction());
@@ -1122,9 +1124,9 @@ XML;
     public function testCommentsInSignedAssertion(): void
     {
         $doc = new DOMDocument();
-        $doc->load(__DIR__ . '../../../signedassertion_with_comments.xml');
+        $doc->load(self::FRAMEWORK . '/assertions/signedassertion_with_comments.xml');
 
-        $publicKey = PEMCertificatesMock::getPublicKey(XMLSecurityKey::RSA_SHA256, PEMCertificatesMock::PUBLIC_KEY);
+        $publicKey = PEMCertificatesMock::getPublicKey(XMLSecurityKey::RSA_SHA256, PEMCertificatesMock::SELFSIGNED_PUBLIC_KEY);
 
         $assertion = new Assertion($doc->documentElement);
         $result = $assertion->validate($publicKey);
@@ -1141,9 +1143,9 @@ XML;
     public function testVerifySignedAssertionChangedBody(): void
     {
         $doc = new DOMDocument();
-        $doc->load(__DIR__ . '../../../signedassertion_tampered.xml');
+        $doc->load(self::FRAMEWORK . '/assertions/signedassertion_tampered.xml');
 
-        $publicKey = PEMCertificatesMock::getPublicKey(XMLSecurityKey::RSA_SHA256, PEMCertificatesMock::PUBLIC_KEY);
+        $publicKey = PEMCertificatesMock::getPublicKey(XMLSecurityKey::RSA_SHA256, PEMCertificatesMock::SELFSIGNED_PUBLIC_KEY);
 
         $this->expectException(Exception::class);
         $this->expectExceptionMessage('Reference validation failed');
@@ -1158,7 +1160,7 @@ XML;
     public function testVerifySignedAssertionWrongKey(): void
     {
         $doc = new DOMDocument();
-        $doc->load(__DIR__ . '../../../signedassertion.xml');
+        $doc->load(self::FRAMEWORK . '/assertions/signedassertion.xml');
 
         $publicKey = PEMCertificatesMock::getPublicKey(XMLSecurityKey::RSA_SHA256, PEMCertificatesMock::OTHER_PUBLIC_KEY);
 
@@ -1176,7 +1178,7 @@ XML;
     public function testVerifySignedAssertionWrongKeyDSA(): void
     {
         $doc = new DOMDocument();
-        $doc->load(__DIR__ . '../../../signedassertion.xml');
+        $doc->load(self::FRAMEWORK . '/assertions/signedassertion.xml');
 
         $publicKey = PEMCertificatesMock::getPublicKeyDSAasRSA();
 
