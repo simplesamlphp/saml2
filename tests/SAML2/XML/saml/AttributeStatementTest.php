@@ -6,10 +6,10 @@ namespace SAML2\XML\saml;
 
 use PHPUnit\Framework\TestCase;
 use RobRichards\XMLSecLibs\XMLSecurityKey;
-use SAML2\CertificatesMock;
 use SAML2\Constants;
 use SAML2\DOMDocumentFactory;
 use SimpleSAML\Assert\AssertionFailedException;
+use SimpleSAML\TestUtils\PEMCertificatesMock;
 
 /**
  * Class \SAML2\XML\saml\AttributeStatementTest
@@ -68,7 +68,7 @@ XML
         );
 
         $pubkey = new XMLSecurityKey(XMLSecurityKey::RSA_SHA256, ['type' => 'public']);
-        $pubkey->loadKey(CertificatesMock::PUBLIC_KEY_PEM);
+        $pubkey->loadKey(PEMCertificatesMock::getPlainPublicKey(PEMCertificatesMock::PUBLIC_KEY));
 
         /** @psalm-var \SAML2\XML\saml\EncryptedAttribute $encryptedAttribute */
         $encryptedAttribute = EncryptedAttribute::fromUnencryptedElement(
@@ -208,7 +208,7 @@ XML
         );
 
         $privkey = new XMLSecurityKey(XMLSecurityKey::RSA_SHA256, ['type' => 'private']);
-        $privkey->loadKey(CertificatesMock::PRIVATE_KEY_PEM);
+        $privkey->loadKey(PEMCertificatesMock::getPlainPrivateKey(PEMCertificatesMock::PRIVATE_KEY));
         $attrStatement->decryptAttributes($privkey, []);
 
         $attributes = $attrStatement->getAttributes();
