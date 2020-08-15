@@ -120,7 +120,7 @@ jobs:
       before_script:
         - composer update
       script:
-        - vendor/bin/phpcs src/
+        - vendor/bin/phpcs
 
 notifications:
   slack:
