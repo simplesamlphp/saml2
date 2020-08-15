@@ -1180,7 +1180,7 @@ XML;
         $doc = new DOMDocument();
         $doc->load(self::FRAMEWORK . '/assertions/signedassertion.xml');
 
-        $publicKey = PEMCertificatesMock::getPublicKeyDSAasRSA();
+        $publicKey = PEMCertificatesMock::getPublicKey(XMLSecurityKey::RSA_SHA256, PEMCertificatesMock::SELFSIGNED_PUBLIC_KEY, PEMCertificatesMock::ALG_SIG_DSA);
 
         $assertion = new Assertion($doc->documentElement);
         $this->expectException(Exception::class);

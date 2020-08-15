@@ -133,7 +133,7 @@ class HTTPRedirectTest extends \Mockery\Adapter\Phpunit\MockeryTestCase
         // validate with wrong type of cert
         $this->expectException(Exception::class);
         $this->expectExceptionMessage('Invalid key type for validating signature');
-        $result = $request->validate(PEMCertificatesMock::getPublicKey(XMLSecurityKey::RSA_SHA256, PEMCertificatesMock::SELFSIGNED_PUBLIC_KEY));
+        $result = $request->validate(PEMCertificatesMock::getPublicKey(XMLSecurityKey::RSA_1_5, PEMCertificatesMock::SELFSIGNED_PUBLIC_KEY));
     }
 
 
