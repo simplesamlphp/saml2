@@ -8,11 +8,6 @@
             "email": "andreas.solberg@uninett.no"
         }
     ],
-    "config": {
-        "platform": {
-            "php": "7.2.31"
-        }
-    },
     "require": {
         "php": ">=7.2",
         "ext-openssl": "*",
