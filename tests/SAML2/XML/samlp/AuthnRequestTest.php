@@ -5,7 +5,7 @@ declare(strict_types=1);
 namespace SAML2\XML\samlp;
 
 use PHPUnit\Framework\TestCase;
-use SAML2\CertificatesMock;
+use RobRichards\XMLSecLibs\XMLSecurityKey;
 use SAML2\Constants;
 use SAML2\DOMDocumentFactory;
 use SAML2\Exception\MissingAttributeException;
@@ -19,6 +19,7 @@ use SAML2\XML\saml\NameID;
 use SAML2\XML\saml\Subject;
 use SAML2\Utils;
 use SimpleSAML\Assert\AssertionFailedException;
+use SimpleSAML\TestUtils\PEMCertificatesMock;
 
 /**
  * Class \SAML2\XML\samlp\AuthnRequestTest
@@ -201,7 +202,7 @@ AUTHNREQUEST;
 
         $authnRequest = AuthnRequest::fromXML(DOMDocumentFactory::fromString($xml)->documentElement);
 
-        $key = CertificatesMock::getPrivateKey();
+        $key = PEMCertificatesMock::getPrivateKey(XMLSecurityKey::RSA_SHA256, PEMCertificatesMock::SELFSIGNED_PRIVATE_KEY);
         $subject = $authnRequest->getSubject();
         $this->assertInstanceOf(Subject::class, $subject);
 
@@ -224,7 +225,7 @@ AUTHNREQUEST;
     public function testThatAnEncryptedNameIdResultsInTheCorrectXmlStructure(): void
     {
         // create an encrypted NameID
-        $key = CertificatesMock::getPublicKey();
+        $key = PEMCertificatesMock::getPublicKey(XMLSecurityKey::RSA_SHA256, PEMCertificatesMock::SELFSIGNED_PUBLIC_KEY);
 
         /** @psalm-var \SAML2\XML\saml\IdentifierInterface $nameId */
         $nameId = EncryptedID::fromUnencryptedElement(
@@ -256,7 +257,7 @@ AUTHNREQUEST;
                 <xenc:EncryptionMethod Algorithm="http://www.w3.org/2001/04/xmlenc#aes128-cbc"/>
                 <ds:KeyInfo xmlns:ds="http://www.w3.org/2000/09/xmldsig#">
                     <xenc:EncryptedKey>
-                        <xenc:EncryptionMethod Algorithm="http://www.w3.org/2001/04/xmlenc#rsa-1_5"/>
+                        <xenc:EncryptionMethod Algorithm="http://www.w3.org/2001/04/xmldsig-more#rsa-sha256"/>
                         <xenc:CipherData>
                             <xenc:CipherValue></xenc:CipherValue>
                         </xenc:CipherData>

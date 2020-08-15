@@ -31,7 +31,7 @@ class CertificateTest extends TestCase
     public function testConvertToCertificate(): void
     {
         $result = Certificate::convertToCertificate(PEMCertificatesMock::getPlainPublicKeyContents());
-        // the formatted public key in CertificatesMock is stored with unix newlines
+        // the formatted public key in PEMCertificatesMock is stored with unix newlines
         $this->assertEquals(trim(PEMCertificatesMock::getPlainPublicKey()), $result);
     }
 }

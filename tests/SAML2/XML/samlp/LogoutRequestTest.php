@@ -5,7 +5,7 @@ declare(strict_types=1);
 namespace SAML2\XML\samlp;
 
 use Mockery\Adapter\Phpunit\MockeryTestCase;
-use SAML2\CertificatesMock;
+use RobRichards\XMLSecLibs\XMLSecurityKey;
 use SAML2\Constants;
 use SAML2\DOMDocumentFactory;
 use SAML2\Exception\MissingElementException;
@@ -22,6 +22,7 @@ use SAML2\XML\xenc\EncryptedData;
 use SAML2\XML\xenc\EncryptedKey;
 use SAML2\XML\xenc\EncryptionMethod;
 use SAML2\XML\xenc\ReferenceList;
+use SimpleSAML\TestUtils\PEMCertificatesMock;
 
 /**
  * Class \SAML2\XML\samlp\LogoutRequestTest
@@ -132,7 +133,7 @@ XML;
 
         $this->assertEquals(['SomeSessionIndex1', 'SomeSessionIndex2'], $logoutRequest->getSessionIndexes());
 
-        $identifier = $encid->decrypt(CertificatesMock::getPrivateKey());
+        $identifier = $encid->decrypt(PEMCertificatesMock::getPrivateKey(XMLSecurityKey::RSA_OAEP_MGF1P, PEMCertificatesMock::SELFSIGNED_PRIVATE_KEY));
         $this->assertInstanceOf(NameID::class, $identifier);
         $this->assertEquals('TheNameIDValue', $identifier->getValue());
     }

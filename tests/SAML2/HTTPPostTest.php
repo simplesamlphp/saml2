@@ -7,6 +7,7 @@ namespace SAML2;
 use Exception;
 use PHPUnit\Framework\Error\Warning;
 use PHPUnit\Framework\TestCase;
+use RobRichards\XMLSecLibs\XMLSecurityKey;
 use SAML2\HTTPPost;
 use SAML2\XML\saml\Issuer;
 use SAML2\XML\samlp\AuthnRequest;
@@ -14,6 +15,7 @@ use SAML2\XML\samlp\Response;
 use SAML2\XML\samlp\Status;
 use SAML2\XML\samlp\StatusCode;
 use SimpleSAML\Utils\HTTP;
+use SimpleSAML\TestUtils\PEMCertificatesMock;
 
 class HTTPPostTest extends \Mockery\Adapter\Phpunit\MockeryTestCase
 {
@@ -152,7 +154,7 @@ class HTTPPostTest extends \Mockery\Adapter\Phpunit\MockeryTestCase
             []
         );
         $response->setRelayState('http://example.org');
-        $response->setSigningKey(CertificatesMock::getPrivateKey());
+        $response->setSigningKey(PEMCertificatesMock::getPrivateKey(XMLSecurityKey::RSA_SHA256, PEMCertificatesMock::SELFSIGNED_PRIVATE_KEY));
 
         $hr = new HTTPPost();
         $hr->send($response);
