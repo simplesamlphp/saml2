@@ -5,7 +5,6 @@ declare(strict_types=1);
 namespace SAML2\Assertion;
 
 use Psr\Log\LoggerInterface;
-
 use SAML2\Assertion;
 use SAML2\Assertion\Exception\InvalidAssertionException;
 use SAML2\Assertion\Exception\InvalidSubjectConfirmationException;
@@ -15,7 +14,6 @@ use SAML2\Assertion\Validation\SubjectConfirmationValidator;
 use SAML2\Configuration\IdentityProvider;
 use SAML2\EncryptedAssertion;
 use SAML2\Response\Exception\InvalidSignatureException;
-use SAML2\Response\Exception\UnencryptedAssertionFoundException;
 use SAML2\Signature\Validator;
 use SAML2\Utilities\ArrayCollection;
 
@@ -95,7 +93,13 @@ class Processor
     {
         $decrypted = new ArrayCollection();
         foreach ($assertions->getIterator() as $assertion) {
-            $decrypted->add($this->decryptAssertion($assertion));
+            if ($assertion instanceof EncryptedAssertion) {
+                $decrypted->add($this->decryptAssertion($assertion));
+            } elseif ($assertion instanceof Assertion) {
+                $decrypted->add($assertion);
+            } else {
+                throw new InvalidAssertionException('The assertion must be of type: EncryptedAssertion or Assertion');
+            }
         }
 
         return $decrypted;
