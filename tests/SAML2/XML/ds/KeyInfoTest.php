@@ -55,11 +55,11 @@ final class KeyInfoTest extends \PHPUnit\Framework\TestCase
                 "\n",
                 ''
             ],
-            file_get_contents(self::FRAMEWORK . '/certificates/pem/selfsigned.example.org.crt')
+            file_get_contents(self::FRAMEWORK . '/certificates/rsa-pem/selfsigned.simplesamlphp.org.crt')
         );
 
         $this->certData = openssl_x509_parse(
-            file_get_contents(self::FRAMEWORK . '/certificates/pem/selfsigned.example.org.crt')
+            file_get_contents(self::FRAMEWORK . '/certificates/rsa-pem/selfsigned.simplesamlphp.org.crt')
         );
 
         $this->document = DOMDocumentFactory::fromString(<<<XML
