@@ -6,10 +6,10 @@ namespace SAML2\XML\saml;
 
 use PHPUnit\Framework\TestCase;
 use RobRichards\XMLSecLibs\XMLSecurityKey;
-use SAML2\CertificatesMock;
 use SAML2\Constants;
 use SAML2\DOMDocumentFactory;
 use SAML2\Exception\MissingAttributeException;
+use SimpleSAML\TestUtils\PEMCertificatesMock;
 
 /**
  * Class \SAML2\XML\saml\AttributeTest
@@ -137,14 +137,14 @@ XML
     {
         $attribute = Attribute::fromXML($this->document->documentElement);
         $pubkey = new XMLSecurityKey(XMLSecurityKey::RSA_SHA256, ['type' => 'public']);
-        $pubkey->loadKey(CertificatesMock::PUBLIC_KEY_PEM);
+        $pubkey->loadKey(PEMCertificatesMock::getPlainPublicKey(PEMCertificatesMock::PUBLIC_KEY));
         /** @psalm-var \SAML2\XML\saml\EncryptedAttribute $encattr */
         $encattr = EncryptedAttribute::fromUnencryptedElement($attribute, $pubkey);
         $str = strval($encattr);
         $doc = DOMDocumentFactory::fromString($str);
         $encattr = EncryptedAttribute::fromXML($doc->documentElement);
         $privkey = new XMLSecurityKey(XMLSecurityKey::RSA_SHA256, ['type' => 'private']);
-        $privkey->loadKey(CertificatesMock::PRIVATE_KEY_PEM);
+        $privkey->loadKey(PEMCertificatesMock::getPlainPrivateKey(PEMCertificatesMock::PRIVATE_KEY));
         $attr = $encattr->decrypt($privkey);
         $this->assertEquals(strval($attribute), strval($attr));
     }

@@ -7,7 +7,6 @@ namespace SAML2\XML\saml;
 use InvalidArgumentException;
 use PHPUnit\Framework\TestCase;
 use RobRichards\XMLSecLibs\XMLSecurityKey;
-use SAML2\CertificatesMock;
 use SAML2\Compat\ContainerSingleton;
 use SAML2\Compat\MockContainer;
 use SAML2\Compat\Ssp\Container;
@@ -23,6 +22,7 @@ use SAML2\XML\xenc\EncryptedKey;
 use SAML2\XML\xenc\EncryptionMethod;
 use SAML2\XML\xenc\ReferenceList;
 use SimpleSAML\Configuration;
+use SimpleSAML\TestUtils\PEMCertificatesMock;
 
 /**
  * Class EncryptedIDTest
@@ -171,15 +171,17 @@ XML
         // test with a NameID
         $nameid = new NameID('value', 'name_qualifier');
         $pubkey = new XMLSecurityKey(XMLSecurityKey::RSA_SHA256, ['type' => 'public']);
-        $pubkey->loadKey(CertificatesMock::PUBLIC_KEY_PEM);
+        $pubkey->loadKey(PEMCertificatesMock::getPlainPublicKey(PEMCertificatesMock::PUBLIC_KEY));
         /** \SAML2\XML\saml\AbstractSamlElement $encid */
         $encid = EncryptedID::fromUnencryptedElement($nameid, $pubkey);
         $str = strval($encid);
+
         $doc = DOMDocumentFactory::fromString($str);
+
         /** \SAML2\XML\EncryptedElementInterface $encid */
         $encid = EncryptedID::fromXML($doc->documentElement);
         $privkey = new XMLSecurityKey(XMLSecurityKey::RSA_SHA256, ['type' => 'private']);
-        $privkey->loadKey(CertificatesMock::PRIVATE_KEY_PEM);
+        $privkey->loadKey(PEMCertificatesMock::getPlainPrivateKey(PEMCertificatesMock::PRIVATE_KEY));
         $id = $encid->decrypt($privkey);
         $this->assertEquals(strval($nameid), strval($id));
 

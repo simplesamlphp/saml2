@@ -6,7 +6,7 @@ namespace SAML2\Signature;
 
 use Mockery;
 use Psr\Log\NullLogger;
-use SAML2\CertificatesMock;
+use RobRichards\XMLSecLibs\XMLSecurityKey;
 use SAML2\Certificate\Key;
 use SAML2\Certificate\KeyCollection;
 use SAML2\Certificate\KeyLoader;
@@ -18,6 +18,7 @@ use SAML2\SimpleTestLogger;
 use SAML2\Utilities\Certificate;
 use SAML2\XML\samlp\AbstractMessage;
 use SAML2\XML\samlp\Response;
+use SimpleSAML\TestUtils\PEMCertificatesMock;
 
 class PublicKeyValidatorTest extends \Mockery\Adapter\Phpunit\MockeryTestCase
 {
@@ -95,15 +96,15 @@ class PublicKeyValidatorTest extends \Mockery\Adapter\Phpunit\MockeryTestCase
     public function signed_message_with_valid_signature_is_validated_correctly(): void
     {
         $pattern = Certificate::CERTIFICATE_PATTERN;
-        preg_match($pattern, CertificatesMock::PUBLIC_KEY_PEM, $matches);
+        preg_match($pattern, PEMCertificatesMock::getPlainPublicKey(PEMCertificatesMock::PUBLIC_KEY), $matches);
 
         $config = new IdentityProvider(['certificateData' => $matches[1]]);
         $validator = new PublicKeyValidator(new SimpleTestLogger(), new KeyLoader());
 
         $doc = DOMDocumentFactory::fromFile(__DIR__ . '/response.xml');
         $response = Response::fromXML($doc->firstChild);
-        $response->setSigningKey(CertificatesMock::getPrivateKey());
-        $response->setCertificates([CertificatesMock::PUBLIC_KEY_PEM]);
+        $response->setSigningKey(PEMCertificatesMock::getPrivateKey(XMLSecurityKey::RSA_SHA256, PEMCertificatesMock::PRIVATE_KEY));
+        $response->setCertificates([PEMCertificatesMock::getPlainPublicKey(PEMCertificatesMock::PUBLIC_KEY)]);
 
         // convert to signed response
         $response = Response::fromXML($response->toXML());

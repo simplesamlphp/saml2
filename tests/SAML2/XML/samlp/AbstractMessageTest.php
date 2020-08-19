@@ -7,7 +7,7 @@ namespace SAML2\XML\samlp;
 use DOMDocument;
 use DOMElement;
 use Exception;
-use SAML2\CertificatesMock;
+use RobRichards\XMLSecLibs\XMLSecurityKey;
 use SAML2\Constants;
 use SAML2\DOMDocumentFactory;
 use SAML2\Exception\MissingElementException;
@@ -22,6 +22,7 @@ use SAML2\XML\samlp\Response;
 use SAML2\XML\samlp\Status;
 use SAML2\XML\samlp\StatusCode;
 use SimpleSAML\Assert\AssertionFailedException;
+use SimpleSAML\TestUtils\PEMCertificatesMock;
 
 class AbstractMessageTest extends \Mockery\Adapter\Phpunit\MockeryTestCase
 {
@@ -49,11 +50,11 @@ class AbstractMessageTest extends \Mockery\Adapter\Phpunit\MockeryTestCase
 AUTHNREQUEST
         );
 
-        $privateKey = CertificatesMock::getPrivateKey();
+        $privateKey = PEMCertificatesMock::getPrivateKey(XMLSecurityKey::RSA_SHA256, PEMCertificatesMock::SELFSIGNED_PRIVATE_KEY);
 
         $unsignedMessage = MessageFactory::fromXML($authnRequest->documentElement);
         $unsignedMessage->setSigningKey($privateKey);
-        $unsignedMessage->setCertificates([CertificatesMock::PUBLIC_KEY_PEM]);
+        $unsignedMessage->setCertificates([PEMCertificatesMock::getPlainPublicKey(PEMCertificatesMock::SELFSIGNED_PUBLIC_KEY)]);
 
         $signedMessage = MessageFactory::fromXML($unsignedMessage->toXML());
         $signature = $signedMessage->getSignature();
@@ -159,11 +160,11 @@ AUTHNREQUEST
         $response = new DOMDocument();
         $response->load(__DIR__ . '../../../Response/response.xml');
 
-        $privateKey = CertificatesMock::getPrivateKey();
+        $privateKey = PEMCertificatesMock::getPrivateKey(XMLSecurityKey::RSA_SHA256, PEMCertificatesMock::SELFSIGNED_PRIVATE_KEY);
 
         $unsignedMessage = MessageFactory::fromXML($response->documentElement);
         $unsignedMessage->setSigningKey($privateKey);
-        $unsignedMessage->setCertificates([CertificatesMock::PUBLIC_KEY_PEM]);
+        $unsignedMessage->setCertificates([PEMCertificatesMock::getPlainPublicKey(PEMCertificatesMock::SELFSIGNED_PUBLIC_KEY)]);
 
         $signedMessage = MessageFactory::fromXML($unsignedMessage->toXML());
 

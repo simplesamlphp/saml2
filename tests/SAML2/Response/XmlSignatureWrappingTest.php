@@ -5,12 +5,12 @@ declare(strict_types=1);
 namespace SAML2\Response;
 
 use Exception;
-use SAML2\CertificatesMock;
 use SAML2\Configuration\IdentityProvider;
 use SAML2\DOMDocumentFactory;
 use SAML2\Signature\Validator;
 use SAML2\XML\saml\Assertion;
 use SAML2\Utilities\Certificate;
+use SimpleSAML\TestUtils\PEMCertificatesMock;
 
 class XmlSignatureWrappingTest extends \Mockery\Adapter\Phpunit\MockeryTestCase
 {
@@ -33,7 +33,7 @@ class XmlSignatureWrappingTest extends \Mockery\Adapter\Phpunit\MockeryTestCase
         $this->signatureValidator = new Validator(new \Psr\Log\NullLogger());
 
         $pattern = Certificate::CERTIFICATE_PATTERN;
-        preg_match($pattern, CertificatesMock::PUBLIC_KEY_PEM, $matches);
+        preg_match($pattern, PEMCertificatesMock::getPlainPublicKey(PEMCertificatesMock::PUBLIC_KEY), $matches);
 
         $this->identityProviderConfiguration = new IdentityProvider(
             ['certificateData' => $matches[1]]

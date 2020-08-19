@@ -6,6 +6,7 @@ namespace SAML2;
 
 use Exception;
 use PHPUnit\Framework\Error\Warning;
+use RobRichards\XMLSecLibs\XMLSecurityKey;
 use SAML2\DOMDocumentFactory;
 use SAML2\HTTPRedirect;
 use SAML2\XML\saml\Issuer;
@@ -14,6 +15,7 @@ use SAML2\XML\samlp\AuthnRequest;
 use SAML2\XML\samlp\Response;
 use SAML2\XML\samlp\Status;
 use SAML2\XML\samlp\StatusCode;
+use SimpleSAML\TestUtils\PEMCertificatesMock;
 
 class HTTPRedirectTest extends \Mockery\Adapter\Phpunit\MockeryTestCase
 {
@@ -99,20 +101,20 @@ class HTTPRedirectTest extends \Mockery\Adapter\Phpunit\MockeryTestCase
      */
     public function testSignedRequestValidation(): void
     {
-        $qs = 'SAMLRequest=nVLBauMwEP0Vo7sjW7FpKpJA2rBsoNuGOruHXhZFHm8EsuRqxtv27yvbWWgvYelFgjfvzbx5zBJVazu56enkHuG5B6TktbUO5VhYsT446RUalE61gJK0rDY%2F7qSYZbILnrz2ln2QXFYoRAhkvGPJbrtiv7VoygJEoTJ9LOusXDSFuJ4vdH6cxwoIEGUjsrqoFUt%2BQcCoXLHYKMoRe9g5JOUoQlleprlI8%2FyQz6W4ksXiiSXbuI1xikbViahDyfkRSM2wD40DmjnL0bSdhcE6Hx7BTd3xqnqoIPw1GmbdqWPJNx80jCGtGIUeWLL5t8mtd9i3EM78n493%2FzWr9XVvx%2B58mj39IlUaR%2FQmKOPq4Dtkyf4c9E1EjPtzOePjREL5%2FXDYp%2FuH6sDWy6G3HDML66%2B5ayO7VlHx2dySf2y9nM7pPprabffeGv02ZNcquux5QEydNiNVUlAODTiKMVvrX24DKIJz8nw9jfx8tOt3&RelayState=https%3A%2F%2Fbeta.surfnet.nl%2Fsimplesaml%2Fmodule.php%2Fcore%2Fauthenticate.php%3Fas%3DBraindrops&SigAlg=http%3A%2F%2Fwww.w3.org%2F2000%2F09%2Fxmldsig%23rsa-sha1&Signature=b%2Bqe%2FXGgICOrEL1v9dwuoy0RJtJ%2FGNAr7gJGYSJzLG0riPKwo7v5CH8GPC2P9IRikaeaNeQrnhBAaf8FCWrO0cLFw4qR6msK9bxRBGk%2BhIaTUYCh54ETrVCyGlmBneMgC5%2FiCRvtEW3ESPXCCqt8Ncu98yZmv9LIVyHSl67Se%2BfbB9sDw3%2FfzwYIHRMqK2aS8jnsnqlgnBGGOXqIqN3%2Bd%2F2dwtCfz14s%2F9odoYzSUv32qfNPiPez6PSNqwhwH7dWE3TlO%2FjZmz0DnOeQ2ft6qdZEi5ZN5KCV6VmNKpkrLMq6DDPnuwPm%2F8oCAoT88R2jG7uf9QZB%2BArWJKMEhDLsCA%3D%3D';
+        $qs = 'SAMLRequest=fZJPi9swEMW%2FitHdlhXnn0UcCBsKgd1SuqWHXoqQJolAGrma8Tb99lW8LGx72OtIv3nz3syOTAyjPkx8xa%2FwawLi6hYDkp4fBjFl1MmQJ40mAmm2%2Bvnw9KgXTavHnDjZFMQ75GPCEEFmn1BUp%2BMgftp%2B69ZtZ9Yb0y%2FdduVsd%2B7XqlOd6zdKtctF36nWrrYbUX2HTIUcRGlUcKIJTkhskEupXbR1u63V6ptaatXp5eqHqI7FjUfDM3VlHklLCXjxCE0aAW1CuHETU6pNtlf%2FAg0GaUoWgOztDErvRkkeLwFq8hes77Mf3mw8JKQpQn6G%2FOJtmcfBbRCqFfvdPQw9T5n3b9oOYvpfLiY3BWjGa5EpiKRRRmDjDJu56OBspsA1jTv5vufudXOfS8an45cUvP1TfUo5Gv54BfeKd%2FV5%2Fqo5GyRf7BZTIaTfDxkMwyA4TyDk%2FlXy3%2FvY%2FwU%3D&RelayState=https%3A%2F%2Fdemo.moo-archive.nl%2Fmodule.php%2Fcore%2Flogin%2Fdefault-sp&SigAlg=http%3A%2F%2Fwww.w3.org%2F2001%2F04%2Fxmldsig-more%23rsa-sha256&Signature=u812YO4zCcw4EdfxxnYgS51AuPX%2BuMl0IZvAxHhk5FJj5%2BAbF5krHG%2BCXMSqd%2FWD6OWM2Q5pvnKinHL7h2gjT%2FxlZDAKVfKk4rxh5b67Vo5z0%2FqvJjASTNj4jp9qsDjFdgVgZoLR4lJoJhueRDWviSSC4t5T%2BsE2G%2FXvDjXL5OI%3D';
         $_SERVER['QUERY_STRING'] = $qs;
 
         $hr = new HTTPRedirect();
         $request = $hr->receive();
 
         // validate with the correct certificate, should verify
-        $result = $request->validate(CertificatesMock::getPublicKey2Sha256());
+        $result = $request->validate(PEMCertificatesMock::getPublicKey(XMLSecurityKey::RSA_SHA256, PEMCertificatesMock::SELFSIGNED_PUBLIC_KEY));
         $this->assertTrue($result);
 
         // validate with another cert, should fail
         $this->expectException(Exception::class);
         $this->expectExceptionMessage('Unable to validate signature');
-        $result = $request->validate(CertificatesMock::getPublicKeySha256());
+        $result = $request->validate(PEMCertificatesMock::getPublicKey(XMLSecurityKey::RSA_SHA256, PEMCertificatesMock::OTHER_PUBLIC_KEY));
     }
 
 
@@ -131,7 +133,7 @@ class HTTPRedirectTest extends \Mockery\Adapter\Phpunit\MockeryTestCase
         // validate with wrong type of cert
         $this->expectException(Exception::class);
         $this->expectExceptionMessage('Invalid key type for validating signature');
-        $result = $request->validate(CertificatesMock::getPublicKey());
+        $result = $request->validate(PEMCertificatesMock::getPublicKey(XMLSecurityKey::RSA_1_5, PEMCertificatesMock::SELFSIGNED_PUBLIC_KEY));
     }
 
 
@@ -239,7 +241,7 @@ class HTTPRedirectTest extends \Mockery\Adapter\Phpunit\MockeryTestCase
 
         $response = new Response($status, $issuer, null, null, null, 'http://example.org/login?success=yes');
         $response->setRelayState('http://example.org');
-        $response->setSigningKey(CertificatesMock::getPrivateKey());
+        $response->setSigningKey(PEMCertificatesMock::getPrivateKey(XMLSecurityKey::RSA_SHA256, PEMCertificatesMock::SELFSIGNED_PRIVATE_KEY));
         $hr = new HTTPRedirect();
         $hr->send($response);
     }

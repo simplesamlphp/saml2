@@ -5,6 +5,7 @@ declare(strict_types=1);
 namespace SAML2;
 
 use RobRichards\XMLSecLibs\XMLSecurityKey;
+use SimpleSAML\TestUtils\PEMCertificatesMock;
 
 /**
  * A trait providing basic tests for signed elements.
@@ -49,14 +50,14 @@ trait SignedElementTestTrait
         foreach ($algorithms as $algorithm) {
             // sign with two certificates
             $key = new XMLSecurityKey($algorithm, ['type' => 'private']);
-            $key->loadKey(CertificatesMock::PRIVATE_KEY_PEM);
+            $key->loadKey(PEMCertificatesMock::getPlainPrivateKey(PEMCertificatesMock::PRIVATE_KEY));
             $pre = $this->testedClass::fromXML($this->document->documentElement);
             $pre->setSigningKey($key);
-            $pre->setCertificates([CertificatesMock::PUBLIC_KEY_PEM, CertificatesMock::PUBLIC_KEY_2_PEM]);
+            $pre->setCertificates([PEMCertificatesMock::getPlainPublicKey(PEMCertificatesMock::PUBLIC_KEY), PEMCertificatesMock::getPlainPublicKey(PEMCertificatesMock::OTHER_PUBLIC_KEY)]);
 
             // verify signature
             $cert = new XMLSecurityKey($algorithm, ['type' => 'public']);
-            $cert->loadKey(CertificatesMock::PUBLIC_KEY_PEM);
+            $cert->loadKey(PEMCertificatesMock::getPlainPublicKey(PEMCertificatesMock::PUBLIC_KEY));
 
             /** @var \SAML2\XML\SignedElementInterface $post */
             $post = $this->testedClass::fromXML($pre->toXML());
@@ -67,7 +68,7 @@ trait SignedElementTestTrait
                 $this->fail('Signature validation failed with algorithm: ' . $algorithm);
             }
             $this->assertEquals(
-                [CertificatesMock::PUBLIC_KEY_PEM],
+                [trim(PEMCertificatesMock::getPlainPublicKey(PEMCertificatesMock::PUBLIC_KEY))],
                 $post->getValidatingCertificates(),
                 'No validating certificate for algorithm: ' . $algorithm
             );
@@ -88,7 +89,7 @@ trait SignedElementTestTrait
 
             // verify with wrong key
             $wrongCert = new XMLSecurityKey($algorithm, ['type' => 'public']);
-            $wrongCert->loadKey(CertificatesMock::PUBLIC_KEY_2_PEM);
+            $wrongCert->loadKey(PEMCertificatesMock::getPlainPublicKey(PEMCertificatesMock::OTHER_PUBLIC_KEY));
             try {
                 $post->validate($wrongCert);
                 $this->fail('Signature validated correctly with wrong certificate.');
@@ -98,7 +99,7 @@ trait SignedElementTestTrait
 
             // verify with wrong algorithm
             $wrongAlgCert = new XMLSecurityKey(XMLSecurityKey::RSA_OAEP_MGF1P, ['type' => 'public']);
-            $wrongAlgCert->loadKey(CertificatesMock::PUBLIC_KEY_PEM);
+            $wrongAlgCert->loadKey(PEMCertificatesMock::getPlainPublicKey(PEMCertificatesMock::PUBLIC_KEY));
             try {
                 $post->validate($wrongAlgCert);
                 $this->fail('Signature validated correctly with wrong algorithm.');

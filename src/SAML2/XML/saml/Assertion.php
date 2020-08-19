@@ -588,7 +588,6 @@ class Assertion implements SignedElementInterface
         foreach ($values as $value) {
             $hasNonTextChildElements = false;
             foreach ($value->childNodes as $childNode) {
-                /** @var \DOMNode $childNode */
                 if ($childNode->nodeType !== XML_TEXT_NODE) {
                     $hasNonTextChildElements = true;
                     break;
