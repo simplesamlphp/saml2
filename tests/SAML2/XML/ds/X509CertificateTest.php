@@ -47,7 +47,7 @@ final class X509CertificateTest extends \PHPUnit\Framework\TestCase
                 "\n",
                 ''
             ],
-            file_get_contents(self::FRAMEWORK . '/certificates/pem/selfsigned.example.org.crt')
+            file_get_contents(self::FRAMEWORK . '/certificates/rsa-pem/selfsigned.simplesamlphp.org.crt')
         );
 
         $this->document = DOMDocumentFactory::fromString(<<<XML
