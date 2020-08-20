@@ -93,7 +93,13 @@ class Processor
     {
         $decrypted = new ArrayCollection();
         foreach ($assertions->getIterator() as $assertion) {
-            $decrypted->add($this->decryptAssertion($assertion));
+            if ($assertion instanceof EncryptedAssertion) {
+                $decrypted->add($this->decryptAssertion($assertion));
+            } elseif ($assertion instanceof Assertion) {
+                $decrypted->add($assertion);
+            } else {
+                throw new InvalidAssertionException('The assertion must be of type: EncryptedAssertion or Assertion');
+            }
         }
 
         return $decrypted;
