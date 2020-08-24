@@ -119,6 +119,9 @@ class AttributeValue extends AbstractSamlElement
              * If there's such class, call fromXML() on the child element.
              */
             $nameIds = NameID::getChildrenOfClass($xml);
+            if (!empty($nameIds)) {
+                $value = $nameIds;
+            }
         }
 
         return new self($value);
