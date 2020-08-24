@@ -59,7 +59,13 @@ class DecodeBase64Transformer implements
                         $values[] = new AttributeValue($decoded);
                     }
                 }
-                $decodedAttributes[] = new Attribute($attribute->getName(), $attribute->getNameFormat(), $attribute->getFriendlyName(), $values, $attribute->getAttributesNS());
+                $decodedAttributes[] = new Attribute(
+                    $attribute->getName(),
+                    $attribute->getNameFormat(),
+                    $attribute->getFriendlyName(),
+                    $values,
+                    $attribute->getAttributesNS()
+                );
             }
             $statements[] = new AttributeStatement($decodedAttributes);
         }
@@ -75,15 +81,6 @@ class DecodeBase64Transformer implements
             $statements
         );
 
-//        $attributes = $assertion->getAttributes();
-//        $decodedAttributes = [];
-//        foreach ($attributes as $name => $values) {
-//            $decodedAttributes[$name] = [];
-//            foreach ($values as $value) {
-//                $decoded = $this->decodeValue($value);
-//                $decodedAttributes[$name] = array_merge($decodedAttributes[$name], $decoded);
-//            }
-//        }
         $assertion->setAttributes($decodedAttributes);
         return $assertion;
     }

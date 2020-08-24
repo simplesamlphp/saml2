@@ -378,7 +378,7 @@ class Assertion extends AbstractSamlElement implements SignedElementInterface
     public static function fromXML(DOMElement $xml): object
     {
         Assert::same($xml->localName, 'Assertion', InvalidDOMElementException::class);
-        Assert::same($xml->namespaceURI, Assertion::NS , InvalidDOMElementException::class);
+        Assert::same($xml->namespaceURI, Assertion::NS, InvalidDOMElementException::class);
         Assert::same(self::getAttribute($xml, 'Version'), '2.0', 'Unsupported version: %s');
 
         $issueInstant = Utils::xsDateTimeToTimestamp(self::getAttribute($xml, 'IssueInstant'));
