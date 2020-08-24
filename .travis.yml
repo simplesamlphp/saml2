@@ -10,8 +10,6 @@ stages:
 ################
 
 php:
-  - 7.2
-  - 7.3
   - 7.4
 
 env:
@@ -28,13 +26,9 @@ jobs:
   fast_finish: true
 
   allow_failures:
-    - php: 7.3
-      env: Security check (composer install)
-    - php: 7.3
-      env: Security check (composer update)
-    - php: 7.3
+    - php: 7.4
       env: Psalm
-    - php: 7.3
+    - php: 7.4
       env: PHP Codesniffer
 
   include:
@@ -42,22 +36,6 @@ jobs:
     ##########################
     #  Pre-conditions stage  #
     ##########################
-
-    - stage: pre-conditions
-      env: Syntax check PHP
-      php: 7.2
-      before_script:
-        - composer install
-      script:
-        - vendor/bin/check-syntax-php.sh
-
-    - stage: pre-conditions
-      env: Syntax check PHP
-      php: 7.3
-      before_script:
-        - composer install
-      script:
-        - vendor/bin/check-syntax-php.sh
 
     - stage: pre-conditions
       env: Syntax check PHP
@@ -81,7 +59,7 @@ jobs:
     ###################
 
     - stage: quality
-      php: 7.3
+      php: 7.4
       env: Security check (composer install)
       before_script:
         - composer install
@@ -89,7 +67,7 @@ jobs:
         - vendor/bin/security-checker security:check
 
     - stage: quality
-      php: 7.3
+      php: 7.4
       env: Security check (composer update)
       before_script:
         - composer update
@@ -97,7 +75,7 @@ jobs:
         - vendor/bin/security-checker security:check
 
     - stage: quality
-      php: 7.3
+      php: 7.4
       env: Codecov
       before_script:
         - composer update
@@ -106,7 +84,7 @@ jobs:
         - bash <(curl -s https://codecov.io/bash)
 
     - stage: quality
-      php: 7.3
+      php: 7.4
       env: Psalm
       before_script:
         - composer update
@@ -115,7 +93,7 @@ jobs:
         - vendor/bin/psalter --issues=UnnecessaryVarAnnotation --dry-run
 
     - stage: quality
-      php: 7.3
+      php: 7.4
       env: PHP Codesniffer
       before_script:
         - composer update
