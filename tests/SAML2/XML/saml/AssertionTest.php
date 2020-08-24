@@ -239,9 +239,9 @@ XML;
     }
 
 
+    // @tvdijen: We have no way to set a type xs:date right now
     /**
      * Test an assertion attribute value types options
-     */
     public function testMarshallingUnmarshallingAttributeValTypes(): void
     {
         // Create an Issuer
@@ -325,67 +325,7 @@ XML;
         $this->assertEquals("xs:decimal", $attributesValueTypes['name3'][0]);
         $this->assertEquals("xs:decimal", $attributesValueTypes['name3'][1]);
     }
-
-
-    /**
-     * Test attribute value types check in Marshalling an assertion.
      */
-
-    public function testMarshallingWrongAttributeValTypes(): void
-    {
-        // Create an Issuer
-        $issuer = new Issuer('testIssuer');
-
-        // Create Conditions
-        $conditions = new Conditions(
-            null,
-            null,
-            [],
-            [
-                new AudienceRestriction(
-                    ['audience1', 'audience2']
-                )
-            ]
-        );
-
-        // Create AuthnStatement
-        $authnStatement = new AuthnStatement(
-            new AuthnContext(
-                new AuthnContextClassRef('someAuthnContext'),
-                null,
-                null,
-                ["idp1", "idp2"]
-            ),
-            time()
-        );
-
-        // Create AttributeStatement
-        $attributeStatement = new AttributeStatement(
-            // Attribute
-            [
-                new Attribute('name1', null, null, [new AttributeValue('value1'), new AttributeValue('2017-31-12')]),
-                new Attribute('name2', null, null, [new AttributeValue(2)]),
-                new Attribute('name3', null, null, [new AttributeValue(1234), new AttributeValue('+2345')])
-            ],
-            // EncryptedAttribute
-            []
-        );
-
-        // Create an assertion
-        $assertion = new Assertion($issuer, null, null, null, $conditions, [$authnStatement, $attributeStatement]);
-
-        // set wrong number elements in name1
-        $assertion->setAttributesValueTypes([
-            "name1" => ["xs:string"],
-            "name3" => "xs:decimal"
-        ]);
-
-        $this->expectException(Exception::class);
-        $this->expectExceptionMessage(
-            "Array of value types and array of values have different size for attribute 'name1'"
-        );
-        $assertionElement = $assertion->toXML()->ownerDocument->saveXML();
-    }
 
 
     /**
