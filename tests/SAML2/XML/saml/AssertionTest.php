@@ -189,8 +189,8 @@ XML;
             // Attribute
             [
                 new Attribute('name1', null, null, [new AttributeValue('value1'), new AttributeValue('value2')]),
-                new Attribute('name2', null, null, [new AttributeValue(2)]),
-                new Attribute('name3', null, null, [new AttributeValue(null)])
+                new Attribute('name2', Constants::NAMEFORMAT_UNSPECIFIED, null, [new AttributeValue(2)]),
+                new Attribute('name3', Constants::NAMEFORMAT_BASIC, null, [new AttributeValue(null)])
             ],
             // EncryptedAttribute
             []
@@ -206,26 +206,36 @@ XML;
         $conditions = $assertionToVerify->getConditions();
         $this->assertNotNull($conditions);
 
-        $this->assertEquals('/relative/path/to/document.xml', $assertionToVerify->getAuthnContextDeclRef());
+        $authnStatements = $assertionToVerify->getAuthnStatements();
+        $this->assertCount(1, $authnStatements);
+
+        $authnStatement = $authnStatements[0];
+        $this->assertEquals('/relative/path/to/document.xml', $authnStatement->getAuthnContext()->getAuthnContextDeclRef()->getDeclRef());
         $this->assertEquals('_123abc', $assertionToVerify->getId());
         $this->assertEquals(1234567890, $assertionToVerify->getIssueInstant());
-        $this->assertEquals(1234567889, $assertionToVerify->getAuthnInstant());
-        $this->assertEquals(1234569090, $assertionToVerify->getSessionNotOnOrAfter());
+        $this->assertEquals(1234569090, $authnStatement->getSessionNotOnOrAfter());
+        $this->assertEquals(1234567889, $authnStatement->getAuthnInstant());
+        $this->assertEquals('idx1', $authnStatement->getSessionIndex());
 
-        $this->assertEquals('idx1', $assertionToVerify->getSessionIndex());
-
-        $authauth = $assertionToVerify->getAuthenticatingAuthority();
+        $authauth = $authnStatement->getAuthnContext()->getAuthenticatingAuthorities();
         $this->assertCount(2, $authauth);
         $this->assertEquals("idp2", $authauth[1]);
 
-        $attributes = $assertionToVerify->getAttributes();
+        $attributeStatements = $assertionToVerify->getAttributeStatements();
+        $this->assertCount(1, $attributeStatements);
+
+        $attributeStatement = $attributeStatements[0];
+        $attributes = $attributeStatement->getAttributes();
+
         $this->assertCount(3, $attributes);
-        $this->assertCount(2, $attributes['name1']);
-        $this->assertEquals("value1", $attributes['name1'][0]);
-        $this->assertEquals(2, $attributes['name2'][0]);
-        // NOTE: nil attribute is currently parsed as string..
-        //$this->assertNull($attributes["name3"][0]);
-        $this->assertEquals(Constants::NAMEFORMAT_UNSPECIFIED, $assertionToVerify->getAttributeNameFormat());
+        $this->assertCount(2, $attributes[0]->getAttributeValues());
+        $this->assertEquals("value1", $attributes[0]->getAttributeValues()[0]->getValue());
+        $this->assertEquals(2, $attributes[1]->getAttributeValues()[0]->getValue());
+        $this->assertNull($attributes[2]->getAttributeValues()[0]->getValue());
+
+        $this->assertNull($attributes[0]->getNameFormat());
+        $this->assertEquals(Constants::NAMEFORMAT_UNSPECIFIED, $attributes[1]->getNameFormat());
+        $this->assertEquals(Constants::NAMEFORMAT_BASIC, $attributes[2]->getNameFormat());
     }
 
 

@@ -226,9 +226,9 @@ class Assertion extends AbstractSamlElement implements SignedElementInterface
      */
     public function getAttributeStatements(): array
     {
-        return array_filter($this->statements, function ($statement) {
+        return array_values(array_filter($this->statements, function ($statement) {
             return $statement instanceof AttributeStatement;
-        });
+        }));
     }
 
 
@@ -237,9 +237,9 @@ class Assertion extends AbstractSamlElement implements SignedElementInterface
      */
     public function getAuthnStatements(): array
     {
-        return array_filter($this->statements, function ($statement) {
+        return array_values(array_filter($this->statements, function ($statement) {
             return $statement instanceof AuthnStatement;
-        });
+        }));
     }
 
 
@@ -248,9 +248,9 @@ class Assertion extends AbstractSamlElement implements SignedElementInterface
      */
     public function getStatements(): array
     {
-        return array_filter($this->statements, function ($statement) {
+        return array_values(array_filter($this->statements, function ($statement) {
             return $statement instanceof Statement;
-        });
+        }));
     }
 
 
