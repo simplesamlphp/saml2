@@ -23,9 +23,9 @@ interface Queryable
      * returned
      *
      * @param string     $key
-     * @param null|mixed $default
+     * @param null|mixed $defaultValue
      *
      * @return mixed
      */
-    public function get(string $key, $default = null);
+    public function get(string $key, $defaultValue = null);
 }

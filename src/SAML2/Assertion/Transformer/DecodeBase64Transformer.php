@@ -51,12 +51,17 @@ class DecodeBase64Transformer implements
         $attributeStatements = $assertion->getAttributeStatements();
         foreach ($attributeStatements as $attributeStatement) {
             $attributes = $attributeStatement->getAttributes();
+            $decodedAttributes = [];
             foreach ($attributes as $attribute) {
                 $values = [];
                 foreach ($attribute->getAttributeValues() as $encodedValue) {
                     $encoded = $encodedValue->getValue();
-                    foreach ($this->decodeValue($encoded) as $decoded) {
-                        $values[] = new AttributeValue($decoded);
+                    if (is_string($encoded)) {
+                        foreach ($this->decodeValue($encoded) as $decoded) {
+                            $values[] = new AttributeValue($decoded);
+                        }
+                    } else {
+                        $values[] = $encodedValue;
                     }
                 }
                 $decodedAttributes[] = new Attribute(
