@@ -76,7 +76,7 @@ final class ProcessorTest extends MockeryTestCase
         foreach ($testData as $assertions) {
             $this->decrypter
                 ->shouldReceive('decrypt')
-                ->andReturn(new Assertion());
+                ->andReturn($assertion);
 
             $collection = new ArrayCollection($assertions);
             $result = $this->processor->decryptAssertions($collection);
