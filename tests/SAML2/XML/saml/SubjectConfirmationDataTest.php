@@ -162,11 +162,11 @@ final class SubjectConfirmationDataTest extends TestCase
 
         /** @psalm-var \SimpleSAML\XMLSecurity\XML\ds\KeyName $keyName */
         $keyName = $info->getInfo()[0];
+        $this->assertEquals('SomeKey', $keyName->getName());
 
         /** @psalm-var \SimpleSAML\XML\Chunk $info */
         $info = $subjectConfirmationData->getInfo()[1];
-
-        $this->assertEquals('SomeKey', $keyName->getName());
+        $this->assertInstanceOf(Chunk::class, $info);
     }
 
 

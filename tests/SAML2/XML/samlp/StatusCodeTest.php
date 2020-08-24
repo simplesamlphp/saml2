@@ -48,10 +48,6 @@ final class StatusCodeTest extends TestCase
             ]
         );
 
-        $nssamlp = StatusCode::NS;
-        $status_responder = Constants::STATUS_RESPONDER;
-        $status_request_denied = Constants::STATUS_REQUEST_DENIED;
-
         $this->assertEquals(
             $this->document->saveXML($this->document->documentElement),
             strval($statusCode)

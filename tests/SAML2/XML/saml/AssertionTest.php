@@ -1162,11 +1162,10 @@ XML;
         $doc = new DOMDocument();
         $doc->load('tests/resources/xml/assertions/signedassertion_tampered.xml');
 
-        $publicKey = PEMCertificatesMock::getPublicKey(XMLSecurityKey::RSA_SHA256, PEMCertificatesMock::SELFSIGNED_PUBLIC_KEY);
-
         $this->expectException(Exception::class);
         $this->expectExceptionMessage('Reference validation failed');
-        $assertion = new Assertion($doc->documentElement);
+
+        Assertion::fromXML($doc->documentElement);
     }
 
 

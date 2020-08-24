@@ -532,7 +532,7 @@ AUTHNREQUEST;
 
         $this->expectException(MissingAttributeException::class);
         $this->expectExceptionMessage('Missing \'ProviderID\' attribute on samlp:IDPEntry.');
-        $authnRequest = AuthnRequest::fromXML(DOMDocumentFactory::fromString($xmlRequest)->documentElement);
+        AuthnRequest::fromXML(DOMDocumentFactory::fromString($xmlRequest)->documentElement);
     }
 
 
@@ -1078,7 +1078,7 @@ AUTHNREQUEST;
 
         $this->expectException(TooManyElementsException::class);
         $this->expectExceptionMessage('Only one <saml:Subject> element is allowed.');
-        $authnRequest = AuthnRequest::fromXML(DOMDocumentFactory::fromString($xml)->documentElement);
+        AuthnRequest::fromXML(DOMDocumentFactory::fromString($xml)->documentElement);
     }
 
 
@@ -1106,7 +1106,7 @@ AUTHNREQUEST;
 
         $this->expectException(TooManyElementsException::class);
         $this->expectExceptionMessage('More than one <saml:NameID> in <saml:Subject>.');
-        $authnRequest = AuthnRequest::fromXML(DOMDocumentFactory::fromString($xml)->documentElement);
+        AuthnRequest::fromXML(DOMDocumentFactory::fromString($xml)->documentElement);
     }
 
 
@@ -1134,7 +1134,7 @@ AUTHNREQUEST;
         $this->expectExceptionMessage(
             'A <saml:Subject> not containing <saml:SubjectConfirmation> should provide exactly one of <saml:BaseID>, <saml:NameID> or <saml:EncryptedID>'
         );
-        $authnRequest = AuthnRequest::fromXML(DOMDocumentFactory::fromString($xml)->documentElement);
+        AuthnRequest::fromXML(DOMDocumentFactory::fromString($xml)->documentElement);
     }
 
 

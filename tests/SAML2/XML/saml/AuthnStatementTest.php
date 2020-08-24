@@ -65,6 +65,7 @@ final class AuthnStatementTest extends TestCase
         $this->assertInstanceOf(SubjectLocality::class, $subjLocality);
 
         $authnContext = $authnStatement->getAuthnContext();
+        $this->assertInstanceOf(AuthnContext::class, $authnContext);
 
         $this->assertEquals(
             $this->document->saveXML($this->document->documentElement),
@@ -126,6 +127,7 @@ final class AuthnStatementTest extends TestCase
         $this->assertInstanceOf(SubjectLocality::class, $subjLocality);
 
         $authnContext = $authnStatement->getAuthnContext();
+        $this->assertInstanceOf(AuthnContext::class, $authnContext);
     }
 
 

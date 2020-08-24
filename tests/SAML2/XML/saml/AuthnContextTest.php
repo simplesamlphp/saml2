@@ -270,7 +270,7 @@ final class AuthnContextTest extends TestCase
         $this->expectException(AssertionFailedException::class);
         $this->expectExceptionMessage('Can only have one of AuthnContextDecl/AuthnContextDeclRef');
 
-        $authnContext = new AuthnContext(
+        new AuthnContext(
             $authnContextClassRef,
             $authnContextDecl,
             $authnContextDeclRef,
@@ -356,7 +356,7 @@ final class AuthnContextTest extends TestCase
         $this->expectException(AssertionFailedException::class);
         $this->expectExceptionMessage('Can only have one of AuthnContextDecl/AuthnContextDeclRef');
 
-        $authnContext = AuthnContext::fromXML($document->documentElement);
+        AuthnContext::fromXML($document->documentElement);
     }
 
 

@@ -295,7 +295,7 @@ XML;
 
         $this->expectException(MissingAttributeException::class);
         $this->expectExceptionMessage('Missing \'Name\' attribute on saml:Attribute.');
-        $aq = AttributeQuery::fromXML($document->documentElement);
+        AttributeQuery::fromXML($document->documentElement);
     }
 
 
@@ -319,7 +319,7 @@ XML;
         $document = DOMDocumentFactory::fromString($xml);
         $this->expectException(MissingElementException::class);
         $this->expectExceptionMessage('Missing subject in subject');
-        $aq = AttributeQuery::fromXML($document->documentElement);
+        AttributeQuery::fromXML($document->documentElement);
     }
 
 
@@ -349,7 +349,7 @@ XML;
         $document = DOMDocumentFactory::fromString($xml);
         $this->expectException(TooManyElementsException::class);
         $this->expectExceptionMessage('More than one <saml:Subject> in AttributeQuery');
-        $aq = AttributeQuery::fromXML($document->documentElement);
+        AttributeQuery::fromXML($document->documentElement);
     }
 
 
@@ -375,10 +375,15 @@ XML;
 XML;
         $document = DOMDocumentFactory::fromString($xml);
         $this->expectException(TooManyElementsException::class);
+<<<<<<< HEAD
         $this->expectExceptionMessage(
             'A <saml:Subject> not containing <saml:SubjectConfirmation> should provide exactly one of <saml:BaseID>, <saml:NameID> or <saml:EncryptedID>'
         );
         $aq = AttributeQuery::fromXML($document->documentElement);
+=======
+        $this->expectExceptionMessage('A <saml:Subject> not containing <saml:SubjectConfirmation> should provide exactly one of <saml:BaseID>, <saml:NameID> or <saml:EncryptedID>');
+        AttributeQuery::fromXML($document->documentElement);
+>>>>>>> Fix Psalm-issues
     }
 
 
@@ -406,7 +411,7 @@ XML;
         $document = DOMDocumentFactory::fromString($xml);
         $this->expectException(TooManyElementsException::class);
         $this->expectExceptionMessage('More than one <saml:NameID> in <saml:Subject>');
-        $aq = AttributeQuery::fromXML($document->documentElement);
+        AttributeQuery::fromXML($document->documentElement);
     }
 
 

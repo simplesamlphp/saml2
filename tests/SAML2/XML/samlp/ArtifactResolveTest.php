@@ -65,9 +65,8 @@ final class ArtifactResolveTest extends TestCase
         $ar = ArtifactResolve::fromXML($this->document->documentElement);
         $this->assertEquals($artifact, $ar->getArtifact());
         $this->assertEquals($id, $ar->getId());
-        $issuer = $ar->getIssuer();
         $this->assertInstanceOf(Issuer::class, $issuer);
-        $this->assertEquals($issuer->getValue(), $issuer->getValue());
+        $this->assertEquals($issuer->getValue(), $ar->getIssuer()->getValue());
     }
 
 

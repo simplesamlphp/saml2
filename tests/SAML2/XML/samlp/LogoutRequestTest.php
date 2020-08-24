@@ -242,7 +242,7 @@ XML;
         $this->expectExceptionMessage(
             "Missing <saml:NameID>, <saml:BaseID> or <saml:EncryptedID> in <samlp:LogoutRequest>."
         );
-        $logoutRequest = LogoutRequest::fromXML($this->logoutRequestElement);
+        LogoutRequest::fromXML($this->logoutRequestElement);
     }
 
 
@@ -268,7 +268,7 @@ XML;
 
         $this->expectException(TooManyElementsException::class);
         $this->expectExceptionMessage("More than one <saml:NameID> in <samlp:LogoutRequest>.");
-        $logoutRequest = LogoutRequest::fromXML($this->logoutRequestElement);
+        LogoutRequest::fromXML($this->logoutRequestElement);
     }
 
 

@@ -277,7 +277,7 @@ STATUSXML
 XML;
 
         $fixtureResponseDom = DOMDocumentFactory::fromString($xml);
-        $response           = Response::fromXML($fixtureResponseDom->documentElement);
+        Response::fromXML($fixtureResponseDom->documentElement);
     }
 
 
@@ -305,6 +305,6 @@ XML;
 XML;
 
         $fixtureResponseDom = DOMDocumentFactory::fromString($xml);
-        $response           = Response::fromXML($fixtureResponseDom->documentElement);
+        Response::fromXML($fixtureResponseDom->documentElement);
     }
 }

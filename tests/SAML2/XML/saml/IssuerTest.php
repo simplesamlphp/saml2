@@ -73,7 +73,7 @@ final class IssuerTest extends TestCase
         $this->expectException(AssertionFailedException::class);
         $this->expectExceptionMessage('Illegal combination of attributes being used');
 
-        $issuer = new Issuer(
+        new Issuer(
             'TheIssuerValue',
             'TheNameQualifier',
             'TheSPNameQualifier',
@@ -92,7 +92,7 @@ final class IssuerTest extends TestCase
         $this->expectException(AssertionFailedException::class);
         $this->expectExceptionMessage('Illegal combination of attributes being used');
 
-        $issuer = new Issuer(
+        new Issuer(
             'TheIssuerValue',
             'TheNameQualifier',
             'TheSPNameQualifier',
@@ -130,7 +130,7 @@ final class IssuerTest extends TestCase
         $this->expectException(AssertionFailedException::class);
         $this->expectExceptionMessage('Illegal combination of attributes being used');
 
-        $issuer = Issuer::fromXML($this->document->documentElement);
+        Issuer::fromXML($this->document->documentElement);
     }
 
 
@@ -144,7 +144,7 @@ final class IssuerTest extends TestCase
         $this->expectException(AssertionFailedException::class);
         $this->expectExceptionMessage('Illegal combination of attributes being used');
 
-        $issuer = Issuer::fromXML($this->document->documentElement);
+        Issuer::fromXML($this->document->documentElement);
     }
 
 

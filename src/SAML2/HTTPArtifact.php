@@ -59,18 +59,18 @@ class HTTPArtifact extends Binding
 
         $store->set('artifact', $artifact, $artifactDataString, Temporal::getTime() + 15 * 60);
 
-        $params = [
-            'SAMLart' => $artifact,
-        ];
+        $destination = $message->getDestination();
+        if ($destination === null) {
+            throw new Exception('Cannot get redirect URL, no destination set in the message.');
+        }
+
+        $params['SAMLart'] = $artifact;
+
         $relayState = $message->getRelayState();
         if ($relayState !== null) {
             $params['RelayState'] = $relayState;
         }
 
-        $destination = $message->getDestination();
-        if ($destination === null) {
-            throw new Exception('Cannot get redirect URL, no destination set in the message.');
-        }
         /** @psalm-suppress UndefinedClass */
         return HTTP::addURLparameters($destination, $params);
     }

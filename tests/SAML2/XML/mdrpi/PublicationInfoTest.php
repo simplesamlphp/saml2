@@ -117,7 +117,7 @@ XML
 
         $this->expectException(MissingAttributeException::class);
         $this->expectExceptionMessage("Missing 'publisher' attribute on mdrpi:PublicationInfo.");
-        $publicationInfo = PublicationInfo::fromXML($document->documentElement);
+        PublicationInfo::fromXML($document->documentElement);
     }
 
 
