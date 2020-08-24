@@ -1340,6 +1340,14 @@ XML;
         // Create an Issuer
         $issuer = new Issuer('testIssuer');
 
+        // Create the conditions
+        $conditions = new Conditions(
+            null,
+            null,
+            [],
+            [new AudienceRestriction(['audience1', 'audience2'])]
+        );
+
         // Create AttributeStatement
         $attributeStatement = new AttributeStatement(
             // Attribute
@@ -1369,17 +1377,18 @@ XML;
         $statements = [$authnStatement, $attributeStatement];
 
         // Create an assertion
-        $assertion = new Assertion($issuer, null, null, $subject, null, $statements);
-
-        $assertion->setSigningKey(CertificatesMock::getPrivateKey());
+        $assertion = new Assertion($issuer, null, null, $subject, $conditions, $statements);
+        $assertion->setSigningKey(PEMCertificatesMock::getPrivateKey(XMLSecurityKey::RSA_SHA256, PEMCertificatesMock::PRIVATE_KEY));
 
         // Marshall it to a \DOMElement
         $assertionElement = $assertion->toXML();
 
+echo $assertionElement->ownerDocument->saveXML();
         // Test for an Issuer
         $issuerElements = XMLUtils::xpQuery($assertionElement, './saml_assertion:Issuer');
         $this->assertCount(1, $issuerElements);
         $this->assertEquals('testIssuer', $issuerElements[0]->textContent);
+
         // Test ordering of Assertion contents
         $assertionElements = XMLUtils::xpQuery($assertionElement, './saml_assertion:Issuer/following-sibling::*');
         $this->assertCount(5, $assertionElements);
