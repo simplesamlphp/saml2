@@ -141,6 +141,9 @@ XML
         $av = AttributeValue::fromXML($document->documentElement);
         $value = $av->getValue();
 
+        $this->assertCount(1, $value);
+        $value = $value[0];
+
         $this->assertInstanceOf(NameID::class, $value);
 
         $this->assertEquals('abcd-some-value-xyz', $value->getValue());

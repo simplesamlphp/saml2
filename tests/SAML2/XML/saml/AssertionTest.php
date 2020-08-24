@@ -730,6 +730,24 @@ XML;
 
 
     /**
+     * Try to verify a signed assertion with the wrong key algorithm.
+     * Must yield a signature validation exception.
+     */
+    public function testVerifySignedAssertionWrongAlgorithm(): void
+    {
+        $doc = new DOMDocument();
+        $doc->load(self::FRAMEWORK . '/assertions/signedassertion.xml');
+
+        $publicKey = PEMCertificatesMock::getPublicKey(XMLSecurityKey::RSA_SHA1, PEMCertificatesMock::SELFSIGNED_PUBLIC_KEY);
+
+        $assertion = Assertion::fromXML($doc->documentElement);
+        $this->expectException(Exception::class);
+        $this->expectExceptionMessage('Algorithm provided in key does not match algorithm used in signature.');
+        $assertion->validate($publicKey);
+    }
+
+
+    /**
      * Try to verify a signed assertion with the wrong key.
      * Must yield a signature validation exception.
      */
@@ -742,7 +760,7 @@ XML;
 
         $assertion = Assertion::fromXML($doc->documentElement);
         $this->expectException(Exception::class);
-        $this->expectExceptionMessage('Algorithm provided in key does not match algorithm used in signature.');
+        $this->expectExceptionMessage('Unable to validate Signature');
         $assertion->validate($publicKey);
     }
 
@@ -760,7 +778,7 @@ XML;
 
         $assertion = Assertion::fromXML($doc->documentElement);
         $this->expectException(Exception::class);
-        $this->expectExceptionMessage('Algorithm provided in key does not match algorithm used in signature.');
+        $this->expectExceptionMessage('Unable to validate Signature');
         $assertion->validate($publicKey);
     }
 
