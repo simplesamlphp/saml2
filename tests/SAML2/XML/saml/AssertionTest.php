@@ -772,9 +772,10 @@ XML;
         );
         $this->assertEquals("1457707995", $assertion->getIssueInstant());
 
-        $certs = $assertion->getCertificates();
-        $this->assertCount(1, $certs);
-        $this->assertEquals(PEMCertificatesMock::getPlainPublicKeyContents(PEMCertificatesMock::SELFSIGNED_PUBLIC_KEY), $certs[0]);
+//        @tvdijen: I don't think it's mandatory by spec to include the public key that was used for signing, so we cannot test this
+//        $certs = $assertion->getCertificates();
+//        $this->assertCount(1, $certs);
+//        $this->assertEquals(PEMCertificatesMock::getPlainPublicKeyContents(PEMCertificatesMock::SELFSIGNED_PUBLIC_KEY), $certs[0]);
 
         // Was signed
         $this->assertTrue($assertion->wasSignedAtConstruction());
