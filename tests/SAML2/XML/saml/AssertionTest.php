@@ -591,44 +591,6 @@ XML;
      */
 
 
-    public function testAttributeValuesWithComplexTypesAreParsedCorrectly(): void
-    {
-        $xml = <<<XML
-            <saml:Assertion
-                    xmlns:saml="urn:oasis:names:tc:SAML:2.0:assertion"
-                    xmlns:samlp="urn:oasis:names:tc:SAML:2.0:protocol"
-                    xmlns:xs="http://www.w3.org/2001/XMLSchema"
-                    xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
-                    Version="2.0"
-                    ID="_93af655219464fb403b34436cfb0c5cb1d9a5502"
-                    IssueInstant="1970-01-01T01:33:31Z">
-            <saml:Issuer>Provider</saml:Issuer>
-            <saml:Conditions/>
-            <saml:AttributeStatement>
-              <saml:Attribute Name="urn:some:custom:outer:element" NameFormat="urn:oasis:names:tc:SAML:2.0:attrname-format:uri">
-                <saml:AttributeValue>
-                  <saml:Attribute Name="urn:some:custom:nested:element">
-                    <saml:AttributeValue>abcd-some-value-xyz</saml:AttributeValue>
-                  </saml:Attribute>
-                </saml:AttributeValue>
-              </saml:Attribute>
-              <saml:Attribute Name="urn:EntityConcernedSubID" NameFormat="urn:oasis:names:tc:SAML:2.0:attrname-format:uri">
-                <saml:AttributeValue xsi:type="xs:string">string</saml:AttributeValue>
-              </saml:Attribute>
-            </saml:AttributeStatement>
-            </saml:Assertion>
-XML;
-
-        $assertion = Assertion::fromXML(DOMDocumentFactory::fromString($xml)->documentElement);
-
-        $attributes = $assertion->getAttributes();
-        $this->assertInstanceOf(
-            DOMNodeList::class,
-            $attributes['urn:some:custom:outer:element'][0]
-        );
-        $this->assertXmlStringEqualsXmlString($xml, $assertion->toXML()->ownerDocument->saveXML());
-    }
-
 /**
     public function testTypedAttributeValuesAreParsedCorrectly(): void
     {
