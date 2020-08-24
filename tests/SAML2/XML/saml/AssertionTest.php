@@ -1012,9 +1012,9 @@ XML;
     }
 
 
+    // @tvdijen: as per discussion we chose to ignore what we don't know
     /**
      * A Condition must be of namespace saml.
-     */
     public function testConditionWithUnknownNamespaceThrowsException(): void
     {
         $xml = <<<XML
@@ -1045,6 +1045,7 @@ XML;
         $this->expectExceptionMessage('Unknown namespace of condition:');
         Assertion::fromXML($document->documentElement);
     }
+     */
 
 
     /**
@@ -1091,7 +1092,7 @@ XML;
         $this->assertNotNull($conditions);
 
         $audienceRestrictions = $conditions->getAudienceRestriction();
-        $this->assertCount(1, $audienceRestrictions);
+        $this->assertCount(2, $audienceRestrictions);
 
         $restriction1 = $audienceRestrictions[0];
         $this->assertCount(1, $restriction1->getAudience());
@@ -1099,14 +1100,14 @@ XML;
 
         $restriction2 = $audienceRestrictions[1];
         $this->assertCount(2, $restriction2->getAudience());
-        $this->assertEquals(['audience2', 'audience1'], $restriction1->getAudience());
+        $this->assertEquals(['audience2', 'audience1'], $restriction2->getAudience());
     }
 
 
+    // @tvdijen: as per discussion we chose to ignore what we don't know
     /**
      * Any Condition other than AudienceRestirction, OneTimeUse and
      * ProxyRestriction must throw an Exception.
-     */
     public function testUnkownThrowsException(): void
     {
         $xml = <<<XML
@@ -1137,6 +1138,7 @@ XML;
         $this->expectExceptionMessage("Unknown condition: 'OtherCondition'");
         Assertion::fromXML($document->documentElement);
     }
+     */
 
 
     /**
