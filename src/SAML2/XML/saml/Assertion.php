@@ -10,6 +10,7 @@ use SimpleSAML\Assert\Assert;
 use SimpleSAML\SAML2\Constants;
 use SimpleSAML\SAML2\Utilities\Temporal;
 use SimpleSAML\SAML2\Utils;
+use SimpleSAML\SAML2\XML\ds\Signature;
 use SimpleSAML\SAML2\XML\SignedElementInterface;
 use SimpleSAML\SAML2\XML\SignedElementTrait;
 use SimpleSAML\XML\Chunk;
@@ -29,7 +30,6 @@ use SimpleSAML\XMLSecurity\XMLSecurityKey;
  */
 class Assertion extends AbstractSamlElement implements SignedElementInterface
 {
-    use IdentifierTrait;
     use SignedElementTrait;
 
     /**
@@ -105,24 +105,6 @@ class Assertion extends AbstractSamlElement implements SignedElementInterface
      * @var array multi-dimensional array of \DOMNodeList|\SAML2\XML\saml\NameID|string|int|array
      */
     protected array $attributes = [];
-
-    /**
-     * The attributes values types as per http://www.w3.org/2001/XMLSchema definitions
-     * the variable is as an associative array, indexed by attribute name
-     *
-     * when parsing assertion, the variable will be:
-     * - <attribute name> => [<Value1's xs type>|null, <xs type Value2>|null, ...]
-     * array will always have the same size of the array of values in $attributes for the same <attribute name>
-     *
-     * when generating assertion, the variable can be:
-     * - null : backward compatibility
-     * - <attribute name> => <xs type> : all values for the given attribute will have the same xs type
-     * - <attribute name> => [<Value1's xs type>|null, <xs type Value2>|null, ...] : Nth value will have type of the
-     *   Nth in the array
-     *
-     * @var array multi-dimensional array of array
-     * @todo this property is now irrelevant, this is implemented in AttributeValue
-     */
 
     /**
      * The SubjectConfirmation elements of the Subject in the assertion.

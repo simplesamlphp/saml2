@@ -62,7 +62,12 @@ final class NameIdDecryptionTransformer implements
      */
     public function transform(Assertion $assertion): Assertion
     {
-        $identifier = $assertion->getIdentifier();
+        $subject = $assertion->getSubject();
+        if ($subject === null) {
+            return $assertion;
+        }
+
+        $identifier = $subject->getIdentifier();
         if (!($identifier instanceof EncryptedID)) {
             return $assertion;
         }
