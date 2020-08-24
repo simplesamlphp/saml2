@@ -1383,7 +1383,6 @@ XML;
         // Marshall it to a \DOMElement
         $assertionElement = $assertion->toXML();
 
-echo $assertionElement->ownerDocument->saveXML();
         // Test for an Issuer
         $issuerElements = XMLUtils::xpQuery($assertionElement, './saml_assertion:Issuer');
         $this->assertCount(1, $issuerElements);

@@ -5,10 +5,12 @@ declare(strict_types=1);
 namespace SimpleSAML\SAML2\XML;
 
 use DOMElement;
+use DOMNode;
 use Exception;
 use SimpleSAML\Assert\Assert;
 use SimpleSAML\XMLSecurity\XML\ds\Signature;
 use SimpleSAML\XMLSecurity\XMLSecurityKey;
+use SimpleSAML\XML\Utils as XMLUtils;
 
 /**
  * Helper trait for processing signed elements.
@@ -190,11 +192,18 @@ trait SignedElementTrait
      * @return \DOMElement The signed element.
      * @throws \Exception If an error occurs while trying to sign.
      */
-    protected function signElement(DOMElement $root): DOMElement
+    protected function signElement(DOMElement $root, DOMNode $insertBefore = null): DOMElement
     {
         if ($this->signingKey instanceof XMLSecurityKey) {
-            $this->signature = new Signature($this->signingKey->getAlgorithm(), $this->certificates, $this->signingKey);
-            $this->signature->toXML($root);
+            if ($insertBefore !== null) {
+                XMLUtils::insertSignature($this->signingKey, $this->certificates, $root, $insertBefore);
+
+                $doc = clone $root->ownerDocument;
+                $this->signature = Signature::fromXML(XMLUtils::xpQuery($doc->documentElement, './ds:Signature')[0]);
+            } else {
+                $this->signature = new Signature($this->signingKey->getAlgorithm(), $this->certificates, $this->signingKey);
+                $this->signature->toXML($root);
+            }
         }
         return $root;
     }

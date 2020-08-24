@@ -452,7 +452,7 @@ class Assertion extends AbstractSamlElement implements SignedElementInterface
         $e->setAttribute('ID', $this->id);
         $e->setAttribute('IssueInstant', gmdate('Y-m-d\TH:i:s\Z', $this->issueInstant));
 
-        $this->issuer->toXML($e);
+        $issuer = $this->issuer->toXML($e);
 
         if ($this->subject !== null) {
             $this->subject->toXML($e);
