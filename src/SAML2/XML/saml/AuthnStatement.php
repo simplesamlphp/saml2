@@ -188,7 +188,8 @@ final class AuthnStatement extends AbstractStatement
         Assert::same($xml->namespaceURI, AuthnStatement::NS, InvalidDOMElementException::class);
 
         $authnContext = AuthnContext::getChildrenOfClass($xml);
-        Assert::minCount($authnContext, 1, 'At least one saml:AuthnContext must be specified.', MissingElementException::class);
+        Assert::minCount($authnContext, 1, 'Missing <saml:AuthnContext> in <saml:AuthnStatement>', MissingElementException::class);
+        Assert::maxCount($authnContext, 1, 'More than one <saml:AuthnContext> in <saml:AuthnStatement>', TooManyElementsException::class);
 
         $authnInstant = XMLUtils::xsDateTimeToTimestamp(self::getAttribute($xml, 'AuthnInstant'));
         $sessionNotOnOrAfter = self::getAttribute($xml, 'SessionNotOnOrAfter', null);

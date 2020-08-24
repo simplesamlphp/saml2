@@ -9,6 +9,8 @@ use SimpleSAML\SAML2\Assertion\Exception\InvalidAssertionException;
 use SimpleSAML\SAML2\Configuration\IdentityProvider;
 use SimpleSAML\SAML2\Configuration\IdentityProviderAware;
 use SimpleSAML\SAML2\XML\saml\Assertion;
+use SimpleSAML\SAML2\XML\saml\Attribute;
+use SimpleSAML\SAML2\XML\saml\AttributeValue;
 
 class DecodeBase64Transformer implements
     TransformerInterface,
@@ -44,15 +46,30 @@ class DecodeBase64Transformer implements
             return $assertion;
         }
 
-        $attributes = $assertion->getAttributes();
-        $decodedAttributes = [];
-        foreach ($attributes as $name => $values) {
-            $decodedAttributes[$name] = [];
-            foreach ($values as $value) {
-                $decoded = $this->decodeValue($value);
-                $decodedAttributes[$name] = array_merge($decodedAttributes[$name], $decoded);
+        $attributeStatements = $assertion->getAttributeStatements();
+        foreach ($attributeStatements as $attributeStatement) {
+            $attributes = $attributeStatement->getAttributes();
+            foreach ($attributes as $attribute) {
+                $values = [];
+                foreach ($attribute->getAttributeValues() as $encodedValue) {
+                    $encoded = $encodedValue->getValue();
+                    foreach ($this->decodeValue($encoded) as $decoded) {
+                        $values[] = new AttributeValue($decoded);
+                    }
+                }
+                $decodedAttributes[] = new Attribute($attribute->getName(), $attribute->getNameFormat(), $attribute->getFriendlyName(), $values, $attribute->getAttributesNS());
             }
         }
+
+//        $attributes = $assertion->getAttributes();
+//        $decodedAttributes = [];
+//        foreach ($attributes as $name => $values) {
+//            $decodedAttributes[$name] = [];
+//            foreach ($values as $value) {
+//                $decoded = $this->decodeValue($value);
+//                $decodedAttributes[$name] = array_merge($decodedAttributes[$name], $decoded);
+//            }
+//        }
         $assertion->setAttributes($decodedAttributes);
         return $assertion;
     }

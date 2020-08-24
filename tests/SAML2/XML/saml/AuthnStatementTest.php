@@ -147,7 +147,7 @@ XML
         );
 
         $this->expectException(MissingElementException::class);
-        $this->expectExceptionMessage('At least one saml:AuthnContext must be specified.');
+        $this->expectExceptionMessage('Missing <saml:AuthnContext> in <saml:AuthnStatement>');
 
         AuthnStatement::fromXML($document->documentElement);
     }
