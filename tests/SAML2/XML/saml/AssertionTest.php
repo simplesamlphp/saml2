@@ -1141,9 +1141,9 @@ XML;
      */
 
 
+    // @tvdijen: I may be crazy, but I think multiple AuthnStatements is perfectly legal
     /**
      * More than one AuthnStatement will throw Exception.
-     */
     public function testMoreThanOneAuthnStatementThrowsException(): void
     {
         $xml = <<<XML
@@ -1173,6 +1173,7 @@ XML;
         $this->expectExceptionMessage("More than one <saml:AuthnStatement> in <saml:Assertion> not supported");
         Assertion::fromXML($document->documentElement);
     }
+     */
 
 
     /** @TODO: should probably be moved to AttributeStatementTest */
