@@ -10,6 +10,7 @@ use SimpleSAML\SAML2\Configuration\IdentityProvider;
 use SimpleSAML\SAML2\Configuration\IdentityProviderAware;
 use SimpleSAML\SAML2\XML\saml\Assertion;
 use SimpleSAML\SAML2\XML\saml\Attribute;
+use SimpleSAML\SAML2\XML\saml\AttributeStatement;
 use SimpleSAML\SAML2\XML\saml\AttributeValue;
 
 class DecodeBase64Transformer implements
@@ -46,6 +47,7 @@ class DecodeBase64Transformer implements
             return $assertion;
         }
 
+        $statements = [];
         $attributeStatements = $assertion->getAttributeStatements();
         foreach ($attributeStatements as $attributeStatement) {
             $attributes = $attributeStatement->getAttributes();
@@ -59,7 +61,19 @@ class DecodeBase64Transformer implements
                 }
                 $decodedAttributes[] = new Attribute($attribute->getName(), $attribute->getNameFormat(), $attribute->getFriendlyName(), $values, $attribute->getAttributesNS());
             }
+            $statements[] = new AttributeStatement($decodedAttributes);
         }
+
+        $statements = array_merge($statements, $assertion->getAuthnStatements(), $assertion->getStatements());
+
+        return new Assertion(
+            $assertion->getIssuer(),
+            $assertion->getId(),
+            $assertion->getIssueInstant(),
+            $assertion->getSubject(),
+            $assertion->getConditions(),
+            $statements
+        );
 
 //        $attributes = $assertion->getAttributes();
 //        $decodedAttributes = [];
