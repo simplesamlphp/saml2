@@ -32,9 +32,7 @@ final class StatementTest extends TestCase
 <saml:Statement
     xmlns:saml="{$samlNamespace}"
     xmlns:xsi="{$xsiNamespace}"
-    xsi:type="CustomStatement">
-  <Statement>SomeStatement</Statement>
-</saml:Statement>
+    xsi:type="CustomStatement">SomeStatement</saml:Statement>
 XML
         );
     }
@@ -48,16 +46,10 @@ XML
      */
     public function testMarshalling(): void
     {
-        $statement = new CustomStatement(
-            new DOMElement('Statement', 'SomeStatement')
-        );
+        $statement = new CustomStatement('SomeStatement');
 
         $this->assertEquals('CustomStatement', $statement->getType());
-
-        $value = $statement->getValue();
-        $this->assertInstanceOf(DOMElement::class, $value);
-        $this->assertEquals('Statement', $value->localName);
-        $this->assertEquals('SomeStatement', $value->textContent);
+        $this->assertEquals('SomeStatement', $statement->getValue());
 
         $this->assertEquals(
             $this->document->saveXML($this->document->documentElement),
@@ -75,12 +67,9 @@ XML
     public function testUnmarshalling(): void
     {
         $statement = CustomStatement::fromXML($this->document->documentElement);
-        $this->assertEquals('CustomStatement', $statement->getType());
 
-        $value = $statement->getValue();
-        $this->assertInstanceOf(DOMElement::class, $value);
-        $this->assertEquals('Statement', $value->localName);
-        $this->assertEquals('SomeStatement', trim($value->textContent));
+        $this->assertEquals('CustomStatement', $statement->getType());
+        $this->assertEquals('SomeStatement', $statement->getValue());
 
         $this->assertEquals(
             $this->document->saveXML($this->document->documentElement),

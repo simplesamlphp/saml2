@@ -17,9 +17,9 @@ final class CustomStatement extends Statement
     /**
      * CustomStatement constructor.
      *
-     * @param \DOMElement $value
+     * @param string $value
      */
-    public function __construct(DOMElement $value)
+    public function __construct(string $value)
     {
         parent::__construct(self::XSI_TYPE);
 
@@ -30,9 +30,9 @@ final class CustomStatement extends Statement
     /**
      * Get the value of this Statement.
      *
-     * @return \DOMElement
+     * @return string
      */
-    public function getValue(): DOMElement
+    public function getValue(): string
     {
         return $this->value;
     }
@@ -41,10 +41,10 @@ final class CustomStatement extends Statement
     /**
      * Set the value of this Statement.
      *
-     * @param \DOMElement $value
+     * @param string $value
      * @return void
      */
-    protected function setValue(DOMElement $value): void
+    protected function setValue(string $value): void
     {
         $this->value = $value;
     }
@@ -66,7 +66,7 @@ final class CustomStatement extends Statement
     {
         Assert::same($xml->getAttributeNS(Constants::NS_XSI, 'type'), 'CustomStatement');
 
-        return new self($xml->ownerDocument->documentElement);
+        return new self($xml->textContent);
     }
 
 
@@ -79,7 +79,8 @@ final class CustomStatement extends Statement
     public function toXML(DOMElement $parent = null): DOMElement
     {
         $e = parent::toXML($parent);
-        $e->appendChild($e->ownerDocument->importNode($this->getValue(), true));
+        $e->textContent = $this->getValue();
+
         return $e;
     }
 }
