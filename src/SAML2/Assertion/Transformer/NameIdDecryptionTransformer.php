@@ -6,13 +6,15 @@ namespace SimpleSAML\SAML2\Assertion\Transformer;
 
 use Exception;
 use Psr\Log\LoggerInterface;
-use SimpleSAML\SAML2\XML\saml\Assertion;
 use SimpleSAML\SAML2\Assertion\Exception\NotDecryptedException;
 use SimpleSAML\SAML2\Certificate\PrivateKeyLoader;
 use SimpleSAML\SAML2\Configuration\IdentityProvider;
 use SimpleSAML\SAML2\Configuration\IdentityProviderAware;
 use SimpleSAML\SAML2\Configuration\ServiceProvider;
 use SimpleSAML\SAML2\Configuration\ServiceProviderAware;
+use SimpleSAML\SAML2\XML\saml\Assertion;
+use SimpleSAML\SAML2\XML\saml\EncryptedID;
+use SimpleSAML\SAML2\XML\saml\Subject;
 
 final class NameIdDecryptionTransformer implements
     TransformerInterface,
@@ -100,7 +102,14 @@ final class NameIdDecryptionTransformer implements
             );
         }
 
-        return $assertion;
+        return new Assertion(
+            $assertion->getIssuer(),
+            $assertion->getId(),
+            $assertion->getIssueInstant(),
+            new Subject($decrypted, $subject->getSubjectConfirmation()),
+            $assertion->getConditions(),
+            $assertion->getStatements()
+        );
     }
 
 
