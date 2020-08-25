@@ -13,6 +13,7 @@ use SAML2\CustomBaseID;
 use SAML2\DOMDocumentFactory;
 use SAML2\Exception\MissingAttributeException;
 use SAML2\Exception\TooManyElementsException;
+use SAML2\Utils;
 
 /**
  * Class \SAML2\XML\saml\SubjectConfirmationTest
@@ -66,6 +67,31 @@ XML
             $this->document->saveXML($this->document->documentElement),
             strval($subjectConfirmation)
         );
+    }
+
+
+    /**
+     * @return void
+     */
+    public function testMarshallingElementOrdering(): void
+    {
+        $subjectConfirmation = new SubjectConfirmation(
+            'SomeMethod',
+            new NameID('SomeNameIDValue'),
+            new SubjectConfirmationData()
+        );
+
+        // Marshall it to a \DOMElement
+        $subjectConfirmationElement = $subjectConfirmation->toXML();
+
+        // Test for a NameID
+        $subjectConfirmationElements = Utils::xpQuery($subjectConfirmationElement, './saml_assertion:NameID');
+        $this->assertCount(1, $subjectConfirmationElements);
+
+        // Test ordering of SubjectConfirmation contents
+        $subjectConfirmationElements = Utils::xpQuery($subjectConfirmationElement, './saml_assertion:NameID/following-sibling::*');
+        $this->assertCount(1, $subjectConfirmationElements);
+        $this->assertEquals('saml:SubjectConfirmationData', $subjectConfirmationElements[0]->tagName);
     }
 
 

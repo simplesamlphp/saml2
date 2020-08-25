@@ -13,6 +13,7 @@ use SAML2\Compat\Ssp\Container;
 use SAML2\Constants;
 use SAML2\CustomBaseID;
 use SAML2\DOMDocumentFactory;
+use SAML2\Utils;
 use SAML2\XML\Chunk;
 use SAML2\XML\ds\KeyInfo;
 use SAML2\XML\xenc\CipherData;
@@ -160,6 +161,49 @@ XML
             $this->document->saveXML($this->document->documentElement),
             strval($eid)
         );
+    }
+
+
+    /**
+     * @return void
+     */
+    public function testMarshallingElementOrdering(): void
+    {
+        $ed = new EncryptedData(
+            new CipherData('Nk4W4mx...'),
+            'Encrypted_DATA_ID',
+            'http://www.w3.org/2001/04/xmlenc#Element',
+            "key-type",
+            'base64-encoded',
+            new EncryptionMethod('http://www.w3.org/2001/04/xmlenc#aes128-cbc'),
+            new KeyInfo([new Chunk($this->retrievalMethod->documentElement)])
+        );
+        $ek = new EncryptedKey(
+            new CipherData('PzA5X...'),
+            'Encrypted_KEY_ID',
+            null,
+            null,
+            null,
+            'some_ENTITY_ID',
+            'Name of the key',
+            new EncryptionMethod('http://www.w3.org/2001/04/xmlenc#rsa-1_5'),
+            null,
+            new ReferenceList(
+                [new DataReference('#Encrypted_DATA_ID')]
+            )
+        );
+        $eid = new EncryptedID($ed, [$ek]);
+
+        $eidElement = $eid->toXML();
+
+        // Test for an EncryptedID
+        $eidElements = Utils::xpQuery($eidElement, './xenc:EncryptedData');
+        $this->assertCount(1, $eidElements);
+
+        // Test ordering of EncryptedID contents
+        $eidElements = Utils::xpQuery($eidElement, './xenc:EncryptedData/following-sibling::*');
+        $this->assertCount(1, $eidElements);
+        $this->assertEquals('xenc:EncryptedKey', $eidElements[0]->tagName);
     }
 
 

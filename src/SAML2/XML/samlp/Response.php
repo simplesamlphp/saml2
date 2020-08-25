@@ -180,6 +180,13 @@ class Response extends AbstractStatusResponse
             $assertion->toXML($e);
         }
 
-        return $this->signElement($e);
+        // Test for an Issuer
+        $responseElements = Utils::xpQuery($e, './saml_assertion:Issuer');
+        $issuer = empty($responseElements) ? null : $responseElements[0];
+
+        if ($this->signingKey !== null) {
+            Utils::insertSignature($this->signingKey, $this->certificates, $e, $issuer->nextSibling);
+        }
+        return $e;
     }
 }

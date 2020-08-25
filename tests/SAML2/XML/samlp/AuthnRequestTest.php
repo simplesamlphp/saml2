@@ -16,6 +16,7 @@ use SAML2\XML\saml\Conditions;
 use SAML2\XML\saml\EncryptedID;
 use SAML2\XML\saml\Issuer;
 use SAML2\XML\saml\NameID;
+use SAML2\XML\saml\ProxyRestriction;
 use SAML2\XML\saml\Subject;
 use SAML2\Utils;
 use SimpleSAML\Assert\AssertionFailedException;
@@ -26,7 +27,7 @@ use SimpleSAML\TestUtils\PEMCertificatesMock;
  */
 class AuthnRequestTest extends TestCase
 {
-    public function testUnmarshalling(): void
+    public function testMarshalling(): void
     {
         $rac = new RequestedAuthnContext(
             [
@@ -58,7 +59,94 @@ class AuthnRequestTest extends TestCase
     }
 
 
-    public function testMarshallingOfSimpleRequest(): void
+    public function testMarshallingElementOrdering(): void
+    {
+        // Create RequestedAuthnContext
+        $rac = new RequestedAuthnContext(
+            [
+                new AuthnContextClassRef('accr1'),
+                new AuthnContextClassRef('accr2')
+            ],
+            'better'
+        );
+
+        // Create Subject
+        $subject = new Subject(
+            new Issuer('some issuer')
+        );
+
+        // Create NameIDPolicy
+        $nameIdPolicy = new NameIDPolicy(
+            'TheFormat',
+            'TheSPNameQualifier',
+            true
+        );
+
+        // Create Conditions
+        $conditions = new Conditions(
+            1405558878,
+            1705558908,
+            [],
+            [
+                new AudienceRestriction(
+                    [
+                        'http://sp.example.com/demo1/metadata.php'
+                    ]
+                ),
+            ],
+            true,
+            new ProxyRestriction(
+                [
+                    'http://sp.example.com/demo2/metadata.php'
+                ],
+                2
+            )
+        );
+
+        // Create Scoping
+        $entry1 = new IDPEntry('urn:some:requester1', 'testName1', 'testLoc1');
+        $getComplete = 'https://some/location';
+        $list = new IDPList([$entry1], $getComplete);
+        $requesterId = 'urn:some:requester';
+        $scoping = new Scoping(2, $list, [$requesterId]);
+
+        $authnRequest = new AuthnRequest(
+            $rac,
+            $subject,
+            $nameIdPolicy,
+            $conditions,
+            null,
+            null,
+            null,
+            null,
+            null,
+            null,
+            null,
+            null,
+            null,
+            null,
+            null,
+            null,
+            $scoping
+        );
+
+        $authnRequestElement = $authnRequest->toXML();
+
+        // Test for a Subject
+        $authnRequestElements = Utils::xpQuery($authnRequestElement, './saml_assertion:Subject');
+        $this->assertCount(1, $authnRequestElements);
+
+        // Test ordering of AuthnRequest contents
+        $authnRequestElements = Utils::xpQuery($authnRequestElement, './saml_assertion:Subject/following-sibling::*');
+        $this->assertCount(4, $authnRequestElements);
+        $this->assertEquals('samlp:NameIDPolicy', $authnRequestElements[0]->tagName);
+        $this->assertEquals('saml:Conditions', $authnRequestElements[1]->tagName);
+        $this->assertEquals('samlp:RequestedAuthnContext', $authnRequestElements[2]->tagName);
+        $this->assertEquals('samlp:Scoping', $authnRequestElements[3]->tagName);
+    }
+
+
+    public function testUnmarshallingOfSimpleRequest(): void
     {
         $xml = <<<AUTHNREQUEST
 <samlp:AuthnRequest

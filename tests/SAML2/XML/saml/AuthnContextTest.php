@@ -134,6 +134,124 @@ XML
     /**
      * @return void
      */
+    public function testMarshallingWithClassRefAndClassDeclElementOrdering(): void
+    {
+        $authnContextDecl = AuthnContextDecl::fromXML($this->decl->documentElement);
+        $authenticatingAuthority = 'https://idp.example.com/SAML2';
+
+        $authnContext = new AuthnContext(
+            new AuthnContextClassRef(Constants::AC_PASSWORD_PROTECTED_TRANSPORT),
+            $authnContextDecl,
+            null,
+            [$authenticatingAuthority]
+        );
+
+        // Marshall it to a \DOMElement
+        $authnContextElement = $authnContext->toXML();
+
+        // Test for a AuthnContextClassRef
+        $authnContextElements = Utils::xpQuery($authnContextElement, './saml_assertion:AuthnContextClassRef');
+        $this->assertCount(1, $authnContextElements);
+
+        // Test ordering of AuthnContext contents
+        $authnContextElements = Utils::xpQuery($authnContextElement, './saml_assertion:AuthnContextClassRef/following-sibling::*');
+        $this->assertCount(2, $authnContextElements);
+        $this->assertEquals('saml:AuthnContextDecl', $authnContextElements[0]->tagName);
+        $this->assertEquals('saml:AuthenticatingAuthority', $authnContextElements[1]->tagName);
+    }
+
+
+    /**
+     * @return void
+     */
+    public function testMarshallingWithoutClassRefAndClassDeclElementOrdering(): void
+    {
+        $authnContextDecl = AuthnContextDecl::fromXML($this->decl->documentElement);
+        $authenticatingAuthority = 'https://idp.example.com/SAML2';
+
+        $authnContext = new AuthnContext(
+            null,
+            $authnContextDecl,
+            null,
+            [$authenticatingAuthority]
+        );
+
+        // Marshall it to a \DOMElement
+        $authnContextElement = $authnContext->toXML();
+
+        // Test for a AuthnContextClassRef
+        $authnContextElements = Utils::xpQuery($authnContextElement, './saml_assertion:AuthnContextDecl');
+        $this->assertCount(1, $authnContextElements);
+
+        // Test ordering of AuthnContext contents
+        $authnContextElements = Utils::xpQuery($authnContextElement, './saml_assertion:AuthnContextDecl/following-sibling::*');
+        $this->assertCount(1, $authnContextElements);
+        $this->assertEquals('saml:AuthenticatingAuthority', $authnContextElements[0]->tagName);
+    }
+
+
+    /**
+     * @return void
+     */
+    public function testMarshallingWithClassRefAndDeclRefElementOrdering(): void
+    {
+        $authnContextDecl = AuthnContextDecl::fromXML($this->decl->documentElement);
+        $authenticatingAuthority = 'https://idp.example.com/SAML2';
+
+        $authnContext = new AuthnContext(
+            new AuthnContextClassRef(Constants::AC_PASSWORD_PROTECTED_TRANSPORT),
+            null,
+            new AuthnContextDeclRef('/relative/path/to/document.xml'),
+            [$authenticatingAuthority]
+        );
+
+        // Marshall it to a \DOMElement
+        $authnContextElement = $authnContext->toXML();
+
+        // Test for a AuthnContextClassRef
+        $authnContextElements = Utils::xpQuery($authnContextElement, './saml_assertion:AuthnContextClassRef');
+        $this->assertCount(1, $authnContextElements);
+
+        // Test ordering of AuthnContext contents
+        $authnContextElements = Utils::xpQuery($authnContextElement, './saml_assertion:AuthnContextClassRef/following-sibling::*');
+        $this->assertCount(2, $authnContextElements);
+        $this->assertEquals('saml:AuthnContextDeclRef', $authnContextElements[0]->tagName);
+        $this->assertEquals('saml:AuthenticatingAuthority', $authnContextElements[1]->tagName);
+    }
+
+
+    /**
+     * @return void
+     */
+    public function testMarshallingWithoutClassRefAndDeclRefElementOrdering(): void
+    {
+        $authnContextDecl = AuthnContextDecl::fromXML($this->decl->documentElement);
+        $authenticatingAuthority = 'https://idp.example.com/SAML2';
+
+        $authnContext = new AuthnContext(
+            null,
+            null,
+            new AuthnContextDeclRef('/relative/path/to/document.xml'),
+            [$authenticatingAuthority]
+        );
+
+        // Marshall it to a \DOMElement
+        $authnContextElement = $authnContext->toXML();
+
+        // Test for a AuthnContextClassRef
+        $authnContextElements = Utils::xpQuery($authnContextElement, './saml_assertion:AuthnContextDeclRef');
+        $this->assertCount(1, $authnContextElements);
+
+        // Test ordering of AuthnContext contents
+        $authnContextElements = Utils::xpQuery($authnContextElement, './saml_assertion:AuthnContextDeclRef/following-sibling::*');
+        $this->assertCount(1, $authnContextElements);
+        $this->assertEquals('saml:AuthenticatingAuthority', $authnContextElements[0]->tagName);
+    }
+
+
+    /**
+     * @return void
+     */
     public function testMarshallingIllegalCombination(): void
     {
         $authnContextClassRef = new AuthnContextClassRef(Constants::AC_PASSWORD_PROTECTED_TRANSPORT);

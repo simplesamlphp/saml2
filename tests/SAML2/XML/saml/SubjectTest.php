@@ -12,6 +12,7 @@ use SAML2\Constants;
 use SAML2\CustomBaseID;
 use SAML2\DOMDocumentFactory;
 use SAML2\Exception\TooManyElementsException;
+use SAML2\Utils;
 
 /**
  * Class \SAML2\XML\saml\SubjectTest
@@ -133,6 +134,53 @@ XML
         $document->documentElement->appendChild($document->importNode($this->subjectConfirmation->documentElement, true));
 
         $this->assertEqualXMLStructure($document->documentElement, $subject->toXML());
+    }
+
+
+    /**
+     * @return void
+     */
+    public function testMarshallingElementOrdering(): void
+    {
+        $subject = new Subject(
+            new NameID(
+                'SomeNameIDValue',
+                null,
+                'https://sp.example.org/authentication/sp/metadata',
+                Constants::NAMEID_TRANSIENT,
+                null
+            ),
+            [
+                new SubjectConfirmation(
+                    'urn:oasis:names:tc:SAML:2.0:cm:bearer',
+                    new NameID(
+                        'SomeOtherNameIDValue',
+                        null,
+                        'https://sp.example.org/authentication/sp/metadata',
+                        Constants::NAMEID_TRANSIENT,
+                        null
+                    ),
+                    new SubjectConfirmationData(
+                        null,
+                        1582802796,
+                        'https://sp.example.org/authentication/sp/consume-assertion',
+                        'def456'
+                    )
+                )
+            ]
+        );
+
+        // Marshall it to a \DOMElement
+        $subjectElement = $subject->toXML();
+
+        // Test for a NameID
+        $subjectElements = Utils::xpQuery($subjectElement, './saml_assertion:NameID');
+        $this->assertCount(1, $subjectElements);
+
+        // Test ordering of Subject contents
+        $subjectElements = Utils::xpQuery($subjectElement, './saml_assertion:NameID/following-sibling::*');
+        $this->assertCount(1, $subjectElements);
+        $this->assertEquals('saml:SubjectConfirmation', $subjectElements[0]->tagName);
     }
 
 

@@ -120,6 +120,29 @@ XML;
     /**
      * @return void
      */
+    public function testMarshallingElementOrdering(): void
+    {
+        $nameId = new NameID('NameIDValue');
+
+        $logoutRequest = new LogoutRequest($nameId, null, null, ['SessionIndexValue']);
+
+        $logoutRequestElement = $logoutRequest->toXML();
+
+        // Test for a NameID
+        $logoutRequestElements = Utils::xpQuery($logoutRequestElement, './saml_assertion:NameID');
+        $this->assertCount(1, $logoutRequestElements);
+
+        // Test ordering of LogoutRequest contents
+        $logoutRequestElements = Utils::xpQuery($logoutRequestElement, './saml_assertion:NameID/following-sibling::*');
+
+        $this->assertCount(1, $logoutRequestElements);
+        $this->assertEquals('samlp:SessionIndex', $logoutRequestElements[0]->tagName);
+    }
+
+
+    /**
+     * @return void
+     */
     public function testUnmarshalling(): void
     {
         $logoutRequest = LogoutRequest::fromXML($this->logoutRequestElement);

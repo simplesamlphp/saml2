@@ -108,6 +108,40 @@ XML
     /**
      * @return void
      */
+    public function testMarshallingElementOrdering(): void
+    {
+        $status = new Status(
+            new StatusCode(
+                Constants::STATUS_RESPONDER,
+                [
+                    new StatusCode(
+                        Constants::STATUS_REQUEST_DENIED
+                    )
+                ]
+            ),
+            'Something went wrong',
+            [
+                new StatusDetail([new Chunk($this->detail->documentElement)])
+            ]
+        );
+
+        $statusElement = $status->toXML();
+
+        // Test for a StatusCode
+        $statusElements = Utils::xpQuery($statusElement, './saml_protocol:StatusCode');
+        $this->assertCount(1, $statusElements);
+
+        // Test ordering of Status contents
+        $statusElements = Utils::xpQuery($statusElement, './saml_protocol:StatusCode/following-sibling::*');
+        $this->assertCount(2, $statusElements);
+        $this->assertEquals('samlp:StatusMessage', $statusElements[0]->tagName);
+        $this->assertEquals('samlp:StatusDetail', $statusElements[1]->tagName);
+    }
+
+
+    /**
+     * @return void
+     */
     public function testUnmarshalling(): void
     {
         $status = Status::fromXML($this->document->documentElement);

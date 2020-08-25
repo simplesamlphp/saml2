@@ -78,6 +78,38 @@ XML
     }
 
 
+    /**
+     * @return void
+     */
+    public function testMarshallingElementOrdering(): void
+    {
+        $authnStatement = new AuthnStatement(
+            new AuthnContext(
+                new AuthnContextClassRef(Constants::AC_PASSWORD_PROTECTED_TRANSPORT),
+                null,
+                null,
+                ['https://idp.example.com/SAML2']
+            ),
+            Utils::xsDateTimeToTimestamp('2020-03-23T23:37:24Z'),
+            Utils::xsDateTimeToTimestamp('2020-03-23T23:37:24Z'),
+            '123',
+            new SubjectLocality('1.1.1.1', 'idp.example.org')
+        );
+
+        // Marshall it to a \DOMElement
+        $authnStatementElement = $authnStatement->toXML();
+
+        // Test for a SubjectLocality
+        $authnStatementElements = Utils::xpQuery($authnStatementElement, './saml_assertion:SubjectLocality');
+        $this->assertCount(1, $authnStatementElements);
+
+        // Test ordering of AuthnStatement contents
+        $authnStatementElements = Utils::xpQuery($authnStatementElement, './saml_assertion:SubjectLocality/following-sibling::*');
+        $this->assertCount(1, $authnStatementElements);
+        $this->assertEquals('saml:AuthnContext', $authnStatementElements[0]->tagName);
+    }
+
+
     // unmarshalling
 
 

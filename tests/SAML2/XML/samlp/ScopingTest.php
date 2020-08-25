@@ -7,6 +7,7 @@ namespace SAML2\XML\samlp;
 use PHPUnit\Framework\TestCase;
 use SAML2\Constants;
 use SAML2\DOMDocumentFactory;
+use SAML2\Utils;
 use SAML2\XML\samlp\IDPEntry;
 use SAML2\XML\samlp\IDPList;
 use SAML2\XML\samlp\Scoping;
@@ -73,6 +74,31 @@ XML
         $this->assertEquals('urn:some:requester', $requesterId[0]);
 
         $this->assertEquals($this->document->saveXML($this->document->documentElement), strval($scoping));
+    }
+
+
+    /**
+     * @return void
+     */
+    public function testMarshallingElementOrdering(): void
+    {
+        $entry1 = new IDPEntry('urn:some:requester1', 'testName1', 'testLoc1');
+        $getComplete = 'https://some/location';
+        $list = new IDPList([$entry1], $getComplete);
+        $requesterId = 'urn:some:requester';
+
+        $scoping = new Scoping(2, $list, [$requesterId]);
+
+        $scopingElement = $scoping->toXML();
+
+        // Test for an IDPList
+        $scopingElements = Utils::xpQuery($scopingElement, './saml_protocol:IDPList');
+        $this->assertCount(1, $scopingElements);
+
+        // Test ordering of Scoping contents
+        $scopingElements = Utils::xpQuery($scopingElement, './saml_protocol:IDPList/following-sibling::*');
+        $this->assertCount(1, $scopingElements);
+        $this->assertEquals('samlp:RequesterID', $scopingElements[0]->tagName);
     }
 
 

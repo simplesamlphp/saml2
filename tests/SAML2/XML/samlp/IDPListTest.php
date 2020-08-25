@@ -7,6 +7,7 @@ namespace SAML2\XML\samlp;
 use PHPUnit\Framework\TestCase;
 use SAML2\DOMDocumentFactory;
 use SAML2\Exception\MissingElementException;
+use SAML2\Utils;
 use SAML2\XML\samlp\IDPEntry;
 use SAML2\XML\samlp\IDPList;
 
@@ -64,6 +65,30 @@ XML
         $this->assertEquals('https://some/location', $list->getGetComplete());
 
         $this->assertEquals($this->document->saveXML($this->document->documentElement), strval($list));
+    }
+
+
+    /**
+     * @return void
+     */
+    public function testMarshallingElementOrdering(): void
+    {
+        $entry1 = new IDPEntry('urn:some:requester1', 'testName1', 'testLoc1');
+        $entry2 = new IDPEntry('urn:some:requester2', 'testName2', 'testLoc2');
+        $getComplete = 'https://some/location';
+        $list = new IDPList([$entry1, $entry2], $getComplete);
+
+        $listElement = $list->toXML();
+
+        // Test for an IDPEntry
+        $listElements = Utils::xpQuery($listElement, './saml_protocol:IDPEntry');
+        $this->assertCount(2, $listElements);
+
+        // Test ordering of IDPList contents
+        $listElements = Utils::xpQuery($listElement, './saml_protocol:IDPEntry/following-sibling::*');
+        $this->assertCount(2, $listElements);
+        $this->assertEquals('samlp:IDPEntry', $listElements[0]->tagName);
+        $this->assertEquals('samlp:GetComplete', $listElements[1]->tagName);
     }
 
 

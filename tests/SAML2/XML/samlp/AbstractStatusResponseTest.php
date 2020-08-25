@@ -5,11 +5,17 @@ declare(strict_types=1);
 namespace SAML2\XML\samlp;
 
 use PHPUnit\Framework\TestCase;
+use RobRichards\XMLSecLibs\XMLSecurityKey;
 use SAML2\Constants;
 use SAML2\DOMDocumentFactory;
 use SAML2\Exception\MissingElementException;
 use SAML2\Utils;
+use SAML2\XML\Chunk;
+use SAML2\XML\saml\Attribute;
+use SAML2\XML\saml\Issuer;
+use SAML2\XML\shibmd\Scope;
 use SAML2\XML\samlp\AbstractResponse;
+use SimpleSAML\TestUtils\PEMCertificatesMock;
 
 /**
  * Class \SAML2\XML\samlp\AbstractStatusResponseTest
@@ -51,6 +57,50 @@ class AbstractStatusResponseTest extends TestCase
         $statusMessageElements = Utils::xpQuery($statusElements[0], './saml_protocol:StatusMessage');
         $this->assertCount(1, $statusMessageElements);
         $this->assertEquals('OurMessageText', $statusMessageElements[0]->textContent);
+    }
+
+
+    /**
+     * @return void
+     */
+    public function testMarshallingSignedResponseElementOrdering(): void
+    {
+        $status = new Status(
+            new StatusCode(
+                'OurStatusCode',
+                [
+                    new StatusCode(
+                        'OurSubStatusCode'
+                    )
+                ]
+            ),
+            'OurMessageText'
+        );
+
+        $issuer = new Issuer('some issuer');
+
+        $attribute = new Attribute('TheName');
+        $scope = new Scope("scope");
+
+        $extensions = new Extensions([
+            new Chunk($attribute->toXML()),
+            new Chunk($scope->toXML()),
+        ]);
+
+        $response = new Response($status, $issuer, null, null, null, null, null, $extensions);
+        $response->setSigningKey(PEMCertificatesMock::getPrivateKey(XMLSecurityKey::RSA_SHA256, PEMCertificatesMock::PRIVATE_KEY));
+        $responseElement = $response->toXML();
+
+        // Test for an Issuer
+        $responseElements = Utils::xpQuery($responseElement, './saml_assertion:Issuer');
+        $this->assertCount(1, $responseElements);
+
+        // Test ordering of Response contents
+        $responseElements = Utils::xpQuery($responseElement, './saml_assertion:Issuer/following-sibling::*');
+        $this->assertCount(3, $responseElements);
+        $this->assertEquals('ds:Signature', $responseElements[0]->tagName);
+        $this->assertEquals('samlp:Extensions', $responseElements[1]->tagName);
+        $this->assertEquals('samlp:Status', $responseElements[2]->tagName);
     }
 
 
