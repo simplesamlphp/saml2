@@ -94,7 +94,7 @@ class Statement extends AbstractStatement
      */
     public function toXML(DOMElement $parent = null): DOMElement
     {
-        $element = parent::toXML($parent);
+        $element = $this->instantiateParentElement($parent);
 
         $element->setAttributeNS(Constants::NS_XSI, 'xsi:type', $this->type);
 

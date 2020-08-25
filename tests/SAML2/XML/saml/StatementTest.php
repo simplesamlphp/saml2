@@ -64,7 +64,7 @@ XML
     /**
      * @return void
      */
-    public function testUnmarshalling(): void
+    public function testUnmarshallingCustomClass(): void
     {
         $statement = CustomStatement::fromXML($this->document->documentElement);
 
