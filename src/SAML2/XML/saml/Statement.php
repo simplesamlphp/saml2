@@ -14,7 +14,7 @@ use SimpleSAML\Assert\Assert;
  *
  * @package simplesamlphp/saml2
  */
-class Statement extends AbstractStatement
+abstract class Statement extends AbstractStatement
 {
     /** @var string */
     protected $type;
@@ -62,27 +62,6 @@ class Statement extends AbstractStatement
     {
         Assert::notEmpty($type, 'The "xsi:type" attribute of an identifier cannot be empty.');
         $this->type = $type;
-    }
-
-
-    /**
-     * Convert XML into an Statement
-     *
-     * @param \DOMElement $xml The XML element we should load
-     *
-     * @return \SAML2\XML\saml\Statement
-     * @throws \SAML2\Exception\InvalidDOMElementException  If xsi:type is not defined or does not implement IdentifierInterface
-     */
-    public static function fromXML(DOMElement $xml): object
-    {
-        Assert::same($xml->localName, 'Statement', InvalidDOMElementException::class);
-        Assert::same($xml->namespaceURI, Statement::NS, InvalidDOMElementException::class);
-        Assert::true(
-            $xml->hasAttributeNS(Constants::NS_XSI, 'type'),
-            'Missing required xsi:type in <saml:Statement> element.'
-        );
-
-        return new self($xml->getAttributeNS(Constants::NS_XSI, 'type'));
     }
 
 
