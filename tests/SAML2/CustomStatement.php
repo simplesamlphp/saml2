@@ -60,7 +60,10 @@ final class CustomStatement extends Statement
 
 
     /**
-     * @inheritDoc
+     * Convert XML into an CustomStatement
+     *
+     * @param \DOMElement $xml The XML element we should load
+     * @return self
      */
     public static function fromXML(DOMElement $xml): object
     {
