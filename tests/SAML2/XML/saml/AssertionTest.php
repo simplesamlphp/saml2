@@ -1077,7 +1077,6 @@ XML;
      */
     public function testEncryption(): void
     {
-        $this->markTestSkipped('This test is not ready to run since Assertion does not extend AbstractXMLElement');
         $xml = <<<XML
 <saml:Assertion xmlns:saml="urn:oasis:names:tc:SAML:2.0:assertion"
                 ID="_593e33ddf86449ce4d4c22b60ac48e067d98a0b2bf"
@@ -1104,13 +1103,13 @@ XML;
         $assertion = Assertion::fromXML($document->documentElement);
 
         $pubkey = new XMLSecurityKey(XMLSecurityKey::RSA_SHA256, ['type' => 'public']);
-        $pubkey->loadKey(PEMCertificatesMock::PUBLIC_KEY_PEM);
+        $pubkey->loadKey(PEMCertificatesMock::getPlainPublicKey(PEMCertificatesMock::PUBLIC_KEY));
 
         $encass = EncryptedAssertion::fromUnencryptedElement($assertion, $pubkey);
         $doc = DOMDocumentFactory::fromString((string) $encass);
         $encass = EncryptedAssertion::fromXML($doc->documentElement);
         $privkey = new XMLSecurityKey(XMLSecurityKey::RSA_SHA256, ['type' => 'private']);
-        $privkey->loadKey(PEMCertificatesMock::PRIVATE_KEY_PEM);
+        $privkey->loadKey(PEMCertificatesMock::getPlainPrivateKey(PEMCertificatesMock::PRIVATE_KEY));
         $decrypted = $encass->decrypt($privkey);
         $this->assertEquals((string) $assertion, (string) $decrypted);
     }
