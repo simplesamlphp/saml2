@@ -6,7 +6,7 @@ namespace SAML2;
 
 use Exception;
 use PHPUnit\Framework\Error\Warning;
-use PHPUnit\Framework\TestCase;
+use Mockery\Adapter\Phpunit\MockeryTestCase;
 use RobRichards\XMLSecLibs\XMLSecurityKey;
 use SAML2\HTTPPost;
 use SAML2\XML\saml\Issuer;
@@ -21,7 +21,7 @@ use SimpleSAML\TestUtils\PEMCertificatesMock;
  * @covers \SAML2\HTTPPost
  * @package simplesamlphp\saml2
  */
-final class HTTPPostTest extends \Mockery\Adapter\Phpunit\MockeryTestCase
+final class HTTPPostTest extends MockeryTestCase
 {
     /**
      * test parsing of basic query string with authnrequest and

@@ -4,6 +4,7 @@ declare(strict_types=1);
 
 namespace SAML2\Assertion\Validation\ConstraintValidator;
 
+use Mockery\Adapter\Phpunit\MockeryTestCase;
 use SAML2\Assertion\Validation\ConstraintValidator\SubjectConfirmationRecipientMatches;
 use SAML2\Assertion\Validation\ConstraintValidator\SubjectConfirmationResponseToMatches;
 use SAML2\Assertion\Validation\Result;
@@ -17,7 +18,7 @@ use SAML2\XML\saml\SubjectConfirmationMatches;
  * @covers \SAML2\Assertion\Validation\ConstraintValidator\SubjectConfirmationRecipientMatches
  * @package simplesamlphp/saml2
  */
-final class SubjectConfirmationRecipientMatchesTest extends \Mockery\Adapter\Phpunit\MockeryTestCase
+final class SubjectConfirmationRecipientMatchesTest extends MockeryTestCase
 {
     /**
      * @group assertion-validation

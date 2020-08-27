@@ -4,6 +4,7 @@ declare(strict_types=1);
 
 namespace SAML2\XML\mdui;
 
+use PHPUnit\Framework\TestCase;
 use SAML2\DOMDocumentFactory;
 use SAML2\XML\Chunk;
 use SAML2\Utils;
@@ -14,7 +15,7 @@ use SAML2\Utils;
  * @covers \SAML2\XML\mdui\UIInfo
  * @package simplesamlphp/saml2
  */
-final class UIInfoTest extends \PHPUnit\Framework\TestCase
+final class UIInfoTest extends TestCase
 {
     /** @var \DOMDocument */
     private $document;

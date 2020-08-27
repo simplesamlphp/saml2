@@ -4,6 +4,7 @@ declare(strict_types=1);
 
 namespace SAML2\XML\mdattr;
 
+use PHPUnit\Framework\TestCase;
 use SAML2\Constants;
 use SAML2\DOMDocumentFactory;
 use SAML2\XML\Chunk;
@@ -18,7 +19,7 @@ use SAML2\Utils;
  * @covers \SAML2\XML\mdattr\EntityAttributes
  * @package simplesamlphp/saml2
  */
-final class EntityAttributesTest extends \PHPUnit\Framework\TestCase
+final class EntityAttributesTest extends TestCase
 {
     /**
      * @return void

@@ -4,6 +4,7 @@ declare(strict_types=1);
 
 namespace SAML2\XML\alg;
 
+use PHPUnit\Framework\TestCase;
 use SAML2\DOMDocumentFactory;
 use SAML2\Exception\MissingAttributeException;
 use SAML2\XML\alg\DigestMethod;
@@ -17,7 +18,7 @@ use SAML2\Utils;
  * @author Jaime Pérez Crespo, UNINETT AS <jaime.perez@uninett.no>
  * @package simplesamlphp/saml2
  */
-final class DigestMethodTest extends \PHPUnit\Framework\TestCase
+final class DigestMethodTest extends TestCase
 {
     /** @var \DOMDocument */
     private $document;

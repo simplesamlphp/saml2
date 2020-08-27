@@ -4,13 +4,14 @@ declare(strict_types=1);
 
 namespace SAML2\Configuration;
 
+use PHPUnit\Framework\TestCase;
 use SAML2\Configuration\Destination;
 
 /**
  * @covers \SAML2\Configuration\Destination
  * @package simplesamlphp/saml2
  */
-final class DestinationTest extends \PHPUnit\Framework\TestCase
+final class DestinationTest extends TestCase
 {
     /**
      * @group configuration

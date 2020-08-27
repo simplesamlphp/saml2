@@ -5,6 +5,7 @@ declare(strict_types=1);
 namespace SAML2\Response;
 
 use Exception;
+use Mockery\Adapter\Phpunit\MockeryTestCase;
 use SAML2\Configuration\IdentityProvider;
 use SAML2\DOMDocumentFactory;
 use SAML2\Signature\Validator;
@@ -15,7 +16,7 @@ use SimpleSAML\TestUtils\PEMCertificatesMock;
 /**
  * @package simplesamlphp/saml2
  */
-final class XmlSignatureWrappingTest extends \Mockery\Adapter\Phpunit\MockeryTestCase
+final class XmlSignatureWrappingTest extends MockeryTestCase
 {
     /**
      * @var \SAML2\Signature\Validator

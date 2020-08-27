@@ -5,13 +5,14 @@ declare(strict_types=1);
 namespace SAML2;
 
 use Exception;
+use PHPUnit\Framework\TestCase;
 use SAML2\HTTPArtifact;
 
 /**
  * @covers \SAML2\HTTPArtifact
  * @package simplesamlphp\saml2
  */
-final class HTTPArtifactTest extends \PHPUnit\Framework\TestCase
+final class HTTPArtifactTest extends TestCase
 {
     /**
      * The Artifact binding depends on simpleSAMLphp, so currently

@@ -4,6 +4,7 @@ declare(strict_types=1);
 
 namespace SAML2\XML\samlp;
 
+use PHPUnit\Framework\TestCase;
 use SAML2\Constants;
 use SAML2\DOMDocumentFactory;
 use SAML2\XML\Chunk;
@@ -16,7 +17,7 @@ use SAML2\XML\Chunk;
  * @author Tim van Dijen, <tvdijen@gmail.com>
  * @package simplesamlphp/saml2
  */
-final class StatusDetailTest extends \PHPUnit\Framework\TestCase
+final class StatusDetailTest extends TestCase
 {
     /** @var \DOMDocument */
     private $document;

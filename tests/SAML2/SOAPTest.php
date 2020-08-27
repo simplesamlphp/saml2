@@ -6,6 +6,7 @@ namespace SAML2;
 
 use DOMDocument;
 use InvalidArgumentException;
+use Mockery\Adapter\Phpunit\MockeryTestCase;
 use SAML2\XML\samlp\ArtifactResolve;
 use SAML2\XML\samlp\MessageFactory;
 use SimpleSAML\Assert\Assert;
@@ -14,7 +15,7 @@ use SimpleSAML\Assert\Assert;
  * @covers \SAML2\SOAP
  * @package simplesamlphp\saml2
  */
-final class SOAPTest extends \Mockery\Adapter\Phpunit\MockeryTestCase
+final class SOAPTest extends MockeryTestCase
 {
     /**
      * @return void

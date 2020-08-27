@@ -7,6 +7,7 @@ namespace SAML2\XML\samlp;
 use DOMDocument;
 use DOMElement;
 use Exception;
+use Mockery\Adapter\Phpunit\MockeryTestCase;
 use RobRichards\XMLSecLibs\XMLSecurityKey;
 use SAML2\Constants;
 use SAML2\DOMDocumentFactory;
@@ -28,7 +29,7 @@ use SimpleSAML\TestUtils\PEMCertificatesMock;
  * @covers \SAML2\XML\samlp\AbstractMessage
  * @package simplesamlphp/saml2
  */
-final class AbstractMessageTest extends \Mockery\Adapter\Phpunit\MockeryTestCase
+final class AbstractMessageTest extends MockeryTestCase
 {
     /**
      * @group Message

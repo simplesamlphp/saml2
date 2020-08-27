@@ -4,6 +4,7 @@ declare(strict_types=1);
 
 namespace SAML2\Certificate;
 
+use Mockery\Adapter\Phpunit\MockeryTestCase;
 use SAML2\Certificate\PrivateKey;
 use SimpleSAML\TestUtils\PEMCertificatesMock;
 
@@ -11,7 +12,7 @@ use SimpleSAML\TestUtils\PEMCertificatesMock;
  * @covers \SAML2\Certificate\PrivateKey
  * @package simplesamlphp/saml2
  */
-final class PrivateKeyTest extends \Mockery\Adapter\Phpunit\MockeryTestCase
+final class PrivateKeyTest extends MockeryTestCase
 {
     /**
      * @group certificate

@@ -4,13 +4,14 @@ declare(strict_types=1);
 
 namespace SAML2\Certificate;
 
+use PHPUnit\Framework\TestCase;
 use SAML2\Certificate\X509;
 
 /**
  * @covers \SAML2\Certificate\X509
  * @package simplesamlphp/saml2
  */
-final class X509Test extends \PHPUnit\Framework\TestCase
+final class X509Test extends TestCase
 {
     /**
      * @group certificate
