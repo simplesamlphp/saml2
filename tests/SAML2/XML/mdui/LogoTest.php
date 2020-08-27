@@ -17,7 +17,7 @@ use SimpleSAML\Assert\AssertionFailedException;
  * @covers \SAML2\XML\mdui\Logo
  * @package simplesamlphp/saml2
  */
-class LogoTest extends TestCase
+final class LogoTest extends TestCase
 {
     /** @var \DOMDocument */
     private $document;

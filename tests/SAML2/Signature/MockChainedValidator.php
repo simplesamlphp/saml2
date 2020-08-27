@@ -14,7 +14,7 @@ use SAML2\XML\SignedElementInterface;
  *
  * @package simplesamlphp/saml2
  */
-class MockChainedValidator extends AbstractChainedValidator
+final class MockChainedValidator extends AbstractChainedValidator
 {
     /**
      * @var bool

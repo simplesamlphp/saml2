@@ -13,7 +13,7 @@ use SAML2\Utils;
  * @covers \SAML2\XML\samlp\ArtifactResolve
  * @package simplesamlphp/saml2
  */
-class ArtifactResolveTest extends TestCase
+final class ArtifactResolveTest extends TestCase
 {
     /** @var \DOMDocument $document */
     private $document;

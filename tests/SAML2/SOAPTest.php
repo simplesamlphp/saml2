@@ -14,7 +14,7 @@ use SimpleSAML\Assert\Assert;
  * @covers \SAML2\SOAP
  * @package simplesamlphp\saml2
  */
-class SOAPTest extends \Mockery\Adapter\Phpunit\MockeryTestCase
+final class SOAPTest extends \Mockery\Adapter\Phpunit\MockeryTestCase
 {
     /**
      * @return void

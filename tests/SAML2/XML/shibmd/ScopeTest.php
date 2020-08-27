@@ -14,7 +14,7 @@ use SAML2\Utils;
  * @covers \SAML2\XML\shibmd\Scope
  * @package simplesamlphp/saml2
  */
-class ScopeTest extends \PHPUnit\Framework\TestCase
+final class ScopeTest extends \PHPUnit\Framework\TestCase
 {
     /** @var \DOMDocument */
     private $document;

@@ -16,7 +16,7 @@ use SAML2\DOMDocumentFactory;
  * @author Tim van Dijen, <tvdijen@gmail.com>
  * @package simplesamlphp/saml2
  */
-class NameIDPolicyTest extends TestCase
+final class NameIDPolicyTest extends TestCase
 {
     /** @var \DOMDocument */
     private $document;

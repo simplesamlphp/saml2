@@ -16,7 +16,7 @@ use SAML2\XML\saml\AttributeValue;
  * @covers \SAML2\XML\Chunk
  * @package simplesamlphp/saml2
  */
-class ChunkTest extends TestCase
+final class ChunkTest extends TestCase
 {
     /** @var \DOMDocument */
     protected $document;

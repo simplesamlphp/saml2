@@ -24,7 +24,7 @@ use SimpleSAML\TestUtils\PEMCertificatesMock;
  * @covers \SAML2\Signature\PublicKeyValidator
  * @package simplesamlphp/saml2
  */
-class PublicKeyValidatorTest extends \Mockery\Adapter\Phpunit\MockeryTestCase
+final class PublicKeyValidatorTest extends \Mockery\Adapter\Phpunit\MockeryTestCase
 {
     private $mockSignedElement;
     private $mockConfiguration;

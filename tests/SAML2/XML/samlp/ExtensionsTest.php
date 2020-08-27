@@ -16,7 +16,7 @@ use SAML2\XML\shibmd\Scope;
  * @covers \SAML2\XML\samlp\Extensions
  * @package simplesamlphp/saml2
  */
-class ExtensionsTest extends TestCase
+final class ExtensionsTest extends TestCase
 {
     /**
      * @var \DOMDocument

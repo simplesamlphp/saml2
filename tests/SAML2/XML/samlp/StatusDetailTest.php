@@ -16,7 +16,7 @@ use SAML2\XML\Chunk;
  * @author Tim van Dijen, <tvdijen@gmail.com>
  * @package simplesamlphp/saml2
  */
-class StatusDetailTest extends \PHPUnit\Framework\TestCase
+final class StatusDetailTest extends \PHPUnit\Framework\TestCase
 {
     /** @var \DOMDocument */
     private $document;

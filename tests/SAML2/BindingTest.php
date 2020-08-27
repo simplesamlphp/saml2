@@ -16,7 +16,7 @@ use SAML2\SOAP;
  * @covers \SAML2\Binding
  * @package simplesamlphp\saml2
  */
-class BindingTest extends \PHPUnit\Framework\TestCase
+final class BindingTest extends \PHPUnit\Framework\TestCase
 {
     /**
      * Test getting binding objects from string.

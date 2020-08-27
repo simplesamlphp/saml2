@@ -13,7 +13,7 @@ use SAML2\XML\saml\SubjectConfirmation;
  * @covers \SAML2\Assertion\Validation\ConstraintValidator\SubjectConfirmationMethod
  * @package simplesamlphp/saml2
  */
-class SubjectConfirmationMethodTest extends \Mockery\Adapter\Phpunit\MockeryTestCase
+final class SubjectConfirmationMethodTest extends \Mockery\Adapter\Phpunit\MockeryTestCase
 {
     /**
      * @group assertion-validation

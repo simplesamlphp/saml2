@@ -13,7 +13,7 @@ use SAML2\Exception\RuntimeException;
  * @covers \SAML2\DOMDocumentFactory
  * @package simplesamlphp\saml2
  */
-class DOMDocumentFactoryTest extends \PHPUnit\Framework\TestCase
+final class DOMDocumentFactoryTest extends \PHPUnit\Framework\TestCase
 {
     /**
      * @group domdocument

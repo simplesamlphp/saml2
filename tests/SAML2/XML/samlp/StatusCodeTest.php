@@ -16,7 +16,7 @@ use SAML2\Utils;
  * @author Tim van Dijen, <tvdijen@gmail.com>
  * @package simplesamlphp/saml2
  */
-class StatusCodeTest extends \PHPUnit\Framework\TestCase
+final class StatusCodeTest extends \PHPUnit\Framework\TestCase
 {
     /** @var \DOMDocument */
     private $document;

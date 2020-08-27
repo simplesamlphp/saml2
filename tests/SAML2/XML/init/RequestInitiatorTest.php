@@ -18,7 +18,7 @@ use SAML2\Utils;
  * @author Tim van Dijen, <tvdijen@gmail.com>
  * @package simplesamlphp/saml2
  */
-class RequestInitiatorTest extends TestCase
+final class RequestInitiatorTest extends TestCase
 {
     /** @var \DOMDocument */
     protected $document;

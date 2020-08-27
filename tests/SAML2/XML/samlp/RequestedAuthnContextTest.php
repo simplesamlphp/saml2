@@ -17,7 +17,7 @@ use SimpleSAML\Assert\AssertionFailedException;
  * @covers \SAML2\XML\samlp\RequestedAuthnContext
  * @package simplesamlphp/saml2
  */
-class RequestedAuthnContextTest extends TestCase
+final class RequestedAuthnContextTest extends TestCase
 {
     /** @var \DOMDocument */
     private $document;

@@ -19,7 +19,7 @@ use SAML2\XML\saml\Assertion;
  *
  * @runTestsInSeparateProcesses
  */
-class SessionNotOnOrAfterTest extends ControlledTimeTest
+final class SessionNotOnOrAfterTest extends ControlledTimeTest
 {
     /**
      * @var \Mockery\MockInterface

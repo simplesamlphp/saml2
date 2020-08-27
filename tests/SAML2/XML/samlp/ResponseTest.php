@@ -19,7 +19,7 @@ use SAML2\Utils;
  * @covers \SAML2\XML\samlp\Response
  * @package simplesamlphp/saml2
  */
-class ResponseTest extends TestCase
+final class ResponseTest extends TestCase
 {
     /**
      * @return void

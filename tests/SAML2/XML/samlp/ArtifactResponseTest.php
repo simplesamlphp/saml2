@@ -16,7 +16,7 @@ use SAML2\Utils;
  * @covers \SAML2\XML\samlp\ArtifactResponse
  * @package simplesamlphp/saml2
  */
-class ArtifactResponseTest extends TestCase
+final class ArtifactResponseTest extends TestCase
 {
     /** @var \DOMDocument */
     private $document;

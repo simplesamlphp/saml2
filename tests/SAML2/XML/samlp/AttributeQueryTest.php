@@ -23,7 +23,7 @@ use SAML2\XML\saml\Subject;
  * @covers \SAML2\XML\samlp\AttributeQuery
  * @package simplesamlphp/saml2
  */
-class AttributeQueryTest extends TestCase
+final class AttributeQueryTest extends TestCase
 {
     /** @var \DOMDocument $document */
     private $document;

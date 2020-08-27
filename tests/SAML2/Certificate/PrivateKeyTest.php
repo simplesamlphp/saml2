@@ -11,7 +11,7 @@ use SimpleSAML\TestUtils\PEMCertificatesMock;
  * @covers \SAML2\Certificate\PrivateKey
  * @package simplesamlphp/saml2
  */
-class PrivateKeyTest extends \Mockery\Adapter\Phpunit\MockeryTestCase
+final class PrivateKeyTest extends \Mockery\Adapter\Phpunit\MockeryTestCase
 {
     /**
      * @group certificate

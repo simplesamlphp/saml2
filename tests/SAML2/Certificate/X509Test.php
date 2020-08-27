@@ -10,7 +10,7 @@ use SAML2\Certificate\X509;
  * @covers \SAML2\Certificate\X509
  * @package simplesamlphp/saml2
  */
-class X509Test extends \PHPUnit\Framework\TestCase
+final class X509Test extends \PHPUnit\Framework\TestCase
 {
     /**
      * @group certificate

@@ -16,7 +16,7 @@ use SimpleSAML\Assert\AssertionFailedException;
  * @covers \SAML2\XML\mdui\Keywords
  * @package simplesamlphp/saml2
  */
-class KeywordsTest extends TestCase
+final class KeywordsTest extends TestCase
 {
     /**
      * Test creating a basic Keywords element.

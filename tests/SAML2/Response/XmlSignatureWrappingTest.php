@@ -15,7 +15,7 @@ use SimpleSAML\TestUtils\PEMCertificatesMock;
 /**
  * @package simplesamlphp/saml2
  */
-class XmlSignatureWrappingTest extends \Mockery\Adapter\Phpunit\MockeryTestCase
+final class XmlSignatureWrappingTest extends \Mockery\Adapter\Phpunit\MockeryTestCase
 {
     /**
      * @var \SAML2\Signature\Validator

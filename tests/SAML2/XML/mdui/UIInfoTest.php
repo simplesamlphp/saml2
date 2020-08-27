@@ -14,7 +14,7 @@ use SAML2\Utils;
  * @covers \SAML2\XML\mdui\UIInfo
  * @package simplesamlphp/saml2
  */
-class UIInfoTest extends \PHPUnit\Framework\TestCase
+final class UIInfoTest extends \PHPUnit\Framework\TestCase
 {
     /** @var \DOMDocument */
     private $document;

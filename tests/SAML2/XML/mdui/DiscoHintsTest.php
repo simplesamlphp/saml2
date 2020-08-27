@@ -15,7 +15,7 @@ use SAML2\Utils;
  * @covers \SAML2\XML\mdui\DiscoHints
  * @package simplesamlphp/saml2
  */
-class DiscoHintsTest extends TestCase
+final class DiscoHintsTest extends TestCase
 {
     /** @var \DOMDocument */
     protected $document;

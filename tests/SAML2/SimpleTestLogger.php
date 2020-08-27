@@ -9,7 +9,7 @@ namespace SAML2;
  *
  * @package simplesamlphp\saml2
  */
-class SimpleTestLogger extends \Psr\Log\AbstractLogger
+final class SimpleTestLogger extends \Psr\Log\AbstractLogger
 {
     /**
      * @var array

@@ -23,7 +23,7 @@ use stdClass;
  * @package simplesamlphp/saml2
  * @runTestsInSeparateProcesses
  */
-class ProcessorTest extends MockeryTestCase
+final class ProcessorTest extends MockeryTestCase
 {
     /**
      * @var Processor

@@ -10,7 +10,7 @@ use SAML2\Configuration\Destination;
  * @covers \SAML2\Configuration\Destination
  * @package simplesamlphp/saml2
  */
-class DestinationTest extends \PHPUnit\Framework\TestCase
+final class DestinationTest extends \PHPUnit\Framework\TestCase
 {
     /**
      * @group configuration

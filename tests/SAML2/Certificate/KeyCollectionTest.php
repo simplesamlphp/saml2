@@ -10,7 +10,7 @@ use SimpleSAML\Assert\AssertionFailedException;
  * @covers \SAML2\Certificate\KeyCollection
  * @package simplesamlphp/saml2
  */
-class KeyCollectionTest extends \Mockery\Adapter\Phpunit\MockeryTestCase
+final class KeyCollectionTest extends \Mockery\Adapter\Phpunit\MockeryTestCase
 {
     /**
      * @group certificate

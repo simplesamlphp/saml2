@@ -21,7 +21,7 @@ use SimpleSAML\TestUtils\PEMCertificatesMock;
  * @covers \SAML2\HTTPPost
  * @package simplesamlphp\saml2
  */
-class HTTPPostTest extends \Mockery\Adapter\Phpunit\MockeryTestCase
+final class HTTPPostTest extends \Mockery\Adapter\Phpunit\MockeryTestCase
 {
     /**
      * test parsing of basic query string with authnrequest and

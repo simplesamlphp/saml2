@@ -18,7 +18,7 @@ use SAML2\XML\saml\SubjectConfirmationData;
  * @covers \SAML2\Assertion\Validation\ConstraintValidator\SubjectConfirmationNotBefore
  * @package simplesamlphp/saml2
  */
-class SubjectConfirmationNotBeforeTest extends ControlledTimeTest
+final class SubjectConfirmationNotBeforeTest extends ControlledTimeTest
 {
     /**
      * @group assertion-validation

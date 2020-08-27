@@ -19,7 +19,7 @@ use SAML2\Utils;
  * @covers \SAML2\Utils
  * @package simplesamlphp\saml2
  */
-class UtilsTest extends \PHPUnit\Framework\TestCase
+final class UtilsTest extends \PHPUnit\Framework\TestCase
 {
     /**
      * Test querying a SAML XML document.

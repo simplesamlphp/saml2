@@ -10,7 +10,7 @@ use SAML2\Response\Validation\Result;
  * @covers \SAML2\Respose\Validation\Result
  * @package simplesamlphp/saml2
  */
-class ResultTest extends \PHPUnit\Framework\TestCase
+final class ResultTest extends \PHPUnit\Framework\TestCase
 {
     /**
      * @group response-validation

@@ -27,7 +27,7 @@ use SimpleSAML\TestUtils\PEMCertificatesMock;
  * @covers \SAML2\Response\SignatureValidation
  * @package simplesamlphp/saml2
  */
-class SignatureValidationTest extends MockeryTestCase
+final class SignatureValidationTest extends MockeryTestCase
 {
     /**
      * @var \SAML2\Configuration\IdentityProvider

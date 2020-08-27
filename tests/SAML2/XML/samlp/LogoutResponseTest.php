@@ -14,7 +14,7 @@ use SAML2\XML\samlp\LogoutResponse;
  * @covers \SAML2\XML\samlp\LogoutResponse
  * @package simplesamlphp/saml2
  */
-class LogoutResponseTest extends TestCase
+final class LogoutResponseTest extends TestCase
 {
     /** @var \DOMDocument */
     private $document;

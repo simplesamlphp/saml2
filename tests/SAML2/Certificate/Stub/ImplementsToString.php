@@ -7,7 +7,7 @@ namespace SAML2\Certificate\Stub;
 /**
  * @package simplesamlphp/saml2
  */
-class ImplementsToString
+final class ImplementsToString
 {
     /**
      * @var string

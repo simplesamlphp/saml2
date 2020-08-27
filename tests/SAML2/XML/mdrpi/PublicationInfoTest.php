@@ -15,7 +15,7 @@ use SAML2\Utils;
  * @covers \SAML2\XML\mdrpi\PublicationInfo
  * @package simplesamlphp/saml2
  */
-class PublicationInfoTest extends TestCase
+final class PublicationInfoTest extends TestCase
 {
     /** @var \DOMDocument */
     protected $document;
