@@ -66,7 +66,10 @@ XML
         $statusDetailElement = $statusDetailElement[0]->getXML();
 
         $this->assertEquals('Cause', $statusDetailElement->tagName);
-        $this->assertEquals('org.sourceid.websso.profiles.idp.FailedAuthnSsoException', $statusDetailElement->textContent);
+        $this->assertEquals(
+            'org.sourceid.websso.profiles.idp.FailedAuthnSsoException',
+            $statusDetailElement->textContent
+        );
     }
 
 

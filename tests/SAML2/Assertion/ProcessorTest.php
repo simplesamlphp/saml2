@@ -59,10 +59,10 @@ final class ProcessorTest extends MockeryTestCase
     /**
      * @test
      */
-    public function processor_correctly_encrypts_assertions(): void
+    public function processorCorrectlyEncryptsAssertions(): void
     {
-        $encryptedAssertion = \Mockery::mock(EncryptedAssertion::class);
-        $assertion = \Mockery::mock(Assertion::class);
+        $encryptedAssertion = m::mock(EncryptedAssertion::class);
+        $assertion = m::mock(Assertion::class);
 
         $testData = [
             [$assertion],
@@ -88,7 +88,7 @@ final class ProcessorTest extends MockeryTestCase
     /**
      * @test
      */
-    public function unsuported_assertions_are_rejected(): void
+    public function unsuportedAssertionsAreRejected(): void
     {
         $this->expectException(InvalidAssertionException::class);
         $this->expectExceptionMessage('The assertion must be of type: EncryptedAssertion or Assertion');

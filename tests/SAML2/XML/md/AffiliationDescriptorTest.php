@@ -31,7 +31,8 @@ final class AffiliationDescriptorTest extends TestCase
     {
         $mdNamespace = AffiliationDescriptor::NS;
         $this->document = DOMDocumentFactory::fromString(<<<XML
-<md:AffiliationDescriptor xmlns:md="{$mdNamespace}" ID="TheID" validUntil="2009-02-13T23:31:30Z" cacheDuration="PT5000S" affiliationOwnerID="TheOwner">
+<md:AffiliationDescriptor xmlns:md="{$mdNamespace}" ID="TheID" validUntil="2009-02-13T23:31:30Z"
+    cacheDuration="PT5000S" affiliationOwnerID="TheOwner">
   <md:AffiliateMember>Member</md:AffiliateMember>
   <md:AffiliateMember>OtherMember</md:AffiliateMember>
   <md:KeyDescriptor use="signing">
@@ -184,7 +185,8 @@ XML
     {
         $mdNamespace = AffiliationDescriptor::NS;
         $document = DOMDocumentFactory::fromString(<<<XML
-<md:AffiliationDescriptor xmlns:md="{$mdNamespace}" affiliationOwnerID="TheOwner" ID="TheID" validUntil="2009-02-13T23:31:30Z" cacheDuration="PT5000S">
+<md:AffiliationDescriptor xmlns:md="{$mdNamespace}" affiliationOwnerID="TheOwner" ID="TheID"
+    validUntil="2009-02-13T23:31:30Z" cacheDuration="PT5000S">
 </md:AffiliationDescriptor>
 XML
         );
@@ -201,9 +203,10 @@ XML
     {
         $mdNamespace = AffiliationDescriptor::NS;
         $document = DOMDocumentFactory::fromString(<<<XML
-<md:AffiliationDescriptor xmlns:md="{$mdNamespace}" affiliationOwnerID="TheOwner" ID="TheID" validUntil="2009-02-13T23:31:30Z" cacheDuration="PT5000S">
-    <md:AffiliateMember></md:AffiliateMember>
-    <md:AffiliateMember>OtherMember</md:AffiliateMember>
+<md:AffiliationDescriptor xmlns:md="{$mdNamespace}" affiliationOwnerID="TheOwner" ID="TheID"
+    validUntil="2009-02-13T23:31:30Z" cacheDuration="PT5000S">
+  <md:AffiliateMember></md:AffiliateMember>
+  <md:AffiliateMember>OtherMember</md:AffiliateMember>
 </md:AffiliationDescriptor>
 XML
         );
@@ -220,9 +223,10 @@ XML
     {
         $mdNamespace = AffiliationDescriptor::NS;
         $document = DOMDocumentFactory::fromString(<<<XML
-<md:AffiliationDescriptor xmlns:md="{$mdNamespace}" ID="TheID" validUntil="2009-02-13T23:31:30Z" cacheDuration="PT5000S">
-    <md:AffiliateMember>Member</md:AffiliateMember>
-    <md:AffiliateMember>OtherMember</md:AffiliateMember>
+<md:AffiliationDescriptor xmlns:md="{$mdNamespace}" ID="TheID"
+    validUntil="2009-02-13T23:31:30Z" cacheDuration="PT5000S">
+  <md:AffiliateMember>Member</md:AffiliateMember>
+  <md:AffiliateMember>OtherMember</md:AffiliateMember>
 </md:AffiliationDescriptor>
 XML
         );
@@ -239,6 +243,9 @@ XML
     public function testSerialization(): void
     {
         $ad = AffiliationDescriptor::fromXML($this->document->documentElement);
-        $this->assertEquals($this->document->saveXML($this->document->documentElement), strval(unserialize(serialize($ad))));
+        $this->assertEquals(
+            $this->document->saveXML($this->document->documentElement),
+            strval(unserialize(serialize($ad)))
+        );
     }
 }

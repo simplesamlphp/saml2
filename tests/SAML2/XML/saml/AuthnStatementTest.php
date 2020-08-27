@@ -32,7 +32,10 @@ final class AuthnStatementTest extends TestCase
         $ac_ppt = Constants::AC_PASSWORD_PROTECTED_TRANSPORT;
 
         $this->document = DOMDocumentFactory::fromString(<<<XML
-<saml:AuthnStatement xmlns:saml="{$samlNamespace}" AuthnInstant="2020-03-23T23:37:24Z" SessionIndex="123" SessionNotOnOrAfter="2020-03-23T23:37:24Z">
+<saml:AuthnStatement xmlns:saml="{$samlNamespace}"
+    AuthnInstant="2020-03-23T23:37:24Z"
+    SessionIndex="123"
+    SessionNotOnOrAfter="2020-03-23T23:37:24Z">
   <saml:SubjectLocality Address="1.1.1.1" DNSName="idp.example.org" />
   <saml:AuthnContext>
     <saml:AuthnContextClassRef>{$ac_ppt}</saml:AuthnContextClassRef>
@@ -107,7 +110,10 @@ XML
         $this->assertCount(1, $authnStatementElements);
 
         // Test ordering of AuthnStatement contents
-        $authnStatementElements = Utils::xpQuery($authnStatementElement, './saml_assertion:SubjectLocality/following-sibling::*');
+        $authnStatementElements = Utils::xpQuery(
+            $authnStatementElement,
+            './saml_assertion:SubjectLocality/following-sibling::*'
+        );
         $this->assertCount(1, $authnStatementElements);
         $this->assertEquals('saml:AuthnContext', $authnStatementElements[0]->tagName);
     }
@@ -141,7 +147,10 @@ XML
     {
         $samlNamespace = Constants::NS_SAML;
         $document = DOMDocumentFactory::fromString(<<<XML
-<saml:AuthnStatement xmlns:saml="{$samlNamespace}" AuthnInstant="2020-03-23T23:37:24Z" SessionIndex="123" SessionNotOnOrAfter="2020-03-23T23:37:24Z">
+<saml:AuthnStatement xmlns:saml="{$samlNamespace}"
+    AuthnInstant="2020-03-23T23:37:24Z"
+    SessionIndex="123"
+    SessionNotOnOrAfter="2020-03-23T23:37:24Z">
 </saml:AuthnStatement>
 XML
         );

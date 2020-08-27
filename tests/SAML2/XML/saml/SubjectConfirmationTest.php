@@ -92,7 +92,10 @@ XML
         $this->assertCount(1, $subjectConfirmationElements);
 
         // Test ordering of SubjectConfirmation contents
-        $subjectConfirmationElements = Utils::xpQuery($subjectConfirmationElement, './saml_assertion:NameID/following-sibling::*');
+        $subjectConfirmationElements = Utils::xpQuery(
+            $subjectConfirmationElement,
+            './saml_assertion:NameID/following-sibling::*'
+        );
         $this->assertCount(1, $subjectConfirmationElements);
         $this->assertEquals('saml:SubjectConfirmationData', $subjectConfirmationElements[0]->tagName);
     }
@@ -172,7 +175,9 @@ XML
         );
 
         $this->expectException(TooManyElementsException::class);
-        $this->expectExceptionMessage('A <saml:SubjectConfirmation> can contain exactly one of <saml:BaseID>, <saml:NameID> or <saml:EncryptedID>.');
+        $this->expectExceptionMessage(
+            'A <saml:SubjectConfirmation> can contain exactly one of <saml:BaseID>, <saml:NameID> or <saml:EncryptedID>.'
+        );
         SubjectConfirmation::fromXML($document->documentElement);
     }
 

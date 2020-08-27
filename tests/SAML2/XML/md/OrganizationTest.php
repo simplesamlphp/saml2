@@ -34,7 +34,8 @@ final class OrganizationTest extends TestCase
     <some:Ext xmlns:some="urn:mace:some:metadata:1.0">SomeExtension</some:Ext>
   </md:Extensions>
   <md:OrganizationName xml:lang="en">Identity Providers R US</md:OrganizationName>
-  <md:OrganizationDisplayName xml:lang="en">Identity Providers R US, a Division of Lerxst Corp.</md:OrganizationDisplayName>
+  <md:OrganizationDisplayName
+      xml:lang="en">Identity Providers R US, a Division of Lerxst Corp.</md:OrganizationDisplayName>
   <md:OrganizationURL xml:lang="en">https://IdentityProvider.com</md:OrganizationURL>
 </md:Organization>
 XML
@@ -70,7 +71,6 @@ XML
         $this->assertEquals(
             $this->document->saveXML($this->document->documentElement),
             strval($org)
-//            $org->toXML($root->documentElement)->ownerDocument->saveXML($root->documentElement->firstChild)
         );
     }
 
@@ -111,7 +111,8 @@ XML
         $document = DOMDocumentFactory::fromString(<<<XML
 <md:Organization xmlns:md="{$mdns}">
   <md:OrganizationName xml:lang="en">Identity Providers R US</md:OrganizationName>
-  <md:OrganizationDisplayName xml:lang="en">Identity Providers R US, a Division of Lerxst Corp.</md:OrganizationDisplayName>
+  <md:OrganizationDisplayName
+      xml:lang="en">Identity Providers R US, a Division of Lerxst Corp.</md:OrganizationDisplayName>
   <md:OrganizationURL xml:lang="en"></md:OrganizationURL>
 </md:Organization>
 XML

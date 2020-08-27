@@ -189,7 +189,9 @@ final class SignatureValidationTest extends MockeryTestCase
         $doc = new DOMDocument();
         $doc->load(__DIR__ . '/response.xml');
         $response = Response::fromXML($doc->documentElement);
-        $response->setSigningKey(PEMCertificatesMock::getPrivateKey(XMLSecurityKey::RSA_SHA256, PEMCertificatesMock::PRIVATE_KEY));
+        $response->setSigningKey(
+            PEMCertificatesMock::getPrivateKey(XMLSecurityKey::RSA_SHA256, PEMCertificatesMock::PRIVATE_KEY)
+        );
         $response->setCertificates([PEMCertificatesMock::getPlainPublicKey(PEMCertificatesMock::PUBLIC_KEY)]);
 
         // convert to signed response
@@ -216,7 +218,9 @@ final class SignatureValidationTest extends MockeryTestCase
         $doc = new DOMDocument();
         $doc->load(__DIR__ . '/unsignedResponseWithSignedAssertion.xml');
         $response = Response::fromXML($doc->documentElement);
-        $response->setSigningKey(PEMCertificatesMock::getPrivateKey(XMLSecurityKey::RSA_SHA256, PEMCertificatesMock::PRIVATE_KEY));
+        $response->setSigningKey(
+            PEMCertificatesMock::getPrivateKey(XMLSecurityKey::RSA_SHA256, PEMCertificatesMock::PRIVATE_KEY)
+        );
         $response->setCertificates([PEMCertificatesMock::getPlainPublicKey(PEMCertificatesMock::PUBLIC_KEY)]);
 
         return Response::fromXML($response->toXML());

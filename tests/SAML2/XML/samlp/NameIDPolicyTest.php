@@ -29,7 +29,11 @@ final class NameIDPolicyTest extends TestCase
     {
         $samlNamespace = Constants::NS_SAMLP;
         $this->document = DOMDocumentFactory::fromString(<<<XML
-<samlp:NameIDPolicy xmlns:samlp="{$samlNamespace}" Format="TheFormat" SPNameQualifier="TheSPNameQualifier" AllowCreate="true"/>
+<samlp:NameIDPolicy
+  xmlns:samlp="{$samlNamespace}"
+  Format="TheFormat"
+  SPNameQualifier="TheSPNameQualifier"
+  AllowCreate="true"/>
 XML
         );
     }

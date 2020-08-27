@@ -99,7 +99,10 @@ XML
         $statusDetailElements = Utils::xpQuery($statusElement, './saml_protocol:StatusDetail');
         $this->assertCount(1, $statusDetailElements);
         $this->assertEquals('Cause', $statusDetailElements[0]->childNodes[0]->tagName);
-        $this->assertEquals('org.sourceid.websso.profiles.idp.FailedAuthnSsoException', $statusDetailElements[0]->childNodes[0]->textContent);
+        $this->assertEquals(
+            'org.sourceid.websso.profiles.idp.FailedAuthnSsoException',
+            $statusDetailElements[0]->childNodes[0]->textContent
+        );
 
         $this->assertEquals(
             $this->document->saveXML($this->document->documentElement),

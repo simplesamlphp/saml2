@@ -30,7 +30,13 @@ final class AttributeTest extends TestCase
     {
         $samlNamespace = Constants::NS_SAML;
         $this->document = DOMDocumentFactory::fromString(<<<XML
-<saml:Attribute xmlns:saml="{$samlNamespace}" Name="TheName" NameFormat="TheNameFormat" FriendlyName="TheFriendlyName" test:attr1="testval1" test:attr2="testval2" xmlns:test="urn:test">
+<saml:Attribute xmlns:saml="{$samlNamespace}"
+    Name="TheName"
+    NameFormat="TheNameFormat"
+    FriendlyName="TheFriendlyName"
+    test:attr1="testval1"
+    test:attr2="testval2"
+    xmlns:test="urn:test">
   <saml:AttributeValue>FirstValue</saml:AttributeValue>
   <saml:AttributeValue>SecondValue</saml:AttributeValue>
 </saml:Attribute>

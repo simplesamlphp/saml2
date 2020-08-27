@@ -25,9 +25,9 @@ final class ChunkTest extends TestCase
     public function setUp(): void
     {
         $attribute = new Attribute(
-            'TheName',
-            'TheNameFormat',
-            'TheFriendlyName',
+            'X',
+            'Y',
+            'Z',
             [
                 new AttributeValue('FirstValue'),
                 new AttributeValue('SecondValue')
@@ -70,7 +70,7 @@ final class ChunkTest extends TestCase
     {
         $this->assertEquals(
             <<<XML
-<saml:Attribute xmlns:saml="urn:oasis:names:tc:SAML:2.0:assertion" Name="TheName" NameFormat="TheNameFormat" FriendlyName="TheFriendlyName">
+<saml:Attribute xmlns:saml="urn:oasis:names:tc:SAML:2.0:assertion" Name="X" NameFormat="Y" FriendlyName="Z">
   <saml:AttributeValue>FirstValue</saml:AttributeValue>
   <saml:AttributeValue>SecondValue</saml:AttributeValue>
 </saml:Attribute>

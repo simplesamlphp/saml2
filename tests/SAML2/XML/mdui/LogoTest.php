@@ -23,7 +23,9 @@ final class LogoTest extends TestCase
     private $document;
 
     /** @var string */
-    private $data = 'data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAAEAAAABCAQAAAC1HAwCAAAAC0lEQVR42mNkYAAAAAYAAjCB0C8AAAAASUVORK5CYII=';
+    private $data = <<<IMG
+data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAAEAAAABCAQAAAC1HAwCAAAAC0lEQVR42mNkYAAAAAYAAjCB0C8AAAAASUVORK5CYII=
+IMG;
 
     /** @var string */
     private $url = 'https://static.example.org/images/logos/logo300x200.png';

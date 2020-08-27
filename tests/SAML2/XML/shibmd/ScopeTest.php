@@ -150,6 +150,9 @@ XML
     public function testSerialization(): void
     {
         $scope = Scope::fromXML($this->document->documentElement);
-        $this->assertEquals($this->document->saveXML($this->document->documentElement), strval(unserialize(serialize($scope))));
+        $this->assertEquals(
+            $this->document->saveXML($this->document->documentElement),
+            strval(unserialize(serialize($scope)))
+        );
     }
 }

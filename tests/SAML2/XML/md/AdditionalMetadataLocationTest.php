@@ -28,7 +28,8 @@ final class AdditionalMetadataLocationTest extends TestCase
     {
         $ns = AdditionalMetadataLocation::NS;
         $this->document = DOMDocumentFactory::fromString(<<<XML
-<md:AdditionalMetadataLocation xmlns:md="{$ns}" namespace="TheNamespaceAttribute">LocationText</md:AdditionalMetadataLocation>
+<md:AdditionalMetadataLocation xmlns:md="{$ns}"
+    namespace="TheNamespaceAttribute">LocationText</md:AdditionalMetadataLocation>
 XML
         );
     }
@@ -47,7 +48,10 @@ XML
         $this->assertEquals('TheNamespaceAttribute', $additionalMetadataLocation->getNamespace());
         $this->assertEquals('LocationText', $additionalMetadataLocation->getLocation());
 
-        $this->assertEquals($this->document->saveXML($this->document->documentElement), strval($additionalMetadataLocation));
+        $this->assertEquals(
+            $this->document->saveXML($this->document->documentElement),
+            strval($additionalMetadataLocation)
+        );
     }
 
 

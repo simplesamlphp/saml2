@@ -40,15 +40,21 @@ final class AttributeAuthorityDescriptorTest extends TestCase
 
         $this->document = DOMDocumentFactory::fromString(<<<XML
 <md:AttributeAuthorityDescriptor protocolSupportEnumeration="urn:oasis:names:tc:SAML:2.0:protocol" xmlns:md="{$mdns}">
-  <md:AttributeService Binding="urn:oasis:names:tc:SAML:2.0:bindings:SOAP" Location="https://IdentityProvider.com/SAML/AA/SOAP"/>
-  <md:AssertionIDRequestService Binding="urn:oasis:names:tc:SAML:2.0:bindings:URI" Location="https://IdentityProvider.com/SAML/AA/URI"/>
+  <md:AttributeService Binding="urn:oasis:names:tc:SAML:2.0:bindings:SOAP"
+      Location="https://IdentityProvider.com/SAML/AA/SOAP"/>
+  <md:AssertionIDRequestService Binding="urn:oasis:names:tc:SAML:2.0:bindings:URI"
+      Location="https://IdentityProvider.com/SAML/AA/URI"/>
   <md:NameIDFormat>urn:oasis:names:tc:SAML:1.1:nameid-format:X509SubjectName</md:NameIDFormat>
   <md:NameIDFormat>urn:oasis:names:tc:SAML:2.0:nameid-format:persistent</md:NameIDFormat>
   <md:NameIDFormat>urn:oasis:names:tc:SAML:2.0:nameid-format:transient</md:NameIDFormat>
   <md:AttributeProfile>profile1</md:AttributeProfile>
   <md:AttributeProfile>profile2</md:AttributeProfile>
-  <saml:Attribute xmlns:saml="{$samlns}" Name="urn:oid:1.3.6.1.4.1.5923.1.1.1.6" NameFormat="urn:oasis:names:tc:SAML:2.0:attrname-format:uri" FriendlyName="eduPersonPrincipalName"></saml:Attribute>
-  <saml:Attribute xmlns:saml="{$samlns}" Name="urn:oid:1.3.6.1.4.1.5923.1.1.1.1" NameFormat="urn:oasis:names:tc:SAML:2.0:attrname-format:uri" FriendlyName="eduPersonAffiliation">
+  <saml:Attribute xmlns:saml="{$samlns}" Name="urn:oid:1.3.6.1.4.1.5923.1.1.1.6"
+      NameFormat="urn:oasis:names:tc:SAML:2.0:attrname-format:uri"
+      FriendlyName="eduPersonPrincipalName"></saml:Attribute>
+  <saml:Attribute xmlns:saml="{$samlns}" Name="urn:oid:1.3.6.1.4.1.5923.1.1.1.1"
+      NameFormat="urn:oasis:names:tc:SAML:2.0:attrname-format:uri"
+      FriendlyName="eduPersonAffiliation">
     <saml:AttributeValue>member</saml:AttributeValue>
     <saml:AttributeValue>student</saml:AttributeValue>
     <saml:AttributeValue>faculty</saml:AttributeValue>
@@ -314,7 +320,8 @@ XML
         $mdns = Constants::NS_MD;
         $document = DOMDocumentFactory::fromString(<<<XML
 <md:AttributeAuthorityDescriptor protocolSupportEnumeration="urn:oasis:names:tc:SAML:2.0:protocol" xmlns:md="{$mdns}">
-  <md:AttributeService Binding="urn:oasis:names:tc:SAML:2.0:bindings:SOAP" Location="https://IdentityProvider.com/SAML/AA/SOAP"/>
+  <md:AttributeService Binding="urn:oasis:names:tc:SAML:2.0:bindings:SOAP"
+      Location="https://IdentityProvider.com/SAML/AA/SOAP"/>
 </md:AttributeAuthorityDescriptor>
 XML
         );
@@ -341,7 +348,8 @@ XML
         $mdns = Constants::NS_MD;
         $document = DOMDocumentFactory::fromString(<<<XML
 <md:AttributeAuthorityDescriptor protocolSupportEnumeration="urn:oasis:names:tc:SAML:2.0:protocol" xmlns:md="{$mdns}">
-  <md:AttributeService Binding="urn:oasis:names:tc:SAML:2.0:bindings:SOAP" Location="https://IdentityProvider.com/SAML/AA/SOAP"/>
+  <md:AttributeService Binding="urn:oasis:names:tc:SAML:2.0:bindings:SOAP"
+      Location="https://IdentityProvider.com/SAML/AA/SOAP"/>
   <md:NameIDFormat></md:NameIDFormat>
 </md:AttributeAuthorityDescriptor>
 XML
@@ -360,7 +368,8 @@ XML
         $mdns = Constants::NS_MD;
         $document = DOMDocumentFactory::fromString(<<<XML
 <md:AttributeAuthorityDescriptor protocolSupportEnumeration="urn:oasis:names:tc:SAML:2.0:protocol" xmlns:md="{$mdns}">
-  <md:AttributeService Binding="urn:oasis:names:tc:SAML:2.0:bindings:SOAP" Location="https://IdentityProvider.com/SAML/AA/SOAP"/>
+  <md:AttributeService Binding="urn:oasis:names:tc:SAML:2.0:bindings:SOAP"
+      Location="https://IdentityProvider.com/SAML/AA/SOAP"/>
   <md:AttributeProfile></md:AttributeProfile>
 </md:AttributeAuthorityDescriptor>
 XML

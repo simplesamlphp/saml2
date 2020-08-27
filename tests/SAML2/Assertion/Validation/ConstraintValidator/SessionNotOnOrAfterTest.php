@@ -42,7 +42,7 @@ final class SessionNotOnOrAfterTest extends ControlledTimeTest
      * @test
      * @return void
      */
-    public function timestamp_in_the_past_before_graceperiod_is_not_valid(): void
+    public function timestampInThePastBeforeGraceperiodIsNotValid(): void
     {
         $this->assertion->shouldReceive('getSessionNotOnOrAfter')->andReturn($this->currentTime - 60);
 
@@ -60,7 +60,7 @@ final class SessionNotOnOrAfterTest extends ControlledTimeTest
      * @group assertion-validation
      * @test
      */
-    public function time_within_graceperiod_is_valid(): void
+    public function timeWithinGraceperiodIsValid(): void
     {
         $this->assertion->shouldReceive('getSessionNotOnOrAfter')->andReturn($this->currentTime - 59);
 
@@ -78,7 +78,7 @@ final class SessionNotOnOrAfterTest extends ControlledTimeTest
      * @test
      * @return void
      */
-    public function current_time_is_valid(): void
+    public function currentTimeIsValid(): void
     {
         $this->assertion->shouldReceive('getSessionNotOnOrAfter')->andReturn($this->currentTime);
 

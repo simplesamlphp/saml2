@@ -93,9 +93,17 @@ XML
             ['https://idp.example.com/SAML2']
         );
 
-        $this->assertEquals(new AuthnContextClassRef(Constants::AC_PASSWORD_PROTECTED_TRANSPORT), $authnContext->getAuthnContextClassRef());
+        $this->assertEquals(
+            new AuthnContextClassRef(
+                Constants::AC_PASSWORD_PROTECTED_TRANSPORT
+            ),
+            $authnContext->getAuthnContextClassRef()
+        );
         $this->assertNull($authnContext->getAuthnContextDecl());
-        $this->assertEquals(new AuthnContextDeclRef('/relative/path/to/document.xml'), $authnContext->getAuthnContextDeclRef());
+        $this->assertEquals(
+            new AuthnContextDeclRef('/relative/path/to/document.xml'),
+            $authnContext->getAuthnContextDeclRef()
+        );
         $this->assertEquals(['https://idp.example.com/SAML2'], $authnContext->getAuthenticatingAuthorities());
 
         $document = $this->document;
@@ -158,7 +166,10 @@ XML
         $this->assertCount(1, $authnContextElements);
 
         // Test ordering of AuthnContext contents
-        $authnContextElements = Utils::xpQuery($authnContextElement, './saml_assertion:AuthnContextClassRef/following-sibling::*');
+        $authnContextElements = Utils::xpQuery(
+            $authnContextElement,
+            './saml_assertion:AuthnContextClassRef/following-sibling::*'
+        );
         $this->assertCount(2, $authnContextElements);
         $this->assertEquals('saml:AuthnContextDecl', $authnContextElements[0]->tagName);
         $this->assertEquals('saml:AuthenticatingAuthority', $authnContextElements[1]->tagName);
@@ -188,7 +199,10 @@ XML
         $this->assertCount(1, $authnContextElements);
 
         // Test ordering of AuthnContext contents
-        $authnContextElements = Utils::xpQuery($authnContextElement, './saml_assertion:AuthnContextDecl/following-sibling::*');
+        $authnContextElements = Utils::xpQuery(
+            $authnContextElement,
+            './saml_assertion:AuthnContextDecl/following-sibling::*'
+        );
         $this->assertCount(1, $authnContextElements);
         $this->assertEquals('saml:AuthenticatingAuthority', $authnContextElements[0]->tagName);
     }
@@ -217,7 +231,10 @@ XML
         $this->assertCount(1, $authnContextElements);
 
         // Test ordering of AuthnContext contents
-        $authnContextElements = Utils::xpQuery($authnContextElement, './saml_assertion:AuthnContextClassRef/following-sibling::*');
+        $authnContextElements = Utils::xpQuery(
+            $authnContextElement,
+            './saml_assertion:AuthnContextClassRef/following-sibling::*'
+        );
         $this->assertCount(2, $authnContextElements);
         $this->assertEquals('saml:AuthnContextDeclRef', $authnContextElements[0]->tagName);
         $this->assertEquals('saml:AuthenticatingAuthority', $authnContextElements[1]->tagName);
@@ -247,7 +264,10 @@ XML
         $this->assertCount(1, $authnContextElements);
 
         // Test ordering of AuthnContext contents
-        $authnContextElements = Utils::xpQuery($authnContextElement, './saml_assertion:AuthnContextDeclRef/following-sibling::*');
+        $authnContextElements = Utils::xpQuery(
+            $authnContextElement,
+            './saml_assertion:AuthnContextDeclRef/following-sibling::*'
+        );
         $this->assertCount(1, $authnContextElements);
         $this->assertEquals('saml:AuthenticatingAuthority', $authnContextElements[0]->tagName);
     }

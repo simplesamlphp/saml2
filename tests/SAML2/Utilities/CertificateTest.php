@@ -20,9 +20,13 @@ final class CertificateTest extends TestCase
      */
     public function testValidStructure(): void
     {
-        $result = Certificate::hasValidStructure(PEMCertificatesMock::getPlainPublicKey(PEMCertificatesMock::PUBLIC_KEY));
+        $result = Certificate::hasValidStructure(
+            PEMCertificatesMock::getPlainPublicKey(PEMCertificatesMock::PUBLIC_KEY)
+        );
         $this->assertTrue($result);
-        $result = Certificate::hasValidStructure(PEMCertificatesMock::getPlainPublicKey(PEMCertificatesMock::BROKEN_PUBLIC_KEY));
+        $result = Certificate::hasValidStructure(
+            PEMCertificatesMock::getPlainPublicKey(PEMCertificatesMock::BROKEN_PUBLIC_KEY)
+        );
         $this->assertFalse($result);
     }
 

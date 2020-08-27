@@ -25,7 +25,7 @@ final class SubjectConfirmationRecipientMatchesTest extends MockeryTestCase
      * @test
      * @return void
      */
-    public function when_the_subject_confirmation_recipient_differs_from_the_destination_the_sc_is_invalid(): void
+    public function whenTheSubjectConfirmationRecipientDiffersFromTheDestinationTheScIsInvalid(): void
     {
         $subjectConfirmationData = new SubjectConfirmationData(null, null, 'someDestination');
         $subjectConfirmation = new SubjectConfirmation(Constants::CM_HOK, null, $subjectConfirmationData);
@@ -47,7 +47,7 @@ final class SubjectConfirmationRecipientMatchesTest extends MockeryTestCase
      * @test
      * @return void
      */
-    public function when_the_subject_confirmation_recipient_equals_the_destination_the_sc_is_invalid(): void
+    public function whenTheSubjectConfirmationRecipientEqualsTheDestinationTheScIsInvalid(): void
     {
         $subjectConfirmationData = new SubjectConfirmationData(null, null, 'theSameDestination');
         $subjectConfirmation = new SubjectConfirmation(Constants::CM_HOK, null, $subjectConfirmationData);

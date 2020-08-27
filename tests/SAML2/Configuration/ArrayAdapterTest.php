@@ -18,7 +18,7 @@ final class ArrayAdapterTest extends TestCase
      * @test
      * @return void
      */
-    public function set_configuration_can_be_queried(): void
+    public function setConfigurationCanBeQueried(): void
     {
         $configuration = new ArrayAdapter(['foo' => 'bar']);
 
@@ -33,7 +33,7 @@ final class ArrayAdapterTest extends TestCase
      * @test
      * @return void
      */
-    public function default_values_are_returned_for_unavailable_configuration(): void
+    public function defaultValuesAreReturnedForUnavailableConfiguration(): void
     {
         $configuration = ['foo' => 'bar'];
 

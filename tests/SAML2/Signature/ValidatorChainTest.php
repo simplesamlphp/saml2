@@ -38,7 +38,7 @@ final class ValidatorChainTest extends TestCase
      * @test
      * @return void
      */
-    public function if_no_validators_can_validate_an_exception_is_thrown(): void
+    public function ifNoValidatorsCanValidateAnExceptionIsThrown(): void
     {
         $this->chain->appendValidator(new MockChainedValidator(false, true));
         $this->chain->appendValidator(new MockChainedValidator(false, true));
@@ -53,7 +53,7 @@ final class ValidatorChainTest extends TestCase
      * @test
      * @return void
      */
-    public function all_registered_validators_should_be_tried(): void
+    public function allRegisteredValidatorsShouldBeTried(): void
     {
         $this->chain->appendValidator(new MockChainedValidator(false, true));
         $this->chain->appendValidator(new MockChainedValidator(false, true));
@@ -72,7 +72,7 @@ final class ValidatorChainTest extends TestCase
      * @test
      * @return void
      */
-    public function it_uses_the_result_of_the_first_validator_that_can_validate(): void
+    public function itUsesTheResultOfTheFirstValidatorThatCanValidate(): void
     {
         $this->chain->appendValidator(new MockChainedValidator(false, true));
         $this->chain->appendValidator(new MockChainedValidator(true, false));

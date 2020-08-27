@@ -37,7 +37,12 @@ final class AttributeQueryTest extends TestCase
         $samlpNamespace = AttributeQuery::NS;
 
         $this->document = DOMDocumentFactory::fromString(<<<XML
-<samlp:AttributeQuery xmlns:samlp="urn:oasis:names:tc:SAML:2.0:protocol" xmlns:saml="urn:oasis:names:tc:SAML:2.0:assertion" ID="aaf23196-1773-2113-474a-fe114412ab72" Version="2.0" IssueInstant="2017-09-06T11:49:27Z">
+<samlp:AttributeQuery
+    xmlns:samlp="urn:oasis:names:tc:SAML:2.0:protocol"
+    xmlns:saml="urn:oasis:names:tc:SAML:2.0:assertion"
+    ID="aaf23196-1773-2113-474a-fe114412ab72"
+    Version="2.0"
+    IssueInstant="2017-09-06T11:49:27Z">
   <saml:Issuer Format="urn:oasis:names:tc:SAML:2.0:nameid-format:entity">https://example.org/</saml:Issuer>
   <saml:Subject>
     <saml:NameID Format="urn:oasis:names:tc:SAML:2.0:nameid-format:unspecified">urn:example:subject</saml:NameID>
@@ -210,15 +215,17 @@ XML
     public function testNoNameFormatDefaultsToUnspecified(): void
     {
         $xml = <<<XML
-  <samlp:AttributeQuery xmlns:saml="urn:oasis:names:tc:SAML:2.0:assertion" xmlns:samlp="urn:oasis:names:tc:SAML:2.0:protocol" ID="aaf23196-1773-2113-474a-fe114412ab72" Version="2.0" IssueInstant="2017-09-06T11:49:27Z">
-	<saml:Issuer Format="urn:oasis:names:tc:SAML:2.0:nameid-format:entity">https://example.org/</saml:Issuer>
-	<saml:Subject>
-	  <saml:NameID Format="urn:oasis:names:tc:SAML:2.0:nameid-format:unspecified">urn:example:subject</saml:NameID>
-	</saml:Subject>
-	<saml:Attribute
-	  Name="urn:oid:2.5.4.4"
-	  FriendlyName="sn">
-	</saml:Attribute>
+<samlp:AttributeQuery
+    xmlns:saml="urn:oasis:names:tc:SAML:2.0:assertion"
+    xmlns:samlp="urn:oasis:names:tc:SAML:2.0:protocol"
+    ID="aaf23196-1773-2113-474a-fe114412ab72"
+    Version="2.0"
+    IssueInstant="2017-09-06T11:49:27Z">
+  <saml:Issuer Format="urn:oasis:names:tc:SAML:2.0:nameid-format:entity">https://example.org/</saml:Issuer>
+  <saml:Subject>
+    <saml:NameID Format="urn:oasis:names:tc:SAML:2.0:nameid-format:unspecified">urn:example:subject</saml:NameID>
+  </saml:Subject>
+  <saml:Attribute Name="urn:oid:2.5.4.4" FriendlyName="sn"></saml:Attribute>
 </samlp:AttributeQuery>
 XML;
         $document = DOMDocumentFactory::fromString($xml);
@@ -234,26 +241,31 @@ XML;
     public function testMultiNameFormatDefaultsToUnspecified(): void
     {
         $xml = <<<XML
-  <samlp:AttributeQuery xmlns:saml="urn:oasis:names:tc:SAML:2.0:assertion" xmlns:samlp="urn:oasis:names:tc:SAML:2.0:protocol" ID="aaf23196-1773-2113-474a-fe114412ab72" Version="2.0" IssueInstant="2017-09-06T11:49:27Z">
-	<saml:Issuer Format="urn:oasis:names:tc:SAML:2.0:nameid-format:entity">https://example.org/</saml:Issuer>
-	<saml:Subject>
-	  <saml:NameID Format="urn:oasis:names:tc:SAML:2.0:nameid-format:unspecified">urn:example:subject</saml:NameID>
-	</saml:Subject>
-	<saml:Attribute
-	  NameFormat="urn:oasis:names:tc:SAML:2.0:attrname-format:uri"
-	  Name="urn:oid:1.3.6.1.4.1.5923.1.1.1.7"
-	  FriendlyName="entitlements">
-	</saml:Attribute>
-	<saml:Attribute
-	  NameFormat="urn:example"
-	  Name="urn:oid:2.5.4.4"
-	  FriendlyName="sn">
-	</saml:Attribute>
-	<saml:Attribute
-	  NameFormat="urn:oasis:names:tc:SAML:2.0:attrname-format:uri"
-	  Name="urn:oid:2.16.840.1.113730.3.1.39"
-	  FriendlyName="preferredLanguage">
-	</saml:Attribute>
+<samlp:AttributeQuery
+    xmlns:saml="urn:oasis:names:tc:SAML:2.0:assertion"
+    xmlns:samlp="urn:oasis:names:tc:SAML:2.0:protocol"
+    ID="aaf23196-1773-2113-474a-fe114412ab72"
+    Version="2.0"
+    IssueInstant="2017-09-06T11:49:27Z">
+  <saml:Issuer Format="urn:oasis:names:tc:SAML:2.0:nameid-format:entity">https://example.org/</saml:Issuer>
+  <saml:Subject>
+    <saml:NameID Format="urn:oasis:names:tc:SAML:2.0:nameid-format:unspecified">urn:example:subject</saml:NameID>
+  </saml:Subject>
+  <saml:Attribute
+      NameFormat="urn:oasis:names:tc:SAML:2.0:attrname-format:uri"
+      Name="urn:oid:1.3.6.1.4.1.5923.1.1.1.7"
+      FriendlyName="entitlements">
+  </saml:Attribute>
+  <saml:Attribute
+      NameFormat="urn:example"
+      Name="urn:oid:2.5.4.4"
+      FriendlyName="sn">
+  </saml:Attribute>
+  <saml:Attribute
+      NameFormat="urn:oasis:names:tc:SAML:2.0:attrname-format:uri"
+      Name="urn:oid:2.16.840.1.113730.3.1.39"
+      FriendlyName="preferredLanguage">
+  </saml:Attribute>
 </samlp:AttributeQuery>
 XML;
         $document = DOMDocumentFactory::fromString($xml);
@@ -273,25 +285,30 @@ XML;
     public function testMissingNameOnAttributeThrowsException(): void
     {
         $xml = <<<XML
-  <samlp:AttributeQuery xmlns:saml="urn:oasis:names:tc:SAML:2.0:assertion" xmlns:samlp="urn:oasis:names:tc:SAML:2.0:protocol" ID="aaf23196-1773-2113-474a-fe114412ab72" Version="2.0" IssueInstant="2017-09-06T11:49:27Z">
-	<saml:Issuer Format="urn:oasis:names:tc:SAML:2.0:nameid-format:entity">https://example.org/</saml:Issuer>
-	<saml:Subject>
-	  <saml:NameID Format="urn:oasis:names:tc:SAML:2.0:nameid-format:unspecified">urn:example:subject</saml:NameID>
-	</saml:Subject>
-	<saml:Attribute
-	  NameFormat="urn:oasis:names:tc:SAML:2.0:attrname-format:uri"
-	  Name="urn:oid:1.3.6.1.4.1.5923.1.1.1.7"
-	  FriendlyName="entitlements">
-	</saml:Attribute>
-	<saml:Attribute
-	  NameFormat="urn:oasis:names:tc:SAML:2.0:attrname-format:uri"
-	  FriendlyName="sn">
-	</saml:Attribute>
-	<saml:Attribute
-	  NameFormat="urn:oasis:names:tc:SAML:2.0:attrname-format:uri"
-	  Name="urn:oid:2.16.840.1.113730.3.1.39"
-	  FriendlyName="preferredLanguage">
-	</saml:Attribute>
+<samlp:AttributeQuery
+    xmlns:saml="urn:oasis:names:tc:SAML:2.0:assertion"
+    xmlns:samlp="urn:oasis:names:tc:SAML:2.0:protocol"
+    ID="aaf23196-1773-2113-474a-fe114412ab72"
+    Version="2.0"
+    IssueInstant="2017-09-06T11:49:27Z">
+  <saml:Issuer Format="urn:oasis:names:tc:SAML:2.0:nameid-format:entity">https://example.org/</saml:Issuer>
+  <saml:Subject>
+    <saml:NameID Format="urn:oasis:names:tc:SAML:2.0:nameid-format:unspecified">urn:example:subject</saml:NameID>
+  </saml:Subject>
+  <saml:Attribute
+      NameFormat="urn:oasis:names:tc:SAML:2.0:attrname-format:uri"
+      Name="urn:oid:1.3.6.1.4.1.5923.1.1.1.7"
+      FriendlyName="entitlements">
+  </saml:Attribute>
+  <saml:Attribute
+      NameFormat="urn:oasis:names:tc:SAML:2.0:attrname-format:uri"
+      FriendlyName="sn">
+  </saml:Attribute>
+  <saml:Attribute
+      NameFormat="urn:oasis:names:tc:SAML:2.0:attrname-format:uri"
+      Name="urn:oid:2.16.840.1.113730.3.1.39"
+      FriendlyName="preferredLanguage">
+  </saml:Attribute>
 </samlp:AttributeQuery>
 XML;
         $document = DOMDocumentFactory::fromString($xml);
@@ -305,13 +322,18 @@ XML;
     public function testNoSubjectThrowsException(): void
     {
         $xml = <<<XML
-  <samlp:AttributeQuery xmlns:saml="urn:oasis:names:tc:SAML:2.0:assertion" xmlns:samlp="urn:oasis:names:tc:SAML:2.0:protocol" ID="aaf23196-1773-2113-474a-fe114412ab72" Version="2.0" IssueInstant="2017-09-06T11:49:27Z">
-	<saml:Issuer Format="urn:oasis:names:tc:SAML:2.0:nameid-format:entity">https://example.org/</saml:Issuer>
-	<saml:Attribute
-	  NameFormat="urn:oasis:names:tc:SAML:2.0:attrname-format:uri"
-	  Name="urn:oid:1.3.6.1.4.1.5923.1.1.1.7"
-	  FriendlyName="entitlements">
-	</saml:Attribute>
+<samlp:AttributeQuery
+    xmlns:saml="urn:oasis:names:tc:SAML:2.0:assertion"
+    xmlns:samlp="urn:oasis:names:tc:SAML:2.0:protocol"
+    ID="aaf23196-1773-2113-474a-fe114412ab72"
+    Version="2.0"
+    IssueInstant="2017-09-06T11:49:27Z">
+  <saml:Issuer Format="urn:oasis:names:tc:SAML:2.0:nameid-format:entity">https://example.org/</saml:Issuer>
+  <saml:Attribute
+      NameFormat="urn:oasis:names:tc:SAML:2.0:attrname-format:uri"
+      Name="urn:oid:1.3.6.1.4.1.5923.1.1.1.7"
+      FriendlyName="entitlements">
+  </saml:Attribute>
 </samlp:AttributeQuery>
 XML;
         $document = DOMDocumentFactory::fromString($xml);
@@ -324,19 +346,24 @@ XML;
     public function testTooManySubjectsThrowsException(): void
     {
         $xml = <<<XML
-  <samlp:AttributeQuery xmlns:saml="urn:oasis:names:tc:SAML:2.0:assertion" xmlns:samlp="urn:oasis:names:tc:SAML:2.0:protocol" ID="aaf23196-1773-2113-474a-fe114412ab72" Version="2.0" IssueInstant="2017-09-06T11:49:27Z">
-	<saml:Issuer Format="urn:oasis:names:tc:SAML:2.0:nameid-format:entity">https://example.org/</saml:Issuer>
-	<saml:Subject>
-	  <saml:NameID Format="urn:oasis:names:tc:SAML:2.0:nameid-format:unspecified">urn:example:subject</saml:NameID>
-	</saml:Subject>
-	<saml:Subject>
-	  <saml:NameID Format="urn:oasis:names:tc:SAML:2.0:nameid-format:unspecified">urn:example:another:subject</saml:NameID>
-	</saml:Subject>
-	<saml:Attribute
-	  NameFormat="urn:oasis:names:tc:SAML:2.0:attrname-format:uri"
-	  Name="urn:oid:1.3.6.1.4.1.5923.1.1.1.7"
-	  FriendlyName="entitlements">
-	</saml:Attribute>
+<samlp:AttributeQuery
+    xmlns:saml="urn:oasis:names:tc:SAML:2.0:assertion"
+    xmlns:samlp="urn:oasis:names:tc:SAML:2.0:protocol"
+    ID="aaf23196-1773-2113-474a-fe114412ab72"
+    Version="2.0"
+    IssueInstant="2017-09-06T11:49:27Z">
+  <saml:Issuer Format="urn:oasis:names:tc:SAML:2.0:nameid-format:entity">https://example.org/</saml:Issuer>
+  <saml:Subject>
+    <saml:NameID Format="urn:oasis:names:tc:SAML:2.0:nameid-format:unspecified">urn:subject</saml:NameID>
+  </saml:Subject>
+  <saml:Subject>
+    <saml:NameID Format="urn:oasis:names:tc:SAML:2.0:nameid-format:unspecified">urn:another:subject</saml:NameID>
+  </saml:Subject>
+  <saml:Attribute
+      NameFormat="urn:oasis:names:tc:SAML:2.0:attrname-format:uri"
+      Name="urn:oid:1.3.6.1.4.1.5923.1.1.1.7"
+      FriendlyName="entitlements">
+  </saml:Attribute>
 </samlp:AttributeQuery>
 XML;
         $document = DOMDocumentFactory::fromString($xml);
@@ -349,21 +376,28 @@ XML;
     public function testNoNameIDinSubjectThrowsException(): void
     {
         $xml = <<<XML
-  <samlp:AttributeQuery xmlns:saml="urn:oasis:names:tc:SAML:2.0:assertion" xmlns:samlp="urn:oasis:names:tc:SAML:2.0:protocol" ID="aaf23196-1773-2113-474a-fe114412ab72" Version="2.0" IssueInstant="2017-09-06T11:49:27Z">
-	<saml:Issuer Format="urn:oasis:names:tc:SAML:2.0:nameid-format:entity">https://example.org/</saml:Issuer>
-	<saml:Subject>
-	  <saml:something>example</saml:something>
-	</saml:Subject>
-	<saml:Attribute
-	  NameFormat="urn:oasis:names:tc:SAML:2.0:attrname-format:uri"
-	  Name="urn:oid:1.3.6.1.4.1.5923.1.1.1.7"
-	  FriendlyName="entitlements">
-	</saml:Attribute>
+<samlp:AttributeQuery
+    xmlns:saml="urn:oasis:names:tc:SAML:2.0:assertion"
+    xmlns:samlp="urn:oasis:names:tc:SAML:2.0:protocol"
+    ID="aaf23196-1773-2113-474a-fe114412ab72"
+    Version="2.0"
+    IssueInstant="2017-09-06T11:49:27Z">
+  <saml:Issuer Format="urn:oasis:names:tc:SAML:2.0:nameid-format:entity">https://example.org/</saml:Issuer>
+  <saml:Subject>
+    <saml:something>example</saml:something>
+  </saml:Subject>
+  <saml:Attribute
+      NameFormat="urn:oasis:names:tc:SAML:2.0:attrname-format:uri"
+      Name="urn:oid:1.3.6.1.4.1.5923.1.1.1.7"
+      FriendlyName="entitlements">
+  </saml:Attribute>
 </samlp:AttributeQuery>
 XML;
         $document = DOMDocumentFactory::fromString($xml);
         $this->expectException(TooManyElementsException::class);
-        $this->expectExceptionMessage('A <saml:Subject> not containing <saml:SubjectConfirmation> should provide exactly one of <saml:BaseID>, <saml:NameID> or <saml:EncryptedID>');
+        $this->expectExceptionMessage(
+            'A <saml:Subject> not containing <saml:SubjectConfirmation> should provide exactly one of <saml:BaseID>, <saml:NameID> or <saml:EncryptedID>'
+        );
         $aq = AttributeQuery::fromXML($document->documentElement);
     }
 
@@ -371,17 +405,22 @@ XML;
     public function testTooManyNameIDsThrowsException(): void
     {
         $xml = <<<XML
-  <samlp:AttributeQuery xmlns:saml="urn:oasis:names:tc:SAML:2.0:assertion" xmlns:samlp="urn:oasis:names:tc:SAML:2.0:protocol" ID="aaf23196-1773-2113-474a-fe114412ab72" Version="2.0" IssueInstant="2017-09-06T11:49:27Z">
-	<saml:Issuer Format="urn:oasis:names:tc:SAML:2.0:nameid-format:entity">https://example.org/</saml:Issuer>
-	<saml:Subject>
-	  <saml:NameID Format="urn:oasis:names:tc:SAML:2.0:nameid-format:unspecified">urn:example:subject</saml:NameID>
-	  <saml:NameID Format="urn:oasis:names:tc:SAML:2.0:nameid-format:unspecified">urn:example:another:subject</saml:NameID>
-	</saml:Subject>
-	<saml:Attribute
-	  NameFormat="urn:oasis:names:tc:SAML:2.0:attrname-format:uri"
-	  Name="urn:oid:1.3.6.1.4.1.5923.1.1.1.7"
-	  FriendlyName="entitlements">
-	</saml:Attribute>
+<samlp:AttributeQuery
+    xmlns:saml="urn:oasis:names:tc:SAML:2.0:assertion"
+    xmlns:samlp="urn:oasis:names:tc:SAML:2.0:protocol"
+    ID="aaf23196-1773-2113-474a-fe114412ab72"
+    Version="2.0"
+    IssueInstant="2017-09-06T11:49:27Z">
+  <saml:Issuer Format="urn:oasis:names:tc:SAML:2.0:nameid-format:entity">https://example.org/</saml:Issuer>
+  <saml:Subject>
+    <saml:NameID Format="urn:oasis:names:tc:SAML:2.0:nameid-format:unspecified">urn:subject</saml:NameID>
+    <saml:NameID Format="urn:oasis:names:tc:SAML:2.0:nameid-format:unspecified">urn:another:subject</saml:NameID>
+  </saml:Subject>
+  <saml:Attribute
+      NameFormat="urn:oasis:names:tc:SAML:2.0:attrname-format:uri"
+      Name="urn:oid:1.3.6.1.4.1.5923.1.1.1.7"
+      FriendlyName="entitlements">
+  </saml:Attribute>
 </samlp:AttributeQuery>
 XML;
         $document = DOMDocumentFactory::fromString($xml);

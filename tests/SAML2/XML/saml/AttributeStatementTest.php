@@ -171,8 +171,12 @@ XML
     public function testUnmarshallingEncryptedAttribute(): void
     {
         $document = $this->document;
-        $document->documentElement->appendChild($document->importNode($this->attributeXML->documentElement, true));
-        $document->documentElement->appendChild($document->importNode($this->encryptedAttributeXML->documentElement, true));
+        $document->documentElement->appendChild(
+            $document->importNode($this->attributeXML->documentElement, true)
+        );
+        $document->documentElement->appendChild(
+            $document->importNode($this->encryptedAttributeXML->documentElement, true)
+        );
 
         $attrStatement = AttributeStatement::fromXML($document->documentElement);
 

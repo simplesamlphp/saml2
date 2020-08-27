@@ -40,7 +40,7 @@ final class SubjectConfirmationResponseToMatchesTest extends MockeryTestCase
      * @test
      * @return void
      */
-    public function when_the_response_responseto_is_null_the_subject_confirmation_is_valid(): void
+    public function whenTheResponseResponsetoIsNullTheSubjectConfirmationIsValid(): void
     {
         $this->response->shouldReceive('getInResponseTo')->andReturnNull();
         $subjectConfirmationData = new SubjectConfirmationData(null, null, null, 'someValue');
@@ -62,7 +62,7 @@ final class SubjectConfirmationResponseToMatchesTest extends MockeryTestCase
      * @test
      * @return void
      */
-    public function when_the_subjectconfirmation_responseto_is_null_the_subjectconfirmation_is_valid(): void
+    public function whenTheSubjectconfirmationResponsetoIsNullTheSubjectconfirmationIsValid(): void
     {
         $this->response->shouldReceive('getInResponseTo')->andReturn('someValue');
         $subjectConfirmationData = new SubjectConfirmationData();
@@ -84,7 +84,7 @@ final class SubjectConfirmationResponseToMatchesTest extends MockeryTestCase
      * @test
      * @return void
      */
-    public function when_the_subjectconfirmation_and_response_responseto_are_null_the_subjectconfirmation_is_valid(): void
+    public function whenTheSubjectconfirmationAndResponseResponsetoAreNullTheSubjectconfirmationIsValid(): void
     {
         $this->response->shouldReceive('getInResponseTo')->andReturnNull();
         $subjectConfirmationData = new SubjectConfirmationData();
@@ -106,7 +106,7 @@ final class SubjectConfirmationResponseToMatchesTest extends MockeryTestCase
      * @test
      * @return void
      */
-    public function when_the_subjectconfirmation_and_response_responseto_are_equal_the_subjectconfirmation_is_valid(): void
+    public function whenTheSubjectconfirmationAndResponseResponsetoAreEqualTheSubjectconfirmationIsValid(): void
     {
         $this->response->shouldReceive('getInResponseTo')->andReturn('theSameValue');
         $subjectConfirmationData = new SubjectConfirmationData(null, null, null, 'theSameValue');
@@ -128,7 +128,7 @@ final class SubjectConfirmationResponseToMatchesTest extends MockeryTestCase
      * @test
      * @return void
      */
-    public function when_the_subjectconfirmation_and_response_responseto_differ_the_subjectconfirmation_is_invalid(): void
+    public function whenTheSubjectconfirmationAndResponseResponsetoDifferTheSubjectconfirmationIsInvalid(): void
     {
         $this->response->shouldReceive('getInResponseTo')->andReturn('someValue');
         $subjectConfirmationData = new SubjectConfirmationData(null, null, null, 'anotherValue');

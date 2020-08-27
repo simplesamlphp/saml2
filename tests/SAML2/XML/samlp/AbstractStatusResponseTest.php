@@ -91,7 +91,9 @@ final class AbstractStatusResponseTest extends TestCase
         ]);
 
         $response = new Response($status, $issuer, null, null, null, null, null, $extensions);
-        $response->setSigningKey(PEMCertificatesMock::getPrivateKey(XMLSecurityKey::RSA_SHA256, PEMCertificatesMock::PRIVATE_KEY));
+        $response->setSigningKey(
+            PEMCertificatesMock::getPrivateKey(XMLSecurityKey::RSA_SHA256, PEMCertificatesMock::PRIVATE_KEY)
+        );
         $responseElement = $response->toXML();
 
         // Test for an Issuer
@@ -205,8 +207,8 @@ XML;
         $this->assertFalse($response->isSuccess());
 
         $status = $response->getStatus();
-        $this->assertEquals("urn:oasis:names:tc:SAML:2.0:status:Requester", $status->getStatusCode()->getValue());
-        $this->assertEquals("urn:oasis:names:tc:SAML:2.0:status:RequestDenied", $status->getStatusCode()->getSubCodes()[0]->getValue());
+        $this->assertEquals(Constants::STATUS_REQUESTER, $status->getStatusCode()->getValue());
+        $this->assertEquals(Constants::STATUS_REQUEST_DENIED, $status->getStatusCode()->getSubCodes()[0]->getValue());
         $this->assertEquals("The AuthnRequest could not be validated", $status->getStatusMessage());
     }
 

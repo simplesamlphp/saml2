@@ -84,8 +84,7 @@ XML
         $this->assertEquals(
             'no',
             $usagePolicyElements[1]->getAttributeNS("http://www.w3.org/XML/1998/namespace", "lang")
-
-);
+        );
         $this->assertEquals('http://NorwegianUsagePolicy', $usagePolicyElements[1]->textContent);
     }
 

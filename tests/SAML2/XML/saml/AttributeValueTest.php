@@ -30,7 +30,10 @@ final class AttributeValueTest extends TestCase
         $nsxsi = Constants::NS_XSI;
 
         $this->document = DOMDocumentFactory::fromString(<<<XML
-<saml:AttributeValue xmlns:saml="$nssaml" xmlns:xs="$nsxs" xmlns:xsi="$nsxsi" xsi:type="xs:integer">2</saml:AttributeValue>
+<saml:AttributeValue xmlns:saml="$nssaml"
+    xmlns:xs="$nsxs"
+    xmlns:xsi="$nsxsi"
+    xsi:type="xs:integer">2</saml:AttributeValue>
 XML
         );
     }
@@ -78,7 +81,8 @@ XML
         $this->assertEquals('xs:nil', $av->getXsiType());
         $nssaml = Constants::NS_SAML;
         $nsxsi = Constants::NS_XSI;
-        $this->assertEquals(<<<XML
+        $this->assertEquals(
+            <<<XML
 <saml:AttributeValue xmlns:saml="$nssaml" xmlns:xsi="$nsxsi" xsi:nil="1"/>
 XML
             ,

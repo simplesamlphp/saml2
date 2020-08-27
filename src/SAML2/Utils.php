@@ -636,7 +636,7 @@ class Utils
     /**
      * Create a KeyDescriptor with the given certificate.
      *
-     * @param string $x509Data The certificate, as a base64-encoded DER data.
+     * @param string $x509Data The certificate, as a base64-encoded PEM data.
      * @return \SAML2\XML\md\KeyDescriptor The keydescriptor.
      */
     public static function createKeyDescriptor(string $x509Data): KeyDescriptor

@@ -17,7 +17,7 @@ final class ArrayCollectionTest extends TestCase
     /**
      * @return void
      */
-    public function test_construct_get_add_set(): void
+    public function testConstructGetAddSet(): void
     {
         $arc = new ArrayCollection(['aap', 'aap', 'noot']);
 
@@ -43,7 +43,7 @@ final class ArrayCollectionTest extends TestCase
     /**
      * @return void
      */
-    public function test_remove(): void
+    public function testRemove(): void
     {
         $arc = new ArrayCollection(['aap', 'aap', 'noot', 'mies']);
 
@@ -76,7 +76,7 @@ final class ArrayCollectionTest extends TestCase
     /**
      * @return void
      */
-    public function test_first_last_count(): void
+    public function testFirstLastCount(): void
     {
         $arc = new ArrayCollection(['aap', 'aap', 'noot', 'mies']);
 
@@ -89,7 +89,7 @@ final class ArrayCollectionTest extends TestCase
     /**
      * @return void
      */
-    public function test_offset(): void
+    public function testOffset(): void
     {
         $arc = new ArrayCollection(['aap', 'aap', 'noot', 'mies']);
 
@@ -112,7 +112,7 @@ final class ArrayCollectionTest extends TestCase
     /**
      * @return void
      */
-    public function test_onlyelement(): void
+    public function testOnlyElement(): void
     {
         $arc = new ArrayCollection(['aap']);
         $this->assertEquals($arc->getOnlyElement(), 'aap');
@@ -122,11 +122,11 @@ final class ArrayCollectionTest extends TestCase
     /**
      * @return void
      */
-    public function test_onlyelement_fail(): void
+    public function testOnlyElementFail(): void
     {
         $this->expectException(RuntimeException::class);
         $this->expectExceptionMessage(
-            'SAML2\Utilities\ArrayCollection::SAML2\Utilities\ArrayCollection::getOnlyElement requires that the collection has exactly one element, "2" elements found'
+            'SAML2\Utilities\ArrayCollection::getOnlyElement requires that the collection has exactly one element, "2" elements found'
         );
         $arc = new ArrayCollection(['aap', 'noot']);
         $arc->getOnlyElement();
@@ -136,7 +136,7 @@ final class ArrayCollectionTest extends TestCase
     /**
      * @return void
      */
-    public function test_getiterator(): void
+    public function testGetiterator(): void
     {
         $arc = new ArrayCollection(['aap', 'noot']);
         $this->assertInstanceOf(\ArrayIterator::class, $arc->getIterator());
@@ -146,7 +146,7 @@ final class ArrayCollectionTest extends TestCase
     /**
      * @return void
      */
-    public function test_filter_map(): void
+    public function testFilterMap(): void
     {
         $arc = new ArrayCollection(['aap', 'aap', 'noot', 'mies']);
 

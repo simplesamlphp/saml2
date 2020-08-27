@@ -49,7 +49,12 @@ final class LogoutRequestTest extends MockeryTestCase
     public function setUp(): void
     {
         $xml = <<<XML
-<samlp:LogoutRequest xmlns:samlp="urn:oasis:names:tc:SAML:2.0:protocol" xmlns:saml="urn:oasis:names:tc:SAML:2.0:assertion" ID="_f987e7436c1103bcf89296303f780d853d7713a8ef" Version="2.0" IssueInstant="2020-08-15T15:53:24Z">
+<samlp:LogoutRequest
+    xmlns:samlp="urn:oasis:names:tc:SAML:2.0:protocol"
+    xmlns:saml="urn:oasis:names:tc:SAML:2.0:assertion"
+    ID="_f987e7436c1103bcf89296303f780d853d7713a8ef"
+    Version="2.0"
+    IssueInstant="2020-08-15T15:53:24Z">
   <saml:Issuer>TheIssuer</saml:Issuer>
   <saml:EncryptedID>
     <xenc:EncryptedData xmlns:xenc="http://www.w3.org/2001/04/xmlenc#" Type="http://www.w3.org/2001/04/xmlenc#Element">
@@ -159,7 +164,12 @@ XML;
 
         $this->assertEquals(['SomeSessionIndex1', 'SomeSessionIndex2'], $logoutRequest->getSessionIndexes());
 
-        $identifier = $encid->decrypt(PEMCertificatesMock::getPrivateKey(XMLSecurityKey::RSA_OAEP_MGF1P, PEMCertificatesMock::SELFSIGNED_PRIVATE_KEY));
+        $identifier = $encid->decrypt(
+            PEMCertificatesMock::getPrivateKey(
+                XMLSecurityKey::RSA_OAEP_MGF1P,
+                PEMCertificatesMock::SELFSIGNED_PRIVATE_KEY
+            )
+        );
         $this->assertInstanceOf(NameID::class, $identifier);
         $this->assertEquals('very secret', $identifier->getValue());
     }
@@ -211,7 +221,12 @@ XML;
     public function testPlainNameIDUnmarshalling(): void
     {
         $xml = <<<XML
-<samlp:LogoutRequest xmlns:samlp="urn:oasis:names:tc:SAML:2.0:protocol" xmlns:saml="urn:oasis:names:tc:SAML:2.0:assertion" ID="SomeIDValue" Version="2.0" IssueInstant="2010-07-22T11:30:19Z">
+<samlp:LogoutRequest
+    xmlns:samlp="urn:oasis:names:tc:SAML:2.0:protocol"
+    xmlns:saml="urn:oasis:names:tc:SAML:2.0:assertion"
+    ID="SomeIDValue"
+    Version="2.0"
+    IssueInstant="2010-07-22T11:30:19Z">
   <saml:Issuer>TheIssuer</saml:Issuer>
   <saml:NameID Format="urn:oasis:names:tc:SAML:2.0:nameid-format:unspecified">frits</saml:NameID>
 </samlp:LogoutRequest>
@@ -234,7 +249,12 @@ XML;
     public function testMissingNameIDThrowsException(): void
     {
         $xml = <<<XML
-<samlp:LogoutRequest xmlns:samlp="urn:oasis:names:tc:SAML:2.0:protocol" xmlns:saml="urn:oasis:names:tc:SAML:2.0:assertion" ID="SomeIDValue" Version="2.0" IssueInstant="2010-07-22T11:30:19Z">
+<samlp:LogoutRequest
+    xmlns:samlp="urn:oasis:names:tc:SAML:2.0:protocol"
+    xmlns:saml="urn:oasis:names:tc:SAML:2.0:assertion"
+    ID="SomeIDValue"
+    Version="2.0"
+    IssueInstant="2010-07-22T11:30:19Z">
   <saml:Issuer>TheIssuer</saml:Issuer>
 </samlp:LogoutRequest>
 XML;
@@ -242,7 +262,9 @@ XML;
         $this->logoutRequestElement = $document->documentElement;
 
         $this->expectException(MissingElementException::class);
-        $this->expectExceptionMessage("Missing <saml:NameID>, <saml:BaseID> or <saml:EncryptedID> in <samlp:LogoutRequest>.");
+        $this->expectExceptionMessage(
+            "Missing <saml:NameID>, <saml:BaseID> or <saml:EncryptedID> in <samlp:LogoutRequest>."
+        );
         $logoutRequest = LogoutRequest::fromXML($this->logoutRequestElement);
     }
 
@@ -253,7 +275,12 @@ XML;
     public function testMultipleNameIDThrowsException(): void
     {
         $xml = <<<XML
-<samlp:LogoutRequest xmlns:samlp="urn:oasis:names:tc:SAML:2.0:protocol" xmlns:saml="urn:oasis:names:tc:SAML:2.0:assertion" ID="SomeIDValue" Version="2.0" IssueInstant="2010-07-22T11:30:19Z">
+<samlp:LogoutRequest
+    xmlns:samlp="urn:oasis:names:tc:SAML:2.0:protocol"
+    xmlns:saml="urn:oasis:names:tc:SAML:2.0:assertion"
+    ID="SomeIDValue"
+    Version="2.0"
+    IssueInstant="2010-07-22T11:30:19Z">
   <saml:Issuer>TheIssuer</saml:Issuer>
   <saml:NameID Format="urn:oasis:names:tc:SAML:2.0:nameid-format:unspecified">frits</saml:NameID>
   <saml:NameID Format="urn:oasis:names:tc:SAML:2.0:nameid-format:unspecified">willem</saml:NameID>
@@ -274,7 +301,13 @@ XML;
     public function testGetNotOnOrAfter(): void
     {
         $xml = <<<XML
-<samlp:LogoutRequest xmlns:samlp="urn:oasis:names:tc:SAML:2.0:protocol" xmlns:saml="urn:oasis:names:tc:SAML:2.0:assertion" ID="SomeIDValue" Version="2.0" IssueInstant="2010-07-22T11:30:19Z" NotOnOrAfter="2018-11-28T19:33:12Z">
+<samlp:LogoutRequest
+    xmlns:samlp="urn:oasis:names:tc:SAML:2.0:protocol"
+    xmlns:saml="urn:oasis:names:tc:SAML:2.0:assertion"
+    ID="SomeIDValue"
+    Version="2.0"
+    IssueInstant="2010-07-22T11:30:19Z"
+    NotOnOrAfter="2018-11-28T19:33:12Z">
   <saml:Issuer>TheIssuer</saml:Issuer>
   <saml:NameID Format="urn:oasis:names:tc:SAML:2.0:nameid-format:unspecified">frits</saml:NameID>
 </samlp:LogoutRequest>
@@ -309,7 +342,14 @@ XML;
     {
         $reason = "urn:simplesamlphp:reason-test";
         $xml = <<<XML
-<samlp:LogoutRequest xmlns:samlp="urn:oasis:names:tc:SAML:2.0:protocol" xmlns:saml="urn:oasis:names:tc:SAML:2.0:assertion" ID="SomeIDValue" Version="2.0" IssueInstant="2010-07-22T11:30:19Z" NotOnOrAfter="2018-11-28T19:33:12Z" Reason="$reason">
+<samlp:LogoutRequest
+    xmlns:samlp="urn:oasis:names:tc:SAML:2.0:protocol"
+    xmlns:saml="urn:oasis:names:tc:SAML:2.0:assertion"
+    ID="SomeIDValue"
+    Version="2.0"
+    IssueInstant="2010-07-22T11:30:19Z"
+    NotOnOrAfter="2018-11-28T19:33:12Z"
+    Reason="$reason">
   <saml:Issuer>TheIssuer</saml:Issuer>
   <saml:NameID Format="urn:oasis:names:tc:SAML:2.0:nameid-format:unspecified">frits</saml:NameID>
 </samlp:LogoutRequest>
@@ -345,7 +385,12 @@ XML;
     public function testWithOutSessionIndices(): void
     {
         $xml = <<<XML
-<samlp:LogoutRequest xmlns:samlp="urn:oasis:names:tc:SAML:2.0:protocol" xmlns:saml="urn:oasis:names:tc:SAML:2.0:assertion" ID="SomeIDValue" Version="2.0" IssueInstant="2010-07-22T11:30:19Z">
+<samlp:LogoutRequest
+    xmlns:samlp="urn:oasis:names:tc:SAML:2.0:protocol"
+    xmlns:saml="urn:oasis:names:tc:SAML:2.0:assertion"
+    ID="SomeIDValue"
+    Version="2.0"
+    IssueInstant="2010-07-22T11:30:19Z">
   <saml:Issuer>TheIssuer</saml:Issuer>
   <saml:NameID Format="urn:oasis:names:tc:SAML:2.0:nameid-format:unspecified">frits</saml:NameID>
 </samlp:LogoutRequest>

@@ -39,7 +39,7 @@ final class IsSuccessfulTest extends MockeryTestCase
      * @test
      * @return void
      */
-    public function validating_a_successful_response_gives_a_valid_validation_result(): void
+    public function validatingASuccessfulResponseGivesAValidValidationResult(): void
     {
         $this->response->shouldReceive('isSuccess')->once()->andReturn(true);
 
@@ -57,7 +57,7 @@ final class IsSuccessfulTest extends MockeryTestCase
      * @test
      * @return void
      */
-    public function an_unsuccessful_response_is_not_valid_and_generates_a_proper_error_message(): void
+    public function anUnsuccessfulResponseIsNotValidAndGeneratesAProperErrorMessage(): void
     {
         $responseStatus = new Status(
             new StatusCode(

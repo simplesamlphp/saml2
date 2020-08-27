@@ -18,7 +18,7 @@ final class X509Test extends TestCase
      * @test
      * @return void
      */
-    public function x509_certificate_contents_must_be_stripped_of_whitespace(): void
+    public function x509CertificateContentsMustBeStrippedOfWhitespace(): void
     {
         $toTest = [
             'X509Certificate' => ' Should   No Longer  Have Whitespaces'

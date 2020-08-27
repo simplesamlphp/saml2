@@ -32,7 +32,12 @@ final class ResponseTest extends TestCase
         $ns = Response::NS;
         $ns_soap = Constants::NS_SOAP;
         $this->document = DOMDocumentFactory::fromString(<<<XML
-<ecp:Response xmlns:ecp="{$ns}" xmlns:SOAP-ENV="{$ns_soap}" SOAP-ENV:mustUnderstand="1" SOAP-ENV:actor="http://schemas.xmlsoap.org/soap/actor/next" AssertionConsumerServiceURL="https://example.com/ACS"/>
+<ecp:Response
+    xmlns:ecp="{$ns}"
+    xmlns:SOAP-ENV="{$ns_soap}"
+    SOAP-ENV:mustUnderstand="1"
+    SOAP-ENV:actor="http://schemas.xmlsoap.org/soap/actor/next"
+    AssertionConsumerServiceURL="https://example.com/ACS"/>
 XML
         );
     }

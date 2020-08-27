@@ -5,6 +5,7 @@ declare(strict_types=1);
 namespace SAML2\XML\saml;
 
 use PHPUnit\Framework\TestCase;
+use Psr\Log\NullLogger;
 use SAML2\Assertion\Exception\InvalidAssertionException;
 use SAML2\Assertion\ProcessorBuilder;
 use SAML2\Configuration\Destination;
@@ -72,7 +73,7 @@ final class AssertionValidatorTest extends TestCase
         $audience = $spentity;
         $destination = 'https://example.org/authentication/sp/consume-assertion';
 
-        $this->logger = new \Psr\Log\NullLogger();
+        $this->logger = new NullLogger();
         $this->validator = new Validator($this->logger);
         $this->destination = new Destination($destination);
         $this->response = new Response(new Status(new StatusCode()));
@@ -138,7 +139,9 @@ XML
         $assertion->setValidAudiences(['https://example.edu/not-the-sp-entity-id']);
 
         $this->expectException(InvalidAssertionException::class);
-        $this->expectExceptionMessage('The configured Service Provider [urn:mace:feide.no:services:no.feide.moodle] is not a valid audience for the assertion. Audiences: [https://example.edu/not-the-sp-entity-id]"');
+        $this->expectExceptionMessage(
+            'The configured Service Provider [urn:mace:feide.no:services:no.feide.moodle] is not a valid audience for the assertion. Audiences: [https://example.edu/not-the-sp-entity-id]"'
+        );
         $result = $this->assertionProcessor->validateAssertion($assertion);
     }
 }

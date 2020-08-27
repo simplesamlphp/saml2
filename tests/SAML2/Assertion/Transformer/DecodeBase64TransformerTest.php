@@ -5,6 +5,7 @@ declare(strict_types=1);
 namespace SAML2\XML\saml;
 
 use PHPUnit\Framework\TestCase;
+use Psr\Log\NullLogger;
 use SAML2\Assertion\Exception\InvalidAssertionException;
 use SAML2\Assertion\ProcessorBuilder;
 use SAML2\Configuration\Destination;
@@ -70,7 +71,7 @@ final class DecodeBase64TransformerTest extends TestCase
     {
         $spentity = 'urn:mace:feide.no:services:no.feide.moodle';
 
-        $this->logger = new \Psr\Log\NullLogger();
+        $this->logger = new NullLogger();
         $this->validator = new Validator($this->logger);
         $this->destination = new Destination($spentity);
         $this->response = new Response(new Status(new StatusCode()));
@@ -269,5 +270,4 @@ XML
         $this->assertCount(1, $eduPersonPrincipalName);
         $this->assertEquals("asjemenou@loeki.tv", $eduPersonPrincipalName[0]);
     }
-
 }

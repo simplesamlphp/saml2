@@ -28,7 +28,7 @@ final class SubjectConfirmationNotBeforeTest extends ControlledTimeTest
      * @preserveGlobalState disabled
      * @return void
      */
-    public function timestamp_in_the_future_beyond_graceperiod_is_not_valid(): void
+    public function timestampInTheFutureBeyondGraceperiodIsNotValid(): void
     {
         $subjectConfirmationData = new SubjectConfirmationData($this->currentTime + 61);
         $subjectConfirmation = new SubjectConfirmation(Constants::CM_HOK, null, $subjectConfirmationData);
@@ -51,7 +51,7 @@ final class SubjectConfirmationNotBeforeTest extends ControlledTimeTest
      * @preserveGlobalState disabled
      * @return void
      */
-    public function time_within_graceperiod_is_valid(): void
+    public function timeWithinGraceperiodIsValid(): void
     {
         $subjectConfirmationData = new SubjectConfirmationData(null, $this->currentTime + 60);
         $subjectConfirmation = new SubjectConfirmation(Constants::CM_HOK, null, $subjectConfirmationData);
@@ -73,7 +73,7 @@ final class SubjectConfirmationNotBeforeTest extends ControlledTimeTest
      * @preserveGlobalState disabled
      * @return void
      */
-    public function current_time_is_valid(): void
+    public function currentTimeIsValid(): void
     {
         $subjectConfirmationData = new SubjectConfirmationData($this->currentTime);
         $subjectConfirmation = new SubjectConfirmation(Constants::CM_HOK, null, $subjectConfirmationData);

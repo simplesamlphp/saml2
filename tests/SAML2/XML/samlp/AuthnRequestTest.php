@@ -247,22 +247,16 @@ AUTHNREQUEST;
     }
 
 
-    public function testThatTheSubjectCanBeSetBySettingTheNameId(): void
-    {
-        $nameId = new NameID('user@example.org', null, null, Constants::NAMEID_UNSPECIFIED);
-        $request = new AuthnRequest(null, new Subject($nameId));
-        /** @psalm-var \DOMDocument $document */
-        $document = $request->toXML()->ownerDocument;
-
-        $expected = '<saml:Subject><saml:NameID Format="urn:oasis:names:tc:SAML:1.1:nameid-format:unspecified">user@example.org</saml:NameID></saml:Subject>';
-        $this->assertStringContainsString($expected, $document->saveXML());
-    }
-
-
     public function testThatAnEncryptedNameIdCanBeDecrypted(): void
     {
         $xml = <<<AUTHNREQUEST
-<samlp:AuthnRequest xmlns:samlp="urn:oasis:names:tc:SAML:2.0:protocol" xmlns:saml="urn:oasis:names:tc:SAML:2.0:assertion" ID="123" Version="2.0" IssueInstant="2020-08-15T16:09:56Z" Destination="https://tiqr.example.org/idp/profile/saml2/Redirect/SSO">
+<samlp:AuthnRequest
+    xmlns:samlp="urn:oasis:names:tc:SAML:2.0:protocol"
+    xmlns:saml="urn:oasis:names:tc:SAML:2.0:assertion"
+    ID="123"
+    Version="2.0"
+    IssueInstant="2020-08-15T16:09:56Z"
+    Destination="https://tiqr.example.org/idp/profile/saml2/Redirect/SSO">
   <saml:Issuer>https://gateway.example.org/saml20/sp/metadata</saml:Issuer>
   <saml:Subject>
     <saml:EncryptedID>
@@ -287,7 +281,10 @@ AUTHNREQUEST;
 
         $authnRequest = AuthnRequest::fromXML(DOMDocumentFactory::fromString($xml)->documentElement);
 
-        $key = PEMCertificatesMock::getPrivateKey(XMLSecurityKey::RSA_SHA256, PEMCertificatesMock::SELFSIGNED_PRIVATE_KEY);
+        $key = PEMCertificatesMock::getPrivateKey(
+            XMLSecurityKey::RSA_SHA256,
+            PEMCertificatesMock::SELFSIGNED_PRIVATE_KEY
+        );
         $subject = $authnRequest->getSubject();
         $this->assertInstanceOf(Subject::class, $subject);
 
@@ -309,7 +306,10 @@ AUTHNREQUEST;
     public function testThatAnEncryptedNameIdResultsInTheCorrectXmlStructure(): void
     {
         // create an encrypted NameID
-        $key = PEMCertificatesMock::getPublicKey(XMLSecurityKey::RSA_SHA256, PEMCertificatesMock::SELFSIGNED_PUBLIC_KEY);
+        $key = PEMCertificatesMock::getPublicKey(
+            XMLSecurityKey::RSA_SHA256,
+            PEMCertificatesMock::SELFSIGNED_PUBLIC_KEY
+        );
 
         /** @psalm-var \SAML2\XML\saml\IdentifierInterface $nameId */
         $nameId = EncryptedID::fromUnencryptedElement(
@@ -322,9 +322,22 @@ AUTHNREQUEST;
         $destination = 'https://tiqr.example.org/idp/profile/saml2/Redirect/SSO';
 
         // basic AuthnRequest
-        $request = new AuthnRequest(null, new Subject($nameId), null, null, null, null, null, null, null, null, $issuer, null, null, $destination);
-
-
+        $request = new AuthnRequest(
+            null,
+            new Subject($nameId),
+            null,
+            null,
+            null,
+            null,
+            null,
+            null,
+            null,
+            null,
+            $issuer,
+            null,
+            null,
+            $destination
+        );
 
         $expectedXml = <<<AUTHNREQUEST
 <samlp:AuthnRequest
@@ -334,25 +347,28 @@ AUTHNREQUEST;
     Version=""
     IssueInstant=""
     Destination="">
-    <saml:Issuer></saml:Issuer>
-    <saml:Subject>
-        <saml:EncryptedID xmlns:xenc="http://www.w3.org/2001/04/xmlenc#" xmlns:ds="http://www.w3.org/2000/09/xmldsig#">
-            <xenc:EncryptedData xmlns:xenc="http://www.w3.org/2001/04/xmlenc#" xmlns:ds="http://www.w3.org/2000/09/xmldsig#" Type="http://www.w3.org/2001/04/xmlenc#Element">
-                <xenc:EncryptionMethod Algorithm="http://www.w3.org/2001/04/xmlenc#aes128-cbc"/>
-                <ds:KeyInfo xmlns:ds="http://www.w3.org/2000/09/xmldsig#">
-                    <xenc:EncryptedKey>
-                        <xenc:EncryptionMethod Algorithm="http://www.w3.org/2001/04/xmldsig-more#rsa-sha256"/>
-                        <xenc:CipherData>
-                            <xenc:CipherValue></xenc:CipherValue>
-                        </xenc:CipherData>
-                    </xenc:EncryptedKey>
-                </ds:KeyInfo>
-                <xenc:CipherData>
-                    <xenc:CipherValue></xenc:CipherValue>
-                </xenc:CipherData>
-            </xenc:EncryptedData>
-        </saml:EncryptedID>
-    </saml:Subject>
+  <saml:Issuer></saml:Issuer>
+  <saml:Subject>
+    <saml:EncryptedID xmlns:xenc="http://www.w3.org/2001/04/xmlenc#" xmlns:ds="http://www.w3.org/2000/09/xmldsig#">
+      <xenc:EncryptedData
+          xmlns:xenc="http://www.w3.org/2001/04/xmlenc#"
+          xmlns:ds="http://www.w3.org/2000/09/xmldsig#"
+          Type="http://www.w3.org/2001/04/xmlenc#Element">
+        <xenc:EncryptionMethod Algorithm="http://www.w3.org/2001/04/xmlenc#aes128-cbc"/>
+          <ds:KeyInfo xmlns:ds="http://www.w3.org/2000/09/xmldsig#">
+            <xenc:EncryptedKey>
+              <xenc:EncryptionMethod Algorithm="http://www.w3.org/2001/04/xmldsig-more#rsa-sha256"/>
+              <xenc:CipherData>
+                <xenc:CipherValue></xenc:CipherValue>
+              </xenc:CipherData>
+            </xenc:EncryptedKey>
+          </ds:KeyInfo>
+          <xenc:CipherData>
+          <xenc:CipherValue></xenc:CipherValue>
+        </xenc:CipherData>
+      </xenc:EncryptedData>
+    </saml:EncryptedID>
+  </saml:Subject>
 </samlp:AuthnRequest>
 AUTHNREQUEST;
 
@@ -385,7 +401,25 @@ AUTHNREQUEST;
         );
 
         // basic AuthnRequest
-        $request = new AuthnRequest(null, null, null, null, null, null, null, null, null, null, $issuer, null, null, $destination, null, null, $scoping);
+        $request = new AuthnRequest(
+            null,
+            null,
+            null,
+            null,
+            null,
+            null,
+            null,
+            null,
+            null,
+            null,
+            $issuer,
+            null,
+            null,
+            $destination,
+            null,
+            null,
+            $scoping
+        );
 
         $expectedStructureDocument = <<<AUTHNREQUEST
 <samlp:AuthnRequest
@@ -535,7 +569,22 @@ AUTHNREQUEST;
         );
 
         // basic AuthnRequest
-        $request = new AuthnRequest(null, null, $nameIdPolicy, null, null, null, null, null, null, null, $issuer, null, $issueInstant, $destination);
+        $request = new AuthnRequest(
+            null,
+            null,
+            $nameIdPolicy,
+            null,
+            null,
+            null,
+            null,
+            null,
+            null,
+            null,
+            $issuer,
+            null,
+            $issueInstant,
+            $destination
+        );
 
         $expectedStructureDocument = <<<AUTHNREQUEST
 <samlp:AuthnRequest
@@ -560,7 +609,10 @@ AUTHNREQUEST;
 
         $this->assertEqualXMLStructure($expectedStructure, $requestStructure);
 
-        $this->assertXmlStringEqualsXmlString($expectedStructure->ownerDocument->saveXML(), $requestStructure->ownerDocument->saveXML());
+        $this->assertXmlStringEqualsXmlString(
+            $expectedStructure->ownerDocument->saveXML(),
+            $requestStructure->ownerDocument->saveXML()
+        );
     }
 
 
@@ -576,7 +628,22 @@ AUTHNREQUEST;
         $nameIdPolicy = new NameIDPolicy(Constants::NAMEID_TRANSIENT);
 
         // basic AuthnRequest
-        $request = new AuthnRequest(null, null, $nameIdPolicy, null, null, null, null, null, null, null, $issuer, null, $issueInstant, $destination);
+        $request = new AuthnRequest(
+            null,
+            null,
+            $nameIdPolicy,
+            null,
+            null,
+            null,
+            null,
+            null,
+            null,
+            null,
+            $issuer,
+            null,
+            $issueInstant,
+            $destination
+        );
 
         $expectedStructureDocument = <<<AUTHNREQUEST
 <samlp:AuthnRequest
@@ -598,7 +665,10 @@ AUTHNREQUEST;
 
         $this->assertEqualXMLStructure($expectedStructure, $requestStructure);
 
-        $this->assertXmlStringEqualsXmlString($expectedStructure->ownerDocument->saveXML(), $requestStructure->ownerDocument->saveXML());
+        $this->assertXmlStringEqualsXmlString(
+            $expectedStructure->ownerDocument->saveXML(),
+            $requestStructure->ownerDocument->saveXML()
+        );
     }
 
 
@@ -659,7 +729,22 @@ AUTHNREQUEST;
         $forceAuthn = true;
 
         // basic AuthnRequest
-        $request = new AuthnRequest(null, null, null, null, $forceAuthn, null, null, null, null, null, $issuer, null, $issueInstant, $destination);
+        $request = new AuthnRequest(
+            null,
+            null,
+            null,
+            null,
+            $forceAuthn,
+            null,
+            null,
+            null,
+            null,
+            null,
+            $issuer,
+            null,
+            $issueInstant,
+            $destination
+        );
 
         $expectedStructureDocument = <<<AUTHNREQUEST
 <samlp:AuthnRequest
@@ -681,7 +766,10 @@ AUTHNREQUEST;
 
         $this->assertEqualXMLStructure($expectedStructure, $requestStructure);
 
-        $this->assertXmlStringEqualsXmlString($expectedStructure->ownerDocument->saveXML(), $requestStructure->ownerDocument->saveXML());
+        $this->assertXmlStringEqualsXmlString(
+            $expectedStructure->ownerDocument->saveXML(),
+            $requestStructure->ownerDocument->saveXML()
+        );
     }
 
 
@@ -759,7 +847,22 @@ AUTHNREQUEST;
         $isPassive = true;
 
         // basic AuthnRequest
-        $request = new AuthnRequest(null, null, null, null, null, $isPassive, null, null, null, null, $issuer, null, $issueInstant, $destination);
+        $request = new AuthnRequest(
+            null,
+            null,
+            null,
+            null,
+            null,
+            $isPassive,
+            null,
+            null,
+            null,
+            null,
+            $issuer,
+            null,
+            $issueInstant,
+            $destination
+        );
 
         $expectedStructureDocument = <<<AUTHNREQUEST
 <samlp:AuthnRequest
@@ -781,7 +884,10 @@ AUTHNREQUEST;
 
         $this->assertEqualXMLStructure($expectedStructure, $requestStructure);
 
-        $this->assertXmlStringEqualsXmlString($expectedStructure->ownerDocument->saveXML(), $requestStructure->ownerDocument->saveXML());
+        $this->assertXmlStringEqualsXmlString(
+            $expectedStructure->ownerDocument->saveXML(),
+            $requestStructure->ownerDocument->saveXML()
+        );
     }
 
 
@@ -797,7 +903,22 @@ AUTHNREQUEST;
         $providerName = "My Example SP";
 
         // basic AuthnRequest
-        $request = new AuthnRequest(null, null, null, null, null, null, null, null, null, $providerName, $issuer, null, $issueInstant, $destination);
+        $request = new AuthnRequest(
+            null,
+            null,
+            null,
+            null,
+            null,
+            null,
+            null,
+            null,
+            null,
+            $providerName,
+            $issuer,
+            null,
+            $issueInstant,
+            $destination
+        );
 
         $expectedStructureDocument = <<<AUTHNREQUEST
 <samlp:AuthnRequest
@@ -819,7 +940,10 @@ AUTHNREQUEST;
 
         $this->assertEqualXMLStructure($expectedStructure, $requestStructure);
 
-        $this->assertXmlStringEqualsXmlString($expectedStructure->ownerDocument->saveXML(), $requestStructure->ownerDocument->saveXML());
+        $this->assertXmlStringEqualsXmlString(
+            $expectedStructure->ownerDocument->saveXML(),
+            $requestStructure->ownerDocument->saveXML()
+        );
     }
 
 
@@ -863,7 +987,22 @@ AUTHNREQUEST;
         $assertionConsumerServiceURL = "https://sp.example.org/authentication/sp/consume-assertion";
 
         // basic AuthnRequest
-        $request = new AuthnRequest(null, null, null, null, null, null, $assertionConsumerServiceURL, $protocolBinding, null, null, $issuer, null, $issueInstant, $destination);
+        $request = new AuthnRequest(
+            null,
+            null,
+            null,
+            null,
+            null,
+            null,
+            $assertionConsumerServiceURL,
+            $protocolBinding,
+            null,
+            null,
+            $issuer,
+            null,
+            $issueInstant,
+            $destination
+        );
 
         $expectedStructureDocument = <<<AUTHNREQUEST
 <samlp:AuthnRequest
@@ -887,7 +1026,10 @@ AUTHNREQUEST;
 
         $this->assertEqualXMLStructure($expectedStructure, $requestStructure);
 
-        $this->assertXmlStringEqualsXmlString($expectedStructure->ownerDocument->saveXML(), $requestStructure->ownerDocument->saveXML());
+        $this->assertXmlStringEqualsXmlString(
+            $expectedStructure->ownerDocument->saveXML(),
+            $requestStructure->ownerDocument->saveXML()
+        );
     }
 
 
@@ -970,7 +1112,9 @@ AUTHNREQUEST;
 AUTHNREQUEST;
 
         $this->expectException(TooManyElementsException::class);
-        $this->expectExceptionMessage('A <saml:Subject> not containing <saml:SubjectConfirmation> should provide exactly one of <saml:BaseID>, <saml:NameID> or <saml:EncryptedID>');
+        $this->expectExceptionMessage(
+            'A <saml:Subject> not containing <saml:SubjectConfirmation> should provide exactly one of <saml:BaseID>, <saml:NameID> or <saml:EncryptedID>'
+        );
         $authnRequest = AuthnRequest::fromXML(DOMDocumentFactory::fromString($xml)->documentElement);
     }
 
@@ -997,7 +1141,22 @@ AUTHNREQUEST;
         );
 
         // basic AuthnRequest
-        $request = new AuthnRequest(null, null, null, $conditions, null, null, null, null, null, null, $issuer, null, null, $destination);
+        $request = new AuthnRequest(
+            null,
+            null,
+            null,
+            $conditions,
+            null,
+            null,
+            null,
+            null,
+            null,
+            null,
+            $issuer,
+            null,
+            null,
+            $destination
+        );
 
         $expectedStructureDocument = <<<AUTHNREQUEST
 <samlp:AuthnRequest

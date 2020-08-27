@@ -47,7 +47,7 @@ final class SpIsValidAudienceTest extends MockeryTestCase
      * @test
      * @return void
      */
-    public function when_no_valid_audiences_are_given_the_assertion_is_valid(): void
+    public function whenNoValidAudiencesAreGivenTheAssertionIsValid(): void
     {
         $this->assertion->shouldReceive('getValidAudiences')->andReturn(null);
         $this->serviceProvider->shouldReceive('getEntityId')->andReturn('entityId');
@@ -67,7 +67,7 @@ final class SpIsValidAudienceTest extends MockeryTestCase
      * @test
      * @return void
      */
-    public function if_the_sp_entity_id_is_not_in_the_valid_audiences_the_assertion_is_invalid(): void
+    public function ifTheSpEntityIdIsNotInTheValidAudiencesTheAssertionIsInvalid(): void
     {
         $this->assertion->shouldReceive('getValidAudiences')->andReturn(['someEntityId']);
         $this->serviceProvider->shouldReceive('getEntityId')->andReturn('anotherEntityId');
@@ -88,7 +88,7 @@ final class SpIsValidAudienceTest extends MockeryTestCase
      * @test
      * @return void
      */
-    public function the_assertion_is_valid_when_the_current_sp_entity_id_is_a_valid_audience(): void
+    public function theAssertionIsValidWhenTheCurrentSpEntityIdIsAValidAudience(): void
     {
         $this->assertion->shouldReceive('getValidAudiences')->andReturn(['foo', 'bar', 'validEntityId', 'baz']);
         $this->serviceProvider->shouldReceive('getEntityId')->andReturn('validEntityId');

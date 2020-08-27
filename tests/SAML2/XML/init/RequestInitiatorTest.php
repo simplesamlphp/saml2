@@ -97,7 +97,9 @@ XML
         $this->document->documentElement->setAttribute('Binding', 'urn:something');
 
         $this->expectException(InvalidArgumentException::class);
-        $this->expectExceptionMessage("The Binding of a RequestInitiator must be 'urn:oasis:names:tc:SAML:profiles:SSO:request-init'.");
+        $this->expectExceptionMessage(
+            "The Binding of a RequestInitiator must be 'urn:oasis:names:tc:SAML:profiles:SSO:request-init'."
+        );
 
         RequestInitiator::fromXML($this->document->documentElement);
     }

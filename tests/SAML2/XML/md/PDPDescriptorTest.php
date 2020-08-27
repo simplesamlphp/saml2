@@ -35,8 +35,10 @@ final class PDPDescriptorTest extends TestCase
         $mdns = Constants::NS_MD;
         $this->document = DOMDocumentFactory::fromString(<<<XML
 <md:PDPDescriptor protocolSupportEnumeration="urn:oasis:names:tc:SAML:2.0:protocol" xmlns:md="{$mdns}">
-  <md:AuthzService Binding="urn:oasis:names:tc:SAML:2.0:bindings:SOAP" Location="https://IdentityProvider.com/SAML/AA/SOAP"/>
-  <md:AssertionIDRequestService Binding="urn:oasis:names:tc:SAML:2.0:bindings:URI" Location="https://IdentityProvider.com/SAML/AA/URI"/>
+  <md:AuthzService Binding="urn:oasis:names:tc:SAML:2.0:bindings:SOAP"
+      Location="https://IdentityProvider.com/SAML/AA/SOAP"/>
+  <md:AssertionIDRequestService Binding="urn:oasis:names:tc:SAML:2.0:bindings:URI"
+      Location="https://IdentityProvider.com/SAML/AA/URI"/>
   <md:NameIDFormat>urn:oasis:names:tc:SAML:1.1:nameid-format:X509SubjectName</md:NameIDFormat>
   <md:NameIDFormat>urn:oasis:names:tc:SAML:2.0:nameid-format:persistent</md:NameIDFormat>
   <md:NameIDFormat>urn:oasis:names:tc:SAML:2.0:nameid-format:transient</md:NameIDFormat>
@@ -213,7 +215,8 @@ XML
         $mdns = Constants::NS_MD;
         $document = DOMDocumentFactory::fromString(<<<XML
 <md:PDPDescriptor protocolSupportEnumeration="urn:oasis:names:tc:SAML:2.0:protocol" xmlns:md="{$mdns}">
-  <md:AuthzService Binding="urn:oasis:names:tc:SAML:2.0:bindings:SOAP" Location="https://IdentityProvider.com/SAML/AA/SOAP"/>
+  <md:AuthzService Binding="urn:oasis:names:tc:SAML:2.0:bindings:SOAP"
+      Location="https://IdentityProvider.com/SAML/AA/SOAP"/>
 </md:PDPDescriptor>
 XML
         );

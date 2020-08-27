@@ -31,7 +31,8 @@ final class RequestedAttributeTest extends TestCase
         $samlns = Constants::NS_SAML;
 
         $this->document = DOMDocumentFactory::fromString(<<<XML
-<md:RequestedAttribute xmlns:md="{$mdns}" Name="attr" NameFormat="urn:format" FriendlyName="Attribute" isRequired="true">
+<md:RequestedAttribute xmlns:md="{$mdns}" Name="attr" NameFormat="urn:format"
+    FriendlyName="Attribute" isRequired="true">
   <saml:AttributeValue xmlns:saml="{$samlns}">value1</saml:AttributeValue>
 </md:RequestedAttribute>
 XML

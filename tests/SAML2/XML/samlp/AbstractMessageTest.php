@@ -49,17 +49,22 @@ final class AbstractMessageTest extends MockeryTestCase
     Version="2.0">
   <saml:Issuer>https://gateway.stepup.org/saml20/sp/metadata</saml:Issuer>
   <saml:Subject>
-        <saml:NameID Format="urn:oasis:names:tc:SAML:1.1:nameid-format:unspecified">user@example.org</saml:NameID>
+    <saml:NameID Format="urn:oasis:names:tc:SAML:1.1:nameid-format:unspecified">user@example.org</saml:NameID>
   </saml:Subject>
 </samlp:AuthnRequest>
 AUTHNREQUEST
         );
 
-        $privateKey = PEMCertificatesMock::getPrivateKey(XMLSecurityKey::RSA_SHA256, PEMCertificatesMock::SELFSIGNED_PRIVATE_KEY);
+        $privateKey = PEMCertificatesMock::getPrivateKey(
+            XMLSecurityKey::RSA_SHA256,
+            PEMCertificatesMock::SELFSIGNED_PRIVATE_KEY
+        );
 
         $unsignedMessage = MessageFactory::fromXML($authnRequest->documentElement);
         $unsignedMessage->setSigningKey($privateKey);
-        $unsignedMessage->setCertificates([PEMCertificatesMock::getPlainPublicKey(PEMCertificatesMock::SELFSIGNED_PUBLIC_KEY)]);
+        $unsignedMessage->setCertificates(
+            [PEMCertificatesMock::getPlainPublicKey(PEMCertificatesMock::SELFSIGNED_PUBLIC_KEY)]
+        );
 
         $signedMessage = MessageFactory::fromXML($unsignedMessage->toXML());
         $signature = $signedMessage->getSignature();
@@ -165,11 +170,16 @@ AUTHNREQUEST
         $response = new DOMDocument();
         $response->load(__DIR__ . '../../../Response/response.xml');
 
-        $privateKey = PEMCertificatesMock::getPrivateKey(XMLSecurityKey::RSA_SHA256, PEMCertificatesMock::SELFSIGNED_PRIVATE_KEY);
+        $privateKey = PEMCertificatesMock::getPrivateKey(
+            XMLSecurityKey::RSA_SHA256,
+            PEMCertificatesMock::SELFSIGNED_PRIVATE_KEY
+        );
 
         $unsignedMessage = MessageFactory::fromXML($response->documentElement);
         $unsignedMessage->setSigningKey($privateKey);
-        $unsignedMessage->setCertificates([PEMCertificatesMock::getPlainPublicKey(PEMCertificatesMock::SELFSIGNED_PUBLIC_KEY)]);
+        $unsignedMessage->setCertificates(
+            [PEMCertificatesMock::getPlainPublicKey(PEMCertificatesMock::SELFSIGNED_PUBLIC_KEY)]
+        );
 
         $signedMessage = MessageFactory::fromXML($unsignedMessage->toXML());
 

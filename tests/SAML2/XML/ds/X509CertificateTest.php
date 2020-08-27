@@ -49,7 +49,10 @@ final class X509CertificateTest extends TestCase
                 "\n",
                 ''
             ],
-            PEMCertificatesMock::getPlainPublicKey(PEMCertificatesMock::SELFSIGNED_PUBLIC_KEY, XMLSecurityKey::RSA_SHA256)
+            PEMCertificatesMock::getPlainPublicKey(
+                PEMCertificatesMock::SELFSIGNED_PUBLIC_KEY,
+                XMLSecurityKey::RSA_SHA256
+            )
         );
 
         $this->document = DOMDocumentFactory::fromString(<<<XML

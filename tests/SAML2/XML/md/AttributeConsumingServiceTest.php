@@ -35,8 +35,11 @@ final class AttributeConsumingServiceTest extends TestCase
 <md:AttributeConsumingService xmlns:md="{$mdns}" index="2" isDefault="true">
   <md:ServiceName xml:lang="en">Academic Journals R US</md:ServiceName>
   <md:ServiceDescription xml:lang="en">Academic Journals R US and only us</md:ServiceDescription>
-  <md:RequestedAttribute Name="urn:oid:1.3.6.1.4.1.5923.1.1.1.7" NameFormat="urn:oasis:names:tc:SAML:2.0:attrname-format:uri" FriendlyName="eduPersonEntitlement">
-    <saml:AttributeValue xmlns:saml="{$samlns}">https://ServiceProvider.com/entitlements/123456789</saml:AttributeValue>
+  <md:RequestedAttribute Name="urn:oid:1.3.6.1.4.1.5923.1.1.1.7"
+      NameFormat="urn:oasis:names:tc:SAML:2.0:attrname-format:uri"
+      FriendlyName="eduPersonEntitlement">
+    <saml:AttributeValue
+        xmlns:saml="{$samlns}">https://ServiceProvider.com/entitlements/123456789</saml:AttributeValue>
   </md:RequestedAttribute>
 </md:AttributeConsumingService>
 XML
@@ -79,7 +82,10 @@ XML
         $this->assertEquals([new ServiceName('en', 'Academic Journals R US')], $acs->getServiceNames());
         $this->assertEquals([$this->getRequestedAttribute()], $acs->getRequestedAttributes());
         $this->assertTrue($acs->getIsDefault());
-        $this->assertEquals([new ServiceDescription('en', 'Academic Journals R US and only us')], $acs->getServiceDescriptions());
+        $this->assertEquals(
+            [new ServiceDescription('en', 'Academic Journals R US and only us')],
+            $acs->getServiceDescriptions()
+        );
 
         $this->assertEquals($this->document->saveXML($this->document->documentElement), strval($acs));
     }

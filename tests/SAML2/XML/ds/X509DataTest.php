@@ -85,7 +85,9 @@ XML
     {
         $X509data = new X509Data(
             [
-                new Chunk(DOMDocumentFactory::fromString('<ds:X509UnknownTag>somevalue</ds:X509UnknownTag>')->documentElement),
+                new Chunk(
+                    DOMDocumentFactory::fromString('<ds:X509UnknownTag>somevalue</ds:X509UnknownTag>')->documentElement
+                ),
                 new X509Certificate($this->certificate),
                 new X509SubjectName($this->certData['name']),
                 new Chunk(DOMDocumentFactory::fromString('<some>Chunk</some>')->documentElement)

@@ -38,8 +38,8 @@ final class PrivateKeyLoaderTest extends TestCase
      * @param \SAML2\Configuration\PrivateKey $configuredKey
      * @return void
      */
-    public function loading_a_configured_private_key_returns_a_certificate_private_key(
-        \SAML2\Configuration\PrivateKey $configuredKey
+    public function loadingAConfiguredPrivateKeyReturnsACertificatePrivateKey(
+        ConfPrivateKey $configuredKey
     ): void {
         $resultingKey = $this->privateKeyLoader->loadPrivateKey($configuredKey);
 
@@ -58,22 +58,22 @@ final class PrivateKeyLoaderTest extends TestCase
     {
         return [
             'no passphrase'   => [
-                new \SAML2\Configuration\PrivateKey(
+                new ConfPrivateKey(
                     dirname(__FILE__) . '/File/a_fake_private_key_file.pem',
-                    \SAML2\Configuration\PrivateKey::NAME_DEFAULT
+                    ConfPrivateKey::NAME_DEFAULT
                 )
             ],
             'with passphrase' => [
-                new \SAML2\Configuration\PrivateKey(
+                new ConfPrivateKey(
                     dirname(__FILE__) . '/File/a_fake_private_key_file.pem',
-                    \SAML2\Configuration\PrivateKey::NAME_DEFAULT,
+                    ConfPrivateKey::NAME_DEFAULT,
                     'foo bar baz'
                 )
             ],
             'private key as contents' => [
-                new \SAML2\Configuration\PrivateKey(
+                new ConfPrivateKey(
                     file_get_contents(dirname(__FILE__) . '/File/a_fake_private_key_file.pem'),
-                    \SAML2\Configuration\PrivateKey::NAME_DEFAULT,
+                    ConfPrivateKey::NAME_DEFAULT,
                     '',
                     false
                 )

@@ -32,7 +32,8 @@ final class ContactPersonTest extends TestCase
         $mdNamespace = Constants::NS_MD;
         $this->document = DOMDocumentFactory::fromString(<<<XML
 <?xml version="1.0"?>
-<md:ContactPerson contactType="other" test:attr1="testval1" test:attr2="testval2" xmlns:md="{$mdNamespace}" xmlns:test="urn:test">
+<md:ContactPerson contactType="other" test:attr1="testval1" test:attr2="testval2"
+    xmlns:md="{$mdNamespace}" xmlns:test="urn:test">
   <md:Extensions>
     <some:Ext xmlns:some="urn:mace:some:metadata:1.0">SomeExtension</some:Ext>
   </md:Extensions>

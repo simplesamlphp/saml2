@@ -19,7 +19,7 @@ final class PrivateKeyTest extends MockeryTestCase
      * @test
      * @return void
      */
-    public function test_create_from_key(): void
+    public function testCreateFromKey(): void
     {
         $key = PEMCertificatesMock::getPlainPrivateKey();
 

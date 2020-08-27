@@ -30,10 +30,10 @@ final class EndpointTypeTest extends TestCase
     {
         $mdNamespace = Constants::NS_MD;
         $this->document = DOMDocumentFactory::fromString(<<<XML
-<md:AttributeService xmlns:md="{$mdNamespace}" Binding="urn:something" Location="https://whatever/" ResponseLocation="https://foo.bar/" xmlns:test="urn:test" test:attr="value" />
+<md:AttributeService xmlns:md="{$mdNamespace}" Binding="urn:something" Location="https://whatever/"
+    ResponseLocation="https://foo.bar/" xmlns:test="urn:test" test:attr="value" />
 XML
         );
-
     }
 
 
