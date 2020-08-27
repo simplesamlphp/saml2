@@ -15,6 +15,8 @@ use SAML2\Utils;
 
 /**
  * Class \SAML2\XML\samlp\ResponseTest
+ *
+ * @covers \SAML2\XML\samlp\Response
  */
 class ResponseTest extends TestCase
 {

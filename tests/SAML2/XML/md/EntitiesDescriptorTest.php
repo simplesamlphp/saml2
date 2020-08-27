@@ -16,6 +16,7 @@ use SimpleSAML\Assert\AssertionFailedException;
 /**
  * Tests for the md:EntitiesDescriptor element.
  *
+ * @covers \SAML2\XML\md\EntitiesDescriptor
  * @package simplesamlphp/saml2
  */
 final class EntitiesDescriptorTest extends TestCase

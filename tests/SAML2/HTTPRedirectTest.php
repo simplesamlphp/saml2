@@ -17,6 +17,9 @@ use SAML2\XML\samlp\Status;
 use SAML2\XML\samlp\StatusCode;
 use SimpleSAML\TestUtils\PEMCertificatesMock;
 
+/**
+ * @covers \SAML2\HTTPRedirect
+ */
 class HTTPRedirectTest extends \Mockery\Adapter\Phpunit\MockeryTestCase
 {
     /**

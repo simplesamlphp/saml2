@@ -13,6 +13,8 @@ use SimpleSAML\Assert\AssertionFailedException;
 
 /**
  * Class \SAML2\XML\md\IndexedEndpointTypeTest
+ *
+ * @covers \SAML2\XML\md\IndexedEndpointType
  */
 final class IndexedEndpointTypeTest extends TestCase
 {

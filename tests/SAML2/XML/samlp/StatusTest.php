@@ -12,6 +12,8 @@ use SAML2\XML\Chunk;
 /**
  * Class \SAML2\XML\samlp\StatusTest
  *
+ * @covers \SAML2\XML\samlp\Status
+ *
  * @author Tim van Dijen, <tvdijen@gmail.com>
  * @package simplesamlphp/saml2
  */

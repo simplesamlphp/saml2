@@ -17,6 +17,8 @@ use SimpleSAML\TestUtils\PEMCertificatesMock;
 
 /**
  * Class \SAML2\AssertionTest
+ *
+ * @covers \SAML2\XML\saml\Assertion
  */
 final class AssertionTest extends MockeryTestCase
 {

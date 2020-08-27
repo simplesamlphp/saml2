@@ -20,6 +20,7 @@ use SAML2\XML\samlp\StatusCode;
 /**
  * Tests for decoding base64 encoded attributes.
  *
+ * @covers \SAML2\Assertion\Transformer\DecodeBase64Transformer
  * @package simplesamlphp/saml2
  */
 final class DecodeBase64TransformerTest extends TestCase

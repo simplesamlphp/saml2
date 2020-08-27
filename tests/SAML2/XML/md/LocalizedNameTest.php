@@ -12,6 +12,7 @@ use SimpleSAML\Assert\AssertionFailedException;
 /**
  * Tests for localized names.
  *
+ * @covers \SAML2\XML\md\LocalizedName
  * @package simplesamlphp/saml2
  */
 final class LocalizedNameTest extends TestCase

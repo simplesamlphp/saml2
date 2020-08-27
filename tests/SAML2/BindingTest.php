@@ -12,6 +12,9 @@ use SAML2\HTTPPost;
 use SAML2\HTTPRedirect;
 use SAML2\SOAP;
 
+/**
+ * @covers \SAML2\Binding
+ */
 class BindingTest extends \PHPUnit\Framework\TestCase
 {
     /**

@@ -13,6 +13,9 @@ use SAML2\XML\saml\SubjectConfirmation;
 use SAML2\XML\saml\SubjectConfirmationData;
 use SAML2\XML\saml\SubjectConfirmationMatches;
 
+/**
+ * @covers \SAML2\Assertion\Validation\ConstraintValidator\SubjectConfirmationRecipientMatches
+ */
 class SubjectConfirmationRecipientMatchesTest extends \Mockery\Adapter\Phpunit\MockeryTestCase
 {
     /**

@@ -10,6 +10,8 @@ use SAML2\XML\samlp\LogoutResponse;
 
 /**
  * Class \SAML2\XML\samlp\LogoutResponseTest
+ *
+ * @covers \SAML2\XML\samlp\LogoutResponse
  */
 class LogoutResponseTest extends TestCase
 {

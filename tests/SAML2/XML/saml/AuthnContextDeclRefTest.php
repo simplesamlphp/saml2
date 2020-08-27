@@ -10,6 +10,8 @@ use SAML2\Utils;
 
 /**
  * Class \SAML2\XML\saml\AuthnContextDeclRefTest
+ *
+ * @covers \SAML2\XML\saml\AuthnContextDeclRef
  */
 final class AuthnContextDeclRefTest extends \PHPUnit\Framework\TestCase
 {

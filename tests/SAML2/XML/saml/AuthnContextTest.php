@@ -11,6 +11,8 @@ use SimpleSAML\Assert\AssertionFailedException;
 
 /**
  * Class \SAML2\XML\saml\AuthnContextTest
+ *
+ * @covers \SAML2\XML\saml\AuthnContext
  */
 final class AuthnContextTest extends \PHPUnit\Framework\TestCase
 {

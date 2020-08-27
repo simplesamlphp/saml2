@@ -7,6 +7,9 @@ namespace SAML2;
 use Exception;
 use SAML2\HTTPArtifact;
 
+/**
+ * @covers \SAML2\HTTPArtifact
+ */
 class HTTPArtifactTest extends \PHPUnit\Framework\TestCase
 {
     /**

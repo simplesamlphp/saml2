@@ -7,6 +7,9 @@ namespace SAML2\Utilities;
 use PHPUnit\Framework\TestCase;
 use SimpleSAML\TestUtils\PEMCertificatesMock;
 
+/**
+ * @covers \SAML2\Utilities\Certificate
+ */
 class CertificateTest extends TestCase
 {
     /**

@@ -11,6 +11,8 @@ use SimpleSAML\Assert\AssertionFailedException;
 
 /**
  * Tests for md:NameIDMappingService.
+ *
+ * @covers \SAML2\XML\md\NameIDMappingService
  */
 final class NameIDMappingServiceTest extends TestCase
 {

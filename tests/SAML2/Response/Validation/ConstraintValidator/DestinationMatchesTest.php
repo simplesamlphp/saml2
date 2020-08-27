@@ -9,6 +9,9 @@ use SAML2\Configuration\Destination;
 use SAML2\Response\Validation\Result;
 use SAML2\Response\Validation\ConstraintValidator\DestinationMatches;
 
+/**
+ * @covers \SAML2\Response\Validation\ConstraintValidator\DestinationMatches
+ */
 class DestinationMatchesTest extends \Mockery\Adapter\Phpunit\MockeryTestCase
 {
     /**

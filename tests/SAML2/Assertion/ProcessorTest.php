@@ -19,6 +19,7 @@ use SAML2\Assertion\Exception\InvalidAssertionException;
 use stdClass;
 
 /**
+ * @covers \SAML2\Assertion\Processor
  * @runTestsInSeparateProcesses
  */
 class ProcessorTest extends MockeryTestCase

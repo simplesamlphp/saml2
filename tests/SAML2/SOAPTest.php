@@ -10,6 +10,9 @@ use SAML2\XML\samlp\ArtifactResolve;
 use SAML2\XML\samlp\MessageFactory;
 use SimpleSAML\Assert\Assert;
 
+/**
+ * @covers \SAML2\SOAP
+ */
 class SOAPTest extends \Mockery\Adapter\Phpunit\MockeryTestCase
 {
     /**

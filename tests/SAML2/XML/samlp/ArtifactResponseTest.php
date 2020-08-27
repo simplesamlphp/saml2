@@ -12,6 +12,9 @@ use SAML2\XML\samlp\StatusCode;
 use SAML2\DOMDocumentFactory;
 use SAML2\Utils;
 
+/**
+ * @covers \SAML2\XML\samlp\ArtifactResponse
+ */
 class ArtifactResponseTest extends TestCase
 {
     /** @var \DOMDocument */

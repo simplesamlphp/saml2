@@ -12,6 +12,8 @@ use SAML2\Utils;
 
 /**
  * Class \SAML2\XML\saml\SubjectLocalityTest
+ *
+ * @covers \SAML2\XML\saml\SubjectLocality
  */
 final class SubjectLocalityTest extends TestCase
 {

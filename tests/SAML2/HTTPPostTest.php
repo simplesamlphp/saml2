@@ -17,6 +17,9 @@ use SAML2\XML\samlp\StatusCode;
 use SimpleSAML\Utils\HTTP;
 use SimpleSAML\TestUtils\PEMCertificatesMock;
 
+/**
+ * @covers \SAML2\HTTPPost
+ */
 class HTTPPostTest extends \Mockery\Adapter\Phpunit\MockeryTestCase
 {
     /**

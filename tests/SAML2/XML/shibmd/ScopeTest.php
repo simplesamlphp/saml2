@@ -10,6 +10,8 @@ use SAML2\Utils;
 
 /**
  * Class \SAML2\XML\shibmd\Scope
+ *
+ * @covers \SAML2\XML\shibmd\Scope
  */
 class ScopeTest extends \PHPUnit\Framework\TestCase
 {

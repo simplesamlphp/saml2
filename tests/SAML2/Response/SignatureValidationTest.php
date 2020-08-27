@@ -23,6 +23,8 @@ use SimpleSAML\TestUtils\PEMCertificatesMock;
 
 /**
  * Test that ensures that either the response or the assertion(s) or both must be signed.
+ *
+ * @covers \SAML2\Response\SignatureValidation
  */
 class SignatureValidationTest extends MockeryTestCase
 {

@@ -6,6 +6,9 @@ namespace SAML2\Configuration;
 
 use SAML2\Configuration\Destination;
 
+/**
+ * @covers \SAML2\Configuration\Destination
+ */
 class DestinationTest extends \PHPUnit\Framework\TestCase
 {
     /**

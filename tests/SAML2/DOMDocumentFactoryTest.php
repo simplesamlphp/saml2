@@ -9,6 +9,9 @@ use SAML2\Exception\UnparseableXmlException;
 use SAML2\Exception\InvalidArgumentException;
 use SAML2\Exception\RuntimeException;
 
+/**
+ * @covers \SAML2\DOMDocumentFactory
+ */
 class DOMDocumentFactoryTest extends \PHPUnit\Framework\TestCase
 {
     /**

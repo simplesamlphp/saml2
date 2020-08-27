@@ -19,6 +19,7 @@ use SimpleSAML\Assert\AssertionFailedException;
  * Due to its nature, it doesn't make sense to test marshalling (creating) such an object, since in that case we
  * would know what object is this and we can model it properly.
  *
+ * @covers \SAML2\XML\md\UnknownRoleDescriptor
  * @package simplesamlphp/saml2
  */
 final class UnknownRoleDescriptorTest extends TestCase

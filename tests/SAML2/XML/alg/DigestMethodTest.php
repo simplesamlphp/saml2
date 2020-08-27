@@ -12,6 +12,8 @@ use SAML2\Utils;
 /**
  * Class \SAML2\XML\alg\DigestMethodTest
  *
+ * @covers \SAML2\XML\alg\DigestMethod
+ *
  * @author Jaime Pérez Crespo, UNINETT AS <jaime.perez@uninett.no>
  * @package simplesamlphp/saml2
  */

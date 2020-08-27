@@ -13,6 +13,8 @@ use SimpleSAML\Assert\AssertionFailedException;
 
 /**
  * Class \SAML2\XML\samlp\RequestedAuthnContextTest
+ *
+ * @covers \SAML2\XML\samlp\RequestedAuthnContext
  */
 class RequestedAuthnContextTest extends TestCase
 {

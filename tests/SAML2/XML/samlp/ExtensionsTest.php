@@ -12,6 +12,8 @@ use SAML2\XML\shibmd\Scope;
 
 /**
  * Class \SAML2\XML\samlp\ExtensionsTest
+ *
+ * @covers \SAML2\XML\samlp\Extensions
  */
 class ExtensionsTest extends TestCase
 {

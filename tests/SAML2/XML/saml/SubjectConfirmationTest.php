@@ -17,6 +17,8 @@ use SAML2\Utils;
 
 /**
  * Class \SAML2\XML\saml\SubjectConfirmationTest
+ *
+ * @covers \SAML2\XML\saml\SubjectConfirmation
  */
 final class SubjectConfirmationTest extends TestCase
 {

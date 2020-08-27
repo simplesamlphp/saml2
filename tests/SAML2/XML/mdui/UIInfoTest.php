@@ -10,6 +10,8 @@ use SAML2\Utils;
 
 /**
  * Class \SAML2\XML\mdui\UIInfoTest
+ *
+ * @covers \SAML2\XML\mdui\UIInfo
  */
 class UIInfoTest extends \PHPUnit\Framework\TestCase
 {

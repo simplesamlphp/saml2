@@ -13,6 +13,8 @@ use SimpleSAML\Assert\AssertionFailedException;
 
 /**
  * Class \SAML2\XML\mdui\LogoTest
+ *
+ * @covers \SAML2\XML\mdui\Logo
  */
 class LogoTest extends TestCase
 {

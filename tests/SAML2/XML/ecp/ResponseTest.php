@@ -13,6 +13,9 @@ use SAML2\Exception\MissingAttributeException;
 use SAML2\XML\ecp\Response;
 use SimpleSAML\Assert\AssertionFailedException;
 
+/**
+ * @covers \SAML2\XML\ecp\Response
+ */
 final class ResponseTest extends \PHPUnit\Framework\TestCase
 {
     /** @var \DOMDocument */

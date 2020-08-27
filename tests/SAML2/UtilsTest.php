@@ -15,6 +15,8 @@ use SAML2\Utils;
 
 /**
  * Class \SAML2\UtilsTest
+ *
+ * @covers \SAML2\Utils
  */
 class UtilsTest extends \PHPUnit\Framework\TestCase
 {

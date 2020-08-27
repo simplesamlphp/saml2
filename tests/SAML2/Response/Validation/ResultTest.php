@@ -6,6 +6,9 @@ namespace SAML2\Response\Validation;
 
 use SAML2\Response\Validation\Result;
 
+/**
+ * @covers \SAML2\Respose\Validation\Result
+ */
 class ResultTest extends \PHPUnit\Framework\TestCase
 {
     /**

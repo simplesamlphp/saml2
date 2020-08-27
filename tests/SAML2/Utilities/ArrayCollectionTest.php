@@ -7,6 +7,9 @@ namespace SAML2\Utilities;
 use SAML2\Utilities\ArrayCollection;
 use SAML2\Exception\RuntimeException;
 
+/**
+ * @covers \SAML2\Utilities\ArrayCollection
+ */
 class ArrayCollectionTest extends \PHPUnit\Framework\TestCase
 {
     /**

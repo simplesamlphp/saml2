@@ -11,6 +11,8 @@ use SAML2\Utils;
 
 /**
  * Class \SAML2\XML\mdui\DiscoHintsTest
+ *
+ * @covers \SAML2\XML\mdui\DiscoHints
  */
 class DiscoHintsTest extends TestCase
 {

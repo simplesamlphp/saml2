@@ -7,6 +7,9 @@ namespace SAML2\Certificate;
 use SAML2\Certificate\PrivateKey;
 use SimpleSAML\TestUtils\PEMCertificatesMock;
 
+/**
+ * @covers \SAML2\Certificate\PrivateKey
+ */
 class PrivateKeyTest extends \Mockery\Adapter\Phpunit\MockeryTestCase
 {
     /**

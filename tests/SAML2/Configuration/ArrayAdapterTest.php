@@ -6,6 +6,9 @@ namespace SAML2\Configuration;
 
 use SAML2\Configuration\ArrayAdapter;
 
+/**
+ * @covers \SAML2\Configuration\ArrayAdapter
+ */
 class ArrayAdapterTest extends \PHPUnit\Framework\TestCase
 {
     /**

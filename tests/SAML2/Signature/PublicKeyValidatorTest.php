@@ -20,6 +20,9 @@ use SAML2\XML\samlp\AbstractMessage;
 use SAML2\XML\samlp\Response;
 use SimpleSAML\TestUtils\PEMCertificatesMock;
 
+/**
+ * @covers \SAML2\Signature\PublicKeyValidator
+ */
 class PublicKeyValidatorTest extends \Mockery\Adapter\Phpunit\MockeryTestCase
 {
     private $mockSignedElement;

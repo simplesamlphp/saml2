@@ -18,6 +18,7 @@ use SimpleSAML\Assert\AssertionFailedException;
 /**
  * Tests for IDPSSODescriptor.
  *
+ * @covers \SAML2\XML\md\IDPSSODescriptor
  * @package simplesamlphp/saml2
  */
 final class IDPSSODescriptorTest extends TestCase

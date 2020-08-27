@@ -15,6 +15,7 @@ use SimpleSAML\Assert\AssertionFailedException;
 /**
  * Tests for the ContactPerson class.
  *
+ * @covers \SAML2\XML\md\ContactPerson
  * @package simplesamlphp/saml2
  */
 final class ContactPersonTest extends TestCase

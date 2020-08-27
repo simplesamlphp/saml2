@@ -11,6 +11,8 @@ use SimpleSAML\Assert\AssertionFailedException;
 
 /**
  * Tests for the AdditionalMetadataLocation class
+ *
+ * @covers \SAML2\XML\md\AdditionalMetadataLocation
  */
 final class AdditionalMetadataLocationTest extends TestCase
 {

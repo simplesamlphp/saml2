@@ -9,6 +9,9 @@ use SAML2\XML\saml\Issuer;
 use SAML2\DOMDocumentFactory;
 use SAML2\Utils;
 
+/**
+ * @covers \SAML2\XML\samlp\ArtifactResolve
+ */
 class ArtifactResolveTest extends TestCase
 {
     /** @var \DOMDocument $document */

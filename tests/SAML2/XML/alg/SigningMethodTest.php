@@ -13,6 +13,8 @@ use SAML2\Utils;
 /**
  * Class \SAML2\XML\alg\SigningMethodTest
  *
+ * @covers \SAML2\XML\alg\SigningMethod
+ *
  * @author Jaime Pérez Crespo, UNINETT AS <jaime.perez@uninett.no>
  * @package simplesamlphp/saml2
  */

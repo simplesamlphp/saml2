@@ -10,6 +10,8 @@ use SimpleSAML\Assert\AssertionFailedException;
 
 /**
  * Tests for md:ArtifactResolutionService.
+ *
+ * @covers \SAML2\XML\md\ArtifactResolutionService
  */
 final class ArtifactResolutionServiceTest extends TestCase
 {

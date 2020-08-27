@@ -11,6 +11,9 @@ use SAML2\XML\samlp\Status;
 use SAML2\XML\samlp\StatusCode;
 use SAML2\Signature\MissingConfigurationException;
 
+/**
+ * @covers \SAML2\Signature\ValidatorChain
+ */
 class ValidatorChainTest extends \PHPUnit\Framework\TestCase
 {
     /**

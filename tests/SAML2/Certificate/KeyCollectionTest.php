@@ -6,6 +6,9 @@ namespace SAML2\Certificate;
 
 use SimpleSAML\Assert\AssertionFailedException;
 
+/**
+ * @covers \SAML2\Certificate\KeyCollection
+ */
 class KeyCollectionTest extends \Mockery\Adapter\Phpunit\MockeryTestCase
 {
     /**

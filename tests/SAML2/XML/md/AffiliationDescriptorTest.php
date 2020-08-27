@@ -16,6 +16,7 @@ use SAML2\XML\ds\KeyName;
 /**
  * Tests for the AffiliationDescriptor class.
  *
+ * @covers \SAML2\XML\md\AffiliationDescriptor
  * @package simplesamlphp/saml2
  */
 final class AffiliationDescriptorTest extends TestCase

@@ -6,6 +6,9 @@ namespace SAML2\Certificate;
 
 use SAML2\Certificate\X509;
 
+/**
+ * @covers \SAML2\Certificate\X509
+ */
 class X509Test extends \PHPUnit\Framework\TestCase
 {
     /**

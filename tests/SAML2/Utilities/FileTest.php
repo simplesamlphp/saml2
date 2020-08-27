@@ -7,6 +7,9 @@ namespace SAML2\Utilities;
 use SAML2\Utilities\File;
 use SAML2\Exception\RuntimeException;
 
+/**
+ * @covers \SAML2\Utilities\File
+ */
 class FileTest extends \PHPUnit\Framework\TestCase
 {
     /**

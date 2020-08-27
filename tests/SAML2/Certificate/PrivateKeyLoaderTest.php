@@ -8,6 +8,9 @@ use SAML2\Configuration\PrivateKey as ConfPrivateKey;
 use SAML2\Certificate\PrivateKey;
 use SAML2\Certificate\PrivateKeyLoader;
 
+/**
+ * @covers \SAML2\Certificate\PrivateKeyLoader
+ */
 class PrivateKeyLoaderTest extends \PHPUnit\Framework\TestCase
 {
     /**

@@ -6,6 +6,9 @@ use DOMElement;
 use SAML2\XML\saml\Condition;
 use SimpleSAML\Assert\Assert;
 
+/**
+ * @covers \SAML2\CustomCondition
+ */
 final class CustomCondition extends Condition
 {
     protected const XSI_TYPE = 'CustomCondition';

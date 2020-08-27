@@ -9,6 +9,9 @@ use SAML2\Assertion\Validation\Result;
 use SAML2\Constants;
 use SAML2\XML\saml\SubjectConfirmation;
 
+/**
+ * @covers \SAML2\Assertion\Validation\ConstraintValidator\SubjectConfirmationMethod
+ */
 class SubjectConfirmationMethodTest extends \Mockery\Adapter\Phpunit\MockeryTestCase
 {
     /**

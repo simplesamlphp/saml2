@@ -11,6 +11,8 @@ use SAML2\Utils;
 /**
  * Class \SAML2\XML\ds\X509SubjectNameTest
  *
+ * @covers \SAML2\XML\ds\X509SubjectName
+ *
  * @author Tim van Dijen, <tvdijen@gmail.com>
  * @package simplesamlphp/saml2
  */

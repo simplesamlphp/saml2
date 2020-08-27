@@ -13,6 +13,8 @@ use SimpleSAML\TestUtils\PEMCertificatesMock;
 
 /**
  * Class \SAML2\XML\saml\AttributeTest
+ *
+ * @covers \SAML2\XML\saml\Attribute
  */
 final class AttributeTest extends TestCase
 {

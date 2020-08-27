@@ -12,6 +12,8 @@ use SAML2\DOMDocumentFactory;
 /**
  * Class \SAML2\XML\saml\BaseIDTest
  *
+ * @covers \SAML2\XML\saml\BaseID
+ *
  * @author Tim van Dijen, <tvdijen@gmail.com>
  * @package simplesamlphp/saml2
  */

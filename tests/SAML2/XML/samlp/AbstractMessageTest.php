@@ -24,6 +24,9 @@ use SAML2\XML\samlp\StatusCode;
 use SimpleSAML\Assert\AssertionFailedException;
 use SimpleSAML\TestUtils\PEMCertificatesMock;
 
+/**
+ * @covers \SAML2\XML\samlp\AbstractMessage
+ */
 class AbstractMessageTest extends \Mockery\Adapter\Phpunit\MockeryTestCase
 {
     /**
@@ -176,7 +179,6 @@ AUTHNREQUEST
 
     /**
      * @group Message
-     * @covers \SAML2\XML\samlp\AbstractMessage::getExtensions()
      * @return void
      */
     public function testGetExtensions(): void

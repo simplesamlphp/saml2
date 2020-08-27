@@ -17,6 +17,8 @@ use SAML2\Utils;
 /**
  * Class \SAML2\XML\saml\SubjectTest
  *
+ * @covers \SAML2\XML\saml\Subject
+ *
  * @author Tim van Dijen, <tvdijen@gmail.com>
  * @package SimpleSAMLphp
  */

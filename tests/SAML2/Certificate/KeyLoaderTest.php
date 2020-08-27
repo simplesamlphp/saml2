@@ -11,6 +11,9 @@ use SAML2\Certificate\Exception\InvalidCertificateStructureException;
 use SAML2\Certificate\Exception\NoKeysFoundException;
 use SAML2\Configuration\CertificateProvider;
 
+/**
+ * @covers \SAML2\Certificate\KeyLoader
+ */
 class KeyLoaderTest extends \Mockery\Adapter\Phpunit\MockeryTestCase
 {
     /**

@@ -14,6 +14,8 @@ use SAML2\Utils;
 
 /**
  * Class \SAML2\XML\mdattr\EntityAttributesTest
+ *
+ * @covers \SAML2\XML\mdattr\EntityAttributes
  */
 class EntityAttributesTest extends \PHPUnit\Framework\TestCase
 {

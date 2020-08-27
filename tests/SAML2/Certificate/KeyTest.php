@@ -8,6 +8,9 @@ use SAML2\Certificate\Key;
 use SAML2\Certificate\Exception\InvalidKeyUsageException;
 use SAML2\Exception\InvalidArgumentException;
 
+/**
+ * @covers \SAML2\Certificate\Key
+ */
 class KeyTest extends \PHPUnit\Framework\TestCase
 {
     /**

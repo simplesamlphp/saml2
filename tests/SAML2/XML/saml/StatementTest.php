@@ -13,6 +13,8 @@ use SimpleSAML\Assert\AssertionFailedException;
 
 /**
  * Class \SAML2\XML\saml\StatementTest
+ *
+ * @covers \SAML2\XML\saml\Statement
  */
 final class StatementTest extends TestCase
 {

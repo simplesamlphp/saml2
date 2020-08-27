@@ -19,6 +19,7 @@ use SAML2\XML\samlp\StatusCode;
 /**
  * Tests for the Assertion validators
  *
+ * @covers \SAML2\Assertion\Validation\AssertionValidator
  * @package simplesamlphp/saml2
  */
 final class AssertionValidatorTest extends TestCase

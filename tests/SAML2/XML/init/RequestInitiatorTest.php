@@ -13,6 +13,8 @@ use SAML2\Utils;
 /**
  * Class \SAML2\XML\init\RequestInitiatorTest
  *
+ * @covers \SAML2\XML\init\RequestInitiator
+ *
  * @author Tim van Dijen, <tvdijen@gmail.com>
  * @package simplesamlphp/saml2
  */

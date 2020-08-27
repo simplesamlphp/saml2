@@ -13,6 +13,7 @@ use SAML2\XML\Chunk;
 /**
  * Test for the Organization metadata element.
  *
+ * @covers \SAML2\XML\md\Organization
  * @package simplesamlphp/saml2
  */
 final class OrganizationTest extends TestCase

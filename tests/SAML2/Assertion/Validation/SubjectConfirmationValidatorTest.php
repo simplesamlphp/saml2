@@ -19,6 +19,7 @@ use SAML2\XML\samlp\StatusCode;
 /**
  * Tests for the SubjectConfirmation validators
  *
+ * @covers \SAML2\Assertion\Validation\SubjectConfirmationValidator
  * @package simplesamlphp/saml2
  */
 final class SubjectConfirmationValidatorTest extends TestCase

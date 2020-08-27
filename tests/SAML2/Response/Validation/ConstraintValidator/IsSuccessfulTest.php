@@ -12,6 +12,9 @@ use SAML2\XML\samlp\Status;
 use SAML2\XML\samlp\StatusCode;
 use SAML2\XML\samlp\StatusMessage;
 
+/**
+ * @covers \SAML2\Response\Validation\ConstraintValidator\IsSuccessful
+ */
 class IsSuccessfulTest extends \Mockery\Adapter\Phpunit\MockeryTestCase
 {
     /**

@@ -15,6 +15,8 @@ use SimpleSAML\TestUtils\PEMCertificatesMock;
 /**
  * Class \SAML2\XML\ds\KeyInfoTest
  *
+ * @covers \SAML2\XML\ds\KeyInfo
+ *
  * @author Tim van Dijen, <tvdijen@gmail.com>
  * @package simplesamlphp/saml2
  */

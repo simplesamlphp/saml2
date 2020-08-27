@@ -11,6 +11,8 @@ use SAML2\Utils;
 
 /**
  * Class \SAML2\XML\mdrpi\RegistrationInfoTest
+ *
+ * @covers \SAML2\XML\mdrpi\RegistrationInfo
  */
 class RegistrationInfoTest extends TestCase
 {

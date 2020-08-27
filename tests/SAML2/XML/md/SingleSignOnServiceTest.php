@@ -11,6 +11,8 @@ use SimpleSAML\Assert\AssertionFailedException;
 
 /**
  * Tests for md:SingleSignOnService.
+ *
+ * @covers \SAML2\XML\md\SingleSignOnService
  */
 final class SingleSignOnServiceTest extends TestCase
 {
