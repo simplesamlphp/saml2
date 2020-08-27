@@ -11,7 +11,7 @@ use SAML2\DOMDocumentFactory;
 /**
  * Class \SAML2\XML\saml\ProxyRestrictionTest
  *
- * @covers \SAML2\XML\samlp\ProxyRestriction
+ * @covers \SAML2\XML\saml\ProxyRestriction
  *
  * @author Tim van Dijen, <tvdijen@gmail.com>
  * @package simplesamlphp/saml2
