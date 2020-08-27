@@ -19,6 +19,7 @@ use SimpleSAML\TestUtils\PEMCertificatesMock;
 
 /**
  * @covers \SAML2\HTTPPost
+ * @package simplesamlphp\saml2
  */
 class HTTPPostTest extends \Mockery\Adapter\Phpunit\MockeryTestCase
 {

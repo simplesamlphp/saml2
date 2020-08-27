@@ -13,6 +13,7 @@ use SAML2\XML\saml\SubjectConfirmationData;
 
 /**
  * @covers \SAML2\Assertion\Validation\ConstraintValidator\SubjectConfirmationResponseToMatches
+ * @package simplesamlphp/saml2
  */
 class SubjectConfirmationResponseToMatchesTest extends \Mockery\Adapter\Phpunit\MockeryTestCase
 {

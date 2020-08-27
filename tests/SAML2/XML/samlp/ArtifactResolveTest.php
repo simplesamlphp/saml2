@@ -11,6 +11,7 @@ use SAML2\Utils;
 
 /**
  * @covers \SAML2\XML\samlp\ArtifactResolve
+ * @package simplesamlphp/saml2
  */
 class ArtifactResolveTest extends TestCase
 {

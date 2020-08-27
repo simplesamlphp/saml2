@@ -9,6 +9,7 @@ namespace SAML2;
  * tests.
  *
  * @runTestsInSeparateProcesses
+ * @package simplesamlphp\saml2
  */
 abstract class ControlledTimeTest extends \Mockery\Adapter\Phpunit\MockeryTestCase
 {

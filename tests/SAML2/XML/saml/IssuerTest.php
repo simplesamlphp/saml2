@@ -14,6 +14,7 @@ use SimpleSAML\Assert\AssertionFailedException;
  * Class \SAML2\XML\saml\IssuerTest
  *
  * @covers \SAML2\XML\saml\Issuer
+ * @package simplesamlphp/saml2
  */
 final class IssuerTest extends TestCase
 {

@@ -16,6 +16,7 @@ use SAML2\Utils;
  * Class \SAML2\XML\mdattr\EntityAttributesTest
  *
  * @covers \SAML2\XML\mdattr\EntityAttributes
+ * @package simplesamlphp/saml2
  */
 class EntityAttributesTest extends \PHPUnit\Framework\TestCase
 {

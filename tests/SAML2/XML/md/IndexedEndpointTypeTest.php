@@ -15,6 +15,7 @@ use SimpleSAML\Assert\AssertionFailedException;
  * Class \SAML2\XML\md\IndexedEndpointTypeTest
  *
  * @covers \SAML2\XML\md\IndexedEndpointType
+ * @package simplesamlphp/saml2
  */
 final class IndexedEndpointTypeTest extends TestCase
 {

@@ -15,6 +15,7 @@ use SimpleSAML\TestUtils\PEMCertificatesMock;
  * Class \SAML2\XML\saml\AttributeStatementTest
  *
  * @covers \SAML2\XML\saml\AttributeStatement
+ * @package simplesamlphp/saml2
  */
 final class AttributeStatementTest extends TestCase
 {

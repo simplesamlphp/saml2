@@ -17,6 +17,7 @@ use SAML2\Utils;
  * Class \SAML2\UtilsTest
  *
  * @covers \SAML2\Utils
+ * @package simplesamlphp\saml2
  */
 class UtilsTest extends \PHPUnit\Framework\TestCase
 {

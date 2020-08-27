@@ -4,6 +4,9 @@ declare(strict_types=1);
 
 namespace SAML2\Certificate\Stub;
 
+/**
+ * @package simplesamlphp/saml2
+ */
 class ImplementsToString
 {
     /**

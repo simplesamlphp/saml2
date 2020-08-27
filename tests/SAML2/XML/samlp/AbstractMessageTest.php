@@ -26,6 +26,7 @@ use SimpleSAML\TestUtils\PEMCertificatesMock;
 
 /**
  * @covers \SAML2\XML\samlp\AbstractMessage
+ * @package simplesamlphp/saml2
  */
 class AbstractMessageTest extends \Mockery\Adapter\Phpunit\MockeryTestCase
 {

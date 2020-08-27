@@ -19,6 +19,7 @@ use SimpleSAML\TestUtils\PEMCertificatesMock;
 
 /**
  * @covers \SAML2\HTTPRedirect
+ * @package simplesamlphp\saml2
  */
 class HTTPRedirectTest extends \Mockery\Adapter\Phpunit\MockeryTestCase
 {

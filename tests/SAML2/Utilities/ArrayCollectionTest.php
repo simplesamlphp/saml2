@@ -9,6 +9,7 @@ use SAML2\Exception\RuntimeException;
 
 /**
  * @covers \SAML2\Utilities\ArrayCollection
+ * @package simplesamlphp/saml2
  */
 class ArrayCollectionTest extends \PHPUnit\Framework\TestCase
 {

@@ -11,6 +11,8 @@ use SAML2\XML\SignedElementInterface;
 /**
  * MockChainedValidator, to be able to test the validatorchain without having to use
  * actual validators
+ *
+ * @package simplesamlphp/saml2
  */
 class MockChainedValidator extends AbstractChainedValidator
 {

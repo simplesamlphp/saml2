@@ -8,6 +8,7 @@ use SimpleSAML\Assert\Assert;
 
 /**
  * @covers \SAML2\CustomCondition
+ * @package simplesamlphp\saml2
  */
 final class CustomCondition extends Condition
 {

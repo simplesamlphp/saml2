@@ -13,6 +13,7 @@ use SAML2\Configuration\CertificateProvider;
 
 /**
  * @covers \SAML2\Certificate\KeyLoader
+ * @package simplesamlphp/saml2
  */
 class KeyLoaderTest extends \Mockery\Adapter\Phpunit\MockeryTestCase
 {

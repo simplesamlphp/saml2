@@ -13,6 +13,7 @@ use SimpleSAML\Assert\AssertionFailedException;
  * Tests for the AdditionalMetadataLocation class
  *
  * @covers \SAML2\XML\md\AdditionalMetadataLocation
+ * @package simplesamlphp/saml2
  */
 final class AdditionalMetadataLocationTest extends TestCase
 {

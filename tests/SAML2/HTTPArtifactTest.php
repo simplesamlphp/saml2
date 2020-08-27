@@ -9,6 +9,7 @@ use SAML2\HTTPArtifact;
 
 /**
  * @covers \SAML2\HTTPArtifact
+ * @package simplesamlphp\saml2
  */
 class HTTPArtifactTest extends \PHPUnit\Framework\TestCase
 {

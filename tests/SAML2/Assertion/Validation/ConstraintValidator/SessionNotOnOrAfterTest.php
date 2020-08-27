@@ -15,6 +15,7 @@ use SAML2\XML\saml\Assertion;
  * tests.
  *
  * @covers \SAML2\Assertion\Validation\ConstraintValidator\SessionNotOnOrAfter
+ * @package simplesamlphp/saml2
  *
  * @runTestsInSeparateProcesses
  */

@@ -12,6 +12,7 @@ use SAML2\Utils;
  * Class \SAML2\XML\shibmd\Scope
  *
  * @covers \SAML2\XML\shibmd\Scope
+ * @package simplesamlphp/saml2
  */
 class ScopeTest extends \PHPUnit\Framework\TestCase
 {

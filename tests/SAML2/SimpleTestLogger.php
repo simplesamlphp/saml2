@@ -6,6 +6,8 @@ namespace SAML2;
 
 /**
  * A very simple in-memory logger that allows querying the log for existence of messages
+ *
+ * @package simplesamlphp\saml2
  */
 class SimpleTestLogger extends \Psr\Log\AbstractLogger
 {

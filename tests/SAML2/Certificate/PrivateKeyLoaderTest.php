@@ -10,6 +10,7 @@ use SAML2\Certificate\PrivateKeyLoader;
 
 /**
  * @covers \SAML2\Certificate\PrivateKeyLoader
+ * @package simplesamlphp/saml2
  */
 class PrivateKeyLoaderTest extends \PHPUnit\Framework\TestCase
 {

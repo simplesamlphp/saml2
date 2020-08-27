@@ -9,6 +9,7 @@ use SimpleSAML\Assert\Assert;
 
 /**
  * @covers \SAML2\CustomBaseID
+ * @package simplesamlphp\saml2
  */
 final class CustomBaseID extends BaseID implements CustomIdentifierInterface
 {

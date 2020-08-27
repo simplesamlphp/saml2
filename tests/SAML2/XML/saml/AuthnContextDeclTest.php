@@ -12,6 +12,7 @@ use SAML2\Utils;
  * Class \SAML2\XML\saml\AuthnContextDeclTest
  *
  * @covers \SAML2\XML\saml\AuthnContextDecl
+ * @package simplesamlphp/saml2
  */
 final class AuthnContextDeclTest extends \PHPUnit\Framework\TestCase
 {

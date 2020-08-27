@@ -16,6 +16,7 @@ use SAML2\XML\saml\Assertion;
  * tests.
  *
  * @covers \SAML2\Assertion\Validation\ConstraintValidator\SpIsValidAudience
+ * @package simplesamlphp/saml2
  */
 class SpIsValidAudienceTest extends MockeryTestCase
 {

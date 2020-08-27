@@ -15,6 +15,7 @@ use SAML2\XML\saml\SubjectConfirmationMatches;
 
 /**
  * @covers \SAML2\Assertion\Validation\ConstraintValidator\SubjectConfirmationRecipientMatches
+ * @package simplesamlphp/saml2
  */
 class SubjectConfirmationRecipientMatchesTest extends \Mockery\Adapter\Phpunit\MockeryTestCase
 {

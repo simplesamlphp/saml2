@@ -11,6 +11,7 @@ use SAML2\Response\Validation\ConstraintValidator\DestinationMatches;
 
 /**
  * @covers \SAML2\Response\Validation\ConstraintValidator\DestinationMatches
+ * @package simplesamlphp/saml2
  */
 class DestinationMatchesTest extends \Mockery\Adapter\Phpunit\MockeryTestCase
 {

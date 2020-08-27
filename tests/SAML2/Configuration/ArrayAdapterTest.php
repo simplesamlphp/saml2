@@ -8,6 +8,7 @@ use SAML2\Configuration\ArrayAdapter;
 
 /**
  * @covers \SAML2\Configuration\ArrayAdapter
+ * @package simplesamlphp/saml2
  */
 class ArrayAdapterTest extends \PHPUnit\Framework\TestCase
 {

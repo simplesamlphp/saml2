@@ -10,6 +10,7 @@ use SAML2\Exception\InvalidArgumentException;
 
 /**
  * @covers \SAML2\Certificate\Key
+ * @package simplesamlphp/saml2
  */
 class KeyTest extends \PHPUnit\Framework\TestCase
 {

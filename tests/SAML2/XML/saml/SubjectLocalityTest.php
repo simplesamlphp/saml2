@@ -14,6 +14,7 @@ use SAML2\Utils;
  * Class \SAML2\XML\saml\SubjectLocalityTest
  *
  * @covers \SAML2\XML\saml\SubjectLocality
+ * @package simplesamlphp/saml2
  */
 final class SubjectLocalityTest extends TestCase
 {

@@ -9,6 +9,7 @@ use SAML2\Exception\RuntimeException;
 
 /**
  * @covers \SAML2\Utilities\File
+ * @package simplesamlphp/saml2
  */
 class FileTest extends \PHPUnit\Framework\TestCase
 {

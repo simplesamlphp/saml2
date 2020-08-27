@@ -12,6 +12,7 @@ use SimpleSAML\Assert\AssertionFailedException;
 
 /**
  * @covers \SAML2\XML\md\AuthnAuthorityDescriptor
+ * @package simplesamlphp/saml2
  */
 final class AuthnAuthorityDescriptorTest extends TestCase
 {

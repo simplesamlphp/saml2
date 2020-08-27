@@ -17,6 +17,7 @@ use SAML2\XML\saml\SubjectConfirmationData;
  * tests.
  *
  * @covers \SAML2\Assertion\Validation\ConstraintValidator\SubjectConfirmationNotOnOrAfter
+ * @package simplesamlphp/saml2
  */
 class SubjectConfirmationNotOnOrAfterTest extends ControlledTimeTest
 {

@@ -13,6 +13,7 @@ use SAML2\Signature\MissingConfigurationException;
 
 /**
  * @covers \SAML2\Signature\ValidatorChain
+ * @package simplesamlphp/saml2
  */
 class ValidatorChainTest extends \PHPUnit\Framework\TestCase
 {

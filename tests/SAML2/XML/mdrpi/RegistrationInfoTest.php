@@ -13,6 +13,7 @@ use SAML2\Utils;
  * Class \SAML2\XML\mdrpi\RegistrationInfoTest
  *
  * @covers \SAML2\XML\mdrpi\RegistrationInfo
+ * @package simplesamlphp/saml2
  */
 class RegistrationInfoTest extends TestCase
 {

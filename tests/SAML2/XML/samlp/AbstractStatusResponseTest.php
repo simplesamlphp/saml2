@@ -21,6 +21,7 @@ use SimpleSAML\TestUtils\PEMCertificatesMock;
  * Class \SAML2\XML\samlp\AbstractStatusResponseTest
  *
  * @covers \SAML2\XML\samlp\AbstractStatusResponse
+ * @package simplesamlphp/saml2
  */
 class AbstractStatusResponseTest extends TestCase
 {
