@@ -26,6 +26,7 @@ use SimpleSAML\TestUtils\PEMCertificatesMock;
  * Class \SAML2\XML\samlp\AuthnRequestTest
  *
  * @covers \SAML2\XML\samlp\AuthnRequest
+ * @covers \SAML2\XML\samlp\AbstractMessage
  * @package simplesamlphp/saml2
  */
 final class AuthnRequestTest extends TestCase

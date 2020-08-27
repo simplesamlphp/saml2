@@ -17,6 +17,8 @@ use SimpleSAML\Assert\AssertionFailedException;
  * Tests for the AttributeAuthorityDescriptor class.
  *
  * @covers \SAML2\XML\md\AttributeAuthorityDescriptor
+ * @covers \SAML2\XML\md\AbstractMetadataDocument
+ * @covers \SAML2\XML\md\AbstractRoleDescriptor
  * @package simplesamlphp/saml2
  */
 final class AttributeAuthorityDescriptorTest extends TestCase

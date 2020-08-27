@@ -21,6 +21,9 @@ use SAML2\XML\saml\Subject;
  * Class \SAML2\AttributeQueryTest
  *
  * @covers \SAML2\XML\samlp\AttributeQuery
+ * @covers \SAML2\XML\samlp\AbstractSubjectQuery
+ * @covers \SAML2\XML\samlp\AbstractRequest
+ * @covers \SAML2\XML\samlp\AbstractMessage
  * @package simplesamlphp/saml2
  */
 final class AttributeQueryTest extends TestCase

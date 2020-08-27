@@ -12,6 +12,8 @@ use SAML2\XML\samlp\LogoutResponse;
  * Class \SAML2\XML\samlp\LogoutResponseTest
  *
  * @covers \SAML2\XML\samlp\LogoutResponse
+ * @covers \SAML2\XML\samlp\AbstractStatusResponse
+ * @covers \SAML2\XML\samlp\AbstractMessage
  * @package simplesamlphp/saml2
  */
 final class LogoutResponseTest extends TestCase

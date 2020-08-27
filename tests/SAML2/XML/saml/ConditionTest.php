@@ -13,6 +13,7 @@ use SAML2\DOMDocumentFactory;
  * Class \SAML2\XML\saml\ConditionTest
  *
  * @covers \SAML2\XML\saml\Condition
+ * @covers \SAML2\XML\saml\AbstractConditionType
  *
  * @author Tim van Dijen, <tvdijen@gmail.com>
  * @package simplesamlphp/saml2

@@ -20,6 +20,8 @@ use SimpleSAML\Assert\AssertionFailedException;
  * would know what object is this and we can model it properly.
  *
  * @covers \SAML2\XML\md\UnknownRoleDescriptor
+ * @covers \SAML2\XML\md\AbstractMetadataDocument
+ * @covers \SAML2\XML\md\AbstractRoleDescriptor
  * @package simplesamlphp/saml2
  */
 final class UnknownRoleDescriptorTest extends TestCase

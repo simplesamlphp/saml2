@@ -20,6 +20,9 @@ use SimpleSAML\Assert\AssertionFailedException;
  * Tests for the md:SPSSODescriptor element.
  *
  * @covers \SAML2\XML\md\SPSSODescriptor
+ * @covers \SAML2\XML\md\AbstractMetadataDocument
+ * @covers \SAML2\XML\md\AbstractRoleDescriptor
+ * @covers \SAML2\XML\md\AbstractSSODescriptor
  * @package simplesamlphp/saml2
  */
 final class SPSSODescriptorTest extends TestCase

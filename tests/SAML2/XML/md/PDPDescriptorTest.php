@@ -13,6 +13,8 @@ use SimpleSAML\Assert\AssertionFailedException;
  * Tests for md:PDPDescriptor
  *
  * @covers \SAML2\XML\md\PDPDescriptor
+ * @covers \SAML2\XML\md\AbstractMetadataDocument
+ * @covers \SAML2\XML\md\AbstractRoleDescriptor
  * @package simplesamlphp/saml2
  */
 final class PDPDescriptorTest extends TestCase

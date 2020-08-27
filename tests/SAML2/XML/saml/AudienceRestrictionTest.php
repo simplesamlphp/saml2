@@ -12,6 +12,7 @@ use SAML2\DOMDocumentFactory;
  * Class \SAML2\XML\saml\AudienceRestrictionTest
  *
  * @covers \SAML2\XML\saml\AudienceRestriction
+ * @covers \SAML2\XML\saml\AbstractConditionType
  *
  * @author Tim van Dijen, <tvdijen@gmail.com>
  * @package simplesamlphp/saml2
