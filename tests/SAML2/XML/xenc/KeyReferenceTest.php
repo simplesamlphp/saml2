@@ -11,20 +11,20 @@ use SAML2\DOMDocumentFactory;
 use SAML2\XML\Chunk;
 
 /**
- * Class \SAML2\XML\xenc\DataReferenceTest
+ * Class \SAML2\XML\xenc\KeyReferenceTest
  *
  * @covers \SAML2\XML\xenc\AbstractReference
- * @covers \SAML2\XML\xenc\DataReference
+ * @covers \SAML2\XML\xenc\KeyReference
  *
  * @author Tim van Dijen, <tvdijen@gmail.com>
  * @package simplesamlphp/saml2
  */
-final class DataReferenceTest extends TestCase
+final class KeyReferenceTest extends TestCase
 {
     /** @var \DOMDocument $document */
     private $document;
 
-    /** @var \SAML2\XML\Chunk $reference */
+    /** @var \SAML2\Chunk $document */
     private $reference;
 
 
@@ -37,29 +37,30 @@ final class DataReferenceTest extends TestCase
         $dsNamespace = XMLSecurityDSig::XMLDSIGNS;
 
         $this->document = DOMDocumentFactory::fromString(<<<XML
-<xenc:DataReference xmlns:xenc="{$xencNamespace}" URI="#Encrypted_DATA_ID">
+<xenc:KeyReference xmlns:xenc="{$xencNamespace}" URI="#Encrypted_KEY_ID">
   <ds:Transforms xmlns:ds="{$dsNamespace}">
     <ds:Transform Algorithm="http://www.w3.org/TR/1999/REC-xpath-19991116">
       <ds:XPath xmlns:xenc="http://www.w3.org/2001/04/xmlenc#">
-        self::xenc:EncryptedData[@Id="example1"]
+        self::xenc:EncryptedKey[@Id="example1"]
       </ds:XPath>
     </ds:Transform>
   </ds:Transforms>
-</xenc:DataReference>
+</xenc:KeyReference>
 XML
         );
 
         $this->reference = new Chunk(DOMDocumentFactory::fromString(<<<XML
- <ds:Transforms xmlns:ds="{$dsNamespace}">
+  <ds:Transforms xmlns:ds="{$dsNamespace}">
     <ds:Transform Algorithm="http://www.w3.org/TR/1999/REC-xpath-19991116">
       <ds:XPath xmlns:xenc="http://www.w3.org/2001/04/xmlenc#">
-        self::xenc:EncryptedData[@Id="example1"]
+        self::xenc:EncryptedKey[@Id="example1"]
       </ds:XPath>
     </ds:Transform>
   </ds:Transforms>
 XML
         )->documentElement);
     }
+
 
     // marshalling
 
@@ -69,17 +70,17 @@ XML
      */
     public function testMarshalling(): void
     {
-        $dataReference = new DataReference('#Encrypted_DATA_ID', [$this->reference]);
+        $keyReference = new KeyReference('#Encrypted_KEY_ID', [$this->reference]);
 
-        $this->assertEquals('#Encrypted_DATA_ID', $dataReference->getURI());
+        $this->assertEquals('#Encrypted_KEY_ID', $keyReference->getURI());
 
-        $references = $dataReference->getReferences();
+        $references = $keyReference->getReferences();
         $this->assertCount(1, $references);
         $this->assertEquals($this->reference, $references[0]);
 
         $this->assertEquals(
             $this->document->saveXML($this->document->documentElement),
-            strval($dataReference)
+            strval($keyReference)
         );
     }
 
@@ -92,17 +93,17 @@ XML
      */
     public function testUnmarshalling(): void
     {
-        $dataReference = DataReference::fromXML($this->document->documentElement);
+        $keyReference = KeyReference::fromXML($this->document->documentElement);
 
-        $this->assertEquals('#Encrypted_DATA_ID', $dataReference->getURI());
+        $this->assertEquals('#Encrypted_KEY_ID', $keyReference->getURI());
 
-        $references = $dataReference->getReferences();
+        $references = $keyReference->getReferences();
         $this->assertCount(1, $references);
         $this->assertEquals($this->reference, $references[0]);
 
         $this->assertEquals(
             $this->document->saveXML($this->document->documentElement),
-            strval($dataReference)
+            strval($keyReference)
         );
     }
 
@@ -114,7 +115,7 @@ XML
     {
         $this->assertEquals(
             $this->document->saveXML($this->document->documentElement),
-            strval(unserialize(serialize(DataReference::fromXML($this->document->documentElement))))
+            strval(unserialize(serialize(KeyReference::fromXML($this->document->documentElement))))
         );
     }
 }
