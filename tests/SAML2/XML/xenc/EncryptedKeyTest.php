@@ -15,6 +15,7 @@ use SAML2\XML\ds\KeyInfo;
 /**
  * Class \SAML2\XML\xenc\EncryptedKeyTest
  *
+ * @covers \SAML2\XML\xenc\AbstractEncryptedType
  * @covers \SAML2\XML\xenc\EncryptedKey
  *
  * @author Tim van Dijen, <tvdijen@gmail.com>

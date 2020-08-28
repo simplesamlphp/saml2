@@ -28,7 +28,7 @@ abstract class AbstractReference extends AbstractXencElement
      * @param string $uri
      * @param \SAML2\Chunk[] $references
      */
-    public function __construct(string $uri, array $references = [])
+    protected function __construct(string $uri, array $references = [])
     {
         $this->setURI($uri);
         $this->setReferences($references);

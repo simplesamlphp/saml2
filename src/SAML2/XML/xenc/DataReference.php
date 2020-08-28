@@ -11,4 +11,14 @@ namespace SimpleSAML\SAML2\XML\xenc;
  */
 class DataReference extends AbstractReference
 {
+    /**
+     * DataReference constructor.
+     *
+     * @param string $uri
+     * @param \SAML2\XML\Chunk[] $references
+     */
+    public function __construct(string $uri, array $references = [])
+    {
+        parent::__construct($uri, $references);
+    }
 }

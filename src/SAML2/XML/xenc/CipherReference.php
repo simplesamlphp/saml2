@@ -12,4 +12,14 @@ namespace SAML2\XML\xenc;
  */
 class CipherReference extends AbstractReference
 {
+    /**
+     * CipherReference constructor.
+     *
+     * @param string $uri
+     * @param \SAML2\XML\Chunk[] $references
+     */
+    public function __construct(string $uri, array $references = [])
+    {
+        parent::__construct($uri, $references);
+    }
 }
