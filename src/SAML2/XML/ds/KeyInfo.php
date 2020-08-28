@@ -136,6 +136,9 @@ final class KeyInfo extends AbstractDsElement
                 }
             } elseif ($n->namespaceURI === Constants::NS_XENC) {
                 switch ($n->localName) {
+                    case 'EncryptedData':
+                        $info[] = EncryptedData::fromXML($n);
+                        break;
                     case 'EncryptedKey':
                         $info[] = EncryptedKey::fromXML($n);
                         break;
