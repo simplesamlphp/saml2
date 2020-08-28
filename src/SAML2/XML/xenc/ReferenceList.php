@@ -91,6 +91,7 @@ class ReferenceList extends AbstractXencElement
         $this->keyreferences = $keyReferences;
     }
 
+
     /**
      * @inheritDoc
      *
