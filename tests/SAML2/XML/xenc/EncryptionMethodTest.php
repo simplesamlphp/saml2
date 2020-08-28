@@ -12,7 +12,7 @@ use SimpleSAML\SAML2\Exception\MissingAttributeException;
 use SimpleSAML\Assert\AssertionFailedException;
 
 /**
- * Tests for the md:EncryptionMethod element.
+ * Tests for the xenc:EncryptionMethod element.
  *
  * @covers \SimpleSAML\SAML2\XML\md\EncryptionMethod
  * @covers \SimpleSAML\SAML2\XML\xenc\EncryptionMethod
@@ -29,8 +29,15 @@ final class EncryptionMethodTest extends TestCase
      */
     protected function setUp(): void
     {
-        $this->document = DOMDocumentFactory::fromFile(
-            dirname(dirname(dirname(dirname(__FILE__)))) . '/resources/xml/md_EncryptionMethod.xml'
+        $xencns = Constants::NS_XENC;
+
+        $this->document = DOMDocumentFactory::fromString(<<<XML
+<xenc:EncryptionMethod xmlns:xenc="{$xencns}" Algorithm="http://www.w3.org/2001/04/xmlenc#rsa-oaep-mgf1p">
+  <xenc:KeySize>10</xenc:KeySize>
+  <xenc:OAEPParams>9lWu3Q==</xenc:OAEPParams>
+  <other:Element xmlns:other="urn:other">Value</other:Element>
+</xenc:EncryptionMethod>
+XML
         );
     }
 
@@ -68,7 +75,7 @@ final class EncryptionMethodTest extends TestCase
     {
         $em = new EncryptionMethod('http://www.w3.org/2001/04/xmlenc#rsa-oaep-mgf1p');
         $document = DOMDocumentFactory::fromString(
-            '<md:EncryptionMethod xmlns:md="' . Constants::NS_MD .
+            '<xenc:EncryptionMethod xmlns:xenc="' . Constants::NS_XENC .
             '" Algorithm="http://www.w3.org/2001/04/xmlenc#rsa-oaep-mgf1p"/>'
         );
 
@@ -107,7 +114,7 @@ final class EncryptionMethodTest extends TestCase
     public function testUnmarshallingWithoutAlgorithm(): void
     {
         $this->expectException(MissingAttributeException::class);
-        $this->expectExceptionMessage('Missing \'Algorithm\' attribute on md:EncryptionMethod.');
+        $this->expectExceptionMessage('Missing \'Algorithm\' attribute on xenc:EncryptionMethod.');
         $this->document->documentElement->removeAttribute('Algorithm');
         EncryptionMethod::fromXML($this->document->documentElement);
     }
@@ -118,9 +125,9 @@ final class EncryptionMethodTest extends TestCase
      */
     public function testUnmarshallingWithoutOptionalParameters(): void
     {
-        $mdns = Constants::NS_MD;
+        $xencns = Constants::NS_XENC;
         $document = DOMDocumentFactory::fromString(<<<XML
-<md:EncryptionMethod xmlns:md="{$mdns}" Algorithm="http://www.w3.org/2001/04/xmlenc#rsa-oaep-mgf1p"/>
+<xenc:EncryptionMethod xmlns:xenc="{$xencns}" Algorithm="http://www.w3.org/2001/04/xmlenc#rsa-oaep-mgf1p"/>
 XML
         );
 
