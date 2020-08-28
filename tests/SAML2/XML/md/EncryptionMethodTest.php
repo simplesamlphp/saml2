@@ -15,6 +15,7 @@ use SimpleSAML\Assert\AssertionFailedException;
  * Tests for the md:EncryptionMethod element.
  *
  * @covers \SimpleSAML\SAML2\XML\md\EncryptionMethod
+ * @covers \SimpleSAML\SAML2\XML\xenc\EncryptionMethod
  * @package simplesamlphp/saml2
  */
 final class EncryptionMethodTest extends TestCase
