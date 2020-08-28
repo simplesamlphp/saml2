@@ -26,7 +26,7 @@ abstract class AbstractReference extends AbstractXencElement
      * AbstractReference constructor.
      *
      * @param string $uri
-     * @param \SAML2\Chunk[] $references
+     * @param \SAML2\XML\Chunk[] $references
      */
     protected function __construct(string $uri, array $references = [])
     {

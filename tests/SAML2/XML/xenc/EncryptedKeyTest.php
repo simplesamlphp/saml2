@@ -36,7 +36,7 @@ final class EncryptedKeyTest extends TestCase
         $this->encryptedKey = DOMDocumentFactory::fromString(<<<XML
 <xenc:EncryptedKey xmlns:xenc="http://www.w3.org/2001/04/xmlenc#"
      Id="Encrypted_KEY_ID"
-     Type="SomeType"
+     Type="http://www.w3.org/2001/04/xmlenc#Element"
      MimeType="text/plain"
      Encoding="someEncoding"
      Recipient="some_ENTITY_ID">
@@ -72,13 +72,13 @@ XML
     {
         $encryptedKey = new EncryptedKey(
             new CipherData('PzA5X...'),
-            'MyID',
+            'Encrypted_KEY_ID',
             'http://www.w3.org/2001/04/xmlenc#Element',
             'text/plain',
             'someEncoding',
             'some_ENTITY_ID',
             'Name of the key',
-            new EncryptionMethod('http://www.w3.org/2001/04/xmlenc#aes128-cbc'),
+            new EncryptionMethod('http://www.w3.org/2001/04/xmlenc#rsa-1_5'),
             new KeyInfo(
                 [
                     new EncryptedKey(
@@ -100,7 +100,7 @@ XML
         $this->assertEquals('PzA5X...', $cipherData->getCipherValue());
 
         $encryptionMethod = $encryptedKey->getEncryptionMethod();
-        $this->assertEquals('http://www.w3.org/2001/04/xmlenc#aes128-cbc', $encryptionMethod->getAlgorithm());
+        $this->assertEquals('http://www.w3.org/2001/04/xmlenc#rsa-1_5', $encryptionMethod->getAlgorithm());
 
         $keyInfo = $encryptedKey->getKeyInfo();
         $info = $keyInfo->getInfo();
@@ -113,17 +113,17 @@ XML
         $this->assertEmpty($referenceList->getKeyReferences());
         $dataRefs = $referenceList->getDataReferences();
         $this->assertCount(1, $dataRefs);
-        $this->assertEquals('#Encrypted_DATA_ID', $dataRefs[0]->getReferences());
+        $this->assertEquals('#Encrypted_DATA_ID', $dataRefs[0]->getURI());
 
-        $this->assertEquals('http://www.w3.org/2001/04/xmlenc#Element', $encryptedData->getType());
-        $this->assertEquals('someEncoding', $encryptedData->getEncoding());
-        $this->assertEquals('text/plain', $encryptedData->getMimeType());
-        $this->assertEquals('MyID', $encryptedData->getID());
-        $this->assertEquals('Recipient', $encryptedData->getRecipient());
-        $this->assertEquals('Name of the key', $encryptedData->getCarriedKeyName());
+        $this->assertEquals('http://www.w3.org/2001/04/xmlenc#Element', $encryptedKey->getType());
+        $this->assertEquals('someEncoding', $encryptedKey->getEncoding());
+        $this->assertEquals('text/plain', $encryptedKey->getMimeType());
+        $this->assertEquals('Encrypted_KEY_ID', $encryptedKey->getID());
+        $this->assertEquals('some_ENTITY_ID', $encryptedKey->getRecipient());
+        $this->assertEquals('Name of the key', $encryptedKey->getCarriedKeyName());
 
         $this->assertEquals(
-            $this->encryptedData->saveXML($this->encryptedKey->documentElement),
+            $this->encryptedKey->saveXML($this->encryptedKey->documentElement),
             strval($encryptedKey)
         );
     }
@@ -191,7 +191,7 @@ XML
         $this->assertEquals('PzA5X...', $cipherData->getCipherValue());
 
         $encryptionMethod = $encryptedKey->getEncryptionMethod();
-        $this->assertEquals('http://www.w3.org/2001/04/xmlenc#aes128-cbc', $encryptionMethod->getAlgorithm());
+        $this->assertEquals('http://www.w3.org/2001/04/xmlenc#rsa-1_5', $encryptionMethod->getAlgorithm());
 
         $keyInfo = $encryptedKey->getKeyInfo();
         $info = $keyInfo->getInfo();
@@ -204,17 +204,17 @@ XML
         $this->assertEmpty($referenceList->getKeyReferences());
         $dataRefs = $referenceList->getDataReferences();
         $this->assertCount(1, $dataRefs);
-        $this->assertEquals('#Encrypted_DATA_ID', $dataRefs[0]->getReferences());
+        $this->assertEquals('#Encrypted_DATA_ID', $dataRefs[0]->getURI());
 
-        $this->assertEquals('http://www.w3.org/2001/04/xmlenc#Element', $encryptedData->getType());
-        $this->assertEquals('someEncoding', $encryptedData->getEncoding());
-        $this->assertEquals('text/plain', $encryptedData->getMimeType());
-        $this->assertEquals('MyID', $encryptedData->getID());
-        $this->assertEquals('Recipient', $encryptedData->getRecipient());
-        $this->assertEquals('Name of the key', $encryptedData->getCarriedKeyName());
+        $this->assertEquals('http://www.w3.org/2001/04/xmlenc#Element', $encryptedKey->getType());
+        $this->assertEquals('someEncoding', $encryptedKey->getEncoding());
+        $this->assertEquals('text/plain', $encryptedKey->getMimeType());
+        $this->assertEquals('Encrypted_KEY_ID', $encryptedKey->getID());
+        $this->assertEquals('some_ENTITY_ID', $encryptedKey->getRecipient());
+        $this->assertEquals('Name of the key', $encryptedKey->getCarriedKeyName());
 
         $this->assertEquals(
-            $this->encryptedData->saveXML($this->encryptedKey->documentElement),
+            $this->encryptedKey->saveXML($this->encryptedKey->documentElement),
             strval($encryptedKey)
         );
     }

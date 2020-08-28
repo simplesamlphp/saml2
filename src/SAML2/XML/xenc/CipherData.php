@@ -37,31 +37,28 @@ class CipherData extends AbstractXencElement
             'Can only have one of CipherValue/CipherReference'
         );
 
-        if (!is_null($cipherValue)) {
-            $this->setCipherValue($cipherValue);
-        } else {
-            $this->setCipherReference($cipherReference);
-        }
+        $this->setCipherValue($cipherValue);
+        $this->setCipherReference($cipherReference);
     }
 
 
     /**
      * Get the string value of the <xenc:CipherValue> element inside this CipherData object.
      *
-     * @return string
+     * @return string|null
      */
-    public function getCipherValue(): string
+    public function getCipherValue(): ?string
     {
         return $this->cipherValue;
     }
 
 
     /**
-     * @param string $cipherValue
+     * @param string|null $cipherValue
      */
-    protected function setCipherValue(string $cipherValue): void
+    protected function setCipherValue(?string $cipherValue): void
     {
-        Assert::regex($cipherValue, '/[a-zA-Z0-9_\-=\+\/]/', 'Invalid data in <xenc:CipherValue>.');
+        Assert::nullOrRegex($cipherValue, '/[a-zA-Z0-9_\-=\+\/]/', 'Invalid data in <xenc:CipherValue>.');
         $this->cipherValue = $cipherValue;
     }
 
@@ -69,18 +66,18 @@ class CipherData extends AbstractXencElement
     /**
      * Get the CipherReference element inside this CipherData object.
      *
-     * @return \SAML2\XML\xenc\CipherReference
+     * @return \SAML2\XML\xenc\CipherReference|null
      */
-    public function getCipherReference(): CipherReference
+    public function getCipherReference(): ?CipherReference
     {
         return $this->cipherReference;
     }
 
 
     /**
-     * @param \SAML2\XML\xenc\CipherReference $cipherReference
+     * @param \SAML2\XML\xenc\CipherReference|null $cipherReference
      */
-    protected function setCipherReference(CipherReference $cipherReference): void
+    protected function setCipherReference(?CipherReference $cipherReference): void
     {
         $this->cipherReference = $cipherReference;
     }
