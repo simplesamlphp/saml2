@@ -89,6 +89,31 @@ XML
     }
 
 
+    public function testMarshallingElementOrdering(): void
+    {
+        $alg = 'http://www.w3.org/2001/04/xmlenc#rsa-oaep-mgf1p';
+        $chunkXml = DOMDocumentFactory::fromString('<other:Element xmlns:other="urn:other">Value</other:Element>');
+        $chunk = Chunk::fromXML($chunkXml->documentElement);
+
+        $em = new EncryptionMethod($alg, 10, '9lWu3Q==', [$chunk]);
+
+        // Marshall it to a \DOMElement
+        $emElement = $em->toXML();
+
+        // Test for a KeySize
+        $keySizeElements = Utils::xpQuery($emElement, './xenc:KeySize');
+        $this->assertCount(1, $keySizeElements);
+        $this->assertEquals('10', $keySizeElements[0]->textContent);
+
+        // Test ordering of EncryptionMethod contents
+        $emElements = Utils::xpQuery($emElement, './xenc:KeySize/following-sibling::*');
+
+        $this->assertCount(2, $emElements);
+        $this->assertEquals('xenc:OAEPParams', $emElements[0]->tagName);
+        $this->assertEquals('other:Element', $emElements[1]->tagName);
+    }
+
+
     // test unmarshalling
 
 
