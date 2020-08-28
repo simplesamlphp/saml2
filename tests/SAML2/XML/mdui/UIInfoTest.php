@@ -195,6 +195,21 @@ XML
 
 
     /**
+     * Adding an empty UInfo element should yield an empty element.
+     */
+    public function testMarshallingEmptyElement(): void
+    {
+        $mduins = UIInfo::NS;
+        $uiInfo = new UIInfo([]);
+        $this->assertEquals(
+            "<mdui:UIInfo xmlns:mdui=\"$mduins\"/>",
+            strval($uiInfo)
+        );
+        $this->assertTrue($uiInfo->isEmptyElement());
+    }
+
+
+    /**
      * Test unmarshalling a basic UIInfo element
      * @return void
      */

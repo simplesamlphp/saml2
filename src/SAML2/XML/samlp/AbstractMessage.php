@@ -186,7 +186,7 @@ abstract class AbstractMessage extends AbstractSamlpElement implements SignedEle
                 /* We were able to validate the message with this validator. */
 
                 return true;
-            } catch (\Exception $e) {
+            } catch (Exception $e) {
                 $exceptions[] = $e;
             }
         }

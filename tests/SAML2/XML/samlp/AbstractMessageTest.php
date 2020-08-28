@@ -61,6 +61,7 @@ AUTHNREQUEST
         );
 
         $unsignedMessage = MessageFactory::fromXML($authnRequest->documentElement);
+        $this->assertEquals('2.0', $unsignedMessage->getVersion());
         $unsignedMessage->setSigningKey($privateKey);
         $unsignedMessage->setCertificates(
             [PEMCertificatesMock::getPlainPublicKey(PEMCertificatesMock::SELFSIGNED_PUBLIC_KEY)]

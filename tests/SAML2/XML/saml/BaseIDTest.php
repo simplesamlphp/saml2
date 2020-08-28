@@ -60,6 +60,7 @@ XML
         $this->assertEquals('123.456', $baseId->getValue());
         $this->assertEquals('TheNameQualifier', $baseId->getNameQualifier());
         $this->assertEquals('TheSPNameQualifier', $baseId->getSPNameQualifier());
+        $this->assertEquals('CustomBaseID', $baseId->getType());
 
         $this->assertEquals(
             $this->document->saveXML($this->document->documentElement),
@@ -81,6 +82,7 @@ XML
         $this->assertEquals('123.456', $baseId->getValue());
         $this->assertEquals('TheNameQualifier', $baseId->getNameQualifier());
         $this->assertEquals('TheSPNameQualifier', $baseId->getSPNameQualifier());
+        $this->assertEquals('CustomBaseID', $baseId->getType());
 
         $this->assertEquals(
             $this->document->saveXML($this->document->documentElement),

@@ -66,10 +66,26 @@ XML
             ["geo:47.37328,8.531126", "geo:19.34343,12.342514"],
             $discoHints->getGeolocationHint()
         );
+        $this->assertFalse($discoHints->isEmptyElement());
         $this->assertEquals(
             $this->document->saveXML($this->document->documentElement),
             strval($discoHints)
         );
+    }
+
+
+    /**
+     * Adding an empty DiscoHints element should yield an empty element.
+     */
+    public function testMarshallingEmptyElement(): void
+    {
+        $mduins = DiscoHints::NS;
+        $discohints = new DiscoHints([]);
+        $this->assertEquals(
+            "<mdui:DiscoHints xmlns:mdui=\"$mduins\"/>",
+            strval($discohints)
+        );
+        $this->assertTrue($discohints->isEmptyElement());
     }
 
 

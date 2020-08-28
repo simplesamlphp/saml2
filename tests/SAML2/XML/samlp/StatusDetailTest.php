@@ -48,10 +48,26 @@ XML
         );
 
         $statusDetail = new StatusDetail([new Chunk($document->documentElement)]);
+        $this->assertFalse($statusDetail->isEmptyElement());
         $this->assertEquals(
             $this->document->saveXML($this->document->documentElement),
             strval($statusDetail)
         );
+    }
+
+
+    /**
+     * Adding an empty StatusDetail element should yield an empty element.
+     */
+    public function testMarshallingEmptyElement(): void
+    {
+        $samlpns = Constants::NS_SAMLP;
+        $statusDetail = new StatusDetail([]);
+        $this->assertEquals(
+            "<samlp:StatusDetail xmlns:samlp=\"$samlpns\"/>",
+            strval($statusDetail)
+        );
+        $this->assertTrue($statusDetail->isEmptyElement());
     }
 
 
@@ -70,7 +86,8 @@ XML
             'org.sourceid.websso.profiles.idp.FailedAuthnSsoException',
             $statusDetailElement->textContent
         );
-    }
+        $this->assertFalse($statusDetail->isEmptyElement());
+   }
 
 
     /**

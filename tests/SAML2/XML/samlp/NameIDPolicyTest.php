@@ -52,11 +52,27 @@ XML
         $this->assertEquals('TheSPNameQualifier', $nameIdPolicy->getSPNameQualifier());
         $this->assertEquals('TheFormat', $nameIdPolicy->getFormat());
         $this->assertEquals(true, $nameIdPolicy->getAllowCreate());
+        $this->assertFalse($nameIdPolicy->isEmptyElement());
 
         $this->assertEquals(
             $this->document->saveXML($this->document->documentElement),
             strval($nameIdPolicy)
         );
+    }
+
+
+    /**
+     * Adding an empty NameIDPolicy element should yield an empty element.
+     */
+    public function testMarshallingEmptyElement(): void
+    {
+        $samlpns = Constants::NS_SAMLP;
+        $nameIdPolicy = new NameIDPolicy();
+        $this->assertEquals(
+            "<samlp:NameIDPolicy xmlns:samlp=\"$samlpns\"/>",
+            strval($nameIdPolicy)
+        );
+        $this->assertTrue($nameIdPolicy->isEmptyElement());
     }
 
 
@@ -70,6 +86,7 @@ XML
         $this->assertEquals('TheSPNameQualifier', $nameIdPolicy->getSPNameQualifier());
         $this->assertEquals('TheFormat', $nameIdPolicy->getFormat());
         $this->assertEquals(true, $nameIdPolicy->getAllowCreate());
+        $this->assertFalse($nameIdPolicy->isEmptyElement());
     }
 
 

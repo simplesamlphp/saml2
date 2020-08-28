@@ -49,6 +49,8 @@ class EncryptedID extends AbstractSamlElement implements EncryptedElementInterfa
                     return $handler::fromXML($xml);
                 }
                 return BaseID::fromXML($xml);
+            default:
+                // Fall thru
         }
         throw new InvalidArgumentException('Unknown or unsupported encrypted identifier.');
     }
