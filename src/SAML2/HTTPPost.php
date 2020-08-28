@@ -2,13 +2,13 @@
 
 declare(strict_types=1);
 
-namespace SAML2;
+namespace SimpleSAML\SAML2;
 
 use DOMDocument;
 use Exception;
-use SAML2\XML\samlp\AbstractMessage;
-use SAML2\XML\samlp\AbstractRequest;
-use SAML2\XML\samlp\MessageFactory;
+use SimpleSAML\SAML2\XML\samlp\AbstractMessage;
+use SimpleSAML\SAML2\XML\samlp\AbstractRequest;
+use SimpleSAML\SAML2\XML\samlp\MessageFactory;
 
 /**
  * Class which implements the HTTP-POST binding.

@@ -2,14 +2,14 @@
 
 declare(strict_types=1);
 
-namespace SAML2;
+namespace SimpleSAML\SAML2;
 
 use DOMDocument;
 use Exception;
-use SAML2\XML\ecp\Response as ECPResponse;
-use SAML2\XML\samlp\AbstractMessage;
-use SAML2\XML\samlp\MessageFactory;
-use SAML2\XML\samlp\Response;
+use SimpleSAML\SAML2\XML\ecp\Response as ECPResponse;
+use SimpleSAML\SAML2\XML\samlp\AbstractMessage;
+use SimpleSAML\SAML2\XML\samlp\MessageFactory;
+use SimpleSAML\SAML2\XML\samlp\Response;
 
 /**
  * Class which implements the SOAP binding.

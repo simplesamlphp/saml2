@@ -2,10 +2,10 @@
 
 declare(strict_types=1);
 
-namespace SAML2;
+namespace SimpleSAML\SAML2;
 
 use Exception;
-use SAML2\XML\samlp\AbstractMessage;
+use SimpleSAML\SAML2\XML\samlp\AbstractMessage;
 
 /**
  * Base class for SAML 2 bindings.

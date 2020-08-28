@@ -2,7 +2,7 @@
 
 declare(strict_types=1);
 
-namespace SAML2;
+namespace SimpleSAML\SAML2;
 
 use DOMDocument;
 use DOMElement;
@@ -13,13 +13,13 @@ use InvalidArgumentException;
 use RobRichards\XMLSecLibs\XMLSecEnc;
 use RobRichards\XMLSecLibs\XMLSecurityDSig;
 use RobRichards\XMLSecLibs\XMLSecurityKey;
-use SAML2\Compat\ContainerInterface;
-use SAML2\Compat\ContainerSingleton;
-use SAML2\Exception\RuntimeException;
-use SAML2\XML\ds\KeyInfo;
-use SAML2\XML\ds\X509Certificate;
-use SAML2\XML\ds\X509Data;
-use SAML2\XML\md\KeyDescriptor;
+use SimpleSAML\SAML2\Compat\ContainerInterface;
+use SimpleSAML\SAML2\Compat\ContainerSingleton;
+use SimpleSAML\SAML2\Exception\RuntimeException;
+use SimpleSAML\SAML2\XML\ds\KeyInfo;
+use SimpleSAML\SAML2\XML\ds\X509Certificate;
+use SimpleSAML\SAML2\XML\ds\X509Data;
+use SimpleSAML\SAML2\XML\md\KeyDescriptor;
 use SimpleSAML\Assert\Assert;
 
 /**

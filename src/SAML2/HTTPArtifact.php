@@ -2,15 +2,15 @@
 
 declare(strict_types=1);
 
-namespace SAML2;
+namespace SimpleSAML\SAML2;
 
 use Exception;
 use RobRichards\XMLSecLibs\XMLSecurityKey;
-use SAML2\Utilities\Temporal;
-use SAML2\XML\saml\Issuer;
-use SAML2\XML\samlp\AbstractMessage;
-use SAML2\XML\samlp\ArtifactResolve;
-use SAML2\XML\samlp\ArtifactResponse;
+use SimpleSAML\SAML2\Utilities\Temporal;
+use SimpleSAML\SAML2\XML\saml\Issuer;
+use SimpleSAML\SAML2\XML\samlp\AbstractMessage;
+use SimpleSAML\SAML2\XML\samlp\ArtifactResolve;
+use SimpleSAML\SAML2\XML\samlp\ArtifactResponse;
 use SimpleSAML\Configuration;
 use SimpleSAML\Metadata\MetaDataStorageHandler;
 use SimpleSAML\Module\saml\Message as MSG;
