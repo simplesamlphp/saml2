@@ -154,7 +154,7 @@ class EncryptedKey extends EncryptedData
             self::getAttribute($xml, 'Id', null),
             self::getAttribute($xml, 'Type', null),
             self::getAttribute($xml, 'MimeType', null),
-            self::getAttribute($xml, 'Type', null),
+            self::getAttribute($xml, 'Encoding', null),
             self::getAttribute($xml, 'Recipient', null),
             count($carriedKeyNames) === 1 ? $carriedKeyNames[0]->textContent : null,
             count($encryptionMethod) === 1 ? $encryptionMethod[0] : null,
