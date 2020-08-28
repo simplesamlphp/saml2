@@ -55,7 +55,7 @@ XML
   <xenc:EncryptedData xmlns:xenc="http://www.w3.org/2001/04/xmlenc#" Type="http://www.w3.org/2001/04/xmlenc#Element">
     <xenc:EncryptionMethod Algorithm="http://www.w3.org/2001/04/xmlenc#aes128-cbc"/>
     <ds:KeyInfo xmlns:ds="http://www.w3.org/2000/09/xmldsig#">
-      <xenc:EncryptedKey xmlns:dsig="http://www.w3.org/2000/09/xmldsig#">
+      <xenc:EncryptedKey>
         <xenc:EncryptionMethod Algorithm="http://www.w3.org/2001/04/xmldsig-more#rsa-sha256"/>
         <xenc:CipherData>
           <xenc:CipherValue>nxf0bJ/1UECkfZBkKrEKU0phPpwUi6sS3bP5SovqVg/ohvgnnmpePNB6/CYyXbnatyhZ8bdgoKcpOJwYiQU5fKkY8ONFHnqWu13S8A8bBIL9ye6ceCKjHtCPiBzYwwOSjSsb+xJHSDzrfFbXDNzYBuyhuW1+uTqcmpoe+PdYyv4=</xenc:CipherValue>
@@ -240,7 +240,7 @@ XML
     <xenc:EncryptedData xmlns:xenc="http://www.w3.org/2001/04/xmlenc#" Type="http://www.w3.org/2001/04/xmlenc#Element">
       <xenc:EncryptionMethod Algorithm="http://www.w3.org/2001/04/xmlenc#aes128-cbc"/>
       <ds:KeyInfo xmlns:ds="http://www.w3.org/2000/09/xmldsig#">
-        <xenc:EncryptedKey xmlns:dsig="http://www.w3.org/2000/09/xmldsig#">
+        <xenc:EncryptedKey>
           <xenc:EncryptionMethod Algorithm="http://www.w3.org/2001/04/xmldsig-more#rsa-sha256"/>
           <xenc:CipherData>
             <xenc:CipherValue>nxf0bJ/1UECkfZBkKrEKU0phPpwUi6sS3bP5SovqVg/ohvgnnmpePNB6/CYyXbnatyhZ8bdgoKcpOJwYiQU5fKkY8ONFHnqWu13S8A8bBIL9ye6ceCKjHtCPiBzYwwOSjSsb+xJHSDzrfFbXDNzYBuyhuW1+uTqcmpoe+PdYyv4=</xenc:CipherValue>

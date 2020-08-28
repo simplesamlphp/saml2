@@ -5,6 +5,7 @@ declare(strict_types=1);
 namespace SAML2\XML\ds;
 
 use DOMElement;
+use SAML2\Constants;
 use SAML2\Exception\InvalidDOMElementException;
 use SAML2\XML\Chunk;
 use SAML2\XML\xenc\EncryptedKey;
@@ -121,24 +122,30 @@ final class KeyInfo extends AbstractDsElement
         foreach ($xml->childNodes as $n) {
             if (!($n instanceof DOMElement)) {
                 continue;
-            } elseif ($n->namespaceURI !== self::NS) {
+            } elseif ($n->namespaceURI === self::NS) {
+                switch ($n->localName) {
+                    case 'KeyName':
+                        $info[] = KeyName::fromXML($n);
+                        break;
+                    case 'X509Data':
+                        $info[] = X509Data::fromXML($n);
+                        break;
+                    default:
+                        $info[] = new Chunk($n);
+                        break;
+                }
+            } elseif ($n->namespaceURI === Constants::NS_XENC) {
+                switch ($n->localName) {
+                    case 'EncryptedKey':
+                        $info[] = EncryptedKey::fromXML($n);
+                        break;
+                    default:
+                        $info[] = new Chunk($n);
+                        break;
+                }
+            } else {
                 $info[] = new Chunk($n);
-                continue;
-            }
-
-            switch ($n->localName) {
-                case 'KeyName':
-                    $info[] = KeyName::fromXML($n);
-                    break;
-                case 'X509Data':
-                    $info[] = X509Data::fromXML($n);
-                    break;
-                case 'EncryptedKey':
-                    $info[] = EncryptedKey::fromXML($n);
-                    break;
-                default:
-                    $info[] = new Chunk($n);
-                    break;
+                break;
             }
         }
 
