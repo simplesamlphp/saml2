@@ -8,6 +8,7 @@ use PHPUnit\Framework\TestCase;
 use RobRichards\XMLSecLibs\XMLSecurityDsig;
 use SAML2\Constants;
 use SAML2\DOMDocumentFactory;
+use SAML2\Utils;
 use SAML2\XML\Chunk;
 use SAML2\XML\ds\KeyInfo;
 
@@ -124,6 +125,54 @@ XML
             $this->encryptedData->saveXML($this->encryptedKey->documentElement),
             strval($encryptedKey)
         );
+    }
+
+
+    /**
+     * @return void
+     */
+    public function testMarshallingElementOrdering(): void
+    {
+        $encryptedKey = new EncryptedKey(
+            new CipherData('PzA5X...'),
+            'Encrypted_KEY_ID',
+            'http://www.w3.org/2001/04/xmlenc#Element',
+            'text/plain',
+            'someEncoding',
+            'some_ENTITY_ID',
+            'Name of the key',
+            new EncryptionMethod('http://www.w3.org/2001/04/xmlenc#rsa-1_5'),
+            new KeyInfo(
+                [
+                    new EncryptedKey(
+                        new CipherData('nxf0b...'),
+                        null,
+                        null,
+                        null,
+                        null,
+                        null,
+                        null,
+                        new EncryptionMethod('http://www.w3.org/2001/04/xmldsig-more#rsa-sha256')
+                    )
+                ]
+            ),
+            new ReferenceList([new DataReference('#Encrypted_DATA_ID')])
+        );
+
+        // Marshall it to a \DOMElement
+        $encryptedKeyElement = $encryptedKey->toXML();
+
+        // Test for a ReferenceList
+        $encryptedKeyElements = Utils::xpQuery($encryptedKeyElement, './xenc:ReferenceList');
+        $this->assertCount(1, $encryptedKeyElements);
+
+        // Test ordering of EncryptedKey contents
+        $encryptedKeyElements = Utils::xpQuery(
+            $encryptedKeyElement,
+            './xenc:ReferenceList/following-sibling::*'
+        );
+        $this->assertCount(1, $encryptedKeyElements);
+        $this->assertEquals('xenc:CarriedKeyName', $encryptedKeyElements[0]->tagName);
     }
 
 
