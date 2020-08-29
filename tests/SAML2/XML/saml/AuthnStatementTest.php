@@ -8,7 +8,7 @@ use InvalidArgumentException;
 use PHPUnit\Framework\TestCase;
 use SimpleSAML\SAML2\Constants;
 use SimpleSAML\SAML2\DOMDocumentFactory;
-use SimpleSAML\SAML2\Exception\MissingElementException;
+use SimpleSAML\XML\Exception\MissingElementException;
 use SimpleSAML\SAML2\Utils;
 
 /**

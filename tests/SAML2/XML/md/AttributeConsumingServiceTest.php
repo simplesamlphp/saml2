@@ -8,7 +8,7 @@ use PHPUnit\Framework\TestCase;
 use SimpleSAML\SAML2\Constants;
 use SimpleSAML\SAML2\DOMDocumentFactory;
 use SimpleSAML\XML\Exception\MissingAttributeException;
-use SimpleSAML\SAML2\Exception\MissingElementException;
+use SimpleSAML\XML\Exception\MissingElementException;
 use SimpleSAML\SAML2\XML\saml\AttributeValue;
 use SimpleSAML\Assert\AssertionFailedException;
 
