@@ -5,11 +5,11 @@ declare(strict_types=1);
 namespace SimpleSAML\SAML2\XML\xenc;
 
 use DOMElement;
-use SimpleSAML\SAML2\Exception\InvalidDOMElementException;
+use SimpleSAML\Assert\Assert;
+use SimpleSAML\SAML2\XML\ds\KeyInfo;
+use SimpleSAML\XML\Exception\InvalidDOMElementException;
 use SimpleSAML\XML\Exception\MissingElementException;
 use SimpleSAML\XML\Exception\TooManyElementsException;
-use SimpleSAML\SAML2\XML\ds\KeyInfo;
-use SimpleSAML\Assert\Assert;
 
 /**
  * Class containing encrypted data.
