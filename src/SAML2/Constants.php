@@ -9,7 +9,7 @@ namespace SimpleSAML\SAML2;
  *
  * @package simplesamlphp/saml2
  */
-class Constants
+class Constants extends \SimpleSAML\XML\Constants
 {
     /**
      * Password authentication context.
@@ -261,16 +261,6 @@ class Constants
      * The namespace for the XML encryption schema.
      */
     public const NS_XENC = 'http://www.w3.org/2001/04/xmlenc#';
-
-    /**
-     * The namespace fox XML schema.
-     */
-    public const NS_XS = 'http://www.w3.org/2001/XMLSchema';
-
-    /**
-     * The namespace for XML schema instance.
-     */
-    public const NS_XSI = 'http://www.w3.org/2001/XMLSchema-instance';
 
     /**
      * The responding provider was unable to successfully authenticate the principal.
