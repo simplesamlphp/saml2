@@ -25,7 +25,7 @@ class EncryptedID extends AbstractSamlElement implements EncryptedElementInterfa
     /**
      * @inheritDoc
      *
-     * @return \SimpleSAML\XML\saml\IdentifierInterface
+     * @return \SimpleSAML\SAML2\XML\saml\IdentifierInterface
      * @throws \InvalidArgumentException
      *
      * @psalm-suppress MismatchingDocblockReturnType

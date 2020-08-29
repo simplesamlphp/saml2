@@ -57,7 +57,7 @@ class AttributeValue extends AbstractSamlElement
             case "NULL":
                 return "xs:nil";
             case "object":
-                return $this->value::NS_PREFIX . ":" . AbstractXMLElement::getClassName(get_class($this->value));
+                return $this->value::getNamespacePrefix() . ":" . AbstractXMLElement::getClassName(get_class($this->value));
             default:
                 return "xs:string";
         }
