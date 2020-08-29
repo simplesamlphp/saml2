@@ -16,7 +16,7 @@ use SimpleSAML\XML\XMLElementInterface;
 trait ExtensionsTrait
 {
     /**
-     * @var \SimpleSAML\SAML2\XML\XMLElementInterface[]
+     * @var \SimpleSAML\XML\XMLElementInterface[]
      */
     protected $extensions = [];
 
@@ -24,7 +24,7 @@ trait ExtensionsTrait
     /**
      * Extensions constructor.
      *
-     * @var \SimpleSAML\SAML2\XML\XMLElementInterfacee[]
+     * @var \SimpleSAML\XML\XMLElementInterface[]
      */
     public function __construct(array $extensions)
     {
@@ -36,7 +36,7 @@ trait ExtensionsTrait
     /**
      * Get an array with all extensions present.
      *
-     * @return \SimpleSAML\SAML2\XML\AbstractXMLElement[]
+     * @return \SimpleSAML\XML\XMLElementInterface[]
      */
     public function getList(): array
     {

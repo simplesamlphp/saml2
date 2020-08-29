@@ -150,7 +150,7 @@ class Assertion implements SignedElementInterface
      * See:
      * @url http://docs.oasis-open.org/security/saml/v2.0/saml-authn-context-2.0-os.pdf
      *
-     * @var \SimpleSAML\SAML2\XML\Chunk|null
+     * @var \SimpleSAML\XML\Chunk|null
      */
     private $authnContextDecl = null;
 
@@ -1163,7 +1163,7 @@ class Assertion implements SignedElementInterface
     /**
      * Set the authentication context declaration.
      *
-     * @param \SimpleSAML\SAML2\XML\Chunk $authnContextDecl
+     * @param \SimpleSAML\XML\Chunk $authnContextDecl
      * @throws \Exception
      * @return void
      */
@@ -1185,7 +1185,7 @@ class Assertion implements SignedElementInterface
      * See:
      * @url http://docs.oasis-open.org/security/saml/v2.0/saml-authn-context-2.0-os.pdf
      *
-     * @return \SimpleSAML\SAML2\XML\Chunk|null
+     * @return \SimpleSAML\XML\Chunk|null
      */
     public function getAuthnContextDecl(): ?Chunk
     {

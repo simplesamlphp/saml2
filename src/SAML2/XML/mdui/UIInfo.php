@@ -23,7 +23,7 @@ final class UIInfo extends AbstractMduiElement
      *
      * The elements can be any of the other \SAML2\XML\mdui\* elements.
      *
-     * @var \SimpleSAML\SAML2\XML\Chunk[]
+     * @var \SimpleSAML\XML\Chunk[]
      */
     protected $children = [];
 
@@ -79,7 +79,7 @@ final class UIInfo extends AbstractMduiElement
      * @param string[] $PrivacyStatementURL
      * @param \SimpleSAML\SAML2\XML\mdui\Keywords[] $Keywords
      * @param \SimpleSAML\SAML2\XML\mdui\Logo[] $Logo
-     * @param \SimpleSAML\SAML2\XML\Chunk[] $children
+     * @param \SimpleSAML\XML\Chunk[] $children
      */
     public function __construct(
         array $DisplayName = [],
@@ -278,7 +278,7 @@ final class UIInfo extends AbstractMduiElement
     /**
      * Collect the value of the children-property
      *
-     * @return \SimpleSAML\SAML2\XML\Chunk[]
+     * @return \SimpleSAML\XML\Chunk[]
      */
     public function getChildren(): array
     {
@@ -289,7 +289,7 @@ final class UIInfo extends AbstractMduiElement
     /**
      * Set the value of the childen-property
      *
-     * @param \SimpleSAML\SAML2\XML\Chunk[] $children
+     * @param \SimpleSAML\XML\Chunk[] $children
      * @return void
      */
     private function setChildren(array $children): void
@@ -303,7 +303,7 @@ final class UIInfo extends AbstractMduiElement
     /**
      * Add the value to the children-property
      *
-     * @param \SimpleSAML\SAML2\XML\Chunk $child
+     * @param \SimpleSAML\XML\Chunk $child
      * @return void
      */
     public function addChild(Chunk $child): void

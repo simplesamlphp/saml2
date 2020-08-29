@@ -62,9 +62,9 @@ final class SubjectConfirmationData extends AbstractSamlElement
      * The various key information elements.
      *
      * Array with various elements describing this key.
-     * Unknown elements will be represented by \SAML2\XML\Chunk.
+     * Unknown elements will be represented by \SimpleSAML\XML\Chunk.
      *
-     * @var (\SimpleSAML\SAML2\XML\ds\KeyInfo|\SimpleSAML\SAML2\XML\Chunk)[]
+     * @var (\SimpleSAML\SAML2\XML\ds\KeyInfo|\SimpleSAML\XML\Chunk)[]
      */
     protected $info = [];
 
@@ -77,7 +77,7 @@ final class SubjectConfirmationData extends AbstractSamlElement
      * @param string|null $recipient
      * @param string|null $inResponseTo
      * @param string|null $address
-     * @param (\SimpleSAML\SAML2\XML\ds\KeyInfo|\SimpleSAML\SAML2\XML\Chunk)[] $info
+     * @param (\SimpleSAML\SAML2\XML\ds\KeyInfo|\SimpleSAML\XML\Chunk)[] $info
      * @param \DOMAttr[] $namespacedAttributes
      */
     public function __construct(
@@ -222,7 +222,7 @@ final class SubjectConfirmationData extends AbstractSamlElement
     /**
      * Collect the value of the info-property
      *
-     * @return (\SimpleSAML\SAML2\XML\ds\KeyInfo|\SimpleSAML\SAML2\XML\Chunk)[]
+     * @return (\SimpleSAML\SAML2\XML\ds\KeyInfo|\SimpleSAML\XML\Chunk)[]
      */
     public function getInfo(): array
     {
@@ -233,7 +233,7 @@ final class SubjectConfirmationData extends AbstractSamlElement
     /**
      * Set the value of the info-property
      *
-     * @param (\SimpleSAML\SAML2\XML\ds\KeyInfo|\SimpleSAML\SAML2\XML\Chunk)[] $info
+     * @param (\SimpleSAML\SAML2\XML\ds\KeyInfo|\SimpleSAML\XML\Chunk)[] $info
      * @return void
      */
     private function setInfo(array $info): void

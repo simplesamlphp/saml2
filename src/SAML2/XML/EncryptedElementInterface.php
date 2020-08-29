@@ -28,7 +28,7 @@ interface EncryptedElementInterface
      * @param \RobRichards\XMLSecLibs\XMLSecurityKey $key The key we should use to decrypt the element.
      * @param string[] $blacklist List of blacklisted encryption algorithms.
      *
-     * @return \SimpleSAML\SAML2\XML\AbstractXMLElement The decrypted element.
+     * @return \SimpleSAML\XML\AbstractXMLElement The decrypted element.
      */
     public function decrypt(XMLSecurityKey $key, array $blacklist = []): AbstractXMLElement;
 

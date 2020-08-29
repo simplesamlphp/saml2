@@ -17,14 +17,14 @@ use SimpleSAML\XML\Chunk;
  */
 final class StatusDetail extends AbstractSamlpElement
 {
-    /** @var \SimpleSAML\SAML2\XML\Chunk[] */
+    /** @var \SimpleSAML\XML\Chunk[] */
     protected $details = [];
 
 
     /**
      * Initialize a samlp:StatusDetail
      *
-     * @param \SimpleSAML\SAML2\XML\Chunk[] $details
+     * @param \SimpleSAML\XML\Chunk[] $details
      */
     public function __construct(array $details = [])
     {
@@ -35,7 +35,7 @@ final class StatusDetail extends AbstractSamlpElement
     /**
      * Collect the details
      *
-     * @return \SimpleSAML\SAML2\XML\Chunk[]
+     * @return \SimpleSAML\XML\Chunk[]
      */
     public function getDetails(): array
     {
@@ -46,7 +46,7 @@ final class StatusDetail extends AbstractSamlpElement
     /**
      * Set the value of the details-property
      *
-     * @param \SimpleSAML\SAML2\XML\Chunk[] $details
+     * @param \SimpleSAML\XML\Chunk[] $details
      * @return void
      * @throws \SimpleSAML\Assert\AssertionFailedException if the supplied array contains anything other than Chunk objects
      */

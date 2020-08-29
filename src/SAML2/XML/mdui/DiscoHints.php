@@ -23,7 +23,7 @@ final class DiscoHints extends AbstractMduiElement
      *
      * The elements can be any of the other \SAML2\XML\mdui\* elements.
      *
-     * @var \SimpleSAML\SAML2\XML\Chunk[]
+     * @var \SimpleSAML\XML\Chunk[]
      */
     protected $children = [];
 
@@ -52,7 +52,7 @@ final class DiscoHints extends AbstractMduiElement
     /**
      * Create a DiscoHints element.
      *
-     * @param \SimpleSAML\SAML2\XML\Chunk[] $children
+     * @param \SimpleSAML\XML\Chunk[] $children
      * @param string[] $IPHint
      * @param string[] $DomainHint
      * @param string[] $GeolocationHint
@@ -146,7 +146,7 @@ final class DiscoHints extends AbstractMduiElement
     /**
      * Collect the value of the children-property
      *
-     * @return \SimpleSAML\SAML2\XML\Chunk[]
+     * @return \SimpleSAML\XML\Chunk[]
      */
     public function getChildren(): array
     {
@@ -171,7 +171,7 @@ final class DiscoHints extends AbstractMduiElement
     /**
      * Add the value to the children-property
      *
-     * @param \SimpleSAML\SAML2\XML\Chunk $child
+     * @param \SimpleSAML\XML\Chunk $child
      * @return void
      */
     public function addChild(Chunk $child): void

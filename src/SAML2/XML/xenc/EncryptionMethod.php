@@ -27,7 +27,7 @@ class EncryptionMethod extends AbstractEncryptionMethod
     /** @var string|null */
     protected $oaepParams = null;
 
-    /** @var \SimpleSAML\SAML2\XML\Chunk[] */
+    /** @var \SimpleSAML\XML\Chunk[] */
     protected $children = [];
 
 
@@ -37,7 +37,7 @@ class EncryptionMethod extends AbstractEncryptionMethod
      * @param string $algorithm
      * @param int|null $keySize
      * @param string|null $oaepParams
-     * @param \SimpleSAML\SAML2\XML\Chunk[] $children
+     * @param \SimpleSAML\XML\Chunk[] $children
      */
     public function __construct(
         string $algorithm,
@@ -180,7 +180,7 @@ class EncryptionMethod extends AbstractEncryptionMethod
     /**
      * Get the children elements of this encryption method as chunks.
      *
-     * @return \SimpleSAML\SAML2\XML\Chunk[]
+     * @return \SimpleSAML\XML\Chunk[]
      */
     public function getChildren(): array
     {
@@ -191,7 +191,7 @@ class EncryptionMethod extends AbstractEncryptionMethod
     /**
      * Set an array of chunks as children of this encryption method.
      *
-     * @param \SimpleSAML\SAML2\XML\Chunk[] $children
+     * @param \SimpleSAML\XML\Chunk[] $children
      * @return void
      * @throws \SimpleSAML\Assert\AssertionFailedException
      */

@@ -132,7 +132,7 @@ final class Signature extends AbstractDsElement
     /**
      * @param DOMElement $xml
      *
-     * @return \SimpleSAML\SAML2\XML\AbstractXMLElement
+     * @return \SimpleSAML\XML\AbstractXMLElement
      * @throws \Exception
      *
      * @throws \SimpleSAML\XML\Exception\InvalidDOMElementException if the qualified name of the supplied element is wrong

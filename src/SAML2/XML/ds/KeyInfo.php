@@ -31,7 +31,7 @@ final class KeyInfo extends AbstractDsElement
      * Array with various elements describing this key.
      * Unknown elements will be represented by \SAML2\XML\Chunk.
      *
-     * @var (\SimpleSAML\SAML2\XML\Chunk|\SimpleSAML\SAML2\XML\ds\KeyName|\SimpleSAML\SAML2\XML\ds\X509Data|\SimpleSAML\SAML2\XML\xenc\EncryptedKey)[]
+     * @var (\SimpleSAML\XML\Chunk|\SimpleSAML\SAML2\XML\ds\KeyName|\SimpleSAML\SAML2\XML\ds\X509Data|\SimpleSAML\SAML2\XML\xenc\EncryptedKey)[]
      */
     protected $info = [];
 
@@ -39,7 +39,7 @@ final class KeyInfo extends AbstractDsElement
     /**
      * Initialize a KeyInfo element.
      *
-     * @param (\SimpleSAML\SAML2\XML\Chunk|\SimpleSAML\SAML2\XML\ds\KeyName|\SimpleSAML\SAML2\XML\ds\X509Data|\SimpleSAML\SAML2\XML\xenc\EncryptedKey)[] $info
+     * @param (\SimpleSAML\XML\Chunk|\SimpleSAML\SAML2\XML\ds\KeyName|\SimpleSAML\SAML2\XML\ds\X509Data|\SimpleSAML\SAML2\XML\xenc\EncryptedKey)[] $info
      * @param string|null $Id
      */
     public function __construct(array $info, $Id = null)
@@ -75,7 +75,7 @@ final class KeyInfo extends AbstractDsElement
     /**
      * Collect the value of the info-property
      *
-     * @return (\SimpleSAML\SAML2\XML\Chunk|\SimpleSAML\SAML2\XML\ds\KeyName|\SimpleSAML\SAML2\XML\ds\X509Data|\SimpleSAML\SAML2\XML\xenc\EncryptedKey)[]
+     * @return (\SimpleSAML\XML\Chunk|\SimpleSAML\SAML2\XML\ds\KeyName|\SimpleSAML\SAML2\XML\ds\X509Data|\SimpleSAML\SAML2\XML\xenc\EncryptedKey)[]
      */
     public function getInfo(): array
     {
@@ -86,7 +86,7 @@ final class KeyInfo extends AbstractDsElement
     /**
      * Set the value of the info-property
      *
-     * @param (\SimpleSAML\SAML2\XML\Chunk|\SimpleSAML\SAML2\XML\ds\KeyName|\SimpleSAML\SAML2\XML\ds\X509Data|\SimpleSAML\SAML2\XML\xenc\EncryptedKey)[] $info
+     * @param (\SimpleSAML\XML\Chunk|\SimpleSAML\SAML2\XML\ds\KeyName|\SimpleSAML\SAML2\XML\ds\X509Data|\SimpleSAML\SAML2\XML\xenc\EncryptedKey)[] $info
      * @return void
      * @throws \SimpleSAML\Assert\AssertionFailedException  if $info contains
      *   anything other than KeyName, X509Data, EncryptedKey or Chunk
