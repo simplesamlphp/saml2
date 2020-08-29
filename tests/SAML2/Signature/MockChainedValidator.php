@@ -4,9 +4,9 @@ declare(strict_types=1);
 
 namespace SAML2\Signature;
 
-use SimpleSAMLSAML2\Signature\AbstractChainedValidator;
-use SimpleSAMLSAML2\Configuration\CertificateProvider;
-use SimpleSAMLSAML2\XML\SignedElementInterface;
+use SimpleSAML\SAML2\Signature\AbstractChainedValidator;
+use SimpleSAML\SAML2\Configuration\CertificateProvider;
+use SimpleSAML\SAML2\XML\SignedElementInterface;
 
 /**
  * MockChainedValidator, to be able to test the validatorchain without having to use

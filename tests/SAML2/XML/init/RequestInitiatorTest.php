@@ -7,8 +7,8 @@ namespace SAML2\XML\init;
 use Exception;
 use InvalidArgumentException;
 use PHPUnit\Framework\TestCase;
-use SimpleSAMLSAML2\DOMDocumentFactory;
-use SimpleSAMLSAML2\Utils;
+use SimpleSAML\SAML2\DOMDocumentFactory;
+use SimpleSAML\SAML2\Utils;
 
 /**
  * Class \SAML2\XML\init\RequestInitiatorTest

@@ -6,9 +6,9 @@ namespace SAML2\Response\Validation\ConstraintValidator;
 
 use Mockery;
 use Mockery\Adapter\Phpunit\MockeryTestCase;
-use SimpleSAMLSAML2\Configuration\Destination;
-use SimpleSAMLSAML2\Response\Validation\Result;
-use SimpleSAMLSAML2\Response\Validation\ConstraintValidator\DestinationMatches;
+use SimpleSAML\SAML2\Configuration\Destination;
+use SimpleSAML\SAML2\Response\Validation\Result;
+use SimpleSAML\SAML2\Response\Validation\ConstraintValidator\DestinationMatches;
 
 /**
  * @covers \SAML2\Response\Validation\ConstraintValidator\DestinationMatches

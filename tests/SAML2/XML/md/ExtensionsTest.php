@@ -5,17 +5,17 @@ declare(strict_types=1);
 namespace SAML2\XML\md;
 
 use PHPUnit\Framework\TestCase;
-use SimpleSAMLSAML2\Constants;
-use SimpleSAMLSAML2\DOMDocumentFactory;
-use SimpleSAMLSAML2\XML\alg\DigestMethod;
-use SimpleSAMLSAML2\XML\alg\SigningMethod;
-use SimpleSAMLSAML2\XML\Chunk;
-use SimpleSAMLSAML2\XML\mdattr\EntityAttributes;
-use SimpleSAMLSAML2\XML\mdrpi\PublicationInfo;
-use SimpleSAMLSAML2\XML\mdrpi\RegistrationInfo;
-use SimpleSAMLSAML2\XML\mdui\DiscoHints;
-use SimpleSAMLSAML2\XML\mdui\UIInfo;
-use SimpleSAMLSAML2\XML\shibmd\Scope;
+use SimpleSAML\SAML2\Constants;
+use SimpleSAML\SAML2\DOMDocumentFactory;
+use SimpleSAML\SAML2\XML\alg\DigestMethod;
+use SimpleSAML\SAML2\XML\alg\SigningMethod;
+use SimpleSAML\SAML2\XML\Chunk;
+use SimpleSAML\SAML2\XML\mdattr\EntityAttributes;
+use SimpleSAML\SAML2\XML\mdrpi\PublicationInfo;
+use SimpleSAML\SAML2\XML\mdrpi\RegistrationInfo;
+use SimpleSAML\SAML2\XML\mdui\DiscoHints;
+use SimpleSAML\SAML2\XML\mdui\UIInfo;
+use SimpleSAML\SAML2\XML\shibmd\Scope;
 
 /**
  * Class \SAML2\XML\md\ExtensionsTest.

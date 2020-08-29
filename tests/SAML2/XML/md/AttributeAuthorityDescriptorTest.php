@@ -6,11 +6,11 @@ namespace SAML2\XML\md;
 
 use Exception;
 use PHPUnit\Framework\TestCase;
-use SimpleSAMLSAML2\Constants;
-use SimpleSAMLSAML2\DOMDocumentFactory;
-use SimpleSAMLSAML2\SignedElementTestTrait;
-use SimpleSAMLSAML2\XML\saml\Attribute;
-use SimpleSAMLSAML2\XML\saml\AttributeValue;
+use SimpleSAML\SAML2\Constants;
+use SimpleSAML\SAML2\DOMDocumentFactory;
+use SimpleSAML\SAML2\SignedElementTestTrait;
+use SimpleSAML\SAML2\XML\saml\Attribute;
+use SimpleSAML\SAML2\XML\saml\AttributeValue;
 use SimpleSAML\Assert\AssertionFailedException;
 
 /**

@@ -6,12 +6,12 @@ namespace SAML2\Response\Validation\ConstraintValidator;
 
 use Mockery;
 use Mockery\Adapter\Phpunit\MockeryTestCase;
-use SimpleSAMLSAML2\Constants;
-use SimpleSAMLSAML2\Response\Validation\Result;
-use SimpleSAMLSAML2\Response\Validation\ConstraintValidator\IsSuccessful;
-use SimpleSAMLSAML2\XML\samlp\Status;
-use SimpleSAMLSAML2\XML\samlp\StatusCode;
-use SimpleSAMLSAML2\XML\samlp\StatusMessage;
+use SimpleSAML\SAML2\Constants;
+use SimpleSAML\SAML2\Response\Validation\Result;
+use SimpleSAML\SAML2\Response\Validation\ConstraintValidator\IsSuccessful;
+use SimpleSAML\SAML2\XML\samlp\Status;
+use SimpleSAML\SAML2\XML\samlp\StatusCode;
+use SimpleSAML\SAML2\XML\samlp\StatusMessage;
 
 /**
  * @covers \SAML2\Response\Validation\ConstraintValidator\IsSuccessful

@@ -4,12 +4,12 @@ declare(strict_types=1);
 
 namespace SAML2\Assertion\Validation\ConstraintValidator;
 
-use SimpleSAMLSAML2\Assertion\Validation\ConstraintValidator\SubjectConfirmationNotBefore;
-use SimpleSAMLSAML2\Assertion\Validation\Result;
-use SimpleSAMLSAML2\Constants;
-use SimpleSAMLSAML2\ControlledTimeTest;
-use SimpleSAMLSAML2\XML\saml\SubjectConfirmation;
-use SimpleSAMLSAML2\XML\saml\SubjectConfirmationData;
+use SimpleSAML\SAML2\Assertion\Validation\ConstraintValidator\SubjectConfirmationNotBefore;
+use SimpleSAML\SAML2\Assertion\Validation\Result;
+use SimpleSAML\SAML2\Constants;
+use SimpleSAML\SAML2\ControlledTimeTest;
+use SimpleSAML\SAML2\XML\saml\SubjectConfirmation;
+use SimpleSAML\SAML2\XML\saml\SubjectConfirmationData;
 
 /**
  * Because we're mocking a static call, we have to run it in separate processes so as to no contaminate the other

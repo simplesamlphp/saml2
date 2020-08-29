@@ -6,10 +6,10 @@ namespace SAML2\XML\md;
 
 use InvalidArgumentException;
 use PHPUnit\Framework\TestCase;
-use SimpleSAMLSAML2\Constants;
-use SimpleSAMLSAML2\DOMDocumentFactory;
-use SimpleSAMLSAML2\Exception\MissingAttributeException;
-use SimpleSAMLSAML2\XML\Chunk;
+use SimpleSAML\SAML2\Constants;
+use SimpleSAML\SAML2\DOMDocumentFactory;
+use SimpleSAML\SAML2\Exception\MissingAttributeException;
+use SimpleSAML\SAML2\XML\Chunk;
 use SimpleSAML\Assert\AssertionFailedException;
 
 /**

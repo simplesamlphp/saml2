@@ -5,10 +5,10 @@ declare(strict_types=1);
 namespace SAML2\Assertion\Validation\ConstraintValidator;
 
 use Mockery;
-use SimpleSAMLSAML2\Assertion\Validation\ConstraintValidator\SessionNotOnOrAfter;
-use SimpleSAMLSAML2\Assertion\Validation\Result;
-use SimpleSAMLSAML2\ControlledTimeTest;
-use SimpleSAMLSAML2\XML\saml\Assertion;
+use SimpleSAML\SAML2\Assertion\Validation\ConstraintValidator\SessionNotOnOrAfter;
+use SimpleSAML\SAML2\Assertion\Validation\Result;
+use SimpleSAML\SAML2\ControlledTimeTest;
+use SimpleSAML\SAML2\XML\saml\Assertion;
 
 /**
  * Because we're mocking a static call, we have to run it in separate processes so as to no contaminate the other

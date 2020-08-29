@@ -6,11 +6,11 @@ namespace SAML2\Response;
 
 use Exception;
 use Mockery\Adapter\Phpunit\MockeryTestCase;
-use SimpleSAMLSAML2\Configuration\IdentityProvider;
-use SimpleSAMLSAML2\DOMDocumentFactory;
-use SimpleSAMLSAML2\Signature\Validator;
-use SimpleSAMLSAML2\XML\saml\Assertion;
-use SimpleSAMLSAML2\Utilities\Certificate;
+use SimpleSAML\SAML2\Configuration\IdentityProvider;
+use SimpleSAML\SAML2\DOMDocumentFactory;
+use SimpleSAML\SAML2\Signature\Validator;
+use SimpleSAML\SAML2\XML\saml\Assertion;
+use SimpleSAML\SAML2\Utilities\Certificate;
 use SimpleSAML\TestUtils\PEMCertificatesMock;
 
 /**

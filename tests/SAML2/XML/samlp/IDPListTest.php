@@ -5,11 +5,11 @@ declare(strict_types=1);
 namespace SAML2\XML\samlp;
 
 use PHPUnit\Framework\TestCase;
-use SimpleSAMLSAML2\DOMDocumentFactory;
-use SimpleSAMLSAML2\Exception\MissingElementException;
-use SimpleSAMLSAML2\Utils;
-use SimpleSAMLSAML2\XML\samlp\IDPEntry;
-use SimpleSAMLSAML2\XML\samlp\IDPList;
+use SimpleSAML\SAML2\DOMDocumentFactory;
+use SimpleSAML\SAML2\Exception\MissingElementException;
+use SimpleSAML\SAML2\Utils;
+use SimpleSAML\SAML2\XML\samlp\IDPEntry;
+use SimpleSAML\SAML2\XML\samlp\IDPList;
 
 /**
  * Class \SAML2\XML\samlp\IDPListTest

@@ -5,12 +5,12 @@ declare(strict_types=1);
 namespace SAML2\Signature;
 
 use PHPUnit\Framework\TestCase;
-use SimpleSAMLSAML2\Configuration\IdentityProvider;
-use SimpleSAMLSAML2\Signature\ValidatorChain;
-use SimpleSAMLSAML2\XML\samlp\Response;
-use SimpleSAMLSAML2\XML\samlp\Status;
-use SimpleSAMLSAML2\XML\samlp\StatusCode;
-use SimpleSAMLSAML2\Signature\MissingConfigurationException;
+use SimpleSAML\SAML2\Configuration\IdentityProvider;
+use SimpleSAML\SAML2\Signature\ValidatorChain;
+use SimpleSAML\SAML2\XML\samlp\Response;
+use SimpleSAML\SAML2\XML\samlp\Status;
+use SimpleSAML\SAML2\XML\samlp\StatusCode;
+use SimpleSAML\SAML2\Signature\MissingConfigurationException;
 
 /**
  * @covers \SAML2\Signature\ValidatorChain

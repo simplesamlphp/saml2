@@ -4,11 +4,11 @@ declare(strict_types=1);
 
 namespace SAML2\XML\samlp;
 
-use SimpleSAMLSAML2\Constants;
-use SimpleSAMLSAML2\DOMDocumentFactory;
+use SimpleSAML\SAML2\Constants;
+use SimpleSAML\SAML2\DOMDocumentFactory;
 use PHPUnit\Framework\TestCase;
-use SimpleSAMLSAML2\Utils;
-use SimpleSAMLSAML2\XML\Chunk;
+use SimpleSAML\SAML2\Utils;
+use SimpleSAML\SAML2\XML\Chunk;
 
 /**
  * Class \SAML2\XML\samlp\StatusTest

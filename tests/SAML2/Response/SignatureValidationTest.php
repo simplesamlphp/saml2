@@ -9,16 +9,16 @@ use Mockery;
 use Mockery\Adapter\Phpunit\MockeryTestCase;
 use Psr\Log\NullLogger;
 use RobRichards\XMLSecLibs\XMLSecurityKey;
-use SimpleSAMLSAML2\Assertion\Processor as AssertionProcessor;
-use SimpleSAMLSAML2\Configuration\Destination;
-use SimpleSAMLSAML2\Configuration\IdentityProvider;
-use SimpleSAMLSAML2\Configuration\ServiceProvider;
-use SimpleSAMLSAML2\Response\Exception\UnsignedResponseException;
-use SimpleSAMLSAML2\Response\Processor as ResponseProcessor;
-use SimpleSAMLSAML2\Utilities\ArrayCollection;
-use SimpleSAMLSAML2\Utilities\Certificate;
-use SimpleSAMLSAML2\XML\saml\Assertion;
-use SimpleSAMLSAML2\XML\samlp\Response;
+use SimpleSAML\SAML2\Assertion\Processor as AssertionProcessor;
+use SimpleSAML\SAML2\Configuration\Destination;
+use SimpleSAML\SAML2\Configuration\IdentityProvider;
+use SimpleSAML\SAML2\Configuration\ServiceProvider;
+use SimpleSAML\SAML2\Response\Exception\UnsignedResponseException;
+use SimpleSAML\SAML2\Response\Processor as ResponseProcessor;
+use SimpleSAML\SAML2\Utilities\ArrayCollection;
+use SimpleSAML\SAML2\Utilities\Certificate;
+use SimpleSAML\SAML2\XML\saml\Assertion;
+use SimpleSAML\SAML2\XML\samlp\Response;
 use SimpleSAML\TestUtils\PEMCertificatesMock;
 
 /**

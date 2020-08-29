@@ -6,11 +6,11 @@ namespace SAML2\Assertion\Validation\ConstraintValidator;
 
 use Mockery;
 use Mockery\Adapter\Phpunit\MockeryTestCase;
-use SimpleSAMLSAML2\Assertion\Validation\Result;
-use SimpleSAMLSAML2\Constants;
-use SimpleSAMLSAML2\XML\samlp\Response;
-use SimpleSAMLSAML2\XML\saml\SubjectConfirmation;
-use SimpleSAMLSAML2\XML\saml\SubjectConfirmationData;
+use SimpleSAML\SAML2\Assertion\Validation\Result;
+use SimpleSAML\SAML2\Constants;
+use SimpleSAML\SAML2\XML\samlp\Response;
+use SimpleSAML\SAML2\XML\saml\SubjectConfirmation;
+use SimpleSAML\SAML2\XML\saml\SubjectConfirmationData;
 
 /**
  * @covers \SAML2\Assertion\Validation\ConstraintValidator\SubjectConfirmationResponseToMatches

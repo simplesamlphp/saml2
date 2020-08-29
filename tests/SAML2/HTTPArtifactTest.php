@@ -6,7 +6,7 @@ namespace SAML2;
 
 use Exception;
 use PHPUnit\Framework\TestCase;
-use SimpleSAMLSAML2\HTTPArtifact;
+use SimpleSAML\SAML2\HTTPArtifact;
 
 /**
  * @covers \SAML2\HTTPArtifact

@@ -6,15 +6,15 @@ namespace SAML2\XML\samlp;
 
 use PHPUnit\Framework\TestCase;
 use RobRichards\XMLSecLibs\XMLSecurityKey;
-use SimpleSAMLSAML2\Constants;
-use SimpleSAMLSAML2\DOMDocumentFactory;
-use SimpleSAMLSAML2\Exception\MissingElementException;
-use SimpleSAMLSAML2\Utils;
-use SimpleSAMLSAML2\XML\Chunk;
-use SimpleSAMLSAML2\XML\saml\Attribute;
-use SimpleSAMLSAML2\XML\saml\Issuer;
-use SimpleSAMLSAML2\XML\shibmd\Scope;
-use SimpleSAMLSAML2\XML\samlp\AbstractResponse;
+use SimpleSAML\SAML2\Constants;
+use SimpleSAML\SAML2\DOMDocumentFactory;
+use SimpleSAML\SAML2\Exception\MissingElementException;
+use SimpleSAML\SAML2\Utils;
+use SimpleSAML\SAML2\XML\Chunk;
+use SimpleSAML\SAML2\XML\saml\Attribute;
+use SimpleSAML\SAML2\XML\saml\Issuer;
+use SimpleSAML\SAML2\XML\shibmd\Scope;
+use SimpleSAML\SAML2\XML\samlp\AbstractResponse;
 use SimpleSAML\TestUtils\PEMCertificatesMock;
 
 /**

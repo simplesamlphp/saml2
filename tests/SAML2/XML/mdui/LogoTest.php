@@ -6,9 +6,9 @@ namespace SAML2\XML\mdui;
 
 use InvalidArgumentException;
 use PHPUnit\Framework\TestCase;
-use SimpleSAMLSAML2\DOMDocumentFactory;
-use SimpleSAMLSAML2\Exception\MissingAttributeException;
-use SimpleSAMLSAML2\Utils;
+use SimpleSAML\SAML2\DOMDocumentFactory;
+use SimpleSAML\SAML2\Exception\MissingAttributeException;
+use SimpleSAML\SAML2\Utils;
 use SimpleSAML\Assert\AssertionFailedException;
 
 /**

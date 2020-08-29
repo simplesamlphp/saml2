@@ -5,13 +5,13 @@ declare(strict_types=1);
 namespace SAML2\XML\mdattr;
 
 use PHPUnit\Framework\TestCase;
-use SimpleSAMLSAML2\Constants;
-use SimpleSAMLSAML2\DOMDocumentFactory;
-use SimpleSAMLSAML2\XML\Chunk;
-use SimpleSAMLSAML2\XML\saml\Attribute;
-use SimpleSAMLSAML2\XML\saml\AttributeValue;
-use SimpleSAMLSAML2\XML\mdattr\EntityAttributes;
-use SimpleSAMLSAML2\Utils;
+use SimpleSAML\SAML2\Constants;
+use SimpleSAML\SAML2\DOMDocumentFactory;
+use SimpleSAML\SAML2\XML\Chunk;
+use SimpleSAML\SAML2\XML\saml\Attribute;
+use SimpleSAML\SAML2\XML\saml\AttributeValue;
+use SimpleSAML\SAML2\XML\mdattr\EntityAttributes;
+use SimpleSAML\SAML2\Utils;
 
 /**
  * Class \SAML2\XML\mdattr\EntityAttributesTest

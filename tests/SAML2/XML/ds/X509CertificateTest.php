@@ -7,8 +7,8 @@ namespace SAML2\XML\ds;
 use PHPUnit\Framework\TestCase;
 use RobRichards\XMLSecLibs\XMLSecurityDSig;
 use RobRichards\XMLSecLibs\XMLSecurityKey;
-use SimpleSAMLSAML2\DOMDocumentFactory;
-use SimpleSAMLSAML2\Utils;
+use SimpleSAML\SAML2\DOMDocumentFactory;
+use SimpleSAML\SAML2\Utils;
 use SimpleSAML\Assert\AssertionFailedException;
 use SimpleSAML\TestUtils\PEMCertificatesMock;
 

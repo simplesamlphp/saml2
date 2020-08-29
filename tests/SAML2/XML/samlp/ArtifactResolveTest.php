@@ -5,9 +5,9 @@ declare(strict_types=1);
 namespace SAML2\XML\samlp;
 
 use PHPUnit\Framework\TestCase;
-use SimpleSAMLSAML2\XML\saml\Issuer;
-use SimpleSAMLSAML2\DOMDocumentFactory;
-use SimpleSAMLSAML2\Utils;
+use SimpleSAML\SAML2\XML\saml\Issuer;
+use SimpleSAML\SAML2\DOMDocumentFactory;
+use SimpleSAML\SAML2\Utils;
 
 /**
  * @covers \SAML2\XML\samlp\ArtifactResolve

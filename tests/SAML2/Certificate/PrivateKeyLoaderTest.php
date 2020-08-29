@@ -5,9 +5,9 @@ declare(strict_types=1);
 namespace SAML2\Certificate;
 
 use PHPUnit\Framework\TestCase;
-use SimpleSAMLSAML2\Configuration\PrivateKey as ConfPrivateKey;
-use SimpleSAMLSAML2\Certificate\PrivateKey;
-use SimpleSAMLSAML2\Certificate\PrivateKeyLoader;
+use SimpleSAML\SAML2\Configuration\PrivateKey as ConfPrivateKey;
+use SimpleSAML\SAML2\Certificate\PrivateKey;
+use SimpleSAML\SAML2\Certificate\PrivateKeyLoader;
 
 /**
  * @covers \SAML2\Certificate\PrivateKeyLoader

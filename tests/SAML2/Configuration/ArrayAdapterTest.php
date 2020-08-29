@@ -5,7 +5,7 @@ declare(strict_types=1);
 namespace SAML2\Configuration;
 
 use PHPUnit\Framework\TestCase;
-use SimpleSAMLSAML2\Configuration\ArrayAdapter;
+use SimpleSAML\SAML2\Configuration\ArrayAdapter;
 
 /**
  * @covers \SAML2\Configuration\ArrayAdapter

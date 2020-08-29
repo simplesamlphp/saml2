@@ -6,9 +6,9 @@ namespace SAML2\XML\saml;
 
 use DOMElement;
 use PHPUnit\Framework\TestCase;
-use SimpleSAMLSAML2\Constants;
-use SimpleSAMLSAML2\CustomStatement;
-use SimpleSAMLSAML2\DOMDocumentFactory;
+use SimpleSAML\SAML2\Constants;
+use SimpleSAML\SAML2\CustomStatement;
+use SimpleSAML\SAML2\DOMDocumentFactory;
 use SimpleSAML\Assert\AssertionFailedException;
 
 /**

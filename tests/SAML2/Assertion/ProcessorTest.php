@@ -7,15 +7,15 @@ namespace SAML2\Assertion;
 use Mockery as m;
 use Mockery\Adapter\Phpunit\MockeryTestCase;
 use Psr\Log\LoggerInterface;
-use SimpleSAMLSAML2\Assertion\Transformer\TransformerInterface;
-use SimpleSAMLSAML2\Assertion\Validation\AssertionValidator;
-use SimpleSAMLSAML2\Assertion\Validation\SubjectConfirmationValidator;
-use SimpleSAMLSAML2\Configuration\IdentityProvider;
-use SimpleSAMLSAML2\Signature\Validator;
-use SimpleSAMLSAML2\Utilities\ArrayCollection;
-use SimpleSAMLSAML2\XML\saml\Assertion;
-use SimpleSAMLSAML2\XML\saml\EncryptedAssertion;
-use SimpleSAMLSAML2\Assertion\Exception\InvalidAssertionException;
+use SimpleSAML\SAML2\Assertion\Transformer\TransformerInterface;
+use SimpleSAML\SAML2\Assertion\Validation\AssertionValidator;
+use SimpleSAML\SAML2\Assertion\Validation\SubjectConfirmationValidator;
+use SimpleSAML\SAML2\Configuration\IdentityProvider;
+use SimpleSAML\SAML2\Signature\Validator;
+use SimpleSAML\SAML2\Utilities\ArrayCollection;
+use SimpleSAML\SAML2\XML\saml\Assertion;
+use SimpleSAML\SAML2\XML\saml\EncryptedAssertion;
+use SimpleSAML\SAML2\Assertion\Exception\InvalidAssertionException;
 use stdClass;
 
 /**

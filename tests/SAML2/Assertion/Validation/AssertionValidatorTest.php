@@ -6,16 +6,16 @@ namespace SAML2\XML\saml;
 
 use PHPUnit\Framework\TestCase;
 use Psr\Log\NullLogger;
-use SimpleSAMLSAML2\Assertion\Exception\InvalidAssertionException;
-use SimpleSAMLSAML2\Assertion\ProcessorBuilder;
-use SimpleSAMLSAML2\Configuration\Destination;
-use SimpleSAMLSAML2\Configuration\IdentityProvider;
-use SimpleSAMLSAML2\Configuration\ServiceProvider;
-use SimpleSAMLSAML2\DOMDocumentFactory;
-use SimpleSAMLSAML2\Signature\Validator;
-use SimpleSAMLSAML2\XML\samlp\Response;
-use SimpleSAMLSAML2\XML\samlp\Status;
-use SimpleSAMLSAML2\XML\samlp\StatusCode;
+use SimpleSAML\SAML2\Assertion\Exception\InvalidAssertionException;
+use SimpleSAML\SAML2\Assertion\ProcessorBuilder;
+use SimpleSAML\SAML2\Configuration\Destination;
+use SimpleSAML\SAML2\Configuration\IdentityProvider;
+use SimpleSAML\SAML2\Configuration\ServiceProvider;
+use SimpleSAML\SAML2\DOMDocumentFactory;
+use SimpleSAML\SAML2\Signature\Validator;
+use SimpleSAML\SAML2\XML\samlp\Response;
+use SimpleSAML\SAML2\XML\samlp\Status;
+use SimpleSAML\SAML2\XML\samlp\StatusCode;
 
 /**
  * Tests for the Assertion validators

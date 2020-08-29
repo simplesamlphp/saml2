@@ -3,8 +3,8 @@
 namespace SAML2;
 
 use DOMElement;
-use SimpleSAMLSAML2\XML\saml\BaseID;
-use SimpleSAMLSAML2\XML\saml\CustomIdentifierInterface;
+use SimpleSAML\SAML2\XML\saml\BaseID;
+use SimpleSAML\SAML2\XML\saml\CustomIdentifierInterface;
 use SimpleSAML\Assert\Assert;
 
 /**

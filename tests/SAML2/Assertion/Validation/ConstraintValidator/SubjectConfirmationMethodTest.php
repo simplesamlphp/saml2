@@ -5,10 +5,10 @@ declare(strict_types=1);
 namespace SAML2\Assertion\Validation\ConstraintValidator;
 
 use Mockery\Adapter\Phpunit\MockeryTestCase;
-use SimpleSAMLSAML2\Assertion\Validation\ConstraintValidator\SubjectConfirmationMethod;
-use SimpleSAMLSAML2\Assertion\Validation\Result;
-use SimpleSAMLSAML2\Constants;
-use SimpleSAMLSAML2\XML\saml\SubjectConfirmation;
+use SimpleSAML\SAML2\Assertion\Validation\ConstraintValidator\SubjectConfirmationMethod;
+use SimpleSAML\SAML2\Assertion\Validation\Result;
+use SimpleSAML\SAML2\Constants;
+use SimpleSAML\SAML2\XML\saml\SubjectConfirmation;
 
 /**
  * @covers \SAML2\Assertion\Validation\ConstraintValidator\SubjectConfirmationMethod

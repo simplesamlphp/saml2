@@ -8,12 +8,12 @@ use Exception;
 use PHPUnit\Framework\Error\Warning;
 use Mockery\Adapter\Phpunit\MockeryTestCase;
 use RobRichards\XMLSecLibs\XMLSecurityKey;
-use SimpleSAMLSAML2\HTTPPost;
-use SimpleSAMLSAML2\XML\saml\Issuer;
-use SimpleSAMLSAML2\XML\samlp\AuthnRequest;
-use SimpleSAMLSAML2\XML\samlp\Response;
-use SimpleSAMLSAML2\XML\samlp\Status;
-use SimpleSAMLSAML2\XML\samlp\StatusCode;
+use SimpleSAML\SAML2\HTTPPost;
+use SimpleSAML\SAML2\XML\saml\Issuer;
+use SimpleSAML\SAML2\XML\samlp\AuthnRequest;
+use SimpleSAML\SAML2\XML\samlp\Response;
+use SimpleSAML\SAML2\XML\samlp\Status;
+use SimpleSAML\SAML2\XML\samlp\StatusCode;
 use SimpleSAML\Utils\HTTP;
 use SimpleSAML\TestUtils\PEMCertificatesMock;
 

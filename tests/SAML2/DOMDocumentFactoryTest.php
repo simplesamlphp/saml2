@@ -5,10 +5,10 @@ declare(strict_types=1);
 namespace SAML2;
 
 use PHPUnit\Framework\TestCase;
-use SimpleSAMLSAML2\DOMDocumentFactory;
-use SimpleSAMLSAML2\Exception\UnparseableXmlException;
-use SimpleSAMLSAML2\Exception\InvalidArgumentException;
-use SimpleSAMLSAML2\Exception\RuntimeException;
+use SimpleSAML\SAML2\DOMDocumentFactory;
+use SimpleSAML\SAML2\Exception\UnparseableXmlException;
+use SimpleSAML\SAML2\Exception\InvalidArgumentException;
+use SimpleSAML\SAML2\Exception\RuntimeException;
 
 /**
  * @covers \SAML2\DOMDocumentFactory

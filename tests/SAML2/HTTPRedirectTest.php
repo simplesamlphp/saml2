@@ -8,14 +8,14 @@ use Exception;
 use Mockery\Adapter\Phpunit\MockeryTestCase;
 use PHPUnit\Framework\Error\Warning;
 use RobRichards\XMLSecLibs\XMLSecurityKey;
-use SimpleSAMLSAML2\DOMDocumentFactory;
-use SimpleSAMLSAML2\HTTPRedirect;
-use SimpleSAMLSAML2\XML\saml\Issuer;
-use SimpleSAMLSAML2\XML\samlp\AbstractRequest;
-use SimpleSAMLSAML2\XML\samlp\AuthnRequest;
-use SimpleSAMLSAML2\XML\samlp\Response;
-use SimpleSAMLSAML2\XML\samlp\Status;
-use SimpleSAMLSAML2\XML\samlp\StatusCode;
+use SimpleSAML\SAML2\DOMDocumentFactory;
+use SimpleSAML\SAML2\HTTPRedirect;
+use SimpleSAML\SAML2\XML\saml\Issuer;
+use SimpleSAML\SAML2\XML\samlp\AbstractRequest;
+use SimpleSAML\SAML2\XML\samlp\AuthnRequest;
+use SimpleSAML\SAML2\XML\samlp\Response;
+use SimpleSAML\SAML2\XML\samlp\Status;
+use SimpleSAML\SAML2\XML\samlp\StatusCode;
 use SimpleSAML\TestUtils\PEMCertificatesMock;
 
 /**

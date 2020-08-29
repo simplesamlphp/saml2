@@ -6,9 +6,9 @@ namespace SAML2\XML\saml;
 
 use InvalidArgumentException;
 use PHPUnit\Framework\TestCase;
-use SimpleSAMLSAML2\Constants;
-use SimpleSAMLSAML2\DOMDocumentFactory;
-use SimpleSAMLSAML2\Utils;
+use SimpleSAML\SAML2\Constants;
+use SimpleSAML\SAML2\DOMDocumentFactory;
+use SimpleSAML\SAML2\Utils;
 
 /**
  * Class \SAML2\XML\saml\SubjectLocalityTest
