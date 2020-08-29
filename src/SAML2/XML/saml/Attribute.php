@@ -9,7 +9,7 @@ use Exception;
 use SimpleSAML\Assert\Assert;
 use SimpleSAML\SAML2\Constants;
 use SimpleSAML\XML\Exception\InvalidDOMElementException;
-use SimpleSAML\SAML2\XML\ExtendableAttributesTrait;
+use SimpleSAML\XML\ExtendableAttributesTrait;
 
 /**
  * Class representing SAML 2 Attribute.

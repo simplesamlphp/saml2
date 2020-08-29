@@ -7,7 +7,7 @@ namespace SimpleSAML\SAML2\XML\md;
 use DOMElement;
 use SimpleSAML\Assert\Assert;
 use SimpleSAML\XML\Exception\InvalidDOMElementException;
-use SimpleSAML\SAML2\XML\ExtendableAttributesTrait;
+use SimpleSAML\XML\ExtendableAttributesTrait;
 
 /**
  * Class representing SAML 2 EndpointType.
