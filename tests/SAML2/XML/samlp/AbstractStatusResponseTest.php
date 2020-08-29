@@ -10,7 +10,7 @@ use SimpleSAML\SAML2\Constants;
 use SimpleSAML\SAML2\DOMDocumentFactory;
 use SimpleSAML\SAML2\Exception\MissingElementException;
 use SimpleSAML\SAML2\Utils;
-use SimpleSAML\SAML2\XML\Chunk;
+use SimpleSAML\XML\Chunk;
 use SimpleSAML\SAML2\XML\saml\Attribute;
 use SimpleSAML\SAML2\XML\saml\Issuer;
 use SimpleSAML\SAML2\XML\shibmd\Scope;

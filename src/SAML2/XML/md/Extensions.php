@@ -11,7 +11,7 @@ use SimpleSAML\SAML2\Utils;
 use SimpleSAML\SAML2\XML\alg\AbstractAlgElement as ALG;
 use SimpleSAML\SAML2\XML\alg\DigestMethod;
 use SimpleSAML\SAML2\XML\alg\SigningMethod;
-use SimpleSAML\SAML2\XML\Chunk;
+use SimpleSAML\XML\Chunk;
 use SimpleSAML\SAML2\XML\ExtensionsTrait;
 use SimpleSAML\SAML2\XML\init\RequestInitiator;
 use SimpleSAML\SAML2\XML\mdattr\EntityAttributes;

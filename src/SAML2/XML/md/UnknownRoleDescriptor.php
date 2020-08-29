@@ -9,7 +9,7 @@ use SimpleSAML\Assert\Assert;
 use SimpleSAML\SAML2\Exception\InvalidDOMElementException;
 use SimpleSAML\SAML2\Exception\TooManyElementsException;
 use SimpleSAML\SAML2\Utils;
-use SimpleSAML\SAML2\XML\Chunk;
+use SimpleSAML\XML\Chunk;
 
 /**
  * Class representing unknown RoleDescriptors.
@@ -21,7 +21,7 @@ final class UnknownRoleDescriptor extends AbstractRoleDescriptor
     /**
      * This RoleDescriptor as XML
      *
-     * @var \SimpleSAML\SAML2\XML\Chunk
+     * @var \SimpleSAML\XML\Chunk
      * @psalm-suppress PropertyNotSetInConstructor
      */
     protected $xml;
@@ -67,7 +67,7 @@ final class UnknownRoleDescriptor extends AbstractRoleDescriptor
     /**
      * Get the original XML of this descriptor as a Chunk object.
      *
-     * @return \SimpleSAML\SAML2\XML\Chunk
+     * @return \SimpleSAML\XML\Chunk
      */
     public function getXML(): Chunk
     {

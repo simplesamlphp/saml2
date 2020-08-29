@@ -7,7 +7,7 @@ namespace SimpleSAML\SAML2\XML\mdui;
 use DOMElement;
 use SimpleSAML\SAML2\Exception\InvalidDOMElementException;
 use SimpleSAML\SAML2\Utils;
-use SimpleSAML\SAML2\XML\Chunk;
+use SimpleSAML\XML\Chunk;
 use SimpleSAML\Assert\Assert;
 
 /**

@@ -18,7 +18,7 @@ use SimpleSAML\SAML2\Exception\MissingElementException;
 use SimpleSAML\SAML2\Exception\TooManyElementsException;
 use SimpleSAML\SAML2\Utilities\Temporal;
 use SimpleSAML\SAML2\Utils;
-use SimpleSAML\SAML2\XML\Chunk;
+use SimpleSAML\XML\Chunk;
 use SimpleSAML\SAML2\XML\SignedElementInterface;
 use SimpleSAML\SAML2\XML\SignedElementTrait;
 

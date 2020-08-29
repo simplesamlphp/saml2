@@ -10,7 +10,7 @@ use RobRichards\XMLSecLibs\XMLSecurityDSig;
 use SimpleSAML\SAML2\Constants;
 use SimpleSAML\SAML2\DOMDocumentFactory;
 use SimpleSAML\SAML2\Exception\MissingAttributeException;
-use SimpleSAML\SAML2\XML\Chunk;
+use SimpleSAML\XML\Chunk;
 use SimpleSAML\Assert\AssertionFailedException;
 
 /**
@@ -120,7 +120,7 @@ final class UnknownRoleDescriptorTest extends TestCase
     {
         $this->document->documentElement->setAttribute('errorURL', 'not a URL');
 
-        $this->expectException(InvalidArgumentException::class);
+        $this->expectException(AssertionFailedException::class);
         $this->expectExceptionMessage('RoleDescriptor errorURL is not a valid URL.');
 
         UnknownRoleDescriptor::fromXML($this->document->documentElement);

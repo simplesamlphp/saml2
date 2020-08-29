@@ -6,7 +6,7 @@ namespace SimpleSAML\SAML2\XML\mdui;
 
 use PHPUnit\Framework\TestCase;
 use SimpleSAML\SAML2\DOMDocumentFactory;
-use SimpleSAML\SAML2\XML\Chunk;
+use SimpleSAML\XML\Chunk;
 use SimpleSAML\SAML2\Utils;
 
 /**

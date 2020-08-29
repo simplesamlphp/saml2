@@ -8,7 +8,7 @@ use SimpleSAML\SAML2\Constants;
 use SimpleSAML\SAML2\DOMDocumentFactory;
 use PHPUnit\Framework\TestCase;
 use SimpleSAML\SAML2\Utils;
-use SimpleSAML\SAML2\XML\Chunk;
+use SimpleSAML\XML\Chunk;
 
 /**
  * Class \SAML2\XML\samlp\StatusTest
