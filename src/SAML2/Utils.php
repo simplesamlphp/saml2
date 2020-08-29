@@ -21,6 +21,7 @@ use SimpleSAML\SAML2\XML\ds\KeyInfo;
 use SimpleSAML\SAML2\XML\ds\X509Certificate;
 use SimpleSAML\SAML2\XML\ds\X509Data;
 use SimpleSAML\SAML2\XML\md\KeyDescriptor;
+use SimpleSAML\XML\DOMDocumentFactory;
 
 /**
  * Helper functions for the SAML2 library.

@@ -12,7 +12,7 @@ use SimpleSAML\SAML2\Compat\MockContainer;
 use SimpleSAML\SAML2\Compat\Ssp\Container;
 use SimpleSAML\SAML2\Constants;
 use SimpleSAML\SAML2\CustomBaseID;
-use SimpleSAML\SAML2\DOMDocumentFactory;
+use SimpleSAML\XML\DOMDocumentFactory;
 use SimpleSAML\SAML2\Utils;
 use SimpleSAML\XML\Chunk;
 use SimpleSAML\SAML2\XML\ds\KeyInfo;
