@@ -102,11 +102,6 @@ abstract class AbstractMessage extends AbstractSamlpElement implements SignedEle
      */
     private $validators = [];
 
-    /**
-     * @var null|string
-     */
-    private $signatureMethod = null;
-
 
     /**
      * Initialize a message.
