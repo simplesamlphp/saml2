@@ -6,10 +6,10 @@ namespace SimpleSAML\SAML2\XML\md;
 
 use DOMElement;
 use SimpleSAML\Assert\Assert;
+use SimpleSAML\SAML2\XML\ds\Signature;
 use SimpleSAML\XML\Exception\InvalidDOMElementException;
 use SimpleSAML\XML\Exception\TooManyElementsException;
-use SimpleSAML\SAML2\Utils;
-use SimpleSAML\SAML2\XML\ds\Signature;
+use SimpleSAML\XML\Utils as XMLUtils;
 
 /**
  * Class representing SAML 2 EntitiesDescriptor element.
@@ -94,7 +94,7 @@ final class EntitiesDescriptor extends AbstractMetadataDocument
             EntitiesDescriptor::getChildrenOfClass($xml),
             self::getAttribute($xml, 'Name', null),
             self::getAttribute($xml, 'ID', null),
-            $validUntil !== null ? Utils::xsDateTimeToTimestamp($validUntil) : null,
+            $validUntil !== null ? XMLUtils::xsDateTimeToTimestamp($validUntil) : null,
             self::getAttribute($xml, 'cacheDuration', null),
             !empty($extensions) ? $extensions[0] : null
         );
