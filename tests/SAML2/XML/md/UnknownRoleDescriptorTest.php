@@ -9,7 +9,7 @@ use PHPUnit\Framework\TestCase;
 use RobRichards\XMLSecLibs\XMLSecurityDSig;
 use SimpleSAML\SAML2\Constants;
 use SimpleSAML\SAML2\DOMDocumentFactory;
-use SimpleSAML\SAML2\Exception\MissingAttributeException;
+use SimpleSAML\XML\Exception\MissingAttributeException;
 use SimpleSAML\XML\Chunk;
 use SimpleSAML\Assert\AssertionFailedException;
 

@@ -10,7 +10,7 @@ use InvalidArgumentException;
 use PHPUnit\Framework\TestCase;
 use SimpleSAML\SAML2\Constants;
 use SimpleSAML\SAML2\DOMDocumentFactory;
-use SimpleSAML\SAML2\Exception\MissingAttributeException;
+use SimpleSAML\XML\Exception\MissingAttributeException;
 use SimpleSAML\SAML2\XML\ecp\Response;
 use SimpleSAML\Assert\AssertionFailedException;
 

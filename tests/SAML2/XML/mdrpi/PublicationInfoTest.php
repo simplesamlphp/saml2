@@ -6,7 +6,7 @@ namespace SimpleSAML\SAML2\XML\mdrpi;
 
 use PHPUnit\Framework\TestCase;
 use SimpleSAML\SAML2\DOMDocumentFactory;
-use SimpleSAML\SAML2\Exception\MissingAttributeException;
+use SimpleSAML\XML\Exception\MissingAttributeException;
 use SimpleSAML\SAML2\Utils;
 
 /**

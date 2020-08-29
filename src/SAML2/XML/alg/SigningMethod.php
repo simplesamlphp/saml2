@@ -8,7 +8,7 @@ use DOMElement;
 use SimpleSAML\Assert\Assert;
 use SimpleSAML\SAML2\DOMDocumentFactory;
 use SimpleSAML\SAML2\Exception\InvalidDOMElementException;
-use SimpleSAML\SAML2\Exception\MissingAttributeException;
+use SimpleSAML\XML\Exception\MissingAttributeException;
 
 /**
  * Class for handling the alg:SigningMethod element.

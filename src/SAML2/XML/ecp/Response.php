@@ -9,7 +9,7 @@ use InvalidArgumentException;
 use SimpleSAML\Assert\Assert;
 use SimpleSAML\SAML2\Constants;
 use SimpleSAML\SAML2\Exception\InvalidDOMElementException;
-use SimpleSAML\SAML2\Exception\MissingAttributeException;
+use SimpleSAML\XML\Exception\MissingAttributeException;
 
 /**
  * Class representing the ECP Response element.

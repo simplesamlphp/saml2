@@ -10,7 +10,7 @@ use RobRichards\XMLSecLibs\XMLSecurityDSig;
 use RobRichards\XMLSecLibs\XMLSecurityKey;
 use SimpleSAML\Assert\Assert;
 use SimpleSAML\SAML2\Exception\InvalidDOMElementException;
-use SimpleSAML\SAML2\Exception\MissingAttributeException;
+use SimpleSAML\XML\Exception\MissingAttributeException;
 use SimpleSAML\SAML2\Utilities\Certificate;
 use SimpleSAML\SAML2\Utils;
 use SimpleSAML\XML\AbstractXMLElement;
