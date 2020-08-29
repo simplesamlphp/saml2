@@ -7,6 +7,7 @@ namespace SimpleSAML\SAML2\XML;
 use DOMElement;
 use SimpleSAML\Assert\Assert;
 use SimpleSAML\SAML2\Utils;
+use SimpleSAML\XML\AbstractXMLElement;
 
 /**
  * Serializable class used to hold an XML element.

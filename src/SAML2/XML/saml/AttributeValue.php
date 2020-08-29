@@ -7,7 +7,7 @@ namespace SimpleSAML\SAML2\XML\saml;
 use DOMElement;
 use SimpleSAML\SAML2\Constants;
 use SimpleSAML\SAML2\Exception\InvalidDOMElementException;
-use SimpleSAML\SAML2\XML\AbstractXMLElement;
+use SimpleSAML\XML\AbstractXMLElement;
 use SimpleSAML\Assert\Assert;
 
 /**

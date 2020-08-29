@@ -13,7 +13,7 @@ use SimpleSAML\SAML2\Exception\InvalidDOMElementException;
 use SimpleSAML\SAML2\Exception\MissingAttributeException;
 use SimpleSAML\SAML2\Utilities\Certificate;
 use SimpleSAML\SAML2\Utils;
-use SimpleSAML\SAML2\XML\AbstractXMLElement;
+use SimpleSAML\XML\AbstractXMLElement;
 
 /**
  * Wrapper class for XML signatures

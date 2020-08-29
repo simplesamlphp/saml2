@@ -6,7 +6,7 @@ namespace SimpleSAML\SAML2\XML;
 
 use DOMElement;
 use SimpleSAML\Assert\Assert;
-use SimpleSAML\SAML2\XML\AbstractXMLElement;
+use SimpleSAML\XML\AbstractXMLElement;
 
 /**
  * Trait grouping common functionality for elements implementing ExtensionType.

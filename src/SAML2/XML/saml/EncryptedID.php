@@ -8,10 +8,10 @@ use InvalidArgumentException;
 use RobRichards\XMLSecLibs\XMLSecurityKey;
 use SimpleSAML\SAML2\Compat\ContainerSingleton;
 use SimpleSAML\SAML2\Constants;
-use SimpleSAML\SAML2\XML\AbstractXMLElement;
 use SimpleSAML\SAML2\XML\EncryptedElementInterface;
 use SimpleSAML\SAML2\XML\EncryptedElementTrait;
 use SimpleSAML\SAML2\Utils;
+use SimpleSAML\XML\AbstractXMLElement;
 
 /**
  * Class representing an encrypted identifier.
@@ -25,7 +25,7 @@ class EncryptedID extends AbstractSamlElement implements EncryptedElementInterfa
     /**
      * @inheritDoc
      *
-     * @return \SimpleSAML\SAML2\XML\saml\IdentifierInterface
+     * @return \SimpleSAML\XML\saml\IdentifierInterface
      * @throws \InvalidArgumentException
      *
      * @psalm-suppress MismatchingDocblockReturnType

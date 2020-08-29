@@ -6,6 +6,7 @@ namespace SimpleSAML\SAML2\XML;
 
 use RobRichards\XMLSecLibs\XMLSecurityKey;
 use SimpleSAML\SAML2\XML\xenc\EncryptedData;
+use SimpleSAML\XML\AbstractXMLElement;
 
 /**
  * Interface for encrypted elements.
