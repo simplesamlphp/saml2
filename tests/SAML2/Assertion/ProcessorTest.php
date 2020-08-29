@@ -2,7 +2,7 @@
 
 declare(strict_types=1);
 
-namespace SAML2\Assertion;
+namespace SimpleSAML\SAML2\Assertion;
 
 use Mockery as m;
 use Mockery\Adapter\Phpunit\MockeryTestCase;
@@ -19,7 +19,7 @@ use SimpleSAML\SAML2\Assertion\Exception\InvalidAssertionException;
 use stdClass;
 
 /**
- * @covers \SAML2\Assertion\Processor
+ * @covers \SimpleSAML\SAML2\Assertion\Processor
  * @package simplesamlphp/saml2
  * @runTestsInSeparateProcesses
  */

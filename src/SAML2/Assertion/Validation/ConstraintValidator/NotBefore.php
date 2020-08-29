@@ -7,7 +7,7 @@ namespace SimpleSAML\SAML2\Assertion\Validation\ConstraintValidator;
 use SimpleSAML\SAML2\XML\saml\Assertion;
 use SimpleSAML\SAML2\Assertion\Validation\AssertionConstraintValidator;
 use SimpleSAML\SAML2\Assertion\Validation\Result;
-use SimpleESAML\SAML2\Utilities\Temporal;
+use SimpleSAML\SAML2\Utilities\Temporal;
 
 class NotBefore implements
     AssertionConstraintValidator
