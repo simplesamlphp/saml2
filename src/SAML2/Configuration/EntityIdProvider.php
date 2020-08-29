@@ -2,10 +2,10 @@
 
 declare(strict_types=1);
 
-namespace SAML2\Configuration;
+namespace SimpleSAML\SAML2\Configuration;
 
 /**
- * Interface \SAML2\Configuration\EntityIdProvider
+ * Interface \SimpleSAML\SAML2\Configuration\EntityIdProvider
  */
 interface EntityIdProvider
 {

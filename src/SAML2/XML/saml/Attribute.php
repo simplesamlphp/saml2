@@ -2,14 +2,14 @@
 
 declare(strict_types=1);
 
-namespace SAML2\XML\saml;
+namespace SimpleSAML\SAML2\XML\saml;
 
 use DOMElement;
 use Exception;
-use SAML2\Constants;
-use SAML2\Exception\InvalidDOMElementException;
-use SAML2\XML\ExtendableAttributesTrait;
 use SimpleSAML\Assert\Assert;
+use SimpleSAML\SAML2\Constants;
+use SimpleSAML\SAML2\Exception\InvalidDOMElementException;
+use SimpleSAML\SAML2\XML\ExtendableAttributesTrait;
 
 /**
  * Class representing SAML 2 Attribute.
@@ -44,9 +44,9 @@ class Attribute extends AbstractSamlElement
     /**
      * List of attribute values.
      *
-     * Array of \SAML2\XML\saml\AttributeValue elements.
+     * Array of \SimpleSAML\SAML2\XML\saml\AttributeValue elements.
      *
-     * @var \SAML2\XML\saml\AttributeValue[]
+     * @var \SimpleSAML\SAML2\XML\saml\AttributeValue[]
      */
     protected $AttributeValues = [];
 
@@ -57,7 +57,7 @@ class Attribute extends AbstractSamlElement
      * @param string $Name
      * @param string|null $NameFormat
      * @param string|null $FriendlyName
-     * @param \SAML2\XML\saml\AttributeValue[] $AttributeValues
+     * @param \SimpleSAML\SAML2\XML\saml\AttributeValue[] $AttributeValues
      * @param \DOMAttr[] $namespacedAttributes
      */
     public function __construct(
@@ -152,7 +152,7 @@ class Attribute extends AbstractSamlElement
     /**
      * Collect the value of the attributeValues-property
      *
-     * @return \SAML2\XML\saml\AttributeValue[]
+     * @return \SimpleSAML\SAML2\XML\saml\AttributeValue[]
      */
     public function getAttributeValues(): array
     {
@@ -163,7 +163,7 @@ class Attribute extends AbstractSamlElement
     /**
      * Set the value of the AttributeValues-property
      *
-     * @param \SAML2\XML\saml\AttributeValue[] $attributeValues
+     * @param \SimpleSAML\SAML2\XML\saml\AttributeValue[] $attributeValues
      * @return void
      */
     protected function setAttributeValues(array $attributeValues): void
@@ -177,10 +177,10 @@ class Attribute extends AbstractSamlElement
      * Convert XML into a Attribute
      *
      * @param \DOMElement $xml The XML element we should load
-     * @return \SAML2\XML\saml\Attribute
+     * @return \SimpleSAML\SAML2\XML\saml\Attribute
      *
-     * @throws \SAML2\Exception\InvalidDOMElementException if the qualified name of the supplied element is wrong
-     * @throws \SAML2\Exception\MissingAttributeException if the supplied element is missing one of the mandatory attributes
+     * @throws \SimpleSAML\SAML2\Exception\InvalidDOMElementException if the qualified name of the supplied element is wrong
+     * @throws \SimpleSAML\SAML2\Exception\MissingAttributeException if the supplied element is missing one of the mandatory attributes
      */
     public static function fromXML(DOMElement $xml): object
     {

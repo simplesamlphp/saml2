@@ -9,6 +9,9 @@ use SimpleSAML\SAML2\Exception\InvalidArgumentException;
 use SimpleSAML\SAML2\Exception\RuntimeException;
 use SimpleSAML\SAML2\Exception\UnparseableXmlException;
 
+/**
+ * @package simplesamlphp/saml2
+ */
 final class DOMDocumentFactory
 {
     /**

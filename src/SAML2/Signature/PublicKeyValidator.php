@@ -2,25 +2,25 @@
 
 declare(strict_types=1);
 
-namespace SAML2\Signature;
+namespace SimpleSAML\SAML2\Signature;
 
 use Psr\Log\LoggerInterface;
-use SAML2\Certificate\Key;
-use SAML2\Certificate\KeyLoader;
-use SAML2\Certificate\X509;
-use SAML2\Configuration\CertificateProvider;
-use SAML2\XML\SignedElementInterface;
 use SimpleSAML\Assert\Assert;
+use SimpleSAML\SAML2\Certificate\Key;
+use SimpleSAML\SAML2\Certificate\KeyLoader;
+use SimpleSAML\SAML2\Certificate\X509;
+use SimpleSAML\SAML2\Configuration\CertificateProvider;
+use SimpleSAML\SAML2\XML\SignedElementInterface;
 
 class PublicKeyValidator extends AbstractChainedValidator
 {
     /**
-     * @var \SAML2\Certificate\KeyCollection
+     * @var \SimpleSAML\SAML2\Certificate\KeyCollection
      */
     private $configuredKeys;
 
     /**
-     * @var \SAML2\Certificate\KeyLoader
+     * @var \SimpleSAML\SAML2\Certificate\KeyLoader
      */
     private $keyLoader;
 
@@ -29,7 +29,7 @@ class PublicKeyValidator extends AbstractChainedValidator
      * Constructor for PublicKeyValidator
      *
      * @param \Psr\Log\LoggerInterface $logger
-     * @param \SAML2\Certificate\KeyLoader $keyLoader
+     * @param \SimpleSAML\SAML2\Certificate\KeyLoader $keyLoader
      */
     public function __construct(LoggerInterface $logger, KeyLoader $keyLoader)
     {
@@ -40,8 +40,8 @@ class PublicKeyValidator extends AbstractChainedValidator
 
 
     /**
-     * @param \SAML2\XML\SignedElementInterface $signedElement
-     * @param \SAML2\Configuration\CertificateProvider $configuration
+     * @param \SimpleSAML\SAML2\XML\SignedElementInterface $signedElement
+     * @param \SimpleSAML\SAML2\Configuration\CertificateProvider $configuration
      *
      * @return bool
      */
@@ -56,8 +56,8 @@ class PublicKeyValidator extends AbstractChainedValidator
 
 
     /**
-     * @param \SAML2\XML\SignedElementInterface $signedElement
-     * @param \SAML2\Configuration\CertificateProvider $configuration
+     * @param \SimpleSAML\SAML2\XML\SignedElementInterface $signedElement
+     * @param \SimpleSAML\SAML2\Configuration\CertificateProvider $configuration
      *
      * @return bool
      *

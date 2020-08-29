@@ -2,14 +2,14 @@
 
 declare(strict_types=1);
 
-namespace SAML2\XML\md;
+namespace SimpleSAML\SAML2\XML\md;
 
 use DOMElement;
-use SAML2\Constants;
-use SAML2\Exception\InvalidDOMElementException;
-use SAML2\XML\saml\Attribute;
-use SAML2\XML\saml\AttributeValue;
 use SimpleSAML\Assert\Assert;
+use SimpleSAML\SAML2\Constants;
+use SimpleSAML\SAML2\Exception\InvalidDOMElementException;
+use SimpleSAML\SAML2\XML\saml\Attribute;
+use SimpleSAML\SAML2\XML\saml\AttributeValue;
 
 /**
  * Class representing SAML 2 metadata RequestedAttribute.
@@ -39,7 +39,7 @@ final class RequestedAttribute extends Attribute
      * @param bool|null   $isRequired
      * @param string|null $NameFormat
      * @param string|null $FriendlyName
-     * @param \SAML2\XML\saml\AttributeValue[]  $AttributeValues
+     * @param \SimpleSAML\SAML2\XML\saml\AttributeValue[]  $AttributeValues
      */
     public function __construct(
         string $Name,
@@ -82,8 +82,8 @@ final class RequestedAttribute extends Attribute
      * @param \DOMElement $xml The XML element we should load
      * @return self
      *
-     * @throws \SAML2\Exception\InvalidDOMElementException if the qualified name of the supplied element is wrong
-     * @throws \SAML2\Exception\MissingAttributeException if the supplied element is missing one of the mandatory attributes
+     * @throws \SimpleSAML\SAML2\Exception\InvalidDOMElementException if the qualified name of the supplied element is wrong
+     * @throws \SimpleSAML\SAML2\Exception\MissingAttributeException if the supplied element is missing one of the mandatory attributes
      */
     public static function fromXML(DOMElement $xml): object
     {

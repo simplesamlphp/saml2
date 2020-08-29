@@ -2,9 +2,9 @@
 
 declare(strict_types=1);
 
-namespace SAML2\Response\Exception;
+namespace SimpleSAML\SAML2\Response\Exception;
 
-use SAML2\Response\Validation\Result;
+use SimpleSAML\SAML2\Response\Validation\Result;
 
 /**
  * Named exception to indicate that the preconditions for processing the SAML response have not been met.
@@ -12,8 +12,8 @@ use SAML2\Response\Validation\Result;
 class PreconditionNotMetException extends InvalidResponseException
 {
     /**
-     * @param Result $result
-     * @return PreconditionNotMetException
+     * @param \SimpleSAML\SAML2\Response\Validation\Result $result
+     * @return \SimpleSAML\SAML2\Response\Exception\PreconditionNotMetException
      */
     public static function createFromValidationResult(Result $result): PreconditionNotMetException
     {

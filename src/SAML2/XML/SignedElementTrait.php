@@ -2,13 +2,13 @@
 
 declare(strict_types=1);
 
-namespace SAML2\XML;
+namespace SimpleSAML\SAML2\XML;
 
 use DOMElement;
 use Exception;
 use RobRichards\XMLSecLibs\XMLSecurityKey;
-use SAML2\XML\ds\Signature;
 use SimpleSAML\Assert\Assert;
+use SimpleSAML\SAML2\XML\ds\Signature;
 
 /**
  * Helper trait for processing signed elements.
@@ -27,7 +27,7 @@ trait SignedElementTrait
     /**
      * The signature of this element.
      *
-     * @var \SAML2\XML\ds\Signature|null $signature
+     * @var \SimpleSAML\SAML2\XML\ds\Signature|null $signature
      */
     protected $signature;
 
@@ -45,7 +45,7 @@ trait SignedElementTrait
     /**
      * Get the signature element of this object.
      *
-     * @return \SAML2\XML\ds\Signature|null
+     * @return \SimpleSAML\SAML2\XML\ds\Signature|null
      */
     public function getSignature(): ?Signature
     {
@@ -56,7 +56,7 @@ trait SignedElementTrait
     /**
      * Initialize a signed element from XML.
      *
-     * @param \SAML2\XML\ds\Signature|null $signature The ds:Signature object
+     * @param \SimpleSAML\SAML2\XML\ds\Signature|null $signature The ds:Signature object
      */
     protected function setSignature(?Signature $signature): void
     {

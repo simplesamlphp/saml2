@@ -2,12 +2,12 @@
 
 declare(strict_types=1);
 
-namespace SAML2\XML\saml;
+namespace SimpleSAML\SAML2\XML\saml;
 
 use DOMElement;
-use SAML2\Constants;
-use SAML2\Exception\InvalidDOMElementException;
-use SAML2\XML\AbstractXMLElement;
+use SimpleSAML\SAML2\Constants;
+use SimpleSAML\SAML2\Exception\InvalidDOMElementException;
+use SimpleSAML\SAML2\XML\AbstractXMLElement;
 use SimpleSAML\Assert\Assert;
 
 /**
@@ -30,7 +30,7 @@ class AttributeValue extends AbstractSamlElement
      *  - string
      *  - int
      *  - null
-     *  - \SAML2\XML\AbstractXMLElement
+     *  - \SimpleSAML\SAML2\XML\AbstractXMLElement
      *
      * @throws \SimpleSAML\Assert\AssertionFailedException if the supplied value is neither a string or a DOMElement
      */
@@ -67,7 +67,7 @@ class AttributeValue extends AbstractSamlElement
     /**
      * Get this attribute value.
      *
-     * @return string|int|\SAML2\XML\AbstractXMLElement|null
+     * @return string|int|\SimpleSAML\SAML2\XML\AbstractXMLElement|null
      */
     public function getValue()
     {
@@ -79,9 +79,9 @@ class AttributeValue extends AbstractSamlElement
      * Convert XML into a AttributeValue
      *
      * @param \DOMElement $xml The XML element we should load
-     * @return \SAML2\XML\saml\AttributeValue
+     * @return \SimpleSAML\SAML2\XML\saml\AttributeValue
      *
-     * @throws \SAML2\Exception\InvalidDOMElementException if the qualified name of the supplied element is wrong
+     * @throws \SimpleSAML\SAML2\Exception\InvalidDOMElementException if the qualified name of the supplied element is wrong
      */
     public static function fromXML(DOMElement $xml): object
     {

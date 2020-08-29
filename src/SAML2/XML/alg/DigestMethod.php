@@ -2,12 +2,12 @@
 
 declare(strict_types=1);
 
-namespace SAML2\XML\alg;
+namespace SimpleSAML\SAML2\XML\alg;
 
 use DOMElement;
-use SAML2\DOMDocumentFactory;
-use SAML2\Exception\InvalidDOMElementException;
 use SimpleSAML\Assert\Assert;
+	use SimpleSAML\SAML2\DOMDocumentFactory;
+use SimpleSAML\SAML2\Exception\InvalidDOMElementException;
 
 /**
  * Class for handling the alg:DigestMethod element.
@@ -66,8 +66,8 @@ final class DigestMethod extends AbstractAlgElement
      * @param \DOMElement $xml The XML element we should load
      * @return self
      *
-     * @throws \SAML2\Exception\InvalidDOMElementException if the qualified name of the supplied element is wrong
-     * @throws \SAML2\Exception\MissingAttributeException if the mandatory Algorithm-attribute is missing
+     * @throws \SimpleSAML\SAML2\Exception\InvalidDOMElementException if the qualified name of the supplied element is wrong
+     * @throws \SimpleSAML\SAML2\Exception\MissingAttributeException if the mandatory Algorithm-attribute is missing
      */
     public static function fromXML(DOMElement $xml): object
     {

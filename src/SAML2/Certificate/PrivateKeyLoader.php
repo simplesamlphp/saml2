@@ -2,22 +2,22 @@
 
 declare(strict_types=1);
 
-namespace SAML2\Certificate;
+namespace SimpleSAML\SAML2\Certificate;
 
 use RobRichards\XMLSecLibs\XMLSecurityKey;
-use SAML2\Certificate\PrivateKey;
-use SAML2\Configuration\DecryptionProvider;
-use SAML2\Configuration\PrivateKey as PrivateKeyConfiguration;
-use SAML2\Utilities\ArrayCollection;
-use SAML2\Utilities\File;
+use SimpleSAML\SAML2\Certificate\PrivateKey;
+use SimpleSAML\SAML2\Configuration\DecryptionProvider;
+use SimpleSAML\SAML2\Configuration\PrivateKey as PrivateKeyConfiguration;
+use SimpleSAML\SAML2\Utilities\ArrayCollection;
+use SimpleSAML\SAML2\Utilities\File;
 
 class PrivateKeyLoader
 {
     /**
      * Loads a private key based on the configuration given.
      *
-     * @param \SAML2\Configuration\PrivateKey $key
-     * @return \SAML2\Certificate\PrivateKey
+     * @param \SimpleSAML\SAML2\Configuration\PrivateKey $key
+     * @return \SimpleSAML\SAML2\Certificate\PrivateKey
      */
     public function loadPrivateKey(PrivateKeyConfiguration $key): PrivateKey
     {
@@ -32,10 +32,10 @@ class PrivateKeyLoader
 
 
     /**
-     * @param \SAML2\Configuration\DecryptionProvider $identityProvider
-     * @param \SAML2\Configuration\DecryptionProvider $serviceProvider
+     * @param \SimpleSAML\SAML2\Configuration\DecryptionProvider $identityProvider
+     * @param \SimpleSAML\SAML2\Configuration\DecryptionProvider $serviceProvider
      * @throws \Exception
-     * @return \SAML2\Utilities\ArrayCollection
+     * @return \SimpleSAML\SAML2\Utilities\ArrayCollection
      */
     public function loadDecryptionKeys(
         DecryptionProvider $identityProvider,
@@ -67,7 +67,7 @@ class PrivateKeyLoader
 
 
     /**
-     * @param \SAML2\Certificate\PrivateKey $privateKey
+     * @param \SimpleSAML\SAML2\Certificate\PrivateKey $privateKey
      * @throws \Exception
      * @return \RobRichards\XMLSecLibs\XMLSecurityKey
      */

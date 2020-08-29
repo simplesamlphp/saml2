@@ -2,21 +2,21 @@
 
 declare(strict_types=1);
 
-namespace SAML2\Response;
+namespace SimpleSAML\SAML2\Response;
 
 use Psr\Log\LoggerInterface;
-use SAML2\Assertion\ProcessorBuilder;
-use SAML2\Configuration\Destination;
-use SAML2\Configuration\IdentityProvider;
-use SAML2\Configuration\ServiceProvider;
-use SAML2\Response\Exception\InvalidResponseException;
-use SAML2\Response\Exception\NoAssertionsFoundException;
-use SAML2\Response\Exception\PreconditionNotMetException;
-use SAML2\Response\Exception\UnsignedResponseException;
-use SAML2\Response\Validation\PreconditionValidator;
-use SAML2\Signature\Validator;
-use SAML2\Utilities\ArrayCollection;
-use SAML2\XML\samlp\Response;
+use SimpleSAML\SAML2\Assertion\ProcessorBuilder;
+use SimpleSAML\SAML2\Configuration\Destination;
+use SimpleSAML\SAML2\Configuration\IdentityProvider;
+use SimpleSAML\SAML2\Configuration\ServiceProvider;
+use SimpleSAML\SAML2\Response\Exception\InvalidResponseException;
+use SimpleSAML\SAML2\Response\Exception\NoAssertionsFoundException;
+use SimpleSAML\SAML2\Response\Exception\PreconditionNotMetException;
+use SimpleSAML\SAML2\Response\Exception\UnsignedResponseException;
+use SimpleSAML\SAML2\Response\Validation\PreconditionValidator;
+use SimpleSAML\SAML2\Signature\Validator;
+use SimpleSAML\SAML2\Utilities\ArrayCollection;
+use SimpleSAML\SAML2\XML\samlp\Response;
 
 class Processor
 {
@@ -26,17 +26,17 @@ class Processor
     private $logger;
 
     /**
-     * @var \SAML2\Response\Validation\PreconditionValidator
+     * @var \SimpleSAML\SAML2\Response\Validation\PreconditionValidator
      */
     private $preconditionValidator;
 
     /**
-     * @var \SAML2\Signature\Validator
+     * @var \SimpleSAML\SAML2\Signature\Validator
      */
     private $signatureValidator;
 
     /**
-     * @var \SAML2\Assertion\Processor
+     * @var \SimpleSAML\SAML2\Assertion\Processor
      */
     private $assertionProcessor;
 
@@ -61,12 +61,12 @@ class Processor
 
 
     /**
-     * @param \SAML2\Configuration\ServiceProvider  $serviceProviderConfiguration
-     * @param \SAML2\Configuration\IdentityProvider $identityProviderConfiguration
-     * @param \SAML2\Configuration\Destination $currentDestination
-     * @param \SAML2\XML\samlp\Response $response
+     * @param \SimpleSAML\SAML2\Configuration\ServiceProvider  $serviceProviderConfiguration
+     * @param \SimpleSAML\SAML2\Configuration\IdentityProvider $identityProviderConfiguration
+     * @param \SimpleSAML\SAML2\Configuration\Destination $currentDestination
+     * @param \SimpleSAML\SAML2\XML\samlp\Response $response
      *
-     * @return \SAML2\Utilities\ArrayCollection Collection of \SAML2\XML\saml\Assertion objects
+     * @return \SimpleSAML\SAML2\Utilities\ArrayCollection Collection of \SimpleSAML\SAML2\XML\saml\Assertion objects
      */
     public function process(
         ServiceProvider $serviceProviderConfiguration,
@@ -93,8 +93,8 @@ class Processor
     /**
      * Checks the preconditions that must be valid in order for the response to be processed.
      *
-     * @param \SAML2\XML\samlp\Response $response
-     * @throws \SAML2\Response\Exception\PreconditionNotMetException
+     * @param \SimpleSAML\SAML2\XML\samlp\Response $response
+     * @throws \SimpleSAML\SAML2\Response\Exception\PreconditionNotMetException
      * @return void
      */
     private function enforcePreconditions(Response $response): void
@@ -108,9 +108,9 @@ class Processor
 
 
     /**
-     * @param \SAML2\XML\samlp\Response $response
-     * @param \SAML2\Configuration\IdentityProvider $identityProviderConfiguration
-     * @throws \SAML2\Response\Exception\InvalidResponseException
+     * @param \SimpleSAML\SAML2\XML\samlp\Response $response
+     * @param \SimpleSAML\SAML2\Configuration\IdentityProvider $identityProviderConfiguration
+     * @throws \SimpleSAML\SAML2\Response\Exception\InvalidResponseException
      * @return void
      */
     private function verifySignature(Response $response, IdentityProvider $identityProviderConfiguration): void
@@ -141,10 +141,10 @@ class Processor
 
 
     /**
-     * @param \SAML2\XML\samlp\Response $response
-     * @throws \SAML2\Response\Exception\UnsignedResponseException
-     * @throws \SAML2\Response\Exception\NoAssertionsFoundException
-     * @return \SAML2\Utilities\ArrayCollection
+     * @param \SimpleSAML\SAML2\XML\samlp\Response $response
+     * @throws \SimpleSAML\SAML2\Response\Exception\UnsignedResponseException
+     * @throws \SimpleSAML\SAML2\Response\Exception\NoAssertionsFoundException
+     * @return \SimpleSAML\SAML2\Utilities\ArrayCollection
      */
     private function processAssertions(Response $response): ArrayCollection
     {

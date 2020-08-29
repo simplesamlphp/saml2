@@ -7,7 +7,7 @@ namespace SimpleSAML\SAML2;
 /**
  * Various SAML 2 constants.
  *
- * @package SimpleSAMLphp
+ * @package simplesamlphp/saml2
  */
 class Constants
 {

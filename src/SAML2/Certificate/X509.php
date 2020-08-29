@@ -2,7 +2,7 @@
 
 declare(strict_types=1);
 
-namespace SAML2\Certificate;
+namespace SimpleSAML\SAML2\Certificate;
 
 /**
  * Specific Certificate Key.
@@ -11,7 +11,7 @@ class X509 extends Key
 {
     /**
      * @param string $certificateContents
-     * @return \SAML2\Certificate\X509
+     * @return \SimpleSAML\SAML2\Certificate\X509
      */
     public static function createFromCertificateData(string $certificateContents): X509
     {

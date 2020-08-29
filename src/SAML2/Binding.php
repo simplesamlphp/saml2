@@ -10,7 +10,7 @@ use SimpleSAML\SAML2\XML\samlp\AbstractMessage;
 /**
  * Base class for SAML 2 bindings.
  *
- * @package SimpleSAMLphp
+ * @package simplesamlphp/saml2
  */
 abstract class Binding
 {
@@ -30,7 +30,7 @@ abstract class Binding
      *
      * @param string $urn The URN of the binding.
      * @throws \Exception
-     * @return \SAML2\Binding The binding.
+     * @return \SimpleSAML\SAML2\Binding The binding.
      */
     public static function getBinding(string $urn): Binding
     {
@@ -57,12 +57,12 @@ abstract class Binding
      * Guess the current binding.
      *
      * This function guesses the current binding and creates an instance
-     * of \SAML2\Binding matching that binding.
+     * of \SimpleSAML\SAML2\Binding matching that binding.
      *
      * An exception will be thrown if it is unable to guess the binding.
      *
      * @throws \Exception
-     * @return \SAML2\Binding The binding.
+     * @return \SimpleSAML\SAML2\Binding The binding.
      */
     public static function getCurrentBinding(): Binding
     {
@@ -141,7 +141,7 @@ abstract class Binding
      * This function will send a message using the specified binding.
      * The message will be delivered to the destination set in the message.
      *
-     * @param \SAML2\XML\samlp\AbstractMessage $message The message which should be sent.
+     * @param \SimpleSAML\SAML2\XML\samlp\AbstractMessage $message The message which should be sent.
      * @return void
      */
     abstract public function send(AbstractMessage $message): void;
@@ -153,7 +153,7 @@ abstract class Binding
      * This function will extract the message from the current request.
      * An exception will be thrown if we are unable to process the message.
      *
-     * @return \SAML2\XML\samlp\AbstractMessage The received message.
+     * @return \SimpleSAML\SAML2\XML\samlp\AbstractMessage The received message.
      */
     abstract public function receive(): AbstractMessage;
 }

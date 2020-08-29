@@ -2,7 +2,7 @@
 
 declare(strict_types=1);
 
-namespace SAML2\Configuration;
+namespace SimpleSAML\SAML2\Configuration;
 
 use RobRichards\XMLSecLibs\XMLSecurityKey;
 use RuntimeException;

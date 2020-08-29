@@ -2,10 +2,10 @@
 
 declare(strict_types=1);
 
-namespace SAML2\XML\md;
+namespace SimpleSAML\SAML2\XML\md;
 
-use SAML2\XML\SignedElementTrait;
-use SAML2\XML\SignedElementInterface;
+use SimpleSAML\SAML2\XML\SignedElementTrait;
+use SimpleSAML\SAML2\XML\SignedElementInterface;
 
 /**
  * Abstract class that represents a signed metadata element.

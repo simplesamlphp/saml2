@@ -2,7 +2,7 @@
 
 declare(strict_types=1);
 
-namespace SAML2\Utilities;
+namespace SimpleSAML\SAML2\Utilities;
 
 /**
  * Collection of Utility functions specifically for certificates

@@ -2,7 +2,7 @@
 
 declare(strict_types=1);
 
-namespace SAML2\Certificate\Exception;
+namespace SimpleSAML\SAML2\Certificate\Exception;
 
 use DomainException;
 use Throwable;

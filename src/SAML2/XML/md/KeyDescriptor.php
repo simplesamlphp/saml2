@@ -2,14 +2,14 @@
 
 declare(strict_types=1);
 
-namespace SAML2\XML\md;
+namespace SimpleSAML\SAML2\XML\md;
 
 use DOMElement;
-use SAML2\Exception\InvalidDOMElementException;
-use SAML2\Exception\MissingElementException;
-use SAML2\Exception\TooManyElementsException;
-use SAML2\XML\ds\KeyInfo;
 use SimpleSAML\Assert\Assert;
+use SimpleSAML\SAML2\Exception\InvalidDOMElementException;
+use SimpleSAML\SAML2\Exception\MissingElementException;
+use SimpleSAML\SAML2\Exception\TooManyElementsException;
+use SimpleSAML\SAML2\XML\ds\KeyInfo;
 
 /**
  * Class representing a KeyDescriptor element.
@@ -30,14 +30,14 @@ final class KeyDescriptor extends AbstractMdElement
     /**
      * The KeyInfo for this key.
      *
-     * @var \SAML2\XML\ds\KeyInfo
+     * @var \SimpleSAML\SAML2\XML\ds\KeyInfo
      */
     protected $KeyInfo;
 
     /**
      * Supported EncryptionMethods.
      *
-     * @var \SAML2\XML\md\EncryptionMethod[]
+     * @var \SimpleSAML\SAML2\XML\md\EncryptionMethod[]
      */
     protected $EncryptionMethods = [];
 
@@ -45,9 +45,9 @@ final class KeyDescriptor extends AbstractMdElement
     /**
      * KeyDescriptor constructor.
      *
-     * @param \SAML2\XML\ds\KeyInfo $keyInfo
+     * @param \SimpleSAML\SAML2\XML\ds\KeyInfo $keyInfo
      * @param string|null $use
-     * @param \SAML2\XML\md\EncryptionMethod[] $encryptionMethod
+     * @param \SimpleSAML\SAML2\XML\md\EncryptionMethod[] $encryptionMethod
      */
     public function __construct(
         KeyInfo $keyInfo,
@@ -91,7 +91,7 @@ final class KeyDescriptor extends AbstractMdElement
     /**
      * Collect the value of the KeyInfo property.
      *
-     * @return \SAML2\XML\ds\KeyInfo
+     * @return \SimpleSAML\SAML2\XML\ds\KeyInfo
      */
     public function getKeyInfo(): KeyInfo
     {
@@ -102,7 +102,7 @@ final class KeyDescriptor extends AbstractMdElement
     /**
      * Set the value of the KeyInfo property.
      *
-     * @param \SAML2\XML\ds\KeyInfo $keyInfo
+     * @param \SimpleSAML\SAML2\XML\ds\KeyInfo $keyInfo
      */
     protected function setKeyInfo(KeyInfo $keyInfo): void
     {
@@ -113,7 +113,7 @@ final class KeyDescriptor extends AbstractMdElement
     /**
      * Collect the value of the EncryptionMethod property.
      *
-     * @return \SAML2\XML\md\EncryptionMethod[]
+     * @return \SimpleSAML\SAML2\XML\md\EncryptionMethod[]
      */
     public function getEncryptionMethods(): array
     {
@@ -124,7 +124,7 @@ final class KeyDescriptor extends AbstractMdElement
     /**
      * Set the value of the EncryptionMethod property.
      *
-     * @param \SAML2\XML\md\EncryptionMethod[] $encryptionMethods
+     * @param \SimpleSAML\SAML2\XML\md\EncryptionMethod[] $encryptionMethods
      * @throws \SimpleSAML\Assert\AssertionFailedException
      */
     protected function setEncryptionMethods(array $encryptionMethods): void

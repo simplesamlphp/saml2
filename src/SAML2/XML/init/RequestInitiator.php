@@ -2,11 +2,11 @@
 
 declare(strict_types=1);
 
-namespace SAML2\XML\init;
+namespace SimpleSAML\SAML2\XML\init;
 
 use DOMElement;
-use SAML2\XML\md\AbstractEndpointType;
-use Webmozart\Assert\Assert;
+use SimpleSAML\Assert\Assert;
+use SimpleSAML\SAML2\XML\md\AbstractEndpointType;
 
 /**
  * Class for handling the init:RequestInitiator element.

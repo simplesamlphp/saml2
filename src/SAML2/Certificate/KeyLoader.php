@@ -2,15 +2,15 @@
 
 declare(strict_types=1);
 
-namespace SAML2\Certificate;
+namespace SimpleSAML\SAML2\Certificate;
 
-use SAML2\Certificate\Exception\InvalidCertificateStructureException;
-use SAML2\Certificate\Exception\NoKeysFoundException;
-use SAML2\Certificate\KeyCollection;
-use SAML2\Configuration\CertificateProvider;
-use SAML2\Exception\InvalidArgumentException;
-use SAML2\Utilities\Certificate;
-use SAML2\Utilities\File;
+use SimpleSAML\SAML2\Certificate\Exception\InvalidCertificateStructureException;
+use SimpleSAML\SAML2\Certificate\Exception\NoKeysFoundException;
+use SimpleSAML\SAML2\Certificate\KeyCollection;
+use SimpleSAML\SAML2\Configuration\CertificateProvider;
+use SimpleSAML\SAML2\Exception\InvalidArgumentException;
+use SimpleSAML\SAML2\Utilities\Certificate;
+use SimpleSAML\SAML2\Utilities\File;
 
 /**
  * KeyLoader
@@ -18,7 +18,7 @@ use SAML2\Utilities\File;
 class KeyLoader
 {
     /**
-     * @var \SAML2\Certificate\KeyCollection
+     * @var \SimpleSAML\SAML2\Certificate\KeyCollection
      */
     private $loadedKeys;
 
@@ -36,10 +36,10 @@ class KeyLoader
      * Extracts the public keys given by the configuration. Mainly exists for BC purposes.
      * Prioritisation order is keys > certData > certificate
      *
-     * @param \SAML2\Configuration\CertificateProvider $config
-     * @param string|null                              $usage
-     * @param bool                                     $required
-     * @return \SAML2\Certificate\KeyCollection
+     * @param \SimpleSAML\SAML2\Configuration\CertificateProvider $config
+     * @param string|null $usage
+     * @param bool $required
+     * @return \SimpleSAML\SAML2\Certificate\KeyCollection
      */
     public static function extractPublicKeys(
         CertificateProvider $config,
@@ -53,10 +53,10 @@ class KeyLoader
 
 
     /**
-     * @param \SAML2\Configuration\CertificateProvider $config
+     * @param \SimpleSAML\SAML2\Configuration\CertificateProvider $config
      * @param null|string $usage
      * @param bool $required
-     * @return \SAML2\Certificate\KeyCollection
+     * @return \SimpleSAML\SAML2\Certificate\KeyCollection
      */
     public function loadKeysFromConfiguration(
         CertificateProvider $config,
@@ -148,7 +148,7 @@ class KeyLoader
 
 
     /**
-     * @return \SAML2\Certificate\KeyCollection
+     * @return \SimpleSAML\SAML2\Certificate\KeyCollection
      */
     public function getKeys(): KeyCollection
     {

@@ -2,7 +2,7 @@
 
 declare(strict_types=1);
 
-namespace SAML2\XML\saml;
+namespace SimpleSAML\SAML2\XML\saml;
 
 use DOMElement;
 use DOMNode;
@@ -10,17 +10,17 @@ use DOMNodeList;
 use Exception;
 use RobRichards\XMLSecLibs\XMLSecEnc;
 use RobRichards\XMLSecLibs\XMLSecurityKey;
-use SAML2\Constants;
-use SAML2\DOMDocumentFactory;
-use SAML2\Exception\InvalidDOMElementException;
-use SAML2\Exception\MissingElementException;
-use SAML2\Exception\TooManyElementsException;
-use SAML2\Utilities\Temporal;
-use SAML2\Utils;
-use SAML2\XML\Chunk;
-use SAML2\XML\SignedElementInterface;
-use SAML2\XML\SignedElementTrait;
 use SimpleSAML\Assert\Assert;
+use SimpleSAML\SAML2\Constants;
+use SimpleSAML\SAML2\DOMDocumentFactory;
+use SimpleSAML\SAML2\Exception\InvalidDOMElementException;
+use SimpleSAML\SAML2\Exception\MissingElementException;
+use SimpleSAML\SAML2\Exception\TooManyElementsException;
+use SimpleSAML\SAML2\Utilities\Temporal;
+use SimpleSAML\SAML2\Utils;
+use SimplesAML\SAML2\XML\Chunk;
+use SimpleSAML\SAML2\XML\SignedElementInterface;
+use SimpleSAML\SAML2\XML\SignedElementTrait;
 
 /**
  * Class representing a SAML 2 assertion.
@@ -51,7 +51,7 @@ class Assertion implements SignedElementInterface
      * If the issuer's format is \SAML2\Constants::NAMEID_ENTITY, this property will just take the issuer's string
      * value.
      *
-     * @var \SAML2\XML\saml\Issuer
+     * @var \SimpleSAML\SAML2\XML\saml\Issuer
      */
     private $issuer;
 
@@ -60,7 +60,7 @@ class Assertion implements SignedElementInterface
      *
      * If the NameId is null, no subject was included in the assertion.
      *
-     * @var \SAML2\XML\saml\NameID|null
+     * @var \SimpleSAML\SAML2\XML\saml\NameID|null
      */
     private $nameId;
 
@@ -150,7 +150,7 @@ class Assertion implements SignedElementInterface
      * See:
      * @url http://docs.oasis-open.org/security/saml/v2.0/saml-authn-context-2.0-os.pdf
      *
-     * @var \SAML2\XML\Chunk|null
+     * @var \SimpleSAML\SAML2\XML\Chunk|null
      */
     private $authnContextDecl = null;
 
@@ -232,7 +232,7 @@ class Assertion implements SignedElementInterface
     /**
      * The SubjectConfirmation elements of the Subject in the assertion.
      *
-     * @var \SAML2\XML\saml\SubjectConfirmation[]
+     * @var \SimpleSAML\SAML2\XML\saml\SubjectConfirmation[]
      */
     private $SubjectConfirmation = [];
 
@@ -727,7 +727,7 @@ class Assertion implements SignedElementInterface
     /**
      * Retrieve the issuer if this assertion.
      *
-     * @return \SAML2\XML\saml\Issuer The issuer of this assertion.
+     * @return \SimpleSAML\SAML2\XML\saml\Issuer The issuer of this assertion.
      */
     public function getIssuer(): Issuer
     {
@@ -738,7 +738,7 @@ class Assertion implements SignedElementInterface
     /**
      * Set the issuer of this message.
      *
-     * @param \SAML2\XML\saml\Issuer $issuer The new issuer of this assertion.
+     * @param \SimpleSAML\SAML2\XML\saml\Issuer $issuer The new issuer of this assertion.
      * @return void
      */
     public function setIssuer(Issuer $issuer): void
@@ -751,7 +751,7 @@ class Assertion implements SignedElementInterface
      * Retrieve the NameId of the subject in the assertion.
      *
      * @throws \Exception
-     * @return \SAML2\XML\saml\NameID|null The name identifier of the assertion.
+     * @return \SimpleSAML\SAML2\XML\saml\NameID|null The name identifier of the assertion.
      */
     public function getNameId(): ?NameID
     {
@@ -768,8 +768,8 @@ class Assertion implements SignedElementInterface
      *
      * The NameId must be a \SAML2\XML\saml\NameID object.
      *
-     * @see \SAML2\Utils::addNameId()
-     * @param \SAML2\XML\saml\NameID|null $nameId The name identifier of the assertion.
+     * @see \SimpleSAML\SAML2\Utils::addNameId()
+     * @param \SimpleSAML\SAML2\XML\saml\NameID|null $nameId The name identifier of the assertion.
      * @return void
      */
     public function setNameId(NameID $nameId = null): void
@@ -871,13 +871,13 @@ class Assertion implements SignedElementInterface
      *
      * @param XMLSecurityKey $key
      * @param array $blacklist
-     * @return \SAML2\XML\saml\Assertion
+     * @return \SimpleSAML\SAML2\XML\saml\Assertion
      *
      * @throws \SimpleSAML\Assert\AssertionFailedException if assertions are false
-     * @throws \SAML2\Exception\InvalidDOMElementException if the qualified name of the supplied element is wrong
-     * @throws \SAML2\Exception\MissingAttributeException if the supplied element is missing one of the mandatory attributes
-     * @throws \SAML2\Exception\MissingElementException if one of the mandatory child-elements is missing
-     * @throws \SAML2\Exception\TooManyElementsException if too many child-elements of a type are specified
+     * @throws \SimpleSAML\SAML2\Exception\InvalidDOMElementException if the qualified name of the supplied element is wrong
+     * @throws \SimpleSAML\SAML2\Exception\MissingAttributeException if the supplied element is missing one of the mandatory attributes
+     * @throws \SimpleSAML\SAML2\Exception\MissingElementException if one of the mandatory child-elements is missing
+     * @throws \SimpleSAML\SAML2\Exception\TooManyElementsException if too many child-elements of a type are specified
      * @throws \Exception
      * @return void
     public function decryptAttributes(XMLSecurityKey $key, array $blacklist = []): void
@@ -1163,7 +1163,7 @@ class Assertion implements SignedElementInterface
     /**
      * Set the authentication context declaration.
      *
-     * @param \SAML2\XML\Chunk $authnContextDecl
+     * @param \SimpleSAML\SAML2\XML\Chunk $authnContextDecl
      * @throws \Exception
      * @return void
      */
@@ -1185,7 +1185,7 @@ class Assertion implements SignedElementInterface
      * See:
      * @url http://docs.oasis-open.org/security/saml/v2.0/saml-authn-context-2.0-os.pdf
      *
-     * @return \SAML2\XML\Chunk|null
+     * @return \SimpleSAML\SAML2\XML\Chunk|null
      */
     public function getAuthnContextDecl(): ?Chunk
     {
@@ -1342,7 +1342,7 @@ class Assertion implements SignedElementInterface
     /**
      * Retrieve the SubjectConfirmation elements we have in our Subject element.
      *
-     * @return array Array of \SAML2\XML\saml\SubjectConfirmation elements.
+     * @return array Array of \SimpleSAML\SAML2\XML\saml\SubjectConfirmation elements.
      */
     public function getSubjectConfirmation(): array
     {
@@ -1353,7 +1353,7 @@ class Assertion implements SignedElementInterface
     /**
      * Set the SubjectConfirmation elements that should be included in the assertion.
      *
-     * @param array $SubjectConfirmation Array of \SAML2\XML\saml\SubjectConfirmation elements.
+     * @param array $SubjectConfirmation Array of \SimpleSAML\SAML2\XML\saml\SubjectConfirmation elements.
      * @return void
      */
     public function setSubjectConfirmation(array $SubjectConfirmation): void

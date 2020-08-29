@@ -2,11 +2,11 @@
 
 declare(strict_types=1);
 
-namespace SAML2\Utilities;
+namespace SimpleSAML\SAML2\Utilities;
 
 use ArrayIterator;
 use Closure;
-use SAML2\Exception\RuntimeException;
+use SimpleSAML\SAML2\Exception\RuntimeException;
 
 /**
  * Simple Array implementation of Collection.

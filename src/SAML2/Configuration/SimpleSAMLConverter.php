@@ -2,7 +2,7 @@
 
 declare(strict_types=1);
 
-namespace SAML2\Configuration;
+namespace SimpleSAML\SAML2\Configuration;
 
 use SimpleSAML\Configuration;
 
@@ -15,7 +15,7 @@ class SimpleSAMLConverter
      * @param \SimpleSAML\Configuration $configuration
      * @param string                    $certificatePrefix
      *
-     * @return \SAML2\Configuration\IdentityProvider
+     * @return \SimpleSAML\SAML2\Configuration\IdentityProvider
      *
      * @psalm-suppress UndefinedClass
      */
@@ -35,7 +35,7 @@ class SimpleSAMLConverter
      * @param \SimpleSAML\Configuration $configuration
      * @param string                    $certificatePrefix
      *
-     * @return \SAML2\Configuration\ServiceProvider
+     * @return \SimpleSAML\SAML2\Configuration\ServiceProvider
      *
      * @psalm-suppress UndefinedClass
      */

@@ -2,15 +2,15 @@
 
 declare(strict_types=1);
 
-namespace SAML2\XML\md;
+namespace SimpleSAML\SAML2\XML\md;
 
 use DOMElement;
 use InvalidArgumentException;
-use SAML2\Constants;
-use SAML2\Exception\InvalidDOMElementException;
-use SAML2\Exception\TooManyElementsException;
-use SAML2\Utils;
-use SAML2\XML\ds\Signature;
+use SimpleSAML\SAML2\Constants;
+use SimpleSAML\SAML2\Exception\InvalidDOMElementException;
+use SimpleSAML\SAML2\Exception\TooManyElementsException;
+use SimpleSAML\SAML2\Utils;
+use SimpleSAML\SAML2\XML\ds\Signature;
 use SimpleSAML\Assert\Assert;
 
 /**
@@ -30,37 +30,37 @@ final class EntityDescriptor extends AbstractMetadataDocument
     /**
      * Array with all roles for this entity.
      *
-     * Array of \SAML2\XML\md\RoleDescriptor objects (and subclasses of RoleDescriptor).
+     * Array of \SimpleSAML\SAML2\XML\md\RoleDescriptor objects (and subclasses of RoleDescriptor).
      *
-     * @var \SAML2\XML\md\AbstractRoleDescriptor[]
+     * @var \SimpleSAML\SAML2\XML\md\AbstractRoleDescriptor[]
      */
     protected $RoleDescriptor = [];
 
     /**
      * AffiliationDescriptor of this entity.
      *
-     * @var \SAML2\XML\md\AffiliationDescriptor|null
+     * @var \SimpleSAML\SAML2\XML\md\AffiliationDescriptor|null
      */
     protected $AffiliationDescriptor = null;
 
     /**
      * Organization of this entity.
      *
-     * @var \SAML2\XML\md\Organization|null
+     * @var \SimpleSAML\SAML2\XML\md\Organization|null
      */
     protected $Organization = null;
 
     /**
      * ContactPerson elements for this entity.
      *
-     * @var \SAML2\XML\md\ContactPerson[]
+     * @var \SimpleSAML\SAML2\XML\md\ContactPerson[]
      */
     protected $ContactPerson = [];
 
     /**
      * AdditionalMetadataLocation elements for this entity.
      *
-     * @var \SAML2\XML\md\AdditionalMetadataLocation[]
+     * @var \SimpleSAML\SAML2\XML\md\AdditionalMetadataLocation[]
      */
     protected $AdditionalMetadataLocation = [];
 
@@ -72,13 +72,13 @@ final class EntityDescriptor extends AbstractMetadataDocument
      * @param string|null $id The ID for this document. Defaults to null.
      * @param int|null $validUntil Unix time of validify for this document. Defaults to null.
      * @param string|null $cacheDuration Maximum time this document can be cached. Defaults to null.
-     * @param \SAML2\XML\md\Extensions|null $extensions An array of extensions.
-     * @param \SAML2\XML\md\AbstractRoleDescriptor[] $roleDescriptors An array of role descriptors.
-     * @param \SAML2\XML\md\AffiliationDescriptor|null $affiliationDescriptor An affiliation descriptor to
+     * @param \SimpleSAML\SAML2\XML\md\Extensions|null $extensions An array of extensions.
+     * @param \SimpleSAML\SAML2\XML\md\AbstractRoleDescriptor[] $roleDescriptors An array of role descriptors.
+     * @param \SimpleSAML\SAML2\XML\md\AffiliationDescriptor|null $affiliationDescriptor An affiliation descriptor to
      *   use instead of role descriptors.
-     * @param \SAML2\XML\md\Organization|null $organization The organization responsible for the SAML entity.
-     * @param \SAML2\XML\md\ContactPerson[] $contacts A list of contact persons for this SAML entity.
-     * @param \SAML2\XML\md\AdditionalMetadataLocation[] $additionalMdLocations A list of
+     * @param \SimpleSAML\SAML2\XML\md\Organization|null $organization The organization responsible for the SAML entity.
+     * @param \SimpleSAML\SAML2\XML\md\ContactPerson[] $contacts A list of contact persons for this SAML entity.
+     * @param \SimpleSAML\SAML2\XML\md\AdditionalMetadataLocation[] $additionalMdLocations A list of
      *   additional metadata locations.
      *
      * @throws \Exception
@@ -116,11 +116,11 @@ final class EntityDescriptor extends AbstractMetadataDocument
      * Convert an existing XML into an EntityDescriptor object
      *
      * @param \DOMElement $xml An existing EntityDescriptor XML document.
-     * @return \SAML2\XML\md\EntityDescriptor An object representing the given document.
+     * @return \SimpleSAML\SAML2\XML\md\EntityDescriptor An object representing the given document.
      *
-     * @throws \SAML2\Exception\InvalidDOMElementException if the qualified name of the supplied element is wrong
-     * @throws \SAML2\Exception\MissingAttributeException if the supplied element is missing one of the mandatory attributes
-     * @throws \SAML2\Exception\TooManyElementsException if too many child-elements of a type are specified
+     * @throws \SimpleSAML\SAML2\Exception\InvalidDOMElementException if the qualified name of the supplied element is wrong
+     * @throws \SimpleSAML\SAML2\Exception\MissingAttributeException if the supplied element is missing one of the mandatory attributes
+     * @throws \SimpleSAML\SAML2\Exception\TooManyElementsException if too many child-elements of a type are specified
      */
     public static function fromXML(DOMElement $xml): object
     {
@@ -248,7 +248,7 @@ final class EntityDescriptor extends AbstractMetadataDocument
     /**
      * Collect the value of the RoleDescriptor property.
      *
-     * @return \SAML2\XML\md\AbstractRoleDescriptor[]
+     * @return \SimpleSAML\SAML2\XML\md\AbstractRoleDescriptor[]
      */
     public function getRoleDescriptors(): array
     {
@@ -259,7 +259,7 @@ final class EntityDescriptor extends AbstractMetadataDocument
     /**
      * Set the value of the RoleDescriptor property.
      *
-     * @param \SAML2\XML\md\AbstractRoleDescriptor[] $roleDescriptors
+     * @param \SimpleSAML\SAML2\XML\md\AbstractRoleDescriptor[] $roleDescriptors
      * @return void
      * @throws \SimpleSAML\Assert\AssertionFailedException
      */
@@ -277,7 +277,7 @@ final class EntityDescriptor extends AbstractMetadataDocument
     /**
      * Collect the value of the AffiliationDescriptor property.
      *
-     * @return \SAML2\XML\md\AffiliationDescriptor|null
+     * @return \SimpleSAML\SAML2\XML\md\AffiliationDescriptor|null
      */
     public function getAffiliationDescriptor(): ?AffiliationDescriptor
     {
@@ -288,7 +288,7 @@ final class EntityDescriptor extends AbstractMetadataDocument
     /**
      * Set the value of the AffliationDescriptor property.
      *
-     * @param \SAML2\XML\md\AffiliationDescriptor|null $affiliationDescriptor
+     * @param \SimpleSAML\SAML2\XML\md\AffiliationDescriptor|null $affiliationDescriptor
      * @return void
      */
     protected function setAffiliationDescriptor(?AffiliationDescriptor $affiliationDescriptor = null): void
@@ -300,7 +300,7 @@ final class EntityDescriptor extends AbstractMetadataDocument
     /**
      * Collect the value of the Organization property.
      *
-     * @return \SAML2\XML\md\Organization|null
+     * @return \SimpleSAML\SAML2\XML\md\Organization|null
      */
     public function getOrganization(): ?Organization
     {
@@ -311,7 +311,7 @@ final class EntityDescriptor extends AbstractMetadataDocument
     /**
      * Set the value of the Organization property.
      *
-     * @param \SAML2\XML\md\Organization|null $organization
+     * @param \SimpleSAML\SAML2\XML\md\Organization|null $organization
      * @return void
      */
     protected function setOrganization(?Organization $organization = null): void
@@ -323,7 +323,7 @@ final class EntityDescriptor extends AbstractMetadataDocument
     /**
      * Collect the value of the ContactPerson property.
      *
-     * @return \SAML2\XML\md\ContactPerson[]
+     * @return \SimpleSAML\SAML2\XML\md\ContactPerson[]
      */
     public function getContactPersons(): array
     {
@@ -352,7 +352,7 @@ final class EntityDescriptor extends AbstractMetadataDocument
     /**
      * Collect the value of the AdditionalMetadataLocation property.
      *
-     * @return \SAML2\XML\md\AdditionalMetadataLocation[]
+     * @return \SimpleSAML\SAML2\XML\md\AdditionalMetadataLocation[]
      */
     public function getAdditionalMetadataLocations(): array
     {

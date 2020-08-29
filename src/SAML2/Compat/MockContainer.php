@@ -2,13 +2,13 @@
 
 declare(strict_types=1);
 
-namespace SAML2\Compat;
+namespace SimpleSAML\SAML2\Compat;
 
 use Psr\Log\LoggerInterface;
 use Psr\Log\NullLogger;
 
 /**
- * Class \SAML2\Compat\MockContainer
+ * Class \SimpleSAML\SAML2\Compat\MockContainer
  */
 class MockContainer implements ContainerInterface
 {

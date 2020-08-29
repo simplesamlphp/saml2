@@ -2,17 +2,17 @@
 
 declare(strict_types=1);
 
-namespace SAML2\XML\md;
+namespace SimpleSAML\SAML2\XML\md;
 
 use DOMElement;
-use SAML2\Constants;
-use SAML2\Exception\InvalidDOMElementException;
-use SAML2\Exception\MissingElementException;
-use SAML2\Exception\TooManyElementsException;
-use SAML2\Utils;
-use SAML2\XML\ds\Signature;
-use SAML2\XML\saml\Attribute;
 use SimpleSAML\Assert\Assert;
+use SimpleSAML\SAML2\Constants;
+use SimpleSAML\SAML2\Exception\InvalidDOMElementException;
+use SimpleSAML\SAML2\Exception\MissingElementException;
+use SimpleSAML\SAML2\Exception\TooManyElementsException;
+use SimpleSAML\SAML2\Utils;
+use SimpleSAML\SAML2\XML\ds\Signature;
+use SimpleSAML\SAML2\XML\saml\Attribute;
 
 /**
  * Class representing SAML 2 metadata AttributeAuthorityDescriptor.
@@ -26,7 +26,7 @@ final class AttributeAuthorityDescriptor extends AbstractRoleDescriptor
      *
      * Array with EndpointType objects.
      *
-     * @var \SAML2\XML\md\AttributeService[]
+     * @var \SimpleSAML\SAML2\XML\md\AttributeService[]
      */
     protected $AttributeServices = [];
 
@@ -35,7 +35,7 @@ final class AttributeAuthorityDescriptor extends AbstractRoleDescriptor
      *
      * Array with EndpointType objects.
      *
-     * @var \SAML2\XML\md\AssertionIDRequestService[]
+     * @var \SimpleSAML\SAML2\XML\md\AssertionIDRequestService[]
      */
     protected $AssertionIDRequestServices = [];
 
@@ -60,7 +60,7 @@ final class AttributeAuthorityDescriptor extends AbstractRoleDescriptor
     /**
      * List of supported attributes.
      *
-     * Array with \SAML2\XML\saml\Attribute objects.
+     * Array with \SimpleSAML\SAML2\XML\saml\Attribute objects.
      *
      * @var Attribute[]
      */
@@ -70,20 +70,20 @@ final class AttributeAuthorityDescriptor extends AbstractRoleDescriptor
     /**
      * AttributeAuthorityDescriptor constructor.
      *
-     * @param \SAML2\XML\md\AttributeService[] $attributeServices
+     * @param \SimpleSAML\SAML2\XML\md\AttributeService[] $attributeServices
      * @param string[] $protocolSupportEnumeration
-     * @param \SAML2\XML\md\AssertionIDRequestService[]|null $assertionIDRequestService
+     * @param \SimpleSAML\SAML2\XML\md\AssertionIDRequestService[]|null $assertionIDRequestService
      * @param string[]|null $nameIDFormats
      * @param string[]|null $attributeProfiles
-     * @param \SAML2\XML\saml\Attribute[]|null $attributes
+     * @param \SimpleSAML\SAML2\XML\saml\Attribute[]|null $attributes
      * @param string|null $ID
      * @param int|null $validUntil
      * @param string|null $cacheDuration
-     * @param \SAML2\XML\md\Extensions|null $extensions
+     * @param \SimpleSAML\SAML2\XML\md\Extensions|null $extensions
      * @param string|null $errorURL
-     * @param \SAML2\XML\md\Organization|null $organization
-     * @param \SAML2\XML\md\KeyDescriptor[] $keyDescriptors
-     * @param \SAML2\XML\md\ContactPerson[] $contacts
+     * @param \SimpleSAML\SAML2\XML\md\Organization|null $organization
+     * @param \SimpleSAML\SAML2\XML\md\KeyDescriptor[] $keyDescriptors
+     * @param \SimpleSAML\SAML2\XML\md\ContactPerson[] $contacts
      */
     public function __construct(
         array $attributeServices,
@@ -123,7 +123,7 @@ final class AttributeAuthorityDescriptor extends AbstractRoleDescriptor
     /**
      * Collect the value of the AttributeService-property
      *
-     * @return \SAML2\XML\md\AttributeService[]
+     * @return \SimpleSAML\SAML2\XML\md\AttributeService[]
      */
     public function getAttributeServices(): array
     {
@@ -134,7 +134,7 @@ final class AttributeAuthorityDescriptor extends AbstractRoleDescriptor
     /**
      * Set the value of the AttributeService-property
      *
-     * @param \SAML2\XML\md\AttributeService[] $attributeServices
+     * @param \SimpleSAML\SAML2\XML\md\AttributeService[] $attributeServices
      * @return void
      */
     protected function setAttributeServices(array $attributeServices): void
@@ -183,7 +183,7 @@ final class AttributeAuthorityDescriptor extends AbstractRoleDescriptor
     /**
      * Collect the value of the AssertionIDRequestService-property
      *
-     * @return \SAML2\XML\md\AssertionIDRequestService[]
+     * @return \SimpleSAML\SAML2\XML\md\AssertionIDRequestService[]
      */
     public function getAssertionIDRequestServices(): array
     {
@@ -194,7 +194,7 @@ final class AttributeAuthorityDescriptor extends AbstractRoleDescriptor
     /**
      * Set the value of the AssertionIDRequestService-property
      *
-     * @param \SAML2\XML\md\AssertionIDRequestService[] $assertionIDRequestServices
+     * @param \SimpleSAML\SAML2\XML\md\AssertionIDRequestService[] $assertionIDRequestServices
      * @return void
      */
     protected function setAssertionIDRequestServices(?array $assertionIDRequestServices): void
@@ -249,7 +249,7 @@ final class AttributeAuthorityDescriptor extends AbstractRoleDescriptor
     /**
      * Set the value of the Attribute-property
      *
-     * @param \SAML2\XML\saml\Attribute[]|null $attributes
+     * @param \SimpleSAML\SAML2\XML\saml\Attribute[]|null $attributes
      */
     protected function setAttributes(?array $attributes): void
     {
@@ -267,10 +267,10 @@ final class AttributeAuthorityDescriptor extends AbstractRoleDescriptor
      * @param \DOMElement $xml The XML element we should load.
      * @return self
      *
-     * @throws \SAML2\Exception\InvalidDOMElementException if the qualified name of the supplied element is wrong
-     * @throws \SAML2\Exception\MissingAttributeException if the supplied element is missing one of the mandatory attributes
-     * @throws \SAML2\Exception\MissingElementException if one of the mandatory child-elements is missing
-     * @throws \SAML2\Exception\TooManyElementsException if too many child-elements of a type are specified
+     * @throws \SimpleSAML\SAML2\Exception\InvalidDOMElementException if the qualified name of the supplied element is wrong
+     * @throws \SimpleSAML\SAML2\Exception\MissingAttributeException if the supplied element is missing one of the mandatory attributes
+     * @throws \SimpleSAML\SAML2\Exception\MissingElementException if one of the mandatory child-elements is missing
+     * @throws \SimpleSAML\SAML2\Exception\TooManyElementsException if too many child-elements of a type are specified
      */
     public static function fromXML(DOMElement $xml): object
     {

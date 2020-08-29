@@ -4,7 +4,7 @@ declare(strict_types=1);
 
 namespace SAML2\Configuration;
 
-use SAML2\Exception\InvalidArgumentException;
+use SimpleSAML\SAML2\Exception\InvalidArgumentException;
 
 /**
  * Value Object representing the current destination
@@ -27,7 +27,7 @@ class Destination
 
 
     /**
-     * @param \SAML2\Configuration\Destination $otherDestination
+     * @param \SimpleSAML\SAML2\Configuration\Destination $otherDestination
      *
      * @return bool
      */

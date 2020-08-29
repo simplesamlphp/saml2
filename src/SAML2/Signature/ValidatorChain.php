@@ -2,11 +2,11 @@
 
 declare(strict_types=1);
 
-namespace SAML2\Signature;
+namespace SimpleSAML\SAML2\Signature;
 
 use Psr\Log\LoggerInterface;
-use SAML2\Configuration\CertificateProvider;
-use SAML2\XML\SignedElementInterface;
+use SimpleSAML\SAML2\Configuration\CertificateProvider;
+use SimpleSAML\SAML2\XML\SignedElementInterface;
 
 /**
  * Allows for validation of a signature trying different validators till a validator is found
@@ -16,20 +16,16 @@ use SAML2\XML\SignedElementInterface;
  */
 class ValidatorChain implements ValidatorInterface
 {
-    /**
-     * @var \Psr\Log\LoggerInterface
-     */
+    /** @var \Psr\Log\LoggerInterface */
     private $logger;
 
-    /**
-     * @var  \SAML2\Signature\ChainedValidator[]
-     */
+    /** @var \SimpleSAML\SAML2\Signature\ChainedValidator[] */
     private $validators = [];
 
 
     /**
      * @param \Psr\Log\LoggerInterface $logger
-     * @param \SAML2\Signature\ChainedValidator[] $validators
+     * @param \SimpleSAML\SAML2\Signature\ChainedValidator[] $validators
      */
     public function __construct(LoggerInterface $logger, array $validators)
     {
@@ -43,7 +39,7 @@ class ValidatorChain implements ValidatorInterface
 
 
     /**
-     * @param \SAML2\Signature\ChainedValidator $validator
+     * @param \SimpleSAML\SAML2\Signature\ChainedValidator $validator
      * @return void
      */
     public function appendValidator(ChainedValidator $validator): void
@@ -53,8 +49,8 @@ class ValidatorChain implements ValidatorInterface
 
 
     /**
-     * @param \SAML2\XML\SignedElementInterface $signedElement
-     * @param \SAML2\Configuration\CertificateProvider $configuration
+     * @param \SimpleSAML\SAML2\XML\SignedElementInterface $signedElement
+     * @param \SimpleSAML\SAML2\Configuration\CertificateProvider $configuration
      *
      * @return bool
      */

@@ -2,14 +2,14 @@
 
 declare(strict_types=1);
 
-namespace SAML2\XML\md;
+namespace SimpleSAML\SAML2\XML\md;
 
 use DOMElement;
-use SAML2\Exception\InvalidDOMElementException;
-use SAML2\Exception\TooManyElementsException;
-use SAML2\Utils;
-use SAML2\XML\Chunk;
 use SimpleSAML\Assert\Assert;
+use SimpleSAML\SAML2\Exception\InvalidDOMElementException;
+use SimpleSAML\SAML2\Exception\TooManyElementsException;
+use SimpleSAML\SAML2\Utils;
+use SimpleSAML\SAML2\XML\Chunk;
 
 /**
  * Class representing unknown RoleDescriptors.
@@ -21,7 +21,7 @@ final class UnknownRoleDescriptor extends AbstractRoleDescriptor
     /**
      * This RoleDescriptor as XML
      *
-     * @var \SAML2\XML\Chunk
+     * @var \SimpleSAML\SAML2\XML\Chunk
      * @psalm-suppress PropertyNotSetInConstructor
      */
     protected $xml;
@@ -31,11 +31,11 @@ final class UnknownRoleDescriptor extends AbstractRoleDescriptor
      * Initialize an unknown RoleDescriptor.
      *
      * @param \DOMElement $xml The XML element we should load.
-     * @return \SAML2\XML\md\UnknownRoleDescriptor
+     * @return \SimpleSAML\SAML2\XML\md\UnknownRoleDescriptor
      *
-     * @throws \SAML2\Exception\InvalidDOMElementException if the qualified name of the supplied element is wrong
-     * @throws \SAML2\Exception\MissingAttributeException if the supplied element is missing one of the mandatory attributes
-     * @throws \SAML2\Exception\TooManyElementsException if too many child-elements of a type are specified
+     * @throws \SimpleSAML\SAML2\Exception\InvalidDOMElementException if the qualified name of the supplied element is wrong
+     * @throws \SimpleSAML\SAML2\Exception\MissingAttributeException if the supplied element is missing one of the mandatory attributes
+     * @throws \SimpleSAML\SAML2\Exception\TooManyElementsException if too many child-elements of a type are specified
      */
     public static function fromXML(DOMElement $xml): object
     {
@@ -67,7 +67,7 @@ final class UnknownRoleDescriptor extends AbstractRoleDescriptor
     /**
      * Get the original XML of this descriptor as a Chunk object.
      *
-     * @return \SAML2\XML\Chunk
+     * @return \SimpleSAML\SAML2\XML\Chunk
      */
     public function getXML(): Chunk
     {

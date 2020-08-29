@@ -2,16 +2,16 @@
 
 declare(strict_types=1);
 
-namespace SAML2\XML\md;
+namespace SimpleSAML\SAML2\XML\md;
 
 use DOMElement;
 use Exception;
-use SAML2\Constants;
-use SAML2\Exception\InvalidDOMElementException;
-use SAML2\Exception\TooManyElementsException;
-use SAML2\Utils;
-use SAML2\XML\ds\Signature;
 use SimpleSAML\Assert\Assert;
+use SimpleSAML\SAML2\Constants;
+use SimpleSAML\SAML2\Exception\InvalidDOMElementException;
+use SimpleSAML\SAML2\Exception\TooManyElementsException;
+use SimpleSAML\SAML2\Utils;
+use SimpleSAML\SAML2\XML\ds\Signature;
 
 /**
  * Class representing SAML 2 AffiliationDescriptor element.
@@ -54,8 +54,8 @@ final class AffiliationDescriptor extends AbstractMetadataDocument
      * @param string|null $ID The ID for this document. Defaults to null.
      * @param int|null $validUntil Unix time of validity for this document. Defaults to null.
      * @param string|null $cacheDuration Maximum time this document can be cached. Defaults to null.
-     * @param \SAML2\XML\md\Extensions|null An array of extensions. Defaults to an empty array.
-     * @param \SAML2\XML\md\KeyDescriptor[] $keyDescriptors An optional array of KeyDescriptors. Defaults to an empty array.
+     * @param \SimpleSAML\SAML2\XML\md\Extensions|null An array of extensions. Defaults to an empty array.
+     * @param \SimpleSAML\SAML2\XML\md\KeyDescriptor[] $keyDescriptors An optional array of KeyDescriptors. Defaults to an empty array.
      */
     public function __construct(
         string $ownerID,
@@ -77,11 +77,11 @@ final class AffiliationDescriptor extends AbstractMetadataDocument
      * Initialize a AffiliationDescriptor.
      *
      * @param \DOMElement $xml The XML element we should load.
-     * @return \SAML2\XML\md\AffiliationDescriptor
+     * @return \SimpleSAML\SAML2\XML\md\AffiliationDescriptor
      *
-     * @throws \SAML2\Exception\InvalidDOMElementException if the qualified name of the supplied element is wrong
-     * @throws \SAML2\Exception\MissingAttributeException if the supplied element is missing one of the mandatory attributes
-     * @throws \SAML2\Exception\TooManyElementsException if too many child-elements of a type are specified
+     * @throws \SimpleSAML\SAML2\Exception\InvalidDOMElementException if the qualified name of the supplied element is wrong
+     * @throws \SimpleSAML\SAML2\Exception\MissingAttributeException if the supplied element is missing one of the mandatory attributes
+     * @throws \SimpleSAML\SAML2\Exception\TooManyElementsException if too many child-elements of a type are specified
      */
     public static function fromXML(DOMElement $xml): object
     {
@@ -174,7 +174,7 @@ final class AffiliationDescriptor extends AbstractMetadataDocument
     /**
      * Collect the value of the KeyDescriptor-property
      *
-     * @return \SAML2\XML\md\KeyDescriptor[]
+     * @return \SimpleSAML\SAML2\XML\md\KeyDescriptor[]
      */
     public function getKeyDescriptors(): array
     {
@@ -185,7 +185,7 @@ final class AffiliationDescriptor extends AbstractMetadataDocument
     /**
      * Set the value of the KeyDescriptor-property
      *
-     * @param \SAML2\XML\md\KeyDescriptor[] $keyDescriptors
+     * @param \SimpleSAML\SAML2\XML\md\KeyDescriptor[] $keyDescriptors
      * @return void
      */
     protected function setKeyDescriptors(array $keyDescriptors): void

@@ -2,11 +2,11 @@
 
 declare(strict_types=1);
 
-namespace SAML2\XML;
+namespace SimpleSAML\SAML2\XML;
 
 use DOMElement;
-use SAML2\XML\AbstractXMLElement;
 use SimpleSAML\Assert\Assert;
+use SimpleSAML\SAML2\XML\AbstractXMLElement;
 
 /**
  * Trait grouping common functionality for elements implementing ExtensionType.
@@ -16,7 +16,7 @@ use SimpleSAML\Assert\Assert;
 trait ExtensionsTrait
 {
     /**
-     * @var \SAML2\XML\AbstractXMLElement[]
+     * @var \SimpleSAML\SAML2\XML\AbstractXMLElement[]
      */
     protected $extensions = [];
 
@@ -24,7 +24,7 @@ trait ExtensionsTrait
     /**
      * Extensions constructor.
      *
-     * @var \SAML2\XML\AbstractXMLElement[]
+     * @var \SimpleSAML\SAML2\XML\AbstractXMLElement[]
      */
     public function __construct(array $extensions)
     {
@@ -36,7 +36,7 @@ trait ExtensionsTrait
     /**
      * Get an array with all extensions present.
      *
-     * @return \SAML2\XML\AbstractXMLElement[]
+     * @return \SimpleSAML\SAML2\XML\AbstractXMLElement[]
      */
     public function getList(): array
     {

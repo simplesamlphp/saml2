@@ -2,30 +2,29 @@
 
 declare(strict_types=1);
 
-namespace SAML2\Assertion;
+namespace SimpleSAML\SAML2\Assertion;
 
 use Psr\Log\LoggerInterface;
-use SAML2\XML\saml\Assertion;
-use SAML2\Assertion\Exception\NotDecryptedException;
-use SAML2\Certificate\PrivateKeyLoader;
-use SAML2\Configuration\IdentityProvider;
-use SAML2\Configuration\ServiceProvider;
-use SAML2\XML\saml\EncryptedAssertion;
+use SimpleSAML\SAML2\Assertion\Exception\NotDecryptedException;
+use SimpleSAML\SAML2\Certificate\PrivateKeyLoader;
+use SimpleSAML\SAML2\Configuration\IdentityProvider;
+use SimpleSAML\SAML2\Configuration\ServiceProvider;
+use SimpleSAML\SAML2\XML\saml\EncryptedAssertion;
 
 class Decrypter
 {
     /**
-     * @var \SAML2\Configuration\IdentityProvider
+     * @var \SimpleSAML\SAML2\Configuration\IdentityProvider
      */
     private $identityProvider;
 
     /**
-     * @var \SAML2\Configuration\ServiceProvider
+     * @var \SimpleSAML\SAML2\Configuration\ServiceProvider
      */
     private $serviceProvider;
 
     /**
-     * @var \SAML2\Certificate\PrivateKeyLoader
+     * @var \SimpleSAML\SAML2\Certificate\PrivateKeyLoader
      */
     private $privateKeyLoader;
 
@@ -39,9 +38,9 @@ class Decrypter
      * Constructor for Decrypter.
      *
      * @param \Psr\Log\LoggerInterface $logger
-     * @param \SAML2\Configuration\IdentityProvider $identityProvider
-     * @param \SAML2\Configuration\ServiceProvider $serviceProvider
-     * @param \SAML2\Certificate\PrivateKeyLoader $privateKeyLoader
+     * @param \SimpleSAML\SAML2\Configuration\IdentityProvider $identityProvider
+     * @param \SimpleSAML\SAML2\Configuration\ServiceProvider $serviceProvider
+     * @param \SimpleSAML\SAML2\Certificate\PrivateKeyLoader $privateKeyLoader
      */
     public function __construct(
         LoggerInterface $logger,
@@ -69,9 +68,9 @@ class Decrypter
 
 
     /**
-     * @param \SAML2\XML\saml\EncryptedAssertion $assertion
+     * @param \SimpleSAML\SAML2\XML\saml\EncryptedAssertion $assertion
      *
-     * @return \SAML2\XML\saml\Assertion
+     * @return \SimpleSAML\SAML2\XML\saml\Assertion
      */
     public function decrypt(EncryptedAssertion $assertion): Assertion
     {

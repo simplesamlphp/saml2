@@ -2,18 +2,18 @@
 
 declare(strict_types=1);
 
-namespace SAML2\XML\md;
+namespace SimpleSAML\SAML2\XML\md;
 
 use DOMElement;
 use Exception;
 use InvalidArgumentException;
-use SAML2\Constants;
-use SAML2\Exception\InvalidDOMElementException;
-use SAML2\Exception\TooManyElementsException;
-use SAML2\Utils;
-use SAML2\XML\ExtendableAttributesTrait;
-use SAML2\XML\ExtendableElementTrait;
 use SimpleSAML\Assert\Assert;
+use SimpleSAML\SAML2\Constants;
+use SimpleSAML\SAML2\Exception\InvalidDOMElementException;
+use SimpleSAML\SAML2\Exception\TooManyElementsException;
+use SimpleSAML\SAML2\Utils;
+use SimpleSAML\SAML2\XML\ExtendableAttributesTrait;
+use SimpleSAML\SAML2\XML\ExtendableElementTrait;
 
 /**
  * Class representing SAML 2 ContactPerson.
@@ -75,7 +75,7 @@ final class ContactPerson extends AbstractMdElement
      * @param string|null                    $company
      * @param string|null                    $givenName
      * @param string|null                    $surName
-     * @param \SAML2\XML\md\Extensions|null  $extensions
+     * @param \SimpleSAML\SAML2\XML\md\Extensions|null  $extensions
      * @param string[]                       $email
      * @param string[]                       $telephone
      * @param \DOMAttr[]                     $namespacedAttributes
@@ -107,9 +107,9 @@ final class ContactPerson extends AbstractMdElement
      * @param \DOMElement $xml The XML element we should load.
      * @return self
      *
-     * @throws \SAML2\Exception\InvalidDOMElementException if the qualified name of the supplied element is wrong
-     * @throws \SAML2\Exception\MissingAttributeException if the supplied element is missing one of the mandatory attributes
-     * @throws \SAML2\Exception\TooManyElementsException if too many child-elements of a type are specified
+     * @throws \SimpleSAML\SAML2\Exception\InvalidDOMElementException if the qualified name of the supplied element is wrong
+     * @throws \SimpleSAML\SAML2\Exception\MissingAttributeException if the supplied element is missing one of the mandatory attributes
+     * @throws \SimpleSAML\SAML2\Exception\TooManyElementsException if too many child-elements of a type are specified
      */
     public static function fromXML(DOMElement $xml): object
     {

@@ -2,12 +2,12 @@
 
 declare(strict_types=1);
 
-namespace SAML2\XML\mdrpi;
+namespace SimpleSAML\SAML2\XML\mdrpi;
 
 use DOMElement;
-use SAML2\Exception\InvalidDOMElementException;
-use SAML2\Utils;
 use SimpleSAML\Assert\Assert;
+use SimpleSAML\SAML2\Exception\InvalidDOMElementException;
+use SimpleSAML\SAML2\Utils;
 
 /**
  * Class for handling the mdrpi:PublicationInfo element.
@@ -169,8 +169,8 @@ final class PublicationInfo extends AbstractMdrpiElement
      * @param \DOMElement $xml The XML element we should load
      * @return self
      *
-     * @throws \SAML2\Exception\InvalidDOMElementException if the qualified name of the supplied element is wrong
-     * @throws \SAML2\Exception\MissingAttributeException if the supplied element is missing one of the mandatory attributes
+     * @throws \SimpleSAML\SAML2\Exception\InvalidDOMElementException if the qualified name of the supplied element is wrong
+     * @throws \SimpleSAML\SAML2\Exception\MissingAttributeException if the supplied element is missing one of the mandatory attributes
      */
     public static function fromXML(DOMElement $xml): object
     {

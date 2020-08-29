@@ -2,13 +2,13 @@
 
 declare(strict_types=1);
 
-namespace SAML2\XML\mdui;
+namespace SimpleSAML\SAML2\XML\mdui;
 
 use DOMElement;
-use SAML2\Exception\InvalidDOMElementException;
-use SAML2\Utils;
-use SAML2\XML\Chunk;
 use SimpleSAML\Assert\Assert;
+use SimpleSAML\SAML2\Exception\InvalidDOMElementException;
+use SimpleSAML\SAML2\Utils;
+use SimpleSAML\SAML2\XML\Chunk;
 
 /**
  * Class for handling the metadata extensions for login and discovery user interface
@@ -23,7 +23,7 @@ final class DiscoHints extends AbstractMduiElement
      *
      * The elements can be any of the other \SAML2\XML\mdui\* elements.
      *
-     * @var \SAML2\XML\Chunk[]
+     * @var \SimpleSAML\SAML2\XML\Chunk[]
      */
     protected $children = [];
 
@@ -52,7 +52,7 @@ final class DiscoHints extends AbstractMduiElement
     /**
      * Create a DiscoHints element.
      *
-     * @param \SAML2\XML\Chunk[] $children
+     * @param \SimpleSAML\SAML2\XML\Chunk[] $children
      * @param string[] $IPHint
      * @param string[] $DomainHint
      * @param string[] $GeolocationHint
@@ -146,7 +146,7 @@ final class DiscoHints extends AbstractMduiElement
     /**
      * Collect the value of the children-property
      *
-     * @return \SAML2\XML\Chunk[]
+     * @return \SimpleSAML\SAML2\XML\Chunk[]
      */
     public function getChildren(): array
     {
@@ -171,7 +171,7 @@ final class DiscoHints extends AbstractMduiElement
     /**
      * Add the value to the children-property
      *
-     * @param \SAML2\XML\Chunk $child
+     * @param \SimpleSAML\SAML2\XML\Chunk $child
      * @return void
      */
     public function addChild(Chunk $child): void
@@ -202,7 +202,7 @@ final class DiscoHints extends AbstractMduiElement
      * @param \DOMElement $xml The XML element we should load
      * @return self
      *
-     * @throws \SAML2\Exception\InvalidDOMElementException if the qualified name of the supplied element is wrong
+     * @throws \SimpleSAML\SAML2\Exception\InvalidDOMElementException if the qualified name of the supplied element is wrong
      */
     public static function fromXML(DOMElement $xml): object
     {

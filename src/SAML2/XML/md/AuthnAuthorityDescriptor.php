@@ -2,15 +2,15 @@
 
 declare(strict_types=1);
 
-namespace SAML2\XML\md;
+namespace SimpleSAML\SAML2\XML\md;
 
 use DOMElement;
-use SAML2\Constants;
-use SAML2\Exception\InvalidDOMElementException;
-use SAML2\Exception\TooManyElementsException;
-use SAML2\Utils;
-use SAML2\XML\ds\Signature;
 use SimpleSAML\Assert\Assert;
+use SimpleSAML\SAML2\Constants;
+use SimpleSAML\SAML2\Exception\InvalidDOMElementException;
+use SimpleSAML\SAML2\Exception\TooManyElementsException;
+use SimpleSAML\SAML2\Utils;
+use SimpleSAML\SAML2\XML\ds\Signature;
 
 /**
  * Class representing SAML 2 metadata AuthnAuthorityDescriptor.
@@ -22,14 +22,14 @@ final class AuthnAuthorityDescriptor extends AbstractRoleDescriptor
     /**
      * List of AuthnQueryService endpoints.
      *
-     * @var \SAML2\XML\md\AbstractEndpointType[]
+     * @var \SimpleSAML\SAML2\XML\md\AbstractEndpointType[]
      */
     protected $AuthnQueryServices = [];
 
     /**
      * List of AssertionIDRequestService endpoints.
      *
-     * @var \SAML2\XML\md\AbstractEndpointType[]
+     * @var \SimpleSAML\SAML2\XML\md\AbstractEndpointType[]
      */
     protected $AssertionIDRequestServices = [];
 
@@ -53,9 +53,9 @@ final class AuthnAuthorityDescriptor extends AbstractRoleDescriptor
      * @param string|null $ID
      * @param int|null $validUntil
      * @param string|null $cacheDuration
-     * @param \SAML2\XML\md\Extensions|null $extensions
+     * @param \SimpleSAML\SAML2\XML\md\Extensions|null $extensions
      * @param string|null $errorURL
-     * @param \SAML2\XML\md\Organization|null $organization
+     * @param \SimpleSAML\SAML2\XML\md\Organization|null $organization
      * @param array $keyDescriptors
      * @param array $contacts
      */
@@ -96,9 +96,9 @@ final class AuthnAuthorityDescriptor extends AbstractRoleDescriptor
      * @param \DOMElement $xml The XML element we should load.
      * @return self
      *
-     * @throws \SAML2\Exception\InvalidDOMElementException if the qualified name of the supplied element is wrong
-     * @throws \SAML2\Exception\MissingAttributeException if the supplied element is missing one of the mandatory attributes
-     * @throws \SAML2\Exception\TooManyElementsException if too many child-elements of a type are specified
+     * @throws \SimpleSAML\SAML2\Exception\InvalidDOMElementException if the qualified name of the supplied element is wrong
+     * @throws \SimpleSAML\SAML2\Exception\MissingAttributeException if the supplied element is missing one of the mandatory attributes
+     * @throws \SimpleSAML\SAML2\Exception\TooManyElementsException if too many child-elements of a type are specified
      */
     public static function fromXML(DOMElement $xml): object
     {
@@ -147,7 +147,7 @@ final class AuthnAuthorityDescriptor extends AbstractRoleDescriptor
     /**
      * Collect the AuthnQueryService endpoints
      *
-     * @return \SAML2\XML\md\AbstractEndpointType[]
+     * @return \SimpleSAML\SAML2\XML\md\AbstractEndpointType[]
      */
     public function getAuthnQueryServices(): array
     {
@@ -158,7 +158,7 @@ final class AuthnAuthorityDescriptor extends AbstractRoleDescriptor
     /**
      * Set the AuthnQueryService endpoints
      *
-     * @param \SAML2\XML\md\AbstractEndpointType[] $authnQueryServices
+     * @param \SimpleSAML\SAML2\XML\md\AbstractEndpointType[] $authnQueryServices
      * @return void
      * @throws \SimpleSAML\Assert\AssertionFailedException
      */
@@ -177,7 +177,7 @@ final class AuthnAuthorityDescriptor extends AbstractRoleDescriptor
     /**
      * Collect the AssertionIDRequestService endpoints
      *
-     * @return \SAML2\XML\md\AbstractEndpointType[]
+     * @return \SimpleSAML\SAML2\XML\md\AbstractEndpointType[]
      */
     public function getAssertionIDRequestServices(): array
     {
@@ -188,7 +188,7 @@ final class AuthnAuthorityDescriptor extends AbstractRoleDescriptor
     /**
      * Set the AssertionIDRequestService endpoints
      *
-     * @param \SAML2\XML\md\AbstractEndpointType[] $assertionIDRequestServices
+     * @param \SimpleSAML\SAML2\XML\md\AbstractEndpointType[] $assertionIDRequestServices
      * @return void
      * @throws \SimpleSAML\Assert\AssertionFailedException
      */

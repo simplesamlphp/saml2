@@ -20,7 +20,7 @@ use SoapClient as BUILTIN_SoapClient;
  * Implementation of the SAML 2.0 SOAP binding.
  *
  * @author Shoaib Ali
- * @package SimpleSAMLphp
+ * @package simplesamlphp/saml2
  */
 class SOAPClient
 {

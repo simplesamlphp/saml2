@@ -2,15 +2,15 @@
 
 declare(strict_types=1);
 
-namespace SAML2\Response\Validation;
+namespace SimpleSAML\SAML2\Response\Validation;
 
-use SAML2\XML\samlp\Response;
+use SimpleSAML\SAML2\XML\samlp\Response;
 
 interface ConstraintValidator
 {
     /**
-     * @param \SAML2\XML\samlp\Response $response
-     * @param \SAML2\Response\Validation\Result $result
+     * @param \SimpleSAML\SAML2\XML\samlp\Response $response
+     * @param \SimpleSAML\SAML2\Response\Validation\Result $result
      * @return void
      */
     public function validate(Response $response, Result $result): void;
