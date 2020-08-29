@@ -220,7 +220,7 @@ XML
         );
 
         $subjectConfirmation = SubjectConfirmation::fromXML($document->documentElement);
-        /** @psalm-var \SAML2\XML\saml\BaseID $identifier */
+        /** @psalm-var \SimpleSAML\SAML2\XML\saml\BaseID $identifier */
         $identifier = $subjectConfirmation->getIdentifier();
         $this->assertEquals('SomeMethod', $subjectConfirmation->getMethod());
         $this->assertEquals(BaseID::class, get_class($identifier));

@@ -147,7 +147,7 @@ XML
         $attribute = Attribute::fromXML($this->document->documentElement);
         $pubkey = new XMLSecurityKey(XMLSecurityKey::RSA_SHA256, ['type' => 'public']);
         $pubkey->loadKey(PEMCertificatesMock::getPlainPublicKey(PEMCertificatesMock::PUBLIC_KEY));
-        /** @psalm-var \SAML2\XML\saml\EncryptedAttribute $encattr */
+        /** @psalm-var \SimpleSAML\SAML2\XML\saml\EncryptedAttribute $encattr */
         $encattr = EncryptedAttribute::fromUnencryptedElement($attribute, $pubkey);
         $str = strval($encattr);
         $doc = DOMDocumentFactory::fromString($str);

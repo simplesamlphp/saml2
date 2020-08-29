@@ -173,13 +173,13 @@ XML
         $this->assertEquals('testval1', $subjectConfirmationData->getAttributeNS('urn:test', 'attr1'));
         $this->assertEquals('testval2', $subjectConfirmationData->getAttributeNS('urn:test', 'attr2'));
 
-        /** @psalm-var \SAML2\XML\ds\KeyInfo $info */
+        /** @psalm-var \SimpleSAML\SAML2\XML\ds\KeyInfo $info */
         $info = $subjectConfirmationData->getInfo()[0];
 
-        /** @psalm-var \SAML2\XML\ds\KeyName $keyName */
+        /** @psalm-var \SimpleSAML\SAML2\XML\ds\KeyName $keyName */
         $keyName = $info->getInfo()[0];
 
-        /** @psalm-var \SAML2\XML\Chunk $info */
+        /** @psalm-var \SimpleSAML\SAML2\XML\Chunk $info */
         $info = $subjectConfirmationData->getInfo()[1];
 
         $this->assertEquals('SomeKey', $keyName->getName());

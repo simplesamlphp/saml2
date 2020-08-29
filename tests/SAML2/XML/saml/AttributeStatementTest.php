@@ -73,7 +73,7 @@ XML
         $pubkey = new XMLSecurityKey(XMLSecurityKey::RSA_SHA256, ['type' => 'public']);
         $pubkey->loadKey(PEMCertificatesMock::getPlainPublicKey(PEMCertificatesMock::PUBLIC_KEY));
 
-        /** @psalm-var \SAML2\XML\saml\EncryptedAttribute $encryptedAttribute */
+        /** @psalm-var \SimpleSAML\SAML2\XML\saml\EncryptedAttribute $encryptedAttribute */
         $encryptedAttribute = EncryptedAttribute::fromUnencryptedElement(
             new Attribute('urn:encrypted:attribute', null, null, [new AttributeValue('very secret data')]),
             $pubkey

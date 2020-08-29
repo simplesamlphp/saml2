@@ -323,11 +323,11 @@ XML
 
         $authnContext = AuthnContext::fromXML($document->documentElement);
 
-        /** @psalm-var \SAML2\XML\saml\AuthnContextClassRef $classRef */
+        /** @psalm-var \SimpleSAML\SAML2\XML\saml\AuthnContextClassRef $classRef */
         $classRef = $authnContext->getAuthnContextClassRef();
         $this->assertEquals(Constants::AC_PASSWORD_PROTECTED_TRANSPORT, $classRef->getClassRef());
 
-        /** @psalm-var \SAML2\XML\saml\AuthnContextDeclRef $declRef */
+        /** @psalm-var \SimpleSAML\SAML2\XML\saml\AuthnContextDeclRef $declRef */
         $declRef = $authnContext->getAuthnContextDeclRef();
         $this->assertEquals('/relative/path/to/document.xml', $declRef->getDeclRef());
 

@@ -312,7 +312,7 @@ AUTHNREQUEST;
             PEMCertificatesMock::SELFSIGNED_PUBLIC_KEY
         );
 
-        /** @psalm-var \SAML2\XML\saml\IdentifierInterface $nameId */
+        /** @psalm-var \SimpleSAML\SAML2\XML\saml\IdentifierInterface $nameId */
         $nameId = EncryptedID::fromUnencryptedElement(
             new NameID(md5('Arthur Dent'), Constants::NAMEID_ENCRYPTED),
             $key

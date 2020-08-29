@@ -149,10 +149,10 @@ XML
     public function testUnmarshalling(): void
     {
         $aq = AttributeQuery::fromXML($this->document->documentElement);
-        /** @psalm-var \SAML2\XML\saml\Issuer $issuer */
+        /** @psalm-var \SimpleSAML\SAML2\XML\saml\Issuer $issuer */
         $issuer = $aq->getIssuer();
         $subject = $aq->getSubject();
-        /** @psalm-var \SAML2\XML\saml\NameID $identifier */
+        /** @psalm-var \SimpleSAML\SAML2\XML\saml\NameID $identifier */
         $identifier = $subject->getIdentifier();
 
         // Sanity check
@@ -233,7 +233,7 @@ XML
 XML;
         $document = DOMDocumentFactory::fromString($xml);
         $aq = AttributeQuery::fromXML($document->documentElement);
-        /** @psalm-var \SAML2\XML\saml\Issuer $issuer */
+        /** @psalm-var \SimpleSAML\SAML2\XML\saml\Issuer $issuer */
         $issuer = $aq->getIssuer();
 
         // Sanity check
@@ -273,7 +273,7 @@ XML;
 XML;
         $document = DOMDocumentFactory::fromString($xml);
         $aq = AttributeQuery::fromXML($document->documentElement);
-        /** @psalm-var \SAML2\XML\saml\Issuer $issuer */
+        /** @psalm-var \SimpleSAML\SAML2\XML\saml\Issuer $issuer */
         $issuer = $aq->getIssuer();
 
         // Sanity check
