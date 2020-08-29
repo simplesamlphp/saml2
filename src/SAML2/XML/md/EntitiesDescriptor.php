@@ -108,7 +108,7 @@ final class EntitiesDescriptor extends AbstractMetadataDocument
     /**
      * Get the EntitiesDescriptor children objects
      *
-     * @return \SimpleSAM\SAML2\XML\md\EntitiesDescriptor[]
+     * @return \SimpleSAML\SAML2\XML\md\EntitiesDescriptor[]
      */
     public function getEntitiesDescriptors(): array
     {

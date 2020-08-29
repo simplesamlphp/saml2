@@ -43,7 +43,7 @@ final class AuthnContext extends AbstractSamlElement
      * @param \SimpleSAML\SAML2\XML\saml\AuthnContextDecl|null $authnContextDecl
      * @param \SimpleSAML\SAML2\XML\saml\AuthnContextDeclRef|null $authnContextDeclRef
      * @param string[] $authenticatingAuthorities
-     * @throws \SimpleSAML\SimpleSAML\Assert\AssertionFailedException
+     * @throws \SimpleSAML\Assert\AssertionFailedException
      */
     public function __construct(
         ?AuthnContextClassRef $authnContextClassRef,
@@ -156,7 +156,7 @@ final class AuthnContext extends AbstractSamlElement
      *
      * @param string[] $authenticatingAuthorities
      * @return void
-     * @throws \SimpleSAML\SimpleSAML\Assert\AssertionFailedException
+     * @throws \SimpleSAML\Assert\AssertionFailedException
      */
     private function setAuthenticatingAuthorities(array $authenticatingAuthorities): void
     {
@@ -172,7 +172,7 @@ final class AuthnContext extends AbstractSamlElement
      * @param \DOMElement $xml The XML element we should load
      * @return \SimpleSAML\SAML2\XML\saml\AuthnContext
      *
-     * @throws \SimpleSAMSL\SAML2\Exception\InvalidDOMElementException if the qualified name of the supplied element is wrong
+     * @throws \SimpleSAML\SAML2\Exception\InvalidDOMElementException if the qualified name of the supplied element is wrong
      */
     public static function fromXML(DOMElement $xml): object
     {

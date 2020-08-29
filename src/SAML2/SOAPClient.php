@@ -133,7 +133,7 @@ class SOAPClient
         $container->debugMessage($request, 'out');
 
         $action = 'http://www.oasis-open.org/committees/security';
-        $version = SOAP_1_1;
+        $version = BUILTIN_SoapClient::SOAP_1_1;
         $destination = $msg->getDestination();
         if ($destination === null) {
             throw new Exception('Cannot send SOAP message, no destination set.');

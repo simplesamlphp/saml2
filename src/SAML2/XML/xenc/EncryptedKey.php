@@ -38,8 +38,8 @@ class EncryptedKey extends EncryptedData
      * @param string|null $recipient The Recipient attribute of this object. Optional.
      * @param string|null $carriedKeyName The value of the CarriedKeyName element of this EncryptedData.
      * @param \SimpleSAML\SAML2\XML\xenc\EncryptionMethod|null $encryptionMethod The EncryptionMethod object of this EncryptedData. Optional.
-     * @param \SimpleSAML\SAML2\ds\KeyInfo|null $keyInfo The KeyInfo object of this EncryptedData. Optional.
-     * @param \SimpleSAML\SAML2\xenc\ReferenceList|null $referenceList The ReferenceList object of this EncryptedData. Optional.
+     * @param \SimpleSAML\SAML2\XML\ds\KeyInfo|null $keyInfo The KeyInfo object of this EncryptedData. Optional.
+     * @param \SimpleSAML\SAML2\XML\xenc\ReferenceList|null $referenceList The ReferenceList object of this EncryptedData. Optional.
      */
     public function __construct(
         CipherData $cipherData,

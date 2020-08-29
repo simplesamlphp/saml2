@@ -211,7 +211,7 @@ final class IDPSSODescriptor extends AbstractSSODescriptor
     /**
      * Get the SingleSignOnService endpoints
      *
-     * @return \SipleSAML\SAML2\XML\md\SingleSignOnService[]
+     * @return \SimpleSAML\SAML2\XML\md\SingleSignOnService[]
      */
     public function getSingleSignOnServices(): array
     {

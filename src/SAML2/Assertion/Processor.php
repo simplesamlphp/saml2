@@ -86,7 +86,7 @@ class Processor
     /**
      * Decrypt assertions, or do nothing if assertions are already decrypted.
      *
-     * @param \SimleSAML\SAML2\Utilities\ArrayCollection $assertions
+     * @param \SimpleSAML\SAML2\Utilities\ArrayCollection $assertions
      * @return \SimpleSAML\SAML2\Utilities\ArrayCollection Collection of processed assertions
      */
     public function decryptAssertions(ArrayCollection $assertions): ArrayCollection

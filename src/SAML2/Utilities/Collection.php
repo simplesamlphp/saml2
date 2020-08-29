@@ -24,7 +24,7 @@ interface Collection extends ArrayAccess, Countable, IteratorAggregate
     /**
      * Shorthand for getting a single element that also must be the only element in the collection.
      *
-     * @throws \SAML2\Exception\RuntimeException if the element was not the only element
+     * @throws \SimpleSAML\SAML2\Exception\RuntimeException if the element was not the only element
      *
      * @return mixed
      */
