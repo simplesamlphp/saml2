@@ -6,7 +6,7 @@ namespace SimpleSAML\SAML2\XML\md;
 
 use DOMElement;
 use SimpleSAML\Assert\Assert;
-use SimpleSAML\SAML2\Exception\InvalidDOMElementException;
+use SimpleSAML\XML\Exception\InvalidDOMElementException;
 use SimpleSAML\SAML2\Utils;
 use SimpleSAML\SAML2\XML\alg\AbstractAlgElement as ALG;
 use SimpleSAML\SAML2\XML\alg\DigestMethod;
@@ -42,7 +42,7 @@ final class Extensions extends AbstractMdElement
      * @param \DOMElement $xml
      * @return \SimpleSAML\SAML2\XML\md\Extensions
      *
-     * @throws \SimpleSAML\SAML2\Exception\InvalidDOMElementException if the qualified name of the supplied element is wrong
+     * @throws \SimpleSAML\XML\Exception\InvalidDOMElementException if the qualified name of the supplied element is wrong
      */
     public static function fromXML(DOMElement $xml): object
     {

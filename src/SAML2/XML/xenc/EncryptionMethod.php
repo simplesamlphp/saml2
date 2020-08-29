@@ -4,6 +4,13 @@ declare(strict_types=1);
 
 namespace SimpleSAML\SAML2\XML\xenc;
 
+use DOMElement;
+use SimpleSAML\Assert\Assert;
+use SimpleSAML\SAML2\Constants;
+use SimpleSAML\XML\Exception\InvalidDOMElementException;
+use SimpleSAML\XML\Exception\TooManyElementsException;
+use SimpleSAML\XML\Chunk;
+
 /**
  * A class implementing the xenc:EncryptionMethod element.
  *
@@ -51,7 +58,7 @@ class EncryptionMethod extends AbstractEncryptionMethod
      * @param \DOMElement $xml
      * @return static
      *
-     * @throws \SimpleSAML\SAML2\Exception\InvalidDOMElementException if the qualified name of the supplied element is wrong
+     * @throws \SimpleSAML\XML\Exception\InvalidDOMElementException if the qualified name of the supplied element is wrong
      * @throws \SimpleSAML\XML\Exception\MissingAttributeException if the supplied element is missing one of the mandatory attributes
      * @throws \SimpleSAML\XML\Exception\TooManyElementsException if too many child-elements of a type are specified
      */
