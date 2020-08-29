@@ -236,6 +236,7 @@ class LogoutRequest extends AbstractRequest
             $e->setAttribute('Reason', $this->reason);
         }
 
+        /** @var \SimpleSAML\SAML2\XML\IdentifierInterface $this->identifier */
         $this->identifier->toXML($e);
 
         foreach ($this->sessionIndexes as $sessionIndex) {

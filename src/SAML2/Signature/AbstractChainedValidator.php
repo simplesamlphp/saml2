@@ -22,7 +22,7 @@ abstract class AbstractChainedValidator implements ChainedValidator
     /**
      * Constructor for AbstractChainedValidator
      *
-     * @param \Psr=Log\LoggerInterface $logger
+     * @param \Psr\Log\LoggerInterface $logger
      */
     public function __construct(LoggerInterface $logger)
     {
