@@ -10,7 +10,7 @@ use InvalidArgumentException;
 use SimpleSAML\Assert\Assert;
 use SimpleSAML\SAML2\Constants;
 use SimpleSAML\SAML2\Exception\InvalidDOMElementException;
-use SimpleSAML\SAML2\Exception\TooManyElementsException;
+use SimpleSAML\XML\Exception\TooManyElementsException;
 use SimpleSAML\SAML2\Utils;
 use SimpleSAML\SAML2\XML\ExtendableAttributesTrait;
 use SimpleSAML\SAML2\XML\ExtendableElementTrait;
