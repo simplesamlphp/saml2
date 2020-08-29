@@ -2,7 +2,7 @@
 
 declare(strict_types=1);
 
-namespace SAML2\Certificate;
+namespace \SimpleSAML\SAML2\Certificate;
 
 use PHPUnit\Framework\TestCase;
 use SimpleSAML\SAML2\Configuration\PrivateKey as ConfPrivateKey;

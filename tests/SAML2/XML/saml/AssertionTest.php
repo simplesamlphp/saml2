@@ -2,7 +2,7 @@
 
 declare(strict_types=1);
 
-namespace SAML2\XML\saml;
+namespace \SimpleSAML\SAML2\XML\saml;
 
 use DOMDocument;
 use Exception;

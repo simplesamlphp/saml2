@@ -2,7 +2,7 @@
 
 declare(strict_types=1);
 
-namespace SAML2\XML\mdui;
+namespace \SimpleSAML\SAML2\XML\mdui;
 
 use PHPUnit\Framework\TestCase;
 use SimpleSAML\SAML2\DOMDocumentFactory;

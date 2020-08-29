@@ -2,7 +2,7 @@
 
 declare(strict_types=1);
 
-namespace SAML2\XML\init;
+namespace \SimpleSAML\SAML2\XML\init;
 
 use Exception;
 use InvalidArgumentException;

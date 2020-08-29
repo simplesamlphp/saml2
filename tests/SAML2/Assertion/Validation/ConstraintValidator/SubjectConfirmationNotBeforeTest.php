@@ -2,7 +2,7 @@
 
 declare(strict_types=1);
 
-namespace SAML2\Assertion\Validation\ConstraintValidator;
+namespace \SimpleSAML\SAML2\Assertion\Validation\ConstraintValidator;
 
 use SimpleSAML\SAML2\Assertion\Validation\ConstraintValidator\SubjectConfirmationNotBefore;
 use SimpleSAML\SAML2\Assertion\Validation\Result;

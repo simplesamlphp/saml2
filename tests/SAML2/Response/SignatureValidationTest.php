@@ -2,7 +2,7 @@
 
 declare(strict_types=1);
 
-namespace SAML2\Response;
+namespace \SimpleSAML\SAML2\Response;
 
 use DOMDocument;
 use Mockery;

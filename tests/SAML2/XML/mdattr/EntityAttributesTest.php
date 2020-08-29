@@ -2,7 +2,7 @@
 
 declare(strict_types=1);
 
-namespace SAML2\XML\mdattr;
+namespace \SimpleSAML\SAML2\XML\mdattr;
 
 use PHPUnit\Framework\TestCase;
 use SimpleSAML\SAML2\Constants;

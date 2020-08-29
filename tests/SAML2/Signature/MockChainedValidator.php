@@ -2,7 +2,7 @@
 
 declare(strict_types=1);
 
-namespace SAML2\Signature;
+namespace \SimpleSAML\SAML2\Signature;
 
 use SimpleSAML\SAML2\Signature\AbstractChainedValidator;
 use SimpleSAML\SAML2\Configuration\CertificateProvider;

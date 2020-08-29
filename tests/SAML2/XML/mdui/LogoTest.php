@@ -2,7 +2,7 @@
 
 declare(strict_types=1);
 
-namespace SAML2\XML\mdui;
+namespace \SimpleSAML\SAML2\XML\mdui;
 
 use InvalidArgumentException;
 use PHPUnit\Framework\TestCase;
