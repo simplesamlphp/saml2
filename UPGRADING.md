@@ -2,6 +2,10 @@
 
 ## 4.x to 5.0
 
+### Namespace migration
+
+All the classes had their namespace changed from SAML2 to SimpleSAML\SAML2.
+
 ### NameIDPolicy BC breaking change
 
 The NameIDPolicy can no longer be represented as an array, but has to be handled using
