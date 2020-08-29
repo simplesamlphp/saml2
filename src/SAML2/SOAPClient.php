@@ -33,11 +33,11 @@ class SOAPClient
     /**
      * This function sends the SOAP message to the service location and returns SOAP response
      *
-     * @param \SAML2\XML\samlp\AbstractMessage $msg The request that should be sent.
+     * @param \SimpleSAML\SAML2\XML\samlp\AbstractMessage $msg The request that should be sent.
      * @param \SimpleSAML\Configuration $srcMetadata The metadata of the issuer of the message.
      * @param \SimpleSAML\Configuration $dstMetadata The metadata of the destination of the message.
      * @throws \Exception
-     * @return \SAML2\XML\samlp\AbstractMessage The response we received.
+     * @return \SimpleSAML\SAML2\XML\samlp\AbstractMessage The response we received.
      *
      * @psalm-suppress UndefinedClass
      */
@@ -176,7 +176,7 @@ class SOAPClient
     /**
      * Add a signature validator based on a SSL context.
      *
-     * @param \SAML2\XML\samlp\AbstractMessage $msg The message we should add a validator to.
+     * @param \SimpleSAML\SAML2\XML\samlp\AbstractMessage $msg The message we should add a validator to.
      * @param resource $context The stream context.
      * @return void
      */

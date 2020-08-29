@@ -2,12 +2,12 @@
 
 declare(strict_types=1);
 
-namespace SAML2\XML\samlp;
+namespace SimpleSAML\SAML2\XML\samlp;
 
 use DOMElement;
-use SAML2\Exception\InvalidDOMElementException;
-use SAML2\XML\Chunk;
 use SimpleSAML\Assert\Assert;
+use SimpleSAML\SAML2\Exception\InvalidDOMElementException;
+use SimpleSAML\SAML2\XML\Chunk;
 
 /**
  * SAML StatusDetail data type.
@@ -17,14 +17,14 @@ use SimpleSAML\Assert\Assert;
  */
 final class StatusDetail extends AbstractSamlpElement
 {
-    /** @var \SAML2\XML\Chunk[] */
+    /** @var \SimpleSAML\SAML2\XML\Chunk[] */
     protected $details = [];
 
 
     /**
      * Initialize a samlp:StatusDetail
      *
-     * @param \SAML2\XML\Chunk[] $details
+     * @param \SimpleSAML\SAML2\XML\Chunk[] $details
      */
     public function __construct(array $details = [])
     {
@@ -35,7 +35,7 @@ final class StatusDetail extends AbstractSamlpElement
     /**
      * Collect the details
      *
-     * @return \SAML2\XML\Chunk[]
+     * @return \SimpleSAML\SAML2\XML\Chunk[]
      */
     public function getDetails(): array
     {
@@ -46,7 +46,7 @@ final class StatusDetail extends AbstractSamlpElement
     /**
      * Set the value of the details-property
      *
-     * @param \SAML2\XML\Chunk[] $details
+     * @param \SimpleSAML\SAML2\XML\Chunk[] $details
      * @return void
      * @throws \SimpleSAML\Assert\AssertionFailedException if the supplied array contains anything other than Chunk objects
      */
@@ -73,9 +73,9 @@ final class StatusDetail extends AbstractSamlpElement
      * Convert XML into a StatusDetail
      *
      * @param \DOMElement $xml The XML element we should load
-     * @return \SAML2\XML\samlp\StatusDetail
+     * @return \SimpleSAML\SAML2\XML\samlp\StatusDetail
      *
-     * @throws \SAML2\Exception\InvalidDOMElementException if the qualified name of the supplied element is wrong
+     * @throws \SimpleSAML\SAML2\Exception\InvalidDOMElementException if the qualified name of the supplied element is wrong
      */
     public static function fromXML(DOMElement $xml): object
     {

@@ -2,11 +2,11 @@
 
 declare(strict_types=1);
 
-namespace SAML2\XML\xenc;
+namespace SimpleSAML\SAML2\XML\xenc;
 
 use DOMElement;
-use SAML2\Exception\InvalidDOMElementException;
 use SimpleSAML\Assert\Assert;
+use SimpleSAML\SAML2\Exception\InvalidDOMElementException;
 
 /**
  * A class containing a list of references to either encrypted data or encryption keys.
@@ -15,18 +15,18 @@ use SimpleSAML\Assert\Assert;
  */
 class ReferenceList extends AbstractXencElement
 {
-    /** @var \SAML2\XML\xenc\DataReference[] */
+    /** @var \SimpleSAML\SAML2\XML\xenc\DataReference[] */
     protected $dataReferences;
 
-    /** @var \SAML2\XML\xenc\KeyReference[] */
+    /** @var \SimpleSAML\SAML2\XML\xenc\KeyReference[] */
     protected $keyreferences;
 
 
     /**
      * ReferenceList constructor.
      *
-     * @param \SAML2\XML\xenc\DataReference[] $dataReferences
-     * @param \SAML2\XML\xenc\KeyReference[] $keyreferences
+     * @param \SimpleSAML\SAML2\XML\xenc\DataReference[] $dataReferences
+     * @param \SimpleSAML\SAML2\XML\xenc\KeyReference[] $keyreferences
      */
     public function __construct(array $dataReferences, array $keyreferences = [])
     {
@@ -43,7 +43,7 @@ class ReferenceList extends AbstractXencElement
     /**
      * Get the list of DataReference objects.
      *
-     * @return \SAML2\XML\xenc\DataReference[]
+     * @return \SimpleSAML\SAML2\XML\xenc\DataReference[]
      */
     public function getDataReferences(): array
     {
@@ -52,7 +52,7 @@ class ReferenceList extends AbstractXencElement
 
 
     /**
-     * @param \SAML2\XML\xenc\DataReference[] $dataReferences
+     * @param \SimpleSAML\SAML2\XML\xenc\DataReference[] $dataReferences
      */
     protected function setDataReferences(array $dataReferences): void
     {
@@ -69,7 +69,7 @@ class ReferenceList extends AbstractXencElement
     /**
      * Get the list of KeyReference objects.
      *
-     * @return \SAML2\XML\xenc\KeyReference[]
+     * @return \SimpleSAML\SAML2\XML\xenc\KeyReference[]
      */
     public function getKeyReferences(): array
     {
@@ -78,7 +78,7 @@ class ReferenceList extends AbstractXencElement
 
 
     /**
-     * @param \SAML2\XML\xenc\KeyReference[] $keyReferences
+     * @param \SimpleSAML\SAML2\XML\xenc\KeyReference[] $keyReferences
      */
     protected function setKeyReferences(array $keyReferences): void
     {
@@ -94,7 +94,7 @@ class ReferenceList extends AbstractXencElement
     /**
      * @inheritDoc
      *
-     * @throws \SAML2\Exception\InvalidDOMElementException if the qualified name of the supplied element is wrong
+     * @throws \SimpleSAML\SAML2\Exception\InvalidDOMElementException if the qualified name of the supplied element is wrong
      */
     public static function fromXML(DOMElement $xml): object
     {

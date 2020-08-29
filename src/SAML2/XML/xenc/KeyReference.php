@@ -2,7 +2,7 @@
 
 declare(strict_types=1);
 
-namespace SAML2\XML\xenc;
+namespace SimpleSAML\SAML2\XML\xenc;
 
 /**
  * Class representing the <xenc:KeyReference> element.

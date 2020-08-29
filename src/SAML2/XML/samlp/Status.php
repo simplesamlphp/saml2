@@ -2,14 +2,14 @@
 
 declare(strict_types=1);
 
-namespace SAML2\XML\samlp;
+namespace SimpleSAML\SAML2\XML\samlp;
 
 use DOMElement;
-use SAML2\Exception\InvalidDOMElementException;
-use SAML2\Exception\MissingElementException;
-use SAML2\Exception\TooManyElementsException;
-use SAML2\Utils;
 use SimpleSAML\Assert\Assert;
+use SimpleSAML\SAML2\Exception\InvalidDOMElementException;
+use SimpleSAML\SAML2\Exception\MissingElementException;
+use SimpleSAML\SAML2\Exception\TooManyElementsException;
+use SimpleSAML\SAML2\Utils;
 
 /**
  * SAML Status data type.
@@ -19,22 +19,22 @@ use SimpleSAML\Assert\Assert;
  */
 final class Status extends AbstractSamlpElement
 {
-    /** @var \SAML2\XML\samlp\StatusCode */
+    /** @var \SimpleSAML\SAML2\XML\samlp\StatusCode */
     protected $statusCode;
 
     /** @var string|null */
     protected $statusMessage;
 
-    /** @var \SAML2\XML\samlp\StatusDetail[] */
+    /** @var \SimpleSAML\SAML2\XML\samlp\StatusDetail[] */
     protected $statusDetails = [];
 
 
     /**
      * Initialize a samlp:Status
      *
-     * @param \SAML2\XML\samlp\StatusCode $statusCode
+     * @param \SimpleSAML\SAML2\XML\samlp\StatusCode $statusCode
      * @param string|null $statusMessage
-     * @param \SAML2\XML\samlp\StatusDetail[] $statusDetails
+     * @param \SimpleSAML\SAML2\XML\samlp\StatusDetail[] $statusDetails
      */
     public function __construct(StatusCode $statusCode, ?string $statusMessage = null, array $statusDetails = [])
     {
@@ -47,7 +47,7 @@ final class Status extends AbstractSamlpElement
     /**
      * Collect the StatusCode
      *
-     * @return \SAML2\XML\samlp\StatusCode
+     * @return \SimpleSAML\SAML2\XML\samlp\StatusCode
      */
     public function getStatusCode(): StatusCode
     {
@@ -58,7 +58,7 @@ final class Status extends AbstractSamlpElement
     /**
      * Set the value of the StatusCode-property
      *
-     * @param \SAML2\XML\samlp\StatusCode $statusCode
+     * @param \SimpleSAML\SAML2\XML\samlp\StatusCode $statusCode
      * @return void
      */
     private function setStatusCode(StatusCode $statusCode): void
@@ -93,7 +93,7 @@ final class Status extends AbstractSamlpElement
     /**
      * Collect the value of the statusDetails property
      *
-     * @return \SAML2\XML\samlp\StatusDetail[]
+     * @return \SimpleSAML\SAML2\XML\samlp\StatusDetail[]
      */
     public function getStatusDetails(): array
     {
@@ -104,7 +104,7 @@ final class Status extends AbstractSamlpElement
     /**
      * Set the value of the statusDetails property
      *
-     * @param \SAML2\XML\samlp\StatusDetail[] $statusDetails
+     * @param \SimpleSAML\SAML2\XML\samlp\StatusDetail[] $statusDetails
      * @return void
      * @throws \SimpleSAML\Assert\AssertionFailedException if the supplied array contains anything other than StatusDetail objects
      */
@@ -121,11 +121,11 @@ final class Status extends AbstractSamlpElement
      * Convert XML into a Status
      *
      * @param \DOMElement $xml The XML element we should load
-     * @return \SAML2\XML\samlp\Status
+     * @return \SimpleSAML\SAML2\XML\samlp\Status
      *
-     * @throws \SAML2\Exception\InvalidDOMElementException if the qualified name of the supplied element is wrong
-     * @throws \SAML2\Exception\TooManyElementsException if too many child-elements of a type are specified
-     * @throws \SAML2\Exception\MissingElementException if one of the mandatory child-elements is missing
+     * @throws \SimpleSAML\SAML2\Exception\InvalidDOMElementException if the qualified name of the supplied element is wrong
+     * @throws \SimpleSAML\SAML2\Exception\TooManyElementsException if too many child-elements of a type are specified
+     * @throws \SimpleSAML\SAML2\Exception\MissingElementException if one of the mandatory child-elements is missing
      */
     public static function fromXML(DOMElement $xml): object
     {

@@ -2,17 +2,17 @@
 
 declare(strict_types=1);
 
-namespace SAML2\XML\saml;
+namespace SimpleSAML\SAML2\XML\saml;
 
 use DOMElement;
 use RobRichards\XMLSecLibs\XMLSecurityDSig;
-use SAML2\Constants;
-use SAML2\Exception\InvalidDOMElementException;
-use SAML2\Utils;
-use SAML2\XML\Chunk;
-use SAML2\XML\ds\KeyInfo;
-use SAML2\XML\ExtendableAttributesTrait;
 use SimpleSAML\Assert\Assert;
+use SimpleSAML\SAML2\Constants;
+use SimpleSAML\SAML2\Exception\InvalidDOMElementException;
+use SimpleSAML\SAML2\Utils;
+use SimpleSAML\SAML2\XML\Chunk;
+use SimpleSAML\SAML2\XML\ds\KeyInfo;
+use SimpleSAML\SAML2\XML\ExtendableAttributesTrait;
 
 /**
  * Class representing SAML 2 SubjectConfirmationData element.
@@ -64,7 +64,7 @@ final class SubjectConfirmationData extends AbstractSamlElement
      * Array with various elements describing this key.
      * Unknown elements will be represented by \SAML2\XML\Chunk.
      *
-     * @var (\SAML2\XML\ds\KeyInfo|\SAML2\XML\Chunk)[]
+     * @var (\SimpleSAML\SAML2\XML\ds\KeyInfo|\SimpleSAML\SAML2\XML\Chunk)[]
      */
     protected $info = [];
 
@@ -77,7 +77,7 @@ final class SubjectConfirmationData extends AbstractSamlElement
      * @param string|null $recipient
      * @param string|null $inResponseTo
      * @param string|null $address
-     * @param (\SAML2\XML\ds\KeyInfo|\SAML2\XML\Chunk)[] $info
+     * @param (\SimpleSAML\SAML2\XML\ds\KeyInfo|\SimpleSAML\SAML2\XML\Chunk)[] $info
      * @param \DOMAttr[] $namespacedAttributes
      */
     public function __construct(
@@ -222,7 +222,7 @@ final class SubjectConfirmationData extends AbstractSamlElement
     /**
      * Collect the value of the info-property
      *
-     * @return (\SAML2\XML\ds\KeyInfo|\SAML2\XML\Chunk)[]
+     * @return (\SimpleSAML\SAML2\XML\ds\KeyInfo|\SimpleSAML\SAML2\XML\Chunk)[]
      */
     public function getInfo(): array
     {
@@ -233,7 +233,7 @@ final class SubjectConfirmationData extends AbstractSamlElement
     /**
      * Set the value of the info-property
      *
-     * @param (\SAML2\XML\ds\KeyInfo|\SAML2\XML\Chunk)[] $info
+     * @param (\SimpleSAML\SAML2\XML\ds\KeyInfo|\SimpleSAML\SAML2\XML\Chunk)[] $info
      * @return void
      */
     private function setInfo(array $info): void
@@ -269,8 +269,8 @@ final class SubjectConfirmationData extends AbstractSamlElement
      * @param \DOMElement $xml The XML element we should load
      * @return self
      *
-     * @throws \SAML2\Exception\InvalidDOMElementException if the qualified name of the supplied element is wrong
-     * @throws \SAML2\Exception\MissingAttributeException if the supplied element is missing any of the mandatory attributes
+     * @throws \SimpleSAML\SAML2\Exception\InvalidDOMElementException if the qualified name of the supplied element is wrong
+     * @throws \SimpleSAML\SAML2\Exception\MissingAttributeException if the supplied element is missing any of the mandatory attributes
      * @throws \SimpleSAML\Assert\AssertionFailedException if NotBefore or NotOnOrAfter contain an invalid date.
      */
     public static function fromXML(DOMElement $xml): object

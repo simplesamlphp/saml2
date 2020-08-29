@@ -2,16 +2,18 @@
 
 declare(strict_types=1);
 
-namespace SAML2\XML\samlp;
+namespace SimpleSAML\SAML2\XML\samlp;
 
 use DOMElement;
 use Exception;
-use SAML2\Constants;
-use SAML2\Exception\InvalidDOMElementException;
 use SimpleSAML\Assert\Assert;
+use SimpleSAML\SAML2\Constants;
+use SimpleSAML\SAML2\Exception\InvalidDOMElementException;
 
 /**
  * Factory class for all SAML 2 messages.
+ *
+ * @package simplesamlphp/saml2
  */
 abstract class MessageFactory
 {
@@ -20,10 +22,10 @@ abstract class MessageFactory
      *
      * @param \DOMElement $xml The root XML element
      * @throws \Exception
-     * @return \SAML2\XML\samlp\AbstractMessage The message
+     * @return \SimpleSAML\SAML2\XML\samlp\AbstractMessage The message
      *
      * @throws \Exception
-     * @throws \SAML2\Exception\InvalidDOMElementException if the qualified name of the supplied element is wrong
+     * @throws \SimpleSAML\SAML2\Exception\InvalidDOMElementException if the qualified name of the supplied element is wrong
      */
     public static function fromXML(DOMElement $xml): object
     {

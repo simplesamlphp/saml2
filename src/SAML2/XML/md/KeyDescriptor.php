@@ -138,11 +138,11 @@ final class KeyDescriptor extends AbstractMdElement
      * Initialize an KeyDescriptor.
      *
      * @param \DOMElement $xml The XML element we should load.
-     * @return \SAML2\XML\md\KeyDescriptor
+     * @return \SimpleSAML\SAML2\XML\md\KeyDescriptor
      *
-     * @throws \SAML2\Exception\InvalidDOMElementException if the qualified name of the supplied element is wrong
-     * @throws \SAML2\Exception\MissingElementException if one of the mandatory child-elements is missing
-     * @throws \SAML2\Exception\TooManyElementsException if too many child-elements of a type are specified
+     * @throws \SimpleSAML\SAML2\Exception\InvalidDOMElementException if the qualified name of the supplied element is wrong
+     * @throws \SimpleSAML\SAML2\Exception\MissingElementException if one of the mandatory child-elements is missing
+     * @throws \SimpleSAML\SAML2\Exception\TooManyElementsException if too many child-elements of a type are specified
      */
     public static function fromXML(DOMElement $xml): object
     {

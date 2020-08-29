@@ -2,40 +2,40 @@
 
 declare(strict_types=1);
 
-namespace SAML2\XML\samlp;
+namespace SimpleSAML\SAML2\XML\samlp;
 
 use DOMElement;
-use SAML2\Exception\InvalidDOMElementException;
-use SAML2\Exception\TooManyElementsException;
-use SAML2\Utils;
-use SAML2\XML\ds\Signature;
-use SAML2\XML\saml\Issuer;
 use SimpleSAML\Assert\Assert;
+use SimpleSAML\SAML2\Exception\InvalidDOMElementException;
+use SimpleSAML\SAML2\Exception\TooManyElementsException;
+use SimpleSAML\SAML2\Utils;
+use SimpleSAML\SAML2\XML\ds\Signature;
+use SimpleSAML\SAML2\XML\saml\Issuer;
 
 /**
  * The \SAML2\ArtifactResponse, is the response to the \SAML2\ArtifactResolve.
  *
  * @author Danny Bollaert, UGent AS. <danny.bollaert@ugent.be>
- * @package SimpleSAMLphp
+ * @package simplesamlphp/saml2
  */
 class ArtifactResponse extends AbstractStatusResponse
 {
-    /** @var \SAML2\XML\samlp\AbstractMessage */
+    /** @var \SimpleSAML\SAML2\XML\samlp\AbstractMessage */
     protected $message;
 
 
     /**
      * Constructor for SAML 2 ArtifactResponse.
      *
-     * @param \SAML2\XML\samlp\Status $status
-     * @param \SAML2\XML\saml\Issuer|null $issuer
+     * @param \SimpleSAML\SAML2\XML\samlp\Status $status
+     * @param \SimpleSAML\SAML2\XML\saml\Issuer|null $issuer
      * @param string|null $id
      * @param int|null $issueInstant
      * @param string|null $inResponseTo
      * @param string|null $destination
      * @param string|null $consent
-     * @param \SAML2\XML\samlp\Extensions|null $extensions
-     * @param \SAML2\XML\samlp\AbstractMessage|null $message
+     * @param \SimpleSAML\SAML2\XML\samlp\Extensions|null $extensions
+     * @param \SimpleSAML\SAML2\XML\samlp\AbstractMessage|null $message
      */
     public function __construct(
         Status $status,
@@ -66,7 +66,7 @@ class ArtifactResponse extends AbstractStatusResponse
     /**
      * Collect the value of the any-property
      *
-     * @return \SAML2\XML\samlp\AbstractMessage|null
+     * @return \SimpleSAML\SAML2\XML\samlp\AbstractMessage|null
      */
     public function getMessage(): ?AbstractMessage
     {
@@ -77,7 +77,7 @@ class ArtifactResponse extends AbstractStatusResponse
     /**
      * Set the value of the any-property
      *
-     * @param \SAML2\XML\samlp\AbstractMessage|null $message
+     * @param \SimpleSAML\SAML2\XML\samlp\AbstractMessage|null $message
      * @return void
      */
     private function setMessage(?AbstractMessage $message): void
@@ -92,8 +92,8 @@ class ArtifactResponse extends AbstractStatusResponse
      * @param \DOMElement $xml
      * @return self
      *
-     * @throws \SAML2\Exception\InvalidDOMElementException if the qualified name of the supplied element is wrong
-     * @throws \SAML2\Exception\MissingAttributeException if the supplied element is missing one of the mandatory attributes
+     * @throws \SimpleSAML\SAML2\Exception\InvalidDOMElementException if the qualified name of the supplied element is wrong
+     * @throws \SimpleSAML\SAML2\Exception\MissingAttributeException if the supplied element is missing one of the mandatory attributes
      */
     public static function fromXML(DOMElement $xml): object
     {

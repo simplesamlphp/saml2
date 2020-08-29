@@ -2,11 +2,11 @@
 
 declare(strict_types=1);
 
-namespace SAML2\XML\samlp;
+namespace SimpleSAMLL\SAML2\XML\samlp;
 
 use DOMElement;
-use SAML2\Exception\InvalidDOMElementException;
 use SimpleSAML\Assert\Assert;
+use SimpleSAML\SAML2\Exception\InvalidDOMElementException;
 
 /**
  * Class for handling SAML2 NameIDPolicy.
@@ -117,9 +117,9 @@ final class NameIDPolicy extends AbstractSamlpElement
      * Convert XML into a NameIDPolicy
      *
      * @param \DOMElement $xml The XML element we should load
-     * @return \SAML2\XML\samlp\NameIDPolicy
+     * @return \SimpleSAML\SAML2\XML\samlp\NameIDPolicy
      *
-     * @throws \SAML2\Exception\InvalidDOMElementException if the qualified name of the supplied element is wrong
+     * @throws \SimpleSAML\SAML2\Exception\InvalidDOMElementException if the qualified name of the supplied element is wrong
      */
     public static function fromXML(DOMElement $xml): object
     {

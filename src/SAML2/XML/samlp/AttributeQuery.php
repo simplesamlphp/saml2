@@ -2,18 +2,18 @@
 
 declare(strict_types=1);
 
-namespace SAML2\XML\samlp;
+namespace SimpleSAML\SAML2\XML\samlp;
 
 use DOMElement;
-use SAML2\Exception\InvalidDOMElementException;
-use SAML2\Exception\MissingElementException;
-use SAML2\Exception\TooManyElementsException;
-use SAML2\Utils;
-use SAML2\XML\ds\Signature;
-use SAML2\XML\saml\Attribute;
-use SAML2\XML\saml\Issuer;
-use SAML2\XML\saml\Subject;
 use SimpleSAML\Assert\Assert;
+use SimpleSAML\SAML2\Exception\InvalidDOMElementException;
+use SimpleSAML\SAML2\Exception\MissingElementException;
+use SimpleSAML\SAML2\Exception\TooManyElementsException;
+use SimpleSAML\SAML2\Utils;
+use SimpleSAML\SAML2\XML\ds\Signature;
+use SimpleSAML\SAML2\XML\saml\Attribute;
+use SimpleSAML\SAML2\XML\saml\Issuer;
+use SimpleSAML\SAML2\XML\saml\Subject;
 
 /**
  * Class for SAML 2 attribute query messages.
@@ -28,14 +28,14 @@ use SimpleSAML\Assert\Assert;
  * - If an attribute contains any attribute values, only the attribute values
  *   which match those in the query should be returned.
  *
- * @package SimpleSAMLphp
+ * @package simplesamlphp/saml2
  */
 class AttributeQuery extends AbstractSubjectQuery
 {
     /**
      * The attributes, as an associative array.
      *
-     * @var \SAML2\XML\saml\Attribute[]
+     * @var \SimpleSAML\SAML2\XML\saml\Attribute[]
      */
     protected $attributes = [];
 
@@ -43,14 +43,14 @@ class AttributeQuery extends AbstractSubjectQuery
     /**
      * Constructor for SAML 2 AttributeQuery.
      *
-     * @param \SAML2\XML\saml\Subject $subject
-     * @param \SAML2\XML\saml\Attribute[] $attributes
-     * @param \SAML2\XML\saml\Issuer $issuer
+     * @param \SimpleSAML\SAML2\XML\saml\Subject $subject
+     * @param \SimpleSAML\SAML2\XML\saml\Attribute[] $attributes
+     * @param \SimpleSAML\SAML2\XML\saml\Issuer $issuer
      * @param string $id
      * @param int $issueInstant
      * @param string|null $destination
      * @param string|null $consent
-     * @param \SAML2\XML\samlp\Extensions $extensions
+     * @param \SimpleSAML\SAML2\XML\samlp\Extensions $extensions
      */
     public function __construct(
         Subject $subject,
@@ -71,7 +71,7 @@ class AttributeQuery extends AbstractSubjectQuery
     /**
      * Retrieve all requested attributes.
      *
-     * @return \SAML2\XML\saml\Attribute[] All requested attributes, as an associative array.
+     * @return \SimpleSAML\SAML2\XML\saml\Attribute[] All requested attributes, as an associative array.
      */
     public function getAttributes(): array
     {
@@ -82,7 +82,7 @@ class AttributeQuery extends AbstractSubjectQuery
     /**
      * Set all requested attributes.
      *
-     * @param \SAML2\XML\saml\Attribute[] $attributes All requested attributes, as an associative array.
+     * @param \SimpleSAML\SAML2\XML\saml\Attribute[] $attributes All requested attributes, as an associative array.
      * @return void
      */
     public function setAttributes(array $attributes): void
@@ -99,10 +99,10 @@ class AttributeQuery extends AbstractSubjectQuery
      * @param \DOMElement $xml
      * @return self
      *
-     * @throws \SAML2\Exception\InvalidDOMElementException if the qualified name of the supplied element is wrong
-     * @throws \SAML2\Exception\MissingAttributeException if the supplied element is missing one of the mandatory attributes
-     * @throws \SAML2\Exception\MissingElementException if one of the mandatory child-elements is missing
-     * @throws \SAML2\Exception\TooManyElementsException if too many child-elements of a type are specified
+     * @throws \SimpleSAML\SAML2\Exception\InvalidDOMElementException if the qualified name of the supplied element is wrong
+     * @throws \SimpleSAML\SAML2\Exception\MissingAttributeException if the supplied element is missing one of the mandatory attributes
+     * @throws \SimpleSAML\SAML2\Exception\MissingElementException if one of the mandatory child-elements is missing
+     * @throws \SimpleSAML\SAML2\Exception\TooManyElementsException if too many child-elements of a type are specified
      */
     public static function fromXML(DOMElement $xml): object
     {

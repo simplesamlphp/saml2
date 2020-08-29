@@ -2,14 +2,14 @@
 
 declare(strict_types=1);
 
-namespace SAML2\XML\samlp;
+namespace SimpleSAML\SAML2\XML\samlp;
 
 use DOMElement;
-use SAML2\Exception\InvalidDOMElementException;
-use SAML2\Utils;
-use SAML2\XML\saml\AuthnContextClassRef;
-use SAML2\XML\saml\AuthnContextDeclRef;
 use SimpleSAML\Assert\Assert;
+use SimpleSAML\SAML2\Exception\InvalidDOMElementException;
+use SimpleSAML\SAML2\Utils;
+use SimpleSAML\SAML2\XML\saml\AuthnContextClassRef;
+use SimpleSAML\SAML2\XML\saml\AuthnContextDeclRef;
 
 /**
  * Class representing SAML2 RequestedAuthnContext
@@ -19,7 +19,7 @@ use SimpleSAML\Assert\Assert;
  */
 final class RequestedAuthnContext extends AbstractSamlpElement
 {
-    /** @var (\SAML2\XML\saml\AuthnContextClassRef|\SAML2\XML\saml\AuthnContextDeclRef)[] */
+    /** @var (\SimpleSAML\SAML2\XML\saml\AuthnContextClassRef|\SimpleSAML\SAML2\XML\saml\AuthnContextDeclRef)[] */
     protected $requestedAuthnContexts = [];
 
     /** @var string|null */
@@ -29,7 +29,7 @@ final class RequestedAuthnContext extends AbstractSamlpElement
     /**
      * Initialize a RequestedAuthnContext.
      *
-     * @param (\SAML2\XML\saml\AuthnContextClassRef|\SAML2\XML\saml\AuthnContextDeclRef)[] $requestedAuthnContexts
+     * @param (\SimpleSAML\SAML2\XML\saml\AuthnContextClassRef|\SimpleSAML\SAML2\XML\saml\AuthnContextDeclRef)[] $requestedAuthnContexts
      * @param string $Comparison
      */
     public function __construct(
@@ -44,7 +44,7 @@ final class RequestedAuthnContext extends AbstractSamlpElement
     /**
      * Collect the value of the requestedAuthnContexts-property
      *
-     * @return (\SAML2\XML\saml\AuthnContextClassRef|\SAML2\XML\saml\AuthnContextDeclRef)[]
+     * @return (\SimpleSAML\SAML2\XML\saml\AuthnContextClassRef|\SimpleSAML\SAML2\XML\saml\AuthnContextDeclRef)[]
      */
     public function getRequestedAuthnContexts(): array
     {
@@ -55,11 +55,11 @@ final class RequestedAuthnContext extends AbstractSamlpElement
     /**
      * Set the value of the requestedAuthnContexts-property
      *
-     * @param (\SAML2\XML\saml\AuthnContextClassRef|\SAML2\XML\saml\AuthnContextDeclRef)[] $requestedAuthnContexts
+     * @param (\SimpleSAML\SAML2\XML\saml\AuthnContextClassRef|\SimpleSAML\SAML2\XML\saml\AuthnContextDeclRef)[] $requestedAuthnContexts
      * @return void
      *
-     * @throws \SAML2\Exception\InvalidDOMElementException if the qualified name of the supplied element is wrong
-     * @throws \SAML2\Exception\InvalidDOMElementException if the supplied element is missing the Algorithm attribute
+     * @throws \SimpleSAML\SAML2\Exception\InvalidDOMElementException if the qualified name of the supplied element is wrong
+     * @throws \SimpleSAML\SAML2\Exception\InvalidDOMElementException if the supplied element is missing the Algorithm attribute
      */
     private function setRequestedAuthnContexts(array $requestedAuthnContexts): void
     {
@@ -111,9 +111,9 @@ final class RequestedAuthnContext extends AbstractSamlpElement
      * Convert XML into a RequestedAuthnContext
      *
      * @param \DOMElement $xml The XML element we should load
-     * @return \SAML2\XML\samlp\RequestedAuthnContext
+     * @return \SimpleSAML\SAML2\XML\samlp\RequestedAuthnContext
      *
-     * @throws \SAML2\Exception\InvalidDOMElementException if the qualified name of the supplied element is wrong
+     * @throws \SimpleSAML\SAML2\Exception\InvalidDOMElementException if the qualified name of the supplied element is wrong
      */
     public static function fromXML(DOMElement $xml): object
     {

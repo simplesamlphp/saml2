@@ -2,24 +2,24 @@
 
 declare(strict_types=1);
 
-namespace SAML2\Response\Validation\ConstraintValidator;
+namespace SimpleSAML\SAML2\Response\Validation\ConstraintValidator;
 
-use SAML2\Configuration\Destination;
-use SAML2\Response\Validation\ConstraintValidator;
-use SAML2\Response\Validation\Result;
-use SAML2\XML\samlp\Response;
+use SimpleSAML\SAML2\Configuration\Destination;
+use SimpleSAML\SAML2\Response\Validation\ConstraintValidator;
+use SimpleSAML\SAML2\Response\Validation\Result;
+use SimpleSAML\SAML2\XML\samlp\Response;
 
 final class DestinationMatches implements ConstraintValidator
 {
     /**
-     * @var \SAML2\Configuration\Destination
+     * @var \SimpleSAML\SAML2\Configuration\Destination
      */
     private $expectedDestination;
 
     /**
      * DestinationMatches constructor.
      *
-     * @param \SAML2\Configuration\Destination $destination
+     * @param \SimpleSAML\SAML2\Configuration\Destination $destination
      */
     public function __construct(Destination $destination)
     {
@@ -28,8 +28,8 @@ final class DestinationMatches implements ConstraintValidator
 
 
     /**
-     * @param \SAML2\XML\samlp\Response $response
-     * @param \SAML2\Response\Validation\Result $result
+     * @param \SimpleSAML\SAML2\XML\samlp\Response $response
+     * @param \SimpleSAML\SAML2\Response\Validation\Result $result
      * @return void
      */
     public function validate(Response $response, Result $result): void

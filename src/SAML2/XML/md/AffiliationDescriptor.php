@@ -39,9 +39,9 @@ final class AffiliationDescriptor extends AbstractMetadataDocument
     /**
      * KeyDescriptor elements.
      *
-     * Array of \SAML2\XML\md\KeyDescriptor elements.
+     * Array of \SimpleSAML\SAML2\XML\md\KeyDescriptor elements.
      *
-     * @var \SAML2\XML\md\KeyDescriptor[]
+     * @var \SimpleSAML\SAML2\XML\md\KeyDescriptor[]
      */
     protected $KeyDescriptors = [];
 

@@ -25,7 +25,7 @@ use SimpleSAML\SAML2\XML\SignedElementTrait;
 /**
  * Class representing a SAML 2 assertion.
  *
- * @package SimpleSAMLphp
+ * @package simplesamlphp/saml2
  */
 class Assertion implements SignedElementInterface
 {

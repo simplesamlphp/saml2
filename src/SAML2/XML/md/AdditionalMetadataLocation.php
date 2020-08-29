@@ -13,7 +13,7 @@ use SimpleSAML\SAML2\Exception\InvalidDOMElementException;
 /**
  * Class representing SAML 2 metadata AdditionalMetadataLocation element.
  *
- * @package SimpleSAMLphp
+ * @package simplesamlphp/saml2
  */
 final class AdditionalMetadataLocation extends AbstractMdElement
 {

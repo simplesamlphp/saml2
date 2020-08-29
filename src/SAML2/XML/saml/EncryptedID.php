@@ -2,16 +2,16 @@
 
 declare(strict_types=1);
 
-namespace SAML2\XML\saml;
+namespace SimpleSAML\SAML2\XML\saml;
 
 use InvalidArgumentException;
 use RobRichards\XMLSecLibs\XMLSecurityKey;
-use SAML2\Compat\ContainerSingleton;
-use SAML2\Constants;
-use SAML2\XML\AbstractXMLElement;
-use SAML2\XML\EncryptedElementInterface;
-use SAML2\XML\EncryptedElementTrait;
-use SAML2\Utils;
+use SimpleSAML\SAML2\Compat\ContainerSingleton;
+use SimpleSAML\SAML2\Constants;
+use SimpleSAML\SAML2\XML\AbstractXMLElement;
+use SimpleSAML\SAML2\XML\EncryptedElementInterface;
+use SimpleSAML\SAML2\XML\EncryptedElementTrait;
+use SimpleSAML\SAML2\Utils;
 
 /**
  * Class representing an encrypted identifier.
@@ -22,11 +22,10 @@ class EncryptedID extends AbstractSamlElement implements EncryptedElementInterfa
 {
     use EncryptedElementTrait;
 
-
     /**
      * @inheritDoc
      *
-     * @return \SAML2\XML\saml\IdentifierInterface
+     * @return \SimpleSAML\SAML2\XML\saml\IdentifierInterface
      * @throws \InvalidArgumentException
      *
      * @psalm-suppress MismatchingDocblockReturnType

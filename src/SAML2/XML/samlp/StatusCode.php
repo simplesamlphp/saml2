@@ -2,12 +2,12 @@
 
 declare(strict_types=1);
 
-namespace SAML2\XML\samlp;
+namespace SimpleSAML\SAML2\XML\samlp;
 
 use DOMElement;
-use SAML2\Constants;
-use SAML2\Exception\InvalidDOMElementException;
 use SimpleSAML\Assert\Assert;
+use SimpleSAML\SAML2\Constants;
+use SimpleSAML\SAML2\Exception\InvalidDOMElementException;
 
 /**
  * SAML StatusCode data type.
@@ -20,7 +20,7 @@ final class StatusCode extends AbstractSamlpElement
     /** @var string */
     protected $Value;
 
-    /** @var \SAML2\XML\samlp\StatusCode[] */
+    /** @var \SimpleSAML\SAML2\XML\samlp\StatusCode[] */
     protected $subCodes = [];
 
 
@@ -28,7 +28,7 @@ final class StatusCode extends AbstractSamlpElement
      * Initialize a samlp:StatusCode
      *
      * @param string $Value
-     * @param \SAML2\XML\samlp\StatusCode[] $subCodes
+     * @param \SimpleSAML\SAML2\XML\samlp\StatusCode[] $subCodes
      */
     public function __construct(string $Value = Constants::STATUS_SUCCESS, array $subCodes = [])
     {
@@ -65,7 +65,7 @@ final class StatusCode extends AbstractSamlpElement
     /**
      * Collect the subcodes
      *
-     * @return \SAML2\XML\samlp\StatusCode[]
+     * @return \SimpleSAML\SAML2\XML\samlp\StatusCode[]
      */
     public function getSubCodes(): array
     {
@@ -76,7 +76,7 @@ final class StatusCode extends AbstractSamlpElement
     /**
      * Set the value of the subCodes-property
      *
-     * @param \SAML2\XML\samlp\StatusCode[] $subCodes
+     * @param \SimpleSAML\SAML2\XML\samlp\StatusCode[] $subCodes
      * @return void
      * @throws \SimpleSAML\Assert\AssertionFailedException if the supplied array contains anything other than StatusCode objects
      */
@@ -92,10 +92,10 @@ final class StatusCode extends AbstractSamlpElement
      * Convert XML into a StatusCode
      *
      * @param \DOMElement $xml The XML element we should load
-     * @return \SAML2\XML\samlp\StatusCode
+     * @return \SimpleSAML\SAML2\XML\samlp\StatusCode
      *
-     * @throws \SAML2\Exception\InvalidDOMElementException if the qualified name of the supplied element is wrong
-     * @throws \SAML2\Exception\MissingAttributeException if the supplied element is missing one of the mandatory attributes
+     * @throws \SimpleSAML\SAML2\Exception\InvalidDOMElementException if the qualified name of the supplied element is wrong
+     * @throws \SimpleSAML\SAML2\Exception\MissingAttributeException if the supplied element is missing one of the mandatory attributes
      */
     public static function fromXML(DOMElement $xml): object
     {

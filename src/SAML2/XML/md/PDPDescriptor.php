@@ -141,7 +141,7 @@ final class PDPDescriptor extends AbstractRoleDescriptor
     /**
      * Set the AuthzService endpoints for this PDPDescriptor
      *
-     * @param \SAML2\XML\md\AuthzService[] $authzServices
+     * @param \SimpleSAML\SAML2\XML\md\AuthzService[] $authzServices
      * @return void
      * @throws \SimpleSAML\Assert\AssertionFailedException
      */

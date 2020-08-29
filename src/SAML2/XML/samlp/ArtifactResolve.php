@@ -2,16 +2,16 @@
 
 declare(strict_types=1);
 
-namespace SAML2\XML\samlp;
+namespace SimpleSAML\SAML2\XML\samlp;
 
 use DOMElement;
-use SAML2\Constants;
-use SAML2\Exception\InvalidDOMElementException;
-use SAML2\Exception\TooManyElementsException;
-use SAML2\Utils;
-use SAML2\XML\ds\Signature;
-use SAML2\XML\saml\Issuer;
 use SimpleSAML\Assert\Assert;
+use SimpleSAML\SAML2\Constants;
+use SimpleSAML\SAML2\Exception\InvalidDOMElementException;
+use SimpleSAML\SAML2\Exception\TooManyElementsException;
+use SimpleSAML\SAML2\Utils;
+use SimpleSAML\SAML2\XML\ds\Signature;
+use SimpleSAML\SAML2\XML\saml\Issuer;
 
 /**
  * The Artifact is part of the SAML 2.0 IdP code, and it builds an artifact object.
@@ -19,7 +19,7 @@ use SimpleSAML\Assert\Assert;
  * I want to use this, to be consistent with the other saml2_requests
  *
  * @author Danny Bollaert, UGent AS. <danny.bollaert@ugent.be>
- * @package SimpleSAMLphp
+ * @package simplesamlphp/saml2
  */
 class ArtifactResolve extends AbstractRequest
 {
@@ -31,12 +31,12 @@ class ArtifactResolve extends AbstractRequest
      * Initialize an ArtifactResolve.
      *
      * @param string $artifact
-     * @param \SAML2\XML\saml\Issuer|null $issuer
+     * @param \SimpleSAML\SAML2\XML\saml\Issuer|null $issuer
      * @param string|null $id
      * @param int|null $issueInstant
      * @param string|null $destination
      * @param string|null $consent
-     * @param \SAML2\XML\samlp\Extensions $extensions
+     * @param \SimpleSAML\SAML2\XML\samlp\Extensions $extensions
      *
      * @throws \Exception
      */
@@ -88,9 +88,9 @@ class ArtifactResolve extends AbstractRequest
      * @param \DOMElement $xml
      * @return self
      *
-     * @throws \SAML2\Exception\InvalidDOMElementException if the qualified name of the supplied element is wrong
-     * @throws \SAML2\Exception\MissingAttributeException if the supplied element is missing one of the mandatory attributes
-     * @throws \SAML2\Exception\TooManyElementsException if too many child-elements of a type are specified
+     * @throws \SimpleSAML\SAML2\Exception\InvalidDOMElementException if the qualified name of the supplied element is wrong
+     * @throws \SimpleSAML\SAML2\Exception\MissingAttributeException if the supplied element is missing one of the mandatory attributes
+     * @throws \SimpleSAML\SAML2\Exception\TooManyElementsException if too many child-elements of a type are specified
      */
     public static function fromXML(DOMElement $xml): object
     {

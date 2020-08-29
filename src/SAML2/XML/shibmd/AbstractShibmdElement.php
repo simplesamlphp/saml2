@@ -2,10 +2,10 @@
 
 declare(strict_types=1);
 
-namespace SAML2\XML\shibmd;
+namespace SimpleSAML\SAML2\XML\shibmd;
 
-use SAML2\Constants;
-use SAML2\XML\AbstractXMLElement;
+use SimpleSAML\SAML2\Constants;
+use SimpleSAML\SAML2\XML\AbstractXMLElement;
 
 /**
  * Abstract class to be implemented by all the classes in this namespace

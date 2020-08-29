@@ -2,25 +2,27 @@
 
 declare(strict_types=1);
 
-namespace SAML2\XML\samlp;
+namespace SimpleSAML\SAML2\XML\samlp;
 
 use DOMElement;
 use Exception;
 use RobRichards\XMLSecLibs\XMLSecurityKey;
-use SAML2\Constants;
-use SAML2\Utilities\Temporal;
-use SAML2\Utils;
-use SAML2\XML\ExtendableElementTrait;
-use SAML2\XML\saml\Issuer;
-use SAML2\XML\SignedElementInterface;
-use SAML2\XML\SignedElementTrait;
 use SimpleSAML\Assert\Assert;
+use SimpleSAML\SAML2\Constants;
+use SimpleSAML\SAML2\Utilities\Temporal;
+use SimpleSAML\SAML2\Utils;
+use SimpleSAML\SAML2\XML\ExtendableElementTrait;
+use SimpleSAML\SAML2\XML\saml\Issuer;
+use SimpleSAML\SAML2\XML\SignedElementInterface;
+use SimpleSAML\SAML2\XML\SignedElementTrait;
 
 /**
  * Base class for all SAML 2 messages.
  *
  * Implements what is common between the samlp:RequestAbstractType and
  * samlp:StatusResponseType element types.
+ *
+ * @package simplesamlphp/saml2
  */
 abstract class AbstractMessage extends AbstractSamlpElement implements SignedElementInterface
 {
@@ -67,7 +69,7 @@ abstract class AbstractMessage extends AbstractSamlpElement implements SignedEle
     /**
      * The entity id of the issuer of this message, or null if unknown.
      *
-     * @var \SAML2\XML\saml\Issuer|null
+     * @var \SimpleSAML\SAML2\XML\saml\Issuer|null
      */
     protected $issuer = null;
 
@@ -109,12 +111,12 @@ abstract class AbstractMessage extends AbstractSamlpElement implements SignedEle
     /**
      * Initialize a message.
      *
-     * @param \SAML2\XML\saml\Issuer|null $issuer
+     * @param \SimpleSAML\SAML2\XML\saml\Issuer|null $issuer
      * @param string|null $id
      * @param int|null $issueInstant
      * @param string|null $destination
      * @param string|null $consent
-     * @param \SAML2\XML\samlp\Extensions $extensions
+     * @param \SimpleSAML\SAML2\XML\samlp\Extensions $extensions
      * @param string|null $relayState
      *
      * @throws \Exception
@@ -288,7 +290,7 @@ abstract class AbstractMessage extends AbstractSamlpElement implements SignedEle
      * Get the given consent for this message.
      * Most likely (though not required) a value of urn:oasis:names:tc:SAML:2.0:consent.
      *
-     * @see \SAML2\Constants
+     * @see \SimpleSAML\SAML2\Constants
      * @return string|null Consent
      */
     public function getConsent(): ?string
@@ -301,7 +303,7 @@ abstract class AbstractMessage extends AbstractSamlpElement implements SignedEle
      * Set the given consent for this message.
      * Most likely (though not required) a value of urn:oasis:names:tc:SAML:2.0:consent.
      *
-     * @see \SAML2\Constants
+     * @see \SimpleSAML\SAML2\Constants
      * @param string|null $consent
      * @return void
      */
@@ -314,7 +316,7 @@ abstract class AbstractMessage extends AbstractSamlpElement implements SignedEle
     /**
      * Retrieve the issuer if this message.
      *
-     * @return \SAML2\XML\saml\Issuer|null The issuer of this message, or NULL if no issuer is given
+     * @return \SimpleSAML\SAML2\XML\saml\Issuer|null The issuer of this message, or NULL if no issuer is given
      */
     public function getIssuer(): ?Issuer
     {
@@ -325,7 +327,7 @@ abstract class AbstractMessage extends AbstractSamlpElement implements SignedEle
     /**
      * Set the issuer of this message.
      *
-     * @param \SAML2\XML\saml\Issuer|null $issuer The new issuer of this message
+     * @param \SimpleSAML\SAML2\XML\saml\Issuer|null $issuer The new issuer of this message
      * @return void
      */
     private function setIssuer(Issuer $issuer = null): void

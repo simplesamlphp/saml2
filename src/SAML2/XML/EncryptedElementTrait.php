@@ -148,7 +148,7 @@ trait EncryptedElementTrait
         }
 
         $dom = $enc->encryptNode($symmetricKey);
-        /** @var \SAML2\XML\xenc\EncryptedData $encData */
+        /** @var \SimpleSAML\SAML2\XML\xenc\EncryptedData $encData */
         $encData = EncryptedData::fromXML($dom);
         return new static($encData, []);
     }

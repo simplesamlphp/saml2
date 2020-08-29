@@ -2,18 +2,18 @@
 
 declare(strict_types=1);
 
-namespace SAML2\Assertion\Validation\ConstraintValidator;
+namespace SimpleSAML\SAML2\Assertion\Validation\ConstraintValidator;
 
-use SAML2\Assertion\Validation\Result;
-use SAML2\Assertion\Validation\SubjectConfirmationConstraintValidator;
-use SAML2\Constants;
-use SAML2\XML\saml\SubjectConfirmation;
+use SimpleSAML\SAML2\Assertion\Validation\Result;
+use SimpleSAML\SAML2\Assertion\Validation\SubjectConfirmationConstraintValidator;
+use SimpleSAML\SAML2\Constants;
+use SimpleSAML\SAML2\XML\saml\SubjectConfirmation;
 
 final class SubjectConfirmationMethod implements SubjectConfirmationConstraintValidator
 {
     /**
-     * @param \SAML2\XML\saml\SubjectConfirmation $subjectConfirmation
-     * @param \SAML2\Assertion\Validation\Result $result
+     * @param \SimpleSAML\SAML2\XML\saml\SubjectConfirmation $subjectConfirmation
+     * @param \SimpleSAML\SAML2\Assertion\Validation\Result $result
      * @return void
      */
     public function validate(

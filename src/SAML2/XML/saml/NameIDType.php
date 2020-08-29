@@ -2,11 +2,11 @@
 
 declare(strict_types=1);
 
-namespace SAML2\XML\saml;
+namespace SimpleSAML\SAML2\XML\saml;
 
 use DOMElement;
-use SAML2\XML\IDNameQualifiersTrait;
 use SimpleSAML\Assert\Assert;
+use SimpleSAML\SAML2\XML\IDNameQualifiersTrait;
 
 /**
  * SAML NameIDType abstract data type.

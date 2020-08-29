@@ -2,18 +2,18 @@
 
 declare(strict_types=1);
 
-namespace SAML2\XML\saml;
+namespace SimpleSAML\SAML2\XML\saml;
 
 use DOMElement;
-use SAML2\Exception\InvalidDOMElementException;
-use SAML2\Utils;
-use Webmozart\Assert\Assert;
+use SimpleSAML\SAML2\Exception\InvalidDOMElementException;
+use SimpleSAML\SAML2\Utils;
+use SimpleSAML\Assert\Assert;
 
 /**
  * Class representing SAML2 SubjectLocality
  *
  * @author Tim van Dijen, <tvdijen@gmail.com>
- * @package simplesamlphp
+ * @package simplesamlphp/saml2
  */
 final class SubjectLocality extends AbstractSamlElement
 {
@@ -105,9 +105,9 @@ final class SubjectLocality extends AbstractSamlElement
      * Convert XML into a SubjectLocality
      *
      * @param \DOMElement $xml The XML element we should load
-     * @return \SAML2\XML\saml\SubjectLocality
+     * @return \SimpleSAML\SAML2\XML\saml\SubjectLocality
      *
-     * @throws \SAML2\Exception\InvalidDOMElementException if the qualified name of the supplied element is wrong
+     * @throws \SimpleSAML\SAML2\Exception\InvalidDOMElementException if the qualified name of the supplied element is wrong
      */
     public static function fromXML(DOMElement $xml): object
     {

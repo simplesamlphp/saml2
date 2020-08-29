@@ -2,13 +2,13 @@
 
 declare(strict_types=1);
 
-namespace SAML2\XML\saml;
+namespace SimpleSAML\SAML2\XML\saml;
 
 use DOMElement;
-use SAML2\Constants;
-use SAML2\Exception\InvalidDOMElementException;
-use SAML2\XML\IDNameQualifiersTrait;
 use SimpleSAML\Assert\Assert;
+use SimpleSAML\SAML2\Constants;
+use SimpleSAML\SAML2\Exception\InvalidDOMElementException;
+use SimpleSAML\SAML2\XML\IDNameQualifiersTrait;
 
 /**
  * SAML BaseID data type.
@@ -111,9 +111,9 @@ class BaseID extends AbstractSamlElement implements BaseIdentifierInterface
      *
      * @param \DOMElement $xml The XML element we should load
      *
-     * @return \SAML2\XML\saml\BaseID
+     * @return \SimpleSAML\SAML2\XML\saml\BaseID
      *
-     * @throws \SAML2\Exception\InvalidDOMElementException if the qualified name of the supplied element is wrong
+     * @throws \SimpleSAML\SAML2\Exception\InvalidDOMElementException if the qualified name of the supplied element is wrong
      */
     public static function fromXML(DOMElement $xml): object
     {
