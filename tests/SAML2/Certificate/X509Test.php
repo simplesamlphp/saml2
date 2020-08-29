@@ -8,7 +8,7 @@ use PHPUnit\Framework\TestCase;
 use SimpleSAML\SAML2\Certificate\X509;
 
 /**
- * @covers \SAML2\Certificate\X509
+ * @covers \SimpleSAML\SAML2\Certificate\X509
  * @package simplesamlphp/saml2
  */
 final class X509Test extends TestCase

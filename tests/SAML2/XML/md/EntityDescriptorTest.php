@@ -18,9 +18,9 @@ use SimpleSAML\Assert\AssertionFailedException;
 /**
  * Class \SAML2\XML\md\EntityDescriptorTest
  *
- * @covers \SAML2\XML\md\EntityDescriptor
- * @covers \SAML2\XML\md\AbstractMetadataDocument
- * @covers \SAML2\XML\md\AbstractRoleDescriptor
+ * @covers \SimpleSAML\SAML2\XML\md\EntityDescriptor
+ * @covers \SimpleSAML\SAML2\XML\md\AbstractMetadataDocument
+ * @covers \SimpleSAML\SAML2\XML\md\AbstractRoleDescriptor
  * @package simplesamlphp/saml2
  */
 final class EntityDescriptorTest extends TestCase

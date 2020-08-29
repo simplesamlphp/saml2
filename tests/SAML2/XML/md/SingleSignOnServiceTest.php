@@ -12,7 +12,7 @@ use SimpleSAML\Assert\AssertionFailedException;
 /**
  * Tests for md:SingleSignOnService.
  *
- * @covers \SAML2\XML\md\SingleSignOnService
+ * @covers \SimpleSAML\SAML2\XML\md\SingleSignOnService
  * @package simplesamlphp/saml2
  */
 final class SingleSignOnServiceTest extends TestCase

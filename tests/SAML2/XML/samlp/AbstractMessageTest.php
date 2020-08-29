@@ -26,7 +26,7 @@ use SimpleSAML\Assert\AssertionFailedException;
 use SimpleSAML\TestUtils\PEMCertificatesMock;
 
 /**
- * @covers \SAML2\XML\samlp\AbstractMessage
+ * @covers \SimpleSAML\SAML2\XML\samlp\AbstractMessage
  * @package simplesamlphp/saml2
  */
 final class AbstractMessageTest extends MockeryTestCase

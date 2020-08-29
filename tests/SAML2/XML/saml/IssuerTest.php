@@ -13,8 +13,8 @@ use SimpleSAML\Assert\AssertionFailedException;
 /**
  * Class \SAML2\XML\saml\IssuerTest
  *
- * @covers \SAML2\XML\saml\Issuer
- * @covers \SAML2\XML\saml\NameIDType
+ * @covers \SimpleSAML\SAML2\XML\saml\Issuer
+ * @covers \SimpleSAML\SAML2\XML\saml\NameIDType
  * @package simplesamlphp/saml2
  */
 final class IssuerTest extends TestCase

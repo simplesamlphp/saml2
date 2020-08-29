@@ -9,7 +9,7 @@ use SimpleSAML\SAML2\Utilities\File;
 use SimpleSAML\SAML2\Exception\RuntimeException;
 
 /**
- * @covers \SAML2\Utilities\File
+ * @covers \SimpleSAML\SAML2\Utilities\File
  * @package simplesamlphp/saml2
  */
 final class FileTest extends TestCase

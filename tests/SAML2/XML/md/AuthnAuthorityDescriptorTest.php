@@ -11,19 +11,19 @@ use SimpleSAML\SAML2\SignedElementTestTrait;
 use SimpleSAML\Assert\AssertionFailedException;
 
 /**
- * @covers \SAML2\XML\md\AuthnAuthorityDescriptor
- * @covers \SAML2\XML\md\AbstractMetadataDocument
- * @covers \SAML2\XML\md\AbstractRoleDescriptor
+ * @covers \SimpleSAML\SAML2\XML\md\AuthnAuthorityDescriptor
+ * @covers \SimpleSAML\SAML2\XML\md\AbstractMetadataDocument
+ * @covers \SimpleSAML\SAML2\XML\md\AbstractRoleDescriptor
  * @package simplesamlphp/saml2
  */
 final class AuthnAuthorityDescriptorTest extends TestCase
 {
     use SignedElementTestTrait;
 
-    /** @var \SAML2\XML\md\AssertionIDRequestService */
+    /** @var \SimpleSAML\SAML2\XML\md\AssertionIDRequestService */
     protected $aidrs;
 
-    /** @var \SAML2\XML\md\AuthnQueryService */
+    /** @var \SimpleSAML\SAML2\XML\md\AuthnQueryService */
     protected $aqs;
 
 

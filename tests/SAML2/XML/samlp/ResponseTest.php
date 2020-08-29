@@ -16,9 +16,9 @@ use SimpleSAML\SAML2\Utils;
 /**
  * Class \SAML2\XML\samlp\ResponseTest
  *
- * @covers \SAML2\XML\samlp\Response
- * @covers \SAML2\XML\samlp\AbstractStatusResponse
- * @covers \SAML2\XML\samlp\AbstractMessage
+ * @covers \SimpleSAML\SAML2\XML\samlp\Response
+ * @covers \SimpleSAML\SAML2\XML\samlp\AbstractStatusResponse
+ * @covers \SimpleSAML\SAML2\XML\samlp\AbstractMessage
  * @package simplesamlphp/saml2
  */
 final class ResponseTest extends TestCase

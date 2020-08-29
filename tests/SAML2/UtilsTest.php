@@ -18,7 +18,7 @@ use SimpleSAML\TestUtils\PEMCertificatesMock;
 /**
  * Class \SAML2\UtilsTest
  *
- * @covers \SAML2\Utils
+ * @covers \SimpleSAML\SAML2\Utils
  * @package simplesamlphp\saml2
  */
 final class UtilsTest extends TestCase

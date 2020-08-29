@@ -15,13 +15,13 @@ use SimpleSAML\SAML2\Certificate\X509;
 use SimpleSAML\SAML2\Configuration\CertificateProvider;
 
 /**
- * @covers \SAML2\Certificate\KeyLoader
+ * @covers \SimpleSAML\SAML2\Certificate\KeyLoader
  * @package simplesamlphp/saml2
  */
 final class KeyLoaderTest extends MockeryTestCase
 {
     /**
-     * @var \SAML2\Certificate\KeyLoader
+     * @var \SimpleSAML\SAML2\Certificate\KeyLoader
      */
     private $keyLoader;
 

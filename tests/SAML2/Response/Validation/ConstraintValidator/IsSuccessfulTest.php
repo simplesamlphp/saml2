@@ -14,7 +14,7 @@ use SimpleSAML\SAML2\XML\samlp\StatusCode;
 use SimpleSAML\SAML2\XML\samlp\StatusMessage;
 
 /**
- * @covers \SAML2\Response\Validation\ConstraintValidator\IsSuccessful
+ * @covers \SimpleSAML\SAML2\Response\Validation\ConstraintValidator\IsSuccessful
  * @package simplesamlphp/saml2
  */
 final class IsSuccessfulTest extends MockeryTestCase

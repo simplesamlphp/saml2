@@ -8,7 +8,7 @@ use Mockery\Adapter\Phpunit\MockeryTestCase;
 use SimpleSAML\Assert\AssertionFailedException;
 
 /**
- * @covers \SAML2\Certificate\KeyCollection
+ * @covers \SimpleSAML\SAML2\Certificate\KeyCollection
  * @package simplesamlphp/saml2
  */
 final class KeyCollectionTest extends MockeryTestCase

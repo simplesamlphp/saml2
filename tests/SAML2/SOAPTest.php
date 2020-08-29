@@ -12,7 +12,7 @@ use SimpleSAML\SAML2\XML\samlp\MessageFactory;
 use SimpleSAML\Assert\Assert;
 
 /**
- * @covers \SAML2\SOAP
+ * @covers \SimpleSAML\SAML2\SOAP
  * @package simplesamlphp\saml2
  */
 final class SOAPTest extends MockeryTestCase

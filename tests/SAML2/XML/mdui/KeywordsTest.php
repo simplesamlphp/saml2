@@ -13,7 +13,7 @@ use SimpleSAML\Assert\AssertionFailedException;
 /**
  * Class \SAML2\XML\mdui\KeywordsTest
  *
- * @covers \SAML2\XML\mdui\Keywords
+ * @covers \SimpleSAML\SAML2\XML\mdui\Keywords
  * @package simplesamlphp/saml2
  */
 final class KeywordsTest extends TestCase

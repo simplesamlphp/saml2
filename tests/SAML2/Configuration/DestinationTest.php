@@ -8,7 +8,7 @@ use PHPUnit\Framework\TestCase;
 use SimpleSAML\SAML2\Configuration\Destination;
 
 /**
- * @covers \SAML2\Configuration\Destination
+ * @covers \SimpleSAML\SAML2\Configuration\Destination
  * @package simplesamlphp/saml2
  */
 final class DestinationTest extends TestCase

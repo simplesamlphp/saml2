@@ -12,7 +12,7 @@ use SimpleSAML\SAML2\Utils;
 /**
  * Class \SAML2\XML\mdrpi\RegistrationInfoTest
  *
- * @covers \SAML2\XML\mdrpi\RegistrationInfo
+ * @covers \SimpleSAML\SAML2\XML\mdrpi\RegistrationInfo
  * @package simplesamlphp/saml2
  */
 final class RegistrationInfoTest extends TestCase

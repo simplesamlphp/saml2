@@ -12,7 +12,7 @@ use SimpleSAML\SAML2\Utils;
 /**
  * Class \SAML2\XML\mdui\UIInfoTest
  *
- * @covers \SAML2\XML\mdui\UIInfo
+ * @covers \SimpleSAML\SAML2\XML\mdui\UIInfo
  * @package simplesamlphp/saml2
  */
 final class UIInfoTest extends TestCase

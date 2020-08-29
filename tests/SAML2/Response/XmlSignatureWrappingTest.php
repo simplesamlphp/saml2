@@ -19,12 +19,12 @@ use SimpleSAML\TestUtils\PEMCertificatesMock;
 final class XmlSignatureWrappingTest extends MockeryTestCase
 {
     /**
-     * @var \SAML2\Signature\Validator
+     * @var \SimpleSAML\SAML2\Signature\Validator
      */
     private $signatureValidator;
 
     /**
-     * @var \SAML2\Configuration\IdentityProvider
+     * @var \SimpleSAML\SAML2\Configuration\IdentityProvider
      */
     private $identityProviderConfiguration;
 
@@ -72,7 +72,7 @@ final class XmlSignatureWrappingTest extends MockeryTestCase
 
 
     /**
-     * @return \SAML2\XML\saml\Assertion
+     * @return \SimpleSAML\SAML2\XML\saml\Assertion
      */
     private function getSignedAssertionWithSignatureThatReferencesAnotherAssertion(): Assertion
     {
@@ -84,7 +84,7 @@ final class XmlSignatureWrappingTest extends MockeryTestCase
 
 
     /**
-     * @return \SAML2\XML\saml\Assertion
+     * @return \SimpleSAML\SAML2\XML\saml\Assertion
      */
     private function getSignedAssertionWithEmbeddedAssertionReferencedInSignature(): Assertion
     {

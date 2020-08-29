@@ -22,7 +22,7 @@ use SimpleSAML\SAML2\XML\samlp\Response;
 use SimpleSAML\TestUtils\PEMCertificatesMock;
 
 /**
- * @covers \SAML2\Signature\PublicKeyValidator
+ * @covers \SimpleSAML\SAML2\Signature\PublicKeyValidator
  * @package simplesamlphp/saml2
  */
 final class PublicKeyValidatorTest extends MockeryTestCase
@@ -122,7 +122,7 @@ final class PublicKeyValidatorTest extends MockeryTestCase
 
 
     /**
-     * @return \SAML2\Certificate\KeyLoader
+     * @return \SimpleSAML\SAML2\Certificate\KeyLoader
      */
     private function prepareKeyLoader($returnValue)
     {

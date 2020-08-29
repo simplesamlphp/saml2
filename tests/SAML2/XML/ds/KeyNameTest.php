@@ -12,7 +12,7 @@ use SimpleSAML\SAML2\Utils;
 /**
  * Class \SAML2\XML\ds\KeyNameTest
  *
- * @covers \SAML2\XML\ds\KeyName
+ * @covers \SimpleSAML\SAML2\XML\ds\KeyName
  *
  * @author Tim van Dijen, <tvdijen@gmail.com>
  * @package simplesamlphp/saml2

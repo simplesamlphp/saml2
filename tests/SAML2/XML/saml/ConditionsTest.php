@@ -11,7 +11,7 @@ use SimpleSAML\SAML2\DOMDocumentFactory;
 /**
  * Class \SAML2\XML\saml\ConditionsTest
  *
- * @covers \SAML2\XML\saml\Conditions
+ * @covers \SimpleSAML\SAML2\XML\saml\Conditions
  *
  * @author Tim van Dijen, <tvdijen@gmail.com>
  * @package simplesamlphp/saml2

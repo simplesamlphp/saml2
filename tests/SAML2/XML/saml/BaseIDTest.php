@@ -12,7 +12,7 @@ use SimpleSAML\SAML2\DOMDocumentFactory;
 /**
  * Class \SAML2\XML\saml\BaseIDTest
  *
- * @covers \SAML2\XML\saml\BaseID
+ * @covers \SimpleSAML\SAML2\XML\saml\BaseID
  *
  * @author Tim van Dijen, <tvdijen@gmail.com>
  * @package simplesamlphp/saml2
@@ -96,7 +96,7 @@ XML
      */
     public function testUnmarshallingCustomClass(): void
     {
-        /** @var \SAML2\CustomBaseID $baseId */
+        /** @var \SimpleSAML\SAML2\CustomBaseID $baseId */
         $baseId = CustomBaseID::fromXML($this->document->documentElement);
 
         $this->assertEquals(123.456, $baseId->getValue());

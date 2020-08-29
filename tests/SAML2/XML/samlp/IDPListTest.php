@@ -14,7 +14,7 @@ use SimpleSAML\SAML2\XML\samlp\IDPList;
 /**
  * Class \SAML2\XML\samlp\IDPListTest
  *
- * @covers \SAML2\XML\samlp\IDPList
+ * @covers \SimpleSAML\SAML2\XML\samlp\IDPList
  *
  * @author Tim van Dijen, <tvdijen@gmail.com>
  * @package simplesamlphp/saml2

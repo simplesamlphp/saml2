@@ -12,7 +12,7 @@ use SimpleSAML\SAML2\XML\Chunk;
 /**
  * Class \SAML2\XML\samlp\StatusDetailTest
  *
- * @covers \SAML2\XML\samlp\StatusDetail
+ * @covers \SimpleSAML\SAML2\XML\samlp\StatusDetail
  *
  * @author Tim van Dijen, <tvdijen@gmail.com>
  * @package simplesamlphp/saml2

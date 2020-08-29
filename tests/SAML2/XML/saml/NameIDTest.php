@@ -10,8 +10,8 @@ use SimpleSAML\SAML2\DOMDocumentFactory;
 /**
  * Class \SAML2\XML\saml\NameIDTest
  *
- * @covers \SAML2\XML\saml\NameID
- * @covers \SAML2\XML\saml\NameIDType
+ * @covers \SimpleSAML\SAML2\XML\saml\NameID
+ * @covers \SimpleSAML\SAML2\XML\saml\NameIDType
  *
  * @author Tim van Dijen, <tvdijen@gmail.com>
  * @package simplesamlphp/saml2

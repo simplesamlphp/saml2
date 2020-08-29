@@ -11,7 +11,7 @@ use SimpleSAML\SAML2\Exception\InvalidArgumentException;
 use SimpleSAML\SAML2\Exception\RuntimeException;
 
 /**
- * @covers \SAML2\DOMDocumentFactory
+ * @covers \SimpleSAML\SAML2\DOMDocumentFactory
  * @package simplesamlphp\saml2
  */
 final class DOMDocumentFactoryTest extends TestCase

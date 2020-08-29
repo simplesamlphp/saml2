@@ -10,9 +10,9 @@ use SimpleSAML\SAML2\DOMDocumentFactory;
 use SimpleSAML\SAML2\Utils;
 
 /**
- * @covers \SAML2\XML\samlp\ArtifactResolve
- * @covers \SAML2\XML\samlp\AbstractRequest
- * @covers \SAML2\XML\samlp\AbstractMessage
+ * @covers \SimpleSAML\SAML2\XML\samlp\ArtifactResolve
+ * @covers \SimpleSAML\SAML2\XML\samlp\AbstractRequest
+ * @covers \SimpleSAML\SAML2\XML\samlp\AbstractMessage
  * @package simplesamlphp/saml2
  */
 final class ArtifactResolveTest extends TestCase

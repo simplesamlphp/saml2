@@ -15,7 +15,7 @@ use SimpleSAML\SAML2\XML\samlp\Scoping;
 /**
  * Class \SAML2\XML\samlp\ScopingTest
  *
- * @covers \SAML2\XML\samlp\Scoping
+ * @covers \SimpleSAML\SAML2\XML\samlp\Scoping
  *
  * @author Tim van Dijen, <tvdijen@gmail.com>
  * @package simplesamlphp/saml2

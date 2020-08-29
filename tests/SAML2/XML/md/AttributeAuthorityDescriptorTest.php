@@ -16,19 +16,19 @@ use SimpleSAML\Assert\AssertionFailedException;
 /**
  * Tests for the AttributeAuthorityDescriptor class.
  *
- * @covers \SAML2\XML\md\AttributeAuthorityDescriptor
- * @covers \SAML2\XML\md\AbstractMetadataDocument
- * @covers \SAML2\XML\md\AbstractRoleDescriptor
+ * @covers \SimpleSAML\SAML2\XML\md\AttributeAuthorityDescriptor
+ * @covers \SimpleSAML\SAML2\XML\md\AbstractMetadataDocument
+ * @covers \SimpleSAML\SAML2\XML\md\AbstractRoleDescriptor
  * @package simplesamlphp/saml2
  */
 final class AttributeAuthorityDescriptorTest extends TestCase
 {
     use SignedElementTestTrait;
 
-    /** @var \SAML2\XML\md\AttributeService */
+    /** @var \SimpleSAML\SAML2\XML\md\AttributeService */
     protected $as;
 
-    /** @var \SAML2\XML\md\AssertionIDRequestService */
+    /** @var \SimpleSAML\SAML2\XML\md\AssertionIDRequestService */
     protected $aidrs;
 
 

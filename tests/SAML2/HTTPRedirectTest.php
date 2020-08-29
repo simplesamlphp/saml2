@@ -19,7 +19,7 @@ use SimpleSAML\SAML2\XML\samlp\StatusCode;
 use SimpleSAML\TestUtils\PEMCertificatesMock;
 
 /**
- * @covers \SAML2\HTTPRedirect
+ * @covers \SimpleSAML\SAML2\HTTPRedirect
  * @package simplesamlphp\saml2
  */
 final class HTTPRedirectTest extends MockeryTestCase

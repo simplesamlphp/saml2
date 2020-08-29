@@ -2,7 +2,7 @@
 
 declare(strict_types=1);
 
-namespace SAML2\XML\samlp;
+namespace SimpleSAML\SAML2\XML\samlp;
 
 use PHPUnit\Framework\TestCase;
 use RobRichards\XMLSecLibs\XMLSecurityKey;
@@ -18,10 +18,10 @@ use SimpleSAML\SAML2\XML\samlp\AbstractResponse;
 use SimpleSAML\TestUtils\PEMCertificatesMock;
 
 /**
- * Class \SAML2\XML\samlp\AbstractStatusResponseTest
+ * Class \SimpleSAML\SAML2\XML\samlp\AbstractStatusResponseTest
  *
- * @covers \SAML2\XML\samlp\AbstractStatusResponse
- * @covers \SAML2\XML\samlp\AbstractMessage
+ * @covers \SimpleSAML\SAML2\XML\samlp\AbstractStatusResponse
+ * @covers \SimpleSAML\SAML2\XML\samlp\AbstractMessage
  * @package simplesamlphp/saml2
  */
 final class AbstractStatusResponseTest extends TestCase

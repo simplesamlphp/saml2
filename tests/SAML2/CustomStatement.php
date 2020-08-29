@@ -9,7 +9,7 @@ use SimpleSAML\SAML2\XML\saml\Statement;
 use SimpleSAML\Assert\Assert;
 
 /**
- * @covers \SAML2\CustomStatement
+ * @covers \SimpleSAML\SAML2\CustomStatement
  * @package simplesamlphp\saml2
  */
 final class CustomStatement extends Statement

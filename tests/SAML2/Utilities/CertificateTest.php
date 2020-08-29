@@ -8,7 +8,7 @@ use PHPUnit\Framework\TestCase;
 use SimpleSAML\TestUtils\PEMCertificatesMock;
 
 /**
- * @covers \SAML2\Utilities\Certificate
+ * @covers \SimpleSAML\SAML2\Utilities\Certificate
  * @package simplesamlphp/saml2
  */
 final class CertificateTest extends TestCase

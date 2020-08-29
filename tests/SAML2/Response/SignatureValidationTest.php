@@ -24,18 +24,18 @@ use SimpleSAML\TestUtils\PEMCertificatesMock;
 /**
  * Test that ensures that either the response or the assertion(s) or both must be signed.
  *
- * @covers \SAML2\Response\SignatureValidation
+ * @covers \SimpleSAML\SAML2\Response\SignatureValidation
  * @package simplesamlphp/saml2
  */
 final class SignatureValidationTest extends MockeryTestCase
 {
     /**
-     * @var \SAML2\Configuration\IdentityProvider
+     * @var \SimpleSAML\SAML2\Configuration\IdentityProvider
      */
     private $identityProviderConfiguration;
 
     /**
-     * @var \SAML2\Configuration\ServiceProvider
+     * @var \SimpleSAML\SAML2\Configuration\ServiceProvider
      */
     private $serviceProviderConfiguration;
 
@@ -182,7 +182,7 @@ final class SignatureValidationTest extends MockeryTestCase
 
 
     /**
-     * @return \SAML2\XML\samlp\Response
+     * @return \SimpleSAML\SAML2\XML\samlp\Response
      */
     private function getSignedResponseWithUnsignedAssertion(): Response
     {
@@ -200,7 +200,7 @@ final class SignatureValidationTest extends MockeryTestCase
 
 
     /**
-     * @return \SAML2\XML\samlp\Response
+     * @return \SimpleSAML\SAML2\XML\samlp\Response
      */
     private function getUnsignedResponseWithSignedAssertion(): Response
     {
@@ -211,7 +211,7 @@ final class SignatureValidationTest extends MockeryTestCase
 
 
     /**
-     * @return \SAML2\XML\samlp\Response
+     * @return \SimpleSAML\SAML2\XML\samlp\Response
      */
     private function getSignedResponseWithSignedAssertion(): Response
     {
@@ -228,7 +228,7 @@ final class SignatureValidationTest extends MockeryTestCase
 
 
     /**
-     * @return \SAML2\XML\samlp\Response
+     * @return \SimpleSAML\SAML2\XML\samlp\Response
      */
     private function getUnsignedResponseWithUnsignedAssertion(): Response
     {

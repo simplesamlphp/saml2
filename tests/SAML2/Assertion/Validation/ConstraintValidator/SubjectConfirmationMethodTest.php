@@ -11,7 +11,7 @@ use SimpleSAML\SAML2\Constants;
 use SimpleSAML\SAML2\XML\saml\SubjectConfirmation;
 
 /**
- * @covers \SAML2\Assertion\Validation\ConstraintValidator\SubjectConfirmationMethod
+ * @covers \SimpleSAML\SAML2\Assertion\Validation\ConstraintValidator\SubjectConfirmationMethod
  * @package simplesamlphp/saml2
  */
 final class SubjectConfirmationMethodTest extends MockeryTestCase

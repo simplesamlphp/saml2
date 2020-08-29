@@ -13,9 +13,9 @@ use SimpleSAML\SAML2\DOMDocumentFactory;
 use SimpleSAML\SAML2\Utils;
 
 /**
- * @covers \SAML2\XML\samlp\ArtifactResponse
- * @covers \SAML2\XML\samlp\AbstractStatusResponse
- * @covers \SAML2\XML\samlp\AbstractMessage
+ * @covers \SimpleSAML\SAML2\XML\samlp\ArtifactResponse
+ * @covers \SimpleSAML\SAML2\XML\samlp\AbstractStatusResponse
+ * @covers \SimpleSAML\SAML2\XML\samlp\AbstractMessage
  * @package simplesamlphp/saml2
  */
 final class ArtifactResponseTest extends TestCase

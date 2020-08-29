@@ -15,7 +15,7 @@ use SimpleSAML\SAML2\XML\saml\SubjectConfirmationData;
 use SimpleSAML\SAML2\XML\saml\SubjectConfirmationMatches;
 
 /**
- * @covers \SAML2\Assertion\Validation\ConstraintValidator\SubjectConfirmationRecipientMatches
+ * @covers \SimpleSAML\SAML2\Assertion\Validation\ConstraintValidator\SubjectConfirmationRecipientMatches
  * @package simplesamlphp/saml2
  */
 final class SubjectConfirmationRecipientMatchesTest extends MockeryTestCase

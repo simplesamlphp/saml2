@@ -11,7 +11,7 @@ use SimpleSAML\SAML2\DOMDocumentFactory;
 /**
  * Tests for AttributeValue elements.
  *
- * @covers \SAML2\XML\saml\AttributeValue
+ * @covers \SimpleSAML\SAML2\XML\saml\AttributeValue
  * @package simplesamlphp/saml2
  */
 final class AttributeValueTest extends TestCase

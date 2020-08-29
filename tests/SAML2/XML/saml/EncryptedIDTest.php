@@ -28,7 +28,7 @@ use SimpleSAML\TestUtils\PEMCertificatesMock;
 /**
  * Class EncryptedIDTest
  *
- * @covers \SAML2\XML\saml\EncryptedID
+ * @covers \SimpleSAML\SAML2\XML\saml\EncryptedID
  * @package simplesamlphp/saml2
  */
 final class EncryptedIDTest extends TestCase

@@ -22,7 +22,7 @@ use SimpleSAML\SAML2\XML\shibmd\Scope;
  *
  * This class tests for currently supported metadata extensions.
  *
- * @covers \SAML2\XML\md\Extensions
+ * @covers \SimpleSAML\SAML2\XML\md\Extensions
  * @package simplesamlphp/saml2
  */
 final class ExtensionsTest extends TestCase

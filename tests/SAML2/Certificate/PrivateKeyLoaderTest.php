@@ -10,13 +10,13 @@ use SimpleSAML\SAML2\Certificate\PrivateKey;
 use SimpleSAML\SAML2\Certificate\PrivateKeyLoader;
 
 /**
- * @covers \SAML2\Certificate\PrivateKeyLoader
+ * @covers \SimpleSAML\SAML2\Certificate\PrivateKeyLoader
  * @package simplesamlphp/saml2
  */
 final class PrivateKeyLoaderTest extends TestCase
 {
     /**
-     * @var \SAML2\Certificate\PrivateKeyLoader
+     * @var \SimpleSAML\SAML2\Certificate\PrivateKeyLoader
      */
     private $privateKeyLoader;
 
@@ -35,7 +35,7 @@ final class PrivateKeyLoaderTest extends TestCase
      * @test
      * @dataProvider privateKeyTestProvider
      *
-     * @param \SAML2\Configuration\PrivateKey $configuredKey
+     * @param \SimpleSAML\SAML2\Configuration\PrivateKey $configuredKey
      * @return void
      */
     public function loadingAConfiguredPrivateKeyReturnsACertificatePrivateKey(

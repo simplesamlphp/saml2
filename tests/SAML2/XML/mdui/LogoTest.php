@@ -14,7 +14,7 @@ use SimpleSAML\Assert\AssertionFailedException;
 /**
  * Class \SAML2\XML\mdui\LogoTest
  *
- * @covers \SAML2\XML\mdui\Logo
+ * @covers \SimpleSAML\SAML2\XML\mdui\Logo
  * @package simplesamlphp/saml2
  */
 final class LogoTest extends TestCase

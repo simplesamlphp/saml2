@@ -13,7 +13,7 @@ use SimpleSAML\Assert\AssertionFailedException;
 /**
  * Class \SAML2\XML\saml\AuthnContextTest
  *
- * @covers \SAML2\XML\saml\AuthnContext
+ * @covers \SimpleSAML\SAML2\XML\saml\AuthnContext
  * @package simplesamlphp/saml2
  */
 final class AuthnContextTest extends TestCase

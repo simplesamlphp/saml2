@@ -14,7 +14,7 @@ use SimpleSAML\TestUtils\PEMCertificatesMock;
 /**
  * Class \SAML2\XML\saml\AttributeStatementTest
  *
- * @covers \SAML2\XML\saml\AttributeStatement
+ * @covers \SimpleSAML\SAML2\XML\saml\AttributeStatement
  * @package simplesamlphp/saml2
  */
 final class AttributeStatementTest extends TestCase
@@ -28,7 +28,7 @@ final class AttributeStatementTest extends TestCase
     /** @var \DOMDocument */
     private $encryptedAttributeXML;
 
-    /** @var \SAML2\XML\saml\EncryptedAttribute */
+    /** @var \SimpleSAML\SAML2\XML\saml\EncryptedAttribute */
     private $encryptedAttribute;
 
 

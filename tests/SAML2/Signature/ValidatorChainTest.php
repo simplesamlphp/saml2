@@ -13,13 +13,13 @@ use SimpleSAML\SAML2\XML\samlp\StatusCode;
 use SimpleSAML\SAML2\Signature\MissingConfigurationException;
 
 /**
- * @covers \SAML2\Signature\ValidatorChain
+ * @covers \SimpleSAML\SAML2\Signature\ValidatorChain
  * @package simplesamlphp/saml2
  */
 final class ValidatorChainTest extends TestCase
 {
     /**
-     * @var \SAML2\Signature\ValidatorChain
+     * @var \SimpleSAML\SAML2\Signature\ValidatorChain
      */
     private $chain;
 

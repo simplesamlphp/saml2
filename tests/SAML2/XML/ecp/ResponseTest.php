@@ -15,7 +15,7 @@ use SimpleSAML\SAML2\XML\ecp\Response;
 use SimpleSAML\Assert\AssertionFailedException;
 
 /**
- * @covers \SAML2\XML\ecp\Response
+ * @covers \SimpleSAML\SAML2\XML\ecp\Response
  * @package simplesamlphp/saml2
  */
 final class ResponseTest extends TestCase

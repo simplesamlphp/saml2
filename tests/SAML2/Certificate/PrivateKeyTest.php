@@ -9,7 +9,7 @@ use SimpleSAML\SAML2\Certificate\PrivateKey;
 use SimpleSAML\TestUtils\PEMCertificatesMock;
 
 /**
- * @covers \SAML2\Certificate\PrivateKey
+ * @covers \SimpleSAML\SAML2\Certificate\PrivateKey
  * @package simplesamlphp/saml2
  */
 final class PrivateKeyTest extends MockeryTestCase

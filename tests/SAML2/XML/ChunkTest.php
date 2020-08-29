@@ -13,7 +13,7 @@ use SimpleSAML\SAML2\XML\saml\AttributeValue;
 /**
  * Class \SAML2\XML\ChunkTest
  *
- * @covers \SAML2\XML\Chunk
+ * @covers \SimpleSAML\SAML2\XML\Chunk
  * @package simplesamlphp/saml2
  */
 final class ChunkTest extends TestCase

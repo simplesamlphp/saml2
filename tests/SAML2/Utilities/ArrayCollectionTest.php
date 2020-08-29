@@ -9,7 +9,7 @@ use SimpleSAML\SAML2\Utilities\ArrayCollection;
 use SimpleSAML\SAML2\Exception\RuntimeException;
 
 /**
- * @covers \SAML2\Utilities\ArrayCollection
+ * @covers \SimpleSAML\SAML2\Utilities\ArrayCollection
  * @package simplesamlphp/saml2
  */
 final class ArrayCollectionTest extends TestCase

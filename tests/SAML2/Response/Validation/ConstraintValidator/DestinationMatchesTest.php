@@ -11,7 +11,7 @@ use SimpleSAML\SAML2\Response\Validation\Result;
 use SimpleSAML\SAML2\Response\Validation\ConstraintValidator\DestinationMatches;
 
 /**
- * @covers \SAML2\Response\Validation\ConstraintValidator\DestinationMatches
+ * @covers \SimpleSAML\SAML2\Response\Validation\ConstraintValidator\DestinationMatches
  * @package simplesamlphp/saml2
  */
 final class DestinationMatchesTest extends MockeryTestCase
