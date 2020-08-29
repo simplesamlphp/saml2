@@ -5,11 +5,11 @@ declare(strict_types=1);
 namespace SAML2\XML\md;
 
 use PHPUnit\Framework\TestCase;
-use SAML2\Constants;
-use SAML2\DOMDocumentFactory;
-use SAML2\Exception\MissingAttributeException;
-use SAML2\Exception\MissingElementException;
-use SAML2\XML\saml\AttributeValue;
+use SimpleSAMLSAML2\Constants;
+use SimpleSAMLSAML2\DOMDocumentFactory;
+use SimpleSAMLSAML2\Exception\MissingAttributeException;
+use SimpleSAMLSAML2\Exception\MissingElementException;
+use SimpleSAMLSAML2\XML\saml\AttributeValue;
 use SimpleSAML\Assert\AssertionFailedException;
 
 /**

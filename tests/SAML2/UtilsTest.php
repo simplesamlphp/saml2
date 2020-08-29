@@ -6,13 +6,13 @@ namespace SAML2;
 
 use Exception;
 use PHPUnit\Framework\TestCase;
-use SAML2\Constants;
-use SAML2\DOMDocumentFactory;
-use SAML2\XML\ds\X509Data;
-use SAML2\XML\saml\NameID;
-use SAML2\XML\saml\Subject;
-use SAML2\XML\samlp\AttributeQuery;
-use SAML2\Utils;
+use SimpleSAMLSAML2\Constants;
+use SimpleSAMLSAML2\DOMDocumentFactory;
+use SimpleSAMLSAML2\XML\ds\X509Data;
+use SimpleSAMLSAML2\XML\saml\NameID;
+use SimpleSAMLSAML2\XML\saml\Subject;
+use SimpleSAMLSAML2\XML\samlp\AttributeQuery;
+use SimpleSAMLSAML2\Utils;
 use SimpleSAML\TestUtils\PEMCertificatesMock;
 
 /**

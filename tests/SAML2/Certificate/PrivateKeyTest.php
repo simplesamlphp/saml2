@@ -5,7 +5,7 @@ declare(strict_types=1);
 namespace SAML2\Certificate;
 
 use Mockery\Adapter\Phpunit\MockeryTestCase;
-use SAML2\Certificate\PrivateKey;
+use SimpleSAMLSAML2\Certificate\PrivateKey;
 use SimpleSAML\TestUtils\PEMCertificatesMock;
 
 /**

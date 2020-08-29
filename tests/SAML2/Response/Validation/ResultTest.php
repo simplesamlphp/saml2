@@ -5,7 +5,7 @@ declare(strict_types=1);
 namespace SAML2\Response\Validation;
 
 use PHPUnit\Framework\TestCase;
-use SAML2\Response\Validation\Result;
+use SimpleSAMLSAML2\Response\Validation\Result;
 
 /**
  * @covers \SAML2\Respose\Validation\Result

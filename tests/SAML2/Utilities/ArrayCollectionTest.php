@@ -5,8 +5,8 @@ declare(strict_types=1);
 namespace SAML2\Utilities;
 
 use PHPUnit\Framework\TestCase;
-use SAML2\Utilities\ArrayCollection;
-use SAML2\Exception\RuntimeException;
+use SimpleSAMLSAML2\Utilities\ArrayCollection;
+use SimpleSAMLSAML2\Exception\RuntimeException;
 
 /**
  * @covers \SAML2\Utilities\ArrayCollection

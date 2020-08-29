@@ -5,16 +5,16 @@ declare(strict_types=1);
 namespace SAML2\XML\saml;
 
 use PHPUnit\Framework\TestCase;
-use SAML2\Assertion\Exception\InvalidSubjectConfirmationException;
-use SAML2\Assertion\ProcessorBuilder;
-use SAML2\Configuration\Destination;
-use SAML2\Configuration\IdentityProvider;
-use SAML2\Configuration\ServiceProvider;
-use SAML2\DOMDocumentFactory;
-use SAML2\Signature\Validator;
-use SAML2\XML\samlp\Response;
-use SAML2\XML\samlp\Status;
-use SAML2\XML\samlp\StatusCode;
+use SimpleSAMLSAML2\Assertion\Exception\InvalidSubjectConfirmationException;
+use SimpleSAMLSAML2\Assertion\ProcessorBuilder;
+use SimpleSAMLSAML2\Configuration\Destination;
+use SimpleSAMLSAML2\Configuration\IdentityProvider;
+use SimpleSAMLSAML2\Configuration\ServiceProvider;
+use SimpleSAMLSAML2\DOMDocumentFactory;
+use SimpleSAMLSAML2\Signature\Validator;
+use SimpleSAMLSAML2\XML\samlp\Response;
+use SimpleSAMLSAML2\XML\samlp\Status;
+use SimpleSAMLSAML2\XML\samlp\StatusCode;
 
 /**
  * Tests for the SubjectConfirmation validators

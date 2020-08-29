@@ -5,12 +5,12 @@ declare(strict_types=1);
 namespace SAML2\XML\samlp;
 
 use PHPUnit\Framework\TestCase;
-use SAML2\Constants;
-use SAML2\DOMDocumentFactory;
-use SAML2\Utils;
-use SAML2\XML\samlp\IDPEntry;
-use SAML2\XML\samlp\IDPList;
-use SAML2\XML\samlp\Scoping;
+use SimpleSAMLSAML2\Constants;
+use SimpleSAMLSAML2\DOMDocumentFactory;
+use SimpleSAMLSAML2\Utils;
+use SimpleSAMLSAML2\XML\samlp\IDPEntry;
+use SimpleSAMLSAML2\XML\samlp\IDPList;
+use SimpleSAMLSAML2\XML\samlp\Scoping;
 
 /**
  * Class \SAML2\XML\samlp\ScopingTest

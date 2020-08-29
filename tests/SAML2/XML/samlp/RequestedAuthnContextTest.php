@@ -5,10 +5,10 @@ declare(strict_types=1);
 namespace SAML2\XML\samlp;
 
 use PHPUnit\Framework\TestCase;
-use SAML2\Constants;
-use SAML2\DOMDocumentFactory;
-use SAML2\XML\saml\AuthnContextClassRef;
-use SAML2\XML\saml\AuthnContextDeclRef;
+use SimpleSAMLSAML2\Constants;
+use SimpleSAMLSAML2\DOMDocumentFactory;
+use SimpleSAMLSAML2\XML\saml\AuthnContextClassRef;
+use SimpleSAMLSAML2\XML\saml\AuthnContextDeclRef;
 use SimpleSAML\Assert\AssertionFailedException;
 
 /**

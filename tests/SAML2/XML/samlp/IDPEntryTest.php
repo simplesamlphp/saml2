@@ -5,8 +5,8 @@ declare(strict_types=1);
 namespace SAML2\XML\samlp;
 
 use PHPUnit\Framework\TestCase;
-use SAML2\DOMDocumentFactory;
-use SAML2\XML\samlp\IDPEntry;
+use SimpleSAMLSAML2\DOMDocumentFactory;
+use SimpleSAMLSAML2\XML\samlp\IDPEntry;
 
 /**
  * Class \SAML2\XML\samlp\IDPEntryTest

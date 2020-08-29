@@ -5,9 +5,9 @@ declare(strict_types=1);
 namespace SAML2\Certificate;
 
 use PHPUnit\Framework\TestCase;
-use SAML2\Certificate\Key;
-use SAML2\Certificate\Exception\InvalidKeyUsageException;
-use SAML2\Exception\InvalidArgumentException;
+use SimpleSAMLSAML2\Certificate\Key;
+use SimpleSAMLSAML2\Certificate\Exception\InvalidKeyUsageException;
+use SimpleSAMLSAML2\Exception\InvalidArgumentException;
 
 /**
  * @covers \SAML2\Certificate\Key

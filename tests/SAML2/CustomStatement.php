@@ -3,7 +3,7 @@
 namespace SAML2;
 
 use DOMElement;
-use SAML2\XML\saml\Statement;
+use SimpleSAMLSAML2\XML\saml\Statement;
 use SimpleSAML\Assert\Assert;
 
 /**

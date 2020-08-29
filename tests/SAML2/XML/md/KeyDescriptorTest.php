@@ -5,11 +5,11 @@ declare(strict_types=1);
 namespace SAML2\XML\md;
 
 use PHPUnit\Framework\TestCase;
-use SAML2\Constants;
-use SAML2\DOMDocumentFactory;
-use SAML2\XML\ds\AbstractDsElement;
-use SAML2\XML\ds\KeyInfo;
-use SAML2\XML\ds\KeyName;
+use SimpleSAMLSAML2\Constants;
+use SimpleSAMLSAML2\DOMDocumentFactory;
+use SimpleSAMLSAML2\XML\ds\AbstractDsElement;
+use SimpleSAMLSAML2\XML\ds\KeyInfo;
+use SimpleSAMLSAML2\XML\ds\KeyName;
 use SimpleSAML\Assert\AssertionFailedException;
 
 /**

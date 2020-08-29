@@ -8,11 +8,11 @@ use DOMDocument;
 use Exception;
 use Mockery\Adapter\Phpunit\MockeryTestCase;
 use RobRichards\XMLSecLibs\XMLSecurityKey;
-use SAML2\Constants;
-use SAML2\DOMDocumentFactory;
-use SAML2\Exception\TooManyElementsException;
-use SAML2\Utils;
-use SAML2\XML\Chunk;
+use SimpleSAMLSAML2\Constants;
+use SimpleSAMLSAML2\DOMDocumentFactory;
+use SimpleSAMLSAML2\Exception\TooManyElementsException;
+use SimpleSAMLSAML2\Utils;
+use SimpleSAMLSAML2\XML\Chunk;
 use SimpleSAML\TestUtils\PEMCertificatesMock;
 
 /**

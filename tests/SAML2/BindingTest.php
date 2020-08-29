@@ -2,16 +2,16 @@
 
 declare(strict_types=1);
 
-namespace SAML2;
+namespace SimpleSAML\SAML2;
 
 use Exception;
 use PHPUnit\Framework\TestCase;
-use SAML2\Binding;
-use SAML2\Constants;
-use SAML2\HTTPArtifact;
-use SAML2\HTTPPost;
-use SAML2\HTTPRedirect;
-use SAML2\SOAP;
+use SimpleSAML\SAML2\Binding;
+use SimpleSAML\SAML2\Constants;
+use SimpleSAML\SAML2\HTTPArtifact;
+use SimpleSAML\SAML2\HTTPPost;
+use SimpleSAML\SAML2\HTTPRedirect;
+use SimpleSAML\SAML2\SOAP;
 
 /**
  * @covers \SAML2\Binding

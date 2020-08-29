@@ -5,7 +5,7 @@ declare(strict_types=1);
 namespace SAML2\Configuration;
 
 use PHPUnit\Framework\TestCase;
-use SAML2\Configuration\Destination;
+use SimpleSAMLSAML2\Configuration\Destination;
 
 /**
  * @covers \SAML2\Configuration\Destination

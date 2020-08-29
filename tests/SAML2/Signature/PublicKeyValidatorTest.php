@@ -8,17 +8,17 @@ use Mockery;
 use Mockery\Adapter\Phpunit\MockeryTestCase;
 use Psr\Log\NullLogger;
 use RobRichards\XMLSecLibs\XMLSecurityKey;
-use SAML2\Certificate\Key;
-use SAML2\Certificate\KeyCollection;
-use SAML2\Certificate\KeyLoader;
-use SAML2\Configuration\IdentityProvider;
-use SAML2\Configuration\CertificateProvider;
-use SAML2\DOMDocumentFactory;
-use SAML2\Signature\PublicKeyValidator;
-use SAML2\SimpleTestLogger;
-use SAML2\Utilities\Certificate;
-use SAML2\XML\samlp\AbstractMessage;
-use SAML2\XML\samlp\Response;
+use SimpleSAMLSAML2\Certificate\Key;
+use SimpleSAMLSAML2\Certificate\KeyCollection;
+use SimpleSAMLSAML2\Certificate\KeyLoader;
+use SimpleSAMLSAML2\Configuration\IdentityProvider;
+use SimpleSAMLSAML2\Configuration\CertificateProvider;
+use SimpleSAMLSAML2\DOMDocumentFactory;
+use SimpleSAMLSAML2\Signature\PublicKeyValidator;
+use SimpleSAMLSAML2\SimpleTestLogger;
+use SimpleSAMLSAML2\Utilities\Certificate;
+use SimpleSAMLSAML2\XML\samlp\AbstractMessage;
+use SimpleSAMLSAML2\XML\samlp\Response;
 use SimpleSAML\TestUtils\PEMCertificatesMock;
 
 /**

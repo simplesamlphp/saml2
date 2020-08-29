@@ -5,7 +5,7 @@ declare(strict_types=1);
 namespace SAML2\Certificate;
 
 use PHPUnit\Framework\TestCase;
-use SAML2\Certificate\X509;
+use SimpleSAMLSAML2\Certificate\X509;
 
 /**
  * @covers \SAML2\Certificate\X509

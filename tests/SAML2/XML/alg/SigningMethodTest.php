@@ -5,10 +5,10 @@ declare(strict_types=1);
 namespace SAML2\XML\alg;
 
 use PHPUnit\Framework\TestCase;
-use SAML2\DOMDocumentFactory;
-use SAML2\Exception\MissingAttributeException;
-use SAML2\XML\alg\SigningMethod;
-use SAML2\Utils;
+use SimpleSAMLSAML2\DOMDocumentFactory;
+use SimpleSAMLSAML2\Exception\MissingAttributeException;
+use SimpleSAMLSAML2\XML\alg\SigningMethod;
+use SimpleSAMLSAML2\Utils;
 
 /**
  * Class \SAML2\XML\alg\SigningMethodTest

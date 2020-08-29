@@ -6,13 +6,13 @@ namespace SAML2\Certificate;
 
 use Mockery;
 use Mockery\Adapter\Phpunit\MockeryTestCase;
-use SAML2\Utilities\Certificate;
-use SAML2\Certificate\Exception\InvalidCertificateStructureException;
-use SAML2\Certificate\Exception\NoKeysFoundException;
-use SAML2\Certificate\Key;
-use SAML2\Certificate\KeyLoader;
-use SAML2\Certificate\X509;
-use SAML2\Configuration\CertificateProvider;
+use SimpleSAMLSAML2\Utilities\Certificate;
+use SimpleSAMLSAML2\Certificate\Exception\InvalidCertificateStructureException;
+use SimpleSAMLSAML2\Certificate\Exception\NoKeysFoundException;
+use SimpleSAMLSAML2\Certificate\Key;
+use SimpleSAMLSAML2\Certificate\KeyLoader;
+use SimpleSAMLSAML2\Certificate\X509;
+use SimpleSAMLSAML2\Configuration\CertificateProvider;
 
 /**
  * @covers \SAML2\Certificate\KeyLoader

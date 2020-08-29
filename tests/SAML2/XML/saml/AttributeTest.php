@@ -6,9 +6,9 @@ namespace SAML2\XML\saml;
 
 use PHPUnit\Framework\TestCase;
 use RobRichards\XMLSecLibs\XMLSecurityKey;
-use SAML2\Constants;
-use SAML2\DOMDocumentFactory;
-use SAML2\Exception\MissingAttributeException;
+use SimpleSAMLSAML2\Constants;
+use SimpleSAMLSAML2\DOMDocumentFactory;
+use SimpleSAMLSAML2\Exception\MissingAttributeException;
 use SimpleSAML\TestUtils\PEMCertificatesMock;
 
 /**

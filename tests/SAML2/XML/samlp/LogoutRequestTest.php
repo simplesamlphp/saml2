@@ -6,22 +6,22 @@ namespace SAML2\XML\samlp;
 
 use Mockery\Adapter\Phpunit\MockeryTestCase;
 use RobRichards\XMLSecLibs\XMLSecurityKey;
-use SAML2\Constants;
-use SAML2\DOMDocumentFactory;
-use SAML2\Exception\MissingElementException;
-use SAML2\Exception\TooManyElementsException;
-use SAML2\Utils;
-use SAML2\XML\Chunk;
-use SAML2\XML\ds\KeyInfo;
-use SAML2\XML\saml\EncryptedID;
-use SAML2\XML\saml\Issuer;
-use SAML2\XML\saml\NameID;
-use SAML2\XML\xenc\CipherData;
-use SAML2\XML\xenc\DataReference;
-use SAML2\XML\xenc\EncryptedData;
-use SAML2\XML\xenc\EncryptedKey;
-use SAML2\XML\xenc\EncryptionMethod;
-use SAML2\XML\xenc\ReferenceList;
+use SimpleSAMLSAML2\Constants;
+use SimpleSAMLSAML2\DOMDocumentFactory;
+use SimpleSAMLSAML2\Exception\MissingElementException;
+use SimpleSAMLSAML2\Exception\TooManyElementsException;
+use SimpleSAMLSAML2\Utils;
+use SimpleSAMLSAML2\XML\Chunk;
+use SimpleSAMLSAML2\XML\ds\KeyInfo;
+use SimpleSAMLSAML2\XML\saml\EncryptedID;
+use SimpleSAMLSAML2\XML\saml\Issuer;
+use SimpleSAMLSAML2\XML\saml\NameID;
+use SimpleSAMLSAML2\XML\xenc\CipherData;
+use SimpleSAMLSAML2\XML\xenc\DataReference;
+use SimpleSAMLSAML2\XML\xenc\EncryptedData;
+use SimpleSAMLSAML2\XML\xenc\EncryptedKey;
+use SimpleSAMLSAML2\XML\xenc\EncryptionMethod;
+use SimpleSAMLSAML2\XML\xenc\ReferenceList;
 use SimpleSAML\TestUtils\PEMCertificatesMock;
 
 /**

@@ -6,13 +6,13 @@ namespace SAML2\XML\md;
 
 use InvalidArgumentException;
 use PHPUnit\Framework\TestCase;
-use SAML2\Constants;
-use SAML2\DOMDocumentFactory;
-use SAML2\Exception\MissingAttributeException;
-use SAML2\Exception\TooManyElementsException;
-use SAML2\SignedElementTestTrait;
-use SAML2\Utils;
-use SAML2\XML\mdrpi\PublicationInfo;
+use SimpleSAMLSAML2\Constants;
+use SimpleSAMLSAML2\DOMDocumentFactory;
+use SimpleSAMLSAML2\Exception\MissingAttributeException;
+use SimpleSAMLSAML2\Exception\TooManyElementsException;
+use SimpleSAMLSAML2\SignedElementTestTrait;
+use SimpleSAMLSAML2\Utils;
+use SimpleSAMLSAML2\XML\mdrpi\PublicationInfo;
 use SimpleSAML\Assert\AssertionFailedException;
 
 /**
