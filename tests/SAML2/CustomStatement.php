@@ -1,6 +1,8 @@
 <?php
 
-namespace SAML2;
+declare(strict_types=1);
+
+namespace SimpleSAML\SAML2;
 
 use DOMElement;
 use SimpleSAML\SAML2\XML\saml\Statement;
