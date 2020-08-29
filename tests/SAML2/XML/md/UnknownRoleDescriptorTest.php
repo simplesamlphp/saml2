@@ -120,7 +120,7 @@ final class UnknownRoleDescriptorTest extends TestCase
     {
         $this->document->documentElement->setAttribute('errorURL', 'not a URL');
 
-        $this->expectException(AssertionFailedException::class);
+        $this->expectException(InvalidArgumentException::class);
         $this->expectExceptionMessage('RoleDescriptor errorURL is not a valid URL.');
 
         UnknownRoleDescriptor::fromXML($this->document->documentElement);
