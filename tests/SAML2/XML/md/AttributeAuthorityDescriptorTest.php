@@ -148,7 +148,7 @@ XML
     {
         $this->expectException(Exception::class);
         $this->expectExceptionMessage(
-            'At least one protocol must be supported by this SAML2\XML\md\AttributeAuthorityDescriptor.'
+            'At least one protocol must be supported by this SimpleSAML\SAML2\XML\md\AttributeAuthorityDescriptor.'
         );
         new AttributeAuthorityDescriptor([$this->as], []);
     }
@@ -233,7 +233,7 @@ XML
     public function testMarshallingWithWrongAssertionIDRequestService(): void
     {
         $this->expectException(AssertionFailedException::class);
-        $this->expectExceptionMessage('Expected an instance of SAML2\XML\md\AssertionIDRequestService. Got: string');
+        $this->expectExceptionMessage('Expected an instance of SimpleSAML\SAML2\XML\md\AssertionIDRequestService. Got: string');
 
         /** @psalm-suppress InvalidArgument */
         new AttributeAuthorityDescriptor([$this->as], ['x'], ['x']);
@@ -268,7 +268,7 @@ XML
     public function testMarshallingWithWrongAttribute(): void
     {
         $this->expectException(AssertionFailedException::class);
-        $this->expectExceptionMessage('Expected an instance of SAML2\XML\saml\Attribute. Got: string');
+        $this->expectExceptionMessage('Expected an instance of SimpleSAML\SAML2\XML\saml\Attribute. Got: string');
 
         /** @psalm-suppress InvalidArgument */
         new AttributeAuthorityDescriptor([$this->as], ['x'], [$this->aidrs], ['x'], ['x'], ['x']);

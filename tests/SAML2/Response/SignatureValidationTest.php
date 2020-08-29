@@ -62,7 +62,7 @@ final class SignatureValidationTest extends MockeryTestCase
      */
     public function setUp(): void
     {
-        $this->assertionProcessorBuilder = Mockery::mock('alias:SAML2\Assertion\ProcessorBuilder');
+        $this->assertionProcessorBuilder = Mockery::mock('alias:SimpleSAML\SAML2\Assertion\ProcessorBuilder');
         $this->assertionProcessor = Mockery::mock(AssertionProcessor::class);
         $this->assertionProcessorBuilder
             ->shouldReceive('build')

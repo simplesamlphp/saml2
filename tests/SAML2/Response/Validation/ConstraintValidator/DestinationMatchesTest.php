@@ -9,6 +9,7 @@ use Mockery\Adapter\Phpunit\MockeryTestCase;
 use SimpleSAML\SAML2\Configuration\Destination;
 use SimpleSAML\SAML2\Response\Validation\Result;
 use SimpleSAML\SAML2\Response\Validation\ConstraintValidator\DestinationMatches;
+use SimpleSAML\SAML2\XML\samlp\Response;
 
 /**
  * @covers \SimpleSAML\SAML2\Response\Validation\ConstraintValidator\DestinationMatches
@@ -27,7 +28,7 @@ final class DestinationMatchesTest extends MockeryTestCase
      */
     public function setUp(): void
     {
-        $this->response = Mockery::mock('SAML2\XML\samlp\Response');
+        $this->response = Mockery::mock(Response::class);
     }
 
 

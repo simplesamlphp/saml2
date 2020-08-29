@@ -6,6 +6,7 @@ namespace SimpleSAML\SAML2\XML\init;
 
 use DOMElement;
 use SimpleSAML\Assert\Assert;
+use SimpleSAML\SAML2\Exception\ProtocolViolationException;
 use SimpleSAML\SAML2\XML\md\AbstractEndpointType;
 
 /**
@@ -65,7 +66,8 @@ final class RequestInitiator extends AbstractEndpointType
             /** @var string $binding */
             self::getAttribute($xml, 'Binding'),
             self::NS,
-            "The Binding of a RequestInitiator must be 'urn:oasis:names:tc:SAML:profiles:SSO:request-init'."
+            "The Binding of a RequestInitiator must be 'urn:oasis:names:tc:SAML:profiles:SSO:request-init'.",
+            ProtocolViolationException::class
         );
 
         /** @var string $location */

@@ -4,11 +4,13 @@ declare(strict_types=1);
 
 namespace SimpleSAML\SAML2\Assertion;
 
+use Exception;
 use Psr\Log\LoggerInterface;
 use SimpleSAML\SAML2\Assertion\Exception\NotDecryptedException;
 use SimpleSAML\SAML2\Certificate\PrivateKeyLoader;
 use SimpleSAML\SAML2\Configuration\IdentityProvider;
 use SimpleSAML\SAML2\Configuration\ServiceProvider;
+use SimpleSAML\SAML2\XML\saml\Assertion;
 use SimpleSAML\SAML2\XML\saml\EncryptedAssertion;
 
 class Decrypter
@@ -88,7 +90,7 @@ class Decrypter
                 $this->logger->debug(sprintf('Decrypted Assertion with key "#%d"', $index));
 
                 return $decryptedAssertion;
-            } catch (\Exception $e) {
+            } catch (Exception $e) {
                 $this->logger->debug(sprintf(
                     'Could not decrypt assertion with key "#%d", "%s" thrown: "%s"',
                     $index,

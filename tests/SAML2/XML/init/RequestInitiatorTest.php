@@ -5,8 +5,8 @@ declare(strict_types=1);
 namespace SimpleSAML\SAML2\XML\init;
 
 use Exception;
-use InvalidArgumentException;
 use PHPUnit\Framework\TestCase;
+use SimpleSAML\SAML2\Exception\ProtocolViolationException;
 use SimpleSAML\SAML2\DOMDocumentFactory;
 use SimpleSAML\SAML2\Utils;
 
@@ -96,7 +96,7 @@ XML
     {
         $this->document->documentElement->setAttribute('Binding', 'urn:something');
 
-        $this->expectException(InvalidArgumentException::class);
+        $this->expectException(ProtocolViolationException::class);
         $this->expectExceptionMessage(
             "The Binding of a RequestInitiator must be 'urn:oasis:names:tc:SAML:profiles:SSO:request-init'."
         );

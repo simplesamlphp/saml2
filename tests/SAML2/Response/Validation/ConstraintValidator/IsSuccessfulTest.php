@@ -9,6 +9,7 @@ use Mockery\Adapter\Phpunit\MockeryTestCase;
 use SimpleSAML\SAML2\Constants;
 use SimpleSAML\SAML2\Response\Validation\Result;
 use SimpleSAML\SAML2\Response\Validation\ConstraintValidator\IsSuccessful;
+use SimpleSAML\SAML2\XML\samlp\Response;
 use SimpleSAML\SAML2\XML\samlp\Status;
 use SimpleSAML\SAML2\XML\samlp\StatusCode;
 use SimpleSAML\SAML2\XML\samlp\StatusMessage;
@@ -30,7 +31,7 @@ final class IsSuccessfulTest extends MockeryTestCase
      */
     public function setUp(): void
     {
-        $this->response = Mockery::mock('SAML2\XML\samlp\Response');
+        $this->response = Mockery::mock(Response::class);
     }
 
 
