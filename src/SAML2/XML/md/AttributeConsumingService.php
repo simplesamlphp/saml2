@@ -72,7 +72,7 @@ final class AttributeConsumingService extends AbstractMdElement
      * @return self
      *
      * @throws \SimpleSAML\SAML2\Exception\InvalidDOMElementException if the qualified name of the supplied element is wrong
-     * @throws \SimpleSAML\SAML2\Exception\MissingElementException if one of the mandatory child-elements is missing
+     * @throws \SimpleSAML\XML\Exception\MissingElementException if one of the mandatory child-elements is missing
      */
     public static function fromXML(DOMElement $xml): object
     {

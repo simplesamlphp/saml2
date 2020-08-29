@@ -141,7 +141,7 @@ final class KeyDescriptor extends AbstractMdElement
      * @return \SimpleSAML\SAML2\XML\md\KeyDescriptor
      *
      * @throws \SimpleSAML\SAML2\Exception\InvalidDOMElementException if the qualified name of the supplied element is wrong
-     * @throws \SimpleSAML\SAML2\Exception\MissingElementException if one of the mandatory child-elements is missing
+     * @throws \SimpleSAML\XML\Exception\MissingElementException if one of the mandatory child-elements is missing
      * @throws \SimpleSAML\XML\Exception\TooManyElementsException if too many child-elements of a type are specified
      */
     public static function fromXML(DOMElement $xml): object

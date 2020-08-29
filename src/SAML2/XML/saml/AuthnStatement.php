@@ -180,7 +180,7 @@ final class AuthnStatement extends AbstractStatement
      *
      * @return \SimpleSAML\SAML2\XML\saml\AuthnStatement
      * @throws \SimpleSAML\SAML2\Exception\InvalidDOMElementException if the qualified name of the supplied element is wrong
-     * @throws \SimpleSAML\SAML2\Exception\MissingElementException if one of the mandatory child-elements is missing
+     * @throws \SimpleSAML\XML\Exception\MissingElementException if one of the mandatory child-elements is missing
      * @throws \Exception if the authentication instant is not a valid timestamp.
      */
     public static function fromXML(DOMElement $xml): object
