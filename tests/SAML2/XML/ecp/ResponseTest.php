@@ -2,7 +2,7 @@
 
 declare(strict_types=1);
 
-namespace \SimpleSAML\SAML2\XML\ecp;
+namespace SimpleSAML\SAML2\XML\ecp;
 
 use DOMDocument;
 use DOMElement;

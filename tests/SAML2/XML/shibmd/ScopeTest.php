@@ -2,7 +2,7 @@
 
 declare(strict_types=1);
 
-namespace \SimpleSAML\SAML2\XML\shibmd;
+namespace SimpleSAML\SAML2\XML\shibmd;
 
 use PHPUnit\Framework\TestCase;
 use SimpleSAML\SAML2\DOMDocumentFactory;

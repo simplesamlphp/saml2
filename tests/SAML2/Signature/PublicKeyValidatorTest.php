@@ -2,7 +2,7 @@
 
 declare(strict_types=1);
 
-namespace \SimpleSAML\SAML2\Signature;
+namespace SimpleSAML\SAML2\Signature;
 
 use Mockery;
 use Mockery\Adapter\Phpunit\MockeryTestCase;

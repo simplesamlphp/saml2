@@ -2,7 +2,7 @@
 
 declare(strict_types=1);
 
-namespace \SimpleSAML\SAML2\XML\md;
+namespace SimpleSAML\SAML2\XML\md;
 
 use PHPUnit\Framework\TestCase;
 use SimpleSAML\SAML2\Constants;

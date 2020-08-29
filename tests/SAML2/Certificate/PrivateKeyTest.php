@@ -2,7 +2,7 @@
 
 declare(strict_types=1);
 
-namespace \SimpleSAML\SAML2\Certificate;
+namespace SimpleSAML\SAML2\Certificate;
 
 use Mockery\Adapter\Phpunit\MockeryTestCase;
 use SimpleSAML\SAML2\Certificate\PrivateKey;

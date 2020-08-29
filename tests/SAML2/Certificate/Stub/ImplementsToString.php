@@ -2,7 +2,7 @@
 
 declare(strict_types=1);
 
-namespace \SimpleSAML\SAML2\Certificate\Stub;
+namespace SimpleSAML\SAML2\Certificate\Stub;
 
 /**
  * @package simplesamlphp/saml2

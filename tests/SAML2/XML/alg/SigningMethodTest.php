@@ -2,7 +2,7 @@
 
 declare(strict_types=1);
 
-namespace \SimpleSAML\SAML2\XML\alg;
+namespace SimpleSAML\SAML2\XML\alg;
 
 use PHPUnit\Framework\TestCase;
 use SimpleSAML\SAML2\DOMDocumentFactory;
