@@ -9,7 +9,7 @@ use SimpleSAML\Assert\Assert;
 use SimpleSAML\SAML2\Constants;
 use SimpleSAML\XML\DOMDocumentFactory;
 use SimpleSAML\XML\Exception\InvalidDOMElementException;
-use SimpleSAML\SAML2\Utils;
+use SimpleSAML\XML\Utils as XMLUtils;
 
 /**
  * SAML AudienceRestriction data type.
@@ -74,7 +74,7 @@ final class AudienceRestriction extends AbstractConditionType
         Assert::same($xml->localName, 'AudienceRestriction', InvalidDOMElementException::class);
         Assert::same($xml->namespaceURI, AudienceRestriction::NS, InvalidDOMElementException::class);
 
-        $audience = Utils::extractStrings($xml, AbstractSamlElement::NS, 'Audience');
+        $audience = XMLUtils::extractStrings($xml, AbstractSamlElement::NS, 'Audience');
 
         return new self($audience);
     }
@@ -90,7 +90,7 @@ final class AudienceRestriction extends AbstractConditionType
     {
         $e = parent::toXML($parent);
 
-        Utils::addStrings($e, AbstractSamlElement::NS, 'saml:Audience', false, $this->audience);
+        XMLUtils::addStrings($e, AbstractSamlElement::NS, 'saml:Audience', false, $this->audience);
 
         return $e;
     }

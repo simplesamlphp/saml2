@@ -12,15 +12,16 @@ use RobRichards\XMLSecLibs\XMLSecEnc;
 use RobRichards\XMLSecLibs\XMLSecurityKey;
 use SimpleSAML\Assert\Assert;
 use SimpleSAML\SAML2\Constants;
+use SimpleSAML\SAML2\Utilities\Temporal;
+use SimpleSAML\SAML2\Utils;
+use SimpleSAML\SAML2\XML\SignedElementInterface;
+use SimpleSAML\SAML2\XML\SignedElementTrait;
+use SimpleSAML\XML\Chunk;
 use SimpleSAML\XML\DOMDocumentFactory;
 use SimpleSAML\XML\Exception\InvalidDOMElementException;
 use SimpleSAML\XML\Exception\MissingElementException;
 use SimpleSAML\XML\Exception\TooManyElementsException;
-use SimpleSAML\SAML2\Utilities\Temporal;
-use SimpleSAML\SAML2\Utils;
-use SimpleSAML\XML\Chunk;
-use SimpleSAML\SAML2\XML\SignedElementInterface;
-use SimpleSAML\SAML2\XML\SignedElementTrait;
+use SimpleSAML\XML\Utils as XMLUtils;
 
 /**
  * Class representing a SAML 2 assertion.
@@ -273,10 +274,10 @@ class Assertion implements SignedElementInterface
             throw new Exception('Unsupported version: ' . $xml->getAttribute('Version'));
         }
 
-        $this->issueInstant = Utils::xsDateTimeToTimestamp($xml->getAttribute('IssueInstant'));
+        $this->issueInstant = XMLUtils::xsDateTimeToTimestamp($xml->getAttribute('IssueInstant'));
 
         /** @var \DOMElement[] $issuer */
-        $issuer = Utils::xpQuery($xml, './saml_assertion:Issuer');
+        $issuer = XMLUtils::xpQuery($xml, './saml_assertion:Issuer');
         if (empty($issuer)) {
             throw new Exception('Missing <saml:Issuer> in assertion.');
         }
@@ -302,7 +303,7 @@ class Assertion implements SignedElementInterface
     private function parseSubject(DOMElement $xml): void
     {
         /** @var \DOMElement[] $subject */
-        $subject = Utils::xpQuery($xml, './saml_assertion:Subject');
+        $subject = XMLUtils::xpQuery($xml, './saml_assertion:Subject');
         if (empty($subject)) {
             /* No Subject node. */
 
@@ -313,7 +314,7 @@ class Assertion implements SignedElementInterface
         $subject = $subject[0];
 
         /** @var \DOMElement[] $nameId */
-        $nameId = Utils::xpQuery(
+        $nameId = XMLUtils::xpQuery(
             $subject,
             './saml_assertion:NameID | ./saml_assertion:EncryptedID/xenc:EncryptedData'
         );
@@ -330,7 +331,7 @@ class Assertion implements SignedElementInterface
         }
 
         /** @var \DOMElement[] $subjectConfirmation */
-        $subjectConfirmation = Utils::xpQuery($subject, './saml_assertion:SubjectConfirmation');
+        $subjectConfirmation = XMLUtils::xpQuery($subject, './saml_assertion:SubjectConfirmation');
         if (empty($subjectConfirmation) && empty($nameId)) {
             throw new Exception('Missing <saml:SubjectConfirmation> in <saml:Subject>.');
         }
@@ -351,7 +352,7 @@ class Assertion implements SignedElementInterface
     private function parseConditions(DOMElement $xml): void
     {
         /** @var \DOMElement[] $conditions */
-        $conditions = Utils::xpQuery($xml, './saml_assertion:Conditions');
+        $conditions = XMLUtils::xpQuery($xml, './saml_assertion:Conditions');
         if (empty($conditions)) {
             /* No <saml:Conditions> node. */
 
@@ -362,13 +363,13 @@ class Assertion implements SignedElementInterface
         $conditions = $conditions[0];
 
         if ($conditions->hasAttribute('NotBefore')) {
-            $notBefore = Utils::xsDateTimeToTimestamp($conditions->getAttribute('NotBefore'));
+            $notBefore = XMLUtils::xsDateTimeToTimestamp($conditions->getAttribute('NotBefore'));
             if ($this->getNotBefore() === null || $this->getNotBefore() < $notBefore) {
                 $this->setNotBefore($notBefore);
             }
         }
         if ($conditions->hasAttribute('NotOnOrAfter')) {
-            $notOnOrAfter = Utils::xsDateTimeToTimestamp($conditions->getAttribute('NotOnOrAfter'));
+            $notOnOrAfter = XMLUtils::xsDateTimeToTimestamp($conditions->getAttribute('NotOnOrAfter'));
             if ($this->getNotOnOrAfter() === null || $this->getNotOnOrAfter() > $notOnOrAfter) {
                 $this->setNotOnOrAfter($notOnOrAfter);
             }
@@ -383,7 +384,7 @@ class Assertion implements SignedElementInterface
             }
             switch ($node->localName) {
                 case 'AudienceRestriction':
-                    $audiences = Utils::extractStrings($node, Constants::NS_SAML, 'Audience');
+                    $audiences = XMLUtils::extractStrings($node, Constants::NS_SAML, 'Audience');
                     if ($this->validAudiences === null) {
                         /* The first (and probably last) AudienceRestriction element. */
                         $this->validAudiences = $audiences;
@@ -418,7 +419,7 @@ class Assertion implements SignedElementInterface
     private function parseAuthnStatement(DOMElement $xml): void
     {
         /** @var \DOMElement[] $authnStatements */
-        $authnStatements = Utils::xpQuery($xml, './saml_assertion:AuthnStatement');
+        $authnStatements = XMLUtils::xpQuery($xml, './saml_assertion:AuthnStatement');
         if (empty($authnStatements)) {
             $this->authnInstant = null;
 
@@ -431,10 +432,10 @@ class Assertion implements SignedElementInterface
         if (!$authnStatement->hasAttribute('AuthnInstant')) {
             throw new Exception('Missing required AuthnInstant attribute on <saml:AuthnStatement>.');
         }
-        $this->authnInstant = Utils::xsDateTimeToTimestamp($authnStatement->getAttribute('AuthnInstant'));
+        $this->authnInstant = XMLUtils::xsDateTimeToTimestamp($authnStatement->getAttribute('AuthnInstant'));
 
         if ($authnStatement->hasAttribute('SessionNotOnOrAfter')) {
-            $this->sessionNotOnOrAfter = Utils::xsDateTimeToTimestamp(
+            $this->sessionNotOnOrAfter = XMLUtils::xsDateTimeToTimestamp(
                 $authnStatement->getAttribute('SessionNotOnOrAfter')
             );
         }
@@ -458,7 +459,7 @@ class Assertion implements SignedElementInterface
     {
         // Get the AuthnContext element
         /** @var \DOMElement[] $authnContexts */
-        $authnContexts = Utils::xpQuery($authnStatementEl, './saml_assertion:AuthnContext');
+        $authnContexts = XMLUtils::xpQuery($authnStatementEl, './saml_assertion:AuthnContext');
         if (count($authnContexts) > 1) {
             throw new Exception('More than one <saml:AuthnContext> in <saml:AuthnStatement>.');
         } elseif (empty($authnContexts)) {
@@ -468,7 +469,7 @@ class Assertion implements SignedElementInterface
 
         // Get the AuthnContextDeclRef (if available)
         /** @var \DOMElement[] $authnContextDeclRefs */
-        $authnContextDeclRefs = Utils::xpQuery($authnContextEl, './saml_assertion:AuthnContextDeclRef');
+        $authnContextDeclRefs = XMLUtils::xpQuery($authnContextEl, './saml_assertion:AuthnContextDeclRef');
         if (count($authnContextDeclRefs) > 1) {
             throw new Exception(
                 'More than one <saml:AuthnContextDeclRef> found?'
@@ -479,7 +480,7 @@ class Assertion implements SignedElementInterface
 
         // Get the AuthnContextDecl (if available)
         /** @var \DOMElement[] $authnContextDecls */
-        $authnContextDecls = Utils::xpQuery($authnContextEl, './saml_assertion:AuthnContextDecl');
+        $authnContextDecls = XMLUtils::xpQuery($authnContextEl, './saml_assertion:AuthnContextDecl');
         if (count($authnContextDecls) > 1) {
             throw new Exception(
                 'More than one <saml:AuthnContextDecl> found?'
@@ -490,7 +491,7 @@ class Assertion implements SignedElementInterface
 
         // Get the AuthnContextClassRef (if available)
         /** @var \DOMElement[] $authnContextClassRefs */
-        $authnContextClassRefs = Utils::xpQuery($authnContextEl, './saml_assertion:AuthnContextClassRef');
+        $authnContextClassRefs = XMLUtils::xpQuery($authnContextEl, './saml_assertion:AuthnContextClassRef');
         if (count($authnContextClassRefs) > 1) {
             throw new Exception('More than one <saml:AuthnContextClassRef> in <saml:AuthnContext>.');
         } elseif (count($authnContextClassRefs) === 1) {
@@ -504,7 +505,7 @@ class Assertion implements SignedElementInterface
             );
         }
 
-        $this->AuthenticatingAuthority = Utils::extractStrings(
+        $this->AuthenticatingAuthority = XMLUtils::extractStrings(
             $authnContextEl,
             Constants::NS_SAML,
             'AuthenticatingAuthority'
@@ -523,7 +524,7 @@ class Assertion implements SignedElementInterface
     {
         $firstAttribute = true;
         /** @var \DOMElement[] $attributes */
-        $attributes = Utils::xpQuery($xml, './saml_assertion:AttributeStatement/saml_assertion:Attribute');
+        $attributes = XMLUtils::xpQuery($xml, './saml_assertion:AttributeStatement/saml_assertion:Attribute');
         foreach ($attributes as $attribute) {
             if (!$attribute->hasAttribute('Name')) {
                 throw new Exception('Missing name on <saml:Attribute> element.');
@@ -563,12 +564,12 @@ class Assertion implements SignedElementInterface
     private function parseAttributeValue(DOMNode $attribute, string $attributeName): void
     {
         /** @var \DOMElement[] $values */
-        $values = Utils::xpQuery($attribute, './saml_assertion:AttributeValue');
+        $values = XMLUtils::xpQuery($attribute, './saml_assertion:AttributeValue');
 
         if ($attributeName === Constants::EPTI_URN_MACE || $attributeName === Constants::EPTI_URN_OID) {
             foreach ($values as $index => $eptiAttributeValue) {
                 /** @var \DOMElement[] $eptiNameId */
-                $eptiNameId = Utils::xpQuery($eptiAttributeValue, './saml_assertion:NameID');
+                $eptiNameId = XMLUtils::xpQuery($eptiAttributeValue, './saml_assertion:NameID');
 
                 if (count($eptiNameId) === 1) {
                     $this->attributes[$attributeName][] = NameID::fromXML($eptiNameId[0]);
@@ -623,7 +624,7 @@ class Assertion implements SignedElementInterface
     private function parseEncryptedAttributes(DOMElement $xml): void
     {
         /** @var \DOMElement[] encryptedAttributes */
-        $this->encryptedAttributes = Utils::xpQuery(
+        $this->encryptedAttributes = XMLUtils::xpQuery(
             $xml,
             './saml_assertion:AttributeStatement/saml_assertion:EncryptedAttribute'
         );
@@ -639,7 +640,7 @@ class Assertion implements SignedElementInterface
     private function parseSignature(DOMElement $xml): void
     {
         /** @var \DOMAttr[] $signatureMethod */
-        $signatureMethod = Utils::xpQuery($xml, './ds:Signature/ds:SignedInfo/ds:SignatureMethod/@Algorithm');
+        $signatureMethod = XMLUtils::xpQuery($xml, './ds:Signature/ds:SignedInfo/ds:SignatureMethod/@Algorithm');
 
         /* Validate the signature element of the message. */
         $sig = Utils::validateElement($xml);
@@ -768,7 +769,6 @@ class Assertion implements SignedElementInterface
      *
      * The NameId must be a \SAML2\XML\saml\NameID object.
      *
-     * @see \SimpleSAML\SAML2\Utils::addNameId()
      * @param \SimpleSAML\SAML2\XML\saml\NameID|null $nameId The name identifier of the assertion.
      * @return void
      */
@@ -1551,7 +1551,7 @@ class Assertion implements SignedElementInterface
             $ar = $document->createElementNS(Constants::NS_SAML, 'saml:AudienceRestriction');
             $conditions->appendChild($ar);
 
-            Utils::addStrings($ar, Constants::NS_SAML, 'saml:Audience', false, $this->validAudiences);
+            XMLUtils::addStrings($ar, Constants::NS_SAML, 'saml:Audience', false, $this->validAudiences);
         }
     }
 
@@ -1598,7 +1598,7 @@ class Assertion implements SignedElementInterface
         $authnStatementEl->appendChild($authnContextEl);
 
         if (!empty($this->authnContextClassRef)) {
-            Utils::addString(
+            XMLUtils::addString(
                 $authnContextEl,
                 Constants::NS_SAML,
                 'saml:AuthnContextClassRef',
@@ -1609,7 +1609,7 @@ class Assertion implements SignedElementInterface
             $this->authnContextDecl->toXML($authnContextEl);
         }
         if (!empty($this->authnContextDeclRef)) {
-            Utils::addString(
+            XMLUtils::addString(
                 $authnContextEl,
                 Constants::NS_SAML,
                 'saml:AuthnContextDeclRef',
@@ -1617,7 +1617,7 @@ class Assertion implements SignedElementInterface
             );
         }
 
-        Utils::addStrings(
+        XMLUtils::addStrings(
             $authnContextEl,
             Constants::NS_SAML,
             'saml:AuthenticatingAuthority',

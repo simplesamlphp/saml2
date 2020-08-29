@@ -8,11 +8,12 @@ use DOMElement;
 use RobRichards\XMLSecLibs\XMLSecurityDSig;
 use SimpleSAML\Assert\Assert;
 use SimpleSAML\SAML2\Constants;
-use SimpleSAML\XML\Exception\InvalidDOMElementException;
-use SimpleSAML\SAML2\Utils;
 use SimpleSAML\SAML2\XML\ds\KeyInfo;
+use SimpleSAML\SAML2\Utils;
 use SimpleSAML\XML\Chunk;
+use SimpleSAML\XML\Exception\InvalidDOMElementException;
 use SimpleSAML\XML\ExtendableAttributesTrait;
+use SimpleSAML\XML\Utils as XMLUtils;
 
 /**
  * Class representing SAML 2 SubjectConfirmationData element.
@@ -280,12 +281,12 @@ final class SubjectConfirmationData extends AbstractSamlElement
 
         $NotBefore = self::getAttribute($xml, 'NotBefore', null);
         if ($NotBefore !== null) {
-            $NotBefore = Utils::xsDateTimeToTimestamp($NotBefore);
+            $NotBefore = XMLUtils::xsDateTimeToTimestamp($NotBefore);
         }
 
         $NotOnOrAfter = self::getAttribute($xml, 'NotOnOrAfter', null);
         if ($NotOnOrAfter !== null) {
-            $NotOnOrAfter = Utils::xsDateTimeToTimestamp($NotOnOrAfter);
+            $NotOnOrAfter = XMLUtils::xsDateTimeToTimestamp($NotOnOrAfter);
         }
 
         $Recipient = self::getAttribute($xml, 'Recipient', null);

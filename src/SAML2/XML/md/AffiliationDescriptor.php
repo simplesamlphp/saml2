@@ -8,10 +8,10 @@ use DOMElement;
 use Exception;
 use SimpleSAML\Assert\Assert;
 use SimpleSAML\SAML2\Constants;
+use SimpleSAML\SAML2\XML\ds\Signature;
 use SimpleSAML\XML\Exception\InvalidDOMElementException;
 use SimpleSAML\XML\Exception\TooManyElementsException;
-use SimpleSAML\SAML2\Utils;
-use SimpleSAML\SAML2\XML\ds\Signature;
+use SimpleSAML\XML\Utils as XMLUtils;
 
 /**
  * Class representing SAML 2 AffiliationDescriptor element.
@@ -89,7 +89,7 @@ final class AffiliationDescriptor extends AbstractMetadataDocument
         Assert::same($xml->namespaceURI, AffiliationDescriptor::NS, InvalidDOMElementException::class);
 
         $owner = self::getAttribute($xml, 'affiliationOwnerID');
-        $members = Utils::extractStrings($xml, Constants::NS_MD, 'AffiliateMember');
+        $members = XMLUtils::extractStrings($xml, Constants::NS_MD, 'AffiliateMember');
         $keyDescriptors = KeyDescriptor::getChildrenOfClass($xml);
 
         $validUntil = self::getAttribute($xml, 'validUntil', null);
@@ -106,7 +106,7 @@ final class AffiliationDescriptor extends AbstractMetadataDocument
             $owner,
             $members,
             self::getAttribute($xml, 'ID', null),
-            $validUntil !== null ? Utils::xsDateTimeToTimestamp($validUntil) : null,
+            $validUntil !== null ? XMLUtils::xsDateTimeToTimestamp($validUntil) : null,
             self::getAttribute($xml, 'cacheDuration', null),
             !empty($extensions) ? $extensions[0] : null,
             $keyDescriptors
@@ -207,7 +207,7 @@ final class AffiliationDescriptor extends AbstractMetadataDocument
         $e = parent::toXML($parent);
 
         $e->setAttribute('affiliationOwnerID', $this->affiliationOwnerID);
-        Utils::addStrings($e, Constants::NS_MD, 'md:AffiliateMember', false, $this->AffiliateMembers);
+        XMLUtils::addStrings($e, Constants::NS_MD, 'md:AffiliateMember', false, $this->AffiliateMembers);
 
         foreach ($this->KeyDescriptors as $kd) {
             $kd->toXML($e);

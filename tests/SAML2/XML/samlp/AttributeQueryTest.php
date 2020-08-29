@@ -6,16 +6,16 @@ namespace SimpleSAML\SAML2\XML\samlp;
 
 use PHPUnit\Framework\TestCase;
 use SimpleSAML\SAML2\Constants;
-use SimpleSAML\XML\DOMDocumentFactory;
-use SimpleSAML\XML\Exception\MissingElementException;
-use SimpleSAML\XML\Exception\MissingAttributeException;
-use SimpleSAML\XML\Exception\TooManyElementsException;
-use SimpleSAML\SAML2\Utils;
 use SimpleSAML\SAML2\XML\saml\Attribute;
 use SimpleSAML\SAML2\XML\saml\AttributeValue;
 use SimpleSAML\SAML2\XML\saml\Issuer;
 use SimpleSAML\SAML2\XML\saml\NameID;
 use SimpleSAML\SAML2\XML\saml\Subject;
+use SimpleSAML\XML\DOMDocumentFactory;
+use SimpleSAML\XML\Exception\MissingElementException;
+use SimpleSAML\XML\Exception\MissingAttributeException;
+use SimpleSAML\XML\Exception\TooManyElementsException;
+use SimpleSAML\XML\Utils as XMLUtils;
 
 /**
  * Class \SAML2\AttributeQueryTest
@@ -88,31 +88,31 @@ final class AttributeQueryTest extends TestCase
         $attributeQueryElement = $attributeQuery->toXML();
 
         // Test Attribute Names
-        $attributes = Utils::xpQuery($attributeQueryElement, './saml_assertion:Attribute');
+        $attributes = XMLUtils::xpQuery($attributeQueryElement, './saml_assertion:Attribute');
         $this->assertCount(4, $attributes);
         $this->assertEquals('test1', $attributes[0]->getAttribute('Name'));
         $this->assertEquals('test2', $attributes[1]->getAttribute('Name'));
         $this->assertEquals('test3', $attributes[2]->getAttribute('Name'));
 
         // Test Attribute Values for Attribute 1
-        $av1 = Utils::xpQuery($attributes[0], './saml_assertion:AttributeValue');
+        $av1 = XMLUtils::xpQuery($attributes[0], './saml_assertion:AttributeValue');
         $this->assertCount(2, $av1);
         $this->assertEquals('test1_attrv1', $av1[0]->textContent);
         $this->assertEquals('test1_attrv2', $av1[1]->textContent);
 
         // Test Attribute Values for Attribute 2
-        $av2 = Utils::xpQuery($attributes[1], './saml_assertion:AttributeValue');
+        $av2 = XMLUtils::xpQuery($attributes[1], './saml_assertion:AttributeValue');
         $this->assertCount(3, $av2);
         $this->assertEquals('test2_attrv1', $av2[0]->textContent);
         $this->assertEquals('test2_attrv2', $av2[1]->textContent);
         $this->assertEquals('test2_attrv3', $av2[2]->textContent);
 
         // Test Attribute Values for Attribute 3
-        $av3 = Utils::xpQuery($attributes[2], './saml_assertion:AttributeValue');
+        $av3 = XMLUtils::xpQuery($attributes[2], './saml_assertion:AttributeValue');
         $this->assertCount(0, $av3);
 
         // Test Attribute Values for Attribute 3
-        $av3 = Utils::xpQuery($attributes[3], './saml_assertion:AttributeValue');
+        $av3 = XMLUtils::xpQuery($attributes[3], './saml_assertion:AttributeValue');
         $this->assertCount(2, $av3);
         $this->assertEquals('4', $av3[0]->textContent);
         $this->assertEquals('xs:integer', $av3[0]->getAttribute('xsi:type'));
@@ -173,7 +173,7 @@ final class AttributeQueryTest extends TestCase
         $attributeQueryElement = $attributeQuery->toXML();
 
         // Test Attribute Names
-        $attributes = Utils::xpQuery($attributeQueryElement, './saml_assertion:Attribute');
+        $attributes = XMLUtils::xpQuery($attributeQueryElement, './saml_assertion:Attribute');
         $this->assertCount(3, $attributes);
         $this->assertEquals('test1', $attributes[0]->getAttribute('Name'));
         $this->assertEquals(Constants::NAMEFORMAT_URI, $attributes[0]->getAttribute('NameFormat'));
@@ -183,7 +183,7 @@ final class AttributeQueryTest extends TestCase
         $this->assertEquals(Constants::NAMEFORMAT_URI, $attributes[2]->getAttribute('NameFormat'));
 
         // Sanity check: test if values are still ok
-        $av1 = Utils::xpQuery($attributes[0], './saml_assertion:AttributeValue');
+        $av1 = XMLUtils::xpQuery($attributes[0], './saml_assertion:AttributeValue');
         $this->assertCount(2, $av1);
         $this->assertEquals('test1_attrv1', $av1[0]->textContent);
         $this->assertEquals('test1_attrv2', $av1[1]->textContent);

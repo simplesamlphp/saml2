@@ -15,6 +15,7 @@ use SimpleSAML\SAML2\XML\ds\Signature;
 use SimpleSAML\SAML2\XML\saml\Assertion;
 use SimpleSAML\SAML2\XML\saml\EncryptedAssertion;
 use SimpleSAML\SAML2\XML\saml\Issuer;
+use SimpleSAML\XML\Utils as XMLUtils;
 
 /**
  * Class for SAML 2 Response messages.
@@ -113,7 +114,7 @@ class Response extends AbstractStatusResponse
 
         $id = self::getAttribute($xml, 'ID');
         /** @psalm-suppress PossiblyNullArgument */
-        $issueInstant = Utils::xsDateTimeToTimestamp(self::getAttribute($xml, 'IssueInstant'));
+        $issueInstant = XMLUtils::xsDateTimeToTimestamp(self::getAttribute($xml, 'IssueInstant'));
         $inResponseTo = self::getAttribute($xml, 'InResponseTo', null);
         $destination = self::getAttribute($xml, 'Destination', null);
         $consent = self::getAttribute($xml, 'Consent', null);
@@ -181,7 +182,7 @@ class Response extends AbstractStatusResponse
         }
 
         // Test for an Issuer
-        $responseElements = Utils::xpQuery($e, './saml_assertion:Issuer');
+        $responseElements = XMLUtils::xpQuery($e, './saml_assertion:Issuer');
         $issuer = empty($responseElements) ? null : $responseElements[0];
 
         if ($this->signingKey !== null) {

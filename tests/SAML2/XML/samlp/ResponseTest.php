@@ -6,12 +6,12 @@ namespace SimpleSAML\SAML2;
 
 use PHPUnit\Framework\TestCase;
 use SimpleSAML\SAML2\Constants;
-use SimpleSAML\XML\DOMDocumentFactory;
 use SimpleSAML\SAML2\XML\samlp\Response;
 use SimpleSAML\SAML2\XML\samlp\Status;
 use SimpleSAML\SAML2\XML\samlp\StatusCode;
 use SimpleSAML\SAML2\XML\saml\Issuer;
-use SimpleSAML\SAML2\Utils;
+use SimpleSAML\XML\DOMDocumentFactory;
+use SimpleSAML\XML\Utils as XMLUtils;
 
 /**
  * Class \SAML2\XML\samlp\ResponseTest
@@ -37,7 +37,7 @@ final class ResponseTest extends TestCase
         $this->assertTrue($responseElement->hasAttribute('Consent'));
         $this->assertEquals($responseElement->getAttribute('Consent'), Constants::CONSENT_EXPLICIT);
 
-        $issuerElements = Utils::xpQuery($responseElement, './saml_assertion:Issuer');
+        $issuerElements = XMLUtils::xpQuery($responseElement, './saml_assertion:Issuer');
         $this->assertCount(1, $issuerElements);
         $this->assertEquals('SomeIssuer', $issuerElements[0]->textContent);
     }

@@ -6,11 +6,11 @@ namespace SimpleSAML\SAML2\XML\samlp;
 
 use PHPUnit\Framework\TestCase;
 use SimpleSAML\SAML2\Constants;
-use SimpleSAML\XML\DOMDocumentFactory;
-use SimpleSAML\SAML2\Utils;
 use SimpleSAML\SAML2\XML\samlp\IDPEntry;
 use SimpleSAML\SAML2\XML\samlp\IDPList;
 use SimpleSAML\SAML2\XML\samlp\Scoping;
+use SimpleSAML\XML\DOMDocumentFactory;
+use SimpleSAML\XML\Utils as XMLUtils;
 
 /**
  * Class \SAML2\XML\samlp\ScopingTest
@@ -85,11 +85,11 @@ final class ScopingTest extends TestCase
         $scopingElement = $scoping->toXML();
 
         // Test for an IDPList
-        $scopingElements = Utils::xpQuery($scopingElement, './saml_protocol:IDPList');
+        $scopingElements = XMLUtils::xpQuery($scopingElement, './saml_protocol:IDPList');
         $this->assertCount(1, $scopingElements);
 
         // Test ordering of Scoping contents
-        $scopingElements = Utils::xpQuery($scopingElement, './saml_protocol:IDPList/following-sibling::*');
+        $scopingElements = XMLUtils::xpQuery($scopingElement, './saml_protocol:IDPList/following-sibling::*');
         $this->assertCount(1, $scopingElements);
         $this->assertEquals('samlp:RequesterID', $scopingElements[0]->tagName);
     }

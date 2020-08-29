@@ -7,10 +7,10 @@ namespace SimpleSAML\SAML2\XML\md;
 use DOMElement;
 use SimpleSAML\Assert\Assert;
 use SimpleSAML\SAML2\Constants;
+use SimpleSAML\SAML2\XML\ds\Signature;
 use SimpleSAML\XML\Exception\InvalidDOMElementException;
 use SimpleSAML\XML\Exception\TooManyElementsException;
-use SimpleSAML\SAML2\Utils;
-use SimpleSAML\SAML2\XML\ds\Signature;
+use SimpleSAML\XML\Utils as XMLUtils;
 
 /**
  * Class representing SAML 2 metadata AuthnAuthorityDescriptor.
@@ -110,7 +110,7 @@ final class AuthnAuthorityDescriptor extends AbstractRoleDescriptor
         $authnQueryServices = AuthnQueryService::getChildrenOfClass($xml);
         $assertionIDRequestServices = AssertionIDRequestService::getChildrenOfClass($xml);
 
-        $nameIDFormats = Utils::extractStrings($xml, Constants::NS_MD, 'NameIDFormat');
+        $nameIDFormats = XMLUtils::extractStrings($xml, Constants::NS_MD, 'NameIDFormat');
 
         $validUntil = self::getAttribute($xml, 'validUntil', null);
 
@@ -129,7 +129,7 @@ final class AuthnAuthorityDescriptor extends AbstractRoleDescriptor
             $assertionIDRequestServices,
             $nameIDFormats,
             self::getAttribute($xml, 'ID', null),
-            $validUntil !== null ? Utils::xsDateTimeToTimestamp($validUntil) : null,
+            $validUntil !== null ? XMLUtils::xsDateTimeToTimestamp($validUntil) : null,
             self::getAttribute($xml, 'cacheDuration', null),
             !empty($extensions) ? $extensions[0] : null,
             self::getAttribute($xml, 'errorURL', null),
@@ -251,7 +251,7 @@ final class AuthnAuthorityDescriptor extends AbstractRoleDescriptor
             $ep->toXML($e);
         }
 
-        Utils::addStrings($e, Constants::NS_MD, 'md:NameIDFormat', false, $this->NameIDFormats);
+        XMLUtils::addStrings($e, Constants::NS_MD, 'md:NameIDFormat', false, $this->NameIDFormats);
 
         return $this->signElement($e);
     }

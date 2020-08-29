@@ -9,7 +9,7 @@ use SimpleSAML\Assert\Assert;
 use SimpleSAML\XML\Exception\InvalidDOMElementException;
 use SimpleSAML\XML\Exception\MissingElementException;
 use SimpleSAML\XML\Exception\TooManyElementsException;
-use SimpleSAML\SAML2\Utils;
+use SimpleSAML\XML\Utils as XMLUtils;
 
 /**
  * SAML Status data type.
@@ -136,7 +136,7 @@ final class Status extends AbstractSamlpElement
         Assert::minCount($statusCode, 1, MissingElementException::class);
         Assert::count($statusCode, 1, TooManyElementsException::class);
 
-        $statusMessage = Utils::extractStrings($xml, AbstractSamlpElement::NS, 'StatusMessage');
+        $statusMessage = XMLUtils::extractStrings($xml, AbstractSamlpElement::NS, 'StatusMessage');
         Assert::maxCount($statusMessage, 1, TooManyElementsException::class);
 
         $statusDetails = StatusDetail::getChildrenOfClass($xml);
@@ -162,7 +162,7 @@ final class Status extends AbstractSamlpElement
         $this->statusCode->toXML($e);
 
         if (!is_null($this->statusMessage)) {
-            Utils::addString($e, AbstractSamlpElement::NS, 'samlp:StatusMessage', $this->statusMessage);
+            XMLUtils::addString($e, AbstractSamlpElement::NS, 'samlp:StatusMessage', $this->statusMessage);
         }
 
         foreach ($this->statusDetails as $sd) {

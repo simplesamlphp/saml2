@@ -7,7 +7,7 @@ namespace SimpleSAML\SAML2\XML\mdrpi;
 use DOMElement;
 use SimpleSAML\Assert\Assert;
 use SimpleSAML\XML\Exception\InvalidDOMElementException;
-use SimpleSAML\SAML2\Utils;
+use SimpleSAML\XML\Utils as XMLUtils;
 
 /**
  * Class for handling the mdrpi:RegistrationInfo element.
@@ -147,9 +147,9 @@ final class RegistrationInfo extends AbstractMdrpiElement
         $registrationAuthority = self::getAttribute($xml, 'registrationAuthority');
         $registrationInstant = self::getAttribute($xml, 'registrationInstant', null);
         if ($registrationInstant !== null) {
-            $registrationInstant = Utils::xsDateTimeToTimestamp($registrationInstant);
+            $registrationInstant = XMLUtils::xsDateTimeToTimestamp($registrationInstant);
         }
-        $RegistrationPolicy = Utils::extractLocalizedStrings($xml, RegistrationInfo::NS, 'RegistrationPolicy');
+        $RegistrationPolicy = XMLUtils::extractLocalizedStrings($xml, RegistrationInfo::NS, 'RegistrationPolicy');
 
         return new self($registrationAuthority, $registrationInstant, $RegistrationPolicy);
     }
@@ -170,7 +170,7 @@ final class RegistrationInfo extends AbstractMdrpiElement
             $e->setAttribute('registrationInstant', gmdate('Y-m-d\TH:i:s\Z', $this->registrationInstant));
         }
 
-        Utils::addStrings($e, RegistrationInfo::NS, 'mdrpi:RegistrationPolicy', true, $this->RegistrationPolicy);
+        XMLUtils::addStrings($e, RegistrationInfo::NS, 'mdrpi:RegistrationPolicy', true, $this->RegistrationPolicy);
         return $e;
     }
 }

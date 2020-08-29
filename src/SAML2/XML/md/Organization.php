@@ -8,12 +8,12 @@ use DOMElement;
 use Exception;
 use SimpleSAML\Assert\Assert;
 use SimpleSAML\SAML2\Constants;
+use SimpleSAML\SAML2\XML\ExtendableElementTrait;
 use SimpleSAML\XML\Exception\InvalidDOMElementException;
 use SimpleSAML\XML\Exception\MissingElementException;
 use SimpleSAML\XML\Exception\TooManyElementsException;
-use SimpleSAML\SAML2\Utils;
-use SimpleSAML\SAML2\XML\ExtendableElementTrait;
 use SimpleSAML\XML\ExtendableAttributesTrait;
+use SimpleSAML\XML\Utils as XMLUtils;
 
 /**
  * Class representing SAML 2 Organization element.
@@ -162,7 +162,7 @@ final class Organization extends AbstractMdElement
         $displayNames = OrganizationDisplayName::getChildrenOfClass($xml);
         Assert::minCount($displayNames, 1, 'Missing at least one OrganizationDisplayName', MissingElementException::class);
 
-        $url = Utils::extractLocalizedStrings($xml, Constants::NS_MD, 'OrganizationURL');
+        $url = XMLUtils::extractLocalizedStrings($xml, Constants::NS_MD, 'OrganizationURL');
         Assert::allStringNotEmpty($url, 'No localized organization URL found.', MissingElementException::class);
 
         $extensions = Extensions::getChildrenOfClass($xml);
@@ -194,7 +194,7 @@ final class Organization extends AbstractMdElement
             $displayName->toXML($e);
         }
 
-        Utils::addStrings($e, Constants::NS_MD, 'md:OrganizationURL', true, $this->OrganizationURL);
+        XMLUtils::addStrings($e, Constants::NS_MD, 'md:OrganizationURL', true, $this->OrganizationURL);
 
         return $e;
     }

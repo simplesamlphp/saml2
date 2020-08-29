@@ -5,9 +5,9 @@ declare(strict_types=1);
 namespace SimpleSAML\SAML2\XML\mdui;
 
 use PHPUnit\Framework\TestCase;
-use SimpleSAML\XML\DOMDocumentFactory;
 use SimpleSAML\XML\Chunk;
-use SimpleSAML\SAML2\Utils;
+use SimpleSAML\XML\DOMDocumentFactory;
+use SimpleSAML\XML\Utils as XMLUtils;
 
 /**
  * Class \SAML2\XML\mdui\DiscoHintsTest
@@ -115,7 +115,7 @@ final class DiscoHintsTest extends TestCase
         $xml = $discoHints->toXML($document->documentElement);
 
         /** @var \DOMElement[] $discoElements */
-        $discoElements = Utils::xpQuery(
+        $discoElements = XMLUtils::xpQuery(
             $xml,
             '/root/*[local-name()=\'DiscoHints\' and namespace-uri()=\'urn:oasis:names:tc:SAML:metadata:ui\']'
         );

@@ -6,10 +6,6 @@ namespace SimpleSAML\SAML2\XML\samlp;
 
 use DOMElement;
 use SimpleSAML\Assert\Assert;
-use SimpleSAML\XML\Exception\InvalidDOMElementException;
-use SimpleSAML\XML\Exception\MissingElementException;
-use SimpleSAML\XML\Exception\TooManyElementsException;
-use SimpleSAML\SAML2\Utils;
 use SimpleSAML\SAML2\XML\IdentifierTrait;
 use SimpleSAML\SAML2\XML\ds\Signature;
 use SimpleSAML\SAML2\XML\saml\IdentifierInterface;
@@ -17,6 +13,10 @@ use SimpleSAML\SAML2\XML\saml\BaseID;
 use SimpleSAML\SAML2\XML\saml\EncryptedID;
 use SimpleSAML\SAML2\XML\saml\NameID;
 use SimpleSAML\SAML2\XML\saml\Issuer;
+use SimpleSAML\XML\Exception\InvalidDOMElementException;
+use SimpleSAML\XML\Exception\MissingElementException;
+use SimpleSAML\XML\Exception\TooManyElementsException;
+use SimpleSAML\XML\Utils as XMLUtils;
 
 /**
  * Class for SAML 2 logout request messages.
@@ -173,11 +173,11 @@ class LogoutRequest extends AbstractRequest
         Assert::same($xml->namespaceURI, LogoutRequest::NS, InvalidDOMElementException::class);
         Assert::same('2.0', self::getAttribute($xml, 'Version'));
 
-        $issueInstant = Utils::xsDateTimeToTimestamp(self::getAttribute($xml, 'IssueInstant'));
+        $issueInstant = XMLUtils::xsDateTimeToTimestamp(self::getAttribute($xml, 'IssueInstant'));
 
         $notOnOrAfter = self::getAttribute($xml, 'NotOnOrAfter', null);
         if ($notOnOrAfter !== null) {
-            $notOnOrAfter = Utils::xsDateTimeToTimestamp($notOnOrAfter);
+            $notOnOrAfter = XMLUtils::xsDateTimeToTimestamp($notOnOrAfter);
         }
 
         $issuer = Issuer::getChildrenOfClass($xml);
@@ -201,7 +201,7 @@ class LogoutRequest extends AbstractRequest
             $identifier,
             $notOnOrAfter,
             self::getAttribute($xml, 'Reason', null),
-            Utils::extractStrings($xml, AbstractSamlpElement::NS, 'SessionIndex'),
+            XMLUtils::extractStrings($xml, AbstractSamlpElement::NS, 'SessionIndex'),
             array_pop($issuer),
             self::getAttribute($xml, 'ID'),
             $issueInstant,

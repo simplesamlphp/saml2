@@ -9,7 +9,7 @@ use PHPUnit\Framework\TestCase;
 use SimpleSAML\SAML2\Constants;
 use SimpleSAML\XML\DOMDocumentFactory;
 use SimpleSAML\XML\Exception\MissingElementException;
-use SimpleSAML\SAML2\Utils;
+use SimpleSAML\XML\Utils as XMLUtils;
 
 /**
  * Class \SAML2\XML\saml\AuthnStatementTest
@@ -49,8 +49,8 @@ final class AuthnStatementTest extends TestCase
                 null,
                 ['https://idp.example.com/SAML2']
             ),
-            Utils::xsDateTimeToTimestamp('2020-03-23T23:37:24Z'),
-            Utils::xsDateTimeToTimestamp('2020-03-23T23:37:24Z'),
+            XMLUtils::xsDateTimeToTimestamp('2020-03-23T23:37:24Z'),
+            XMLUtils::xsDateTimeToTimestamp('2020-03-23T23:37:24Z'),
             '123',
             new SubjectLocality('1.1.1.1', 'idp.example.org')
         );
@@ -83,8 +83,8 @@ final class AuthnStatementTest extends TestCase
                 null,
                 ['https://idp.example.com/SAML2']
             ),
-            Utils::xsDateTimeToTimestamp('2020-03-23T23:37:24Z'),
-            Utils::xsDateTimeToTimestamp('2020-03-23T23:37:24Z'),
+            XMLUtils::xsDateTimeToTimestamp('2020-03-23T23:37:24Z'),
+            XMLUtils::xsDateTimeToTimestamp('2020-03-23T23:37:24Z'),
             '123',
             new SubjectLocality('1.1.1.1', 'idp.example.org')
         );
@@ -93,11 +93,11 @@ final class AuthnStatementTest extends TestCase
         $authnStatementElement = $authnStatement->toXML();
 
         // Test for a SubjectLocality
-        $authnStatementElements = Utils::xpQuery($authnStatementElement, './saml_assertion:SubjectLocality');
+        $authnStatementElements = XMLUtils::xpQuery($authnStatementElement, './saml_assertion:SubjectLocality');
         $this->assertCount(1, $authnStatementElements);
 
         // Test ordering of AuthnStatement contents
-        $authnStatementElements = Utils::xpQuery(
+        $authnStatementElements = XMLUtils::xpQuery(
             $authnStatementElement,
             './saml_assertion:SubjectLocality/following-sibling::*'
         );

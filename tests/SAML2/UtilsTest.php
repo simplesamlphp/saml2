@@ -7,13 +7,14 @@ namespace SimpleSAML\SAML2;
 use Exception;
 use PHPUnit\Framework\TestCase;
 use SimpleSAML\SAML2\Constants;
-use SimpleSAML\XML\DOMDocumentFactory;
+use SimpleSAML\SAML2\Utils;
 use SimpleSAML\SAML2\XML\ds\X509Data;
 use SimpleSAML\SAML2\XML\saml\NameID;
 use SimpleSAML\SAML2\XML\saml\Subject;
 use SimpleSAML\SAML2\XML\samlp\AttributeQuery;
-use SimpleSAML\SAML2\Utils;
 use SimpleSAML\TestUtils\PEMCertificatesMock;
+use SimpleSAML\XML\DOMDocumentFactory;
+use SimpleSAML\XML\Utils as XMLUtils;
 
 /**
  * Class \SAML2\UtilsTest
@@ -41,7 +42,7 @@ final class UtilsTest extends TestCase
 
         $xml = $aq->toXML();
 
-        $nameId_after = Utils::xpQuery($xml, './saml_assertion:Subject/saml_assertion:NameID');
+        $nameId_after = XMLUtils::xpQuery($xml, './saml_assertion:Subject/saml_assertion:NameID');
         $this->assertTrue(count($nameId_after) === 1);
         $this->assertEquals('NameIDValue', $nameId_after[0]->textContent);
         $this->assertEquals('SomeNameIDFormat', $nameId_after[0]->getAttribute("Format"));
@@ -58,7 +59,7 @@ final class UtilsTest extends TestCase
     {
         $document = DOMDocumentFactory::fromString('<root/>');
 
-        Utils::addString(
+        XMLUtils::addString(
             $document->firstChild,
             'testns',
             'ns:somenode',
@@ -70,7 +71,7 @@ final class UtilsTest extends TestCase
         );
 
         $document->loadXML('<ns:root xmlns:ns="testns"/>');
-        Utils::addString(
+        XMLUtils::addString(
             $document->firstChild,
             'testns',
             'ns:somenode',
@@ -90,7 +91,7 @@ final class UtilsTest extends TestCase
     public function testGetAddStrings(): void
     {
         $document = DOMDocumentFactory::fromString('<root/>');
-        Utils::addStrings(
+        XMLUtils::addStrings(
             $document->firstChild,
             'testns',
             'ns:somenode',
@@ -106,7 +107,7 @@ final class UtilsTest extends TestCase
         );
 
         $document->loadXML('<ns:root xmlns:ns="testns"/>');
-        Utils::addStrings(
+        XMLUtils::addStrings(
             $document->firstChild,
             'testns',
             'ns:somenode',
@@ -122,7 +123,7 @@ final class UtilsTest extends TestCase
         );
 
         $document->loadXML('<root/>');
-        Utils::addStrings(
+        XMLUtils::addStrings(
             $document->firstChild,
             'testns',
             'ns:somenode',
@@ -138,7 +139,7 @@ final class UtilsTest extends TestCase
         );
 
         $document->loadXML('<ns:root xmlns:ns="testns"/>');
-        Utils::addStrings(
+        XMLUtils::addStrings(
             $document->firstChild,
             'testns',
             'ns:somenode',
@@ -168,7 +169,7 @@ final class UtilsTest extends TestCase
             '</root>'
         );
 
-        $stringValues = Utils::extractStrings(
+        $stringValues = XMLUtils::extractStrings(
             $document->firstChild,
             Constants::NS_MD,
             'somenode'
@@ -193,7 +194,7 @@ final class UtilsTest extends TestCase
             '</root>'
         );
 
-        $localizedStringValues = Utils::extractLocalizedStrings(
+        $localizedStringValues = XMLUtils::extractLocalizedStrings(
             $document->firstChild,
             Constants::NS_MD,
             'somenode'
@@ -214,7 +215,7 @@ final class UtilsTest extends TestCase
     public function testXsDateTimeToTimestamp($shouldPass, $time, $expectedTs = null): void
     {
         try {
-            $ts = Utils::xsDateTimeToTimestamp($time);
+            $ts = XMLUtils::xsDateTimeToTimestamp($time);
             $this->assertTrue($shouldPass);
             $this->assertEquals($expectedTs, $ts);
         } catch (\Exception $e) {

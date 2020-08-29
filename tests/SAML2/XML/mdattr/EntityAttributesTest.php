@@ -6,12 +6,12 @@ namespace SimpleSAML\SAML2\XML\mdattr;
 
 use PHPUnit\Framework\TestCase;
 use SimpleSAML\SAML2\Constants;
-use SimpleSAML\XML\DOMDocumentFactory;
-use SimpleSAML\XML\Chunk;
 use SimpleSAML\SAML2\XML\saml\Attribute;
 use SimpleSAML\SAML2\XML\saml\AttributeValue;
 use SimpleSAML\SAML2\XML\mdattr\EntityAttributes;
-use SimpleSAML\SAML2\Utils;
+use SimpleSAML\XML\Chunk;
+use SimpleSAML\XML\DOMDocumentFactory;
+use SimpleSAML\XML\Utils as XMLUtils;
 
 /**
  * Class \SAML2\XML\mdattr\EntityAttributesTest
@@ -65,14 +65,14 @@ final class EntityAttributesTest extends TestCase
         $document = DOMDocumentFactory::fromString('<root />');
         $xml = $entityAttributes->toXML($document->firstChild);
 
-        $entityAttributesElements = Utils::xpQuery(
+        $entityAttributesElements = XMLUtils::xpQuery(
             $xml,
             '/root/*[local-name()=\'EntityAttributes\' and namespace-uri()=\'urn:oasis:names:tc:SAML:metadata:attribute\']'
         );
         $this->assertCount(1, $entityAttributesElements);
         $entityAttributesElement = $entityAttributesElements[0];
 
-        $attributeElements = Utils::xpQuery(
+        $attributeElements = XMLUtils::xpQuery(
             $entityAttributesElement,
             './*[local-name()=\'Attribute\' and namespace-uri()=\'urn:oasis:names:tc:SAML:2.0:assertion\']'
         );

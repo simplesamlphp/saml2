@@ -6,9 +6,9 @@ namespace SimpleSAML\SAML2\XML\mdui;
 
 use DOMElement;
 use SimpleSAML\Assert\Assert;
-use SimpleSAML\XML\Exception\InvalidDOMElementException;
-use SimpleSAML\SAML2\Utils;
 use SimpleSAML\XML\Chunk;
+use SimpleSAML\XML\Exception\InvalidDOMElementException;
+use SimpleSAML\XML\Utils as XMLUtils;
 
 /**
  * Class for handling the metadata extensions for login and discovery user interface
@@ -209,13 +209,13 @@ final class DiscoHints extends AbstractMduiElement
         Assert::same($xml->localName, 'DiscoHints', InvalidDOMElementException::class);
         Assert::same($xml->namespaceURI, DiscoHints::NS, InvalidDOMElementException::class);
 
-        $IPHint = Utils::extractStrings($xml, DiscoHints::NS, 'IPHint');
-        $DomainHint = Utils::extractStrings($xml, DiscoHints::NS, 'DomainHint');
-        $GeolocationHint = Utils::extractStrings($xml, DiscoHints::NS, 'GeolocationHint');
+        $IPHint = XMLUtils::extractStrings($xml, DiscoHints::NS, 'IPHint');
+        $DomainHint = XMLUtils::extractStrings($xml, DiscoHints::NS, 'DomainHint');
+        $GeolocationHint = XMLUtils::extractStrings($xml, DiscoHints::NS, 'GeolocationHint');
         $children = [];
 
         /** @var \DOMElement $node */
-        foreach (Utils::xpQuery($xml, "./*[namespace-uri()!='" . DiscoHints::NS . "']") as $node) {
+        foreach (XMLUtils::xpQuery($xml, "./*[namespace-uri()!='" . DiscoHints::NS . "']") as $node) {
             $children[] = new Chunk($node);
         }
 
@@ -237,9 +237,9 @@ final class DiscoHints extends AbstractMduiElement
             $child->toXML($e);
         }
 
-        Utils::addStrings($e, DiscoHints::NS, 'mdui:IPHint', false, $this->IPHint);
-        Utils::addStrings($e, DiscoHints::NS, 'mdui:DomainHint', false, $this->DomainHint);
-        Utils::addStrings($e, DiscoHints::NS, 'mdui:GeolocationHint', false, $this->GeolocationHint);
+        XMLUtils::addStrings($e, DiscoHints::NS, 'mdui:IPHint', false, $this->IPHint);
+        XMLUtils::addStrings($e, DiscoHints::NS, 'mdui:DomainHint', false, $this->DomainHint);
+        XMLUtils::addStrings($e, DiscoHints::NS, 'mdui:GeolocationHint', false, $this->GeolocationHint);
 
         return $e;
     }

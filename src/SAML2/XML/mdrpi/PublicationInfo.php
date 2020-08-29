@@ -7,7 +7,7 @@ namespace SimpleSAML\SAML2\XML\mdrpi;
 use DOMElement;
 use SimpleSAML\Assert\Assert;
 use SimpleSAML\XML\Exception\InvalidDOMElementException;
-use SimpleSAML\SAML2\Utils;
+use SimpleSAML\XML\Utils as XMLUtils;
 
 /**
  * Class for handling the mdrpi:PublicationInfo element.
@@ -180,11 +180,11 @@ final class PublicationInfo extends AbstractMdrpiElement
         $publisher = self::getAttribute($xml, 'publisher');
         $creationInstant = self::getAttribute($xml, 'creationInstant', null);
         if ($creationInstant !== null) {
-            $creationInstant = Utils::xsDateTimeToTimestamp($creationInstant);
+            $creationInstant = XMLUtils::xsDateTimeToTimestamp($creationInstant);
         }
 
         $publicationId = self::getAttribute($xml, 'publicationId', null);
-        $UsagePolicy = Utils::extractLocalizedStrings($xml, PublicationInfo::NS, 'UsagePolicy');
+        $UsagePolicy = XMLUtils::extractLocalizedStrings($xml, PublicationInfo::NS, 'UsagePolicy');
 
         return new self($publisher, $creationInstant, $publicationId, $UsagePolicy);
     }
@@ -209,7 +209,7 @@ final class PublicationInfo extends AbstractMdrpiElement
             $e->setAttribute('publicationId', $this->publicationId);
         }
 
-        Utils::addStrings($e, PublicationInfo::NS, 'mdrpi:UsagePolicy', true, $this->UsagePolicy);
+        XMLUtils::addStrings($e, PublicationInfo::NS, 'mdrpi:UsagePolicy', true, $this->UsagePolicy);
         return $e;
     }
 }

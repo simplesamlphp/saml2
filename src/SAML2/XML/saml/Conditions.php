@@ -8,7 +8,7 @@ use DOMElement;
 use SimpleSAML\Assert\Assert;
 use SimpleSAML\SAML2\Constants;
 use SimpleSAML\XML\Exception\InvalidDOMElementException;
-use SimpleSAML\SAML2\Utils;
+use SimpleSAML\XML\Utils as XMLUtils;
 
 /**
  * Class representing SAML 2 Conditions element.
@@ -256,12 +256,12 @@ final class Conditions extends AbstractSamlElement
 
         $condition = Condition::getChildrenOfClass($xml);
         $audienceRestriction = AudienceRestriction::getChildrenOfClass($xml);
-        $oneTimeUse = Utils::extractStrings($xml, AbstractSamlElement::NS, 'OneTimeUse');
+        $oneTimeUse = XMLUtils::extractStrings($xml, AbstractSamlElement::NS, 'OneTimeUse');
         $proxyRestriction = ProxyRestriction::getChildrenOfClass($xml);
 
         return new self(
-            $notBefore !== null ? Utils::xsDateTimeToTimestamp($notBefore) : null,
-            $notOnOrAfter !== null ? Utils::xsDateTimeToTimestamp($notOnOrAfter) : null,
+            $notBefore !== null ? XMLUtils::xsDateTimeToTimestamp($notBefore) : null,
+            $notOnOrAfter !== null ? XMLUtils::xsDateTimeToTimestamp($notOnOrAfter) : null,
             $condition,
             $audienceRestriction,
             !empty($oneTimeUse),

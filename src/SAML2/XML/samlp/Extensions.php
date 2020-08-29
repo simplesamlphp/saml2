@@ -6,10 +6,10 @@ namespace SimpleSAML\SAML2\XML\samlp;
 
 use DOMElement;
 use SimpleSAML\Assert\Assert;
-use SimpleSAML\XML\Exception\InvalidDOMElementException;
-use SimpleSAML\SAML2\Utils;
-use SimpleSAML\XML\Chunk;
 use SimpleSAML\SAML2\XML\ExtensionsTrait;
+use SimpleSAML\XML\Chunk;
+use SimpleSAML\XML\Exception\InvalidDOMElementException;
+use SimpleSAML\XML\Utils as XMLUtils;
 
 /**
  * Class for handling SAML2 extensions.
@@ -48,7 +48,7 @@ final class Extensions extends AbstractSamlpElement
         $ret = [];
 
         /** @var \DOMElement $node */
-        foreach (Utils::xpQuery($xml, './*') as $node) {
+        foreach (XMLUtils::xpQuery($xml, './*') as $node) {
             $ret[] = new Chunk($node);
         }
 

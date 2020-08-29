@@ -5,10 +5,10 @@ declare(strict_types=1);
 namespace SimpleSAML\SAML2\XML\mdui;
 
 use DOMElement;
-use SimpleSAML\XML\Exception\InvalidDOMElementException;
-use SimpleSAML\SAML2\Utils;
-use SimpleSAML\XML\Chunk;
 use SimpleSAML\Assert\Assert;
+use SimpleSAML\XML\Chunk;
+use SimpleSAML\XML\Exception\InvalidDOMElementException;
+use SimpleSAML\XML\Utils as XMLUtils;
 
 /**
  * Class for handling the metadata extensions for login and discovery user interface
@@ -344,14 +344,14 @@ final class UIInfo extends AbstractMduiElement
         Assert::same($xml->localName, 'UIInfo', InvalidDOMElementException::class);
         Assert::same($xml->namespaceURI, UIInfo::NS, InvalidDOMElementException::class);
 
-        $DisplayName = Utils::extractLocalizedStrings($xml, UIInfo::NS, 'DisplayName');
-        $Description = Utils::extractLocalizedStrings($xml, UIInfo::NS, 'Description');
-        $InformationURL = Utils::extractLocalizedStrings($xml, UIInfo::NS, 'InformationURL');
-        $PrivacyStatementURL = Utils::extractLocalizedStrings($xml, UIInfo::NS, 'PrivacyStatementURL');
+        $DisplayName = XMLUtils::extractLocalizedStrings($xml, UIInfo::NS, 'DisplayName');
+        $Description = XMLUtils::extractLocalizedStrings($xml, UIInfo::NS, 'Description');
+        $InformationURL = XMLUtils::extractLocalizedStrings($xml, UIInfo::NS, 'InformationURL');
+        $PrivacyStatementURL = XMLUtils::extractLocalizedStrings($xml, UIInfo::NS, 'PrivacyStatementURL');
         $Keywords = $Logo = $children = [];
 
         /** @var \DOMElement $node */
-        foreach (Utils::xpQuery($xml, './*') as $node) {
+        foreach (XMLUtils::xpQuery($xml, './*') as $node) {
             if ($node->namespaceURI === UIInfo::NS) {
                 switch ($node->localName) {
                     case 'Keywords':
@@ -388,10 +388,10 @@ final class UIInfo extends AbstractMduiElement
     {
         $e = $this->instantiateParentElement($parent);
 
-        Utils::addStrings($e, UIInfo::NS, 'mdui:DisplayName', true, $this->DisplayName);
-        Utils::addStrings($e, UIInfo::NS, 'mdui:Description', true, $this->Description);
-        Utils::addStrings($e, UIInfo::NS, 'mdui:InformationURL', true, $this->InformationURL);
-        Utils::addStrings($e, UIInfo::NS, 'mdui:PrivacyStatementURL', true, $this->PrivacyStatementURL);
+        XMLUtils::addStrings($e, UIInfo::NS, 'mdui:DisplayName', true, $this->DisplayName);
+        XMLUtils::addStrings($e, UIInfo::NS, 'mdui:Description', true, $this->Description);
+        XMLUtils::addStrings($e, UIInfo::NS, 'mdui:InformationURL', true, $this->InformationURL);
+        XMLUtils::addStrings($e, UIInfo::NS, 'mdui:PrivacyStatementURL', true, $this->PrivacyStatementURL);
 
         foreach ($this->Keywords as $child) {
             $child->toXML($e);

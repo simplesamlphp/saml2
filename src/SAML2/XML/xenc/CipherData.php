@@ -7,7 +7,7 @@ namespace SimpleSAML\SAML2\XML\xenc;
 use DOMElement;
 use SimpleSAML\Assert\Assert;
 use SimpleSAML\XML\Exception\InvalidDOMElementException;
-use SimpleSAML\SAML2\Utils;
+use SimpleSAML\XML\Utils as XMLUtils;
 
 /**
  * Class representing <xenc:CipherData>.
@@ -93,8 +93,9 @@ class CipherData extends AbstractXencElement
         Assert::same($xml->localName, 'CipherData', InvalidDOMElementException::class);
         Assert::same($xml->namespaceURI, CipherData::NS, InvalidDOMElementException::class);
 
-        $cv = Utils::xpQuery($xml, './xenc:CipherValue');
-        Assert::maxCount($cv, 1, 'More than one CipherValue element in <xenc:CipherData');
+        $cv = XMLUtils::xpQuery($xml, './xenc:CipherValue');
+        Assert::notEmpty($cv, 'Missing CipherValue element in <xenc:CipherData>');
+        Assert::count($cv, 1, 'More than one CipherValue element in <xenc:CipherData');
 
         $cr = CipherReference::getChildrenOfClass($xml);
         Assert::maxCount($cr, 1, 'More than one CipherReference element in <xenc:CipherData');

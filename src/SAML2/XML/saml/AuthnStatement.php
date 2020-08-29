@@ -8,7 +8,7 @@ use DOMElement;
 use SimpleSAML\Assert\Assert;
 use SimpleSAML\XML\Exception\InvalidDOMElementException;
 use SimpleSAML\XML\Exception\MissingElementException;
-use SimpleSAML\SAML2\Utils;
+use SimpleSAML\XML\Utils as XMLUtils;
 
 /**
  * Class representing a SAML2 AuthnStatement
@@ -191,14 +191,14 @@ final class AuthnStatement extends AbstractStatement
         $authnContext = AuthnContext::getChildrenOfClass($xml);
         Assert::minCount($authnContext, 1, 'At least one saml:AuthnContext must be specified.', MissingElementException::class);
 
-        $authnInstant = Utils::xsDateTimeToTimestamp(self::getAttribute($xml, 'AuthnInstant'));
+        $authnInstant = XMLUtils::xsDateTimeToTimestamp(self::getAttribute($xml, 'AuthnInstant'));
         $sessionNotOnOrAfter = self::getAttribute($xml, 'SessionNotOnOrAfter', null);
         $subjectLocality = SubjectLocality::getChildrenOfClass($xml);
 
         return new self(
             array_pop($authnContext),
             $authnInstant,
-            is_null($sessionNotOnOrAfter) ? $sessionNotOnOrAfter : Utils::xsDateTimeToTimestamp($sessionNotOnOrAfter),
+            is_null($sessionNotOnOrAfter) ? $sessionNotOnOrAfter : XMLUtils::xsDateTimeToTimestamp($sessionNotOnOrAfter),
             self::getAttribute($xml, 'SessionIndex', null),
             array_pop($subjectLocality)
         );

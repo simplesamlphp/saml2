@@ -6,7 +6,7 @@ use DOMElement;
 use SimpleSAML\Assert\Assert;
 use SimpleSAML\SAML2\Constants;
 use SimpleSAML\XML\Exception\InvalidDOMElementException;
-use SimpleSAML\SAML2\Utils;
+use SimpleSAML\XML\Utils as XMLUtils;
 
 /**
  * @author Tim van Dijen, <tvdijen@gmail.com>
@@ -103,7 +103,7 @@ final class ProxyRestriction extends AbstractConditionType
         Assert::same($xml->namespaceURI, ProxyRestriction::NS, InvalidDOMElementException::class);
 
         $count = self::getIntegerAttribute($xml, 'Count', null);
-        $audience = Utils::extractStrings($xml, AbstractSamlElement::NS, 'Audience');
+        $audience = XMLUtils::extractStrings($xml, AbstractSamlElement::NS, 'Audience');
 
         return new self($audience, $count);
     }
@@ -123,7 +123,7 @@ final class ProxyRestriction extends AbstractConditionType
             $e->setAttribute('Count', $this->count);
         }
 
-        Utils::addStrings($e, AbstractSamlElement::NS, 'saml:Audience', false, $this->audience);
+        XMLUtils::addStrings($e, AbstractSamlElement::NS, 'saml:Audience', false, $this->audience);
 
         return $e;
     }

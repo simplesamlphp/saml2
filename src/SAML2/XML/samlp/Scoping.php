@@ -7,7 +7,7 @@ namespace SimpleSAML\SAML2\XML\samlp;
 use DOMElement;
 use SimpleSAML\Assert\Assert;
 use SimpleSAML\XML\Exception\InvalidDOMElementException;
-use SimpleSAML\SAML2\Utils;
+use SimpleSAML\XML\Utils as XMLUtils;
 
 /**
  * Class for handling SAML2 Scoping.
@@ -131,7 +131,7 @@ final class Scoping extends AbstractSamlpElement
 
         $proxyCount = self::getAttribute($xml, 'ProxyCount', null);
         $idpList = IDPList::getChildrenOfClass($xml);
-        $requesterId = Utils::extractStrings($xml, AbstractSamlpElement::NS, 'RequesterID');
+        $requesterId = XMLUtils::extractStrings($xml, AbstractSamlpElement::NS, 'RequesterID');
 
         return new self(
             is_null($proxyCount) ? null : intval($proxyCount),
@@ -160,7 +160,7 @@ final class Scoping extends AbstractSamlpElement
         }
 
         if (!empty($this->requesterId)) {
-            Utils::addStrings($e, AbstractSamlpElement::NS, 'samlp:RequesterID', false, $this->requesterId);
+            XMLUtils::addStrings($e, AbstractSamlpElement::NS, 'samlp:RequesterID', false, $this->requesterId);
         }
 
         return $e;

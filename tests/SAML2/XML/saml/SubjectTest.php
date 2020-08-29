@@ -12,7 +12,7 @@ use SimpleSAML\SAML2\Constants;
 use SimpleSAML\SAML2\CustomBaseID;
 use SimpleSAML\XML\DOMDocumentFactory;
 use SimpleSAML\XML\Exception\TooManyElementsException;
-use SimpleSAML\SAML2\Utils;
+use SimpleSAML\XML\Utils as XMLUtils;
 
 /**
  * Class \SAML2\XML\saml\SubjectTest
@@ -156,11 +156,11 @@ XML
         $subjectElement = $subject->toXML();
 
         // Test for a NameID
-        $subjectElements = Utils::xpQuery($subjectElement, './saml_assertion:NameID');
+        $subjectElements = XMLUtils::xpQuery($subjectElement, './saml_assertion:NameID');
         $this->assertCount(1, $subjectElements);
 
         // Test ordering of Subject contents
-        $subjectElements = Utils::xpQuery($subjectElement, './saml_assertion:NameID/following-sibling::*');
+        $subjectElements = XMLUtils::xpQuery($subjectElement, './saml_assertion:NameID/following-sibling::*');
         $this->assertCount(1, $subjectElements);
         $this->assertEquals('saml:SubjectConfirmation', $subjectElements[0]->tagName);
     }

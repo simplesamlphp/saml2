@@ -7,15 +7,15 @@ namespace SimpleSAML\SAML2\XML\samlp;
 use PHPUnit\Framework\TestCase;
 use RobRichards\XMLSecLibs\XMLSecurityKey;
 use SimpleSAML\SAML2\Constants;
-use SimpleSAML\XML\DOMDocumentFactory;
-use SimpleSAML\XML\Exception\MissingElementException;
-use SimpleSAML\SAML2\Utils;
-use SimpleSAML\XML\Chunk;
 use SimpleSAML\SAML2\XML\saml\Attribute;
 use SimpleSAML\SAML2\XML\saml\Issuer;
 use SimpleSAML\SAML2\XML\shibmd\Scope;
 use SimpleSAML\SAML2\XML\samlp\AbstractResponse;
 use SimpleSAML\TestUtils\PEMCertificatesMock;
+use SimpleSAML\XML\DOMDocumentFactory;
+use SimpleSAML\XML\Exception\MissingElementException;
+use SimpleSAML\XML\Utils as XMLUtils;
+use SimpleSAML\XML\Chunk;
 
 /**
  * Class \SimpleSAML\SAML2\XML\samlp\AbstractStatusResponseTest
@@ -47,18 +47,18 @@ final class AbstractStatusResponseTest extends TestCase
 
         $responseElement = $response->toXML();
 
-        $statusElements = Utils::xpQuery($responseElement, './saml_protocol:Status');
+        $statusElements = XMLUtils::xpQuery($responseElement, './saml_protocol:Status');
         $this->assertCount(1, $statusElements);
 
-        $statusCodeElements = Utils::xpQuery($statusElements[0], './saml_protocol:StatusCode');
+        $statusCodeElements = XMLUtils::xpQuery($statusElements[0], './saml_protocol:StatusCode');
         $this->assertCount(1, $statusCodeElements);
         $this->assertEquals('OurStatusCode', $statusCodeElements[0]->getAttribute("Value"));
 
-        $nestedStatusCodeElements = Utils::xpQuery($statusCodeElements[0], './saml_protocol:StatusCode');
+        $nestedStatusCodeElements = XMLUtils::xpQuery($statusCodeElements[0], './saml_protocol:StatusCode');
         $this->assertCount(1, $nestedStatusCodeElements);
         $this->assertEquals('OurSubStatusCode', $nestedStatusCodeElements[0]->getAttribute("Value"));
 
-        $statusMessageElements = Utils::xpQuery($statusElements[0], './saml_protocol:StatusMessage');
+        $statusMessageElements = XMLUtils::xpQuery($statusElements[0], './saml_protocol:StatusMessage');
         $this->assertCount(1, $statusMessageElements);
         $this->assertEquals('OurMessageText', $statusMessageElements[0]->textContent);
     }
@@ -98,11 +98,11 @@ final class AbstractStatusResponseTest extends TestCase
         $responseElement = $response->toXML();
 
         // Test for an Issuer
-        $responseElements = Utils::xpQuery($responseElement, './saml_assertion:Issuer');
+        $responseElements = XMLUtils::xpQuery($responseElement, './saml_assertion:Issuer');
         $this->assertCount(1, $responseElements);
 
         // Test ordering of Response contents
-        $responseElements = Utils::xpQuery($responseElement, './saml_assertion:Issuer/following-sibling::*');
+        $responseElements = XMLUtils::xpQuery($responseElement, './saml_assertion:Issuer/following-sibling::*');
         $this->assertCount(3, $responseElements);
         $this->assertEquals('ds:Signature', $responseElements[0]->tagName);
         $this->assertEquals('samlp:Extensions', $responseElements[1]->tagName);

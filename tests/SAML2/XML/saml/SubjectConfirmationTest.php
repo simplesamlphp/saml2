@@ -13,7 +13,7 @@ use SimpleSAML\SAML2\CustomBaseID;
 use SimpleSAML\XML\DOMDocumentFactory;
 use SimpleSAML\XML\Exception\MissingAttributeException;
 use SimpleSAML\XML\Exception\TooManyElementsException;
-use SimpleSAML\SAML2\Utils;
+use SimpleSAML\XML\Utils as XMLUtils;
 
 /**
  * Class \SAML2\XML\saml\SubjectConfirmationTest
@@ -82,11 +82,11 @@ final class SubjectConfirmationTest extends TestCase
         $subjectConfirmationElement = $subjectConfirmation->toXML();
 
         // Test for a NameID
-        $subjectConfirmationElements = Utils::xpQuery($subjectConfirmationElement, './saml_assertion:NameID');
+        $subjectConfirmationElements = XMLUtils::xpQuery($subjectConfirmationElement, './saml_assertion:NameID');
         $this->assertCount(1, $subjectConfirmationElements);
 
         // Test ordering of SubjectConfirmation contents
-        $subjectConfirmationElements = Utils::xpQuery(
+        $subjectConfirmationElements = XMLUtils::xpQuery(
             $subjectConfirmationElement,
             './saml_assertion:NameID/following-sibling::*'
         );

@@ -6,12 +6,12 @@ namespace SimpleSAML\SAML2\XML\md;
 
 use PHPUnit\Framework\TestCase;
 use RobRichards\XMLSecLibs\XMLSecurityDSig;
-use SimpleSAML\SAML2\Constants;
-use SimpleSAML\XML\DOMDocumentFactory;
-use SimpleSAML\SAML2\SignedElementTestTrait;
-use SimpleSAML\SAML2\Utils;
-use SimpleSAML\SAML2\XML\mdrpi\PublicationInfo;
 use SimpleSAML\Assert\AssertionFailedException;
+use SimpleSAML\SAML2\Constants;
+use SimpleSAML\SAML2\SignedElementTestTrait;
+use SimpleSAML\SAML2\XML\mdrpi\PublicationInfo;
+use SimpleSAML\XML\DOMDocumentFactory;
+use SimpleSAML\XML\Utils as XMLUtils;
 
 /**
  * Tests for the md:EntitiesDescriptor element.
@@ -50,7 +50,7 @@ final class EntitiesDescriptorTest extends TestCase
             [
                 new PublicationInfo(
                     'http://publisher.ra/',
-                    Utils::xsDateTimeToTimestamp('2020-02-03T13:46:24Z'),
+                    XMLUtils::xsDateTimeToTimestamp('2020-02-03T13:46:24Z'),
                     null,
                     ['en' => 'http://publisher.ra/policy.txt']
                 )

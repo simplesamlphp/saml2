@@ -7,11 +7,9 @@ namespace SimpleSAML\SAML2\XML\md;
 use DOMElement;
 use SimpleSAML\Assert\Assert;
 use SimpleSAML\XML\Exception\InvalidDOMElementException;
-use SimpleSAML\SAML2\Utils;
 use SimpleSAML\SAML2\XML\alg\AbstractAlgElement as ALG;
 use SimpleSAML\SAML2\XML\alg\DigestMethod;
 use SimpleSAML\SAML2\XML\alg\SigningMethod;
-use SimpleSAML\XML\Chunk;
 use SimpleSAML\SAML2\XML\ExtensionsTrait;
 use SimpleSAML\SAML2\XML\init\RequestInitiator;
 use SimpleSAML\SAML2\XML\mdattr\EntityAttributes;
@@ -22,6 +20,8 @@ use SimpleSAML\SAML2\XML\mdui\AbstractMduiElement as MDUI;
 use SimpleSAML\SAML2\XML\mdui\DiscoHints;
 use SimpleSAML\SAML2\XML\mdui\UIInfo;
 use SimpleSAML\SAML2\XML\shibmd\Scope;
+use SimpleSAML\XML\Chunk;
+use SimpleSAML\XML\Utils as XMLUtils;
 
 /**
  * Class for handling SAML2 metadata extensions.
@@ -84,7 +84,7 @@ final class Extensions extends AbstractMdElement
         ];
 
         /** @var \DOMElement $node */
-        foreach (Utils::xpQuery($xml, './*') as $node) {
+        foreach (XMLUtils::xpQuery($xml, './*') as $node) {
             if (
                 !is_null($node->namespaceURI)
                 && array_key_exists($node->namespaceURI, $supported)

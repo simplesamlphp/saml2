@@ -7,7 +7,7 @@ namespace SimpleSAML\SAML2\XML\mdrpi;
 use PHPUnit\Framework\TestCase;
 use SimpleSAML\XML\DOMDocumentFactory;
 use SimpleSAML\XML\Exception\MissingAttributeException;
-use SimpleSAML\SAML2\Utils;
+use SimpleSAML\XML\Utils as XMLUtils;
 
 /**
  * Class \SAML2\XML\mdrpi\PublicationInfoTest
@@ -51,7 +51,7 @@ final class PublicationInfoTest extends TestCase
         $xml = $publicationInfo->toXML($document->documentElement);
 
         /** @var \DOMElement[] $publicationInfoElements */
-        $publicationInfoElements = Utils::xpQuery(
+        $publicationInfoElements = XMLUtils::xpQuery(
             $xml,
             '/root/*[local-name()=\'PublicationInfo\' and namespace-uri()=\'urn:oasis:names:tc:SAML:metadata:rpi\']'
         );
@@ -63,7 +63,7 @@ final class PublicationInfoTest extends TestCase
         $this->assertEquals('PublicationIdValue', $publicationInfoElement->getAttribute("publicationId"));
 
         /** @var \DOMElement[] $usagePolicyElements */
-        $usagePolicyElements = Utils::xpQuery(
+        $usagePolicyElements = XMLUtils::xpQuery(
             $publicationInfoElement,
             './*[local-name()=\'UsagePolicy\' and namespace-uri()=\'urn:oasis:names:tc:SAML:metadata:rpi\']'
         );

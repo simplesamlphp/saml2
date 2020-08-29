@@ -9,7 +9,7 @@ use SimpleSAML\Assert\Assert;
 use SimpleSAML\XML\Exception\InvalidDOMElementException;
 use SimpleSAML\XML\Exception\MissingElementException;
 use SimpleSAML\XML\Exception\TooManyElementsException;
-use SimpleSAML\SAML2\Utils;
+use SimpleSAML\XML\Utils as XMLUtils;
 
 /**
  * Class for handling SAML2 IDPList.
@@ -98,7 +98,7 @@ final class IDPList extends AbstractSamlpElement
         $idpEntry = IDPEntry::getChildrenOfClass($xml);
         Assert::minCount($idpEntry, 1, 'At least one <samlp:IDPEntry> must be specified.', MissingElementException::class);
 
-        $getComplete = Utils::extractStrings($xml, AbstractSamlpElement::NS, 'GetComplete');
+        $getComplete = XMLUtils::extractStrings($xml, AbstractSamlpElement::NS, 'GetComplete');
         Assert::maxCount($getComplete, 1, 'Only one <samlp:GetComplete> element is allowed.', TooManyElementsException::class);
 
         return new self(
@@ -123,7 +123,7 @@ final class IDPList extends AbstractSamlpElement
         }
 
         if (!is_null($this->getComplete)) {
-            Utils::addString($e, AbstractSamlpElement::NS, 'samlp:GetComplete', $this->getComplete);
+            XMLUtils::addString($e, AbstractSamlpElement::NS, 'samlp:GetComplete', $this->getComplete);
         }
 
         return $e;
