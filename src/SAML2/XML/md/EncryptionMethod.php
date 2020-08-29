@@ -5,7 +5,7 @@ declare(strict_types=1);
 namespace SimpleSAML\SAML2\XML\md;
 
 use SimpleSAML\SAML2\Constants;
-use SimpleSAML\SAML2\XML\xenc\EncryptionMethod ass EncMethod;
+use SimpleSAML\SAML2\XML\xenc\EncryptionMethod as EncMethod;
 
 /**
  * A class implementing the md:EncryptionMethod element.
