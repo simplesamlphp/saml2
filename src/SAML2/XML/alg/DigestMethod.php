@@ -67,7 +67,7 @@ final class DigestMethod extends AbstractAlgElement
      * @return self
      *
      * @throws \SimpleSAML\SAML2\Exception\InvalidDOMElementException if the qualified name of the supplied element is wrong
-     * @throws \SimpleSAML\SAML2\Exception\MissingAttributeException if the mandatory Algorithm-attribute is missing
+     * @throws \SimpleSAML\XML\Exception\MissingAttributeException if the mandatory Algorithm-attribute is missing
      */
     public static function fromXML(DOMElement $xml): object
     {
