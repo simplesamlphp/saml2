@@ -2,19 +2,19 @@
 
 declare(strict_types=1);
 
-namespace SAML2\XML\md;
+namespace SimpleSAML\SAML2\XML\md;
 
 use PHPUnit\Framework\TestCase;
-use SAML2\Constants;
-use SAML2\DOMDocumentFactory;
+use SimpleSAML\SAML2\Constants;
+use SimpleSAML\SAML2\DOMDocumentFactory;
 use SimpleSAML\Assert\AssertionFailedException;
 
 /**
  * Tests for md:PDPDescriptor
  *
- * @covers \SAML2\XML\md\PDPDescriptor
- * @covers \SAML2\XML\md\AbstractMetadataDocument
- * @covers \SAML2\XML\md\AbstractRoleDescriptor
+ * @covers \SimpleSAML\SAML2\XML\md\PDPDescriptor
+ * @covers \SimpleSAML\SAML2\XML\md\AbstractMetadataDocument
+ * @covers \SimpleSAML\SAML2\XML\md\AbstractRoleDescriptor
  * @package simplesamlphp/saml2
  */
 final class PDPDescriptorTest extends TestCase
@@ -22,10 +22,10 @@ final class PDPDescriptorTest extends TestCase
     /** @var \DOMDocument */
     protected $document;
 
-    /** @var \SAML2\XML\md\AuthzService */
+    /** @var \SimpleSAML\SAML2\XML\md\AuthzService */
     protected $authzService;
 
-    /** @var \SAML2\XML\md\AssertionIDRequestService */
+    /** @var \SimpleSAML\SAML2\XML\md\AssertionIDRequestService */
     protected $assertionIDRequestService;
 
 

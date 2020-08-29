@@ -2,7 +2,7 @@
 
 declare(strict_types=1);
 
-namespace SAML2\Response\Validation;
+namespace SimpleSAML\SAML2\Response\Validation;
 
 /**
  * Simple Result object

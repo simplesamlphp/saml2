@@ -2,19 +2,19 @@
 
 declare(strict_types=1);
 
-namespace SAML2\XML\md;
+namespace SimpleSAML\SAML2\XML\md;
 
 use PHPUnit\Framework\TestCase;
-use SAML2\Constants;
-use SAML2\DOMDocumentFactory;
-use SAML2\Exception\InvalidDOMElementException;
-use SAML2\Exception\MissingAttributeException;
+use SimpleSAML\SAML2\Constants;
+use SimpleSAML\SAML2\DOMDocumentFactory;
+use SimpleSAML\SAML2\Exception\InvalidDOMElementException;
+use SimpleSAML\SAML2\Exception\MissingAttributeException;
 use SimpleSAML\Assert\AssertionFailedException;
 
 /**
  * Class \SAML2\XML\md\EndpointType
  *
- * @covers \SAML2\XML\md\EndpointType
+ * @covers \SimpleSAML\SAML2\XML\md\EndpointType
  * @package simplesamlphp/saml2
  */
 final class EndpointTypeTest extends TestCase

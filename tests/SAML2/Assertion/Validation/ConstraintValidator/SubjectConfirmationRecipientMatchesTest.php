@@ -2,20 +2,20 @@
 
 declare(strict_types=1);
 
-namespace SAML2\Assertion\Validation\ConstraintValidator;
+namespace SimpleSAML\SAML2\Assertion\Validation\ConstraintValidator;
 
 use Mockery\Adapter\Phpunit\MockeryTestCase;
-use SAML2\Assertion\Validation\ConstraintValidator\SubjectConfirmationRecipientMatches;
-use SAML2\Assertion\Validation\ConstraintValidator\SubjectConfirmationResponseToMatches;
-use SAML2\Assertion\Validation\Result;
-use SAML2\Configuration\Destination;
-use SAML2\Constants;
-use SAML2\XML\saml\SubjectConfirmation;
-use SAML2\XML\saml\SubjectConfirmationData;
-use SAML2\XML\saml\SubjectConfirmationMatches;
+use SimpleSAML\SAML2\Assertion\Validation\ConstraintValidator\SubjectConfirmationRecipientMatches;
+use SimpleSAML\SAML2\Assertion\Validation\ConstraintValidator\SubjectConfirmationResponseToMatches;
+use SimpleSAML\SAML2\Assertion\Validation\Result;
+use SimpleSAML\SAML2\Configuration\Destination;
+use SimpleSAML\SAML2\Constants;
+use SimpleSAML\SAML2\XML\saml\SubjectConfirmation;
+use SimpleSAML\SAML2\XML\saml\SubjectConfirmationData;
+use SimpleSAML\SAML2\XML\saml\SubjectConfirmationMatches;
 
 /**
- * @covers \SAML2\Assertion\Validation\ConstraintValidator\SubjectConfirmationRecipientMatches
+ * @covers \SimpleSAML\SAML2\Assertion\Validation\ConstraintValidator\SubjectConfirmationRecipientMatches
  * @package simplesamlphp/saml2
  */
 final class SubjectConfirmationRecipientMatchesTest extends MockeryTestCase

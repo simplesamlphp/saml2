@@ -2,18 +2,18 @@
 
 declare(strict_types=1);
 
-namespace SAML2\XML\ds;
+namespace SimpleSAML\SAML2\XML\ds;
 
 use DOMElement;
 use Exception;
 use RobRichards\XMLSecLibs\XMLSecurityDSig;
 use RobRichards\XMLSecLibs\XMLSecurityKey;
-use SAML2\Exception\InvalidDOMElementException;
-use SAML2\Exception\MissingAttributeException;
-use SAML2\Utilities\Certificate;
-use SAML2\Utils;
-use SAML2\XML\AbstractXMLElement;
 use SimpleSAML\Assert\Assert;
+use SimpleSAML\SAML2\Exception\InvalidDOMElementException;
+use SimpleSAML\SAML2\Exception\MissingAttributeException;
+use SimpleSAML\SAML2\Utilities\Certificate;
+use SimpleSAML\SAML2\Utils;
+use SimpleSAML\SAML2\XML\AbstractXMLElement;
 
 /**
  * Wrapper class for XML signatures
@@ -132,11 +132,11 @@ final class Signature extends AbstractDsElement
     /**
      * @param DOMElement $xml
      *
-     * @return AbstractXMLElement
+     * @return \SimpleSAML\SAML2\XML\AbstractXMLElement
      * @throws \Exception
      *
-     * @throws \SAML2\Exception\InvalidDOMElementException if the qualified name of the supplied element is wrong
-     * @throws \SAML2\Exception\MissingAttributeException if the supplied signature is missing an Algorithm attribute
+     * @throws \SimpleSAML\SAML2\Exception\InvalidDOMElementException if the qualified name of the supplied element is wrong
+     * @throws \SimpleSAML\SAML2\Exception\MissingAttributeException if the supplied signature is missing an Algorithm attribute
      */
     public static function fromXML(DOMElement $xml): object
     {
@@ -196,9 +196,9 @@ final class Signature extends AbstractDsElement
 
 
     /**
-     * @param DOMElement|null $parent
+     * @param \DOMElement|null $parent
      *
-     * @return DOMElement
+     * @return \DOMElement
      *
      * @psalm-suppress MoreSpecificReturnType
      */

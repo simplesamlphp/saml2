@@ -2,17 +2,17 @@
 
 declare(strict_types=1);
 
-namespace SAML2\XML\shibmd;
+namespace SimpleSAML\SAML2\XML\shibmd;
 
 use PHPUnit\Framework\TestCase;
-use SAML2\DOMDocumentFactory;
-use SAML2\XML\shibmd\Scope;
-use SAML2\Utils;
+use SimpleSAML\SAML2\DOMDocumentFactory;
+use SimpleSAML\SAML2\XML\shibmd\Scope;
+use SimpleSAML\SAML2\Utils;
 
 /**
  * Class \SAML2\XML\shibmd\Scope
  *
- * @covers \SAML2\XML\shibmd\Scope
+ * @covers \SimpleSAML\SAML2\XML\shibmd\Scope
  * @package simplesamlphp/saml2
  */
 final class ScopeTest extends TestCase

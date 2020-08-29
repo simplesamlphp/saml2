@@ -2,40 +2,40 @@
 
 declare(strict_types=1);
 
-namespace SAML2\XML\samlp;
+namespace SimpleSAML\SAML2\XML\samlp;
 
 use DOMElement;
-use SAML2\Exception\InvalidDOMElementException;
-use SAML2\Exception\TooManyElementsException;
-use SAML2\XML\ds\Signature;
-use SAML2\XML\saml\Conditions;
-use SAML2\XML\saml\Issuer;
-use SAML2\XML\saml\Subject;
-use SAML2\XML\saml\SubjectConfirmation;
-use SAML2\Utils;
 use SimpleSAML\Assert\Assert;
+use SimpleSAML\SAML2\Exception\InvalidDOMElementException;
+use SimpleSAML\SAML2\Exception\TooManyElementsException;
+use SimpleSAML\SAML2\XML\ds\Signature;
+use SimpleSAML\SAML2\XML\saml\Conditions;
+use SimpleSAML\SAML2\XML\saml\Issuer;
+use SimpleSAML\SAML2\XML\saml\Subject;
+use SimpleSAML\SAML2\XML\saml\SubjectConfirmation;
+use SimpleSAML\SAML2\Utils;
 
 /**
  * Class for SAML 2 authentication request messages.
  *
- * @package SimpleSAMLphp
+ * @package simplesamlphp/saml2
  */
 class AuthnRequest extends AbstractRequest
 {
     /**
-     * @var \SAML2\XML\saml\Subject|null
+     * @var \SimpleSAML\SAML2\XML\saml\Subject|null
      */
     protected $subject = null;
 
     /**
-     * @var \SAML2\XML\samlp\Scoping|null
+     * @var \SimpleSAML\SAML2\XML\samlp\Scoping|null
      */
     protected $scoping = null;
 
     /**
      * The options for what type of name identifier should be returned.
      *
-     * @var \SAML2\XML\samlp\NameIDPolicy|null
+     * @var \SimpleSAML\SAML2\XML\samlp\NameIDPolicy|null
      */
     protected $nameIdPolicy = null;
 
@@ -91,17 +91,17 @@ class AuthnRequest extends AbstractRequest
     /**
      * What authentication context was requested.
      *
-     * @var \SAML2\XML\samlp\RequestedAuthnContext|null
+     * @var \SimpleSAML\SAML2\XML\samlp\RequestedAuthnContext|null
      */
     protected $requestedAuthnContext;
 
     /**
-     * @var \SAML2\XML\saml\Conditions|null
+     * @var \SimpleSAML\SAML2\XML\saml\Conditions|null
      */
     protected $conditions = null;
 
     /**
-     * @var \SAML2\XML\saml\SubjectConfirmation[]
+     * @var \SimpleSAML\SAML2\XML\saml\SubjectConfirmation[]
      */
     protected $subjectConfirmation = [];
 
@@ -109,23 +109,23 @@ class AuthnRequest extends AbstractRequest
     /**
      * Constructor for SAML 2 AuthnRequest
      *
-     * @param \SAML2\XML\samlp\RequestedAuthnContext $requestedAuthnContext
-     * @param \SAML2\XML\saml\Subject $subject
-     * @param \SAML2\XML\samlp\NameIDPolicy $nameIdPolicy
-     * @param \SAML2\XML\saml\Conditions $conditions
+     * @param \SimpleSAML\SAML2\XML\samlp\RequestedAuthnContext $requestedAuthnContext
+     * @param \SimpleSAML\SAML2\XML\saml\Subject $subject
+     * @param \SimpleSAML\SAML2\XML\samlp\NameIDPolicy $nameIdPolicy
+     * @param \SimpleSAML\SAML2\XML\saml\Conditions $conditions
      * @param bool $forceAuthn
      * @param bool $isPassive
      * @param string $assertionConsumerServiceUrl
      * @param string $protocolBinding
      * @param int $attributeConsumingServiceIndex
      * @param string $providerName
-     * @param \SAML2\XML\saml\Issuer|null $issuer
+     * @param \SimpleSAML\SAML2\XML\saml\Issuer|null $issuer
      * @param string|null $id
      * @param int|null $issueInstant
      * @param string|null $destination
      * @param string|null $consent
-     * @param \SAML2\XML\samlp\Extensions|null $extensions
-     * @param \SAML2\XML\samlp\Scoping|null $scoping
+     * @param \SimpleSAML\SAML2\XML\samlp\Extensions|null $extensions
+     * @param \SimpleSAML\SAML2\XML\samlp\Scoping|null $scoping
      * @throws \Exception
      */
     public function __construct(
@@ -165,7 +165,7 @@ class AuthnRequest extends AbstractRequest
 
 
     /**
-     * @param \SAML2\XML\saml\Subject|null $subject
+     * @param \SimpleSAML\SAML2\XML\saml\Subject|null $subject
      * @return void
      */
     private function setSubject(?Subject $subject): void
@@ -175,7 +175,7 @@ class AuthnRequest extends AbstractRequest
 
 
     /**
-     * @return \SAML2\XML\saml\Subject|null
+     * @return \SimpleSAML\SAML2\XML\saml\Subject|null
      */
     public function getSubject(): ?Subject
     {
@@ -184,7 +184,7 @@ class AuthnRequest extends AbstractRequest
 
 
     /**
-     * @param \SAML2\XML\samlp\Scoping|null $scoping
+     * @param \SimpleSAML\SAML2\XML\samlp\Scoping|null $scoping
      * @return void
      */
     private function setScoping(?Scoping $scoping): void
@@ -194,7 +194,7 @@ class AuthnRequest extends AbstractRequest
 
 
     /**
-     * @return \SAML2\XML\samlp\Scoping|null
+     * @return \SimpleSAML\SAML2\XML\samlp\Scoping|null
      */
     public function getScoping(): ?Scoping
     {
@@ -203,7 +203,7 @@ class AuthnRequest extends AbstractRequest
 
 
     /**
-     * @param \SAML2\XML\saml\Conditions|null $conditions
+     * @param \SimpleSAML\SAML2\XML\saml\Conditions|null $conditions
      * @return void
      */
     private function setConditions(?Conditions $conditions): void
@@ -213,7 +213,7 @@ class AuthnRequest extends AbstractRequest
 
 
     /**
-     * @return \SAML2\XML\saml\Conditions|null
+     * @return \SimpleSAML\SAML2\XML\saml\Conditions|null
      */
     public function getConditions(): ?Conditions
     {
@@ -224,8 +224,8 @@ class AuthnRequest extends AbstractRequest
     /**
      * Retrieve the NameIdPolicy.
      *
-     * @see \SAML2\AuthnRequest::setNameIdPolicy()
-     * @return \SAML2\XML\samlp\NameIDPolicy|null The NameIdPolicy.
+     * @see \SimpleSAML\SAML2\AuthnRequest::setNameIdPolicy()
+     * @return \SimpleSAML\SAML2\XML\samlp\NameIDPolicy|null The NameIdPolicy.
      */
     public function getNameIdPolicy(): ?NameIDPolicy
     {
@@ -236,7 +236,7 @@ class AuthnRequest extends AbstractRequest
     /**
      * Set the NameIDPolicy.
      *
-     * @param \SAML2\XML\samlp\NameIDPolicy|null $nameIdPolicy The NameIDPolicy.
+     * @param \SimpleSAML\SAML2\XML\samlp\NameIDPolicy|null $nameIdPolicy The NameIDPolicy.
      * @return void
      */
     private function setNameIdPolicy(?NameIDPolicy $nameIdPolicy): void
@@ -409,7 +409,7 @@ class AuthnRequest extends AbstractRequest
     /**
      * Retrieve the RequestedAuthnContext.
      *
-     * @return \SAML2\XML\samlp\RequestedAuthnContext|null The RequestedAuthnContext.
+     * @return \SimpleSAML\SAML2\XML\samlp\RequestedAuthnContext|null The RequestedAuthnContext.
      */
     public function getRequestedAuthnContext(): ?RequestedAuthnContext
     {
@@ -420,7 +420,7 @@ class AuthnRequest extends AbstractRequest
     /**
      * Set the RequestedAuthnContext.
      *
-     * @param \SAML2\XML\samlp\RequestedAuthnContext|null $requestedAuthnContext The RequestedAuthnContext.
+     * @param \SimpleSAML\SAML2\XML\samlp\RequestedAuthnContext|null $requestedAuthnContext The RequestedAuthnContext.
      * @return void
      */
     private function setRequestedAuthnContext(RequestedAuthnContext $requestedAuthnContext = null): void
@@ -432,7 +432,7 @@ class AuthnRequest extends AbstractRequest
     /**
      * Retrieve the SubjectConfirmation elements we have in our Subject element.
      *
-     * @return \SAML2\XML\saml\SubjectConfirmation[]
+     * @return \SimpleSAML\SAML2\XML\saml\SubjectConfirmation[]
      */
     public function getSubjectConfirmation(): array
     {
@@ -443,7 +443,7 @@ class AuthnRequest extends AbstractRequest
     /**
      * Set the SubjectConfirmation elements that should be included in the assertion.
      *
-     * @param array \SAML2\XML\saml\SubjectConfirmation[]
+     * @param array \SimpleSAML\SAML2\XML\saml\SubjectConfirmation[]
      * @return void
      */
     private function setSubjectConfirmation(array $subjectConfirmation): void
@@ -458,11 +458,11 @@ class AuthnRequest extends AbstractRequest
      * Convert XML into an AuthnRequest
      *
      * @param \DOMElement $xml The XML element we should load
-     * @return \SAML2\XML\samlp\AuthnRequest
+     * @return \SimpleSAML\SAML2\XML\samlp\AuthnRequest
      *
-     * @throws \SAML2\Exception\InvalidDOMElementException if the qualified name of the supplied element is wrong
-     * @throws \SAML2\Exception\MissingAttributeException if the supplied element is missing one of the mandatory attributes
-     * @throws \SAML2\Exception\TooManyElementsException if too many child-elements of a type are specified
+     * @throws \SimpleSAML\SAML2\Exception\InvalidDOMElementException if the qualified name of the supplied element is wrong
+     * @throws \SimpleSAML\SAML2\Exception\MissingAttributeException if the supplied element is missing one of the mandatory attributes
+     * @throws \SimpleSAML\SAML2\Exception\TooManyElementsException if too many child-elements of a type are specified
      */
     public static function fromXML(DOMElement $xml): object
     {

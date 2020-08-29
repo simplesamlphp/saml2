@@ -2,18 +2,18 @@
 
 declare(strict_types=1);
 
-namespace SAML2\XML\md;
+namespace SimpleSAML\SAML2\XML\md;
 
 use PHPUnit\Framework\TestCase;
-use SAML2\Constants;
-use SAML2\DOMDocumentFactory;
-use SAML2\XML\saml\AttributeValue;
+use SimpleSAML\SAML2\Constants;
+use SimpleSAML\SAML2\DOMDocumentFactory;
+use SimpleSAML\SAML2\XML\saml\AttributeValue;
 use SimpleSAML\Assert\AssertionFailedException;
 
 /**
  * Test for the RequestedAttribute metadata element.
  *
- * @covers \SAML2\XML\md\RequestedAttribute
+ * @covers \SimpleSAML\SAML2\XML\md\RequestedAttribute
  * @package simplesamlphp/saml2
  */
 final class RequestedAttributeTest extends TestCase

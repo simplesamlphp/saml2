@@ -2,19 +2,19 @@
 
 declare(strict_types=1);
 
-namespace SAML2\XML\mdui;
+namespace SimpleSAML\SAML2\XML\mdui;
 
 use InvalidArgumentException;
 use PHPUnit\Framework\TestCase;
-use SAML2\DOMDocumentFactory;
-use SAML2\Exception\MissingAttributeException;
-use SAML2\Utils;
+use SimpleSAML\SAML2\DOMDocumentFactory;
+use SimpleSAML\SAML2\Exception\MissingAttributeException;
+use SimpleSAML\SAML2\Utils;
 use SimpleSAML\Assert\AssertionFailedException;
 
 /**
  * Class \SAML2\XML\mdui\LogoTest
  *
- * @covers \SAML2\XML\mdui\Logo
+ * @covers \SimpleSAML\SAML2\XML\mdui\Logo
  * @package simplesamlphp/saml2
  */
 final class LogoTest extends TestCase

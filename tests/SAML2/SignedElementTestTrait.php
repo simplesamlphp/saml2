@@ -2,7 +2,7 @@
 
 declare(strict_types=1);
 
-namespace SAML2;
+namespace SimpleSAML\SAML2;
 
 use RobRichards\XMLSecLibs\XMLSecurityKey;
 use SimpleSAML\TestUtils\PEMCertificatesMock;
@@ -64,7 +64,7 @@ trait SignedElementTestTrait
             $cert = new XMLSecurityKey($algorithm, ['type' => 'public']);
             $cert->loadKey(PEMCertificatesMock::getPlainPublicKey(PEMCertificatesMock::PUBLIC_KEY));
 
-            /** @var \SAML2\XML\SignedElementInterface $post */
+            /** @var \SimpleSAML\SAML2\XML\SignedElementInterface $post */
             $post = $this->testedClass::fromXML($pre->toXML());
             try {
                 $this->assertTrue($post->validate($cert));

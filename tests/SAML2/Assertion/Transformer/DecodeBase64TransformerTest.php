@@ -2,26 +2,26 @@
 
 declare(strict_types=1);
 
-namespace SAML2\XML\saml;
+namespace SimpleSAML\SAML2\XML\saml;
 
 use PHPUnit\Framework\TestCase;
 use Psr\Log\NullLogger;
-use SAML2\Assertion\Exception\InvalidAssertionException;
-use SAML2\Assertion\ProcessorBuilder;
-use SAML2\Configuration\Destination;
-use SAML2\Configuration\IdentityProvider;
-use SAML2\Configuration\ServiceProvider;
-use SAML2\DOMDocumentFactory;
-use SAML2\Signature\Validator;
-use SAML2\Utilities\ArrayCollection;
-use SAML2\XML\samlp\Response;
-use SAML2\XML\samlp\Status;
-use SAML2\XML\samlp\StatusCode;
+use SimpleSAML\SAML2\Assertion\Exception\InvalidAssertionException;
+use SimpleSAML\SAML2\Assertion\ProcessorBuilder;
+use SimpleSAML\SAML2\Configuration\Destination;
+use SimpleSAML\SAML2\Configuration\IdentityProvider;
+use SimpleSAML\SAML2\Configuration\ServiceProvider;
+use SimpleSAML\SAML2\DOMDocumentFactory;
+use SimpleSAML\SAML2\Signature\Validator;
+use SimpleSAML\SAML2\Utilities\ArrayCollection;
+use SimpleSAML\SAML2\XML\samlp\Response;
+use SimpleSAML\SAML2\XML\samlp\Status;
+use SimpleSAML\SAML2\XML\samlp\StatusCode;
 
 /**
  * Tests for decoding base64 encoded attributes.
  *
- * @covers \SAML2\Assertion\Transformer\DecodeBase64Transformer
+ * @covers \SimpleSAML\SAML2\Assertion\Transformer\DecodeBase64Transformer
  * @package simplesamlphp/saml2
  */
 final class DecodeBase64TransformerTest extends TestCase
@@ -30,17 +30,17 @@ final class DecodeBase64TransformerTest extends TestCase
     protected $document;
 
     /**
-     * @var \SAML2\Assertion\Processor
+     * @var \SimpleSAML\SAML2\Assertion\Processor
      */
     protected $assertionProcessor;
 
     /**
-     * @var \SAML2\Configuration\IdentityProvider
+     * @var \SimpleSAML\SAML2\Configuration\IdentityProvider
      */
     protected $identityProviderConfiguration;
 
     /**
-     * @var \SAML2\Configuration\ServiceProvider
+     * @var \SimpleSAML\SAML2\Configuration\ServiceProvider
      */
     protected $serviceProviderConfiguration;
 
@@ -50,17 +50,17 @@ final class DecodeBase64TransformerTest extends TestCase
     protected $logger;
 
     /**
-     * @var \SAML2\Response\Validation\Validator
+     * @var \SimpleSAML\SAML2\Response\Validation\Validator
      */
     protected $validator;
 
     /**
-     * @var \SAML2\Configuration\Destination
+     * @var \SimpleSAML\SAML2\Configuration\Destination
      */
     protected $destination;
 
     /**
-     * @var \SAML2\xml\samlp\Response
+     * @var \SimpleSAML\SAML2\xml\samlp\Response
      */
     protected $response;
 

@@ -2,19 +2,19 @@
 
 declare(strict_types=1);
 
-namespace SAML2;
+namespace SimpleSAML\SAML2;
 
 use Exception;
 use RobRichards\XMLSecLibs\XMLSecurityKey;
-use SAML2\XML\samlp\AbstractMessage;
-use SAML2\XML\samlp\AbstractRequest;
-use SAML2\XML\samlp\MessageFactory;
 use SimpleSAML\Assert\Assert;
+use SimpleSAML\SAML2\XML\samlp\AbstractMessage;
+use SimpleSAML\SAML2\XML\samlp\AbstractRequest;
+use SimpleSAML\SAML2\XML\samlp\MessageFactory;
 
 /**
  * Class which implements the HTTP-Redirect binding.
  *
- * @package SimpleSAMLphp
+ * @package simplesamlphp/saml2
  */
 class HTTPRedirect extends Binding
 {
@@ -23,7 +23,7 @@ class HTTPRedirect extends Binding
     /**
      * Create the redirect URL for a message.
      *
-     * @param \SAML2\XML\samlp\AbstractMessage $message The message.
+     * @param \SimpleSAML\SAML2\XML\samlp\AbstractMessage $message The message.
      * @return string The URL the user should be redirected to in order to send a message.
      */
     public function getRedirectURL(AbstractMessage $message): string
@@ -84,7 +84,7 @@ class HTTPRedirect extends Binding
      * Send a SAML 2 message using the HTTP-Redirect binding.
      * Note: This function never returns.
      *
-     * @param \SAML2\XML\samlp\AbstractMessage $message The message we should send.
+     * @param \SimpleSAML\SAML2\XML\samlp\AbstractMessage $message The message we should send.
      * @return void
      */
     public function send(AbstractMessage $message): void
@@ -101,7 +101,7 @@ class HTTPRedirect extends Binding
      * Throws an exception if it is unable receive the message.
      *
      * @throws \Exception
-     * @return \SAML2\XML\samlp\AbstractMessage The received message.
+     * @return \SimpleSAML\SAML2\XML\samlp\AbstractMessage The received message.
      *
      * NPath is currently too high but solving that just moves code around.
      */
@@ -218,7 +218,7 @@ class HTTPRedirect extends Binding
      *
      * Throws an exception if we are unable to validate the signature.
      *
-     * @param array          $data The data we need to validate the query string.
+     * @param array $data The data we need to validate the query string.
      * @param \RobRichards\XMLSecLibs\XMLSecurityKey $key  The key we should validate the query against.
      * @return void
      *

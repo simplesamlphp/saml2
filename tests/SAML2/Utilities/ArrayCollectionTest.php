@@ -2,14 +2,14 @@
 
 declare(strict_types=1);
 
-namespace SAML2\Utilities;
+namespace SimpleSAML\SAML2\Utilities;
 
 use PHPUnit\Framework\TestCase;
-use SAML2\Utilities\ArrayCollection;
-use SAML2\Exception\RuntimeException;
+use SimpleSAML\SAML2\Utilities\ArrayCollection;
+use SimpleSAML\SAML2\Exception\RuntimeException;
 
 /**
- * @covers \SAML2\Utilities\ArrayCollection
+ * @covers \SimpleSAML\SAML2\Utilities\ArrayCollection
  * @package simplesamlphp/saml2
  */
 final class ArrayCollectionTest extends TestCase

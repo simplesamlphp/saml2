@@ -2,22 +2,22 @@
 
 declare(strict_types=1);
 
-namespace SAML2\XML\saml;
+namespace SimpleSAML\SAML2\XML\saml;
 
 use Mockery;
 use PHPUnit\Framework\TestCase;
-use SAML2\Compat\ContainerInterface;
-use SAML2\Compat\ContainerSingleton;
-use SAML2\Constants;
-use SAML2\CustomBaseID;
-use SAML2\DOMDocumentFactory;
-use SAML2\Exception\TooManyElementsException;
-use SAML2\Utils;
+use SimpleSAML\SAML2\Compat\ContainerInterface;
+use SimpleSAML\SAML2\Compat\ContainerSingleton;
+use SimpleSAML\SAML2\Constants;
+use SimpleSAML\SAML2\CustomBaseID;
+use SimpleSAML\SAML2\DOMDocumentFactory;
+use SimpleSAML\SAML2\Exception\TooManyElementsException;
+use SimpleSAML\SAML2\Utils;
 
 /**
  * Class \SAML2\XML\saml\SubjectTest
  *
- * @covers \SAML2\XML\saml\Subject
+ * @covers \SimpleSAML\SAML2\XML\saml\Subject
  *
  * @author Tim van Dijen, <tvdijen@gmail.com>
  * @package SimpleSAMLphp

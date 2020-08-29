@@ -2,7 +2,7 @@
 
 declare(strict_types=1);
 
-namespace SAML2\XML;
+namespace SimpleSAML\SAML2\XML;
 
 /**
  * Trait grouping common functionality for elements implementing BaseIDAbstractType and NameIDType.

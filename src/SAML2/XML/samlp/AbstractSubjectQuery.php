@@ -2,11 +2,11 @@
 
 declare(strict_types=1);
 
-namespace SAML2\XML\samlp;
+namespace SimpleSAML\SAML2\XML\samlp;
 
 use DOMElement;
-use SAML2\XML\saml\Issuer;
-use SAML2\XML\saml\Subject;
+use SimpleSAML\SAML2\XML\saml\Issuer;
+use SimpleSAML\SAML2\XML\saml\Subject;
 use SimpleSAML\Assert\Assert;
 
 /**
@@ -18,24 +18,24 @@ use SimpleSAML\Assert\Assert;
  * Note that this class currently only handles the simple case - where the
  * subject doesn't contain any sort of subject confirmation requirements.
  *
- * @package SimpleSAMLphp
+ * @package simplesamlphp/saml2
  */
 abstract class AbstractSubjectQuery extends AbstractRequest
 {
-    /** @var \SAML2\XML\saml\Subject */
+    /** @var \SimpleSAML\SAML2\XML\saml\Subject */
     protected $subject;
 
 
     /**
      * Constructor for SAML 2 response messages.
      *
-     * @param \SAML2\XML\saml\Subject $subject
-     * @param \SAML2\XML\saml\Issuer $issuer
+     * @param \SimpleSAML\SAML2\XML\saml\Subject $subject
+     * @param \SimpleSAML\SAML2\XML\saml\Issuer $issuer
      * @param string $id
      * @param int $issueInstant
      * @param string|null $destination
      * @param string|null $consent
-     * @param \SAML2\XML\samlp\Extensions $extensions
+     * @param \SimpleSAML\SAML2\XML\samlp\Extensions $extensions
      */
     protected function __construct(
         Subject $subject,
@@ -55,7 +55,7 @@ abstract class AbstractSubjectQuery extends AbstractRequest
     /**
      * Collect the value of the subject
      *
-     * @return \SAML2\XML\saml\Subject
+     * @return \SimpleSAML\SAML2\XML\saml\Subject
      */
     public function getSubject(): Subject
     {
@@ -65,7 +65,7 @@ abstract class AbstractSubjectQuery extends AbstractRequest
 
     /**
      * Set the value of the subject-property
-     * @param \SAML2\XML\saml\Subject $subject
+     * @param \SimpleSAML\SAML2\XML\saml\Subject $subject
      *
      * @return void
      */

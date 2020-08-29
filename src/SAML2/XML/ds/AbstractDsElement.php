@@ -2,10 +2,10 @@
 
 declare(strict_types=1);
 
-namespace SAML2\XML\ds;
+namespace SimpleSAML\SAML2\XML\ds;
 
 use RobRichards\XMLSecLibs\XMLSecurityDSig;
-use SAML2\XML\AbstractXMLElement;
+use SimpleSAML\SAML2\XML\AbstractXMLElement;
 
 /**
  * Abstract class to be implemented by all the classes in this namespace

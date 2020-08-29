@@ -2,17 +2,17 @@
 
 declare(strict_types=1);
 
-namespace SAML2\XML\md;
+namespace SimpleSAML\SAML2\XML\md;
 
 use PHPUnit\Framework\TestCase;
-use SAML2\Constants;
-use SAML2\DOMDocumentFactory;
+use SimpleSAML\SAML2\Constants;
+use SimpleSAML\SAML2\DOMDocumentFactory;
 use SimpleSAML\Assert\AssertionFailedException;
 
 /**
  * Tests for localized names.
  *
- * @covers \SAML2\XML\md\LocalizedName
+ * @covers \SimpleSAML\SAML2\XML\md\LocalizedName
  * @package simplesamlphp/saml2
  */
 final class LocalizedNameTest extends TestCase

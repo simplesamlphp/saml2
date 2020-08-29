@@ -2,20 +2,20 @@
 
 declare(strict_types=1);
 
-namespace SAML2\XML\samlp;
+namespace SimpleSAML\SAML2\XML\samlp;
 
 use PHPUnit\Framework\TestCase;
-use SAML2\Constants;
-use SAML2\XML\saml\Issuer;
-use SAML2\XML\samlp\Status;
-use SAML2\XML\samlp\StatusCode;
-use SAML2\DOMDocumentFactory;
-use SAML2\Utils;
+use SimpleSAML\SAML2\Constants;
+use SimpleSAML\SAML2\XML\saml\Issuer;
+use SimpleSAML\SAML2\XML\samlp\Status;
+use SimpleSAML\SAML2\XML\samlp\StatusCode;
+use SimpleSAML\SAML2\DOMDocumentFactory;
+use SimpleSAML\SAML2\Utils;
 
 /**
- * @covers \SAML2\XML\samlp\ArtifactResponse
- * @covers \SAML2\XML\samlp\AbstractStatusResponse
- * @covers \SAML2\XML\samlp\AbstractMessage
+ * @covers \SimpleSAML\SAML2\XML\samlp\ArtifactResponse
+ * @covers \SimpleSAML\SAML2\XML\samlp\AbstractStatusResponse
+ * @covers \SimpleSAML\SAML2\XML\samlp\AbstractMessage
  * @package simplesamlphp/saml2
  */
 final class ArtifactResponseTest extends TestCase

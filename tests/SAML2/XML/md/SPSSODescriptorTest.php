@@ -2,27 +2,27 @@
 
 declare(strict_types=1);
 
-namespace SAML2\XML\md;
+namespace SimpleSAML\SAML2\XML\md;
 
 use PHPUnit\Framework\TestCase;
 use RobRichards\XMLSecLibs\XMLSecurityDSig;
-use SAML2\Constants;
-use SAML2\DOMDocumentFactory;
-use SAML2\SignedElementTestTrait;
-use SAML2\Utils;
-use SAML2\XML\ds\KeyInfo;
-use SAML2\XML\ds\KeyName;
-use SAML2\XML\mdrpi\PublicationInfo;
-use SAML2\XML\saml\AttributeValue;
+use SimpleSAML\SAML2\Constants;
+use SimpleSAML\SAML2\DOMDocumentFactory;
+use SimpleSAML\SAML2\SignedElementTestTrait;
+use SimpleSAML\SAML2\Utils;
+use SimpleSAML\SAML2\XML\ds\KeyInfo;
+use SimpleSAML\SAML2\XML\ds\KeyName;
+use SimpleSAML\SAML2\XML\mdrpi\PublicationInfo;
+use SimpleSAML\SAML2\XML\saml\AttributeValue;
 use SimpleSAML\Assert\AssertionFailedException;
 
 /**
  * Tests for the md:SPSSODescriptor element.
  *
- * @covers \SAML2\XML\md\SPSSODescriptor
- * @covers \SAML2\XML\md\AbstractMetadataDocument
- * @covers \SAML2\XML\md\AbstractRoleDescriptor
- * @covers \SAML2\XML\md\AbstractSSODescriptor
+ * @covers \SimpleSAML\SAML2\XML\md\SPSSODescriptor
+ * @covers \SimpleSAML\SAML2\XML\md\AbstractMetadataDocument
+ * @covers \SimpleSAML\SAML2\XML\md\AbstractRoleDescriptor
+ * @covers \SimpleSAML\SAML2\XML\md\AbstractSSODescriptor
  * @package simplesamlphp/saml2
  */
 final class SPSSODescriptorTest extends TestCase

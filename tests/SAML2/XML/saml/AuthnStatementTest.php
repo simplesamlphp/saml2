@@ -2,19 +2,19 @@
 
 declare(strict_types=1);
 
-namespace SAML2\XML\saml;
+namespace SimpleSAML\SAML2\XML\saml;
 
 use InvalidArgumentException;
 use PHPUnit\Framework\TestCase;
-use SAML2\Constants;
-use SAML2\DOMDocumentFactory;
-use SAML2\Exception\MissingElementException;
-use SAML2\Utils;
+use SimpleSAML\SAML2\Constants;
+use SimpleSAML\SAML2\DOMDocumentFactory;
+use SimpleSAML\SAML2\Exception\MissingElementException;
+use SimpleSAML\SAML2\Utils;
 
 /**
  * Class \SAML2\XML\saml\AuthnStatementTest
  *
- * @covers \SAML2\XML\saml\AuthnStatement
+ * @covers \SimpleSAML\SAML2\XML\saml\AuthnStatement
  * @package simplesamlphp/saml2
  */
 final class AuthnStatementTest extends TestCase

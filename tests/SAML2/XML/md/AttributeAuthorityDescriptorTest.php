@@ -2,33 +2,33 @@
 
 declare(strict_types=1);
 
-namespace SAML2\XML\md;
+namespace SimpleSAML\SAML2\XML\md;
 
 use Exception;
 use PHPUnit\Framework\TestCase;
-use SAML2\Constants;
-use SAML2\DOMDocumentFactory;
-use SAML2\SignedElementTestTrait;
-use SAML2\XML\saml\Attribute;
-use SAML2\XML\saml\AttributeValue;
+use SimpleSAML\SAML2\Constants;
+use SimpleSAML\SAML2\DOMDocumentFactory;
+use SimpleSAML\SAML2\SignedElementTestTrait;
+use SimpleSAML\SAML2\XML\saml\Attribute;
+use SimpleSAML\SAML2\XML\saml\AttributeValue;
 use SimpleSAML\Assert\AssertionFailedException;
 
 /**
  * Tests for the AttributeAuthorityDescriptor class.
  *
- * @covers \SAML2\XML\md\AttributeAuthorityDescriptor
- * @covers \SAML2\XML\md\AbstractMetadataDocument
- * @covers \SAML2\XML\md\AbstractRoleDescriptor
+ * @covers \SimpleSAML\SAML2\XML\md\AttributeAuthorityDescriptor
+ * @covers \SimpleSAML\SAML2\XML\md\AbstractMetadataDocument
+ * @covers \SimpleSAML\SAML2\XML\md\AbstractRoleDescriptor
  * @package simplesamlphp/saml2
  */
 final class AttributeAuthorityDescriptorTest extends TestCase
 {
     use SignedElementTestTrait;
 
-    /** @var \SAML2\XML\md\AttributeService */
+    /** @var \SimpleSAML\SAML2\XML\md\AttributeService */
     protected $as;
 
-    /** @var \SAML2\XML\md\AssertionIDRequestService */
+    /** @var \SimpleSAML\SAML2\XML\md\AssertionIDRequestService */
     protected $aidrs;
 
 
@@ -148,7 +148,7 @@ XML
     {
         $this->expectException(Exception::class);
         $this->expectExceptionMessage(
-            'At least one protocol must be supported by this SAML2\XML\md\AttributeAuthorityDescriptor.'
+            'At least one protocol must be supported by this SimpleSAML\SAML2\XML\md\AttributeAuthorityDescriptor.'
         );
         new AttributeAuthorityDescriptor([$this->as], []);
     }
@@ -233,7 +233,7 @@ XML
     public function testMarshallingWithWrongAssertionIDRequestService(): void
     {
         $this->expectException(AssertionFailedException::class);
-        $this->expectExceptionMessage('Expected an instance of SAML2\XML\md\AssertionIDRequestService. Got: string');
+        $this->expectExceptionMessage('Expected an instance of SimpleSAML\SAML2\XML\md\AssertionIDRequestService. Got: string');
 
         /** @psalm-suppress InvalidArgument */
         new AttributeAuthorityDescriptor([$this->as], ['x'], ['x']);
@@ -268,7 +268,7 @@ XML
     public function testMarshallingWithWrongAttribute(): void
     {
         $this->expectException(AssertionFailedException::class);
-        $this->expectExceptionMessage('Expected an instance of SAML2\XML\saml\Attribute. Got: string');
+        $this->expectExceptionMessage('Expected an instance of SimpleSAML\SAML2\XML\saml\Attribute. Got: string');
 
         /** @psalm-suppress InvalidArgument */
         new AttributeAuthorityDescriptor([$this->as], ['x'], [$this->aidrs], ['x'], ['x'], ['x']);

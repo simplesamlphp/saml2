@@ -2,16 +2,16 @@
 
 declare(strict_types=1);
 
-namespace SAML2\XML\samlp;
+namespace SimpleSAML\SAML2\XML\samlp;
 
 use PHPUnit\Framework\TestCase;
-use SAML2\DOMDocumentFactory;
-use SAML2\XML\samlp\IDPEntry;
+use SimpleSAML\SAML2\DOMDocumentFactory;
+use SimpleSAML\SAML2\XML\samlp\IDPEntry;
 
 /**
  * Class \SAML2\XML\samlp\IDPEntryTest
  *
- * @covers \SAML2\XML\samlp\IDPEntry
+ * @covers \SimpleSAML\SAML2\XML\samlp\IDPEntry
  *
  * @author Tim van Dijen, <tvdijen@gmail.com>
  * @package simplesamlphp/saml2

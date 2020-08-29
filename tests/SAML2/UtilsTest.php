@@ -2,23 +2,23 @@
 
 declare(strict_types=1);
 
-namespace SAML2;
+namespace SimpleSAML\SAML2;
 
 use Exception;
 use PHPUnit\Framework\TestCase;
-use SAML2\Constants;
-use SAML2\DOMDocumentFactory;
-use SAML2\XML\ds\X509Data;
-use SAML2\XML\saml\NameID;
-use SAML2\XML\saml\Subject;
-use SAML2\XML\samlp\AttributeQuery;
-use SAML2\Utils;
+use SimpleSAML\SAML2\Constants;
+use SimpleSAML\SAML2\DOMDocumentFactory;
+use SimpleSAML\SAML2\XML\ds\X509Data;
+use SimpleSAML\SAML2\XML\saml\NameID;
+use SimpleSAML\SAML2\XML\saml\Subject;
+use SimpleSAML\SAML2\XML\samlp\AttributeQuery;
+use SimpleSAML\SAML2\Utils;
 use SimpleSAML\TestUtils\PEMCertificatesMock;
 
 /**
  * Class \SAML2\UtilsTest
  *
- * @covers \SAML2\Utils
+ * @covers \SimpleSAML\SAML2\Utils
  * @package simplesamlphp\saml2
  */
 final class UtilsTest extends TestCase

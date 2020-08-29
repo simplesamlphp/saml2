@@ -2,31 +2,31 @@
 
 declare(strict_types=1);
 
-namespace SAML2\XML\samlp;
+namespace SimpleSAML\SAML2\XML\samlp;
 
 use PHPUnit\Framework\TestCase;
 use RobRichards\XMLSecLibs\XMLSecurityKey;
-use SAML2\Constants;
-use SAML2\DOMDocumentFactory;
-use SAML2\Exception\MissingAttributeException;
-use SAML2\Exception\TooManyElementsException;
-use SAML2\XML\saml\AudienceRestriction;
-use SAML2\XML\saml\AuthnContextClassRef;
-use SAML2\XML\saml\Conditions;
-use SAML2\XML\saml\EncryptedID;
-use SAML2\XML\saml\Issuer;
-use SAML2\XML\saml\NameID;
-use SAML2\XML\saml\ProxyRestriction;
-use SAML2\XML\saml\Subject;
-use SAML2\Utils;
+use SimpleSAML\SAML2\Constants;
+use SimpleSAML\SAML2\DOMDocumentFactory;
+use SimpleSAML\SAML2\Exception\MissingAttributeException;
+use SimpleSAML\SAML2\Exception\TooManyElementsException;
+use SimpleSAML\SAML2\XML\saml\AudienceRestriction;
+use SimpleSAML\SAML2\XML\saml\AuthnContextClassRef;
+use SimpleSAML\SAML2\XML\saml\Conditions;
+use SimpleSAML\SAML2\XML\saml\EncryptedID;
+use SimpleSAML\SAML2\XML\saml\Issuer;
+use SimpleSAML\SAML2\XML\saml\NameID;
+use SimpleSAML\SAML2\XML\saml\ProxyRestriction;
+use SimpleSAML\SAML2\XML\saml\Subject;
+use SimpleSAML\SAML2\Utils;
 use SimpleSAML\Assert\AssertionFailedException;
 use SimpleSAML\TestUtils\PEMCertificatesMock;
 
 /**
  * Class \SAML2\XML\samlp\AuthnRequestTest
  *
- * @covers \SAML2\XML\samlp\AuthnRequest
- * @covers \SAML2\XML\samlp\AbstractMessage
+ * @covers \SimpleSAML\SAML2\XML\samlp\AuthnRequest
+ * @covers \SimpleSAML\SAML2\XML\samlp\AbstractMessage
  * @package simplesamlphp/saml2
  */
 final class AuthnRequestTest extends TestCase
@@ -312,7 +312,7 @@ AUTHNREQUEST;
             PEMCertificatesMock::SELFSIGNED_PUBLIC_KEY
         );
 
-        /** @psalm-var \SAML2\XML\saml\IdentifierInterface $nameId */
+        /** @psalm-var \SimpleSAML\SAML2\XML\saml\IdentifierInterface $nameId */
         $nameId = EncryptedID::fromUnencryptedElement(
             new NameID(md5('Arthur Dent'), Constants::NAMEID_ENCRYPTED),
             $key

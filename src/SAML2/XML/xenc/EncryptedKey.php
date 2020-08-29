@@ -2,13 +2,13 @@
 
 declare(strict_types=1);
 
-namespace SAML2\XML\xenc;
+namespace SimpleSAML\SAML2\XML\xenc;
 
 use DOMElement;
-use SAML2\Exception\InvalidDOMElementException;
-use SAML2\Utils;
-use SAML2\XML\ds\KeyInfo;
 use SimpleSAML\Assert\Assert;
+use SimpleSAML\SAML2\Exception\InvalidDOMElementException;
+use SimpleSAML\SAML2\Utils;
+use SimpleSAML\SAML2\XML\ds\KeyInfo;
 
 /**
  * Class representing an encrypted key.
@@ -23,23 +23,23 @@ class EncryptedKey extends EncryptedData
     /** @var string|null */
     protected $recipient;
 
-    /** @var ReferenceList|null */
+    /** @var \SimpleSAML\SAML2\XML\xenc\ReferenceList|null */
     protected $referenceList;
 
 
     /**
      * EncryptedKey constructor.
      *
-     * @param CipherData $cipherData The CipherData object of this EncryptedData.
+     * @param \SimpleSAML\SAML2\XML\xenc\CipherData $cipherData The CipherData object of this EncryptedData.
      * @param string|null $id The Id attribute of this object. Optional.
      * @param string|null $type The Type attribute of this object. Optional.
      * @param string|null $mimeType The MimeType attribute of this object. Optional.
      * @param string|null $encoding The Encoding attribute of this object. Optional.
      * @param string|null $recipient The Recipient attribute of this object. Optional.
      * @param string|null $carriedKeyName The value of the CarriedKeyName element of this EncryptedData.
-     * @param EncryptionMethod|null $encryptionMethod The EncryptionMethod object of this EncryptedData. Optional.
-     * @param KeyInfo|null $keyInfo The KeyInfo object of this EncryptedData. Optional.
-     * @param ReferenceList|null $referenceList The ReferenceList object of this EncryptedData. Optional.
+     * @param \SimpleSAML\SAML2\XML\xenc\EncryptionMethod|null $encryptionMethod The EncryptionMethod object of this EncryptedData. Optional.
+     * @param \SimpleSAML\SAML2\XML\ds\KeyInfo|null $keyInfo The KeyInfo object of this EncryptedData. Optional.
+     * @param \SimpleSAML\SAML2\XML\xenc\ReferenceList|null $referenceList The ReferenceList object of this EncryptedData. Optional.
      */
     public function __construct(
         CipherData $cipherData,
@@ -103,7 +103,7 @@ class EncryptedKey extends EncryptedData
     /**
      * Get the ReferenceList object.
      *
-     * @return ReferenceList|null
+     * @return \SimpleSAML\SAML2\XML\xenc\ReferenceList|null
      */
     public function getReferenceList(): ?ReferenceList
     {
@@ -112,7 +112,7 @@ class EncryptedKey extends EncryptedData
 
 
     /**
-     * @param ReferenceList|null $referenceList
+     * @param \SimpleSAML\SAML2\XML\xenc\ReferenceList|null $referenceList
      */
     protected function setReferenceList(?ReferenceList $referenceList): void
     {
@@ -123,7 +123,7 @@ class EncryptedKey extends EncryptedData
     /**
      * @inheritDoc
      *
-     * @throws \SAML2\Exception\InvalidDOMElementException if the qualified name of the supplied element is wrong
+     * @throws \SimpleSAML\SAML2\Exception\InvalidDOMElementException if the qualified name of the supplied element is wrong
      */
     public static function fromXML(DOMElement $xml): object
     {

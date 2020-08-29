@@ -2,13 +2,13 @@
 
 declare(strict_types=1);
 
-namespace SAML2\XML\saml;
+namespace SimpleSAML\SAML2\XML\saml;
 
 use DOMElement;
-use SAML2\Exception\InvalidDOMElementException;
-use SAML2\Exception\MissingElementException;
-use SAML2\Utils;
 use SimpleSAML\Assert\Assert;
+use SimpleSAML\SAML2\Exception\InvalidDOMElementException;
+use SimpleSAML\SAML2\Exception\MissingElementException;
+use SimpleSAML\SAML2\Utils;
 
 /**
  * Class representing a SAML2 AuthnStatement
@@ -18,7 +18,7 @@ use SimpleSAML\Assert\Assert;
  */
 final class AuthnStatement extends AbstractStatement
 {
-    /** @var \SAML2\XML\saml\AuthnContext */
+    /** @var \SimpleSAML\SAML2\XML\saml\AuthnContext */
     protected $authnContext;
 
     /** @var int */
@@ -30,18 +30,18 @@ final class AuthnStatement extends AbstractStatement
     /** @var string|null */
     protected $sessionIndex = null;
 
-    /** @var \SAML2\XML\saml\SubjectLocality|null */
+    /** @var \SimpleSAML\SAML2\XML\saml\SubjectLocality|null */
     protected $subjectLocality = null;
 
 
     /**
      * Initialize an AuthnContext.
      *
-     * @param \SAML2\XML\saml\AuthnContext $authnContext
+     * @param \SimpleSAML\SAML2\XML\saml\AuthnContext $authnContext
      * @param int $authnInstant
      * @param int|null $sessionNotOnOrAfter
      * @param string|null $sessionIndex
-     * @param \SAML2\XML\saml\SubjectLocality|null $subjectLocality
+     * @param \SimpleSAML\SAML2\XML\saml\SubjectLocality|null $subjectLocality
      */
     public function __construct(
         AuthnContext $authnContext,
@@ -61,7 +61,7 @@ final class AuthnStatement extends AbstractStatement
     /**
      * Collect the value of the authnContext-property
      *
-     * @return \SAML2\XML\saml\AuthnContext
+     * @return \SimpleSAML\SAML2\XML\saml\AuthnContext
      */
     public function getAuthnContext(): AuthnContext
     {
@@ -72,7 +72,7 @@ final class AuthnStatement extends AbstractStatement
     /**
      * Set the value of the authnContext-property
      *
-     * @param \SAML2\XML\saml\AuthnContext $authnContext
+     * @param \SimpleSAML\SAML2\XML\saml\AuthnContext $authnContext
      * @return void
      */
     private function setAuthnContext(AuthnContext $authnContext): void
@@ -153,7 +153,7 @@ final class AuthnStatement extends AbstractStatement
     /**
      * Collect the value of the subjectLocality-property
      *
-     * @return \SAML2\XML\saml\SubjectLocality|null
+     * @return \SimpleSAML\SAML2\XML\saml\SubjectLocality|null
      */
     public function getSubjectLocality(): ?SubjectLocality
     {
@@ -164,7 +164,7 @@ final class AuthnStatement extends AbstractStatement
     /**
      * Set the value of the subjectLocality-property
      *
-     * @param \SAML2\XML\saml\SubjectLocality|null $subjectLocality
+     * @param \SimpleSAML\SAML2\XML\saml\SubjectLocality|null $subjectLocality
      * @return void
      */
     private function setSubjectLocality(?SubjectLocality $subjectLocality): void
@@ -178,9 +178,9 @@ final class AuthnStatement extends AbstractStatement
      *
      * @param \DOMElement $xml The XML element we should load
      *
-     * @return \SAML2\XML\saml\AuthnStatement
-     * @throws \SAML2\Exception\InvalidDOMElementException if the qualified name of the supplied element is wrong
-     * @throws \SAML2\Exception\MissingElementException if one of the mandatory child-elements is missing
+     * @return \SimpleSAML\SAML2\XML\saml\AuthnStatement
+     * @throws \SimpleSAML\SAML2\Exception\InvalidDOMElementException if the qualified name of the supplied element is wrong
+     * @throws \SimpleSAML\SAML2\Exception\MissingElementException if one of the mandatory child-elements is missing
      * @throws \Exception if the authentication instant is not a valid timestamp.
      */
     public static function fromXML(DOMElement $xml): object

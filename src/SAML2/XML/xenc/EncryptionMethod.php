@@ -2,14 +2,14 @@
 
 declare(strict_types=1);
 
-namespace SAML2\XML\xenc;
+namespace SimpleSAML\SAML2\XML\xenc;
 
 use DOMElement;
-use SAML2\Constants;
-use SAML2\Exception\InvalidDOMElementException;
-use SAML2\Exception\TooManyElementsException;
-use SAML2\XML\Chunk;
 use SimpleSAML\Assert\Assert;
+use SimpleSAML\SAML2\Constants;
+use SimpleSAML\SAML2\Exception\InvalidDOMElementException;
+use SimpleSAML\SAML2\Exception\TooManyElementsException;
+use SimpleSAML\SAML2\XML\Chunk;
 
 /**
  * A class implementing the xenc:EncryptionMethod element.
@@ -27,7 +27,7 @@ class EncryptionMethod extends AbstractXencElement
     /** @var string|null */
     protected $oaepParams = null;
 
-    /** @var \SAML2\XML\Chunk[] */
+    /** @var \SimpleSAML\SAML2\XML\Chunk[] */
     protected $children = [];
 
 
@@ -37,7 +37,7 @@ class EncryptionMethod extends AbstractXencElement
      * @param string $algorithm
      * @param int|null $keySize
      * @param string|null $oaepParams
-     * @param \SAML2\XML\Chunk[] $children
+     * @param \SimpleSAML\SAML2\XML\Chunk[] $children
      */
     public function __construct(
         string $algorithm,
@@ -58,9 +58,9 @@ class EncryptionMethod extends AbstractXencElement
      * @param \DOMElement $xml
      * @return static
      *
-     * @throws \SAML2\Exception\InvalidDOMElementException if the qualified name of the supplied element is wrong
-     * @throws \SAML2\Exception\MissingAttributeException if the supplied element is missing one of the mandatory attributes
-     * @throws \SAML2\Exception\TooManyElementsException if too many child-elements of a type are specified
+     * @throws \SimpleSAML\SAML2\Exception\InvalidDOMElementException if the qualified name of the supplied element is wrong
+     * @throws \SimpleSAML\SAML2\Exception\MissingAttributeException if the supplied element is missing one of the mandatory attributes
+     * @throws \SimpleSAML\SAML2\Exception\TooManyElementsException if too many child-elements of a type are specified
      */
     public static function fromXML(DOMElement $xml): object
     {
@@ -180,7 +180,7 @@ class EncryptionMethod extends AbstractXencElement
     /**
      * Get the children elements of this encryption method as chunks.
      *
-     * @return \SAML2\XML\Chunk[]
+     * @return \SimpleSAML\SAML2\XML\Chunk[]
      */
     public function getChildren(): array
     {
@@ -191,7 +191,7 @@ class EncryptionMethod extends AbstractXencElement
     /**
      * Set an array of chunks as children of this encryption method.
      *
-     * @param \SAML2\XML\Chunk[] $children
+     * @param \SimpleSAML\SAML2\XML\Chunk[] $children
      * @return void
      * @throws \SimpleSAML\Assert\AssertionFailedException
      */

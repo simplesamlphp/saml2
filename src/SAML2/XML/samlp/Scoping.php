@@ -2,12 +2,12 @@
 
 declare(strict_types=1);
 
-namespace SAML2\XML\samlp;
+namespace SimpleSAML\SAML2\XML\samlp;
 
 use DOMElement;
-use SAML2\Exception\InvalidDOMElementException;
-use SAML2\Utils;
 use SimpleSAML\Assert\Assert;
+use SimpleSAML\SAML2\Exception\InvalidDOMElementException;
+use SimpleSAML\SAML2\Utils;
 
 /**
  * Class for handling SAML2 Scoping.
@@ -17,7 +17,7 @@ use SimpleSAML\Assert\Assert;
  */
 final class Scoping extends AbstractSamlpElement
 {
-    /** @var \SAML2\XML\samlp\IDPList|null */
+    /** @var \SimpleSAML\SAML2\XML\samlp\IDPList|null */
     protected $IDPList;
 
     /** @var string[] */
@@ -31,7 +31,7 @@ final class Scoping extends AbstractSamlpElement
      * Initialize a Scoping element.
      *
      * @param int|null $proxyCount
-     * @param \SAML2\XML\samlp\IDPList|null $idpList
+     * @param \SimpleSAML\SAML2\XML\samlp\IDPList|null $idpList
      * @param string[] $requesterId
      */
     public function __construct(?int $proxyCount = null, ?IDPList $idpList = null, array $requesterId = [])
@@ -43,7 +43,7 @@ final class Scoping extends AbstractSamlpElement
 
 
     /**
-     * @return \SAML2\XML\samlp\IDPList|null
+     * @return \SimpleSAML\SAML2\XML\samlp\IDPList|null
      */
     public function getIDPList(): ?IDPList
     {
@@ -52,7 +52,7 @@ final class Scoping extends AbstractSamlpElement
 
 
     /**
-     * @param \SAML2\XML\samlp\IDPList|null $idpList
+     * @param \SimpleSAML\SAML2\XML\samlp\IDPList|null $idpList
      * @return void
      */
     private function setIDPList(?IDPList $idpList): void
@@ -120,9 +120,9 @@ final class Scoping extends AbstractSamlpElement
      * Convert XML into a Scoping-element
      *
      * @param \DOMElement $xml The XML element we should load
-     * @return \SAML2\XML\samlp\Scoping
+     * @return \SimpleSAML\SAML2\XML\samlp\Scoping
      *
-     * @throws \SAML2\Exception\InvalidDOMElementException if the qualified name of the supplied element is wrong
+     * @throws \SimpleSAML\SAML2\Exception\InvalidDOMElementException if the qualified name of the supplied element is wrong
      */
     public static function fromXML(DOMElement $xml): object
     {

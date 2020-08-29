@@ -2,16 +2,17 @@
 
 declare(strict_types=1);
 
-namespace SAML2\XML\md;
+namespace SimpleSAML\SAML2\XML\md;
 
-use SAML2\Constants;
+use SimpleSAML\SAML2\Constants;
+use SimpleSAML\SAML2\XML\xenc\EncryptionMethod as EncMethod;
 
 /**
  * A class implementing the md:EncryptionMethod element.
  *
  * @package simplesamlphp/saml2
  */
-class EncryptionMethod extends \SAML2\XML\xenc\EncryptionMethod
+class EncryptionMethod extends EncMethod
 {
     /** @var string */
     public const NS = Constants::NS_MD;

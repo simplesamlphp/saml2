@@ -2,12 +2,12 @@
 
 declare(strict_types=1);
 
-namespace SAML2\XML\mdui;
+namespace SimpleSAML\SAML2\XML\mdui;
 
 use DOMElement;
-use SAML2\Exception\InvalidDOMElementException;
-use SAML2\Utils;
-use SAML2\XML\Chunk;
+use SimpleSAML\SAML2\Exception\InvalidDOMElementException;
+use SimpleSAML\SAML2\Utils;
+use SimpleSAML\SAML2\XML\Chunk;
 use SimpleSAML\Assert\Assert;
 
 /**
@@ -23,7 +23,7 @@ final class UIInfo extends AbstractMduiElement
      *
      * The elements can be any of the other \SAML2\XML\mdui\* elements.
      *
-     * @var \SAML2\XML\Chunk[]
+     * @var \SimpleSAML\SAML2\XML\Chunk[]
      */
     protected $children = [];
 
@@ -58,14 +58,14 @@ final class UIInfo extends AbstractMduiElement
     /**
      * The Keywords, as an array of Keywords objects
      *
-     * @var \SAML2\XML\mdui\Keywords[]
+     * @var \SimpleSAML\SAML2\XML\mdui\Keywords[]
      */
     protected $Keywords = [];
 
     /**
      * The Logo, as an array of Logo objects
      *
-     * @var \SAML2\XML\mdui\Logo[]
+     * @var \SimpleSAML\SAML2\XML\mdui\Logo[]
      */
     protected $Logo = [];
 
@@ -77,9 +77,9 @@ final class UIInfo extends AbstractMduiElement
      * @param string[] $Description
      * @param string[] $InformationURL
      * @param string[] $PrivacyStatementURL
-     * @param \SAML2\XML\mdui\Keywords[] $Keywords
-     * @param \SAML2\XML\mdui\Logo[] $Logo
-     * @param \SAML2\XML\Chunk[] $children
+     * @param \SimpleSAML\SAML2\XML\mdui\Keywords[] $Keywords
+     * @param \SimpleSAML\SAML2\XML\mdui\Logo[] $Logo
+     * @param \SimpleSAML\SAML2\XML\Chunk[] $children
      */
     public function __construct(
         array $DisplayName = [],
@@ -103,7 +103,7 @@ final class UIInfo extends AbstractMduiElement
     /**
      * Collect the value of the Keywords-property
      *
-     * @return \SAML2\XML\mdui\Keywords[]
+     * @return \SimpleSAML\SAML2\XML\mdui\Keywords[]
      */
     public function getKeywords(): array
     {
@@ -114,7 +114,7 @@ final class UIInfo extends AbstractMduiElement
     /**
      * Set the value of the Keywords-property
      *
-     * @param \SAML2\XML\mdui\Keywords[] $keywords
+     * @param \SimpleSAML\SAML2\XML\mdui\Keywords[] $keywords
      * @return void
      *
      * @throws \SimpleSAML\Assert\AssertionFailedException if assertions are false
@@ -130,7 +130,7 @@ final class UIInfo extends AbstractMduiElement
     /**
      * Add the value to the Keywords-property
      *
-     * @param \SAML2\XML\mdui\Keywords $keyword
+     * @param \SimpleSAML\SAML2\XML\mdui\Keywords $keyword
      * @return void
      */
     public function addKeyword(Keywords $keyword): void
@@ -241,7 +241,7 @@ final class UIInfo extends AbstractMduiElement
     /**
      * Collect the value of the Logo-property
      *
-     * @return \SAML2\XML\mdui\Logo[]
+     * @return \SimpleSAML\SAML2\XML\mdui\Logo[]
      */
     public function getLogo(): array
     {
@@ -252,7 +252,7 @@ final class UIInfo extends AbstractMduiElement
     /**
      * Set the value of the Logo-property
      *
-     * @param \SAML2\XML\mdui\Logo[] $logo
+     * @param \SimpleSAML\SAML2\XML\mdui\Logo[] $logo
      * @return void
      */
     private function setLogo(array $logo): void
@@ -266,7 +266,7 @@ final class UIInfo extends AbstractMduiElement
     /**
      * Add the value to the Logo-property
      *
-     * @param \SAML2\XML\mdui\Logo $logo
+     * @param \SimpleSAML\SAML2\XML\mdui\Logo $logo
      * @return void
      */
     public function addLogo(Logo $logo): void
@@ -278,7 +278,7 @@ final class UIInfo extends AbstractMduiElement
     /**
      * Collect the value of the children-property
      *
-     * @return \SAML2\XML\Chunk[]
+     * @return \SimpleSAML\SAML2\XML\Chunk[]
      */
     public function getChildren(): array
     {
@@ -289,7 +289,7 @@ final class UIInfo extends AbstractMduiElement
     /**
      * Set the value of the childen-property
      *
-     * @param \SAML2\XML\Chunk[] $children
+     * @param \SimpleSAML\SAML2\XML\Chunk[] $children
      * @return void
      */
     private function setChildren(array $children): void
@@ -303,7 +303,7 @@ final class UIInfo extends AbstractMduiElement
     /**
      * Add the value to the children-property
      *
-     * @param \SAML2\XML\Chunk $child
+     * @param \SimpleSAML\SAML2\XML\Chunk $child
      * @return void
      */
     public function addChild(Chunk $child): void
@@ -337,7 +337,7 @@ final class UIInfo extends AbstractMduiElement
      * @param \DOMElement $xml The XML element we should load
      * @return self
      *
-     * @throws \SAML2\Exception\InvalidDOMElementException if the qualified name of the supplied element is wrong
+     * @throws \SimpleSAML\SAML2\Exception\InvalidDOMElementException if the qualified name of the supplied element is wrong
      */
     public static function fromXML(DOMElement $xml): object
     {

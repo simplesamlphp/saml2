@@ -2,14 +2,14 @@
 
 declare(strict_types=1);
 
-namespace SAML2\XML\md;
+namespace SimpleSAML\SAML2\XML\md;
 
 use DOMElement;
-use SAML2\Constants;
-use SAML2\Exception\InvalidDOMElementException;
-use SAML2\Exception\TooManyElementsException;
-use SAML2\Utils;
 use SimpleSAML\Assert\Assert;
+use SimpleSAML\SAML2\Constants;
+use SimpleSAML\SAML2\Exception\InvalidDOMElementException;
+use SimpleSAML\SAML2\Exception\TooManyElementsException;
+use SimpleSAML\SAML2\Utils;
 
 /**
  * Class representing SAML 2 metadata PDPDescriptor.
@@ -21,14 +21,14 @@ final class PDPDescriptor extends AbstractRoleDescriptor
     /**
      * List of AuthzService endpoints.
      *
-     * @var \SAML2\XML\md\AuthzService[]
+     * @var \SimpleSAML\SAML2\XML\md\AuthzService[]
      */
     protected $authzServiceEndpoints = [];
 
     /**
      * List of AssertionIDRequestService endpoints.
      *
-     * @var \SAML2\XML\md\AssertionIDRequestService[]
+     * @var \SimpleSAML\SAML2\XML\md\AssertionIDRequestService[]
      */
     protected $assertionIDRequestServiceEndpoints = [];
 
@@ -43,18 +43,18 @@ final class PDPDescriptor extends AbstractRoleDescriptor
     /**
      * PDPDescriptor constructor.
      *
-     * @param \SAML2\XML\md\AuthzService[] $authServiceEndpoints
+     * @param \SimpleSAML\SAML2\XML\md\AuthzService[] $authServiceEndpoints
      * @param string[] $protocolSupportEnumeration
-     * @param \SAML2\XML\md\AssertionIDRequestService[] $assertionIDRequestService
+     * @param \SimpleSAML\SAML2\XML\md\AssertionIDRequestService[] $assertionIDRequestService
      * @param string[] $nameIDFormats
      * @param string|null $ID
      * @param int|null $validUntil
      * @param string|null $cacheDuration
-     * @param \SAML2\XML\md\Extensions|null $extensions
+     * @param \SimpleSAML\SAML2\XML\md\Extensions|null $extensions
      * @param string|null $errorURL
-     * @param \SAML2\XML\md\Organization|null $organization
-     * @param \SAML2\XML\md\KeyDescriptor[] $keyDescriptors
-     * @param \SAML2\XML\md\ContactPerson[] $contacts
+     * @param \SimpleSAML\SAML2\XML\md\Organization|null $organization
+     * @param \SimpleSAML\SAML2\XML\md\KeyDescriptor[] $keyDescriptors
+     * @param \SimpleSAML\SAML2\XML\md\ContactPerson[] $contacts
      */
     public function __construct(
         array $authServiceEndpoints,
@@ -91,11 +91,11 @@ final class PDPDescriptor extends AbstractRoleDescriptor
      * Initialize an IDPSSODescriptor from a given XML document.
      *
      * @param \DOMElement $xml The XML element we should load.
-     * @return \SAML2\XML\md\PDPDescriptor
+     * @return \SimpleSAML\SAML2\XML\md\PDPDescriptor
      *
-     * @throws \SAML2\Exception\InvalidDOMElementException if the qualified name of the supplied element is wrong
-     * @throws \SAML2\Exception\MissingAttributeException if the supplied element is missing one of the mandatory attributes
-     * @throws \SAML2\Exception\TooManyElementsException if too many child-elements of a type are specified
+     * @throws \SimpleSAML\SAML2\Exception\InvalidDOMElementException if the qualified name of the supplied element is wrong
+     * @throws \SimpleSAML\SAML2\Exception\MissingAttributeException if the supplied element is missing one of the mandatory attributes
+     * @throws \SimpleSAML\SAML2\Exception\TooManyElementsException if too many child-elements of a type are specified
      */
     public static function fromXML(DOMElement $xml): object
     {
@@ -130,7 +130,7 @@ final class PDPDescriptor extends AbstractRoleDescriptor
     /**
      * Get the AuthzService endpoints of this PDPDescriptor
      *
-     * @return \SAML2\XML\md\AuthzService[]
+     * @return \SimpleSAML\SAML2\XML\md\AuthzService[]
      */
     public function getAuthzServiceEndpoints(): array
     {
@@ -141,7 +141,7 @@ final class PDPDescriptor extends AbstractRoleDescriptor
     /**
      * Set the AuthzService endpoints for this PDPDescriptor
      *
-     * @param \SAML2\XML\md\AuthzService[] $authzServices
+     * @param \SimpleSAML\SAML2\XML\md\AuthzService[] $authzServices
      * @return void
      * @throws \SimpleSAML\Assert\AssertionFailedException
      */
@@ -160,7 +160,7 @@ final class PDPDescriptor extends AbstractRoleDescriptor
     /**
      * Get the AssertionIDRequestService endpoints of this PDPDescriptor
      *
-     * @return \SAML2\XML\md\AssertionIDRequestService[]
+     * @return \SimpleSAML\SAML2\XML\md\AssertionIDRequestService[]
      */
     public function getAssertionIDRequestServices(): array
     {
@@ -171,7 +171,7 @@ final class PDPDescriptor extends AbstractRoleDescriptor
     /**
      * Set the AssertionIDRequestService endpoints for this PDPDescriptor
      *
-     * @param \SAML2\XML\md\AssertionIDRequestService[] $assertionIDRequestServices
+     * @param \SimpleSAML\SAML2\XML\md\AssertionIDRequestService[] $assertionIDRequestServices
      * @return void
      * @throws \SimpleSAML\Assert\AssertionFailedException
      */

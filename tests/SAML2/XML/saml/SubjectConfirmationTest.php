@@ -2,23 +2,23 @@
 
 declare(strict_types=1);
 
-namespace SAML2\XML\saml;
+namespace SimpleSAML\SAML2\XML\saml;
 
 use Mockery;
 use PHPUnit\Framework\TestCase;
-use SAML2\Compat\ContainerInterface;
-use SAML2\Compat\ContainerSingleton;
-use SAML2\Constants;
-use SAML2\CustomBaseID;
-use SAML2\DOMDocumentFactory;
-use SAML2\Exception\MissingAttributeException;
-use SAML2\Exception\TooManyElementsException;
-use SAML2\Utils;
+use SimpleSAML\SAML2\Compat\ContainerInterface;
+use SimpleSAML\SAML2\Compat\ContainerSingleton;
+use SimpleSAML\SAML2\Constants;
+use SimpleSAML\SAML2\CustomBaseID;
+use SimpleSAML\SAML2\DOMDocumentFactory;
+use SimpleSAML\SAML2\Exception\MissingAttributeException;
+use SimpleSAML\SAML2\Exception\TooManyElementsException;
+use SimpleSAML\SAML2\Utils;
 
 /**
  * Class \SAML2\XML\saml\SubjectConfirmationTest
  *
- * @covers \SAML2\XML\saml\SubjectConfirmation
+ * @covers \SimpleSAML\SAML2\XML\saml\SubjectConfirmation
  * @package simplesamlphp/saml2
  */
 final class SubjectConfirmationTest extends TestCase
@@ -220,7 +220,7 @@ XML
         );
 
         $subjectConfirmation = SubjectConfirmation::fromXML($document->documentElement);
-        /** @psalm-var \SAML2\XML\saml\BaseID $identifier */
+        /** @psalm-var \SimpleSAML\SAML2\XML\saml\BaseID $identifier */
         $identifier = $subjectConfirmation->getIdentifier();
         $this->assertEquals('SomeMethod', $subjectConfirmation->getMethod());
         $this->assertEquals(BaseID::class, get_class($identifier));

@@ -2,7 +2,7 @@
 
 declare(strict_types=1);
 
-namespace SAML2\Utilities;
+namespace SimpleSAML\SAML2\Utilities;
 
 use ArrayAccess;
 use Closure;
@@ -24,7 +24,7 @@ interface Collection extends ArrayAccess, Countable, IteratorAggregate
     /**
      * Shorthand for getting a single element that also must be the only element in the collection.
      *
-     * @throws \SAML2\Exception\RuntimeException if the element was not the only element
+     * @throws \SimpleSAML\SAML2\Exception\RuntimeException if the element was not the only element
      *
      * @return mixed
      */
@@ -61,7 +61,7 @@ interface Collection extends ArrayAccess, Countable, IteratorAggregate
     /**
      * @param \Closure $filterFunction
      *
-     * @return \SAML2\Utilities\Collection
+     * @return \SimpleSAML\SAML2\Utilities\Collection
      */
     public function filter(Closure $filterFunction): Collection;
 

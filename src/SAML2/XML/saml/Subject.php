@@ -2,22 +2,22 @@
 
 declare(strict_types=1);
 
-namespace SAML2\XML\saml;
+namespace SimpleSAML\SAML2\XML\saml;
 
 use DOMElement;
-use SAML2\Compat\ContainerSingleton;
-use SAML2\Constants;
-use SAML2\Exception\InvalidDOMElementException;
-use SAML2\Exception\TooManyElementsException;
-use SAML2\Utils;
-use SAML2\XML\IdentifierTrait;
 use SimpleSAML\Assert\Assert;
+use SimpleSAML\SAML2\Compat\ContainerSingleton;
+use SimpleSAML\SAML2\Constants;
+use SimpleSAML\SAML2\Exception\InvalidDOMElementException;
+use SimpleSAML\SAML2\Exception\TooManyElementsException;
+use SimpleSAML\SAML2\Utils;
+use SimpleSAML\SAML2\XML\IdentifierTrait;
 
 /**
  * Class representing SAML 2 Subject element.
  *
  * @author Tim van Dijen, <tvdijen@gmail.com>
- * @package SimpleSAMLphp
+ * @package simplesamlphp/saml2
  */
 final class Subject extends AbstractSamlElement
 {
@@ -26,7 +26,7 @@ final class Subject extends AbstractSamlElement
     /**
      * SubjectConfirmation element with extra data for verification of the Subject.
      *
-     * @var \SAML2\XML\saml\SubjectConfirmation[]
+     * @var \SimpleSAML\SAML2\XML\saml\SubjectConfirmation[]
      */
     protected $SubjectConfirmation;
 
@@ -34,8 +34,8 @@ final class Subject extends AbstractSamlElement
     /**
      * Initialize a Subject element.
      *
-     * @param \SAML2\XML\saml\IdentifierInterface|null $identifier
-     * @param \SAML2\XML\saml\SubjectConfirmation[] $SubjectConfirmation
+     * @param \SimpleSAML\SAML2\XML\saml\IdentifierInterface|null $identifier
+     * @param \SimpleSAML\SAML2\XML\saml\SubjectConfirmation[] $SubjectConfirmation
      */
     public function __construct(
         ?IdentifierInterface $identifier,
@@ -57,7 +57,7 @@ final class Subject extends AbstractSamlElement
     /**
      * Collect the value of the SubjectConfirmation-property
      *
-     * @return \SAML2\XML\saml\SubjectConfirmation[]
+     * @return \SimpleSAML\SAML2\XML\saml\SubjectConfirmation[]
      */
     public function getSubjectConfirmation(): array
     {
@@ -68,7 +68,7 @@ final class Subject extends AbstractSamlElement
     /**
      * Set the value of the SubjectConfirmation-property
      *
-     * @param \SAML2\XML\saml\SubjectConfirmation[] $subjectConfirmation
+     * @param \SimpleSAML\SAML2\XML\saml\SubjectConfirmation[] $subjectConfirmation
      * @return void
      */
     private function setSubjectConfirmation(array $subjectConfirmation): void
@@ -85,7 +85,7 @@ final class Subject extends AbstractSamlElement
      * @param \DOMElement $xml The XML element we should load
      * @return self
      *
-     * @throws \SAML2\Exception\InvalidDOMElementException if the qualified name of the supplied element is wrong
+     * @throws \SimpleSAML\SAML2\Exception\InvalidDOMElementException if the qualified name of the supplied element is wrong
      */
     public static function fromXML(DOMElement $xml): object
     {

@@ -2,17 +2,17 @@
 
 declare(strict_types=1);
 
-namespace SAML2\XML\mdui;
+namespace SimpleSAML\SAML2\XML\mdui;
 
 use PHPUnit\Framework\TestCase;
-use SAML2\DOMDocumentFactory;
-use SAML2\XML\Chunk;
-use SAML2\Utils;
+use SimpleSAML\SAML2\DOMDocumentFactory;
+use SimpleSAML\SAML2\XML\Chunk;
+use SimpleSAML\SAML2\Utils;
 
 /**
  * Class \SAML2\XML\mdui\DiscoHintsTest
  *
- * @covers \SAML2\XML\mdui\DiscoHints
+ * @covers \SimpleSAML\SAML2\XML\mdui\DiscoHints
  * @package simplesamlphp/saml2
  */
 final class DiscoHintsTest extends TestCase

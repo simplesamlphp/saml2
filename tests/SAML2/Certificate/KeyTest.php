@@ -2,15 +2,15 @@
 
 declare(strict_types=1);
 
-namespace SAML2\Certificate;
+namespace SimpleSAML\SAML2\Certificate;
 
 use PHPUnit\Framework\TestCase;
-use SAML2\Certificate\Key;
-use SAML2\Certificate\Exception\InvalidKeyUsageException;
-use SAML2\Exception\InvalidArgumentException;
+use SimpleSAML\SAML2\Certificate\Key;
+use SimpleSAML\SAML2\Certificate\Exception\InvalidKeyUsageException;
+use SimpleSAML\SAML2\Exception\InvalidArgumentException;
 
 /**
- * @covers \SAML2\Certificate\Key
+ * @covers \SimpleSAML\SAML2\Certificate\Key
  * @package simplesamlphp/saml2
  */
 final class KeyTest extends TestCase

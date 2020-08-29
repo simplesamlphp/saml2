@@ -2,18 +2,18 @@
 
 declare(strict_types=1);
 
-namespace SAML2\XML\samlp;
+namespace SimpleSAML\SAML2\XML\samlp;
 
-use SAML2\Constants;
-use SAML2\DOMDocumentFactory;
+use SimpleSAML\SAML2\Constants;
+use SimpleSAML\SAML2\DOMDocumentFactory;
 use PHPUnit\Framework\TestCase;
-use SAML2\Utils;
-use SAML2\XML\Chunk;
+use SimpleSAML\SAML2\Utils;
+use SimpleSAML\SAML2\XML\Chunk;
 
 /**
  * Class \SAML2\XML\samlp\StatusTest
  *
- * @covers \SAML2\XML\samlp\Status
+ * @covers \SimpleSAML\SAML2\XML\samlp\Status
  *
  * @author Tim van Dijen, <tvdijen@gmail.com>
  * @package simplesamlphp/saml2

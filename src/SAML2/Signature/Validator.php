@@ -2,12 +2,12 @@
 
 declare(strict_types=1);
 
-namespace SAML2\Signature;
+namespace SimpleSAML\SAML2\Signature;
 
 use Psr\Log\LoggerInterface;
-use SAML2\Certificate\KeyLoader;
-use SAML2\Configuration\CertificateProvider;
-use SAML2\XML\SignedElementInterface;
+use SimpleSAML\SAML2\Certificate\KeyLoader;
+use SimpleSAML\SAML2\Configuration\CertificateProvider;
+use SimpleSAML\SAML2\XML\SignedElementInterface;
 
 /**
  * Signature Validator.
@@ -30,8 +30,8 @@ class Validator
 
 
     /**
-     * @param \SAML2\XML\SignedElementInterface $signedElement
-     * @param \SAML2\Configuration\CertificateProvider $configuration
+     * @param \SimpleSAML\SAML2\XML\SignedElementInterface $signedElement
+     * @param \SimpleSAML\SAML2\Configuration\CertificateProvider $configuration
      *
      * @return bool
      */

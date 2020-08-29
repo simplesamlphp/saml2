@@ -2,19 +2,19 @@
 
 declare(strict_types=1);
 
-namespace SAML2\XML\saml;
+namespace SimpleSAML\SAML2\XML\saml;
 
 use DOMElement;
 use PHPUnit\Framework\TestCase;
-use SAML2\Constants;
-use SAML2\CustomStatement;
-use SAML2\DOMDocumentFactory;
+use SimpleSAML\SAML2\Constants;
+use SimpleSAML\SAML2\CustomStatement;
+use SimpleSAML\SAML2\DOMDocumentFactory;
 use SimpleSAML\Assert\AssertionFailedException;
 
 /**
  * Class \SAML2\XML\saml\StatementTest
  *
- * @covers \SAML2\XML\saml\Statement
+ * @covers \SimpleSAML\SAML2\XML\saml\Statement
  * @package simplesamlphp/saml2
  */
 final class StatementTest extends TestCase

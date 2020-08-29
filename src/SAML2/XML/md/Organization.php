@@ -2,23 +2,23 @@
 
 declare(strict_types=1);
 
-namespace SAML2\XML\md;
+namespace SimpleSAML\SAML2\XML\md;
 
 use DOMElement;
 use Exception;
-use SAML2\Constants;
-use SAML2\Exception\InvalidDOMElementException;
-use SAML2\Exception\MissingElementException;
-use SAML2\Exception\TooManyElementsException;
-use SAML2\Utils;
-use SAML2\XML\ExtendableAttributesTrait;
-use SAML2\XML\ExtendableElementTrait;
 use SimpleSAML\Assert\Assert;
+use SimpleSAML\SAML2\Constants;
+use SimpleSAML\SAML2\Exception\InvalidDOMElementException;
+use SimpleSAML\SAML2\Exception\MissingElementException;
+use SimpleSAML\SAML2\Exception\TooManyElementsException;
+use SimpleSAML\SAML2\Utils;
+use SimpleSAML\SAML2\XML\ExtendableAttributesTrait;
+use SimpleSAML\SAML2\XML\ExtendableElementTrait;
 
 /**
  * Class representing SAML 2 Organization element.
  *
- * @package SimpleSAMLphp
+ * @package simplesamlphp/saml2
  */
 final class Organization extends AbstractMdElement
 {
@@ -28,14 +28,14 @@ final class Organization extends AbstractMdElement
     /**
      * The OrganizationName, as an array of language => translation.
      *
-     * @var \SAML2\XML\md\OrganizationName[]
+     * @var \SimpleSAML\SAML2\XML\md\OrganizationName[]
      */
     protected $OrganizationName = [];
 
     /**
      * The OrganizationDisplayName, as an array of language => translation.
      *
-     * @var \SAML2\XML\md\OrganizationDisplayName[]
+     * @var \SimpleSAML\SAML2\XML\md\OrganizationDisplayName[]
      */
     protected $OrganizationDisplayName = [];
 
@@ -50,10 +50,10 @@ final class Organization extends AbstractMdElement
     /**
      * Organization constructor.
      *
-     * @param \SAML2\XML\md\OrganizationName[] $organizationName
-     * @param \SAML2\XML\md\OrganizationDisplayName[] $organizationDisplayName
+     * @param \SimpleSAML\SAML2\XML\md\OrganizationName[] $organizationName
+     * @param \SimpleSAML\SAML2\XML\md\OrganizationDisplayName[] $organizationDisplayName
      * @param string[] $organizationURL
-     * @param \SAML2\XML\md\Extensions|null $extensions
+     * @param \SimpleSAML\SAML2\XML\md\Extensions|null $extensions
      */
     public function __construct(
         array $organizationName,
@@ -71,7 +71,7 @@ final class Organization extends AbstractMdElement
     /**
      * Collect the value of the OrganizationName property.
      *
-     * @return \SAML2\XML\md\OrganizationName[]
+     * @return \SimpleSAML\SAML2\XML\md\OrganizationName[]
      */
     public function getOrganizationName(): array
     {
@@ -82,7 +82,7 @@ final class Organization extends AbstractMdElement
     /**
      * Set the value of the OrganizationName property.
      *
-     * @param \SAML2\XML\md\OrganizationName[] $organizationName
+     * @param \SimpleSAML\SAML2\XML\md\OrganizationName[] $organizationName
      * @return void
      * @throws \SimpleSAML\Assert\AssertionFailedException
      */
@@ -96,7 +96,7 @@ final class Organization extends AbstractMdElement
     /**
      * Collect the value of the OrganizationDisplayName property.
      *
-     * @return \SAML2\XML\md\OrganizationDisplayName[]
+     * @return \SimpleSAML\SAML2\XML\md\OrganizationDisplayName[]
      */
     public function getOrganizationDisplayName(): array
     {
@@ -107,7 +107,7 @@ final class Organization extends AbstractMdElement
     /**
      * Set the value of the OrganizationDisplayName property.
      *
-     * @param \SAML2\XML\md\OrganizationDisplayName[] $organizationDisplayName
+     * @param \SimpleSAML\SAML2\XML\md\OrganizationDisplayName[] $organizationDisplayName
      * @return void
      * @throws \SimpleSAML\Assert\AssertionFailedException
      */
@@ -148,8 +148,8 @@ final class Organization extends AbstractMdElement
      * @param \DOMElement $xml The XML element we should load.
      * @return self
      *
-     * @throws \SAML2\Exception\InvalidDOMElementException if the qualified name of the supplied element is wrong
-     * @throws \SAML2\Exception\MissingElementException if one of the mandatory child-elements is missing
+     * @throws \SimpleSAML\SAML2\Exception\InvalidDOMElementException if the qualified name of the supplied element is wrong
+     * @throws \SimpleSAML\SAML2\Exception\MissingElementException if one of the mandatory child-elements is missing
      */
     public static function fromXML(DOMElement $xml): object
     {

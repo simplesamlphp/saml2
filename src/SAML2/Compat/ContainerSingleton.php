@@ -2,20 +2,20 @@
 
 declare(strict_types=1);
 
-namespace SAML2\Compat;
+namespace SimpleSAML\SAML2\Compat;
 
-use SAML2\Compat\Ssp\Container;
-use SAML2\XML\AbstractXMLElement;
 use SimpleSAML\Assert\Assert;
+use SimpleSAML\SAML2\Compat\Ssp\Container;
+use SimpleSAML\SAML2\XML\AbstractXMLElement;
 
 class ContainerSingleton
 {
-    /** @var \SAML2\Compat\ContainerInterface|null */
+    /** @var \SimpleSAML\SAML2\Compat\ContainerInterface|null */
     protected static $container = null;
 
 
     /**
-     * @return \SAML2\Compat\ContainerInterface
+     * @return \SimpleSAML\SAML2\Compat\ContainerInterface
      */
     public static function getInstance(): ContainerInterface
     {
@@ -29,7 +29,7 @@ class ContainerSingleton
     /**
      * Set a container to use.
      *
-     * @param \SAML2\Compat\ContainerInterface $container
+     * @param \SimpleSAML\SAML2\Compat\ContainerInterface $container
      * @return void
      */
     public static function setContainer(ContainerInterface $container): void
@@ -39,7 +39,7 @@ class ContainerSingleton
 
 
     /**
-     * @return \SAML2\Compat\Ssp\Container
+     * @return \SimpleSAML\SAML2\Compat\Ssp\Container
      */
     public static function initSspContainer(): Container
     {

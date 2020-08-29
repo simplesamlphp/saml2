@@ -2,26 +2,26 @@
 
 declare(strict_types=1);
 
-namespace SAML2\XML\md;
+namespace SimpleSAML\SAML2\XML\md;
 
 use DOMElement;
-use SAML2\Exception\InvalidDOMElementException;
-use SAML2\Utils;
-use SAML2\XML\alg\AbstractAlgElement as ALG;
-use SAML2\XML\alg\DigestMethod;
-use SAML2\XML\alg\SigningMethod;
-use SAML2\XML\Chunk;
-use SAML2\XML\ExtensionsTrait;
-use SAML2\XML\init\RequestInitiator;
-use SAML2\XML\mdattr\EntityAttributes;
-use SAML2\XML\mdrpi\AbstractMdrpiElement as MDRPI;
-use SAML2\XML\mdrpi\PublicationInfo;
-use SAML2\XML\mdrpi\RegistrationInfo;
-use SAML2\XML\mdui\AbstractMduiElement as MDUI;
-use SAML2\XML\mdui\DiscoHints;
-use SAML2\XML\mdui\UIInfo;
-use SAML2\XML\shibmd\Scope;
 use SimpleSAML\Assert\Assert;
+use SimpleSAML\SAML2\Exception\InvalidDOMElementException;
+use SimpleSAML\SAML2\Utils;
+use SimpleSAML\SAML2\XML\alg\AbstractAlgElement as ALG;
+use SimpleSAML\SAML2\XML\alg\DigestMethod;
+use SimpleSAML\SAML2\XML\alg\SigningMethod;
+use SimpleSAML\SAML2\XML\Chunk;
+use SimpleSAML\SAML2\XML\ExtensionsTrait;
+use SimpleSAML\SAML2\XML\init\RequestInitiator;
+use SimpleSAML\SAML2\XML\mdattr\EntityAttributes;
+use SimpleSAML\SAML2\XML\mdrpi\AbstractMdrpiElement as MDRPI;
+use SimpleSAML\SAML2\XML\mdrpi\PublicationInfo;
+use SimpleSAML\SAML2\XML\mdrpi\RegistrationInfo;
+use SimpleSAML\SAML2\XML\mdui\AbstractMduiElement as MDUI;
+use SimpleSAML\SAML2\XML\mdui\DiscoHints;
+use SimpleSAML\SAML2\XML\mdui\UIInfo;
+use SimpleSAML\SAML2\XML\shibmd\Scope;
 
 /**
  * Class for handling SAML2 metadata extensions.
@@ -37,12 +37,12 @@ final class Extensions extends AbstractMdElement
      * Create an Extensions object from its md:Extensions XML representation.
      *
      * For those supported extensions, an object of the corresponding class will be created. The rest will be added
-     * as a \SAML2\XML\Chunk object.
+     * as a \SimpleSAML\SAML2\XML\Chunk object.
      *
      * @param \DOMElement $xml
-     * @return \SAML2\XML\md\Extensions
+     * @return \SimpleSAML\SAML2\XML\md\Extensions
      *
-     * @throws \SAML2\Exception\InvalidDOMElementException if the qualified name of the supplied element is wrong
+     * @throws \SimpleSAML\SAML2\Exception\InvalidDOMElementException if the qualified name of the supplied element is wrong
      */
     public static function fromXML(DOMElement $xml): object
     {

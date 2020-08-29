@@ -2,17 +2,17 @@
 
 declare(strict_types=1);
 
-namespace SAML2\XML\saml;
+namespace SimpleSAML\SAML2\XML\saml;
 
 use PHPUnit\Framework\TestCase;
-use SAML2\Constants;
-use SAML2\CustomBaseID;
-use SAML2\DOMDocumentFactory;
+use SimpleSAML\SAML2\Constants;
+use SimpleSAML\SAML2\CustomBaseID;
+use SimpleSAML\SAML2\DOMDocumentFactory;
 
 /**
  * Class \SAML2\XML\saml\BaseIDTest
  *
- * @covers \SAML2\XML\saml\BaseID
+ * @covers \SimpleSAML\SAML2\XML\saml\BaseID
  *
  * @author Tim van Dijen, <tvdijen@gmail.com>
  * @package simplesamlphp/saml2
@@ -96,7 +96,7 @@ XML
      */
     public function testUnmarshallingCustomClass(): void
     {
-        /** @var \SAML2\CustomBaseID $baseId */
+        /** @var \SimpleSAML\SAML2\CustomBaseID $baseId */
         $baseId = CustomBaseID::fromXML($this->document->documentElement);
 
         $this->assertEquals(123.456, $baseId->getValue());

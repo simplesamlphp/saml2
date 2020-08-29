@@ -2,19 +2,19 @@
 
 declare(strict_types=1);
 
-namespace SAML2\XML\saml;
+namespace SimpleSAML\SAML2\XML\saml;
 
 use PHPUnit\Framework\TestCase;
-use SAML2\Constants;
-use SAML2\DOMDocumentFactory;
-use SAML2\Utils;
+use SimpleSAML\SAML2\Constants;
+use SimpleSAML\SAML2\DOMDocumentFactory;
+use SimpleSAML\SAML2\Utils;
 use SimpleSAML\Assert\AssertionFailedException;
 
 /**
  * Class \SAML2\XML\saml\IssuerTest
  *
- * @covers \SAML2\XML\saml\Issuer
- * @covers \SAML2\XML\saml\NameIDType
+ * @covers \SimpleSAML\SAML2\XML\saml\Issuer
+ * @covers \SimpleSAML\SAML2\XML\saml\NameIDType
  * @package simplesamlphp/saml2
  */
 final class IssuerTest extends TestCase

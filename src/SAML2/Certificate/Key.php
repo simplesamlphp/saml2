@@ -2,10 +2,10 @@
 
 declare(strict_types=1);
 
-namespace SAML2\Certificate;
+namespace SimpleSAML\SAML2\Certificate;
 
-use SAML2\Certificate\Exception\InvalidKeyUsageException;
-use SAML2\Exception\InvalidArgumentException;
+use SimpleSAML\SAML2\Certificate\Exception\InvalidKeyUsageException;
+use SimpleSAML\SAML2\Exception\InvalidArgumentException;
 
 /**
  * Simple DTO wrapper for (X509) keys. Implements ArrayAccess
@@ -18,9 +18,7 @@ class Key implements \ArrayAccess
 
     public const USAGE_ENCRYPTION = 'encryption';
 
-    /**
-     * @var array
-     */
+    /** @var array */
     protected $keyData = [];
 
 
@@ -41,7 +39,7 @@ class Key implements \ArrayAccess
      *
      * @param string $usage
      * @return bool
-     * @throws \SAML2\Exception\InvalidArgumentException
+     * @throws \SimpleSAML\SAML2\Exception\InvalidArgumentException
      */
     public function canBeUsedFor(string $usage): bool
     {
@@ -68,7 +66,7 @@ class Key implements \ArrayAccess
 
     /**
      * @param mixed $offset
-     * @throws \SAML2\Exception\InvalidArgumentException
+     * @throws \SimpleSAML\SAML2\Exception\InvalidArgumentException
      * @return bool
      *
      * Type hint not possible due to upstream method signature
@@ -84,7 +82,7 @@ class Key implements \ArrayAccess
 
     /**
      * @param mixed $offset
-     * @throws \SAML2\Exception\InvalidArgumentException
+     * @throws \SimpleSAML\SAML2\Exception\InvalidArgumentException
      * @return mixed
      *
      * Type hint not possible due to upstream method signature
@@ -101,7 +99,7 @@ class Key implements \ArrayAccess
     /**
      * @param mixed $offset
      * @param mixed $value
-     * @throws \SAML2\Exception\InvalidArgumentException
+     * @throws \SimpleSAML\SAML2\Exception\InvalidArgumentException
      * @return void
      */
     public function offsetSet($offset, $value): void
@@ -115,7 +113,7 @@ class Key implements \ArrayAccess
 
     /**
      * @param mixed $offset
-     * @throws \SAML2\Exception\InvalidArgumentException
+     * @throws \SimpleSAML\SAML2\Exception\InvalidArgumentException
      * @return void
      *
      * Type hint not possible due to upstream method signature

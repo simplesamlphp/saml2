@@ -2,13 +2,13 @@
 
 declare(strict_types=1);
 
-namespace SAML2\Configuration;
+namespace SimpleSAML\SAML2\Configuration;
 
 use PHPUnit\Framework\TestCase;
-use SAML2\Configuration\ArrayAdapter;
+use SimpleSAML\SAML2\Configuration\ArrayAdapter;
 
 /**
- * @covers \SAML2\Configuration\ArrayAdapter
+ * @covers \SimpleSAML\SAML2\Configuration\ArrayAdapter
  * @package simplesamlphp/saml2
  */
 final class ArrayAdapterTest extends TestCase

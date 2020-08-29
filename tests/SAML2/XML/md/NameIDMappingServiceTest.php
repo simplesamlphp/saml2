@@ -2,17 +2,17 @@
 
 declare(strict_types=1);
 
-namespace SAML2\XML\md;
+namespace SimpleSAML\SAML2\XML\md;
 
 use PHPUnit\Framework\TestCase;
-use SAML2\Constants;
-use SAML2\DOMDocumentFactory;
+use SimpleSAML\SAML2\Constants;
+use SimpleSAML\SAML2\DOMDocumentFactory;
 use SimpleSAML\Assert\AssertionFailedException;
 
 /**
  * Tests for md:NameIDMappingService.
  *
- * @covers \SAML2\XML\md\NameIDMappingService
+ * @covers \SimpleSAML\SAML2\XML\md\NameIDMappingService
  * @package simplesamlphp/saml2
  */
 final class NameIDMappingServiceTest extends TestCase

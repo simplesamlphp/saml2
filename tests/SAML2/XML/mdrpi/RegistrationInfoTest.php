@@ -2,17 +2,17 @@
 
 declare(strict_types=1);
 
-namespace SAML2\XML\mdrpi;
+namespace SimpleSAML\SAML2\XML\mdrpi;
 
 use PHPUnit\Framework\TestCase;
-use SAML2\DOMDocumentFactory;
-use SAML2\Exception\MissingAttributeException;
-use SAML2\Utils;
+use SimpleSAML\SAML2\DOMDocumentFactory;
+use SimpleSAML\SAML2\Exception\MissingAttributeException;
+use SimpleSAML\SAML2\Utils;
 
 /**
  * Class \SAML2\XML\mdrpi\RegistrationInfoTest
  *
- * @covers \SAML2\XML\mdrpi\RegistrationInfo
+ * @covers \SimpleSAML\SAML2\XML\mdrpi\RegistrationInfo
  * @package simplesamlphp/saml2
  */
 final class RegistrationInfoTest extends TestCase

@@ -2,13 +2,13 @@
 
 declare(strict_types=1);
 
-namespace SAML2\Compat\Ssp;
+namespace SimpleSAML\SAML2\Compat\Ssp;
 
 use Psr\Log\LoggerInterface;
-use SAML2\Compat\ContainerInterface;
-use SAML2\XML\AbstractXMLElement;
-use SAML2\XML\saml\CustomIdentifierInterface;
 use SimpleSAML\Assert\Assert;
+use SimpleSAML\SAML2\Compat\ContainerInterface;
+use SimpleSAML\SAML2\XML\AbstractXMLElement;
+use SimpleSAML\SAML2\XML\saml\CustomIdentifierInterface;
 use SimpleSAML\Utils\HTTP;
 use SimpleSAML\Utils\Random;
 use SimpleSAML\Utils\System;

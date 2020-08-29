@@ -2,18 +2,18 @@
 
 declare(strict_types=1);
 
-namespace SAML2\XML;
+namespace SimpleSAML\SAML2\XML;
 
 use PHPUnit\Framework\TestCase;
-use SAML2\Constants;
-use SAML2\DOMDocumentFactory;
-use SAML2\XML\saml\Attribute;
-use SAML2\XML\saml\AttributeValue;
+use SimpleSAML\SAML2\Constants;
+use SimpleSAML\SAML2\DOMDocumentFactory;
+use SimpleSAML\SAML2\XML\saml\Attribute;
+use SimpleSAML\SAML2\XML\saml\AttributeValue;
 
 /**
  * Class \SAML2\XML\ChunkTest
  *
- * @covers \SAML2\XML\Chunk
+ * @covers \SimpleSAML\SAML2\XML\Chunk
  * @package simplesamlphp/saml2
  */
 final class ChunkTest extends TestCase

@@ -2,12 +2,12 @@
 
 declare(strict_types=1);
 
-namespace SAML2\XML\md;
+namespace SimpleSAML\SAML2\XML\md;
 
 use DOMElement;
-use SAML2\Constants;
-use SAML2\Utils;
 use SimpleSAML\Assert\Assert;
+use SimpleSAML\SAML2\Constants;
+use SimpleSAML\SAML2\Utils;
 
 /**
  * Class representing SAML 2 SSODescriptorType.
@@ -19,21 +19,21 @@ abstract class AbstractSSODescriptor extends AbstractRoleDescriptor
     /**
      * List of ArtifactResolutionService endpoints.
      *
-     * @var \SAML2\XML\md\AbstractIndexedEndpointType[]
+     * @var \SimpleSAML\SAML2\XML\md\AbstractIndexedEndpointType[]
      */
     protected $artifactResolutionServiceEndpoints = [];
 
     /**
      * List of SingleLogoutService endpoints.
      *
-     * @var \SAML2\XML\md\AbstractEndpointType[]
+     * @var \SimpleSAML\SAML2\XML\md\AbstractEndpointType[]
      */
     protected $sloServiceEndpoints = [];
 
     /**
      * List of ManageNameIDService endpoints.
      *
-     * @var \SAML2\XML\md\AbstractEndpointType[]
+     * @var \SimpleSAML\SAML2\XML\md\AbstractEndpointType[]
      */
     protected $manageNameIDServiceEndpoints = [];
 
@@ -54,18 +54,18 @@ abstract class AbstractSSODescriptor extends AbstractRoleDescriptor
      * @param string|null $ID The ID for this document. Defaults to null.
      * @param int|null $validUntil Unix time of validity for this document. Defaults to null.
      * @param string|null $cacheDuration Maximum time this document can be cached. Defaults to null.
-     * @param \SAML2\XML\md\Extensions|null $extensions An array of extensions. Defaults to an empty array.
+     * @param \SimpleSAML\SAML2\XML\md\Extensions|null $extensions An array of extensions. Defaults to an empty array.
      * @param string|null $errorURL An URI where to redirect users for support. Defaults to null.
-     * @param \SAML2\XML\md\KeyDescriptor[] $keyDescriptors An array of KeyDescriptor elements.
+     * @param \SimpleSAML\SAML2\XML\md\KeyDescriptor[] $keyDescriptors An array of KeyDescriptor elements.
      *   Defaults to an empty array.
-     * @param \SAML2\XML\md\Organization|null $organization The organization running this entity. Defaults to null.
-     * @param \SAML2\XML\md\ContactPerson[] $contacts An array of contacts for this entity.
+     * @param \SimpleSAML\SAML2\XML\md\Organization|null $organization The organization running this entity. Defaults to null.
+     * @param \SimpleSAML\SAML2\XML\md\ContactPerson[] $contacts An array of contacts for this entity.
      *   Defaults to an empty array.
-     * @param \SAML2\XML\md\AbstractIndexedEndpointType[] $artifactResolutionService An array of
+     * @param \SimpleSAML\SAML2\XML\md\AbstractIndexedEndpointType[] $artifactResolutionService An array of
      *   ArtifactResolutionEndpoint. Defaults to an empty array.
-     * @param \SAML2\XML\md\AbstractEndpointType[] $singleLogoutService An array of SingleLogoutEndpoint.
+     * @param \SimpleSAML\SAML2\XML\md\AbstractEndpointType[] $singleLogoutService An array of SingleLogoutEndpoint.
      *   Defaults to an empty array.
-     * @param \SAML2\XML\md\AbstractEndpointType[] $manageNameIDService An array of ManageNameIDService.
+     * @param \SimpleSAML\SAML2\XML\md\AbstractEndpointType[] $manageNameIDService An array of ManageNameIDService.
      *   Defaults to an empty array.
      * @param string[] $nameIDFormat An array of supported NameID formats. Defaults to an empty array.
      */
@@ -106,7 +106,7 @@ abstract class AbstractSSODescriptor extends AbstractRoleDescriptor
     /**
      * Collect the value of the ArtifactResolutionService-property
      *
-     * @return \SAML2\XML\md\AbstractIndexedEndpointType[]
+     * @return \SimpleSAML\SAML2\XML\md\AbstractIndexedEndpointType[]
      */
     public function getArtifactResolutionServices(): array
     {
@@ -117,7 +117,7 @@ abstract class AbstractSSODescriptor extends AbstractRoleDescriptor
     /**
      * Set the value of the ArtifactResolutionService-property
      *
-     * @param \SAML2\XML\md\AbstractIndexedEndpointType[] $artifactResolutionServices
+     * @param \SimpleSAML\SAML2\XML\md\AbstractIndexedEndpointType[] $artifactResolutionServices
      * @return void
      * @throws \SimpleSAML\Assert\AssertionFailedException
      */
@@ -135,7 +135,7 @@ abstract class AbstractSSODescriptor extends AbstractRoleDescriptor
     /**
      * Collect the value of the SingleLogoutService-property
      *
-     * @return \SAML2\XML\md\AbstractEndpointType[]
+     * @return \SimpleSAML\SAML2\XML\md\AbstractEndpointType[]
      */
     public function getSingleLogoutServices(): array
     {
@@ -146,7 +146,7 @@ abstract class AbstractSSODescriptor extends AbstractRoleDescriptor
     /**
      * Set the value of the SingleLogoutService-property
      *
-     * @param \SAML2\XML\md\AbstractEndpointType[] $singleLogoutServices
+     * @param \SimpleSAML\SAML2\XML\md\AbstractEndpointType[] $singleLogoutServices
      * @throws \SimpleSAML\Assert\AssertionFailedException
      */
     protected function setSingleLogoutServices(array $singleLogoutServices): void
@@ -163,7 +163,7 @@ abstract class AbstractSSODescriptor extends AbstractRoleDescriptor
     /**
      * Collect the value of the ManageNameIDService-property
      *
-     * @return \SAML2\XML\md\AbstractEndpointType[]
+     * @return \SimpleSAML\SAML2\XML\md\AbstractEndpointType[]
      */
     public function getManageNameIDServices(): array
     {
@@ -174,7 +174,7 @@ abstract class AbstractSSODescriptor extends AbstractRoleDescriptor
     /**
      * Set the value of the ManageNameIDService-property
      *
-     * @param \SAML2\XML\md\AbstractEndpointType[] $manageNameIDServices
+     * @param \SimpleSAML\SAML2\XML\md\AbstractEndpointType[] $manageNameIDServices
      * @throws \SimpleSAML\Assert\AssertionFailedException
      */
     protected function setManageNameIDServices(array $manageNameIDServices): void

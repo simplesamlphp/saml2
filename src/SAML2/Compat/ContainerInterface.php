@@ -2,10 +2,10 @@
 
 declare(strict_types=1);
 
-namespace SAML2\Compat;
+namespace SimpleSAML\SAML2\Compat;
 
 use Psr\Log\LoggerInterface;
-use SAML2\XML\AbstractXMLElement;
+use SimpleSAML\SAML2\XML\AbstractXMLElement;
 
 interface ContainerInterface
 {
@@ -98,12 +98,12 @@ interface ContainerInterface
      * Search for a class that implements an $element in the given $namespace.
      *
      * Such classes must have been registered previously by calling registerExtensionHandler(), and they must
-     * extend \SAML2\XML\AbstractXMLElement.
+     * extend \SimpleSAML\SAML2\XML\AbstractXMLElement.
      *
      * @param string $namespace The namespace URI for the given element.
      * @param string $element The local name of the element.
      *
-     * @return string|null The fully-qualified name of a class extending \SAML2\XML\AbstractXMLElement and
+     * @return string|null The fully-qualified name of a class extending \SimpleSAML\SAML2\XML\AbstractXMLElement and
      * implementing support for the given element, or null if no such class has been registered before.
      * @psalm-return class-string|null
      */
@@ -114,11 +114,11 @@ interface ContainerInterface
      * Search for a class that implements a custom identifier type.
      *
      * Such classes must have been registered previously by calling registerExtensionHandler(), and they must
-     * implement \SAML2\XML\saml\CustomIdentifierInterface.
+     * implement \SimpleSAML\SAML2\XML\saml\CustomIdentifierInterface.
      *
      * @param string $type The type of the identifier (xsi:type of the BaseID element).
      *
-     * @return string|null The fully-qualified name of a class implementing \SAML2\XML\saml\CustomIdentifierInterface
+     * @return string|null The fully-qualified name of a class implementing \SimpleSAML\SAML2\XML\saml\CustomIdentifierInterface
      * or null if no such class has been registered before.
      * @psalm-return class-string|null
      */

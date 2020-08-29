@@ -2,13 +2,13 @@
 
 declare(strict_types=1);
 
-namespace SAML2\XML\saml;
+namespace SimpleSAML\SAML2\XML\saml;
 
 use DOMElement;
-use SAML2\Constants;
-use SAML2\DOMDocumentFactory;
-use SAML2\Exception\InvalidDOMElementException;
 use SimpleSAML\Assert\Assert;
+use SimpleSAML\SAML2\Constants;
+use SimpleSAML\SAML2\DOMDocumentFactory;
+use SimpleSAML\SAML2\Exception\InvalidDOMElementException;
 
 /**
  * Class representing the saml:Issuer element.
@@ -72,9 +72,9 @@ final class Issuer extends NameIDType
      * Convert XML into an Issuer
      *
      * @param \DOMElement $xml The XML element we should load
-     * @return \SAML2\XML\saml\Issuer
+     * @return \SimpleSAML\SAML2\XML\saml\Issuer
      *
-     * @throws \SAML2\Exception\InvalidDOMElementException if the qualified name of the supplied element is wrong
+     * @throws \SimpleSAML\SAML2\Exception\InvalidDOMElementException if the qualified name of the supplied element is wrong
      */
     public static function fromXML(DOMElement $xml): object
     {

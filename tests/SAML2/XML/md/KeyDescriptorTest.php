@@ -2,20 +2,20 @@
 
 declare(strict_types=1);
 
-namespace SAML2\XML\md;
+namespace SimpleSAML\SAML2\XML\md;
 
 use PHPUnit\Framework\TestCase;
-use SAML2\Constants;
-use SAML2\DOMDocumentFactory;
-use SAML2\XML\ds\AbstractDsElement;
-use SAML2\XML\ds\KeyInfo;
-use SAML2\XML\ds\KeyName;
+use SimpleSAML\SAML2\Constants;
+use SimpleSAML\SAML2\DOMDocumentFactory;
+use SimpleSAML\SAML2\XML\ds\AbstractDsElement;
+use SimpleSAML\SAML2\XML\ds\KeyInfo;
+use SimpleSAML\SAML2\XML\ds\KeyName;
 use SimpleSAML\Assert\AssertionFailedException;
 
 /**
  * A set of tests for the md:KeyDescriptor element
  *
- * @covers \SAML2\XML\md\KeyDescriptor
+ * @covers \SimpleSAML\SAML2\XML\md\KeyDescriptor
  * @package simplesamlphp/saml2
  */
 final class KeyDescriptorTest extends TestCase

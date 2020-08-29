@@ -2,17 +2,17 @@
 
 declare(strict_types=1);
 
-namespace SAML2\XML\saml;
+namespace SimpleSAML\SAML2\XML\saml;
 
 use PHPUnit\Framework\TestCase;
-use SAML2\Constants;
-use SAML2\DOMDocumentFactory;
-use SAML2\Utils;
+use SimpleSAML\SAML2\Constants;
+use SimpleSAML\SAML2\DOMDocumentFactory;
+use SimpleSAML\SAML2\Utils;
 
 /**
  * Class \SAML2\XML\saml\AuthnContextClassRefTest
  *
- * @covers \SAML2\XML\saml\AuthnContextClassRef
+ * @covers \SimpleSAML\SAML2\XML\saml\AuthnContextClassRef
  * @package simplesamlphp/saml2
  */
 final class AuthnContextClassRefTest extends TestCase

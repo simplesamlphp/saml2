@@ -2,28 +2,28 @@
 
 declare(strict_types=1);
 
-namespace SAML2\XML\samlp;
+namespace SimpleSAML\SAML2\XML\samlp;
 
 use PHPUnit\Framework\TestCase;
-use SAML2\Constants;
-use SAML2\DOMDocumentFactory;
-use SAML2\Exception\MissingElementException;
-use SAML2\Exception\MissingAttributeException;
-use SAML2\Exception\TooManyElementsException;
-use SAML2\Utils;
-use SAML2\XML\saml\Attribute;
-use SAML2\XML\saml\AttributeValue;
-use SAML2\XML\saml\Issuer;
-use SAML2\XML\saml\NameID;
-use SAML2\XML\saml\Subject;
+use SimpleSAML\SAML2\Constants;
+use SimpleSAML\SAML2\DOMDocumentFactory;
+use SimpleSAML\SAML2\Exception\MissingElementException;
+use SimpleSAML\SAML2\Exception\MissingAttributeException;
+use SimpleSAML\SAML2\Exception\TooManyElementsException;
+use SimpleSAML\SAML2\Utils;
+use SimpleSAML\SAML2\XML\saml\Attribute;
+use SimpleSAML\SAML2\XML\saml\AttributeValue;
+use SimpleSAML\SAML2\XML\saml\Issuer;
+use SimpleSAML\SAML2\XML\saml\NameID;
+use SimpleSAML\SAML2\XML\saml\Subject;
 
 /**
  * Class \SAML2\AttributeQueryTest
  *
- * @covers \SAML2\XML\samlp\AttributeQuery
- * @covers \SAML2\XML\samlp\AbstractSubjectQuery
- * @covers \SAML2\XML\samlp\AbstractRequest
- * @covers \SAML2\XML\samlp\AbstractMessage
+ * @covers \SimpleSAML\SAML2\XML\samlp\AttributeQuery
+ * @covers \SimpleSAML\SAML2\XML\samlp\AbstractSubjectQuery
+ * @covers \SimpleSAML\SAML2\XML\samlp\AbstractRequest
+ * @covers \SimpleSAML\SAML2\XML\samlp\AbstractMessage
  * @package simplesamlphp/saml2
  */
 final class AttributeQueryTest extends TestCase
@@ -149,10 +149,10 @@ XML
     public function testUnmarshalling(): void
     {
         $aq = AttributeQuery::fromXML($this->document->documentElement);
-        /** @psalm-var \SAML2\XML\saml\Issuer $issuer */
+        /** @psalm-var \SimpleSAML\SAML2\XML\saml\Issuer $issuer */
         $issuer = $aq->getIssuer();
         $subject = $aq->getSubject();
-        /** @psalm-var \SAML2\XML\saml\NameID $identifier */
+        /** @psalm-var \SimpleSAML\SAML2\XML\saml\NameID $identifier */
         $identifier = $subject->getIdentifier();
 
         // Sanity check
@@ -233,7 +233,7 @@ XML
 XML;
         $document = DOMDocumentFactory::fromString($xml);
         $aq = AttributeQuery::fromXML($document->documentElement);
-        /** @psalm-var \SAML2\XML\saml\Issuer $issuer */
+        /** @psalm-var \SimpleSAML\SAML2\XML\saml\Issuer $issuer */
         $issuer = $aq->getIssuer();
 
         // Sanity check
@@ -273,7 +273,7 @@ XML;
 XML;
         $document = DOMDocumentFactory::fromString($xml);
         $aq = AttributeQuery::fromXML($document->documentElement);
-        /** @psalm-var \SAML2\XML\saml\Issuer $issuer */
+        /** @psalm-var \SimpleSAML\SAML2\XML\saml\Issuer $issuer */
         $issuer = $aq->getIssuer();
 
         // Sanity check

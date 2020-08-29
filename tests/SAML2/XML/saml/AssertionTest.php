@@ -2,23 +2,23 @@
 
 declare(strict_types=1);
 
-namespace SAML2\XML\saml;
+namespace SimpleSAML\SAML2\XML\saml;
 
 use DOMDocument;
 use Exception;
 use Mockery\Adapter\Phpunit\MockeryTestCase;
 use RobRichards\XMLSecLibs\XMLSecurityKey;
-use SAML2\Constants;
-use SAML2\DOMDocumentFactory;
-use SAML2\Exception\TooManyElementsException;
-use SAML2\Utils;
-use SAML2\XML\Chunk;
+use SimpleSAML\SAML2\Constants;
+use SimpleSAML\SAML2\DOMDocumentFactory;
+use SimpleSAML\SAML2\Exception\TooManyElementsException;
+use SimpleSAML\SAML2\Utils;
+use SimpleSAML\SAML2\XML\Chunk;
 use SimpleSAML\TestUtils\PEMCertificatesMock;
 
 /**
  * Class \SAML2\AssertionTest
  *
- * @covers \SAML2\XML\saml\Assertion
+ * @covers \SimpleSAML\SAML2\XML\saml\Assertion
  * @package simplesamlphp/saml2
  */
 final class AssertionTest extends MockeryTestCase
@@ -177,7 +177,7 @@ XML;
         $this->assertEquals(2, $attributes['name2'][0]);
         // NOTE: nil attribute is currently parsed as string..
         //$this->assertNull($attributes["name3"][0]);
-        $this->assertEquals(\SAML2\Constants::NAMEFORMAT_UNSPECIFIED, $assertionToVerify->getAttributeNameFormat());
+        $this->assertEquals(Constants::NAMEFORMAT_UNSPECIFIED, $assertionToVerify->getAttributeNameFormat());
     }
 
 
@@ -204,7 +204,7 @@ XML;
             "name2" => [2],
             "name3" => [1234, "+2345"]
         ]);
-        $assertion->setAttributeNameFormat(\SAML2\Constants::NAMEFORMAT_UNSPECIFIED);
+        $assertion->setAttributeNameFormat(Constants::NAMEFORMAT_UNSPECIFIED);
 
         // set xs:type for first and third name1 values, and all name3 values.
         // second name1 value and all name2 values will use default behaviour
@@ -231,7 +231,7 @@ XML;
         $this->assertCount(2, $attributes['name3']);
         $this->assertEquals("1234", $attributes['name3'][0]);
         $this->assertEquals("+2345", $attributes['name3'][1]);
-        $this->assertEquals(\SAML2\Constants::NAMEFORMAT_UNSPECIFIED, $assertionToVerify->getAttributeNameFormat());
+        $this->assertEquals(Constants::NAMEFORMAT_UNSPECIFIED, $assertionToVerify->getAttributeNameFormat());
 
         $attributesValueTypes = $assertionToVerify->getAttributesValueTypes();
         $this->assertCount(3, $attributesValueTypes);
@@ -271,7 +271,7 @@ XML;
             "name2" => [2],
             "name3" => [1234, "+2345"]
         ]);
-        $assertion->setAttributeNameFormat(\SAML2\Constants::NAMEFORMAT_UNSPECIFIED);
+        $assertion->setAttributeNameFormat(Constants::NAMEFORMAT_UNSPECIFIED);
 
         // set wrong number elements in name1
         $assertion->setAttributesValueTypes([

@@ -2,12 +2,12 @@
 
 declare(strict_types=1);
 
-namespace SAML2\XML\saml;
+namespace SimpleSAML\SAML2\XML\saml;
 
 use DOMElement;
 use RobRichards\XMLSecLibs\XMLSecurityKey;
-use SAML2\Exception\InvalidDOMElementException;
 use SimpleSAML\Assert\Assert;
+use SimpleSAML\SAML2\Exception\InvalidDOMElementException;
 
 /**
  * Class representing a SAML2 AttributeStatement
@@ -16,18 +16,18 @@ use SimpleSAML\Assert\Assert;
  */
 class AttributeStatement extends AbstractStatement
 {
-    /** @var \SAML2\XML\saml\Attribute[] */
+    /** @var \SimpleSAML\SAML2\XML\saml\Attribute[] */
     protected $attributes = [];
 
-    /** @var \SAML2\XML\saml\EncryptedAttribute[] */
+    /** @var \SimpleSAML\SAML2\XML\saml\EncryptedAttribute[] */
     protected $encryptedAttributes = [];
 
 
     /**
      * AttributeStatement constructor.
      *
-     * @param \SAML2\XML\saml\Attribute[] $attributes
-     * @param \SAML2\XML\saml\EncryptedAttribute[] $encryptedAttributes
+     * @param \SimpleSAML\SAML2\XML\saml\Attribute[] $attributes
+     * @param \SimpleSAML\SAML2\XML\saml\EncryptedAttribute[] $encryptedAttributes
      */
     public function __construct(
         array $attributes = [],
@@ -40,7 +40,7 @@ class AttributeStatement extends AbstractStatement
 
 
     /**
-     * @return \SAML2\XML\saml\Attribute[]
+     * @return \SimpleSAML\SAML2\XML\saml\Attribute[]
      */
     public function getAttributes(): array
     {
@@ -49,7 +49,7 @@ class AttributeStatement extends AbstractStatement
 
 
     /**
-     * @param \SAML2\XML\saml\Attribute[] $attributes
+     * @param \SimpleSAML\SAML2\XML\saml\Attribute[] $attributes
      */
     private function setAttributes(array $attributes): void
     {
@@ -59,7 +59,7 @@ class AttributeStatement extends AbstractStatement
 
 
     /**
-     * @return \SAML2\XML\saml\EncryptedAttribute[]
+     * @return \SimpleSAML\SAML2\XML\saml\EncryptedAttribute[]
      */
     public function getEncryptedAttributes(): array
     {
@@ -93,7 +93,7 @@ class AttributeStatement extends AbstractStatement
 
 
     /**
-     * @param \SAML2\XML\saml\EncryptedAttribute[] $encryptedAttributes
+     * @param \SimpleSAML\SAML2\XML\saml\EncryptedAttribute[] $encryptedAttributes
      */
     private function setEncryptedAttributes(array $encryptedAttributes): void
     {
@@ -104,9 +104,9 @@ class AttributeStatement extends AbstractStatement
 
     /**
      * @param \DOMElement $xml
-     * @return \SAML2\XML\saml\AttributeStatement
+     * @return \SimpleSAML\SAML2\XML\saml\AttributeStatement
      *
-     * @throws \SAML2\Exception\InvalidDOMElementException if the qualified name of the supplied element is wrong
+     * @throws \SimpleSAML\SAML2\Exception\InvalidDOMElementException if the qualified name of the supplied element is wrong
      */
     public static function fromXML(DOMElement $xml): object
     {

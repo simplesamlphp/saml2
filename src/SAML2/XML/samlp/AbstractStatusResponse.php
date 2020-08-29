@@ -2,22 +2,22 @@
 
 declare(strict_types=1);
 
-namespace SAML2\XML\samlp;
+namespace SimpleSAML\SAML2\XML\samlp;
 
 use DOMElement;
-use SAML2\Constants;
-use SAML2\XML\ExtensionsTrait;
-use SAML2\XML\saml\Issuer;
+use SimpleSAML\SAML2\Constants;
+use SimpleSAML\SAML2\XML\ExtensionsTrait;
+use SimpleSAML\SAML2\XML\saml\Issuer;
 
 /**
  * Base class for all SAML 2 response messages.
  *
  * Implements samlp:StatusResponseType. All of the elements in that type is
- * stored in the \SAML2\Message class, and this class is therefore more
+ * stored in the \SimpleSAML\SAML2\Message class, and this class is therefore more
  * or less empty. It is included mainly to make it easy to separate requests from
  * responses.
  *
- * @package SimpleSAMLphp
+ * @package simplesamlphp/saml2
  */
 abstract class AbstractStatusResponse extends AbstractMessage
 {
@@ -34,7 +34,7 @@ abstract class AbstractStatusResponse extends AbstractMessage
     /**
      * The status code of the response.
      *
-     * @var \SAML2\XML\samlp\Status
+     * @var \SimpleSAML\SAML2\XML\samlp\Status
      */
     protected $status;
 
@@ -42,14 +42,14 @@ abstract class AbstractStatusResponse extends AbstractMessage
     /**
      * Constructor for SAML 2 response messages.
      *
-     * @param \SAML2\XML\samlp\Status $status
-     * @param \SAML2\XML\saml\Issuer|null $issuer
+     * @param \SimpleSAML\SAML2\XML\samlp\Status $status
+     * @param \SimpleSAML\SAML2\XML\saml\Issuer|null $issuer
      * @param string|null $id
      * @param int|null $issueInstant
      * @param string|null $inResponseTo
      * @param string|null $destination
      * @param string|null $consent
-     * @param \SAML2\XML\samlp\Extensions|null $extensions
+     * @param \SimpleSAML\SAML2\XML\samlp\Extensions|null $extensions
      * @param string|null $relayState
      *
      * @throws \Exception
@@ -109,7 +109,7 @@ abstract class AbstractStatusResponse extends AbstractMessage
     /**
      * Retrieve the status code.
      *
-     * @return \SAML2\XML\samlp\Status The status code.
+     * @return \SimpleSAML\SAML2\XML\samlp\Status The status code.
      */
     public function getStatus(): Status
     {
@@ -120,7 +120,7 @@ abstract class AbstractStatusResponse extends AbstractMessage
     /**
      * Set the status code.
      *
-     * @param \SAML2\XML\samlp\Status $status The status code.
+     * @param \SimpleSAML\SAML2\XML\samlp\Status $status The status code.
      * @return void
      */
     protected function setStatus(Status $status): void

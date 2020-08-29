@@ -2,17 +2,17 @@
 
 declare(strict_types=1);
 
-namespace SAML2\XML\saml;
+namespace SimpleSAML\SAML2\XML\saml;
 
 use PHPUnit\Framework\TestCase;
-use SAML2\Constants;
-use SAML2\DOMDocumentFactory;
+use SimpleSAML\SAML2\Constants;
+use SimpleSAML\SAML2\DOMDocumentFactory;
 
 /**
  * Class \SAML2\XML\saml\ProxyRestrictionTest
  *
- * @covers \SAML2\XML\saml\ProxyRestriction
- * @covers \SAML2\XML\saml\AbstractConditionType
+ * @covers \SimpleSAML\SAML2\XML\saml\ProxyRestriction
+ * @covers \SimpleSAML\SAML2\XML\saml\AbstractConditionType
  *
  * @author Tim van Dijen, <tvdijen@gmail.com>
  * @package simplesamlphp/saml2

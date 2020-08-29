@@ -2,22 +2,22 @@
 
 declare(strict_types=1);
 
-namespace SAML2\XML\md;
+namespace SimpleSAML\SAML2\XML\md;
 
 use PHPUnit\Framework\TestCase;
 use RobRichards\XMLSecLibs\XMLSecurityDSig;
-use SAML2\Constants;
-use SAML2\DOMDocumentFactory;
-use SAML2\SignedElementTestTrait;
-use SAML2\Utils;
-use SAML2\XML\mdrpi\PublicationInfo;
+use SimpleSAML\SAML2\Constants;
+use SimpleSAML\SAML2\DOMDocumentFactory;
+use SimpleSAML\SAML2\SignedElementTestTrait;
+use SimpleSAML\SAML2\Utils;
+use SimpleSAML\SAML2\XML\mdrpi\PublicationInfo;
 use SimpleSAML\Assert\AssertionFailedException;
 
 /**
  * Tests for the md:EntitiesDescriptor element.
  *
- * @covers \SAML2\XML\md\EntitiesDescriptor
- * @covers \SAML2\XML\md\AbstractMetadataDocument
+ * @covers \SimpleSAML\SAML2\XML\md\EntitiesDescriptor
+ * @covers \SimpleSAML\SAML2\XML\md\AbstractMetadataDocument
  * @package simplesamlphp/saml2
  */
 final class EntitiesDescriptorTest extends TestCase

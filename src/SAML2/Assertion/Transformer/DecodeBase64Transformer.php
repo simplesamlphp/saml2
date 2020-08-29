@@ -2,26 +2,26 @@
 
 declare(strict_types=1);
 
-namespace SAML2\Assertion\Transformer;
+namespace SimpleSAML\SAML2\Assertion\Transformer;
 
-use SAML2\Assertion\Exception\InvalidAssertionException;
-use SAML2\Configuration\IdentityProvider;
-use SAML2\Configuration\IdentityProviderAware;
-use SAML2\XML\saml\Assertion;
 use SimpleSAML\Assert\Assert;
+use SimpleSAML\SAML2\Assertion\Exception\InvalidAssertionException;
+use SimpleSAML\SAML2\Configuration\IdentityProvider;
+use SimpleSAML\SAML2\Configuration\IdentityProviderAware;
+use SimpleSAML\SAML2\XML\saml\Assertion;
 
 class DecodeBase64Transformer implements
     TransformerInterface,
     IdentityProviderAware
 {
     /**
-     * @var \SAML2\Configuration\IdentityProvider
+     * @var \SimpleSAML\SAML2\Configuration\IdentityProvider
      */
     private $identityProvider;
 
 
     /**
-     * @param \SAML2\Configuration\IdentityProvider $identityProvider
+     * @param \SimpleSAML\SAML2\Configuration\IdentityProvider $identityProvider
      * @return void
      */
     public function setIdentityProvider(IdentityProvider $identityProvider): void
@@ -31,8 +31,8 @@ class DecodeBase64Transformer implements
 
 
     /**
-     * @param \SAML2\XML\saml\Assertion $assertion
-     * @return \SAML2\XML\saml\Assertion
+     * @param \SimpleSAML\SAML2\XML\saml\Assertion $assertion
+     * @return \SimpleSAML\SAML2\XML\saml\Assertion
      *
      * @throws \SimpleSAML\Assert\AssertionFailedException if assertions are false
      */

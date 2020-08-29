@@ -2,19 +2,19 @@
 
 declare(strict_types=1);
 
-namespace SAML2\XML\saml;
+namespace SimpleSAML\SAML2\XML\saml;
 
 use PHPUnit\Framework\TestCase;
 use RobRichards\XMLSecLibs\XMLSecurityKey;
-use SAML2\Constants;
-use SAML2\DOMDocumentFactory;
-use SAML2\Exception\MissingAttributeException;
+use SimpleSAML\SAML2\Constants;
+use SimpleSAML\SAML2\DOMDocumentFactory;
+use SimpleSAML\SAML2\Exception\MissingAttributeException;
 use SimpleSAML\TestUtils\PEMCertificatesMock;
 
 /**
  * Class \SAML2\XML\saml\AttributeTest
  *
- * @covers \SAML2\XML\saml\Attribute
+ * @covers \SimpleSAML\SAML2\XML\saml\Attribute
  * @package simplesamlphp/saml2
  */
 final class AttributeTest extends TestCase
@@ -147,7 +147,7 @@ XML
         $attribute = Attribute::fromXML($this->document->documentElement);
         $pubkey = new XMLSecurityKey(XMLSecurityKey::RSA_SHA256, ['type' => 'public']);
         $pubkey->loadKey(PEMCertificatesMock::getPlainPublicKey(PEMCertificatesMock::PUBLIC_KEY));
-        /** @psalm-var \SAML2\XML\saml\EncryptedAttribute $encattr */
+        /** @psalm-var \SimpleSAML\SAML2\XML\saml\EncryptedAttribute $encattr */
         $encattr = EncryptedAttribute::fromUnencryptedElement($attribute, $pubkey);
         $str = strval($encattr);
         $doc = DOMDocumentFactory::fromString($str);

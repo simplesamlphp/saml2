@@ -2,7 +2,7 @@
 
 declare(strict_types=1);
 
-namespace SAML2\Compat\Ssp;
+namespace SimpleSAML\SAML2\Compat\Ssp;
 
 use Psr\Log\InvalidArgumentException;
 use Psr\Log\LoggerInterface;

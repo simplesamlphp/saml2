@@ -2,18 +2,18 @@
 
 declare(strict_types=1);
 
-namespace SAML2\XML\samlp;
+namespace SimpleSAML\SAML2\XML\samlp;
 
 use PHPUnit\Framework\TestCase;
-use SAML2\DOMDocumentFactory;
-use SAML2\XML\Chunk;
-use SAML2\XML\saml\Attribute;
-use SAML2\XML\shibmd\Scope;
+use SimpleSAML\SAML2\DOMDocumentFactory;
+use SimpleSAML\SAML2\XML\Chunk;
+use SimpleSAML\SAML2\XML\saml\Attribute;
+use SimpleSAML\SAML2\XML\shibmd\Scope;
 
 /**
  * Class \SAML2\XML\samlp\ExtensionsTest
  *
- * @covers \SAML2\XML\samlp\Extensions
+ * @covers \SimpleSAML\SAML2\XML\samlp\Extensions
  * @package simplesamlphp/saml2
  */
 final class ExtensionsTest extends TestCase

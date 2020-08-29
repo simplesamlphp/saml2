@@ -2,20 +2,20 @@
 
 declare(strict_types=1);
 
-namespace SAML2\XML\md;
+namespace SimpleSAML\SAML2\XML\md;
 
 use InvalidArgumentException;
 use PHPUnit\Framework\TestCase;
-use SAML2\Constants;
-use SAML2\DOMDocumentFactory;
-use SAML2\Exception\MissingAttributeException;
-use SAML2\XML\Chunk;
+use SimpleSAML\SAML2\Constants;
+use SimpleSAML\SAML2\DOMDocumentFactory;
+use SimpleSAML\SAML2\Exception\MissingAttributeException;
+use SimpleSAML\SAML2\XML\Chunk;
 use SimpleSAML\Assert\AssertionFailedException;
 
 /**
  * Tests for the ContactPerson class.
  *
- * @covers \SAML2\XML\md\ContactPerson
+ * @covers \SimpleSAML\SAML2\XML\md\ContactPerson
  * @package simplesamlphp/saml2
  */
 final class ContactPersonTest extends TestCase

@@ -2,13 +2,13 @@
 
 declare(strict_types=1);
 
-namespace SAML2\XML\md;
+namespace SimpleSAML\SAML2\XML\md;
 
 use DOMElement;
-use SAML2\Exception\InvalidDOMElementException;
-use SAML2\Exception\MissingElementException;
-use SAML2\Utils;
 use SimpleSAML\Assert\Assert;
+use SimpleSAML\SAML2\Exception\InvalidDOMElementException;
+use SimpleSAML\SAML2\Exception\MissingElementException;
+use SimpleSAML\SAML2\Utils;
 
 /**
  * Class representing SAML 2 Metadata AttributeConsumingService element.
@@ -22,21 +22,21 @@ final class AttributeConsumingService extends AbstractMdElement
     /**
      * The ServiceName of this AttributeConsumingService.
      *
-     * @var \SAML2\XML\md\ServiceName[]
+     * @var \SimpleSAML\SAML2\XML\md\ServiceName[]
      */
     protected $serviceNames = [];
 
     /**
      * The ServiceDescription of this AttributeConsumingService.
      *
-     * @var \SAML2\XML\md\ServiceDescription[]
+     * @var \SimpleSAML\SAML2\XML\md\ServiceDescription[]
      */
     protected $serviceDescriptions = [];
 
     /**
      * The RequestedAttribute elements.
      *
-     * @var \SAML2\XML\md\RequestedAttribute[]
+     * @var \SimpleSAML\SAML2\XML\md\RequestedAttribute[]
      */
     protected $requestedAttributes = [];
 
@@ -45,10 +45,10 @@ final class AttributeConsumingService extends AbstractMdElement
      * AttributeConsumingService constructor.
      *
      * @param int $index
-     * @param \SAML2\XML\md\ServiceName[] $name
-     * @param \SAML2\XML\md\RequestedAttribute[] $requestedAttributes
+     * @param \SimpleSAML\SAML2\XML\md\ServiceName[] $name
+     * @param \SimpleSAML\SAML2\XML\md\RequestedAttribute[] $requestedAttributes
      * @param bool|null $isDefault
-     * @param \SAML2\XML\md\ServiceDescription[] $description
+     * @param \SimpleSAML\SAML2\XML\md\ServiceDescription[] $description
      */
     public function __construct(
         int $index,
@@ -71,8 +71,8 @@ final class AttributeConsumingService extends AbstractMdElement
      * @param \DOMElement $xml The XML element we should load.
      * @return self
      *
-     * @throws \SAML2\Exception\InvalidDOMElementException if the qualified name of the supplied element is wrong
-     * @throws \SAML2\Exception\MissingElementException if one of the mandatory child-elements is missing
+     * @throws \SimpleSAML\SAML2\Exception\InvalidDOMElementException if the qualified name of the supplied element is wrong
+     * @throws \SimpleSAML\SAML2\Exception\MissingElementException if one of the mandatory child-elements is missing
      */
     public static function fromXML(DOMElement $xml): object
     {
@@ -105,7 +105,7 @@ final class AttributeConsumingService extends AbstractMdElement
     /**
      * Get the localized names of this service.
      *
-     * @return \SAML2\XML\md\ServiceName[]
+     * @return \SimpleSAML\SAML2\XML\md\ServiceName[]
      */
     public function getServiceNames(): array
     {
@@ -116,7 +116,7 @@ final class AttributeConsumingService extends AbstractMdElement
     /**
      * Set the localized names of this service.
      *
-     * @param \SAML2\XML\md\ServiceName[] $serviceNames
+     * @param \SimpleSAML\SAML2\XML\md\ServiceName[] $serviceNames
      * @throws \SimpleSAML\Assert\AssertionFailedException
      */
     protected function setServiceNames(array $serviceNames): void
@@ -139,7 +139,7 @@ final class AttributeConsumingService extends AbstractMdElement
     /**
      * Collect the value of the ServiceDescription-property
      *
-     * @return \SAML2\XML\md\ServiceDescription[]
+     * @return \SimpleSAML\SAML2\XML\md\ServiceDescription[]
      */
     public function getServiceDescriptions(): array
     {
@@ -150,7 +150,7 @@ final class AttributeConsumingService extends AbstractMdElement
     /**
      * Set the value of the ServiceDescription-property
      *
-     * @param \SAML2\XML\md\ServiceDescription[] $serviceDescriptions
+     * @param \SimpleSAML\SAML2\XML\md\ServiceDescription[] $serviceDescriptions
      * @throws \SimpleSAML\Assert\AssertionFailedException
      */
     protected function setServiceDescriptions(array $serviceDescriptions): void
@@ -167,7 +167,7 @@ final class AttributeConsumingService extends AbstractMdElement
     /**
      * Collect the value of the RequestedAttribute-property
      *
-     * @return \SAML2\XML\md\RequestedAttribute[]
+     * @return \SimpleSAML\SAML2\XML\md\RequestedAttribute[]
      */
     public function getRequestedAttributes(): array
     {
@@ -178,7 +178,7 @@ final class AttributeConsumingService extends AbstractMdElement
     /**
      * Set the value of the RequestedAttribute-property
      *
-     * @param \SAML2\XML\md\RequestedAttribute[] $requestedAttributes
+     * @param \SimpleSAML\SAML2\XML\md\RequestedAttribute[] $requestedAttributes
      * @throws \SimpleSAML\Assert\AssertionFailedException
      */
     public function setRequestedAttributes(array $requestedAttributes): void

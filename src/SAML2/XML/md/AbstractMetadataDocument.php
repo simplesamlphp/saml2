@@ -1,10 +1,10 @@
 <?php
 
-namespace SAML2\XML\md;
+namespace SimpleSAML\SAML2\XML\md;
 
 use DOMElement;
-use SAML2\XML\SignedElementTrait;
-use SAML2\XML\ExtendableElementTrait;
+use SimpleSAML\SAML2\XML\SignedElementTrait;
+use SimpleSAML\SAML2\XML\ExtendableElementTrait;
 
 /**
  * Class to represent a metadata document
@@ -44,7 +44,7 @@ abstract class AbstractMetadataDocument extends AbstractSignedMdElement
      * @param string|null $ID The ID for this document. Defaults to null.
      * @param int|null    $validUntil Unix time of validity for this document. Defaults to null.
      * @param string|null $cacheDuration Maximum time this document can be cached. Defaults to null.
-     * @param \SAML2\XML\md\Extensions|null $extensions An array of extensions. Defaults to null.
+     * @param \SimpleSAML\SAML2\XML\md\Extensions|null $extensions An array of extensions. Defaults to null.
      */
     public function __construct(
         ?string $ID = null,

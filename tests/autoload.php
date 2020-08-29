@@ -2,8 +2,8 @@
 
 declare(strict_types=1);
 
-use SAML2\Compat\ContainerSingleton;
-use SAML2\Compat\MockContainer;
+use SimpleSAML\SAML2\Compat\ContainerSingleton;
+use SimpleSAML\SAML2\Compat\MockContainer;
 
 // Load Composer autoloader
 require __DIR__ . '/../vendor/autoload.php';

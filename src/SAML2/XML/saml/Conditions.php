@@ -2,19 +2,19 @@
 
 declare(strict_types=1);
 
-namespace SAML2\XML\saml;
+namespace SimpleSAML\SAML2\XML\saml;
 
 use DOMElement;
-use SAML2\Constants;
-use SAML2\Exception\InvalidDOMElementException;
-use SAML2\Utils;
 use SimpleSAML\Assert\Assert;
+use SimpleSAML\SAML2\Constants;
+use SimpleSAML\SAML2\Exception\InvalidDOMElementException;
+use SimpleSAML\SAML2\Utils;
 
 /**
  * Class representing SAML 2 Conditions element.
  *
  * @author Tim van Dijen, <tvdijen@gmail.com>
- * @package SimpleSAMLphp
+ * @package simplesamlphp/saml2
  */
 final class Conditions extends AbstractSamlElement
 {
@@ -29,12 +29,12 @@ final class Conditions extends AbstractSamlElement
     protected $notOnOrAfter;
 
     /**
-     * @var \SAML2\XML\saml\Condition[]
+     * @var \SimpleSAML\SAML2\XML\saml\Condition[]
      */
     protected $condition;
 
     /**
-     * @var \SAML2\XML\saml\AudienceRestriction[]
+     * @var \SimpleSAML\SAML2\XML\saml\AudienceRestriction[]
      */
     protected $audienceRestriction;
 
@@ -44,7 +44,7 @@ final class Conditions extends AbstractSamlElement
     protected $oneTimeUse = false;
 
     /**
-     * @var \SAML2\XML\saml\ProxyRestriction|null
+     * @var \SimpleSAML\SAML2\XML\saml\ProxyRestriction|null
      */
     protected $proxyRestriction;
 
@@ -54,10 +54,10 @@ final class Conditions extends AbstractSamlElement
      *
      * @param int|null $notBefore
      * @param int|null $notOnOrAfter
-     * @param \SAML2\XML\saml\Condition[] $condition
-     * @param \SAML2\XML\saml\AudienceRestriction[] $audienceRestriction
+     * @param \SimpleSAML\SAML2\XML\saml\Condition[] $condition
+     * @param \SimpleSAML\SAML2\XML\saml\AudienceRestriction[] $audienceRestriction
      * @param bool|null $oneTimeUse
-     * @param \SAML2\XML\saml\ProxyRestriction|null $proxyRestriction
+     * @param \SimpleSAML\SAML2\XML\saml\ProxyRestriction|null $proxyRestriction
      */
     public function __construct(
         ?int $notBefore = null,
@@ -127,7 +127,7 @@ final class Conditions extends AbstractSamlElement
     /**
      * Collect the value of the condition-property
      *
-     * @return \SAML2\XML\saml\Condition[]
+     * @return \SimpleSAML\SAML2\XML\saml\Condition[]
      */
     public function getCondition(): array
     {
@@ -138,7 +138,7 @@ final class Conditions extends AbstractSamlElement
     /**
      * Set the value of the condition-property
      *
-     * @param \SAML2\XML\saml\Condition[] $condition
+     * @param \SimpleSAML\SAML2\XML\saml\Condition[] $condition
      * @return void
      */
     private function setCondition(array $condition): void
@@ -152,7 +152,7 @@ final class Conditions extends AbstractSamlElement
     /**
      * Collect the value of the audienceRestriction-property
      *
-     * @return \SAML2\XML\saml\AudienceRestriction[]
+     * @return \SimpleSAML\SAML2\XML\saml\AudienceRestriction[]
      */
     public function getAudienceRestriction(): array
     {
@@ -163,7 +163,7 @@ final class Conditions extends AbstractSamlElement
     /**
      * Set the value of the audienceRestriction-property
      *
-     * @param \SAML2\XML\saml\AudienceRestriction[] $audienceRestriction
+     * @param \SimpleSAML\SAML2\XML\saml\AudienceRestriction[] $audienceRestriction
      * @return void
      */
     private function setAudienceRestriction(array $audienceRestriction): void
@@ -200,7 +200,7 @@ final class Conditions extends AbstractSamlElement
     /**
      * Collect the value of the proxyRestriction-property
      *
-     * @return \SAML2\XML\saml\ProxyRestriction|null
+     * @return \SimpleSAML\SAML2\XML\saml\ProxyRestriction|null
      */
     public function getProxyRestriction(): ?ProxyRestriction
     {
@@ -211,7 +211,7 @@ final class Conditions extends AbstractSamlElement
     /**
      * Set the value of the proxyRestriction-property
      *
-     * @param \SAML2\XML\saml\ProxyRestriction|null $proxyRestriction
+     * @param \SimpleSAML\SAML2\XML\saml\ProxyRestriction|null $proxyRestriction
      * @return void
      */
     private function setProxyRestriction(?ProxyRestriction $proxyRestriction): void
@@ -244,7 +244,7 @@ final class Conditions extends AbstractSamlElement
      * @param \DOMElement $xml The XML element we should load
      * @return self
      *
-     * @throws \SAML2\Exception\InvalidDOMElementException if the qualified name of the supplied element is wrong
+     * @throws \SimpleSAML\SAML2\Exception\InvalidDOMElementException if the qualified name of the supplied element is wrong
      */
     public static function fromXML(DOMElement $xml): object
     {

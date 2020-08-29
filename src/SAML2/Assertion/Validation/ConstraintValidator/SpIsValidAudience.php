@@ -2,27 +2,27 @@
 
 declare(strict_types=1);
 
-namespace SAML2\Assertion\Validation\ConstraintValidator;
+namespace SimpleSAML\SAML2\Assertion\Validation\ConstraintValidator;
 
-use SAML2\XML\saml\Assertion;
-use SAML2\Assertion\Validation\AssertionConstraintValidator;
-use SAML2\Assertion\Validation\Result;
-use SAML2\Configuration\ServiceProvider;
-use SAML2\Configuration\ServiceProviderAware;
 use SimpleSAML\Assert\Assert;
+use SimpleSAML\SAML2\XML\saml\Assertion;
+use SimpleSAML\SAML2\Assertion\Validation\AssertionConstraintValidator;
+use SimpleSAML\SAML2\Assertion\Validation\Result;
+use SimpleSAML\SAML2\Configuration\ServiceProvider;
+use SimpleSAML\SAML2\Configuration\ServiceProviderAware;
 
 class SpIsValidAudience implements
     AssertionConstraintValidator,
     ServiceProviderAware
 {
     /**
-     * @var \SAML2\Configuration\ServiceProvider
+     * @var \SimpleSAML\SAML2\Configuration\ServiceProvider
      */
     private $serviceProvider;
 
 
     /**
-     * @param ServiceProvider $serviceProvider
+     * @param \SimpleSAML\SAML2\Configuration\ServiceProvider $serviceProvider
      * @return void
      */
     public function setServiceProvider(ServiceProvider $serviceProvider): void
@@ -32,8 +32,8 @@ class SpIsValidAudience implements
 
 
     /**
-     * @param \SAML2\XML\saml\Assertion $assertion
-     * @param \SAML2\Assertion\Validation\Result $result
+     * @param \SimpleSAML\SAML2\XML\saml\Assertion $assertion
+     * @param \SimpleSAML\SAML2\Assertion\Validation\Result $result
      * @return void
      *
      * @throws \SimpleSAML\Assert\AssertionFailedException if assertions are false

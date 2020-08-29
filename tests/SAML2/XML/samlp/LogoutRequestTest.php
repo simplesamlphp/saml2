@@ -2,34 +2,34 @@
 
 declare(strict_types=1);
 
-namespace SAML2\XML\samlp;
+namespace SimpleSAML\SAML2\XML\samlp;
 
 use Mockery\Adapter\Phpunit\MockeryTestCase;
 use RobRichards\XMLSecLibs\XMLSecurityKey;
-use SAML2\Constants;
-use SAML2\DOMDocumentFactory;
-use SAML2\Exception\MissingElementException;
-use SAML2\Exception\TooManyElementsException;
-use SAML2\Utils;
-use SAML2\XML\Chunk;
-use SAML2\XML\ds\KeyInfo;
-use SAML2\XML\saml\EncryptedID;
-use SAML2\XML\saml\Issuer;
-use SAML2\XML\saml\NameID;
-use SAML2\XML\xenc\CipherData;
-use SAML2\XML\xenc\DataReference;
-use SAML2\XML\xenc\EncryptedData;
-use SAML2\XML\xenc\EncryptedKey;
-use SAML2\XML\xenc\EncryptionMethod;
-use SAML2\XML\xenc\ReferenceList;
+use SimpleSAML\SAML2\Constants;
+use SimpleSAML\SAML2\DOMDocumentFactory;
+use SimpleSAML\SAML2\Exception\MissingElementException;
+use SimpleSAML\SAML2\Exception\TooManyElementsException;
+use SimpleSAML\SAML2\Utils;
+use SimpleSAML\SAML2\XML\Chunk;
+use SimpleSAML\SAML2\XML\ds\KeyInfo;
+use SimpleSAML\SAML2\XML\saml\EncryptedID;
+use SimpleSAML\SAML2\XML\saml\Issuer;
+use SimpleSAML\SAML2\XML\saml\NameID;
+use SimpleSAML\SAML2\XML\xenc\CipherData;
+use SimpleSAML\SAML2\XML\xenc\DataReference;
+use SimpleSAML\SAML2\XML\xenc\EncryptedData;
+use SimpleSAML\SAML2\XML\xenc\EncryptedKey;
+use SimpleSAML\SAML2\XML\xenc\EncryptionMethod;
+use SimpleSAML\SAML2\XML\xenc\ReferenceList;
 use SimpleSAML\TestUtils\PEMCertificatesMock;
 
 /**
  * Class \SAML2\XML\samlp\LogoutRequestTest
  *
- * @covers \SAML2\XML\samlp\LogoutRequest
- * @covers \SAML2\XML\samlp\AbstractRequest
- * @covers \SAML2\XML\samlp\AbstractMessage
+ * @covers \SimpleSAML\SAML2\XML\samlp\LogoutRequest
+ * @covers \SimpleSAML\SAML2\XML\samlp\AbstractRequest
+ * @covers \SimpleSAML\SAML2\XML\samlp\AbstractMessage
  * @package simplesamlphp/saml2
  */
 final class LogoutRequestTest extends MockeryTestCase

@@ -2,24 +2,24 @@
 
 declare(strict_types=1);
 
-namespace SAML2;
+namespace SimpleSAML\SAML2;
 
 use DOMDocument;
 use Exception;
-use SAML2\XML\ecp\Response as ECPResponse;
-use SAML2\XML\samlp\AbstractMessage;
-use SAML2\XML\samlp\MessageFactory;
-use SAML2\XML\samlp\Response;
+use SimpleSAML\SAML2\XML\ecp\Response as ECPResponse;
+use SimpleSAML\SAML2\XML\samlp\AbstractMessage;
+use SimpleSAML\SAML2\XML\samlp\MessageFactory;
+use SimpleSAML\SAML2\XML\samlp\Response;
 
 /**
  * Class which implements the SOAP binding.
  *
- * @package SimpleSAMLphp
+ * @package simplesamlphp/saml2
  */
 class SOAP extends Binding
 {
     /**
-     * @param \SAML2\XML\samlp\AbstractMessage $message
+     * @param \SimpleSAML\SAML2\XML\samlp\AbstractMessage $message
      * @throws \Exception
      * @return string|false The XML or false on error
      */
@@ -75,7 +75,7 @@ SOAP;
      *
      * Note: This function never returns.
      *
-     * @param \SAML2\XML\samlp\AbstractMessage $message The message we should send.
+     * @param \SimpleSAML\SAML2\XML\samlp\AbstractMessage $message The message we should send.
      * @return void
      */
     public function send(AbstractMessage $message): void
@@ -97,7 +97,7 @@ SOAP;
      * Receive a SAML 2 message sent using the HTTP-POST binding.
      *
      * @throws \Exception If unable to receive the message
-     * @return \SAML2\XML\samlp\AbstractMessage The received message.
+     * @return \SimpleSAML\SAML2\XML\samlp\AbstractMessage The received message.
      */
     public function receive(): AbstractMessage
     {

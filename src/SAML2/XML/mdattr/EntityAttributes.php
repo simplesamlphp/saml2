@@ -2,14 +2,14 @@
 
 declare(strict_types=1);
 
-namespace SAML2\XML\mdattr;
+namespace SimpleSAML\SAML2\XML\mdattr;
 
 use DOMElement;
-use SAML2\Exception\InvalidDOMElementException;
-use SAML2\Utils;
-use SAML2\XML\Chunk;
-use SAML2\XML\saml\Attribute;
 use SimpleSAML\Assert\Assert;
+use SimpleSAML\SAML2\Exception\InvalidDOMElementException;
+use SimpleSAML\SAML2\Utils;
+use SimpleSAML\SAML2\XML\Chunk;
+use SimpleSAML\SAML2\XML\saml\Attribute;
 
 /**
  * Class for handling the EntityAttributes metadata extension.
@@ -24,7 +24,7 @@ final class EntityAttributes extends AbstractMdattrElement
      *
      * The elements can be \SAML2\XML\saml\Attribute or \SAML2\XML\Chunk elements.
      *
-     * @var (\SAML2\XML\saml\Attribute|\SAML2\XML\Chunk)[]
+     * @var (\SimpleSAML\SAML2\XML\saml\Attribute|\SimpleSAML\SAML2\XML\Chunk)[]
      */
     protected $children = [];
 
@@ -32,7 +32,7 @@ final class EntityAttributes extends AbstractMdattrElement
     /**
      * Create a EntityAttributes element.
      *
-     * @param (\SAML2\XML\Chunk|\SAML2\XML\saml\Attribute)[] $children
+     * @param (\SimpleSAML\SAML2\XML\Chunk|\SimpleSAML\SAML2\XML\saml\Attribute)[] $children
      */
     public function __construct(array $children)
     {
@@ -43,7 +43,7 @@ final class EntityAttributes extends AbstractMdattrElement
     /**
      * Collect the value of the children-property
      *
-     * @return (\SAML2\XML\Chunk|\SAML2\XML\saml\Attribute)[]
+     * @return (\SimpleSAML\SAML2\XML\Chunk|\SimpleSAML\SAML2\XML\saml\Attribute)[]
      */
     public function getChildren(): array
     {
@@ -54,7 +54,7 @@ final class EntityAttributes extends AbstractMdattrElement
     /**
      * Set the value of the childen-property
      *
-     * @param (\SAML2\XML\Chunk|\SAML2\XML\saml\Attribute)[] $children
+     * @param (\SimpleSAML\SAML2\XML\Chunk|\SimpleSAML\SAML2\XML\saml\Attribute)[] $children
      * @return void
      * @throws \SimpleSAML\Assert\AssertionFailedException
      */
@@ -69,7 +69,7 @@ final class EntityAttributes extends AbstractMdattrElement
     /**
      * Add the value to the children-property
      *
-     * @param \SAML2\XML\Chunk|\SAML2\XML\saml\Attribute $child
+     * @param \SimpleSAML\SAML2\XML\Chunk|\SimpleSAML\SAML2\XML\saml\Attribute $child
      * @return void
      * @throws \SimpleSAML\Assert\AssertionFailedException
      */
@@ -87,7 +87,7 @@ final class EntityAttributes extends AbstractMdattrElement
      * @param \DOMElement $xml The XML element we should load
      * @return self
      *
-     * @throws \SAML2\Exception\InvalidDOMElementException if the qualified name of the supplied element is wrong
+     * @throws \SimpleSAML\SAML2\Exception\InvalidDOMElementException if the qualified name of the supplied element is wrong
      */
     public static function fromXML(DOMElement $xml): object
     {

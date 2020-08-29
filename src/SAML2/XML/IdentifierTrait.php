@@ -2,16 +2,16 @@
 
 declare(strict_types=1);
 
-namespace SAML2\XML;
+namespace SimpleSAML\SAML2\XML;
 
 use DOMElement;
-use SAML2\Compat\ContainerSingleton;
-use SAML2\Exception\TooManyElementsException;
-use SAML2\XML\saml\BaseID;
-use SAML2\XML\saml\EncryptedID;
-use SAML2\XML\saml\NameID;
-use SAML2\XML\saml\IdentifierInterface;
 use SimpleSAML\Assert\Assert;
+use SimpleSAML\SAML2\Compat\ContainerSingleton;
+use SimpleSAML\SAML2\Exception\TooManyElementsException;
+use SimpleSAML\SAML2\XML\saml\BaseID;
+use SimpleSAML\SAML2\XML\saml\EncryptedID;
+use SimpleSAML\SAML2\XML\saml\NameID;
+use SimpleSAML\SAML2\XML\saml\IdentifierInterface;
 
 /**
  * Trait grouping common functionality for elements that can hold identifiers.
@@ -24,7 +24,7 @@ trait IdentifierTrait
     /**
      * The identifier for this element.
      *
-     * @var \SAML2\XML\saml\IdentifierInterface|null
+     * @var \SimpleSAML\SAML2\XML\saml\IdentifierInterface|null
      */
     protected $identifier = null;
 
@@ -32,7 +32,7 @@ trait IdentifierTrait
     /**
      * Collect the value of the identifier-property
      *
-     * @return \SAML2\XML\saml\IdentifierInterface|null
+     * @return \SimpleSAML\SAML2\XML\saml\IdentifierInterface|null
      */
     public function getIdentifier(): ?IdentifierInterface
     {
@@ -43,7 +43,7 @@ trait IdentifierTrait
     /**
      * Set the value of the identifier-property
      *
-     * @param \SAML2\XML\saml\IdentifierInterface|null $identifier
+     * @param \SimpleSAML\SAML2\XML\saml\IdentifierInterface|null $identifier
      * @return void
      */
     protected function setIdentifier(?IdentifierInterface $identifier): void
@@ -56,8 +56,8 @@ trait IdentifierTrait
      * Retrieve an identifier of any type from XML
      *
      * @param \DOMElement $xml
-     * @return \SAML2\XML\saml\IdentifierInterface|null
-     * @throws \SAML2\Exception\TooManyElementsException if too many child-elements of a type are specified
+     * @return \SimpleSAML\SAML2\XML\saml\IdentifierInterface|null
+     * @throws \SimpleSAML\SAML2\Exception\TooManyElementsException if too many child-elements of a type are specified
      */
     protected static function getIdentifierFromXML(DOMElement $xml): ?IdentifierInterface
     {
@@ -95,7 +95,7 @@ trait IdentifierTrait
             TooManyElementsException::class
         );
 
-        /** @psalm-var \SAML2\XML\saml\IdentifierInterface|null $identifier */
+        /** @psalm-var \SimpleSAML\SAML2\XML\saml\IdentifierInterface|null $identifier */
         $identifier = array_pop($identifiers);
 
         if ($identifier !== null) {
@@ -104,7 +104,7 @@ trait IdentifierTrait
                 $type = $identifier->getType();
                 $container = ContainerSingleton::getInstance();
 
-                /** @var \SAML2\XML\saml\CustomIdentifierInterface $handler */
+                /** @var \SimpleSAML\SAML2\XML\saml\CustomIdentifierInterface $handler */
                 $handler = $container->getIdentifierHandler($type);
 
                 if ($handler !== null) {

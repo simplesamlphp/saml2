@@ -2,19 +2,19 @@
 
 declare(strict_types=1);
 
-namespace SAML2\XML\saml;
+namespace SimpleSAML\SAML2\XML\saml;
 
 use PHPUnit\Framework\TestCase;
 use RobRichards\XMLSecLibs\XMLSecurityKey;
-use SAML2\Constants;
-use SAML2\DOMDocumentFactory;
+use SimpleSAML\SAML2\Constants;
+use SimpleSAML\SAML2\DOMDocumentFactory;
 use SimpleSAML\Assert\AssertionFailedException;
 use SimpleSAML\TestUtils\PEMCertificatesMock;
 
 /**
  * Class \SAML2\XML\saml\AttributeStatementTest
  *
- * @covers \SAML2\XML\saml\AttributeStatement
+ * @covers \SimpleSAML\SAML2\XML\saml\AttributeStatement
  * @package simplesamlphp/saml2
  */
 final class AttributeStatementTest extends TestCase
@@ -28,7 +28,7 @@ final class AttributeStatementTest extends TestCase
     /** @var \DOMDocument */
     private $encryptedAttributeXML;
 
-    /** @var \SAML2\XML\saml\EncryptedAttribute */
+    /** @var \SimpleSAML\SAML2\XML\saml\EncryptedAttribute */
     private $encryptedAttribute;
 
 
@@ -73,7 +73,7 @@ XML
         $pubkey = new XMLSecurityKey(XMLSecurityKey::RSA_SHA256, ['type' => 'public']);
         $pubkey->loadKey(PEMCertificatesMock::getPlainPublicKey(PEMCertificatesMock::PUBLIC_KEY));
 
-        /** @psalm-var \SAML2\XML\saml\EncryptedAttribute $encryptedAttribute */
+        /** @psalm-var \SimpleSAML\SAML2\XML\saml\EncryptedAttribute $encryptedAttribute */
         $encryptedAttribute = EncryptedAttribute::fromUnencryptedElement(
             new Attribute('urn:encrypted:attribute', null, null, [new AttributeValue('very secret data')]),
             $pubkey

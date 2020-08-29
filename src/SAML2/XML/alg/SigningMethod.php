@@ -2,13 +2,13 @@
 
 declare(strict_types=1);
 
-namespace SAML2\XML\alg;
+namespace SimpleSAML\SAML2\XML\alg;
 
 use DOMElement;
-use SAML2\DOMDocumentFactory;
-use SAML2\Exception\InvalidDOMElementException;
-use SAML2\Exception\MissingAttributeException;
 use SimpleSAML\Assert\Assert;
+use SimpleSAML\SAML2\DOMDocumentFactory;
+use SimpleSAML\SAML2\Exception\InvalidDOMElementException;
+use SimpleSAML\SAML2\Exception\MissingAttributeException;
 
 /**
  * Class for handling the alg:SigningMethod element.
@@ -134,8 +134,8 @@ final class SigningMethod extends AbstractAlgElement
      * @param \DOMElement $xml The XML element we should load
      * @return self
      *
-     * @throws \SAML2\Exception\InvalidDOMElementException if the qualified name of the supplied element is wrong
-     * @throws \SAML2\Exception\MissingAttributeException if the supplied argument is missing the Algorithm attribute
+     * @throws \SimpleSAML\SAML2\Exception\InvalidDOMElementException if the qualified name of the supplied element is wrong
+     * @throws \SimpleSAML\SAML2\Exception\MissingAttributeException if the supplied argument is missing the Algorithm attribute
      */
     public static function fromXML(DOMElement $xml): object
     {

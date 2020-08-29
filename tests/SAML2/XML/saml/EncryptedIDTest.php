@@ -2,33 +2,33 @@
 
 declare(strict_types=1);
 
-namespace SAML2\XML\saml;
+namespace SimpleSAML\SAML2\XML\saml;
 
 use InvalidArgumentException;
 use PHPUnit\Framework\TestCase;
 use RobRichards\XMLSecLibs\XMLSecurityKey;
-use SAML2\Compat\ContainerSingleton;
-use SAML2\Compat\MockContainer;
-use SAML2\Compat\Ssp\Container;
-use SAML2\Constants;
-use SAML2\CustomBaseID;
-use SAML2\DOMDocumentFactory;
-use SAML2\Utils;
-use SAML2\XML\Chunk;
-use SAML2\XML\ds\KeyInfo;
-use SAML2\XML\xenc\CipherData;
-use SAML2\XML\xenc\DataReference;
-use SAML2\XML\xenc\EncryptedData;
-use SAML2\XML\xenc\EncryptedKey;
-use SAML2\XML\xenc\EncryptionMethod;
-use SAML2\XML\xenc\ReferenceList;
+use SimpleSAML\SAML2\Compat\ContainerSingleton;
+use SimpleSAML\SAML2\Compat\MockContainer;
+use SimpleSAML\SAML2\Compat\Ssp\Container;
+use SimpleSAML\SAML2\Constants;
+use SimpleSAML\SAML2\CustomBaseID;
+use SimpleSAML\SAML2\DOMDocumentFactory;
+use SimpleSAML\SAML2\Utils;
+use SimpleSAML\SAML2\XML\Chunk;
+use SimpleSAML\SAML2\XML\ds\KeyInfo;
+use SimpleSAML\SAML2\XML\xenc\CipherData;
+use SimpleSAML\SAML2\XML\xenc\DataReference;
+use SimpleSAML\SAML2\XML\xenc\EncryptedData;
+use SimpleSAML\SAML2\XML\xenc\EncryptedKey;
+use SimpleSAML\SAML2\XML\xenc\EncryptionMethod;
+use SimpleSAML\SAML2\XML\xenc\ReferenceList;
 use SimpleSAML\Configuration;
 use SimpleSAML\TestUtils\PEMCertificatesMock;
 
 /**
  * Class EncryptedIDTest
  *
- * @covers \SAML2\XML\saml\EncryptedID
+ * @covers \SimpleSAML\SAML2\XML\saml\EncryptedID
  * @package simplesamlphp/saml2
  */
 final class EncryptedIDTest extends TestCase

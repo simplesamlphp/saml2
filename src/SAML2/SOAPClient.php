@@ -2,15 +2,15 @@
 
 declare(strict_types=1);
 
-namespace SAML2;
+namespace SimpleSAML\SAML2;
 
 use DOMDocument;
 use Exception;
 use RobRichards\XMLSecLibs\XMLSecurityKey;
-use SAML2\Compat\ContainerSingleton;
-use SAML2\Exception\RuntimeException;
-use SAML2\XML\samlp\AbstractMessage;
-use SAML2\XML\samlp\MessageFactory;
+use SimpleSAML\SAML2\Compat\ContainerSingleton;
+use SimpleSAML\SAML2\Exception\RuntimeException;
+use SimpleSAML\SAML2\XML\samlp\AbstractMessage;
+use SimpleSAML\SAML2\XML\samlp\MessageFactory;
 use SimpleSAML\Configuration;
 use SimpleSAML\Utils\Config;
 use SimpleSAML\Utils\Crypto;
@@ -20,7 +20,7 @@ use SoapClient as BUILTIN_SoapClient;
  * Implementation of the SAML 2.0 SOAP binding.
  *
  * @author Shoaib Ali
- * @package SimpleSAMLphp
+ * @package simplesamlphp/saml2
  */
 class SOAPClient
 {
@@ -33,11 +33,11 @@ class SOAPClient
     /**
      * This function sends the SOAP message to the service location and returns SOAP response
      *
-     * @param \SAML2\XML\samlp\AbstractMessage $msg The request that should be sent.
+     * @param \SimpleSAML\SAML2\XML\samlp\AbstractMessage $msg The request that should be sent.
      * @param \SimpleSAML\Configuration $srcMetadata The metadata of the issuer of the message.
      * @param \SimpleSAML\Configuration $dstMetadata The metadata of the destination of the message.
      * @throws \Exception
-     * @return \SAML2\XML\samlp\AbstractMessage The response we received.
+     * @return \SimpleSAML\SAML2\XML\samlp\AbstractMessage The response we received.
      *
      * @psalm-suppress UndefinedClass
      */
@@ -133,7 +133,7 @@ class SOAPClient
         $container->debugMessage($request, 'out');
 
         $action = 'http://www.oasis-open.org/committees/security';
-        $version = SOAP_1_1;
+        $version = BUILTIN_SoapClient::SOAP_1_1;
         $destination = $msg->getDestination();
         if ($destination === null) {
             throw new Exception('Cannot send SOAP message, no destination set.');
@@ -176,7 +176,7 @@ class SOAPClient
     /**
      * Add a signature validator based on a SSL context.
      *
-     * @param \SAML2\XML\samlp\AbstractMessage $msg The message we should add a validator to.
+     * @param \SimpleSAML\SAML2\XML\samlp\AbstractMessage $msg The message we should add a validator to.
      * @param resource $context The stream context.
      * @return void
      */

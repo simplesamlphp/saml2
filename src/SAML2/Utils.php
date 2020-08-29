@@ -2,7 +2,7 @@
 
 declare(strict_types=1);
 
-namespace SAML2;
+namespace SimpleSAML\SAML2;
 
 use DOMDocument;
 use DOMElement;
@@ -13,19 +13,19 @@ use InvalidArgumentException;
 use RobRichards\XMLSecLibs\XMLSecEnc;
 use RobRichards\XMLSecLibs\XMLSecurityDSig;
 use RobRichards\XMLSecLibs\XMLSecurityKey;
-use SAML2\Compat\ContainerInterface;
-use SAML2\Compat\ContainerSingleton;
-use SAML2\Exception\RuntimeException;
-use SAML2\XML\ds\KeyInfo;
-use SAML2\XML\ds\X509Certificate;
-use SAML2\XML\ds\X509Data;
-use SAML2\XML\md\KeyDescriptor;
 use SimpleSAML\Assert\Assert;
+use SimpleSAML\SAML2\Compat\ContainerInterface;
+use SimpleSAML\SAML2\Compat\ContainerSingleton;
+use SimpleSAML\SAML2\Exception\RuntimeException;
+use SimpleSAML\SAML2\XML\ds\KeyInfo;
+use SimpleSAML\SAML2\XML\ds\X509Certificate;
+use SimpleSAML\SAML2\XML\ds\X509Data;
+use SimpleSAML\SAML2\XML\md\KeyDescriptor;
 
 /**
  * Helper functions for the SAML2 library.
  *
- * @package SimpleSAMLphp
+ * @package simplesamlphp/saml2
  */
 class Utils
 {
@@ -637,7 +637,7 @@ class Utils
      * Create a KeyDescriptor with the given certificate.
      *
      * @param string $x509Data The certificate, as a base64-encoded PEM data.
-     * @return \SAML2\XML\md\KeyDescriptor The keydescriptor.
+     * @return \SimpleSAML\SAML2\XML\md\KeyDescriptor The keydescriptor.
      */
     public static function createKeyDescriptor(string $x509Data): KeyDescriptor
     {
@@ -702,7 +702,7 @@ class Utils
 
 
     /**
-     * @return \SAML2\Compat\ContainerInterface
+     * @return \SimpleSAML\SAML2\Compat\ContainerInterface
      */
     public static function getContainer(): ContainerInterface
     {

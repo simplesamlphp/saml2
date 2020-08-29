@@ -2,20 +2,20 @@
 
 declare(strict_types=1);
 
-namespace SAML2\XML\md;
+namespace SimpleSAML\SAML2\XML\md;
 
 use PHPUnit\Framework\TestCase;
-use SAML2\Constants;
-use SAML2\DOMDocumentFactory;
-use SAML2\Exception\MissingAttributeException;
-use SAML2\Exception\MissingElementException;
-use SAML2\XML\saml\AttributeValue;
+use SimpleSAML\SAML2\Constants;
+use SimpleSAML\SAML2\DOMDocumentFactory;
+use SimpleSAML\SAML2\Exception\MissingAttributeException;
+use SimpleSAML\SAML2\Exception\MissingElementException;
+use SimpleSAML\SAML2\XML\saml\AttributeValue;
 use SimpleSAML\Assert\AssertionFailedException;
 
 /**
  * Tests for the AttributeConsumingService class.
  *
- * @covers \SAML2\XML\md\AttributeConsumingService
+ * @covers \SimpleSAML\SAML2\XML\md\AttributeConsumingService
  * @package simplesamlphp/saml2
  */
 final class AttributeConsumingServiceTest extends TestCase

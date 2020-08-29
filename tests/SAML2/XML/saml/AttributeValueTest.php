@@ -2,16 +2,16 @@
 
 declare(strict_types=1);
 
-namespace SAML2\XML\saml;
+namespace SimpleSAML\SAML2\XML\saml;
 
 use PHPUnit\Framework\TestCase;
-use SAML2\Constants;
-use SAML2\DOMDocumentFactory;
+use SimpleSAML\SAML2\Constants;
+use SimpleSAML\SAML2\DOMDocumentFactory;
 
 /**
  * Tests for AttributeValue elements.
  *
- * @covers \SAML2\XML\saml\AttributeValue
+ * @covers \SimpleSAML\SAML2\XML\saml\AttributeValue
  * @package simplesamlphp/saml2
  */
 final class AttributeValueTest extends TestCase

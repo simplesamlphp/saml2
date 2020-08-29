@@ -2,13 +2,16 @@
 
 declare(strict_types=1);
 
-namespace SAML2;
+namespace SimpleSAML\SAML2;
 
 use DOMDocument;
-use SAML2\Exception\InvalidArgumentException;
-use SAML2\Exception\RuntimeException;
-use SAML2\Exception\UnparseableXmlException;
+use SimpleSAML\SAML2\Exception\InvalidArgumentException;
+use SimpleSAML\SAML2\Exception\RuntimeException;
+use SimpleSAML\SAML2\Exception\UnparseableXmlException;
 
+/**
+ * @package simplesamlphp/saml2
+ */
 final class DOMDocumentFactory
 {
     /**

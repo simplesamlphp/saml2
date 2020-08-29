@@ -2,7 +2,7 @@
 
 declare(strict_types=1);
 
-namespace SAML2\Exception;
+namespace SimpleSAML\SAML2\Exception;
 
 use InvalidArgumentException as BUILTIN_InvalidArgumentException;
 use Throwable;
@@ -13,7 +13,7 @@ class InvalidArgumentException extends BUILTIN_InvalidArgumentException implemen
      * @param string $expected description of expected type
      * @param mixed  $parameter the parameter that is not of the expected type.
      *
-     * @return \SAML2\Exception\InvalidArgumentException
+     * @return \SimpleSAML\SAML2\Exception\InvalidArgumentException
      */
     public static function invalidType(string $expected, $parameter): InvalidArgumentException
     {

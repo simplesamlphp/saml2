@@ -2,26 +2,26 @@
 
 declare(strict_types=1);
 
-namespace SAML2\XML\samlp;
+namespace SimpleSAML\SAML2\XML\samlp;
 
 use PHPUnit\Framework\TestCase;
 use RobRichards\XMLSecLibs\XMLSecurityKey;
-use SAML2\Constants;
-use SAML2\DOMDocumentFactory;
-use SAML2\Exception\MissingElementException;
-use SAML2\Utils;
-use SAML2\XML\Chunk;
-use SAML2\XML\saml\Attribute;
-use SAML2\XML\saml\Issuer;
-use SAML2\XML\shibmd\Scope;
-use SAML2\XML\samlp\AbstractResponse;
+use SimpleSAML\SAML2\Constants;
+use SimpleSAML\SAML2\DOMDocumentFactory;
+use SimpleSAML\SAML2\Exception\MissingElementException;
+use SimpleSAML\SAML2\Utils;
+use SimpleSAML\SAML2\XML\Chunk;
+use SimpleSAML\SAML2\XML\saml\Attribute;
+use SimpleSAML\SAML2\XML\saml\Issuer;
+use SimpleSAML\SAML2\XML\shibmd\Scope;
+use SimpleSAML\SAML2\XML\samlp\AbstractResponse;
 use SimpleSAML\TestUtils\PEMCertificatesMock;
 
 /**
- * Class \SAML2\XML\samlp\AbstractStatusResponseTest
+ * Class \SimpleSAML\SAML2\XML\samlp\AbstractStatusResponseTest
  *
- * @covers \SAML2\XML\samlp\AbstractStatusResponse
- * @covers \SAML2\XML\samlp\AbstractMessage
+ * @covers \SimpleSAML\SAML2\XML\samlp\AbstractStatusResponse
+ * @covers \SimpleSAML\SAML2\XML\samlp\AbstractMessage
  * @package simplesamlphp/saml2
  */
 final class AbstractStatusResponseTest extends TestCase

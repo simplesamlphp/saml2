@@ -2,13 +2,13 @@
 
 declare(strict_types=1);
 
-namespace SAML2\XML\saml;
+namespace SimpleSAML\SAML2\XML\saml;
 
 use RobRichards\XMLSecLibs\XMLSecurityKey;
-use SAML2\Utils;
-use SAML2\XML\AbstractXMLElement;
-use SAML2\XML\EncryptedElementInterface;
-use SAML2\XML\EncryptedElementTrait;
+use SimpleSAML\SAML2\Utils;
+use SimpleSAML\SAML2\XML\AbstractXMLElement;
+use SimpleSAML\SAML2\XML\EncryptedElementInterface;
+use SimpleSAML\SAML2\XML\EncryptedElementTrait;
 
 /**
  * Class handling encrypted attributes.
@@ -23,7 +23,7 @@ class EncryptedAttribute extends AbstractSamlElement implements EncryptedElement
     /**
      * @inheritDoc
      *
-     * @return \SAML2\XML\saml\Attribute
+     * @return \SimpleSAML\SAML2\XML\saml\Attribute
      * @throws \Exception
      *
      * @psalm-suppress MismatchingDocblockReturnType

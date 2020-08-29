@@ -2,18 +2,18 @@
 
 declare(strict_types=1);
 
-namespace SAML2\XML\saml;
+namespace SimpleSAML\SAML2\XML\saml;
 
 use PHPUnit\Framework\TestCase;
-use SAML2\Constants;
-use SAML2\DOMDocumentFactory;
-use SAML2\Utils;
+use SimpleSAML\SAML2\Constants;
+use SimpleSAML\SAML2\DOMDocumentFactory;
+use SimpleSAML\SAML2\Utils;
 use SimpleSAML\Assert\AssertionFailedException;
 
 /**
  * Class \SAML2\XML\saml\AuthnContextTest
  *
- * @covers \SAML2\XML\saml\AuthnContext
+ * @covers \SimpleSAML\SAML2\XML\saml\AuthnContext
  * @package simplesamlphp/saml2
  */
 final class AuthnContextTest extends TestCase
@@ -323,11 +323,11 @@ XML
 
         $authnContext = AuthnContext::fromXML($document->documentElement);
 
-        /** @psalm-var \SAML2\XML\saml\AuthnContextClassRef $classRef */
+        /** @psalm-var \SimpleSAML\SAML2\XML\saml\AuthnContextClassRef $classRef */
         $classRef = $authnContext->getAuthnContextClassRef();
         $this->assertEquals(Constants::AC_PASSWORD_PROTECTED_TRANSPORT, $classRef->getClassRef());
 
-        /** @psalm-var \SAML2\XML\saml\AuthnContextDeclRef $declRef */
+        /** @psalm-var \SimpleSAML\SAML2\XML\saml\AuthnContextDeclRef $declRef */
         $declRef = $authnContext->getAuthnContextDeclRef();
         $this->assertEquals('/relative/path/to/document.xml', $declRef->getDeclRef());
 

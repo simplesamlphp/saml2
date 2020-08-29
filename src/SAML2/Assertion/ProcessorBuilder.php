@@ -2,29 +2,29 @@
 
 declare(strict_types=1);
 
-namespace SAML2\Assertion;
+namespace SimpleSAML\SAML2\Assertion;
 
 use Psr\Log\LoggerInterface;
-use SAML2\Assertion\Transformer\DecodeBase64Transformer;
-use SAML2\Assertion\Transformer\NameIdDecryptionTransformer;
-use SAML2\Assertion\Transformer\TransformerChain;
-use SAML2\Assertion\Validation\AssertionValidator;
-use SAML2\Assertion\Validation\ConstraintValidator\NotBefore;
-use SAML2\Assertion\Validation\ConstraintValidator\NotOnOrAfter;
-use SAML2\Assertion\Validation\ConstraintValidator\SessionNotOnOrAfter;
-use SAML2\Assertion\Validation\ConstraintValidator\SpIsValidAudience;
-use SAML2\Assertion\Validation\ConstraintValidator\SubjectConfirmationMethod;
-use SAML2\Assertion\Validation\ConstraintValidator\SubjectConfirmationNotBefore;
-use SAML2\Assertion\Validation\ConstraintValidator\SubjectConfirmationNotOnOrAfter;
-use SAML2\Assertion\Validation\ConstraintValidator\SubjectConfirmationRecipientMatches;
-use SAML2\Assertion\Validation\ConstraintValidator\SubjectConfirmationResponseToMatches;
-use SAML2\Assertion\Validation\SubjectConfirmationValidator;
-use SAML2\Certificate\PrivateKeyLoader;
-use SAML2\Configuration\Destination;
-use SAML2\Configuration\IdentityProvider;
-use SAML2\Configuration\ServiceProvider;
-use SAML2\Signature\Validator;
-use SAML2\XML\samlp\Response;
+use SimpleSAML\SAML2\Assertion\Transformer\DecodeBase64Transformer;
+use SimpleSAML\SAML2\Assertion\Transformer\NameIdDecryptionTransformer;
+use SimpleSAML\SAML2\Assertion\Transformer\TransformerChain;
+use SimpleSAML\SAML2\Assertion\Validation\AssertionValidator;
+use SimpleSAML\SAML2\Assertion\Validation\ConstraintValidator\NotBefore;
+use SimpleSAML\SAML2\Assertion\Validation\ConstraintValidator\NotOnOrAfter;
+use SimpleSAML\SAML2\Assertion\Validation\ConstraintValidator\SessionNotOnOrAfter;
+use SimpleSAML\SAML2\Assertion\Validation\ConstraintValidator\SpIsValidAudience;
+use SimpleSAML\SAML2\Assertion\Validation\ConstraintValidator\SubjectConfirmationMethod;
+use SimpleSAML\SAML2\Assertion\Validation\ConstraintValidator\SubjectConfirmationNotBefore;
+use SimpleSAML\SAML2\Assertion\Validation\ConstraintValidator\SubjectConfirmationNotOnOrAfter;
+use SimpleSAML\SAML2\Assertion\Validation\ConstraintValidator\SubjectConfirmationRecipientMatches;
+use SimpleSAML\SAML2\Assertion\Validation\ConstraintValidator\SubjectConfirmationResponseToMatches;
+use SimpleSAML\SAML2\Assertion\Validation\SubjectConfirmationValidator;
+use SimpleSAML\SAML2\Certificate\PrivateKeyLoader;
+use SimpleSAML\SAML2\Configuration\Destination;
+use SimpleSAML\SAML2\Configuration\IdentityProvider;
+use SimpleSAML\SAML2\Configuration\ServiceProvider;
+use SimpleSAML\SAML2\Signature\Validator;
+use SimpleSAML\SAML2\XML\samlp\Response;
 
 /**
  * Simple Builder that allows to build a new Assertion Processor.
@@ -35,12 +35,12 @@ class ProcessorBuilder
 {
     /**
      * @param \Psr\Log\LoggerInterface $logger
-     * @param \SAML2\Signature\Validator $signatureValidator
-     * @param \SAML2\Configuration\Destination $currentDestination
-     * @param \SAML2\Configuration\IdentityProvider $identityProvider
-     * @param \SAML2\Configuration\ServiceProvider $serviceProvider
-     * @param \SAML2\XML\samlp\Response $response
-     * @return \SAML2\Assertion\Processor
+     * @param \SimpleSAML\SAML2\Signature\Validator $signatureValidator
+     * @param \SimpleSAML\SAML2\Configuration\Destination $currentDestination
+     * @param \SimpleSAML\SAML2\Configuration\IdentityProvider $identityProvider
+     * @param \SimpleSAML\SAML2\Configuration\ServiceProvider $serviceProvider
+     * @param \SimpleSAML\SAML2\XML\samlp\Response $response
+     * @return \SimpleSAML\SAML2\Assertion\Processor
      */
     public static function build(
         LoggerInterface $logger,
@@ -80,9 +80,9 @@ class ProcessorBuilder
 
 
     /**
-     * @param \SAML2\Configuration\IdentityProvider $identityProvider
-     * @param \SAML2\Configuration\ServiceProvider $serviceProvider
-     * @return \SAML2\Assertion\Validation\AssertionValidator
+     * @param \SimpleSAML\SAML2\Configuration\IdentityProvider $identityProvider
+     * @param \SimpleSAML\SAML2\Configuration\ServiceProvider $serviceProvider
+     * @return \SimpleSAML\SAML2\Assertion\Validation\AssertionValidator
      */
     private static function createAssertionValidator(
         IdentityProvider $identityProvider,
@@ -99,11 +99,11 @@ class ProcessorBuilder
 
 
     /**
-     * @param \SAML2\Configuration\IdentityProvider $identityProvider
-     * @param \SAML2\Configuration\ServiceProvider $serviceProvider
-     * @param \SAML2\Configuration\Destination $currentDestination
-     * @param \SAML2\XML\samlp\Response $response
-     * @return \SAML2\Assertion\Validation\SubjectConfirmationValidator
+     * @param \SimpleSAML\SAML2\Configuration\IdentityProvider $identityProvider
+     * @param \SimpleSAML\SAML2\Configuration\ServiceProvider $serviceProvider
+     * @param \SimpleSAML\SAML2\Configuration\Destination $currentDestination
+     * @param \SimpleSAML\SAML2\XML\samlp\Response $response
+     * @return \SimpleSAML\SAML2\Assertion\Validation\SubjectConfirmationValidator
      */
     private static function createSubjectConfirmationValidator(
         IdentityProvider $identityProvider,
@@ -137,10 +137,10 @@ class ProcessorBuilder
 
     /**
      * @param \Psr\Log\LoggerInterface $logger
-     * @param \SAML2\Certificate\PrivateKeyLoader $keyLoader
-     * @param \SAML2\Configuration\IdentityProvider $identityProvider
-     * @param \SAML2\Configuration\ServiceProvider $serviceProvider
-     * @return \SAML2\Assertion\Transformer\TransformerChain
+     * @param \SimpleSAML\SAML2\Certificate\PrivateKeyLoader $keyLoader
+     * @param \SimpleSAML\SAML2\Configuration\IdentityProvider $identityProvider
+     * @param \SimpleSAML\SAML2\Configuration\ServiceProvider $serviceProvider
+     * @return \SimpleSAML\SAML2\Assertion\Transformer\TransformerChain
      */
     private static function createAssertionTransformerChain(
         LoggerInterface $logger,

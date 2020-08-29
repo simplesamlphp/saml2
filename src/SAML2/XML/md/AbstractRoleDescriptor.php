@@ -2,7 +2,7 @@
 
 declare(strict_types=1);
 
-namespace SAML2\XML\md;
+namespace SimpleSAML\SAML2\XML\md;
 
 use DOMElement;
 use InvalidArgumentException;
@@ -32,25 +32,25 @@ abstract class AbstractRoleDescriptor extends AbstractMetadataDocument
     /**
      * KeyDescriptor elements.
      *
-     * Array of \SAML2\XML\md\KeyDescriptor elements.
+     * Array of \SimpleSAML\SAML2\XML\md\KeyDescriptor elements.
      *
-     * @var \SAML2\XML\md\KeyDescriptor[]
+     * @var \SimpleSAML\SAML2\XML\md\KeyDescriptor[]
      */
     protected $KeyDescriptors = [];
 
     /**
      * Organization of this role.
      *
-     * @var \SAML2\XML\md\Organization|null
+     * @var \SimpleSAML\SAML2\XML\md\Organization|null
      */
     protected $Organization = null;
 
     /**
      * ContactPerson elements for this role.
      *
-     * Array of \SAML2\XML\md\ContactPerson objects.
+     * Array of \SimpleSAML\SAML2\XML\md\ContactPerson objects.
      *
-     * @var \SAML2\XML\md\ContactPerson[]
+     * @var \SimpleSAML\SAML2\XML\md\ContactPerson[]
      */
     protected $ContactPersons = [];
 
@@ -62,11 +62,11 @@ abstract class AbstractRoleDescriptor extends AbstractMetadataDocument
      * @param string|null $ID The ID for this document. Defaults to null.
      * @param int|null $validUntil Unix time of validity for this document. Defaults to null.
      * @param string|null $cacheDuration Maximum time this document can be cached. Defaults to null.
-     * @param \SAML2\XML\md\Extensions|null $extensions An Extensions object. Defaults to null.
+     * @param \SimpleSAML\SAML2\XML\md\Extensions|null $extensions An Extensions object. Defaults to null.
      * @param string|null $errorURL An URI where to redirect users for support. Defaults to null.
-     * @param \SAML2\XML\md\KeyDescriptor[] $keyDescriptors An array of KeyDescriptor elements. Defaults to an empty array.
-     * @param \SAML2\XML\md\Organization|null $organization The organization running this entity. Defaults to null.
-     * @param \SAML2\XML\md\ContactPerson[] $contacts An array of contacts for this entity. Defaults to an empty array.
+     * @param \SimpleSAML\SAML2\XML\md\KeyDescriptor[] $keyDescriptors An array of KeyDescriptor elements. Defaults to an empty array.
+     * @param \SimpleSAML\SAML2\XML\md\Organization|null $organization The organization running this entity. Defaults to null.
+     * @param \SimpleSAML\SAML2\XML\md\ContactPerson[] $contacts An array of contacts for this entity. Defaults to an empty array.
      */
     public function __construct(
         array $protocolSupportEnumeration,
@@ -144,7 +144,7 @@ abstract class AbstractRoleDescriptor extends AbstractMetadataDocument
     /**
      * Collect the value of the Organization property.
      *
-     * @return \SAML2\XML\md\Organization|null
+     * @return \SimpleSAML\SAML2\XML\md\Organization|null
      */
     public function getOrganization()
     {
@@ -155,7 +155,7 @@ abstract class AbstractRoleDescriptor extends AbstractMetadataDocument
     /**
      * Set the value of the Organization property.
      *
-     * @param \SAML2\XML\md\Organization|null $organization
+     * @param \SimpleSAML\SAML2\XML\md\Organization|null $organization
      * @return void
      */
     protected function setOrganization(?Organization $organization = null): void
@@ -167,7 +167,7 @@ abstract class AbstractRoleDescriptor extends AbstractMetadataDocument
     /**
      * Collect the value of the ContactPersons property.
      *
-     * @return \SAML2\XML\md\ContactPerson[]
+     * @return \SimpleSAML\SAML2\XML\md\ContactPerson[]
      */
     public function getContactPersons()
     {
@@ -178,7 +178,7 @@ abstract class AbstractRoleDescriptor extends AbstractMetadataDocument
     /**
      * Set the value of the ContactPerson property.
      *
-     * @param \SAML2\XML\md\ContactPerson[] $contactPersons
+     * @param \SimpleSAML\SAML2\XML\md\ContactPerson[] $contactPersons
      * @return void
      * @throws \SimpleSAML\Assert\AssertionFailedException
      */
@@ -196,7 +196,7 @@ abstract class AbstractRoleDescriptor extends AbstractMetadataDocument
     /**
      * Collect the value of the KeyDescriptors property.
      *
-     * @return \SAML2\XML\md\KeyDescriptor[]
+     * @return \SimpleSAML\SAML2\XML\md\KeyDescriptor[]
      */
     public function getKeyDescriptors()
     {
@@ -207,7 +207,7 @@ abstract class AbstractRoleDescriptor extends AbstractMetadataDocument
     /**
      * Set the value of the KeyDescriptor property.
      *
-     * @param \SAML2\XML\md\KeyDescriptor[] $keyDescriptor
+     * @param \SimpleSAML\SAML2\XML\md\KeyDescriptor[] $keyDescriptor
      */
     protected function setKeyDescriptors(array $keyDescriptor): void
     {

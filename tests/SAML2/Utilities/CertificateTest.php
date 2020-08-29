@@ -2,13 +2,13 @@
 
 declare(strict_types=1);
 
-namespace SAML2\Utilities;
+namespace SimpleSAML\SAML2\Utilities;
 
 use PHPUnit\Framework\TestCase;
 use SimpleSAML\TestUtils\PEMCertificatesMock;
 
 /**
- * @covers \SAML2\Utilities\Certificate
+ * @covers \SimpleSAML\SAML2\Utilities\Certificate
  * @package simplesamlphp/saml2
  */
 final class CertificateTest extends TestCase
