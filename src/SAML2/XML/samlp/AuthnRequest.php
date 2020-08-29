@@ -100,11 +100,6 @@ class AuthnRequest extends AbstractRequest
      */
     protected $conditions = null;
 
-    /**
-     * @var \SimpleSAML\SAML2\XML\saml\SubjectConfirmation[]
-     */
-    protected $subjectConfirmation = [];
-
 
     /**
      * Constructor for SAML 2 AuthnRequest
@@ -426,31 +421,6 @@ class AuthnRequest extends AbstractRequest
     private function setRequestedAuthnContext(RequestedAuthnContext $requestedAuthnContext = null): void
     {
         $this->requestedAuthnContext = $requestedAuthnContext;
-    }
-
-
-    /**
-     * Retrieve the SubjectConfirmation elements we have in our Subject element.
-     *
-     * @return \SimpleSAML\SAML2\XML\saml\SubjectConfirmation[]
-     */
-    public function getSubjectConfirmation(): array
-    {
-        return $this->subjectConfirmation;
-    }
-
-
-    /**
-     * Set the SubjectConfirmation elements that should be included in the assertion.
-     *
-     * @param array \SimpleSAML\SAML2\XML\saml\SubjectConfirmation[]
-     * @return void
-     */
-    private function setSubjectConfirmation(array $subjectConfirmation): void
-    {
-        Assert::allIsInstanceOf($subjectConfirmation, SubjectConfirmation::class);
-
-        $this->subjectConfirmation = $subjectConfirmation;
     }
 
 
