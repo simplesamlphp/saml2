@@ -2,7 +2,7 @@
 
 declare(strict_types=1);
 
-namespace SimpleSAMLL\SAML2\XML\samlp;
+namespace SimpleSAML\SAML2\XML\samlp;
 
 use DOMElement;
 use SimpleSAML\Assert\Assert;
