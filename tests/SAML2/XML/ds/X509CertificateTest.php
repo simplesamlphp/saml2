@@ -28,16 +28,15 @@ final class X509CertificateTest extends TestCase
     /** @var string */
     private $certificate;
 
-
     /**
      * @return void
      */
     public function setUp(): void
     {
-        $ns = X509Certificate::NS;
-
         $this->certificate = str_replace(
             [
+                '-----BEGIN CERTIFICATE-----',
+                '-----END CERTIFICATE-----',
                 '-----BEGIN RSA PUBLIC KEY-----',
                 '-----END RSA PUBLIC KEY-----',
                 "\r\n",
@@ -46,18 +45,16 @@ final class X509CertificateTest extends TestCase
             [
                 '',
                 '',
+                '',
+                '',
                 "\n",
                 ''
             ],
-            PEMCertificatesMock::getPlainPublicKey(
-                PEMCertificatesMock::SELFSIGNED_PUBLIC_KEY,
-                XMLSecurityKey::RSA_SHA256
-            )
+            PEMCertificatesMock::getPlainPublicKey(PEMCertificatesMock::SELFSIGNED_PUBLIC_KEY)
         );
 
-        $this->document = DOMDocumentFactory::fromString(<<<XML
-<ds:X509Certificate xmlns:ds="{$ns}">{$this->certificate}</ds:X509Certificate>
-XML
+        $this->document = DOMDocumentFactory::fromFile(
+            dirname(dirname(dirname(dirname(__FILE__)))) . '/resources/xml/ds_X509Certificate.xml'
         );
     }
 

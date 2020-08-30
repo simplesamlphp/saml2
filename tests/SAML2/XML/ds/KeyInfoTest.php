@@ -37,8 +37,6 @@ final class KeyInfoTest extends TestCase
      */
     public function setUp(): void
     {
-        $ns = KeyInfo::NS;
-
         $this->certificate = str_replace(
             [
                 '-----BEGIN CERTIFICATE-----',
@@ -63,17 +61,8 @@ final class KeyInfoTest extends TestCase
             PEMCertificatesMock::getPlainPublicKey(PEMCertificatesMock::SELFSIGNED_PUBLIC_KEY)
         );
 
-        $this->document = DOMDocumentFactory::fromString(<<<XML
-<ds:KeyInfo xmlns:ds="{$ns}" Id="abc123">
-  <ds:KeyName>testkey</ds:KeyName>
-  <ds:X509Data>
-    <ds:X509Certificate>{$this->certificate}</ds:X509Certificate>
-    <ds:X509SubjectName>{$this->certData['name']}</ds:X509SubjectName>
-  </ds:X509Data>
-  <ds:KeySomething>Some unknown tag within the ds-namespace</ds:KeySomething>
-  <some>Chunk</some>
-</ds:KeyInfo>
-XML
+        $this->document = DOMDocumentFactory::fromFile(
+            dirname(dirname(dirname(dirname(__FILE__)))) . '/resources/xml/ds_KeyInfo.xml'
         );
     }
 
