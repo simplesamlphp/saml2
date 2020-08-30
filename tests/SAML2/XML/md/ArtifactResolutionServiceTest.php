@@ -25,11 +25,8 @@ final class ArtifactResolutionServiceTest extends TestCase
      */
     protected function setUp(): void
     {
-        $mdNamespace = ArtifactResolutionService::NS;
-        $this->document = DOMDocumentFactory::fromString(<<<XML
-<md:ArtifactResolutionService xmlns:md="{$mdNamespace}" Binding="urn:something"
-    Location="https://whatever/" index="42" isDefault="false"/>
-XML
+        $this->document = DOMDocumentFactory::fromFile(
+            dirname(dirname(dirname(dirname(__FILE__)))) . '/resources/xml/md_ArtifactResolutionService.xml'
         );
     }
 

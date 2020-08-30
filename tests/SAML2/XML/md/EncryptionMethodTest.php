@@ -28,16 +28,8 @@ final class EncryptionMethodTest extends TestCase
      */
     protected function setUp(): void
     {
-        $mdns = Constants::NS_MD;
-        $xencns = Constants::NS_XENC;
-
-        $this->document = DOMDocumentFactory::fromString(<<<XML
-<md:EncryptionMethod xmlns:md="{$mdns}" Algorithm="http://www.w3.org/2001/04/xmlenc#rsa-oaep-mgf1p">
-  <xenc:KeySize xmlns:xenc="{$xencns}">10</xenc:KeySize>
-  <xenc:OAEPParams xmlns:xenc="{$xencns}">9lWu3Q==</xenc:OAEPParams>
-  <other:Element xmlns:other="urn:other">Value</other:Element>
-</md:EncryptionMethod>
-XML
+        $this->document = DOMDocumentFactory::fromFile(
+            dirname(dirname(dirname(dirname(__FILE__)))) . '/resources/xml/md_EncryptionMethod.xml'
         );
     }
 

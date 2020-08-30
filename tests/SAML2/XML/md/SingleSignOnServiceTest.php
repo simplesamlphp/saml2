@@ -26,10 +26,8 @@ final class SingleSignOnServiceTest extends TestCase
      */
     protected function setUp(): void
     {
-        $mdNamespace = Constants::NS_MD;
-        $this->document = DOMDocumentFactory::fromString(<<<XML
-<md:SingleSignOnService xmlns:md="{$mdNamespace}" Binding="urn:something" Location="https://whatever/" />
-XML
+        $this->document = DOMDocumentFactory::fromFile(
+            dirname(dirname(dirname(dirname(__FILE__)))) . '/resources/xml/md_SingleSignOnService.xml'
         );
     }
 

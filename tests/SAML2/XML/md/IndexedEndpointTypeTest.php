@@ -28,11 +28,8 @@ final class IndexedEndpointTypeTest extends TestCase
      */
     protected function setUp(): void
     {
-        $mdNamespace = Constants::NS_MD;
-        $this->document = DOMDocumentFactory::fromString(<<<XML
-<md:AssertionConsumerService xmlns:md="{$mdNamespace}" Binding="urn:something"
-    Location="https://whatever/" index="42" isDefault="false" />
-XML
+        $this->document = DOMDocumentFactory::fromFile(
+            dirname(dirname(dirname(dirname(__FILE__)))) . '/resources/xml/md_AssertionConsumerService.xml'
         );
     }
 

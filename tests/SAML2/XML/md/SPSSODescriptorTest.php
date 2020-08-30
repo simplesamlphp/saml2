@@ -35,65 +35,9 @@ final class SPSSODescriptorTest extends TestCase
      */
     protected function setUp(): void
     {
-        $mdns = Constants::NS_MD;
-        $dsns = XMLSecurityDSig::XMLDSIGNS;
-        $samlns = Constants::NS_SAML;
-
-        $this->document = DOMDocumentFactory::fromString(<<<XML
-<md:SPSSODescriptor xmlns:md="{$mdns}" ID="someID" validUntil="2010-02-01T12:34:56Z" cacheDuration="PT9000S"
-    protocolSupportEnumeration="urn:oasis:names:tc:SAML:2.0:protocol" errorURL="https://error.url/"
-    AuthnRequestsSigned="true" WantAssertionsSigned="false">
-  <md:Extensions>
-    <mdrpi:PublicationInfo xmlns:mdrpi="urn:oasis:names:tc:SAML:metadata:rpi"
-        publisher="http://publisher.ra/" creationInstant="2020-02-03T13:46:24Z">
-      <mdrpi:UsagePolicy xml:lang="en">http://publisher.ra/policy.txt</mdrpi:UsagePolicy>
-    </mdrpi:PublicationInfo>
-  </md:Extensions>
-  <md:KeyDescriptor use="signing">
-    <ds:KeyInfo xmlns:ds="{$dsns}">
-      <ds:KeyName>ServiceProvider.com SSO Key</ds:KeyName>
-    </ds:KeyInfo>
-  </md:KeyDescriptor>
-  <md:Organization>
-    <md:OrganizationName xml:lang="en">Identity Providers R US</md:OrganizationName>
-    <md:OrganizationDisplayName xml:lang="en">Identity Providers R US, a Division of Lerxst Corp.</md:OrganizationDisplayName>
-    <md:OrganizationURL xml:lang="en">https://IdentityProvider.com</md:OrganizationURL>
-  </md:Organization>
-  <md:ContactPerson contactType="other">
-    <md:EmailAddress>mailto:john.doe@test.company</md:EmailAddress>
-  </md:ContactPerson>
-  <md:ArtifactResolutionService Binding="binding1" Location="location1" index="0"/>
-  <md:SingleLogoutService Binding="urn:oasis:names:tc:SAML:2.0:bindings:SOAP"
-      Location="https://ServiceProvider.com/SAML/SLO/SOAP"/>
-  <md:SingleLogoutService Binding="urn:oasis:names:tc:SAML:2.0:bindings:HTTP-Redirect"
-       Location="https://ServiceProvider.com/SAML/SLO/Browser"
-       ResponseLocation="https://ServiceProvider.com/SAML/SLO/Response"/>
-  <md:ManageNameIDService Binding="binding1" Location="location1"></md:ManageNameIDService>
-  <md:NameIDFormat>urn:oasis:names:tc:SAML:2.0:nameid-format:transient</md:NameIDFormat>
-  <md:AssertionConsumerService Binding="urn:oasis:names:tc:SAML:2.0:bindings:HTTP-Artifact"
-      Location="https://ServiceProvider.com/SAML/SSO/Artifact" index="0" isDefault="true"/>
-  <md:AssertionConsumerService Binding="urn:oasis:names:tc:SAML:2.0:bindings:HTTP-POST"
-      Location="https://ServiceProvider.com/SAML/SSO/POST" index="1"/>
-  <md:AttributeConsumingService index="0" isDefault="true">
-    <md:ServiceName xml:lang="en">Academic Journals R US</md:ServiceName>
-    <md:RequestedAttribute Name="urn:oid:1.3.6.1.4.1.5923.1.1.1.7"
-        NameFormat="urn:oasis:names:tc:SAML:2.0:attrname-format:uri" FriendlyName="eduPersonEntitlement">
-      <saml:AttributeValue
-          xmlns:saml="{$samlns}">https://ServiceProvider.com/entitlements/123456789</saml:AttributeValue>
-    </md:RequestedAttribute>
-  </md:AttributeConsumingService>
-  <md:AttributeConsumingService index="1">
-    <md:ServiceName xml:lang="en">Academic Journals R US</md:ServiceName>
-    <md:RequestedAttribute Name="urn:oid:1.3.6.1.4.1.5923.1.1.1.7"
-          NameFormat="urn:oasis:names:tc:SAML:2.0:attrname-format:uri" FriendlyName="eduPersonEntitlement">
-      <saml:AttributeValue
-          xmlns:saml="{$samlns}">https://ServiceProvider.com/entitlements/123456789</saml:AttributeValue>
-    </md:RequestedAttribute>
-  </md:AttributeConsumingService>
-</md:SPSSODescriptor>
-XML
+        $this->document = DOMDocumentFactory::fromFile(
+            dirname(dirname(dirname(dirname(__FILE__)))) . '/resources/xml/md_SPSSODescriptor.xml'
         );
-
         $this->testedClass = SPSSODescriptor::class;
     }
 

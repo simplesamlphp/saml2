@@ -30,21 +30,9 @@ final class AffiliationDescriptorTest extends TestCase
      */
     protected function setUp(): void
     {
-        $mdNamespace = AffiliationDescriptor::NS;
-        $this->document = DOMDocumentFactory::fromString(<<<XML
-<md:AffiliationDescriptor xmlns:md="{$mdNamespace}" ID="TheID" validUntil="2009-02-13T23:31:30Z"
-    cacheDuration="PT5000S" affiliationOwnerID="TheOwner">
-  <md:AffiliateMember>Member</md:AffiliateMember>
-  <md:AffiliateMember>OtherMember</md:AffiliateMember>
-  <md:KeyDescriptor use="signing">
-    <ds:KeyInfo xmlns:ds="http://www.w3.org/2000/09/xmldsig#">
-      <ds:KeyName>IdentityProvider.com SSO Key</ds:KeyName>
-    </ds:KeyInfo>
-  </md:KeyDescriptor>
-</md:AffiliationDescriptor>
-XML
+        $this->document = DOMDocumentFactory::fromFile(
+            dirname(dirname(dirname(dirname(__FILE__)))) . '/resources/xml/md_AffiliationDescriptor.xml'
         );
-
         $this->testedClass = AffiliationDescriptor::class;
     }
 

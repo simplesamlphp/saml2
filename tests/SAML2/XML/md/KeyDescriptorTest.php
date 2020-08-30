@@ -29,17 +29,8 @@ final class KeyDescriptorTest extends TestCase
      */
     protected function setUp(): void
     {
-        $mdns = Constants::NS_MD;
-        $dsns = AbstractDsElement::NS;
-
-        $this->document = DOMDocumentFactory::fromString(<<<XML
-<md:KeyDescriptor xmlns:md="{$mdns}" use="signing">
-  <ds:KeyInfo xmlns:ds="{$dsns}">
-    <ds:KeyName>IdentityProvider.com SSO Key</ds:KeyName>
-  </ds:KeyInfo>
-  <md:EncryptionMethod Algorithm="http://www.w3.org/2001/04/xmlenc#rsa-1_5"/>
-</md:KeyDescriptor>
-XML
+        $this->document = DOMDocumentFactory::fromFile(
+            dirname(dirname(dirname(dirname(__FILE__)))) . '/resources/xml/md_KeyDescriptor.xml'
         );
     }
 

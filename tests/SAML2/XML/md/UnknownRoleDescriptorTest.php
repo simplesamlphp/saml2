@@ -35,47 +35,8 @@ final class UnknownRoleDescriptorTest extends TestCase
      */
     public function setUp(): void
     {
-        $namespace = 'namespace:uri';
-        $mdns = Constants::NS_MD;
-        $dsns = XMLSecurityDSig::XMLDSIGNS;
-
-        $this->document = DOMDocumentFactory::fromString(<<<XML
-<ns:SomeRoleDescriptor xmlns:ns="{$namespace}" xmlns:md="{$mdns}" ID="TheID" validUntil="2009-02-13T23:31:30Z"
-     cacheDuration="PT5000S" protocolSupportEnumeration="protocol1 protocol2" errorURL="https://error.reporting/">
-  <md:KeyDescriptor use="signing">
-    <ds:KeyInfo xmlns:ds="{$dsns}">
-      <ds:KeyName>IdentityProvider.com SSO Signing Key</ds:KeyName>
-    </ds:KeyInfo>
-  </md:KeyDescriptor>
-  <md:KeyDescriptor use="encryption">
-    <ds:KeyInfo xmlns:ds="{$dsns}">
-      <ds:KeyName>IdentityProvider.com SSO Encryption Key</ds:KeyName>
-    </ds:KeyInfo>
-    <md:EncryptionMethod Algorithm="http://www.w3.org/2001/04/xmlenc#rsa-oaep-mgf1p"></md:EncryptionMethod>
-  </md:KeyDescriptor>
-  <md:Organization>
-    <md:OrganizationName xml:lang="en">Identity Providers R US</md:OrganizationName>
-    <md:OrganizationDisplayName
-        xml:lang="en">Identity Providers R US, a Division of Lerxst Corp.</md:OrganizationDisplayName>
-    <md:OrganizationURL xml:lang="en">https://IdentityProvider.com</md:OrganizationURL>
-  </md:Organization>
-  <md:ContactPerson contactType="other" test:attr1="testval1" test:attr2="testval2" xmlns:test="urn:test">
-    <md:Company>Test Company</md:Company>
-    <md:GivenName>John</md:GivenName>
-    <md:SurName>Doe</md:SurName>
-    <md:EmailAddress>mailto:jdoe@test.company</md:EmailAddress>
-    <md:EmailAddress>mailto:john.doe@test.company</md:EmailAddress>
-    <md:TelephoneNumber>1-234-567-8901</md:TelephoneNumber>
-  </md:ContactPerson>
-  <md:ContactPerson contactType="technical">
-    <md:TelephoneNumber>1-234-567-8901</md:TelephoneNumber>
-  </md:ContactPerson>
-  <md:Extensions xmlns:md="{$mdns}">
-    <md:SomeUnknownExtension attr="attrval">value</md:SomeUnknownExtension>
-  </md:Extensions>
-  <ns:SomeElement>SomeValue</ns:SomeElement>
-</ns:SomeRoleDescriptor>
-XML
+        $this->document = DOMDocumentFactory::fromFile(
+            dirname(dirname(dirname(dirname(__FILE__)))) . '/resources/xml/md_UnknownRoleDescriptor.xml'
         );
     }
 

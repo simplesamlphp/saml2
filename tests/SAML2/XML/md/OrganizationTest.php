@@ -27,18 +27,8 @@ final class OrganizationTest extends TestCase
      */
     protected function setUp(): void
     {
-        $mdns = Constants::NS_MD;
-        $this->document = DOMDocumentFactory::fromString(<<<XML
-<md:Organization xmlns:md="{$mdns}">
-  <md:Extensions>
-    <some:Ext xmlns:some="urn:mace:some:metadata:1.0">SomeExtension</some:Ext>
-  </md:Extensions>
-  <md:OrganizationName xml:lang="en">Identity Providers R US</md:OrganizationName>
-  <md:OrganizationDisplayName
-      xml:lang="en">Identity Providers R US, a Division of Lerxst Corp.</md:OrganizationDisplayName>
-  <md:OrganizationURL xml:lang="en">https://IdentityProvider.com</md:OrganizationURL>
-</md:Organization>
-XML
+        $this->document = DOMDocumentFactory::fromFile(
+            dirname(dirname(dirname(dirname(__FILE__)))) . '/resources/xml/md_Organization.xml'
         );
     }
 

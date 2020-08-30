@@ -33,54 +33,9 @@ final class EntityDescriptorTest extends TestCase
      */
     protected function setUp(): void
     {
-        $mdns = Constants::NS_MD;
-
-        $this->document = DOMDocumentFactory::fromString(<<<XML
-<md:EntityDescriptor xmlns:md="{$mdns}" ID="_5A3CHB081" validUntil="2020-02-05T09:39:25Z"
-    cacheDuration="P2Y6M5DT12H35M30S" entityID="urn:example:entity">
-  <md:Extensions>
-    <mdrpi:PublicationInfo xmlns:mdrpi="urn:oasis:names:tc:SAML:metadata:rpi"
-        publisher="http://publisher.ra/" creationInstant="2020-02-03T13:46:24Z">
-      <mdrpi:UsagePolicy xml:lang="en">http://publisher.ra/policy.txt</mdrpi:UsagePolicy>
-    </mdrpi:PublicationInfo>
-  </md:Extensions>
-  <md:IDPSSODescriptor protocolSupportEnumeration="urn:oasis:names:tc:SAML:2.0:protocol">
-    <md:SingleSignOnService Binding="urn:oasis:names:tc:SAML:2.0:bindings:HTTP-Redirect"
-        Location="https://engine.test.example.edu/authentication/idp/single-sign-on"/>
-  </md:IDPSSODescriptor>
-  <md:AttributeAuthorityDescriptor protocolSupportEnumeration="urn:oasis:names:tc:SAML:2.0:protocol">
-    <md:AttributeService Binding="urn:oasis:names:tc:SAML:2.0:bindings:SOAP"
-        Location="https://idp.example.org/AttributeService" />
-  </md:AttributeAuthorityDescriptor>
-  <md:AuthnAuthorityDescriptor protocolSupportEnumeration="protocol1">
-    <md:AuthnQueryService Binding="uri:binding:aqs" Location="http://www.example.com/aqs" />
-  </md:AuthnAuthorityDescriptor>
-  <md:PDPDescriptor protocolSupportEnumeration="urn:oasis:names:tc:SAML:2.0:protocol">
-    <md:AuthzService Binding="urn:oasis:names:tc:SAML:2.0:bindings:SOAP"
-        Location="https://IdentityProvider.com/SAML/AA/SOAP"/>
-  </md:PDPDescriptor>
-  <md:Organization>
-    <md:OrganizationName xml:lang="en">orgNameTest (en)</md:OrganizationName>
-    <md:OrganizationDisplayName xml:lang="en">orgDispNameTest (en)</md:OrganizationDisplayName>
-    <md:OrganizationURL xml:lang="en">orgURL (en)</md:OrganizationURL>
-  </md:Organization>
-  <md:ContactPerson contactType="support">
-    <md:EmailAddress>mailto:help@example.edu</md:EmailAddress>
-  </md:ContactPerson>
-  <md:ContactPerson contactType="technical">
-    <md:EmailAddress>mailto:root@example.edu</md:EmailAddress>
-  </md:ContactPerson>
-  <md:ContactPerson contactType="administrative">
-    <md:EmailAddress>mailto:info@example.edu</md:EmailAddress>
-  </md:ContactPerson>
-  <md:AdditionalMetadataLocation
-      namespace="somemd">https://example.edu/some/metadata.xml</md:AdditionalMetadataLocation>
-  <md:AdditionalMetadataLocation
-      namespace="mymd">https://example.edu/more/metadata.xml</md:AdditionalMetadataLocation>
-</md:EntityDescriptor>
-XML
+        $this->document = DOMDocumentFactory::fromFile(
+            dirname(dirname(dirname(dirname(__FILE__)))) . '/resources/xml/md_EntityDescriptor.xml'
         );
-
         $this->testedClass = EntityDescriptor::class;
     }
 
