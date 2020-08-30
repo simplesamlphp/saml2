@@ -24,12 +24,13 @@ final class SigningMethodTest extends TestCase
     private $document;
 
 
+    /**
+     * @return void
+     */
     protected function setUp(): void
     {
-        $ns = SigningMethod::NS;
-        $this->document = DOMDocumentFactory::fromString(<<<XML
-<alg:SigningMethod xmlns:alg="{$ns}" Algorithm="http://exampleAlgorithm" MinKeySize="1024" MaxKeySize="4096" />
-XML
+        $this->document = DOMDocumentFactory::fromFile(
+            dirname(dirname(dirname(dirname(__FILE__)))) . '/resources/xml/alg_SigningMethod.xml'
         );
     }
 
