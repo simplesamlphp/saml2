@@ -6,7 +6,7 @@ namespace SimpleSAML\SAML2\XML\alg;
 
 use DOMElement;
 use SimpleSAML\Assert\Assert;
-	use SimpleSAML\SAML2\DOMDocumentFactory;
+use SimpleSAML\SAML2\DOMDocumentFactory;
 use SimpleSAML\SAML2\Exception\InvalidDOMElementException;
 
 /**
