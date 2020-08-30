@@ -29,13 +29,8 @@ final class RequestInitiatorTest extends TestCase
      */
     protected function setUp(): void
     {
-        $this->document = DOMDocumentFactory::fromString(<<<XML
-<init:RequestInitiator xmlns:init="urn:oasis:names:tc:SAML:profiles:SSO:request-init"
-                       Binding="urn:oasis:names:tc:SAML:profiles:SSO:request-init"
-                       Location="https://whatever/"
-                       ResponseLocation="https://foo.bar/"
-                       xmlns:test="urn:test" test:attr="value" />
-XML
+        $this->document = DOMDocumentFactory::fromFile(
+            dirname(dirname(dirname(dirname(__FILE__)))) . '/resources/xml/init_RequestInitiator.xml'
         );
     }
 
