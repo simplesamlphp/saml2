@@ -76,6 +76,31 @@ final class EncryptedAssertionTest extends TestCase
 
 
     /**
+     * Test encryption / decryption
+     */
+    public function testEncryption(): void
+    {
+        $this->markTestSkipped('This test can be enabled as soon as the rewrite-assertion branch has been merged');
+
+        $pubkey = new XMLSecurityKey(XMLSecurityKey::RSA_SHA256, ['type' => 'public']);
+        $pubkey->loadKey(PEMCertificatesMock::getPlainPublicKey(PEMCertificatesMock::PUBLIC_KEY));
+
+        $assertion = new Assertion(new Issuer('Test'));
+
+        /** \SAML2\XML\saml\AbstractSamlElement $encAssertion */
+        $encAssertion = EncryptedAssertion::fromUnencryptedElement($assertion, $pubkey);
+        $doc = DOMDocumentFactory::fromString(strval($encAssertion));
+
+        /** \SAML2\XML\EncryptedElementInterface $encid */
+        $encAssertion = Assertion::fromXML($doc->documentElement);
+        $privkey = new XMLSecurityKey(XMLSecurityKey::RSA_SHA256, ['type' => 'private']);
+        $privkey->loadKey(PEMCertificatesMock::getPlainPrivateKey(PEMCertificatesMock::PRIVATE_KEY));
+
+        $this->assertEquals(strval($assertion), strval($encAssertion->decrypt($privkey)));
+    }
+
+
+    /**
      * Test serialization / unserialization
      */
     public function testSerialization(): void
