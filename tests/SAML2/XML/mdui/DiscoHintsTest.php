@@ -26,16 +26,8 @@ final class DiscoHintsTest extends TestCase
      */
     protected function setUp(): void
     {
-        $this->document = DOMDocumentFactory::fromString(<<<XML
-<mdui:DiscoHints xmlns:mdui="urn:oasis:names:tc:SAML:metadata:ui">
-  <mdui:IPHint>130.59.0.0/16</mdui:IPHint>
-  <mdui:IPHint>2001:620::0/96</mdui:IPHint>
-  <mdui:DomainHint>example.com</mdui:DomainHint>
-  <mdui:DomainHint>www.example.com</mdui:DomainHint>
-  <mdui:GeolocationHint>geo:47.37328,8.531126</mdui:GeolocationHint>
-  <mdui:GeolocationHint>geo:19.34343,12.342514</mdui:GeolocationHint>
-</mdui:DiscoHints>
-XML
+        $this->document = DOMDocumentFactory::fromFile(
+            dirname(dirname(dirname(dirname(__FILE__)))) . '/resources/xml/mdui_DiscoHints.xml'
         );
     }
 
