@@ -1,0 +1,11 @@
+<saml:AttributeStatement xmlns:saml="urn:oasis:names:tc:SAML:2.0:assertion">
+  <saml:Attribute Name="urn:ServiceID">
+    <saml:AttributeValue>1</saml:AttributeValue>
+  </saml:Attribute>
+  <saml:Attribute Name="urn:EntityConcernedID">
+    <saml:AttributeValue>1</saml:AttributeValue>
+  </saml:Attribute>
+  <saml:Attribute Name="urn:EntityConcernedSubID">
+    <saml:AttributeValue>1</saml:AttributeValue>
+  </saml:Attribute>
+</saml:AttributeStatement>

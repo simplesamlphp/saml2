@@ -26,10 +26,8 @@ final class LocalizedNameTest extends TestCase
      */
     protected function setUp(): void
     {
-        $ns = Constants::NS_MD;
-        $this->document = DOMDocumentFactory::fromString(<<<XML
-<md:OrganizationName xml:lang="en" xmlns:md="{$ns}">Names R US</md:OrganizationName>
-XML
+        $this->document = DOMDocumentFactory::fromFile(
+            dirname(dirname(dirname(dirname(__FILE__)))) . '/resources/xml/md_OrganizationName.xml'
         );
     }
 

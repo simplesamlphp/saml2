@@ -1,0 +1,1 @@
+<saml:BaseID xmlns:saml="urn:oasis:names:tc:SAML:2.0:assertion" NameQualifier="TheNameQualifier" SPNameQualifier="TheSPNameQualifier" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:type="CustomBaseID">123.456</saml:BaseID>

@@ -37,33 +37,8 @@ final class AttributeQueryTest extends TestCase
      */
     public function setup(): void
     {
-        $samlpNamespace = AttributeQuery::NS;
-
-        $this->document = DOMDocumentFactory::fromString(<<<XML
-<samlp:AttributeQuery
-    xmlns:samlp="urn:oasis:names:tc:SAML:2.0:protocol"
-    xmlns:saml="urn:oasis:names:tc:SAML:2.0:assertion"
-    ID="aaf23196-1773-2113-474a-fe114412ab72"
-    Version="2.0"
-    IssueInstant="2017-09-06T11:49:27Z">
-  <saml:Issuer Format="urn:oasis:names:tc:SAML:2.0:nameid-format:entity">https://example.org/</saml:Issuer>
-  <saml:Subject>
-    <saml:NameID Format="urn:oasis:names:tc:SAML:2.0:nameid-format:unspecified">urn:example:subject</saml:NameID>
-  </saml:Subject>
-  <saml:Attribute
-    Name="urn:oid:1.3.6.1.4.1.5923.1.1.1.7"
-    NameFormat="urn:oasis:names:tc:SAML:2.0:attrname-format:uri"
-    FriendlyName="entitlements"/>
-  <saml:Attribute
-    Name="urn:oid:2.5.4.4"
-    NameFormat="urn:oasis:names:tc:SAML:2.0:attrname-format:uri"
-    FriendlyName="sn"/>
-  <saml:Attribute
-    Name="urn:oid:2.16.840.1.113730.3.1.39"
-    NameFormat="urn:oasis:names:tc:SAML:2.0:attrname-format:uri"
-    FriendlyName="preferredLanguage"/>
-</samlp:AttributeQuery>
-XML
+        $this->document = DOMDocumentFactory::fromFile(
+            dirname(dirname(dirname(dirname(__FILE__)))) . '/resources/xml/samlp_AttributeQuery.xml'
         );
     }
 

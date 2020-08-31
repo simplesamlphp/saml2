@@ -1,0 +1,4 @@
+<saml:AudienceRestriction xmlns:saml="urn:oasis:names:tc:SAML:2.0:assertion">
+  <saml:Audience>urn:audience1</saml:Audience>
+  <saml:Audience>urn:audience2</saml:Audience>
+</saml:AudienceRestriction>

@@ -28,14 +28,8 @@ final class AudienceRestrictionTest extends TestCase
      */
     public function setup(): void
     {
-        $samlNamespace = AudienceRestriction::NS;
-
-        $this->document = DOMDocumentFactory::fromString(<<<XML
-<saml:AudienceRestriction xmlns:saml="{$samlNamespace}">
-  <saml:Audience>urn:audience1</saml:Audience>
-  <saml:Audience>urn:audience2</saml:Audience>
-</saml:AudienceRestriction>
-XML
+        $this->document = DOMDocumentFactory::fromFile(
+            dirname(dirname(dirname(dirname(__FILE__)))) . '/resources/xml/saml_AudienceRestriction.xml'
         );
     }
 

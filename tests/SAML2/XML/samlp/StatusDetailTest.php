@@ -28,12 +28,8 @@ final class StatusDetailTest extends TestCase
      */
     public function setUp(): void
     {
-        $nssamlp = StatusDetail::NS;
-        $this->document = DOMDocumentFactory::fromString(<<<XML
-<samlp:StatusDetail xmlns:samlp="{$nssamlp}">
-  <Cause>org.sourceid.websso.profiles.idp.FailedAuthnSsoException</Cause>
-</samlp:StatusDetail>
-XML
+        $this->document = DOMDocumentFactory::fromFile(
+            dirname(dirname(dirname(dirname(__FILE__)))) . '/resources/xml/samlp_StatusDetail.xml'
         );
     }
 

@@ -40,8 +40,6 @@ final class X509DataTest extends TestCase
      */
     public function setUp(): void
     {
-        $ns = X509Data::NS;
-
         $this->certificate = str_replace(
             [
                 '-----BEGIN CERTIFICATE-----',
@@ -66,14 +64,8 @@ final class X509DataTest extends TestCase
             PEMCertificatesMock::getPlainPublicKey(PEMCertificatesMock::SELFSIGNED_PUBLIC_KEY)
         );
 
-        $this->document = DOMDocumentFactory::fromString(<<<XML
-<ds:X509Data xmlns:ds="{$ns}">
-  <ds:X509UnknownTag>somevalue</ds:X509UnknownTag>
-  <ds:X509Certificate>{$this->certificate}</ds:X509Certificate>
-  <ds:X509SubjectName>{$this->certData['name']}</ds:X509SubjectName>
-  <some>Chunk</some>
-</ds:X509Data>
-XML
+        $this->document = DOMDocumentFactory::fromFile(
+            dirname(dirname(dirname(dirname(__FILE__)))) . '/resources/xml/ds_X509Data.xml'
         );
     }
 

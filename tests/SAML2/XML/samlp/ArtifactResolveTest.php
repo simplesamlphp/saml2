@@ -25,16 +25,8 @@ final class ArtifactResolveTest extends TestCase
      */
     public function setup(): void
     {
-        $this->document = DOMDocumentFactory::fromString(<<<XML
-<samlp:ArtifactResolve
-        xmlns:samlp="urn:oasis:names:tc:SAML:2.0:protocol"
-        xmlns:saml="urn:oasis:names:tc:SAML:2.0:assertion"
-        ID="_6c3a4f8b9c2d" Version="2.0"
-        IssueInstant="2004-01-21T19:00:49Z">
-  <saml:Issuer>https://ServiceProvider.com/SAML</saml:Issuer>
-  <samlp:Artifact>AAQAADWNEw5VT47wcO4zX/iEzMmFQvGknDfws2ZtqSGdkNSbsW1cmVR0bzU=</samlp:Artifact>
-</samlp:ArtifactResolve>
-XML
+        $this->document = DOMDocumentFactory::fromFile(
+            dirname(dirname(dirname(dirname(__FILE__)))) . '/resources/xml/samlp_ArtifactResolve.xml'
         );
     }
 

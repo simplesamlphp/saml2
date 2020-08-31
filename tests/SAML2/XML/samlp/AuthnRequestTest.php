@@ -31,6 +31,20 @@ use SimpleSAML\TestUtils\PEMCertificatesMock;
  */
 final class AuthnRequestTest extends TestCase
 {
+    /**
+     * @return void
+     */
+    public function setUp(): void
+    {
+        $this->document = DOMDocumentFactory::fromFile(
+            dirname(dirname(dirname(dirname(__FILE__)))) . '/resources/xml/samlp_AuthnRequest.xml'
+        );
+    }
+
+
+    // Marshalling
+
+
     public function testMarshalling(): void
     {
         $rac = new RequestedAuthnContext(
@@ -148,6 +162,9 @@ final class AuthnRequestTest extends TestCase
         $this->assertEquals('samlp:RequestedAuthnContext', $authnRequestElements[2]->tagName);
         $this->assertEquals('samlp:Scoping', $authnRequestElements[3]->tagName);
     }
+
+
+    // Unmarshalling
 
 
     public function testUnmarshallingOfSimpleRequest(): void
@@ -1183,5 +1200,17 @@ AUTHNREQUEST;
         $requestStructure = $request->toXML();
 
         $this->assertEqualXMLStructure($expectedStructure, $requestStructure);
+    }
+
+
+    /**
+     * Test serialization / unserialization
+     */
+    public function testSerialization(): void
+    {
+        $this->assertEquals(
+            $this->document->saveXML($this->document->documentElement),
+            strval(unserialize(serialize(AuthnRequest::fromXML($this->document->documentElement))))
+        );
     }
 }

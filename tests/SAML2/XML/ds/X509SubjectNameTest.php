@@ -27,10 +27,8 @@ final class X509SubjectNameTest extends TestCase
      */
     protected function setUp(): void
     {
-        $ns = X509SubjectName::NS;
-        $this->document = DOMDocumentFactory::fromString(<<<XML
-<ds:X509SubjectName xmlns:ds="{$ns}">some name</ds:X509SubjectName>
-XML
+        $this->document = DOMDocumentFactory::fromFile(
+            dirname(dirname(dirname(dirname(__FILE__)))) . '/resources/xml/ds_X509SubjectName.xml'
         );
     }
 

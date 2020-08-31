@@ -30,16 +30,13 @@ IMG;
     /** @var string */
     private $url = 'https://static.example.org/images/logos/logo300x200.png';
 
-
     /**
      * @return void
      */
     public function setUp(): void
     {
-        $ns = Logo::NS;
-        $this->document = DOMDocumentFactory::fromString(<<<XML
-<mdui:Logo xmlns:mdui="{$ns}" height="200" width="300" xml:lang="nl">{$this->url}</mdui:Logo>
-XML
+        $this->document = DOMDocumentFactory::fromFile(
+            dirname(dirname(dirname(dirname(__FILE__)))) . '/resources/xml/mdui_Logo.xml'
         );
     }
 
@@ -52,12 +49,11 @@ XML
     {
         $logo = new Logo($this->url, 200, 300, "nl");
 
-        $document = DOMDocumentFactory::fromString('<root />');
-        $xml = $logo->toXML($document->documentElement);
+        $xml = $logo->toXML();
 
         $logoElements = Utils::xpQuery(
             $xml,
-            '/root/*[local-name()=\'Logo\' and namespace-uri()=\'urn:oasis:names:tc:SAML:metadata:ui\']'
+            '/*[local-name()=\'Logo\' and namespace-uri()=\'urn:oasis:names:tc:SAML:metadata:ui\']'
         );
         $this->assertCount(1, $logoElements);
 

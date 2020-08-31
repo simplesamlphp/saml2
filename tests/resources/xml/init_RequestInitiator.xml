@@ -1,0 +1,1 @@
+<init:RequestInitiator xmlns:init="urn:oasis:names:tc:SAML:profiles:SSO:request-init" Binding="urn:oasis:names:tc:SAML:profiles:SSO:request-init" Location="https://whatever/" ResponseLocation="https://foo.bar/" xmlns:test="urn:test" test:attr="value"/>

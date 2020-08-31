@@ -1,0 +1,1 @@
+<alg:SigningMethod xmlns:alg="urn:oasis:names:tc:SAML:metadata:algsupport" Algorithm="http://exampleAlgorithm" MinKeySize="1024" MaxKeySize="4096" />

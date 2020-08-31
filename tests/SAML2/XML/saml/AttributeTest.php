@@ -28,19 +28,8 @@ final class AttributeTest extends TestCase
      */
     protected function setUp(): void
     {
-        $samlNamespace = Constants::NS_SAML;
-        $this->document = DOMDocumentFactory::fromString(<<<XML
-<saml:Attribute xmlns:saml="{$samlNamespace}"
-    Name="TheName"
-    NameFormat="TheNameFormat"
-    FriendlyName="TheFriendlyName"
-    test:attr1="testval1"
-    test:attr2="testval2"
-    xmlns:test="urn:test">
-  <saml:AttributeValue>FirstValue</saml:AttributeValue>
-  <saml:AttributeValue>SecondValue</saml:AttributeValue>
-</saml:Attribute>
-XML
+        $this->document = DOMDocumentFactory::fromFile(
+            dirname(dirname(dirname(dirname(__FILE__)))) . '/resources/xml/saml_Attribute.xml'
         );
     }
 

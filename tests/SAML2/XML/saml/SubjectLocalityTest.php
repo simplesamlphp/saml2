@@ -27,11 +27,8 @@ final class SubjectLocalityTest extends TestCase
      */
     protected function setUp(): void
     {
-        $samlNamespace = Constants::NS_SAML;
-
-        $this->document = DOMDocumentFactory::fromString(<<<XML
-<saml:SubjectLocality xmlns:saml="{$samlNamespace}" Address="1.1.1.1" DNSName="idp.example.org" />
-XML
+        $this->document = DOMDocumentFactory::fromFile(
+            dirname(dirname(dirname(dirname(__FILE__)))) . '/resources/xml/saml_SubjectLocality.xml'
         );
     }
 

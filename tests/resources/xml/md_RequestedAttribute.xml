@@ -1,0 +1,3 @@
+<md:RequestedAttribute xmlns:md="urn:oasis:names:tc:SAML:2.0:metadata" Name="attr" NameFormat="urn:format" FriendlyName="Attribute" isRequired="true">
+  <saml:AttributeValue xmlns:saml="urn:oasis:names:tc:SAML:2.0:assertion">value1</saml:AttributeValue>
+</md:RequestedAttribute>

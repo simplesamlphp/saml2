@@ -1,0 +1,4 @@
+<mdrpi:PublicationInfo xmlns:mdrpi="urn:oasis:names:tc:SAML:metadata:rpi" publisher="SomePublisher" creationInstant="2011-01-01T00:00:00Z" publicationId="SomePublicationId">
+  <mdrpi:UsagePolicy xml:lang="en">http://TheEnglishUsagePolicy</mdrpi:UsagePolicy>
+  <mdrpi:UsagePolicy xml:lang="no">http://TheNorwegianUsagePolicy</mdrpi:UsagePolicy>
+</mdrpi:PublicationInfo>

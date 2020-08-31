@@ -30,15 +30,8 @@ final class IDPListTest extends TestCase
      */
     protected function setUp(): void
     {
-        $ns = IDPList::NS;
-
-        $this->document = DOMDocumentFactory::fromString(<<<XML
-<samlp:IDPList xmlns:samlp="{$ns}">
-  <samlp:IDPEntry ProviderID="urn:some:requester1" Name="testName1" Loc="testLoc1"/>
-  <samlp:IDPEntry ProviderID="urn:some:requester2" Name="testName2" Loc="testLoc2"/>
-  <samlp:GetComplete>https://some/location</samlp:GetComplete>
-</samlp:IDPList>
-XML
+        $this->document = DOMDocumentFactory::fromFile(
+            dirname(dirname(dirname(dirname(__FILE__)))) . '/resources/xml/samlp_IDPList.xml'
         );
     }
 

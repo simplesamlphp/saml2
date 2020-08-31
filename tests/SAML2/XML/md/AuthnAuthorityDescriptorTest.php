@@ -32,15 +32,8 @@ final class AuthnAuthorityDescriptorTest extends TestCase
      */
     protected function setUp(): void
     {
-        $mdns = Constants::NS_MD;
-        $this->document = DOMDocumentFactory::fromString(<<<XML
-<md:AuthnAuthorityDescriptor xmlns:md="${mdns}" protocolSupportEnumeration="protocol1 protocol2">
-  <md:AuthnQueryService Binding="uri:binding:aqs" Location="http://www.example.com/aqs" />
-  <md:AssertionIDRequestService Binding="uri:binding:aidrs" Location="http://www.example.com/aidrs" />
-  <md:NameIDFormat>http://www.example1.com/</md:NameIDFormat>
-  <md:NameIDFormat>http://www.example2.com/</md:NameIDFormat>
-</md:AuthnAuthorityDescriptor>
-XML
+        $this->document = DOMDocumentFactory::fromFile(
+            dirname(dirname(dirname(dirname(__FILE__)))) . '/resources/xml/md_AuthnAuthorityDescriptor.xml'
         );
 
         $this->aqs = new AuthnQueryService('uri:binding:aqs', 'http://www.example.com/aqs');

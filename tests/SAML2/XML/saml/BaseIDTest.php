@@ -28,17 +28,8 @@ final class BaseIDTest extends TestCase
      */
     public function setup(): void
     {
-        $samlNamespace = BaseID::NS;
-        $xsiNamespace = Constants::NS_XSI;
-
-        $this->document = DOMDocumentFactory::fromString(<<<XML
-<saml:BaseID
-  xmlns:saml="{$samlNamespace}"
-  NameQualifier="TheNameQualifier"
-  SPNameQualifier="TheSPNameQualifier"
-  xmlns:xsi="{$xsiNamespace}"
-  xsi:type="CustomBaseID">123.456</saml:BaseID>
-XML
+        $this->document = DOMDocumentFactory::fromFile(
+            dirname(dirname(dirname(dirname(__FILE__)))) . '/resources/xml/saml_BaseID.xml'
         );
     }
 

@@ -1,0 +1,1 @@
+<md:AttributeService xmlns:md="urn:oasis:names:tc:SAML:2.0:metadata" Binding="urn:something" Location="https://whatever/" ResponseLocation="https://foo.bar/" xmlns:test="urn:test" test:attr="value" />

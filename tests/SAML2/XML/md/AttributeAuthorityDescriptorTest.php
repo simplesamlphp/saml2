@@ -37,36 +37,9 @@ final class AttributeAuthorityDescriptorTest extends TestCase
      */
     protected function setUp(): void
     {
-        $mdns = Constants::NS_MD;
-        $samlns = Constants::NS_SAML;
-
-        $this->document = DOMDocumentFactory::fromString(<<<XML
-<md:AttributeAuthorityDescriptor protocolSupportEnumeration="urn:oasis:names:tc:SAML:2.0:protocol" xmlns:md="{$mdns}">
-  <md:AttributeService Binding="urn:oasis:names:tc:SAML:2.0:bindings:SOAP"
-      Location="https://IdentityProvider.com/SAML/AA/SOAP"/>
-  <md:AssertionIDRequestService Binding="urn:oasis:names:tc:SAML:2.0:bindings:URI"
-      Location="https://IdentityProvider.com/SAML/AA/URI"/>
-  <md:NameIDFormat>urn:oasis:names:tc:SAML:1.1:nameid-format:X509SubjectName</md:NameIDFormat>
-  <md:NameIDFormat>urn:oasis:names:tc:SAML:2.0:nameid-format:persistent</md:NameIDFormat>
-  <md:NameIDFormat>urn:oasis:names:tc:SAML:2.0:nameid-format:transient</md:NameIDFormat>
-  <md:AttributeProfile>profile1</md:AttributeProfile>
-  <md:AttributeProfile>profile2</md:AttributeProfile>
-  <saml:Attribute xmlns:saml="{$samlns}" Name="urn:oid:1.3.6.1.4.1.5923.1.1.1.6"
-      NameFormat="urn:oasis:names:tc:SAML:2.0:attrname-format:uri"
-      FriendlyName="eduPersonPrincipalName"></saml:Attribute>
-  <saml:Attribute xmlns:saml="{$samlns}" Name="urn:oid:1.3.6.1.4.1.5923.1.1.1.1"
-      NameFormat="urn:oasis:names:tc:SAML:2.0:attrname-format:uri"
-      FriendlyName="eduPersonAffiliation">
-    <saml:AttributeValue>member</saml:AttributeValue>
-    <saml:AttributeValue>student</saml:AttributeValue>
-    <saml:AttributeValue>faculty</saml:AttributeValue>
-    <saml:AttributeValue>employee</saml:AttributeValue>
-    <saml:AttributeValue>staff</saml:AttributeValue>
-  </saml:Attribute>
-</md:AttributeAuthorityDescriptor>
-XML
+        $this->document = DOMDocumentFactory::fromFile(
+            dirname(dirname(dirname(dirname(__FILE__)))) . '/resources/xml/md_AttributeAuthorityDescriptor.xml'
         );
-
         $this->as = new AttributeService(
             "urn:oasis:names:tc:SAML:2.0:bindings:SOAP",
             "https://IdentityProvider.com/SAML/AA/SOAP"

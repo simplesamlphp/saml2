@@ -29,15 +29,8 @@ final class ConditionTest extends TestCase
      */
     public function setup(): void
     {
-        $samlNamespace = Condition::NS;
-        $xsiNamespace = Constants::NS_XSI;
-
-        $this->document = DOMDocumentFactory::fromString(<<<XML
-<saml:Condition
-  xmlns:saml="{$samlNamespace}"
-  xmlns:xsi="{$xsiNamespace}"
-  xsi:type="CustomCondition">SomeCondition</saml:Condition>
-XML
+        $this->document = DOMDocumentFactory::fromFile(
+            dirname(dirname(dirname(dirname(__FILE__)))) . '/resources/xml/saml_Condition.xml'
         );
     }
 

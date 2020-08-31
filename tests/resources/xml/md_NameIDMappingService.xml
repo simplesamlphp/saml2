@@ -1,0 +1,1 @@
+<md:NameIDMappingService xmlns:md="urn:oasis:names:tc:SAML:2.0:metadata" Binding="urn:something" Location="https://whatever/" />

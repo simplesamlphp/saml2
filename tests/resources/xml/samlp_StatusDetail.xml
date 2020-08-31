@@ -1,0 +1,3 @@
+<samlp:StatusDetail xmlns:samlp="urn:oasis:names:tc:SAML:2.0:protocol">
+  <Cause>org.sourceid.websso.profiles.idp.FailedAuthnSsoException</Cause>
+</samlp:StatusDetail>

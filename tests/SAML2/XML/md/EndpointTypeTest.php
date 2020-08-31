@@ -28,11 +28,8 @@ final class EndpointTypeTest extends TestCase
      */
     protected function setUp(): void
     {
-        $mdNamespace = Constants::NS_MD;
-        $this->document = DOMDocumentFactory::fromString(<<<XML
-<md:AttributeService xmlns:md="{$mdNamespace}" Binding="urn:something" Location="https://whatever/"
-    ResponseLocation="https://foo.bar/" xmlns:test="urn:test" test:attr="value" />
-XML
+        $this->document = DOMDocumentFactory::fromFile(
+            dirname(dirname(dirname(dirname(__FILE__)))) . '/resources/xml/md_AttributeService.xml'
         );
     }
 

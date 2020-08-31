@@ -28,15 +28,8 @@ final class StatementTest extends TestCase
      */
     protected function setUp(): void
     {
-        $samlNamespace = Statement::NS;
-        $xsiNamespace = Constants::NS_XSI;
-
-        $this->document = DOMDocumentFactory::fromString(<<<XML
-<saml:Statement
-    xmlns:saml="{$samlNamespace}"
-    xmlns:xsi="{$xsiNamespace}"
-    xsi:type="CustomStatement">SomeStatement</saml:Statement>
-XML
+        $this->document = DOMDocumentFactory::fromFile(
+            dirname(dirname(dirname(dirname(__FILE__)))) . '/resources/xml/saml_Statement.xml'
         );
     }
 

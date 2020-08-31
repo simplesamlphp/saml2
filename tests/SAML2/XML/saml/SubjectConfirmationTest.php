@@ -29,14 +29,8 @@ final class SubjectConfirmationTest extends TestCase
 
     public function setup(): void
     {
-        $samlNamespace = SubjectConfirmation::NS;
-
-        $this->document = DOMDocumentFactory::fromString(<<<XML
-<saml:SubjectConfirmation xmlns:saml="{$samlNamespace}" Method="SomeMethod">
-  <saml:NameID>SomeNameIDValue</saml:NameID>
-  <saml:SubjectConfirmationData/>
-</saml:SubjectConfirmation>
-XML
+        $this->document = DOMDocumentFactory::fromFile(
+            dirname(dirname(dirname(dirname(__FILE__)))) . '/resources/xml/saml_SubjectConfirmation.xml'
         );
     }
 

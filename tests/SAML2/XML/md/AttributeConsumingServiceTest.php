@@ -29,20 +29,8 @@ final class AttributeConsumingServiceTest extends TestCase
      */
     protected function setUp(): void
     {
-        $mdns = Constants::NS_MD;
-        $samlns = Constants::NS_SAML;
-        $this->document = DOMDocumentFactory::fromString(<<<XML
-<md:AttributeConsumingService xmlns:md="{$mdns}" index="2" isDefault="true">
-  <md:ServiceName xml:lang="en">Academic Journals R US</md:ServiceName>
-  <md:ServiceDescription xml:lang="en">Academic Journals R US and only us</md:ServiceDescription>
-  <md:RequestedAttribute Name="urn:oid:1.3.6.1.4.1.5923.1.1.1.7"
-      NameFormat="urn:oasis:names:tc:SAML:2.0:attrname-format:uri"
-      FriendlyName="eduPersonEntitlement">
-    <saml:AttributeValue
-        xmlns:saml="{$samlns}">https://ServiceProvider.com/entitlements/123456789</saml:AttributeValue>
-  </md:RequestedAttribute>
-</md:AttributeConsumingService>
-XML
+        $this->document = DOMDocumentFactory::fromFile(
+            dirname(dirname(dirname(dirname(__FILE__)))) . '/resources/xml/md_AttributeConsumingService.xml'
         );
     }
 

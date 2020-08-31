@@ -23,11 +23,8 @@ final class AuthnContextClassRefTest extends TestCase
 
     protected function setUp(): void
     {
-        $samlNamespace = Constants::NS_SAML;
-        $ac_ppt = Constants::AC_PASSWORD_PROTECTED_TRANSPORT;
-        $this->document = DOMDocumentFactory::fromString(<<<XML
-<saml:AuthnContextClassRef xmlns:saml="{$samlNamespace}">{$ac_ppt}</saml:AuthnContextClassRef>
-XML
+        $this->document = DOMDocumentFactory::fromFile(
+            dirname(dirname(dirname(dirname(__FILE__)))) . '/resources/xml/saml_AuthnContextClassRef.xml'
         );
     }
 

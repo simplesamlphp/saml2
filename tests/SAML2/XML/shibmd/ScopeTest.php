@@ -26,10 +26,8 @@ final class ScopeTest extends TestCase
      */
     public function setUp(): void
     {
-        $ns = Scope::NS;
-        $this->document = DOMDocumentFactory::fromString(<<<XML
-<shibmd:Scope xmlns:shibmd="{$ns}" regexp="false">example.org</shibmd:Scope>
-XML
+        $this->document = DOMDocumentFactory::fromFile(
+            dirname(dirname(dirname(dirname(__FILE__)))) . '/resources/xml/shibmd_Scope.xml'
         );
     }
 

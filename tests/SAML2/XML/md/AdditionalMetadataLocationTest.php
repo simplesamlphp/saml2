@@ -26,11 +26,8 @@ final class AdditionalMetadataLocationTest extends TestCase
      */
     public function setUp(): void
     {
-        $ns = AdditionalMetadataLocation::NS;
-        $this->document = DOMDocumentFactory::fromString(<<<XML
-<md:AdditionalMetadataLocation xmlns:md="{$ns}"
-    namespace="TheNamespaceAttribute">LocationText</md:AdditionalMetadataLocation>
-XML
+        $this->document = DOMDocumentFactory::fromFile(
+            dirname(dirname(dirname(dirname(__FILE__)))) . '/resources/xml/md_AdditionalMetadataLocation.xml'
         );
     }
 

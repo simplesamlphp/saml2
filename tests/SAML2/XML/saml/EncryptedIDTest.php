@@ -45,42 +45,12 @@ final class EncryptedIDTest extends TestCase
      */
     public function setup(): void
     {
-        $samlNamespace = BaseID::NS;
-        $xencNamespace = Constants::NS_XENC;
-
-        $this->document = DOMDocumentFactory::fromString(<<<XML
-<saml:EncryptedID xmlns:saml="{$samlNamespace}">
-  <xenc:EncryptedData
-      xmlns:xenc="{$xencNamespace}"
-      Id="Encrypted_DATA_ID"
-      Type="http://www.w3.org/2001/04/xmlenc#Element"
-      MimeType="key-type"
-      Encoding="base64-encoded">
-    <xenc:EncryptionMethod Algorithm="http://www.w3.org/2001/04/xmlenc#aes128-cbc"/>
-    <ds:KeyInfo xmlns:ds="http://www.w3.org/2000/09/xmldsig#">
-      <ds:RetrievalMethod URI="#Encrypted_KEY_ID" Type="http://www.w3.org/2001/04/xmlenc#EncryptedKey"/>
-    </ds:KeyInfo>
-    <xenc:CipherData>
-      <xenc:CipherValue>Nk4W4mx...</xenc:CipherValue>
-    </xenc:CipherData>
-  </xenc:EncryptedData>
-  <xenc:EncryptedKey xmlns:xenc="http://www.w3.org/2001/04/xmlenc#" Id="Encrypted_KEY_ID" Recipient="some_ENTITY_ID">
-    <xenc:EncryptionMethod Algorithm="http://www.w3.org/2001/04/xmlenc#rsa-1_5"/>
-    <xenc:CipherData>
-      <xenc:CipherValue>PzA5X...</xenc:CipherValue>
-    </xenc:CipherData>
-    <xenc:ReferenceList>
-      <xenc:DataReference URI="#Encrypted_DATA_ID"/>
-    </xenc:ReferenceList>
-    <xenc:CarriedKeyName>Name of the key</xenc:CarriedKeyName>
-  </xenc:EncryptedKey>
-</saml:EncryptedID>
-XML
+        $this->document = DOMDocumentFactory::fromFile(
+            dirname(dirname(dirname(dirname(__FILE__)))) . '/resources/xml/saml_EncryptedID.xml'
         );
 
-        $this->retrievalMethod = DOMDocumentFactory::fromString(
-            '<ds:RetrievalMethod xmlns:ds="http://www.w3.org/2000/09/xmldsig#" URI="#Encrypted_KEY_ID" ' .
-            'Type="http://www.w3.org/2001/04/xmlenc#EncryptedKey"/>'
+        $this->retrievalMethod = DOMDocumentFactory::fromFile(
+            dirname(dirname(dirname(dirname(__FILE__)))) . '/resources/xml/ds_RetrievalMethod.xml'
         );
     }
 

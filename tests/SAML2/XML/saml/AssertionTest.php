@@ -25,6 +25,21 @@ final class AssertionTest extends MockeryTestCase
 {
     private const FRAMEWORK = 'vendor/simplesamlphp/simplesamlphp-test-framework';
 
+    /** @var \DOMDocument */
+    private $document;
+
+
+    /**
+     * @return void
+     */
+    public function setUp(): void
+    {
+        $this->document = DOMDocumentFactory::fromFile(
+            dirname(dirname(dirname(dirname(__FILE__)))) . '/resources/xml/saml_Assertion.xml'
+        );
+    }
+
+
     /**
      * Test to build a basic assertion
      */

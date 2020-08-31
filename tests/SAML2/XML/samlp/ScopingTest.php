@@ -31,17 +31,8 @@ final class ScopingTest extends TestCase
      */
     protected function setUp(): void
     {
-        $ns = Scoping::NS;
-
-        $this->document = DOMDocumentFactory::fromString(<<<XML
-<samlp:Scoping xmlns:samlp="{$ns}" ProxyCount="2">
-  <samlp:IDPList>
-    <samlp:IDPEntry ProviderID="urn:some:requester1" Name="testName1" Loc="testLoc1"/>
-    <samlp:GetComplete>https://some/location</samlp:GetComplete>
-  </samlp:IDPList>
-  <samlp:RequesterID>urn:some:requester</samlp:RequesterID>
-</samlp:Scoping>
-XML
+        $this->document = DOMDocumentFactory::fromFile(
+            dirname(dirname(dirname(dirname(__FILE__)))) . '/resources/xml/samlp_Scoping.xml'
         );
     }
 

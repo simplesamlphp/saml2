@@ -27,10 +27,8 @@ final class KeyNameTest extends TestCase
      */
     protected function setUp(): void
     {
-        $ns = KeyName::NS;
-        $this->document = DOMDocumentFactory::fromString(<<<XML
-<ds:KeyName xmlns:ds="{$ns}">testkey</ds:KeyName>
-XML
+        $this->document = DOMDocumentFactory::fromFile(
+            dirname(dirname(dirname(dirname(__FILE__)))) . '/resources/xml/ds_KeyName.xml'
         );
     }
 
