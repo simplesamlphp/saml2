@@ -1,0 +1,21 @@
+<saml:EncryptedID xmlns:saml="urn:oasis:names:tc:SAML:2.0:assertion">
+  <xenc:EncryptedData xmlns:xenc="http://www.w3.org/2001/04/xmlenc#" Id="Encrypted_DATA_ID" Type="http://www.w3.org/2001/04/xmlenc#Element" MimeType="key-type" Encoding="base64-encoded">
+    <xenc:EncryptionMethod Algorithm="http://www.w3.org/2001/04/xmlenc#aes128-cbc"/>
+    <ds:KeyInfo xmlns:ds="http://www.w3.org/2000/09/xmldsig#">
+      <ds:RetrievalMethod URI="#Encrypted_KEY_ID" Type="http://www.w3.org/2001/04/xmlenc#EncryptedKey"/>
+    </ds:KeyInfo>
+    <xenc:CipherData>
+      <xenc:CipherValue>Nk4W4mx...</xenc:CipherValue>
+    </xenc:CipherData>
+  </xenc:EncryptedData>
+  <xenc:EncryptedKey xmlns:xenc="http://www.w3.org/2001/04/xmlenc#" Id="Encrypted_KEY_ID" Recipient="some_ENTITY_ID">
+    <xenc:EncryptionMethod Algorithm="http://www.w3.org/2001/04/xmlenc#rsa-1_5"/>
+    <xenc:CipherData>
+      <xenc:CipherValue>PzA5X...</xenc:CipherValue>
+    </xenc:CipherData>
+    <xenc:ReferenceList>
+      <xenc:DataReference URI="#Encrypted_DATA_ID"/>
+    </xenc:ReferenceList>
+    <xenc:CarriedKeyName>Name of the key</xenc:CarriedKeyName>
+  </xenc:EncryptedKey>
+</saml:EncryptedID>

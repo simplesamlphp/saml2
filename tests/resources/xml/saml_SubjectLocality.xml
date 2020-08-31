@@ -1,0 +1,1 @@
+<saml:SubjectLocality xmlns:saml="urn:oasis:names:tc:SAML:2.0:assertion" Address="1.1.1.1" DNSName="idp.example.org" />

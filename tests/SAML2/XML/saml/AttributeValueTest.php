@@ -25,16 +25,8 @@ final class AttributeValueTest extends TestCase
      */
     protected function setUp(): void
     {
-        $nssaml = Constants::NS_SAML;
-        $nsxs = Constants::NS_XS;
-        $nsxsi = Constants::NS_XSI;
-
-        $this->document = DOMDocumentFactory::fromString(<<<XML
-<saml:AttributeValue xmlns:saml="$nssaml"
-    xmlns:xs="$nsxs"
-    xmlns:xsi="$nsxsi"
-    xsi:type="xs:integer">2</saml:AttributeValue>
-XML
+        $this->document = DOMDocumentFactory::fromFile(
+            dirname(dirname(dirname(dirname(__FILE__)))) . '/resources/xml/saml_AttributeValue.xml'
         );
     }
 

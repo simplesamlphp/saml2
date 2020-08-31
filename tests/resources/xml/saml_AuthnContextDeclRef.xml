@@ -1,0 +1,1 @@
+<saml:AuthnContextDeclRef xmlns:saml="urn:oasis:names:tc:SAML:2.0:assertion">/relative/path/to/document.xml</saml:AuthnContextDeclRef>

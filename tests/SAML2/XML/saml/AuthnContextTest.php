@@ -39,41 +39,24 @@ final class AuthnContextTest extends TestCase
      */
     protected function setUp(): void
     {
-        $samlNamespace = Constants::NS_SAML;
-        $ac_ppt = Constants::AC_PASSWORD_PROTECTED_TRANSPORT;
-
-        $this->document = DOMDocumentFactory::fromString(<<<XML
-<saml:AuthnContext xmlns:saml="{$samlNamespace}">
-</saml:AuthnContext>
-XML
+        $this->document = DOMDocumentFactory::fromFile(
+            dirname(dirname(dirname(dirname(__FILE__)))) . '/resources/xml/saml_AuthnContext.xml'
         );
 
-        $this->classRef = DOMDocumentFactory::fromString(<<<XML
-<saml:AuthnContextClassRef xmlns:saml="{$samlNamespace}">{$ac_ppt}</saml:AuthnContextClassRef>
-XML
+        $this->classRef = DOMDocumentFactory::fromFile(
+            dirname(dirname(dirname(dirname(__FILE__)))) . '/resources/xml/saml_AuthnContextClassRef.xml'
         );
 
-        $this->declRef = DOMDocumentFactory::fromString(<<<XML
-<saml:AuthnContextDeclRef xmlns:saml="{$samlNamespace}">/relative/path/to/document.xml</saml:AuthnContextDeclRef>
-XML
+        $this->declRef = DOMDocumentFactory::fromFile(
+            dirname(dirname(dirname(dirname(__FILE__)))) . '/resources/xml/saml_AuthnContextDeclRef.xml'
         );
 
-        $this->decl = DOMDocumentFactory::fromString(<<<XML
-<saml:AuthnContextDecl xmlns:saml="{$samlNamespace}">
-  <samlacpass:AuthenticationContextDeclaration>
-    <samlacpass:Identification nym="verinymity">
-      <samlacpass:Extension>
-        <safeac:NoVerification/>
-      </samlacpass:Extension>
-    </samlacpass:Identification>
-  </samlacpass:AuthenticationContextDeclaration>
-</saml:AuthnContextDecl>
-XML
+        $this->decl = DOMDocumentFactory::fromFile(
+            dirname(dirname(dirname(dirname(__FILE__)))) . '/resources/xml/saml_AuthnContextDecl.xml'
         );
 
-        $this->authority = DOMDocumentFactory::fromString(<<<XML
-<saml:AuthenticatingAuthority xmlns:saml="{$samlNamespace}">https://idp.example.com/SAML2</saml:AuthenticatingAuthority>
-XML
+        $this->authority = DOMDocumentFactory::fromFile(
+            dirname(dirname(dirname(dirname(__FILE__)))) . '/resources/xml/saml_AuthenticatingAuthority.xml'
         );
     }
 

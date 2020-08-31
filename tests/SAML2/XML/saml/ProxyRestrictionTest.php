@@ -28,15 +28,8 @@ final class ProxyRestrictionTest extends TestCase
      */
     public function setup(): void
     {
-        $samlNamespace = ProxyRestriction::NS;
-        $xsiNamespace = Constants::NS_XSI;
-
-        $this->document = DOMDocumentFactory::fromString(<<<XML
-<saml:ProxyRestriction xmlns:saml="{$samlNamespace}" Count="2">
-  <saml:Audience>urn:audience1</saml:Audience>
-  <saml:Audience>urn:audience2</saml:Audience>
-</saml:ProxyRestriction>
-XML
+        $this->document = DOMDocumentFactory::fromFile(
+            dirname(dirname(dirname(dirname(__FILE__)))) . '/resources/xml/saml_ProxyRestriction.xml'
         );
     }
 

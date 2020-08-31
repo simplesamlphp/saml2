@@ -28,26 +28,8 @@ final class SubjectConfirmationDataTest extends TestCase
      */
     public function setup(): void
     {
-        $samlNamespace = SubjectConfirmationData::NS;
-        $dsNamespace = KeyInfo::NS;
-
-        $this->document = DOMDocumentFactory::fromString(<<<XML
-<saml:SubjectConfirmationData
-    xmlns:saml="{$samlNamespace}"
-    NotBefore="2001-04-19T04:25:21Z"
-    NotOnOrAfter="2009-02-13T23:31:30Z"
-    Recipient="https://sp.example.org/asdf"
-    InResponseTo="SomeRequestID"
-    Address="127.0.0.1"
-    test:attr1="testval1"
-    test:attr2="testval2"
-    xmlns:test="urn:test">
-  <ds:KeyInfo xmlns:ds="{$dsNamespace}">
-    <ds:KeyName>SomeKey</ds:KeyName>
-  </ds:KeyInfo>
-  <some>Arbitrary Element</some>
-</saml:SubjectConfirmationData>
-XML
+        $this->document = DOMDocumentFactory::fromFile(
+            dirname(dirname(dirname(dirname(__FILE__)))) . '/resources/xml/saml_SubjectConfirmationData.xml'
         );
     }
 

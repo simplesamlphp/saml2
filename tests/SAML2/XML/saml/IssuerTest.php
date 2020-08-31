@@ -28,15 +28,8 @@ final class IssuerTest extends TestCase
      */
     public function setup(): void
     {
-        $samlNamespace = Issuer::NS;
-        $this->document = DOMDocumentFactory::fromString(<<<XML
-<saml:Issuer
-  xmlns:saml="{$samlNamespace}"
-  NameQualifier="TheNameQualifier"
-  SPNameQualifier="TheSPNameQualifier"
-  Format="TheFormat"
-  SPProvidedID="TheSPProvidedID">TheIssuerValue</saml:Issuer>
-XML
+        $this->document = DOMDocumentFactory::fromFile(
+            dirname(dirname(dirname(dirname(__FILE__)))) . '/resources/xml/saml_Issuer.xml'
         );
     }
 

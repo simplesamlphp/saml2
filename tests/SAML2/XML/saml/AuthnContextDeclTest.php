@@ -26,18 +26,8 @@ final class AuthnContextDeclTest extends TestCase
      */
     protected function setUp(): void
     {
-        $samlNamespace = Constants::NS_SAML;
-        $this->document = DOMDocumentFactory::fromString(<<<XML
-            <saml:AuthnContextDecl xmlns:saml="{$samlNamespace}">
-                <samlacpass:AuthenticationContextDeclaration>
-                    <samlacpass:Identification nym="verinymity">
-                        <samlacpass:Extension>
-                            <safeac:NoVerification/>
-                        </samlacpass:Extension>
-                    </samlacpass:Identification>
-                </samlacpass:AuthenticationContextDeclaration>
-            </saml:AuthnContextDecl>
-XML
+        $this->document = DOMDocumentFactory::fromFile(
+            dirname(dirname(dirname(dirname(__FILE__)))) . '/resources/xml/saml_AuthnContextDecl.xml'
         );
     }
 

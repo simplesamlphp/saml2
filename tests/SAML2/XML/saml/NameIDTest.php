@@ -26,16 +26,8 @@ final class NameIDTest extends TestCase
      */
     public function setup(): void
     {
-        $samlNamespace = Issuer::NS;
-
-        $this->document = DOMDocumentFactory::fromString(<<<XML
-<saml:NameID
-  xmlns:saml="{$samlNamespace}"
-  NameQualifier="TheNameQualifier"
-  SPNameQualifier="TheSPNameQualifier"
-  Format="TheFormat"
-  SPProvidedID="TheSPProvidedID">TheNameIDValue</saml:NameID>
-XML
+        $this->document = DOMDocumentFactory::fromFile(
+            dirname(dirname(dirname(dirname(__FILE__)))) . '/resources/xml/saml_NameID.xml'
         );
     }
 

@@ -1,0 +1,4 @@
+<saml:Attribute xmlns:saml="urn:oasis:names:tc:SAML:2.0:assertion" Name="TheName" NameFormat="TheNameFormat" FriendlyName="TheFriendlyName" test:attr1="testval1" test:attr2="testval2"	 xmlns:test="urn:test">
+  <saml:AttributeValue>FirstValue</saml:AttributeValue>
+  <saml:AttributeValue>SecondValue</saml:AttributeValue>
+</saml:Attribute>

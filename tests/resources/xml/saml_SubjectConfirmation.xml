@@ -1,0 +1,4 @@
+<saml:SubjectConfirmation xmlns:saml="urn:oasis:names:tc:SAML:2.0:assertion" Method="SomeMethod">
+  <saml:NameID>SomeNameIDValue</saml:NameID>
+  <saml:SubjectConfirmationData/>
+</saml:SubjectConfirmation>
