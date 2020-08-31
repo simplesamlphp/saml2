@@ -5,15 +5,15 @@ declare(strict_types=1);
 namespace SimpleSAML\SAML2\XML\xenc;
 
 /**
- * Class representing the <xenc:DataReference> element.
+ * Class representing the <xenc:CipherReference> element.
  *
  * @author Tim van Dijen, <tvdijen@gmail.com>
  * @package simplesamlphp/saml2
  */
-class DataReference extends AbstractReference
+class CipherReference extends AbstractReference
 {
     /**
-     * DataReference constructor.
+     * CipherReference constructor.
      *
      * @param string $uri
      * @param \SimpleSAML\SAML2\XML\Chunk[] $references

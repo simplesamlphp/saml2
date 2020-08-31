@@ -7,6 +7,7 @@ namespace SimpleSAML\SAML2\XML\xenc;
 use DOMElement;
 use SimpleSAML\Assert\Assert;
 use SimpleSAML\SAML2\Exception\InvalidDOMElementException;
+use SimpleSAML\SAML2\XML\Chunk;
 
 /**
  * Abstract class representing references. No custom elements are allowed.
@@ -18,15 +19,20 @@ abstract class AbstractReference extends AbstractXencElement
     /** @var string */
     protected $uri;
 
+    /** @var \SimpleSAML\SAML2\XML\Chunk[] */
+    protected $references = [];
+
 
     /**
      * AbstractReference constructor.
      *
      * @param string $uri
+     * @param \SimpleSAML\SAML2\XML\Chunk[] $references
      */
-    public function __construct(string $uri)
+    protected function __construct(string $uri, array $references = [])
     {
         $this->setURI($uri);
+        $this->setReferences($references);
     }
 
 
@@ -52,6 +58,31 @@ abstract class AbstractReference extends AbstractXencElement
 
 
     /**
+     * Collect the references
+     *
+     * @return \SimpleSAML\SAML2\XML\Chunk[]
+     */
+    public function getReferences(): array
+    {
+        return $this->references;
+    }
+
+
+    /**
+     * Set the value of the references-property
+     *
+     * @param \SimpleSAML\SAML2\XML\Chunk[] $references
+     * @return void
+     * @throws \SimpleSAML\Assert\AssertionFailedException if the supplied array contains anything other than Chunk objects
+     */
+    private function setReferences(array $references): void
+    {
+        Assert::allIsInstanceOf($references, Chunk::class);
+        $this->references = $references;
+    }
+
+
+    /**
      * @inheritDoc
      *
      * @throws \SimpleSAML\SAML2\Exception\InvalidDOMElementException if the qualified name of the supplied element is wrong
@@ -62,7 +93,18 @@ abstract class AbstractReference extends AbstractXencElement
         Assert::same($xml->localName, static::getClassName(static::class), InvalidDOMElementException::class);
         Assert::same($xml->namespaceURI, static::NS, InvalidDOMElementException::class);
 
-        return new static(self::getAttribute($xml, 'URI'));
+        $URI = self::getAttribute($xml, 'URI');
+
+        $references = [];
+        foreach ($xml->childNodes as $reference) {
+            if (!($reference instanceof DOMElement)) {
+                continue;
+            }
+
+            $references[] = new Chunk($reference);
+        }
+
+        return new static($URI, $references);
     }
 
 
@@ -73,6 +115,11 @@ abstract class AbstractReference extends AbstractXencElement
     {
         $e = $this->instantiateParentElement($parent);
         $e->setAttribute('URI', $this->uri);
+
+        foreach ($this->references as $reference) {
+            $e->appendChild($e->ownerDocument->importNode($reference->getXML(), true));
+        }
+
         return $e;
     }
 }

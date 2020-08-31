@@ -15,7 +15,7 @@ use SimpleSAML\SAML2\XML\ds\KeyInfo;
  *
  * @package simplesamlphp/saml2
  */
-class EncryptedKey extends EncryptedData
+class EncryptedKey extends AbstractEncryptedType
 {
     /** @var string|null */
     protected $carriedKeyName;
