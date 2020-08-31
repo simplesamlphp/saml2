@@ -26,16 +26,8 @@ final class RegistrationInfoTest extends TestCase
      */
     protected function setUp(): void
     {
-        $this->document = DOMDocumentFactory::fromString(<<<XML
-<mdrpi:RegistrationInfo xmlns:mdrpi="urn:oasis:names:tc:SAML:metadata:rpi"
-    registrationAuthority="urn:example:example.org"
-    registrationInstant="2006-05-29T11:34:27Z">
-  <mdrpi:RegistrationPolicy
-      xml:lang="en">http://www.example.org/aai/metadata/en_registration.html</mdrpi:RegistrationPolicy>
-  <mdrpi:RegistrationPolicy
-      xml:lang="de">http://www.example.org/aai/metadata/de_registration.html</mdrpi:RegistrationPolicy>
-</mdrpi:RegistrationInfo>
-XML
+        $this->document = DOMDocumentFactory::fromFile(
+            dirname(dirname(dirname(dirname(__FILE__)))) . '/resources/xml/mdrpi_RegistrationInfo.xml'
         );
     }
 
