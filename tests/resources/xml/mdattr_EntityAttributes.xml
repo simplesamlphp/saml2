@@ -1,0 +1,10 @@
+<mdattr:EntityAttributes xmlns:mdattr="urn:oasis:names:tc:SAML:metadata:attribute">
+  <saml:Assertion xmlns:saml="urn:oasis:names:tc:SAML:2.0:assertion" IssueInstant="1984-08-26T10:01:30.000Z" Version="2.0"/>
+  <saml:Attribute xmlns:saml="urn:oasis:names:tc:SAML:2.0:assertion" Name="attrib1" NameFormat="urn:oasis:names:tc:SAML:2.0:attrname-format:uri"/>
+  <saml:Assertion xmlns:saml="urn:oasis:names:tc:SAML:2.0:assertion" IssueInstant="1984-08-26T10:01:30.000Z" Version="2.0"/>
+  <saml:Attribute xmlns:saml="urn:oasis:names:tc:SAML:2.0:assertion" Name="urn:simplesamlphp:v1:simplesamlphp" NameFormat="urn:oasis:names:tc:SAML:2.0:attrname-format:uri">
+    <saml:AttributeValue>is</saml:AttributeValue>
+    <saml:AttributeValue>really</saml:AttributeValue>
+    <saml:AttributeValue>cool</saml:AttributeValue>
+  </saml:Attribute>
+</mdattr:EntityAttributes>
