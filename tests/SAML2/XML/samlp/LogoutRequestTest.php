@@ -50,37 +50,9 @@ final class LogoutRequestTest extends MockeryTestCase
      */
     public function setUp(): void
     {
-        $xml = <<<XML
-<samlp:LogoutRequest
-    xmlns:samlp="urn:oasis:names:tc:SAML:2.0:protocol"
-    xmlns:saml="urn:oasis:names:tc:SAML:2.0:assertion"
-    ID="_f987e7436c1103bcf89296303f780d853d7713a8ef"
-    Version="2.0"
-    IssueInstant="2020-08-15T15:53:24Z">
-  <saml:Issuer>TheIssuer</saml:Issuer>
-  <saml:EncryptedID>
-    <xenc:EncryptedData xmlns:xenc="http://www.w3.org/2001/04/xmlenc#" Type="http://www.w3.org/2001/04/xmlenc#Element">
-      <xenc:EncryptionMethod Algorithm="http://www.w3.org/2001/04/xmlenc#aes128-cbc"/>
-      <ds:KeyInfo xmlns:ds="http://www.w3.org/2000/09/xmldsig#">
-        <xenc:EncryptedKey>
-          <xenc:EncryptionMethod Algorithm="http://www.w3.org/2001/04/xmlenc#rsa-oaep-mgf1p"/>
-          <xenc:CipherData>
-            <xenc:CipherValue>QMYbOZfUgJmvzmTeSDqvA8MKzt4M2K9kb0BQtIqMgyn+OlBmRVvebZEkW/5k5E9qPtMUBCPiTatJ8aNb7Z4DuPqTRODgGzR7LEyOxe8JTPbzn/xwkVHRwzMkodDUkTDDIkJr7Tzyseg1crGZf21q8pBJfGXSaPamIC2ncjuOcs0=</xenc:CipherValue>
-          </xenc:CipherData>
-        </xenc:EncryptedKey>
-      </ds:KeyInfo>
-      <xenc:CipherData>
-        <xenc:CipherValue>U0czb6qGEvLTQaVcJDNjuAJvMAV4CcRQYvxUoBgfCP1T1xh14Kez8k0VHyEtgf6TYG7dK87SBzZccsn7MlLDLFbWH807bJ+cnXSQ9+8dXB/aohfXnmNSZUcIQiPLr5oNq1g6GYhgiNShDnYZUG3ffQ==</xenc:CipherValue>
-      </xenc:CipherData>
-    </xenc:EncryptedData>
-  </saml:EncryptedID>
-  <samlp:SessionIndex>SomeSessionIndex1</samlp:SessionIndex>
-  <samlp:SessionIndex>SomeSessionIndex2</samlp:SessionIndex>
-</samlp:LogoutRequest>
-XML;
-        $document = DOMDocumentFactory::fromString($xml);
-        $this->document = $document;
-        $this->logoutRequestElement = $document->documentElement;
+        $this->document = DOMDocumentFactory::fromFile(
+            dirname(dirname(dirname(dirname(__FILE__)))) . '/resources/xml/samlp_LogoutRequest.xml'
+        );
 
         $this->retrievalMethod = DOMDocumentFactory::fromString(
             '<ds:RetrievalMethod xmlns:ds="http://www.w3.org/2000/09/xmldsig#" URI="#Encrypted_KEY_ID" ' .
@@ -155,7 +127,7 @@ XML;
      */
     public function testUnmarshalling(): void
     {
-        $logoutRequest = LogoutRequest::fromXML($this->logoutRequestElement);
+        $logoutRequest = LogoutRequest::fromXML($this->document->documentElement);
         $issuer = $logoutRequest->getIssuer();
 
         $this->assertInstanceOf(Issuer::class, $issuer);

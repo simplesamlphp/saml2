@@ -1,0 +1,7 @@
+<samlp:Scoping xmlns:samlp="urn:oasis:names:tc:SAML:2.0:protocol" ProxyCount="2">
+  <samlp:IDPList>
+    <samlp:IDPEntry ProviderID="urn:some:requester1" Name="testName1" Loc="testLoc1"/>
+    <samlp:GetComplete>https://some/location</samlp:GetComplete>
+  </samlp:IDPList>
+  <samlp:RequesterID>urn:some:requester</samlp:RequesterID>
+</samlp:Scoping>

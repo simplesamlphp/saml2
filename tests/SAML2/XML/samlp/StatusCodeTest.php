@@ -28,15 +28,8 @@ final class StatusCodeTest extends TestCase
      */
     public function setUp(): void
     {
-        $nssamlp = StatusCode::NS;
-        $status_responder = Constants::STATUS_RESPONDER;
-        $status_request_denied = Constants::STATUS_REQUEST_DENIED;
-
-        $this->document = DOMDocumentFactory::fromString(<<<XML
-<samlp:StatusCode xmlns:samlp="{$nssamlp}" Value="{$status_responder}">
-  <samlp:StatusCode Value="{$status_request_denied}"/>
-</samlp:StatusCode>
-XML
+        $this->document = DOMDocumentFactory::fromFile(
+            dirname(dirname(dirname(dirname(__FILE__)))) . '/resources/xml/samlp_StatusCode.xml'
         );
     }
 

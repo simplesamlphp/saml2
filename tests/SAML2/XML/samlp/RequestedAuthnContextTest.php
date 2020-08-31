@@ -28,14 +28,8 @@ final class RequestedAuthnContextTest extends TestCase
      */
     public function setUp(): void
     {
-        $nssamlp = RequestedAuthnContext::NS;
-        $nssaml = AuthnContextDeclRef::NS;
-
-        $this->document = DOMDocumentFactory::fromString(<<<XML
-<samlp:RequestedAuthnContext xmlns:samlp="{$nssamlp}" Comparison="exact">
-  <saml:AuthnContextDeclRef xmlns:saml="{$nssaml}">/relative/path/to/document.xml</saml:AuthnContextDeclRef>
-</samlp:RequestedAuthnContext>
-XML
+        $this->document = DOMDocumentFactory::fromFile(
+            dirname(dirname(dirname(dirname(__FILE__)))) . '/resources/xml/samlp_RequestedAuthnContext.xml'
         );
     }
 

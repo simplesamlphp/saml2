@@ -27,11 +27,8 @@ final class IDPEntryTest extends TestCase
      */
     protected function setUp(): void
     {
-        $ns = IDPEntry::NS;
-
-        $this->document = DOMDocumentFactory::fromString(<<<XML
-<samlp:IDPEntry xmlns:samlp="{$ns}" ProviderID="urn:some:requester" Name="testName" Loc="testLoc"/>
-XML
+        $this->document = DOMDocumentFactory::fromFile(
+            dirname(dirname(dirname(dirname(__FILE__)))) . '/resources/xml/samlp_IDPEntry.xml'
         );
     }
 
@@ -55,11 +52,9 @@ XML
      */
     public function testMarshallingNullables(): void
     {
-        $ns = IDPEntry::NS;
-        $document = <<<XML
-<samlp:IDPEntry xmlns:samlp="{$ns}" ProviderID="urn:some:requester"/>
-XML
-        ;
+        $document = $this->document;
+        $document->documentElement->removeAttribute('Name');
+        $document->documentElement->removeAttribute('Loc');
 
         $entry = new IDPEntry('urn:some:requester', null, null);
 
@@ -67,7 +62,10 @@ XML
         $this->assertNull($entry->getName());
         $this->assertNull($entry->getLoc());
 
-        $this->assertEquals($document, strval($entry));
+        $this->assertEquals(
+            $this->document->saveXML($document->documentElement),
+            strval($entry)
+        );
     }
 
 

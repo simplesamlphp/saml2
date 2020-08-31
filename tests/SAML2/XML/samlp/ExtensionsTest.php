@@ -30,14 +30,8 @@ final class ExtensionsTest extends TestCase
      */
     public function setUp(): void
     {
-        $this->document = DOMDocumentFactory::fromString(<<<XML
-<samlp:Extensions xmlns:samlp="urn:oasis:names:tc:SAML:2.0:protocol">
-  <myns:AttributeList xmlns:myns="urn:mynamespace">
-    <myns:Attribute name="UserName" value=""/>
-  </myns:AttributeList>
-  <ExampleElement name="AnotherExtension" />
-</samlp:Extensions>
-XML
+        $this->document = DOMDocumentFactory::fromFile(
+            dirname(dirname(dirname(dirname(__FILE__)))) . '/resources/xml/samlp_Extensions.xml'
         );
     }
 

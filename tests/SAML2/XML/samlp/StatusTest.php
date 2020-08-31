@@ -32,26 +32,12 @@ final class StatusTest extends TestCase
      */
     public function setUp(): void
     {
-        $nssamlp = Status::NS;
-        $status_responder = Constants::STATUS_RESPONDER;
-        $status_request_denied = Constants::STATUS_REQUEST_DENIED;
-
-        $this->document = DOMDocumentFactory::fromString(<<<XML
-<samlp:Status xmlns:samlp="{$nssamlp}">
-  <samlp:StatusCode Value="{$status_responder}">
-    <samlp:StatusCode Value="{$status_request_denied}"/>
-  </samlp:StatusCode>
-  <samlp:StatusMessage>Something went wrong</samlp:StatusMessage>
-  <samlp:StatusDetail>
-    <Cause>org.sourceid.websso.profiles.idp.FailedAuthnSsoException</Cause>
-  </samlp:StatusDetail>
-</samlp:Status>
-XML
+        $this->document = DOMDocumentFactory::fromFile(
+            dirname(dirname(dirname(dirname(__FILE__)))) . '/resources/xml/samlp_Status.xml'
         );
 
-        $this->detail = DOMDocumentFactory::fromString(<<<XML
-<Cause>org.sourceid.websso.profiles.idp.FailedAuthnSsoException</Cause>
-XML
+        $this->detail = DOMDocumentFactory::fromFile(
+            dirname(dirname(dirname(dirname(__FILE__)))) . '/resources/xml/samlp_StatusDetail.xml'
         );
     }
 
@@ -72,7 +58,9 @@ XML
             ),
             'Something went wrong',
             [
-                new StatusDetail([new Chunk($this->detail->documentElement)])
+                StatusDetail::fromXML(
+                    DOMDocumentFactory::fromFile(dirname(dirname(dirname(dirname(__FILE__)))) . '/resources/xml/samlp_StatusDetail.xml')->documentElement
+                )
             ]
         );
 
