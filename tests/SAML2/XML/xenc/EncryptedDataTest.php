@@ -30,28 +30,8 @@ final class EncryptedDataTest extends TestCase
      */
     public function setup(): void
     {
-        $xencNamespace = Constants::NS_XENC;
-
-        $this->encryptedData = DOMDocumentFactory::fromString(<<<XML
-<xenc:EncryptedData xmlns:xenc="{$xencNamespace}"
-    Id="MyID"
-    Type="http://www.w3.org/2001/04/xmlenc#Element"
-    MimeType="text/plain"
-    Encoding="SomeEncoding">
-  <xenc:EncryptionMethod Algorithm="http://www.w3.org/2001/04/xmlenc#aes128-cbc"/>
-  <ds:KeyInfo xmlns:ds="http://www.w3.org/2000/09/xmldsig#">
-    <xenc:EncryptedKey>
-      <xenc:EncryptionMethod Algorithm="http://www.w3.org/2001/04/xmldsig-more#rsa-sha256"/>
-      <xenc:CipherData>
-        <xenc:CipherValue>nxf0b...</xenc:CipherValue>
-      </xenc:CipherData>
-    </xenc:EncryptedKey>
-  </ds:KeyInfo>
-  <xenc:CipherData>
-    <xenc:CipherValue>iaDc7...</xenc:CipherValue>
-  </xenc:CipherData>
-</xenc:EncryptedData>
-XML
+        $this->document = DOMDocumentFactory::fromFile(
+            dirname(dirname(dirname(dirname(__FILE__)))) . '/resources/xml/xenc_EncryptedData.xml'
         );
     }
 
@@ -106,7 +86,7 @@ XML
         $this->assertEquals('SomeEncoding', $encryptedData->getEncoding());
 
         $this->assertEquals(
-            $this->encryptedData->saveXML($this->encryptedData->documentElement),
+            $this->document->saveXML($this->document->documentElement),
             strval($encryptedData)
         );
     }
@@ -120,7 +100,7 @@ XML
      */
     public function testUnmarshalling(): void
     {
-        $encryptedData = EncryptedData::fromXML($this->encryptedData->documentElement);
+        $encryptedData = EncryptedData::fromXML($this->document->documentElement);
 
         $cipherData = $encryptedData->getCipherData();
         $this->assertEquals('iaDc7...', $cipherData->getCipherValue());
@@ -141,7 +121,7 @@ XML
         $this->assertEquals('SomeEncoding', $encryptedData->getEncoding());
 
         $this->assertEquals(
-            $this->encryptedData->saveXML($this->encryptedData->documentElement),
+            $this->document->saveXML($this->document->documentElement),
             strval($encryptedData)
         );
     }
@@ -153,8 +133,8 @@ XML
     public function testSerialization(): void
     {
         $this->assertEquals(
-            $this->encryptedData->saveXML($this->encryptedData->documentElement),
-            strval(unserialize(serialize(EncryptedData::fromXML($this->encryptedData->documentElement))))
+            $this->document->saveXML($this->document->documentElement),
+            strval(unserialize(serialize(EncryptedData::fromXML($this->document->documentElement))))
         );
     }
 }

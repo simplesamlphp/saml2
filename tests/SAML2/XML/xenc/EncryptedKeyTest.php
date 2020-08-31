@@ -31,33 +31,8 @@ final class EncryptedKeyTest extends TestCase
      */
     public function setup(): void
     {
-        $xencNamespace = Constants::NS_XENC;
-
-        $this->encryptedKey = DOMDocumentFactory::fromString(<<<XML
-<xenc:EncryptedKey xmlns:xenc="http://www.w3.org/2001/04/xmlenc#"
-     Id="Encrypted_KEY_ID"
-     Type="http://www.w3.org/2001/04/xmlenc#Element"
-     MimeType="text/plain"
-     Encoding="someEncoding"
-     Recipient="some_ENTITY_ID">
-  <xenc:EncryptionMethod Algorithm="http://www.w3.org/2001/04/xmlenc#rsa-1_5"/>
-  <ds:KeyInfo xmlns:ds="http://www.w3.org/2000/09/xmldsig#">
-    <xenc:EncryptedKey>
-      <xenc:EncryptionMethod Algorithm="http://www.w3.org/2001/04/xmldsig-more#rsa-sha256"/>
-      <xenc:CipherData>
-        <xenc:CipherValue>nxf0b...</xenc:CipherValue>
-      </xenc:CipherData>
-    </xenc:EncryptedKey>
-  </ds:KeyInfo>
-  <xenc:CipherData>
-    <xenc:CipherValue>PzA5X...</xenc:CipherValue>
-  </xenc:CipherData>
-  <xenc:ReferenceList>
-    <xenc:DataReference URI="#Encrypted_DATA_ID"/>
-  </xenc:ReferenceList>
-  <xenc:CarriedKeyName>Name of the key</xenc:CarriedKeyName>
-</xenc:EncryptedKey>
-XML
+        $this->document = DOMDocumentFactory::fromFile(
+            dirname(dirname(dirname(dirname(__FILE__)))) . '/resources/xml/xenc_EncryptedKey.xml'
         );
     }
 
@@ -123,7 +98,7 @@ XML
         $this->assertEquals('Name of the key', $encryptedKey->getCarriedKeyName());
 
         $this->assertEquals(
-            $this->encryptedKey->saveXML($this->encryptedKey->documentElement),
+            $this->document->saveXML($this->document->documentElement),
             strval($encryptedKey)
         );
     }
@@ -185,7 +160,7 @@ XML
      */
     public function testUnmarshalling(): void
     {
-        $encryptedKey = EncryptedKey::fromXML($this->encryptedKey->documentElement);
+        $encryptedKey = EncryptedKey::fromXML($this->document->documentElement);
 
         $cipherData = $encryptedKey->getCipherData();
         $this->assertEquals('PzA5X...', $cipherData->getCipherValue());
@@ -214,7 +189,7 @@ XML
         $this->assertEquals('Name of the key', $encryptedKey->getCarriedKeyName());
 
         $this->assertEquals(
-            $this->encryptedKey->saveXML($this->encryptedKey->documentElement),
+            $this->document->saveXML($this->document->documentElement),
             strval($encryptedKey)
         );
     }
@@ -226,8 +201,8 @@ XML
     public function testSerialization(): void
     {
         $this->assertEquals(
-            $this->encryptedKey->saveXML($this->encryptedKey->documentElement),
-            strval(unserialize(serialize(EncryptedKey::fromXML($this->encryptedKey->documentElement))))
+            $this->document->saveXML($this->document->documentElement),
+            strval(unserialize(serialize(EncryptedKey::fromXML($this->document->documentElement))))
         );
     }
 }

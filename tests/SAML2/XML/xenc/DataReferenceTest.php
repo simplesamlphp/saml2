@@ -33,20 +33,10 @@ final class DataReferenceTest extends TestCase
      */
     public function setup(): void
     {
-        $xencNamespace = Constants::NS_XENC;
         $dsNamespace = XMLSecurityDSig::XMLDSIGNS;
 
-        $this->document = DOMDocumentFactory::fromString(<<<XML
-<xenc:DataReference xmlns:xenc="{$xencNamespace}" URI="#Encrypted_DATA_ID">
-  <ds:Transforms xmlns:ds="{$dsNamespace}">
-    <ds:Transform Algorithm="http://www.w3.org/TR/1999/REC-xpath-19991116">
-      <ds:XPath xmlns:xenc="http://www.w3.org/2001/04/xmlenc#">
-        self::xenc:EncryptedData[@Id="example1"]
-      </ds:XPath>
-    </ds:Transform>
-  </ds:Transforms>
-</xenc:DataReference>
-XML
+        $this->document = DOMDocumentFactory::fromFile(
+            dirname(dirname(dirname(dirname(__FILE__)))) . '/resources/xml/xenc_DataReference.xml'
         );
 
         $this->reference = new Chunk(DOMDocumentFactory::fromString(<<<XML
