@@ -2,13 +2,13 @@
 
 declare(strict_types=1);
 
-namespace SAML2\XML\xenc;
+namespace SimpleSAML\SAML2\XML\xenc;
 
 use DOMElement;
-use SAML2\Exception\InvalidDOMElementException;
-use SAML2\Exception\MissingElementException;
-use SAML2\Exception\TooManyElementsException;
-use SAML2\XML\ds\KeyInfo;
+use SimpleSAML\SAML2\Exception\InvalidDOMElementException;
+use SimpleSAML\SAML2\Exception\MissingElementException;
+use SimpleSAML\SAML2\Exception\TooManyElementsException;
+use SimpleSAML\SAML2\XML\ds\KeyInfo;
 use SimpleSAML\Assert\Assert;
 
 /**

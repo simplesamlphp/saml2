@@ -2,13 +2,13 @@
 
 declare(strict_types=1);
 
-namespace SAML2\XML\xenc;
+namespace SimpleSAML\SAML2\XML\xenc;
 
 use PHPUnit\Framework\TestCase;
 use RobRichards\XMLSecLibs\XMLSecurityDsig;
-use SAML2\Constants;
-use SAML2\DOMDocumentFactory;
-use SAML2\XML\Chunk;
+use SimpleSAML\SAML2\Constants;
+use SimpleSAML\SAML2\DOMDocumentFactory;
+use SimpleSAML\SAML2\XML\Chunk;
 
 /**
  * Class \SAML2\XML\xenc\CipherDataTest

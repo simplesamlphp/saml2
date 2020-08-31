@@ -2,11 +2,12 @@
 
 declare(strict_types=1);
 
-namespace SimpleSAML\SAML2\XML\md;
+namespace SimpleSAML\SAML2\XML\xenc;
 
 use PHPUnit\Framework\TestCase;
 use SimpleSAML\SAML2\Constants;
 use SimpleSAML\SAML2\DOMDocumentFactory;
+use SimpleSAML\SAML2\Utils;
 use SimpleSAML\SAML2\XML\Chunk;
 use SimpleSAML\SAML2\Exception\MissingAttributeException;
 use SimpleSAML\Assert\AssertionFailedException;

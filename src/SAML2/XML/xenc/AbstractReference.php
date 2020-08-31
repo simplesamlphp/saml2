@@ -7,6 +7,7 @@ namespace SimpleSAML\SAML2\XML\xenc;
 use DOMElement;
 use SimpleSAML\Assert\Assert;
 use SimpleSAML\SAML2\Exception\InvalidDOMElementException;
+use SimpleSAML\SAML2\XML\Chunk;
 
 /**
  * Abstract class representing references. No custom elements are allowed.
@@ -18,7 +19,7 @@ abstract class AbstractReference extends AbstractXencElement
     /** @var string */
     protected $uri;
 
-    /** @var \SAML2\XML\Chunk[] */
+    /** @var \SimpleSAML\SAML2\XML\Chunk[] */
     protected $references = [];
 
 
@@ -26,7 +27,7 @@ abstract class AbstractReference extends AbstractXencElement
      * AbstractReference constructor.
      *
      * @param string $uri
-     * @param \SAML2\XML\Chunk[] $references
+     * @param \SimpleSAML\SAML2\XML\Chunk[] $references
      */
     protected function __construct(string $uri, array $references = [])
     {
@@ -59,7 +60,7 @@ abstract class AbstractReference extends AbstractXencElement
     /**
      * Collect the references
      *
-     * @return \SAML2\XML\Chunk[]
+     * @return \SimpleSAML\SAML2\XML\Chunk[]
      */
     public function getReferences(): array
     {
@@ -70,7 +71,7 @@ abstract class AbstractReference extends AbstractXencElement
     /**
      * Set the value of the references-property
      *
-     * @param \SAML2\XML\Chunk[] $references
+     * @param \SimpleSAML\SAML2\XML\Chunk[] $references
      * @return void
      * @throws \SimpleSAML\Assert\AssertionFailedException if the supplied array contains anything other than Chunk objects
      */
