@@ -19,7 +19,7 @@ class CipherData extends AbstractXencElement
     /** @var string|null */
     protected $cipherValue = null;
 
-    /** @var \SAML2\XML\xenc\CipherReference|null */
+    /** @var \SimpleSAML\SAML2\XML\xenc\CipherReference|null */
     protected $cipherReference = null;
 
 
@@ -27,7 +27,7 @@ class CipherData extends AbstractXencElement
      * CipherData constructor.
      *
      * @param string|null $cipherValue
-     * @param \SAML2\XML\xenc\CipherReference|null $cipherReference
+     * @param \SimpleSAML\SAML2\XML\xenc\CipherReference|null $cipherReference
      */
     public function __construct(?string $cipherValue, ?CipherReference $cipherReference = null)
     {
@@ -66,7 +66,7 @@ class CipherData extends AbstractXencElement
     /**
      * Get the CipherReference element inside this CipherData object.
      *
-     * @return \SAML2\XML\xenc\CipherReference|null
+     * @return \SimpleSAML\SAML2\XML\xenc\CipherReference|null
      */
     public function getCipherReference(): ?CipherReference
     {
@@ -75,7 +75,7 @@ class CipherData extends AbstractXencElement
 
 
     /**
-     * @param \SAML2\XML\xenc\CipherReference|null $cipherReference
+     * @param \SimpleSAML\SAML2\XML\xenc\CipherReference|null $cipherReference
      */
     protected function setCipherReference(?CipherReference $cipherReference): void
     {

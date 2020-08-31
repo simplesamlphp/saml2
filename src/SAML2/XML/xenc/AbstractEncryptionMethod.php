@@ -28,7 +28,7 @@ abstract class AbstractEncryptionMethod extends AbstractXencElement
     /** @var string|null */
     protected $oaepParams = null;
 
-    /** @var \SAML2\XML\Chunk[] */
+    /** @var \SimpleSAML\SAML2\XML\Chunk[] */
     protected $children = [];
 
 
@@ -38,7 +38,7 @@ abstract class AbstractEncryptionMethod extends AbstractXencElement
      * @param string $algorithm
      * @param int|null $keySize
      * @param string|null $oaepParams
-     * @param \SAML2\XML\Chunk[] $children
+     * @param \SimpleSAML\SAML2\XML\Chunk[] $children
      */
     public function __construct(
         string $algorithm,
@@ -59,9 +59,9 @@ abstract class AbstractEncryptionMethod extends AbstractXencElement
      * @param \DOMElement $xml
      * @return static
      *
-     * @throws \SAML2\Exception\InvalidDOMElementException if the qualified name of the supplied element is wrong
-     * @throws \SAML2\Exception\MissingAttributeException if the supplied element is missing one of the mandatory attributes
-     * @throws \SAML2\Exception\TooManyElementsException if too many child-elements of a type are specified
+     * @throws \SimpleSAML\SAML2\Exception\InvalidDOMElementException if the qualified name of the supplied element is wrong
+     * @throws \SimpleSAML\SAML2\Exception\MissingAttributeException if the supplied element is missing one of the mandatory attributes
+     * @throws \SimpleSAML\SAML2\Exception\TooManyElementsException if too many child-elements of a type are specified
      */
     public static function fromXML(DOMElement $xml): object
     {
@@ -181,7 +181,7 @@ abstract class AbstractEncryptionMethod extends AbstractXencElement
     /**
      * Get the children elements of this encryption method as chunks.
      *
-     * @return \SAML2\XML\Chunk[]
+     * @return \SimpleSAML\SAML2\XML\Chunk[]
      */
     public function getChildren(): array
     {
@@ -192,7 +192,7 @@ abstract class AbstractEncryptionMethod extends AbstractXencElement
     /**
      * Set an array of chunks as children of this encryption method.
      *
-     * @param \SAML2\XML\Chunk[] $children
+     * @param \SimpleSAML\SAML2\XML\Chunk[] $children
      * @return void
      * @throws \SimpleSAML\Assert\AssertionFailedException
      */

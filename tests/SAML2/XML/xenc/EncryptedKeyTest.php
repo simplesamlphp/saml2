@@ -13,10 +13,10 @@ use SimpleSAML\SAML2\XML\Chunk;
 use SimpleSAML\SAML2\XML\ds\KeyInfo;
 
 /**
- * Class \SAML2\XML\xenc\EncryptedKeyTest
+ * Class \SimpleSAML\SAML2\XML\xenc\EncryptedKeyTest
  *
- * @covers \SAML2\XML\xenc\AbstractEncryptedType
- * @covers \SAML2\XML\xenc\EncryptedKey
+ * @covers \SimpleSAML\SAML2\XML\xenc\AbstractEncryptedType
+ * @covers \SimpleSAML\SAML2\XML\xenc\EncryptedKey
  *
  * @author Tim van Dijen, <tvdijen@gmail.com>
  * @package simplesamlphp/saml2

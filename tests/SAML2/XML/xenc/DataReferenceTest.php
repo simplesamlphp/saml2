@@ -11,10 +11,10 @@ use SimpleSAML\SAML2\DOMDocumentFactory;
 use SimpleSAML\SAML2\XML\Chunk;
 
 /**
- * Class \SAML2\XML\xenc\DataReferenceTest
+ * Class \SimpleSAML\SAML2\XML\xenc\DataReferenceTest
  *
- * @covers \SAML2\XML\xenc\AbstractReference
- * @covers \SAML2\XML\xenc\DataReference
+ * @covers \SimpleSAML\SAML2\XML\xenc\AbstractReference
+ * @covers \SimpleSAML\SAML2\XML\xenc\DataReference
  *
  * @author Tim van Dijen, <tvdijen@gmail.com>
  * @package simplesamlphp/saml2

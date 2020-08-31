@@ -13,7 +13,7 @@ use SimpleSAML\SAML2\XML\Chunk;
 /**
  * Class \SAML2\XML\xenc\CipherDataTest
  *
- * @covers \SAML2\XML\xenc\CipherData
+ * @covers \SimpleSAML\SAML2\XML\xenc\CipherData
  *
  * @author Tim van Dijen, <tvdijen@gmail.com>
  * @package simplesamlphp/saml2

@@ -21,19 +21,19 @@ use SimpleSAML\Assert\Assert;
  */
 class AbstractEncryptedType extends AbstractXencElement
 {
-    /** @var \SAML2\XML\xenc\CipherData */
+    /** @var \SimpleSAML\SAML2\XML\xenc\CipherData */
     protected $cipherData;
 
     /** @var string|null */
     protected $encoding;
 
-    /** @var \SAML2\XML\xenc\EncryptionMethod|null */
+    /** @var \SimpleSAML\SAML2\XML\xenc\EncryptionMethod|null */
     protected $encryptionMethod;
 
     /** @var string|null */
     protected $id;
 
-    /** @var \SAML2\XML\ds\KeyInfo|null */
+    /** @var \SimpleSAML\SAML2\XML\ds\KeyInfo|null */
     protected $keyInfo;
 
     /** @var string|null */
@@ -46,13 +46,13 @@ class AbstractEncryptedType extends AbstractXencElement
     /**
      * EncryptedData constructor.
      *
-     * @param \SAML2\XML\xenc\CipherData $cipherData The CipherData object of this EncryptedData.
+     * @param \SimpleSAML\SAML2\XML\xenc\CipherData $cipherData The CipherData object of this EncryptedData.
      * @param string|null $id The Id attribute of this object. Optional.
      * @param string|null $type The Type attribute of this object. Optional.
      * @param string|null $mimeType The MimeType attribute of this object. Optional.
      * @param string|null $encoding The Encoding attribute of this object. Optional.
-     * @param \SAML2\XML\xenc\EncryptionMethod|null $encryptionMethod The EncryptionMethod object of this EncryptedData. Optional.
-     * @param \SAML2\XML\ds\KeyInfo|null $keyInfo The KeyInfo object of this EncryptedData. Optional.
+     * @param \SimpleSAML\SAML2\XML\xenc\EncryptionMethod|null $encryptionMethod The EncryptionMethod object of this EncryptedData. Optional.
+     * @param \SimpleSAML\SAML2\XML\ds\KeyInfo|null $keyInfo The KeyInfo object of this EncryptedData. Optional.
      */
     protected function __construct(
         CipherData $cipherData,
@@ -76,7 +76,7 @@ class AbstractEncryptedType extends AbstractXencElement
     /**
      * Get the CipherData object.
      *
-     * @return \SAML2\XML\xenc\CipherData
+     * @return \SimpleSAML\SAML2\XML\xenc\CipherData
      */
     public function getCipherData(): CipherData
     {
@@ -85,7 +85,7 @@ class AbstractEncryptedType extends AbstractXencElement
 
 
     /**
-     * @param \SAML2\XML\xenc\CipherData $cipherData
+     * @param \SimpleSAML\SAML2\XML\xenc\CipherData $cipherData
      */
     protected function setCipherData(CipherData $cipherData): void
     {
@@ -117,7 +117,7 @@ class AbstractEncryptedType extends AbstractXencElement
     /**
      * Get the EncryptionMethod object.
      *
-     * @return \SAML2\XML\xenc\EncryptionMethod|null
+     * @return \SimpleSAML\SAML2\XML\xenc\EncryptionMethod|null
      */
     public function getEncryptionMethod(): ?EncryptionMethod
     {
@@ -126,7 +126,7 @@ class AbstractEncryptedType extends AbstractXencElement
 
 
     /**
-     * @param \SAML2\XML\xenc\EncryptionMethod|null $encryptionMethod
+     * @param \SimpleSAML\SAML2\XML\xenc\EncryptionMethod|null $encryptionMethod
      */
     protected function setEncryptionMethod(?EncryptionMethod $encryptionMethod): void
     {
@@ -158,7 +158,7 @@ class AbstractEncryptedType extends AbstractXencElement
     /**
      * Get the KeyInfo object.
      *
-     * @return \SAML2\XML\ds\KeyInfo|null
+     * @return \SimpleSAML\SAML2\XML\ds\KeyInfo|null
      */
     public function getKeyInfo(): ?KeyInfo
     {
@@ -167,7 +167,7 @@ class AbstractEncryptedType extends AbstractXencElement
 
 
     /**
-     * @param \SAML2\XML\ds\KeyInfo|null $keyInfo
+     * @param \SimpleSAML\SAML2\XML\ds\KeyInfo|null $keyInfo
      */
     protected function setKeyInfo(?KeyInfo $keyInfo): void
     {
@@ -219,9 +219,9 @@ class AbstractEncryptedType extends AbstractXencElement
     /**
      * @inheritDoc
      *
-     * @throws \SAML2\Exception\InvalidDOMElementException if the qualified name of the supplied element is wrong
-     * @throws \SAML2\Exception\MissingElementException if one of the mandatory child-elements is missing
-     * @throws \SAML2\Exception\TooManyElementsException if too many child-elements of a type are specified
+     * @throws \SimpleSAML\SAML2\Exception\InvalidDOMElementException if the qualified name of the supplied element is wrong
+     * @throws \SimpleSAML\SAML2\Exception\MissingElementException if one of the mandatory child-elements is missing
+     * @throws \SimpleSAML\SAML2\Exception\TooManyElementsException if too many child-elements of a type are specified
      */
     public static function fromXML(DOMElement $xml): object
     {

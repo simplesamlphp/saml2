@@ -16,7 +16,7 @@ class DataReference extends AbstractReference
      * DataReference constructor.
      *
      * @param string $uri
-     * @param \SAML2\XML\Chunk[] $references
+     * @param \SimpleSAML\SAML2\XML\Chunk[] $references
      */
     public function __construct(string $uri, array $references = [])
     {

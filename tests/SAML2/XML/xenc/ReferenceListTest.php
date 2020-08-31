@@ -11,9 +11,9 @@ use SimpleSAML\SAML2\DOMDocumentFactory;
 use SimpleSAML\SAML2\XML\Chunk;
 
 /**
- * Class \SAML2\XML\xenc\ReferenceListTest
+ * Class \SimpleSAML\SAML2\XML\xenc\ReferenceListTest
  *
- * @covers \SAML2\XML\xenc\ReferenceList
+ * @covers \SimpleSAML\SAML2\XML\xenc\ReferenceList
  *
  * @author Tim van Dijen, <tvdijen@gmail.com>
  * @package simplesamlphp/saml2
