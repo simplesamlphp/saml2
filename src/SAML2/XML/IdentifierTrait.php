@@ -7,7 +7,7 @@ namespace SimpleSAML\SAML2\XML;
 use DOMElement;
 use SimpleSAML\Assert\Assert;
 use SimpleSAML\SAML2\Compat\ContainerSingleton;
-use SimpleSAML\SAML2\Exception\TooManyElementsException;
+use SimpleSAML\XML\Exception\TooManyElementsException;
 use SimpleSAML\SAML2\XML\saml\BaseID;
 use SimpleSAML\SAML2\XML\saml\EncryptedID;
 use SimpleSAML\SAML2\XML\saml\NameID;
@@ -57,7 +57,7 @@ trait IdentifierTrait
      *
      * @param \DOMElement $xml
      * @return \SimpleSAML\SAML2\XML\saml\IdentifierInterface|null
-     * @throws \SimpleSAML\SAML2\Exception\TooManyElementsException if too many child-elements of a type are specified
+     * @throws \SimpleSAML\XML\Exception\TooManyElementsException if too many child-elements of a type are specified
      */
     protected static function getIdentifierFromXML(DOMElement $xml): ?IdentifierInterface
     {

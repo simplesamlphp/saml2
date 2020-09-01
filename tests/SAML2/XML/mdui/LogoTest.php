@@ -6,15 +6,16 @@ namespace SimpleSAML\SAML2\XML\mdui;
 
 use InvalidArgumentException;
 use PHPUnit\Framework\TestCase;
-use SimpleSAML\SAML2\DOMDocumentFactory;
-use SimpleSAML\SAML2\Exception\MissingAttributeException;
-use SimpleSAML\SAML2\Utils;
 use SimpleSAML\Assert\AssertionFailedException;
+use SimpleSAML\XML\DOMDocumentFactory;
+use SimpleSAML\XML\Exception\MissingAttributeException;
+use SimpleSAML\XML\Utils as XMLUtils;
 
 /**
  * Class \SAML2\XML\mdui\LogoTest
  *
  * @covers \SimpleSAML\SAML2\XML\mdui\Logo
+ * @covers \SimpleSAML\SAML2\XML\mdui\AbstractMduiElement
  * @package simplesamlphp/saml2
  */
 final class LogoTest extends TestCase
@@ -51,7 +52,7 @@ IMG;
 
         $xml = $logo->toXML();
 
-        $logoElements = Utils::xpQuery(
+        $logoElements = XMLUtils::xpQuery(
             $xml,
             '/*[local-name()=\'Logo\' and namespace-uri()=\'urn:oasis:names:tc:SAML:metadata:ui\']'
         );

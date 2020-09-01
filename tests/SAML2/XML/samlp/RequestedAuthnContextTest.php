@@ -6,7 +6,7 @@ namespace SimpleSAML\SAML2\XML\samlp;
 
 use PHPUnit\Framework\TestCase;
 use SimpleSAML\SAML2\Constants;
-use SimpleSAML\SAML2\DOMDocumentFactory;
+use SimpleSAML\XML\DOMDocumentFactory;
 use SimpleSAML\SAML2\XML\saml\AuthnContextClassRef;
 use SimpleSAML\SAML2\XML\saml\AuthnContextDeclRef;
 use SimpleSAML\Assert\AssertionFailedException;
@@ -15,6 +15,7 @@ use SimpleSAML\Assert\AssertionFailedException;
  * Class \SAML2\XML\samlp\RequestedAuthnContextTest
  *
  * @covers \SimpleSAML\SAML2\XML\samlp\RequestedAuthnContext
+ * @covers \SimpleSAML\SAML2\XML\samlp\AbstractSamlpElement
  * @package simplesamlphp/saml2
  */
 final class RequestedAuthnContextTest extends TestCase

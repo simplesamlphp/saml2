@@ -7,7 +7,7 @@ namespace SimpleSAML\SAML2\XML\md;
 use DOMElement;
 use SimpleSAML\Assert\Assert;
 use SimpleSAML\SAML2\Constants;
-use SimpleSAML\SAML2\Utils;
+use SimpleSAML\XML\Utils as XMLUtils;
 
 /**
  * Class representing SAML 2 SSODescriptorType.
@@ -233,7 +233,7 @@ abstract class AbstractSSODescriptor extends AbstractRoleDescriptor
             $ep->toXML($e);
         }
 
-        Utils::addStrings($e, Constants::NS_MD, 'md:NameIDFormat', false, $this->nameIDFormats);
+        XMLUtils::addStrings($e, Constants::NS_MD, 'md:NameIDFormat', false, $this->nameIDFormats);
 
         return $e;
     }

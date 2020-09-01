@@ -7,14 +7,15 @@ namespace SimpleSAML\SAML2\XML\xenc;
 use PHPUnit\Framework\TestCase;
 use RobRichards\XMLSecLibs\XMLSecurityDsig;
 use SimpleSAML\SAML2\Constants;
-use SimpleSAML\SAML2\DOMDocumentFactory;
-use SimpleSAML\SAML2\Utils;
-use SimpleSAML\SAML2\XML\Chunk;
 use SimpleSAML\SAML2\XML\ds\KeyInfo;
+use SimpleSAML\XML\Chunk;
+use SimpleSAML\XML\DOMDocumentFactory;
+use SimpleSAML\XML\Utils as XMLUtils;
 
 /**
  * Class \SimpleSAML\SAML2\XML\xenc\EncryptedKeyTest
  *
+ * @covers \SimpleSAML\SAML2\XML\xenc\AbstractXencElement
  * @covers \SimpleSAML\SAML2\XML\xenc\AbstractEncryptedType
  * @covers \SimpleSAML\SAML2\XML\xenc\EncryptedKey
  *
@@ -139,11 +140,11 @@ final class EncryptedKeyTest extends TestCase
         $encryptedKeyElement = $encryptedKey->toXML();
 
         // Test for a ReferenceList
-        $encryptedKeyElements = Utils::xpQuery($encryptedKeyElement, './xenc:ReferenceList');
+        $encryptedKeyElements = XMLUtils::xpQuery($encryptedKeyElement, './xenc:ReferenceList');
         $this->assertCount(1, $encryptedKeyElements);
 
         // Test ordering of EncryptedKey contents
-        $encryptedKeyElements = Utils::xpQuery(
+        $encryptedKeyElements = XMLUtils::xpQuery(
             $encryptedKeyElement,
             './xenc:ReferenceList/following-sibling::*'
         );

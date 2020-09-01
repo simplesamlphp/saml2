@@ -7,7 +7,7 @@ namespace SimpleSAML\SAML2\XML\md;
 use PHPUnit\Framework\TestCase;
 use RobRichards\XMLSecLibs\XMLSecurityDSig;
 use SimpleSAML\SAML2\Constants;
-use SimpleSAML\SAML2\DOMDocumentFactory;
+use SimpleSAML\XML\DOMDocumentFactory;
 use SimpleSAML\SAML2\SignedElementTestTrait;
 use SimpleSAML\SAML2\XML\ds\KeyInfo;
 use SimpleSAML\SAML2\XML\ds\KeyName;
@@ -22,6 +22,7 @@ use SimpleSAML\Assert\AssertionFailedException;
  * @covers \SimpleSAML\SAML2\XML\md\AbstractMetadataDocument
  * @covers \SimpleSAML\SAML2\XML\md\AbstractRoleDescriptor
  * @covers \SimpleSAML\SAML2\XML\md\AbstractSSODescriptor
+ * @covers \SimpleSAML\SAML2\XML\md\AbstractMdElement
  * @package simplesamlphp/saml2
  */
 final class IDPSSODescriptorTest extends TestCase

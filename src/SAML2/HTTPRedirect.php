@@ -10,6 +10,7 @@ use SimpleSAML\Assert\Assert;
 use SimpleSAML\SAML2\XML\samlp\AbstractMessage;
 use SimpleSAML\SAML2\XML\samlp\AbstractRequest;
 use SimpleSAML\SAML2\XML\samlp\MessageFactory;
+use SimpleSAML\XML\DOMDocumentFactory;
 
 /**
  * Class which implements the HTTP-Redirect binding.

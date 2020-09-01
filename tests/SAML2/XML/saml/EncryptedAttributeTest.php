@@ -6,17 +6,17 @@ namespace SimpleSAML\SAML2\XML\saml;
 
 use PHPUnit\Framework\TestCase;
 use RobRichards\XMLSecLibs\XMLSecurityKey;
-use SimpleSAML\SAML2\Constants;
-use SimpleSAML\SAML2\DOMDocumentFactory;
 use SimpleSAML\Assert\AssertionFailedException;
 use SimpleSAML\TestUtils\PEMCertificatesMock;
+use SimpleSAML\XML\DOMDocumentFactory;
 
 /**
  * Class \SAML2\XML\saml\EncryptedAttributeTest
  *
  * @author Tim van Dijen, <tvdijen@gmail.com>
- * @covers \SimpleSAML\SAML2\XML\saml\EncryptedAttribute
  * @package simplesamlphp/saml2
+ * @covers \SimpleSAML\SAML2\XML\saml\EncryptedAttribute
+ * @covers \SimpleSAML\SAML2\XML\saml\AbstractSamlElement
  */
 final class EncryptedAttributeTest extends TestCase
 {

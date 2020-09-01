@@ -9,11 +9,12 @@ use Exception;
 use RobRichards\XMLSecLibs\XMLSecurityDSig;
 use RobRichards\XMLSecLibs\XMLSecurityKey;
 use SimpleSAML\Assert\Assert;
-use SimpleSAML\SAML2\Exception\InvalidDOMElementException;
-use SimpleSAML\SAML2\Exception\MissingAttributeException;
 use SimpleSAML\SAML2\Utilities\Certificate;
 use SimpleSAML\SAML2\Utils;
-use SimpleSAML\SAML2\XML\AbstractXMLElement;
+use SimpleSAML\XML\AbstractXMLElement;
+use SimpleSAML\XML\Exception\InvalidDOMElementException;
+use SimpleSAML\XML\Exception\MissingAttributeException;
+use SimpleSAML\XML\Utils as XMLUtils;
 
 /**
  * Wrapper class for XML signatures
@@ -132,11 +133,11 @@ final class Signature extends AbstractDsElement
     /**
      * @param DOMElement $xml
      *
-     * @return \SimpleSAML\SAML2\XML\AbstractXMLElement
+     * @return \SimpleSAML\XML\AbstractXMLElement
      * @throws \Exception
      *
-     * @throws \SimpleSAML\SAML2\Exception\InvalidDOMElementException if the qualified name of the supplied element is wrong
-     * @throws \SimpleSAML\SAML2\Exception\MissingAttributeException if the supplied signature is missing an Algorithm attribute
+     * @throws \SimpleSAML\XML\Exception\InvalidDOMElementException if the qualified name of the supplied element is wrong
+     * @throws \SimpleSAML\XML\Exception\MissingAttributeException if the supplied signature is missing an Algorithm attribute
      */
     public static function fromXML(DOMElement $xml): object
     {
@@ -145,7 +146,7 @@ final class Signature extends AbstractDsElement
 
         $parent = $xml->parentNode;
 
-        $sigMethod = Utils::xpQuery($xml, './ds:SignedInfo/ds:SignatureMethod');
+        $sigMethod = XMLUtils::xpQuery($xml, './ds:SignedInfo/ds:SignatureMethod');
         Assert::notEmpty($sigMethod, 'Missing ds:SignatureMethod element.');
         /** @var \DOMElement $sigMethod */
         $sigMethod = $sigMethod[0];
@@ -156,7 +157,7 @@ final class Signature extends AbstractDsElement
 
         // now we extract all available X509 certificates in the signature element
         $certificates = [];
-        foreach (Utils::xpQuery($xml, './ds:KeyInfo/ds:X509Data/ds:X509Certificate') as $certNode) {
+        foreach (XMLUtils::xpQuery($xml, './ds:KeyInfo/ds:X509Data/ds:X509Certificate') as $certNode) {
             $certificates[] = Certificate::convertToCertificate(
                 str_replace(["\r", "\n", "\t", ' '], '', trim($certNode->textContent))
             );
@@ -208,7 +209,7 @@ final class Signature extends AbstractDsElement
         Assert::notNull($this->key, 'Cannot sign without a signing key.');
 
         // find first child element
-        $childElements = Utils::xpQuery($parent, './*');
+        $childElements = XMLUtils::xpQuery($parent, './*');
         $firstChildElement = null;
         if (count($childElements) > 0) {
             $firstChildElement = $childElements[0];
@@ -216,6 +217,6 @@ final class Signature extends AbstractDsElement
 
         Utils::insertSignature($this->key, $this->certificates, $parent, $firstChildElement);
         /** @psalm-suppress LessSpecificReturnStatement */
-        return Utils::xpQuery($parent, './ds:Signature')[0];
+        return XMLUtils::xpQuery($parent, './ds:Signature')[0];
     }
 }

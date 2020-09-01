@@ -6,8 +6,8 @@ namespace SimpleSAML\SAML2\XML\samlp;
 
 use DOMElement;
 use SimpleSAML\Assert\Assert;
-use SimpleSAML\SAML2\Exception\InvalidDOMElementException;
-use SimpleSAML\SAML2\XML\Chunk;
+use SimpleSAML\XML\Exception\InvalidDOMElementException;
+use SimpleSAML\XML\Chunk;
 
 /**
  * SAML StatusDetail data type.
@@ -17,14 +17,14 @@ use SimpleSAML\SAML2\XML\Chunk;
  */
 final class StatusDetail extends AbstractSamlpElement
 {
-    /** @var \SimpleSAML\SAML2\XML\Chunk[] */
+    /** @var \SimpleSAML\XML\Chunk[] */
     protected $details = [];
 
 
     /**
      * Initialize a samlp:StatusDetail
      *
-     * @param \SimpleSAML\SAML2\XML\Chunk[] $details
+     * @param \SimpleSAML\XML\Chunk[] $details
      */
     public function __construct(array $details = [])
     {
@@ -35,7 +35,7 @@ final class StatusDetail extends AbstractSamlpElement
     /**
      * Collect the details
      *
-     * @return \SimpleSAML\SAML2\XML\Chunk[]
+     * @return \SimpleSAML\XML\Chunk[]
      */
     public function getDetails(): array
     {
@@ -46,7 +46,7 @@ final class StatusDetail extends AbstractSamlpElement
     /**
      * Set the value of the details-property
      *
-     * @param \SimpleSAML\SAML2\XML\Chunk[] $details
+     * @param \SimpleSAML\XML\Chunk[] $details
      * @return void
      * @throws \SimpleSAML\Assert\AssertionFailedException if the supplied array contains anything other than Chunk objects
      */
@@ -75,7 +75,7 @@ final class StatusDetail extends AbstractSamlpElement
      * @param \DOMElement $xml The XML element we should load
      * @return \SimpleSAML\SAML2\XML\samlp\StatusDetail
      *
-     * @throws \SimpleSAML\SAML2\Exception\InvalidDOMElementException if the qualified name of the supplied element is wrong
+     * @throws \SimpleSAML\XML\Exception\InvalidDOMElementException if the qualified name of the supplied element is wrong
      */
     public static function fromXML(DOMElement $xml): object
     {

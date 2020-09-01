@@ -6,8 +6,8 @@ namespace SimpleSAML\SAML2\XML\xenc;
 
 use DOMElement;
 use SimpleSAML\Assert\Assert;
-use SimpleSAML\SAML2\Exception\InvalidDOMElementException;
-use SimpleSAML\SAML2\Utils;
+use SimpleSAML\XML\Exception\InvalidDOMElementException;
+use SimpleSAML\XML\Utils as XMLUtils;
 
 /**
  * Class representing <xenc:CipherData>.
@@ -86,15 +86,16 @@ class CipherData extends AbstractXencElement
     /**
      * @inheritDoc
      *
-     * @throws \SimpleSAML\SAML2\Exception\InvalidDOMElementException if the qualified name of the supplied element is wrong
+     * @throws \SimpleSAML\XML\Exception\InvalidDOMElementException if the qualified name of the supplied element is wrong
      */
     public static function fromXML(DOMElement $xml): object
     {
         Assert::same($xml->localName, 'CipherData', InvalidDOMElementException::class);
         Assert::same($xml->namespaceURI, CipherData::NS, InvalidDOMElementException::class);
 
-        $cv = Utils::xpQuery($xml, './xenc:CipherValue');
-        Assert::maxCount($cv, 1, 'More than one CipherValue element in <xenc:CipherData');
+        $cv = XMLUtils::xpQuery($xml, './xenc:CipherValue');
+        Assert::notEmpty($cv, 'Missing CipherValue element in <xenc:CipherData>');
+        Assert::count($cv, 1, 'More than one CipherValue element in <xenc:CipherData');
 
         $cr = CipherReference::getChildrenOfClass($xml);
         Assert::maxCount($cr, 1, 'More than one CipherReference element in <xenc:CipherData');
@@ -115,7 +116,7 @@ class CipherData extends AbstractXencElement
         $e = $this->instantiateParentElement($parent);
 
         if ($this->cipherValue !== null) {
-            Utils::addString($e, $this::NS, 'CipherValue', $this->cipherValue);
+            XMLUtils::addString($e, $this::NS, 'CipherValue', $this->cipherValue);
         }
 
         if ($this->cipherReference !== null) {

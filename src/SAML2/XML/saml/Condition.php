@@ -7,7 +7,7 @@ namespace SimpleSAML\SAML2\XML\saml;
 use DOMElement;
 use SimpleSAML\Assert\Assert;
 use SimpleSAML\SAML2\Constants;
-use SimpleSAML\SAML2\Exception\InvalidDOMElementException;
+use SimpleSAML\XML\Exception\InvalidDOMElementException;
 
 /**
  * SAML Condition data type.
@@ -93,7 +93,7 @@ class Condition extends AbstractConditionType
      * @param \DOMElement $xml The XML element we should load
      * @return \SimpleSAML\SAML2\XML\saml\Condition
      *
-     * @throws \SimpleSAML\SAML2\Exception\InvalidDOMElementException if the qualified name of the supplied element is wrong
+     * @throws \SimpleSAML\XML\Exception\InvalidDOMElementException if the qualified name of the supplied element is wrong
      */
     public static function fromXML(DOMElement $xml): object
     {

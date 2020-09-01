@@ -6,14 +6,14 @@ namespace SimpleSAML\SAML2\XML\samlp;
 
 use DOMElement;
 use SimpleSAML\Assert\Assert;
-use SimpleSAML\SAML2\Exception\InvalidDOMElementException;
-use SimpleSAML\SAML2\Exception\TooManyElementsException;
+use SimpleSAML\XML\Exception\InvalidDOMElementException;
+use SimpleSAML\XML\Exception\TooManyElementsException;
 use SimpleSAML\SAML2\XML\ds\Signature;
 use SimpleSAML\SAML2\XML\saml\Conditions;
 use SimpleSAML\SAML2\XML\saml\Issuer;
 use SimpleSAML\SAML2\XML\saml\Subject;
 use SimpleSAML\SAML2\XML\saml\SubjectConfirmation;
-use SimpleSAML\SAML2\Utils;
+use SimpleSAML\XML\Utils as XMLUtils;
 
 /**
  * Class for SAML 2 authentication request messages.
@@ -430,9 +430,9 @@ class AuthnRequest extends AbstractRequest
      * @param \DOMElement $xml The XML element we should load
      * @return \SimpleSAML\SAML2\XML\samlp\AuthnRequest
      *
-     * @throws \SimpleSAML\SAML2\Exception\InvalidDOMElementException if the qualified name of the supplied element is wrong
-     * @throws \SimpleSAML\SAML2\Exception\MissingAttributeException if the supplied element is missing one of the mandatory attributes
-     * @throws \SimpleSAML\SAML2\Exception\TooManyElementsException if too many child-elements of a type are specified
+     * @throws \SimpleSAML\XML\Exception\InvalidDOMElementException if the qualified name of the supplied element is wrong
+     * @throws \SimpleSAML\XML\Exception\MissingAttributeException if the supplied element is missing one of the mandatory attributes
+     * @throws \SimpleSAML\XML\Exception\TooManyElementsException if too many child-elements of a type are specified
      */
     public static function fromXML(DOMElement $xml): object
     {
@@ -440,7 +440,7 @@ class AuthnRequest extends AbstractRequest
         Assert::same($xml->namespaceURI, AuthnRequest::NS, InvalidDOMElementException::class);
         Assert::same('2.0', self::getAttribute($xml, 'Version'));
 
-        $issueInstant = Utils::xsDateTimeToTimestamp(self::getAttribute($xml, 'IssueInstant'));
+        $issueInstant = XMLUtils::xsDateTimeToTimestamp(self::getAttribute($xml, 'IssueInstant'));
 
         $attributeConsumingServiceIndex = self::getIntegerAttribute($xml, 'AttributeConsumingServiceIndex', null);
 

@@ -7,7 +7,7 @@ namespace SimpleSAML\SAML2\XML\saml;
 use PHPUnit\Framework\TestCase;
 use RobRichards\XMLSecLibs\XMLSecurityKey;
 use SimpleSAML\SAML2\Constants;
-use SimpleSAML\SAML2\DOMDocumentFactory;
+use SimpleSAML\XML\DOMDocumentFactory;
 use SimpleSAML\Assert\AssertionFailedException;
 use SimpleSAML\TestUtils\PEMCertificatesMock;
 
@@ -15,6 +15,7 @@ use SimpleSAML\TestUtils\PEMCertificatesMock;
  * Class \SAML2\XML\saml\AttributeStatementTest
  *
  * @covers \SimpleSAML\SAML2\XML\saml\AttributeStatement
+ * @covers \SimpleSAML\SAML2\XML\saml\AbstractSamlElement
  * @package simplesamlphp/saml2
  */
 final class AttributeStatementTest extends TestCase

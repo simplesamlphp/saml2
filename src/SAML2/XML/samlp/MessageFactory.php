@@ -8,7 +8,7 @@ use DOMElement;
 use Exception;
 use SimpleSAML\Assert\Assert;
 use SimpleSAML\SAML2\Constants;
-use SimpleSAML\SAML2\Exception\InvalidDOMElementException;
+use SimpleSAML\XML\Exception\InvalidDOMElementException;
 
 /**
  * Factory class for all SAML 2 messages.
@@ -25,7 +25,7 @@ abstract class MessageFactory
      * @return \SimpleSAML\SAML2\XML\samlp\AbstractMessage The message
      *
      * @throws \Exception
-     * @throws \SimpleSAML\SAML2\Exception\InvalidDOMElementException if the qualified name of the supplied element is wrong
+     * @throws \SimpleSAML\XML\Exception\InvalidDOMElementException if the qualified name of the supplied element is wrong
      */
     public static function fromXML(DOMElement $xml): object
     {

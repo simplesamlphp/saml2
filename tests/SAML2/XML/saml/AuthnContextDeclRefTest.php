@@ -6,13 +6,14 @@ namespace SimpleSAML\SAML2\XML\saml;
 
 use PHPUnit\Framework\TestCase;
 use SimpleSAML\SAML2\Constants;
-use SimpleSAML\SAML2\DOMDocumentFactory;
+use SimpleSAML\XML\DOMDocumentFactory;
 use SimpleSAML\SAML2\Utils;
 
 /**
  * Class \SAML2\XML\saml\AuthnContextDeclRefTest
  *
  * @covers \SimpleSAML\SAML2\XML\saml\AuthnContextDeclRef
+ * @covers \SimpleSAML\SAML2\XML\saml\AbstractSamlElement
  * @package simplesamlphp/saml2
  */
 final class AuthnContextDeclRefTest extends TestCase

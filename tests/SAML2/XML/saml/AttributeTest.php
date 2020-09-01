@@ -7,14 +7,15 @@ namespace SimpleSAML\SAML2\XML\saml;
 use PHPUnit\Framework\TestCase;
 use RobRichards\XMLSecLibs\XMLSecurityKey;
 use SimpleSAML\SAML2\Constants;
-use SimpleSAML\SAML2\DOMDocumentFactory;
-use SimpleSAML\SAML2\Exception\MissingAttributeException;
+use SimpleSAML\XML\DOMDocumentFactory;
+use SimpleSAML\XML\Exception\MissingAttributeException;
 use SimpleSAML\TestUtils\PEMCertificatesMock;
 
 /**
  * Class \SAML2\XML\saml\AttributeTest
  *
  * @covers \SimpleSAML\SAML2\XML\saml\Attribute
+ * @covers \SimpleSAML\SAML2\XML\saml\AbstractSamlElement
  * @package simplesamlphp/saml2
  */
 final class AttributeTest extends TestCase

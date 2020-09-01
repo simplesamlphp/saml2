@@ -6,11 +6,12 @@ namespace SimpleSAML\SAML2\XML\md;
 
 use PHPUnit\Framework\TestCase;
 use SimpleSAML\SAML2\Constants;
-use SimpleSAML\SAML2\DOMDocumentFactory;
+use SimpleSAML\XML\DOMDocumentFactory;
 use SimpleSAML\SAML2\SignedElementTestTrait;
 use SimpleSAML\Assert\AssertionFailedException;
 
 /**
+ * @covers \SimpleSAML\SAML2\XML\md\AbstractMdElement
  * @covers \SimpleSAML\SAML2\XML\md\AuthnAuthorityDescriptor
  * @covers \SimpleSAML\SAML2\XML\md\AbstractMetadataDocument
  * @covers \SimpleSAML\SAML2\XML\md\AbstractRoleDescriptor

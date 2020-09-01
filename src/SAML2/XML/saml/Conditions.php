@@ -7,8 +7,8 @@ namespace SimpleSAML\SAML2\XML\saml;
 use DOMElement;
 use SimpleSAML\Assert\Assert;
 use SimpleSAML\SAML2\Constants;
-use SimpleSAML\SAML2\Exception\InvalidDOMElementException;
-use SimpleSAML\SAML2\Utils;
+use SimpleSAML\XML\Exception\InvalidDOMElementException;
+use SimpleSAML\XML\Utils as XMLUtils;
 
 /**
  * Class representing SAML 2 Conditions element.
@@ -244,7 +244,7 @@ final class Conditions extends AbstractSamlElement
      * @param \DOMElement $xml The XML element we should load
      * @return self
      *
-     * @throws \SimpleSAML\SAML2\Exception\InvalidDOMElementException if the qualified name of the supplied element is wrong
+     * @throws \SimpleSAML\XML\Exception\InvalidDOMElementException if the qualified name of the supplied element is wrong
      */
     public static function fromXML(DOMElement $xml): object
     {
@@ -256,12 +256,12 @@ final class Conditions extends AbstractSamlElement
 
         $condition = Condition::getChildrenOfClass($xml);
         $audienceRestriction = AudienceRestriction::getChildrenOfClass($xml);
-        $oneTimeUse = Utils::extractStrings($xml, AbstractSamlElement::NS, 'OneTimeUse');
+        $oneTimeUse = XMLUtils::extractStrings($xml, AbstractSamlElement::NS, 'OneTimeUse');
         $proxyRestriction = ProxyRestriction::getChildrenOfClass($xml);
 
         return new self(
-            $notBefore !== null ? Utils::xsDateTimeToTimestamp($notBefore) : null,
-            $notOnOrAfter !== null ? Utils::xsDateTimeToTimestamp($notOnOrAfter) : null,
+            $notBefore !== null ? XMLUtils::xsDateTimeToTimestamp($notBefore) : null,
+            $notOnOrAfter !== null ? XMLUtils::xsDateTimeToTimestamp($notOnOrAfter) : null,
             $condition,
             $audienceRestriction,
             !empty($oneTimeUse),

@@ -5,11 +5,11 @@ declare(strict_types=1);
 namespace SimpleSAML\SAML2\XML\xenc;
 
 use DOMElement;
-use SimpleSAML\SAML2\Exception\InvalidDOMElementException;
-use SimpleSAML\SAML2\Exception\MissingElementException;
-use SimpleSAML\SAML2\Exception\TooManyElementsException;
-use SimpleSAML\SAML2\XML\ds\KeyInfo;
 use SimpleSAML\Assert\Assert;
+use SimpleSAML\SAML2\XML\ds\KeyInfo;
+use SimpleSAML\XML\Exception\InvalidDOMElementException;
+use SimpleSAML\XML\Exception\MissingElementException;
+use SimpleSAML\XML\Exception\TooManyElementsException;
 
 /**
  * Abstract class representing encrypted data.
@@ -219,9 +219,9 @@ class AbstractEncryptedType extends AbstractXencElement
     /**
      * @inheritDoc
      *
-     * @throws \SimpleSAML\SAML2\Exception\InvalidDOMElementException if the qualified name of the supplied element is wrong
-     * @throws \SimpleSAML\SAML2\Exception\MissingElementException if one of the mandatory child-elements is missing
-     * @throws \SimpleSAML\SAML2\Exception\TooManyElementsException if too many child-elements of a type are specified
+     * @throws \SimpleSAML\XML\Exception\InvalidDOMElementException if the qualified name of the supplied element is wrong
+     * @throws \SimpleSAML\XML\Exception\MissingElementException if one of the mandatory child-elements is missing
+     * @throws \SimpleSAML\XML\Exception\TooManyElementsException if too many child-elements of a type are specified
      */
     public static function fromXML(DOMElement $xml): object
     {

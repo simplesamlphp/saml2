@@ -9,11 +9,11 @@ use Exception;
 use InvalidArgumentException;
 use SimpleSAML\Assert\Assert;
 use SimpleSAML\SAML2\Constants;
-use SimpleSAML\SAML2\Exception\InvalidDOMElementException;
-use SimpleSAML\SAML2\Exception\TooManyElementsException;
-use SimpleSAML\SAML2\Utils;
-use SimpleSAML\SAML2\XML\ExtendableAttributesTrait;
 use SimpleSAML\SAML2\XML\ExtendableElementTrait;
+use SimpleSAML\XML\Exception\InvalidDOMElementException;
+use SimpleSAML\XML\Exception\TooManyElementsException;
+use SimpleSAML\XML\ExtendableAttributesTrait;
+use SimpleSAML\XML\Utils as XMLUtils;
 
 /**
  * Class representing SAML 2 ContactPerson.
@@ -107,9 +107,9 @@ final class ContactPerson extends AbstractMdElement
      * @param \DOMElement $xml The XML element we should load.
      * @return self
      *
-     * @throws \SimpleSAML\SAML2\Exception\InvalidDOMElementException if the qualified name of the supplied element is wrong
-     * @throws \SimpleSAML\SAML2\Exception\MissingAttributeException if the supplied element is missing one of the mandatory attributes
-     * @throws \SimpleSAML\SAML2\Exception\TooManyElementsException if too many child-elements of a type are specified
+     * @throws \SimpleSAML\XML\Exception\InvalidDOMElementException if the qualified name of the supplied element is wrong
+     * @throws \SimpleSAML\XML\Exception\MissingAttributeException if the supplied element is missing one of the mandatory attributes
+     * @throws \SimpleSAML\XML\Exception\TooManyElementsException if too many child-elements of a type are specified
      */
     public static function fromXML(DOMElement $xml): object
     {
@@ -148,7 +148,7 @@ final class ContactPerson extends AbstractMdElement
      */
     private static function getStringElements(DOMElement $parent, string $name): array
     {
-        $e = Utils::xpQuery($parent, './saml_metadata:' . $name);
+        $e = XMLUtils::xpQuery($parent, './saml_metadata:' . $name);
 
         $ret = [];
         foreach ($e as $i) {
@@ -361,20 +361,20 @@ final class ContactPerson extends AbstractMdElement
         }
 
         if ($this->Company !== null) {
-            Utils::addString($e, Constants::NS_MD, 'md:Company', $this->Company);
+            XMLUtils::addString($e, Constants::NS_MD, 'md:Company', $this->Company);
         }
         if ($this->GivenName !== null) {
-            Utils::addString($e, Constants::NS_MD, 'md:GivenName', $this->GivenName);
+            XMLUtils::addString($e, Constants::NS_MD, 'md:GivenName', $this->GivenName);
         }
         if ($this->SurName !== null) {
-            Utils::addString($e, Constants::NS_MD, 'md:SurName', $this->SurName);
+            XMLUtils::addString($e, Constants::NS_MD, 'md:SurName', $this->SurName);
         }
 
         /** @var string[] $addresses */
         $addresses = preg_filter('/^/', 'mailto:', $this->EmailAddresses);
-        Utils::addStrings($e, Constants::NS_MD, 'md:EmailAddress', false, $addresses);
+        XMLUtils::addStrings($e, Constants::NS_MD, 'md:EmailAddress', false, $addresses);
 
-        Utils::addStrings($e, Constants::NS_MD, 'md:TelephoneNumber', false, $this->TelephoneNumbers);
+        XMLUtils::addStrings($e, Constants::NS_MD, 'md:TelephoneNumber', false, $this->TelephoneNumbers);
 
         return $e;
     }

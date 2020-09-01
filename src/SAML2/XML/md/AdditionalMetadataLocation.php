@@ -8,7 +8,7 @@ use DOMElement;
 use Exception;
 use InvalidArgumentException;
 use SimpleSAML\Assert\Assert;
-use SimpleSAML\SAML2\Exception\InvalidDOMElementException;
+use SimpleSAML\XML\Exception\InvalidDOMElementException;
 
 /**
  * Class representing SAML 2 metadata AdditionalMetadataLocation element.
@@ -51,8 +51,8 @@ final class AdditionalMetadataLocation extends AbstractMdElement
      * @param \DOMElement $xml The XML element we should load.
      * @return self
      *
-     * @throws \SimpleSAML\SAML2\Exception\InvalidDOMElementException if the qualified name of the supplied element is wrong
-     * @throws \SimpleSAML\SAML2\Exception\MissingAttributeException if the supplied element is missing any of the mandatory attributes
+     * @throws \SimpleSAML\XML\Exception\InvalidDOMElementException if the qualified name of the supplied element is wrong
+     * @throws \SimpleSAML\XML\Exception\MissingAttributeException if the supplied element is missing any of the mandatory attributes
      */
     public static function fromXML(DOMElement $xml): object
     {

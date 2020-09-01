@@ -5,7 +5,7 @@ declare(strict_types=1);
 namespace SimpleSAML\SAML2\XML\samlp;
 
 use PHPUnit\Framework\TestCase;
-use SimpleSAML\SAML2\DOMDocumentFactory;
+use SimpleSAML\XML\DOMDocumentFactory;
 use SimpleSAML\SAML2\XML\samlp\LogoutResponse;
 
 /**
@@ -14,6 +14,7 @@ use SimpleSAML\SAML2\XML\samlp\LogoutResponse;
  * @covers \SimpleSAML\SAML2\XML\samlp\LogoutResponse
  * @covers \SimpleSAML\SAML2\XML\samlp\AbstractStatusResponse
  * @covers \SimpleSAML\SAML2\XML\samlp\AbstractMessage
+ * @covers \SimpleSAML\SAML2\XML\samlp\AbstractSamlpElement
  * @package simplesamlphp/saml2
  */
 final class LogoutResponseTest extends TestCase

@@ -5,7 +5,7 @@ declare(strict_types=1);
 namespace SimpleSAML\SAML2\XML\saml;
 
 use DOMElement;
-use SimpleSAML\SAML2\Exception\InvalidDOMElementException;
+use SimpleSAML\XML\Exception\InvalidDOMElementException;
 use SimpleSAML\SAML2\Utils;
 use SimpleSAML\Assert\Assert;
 
@@ -107,7 +107,7 @@ final class SubjectLocality extends AbstractSamlElement
      * @param \DOMElement $xml The XML element we should load
      * @return \SimpleSAML\SAML2\XML\saml\SubjectLocality
      *
-     * @throws \SimpleSAML\SAML2\Exception\InvalidDOMElementException if the qualified name of the supplied element is wrong
+     * @throws \SimpleSAML\XML\Exception\InvalidDOMElementException if the qualified name of the supplied element is wrong
      */
     public static function fromXML(DOMElement $xml): object
     {

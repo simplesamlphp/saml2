@@ -6,11 +6,11 @@ namespace SimpleSAML\SAML2\XML\samlp;
 
 use DOMElement;
 use SimpleSAML\Assert\Assert;
-use SimpleSAML\SAML2\Exception\InvalidDOMElementException;
-use SimpleSAML\SAML2\Exception\TooManyElementsException;
-use SimpleSAML\SAML2\Utils;
 use SimpleSAML\SAML2\XML\ds\Signature;
 use SimpleSAML\SAML2\XML\saml\Issuer;
+use SimpleSAML\XML\Exception\InvalidDOMElementException;
+use SimpleSAML\XML\Exception\TooManyElementsException;
+use SimpleSAML\XML\Utils as XMLUtils;
 
 /**
  * The \SAML2\ArtifactResponse, is the response to the \SAML2\ArtifactResolve.
@@ -92,8 +92,8 @@ class ArtifactResponse extends AbstractStatusResponse
      * @param \DOMElement $xml
      * @return self
      *
-     * @throws \SimpleSAML\SAML2\Exception\InvalidDOMElementException if the qualified name of the supplied element is wrong
-     * @throws \SimpleSAML\SAML2\Exception\MissingAttributeException if the supplied element is missing one of the mandatory attributes
+     * @throws \SimpleSAML\XML\Exception\InvalidDOMElementException if the qualified name of the supplied element is wrong
+     * @throws \SimpleSAML\XML\Exception\MissingAttributeException if the supplied element is missing one of the mandatory attributes
      */
     public static function fromXML(DOMElement $xml): object
     {
@@ -102,7 +102,7 @@ class ArtifactResponse extends AbstractStatusResponse
         Assert::same('2.0', self::getAttribute($xml, 'Version'));
 
         $id = self::getAttribute($xml, 'ID');
-        $issueInstant = Utils::xsDateTimeToTimestamp(self::getAttribute($xml, 'IssueInstant'));
+        $issueInstant = XMLUtils::xsDateTimeToTimestamp(self::getAttribute($xml, 'IssueInstant'));
         $inResponseTo = self::getAttribute($xml, 'InResponseTo', null);
         $destination = self::getAttribute($xml, 'Destination', null);
         $consent = self::getAttribute($xml, 'Consent', null);
@@ -111,7 +111,7 @@ class ArtifactResponse extends AbstractStatusResponse
         Assert::countBetween($issuer, 0, 1);
 
         // find message; it should come last, after the Status-element
-        $status = Utils::xpQuery($xml, './saml_protocol:Status');
+        $status = XMLUtils::xpQuery($xml, './saml_protocol:Status');
         $status = $status[0];
         $message = null;
 

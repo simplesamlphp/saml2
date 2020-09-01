@@ -7,13 +7,14 @@ namespace SimpleSAML\SAML2\XML\saml;
 use PHPUnit\Framework\TestCase;
 use SimpleSAML\SAML2\Constants;
 use SimpleSAML\SAML2\CustomCondition;
-use SimpleSAML\SAML2\DOMDocumentFactory;
+use SimpleSAML\XML\DOMDocumentFactory;
 
 /**
  * Class \SAML2\XML\saml\ConditionTest
  *
  * @covers \SimpleSAML\SAML2\XML\saml\Condition
  * @covers \SimpleSAML\SAML2\XML\saml\AbstractConditionType
+ * @covers \SimpleSAML\SAML2\XML\saml\AbstractSamlElement
  *
  * @author Tim van Dijen, <tvdijen@gmail.com>
  * @package simplesamlphp/saml2

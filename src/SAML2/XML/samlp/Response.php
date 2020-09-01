@@ -7,14 +7,15 @@ namespace SimpleSAML\SAML2\XML\samlp;
 use DOMElement;
 use SimpleSAML\Assert\Assert;
 use SimpleSAML\SAML2\Constants;
-use SimpleSAML\SAML2\Exception\InvalidDOMElementException;
-use SimpleSAML\SAML2\Exception\MissingElementException;
-use SimpleSAML\SAML2\Exception\TooManyElementsException;
+use SimpleSAML\XML\Exception\InvalidDOMElementException;
+use SimpleSAML\XML\Exception\MissingElementException;
+use SimpleSAML\XML\Exception\TooManyElementsException;
 use SimpleSAML\SAML2\Utils;
 use SimpleSAML\SAML2\XML\ds\Signature;
 use SimpleSAML\SAML2\XML\saml\Assertion;
 use SimpleSAML\SAML2\XML\saml\EncryptedAssertion;
 use SimpleSAML\SAML2\XML\saml\Issuer;
+use SimpleSAML\XML\Utils as XMLUtils;
 
 /**
  * Class for SAML 2 Response messages.
@@ -101,9 +102,9 @@ class Response extends AbstractStatusResponse
      * @param \DOMElement $xml The input message.
      * @return self
      *
-     * @throws \SimpleSAML\SAML2\Exception\InvalidDOMElementException if the qualified name of the supplied element is wrong
-     * @throws \SimpleSAML\SAML2\Exception\MissingAttributeException if the supplied element is missing one of the mandatory attributes
-     * @throws \SimpleSAML\SAML2\Exception\MissingElementException if one of the mandatory child-elements is missing
+     * @throws \SimpleSAML\XML\Exception\InvalidDOMElementException if the qualified name of the supplied element is wrong
+     * @throws \SimpleSAML\XML\Exception\MissingAttributeException if the supplied element is missing one of the mandatory attributes
+     * @throws \SimpleSAML\XML\Exception\MissingElementException if one of the mandatory child-elements is missing
      */
     public static function fromXML(DOMElement $xml): object
     {
@@ -113,7 +114,7 @@ class Response extends AbstractStatusResponse
 
         $id = self::getAttribute($xml, 'ID');
         /** @psalm-suppress PossiblyNullArgument */
-        $issueInstant = Utils::xsDateTimeToTimestamp(self::getAttribute($xml, 'IssueInstant'));
+        $issueInstant = XMLUtils::xsDateTimeToTimestamp(self::getAttribute($xml, 'IssueInstant'));
         $inResponseTo = self::getAttribute($xml, 'InResponseTo', null);
         $destination = self::getAttribute($xml, 'Destination', null);
         $consent = self::getAttribute($xml, 'Consent', null);
@@ -181,7 +182,7 @@ class Response extends AbstractStatusResponse
         }
 
         // Test for an Issuer
-        $responseElements = Utils::xpQuery($e, './saml_assertion:Issuer');
+        $responseElements = XMLUtils::xpQuery($e, './saml_assertion:Issuer');
         $issuer = empty($responseElements) ? null : $responseElements[0];
 
         if ($this->signingKey !== null) {

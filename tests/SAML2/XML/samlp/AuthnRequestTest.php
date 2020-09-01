@@ -7,9 +7,6 @@ namespace SimpleSAML\SAML2\XML\samlp;
 use PHPUnit\Framework\TestCase;
 use RobRichards\XMLSecLibs\XMLSecurityKey;
 use SimpleSAML\SAML2\Constants;
-use SimpleSAML\SAML2\DOMDocumentFactory;
-use SimpleSAML\SAML2\Exception\MissingAttributeException;
-use SimpleSAML\SAML2\Exception\TooManyElementsException;
 use SimpleSAML\SAML2\XML\saml\AudienceRestriction;
 use SimpleSAML\SAML2\XML\saml\AuthnContextClassRef;
 use SimpleSAML\SAML2\XML\saml\Conditions;
@@ -18,15 +15,19 @@ use SimpleSAML\SAML2\XML\saml\Issuer;
 use SimpleSAML\SAML2\XML\saml\NameID;
 use SimpleSAML\SAML2\XML\saml\ProxyRestriction;
 use SimpleSAML\SAML2\XML\saml\Subject;
-use SimpleSAML\SAML2\Utils;
 use SimpleSAML\Assert\AssertionFailedException;
 use SimpleSAML\TestUtils\PEMCertificatesMock;
+use SimpleSAML\XML\DOMDocumentFactory;
+use SimpleSAML\XML\Exception\MissingAttributeException;
+use SimpleSAML\XML\Exception\TooManyElementsException;
+use SimpleSAML\XML\Utils as XMLUtils;
 
 /**
  * Class \SAML2\XML\samlp\AuthnRequestTest
  *
  * @covers \SimpleSAML\SAML2\XML\samlp\AuthnRequest
  * @covers \SimpleSAML\SAML2\XML\samlp\AbstractMessage
+ * @covers \SimpleSAML\SAML2\XML\samlp\AbstractSamlpElement
  * @package simplesamlphp/saml2
  */
 final class AuthnRequestTest extends TestCase
@@ -58,7 +59,7 @@ final class AuthnRequestTest extends TestCase
 
         $authnRequestElement = $authnRequest->toXML();
 
-        $requestedAuthnContextElements = Utils::xpQuery(
+        $requestedAuthnContextElements = XMLUtils::xpQuery(
             $authnRequestElement,
             './saml_protocol:RequestedAuthnContext'
         );
@@ -67,7 +68,7 @@ final class AuthnRequestTest extends TestCase
         $requestedAuthnConextElement = $requestedAuthnContextElements[0];
         $this->assertEquals('better', $requestedAuthnConextElement->getAttribute("Comparison"));
 
-        $authnContextClassRefElements = Utils::xpQuery(
+        $authnContextClassRefElements = XMLUtils::xpQuery(
             $requestedAuthnConextElement,
             './saml_assertion:AuthnContextClassRef'
         );
@@ -151,11 +152,11 @@ final class AuthnRequestTest extends TestCase
         $authnRequestElement = $authnRequest->toXML();
 
         // Test for a Subject
-        $authnRequestElements = Utils::xpQuery($authnRequestElement, './saml_assertion:Subject');
+        $authnRequestElements = XMLUtils::xpQuery($authnRequestElement, './saml_assertion:Subject');
         $this->assertCount(1, $authnRequestElements);
 
         // Test ordering of AuthnRequest contents
-        $authnRequestElements = Utils::xpQuery($authnRequestElement, './saml_assertion:Subject/following-sibling::*');
+        $authnRequestElements = XMLUtils::xpQuery($authnRequestElement, './saml_assertion:Subject/following-sibling::*');
         $this->assertCount(4, $authnRequestElements);
         $this->assertEquals('samlp:NameIDPolicy', $authnRequestElements[0]->tagName);
         $this->assertEquals('saml:Conditions', $authnRequestElements[1]->tagName);
@@ -185,7 +186,7 @@ AUTHNREQUEST;
 
         $authnRequest = AuthnRequest::fromXML(DOMDocumentFactory::fromString($xml)->documentElement);
         $issuer = $authnRequest->getIssuer();
-        $expectedIssueInstant = Utils::xsDateTimeToTimestamp('2004-12-05T09:21:59Z');
+        $expectedIssueInstant = XMLUtils::xsDateTimeToTimestamp('2004-12-05T09:21:59Z');
         $this->assertEquals($expectedIssueInstant, $authnRequest->getIssueInstant());
         $this->assertEquals('https://idp.example.org/SAML2/SSO/Artifact', $authnRequest->getDestination());
         $this->assertEquals(Constants::BINDING_HTTP_ARTIFACT, $authnRequest->getProtocolBinding());
@@ -578,7 +579,7 @@ AUTHNREQUEST;
         // the Issuer
         $issuer = new Issuer('https://gateway.example.org/saml20/sp/metadata');
         $destination = 'https://tiqr.example.org/idp/profile/saml2/Redirect/SSO';
-        $issueInstant = Utils::xsDateTimeToTimestamp('2004-12-05T09:21:59Z');
+        $issueInstant = XMLUtils::xsDateTimeToTimestamp('2004-12-05T09:21:59Z');
 
         $nameIdPolicy = new NameIDPolicy(
             Constants::NAMEID_TRANSIENT,
@@ -642,7 +643,7 @@ AUTHNREQUEST;
         // the Issuer
         $issuer = new Issuer('https://gateway.example.org/saml20/sp/metadata');
         $destination = 'https://tiqr.example.org/idp/profile/saml2/Redirect/SSO';
-        $issueInstant = Utils::xsDateTimeToTimestamp('2004-12-05T09:21:59Z');
+        $issueInstant = XMLUtils::xsDateTimeToTimestamp('2004-12-05T09:21:59Z');
         $nameIdPolicy = new NameIDPolicy(Constants::NAMEID_TRANSIENT);
 
         // basic AuthnRequest
@@ -743,7 +744,7 @@ AUTHNREQUEST;
         // the Issuer
         $issuer = new Issuer('https://gateway.example.org/saml20/sp/metadata');
         $destination = 'https://tiqr.example.org/idp/profile/saml2/Redirect/SSO';
-        $issueInstant = Utils::xsDateTimeToTimestamp('2004-12-05T09:21:59Z');
+        $issueInstant = XMLUtils::xsDateTimeToTimestamp('2004-12-05T09:21:59Z');
         $forceAuthn = true;
 
         // basic AuthnRequest
@@ -861,7 +862,7 @@ AUTHNREQUEST;
         // the Issuer
         $issuer = new Issuer('https://gateway.example.org/saml20/sp/metadata');
         $destination = 'https://tiqr.example.org/idp/profile/saml2/Redirect/SSO';
-        $issueInstant = Utils::xsDateTimeToTimestamp('2004-12-05T09:21:59Z');
+        $issueInstant = XMLUtils::xsDateTimeToTimestamp('2004-12-05T09:21:59Z');
         $isPassive = true;
 
         // basic AuthnRequest
@@ -917,7 +918,7 @@ AUTHNREQUEST;
         // the Issuer
         $issuer = new Issuer('https://gateway.example.org/saml20/sp/metadata');
         $destination = 'https://tiqr.example.org/idp/profile/saml2/Redirect/SSO';
-        $issueInstant = Utils::xsDateTimeToTimestamp('2004-12-05T09:21:59Z');
+        $issueInstant = XMLUtils::xsDateTimeToTimestamp('2004-12-05T09:21:59Z');
         $providerName = "My Example SP";
 
         // basic AuthnRequest
@@ -999,7 +1000,7 @@ AUTHNREQUEST;
     {
         // the Issuer
         $issuer = new Issuer('https://sp.example.org/saml20/sp/metadata');
-        $issueInstant = Utils::xsDateTimeToTimestamp('2004-12-05T09:21:59Z');
+        $issueInstant = XMLUtils::xsDateTimeToTimestamp('2004-12-05T09:21:59Z');
         $destination = 'https://idp.example.org/idp/profile/saml2/Redirect/SSO';
         $protocolBinding = Constants::BINDING_HTTP_POST;
         $assertionConsumerServiceURL = "https://sp.example.org/authentication/sp/consume-assertion";

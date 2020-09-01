@@ -6,15 +6,16 @@ namespace SimpleSAML\SAML2\XML\md;
 
 use PHPUnit\Framework\TestCase;
 use SimpleSAML\SAML2\Constants;
-use SimpleSAML\SAML2\DOMDocumentFactory;
-use SimpleSAML\SAML2\Exception\InvalidDOMElementException;
-use SimpleSAML\SAML2\Exception\MissingAttributeException;
+use SimpleSAML\XML\DOMDocumentFactory;
+use SimpleSAML\XML\Exception\InvalidDOMElementException;
+use SimpleSAML\XML\Exception\MissingAttributeException;
 use SimpleSAML\Assert\AssertionFailedException;
 
 /**
  * Class \SAML2\XML\md\IndexedEndpointTypeTest
  *
  * @covers \SimpleSAML\SAML2\XML\md\IndexedEndpointType
+ * @covers \SimpleSAML\SAML2\XML\md\AbstractMdElement
  * @package simplesamlphp/saml2
  */
 final class IndexedEndpointTypeTest extends TestCase

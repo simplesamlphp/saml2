@@ -6,14 +6,15 @@ namespace SimpleSAML\SAML2\XML\md;
 
 use PHPUnit\Framework\TestCase;
 use SimpleSAML\SAML2\Constants;
-use SimpleSAML\SAML2\DOMDocumentFactory;
-use SimpleSAML\SAML2\Exception\MissingElementException;
-use SimpleSAML\SAML2\XML\Chunk;
+use SimpleSAML\XML\DOMDocumentFactory;
+use SimpleSAML\XML\Exception\MissingElementException;
+use SimpleSAML\XML\Chunk;
 
 /**
  * Test for the Organization metadata element.
  *
  * @covers \SimpleSAML\SAML2\XML\md\Organization
+ * @covers \SimpleSAML\SAML2\XML\md\AbstractMdElement
  * @package simplesamlphp/saml2
  */
 final class OrganizationTest extends TestCase

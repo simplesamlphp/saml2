@@ -5,16 +5,17 @@ declare(strict_types=1);
 namespace SimpleSAML\SAML2\XML\samlp;
 
 use PHPUnit\Framework\TestCase;
-use SimpleSAML\SAML2\DOMDocumentFactory;
-use SimpleSAML\SAML2\Exception\MissingElementException;
-use SimpleSAML\SAML2\Utils;
 use SimpleSAML\SAML2\XML\samlp\IDPEntry;
 use SimpleSAML\SAML2\XML\samlp\IDPList;
+use SimpleSAML\XML\DOMDocumentFactory;
+use SimpleSAML\XML\Exception\MissingElementException;
+use SimpleSAML\XML\Utils as XMLUtils;
 
 /**
  * Class \SAML2\XML\samlp\IDPListTest
  *
  * @covers \SimpleSAML\SAML2\XML\samlp\IDPList
+ * @covers \SimpleSAML\SAML2\XML\samlp\AbstractSamlpElement
  *
  * @author Tim van Dijen, <tvdijen@gmail.com>
  * @package simplesamlphp/saml2
@@ -76,11 +77,11 @@ final class IDPListTest extends TestCase
         $listElement = $list->toXML();
 
         // Test for an IDPEntry
-        $listElements = Utils::xpQuery($listElement, './saml_protocol:IDPEntry');
+        $listElements = XMLUtils::xpQuery($listElement, './saml_protocol:IDPEntry');
         $this->assertCount(2, $listElements);
 
         // Test ordering of IDPList contents
-        $listElements = Utils::xpQuery($listElement, './saml_protocol:IDPEntry/following-sibling::*');
+        $listElements = XMLUtils::xpQuery($listElement, './saml_protocol:IDPEntry/following-sibling::*');
         $this->assertCount(2, $listElements);
         $this->assertEquals('samlp:IDPEntry', $listElements[0]->tagName);
         $this->assertEquals('samlp:GetComplete', $listElements[1]->tagName);

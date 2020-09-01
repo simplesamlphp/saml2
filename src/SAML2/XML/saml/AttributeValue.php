@@ -6,8 +6,8 @@ namespace SimpleSAML\SAML2\XML\saml;
 
 use DOMElement;
 use SimpleSAML\SAML2\Constants;
-use SimpleSAML\SAML2\Exception\InvalidDOMElementException;
-use SimpleSAML\SAML2\XML\AbstractXMLElement;
+use SimpleSAML\XML\Exception\InvalidDOMElementException;
+use SimpleSAML\XML\AbstractXMLElement;
 use SimpleSAML\Assert\Assert;
 
 /**
@@ -18,7 +18,7 @@ use SimpleSAML\Assert\Assert;
 class AttributeValue extends AbstractSamlElement
 {
     /**
-     * @var string|int|AbstractXMLElement|null
+     * @var string|int|\SimpleSAML\XML\AbstractXMLElement|null
      */
     protected $value;
 
@@ -30,7 +30,7 @@ class AttributeValue extends AbstractSamlElement
      *  - string
      *  - int
      *  - null
-     *  - \SimpleSAML\SAML2\XML\AbstractXMLElement
+     *  - \SimpleSAML\XML\AbstractXMLElement
      *
      * @throws \SimpleSAML\Assert\AssertionFailedException if the supplied value is neither a string or a DOMElement
      */
@@ -57,7 +57,7 @@ class AttributeValue extends AbstractSamlElement
             case "NULL":
                 return "xs:nil";
             case "object":
-                return $this->value::NS_PREFIX . ":" . AbstractXMLElement::getClassName(get_class($this->value));
+                return $this->value::getNamespacePrefix() . ":" . AbstractXMLElement::getClassName(get_class($this->value));
             default:
                 return "xs:string";
         }
@@ -67,7 +67,7 @@ class AttributeValue extends AbstractSamlElement
     /**
      * Get this attribute value.
      *
-     * @return string|int|\SimpleSAML\SAML2\XML\AbstractXMLElement|null
+     * @return string|int|\SimpleSAML\XML\AbstractXMLElement|null
      */
     public function getValue()
     {
@@ -81,7 +81,7 @@ class AttributeValue extends AbstractSamlElement
      * @param \DOMElement $xml The XML element we should load
      * @return \SimpleSAML\SAML2\XML\saml\AttributeValue
      *
-     * @throws \SimpleSAML\SAML2\Exception\InvalidDOMElementException if the qualified name of the supplied element is wrong
+     * @throws \SimpleSAML\XML\Exception\InvalidDOMElementException if the qualified name of the supplied element is wrong
      */
     public static function fromXML(DOMElement $xml): object
     {

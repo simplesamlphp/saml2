@@ -6,13 +6,14 @@ namespace SimpleSAML\SAML2\XML\samlp;
 
 use PHPUnit\Framework\TestCase;
 use SimpleSAML\SAML2\Constants;
-use SimpleSAML\SAML2\DOMDocumentFactory;
-use SimpleSAML\SAML2\XML\Chunk;
+use SimpleSAML\XML\DOMDocumentFactory;
+use SimpleSAML\XML\Chunk;
 
 /**
  * Class \SAML2\XML\samlp\StatusDetailTest
  *
  * @covers \SimpleSAML\SAML2\XML\samlp\StatusDetail
+ * @covers \SimpleSAML\SAML2\XML\samlp\AbstractSamlpElement
  *
  * @author Tim van Dijen, <tvdijen@gmail.com>
  * @package simplesamlphp/saml2

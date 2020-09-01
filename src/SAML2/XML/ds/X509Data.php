@@ -6,8 +6,8 @@ namespace SimpleSAML\SAML2\XML\ds;
 
 use DOMElement;
 use SimpleSAML\Assert\Assert;
-use SimpleSAML\SAML2\Exception\InvalidDOMElementException;
-use SimpleSAML\SAML2\XML\Chunk;
+use SimpleSAML\XML\Exception\InvalidDOMElementException;
+use SimpleSAML\XML\Chunk;
 use SimpleSAML\SAML2\XML\ds\X509Certificate;
 
 /**
@@ -23,7 +23,7 @@ final class X509Data extends AbstractDsElement
      * Array with various elements describing this certificate.
      * Unknown elements will be represented by \SAML2\XML\Chunk.
      *
-     * @var (\SimpleSAML\SAML2\XML\Chunk|\SimpleSAML\SAML2\XML\ds\X509Certificate|\SimpleSAML\SAML2\XML\ds\X509SubjectName)[]
+     * @var (\SimpleSAML\XML\Chunk|\SimpleSAML\SAML2\XML\ds\X509Certificate|\SimpleSAML\SAML2\XML\ds\X509SubjectName)[]
      */
     protected $data = [];
 
@@ -31,7 +31,7 @@ final class X509Data extends AbstractDsElement
     /**
      * Initialize a X509Data.
      *
-     * @param (\SimpleSAML\SAML2\XML\Chunk|\SimpleSAML\SAML2\XML\ds\X509Certificate|\SimpleSAML\SAML2\XML\ds\X509SubjectName)[] $data
+     * @param (\SimpleSAML\XML\Chunk|\SimpleSAML\SAML2\XML\ds\X509Certificate|\SimpleSAML\SAML2\XML\ds\X509SubjectName)[] $data
      */
     public function __construct(array $data)
     {
@@ -42,7 +42,7 @@ final class X509Data extends AbstractDsElement
     /**
      * Collect the value of the data-property
      *
-     * @return (\SimpleSAML\SAML2\XML\Chunk|\SimpleSAML\SAML2\XML\ds\X509Certificate|\SimpleSAML\SAML2\XML\ds\X509SubjectName)[]
+     * @return (\SimpleSAML\XML\Chunk|\SimpleSAML\SAML2\XML\ds\X509Certificate|\SimpleSAML\SAML2\XML\ds\X509SubjectName)[]
      */
     public function getData(): array
     {
@@ -53,7 +53,7 @@ final class X509Data extends AbstractDsElement
     /**
      * Set the value of the data-property
      *
-     * @param (\SimpleSAML\SAML2\XML\Chunk|\SimpleSAML\SAML2\XML\ds\X509Certificate|\SimpleSAML\SAML2\XML\ds\X509SubjectName)[] $data
+     * @param (\SimpleSAML\XML\Chunk|\SimpleSAML\SAML2\XML\ds\X509Certificate|\SimpleSAML\SAML2\XML\ds\X509SubjectName)[] $data
      * @return void
      * @throws \SimpleSAML\Assert\AssertionFailedException
      *     if $data contains anything other than X509Certificate or Chunk
@@ -72,7 +72,7 @@ final class X509Data extends AbstractDsElement
      * @param \DOMElement $xml The XML element we should load
      * @return self
      *
-     * @throws \SimpleSAML\SAML2\Exception\InvalidDOMElementException if the qualified name of the supplied element is wrong
+     * @throws \SimpleSAML\XML\Exception\InvalidDOMElementException if the qualified name of the supplied element is wrong
      */
     public static function fromXML(DOMElement $xml): object
     {

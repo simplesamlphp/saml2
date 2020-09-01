@@ -13,7 +13,7 @@ use SimpleSAML\SAML2\Certificate\KeyCollection;
 use SimpleSAML\SAML2\Certificate\KeyLoader;
 use SimpleSAML\SAML2\Configuration\IdentityProvider;
 use SimpleSAML\SAML2\Configuration\CertificateProvider;
-use SimpleSAML\SAML2\DOMDocumentFactory;
+use SimpleSAML\XML\DOMDocumentFactory;
 use SimpleSAML\SAML2\Signature\PublicKeyValidator;
 use SimpleSAML\SAML2\SimpleTestLogger;
 use SimpleSAML\SAML2\Utilities\Certificate;

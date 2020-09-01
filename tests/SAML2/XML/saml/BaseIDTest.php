@@ -7,12 +7,13 @@ namespace SimpleSAML\SAML2\XML\saml;
 use PHPUnit\Framework\TestCase;
 use SimpleSAML\SAML2\Constants;
 use SimpleSAML\SAML2\CustomBaseID;
-use SimpleSAML\SAML2\DOMDocumentFactory;
+use SimpleSAML\XML\DOMDocumentFactory;
 
 /**
  * Class \SAML2\XML\saml\BaseIDTest
  *
  * @covers \SimpleSAML\SAML2\XML\saml\BaseID
+ * @covers \SimpleSAML\SAML2\XML\saml\AbstractSamlElement
  *
  * @author Tim van Dijen, <tvdijen@gmail.com>
  * @package simplesamlphp/saml2

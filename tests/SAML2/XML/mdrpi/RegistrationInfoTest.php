@@ -5,14 +5,15 @@ declare(strict_types=1);
 namespace SimpleSAML\SAML2\XML\mdrpi;
 
 use PHPUnit\Framework\TestCase;
-use SimpleSAML\SAML2\DOMDocumentFactory;
-use SimpleSAML\SAML2\Exception\MissingAttributeException;
-use SimpleSAML\SAML2\Utils;
+use SimpleSAML\XML\DOMDocumentFactory;
+use SimpleSAML\XML\Exception\MissingAttributeException;
+use SimpleSAML\XML\Utils as XMLUtils;
 
 /**
  * Class \SAML2\XML\mdrpi\RegistrationInfoTest
  *
  * @covers \SimpleSAML\SAML2\XML\mdrpi\RegistrationInfo
+ * @covers \SimpleSAML\SAML2\XML\mdrpi\AbstractMdrpiElement
  * @package simplesamlphp/saml2
  */
 final class RegistrationInfoTest extends TestCase
@@ -50,7 +51,7 @@ final class RegistrationInfoTest extends TestCase
         $xml = $registrationInfo->toXML($document->documentElement);
 
         /** @var \DOMElement[] $registrationInfoElements */
-        $registrationInfoElements = Utils::xpQuery(
+        $registrationInfoElements = XMLUtils::xpQuery(
             $xml,
             '/root/*[local-name()=\'RegistrationInfo\' and namespace-uri()=\'urn:oasis:names:tc:SAML:metadata:rpi\']'
         );
@@ -64,7 +65,7 @@ final class RegistrationInfoTest extends TestCase
         $this->assertEquals('2009-02-13T23:31:30Z', $registrationInfoElement->getAttribute("registrationInstant"));
 
         /** @var \DOMElement[] $usagePolicyElements */
-        $usagePolicyElements = Utils::xpQuery(
+        $usagePolicyElements = XMLUtils::xpQuery(
             $registrationInfoElement,
             './*[local-name()=\'RegistrationPolicy\' and namespace-uri()=\'urn:oasis:names:tc:SAML:metadata:rpi\']'
         );

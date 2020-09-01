@@ -11,7 +11,7 @@ use SimpleSAML\SAML2\Assertion\ProcessorBuilder;
 use SimpleSAML\SAML2\Configuration\Destination;
 use SimpleSAML\SAML2\Configuration\IdentityProvider;
 use SimpleSAML\SAML2\Configuration\ServiceProvider;
-use SimpleSAML\SAML2\DOMDocumentFactory;
+use SimpleSAML\XML\DOMDocumentFactory;
 use SimpleSAML\SAML2\Signature\Validator;
 use SimpleSAML\SAML2\XML\samlp\Response;
 use SimpleSAML\SAML2\XML\samlp\Status;

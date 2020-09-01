@@ -8,10 +8,11 @@ use DOMElement;
 use RobRichards\XMLSecLibs\XMLSecEnc;
 use RobRichards\XMLSecLibs\XMLSecurityKey;
 use SimpleSAML\Assert\Assert;
-use SimpleSAML\SAML2\Exception\InvalidDOMElementException;
+use SimpleSAML\XML\Exception\InvalidDOMElementException;
 use SimpleSAML\SAML2\Utils;
 use SimpleSAML\SAML2\XML\xenc\EncryptedData;
 use SimpleSAML\SAML2\XML\xenc\EncryptedKey;
+use SimpleSAML\XML\AbstractXMLElement;
 
 /**
  * Trait aggregating functionality for encrypted elements.
@@ -104,7 +105,7 @@ trait EncryptedElementTrait
     /**
      * Create an encrypted element from a given unencrypted element and a key.
      *
-     * @param \SimpleSAML\SAML2\XML\AbstractXMLElement $element
+     * @param \SimpleSAML\XML\AbstractXMLElement $element
      * @param \RobRichards\XMLSecLibs\XMLSecurityKey $key
      *
      * @return \SimpleSAML\SAML2\XML\EncryptedElementInterface
@@ -158,7 +159,7 @@ trait EncryptedElementTrait
      * @inheritDoc
      * @return \SimpleSAML\SAML2\XML\EncryptedElementInterface
      *
-     * @throws \SimpleSAML\SAML2\Exception\InvalidDOMElementException if the qualified name of the supplied element is wrong
+     * @throws \SimpleSAML\XML\Exception\InvalidDOMElementException if the qualified name of the supplied element is wrong
      */
     public static function fromXML(DOMElement $xml): object
     {

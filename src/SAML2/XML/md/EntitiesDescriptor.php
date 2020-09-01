@@ -6,10 +6,10 @@ namespace SimpleSAML\SAML2\XML\md;
 
 use DOMElement;
 use SimpleSAML\Assert\Assert;
-use SimpleSAML\SAML2\Exception\InvalidDOMElementException;
-use SimpleSAML\SAML2\Exception\TooManyElementsException;
-use SimpleSAML\SAML2\Utils;
 use SimpleSAML\SAML2\XML\ds\Signature;
+use SimpleSAML\XML\Exception\InvalidDOMElementException;
+use SimpleSAML\XML\Exception\TooManyElementsException;
+use SimpleSAML\XML\Utils as XMLUtils;
 
 /**
  * Class representing SAML 2 EntitiesDescriptor element.
@@ -71,8 +71,8 @@ final class EntitiesDescriptor extends AbstractMetadataDocument
      * @param \DOMElement $xml The XML element we should load.
      * @return \SimpleSAML\SAML2\XML\md\EntitiesDescriptor
      *
-     * @throws \SimpleSAML\SAML2\Exception\InvalidDOMElementException if the qualified name of the supplied element is wrong
-     * @throws \SimpleSAML\SAML2\Exception\TooManyElementsException if too many child-elements of a type are specified
+     * @throws \SimpleSAML\XML\Exception\InvalidDOMElementException if the qualified name of the supplied element is wrong
+     * @throws \SimpleSAML\XML\Exception\TooManyElementsException if too many child-elements of a type are specified
      */
     public static function fromXML(DOMElement $xml): object
     {
@@ -94,7 +94,7 @@ final class EntitiesDescriptor extends AbstractMetadataDocument
             EntitiesDescriptor::getChildrenOfClass($xml),
             self::getAttribute($xml, 'Name', null),
             self::getAttribute($xml, 'ID', null),
-            $validUntil !== null ? Utils::xsDateTimeToTimestamp($validUntil) : null,
+            $validUntil !== null ? XMLUtils::xsDateTimeToTimestamp($validUntil) : null,
             self::getAttribute($xml, 'cacheDuration', null),
             !empty($extensions) ? $extensions[0] : null
         );

@@ -5,15 +5,16 @@ declare(strict_types=1);
 namespace SimpleSAML\SAML2\XML\saml;
 
 use PHPUnit\Framework\TestCase;
-use SimpleSAML\SAML2\Constants;
-use SimpleSAML\SAML2\DOMDocumentFactory;
-use SimpleSAML\SAML2\Utils;
 use SimpleSAML\Assert\AssertionFailedException;
+use SimpleSAML\SAML2\Constants;
+use SimpleSAML\XML\DOMDocumentFactory;
+use SimpleSAML\XML\Utils as XMLUtils;
 
 /**
  * Class \SAML2\XML\saml\AuthnContextTest
  *
  * @covers \SimpleSAML\SAML2\XML\saml\AuthnContext
+ * @covers \SimpleSAML\SAML2\XML\saml\AbstractSamlElement
  * @package simplesamlphp/saml2
  */
 final class AuthnContextTest extends TestCase
@@ -145,11 +146,11 @@ final class AuthnContextTest extends TestCase
         $authnContextElement = $authnContext->toXML();
 
         // Test for a AuthnContextClassRef
-        $authnContextElements = Utils::xpQuery($authnContextElement, './saml_assertion:AuthnContextClassRef');
+        $authnContextElements = XMLUtils::xpQuery($authnContextElement, './saml_assertion:AuthnContextClassRef');
         $this->assertCount(1, $authnContextElements);
 
         // Test ordering of AuthnContext contents
-        $authnContextElements = Utils::xpQuery(
+        $authnContextElements = XMLUtils::xpQuery(
             $authnContextElement,
             './saml_assertion:AuthnContextClassRef/following-sibling::*'
         );
@@ -178,11 +179,11 @@ final class AuthnContextTest extends TestCase
         $authnContextElement = $authnContext->toXML();
 
         // Test for a AuthnContextClassRef
-        $authnContextElements = Utils::xpQuery($authnContextElement, './saml_assertion:AuthnContextDecl');
+        $authnContextElements = XMLUtils::xpQuery($authnContextElement, './saml_assertion:AuthnContextDecl');
         $this->assertCount(1, $authnContextElements);
 
         // Test ordering of AuthnContext contents
-        $authnContextElements = Utils::xpQuery(
+        $authnContextElements = XMLUtils::xpQuery(
             $authnContextElement,
             './saml_assertion:AuthnContextDecl/following-sibling::*'
         );
@@ -210,11 +211,11 @@ final class AuthnContextTest extends TestCase
         $authnContextElement = $authnContext->toXML();
 
         // Test for a AuthnContextClassRef
-        $authnContextElements = Utils::xpQuery($authnContextElement, './saml_assertion:AuthnContextClassRef');
+        $authnContextElements = XMLUtils::xpQuery($authnContextElement, './saml_assertion:AuthnContextClassRef');
         $this->assertCount(1, $authnContextElements);
 
         // Test ordering of AuthnContext contents
-        $authnContextElements = Utils::xpQuery(
+        $authnContextElements = XMLUtils::xpQuery(
             $authnContextElement,
             './saml_assertion:AuthnContextClassRef/following-sibling::*'
         );
@@ -243,11 +244,11 @@ final class AuthnContextTest extends TestCase
         $authnContextElement = $authnContext->toXML();
 
         // Test for a AuthnContextClassRef
-        $authnContextElements = Utils::xpQuery($authnContextElement, './saml_assertion:AuthnContextDeclRef');
+        $authnContextElements = XMLUtils::xpQuery($authnContextElement, './saml_assertion:AuthnContextDeclRef');
         $this->assertCount(1, $authnContextElements);
 
         // Test ordering of AuthnContext contents
-        $authnContextElements = Utils::xpQuery(
+        $authnContextElements = XMLUtils::xpQuery(
             $authnContextElement,
             './saml_assertion:AuthnContextDeclRef/following-sibling::*'
         );

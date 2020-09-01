@@ -5,13 +5,14 @@ declare(strict_types=1);
 namespace SimpleSAML\SAML2\XML\md;
 
 use PHPUnit\Framework\TestCase;
-use SimpleSAML\SAML2\DOMDocumentFactory;
-use SimpleSAML\SAML2\Exception\MissingAttributeException;
+use SimpleSAML\XML\DOMDocumentFactory;
+use SimpleSAML\XML\Exception\MissingAttributeException;
 use SimpleSAML\Assert\AssertionFailedException;
 
 /**
  * Tests for the AdditionalMetadataLocation class
  *
+ * @covers \SimpleSAML\SAML2\XML\md\AbstractMdElement
  * @covers \SimpleSAML\SAML2\XML\md\AdditionalMetadataLocation
  * @package simplesamlphp/saml2
  */

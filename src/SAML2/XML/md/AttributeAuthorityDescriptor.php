@@ -7,12 +7,12 @@ namespace SimpleSAML\SAML2\XML\md;
 use DOMElement;
 use SimpleSAML\Assert\Assert;
 use SimpleSAML\SAML2\Constants;
-use SimpleSAML\SAML2\Exception\InvalidDOMElementException;
-use SimpleSAML\SAML2\Exception\MissingElementException;
-use SimpleSAML\SAML2\Exception\TooManyElementsException;
-use SimpleSAML\SAML2\Utils;
 use SimpleSAML\SAML2\XML\ds\Signature;
 use SimpleSAML\SAML2\XML\saml\Attribute;
+use SimpleSAML\XML\Exception\InvalidDOMElementException;
+use SimpleSAML\XML\Exception\MissingElementException;
+use SimpleSAML\XML\Exception\TooManyElementsException;
+use SimpleSAML\XML\Utils as XMLUtils;
 
 /**
  * Class representing SAML 2 metadata AttributeAuthorityDescriptor.
@@ -267,10 +267,10 @@ final class AttributeAuthorityDescriptor extends AbstractRoleDescriptor
      * @param \DOMElement $xml The XML element we should load.
      * @return self
      *
-     * @throws \SimpleSAML\SAML2\Exception\InvalidDOMElementException if the qualified name of the supplied element is wrong
-     * @throws \SimpleSAML\SAML2\Exception\MissingAttributeException if the supplied element is missing one of the mandatory attributes
-     * @throws \SimpleSAML\SAML2\Exception\MissingElementException if one of the mandatory child-elements is missing
-     * @throws \SimpleSAML\SAML2\Exception\TooManyElementsException if too many child-elements of a type are specified
+     * @throws \SimpleSAML\XML\Exception\InvalidDOMElementException if the qualified name of the supplied element is wrong
+     * @throws \SimpleSAML\XML\Exception\MissingAttributeException if the supplied element is missing one of the mandatory attributes
+     * @throws \SimpleSAML\XML\Exception\MissingElementException if one of the mandatory child-elements is missing
+     * @throws \SimpleSAML\XML\Exception\TooManyElementsException if too many child-elements of a type are specified
      */
     public static function fromXML(DOMElement $xml): object
     {
@@ -287,8 +287,8 @@ final class AttributeAuthorityDescriptor extends AbstractRoleDescriptor
         );
 
         $assertIDReqServices = AssertionIDRequestService::getChildrenOfClass($xml);
-        $nameIDFormats = Utils::extractStrings($xml, Constants::NS_MD, 'NameIDFormat');
-        $attrProfiles = Utils::extractStrings($xml, Constants::NS_MD, 'AttributeProfile');
+        $nameIDFormats = XMLUtils::extractStrings($xml, Constants::NS_MD, 'NameIDFormat');
+        $attrProfiles = XMLUtils::extractStrings($xml, Constants::NS_MD, 'AttributeProfile');
 
         $attributes = Attribute::getChildrenOfClass($xml);
         $validUntil = self::getAttribute($xml, 'validUntil', null);
@@ -310,7 +310,7 @@ final class AttributeAuthorityDescriptor extends AbstractRoleDescriptor
             $attrProfiles,
             $attributes,
             self::getAttribute($xml, 'ID', null),
-            $validUntil !== null ? Utils::xsDateTimeToTimestamp($validUntil) : null,
+            $validUntil !== null ? XMLUtils::xsDateTimeToTimestamp($validUntil) : null,
             self::getAttribute($xml, 'cacheDuration', null),
             !empty($extensions) ? $extensions[0] : null,
             self::getAttribute($xml, 'errorURL', null),
@@ -344,8 +344,8 @@ final class AttributeAuthorityDescriptor extends AbstractRoleDescriptor
             $ep->toXML($e);
         }
 
-        Utils::addStrings($e, Constants::NS_MD, 'md:NameIDFormat', false, $this->NameIDFormats);
-        Utils::addStrings($e, Constants::NS_MD, 'md:AttributeProfile', false, $this->AttributeProfiles);
+        XMLUtils::addStrings($e, Constants::NS_MD, 'md:NameIDFormat', false, $this->NameIDFormats);
+        XMLUtils::addStrings($e, Constants::NS_MD, 'md:AttributeProfile', false, $this->AttributeProfiles);
 
         foreach ($this->Attributes as $a) {
             $a->toXML($e);
