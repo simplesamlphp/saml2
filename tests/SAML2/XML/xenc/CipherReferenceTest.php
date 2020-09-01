@@ -13,6 +13,7 @@ use SimpleSAML\XML\DOMDocumentFactory;
 /**
  * Class \SimpleSAML\SAML2\XML\xenc\CipherReferenceTest
  *
+ * @covers \SimpleSAML\SAML2\XML\xenc\AbstractXencElement
  * @covers \SimpleSAML\SAML2\XML\xenc\AbstractReference
  * @covers \SimpleSAML\SAML2\XML\xenc\CipherReference
  *

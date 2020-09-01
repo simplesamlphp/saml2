@@ -13,6 +13,7 @@ use SimpleSAML\XML\DOMDocumentFactory;
 /**
  * Class \SimpleSAML\SAML2\XML\xenc\ReferenceListTest
  *
+ * @covers \SimpleSAML\SAML2\XML\xenc\AbstractXencElement
  * @covers \SimpleSAML\SAML2\XML\xenc\ReferenceList
  *
  * @author Tim van Dijen, <tvdijen@gmail.com>

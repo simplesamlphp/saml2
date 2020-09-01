@@ -13,6 +13,7 @@ use SimpleSAML\XML\DOMDocumentFactory;
 /**
  * Class \SAML2\XML\xenc\CipherDataTest
  *
+ * @covers \SimpleSAML\SAML2\XML\xenc\AbstractXencElement
  * @covers \SimpleSAML\SAML2\XML\xenc\CipherData
  *
  * @author Tim van Dijen, <tvdijen@gmail.com>

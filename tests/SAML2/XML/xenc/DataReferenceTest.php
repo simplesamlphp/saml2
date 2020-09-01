@@ -13,6 +13,7 @@ use SimpleSAML\XML\DOMDocumentFactory;
 /**
  * Class \SimpleSAML\SAML2\XML\xenc\DataReferenceTest
  *
+ * @covers \SimpleSAML\SAML2\XML\xenc\AbstractXencElement
  * @covers \SimpleSAML\SAML2\XML\xenc\AbstractReference
  * @covers \SimpleSAML\SAML2\XML\xenc\DataReference
  *

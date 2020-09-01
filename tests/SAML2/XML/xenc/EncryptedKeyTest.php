@@ -15,6 +15,7 @@ use SimpleSAML\XML\Utils as XMLUtils;
 /**
  * Class \SimpleSAML\SAML2\XML\xenc\EncryptedKeyTest
  *
+ * @covers \SimpleSAML\SAML2\XML\xenc\AbstractXencElement
  * @covers \SimpleSAML\SAML2\XML\xenc\AbstractEncryptedType
  * @covers \SimpleSAML\SAML2\XML\xenc\EncryptedKey
  *

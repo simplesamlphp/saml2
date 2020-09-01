@@ -14,6 +14,7 @@ use SimpleSAML\XML\DOMDocumentFactory;
 /**
  * Class \SimpleSAML\SAML2\XML\xenc\EncryptedDataTest
  *
+ * @covers \SimpleSAML\SAML2\XML\xenc\AbstractXencElement
  * @covers \SimpleSAML\SAML2\XML\xenc\AbstractEncryptedType
  * @covers \SimpleSAML\SAML2\XML\xenc\EncryptedData
  *
