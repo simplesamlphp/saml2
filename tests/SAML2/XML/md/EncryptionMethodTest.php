@@ -10,7 +10,7 @@ use SimpleSAML\SAML2\Constants;
 use SimpleSAML\XML\Chunk;
 use SimpleSAML\XML\DOMDocumentFactory;
 use SimpleSAML\XML\Exception\MissingAttributeException;
-use SimpleSAML\XML\Utils;
+use SimpleSAML\XML\Utils as XMLUtils;
 
 /**
  * Tests for the md:EncryptionMethod element.
