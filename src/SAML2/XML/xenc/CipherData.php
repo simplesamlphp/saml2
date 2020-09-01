@@ -116,7 +116,7 @@ class CipherData extends AbstractXencElement
         $e = $this->instantiateParentElement($parent);
 
         if ($this->cipherValue !== null) {
-            Utils::addString($e, $this::NS, 'CipherValue', $this->cipherValue);
+            XMLUtils::addString($e, $this::NS, 'CipherValue', $this->cipherValue);
         }
 
         if ($this->cipherReference !== null) {

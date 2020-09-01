@@ -6,8 +6,6 @@ namespace SimpleSAML\SAML2\XML\saml;
 
 use Phpunit\Framework\TestCase;
 use RobRichards\XMLSecLibs\XMLSecurityKey;
-use SimpleSAML\SAML2\DOMDocumentFactory;
-use SimpleSAML\SAML2\XML\Chunk;
 use SimpleSAML\SAML2\XML\ds\KeyInfo;
 use SimpleSAML\SAML2\XML\xenc\CipherData;
 use SimpleSAML\SAML2\XML\xenc\DataReference;
@@ -16,6 +14,8 @@ use SimpleSAML\SAML2\XML\xenc\EncryptedKey;
 use SimpleSAML\SAML2\XML\xenc\EncryptionMethod;
 use SimpleSAML\SAML2\XML\xenc\ReferenceList;
 use SimpleSAML\TestUtils\PEMCertificatesMock;
+use SimpleSAML\XML\DOMDocumentFactory;
+use SimpleSAML\XML\Chunk;
 
 /**
  * Class \SAML2\EncryptedAssertionTest

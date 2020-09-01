@@ -15,7 +15,7 @@ class KeyReference extends AbstractReference
      * KeyReference constructor.
      *
      * @param string $uri
-     * @param \SimpleSAML\SAML2\XML\Chunk[] $references
+     * @param \SimpleSAML\XML\Chunk[] $references
      */
     public function __construct(string $uri, array $references = [])
     {

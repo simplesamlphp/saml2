@@ -19,7 +19,7 @@ abstract class AbstractReference extends AbstractXencElement
     /** @var string */
     protected $uri;
 
-    /** @var \SimpleSAML\SAML2\XML\Chunk[] */
+    /** @var \SimpleSAML\XML\Chunk[] */
     protected $references = [];
 
 
@@ -27,7 +27,7 @@ abstract class AbstractReference extends AbstractXencElement
      * AbstractReference constructor.
      *
      * @param string $uri
-     * @param \SimpleSAML\SAML2\XML\Chunk[] $references
+     * @param \SimpleSAML\XML\Chunk[] $references
      */
     protected function __construct(string $uri, array $references = [])
     {
@@ -60,7 +60,7 @@ abstract class AbstractReference extends AbstractXencElement
     /**
      * Collect the references
      *
-     * @return \SimpleSAML\SAML2\XML\Chunk[]
+     * @return \SimpleSAML\XML\Chunk[]
      */
     public function getReferences(): array
     {
@@ -71,9 +71,10 @@ abstract class AbstractReference extends AbstractXencElement
     /**
      * Set the value of the references-property
      *
-     * @param \SimpleSAML\SAML2\XML\Chunk[] $references
+     * @param \SimpleSAML\XML\Chunk[] $references
      * @return void
-     * @throws \SimpleSAML\Assert\AssertionFailedException if the supplied array contains anything other than Chunk objects
+     * @throws \SimpleSAML\Assert\AssertionFailedException
+     *   if the supplied array contains anything other than Chunk objects
      */
     private function setReferences(array $references): void
     {
@@ -85,8 +86,10 @@ abstract class AbstractReference extends AbstractXencElement
     /**
      * @inheritDoc
      *
-     * @throws \SimpleSAML\XML\Exception\InvalidDOMElementException if the qualified name of the supplied element is wrong
-     * @throws \SimpleSAML\XML\Exception\MissingAttributeException if the supplied element is missing one of the mandatory attributes
+     * @throws \SimpleSAML\XML\Exception\InvalidDOMElementException
+     *   if the qualified name of the supplied element is wrong
+     * @throws \SimpleSAML\XML\Exception\MissingAttributeException
+     *   if the supplied element is missing one of the mandatory attributes
      */
     public static function fromXML(DOMElement $xml): object
     {

@@ -7,9 +7,9 @@ namespace SimpleSAML\SAML2\XML\xenc;
 use PHPUnit\Framework\TestCase;
 use RobRichards\XMLSecLibs\XMLSecurityDsig;
 use SimpleSAML\SAML2\Constants;
-use SimpleSAML\SAML2\DOMDocumentFactory;
-use SimpleSAML\SAML2\XML\Chunk;
 use SimpleSAML\SAML2\XML\ds\KeyInfo;
+use SimpleSAML\XML\Chunk;
+use SimpleSAML\XML\DOMDocumentFactory;
 
 /**
  * Class \SimpleSAML\SAML2\XML\xenc\EncryptedDataTest
