@@ -16,6 +16,7 @@ use SimpleSAML\XML\Utils as XMLUtils;
 /**
  * Tests for the md:EntitiesDescriptor element.
  *
+ * @covers \SimpleSAML\SAML2\XML\md\AbstractMdElement
  * @covers \SimpleSAML\SAML2\XML\md\EntitiesDescriptor
  * @covers \SimpleSAML\SAML2\XML\md\AbstractMetadataDocument
  * @package simplesamlphp/saml2

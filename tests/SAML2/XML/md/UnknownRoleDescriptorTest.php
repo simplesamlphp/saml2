@@ -22,6 +22,7 @@ use SimpleSAML\Assert\AssertionFailedException;
  * @covers \SimpleSAML\SAML2\XML\md\UnknownRoleDescriptor
  * @covers \SimpleSAML\SAML2\XML\md\AbstractMetadataDocument
  * @covers \SimpleSAML\SAML2\XML\md\AbstractRoleDescriptor
+ * @covers \SimpleSAML\SAML2\XML\md\AbstractMdElement
  * @package simplesamlphp/saml2
  */
 final class UnknownRoleDescriptorTest extends TestCase

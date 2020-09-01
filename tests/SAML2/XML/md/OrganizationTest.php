@@ -14,6 +14,7 @@ use SimpleSAML\XML\Chunk;
  * Test for the Organization metadata element.
  *
  * @covers \SimpleSAML\SAML2\XML\md\Organization
+ * @covers \SimpleSAML\SAML2\XML\md\AbstractMdElement
  * @package simplesamlphp/saml2
  */
 final class OrganizationTest extends TestCase

@@ -13,6 +13,7 @@ use SimpleSAML\XML\Utils as XMLUtils;
  * Class \SAML2\XML\shibmd\Scope
  *
  * @covers \SimpleSAML\SAML2\XML\shibmd\Scope
+ * @covers \SimpleSAML\SAML2\XML\shibmd\AbstractShibmdElement
  * @package simplesamlphp/saml2
  */
 final class ScopeTest extends TestCase

@@ -16,6 +16,7 @@ use SimpleSAML\XML\Utils as XMLUtils;
  * Class \SAML2\XML\samlp\ScopingTest
  *
  * @covers \SimpleSAML\SAML2\XML\samlp\Scoping
+ * @covers \SimpleSAML\SAML2\XML\samlp\AbstractSamlpElement
  *
  * @author Tim van Dijen, <tvdijen@gmail.com>
  * @package simplesamlphp/saml2

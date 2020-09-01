@@ -12,6 +12,7 @@ use SimpleSAML\XML\DOMDocumentFactory;
  * Class \SAML2\XML\md\NameIDPolicyTest
  *
  * @covers \SimpleSAML\SAML2\XML\samlp\NameIDPolicy
+ * @covers \SimpleSAML\SAML2\XML\samlp\AbstractSamlpElement
  *
  * @author Tim van Dijen, <tvdijen@gmail.com>
  * @package simplesamlphp/saml2

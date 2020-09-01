@@ -13,6 +13,7 @@ use SimpleSAML\XML\Chunk;
  * Class \SAML2\XML\samlp\StatusDetailTest
  *
  * @covers \SimpleSAML\SAML2\XML\samlp\StatusDetail
+ * @covers \SimpleSAML\SAML2\XML\samlp\AbstractSamlpElement
  *
  * @author Tim van Dijen, <tvdijen@gmail.com>
  * @package simplesamlphp/saml2

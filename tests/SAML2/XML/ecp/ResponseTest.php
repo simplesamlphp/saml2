@@ -15,6 +15,7 @@ use SimpleSAML\SAML2\XML\ecp\Response;
 use SimpleSAML\Assert\AssertionFailedException;
 
 /**
+ * @covers \SimpleSAML\SAML2\XML\ecp\AbstractEcpElement
  * @covers \SimpleSAML\SAML2\XML\ecp\Response
  * @package simplesamlphp/saml2
  */

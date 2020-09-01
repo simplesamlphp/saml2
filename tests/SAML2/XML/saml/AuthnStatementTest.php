@@ -15,6 +15,7 @@ use SimpleSAML\XML\Utils as XMLUtils;
  * Class \SAML2\XML\saml\AuthnStatementTest
  *
  * @covers \SimpleSAML\SAML2\XML\saml\AuthnStatement
+ * @covers \SimpleSAML\SAML2\XML\saml\AbstractSamlElement
  * @package simplesamlphp/saml2
  */
 final class AuthnStatementTest extends TestCase

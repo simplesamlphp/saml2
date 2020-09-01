@@ -13,6 +13,7 @@ use SimpleSAML\XML\DOMDocumentFactory;
  *
  * @covers \SimpleSAML\SAML2\XML\saml\ProxyRestriction
  * @covers \SimpleSAML\SAML2\XML\saml\AbstractConditionType
+ * @covers \SimpleSAML\SAML2\XML\saml\AbstractSamlElement
  *
  * @author Tim van Dijen, <tvdijen@gmail.com>
  * @package simplesamlphp/saml2

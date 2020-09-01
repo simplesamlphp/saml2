@@ -30,6 +30,7 @@ use SimpleSAML\XML\Chunk;
  * @covers \SimpleSAML\SAML2\XML\samlp\LogoutRequest
  * @covers \SimpleSAML\SAML2\XML\samlp\AbstractRequest
  * @covers \SimpleSAML\SAML2\XML\samlp\AbstractMessage
+ * @covers \SimpleSAML\SAML2\XML\samlp\AbstractSamlpElement
  * @package simplesamlphp/saml2
  */
 final class LogoutRequestTest extends MockeryTestCase

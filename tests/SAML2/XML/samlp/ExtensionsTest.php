@@ -14,6 +14,7 @@ use SimpleSAML\SAML2\XML\shibmd\Scope;
  * Class \SAML2\XML\samlp\ExtensionsTest
  *
  * @covers \SimpleSAML\SAML2\XML\samlp\Extensions
+ * @covers \SimpleSAML\SAML2\XML\samlp\AbstractSamlpElement
  * @package simplesamlphp/saml2
  */
 final class ExtensionsTest extends TestCase

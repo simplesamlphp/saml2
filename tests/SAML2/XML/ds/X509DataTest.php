@@ -15,6 +15,7 @@ use SimpleSAML\TestUtils\PEMCertificatesMock;
 /**
  * Class \SAML2\XML\ds\X509DataTest
  *
+ * @covers \SimpleSAML\SAML2\XML\ds\AbstractDsElement
  * @covers \SimpleSAML\SAML2\XML\ds\X509Data
  *
  * @author Tim van Dijen, <tvdijen@gmail.com>

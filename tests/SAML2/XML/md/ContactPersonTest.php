@@ -15,6 +15,7 @@ use SimpleSAML\Assert\AssertionFailedException;
 /**
  * Tests for the ContactPerson class.
  *
+ * @covers \SimpleSAML\SAML2\XML\md\AbstractMdElement
  * @covers \SimpleSAML\SAML2\XML\md\ContactPerson
  * @package simplesamlphp/saml2
  */

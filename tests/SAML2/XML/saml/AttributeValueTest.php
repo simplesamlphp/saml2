@@ -12,6 +12,7 @@ use SimpleSAML\XML\DOMDocumentFactory;
  * Tests for AttributeValue elements.
  *
  * @covers \SimpleSAML\SAML2\XML\saml\AttributeValue
+ * @covers \SimpleSAML\SAML2\XML\saml\AbstractSamlElement
  * @package simplesamlphp/saml2
  */
 final class AttributeValueTest extends TestCase

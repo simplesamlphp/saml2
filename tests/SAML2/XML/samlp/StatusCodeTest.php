@@ -13,6 +13,7 @@ use SimpleSAML\SAML2\Utils;
  * Class \SAML2\XML\samlp\StatusCodeTest
  *
  * @covers \SimpleSAML\SAML2\XML\samlp\StatusCode
+ * @covers \SimpleSAML\SAML2\XML\samlp\AbstractSamlpElement
  *
  * @author Tim van Dijen, <tvdijen@gmail.com>
  * @package simplesamlphp/saml2

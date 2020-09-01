@@ -12,6 +12,7 @@ use SimpleSAML\SAML2\XML\samlp\IDPEntry;
  * Class \SAML2\XML\samlp\IDPEntryTest
  *
  * @covers \SimpleSAML\SAML2\XML\samlp\IDPEntry
+ * @covers \SimpleSAML\SAML2\XML\samlp\AbstractSamlpElement
  *
  * @author Tim van Dijen, <tvdijen@gmail.com>
  * @package simplesamlphp/saml2

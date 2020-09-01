@@ -12,6 +12,7 @@ use SimpleSAML\SAML2\Utils;
 /**
  * Class \SAML2\XML\ds\X509SubjectNameTest
  *
+ * @covers \SimpleSAML\SAML2\XML\ds\AbstractDsElement
  * @covers \SimpleSAML\SAML2\XML\ds\X509SubjectName
  *
  * @author Tim van Dijen, <tvdijen@gmail.com>

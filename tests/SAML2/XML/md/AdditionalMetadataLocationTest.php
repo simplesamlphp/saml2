@@ -12,6 +12,7 @@ use SimpleSAML\Assert\AssertionFailedException;
 /**
  * Tests for the AdditionalMetadataLocation class
  *
+ * @covers \SimpleSAML\SAML2\XML\md\AbstractMdElement
  * @covers \SimpleSAML\SAML2\XML\md\AdditionalMetadataLocation
  * @package simplesamlphp/saml2
  */

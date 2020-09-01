@@ -15,6 +15,7 @@ use SimpleSAML\Assert\AssertionFailedException;
 /**
  * Tests for the AttributeConsumingService class.
  *
+ * @covers \SimpleSAML\SAML2\XML\md\AbstractMdElement
  * @covers \SimpleSAML\SAML2\XML\md\AttributeConsumingService
  * @package simplesamlphp/saml2
  */

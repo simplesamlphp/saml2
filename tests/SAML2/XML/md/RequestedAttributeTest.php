@@ -14,6 +14,7 @@ use SimpleSAML\Assert\AssertionFailedException;
  * Test for the RequestedAttribute metadata element.
  *
  * @covers \SimpleSAML\SAML2\XML\md\RequestedAttribute
+ * @covers \SimpleSAML\SAML2\XML\md\AbstractMdElement
  * @package simplesamlphp/saml2
  */
 final class RequestedAttributeTest extends TestCase

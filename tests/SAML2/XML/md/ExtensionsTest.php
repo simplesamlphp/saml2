@@ -22,6 +22,7 @@ use SimpleSAML\SAML2\XML\shibmd\Scope;
  *
  * This class tests for currently supported metadata extensions.
  *
+ * @covers \SimpleSAML\SAML2\XML\md\AbstractMdElement
  * @covers \SimpleSAML\SAML2\XML\md\Extensions
  * @package simplesamlphp/saml2
  */

@@ -14,8 +14,9 @@ use SimpleSAML\XML\DOMDocumentFactory;
  * Class \SAML2\XML\saml\EncryptedAttributeTest
  *
  * @author Tim van Dijen, <tvdijen@gmail.com>
- * @covers \SimpleSAML\SAML2\XML\saml\EncryptedAttribute
  * @package simplesamlphp/saml2
+ * @covers \SimpleSAML\SAML2\XML\saml\EncryptedAttribute
+ * @covers \SimpleSAML\SAML2\XML\saml\AbstractSamlElement
  */
 final class EncryptedAttributeTest extends TestCase
 {

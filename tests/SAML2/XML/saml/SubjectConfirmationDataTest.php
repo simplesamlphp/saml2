@@ -15,6 +15,7 @@ use SimpleSAML\SAML2\XML\ds\KeyName;
  * Class \SAML2\XML\saml\SubjectConfirmationDataTest
  *
  * @covers \SimpleSAML\SAML2\XML\saml\SubjectConfirmationData
+ * @covers \SimpleSAML\SAML2\XML\saml\AbstractSamlElement
  * @package simplesamlphp/saml2
  */
 final class SubjectConfirmationDataTest extends TestCase

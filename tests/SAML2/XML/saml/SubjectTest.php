@@ -18,6 +18,7 @@ use SimpleSAML\XML\Utils as XMLUtils;
  * Class \SAML2\XML\saml\SubjectTest
  *
  * @covers \SimpleSAML\SAML2\XML\saml\Subject
+ * @covers \SimpleSAML\SAML2\XML\saml\AbstractSamlElement
  *
  * @author Tim van Dijen, <tvdijen@gmail.com>
  * @package SimpleSAMLphp

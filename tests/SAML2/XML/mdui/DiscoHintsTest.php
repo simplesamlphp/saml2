@@ -13,6 +13,7 @@ use SimpleSAML\XML\Utils as XMLUtils;
  * Class \SAML2\XML\mdui\DiscoHintsTest
  *
  * @covers \SimpleSAML\SAML2\XML\mdui\DiscoHints
+ * @covers \SimpleSAML\SAML2\XML\mdui\AbstractMduiElement
  * @package simplesamlphp/saml2
  */
 final class DiscoHintsTest extends TestCase

@@ -19,6 +19,7 @@ use SimpleSAML\XML\Utils as XMLUtils;
  * Class \SAML2\AssertionTest
  *
  * @covers \SimpleSAML\SAML2\XML\saml\Assertion
+ * @covers \SimpleSAML\SAML2\XML\saml\AbstractSamlElement
  * @package simplesamlphp/saml2
  */
 final class AssertionTest extends MockeryTestCase

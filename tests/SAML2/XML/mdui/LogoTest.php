@@ -15,6 +15,7 @@ use SimpleSAML\XML\Utils as XMLUtils;
  * Class \SAML2\XML\mdui\LogoTest
  *
  * @covers \SimpleSAML\SAML2\XML\mdui\Logo
+ * @covers \SimpleSAML\SAML2\XML\mdui\AbstractMduiElement
  * @package simplesamlphp/saml2
  */
 final class LogoTest extends TestCase

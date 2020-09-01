@@ -20,9 +20,10 @@ use SimpleSAML\XML\Chunk;
 /**
  * Class \SAML2\EncryptedAssertionTest
  *
+ * @package simplesamlphp/saml2
  * @author Tim van Dijen, <tvdijen@gmail.com>
  * @covers \SimpleSAML\SAML2\XML\saml\EncryptedAssertion
- * @package simplesamlphp/saml2
+ * @covers \SimpleSAML\SAML2\XML\saml\AbstractSamlElement
  */
 final class EncryptedAssertionTest extends TestCase
 {

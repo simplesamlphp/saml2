@@ -24,6 +24,7 @@ use SimpleSAML\XML\Utils as XMLUtils;
  * @covers \SimpleSAML\SAML2\XML\samlp\AbstractSubjectQuery
  * @covers \SimpleSAML\SAML2\XML\samlp\AbstractRequest
  * @covers \SimpleSAML\SAML2\XML\samlp\AbstractMessage
+ * @covers \SimpleSAML\SAML2\XML\samlp\AbstractSamlpElement
  * @package simplesamlphp/saml2
  */
 final class AttributeQueryTest extends TestCase

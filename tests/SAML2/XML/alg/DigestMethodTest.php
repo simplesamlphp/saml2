@@ -13,6 +13,7 @@ use SimpleSAML\SAML2\Utils;
 /**
  * Class \SAML2\XML\alg\DigestMethodTest
  *
+ * @covers \SimpleSAML\SAML2\XML\alg\AbstractAlgElement
  * @covers \SimpleSAML\SAML2\XML\alg\DigestMethod
  *
  * @author Jaime Pérez Crespo, UNINETT AS <jaime.perez@uninett.no>

@@ -15,6 +15,7 @@ use SimpleSAML\XML\Utils as XMLUtils;
 /**
  * Tests for the md:EncryptionMethod element.
  *
+ * @covers \SimpleSAML\SAML2\XML\md\AbstractMdElement
  * @covers \SimpleSAML\SAML2\XML\xenc\AbstractEncryptionMethod
  * @covers \SimpleSAML\SAML2\XML\md\EncryptionMethod
  * @package simplesamlphp/saml2

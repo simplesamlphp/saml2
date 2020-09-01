@@ -29,6 +29,7 @@ use SimpleSAML\XML\Utils as XMLUtils;
  * Class EncryptedIDTest
  *
  * @covers \SimpleSAML\SAML2\XML\saml\EncryptedID
+ * @covers \SimpleSAML\SAML2\XML\saml\AbstractSamlElement
  * @package simplesamlphp/saml2
  */
 final class EncryptedIDTest extends TestCase

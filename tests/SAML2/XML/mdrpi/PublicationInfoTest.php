@@ -13,6 +13,7 @@ use SimpleSAML\XML\Utils as XMLUtils;
  * Class \SAML2\XML\mdrpi\PublicationInfoTest
  *
  * @covers \SimpleSAML\SAML2\XML\mdrpi\PublicationInfo
+ * @covers \SimpleSAML\SAML2\XML\mdrpi\AbstractMdrpiElement
  * @package simplesamlphp/saml2
  */
 final class PublicationInfoTest extends TestCase

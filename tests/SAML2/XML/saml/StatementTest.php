@@ -15,6 +15,7 @@ use SimpleSAML\Assert\AssertionFailedException;
  * Class \SAML2\XML\saml\StatementTest
  *
  * @covers \SimpleSAML\SAML2\XML\saml\Statement
+ * @covers \SimpleSAML\SAML2\XML\saml\AbstractSamlElement
  * @package simplesamlphp/saml2
  */
 final class StatementTest extends TestCase

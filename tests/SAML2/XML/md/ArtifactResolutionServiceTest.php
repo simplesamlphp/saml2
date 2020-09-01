@@ -11,6 +11,7 @@ use SimpleSAML\Assert\AssertionFailedException;
 /**
  * Tests for md:ArtifactResolutionService.
  *
+ * @covers \SimpleSAML\SAML2\XML\md\AbstractMdElement
  * @covers \SimpleSAML\SAML2\XML\md\ArtifactResolutionService
  * @package simplesamlphp/saml2
  */

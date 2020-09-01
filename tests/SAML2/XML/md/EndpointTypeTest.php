@@ -14,6 +14,7 @@ use SimpleSAML\Assert\AssertionFailedException;
 /**
  * Class \SAML2\XML\md\EndpointType
  *
+ * @covers \SimpleSAML\SAML2\XML\md\AbstractMdElement
  * @covers \SimpleSAML\SAML2\XML\md\EndpointType
  * @package simplesamlphp/saml2
  */

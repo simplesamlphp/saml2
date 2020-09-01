@@ -13,6 +13,7 @@ use SimpleSAML\SAML2\Utils;
  * Class \SAML2\XML\saml\AuthnContextClassRefTest
  *
  * @covers \SimpleSAML\SAML2\XML\saml\AuthnContextClassRef
+ * @covers \SimpleSAML\SAML2\XML\saml\AbstractSamlElement
  * @package simplesamlphp/saml2
  */
 final class AuthnContextClassRefTest extends TestCase

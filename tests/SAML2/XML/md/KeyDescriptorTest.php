@@ -16,6 +16,7 @@ use SimpleSAML\Assert\AssertionFailedException;
  * A set of tests for the md:KeyDescriptor element
  *
  * @covers \SimpleSAML\SAML2\XML\md\KeyDescriptor
+ * @covers \SimpleSAML\SAML2\XML\md\AbstractMdElement
  * @package simplesamlphp/saml2
  */
 final class KeyDescriptorTest extends TestCase

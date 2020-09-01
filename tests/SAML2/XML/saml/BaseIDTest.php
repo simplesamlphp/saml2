@@ -13,6 +13,7 @@ use SimpleSAML\XML\DOMDocumentFactory;
  * Class \SAML2\XML\saml\BaseIDTest
  *
  * @covers \SimpleSAML\SAML2\XML\saml\BaseID
+ * @covers \SimpleSAML\SAML2\XML\saml\AbstractSamlElement
  *
  * @author Tim van Dijen, <tvdijen@gmail.com>
  * @package simplesamlphp/saml2

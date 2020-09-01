@@ -18,6 +18,7 @@ use SimpleSAML\XML\Utils as XMLUtils;
 /**
  * Class \SAML2\XML\md\EntityDescriptorTest
  *
+ * @covers \SimpleSAML\SAML2\XML\md\AbstractMdElement
  * @covers \SimpleSAML\SAML2\XML\md\EntityDescriptor
  * @covers \SimpleSAML\SAML2\XML\md\AbstractMetadataDocument
  * @covers \SimpleSAML\SAML2\XML\md\AbstractRoleDescriptor

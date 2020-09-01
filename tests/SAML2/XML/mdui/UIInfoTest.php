@@ -13,6 +13,7 @@ use SimpleSAML\XML\Utils as XMLUtils;
  * Class \SAML2\XML\mdui\UIInfoTest
  *
  * @covers \SimpleSAML\SAML2\XML\mdui\UIInfo
+ * @covers \SimpleSAML\SAML2\XML\mdui\AbstractMduiElement
  * @package simplesamlphp/saml2
  */
 final class UIInfoTest extends TestCase
