@@ -14,6 +14,7 @@ use SimpleSAML\SAML2\XML\ecp\RequestAuthenticated;
 /**
  * @author Tim van Dijen, <tvdijen@gmail.com>
  * @package simplesamlphp/saml2
+ * @covers \SimpleSAML\SAML2\XML\ecp\AbstractEcpElement
  * @covers \SimpleSAML\SAML2\XML\ecp\RequestAuthenticated
  */
 final class RequestAuthenticatedTest extends TestCase
