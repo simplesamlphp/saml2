@@ -12,7 +12,6 @@ use SimpleSAML\SAML2\Constants;
 use SimpleSAML\SAML2\DOMDocumentFactory;
 use SimpleSAML\SAML2\Exception\MissingAttributeException;
 use SimpleSAML\SAML2\XML\ecp\Response;
-use SimpleSAML\Assert\AssertionFailedException;
 
 /**
  * @covers \SimpleSAML\SAML2\XML\ecp\Response
@@ -86,6 +85,8 @@ final class ResponseTest extends TestCase
         $response = Response::fromXML($this->document->documentElement);
 
         $this->assertEquals('https://example.com/ACS', $response->getAssertionConsumerServiceURL());
+
+        $this->assertEquals($this->document->saveXML($this->document->documentElement), strval($response));
     }
 
 
@@ -97,11 +98,13 @@ final class ResponseTest extends TestCase
         $document = $this->document->documentElement;
         $document->removeAttributeNS(Constants::NS_SOAP, 'mustUnderstand');
 
-        $this->expectException(AssertionFailedException::class);
+        $this->expectException(MissingAttributeException::class);
         $this->expectExceptionMessage('Missing SOAP-ENV:mustUnderstand attribute in <ecp:Response>.');
 
         Response::fromXML($document);
     }
+
+
     /**
      * @return void
      */
@@ -110,7 +113,7 @@ final class ResponseTest extends TestCase
         $document = $this->document->documentElement;
         $document->removeAttributeNS(Constants::NS_SOAP, 'actor');
 
-        $this->expectException(AssertionFailedException::class);
+        $this->expectException(MissingAttributeException::class);
         $this->expectExceptionMessage('Missing SOAP-ENV:actor attribute in <ecp:Response>.');
 
         Response::fromXML($document);
