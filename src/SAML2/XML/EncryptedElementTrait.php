@@ -128,6 +128,9 @@ trait EncryptedElementTrait
             case XMLSecurityKey::AES128_CBC:
             case XMLSecurityKey::AES192_CBC:
             case XMLSecurityKey::AES256_CBC:
+            case XMLSecurityKey::AES128_GCM:
+            case XMLSecurityKey::AES192_GCM:
+            case XMLSecurityKey::AES256_GCM:
                 $symmetricKey = $key;
                 break;
 
@@ -136,6 +139,7 @@ trait EncryptedElementTrait
             case XMLSecurityKey::RSA_SHA256:
             case XMLSecurityKey::RSA_SHA384:
             case XMLSecurityKey::RSA_SHA512:
+            case XMLSecurityKey::RSA_OAEP:
             case XMLSecurityKey::RSA_OAEP_MGF1P:
                 $symmetricKey = new XMLSecurityKey(XMLSecurityKey::AES128_CBC);
                 $symmetricKey->generateSessionKey();
