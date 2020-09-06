@@ -4,6 +4,7 @@ declare(strict_types=1);
 
 namespace SimpleSAML\SAML2\XML\samlp;
 
+use DOMDocument;
 use DOMElement;
 use Exception;
 use RobRichards\XMLSecLibs\XMLSecurityKey;
@@ -88,7 +89,7 @@ abstract class AbstractMessage extends AbstractSamlpElement implements SignedEle
      *
      * @var \DOMDocument|null
      */
-    protected DOMDocument $document = null;
+    protected ?DOMDocument $document = null;
 
     /** @var bool */
     protected bool $messageContainedSignatureUponConstruction = false;
