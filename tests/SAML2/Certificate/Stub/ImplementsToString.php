@@ -9,10 +9,8 @@ namespace SimpleSAML\SAML2\Certificate\Stub;
  */
 final class ImplementsToString
 {
-    /**
-     * @var string
-     */
-    private $value;
+    /** @var string */
+    private string $value;
 
 
     /**

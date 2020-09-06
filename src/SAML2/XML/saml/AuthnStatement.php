@@ -19,19 +19,19 @@ use SimpleSAML\XML\Utils as XMLUtils;
 final class AuthnStatement extends AbstractStatement
 {
     /** @var \SimpleSAML\SAML2\XML\saml\AuthnContext */
-    protected $authnContext;
+    protected AuthnContext $authnContext;
 
     /** @var int */
-    protected $authnInstant;
+    protected int $authnInstant;
 
     /** @var int|null */
-    protected $sessionNotOnOrAfter;
+    protected ?int $sessionNotOnOrAfter;
 
     /** @var string|null */
-    protected $sessionIndex = null;
+    protected ?string $sessionIndex = null;
 
     /** @var \SimpleSAML\SAML2\XML\saml\SubjectLocality|null */
-    protected $subjectLocality = null;
+    protected ?SubjectLocality $subjectLocality = null;
 
 
     /**

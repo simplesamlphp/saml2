@@ -20,7 +20,7 @@ trait ExtendableElementTrait
      *
      * @var \SimpleSAML\XML\AbstractXMLElement|null
      */
-    protected $Extensions = null;
+    protected ?AbstractXMLElement $Extensions = null;
 
 
     /**

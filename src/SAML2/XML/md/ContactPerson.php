@@ -30,42 +30,42 @@ final class ContactPerson extends AbstractMdElement
      *
      * @var string
      */
-    protected $contactType;
+    protected string $contactType;
 
     /**
      * The Company of this contact.
      *
      * @var string|null
      */
-    protected $Company = null;
+    protected ?string $Company = null;
 
     /**
      * The GivenName of this contact.
      *
      * @var string|null
      */
-    protected $GivenName = null;
+    protected ?string $GivenName = null;
 
     /**
      * The SurName of this contact.
      *
      * @var string|null
      */
-    protected $SurName = null;
+    protected ?string $SurName = null;
 
     /**
      * The EmailAddresses of this contact.
      *
      * @var array
      */
-    protected $EmailAddresses = [];
+    protected array $EmailAddresses = [];
 
     /**
      * The TelephoneNumbers of this contact.
      *
      * @var array
      */
-    protected $TelephoneNumbers = [];
+    protected array $TelephoneNumbers = [];
 
 
     /**

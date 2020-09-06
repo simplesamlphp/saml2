@@ -24,21 +24,21 @@ final class AttributeConsumingService extends AbstractMdElement
      *
      * @var \SimpleSAML\SAML2\XML\md\ServiceName[]
      */
-    protected $serviceNames = [];
+    protected array $serviceNames = [];
 
     /**
      * The ServiceDescription of this AttributeConsumingService.
      *
      * @var \SimpleSAML\SAML2\XML\md\ServiceDescription[]
      */
-    protected $serviceDescriptions = [];
+    protected array $serviceDescriptions = [];
 
     /**
      * The RequestedAttribute elements.
      *
      * @var \SimpleSAML\SAML2\XML\md\RequestedAttribute[]
      */
-    protected $requestedAttributes = [];
+    protected array $requestedAttributes = [];
 
 
     /**

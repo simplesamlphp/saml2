@@ -4,6 +4,7 @@ declare(strict_types=1);
 
 namespace SimpleSAML\SAML2\XML\mdui;
 
+use DOMDocument;
 use PHPUnit\Framework\TestCase;
 use SimpleSAML\Assert\AssertionFailedException;
 use SimpleSAML\XML\DOMDocumentFactory;
@@ -19,6 +20,10 @@ use SimpleSAML\XML\Utils as XMLUtils;
  */
 final class KeywordsTest extends TestCase
 {
+    /** @var \DOMDocument */
+    private DOMDocument $document;
+
+
     /**
      * @return void
      */

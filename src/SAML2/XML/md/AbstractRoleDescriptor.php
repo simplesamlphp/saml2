@@ -20,14 +20,14 @@ abstract class AbstractRoleDescriptor extends AbstractMetadataDocument
      *
      * @var string[]
      */
-    protected $protocolSupportEnumeration = [];
+    protected array $protocolSupportEnumeration = [];
 
     /**
      * Error URL for this role.
      *
      * @var string|null
      */
-    protected $errorURL = null;
+    protected ?string $errorURL = null;
 
     /**
      * KeyDescriptor elements.
@@ -36,14 +36,14 @@ abstract class AbstractRoleDescriptor extends AbstractMetadataDocument
      *
      * @var \SimpleSAML\SAML2\XML\md\KeyDescriptor[]
      */
-    protected $KeyDescriptors = [];
+    protected array $KeyDescriptors = [];
 
     /**
      * Organization of this role.
      *
      * @var \SimpleSAML\SAML2\XML\md\Organization|null
      */
-    protected $Organization = null;
+    protected ?Organization $Organization = null;
 
     /**
      * ContactPerson elements for this role.
@@ -52,7 +52,7 @@ abstract class AbstractRoleDescriptor extends AbstractMetadataDocument
      *
      * @var \SimpleSAML\SAML2\XML\md\ContactPerson[]
      */
-    protected $ContactPersons = [];
+    protected array $ContactPersons = [];
 
 
     /**

@@ -24,7 +24,7 @@ use SimpleSAML\XML\Utils as XMLUtils;
 class ArtifactResolve extends AbstractRequest
 {
     /** @var string */
-    protected $artifact;
+    protected string $artifact;
 
 
     /**

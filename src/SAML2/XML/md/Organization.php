@@ -30,21 +30,21 @@ final class Organization extends AbstractMdElement
      *
      * @var \SimpleSAML\SAML2\XML\md\OrganizationName[]
      */
-    protected $OrganizationName = [];
+    protected array $OrganizationName = [];
 
     /**
      * The OrganizationDisplayName, as an array of language => translation.
      *
      * @var \SimpleSAML\SAML2\XML\md\OrganizationDisplayName[]
      */
-    protected $OrganizationDisplayName = [];
+    protected array $OrganizationDisplayName = [];
 
     /**
      * The OrganizationURL, as an array of language => translation.
      *
      * @var array
      */
-    protected $OrganizationURL = [];
+    protected array $OrganizationURL = [];
 
 
     /**

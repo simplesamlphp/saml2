@@ -33,21 +33,21 @@ abstract class AbstractEndpointType extends AbstractMdElement
      *
      * @var string
      */
-    protected $Binding;
+    protected string $Binding;
 
     /**
      * The URI to this endpoint.
      *
      * @var string
      */
-    protected $Location;
+    protected string $Location;
 
     /**
      * The URI where responses can be delivered.
      *
      * @var string|null
      */
-    protected $ResponseLocation = null;
+    protected ?string $ResponseLocation = null;
 
 
     /**

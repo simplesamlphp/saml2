@@ -4,6 +4,7 @@ declare(strict_types=1);
 
 namespace SimpleSAML\SAML2\XML\md;
 
+use DOMDocument;
 use InvalidArgumentException;
 use PHPUnit\Framework\TestCase;
 use SimpleSAML\SAML2\Constants;
@@ -22,7 +23,7 @@ use SimpleSAML\Assert\AssertionFailedException;
 final class ContactPersonTest extends TestCase
 {
     /** @var \DOMDocument */
-    protected $document;
+    protected DOMDocument $document;
 
 
     /**

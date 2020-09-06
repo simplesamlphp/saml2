@@ -24,16 +24,16 @@ use SimpleSAML\XML\Utils as XMLUtils;
 final class AuthnContext extends AbstractSamlElement
 {
     /** @var \SimpleSAML\SAML2\XML\saml\AuthnContextClassRef|null */
-    protected $authnContextClassRef = null;
+    protected ?AuthnContextClassRef $authnContextClassRef = null;
 
     /** @var \SimpleSAML\SAML2\XML\saml\AuthnContextDeclRef|null */
-    protected $authnContextDeclRef = null;
+    protected ?AuthnContextDeclRef $authnContextDeclRef = null;
 
     /** @var \SimpleSAML\SAML2\XML\saml\AuthnContextDecl|null */
-    protected $authnContextDecl = null;
+    protected ?AuthnContextDecl $authnContextDecl = null;
 
     /** @var string[] */
-    protected $authenticatingAuthorities = [];
+    protected array $authenticatingAuthorities = [];
 
 
     /**

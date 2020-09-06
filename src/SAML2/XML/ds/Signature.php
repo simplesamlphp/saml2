@@ -24,16 +24,16 @@ use SimpleSAML\XML\Utils as XMLUtils;
 final class Signature extends AbstractDsElement
 {
     /** @var string */
-    protected $algorithm;
+    protected string $algorithm;
 
     /** @var string[] */
-    protected $certificates = [];
+    protected array $certificates = [];
 
     /** @var \RobRichards\XMLSecLibs\XMLSecurityKey|null */
-    protected $key;
+    protected ?XMLSecurityKey $key;
 
     /** @var \RobRichards\XMLSecLibs\XMLSecurityDSig */
-    protected $signer;
+    protected XMLSecurityDSig $signer;
 
 
     /**

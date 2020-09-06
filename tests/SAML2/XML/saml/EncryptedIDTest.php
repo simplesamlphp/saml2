@@ -4,6 +4,7 @@ declare(strict_types=1);
 
 namespace SimpleSAML\SAML2\XML\saml;
 
+use DOMDocument;
 use InvalidArgumentException;
 use PHPUnit\Framework\TestCase;
 use RobRichards\XMLSecLibs\XMLSecurityKey;
@@ -35,10 +36,10 @@ use SimpleSAML\XML\Utils as XMLUtils;
 final class EncryptedIDTest extends TestCase
 {
     /** @var \DOMDocument $document */
-    private $document;
+    private DOMDocument $document;
 
     /** @var \DOMDocument $retrievalMethod */
-    private $retrievalMethod;
+    private DOMDocument $retrievalMethod;
 
 
     /**

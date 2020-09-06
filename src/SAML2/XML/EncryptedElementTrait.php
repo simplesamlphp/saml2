@@ -27,14 +27,14 @@ trait EncryptedElementTrait
      * @var \SimpleSAML\SAML2\XML\xenc\EncryptedData
      * @psalm-suppress PropertyNotSetInConstructor
      */
-    protected $encryptedData;
+    protected EncryptedData $encryptedData;
 
     /**
      * A list of encrypted keys.
      *
      * @var \SimpleSAML\SAML2\XML\xenc\EncryptedKey[]
      */
-    protected $encryptedKeys = [];
+    protected array $encryptedKeys = [];
 
 
     /**
@@ -48,12 +48,6 @@ trait EncryptedElementTrait
         $this->setEncryptedData($encryptedData);
         $this->setEncryptedKeys($encryptedKeys);
     }
-
-
-    abstract public function instantiateParentElement(DOMElement $parent = null): DOMElement;
-
-
-    abstract public function getQualifiedName(): string;
 
 
     /**
@@ -195,4 +189,10 @@ trait EncryptedElementTrait
 
         return $e;
     }
+
+
+    abstract public function instantiateParentElement(DOMElement $parent = null): DOMElement;
+
+
+    abstract public function getQualifiedName(): string;
 }

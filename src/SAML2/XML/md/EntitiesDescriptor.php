@@ -23,13 +23,13 @@ final class EntitiesDescriptor extends AbstractMetadataDocument
      *
      * @var string|null
      */
-    protected $Name = null;
+    protected ?string $Name = null;
 
     /** @var \SimpleSAML\SAML2\XML\md\EntityDescriptor[] */
-    protected $entityDescriptors = [];
+    protected array $entityDescriptors = [];
 
     /** @var \SimpleSAML\SAML2\XML\md\EntitiesDescriptor[] */
-    protected $entitiesDescriptors = [];
+    protected array $entitiesDescriptors = [];
 
 
     /**

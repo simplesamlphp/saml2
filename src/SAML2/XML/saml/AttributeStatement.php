@@ -17,10 +17,10 @@ use SimpleSAML\XML\Exception\InvalidDOMElementException;
 class AttributeStatement extends AbstractStatement
 {
     /** @var \SimpleSAML\SAML2\XML\saml\Attribute[] */
-    protected $attributes = [];
+    protected array $attributes = [];
 
     /** @var \SimpleSAML\SAML2\XML\saml\EncryptedAttribute[] */
-    protected $encryptedAttributes = [];
+    protected array $encryptedAttributes = [];
 
 
     /**

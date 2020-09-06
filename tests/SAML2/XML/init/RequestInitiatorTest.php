@@ -4,6 +4,7 @@ declare(strict_types=1);
 
 namespace SimpleSAML\SAML2\XML\init;
 
+use DOMDocument;
 use Exception;
 use PHPUnit\Framework\TestCase;
 use SimpleSAML\SAML2\Exception\ProtocolViolationException;
@@ -21,7 +22,7 @@ use SimpleSAML\SAML2\Utils;
 final class RequestInitiatorTest extends TestCase
 {
     /** @var \DOMDocument */
-    protected $document;
+    protected DOMDocument $document;
 
 
     /**

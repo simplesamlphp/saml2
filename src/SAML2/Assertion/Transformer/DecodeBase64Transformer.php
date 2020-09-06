@@ -17,7 +17,7 @@ class DecodeBase64Transformer implements
     /**
      * @var \SimpleSAML\SAML2\Configuration\IdentityProvider
      */
-    private $identityProvider;
+    private IdentityProvider $identityProvider;
 
 
     /**

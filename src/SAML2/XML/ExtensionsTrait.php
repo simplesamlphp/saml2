@@ -15,10 +15,8 @@ use SimpleSAML\XML\XMLElementInterface;
  */
 trait ExtensionsTrait
 {
-    /**
-     * @var \SimpleSAML\XML\XMLElementInterface[]
-     */
-    protected $extensions = [];
+    /** @var \SimpleSAML\XML\XMLElementInterface[] */
+    protected array $extensions = [];
 
 
     /**

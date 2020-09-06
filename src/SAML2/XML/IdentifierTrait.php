@@ -26,7 +26,7 @@ trait IdentifierTrait
      *
      * @var \SimpleSAML\SAML2\XML\saml\IdentifierInterface|null
      */
-    protected $identifier = null;
+    protected ?IdentifierInterface $identifier = null;
 
 
     /**

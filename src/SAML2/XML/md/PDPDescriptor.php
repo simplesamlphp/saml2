@@ -23,21 +23,21 @@ final class PDPDescriptor extends AbstractRoleDescriptor
      *
      * @var \SimpleSAML\SAML2\XML\md\AuthzService[]
      */
-    protected $authzServiceEndpoints = [];
+    protected array $authzServiceEndpoints = [];
 
     /**
      * List of AssertionIDRequestService endpoints.
      *
      * @var \SimpleSAML\SAML2\XML\md\AssertionIDRequestService[]
      */
-    protected $assertionIDRequestServiceEndpoints = [];
+    protected array $assertionIDRequestServiceEndpoints = [];
 
     /**
      * List of supported NameID formats.
      *
      * @var string[]
      */
-    protected $nameIDFormats = [];
+    protected array $nameIDFormats = [];
 
 
     /**

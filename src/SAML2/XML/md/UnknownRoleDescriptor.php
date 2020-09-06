@@ -24,7 +24,7 @@ final class UnknownRoleDescriptor extends AbstractRoleDescriptor
      * @var \SimpleSAML\XML\Chunk
      * @psalm-suppress PropertyNotSetInConstructor
      */
-    protected $xml;
+    protected Chunk $xml;
 
 
     /**

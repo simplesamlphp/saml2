@@ -18,13 +18,13 @@ use SimpleSAML\XML\Utils as XMLUtils;
 final class Scoping extends AbstractSamlpElement
 {
     /** @var \SimpleSAML\SAML2\XML\samlp\IDPList|null */
-    protected $IDPList;
+    protected ?IDPList $IDPList;
 
     /** @var string[] */
-    protected $requesterId;
+    protected array $requesterId;
 
     /** @var int|null */
-    protected $proxyCount;
+    protected ?int $proxyCount;
 
 
     /**

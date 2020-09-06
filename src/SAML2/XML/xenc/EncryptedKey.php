@@ -18,13 +18,13 @@ use SimpleSAML\XML\Utils as XMLUtils;
 class EncryptedKey extends AbstractEncryptedType
 {
     /** @var string|null */
-    protected $carriedKeyName;
+    protected ?string $carriedKeyName;
 
     /** @var string|null */
-    protected $recipient;
+    protected ?string $recipient;
 
     /** @var \SimpleSAML\SAML2\XML\xenc\ReferenceList|null */
-    protected $referenceList;
+    protected ?ReferenceList $referenceList;
 
 
     /**

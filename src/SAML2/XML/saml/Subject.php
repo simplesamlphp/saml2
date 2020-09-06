@@ -28,7 +28,7 @@ final class Subject extends AbstractSamlElement
      *
      * @var \SimpleSAML\SAML2\XML\saml\SubjectConfirmation[]
      */
-    protected $SubjectConfirmation;
+    protected array $SubjectConfirmation;
 
 
     /**

@@ -18,7 +18,7 @@ use SimpleSAML\XML\Exception\InvalidDOMElementException;
 class Condition extends AbstractConditionType
 {
     /** @var string */
-    protected $type;
+    protected string $type;
 
 
     /**

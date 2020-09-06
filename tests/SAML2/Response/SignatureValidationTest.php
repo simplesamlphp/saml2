@@ -6,6 +6,7 @@ namespace SimpleSAML\SAML2\Response;
 
 use DOMDocument;
 use Mockery;
+use Mockery\MockInterface;
 use Mockery\Adapter\Phpunit\MockeryTestCase;
 use Psr\Log\NullLogger;
 use RobRichards\XMLSecLibs\XMLSecurityKey;
@@ -32,27 +33,27 @@ final class SignatureValidationTest extends MockeryTestCase
     /**
      * @var \SimpleSAML\SAML2\Configuration\IdentityProvider
      */
-    private $identityProviderConfiguration;
+    private IdentityProvider $identityProviderConfiguration;
 
     /**
      * @var \SimpleSAML\SAML2\Configuration\ServiceProvider
      */
-    private $serviceProviderConfiguration;
+    private ServiceProvider $serviceProviderConfiguration;
 
     /**
      * @var \Mockery\MockInterface Mock of \SAML2\Assertion\ProcessorBuilder
      */
-    private $assertionProcessorBuilder;
+    private MockInterface $assertionProcessorBuilder;
 
     /**
      * @var \Mockery\MockInterface Mock of \SAML2\Assertion\Processor
      */
-    private $assertionProcessor;
+    private MockInterface $assertionProcessor;
 
     /**
      * @var string
      */
-    private $currentDestination = 'http://moodle.bridge.feide.no/simplesaml/saml2/sp/AssertionConsumerService.php';
+    private string $currentDestination = 'http://moodle.bridge.feide.no/simplesaml/saml2/sp/AssertionConsumerService.php';
 
 
     /**

@@ -4,6 +4,8 @@ declare(strict_types=1);
 
 namespace SimpleSAML\SAML2\XML\samlp;
 
+use DOMDocument;
+use DOMElement;
 use Mockery\Adapter\Phpunit\MockeryTestCase;
 use RobRichards\XMLSecLibs\XMLSecurityKey;
 use SimpleSAML\SAML2\Constants;
@@ -36,13 +38,13 @@ use SimpleSAML\XML\Chunk;
 final class LogoutRequestTest extends MockeryTestCase
 {
     /** @var \DOMDocument $document */
-    private $document;
+    private DOMDocument $document;
 
     /** @var \DOMElement */
-    private $logoutRequestElement;
+    private DOMElement $logoutRequestElement;
 
     /** @var \DOMDocument $retrievalMethod */
-    private $retrievalMethod;
+    private DOMDocument $retrievalMethod;
 
 
     /**

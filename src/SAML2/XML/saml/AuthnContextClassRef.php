@@ -19,7 +19,7 @@ use SimpleSAML\XML\Exception\InvalidDOMElementException;
 final class AuthnContextClassRef extends AbstractSamlElement
 {
     /** @var string */
-    protected $classRef;
+    protected string $classRef;
 
 
     /**

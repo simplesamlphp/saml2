@@ -22,25 +22,25 @@ use SimpleSAML\XML\Exception\TooManyElementsException;
 class AbstractEncryptedType extends AbstractXencElement
 {
     /** @var \SimpleSAML\SAML2\XML\xenc\CipherData */
-    protected $cipherData;
+    protected CipherData $cipherData;
 
     /** @var string|null */
-    protected $encoding;
+    protected ?string $encoding;
 
     /** @var \SimpleSAML\SAML2\XML\xenc\EncryptionMethod|null */
-    protected $encryptionMethod;
+    protected ?EncryptionMethod $encryptionMethod;
 
     /** @var string|null */
-    protected $id;
+    protected ?string $id;
 
     /** @var \SimpleSAML\SAML2\XML\ds\KeyInfo|null */
-    protected $keyInfo;
+    protected ?KeyInfo $keyInfo;
 
     /** @var string|null */
-    protected $mimeType;
+    protected ?string $mimeType;
 
     /** @var string|null */
-    protected $type;
+    protected ?string $type;
 
 
     /**

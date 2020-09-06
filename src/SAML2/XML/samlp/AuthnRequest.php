@@ -25,80 +25,80 @@ class AuthnRequest extends AbstractRequest
     /**
      * @var \SimpleSAML\SAML2\XML\saml\Subject|null
      */
-    protected $subject = null;
+    protected ?Subject $subject = null;
 
     /**
      * @var \SimpleSAML\SAML2\XML\samlp\Scoping|null
      */
-    protected $scoping = null;
+    protected ?Scoping $scoping = null;
 
     /**
      * The options for what type of name identifier should be returned.
      *
      * @var \SimpleSAML\SAML2\XML\samlp\NameIDPolicy|null
      */
-    protected $nameIdPolicy = null;
+    protected ?NameIDPolicy $nameIdPolicy = null;
 
     /**
      * Whether the Identity Provider must authenticate the user again.
      *
      * @var bool|null
      */
-    protected $forceAuthn = false;
+    protected ?bool $forceAuthn = false;
 
     /**
      * Optional ProviderID attribute
      *
      * @var string|null
      */
-    protected $ProviderName = null;
+    protected ?string $ProviderName = null;
 
     /**
      * Set to true if this request is passive.
      *
      * @var bool|null
      */
-    protected $isPassive = false;
+    protected ?bool $isPassive = false;
 
     /**
      * The URL of the assertion consumer service where the response should be delivered.
      *
      * @var string|null
      */
-    protected $assertionConsumerServiceURL;
+    protected ?string $assertionConsumerServiceURL;
 
     /**
      * What binding should be used when sending the response.
      *
      * @var string|null
      */
-    protected $protocolBinding;
+    protected ?string $protocolBinding;
 
     /**
      * The index of the AttributeConsumingService.
      *
      * @var int|null
      */
-    protected $attributeConsumingServiceIndex;
+    protected ?int $attributeConsumingServiceIndex;
 
     /**
      * The index of the AssertionConsumerService.
      *
      * @var int|null
      */
-    protected $assertionConsumerServiceIndex;
+    protected ?int $assertionConsumerServiceIndex = null;
 
     /**
      * What authentication context was requested.
      *
      * @var \SimpleSAML\SAML2\XML\samlp\RequestedAuthnContext|null
      */
-    protected $requestedAuthnContext;
+    protected ?RequestedAuthnContext $requestedAuthnContext;
 
     /**
      * @var \SimpleSAML\SAML2\XML\saml\Conditions|null
      */
-    protected $conditions = null;
+    protected ?Conditions $conditions = null;
 
 
     /**

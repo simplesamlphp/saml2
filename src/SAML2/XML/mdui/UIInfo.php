@@ -25,49 +25,49 @@ final class UIInfo extends AbstractMduiElement
      *
      * @var \SimpleSAML\XML\Chunk[]
      */
-    protected $children = [];
+    protected array $children = [];
 
     /**
      * The DisplayName, as an array of language => translation.
      *
      * @var string[]
      */
-    protected $DisplayName = [];
+    protected array $DisplayName = [];
 
     /**
      * The Description, as an array of language => translation.
      *
      * @var string[]
      */
-    protected $Description = [];
+    protected array $Description = [];
 
     /**
      * The InformationURL, as an array of language => url.
      *
      * @var string[]
      */
-    protected $InformationURL = [];
+    protected array $InformationURL = [];
 
     /**
      * The PrivacyStatementURL, as an array of language => url.
      *
      * @var array
      */
-    protected $PrivacyStatementURL = [];
+    protected array $PrivacyStatementURL = [];
 
     /**
      * The Keywords, as an array of Keywords objects
      *
      * @var \SimpleSAML\SAML2\XML\mdui\Keywords[]
      */
-    protected $Keywords = [];
+    protected array $Keywords = [];
 
     /**
      * The Logo, as an array of Logo objects
      *
      * @var \SimpleSAML\SAML2\XML\mdui\Logo[]
      */
-    protected $Logo = [];
+    protected array $Logo = [];
 
 
     /**

@@ -4,6 +4,7 @@ declare(strict_types=1);
 
 namespace SimpleSAML\SAML2\XML\samlp;
 
+use DOMDocument;
 use PHPUnit\Framework\TestCase;
 use SimpleSAML\XML\DOMDocumentFactory;
 use SimpleSAML\XML\Chunk;
@@ -19,10 +20,8 @@ use SimpleSAML\SAML2\XML\shibmd\Scope;
  */
 final class ExtensionsTest extends TestCase
 {
-    /**
-     * @var \DOMDocument
-     */
-    private $document;
+    /** @var \DOMDocument */
+    private DOMDocument $document;
 
 
     /**

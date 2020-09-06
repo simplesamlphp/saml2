@@ -20,7 +20,7 @@ use SimpleSAML\XML\Utils as XMLUtils;
 final class AudienceRestriction extends AbstractConditionType
 {
     /** @var string[] */
-    protected $audience = [];
+    protected array $audience = [];
 
 
     /**

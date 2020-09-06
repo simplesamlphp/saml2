@@ -32,14 +32,14 @@ class LogoutRequest extends AbstractRequest
      *
      * @var int|null
      */
-    protected $notOnOrAfter = null;
+    protected ?int $notOnOrAfter = null;
 
     /**
      * The SessionIndexes of the sessions that should be terminated.
      *
      * @var string[]
      */
-    protected $sessionIndexes = [];
+    protected array $sessionIndexes = [];
 
     /**
      * The optional reason for the logout, typically a URN
@@ -48,7 +48,7 @@ class LogoutRequest extends AbstractRequest
      *
      * @var string|null
      */
-    protected $reason = null;
+    protected ?string $reason = null;
 
 
     /**
@@ -236,7 +236,7 @@ class LogoutRequest extends AbstractRequest
             $e->setAttribute('Reason', $this->reason);
         }
 
-        /** @var \SimpleSAML\SAML2\XML\IdentifierInterface $this->identifier */
+        /** @var \SimpleSAML\SAML2\XML\saml\IdentifierInterface $this->identifier */
         $this->identifier->toXML($e);
 
         foreach ($this->sessionIndexes as $sessionIndex) {

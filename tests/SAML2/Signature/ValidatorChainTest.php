@@ -18,10 +18,8 @@ use SimpleSAML\SAML2\Signature\MissingConfigurationException;
  */
 final class ValidatorChainTest extends TestCase
 {
-    /**
-     * @var \SimpleSAML\SAML2\Signature\ValidatorChain
-     */
-    private $chain;
+    /** @var \SimpleSAML\SAML2\Signature\ValidatorChain */
+    private ValidatorChain $chain;
 
 
     /**

@@ -26,13 +26,13 @@ final class EntityAttributes extends AbstractMdattrElement
      *
      * @var (\SimpleSAML\SAML2\XML\saml\Attribute|\SimpleSAML\XML\Chunk)[]
      */
-    protected $children = [];
+    protected array $children = [];
 
 
     /**
      * Create a EntityAttributes element.
      *
-     * @param (\SimpleSAML\XML\Chunk|\SimpleSAML\XML\saml\Attribute)[] $children
+     * @param (\SimpleSAML\XML\Chunk|\SimpleSAML\SAML2\XML\saml\Attribute)[] $children
      */
     public function __construct(array $children)
     {

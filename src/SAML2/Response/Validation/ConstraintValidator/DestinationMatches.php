@@ -14,7 +14,7 @@ final class DestinationMatches implements ConstraintValidator
     /**
      * @var \SimpleSAML\SAML2\Configuration\Destination
      */
-    private $expectedDestination;
+    private Destination $expectedDestination;
 
     /**
      * DestinationMatches constructor.

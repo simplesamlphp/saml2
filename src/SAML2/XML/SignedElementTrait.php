@@ -22,14 +22,14 @@ trait SignedElementTrait
      *
      * @var string[]
      */
-    protected $certificates = [];
+    protected array $certificates = [];
 
     /**
      * The signature of this element.
      *
      * @var \SimpleSAML\SAML2\XML\ds\Signature|null $signature
      */
-    protected $signature;
+    protected ?Signature $signature = null;
 
 
     /**
@@ -39,7 +39,7 @@ trait SignedElementTrait
      *
      * @var \RobRichards\XMLSecLibs\XMLSecurityKey|null
      */
-    protected $signingKey;
+    protected ?XMLSecurityKey $signingKey = null;
 
 
     /**

@@ -21,7 +21,7 @@ use SimpleSAML\SAML2\Utils;
 final class AuthnContextDecl extends AbstractSamlElement
 {
     /** @var \DOMNodeList */
-    protected $decl;
+    protected DOMNodeList $decl;
 
 
     /**

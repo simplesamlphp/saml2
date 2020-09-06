@@ -19,7 +19,7 @@ class Key implements \ArrayAccess
     public const USAGE_ENCRYPTION = 'encryption';
 
     /** @var array */
-    protected $keyData = [];
+    protected array $keyData = [];
 
 
     /**

@@ -23,7 +23,7 @@ final class DigestMethod extends AbstractAlgElement
      *
      * @var string
      */
-    protected $Algorithm;
+    protected string $Algorithm;
 
 
     /**

@@ -26,14 +26,14 @@ abstract class AbstractLocalizedName extends AbstractMdElement
      *
      * @var string
      */
-    protected $language;
+    protected string $language;
 
     /**
      * The localized string.
      *
      * @var string
      */
-    protected $value;
+    protected string $value;
 
 
     /**

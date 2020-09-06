@@ -23,7 +23,7 @@ final class Response extends AbstractEcpElement
      *
      * @var string
      */
-    protected $AssertionConsumerServiceURL;
+    protected string $AssertionConsumerServiceURL;
 
 
     /**

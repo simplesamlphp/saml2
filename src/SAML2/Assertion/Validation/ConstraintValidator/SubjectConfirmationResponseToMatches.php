@@ -13,8 +13,8 @@ use SimpleSAML\SAML2\XML\samlp\Response;
 class SubjectConfirmationResponseToMatches implements
     SubjectConfirmationConstraintValidator
 {
-    /** @var Response */
-    private $response;
+    /** @var \SimpleSAML\SAML2\XML\samlp\Response */
+    private Response $response;
 
 
     /**

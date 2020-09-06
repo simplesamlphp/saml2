@@ -21,7 +21,7 @@ use SimpleSAML\XML\Utils as XMLUtils;
 class ArtifactResponse extends AbstractStatusResponse
 {
     /** @var \SimpleSAML\SAML2\XML\samlp\AbstractMessage */
-    protected $message;
+    protected AbstractMessage $message;
 
 
     /**

@@ -22,14 +22,14 @@ final class AdditionalMetadataLocation extends AbstractMdElement
      *
      * @var string
      */
-    protected $namespace;
+    protected string $namespace;
 
     /**
      * The URI where the metadata is located.
      *
      * @var string
      */
-    protected $location;
+    protected string $location;
 
 
     /**

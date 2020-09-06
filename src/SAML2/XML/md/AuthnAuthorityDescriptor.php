@@ -24,14 +24,14 @@ final class AuthnAuthorityDescriptor extends AbstractRoleDescriptor
      *
      * @var \SimpleSAML\SAML2\XML\md\AbstractEndpointType[]
      */
-    protected $AuthnQueryServices = [];
+    protected array $AuthnQueryServices = [];
 
     /**
      * List of AssertionIDRequestService endpoints.
      *
      * @var \SimpleSAML\SAML2\XML\md\AbstractEndpointType[]
      */
-    protected $AssertionIDRequestServices = [];
+    protected array $AssertionIDRequestServices = [];
 
     /**
      * List of supported NameID formats.
@@ -40,7 +40,7 @@ final class AuthnAuthorityDescriptor extends AbstractRoleDescriptor
      *
      * @var string[]
      */
-    protected $NameIDFormats = [];
+    protected array $NameIDFormats = [];
 
 
     /**

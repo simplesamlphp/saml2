@@ -28,7 +28,7 @@ abstract class AbstractStatusResponse extends AbstractMessage
      *
      * @var string|null
      */
-    protected $inResponseTo;
+    protected ?string $inResponseTo;
 
 
     /**
@@ -36,7 +36,7 @@ abstract class AbstractStatusResponse extends AbstractMessage
      *
      * @var \SimpleSAML\SAML2\XML\samlp\Status
      */
-    protected $status;
+    protected Status $status;
 
 
     /**

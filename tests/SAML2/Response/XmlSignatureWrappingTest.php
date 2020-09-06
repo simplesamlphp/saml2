@@ -21,12 +21,12 @@ final class XmlSignatureWrappingTest extends MockeryTestCase
     /**
      * @var \SimpleSAML\SAML2\Signature\Validator
      */
-    private $signatureValidator;
+    private Validator $signatureValidator;
 
     /**
      * @var \SimpleSAML\SAML2\Configuration\IdentityProvider
      */
-    private $identityProviderConfiguration;
+    private IdentityProvider $identityProviderConfiguration;
 
 
     /**

@@ -17,7 +17,7 @@ use SimpleSAML\XML\Exception\InvalidDOMElementException;
 abstract class Statement extends AbstractStatement
 {
     /** @var string */
-    protected $type;
+    protected string $type;
 
 
     /**

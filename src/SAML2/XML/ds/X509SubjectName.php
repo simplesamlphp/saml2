@@ -21,7 +21,7 @@ final class X509SubjectName extends AbstractDsElement
      *
      * @var string
      */
-    protected $name;
+    protected string $name;
 
 
     /**

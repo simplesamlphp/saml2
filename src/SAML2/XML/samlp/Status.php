@@ -20,13 +20,13 @@ use SimpleSAML\XML\Utils as XMLUtils;
 final class Status extends AbstractSamlpElement
 {
     /** @var \SimpleSAML\SAML2\XML\samlp\StatusCode */
-    protected $statusCode;
+    protected StatusCode $statusCode;
 
     /** @var string|null */
-    protected $statusMessage;
+    protected ?string $statusMessage;
 
     /** @var \SimpleSAML\SAML2\XML\samlp\StatusDetail[] */
-    protected $statusDetails = [];
+    protected array $statusDetails = [];
 
 
     /**

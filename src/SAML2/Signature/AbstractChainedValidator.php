@@ -16,7 +16,7 @@ abstract class AbstractChainedValidator implements ChainedValidator
     /**
      * @var \Psr\Log\LoggerInterface
      */
-    protected $logger;
+    protected LoggerInterface $logger;
 
 
     /**

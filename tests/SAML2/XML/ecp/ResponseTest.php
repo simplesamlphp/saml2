@@ -22,7 +22,7 @@ use SimpleSAML\Assert\AssertionFailedException;
 final class ResponseTest extends TestCase
 {
     /** @var \DOMDocument */
-    private $document;
+    private DOMDocument $document;
 
 
     /**

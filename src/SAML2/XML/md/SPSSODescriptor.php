@@ -24,14 +24,14 @@ final class SPSSODescriptor extends AbstractSSODescriptor
      *
      * @var bool|null
      */
-    protected $authnRequestsSigned = null;
+    protected ?bool $authnRequestsSigned = null;
 
     /**
      * Whether this SP wants the Assertion elements to be signed.
      *
      * @var bool|null
      */
-    protected $wantAssertionsSigned = null;
+    protected ?bool $wantAssertionsSigned = null;
 
     /**
      * List of AssertionConsumerService endpoints for this SP.
@@ -40,7 +40,7 @@ final class SPSSODescriptor extends AbstractSSODescriptor
      *
      * @var \SimpleSAML\SAML2\XML\md\AssertionConsumerService[]
      */
-    protected $assertionConsumerService = [];
+    protected array $assertionConsumerService = [];
 
     /**
      * List of AttributeConsumingService descriptors for this SP.
@@ -49,7 +49,7 @@ final class SPSSODescriptor extends AbstractSSODescriptor
      *
      * @var \SimpleSAML\SAML2\XML\md\AttributeConsumingService[]
      */
-    protected $attributeConsumingService = [];
+    protected array $attributeConsumingService = [];
 
 
 

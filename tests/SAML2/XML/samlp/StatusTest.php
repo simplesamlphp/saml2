@@ -4,9 +4,10 @@ declare(strict_types=1);
 
 namespace SimpleSAML\SAML2\XML\samlp;
 
+use DOMDocument;
+use PHPUnit\Framework\TestCase;
 use SimpleSAML\SAML2\Constants;
 use SimpleSAML\XML\DOMDocumentFactory;
-use PHPUnit\Framework\TestCase;
 use SimpleSAML\XML\Chunk;
 use SimpleSAML\XML\Utils as XMLUtils;
 
@@ -22,10 +23,10 @@ use SimpleSAML\XML\Utils as XMLUtils;
 final class StatusTest extends TestCase
 {
     /** @var \DOMDocument */
-    private $document;
+    private DOMDocument $document;
 
     /** @var \DOMDocument */
-    private $detail;
+    private DOMDocument $detail;
 
 
     /**

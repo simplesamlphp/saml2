@@ -20,16 +20,16 @@ use SimpleSAML\XML\Chunk;
 abstract class AbstractEncryptionMethod extends AbstractXencElement
 {
     /** @var string */
-    protected $algorithm;
+    protected string $algorithm;
 
     /** @var int|null */
-    protected $keySize = null;
+    protected ?int $keySize = null;
 
     /** @var string|null */
-    protected $oaepParams = null;
+    protected ?string $oaepParams = null;
 
     /** @var \SimpleSAML\XML\Chunk[] */
-    protected $children = [];
+    protected array $children = [];
 
 
     /**
