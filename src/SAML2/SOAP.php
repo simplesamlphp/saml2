@@ -8,6 +8,7 @@ use DOMDocument;
 use Exception;
 use SimpleSAML\SAML2\Utils;
 use SimpleSAML\SAML2\XML\ecp\Response as ECPResponse;
+use SimpleSAML\SAML2\XML\ecp\RequestAuthenticated;
 use SimpleSAML\SAML2\XML\samlp\AbstractMessage;
 use SimpleSAML\SAML2\XML\samlp\MessageFactory;
 use SimpleSAML\SAML2\XML\samlp\Response;
@@ -47,21 +48,15 @@ SOAP;
             /** @var \DOMElement $header */
             $header = $doc->getElementsByTagNameNS(Constants::NS_SOAP, 'Header')->item(0);
 
+            $requestAuthenticated = new RequestAuthenticated();
+            $header->appendChild($header->ownerDocument->importNode($requestAuthenticated->toXML(), true));
+
             $destination = $this->destination ?: $message->getDestination();
             if ($destination === null) {
                 throw new Exception('No destination available for SOAP message.');
             }
             $response = new ECPResponse($destination);
-
             $response->toXML($header);
-
-            // TODO We SHOULD add ecp:RequestAuthenticated SOAP header if we
-            // authenticated the AuthnRequest. It may make sense to have a
-            // standardized way for Message objects to contain (optional) SOAP
-            // headers for use with the SOAP binding.
-            //
-            // https://docs.oasis-open.org/security/saml/Post2.0/saml-ecp/v2.0/cs01/saml-ecp-v2.0-cs01.html#_Toc366664733
-            // See Section 2.3.6.1
         }
 
         /** @var \DOMElement $body */
