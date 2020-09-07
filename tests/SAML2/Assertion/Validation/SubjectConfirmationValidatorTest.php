@@ -4,8 +4,12 @@ declare(strict_types=1);
 
 namespace SimpleSAML\SAML2\XML\saml;
 
+use DOMDocument;
 use PHPUnit\Framework\TestCase;
+use Psr\Log\LoggerInterface;
+use Psr\Log\NullLogger;
 use SimpleSAML\SAML2\Assertion\Exception\InvalidSubjectConfirmationException;
+use SimpleSAML\SAML2\Assertion\Processor;
 use SimpleSAML\SAML2\Assertion\ProcessorBuilder;
 use SimpleSAML\SAML2\Configuration\Destination;
 use SimpleSAML\SAML2\Configuration\IdentityProvider;
@@ -25,42 +29,29 @@ use SimpleSAML\SAML2\XML\samlp\StatusCode;
 final class SubjectConfirmationValidatorTest extends TestCase
 {
     /** @var \DOMDocument */
-    protected $document;
+    protected DOMDocument $document;
 
-    /**
-     * @var \SimpleSAML\SAML2\Assertion\Processor
-     */
-    protected $assertionProcessor;
+    /** @var \SimpleSAML\SAML2\Assertion\Processor */
+    protected Processor $assertionProcessor;
 
-    /**
-     * @var \SimpleSAML\SAML2\Configuration\IdentityProvider
-     */
-    protected $identityProviderConfiguration;
+    /** @var \SimpleSAML\SAML2\Configuration\IdentityProvider */
+    protected IdentityProvider $identityProviderConfiguration;
 
-    /**
-     * @var \SimpleSAML\SAML2\Configuration\ServiceProvider
-     */
-    protected $serviceProviderConfiguration;
+    /** @var \SimpleSAML\SAML2\Configuration\ServiceProvider */
+    protected ServiceProvider $serviceProviderConfiguration;
 
-    /**
-     * @var \Psr\Log\LoggerInterface
-     */
-    protected $logger;
+    /** @var \Psr\Log\LoggerInterface */
+    protected LoggerInterface $logger;
 
-    /**
-     * @var \SimpleSAML\SAML2\Response\Validation\Validator
-     */
-    protected $validator;
+    /** @var \SimpleSAML\SAML2\Response\Validation\Validator */
+    protected Validator $validator;
 
-    /**
-     * @var \SimpleSAML\SAML2\Configuration\Destination
-     */
-    protected $destination;
+    /** @var \SimpleSAML\SAML2\Configuration\Destination */
+    protected Destination $destination;
 
-    /**
-     * @var \SimpleSAML\SAML2\xml\samlp\Response
-     */
-    protected $response;
+    /** @var \SimpleSAML\SAML2\xml\samlp\Response */
+    protected Response $response;
+
 
     /**
      * @return void
@@ -71,7 +62,7 @@ final class SubjectConfirmationValidatorTest extends TestCase
         $spentity = 'urn:mace:feide.no:services:no.feide.moodle';
         $destination = 'https://example.org/authentication/sp/consume-assertion';
 
-        $this->logger = new \Psr\Log\NullLogger();
+        $this->logger = new NullLogger();
         $this->validator = new Validator($this->logger);
         $this->destination = new Destination($destination);
         $this->response = new Response(new Status(new StatusCode()));

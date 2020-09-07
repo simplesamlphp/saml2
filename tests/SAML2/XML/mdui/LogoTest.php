@@ -4,6 +4,7 @@ declare(strict_types=1);
 
 namespace SimpleSAML\SAML2\XML\mdui;
 
+use DOMDocument;
 use InvalidArgumentException;
 use PHPUnit\Framework\TestCase;
 use SimpleSAML\Assert\AssertionFailedException;
@@ -21,15 +22,16 @@ use SimpleSAML\XML\Utils as XMLUtils;
 final class LogoTest extends TestCase
 {
     /** @var \DOMDocument */
-    private $document;
+    private DOMDocument $document;
 
     /** @var string */
-    private $data = <<<IMG
+    private string $data = <<<IMG
 data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAAEAAAABCAQAAAC1HAwCAAAAC0lEQVR42mNkYAAAAAYAAjCB0C8AAAAASUVORK5CYII=
 IMG;
 
     /** @var string */
-    private $url = 'https://static.example.org/images/logos/logo300x200.png';
+    private string $url = 'https://static.example.org/images/logos/logo300x200.png';
+
 
     /**
      * @return void

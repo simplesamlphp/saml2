@@ -27,10 +27,10 @@ final class AttributeAuthorityDescriptorTest extends TestCase
     use SignedElementTestTrait;
 
     /** @var \SimpleSAML\SAML2\XML\md\AttributeService */
-    protected $as;
+    protected AttributeService $as;
 
     /** @var \SimpleSAML\SAML2\XML\md\AssertionIDRequestService */
-    protected $aidrs;
+    protected AssertionIDRequestService $aidrs;
 
 
     /**

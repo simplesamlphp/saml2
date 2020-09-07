@@ -22,28 +22,28 @@ final class Logo extends AbstractMduiElement
      *
      * @var string
      */
-    protected $url;
+    protected string $url;
 
     /**
      * The width of this logo.
      *
      * @var int
      */
-    protected $width;
+    protected int $width;
 
     /**
      * The height of this logo.
      *
      * @var int
      */
-    protected $height;
+    protected int $height;
 
     /**
      * The language of this item.
      *
      * @var string|null
      */
-    protected $lang = null;
+    protected ?string $lang = null;
 
 
     /**

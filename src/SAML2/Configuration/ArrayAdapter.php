@@ -12,7 +12,7 @@ class ArrayAdapter implements Queryable
     /**
      * @var array
      */
-    private $configuration;
+    private array $configuration;
 
 
     /**

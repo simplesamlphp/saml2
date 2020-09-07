@@ -25,7 +25,7 @@ final class AffiliationDescriptor extends AbstractMetadataDocument
      *
      * @var string
      */
-    public $affiliationOwnerID;
+    public string $affiliationOwnerID;
 
     /**
      * The AffiliateMember(s).
@@ -34,7 +34,7 @@ final class AffiliationDescriptor extends AbstractMetadataDocument
      *
      * @var string[]
      */
-    protected $AffiliateMembers = [];
+    protected array $AffiliateMembers = [];
 
     /**
      * KeyDescriptor elements.
@@ -43,7 +43,7 @@ final class AffiliationDescriptor extends AbstractMetadataDocument
      *
      * @var \SimpleSAML\SAML2\XML\md\KeyDescriptor[]
      */
-    protected $KeyDescriptors = [];
+    protected array $KeyDescriptors = [];
 
 
     /**

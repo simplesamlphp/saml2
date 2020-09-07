@@ -4,6 +4,7 @@ declare(strict_types=1);
 
 namespace SimpleSAML\SAML2\XML\saml;
 
+use DOMDocument;
 use PHPUnit\Framework\TestCase;
 use SimpleSAML\SAML2\Constants;
 use SimpleSAML\SAML2\CustomCondition;
@@ -22,7 +23,7 @@ use SimpleSAML\XML\DOMDocumentFactory;
 final class ConditionTest extends TestCase
 {
     /** @var \DOMDocument $document */
-    private $document;
+    private DOMDocument $document;
 
 
     /**

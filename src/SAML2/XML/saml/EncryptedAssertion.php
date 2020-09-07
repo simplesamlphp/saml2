@@ -19,10 +19,8 @@ class EncryptedAssertion extends AbstractSamlElement implements EncryptedElement
 {
     use EncryptedElementTrait;
 
-    /**
-     * @var bool
-     */
-    protected $wasSignedAtConstruction = false;
+    /** @var bool */
+    protected bool $wasSignedAtConstruction = false;
 
 
     /**

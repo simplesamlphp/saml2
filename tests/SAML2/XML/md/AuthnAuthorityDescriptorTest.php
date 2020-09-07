@@ -22,10 +22,10 @@ final class AuthnAuthorityDescriptorTest extends TestCase
     use SignedElementTestTrait;
 
     /** @var \SimpleSAML\SAML2\XML\md\AssertionIDRequestService */
-    protected $aidrs;
+    protected AssertionIDRequestService $aidrs;
 
     /** @var \SimpleSAML\SAML2\XML\md\AuthnQueryService */
-    protected $aqs;
+    protected AuthnQueryService $aqs;
 
 
     /**

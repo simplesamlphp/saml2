@@ -17,10 +17,10 @@ use SimpleSAML\SAML2\XML\SignedElementInterface;
 class ValidatorChain implements ValidatorInterface
 {
     /** @var \Psr\Log\LoggerInterface */
-    private $logger;
+    private LoggerInterface $logger;
 
     /** @var \SimpleSAML\SAML2\Signature\ChainedValidator[] */
-    private $validators = [];
+    private array $validators = [];
 
 
     /**

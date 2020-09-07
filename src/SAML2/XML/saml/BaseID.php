@@ -21,10 +21,10 @@ class BaseID extends AbstractSamlElement implements BaseIdentifierInterface
     use IDNameQualifiersTrait;
 
     /** @var string */
-    protected $value;
+    protected string $value;
 
     /** @var string */
-    protected $type;
+    protected string $type;
 
 
     /**

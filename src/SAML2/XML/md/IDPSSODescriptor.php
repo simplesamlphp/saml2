@@ -25,42 +25,42 @@ final class IDPSSODescriptor extends AbstractSSODescriptor
      *
      * @var bool|null
      */
-    protected $wantAuthnRequestsSigned = null;
+    protected ?bool $wantAuthnRequestsSigned = null;
 
     /**
      * List of SingleSignOnService endpoints.
      *
      * @var \SimpleSAML\SAML2\XML\md\SingleSignOnService[]
      */
-    protected $ssoServiceEndpoints = [];
+    protected array $ssoServiceEndpoints = [];
 
     /**
      * List of NameIDMappingService endpoints.
      *
      * @var \SimpleSAML\SAML2\XML\md\NameIDMappingService[]
      */
-    protected $nameIDMappingServiceEndpoints = [];
+    protected array $nameIDMappingServiceEndpoints = [];
 
     /**
      * List of AssertionIDRequestService endpoints.
      *
      * @var \SimpleSAML\SAML2\XML\md\AssertionIDRequestService[]
      */
-    protected $assertionIDRequestServiceEndpoints = [];
+    protected array $assertionIDRequestServiceEndpoints = [];
 
     /**
      * List of supported attribute profiles.
      *
      * @var string[]
      */
-    protected $attributeProfiles = [];
+    protected array $attributeProfiles = [];
 
     /**
      * List of supported attributes.
      *
      * @var \SimpleSAML\SAML2\XML\saml\Attribute[]
      */
-    protected $attributes = [];
+    protected array $attributes = [];
 
 
     /**

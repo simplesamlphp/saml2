@@ -18,10 +18,10 @@ use SimpleSAML\XML\Exception\InvalidDOMElementException;
 final class StatusCode extends AbstractSamlpElement
 {
     /** @var string */
-    protected $Value;
+    protected string $Value;
 
     /** @var \SimpleSAML\SAML2\XML\samlp\StatusCode[] */
-    protected $subCodes = [];
+    protected array $subCodes = [];
 
 
     /**

@@ -7,6 +7,7 @@ namespace SimpleSAML\SAML2\Signature;
 use Psr\Log\LoggerInterface;
 use SimpleSAML\Assert\Assert;
 use SimpleSAML\SAML2\Certificate\Key;
+use SimpleSAML\SAML2\Certificate\KeyCollection;
 use SimpleSAML\SAML2\Certificate\KeyLoader;
 use SimpleSAML\SAML2\Certificate\X509;
 use SimpleSAML\SAML2\Configuration\CertificateProvider;
@@ -17,12 +18,12 @@ class PublicKeyValidator extends AbstractChainedValidator
     /**
      * @var \SimpleSAML\SAML2\Certificate\KeyCollection
      */
-    private $configuredKeys;
+    private KeyCollection $configuredKeys;
 
     /**
      * @var \SimpleSAML\SAML2\Certificate\KeyLoader
      */
-    private $keyLoader;
+    private KeyLoader $keyLoader;
 
 
     /**

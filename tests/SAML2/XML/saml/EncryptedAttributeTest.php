@@ -4,6 +4,7 @@ declare(strict_types=1);
 
 namespace SimpleSAML\SAML2\XML\saml;
 
+use DOMDocument;
 use PHPUnit\Framework\TestCase;
 use RobRichards\XMLSecLibs\XMLSecurityKey;
 use SimpleSAML\Assert\AssertionFailedException;
@@ -21,7 +22,7 @@ use SimpleSAML\XML\DOMDocumentFactory;
 final class EncryptedAttributeTest extends TestCase
 {
     /** @var \DOMDocument */
-    private $document;
+    private DOMDocument $document;
 
 
     /**

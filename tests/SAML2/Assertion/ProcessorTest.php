@@ -5,6 +5,7 @@ declare(strict_types=1);
 namespace SimpleSAML\SAML2\Assertion;
 
 use Mockery as m;
+use Mockery\MockInterface;
 use Mockery\Adapter\Phpunit\MockeryTestCase;
 use Psr\Log\LoggerInterface;
 use SimpleSAML\SAML2\Assertion\Transformer\TransformerInterface;
@@ -26,14 +27,15 @@ use stdClass;
 final class ProcessorTest extends MockeryTestCase
 {
     /**
-     * @var Processor
+     * @var \SimpleSAML\SAML2\Assertion\Processor
      */
-    private $processor;
+    private Processor $processor;
 
     /**
      * @var m\MockInterface&Decrypter
      */
-    private $decrypter;
+    private MockInterface $decrypter;
+
 
     protected function setUp(): void
     {

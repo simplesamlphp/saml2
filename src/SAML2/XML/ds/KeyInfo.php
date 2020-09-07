@@ -24,7 +24,7 @@ final class KeyInfo extends AbstractDsElement
      *
      * @var string|null
      */
-    protected $Id = null;
+    protected ?string $Id = null;
 
     /**
      * The various key information elements.
@@ -34,7 +34,7 @@ final class KeyInfo extends AbstractDsElement
      *
      * @var (\SimpleSAML\XML\Chunk|\SimpleSAML\SAML2\XML\ds\KeyName|\SimpleSAML\SAML2\XML\ds\X509Data|\SimpleSAML\SAML2\XML\xenc\EncryptedKey)[]
      */
-    protected $info = [];
+    protected array $info = [];
 
 
     /**

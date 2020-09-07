@@ -16,7 +16,7 @@ final class SimpleTestLogger extends AbstractLogger
     /**
      * @var array
      */
-    private $messages = [];
+    private array $messages = [];
 
 
     /**

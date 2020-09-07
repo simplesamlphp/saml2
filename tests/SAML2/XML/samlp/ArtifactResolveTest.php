@@ -4,6 +4,7 @@ declare(strict_types=1);
 
 namespace SimpleSAML\SAML2\XML\samlp;
 
+use DOMDocument;
 use PHPUnit\Framework\TestCase;
 use SimpleSAML\SAML2\XML\saml\Issuer;
 use SimpleSAML\XML\DOMDocumentFactory;
@@ -19,7 +20,8 @@ use SimpleSAML\SAML2\Utils;
 final class ArtifactResolveTest extends TestCase
 {
     /** @var \DOMDocument $document */
-    private $document;
+    private DOMDocument $document;
+
 
     /**
      * @return void

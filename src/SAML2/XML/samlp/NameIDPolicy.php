@@ -17,13 +17,13 @@ use SimpleSAML\XML\Exception\InvalidDOMElementException;
 final class NameIDPolicy extends AbstractSamlpElement
 {
     /** @var string|null */
-    protected $Format = null;
+    protected ?string $Format = null;
 
     /** @var string|null */
-    protected $SPNameQualifier = null;
+    protected ?string $SPNameQualifier = null;
 
     /** @var bool|null */
-    protected $AllowCreate = null;
+    protected ?bool $AllowCreate = null;
 
 
     /**

@@ -29,7 +29,7 @@ class Response extends AbstractStatusResponse
      *
      * @var (\SimpleSAML\SAML2\XML\saml\Assertion|\SimpleSAML\SAML2\XML\saml\EncryptedAssertion)[]
      */
-    protected $assertions = [];
+    protected array $assertions = [];
 
 
     /**

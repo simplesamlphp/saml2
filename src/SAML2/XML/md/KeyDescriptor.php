@@ -25,21 +25,21 @@ final class KeyDescriptor extends AbstractMdElement
      *
      * @var string|null
      */
-    protected $use = null;
+    protected ?string $use = null;
 
     /**
      * The KeyInfo for this key.
      *
      * @var \SimpleSAML\SAML2\XML\ds\KeyInfo
      */
-    protected $KeyInfo;
+    protected KeyInfo $KeyInfo;
 
     /**
      * Supported EncryptionMethods.
      *
      * @var \SimpleSAML\SAML2\XML\md\EncryptionMethod[]
      */
-    protected $EncryptionMethods = [];
+    protected array $EncryptionMethods = [];
 
 
     /**

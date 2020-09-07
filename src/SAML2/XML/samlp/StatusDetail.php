@@ -18,7 +18,7 @@ use SimpleSAML\XML\Chunk;
 final class StatusDetail extends AbstractSamlpElement
 {
     /** @var \SimpleSAML\XML\Chunk[] */
-    protected $details = [];
+    protected array $details = [];
 
 
     /**

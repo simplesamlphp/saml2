@@ -4,6 +4,7 @@ declare(strict_types=1);
 
 namespace SimpleSAML\SAML2\XML\ds;
 
+use DOMDocument;
 use PHPUnit\Framework\TestCase;
 use RobRichards\XMLSecLibs\XMLSecurityDSig;
 use SimpleSAML\XML\DOMDocumentFactory;
@@ -21,7 +22,8 @@ use SimpleSAML\SAML2\Utils;
 final class X509SubjectNameTest extends TestCase
 {
     /** @var \DOMDocument */
-    private $document;
+    private DOMDocument $document;
+
 
     /**
      * @return void

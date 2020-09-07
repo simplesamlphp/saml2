@@ -4,6 +4,7 @@ declare(strict_types=1);
 
 namespace SimpleSAML\SAML2;
 
+use DOMDocument;
 use RobRichards\XMLSecLibs\XMLSecurityKey;
 use SimpleSAML\TestUtils\PEMCertificatesMock;
 
@@ -22,14 +23,14 @@ trait SignedElementTestTrait
      *
      * @var \DOMDocument
      */
-    protected $document;
+    protected DOMDocument $document;
 
     /**
      * The name of the class we are testing.
      *
      * @var string
      */
-    protected $testedClass = '';
+    protected string $testedClass = '';
 
 
     /**

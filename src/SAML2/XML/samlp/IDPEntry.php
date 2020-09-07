@@ -17,13 +17,13 @@ use SimpleSAML\XML\Exception\InvalidDOMElementException;
 final class IDPEntry extends AbstractSamlpElement
 {
     /** @var string */
-    protected $providerId;
+    protected string $providerId;
 
     /** @var string|null */
-    protected $name;
+    protected ?string $name;
 
     /** @var string|null */
-    protected $loc;
+    protected ?string $loc;
 
     /**
      * Initialize an IDPEntry element.

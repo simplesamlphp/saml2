@@ -23,14 +23,14 @@ final class Keywords extends AbstractMduiElement
      *
      * @var string[]
      */
-    protected $Keywords = [];
+    protected array $Keywords = [];
 
     /**
      * The language of this item.
      *
      * @var string
      */
-    protected $lang;
+    protected string $lang;
 
 
     /**

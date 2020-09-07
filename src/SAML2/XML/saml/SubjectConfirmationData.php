@@ -29,35 +29,35 @@ final class SubjectConfirmationData extends AbstractSamlElement
      *
      * @var int|null
      */
-    protected $NotBefore = null;
+    protected ?int $NotBefore = null;
 
     /**
      * The time after which this element is invalid, as an unix timestamp.
      *
      * @var int|null
      */
-    protected $NotOnOrAfter = null;
+    protected ?int $NotOnOrAfter = null;
 
     /**
      * The Recipient this Subject is valid for. Either an entity or a location.
      *
      * @var string|null
      */
-    protected $Recipient = null;
+    protected ?string $Recipient = null;
 
     /**
      * The ID of the AuthnRequest this is a response to.
      *
      * @var string|null
      */
-    protected $InResponseTo = null;
+    protected ?string $InResponseTo = null;
 
     /**
      * The IP(v6) address of the user.
      *
      * @var string|null
      */
-    protected $Address = null;
+    protected ?string $Address = null;
 
     /**
      * The various key information elements.
@@ -67,7 +67,7 @@ final class SubjectConfirmationData extends AbstractSamlElement
      *
      * @var (\SimpleSAML\SAML2\XML\ds\KeyInfo|\SimpleSAML\XML\Chunk)[]
      */
-    protected $info = [];
+    protected array $info = [];
 
 
     /**

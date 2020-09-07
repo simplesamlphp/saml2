@@ -22,14 +22,14 @@ final class Scope extends AbstractShibmdElement
      *
      * @var string
      */
-    protected $scope;
+    protected string $scope;
 
     /**
      * Whether this is a regexp scope.
      *
      * @var bool
      */
-    protected $regexp;
+    protected bool $regexp;
 
 
     /**

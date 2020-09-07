@@ -18,14 +18,14 @@ trait IndexedElementTrait
      *
      * @var int
      */
-    protected $index;
+    protected int $index;
 
     /**
      * Whether this endpoint is the default.
      *
      * @var bool|null
      */
-    protected $isDefault = null;
+    protected ?bool $isDefault = null;
 
 
     /**

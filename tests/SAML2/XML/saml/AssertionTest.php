@@ -27,7 +27,7 @@ final class AssertionTest extends MockeryTestCase
     private const FRAMEWORK = 'vendor/simplesamlphp/simplesamlphp-test-framework';
 
     /** @var \DOMDocument */
-    private $document;
+    private DOMDocument $document;
 
 
     /**

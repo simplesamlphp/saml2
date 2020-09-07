@@ -25,7 +25,7 @@ final class X509Data extends AbstractDsElement
      *
      * @var (\SimpleSAML\XML\Chunk|\SimpleSAML\SAML2\XML\ds\X509Certificate|\SimpleSAML\SAML2\XML\ds\X509SubjectName)[]
      */
-    protected $data = [];
+    protected array $data = [];
 
 
     /**

@@ -4,6 +4,7 @@ declare(strict_types=1);
 
 namespace SimpleSAML\SAML2\XML\saml;
 
+use DOMDocument;
 use Mockery;
 use PHPUnit\Framework\TestCase;
 use SimpleSAML\SAML2\Compat\ContainerInterface;
@@ -25,7 +26,7 @@ use SimpleSAML\XML\Utils as XMLUtils;
 final class SubjectConfirmationTest extends TestCase
 {
     /** @var \DOMDocument */
-    private $document;
+    private DOMDocument $document;
 
 
     public function setup(): void

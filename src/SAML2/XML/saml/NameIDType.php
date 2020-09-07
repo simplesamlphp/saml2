@@ -35,7 +35,7 @@ abstract class NameIDType extends AbstractSamlElement implements IdentifierInter
      *
      * @see saml-core-2.0-os
      */
-    protected $Format = null;
+    protected ?string $Format = null;
 
     /**
      * A name identifier established by a service provider or affiliation of providers for the entity, if different from
@@ -47,14 +47,14 @@ abstract class NameIDType extends AbstractSamlElement implements IdentifierInter
      *
      * @see saml-core-2.0-os
      */
-    protected $SPProvidedID = null;
+    protected ?string $SPProvidedID = null;
 
     /**
      * The NameIDType complex type is used when an element serves to represent an entity by a string-valued name.
      *
      * @var string
      */
-    protected $value;
+    protected string $value;
 
 
     /**

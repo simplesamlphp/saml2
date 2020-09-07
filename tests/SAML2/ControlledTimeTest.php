@@ -16,7 +16,7 @@ use Mockery\Adapter\Phpunit\MockeryTestCase;
 abstract class ControlledTimeTest extends MockeryTestCase
 {
     /** @var int */
-    protected $currentTime = 1;
+    protected int $currentTime = 1;
 
 
     public function setUp(): void

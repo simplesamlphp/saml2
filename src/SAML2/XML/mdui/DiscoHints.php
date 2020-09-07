@@ -25,28 +25,28 @@ final class DiscoHints extends AbstractMduiElement
      *
      * @var \SimpleSAML\XML\Chunk[]
      */
-    protected $children = [];
+    protected array $children = [];
 
     /**
      * The IPHint, as an array of strings.
      *
      * @var string[]
      */
-    protected $IPHint = [];
+    protected array $IPHint = [];
 
     /**
      * The DomainHint, as an array of strings.
      *
      * @var string[]
      */
-    protected $DomainHint = [];
+    protected array $DomainHint = [];
 
     /**
      * The GeolocationHint, as an array of strings.
      *
      * @var string[]
      */
-    protected $GeolocationHint = [];
+    protected array $GeolocationHint = [];
 
 
     /**

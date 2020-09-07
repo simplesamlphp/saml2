@@ -16,15 +16,11 @@ use SimpleSAML\SAML2\XML\SignedElementInterface;
  */
 final class MockChainedValidator extends AbstractChainedValidator
 {
-    /**
-     * @var bool
-     */
-    private $canValidate;
+    /** @var bool */
+    private bool $canValidate;
 
-    /**
-     * @var bool
-     */
-    private $isValid;
+    /** @var bool */
+    private bool $isValid;
 
 
     /**

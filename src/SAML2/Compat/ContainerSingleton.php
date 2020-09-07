@@ -10,7 +10,7 @@ use SimpleSAML\SAML2\Compat\Ssp\Container;
 class ContainerSingleton
 {
     /** @var \SimpleSAML\SAML2\Compat\ContainerInterface|null */
-    protected static $container = null;
+    protected static ?ContainerInterface $container = null;
 
 
     /**

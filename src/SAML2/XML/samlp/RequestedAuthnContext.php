@@ -20,10 +20,10 @@ use SimpleSAML\SAML2\XML\saml\AuthnContextDeclRef;
 final class RequestedAuthnContext extends AbstractSamlpElement
 {
     /** @var (\SimpleSAML\SAML2\XML\saml\AuthnContextClassRef|\SimpleSAML\SAML2\XML\saml\AuthnContextDeclRef)[] */
-    protected $requestedAuthnContexts = [];
+    protected array $requestedAuthnContexts = [];
 
     /** @var string|null */
-    protected $Comparison = null;
+    protected ?string $Comparison = null;
 
 
     /**

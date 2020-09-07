@@ -17,10 +17,10 @@ use SimpleSAML\XML\Utils as XMLUtils;
 class CipherData extends AbstractXencElement
 {
     /** @var string|null */
-    protected $cipherValue = null;
+    protected ?string $cipherValue = null;
 
     /** @var \SimpleSAML\SAML2\XML\xenc\CipherReference|null */
-    protected $cipherReference = null;
+    protected ?CipherReference $cipherReference = null;
 
 
     /**

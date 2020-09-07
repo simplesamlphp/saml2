@@ -17,7 +17,7 @@ use SimpleSAML\SAML2\Constants;
 abstract class AbstractConditionType extends AbstractSamlElement
 {
     /** @var string */
-    protected $value;
+    protected string $value;
 
 
     /**

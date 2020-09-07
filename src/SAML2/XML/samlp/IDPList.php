@@ -20,10 +20,10 @@ use SimpleSAML\XML\Utils as XMLUtils;
 final class IDPList extends AbstractSamlpElement
 {
     /** @var \SimpleSAML\SAML2\XML\samlp\IDPEntry[] */
-    protected $IDPEntry;
+    protected array $IDPEntry;
 
     /** @var string|null */
-    protected $getComplete;
+    protected ?string $getComplete;
 
 
     /**

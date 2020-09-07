@@ -8,10 +8,8 @@ use SimpleSAML\SAML2\XML\samlp\Response;
 
 class Validator
 {
-    /**
-     * @var \SimpleSAML\SAML2\Response\Validation\ConstraintValidator[]
-     */
-    protected $constraints = [];
+    /** @var \SimpleSAML\SAML2\Response\Validation\ConstraintValidator[] */
+    protected array $constraints = [];
 
 
     /**

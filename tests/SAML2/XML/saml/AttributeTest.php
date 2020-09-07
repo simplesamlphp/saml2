@@ -4,6 +4,7 @@ declare(strict_types=1);
 
 namespace SimpleSAML\SAML2\XML\saml;
 
+use DOMDocument;
 use PHPUnit\Framework\TestCase;
 use RobRichards\XMLSecLibs\XMLSecurityKey;
 use SimpleSAML\SAML2\Constants;
@@ -21,7 +22,7 @@ use SimpleSAML\TestUtils\PEMCertificatesMock;
 final class AttributeTest extends TestCase
 {
     /** @var \DOMDocument */
-    protected $document;
+    protected DOMDocument $document;
 
 
     /**

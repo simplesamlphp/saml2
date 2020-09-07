@@ -16,10 +16,10 @@ use SimpleSAML\XML\Exception\InvalidDOMElementException;
 class ReferenceList extends AbstractXencElement
 {
     /** @var \SimpleSAML\SAML2\XML\xenc\DataReference[] */
-    protected $dataReferences;
+    protected array $dataReferences;
 
     /** @var \SimpleSAML\SAML2\XML\xenc\KeyReference[] */
-    protected $keyreferences;
+    protected array $keyreferences;
 
 
     /**

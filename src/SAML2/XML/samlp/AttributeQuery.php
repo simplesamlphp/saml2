@@ -37,7 +37,7 @@ class AttributeQuery extends AbstractSubjectQuery
      *
      * @var \SimpleSAML\SAML2\XML\saml\Attribute[]
      */
-    protected $attributes = [];
+    protected array $attributes = [];
 
 
     /**

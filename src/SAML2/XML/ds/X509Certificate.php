@@ -21,7 +21,7 @@ final class X509Certificate extends AbstractDsElement
      *
      * @var string
      */
-    protected $certificate;
+    protected string $certificate;
 
 
     /**

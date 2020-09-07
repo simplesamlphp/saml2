@@ -4,6 +4,7 @@ declare(strict_types=1);
 
 namespace SimpleSAML\SAML2\XML\mdui;
 
+use DOMDocument;
 use PHPUnit\Framework\TestCase;
 use SimpleSAML\XML\Chunk;
 use SimpleSAML\XML\DOMDocumentFactory;
@@ -19,7 +20,7 @@ use SimpleSAML\XML\Utils as XMLUtils;
 final class UIInfoTest extends TestCase
 {
     /** @var \DOMDocument */
-    private $document;
+    private DOMDocument $document;
 
 
     /**

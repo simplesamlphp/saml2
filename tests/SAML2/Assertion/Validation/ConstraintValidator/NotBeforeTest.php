@@ -5,6 +5,7 @@ declare(strict_types=1);
 namespace SimpleSAML\SAML2\Assertion\Validation\ConstraintValidator;
 
 use Mockery;
+use Mockery\MockInterface;
 use SimpleSAML\SAML2\Assertion\Validation\ConstraintValidator\NotBefore;
 use SimpleSAML\SAML2\Assertion\Validation\Result;
 use SimpleSAML\SAML2\ControlledTimeTest;
@@ -21,15 +22,11 @@ use SimpleSAML\SAML2\XML\saml\Assertion;
  */
 final class NotBeforeTest extends ControlledTimeTest
 {
-    /**
-     * @var \Mockery\MockInterface
-     */
-    private $assertion;
+    /** @var \Mockery\MockInterface */
+    private MockInterface $assertion;
 
-    /**
-     * @var int
-     */
-    protected $currentTime = 1;
+    /** @var int */
+    protected int $currentTime = 1;
 
 
     /**

@@ -4,6 +4,7 @@ declare(strict_types=1);
 
 namespace SimpleSAML\SAML2\XML\saml;
 
+use DOMDocument;
 use PHPUnit\Framework\TestCase;
 use SimpleSAML\Assert\AssertionFailedException;
 use SimpleSAML\SAML2\Constants;
@@ -20,19 +21,19 @@ use SimpleSAML\XML\Utils as XMLUtils;
 final class AuthnContextTest extends TestCase
 {
     /** @var \DOMDocument */
-    private $document;
+    private DOMDocument $document;
 
     /** @var \DOMDocument */
-    private $classRef;
+    private DOMDocument $classRef;
 
     /** @var \DOMDocument */
-    private $declRef;
+    private DOMDocument $declRef;
 
     /** @var \DOMDocument */
-    private $decl;
+    private DOMDocument $decl;
 
     /** @var \DOMDocument */
-    private $authority;
+    private DOMDocument $authority;
 
 
     /**

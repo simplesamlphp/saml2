@@ -18,7 +18,7 @@ class SpIsValidAudience implements
     /**
      * @var \SimpleSAML\SAML2\Configuration\ServiceProvider
      */
-    private $serviceProvider;
+    private ServiceProvider $serviceProvider;
 
 
     /**

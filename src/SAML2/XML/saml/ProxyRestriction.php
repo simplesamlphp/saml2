@@ -19,12 +19,12 @@ final class ProxyRestriction extends AbstractConditionType
     /**
      * @param string[]
      */
-    protected $audience = [];
+    protected array $audience = [];
 
     /**
      * @param int|null
      */
-    protected $count;
+    protected ?int $count;
 
 
     /**

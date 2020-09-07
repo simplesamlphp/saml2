@@ -16,13 +16,11 @@ use SimpleSAML\Utils\XML;
 
 class Container implements ContainerInterface
 {
-    /**
-     * @var \Psr\Log\LoggerInterface
-     */
-    protected $logger;
+    /** @var \Psr\Log\LoggerInterface */
+    protected LoggerInterface $logger;
 
     /** @var array */
-    protected $registry = [];
+    protected array $registry = [];
 
 
     /**

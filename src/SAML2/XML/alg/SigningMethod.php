@@ -24,7 +24,7 @@ final class SigningMethod extends AbstractAlgElement
      *
      * @var string
      */
-    protected $Algorithm;
+    protected string $Algorithm;
 
     /**
      * The smallest key size, in bits, that the entity supports in conjunction with the algorithm. If omitted, no
@@ -32,7 +32,7 @@ final class SigningMethod extends AbstractAlgElement
      *
      * @var int|null
      */
-    protected $MinKeySize = null;
+    protected ?int $MinKeySize = null;
 
     /**
      * The largest key size, in bits, that the entity supports in conjunction with the algorithm. If omitted, no
@@ -40,7 +40,7 @@ final class SigningMethod extends AbstractAlgElement
      *
      * @var int|null
      */
-    protected $MaxKeySize = null;
+    protected ?int $MaxKeySize = null;
 
 
     /**

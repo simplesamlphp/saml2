@@ -5,6 +5,7 @@ declare(strict_types=1);
 namespace SimpleSAML\SAML2\Signature;
 
 use Mockery;
+use Mockery\MockInterface;
 use Mockery\Adapter\Phpunit\MockeryTestCase;
 use Psr\Log\NullLogger;
 use RobRichards\XMLSecLibs\XMLSecurityKey;
@@ -27,8 +28,11 @@ use SimpleSAML\TestUtils\PEMCertificatesMock;
  */
 final class PublicKeyValidatorTest extends MockeryTestCase
 {
-    private $mockSignedElement;
-    private $mockConfiguration;
+    /** @var \Mockery\MockInterface */
+    private MockInterface $mockSignedElement;
+
+    /** @var \Mockery\MockInterface */
+    private MockInterface $mockConfiguration;
 
 
     /**

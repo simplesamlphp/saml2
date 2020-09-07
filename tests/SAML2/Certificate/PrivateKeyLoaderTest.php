@@ -18,7 +18,7 @@ final class PrivateKeyLoaderTest extends TestCase
     /**
      * @var \SimpleSAML\SAML2\Certificate\PrivateKeyLoader
      */
-    private $privateKeyLoader;
+    private PrivateKeyLoader $privateKeyLoader;
 
 
     /**

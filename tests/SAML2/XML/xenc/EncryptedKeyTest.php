@@ -4,6 +4,7 @@ declare(strict_types=1);
 
 namespace SimpleSAML\SAML2\XML\xenc;
 
+use DOMDocument;
 use PHPUnit\Framework\TestCase;
 use RobRichards\XMLSecLibs\XMLSecurityDsig;
 use SimpleSAML\SAML2\Constants;
@@ -25,7 +26,8 @@ use SimpleSAML\XML\Utils as XMLUtils;
 final class EncryptedKeyTest extends TestCase
 {
     /** @var \DOMDocument $document */
-    private $document;
+    private DOMDocument $document;
+
 
     /**
      * @return void

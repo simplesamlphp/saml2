@@ -22,14 +22,14 @@ final class RegistrationInfo extends AbstractMdrpiElement
      *
      * @var string
      */
-    protected $registrationAuthority;
+    protected string $registrationAuthority;
 
     /**
      * The registration timestamp for the metadata, as a UNIX timestamp.
      *
      * @var int|null
      */
-    protected $registrationInstant = null;
+    protected ?int $registrationInstant = null;
 
     /**
      * Link to registration policy for this metadata.
@@ -38,7 +38,7 @@ final class RegistrationInfo extends AbstractMdrpiElement
      *
      * @var array
      */
-    protected $RegistrationPolicy = [];
+    protected array $RegistrationPolicy = [];
 
 
     /**

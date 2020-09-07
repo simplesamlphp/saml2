@@ -21,21 +21,21 @@ abstract class AbstractMetadataDocument extends AbstractSignedMdElement
      *
      * @var string|null
      */
-    protected $ID;
+    protected ?string $ID;
 
     /**
      * How long this element is valid, as a unix timestamp.
      *
      * @var int|null
      */
-    protected $validUntil;
+    protected ?int $validUntil;
 
     /**
      * The length of time this element can be cached, as string.
      *
      * @var string|null
      */
-    protected $cacheDuration;
+    protected ?string $cacheDuration;
 
 
     /**

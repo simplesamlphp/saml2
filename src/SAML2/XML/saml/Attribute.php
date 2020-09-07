@@ -25,21 +25,21 @@ class Attribute extends AbstractSamlElement
      *
      * @var string
      */
-    protected $Name;
+    protected string $Name;
 
     /**
      * The NameFormat of this attribute.
      *
      * @var string|null
      */
-    protected $NameFormat = null;
+    protected ?string $NameFormat = null;
 
     /**
      * The FriendlyName of this attribute.
      *
      * @var string|null
      */
-    protected $FriendlyName = null;
+    protected ?string $FriendlyName = null;
 
     /**
      * List of attribute values.
@@ -48,7 +48,7 @@ class Attribute extends AbstractSamlElement
      *
      * @var \SimpleSAML\SAML2\XML\saml\AttributeValue[]
      */
-    protected $AttributeValues = [];
+    protected array $AttributeValues = [];
 
 
     /**

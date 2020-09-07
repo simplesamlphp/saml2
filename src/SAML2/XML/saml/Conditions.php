@@ -18,35 +18,23 @@ use SimpleSAML\XML\Utils as XMLUtils;
  */
 final class Conditions extends AbstractSamlElement
 {
-    /**
-     * @var int|null
-     */
-    protected $notBefore;
+    /** @var int|null */
+    protected ?int $notBefore;
 
-    /**
-     * @var int|null
-     */
-    protected $notOnOrAfter;
+    /** @var int|null */
+    protected ?int $notOnOrAfter;
 
-    /**
-     * @var \SimpleSAML\SAML2\XML\saml\Condition[]
-     */
-    protected $condition;
+    /** @var \SimpleSAML\SAML2\XML\saml\Condition[] */
+    protected array $condition;
 
-    /**
-     * @var \SimpleSAML\SAML2\XML\saml\AudienceRestriction[]
-     */
-    protected $audienceRestriction;
+    /** @var \SimpleSAML\SAML2\XML\saml\AudienceRestriction[] */
+    protected array $audienceRestriction;
 
-    /**
-     * @var bool
-     */
-    protected $oneTimeUse = false;
+    /** @var bool */
+    protected bool $oneTimeUse = false;
 
-    /**
-     * @var \SimpleSAML\SAML2\XML\saml\ProxyRestriction|null
-     */
-    protected $proxyRestriction;
+    /** @var \SimpleSAML\SAML2\XML\saml\ProxyRestriction|null */
+    protected ?ProxyRestriction $proxyRestriction;
 
 
     /**
@@ -232,7 +220,7 @@ final class Conditions extends AbstractSamlElement
             && empty($this->notOnOrAfter)
             && empty($this->condition)
             && empty($this->audienceRestriction)
-            && empty($this->oneTimeUse)
+            && $this->oneTimeUse === false
             && empty($this->proxyRestriction)
         );
     }
@@ -296,7 +284,7 @@ final class Conditions extends AbstractSamlElement
             $audienceRestriction->toXML($e);
         }
 
-        if (!empty($this->oneTimeUse)) {
+        if ($this->oneTimeUse !== false) {
             /** @psalm-suppress PossiblyNullReference */
             $e->appendChild(
                 $e->ownerDocument->createElementNS(AbstractSamlElement::NS, 'saml:OneTimeUse')

@@ -18,22 +18,22 @@ class Decrypter
     /**
      * @var \SimpleSAML\SAML2\Configuration\IdentityProvider
      */
-    private $identityProvider;
+    private IdentityProvider $identityProvider;
 
     /**
      * @var \SimpleSAML\SAML2\Configuration\ServiceProvider
      */
-    private $serviceProvider;
+    private ServiceProvider $serviceProvider;
 
     /**
      * @var \SimpleSAML\SAML2\Certificate\PrivateKeyLoader
      */
-    private $privateKeyLoader;
+    private PrivateKeyLoader $privateKeyLoader;
 
     /**
      * @var \Psr\Log\LoggerInterface
      */
-    private $logger;
+    private LoggerInterface $logger;
 
 
     /**

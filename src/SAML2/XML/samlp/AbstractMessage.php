@@ -4,6 +4,7 @@ declare(strict_types=1);
 
 namespace SimpleSAML\SAML2\XML\samlp;
 
+use DOMDocument;
 use DOMElement;
 use Exception;
 use RobRichards\XMLSecLibs\XMLSecurityKey;
@@ -36,49 +37,49 @@ abstract class AbstractMessage extends AbstractSamlpElement implements SignedEle
      *
      * @var string
      */
-    protected $id;
+    protected string $id;
 
     /**
      * The version of this message.
      *
      * @var string
      */
-    protected $version = '2.0';
+    protected string $version = '2.0';
 
     /**
      * The issue timestamp of this message, as an UNIX timestamp.
      *
      * @var int
      */
-    protected $issueInstant;
+    protected int $issueInstant;
 
     /**
      * The destination URL of this message if it is known.
      *
      * @var string|null
      */
-    protected $destination = null;
+    protected ?string $destination = null;
 
     /**
      * The destination URL of this message if it is known.
      *
      * @var string|null
      */
-    protected $consent;
+    protected ?string $consent;
 
     /**
      * The entity id of the issuer of this message, or null if unknown.
      *
      * @var \SimpleSAML\SAML2\XML\saml\Issuer|null
      */
-    protected $issuer = null;
+    protected ?Issuer $issuer = null;
 
     /**
      * The RelayState associated with this message.
      *
      * @var string|null
      */
-    protected $relayState = null;
+    protected ?string $relayState = null;
 
     /**
      * The \DOMDocument we are currently building.
@@ -86,21 +87,19 @@ abstract class AbstractMessage extends AbstractSamlpElement implements SignedEle
      * This variable is used while generating XML from this message. It holds the
      * \DOMDocument of the XML we are generating.
      *
-     * @var \DOMDocument
+     * @var \DOMDocument|null
      */
-    protected $document;
+    protected ?DOMDocument $document = null;
 
-    /**
-     * @var bool
-     */
-    protected $messageContainedSignatureUponConstruction = false;
+    /** @var bool */
+    protected bool $messageContainedSignatureUponConstruction = false;
 
     /**
      * Available methods for validating this message.
      *
      * @var array
      */
-    private $validators = [];
+    private array $validators = [];
 
 
     /**

@@ -17,10 +17,10 @@ use SimpleSAML\XML\Exception\InvalidDOMElementException;
 abstract class AbstractReference extends AbstractXencElement
 {
     /** @var string */
-    protected $uri;
+    protected string $uri;
 
     /** @var \SimpleSAML\XML\Chunk[] */
-    protected $references = [];
+    protected array $references = [];
 
 
     /**

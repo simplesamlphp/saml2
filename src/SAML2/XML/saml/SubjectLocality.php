@@ -18,10 +18,10 @@ use SimpleSAML\Assert\Assert;
 final class SubjectLocality extends AbstractSamlElement
 {
     /** @var string|null */
-    protected $address;
+    protected ?string $address;
 
     /** @var string|null */
-    protected $dnsName;
+    protected ?string $dnsName;
 
 
     /**

@@ -4,6 +4,7 @@ declare(strict_types=1);
 
 namespace SimpleSAML\SAML2\XML\ds;
 
+use DOMDocument;
 use PHPUnit\Framework\TestCase;
 use RobRichards\XMLSecLibs\XMLSecurityDSig;
 use SimpleSAML\XML\DOMDocumentFactory;
@@ -24,13 +25,13 @@ use SimpleSAML\TestUtils\PEMCertificatesMock;
 final class KeyInfoTest extends TestCase
 {
     /** @var string */
-    private $certificate;
+    private string $certificate;
 
     /** @var string[] */
-    private $certData;
+    private array $certData;
 
     /** @var \DOMDocument */
-    private $document;
+    private DOMDocument $document;
 
 
     /**

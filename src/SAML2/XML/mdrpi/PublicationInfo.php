@@ -22,21 +22,21 @@ final class PublicationInfo extends AbstractMdrpiElement
      *
      * @var string
      */
-    protected $publisher;
+    protected string $publisher;
 
     /**
      * The creation timestamp for the metadata, as a UNIX timestamp.
      *
      * @var int|null
      */
-    protected $creationInstant = null;
+    protected ?int $creationInstant = null;
 
     /**
      * Identifier for this metadata publication.
      *
      * @var string|null
      */
-    protected $publicationId = null;
+    protected ?string $publicationId = null;
 
     /**
      * Link to usage policy for this metadata.
@@ -45,7 +45,7 @@ final class PublicationInfo extends AbstractMdrpiElement
      *
      * @var array
      */
-    protected $UsagePolicy = [];
+    protected array $UsagePolicy = [];
 
 
     /**

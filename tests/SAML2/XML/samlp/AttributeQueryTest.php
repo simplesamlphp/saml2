@@ -4,6 +4,7 @@ declare(strict_types=1);
 
 namespace SimpleSAML\SAML2\XML\samlp;
 
+use DOMDocument;
 use PHPUnit\Framework\TestCase;
 use SimpleSAML\SAML2\Constants;
 use SimpleSAML\SAML2\XML\saml\Attribute;
@@ -30,7 +31,7 @@ use SimpleSAML\XML\Utils as XMLUtils;
 final class AttributeQueryTest extends TestCase
 {
     /** @var \DOMDocument $document */
-    private $document;
+    private DOMDocument $document;
 
 
     /**

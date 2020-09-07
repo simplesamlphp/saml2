@@ -27,14 +27,14 @@ final class SubjectConfirmation extends AbstractSamlElement
      *
      * @var string
      */
-    protected $Method;
+    protected string $Method;
 
     /**
      * SubjectConfirmationData element with extra data for verification of the Subject.
      *
      * @var \SimpleSAML\SAML2\XML\saml\SubjectConfirmationData|null
      */
-    protected $SubjectConfirmationData = null;
+    protected ?SubjectConfirmationData $SubjectConfirmationData = null;
 
 
     /**
