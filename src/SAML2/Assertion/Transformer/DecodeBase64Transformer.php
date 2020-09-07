@@ -85,9 +85,6 @@ class DecodeBase64Transformer implements
             $assertion->getConditions(),
             $statements
         );
-
-        $assertion->setAttributes($decodedAttributes);
-        return $assertion;
     }
 
 
