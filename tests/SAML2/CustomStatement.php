@@ -16,8 +16,8 @@ final class CustomStatement extends Statement
 {
     protected const XSI_TYPE = 'CustomStatement';
 
-    /** @var \DOMElement */
-    protected $value;
+    /** @var string */
+    protected string $value;
 
 
     /**

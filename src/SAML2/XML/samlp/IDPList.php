@@ -6,10 +6,10 @@ namespace SimpleSAML\SAML2\XML\samlp;
 
 use DOMElement;
 use SimpleSAML\Assert\Assert;
-use SimpleSAML\SAML2\Exception\InvalidDOMElementException;
-use SimpleSAML\SAML2\Exception\MissingElementException;
-use SimpleSAML\SAML2\Exception\TooManyElementsException;
-use SimpleSAML\SAML2\Utils;
+use SimpleSAML\XML\Exception\InvalidDOMElementException;
+use SimpleSAML\XML\Exception\MissingElementException;
+use SimpleSAML\XML\Exception\TooManyElementsException;
+use SimpleSAML\XML\Utils as XMLUtils;
 
 /**
  * Class for handling SAML2 IDPList.
@@ -20,10 +20,10 @@ use SimpleSAML\SAML2\Utils;
 final class IDPList extends AbstractSamlpElement
 {
     /** @var \SimpleSAML\SAML2\XML\samlp\IDPEntry[] */
-    protected $IDPEntry;
+    protected array $IDPEntry;
 
     /** @var string|null */
-    protected $getComplete;
+    protected ?string $getComplete;
 
 
     /**
@@ -86,9 +86,9 @@ final class IDPList extends AbstractSamlpElement
      * @param \DOMElement $xml The XML element we should load
      * @return \SimpleSAML\SAML2\XML\samlp\IDPList
      *
-     * @throws \SimpleSAML\SAML2\Exception\InvalidDOMElementException if the qualified name of the supplied element is wrong
-     * @throws \SimpleSAML\SAML2\Exception\MissingElementException if one of the mandatory child-elements is missing
-     * @throws \SimpleSAML\SAML2\Exception\TooManyElementsException if too many child-elements of a type are specified
+     * @throws \SimpleSAML\XML\Exception\InvalidDOMElementException if the qualified name of the supplied element is wrong
+     * @throws \SimpleSAML\XML\Exception\MissingElementException if one of the mandatory child-elements is missing
+     * @throws \SimpleSAML\XML\Exception\TooManyElementsException if too many child-elements of a type are specified
      */
     public static function fromXML(DOMElement $xml): object
     {
@@ -98,7 +98,7 @@ final class IDPList extends AbstractSamlpElement
         $idpEntry = IDPEntry::getChildrenOfClass($xml);
         Assert::minCount($idpEntry, 1, 'At least one <samlp:IDPEntry> must be specified.', MissingElementException::class);
 
-        $getComplete = Utils::extractStrings($xml, AbstractSamlpElement::NS, 'GetComplete');
+        $getComplete = XMLUtils::extractStrings($xml, AbstractSamlpElement::NS, 'GetComplete');
         Assert::maxCount($getComplete, 1, 'Only one <samlp:GetComplete> element is allowed.', TooManyElementsException::class);
 
         return new self(
@@ -123,7 +123,7 @@ final class IDPList extends AbstractSamlpElement
         }
 
         if (!is_null($this->getComplete)) {
-            Utils::addString($e, AbstractSamlpElement::NS, 'samlp:GetComplete', $this->getComplete);
+            XMLUtils::addString($e, AbstractSamlpElement::NS, 'samlp:GetComplete', $this->getComplete);
         }
 
         return $e;

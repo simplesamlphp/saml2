@@ -8,11 +8,12 @@ use DOMElement;
 use RobRichards\XMLSecLibs\XMLSecurityDSig;
 use SimpleSAML\Assert\Assert;
 use SimpleSAML\SAML2\Constants;
-use SimpleSAML\SAML2\Exception\InvalidDOMElementException;
-use SimpleSAML\SAML2\Utils;
-use SimpleSAML\SAML2\XML\Chunk;
 use SimpleSAML\SAML2\XML\ds\KeyInfo;
-use SimpleSAML\SAML2\XML\ExtendableAttributesTrait;
+use SimpleSAML\SAML2\Utils;
+use SimpleSAML\XML\Chunk;
+use SimpleSAML\XML\Exception\InvalidDOMElementException;
+use SimpleSAML\XML\ExtendableAttributesTrait;
+use SimpleSAML\XML\Utils as XMLUtils;
 
 /**
  * Class representing SAML 2 SubjectConfirmationData element.
@@ -28,45 +29,45 @@ final class SubjectConfirmationData extends AbstractSamlElement
      *
      * @var int|null
      */
-    protected $NotBefore = null;
+    protected ?int $NotBefore = null;
 
     /**
      * The time after which this element is invalid, as an unix timestamp.
      *
      * @var int|null
      */
-    protected $NotOnOrAfter = null;
+    protected ?int $NotOnOrAfter = null;
 
     /**
      * The Recipient this Subject is valid for. Either an entity or a location.
      *
      * @var string|null
      */
-    protected $Recipient = null;
+    protected ?string $Recipient = null;
 
     /**
      * The ID of the AuthnRequest this is a response to.
      *
      * @var string|null
      */
-    protected $InResponseTo = null;
+    protected ?string $InResponseTo = null;
 
     /**
      * The IP(v6) address of the user.
      *
      * @var string|null
      */
-    protected $Address = null;
+    protected ?string $Address = null;
 
     /**
      * The various key information elements.
      *
      * Array with various elements describing this key.
-     * Unknown elements will be represented by \SAML2\XML\Chunk.
+     * Unknown elements will be represented by \SimpleSAML\XML\Chunk.
      *
-     * @var (\SimpleSAML\SAML2\XML\ds\KeyInfo|\SimpleSAML\SAML2\XML\Chunk)[]
+     * @var (\SimpleSAML\SAML2\XML\ds\KeyInfo|\SimpleSAML\XML\Chunk)[]
      */
-    protected $info = [];
+    protected array $info = [];
 
 
     /**
@@ -77,7 +78,7 @@ final class SubjectConfirmationData extends AbstractSamlElement
      * @param string|null $recipient
      * @param string|null $inResponseTo
      * @param string|null $address
-     * @param (\SimpleSAML\SAML2\XML\ds\KeyInfo|\SimpleSAML\SAML2\XML\Chunk)[] $info
+     * @param (\SimpleSAML\SAML2\XML\ds\KeyInfo|\SimpleSAML\XML\Chunk)[] $info
      * @param \DOMAttr[] $namespacedAttributes
      */
     public function __construct(
@@ -222,7 +223,7 @@ final class SubjectConfirmationData extends AbstractSamlElement
     /**
      * Collect the value of the info-property
      *
-     * @return (\SimpleSAML\SAML2\XML\ds\KeyInfo|\SimpleSAML\SAML2\XML\Chunk)[]
+     * @return (\SimpleSAML\SAML2\XML\ds\KeyInfo|\SimpleSAML\XML\Chunk)[]
      */
     public function getInfo(): array
     {
@@ -233,7 +234,7 @@ final class SubjectConfirmationData extends AbstractSamlElement
     /**
      * Set the value of the info-property
      *
-     * @param (\SimpleSAML\SAML2\XML\ds\KeyInfo|\SimpleSAML\SAML2\XML\Chunk)[] $info
+     * @param (\SimpleSAML\SAML2\XML\ds\KeyInfo|\SimpleSAML\XML\Chunk)[] $info
      * @return void
      */
     private function setInfo(array $info): void
@@ -283,12 +284,12 @@ final class SubjectConfirmationData extends AbstractSamlElement
 
         $NotBefore = self::getAttribute($xml, 'NotBefore', null);
         if ($NotBefore !== null) {
-            $NotBefore = Utils::xsDateTimeToTimestamp($NotBefore);
+            $NotBefore = XMLUtils::xsDateTimeToTimestamp($NotBefore);
         }
 
         $NotOnOrAfter = self::getAttribute($xml, 'NotOnOrAfter', null);
         if ($NotOnOrAfter !== null) {
-            $NotOnOrAfter = Utils::xsDateTimeToTimestamp($NotOnOrAfter);
+            $NotOnOrAfter = XMLUtils::xsDateTimeToTimestamp($NotOnOrAfter);
         }
 
         $Recipient = self::getAttribute($xml, 'Recipient', null);

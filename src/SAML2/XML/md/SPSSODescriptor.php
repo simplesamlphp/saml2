@@ -7,10 +7,10 @@ namespace SimpleSAML\SAML2\XML\md;
 use DOMElement;
 use SimpleSAML\Assert\Assert;
 use SimpleSAML\SAML2\Constants;
-use SimpleSAML\SAML2\Exception\InvalidDOMElementException;
-use SimpleSAML\SAML2\Exception\TooManyElementsException;
-use SimpleSAML\SAML2\Utils;
 use SimpleSAML\SAML2\XML\ds\Signature;
+use SimpleSAML\XML\Exception\InvalidDOMElementException;
+use SimpleSAML\XML\Exception\TooManyElementsException;
+use SimpleSAML\XML\Utils as XMLUtils;
 
 /**
  * Class representing SAML 2 SPSSODescriptor.
@@ -24,14 +24,14 @@ final class SPSSODescriptor extends AbstractSSODescriptor
      *
      * @var bool|null
      */
-    protected $authnRequestsSigned = null;
+    protected ?bool $authnRequestsSigned = null;
 
     /**
      * Whether this SP wants the Assertion elements to be signed.
      *
      * @var bool|null
      */
-    protected $wantAssertionsSigned = null;
+    protected ?bool $wantAssertionsSigned = null;
 
     /**
      * List of AssertionConsumerService endpoints for this SP.
@@ -40,7 +40,7 @@ final class SPSSODescriptor extends AbstractSSODescriptor
      *
      * @var \SimpleSAML\SAML2\XML\md\AssertionConsumerService[]
      */
-    protected $assertionConsumerService = [];
+    protected array $assertionConsumerService = [];
 
     /**
      * List of AttributeConsumingService descriptors for this SP.
@@ -49,7 +49,7 @@ final class SPSSODescriptor extends AbstractSSODescriptor
      *
      * @var \SimpleSAML\SAML2\XML\md\AttributeConsumingService[]
      */
-    protected $attributeConsumingService = [];
+    protected array $attributeConsumingService = [];
 
 
 
@@ -240,9 +240,9 @@ final class SPSSODescriptor extends AbstractSSODescriptor
      *
      * @return self
      *
-     * @throws \SimpleSAML\SAML2\Exception\InvalidDOMElementException if the qualified name of the supplied element is wrong
-     * @throws \SimpleSAML\SAML2\Exception\MissingAttributeException if the supplied element is missing one of the mandatory attributes
-     * @throws \SimpleSAML\SAML2\Exception\TooManyElementsException if too many child-elements of a type are specified
+     * @throws \SimpleSAML\XML\Exception\InvalidDOMElementException if the qualified name of the supplied element is wrong
+     * @throws \SimpleSAML\XML\Exception\MissingAttributeException if the supplied element is missing one of the mandatory attributes
+     * @throws \SimpleSAML\XML\Exception\TooManyElementsException if too many child-elements of a type are specified
      */
     public static function fromXML(DOMElement $xml): object
     {
@@ -267,7 +267,7 @@ final class SPSSODescriptor extends AbstractSSODescriptor
             self::getBooleanAttribute($xml, 'WantAssertionsSigned', null),
             AttributeConsumingService::getChildrenOfClass($xml),
             self::getAttribute($xml, 'ID', null),
-            $validUntil !== null ? Utils::xsDateTimeToTimestamp($validUntil) : null,
+            $validUntil !== null ? XMLUtils::xsDateTimeToTimestamp($validUntil) : null,
             self::getAttribute($xml, 'cacheDuration', null),
             !empty($extensions) ? $extensions[0] : null,
             self::getAttribute($xml, 'errorURL', null),
@@ -277,7 +277,7 @@ final class SPSSODescriptor extends AbstractSSODescriptor
             ArtifactResolutionService::getChildrenOfClass($xml),
             SingleLogoutService::getChildrenOfClass($xml),
             ManageNameIDService::getChildrenOfClass($xml),
-            Utils::extractStrings($xml, Constants::NS_MD, 'NameIDFormat')
+            XMLUtils::extractStrings($xml, Constants::NS_MD, 'NameIDFormat')
         );
         if (!empty($signature)) {
             $spssod->setSignature($signature[0]);

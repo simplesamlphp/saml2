@@ -14,7 +14,7 @@ class Destination
     /**
      * @var string
      */
-    private $destination;
+    private string $destination;
 
 
     /**

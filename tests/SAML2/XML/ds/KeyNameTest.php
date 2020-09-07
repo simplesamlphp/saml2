@@ -4,14 +4,16 @@ declare(strict_types=1);
 
 namespace SimpleSAML\SAML2\XML\ds;
 
+use DOMDocument;
 use PHPUnit\Framework\TestCase;
 use RobRichards\XMLSecLibs\XMLSecurityDSig;
-use SimpleSAML\SAML2\DOMDocumentFactory;
+use SimpleSAML\XML\DOMDocumentFactory;
 use SimpleSAML\SAML2\Utils;
 
 /**
  * Class \SAML2\XML\ds\KeyNameTest
  *
+ * @covers \SimpleSAML\SAML2\XML\ds\AbstractDsElement
  * @covers \SimpleSAML\SAML2\XML\ds\KeyName
  *
  * @author Tim van Dijen, <tvdijen@gmail.com>
@@ -20,7 +22,7 @@ use SimpleSAML\SAML2\Utils;
 final class KeyNameTest extends TestCase
 {
     /** @var \DOMDocument */
-    private $document;
+    private DOMDocument $document;
 
     /**
      * @return void

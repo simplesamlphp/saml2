@@ -8,7 +8,7 @@ use Exception;
 use Mockery\Adapter\Phpunit\MockeryTestCase;
 use PHPUnit\Framework\Error\Warning;
 use RobRichards\XMLSecLibs\XMLSecurityKey;
-use SimpleSAML\SAML2\DOMDocumentFactory;
+use SimpleSAML\XML\DOMDocumentFactory;
 use SimpleSAML\SAML2\HTTPRedirect;
 use SimpleSAML\SAML2\XML\saml\Issuer;
 use SimpleSAML\SAML2\XML\samlp\AbstractRequest;

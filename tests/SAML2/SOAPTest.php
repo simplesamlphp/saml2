@@ -9,7 +9,7 @@ use InvalidArgumentException;
 use Mockery\Adapter\Phpunit\MockeryTestCase;
 use SimpleSAML\SAML2\XML\samlp\ArtifactResolve;
 use SimpleSAML\SAML2\XML\samlp\MessageFactory;
-use SimpleSAML\Assert\Assert;
+use SimpleSAML\Assert\AssertionFailedException;
 
 /**
  * @covers \SimpleSAML\SAML2\SOAP
@@ -22,8 +22,8 @@ final class SOAPTest extends MockeryTestCase
      */
     public function testRequestParsingEmptyMessage(): void
     {
-        $this->expectException(InvalidArgumentException::class);
-        $this->expectExceptionMessage('Invalid Argument type: "non-empty string" expected, "string" given');
+        $this->expectException(AssertionFailedException::class);
+        $this->expectExceptionMessage('Expected a different value than "".');
 
         $stub = $this->getStubWithInput('');
         $stub->receive();

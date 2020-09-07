@@ -7,7 +7,7 @@ namespace SimpleSAML\SAML2\XML\md;
 use Exception;
 use PHPUnit\Framework\TestCase;
 use SimpleSAML\SAML2\Constants;
-use SimpleSAML\SAML2\DOMDocumentFactory;
+use SimpleSAML\XML\DOMDocumentFactory;
 use SimpleSAML\SAML2\SignedElementTestTrait;
 use SimpleSAML\SAML2\XML\saml\Attribute;
 use SimpleSAML\SAML2\XML\saml\AttributeValue;
@@ -16,9 +16,10 @@ use SimpleSAML\Assert\AssertionFailedException;
 /**
  * Tests for the AttributeAuthorityDescriptor class.
  *
- * @covers \SimpleSAML\SAML2\XML\md\AttributeAuthorityDescriptor
+ * @covers \SimpleSAML\SAML2\XML\md\AbstractMdElement
  * @covers \SimpleSAML\SAML2\XML\md\AbstractMetadataDocument
  * @covers \SimpleSAML\SAML2\XML\md\AbstractRoleDescriptor
+ * @covers \SimpleSAML\SAML2\XML\md\AttributeAuthorityDescriptor
  * @package simplesamlphp/saml2
  */
 final class AttributeAuthorityDescriptorTest extends TestCase
@@ -26,10 +27,10 @@ final class AttributeAuthorityDescriptorTest extends TestCase
     use SignedElementTestTrait;
 
     /** @var \SimpleSAML\SAML2\XML\md\AttributeService */
-    protected $as;
+    protected AttributeService $as;
 
     /** @var \SimpleSAML\SAML2\XML\md\AssertionIDRequestService */
-    protected $aidrs;
+    protected AssertionIDRequestService $aidrs;
 
 
     /**

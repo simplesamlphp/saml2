@@ -20,7 +20,7 @@ abstract class Binding
      * This can be null, in which case the destination in the message is used.
      * @var string|null
      */
-    protected $destination = null;
+    protected ?string $destination = null;
 
 
     /**

@@ -6,18 +6,19 @@ namespace SimpleSAML\SAML2\XML\md;
 
 use InvalidArgumentException;
 use PHPUnit\Framework\TestCase;
-use SimpleSAML\SAML2\Constants;
-use SimpleSAML\SAML2\DOMDocumentFactory;
-use SimpleSAML\SAML2\Exception\MissingAttributeException;
-use SimpleSAML\SAML2\Exception\TooManyElementsException;
-use SimpleSAML\SAML2\SignedElementTestTrait;
-use SimpleSAML\SAML2\Utils;
-use SimpleSAML\SAML2\XML\mdrpi\PublicationInfo;
 use SimpleSAML\Assert\AssertionFailedException;
+use SimpleSAML\SAML2\Constants;
+use SimpleSAML\SAML2\SignedElementTestTrait;
+use SimpleSAML\SAML2\XML\mdrpi\PublicationInfo;
+use SimpleSAML\XML\DOMDocumentFactory;
+use SimpleSAML\XML\Exception\MissingAttributeException;
+use SimpleSAML\XML\Exception\TooManyElementsException;
+use SimpleSAML\XML\Utils as XMLUtils;
 
 /**
  * Class \SAML2\XML\md\EntityDescriptorTest
  *
+ * @covers \SimpleSAML\SAML2\XML\md\AbstractMdElement
  * @covers \SimpleSAML\SAML2\XML\md\EntityDescriptor
  * @covers \SimpleSAML\SAML2\XML\md\AbstractMetadataDocument
  * @covers \SimpleSAML\SAML2\XML\md\AbstractRoleDescriptor
@@ -105,7 +106,7 @@ final class EntityDescriptorTest extends TestCase
         $extensions = new Extensions([
             new PublicationInfo(
                 'http://publisher.ra/',
-                Utils::xsDateTimeToTimestamp('2020-02-03T13:46:24Z'),
+                XMLUtils::xsDateTimeToTimestamp('2020-02-03T13:46:24Z'),
                 null,
                 ['en' => 'http://publisher.ra/policy.txt']
             )
@@ -209,7 +210,7 @@ XML
         $extensions = new Extensions([
             new PublicationInfo(
                 'http://publisher.ra/',
-                Utils::xsDateTimeToTimestamp('2020-02-03T13:46:24Z'),
+                XMLUtils::xsDateTimeToTimestamp('2020-02-03T13:46:24Z'),
                 null,
                 ['en' => 'http://publisher.ra/policy.txt']
             )

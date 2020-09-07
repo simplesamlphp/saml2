@@ -15,32 +15,32 @@ class MockContainer implements ContainerInterface
     /**
      * @var string
      */
-    private $id = '123';
+    private string $id = '123';
 
     /**
      * @var array
      */
-    private $debugMessages = [];
+    private array $debugMessages = [];
 
     /**
      * @var string
      */
-    private $redirectUrl;
+    private string $redirectUrl;
 
     /**
      * @var array
      */
-    private $redirectData = [];
+    private array $redirectData = [];
 
     /**
      * @var string|null
      */
-    private $postRedirectUrl = null;
+    private ?string $postRedirectUrl = null;
 
     /**
      * @var array
      */
-    private $postRedirectData;
+    private array $postRedirectData;
 
 
     /**

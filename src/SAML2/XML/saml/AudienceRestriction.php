@@ -7,9 +7,9 @@ namespace SimpleSAML\SAML2\XML\saml;
 use DOMElement;
 use SimpleSAML\Assert\Assert;
 use SimpleSAML\SAML2\Constants;
-use SimpleSAML\SAML2\DOMDocumentFactory;
-use SimpleSAML\SAML2\Exception\InvalidDOMElementException;
-use SimpleSAML\SAML2\Utils;
+use SimpleSAML\XML\DOMDocumentFactory;
+use SimpleSAML\XML\Exception\InvalidDOMElementException;
+use SimpleSAML\XML\Utils as XMLUtils;
 
 /**
  * SAML AudienceRestriction data type.
@@ -20,7 +20,7 @@ use SimpleSAML\SAML2\Utils;
 final class AudienceRestriction extends AbstractConditionType
 {
     /** @var string[] */
-    protected $audience = [];
+    protected array $audience = [];
 
 
     /**
@@ -67,14 +67,14 @@ final class AudienceRestriction extends AbstractConditionType
      * @param \DOMElement $xml The XML element we should load
      * @return self
      *
-     * @throws \SimpleSAML\SAML2\Exception\InvalidDOMElementException if the qualified name of the supplied element is wrong
+     * @throws \SimpleSAML\XML\Exception\InvalidDOMElementException if the qualified name of the supplied element is wrong
      */
     public static function fromXML(DOMElement $xml): object
     {
         Assert::same($xml->localName, 'AudienceRestriction', InvalidDOMElementException::class);
         Assert::same($xml->namespaceURI, AudienceRestriction::NS, InvalidDOMElementException::class);
 
-        $audience = Utils::extractStrings($xml, AbstractSamlElement::NS, 'Audience');
+        $audience = XMLUtils::extractStrings($xml, AbstractSamlElement::NS, 'Audience');
 
         return new self($audience);
     }
@@ -90,7 +90,7 @@ final class AudienceRestriction extends AbstractConditionType
     {
         $e = parent::toXML($parent);
 
-        Utils::addStrings($e, AbstractSamlElement::NS, 'saml:Audience', false, $this->audience);
+        XMLUtils::addStrings($e, AbstractSamlElement::NS, 'saml:Audience', false, $this->audience);
 
         return $e;
     }

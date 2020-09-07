@@ -4,24 +4,27 @@ declare(strict_types=1);
 
 namespace SimpleSAML\SAML2\XML\md;
 
+use DOMDocument;
 use PHPUnit\Framework\TestCase;
-use SimpleSAML\SAML2\Constants;
-use SimpleSAML\SAML2\DOMDocumentFactory;
-use SimpleSAML\SAML2\Utils;
-use SimpleSAML\SAML2\XML\Chunk;
-use SimpleSAML\SAML2\Exception\MissingAttributeException;
 use SimpleSAML\Assert\AssertionFailedException;
+use SimpleSAML\SAML2\Constants;
+use SimpleSAML\XML\Chunk;
+use SimpleSAML\XML\DOMDocumentFactory;
+use SimpleSAML\XML\Exception\MissingAttributeException;
+use SimpleSAML\XML\Utils as XMLUtils;
 
 /**
  * Tests for the md:EncryptionMethod element.
  *
+ * @covers \SimpleSAML\SAML2\XML\md\AbstractMdElement
+ * @covers \SimpleSAML\SAML2\XML\xenc\AbstractEncryptionMethod
  * @covers \SimpleSAML\SAML2\XML\md\EncryptionMethod
  * @package simplesamlphp/saml2
  */
 final class EncryptionMethodTest extends TestCase
 {
     /** @var \DOMDocument */
-    protected $document;
+    protected DOMDocument $document;
 
 
     /**
@@ -94,12 +97,12 @@ final class EncryptionMethodTest extends TestCase
         $emElement = $em->toXML();
 
         // Test for a KeySize
-        $keySizeElements = Utils::xpQuery($emElement, './xenc:KeySize');
+        $keySizeElements = XMLUtils::xpQuery($emElement, './xenc:KeySize');
         $this->assertCount(1, $keySizeElements);
         $this->assertEquals('10', $keySizeElements[0]->textContent);
 
         // Test ordering of EncryptionMethod contents
-        $emElements = Utils::xpQuery($emElement, './xenc:KeySize/following-sibling::*');
+        $emElements = XMLUtils::xpQuery($emElement, './xenc:KeySize/following-sibling::*');
 
         $this->assertCount(2, $emElements);
         $this->assertEquals('xenc:OAEPParams', $emElements[0]->tagName);

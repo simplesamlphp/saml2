@@ -6,10 +6,6 @@ namespace SimpleSAML\SAML2\XML\samlp;
 
 use DOMElement;
 use SimpleSAML\Assert\Assert;
-use SimpleSAML\SAML2\Exception\InvalidDOMElementException;
-use SimpleSAML\SAML2\Exception\MissingElementException;
-use SimpleSAML\SAML2\Exception\TooManyElementsException;
-use SimpleSAML\SAML2\Utils;
 use SimpleSAML\SAML2\XML\IdentifierTrait;
 use SimpleSAML\SAML2\XML\ds\Signature;
 use SimpleSAML\SAML2\XML\saml\IdentifierInterface;
@@ -17,6 +13,10 @@ use SimpleSAML\SAML2\XML\saml\BaseID;
 use SimpleSAML\SAML2\XML\saml\EncryptedID;
 use SimpleSAML\SAML2\XML\saml\NameID;
 use SimpleSAML\SAML2\XML\saml\Issuer;
+use SimpleSAML\XML\Exception\InvalidDOMElementException;
+use SimpleSAML\XML\Exception\MissingElementException;
+use SimpleSAML\XML\Exception\TooManyElementsException;
+use SimpleSAML\XML\Utils as XMLUtils;
 
 /**
  * Class for SAML 2 logout request messages.
@@ -32,14 +32,14 @@ class LogoutRequest extends AbstractRequest
      *
      * @var int|null
      */
-    protected $notOnOrAfter = null;
+    protected ?int $notOnOrAfter = null;
 
     /**
      * The SessionIndexes of the sessions that should be terminated.
      *
      * @var string[]
      */
-    protected $sessionIndexes = [];
+    protected array $sessionIndexes = [];
 
     /**
      * The optional reason for the logout, typically a URN
@@ -48,7 +48,7 @@ class LogoutRequest extends AbstractRequest
      *
      * @var string|null
      */
-    protected $reason = null;
+    protected ?string $reason = null;
 
 
     /**
@@ -162,10 +162,10 @@ class LogoutRequest extends AbstractRequest
      * @param \DOMElement $xml The XML element we should load
      * @return \SimpleSAML\SAML2\XML\samlp\LogoutRequest
      *
-     * @throws \SimpleSAML\SAML2\Exception\InvalidDOMElementException if the qualified name of the supplied element is wrong
-     * @throws \SimpleSAML\SAML2\Exception\MissingAttributeException if the supplied element is missing one of the mandatory attributes
-     * @throws \SimpleSAML\SAML2\Exception\MissingElementException if one of the mandatory child-elements is missing
-     * @throws \SimpleSAML\SAML2\Exception\TooManyElementsException if too many child-elements of a type are specified
+     * @throws \SimpleSAML\XML\Exception\InvalidDOMElementException if the qualified name of the supplied element is wrong
+     * @throws \SimpleSAML\XML\Exception\MissingAttributeException if the supplied element is missing one of the mandatory attributes
+     * @throws \SimpleSAML\XML\Exception\MissingElementException if one of the mandatory child-elements is missing
+     * @throws \SimpleSAML\XML\Exception\TooManyElementsException if too many child-elements of a type are specified
      */
     public static function fromXML(DOMElement $xml): object
     {
@@ -173,11 +173,11 @@ class LogoutRequest extends AbstractRequest
         Assert::same($xml->namespaceURI, LogoutRequest::NS, InvalidDOMElementException::class);
         Assert::same('2.0', self::getAttribute($xml, 'Version'));
 
-        $issueInstant = Utils::xsDateTimeToTimestamp(self::getAttribute($xml, 'IssueInstant'));
+        $issueInstant = XMLUtils::xsDateTimeToTimestamp(self::getAttribute($xml, 'IssueInstant'));
 
         $notOnOrAfter = self::getAttribute($xml, 'NotOnOrAfter', null);
         if ($notOnOrAfter !== null) {
-            $notOnOrAfter = Utils::xsDateTimeToTimestamp($notOnOrAfter);
+            $notOnOrAfter = XMLUtils::xsDateTimeToTimestamp($notOnOrAfter);
         }
 
         $issuer = Issuer::getChildrenOfClass($xml);
@@ -201,7 +201,7 @@ class LogoutRequest extends AbstractRequest
             $identifier,
             $notOnOrAfter,
             self::getAttribute($xml, 'Reason', null),
-            Utils::extractStrings($xml, AbstractSamlpElement::NS, 'SessionIndex'),
+            XMLUtils::extractStrings($xml, AbstractSamlpElement::NS, 'SessionIndex'),
             array_pop($issuer),
             self::getAttribute($xml, 'ID'),
             $issueInstant,
@@ -236,7 +236,7 @@ class LogoutRequest extends AbstractRequest
             $e->setAttribute('Reason', $this->reason);
         }
 
-        /** @var \SimpleSAML\SAML2\XML\IdentifierInterface $this->identifier */
+        /** @var \SimpleSAML\SAML2\XML\saml\IdentifierInterface $this->identifier */
         $this->identifier->toXML($e);
 
         foreach ($this->sessionIndexes as $sessionIndex) {

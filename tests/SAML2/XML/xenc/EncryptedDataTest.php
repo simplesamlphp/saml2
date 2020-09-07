@@ -4,16 +4,18 @@ declare(strict_types=1);
 
 namespace SimpleSAML\SAML2\XML\xenc;
 
+use DOMDocument;
 use PHPUnit\Framework\TestCase;
 use RobRichards\XMLSecLibs\XMLSecurityDsig;
 use SimpleSAML\SAML2\Constants;
-use SimpleSAML\SAML2\DOMDocumentFactory;
-use SimpleSAML\SAML2\XML\Chunk;
 use SimpleSAML\SAML2\XML\ds\KeyInfo;
+use SimpleSAML\XML\Chunk;
+use SimpleSAML\XML\DOMDocumentFactory;
 
 /**
  * Class \SimpleSAML\SAML2\XML\xenc\EncryptedDataTest
  *
+ * @covers \SimpleSAML\SAML2\XML\xenc\AbstractXencElement
  * @covers \SimpleSAML\SAML2\XML\xenc\AbstractEncryptedType
  * @covers \SimpleSAML\SAML2\XML\xenc\EncryptedData
  *
@@ -23,7 +25,8 @@ use SimpleSAML\SAML2\XML\ds\KeyInfo;
 final class EncryptedDataTest extends TestCase
 {
     /** @var \DOMDocument $document */
-    private $document;
+    private DOMDocument $document;
+
 
     /**
      * @return void

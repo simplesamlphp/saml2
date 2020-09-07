@@ -4,24 +4,26 @@ declare(strict_types=1);
 
 namespace SimpleSAML\SAML2\XML\samlp;
 
+use DOMDocument;
 use PHPUnit\Framework\TestCase;
 use SimpleSAML\SAML2\Constants;
 use SimpleSAML\SAML2\XML\saml\Issuer;
 use SimpleSAML\SAML2\XML\samlp\Status;
 use SimpleSAML\SAML2\XML\samlp\StatusCode;
-use SimpleSAML\SAML2\DOMDocumentFactory;
-use SimpleSAML\SAML2\Utils;
+use SimpleSAML\XML\DOMDocumentFactory;
+use SimpleSAML\XML\Utils as XMLUtils;
 
 /**
  * @covers \SimpleSAML\SAML2\XML\samlp\ArtifactResponse
  * @covers \SimpleSAML\SAML2\XML\samlp\AbstractStatusResponse
  * @covers \SimpleSAML\SAML2\XML\samlp\AbstractMessage
+ * @covers \SimpleSAML\SAML2\XML\samlp\AbstractSamlpElement
  * @package simplesamlphp/saml2
  */
 final class ArtifactResponseTest extends TestCase
 {
     /** @var \DOMDocument */
-    private $document;
+    private DOMDocument $document;
 
 
     /**
@@ -42,7 +44,7 @@ final class ArtifactResponseTest extends TestCase
     {
         $issuer2 = new Issuer('urn:example:other');
         $id = '_306f8ec5b618f361c70b6ffb1480eade';
-        $issueInstant = Utils::xsDateTimeToTimestamp('2004-12-05T09:21:59Z');
+        $issueInstant = XMLUtils::xsDateTimeToTimestamp('2004-12-05T09:21:59Z');
         $destination = 'https://idp.example.org/SAML2/SSO/Artifact';
         $protocolBinding = Constants::BINDING_HTTP_ARTIFACT;
         $assertionConsumerServiceURL = 'https://sp.example.com/SAML2/SSO/Artifact';
@@ -81,11 +83,11 @@ final class ArtifactResponseTest extends TestCase
 
         $artifactResponseElement = $artifactResponse->toXML();
 
-        $artifactIssuer = Utils::xpQuery($artifactResponseElement, './saml_assertion:Issuer');
+        $artifactIssuer = XMLUtils::xpQuery($artifactResponseElement, './saml_assertion:Issuer');
         $this->assertCount(1, $artifactIssuer);
         $this->assertEquals($issuer1->getValue(), $artifactIssuer[0]->textContent);
 
-        $authnelement = Utils::xpQuery($artifactResponseElement, './saml_protocol:AuthnRequest/saml_assertion:Issuer');
+        $authnelement = XMLUtils::xpQuery($artifactResponseElement, './saml_protocol:AuthnRequest/saml_assertion:Issuer');
         $this->assertCount(1, $authnelement);
         $this->assertEquals($issuer2->getValue(), $authnelement[0]->textContent);
 

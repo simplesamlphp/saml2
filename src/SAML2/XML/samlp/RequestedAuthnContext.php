@@ -6,7 +6,7 @@ namespace SimpleSAML\SAML2\XML\samlp;
 
 use DOMElement;
 use SimpleSAML\Assert\Assert;
-use SimpleSAML\SAML2\Exception\InvalidDOMElementException;
+use SimpleSAML\XML\Exception\InvalidDOMElementException;
 use SimpleSAML\SAML2\Utils;
 use SimpleSAML\SAML2\XML\saml\AuthnContextClassRef;
 use SimpleSAML\SAML2\XML\saml\AuthnContextDeclRef;
@@ -20,10 +20,10 @@ use SimpleSAML\SAML2\XML\saml\AuthnContextDeclRef;
 final class RequestedAuthnContext extends AbstractSamlpElement
 {
     /** @var (\SimpleSAML\SAML2\XML\saml\AuthnContextClassRef|\SimpleSAML\SAML2\XML\saml\AuthnContextDeclRef)[] */
-    protected $requestedAuthnContexts = [];
+    protected array $requestedAuthnContexts = [];
 
     /** @var string|null */
-    protected $Comparison = null;
+    protected ?string $Comparison = null;
 
 
     /**
@@ -58,8 +58,8 @@ final class RequestedAuthnContext extends AbstractSamlpElement
      * @param (\SimpleSAML\SAML2\XML\saml\AuthnContextClassRef|\SimpleSAML\SAML2\XML\saml\AuthnContextDeclRef)[] $requestedAuthnContexts
      * @return void
      *
-     * @throws \SimpleSAML\SAML2\Exception\InvalidDOMElementException if the qualified name of the supplied element is wrong
-     * @throws \SimpleSAML\SAML2\Exception\InvalidDOMElementException if the supplied element is missing the Algorithm attribute
+     * @throws \SimpleSAML\XML\Exception\InvalidDOMElementException if the qualified name of the supplied element is wrong
+     * @throws \SimpleSAML\XML\Exception\InvalidDOMElementException if the supplied element is missing the Algorithm attribute
      */
     private function setRequestedAuthnContexts(array $requestedAuthnContexts): void
     {
@@ -113,7 +113,7 @@ final class RequestedAuthnContext extends AbstractSamlpElement
      * @param \DOMElement $xml The XML element we should load
      * @return \SimpleSAML\SAML2\XML\samlp\RequestedAuthnContext
      *
-     * @throws \SimpleSAML\SAML2\Exception\InvalidDOMElementException if the qualified name of the supplied element is wrong
+     * @throws \SimpleSAML\XML\Exception\InvalidDOMElementException if the qualified name of the supplied element is wrong
      */
     public static function fromXML(DOMElement $xml): object
     {

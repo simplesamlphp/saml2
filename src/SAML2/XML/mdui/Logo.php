@@ -7,7 +7,7 @@ namespace SimpleSAML\SAML2\XML\mdui;
 use DOMElement;
 use InvalidArgumentException;
 use SimpleSAML\Assert\Assert;
-use SimpleSAML\SAML2\Exception\InvalidDOMElementException;
+use SimpleSAML\XML\Exception\InvalidDOMElementException;
 
 /**
  * Class for handling the Logo metadata extensions for login and discovery user interface
@@ -22,28 +22,28 @@ final class Logo extends AbstractMduiElement
      *
      * @var string
      */
-    protected $url;
+    protected string $url;
 
     /**
      * The width of this logo.
      *
      * @var int
      */
-    protected $width;
+    protected int $width;
 
     /**
      * The height of this logo.
      *
      * @var int
      */
-    protected $height;
+    protected int $height;
 
     /**
      * The language of this item.
      *
      * @var string|null
      */
-    protected $lang = null;
+    protected ?string $lang = null;
 
 
     /**
@@ -166,8 +166,8 @@ final class Logo extends AbstractMduiElement
      * @param \DOMElement $xml The XML element we should load
      * @return self
      *
-     * @throws \SimpleSAML\SAML2\Exception\InvalidDOMElementException if the qualified name of the supplied element is wrong
-     * @throws \SimpleSAML\SAML2\Exception\MissingAttributeException if the supplied element is missing one of the mandatory attributes
+     * @throws \SimpleSAML\XML\Exception\InvalidDOMElementException if the qualified name of the supplied element is wrong
+     * @throws \SimpleSAML\XML\Exception\MissingAttributeException if the supplied element is missing one of the mandatory attributes
      */
     public static function fromXML(DOMElement $xml): object
     {

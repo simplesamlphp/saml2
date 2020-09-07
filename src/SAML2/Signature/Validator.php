@@ -15,7 +15,7 @@ use SimpleSAML\SAML2\XML\SignedElementInterface;
 class Validator
 {
     /** @var \Psr\Log\LoggerInterface */
-    private $logger;
+    private LoggerInterface $logger;
 
 
     /**

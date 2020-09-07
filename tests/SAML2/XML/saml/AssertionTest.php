@@ -9,16 +9,17 @@ use Exception;
 use Mockery\Adapter\Phpunit\MockeryTestCase;
 use RobRichards\XMLSecLibs\XMLSecurityKey;
 use SimpleSAML\SAML2\Constants;
-use SimpleSAML\SAML2\DOMDocumentFactory;
-use SimpleSAML\SAML2\Exception\TooManyElementsException;
-use SimpleSAML\SAML2\Utils;
-use SimpleSAML\SAML2\XML\Chunk;
 use SimpleSAML\TestUtils\PEMCertificatesMock;
+use SimpleSAML\XML\Chunk;
+use SimpleSAML\XML\DOMDocumentFactory;
+use SimpleSAML\XML\Exception\TooManyElementsException;
+use SimpleSAML\XML\Utils as XMLUtils;
 
 /**
  * Class \SAML2\AssertionTest
  *
  * @covers \SimpleSAML\SAML2\XML\saml\Assertion
+ * @covers \SimpleSAML\SAML2\XML\saml\AbstractSamlElement
  * @package simplesamlphp/saml2
  */
 final class AssertionTest extends MockeryTestCase
@@ -26,7 +27,7 @@ final class AssertionTest extends MockeryTestCase
     private const FRAMEWORK = 'vendor/simplesamlphp/simplesamlphp-test-framework';
 
     /** @var \DOMDocument */
-    private $document;
+    private DOMDocument $document;
 
 
     /**
@@ -58,12 +59,12 @@ final class AssertionTest extends MockeryTestCase
         $assertionElement = $assertion->toXML();
 
         // Test for an Issuer
-        $issuerElements = Utils::xpQuery($assertionElement, './saml_assertion:Issuer');
+        $issuerElements = XMLUtils::xpQuery($assertionElement, './saml_assertion:Issuer');
         $this->assertCount(1, $issuerElements);
         $this->assertEquals('testIssuer', $issuerElements[0]->textContent);
 
         // Test for an AudienceRestriction
-        $audienceElements = Utils::xpQuery(
+        $audienceElements = XMLUtils::xpQuery(
             $assertionElement,
             './saml_assertion:Conditions/saml_assertion:AudienceRestriction/saml_assertion:Audience'
         );
@@ -72,7 +73,7 @@ final class AssertionTest extends MockeryTestCase
         $this->assertEquals('audience2', $audienceElements[1]->textContent);
 
         // Test for an Authentication Context
-        $authnContextElements = Utils::xpQuery(
+        $authnContextElements = XMLUtils::xpQuery(
             $assertionElement,
             './saml_assertion:AuthnStatement/saml_assertion:AuthnContext/saml_assertion:AuthnContextClassRef'
         );
@@ -391,7 +392,7 @@ XML;
         $documentParent  = DOMDocumentFactory::fromString("<root />");
         $assertionElement = $assertion->toXML($documentParent->documentElement);
 
-        $acElements = Utils::xpQuery($assertionElement, './saml_assertion:AuthnStatement/saml_assertion:AuthnContext');
+        $acElements = XMLUtils::xpQuery($assertionElement, './saml_assertion:AuthnStatement/saml_assertion:AuthnContext');
         $this->assertCount(1, $acElements);
         $this->assertEquals('samlac:AuthenticationContextDeclaration', $acElements[0]->firstChild->tagName);
         $this->assertEquals('urn:oasis:names:tc:SAML:2.0:ac', $acElements[0]->firstChild->namespaceURI);
@@ -411,7 +412,7 @@ XML;
         $assertion->setIssuer($issuer);
 
         $xml = $assertion->toXML();
-        $xml_issuer = Utils::xpQuery($xml, './saml_assertion:Issuer');
+        $xml_issuer = XMLUtils::xpQuery($xml, './saml_assertion:Issuer');
         $xml_issuer = $xml_issuer[0];
 
         $this->assertFalse($xml_issuer->hasAttributes());
@@ -428,7 +429,7 @@ XML;
 
         $assertion->setIssuer($issuer);
         $xml = $assertion->toXML();
-        $xml_issuer = Utils::xpQuery($xml, './saml_assertion:Issuer');
+        $xml_issuer = XMLUtils::xpQuery($xml, './saml_assertion:Issuer');
         $xml_issuer = $xml_issuer[0];
 
         $this->assertTrue($xml_issuer->hasAttributes());
@@ -2025,11 +2026,11 @@ XML;
         $assertionElement = $assertion->toXML();
 
         // Test for an Issuer
-        $issuerElements = Utils::xpQuery($assertionElement, './saml_assertion:Issuer');
+        $issuerElements = XMLUtils::xpQuery($assertionElement, './saml_assertion:Issuer');
         $this->assertCount(1, $issuerElements);
         $this->assertEquals('testIssuer', $issuerElements[0]->textContent);
         // Test ordering of Assertion contents
-        $assertionElements = Utils::xpQuery($assertionElement, './saml_assertion:Issuer/following-sibling::*');
+        $assertionElements = XMLUtils::xpQuery($assertionElement, './saml_assertion:Issuer/following-sibling::*');
         $this->assertCount(5, $assertionElements);
         $this->assertEquals('ds:Signature', $assertionElements[0]->tagName);
         $this->assertEquals('saml:Subject', $assertionElements[1]->tagName);
@@ -2059,7 +2060,7 @@ XML;
         ]);
 
         $assertionElement = $assertion->toXML();
-        $assertionElements = Utils::xpQuery(
+        $assertionElements = XMLUtils::xpQuery(
             $assertionElement,
             './saml_assertion:AttributeStatement/saml_assertion:Attribute'
         );

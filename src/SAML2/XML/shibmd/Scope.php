@@ -6,7 +6,7 @@ namespace SimpleSAML\SAML2\XML\shibmd;
 
 use DOMElement;
 use SimpleSAML\Assert\Assert;
-use SimpleSAML\SAML2\Exception\InvalidDOMElementException;
+use SimpleSAML\XML\Exception\InvalidDOMElementException;
 use SimpleSAML\SAML2\Utils;
 
 /**
@@ -22,14 +22,14 @@ final class Scope extends AbstractShibmdElement
      *
      * @var string
      */
-    protected $scope;
+    protected string $scope;
 
     /**
      * Whether this is a regexp scope.
      *
      * @var bool
      */
-    protected $regexp;
+    protected bool $regexp;
 
 
     /**
@@ -97,7 +97,7 @@ final class Scope extends AbstractShibmdElement
      * @param \DOMElement $xml The XML element we should load
      * @return self
      *
-     * @throws \SimpleSAML\SAML2\Exception\InvalidDOMElementException if the qualified name of the supplied element is wrong
+     * @throws \SimpleSAML\XML\Exception\InvalidDOMElementException if the qualified name of the supplied element is wrong
      */
     public static function fromXML(DOMElement $xml): object
     {

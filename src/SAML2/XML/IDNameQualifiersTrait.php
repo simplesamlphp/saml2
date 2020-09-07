@@ -20,7 +20,7 @@ trait IDNameQualifiersTrait
      *
      * @var string|null
      */
-    protected $NameQualifier = null;
+    protected ?string $NameQualifier = null;
 
     /**
      * Further qualifies an identifier with the name of a service provider or affiliation of providers.
@@ -30,7 +30,7 @@ trait IDNameQualifiersTrait
      *
      * @var string|null
      */
-    protected $SPNameQualifier = null;
+    protected ?string $SPNameQualifier = null;
 
 
     /**

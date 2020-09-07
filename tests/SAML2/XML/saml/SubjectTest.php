@@ -4,20 +4,22 @@ declare(strict_types=1);
 
 namespace SimpleSAML\SAML2\XML\saml;
 
+use DOMDocument;
 use Mockery;
 use PHPUnit\Framework\TestCase;
 use SimpleSAML\SAML2\Compat\ContainerInterface;
 use SimpleSAML\SAML2\Compat\ContainerSingleton;
 use SimpleSAML\SAML2\Constants;
 use SimpleSAML\SAML2\CustomBaseID;
-use SimpleSAML\SAML2\DOMDocumentFactory;
-use SimpleSAML\SAML2\Exception\TooManyElementsException;
-use SimpleSAML\SAML2\Utils;
+use SimpleSAML\XML\DOMDocumentFactory;
+use SimpleSAML\XML\Exception\TooManyElementsException;
+use SimpleSAML\XML\Utils as XMLUtils;
 
 /**
  * Class \SAML2\XML\saml\SubjectTest
  *
  * @covers \SimpleSAML\SAML2\XML\saml\Subject
+ * @covers \SimpleSAML\SAML2\XML\saml\AbstractSamlElement
  *
  * @author Tim van Dijen, <tvdijen@gmail.com>
  * @package SimpleSAMLphp
@@ -25,19 +27,19 @@ use SimpleSAML\SAML2\Utils;
 final class SubjectTest extends TestCase
 {
     /** @var \DOMDocument */
-    private $document;
+    private DOMDocument $document;
 
     /** @var \DOMDocument */
-    private $subject;
+    private DOMDocument $subject;
 
     /** @var \DOMDocument */
-    private $baseId;
+    private DOMDocument $baseId;
 
     /** @var \DOMDocument */
-    private $nameId;
+    private DOMDocument $nameId;
 
     /** @var \DOMDocument */
-    private $subjectConfirmation;
+    private DOMDocument $subjectConfirmation;
 
 
     public function setup(): void
@@ -156,11 +158,11 @@ XML
         $subjectElement = $subject->toXML();
 
         // Test for a NameID
-        $subjectElements = Utils::xpQuery($subjectElement, './saml_assertion:NameID');
+        $subjectElements = XMLUtils::xpQuery($subjectElement, './saml_assertion:NameID');
         $this->assertCount(1, $subjectElements);
 
         // Test ordering of Subject contents
-        $subjectElements = Utils::xpQuery($subjectElement, './saml_assertion:NameID/following-sibling::*');
+        $subjectElements = XMLUtils::xpQuery($subjectElement, './saml_assertion:NameID/following-sibling::*');
         $this->assertCount(1, $subjectElements);
         $this->assertEquals('saml:SubjectConfirmation', $subjectElements[0]->tagName);
     }

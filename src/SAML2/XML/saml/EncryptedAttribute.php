@@ -6,7 +6,7 @@ namespace SimpleSAML\SAML2\XML\saml;
 
 use RobRichards\XMLSecLibs\XMLSecurityKey;
 use SimpleSAML\SAML2\Utils;
-use SimpleSAML\SAML2\XML\AbstractXMLElement;
+use SimpleSAML\XML\AbstractXMLElement;
 use SimpleSAML\SAML2\XML\EncryptedElementInterface;
 use SimpleSAML\SAML2\XML\EncryptedElementTrait;
 

@@ -6,9 +6,9 @@ namespace SimpleSAML\SAML2\XML\saml;
 
 use DOMElement;
 use SimpleSAML\Assert\Assert;
-use SimpleSAML\SAML2\Exception\InvalidDOMElementException;
-use SimpleSAML\SAML2\Exception\MissingElementException;
-use SimpleSAML\SAML2\Utils;
+use SimpleSAML\XML\Exception\InvalidDOMElementException;
+use SimpleSAML\XML\Exception\MissingElementException;
+use SimpleSAML\XML\Utils as XMLUtils;
 
 /**
  * Class representing a SAML2 AuthnStatement
@@ -19,19 +19,19 @@ use SimpleSAML\SAML2\Utils;
 final class AuthnStatement extends AbstractStatement
 {
     /** @var \SimpleSAML\SAML2\XML\saml\AuthnContext */
-    protected $authnContext;
+    protected AuthnContext $authnContext;
 
     /** @var int */
-    protected $authnInstant;
+    protected int $authnInstant;
 
     /** @var int|null */
-    protected $sessionNotOnOrAfter;
+    protected ?int $sessionNotOnOrAfter;
 
     /** @var string|null */
-    protected $sessionIndex = null;
+    protected ?string $sessionIndex = null;
 
     /** @var \SimpleSAML\SAML2\XML\saml\SubjectLocality|null */
-    protected $subjectLocality = null;
+    protected ?SubjectLocality $subjectLocality = null;
 
 
     /**
@@ -179,8 +179,8 @@ final class AuthnStatement extends AbstractStatement
      * @param \DOMElement $xml The XML element we should load
      *
      * @return \SimpleSAML\SAML2\XML\saml\AuthnStatement
-     * @throws \SimpleSAML\SAML2\Exception\InvalidDOMElementException if the qualified name of the supplied element is wrong
-     * @throws \SimpleSAML\SAML2\Exception\MissingElementException if one of the mandatory child-elements is missing
+     * @throws \SimpleSAML\XML\Exception\InvalidDOMElementException if the qualified name of the supplied element is wrong
+     * @throws \SimpleSAML\XML\Exception\MissingElementException if one of the mandatory child-elements is missing
      * @throws \Exception if the authentication instant is not a valid timestamp.
      */
     public static function fromXML(DOMElement $xml): object
@@ -191,14 +191,14 @@ final class AuthnStatement extends AbstractStatement
         $authnContext = AuthnContext::getChildrenOfClass($xml);
         Assert::minCount($authnContext, 1, 'At least one saml:AuthnContext must be specified.', MissingElementException::class);
 
-        $authnInstant = Utils::xsDateTimeToTimestamp(self::getAttribute($xml, 'AuthnInstant'));
+        $authnInstant = XMLUtils::xsDateTimeToTimestamp(self::getAttribute($xml, 'AuthnInstant'));
         $sessionNotOnOrAfter = self::getAttribute($xml, 'SessionNotOnOrAfter', null);
         $subjectLocality = SubjectLocality::getChildrenOfClass($xml);
 
         return new self(
             array_pop($authnContext),
             $authnInstant,
-            is_null($sessionNotOnOrAfter) ? $sessionNotOnOrAfter : Utils::xsDateTimeToTimestamp($sessionNotOnOrAfter),
+            is_null($sessionNotOnOrAfter) ? $sessionNotOnOrAfter : XMLUtils::xsDateTimeToTimestamp($sessionNotOnOrAfter),
             self::getAttribute($xml, 'SessionIndex', null),
             array_pop($subjectLocality)
         );

@@ -7,9 +7,9 @@ namespace SimpleSAML\SAML2\XML\md;
 use DOMElement;
 use SimpleSAML\Assert\Assert;
 use SimpleSAML\SAML2\Constants;
-use SimpleSAML\SAML2\Exception\InvalidDOMElementException;
-use SimpleSAML\SAML2\Exception\TooManyElementsException;
-use SimpleSAML\SAML2\Utils;
+use SimpleSAML\XML\Exception\InvalidDOMElementException;
+use SimpleSAML\XML\Exception\TooManyElementsException;
+use SimpleSAML\XML\Utils as XMLUtils;
 
 /**
  * Class representing SAML 2 metadata PDPDescriptor.
@@ -23,21 +23,21 @@ final class PDPDescriptor extends AbstractRoleDescriptor
      *
      * @var \SimpleSAML\SAML2\XML\md\AuthzService[]
      */
-    protected $authzServiceEndpoints = [];
+    protected array $authzServiceEndpoints = [];
 
     /**
      * List of AssertionIDRequestService endpoints.
      *
      * @var \SimpleSAML\SAML2\XML\md\AssertionIDRequestService[]
      */
-    protected $assertionIDRequestServiceEndpoints = [];
+    protected array $assertionIDRequestServiceEndpoints = [];
 
     /**
      * List of supported NameID formats.
      *
      * @var string[]
      */
-    protected $nameIDFormats = [];
+    protected array $nameIDFormats = [];
 
 
     /**
@@ -93,9 +93,9 @@ final class PDPDescriptor extends AbstractRoleDescriptor
      * @param \DOMElement $xml The XML element we should load.
      * @return \SimpleSAML\SAML2\XML\md\PDPDescriptor
      *
-     * @throws \SimpleSAML\SAML2\Exception\InvalidDOMElementException if the qualified name of the supplied element is wrong
-     * @throws \SimpleSAML\SAML2\Exception\MissingAttributeException if the supplied element is missing one of the mandatory attributes
-     * @throws \SimpleSAML\SAML2\Exception\TooManyElementsException if too many child-elements of a type are specified
+     * @throws \SimpleSAML\XML\Exception\InvalidDOMElementException if the qualified name of the supplied element is wrong
+     * @throws \SimpleSAML\XML\Exception\MissingAttributeException if the supplied element is missing one of the mandatory attributes
+     * @throws \SimpleSAML\XML\Exception\TooManyElementsException if too many child-elements of a type are specified
      */
     public static function fromXML(DOMElement $xml): object
     {
@@ -114,9 +114,9 @@ final class PDPDescriptor extends AbstractRoleDescriptor
             AuthzService::getChildrenOfClass($xml),
             preg_split('/[\s]+/', trim($protocols)),
             AssertionIDRequestService::getChildrenOfClass($xml),
-            Utils::extractStrings($xml, Constants::NS_MD, 'NameIDFormat'),
+            XMLUtils::extractStrings($xml, Constants::NS_MD, 'NameIDFormat'),
             self::getAttribute($xml, 'ID', null),
-            $validUntil !== null ? Utils::xsDateTimeToTimestamp($validUntil) : null,
+            $validUntil !== null ? XMLUtils::xsDateTimeToTimestamp($validUntil) : null,
             self::getAttribute($xml, 'cacheDuration', null),
             !empty($extensions) ? $extensions[0] : null,
             self::getAttribute($xml, 'errorURL', null),
@@ -228,7 +228,7 @@ final class PDPDescriptor extends AbstractRoleDescriptor
             $ep->toXML($e);
         }
 
-        Utils::addStrings($e, Constants::NS_MD, 'md:NameIDFormat', false, $this->nameIDFormats);
+        XMLUtils::addStrings($e, Constants::NS_MD, 'md:NameIDFormat', false, $this->nameIDFormats);
 
         return $this->signElement($e);
     }

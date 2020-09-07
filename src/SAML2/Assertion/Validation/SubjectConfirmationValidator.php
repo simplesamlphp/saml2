@@ -13,13 +13,13 @@ use SimpleSAML\SAML2\XML\saml\SubjectConfirmation;
 class SubjectConfirmationValidator
 {
     /** @var \SimpleSAML\SAML2\Assertion\Validation\SubjectConfirmationConstraintValidator[] */
-    protected $constraints;
+    protected array $constraints;
 
     /** @var \SimpleSAML\SAML2\Configuration\IdentityProvider */
-    protected $identityProvider;
+    protected IdentityProvider $identityProvider;
 
     /** @var \SimpleSAML\SAML2\Configuration\ServiceProvider */
-    protected $serviceProvider;
+    protected ServiceProvider $serviceProvider;
 
 
     /**

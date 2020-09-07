@@ -7,7 +7,7 @@ namespace SimpleSAML\SAML2\XML\samlp;
 use DOMElement;
 use SimpleSAML\Assert\Assert;
 use SimpleSAML\SAML2\Constants;
-use SimpleSAML\SAML2\Exception\InvalidDOMElementException;
+use SimpleSAML\XML\Exception\InvalidDOMElementException;
 
 /**
  * SAML StatusCode data type.
@@ -18,10 +18,10 @@ use SimpleSAML\SAML2\Exception\InvalidDOMElementException;
 final class StatusCode extends AbstractSamlpElement
 {
     /** @var string */
-    protected $Value;
+    protected string $Value;
 
     /** @var \SimpleSAML\SAML2\XML\samlp\StatusCode[] */
-    protected $subCodes = [];
+    protected array $subCodes = [];
 
 
     /**
@@ -94,8 +94,8 @@ final class StatusCode extends AbstractSamlpElement
      * @param \DOMElement $xml The XML element we should load
      * @return \SimpleSAML\SAML2\XML\samlp\StatusCode
      *
-     * @throws \SimpleSAML\SAML2\Exception\InvalidDOMElementException if the qualified name of the supplied element is wrong
-     * @throws \SimpleSAML\SAML2\Exception\MissingAttributeException if the supplied element is missing one of the mandatory attributes
+     * @throws \SimpleSAML\XML\Exception\InvalidDOMElementException if the qualified name of the supplied element is wrong
+     * @throws \SimpleSAML\XML\Exception\MissingAttributeException if the supplied element is missing one of the mandatory attributes
      */
     public static function fromXML(DOMElement $xml): object
     {

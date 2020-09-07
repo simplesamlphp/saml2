@@ -7,7 +7,7 @@ namespace SimpleSAML\SAML2\XML\saml;
 use DOMElement;
 use SimpleSAML\Assert\Assert;
 use SimpleSAML\SAML2\Constants;
-use SimpleSAML\SAML2\Exception\InvalidDOMElementException;
+use SimpleSAML\XML\Exception\InvalidDOMElementException;
 
 /**
  * Class implementing the <saml:Statement> extension point.
@@ -17,7 +17,7 @@ use SimpleSAML\SAML2\Exception\InvalidDOMElementException;
 abstract class Statement extends AbstractStatement
 {
     /** @var string */
-    protected $type;
+    protected string $type;
 
 
     /**

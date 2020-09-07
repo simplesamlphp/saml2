@@ -4,31 +4,34 @@ declare(strict_types=1);
 
 namespace SimpleSAML\SAML2\XML\mdui;
 
+use DOMDocument;
 use InvalidArgumentException;
 use PHPUnit\Framework\TestCase;
-use SimpleSAML\SAML2\DOMDocumentFactory;
-use SimpleSAML\SAML2\Exception\MissingAttributeException;
-use SimpleSAML\SAML2\Utils;
 use SimpleSAML\Assert\AssertionFailedException;
+use SimpleSAML\XML\DOMDocumentFactory;
+use SimpleSAML\XML\Exception\MissingAttributeException;
+use SimpleSAML\XML\Utils as XMLUtils;
 
 /**
  * Class \SAML2\XML\mdui\LogoTest
  *
  * @covers \SimpleSAML\SAML2\XML\mdui\Logo
+ * @covers \SimpleSAML\SAML2\XML\mdui\AbstractMduiElement
  * @package simplesamlphp/saml2
  */
 final class LogoTest extends TestCase
 {
     /** @var \DOMDocument */
-    private $document;
+    private DOMDocument $document;
 
     /** @var string */
-    private $data = <<<IMG
+    private string $data = <<<IMG
 data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAAEAAAABCAQAAAC1HAwCAAAAC0lEQVR42mNkYAAAAAYAAjCB0C8AAAAASUVORK5CYII=
 IMG;
 
     /** @var string */
-    private $url = 'https://static.example.org/images/logos/logo300x200.png';
+    private string $url = 'https://static.example.org/images/logos/logo300x200.png';
+
 
     /**
      * @return void
@@ -51,7 +54,7 @@ IMG;
 
         $xml = $logo->toXML();
 
-        $logoElements = Utils::xpQuery(
+        $logoElements = XMLUtils::xpQuery(
             $xml,
             '/*[local-name()=\'Logo\' and namespace-uri()=\'urn:oasis:names:tc:SAML:metadata:ui\']'
         );

@@ -23,17 +23,17 @@ class Processor
     /**
      * @var \Psr\Log\LoggerInterface
      */
-    private $logger;
+    private LoggerInterface $logger;
 
     /**
      * @var \SimpleSAML\SAML2\Response\Validation\PreconditionValidator
      */
-    private $preconditionValidator;
+    private PreconditionValidator $preconditionValidator;
 
     /**
      * @var \SimpleSAML\SAML2\Signature\Validator
      */
-    private $signatureValidator;
+    private Validator $signatureValidator;
 
     /**
      * @var \SimpleSAML\SAML2\Assertion\Processor
@@ -46,7 +46,7 @@ class Processor
      *
      * @var bool
      */
-    private $responseIsSigned = false;
+    private bool $responseIsSigned = false;
 
 
     /**

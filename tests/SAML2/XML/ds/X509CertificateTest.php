@@ -4,10 +4,11 @@ declare(strict_types=1);
 
 namespace SimpleSAML\SAML2\XML\ds;
 
+use DOMDocument;
 use PHPUnit\Framework\TestCase;
 use RobRichards\XMLSecLibs\XMLSecurityDSig;
 use RobRichards\XMLSecLibs\XMLSecurityKey;
-use SimpleSAML\SAML2\DOMDocumentFactory;
+use SimpleSAML\XML\DOMDocumentFactory;
 use SimpleSAML\SAML2\Utils;
 use SimpleSAML\Assert\AssertionFailedException;
 use SimpleSAML\TestUtils\PEMCertificatesMock;
@@ -15,6 +16,7 @@ use SimpleSAML\TestUtils\PEMCertificatesMock;
 /**
  * Class \SAML2\XML\ds\X509CertificateTest
  *
+ * @covers \SimpleSAML\SAML2\XML\ds\AbstractDsElement
  * @covers \SimpleSAML\SAML2\XML\ds\X509Certificate
  *
  * @author Tim van Dijen, <tvdijen@gmail.com>
@@ -23,10 +25,11 @@ use SimpleSAML\TestUtils\PEMCertificatesMock;
 final class X509CertificateTest extends TestCase
 {
     /** @var \DOMDocument */
-    private $document;
+    private DOMDocument $document;
 
     /** @var string */
-    private $certificate;
+    private string $certificate;
+
 
     /**
      * @return void

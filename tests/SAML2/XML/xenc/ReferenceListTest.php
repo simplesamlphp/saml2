@@ -4,15 +4,17 @@ declare(strict_types=1);
 
 namespace SimpleSAML\SAML2\XML\xenc;
 
+use DOMDocument;
 use PHPUnit\Framework\TestCase;
 use RobRichards\XMLSecLibs\XMLSecurityDsig;
 use SimpleSAML\SAML2\Constants;
-use SimpleSAML\SAML2\DOMDocumentFactory;
-use SimpleSAML\SAML2\XML\Chunk;
+use SimpleSAML\XML\Chunk;
+use SimpleSAML\XML\DOMDocumentFactory;
 
 /**
  * Class \SimpleSAML\SAML2\XML\xenc\ReferenceListTest
  *
+ * @covers \SimpleSAML\SAML2\XML\xenc\AbstractXencElement
  * @covers \SimpleSAML\SAML2\XML\xenc\ReferenceList
  *
  * @author Tim van Dijen, <tvdijen@gmail.com>
@@ -21,13 +23,13 @@ use SimpleSAML\SAML2\XML\Chunk;
 final class ReferenceListTest extends TestCase
 {
     /** @var \DOMDocument $document */
-    private $document;
+    private DOMDocument $document;
 
-    /** @var \SAML2\Chunk $dataReference */
-    private $dataReference;
+    /** @var \SAML2\XML\Chunk $dataReference */
+    private Chunk $dataReference;
 
-    /** @var \SAML2\Chunk $keyReference */
-    private $keyReference;
+    /** @var \SAML2\XML\Chunk $keyReference */
+    private Chunk $keyReference;
 
 
     /**

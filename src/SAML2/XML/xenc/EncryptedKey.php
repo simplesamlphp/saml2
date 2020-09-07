@@ -6,9 +6,9 @@ namespace SimpleSAML\SAML2\XML\xenc;
 
 use DOMElement;
 use SimpleSAML\Assert\Assert;
-use SimpleSAML\SAML2\Exception\InvalidDOMElementException;
-use SimpleSAML\SAML2\Utils;
 use SimpleSAML\SAML2\XML\ds\KeyInfo;
+use SimpleSAML\XML\Exception\InvalidDOMElementException;
+use SimpleSAML\XML\Utils as XMLUtils;
 
 /**
  * Class representing an encrypted key.
@@ -18,13 +18,13 @@ use SimpleSAML\SAML2\XML\ds\KeyInfo;
 class EncryptedKey extends AbstractEncryptedType
 {
     /** @var string|null */
-    protected $carriedKeyName;
+    protected ?string $carriedKeyName;
 
     /** @var string|null */
-    protected $recipient;
+    protected ?string $recipient;
 
     /** @var \SimpleSAML\SAML2\XML\xenc\ReferenceList|null */
-    protected $referenceList;
+    protected ?ReferenceList $referenceList;
 
 
     /**
@@ -123,7 +123,7 @@ class EncryptedKey extends AbstractEncryptedType
     /**
      * @inheritDoc
      *
-     * @throws \SimpleSAML\SAML2\Exception\InvalidDOMElementException if the qualified name of the supplied element is wrong
+     * @throws \SimpleSAML\XML\Exception\InvalidDOMElementException if the qualified name of the supplied element is wrong
      */
     public static function fromXML(DOMElement $xml): object
     {
@@ -146,7 +146,7 @@ class EncryptedKey extends AbstractEncryptedType
         $referenceLists = ReferenceList::getChildrenOfClass($xml);
         Assert::maxCount($keyInfo, 1, 'Only one ReferenceList element allowed in <xenc:EncryptedKey>.');
 
-        $carriedKeyNames = Utils::xpQuery($xml, './xenc:CarriedKeyName');
+        $carriedKeyNames = XMLUtils::xpQuery($xml, './xenc:CarriedKeyName');
         Assert::maxCount($carriedKeyNames, 1, 'Only one CarriedKeyName element allowed in <xenc:EncryptedKey>.');
 
         return new self(

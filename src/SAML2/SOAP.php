@@ -6,11 +6,14 @@ namespace SimpleSAML\SAML2;
 
 use DOMDocument;
 use Exception;
+use SimpleSAML\SAML2\Utils;
 use SimpleSAML\SAML2\XML\ecp\Response as ECPResponse;
 use SimpleSAML\SAML2\XML\ecp\RequestAuthenticated;
 use SimpleSAML\SAML2\XML\samlp\AbstractMessage;
 use SimpleSAML\SAML2\XML\samlp\MessageFactory;
 use SimpleSAML\SAML2\XML\samlp\Response;
+use SimpleSAML\XML\DOMDocumentFactory;
+use SimpleSAML\XML\Utils as XMLUtils;
 
 /**
  * Class which implements the SOAP binding.
@@ -107,7 +110,7 @@ SOAP;
         $xml = $document->firstChild;
         Utils::getContainer()->debugMessage($document->documentElement, 'in');
         /** @var \DOMElement[] $results */
-        $results = Utils::xpQuery($xml, '/soap-env:Envelope/soap-env:Body/*[1]');
+        $results = XMLUtils::xpQuery($xml, '/soap-env:Envelope/soap-env:Body/*[1]');
 
         return MessageFactory::fromXML($results[0]);
     }

@@ -4,17 +4,19 @@ declare(strict_types=1);
 
 namespace SimpleSAML\SAML2\XML\ds;
 
+use DOMDocument;
 use PHPUnit\Framework\TestCase;
 use RobRichards\XMLSecLibs\XMLSecurityDSig;
-use SimpleSAML\SAML2\DOMDocumentFactory;
+use SimpleSAML\XML\DOMDocumentFactory;
 use SimpleSAML\SAML2\Utils;
-use SimpleSAML\SAML2\XML\Chunk;
+use SimpleSAML\XML\Chunk;
 use SimpleSAML\Assert\AssertionFailedException;
 use SimpleSAML\TestUtils\PEMCertificatesMock;
 
 /**
  * Class \SAML2\XML\ds\X509DataTest
  *
+ * @covers \SimpleSAML\SAML2\XML\ds\AbstractDsElement
  * @covers \SimpleSAML\SAML2\XML\ds\X509Data
  *
  * @author Tim van Dijen, <tvdijen@gmail.com>
@@ -22,17 +24,17 @@ use SimpleSAML\TestUtils\PEMCertificatesMock;
  */
 final class X509DataTest extends TestCase
 {
-    /** @var \DOMDocument */
-    private $document;
-
     /** @var string */
     private const FRAMEWORK = 'vendor/simplesamlphp/simplesamlphp-test-framework';
 
+    /** @var \DOMDocument */
+    private DOMDocument $document;
+
     /** @var string */
-    private $certificate;
+    private string $certificate;
 
     /** @var string[] */
-    private $certData;
+    private array $certData;
 
 
     /**

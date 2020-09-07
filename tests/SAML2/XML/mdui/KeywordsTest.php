@@ -4,20 +4,26 @@ declare(strict_types=1);
 
 namespace SimpleSAML\SAML2\XML\mdui;
 
+use DOMDocument;
 use PHPUnit\Framework\TestCase;
-use SimpleSAML\SAML2\DOMDocumentFactory;
-use SimpleSAML\SAML2\Exception\MissingAttributeException;
-use SimpleSAML\SAML2\Utils;
 use SimpleSAML\Assert\AssertionFailedException;
+use SimpleSAML\XML\DOMDocumentFactory;
+use SimpleSAML\XML\Exception\MissingAttributeException;
+use SimpleSAML\XML\Utils as XMLUtils;
 
 /**
  * Class \SAML2\XML\mdui\KeywordsTest
  *
  * @covers \SimpleSAML\SAML2\XML\mdui\Keywords
+ * @covers \SimpleSAML\SAML2\XML\mdui\AbstractMduiElement
  * @package simplesamlphp/saml2
  */
 final class KeywordsTest extends TestCase
 {
+    /** @var \DOMDocument */
+    private DOMDocument $document;
+
+
     /**
      * @return void
      */
@@ -40,7 +46,7 @@ final class KeywordsTest extends TestCase
 
         $xml = $keywords->toXML();
 
-        $keywordElements = Utils::xpQuery(
+        $keywordElements = XMLUtils::xpQuery(
             $xml,
             '/*[local-name()=\'Keywords\' and namespace-uri()=\'urn:oasis:names:tc:SAML:metadata:ui\']'
         );

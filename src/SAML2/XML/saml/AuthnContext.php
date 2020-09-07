@@ -7,13 +7,13 @@ namespace SimpleSAML\SAML2\XML\saml;
 use DOMElement;
 use SimpleSAML\Assert\Assert;
 use SimpleSAML\SAML2\Constants;
-use SimpleSAML\SAML2\DOMDocumentFactory;
-use SimpleSAML\SAML2\Exception\InvalidDOMElementException;
-use SimpleSAML\SAML2\Exception\TooManyElementsException;
-use SimpleSAML\SAML2\Utils;
 use SimpleSAML\SAML2\XML\saml\AuthnContextClassRef;
 use SimpleSAML\SAML2\XML\saml\AuthnContextDecl;
 use SimpleSAML\SAML2\XML\saml\AuthnContextDeclRef;
+use SimpleSAML\XML\DOMDocumentFactory;
+use SimpleSAML\XML\Exception\InvalidDOMElementException;
+use SimpleSAML\XML\Exception\TooManyElementsException;
+use SimpleSAML\XML\Utils as XMLUtils;
 
 /**
  * Class representing SAML2 AuthnContext
@@ -24,16 +24,16 @@ use SimpleSAML\SAML2\XML\saml\AuthnContextDeclRef;
 final class AuthnContext extends AbstractSamlElement
 {
     /** @var \SimpleSAML\SAML2\XML\saml\AuthnContextClassRef|null */
-    protected $authnContextClassRef = null;
+    protected ?AuthnContextClassRef $authnContextClassRef = null;
 
     /** @var \SimpleSAML\SAML2\XML\saml\AuthnContextDeclRef|null */
-    protected $authnContextDeclRef = null;
+    protected ?AuthnContextDeclRef $authnContextDeclRef = null;
 
     /** @var \SimpleSAML\SAML2\XML\saml\AuthnContextDecl|null */
-    protected $authnContextDecl = null;
+    protected ?AuthnContextDecl $authnContextDecl = null;
 
     /** @var string[] */
-    protected $authenticatingAuthorities = [];
+    protected array $authenticatingAuthorities = [];
 
 
     /**
@@ -172,7 +172,7 @@ final class AuthnContext extends AbstractSamlElement
      * @param \DOMElement $xml The XML element we should load
      * @return \SimpleSAML\SAML2\XML\saml\AuthnContext
      *
-     * @throws \SimpleSAML\SAML2\Exception\InvalidDOMElementException if the qualified name of the supplied element is wrong
+     * @throws \SimpleSAML\XML\Exception\InvalidDOMElementException if the qualified name of the supplied element is wrong
      */
     public static function fromXML(DOMElement $xml): object
     {
@@ -203,7 +203,7 @@ final class AuthnContext extends AbstractSamlElement
             TooManyElementsException::class
         );
 
-        $authorities = Utils::extractStrings($xml, AbstractSamlElement::NS, 'AuthenticatingAuthority');
+        $authorities = XMLUtils::extractStrings($xml, AbstractSamlElement::NS, 'AuthenticatingAuthority');
 
         return new self(
             array_pop($authnContextClassRef),
@@ -236,7 +236,7 @@ final class AuthnContext extends AbstractSamlElement
             $this->authnContextDeclRef->toXML($e);
         }
 
-        Utils::addStrings($e, AbstractSamlElement::NS, 'saml:AuthenticatingAuthority', false, $this->authenticatingAuthorities);
+        XMLUtils::addStrings($e, AbstractSamlElement::NS, 'saml:AuthenticatingAuthority', false, $this->authenticatingAuthorities);
 
         return $e;
     }

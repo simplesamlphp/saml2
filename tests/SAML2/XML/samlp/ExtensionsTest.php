@@ -4,9 +4,10 @@ declare(strict_types=1);
 
 namespace SimpleSAML\SAML2\XML\samlp;
 
+use DOMDocument;
 use PHPUnit\Framework\TestCase;
-use SimpleSAML\SAML2\DOMDocumentFactory;
-use SimpleSAML\SAML2\XML\Chunk;
+use SimpleSAML\XML\DOMDocumentFactory;
+use SimpleSAML\XML\Chunk;
 use SimpleSAML\SAML2\XML\saml\Attribute;
 use SimpleSAML\SAML2\XML\shibmd\Scope;
 
@@ -14,14 +15,13 @@ use SimpleSAML\SAML2\XML\shibmd\Scope;
  * Class \SAML2\XML\samlp\ExtensionsTest
  *
  * @covers \SimpleSAML\SAML2\XML\samlp\Extensions
+ * @covers \SimpleSAML\SAML2\XML\samlp\AbstractSamlpElement
  * @package simplesamlphp/saml2
  */
 final class ExtensionsTest extends TestCase
 {
-    /**
-     * @var \DOMDocument
-     */
-    private $document;
+    /** @var \DOMDocument */
+    private DOMDocument $document;
 
 
     /**

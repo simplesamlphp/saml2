@@ -4,21 +4,23 @@ declare(strict_types=1);
 
 namespace SimpleSAML\SAML2\XML\mdui;
 
+use DOMDocument;
 use PHPUnit\Framework\TestCase;
-use SimpleSAML\SAML2\DOMDocumentFactory;
-use SimpleSAML\SAML2\XML\Chunk;
-use SimpleSAML\SAML2\Utils;
+use SimpleSAML\XML\Chunk;
+use SimpleSAML\XML\DOMDocumentFactory;
+use SimpleSAML\XML\Utils as XMLUtils;
 
 /**
  * Class \SAML2\XML\mdui\UIInfoTest
  *
  * @covers \SimpleSAML\SAML2\XML\mdui\UIInfo
+ * @covers \SimpleSAML\SAML2\XML\mdui\AbstractMduiElement
  * @package simplesamlphp/saml2
  */
 final class UIInfoTest extends TestCase
 {
     /** @var \DOMDocument */
-    private $document;
+    private DOMDocument $document;
 
 
     /**
@@ -53,7 +55,7 @@ final class UIInfoTest extends TestCase
         $document = DOMDocumentFactory::fromString('<root />');
         $xml = $uiinfo->toXML($document->documentElement);
 
-        $infoElements = Utils::xpQuery(
+        $infoElements = XMLUtils::xpQuery(
             $xml,
             '/root/*[local-name()=\'UIInfo\' and namespace-uri()=\'urn:oasis:names:tc:SAML:metadata:ui\']'
         );
@@ -61,7 +63,7 @@ final class UIInfoTest extends TestCase
         $infoElement = $infoElements[0];
 
         /** @var \DOMElement[] $displaynameElements */
-        $displaynameElements = Utils::xpQuery(
+        $displaynameElements = XMLUtils::xpQuery(
             $infoElement,
             './*[local-name()=\'DisplayName\' and namespace-uri()=\'urn:oasis:names:tc:SAML:metadata:ui\']'
         );
@@ -72,7 +74,7 @@ final class UIInfoTest extends TestCase
         $this->assertEquals("en", $displaynameElements[1]->getAttribute("xml:lang"));
 
         /** @var \DOMElement[] $descriptionElements */
-        $descriptionElements = Utils::xpQuery(
+        $descriptionElements = XMLUtils::xpQuery(
             $infoElement,
             './*[local-name()=\'Description\' and namespace-uri()=\'urn:oasis:names:tc:SAML:metadata:ui\']'
         );
@@ -83,7 +85,7 @@ final class UIInfoTest extends TestCase
         $this->assertEquals("en", $descriptionElements[1]->getAttribute("xml:lang"));
 
         /** @var \DOMElement[] $infourlElements */
-        $infourlElements = Utils::xpQuery(
+        $infourlElements = XMLUtils::xpQuery(
             $infoElement,
             './*[local-name()=\'InformationURL\' and namespace-uri()=\'urn:oasis:names:tc:SAML:metadata:ui\']'
         );
@@ -94,7 +96,7 @@ final class UIInfoTest extends TestCase
         $this->assertEquals("en", $infourlElements[1]->getAttribute("xml:lang"));
 
         /** @var \DOMElement[] $privurlElements */
-        $privurlElements = Utils::xpQuery(
+        $privurlElements = XMLUtils::xpQuery(
             $infoElement,
             './*[local-name()=\'PrivacyStatementURL\' and namespace-uri()=\'urn:oasis:names:tc:SAML:metadata:ui\']'
         );
@@ -137,14 +139,14 @@ final class UIInfoTest extends TestCase
         $document = DOMDocumentFactory::fromString('<root />');
         $xml = $uiinfo->toXML($document->documentElement);
 
-        $infoElements = Utils::xpQuery(
+        $infoElements = XMLUtils::xpQuery(
             $xml,
             '/root/*[local-name()=\'UIInfo\' and namespace-uri()=\'urn:oasis:names:tc:SAML:metadata:ui\']'
         );
         $this->assertCount(1, $infoElements);
         $infoElement = $infoElements[0];
 
-        $logoElements = Utils::xpQuery(
+        $logoElements = XMLUtils::xpQuery(
             $infoElement,
             './*[local-name()=\'Logo\' and namespace-uri()=\'urn:oasis:names:tc:SAML:metadata:ui\']'
         );
@@ -152,7 +154,7 @@ final class UIInfoTest extends TestCase
         $this->assertEquals("https://example.edu/logo.png", $logoElements[0]->textContent);
 
         /** @var \DOMElement[] $keywordElements */
-        $keywordElements = Utils::xpQuery(
+        $keywordElements = XMLUtils::xpQuery(
             $infoElement,
             './*[local-name()=\'Keywords\' and namespace-uri()=\'urn:oasis:names:tc:SAML:metadata:ui\']'
         );
@@ -160,14 +162,14 @@ final class UIInfoTest extends TestCase
         $this->assertEquals("voorbeeld specimen", $keywordElements[0]->textContent);
         $this->assertEquals("nl", $keywordElements[0]->getAttribute("xml:lang"));
 
-        $discoElements = Utils::xpQuery(
+        $discoElements = XMLUtils::xpQuery(
             $infoElement,
             './*[local-name()=\'DiscoHints\' and namespace-uri()=\'urn:oasis:names:tc:SAML:metadata:ui\']'
         );
         $this->assertCount(1, $discoElements);
         $discoElement = $discoElements[0];
 
-        $iphintElements = Utils::xpQuery(
+        $iphintElements = XMLUtils::xpQuery(
             $discoElement,
             './*[local-name()=\'IPHint\' and namespace-uri()=\'urn:oasis:names:tc:SAML:metadata:ui\']'
         );
@@ -176,7 +178,7 @@ final class UIInfoTest extends TestCase
         $this->assertEquals("fd00:0123:aa:1001::/64", $iphintElements[1]->textContent);
 
         /** @var \DOMElement[] $keywordElements */
-        $keywordElements = Utils::xpQuery(
+        $keywordElements = XMLUtils::xpQuery(
             $discoElement,
             './*[local-name()=\'Keywords\' and namespace-uri()=\'urn:oasis:names:tc:SAML:metadata:ui\']'
         );

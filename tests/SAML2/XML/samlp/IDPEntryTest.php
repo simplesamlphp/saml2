@@ -4,14 +4,16 @@ declare(strict_types=1);
 
 namespace SimpleSAML\SAML2\XML\samlp;
 
+use DOMDocument;
 use PHPUnit\Framework\TestCase;
-use SimpleSAML\SAML2\DOMDocumentFactory;
+use SimpleSAML\XML\DOMDocumentFactory;
 use SimpleSAML\SAML2\XML\samlp\IDPEntry;
 
 /**
  * Class \SAML2\XML\samlp\IDPEntryTest
  *
  * @covers \SimpleSAML\SAML2\XML\samlp\IDPEntry
+ * @covers \SimpleSAML\SAML2\XML\samlp\AbstractSamlpElement
  *
  * @author Tim van Dijen, <tvdijen@gmail.com>
  * @package simplesamlphp/saml2
@@ -19,7 +21,7 @@ use SimpleSAML\SAML2\XML\samlp\IDPEntry;
 final class IDPEntryTest extends TestCase
 {
     /** @var \DOMDocument */
-    private $document;
+    private DOMDocument $document;
 
 
     /**

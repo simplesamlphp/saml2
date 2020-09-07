@@ -4,10 +4,9 @@ declare(strict_types=1);
 
 namespace SimpleSAML\SAML2\XML\saml;
 
+use DOMDocument;
 use Phpunit\Framework\TestCase;
 use RobRichards\XMLSecLibs\XMLSecurityKey;
-use SimpleSAML\SAML2\DOMDocumentFactory;
-use SimpleSAML\SAML2\XML\Chunk;
 use SimpleSAML\SAML2\XML\ds\KeyInfo;
 use SimpleSAML\SAML2\XML\xenc\CipherData;
 use SimpleSAML\SAML2\XML\xenc\DataReference;
@@ -16,18 +15,21 @@ use SimpleSAML\SAML2\XML\xenc\EncryptedKey;
 use SimpleSAML\SAML2\XML\xenc\EncryptionMethod;
 use SimpleSAML\SAML2\XML\xenc\ReferenceList;
 use SimpleSAML\TestUtils\PEMCertificatesMock;
+use SimpleSAML\XML\DOMDocumentFactory;
+use SimpleSAML\XML\Chunk;
 
 /**
  * Class \SAML2\EncryptedAssertionTest
  *
+ * @package simplesamlphp/saml2
  * @author Tim van Dijen, <tvdijen@gmail.com>
  * @covers \SimpleSAML\SAML2\XML\saml\EncryptedAssertion
- * @package simplesamlphp/saml2
+ * @covers \SimpleSAML\SAML2\XML\saml\AbstractSamlElement
  */
 final class EncryptedAssertionTest extends TestCase
 {
     /** @var \DOMDocument */
-    private $document;
+    private DOMDocument $document;
 
 
     /**

@@ -4,17 +4,16 @@ declare(strict_types=1);
 
 namespace SimpleSAML\SAML2\XML\saml;
 
+use DOMDocument;
 use InvalidArgumentException;
 use PHPUnit\Framework\TestCase;
 use RobRichards\XMLSecLibs\XMLSecurityKey;
+use SimpleSAML\Configuration;
 use SimpleSAML\SAML2\Compat\ContainerSingleton;
 use SimpleSAML\SAML2\Compat\MockContainer;
 use SimpleSAML\SAML2\Compat\Ssp\Container;
 use SimpleSAML\SAML2\Constants;
 use SimpleSAML\SAML2\CustomBaseID;
-use SimpleSAML\SAML2\DOMDocumentFactory;
-use SimpleSAML\SAML2\Utils;
-use SimpleSAML\SAML2\XML\Chunk;
 use SimpleSAML\SAML2\XML\ds\KeyInfo;
 use SimpleSAML\SAML2\XML\xenc\CipherData;
 use SimpleSAML\SAML2\XML\xenc\DataReference;
@@ -22,22 +21,25 @@ use SimpleSAML\SAML2\XML\xenc\EncryptedData;
 use SimpleSAML\SAML2\XML\xenc\EncryptedKey;
 use SimpleSAML\SAML2\XML\xenc\EncryptionMethod;
 use SimpleSAML\SAML2\XML\xenc\ReferenceList;
-use SimpleSAML\Configuration;
 use SimpleSAML\TestUtils\PEMCertificatesMock;
+use SimpleSAML\XML\Chunk;
+use SimpleSAML\XML\DOMDocumentFactory;
+use SimpleSAML\XML\Utils as XMLUtils;
 
 /**
  * Class EncryptedIDTest
  *
  * @covers \SimpleSAML\SAML2\XML\saml\EncryptedID
+ * @covers \SimpleSAML\SAML2\XML\saml\AbstractSamlElement
  * @package simplesamlphp/saml2
  */
 final class EncryptedIDTest extends TestCase
 {
     /** @var \DOMDocument $document */
-    private $document;
+    private DOMDocument $document;
 
     /** @var \DOMDocument $retrievalMethod */
-    private $retrievalMethod;
+    private DOMDocument $retrievalMethod;
 
 
     /**
@@ -168,11 +170,11 @@ final class EncryptedIDTest extends TestCase
         $eidElement = $eid->toXML();
 
         // Test for an EncryptedID
-        $eidElements = Utils::xpQuery($eidElement, './xenc:EncryptedData');
+        $eidElements = XMLUtils::xpQuery($eidElement, './xenc:EncryptedData');
         $this->assertCount(1, $eidElements);
 
         // Test ordering of EncryptedID contents
-        $eidElements = Utils::xpQuery($eidElement, './xenc:EncryptedData/following-sibling::*');
+        $eidElements = XMLUtils::xpQuery($eidElement, './xenc:EncryptedData/following-sibling::*');
         $this->assertCount(1, $eidElements);
         $this->assertEquals('xenc:EncryptedKey', $eidElements[0]->tagName);
     }

@@ -4,21 +4,23 @@ declare(strict_types=1);
 
 namespace SimpleSAML\SAML2\XML\shibmd;
 
+use DOMDocument;
 use PHPUnit\Framework\TestCase;
-use SimpleSAML\SAML2\DOMDocumentFactory;
 use SimpleSAML\SAML2\XML\shibmd\Scope;
-use SimpleSAML\SAML2\Utils;
+use SimpleSAML\XML\DOMDocumentFactory;
+use SimpleSAML\XML\Utils as XMLUtils;
 
 /**
  * Class \SAML2\XML\shibmd\Scope
  *
  * @covers \SimpleSAML\SAML2\XML\shibmd\Scope
+ * @covers \SimpleSAML\SAML2\XML\shibmd\AbstractShibmdElement
  * @package simplesamlphp/saml2
  */
 final class ScopeTest extends TestCase
 {
     /** @var \DOMDocument */
-    private $document;
+    private DOMDocument $document;
 
 
     /**
@@ -44,7 +46,7 @@ final class ScopeTest extends TestCase
         $scopeElement = $scope->toXML($document->documentElement);
 
         /** @var \DOMElement[] $scopeElements */
-        $scopeElements = Utils::xpQuery($scopeElement, '/root/shibmd:Scope');
+        $scopeElements = XMLUtils::xpQuery($scopeElement, '/root/shibmd:Scope');
         $this->assertCount(1, $scopeElements);
         $scopeElement = $scopeElements[0];
 
@@ -67,7 +69,7 @@ final class ScopeTest extends TestCase
         $scopeElement = $scope->toXML($document->documentElement);
 
         /** @var \DOMElement[] $scopeElements */
-        $scopeElements = Utils::xpQuery($scopeElement, '/root/shibmd:Scope');
+        $scopeElements = XMLUtils::xpQuery($scopeElement, '/root/shibmd:Scope');
         $this->assertCount(1, $scopeElements);
         $scopeElement = $scopeElements[0];
 
@@ -89,7 +91,7 @@ final class ScopeTest extends TestCase
         $scopeElement = $scope->toXML($document->documentElement);
 
         /** @var \DOMElement[] $scopeElements */
-        $scopeElements = Utils::xpQuery($scopeElement, '/root/shibmd:Scope');
+        $scopeElements = XMLUtils::xpQuery($scopeElement, '/root/shibmd:Scope');
         $this->assertCount(1, $scopeElements);
         $scopeElement = $scopeElements[0];
 

@@ -7,8 +7,8 @@ namespace SimpleSAML\SAML2\XML\saml;
 use DOMElement;
 use SimpleSAML\Assert\Assert;
 use SimpleSAML\SAML2\Constants;
-use SimpleSAML\SAML2\Exception\InvalidDOMElementException;
-use SimpleSAML\SAML2\Utils;
+use SimpleSAML\XML\Exception\InvalidDOMElementException;
+use SimpleSAML\XML\Utils as XMLUtils;
 
 /**
  * Class representing SAML 2 Conditions element.
@@ -18,35 +18,23 @@ use SimpleSAML\SAML2\Utils;
  */
 final class Conditions extends AbstractSamlElement
 {
-    /**
-     * @var int|null
-     */
-    protected $notBefore;
+    /** @var int|null */
+    protected ?int $notBefore;
 
-    /**
-     * @var int|null
-     */
-    protected $notOnOrAfter;
+    /** @var int|null */
+    protected ?int $notOnOrAfter;
 
-    /**
-     * @var \SimpleSAML\SAML2\XML\saml\Condition[]
-     */
-    protected $condition;
+    /** @var \SimpleSAML\SAML2\XML\saml\Condition[] */
+    protected array $condition;
 
-    /**
-     * @var \SimpleSAML\SAML2\XML\saml\AudienceRestriction[]
-     */
-    protected $audienceRestriction;
+    /** @var \SimpleSAML\SAML2\XML\saml\AudienceRestriction[] */
+    protected array $audienceRestriction;
 
-    /**
-     * @var bool
-     */
-    protected $oneTimeUse = false;
+    /** @var bool */
+    protected bool $oneTimeUse = false;
 
-    /**
-     * @var \SimpleSAML\SAML2\XML\saml\ProxyRestriction|null
-     */
-    protected $proxyRestriction;
+    /** @var \SimpleSAML\SAML2\XML\saml\ProxyRestriction|null */
+    protected ?ProxyRestriction $proxyRestriction;
 
 
     /**
@@ -232,7 +220,7 @@ final class Conditions extends AbstractSamlElement
             && empty($this->notOnOrAfter)
             && empty($this->condition)
             && empty($this->audienceRestriction)
-            && empty($this->oneTimeUse)
+            && $this->oneTimeUse === false
             && empty($this->proxyRestriction)
         );
     }
@@ -244,7 +232,7 @@ final class Conditions extends AbstractSamlElement
      * @param \DOMElement $xml The XML element we should load
      * @return self
      *
-     * @throws \SimpleSAML\SAML2\Exception\InvalidDOMElementException if the qualified name of the supplied element is wrong
+     * @throws \SimpleSAML\XML\Exception\InvalidDOMElementException if the qualified name of the supplied element is wrong
      */
     public static function fromXML(DOMElement $xml): object
     {
@@ -256,12 +244,12 @@ final class Conditions extends AbstractSamlElement
 
         $condition = Condition::getChildrenOfClass($xml);
         $audienceRestriction = AudienceRestriction::getChildrenOfClass($xml);
-        $oneTimeUse = Utils::extractStrings($xml, AbstractSamlElement::NS, 'OneTimeUse');
+        $oneTimeUse = XMLUtils::extractStrings($xml, AbstractSamlElement::NS, 'OneTimeUse');
         $proxyRestriction = ProxyRestriction::getChildrenOfClass($xml);
 
         return new self(
-            $notBefore !== null ? Utils::xsDateTimeToTimestamp($notBefore) : null,
-            $notOnOrAfter !== null ? Utils::xsDateTimeToTimestamp($notOnOrAfter) : null,
+            $notBefore !== null ? XMLUtils::xsDateTimeToTimestamp($notBefore) : null,
+            $notOnOrAfter !== null ? XMLUtils::xsDateTimeToTimestamp($notOnOrAfter) : null,
             $condition,
             $audienceRestriction,
             !empty($oneTimeUse),
@@ -296,7 +284,7 @@ final class Conditions extends AbstractSamlElement
             $audienceRestriction->toXML($e);
         }
 
-        if (!empty($this->oneTimeUse)) {
+        if ($this->oneTimeUse !== false) {
             /** @psalm-suppress PossiblyNullReference */
             $e->appendChild(
                 $e->ownerDocument->createElementNS(AbstractSamlElement::NS, 'saml:OneTimeUse')

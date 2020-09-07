@@ -9,18 +9,19 @@ use DOMElement;
 use InvalidArgumentException;
 use PHPUnit\Framework\TestCase;
 use SimpleSAML\SAML2\Constants;
-use SimpleSAML\SAML2\DOMDocumentFactory;
-use SimpleSAML\SAML2\Exception\MissingAttributeException;
+use SimpleSAML\XML\DOMDocumentFactory;
+use SimpleSAML\XML\Exception\MissingAttributeException;
 use SimpleSAML\SAML2\XML\ecp\Response;
 
 /**
+ * @covers \SimpleSAML\SAML2\XML\ecp\AbstractEcpElement
  * @covers \SimpleSAML\SAML2\XML\ecp\Response
  * @package simplesamlphp/saml2
  */
 final class ResponseTest extends TestCase
 {
     /** @var \DOMDocument */
-    private $document;
+    private DOMDocument $document;
 
 
     /**

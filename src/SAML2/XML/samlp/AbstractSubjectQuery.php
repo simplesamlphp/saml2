@@ -23,7 +23,7 @@ use SimpleSAML\Assert\Assert;
 abstract class AbstractSubjectQuery extends AbstractRequest
 {
     /** @var \SimpleSAML\SAML2\XML\saml\Subject */
-    protected $subject;
+    protected Subject $subject;
 
 
     /**

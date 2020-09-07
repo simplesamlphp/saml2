@@ -6,10 +6,10 @@ namespace SimpleSAML\SAML2\XML\samlp;
 
 use DOMElement;
 use SimpleSAML\Assert\Assert;
-use SimpleSAML\SAML2\Exception\InvalidDOMElementException;
-use SimpleSAML\SAML2\Exception\MissingElementException;
-use SimpleSAML\SAML2\Exception\TooManyElementsException;
-use SimpleSAML\SAML2\Utils;
+use SimpleSAML\XML\Exception\InvalidDOMElementException;
+use SimpleSAML\XML\Exception\MissingElementException;
+use SimpleSAML\XML\Exception\TooManyElementsException;
+use SimpleSAML\XML\Utils as XMLUtils;
 
 /**
  * SAML Status data type.
@@ -20,13 +20,13 @@ use SimpleSAML\SAML2\Utils;
 final class Status extends AbstractSamlpElement
 {
     /** @var \SimpleSAML\SAML2\XML\samlp\StatusCode */
-    protected $statusCode;
+    protected StatusCode $statusCode;
 
     /** @var string|null */
-    protected $statusMessage;
+    protected ?string $statusMessage;
 
     /** @var \SimpleSAML\SAML2\XML\samlp\StatusDetail[] */
-    protected $statusDetails = [];
+    protected array $statusDetails = [];
 
 
     /**
@@ -123,9 +123,9 @@ final class Status extends AbstractSamlpElement
      * @param \DOMElement $xml The XML element we should load
      * @return \SimpleSAML\SAML2\XML\samlp\Status
      *
-     * @throws \SimpleSAML\SAML2\Exception\InvalidDOMElementException if the qualified name of the supplied element is wrong
-     * @throws \SimpleSAML\SAML2\Exception\TooManyElementsException if too many child-elements of a type are specified
-     * @throws \SimpleSAML\SAML2\Exception\MissingElementException if one of the mandatory child-elements is missing
+     * @throws \SimpleSAML\XML\Exception\InvalidDOMElementException if the qualified name of the supplied element is wrong
+     * @throws \SimpleSAML\XML\Exception\TooManyElementsException if too many child-elements of a type are specified
+     * @throws \SimpleSAML\XML\Exception\MissingElementException if one of the mandatory child-elements is missing
      */
     public static function fromXML(DOMElement $xml): object
     {
@@ -136,7 +136,7 @@ final class Status extends AbstractSamlpElement
         Assert::minCount($statusCode, 1, MissingElementException::class);
         Assert::count($statusCode, 1, TooManyElementsException::class);
 
-        $statusMessage = Utils::extractStrings($xml, AbstractSamlpElement::NS, 'StatusMessage');
+        $statusMessage = XMLUtils::extractStrings($xml, AbstractSamlpElement::NS, 'StatusMessage');
         Assert::maxCount($statusMessage, 1, TooManyElementsException::class);
 
         $statusDetails = StatusDetail::getChildrenOfClass($xml);
@@ -162,7 +162,7 @@ final class Status extends AbstractSamlpElement
         $this->statusCode->toXML($e);
 
         if (!is_null($this->statusMessage)) {
-            Utils::addString($e, AbstractSamlpElement::NS, 'samlp:StatusMessage', $this->statusMessage);
+            XMLUtils::addString($e, AbstractSamlpElement::NS, 'samlp:StatusMessage', $this->statusMessage);
         }
 
         foreach ($this->statusDetails as $sd) {

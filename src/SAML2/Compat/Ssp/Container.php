@@ -7,8 +7,8 @@ namespace SimpleSAML\SAML2\Compat\Ssp;
 use Psr\Log\LoggerInterface;
 use SimpleSAML\Assert\Assert;
 use SimpleSAML\SAML2\Compat\ContainerInterface;
-use SimpleSAML\SAML2\XML\AbstractXMLElement;
 use SimpleSAML\SAML2\XML\saml\CustomIdentifierInterface;
+use SimpleSAML\XML\AbstractXMLElement;
 use SimpleSAML\Utils\HTTP;
 use SimpleSAML\Utils\Random;
 use SimpleSAML\Utils\System;
@@ -16,13 +16,11 @@ use SimpleSAML\Utils\XML;
 
 class Container implements ContainerInterface
 {
-    /**
-     * @var \Psr\Log\LoggerInterface
-     */
-    protected $logger;
+    /** @var \Psr\Log\LoggerInterface */
+    protected LoggerInterface $logger;
 
     /** @var array */
-    protected $registry = [];
+    protected array $registry = [];
 
 
     /**

@@ -6,8 +6,8 @@ namespace SimpleSAML\SAML2\XML\mdrpi;
 
 use DOMElement;
 use SimpleSAML\Assert\Assert;
-use SimpleSAML\SAML2\Exception\InvalidDOMElementException;
-use SimpleSAML\SAML2\Utils;
+use SimpleSAML\XML\Exception\InvalidDOMElementException;
+use SimpleSAML\XML\Utils as XMLUtils;
 
 /**
  * Class for handling the mdrpi:PublicationInfo element.
@@ -22,21 +22,21 @@ final class PublicationInfo extends AbstractMdrpiElement
      *
      * @var string
      */
-    protected $publisher;
+    protected string $publisher;
 
     /**
      * The creation timestamp for the metadata, as a UNIX timestamp.
      *
      * @var int|null
      */
-    protected $creationInstant = null;
+    protected ?int $creationInstant = null;
 
     /**
      * Identifier for this metadata publication.
      *
      * @var string|null
      */
-    protected $publicationId = null;
+    protected ?string $publicationId = null;
 
     /**
      * Link to usage policy for this metadata.
@@ -45,7 +45,7 @@ final class PublicationInfo extends AbstractMdrpiElement
      *
      * @var array
      */
-    protected $UsagePolicy = [];
+    protected array $UsagePolicy = [];
 
 
     /**
@@ -169,8 +169,8 @@ final class PublicationInfo extends AbstractMdrpiElement
      * @param \DOMElement $xml The XML element we should load
      * @return self
      *
-     * @throws \SimpleSAML\SAML2\Exception\InvalidDOMElementException if the qualified name of the supplied element is wrong
-     * @throws \SimpleSAML\SAML2\Exception\MissingAttributeException if the supplied element is missing one of the mandatory attributes
+     * @throws \SimpleSAML\XML\Exception\InvalidDOMElementException if the qualified name of the supplied element is wrong
+     * @throws \SimpleSAML\XML\Exception\MissingAttributeException if the supplied element is missing one of the mandatory attributes
      */
     public static function fromXML(DOMElement $xml): object
     {
@@ -180,11 +180,11 @@ final class PublicationInfo extends AbstractMdrpiElement
         $publisher = self::getAttribute($xml, 'publisher');
         $creationInstant = self::getAttribute($xml, 'creationInstant', null);
         if ($creationInstant !== null) {
-            $creationInstant = Utils::xsDateTimeToTimestamp($creationInstant);
+            $creationInstant = XMLUtils::xsDateTimeToTimestamp($creationInstant);
         }
 
         $publicationId = self::getAttribute($xml, 'publicationId', null);
-        $UsagePolicy = Utils::extractLocalizedStrings($xml, PublicationInfo::NS, 'UsagePolicy');
+        $UsagePolicy = XMLUtils::extractLocalizedStrings($xml, PublicationInfo::NS, 'UsagePolicy');
 
         return new self($publisher, $creationInstant, $publicationId, $UsagePolicy);
     }
@@ -209,7 +209,7 @@ final class PublicationInfo extends AbstractMdrpiElement
             $e->setAttribute('publicationId', $this->publicationId);
         }
 
-        Utils::addStrings($e, PublicationInfo::NS, 'mdrpi:UsagePolicy', true, $this->UsagePolicy);
+        XMLUtils::addStrings($e, PublicationInfo::NS, 'mdrpi:UsagePolicy', true, $this->UsagePolicy);
         return $e;
     }
 }

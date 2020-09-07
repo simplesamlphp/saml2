@@ -17,14 +17,15 @@
         }
     ],
     "require": {
-        "php": ">=7.2",
+        "php": ">=7.4",
         "ext-openssl": "*",
         "ext-dom": "*",
         "ext-zlib": "*",
 
         "psr/log": "~1.1",
         "robrichards/xmlseclibs": "^3.1.0",
-        "simplesamlphp/assert": "~0.0.12"
+        "simplesamlphp/assert": "~0.0.12",
+        "simplesamlphp/xml-common": "~0.0.9"
     },
     "require-dev": {
         "mockery/mockery": "~1.3",

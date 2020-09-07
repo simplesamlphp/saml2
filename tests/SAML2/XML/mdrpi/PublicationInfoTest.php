@@ -4,21 +4,23 @@ declare(strict_types=1);
 
 namespace SimpleSAML\SAML2\XML\mdrpi;
 
+use DOMDocument;
 use PHPUnit\Framework\TestCase;
-use SimpleSAML\SAML2\DOMDocumentFactory;
-use SimpleSAML\SAML2\Exception\MissingAttributeException;
-use SimpleSAML\SAML2\Utils;
+use SimpleSAML\XML\DOMDocumentFactory;
+use SimpleSAML\XML\Exception\MissingAttributeException;
+use SimpleSAML\XML\Utils as XMLUtils;
 
 /**
  * Class \SAML2\XML\mdrpi\PublicationInfoTest
  *
  * @covers \SimpleSAML\SAML2\XML\mdrpi\PublicationInfo
+ * @covers \SimpleSAML\SAML2\XML\mdrpi\AbstractMdrpiElement
  * @package simplesamlphp/saml2
  */
 final class PublicationInfoTest extends TestCase
 {
     /** @var \DOMDocument */
-    protected $document;
+    protected DOMDocument $document;
 
 
     /**
@@ -51,7 +53,7 @@ final class PublicationInfoTest extends TestCase
         $xml = $publicationInfo->toXML($document->documentElement);
 
         /** @var \DOMElement[] $publicationInfoElements */
-        $publicationInfoElements = Utils::xpQuery(
+        $publicationInfoElements = XMLUtils::xpQuery(
             $xml,
             '/root/*[local-name()=\'PublicationInfo\' and namespace-uri()=\'urn:oasis:names:tc:SAML:metadata:rpi\']'
         );
@@ -63,7 +65,7 @@ final class PublicationInfoTest extends TestCase
         $this->assertEquals('PublicationIdValue', $publicationInfoElement->getAttribute("publicationId"));
 
         /** @var \DOMElement[] $usagePolicyElements */
-        $usagePolicyElements = Utils::xpQuery(
+        $usagePolicyElements = XMLUtils::xpQuery(
             $publicationInfoElement,
             './*[local-name()=\'UsagePolicy\' and namespace-uri()=\'urn:oasis:names:tc:SAML:metadata:rpi\']'
         );

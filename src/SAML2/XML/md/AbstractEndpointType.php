@@ -6,8 +6,8 @@ namespace SimpleSAML\SAML2\XML\md;
 
 use DOMElement;
 use SimpleSAML\Assert\Assert;
-use SimpleSAML\SAML2\Exception\InvalidDOMElementException;
-use SimpleSAML\SAML2\XML\ExtendableAttributesTrait;
+use SimpleSAML\XML\Exception\InvalidDOMElementException;
+use SimpleSAML\XML\ExtendableAttributesTrait;
 
 /**
  * Class representing SAML 2 EndpointType.
@@ -33,21 +33,21 @@ abstract class AbstractEndpointType extends AbstractMdElement
      *
      * @var string
      */
-    protected $Binding;
+    protected string $Binding;
 
     /**
      * The URI to this endpoint.
      *
      * @var string
      */
-    protected $Location;
+    protected string $Location;
 
     /**
      * The URI where responses can be delivered.
      *
      * @var string|null
      */
-    protected $ResponseLocation = null;
+    protected ?string $ResponseLocation = null;
 
 
     /**
@@ -81,8 +81,8 @@ abstract class AbstractEndpointType extends AbstractMdElement
      * @param \DOMElement $xml The XML element we should load.
      * @return static
      *
-     * @throws \SimpleSAML\SAML2\Exception\InvalidDOMElementException if the qualified name of the supplied element is wrong
-     * @throws \SimpleSAML\SAML2\Exception\MissingAttributeException if the supplied element is missing any of the mandatory attributes
+     * @throws \SimpleSAML\XML\Exception\InvalidDOMElementException if the qualified name of the supplied element is wrong
+     * @throws \SimpleSAML\XML\Exception\MissingAttributeException if the supplied element is missing any of the mandatory attributes
      */
     public static function fromXML(DOMElement $xml): object
     {

@@ -9,10 +9,8 @@ namespace SimpleSAML\SAML2\Response\Validation;
  */
 class Result
 {
-    /**
-     * @var array
-     */
-    private $errors = [];
+    /** @var array */
+    private array $errors = [];
 
 
     /**

@@ -6,8 +6,8 @@ namespace SimpleSAML\SAML2\XML\mdrpi;
 
 use DOMElement;
 use SimpleSAML\Assert\Assert;
-use SimpleSAML\SAML2\Exception\InvalidDOMElementException;
-use SimpleSAML\SAML2\Utils;
+use SimpleSAML\XML\Exception\InvalidDOMElementException;
+use SimpleSAML\XML\Utils as XMLUtils;
 
 /**
  * Class for handling the mdrpi:RegistrationInfo element.
@@ -22,14 +22,14 @@ final class RegistrationInfo extends AbstractMdrpiElement
      *
      * @var string
      */
-    protected $registrationAuthority;
+    protected string $registrationAuthority;
 
     /**
      * The registration timestamp for the metadata, as a UNIX timestamp.
      *
      * @var int|null
      */
-    protected $registrationInstant = null;
+    protected ?int $registrationInstant = null;
 
     /**
      * Link to registration policy for this metadata.
@@ -38,7 +38,7 @@ final class RegistrationInfo extends AbstractMdrpiElement
      *
      * @var array
      */
-    protected $RegistrationPolicy = [];
+    protected array $RegistrationPolicy = [];
 
 
     /**
@@ -136,8 +136,8 @@ final class RegistrationInfo extends AbstractMdrpiElement
      * @param \DOMElement $xml The XML element we should load
      * @return self
      *
-     * @throws \SimpleSAML\SAML2\Exception\InvalidDOMElementException if the qualified name of the supplied element is wrong
-     * @throws \SimpleSAML\SAML2\Exception\MissingAttributeException if the supplied element is missing one of the mandatory attributes
+     * @throws \SimpleSAML\XML\Exception\InvalidDOMElementException if the qualified name of the supplied element is wrong
+     * @throws \SimpleSAML\XML\Exception\MissingAttributeException if the supplied element is missing one of the mandatory attributes
      */
     public static function fromXML(DOMElement $xml): object
     {
@@ -147,9 +147,9 @@ final class RegistrationInfo extends AbstractMdrpiElement
         $registrationAuthority = self::getAttribute($xml, 'registrationAuthority');
         $registrationInstant = self::getAttribute($xml, 'registrationInstant', null);
         if ($registrationInstant !== null) {
-            $registrationInstant = Utils::xsDateTimeToTimestamp($registrationInstant);
+            $registrationInstant = XMLUtils::xsDateTimeToTimestamp($registrationInstant);
         }
-        $RegistrationPolicy = Utils::extractLocalizedStrings($xml, RegistrationInfo::NS, 'RegistrationPolicy');
+        $RegistrationPolicy = XMLUtils::extractLocalizedStrings($xml, RegistrationInfo::NS, 'RegistrationPolicy');
 
         return new self($registrationAuthority, $registrationInstant, $RegistrationPolicy);
     }
@@ -170,7 +170,7 @@ final class RegistrationInfo extends AbstractMdrpiElement
             $e->setAttribute('registrationInstant', gmdate('Y-m-d\TH:i:s\Z', $this->registrationInstant));
         }
 
-        Utils::addStrings($e, RegistrationInfo::NS, 'mdrpi:RegistrationPolicy', true, $this->RegistrationPolicy);
+        XMLUtils::addStrings($e, RegistrationInfo::NS, 'mdrpi:RegistrationPolicy', true, $this->RegistrationPolicy);
         return $e;
     }
 }

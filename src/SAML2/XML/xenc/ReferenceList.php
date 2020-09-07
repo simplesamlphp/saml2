@@ -6,7 +6,7 @@ namespace SimpleSAML\SAML2\XML\xenc;
 
 use DOMElement;
 use SimpleSAML\Assert\Assert;
-use SimpleSAML\SAML2\Exception\InvalidDOMElementException;
+use SimpleSAML\XML\Exception\InvalidDOMElementException;
 
 /**
  * A class containing a list of references to either encrypted data or encryption keys.
@@ -16,10 +16,10 @@ use SimpleSAML\SAML2\Exception\InvalidDOMElementException;
 class ReferenceList extends AbstractXencElement
 {
     /** @var \SimpleSAML\SAML2\XML\xenc\DataReference[] */
-    protected $dataReferences;
+    protected array $dataReferences;
 
     /** @var \SimpleSAML\SAML2\XML\xenc\KeyReference[] */
-    protected $keyreferences;
+    protected array $keyreferences;
 
 
     /**
@@ -95,7 +95,7 @@ class ReferenceList extends AbstractXencElement
     /**
      * @inheritDoc
      *
-     * @throws \SimpleSAML\SAML2\Exception\InvalidDOMElementException if the qualified name of the supplied element is wrong
+     * @throws \SimpleSAML\XML\Exception\InvalidDOMElementException if the qualified name of the supplied element is wrong
      */
     public static function fromXML(DOMElement $xml): object
     {

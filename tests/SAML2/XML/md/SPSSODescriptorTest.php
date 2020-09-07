@@ -4,17 +4,18 @@ declare(strict_types=1);
 
 namespace SimpleSAML\SAML2\XML\md;
 
+use DOMDocument;
 use PHPUnit\Framework\TestCase;
 use RobRichards\XMLSecLibs\XMLSecurityDSig;
+use SimpleSAML\Assert\AssertionFailedException;
 use SimpleSAML\SAML2\Constants;
-use SimpleSAML\SAML2\DOMDocumentFactory;
 use SimpleSAML\SAML2\SignedElementTestTrait;
-use SimpleSAML\SAML2\Utils;
 use SimpleSAML\SAML2\XML\ds\KeyInfo;
 use SimpleSAML\SAML2\XML\ds\KeyName;
 use SimpleSAML\SAML2\XML\mdrpi\PublicationInfo;
 use SimpleSAML\SAML2\XML\saml\AttributeValue;
-use SimpleSAML\Assert\AssertionFailedException;
+use SimpleSAML\XML\DOMDocumentFactory;
+use SimpleSAML\XML\Utils as XMLUtils;
 
 /**
  * Tests for the md:SPSSODescriptor element.
@@ -23,6 +24,7 @@ use SimpleSAML\Assert\AssertionFailedException;
  * @covers \SimpleSAML\SAML2\XML\md\AbstractMetadataDocument
  * @covers \SimpleSAML\SAML2\XML\md\AbstractRoleDescriptor
  * @covers \SimpleSAML\SAML2\XML\md\AbstractSSODescriptor
+ * @covers \SimpleSAML\SAML2\XML\md\AbstractMdElement
  * @package simplesamlphp/saml2
  */
 final class SPSSODescriptorTest extends TestCase
@@ -91,7 +93,7 @@ final class SPSSODescriptorTest extends TestCase
         $extensions = new Extensions([
             new PublicationInfo(
                 'http://publisher.ra/',
-                Utils::xsDateTimeToTimestamp('2020-02-03T13:46:24Z'),
+                XMLUtils::xsDateTimeToTimestamp('2020-02-03T13:46:24Z'),
                 null,
                 ['en' => 'http://publisher.ra/policy.txt']
             )
@@ -120,7 +122,7 @@ final class SPSSODescriptorTest extends TestCase
             false,
             [$attrcs1, $attrcs2],
             'someID',
-            Utils::xsDateTimeToTimestamp('2010-02-01T12:34:56Z'),
+            XMLUtils::xsDateTimeToTimestamp('2010-02-01T12:34:56Z'),
             'PT9000S',
             $extensions,
             'https://error.url/',

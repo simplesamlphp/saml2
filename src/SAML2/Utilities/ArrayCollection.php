@@ -16,7 +16,7 @@ class ArrayCollection implements Collection
     /**
      * @var array
      */
-    protected $elements;
+    protected array $elements;
 
 
     /**

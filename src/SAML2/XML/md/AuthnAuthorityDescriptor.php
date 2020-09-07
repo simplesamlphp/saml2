@@ -7,10 +7,10 @@ namespace SimpleSAML\SAML2\XML\md;
 use DOMElement;
 use SimpleSAML\Assert\Assert;
 use SimpleSAML\SAML2\Constants;
-use SimpleSAML\SAML2\Exception\InvalidDOMElementException;
-use SimpleSAML\SAML2\Exception\TooManyElementsException;
-use SimpleSAML\SAML2\Utils;
 use SimpleSAML\SAML2\XML\ds\Signature;
+use SimpleSAML\XML\Exception\InvalidDOMElementException;
+use SimpleSAML\XML\Exception\TooManyElementsException;
+use SimpleSAML\XML\Utils as XMLUtils;
 
 /**
  * Class representing SAML 2 metadata AuthnAuthorityDescriptor.
@@ -24,14 +24,14 @@ final class AuthnAuthorityDescriptor extends AbstractRoleDescriptor
      *
      * @var \SimpleSAML\SAML2\XML\md\AbstractEndpointType[]
      */
-    protected $AuthnQueryServices = [];
+    protected array $AuthnQueryServices = [];
 
     /**
      * List of AssertionIDRequestService endpoints.
      *
      * @var \SimpleSAML\SAML2\XML\md\AbstractEndpointType[]
      */
-    protected $AssertionIDRequestServices = [];
+    protected array $AssertionIDRequestServices = [];
 
     /**
      * List of supported NameID formats.
@@ -40,7 +40,7 @@ final class AuthnAuthorityDescriptor extends AbstractRoleDescriptor
      *
      * @var string[]
      */
-    protected $NameIDFormats = [];
+    protected array $NameIDFormats = [];
 
 
     /**
@@ -96,9 +96,9 @@ final class AuthnAuthorityDescriptor extends AbstractRoleDescriptor
      * @param \DOMElement $xml The XML element we should load.
      * @return self
      *
-     * @throws \SimpleSAML\SAML2\Exception\InvalidDOMElementException if the qualified name of the supplied element is wrong
-     * @throws \SimpleSAML\SAML2\Exception\MissingAttributeException if the supplied element is missing one of the mandatory attributes
-     * @throws \SimpleSAML\SAML2\Exception\TooManyElementsException if too many child-elements of a type are specified
+     * @throws \SimpleSAML\XML\Exception\InvalidDOMElementException if the qualified name of the supplied element is wrong
+     * @throws \SimpleSAML\XML\Exception\MissingAttributeException if the supplied element is missing one of the mandatory attributes
+     * @throws \SimpleSAML\XML\Exception\TooManyElementsException if too many child-elements of a type are specified
      */
     public static function fromXML(DOMElement $xml): object
     {
@@ -110,7 +110,7 @@ final class AuthnAuthorityDescriptor extends AbstractRoleDescriptor
         $authnQueryServices = AuthnQueryService::getChildrenOfClass($xml);
         $assertionIDRequestServices = AssertionIDRequestService::getChildrenOfClass($xml);
 
-        $nameIDFormats = Utils::extractStrings($xml, Constants::NS_MD, 'NameIDFormat');
+        $nameIDFormats = XMLUtils::extractStrings($xml, Constants::NS_MD, 'NameIDFormat');
 
         $validUntil = self::getAttribute($xml, 'validUntil', null);
 
@@ -129,7 +129,7 @@ final class AuthnAuthorityDescriptor extends AbstractRoleDescriptor
             $assertionIDRequestServices,
             $nameIDFormats,
             self::getAttribute($xml, 'ID', null),
-            $validUntil !== null ? Utils::xsDateTimeToTimestamp($validUntil) : null,
+            $validUntil !== null ? XMLUtils::xsDateTimeToTimestamp($validUntil) : null,
             self::getAttribute($xml, 'cacheDuration', null),
             !empty($extensions) ? $extensions[0] : null,
             self::getAttribute($xml, 'errorURL', null),
@@ -251,7 +251,7 @@ final class AuthnAuthorityDescriptor extends AbstractRoleDescriptor
             $ep->toXML($e);
         }
 
-        Utils::addStrings($e, Constants::NS_MD, 'md:NameIDFormat', false, $this->NameIDFormats);
+        XMLUtils::addStrings($e, Constants::NS_MD, 'md:NameIDFormat', false, $this->NameIDFormats);
 
         return $this->signElement($e);
     }
