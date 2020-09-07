@@ -59,7 +59,7 @@ final class AuthnRequestTest extends TestCase
 
         $authnRequestElement = $authnRequest->toXML();
 
-        $requestedAuthnContextElements = Utils::xpQuery(
+        $requestedAuthnContextElements = XMLUtils::xpQuery(
             $authnRequestElement,
             './saml_protocol:RequestedAuthnContext'
         );
@@ -134,6 +134,7 @@ final class AuthnRequestTest extends TestCase
             $subject,
             $nameIdPolicy,
             $conditions,
+            null,
             null,
             null,
             null,
@@ -354,6 +355,7 @@ AUTHNREQUEST;
             null,
             null,
             null,
+            null,
             $issuer,
             null,
             null,
@@ -423,6 +425,7 @@ AUTHNREQUEST;
 
         // basic AuthnRequest
         $request = new AuthnRequest(
+            null,
             null,
             null,
             null,
@@ -601,6 +604,7 @@ AUTHNREQUEST;
             null,
             null,
             null,
+            null,
             $issuer,
             null,
             $issueInstant,
@@ -653,6 +657,7 @@ AUTHNREQUEST;
             null,
             null,
             $nameIdPolicy,
+            null,
             null,
             null,
             null,
@@ -756,6 +761,7 @@ AUTHNREQUEST;
             null,
             null,
             $forceAuthn,
+            null,
             null,
             null,
             null,
@@ -879,6 +885,7 @@ AUTHNREQUEST;
             null,
             null,
             null,
+            null,
             $issuer,
             null,
             $issueInstant,
@@ -925,6 +932,7 @@ AUTHNREQUEST;
 
         // basic AuthnRequest
         $request = new AuthnRequest(
+            null,
             null,
             null,
             null,
@@ -1016,6 +1024,7 @@ AUTHNREQUEST;
             null,
             null,
             $assertionConsumerServiceURL,
+            null,
             $protocolBinding,
             null,
             null,
@@ -1167,6 +1176,7 @@ AUTHNREQUEST;
             null,
             null,
             $conditions,
+            null,
             null,
             null,
             null,

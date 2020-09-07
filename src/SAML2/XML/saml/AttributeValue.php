@@ -31,7 +31,7 @@ class AttributeValue extends AbstractSamlElement
      *  - string
      *  - int
      *  - null
-     *  - \SimpleSAML\XML\AbstractXMLElement
+     *  - \SimpleSAML\XML\AbstractXMLElement[]
      *
      * @throws \SimpleSAML\Assert\AssertionFailedException if the supplied value is neither a string or a DOMElement
      */
@@ -75,7 +75,7 @@ class AttributeValue extends AbstractSamlElement
     /**
      * Get this attribute value.
      *
-     * @return string|int|\SimpleSAML\XML\AbstractXMLElement|null
+     * @return string|int|\SimpleSAML\XML\AbstractXMLElement[]|null
      */
     public function getValue()
     {

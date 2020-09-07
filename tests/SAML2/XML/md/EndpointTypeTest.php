@@ -13,10 +13,10 @@ use SimpleSAML\XML\Exception\InvalidDOMElementException;
 use SimpleSAML\XML\Exception\MissingAttributeException;
 
 /**
- * Class \SAML2\XML\md\EndpointType
+ * Class \SAML2\XML\md\EndpointTypeTest
  *
  * @covers \SimpleSAML\SAML2\XML\md\AbstractMdElement
- * @covers \SimpleSAML\SAML2\XML\md\EndpointType
+ * @covers \SimpleSAML\SAML2\XML\md\AbstractEndpointType
  * @package simplesamlphp/saml2
  */
 final class EndpointTypeTest extends TestCase

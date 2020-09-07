@@ -25,7 +25,7 @@ use SimpleSAML\XMLSecurity\XMLSecurityKey;
 /**
  * Test that ensures that either the response or the assertion(s) or both must be signed.
  *
- * @covers \SimpleSAML\SAML2\Response\SignatureValidation
+ * @covers \SimpleSAML\SAML2\Response\Processor
  * @package simplesamlphp/saml2
  */
 final class SignatureValidationTest extends MockeryTestCase

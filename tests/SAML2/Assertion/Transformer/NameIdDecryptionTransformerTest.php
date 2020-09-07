@@ -2,26 +2,25 @@
 
 declare(strict_types=1);
 
-namespace SAML2\XML\saml;
+namespace SimpleSAML\SAML2\XML\saml;
 
 use PHPUnit\Framework\TestCase;
 use Psr\Log\NullLogger;
 use RobRichards\XMLSecLibs\XMLSecurityKey;
-use SAML2\Assertion\Exception\InvalidAssertionException;
-use SAML2\Assertion\ProcessorBuilder;
-use SAML2\Constants;
-use SAML2\Configuration\Destination;
-use SAML2\Configuration\IdentityProvider;
-use SAML2\Configuration\PrivateKey;
-use SAML2\Configuration\ServiceProvider;
-use SAML2\DOMDocumentFactory;
-use SAML2\Signature\Validator;
-use SAML2\Utilities\ArrayCollection;
-use SAML2\Utils;
-use SAML2\XML\samlp\Response;
-use SAML2\XML\samlp\Status;
-use SAML2\XML\samlp\StatusCode;
+use SimpleSAML\SAML2\Assertion\Exception\InvalidAssertionException;
+use SimpleSAML\SAML2\Assertion\ProcessorBuilder;
+use SimpleSAML\SAML2\Constants;
+use SimpleSAML\SAML2\Configuration\Destination;
+use SimpleSAML\SAML2\Configuration\IdentityProvider;
+use SimpleSAML\SAML2\Configuration\PrivateKey;
+use SimpleSAML\SAML2\Configuration\ServiceProvider;
+use SimpleSAML\SAML2\Signature\Validator;
+use SimpleSAML\SAML2\Utilities\ArrayCollection;
+use SimpleSAML\SAML2\XML\samlp\Response;
+use SimpleSAML\SAML2\XML\samlp\Status;
+use SimpleSAML\SAML2\XML\samlp\StatusCode;
 use SimpleSAML\TestUtils\PEMCertificatesMock;
+use SimpleSAML\XML\DOMDocumentFactory;
 
 /**
  * Tests for decryption NameIDs.

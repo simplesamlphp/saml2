@@ -5,6 +5,7 @@ declare(strict_types=1);
 namespace SimpleSAML\SAML2\Assertion\Validation\ConstraintValidator;
 
 use Mockery;
+use Mockery\Adapter\Phpunit\MockeryTestCase;
 use Mockery\MockInterface;
 use SimpleSAML\SAML2\Assertion\Validation\ConstraintValidator\SpIsValidAudience;
 use SimpleSAML\SAML2\Assertion\Validation\Result;

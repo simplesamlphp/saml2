@@ -66,11 +66,7 @@ final class ResponseTest extends TestCase
   <samlp:Status>
     <samlp:StatusCode Value="urn:oasis:names:tc:SAML:2.0:status:Success"/>
   </samlp:Status>
-  <saml:Assertion xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
-      xmlns:xs="http://www.w3.org/2001/XMLSchema"
-      Version="2.0"
-      ID="s2b7afe8e21a0910d027dfbc94ec4b862e1fbbd9ab"
-      IssueInstant="2007-12-10T11:39:48Z">
+  <saml:Assertion ID="s2b7afe8e21a0910d027dfbc94ec4b862e1fbbd9ab" IssueInstant="2007-12-10T11:39:48Z" Version="2.0">
     <saml:Issuer>max.feide.no</saml:Issuer>
     <saml:Subject>
       <saml:NameID NameQualifier="max.feide.no"
@@ -94,42 +90,40 @@ final class ResponseTest extends TestCase
     </saml:AuthnStatement>
     <saml:AttributeStatement>
       <saml:Attribute Name="givenName">
-        <saml:AttributeValue
-            xsi:type="xs:string">RkVJREUgVGVzdCBVc2VyIChnaXZlbk5hbWUpIMO4w6bDpcOYw4bDhQ==</saml:AttributeValue>
+        <saml:AttributeValue>RkVJREUgVGVzdCBVc2VyIChnaXZlbk5hbWUpIMO4w6bDpcOYw4bDhQ==</saml:AttributeValue>
       </saml:Attribute>
       <saml:Attribute Name="eduPersonPrincipalName">
-        <saml:AttributeValue xsi:type="xs:string">dGVzdEBmZWlkZS5ubw==</saml:AttributeValue>
+        <saml:AttributeValue>dGVzdEBmZWlkZS5ubw==</saml:AttributeValue>
       </saml:Attribute>
       <saml:Attribute Name="o">
-        <saml:AttributeValue xsi:type="xs:string">VU5JTkVUVA==</saml:AttributeValue>
+        <saml:AttributeValue>VU5JTkVUVA==</saml:AttributeValue>
       </saml:Attribute>
       <saml:Attribute Name="ou">
-        <saml:AttributeValue xsi:type="xs:string">VU5JTkVUVA==</saml:AttributeValue>
+        <saml:AttributeValue>VU5JTkVUVA==</saml:AttributeValue>
       </saml:Attribute>
       <saml:Attribute Name="eduPersonOrgDN">
-        <saml:AttributeValue xsi:type="xs:string">ZGM9dW5pbmV0dCxkYz1ubw==</saml:AttributeValue>
+        <saml:AttributeValue>ZGM9dW5pbmV0dCxkYz1ubw==</saml:AttributeValue>
       </saml:Attribute>
       <saml:Attribute Name="eduPersonPrimaryAffiliation">
-        <saml:AttributeValue xsi:type="xs:string">c3R1ZGVudA==</saml:AttributeValue>
+        <saml:AttributeValue>c3R1ZGVudA==</saml:AttributeValue>
       </saml:Attribute>
       <saml:Attribute Name="mail">
-        <saml:AttributeValue xsi:type="xs:string">bW9yaWEtc3VwcG9ydEB1bmluZXR0Lm5v</saml:AttributeValue>
+        <saml:AttributeValue>bW9yaWEtc3VwcG9ydEB1bmluZXR0Lm5v</saml:AttributeValue>
       </saml:Attribute>
       <saml:Attribute Name="preferredLanguage">
-        <saml:AttributeValue xsi:type="xs:string">bm8=</saml:AttributeValue>
+        <saml:AttributeValue>bm8=</saml:AttributeValue>
       </saml:Attribute>
       <saml:Attribute Name="eduPersonOrgUnitDN">
-        <saml:AttributeValue
-            xsi:type="xs:string">b3U9dW5pbmV0dCxvdT1vcmdhbml6YXRpb24sZGM9dW5pbmV0dCxkYz1ubw==</saml:AttributeValue>
+        <saml:AttributeValue>b3U9dW5pbmV0dCxvdT1vcmdhbml6YXRpb24sZGM9dW5pbmV0dCxkYz1ubw==</saml:AttributeValue>
       </saml:Attribute>
       <saml:Attribute Name="sn">
-        <saml:AttributeValue xsi:type="xs:string">RkVJREUgVGVzdCBVc2VyIChzbikgw7jDpsOlw5jDhsOF</saml:AttributeValue>
+        <saml:AttributeValue>RkVJREUgVGVzdCBVc2VyIChzbikgw7jDpsOlw5jDhsOF</saml:AttributeValue>
       </saml:Attribute>
       <saml:Attribute Name="cn">
-        <saml:AttributeValue xsi:type="xs:string">RkVJREUgVGVzdCBVc2VyIChjbikgw7jDpsOlw5jDhsOF</saml:AttributeValue>
+        <saml:AttributeValue>RkVJREUgVGVzdCBVc2VyIChjbikgw7jDpsOlw5jDhsOF</saml:AttributeValue>
       </saml:Attribute>
       <saml:Attribute Name="eduPersonAffiliation">
-        <saml:AttributeValue xsi:type="xs:string">ZW1wbG95ZWU=_c3RhZmY=_c3R1ZGVudA==</saml:AttributeValue>
+        <saml:AttributeValue>ZW1wbG95ZWU=_c3RhZmY=_c3R1ZGVudA==</saml:AttributeValue>
       </saml:Attribute>
     </saml:AttributeStatement>
   </saml:Assertion>

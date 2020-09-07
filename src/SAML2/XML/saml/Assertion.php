@@ -59,7 +59,7 @@ class Assertion extends AbstractSamlElement implements SignedElementInterface
     /**
      * The subject of this assertion
      *
-     * @var \SAML2\XML\saml\Subject|null
+     * @var \SimpleSAML\SAML2\XML\saml\Subject|null
      */
     protected ?Subject $subject;
 
@@ -93,7 +93,7 @@ class Assertion extends AbstractSamlElement implements SignedElementInterface
      *
      * To ease handling, all attribute values are represented as an array of values, also for values with a multiplicity
      * of single. There are 5 possible variants of datatypes for the values: a string, an integer, an array, a
-     * DOMNodeList or a SAML2\XML\saml\NameID object.
+     * DOMNodeList or a \SimpleSAML\SAML2\XML\saml\NameID object.
      *
      * If the attribute is an eduPersonTargetedID, the values will be SAML2\XML\saml\NameID objects.
      * If the attribute value has an type-definition (xsi:string or xsi:int), the values will be of that type.
@@ -102,7 +102,7 @@ class Assertion extends AbstractSamlElement implements SignedElementInterface
      *
      * **WARNING** a DOMNodeList cannot be serialized without data-loss and should be handled explicitly
      *
-     * @var array multi-dimensional array of \DOMNodeList|\SAML2\XML\saml\NameID|string|int|array
+     * @var array multi-dimensional array of \DOMNodeList|\SimpleSAML\SAML2\XML\saml\NameID|string|int|array
      */
     protected array $attributes = [];
 
@@ -132,7 +132,7 @@ class Assertion extends AbstractSamlElement implements SignedElementInterface
      * @param int|null $issueInstant
      * @param \SimpleSAML\SAML2\XML\saml\Subject|null $subject
      * @param \SimpleSAML\SAML2\XML\saml\Conditions|null $conditions
-     * @param \SimpleSAML\XML\AbstractStatement[] $statements
+     * @param \SimpleSAML\SAML2\XML\saml\AbstractStatement[] $statements
      */
     public function __construct(
         Issuer $issuer,
@@ -158,7 +158,7 @@ class Assertion extends AbstractSamlElement implements SignedElementInterface
     /**
      * Collect the value of the subject
      *
-     * @return \SAML2\XML\saml\Subject|null
+     * @return \SimpleSAML\SAML2\XML\saml\Subject|null
      */
     public function getSubject(): ?Subject
     {
@@ -169,7 +169,7 @@ class Assertion extends AbstractSamlElement implements SignedElementInterface
     /**
      * Set the value of the subject-property
      *
-     * @param \SAML2\XML\saml\Subject|null $subject
+     * @param \SimpleSAML\SAML2\XML\saml\Subject|null $subject
      *
      * @return void
      */
@@ -182,7 +182,7 @@ class Assertion extends AbstractSamlElement implements SignedElementInterface
     /**
      * Collect the value of the conditions-property
      *
-     * @return \SAML2\XML\saml\Conditions|null
+     * @return \SimpleSAML\SAML2\XML\saml\Conditions|null
      */
     public function getConditions(): ?Conditions
     {
@@ -193,7 +193,7 @@ class Assertion extends AbstractSamlElement implements SignedElementInterface
     /**
      * Set the value of the conditions-property
      *
-     * @param \SAML2\XML\saml\Conditions|null $conditions
+     * @param \SimpleSAML\SAML2\XML\saml\Conditions|null $conditions
      *
      * @return void
      */
@@ -204,7 +204,7 @@ class Assertion extends AbstractSamlElement implements SignedElementInterface
 
 
     /**
-     * @return \SAML2\XML\saml\AttributeStatement[]
+     * @return \SimpleSAML\SAML2\XML\saml\AttributeStatement[]
      */
     public function getAttributeStatements(): array
     {
@@ -215,7 +215,7 @@ class Assertion extends AbstractSamlElement implements SignedElementInterface
 
 
     /**
-     * @return \SAML2\XML\saml\AuthnStatement[]
+     * @return \SimpleSAML\SAML2\XML\saml\AuthnStatement[]
      */
     public function getAuthnStatements(): array
     {
@@ -226,7 +226,7 @@ class Assertion extends AbstractSamlElement implements SignedElementInterface
 
 
     /**
-     * @return \SAML2\XML\saml\Statement[]
+     * @return \SimpleSAML\SAML2\XML\saml\Statement[]
      */
     public function getStatements(): array
     {
@@ -239,7 +239,7 @@ class Assertion extends AbstractSamlElement implements SignedElementInterface
     /**
      * Set the statements in this assertion
      *
-     * @param \SAML2\XML\saml\AbstractStatement[] $statements
+     * @param \SimpleSAML\SAML2\XML\saml\AbstractStatement[] $statements
      */
     protected function setStatements(array $statements): void
     {
@@ -366,13 +366,13 @@ class Assertion extends AbstractSamlElement implements SignedElementInterface
      * Convert XML into an Assertion
      *
      * @param \DOMElement $xml The XML element we should load
-     * @return \SAML2\XML\saml\Assertion
+     * @return \SimpleSAML\SAML2\XML\saml\Assertion
      *
      * @throws \SimpleSAML\Assert\AssertionFailedException if assertions are false
-     * @throws \SAML2\Exception\InvalidDOMElementException if the qualified name of the supplied element is wrong
-     * @throws \SAML2\Exception\MissingAttributeException if the supplied element is missing one of the mandatory attributes
-     * @throws \SAML2\Exception\MissingElementException if one of the mandatory child-elements is missing
-     * @throws \SAML2\Exception\TooManyElementsException if too many child-elements of a type are specified
+     * @throws \SimpleSAML\XML\Exception\InvalidDOMElementException if the qualified name of the supplied element is wrong
+     * @throws \SimpleSAML\XML\Exception\MissingAttributeException if the supplied element is missing one of the mandatory attributes
+     * @throws \SimpleSAML\XML\Exception\MissingElementException if one of the mandatory child-elements is missing
+     * @throws \SimpleSAML\XML\Exception\TooManyElementsException if too many child-elements of a type are specified
      * @throws \Exception
      */
     public static function fromXML(DOMElement $xml): object
@@ -381,7 +381,7 @@ class Assertion extends AbstractSamlElement implements SignedElementInterface
         Assert::same($xml->namespaceURI, Assertion::NS, InvalidDOMElementException::class);
         Assert::same(self::getAttribute($xml, 'Version'), '2.0', 'Unsupported version: %s');
 
-        $issueInstant = Utils::xsDateTimeToTimestamp(self::getAttribute($xml, 'IssueInstant'));
+        $issueInstant = XMLUtils::xsDateTimeToTimestamp(self::getAttribute($xml, 'IssueInstant'));
 
         $issuer = Issuer::getChildrenOfClass($xml);
         Assert::minCount($issuer, 1, 'Missing <saml:Issuer> in assertion.', MissingElementException::class);
@@ -428,10 +428,10 @@ class Assertion extends AbstractSamlElement implements SignedElementInterface
      */
     public function toXML(DOMElement $parentElement = null): DOMElement
     {
-        $e = self::instantiateParentElement($parentElement);
+        $e = $this->instantiateParentElement($parentElement);
 
-        $e->setAttribute('Version', '2.0');
         $e->setAttribute('ID', $this->id);
+        $e->setAttribute('Version', '2.0');
         $e->setAttribute('IssueInstant', gmdate('Y-m-d\TH:i:s\Z', $this->issueInstant));
 
         $issuer = $this->issuer->toXML($e);

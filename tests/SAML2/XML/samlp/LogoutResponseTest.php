@@ -43,8 +43,8 @@ final class LogoutResponseTest extends TestCase
         $document = DOMDocumentFactory::fromString(<<<XML
 <samlp:LogoutResponse xmlns:samlp="urn:oasis:names:tc:SAML:2.0:protocol"
     xmlns:saml="urn:oasis:names:tc:SAML:2.0:assertion"
-    Version="2.0"
     ID="s2a0da3504aff978b0f8c80f6a62c713c4a2f64c5b"
+    Version="2.0"
     IssueInstant="2007-12-10T11:39:48Z"
     Destination="http://somewhere.example.org/simplesaml/saml2/sp/AssertionConsumerService.php"
     InResponseTo="_bec424fa5103428909a30ff1e31168327f79474984">

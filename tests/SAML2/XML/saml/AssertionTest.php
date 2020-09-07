@@ -11,13 +11,14 @@ use Mockery\Adapter\Phpunit\MockeryTestCase;
 use SimpleSAML\SAML2\Constants;
 use SimpleSAML\XML\Chunk;
 use SimpleSAML\XML\DOMDocumentFactory;
+use SimpleSAML\XML\Exception\MissingElementException;
 use SimpleSAML\XML\Exception\TooManyElementsException;
 use SimpleSAML\XML\Utils as XMLUtils;
 use SimpleSAML\XMLSecurity\TestUtils\PEMCertificatesMock;
 use SimpleSAML\XMLSecurity\XMLSecurityKey;
 
 /**
- * Class \SAML2\AssertionTest
+ * Class \SimpleSAML\SAML2\AssertionTest
  *
  * @covers \SimpleSAML\SAML2\XML\saml\Assertion
  * @covers \SimpleSAML\SAML2\XML\saml\AbstractSamlElement
@@ -968,6 +969,7 @@ XML;
         $this->assertInstanceOf(NameID::class, $nameId);
 
         $publicKey = PEMCertificatesMock::getPublicKey(XMLSecurityKey::RSA_SHA256, PEMCertificatesMock::PUBLIC_KEY);
+        /** @psalm-var \SimpleSAML\SAML2\XML\saml\EncryptedID */
         $encId = EncryptedID::fromUnencryptedElement($nameId, $publicKey);
 
         $subject = new Subject($encId);
@@ -1003,6 +1005,7 @@ XML;
         $privateKey = PEMCertificatesMock::getPrivateKey(XMLSecurityKey::RSA_SHA256, PEMCertificatesMock::PRIVATE_KEY);
         $nameID = $identifier->decrypt($privateKey, []);
 
+        $this->assertInstanceOf(NameID::class, $nameID);
         $this->assertEquals('just_a_basic_identifier', $nameID->getValue());
         $this->assertEquals('urn:oasis:names:tc:SAML:2.0:nameid-format:transient', $nameID->getFormat());
     }
@@ -1106,11 +1109,11 @@ XML;
         $pubkey->loadKey(PEMCertificatesMock::getPlainPublicKey(PEMCertificatesMock::PUBLIC_KEY));
 
         $encass = EncryptedAssertion::fromUnencryptedElement($assertion, $pubkey);
-        $doc = DOMDocumentFactory::fromString((string) $encass);
+        $doc = DOMDocumentFactory::fromString(strval($encass));
         $encass = EncryptedAssertion::fromXML($doc->documentElement);
         $privkey = new XMLSecurityKey(XMLSecurityKey::RSA_SHA256, ['type' => 'private']);
         $privkey->loadKey(PEMCertificatesMock::getPlainPrivateKey(PEMCertificatesMock::PRIVATE_KEY));
         $decrypted = $encass->decrypt($privkey);
-        $this->assertEquals((string) $assertion, (string) $decrypted);
+        $this->assertEquals(strval($assertion), strval($decrypted));
     }
 }
