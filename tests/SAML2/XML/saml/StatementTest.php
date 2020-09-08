@@ -7,10 +7,10 @@ namespace SimpleSAML\SAML2\XML\saml;
 use DOMDocument;
 use DOMElement;
 use PHPUnit\Framework\TestCase;
+use SimpleSAML\Assert\AssertionFailedException;
 use SimpleSAML\SAML2\Constants;
 use SimpleSAML\SAML2\CustomStatement;
 use SimpleSAML\XML\DOMDocumentFactory;
-use SimpleSAML\Assert\AssertionFailedException;
 
 /**
  * Class \SAML2\XML\saml\StatementTest

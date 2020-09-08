@@ -4,8 +4,8 @@ declare(strict_types=1);
 
 namespace SimpleSAML\SAML2\XML\ds;
 
-use RobRichards\XMLSecLibs\XMLSecurityDSig;
 use SimpleSAML\XML\AbstractXMLElement;
+use SimpleSAML\XMLSecurity\XMLSecurityDSig;
 
 /**
  * Abstract class to be implemented by all the classes in this namespace

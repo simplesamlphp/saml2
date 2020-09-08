@@ -6,12 +6,12 @@ namespace SimpleSAML\SAML2\XML\md;
 
 use DOMDocument;
 use PHPUnit\Framework\TestCase;
+use SimpleSAML\Assert\AssertionFailedException;
 use SimpleSAML\SAML2\Constants;
+use SimpleSAML\SAML2\XML\saml\AttributeValue;
 use SimpleSAML\XML\DOMDocumentFactory;
 use SimpleSAML\XML\Exception\MissingAttributeException;
 use SimpleSAML\XML\Exception\MissingElementException;
-use SimpleSAML\SAML2\XML\saml\AttributeValue;
-use SimpleSAML\Assert\AssertionFailedException;
 
 /**
  * Tests for the AttributeConsumingService class.

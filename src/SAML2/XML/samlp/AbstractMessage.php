@@ -7,7 +7,6 @@ namespace SimpleSAML\SAML2\XML\samlp;
 use DOMDocument;
 use DOMElement;
 use Exception;
-use RobRichards\XMLSecLibs\XMLSecurityKey;
 use SimpleSAML\Assert\Assert;
 use SimpleSAML\SAML2\Constants;
 use SimpleSAML\SAML2\Utilities\Temporal;
@@ -16,6 +15,7 @@ use SimpleSAML\SAML2\XML\ExtendableElementTrait;
 use SimpleSAML\SAML2\XML\saml\Issuer;
 use SimpleSAML\SAML2\XML\SignedElementInterface;
 use SimpleSAML\SAML2\XML\SignedElementTrait;
+use SimpleSAML\XMLSecurity\XMLSecurityKey;
 
 /**
  * Base class for all SAML 2 messages.
@@ -161,7 +161,7 @@ abstract class AbstractMessage extends AbstractSamlpElement implements SignedEle
      * signature we can validate. An exception is thrown if the signature
      * validation fails.
      *
-     * @param \RobRichards\XMLSecLibs\XMLSecurityKey $key The key we should check against
+     * @param \SimpleSAML\XMLSecurity\XMLSecurityKey $key The key we should check against
      * @throws \Exception
      * @return bool true on success, false when we don't have a signature
      */
@@ -368,7 +368,7 @@ abstract class AbstractMessage extends AbstractSamlpElement implements SignedEle
      * Wrapper method over SignedElementTrait to use as a validator for enveloped XML signatures.
      *
      * @param array $_
-     * @param \RobRichards\XMLSecLibs\XMLSecurityKey $key The key to use to verify the enveloped signature.
+     * @param \SimpleSAML\XMLSecurity\XMLSecurityKey $key The key to use to verify the enveloped signature.
      *
      * @throws \Exception If there's no enveloped signature, or it fails to validate.
      */

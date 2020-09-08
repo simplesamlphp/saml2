@@ -7,8 +7,8 @@ namespace SimpleSAML\SAML2\XML\saml;
 use DOMDocument;
 use PHPUnit\Framework\TestCase;
 use SimpleSAML\SAML2\Constants;
-use SimpleSAML\XML\DOMDocumentFactory;
 use SimpleSAML\SAML2\Utils;
+use SimpleSAML\XML\DOMDocumentFactory;
 
 /**
  * Class \SAML2\XML\saml\AuthnContextClassRefTest

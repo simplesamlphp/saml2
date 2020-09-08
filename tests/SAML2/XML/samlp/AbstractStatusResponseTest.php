@@ -5,17 +5,17 @@ declare(strict_types=1);
 namespace SimpleSAML\SAML2\XML\samlp;
 
 use PHPUnit\Framework\TestCase;
-use RobRichards\XMLSecLibs\XMLSecurityKey;
 use SimpleSAML\SAML2\Constants;
 use SimpleSAML\SAML2\XML\saml\Attribute;
 use SimpleSAML\SAML2\XML\saml\Issuer;
 use SimpleSAML\SAML2\XML\shibmd\Scope;
 use SimpleSAML\SAML2\XML\samlp\AbstractResponse;
-use SimpleSAML\TestUtils\PEMCertificatesMock;
 use SimpleSAML\XML\DOMDocumentFactory;
 use SimpleSAML\XML\Exception\MissingElementException;
 use SimpleSAML\XML\Utils as XMLUtils;
 use SimpleSAML\XML\Chunk;
+use SimpleSAML\XMLSecurity\TestUtils\PEMCertificatesMock;
+use SimpleSAML\XMLSecurity\XMLSecurityKey;
 
 /**
  * Class \SimpleSAML\SAML2\XML\samlp\AbstractStatusResponseTest

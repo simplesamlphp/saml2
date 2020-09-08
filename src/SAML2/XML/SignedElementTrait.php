@@ -6,9 +6,9 @@ namespace SimpleSAML\SAML2\XML;
 
 use DOMElement;
 use Exception;
-use RobRichards\XMLSecLibs\XMLSecurityKey;
 use SimpleSAML\Assert\Assert;
 use SimpleSAML\SAML2\XML\ds\Signature;
+use SimpleSAML\XMLSecurity\XMLSecurityKey;
 
 /**
  * Helper trait for processing signed elements.
@@ -37,7 +37,7 @@ trait SignedElementTrait
      *
      * The private key can be null, in which case we can only validate an already signed message.
      *
-     * @var \RobRichards\XMLSecLibs\XMLSecurityKey|null
+     * @var \SimpleSAML\XMLSecurity\XMLSecurityKey|null
      */
     protected ?XMLSecurityKey $signingKey = null;
 
@@ -97,7 +97,7 @@ trait SignedElementTrait
      *
      * If the key is null, the message will be sent unsigned.
      *
-     * @return \RobRichards\XMLSecLibs\XMLSecurityKey|null
+     * @return \SimpleSAML\XMLSecurity\XMLSecurityKey|null
      */
     public function getSigningKey(): ?XMLSecurityKey
     {
@@ -110,7 +110,7 @@ trait SignedElementTrait
      *
      * If the key is null, the message will be sent unsigned.
      *
-     * @param \RobRichards\XMLSecLibs\XMLSecurityKey|null $signingKey
+     * @param \SimpleSAML\XMLSecurity\XMLSecurityKey|null $signingKey
      * @return void
      */
     public function setSigningKey(XMLSecurityKey $signingKey = null): void
@@ -126,7 +126,7 @@ trait SignedElementTrait
      * signature we can validate. An exception is thrown if the signature
      * validation fails.
      *
-     * @param  \RobRichards\XMLSecLibs\XMLSecurityKey $key The key we should check against.
+     * @param  \SimpleSAML\XMLSecurity\XMLSecurityKey $key The key we should check against.
      * @return bool True on success, false when we don't have a signature.
      * @throws \Exception
      */

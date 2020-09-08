@@ -6,12 +6,12 @@ namespace SimpleSAML\SAML2\XML\md;
 
 use Exception;
 use PHPUnit\Framework\TestCase;
+use SimpleSAML\Assert\AssertionFailedException;
 use SimpleSAML\SAML2\Constants;
-use SimpleSAML\XML\DOMDocumentFactory;
 use SimpleSAML\SAML2\SignedElementTestTrait;
 use SimpleSAML\SAML2\XML\saml\Attribute;
 use SimpleSAML\SAML2\XML\saml\AttributeValue;
-use SimpleSAML\Assert\AssertionFailedException;
+use SimpleSAML\XML\DOMDocumentFactory;
 
 /**
  * Tests for the AttributeAuthorityDescriptor class.

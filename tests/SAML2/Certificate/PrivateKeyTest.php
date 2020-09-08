@@ -6,7 +6,7 @@ namespace SimpleSAML\SAML2\Certificate;
 
 use Mockery\Adapter\Phpunit\MockeryTestCase;
 use SimpleSAML\SAML2\Certificate\PrivateKey;
-use SimpleSAML\TestUtils\PEMCertificatesMock;
+use SimpleSAML\XMLSecurity\TestUtils\PEMCertificatesMock;
 
 /**
  * @covers \SimpleSAML\SAML2\Certificate\PrivateKey

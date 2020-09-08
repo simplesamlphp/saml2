@@ -9,7 +9,6 @@ use Mockery;
 use Mockery\MockInterface;
 use Mockery\Adapter\Phpunit\MockeryTestCase;
 use Psr\Log\NullLogger;
-use RobRichards\XMLSecLibs\XMLSecurityKey;
 use SimpleSAML\SAML2\Assertion\Processor as AssertionProcessor;
 use SimpleSAML\SAML2\Configuration\Destination;
 use SimpleSAML\SAML2\Configuration\IdentityProvider;
@@ -20,7 +19,8 @@ use SimpleSAML\SAML2\Utilities\ArrayCollection;
 use SimpleSAML\SAML2\Utilities\Certificate;
 use SimpleSAML\SAML2\XML\saml\Assertion;
 use SimpleSAML\SAML2\XML\samlp\Response;
-use SimpleSAML\TestUtils\PEMCertificatesMock;
+use SimpleSAML\XMLSecurity\TestUtils\PEMCertificatesMock;
+use SimpleSAML\XMLSecurity\XMLSecurityKey;
 
 /**
  * Test that ensures that either the response or the assertion(s) or both must be signed.

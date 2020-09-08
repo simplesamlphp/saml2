@@ -6,10 +6,10 @@ namespace SimpleSAML\SAML2\Signature;
 
 use Exception;
 use Psr\Log\LoggerInterface;
-use RobRichards\XMLSecLibs\XMLSecurityKey;
 use SimpleSAML\SAML2\Utils;
 use SimpleSAML\SAML2\XML\SignedElementInterface;
 use SimpleSAML\SAML2\Utilities\ArrayCollection;
+use SimpleSAML\XMLSecurity\XMLSecurityKey;
 
 abstract class AbstractChainedValidator implements ChainedValidator
 {

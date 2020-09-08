@@ -6,9 +6,9 @@ namespace SimpleSAML\SAML2\XML\md;
 
 use DOMDocument;
 use PHPUnit\Framework\TestCase;
+use SimpleSAML\Assert\AssertionFailedException;
 use SimpleSAML\SAML2\Constants;
 use SimpleSAML\XML\DOMDocumentFactory;
-use SimpleSAML\Assert\AssertionFailedException;
 
 /**
  * Tests for md:SingleSignOnService.

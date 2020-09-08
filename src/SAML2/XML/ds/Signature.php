@@ -6,8 +6,6 @@ namespace SimpleSAML\SAML2\XML\ds;
 
 use DOMElement;
 use Exception;
-use RobRichards\XMLSecLibs\XMLSecurityDSig;
-use RobRichards\XMLSecLibs\XMLSecurityKey;
 use SimpleSAML\Assert\Assert;
 use SimpleSAML\SAML2\Utilities\Certificate;
 use SimpleSAML\SAML2\Utils;
@@ -15,6 +13,8 @@ use SimpleSAML\XML\AbstractXMLElement;
 use SimpleSAML\XML\Exception\InvalidDOMElementException;
 use SimpleSAML\XML\Exception\MissingAttributeException;
 use SimpleSAML\XML\Utils as XMLUtils;
+use SimpleSAML\XMLSecurity\XMLSecurityDSig;
+use SimpleSAML\XMLSecurity\XMLSecurityKey;
 
 /**
  * Wrapper class for XML signatures
@@ -29,10 +29,10 @@ final class Signature extends AbstractDsElement
     /** @var string[] */
     protected array $certificates = [];
 
-    /** @var \RobRichards\XMLSecLibs\XMLSecurityKey|null */
+    /** @var \SimpleSAML\XMLSecurity\XMLSecurityKey|null */
     protected ?XMLSecurityKey $key;
 
-    /** @var \RobRichards\XMLSecLibs\XMLSecurityDSig */
+    /** @var \SimpleSAML\XMLSecurity\XMLSecurityDSig */
     protected XMLSecurityDSig $signer;
 
 
@@ -41,7 +41,7 @@ final class Signature extends AbstractDsElement
      *
      * @param string $algorithm
      * @param string[] $certificates
-     * @param \RobRichards\XMLSecLibs\XMLSecurityKey|null $key
+     * @param \SimpleSAML\XMLSecurity\XMLSecurityKey|null $key
      *
      * @throws \Exception
      */
@@ -110,7 +110,7 @@ final class Signature extends AbstractDsElement
 
 
     /**
-     * @param \RobRichards\XMLSecLibs\XMLSecurityKey|null $key
+     * @param \SimpleSAML\XMLSecurity\XMLSecurityKey|null $key
      */
     protected function setKey(?XMLSecurityKey $key): void
     {

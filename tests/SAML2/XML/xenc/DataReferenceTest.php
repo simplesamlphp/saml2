@@ -6,10 +6,10 @@ namespace SimpleSAML\SAML2\XML\xenc;
 
 use DOMDocument;
 use PHPUnit\Framework\TestCase;
-use RobRichards\XMLSecLibs\XMLSecurityDsig;
 use SimpleSAML\SAML2\Constants;
 use SimpleSAML\XML\Chunk;
 use SimpleSAML\XML\DOMDocumentFactory;
+use SimpleSAML\XMLSecurity\XMLSecurityDsig;
 
 /**
  * Class \SimpleSAML\SAML2\XML\xenc\DataReferenceTest

@@ -5,7 +5,7 @@ declare(strict_types=1);
 namespace SimpleSAML\SAML2\XML\samlp;
 
 use PHPUnit\Framework\TestCase;
-use RobRichards\XMLSecLibs\XMLSecurityKey;
+use SimpleSAML\Assert\AssertionFailedException;
 use SimpleSAML\SAML2\Constants;
 use SimpleSAML\SAML2\XML\saml\AudienceRestriction;
 use SimpleSAML\SAML2\XML\saml\AuthnContextClassRef;
@@ -15,12 +15,12 @@ use SimpleSAML\SAML2\XML\saml\Issuer;
 use SimpleSAML\SAML2\XML\saml\NameID;
 use SimpleSAML\SAML2\XML\saml\ProxyRestriction;
 use SimpleSAML\SAML2\XML\saml\Subject;
-use SimpleSAML\Assert\AssertionFailedException;
-use SimpleSAML\TestUtils\PEMCertificatesMock;
 use SimpleSAML\XML\DOMDocumentFactory;
 use SimpleSAML\XML\Exception\MissingAttributeException;
 use SimpleSAML\XML\Exception\TooManyElementsException;
 use SimpleSAML\XML\Utils as XMLUtils;
+use SimpleSAML\XMLSecurity\TestUtils\PEMCertificatesMock;
+use SimpleSAML\XMLSecurity\XMLSecurityKey;
 
 /**
  * Class \SAML2\XML\samlp\AuthnRequestTest

@@ -9,9 +9,9 @@ use DOMElement;
 use InvalidArgumentException;
 use PHPUnit\Framework\TestCase;
 use SimpleSAML\SAML2\Constants;
+use SimpleSAML\SAML2\XML\ecp\Response;
 use SimpleSAML\XML\DOMDocumentFactory;
 use SimpleSAML\XML\Exception\MissingAttributeException;
-use SimpleSAML\SAML2\XML\ecp\Response;
 
 /**
  * @covers \SimpleSAML\SAML2\XML\ecp\AbstractEcpElement

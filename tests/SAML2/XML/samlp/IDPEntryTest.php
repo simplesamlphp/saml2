@@ -6,8 +6,8 @@ namespace SimpleSAML\SAML2\XML\samlp;
 
 use DOMDocument;
 use PHPUnit\Framework\TestCase;
-use SimpleSAML\XML\DOMDocumentFactory;
 use SimpleSAML\SAML2\XML\samlp\IDPEntry;
+use SimpleSAML\XML\DOMDocumentFactory;
 
 /**
  * Class \SAML2\XML\samlp\IDPEntryTest

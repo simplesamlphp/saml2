@@ -5,8 +5,8 @@ declare(strict_types=1);
 namespace SimpleSAML\SAML2;
 
 use DOMDocument;
-use RobRichards\XMLSecLibs\XMLSecurityKey;
-use SimpleSAML\TestUtils\PEMCertificatesMock;
+use SimpleSAML\XMLSecurity\TestUtils\PEMCertificatesMock;
+use SimpleSAML\XMLSecurity\XMLSecurityKey;
 
 /**
  * A trait providing basic tests for signed elements.

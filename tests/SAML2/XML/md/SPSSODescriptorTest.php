@@ -6,7 +6,6 @@ namespace SimpleSAML\SAML2\XML\md;
 
 use DOMDocument;
 use PHPUnit\Framework\TestCase;
-use RobRichards\XMLSecLibs\XMLSecurityDSig;
 use SimpleSAML\Assert\AssertionFailedException;
 use SimpleSAML\SAML2\Constants;
 use SimpleSAML\SAML2\SignedElementTestTrait;
@@ -16,6 +15,7 @@ use SimpleSAML\SAML2\XML\mdrpi\PublicationInfo;
 use SimpleSAML\SAML2\XML\saml\AttributeValue;
 use SimpleSAML\XML\DOMDocumentFactory;
 use SimpleSAML\XML\Utils as XMLUtils;
+use SimpleSAML\XMLSecurity\XMLSecurityDSig;
 
 /**
  * Tests for the md:SPSSODescriptor element.

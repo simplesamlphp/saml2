@@ -8,6 +8,7 @@ use Mockery as m;
 use Mockery\MockInterface;
 use Mockery\Adapter\Phpunit\MockeryTestCase;
 use Psr\Log\LoggerInterface;
+use SimpleSAML\SAML2\Assertion\Exception\InvalidAssertionException;
 use SimpleSAML\SAML2\Assertion\Transformer\TransformerInterface;
 use SimpleSAML\SAML2\Assertion\Validation\AssertionValidator;
 use SimpleSAML\SAML2\Assertion\Validation\SubjectConfirmationValidator;
@@ -16,7 +17,6 @@ use SimpleSAML\SAML2\Signature\Validator;
 use SimpleSAML\SAML2\Utilities\ArrayCollection;
 use SimpleSAML\SAML2\XML\saml\Assertion;
 use SimpleSAML\SAML2\XML\saml\EncryptedAssertion;
-use SimpleSAML\SAML2\Assertion\Exception\InvalidAssertionException;
 use stdClass;
 
 /**

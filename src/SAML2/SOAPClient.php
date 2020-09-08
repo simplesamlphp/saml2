@@ -6,14 +6,14 @@ namespace SimpleSAML\SAML2;
 
 use DOMDocument;
 use Exception;
-use RobRichards\XMLSecLibs\XMLSecurityKey;
+use SimpleSAML\Configuration;
 use SimpleSAML\SAML2\Compat\ContainerSingleton;
 use SimpleSAML\SAML2\Exception\RuntimeException;
 use SimpleSAML\SAML2\XML\samlp\AbstractMessage;
 use SimpleSAML\SAML2\XML\samlp\MessageFactory;
-use SimpleSAML\Configuration;
 use SimpleSAML\Utils\Config;
 use SimpleSAML\Utils\Crypto;
+use SimpleSAML\XMLSecurity\XMLSecurityKey;
 use SoapClient as BUILTIN_SoapClient;
 
 /**
@@ -216,7 +216,7 @@ class SOAPClient
      * Validate a SOAP message against the certificate on the SSL connection.
      *
      * @param string $data The public key that was used on the connection.
-     * @param XMLSecurityKey $key The key we should validate the certificate against.
+     * @param \SimpleSAML\XMLSecurity\XMLSecurityKey $key The key we should validate the certificate against.
      * @throws \Exception
      * @return void
      */

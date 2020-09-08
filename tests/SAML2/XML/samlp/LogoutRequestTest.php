@@ -7,7 +7,6 @@ namespace SimpleSAML\SAML2\XML\samlp;
 use DOMDocument;
 use DOMElement;
 use Mockery\Adapter\Phpunit\MockeryTestCase;
-use RobRichards\XMLSecLibs\XMLSecurityKey;
 use SimpleSAML\SAML2\Constants;
 use SimpleSAML\SAML2\XML\ds\KeyInfo;
 use SimpleSAML\SAML2\XML\saml\EncryptedID;
@@ -19,12 +18,13 @@ use SimpleSAML\SAML2\XML\xenc\EncryptedData;
 use SimpleSAML\SAML2\XML\xenc\EncryptedKey;
 use SimpleSAML\SAML2\XML\xenc\EncryptionMethod;
 use SimpleSAML\SAML2\XML\xenc\ReferenceList;
-use SimpleSAML\TestUtils\PEMCertificatesMock;
 use SimpleSAML\XML\DOMDocumentFactory;
 use SimpleSAML\XML\Exception\MissingElementException;
 use SimpleSAML\XML\Exception\TooManyElementsException;
 use SimpleSAML\XML\Utils as XMLUtils;
 use SimpleSAML\XML\Chunk;
+use SimpleSAML\XMLSecurity\TestUtils\PEMCertificatesMock;
+use SimpleSAML\XMLSecurity\XMLSecurityKey;
 
 /**
  * Class \SAML2\XML\samlp\LogoutRequestTest

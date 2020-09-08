@@ -6,9 +6,9 @@ namespace SimpleSAML\SAML2\XML\samlp;
 
 use DOMDocument;
 use PHPUnit\Framework\TestCase;
+use SimpleSAML\SAML2\Utils;
 use SimpleSAML\SAML2\XML\saml\Issuer;
 use SimpleSAML\XML\DOMDocumentFactory;
-use SimpleSAML\SAML2\Utils;
 
 /**
  * @covers \SimpleSAML\SAML2\XML\samlp\ArtifactResolve
