@@ -6,7 +6,6 @@ namespace SimpleSAML\SAML2\XML\saml;
 
 use PHPUnit\Framework\TestCase;
 use Psr\Log\NullLogger;
-use RobRichards\XMLSecLibs\XMLSecurityKey;
 use SimpleSAML\SAML2\Assertion\Exception\InvalidAssertionException;
 use SimpleSAML\SAML2\Assertion\ProcessorBuilder;
 use SimpleSAML\SAML2\Constants;
@@ -19,8 +18,9 @@ use SimpleSAML\SAML2\Utilities\ArrayCollection;
 use SimpleSAML\SAML2\XML\samlp\Response;
 use SimpleSAML\SAML2\XML\samlp\Status;
 use SimpleSAML\SAML2\XML\samlp\StatusCode;
-use SimpleSAML\TestUtils\PEMCertificatesMock;
 use SimpleSAML\XML\DOMDocumentFactory;
+use SimpleSAML\XMLSecurity\XMLSecurityKey;
+use SimpleSAML\XMLSecurity\TestUtils\PEMCertificatesMock;
 
 /**
  * Tests for decryption NameIDs.
@@ -68,7 +68,7 @@ final class NameIdDecryptionTransformerTest extends TestCase
     protected $response;
 
     /** @var string */
-    private const FRAMEWORK = '/vendor/simplesamlphp/simplesamlphp-test-framework';
+    private const FRAMEWORK = '/vendor/simplesamlphp/xml-security';
 
 
     /**
@@ -90,7 +90,7 @@ final class NameIdDecryptionTransformerTest extends TestCase
                 'blacklistedEncryptionAlgorithms' => [],
                 'privateKeys' => [
                     new PrivateKey(
-                        getcwd() . self::FRAMEWORK . '/certificates/rsa-pem/signed.simplesamlphp.org.key',
+                        getcwd() . self::FRAMEWORK . '/resources/certificates/rsa-pem/signed.simplesamlphp.org.key',
                         'default',
                         '1234',
                         true
