@@ -8,8 +8,8 @@ use DOMDocument;
 use Exception;
 use PHPUnit\Framework\TestCase;
 use SimpleSAML\SAML2\Exception\ProtocolViolationException;
-use SimpleSAML\XML\DOMDocumentFactory;
 use SimpleSAML\SAML2\Utils;
+use SimpleSAML\XML\DOMDocumentFactory;
 
 /**
  * Class \SAML2\XML\init\RequestInitiatorTest

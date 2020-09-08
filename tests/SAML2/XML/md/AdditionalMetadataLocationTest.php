@@ -6,9 +6,9 @@ namespace SimpleSAML\SAML2\XML\md;
 
 use DOMDocument;
 use PHPUnit\Framework\TestCase;
+use SimpleSAML\Assert\AssertionFailedException;
 use SimpleSAML\XML\DOMDocumentFactory;
 use SimpleSAML\XML\Exception\MissingAttributeException;
-use SimpleSAML\Assert\AssertionFailedException;
 
 /**
  * Tests for the AdditionalMetadataLocation class

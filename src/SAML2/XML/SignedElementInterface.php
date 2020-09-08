@@ -2,7 +2,7 @@
 
 namespace SimpleSAML\SAML2\XML;
 
-use RobRichards\XMLSecLibs\XMLSecurityKey;
+use SimpleSAML\XMLSecurity\XMLSecurityKey;
 
 /**
  * An interface describing signed elements.
@@ -43,7 +43,7 @@ interface SignedElementInterface
      *
      * If the key is null, the message will be sent unsigned.
      *
-     * @param \RobRichards\XMLSecLibs\XMLSecurityKey|null $signingKey
+     * @param \SimpleSAML\XMLSecurity\XMLSecurityKey|null $signingKey
      * @return void
      */
     public function setSigningKey(XMLSecurityKey $signingKey = null): void;
@@ -55,7 +55,7 @@ interface SignedElementInterface
      * If no signature is present, false is returned. If a signature is present,
      * but cannot be verified, an exception will be thrown.
      *
-     * @param \RobRichards\XMLSecLibs\XMLSecurityKey $key The key we should check against.
+     * @param \SimpleSAML\XMLSecurity\XMLSecurityKey $key The key we should check against.
      * @return bool True if successful, false if we don't have a signature that can be verified.
      */
     public function validate(XMLSecurityKey $key): bool;

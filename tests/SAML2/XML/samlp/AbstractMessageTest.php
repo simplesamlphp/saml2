@@ -8,7 +8,7 @@ use DOMDocument;
 use DOMElement;
 use Exception;
 use Mockery\Adapter\Phpunit\MockeryTestCase;
-use RobRichards\XMLSecLibs\XMLSecurityKey;
+use SimpleSAML\Assert\AssertionFailedException;
 use SimpleSAML\SAML2\Constants;
 use SimpleSAML\SAML2\XML\ds\Signature;
 use SimpleSAML\SAML2\XML\saml\Issuer;
@@ -18,12 +18,12 @@ use SimpleSAML\SAML2\XML\samlp\MessageFactory;
 use SimpleSAML\SAML2\XML\samlp\Response;
 use SimpleSAML\SAML2\XML\samlp\Status;
 use SimpleSAML\SAML2\XML\samlp\StatusCode;
-use SimpleSAML\Assert\AssertionFailedException;
-use SimpleSAML\TestUtils\PEMCertificatesMock;
 use SimpleSAML\XML\Chunk;
 use SimpleSAML\XML\DOMDocumentFactory;
 use SimpleSAML\XML\Exception\MissingElementException;
 use SimpleSAML\XML\Utils as XMLUtils;
+use SimpleSAML\XMLSecurity\TestUtils\PEMCertificatesMock;
+use SimpleSAML\XMLSecurity\XMLSecurityKey;
 
 /**
  * @covers \SimpleSAML\SAML2\XML\samlp\AbstractMessage

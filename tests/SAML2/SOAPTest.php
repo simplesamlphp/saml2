@@ -7,9 +7,9 @@ namespace SimpleSAML\SAML2;
 use DOMDocument;
 use InvalidArgumentException;
 use Mockery\Adapter\Phpunit\MockeryTestCase;
+use SimpleSAML\Assert\AssertionFailedException;
 use SimpleSAML\SAML2\XML\samlp\ArtifactResolve;
 use SimpleSAML\SAML2\XML\samlp\MessageFactory;
-use SimpleSAML\Assert\AssertionFailedException;
 
 /**
  * @covers \SimpleSAML\SAML2\SOAP

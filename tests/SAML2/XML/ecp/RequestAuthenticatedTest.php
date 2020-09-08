@@ -7,9 +7,9 @@ namespace SimpleSAML\SAML2\XML\ecp;
 use DOMDocument;
 use PHPUnit\Framework\TestCase;
 use SimpleSAML\SAML2\Constants;
-use SimpleSAML\SAML2\DOMDocumentFactory;
-use SimpleSAML\SAML2\Exception\MissingAttributeException;
 use SimpleSAML\SAML2\XML\ecp\RequestAuthenticated;
+use SimpleSAML\XML\DOMDocumentFactory;
+use SimpleSAML\XML\Exception\MissingAttributeException;
 
 /**
  * @author Tim van Dijen, <tvdijen@gmail.com>

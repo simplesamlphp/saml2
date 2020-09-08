@@ -7,12 +7,12 @@ namespace SimpleSAML\SAML2\XML\md;
 use DOMDocument;
 use InvalidArgumentException;
 use PHPUnit\Framework\TestCase;
-use RobRichards\XMLSecLibs\XMLSecurityDSig;
+use SimpleSAML\Assert\AssertionFailedException;
 use SimpleSAML\SAML2\Constants;
 use SimpleSAML\XML\DOMDocumentFactory;
 use SimpleSAML\XML\Exception\MissingAttributeException;
 use SimpleSAML\XML\Chunk;
-use SimpleSAML\Assert\AssertionFailedException;
+use SimpleSAML\XMLSecurity\XMLSecurityDSig;
 
 /**
  * This is a test for the UnknownRoleDescriptor class.

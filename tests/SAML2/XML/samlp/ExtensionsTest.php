@@ -6,10 +6,10 @@ namespace SimpleSAML\SAML2\XML\samlp;
 
 use DOMDocument;
 use PHPUnit\Framework\TestCase;
-use SimpleSAML\XML\DOMDocumentFactory;
-use SimpleSAML\XML\Chunk;
 use SimpleSAML\SAML2\XML\saml\Attribute;
 use SimpleSAML\SAML2\XML\shibmd\Scope;
+use SimpleSAML\XML\DOMDocumentFactory;
+use SimpleSAML\XML\Chunk;
 
 /**
  * Class \SAML2\XML\samlp\ExtensionsTest

@@ -5,12 +5,12 @@ declare(strict_types=1);
 namespace SimpleSAML\SAML2;
 
 use Exception;
-use RobRichards\XMLSecLibs\XMLSecurityKey;
 use SimpleSAML\Assert\Assert;
 use SimpleSAML\SAML2\XML\samlp\AbstractMessage;
 use SimpleSAML\SAML2\XML\samlp\AbstractRequest;
 use SimpleSAML\SAML2\XML\samlp\MessageFactory;
 use SimpleSAML\XML\DOMDocumentFactory;
+use SimpleSAML\XMLSecurity\XMLSecurityKey;
 
 /**
  * Class which implements the HTTP-Redirect binding.
@@ -220,7 +220,7 @@ class HTTPRedirect extends Binding
      * Throws an exception if we are unable to validate the signature.
      *
      * @param array $data The data we need to validate the query string.
-     * @param \RobRichards\XMLSecLibs\XMLSecurityKey $key  The key we should validate the query against.
+     * @param \SimpleSAML\XMLSecurity\XMLSecurityKey $key  The key we should validate the query against.
      * @return void
      *
      * @throws \Exception

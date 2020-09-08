@@ -7,13 +7,13 @@ namespace SimpleSAML\SAML2\XML\saml;
 use DOMDocument;
 use Exception;
 use Mockery\Adapter\Phpunit\MockeryTestCase;
-use RobRichards\XMLSecLibs\XMLSecurityKey;
 use SimpleSAML\SAML2\Constants;
-use SimpleSAML\TestUtils\PEMCertificatesMock;
 use SimpleSAML\XML\Chunk;
 use SimpleSAML\XML\DOMDocumentFactory;
 use SimpleSAML\XML\Exception\TooManyElementsException;
 use SimpleSAML\XML\Utils as XMLUtils;
+use SimpleSAML\XMLSecurity\TestUtils\PEMCertificatesMock;
+use SimpleSAML\XMLSecurity\XMLSecurityKey;
 
 /**
  * Class \SAML2\AssertionTest

@@ -5,13 +5,13 @@ declare(strict_types=1);
 namespace SimpleSAML\SAML2\XML\saml;
 
 use InvalidArgumentException;
-use RobRichards\XMLSecLibs\XMLSecurityKey;
 use SimpleSAML\SAML2\Compat\ContainerSingleton;
 use SimpleSAML\SAML2\Constants;
 use SimpleSAML\SAML2\XML\EncryptedElementInterface;
 use SimpleSAML\SAML2\XML\EncryptedElementTrait;
 use SimpleSAML\SAML2\Utils;
 use SimpleSAML\XML\AbstractXMLElement;
+use SimpleSAML\XMLSecurity\XMLSecurityKey;
 
 /**
  * Class representing an encrypted identifier.

@@ -6,11 +6,11 @@ namespace SimpleSAML\SAML2\XML\saml;
 
 use DOMDocument;
 use PHPUnit\Framework\TestCase;
-use RobRichards\XMLSecLibs\XMLSecurityKey;
+use SimpleSAML\Assert\AssertionFailedException;
 use SimpleSAML\SAML2\Constants;
 use SimpleSAML\XML\DOMDocumentFactory;
-use SimpleSAML\Assert\AssertionFailedException;
-use SimpleSAML\TestUtils\PEMCertificatesMock;
+use SimpleSAML\XMLSecurity\PEMCertificatesMock;
+use SimpleSAML\XMLSecurity\XMLSecurityKey;
 
 /**
  * Class \SAML2\XML\saml\AttributeStatementTest

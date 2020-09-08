@@ -12,9 +12,9 @@ use SimpleSAML\SAML2\XML\ds\X509Data;
 use SimpleSAML\SAML2\XML\saml\NameID;
 use SimpleSAML\SAML2\XML\saml\Subject;
 use SimpleSAML\SAML2\XML\samlp\AttributeQuery;
-use SimpleSAML\TestUtils\PEMCertificatesMock;
 use SimpleSAML\XML\DOMDocumentFactory;
 use SimpleSAML\XML\Utils as XMLUtils;
+use SimpleSAML\XMLSecurity\TestUtils\PEMCertificatesMock;
 
 /**
  * Class \SAML2\UtilsTest

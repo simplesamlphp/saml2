@@ -5,7 +5,7 @@ declare(strict_types=1);
 namespace SimpleSAML\SAML2\Utilities;
 
 use PHPUnit\Framework\TestCase;
-use SimpleSAML\TestUtils\PEMCertificatesMock;
+use SimpleSAML\XMLSecurity\TestUtils\PEMCertificatesMock;
 
 /**
  * @covers \SimpleSAML\SAML2\Utilities\Certificate

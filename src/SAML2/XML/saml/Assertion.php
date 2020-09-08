@@ -8,8 +8,6 @@ use DOMElement;
 use DOMNode;
 use DOMNodeList;
 use Exception;
-use RobRichards\XMLSecLibs\XMLSecEnc;
-use RobRichards\XMLSecLibs\XMLSecurityKey;
 use SimpleSAML\Assert\Assert;
 use SimpleSAML\SAML2\Constants;
 use SimpleSAML\SAML2\Utilities\Temporal;
@@ -22,6 +20,8 @@ use SimpleSAML\XML\Exception\InvalidDOMElementException;
 use SimpleSAML\XML\Exception\MissingElementException;
 use SimpleSAML\XML\Exception\TooManyElementsException;
 use SimpleSAML\XML\Utils as XMLUtils;
+use SimpleSAML\XMLSecurity\XMLSecEnc;
+use SimpleSAML\XMLSecurity\XMLSecurityKey;
 
 /**
  * Class representing a SAML 2 assertion.
@@ -86,7 +86,7 @@ class Assertion implements SignedElementInterface
     /**
      * Private key we should use to encrypt the attributes.
      *
-     * @var XMLSecurityKey|null
+     * @var \SimpleSAML\XMLSecurity\XMLSecurityKey|null
      */
     private ?XMLSecurityKey $encryptionKey;
 
@@ -660,7 +660,7 @@ class Assertion implements SignedElementInterface
      * Otherwise, true will be returned. An exception is thrown if the
      * signature validation fails.
      *
-     * @param  XMLSecurityKey $key The key we should check against.
+     * @param  \SimpleSAML\XMLSecurity\XMLSecurityKey $key The key we should check against.
      * @return boolean        true if successful, false if it is unsigned.
      *
      * @throws \SimpleSAML\Assert\AssertionFailedException if assertions are false
@@ -792,7 +792,7 @@ class Assertion implements SignedElementInterface
     /**
      * Encrypt the NameID in the Assertion.
      *
-     * @param XMLSecurityKey $key The encryption key.
+     * @param \SimpleSAML\XMLSecurity\XMLSecurityKey $key The encryption key.
      * @return void
      *
      * @throws \InvalidArgumentException if assertions are false
@@ -833,7 +833,7 @@ class Assertion implements SignedElementInterface
     /**
      * Decrypt the NameId of the subject in the assertion.
      *
-     * @param XMLSecurityKey $key       The decryption key.
+     * @param \SimpleSAML\XMLSecurity\XMLSecurityKey $key       The decryption key.
      * @param array          $blacklist Blacklisted decryption algorithms.
      * @return void
      *
@@ -869,7 +869,7 @@ class Assertion implements SignedElementInterface
     /**
      * Decrypt the assertion attributes.
      *
-     * @param XMLSecurityKey $key
+     * @param \SimpleSAML\XMLSecurity\XMLSecurityKey $key
      * @param array $blacklist
      * @return \SimpleSAML\SAML2\XML\saml\Assertion
      *
@@ -1388,7 +1388,7 @@ class Assertion implements SignedElementInterface
     /**
      * Return the key we should use to encrypt the assertion.
      *
-     * @return XMLSecurityKey|null The key, or NULL if no key is specified..
+     * @return \SimpleSAML\XMLSecurity\XMLSecurityKey|null The key, or NULL if no key is specified..
      *
      */
     public function getEncryptionKey(): ?XMLSecurityKey
@@ -1400,7 +1400,7 @@ class Assertion implements SignedElementInterface
     /**
      * Set the private key we should use to encrypt the attributes.
      *
-     * @param XMLSecurityKey|null $Key
+     * @param \SimpleSAML\XMLSecurity\XMLSecurityKey|null $Key
      * @return void
      */
     public function setEncryptionKey(XMLSecurityKey $Key = null): void

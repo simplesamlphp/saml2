@@ -6,9 +6,8 @@ namespace SimpleSAML\SAML2\XML\ds;
 
 use DOMDocument;
 use PHPUnit\Framework\TestCase;
-use RobRichards\XMLSecLibs\XMLSecurityDSig;
 use SimpleSAML\XML\DOMDocumentFactory;
-use SimpleSAML\SAML2\Utils;
+use SimpleSAML\XMLSecurity\XMLSecurityDSig;
 
 /**
  * Class \SAML2\XML\ds\X509SubjectNameTest

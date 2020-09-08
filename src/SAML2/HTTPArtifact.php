@@ -5,18 +5,18 @@ declare(strict_types=1);
 namespace SimpleSAML\SAML2;
 
 use Exception;
-use RobRichards\XMLSecLibs\XMLSecurityKey;
 use SimpleSAML\Assert\Assert;
+use SimpleSAML\Configuration;
+use SimpleSAML\Metadata\MetaDataStorageHandler;
+use SimpleSAML\Module\saml\Message as MSG;
 use SimpleSAML\SAML2\Utilities\Temporal;
 use SimpleSAML\SAML2\XML\saml\Issuer;
 use SimpleSAML\SAML2\XML\samlp\AbstractMessage;
 use SimpleSAML\SAML2\XML\samlp\ArtifactResolve;
 use SimpleSAML\SAML2\XML\samlp\ArtifactResponse;
-use SimpleSAML\Configuration;
-use SimpleSAML\Metadata\MetaDataStorageHandler;
-use SimpleSAML\Module\saml\Message as MSG;
 use SimpleSAML\Store;
 use SimpleSAML\Utils\HTTP;
+use SimpleSAML\XMLSecurity\XMLSecurityKey;
 
 /**
  * Class which implements the HTTP-Artifact binding.
@@ -199,7 +199,7 @@ class HTTPArtifact extends Binding
      * A validator which returns true if the ArtifactResponse was signed with the given key
      *
      * @param \SimpleSAML\SAML2\XML\samlp\ArtifactResponse $message
-     * @param \RobRichards\XMLSecLibs\XMLSecurityKey $key
+     * @param \SimpleSAML\XMLSecurity\XMLSecurityKey $key
      * @return bool
      */
     public static function validateSignature(ArtifactResponse $message, XMLSecurityKey $key): bool

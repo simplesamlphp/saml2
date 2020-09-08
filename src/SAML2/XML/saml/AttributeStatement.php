@@ -5,9 +5,9 @@ declare(strict_types=1);
 namespace SimpleSAML\SAML2\XML\saml;
 
 use DOMElement;
-use RobRichards\XMLSecLibs\XMLSecurityKey;
 use SimpleSAML\Assert\Assert;
 use SimpleSAML\XML\Exception\InvalidDOMElementException;
+use SimpleSAML\XMLSecurity\XMLSecurityKey;
 
 /**
  * Class representing a SAML2 AttributeStatement
@@ -68,7 +68,7 @@ class AttributeStatement extends AbstractStatement
 
 
     /**
-     * @param \RobRichards\XMLSecLibs\XMLSecurityKey $key
+     * @param \SimpleSAML\XMLSecurity\XMLSecurityKey $key
      * @param array $blacklist
      *
      * @throws \Exception

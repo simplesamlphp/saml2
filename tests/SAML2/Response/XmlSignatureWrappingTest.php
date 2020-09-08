@@ -7,11 +7,11 @@ namespace SimpleSAML\SAML2\Response;
 use Exception;
 use Mockery\Adapter\Phpunit\MockeryTestCase;
 use SimpleSAML\SAML2\Configuration\IdentityProvider;
-use SimpleSAML\XML\DOMDocumentFactory;
 use SimpleSAML\SAML2\Signature\Validator;
 use SimpleSAML\SAML2\XML\saml\Assertion;
 use SimpleSAML\SAML2\Utilities\Certificate;
-use SimpleSAML\TestUtils\PEMCertificatesMock;
+use SimpleSAML\XML\DOMDocumentFactory;
+use SimpleSAML\XMLSecurity\TestUtils\PEMCertificatesMock;
 
 /**
  * @package simplesamlphp/saml2

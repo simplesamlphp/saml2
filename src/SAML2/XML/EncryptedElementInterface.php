@@ -4,9 +4,9 @@ declare(strict_types=1);
 
 namespace SimpleSAML\SAML2\XML;
 
-use RobRichards\XMLSecLibs\XMLSecurityKey;
 use SimpleSAML\SAML2\XML\xenc\EncryptedData;
 use SimpleSAML\XML\AbstractXMLElement;
+use SimpleSAML\XMLSecurity\XMLSecurityKey;
 
 /**
  * Interface for encrypted elements.
@@ -25,7 +25,7 @@ interface EncryptedElementInterface
 
 
     /**
-     * @param \RobRichards\XMLSecLibs\XMLSecurityKey $key The key we should use to decrypt the element.
+     * @param \SimpleSAML\XMLSecurity\XMLSecurityKey $key The key we should use to decrypt the element.
      * @param string[] $blacklist List of blacklisted encryption algorithms.
      *
      * @return \SimpleSAML\XML\AbstractXMLElement The decrypted element.

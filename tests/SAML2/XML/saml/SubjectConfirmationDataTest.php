@@ -7,10 +7,10 @@ namespace SimpleSAML\SAML2\XML\saml;
 use DOMDocument;
 use PHPUnit\Framework\TestCase;
 use SimpleSAML\SAML2\Constants;
-use SimpleSAML\XML\DOMDocumentFactory;
-use SimpleSAML\XML\Chunk;
 use SimpleSAML\SAML2\XML\ds\KeyInfo;
 use SimpleSAML\SAML2\XML\ds\KeyName;
+use SimpleSAML\XML\DOMDocumentFactory;
+use SimpleSAML\XML\Chunk;
 
 /**
  * Class \SAML2\XML\saml\SubjectConfirmationDataTest
