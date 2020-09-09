@@ -9,8 +9,8 @@ use SimpleSAML\SAML2\Compat\ContainerSingleton;
 use SimpleSAML\SAML2\Constants;
 use SimpleSAML\SAML2\XML\EncryptedElementInterface;
 use SimpleSAML\SAML2\XML\EncryptedElementTrait;
-use SimpleSAML\SAML2\Utils;
 use SimpleSAML\XML\AbstractXMLElement;
+use SimpleSAML\XMLSecurity\Utils\Security;
 use SimpleSAML\XMLSecurity\XMLSecurityKey;
 
 /**
@@ -33,7 +33,7 @@ class EncryptedID extends AbstractSamlElement implements EncryptedElementInterfa
      */
     public function decrypt(XMLSecurityKey $key, array $blacklist = []): AbstractXMLElement
     {
-        $xml = Utils::decryptElement($this->encryptedData->toXML(), $key, $blacklist);
+        $xml = Security::decryptElement($this->encryptedData->toXML(), $key, $blacklist);
         $id = implode(':', [$xml->namespaceURI, $xml->localName]);
         switch ($id) {
             case NameID::NS . ':NameID':

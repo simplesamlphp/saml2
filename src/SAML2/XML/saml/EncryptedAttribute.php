@@ -4,10 +4,10 @@ declare(strict_types=1);
 
 namespace SimpleSAML\SAML2\XML\saml;
 
-use SimpleSAML\SAML2\Utils;
-use SimpleSAML\XML\AbstractXMLElement;
 use SimpleSAML\SAML2\XML\EncryptedElementInterface;
 use SimpleSAML\SAML2\XML\EncryptedElementTrait;
+use SimpleSAML\XML\AbstractXMLElement;
+use SimpleSAML\XMLSecurity\Utils\Security;
 use SimpleSAML\XMLSecurity\XMLSecurityKey;
 
 /**
@@ -31,7 +31,7 @@ class EncryptedAttribute extends AbstractSamlElement implements EncryptedElement
      */
     public function decrypt(XMLSecurityKey $key, array $blacklist = []): AbstractXMLElement
     {
-        $attrXML = Utils::decryptElement($this->encryptedData->toXML(), $key, $blacklist);
+        $attrXML = Security::decryptElement($this->encryptedData->toXML(), $key, $blacklist);
 
         return Attribute::fromXML($attrXML);
     }

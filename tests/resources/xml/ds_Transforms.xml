@@ -1,7 +1,0 @@
-  <ds:Transforms xmlns:ds="http://www.w3.org/2000/09/xmldsig#">
-    <ds:Transform Algorithm="http://www.w3.org/TR/1999/REC-xpath-19991116">
-      <ds:XPath xmlns:xenc="http://www.w3.org/2001/04/xmlenc#">
-        self::xenc:CipherValue[@Id="example1"]
-      </ds:XPath>
-    </ds:Transform>
-  </ds:Transforms>

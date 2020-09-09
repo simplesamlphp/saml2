@@ -20,6 +20,7 @@ use SimpleSAML\XML\Exception\InvalidDOMElementException;
 use SimpleSAML\XML\Exception\MissingElementException;
 use SimpleSAML\XML\Exception\TooManyElementsException;
 use SimpleSAML\XML\Utils as XMLUtils;
+use SimpleSAML\XMLSecurity\Utils\Security as SecurityUtils;
 use SimpleSAML\XMLSecurity\XMLSecEnc;
 use SimpleSAML\XMLSecurity\XMLSecurityKey;
 
@@ -643,7 +644,7 @@ class Assertion implements SignedElementInterface
         $signatureMethod = XMLUtils::xpQuery($xml, './ds:Signature/ds:SignedInfo/ds:SignatureMethod/@Algorithm');
 
         /* Validate the signature element of the message. */
-        $sig = Utils::validateElement($xml);
+        $sig = SecurityUtils::validateElement($xml);
         if ($sig !== false) {
             $this->wasSignedAtConstruction = true;
             $this->setCertificates($sig['Certificates']);
@@ -673,7 +674,7 @@ class Assertion implements SignedElementInterface
             return false;
         }
 
-        Utils::validateSignature($this->signatureData, $key);
+        SecurityUtils::validateSignature($this->signatureData, $key);
 
         return true;
     }
@@ -847,7 +848,7 @@ class Assertion implements SignedElementInterface
             return;
         }
 
-        $nameId = Utils::decryptElement($this->encryptedNameId, $key, $blacklist);
+        $nameId = SecurityUtils::decryptElement($this->encryptedNameId, $key, $blacklist);
         Utils::getContainer()->debugMessage($nameId, 'decrypt');
         $this->nameId = NameID::fromXML($nameId);
 
@@ -889,7 +890,7 @@ class Assertion implements SignedElementInterface
         $attributes = $this->getEncryptedAttributes();
         foreach ($attributes as $attributeEnc) {
             // Decrypt node <EncryptedAttribute>
-            $attribute = Utils::decryptElement(
+            $attribute = SecurityUtils::decryptElement(
                 $attributeEnc->getElementsByTagName('EncryptedData')->item(0),
                 $key,
                 $blacklist
@@ -1489,7 +1490,7 @@ class Assertion implements SignedElementInterface
         }
 
         if ($this->signingKey !== null) {
-            Utils::insertSignature($this->signingKey, $this->certificates, $root, $issuer->nextSibling);
+            SecurityUtils::insertSignature($this->signingKey, $this->certificates, $root, $issuer->nextSibling);
         }
 
         return $root;

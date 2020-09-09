@@ -13,17 +13,17 @@ use SimpleSAML\SAML2\Compat\MockContainer;
 use SimpleSAML\SAML2\Compat\Ssp\Container;
 use SimpleSAML\SAML2\Constants;
 use SimpleSAML\SAML2\CustomBaseID;
-use SimpleSAML\SAML2\XML\ds\KeyInfo;
-use SimpleSAML\SAML2\XML\xenc\CipherData;
-use SimpleSAML\SAML2\XML\xenc\DataReference;
-use SimpleSAML\SAML2\XML\xenc\EncryptedData;
-use SimpleSAML\SAML2\XML\xenc\EncryptedKey;
-use SimpleSAML\SAML2\XML\xenc\EncryptionMethod;
-use SimpleSAML\SAML2\XML\xenc\ReferenceList;
 use SimpleSAML\XML\Chunk;
 use SimpleSAML\XML\DOMDocumentFactory;
 use SimpleSAML\XML\Utils as XMLUtils;
 use SimpleSAML\XMLSecurity\TestUtils\PEMCertificatesMock;
+use SimpleSAML\XMLSecurity\XML\ds\KeyInfo;
+use SimpleSAML\XMLSecurity\XML\xenc\CipherData;
+use SimpleSAML\XMLSecurity\XML\xenc\DataReference;
+use SimpleSAML\XMLSecurity\XML\xenc\EncryptedData;
+use SimpleSAML\XMLSecurity\XML\xenc\EncryptedKey;
+use SimpleSAML\XMLSecurity\XML\xenc\EncryptionMethod;
+use SimpleSAML\XMLSecurity\XML\xenc\ReferenceList;
 use SimpleSAML\XMLSecurity\XMLSecurityKey;
 
 /**
@@ -52,7 +52,7 @@ final class EncryptedIDTest extends TestCase
         );
 
         $this->retrievalMethod = DOMDocumentFactory::fromFile(
-            dirname(dirname(dirname(dirname(__FILE__)))) . '/resources/xml/ds_RetrievalMethod.xml'
+            dirname(dirname(dirname(dirname(dirname(__FILE__))))) . '/vendor/simplesamlphp/xml-security/tests/resources/xml/ds_RetrievalMethod.xml'
         );
     }
 

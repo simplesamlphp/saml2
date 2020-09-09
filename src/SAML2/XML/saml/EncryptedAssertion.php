@@ -8,6 +8,7 @@ use SimpleSAML\SAML2\XML\EncryptedElementInterface;
 use SimpleSAML\SAML2\XML\EncryptedElementTrait;
 use SimpleSAML\SAML2\Utils;
 use SimpleSAML\XML\AbstractXMLElement;
+use SimpleSAML\XMLSecurity\Utils\Security;
 use SimpleSAML\XMLSecurity\XMLSecurityKey;
 
 /**
@@ -34,7 +35,7 @@ class EncryptedAssertion extends AbstractSamlElement implements EncryptedElement
      */
     public function decrypt(XMLSecurityKey $key, array $blacklist = []): AbstractXMLElement
     {
-        $assertionXML = Utils::decryptElement($this->encryptedData->toXML(), $key, $blacklist);
+        $assertionXML = Security::decryptElement($this->encryptedData->toXML(), $key, $blacklist);
 
         Utils::getContainer()->debugMessage($assertionXML, 'decrypt');
 

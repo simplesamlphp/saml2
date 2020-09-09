@@ -7,12 +7,12 @@ namespace SimpleSAML\SAML2\XML\md;
 use DOMElement;
 use SimpleSAML\Assert\Assert;
 use SimpleSAML\SAML2\Constants;
-use SimpleSAML\SAML2\XML\ds\Signature;
 use SimpleSAML\SAML2\XML\saml\Attribute;
 use SimpleSAML\XML\Exception\InvalidDOMElementException;
 use SimpleSAML\XML\Exception\MissingElementException;
 use SimpleSAML\XML\Exception\TooManyElementsException;
 use SimpleSAML\XML\Utils as XMLUtils;
+use SimpleSAML\XMLSecurity\XML\ds\Signature;
 
 /**
  * Class representing SAML 2 metadata AttributeAuthorityDescriptor.

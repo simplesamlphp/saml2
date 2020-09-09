@@ -7,11 +7,11 @@ namespace SimpleSAML\SAML2\XML\samlp;
 use DOMElement;
 use SimpleSAML\Assert\Assert;
 use SimpleSAML\SAML2\Constants;
-use SimpleSAML\SAML2\XML\ds\Signature;
 use SimpleSAML\SAML2\XML\saml\Issuer;
 use SimpleSAML\XML\Exception\InvalidDOMElementException;
 use SimpleSAML\XML\Exception\TooManyElementsException;
 use SimpleSAML\XML\Utils as XMLUtils;
+use SimpleSAML\XMLSecurity\XML\ds\Signature;
 
 /**
  * The Artifact is part of the SAML 2.0 IdP code, and it builds an artifact object.

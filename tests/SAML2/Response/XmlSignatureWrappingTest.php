@@ -9,8 +9,8 @@ use Mockery\Adapter\Phpunit\MockeryTestCase;
 use SimpleSAML\SAML2\Configuration\IdentityProvider;
 use SimpleSAML\SAML2\Signature\Validator;
 use SimpleSAML\SAML2\XML\saml\Assertion;
-use SimpleSAML\SAML2\Utilities\Certificate;
 use SimpleSAML\XML\DOMDocumentFactory;
+use SimpleSAML\XMLSecurity\Utils\Certificate;
 use SimpleSAML\XMLSecurity\TestUtils\PEMCertificatesMock;
 
 /**

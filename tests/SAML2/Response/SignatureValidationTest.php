@@ -16,10 +16,10 @@ use SimpleSAML\SAML2\Configuration\ServiceProvider;
 use SimpleSAML\SAML2\Response\Exception\UnsignedResponseException;
 use SimpleSAML\SAML2\Response\Processor as ResponseProcessor;
 use SimpleSAML\SAML2\Utilities\ArrayCollection;
-use SimpleSAML\SAML2\Utilities\Certificate;
 use SimpleSAML\SAML2\XML\saml\Assertion;
 use SimpleSAML\SAML2\XML\samlp\Response;
 use SimpleSAML\XMLSecurity\TestUtils\PEMCertificatesMock;
+use SimpleSAML\XMLSecurity\Utils\Certificate;
 use SimpleSAML\XMLSecurity\XMLSecurityKey;
 
 /**

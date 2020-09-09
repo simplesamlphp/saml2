@@ -7,10 +7,10 @@ namespace SimpleSAML\SAML2\XML\saml;
 use DOMDocument;
 use PHPUnit\Framework\TestCase;
 use SimpleSAML\SAML2\Constants;
-use SimpleSAML\SAML2\XML\ds\KeyInfo;
-use SimpleSAML\SAML2\XML\ds\KeyName;
 use SimpleSAML\XML\DOMDocumentFactory;
 use SimpleSAML\XML\Chunk;
+use SimpleSAML\XMLSecurity\XML\ds\KeyInfo;
+use SimpleSAML\XMLSecurity\XML\ds\KeyName;
 
 /**
  * Class \SAML2\XML\saml\SubjectConfirmationDataTest
@@ -157,10 +157,10 @@ final class SubjectConfirmationDataTest extends TestCase
         $this->assertEquals('testval1', $subjectConfirmationData->getAttributeNS('urn:test', 'attr1'));
         $this->assertEquals('testval2', $subjectConfirmationData->getAttributeNS('urn:test', 'attr2'));
 
-        /** @psalm-var \SimpleSAML\SAML2\XML\ds\KeyInfo $info */
+        /** @psalm-var \SimpleSAML\XMLSecurity\XML\ds\KeyInfo $info */
         $info = $subjectConfirmationData->getInfo()[0];
 
-        /** @psalm-var \SimpleSAML\SAML2\XML\ds\KeyName $keyName */
+        /** @psalm-var \SimpleSAML\XMLSecurity\XML\ds\KeyName $keyName */
         $keyName = $info->getInfo()[0];
 
         /** @psalm-var \SimpleSAML\XML\Chunk $info */

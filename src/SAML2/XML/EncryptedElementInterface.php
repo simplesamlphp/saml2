@@ -4,8 +4,8 @@ declare(strict_types=1);
 
 namespace SimpleSAML\SAML2\XML;
 
-use SimpleSAML\SAML2\XML\xenc\EncryptedData;
 use SimpleSAML\XML\AbstractXMLElement;
+use SimpleSAML\XMLSecurity\XML\xenc\EncryptedData;
 use SimpleSAML\XMLSecurity\XMLSecurityKey;
 
 /**
@@ -18,8 +18,8 @@ interface EncryptedElementInterface
     /**
      * Constructor for encrypted elements.
      *
-     * @param \SimpleSAML\SAML2\XML\xenc\EncryptedData $encryptedData The EncryptedData object.
-     * @param \SimpleSAML\SAML2\XML\xenc\EncryptedKey[] $encryptedKeys An array of zero or more EncryptedKey objects.
+     * @param \SimpleSAML\XMLSecurity\XML\xenc\EncryptedData $encryptedData The EncryptedData object.
+     * @param \SimpleSAML\XMLSecurity\XML\xenc\EncryptedKey[] $encryptedKeys An array of zero or more EncryptedKey objects.
      */
     public function __construct(EncryptedData $encryptedData, array $encryptedKeys);
 
@@ -36,7 +36,7 @@ interface EncryptedElementInterface
     /**
      * Get the EncryptedData object.
      *
-     * @return \SimpleSAML\SAML2\XML\xenc\EncryptedData
+     * @return \SimpleSAML\XMLSecurity\XML\xenc\EncryptedData
      */
     public function getEncryptedData(): EncryptedData;
 
@@ -44,7 +44,7 @@ interface EncryptedElementInterface
     /**
      * Get the array of EncryptedKey objects
      *
-     * @return \SimpleSAML\SAML2\XML\xenc\EncryptedKey[]
+     * @return \SimpleSAML\XMLSecurity\XML\xenc\EncryptedKey[]
      */
     public function getEncryptedKeys(): array;
 }
