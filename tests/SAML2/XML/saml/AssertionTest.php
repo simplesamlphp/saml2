@@ -24,8 +24,6 @@ use SimpleSAML\XMLSecurity\XMLSecurityKey;
  */
 final class AssertionTest extends MockeryTestCase
 {
-    private const FRAMEWORK = 'vendor/simplesamlphp/simplesamlphp-test-framework';
-
     /** @var \DOMDocument */
     private DOMDocument $document;
 
@@ -1111,7 +1109,7 @@ XML;
     public function testVerifySignedAssertion(): void
     {
         $doc = new DOMDocument();
-        $doc->load(self::FRAMEWORK . '/assertions/signedassertion.xml');
+        $doc->load('tests/resources/xml/assertions/signedassertion.xml');
 
         $publicKey = PEMCertificatesMock::getPublicKey(XMLSecurityKey::RSA_SHA256, PEMCertificatesMock::SELFSIGNED_PUBLIC_KEY);
 
@@ -1143,7 +1141,7 @@ XML;
     public function testCommentsInSignedAssertion(): void
     {
         $doc = new DOMDocument();
-        $doc->load(self::FRAMEWORK . '/assertions/signedassertion_with_comments.xml');
+        $doc->load('tests/resources/xml/assertions/signedassertion_with_comments.xml');
 
         $publicKey = PEMCertificatesMock::getPublicKey(XMLSecurityKey::RSA_SHA256, PEMCertificatesMock::SELFSIGNED_PUBLIC_KEY);
 
@@ -1162,7 +1160,7 @@ XML;
     public function testVerifySignedAssertionChangedBody(): void
     {
         $doc = new DOMDocument();
-        $doc->load(self::FRAMEWORK . '/assertions/signedassertion_tampered.xml');
+        $doc->load('tests/resources/xml/assertions/signedassertion_tampered.xml');
 
         $publicKey = PEMCertificatesMock::getPublicKey(XMLSecurityKey::RSA_SHA256, PEMCertificatesMock::SELFSIGNED_PUBLIC_KEY);
 
@@ -1179,7 +1177,7 @@ XML;
     public function testVerifySignedAssertionWrongKey(): void
     {
         $doc = new DOMDocument();
-        $doc->load(self::FRAMEWORK . '/assertions/signedassertion.xml');
+        $doc->load('tests/resources/xml/assertions/signedassertion.xml');
 
         $publicKey = PEMCertificatesMock::getPublicKey(XMLSecurityKey::RSA_SHA256, PEMCertificatesMock::OTHER_PUBLIC_KEY);
 
@@ -1197,7 +1195,7 @@ XML;
     public function testVerifySignedAssertionWrongKeyDSA(): void
     {
         $doc = new DOMDocument();
-        $doc->load(self::FRAMEWORK . '/assertions/signedassertion.xml');
+        $doc->load('tests/resources/xml/assertions/signedassertion.xml');
 
         $publicKey = PEMCertificatesMock::getPublicKey(XMLSecurityKey::RSA_SHA256, PEMCertificatesMock::SELFSIGNED_PUBLIC_KEY, PEMCertificatesMock::ALG_SIG_DSA);
 
