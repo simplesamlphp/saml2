@@ -22,7 +22,6 @@ use SimpleSAML\XMLSecurity\XMLSecurityKey;
  * Class \SAML2\EncryptedAssertionTest
  *
  * @package simplesamlphp/saml2
- * @author Tim van Dijen, <tvdijen@gmail.com>
  * @covers \SimpleSAML\SAML2\XML\saml\EncryptedAssertion
  * @covers \SimpleSAML\SAML2\XML\saml\AbstractSamlElement
  */

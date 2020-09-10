@@ -12,7 +12,6 @@ use SimpleSAML\XML\DOMDocumentFactory;
 use SimpleSAML\XML\Exception\MissingAttributeException;
 
 /**
- * @author Tim van Dijen, <tvdijen@gmail.com>
  * @package simplesamlphp/saml2
  * @covers \SimpleSAML\SAML2\XML\ecp\AbstractEcpElement
  * @covers \SimpleSAML\SAML2\XML\ecp\RequestAuthenticated

@@ -16,7 +16,6 @@ use SimpleSAML\XML\DOMDocumentFactory;
  * @covers \SimpleSAML\SAML2\XML\samlp\StatusCode
  * @covers \SimpleSAML\SAML2\XML\samlp\AbstractSamlpElement
  *
- * @author Tim van Dijen, <tvdijen@gmail.com>
  * @package simplesamlphp/saml2
  */
 final class StatusCodeTest extends TestCase

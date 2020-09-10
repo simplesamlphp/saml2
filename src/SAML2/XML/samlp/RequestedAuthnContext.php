@@ -14,7 +14,6 @@ use SimpleSAML\SAML2\XML\saml\AuthnContextDeclRef;
 /**
  * Class representing SAML2 RequestedAuthnContext
  *
- * @author Tim van Dijen, <tvdijen@gmail.com>
  * @package simplesamlphp/saml2
  */
 final class RequestedAuthnContext extends AbstractSamlpElement

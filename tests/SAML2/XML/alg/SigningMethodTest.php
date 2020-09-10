@@ -17,7 +17,6 @@ use SimpleSAML\SAML2\Utils;
  * @covers \SimpleSAML\SAML2\XML\alg\AbstractAlgElement
  * @covers \SimpleSAML\SAML2\XML\alg\SigningMethod
  *
- * @author Jaime Pérez Crespo, UNINETT AS <jaime.perez@uninett.no>
  * @package simplesamlphp/saml2
  */
 final class SigningMethodTest extends TestCase

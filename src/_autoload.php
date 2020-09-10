@@ -5,7 +5,6 @@ declare(strict_types=1);
 /**
  * Temporary autoloader to ensure compatibility with old, non-PSR-4 compliant classes.
  *
- * @author Jaime Pérez Crespo <jaime.perez@uninett.no>
  * @package SimpleSAMLphp
  */
 

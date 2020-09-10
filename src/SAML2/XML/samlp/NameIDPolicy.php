@@ -11,7 +11,6 @@ use SimpleSAML\XML\Exception\InvalidDOMElementException;
 /**
  * Class for handling SAML2 NameIDPolicy.
  *
- * @author Tim van Dijen, <tvdijen@gmail.com>
  * @package simplesamlphp/saml2
  */
 final class NameIDPolicy extends AbstractSamlpElement

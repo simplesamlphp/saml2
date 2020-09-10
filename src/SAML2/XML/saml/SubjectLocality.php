@@ -12,7 +12,6 @@ use SimpleSAML\Assert\Assert;
 /**
  * Class representing SAML2 SubjectLocality
  *
- * @author Tim van Dijen, <tvdijen@gmail.com>
  * @package simplesamlphp/saml2
  */
 final class SubjectLocality extends AbstractSamlElement

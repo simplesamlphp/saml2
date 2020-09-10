@@ -13,7 +13,6 @@ use SimpleSAML\XML\Utils as XMLUtils;
 /**
  * Class representing SAML 2 Conditions element.
  *
- * @author Tim van Dijen, <tvdijen@gmail.com>
  * @package simplesamlphp/saml2
  */
 final class Conditions extends AbstractSamlElement

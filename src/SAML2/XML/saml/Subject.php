@@ -16,7 +16,6 @@ use SimpleSAML\SAML2\XML\IdentifierTrait;
 /**
  * Class representing SAML 2 Subject element.
  *
- * @author Tim van Dijen, <tvdijen@gmail.com>
  * @package simplesamlphp/saml2
  */
 final class Subject extends AbstractSamlElement

@@ -16,7 +16,6 @@ use SimpleSAML\SAML2\XML\saml\IdentifierInterface;
 /**
  * Trait grouping common functionality for elements that can hold identifiers.
  *
- * @author Tim van Dijen, <tvdijen@gmail.com>
  * @package simplesamlphp/saml2
  */
 trait IdentifierTrait

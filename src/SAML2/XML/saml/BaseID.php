@@ -13,7 +13,6 @@ use SimpleSAML\SAML2\XML\IDNameQualifiersTrait;
 /**
  * SAML BaseID data type.
  *
- * @author Tim van Dijen, <tvdijen@gmail.com>
  * @package simplesamlphp/saml2
  */
 class BaseID extends AbstractSamlElement implements BaseIdentifierInterface

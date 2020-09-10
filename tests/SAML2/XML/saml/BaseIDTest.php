@@ -16,7 +16,6 @@ use SimpleSAML\XML\DOMDocumentFactory;
  * @covers \SimpleSAML\SAML2\XML\saml\BaseID
  * @covers \SimpleSAML\SAML2\XML\saml\AbstractSamlElement
  *
- * @author Tim van Dijen, <tvdijen@gmail.com>
  * @package simplesamlphp/saml2
  */
 final class BaseIDTest extends TestCase

@@ -13,7 +13,6 @@ use SimpleSAML\XML\Exception\MissingAttributeException;
 /**
  * Class representing the ECP RequestAuthenticated element.
  *
- * @author Tim van Dijen, <tvdijen@gmail.com>
  * @package simplesamlphp/saml2
  */
 final class RequestAuthenticated extends AbstractEcpElement

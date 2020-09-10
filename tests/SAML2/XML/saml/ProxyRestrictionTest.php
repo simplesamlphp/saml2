@@ -16,7 +16,6 @@ use SimpleSAML\SAML2\Constants;
  * @covers \SimpleSAML\SAML2\XML\saml\AbstractConditionType
  * @covers \SimpleSAML\SAML2\XML\saml\AbstractSamlElement
  *
- * @author Tim van Dijen, <tvdijen@gmail.com>
  * @package simplesamlphp/saml2
  */
 final class ProxyRestrictionTest extends TestCase

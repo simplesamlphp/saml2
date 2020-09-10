@@ -11,7 +11,6 @@ use SimpleSAML\XML\Exception\InvalidDOMElementException;
 /**
  * Class representing the saml:NameID element.
  *
- * @author Jaime Pérez Crespo, UNINETT AS <jaime.perez@uninett.no>
  * @package simplesamlphp/saml2
  */
 final class NameID extends NameIDType

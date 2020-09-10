@@ -13,7 +13,6 @@ use SimpleSAML\XML\Utils as XMLUtils;
 /**
  * Class representing a SAML2 AuthnStatement
  *
- * @author Tim van Dijen, <tvdijen@gmail.com>
  * @package simplesamlphp/saml2
  */
 final class AuthnStatement extends AbstractStatement

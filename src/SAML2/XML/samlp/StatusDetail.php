@@ -12,7 +12,6 @@ use SimpleSAML\XML\Chunk;
 /**
  * SAML StatusDetail data type.
  *
- * @author Tim van Dijen, <tvdijen@gmail.com>
  * @package simplesamlphp/saml2
  */
 final class StatusDetail extends AbstractSamlpElement

@@ -15,7 +15,6 @@ use SimpleSAML\XMLSecurity\XML\ds\Signature;
 /**
  * The \SAML2\ArtifactResponse, is the response to the \SAML2\ArtifactResolve.
  *
- * @author Danny Bollaert, UGent AS. <danny.bollaert@ugent.be>
  * @package simplesamlphp/saml2
  */
 class ArtifactResponse extends AbstractStatusResponse

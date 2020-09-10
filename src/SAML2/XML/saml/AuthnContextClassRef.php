@@ -13,7 +13,6 @@ use SimpleSAML\XML\Exception\InvalidDOMElementException;
 /**
  * Class representing SAML2 AuthnContextClassRef
  *
- * @author Tim van Dijen, <tvdijen@gmail.com>
  * @package simplesamlphp/saml2
  */
 final class AuthnContextClassRef extends AbstractSamlElement

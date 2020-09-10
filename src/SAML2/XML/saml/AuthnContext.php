@@ -18,7 +18,6 @@ use SimpleSAML\XML\Utils as XMLUtils;
 /**
  * Class representing SAML2 AuthnContext
  *
- * @author Tim van Dijen, <tvdijen@gmail.com>
  * @package simplesamlphp/saml2
  */
 final class AuthnContext extends AbstractSamlElement

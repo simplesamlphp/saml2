@@ -9,7 +9,6 @@ use DOMElement;
 /**
  * Interface for several types of identifiers.
  *
- * @author Tim van Dijen, <tvdijen@gmail.com>
  * @package simplesamlphp/saml2
  */
 interface IdentifierInterface

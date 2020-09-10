@@ -16,7 +16,6 @@ use SimpleSAML\XML\Chunk;
  * @covers \SimpleSAML\SAML2\XML\samlp\StatusDetail
  * @covers \SimpleSAML\SAML2\XML\samlp\AbstractSamlpElement
  *
- * @author Tim van Dijen, <tvdijen@gmail.com>
  * @package simplesamlphp/saml2
  */
 final class StatusDetailTest extends TestCase

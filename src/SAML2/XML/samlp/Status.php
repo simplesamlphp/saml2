@@ -14,7 +14,6 @@ use SimpleSAML\XML\Utils as XMLUtils;
 /**
  * SAML Status data type.
  *
- * @author Tim van Dijen, <tvdijen@gmail.com>
  * @package simplesamlphp/saml2
  */
 final class Status extends AbstractSamlpElement

@@ -21,7 +21,6 @@ use SimpleSAML\XMLSecurity\XMLSecurityKey;
 /**
  * Class which implements the HTTP-Artifact binding.
  *
- * @author  Danny Bollaert, UGent AS. <danny.bollaert@ugent.be>
  * @package simplesamlphp/saml2
  */
 class HTTPArtifact extends Binding

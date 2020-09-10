@@ -18,7 +18,6 @@ use SimpleSAML\XMLSecurity\XML\ds\Signature;
  * I am using strings, because I find them easier to work with.
  * I want to use this, to be consistent with the other saml2_requests
  *
- * @author Danny Bollaert, UGent AS. <danny.bollaert@ugent.be>
  * @package simplesamlphp/saml2
  */
 class ArtifactResolve extends AbstractRequest

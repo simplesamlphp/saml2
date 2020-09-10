@@ -14,7 +14,6 @@ use SimpleSAML\XML\Utils as XMLUtils;
 /**
  * Class for handling SAML2 IDPList.
  *
- * @author Tim van Dijen, <tvdijen@gmail.com>
  * @package simplesamlphp/saml2
  */
 final class IDPList extends AbstractSamlpElement

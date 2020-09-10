@@ -12,7 +12,6 @@ use SimpleSAML\XML\Utils as XMLUtils;
 /**
  * Class for handling SAML2 Scoping.
  *
- * @author Tim van Dijen, <tvdijen@gmail.com>
  * @package simplesamlphp/saml2
  */
 final class Scoping extends AbstractSamlpElement

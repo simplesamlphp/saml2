@@ -15,7 +15,6 @@ use SimpleSAML\SAML2\Utils;
 /**
  * Class representing SAML2 AuthnContextDecl
  *
- * @author Tim van Dijen, <tvdijen@gmail.com>
  * @package simplesamlphp/saml2
  */
 final class AuthnContextDecl extends AbstractSamlElement

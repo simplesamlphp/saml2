@@ -7,7 +7,6 @@ namespace SimpleSAML\SAML2\XML;
 /**
  * Trait grouping common functionality for elements implementing BaseIDAbstractType and NameIDType.
  *
- * @author Tim van Dijen, <tvdijen@gmail.com>
  * @package simplesamlphp/saml2
  */
 trait IDNameQualifiersTrait

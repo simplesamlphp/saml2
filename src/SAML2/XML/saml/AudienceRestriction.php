@@ -14,7 +14,6 @@ use SimpleSAML\XML\Utils as XMLUtils;
 /**
  * SAML AudienceRestriction data type.
  *
- * @author Tim van Dijen, <tvdijen@gmail.com>
  * @package simplesamlphp/saml2
  */
 final class AudienceRestriction extends AbstractConditionType

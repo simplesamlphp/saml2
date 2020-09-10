@@ -18,7 +18,6 @@ use SimpleSAML\XML\Utils as XMLUtils;
  * @covers \SimpleSAML\SAML2\XML\samlp\IDPList
  * @covers \SimpleSAML\SAML2\XML\samlp\AbstractSamlpElement
  *
- * @author Tim van Dijen, <tvdijen@gmail.com>
  * @package simplesamlphp/saml2
  */
 final class IDPListTest extends TestCase

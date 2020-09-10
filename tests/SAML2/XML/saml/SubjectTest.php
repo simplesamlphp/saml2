@@ -21,7 +21,6 @@ use SimpleSAML\XML\Utils as XMLUtils;
  * @covers \SimpleSAML\SAML2\XML\saml\Subject
  * @covers \SimpleSAML\SAML2\XML\saml\AbstractSamlElement
  *
- * @author Tim van Dijen, <tvdijen@gmail.com>
  * @package SimpleSAMLphp
  */
 final class SubjectTest extends TestCase

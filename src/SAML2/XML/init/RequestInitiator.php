@@ -14,7 +14,6 @@ use SimpleSAML\SAML2\XML\md\AbstractEndpointType;
  *
  * @link: http://docs.oasis-open.org/security/saml/Post2.0/sstc-request-initiation-cs-01.pdf
  *
- * @author Tim van Dijen, <tvdijen@gmail.com>
  * @package simplesamlphp/saml2
  */
 final class RequestInitiator extends AbstractEndpointType

@@ -13,7 +13,6 @@ use SimpleSAML\XML\Exception\InvalidDOMElementException;
  * Class for handling the alg:DigestMethod element.
  *
  * @link http://docs.oasis-open.org/security/saml/Post2.0/sstc-saml-metadata-algsupport.pdf
- * @author Jaime Pérez Crespo, UNINETT AS <jaime.perez@uninett.no>
  * @package simplesamlphp/saml2
  */
 final class DigestMethod extends AbstractAlgElement

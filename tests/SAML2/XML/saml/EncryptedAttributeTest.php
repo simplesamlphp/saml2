@@ -14,7 +14,6 @@ use SimpleSAML\XMLSecurity\XMLSecurityKey;
 /**
  * Class \SAML2\XML\saml\EncryptedAttributeTest
  *
- * @author Tim van Dijen, <tvdijen@gmail.com>
  * @package simplesamlphp/saml2
  * @covers \SimpleSAML\SAML2\XML\saml\EncryptedAttribute
  * @covers \SimpleSAML\SAML2\XML\saml\AbstractSamlElement

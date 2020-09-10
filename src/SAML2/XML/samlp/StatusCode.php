@@ -12,7 +12,6 @@ use SimpleSAML\XML\Exception\InvalidDOMElementException;
 /**
  * SAML StatusCode data type.
  *
- * @author Tim van Dijen, <tvdijen@gmail.com>
  * @package simplesamlphp/saml2
  */
 final class StatusCode extends AbstractSamlpElement

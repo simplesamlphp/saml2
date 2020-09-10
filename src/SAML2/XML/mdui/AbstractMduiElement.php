@@ -11,7 +11,6 @@ use SimpleSAML\XML\AbstractXMLElement;
  *
  * @link: http://docs.oasis-open.org/security/saml/Post2.0/sstc-saml-metadata-ui/v1.0/sstc-saml-metadata-ui-v1.0.pdf
  *
- * @author Tim van Dijen, <tvdijen@gmail.com>
  * @package simplesamlphp/saml2
  */
 abstract class AbstractMduiElement extends AbstractXMLElement

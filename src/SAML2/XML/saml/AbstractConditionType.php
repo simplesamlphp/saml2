@@ -11,7 +11,6 @@ use SimpleSAML\SAML2\Constants;
 /**
  * Abstract class to be implemented by all the conditions in this namespace
  *
- * @author Tim van Dijen, <tvdijen@gmail.com>
  * @package simplesamlphp/saml2
  */
 abstract class AbstractConditionType extends AbstractSamlElement

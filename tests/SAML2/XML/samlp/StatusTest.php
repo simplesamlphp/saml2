@@ -17,7 +17,6 @@ use SimpleSAML\XML\Utils as XMLUtils;
  * @covers \SimpleSAML\SAML2\XML\samlp\Status
  * @covers \SimpleSAML\SAML2\XML\samlp\AbstractSamlpElement
  *
- * @author Tim van Dijen, <tvdijen@gmail.com>
  * @package simplesamlphp/saml2
  */
 final class StatusTest extends TestCase
