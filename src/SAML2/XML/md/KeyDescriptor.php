@@ -9,7 +9,7 @@ use SimpleSAML\Assert\Assert;
 use SimpleSAML\XML\Exception\InvalidDOMElementException;
 use SimpleSAML\XML\Exception\MissingElementException;
 use SimpleSAML\XML\Exception\TooManyElementsException;
-use SimpleSAML\SAML2\XML\ds\KeyInfo;
+use SimpleSAML\XMLSecurity\XML\ds\KeyInfo;
 
 /**
  * Class representing a KeyDescriptor element.
@@ -30,7 +30,7 @@ final class KeyDescriptor extends AbstractMdElement
     /**
      * The KeyInfo for this key.
      *
-     * @var \SimpleSAML\SAML2\XML\ds\KeyInfo
+     * @var \SimpleSAML\XMLSecurity\XML\ds\KeyInfo
      */
     protected KeyInfo $KeyInfo;
 
@@ -45,7 +45,7 @@ final class KeyDescriptor extends AbstractMdElement
     /**
      * KeyDescriptor constructor.
      *
-     * @param \SimpleSAML\SAML2\XML\ds\KeyInfo $keyInfo
+     * @param \SimpleSAML\XMLSecurity\XML\ds\KeyInfo $keyInfo
      * @param string|null $use
      * @param \SimpleSAML\SAML2\XML\md\EncryptionMethod[] $encryptionMethod
      */
@@ -91,7 +91,7 @@ final class KeyDescriptor extends AbstractMdElement
     /**
      * Collect the value of the KeyInfo property.
      *
-     * @return \SimpleSAML\SAML2\XML\ds\KeyInfo
+     * @return \SimpleSAML\XMLSecurity\XML\ds\KeyInfo
      */
     public function getKeyInfo(): KeyInfo
     {
@@ -102,7 +102,7 @@ final class KeyDescriptor extends AbstractMdElement
     /**
      * Set the value of the KeyInfo property.
      *
-     * @param \SimpleSAML\SAML2\XML\ds\KeyInfo $keyInfo
+     * @param \SimpleSAML\XMLSecurity\XML\ds\KeyInfo $keyInfo
      */
     protected function setKeyInfo(KeyInfo $keyInfo): void
     {

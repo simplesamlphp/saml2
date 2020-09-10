@@ -6,12 +6,12 @@ namespace SimpleSAML\SAML2\XML\md;
 
 use Exception;
 use PHPUnit\Framework\TestCase;
-use SimpleSAML\XML\DOMDocumentFactory;
-use SimpleSAML\XML\Exception\MissingAttributeException;
 use SimpleSAML\SAML2\SignedElementTestTrait;
 use SimpleSAML\SAML2\Utils;
-use SimpleSAML\SAML2\XML\ds\KeyInfo;
-use SimpleSAML\SAML2\XML\ds\KeyName;
+use SimpleSAML\XML\DOMDocumentFactory;
+use SimpleSAML\XML\Exception\MissingAttributeException;
+use SimpleSAML\XMLSecurity\XML\ds\KeyInfo;
+use SimpleSAML\XMLSecurity\XML\ds\KeyName;
 
 /**
  * Tests for the AffiliationDescriptor class.

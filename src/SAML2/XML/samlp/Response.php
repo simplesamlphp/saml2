@@ -7,15 +7,15 @@ namespace SimpleSAML\SAML2\XML\samlp;
 use DOMElement;
 use SimpleSAML\Assert\Assert;
 use SimpleSAML\SAML2\Constants;
-use SimpleSAML\XML\Exception\InvalidDOMElementException;
-use SimpleSAML\XML\Exception\MissingElementException;
-use SimpleSAML\XML\Exception\TooManyElementsException;
-use SimpleSAML\SAML2\Utils;
-use SimpleSAML\SAML2\XML\ds\Signature;
 use SimpleSAML\SAML2\XML\saml\Assertion;
 use SimpleSAML\SAML2\XML\saml\EncryptedAssertion;
 use SimpleSAML\SAML2\XML\saml\Issuer;
+use SimpleSAML\XML\Exception\InvalidDOMElementException;
+use SimpleSAML\XML\Exception\MissingElementException;
+use SimpleSAML\XML\Exception\TooManyElementsException;
 use SimpleSAML\XML\Utils as XMLUtils;
+use SimpleSAML\XMLSecurity\Utils\Security;
+use SimpleSAML\XMLSecurity\XML\ds\Signature;
 
 /**
  * Class for SAML 2 Response messages.
@@ -186,7 +186,7 @@ class Response extends AbstractStatusResponse
         $issuer = empty($responseElements) ? null : $responseElements[0];
 
         if ($this->signingKey !== null) {
-            Utils::insertSignature($this->signingKey, $this->certificates, $e, $issuer->nextSibling);
+            Security::insertSignature($this->signingKey, $this->certificates, $e, $issuer->nextSibling);
         }
         return $e;
     }

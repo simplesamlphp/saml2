@@ -10,6 +10,7 @@ use SimpleSAML\SAML2\XML\samlp\AbstractMessage;
 use SimpleSAML\SAML2\XML\samlp\AbstractRequest;
 use SimpleSAML\SAML2\XML\samlp\MessageFactory;
 use SimpleSAML\XML\DOMDocumentFactory;
+use SimpleSAML\XMLSecurity\Utils\Security;
 use SimpleSAML\XMLSecurity\XMLSecurityKey;
 
 /**
@@ -240,7 +241,7 @@ class HTTPRedirect extends Binding
         $signature = base64_decode($signature);
 
         if ($key->type !== $sigAlg) {
-            $key = Utils::castKey($key, $sigAlg);
+            $key = Security::castKey($key, $sigAlg);
         }
 
         if ($key->verifySignature($query, $signature) !== 1) {

@@ -6,11 +6,11 @@ namespace SimpleSAML\SAML2\XML;
 
 use DOMElement;
 use SimpleSAML\Assert\Assert;
-use SimpleSAML\XML\Exception\InvalidDOMElementException;
 use SimpleSAML\SAML2\Utils;
-use SimpleSAML\SAML2\XML\xenc\EncryptedData;
-use SimpleSAML\SAML2\XML\xenc\EncryptedKey;
 use SimpleSAML\XML\AbstractXMLElement;
+use SimpleSAML\XML\Exception\InvalidDOMElementException;
+use SimpleSAML\XMLSecurity\XML\xenc\EncryptedData;
+use SimpleSAML\XMLSecurity\XML\xenc\EncryptedKey;
 use SimpleSAML\XMLSecurity\XMLSecEnc;
 use SimpleSAML\XMLSecurity\XMLSecurityKey;
 
@@ -24,7 +24,7 @@ trait EncryptedElementTrait
     /**
      * The current encrypted ID.
      *
-     * @var \SimpleSAML\SAML2\XML\xenc\EncryptedData
+     * @var \SimpleSAML\XMLSecurity\XML\xenc\EncryptedData
      * @psalm-suppress PropertyNotSetInConstructor
      */
     protected EncryptedData $encryptedData;
@@ -32,7 +32,7 @@ trait EncryptedElementTrait
     /**
      * A list of encrypted keys.
      *
-     * @var \SimpleSAML\SAML2\XML\xenc\EncryptedKey[]
+     * @var \SimpleSAML\XMLSecurity\XML\xenc\EncryptedKey[]
      */
     protected array $encryptedKeys = [];
 
@@ -40,8 +40,8 @@ trait EncryptedElementTrait
     /**
      * Constructor for encrypted elements.
      *
-     * @param \SimpleSAML\SAML2\XML\xenc\EncryptedData $encryptedData The EncryptedData object.
-     * @param \SimpleSAML\SAML2\XML\xenc\EncryptedKey[] $encryptedKeys An array of zero or more EncryptedKey objects.
+     * @param \SimpleSAML\XMLSecurity\XML\xenc\EncryptedData $encryptedData The EncryptedData object.
+     * @param \SimpleSAML\XMLSecurity\XML\xenc\EncryptedKey[] $encryptedKeys An array of zero or more EncryptedKey objects.
      */
     public function __construct(EncryptedData $encryptedData, array $encryptedKeys)
     {
@@ -53,7 +53,7 @@ trait EncryptedElementTrait
     /**
      * Get the EncryptedData object.
      *
-     * @return \SimpleSAML\SAML2\XML\xenc\EncryptedData
+     * @return \SimpleSAML\XMLSecurity\XML\xenc\EncryptedData
      */
     public function getEncryptedData(): EncryptedData
     {
@@ -62,7 +62,7 @@ trait EncryptedElementTrait
 
 
     /**
-     * @param \SimpleSAML\SAML2\XML\xenc\EncryptedData $encryptedData
+     * @param \SimpleSAML\XMLSecurity\XML\xenc\EncryptedData $encryptedData
      */
     protected function setEncryptedData(EncryptedData $encryptedData): void
     {
@@ -73,7 +73,7 @@ trait EncryptedElementTrait
     /**
      * Get the array of EncryptedKey objects
      *
-     * @return \SimpleSAML\SAML2\XML\xenc\EncryptedKey[]
+     * @return \SimpleSAML\XMLSecurity\XML\xenc\EncryptedKey[]
      */
     public function getEncryptedKeys(): array
     {
@@ -82,7 +82,7 @@ trait EncryptedElementTrait
 
 
     /**
-     * @param \SimpleSAML\SAML2\XML\xenc\EncryptedKey[] $encryptedKeys
+     * @param \SimpleSAML\XMLSecurity\XML\xenc\EncryptedKey[] $encryptedKeys
      */
     protected function setEncryptedKeys(array $encryptedKeys): void
     {
@@ -147,7 +147,7 @@ trait EncryptedElementTrait
         }
 
         $dom = $enc->encryptNode($symmetricKey);
-        /** @var \SimpleSAML\SAML2\XML\xenc\EncryptedData $encData */
+        /** @var \SimpleSAML\XMLSecurity\XML\xenc\EncryptedData $encData */
         $encData = EncryptedData::fromXML($dom);
         return new static($encData, []);
     }

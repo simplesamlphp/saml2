@@ -13,6 +13,7 @@ use SimpleSAML\SAML2\XML\samlp\AbstractMessage;
 use SimpleSAML\SAML2\XML\samlp\MessageFactory;
 use SimpleSAML\Utils\Config;
 use SimpleSAML\Utils\Crypto;
+use SimpleSAML\XMLSecurity\Utils as XMLUtils;
 use SimpleSAML\XMLSecurity\XMLSecurityKey;
 use SoapClient as BUILTIN_SoapClient;
 
@@ -161,7 +162,7 @@ class SOAPClient
         }
         //Extract the message from the response
         /** @var \DOMElement[] $samlresponse */
-        $samlresponse = Utils::xpQuery($dom->firstChild, '/soap-env:Envelope/soap-env:Body/*[1]');
+        $samlresponse = XMLUtils::xpQuery($dom->firstChild, '/soap-env:Envelope/soap-env:Body/*[1]');
         $samlresponse = MessageFactory::fromXML($samlresponse[0]);
 
         /* Add validator to message which uses the SSL context. */
@@ -252,7 +253,7 @@ class SOAPClient
     private function getSOAPFault(DOMDocument $soapMessage): ?string
     {
         /** @psalm-suppress PossiblyNullArgument */
-        $soapFault = Utils::xpQuery($soapMessage->firstChild, '/soap-env:Envelope/soap-env:Body/soap-env:Fault');
+        $soapFault = XMLUtils::xpQuery($soapMessage->firstChild, '/soap-env:Envelope/soap-env:Body/soap-env:Fault');
 
         if (empty($soapFault)) {
             /* No fault. */
@@ -263,7 +264,7 @@ class SOAPClient
         // There is a fault element but we haven't found out what the fault string is
         $soapFaultString = "Unknown fault string found";
         // find out the fault string
-        $faultStringElement = Utils::xpQuery($soapFaultElement, './soap-env:faultstring');
+        $faultStringElement = XMLUtils::xpQuery($soapFaultElement, './soap-env:faultstring');
         if (!empty($faultStringElement)) {
             return $faultStringElement[0]->textContent;
         }

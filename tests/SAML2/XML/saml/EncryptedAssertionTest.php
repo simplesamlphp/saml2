@@ -5,17 +5,17 @@ declare(strict_types=1);
 namespace SimpleSAML\SAML2\XML\saml;
 
 use DOMDocument;
-use Phpunit\Framework\TestCase;
-use SimpleSAML\SAML2\XML\ds\KeyInfo;
-use SimpleSAML\SAML2\XML\xenc\CipherData;
-use SimpleSAML\SAML2\XML\xenc\DataReference;
-use SimpleSAML\SAML2\XML\xenc\EncryptedData;
-use SimpleSAML\SAML2\XML\xenc\EncryptedKey;
-use SimpleSAML\SAML2\XML\xenc\EncryptionMethod;
-use SimpleSAML\SAML2\XML\xenc\ReferenceList;
+use PHPUnit\Framework\TestCase;
 use SimpleSAML\XML\DOMDocumentFactory;
 use SimpleSAML\XML\Chunk;
 use SimpleSAML\XMLSecurity\TestUtils\PEMCertificatesMock;
+use SimpleSAML\XMLSecurity\XML\ds\KeyInfo;
+use SimpleSAML\XMLSecurity\XML\xenc\CipherData;
+use SimpleSAML\XMLSecurity\XML\xenc\DataReference;
+use SimpleSAML\XMLSecurity\XML\xenc\EncryptedData;
+use SimpleSAML\XMLSecurity\XML\xenc\EncryptedKey;
+use SimpleSAML\XMLSecurity\XML\xenc\EncryptionMethod;
+use SimpleSAML\XMLSecurity\XML\xenc\ReferenceList;
 use SimpleSAML\XMLSecurity\XMLSecurityKey;
 
 /**
@@ -58,7 +58,7 @@ final class EncryptedAssertionTest extends TestCase
             null,
             null,
             new EncryptionMethod('http://www.w3.org/2001/04/xmlenc#aes128-cbc'),
-            new KeyInfo([new Chunk(DOMDocumentFactory::fromFile(dirname(dirname(dirname(dirname(__FILE__)))) . '/resources/xml/ds_RetrievalMethod.xml')->documentElement)])
+            new KeyInfo([new Chunk(DOMDocumentFactory::fromFile(dirname(dirname(dirname(dirname(dirname(__FILE__))))) . '/vendor/simplesamlphp/xml-security/tests/resources/xml/ds_RetrievalMethod.xml')->documentElement)])
         );
         $encryptedAssertion = new EncryptedAssertion($ed, []);
 

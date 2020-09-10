@@ -6,9 +6,9 @@ namespace SimpleSAML\SAML2\Signature;
 
 use Exception;
 use Psr\Log\LoggerInterface;
-use SimpleSAML\SAML2\Utils;
 use SimpleSAML\SAML2\XML\SignedElementInterface;
 use SimpleSAML\SAML2\Utilities\ArrayCollection;
+use SimpleSAML\XMLSecurity\Utils\Security;
 use SimpleSAML\XMLSecurity\XMLSecurityKey;
 
 abstract class AbstractChainedValidator implements ChainedValidator
@@ -48,7 +48,7 @@ abstract class AbstractChainedValidator implements ChainedValidator
         foreach ($pemCandidates as $index => $candidateKey) {
             $key = new XMLSecurityKey(XMLSecurityKey::RSA_SHA256, ['type' => 'public']);
             $key->loadKey($candidateKey->getCertificate());
-            $key = Utils::castKey($key, $element->getSignature()->getAlgorithm(), 'public');
+            $key = Security::castKey($key, $element->getSignature()->getAlgorithm(), 'public');
 
             try {
                 /*

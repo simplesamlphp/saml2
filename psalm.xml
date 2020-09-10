@@ -8,8 +8,8 @@
   <projectFiles>
     <directory name="src/SAML2" />
     <directory name="tests/SAML2/XML/alg" />
-    <directory name="tests/SAML2/XML/ds" />
     <directory name="tests/SAML2/XML/ecp" />
+    <directory name="tests/SAML2/XML/init" />
     <directory name="tests/SAML2/XML/md" />
     <directory name="tests/SAML2/XML/mdrpi" />
     <directory name="tests/SAML2/XML/mdui" />
