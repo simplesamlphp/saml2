@@ -90,7 +90,7 @@ final class NameIdDecryptionTransformerTest extends TestCase
                 'blacklistedEncryptionAlgorithms' => [],
                 'privateKeys' => [
                     new PrivateKey(
-                        getcwd() . self::FRAMEWORK . '/resources/certificates/rsa-pem/signed.simplesamlphp.org.key',
+                        getcwd() . self::FRAMEWORK . '/tests/resources/certificates/rsa-pem/signed.simplesamlphp.org.key',
                         'default',
                         '1234',
                         true

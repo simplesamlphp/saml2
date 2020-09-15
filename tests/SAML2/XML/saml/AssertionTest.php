@@ -594,7 +594,7 @@ XML;
     public function testVerifySignedAssertionWrongAlgorithm(): void
     {
         $doc = new DOMDocument();
-        $doc->load(self::FRAMEWORK . '/assertions/signedassertion.xml');
+        $doc->load('tests/resources/xml/assertions/signedassertion.xml');
 
         $publicKey = PEMCertificatesMock::getPublicKey(XMLSecurityKey::RSA_SHA1, PEMCertificatesMock::SELFSIGNED_PUBLIC_KEY);
 
