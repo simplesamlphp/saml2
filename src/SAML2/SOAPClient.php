@@ -13,7 +13,7 @@ use SimpleSAML\SAML2\XML\samlp\AbstractMessage;
 use SimpleSAML\SAML2\XML\samlp\MessageFactory;
 use SimpleSAML\Utils\Config;
 use SimpleSAML\Utils\Crypto;
-use SimpleSAML\XMLSecurity\Utils as XMLUtils;
+use SimpleSAML\XML\Utils as XMLUtils;
 use SimpleSAML\XMLSecurity\XMLSecurityKey;
 use SoapClient as BUILTIN_SoapClient;
 
