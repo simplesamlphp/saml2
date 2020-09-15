@@ -25,7 +25,6 @@ final class RequestedAttributeTest extends TestCase
 
 
     /**
-     * @return void
      */
     protected function setUp(): void
     {

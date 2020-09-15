@@ -25,7 +25,6 @@ final class LogoutResponseTest extends TestCase
 
 
     /**
-     * @return void
      */
     public function setUp(): void
     {
@@ -36,7 +35,6 @@ final class LogoutResponseTest extends TestCase
 
 
     /**
-     * @return void
      */
     public function testLogoutFailed(): void
     {
@@ -77,7 +75,6 @@ XML
 
     /**
      * A successful logout response
-     * @return void
      */
     public function testLogoutSuccess(): void
     {

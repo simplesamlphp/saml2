@@ -26,7 +26,6 @@ final class IndexedEndpointTypeTest extends TestCase
 
 
     /**
-     * @return void
      */
     protected function setUp(): void
     {

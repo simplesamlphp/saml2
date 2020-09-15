@@ -83,7 +83,6 @@ final class Organization extends AbstractMdElement
      * Set the value of the OrganizationName property.
      *
      * @param \SimpleSAML\SAML2\XML\md\OrganizationName[] $organizationName
-     * @return void
      * @throws \SimpleSAML\Assert\AssertionFailedException
      */
     protected function setOrganizationName(array $organizationName): void
@@ -108,7 +107,6 @@ final class Organization extends AbstractMdElement
      * Set the value of the OrganizationDisplayName property.
      *
      * @param \SimpleSAML\SAML2\XML\md\OrganizationDisplayName[] $organizationDisplayName
-     * @return void
      * @throws \SimpleSAML\Assert\AssertionFailedException
      */
     protected function setOrganizationDisplayName(array $organizationDisplayName): void

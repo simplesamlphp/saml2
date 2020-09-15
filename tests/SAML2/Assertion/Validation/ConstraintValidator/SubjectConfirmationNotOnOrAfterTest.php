@@ -27,7 +27,6 @@ final class SubjectConfirmationNotOnOrAfterTest extends ControlledTimeTest
      *
      * @runInSeparateProcess
      * @preserveGlobalState disabled
-     * @return void
      */
     public function timestampInThePastBeforeGraceperiodIsNotValid(): void
     {
@@ -50,7 +49,6 @@ final class SubjectConfirmationNotOnOrAfterTest extends ControlledTimeTest
      *
      * @runInSeparateProcess
      * @preserveGlobalState disabled
-     * @return void
      */
     public function timeWithinGraceperiodIsValid(): void
     {
@@ -72,7 +70,6 @@ final class SubjectConfirmationNotOnOrAfterTest extends ControlledTimeTest
      *
      * @runInSeparateProcess
      * @preserveGlobalState disabled
-     * @return void
      */
     public function currentTimeIsValid(): void
     {

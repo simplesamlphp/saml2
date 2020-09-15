@@ -16,7 +16,6 @@ final class X509Test extends TestCase
     /**
      * @group certificate
      * @test
-     * @return void
      */
     public function x509CertificateContentsMustBeStrippedOfWhitespace(): void
     {

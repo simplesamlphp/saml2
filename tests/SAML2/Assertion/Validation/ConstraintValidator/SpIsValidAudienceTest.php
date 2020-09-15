@@ -29,7 +29,6 @@ final class SpIsValidAudienceTest extends MockeryTestCase
 
 
     /**
-     * @return void
      */
     public function setUp(): void
     {
@@ -42,7 +41,6 @@ final class SpIsValidAudienceTest extends MockeryTestCase
     /**
      * @group assertion-validation
      * @test
-     * @return void
      */
     public function whenNoValidAudiencesAreGivenTheAssertionIsValid(): void
     {
@@ -62,7 +60,6 @@ final class SpIsValidAudienceTest extends MockeryTestCase
     /**
      * @group assertion-validation
      * @test
-     * @return void
      */
     public function ifTheSpEntityIdIsNotInTheValidAudiencesTheAssertionIsInvalid(): void
     {
@@ -83,7 +80,6 @@ final class SpIsValidAudienceTest extends MockeryTestCase
     /**
      * @group assertion-validation
      * @test
-     * @return void
      */
     public function theAssertionIsValidWhenTheCurrentSpEntityIdIsAValidAudience(): void
     {

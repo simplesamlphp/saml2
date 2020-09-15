@@ -72,7 +72,6 @@ class BaseID extends AbstractSamlElement implements BaseIdentifierInterface
      * Set the type of this BaseID (in the xsi:type attribute)
      *
      * @param string $type
-     * @return void
      */
     protected function setType(string $type): void
     {
@@ -97,7 +96,6 @@ class BaseID extends AbstractSamlElement implements BaseIdentifierInterface
      * Set the string value of this BaseID.
      *
      * @param string $value
-     * @return void
      */
     protected function setValue(string $value): void
     {

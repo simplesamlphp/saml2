@@ -68,7 +68,6 @@ final class Subject extends AbstractSamlElement
      * Set the value of the SubjectConfirmation-property
      *
      * @param \SimpleSAML\SAML2\XML\saml\SubjectConfirmation[] $subjectConfirmation
-     * @return void
      */
     private function setSubjectConfirmation(array $subjectConfirmation): void
     {

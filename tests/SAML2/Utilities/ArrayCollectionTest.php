@@ -15,7 +15,6 @@ use SimpleSAML\SAML2\Exception\RuntimeException;
 final class ArrayCollectionTest extends TestCase
 {
     /**
-     * @return void
      */
     public function testConstructGetAddSet(): void
     {
@@ -41,7 +40,6 @@ final class ArrayCollectionTest extends TestCase
 
 
     /**
-     * @return void
      */
     public function testRemove(): void
     {
@@ -74,7 +72,6 @@ final class ArrayCollectionTest extends TestCase
 
 
     /**
-     * @return void
      */
     public function testFirstLastCount(): void
     {
@@ -87,7 +84,6 @@ final class ArrayCollectionTest extends TestCase
 
 
     /**
-     * @return void
      */
     public function testOffset(): void
     {
@@ -110,7 +106,6 @@ final class ArrayCollectionTest extends TestCase
 
 
     /**
-     * @return void
      */
     public function testOnlyElement(): void
     {
@@ -120,7 +115,6 @@ final class ArrayCollectionTest extends TestCase
 
 
     /**
-     * @return void
      */
     public function testOnlyElementFail(): void
     {
@@ -134,7 +128,6 @@ final class ArrayCollectionTest extends TestCase
 
 
     /**
-     * @return void
      */
     public function testGetiterator(): void
     {
@@ -144,7 +137,6 @@ final class ArrayCollectionTest extends TestCase
 
 
     /**
-     * @return void
      */
     public function testFilterMap(): void
     {

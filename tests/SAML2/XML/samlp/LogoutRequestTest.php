@@ -49,7 +49,6 @@ final class LogoutRequestTest extends MockeryTestCase
 
     /**
      * Load a fixture.
-     * @return void
      */
     public function setUp(): void
     {
@@ -65,7 +64,6 @@ final class LogoutRequestTest extends MockeryTestCase
 
 
     /**
-     * @return void
      */
     public function testMarshalling(): void
     {
@@ -103,7 +101,6 @@ final class LogoutRequestTest extends MockeryTestCase
 
 
     /**
-     * @return void
      */
     public function testMarshallingElementOrdering(): void
     {
@@ -126,7 +123,6 @@ final class LogoutRequestTest extends MockeryTestCase
 
 
     /**
-     * @return void
      */
     public function testUnmarshalling(): void
     {
@@ -153,7 +149,6 @@ final class LogoutRequestTest extends MockeryTestCase
 
 
     /**
-     * @return void
      */
     public function testEncryptedNameId(): void
     {
@@ -193,7 +188,6 @@ final class LogoutRequestTest extends MockeryTestCase
 
 
     /**
-     * @return void
      */
     public function testPlainNameIDUnmarshalling(): void
     {
@@ -221,7 +215,6 @@ XML;
 
 
     /**
-     * @return void
      */
     public function testMissingNameIDThrowsException(): void
     {
@@ -247,7 +240,6 @@ XML;
 
 
     /**
-     * @return void
      */
     public function testMultipleNameIDThrowsException(): void
     {
@@ -273,7 +265,6 @@ XML;
 
 
     /**
-     * @return void
      */
     public function testGetNotOnOrAfter(): void
     {
@@ -298,7 +289,6 @@ XML;
 
 
     /**
-     * @return void
      */
     public function testSetNotOnOrAfter(): void
     {
@@ -313,7 +303,6 @@ XML;
     }
 
     /**
-     * @return void
      */
     public function testGetReason(): void
     {
@@ -340,7 +329,6 @@ XML;
 
 
     /**
-     * @return void
      */
     public function testSetReason(): void
     {
@@ -357,7 +345,6 @@ XML;
 
 
     /**
-     * @return void
      */
     public function testWithOutSessionIndices(): void
     {
@@ -381,7 +368,6 @@ XML;
 
 
     /**
-     * @return void
      */
     public function testSetSessionIndicesVariants(): void
     {

@@ -23,7 +23,6 @@ final class RequestAuthenticatedTest extends TestCase
 
 
     /**
-     * @return void
      */
     public function setUp(): void
     {
@@ -34,7 +33,6 @@ final class RequestAuthenticatedTest extends TestCase
 
 
     /**
-     * @return void
      */
     public function testMarshalling(): void
     {
@@ -45,7 +43,6 @@ final class RequestAuthenticatedTest extends TestCase
 
 
     /**
-     * @return void
      */
     public function testUnmarshalling(): void
     {
@@ -56,7 +53,6 @@ final class RequestAuthenticatedTest extends TestCase
 
 
     /**
-     * @return void
      */
     public function testUnmarshallingWithMissingActorThrowsException(): void
     {

@@ -161,7 +161,6 @@ class Processor
 
     /**
      * @param \SimpleSAML\SAML2\XML\saml\Assertion $assertion
-     * @return void
      */
     public function validateAssertion(Assertion $assertion): void
     {

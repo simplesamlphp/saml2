@@ -31,7 +31,6 @@ class X509 extends Key
      *
      * @param mixed $offset
      * @param mixed $value
-     * @return void
      *
      * Type hint not possible due to upstream method signature
      */

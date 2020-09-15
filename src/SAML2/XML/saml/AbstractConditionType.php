@@ -45,7 +45,6 @@ abstract class AbstractConditionType extends AbstractSamlElement
      * Set the string value of this Condition.
      *
      * @param string $value
-     * @return void
      */
     protected function setValue(string $value): void
     {

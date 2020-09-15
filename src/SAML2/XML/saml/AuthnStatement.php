@@ -72,7 +72,6 @@ final class AuthnStatement extends AbstractStatement
      * Set the value of the authnContext-property
      *
      * @param \SimpleSAML\SAML2\XML\saml\AuthnContext $authnContext
-     * @return void
      */
     private function setAuthnContext(AuthnContext $authnContext): void
     {
@@ -95,7 +94,6 @@ final class AuthnStatement extends AbstractStatement
      * Set the value of the authnInstant-property
      *
      * @param int $authnInstant
-     * @return void
      */
     private function setAuthnInstant(int $authnInstant): void
     {
@@ -118,7 +116,6 @@ final class AuthnStatement extends AbstractStatement
      * Set the value of the sessionNotOnOrAfter-property
      *
      * @param int|null $sessionNotOnOrAfter
-     * @return void
      */
     private function setSessionNotOnOrAfter(?int $sessionNotOnOrAfter): void
     {
@@ -141,7 +138,6 @@ final class AuthnStatement extends AbstractStatement
      * Set the value of the sessionIndex-property
      *
      * @param string|null $sessionIndex
-     * @return void
      */
     private function setSessionIndex(?string $sessionIndex): void
     {
@@ -164,7 +160,6 @@ final class AuthnStatement extends AbstractStatement
      * Set the value of the subjectLocality-property
      *
      * @param \SimpleSAML\SAML2\XML\saml\SubjectLocality|null $subjectLocality
-     * @return void
      */
     private function setSubjectLocality(?SubjectLocality $subjectLocality): void
     {

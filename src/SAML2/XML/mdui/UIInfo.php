@@ -115,7 +115,6 @@ final class UIInfo extends AbstractMduiElement
      * Set the value of the Keywords-property
      *
      * @param \SimpleSAML\SAML2\XML\mdui\Keywords[] $keywords
-     * @return void
      *
      * @throws \SimpleSAML\Assert\AssertionFailedException if assertions are false
      */
@@ -131,7 +130,6 @@ final class UIInfo extends AbstractMduiElement
      * Add the value to the Keywords-property
      *
      * @param \SimpleSAML\SAML2\XML\mdui\Keywords $keyword
-     * @return void
      */
     public function addKeyword(Keywords $keyword): void
     {
@@ -154,7 +152,6 @@ final class UIInfo extends AbstractMduiElement
      * Set the value of the DisplayName-property
      *
      * @param string[] $displayName
-     * @return void
      */
     private function setDisplayName(array $displayName): void
     {
@@ -179,7 +176,6 @@ final class UIInfo extends AbstractMduiElement
      * Set the value of the Description-property
      *
      * @param string[] $description
-     * @return void
      */
     private function setDescription(array $description): void
     {
@@ -203,7 +199,6 @@ final class UIInfo extends AbstractMduiElement
      * Set the value of the InformationURL-property
      *
      * @param string[] $informationURL
-     * @return void
      */
     private function setInformationURL(array $informationURL): void
     {
@@ -228,7 +223,6 @@ final class UIInfo extends AbstractMduiElement
      * Set the value of the PrivacyStatementURL-property
      *
      * @param string[] $privacyStatementURL
-     * @return void
      */
     private function setPrivacyStatementURL(array $privacyStatementURL): void
     {
@@ -253,7 +247,6 @@ final class UIInfo extends AbstractMduiElement
      * Set the value of the Logo-property
      *
      * @param \SimpleSAML\SAML2\XML\mdui\Logo[] $logo
-     * @return void
      */
     private function setLogo(array $logo): void
     {
@@ -267,7 +260,6 @@ final class UIInfo extends AbstractMduiElement
      * Add the value to the Logo-property
      *
      * @param \SimpleSAML\SAML2\XML\mdui\Logo $logo
-     * @return void
      */
     public function addLogo(Logo $logo): void
     {
@@ -290,7 +282,6 @@ final class UIInfo extends AbstractMduiElement
      * Set the value of the childen-property
      *
      * @param \SimpleSAML\XML\Chunk[] $children
-     * @return void
      */
     private function setChildren(array $children): void
     {
@@ -304,7 +295,6 @@ final class UIInfo extends AbstractMduiElement
      * Add the value to the children-property
      *
      * @param \SimpleSAML\XML\Chunk $child
-     * @return void
      */
     public function addChild(Chunk $child): void
     {

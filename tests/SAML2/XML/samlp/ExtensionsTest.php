@@ -26,7 +26,6 @@ final class ExtensionsTest extends TestCase
 
     /**
      * Prepare a basic DOMElement to test against
-     * @return void
      */
     public function setUp(): void
     {
@@ -38,7 +37,6 @@ final class ExtensionsTest extends TestCase
 
     /**
      * Test the getList() method.
-     * @return void
      */
     public function testExtensionsGet(): void
     {
@@ -55,7 +53,6 @@ final class ExtensionsTest extends TestCase
 
     /**
      * Adding empty list should leave existing extensions unchanged.
-     * @return void
      */
     public function testExtensionsAddEmpty(): void
     {
@@ -73,7 +70,6 @@ final class ExtensionsTest extends TestCase
 
     /**
      * Test adding two random elements.
-     * @return void
      */
     public function testExtensionsAddSome(): void
     {

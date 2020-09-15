@@ -28,7 +28,6 @@ final class EncryptionMethodTest extends TestCase
 
 
     /**
-     * @return void
      */
     protected function setUp(): void
     {

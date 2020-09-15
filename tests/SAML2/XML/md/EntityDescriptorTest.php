@@ -30,7 +30,6 @@ final class EntityDescriptorTest extends TestCase
 
 
     /**
-     * @return void
      */
     protected function setUp(): void
     {

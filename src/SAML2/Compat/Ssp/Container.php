@@ -57,7 +57,6 @@ class Container implements ContainerInterface
      * {@inheritdoc}
      * @param mixed $message
      * @param string $type
-     * @return void
      */
     public function debugMessage($message, string $type): void
     {
@@ -70,7 +69,6 @@ class Container implements ContainerInterface
      * {@inheritdoc}
      * @param string $url
      * @param array $data
-     * @return void
      */
     public function redirect(string $url, array $data = []): void
     {
@@ -83,7 +81,6 @@ class Container implements ContainerInterface
      * {@inheritdoc}
      * @param string $url
      * @param array $data
-     * @return void
      */
     public function postRedirect(string $url, array $data = []): void
     {
@@ -108,7 +105,6 @@ class Container implements ContainerInterface
      * @param string $filename
      * @param string $date
      * @param int|null $mode
-     * @return void
      */
     public function writeFile(string $filename, string $data, int $mode = null): void
     {

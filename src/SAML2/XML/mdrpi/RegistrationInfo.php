@@ -74,7 +74,6 @@ final class RegistrationInfo extends AbstractMdrpiElement
      * Set the value of the registrationAuthority property
      *
      * @param string $registrationAuthority
-     * @return void
      */
     private function setRegistrationAuthority(string $registrationAuthority): void
     {
@@ -97,7 +96,6 @@ final class RegistrationInfo extends AbstractMdrpiElement
      * Set the value of the registrationInstant property
      *
      * @param int|null $registrationInstant
-     * @return void
      */
     private function setRegistrationInstant(?int $registrationInstant): void
     {
@@ -120,7 +118,6 @@ final class RegistrationInfo extends AbstractMdrpiElement
      * Set the value of the RegistrationPolicy property
      *
      * @param array $registrationPolicy
-     * @return void
      */
     private function setRegistrationPolicy(array $registrationPolicy): void
     {

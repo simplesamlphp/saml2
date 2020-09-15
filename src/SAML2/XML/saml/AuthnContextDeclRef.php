@@ -47,7 +47,6 @@ final class AuthnContextDeclRef extends AbstractSamlElement
      * Set the value of the declRef-property
      *
      * @param string $name
-     * @return void
      */
     private function setDeclRef(string $declRef): void
     {

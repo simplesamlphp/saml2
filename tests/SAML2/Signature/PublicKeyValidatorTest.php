@@ -36,7 +36,6 @@ final class PublicKeyValidatorTest extends MockeryTestCase
 
 
     /**
-     * @return void
      */
     public function setUp(): void
     {
@@ -48,7 +47,6 @@ final class PublicKeyValidatorTest extends MockeryTestCase
     /**
      * @test
      * @group signature
-     * @return void
      */
     public function itCannotValidateIfNoKeysCanBeLoaded(): void
     {
@@ -62,7 +60,6 @@ final class PublicKeyValidatorTest extends MockeryTestCase
     /**
      * @test
      * @group signature
-     * @return void
      */
     public function itWillValidateWhenKeysCanBeLoaded(): void
     {
@@ -76,7 +73,6 @@ final class PublicKeyValidatorTest extends MockeryTestCase
     /**
      * @test
      * @group signature
-     * @return void
      */
     public function nonX509KeysAreNotUsedForValidation(): void
     {
@@ -100,7 +96,6 @@ final class PublicKeyValidatorTest extends MockeryTestCase
     /**
      * @test
      * @group signature
-     * @return void
      */
     public function signedMessageWithValidSignatureIsValidatedCorrectly(): void
     {

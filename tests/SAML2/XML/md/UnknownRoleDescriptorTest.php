@@ -33,7 +33,6 @@ final class UnknownRoleDescriptorTest extends TestCase
 
 
     /**
-     * @return void
      */
     public function setUp(): void
     {

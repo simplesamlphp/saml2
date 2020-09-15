@@ -50,7 +50,6 @@ final class IDPEntry extends AbstractSamlpElement
 
     /**
      * @param string $providerId
-     * @return void
      */
     private function setProviderId(string $providerId): void
     {
@@ -69,7 +68,6 @@ final class IDPEntry extends AbstractSamlpElement
 
     /**
      * @param string $name|null
-     * @return void
      */
     private function setName(?string $name): void
     {
@@ -88,7 +86,6 @@ final class IDPEntry extends AbstractSamlpElement
 
     /**
      * @param string $loc|null
-     * @return void
      */
     private function setLoc(?string $loc): void
     {

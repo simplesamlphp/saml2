@@ -51,7 +51,6 @@ final class StatusCode extends AbstractSamlpElement
      * Set the value of the Value-property
      *
      * @param string $Value
-     * @return void
      * @throws \SimpleSAML\Assert\AssertionFailedException if the supplied $Value is empty
      */
     private function setValue(string $Value): void
@@ -76,7 +75,6 @@ final class StatusCode extends AbstractSamlpElement
      * Set the value of the subCodes-property
      *
      * @param \SimpleSAML\SAML2\XML\samlp\StatusCode[] $subCodes
-     * @return void
      * @throws \SimpleSAML\Assert\AssertionFailedException if the supplied array contains anything other than StatusCode objects
      */
     private function setSubCodes(array $subCodes): void

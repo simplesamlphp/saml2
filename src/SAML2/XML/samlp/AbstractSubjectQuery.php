@@ -67,7 +67,6 @@ abstract class AbstractSubjectQuery extends AbstractRequest
      * Set the value of the subject-property
      * @param \SimpleSAML\SAML2\XML\saml\Subject $subject
      *
-     * @return void
      */
     private function setSubject(Subject $subject): void
     {

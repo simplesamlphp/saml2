@@ -58,7 +58,6 @@ final class Status extends AbstractSamlpElement
      * Set the value of the StatusCode-property
      *
      * @param \SimpleSAML\SAML2\XML\samlp\StatusCode $statusCode
-     * @return void
      */
     private function setStatusCode(StatusCode $statusCode): void
     {
@@ -81,7 +80,6 @@ final class Status extends AbstractSamlpElement
      * Set the value of the statusMessage property
      * @param string|null $statusMessage
      *
-     * @return void
      */
     private function setStatusMessage(?string $statusMessage): void
     {
@@ -104,7 +102,6 @@ final class Status extends AbstractSamlpElement
      * Set the value of the statusDetails property
      *
      * @param \SimpleSAML\SAML2\XML\samlp\StatusDetail[] $statusDetails
-     * @return void
      * @throws \SimpleSAML\Assert\AssertionFailedException if the supplied array contains anything other than StatusDetail objects
      */
     private function setStatusDetails(array $statusDetails): void

@@ -77,7 +77,6 @@ class ArtifactResponse extends AbstractStatusResponse
      * Set the value of the any-property
      *
      * @param \SimpleSAML\SAML2\XML\samlp\AbstractMessage|null $message
-     * @return void
      */
     private function setMessage(?AbstractMessage $message): void
     {

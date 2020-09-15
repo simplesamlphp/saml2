@@ -143,7 +143,6 @@ abstract class AbstractMessage extends AbstractSamlpElement implements SignedEle
      *
      * @param callable $function The function which should be called
      * @param mixed $data The data that should be included as the first parameter to the function
-     * @return void
      */
     public function addValidator(callable $function, $data): void
     {
@@ -207,7 +206,6 @@ abstract class AbstractMessage extends AbstractSamlpElement implements SignedEle
      * Set the identifier of this message.
      *
      * @param string|null $id The new identifier of this message
-     * @return void
      */
     private function setId(?string $id): void
     {
@@ -245,7 +243,6 @@ abstract class AbstractMessage extends AbstractSamlpElement implements SignedEle
      * Set the issue timestamp of this message.
      *
      * @param int|null $issueInstant The new issue timestamp of this message, as an UNIX timestamp
-     * @return void
      */
     private function setIssueInstant(?int $issueInstant): void
     {
@@ -272,7 +269,6 @@ abstract class AbstractMessage extends AbstractSamlpElement implements SignedEle
      * Set the destination of this message.
      *
      * @param string|null $destination The new destination of this message
-     * @return void
      */
     private function setDestination(string $destination = null): void
     {
@@ -299,7 +295,6 @@ abstract class AbstractMessage extends AbstractSamlpElement implements SignedEle
      *
      * @see \SimpleSAML\SAML2\Constants
      * @param string|null $consent
-     * @return void
      */
     private function setConsent(?string $consent): void
     {
@@ -322,7 +317,6 @@ abstract class AbstractMessage extends AbstractSamlpElement implements SignedEle
      * Set the issuer of this message.
      *
      * @param \SimpleSAML\SAML2\XML\saml\Issuer|null $issuer The new issuer of this message
-     * @return void
      */
     private function setIssuer(Issuer $issuer = null): void
     {
@@ -356,7 +350,6 @@ abstract class AbstractMessage extends AbstractSamlpElement implements SignedEle
      * Set the RelayState associated with this message.
      *
      * @param string|null $relayState The new RelayState
-     * @return void
      */
     public function setRelayState(string $relayState = null): void
     {

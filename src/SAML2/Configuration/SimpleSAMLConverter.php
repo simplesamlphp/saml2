@@ -95,7 +95,6 @@ class SimpleSAMLConverter
      * @param \SimpleSAML\Configuration $configuration
      * @param array                     $baseConfiguration
      *
-     * @return void
      *
      * @psalm-suppress UndefinedClass
      */
@@ -110,7 +109,6 @@ class SimpleSAMLConverter
      * @param \SimpleSAML\Configuration $configuration
      * @param array                     $baseConfiguration
      *
-     * @return void
      *
      * @psalm-suppress UndefinedClass
      */
@@ -124,7 +122,6 @@ class SimpleSAMLConverter
      * @param \SimpleSAML\Configuration $configuration
      * @param array                     $baseConfiguration
      *
-     * @return void
      *
      * @psalm-suppress UndefinedClass
      */

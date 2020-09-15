@@ -25,7 +25,6 @@ final class BaseIDTest extends TestCase
 
 
     /**
-     * @return void
      */
     public function setup(): void
     {
@@ -39,7 +38,6 @@ final class BaseIDTest extends TestCase
 
 
     /**
-     * @return void
      */
     public function testMarshalling(): void
     {
@@ -65,7 +63,6 @@ final class BaseIDTest extends TestCase
 
 
     /**
-     * @return void
      */
     public function testUnmarshalling(): void
     {
@@ -84,7 +81,6 @@ final class BaseIDTest extends TestCase
 
 
     /**
-     * @return void
      */
     public function testUnmarshallingCustomClass(): void
     {

@@ -40,7 +40,6 @@ class ValidatorChain implements ValidatorInterface
 
     /**
      * @param \SimpleSAML\SAML2\Signature\ChainedValidator $validator
-     * @return void
      */
     public function appendValidator(ChainedValidator $validator): void
     {

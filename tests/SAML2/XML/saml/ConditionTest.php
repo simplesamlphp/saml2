@@ -26,7 +26,6 @@ final class ConditionTest extends TestCase
 
 
     /**
-     * @return void
      */
     public function setup(): void
     {
@@ -40,7 +39,6 @@ final class ConditionTest extends TestCase
 
 
     /**
-     * @return void
      */
     public function testMarshalling(): void
     {
@@ -62,7 +60,6 @@ final class ConditionTest extends TestCase
 
 
     /**
-     * @return void
      */
     public function testUnmarshalling(): void
     {
@@ -79,7 +76,6 @@ final class ConditionTest extends TestCase
 
 
     /**
-     * @return void
      */
     public function testUnmarshallingCustomClass(): void
     {

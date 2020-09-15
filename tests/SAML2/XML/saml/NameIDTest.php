@@ -23,7 +23,6 @@ final class NameIDTest extends TestCase
     private DOMDocument $document;
 
     /**
-     * @return void
      */
     public function setup(): void
     {
@@ -37,7 +36,6 @@ final class NameIDTest extends TestCase
 
 
     /**
-     * @return void
      */
     public function testMarshalling(): void
     {
@@ -66,7 +64,6 @@ final class NameIDTest extends TestCase
 
 
     /**
-     * @return void
      */
     public function testUnmarshalling(): void
     {

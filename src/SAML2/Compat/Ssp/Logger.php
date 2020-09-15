@@ -17,7 +17,6 @@ class Logger implements LoggerInterface
      *
      * @param string $message
      * @param array $context
-     * @return void
      *
      * Type hint not possible due to upstream method signature
      */
@@ -36,7 +35,6 @@ class Logger implements LoggerInterface
      *
      * @param string $message
      * @param array $context
-     * @return void
      *
      * Type hint not possible due to upstream method signature
      */
@@ -54,7 +52,6 @@ class Logger implements LoggerInterface
      *
      * @param string $message
      * @param array $context
-     * @return void
      *
      * Type hint not possible due to upstream method signature
      */
@@ -71,7 +68,6 @@ class Logger implements LoggerInterface
      *
      * @param string $message
      * @param array $context
-     * @return void
      *
      * Type hint not possible due to upstream method signature
      */
@@ -90,7 +86,6 @@ class Logger implements LoggerInterface
      *
      * @param string $message
      * @param array $context
-     * @return void
      *
      * Type hint not possible due to upstream method signature
      */
@@ -106,7 +101,6 @@ class Logger implements LoggerInterface
      *
      * @param string $message
      * @param array $context
-     * @return void
      *
      * Type hint not possible due to upstream method signature
      */
@@ -124,7 +118,6 @@ class Logger implements LoggerInterface
      *
      * @param string $message
      * @param array $context
-     * @return void
      *
      * Type hint not possible due to upstream method signature
      */
@@ -140,7 +133,6 @@ class Logger implements LoggerInterface
      *
      * @param string $message
      * @param array $context
-     * @return void
      *
      * Type hint not possible due to upstream method signature
      */
@@ -157,7 +149,6 @@ class Logger implements LoggerInterface
      * @param mixed $level
      * @param string $message
      * @param array $context
-     * @return void
      *
      * @throws \SimpleSAML\Assert\AssertionFailedException if assertions are false
      *

@@ -117,7 +117,6 @@ final class PublicationInfo extends AbstractMdrpiElement
      * Set the value of the publisher-property
      *
      * @param string $publisher
-     * @return void
      */
     private function setPublisher(string $publisher): void
     {
@@ -129,7 +128,6 @@ final class PublicationInfo extends AbstractMdrpiElement
      * Set the value of the creationInstant-property
      *
      * @param int|null $creationInstant
-     * @return void
      */
     private function setCreationInstant(?int $creationInstant): void
     {
@@ -141,7 +139,6 @@ final class PublicationInfo extends AbstractMdrpiElement
      * Set the value of the publicationId-property
      *
      * @param string|null $publicationId
-     * @return void
      */
     private function setPublicationId(?string $publicationId): void
     {
@@ -153,7 +150,6 @@ final class PublicationInfo extends AbstractMdrpiElement
      * Set the value of the UsagePolicy-property
      *
      * @param array $usagePolicy
-     * @return void
      */
     private function setUsagePolicy(array $usagePolicy): void
     {

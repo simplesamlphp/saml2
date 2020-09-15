@@ -61,7 +61,6 @@ final class Keywords extends AbstractMduiElement
      * Set the value of the lang-property
      *
      * @param string $lang
-     * @return void
      */
     private function setLanguage(string $lang): void
     {
@@ -84,7 +83,6 @@ final class Keywords extends AbstractMduiElement
      * Set the value of the Keywords-property
      *
      * @param string[] $keywords
-     * @return void
      *
      * @throws \SimpleSAML\Assert\AssertionFailedException if one of the keywords contains `+`
      */
@@ -99,7 +97,6 @@ final class Keywords extends AbstractMduiElement
      * Add the value to the Keywords-property
      *
      * @param string $keyword
-     * @return void
      *
      * @throws \SimpleSAML\Assert\AssertionFailedException if the keyword contains a `+`
      */

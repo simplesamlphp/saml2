@@ -85,7 +85,6 @@ final class AuthnContext extends AbstractSamlElement
      * Set the value of the authnContextClassRef-property
      *
      * @param \SimpleSAML\SAML2\XML\saml\AuthnContextClassRef|null $authnContextClassRef
-     * @return void
      */
     private function setAuthnContextClassRef(?AuthnContextClassRef $authnContextClassRef): void
     {
@@ -108,7 +107,6 @@ final class AuthnContext extends AbstractSamlElement
      * Set the value of the authnContextDeclRef-property
      *
      * @param \SimpleSAML\SAML2\XML\saml\AuthnContextDeclRef|null $authnContextDeclRef
-     * @return void
      */
     private function setAuthnContextDeclRef(?AuthnContextDeclRef $authnContextDeclRef): void
     {
@@ -131,7 +129,6 @@ final class AuthnContext extends AbstractSamlElement
      * Set the value of the authnContextDecl-property
      *
      * @param \SimpleSAML\SAML2\XML\saml\AuthnContextDecl|null $authnContextDecl
-     * @return void
      */
     private function setAuthnContextDecl(?AuthnContextDecl $authnContextDecl): void
     {
@@ -154,7 +151,6 @@ final class AuthnContext extends AbstractSamlElement
      * Set the value of the authenticatingAuthorities-property
      *
      * @param string[] $authenticatingAuthorities
-     * @return void
      * @throws \SimpleSAML\Assert\AssertionFailedException
      */
     private function setAuthenticatingAuthorities(array $authenticatingAuthorities): void

@@ -27,7 +27,6 @@ final class EntitiesDescriptorTest extends TestCase
 
 
     /**
-     * @return void
      */
     protected function setUp(): void
     {

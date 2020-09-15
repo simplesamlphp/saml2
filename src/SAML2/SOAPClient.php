@@ -178,7 +178,6 @@ class SOAPClient
      *
      * @param \SimpleSAML\SAML2\XML\samlp\AbstractMessage $msg The message we should add a validator to.
      * @param resource $context The stream context.
-     * @return void
      */
     private static function addSSLValidator(AbstractMessage $msg, $context): void
     {
@@ -218,7 +217,6 @@ class SOAPClient
      * @param string $data The public key that was used on the connection.
      * @param \SimpleSAML\XMLSecurity\XMLSecurityKey $key The key we should validate the certificate against.
      * @throws \Exception
-     * @return void
      */
     public static function validateSSL(string $data, XMLSecurityKey $key): void
     {

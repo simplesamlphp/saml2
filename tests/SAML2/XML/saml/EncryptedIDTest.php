@@ -43,7 +43,6 @@ final class EncryptedIDTest extends TestCase
 
 
     /**
-     * @return void
      */
     public function setup(): void
     {
@@ -58,7 +57,6 @@ final class EncryptedIDTest extends TestCase
 
 
     /**
-     * @return void
      */
     public function tearDown(): void
     {
@@ -70,7 +68,6 @@ final class EncryptedIDTest extends TestCase
 
 
     /**
-     * @return void
      */
     public function testMarshalling(): void
     {
@@ -138,7 +135,6 @@ final class EncryptedIDTest extends TestCase
 
 
     /**
-     * @return void
      */
     public function testMarshallingElementOrdering(): void
     {

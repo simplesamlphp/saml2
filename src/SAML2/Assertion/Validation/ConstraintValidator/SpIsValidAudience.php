@@ -23,7 +23,6 @@ class SpIsValidAudience implements
 
     /**
      * @param \SimpleSAML\SAML2\Configuration\ServiceProvider $serviceProvider
-     * @return void
      */
     public function setServiceProvider(ServiceProvider $serviceProvider): void
     {
@@ -34,7 +33,6 @@ class SpIsValidAudience implements
     /**
      * @param \SimpleSAML\SAML2\XML\saml\Assertion $assertion
      * @param \SimpleSAML\SAML2\Assertion\Validation\Result $result
-     * @return void
      *
      * @throws \SimpleSAML\Assert\AssertionFailedException if assertions are false
      */

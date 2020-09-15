@@ -25,7 +25,6 @@ final class EncryptedAttributeTest extends TestCase
 
 
     /**
-     * @return void
      */
     protected function setUp(): void
     {
@@ -39,7 +38,6 @@ final class EncryptedAttributeTest extends TestCase
 
 
     /**
-     * @return void
      */
     public function testMarshalling(): void
     {
@@ -62,7 +60,6 @@ final class EncryptedAttributeTest extends TestCase
 
 
     /**
-     * @return void
      */
     public function testUnmarshalling(): void
     {
@@ -74,7 +71,6 @@ final class EncryptedAttributeTest extends TestCase
 
 
     /**
-     * @return void
      */
     public function testDecryptAttribute(): void
     {

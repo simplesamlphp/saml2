@@ -59,7 +59,6 @@ final class SignatureValidationTest extends MockeryTestCase
     /**
      * We mock the actual assertion processing as that is not what we want to test here. Since the assertion processor
      * is created via a static ::build() method we have to mock that, and have to run the tests in separate processes
-     * @return void
      */
     public function setUp(): void
     {
@@ -83,7 +82,6 @@ final class SignatureValidationTest extends MockeryTestCase
     /**
      * @runInSeparateProcess
      * @preserveGlobalState disabled
-     * @return void
      */
     public function testThatAnUnsignedResponseWithASignedAssertionCanBeProcessed(): void
     {
@@ -107,7 +105,6 @@ final class SignatureValidationTest extends MockeryTestCase
     /**
      * @runInSeparateProcess
      * @preserveGlobalState disabled
-     * @return void
      */
     public function testThatASignedResponseWithAnUnsignedAssertionCanBeProcessed(): void
     {
@@ -131,7 +128,6 @@ final class SignatureValidationTest extends MockeryTestCase
     /**
      * @runInSeparateProcess
      * @preserveGlobalState disabled
-     * @return void
      */
     public function testThatASignedResponseWithASignedAssertionIsValid(): void
     {
@@ -155,7 +151,6 @@ final class SignatureValidationTest extends MockeryTestCase
     /**
      * @runInSeparateProcess
      * @preserveGlobalState disabled
-     * @return void
      */
     public function testThatAnUnsignedResponseWithNoSignedAssertionsThrowsAnException(): void
     {

@@ -46,7 +46,6 @@ final class StatusDetail extends AbstractSamlpElement
      * Set the value of the details-property
      *
      * @param \SimpleSAML\XML\Chunk[] $details
-     * @return void
      * @throws \SimpleSAML\Assert\AssertionFailedException if the supplied array contains anything other than Chunk objects
      */
     private function setDetails(array $details): void

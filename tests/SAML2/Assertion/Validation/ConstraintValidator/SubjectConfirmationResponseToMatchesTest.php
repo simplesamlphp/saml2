@@ -24,7 +24,6 @@ final class SubjectConfirmationResponseToMatchesTest extends MockeryTestCase
 
 
     /**
-     * @return void
      */
     public function setUp(): void
     {
@@ -37,7 +36,6 @@ final class SubjectConfirmationResponseToMatchesTest extends MockeryTestCase
     /**
      * @group assertion-validation
      * @test
-     * @return void
      */
     public function whenTheResponseResponsetoIsNullTheSubjectConfirmationIsValid(): void
     {
@@ -59,7 +57,6 @@ final class SubjectConfirmationResponseToMatchesTest extends MockeryTestCase
     /**
      * @group assertion-validation
      * @test
-     * @return void
      */
     public function whenTheSubjectconfirmationResponsetoIsNullTheSubjectconfirmationIsValid(): void
     {
@@ -81,7 +78,6 @@ final class SubjectConfirmationResponseToMatchesTest extends MockeryTestCase
     /**
      * @group assertion-validation
      * @test
-     * @return void
      */
     public function whenTheSubjectconfirmationAndResponseResponsetoAreNullTheSubjectconfirmationIsValid(): void
     {
@@ -103,7 +99,6 @@ final class SubjectConfirmationResponseToMatchesTest extends MockeryTestCase
     /**
      * @group assertion-validation
      * @test
-     * @return void
      */
     public function whenTheSubjectconfirmationAndResponseResponsetoAreEqualTheSubjectconfirmationIsValid(): void
     {
@@ -125,7 +120,6 @@ final class SubjectConfirmationResponseToMatchesTest extends MockeryTestCase
     /**
      * @group assertion-validation
      * @test
-     * @return void
      */
     public function whenTheSubjectconfirmationAndResponseResponsetoDifferTheSubjectconfirmationIsInvalid(): void
     {

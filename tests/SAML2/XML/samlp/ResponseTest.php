@@ -25,7 +25,6 @@ use SimpleSAML\XML\Utils as XMLUtils;
 final class ResponseTest extends TestCase
 {
     /**
-     * @return void
      */
     public function testMarshalling(): void
     {
@@ -45,7 +44,6 @@ final class ResponseTest extends TestCase
 
 
     /**
-     * @return void
      */
     public function testLoop(): void
     {

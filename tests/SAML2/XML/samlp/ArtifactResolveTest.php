@@ -24,7 +24,6 @@ final class ArtifactResolveTest extends TestCase
 
 
     /**
-     * @return void
      */
     public function setup(): void
     {
@@ -35,7 +34,6 @@ final class ArtifactResolveTest extends TestCase
 
 
     /**
-     * @return void
      */
     public function testMarshalling(): void
     {
@@ -54,7 +52,6 @@ final class ArtifactResolveTest extends TestCase
 
 
     /**
-     * @return void
      */
     public function testUnmarshalling(): void
     {

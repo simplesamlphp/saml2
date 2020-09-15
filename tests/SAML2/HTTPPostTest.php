@@ -26,7 +26,6 @@ final class HTTPPostTest extends MockeryTestCase
     /**
      * test parsing of basic query string with authnrequest and
      * verify that the correct issuer is found.
-     * @return void
      */
     public function testRequestParsing(): void
     {
@@ -45,7 +44,6 @@ final class HTTPPostTest extends MockeryTestCase
      * test parsing of SAMLResponse in post.
      * verify that the correct issuer is found.
      * verify that relaystate is found.
-     * @return void
      */
     public function testResponseParsing(): void
     {
@@ -66,7 +64,6 @@ final class HTTPPostTest extends MockeryTestCase
     /**
      * test parsing a request that contains no SAMLRequest or Response
      * must generate an exception.
-     * @return void
      */
     public function testNoRequestParsing(): void
     {
@@ -81,7 +78,6 @@ final class HTTPPostTest extends MockeryTestCase
 
     /**
      * Construct an authnrequest without a destination and try to send it.
-     * @return void
      */
     public function testSendMissingDestination(): void
     {
@@ -95,7 +91,6 @@ final class HTTPPostTest extends MockeryTestCase
 
     /**
      * Construct an authnrequest and send it to the destination set in the binding.
-     * @return void
      * @doesNotPerformAssertions
      */
     public function testSendAuthnRequestWithDestinationInBinding(): void
@@ -109,7 +104,6 @@ final class HTTPPostTest extends MockeryTestCase
 
     /**
      * Construct an authnrequest with a destination set and try to send it.
-     * @return void
      * @doesNotPerformAssertions
      */
     public function testSendAuthnRequestWithDestination(): void
@@ -138,7 +132,6 @@ final class HTTPPostTest extends MockeryTestCase
     /**
      * Construct an authnresponse and send it.
      * Also test setting a relaystate and destination for the response.
-     * @return void
      * @doesNotPerformAssertions
      */
     public function testSendAuthnResponse(): void

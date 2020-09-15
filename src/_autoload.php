@@ -12,7 +12,6 @@ declare(strict_types=1);
  * Autoload function that looks for classes migrated to PSR-4.
  *
  * @param string $className Name of the class.
- * @return void
  */
 function SAML2_autoload(string $className): void
 {

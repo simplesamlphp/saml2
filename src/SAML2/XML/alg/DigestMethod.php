@@ -51,7 +51,6 @@ final class DigestMethod extends AbstractAlgElement
      * Set the value of the Algorithm-property
      *
      * @param string $algorithm
-     * @return void
      */
     private function setAlgorithm(string $algorithm): void
     {

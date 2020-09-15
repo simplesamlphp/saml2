@@ -115,7 +115,6 @@ final class SubjectConfirmationData extends AbstractSamlElement
      * Set the value of the NotBefore-property
      *
      * @param int|null $notBefore
-     * @return void
      */
     private function setNotBefore(?int $notBefore): void
     {
@@ -138,7 +137,6 @@ final class SubjectConfirmationData extends AbstractSamlElement
      * Set the value of the NotOnOrAfter-property
      *
      * @param int|null $notOnOrAfter
-     * @return void
      */
     private function setNotOnOrAfter(?int $notOnOrAfter): void
     {
@@ -161,7 +159,6 @@ final class SubjectConfirmationData extends AbstractSamlElement
      * Set the value of the Recipient-property
      *
      * @param string|null $recipient
-     * @return void
      */
     private function setRecipient(?string $recipient): void
     {
@@ -184,7 +181,6 @@ final class SubjectConfirmationData extends AbstractSamlElement
      * Set the value of the InResponseTo-property
      *
      * @param string|null $inResponseTo
-     * @return void
      */
     private function setInResponseTo(?string $inResponseTo): void
     {
@@ -207,7 +203,6 @@ final class SubjectConfirmationData extends AbstractSamlElement
      * Set the value of the Address-property
      *
      * @param string|null $address
-     * @return void
      */
     private function setAddress(?string $address): void
     {
@@ -235,7 +230,6 @@ final class SubjectConfirmationData extends AbstractSamlElement
      * Set the value of the info-property
      *
      * @param (\SimpleSAML\XMLSecurity\XML\ds\KeyInfo|\SimpleSAML\XML\Chunk)[] $info
-     * @return void
      */
     private function setInfo(array $info): void
     {

@@ -98,7 +98,6 @@ final class NameIdDecryptionTransformer implements
 
     /**
      * @param \SimpleSAML\SAML2\Configuration\IdentityProvider $identityProvider
-     * @return void
      */
     public function setIdentityProvider(IdentityProvider $identityProvider): void
     {
@@ -108,7 +107,6 @@ final class NameIdDecryptionTransformer implements
 
     /**
      * @param \SimpleSAML\SAML2\Configuration\ServiceProvider $serviceProvider
-     * @return void
      */
     public function setServiceProvider(ServiceProvider $serviceProvider): void
     {

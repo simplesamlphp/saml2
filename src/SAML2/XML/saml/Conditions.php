@@ -80,7 +80,6 @@ final class Conditions extends AbstractSamlElement
      * Set the value of the notBefore-property
      *
      * @param int|null $notBefore
-     * @return void
      */
     private function setNotBefore(?int $notBefore): void
     {
@@ -103,7 +102,6 @@ final class Conditions extends AbstractSamlElement
      * Set the value of the notOnOrAfter-property
      *
      * @param int|null $notOnOrAfter
-     * @return void
      */
     private function setNotOnOrAfter(?int $notOnOrAfter): void
     {
@@ -126,7 +124,6 @@ final class Conditions extends AbstractSamlElement
      * Set the value of the condition-property
      *
      * @param \SimpleSAML\SAML2\XML\saml\Condition[] $condition
-     * @return void
      */
     private function setCondition(array $condition): void
     {
@@ -151,7 +148,6 @@ final class Conditions extends AbstractSamlElement
      * Set the value of the audienceRestriction-property
      *
      * @param \SimpleSAML\SAML2\XML\saml\AudienceRestriction[] $audienceRestriction
-     * @return void
      */
     private function setAudienceRestriction(array $audienceRestriction): void
     {
@@ -176,7 +172,6 @@ final class Conditions extends AbstractSamlElement
      * Set the value of the oneTimeUse-property
      *
      * @param bool $oneTimeUse
-     * @return void
      */
     private function setOneTimeUse(bool $oneTimeUse): void
     {
@@ -199,7 +194,6 @@ final class Conditions extends AbstractSamlElement
      * Set the value of the proxyRestriction-property
      *
      * @param \SimpleSAML\SAML2\XML\saml\ProxyRestriction|null $proxyRestriction
-     * @return void
      */
     private function setProxyRestriction(?ProxyRestriction $proxyRestriction): void
     {

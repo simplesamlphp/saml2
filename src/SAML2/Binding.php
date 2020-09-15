@@ -127,7 +127,6 @@ abstract class Binding
      * Set to null to use the destination set in the message.
      *
      * @param string|null $destination The destination the message should be delivered to.
-     * @return void
      */
     public function setDestination(string $destination = null): void
     {
@@ -142,7 +141,6 @@ abstract class Binding
      * The message will be delivered to the destination set in the message.
      *
      * @param \SimpleSAML\SAML2\XML\samlp\AbstractMessage $message The message which should be sent.
-     * @return void
      */
     abstract public function send(AbstractMessage $message): void;
 

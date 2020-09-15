@@ -16,7 +16,6 @@ interface Collection extends ArrayAccess, Countable, IteratorAggregate
      *
      * @param mixed $element
      *
-     * @return void
      */
     public function add($element): void;
 
@@ -78,7 +77,6 @@ interface Collection extends ArrayAccess, Countable, IteratorAggregate
 
     /**
      * @param mixed $element
-     * @return void
      */
     public function remove($element): void;
 
@@ -88,7 +86,6 @@ interface Collection extends ArrayAccess, Countable, IteratorAggregate
      *
      * @param mixed $key
      * @param mixed $value
-     * @return void
      */
     public function set($key, $value): void;
 }

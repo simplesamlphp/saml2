@@ -27,7 +27,6 @@ final class NotOnOrAfterTest extends ControlledTimeTest
 
 
     /**
-     * @return void
      */
     public function setUp(): void
     {
@@ -39,7 +38,6 @@ final class NotOnOrAfterTest extends ControlledTimeTest
     /**
      * @group assertion-validation
      * @test
-     * @return void
      */
     public function timestampInThePastBeforeGraceperiodIsNotValid(): void
     {
@@ -75,7 +73,6 @@ final class NotOnOrAfterTest extends ControlledTimeTest
     /**
      * @group assertion-validation
      * @test
-     * @return void
      */
     public function currentTimeIsValid(): void
     {

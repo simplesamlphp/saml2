@@ -25,7 +25,6 @@ final class ResponseTest extends TestCase
 
 
     /**
-     * @return void
      */
     public function setUp(): void
     {
@@ -36,7 +35,6 @@ final class ResponseTest extends TestCase
 
 
     /**
-     * @return void
      */
     public function testMarshalling(): void
     {
@@ -49,7 +47,6 @@ final class ResponseTest extends TestCase
 
 
     /**
-     * @return void
      */
     public function testToXMLResponseAppended(): void
     {
@@ -67,7 +64,6 @@ final class ResponseTest extends TestCase
 
 
     /**
-     * @return void
      */
     public function testInvalidACSThrowsException(): void
     {
@@ -79,7 +75,6 @@ final class ResponseTest extends TestCase
 
 
     /**
-     * @return void
      */
     public function testUnmarshalling(): void
     {
@@ -92,7 +87,6 @@ final class ResponseTest extends TestCase
 
 
     /**
-     * @return void
      */
     public function testUnmarshallingWithMissingMustUnderstandThrowsException(): void
     {
@@ -107,7 +101,6 @@ final class ResponseTest extends TestCase
 
 
     /**
-     * @return void
      */
     public function testUnmarshallingWithMissingActorThrowsException(): void
     {
@@ -122,7 +115,6 @@ final class ResponseTest extends TestCase
 
 
     /**
-     * @return void
      */
     public function testUnmarshallingWithMissingACSThrowsException(): void
     {

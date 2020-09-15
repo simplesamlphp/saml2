@@ -26,7 +26,6 @@ final class AuthnStatementTest extends TestCase
 
 
     /**
-     * @return void
      */
     protected function setUp(): void
     {
@@ -40,7 +39,6 @@ final class AuthnStatementTest extends TestCase
 
 
     /**
-     * @return void
      */
     public function testMarshalling(): void
     {
@@ -75,7 +73,6 @@ final class AuthnStatementTest extends TestCase
 
 
     /**
-     * @return void
      */
     public function testMarshallingElementOrdering(): void
     {
@@ -113,7 +110,6 @@ final class AuthnStatementTest extends TestCase
 
 
     /**
-     * @return void
      */
     public function testUnmarshalling(): void
     {
@@ -132,7 +128,6 @@ final class AuthnStatementTest extends TestCase
 
 
     /**
-     * @return void
      */
     public function testUnmarshallingWithoutAuthnContextThrowsException(): void
     {

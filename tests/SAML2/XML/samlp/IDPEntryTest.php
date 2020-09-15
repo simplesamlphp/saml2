@@ -24,7 +24,6 @@ final class IDPEntryTest extends TestCase
 
 
     /**
-     * @return void
      */
     protected function setUp(): void
     {
@@ -35,7 +34,6 @@ final class IDPEntryTest extends TestCase
 
 
     /**
-     * @return void
      */
     public function testMarshalling(): void
     {
@@ -49,7 +47,6 @@ final class IDPEntryTest extends TestCase
     }
 
     /**
-     * @return void
      */
     public function testMarshallingNullables(): void
     {
@@ -71,7 +68,6 @@ final class IDPEntryTest extends TestCase
 
 
     /**
-     * @return void
      */
     public function testUnmarshalling(): void
     {

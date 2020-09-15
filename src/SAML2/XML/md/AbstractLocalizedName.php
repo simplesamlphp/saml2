@@ -90,7 +90,6 @@ abstract class AbstractLocalizedName extends AbstractMdElement
      * Set the language this string is localized in.
      *
      * @param string $language
-     * @return void
      */
     protected function setLanguage(string $language): void
     {
@@ -114,7 +113,6 @@ abstract class AbstractLocalizedName extends AbstractMdElement
      * Set the localized string.
      *
      * @param string $value
-     * @return void
      */
     protected function setValue(string $value): void
     {

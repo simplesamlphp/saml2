@@ -34,7 +34,6 @@ final class AbstractMessageTest extends MockeryTestCase
 {
     /**
      * @group Message
-     * @return void
      */
     public function testCorrectSignatureMethodCanBeExtractedFromAuthnRequest(): void
     {
@@ -78,7 +77,6 @@ AUTHNREQUEST
 
     /**
      * @group Message
-     * @return void
      */
     public function testIssuerParsedAsNameID(): void
     {
@@ -118,7 +116,6 @@ AUTHNREQUEST
 
     /**
      * @group Message
-     * @return void
      */
     public function testConvertIssuerToXML(): void
     {
@@ -165,7 +162,6 @@ AUTHNREQUEST
 
     /**
      * @group Message
-     * @return void
      */
     public function testCorrectSignatureMethodCanBeExtractedFromResponse(): void
     {
@@ -193,7 +189,6 @@ AUTHNREQUEST
 
     /**
      * @group Message
-     * @return void
      */
     public function testGetExtensions(): void
     {
@@ -240,7 +235,6 @@ AUTHNREQUEST
 
     /**
      * @group Message
-     * @return void
      */
     public function testNamespaceMustBeProtocol(): void
     {
@@ -262,7 +256,6 @@ XML;
 
     /**
      * @group Message
-     * @return void
      */
     public function testSAMLversionMustBe20(): void
     {
@@ -290,7 +283,6 @@ XML;
 
     /**
      * @group Message
-     * @return void
      */
     public function testMessageMustHaveID(): void
     {
@@ -315,7 +307,6 @@ XML;
     /**
      * Tests AQ message type and some getters/setters.
      * @group Message
-     * @return void
      */
     public function testParseAttributeQuery(): void
     {
@@ -366,7 +357,6 @@ XML;
 
     /**
      * @group Message
-     * @return void
      */
     public function testMessageTypeMustBeKnown(): void
     {

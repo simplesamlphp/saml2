@@ -80,7 +80,6 @@ final class AdditionalMetadataLocation extends AbstractMdElement
      * Set the value of the namespace-property
      *
      * @param string $namespace
-     * @return void
      * @throws \SimpleSAML\Assert\AssertionFailedException
      */
     protected function setNamespace(string $namespace): void
@@ -105,7 +104,6 @@ final class AdditionalMetadataLocation extends AbstractMdElement
      * Set the value of the location-property
      *
      * @param string $location
-     * @return void
      * @throws \SimpleSAML\Assert\AssertionFailedException
      */
     protected function setLocation(string $location): void

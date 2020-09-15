@@ -23,7 +23,6 @@ final class SubjectConfirmationRecipientMatchesTest extends MockeryTestCase
     /**
      * @group assertion-validation
      * @test
-     * @return void
      */
     public function whenTheSubjectConfirmationRecipientDiffersFromTheDestinationTheScIsInvalid(): void
     {
@@ -45,7 +44,6 @@ final class SubjectConfirmationRecipientMatchesTest extends MockeryTestCase
     /**
      * @group assertion-validation
      * @test
-     * @return void
      */
     public function whenTheSubjectConfirmationRecipientEqualsTheDestinationTheScIsInvalid(): void
     {

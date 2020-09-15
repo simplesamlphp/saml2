@@ -24,7 +24,6 @@ final class UIInfoTest extends TestCase
 
 
     /**
-     * @return void
      */
     public function setUp(): void
     {
@@ -36,7 +35,6 @@ final class UIInfoTest extends TestCase
 
     /**
      * Test creating a basic UIInfo element.
-     * @return void
      */
     public function testMarshalling(): void
     {
@@ -110,7 +108,6 @@ final class UIInfoTest extends TestCase
 
     /**
      * Test creating an UIinfo element with XML children
-     * @return void
      */
     public function testMarshallingChildren(): void
     {
@@ -205,7 +202,6 @@ final class UIInfoTest extends TestCase
 
     /**
      * Test unmarshalling a basic UIInfo element
-     * @return void
      */
     public function testUnmarshalling(): void
     {

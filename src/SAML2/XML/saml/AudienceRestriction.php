@@ -50,7 +50,6 @@ final class AudienceRestriction extends AbstractConditionType
      * Set the value of the Audience-property
      *
      * @param string[] $audience
-     * @return void
      */
     private function setAudience(array $audience): void
     {

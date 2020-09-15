@@ -47,7 +47,6 @@ final class SubjectConfirmationTest extends TestCase
 
 
     /**
-     * @return void
      */
     public function testMarshalling(): void
     {
@@ -70,7 +69,6 @@ final class SubjectConfirmationTest extends TestCase
 
 
     /**
-     * @return void
      */
     public function testMarshallingElementOrdering(): void
     {
@@ -101,7 +99,6 @@ final class SubjectConfirmationTest extends TestCase
 
 
     /**
-     * @return void
      */
     public function testUnmarshalling(): void
     {
@@ -120,7 +117,6 @@ final class SubjectConfirmationTest extends TestCase
 
 
     /**
-     * @return void
      */
     public function testMethodMissingThrowsException(): void
     {
@@ -135,7 +131,6 @@ final class SubjectConfirmationTest extends TestCase
 
 
     /**
-     * @return void
      */
     public function testManyNameIDThrowsException(): void
     {
@@ -179,7 +174,6 @@ XML
 
 
     /**
-     * @return void
      */
     public function testManySubjectConfirmationDataThrowsException(): void
     {

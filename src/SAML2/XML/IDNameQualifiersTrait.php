@@ -47,7 +47,6 @@ trait IDNameQualifiersTrait
      * Set the value of the NameQualifier-property
      *
      * @param string|null $nameQualifier
-     * @return void
      */
     private function setNameQualifier(?string $nameQualifier): void
     {
@@ -69,7 +68,6 @@ trait IDNameQualifiersTrait
      * Set the value of the SPNameQualifier-property
      *
      * @param string|null $spNameQualifier
-     * @return void
      */
     private function setSPNameQualifier(?string $spNameQualifier): void
     {

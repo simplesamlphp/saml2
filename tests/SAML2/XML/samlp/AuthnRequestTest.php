@@ -33,7 +33,6 @@ use SimpleSAML\XMLSecurity\XMLSecurityKey;
 final class AuthnRequestTest extends TestCase
 {
     /**
-     * @return void
      */
     public function setUp(): void
     {

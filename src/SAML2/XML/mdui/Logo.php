@@ -78,7 +78,6 @@ final class Logo extends AbstractMduiElement
      * Set the value of the url-property
      *
      * @param string $url
-     * @return void
      * @throws \InvalidArgumentException if the supplied value is not a valid URL
      */
     private function setUrl(string $url): void
@@ -106,7 +105,6 @@ final class Logo extends AbstractMduiElement
      * Set the value of the lang-property
      *
      * @param string|null $lang
-     * @return void
      */
     private function setLanguage(?string $lang): void
     {
@@ -129,7 +127,6 @@ final class Logo extends AbstractMduiElement
      * Set the value of the height-property
      *
      * @param int $height
-     * @return void
      */
     private function setHeight(int $height): void
     {
@@ -152,7 +149,6 @@ final class Logo extends AbstractMduiElement
      * Set the value of the width-property
      *
      * @param int $width
-     * @return void
      */
     private function setWidth(int $width): void
     {

@@ -30,7 +30,6 @@ final class XmlSignatureWrappingTest extends MockeryTestCase
 
 
     /**
-     * @return void
      */
     public function setUp(): void
     {
@@ -46,7 +45,6 @@ final class XmlSignatureWrappingTest extends MockeryTestCase
 
 
     /**
-     * @return void
      */
     public function testThatASignatureReferencingAnEmbeddedAssertionIsNotValid(): void
     {
@@ -59,7 +57,6 @@ final class XmlSignatureWrappingTest extends MockeryTestCase
 
 
     /**
-     * @return void
      */
     public function testThatASignatureReferencingAnotherAssertionIsNotValid(): void
     {

@@ -24,7 +24,6 @@ final class DiscoHintsTest extends TestCase
 
 
     /**
-     * @return void
      */
     protected function setUp(): void
     {
@@ -36,7 +35,6 @@ final class DiscoHintsTest extends TestCase
 
     /**
      * Test marshalling a basic DiscoHints element
-     * @return void
      */
     public function testMarshalling(): void
     {
@@ -85,7 +83,6 @@ final class DiscoHintsTest extends TestCase
 
     /**
      * Test unmarshalling a basic DiscoHints element
-     * @return void
      */
     public function testUnmarshalling(): void
     {
@@ -105,7 +102,6 @@ final class DiscoHintsTest extends TestCase
 
     /**
      * Add a Keywords element to the children attribute
-     * @return void
      */
     public function testMarshallingChildren(): void
     {
@@ -132,7 +128,6 @@ final class DiscoHintsTest extends TestCase
 
     /**
      * Unmarshal a DiscoHints attribute with extra children
-     * @return void
      */
     public function testUnmarshallingChildren(): void
     {

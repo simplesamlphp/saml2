@@ -200,7 +200,6 @@ final class IDPSSODescriptor extends AbstractSSODescriptor
      * Set the value of the WantAuthnRequestsSigned-property
      *
      * @param bool|null $flag
-     * @return void
      */
     protected function setWantAuthnRequestsSigned(?bool $flag = null): void
     {
@@ -223,7 +222,6 @@ final class IDPSSODescriptor extends AbstractSSODescriptor
      * Set the SingleSignOnService endpoints
      *
      * @param \SimpleSAML\SAML2\XML\md\SingleSignOnService[] $singleSignOnServices
-     * @return void
      */
     protected function setSingleSignOnServices(array $singleSignOnServices): void
     {
@@ -252,7 +250,6 @@ final class IDPSSODescriptor extends AbstractSSODescriptor
      * Set the NameIDMappingService endpoints
      *
      * @param \SimpleSAML\SAML2\XML\md\NameIDMappingService[] $nameIDMappingServices
-     * @return void
      */
     protected function setNameIDMappingServices(array $nameIDMappingServices): void
     {
@@ -280,7 +277,6 @@ final class IDPSSODescriptor extends AbstractSSODescriptor
      * Set the AssertionIDRequestService endpoints
      *
      * @param \SimpleSAML\SAML2\XML\md\AssertionIDRequestService[] $assertionIDRequestServices
-     * @return void
      */
     protected function setAssertionIDRequestService(array $assertionIDRequestServices): void
     {

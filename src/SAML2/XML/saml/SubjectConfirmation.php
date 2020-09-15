@@ -70,7 +70,6 @@ final class SubjectConfirmation extends AbstractSamlElement
      * Set the value of the Method-property
      *
      * @param string $method
-     * @return void
      */
     private function setMethod(string $method): void
     {
@@ -93,7 +92,6 @@ final class SubjectConfirmation extends AbstractSamlElement
      * Set the value of the SubjectConfirmationData-property
      *
      * @param \SimpleSAML\SAML2\XML\saml\SubjectConfirmationData|null $subjectConfirmationData
-     * @return void
      */
     private function setSubjectConfirmationData(?SubjectConfirmationData $subjectConfirmationData): void
     {

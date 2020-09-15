@@ -55,7 +55,6 @@ final class EntityAttributes extends AbstractMdattrElement
      * Set the value of the childen-property
      *
      * @param (\SimpleSAML\XML\Chunk|\SimpleSAML\SAML2\XML\saml\Attribute)[] $children
-     * @return void
      * @throws \SimpleSAML\Assert\AssertionFailedException
      */
     private function setChildren(array $children): void
@@ -70,7 +69,6 @@ final class EntityAttributes extends AbstractMdattrElement
      * Add the value to the children-property
      *
      * @param \SimpleSAML\XML\Chunk|\SimpleSAML\SAML2\XML\saml\Attribute $child
-     * @return void
      * @throws \SimpleSAML\Assert\AssertionFailedException
      */
     public function addChild($child): void

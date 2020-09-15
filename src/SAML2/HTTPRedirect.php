@@ -87,7 +87,6 @@ class HTTPRedirect extends Binding
      * Note: This function never returns.
      *
      * @param \SimpleSAML\SAML2\XML\samlp\AbstractMessage $message The message we should send.
-     * @return void
      */
     public function send(AbstractMessage $message): void
     {
@@ -222,7 +221,6 @@ class HTTPRedirect extends Binding
      *
      * @param array $data The data we need to validate the query string.
      * @param \SimpleSAML\XMLSecurity\XMLSecurityKey $key  The key we should validate the query against.
-     * @return void
      *
      * @throws \Exception
      * @throws \SimpleSAML\Assert\AssertionFailedException if assertions are false

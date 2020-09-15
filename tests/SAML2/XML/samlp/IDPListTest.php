@@ -27,7 +27,6 @@ final class IDPListTest extends TestCase
 
 
     /**
-     * @return void
      */
     protected function setUp(): void
     {
@@ -38,7 +37,6 @@ final class IDPListTest extends TestCase
 
 
     /**
-     * @return void
      */
     public function testMarshalling(): void
     {
@@ -65,7 +63,6 @@ final class IDPListTest extends TestCase
 
 
     /**
-     * @return void
      */
     public function testMarshallingElementOrdering(): void
     {
@@ -89,7 +86,6 @@ final class IDPListTest extends TestCase
 
 
     /**
-     * @return void
      */
     public function testMarshallingNullables(): void
     {
@@ -118,7 +114,6 @@ XML
 
 
     /**
-     * @return void
      */
     public function testUnmarshalling(): void
     {
@@ -140,7 +135,6 @@ XML
 
 
     /**
-     * @return void
      */
     public function testZeroIDPEntriesThrowsException(): void
     {

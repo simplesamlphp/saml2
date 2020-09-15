@@ -17,7 +17,6 @@ final class PrivateKeyTest extends MockeryTestCase
     /**
      * @group certificate
      * @test
-     * @return void
      */
     public function testCreateFromKey(): void
     {

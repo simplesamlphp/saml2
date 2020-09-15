@@ -83,7 +83,6 @@ class AttributeQuery extends AbstractSubjectQuery
      * Set all requested attributes.
      *
      * @param \SimpleSAML\SAML2\XML\saml\Attribute[] $attributes All requested attributes, as an associative array.
-     * @return void
      */
     public function setAttributes(array $attributes): void
     {

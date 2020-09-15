@@ -72,7 +72,6 @@ XML
 
 
     /**
-     * @return void
      */
     public function testMarshallingNameID(): void
     {
@@ -121,7 +120,6 @@ XML
 
 
     /**
-     * @return void
      */
     public function testMarshallingElementOrdering(): void
     {
@@ -168,7 +166,6 @@ XML
 
 
     /**
-     * @return void
      */
     public function testMarshallingBaseID(): void
     {
@@ -217,7 +214,6 @@ XML
 
 
     /**
-     * @return void
      */
     public function testUnmarshalling(): void
     {
@@ -236,7 +232,6 @@ XML
 
 
     /**
-     * @return void
      */
     public function testEmptySubjectThrowsException(): void
     {
@@ -252,7 +247,6 @@ XML
 
 
     /**
-     * @return void
      */
     public function testManyNameIDThrowsException(): void
     {

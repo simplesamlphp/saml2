@@ -53,7 +53,6 @@ final class SubjectLocality extends AbstractSamlElement
      * Set the value of the address-property
      *
      * @param string|null $address
-     * @return void
      */
     private function setAddress(?string $address): void
     {
@@ -77,7 +76,6 @@ final class SubjectLocality extends AbstractSamlElement
      * Set the value of the dnsName-property
      *
      * @param string|null $dnsName
-     * @return void
      */
     private function setDnsName(?string $dnsName): void
     {

@@ -26,7 +26,6 @@ final class SigningMethodTest extends TestCase
 
 
     /**
-     * @return void
      */
     protected function setUp(): void
     {
@@ -37,7 +36,6 @@ final class SigningMethodTest extends TestCase
 
 
     /**
-     * @return void
      */
     public function testMarshalling(): void
     {
@@ -52,7 +50,6 @@ final class SigningMethodTest extends TestCase
 
 
     /**
-     * @return void
      */
     public function testUnmarshalling(): void
     {
@@ -65,7 +62,6 @@ final class SigningMethodTest extends TestCase
 
 
     /**
-     * @return void
      */
     public function testMissingAlgorithmThrowsException(): void
     {

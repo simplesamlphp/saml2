@@ -39,7 +39,6 @@ class SubjectConfirmationValidator
 
     /**
      * @param \SimpleSAML\SAML2\Assertion\Validation\SubjectConfirmationConstraintValidator $constraint
-     * @return void
      */
     public function addConstraintValidator(
         SubjectConfirmationConstraintValidator $constraint
