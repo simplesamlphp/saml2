@@ -373,15 +373,10 @@ XML;
 XML;
         $document = DOMDocumentFactory::fromString($xml);
         $this->expectException(TooManyElementsException::class);
-<<<<<<< HEAD
         $this->expectExceptionMessage(
             'A <saml:Subject> not containing <saml:SubjectConfirmation> should provide exactly one of <saml:BaseID>, <saml:NameID> or <saml:EncryptedID>'
         );
-        $aq = AttributeQuery::fromXML($document->documentElement);
-=======
-        $this->expectExceptionMessage('A <saml:Subject> not containing <saml:SubjectConfirmation> should provide exactly one of <saml:BaseID>, <saml:NameID> or <saml:EncryptedID>');
         AttributeQuery::fromXML($document->documentElement);
->>>>>>> Fix Psalm-issues
     }
 
 
