@@ -64,7 +64,7 @@ jobs:
         uses: allenevans/set-env@v1.0.0
         if: ${{ matrix.php-versions != '7.4' || matrix.operating-system != 'ubuntu-latest' }}
         with:
-          NO_COVERAGE: "--no-coverage"
+          echo "NO_COVERAGE=--no-coverage" >> $GITHUB_ENV
 
       - name: Run unit tests
         run: |
