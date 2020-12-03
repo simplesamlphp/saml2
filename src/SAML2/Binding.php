@@ -85,7 +85,7 @@ abstract class Binding
                     return new HTTPPost();
                 } elseif (array_key_exists('SAMLart', $_POST)) {
                     return new HTTPArtifact();
-                } elseif ($contentType === 'text/xml') {
+                } elseif ($contentType === 'text/xml' || $contentType === 'application/soap+xml') {
                     return new SOAP();
                 }
                 break;
