@@ -33,6 +33,7 @@ $authnRequest = new AuthnRequest(
     null,
     null,
     null,
+    null,
     $issuer,
     "123",
     null,
