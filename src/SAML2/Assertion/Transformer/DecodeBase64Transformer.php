@@ -86,7 +86,7 @@ class DecodeBase64Transformer implements
         array_walk($encodedValues, function(&$v, $k) {
             if (is_string($v)) {
                 foreach ($this->decodeValue($v) as $decoded) {
-                    $v[$k] = new AttributeValue($decoded);
+                    $v = new AttributeValue($decoded);
                 }
             }
         });
