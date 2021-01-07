@@ -182,7 +182,7 @@ XML
         $processed = $this->assertionProcessor->process($assertion);
         $attributes = $processed->getAttributeStatements()[0]->getAttributes();
 
-        $affiliation = $attributes[1]->getAttributeValues();
+        $affiliation = $attributes[0]->getAttributeValues();
         $this->assertCount(2, $affiliation);
         $this->assertEquals("member", $affiliation[0]->getValue());
         $this->assertEquals("affiliate", $affiliation[1]->getValue());
