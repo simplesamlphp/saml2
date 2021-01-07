@@ -83,9 +83,10 @@ class DecodeBase64Transformer implements
      */
     private function getDecodedAttributeValues(array $encodedValues): array
     {
-        array_walk($encodedValues, function(&$v, $k) {
+        $callback = [$this, 'decodeValue'];
+        array_walk($encodedValues, function($v, $k) use (&$encodedValues, $callback) {
             if (is_string($v)) {
-                foreach ($this->decodeValue($v) as $decoded) {
+                foreach ($callback($v) as $decoded) {
                     $v = new AttributeValue($decoded);
                 }
             }
