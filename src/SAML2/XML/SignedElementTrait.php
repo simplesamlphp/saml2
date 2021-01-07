@@ -8,6 +8,7 @@ use DOMElement;
 use DOMNode;
 use Exception;
 use SimpleSAML\Assert\Assert;
+use SimpleSAML\XMLSecurity\Utils as XMLSecurityUtils;
 use SimpleSAML\XMLSecurity\XML\ds\Signature;
 use SimpleSAML\XMLSecurity\XMLSecurityKey;
 use SimpleSAML\XML\Utils as XMLUtils;
@@ -194,7 +195,7 @@ trait SignedElementTrait
     {
         if ($this->signingKey instanceof XMLSecurityKey) {
             if ($insertBefore !== null) {
-                XMLUtils::insertSignature($this->signingKey, $this->certificates, $root, $insertBefore);
+                XMLSecurityUtils::insertSignature($this->signingKey, $this->certificates, $root, $insertBefore);
 
                 $doc = clone $root->ownerDocument;
                 $this->signature = Signature::fromXML(XMLUtils::xpQuery($doc->documentElement, './ds:Signature')[0]);
