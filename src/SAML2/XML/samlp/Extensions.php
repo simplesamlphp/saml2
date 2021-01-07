@@ -21,7 +21,7 @@ final class Extensions extends AbstractSamlpElement
     use ExtensionsTrait;
 
     /**
-     * Create an Extensions object from its md:Extensions XML representation.
+     * Create an Extensions object from its samlp:Extensions XML representation.
      *
      * For those supported extensions, an object of the corresponding class will be created. The rest will be added
      * as a \SimpleSAML\XML\Chunk object.
