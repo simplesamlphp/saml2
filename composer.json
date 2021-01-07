@@ -25,7 +25,7 @@
         "psr/log": "~1.1",
         "simplesamlphp/xml-common": "~0.0.9",
         "simplesamlphp/xml-security": "~0.0.5",
-        "simplesamlphp/assert": "~0.0.12"
+        "simplesamlphp/assert": "~0.1.0"
     },
     "require-dev": {
         "mockery/mockery": "~1.3",
