@@ -85,7 +85,6 @@ class AttributeStatement extends AbstractStatement
 
     /**
      * @return bool
-     * @return void
      */
     public function hasEncryptedAttributes(): bool
     {
