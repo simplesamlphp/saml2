@@ -25,7 +25,6 @@ final class RequestAuthenticated extends AbstractEcpElement
      * Create a ECP RequestAuthenticated element.
      *
      * @param int $mustUnderstand
-     * @return void
      */
     public function __construct(?int $mustUnderstand = null)
     {

@@ -118,7 +118,6 @@ abstract class AbstractSSODescriptor extends AbstractRoleDescriptor
      * Set the value of the ArtifactResolutionService-property
      *
      * @param \SimpleSAML\SAML2\XML\md\AbstractIndexedEndpointType[] $artifactResolutionServices
-     * @return void
      * @throws \SimpleSAML\Assert\AssertionFailedException
      */
     protected function setArtifactResolutionServices(array $artifactResolutionServices): void

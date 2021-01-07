@@ -29,7 +29,6 @@ class ContainerSingleton
      * Set a container to use.
      *
      * @param \SimpleSAML\SAML2\Compat\ContainerInterface $container
-     * @return void
      */
     public static function setContainer(ContainerInterface $container): void
     {

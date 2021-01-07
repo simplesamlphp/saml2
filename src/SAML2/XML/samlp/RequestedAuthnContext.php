@@ -55,7 +55,6 @@ final class RequestedAuthnContext extends AbstractSamlpElement
      * Set the value of the requestedAuthnContexts-property
      *
      * @param (\SimpleSAML\SAML2\XML\saml\AuthnContextClassRef|\SimpleSAML\SAML2\XML\saml\AuthnContextDeclRef)[] $requestedAuthnContexts
-     * @return void
      *
      * @throws \SimpleSAML\XML\Exception\InvalidDOMElementException if the qualified name of the supplied element is wrong
      * @throws \SimpleSAML\XML\Exception\InvalidDOMElementException if the supplied element is missing the Algorithm attribute
@@ -98,7 +97,6 @@ final class RequestedAuthnContext extends AbstractSamlpElement
      * Set the value of the Comparison-property
      *
      * @param string|null $comparison
-     * @return void
      */
     private function setComparison(?string $comparison): void
     {

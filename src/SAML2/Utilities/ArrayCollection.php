@@ -33,7 +33,6 @@ class ArrayCollection implements Collection
     /**
      * @param mixed $element
      *
-     * @return void
      */
     public function add($element): void
     {
@@ -66,7 +65,6 @@ class ArrayCollection implements Collection
     /**
      * @param mixed $key
      * @param mixed $value
-     * @return void
      */
     public function set($key, $value): void
     {
@@ -77,7 +75,6 @@ class ArrayCollection implements Collection
     /**
      * @param mixed $element
      *
-     * @return void
      */
     public function remove($element): void
     {
@@ -179,7 +176,6 @@ class ArrayCollection implements Collection
     /**
      * @param mixed $offset
      * @param mixed $value
-     * @return void
      */
     public function offsetSet($offset, $value): void
     {
@@ -189,7 +185,6 @@ class ArrayCollection implements Collection
 
     /**
      * @param $offset
-     * @return void
      */
     public function offsetUnset($offset): void
     {

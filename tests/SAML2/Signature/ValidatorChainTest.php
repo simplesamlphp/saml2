@@ -23,7 +23,6 @@ final class ValidatorChainTest extends TestCase
 
 
     /**
-     * @return void
      */
     public function setUp(): void
     {
@@ -34,7 +33,6 @@ final class ValidatorChainTest extends TestCase
     /**
      * @group signature
      * @test
-     * @return void
      */
     public function ifNoValidatorsCanValidateAnExceptionIsThrown(): void
     {
@@ -49,7 +47,6 @@ final class ValidatorChainTest extends TestCase
     /**
      * @group signature
      * @test
-     * @return void
      */
     public function allRegisteredValidatorsShouldBeTried(): void
     {
@@ -68,7 +65,6 @@ final class ValidatorChainTest extends TestCase
     /**
      * @group signature
      * @test
-     * @return void
      */
     public function itUsesTheResultOfTheFirstValidatorThatCanValidate(): void
     {

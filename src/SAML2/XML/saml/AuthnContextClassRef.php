@@ -47,7 +47,6 @@ final class AuthnContextClassRef extends AbstractSamlElement
      * Set the value of the classRef-property
      *
      * @param string $name
-     * @return void
      */
     private function setClassRef(string $classRef): void
     {

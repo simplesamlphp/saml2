@@ -26,7 +26,6 @@ final class StatementTest extends TestCase
 
 
     /**
-     * @return void
      */
     protected function setUp(): void
     {
@@ -40,7 +39,6 @@ final class StatementTest extends TestCase
 
 
     /**
-     * @return void
      */
     public function testMarshalling(): void
     {
@@ -60,7 +58,6 @@ final class StatementTest extends TestCase
 
 
     /**
-     * @return void
      */
     public function testUnmarshallingCustomClass(): void
     {

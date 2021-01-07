@@ -25,7 +25,6 @@ final class KeywordsTest extends TestCase
 
 
     /**
-     * @return void
      */
     public function setUp(): void
     {
@@ -37,7 +36,6 @@ final class KeywordsTest extends TestCase
 
     /**
      * Test creating a basic Keywords element.
-     * @return void
      */
     public function testMarshalling(): void
     {
@@ -61,7 +59,6 @@ final class KeywordsTest extends TestCase
 
     /**
      * Keyword may not contain a "+", Exception expected.
-     * @return void
      */
     public function testKeywordWithPlusSignThrowsException(): void
     {
@@ -74,7 +71,6 @@ final class KeywordsTest extends TestCase
 
     /**
      * Unmarshalling of a keywords tag
-     * @return void
      */
     public function testUnmarshalling(): void
     {
@@ -89,7 +85,6 @@ final class KeywordsTest extends TestCase
 
     /**
      * Unmarshalling fails if lang attribute not present
-     * @return void
      */
     public function testUnmarshallingFailsMissingLanguage(): void
     {
@@ -104,7 +99,6 @@ final class KeywordsTest extends TestCase
 
     /**
      * Unmarshalling fails if attribute is empty
-     * @return void
      */
     public function testUnmarshallingFailsMissingKeywords(): void
     {

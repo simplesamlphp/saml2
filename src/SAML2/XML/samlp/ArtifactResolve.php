@@ -73,7 +73,6 @@ class ArtifactResolve extends AbstractRequest
      * Set the artifact that should be included in this response.
      *
      * @param string $artifact
-     * @return void
      */
     public function setArtifact(string $artifact): void
     {

@@ -15,7 +15,6 @@ class NotOnOrAfter implements
     /**
      * @param \SimpleSAML\SAML2\XML\saml\Assertion $assertion
      * @param \SimpleSAML\SAML2\Assertion\Validation\Result $result
-     * @return void
      */
     public function validate(Assertion $assertion, Result $result): void
     {

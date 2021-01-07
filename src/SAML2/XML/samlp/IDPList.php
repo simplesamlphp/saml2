@@ -49,7 +49,6 @@ final class IDPList extends AbstractSamlpElement
 
     /**
      * @param \SimpleSAML\SAML2\XML\samlp\IDPEntry[] $idpEntry
-     * @return void
      */
     private function setIdpEntry(array $idpEntry): void
     {
@@ -71,7 +70,6 @@ final class IDPList extends AbstractSamlpElement
 
     /**
      * @param string|null $getComplete
-     * @return void
      */
     private function setGetComplete(?string $getComplete = null): void
     {

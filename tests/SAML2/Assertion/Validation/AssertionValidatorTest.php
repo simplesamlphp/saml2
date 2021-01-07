@@ -53,7 +53,6 @@ final class AssertionValidatorTest extends TestCase
     protected Response $response;
 
     /**
-     * @return void
      */
     protected function setUp(): void
     {
@@ -113,7 +112,6 @@ XML
      *
      * @runInSeparateProcess
      * @preserveGlobalState disabled
-     * @return void
      */
     public function testBasicValidation(): void
     {
@@ -128,7 +126,6 @@ XML
      *
      * @runInSeparateProcess
      * @preserveGlobalState disabled
-     * @return void
      */
     public function testAssertionNonValidation(): void
     {

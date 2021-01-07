@@ -130,7 +130,6 @@ abstract class AbstractRoleDescriptor extends AbstractMetadataDocument
      * Set the value of the ProtocolSupportEnumeration property.
      *
      * @param string[] $protocols
-     * @return void
      * @throws \SimpleSAML\Assert\AssertionFailedException if the qualified name of the supplied element is wrong
      */
     protected function setProtocolSupportEnumeration(array $protocols): void
@@ -156,7 +155,6 @@ abstract class AbstractRoleDescriptor extends AbstractMetadataDocument
      * Set the value of the Organization property.
      *
      * @param \SimpleSAML\SAML2\XML\md\Organization|null $organization
-     * @return void
      */
     protected function setOrganization(?Organization $organization = null): void
     {
@@ -179,7 +177,6 @@ abstract class AbstractRoleDescriptor extends AbstractMetadataDocument
      * Set the value of the ContactPerson property.
      *
      * @param \SimpleSAML\SAML2\XML\md\ContactPerson[] $contactPersons
-     * @return void
      * @throws \SimpleSAML\Assert\AssertionFailedException
      */
     protected function setContactPersons(array $contactPersons): void

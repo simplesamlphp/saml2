@@ -25,7 +25,6 @@ final class StatusCodeTest extends TestCase
 
 
     /**
-     * @return void
      */
     public function setUp(): void
     {
@@ -36,7 +35,6 @@ final class StatusCodeTest extends TestCase
 
 
     /**
-     * @return void
      */
     public function testMarshalling(): void
     {
@@ -56,7 +54,6 @@ final class StatusCodeTest extends TestCase
 
 
     /**
-     * @return void
      */
     public function testUnmarshalling(): void
     {

@@ -74,7 +74,6 @@ SOAP;
      * Note: This function never returns.
      *
      * @param \SimpleSAML\SAML2\XML\samlp\AbstractMessage $message The message we should send.
-     * @return void
      */
     public function send(AbstractMessage $message): void
     {

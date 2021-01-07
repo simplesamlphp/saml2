@@ -24,7 +24,6 @@ final class ScopeTest extends TestCase
 
 
     /**
-     * @return void
      */
     public function setUp(): void
     {
@@ -36,7 +35,6 @@ final class ScopeTest extends TestCase
 
     /**
      * Marshalling a scope in literal (non-regexp) form.
-     * @return void
      */
     public function testMarshallingLiteral(): void
     {
@@ -59,7 +57,6 @@ final class ScopeTest extends TestCase
     /**
      * Marshalling a scope which does not specificy the value for
      * regexp explicitly (expect it to default to 'false').
-     * @return void
      */
     public function testMarshallingImplicitRegexpValue(): void
     {
@@ -81,7 +78,6 @@ final class ScopeTest extends TestCase
 
     /**
      * Marshalling a scope which is in regexp form.
-     * @return void
      */
     public function testMarshallingRegexp(): void
     {
@@ -103,7 +99,6 @@ final class ScopeTest extends TestCase
 
     /**
      * Unmarshalling a scope in literal (non-regexp) form.
-     * @return void
      */
     public function testUnmarshallingLiteral(): void
     {
@@ -117,7 +112,6 @@ final class ScopeTest extends TestCase
     /**
      * Unmarshalling a scope that does not specify an explicit
      * regexp value (assumed to be false).
-     * @return void
      */
     public function testUnmarshallingWithoutRegexpValue(): void
     {
@@ -130,7 +124,6 @@ final class ScopeTest extends TestCase
 
     /**
      * Unmarshalling a scope in regexp form.
-     * @return void
      */
     public function testUnmarshallingRegexp(): void
     {

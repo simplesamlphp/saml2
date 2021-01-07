@@ -26,7 +26,6 @@ final class DigestMethodTest extends TestCase
 
 
     /**
-     * @return void
      */
     protected function setUp(): void
     {
@@ -37,7 +36,6 @@ final class DigestMethodTest extends TestCase
 
 
     /**
-     * @return void
      */
     public function testMarshalling(): void
     {
@@ -50,7 +48,6 @@ final class DigestMethodTest extends TestCase
 
 
     /**
-     * @return void
      */
     public function testUnmarshalling(): void
     {
@@ -61,7 +58,6 @@ final class DigestMethodTest extends TestCase
 
 
     /**
-     * @return void
      */
     public function testUnmarshallingMissingAlgorithmThrowsException(): void
     {

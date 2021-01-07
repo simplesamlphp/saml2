@@ -51,7 +51,6 @@ final class NameIDPolicy extends AbstractSamlpElement
 
     /**
      * @param string|null $Format
-     * @return void
      */
     private function setFormat(?string $Format): void
     {
@@ -70,7 +69,6 @@ final class NameIDPolicy extends AbstractSamlpElement
 
     /**
      * @param string|null $SPNameQualifier
-     * @return void
      */
     private function setSPNameQualifier(?string $SPNameQualifier): void
     {
@@ -89,7 +87,6 @@ final class NameIDPolicy extends AbstractSamlpElement
 
     /**
      * @param bool|null $AllowCreate
-     * @return void
      */
     private function setAllowCreate(?bool $AllowCreate): void
     {

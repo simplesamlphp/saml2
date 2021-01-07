@@ -30,7 +30,6 @@ class SubjectConfirmationResponseToMatches implements
     /**
      * @param \SimpleSAML\SAML2\XML\saml\SubjectConfirmation $subjectConfirmation
      * @param \SimpleSAML\SAML2\Assertion\Validation\Result $result
-     * @return void
      *
      * @throws \SimpleSAML\Assert\AssertionFailedException if assertions are false
      */

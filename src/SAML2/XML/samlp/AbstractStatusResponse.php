@@ -98,7 +98,6 @@ abstract class AbstractStatusResponse extends AbstractMessage
      * Set the ID of the request this is a response to.
      *
      * @param string|null $inResponseTo The ID of the request.
-     * @return void
      */
     protected function setInResponseTo(?string $inResponseTo): void
     {
@@ -121,7 +120,6 @@ abstract class AbstractStatusResponse extends AbstractMessage
      * Set the status code.
      *
      * @param \SimpleSAML\SAML2\XML\samlp\Status $status The status code.
-     * @return void
      */
     protected function setStatus(Status $status): void
     {

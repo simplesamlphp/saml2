@@ -43,7 +43,6 @@ class AssertionValidator
 
     /**
      * @param \SimpleSAML\SAML2\Assertion\Validation\AssertionConstraintValidator $constraint
-     * @return void
      */
     public function addConstraintValidator(AssertionConstraintValidator $constraint): void
     {

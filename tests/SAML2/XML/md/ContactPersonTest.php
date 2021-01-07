@@ -27,7 +27,6 @@ final class ContactPersonTest extends TestCase
 
 
     /**
-     * @return void
      */
     protected function setUp(): void
     {
@@ -290,7 +289,6 @@ XML
 
 
     /**
-     * @return void
      */
     public function testInvalidEmailThrowsException(): void
     {
@@ -301,7 +299,6 @@ XML
 
 
     /**
-     * @return void
      */
     public function testInvalidEmailInSetThrowsException(): void
     {

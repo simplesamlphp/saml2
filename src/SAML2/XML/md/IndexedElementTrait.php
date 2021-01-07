@@ -43,7 +43,6 @@ trait IndexedElementTrait
      * Set the value of the index property.
      *
      * @param int $index
-     * @return void
      * @throws \SimpleSAML\Assert\AssertionFailedException
      */
     protected function setIndex(int $index): void

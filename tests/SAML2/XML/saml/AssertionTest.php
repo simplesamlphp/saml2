@@ -31,7 +31,6 @@ final class AssertionTest extends MockeryTestCase
 
 
     /**
-     * @return void
      */
     public function setUp(): void
     {

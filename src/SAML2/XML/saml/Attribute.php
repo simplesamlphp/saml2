@@ -90,7 +90,6 @@ class Attribute extends AbstractSamlElement
      * Set the value of the Name-property
      *
      * @param string $name
-     * @return void
      */
     protected function setName(string $name): void
     {
@@ -114,7 +113,6 @@ class Attribute extends AbstractSamlElement
      * Set the value of the NameFormat-property
      *
      * @param string|null $NameFormat
-     * @return void
      * @throws \SimpleSAML\Assert\AssertionFailedException if the NameFormat is empty
      */
     protected function setNameFormat(?string $NameFormat): void
@@ -139,7 +137,6 @@ class Attribute extends AbstractSamlElement
      * Set the value of the FriendlyName-property
      *
      * @param string|null $friendlyName
-     * @return void
      * @throws \SimpleSAML\Assert\AssertionFailedException if the FriendlyName is empty
      */
     private function setFriendlyName(?string $friendlyName): void
@@ -164,7 +161,6 @@ class Attribute extends AbstractSamlElement
      * Set the value of the AttributeValues-property
      *
      * @param \SimpleSAML\SAML2\XML\saml\AttributeValue[] $attributeValues
-     * @return void
      */
     protected function setAttributeValues(array $attributeValues): void
     {

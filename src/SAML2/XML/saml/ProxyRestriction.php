@@ -56,7 +56,6 @@ final class ProxyRestriction extends AbstractConditionType
      * Set the value of the count-attribute
      *
      * @param int|null $count
-     * @return void
      */
     protected function setCount(?int $count): void
     {
@@ -80,7 +79,6 @@ final class ProxyRestriction extends AbstractConditionType
      * Set the value of the audience-attribute
      *
      * @param string[] $audience
-     * @return void
      */
     protected function setAudience(array $audience): void
     {

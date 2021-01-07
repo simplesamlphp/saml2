@@ -26,7 +26,6 @@ final class SubjectConfirmationDataTest extends TestCase
 
 
     /**
-     * @return void
      */
     public function setup(): void
     {
@@ -40,7 +39,6 @@ final class SubjectConfirmationDataTest extends TestCase
 
 
     /**
-     * @return void
      */
     public function testMarshalling(): void
     {
@@ -81,7 +79,6 @@ final class SubjectConfirmationDataTest extends TestCase
 
 
     /**
-     * @return void
      */
     public function testMarshallingWithNonIPAddress(): void
     {
@@ -128,7 +125,6 @@ final class SubjectConfirmationDataTest extends TestCase
 
 
     /**
-     * @return void
      */
     public function testUnmarshalling(): void
     {
@@ -171,7 +167,6 @@ final class SubjectConfirmationDataTest extends TestCase
 
 
     /**
-     * @return void
      */
     public function testUnmarshallingEmpty(): void
     {

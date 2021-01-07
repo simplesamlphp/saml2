@@ -29,7 +29,6 @@ final class StatusTest extends TestCase
 
 
     /**
-     * @return void
      */
     public function setUp(): void
     {
@@ -44,7 +43,6 @@ final class StatusTest extends TestCase
 
 
     /**
-     * @return void
      */
     public function testMarshalling(): void
     {
@@ -101,7 +99,6 @@ final class StatusTest extends TestCase
 
 
     /**
-     * @return void
      */
     public function testMarshallingElementOrdering(): void
     {
@@ -135,7 +132,6 @@ final class StatusTest extends TestCase
 
 
     /**
-     * @return void
      */
     public function testUnmarshalling(): void
     {

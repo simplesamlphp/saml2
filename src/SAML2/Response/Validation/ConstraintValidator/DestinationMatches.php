@@ -30,7 +30,6 @@ final class DestinationMatches implements ConstraintValidator
     /**
      * @param \SimpleSAML\SAML2\XML\samlp\Response $response
      * @param \SimpleSAML\SAML2\Response\Validation\Result $result
-     * @return void
      */
     public function validate(Response $response, Result $result): void
     {

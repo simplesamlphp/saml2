@@ -164,7 +164,6 @@ class AuthnRequest extends AbstractRequest
 
     /**
      * @param \SimpleSAML\SAML2\XML\saml\Subject|null $subject
-     * @return void
      */
     private function setSubject(?Subject $subject): void
     {
@@ -183,7 +182,6 @@ class AuthnRequest extends AbstractRequest
 
     /**
      * @param \SimpleSAML\SAML2\XML\samlp\Scoping|null $scoping
-     * @return void
      */
     private function setScoping(?Scoping $scoping): void
     {
@@ -202,7 +200,6 @@ class AuthnRequest extends AbstractRequest
 
     /**
      * @param \SimpleSAML\SAML2\XML\saml\Conditions|null $conditions
-     * @return void
      */
     private function setConditions(?Conditions $conditions): void
     {
@@ -235,7 +232,6 @@ class AuthnRequest extends AbstractRequest
      * Set the NameIDPolicy.
      *
      * @param \SimpleSAML\SAML2\XML\samlp\NameIDPolicy|null $nameIdPolicy The NameIDPolicy.
-     * @return void
      */
     private function setNameIdPolicy(?NameIDPolicy $nameIdPolicy): void
     {
@@ -258,7 +254,6 @@ class AuthnRequest extends AbstractRequest
      * Set the value of the ForceAuthn attribute.
      *
      * @param bool $forceAuthn The ForceAuthn attribute.
-     * @return void
      */
     private function setForceAuthn(?bool $forceAuthn): void
     {
@@ -281,7 +276,6 @@ class AuthnRequest extends AbstractRequest
      * Set the value of the ProviderName attribute.
      *
      * @param string|null $ProviderName The ProviderName attribute.
-     * @return void
      */
     private function setProviderName(?string $ProviderName): void
     {
@@ -304,7 +298,6 @@ class AuthnRequest extends AbstractRequest
      * Set the value of the IsPassive attribute.
      *
      * @param bool|null $isPassive The IsPassive attribute.
-     * @return void
      */
     private function setIsPassive(?bool $isPassive): void
     {
@@ -327,7 +320,6 @@ class AuthnRequest extends AbstractRequest
      * Set the value of the AssertionConsumerServiceURL attribute.
      *
      * @param string|null $assertionConsumerServiceURL The AssertionConsumerServiceURL attribute.
-     * @return void
      */
     private function setAssertionConsumerServiceURL(string $assertionConsumerServiceURL = null): void
     {
@@ -350,7 +342,6 @@ class AuthnRequest extends AbstractRequest
      * Set the value of the ProtocolBinding attribute.
      *
      * @param string $protocolBinding The ProtocolBinding attribute.
-     * @return void
      */
     private function setProtocolBinding(string $protocolBinding = null): void
     {
@@ -373,7 +364,6 @@ class AuthnRequest extends AbstractRequest
      * Set the value of the AttributeConsumingServiceIndex attribute.
      *
      * @param int|null $attributeConsumingServiceIndex The AttributeConsumingServiceIndex attribute.
-     * @return void
      */
     private function setAttributeConsumingServiceIndex(int $attributeConsumingServiceIndex = null): void
     {
@@ -396,7 +386,6 @@ class AuthnRequest extends AbstractRequest
      * Set the value of the AssertionConsumerServiceIndex attribute.
      *
      * @param int|null $assertionConsumerServiceIndex The AssertionConsumerServiceIndex attribute.
-     * @return void
      */
     private function setAssertionConsumerServiceIndex(int $assertionConsumerServiceIndex = null): void
     {
@@ -419,7 +408,6 @@ class AuthnRequest extends AbstractRequest
      * Set the RequestedAuthnContext.
      *
      * @param \SimpleSAML\SAML2\XML\samlp\RequestedAuthnContext|null $requestedAuthnContext The RequestedAuthnContext.
-     * @return void
      */
     private function setRequestedAuthnContext(RequestedAuthnContext $requestedAuthnContext = null): void
     {

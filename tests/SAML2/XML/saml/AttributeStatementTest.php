@@ -26,7 +26,6 @@ final class AttributeStatementTest extends TestCase
 
 
     /**
-     * @return void
      */
     protected function setUp(): void
     {
@@ -40,7 +39,6 @@ final class AttributeStatementTest extends TestCase
 
 
     /**
-     * @return void
      */
     public function testMarshallingAttributes(): void
     {
@@ -61,7 +59,6 @@ final class AttributeStatementTest extends TestCase
 
 
     /**
-     * @return void
      */
     public function testMarshallingMissingAttributesThrowsException(): void
     {
@@ -75,7 +72,6 @@ final class AttributeStatementTest extends TestCase
 
 
     /**
-     * @return void
      */
     public function testUnmarshalling(): void
     {
@@ -93,7 +89,6 @@ final class AttributeStatementTest extends TestCase
 
 
     /**
-     * @return void
      */
     public function testUnmarshallingMissingAttributesThrowsException(): void
     {

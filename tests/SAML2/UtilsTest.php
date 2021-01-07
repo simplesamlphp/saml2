@@ -26,7 +26,6 @@ final class UtilsTest extends TestCase
 {
     /**
      * Test querying a SAML XML document.
-     * @return void
      */
     public function testXpQuery(): void
     {
@@ -53,7 +52,6 @@ final class UtilsTest extends TestCase
 
     /**
      * Test adding an element with a string value.
-     * @return void
      */
     public function testAddString(): void
     {
@@ -86,7 +84,6 @@ final class UtilsTest extends TestCase
 
     /**
      * Test adding multiple elements of a given type with given values.
-     * @return void
      */
     public function testGetAddStrings(): void
     {
@@ -158,7 +155,6 @@ final class UtilsTest extends TestCase
 
     /**
      * Test retrieval of a string value for a given node.
-     * @return void
      */
     public function testExtractString(): void
     {
@@ -183,7 +179,6 @@ final class UtilsTest extends TestCase
 
     /**
      * Test retrieval of a localized string for a given node.
-     * @return void
      */
     public function testExtractLocalizedString(): void
     {
@@ -210,7 +205,6 @@ final class UtilsTest extends TestCase
      * Test xsDateTime format validity
      *
      * @dataProvider xsDateTimes
-     * @return void
      */
     public function testXsDateTimeToTimestamp($shouldPass, $time, $expectedTs = null): void
     {
@@ -249,7 +243,6 @@ final class UtilsTest extends TestCase
 
     /**
      * Test createKeyDescriptor.
-     * @return void
      */
     public function testCreateKeyDescriptor(): void
     {

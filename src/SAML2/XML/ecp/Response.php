@@ -30,7 +30,6 @@ final class Response extends AbstractEcpElement
      * Create a ECP Response element.
      *
      * @param string $assertionConsumerServiceURL
-     * @return void
      */
     public function __construct(string $assertionConsumerServiceURL)
     {
@@ -54,7 +53,6 @@ final class Response extends AbstractEcpElement
      *
      * @param string $assertionConsumerServiceURL
      * @throws \InvalidArgumentException if provided string is not a valid URL
-     * @return void
      */
     private function setAssertionConsumerServiceURL(string $assertionConsumerServiceURL): void
     {

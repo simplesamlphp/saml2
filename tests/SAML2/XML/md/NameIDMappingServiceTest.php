@@ -24,7 +24,6 @@ final class NameIDMappingServiceTest extends TestCase
 
 
     /**
-     * @return void
      */
     protected function setUp(): void
     {

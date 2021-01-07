@@ -24,7 +24,6 @@ final class AuthnContextDeclRefTest extends TestCase
 
 
     /**
-     * @return void
      */
     protected function setUp(): void
     {
@@ -38,7 +37,6 @@ final class AuthnContextDeclRefTest extends TestCase
 
 
     /**
-     * @return void
      */
     public function testMarshalling(): void
     {
@@ -52,7 +50,6 @@ final class AuthnContextDeclRefTest extends TestCase
 
 
     /**
-     * @return void
      */
     public function testUnmarshalling(): void
     {

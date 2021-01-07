@@ -157,7 +157,6 @@ final class AffiliationDescriptor extends AbstractMetadataDocument
      * Set the value of the AffiliateMember-property
      *
      * @param string[] $affiliateMembers
-     * @return void
      * @throws \SimpleSAML\Assert\AssertionFailedException
      */
     protected function setAffiliateMembers(array $affiliateMembers): void
@@ -186,7 +185,6 @@ final class AffiliationDescriptor extends AbstractMetadataDocument
      * Set the value of the KeyDescriptor-property
      *
      * @param \SimpleSAML\SAML2\XML\md\KeyDescriptor[] $keyDescriptors
-     * @return void
      */
     protected function setKeyDescriptors(array $keyDescriptors): void
     {

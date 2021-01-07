@@ -38,7 +38,6 @@ final class AuthnContextTest extends TestCase
 
 
     /**
-     * @return void
      */
     protected function setUp(): void
     {
@@ -68,7 +67,6 @@ final class AuthnContextTest extends TestCase
 
 
     /**
-     * @return void
      */
     public function testMarshallingWithClassRef(): void
     {
@@ -102,7 +100,6 @@ final class AuthnContextTest extends TestCase
 
 
     /**
-     * @return void
      */
     public function testMarshallingWithoutClassRef(): void
     {
@@ -130,7 +127,6 @@ final class AuthnContextTest extends TestCase
 
 
     /**
-     * @return void
      */
     public function testMarshallingWithClassRefAndClassDeclElementOrdering(): void
     {
@@ -163,7 +159,6 @@ final class AuthnContextTest extends TestCase
 
 
     /**
-     * @return void
      */
     public function testMarshallingWithoutClassRefAndClassDeclElementOrdering(): void
     {
@@ -195,7 +190,6 @@ final class AuthnContextTest extends TestCase
 
 
     /**
-     * @return void
      */
     public function testMarshallingWithClassRefAndDeclRefElementOrdering(): void
     {
@@ -228,7 +222,6 @@ final class AuthnContextTest extends TestCase
 
 
     /**
-     * @return void
      */
     public function testMarshallingWithoutClassRefAndDeclRefElementOrdering(): void
     {
@@ -260,7 +253,6 @@ final class AuthnContextTest extends TestCase
 
 
     /**
-     * @return void
      */
     public function testMarshallingIllegalCombination(): void
     {
@@ -283,7 +275,6 @@ final class AuthnContextTest extends TestCase
 
 
     /**
-     * @return void
      */
     public function testMarshallingEmpty(): void
     {
@@ -298,7 +289,6 @@ final class AuthnContextTest extends TestCase
 
 
     /**
-     * @return void
      */
     public function testUnmarshallingWithClassRef(): void
     {
@@ -323,7 +313,6 @@ final class AuthnContextTest extends TestCase
 
 
     /**
-     * @return void
      */
     public function testUnmarshallingWithoutClassRef(): void
     {
@@ -344,7 +333,6 @@ final class AuthnContextTest extends TestCase
 
 
     /**
-     * @return void
      */
     public function testUnmarshallingIllegalCombination(): void
     {
@@ -410,7 +398,6 @@ final class AuthnContextTest extends TestCase
 
 
     /**
-     * @return void
      */
     public function testUnmarshallingEmpty(): void
     {

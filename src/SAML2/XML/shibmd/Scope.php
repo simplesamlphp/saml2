@@ -60,7 +60,6 @@ final class Scope extends AbstractShibmdElement
      * Set the value of the scope-property
      *
      * @param string $scope
-     * @return void
      */
     private function setScope(string $scope): void
     {
@@ -83,7 +82,6 @@ final class Scope extends AbstractShibmdElement
      * Set the value of the regexp-property
      *
      * @param bool $regexp
-     * @return void
      */
     private function setIsRegexpScope(bool $regexp): void
     {

@@ -20,7 +20,6 @@ final class SimpleTestLogger extends AbstractLogger
 
 
     /**
-     * @return void
      */
     public function log($level, $message, array $context = []): void
     {

@@ -25,7 +25,6 @@ final class RequestInitiatorTest extends TestCase
 
 
     /**
-     * @return void
      */
     protected function setUp(): void
     {

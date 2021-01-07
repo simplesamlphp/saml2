@@ -16,7 +16,6 @@ final class KeyCollectionTest extends MockeryTestCase
     /**
      * @group certificate
      * @test
-     * @return void
      */
     public function testKeyCollectionAddWrongType(): void
     {

@@ -48,7 +48,6 @@ final class CustomStatement extends Statement
      * Set the value of this Statement.
      *
      * @param string $value
-     * @return void
      */
     protected function setValue(string $value): void
     {

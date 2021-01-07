@@ -57,7 +57,6 @@ final class DecodeBase64TransformerTest extends TestCase
 
 
     /**
-     * @return void
      */
     protected function setUp(): void
     {
@@ -131,7 +130,6 @@ XML
      *
      * @runInSeparateProcess
      * @preserveGlobalState disabled
-     * @return void
      */
     public function testBasicDecoding(): void
     {
@@ -156,7 +154,6 @@ XML
      *
      * @runInSeparateProcess
      * @preserveGlobalState disabled
-     * @return void
      */
     public function testRegularMultivaluedDecoding(): void
     {
@@ -177,7 +174,6 @@ XML
      *
      * @runInSeparateProcess
      * @preserveGlobalState disabled
-     * @return void
      */
     public function testConcatenatedMultivaluedDecoding(): void
     {
@@ -199,7 +195,6 @@ XML
      *
      * @runInSeparateProcess
      * @preserveGlobalState disabled
-     * @return void
      */
     public function testInvalidBase64(): void
     {
@@ -220,7 +215,6 @@ XML
      *
      * @runInSeparateProcess
      * @preserveGlobalState disabled
-     * @return void
      */
     public function testBase64encodedNotSet(): void
     {
@@ -252,7 +246,6 @@ XML
      *
      * @runInSeparateProcess
      * @preserveGlobalState disabled
-     * @return void
      */
     public function testDecodingProcessAssertions(): void
     {

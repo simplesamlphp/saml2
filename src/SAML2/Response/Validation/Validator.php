@@ -14,7 +14,6 @@ class Validator
 
     /**
      * @param \SimpleSAML\SAML2\Response\Validation\ConstraintValidator $constraint
-     * @return void
      */
     public function addConstraintValidator(ConstraintValidator $constraint): void
     {

@@ -26,7 +26,6 @@ final class KeyDescriptorTest extends TestCase
 
 
     /**
-     * @return void
      */
     protected function setUp(): void
     {

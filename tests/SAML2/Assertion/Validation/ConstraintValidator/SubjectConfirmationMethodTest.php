@@ -19,7 +19,6 @@ final class SubjectConfirmationMethodTest extends MockeryTestCase
     /**
      * @group assertion-validation
      * @test
-     * @return void
      */
     public function aSubjectConfirmationWithBearerMethodIsValid(): void
     {
@@ -37,7 +36,6 @@ final class SubjectConfirmationMethodTest extends MockeryTestCase
     /**
      * @group assertion-validation
      * @test
-     * @return void
      */
     public function aSubjectConfirmationWithHolderOfKeyMethodIsNotValid(): void
     {

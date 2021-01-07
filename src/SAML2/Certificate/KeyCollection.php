@@ -17,7 +17,6 @@ class KeyCollection extends ArrayCollection
      *
      * @psalm-suppress MoreSpecificImplementedParamType
      * @param \SimpleSAML\SAML2\Certificate\Key $key
-     * @return void
      *
      * @throws \SimpleSAML\Assert\AssertionFailedException if assertions are false
      *

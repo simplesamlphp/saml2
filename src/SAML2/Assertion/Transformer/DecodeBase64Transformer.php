@@ -25,7 +25,6 @@ class DecodeBase64Transformer implements
 
     /**
      * @param \SimpleSAML\SAML2\Configuration\IdentityProvider $identityProvider
-     * @return void
      */
     public function setIdentityProvider(IdentityProvider $identityProvider): void
     {

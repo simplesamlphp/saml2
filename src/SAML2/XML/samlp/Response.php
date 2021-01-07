@@ -86,7 +86,6 @@ class Response extends AbstractStatusResponse
      * Set the assertions that should be included in this response.
      *
      * @param (\SimpleSAML\SAML2\XML\saml\Assertion|\SimpleSAML\SAML2\XML\saml\EncryptedAssertion)[] $assertions The assertions.
-     * @return void
      */
     protected function setAssertions(array $assertions): void
     {

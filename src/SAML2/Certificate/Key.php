@@ -100,7 +100,6 @@ class Key implements \ArrayAccess
      * @param mixed $offset
      * @param mixed $value
      * @throws \SimpleSAML\SAML2\Exception\InvalidArgumentException
-     * @return void
      */
     public function offsetSet($offset, $value): void
     {
@@ -114,7 +113,6 @@ class Key implements \ArrayAccess
     /**
      * @param mixed $offset
      * @throws \SimpleSAML\SAML2\Exception\InvalidArgumentException
-     * @return void
      *
      * Type hint not possible due to upstream method signature
      */

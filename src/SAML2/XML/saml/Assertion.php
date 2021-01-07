@@ -170,8 +170,6 @@ class Assertion extends AbstractSamlElement implements SignedElementInterface
      * Set the value of the subject-property
      *
      * @param \SimpleSAML\SAML2\XML\saml\Subject|null $subject
-     *
-     * @return void
      */
     protected function setSubject(?Subject $subject): void
     {
@@ -194,8 +192,6 @@ class Assertion extends AbstractSamlElement implements SignedElementInterface
      * Set the value of the conditions-property
      *
      * @param \SimpleSAML\SAML2\XML\saml\Conditions|null $conditions
-     *
-     * @return void
      */
     protected function setConditions(?Conditions $conditions): void
     {
@@ -264,8 +260,6 @@ class Assertion extends AbstractSamlElement implements SignedElementInterface
      * Set the identifier of this assertion.
      *
      * @param string|null $id The new identifier of this assertion.
-     *
-     * @return void
      */
     public function setId(?string $id): void
     {
@@ -291,8 +285,6 @@ class Assertion extends AbstractSamlElement implements SignedElementInterface
      * Set the issue timestamp of this assertion.
      *
      * @param int|null $issueInstant The new issue timestamp of this assertion, as an UNIX timestamp.
-     *
-     * @return void
      */
     public function setIssueInstant(?int $issueInstant): void
     {
@@ -319,7 +311,6 @@ class Assertion extends AbstractSamlElement implements SignedElementInterface
      * Set the issuer of this message.
      *
      * @param \SimpleSAML\SAML2\XML\saml\Issuer $issuer The new issuer of this assertion.
-     * @return void
      */
     public function setIssuer(Issuer $issuer): void
     {
@@ -342,8 +333,6 @@ class Assertion extends AbstractSamlElement implements SignedElementInterface
      * Set the SubjectConfirmation elements that should be included in the assertion.
      *
      * @param array $SubjectConfirmation Array of \SimpleSAML\SAML2\XML\saml\SubjectConfirmation elements.
-     * @return void
-     *
      * @throws \SimpleSAML\Assert\AssertionFailedException if assertions are false
      */
     public function setSubjectConfirmation(array $SubjectConfirmation): void

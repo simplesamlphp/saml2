@@ -24,7 +24,6 @@ final class NameIDPolicyTest extends TestCase
 
 
     /**
-     * @return void
      */
     public function setUp(): void
     {
@@ -34,7 +33,6 @@ final class NameIDPolicyTest extends TestCase
     }
 
     /**
-     * @return void
      */
     public function testMarshalling(): void
     {
@@ -72,7 +70,6 @@ final class NameIDPolicyTest extends TestCase
 
 
     /**
-     * @return void
      */
     public function testUnmarshalling(): void
     {

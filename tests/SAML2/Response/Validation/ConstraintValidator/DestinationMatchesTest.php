@@ -23,7 +23,6 @@ final class DestinationMatchesTest extends MockeryTestCase
 
 
     /**
-     * @return void
      */
     public function setUp(): void
     {
@@ -34,7 +33,6 @@ final class DestinationMatchesTest extends MockeryTestCase
     /**
      * @group response-validation
      * @test
-     * @return void
      */
     public function aResponseIsValidWhenTheDestinationsMatch(): void
     {
@@ -52,7 +50,6 @@ final class DestinationMatchesTest extends MockeryTestCase
     /**
      * @group response-validation
      * @test
-     * @return void
      */
     public function aResponseIsNotValidWhenTheDestinationsAreNotEqual(): void
     {

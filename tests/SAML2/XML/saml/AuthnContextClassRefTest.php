@@ -35,7 +35,6 @@ final class AuthnContextClassRefTest extends TestCase
 
 
     /**
-     * @return void
      */
     public function testMarshalling(): void
     {
@@ -50,7 +49,6 @@ final class AuthnContextClassRefTest extends TestCase
 
 
     /**
-     * @return void
      */
     public function testUnmarshalling(): void
     {

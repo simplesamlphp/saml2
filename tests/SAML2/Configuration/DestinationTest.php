@@ -16,7 +16,6 @@ final class DestinationTest extends TestCase
     /**
      * @group configuration
      * @test
-     * @return void
      */
     public function twoDestinationsWithTheSameValueAreEqual(): void
     {
@@ -30,7 +29,6 @@ final class DestinationTest extends TestCase
     /**
      * @group configuration
      * @test
-     * @return void
      */
     public function twoDestinationsWithTheDifferentValuesAreNotEqual(): void
     {

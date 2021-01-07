@@ -159,7 +159,6 @@ final class AuthnAuthorityDescriptor extends AbstractRoleDescriptor
      * Set the AuthnQueryService endpoints
      *
      * @param \SimpleSAML\SAML2\XML\md\AbstractEndpointType[] $authnQueryServices
-     * @return void
      * @throws \SimpleSAML\Assert\AssertionFailedException
      */
     protected function setAuthnQueryServices(array $authnQueryServices): void
@@ -189,7 +188,6 @@ final class AuthnAuthorityDescriptor extends AbstractRoleDescriptor
      * Set the AssertionIDRequestService endpoints
      *
      * @param \SimpleSAML\SAML2\XML\md\AbstractEndpointType[] $assertionIDRequestServices
-     * @return void
      * @throws \SimpleSAML\Assert\AssertionFailedException
      */
     protected function setAssertionIDRequestService(?array $assertionIDRequestServices = []): void
@@ -218,7 +216,6 @@ final class AuthnAuthorityDescriptor extends AbstractRoleDescriptor
      * Set the values of the NameIDFormat
      *
      * @param string[] $nameIDFormats
-     * @return void
      * @throws \SimpleSAML\Assert\AssertionFailedException
      */
     protected function setNameIDFormat(?array $nameIDFormats): void

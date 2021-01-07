@@ -68,7 +68,6 @@ final class RequestedAttribute extends Attribute
      * Set the value of the isRequired-property
      *
      * @param bool|null $flag
-     * @return void
      */
     protected function setIsRequired(?bool $flag): void
     {

@@ -235,7 +235,6 @@ final class EntityDescriptor extends AbstractMetadataDocument
     /**
      * Set the value of the entityID-property
      * @param string $entityId
-     * @return void
      */
     protected function setEntityID(string $entityId): void
     {
@@ -260,7 +259,6 @@ final class EntityDescriptor extends AbstractMetadataDocument
      * Set the value of the RoleDescriptor property.
      *
      * @param \SimpleSAML\SAML2\XML\md\AbstractRoleDescriptor[] $roleDescriptors
-     * @return void
      * @throws \SimpleSAML\Assert\AssertionFailedException
      */
     protected function setRoleDescriptors(array $roleDescriptors): void
@@ -289,7 +287,6 @@ final class EntityDescriptor extends AbstractMetadataDocument
      * Set the value of the AffliationDescriptor property.
      *
      * @param \SimpleSAML\SAML2\XML\md\AffiliationDescriptor|null $affiliationDescriptor
-     * @return void
      */
     protected function setAffiliationDescriptor(?AffiliationDescriptor $affiliationDescriptor = null): void
     {
@@ -312,7 +309,6 @@ final class EntityDescriptor extends AbstractMetadataDocument
      * Set the value of the Organization property.
      *
      * @param \SimpleSAML\SAML2\XML\md\Organization|null $organization
-     * @return void
      */
     protected function setOrganization(?Organization $organization = null): void
     {
@@ -335,7 +331,6 @@ final class EntityDescriptor extends AbstractMetadataDocument
      * Set the value of the ContactPerson property.
      *
      * @param array $contactPerson
-     * @return void
      * @throws \SimpleSAML\Assert\AssertionFailedException
      */
     protected function setContactPersons(array $contactPerson): void
@@ -364,7 +359,6 @@ final class EntityDescriptor extends AbstractMetadataDocument
      * Set the value of the AdditionalMetadataLocation property.
      *
      * @param array $additionalMetadataLocation
-     * @return void
      * @throws \SimpleSAML\Assert\AssertionFailedException
      */
     protected function setAdditionalMetadataLocations(array $additionalMetadataLocation): void

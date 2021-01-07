@@ -26,7 +26,6 @@ final class RequestedAuthnContextTest extends TestCase
 
 
     /**
-     * @return void
      */
     public function setUp(): void
     {
@@ -36,7 +35,6 @@ final class RequestedAuthnContextTest extends TestCase
     }
 
     /**
-     * @return void
      */
     public function testMarshalling(): void
     {
@@ -52,7 +50,6 @@ final class RequestedAuthnContextTest extends TestCase
 
 
     /**
-     * @return void
      */
     public function testMarshallingWithMixedContextsFails(): void
     {
@@ -67,7 +64,6 @@ final class RequestedAuthnContextTest extends TestCase
 
 
     /**
-     * @return void
      */
     public function testMarshallingWithInvalidContentFails(): void
     {
@@ -91,7 +87,6 @@ final class RequestedAuthnContextTest extends TestCase
 
 
     /**
-     * @return void
      */
     public function testUnmarshalling(): void
     {
@@ -106,7 +101,6 @@ final class RequestedAuthnContextTest extends TestCase
 
 
     /**
-     * @return void
      */
     public function testUnmarshallingWithMixedContextsFails(): void
     {

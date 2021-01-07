@@ -40,7 +40,6 @@ final class KeyLoaderTest extends MockeryTestCase
 
 
     /*
-     * @return void
      */
     public function setUp(): void
     {
@@ -52,7 +51,6 @@ final class KeyLoaderTest extends MockeryTestCase
     /**
      * @group certificate
      * @test
-     * @return void
      */
     public function loadKeysChecksForUsageOfKey(): void
     {
@@ -72,7 +70,6 @@ final class KeyLoaderTest extends MockeryTestCase
     /**
      * @group certificate
      * @test
-     * @return void
      */
     public function loadKeysConstructsX509Certificate(): void
     {
@@ -91,7 +88,6 @@ final class KeyLoaderTest extends MockeryTestCase
     /**
      * @group certificate
      * @test
-     * @return void
      */
     public function certificateDataIsLoadedAsKey(): void
     {
@@ -110,7 +106,6 @@ final class KeyLoaderTest extends MockeryTestCase
     /**
      * @group certificate
      * @test
-     * @return void
      */
     public function loadingAFileWithTheWrongFormatThrowsAnException(): void
     {
@@ -123,7 +118,6 @@ final class KeyLoaderTest extends MockeryTestCase
     /**
      * @group certificate
      * @test
-     * @return void
      */
     public function loadingACertificateFromFileCreatesAKey(): void
     {
@@ -145,7 +139,6 @@ final class KeyLoaderTest extends MockeryTestCase
     /**
      * @group certificate
      * @test
-     * @return void
      */
     public function loadingARequiredCertificateFromAnEmptyConfigurationThrowsAnException(): void
     {
@@ -168,7 +161,6 @@ final class KeyLoaderTest extends MockeryTestCase
     /**
      * @group certificate
      * @test
-     * @return void
      */
     public function loadingACertificateFileFromConfigurationCreatesKey(): void
     {
@@ -195,7 +187,6 @@ final class KeyLoaderTest extends MockeryTestCase
     /**
      * @group certificate
      * @test
-     * @return void
      */
     public function loadingAnInvalidCertificateFileFromConfigurationThrowsException(): void
     {

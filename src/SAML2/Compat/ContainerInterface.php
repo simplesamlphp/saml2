@@ -34,7 +34,6 @@ interface ContainerInterface
      *
      * @param \DOMElement|string $message
      * @param string $type
-     * @return void
      */
     public function debugMessage($message, string $type): void;
 
@@ -45,7 +44,6 @@ interface ContainerInterface
      *
      * @param string $url
      * @param array $data
-     * @return void
      */
     public function redirect(string $url, array $data = []): void;
 
@@ -55,7 +53,6 @@ interface ContainerInterface
      *
      * @param string $url
      * @param array $data
-     * @return void
      */
     public function postRedirect(string $url, array $data = []): void;
 
@@ -79,7 +76,6 @@ interface ContainerInterface
      * @param string $filename The path to the file we want to write to.
      * @param string $data The data we should write to the file.
      * @param int $mode The permissions to apply to the file. Defaults to 0600.
-     * @return void
      */
     public function writeFile(string $filename, string $data, int $mode = null): void;
 
@@ -89,7 +85,6 @@ interface ContainerInterface
      *
      * @param string $class The class name of a class extending AbstractXMLElement or BaseID.
      * @psalm-param class-string $class
-     * @return void
      */
     public function registerExtensionHandler(string $class): void;
 

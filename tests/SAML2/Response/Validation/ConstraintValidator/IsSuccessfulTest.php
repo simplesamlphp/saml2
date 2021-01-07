@@ -26,7 +26,6 @@ final class IsSuccessfulTest extends MockeryTestCase
 
 
     /**
-     * @return void
      */
     public function setUp(): void
     {
@@ -37,7 +36,6 @@ final class IsSuccessfulTest extends MockeryTestCase
     /**
      * @group response-validation
      * @test
-     * @return void
      */
     public function validatingASuccessfulResponseGivesAValidValidationResult(): void
     {
@@ -55,7 +53,6 @@ final class IsSuccessfulTest extends MockeryTestCase
     /**
      * @group response-validation
      * @test
-     * @return void
      */
     public function anUnsuccessfulResponseIsNotValidAndGeneratesAProperErrorMessage(): void
     {

@@ -23,7 +23,6 @@ final class AttributeValueTest extends TestCase
 
 
     /**
-     * @return void
      */
     protected function setUp(): void
     {
@@ -39,7 +38,6 @@ final class AttributeValueTest extends TestCase
     /**
      * Test creating an AttributeValue from scratch using a string.
      *
-     * @return void
      */
     public function testMarshallingString(): void
     {
@@ -53,7 +51,6 @@ final class AttributeValueTest extends TestCase
     /**
      * Test creating an AttributeValue from scratch using an integer.
      *
-     * @return void
      */
     public function testMarshallingInteger(): void
     {
@@ -89,7 +86,6 @@ XML
      * Verifies that supplying an empty string as attribute value will
      * generate a tag with no content (instead of e.g. an empty tag).
      *
-     * @return void
      */
     public function testEmptyStringAttribute(): void
     {
@@ -110,7 +106,6 @@ XML
     /**
      * Verifies that we can create an AttributeValue from a DOMElement.
      *
-     * @return void
      */
     public function testUnmarshalling(): void
     {
@@ -155,7 +150,6 @@ XML
     /**
      * Serialize an AttributeValue and Unserialize that again.
      *
-     * @return void
      */
     public function testSerialize(): void
     {

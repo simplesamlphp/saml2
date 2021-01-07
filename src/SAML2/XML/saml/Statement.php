@@ -56,7 +56,6 @@ abstract class Statement extends AbstractStatement
      *
      * @param string $type
      *
-     * @return void
      */
     protected function setType(string $type): void
     {

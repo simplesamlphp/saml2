@@ -16,7 +16,6 @@ final class ResultTest extends TestCase
     /**
      * @group response-validation
      * @test
-     * @return void
      */
     public function addedErrorsCanBeRetrieved(): void
     {
@@ -34,7 +33,6 @@ final class ResultTest extends TestCase
     /**
      * @group response-validation
      * @test
-     * @return void
      */
     public function theResultCorrectlyReportsWhetherOrNotItIsValid(): void
     {

@@ -92,7 +92,6 @@ class KeyLoader
      *
      * @param array|\Traversable $configuredKeys
      * @param string|null $usage
-     * @return void
      */
     public function loadKeys($configuredKeys, string $usage = null): void
     {
@@ -116,7 +115,6 @@ class KeyLoader
      * Attempts to load a key based on the given certificateData
      *
      * @param string $certificateData
-     * @return void
      */
     public function loadCertificateData(string $certificateData): void
     {
@@ -128,7 +126,6 @@ class KeyLoader
      * Loads the certificate in the file given
      *
      * @param string $certificateFile the full path to the cert file.
-     * @return void
      */
     public function loadCertificateFile(string $certificateFile): void
     {

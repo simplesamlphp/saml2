@@ -18,7 +18,6 @@ final class HTTPArtifactTest extends TestCase
      * The Artifact binding depends on simpleSAMLphp, so currently
      * the only thing we can really unit test is whether the SAMLart
      * parameter is missing.
-     * @return void
      */
     public function testArtifactMissingUrlParamThrowsException(): void
     {

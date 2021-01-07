@@ -32,7 +32,6 @@ final class EncryptedAssertionTest extends TestCase
 
 
     /**
-     * @return void
      */
     public function setUp(): void
     {
@@ -46,7 +45,6 @@ final class EncryptedAssertionTest extends TestCase
 
 
     /**
-     * @return void
      */
     public function testMarshalling(): void
     {

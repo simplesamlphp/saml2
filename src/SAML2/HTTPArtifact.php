@@ -82,7 +82,6 @@ class HTTPArtifact extends Binding
      * Note: This function never returns.
      *
      * @param \SimpleSAML\SAML2\XML\samlp\AbstractMessage $message The message we should send.
-     * @return void
      * @throws \Exception
      */
     public function send(AbstractMessage $message): void
@@ -185,7 +184,6 @@ class HTTPArtifact extends Binding
     /**
      * @param \SimpleSAML\Configuration $sp
      *
-     * @return void
      *
      * @psalm-suppress UndefinedClass
      */

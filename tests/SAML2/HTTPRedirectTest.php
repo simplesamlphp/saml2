@@ -27,7 +27,6 @@ final class HTTPRedirectTest extends MockeryTestCase
     /**
      * test parsing of basic query string with authnrequest and
      * verify that the correct issuer is found.
-     * @return void
      */
     public function testRequestParsing(): void
     {
@@ -47,7 +46,6 @@ final class HTTPRedirectTest extends MockeryTestCase
     /**
      * test parsing of basic query string with saml response and
      * verify that the correct issuer is found.
-     * @return void
      */
     public function testResponseParsing(): void
     {
@@ -64,7 +62,6 @@ final class HTTPRedirectTest extends MockeryTestCase
 
     /**
      * test parsing of Relaystate and SAMLencoding together with authnrequest
-     * @return void
      */
     public function testRequestParsingMoreParams(): void
     {
@@ -82,7 +79,6 @@ final class HTTPRedirectTest extends MockeryTestCase
     /**
      * Test parsing a signed authentication request.
      * It does not actually verify the validity of the signature.
-     * @return void
      */
     public function testSignedRequestParsing(): void
     {
@@ -102,7 +98,6 @@ final class HTTPRedirectTest extends MockeryTestCase
 
     /**
      * Test validating a signed authentication request.
-     * @return void
      */
     public function testSignedRequestValidation(): void
     {
@@ -125,7 +120,6 @@ final class HTTPRedirectTest extends MockeryTestCase
 
     /**
      * Test validating a signed authentication request.
-     * @return void
      */
     public function testSignedRequestValidationWrongKeytype(): void
     {
@@ -144,7 +138,6 @@ final class HTTPRedirectTest extends MockeryTestCase
 
     /**
      * test that a request with unsupported encoding specified fails
-     * @return void
      */
     public function testInvalidEncodingSpecified(): void
     {
@@ -159,7 +152,6 @@ final class HTTPRedirectTest extends MockeryTestCase
 
 
     /**
-     * @return void
      */
     public function testNoSigAlgSpecified(): void
     {
@@ -175,7 +167,6 @@ final class HTTPRedirectTest extends MockeryTestCase
 
     /**
      * test handling of non-deflated data in samlrequest
-     * @return void
      */
     public function testInvalidRequestData(): void
     {
@@ -191,7 +182,6 @@ final class HTTPRedirectTest extends MockeryTestCase
 
     /**
      * test with a query string that has Request nor Response
-     * @return void
      */
     public function testNoRequestOrResponse(): void
     {
@@ -207,7 +197,6 @@ final class HTTPRedirectTest extends MockeryTestCase
 
     /**
      * Construct an authnrequest and try to send it without a destination.
-     * @return void
      */
     public function testSendWithoutDestination(): void
     {
@@ -221,7 +210,6 @@ final class HTTPRedirectTest extends MockeryTestCase
 
     /**
      * Construct an authnrequest and send it.
-     * @return void
      * @doesNotPerformAssertions
      */
     public function testSendAuthnrequest(): void
@@ -236,7 +224,6 @@ final class HTTPRedirectTest extends MockeryTestCase
     /**
      * Construct an authnresponse and send it.
      * Also test setting a relaystate and destination for the response.
-     * @return void
      * @doesNotPerformAssertions
      */
     public function testSendAuthnResponse(): void
@@ -254,7 +241,6 @@ final class HTTPRedirectTest extends MockeryTestCase
 
     /**
      * Test setting destination in the HR binding.
-     * @return void
      * @doesNotPerformAssertions
      */
     public function testSendAuthnResponseBespokeDestination(): void

@@ -18,7 +18,6 @@ use SimpleSAML\SAML2\XML\samlp\MessageFactory;
 final class SOAPTest extends MockeryTestCase
 {
     /**
-     * @return void
      */
     public function testRequestParsingEmptyMessage(): void
     {
@@ -31,7 +30,6 @@ final class SOAPTest extends MockeryTestCase
 
 
     /**
-     * @return void
      */
     public function testRequestParsing(): void
     {
@@ -67,7 +65,6 @@ SOAP
 
 
     /**
-     * @return void
      */
     public function testSendArtifactResponse(): void
     {
@@ -116,7 +113,6 @@ SOAP;
 
 
     /**
-     * @return void
      */
     public function testSendResponse(): void
     {

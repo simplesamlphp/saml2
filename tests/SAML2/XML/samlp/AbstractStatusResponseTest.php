@@ -28,7 +28,6 @@ use SimpleSAML\XMLSecurity\XMLSecurityKey;
 final class AbstractStatusResponseTest extends TestCase
 {
     /**
-     * @return void
      */
     public function testMarshalling(): void
     {
@@ -66,7 +65,6 @@ final class AbstractStatusResponseTest extends TestCase
 
 
     /**
-     * @return void
      */
     public function testMarshallingSignedResponseElementOrdering(): void
     {
@@ -112,7 +110,6 @@ final class AbstractStatusResponseTest extends TestCase
 
 
     /**
-     * @return void
      */
     public function testUnmarshalling(): void
     {
@@ -148,7 +145,6 @@ XML;
 
     /**
      * A status reponse that is not an error
-     * @return void
      */
     public function testStatusSuccess(): void
     {
@@ -181,7 +177,6 @@ XML;
 
     /**
      * See if we can parse a StatusResponse with a subcode
-     * @return void
      */
     public function testStatusSubcode(): void
     {
@@ -217,7 +212,6 @@ XML;
 
     /**
      * Test adding in-response-to to a status message.
-     * @return void
      */
     public function testResponseTo(): void
     {
@@ -250,7 +244,6 @@ STATUSXML
 
     /**
      * A response without any <Status> element throws exception
-     * @return void
      */
     public function testNoStatusElementThrowsException(): void
     {
@@ -283,7 +276,6 @@ XML;
 
     /**
      * StatusCode is required in a StatusResponse.
-     * @return void
      */
     public function testNoStatusCodeThrowsException(): void
     {

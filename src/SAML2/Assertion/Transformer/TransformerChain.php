@@ -39,7 +39,6 @@ class TransformerChain implements TransformerInterface
 
     /**
      * @param \SimpleSAML\SAML2\Assertion\Transformer\TransformerInterface $transformer
-     * @return void
      */
     public function addTransformerStep(TransformerInterface $transformer): void
     {

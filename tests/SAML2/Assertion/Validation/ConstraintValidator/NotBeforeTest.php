@@ -37,7 +37,6 @@ final class NotBeforeTest extends ControlledTimeTest
 
 
     /**
-     * @return void
      */
     public function setUp(): void
     {
@@ -61,7 +60,6 @@ final class NotBeforeTest extends ControlledTimeTest
     /**
      * @group assertion-validation
      * @test
-     * @return void
      */
     public function timestampInTheFutureBeyondGraceperiodIsNotValid(): void
     {
@@ -84,7 +82,6 @@ final class NotBeforeTest extends ControlledTimeTest
     /**
      * @group assertion-validation
      * @test
-     * @return void
      */
     public function timeWithinGraceperiodIsValid(): void
     {
@@ -106,7 +103,6 @@ final class NotBeforeTest extends ControlledTimeTest
     /**
      * @group assertion-validation
      * @test
-     * @return void
      */
     public function currentTimeIsValid(): void
     {

@@ -16,7 +16,6 @@ final class ArrayAdapterTest extends TestCase
     /**
      * @group configuration
      * @test
-     * @return void
      */
     public function setConfigurationCanBeQueried(): void
     {
@@ -31,7 +30,6 @@ final class ArrayAdapterTest extends TestCase
     /**
      * @group configuration
      * @test
-     * @return void
      */
     public function defaultValuesAreReturnedForUnavailableConfiguration(): void
     {

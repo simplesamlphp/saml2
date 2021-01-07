@@ -25,7 +25,6 @@ final class OrganizationTest extends TestCase
 
 
     /**
-     * @return void
      */
     protected function setUp(): void
     {

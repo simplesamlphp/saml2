@@ -17,7 +17,6 @@ final class FileTest extends TestCase
     /**
      * @group utilities
      * @test
-     * @return void
      */
     public function whenLoadingANonExistantFileAnExceptionIsThrown(): void
     {
@@ -29,7 +28,6 @@ final class FileTest extends TestCase
     /**
      * @group utilities
      * @test
-     * @return void
      */
     public function anExistingReadableFileCanBeLoaded(): void
     {

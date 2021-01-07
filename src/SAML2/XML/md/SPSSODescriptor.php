@@ -143,7 +143,6 @@ final class SPSSODescriptor extends AbstractSSODescriptor
      * Set the value of the AuthnRequestsSigned-property
      *
      * @param bool|null $flag
-     * @return void
      */
     private function setAuthnRequestsSigned(?bool $flag): void
     {
@@ -166,7 +165,6 @@ final class SPSSODescriptor extends AbstractSSODescriptor
      * Set the value of the WantAssertionsSigned-property
      *
      * @param bool|null $flag
-     * @return void
      */
     private function setWantAssertionsSigned(?bool $flag): void
     {
@@ -189,7 +187,6 @@ final class SPSSODescriptor extends AbstractSSODescriptor
      * Set the value of the AssertionConsumerService-property
      *
      * @param \SimpleSAML\SAML2\XML\md\AssertionConsumerService[] $acs
-     * @return void
      * @throws \SimpleSAML\Assert\AssertionFailedException
      */
     private function setAssertionConsumerService(array $acs): void
@@ -219,7 +216,6 @@ final class SPSSODescriptor extends AbstractSSODescriptor
      * Set the value of the AttributeConsumingService-property
      *
      * @param \SimpleSAML\SAML2\XML\md\AttributeConsumingService[] $acs
-     * @return void
      * @throws \SimpleSAML\Assert\AssertionFailedException
      */
     private function setAttributeConsumingService(array $acs): void

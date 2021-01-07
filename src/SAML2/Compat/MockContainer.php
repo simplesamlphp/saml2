@@ -74,7 +74,6 @@ class MockContainer implements ContainerInterface
      *
      * @param \DOMElement|string $message
      * @param string $type
-     * @return void
      */
     public function debugMessage($message, string $type): void
     {
@@ -87,7 +86,6 @@ class MockContainer implements ContainerInterface
      *
      * @param string $url
      * @param array $data
-     * @return void
      */
     public function redirect(string $url, array $data = []): void
     {
@@ -101,7 +99,6 @@ class MockContainer implements ContainerInterface
      *
      * @param string|null $url
      * @param array $data
-     * @return void
      */
     public function postRedirect(string $url = null, array $data = []): void
     {
@@ -123,7 +120,6 @@ class MockContainer implements ContainerInterface
      * @param string $filename
      * @param string $data
      * @param int|null $mode
-     * @return void
      */
     public function writeFile(string $filename, string $data, int $mode = null): void
     {

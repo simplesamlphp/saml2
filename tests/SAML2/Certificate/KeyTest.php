@@ -18,7 +18,6 @@ final class KeyTest extends TestCase
     /**
      * @group certificate
      * @test
-     * @return void
      */
     public function invalidKeyUsageShouldThrowAnException(): void
     {
@@ -32,7 +31,6 @@ final class KeyTest extends TestCase
      * @group certificate
      * @dataProvider functionProvider
      * @test
-     * @return void
      */
     public function invalidOffsetTypeShouldThrowAnException($function, $params): void
     {
@@ -45,7 +43,6 @@ final class KeyTest extends TestCase
     /**
      * @group certificate
      * @test
-     * @return void
      */
     public function assertThatKeyUsageCheckWorksCorrectly(): void
     {
@@ -62,7 +59,6 @@ final class KeyTest extends TestCase
     /**
      * @group certificate
      * @test
-     * @return void
      */
     public function assertThatOffsetgetWorksCorrectly(): void
     {
@@ -74,7 +70,6 @@ final class KeyTest extends TestCase
     /**
      * @group certificate
      * @test
-     * @return void
      */
     public function assertThatOffsetunsetUnsetsOffset(): void
     {

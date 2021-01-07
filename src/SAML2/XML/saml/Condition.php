@@ -51,7 +51,6 @@ class Condition extends AbstractConditionType
      * Set the type of this Condition (in the xsi:type attribute)
      *
      * @param string $type
-     * @return void
      */
     protected function setType(string $type): void
     {

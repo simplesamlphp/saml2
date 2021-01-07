@@ -35,7 +35,6 @@ final class AttributeQueryTest extends TestCase
 
 
     /**
-     * @return void
      */
     public function setup(): void
     {
@@ -46,7 +45,6 @@ final class AttributeQueryTest extends TestCase
 
 
     /**
-     * @return void
      */
     public function testMarshalling(): void
     {

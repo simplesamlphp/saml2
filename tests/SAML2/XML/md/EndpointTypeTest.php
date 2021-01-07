@@ -15,8 +15,8 @@ use SimpleSAML\XML\Exception\MissingAttributeException;
 /**
  * Class \SAML2\XML\md\EndpointTypeTest
  *
- * @covers \SimpleSAML\SAML2\XML\md\AbstractMdElement
  * @covers \SimpleSAML\SAML2\XML\md\AbstractEndpointType
+ * @covers \SimpleSAML\SAML2\XML\md\AbstractMdElement
  * @package simplesamlphp/saml2
  */
 final class EndpointTypeTest extends TestCase
@@ -26,7 +26,6 @@ final class EndpointTypeTest extends TestCase
 
 
     /**
-     * @return void
      */
     protected function setUp(): void
     {

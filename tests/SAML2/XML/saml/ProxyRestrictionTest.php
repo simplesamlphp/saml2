@@ -25,7 +25,6 @@ final class ProxyRestrictionTest extends TestCase
 
 
     /**
-     * @return void
      */
     public function setup(): void
     {
@@ -39,7 +38,6 @@ final class ProxyRestrictionTest extends TestCase
 
 
     /**
-     * @return void
      */
     public function testMarshalling(): void
     {
@@ -70,7 +68,6 @@ final class ProxyRestrictionTest extends TestCase
 
 
     /**
-     * @return void
      */
     public function testUnmarshalling(): void
     {

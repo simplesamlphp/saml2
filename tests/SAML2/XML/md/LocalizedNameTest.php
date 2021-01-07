@@ -24,7 +24,6 @@ final class LocalizedNameTest extends TestCase
 
 
     /**
-     * @return void
      */
     protected function setUp(): void
     {

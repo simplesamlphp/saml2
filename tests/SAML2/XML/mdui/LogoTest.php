@@ -34,7 +34,6 @@ IMG;
 
 
     /**
-     * @return void
      */
     public function setUp(): void
     {
@@ -46,7 +45,6 @@ IMG;
 
     /**
      * Test creating a basic Logo element.
-     * @return void
      */
     public function testMarshalling(): void
     {
@@ -71,7 +69,6 @@ IMG;
 
     /**
      * Unmarshalling of a logo tag
-     * @return void
      */
     public function testUnmarshalling(): void
     {
@@ -85,7 +82,6 @@ IMG;
 
     /**
      * Unmarshalling of a logo tag with a data: URL
-     * @return void
      */
     public function testUnmarshallingDataURL(): void
     {
@@ -106,7 +102,6 @@ IMG;
 
     /**
      * Unmarshalling fails if url attribute not present
-     * @return void
      */
     public function testUnmarshallingFailsEmptyURL(): void
     {
@@ -121,7 +116,6 @@ IMG;
 
     /**
      * Unmarshalling fails if url attribute is invalid
-     * @return void
      */
     public function testUnmarshallingFailsInvalidURL(): void
     {
@@ -136,7 +130,6 @@ IMG;
 
     /**
      * Unmarshalling fails if width attribute not present
-     * @return void
      */
     public function testUnmarshallingFailsMissingWidth(): void
     {
@@ -151,7 +144,6 @@ IMG;
 
     /**
      * Unmarshalling fails if height attribute not present
-     * @return void
      */
     public function testUnmarshallingFailsMissingHeight(): void
     {

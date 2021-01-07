@@ -95,7 +95,6 @@ abstract class NameIDType extends AbstractSamlElement implements IdentifierInter
      * Set the value of the Format-property
      *
      * @param string|null $format
-     * @return void
      */
     private function setFormat(?string $format): void
     {
@@ -119,7 +118,6 @@ abstract class NameIDType extends AbstractSamlElement implements IdentifierInter
      * Set the value of the SPProvidedID-property
      *
      * @param string|null $spProvidedID
-     * @return void
      */
     public function setSPProvidedID(?string $spProvidedID): void
     {
@@ -141,7 +139,6 @@ abstract class NameIDType extends AbstractSamlElement implements IdentifierInter
     /**
      * Set the value of the value-property
      * @param string $value
-     * @return void
      *
      * @throws \SimpleSAML\Assert\AssertionFailedException if assertions are false
      */

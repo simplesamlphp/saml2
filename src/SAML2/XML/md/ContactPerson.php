@@ -195,7 +195,6 @@ final class ContactPerson extends AbstractMdElement
      * Set the value of the contactType-property
      *
      * @param string $contactType
-     * @return void
      * @throws \SimpleSAML\Assert\AssertionFailedException if $contactType is not one of the predefined values
      */
     protected function setContactType(string $contactType): void
@@ -220,7 +219,6 @@ final class ContactPerson extends AbstractMdElement
      * Set the value of the Company-property
      *
      * @param string|null $company
-     * @return void
      */
     protected function setCompany(?string $company): void
     {
@@ -243,7 +241,6 @@ final class ContactPerson extends AbstractMdElement
      * Set the value of the GivenName-property
      *
      * @param string|null $givenName
-     * @return void
      */
     protected function setGivenName(?string $givenName): void
     {
@@ -266,7 +263,6 @@ final class ContactPerson extends AbstractMdElement
      * Set the value of the SurName-property
      *
      * @param string|null $surName
-     * @return void
      */
     protected function setSurName(?string $surName): void
     {
@@ -304,7 +300,6 @@ final class ContactPerson extends AbstractMdElement
      * Set the value of the EmailAddress-property
      *
      * @param string[] $emailAddresses
-     * @return void
      * @throws \SimpleSAML\Assert\AssertionFailedException
      */
     protected function setEmailAddresses(array $emailAddresses): void

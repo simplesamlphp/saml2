@@ -95,7 +95,6 @@ class Processor
      *
      * @param \SimpleSAML\SAML2\XML\samlp\Response $response
      * @throws \SimpleSAML\SAML2\Response\Exception\PreconditionNotMetException
-     * @return void
      */
     private function enforcePreconditions(Response $response): void
     {
@@ -111,7 +110,6 @@ class Processor
      * @param \SimpleSAML\SAML2\XML\samlp\Response $response
      * @param \SimpleSAML\SAML2\Configuration\IdentityProvider $identityProviderConfiguration
      * @throws \SimpleSAML\SAML2\Response\Exception\InvalidResponseException
-     * @return void
      */
     private function verifySignature(Response $response, IdentityProvider $identityProviderConfiguration): void
     {

@@ -72,7 +72,6 @@ final class SigningMethod extends AbstractAlgElement
      * Set the value of the Algorithm-property
      *
      * @param string $algorithm
-     * @return void
      */
     private function setAlgorithm(string $algorithm): void
     {
@@ -95,7 +94,6 @@ final class SigningMethod extends AbstractAlgElement
      * Set the value of the MinKeySize-property
      *
      * @param int|null $minKeySize
-     * @return void
      */
     private function setMinKeySize(int $minKeySize = null): void
     {
@@ -119,7 +117,6 @@ final class SigningMethod extends AbstractAlgElement
      * Set the value of the MaxKeySize-property
      *
      * @param int|null $maxKeySize
-     * @return void
      */
     private function setMaxKeySize(int $maxKeySize = null): void
     {

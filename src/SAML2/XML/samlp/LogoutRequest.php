@@ -102,7 +102,6 @@ class LogoutRequest extends AbstractRequest
      * Set the expiration time of this request.
      *
      * @param int|null $notOnOrAfter The expiration time of this request.
-     * @return void
      */
     public function setNotOnOrAfter(?int $notOnOrAfter = null): void
     {
@@ -124,7 +123,6 @@ class LogoutRequest extends AbstractRequest
      * Set the reason for this request.
      *
      * @param string|null $reason The optional reason for this request in URN format
-     * @return void
      */
     public function setReason(?string $reason = null): void
     {
@@ -147,7 +145,6 @@ class LogoutRequest extends AbstractRequest
      * Set the SessionIndexes of the sessions that should be terminated.
      *
      * @param string[] $sessionIndexes The SessionIndexes, or an empty array if all sessions should be terminated.
-     * @return void
      */
     public function setSessionIndexes(array $sessionIndexes): void
     {

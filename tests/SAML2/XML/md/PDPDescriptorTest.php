@@ -32,7 +32,6 @@ final class PDPDescriptorTest extends TestCase
 
 
     /**
-     * @return void
      */
     protected function setUp(): void
     {

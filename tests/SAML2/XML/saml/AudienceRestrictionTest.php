@@ -25,7 +25,6 @@ final class AudienceRestrictionTest extends TestCase
 
 
     /**
-     * @return void
      */
     public function setup(): void
     {
@@ -39,7 +38,6 @@ final class AudienceRestrictionTest extends TestCase
 
 
     /**
-     * @return void
      */
     public function testMarshalling(): void
     {
@@ -66,7 +64,6 @@ final class AudienceRestrictionTest extends TestCase
 
 
     /**
-     * @return void
      */
     public function testUnmarshalling(): void
     {

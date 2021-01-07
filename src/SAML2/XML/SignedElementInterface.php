@@ -24,7 +24,6 @@ interface SignedElementInterface
      * The certificates should be strings with the PEM encoded data.
      *
      * @param string[] $certificates An array of certificates.
-     * @return void
      */
     public function setCertificates(array $certificates): void;
 
@@ -44,7 +43,6 @@ interface SignedElementInterface
      * If the key is null, the message will be sent unsigned.
      *
      * @param \SimpleSAML\XMLSecurity\XMLSecurityKey|null $signingKey
-     * @return void
      */
     public function setSigningKey(XMLSecurityKey $signingKey = null): void;
 

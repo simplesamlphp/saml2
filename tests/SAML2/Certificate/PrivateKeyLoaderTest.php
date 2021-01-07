@@ -22,7 +22,6 @@ final class PrivateKeyLoaderTest extends TestCase
 
 
     /**
-     * @return void
      */
     public function setUp(): void
     {
@@ -36,7 +35,6 @@ final class PrivateKeyLoaderTest extends TestCase
      * @dataProvider privateKeyTestProvider
      *
      * @param \SimpleSAML\SAML2\Configuration\PrivateKey $configuredKey
-     * @return void
      */
     public function loadingAConfiguredPrivateKeyReturnsACertificatePrivateKey(
         ConfPrivateKey $configuredKey

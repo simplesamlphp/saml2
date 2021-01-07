@@ -24,7 +24,6 @@ final class AdditionalMetadataLocationTest extends TestCase
 
 
     /**
-     * @return void
      */
     public function setUp(): void
     {

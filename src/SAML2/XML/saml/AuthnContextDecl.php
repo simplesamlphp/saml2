@@ -49,7 +49,6 @@ final class AuthnContextDecl extends AbstractSamlElement
      * Set the value of the decl-property
      *
      * @param \DOMNodeList $decl
-     * @return void
      */
     private function setDecl(DOMNodeList $decl): void
     {

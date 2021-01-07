@@ -25,7 +25,6 @@ final class SubjectLocalityTest extends TestCase
 
 
     /**
-     * @return void
      */
     protected function setUp(): void
     {
@@ -39,7 +38,6 @@ final class SubjectLocalityTest extends TestCase
 
 
     /**
-     * @return void
      */
     public function testMarshalling(): void
     {
@@ -78,7 +76,6 @@ final class SubjectLocalityTest extends TestCase
 
 
     /**
-     * @return void
      */
     public function testUnmarshalling(): void
     {

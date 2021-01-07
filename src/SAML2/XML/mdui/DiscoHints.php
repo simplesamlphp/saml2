@@ -85,7 +85,6 @@ final class DiscoHints extends AbstractMduiElement
      * Set the value of the IPHint-property
      *
      * @param string[] $hints
-     * @return void
      */
     private function setIPHint(array $hints): void
     {
@@ -110,7 +109,6 @@ final class DiscoHints extends AbstractMduiElement
      * Set the value of the DomainHint-property
      *
      * @param string[] $hints
-     * @return void
      */
     private function setDomainHint(array $hints): void
     {
@@ -135,7 +133,6 @@ final class DiscoHints extends AbstractMduiElement
      * Set the value of the GeolocationHint-property
      *
      * @param string[] $hints
-     * @return void
      */
     private function setGeolocationHint(array $hints): void
     {
@@ -158,7 +155,6 @@ final class DiscoHints extends AbstractMduiElement
      * Set the value of the childen-property
      *
      * @param array $children
-     * @return void
      */
     private function setChildren(array $children): void
     {
@@ -172,7 +168,6 @@ final class DiscoHints extends AbstractMduiElement
      * Add the value to the children-property
      *
      * @param \SimpleSAML\XML\Chunk $child
-     * @return void
      */
     public function addChild(Chunk $child): void
     {

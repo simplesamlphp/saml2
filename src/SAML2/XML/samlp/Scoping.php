@@ -52,7 +52,6 @@ final class Scoping extends AbstractSamlpElement
 
     /**
      * @param \SimpleSAML\SAML2\XML\samlp\IDPList|null $idpList
-     * @return void
      */
     private function setIDPList(?IDPList $idpList): void
     {
@@ -71,7 +70,6 @@ final class Scoping extends AbstractSamlpElement
 
     /**
      * @param string[] $requesterId
-     * @return void
      */
     private function setRequesterId(array $requesterId): void
     {
@@ -92,7 +90,6 @@ final class Scoping extends AbstractSamlpElement
 
     /**
      * @param int|null $proxyCount
-     * @return void
      */
     private function setProxyCount(?int $proxyCount): void
     {

@@ -31,7 +31,6 @@ final class IDPSSODescriptorTest extends TestCase
 
 
     /**
-     * @return void
      */
     protected function setUp(): void
     {
@@ -425,7 +424,6 @@ XML
     /**
      * Test serialization / unserialization.
      *
-     * @return void
      */
     public function testSerialize(): void
     {

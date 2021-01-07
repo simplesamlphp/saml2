@@ -31,7 +31,6 @@ final class SessionNotOnOrAfterTest extends ControlledTimeTest
 
 
     /**
-     * @return void
      */
     public function setUp(): void
     {
@@ -45,7 +44,6 @@ final class SessionNotOnOrAfterTest extends ControlledTimeTest
     /**
      * @group assertion-validation
      * @test
-     * @return void
      */
     public function timestampInThePastBeforeGraceperiodIsNotValid(): void
     {
@@ -105,7 +103,6 @@ final class SessionNotOnOrAfterTest extends ControlledTimeTest
     /**
      * @group assertion-validation
      * @test
-     * @return void
      */
     public function currentTimeIsValid(): void
     {

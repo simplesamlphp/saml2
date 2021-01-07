@@ -23,7 +23,6 @@ final class ArtifactResolutionServiceTest extends TestCase
 
 
     /**
-     * @return void
      */
     protected function setUp(): void
     {
