@@ -52,17 +52,7 @@ class DecodeBase64Transformer implements
             $attributes = $attributeStatement->getAttributes();
             $decodedAttributes = [];
             foreach ($attributes as $attribute) {
-                $values = [];
-                foreach ($attribute->getAttributeValues() as $encodedValue) {
-                    $encoded = $encodedValue->getValue();
-                    if (is_string($encoded)) {
-                        foreach ($this->decodeValue($encoded) as $decoded) {
-                            $values[] = new AttributeValue($decoded);
-                        }
-                    } else {
-                        $values[] = $encodedValue;
-                    }
-                }
+                $values = $this->getDecodedAttributeValues($attribute->getAttributeValues());
                 $decodedAttributes[] = new Attribute(
                     $attribute->getName(),
                     $attribute->getNameFormat(),
@@ -84,6 +74,23 @@ class DecodeBase64Transformer implements
             $assertion->getConditions(),
             $statements
         );
+    }
+
+
+    /**
+     * @param \SimpleSAML\SAML2\XML\saml\AttributeValues[] $encodedValues
+     * @return array
+     */
+    private function getDecodedAttributeValues(array $encodedValues): array
+    {
+        array_walk($encodedValues, function(&$v, $k) {
+            if (is_string($v)) {
+                foreach ($this->decodeValue($v) as $decoded) {
+                    $v[$k] = new AttributeValue($decoded);
+                }
+            }
+        });
+        return $encodedValues;
     }
 
 
