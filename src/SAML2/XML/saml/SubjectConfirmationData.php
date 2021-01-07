@@ -264,9 +264,9 @@ final class SubjectConfirmationData extends AbstractSamlElement
      * @param \DOMElement $xml The XML element we should load
      * @return self
      *
-     * @throws \SimpleSAML\XMLSecurity\Exception\InvalidDOMElementException
+     * @throws \SimpleSAML\XML\Exception\InvalidDOMElementException
      *   if the qualified name of the supplied element is wrong
-     * @throws \SimpleSAML\XMLSecurity\Exception\MissingAttributeException
+     * @throws \SimpleSAML\XML\Exception\MissingAttributeException
      *   if the supplied element is missing any of the mandatory attributes
      * @throws \SimpleSAML\Assert\AssertionFailedException
      *   if NotBefore or NotOnOrAfter contain an invalid date.

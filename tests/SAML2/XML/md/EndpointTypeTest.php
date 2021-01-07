@@ -13,7 +13,7 @@ use SimpleSAML\XML\Exception\InvalidDOMElementException;
 use SimpleSAML\XML\Exception\MissingAttributeException;
 
 /**
- * Class \SAML2\XML\md\EndpointType
+ * Class \SAML2\XML\md\EndpointTypeTest
  *
  * @covers \SimpleSAML\SAML2\XML\md\AbstractEndpointType
  * @covers \SimpleSAML\SAML2\XML\md\AbstractMdElement

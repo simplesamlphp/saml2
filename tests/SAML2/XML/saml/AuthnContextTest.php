@@ -9,6 +9,7 @@ use PHPUnit\Framework\TestCase;
 use SimpleSAML\Assert\AssertionFailedException;
 use SimpleSAML\SAML2\Constants;
 use SimpleSAML\XML\DOMDocumentFactory;
+use SimpleSAML\XML\Exception\TooManyElementsException;
 use SimpleSAML\XML\Utils as XMLUtils;
 
 /**
@@ -343,6 +344,54 @@ final class AuthnContextTest extends TestCase
 
         $this->expectException(AssertionFailedException::class);
         $this->expectExceptionMessage('Can only have one of AuthnContextDecl/AuthnContextDeclRef');
+
+        AuthnContext::fromXML($document->documentElement);
+    }
+
+
+    /**
+     * More than one AuthnContextClassRef inside AuthnContext will throw Exception.
+     */
+    public function testMoreThanOneAuthnContextClassRefThrowsException(): void
+    {
+        $document = $this->document;
+        $document->documentElement->appendChild($document->importNode($this->classRef->documentElement, true));
+        $document->documentElement->appendChild($document->importNode($this->classRef->documentElement, true));
+
+        $this->expectException(TooManyElementsException::class);
+        $this->expectExceptionMessage("More than one <saml:AuthnContextClassRef> found");
+
+        AuthnContext::fromXML($document->documentElement);
+    }
+
+
+    /**
+     * More than one AuthnContextDeclRef inside AuthnContext will throw Exception.
+     */
+    public function testMoreThanOneAuthnContextDeclRefThrowsException(): void
+    {
+        $document = $this->document;
+        $document->documentElement->appendChild($document->importNode($this->declRef->documentElement, true));
+        $document->documentElement->appendChild($document->importNode($this->declRef->documentElement, true));
+
+        $this->expectException(TooManyElementsException::class);
+        $this->expectExceptionMessage("More than one <saml:AuthnContextDeclRef> found");
+
+        AuthnContext::fromXML($document->documentElement);
+    }
+
+
+    /**
+     * More than one AuthnContextDecl inside AuthnContext will throw Exception.
+     */
+    public function testMoreThanOneAuthnContextDeclThrowsException(): void
+    {
+        $document = $this->document;
+        $document->documentElement->appendChild($document->importNode($this->decl->documentElement, true));
+        $document->documentElement->appendChild($document->importNode($this->decl->documentElement, true));
+
+        $this->expectException(TooManyElementsException::class);
+        $this->expectExceptionMessage("More than one <saml:AuthnContextDecl> found");
 
         AuthnContext::fromXML($document->documentElement);
     }

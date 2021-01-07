@@ -17,6 +17,7 @@ use SimpleSAML\Assert\Assert;
  */
 class AttributeValue extends AbstractSamlElement
 {
+
     /**
      * @var string|int|\SimpleSAML\XML\AbstractXMLElement|null
      */
@@ -30,16 +31,23 @@ class AttributeValue extends AbstractSamlElement
      *  - string
      *  - int
      *  - null
-     *  - \SimpleSAML\XML\AbstractXMLElement
+     *  - \SimpleSAML\XML\AbstractXMLElement[]
      *
      * @throws \SimpleSAML\Assert\AssertionFailedException if the supplied value is neither a string or a DOMElement
      */
     public function __construct($value)
     {
         Assert::true(
-            is_string($value) || is_int($value) || is_null($value) || $value instanceof AbstractXMLElement,
-            'Value must be of type "string", "int", "null" or "AbstractXMLElement".'
+            is_string($value) || is_int($value) || is_null($value) || is_array($value),
+            'Value must be of type "string", "int", "null", or an array of "AbstractXMLElement".'
         );
+        if (is_array($value)) {
+            Assert::allIsInstanceOf(
+                $value,
+                AbstractXMLElement::class,
+                'All values passed as an array must be an instance of "AbstractXMLElement".'
+            );
+        }
         $this->value = $value;
     }
 
@@ -67,7 +75,7 @@ class AttributeValue extends AbstractSamlElement
     /**
      * Get this attribute value.
      *
-     * @return string|int|\SimpleSAML\XML\AbstractXMLElement|null
+     * @return string|int|\SimpleSAML\XML\AbstractXMLElement[]|null
      */
     public function getValue()
     {
@@ -92,13 +100,28 @@ class AttributeValue extends AbstractSamlElement
             $xml->hasAttributeNS(Constants::NS_XSI, "type") &&
             $xml->getAttributeNS(Constants::NS_XSI, "type") === "xs:integer"
         ) {
+            // we have an integer as value
             $value = intval($value);
         } elseif (
+            // null value
             $xml->hasAttributeNS(Constants::NS_XSI, "nil") &&
             ($xml->getAttributeNS(Constants::NS_XSI, "nil") === "1" ||
                 $xml->getAttributeNS(Constants::NS_XSI, "nil") === "true")
         ) {
             $value = null;
+        } else {
+            // try to see if the value is something we recognize
+            /**
+             * @todo register constant mapping from namespace to prefix, then
+             * iterate over children, pick DOM elements, fetch their localName
+             * and namespace, and try to build a class name from our registered
+             * prefix for that namespace in the form "\SAML2\XML\<prefix>\<localName>".
+             * If there's such class, call fromXML() on the child element.
+             */
+            $nameIds = NameID::getChildrenOfClass($xml);
+            if (!empty($nameIds)) {
+                $value = $nameIds;
+            }
         }
 
         return new self($value);
@@ -116,24 +139,26 @@ class AttributeValue extends AbstractSamlElement
     {
         $e = parent::instantiateParentElement($parent);
 
-        $value = $this->value;
         switch (gettype($this->value)) {
             case "integer":
                 // make sure that the xs namespace is available in the AttributeValue
                 $e->setAttributeNS('http://www.w3.org/2000/xmlns/', 'xmlns:xs', Constants::NS_XS);
-
                 $e->setAttributeNS(Constants::NS_XSI, "xsi:type", "xs:integer");
-                $value = strval($value);
+                $e->textContent = strval($this->value);
                 break;
             case "NULL":
                 $e->setAttributeNS(Constants::NS_XSI, "xsi:nil", "1");
-                $value = "";
+                $e->textContent = "";
                 break;
-            case "object":
-                $value = $this->value->__toString();
+            case "array":
+                foreach ($this->value as $object) {
+                    $object->toXML($e);
+                }
+                break;
+            default:
+                $e->textContent = $this->value;
         }
 
-        $e->textContent = $value;
         return $e;
     }
 }

@@ -120,6 +120,34 @@ XML
 
 
     /**
+     * Verifies that we can create an AttributeValue containing a NameID from a DOMElement.
+     *
+     * @return void
+     */
+    public function testUnmarshallingNameID(): void
+    {
+        $document = DOMDocumentFactory::fromString(<<<XML
+<saml:AttributeValue xmlns:saml="urn:oasis:names:tc:SAML:2.0:assertion">
+  <saml:NameID Format="urn:oasis:names:tc:SAML:2.0:nameid-format:persistent">abcd-some-value-xyz</saml:NameID>
+</saml:AttributeValue>
+XML
+        );
+
+        $av = AttributeValue::fromXML($document->documentElement);
+        $value = $av->getValue();
+
+        $this->assertCount(1, $value);
+        $value = $value[0];
+
+        $this->assertInstanceOf(NameID::class, $value);
+
+        $this->assertEquals('abcd-some-value-xyz', $value->getValue());
+        $this->assertEquals('urn:oasis:names:tc:SAML:2.0:nameid-format:persistent', $value->getFormat());
+        $this->assertXmlStringEqualsXmlString($document, $av->toXML()->ownerDocument->saveXML());
+    }
+
+
+    /**
      * Serialize an AttributeValue and Unserialize that again.
      *
      */

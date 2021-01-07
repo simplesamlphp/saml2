@@ -145,6 +145,7 @@ final class AuthnRequestTest extends TestCase
             null,
             null,
             null,
+            null,
             $scoping
         );
 
@@ -231,7 +232,9 @@ AUTHNREQUEST;
         $document     = DOMDocumentFactory::fromString($xml);
         $authnRequest = AuthnRequest::fromXML($document->documentElement);
 
-        $this->assertXmlStringEqualsXmlString($document->C14N(), $authnRequest->toXML()->C14N());
+        /** @psalm-var \DOMDocument $e->ownerDocument */
+        $e = $authnRequest->toXML();
+        $this->assertXmlStringEqualsXmlString($document->C14N(), $e->ownerDocument->C14N());
     }
 
 
@@ -351,6 +354,7 @@ AUTHNREQUEST;
             null,
             null,
             null,
+            null,
             $issuer,
             null,
             null,
@@ -420,6 +424,7 @@ AUTHNREQUEST;
 
         // basic AuthnRequest
         $request = new AuthnRequest(
+            null,
             null,
             null,
             null,
@@ -598,6 +603,7 @@ AUTHNREQUEST;
             null,
             null,
             null,
+            null,
             $issuer,
             null,
             $issueInstant,
@@ -650,6 +656,7 @@ AUTHNREQUEST;
             null,
             null,
             $nameIdPolicy,
+            null,
             null,
             null,
             null,
@@ -753,6 +760,7 @@ AUTHNREQUEST;
             null,
             null,
             $forceAuthn,
+            null,
             null,
             null,
             null,
@@ -876,6 +884,7 @@ AUTHNREQUEST;
             null,
             null,
             null,
+            null,
             $issuer,
             null,
             $issueInstant,
@@ -922,6 +931,7 @@ AUTHNREQUEST;
 
         // basic AuthnRequest
         $request = new AuthnRequest(
+            null,
             null,
             null,
             null,
@@ -1013,6 +1023,7 @@ AUTHNREQUEST;
             null,
             null,
             $assertionConsumerServiceURL,
+            null,
             $protocolBinding,
             null,
             null,
@@ -1164,6 +1175,7 @@ AUTHNREQUEST;
             null,
             null,
             $conditions,
+            null,
             null,
             null,
             null,

@@ -101,6 +101,11 @@ final class SubjectConfirmationValidatorTest extends TestCase
                                               />
             </saml:SubjectConfirmation>
         </saml:Subject>
+        <saml:AuthnStatement AuthnInstant="2010-03-05T13:34:28Z">
+            <saml:AuthnContext>
+                <saml:AuthnContextClassRef>someAuthnContext</saml:AuthnContextClassRef>
+            </saml:AuthnContext>
+        </saml:AuthnStatement>
     </saml:Assertion>
 XML
         );
@@ -114,7 +119,7 @@ XML
      */
     public function testBasicValidation(): void
     {
-        $assertion = new Assertion($this->document->documentElement);
+        $assertion = Assertion::fromXML($this->document->documentElement);
 
         $result = $this->assertionProcessor->validateAssertion($assertion);
         $this->assertNull($result);
@@ -128,9 +133,9 @@ XML
      */
     public function testSubjectConfirmationNonValidation(): void
     {
-        $assertion = new Assertion($this->document->documentElement);
+        $assertion = Assertion::fromXML($this->document->documentElement);
 
-        $sc = $assertion->getSubjectConfirmation()[0];
+        $sc = $assertion->getSubject()->getSubjectConfirmation()[0];
         $scd = $sc->getSubjectConfirmationData();
         $newscd = new SubjectConfirmationData(
             $scd->getNotBefore(),

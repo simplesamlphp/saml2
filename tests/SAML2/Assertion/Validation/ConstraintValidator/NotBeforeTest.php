@@ -4,12 +4,15 @@ declare(strict_types=1);
 
 namespace SimpleSAML\SAML2\Assertion\Validation\ConstraintValidator;
 
-use Mockery;
-use Mockery\MockInterface;
 use SimpleSAML\SAML2\Assertion\Validation\ConstraintValidator\NotBefore;
 use SimpleSAML\SAML2\Assertion\Validation\Result;
 use SimpleSAML\SAML2\ControlledTimeTest;
 use SimpleSAML\SAML2\XML\saml\Assertion;
+use SimpleSAML\SAML2\XML\saml\AuthnContext;
+use SimpleSAML\SAML2\XML\saml\AuthnContextClassRef;
+use SimpleSAML\SAML2\XML\saml\AuthnStatement;
+use SimpleSAML\SAML2\XML\saml\Conditions;
+use SimpleSAML\SAML2\XML\saml\Issuer;
 
 /**
  * Because we're mocking a static call, we have to run it in separate processes so as to no contaminate the other
@@ -22,11 +25,15 @@ use SimpleSAML\SAML2\XML\saml\Assertion;
  */
 final class NotBeforeTest extends ControlledTimeTest
 {
-    /** @var \Mockery\MockInterface */
-    private MockInterface $assertion;
+    /**
+     * @var \SAML2\XML\saml\Issuer
+     */
+    private $issuer;
 
-    /** @var int */
-    protected int $currentTime = 1;
+    /**
+     * @var \SAML2\XML\saml\AuthnStatement
+     */
+    private $authnStatement;
 
 
     /**
@@ -34,7 +41,19 @@ final class NotBeforeTest extends ControlledTimeTest
     public function setUp(): void
     {
         parent::setUp();
-        $this->assertion = Mockery::mock(Assertion::class);
+
+        // Create an Issuer
+        $this->issuer = new Issuer('testIssuer');
+
+        // Create the statements
+        $this->authnStatement = new AuthnStatement(
+            new AuthnContext(
+                new AuthnContextClassRef('someAuthnContext'),
+                null,
+                null
+            ),
+            time()
+        );
     }
 
 
@@ -44,12 +63,16 @@ final class NotBeforeTest extends ControlledTimeTest
      */
     public function timestampInTheFutureBeyondGraceperiodIsNotValid(): void
     {
-        $this->assertion->shouldReceive('getNotBefore')->andReturn($this->currentTime + 61);
+        // Create Conditions
+        $conditions = new Conditions($this->currentTime + 61);
+
+        // Create an assertion
+        $assertion = new Assertion($this->issuer, null, null, null, $conditions, [$this->authnStatement]);
 
         $validator = new NotBefore();
         $result    = new Result();
 
-        $validator->validate($this->assertion, $result);
+        $validator->validate($assertion, $result);
 
         $this->assertFalse($result->isValid());
         $this->assertCount(1, $result->getErrors());
@@ -62,12 +85,16 @@ final class NotBeforeTest extends ControlledTimeTest
      */
     public function timeWithinGraceperiodIsValid(): void
     {
-        $this->assertion->shouldReceive('getNotBefore')->andReturn($this->currentTime + 60);
+        // Create Conditions
+        $conditions = new Conditions($this->currentTime + 60);
+
+        // Create an assertion
+        $assertion = new Assertion($this->issuer, null, null, null, $conditions, [$this->authnStatement]);
 
         $validator = new NotBefore();
         $result    = new Result();
 
-        $validator->validate($this->assertion, $result);
+        $validator->validate($assertion, $result);
 
         $this->assertTrue($result->isValid());
     }
@@ -79,12 +106,16 @@ final class NotBeforeTest extends ControlledTimeTest
      */
     public function currentTimeIsValid(): void
     {
-        $this->assertion->shouldReceive('getNotBefore')->andReturn($this->currentTime);
+        // Create Conditions
+        $conditions = new Conditions($this->currentTime);
+
+        // Create an assertion
+        $assertion = new Assertion($this->issuer, null, null, null, $conditions, [$this->authnStatement]);
 
         $validator = new NotBefore();
         $result    = new Result();
 
-        $validator->validate($this->assertion, $result);
+        $validator->validate($assertion, $result);
 
         $this->assertTrue($result->isValid());
     }

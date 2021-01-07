@@ -6,13 +6,15 @@ namespace SimpleSAML\SAML2\Assertion\Transformer;
 
 use Exception;
 use Psr\Log\LoggerInterface;
-use SimpleSAML\SAML2\XML\saml\Assertion;
 use SimpleSAML\SAML2\Assertion\Exception\NotDecryptedException;
 use SimpleSAML\SAML2\Certificate\PrivateKeyLoader;
 use SimpleSAML\SAML2\Configuration\IdentityProvider;
 use SimpleSAML\SAML2\Configuration\IdentityProviderAware;
 use SimpleSAML\SAML2\Configuration\ServiceProvider;
 use SimpleSAML\SAML2\Configuration\ServiceProviderAware;
+use SimpleSAML\SAML2\XML\saml\Assertion;
+use SimpleSAML\SAML2\XML\saml\EncryptedID;
+use SimpleSAML\SAML2\XML\saml\Subject;
 
 final class NameIdDecryptionTransformer implements
     TransformerInterface,
@@ -62,7 +64,13 @@ final class NameIdDecryptionTransformer implements
      */
     public function transform(Assertion $assertion): Assertion
     {
-        if (!$assertion->isNameIdEncrypted()) {
+        $subject = $assertion->getSubject();
+        if ($subject === null) {
+            return $assertion;
+        }
+
+        $identifier = $subject->getIdentifier();
+        if (!($identifier instanceof EncryptedID)) {
             return $assertion;
         }
 
@@ -72,10 +80,12 @@ final class NameIdDecryptionTransformer implements
             $blacklistedKeys = $this->serviceProvider->getBlacklistedAlgorithms();
         }
 
+        $decrypted = null;
         foreach ($decryptionKeys as $index => $key) {
             try {
-                $assertion->decryptNameId($key, $blacklistedKeys);
+                $decrypted = $identifier->decrypt($key, $blacklistedKeys);
                 $this->logger->debug(sprintf('Decrypted assertion NameId with key "#%d"', $index));
+                break;
             } catch (Exception $e) {
                 $this->logger->debug(sprintf(
                     'Decrypting assertion NameId with key "#%d" failed, "%s" thrown: "%s"',
@@ -86,13 +96,20 @@ final class NameIdDecryptionTransformer implements
             }
         }
 
-        if ($assertion->isNameIdEncrypted()) {
+        if ($decrypted === null) {
             throw new NotDecryptedException(
                 'Could not decrypt the assertion NameId with the configured keys, see the debug log for information'
             );
         }
 
-        return $assertion;
+        return new Assertion(
+            $assertion->getIssuer(),
+            $assertion->getId(),
+            $assertion->getIssueInstant(),
+            new Subject($decrypted, $subject->getSubjectConfirmation()),
+            $assertion->getConditions(),
+            $assertion->getStatements()
+        );
     }
 
 

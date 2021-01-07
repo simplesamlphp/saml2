@@ -79,7 +79,6 @@ XML
     public function testLogoutSuccess(): void
     {
         $response = LogoutResponse::fromXML($this->document->documentElement);
-
         $this->assertTrue($response->isSuccess());
 
         $status = $response->getStatus();

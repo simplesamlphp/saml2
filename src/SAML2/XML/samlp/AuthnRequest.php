@@ -110,10 +110,11 @@ class AuthnRequest extends AbstractRequest
      * @param \SimpleSAML\SAML2\XML\saml\Conditions $conditions
      * @param bool $forceAuthn
      * @param bool $isPassive
-     * @param string $assertionConsumerServiceUrl
-     * @param string $protocolBinding
-     * @param int $attributeConsumingServiceIndex
-     * @param string $providerName
+     * @param string|null $assertionConsumerServiceUrl
+     * @param int|null $assertionConsumerServiceIndex
+     * @param string|null $protocolBinding
+     * @param int|null $attributeConsumingServiceIndex
+     * @param string|null $providerName
      * @param \SimpleSAML\SAML2\XML\saml\Issuer|null $issuer
      * @param string|null $id
      * @param int|null $issueInstant
@@ -131,6 +132,7 @@ class AuthnRequest extends AbstractRequest
         ?bool $forceAuthn = null,
         ?bool $isPassive = null,
         ?string $assertionConsumerServiceUrl = null,
+        ?int $assertionConsumerServiceIndex = null,
         ?string $protocolBinding = null,
         ?int $attributeConsumingServiceIndex = null,
         ?string $providerName = null,
@@ -152,6 +154,7 @@ class AuthnRequest extends AbstractRequest
         $this->setForceAuthn($forceAuthn);
         $this->setIsPassive($isPassive);
         $this->setAssertionConsumerServiceUrl($assertionConsumerServiceUrl);
+        $this->setAssertionConsumerServiceIndex($assertionConsumerServiceIndex);
         $this->setProtocolBinding($protocolBinding);
         $this->setAttributeConsumingServiceIndex($attributeConsumingServiceIndex);
         $this->setProviderName($providerName);
@@ -431,6 +434,7 @@ class AuthnRequest extends AbstractRequest
         $issueInstant = XMLUtils::xsDateTimeToTimestamp(self::getAttribute($xml, 'IssueInstant'));
 
         $attributeConsumingServiceIndex = self::getIntegerAttribute($xml, 'AttributeConsumingServiceIndex', null);
+        $assertionConsumerServiceIndex = self::getIntegerAttribute($xml, 'AssertionConsumerServiceIndex', null);
 
         $conditions = Conditions::getChildrenOfClass($xml);
         Assert::maxCount($conditions, 1, 'Only one <saml:Conditions> element is allowed.', TooManyElementsException::class);
@@ -461,7 +465,6 @@ class AuthnRequest extends AbstractRequest
         $scoping = Scoping::getChildrenOfClass($xml);
         Assert::maxCount($scoping, 1, 'Only one <samlp:Scoping> element is allowed.', TooManyElementsException::class);
 
-
         $request = new self(
             array_pop($requestedAuthnContext),
             array_pop($subject),
@@ -470,6 +473,7 @@ class AuthnRequest extends AbstractRequest
             self::getBooleanAttribute($xml, 'ForceAuthn', null),
             self::getBooleanAttribute($xml, 'IsPassive', null),
             self::getAttribute($xml, 'AssertionConsumerServiceURL', null),
+            $assertionConsumerServiceIndex,
             self::getAttribute($xml, 'ProtocolBinding', null),
             $attributeConsumingServiceIndex,
             self::getAttribute($xml, 'ProviderName', null),

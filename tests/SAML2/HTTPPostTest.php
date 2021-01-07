@@ -122,6 +122,7 @@ final class HTTPPostTest extends MockeryTestCase
             null,
             null,
             null,
+            null,
             'https://example.org'
         );
         $hp = new HTTPPost();

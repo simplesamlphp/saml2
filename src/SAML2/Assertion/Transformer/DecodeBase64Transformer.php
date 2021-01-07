@@ -9,6 +9,9 @@ use SimpleSAML\SAML2\Assertion\Exception\InvalidAssertionException;
 use SimpleSAML\SAML2\Configuration\IdentityProvider;
 use SimpleSAML\SAML2\Configuration\IdentityProviderAware;
 use SimpleSAML\SAML2\XML\saml\Assertion;
+use SimpleSAML\SAML2\XML\saml\Attribute;
+use SimpleSAML\SAML2\XML\saml\AttributeStatement;
+use SimpleSAML\SAML2\XML\saml\AttributeValue;
 
 class DecodeBase64Transformer implements
     TransformerInterface,
@@ -43,17 +46,55 @@ class DecodeBase64Transformer implements
             return $assertion;
         }
 
-        $attributes = $assertion->getAttributes();
-        $decodedAttributes = [];
-        foreach ($attributes as $name => $values) {
-            $decodedAttributes[$name] = [];
-            foreach ($values as $value) {
-                $decoded = $this->decodeValue($value);
-                $decodedAttributes[$name] = array_merge($decodedAttributes[$name], $decoded);
+        $statements = [];
+        $attributeStatements = $assertion->getAttributeStatements();
+        foreach ($attributeStatements as $attributeStatement) {
+            $attributes = $attributeStatement->getAttributes();
+            $decodedAttributes = [];
+            foreach ($attributes as $attribute) {
+                $values = $this->getDecodedAttributeValues($attribute->getAttributeValues());
+                $decodedAttributes[] = new Attribute(
+                    $attribute->getName(),
+                    $attribute->getNameFormat(),
+                    $attribute->getFriendlyName(),
+                    $values,
+                    $attribute->getAttributesNS()
+                );
+            }
+            $statements[] = new AttributeStatement($decodedAttributes);
+        }
+
+        $statements = array_merge($statements, $assertion->getAuthnStatements(), $assertion->getStatements());
+
+        return new Assertion(
+            $assertion->getIssuer(),
+            $assertion->getId(),
+            $assertion->getIssueInstant(),
+            $assertion->getSubject(),
+            $assertion->getConditions(),
+            $statements
+        );
+    }
+
+
+    /**
+     * @param \SimpleSAML\SAML2\XML\saml\AttributeValues[] $encodedValues
+     * @return array
+     */
+    private function getDecodedAttributeValues(array $encodedValues): array
+    {
+        $values = [];
+        foreach ($encodedValues as $encodedValue) {
+            $encoded = $encodedValue->getValue();
+            if (is_string($encoded)) {
+                foreach ($this->decodeValue($encoded) as $decoded) {
+                    $values[] = new AttributeValue($decoded);
+                }
+            } else {
+                $values[] = $encodedValue;
             }
         }
-        $assertion->setAttributes($decodedAttributes);
-        return $assertion;
+        return $values;
     }
 
 

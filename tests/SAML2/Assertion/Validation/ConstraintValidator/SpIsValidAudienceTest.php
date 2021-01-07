@@ -5,12 +5,18 @@ declare(strict_types=1);
 namespace SimpleSAML\SAML2\Assertion\Validation\ConstraintValidator;
 
 use Mockery;
-use Mockery\MockInterface;
 use Mockery\Adapter\Phpunit\MockeryTestCase;
+use Mockery\MockInterface;
 use SimpleSAML\SAML2\Assertion\Validation\ConstraintValidator\SpIsValidAudience;
 use SimpleSAML\SAML2\Assertion\Validation\Result;
 use SimpleSAML\SAML2\Configuration\ServiceProvider;
 use SimpleSAML\SAML2\XML\saml\Assertion;
+use SimpleSAML\SAML2\XML\saml\AudienceRestriction;
+use SimpleSAML\SAML2\XML\saml\AuthnContext;
+use SimpleSAML\SAML2\XML\saml\AuthnContextClassRef;
+use SimpleSAML\SAML2\XML\saml\AuthnStatement;
+use SimpleSAML\SAML2\XML\saml\Conditions;
+use SimpleSAML\SAML2\XML\saml\Issuer;
 
 /**
  * Because we're mocking a static call, we have to run it in separate processes so as to no contaminate the other
@@ -21,8 +27,20 @@ use SimpleSAML\SAML2\XML\saml\Assertion;
  */
 final class SpIsValidAudienceTest extends MockeryTestCase
 {
-    /** @var \Mockery\MockInterface */
-    private MockInterface $assertion;
+    /**
+     * @var \SAML2\XML\saml\AuthnStatement
+     */
+    private AuthnStatement $authnStatement;
+
+    /**
+     * @var \SAML2\XML\saml\Conditions
+     */
+    private Conditions $conditions;
+
+    /**
+     * @var \SAML2\XML\saml\Isssuer
+     */
+    private Issuer $issuer;
 
     /** @var \Mockery\MockInterface */
     private MockInterface $serviceProvider;
@@ -33,7 +51,28 @@ final class SpIsValidAudienceTest extends MockeryTestCase
     public function setUp(): void
     {
         parent::setUp();
-        $this->assertion = Mockery::mock(Assertion::class);
+
+        // Create an Issuer
+        $this->issuer = new Issuer('testIssuer');
+
+        // Create the conditions
+        $this->conditions = new Conditions(
+            null,
+            null,
+            [],
+            [new AudienceRestriction(['audience1', 'audience2'])]
+        );
+
+        // Create the statements
+        $this->authnStatement = new AuthnStatement(
+            new AuthnContext(
+                new AuthnContextClassRef('someAuthnContext'),
+                null,
+                null
+            ),
+            time()
+        );
+
         $this->serviceProvider = Mockery::mock(ServiceProvider::class);
     }
 
@@ -44,14 +83,16 @@ final class SpIsValidAudienceTest extends MockeryTestCase
      */
     public function whenNoValidAudiencesAreGivenTheAssertionIsValid(): void
     {
-        $this->assertion->shouldReceive('getValidAudiences')->andReturn(null);
+        // Create an assertion
+        $assertion = new Assertion($this->issuer, null, null, null, null, [$this->authnStatement]);
+
         $this->serviceProvider->shouldReceive('getEntityId')->andReturn('entityId');
 
         $validator = new SpIsValidAudience();
         $validator->setServiceProvider($this->serviceProvider);
         $result    = new Result();
 
-        $validator->validate($this->assertion, $result);
+        $validator->validate($assertion, $result);
 
         $this->assertTrue($result->isValid());
     }
@@ -63,14 +104,16 @@ final class SpIsValidAudienceTest extends MockeryTestCase
      */
     public function ifTheSpEntityIdIsNotInTheValidAudiencesTheAssertionIsInvalid(): void
     {
-        $this->assertion->shouldReceive('getValidAudiences')->andReturn(['someEntityId']);
+        // Create an assertion
+        $assertion = new Assertion($this->issuer, null, null, null, $this->conditions, [$this->authnStatement]);
+
         $this->serviceProvider->shouldReceive('getEntityId')->andReturn('anotherEntityId');
 
         $validator = new SpIsValidAudience();
         $validator->setServiceProvider($this->serviceProvider);
         $result    = new Result();
 
-        $validator->validate($this->assertion, $result);
+        $validator->validate($assertion, $result);
 
         $this->assertFalse($result->isValid());
         $this->assertCount(1, $result->getErrors());
@@ -83,14 +126,16 @@ final class SpIsValidAudienceTest extends MockeryTestCase
      */
     public function theAssertionIsValidWhenTheCurrentSpEntityIdIsAValidAudience(): void
     {
-        $this->assertion->shouldReceive('getValidAudiences')->andReturn(['foo', 'bar', 'validEntityId', 'baz']);
-        $this->serviceProvider->shouldReceive('getEntityId')->andReturn('validEntityId');
+        // Create an assertion
+        $assertion = new Assertion($this->issuer, null, null, null, $this->conditions, [$this->authnStatement]);
+
+        $this->serviceProvider->shouldReceive('getEntityId')->andReturn('audience1');
 
         $validator = new SpIsValidAudience();
         $validator->setServiceProvider($this->serviceProvider);
         $result    = new Result();
 
-        $validator->validate($this->assertion, $result);
+        $validator->validate($assertion, $result);
 
         $this->assertTrue($result->isValid());
     }

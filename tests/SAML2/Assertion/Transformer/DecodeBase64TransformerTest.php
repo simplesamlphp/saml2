@@ -14,12 +14,14 @@ use SimpleSAML\SAML2\Assertion\ProcessorBuilder;
 use SimpleSAML\SAML2\Configuration\Destination;
 use SimpleSAML\SAML2\Configuration\IdentityProvider;
 use SimpleSAML\SAML2\Configuration\ServiceProvider;
+use SimpleSAML\SAML2\Constants;
 use SimpleSAML\SAML2\Signature\Validator;
 use SimpleSAML\SAML2\Utilities\ArrayCollection;
 use SimpleSAML\SAML2\XML\samlp\Response;
 use SimpleSAML\SAML2\XML\samlp\Status;
 use SimpleSAML\SAML2\XML\samlp\StatusCode;
 use SimpleSAML\XML\DOMDocumentFactory;
+use SimpleSAML\XML\Utils as XMLUtils;
 
 /**
  * Tests for decoding base64 encoded attributes.
@@ -52,6 +54,7 @@ final class DecodeBase64TransformerTest extends TestCase
 
     /** @var \SimpleSAML\SAML2\xml\samlp\Response */
     protected Response $response;
+
 
     /**
      */
@@ -88,6 +91,11 @@ final class DecodeBase64TransformerTest extends TestCase
                     >
         <saml:Issuer>urn:thki:sid:idp2</saml:Issuer>
         <saml:Conditions/>
+        <saml:AuthnStatement AuthnInstant="2010-03-05T13:34:28Z">
+          <saml:AuthnContext>
+            <saml:AuthnContextClassRef>someAuthnContext</saml:AuthnContextClassRef>
+          </saml:AuthnContext>
+        </saml:AuthnStatement>
         <saml:AttributeStatement>
             <saml:Attribute Name="urn:mace:dir:attribute-def:eduPersonAffiliation"
                             NameFormat="urn:oasis:names:tc:SAML:2.0:attrname-format:uri"
@@ -116,6 +124,7 @@ XML
         );
     }
 
+
     /**
      * Verifies that we can create decoded AttributeValues.
      *
@@ -126,19 +135,19 @@ XML
     {
         $this->assertTrue($this->identityProviderConfiguration->hasBase64EncodedAttributes());
 
-        $assertion = new Assertion($this->document->firstChild);
-
+        $assertion = Assertion::fromXML($this->document->firstChild);
         $processed = $this->assertionProcessor->process($assertion);
-        $attributes = $processed->getAttributes();
+        $attributes = $processed->getAttributeStatements()[0]->getAttributes();
 
-        $displayName = $attributes['urn:mace:dir:attribute-def:displayName'];
+        $displayName = $attributes[3]->getAttributeValues();
         $this->assertCount(1, $displayName);
-        $this->assertEquals("Iemand Anders", $displayName[0]);
+        $this->assertEquals("Iemand Anders", $displayName[0]->getValue());
 
-        $eduPersonPrincipalName = $attributes['urn:mace:dir:attribute-def:eduPersonPrincipalName'];
+        $eduPersonPrincipalName = $attributes[2]->getAttributeValues();
         $this->assertCount(1, $eduPersonPrincipalName);
-        $this->assertEquals("asjemenou@loeki.tv", $eduPersonPrincipalName[0]);
+        $this->assertEquals("asjemenou@loeki.tv", $eduPersonPrincipalName[0]->getValue());
     }
+
 
     /**
      * Multi-valued attributes are also decoded correctly.
@@ -148,16 +157,17 @@ XML
      */
     public function testRegularMultivaluedDecoding(): void
     {
-        $assertion = new Assertion($this->document->firstChild);
+        $assertion = Assertion::fromXML($this->document->firstChild);
 
         $processed = $this->assertionProcessor->process($assertion);
-        $attributes = $processed->getAttributes();
+        $attributes = $processed->getAttributeStatements()[0]->getAttributes();
 
-        $affiliation = $attributes['urn:mace:dir:attribute-def:eduPersonAffiliation'];
+        $affiliation = $attributes[0]->getAttributeValues();
         $this->assertCount(2, $affiliation);
-        $this->assertEquals("member", $affiliation[0]);
-        $this->assertEquals("affiliate", $affiliation[1]);
+        $this->assertEquals("member", $affiliation[0]->getValue());
+        $this->assertEquals("affiliate", $affiliation[1]->getValue());
     }
+
 
     /**
      * Multi-valued concatenated attributes are also decoded correctly.
@@ -167,16 +177,17 @@ XML
      */
     public function testConcatenatedMultivaluedDecoding(): void
     {
-        $assertion = new Assertion($this->document->firstChild);
+        $assertion = Assertion::fromXML($this->document->firstChild);
 
         $processed = $this->assertionProcessor->process($assertion);
-        $attributes = $processed->getAttributes();
+        $attributes = $processed->getAttributeStatements()[0]->getAttributes();
 
-        $affiliation = $attributes['urn:mace:dir:attribute-def:eduPersonAffiliationAlternative'];
+        $affiliation = $attributes[1]->getAttributeValues();
         $this->assertCount(2, $affiliation);
-        $this->assertEquals("member", $affiliation[0]);
-        $this->assertEquals("affiliate", $affiliation[1]);
+        $this->assertEquals("member", $affiliation[0]->getValue());
+        $this->assertEquals("affiliate", $affiliation[1]->getValue());
     }
+
 
     /**
      * Check that attribute values with characters not in the base64 alphabet
@@ -187,17 +198,17 @@ XML
      */
     public function testInvalidBase64(): void
     {
-        $assertion = new Assertion($this->document->firstChild);
+        $attributeStatement = XMLUtils::xpQuery($this->document->documentElement, './saml_assertion:AttributeStatement');
 
-        $parsedAttributes = $assertion->getAttributes();
-        $parsedAttributes['urn:mace:dir:attribute-def:displayName'][0] =
-            strtr($parsedAttributes['urn:mace:dir:attribute-def:displayName'][0], 'k', '.');
-        $assertion->setAttributes($parsedAttributes);
+        $attribute = new Attribute('broken:encoding', Constants::NAMEFORMAT_URI, null, [new AttributeValue('SWVtYW5.IEFuZGVycw==')]);
+        $attribute->toXML($attributeStatement[0]);
 
+        $assertion = Assertion::fromXML($this->document->firstChild);
         $this->expectException(InvalidAssertionException::class);
         $this->expectExceptionMessage('Invalid base64 encoded attribute value "SWVtYW5.IEFuZGVycw=="');
-        $processed = $this->assertionProcessor->process($assertion);
+        $this->assertionProcessor->process($assertion);
     }
+
 
     /**
      * If we disable base64encoded attributes nothing happens
@@ -219,15 +230,16 @@ XML
             $this->response
         );
 
-        $assertion = new Assertion($this->document->firstChild);
+        $assertion = Assertion::fromXML($this->document->firstChild);
 
         $processed = $noBase64AssertionProcessor->process($assertion);
-        $attributes = $processed->getAttributes();
+        $attributes = $processed->getAttributeStatements()[0]->getAttributes();
 
-        $displayName = $attributes['urn:mace:dir:attribute-def:displayName'];
+        $displayName = $attributes[3]->getAttributeValues();
         $this->assertCount(1, $displayName);
-        $this->assertEquals("SWVtYW5kIEFuZGVycw==", $displayName[0]);
+        $this->assertEquals("SWVtYW5kIEFuZGVycw==", $displayName[0]->getValue());
     }
+
 
     /**
      * Run the decoder through processAssertions.
@@ -237,19 +249,19 @@ XML
      */
     public function testDecodingProcessAssertions(): void
     {
-        $assertion = new Assertion($this->document->firstChild);
+        $assertion = Assertion::fromXML($this->document->firstChild);
         $assertions = new ArrayCollection([$assertion]);
 
         $processed = $this->assertionProcessor->processAssertions($assertions);
         $this->assertCount(1, $processed);
-        $attributes = $processed->getOnlyElement()->getAttributes();
+        $attributes = $processed->getOnlyElement()->getAttributeStatements()[0]->getAttributes();
 
-        $displayName = $attributes['urn:mace:dir:attribute-def:displayName'];
+        $displayName = $attributes[3]->getAttributeValues();
         $this->assertCount(1, $displayName);
-        $this->assertEquals("Iemand Anders", $displayName[0]);
+        $this->assertEquals("Iemand Anders", $displayName[0]->getValue());
 
-        $eduPersonPrincipalName = $attributes['urn:mace:dir:attribute-def:eduPersonPrincipalName'];
+        $eduPersonPrincipalName = $attributes[2]->getAttributeValues();
         $this->assertCount(1, $eduPersonPrincipalName);
-        $this->assertEquals("asjemenou@loeki.tv", $eduPersonPrincipalName[0]);
+        $this->assertEquals("asjemenou@loeki.tv", $eduPersonPrincipalName[0]->getValue());
     }
 }

@@ -137,7 +137,7 @@ class Response extends AbstractStatusResponse
             }
 
             if ($node->localName === 'Assertion') {
-                $assertions[] = new Assertion($node);
+                $assertions[] = Assertion::fromXML($node);
             } elseif ($node->localName === 'EncryptedAssertion') {
                 $assertions[] = EncryptedAssertion::fromXML($node);
             }

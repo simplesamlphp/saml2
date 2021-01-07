@@ -74,7 +74,7 @@ final class XmlSignatureWrappingTest extends MockeryTestCase
     private function getSignedAssertionWithSignatureThatReferencesAnotherAssertion(): Assertion
     {
         $doc = DOMDocumentFactory::fromFile(__DIR__ . '/signedAssertionWithInvalidReferencedId.xml');
-        $assertion = new Assertion($doc->firstChild);
+        $assertion = Assertion::fromXML($doc->firstChild);
 
         return $assertion;
     }
@@ -86,7 +86,7 @@ final class XmlSignatureWrappingTest extends MockeryTestCase
     private function getSignedAssertionWithEmbeddedAssertionReferencedInSignature(): Assertion
     {
         $document = DOMDocumentFactory::fromFile(__DIR__ . '/signedAssertionReferencedEmbeddedAssertion.xml');
-        $assertion = new Assertion($document->firstChild);
+        $assertion = Assertion::fromXML($document->firstChild);
 
         return $assertion;
     }

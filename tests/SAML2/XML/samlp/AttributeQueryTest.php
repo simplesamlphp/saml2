@@ -126,6 +126,7 @@ final class AttributeQueryTest extends TestCase
         $aq = AttributeQuery::fromXML($this->document->documentElement);
         /** @psalm-var \SimpleSAML\SAML2\XML\saml\Issuer $issuer */
         $issuer = $aq->getIssuer();
+
         $subject = $aq->getSubject();
         /** @psalm-var \SimpleSAML\SAML2\XML\saml\NameID $identifier */
         $identifier = $subject->getIdentifier();
@@ -376,6 +377,7 @@ XML;
         $this->expectExceptionMessage(
             'A <saml:Subject> not containing <saml:SubjectConfirmation> should provide exactly one of <saml:BaseID>, <saml:NameID> or <saml:EncryptedID>'
         );
+
         AttributeQuery::fromXML($document->documentElement);
     }
 

@@ -13,7 +13,7 @@ use SimpleSAML\XML\DOMDocumentFactory;
 /**
  * Tests for localized names.
  *
- * @covers \SimpleSAML\SAML2\XML\md\LocalizedName
+ * @covers \SimpleSAML\SAML2\XML\md\OrganizationName
  * @covers \SimpleSAML\SAML2\XML\md\AbstractMdElement
  * @package simplesamlphp/saml2
  */
