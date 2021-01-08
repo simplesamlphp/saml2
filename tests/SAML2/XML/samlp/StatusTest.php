@@ -124,6 +124,7 @@ final class StatusTest extends TestCase
         $this->assertCount(1, $statusElements);
 
         // Test ordering of Status contents
+        /** @psalm-var \DOMElement[] $statusElements */
         $statusElements = XMLUtils::xpQuery($statusElement, './saml_protocol:StatusCode/following-sibling::*');
         $this->assertCount(2, $statusElements);
         $this->assertEquals('samlp:StatusMessage', $statusElements[0]->tagName);

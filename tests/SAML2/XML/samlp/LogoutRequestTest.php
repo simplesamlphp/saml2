@@ -115,6 +115,7 @@ final class LogoutRequestTest extends MockeryTestCase
         $this->assertCount(1, $logoutRequestElements);
 
         // Test ordering of LogoutRequest contents
+        /** @psalm-var \DOMElement[] $logoutRequestElements */
         $logoutRequestElements = XMLUtils::xpQuery($logoutRequestElement, './saml_assertion:NameID/following-sibling::*');
 
         $this->assertCount(1, $logoutRequestElements);

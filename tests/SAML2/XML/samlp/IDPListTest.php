@@ -78,6 +78,7 @@ final class IDPListTest extends TestCase
         $this->assertCount(2, $listElements);
 
         // Test ordering of IDPList contents
+        /** @psalm-var \DOMElement[] $listElements */
         $listElements = XMLUtils::xpQuery($listElement, './saml_protocol:IDPEntry/following-sibling::*');
         $this->assertCount(2, $listElements);
         $this->assertEquals('samlp:IDPEntry', $listElements[0]->tagName);

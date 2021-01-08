@@ -87,6 +87,7 @@ final class ScopingTest extends TestCase
         $this->assertCount(1, $scopingElements);
 
         // Test ordering of Scoping contents
+        /** @psalm-var \DOMElement[] $scopingElements */
         $scopingElements = XMLUtils::xpQuery($scopingElement, './saml_protocol:IDPList/following-sibling::*');
         $this->assertCount(1, $scopingElements);
         $this->assertEquals('samlp:RequesterID', $scopingElements[0]->tagName);
