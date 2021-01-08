@@ -2,15 +2,29 @@
 
 declare(strict_types=1);
 
-namespace SimpleSAML\SAML2\XML\md;
+namespace SimpleSAML\Test\SAML2\XML\md;
 
 use DOMDocument;
 use PHPUnit\Framework\TestCase;
 use SimpleSAML\Assert\AssertionFailedException;
 use SimpleSAML\SAML2\Constants;
-use SimpleSAML\SAML2\SignedElementTestTrait;
+use SimpleSAML\SAML2\XML\md\ArtifactResolutionService;
+use SimpleSAML\SAML2\XML\md\AssertionConsumerService;
+use SimpleSAML\SAML2\XML\md\AttributeConsumingService;
+use SimpleSAML\SAML2\XML\md\ContactPerson;
+use SimpleSAML\SAML2\XML\md\Extensions;
+use SimpleSAML\SAML2\XML\md\KeyDescriptor;
+use SimpleSAML\SAML2\XML\md\ManageNameIDService;
+use SimpleSAML\SAML2\XML\md\Organization;
+use SimpleSAML\SAML2\XML\md\OrganizationDisplayName;
+use SimpleSAML\SAML2\XML\md\OrganizationName;
+use SimpleSAML\SAML2\XML\md\RequestedAttribute;
+use SimpleSAML\SAML2\XML\md\ServiceName;
+use SimpleSAML\SAML2\XML\md\SingleLogoutService;
+use SimpleSAML\SAML2\XML\md\SPSSODescriptor;
 use SimpleSAML\SAML2\XML\mdrpi\PublicationInfo;
 use SimpleSAML\SAML2\XML\saml\AttributeValue;
+use SimpleSAML\Test\SAML2\SignedElementTestTrait;
 use SimpleSAML\XML\DOMDocumentFactory;
 use SimpleSAML\XML\Utils as XMLUtils;
 use SimpleSAML\XMLSecurity\XML\ds\KeyInfo;

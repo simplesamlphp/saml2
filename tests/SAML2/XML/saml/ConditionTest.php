@@ -2,12 +2,13 @@
 
 declare(strict_types=1);
 
-namespace SimpleSAML\SAML2\XML\saml;
+namespace SimpleSAML\Test\SAML2\XML\saml;
 
 use DOMDocument;
 use PHPUnit\Framework\TestCase;
 use SimpleSAML\SAML2\Constants;
-use SimpleSAML\SAML2\CustomCondition;
+use SimpleSAML\SAML2\XML\saml\Condition;
+use SimpleSAML\Test\SAML2\CustomCondition;
 use SimpleSAML\XML\DOMDocumentFactory;
 
 /**
@@ -79,7 +80,7 @@ final class ConditionTest extends TestCase
      */
     public function testUnmarshallingCustomClass(): void
     {
-        /** @var \SimpleSAML\SAML2\CustomCondition $condition */
+        /** @var \SimpleSAML\Test\SAML2\CustomCondition $condition */
         $condition = CustomCondition::fromXML($this->document->documentElement);
 
         $this->assertEquals('CustomCondition', $condition->getType());

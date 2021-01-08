@@ -2,12 +2,14 @@
 
 declare(strict_types=1);
 
-namespace SimpleSAML\SAML2\XML\md;
+namespace SimpleSAML\Test\SAML2\XML\md;
 
 use Exception;
 use PHPUnit\Framework\TestCase;
-use SimpleSAML\SAML2\SignedElementTestTrait;
 use SimpleSAML\SAML2\Utils;
+use SimpleSAML\SAML2\XML\md\AffiliationDescriptor;
+use SimpleSAML\SAML2\XML\md\KeyDescriptor;
+use SimpleSAML\Test\SAML2\SignedElementTestTrait;
 use SimpleSAML\XML\DOMDocumentFactory;
 use SimpleSAML\XML\Exception\MissingAttributeException;
 use SimpleSAML\XMLSecurity\XML\ds\KeyInfo;

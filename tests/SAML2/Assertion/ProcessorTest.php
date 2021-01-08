@@ -2,13 +2,15 @@
 
 declare(strict_types=1);
 
-namespace SimpleSAML\SAML2\Assertion;
+namespace SimpleSAML\Test\SAML2\Assertion;
 
 use Mockery as m;
 use Mockery\MockInterface;
 use Mockery\Adapter\Phpunit\MockeryTestCase;
 use Psr\Log\LoggerInterface;
+use SimpleSAML\SAML2\Assertion\Decrypter;
 use SimpleSAML\SAML2\Assertion\Exception\InvalidAssertionException;
+use SimpleSAML\SAML2\Assertion\Processor;
 use SimpleSAML\SAML2\Assertion\Transformer\TransformerInterface;
 use SimpleSAML\SAML2\Assertion\Validation\AssertionValidator;
 use SimpleSAML\SAML2\Assertion\Validation\SubjectConfirmationValidator;

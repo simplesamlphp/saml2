@@ -2,7 +2,7 @@
 
 declare(strict_types=1);
 
-namespace SimpleSAML\SAML2\XML\saml;
+namespace SimpleSAML\Test\SAML2\XML\saml;
 
 use DOMDocument;
 use InvalidArgumentException;
@@ -12,7 +12,12 @@ use SimpleSAML\SAML2\Compat\ContainerSingleton;
 use SimpleSAML\SAML2\Compat\MockContainer;
 use SimpleSAML\SAML2\Compat\Ssp\Container;
 use SimpleSAML\SAML2\Constants;
-use SimpleSAML\SAML2\CustomBaseID;
+use SimpleSAML\SAML2\XML\saml\Attribute;
+use SimpleSAML\SAML2\XML\saml\BaseID;
+use SimpleSAML\SAML2\XML\saml\EncryptedID;
+use SimpleSAML\SAML2\XML\saml\Issuer;
+use SimpleSAML\SAML2\XML\saml\NameID;
+use SimpleSAML\Test\SAML2\CustomBaseID;
 use SimpleSAML\XML\Chunk;
 use SimpleSAML\XML\DOMDocumentFactory;
 use SimpleSAML\XML\Utils as XMLUtils;

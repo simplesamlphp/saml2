@@ -2,10 +2,11 @@
 
 declare(strict_types=1);
 
-namespace SimpleSAML\SAML2\Certificate;
+namespace SimpleSAML\Test\SAML2\Certificate;
 
 use Mockery\Adapter\Phpunit\MockeryTestCase;
 use SimpleSAML\Assert\AssertionFailedException;
+use SimpleSAML\SAML2\Certificate\KeyCollection;
 
 /**
  * @covers \SimpleSAML\SAML2\Certificate\KeyCollection

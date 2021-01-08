@@ -2,14 +2,31 @@
 
 declare(strict_types=1);
 
-namespace SimpleSAML\SAML2\XML\md;
+namespace SimpleSAML\Test\SAML2\XML\md;
 
 use InvalidArgumentException;
 use PHPUnit\Framework\TestCase;
 use SimpleSAML\Assert\AssertionFailedException;
 use SimpleSAML\SAML2\Constants;
-use SimpleSAML\SAML2\SignedElementTestTrait;
+use SimpleSAML\SAML2\XML\md\AdditionalMetadataLocation;
+use SimpleSAML\SAML2\XML\md\AffiliationDescriptor;
+use SimpleSAML\SAML2\XML\md\AttributeAuthorityDescriptor;
+use SimpleSAML\SAML2\XML\md\AttributeService;
+use SimpleSAML\SAML2\XML\md\AuthnAuthorityDescriptor;
+use SimpleSAML\SAML2\XML\md\AuthnQueryService;
+use SimpleSAML\SAML2\XML\md\AuthzService;
+use SimpleSAML\SAML2\XML\md\ContactPerson;
+use SimpleSAML\SAML2\XML\md\EntityDescriptor;
+use SimpleSAML\SAML2\XML\md\Extensions;
+use SimpleSAML\SAML2\XML\md\IDPSSODescriptor;
+use SimpleSAML\SAML2\XML\md\Organization;
+use SimpleSAML\SAML2\XML\md\OrganizationDisplayName;
+use SimpleSAML\SAML2\XML\md\OrganizationName;
+use SimpleSAML\SAML2\XML\md\PDPDescriptor;
+use SimpleSAML\SAML2\XML\md\SingleSignOnService;
+use SimpleSAML\SAML2\XML\md\UnknownRoleDescriptor;
 use SimpleSAML\SAML2\XML\mdrpi\PublicationInfo;
+use SimpleSAML\Test\SAML2\SignedElementTestTrait;
 use SimpleSAML\XML\DOMDocumentFactory;
 use SimpleSAML\XML\Exception\MissingAttributeException;
 use SimpleSAML\XML\Exception\TooManyElementsException;

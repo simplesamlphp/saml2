@@ -2,7 +2,7 @@
 
 declare(strict_types=1);
 
-namespace SimpleSAML\SAML2\XML\samlp;
+namespace SimpleSAML\Test\SAML2\XML\samlp;
 
 use DOMDocument;
 use PHPUnit\Framework\TestCase;
@@ -12,6 +12,7 @@ use SimpleSAML\SAML2\XML\saml\AttributeValue;
 use SimpleSAML\SAML2\XML\saml\Issuer;
 use SimpleSAML\SAML2\XML\saml\NameID;
 use SimpleSAML\SAML2\XML\saml\Subject;
+use SimpleSAML\SAML2\XML\samlp\AttributeQuery;
 use SimpleSAML\XML\DOMDocumentFactory;
 use SimpleSAML\XML\Exception\MissingElementException;
 use SimpleSAML\XML\Exception\MissingAttributeException;

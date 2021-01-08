@@ -2,11 +2,13 @@
 
 declare(strict_types=1);
 
-namespace SimpleSAML\SAML2\XML\md;
+namespace SimpleSAML\Test\SAML2\XML\md;
 
 use DOMDocument;
 use PHPUnit\Framework\TestCase;
 use SimpleSAML\Assert\AssertionFailedException;
+use SimpleSAML\SAML2\XML\md\EncryptionMethod;
+use SimpleSAML\SAML2\XML\md\KeyDescriptor;
 use SimpleSAML\XML\DOMDocumentFactory;
 use SimpleSAML\XMLSecurity\XML\ds\AbstractDsElement;
 use SimpleSAML\XMLSecurity\XML\ds\KeyInfo;

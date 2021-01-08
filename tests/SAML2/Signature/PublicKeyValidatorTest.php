@@ -2,7 +2,7 @@
 
 declare(strict_types=1);
 
-namespace SimpleSAML\SAML2\Signature;
+namespace SimpleSAML\Test\SAML2\Signature;
 
 use Mockery;
 use Mockery\MockInterface;
@@ -14,9 +14,9 @@ use SimpleSAML\SAML2\Certificate\KeyLoader;
 use SimpleSAML\SAML2\Configuration\IdentityProvider;
 use SimpleSAML\SAML2\Configuration\CertificateProvider;
 use SimpleSAML\SAML2\Signature\PublicKeyValidator;
-use SimpleSAML\SAML2\SimpleTestLogger;
 use SimpleSAML\SAML2\XML\samlp\AbstractMessage;
 use SimpleSAML\SAML2\XML\samlp\Response;
+use SimpleSAML\Test\SAML2\SimpleTestLogger;
 use SimpleSAML\XML\DOMDocumentFactory;
 use SimpleSAML\XMLSecurity\TestUtils\PEMCertificatesMock;
 use SimpleSAML\XMLSecurity\Utils\Certificate;

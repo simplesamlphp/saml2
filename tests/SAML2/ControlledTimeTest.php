@@ -2,7 +2,7 @@
 
 declare(strict_types=1);
 
-namespace SimpleSAML\SAML2;
+namespace SimpleSAML\Test\SAML2;
 
 use Mockery\Adapter\Phpunit\MockeryTestCase;
 

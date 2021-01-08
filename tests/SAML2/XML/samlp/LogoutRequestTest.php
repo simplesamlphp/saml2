@@ -2,7 +2,7 @@
 
 declare(strict_types=1);
 
-namespace SimpleSAML\SAML2\XML\samlp;
+namespace SimpleSAML\Test\SAML2\XML\samlp;
 
 use DOMDocument;
 use DOMElement;
@@ -11,6 +11,7 @@ use SimpleSAML\SAML2\Constants;
 use SimpleSAML\SAML2\XML\saml\EncryptedID;
 use SimpleSAML\SAML2\XML\saml\Issuer;
 use SimpleSAML\SAML2\XML\saml\NameID;
+use SimpleSAML\SAML2\XML\samlp\LogoutRequest;
 use SimpleSAML\XML\Chunk;
 use SimpleSAML\XML\DOMDocumentFactory;
 use SimpleSAML\XML\Exception\MissingElementException;

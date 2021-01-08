@@ -2,15 +2,16 @@
 
 declare(strict_types=1);
 
-namespace SimpleSAML\SAML2;
+namespace SimpleSAML\Test\SAML2;
 
 use DOMElement;
+use SimpleSAML\SAML2\Constants;
 use SimpleSAML\SAML2\XML\saml\BaseID;
 use SimpleSAML\SAML2\XML\saml\CustomIdentifierInterface;
 use SimpleSAML\Assert\Assert;
 
 /**
- * @covers \SimpleSAML\SAML2\CustomBaseID
+ * @covers \SimpleSAML\Test\SAML2\CustomBaseID
  * @package simplesamlphp\saml2
  */
 final class CustomBaseID extends BaseID implements CustomIdentifierInterface

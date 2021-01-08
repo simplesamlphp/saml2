@@ -2,7 +2,7 @@
 
 declare(strict_types=1);
 
-namespace SimpleSAML\SAML2\XML\saml;
+namespace SimpleSAML\Test\SAML2\XML\saml;
 
 use PHPUnit\Framework\TestCase;
 use Psr\Log\NullLogger;
@@ -15,6 +15,14 @@ use SimpleSAML\SAML2\Configuration\PrivateKey;
 use SimpleSAML\SAML2\Configuration\ServiceProvider;
 use SimpleSAML\SAML2\Signature\Validator;
 use SimpleSAML\SAML2\Utilities\ArrayCollection;
+use SimpleSAML\SAML2\XML\saml\Assertion;
+use SimpleSAML\SAML2\XML\saml\AuthnContext;
+use SimpleSAML\SAML2\XML\saml\AuthnContextClassRef;
+use SimpleSAML\SAML2\XML\saml\AuthnStatement;
+use SimpleSAML\SAML2\XML\saml\EncryptedID;
+use SimpleSAML\SAML2\XML\saml\Issuer;
+use SimpleSAML\SAML2\XML\saml\NameID;
+use SimpleSAML\SAML2\XML\saml\Subject;
 use SimpleSAML\SAML2\XML\samlp\Response;
 use SimpleSAML\SAML2\XML\samlp\Status;
 use SimpleSAML\SAML2\XML\samlp\StatusCode;

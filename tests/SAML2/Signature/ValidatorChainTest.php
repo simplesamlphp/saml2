@@ -2,7 +2,7 @@
 
 declare(strict_types=1);
 
-namespace SimpleSAML\SAML2\Signature;
+namespace SimpleSAML\Test\SAML2\Signature;
 
 use PHPUnit\Framework\TestCase;
 use SimpleSAML\SAML2\Configuration\IdentityProvider;

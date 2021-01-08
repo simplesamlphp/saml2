@@ -2,13 +2,16 @@
 
 declare(strict_types=1);
 
-namespace SimpleSAML\SAML2\XML\md;
+namespace SimpleSAML\Test\SAML2\XML\md;
 
 use PHPUnit\Framework\TestCase;
 use SimpleSAML\Assert\AssertionFailedException;
 use SimpleSAML\SAML2\Constants;
-use SimpleSAML\SAML2\SignedElementTestTrait;
+use SimpleSAML\SAML2\XML\md\EntityDescriptor;
+use SimpleSAML\SAML2\XML\md\EntitiesDescriptor;
+use SimpleSAML\SAML2\XML\md\Extensions;
 use SimpleSAML\SAML2\XML\mdrpi\PublicationInfo;
+use SimpleSAML\Test\SAML2\SignedElementTestTrait;
 use SimpleSAML\XML\DOMDocumentFactory;
 use SimpleSAML\XML\Utils as XMLUtils;
 use SimpleSAML\XMLSecurity\XMLSecurityDSig;

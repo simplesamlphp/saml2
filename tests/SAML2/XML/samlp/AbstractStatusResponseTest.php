@@ -2,7 +2,7 @@
 
 declare(strict_types=1);
 
-namespace SimpleSAML\SAML2\XML\samlp;
+namespace SimpleSAML\Test\SAML2\XML\samlp;
 
 use PHPUnit\Framework\TestCase;
 use SimpleSAML\SAML2\Constants;
@@ -10,6 +10,10 @@ use SimpleSAML\SAML2\XML\saml\Attribute;
 use SimpleSAML\SAML2\XML\saml\Issuer;
 use SimpleSAML\SAML2\XML\shibmd\Scope;
 use SimpleSAML\SAML2\XML\samlp\AbstractResponse;
+use SimpleSAML\SAML2\XML\samlp\Extensions;
+use SimpleSAML\SAML2\XML\samlp\Response;
+use SimpleSAML\SAML2\XML\samlp\Status;
+use SimpleSAML\SAML2\XML\samlp\StatusCode;
 use SimpleSAML\XML\DOMDocumentFactory;
 use SimpleSAML\XML\Exception\MissingElementException;
 use SimpleSAML\XML\Utils as XMLUtils;

@@ -2,7 +2,7 @@
 
 declare(strict_types=1);
 
-namespace SimpleSAML\SAML2\Certificate;
+namespace SimpleSAML\Test\SAML2\Certificate;
 
 use Mockery;
 use Mockery\MockInterface;

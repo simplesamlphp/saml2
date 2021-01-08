@@ -2,7 +2,7 @@
 
 declare(strict_types=1);
 
-namespace SimpleSAML\SAML2\Utilities;
+namespace SimpleSAML\Test\SAML2\Utilities;
 
 use PHPUnit\Framework\TestCase;
 use SimpleSAML\SAML2\Utilities\File;

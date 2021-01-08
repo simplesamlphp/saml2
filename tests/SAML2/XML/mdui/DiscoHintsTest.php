@@ -2,10 +2,12 @@
 
 declare(strict_types=1);
 
-namespace SimpleSAML\SAML2\XML\mdui;
+namespace SimpleSAML\Test\SAML2\XML\mdui;
 
 use DOMDocument;
 use PHPUnit\Framework\TestCase;
+use SimpleSAML\SAML2\XML\mdui\DiscoHints;
+use SimpleSAML\SAML2\XML\mdui\Keywords;
 use SimpleSAML\XML\Chunk;
 use SimpleSAML\XML\DOMDocumentFactory;
 use SimpleSAML\XML\Utils as XMLUtils;

@@ -42,12 +42,12 @@
     },
     "autoload-dev": {
         "psr-4": {
-            "SimpleSAML\\SAML2\\": "tests/SAML2/"
+            "SimpleSAML\\Test\\SAML2\\": "tests/SAML2/"
         }
     },
     "extra": {
         "branch-alias": {
-            "dev-master": "v4.2.x-dev"
+            "dev-master": "v5.0.x-dev"
         }
     }
 }

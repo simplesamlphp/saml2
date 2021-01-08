@@ -2,13 +2,14 @@
 
 declare(strict_types=1);
 
-namespace SimpleSAML\SAML2\XML\saml;
+namespace SimpleSAML\Test\SAML2\XML\saml;
 
 use DOMDocument;
 use PHPUnit\Framework\TestCase;
 use SimpleSAML\Assert\AssertionFailedException;
 use SimpleSAML\SAML2\Constants;
 use SimpleSAML\SAML2\Utils;
+use SimpleSAML\SAML2\XML\saml\Issuer;
 use SimpleSAML\XML\DOMDocumentFactory;
 
 /**

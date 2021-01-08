@@ -2,7 +2,7 @@
 
 declare(strict_types=1);
 
-namespace SimpleSAML\SAML2\XML\saml;
+namespace SimpleSAML\Test\SAML2\XML\saml;
 
 use DOMDocument;
 use PHPUnit\Framework\TestCase;
@@ -17,6 +17,9 @@ use SimpleSAML\SAML2\Configuration\ServiceProvider;
 use SimpleSAML\SAML2\Constants;
 use SimpleSAML\SAML2\Signature\Validator;
 use SimpleSAML\SAML2\Utilities\ArrayCollection;
+use SimpleSAML\SAML2\XML\saml\Assertion;
+use SimpleSAML\SAML2\XML\saml\Attribute;
+use SimpleSAML\SAML2\XML\saml\AttributeValue;
 use SimpleSAML\SAML2\XML\samlp\Response;
 use SimpleSAML\SAML2\XML\samlp\Status;
 use SimpleSAML\SAML2\XML\samlp\StatusCode;

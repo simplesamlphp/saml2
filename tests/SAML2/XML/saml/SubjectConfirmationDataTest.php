@@ -2,11 +2,12 @@
 
 declare(strict_types=1);
 
-namespace SimpleSAML\SAML2\XML\saml;
+namespace SimpleSAML\Test\SAML2\XML\saml;
 
 use DOMDocument;
 use PHPUnit\Framework\TestCase;
 use SimpleSAML\SAML2\Constants;
+use SimpleSAML\SAML2\XML\saml\SubjectConfirmationData;
 use SimpleSAML\XML\DOMDocumentFactory;
 use SimpleSAML\XML\Chunk;
 use SimpleSAML\XMLSecurity\XML\ds\KeyInfo;

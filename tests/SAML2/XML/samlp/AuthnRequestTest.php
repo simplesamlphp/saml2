@@ -2,7 +2,7 @@
 
 declare(strict_types=1);
 
-namespace SimpleSAML\SAML2\XML\samlp;
+namespace SimpleSAML\Test\SAML2\XML\samlp;
 
 use DOMDocument;
 use PHPUnit\Framework\TestCase;
@@ -16,6 +16,12 @@ use SimpleSAML\SAML2\XML\saml\Issuer;
 use SimpleSAML\SAML2\XML\saml\NameID;
 use SimpleSAML\SAML2\XML\saml\ProxyRestriction;
 use SimpleSAML\SAML2\XML\saml\Subject;
+use SimpleSAML\SAML2\XML\samlp\AuthnRequest;
+use SimpleSAML\SAML2\XML\samlp\IDPEntry;
+use SimpleSAML\SAML2\XML\samlp\IDPList;
+use SimpleSAML\SAML2\XML\samlp\NameIDPolicy;
+use SimpleSAML\SAML2\XML\samlp\RequestedAuthnContext;
+use SimpleSAML\SAML2\XML\samlp\Scoping;
 use SimpleSAML\XML\DOMDocumentFactory;
 use SimpleSAML\XML\Exception\MissingAttributeException;
 use SimpleSAML\XML\Exception\TooManyElementsException;

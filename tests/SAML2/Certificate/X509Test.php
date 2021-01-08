@@ -2,7 +2,7 @@
 
 declare(strict_types=1);
 
-namespace SimpleSAML\SAML2\Certificate;
+namespace SimpleSAML\Test\SAML2\Certificate;
 
 use PHPUnit\Framework\TestCase;
 use SimpleSAML\SAML2\Certificate\X509;

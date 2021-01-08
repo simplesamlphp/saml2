@@ -2,11 +2,12 @@
 
 declare(strict_types=1);
 
-namespace SimpleSAML\SAML2\Assertion\Validation\ConstraintValidator;
+namespace SimpleSAML\Test\SAML2\Assertion\Validation\ConstraintValidator;
 
 use Mockery;
 use Mockery\MockInterface;
 use Mockery\Adapter\Phpunit\MockeryTestCase;
+use SimpleSAML\SAML2\Assertion\Validation\ConstraintValidator\SubjectConfirmationResponseToMatches;
 use SimpleSAML\SAML2\Assertion\Validation\Result;
 use SimpleSAML\SAML2\Constants;
 use SimpleSAML\SAML2\XML\samlp\Response;

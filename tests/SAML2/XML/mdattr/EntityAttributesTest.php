@@ -2,7 +2,7 @@
 
 declare(strict_types=1);
 
-namespace SimpleSAML\SAML2\XML\mdattr;
+namespace SimpleSAML\Test\SAML2\XML\mdattr;
 
 use DOMDocument;
 use PHPUnit\Framework\TestCase;

@@ -2,7 +2,7 @@
 
 declare(strict_types=1);
 
-namespace SimpleSAML\SAML2\XML\saml;
+namespace SimpleSAML\Test\SAML2\XML\saml;
 
 use DOMDocument;
 use Mockery;
@@ -10,7 +10,12 @@ use PHPUnit\Framework\TestCase;
 use SimpleSAML\SAML2\Compat\ContainerInterface;
 use SimpleSAML\SAML2\Compat\ContainerSingleton;
 use SimpleSAML\SAML2\Constants;
-use SimpleSAML\SAML2\CustomBaseID;
+use SimpleSAML\SAML2\XML\saml\BaseID;
+use SimpleSAML\SAML2\XML\saml\NameID;
+use SimpleSAML\SAML2\XML\saml\Subject;
+use SimpleSAML\SAML2\XML\saml\SubjectConfirmation;
+use SimpleSAML\SAML2\XML\saml\SubjectConfirmationData;
+use SimpleSAML\Test\SAML2\CustomBaseID;
 use SimpleSAML\XML\DOMDocumentFactory;
 use SimpleSAML\XML\Exception\TooManyElementsException;
 use SimpleSAML\XML\Utils as XMLUtils;

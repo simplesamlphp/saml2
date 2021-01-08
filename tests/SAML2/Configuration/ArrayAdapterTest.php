@@ -2,7 +2,7 @@
 
 declare(strict_types=1);
 
-namespace SimpleSAML\SAML2\Configuration;
+namespace SimpleSAML\Test\SAML2\Configuration;
 
 use PHPUnit\Framework\TestCase;
 use SimpleSAML\SAML2\Configuration\ArrayAdapter;

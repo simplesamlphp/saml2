@@ -2,10 +2,11 @@
 
 declare(strict_types=1);
 
-namespace SimpleSAML\SAML2\XML\mdrpi;
+namespace SimpleSAML\Test\SAML2\XML\mdrpi;
 
 use DOMDocument;
 use PHPUnit\Framework\TestCase;
+use SimpleSAML\SAML2\XML\mdrpi\RegistrationInfo;
 use SimpleSAML\XML\DOMDocumentFactory;
 use SimpleSAML\XML\Exception\MissingAttributeException;
 use SimpleSAML\XML\Utils as XMLUtils;

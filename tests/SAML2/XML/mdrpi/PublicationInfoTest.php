@@ -2,10 +2,11 @@
 
 declare(strict_types=1);
 
-namespace SimpleSAML\SAML2\XML\mdrpi;
+namespace SimpleSAML\Test\SAML2\XML\mdrpi;
 
 use DOMDocument;
 use PHPUnit\Framework\TestCase;
+use SimpleSAML\SAML2\XML\mdrpi\PublicationInfo;
 use SimpleSAML\XML\DOMDocumentFactory;
 use SimpleSAML\XML\Exception\MissingAttributeException;
 use SimpleSAML\XML\Utils as XMLUtils;
@@ -101,7 +102,7 @@ final class PublicationInfoTest extends TestCase
 
     /**
      */
-    public function testMissingPublisherThrowsException()
+    public function testMissingPublisherThrowsException(): void
     {
         $document = DOMDocumentFactory::fromString(<<<XML
 <mdrpi:PublicationInfo xmlns:mdrpi="urn:oasis:names:tc:SAML:metadata:rpi"

@@ -2,12 +2,16 @@
 
 declare(strict_types=1);
 
-namespace SimpleSAML\SAML2\XML\samlp;
+namespace SimpleSAML\Test\SAML2\XML\samlp;
 
 use DOMDocument;
 use PHPUnit\Framework\TestCase;
 use SimpleSAML\SAML2\Constants;
 use SimpleSAML\SAML2\XML\saml\Issuer;
+use SimpleSAML\SAML2\XML\samlp\AuthnRequest;
+use SimpleSAML\SAML2\XML\samlp\ArtifactResolve;
+use SimpleSAML\SAML2\XML\samlp\ArtifactResponse;
+use SimpleSAML\SAML2\XML\samlp\NameIDPolicy;
 use SimpleSAML\SAML2\XML\samlp\Status;
 use SimpleSAML\SAML2\XML\samlp\StatusCode;
 use SimpleSAML\XML\DOMDocumentFactory;

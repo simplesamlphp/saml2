@@ -2,12 +2,13 @@
 
 declare(strict_types=1);
 
-namespace SimpleSAML\SAML2\XML\mdui;
+namespace SimpleSAML\Test\SAML2\XML\mdui;
 
 use DOMDocument;
 use InvalidArgumentException;
 use PHPUnit\Framework\TestCase;
 use SimpleSAML\Assert\AssertionFailedException;
+use SimpleSAML\SAML2\XML\mdui\Logo;
 use SimpleSAML\XML\DOMDocumentFactory;
 use SimpleSAML\XML\Exception\MissingAttributeException;
 use SimpleSAML\XML\Utils as XMLUtils;

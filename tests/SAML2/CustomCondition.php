@@ -2,14 +2,15 @@
 
 declare(strict_types=1);
 
-namespace SimpleSAML\SAML2;
+namespace SimpleSAML\Test\SAML2;
 
 use DOMElement;
+use SimpleSAML\SAML2\Constants;
 use SimpleSAML\SAML2\XML\saml\Condition;
 use SimpleSAML\Assert\Assert;
 
 /**
- * @covers \SimpleSAML\SAML2\CustomCondition
+ * @covers \SimpleSAML\Test\SAML2\CustomCondition
  * @package simplesamlphp\saml2
  */
 final class CustomCondition extends Condition

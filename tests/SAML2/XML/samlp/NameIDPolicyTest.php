@@ -2,11 +2,12 @@
 
 declare(strict_types=1);
 
-namespace SimpleSAML\SAML2\XML\samlp;
+namespace SimpleSAML\Test\SAML2\XML\samlp;
 
 use DOMDocument;
 use PHPUnit\Framework\TestCase;
 use SimpleSAML\SAML2\Constants;
+use SimpleSAML\SAML2\XML\samlp\NameIDPolicy;
 use SimpleSAML\XML\DOMDocumentFactory;
 
 /**
