@@ -59,7 +59,10 @@ class AttributeValue extends AbstractSamlElement
      */
     public function getXsiType(): string
     {
-        switch (gettype($this->value)) {
+        /** @psalm-var string $type */
+        $type = gettype($this->value);
+
+        switch ($type) {
             case "integer":
                 return "xs:integer";
             case "NULL":
@@ -139,7 +142,10 @@ class AttributeValue extends AbstractSamlElement
     {
         $e = parent::instantiateParentElement($parent);
 
-        switch (gettype($this->value)) {
+        /** @psalm-var string $type */
+        $type = gettype($this->value);
+
+        switch ($type) {
             case "integer":
                 // make sure that the xs namespace is available in the AttributeValue
                 $e->setAttributeNS('http://www.w3.org/2000/xmlns/', 'xmlns:xs', Constants::NS_XS);
