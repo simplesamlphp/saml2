@@ -19,7 +19,7 @@ use SimpleSAML\XMLSecurity\XML\ds\Signature;
  */
 class ArtifactResponse extends AbstractStatusResponse
 {
-    /** @var \SimpleSAML\SAML2\XML\samlp\AbstractMessage */
+    /** @var \SimpleSAML\SAML2\XML\samlp\AbstractMessage|null */
     protected AbstractMessage $message;
 
 
