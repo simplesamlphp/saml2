@@ -63,6 +63,7 @@ final class AuthnRequestTest extends TestCase
 
         $authnRequestElement = $authnRequest->toXML();
 
+        /** @psalm-var \DOMElement[] $requestedAuthnContextElements */
         $requestedAuthnContextElements = XMLUtils::xpQuery(
             $authnRequestElement,
             './saml_protocol:RequestedAuthnContext'

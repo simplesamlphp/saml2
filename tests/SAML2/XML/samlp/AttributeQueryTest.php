@@ -88,6 +88,7 @@ final class AttributeQueryTest extends TestCase
         $attributeQueryElement = $attributeQuery->toXML();
 
         // Test Attribute Names
+        /** @psalm-var \DOMElement[] $attributes */
         $attributes = XMLUtils::xpQuery($attributeQueryElement, './saml_assertion:Attribute');
         $this->assertCount(4, $attributes);
         $this->assertEquals('test1', $attributes[0]->getAttribute('Name'));
@@ -95,12 +96,14 @@ final class AttributeQueryTest extends TestCase
         $this->assertEquals('test3', $attributes[2]->getAttribute('Name'));
 
         // Test Attribute Values for Attribute 1
+        /** @psalm-var \DOMElement[] $av1 */
         $av1 = XMLUtils::xpQuery($attributes[0], './saml_assertion:AttributeValue');
         $this->assertCount(2, $av1);
         $this->assertEquals('test1_attrv1', $av1[0]->textContent);
         $this->assertEquals('test1_attrv2', $av1[1]->textContent);
 
         // Test Attribute Values for Attribute 2
+        /** @psalm-var \DOMElement[] $av2 */
         $av2 = XMLUtils::xpQuery($attributes[1], './saml_assertion:AttributeValue');
         $this->assertCount(3, $av2);
         $this->assertEquals('test2_attrv1', $av2[0]->textContent);
@@ -108,10 +111,12 @@ final class AttributeQueryTest extends TestCase
         $this->assertEquals('test2_attrv3', $av2[2]->textContent);
 
         // Test Attribute Values for Attribute 3
+        /** @psalm-var \DOMElement[] $av3 */
         $av3 = XMLUtils::xpQuery($attributes[2], './saml_assertion:AttributeValue');
         $this->assertCount(0, $av3);
 
         // Test Attribute Values for Attribute 3
+        /** @psalm-var \DOMElement[] $av3 */
         $av3 = XMLUtils::xpQuery($attributes[3], './saml_assertion:AttributeValue');
         $this->assertCount(2, $av3);
         $this->assertEquals('4', $av3[0]->textContent);
@@ -174,6 +179,7 @@ final class AttributeQueryTest extends TestCase
         $attributeQueryElement = $attributeQuery->toXML();
 
         // Test Attribute Names
+        /** @psalm-var \DOMElement[] $attributes */
         $attributes = XMLUtils::xpQuery($attributeQueryElement, './saml_assertion:Attribute');
         $this->assertCount(3, $attributes);
         $this->assertEquals('test1', $attributes[0]->getAttribute('Name'));
