@@ -78,7 +78,7 @@ class DecodeBase64Transformer implements
 
 
     /**
-     * @param \SimpleSAML\SAML2\XML\saml\AttributeValues[] $encodedValues
+     * @param \SimpleSAML\SAML2\XML\saml\AttributeValue[] $encodedValues
      * @return array
      */
     private function getDecodedAttributeValues(array $encodedValues): array
