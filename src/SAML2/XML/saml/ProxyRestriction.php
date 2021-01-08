@@ -117,7 +117,7 @@ final class ProxyRestriction extends AbstractConditionType
         $e = parent::toXML($parent);
 
         if ($this->count !== null) {
-            $e->setAttribute('Count', $this->count);
+            $e->setAttribute('Count', strval($this->count));
         }
 
         XMLUtils::addStrings($e, AbstractSamlElement::NS, 'saml:Audience', false, $this->audience);
