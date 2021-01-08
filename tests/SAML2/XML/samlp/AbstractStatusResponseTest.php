@@ -54,10 +54,12 @@ final class AbstractStatusResponseTest extends TestCase
         $statusElements = XMLUtils::xpQuery($responseElement, './saml_protocol:Status');
         $this->assertCount(1, $statusElements);
 
+        /** @psalm-var \DOMElement[] $statusCodeElements */
         $statusCodeElements = XMLUtils::xpQuery($statusElements[0], './saml_protocol:StatusCode');
         $this->assertCount(1, $statusCodeElements);
         $this->assertEquals('OurStatusCode', $statusCodeElements[0]->getAttribute("Value"));
 
+        /** @psalm-var \DOMElement[] $nestedStatusCodeElements */
         $nestedStatusCodeElements = XMLUtils::xpQuery($statusCodeElements[0], './saml_protocol:StatusCode');
         $this->assertCount(1, $nestedStatusCodeElements);
         $this->assertEquals('OurSubStatusCode', $nestedStatusCodeElements[0]->getAttribute("Value"));
@@ -105,6 +107,7 @@ final class AbstractStatusResponseTest extends TestCase
         $this->assertCount(1, $responseElements);
 
         // Test ordering of Response contents
+        /** @psalm-var \DOMElement[] $responseElements */
         $responseElements = XMLUtils::xpQuery($responseElement, './saml_assertion:Issuer/following-sibling::*');
         $this->assertCount(3, $responseElements);
         $this->assertEquals('ds:Signature', $responseElements[0]->tagName);

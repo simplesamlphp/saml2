@@ -90,6 +90,7 @@ final class SubjectConfirmationTest extends TestCase
         $this->assertCount(1, $subjectConfirmationElements);
 
         // Test ordering of SubjectConfirmation contents
+        /** @psalm-var \DOMElement[] $subjectConfirmationElements */
         $subjectConfirmationElements = XMLUtils::xpQuery(
             $subjectConfirmationElement,
             './saml_assertion:NameID/following-sibling::*'

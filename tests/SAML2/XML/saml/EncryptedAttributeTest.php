@@ -81,6 +81,7 @@ final class EncryptedAttributeTest extends TestCase
 
         $privkey = new XMLSecurityKey(XMLSecurityKey::RSA_SHA256, ['type' => 'private']);
         $privkey->loadKey(PEMCertificatesMock::getPlainPrivateKey(PEMCertificatesMock::PRIVATE_KEY));
+        /** @psalm-var \SimpleSAML\SAML2\XML\saml\Attribute $decryptedAttribute */
         $decryptedAttribute = $encryptedAttribute->decrypt($privkey, []);
 
         $this->assertEquals('urn:encrypted:attribute', $decryptedAttribute->getName());

@@ -175,6 +175,7 @@ final class EncryptedIDTest extends TestCase
         $this->assertCount(1, $eidElements);
 
         // Test ordering of EncryptedID contents
+        /** @psalm-var \DOMElement[] $eidElements */
         $eidElements = XMLUtils::xpQuery($eidElement, './xenc:EncryptedData/following-sibling::*');
         $this->assertCount(1, $eidElements);
         $this->assertEquals('xenc:EncryptedKey', $eidElements[0]->tagName);

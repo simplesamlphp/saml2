@@ -103,6 +103,7 @@ final class AuthnStatementTest extends TestCase
         $this->assertCount(1, $authnStatementElements);
 
         // Test ordering of AuthnStatement contents
+        /** @psalm-var \DOMElement[] $authnStatementElements */
         $authnStatementElements = XMLUtils::xpQuery(
             $authnStatementElement,
             './saml_assertion:SubjectLocality/following-sibling::*'

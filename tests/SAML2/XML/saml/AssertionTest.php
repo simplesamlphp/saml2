@@ -1080,6 +1080,7 @@ XML;
         $this->assertEquals('testIssuer', $issuerElements[0]->textContent);
 
         // Test ordering of Assertion contents
+        /** @psalm-var \DOMElement[] $assertionElements */
         $assertionElements = XMLUtils::xpQuery($assertionElement, './saml_assertion:Issuer/following-sibling::*');
         $this->assertCount(5, $assertionElements);
         $this->assertEquals('ds:Signature', $assertionElements[0]->tagName);

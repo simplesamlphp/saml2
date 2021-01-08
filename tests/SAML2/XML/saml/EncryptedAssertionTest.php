@@ -89,11 +89,10 @@ final class EncryptedAssertionTest extends TestCase
 
         $assertion = new Assertion(new Issuer('Test'));
 
-        /** \SAML2\XML\saml\AbstractSamlElement $encAssertion */
         $encAssertion = EncryptedAssertion::fromUnencryptedElement($assertion, $pubkey);
         $doc = DOMDocumentFactory::fromString(strval($encAssertion));
 
-        /** \SAML2\XML\EncryptedElementInterface $encid */
+        /** @psalm-var \SimpleSAML\SAML2\XML\EncryptedElementInterface $encAssertion */
         $encAssertion = Assertion::fromXML($doc->documentElement);
         $privkey = new XMLSecurityKey(XMLSecurityKey::RSA_SHA256, ['type' => 'private']);
         $privkey->loadKey(PEMCertificatesMock::getPlainPrivateKey(PEMCertificatesMock::PRIVATE_KEY));

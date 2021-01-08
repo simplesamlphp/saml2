@@ -152,6 +152,7 @@ final class AuthnContextTest extends TestCase
         $this->assertCount(1, $authnContextElements);
 
         // Test ordering of AuthnContext contents
+        /** @psalm-var \DOMElement[] $authnContextElements */
         $authnContextElements = XMLUtils::xpQuery(
             $authnContextElement,
             './saml_assertion:AuthnContextClassRef/following-sibling::*'
@@ -184,6 +185,7 @@ final class AuthnContextTest extends TestCase
         $this->assertCount(1, $authnContextElements);
 
         // Test ordering of AuthnContext contents
+        /** @psalm-var \DOMElement[] $authnContextElements */
         $authnContextElements = XMLUtils::xpQuery(
             $authnContextElement,
             './saml_assertion:AuthnContextDecl/following-sibling::*'
@@ -215,6 +217,7 @@ final class AuthnContextTest extends TestCase
         $this->assertCount(1, $authnContextElements);
 
         // Test ordering of AuthnContext contents
+        /** @psalm-var \DOMElement[] $authnContextElements */
         $authnContextElements = XMLUtils::xpQuery(
             $authnContextElement,
             './saml_assertion:AuthnContextClassRef/following-sibling::*'
@@ -247,6 +250,7 @@ final class AuthnContextTest extends TestCase
         $this->assertCount(1, $authnContextElements);
 
         // Test ordering of AuthnContext contents
+        /** @psalm-var \DOMElement[] $authnContextElements */
         $authnContextElements = XMLUtils::xpQuery(
             $authnContextElement,
             './saml_assertion:AuthnContextDeclRef/following-sibling::*'
