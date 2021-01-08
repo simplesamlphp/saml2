@@ -70,9 +70,7 @@ final class PDPDescriptorTest extends TestCase
         );
 
         $this->assertCount(1, $pdpd->getAuthzServiceEndpoints());
-        $this->assertInstanceOf(AuthzService::class, $pdpd->getAuthzServiceEndpoints()[0]);
         $this->assertCount(1, $pdpd->getAssertionIDRequestServices());
-        $this->assertInstanceOf(AssertionIDRequestService::class, $pdpd->getAssertionIDRequestServices()[0]);
         $this->assertCount(3, $pdpd->getNameIDFormats());
         $this->assertEquals(
             [
@@ -167,9 +165,7 @@ final class PDPDescriptorTest extends TestCase
     {
         $pdpd = PDPDescriptor::fromXML($this->document->documentElement);
         $this->assertCount(1, $pdpd->getAuthzServiceEndpoints());
-        $this->assertInstanceOf(AuthzService::class, $pdpd->getAuthzServiceEndpoints()[0]);
         $this->assertCount(1, $pdpd->getAssertionIDRequestServices());
-        $this->assertInstanceOf(AssertionIDRequestService::class, $pdpd->getAssertionIDRequestServices()[0]);
         $this->assertCount(3, $pdpd->getNameIDFormats());
         $this->assertEquals(
             [

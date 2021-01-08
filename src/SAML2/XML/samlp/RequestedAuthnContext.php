@@ -70,7 +70,7 @@ final class RequestedAuthnContext extends AbstractSamlpElement
                 AuthnContextClassRef::class,
                 'You need either AuthnContextClassRef or AuthnContextDeclRef, not both.'
             );
-        } elseif ($requestedAuthnContexts[0] instanceof AuthnContextDeclRef) {
+        } else { // Can only be AuthnContextDeclRef
             Assert::allIsInstanceOf(
                 $requestedAuthnContexts,
                 AuthnContextDeclRef::class,

@@ -55,7 +55,6 @@ final class KeyDescriptorTest extends TestCase
         $this->assertCount(1, $knfo->getInfo());
         $this->assertInstanceOf(KeyName::class, $knfo->getInfo()[0]);
         $this->assertCount(1, $kd->getEncryptionMethods());
-        $this->assertInstanceOf(EncryptionMethod::class, $kd->getEncryptionMethods()[0]);
         $this->assertEquals('http://www.w3.org/2001/04/xmlenc#rsa-1_5', $kd->getEncryptionMethods()[0]->getAlgorithm());
 
         $this->assertEquals(
@@ -122,7 +121,6 @@ XML
         $this->assertCount(1, $info);
         $this->assertInstanceOf(KeyName::class, $info[0]);
         $this->assertCount(1, $kd->getEncryptionMethods());
-        $this->assertInstanceOf(EncryptionMethod::class, $kd->getEncryptionMethods()[0]);
         $this->assertEquals('http://www.w3.org/2001/04/xmlenc#rsa-1_5', $kd->getEncryptionMethods()[0]->getAlgorithm());
     }
 

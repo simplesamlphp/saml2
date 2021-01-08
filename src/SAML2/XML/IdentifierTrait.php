@@ -102,7 +102,7 @@ trait IdentifierTrait
                 $type = $identifier->getType();
                 $container = ContainerSingleton::getInstance();
 
-                /** @var \SimpleSAML\SAML2\XML\saml\CustomIdentifierInterface $handler */
+                /** @var \SimpleSAML\SAML2\XML\saml\CustomIdentifierInterface|null $handler */
                 $handler = $container->getIdentifierHandler($type);
 
                 if ($handler !== null) {
