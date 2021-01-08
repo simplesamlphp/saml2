@@ -8,7 +8,7 @@ use DOMElement;
 use DOMNode;
 use Exception;
 use SimpleSAML\Assert\Assert;
-use SimpleSAML\XMLSecurity\Utils as XMLSecurityUtils;
+use SimpleSAML\XMLSecurity\Utils\Security as XMLSecurityUtils;
 use SimpleSAML\XMLSecurity\XML\ds\Signature;
 use SimpleSAML\XMLSecurity\XMLSecurityKey;
 use SimpleSAML\XML\Utils as XMLUtils;
