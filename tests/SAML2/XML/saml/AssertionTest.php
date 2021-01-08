@@ -439,13 +439,20 @@ XML;
 
         $maceValue = $attributes[1]->getAttributeValues()[0];
         $oidValue = $attributes[0]->getAttributeValues()[0];
-        $this->assertInstanceOf(NameID::class, $maceValue->getValue()[0]);
-        $this->assertInstanceOf(NameID::class, $oidValue->getValue()[0]);
 
-        $this->assertEquals('abcd-some-value-xyz', $maceValue->getValue()[0]->getValue());
-        $this->assertEquals('abcd-some-value-xyz', $oidValue->getValue()[0]->getValue());
-        $this->assertEquals('urn:oasis:names:tc:SAML:2.0:nameid-format:persistent', $maceValue->getValue()[0]->getFormat());
-        $this->assertEquals('urn:oasis:names:tc:SAML:2.0:nameid-format:persistent', $oidValue->getValue()[0]->getFormat());
+        /** @psalm-var (\SimpleSAML\SAML2\XML\saml\AttributeValue|\SimpleSAML\SAML2\XML\saml\IdentifierInterface)[] $mValue */
+        $mValue = $maceValue->getValue();
+
+        /** @psalm-var (\SimpleSAML\SAML2\XML\saml\AttributeValue|\SimpleSAML\SAML2\XML\saml\IdentifierInterface)[] $oValue */
+        $oValue = $oidValue->getValue();
+
+        $this->assertInstanceOf(NameID::class, $mValue[0]);
+        $this->assertInstanceOf(NameID::class, $oValue[0]);
+
+        $this->assertEquals('abcd-some-value-xyz', $mValue[0]->getValue());
+        $this->assertEquals('abcd-some-value-xyz', $oValue[0]->getValue());
+        $this->assertEquals('urn:oasis:names:tc:SAML:2.0:nameid-format:persistent', $mValue[0]->getFormat());
+        $this->assertEquals('urn:oasis:names:tc:SAML:2.0:nameid-format:persistent', $oValue[0]->getFormat());
         $this->assertXmlStringEqualsXmlString($xml, $assertion->toXML()->ownerDocument->saveXML());
     }
 
@@ -481,9 +488,6 @@ XML;
         $attributes = $assertion->getAttributeStatements()[0]->getAttributes();
         $maceValue = $attributes[1]->getAttributeValues()[0];
         $oidValue = $attributes[0]->getAttributeValues()[0];
-
-//        $this->assertInstanceOf(NameID::class, $maceValue);
-//        $this->assertInstanceOf(NameID::class, $oidValue);
 
         $this->assertEquals('string-23', $maceValue->getValue());
         $this->assertEquals('string-12', $oidValue->getValue());
@@ -525,16 +529,24 @@ XML;
 
         $attributes = $assertion->getAttributeStatements()[0]->getAttributes();
 
-        $maceFirstValue = $attributes[0]->getAttributeValues()[0];
-        $maceSecondValue = $attributes[0]->getAttributeValues()[1];
+        $values = $attributes[0]->getAttributeValues();
+        $this->assertCount(2, $values);
+        $maceFirstValue = $values[0];
+        $maceSecondValue = $values[1];
 
-        $this->assertInstanceOf(NameID::class, $maceFirstValue->getValue()[0]);
-        $this->assertInstanceOf(NameID::class, $maceSecondValue->getValue()[0]);
+        /** @psalm-var (\SimpleSAML\SAML2\XML\saml\AttributeValue|\SimpleSAML\SAML2\XML\saml\IdentifierInterface)[] $firstValue */
+        $firstValue = $maceFirstValue->getValue();
 
-        $this->assertEquals('abcd-some-value-xyz', $maceFirstValue->getValue()[0]->getValue());
-        $this->assertEquals('xyz-some-value-abcd', $maceSecondValue->getValue()[0]->getValue());
-        $this->assertEquals('urn:oasis:names:tc:SAML:2.0:nameid-format:persistent', $maceFirstValue->getValue()[0]->getFormat());
-        $this->assertEquals('urn:oasis:names:tc:SAML:2.0:nameid-format:persistent', $maceSecondValue->getValue()[0]->getFormat());
+        /** @psalm-var (\SimpleSAML\SAML2\XML\saml\AttributeValue|\SimpleSAML\SAML2\XML\saml\IdentifierInterface)[] $secondValue */
+        $secondValue = $maceSecondValue->getValue();
+
+        $this->assertInstanceOf(NameID::class, $firstValue[0]);
+        $this->assertInstanceOf(NameID::class, $secondValue[0]);
+
+        $this->assertEquals('abcd-some-value-xyz', $firstValue[0]->getValue());
+        $this->assertEquals('xyz-some-value-abcd', $secondValue[0]->getValue());
+        $this->assertEquals('urn:oasis:names:tc:SAML:2.0:nameid-format:persistent', $firstValue[0]->getFormat());
+        $this->assertEquals('urn:oasis:names:tc:SAML:2.0:nameid-format:persistent', $secondValue[0]->getFormat());
 
         $this->assertXmlStringEqualsXmlString($xml, $assertion->toXML()->ownerDocument->saveXML());
     }
@@ -582,7 +594,12 @@ XML;
         $result = $assertion->validate($publicKey);
 
         $this->assertTrue($result);
-        $this->assertEquals("_1bbcf227253269d19a689c53cdd542fe2384a9538b", $assertion->getSubject()->getIdentifier()->getValue());
+        /** @psalm-var \SimpleSAML\SAML2\XML\saml\Subject $subject */
+        $subject = $assertion->getSubject();
+
+        /** @psalm-var \SimpleSAML\SAML2\XML\saml\IdentifierInterface $identifier */
+        $identifier = $subject->getIdentifier();
+        $this->assertEquals("_1bbcf227253269d19a689c53cdd542fe2384a9538b", $identifier->getValue());
     }
 
 
