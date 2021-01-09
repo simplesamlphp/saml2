@@ -19,6 +19,36 @@ use SimpleSAML\XMLSecurity\XML\ds\Signature;
 class LogoutResponse extends AbstractStatusResponse
 {
     /**
+     * Constructor for SAML 2 LogoutResponse.
+     *
+     * @param \SimpleSAML\SAML2\XML\samlp\Status $status
+     * @param \SimpleSAML\SAML2\XML\saml\Issuer|null $issuer
+     * @param string|null $id
+     * @param int|null $issueInstant
+     * @param string|null $inResponseTo
+     * @param string|null $destination
+     * @param string|null $consent
+     * @param \SimpleSAML\SAML2\XML\samlp\Extensions|null $extensions
+     * @param string|null $relayState
+     *
+     * @throws \Exception
+     */
+    public function __construct(
+        Status $status,
+        ?Issuer $issuer = null,
+        ?string $id = null,
+        ?int $issueInstant = null,
+        ?string $inResponseTo = null,
+        ?string $destination = null,
+        ?string $consent = null,
+        ?Extensions $extensions = null,
+        ?string $relayState = null
+    ) {
+        parent::__construct($status, $issuer, $id, $issueInstant, $inResponseTo, $destination, $consent, $extensions, $relayState);
+    }
+
+
+    /**
      * Convert XML into an LogoutResponse
      *
      * @param \DOMElement $xml
