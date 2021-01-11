@@ -191,13 +191,13 @@ final class EncryptedIDTest extends TestCase
         $nameid = new NameID('value', 'name_qualifier');
         $pubkey = new XMLSecurityKey(XMLSecurityKey::RSA_SHA256, ['type' => 'public']);
         $pubkey->loadKey(PEMCertificatesMock::getPlainPublicKey(PEMCertificatesMock::PUBLIC_KEY));
-        /** \SAML2\XML\saml\AbstractSamlElement $encid */
+        /** \SimpleSAML\SAML2\XML\saml\AbstractSamlElement $encid */
         $encid = EncryptedID::fromUnencryptedElement($nameid, $pubkey);
         $str = strval($encid);
 
         $doc = DOMDocumentFactory::fromString($str);
 
-        /** \SAML2\XML\EncryptedElementInterface $encid */
+        /** \SimpleSAML\XMLSecurity\XML\EncryptedElementInterface $encid */
         $encid = EncryptedID::fromXML($doc->documentElement);
         $privkey = new XMLSecurityKey(XMLSecurityKey::RSA_SHA256, ['type' => 'private']);
         $privkey->loadKey(PEMCertificatesMock::getPlainPrivateKey(PEMCertificatesMock::PRIVATE_KEY));

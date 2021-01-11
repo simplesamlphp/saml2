@@ -102,7 +102,7 @@ trait EncryptedElementTrait
      * @param \SimpleSAML\XML\AbstractXMLElement $element
      * @param \SimpleSAML\XMLSecurity\XMLSecurityKey $key
      *
-     * @return \SimpleSAML\SAML2\XML\EncryptedElementInterface
+     * @return \SimpleSAML\XMLSecurity\XML\EncryptedElementInterface
      * @throws \Exception
      */
     public static function fromUnencryptedElement(
@@ -155,7 +155,7 @@ trait EncryptedElementTrait
 
     /**
      * @inheritDoc
-     * @return \SimpleSAML\SAML2\XML\EncryptedElementInterface
+     * @return \SimpleSAML\XMLSecurity\XML\EncryptedElementInterface
      *
      * @throws \SimpleSAML\XML\Exception\InvalidDOMElementException if the qualified name of the supplied element is wrong
      */
