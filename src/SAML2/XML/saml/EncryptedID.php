@@ -7,10 +7,10 @@ namespace SimpleSAML\SAML2\XML\saml;
 use InvalidArgumentException;
 use SimpleSAML\SAML2\Compat\ContainerSingleton;
 use SimpleSAML\SAML2\Constants;
-use SimpleSAML\SAML2\XML\EncryptedElementTrait;
 use SimpleSAML\XML\AbstractXMLElement;
 use SimpleSAML\XMLSecurity\Utils\Security;
 use SimpleSAML\XMLSecurity\XML\EncryptedElementInterface;
+use SimpleSAML\XMLSecurity\XML\EncryptedElementTrait;
 use SimpleSAML\XMLSecurity\XMLSecurityKey;
 
 /**
