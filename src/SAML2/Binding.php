@@ -5,6 +5,7 @@ declare(strict_types=1);
 namespace SimpleSAML\SAML2;
 
 use Exception;
+use Psr\Http\Message\ServerRequestInterface;
 use SimpleSAML\SAML2\XML\samlp\AbstractMessage;
 use SimpleSAML\SAML2\Exception\Protocol\UnsupportedBindingException;
 
@@ -69,31 +70,38 @@ abstract class Binding
      *
      * An exception will be thrown if it is unable to guess the binding.
      *
+     * @param \Psr\Http\Message\ServerRequestInterface $request
      * @throws \SimpleSAML\SAML2\Exception\Protocol\UnsupportedBindingException
      * @return \SimpleSAML\SAML2\Binding The binding.
      */
-    public static function getCurrentBinding(): Binding
+    public static function getCurrentBinding(ServerRequestInterface $request): Binding
     {
-        switch ($_SERVER['REQUEST_METHOD']) {
+        $headers = $request->getHeaders();
+        $method = $request->getMethod();
+
+        switch ($method) {
             case 'GET':
-                if (array_key_exists('SAMLRequest', $_GET) || array_key_exists('SAMLResponse', $_GET)) {
+                $query = $request->getQueryParams();
+                if (array_key_exists('SAMLRequest', $query) || array_key_exists('SAMLResponse', $query)) {
                     return new HTTPRedirect();
-                } elseif (array_key_exists('SAMLart', $_GET)) {
+                } elseif (array_key_exists('SAMLart', $query)) {
                     return new HTTPArtifact();
                 }
                 break;
 
             case 'POST':
-                if (isset($_SERVER['CONTENT_TYPE'])) {
-                    $contentType = $_SERVER['CONTENT_TYPE'];
+                if (isset($headers['CONTENT_TYPE'])) {
+                    $contentType = $headers['CONTENT_TYPE'][0];
                     $contentType = explode(';', $contentType);
                     $contentType = $contentType[0]; /* Remove charset. */
                 } else {
                     $contentType = null;
                 }
-                if (array_key_exists('SAMLRequest', $_POST) || array_key_exists('SAMLResponse', $_POST)) {
+
+                $query = $request->getParsedBody();
+                if (array_key_exists('SAMLRequest', $query) || array_key_exists('SAMLResponse', $query)) {
                     return new HTTPPost();
-                } elseif (array_key_exists('SAMLart', $_POST)) {
+                } elseif (array_key_exists('SAMLart', $query)) {
                     return new HTTPArtifact();
                 } elseif ($contentType === 'text/xml' || $contentType === 'application/soap+xml') {
                     return new SOAP();
@@ -103,15 +111,12 @@ abstract class Binding
 
         $logger = Utils::getContainer()->getLogger();
         $logger->warning('Unable to find the SAML 2 binding used for this request.');
-        $logger->warning('Request method: ' . var_export($_SERVER['REQUEST_METHOD'], true));
-        if (!empty($_GET)) {
-            $logger->warning("GET parameters: '" . implode("', '", array_map('addslashes', array_keys($_GET))) . "'");
+        $logger->warning('Request method: ' . var_export($method, true));
+        if (!empty($query)) {
+            $logger->warning($method . " parameters: '" . implode("', '", array_map('addslashes', array_keys($query))) . "'");
         }
-        if (!empty($_POST)) {
-            $logger->warning("POST parameters: '" . implode("', '", array_map('addslashes', array_keys($_POST))) . "'");
-        }
-        if (isset($_SERVER['CONTENT_TYPE'])) {
-            $logger->warning('Content-Type: ' . var_export($_SERVER['CONTENT_TYPE'], true));
+        if (isset($headers['CONTENT_TYPE'])) {
+            $logger->warning('Content-Type: ' . var_export($headers['CONTENT_TYPE'], true));
         }
 
         throw new UnsupportedBindingException('Unable to find the SAML 2 binding used for this request.');
