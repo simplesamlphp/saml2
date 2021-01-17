@@ -1,4 +1,4 @@
-/tests export-ignore
+/tests/SAML2 export-ignore
 /tools export-ignore
 .coveralls.yml export-ignore
 .gitattributes export-ignore
