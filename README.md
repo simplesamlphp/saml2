@@ -1,7 +1,7 @@
 SimpleSAMLphp SAML2 library
 ===========================
 ![CI](https://github.com/simplesamlphp/saml2/workflows/CI/badge.svg?branch=master)
-[![Build Status](https://travis-ci.org/simplesamlphp/saml2.png?branch=feature/fix-build)](https://travis-ci.org/simplesamlphp/saml2)
+[![Scrutinizer Code Quality](https://scrutinizer-ci.com/g/simplesamlphp/saml2/badges/quality-score.png?b=master)](https://scrutinizer-ci.com/g/simplesamlphp/saml2/?branch=master)
 [![Coverage Status](https://codecov.io/gh/simplesamlphp/saml2/branch/master/graph/badge.svg)](https://codecov.io/gh/simplesamlphp/saml2)
 
 A PHP library for SAML2 related functionality. Extracted from [SimpleSAMLphp](https://www.simplesamlphp.org),
