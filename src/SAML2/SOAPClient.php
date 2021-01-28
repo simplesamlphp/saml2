@@ -8,7 +8,9 @@ use DOMDocument;
 use Exception;
 use SimpleSAML\Configuration;
 use SimpleSAML\SAML2\Compat\ContainerSingleton;
+use SimpleSAML\SAML2\Exception\InvalidArgumentException;
 use SimpleSAML\SAML2\Exception\RuntimeException;
+use SimpleSAML\SAML2\Exception\UnparseableXmlException;
 use SimpleSAML\SAML2\XML\samlp\AbstractMessage;
 use SimpleSAML\SAML2\XML\samlp\MessageFactory;
 use SimpleSAML\Utils\Config;
@@ -150,8 +152,12 @@ class SOAPClient
         // Convert to SAML2\XML\samlp\AbstractMessage (\DOMElement)
         try {
             $dom = DOMDocumentFactory::fromString($soapresponsexml);
-        } catch (RuntimeException $e) {
-            throw new Exception('Not a SOAP response.', 0, $e);
+        } catch (InvalidArgumentException | UnparseableXmlException | RuntimeException $e) {
+            throw new \Exception($e->getMessage(), 0, $e);
+        }
+        $soapresponse = Utils::xpQuery($dom->firstChild, '/soap-env:Envelope/soap-env:Body/*[1]');
+        if (empty($soapresponse)) {
+            throw new \Exception('Not a SOAP response', 0);
         }
         $container->debugMessage($dom->documentElement, 'in');
 
