@@ -6,6 +6,8 @@ namespace SAML2;
 
 use DOMDocument;
 use RobRichards\XMLSecLibs\XMLSecurityKey;
+use SAML2\Exception\InvalidArgumentException;
+use SAML2\Exception\UnparseableXmlException;
 use SimpleSAML\Configuration;
 use SimpleSAML\Utils\Config;
 use SimpleSAML\Utils\Crypto;
@@ -146,8 +148,12 @@ class SOAPClient
         // Convert to SAML2\Message (\DOMElement)
         try {
             $dom = DOMDocumentFactory::fromString($soapresponsexml);
-        } catch (RuntimeException $e) {
-            throw new \Exception('Not a SOAP response.', 0, $e);
+        } catch (InvalidArgumentException | UnparseableXmlException | RuntimeException $e) {
+            throw new \Exception($e->getMessage(), 0, $e);
+        }
+        $soapresponse = Utils::xpQuery($dom->firstChild, '/soap-env:Envelope/soap-env:Body/*[1]');
+        if (empty($soapresponse)) {
+            throw new \Exception('Not a SOAP response', 0);
         }
         $container->debugMessage($dom->documentElement, 'in');
 
