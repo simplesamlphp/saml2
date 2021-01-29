@@ -4,10 +4,9 @@ SimpleSAMLphp SAML2 library
 [![Scrutinizer Code Quality](https://scrutinizer-ci.com/g/simplesamlphp/saml2/badges/quality-score.png?b=master)](https://scrutinizer-ci.com/g/simplesamlphp/saml2/?branch=master)
 [![Coverage Status](https://codecov.io/gh/simplesamlphp/saml2/branch/master/graph/badge.svg)](https://codecov.io/gh/simplesamlphp/saml2)
 
-A PHP library for SAML2 related functionality. Extracted from [SimpleSAMLphp](https://www.simplesamlphp.org),
-used by [OpenConext](https://www.openconext.org).
-This library started as a collaboration between [UNINETT](https://www.uninett.no) and [SURFnet](https://www.surfnet.nl) but everyone is invited to contribute.
+A PHP library for SAML2 related functionality.
 
+It is used by several products, most notably [SimpleSAMLphp](https://www.simplesamlphp.org) and [OpenConext](https://www.openconext.org).
 
 Before you use it
 -----------------
