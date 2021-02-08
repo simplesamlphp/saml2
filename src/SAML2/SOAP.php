@@ -6,6 +6,7 @@ namespace SimpleSAML\SAML2;
 
 use DOMDocument;
 use Exception;
+use Psr\Http\Message\ServerRequestInterface;
 use SimpleSAML\SAML2\Utils;
 use SimpleSAML\SAML2\Utils\XPath;
 use SimpleSAML\SAML2\XML\ecp\Response as ECPResponse;
@@ -96,10 +97,11 @@ SOAP;
     /**
      * Receive a SAML 2 message sent using the HTTP-POST binding.
      *
-     * @throws \Exception If unable to receive the message
+     * @param \Psr\Http\Message\ServerRequestInterface $request
      * @return \SimpleSAML\SAML2\XML\samlp\AbstractMessage The received message.
+     * @throws \Exception If unable to receive the message
      */
-    public function receive(): AbstractMessage
+    public function receive(ServerRequestInterface $request): AbstractMessage
     {
         $postText = $this->getInputStream();
 

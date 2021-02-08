@@ -164,7 +164,8 @@ abstract class Binding
      * This function will extract the message from the current request.
      * An exception will be thrown if we are unable to process the message.
      *
+     * @param \Psr\Http\Message\ServerRequestInterface $request
      * @return \SimpleSAML\SAML2\XML\samlp\AbstractMessage The received message.
      */
-    abstract public function receive(): AbstractMessage;
+    abstract public function receive(ServerRequestInterface $request): AbstractMessage;
 }
