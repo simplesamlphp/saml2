@@ -155,7 +155,7 @@ class SOAPClient
         } catch (InvalidArgumentException | UnparseableXmlException | RuntimeException $e) {
             throw new \Exception($e->getMessage(), 0, $e);
         }
-        $soapresponse = Utils::xpQuery($dom->firstChild, '/soap-env:Envelope/soap-env:Body/*[1]');
+        $soapresponse = XMLUtils::xpQuery($dom->firstChild, '/soap-env:Envelope/soap-env:Body/*[1]');
         if (empty($soapresponse)) {
             throw new \Exception('Not a SOAP response', 0);
         }
