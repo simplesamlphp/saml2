@@ -229,7 +229,6 @@ final class SPSSODescriptorTest extends TestCase
         );
         $this->assertNull($spssod->getAuthnRequestsSigned());
         $this->assertNull($spssod->getWantAssertionsSigned());
-        $this->assertIsArray($spssod->getAttributeConsumingService());
         $this->assertEmpty($spssod->getAttributeConsumingService());
     }
 
@@ -323,7 +322,6 @@ XML
         $spssod = SPSSODescriptor::fromXML($document->documentElement);
         $this->assertNull($spssod->getAuthnRequestsSigned());
         $this->assertNull($spssod->getWantAssertionsSigned());
-        $this->assertIsArray($spssod->getAttributeConsumingService());
         $this->assertEmpty($spssod->getAttributeConsumingService());
     }
 

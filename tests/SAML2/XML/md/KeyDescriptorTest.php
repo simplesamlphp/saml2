@@ -90,7 +90,6 @@ final class KeyDescriptorTest extends TestCase
 
         $this->assertNull($kd->getUse());
         $this->assertEmpty($kd->getEncryptionMethods());
-        $this->assertEmpty($kd->getEncryptionMethods());
 
         $this->assertEquals(
             <<<XML
@@ -157,7 +156,6 @@ XML
 
         $kd = KeyDescriptor::fromXML($document->documentElement);
         $this->assertNull($kd->getUse());
-        $this->assertIsArray($kd->getEncryptionMethods());
         $this->assertEmpty($kd->getEncryptionMethods());
     }
 

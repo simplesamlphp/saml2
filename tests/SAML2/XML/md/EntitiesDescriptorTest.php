@@ -112,7 +112,6 @@ final class EntitiesDescriptorTest extends TestCase
             [$childEntityd]
         );
         $this->assertNull($entitiesd->getName());
-        $this->assertIsArray($entitiesd->getEntitiesDescriptors());
         $this->assertEmpty($entitiesd->getEntitiesDescriptors());
     }
 
@@ -132,7 +131,6 @@ final class EntitiesDescriptorTest extends TestCase
             [],
             [$childEntitiesd]
         );
-        $this->assertIsArray($entitiesd->getEntityDescriptors());
         $this->assertEmpty($entitiesd->getEntityDescriptors());
     }
 
