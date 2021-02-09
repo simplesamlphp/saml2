@@ -186,7 +186,12 @@ abstract class AbstractMessage extends AbstractSamlpElement implements SignedEle
             }
         }
 
-        /* No validators were able to validate the message. */
+        Assert::notEmpty($exceptions);
+
+        /**
+         * No validators were able to validate the message.
+         * @psalm-suppress InvalidThrow
+         */
         throw array_pop($exceptions);
     }
 
