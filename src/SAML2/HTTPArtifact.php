@@ -64,7 +64,7 @@ class HTTPArtifact extends Binding
             throw new Exception('Cannot get redirect URL, no destination set in the message.');
         }
 
-        $params['SAMLart'] = $artifact;
+        $params = ['SAMLart' => $artifact];
 
         $relayState = $message->getRelayState();
         if ($relayState !== null) {
