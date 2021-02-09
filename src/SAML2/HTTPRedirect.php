@@ -181,58 +181,6 @@ class HTTPRedirect extends Binding
 
 
     /**
-     * Helper function to parse query data.
-     *
-     * This function returns the query string split into key=>value pairs.
-     * It also adds a new parameter, SignedQuery, which contains the data that is
-     * signed.
-     *
-     * @return array The query data that is signed.
-    private static function parseQuery(): array
-    {
-        //
-        // Parse the query string. We need to do this ourself, so that we get access
-        // to the raw (urlencoded) values. This is required because different software
-        // can urlencode to different values.
-        //
-        $data = [];
-        $relayState = '';
-        $sigAlg = '';
-        $sigQuery = '';
-        foreach (explode('&', $_SERVER['QUERY_STRING']) as $e) {
-            $tmp = explode('=', $e, 2);
-            $name = $tmp[0];
-            if (count($tmp) === 2) {
-                $value = $tmp[1];
-            } else {
-                // No value for this parameter.
-                $value = '';
-            }
-            $name = urldecode($name);
-            $data[$name] = urldecode($value);
-
-            switch ($name) {
-                case 'SAMLRequest':
-                case 'SAMLResponse':
-                    $sigQuery = $name . '=' . $value;
-                    break;
-                case 'RelayState':
-                    $relayState = '&RelayState=' . $value;
-                    break;
-                case 'SigAlg':
-                    $sigAlg = '&SigAlg=' . $value;
-                    break;
-            }
-        }
-
-        $data['SignedQuery'] = $sigQuery . $relayState . $sigAlg;
-
-        return $data;
-    }
-     */
-
-
-    /**
      * Validate the signature on a HTTP-Redirect message.
      *
      * Throws an exception if we are unable to validate the signature.
