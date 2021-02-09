@@ -4,6 +4,7 @@ declare(strict_types=1);
 
 namespace SimpleSAML\SAML2;
 
+use DOMElement;
 use Exception;
 use SimpleSAML\Assert\Assert;
 use SimpleSAML\SAML2\XML\samlp\AbstractMessage;
@@ -133,10 +134,7 @@ class HTTPRedirect extends Binding
 
         $document = DOMDocumentFactory::fromString($message);
         Utils::getContainer()->debugMessage($document->documentElement, 'in');
-        if (!$document->firstChild instanceof \DOMElement) {
-            throw new Exception('Malformed SAML message received.');
-        }
-        $message = MessageFactory::fromXML($document->firstChild);
+        $message = MessageFactory::fromXML($document->documentElement);
 
         if (array_key_exists('RelayState', $data)) {
             $message->setRelayState($data['RelayState']);

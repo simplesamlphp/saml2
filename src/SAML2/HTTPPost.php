@@ -88,11 +88,8 @@ class HTTPPost extends Binding
 
         $document = DOMDocumentFactory::fromString($msgStr);
         Utils::getContainer()->debugMessage($document->documentElement, 'in');
-        if (!$document->firstChild instanceof DOMElement) {
-            throw new Exception('Malformed SAML message received.');
-        }
 
-        $msg = MessageFactory::fromXML($document->firstChild);
+        $msg = MessageFactory::fromXML($document->documentElement);
 
         if (array_key_exists('RelayState', $_POST)) {
             $msg->setRelayState($_POST['RelayState']);
