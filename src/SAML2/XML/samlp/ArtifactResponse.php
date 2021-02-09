@@ -13,14 +13,15 @@ use SimpleSAML\XML\Utils as XMLUtils;
 use SimpleSAML\XMLSecurity\XML\ds\Signature;
 
 /**
- * The \SAML2\ArtifactResponse, is the response to the \SAML2\ArtifactResolve.
+ * The \SimpleSAML\SAML2\XML\samlp\ArtifactResponse,
+ *  is the response to the \SimpleSAML\SAML2\XML\samlp\ArtifactResolve.
  *
  * @package simplesamlphp/saml2
  */
 class ArtifactResponse extends AbstractStatusResponse
 {
     /** @var \SimpleSAML\SAML2\XML\samlp\AbstractMessage|null */
-    protected AbstractMessage $message;
+    protected ?AbstractMessage $message;
 
 
     /**
