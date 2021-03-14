@@ -14,13 +14,10 @@ class ContainerSingleton
 
 
     /**
-     * @return \SimpleSAML\SAML2\Compat\ContainerInterface
+     * @return \SimpleSAML\SAML2\Compat\ContainerInterface|null
      */
-    public static function getInstance(): ContainerInterface
+    public static function getInstance(): ?ContainerInterface
     {
-        if (!isset(self::$container)) {
-            self::$container = self::initSspContainer();
-        }
         return self::$container;
     }
 
@@ -33,14 +30,5 @@ class ContainerSingleton
     public static function setContainer(ContainerInterface $container): void
     {
         self::$container = $container;
-    }
-
-
-    /**
-     * @return \SimpleSAML\SAML2\Compat\Ssp\Container
-     */
-    public static function initSspContainer(): Container
-    {
-        return new Container();
     }
 }

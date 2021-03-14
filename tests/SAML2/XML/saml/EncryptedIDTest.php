@@ -10,7 +10,6 @@ use PHPUnit\Framework\TestCase;
 use SimpleSAML\Configuration;
 use SimpleSAML\SAML2\Compat\ContainerSingleton;
 use SimpleSAML\SAML2\Compat\MockContainer;
-use SimpleSAML\SAML2\Compat\Ssp\Container;
 use SimpleSAML\SAML2\Constants;
 use SimpleSAML\SAML2\XML\saml\Attribute;
 use SimpleSAML\SAML2\XML\saml\BaseID;
@@ -219,7 +218,7 @@ final class EncryptedIDTest extends TestCase
         $this->assertEquals(strval($customid), strval($id));
 
         // test a custom BaseID with a registered handler
-        $container = $this->createMock(Container::class);
+        $container = $this->createMock(MockContainer::class);
         $container->method('getIdentifierHandler')->willReturn(CustomBaseID::class);
         ContainerSingleton::setContainer($container);
 
