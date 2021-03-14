@@ -22,6 +22,7 @@ use SimpleSAML\SAML2\XML\md\IDPSSODescriptor;
 use SimpleSAML\SAML2\XML\md\Organization;
 use SimpleSAML\SAML2\XML\md\OrganizationDisplayName;
 use SimpleSAML\SAML2\XML\md\OrganizationName;
+use SimpleSAML\SAML2\XML\md\OrganizationURL;
 use SimpleSAML\SAML2\XML\md\PDPDescriptor;
 use SimpleSAML\SAML2\XML\md\SingleSignOnService;
 use SimpleSAML\SAML2\XML\md\UnknownRoleDescriptor;
@@ -108,7 +109,7 @@ final class EntityDescriptorTest extends TestCase
         $org = new Organization(
             [new OrganizationName('en', 'orgNameTest (en)')],
             [new OrganizationDisplayName('en', 'orgDispNameTest (en)')],
-            ['en' => 'orgURL (en)']
+            [new OrganizationURL('en', 'orgURL (en)')]
         );
         $contacts = [
             new ContactPerson('support', null, null, null, null, ['help@example.edu']),
@@ -212,7 +213,7 @@ XML
         $org = new Organization(
             [new OrganizationName('en', 'orgNameTest (en)')],
             [new OrganizationDisplayName('en', 'orgDispNameTest (en)')],
-            ['en' => 'orgURL (en)']
+            [new OrganizationURL('en', 'orgURL (en)')]
         );
         $contacts = [
             new ContactPerson('support', null, null, null, null, ['help@example.edu']),

@@ -26,23 +26,23 @@ final class Organization extends AbstractMdElement
     use ExtendableElementTrait;
 
     /**
-     * The OrganizationName, as an array of language => translation.
+     * The OrganizationName, as an array of OrganizationName objects.
      *
      * @var \SimpleSAML\SAML2\XML\md\OrganizationName[]
      */
     protected array $OrganizationName = [];
 
     /**
-     * The OrganizationDisplayName, as an array of language => translation.
+     * The OrganizationDisplayName, as an array of OrganizationDisplayName objects.
      *
      * @var \SimpleSAML\SAML2\XML\md\OrganizationDisplayName[]
      */
     protected array $OrganizationDisplayName = [];
 
     /**
-     * The OrganizationURL, as an array of language => translation.
+     * The OrganizationURL, as an array of OrganizationURL objects.
      *
-     * @var array
+     * @var \SimpleSAML\SAML2\XML\md\OrganizationURL[]
      */
     protected array $OrganizationURL = [];
 
@@ -52,7 +52,7 @@ final class Organization extends AbstractMdElement
      *
      * @param \SimpleSAML\SAML2\XML\md\OrganizationName[] $organizationName
      * @param \SimpleSAML\SAML2\XML\md\OrganizationDisplayName[] $organizationDisplayName
-     * @param string[] $organizationURL
+     * @param \SimpleSAML\SAML2\XML\md\OrganizationURL[] $organizationURL
      * @param \SimpleSAML\SAML2\XML\md\Extensions|null $extensions
      */
     public function __construct(
@@ -119,7 +119,7 @@ final class Organization extends AbstractMdElement
     /**
      * Collect the value of the OrganizationURL property.
      *
-     * @return string[]
+     * @return \SimpleSAML\SAML2\XML\md\OrganizationURL[]
      */
     public function getOrganizationURL(): array
     {
@@ -130,12 +130,12 @@ final class Organization extends AbstractMdElement
     /**
      * Set the value of the OrganizationURL property.
      *
-     * @param string[] $organizationURL
+     * @param \SimpleSAML\SAML2\XML\md\OrganizationURL[] $organizationURL
      * @throws \SimpleSAML\Assert\AssertionFailedException
      */
     protected function setOrganizationURL(array $organizationURL): void
     {
-        Assert::allStringNotEmpty($organizationURL, 'Incorrect OrganizationURL.');
+        Assert::allIsInstanceOf($organizationURL, OrganizationURL::class);
         $this->OrganizationURL = $organizationURL;
     }
 
@@ -160,13 +160,13 @@ final class Organization extends AbstractMdElement
         $displayNames = OrganizationDisplayName::getChildrenOfClass($xml);
         Assert::minCount($displayNames, 1, 'Missing at least one OrganizationDisplayName', MissingElementException::class);
 
-        $url = XMLUtils::extractLocalizedStrings($xml, Constants::NS_MD, 'OrganizationURL');
-        Assert::allStringNotEmpty($url, 'No localized organization URL found.', MissingElementException::class);
+        $urls = OrganizationURL::getChildrenOfClass($xml);
+        Assert::minCount($urls, 1, 'Missing at least one OrganizationURL', MissingElementException::class);
 
         $extensions = Extensions::getChildrenOfClass($xml);
         Assert::maxCount($extensions, 1, 'Cannot process more than one md:Extensions element.', TooManyElementsException::class);
 
-        return new self($names, $displayNames, $url, !empty($extensions) ? $extensions[0] : null);
+        return new self($names, $displayNames, $urls, !empty($extensions) ? $extensions[0] : null);
     }
 
 
@@ -192,7 +192,9 @@ final class Organization extends AbstractMdElement
             $displayName->toXML($e);
         }
 
-        XMLUtils::addStrings($e, Constants::NS_MD, 'md:OrganizationURL', true, $this->OrganizationURL);
+        foreach ($this->OrganizationURL as $url) {
+            $url->toXML($e);
+        }
 
         return $e;
     }

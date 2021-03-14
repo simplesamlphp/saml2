@@ -11,6 +11,7 @@ use SimpleSAML\SAML2\XML\md\Extensions;
 use SimpleSAML\SAML2\XML\md\Organization;
 use SimpleSAML\SAML2\XML\md\OrganizationDisplayName;
 use SimpleSAML\SAML2\XML\md\OrganizationName;
+use SimpleSAML\SAML2\XML\md\OrganizationURL;
 use SimpleSAML\XML\DOMDocumentFactory;
 use SimpleSAML\XML\Exception\MissingElementException;
 use SimpleSAML\XML\Chunk;
@@ -53,7 +54,7 @@ final class OrganizationTest extends TestCase
         $org = new Organization(
             [new OrganizationName('en', 'Identity Providers R US')],
             [new OrganizationDisplayName('en', 'Identity Providers R US, a Division of Lerxst Corp.')],
-            ['en' => 'https://IdentityProvider.com'],
+            [new OrganizationURL('en', 'https://IdentityProvider.com')],
             new Extensions(
                 [
                     new Chunk($ext->documentElement)
@@ -89,39 +90,14 @@ final class OrganizationTest extends TestCase
             strval($org->getOrganizationDisplayName()[0])
         );
         $this->assertEquals(
-            [
-                'en' => 'https://IdentityProvider.com',
-            ],
-            $org->getOrganizationURL()
+            strval(new OrganizationURL('en', 'https://IdentityProvider.com')),
+            strval($org->getOrganizationURL()[0])
         );
     }
 
 
     /**
-     * Test creating an Organization object from XML containing no url
-     */
-    public function testUnmarshallingEmptyUrl(): void
-    {
-        $mdns = Constants::NS_MD;
-        $document = DOMDocumentFactory::fromString(<<<XML
-<md:Organization xmlns:md="{$mdns}">
-  <md:OrganizationName xml:lang="en">Identity Providers R US</md:OrganizationName>
-  <md:OrganizationDisplayName
-      xml:lang="en">Identity Providers R US, a Division of Lerxst Corp.</md:OrganizationDisplayName>
-  <md:OrganizationURL xml:lang="en"></md:OrganizationURL>
-</md:Organization>
-XML
-        );
-
-        $this->expectException(MissingElementException::class);
-        $this->expectExceptionMessage('No localized organization URL found.');
-
-        Organization::fromXML($document->documentElement);
-    }
-
-
-    /**
-     * Test serialization and unserialization of AdditionalMetadataLocation elements.
+     * Test serialization and unserialization of Organization elements.
      */
     public function testSerialization(): void
     {
