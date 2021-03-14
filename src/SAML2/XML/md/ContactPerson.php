@@ -365,7 +365,6 @@ final class ContactPerson extends AbstractMdElement
             XMLUtils::addString($e, Constants::NS_MD, 'md:SurName', $this->SurName);
         }
 
-        /** @var string[] $addresses */
         $addresses = preg_filter('/^/', 'mailto:', $this->EmailAddresses);
         XMLUtils::addStrings($e, Constants::NS_MD, 'md:EmailAddress', false, $addresses);
 

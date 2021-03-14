@@ -59,7 +59,6 @@ class AttributeValue extends AbstractSamlElement
      */
     public function getXsiType(): string
     {
-        /** @psalm-var string $type */
         $type = gettype($this->value);
 
         switch ($type) {
@@ -143,7 +142,6 @@ class AttributeValue extends AbstractSamlElement
     {
         $e = parent::instantiateParentElement($parent);
 
-        /** @psalm-var string $type */
         $type = gettype($this->value);
 
         switch ($type) {
