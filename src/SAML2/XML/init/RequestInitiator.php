@@ -44,7 +44,7 @@ final class RequestInitiator extends AbstractEndpointType
 
 
     /**
-     * Initialize an EndpointType.
+     * Initialize an RequestInitiator.
      *
      * Note: this method cannot be used when extending this class, if the constructor has a different signature.
      *
