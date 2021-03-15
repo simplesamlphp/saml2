@@ -11,6 +11,7 @@ use SimpleSAML\Assert\AssertionFailedException;
 use SimpleSAML\SAML2\Constants;
 use SimpleSAML\SAML2\XML\md\ContactPerson;
 use SimpleSAML\SAML2\XML\md\Extensions;
+use SimpleSAML\Test\XML\ArrayizableXMLTestTrait;
 use SimpleSAML\Test\XML\SerializableXMLTestTrait;
 use SimpleSAML\XML\DOMDocumentFactory;
 use SimpleSAML\XML\Exception\MissingAttributeException;
@@ -25,6 +26,7 @@ use SimpleSAML\XML\Chunk;
  */
 final class ContactPersonTest extends TestCase
 {
+    use ArrayizableXMLTestTrait;
     use SerializableXMLTestTrait;
 
 
@@ -37,6 +39,17 @@ final class ContactPersonTest extends TestCase
         $this->xmlRepresentation = DOMDocumentFactory::fromFile(
             dirname(dirname(dirname(dirname(__FILE__)))) . '/resources/xml/md_ContactPerson.xml'
         );
+
+        $this->arrayRepresentation = [
+            'ContactType' => 'administrative',
+            'Company' => 'SimpleSAMLphp',
+            'GivenName' => 'Lead',
+            'SurName' => 'Developer',
+            'Extensions' => null,
+            'EmailAddresses' => ['lead.developer@example.org'],
+            'TelephoneNumbers' => ['+1234567890'],
+            'urn:test' => ['test:attr' => 'value'],
+        ];
     }
 
 

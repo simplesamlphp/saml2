@@ -10,6 +10,7 @@ use InvalidArgumentException;
 use SimpleSAML\Assert\Assert;
 use SimpleSAML\SAML2\Constants;
 use SimpleSAML\SAML2\XML\ExtendableElementTrait;
+use SimpleSAML\XML\DOMDocumentFactory;
 use SimpleSAML\XML\Exception\InvalidDOMElementException;
 use SimpleSAML\XML\Exception\TooManyElementsException;
 use SimpleSAML\XML\ExtendableAttributesTrait;
@@ -56,14 +57,14 @@ final class ContactPerson extends AbstractMdElement
     /**
      * The EmailAddresses of this contact.
      *
-     * @var array
+     * @var string[]
      */
     protected array $EmailAddresses = [];
 
     /**
      * The TelephoneNumbers of this contact.
      *
-     * @var array
+     * @var string[]
      */
     protected array $TelephoneNumbers = [];
 
@@ -98,43 +99,6 @@ final class ContactPerson extends AbstractMdElement
         $this->setTelephoneNumbers($telephone);
         $this->setExtensions($extensions);
         $this->setAttributesNS($namespacedAttributes);
-    }
-
-
-    /**
-     * Initialize a ContactPerson element.
-     *
-     * @param \DOMElement $xml The XML element we should load.
-     * @return self
-     *
-     * @throws \SimpleSAML\XML\Exception\InvalidDOMElementException if the qualified name of the supplied element is wrong
-     * @throws \SimpleSAML\XML\Exception\MissingAttributeException if the supplied element is missing one of the mandatory attributes
-     * @throws \SimpleSAML\XML\Exception\TooManyElementsException if too many child-elements of a type are specified
-     */
-    public static function fromXML(DOMElement $xml): object
-    {
-        Assert::same($xml->localName, 'ContactPerson', InvalidDOMElementException::class);
-        Assert::same($xml->namespaceURI, ContactPerson::NS, InvalidDOMElementException::class);
-
-        $contactType = self::getAttribute($xml, 'contactType');
-        $company = self::getStringElement($xml, 'Company');
-        $givenName = self::getStringElement($xml, 'GivenName');
-        $surName = self::getStringElement($xml, 'SurName');
-        $email = self::getStringElements($xml, 'EmailAddress');
-        $telephone = self::getStringElements($xml, 'TelephoneNumber');
-        $extensions = Extensions::getChildrenOfClass($xml);
-        Assert::maxCount($extensions, 1, 'Only one md:Extensions element is allowed.', TooManyElementsException::class);
-
-        return new self(
-            $contactType,
-            $company,
-            $givenName,
-            $surName,
-            (count($extensions) === 1) ? $extensions[0] : null,
-            $email,
-            $telephone,
-            self::getAttributesNSFromXML($xml)
-        );
     }
 
 
@@ -335,6 +299,43 @@ final class ContactPerson extends AbstractMdElement
 
 
     /**
+     * Initialize a ContactPerson element.
+     *
+     * @param \DOMElement $xml The XML element we should load.
+     * @return self
+     *
+     * @throws \SimpleSAML\XML\Exception\InvalidDOMElementException if the qualified name of the supplied element is wrong
+     * @throws \SimpleSAML\XML\Exception\MissingAttributeException if the supplied element is missing one of the mandatory attributes
+     * @throws \SimpleSAML\XML\Exception\TooManyElementsException if too many child-elements of a type are specified
+     */
+    public static function fromXML(DOMElement $xml): object
+    {
+        Assert::same($xml->localName, 'ContactPerson', InvalidDOMElementException::class);
+        Assert::same($xml->namespaceURI, ContactPerson::NS, InvalidDOMElementException::class);
+
+        $contactType = self::getAttribute($xml, 'contactType');
+        $company = self::getStringElement($xml, 'Company');
+        $givenName = self::getStringElement($xml, 'GivenName');
+        $surName = self::getStringElement($xml, 'SurName');
+        $email = self::getStringElements($xml, 'EmailAddress');
+        $telephone = self::getStringElements($xml, 'TelephoneNumber');
+        $extensions = Extensions::getChildrenOfClass($xml);
+        Assert::maxCount($extensions, 1, 'Only one md:Extensions element is allowed.', TooManyElementsException::class);
+
+        return new self(
+            $contactType,
+            $company,
+            $givenName,
+            $surName,
+            (count($extensions) === 1) ? $extensions[0] : null,
+            $email,
+            $telephone,
+            self::getAttributesNSFromXML($xml)
+        );
+    }
+
+
+    /**
      * Convert this ContactPerson to XML.
      *
      * @param \DOMElement|null $parent The element we should add this contact to.
@@ -371,5 +372,84 @@ final class ContactPerson extends AbstractMdElement
         XMLUtils::addStrings($e, Constants::NS_MD, 'md:TelephoneNumber', false, $this->TelephoneNumbers);
 
         return $e;
+    }
+
+
+    /**
+     * Create a class from an array
+     *
+     * @param array $data
+     * @return self
+     */
+    public static function fromArray(array $data): object
+    {
+        Assert::keyExists($data, 'ContactType');
+
+        $ContactType = $data['ContactType'];
+        $Company = $data['Company'] ?? null;
+        $GivenName = $data['GivenName'] ?? null;
+        $SurName = $data['SurName'] ?? null;
+        $Extensions = $data['Extensions'] ?? null;
+        $EmailAddresses = $data['EmailAddresses'] ?? [];
+        $TelephoneNumbers = $data['TelephoneNumbers'] ?? [];
+
+        // Anything after this should be (namespaced) attributes
+        unset(
+            $data['ContactType'],
+            $data['Company'],
+            $data['GivenName'],
+            $data['SurName'],
+            $data['Extensions'],
+            $data['EmailAddresses'],
+            $data['TelephoneNumbers']
+        );
+
+        $attributes = [];
+        foreach ($data as $ns => $attribute) {
+            $name = array_key_first($attribute);
+            $value = $attribute[$name];
+
+            $doc = DOMDocumentFactory::create();
+            $elt = $doc->createElement("placeholder");
+            $elt->setAttributeNS($ns, $name, $value);
+
+            $attributes[] = $elt->getAttributeNode($name);
+        }
+
+        return new self(
+            $ContactType,
+            $Company,
+            $GivenName,
+            $SurName,
+            $Extensions,
+            $EmailAddresses,
+            $TelephoneNumbers,
+            $attributes
+        );
+    }
+
+
+    /**
+     * Create an array from this class
+     *
+     * @return array
+     */
+    public function toArray(): array
+    {
+        $data = [
+            'ContactType' => $this->contactType,
+            'Company' => $this->Company,
+            'GivenName' => $this->GivenName,
+            'SurName' => $this->SurName,
+            'EmailAddresses' => $this->EmailAddresses,
+            'TelephoneNumbers' => $this->TelephoneNumbers,
+            'Extensions' => $this->Extensions,
+        ];
+
+        foreach ($this->getAttributesNS() as $a) {
+            $data[$a['namespaceURI']] =  [$a['qualifiedName'] => $a['value']];
+        }
+
+        return $data;
     }
 }
