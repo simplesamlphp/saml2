@@ -70,7 +70,7 @@ final class RequestAuthenticated extends AbstractEcpElement
 
 
     /**
-     * Convert this ECP Response to XML.
+     * Convert this ECP RequestAuthentication to XML.
      *
      * @param \DOMElement|null $parent The element we should append this element to.
      * @return \DOMElement
