@@ -172,7 +172,9 @@ final class Logo extends AbstractMduiElement
         Assert::stringNotEmpty($xml->textContent, 'Missing url value for Logo.');
 
         $Url = $xml->textContent;
+        /** @var int $Width */
         $Width = self::getIntegerAttribute($xml, 'width');
+        /** @var int $Height */
         $Height = self::getIntegerAttribute($xml, 'height');
         $lang = self::getAttribute($xml, 'xml:lang');
 
