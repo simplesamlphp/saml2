@@ -6,9 +6,13 @@ namespace SimpleSAML\Test\SAML2\XML\mdui;
 
 use DOMDocument;
 use PHPUnit\Framework\TestCase;
+use SimpleSAML\SAML2\XML\mdui\Description;
 use SimpleSAML\SAML2\XML\mdui\DiscoHints;
+use SimpleSAML\SAML2\XML\mdui\DisplayName;
+use SimpleSAML\SAML2\XML\mdui\InformationURL;
 use SimpleSAML\SAML2\XML\mdui\Keywords;
 use SimpleSAML\SAML2\XML\mdui\Logo;
+use SimpleSAML\SAML2\XML\mdui\PrivacyStatementURL;
 use SimpleSAML\SAML2\XML\mdui\UIInfo;
 use SimpleSAML\XML\Chunk;
 use SimpleSAML\XML\DOMDocumentFactory;
@@ -46,10 +50,22 @@ final class UIInfoTest extends TestCase
         $keyword = new Keywords('en', ['keyword']);
 
         $uiinfo = new UIInfo(
-            ["nl" => "Voorbeeld", "en" => "Example"],
-            ["nl" => "Omschrijving", "en" => "Description"],
-            ["nl" => "https://voorbeeld.nl/", "en" => "https://example.org"],
-            ["nl" => "https://voorbeeld.nl/privacy", "en" => "https://example.org/privacy"]
+            [
+                new DisplayName("nl", "Voorbeeld"),
+                new DisplayName("en", "Example")
+            ],
+            [
+                new Description("nl", "Omschrijving"),
+                new Description("en", "Description")
+            ],
+            [
+                new InformationURL("nl", "https://voorbeeld.nl/"),
+                new InformationURL("en", "https://example.org")
+            ],
+            [
+                new PrivacyStatementURL("nl", "https://voorbeeld.nl/privacy"),
+                new PrivacyStatementURL("en", "https://example.org/privacy")
+            ]
         );
         $uiinfo->addKeyword($keyword);
         $uiinfo->addLogo($logo);
@@ -215,15 +231,20 @@ final class UIInfoTest extends TestCase
         );
 
         $this->assertCount(2, $uiinfo->getDisplayName());
-        $this->assertEquals('University of Examples', $uiinfo->getDisplayName()['en']);
-        $this->assertEquals('Univërsitä øf Exåmpleß', $uiinfo->getDisplayName()['el']);
+        $this->assertEquals('University of Examples', $uiinfo->getDisplayName()[0]->getValue());
+        $this->assertEquals('en', $uiinfo->getDisplayName()[0]->getLanguage());
+        $this->assertEquals('Univërsitä øf Exåmpleß', $uiinfo->getDisplayName()[1]->getValue());
+        $this->assertEquals('el', $uiinfo->getDisplayName()[1]->getLanguage());
         $this->assertCount(2, $uiinfo->getInformationURL());
-        $this->assertEquals('http://www.example.edu/en/', $uiinfo->getInformationURL()['en']);
-        $this->assertEquals('http://www.example.edu/', $uiinfo->getInformationURL()['el']);
+        $this->assertEquals('http://www.example.edu/en/', $uiinfo->getInformationURL()[0]->getValue());
+        $this->assertEquals('en', $uiinfo->getInformationURL()[0]->getLanguage());
+        $this->assertEquals('http://www.example.edu/', $uiinfo->getInformationURL()[1]->getValue());
+        $this->assertEquals('el', $uiinfo->getInformationURL()[1]->getLanguage());
         $this->assertCount(1, $uiinfo->getPrivacyStatementURL());
-        $this->assertEquals('https://example.org/privacy', $uiinfo->getPrivacyStatementURL()['en']);
+        $this->assertEquals('https://example.org/privacy', $uiinfo->getPrivacyStatementURL()[0]->getValue());
+        $this->assertEquals('en', $uiinfo->getPrivacyStatementURL()[0]->getLanguage());
         $this->assertCount(1, $uiinfo->getDescription());
-        $this->assertEquals('Just an example', $uiinfo->getDescription()['en']);
+        $this->assertEquals('Just an example', $uiinfo->getDescription()[0]->getValue());
         $this->assertCount(1, $uiinfo->getLogo());
         $this->assertEquals('https://example.org/idp/images/logo_87x88.png', $uiinfo->getLogo()[0]->getUrl());
         $this->assertEquals(87, $uiinfo->getLogo()[0]->getWidth());

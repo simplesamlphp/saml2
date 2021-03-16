@@ -16,10 +16,11 @@ use SimpleSAML\XML\DOMDocumentFactory;
  * Tests for localized names.
  *
  * @covers \SimpleSAML\SAML2\XML\md\OrganizationName
+ * @covers \SimpleSAML\SAML2\XML\md\AbstractLocalizedName
  * @covers \SimpleSAML\SAML2\XML\md\AbstractMdElement
  * @package simplesamlphp/saml2
  */
-final class LocalizedNameTest extends TestCase
+final class OrganizationNameTest extends TestCase
 {
     /** @var \DOMDocument */
     protected DOMDocument $document;
@@ -39,33 +40,33 @@ final class LocalizedNameTest extends TestCase
 
 
     /**
-     * Test creating a LocalizedName object from scratch.
+     * Test creating a OrganizationName object from scratch.
      */
     public function testMarshalling(): void
     {
-        $name = new OrganizationName('en', 'Names R US');
+        $name = new OrganizationName('en', 'Identity Providers R US');
 
         $this->assertEquals('en', $name->getLanguage());
-        $this->assertEquals('Names R US', $name->getValue());
+        $this->assertEquals('Identity Providers R US', $name->getValue());
 
         $this->assertEquals($this->document->saveXML($this->document->documentElement), strval($name));
     }
 
 
     /**
-     * Test that creating a LocalizedName from scratch with an empty language fails.
+     * Test that creating a OrganizationName from scratch with an empty language fails.
      */
     public function testMarshallingWithEmptyLang(): void
     {
         $this->expectException(AssertionFailedException::class);
         $this->expectExceptionMessage('xml:lang cannot be empty.');
 
-        new OrganizationName('', 'Names R US');
+        new OrganizationName('', 'Identity Providers R US');
     }
 
 
     /**
-     * Test that creating a LocalizedName from scratch with an empty value works.
+     * Test that creating a OrganizationName from scratch with an empty value works.
      */
     public function testMarshallingWithEmptyValue(): void
     {
@@ -81,7 +82,7 @@ final class LocalizedNameTest extends TestCase
 
 
     /**
-     * Test creating a LocalizedName from XML.
+     * Test creating a OrganizationName from XML.
      */
     public function testUnmarshalling(): void
     {
@@ -91,11 +92,11 @@ final class LocalizedNameTest extends TestCase
 
 
     /**
-     * Test that creating a LocalizedName from XML fails when xml:lang is missing.
+     * Test that creating a OrganizationName from XML fails when xml:lang is missing.
      */
     public function testUnmarshallingWithoutLang(): void
     {
-        $this->document->documentElement->removeAttributeNS(AbstractLocalizedName::XML_NS, 'lang');
+        $this->document->documentElement->removeAttributeNS(OrganizationName::XML_NS, 'lang');
 
         $this->expectException(AssertionFailedException::class);
         $this->expectExceptionMessage('Missing xml:lang from OrganizationName');
@@ -105,11 +106,11 @@ final class LocalizedNameTest extends TestCase
 
 
     /**
-     * Test that creating a LocalizedName from XML fails when xml:lang is empty.
+     * Test that creating a OrganizationName from XML fails when xml:lang is empty.
      */
     public function testUnmarshallingWithEmptyLang(): void
     {
-        $this->document->documentElement->setAttributeNS(AbstractLocalizedName::XML_NS, 'lang', '');
+        $this->document->documentElement->setAttributeNS(OrganizationName::XML_NS, 'lang', '');
 
         $this->expectException(AssertionFailedException::class);
         $this->expectExceptionMessage('xml:lang cannot be empty.');
@@ -119,7 +120,7 @@ final class LocalizedNameTest extends TestCase
 
 
     /**
-     * Test that creating a LocalizedName from XML works for empty values.
+     * Test that creating a OrganizationName from XML works for empty values.
      */
     public function testUnmarshallingWithEmptyValue(): void
     {

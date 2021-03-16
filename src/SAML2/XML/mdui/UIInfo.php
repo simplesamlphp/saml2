@@ -28,30 +28,30 @@ final class UIInfo extends AbstractMduiElement
     protected array $children = [];
 
     /**
-     * The DisplayName, as an array of language => translation.
+     * The DisplayName, as an array of DisplayName objects
      *
-     * @var string[]
+     * @var \SimpleSAML\SAML2\XML\mdui\DisplayName[]
      */
     protected array $DisplayName = [];
 
     /**
-     * The Description, as an array of language => translation.
+     * The Description, as an array of Description objects
      *
-     * @var string[]
+     * @var \SimpleSAML\SAML2\XML\mdui\Description[]
      */
     protected array $Description = [];
 
     /**
-     * The InformationURL, as an array of language => url.
+     * The InformationURL, as an array of InformationURL objects
      *
-     * @var string[]
+     * @var \SimpleSAML\SAML2\XML\mdui\InformationURL[]
      */
     protected array $InformationURL = [];
 
     /**
-     * The PrivacyStatementURL, as an array of language => url.
+     * The PrivacyStatementURL, as an array of PrivacyStatementURL objects
      *
-     * @var array
+     * @var \SimpleSAML\SAML2\XML\mdui\PrivacyStatementURL[]
      */
     protected array $PrivacyStatementURL = [];
 
@@ -73,10 +73,10 @@ final class UIInfo extends AbstractMduiElement
     /**
      * Create a UIInfo element.
      *
-     * @param string[] $DisplayName
-     * @param string[] $Description
-     * @param string[] $InformationURL
-     * @param string[] $PrivacyStatementURL
+     * @param \SimpleSAML\SAML2\XML\mdui\DisplayName[] $DisplayName
+     * @param \SimpleSAML\SAML2\XML\mdui\Description[] $Description
+     * @param \SimpleSAML\SAML2\XML\mdui\InformationURL[] $InformationURL
+     * @param \SimpleSAML\SAML2\XML\mdui\PrivacyStatementURL[] $PrivacyStatementURL
      * @param \SimpleSAML\SAML2\XML\mdui\Keywords[] $Keywords
      * @param \SimpleSAML\SAML2\XML\mdui\Logo[] $Logo
      * @param \SimpleSAML\XML\Chunk[] $children
@@ -140,7 +140,7 @@ final class UIInfo extends AbstractMduiElement
     /**
      * Collect the value of the DisplayName-property
      *
-     * @return string[]
+     * @return \SimpleSAML\SAML2\XML\mdui\DisplayName[]
      */
     public function getDisplayName(): array
     {
@@ -151,11 +151,11 @@ final class UIInfo extends AbstractMduiElement
     /**
      * Set the value of the DisplayName-property
      *
-     * @param string[] $displayName
+     * @param \SimpleSAML\SAML2\XML\mdui\DisplayName[] $displayName
      */
     private function setDisplayName(array $displayName): void
     {
-        Assert::allStringNotEmpty($displayName);
+        Assert::allIsInstanceOf($displayName, DisplayName::class);
 
         $this->DisplayName = $displayName;
     }
@@ -164,7 +164,7 @@ final class UIInfo extends AbstractMduiElement
     /**
      * Collect the value of the Description-property
      *
-     * @return string[]
+     * @return \SimpleSAML\SAML2\XML\mdui\Description[]
      */
     public function getDescription(): array
     {
@@ -175,11 +175,11 @@ final class UIInfo extends AbstractMduiElement
     /**
      * Set the value of the Description-property
      *
-     * @param string[] $description
+     * @param \SimpleSAML\SAML2\XML\mdui\Description[] $description
      */
     private function setDescription(array $description): void
     {
-        Assert::allStringNotEmpty($description);
+        Assert::allIsInstanceOf($description, Description::class);
 
         $this->Description = $description;
     }
@@ -187,7 +187,7 @@ final class UIInfo extends AbstractMduiElement
 
     /**
      * Collect the value of the InformationURL-property
-     * @return string[]
+     * @return \SimpleSAML\SAML2\XML\mdui\InformationURL[]
      */
     public function getInformationURL(): array
     {
@@ -198,11 +198,11 @@ final class UIInfo extends AbstractMduiElement
     /**
      * Set the value of the InformationURL-property
      *
-     * @param string[] $informationURL
+     * @param \SimpleSAML\SAML2\XML\mdui\InformationURL[] $informationURL
      */
     private function setInformationURL(array $informationURL): void
     {
-        Assert::allStringNotEmpty($informationURL);
+        Assert::allIsInstanceOf($informationURL, InformationURL::class);
 
         $this->InformationURL = $informationURL;
     }
@@ -211,7 +211,7 @@ final class UIInfo extends AbstractMduiElement
     /**
      * Collect the value of the PrivacyStatementURL-property
      *
-     * @return string[]
+     * @return \SimpleSAML\SAML2\XML\mdui\PrivacyStatementURL[]
      */
     public function getPrivacyStatementURL(): array
     {
@@ -222,11 +222,11 @@ final class UIInfo extends AbstractMduiElement
     /**
      * Set the value of the PrivacyStatementURL-property
      *
-     * @param string[] $privacyStatementURL
+     * @param \SimpleSAML\SAML2\XML\mdui\PrivacyStatementURL[] $privacyStatementURL
      */
     private function setPrivacyStatementURL(array $privacyStatementURL): void
     {
-        Assert::allStringNotEmpty($privacyStatementURL);
+        Assert::allIsInstanceOf($privacyStatementURL, PrivacyStatementURL::class);
 
         $this->PrivacyStatementURL = $privacyStatementURL;
     }
@@ -334,24 +334,17 @@ final class UIInfo extends AbstractMduiElement
         Assert::same($xml->localName, 'UIInfo', InvalidDOMElementException::class);
         Assert::same($xml->namespaceURI, UIInfo::NS, InvalidDOMElementException::class);
 
-        $DisplayName = XMLUtils::extractLocalizedStrings($xml, UIInfo::NS, 'DisplayName');
-        $Description = XMLUtils::extractLocalizedStrings($xml, UIInfo::NS, 'Description');
-        $InformationURL = XMLUtils::extractLocalizedStrings($xml, UIInfo::NS, 'InformationURL');
-        $PrivacyStatementURL = XMLUtils::extractLocalizedStrings($xml, UIInfo::NS, 'PrivacyStatementURL');
-        $Keywords = $Logo = $children = [];
+        $DisplayName = DisplayName::getChildrenOfClass($xml);
+        $Description = Description::getChildrenOfClass($xml);
+        $InformationURL = InformationURL::getChildrenOfClass($xml);
+        $PrivacyStatementURL = PrivacyStatementURL::getChildrenOfClass($xml);
+        $Keywords = Keywords::getChildrenOfClass($xml);
+        $Logo = Logo::getChildrenOfClass($xml);
+        $children = [];
 
         /** @var \DOMElement $node */
         foreach (XMLUtils::xpQuery($xml, './*') as $node) {
-            if ($node->namespaceURI === UIInfo::NS) {
-                switch ($node->localName) {
-                    case 'Keywords':
-                        $Keywords[] = Keywords::fromXML($node);
-                        break;
-                    case 'Logo':
-                        $Logo[] = Logo::fromXML($node);
-                        break;
-                }
-            } else {
+            if ($node->namespaceURI !== UIInfo::NS) {
                 $children[] = new Chunk($node);
             }
         }
@@ -378,10 +371,21 @@ final class UIInfo extends AbstractMduiElement
     {
         $e = $this->instantiateParentElement($parent);
 
-        XMLUtils::addStrings($e, UIInfo::NS, 'mdui:DisplayName', true, $this->DisplayName);
-        XMLUtils::addStrings($e, UIInfo::NS, 'mdui:Description', true, $this->Description);
-        XMLUtils::addStrings($e, UIInfo::NS, 'mdui:InformationURL', true, $this->InformationURL);
-        XMLUtils::addStrings($e, UIInfo::NS, 'mdui:PrivacyStatementURL', true, $this->PrivacyStatementURL);
+        foreach ($this->DisplayName as $child) {
+            $child->toXML($e);
+        }
+
+        foreach ($this->Description as $child) {
+            $child->toXML($e);
+        }
+
+        foreach ($this->InformationURL as $child) {
+            $child->toXML($e);
+        }
+
+        foreach ($this->PrivacyStatementURL as $child) {
+            $child->toXML($e);
+        }
 
         foreach ($this->Keywords as $child) {
             $child->toXML($e);

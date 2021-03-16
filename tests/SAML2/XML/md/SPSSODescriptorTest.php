@@ -18,6 +18,7 @@ use SimpleSAML\SAML2\XML\md\ManageNameIDService;
 use SimpleSAML\SAML2\XML\md\Organization;
 use SimpleSAML\SAML2\XML\md\OrganizationDisplayName;
 use SimpleSAML\SAML2\XML\md\OrganizationName;
+use SimpleSAML\SAML2\XML\md\OrganizationURL;
 use SimpleSAML\SAML2\XML\md\RequestedAttribute;
 use SimpleSAML\SAML2\XML\md\ServiceName;
 use SimpleSAML\SAML2\XML\md\SingleLogoutService;
@@ -115,7 +116,7 @@ final class SPSSODescriptorTest extends TestCase
         $org = new Organization(
             [new OrganizationName('en', 'Identity Providers R US')],
             [new OrganizationDisplayName('en', 'Identity Providers R US, a Division of Lerxst Corp.')],
-            ['en' => 'https://IdentityProvider.com']
+            [new OrganizationURL('en', 'https://IdentityProvider.com')]
         );
         $contact = new ContactPerson(
             'other',
