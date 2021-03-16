@@ -36,7 +36,7 @@ final class RegistrationInfo extends AbstractMdrpiElement
      *
      * This is an associative array with language=>URL.
      *
-     * @var array
+     * @var \SimpleSAML\SAML2\XML\mdrpi\RegistrationPolicy[]
      */
     protected array $RegistrationPolicy = [];
 
@@ -46,7 +46,7 @@ final class RegistrationInfo extends AbstractMdrpiElement
      *
      * @param string $registrationAuthority
      * @param int|null $registrationInstant
-     * @param array $RegistrationPolicy
+     * @param \SimpleSAML\SAML2\XML\mdrpi\RegistrationPolicy[] $RegistrationPolicy
      */
     public function __construct(
         string $registrationAuthority,
@@ -106,7 +106,7 @@ final class RegistrationInfo extends AbstractMdrpiElement
     /**
      * Collect the value of the RegistrationPolicy property
      *
-     * @return array
+     * @return \SimpleSAML\SAML2\XML\mdrpi\RegistrationPolicy[]
      */
     public function getRegistrationPolicy(): array
     {
@@ -117,11 +117,11 @@ final class RegistrationInfo extends AbstractMdrpiElement
     /**
      * Set the value of the RegistrationPolicy property
      *
-     * @param array $registrationPolicy
+     * @param \SimpleSAML\SAML2\XML\mdrpi\RegistrationPolicy[] $registrationPolicy
      */
     private function setRegistrationPolicy(array $registrationPolicy): void
     {
-        Assert::allStringNotEmpty($registrationPolicy);
+        Assert::allIsInstanceOf($registrationPolicy, RegistrationPolicy::class);
 
         $this->RegistrationPolicy = $registrationPolicy;
     }
@@ -146,7 +146,7 @@ final class RegistrationInfo extends AbstractMdrpiElement
         if ($registrationInstant !== null) {
             $registrationInstant = XMLUtils::xsDateTimeToTimestamp($registrationInstant);
         }
-        $RegistrationPolicy = XMLUtils::extractLocalizedStrings($xml, RegistrationInfo::NS, 'RegistrationPolicy');
+        $RegistrationPolicy = RegistrationPolicy::getChildrenOfClass($xml);
 
         return new self($registrationAuthority, $registrationInstant, $RegistrationPolicy);
     }
@@ -167,7 +167,10 @@ final class RegistrationInfo extends AbstractMdrpiElement
             $e->setAttribute('registrationInstant', gmdate('Y-m-d\TH:i:s\Z', $this->registrationInstant));
         }
 
-        XMLUtils::addStrings($e, RegistrationInfo::NS, 'mdrpi:RegistrationPolicy', true, $this->RegistrationPolicy);
+        foreach ($this->RegistrationPolicy as $rp) {
+            $rp->toXML($e);
+        }
+
         return $e;
     }
 }

@@ -24,6 +24,7 @@ use SimpleSAML\SAML2\XML\md\ServiceName;
 use SimpleSAML\SAML2\XML\md\SingleLogoutService;
 use SimpleSAML\SAML2\XML\md\SPSSODescriptor;
 use SimpleSAML\SAML2\XML\mdrpi\PublicationInfo;
+use SimpleSAML\SAML2\XML\mdrpi\UsagePolicy;
 use SimpleSAML\SAML2\XML\saml\AttributeValue;
 use SimpleSAML\Test\SAML2\SignedElementTestTrait;
 use SimpleSAML\XML\DOMDocumentFactory;
@@ -109,7 +110,7 @@ final class SPSSODescriptorTest extends TestCase
                 'http://publisher.ra/',
                 XMLUtils::xsDateTimeToTimestamp('2020-02-03T13:46:24Z'),
                 null,
-                ['en' => 'http://publisher.ra/policy.txt']
+                [new UsagePolicy('en', 'http://publisher.ra/policy.txt')]
             )
         ]);
         $kd = new KeyDescriptor(new KeyInfo([new KeyName('ServiceProvider.com SSO Key')]), 'signing');

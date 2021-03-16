@@ -5,23 +5,22 @@ declare(strict_types=1);
 namespace SimpleSAML\Test\SAML2\XML\md;
 
 use DOMDocument;
-use InvalidArgumentException;
 use PHPUnit\Framework\TestCase;
 use SimpleSAML\Assert\AssertionFailedException;
 use SimpleSAML\SAML2\Constants;
 use SimpleSAML\SAML2\XML\md\AbstractLocalizedName;
-use SimpleSAML\SAML2\XML\md\OrganizationURL;
+use SimpleSAML\SAML2\XML\mdui\DisplayName;
 use SimpleSAML\XML\DOMDocumentFactory;
 
 /**
  * Tests for localized names.
  *
- * @covers \SimpleSAML\SAML2\XML\md\OrganizationURL
+ * @covers \SimpleSAML\SAML2\XML\md\DisplayName
  * @covers \SimpleSAML\SAML2\XML\md\AbstractLocalizedName
  * @covers \SimpleSAML\SAML2\XML\md\AbstractMdElement
  * @package simplesamlphp/saml2
  */
-final class OrganizationURLTest extends TestCase
+final class DisplayNameTest extends TestCase
 {
     /** @var \DOMDocument */
     protected DOMDocument $document;
@@ -32,7 +31,7 @@ final class OrganizationURLTest extends TestCase
     protected function setUp(): void
     {
         $this->document = DOMDocumentFactory::fromFile(
-            dirname(dirname(dirname(dirname(__FILE__)))) . '/resources/xml/md_OrganizationURL.xml'
+            dirname(dirname(dirname(dirname(__FILE__)))) . '/resources/xml/mdui_DisplayName.xml'
         );
     }
 
@@ -41,37 +40,37 @@ final class OrganizationURLTest extends TestCase
 
 
     /**
-     * Test creating a OrganizationURL object from scratch.
+     * Test creating a DisplayName object from scratch.
      */
     public function testMarshalling(): void
     {
-        $name = new OrganizationURL('en', 'https://IdentityProvider.com');
+        $name = new DisplayName('en', 'University of Examples');
 
         $this->assertEquals('en', $name->getLanguage());
-        $this->assertEquals('https://IdentityProvider.com', $name->getValue());
+        $this->assertEquals('University of Examples', $name->getValue());
 
         $this->assertEquals($this->document->saveXML($this->document->documentElement), strval($name));
     }
 
 
     /**
-     * Test that creating a OrganizationURL from scratch with an empty language fails.
+     * Test that creating a DisplayName from scratch with an empty language fails.
      */
     public function testMarshallingWithEmptyLang(): void
     {
         $this->expectException(AssertionFailedException::class);
         $this->expectExceptionMessage('xml:lang cannot be empty.');
 
-        new OrganizationURL('', 'https://IdentityProvider.com');
+        new DisplayName('', 'University of Examples');
     }
 
 
     /**
-     * Test that creating a OrganizationURL from scratch with an empty value works.
+     * Test that creating a DisplayName from scratch with an empty value works.
      */
     public function testMarshallingWithEmptyValue(): void
     {
-        $name = new OrganizationURL('en', '');
+        $name = new DisplayName('en', '');
 
         $this->document->documentElement->textContent = '';
 
@@ -83,54 +82,54 @@ final class OrganizationURLTest extends TestCase
 
 
     /**
-     * Test creating a OrganizationURL from XML.
+     * Test creating a DisplayName from XML.
      */
     public function testUnmarshalling(): void
     {
-        $name = OrganizationURL::fromXML($this->document->documentElement);
+        $name = DisplayName::fromXML($this->document->documentElement);
         $this->assertEquals($this->document->saveXML($this->document->documentElement), strval($name));
     }
 
 
     /**
-     * Test that creating a OrganizationURL from XML fails when xml:lang is missing.
+     * Test that creating a DisplayName from XML fails when xml:lang is missing.
      */
     public function testUnmarshallingWithoutLang(): void
     {
-        $this->document->documentElement->removeAttributeNS(OrganizationURL::XML_NS, 'lang');
+        $this->document->documentElement->removeAttributeNS(DisplayName::XML_NS, 'lang');
 
         $this->expectException(AssertionFailedException::class);
-        $this->expectExceptionMessage('Missing xml:lang from OrganizationURL');
+        $this->expectExceptionMessage('Missing xml:lang from DisplayName');
 
-        OrganizationURL::fromXML($this->document->documentElement);
+        DisplayName::fromXML($this->document->documentElement);
     }
 
 
     /**
-     * Test that creating a OrganizationURL from XML fails when xml:lang is empty.
+     * Test that creating a DisplayName from XML fails when xml:lang is empty.
      */
     public function testUnmarshallingWithEmptyLang(): void
     {
-        $this->document->documentElement->setAttributeNS(OrganizationURL::XML_NS, 'lang', '');
+        $this->document->documentElement->setAttributeNS(DisplayName::XML_NS, 'lang', '');
 
         $this->expectException(AssertionFailedException::class);
         $this->expectExceptionMessage('xml:lang cannot be empty.');
 
-        OrganizationURL::fromXML($this->document->documentElement);
+        DisplayName::fromXML($this->document->documentElement);
     }
 
 
     /**
-     * Test that creating a OrganizationURL with an invalid url throws an exception
+     * Test that creating a DisplayName from XML works for empty values.
      */
-    public function testUnmarshallingFailsInvalidURL(): void
+    public function testUnmarshallingWithEmptyValue(): void
     {
-        $document = $this->document;
-        $document->documentElement->textContent = 'this is no url';
+        $this->document->documentElement->textContent = '';
+        $name = DisplayName::fromXML($this->document->documentElement);
 
-        $this->expectException(InvalidArgumentException::class);
-        $this->expectExceptionMessage('md:OrganizationURL is not a valid URL.');
-        OrganizationURL::fromXML($document->documentElement);
+        $this->assertEquals('en', $name->getLanguage());
+        $this->assertEquals('', $name->getValue());
+        $this->assertEquals($this->document->saveXML($this->document->documentElement), strval($name));
     }
 
 
@@ -141,7 +140,7 @@ final class OrganizationURLTest extends TestCase
     {
         $this->assertEquals(
             $this->document->saveXML($this->document->documentElement),
-            strval(unserialize(serialize(OrganizationURL::fromXML($this->document->documentElement))))
+            strval(unserialize(serialize(DisplayName::fromXML($this->document->documentElement))))
         );
     }
 }

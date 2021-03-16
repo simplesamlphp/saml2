@@ -19,7 +19,7 @@
   <md:Organization>
     <md:OrganizationName xml:lang="en">orgNameTest (en)</md:OrganizationName>
     <md:OrganizationDisplayName xml:lang="en">orgDispNameTest (en)</md:OrganizationDisplayName>
-    <md:OrganizationURL xml:lang="en">orgURL (en)</md:OrganizationURL>
+    <md:OrganizationURL xml:lang="en">https://IdentityProvider.com</md:OrganizationURL>
   </md:Organization>
   <md:ContactPerson contactType="support">
     <md:EmailAddress>mailto:help@example.edu</md:EmailAddress>

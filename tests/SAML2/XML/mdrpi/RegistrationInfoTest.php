@@ -7,6 +7,7 @@ namespace SimpleSAML\Test\SAML2\XML\mdrpi;
 use DOMDocument;
 use PHPUnit\Framework\TestCase;
 use SimpleSAML\SAML2\XML\mdrpi\RegistrationInfo;
+use SimpleSAML\SAML2\XML\mdrpi\RegistrationPolicy;
 use SimpleSAML\XML\DOMDocumentFactory;
 use SimpleSAML\XML\Exception\MissingAttributeException;
 use SimpleSAML\XML\Utils as XMLUtils;
@@ -42,8 +43,8 @@ final class RegistrationInfoTest extends TestCase
             'https://ExampleAuthority',
             1234567890,
             [
-                'en' => 'http://EnglishRegistrationPolicy',
-                'nl' => 'https://DutchRegistratiebeleid',
+                new RegistrationPolicy('en', 'http://EnglishRegistrationPolicy'),
+                new RegistrationPolicy('nl', 'https://DutchRegistratiebeleid'),
             ]
         );
 
@@ -95,8 +96,10 @@ final class RegistrationInfoTest extends TestCase
 
         $registrationPolicy = $registrationInfo->getRegistrationPolicy();
         $this->assertCount(2, $registrationPolicy);
-        $this->assertEquals('http://www.example.org/aai/metadata/en_registration.html', $registrationPolicy["en"]);
-        $this->assertEquals('http://www.example.org/aai/metadata/de_registration.html', $registrationPolicy["de"]);
+        $this->assertEquals('http://www.example.org/aai/metadata/en_registration.html', $registrationPolicy[0]->getValue());
+        $this->assertEquals('en', $registrationPolicy[0]->getLanguage());
+        $this->assertEquals('http://www.example.org/aai/metadata/de_registration.html', $registrationPolicy[1]->getValue());
+        $this->assertEquals('de', $registrationPolicy[1]->getLanguage());
     }
 
 

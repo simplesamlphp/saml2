@@ -27,6 +27,7 @@ use SimpleSAML\SAML2\XML\md\PDPDescriptor;
 use SimpleSAML\SAML2\XML\md\SingleSignOnService;
 use SimpleSAML\SAML2\XML\md\UnknownRoleDescriptor;
 use SimpleSAML\SAML2\XML\mdrpi\PublicationInfo;
+use SimpleSAML\SAML2\XML\mdrpi\UsagePolicy;
 use SimpleSAML\Test\SAML2\SignedElementTestTrait;
 use SimpleSAML\XML\DOMDocumentFactory;
 use SimpleSAML\XML\Exception\MissingAttributeException;
@@ -109,7 +110,7 @@ final class EntityDescriptorTest extends TestCase
         $org = new Organization(
             [new OrganizationName('en', 'orgNameTest (en)')],
             [new OrganizationDisplayName('en', 'orgDispNameTest (en)')],
-            [new OrganizationURL('en', 'orgURL (en)')]
+            [new OrganizationURL('en', 'https://IdentityProvider.com')]
         );
         $contacts = [
             new ContactPerson('support', null, null, null, null, ['help@example.edu']),
@@ -125,7 +126,7 @@ final class EntityDescriptorTest extends TestCase
                 'http://publisher.ra/',
                 XMLUtils::xsDateTimeToTimestamp('2020-02-03T13:46:24Z'),
                 null,
-                ['en' => 'http://publisher.ra/policy.txt']
+                [new UsagePolicy('en', 'http://publisher.ra/policy.txt')]
             )
         ]);
 
@@ -186,7 +187,7 @@ final class EntityDescriptorTest extends TestCase
   <md:Organization>
     <md:OrganizationName xml:lang="en">orgNameTest (en)</md:OrganizationName>
     <md:OrganizationDisplayName xml:lang="en">orgDispNameTest (en)</md:OrganizationDisplayName>
-    <md:OrganizationURL xml:lang="en">orgURL (en)</md:OrganizationURL>
+    <md:OrganizationURL xml:lang="en">https://IdentityProvider.com</md:OrganizationURL>
   </md:Organization>
   <md:ContactPerson contactType="support">
     <md:EmailAddress>mailto:help@example.edu</md:EmailAddress>
@@ -213,7 +214,7 @@ XML
         $org = new Organization(
             [new OrganizationName('en', 'orgNameTest (en)')],
             [new OrganizationDisplayName('en', 'orgDispNameTest (en)')],
-            [new OrganizationURL('en', 'orgURL (en)')]
+            [new OrganizationURL('en', 'https://IdentityProvider.com')]
         );
         $contacts = [
             new ContactPerson('support', null, null, null, null, ['help@example.edu']),
@@ -229,7 +230,7 @@ XML
                 'http://publisher.ra/',
                 XMLUtils::xsDateTimeToTimestamp('2020-02-03T13:46:24Z'),
                 null,
-                ['en' => 'http://publisher.ra/policy.txt']
+                [new UsagePolicy('en', 'http://publisher.ra/policy.txt')]
             )
         ]);
 
@@ -490,12 +491,12 @@ XML
   <Organization>
     <OrganizationName xml:lang="en">orgNameTest (en)</OrganizationName>
     <OrganizationDisplayName xml:lang="en">orgDispNameTest (en)</OrganizationDisplayName>
-    <OrganizationURL xml:lang="en">orgURL (en)</OrganizationURL>
+    <OrganizationURL xml:lang="en">https://IdentityProvider.com</OrganizationURL>
   </Organization>
   <Organization>
     <OrganizationName xml:lang="no">orgNameTest (no)</OrganizationName>
     <OrganizationDisplayName xml:lang="no">orgDispNameTest (no)</OrganizationDisplayName>
-    <OrganizationURL xml:lang="no">orgURL (no)</OrganizationURL>
+    <OrganizationURL xml:lang="no">https://IdentityProvider.com</OrganizationURL>
   </Organization>
 </EntityDescriptor>
 XML
@@ -526,7 +527,7 @@ XML
   <Organization>
     <OrganizationName xml:lang="en">orgNameTest (en)</OrganizationName>
     <OrganizationDisplayName xml:lang="en">orgDispNameTest (en)</OrganizationDisplayName>
-    <OrganizationURL xml:lang="en">orgURL (en)</OrganizationURL>
+    <OrganizationURL xml:lang="en">https://IdentityProvider.com</OrganizationURL>
   </Organization>
 </EntityDescriptor>
 XML

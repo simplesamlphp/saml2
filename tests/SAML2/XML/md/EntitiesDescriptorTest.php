@@ -11,6 +11,7 @@ use SimpleSAML\SAML2\XML\md\EntityDescriptor;
 use SimpleSAML\SAML2\XML\md\EntitiesDescriptor;
 use SimpleSAML\SAML2\XML\md\Extensions;
 use SimpleSAML\SAML2\XML\mdrpi\PublicationInfo;
+use SimpleSAML\SAML2\XML\mdrpi\UsagePolicy;
 use SimpleSAML\Test\SAML2\SignedElementTestTrait;
 use SimpleSAML\XML\DOMDocumentFactory;
 use SimpleSAML\XML\Utils as XMLUtils;
@@ -55,7 +56,7 @@ final class EntitiesDescriptorTest extends TestCase
                     'http://publisher.ra/',
                     XMLUtils::xsDateTimeToTimestamp('2020-02-03T13:46:24Z'),
                     null,
-                    ['en' => 'http://publisher.ra/policy.txt']
+                    [new UsagePolicy('en', 'http://publisher.ra/policy.txt')]
                 )
             ]
         );

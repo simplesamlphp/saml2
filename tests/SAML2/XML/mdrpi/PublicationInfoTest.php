@@ -7,6 +7,7 @@ namespace SimpleSAML\Test\SAML2\XML\mdrpi;
 use DOMDocument;
 use PHPUnit\Framework\TestCase;
 use SimpleSAML\SAML2\XML\mdrpi\PublicationInfo;
+use SimpleSAML\SAML2\XML\mdrpi\UsagePolicy;
 use SimpleSAML\XML\DOMDocumentFactory;
 use SimpleSAML\XML\Exception\MissingAttributeException;
 use SimpleSAML\XML\Utils as XMLUtils;
@@ -43,8 +44,8 @@ final class PublicationInfoTest extends TestCase
             1234567890,
             'PublicationIdValue',
             [
-                'en' => 'http://EnglishUsagePolicy',
-                'no' => 'http://NorwegianUsagePolicy',
+                new UsagePolicy('en', 'http://EnglishUsagePolicy'),
+                new UsagePolicy('no', 'http://NorwegianUsagePolicy'),
             ]
         );
 
@@ -95,8 +96,10 @@ final class PublicationInfoTest extends TestCase
 
         $usagePolicy = $publicationInfo->getUsagePolicy();
         $this->assertCount(2, $usagePolicy);
-        $this->assertEquals('http://TheEnglishUsagePolicy', $usagePolicy["en"]);
-        $this->assertEquals('http://TheNorwegianUsagePolicy', $usagePolicy["no"]);
+        $this->assertEquals('http://TheEnglishUsagePolicy', $usagePolicy[0]->getValue());
+        $this->assertEquals('en', $usagePolicy[0]->getLanguage());
+        $this->assertEquals('http://TheNorwegianUsagePolicy', $usagePolicy[1]->getValue());
+        $this->assertEquals('no', $usagePolicy[1]->getLanguage());
     }
 
 

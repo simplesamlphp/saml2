@@ -41,9 +41,9 @@ final class PublicationInfo extends AbstractMdrpiElement
     /**
      * Link to usage policy for this metadata.
      *
-     * This is an associative array with language=>URL.
+     * This is array of UsagePolicy objects.
      *
-     * @var array
+     * @var \SimpleSAML\SAML2\XML\mdrpi\UsagePolicy[]
      */
     protected array $UsagePolicy = [];
 
@@ -54,7 +54,7 @@ final class PublicationInfo extends AbstractMdrpiElement
      * @param string $publisher
      * @param int|null $creationInstant
      * @param string|null $publicationId
-     * @param array $UsagePolicy
+     * @param \SimpleSAML\SAML2\XML\mdrpi\UsagePolicy $UsagePolicy
      */
     public function __construct(
         string $publisher,
@@ -105,7 +105,7 @@ final class PublicationInfo extends AbstractMdrpiElement
     /**
      * Collect the value of the UsagePolicy-property
      *
-     * @return array
+     * @return \SimpleSAML\SAML2\XML\mdrpi\UsagePolicy
      */
     public function getUsagePolicy(): array
     {
@@ -149,11 +149,11 @@ final class PublicationInfo extends AbstractMdrpiElement
     /**
      * Set the value of the UsagePolicy-property
      *
-     * @param array $usagePolicy
+     * @param \SimpleSAML\SAML2\XML\mdrpi\UsagePolicy $usagePolicy
      */
     private function setUsagePolicy(array $usagePolicy): void
     {
-        Assert::allStringNotEmpty($usagePolicy);
+        Assert::allIsInstanceOf($usagePolicy, UsagePolicy::class);
 
         $this->UsagePolicy = $usagePolicy;
     }
@@ -180,7 +180,7 @@ final class PublicationInfo extends AbstractMdrpiElement
         }
 
         $publicationId = self::getAttribute($xml, 'publicationId', null);
-        $UsagePolicy = XMLUtils::extractLocalizedStrings($xml, PublicationInfo::NS, 'UsagePolicy');
+        $UsagePolicy = UsagePolicy::getChildrenOfClass($xml);
 
         return new self($publisher, $creationInstant, $publicationId, $UsagePolicy);
     }
@@ -205,7 +205,10 @@ final class PublicationInfo extends AbstractMdrpiElement
             $e->setAttribute('publicationId', $this->publicationId);
         }
 
-        XMLUtils::addStrings($e, PublicationInfo::NS, 'mdrpi:UsagePolicy', true, $this->UsagePolicy);
+        foreach ($this->UsagePolicy as $up) {
+            $up->toXML($e);
+        }
+
         return $e;
     }
 }

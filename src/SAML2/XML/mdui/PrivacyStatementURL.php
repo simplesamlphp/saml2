@@ -4,14 +4,15 @@ declare(strict_types=1);
 
 namespace SimpleSAML\SAML2\XML\mdui;
 
-use SimpleSAML\SAML2\XML\md\AbstractLocalizedName;
+use InvalidArgumentException;
+use SimpleSAML\SAML2\XML\md\AbstractLocalizedURI;
 
 /**
  * A localized name representing an entity's privacy statement url.
  *
  * @package simplesamlphp/saml2
  */
-final class PrivacyStatementURL extends AbstractLocalizedName
+final class PrivacyStatementURL extends AbstractLocalizedURI
 {
     /** @var string */
     public const NS = 'urn:oasis:names:tc:SAML:metadata:ui';
