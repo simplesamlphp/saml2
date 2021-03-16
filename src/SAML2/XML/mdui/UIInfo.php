@@ -49,9 +49,9 @@ final class UIInfo extends AbstractMduiElement
     protected array $InformationURL = [];
 
     /**
-     * The PrivacyStatementURL, as an array of language => url.
+     * The PrivacyStatementURL, as an array of PrivacyStatementURL objects
      *
-     * @var array
+     * @var \SimpleSAML\SAML2\XML\mdui\PrivacyStatementURL[]
      */
     protected array $PrivacyStatementURL = [];
 
@@ -76,7 +76,7 @@ final class UIInfo extends AbstractMduiElement
      * @param \SimpleSAML\SAML2\XML\mdui\DisplayName[] $DisplayName
      * @param \SimpleSAML\SAML2\XML\mdui\Description[] $Description
      * @param \SimpleSAML\SAML2\XML\mdui\InformationURL[] $InformationURL
-     * @param string[] $PrivacyStatementURL
+     * @param \SimpleSAML\SAML2\XML\mdui\PrivacyStatementURL[] $PrivacyStatementURL
      * @param \SimpleSAML\SAML2\XML\mdui\Keywords[] $Keywords
      * @param \SimpleSAML\SAML2\XML\mdui\Logo[] $Logo
      * @param \SimpleSAML\XML\Chunk[] $children
@@ -211,7 +211,7 @@ final class UIInfo extends AbstractMduiElement
     /**
      * Collect the value of the PrivacyStatementURL-property
      *
-     * @return string[]
+     * @return \SimpleSAML\SAML2\XML\mdui\PrivacyStatementURL[]
      */
     public function getPrivacyStatementURL(): array
     {
@@ -222,11 +222,11 @@ final class UIInfo extends AbstractMduiElement
     /**
      * Set the value of the PrivacyStatementURL-property
      *
-     * @param string[] $privacyStatementURL
+     * @param \SimpleSAML\SAML2\XML\mdui\PrivacyStatementURL[] $privacyStatementURL
      */
     private function setPrivacyStatementURL(array $privacyStatementURL): void
     {
-        Assert::allStringNotEmpty($privacyStatementURL);
+        Assert::allIsInstanceOf($privacyStatementURL, PrivacyStatementURL::class);
 
         $this->PrivacyStatementURL = $privacyStatementURL;
     }
@@ -334,8 +334,7 @@ final class UIInfo extends AbstractMduiElement
         Assert::same($xml->localName, 'UIInfo', InvalidDOMElementException::class);
         Assert::same($xml->namespaceURI, UIInfo::NS, InvalidDOMElementException::class);
 
-        $PrivacyStatementURL = XMLUtils::extractLocalizedStrings($xml, UIInfo::NS, 'PrivacyStatementURL');
-        $DisplayName = $Description = $InformationURL = $Keywords = $Logo = $children = [];
+        $DisplayName = $Description = $InformationURL = $PrivacyStatementURL = $Keywords = $Logo = $children = [];
 
         /** @var \DOMElement $node */
         foreach (XMLUtils::xpQuery($xml, './*') as $node) {
@@ -349,6 +348,9 @@ final class UIInfo extends AbstractMduiElement
                         break;
                     case 'InformationURL':
                         $InformationURL[] = InformationURL::fromXML($node);
+                        break;
+                    case 'PrivacyStatementURL':
+                        $PrivacyStatementURL[] = PrivacyStatementURL::fromXML($node);
                         break;
                     case 'Keywords':
                         $Keywords[] = Keywords::fromXML($node);
@@ -384,8 +386,6 @@ final class UIInfo extends AbstractMduiElement
     {
         $e = $this->instantiateParentElement($parent);
 
-        XMLUtils::addStrings($e, UIInfo::NS, 'mdui:PrivacyStatementURL', true, $this->PrivacyStatementURL);
-
         foreach ($this->DisplayName as $child) {
             $child->toXML($e);
         }
@@ -395,6 +395,10 @@ final class UIInfo extends AbstractMduiElement
         }
 
         foreach ($this->InformationURL as $child) {
+            $child->toXML($e);
+        }
+
+        foreach ($this->PrivacyStatementURL as $child) {
             $child->toXML($e);
         }
 
