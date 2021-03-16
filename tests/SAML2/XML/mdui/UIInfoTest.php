@@ -232,12 +232,17 @@ final class UIInfoTest extends TestCase
 
         $this->assertCount(2, $uiinfo->getDisplayName());
         $this->assertEquals('University of Examples', $uiinfo->getDisplayName()[0]->getValue());
+        $this->assertEquals('en', $uiinfo->getDisplayName()[0]->getLanguage());
         $this->assertEquals('Univërsitä øf Exåmpleß', $uiinfo->getDisplayName()[1]->getValue());
+        $this->assertEquals('el', $uiinfo->getDisplayName()[1]->getLanguage());
         $this->assertCount(2, $uiinfo->getInformationURL());
         $this->assertEquals('http://www.example.edu/en/', $uiinfo->getInformationURL()[0]->getValue());
+        $this->assertEquals('en', $uiinfo->getInformationURL()[0]->getLanguage());
         $this->assertEquals('http://www.example.edu/', $uiinfo->getInformationURL()[1]->getValue());
+        $this->assertEquals('el', $uiinfo->getInformationURL()[1]->getLanguage());
         $this->assertCount(1, $uiinfo->getPrivacyStatementURL());
         $this->assertEquals('https://example.org/privacy', $uiinfo->getPrivacyStatementURL()[0]->getValue());
+        $this->assertEquals('en', $uiinfo->getPrivacyStatementURL()[0]->getLanguage());
         $this->assertCount(1, $uiinfo->getDescription());
         $this->assertEquals('Just an example', $uiinfo->getDescription()[0]->getValue());
         $this->assertCount(1, $uiinfo->getLogo());
