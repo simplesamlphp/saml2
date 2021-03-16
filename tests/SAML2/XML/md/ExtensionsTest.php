@@ -14,6 +14,7 @@ use SimpleSAML\SAML2\XML\mdattr\EntityAttributes;
 use SimpleSAML\SAML2\XML\mdrpi\PublicationInfo;
 use SimpleSAML\SAML2\XML\mdrpi\RegistrationInfo;
 use SimpleSAML\SAML2\XML\mdui\DiscoHints;
+use SimpleSAML\SAML2\XML\mdui\DisplayName;
 use SimpleSAML\SAML2\XML\mdui\UIInfo;
 use SimpleSAML\SAML2\XML\shibmd\Scope;
 use SimpleSAML\XML\Chunk;
@@ -56,7 +57,7 @@ final class ExtensionsTest extends TestCase
         $scope = new Scope('SomeScope');
         $ra = new RegistrationInfo('SomeAuthority');
         $pubInfo = new PublicationInfo('SomePublisher');
-        $uiinfo = new UIInfo(['en' => 'Example']);
+        $uiinfo = new UIInfo([new DisplayName('en', 'Example')]);
         $discoHints = new DiscoHints([], ['127.0.0.1']);
         $digestMethod = new DigestMethod('SomeAlgorithm');
         $signingMethod = new SigningMethod('SomeOtherAlgorithm', 1024, 4096);
