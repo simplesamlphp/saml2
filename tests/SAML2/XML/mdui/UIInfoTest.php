@@ -15,6 +15,7 @@ use SimpleSAML\SAML2\XML\mdui\Keywords;
 use SimpleSAML\SAML2\XML\mdui\Logo;
 use SimpleSAML\SAML2\XML\mdui\PrivacyStatementURL;
 use SimpleSAML\SAML2\XML\mdui\UIInfo;
+use SimpleSAML\Test\XML\ArrayizableXMLTestTrait;
 use SimpleSAML\Test\XML\SerializableXMLTestTrait;
 use SimpleSAML\XML\Chunk;
 use SimpleSAML\XML\DOMDocumentFactory;
@@ -29,6 +30,7 @@ use SimpleSAML\XML\Utils as XMLUtils;
  */
 final class UIInfoTest extends TestCase
 {
+    use ArrayizableXMLTestTrait;
     use SerializableXMLTestTrait;
 
 
@@ -41,6 +43,15 @@ final class UIInfoTest extends TestCase
         $this->xmlRepresentation = DOMDocumentFactory::fromFile(
             dirname(dirname(dirname(dirname(__FILE__)))) . '/resources/xml/mdui_UIInfo.xml'
         );
+
+        $this->arrayRepresentation = [
+            'DisplayName' => ["nl" => "Voorbeeld", "en" => "Example"],
+            'Description' => ["nl" => "Omschrijving", "en" => "Description"],
+            'InformationURL' => ["nl" => "https://voorbeeld.nl/", "en" => "https://example.org"],
+            'PrivacyStatementURL' => ["nl" => "https://voorbeeld.nl/privacy", "en" => "https://example.org/privacy"],
+            'Keywords' => ['en' => ['keyword']],
+            'Logo' => [['url' => 'https://example.edu/logo.png', 'height' => 30, 'width' => 20, 'lang' => 'nl']],
+        ];
     }
 
 

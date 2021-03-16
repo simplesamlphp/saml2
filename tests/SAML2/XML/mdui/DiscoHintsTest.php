@@ -8,6 +8,7 @@ use DOMDocument;
 use PHPUnit\Framework\TestCase;
 use SimpleSAML\SAML2\XML\mdui\DiscoHints;
 use SimpleSAML\SAML2\XML\mdui\Keywords;
+use SimpleSAML\Test\XML\ArrayizableXMLTestTrait;
 use SimpleSAML\Test\XML\SerializableXMLTestTrait;
 use SimpleSAML\XML\Chunk;
 use SimpleSAML\XML\DOMDocumentFactory;
@@ -22,6 +23,7 @@ use SimpleSAML\XML\Utils as XMLUtils;
  */
 final class DiscoHintsTest extends TestCase
 {
+    use ArrayizableXMLTestTrait;
     use SerializableXMLTestTrait;
 
 
@@ -34,6 +36,12 @@ final class DiscoHintsTest extends TestCase
         $this->xmlRepresentation = DOMDocumentFactory::fromFile(
             dirname(dirname(dirname(dirname(__FILE__)))) . '/resources/xml/mdui_DiscoHints.xml'
         );
+
+        $this->arrayRepresentation = [
+            'IPHint' => ["130.59.0.0/16", "2001:620::0/96"],
+            'DomainHint' => ["example.com", "www.example.com"],
+            'GeolocationHint' => ["geo:47.37328,8.531126", "geo:19.34343,12.342514"],
+        ];
     }
 
 

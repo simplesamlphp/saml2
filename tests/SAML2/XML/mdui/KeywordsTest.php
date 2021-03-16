@@ -10,6 +10,7 @@ use SimpleSAML\Assert\AssertionFailedException;
 use SimpleSAML\SAML2\XML\mdui\Keywords;
 use SimpleSAML\XML\DOMDocumentFactory;
 use SimpleSAML\XML\Exception\MissingAttributeException;
+use SimpleSAML\Test\XML\ArrayizableXMLTestTrait;
 use SimpleSAML\Test\XML\SerializableXMLTestTrait;
 use SimpleSAML\XML\Utils as XMLUtils;
 
@@ -22,6 +23,7 @@ use SimpleSAML\XML\Utils as XMLUtils;
  */
 final class KeywordsTest extends TestCase
 {
+    use ArrayizableXMLTestTrait;
     use SerializableXMLTestTrait;
 
 
@@ -34,6 +36,10 @@ final class KeywordsTest extends TestCase
         $this->xmlRepresentation = DOMDocumentFactory::fromFile(
             dirname(dirname(dirname(dirname(__FILE__)))) . '/resources/xml/mdui_Keywords.xml'
         );
+
+        $this->arrayRepresentation = [
+            'en' => ["KLM", "royal", "Dutch"]
+        ];
     }
 
 

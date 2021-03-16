@@ -238,4 +238,35 @@ final class DiscoHints extends AbstractMduiElement
 
         return $e;
     }
+
+
+    /**
+     * Create a class from an array
+     *
+     * @param array $data
+     * @return self
+     */
+    public static function fromArray(array $data): object
+    {
+        $IPHint = $data['IPHint'] ?? [];
+        $DomainHint = $data['DomainHint'] ?? [];
+        $GeolocationHint = $data['GeolocationHint'] ?? [];
+
+        return new self([], $IPHint, $DomainHint, $GeolocationHint);
+    }
+
+
+    /**
+     * Create an array from this class
+     *
+     * @return array
+     */
+    public function toArray(): array
+    {
+        return [
+            'IPHint' => $this->IPHint,
+            'DomainHint' => $this->DomainHint,
+            'GeolocationHint' => $this->GeolocationHint
+        ];
+    }
 }

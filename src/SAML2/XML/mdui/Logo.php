@@ -202,4 +202,34 @@ final class Logo extends AbstractMduiElement
 
         return $e;
     }
+
+
+    /**
+     * Create a class from an array
+     *
+     * @param array $data
+     * @return self
+     */
+    public static function fromArray(array $data): object
+    {
+        Assert::keyExists($data, 'url');
+
+        $Url = $data['url'];
+        $Width = $data['width'] ?? null;
+        $Height = $data['height'] ?? null;
+        $lang = $data['lang'] ?? null;
+
+        return new self($Url, $Height, $Width, $lang);
+    }
+
+
+    /**
+     * Create an array from this class
+     *
+     * @return array
+     */
+    public function toArray(): array
+    {
+        return ['url' => $this->url, 'width' => $this->width, 'height' => $this->height, 'lang' => $this->lang];
+    }
 }

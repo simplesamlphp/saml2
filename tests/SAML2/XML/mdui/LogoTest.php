@@ -11,6 +11,7 @@ use SimpleSAML\Assert\AssertionFailedException;
 use SimpleSAML\SAML2\XML\mdui\Logo;
 use SimpleSAML\XML\DOMDocumentFactory;
 use SimpleSAML\XML\Exception\MissingAttributeException;
+use SimpleSAML\Test\XML\ArrayizableXMLTestTrait;
 use SimpleSAML\Test\XML\SerializableXMLTestTrait;
 use SimpleSAML\XML\Utils as XMLUtils;
 
@@ -23,6 +24,7 @@ use SimpleSAML\XML\Utils as XMLUtils;
  */
 final class LogoTest extends TestCase
 {
+    use ArrayizableXMLTestTrait;
     use SerializableXMLTestTrait;
 
 
@@ -44,6 +46,13 @@ IMG;
         $this->xmlRepresentation = DOMDocumentFactory::fromFile(
             dirname(dirname(dirname(dirname(__FILE__)))) . '/resources/xml/mdui_Logo.xml'
         );
+
+        $this->arrayRepresentation = [
+            'url' => 'https://static.example.org/images/logos/logo300x200.png',
+            'width' => 300,
+            'height' => 200,
+            'lang' => 'en',
+        ];
     }
 
 

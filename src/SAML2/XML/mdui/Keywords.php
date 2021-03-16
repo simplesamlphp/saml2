@@ -156,4 +156,33 @@ final class Keywords extends AbstractMduiElement
 
         return $e;
     }
+
+
+    /**
+     * Create a class from an array
+     *
+     * @param array $data
+     * @return self
+     */
+    public static function fromArray(array $data): object
+    {
+        Assert::notEmpty($data);
+        Assert::count($data, 1);
+
+        $lang = array_key_first($data);
+        $keywords = $data[$lang];
+
+        return new self($lang, $keywords);
+    }
+
+
+    /**
+     * Create an array from this class
+     *
+     * @return array
+     */
+    public function toArray(): array
+    {
+        return [$this->lang => $this->Keywords];
+    }
 }
