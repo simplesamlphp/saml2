@@ -42,9 +42,9 @@ final class UIInfo extends AbstractMduiElement
     protected array $Description = [];
 
     /**
-     * The InformationURL, as an array of language => url.
+     * The InformationURL, as an array of InformationURL objects
      *
-     * @var string[]
+     * @var \SimpleSAML\SAML2\XML\mdui\InformationURL[]
      */
     protected array $InformationURL = [];
 
@@ -75,7 +75,7 @@ final class UIInfo extends AbstractMduiElement
      *
      * @param \SimpleSAML\SAML2\XML\mdui\DisplayName[] $DisplayName
      * @param \SimpleSAML\SAML2\XML\mdui\Description[] $Description
-     * @param string[] $InformationURL
+     * @param \SimpleSAML\SAML2\XML\mdui\InformationURL[] $InformationURL
      * @param string[] $PrivacyStatementURL
      * @param \SimpleSAML\SAML2\XML\mdui\Keywords[] $Keywords
      * @param \SimpleSAML\SAML2\XML\mdui\Logo[] $Logo
@@ -187,7 +187,7 @@ final class UIInfo extends AbstractMduiElement
 
     /**
      * Collect the value of the InformationURL-property
-     * @return string[]
+     * @return \SimpleSAML\SAML2\XML\mdui\InformationURL[]
      */
     public function getInformationURL(): array
     {
@@ -198,11 +198,11 @@ final class UIInfo extends AbstractMduiElement
     /**
      * Set the value of the InformationURL-property
      *
-     * @param string[] $informationURL
+     * @param \SimpleSAML\SAML2\XML\mdui\InformationURL[] $informationURL
      */
     private function setInformationURL(array $informationURL): void
     {
-        Assert::allStringNotEmpty($informationURL);
+        Assert::allIsInstanceOf($informationURL, InformationURL::class);
 
         $this->InformationURL = $informationURL;
     }
@@ -334,9 +334,8 @@ final class UIInfo extends AbstractMduiElement
         Assert::same($xml->localName, 'UIInfo', InvalidDOMElementException::class);
         Assert::same($xml->namespaceURI, UIInfo::NS, InvalidDOMElementException::class);
 
-        $InformationURL = XMLUtils::extractLocalizedStrings($xml, UIInfo::NS, 'InformationURL');
         $PrivacyStatementURL = XMLUtils::extractLocalizedStrings($xml, UIInfo::NS, 'PrivacyStatementURL');
-        $DisplayName = $Description = $Keywords = $Logo = $children = [];
+        $DisplayName = $Description = $InformationURL = $Keywords = $Logo = $children = [];
 
         /** @var \DOMElement $node */
         foreach (XMLUtils::xpQuery($xml, './*') as $node) {
@@ -347,6 +346,9 @@ final class UIInfo extends AbstractMduiElement
                         break;
                     case 'Description':
                         $Description[] = Description::fromXML($node);
+                        break;
+                    case 'InformationURL':
+                        $InformationURL[] = InformationURL::fromXML($node);
                         break;
                     case 'Keywords':
                         $Keywords[] = Keywords::fromXML($node);
@@ -382,7 +384,6 @@ final class UIInfo extends AbstractMduiElement
     {
         $e = $this->instantiateParentElement($parent);
 
-        XMLUtils::addStrings($e, UIInfo::NS, 'mdui:InformationURL', true, $this->InformationURL);
         XMLUtils::addStrings($e, UIInfo::NS, 'mdui:PrivacyStatementURL', true, $this->PrivacyStatementURL);
 
         foreach ($this->DisplayName as $child) {
@@ -390,6 +391,10 @@ final class UIInfo extends AbstractMduiElement
         }
 
         foreach ($this->Description as $child) {
+            $child->toXML($e);
+        }
+
+        foreach ($this->InformationURL as $child) {
             $child->toXML($e);
         }
 
