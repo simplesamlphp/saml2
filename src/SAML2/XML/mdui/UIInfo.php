@@ -334,32 +334,17 @@ final class UIInfo extends AbstractMduiElement
         Assert::same($xml->localName, 'UIInfo', InvalidDOMElementException::class);
         Assert::same($xml->namespaceURI, UIInfo::NS, InvalidDOMElementException::class);
 
-        $DisplayName = $Description = $InformationURL = $PrivacyStatementURL = $Keywords = $Logo = $children = [];
+        $DisplayName = DisplayName::getChildrenOfClass($xml);
+        $Description = Description::getChildrenOfClass($xml);
+        $InformationURL = InformationURL::getChildrenOfClass($xml);
+        $PrivacyStatementURL = PrivacyStatementURL::getChildrenOfClass($xml);
+        $Keywords = Keywords::getChildrenOfClass($xml);
+        $Logo = Logo::getChildrenOfClass($xml);
+        $children = [];
 
         /** @var \DOMElement $node */
         foreach (XMLUtils::xpQuery($xml, './*') as $node) {
-            if ($node->namespaceURI === UIInfo::NS) {
-                switch ($node->localName) {
-                    case 'DisplayName':
-                        $DisplayName[] = DisplayName::fromXML($node);
-                        break;
-                    case 'Description':
-                        $Description[] = Description::fromXML($node);
-                        break;
-                    case 'InformationURL':
-                        $InformationURL[] = InformationURL::fromXML($node);
-                        break;
-                    case 'PrivacyStatementURL':
-                        $PrivacyStatementURL[] = PrivacyStatementURL::fromXML($node);
-                        break;
-                    case 'Keywords':
-                        $Keywords[] = Keywords::fromXML($node);
-                        break;
-                    case 'Logo':
-                        $Logo[] = Logo::fromXML($node);
-                        break;
-                }
-            } else {
+            if ($node->namespaceURI !== UIInfo::NS) {
                 $children[] = new Chunk($node);
             }
         }
