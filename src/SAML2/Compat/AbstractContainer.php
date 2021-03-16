@@ -5,22 +5,24 @@ declare(strict_types=1);
 namespace SimpleSAML\SAML2\Compat;
 
 use Psr\Log\LoggerInterface;
+use SimpleSAML\Assert\Assert;
 use SimpleSAML\XML\AbstractXMLElement;
+use SimpleSAML\XML\saml\CustomIdentifierInterface;
 
-interface ContainerInterface
+abstract class AbstractContainer
 {
     /**
      * Get a PSR-3 compatible logger.
      * @return \Psr\Log\LoggerInterface
      */
-    public function getLogger(): LoggerInterface;
+    abstract public function getLogger(): LoggerInterface;
 
 
     /**
      * Generate a random identifier for identifying SAML2 documents.
      * @return string
      */
-    public function generateId(): string;
+    abstract public function generateId(): string;
 
 
     /**
@@ -35,8 +37,7 @@ interface ContainerInterface
      * @param \DOMElement|string $message
      * @param string $type
      */
-    public function debugMessage($message, string $type): void;
-
+    abstract public function debugMessage($message, string $type): void;
 
 
     /**
@@ -45,7 +46,7 @@ interface ContainerInterface
      * @param string $url
      * @param array $data
      */
-    public function redirect(string $url, array $data = []): void;
+    abstract public function redirect(string $url, array $data = []): void;
 
 
     /**
@@ -54,7 +55,7 @@ interface ContainerInterface
      * @param string $url
      * @param array $data
      */
-    public function postRedirect(string $url, array $data = []): void;
+    abstract public function postRedirect(string $url, array $data = []): void;
 
 
     /**
@@ -64,7 +65,7 @@ interface ContainerInterface
      * to the current user.
      * @return string Path to a temporary directory, without a trailing directory separator.
      */
-    public function getTempDir(): string;
+    abstract public function getTempDir(): string;
 
 
     /**
@@ -77,7 +78,7 @@ interface ContainerInterface
      * @param string $data The data we should write to the file.
      * @param int $mode The permissions to apply to the file. Defaults to 0600.
      */
-    public function writeFile(string $filename, string $data, int $mode = null): void;
+    abstract public function writeFile(string $filename, string $data, int $mode = null): void;
 
 
     /**
@@ -86,7 +87,16 @@ interface ContainerInterface
      * @param string $class The class name of a class extending AbstractXMLElement or BaseID.
      * @psalm-param class-string $class
      */
-    public function registerExtensionHandler(string $class): void;
+    public function registerExtensionHandler(string $class): void
+    {
+        Assert::subclassOf($class, AbstractXMLElement::class);
+        if (is_subclass_of($class, CustomIdentifierInterface::class, true)) {
+            $key = $class::getXsiType() . ':BaseID';
+        } else {
+            $key = join(':', [urlencode($class::NS), AbstractXMLElement::getClassName($class)]);
+        }
+        $this->registry[$key] = $class;
+    }
 
 
     /**
@@ -102,7 +112,12 @@ interface ContainerInterface
      * implementing support for the given element, or null if no such class has been registered before.
      * @psalm-return class-string|null
      */
-    public function getElementHandler(string $namespace, string $element): ?string;
+    public function getElementHandler(string $namespace, string $element): ?string
+    {
+        Assert::notEmpty($namespace, 'Cannot search for handlers without an associated namespace URI.');
+        Assert::notEmpty($element, 'Cannot search for handlers without an associated element name.');
+        return $this->registry[join(':', [urlencode($namespace), $element])];
+    }
 
 
     /**
@@ -117,5 +132,10 @@ interface ContainerInterface
      * or null if no such class has been registered before.
      * @psalm-return class-string|null
      */
-    public function getIdentifierHandler(string $type): ?string;
+    public function getIdentifierHandler(string $type): ?string
+    {
+        Assert::notEmpty($type, 'Cannot search for identifier handlers with an empty type.');
+        $handler = $type . ':BaseID';
+        return array_key_exists($handler, $this->registry) ? $this->registry[$handler] : null;
+    }
 }

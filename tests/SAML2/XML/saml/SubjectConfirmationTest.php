@@ -7,7 +7,7 @@ namespace SimpleSAML\Test\SAML2\XML\saml;
 use DOMDocument;
 use Mockery;
 use PHPUnit\Framework\TestCase;
-use SimpleSAML\SAML2\Compat\ContainerInterface;
+use SimpleSAML\SAML2\Compat\AbstractContainer;
 use SimpleSAML\SAML2\Compat\ContainerSingleton;
 use SimpleSAML\SAML2\Constants;
 use SimpleSAML\SAML2\XML\saml\BaseID;
@@ -235,7 +235,7 @@ XML
     public function testCustomIDHandler(): void
     {
         $container = ContainerSingleton::getInstance();
-        $mock = Mockery::mock(ContainerInterface::class);
+        $mock = Mockery::mock(AbstractContainer::class);
         /**
          * @psalm-suppress UndefinedMagicMethod
          * @psalm-suppress InvalidArgument

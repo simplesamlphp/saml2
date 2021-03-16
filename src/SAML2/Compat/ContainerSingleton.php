@@ -9,14 +9,14 @@ use SimpleSAML\SAML2\Compat\Ssp\Container;
 
 class ContainerSingleton
 {
-    /** @var \SimpleSAML\SAML2\Compat\ContainerInterface|null */
-    protected static ?ContainerInterface $container = null;
+    /** @var \SimpleSAML\SAML2\Compat\AbstractContainer|null */
+    protected static ?AbstractContainer $container = null;
 
 
     /**
-     * @return \SimpleSAML\SAML2\Compat\ContainerInterface|null
+     * @return \SimpleSAML\SAML2\Compat\AbstractContainer|null
      */
-    public static function getInstance(): ?ContainerInterface
+    public static function getInstance(): ?AbstractContainer
     {
         return self::$container;
     }
@@ -25,9 +25,9 @@ class ContainerSingleton
     /**
      * Set a container to use.
      *
-     * @param \SimpleSAML\SAML2\Compat\ContainerInterface $container
+     * @param \SimpleSAML\SAML2\Compat\AbstractContainer $container
      */
-    public static function setContainer(ContainerInterface $container): void
+    public static function setContainer(AbstractContainer $container): void
     {
         self::$container = $container;
     }

@@ -5,7 +5,7 @@ declare(strict_types=1);
 namespace SimpleSAML\SAML2;
 
 use SimpleSAML\Assert\Assert;
-use SimpleSAML\SAML2\Compat\ContainerInterface;
+use SimpleSAML\SAML2\Compat\AbstractContainer;
 use SimpleSAML\SAML2\Compat\ContainerSingleton;
 use SimpleSAML\SAML2\XML\md\KeyDescriptor;
 use SimpleSAML\XMLSecurity\XML\ds\KeyInfo;
@@ -40,9 +40,9 @@ class Utils
 
 
     /**
-     * @return \SimpleSAML\SAML2\Compat\ContainerInterface
+     * @return \SimpleSAML\SAML2\Compat\AbstractContainer
      */
-    public static function getContainer(): ContainerInterface
+    public static function getContainer(): AbstractContainer
     {
         return ContainerSingleton::getInstance();
     }
