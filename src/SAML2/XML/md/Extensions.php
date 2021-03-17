@@ -97,37 +97,6 @@ final class Extensions extends AbstractMdElement
             }
         }
 
-        /**
-         * The <mdrpi:PublicationInfo> element MUST NOT appear more than once within the <md:Extensions> element
-         *  of a given <md:EntitiesDescriptor>or <md:EntityDescriptor> element.
-         */
-        $pi = array_values(array_filter($ret, function ($statement) {
-            return $statement instanceof PublicationInfo;
-        }));
-        Assert::maxCount(
-            $pi,
-            1,
-            'The <mdrpi:PublicationInfo> element MUST NOT appear more than once within the <md:Extensions> element'
-            . ' of a given <md:EntitiesDescriptor> or <md:EntityDescriptor> element.',
-            ProtocolViolationException::class
-        );
-
-
-        /**
-         * The <mdrpi:RegistrationInfo> element MUST NOT appear more than once within the <md:Extensions> element
-         *  of a given <md:EntitiesDescriptor>or <md:EntityDescriptor> element.
-         */
-        $ri = array_values(array_filter($ret, function ($statement) {
-            return $statement instanceof RegistrationInfo;
-        }));
-        Assert::maxCount(
-            $ri,
-            1,
-            'The <mdrpi:RegistrationInfo> element MUST NOT appear more than once within the <md:Extensions> element'
-            . ' of a given <md:EntitiesDescriptor> or <md:EntityDescriptor> element.',
-            ProtocolViolationException::class
-        );
-
         return new self($ret);
     }
 }
