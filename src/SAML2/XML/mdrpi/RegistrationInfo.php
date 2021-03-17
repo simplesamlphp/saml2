@@ -6,6 +6,7 @@ namespace SimpleSAML\SAML2\XML\mdrpi;
 
 use DOMElement;
 use SimpleSAML\Assert\Assert;
+use SimpleSAML\SAML2\Exception\ProtocolViolationException;
 use SimpleSAML\XML\Exception\InvalidDOMElementException;
 use SimpleSAML\XML\Utils as XMLUtils;
 
@@ -123,6 +124,23 @@ final class RegistrationInfo extends AbstractMdrpiElement
     {
         Assert::allIsInstanceOf($registrationPolicy, RegistrationPolicy::class);
 
+        /**
+         * 2.1.1:  There MUST NOT be more than one <mdrpi:RegistrationPolicy>,
+         *         within a given <mdrpi:RegistrationInfo>, for a given language
+         */
+        $languages = array_map(
+            function ($rp) {
+                return $rp->getLanguage();
+            },
+            $registrationPolicy
+        );
+        Assert::uniqueValues(
+            $languages,
+            'There MUST NOT be more than one <mdrpi:RegistrationPolicy>,'
+            . ' within a given <mdrpi:RegistrationInfo>, for a given language',
+            ProtocolViolationException::class
+        );
+
         $this->RegistrationPolicy = $registrationPolicy;
     }
 
@@ -133,8 +151,10 @@ final class RegistrationInfo extends AbstractMdrpiElement
      * @param \DOMElement $xml The XML element we should load
      * @return self
      *
-     * @throws \SimpleSAML\XML\Exception\InvalidDOMElementException if the qualified name of the supplied element is wrong
-     * @throws \SimpleSAML\XML\Exception\MissingAttributeException if the supplied element is missing one of the mandatory attributes
+     * @throws \SimpleSAML\XML\Exception\InvalidDOMElementException
+     *   if the qualified name of the supplied element is wrong
+     * @throws \SimpleSAML\XML\Exception\MissingAttributeException
+     *   if the supplied element is missing one of the mandatory attributes
      */
     public static function fromXML(DOMElement $xml): object
     {
@@ -143,6 +163,17 @@ final class RegistrationInfo extends AbstractMdrpiElement
 
         $registrationAuthority = self::getAttribute($xml, 'registrationAuthority');
         $registrationInstant = self::getAttribute($xml, 'registrationInstant', null);
+
+        // 2.1.1:  Time values MUST be expressed in the UTC timezone using the 'Z' timezone identifier
+        if ($registrationInstant !== null) {
+            Assert::same(
+                substr($registrationInstant, -1),
+                'Z',
+                "Time values MUST be expressed in the UTC timezone using the 'Z' timezone identifier.",
+                ProtocolViolationException::class
+            );
+        }
+
         if ($registrationInstant !== null) {
             $registrationInstant = XMLUtils::xsDateTimeToTimestamp($registrationInstant);
         }

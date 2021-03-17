@@ -7,6 +7,7 @@ namespace SimpleSAML\Test\SAML2\XML\md;
 use DOMDocument;
 use PHPUnit\Framework\TestCase;
 use SimpleSAML\SAML2\Constants;
+use SimpleSAML\SAML2\Exception\ProtocolViolationException;
 use SimpleSAML\SAML2\XML\alg\DigestMethod;
 use SimpleSAML\SAML2\XML\alg\SigningMethod;
 use SimpleSAML\SAML2\XML\md\Extensions;
@@ -76,6 +77,42 @@ final class ExtensionsTest extends TestCase
             $this->document->saveXML($this->document->documentElement),
             strval($extensions)
         );
+    }
+
+
+    /**
+     * Adding multiple RegistrationInfo extensions should throw an exception.
+     */
+    public function testMarshallingWithMultipleRegistrationInfoExtensions(): void
+    {
+        $regInfo1 = new RegistrationInfo('SomeAuthority');
+        $regInfo2 = new RegistrationInfo('SomeOtherAuthority');
+
+        $this->expectException(ProtocolViolationException::class);
+        $this->expectExceptionMessage(
+            'The <mdrpi:RegistrationInfo> element MUST NOT appear more than once within the <md:Extensions> element'
+            . ' of a given <md:EntitiesDescriptor> or <md:EntityDescriptor> element.'
+        );
+        $extensions = new Extensions([$regInfo1, $regInfo2]);
+        Extensions::fromXML($extensions->toXML());
+    }
+
+
+    /**
+     * Adding multiple PublicationInfo extensions should throw an exception.
+     */
+    public function testMarshallingWithMultiplePublicationInfoExtensions(): void
+    {
+        $pubInfo1 = new PublicationInfo('SomePublisher');
+        $pubInfo2 = new PublicationInfo('SomeOtherPublisher');
+
+        $this->expectException(ProtocolViolationException::class);
+        $this->expectExceptionMessage(
+            'The <mdrpi:PublicationInfo> element MUST NOT appear more than once within the <md:Extensions> element'
+            . ' of a given <md:EntitiesDescriptor> or <md:EntityDescriptor> element.'
+        );
+        $extensions = new Extensions([$pubInfo1, $pubInfo2]);
+        Extensions::fromXML($extensions->toXML());
     }
 
 

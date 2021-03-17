@@ -6,6 +6,7 @@ namespace SimpleSAML\SAML2\XML\mdrpi;
 
 use DOMElement;
 use SimpleSAML\Assert\Assert;
+use SimpleSAML\SAML2\Exception\ProtocolViolationException;
 use SimpleSAML\XML\Exception\InvalidDOMElementException;
 use SimpleSAML\XML\Utils as XMLUtils;
 
@@ -155,6 +156,23 @@ final class PublicationInfo extends AbstractMdrpiElement
     {
         Assert::allIsInstanceOf($usagePolicy, UsagePolicy::class);
 
+        /**
+         * 2.2.1:  There MUST NOT be more than one <mdrpi:UsagePolicy>,
+         *         within a given <mdrpi:UsageInfo>, for a given language
+         */
+        $languages = array_map(
+            function ($up) {
+                return $up->getLanguage();
+            },
+            $usagePolicy
+        );
+        Assert::uniqueValues(
+            $languages,
+            'There MUST NOT be more than one <mdrpi:UsagePolicy>,'
+            . ' within a given <mdrpi:PublicationInfo>, for a given language',
+            ProtocolViolationException::class
+        );
+
         $this->UsagePolicy = $usagePolicy;
     }
 
@@ -175,6 +193,17 @@ final class PublicationInfo extends AbstractMdrpiElement
 
         $publisher = self::getAttribute($xml, 'publisher');
         $creationInstant = self::getAttribute($xml, 'creationInstant', null);
+
+        // 2.2.1:  Time values MUST be expressed in the UTC timezone using the 'Z' timezone identifier
+        if ($creationInstant !== null) {
+            Assert::same(
+                substr($creationInstant, -1),
+                'Z',
+                "Time values MUST be expressed in the UTC timezone using the 'Z' timezone identifier.",
+                ProtocolViolationException::class
+            );
+        }
+
         if ($creationInstant !== null) {
             $creationInstant = XMLUtils::xsDateTimeToTimestamp($creationInstant);
         }
