@@ -21,7 +21,7 @@ final class UIInfo extends AbstractMduiElement
     /**
      * Array with child elements.
      *
-     * The elements can be any of the other \SAML2\XML\mdui\* elements.
+     * The elements can be any other namespace.
      *
      * @var \SimpleSAML\XML\Chunk[]
      */
