@@ -1,0 +1,120 @@
+<?php
+
+declare(strict_types=1);
+
+namespace SimpleSAML\Test\SAML2\XML\mdrpi;
+
+use DOMDocument;
+use PHPUnit\Framework\TestCase;
+use SimpleSAML\SAML2\Exception\ProtocolViolationException;
+use SimpleSAML\SAML2\XML\mdrpi\Publication;
+use SimpleSAML\XML\DOMDocumentFactory;
+use SimpleSAML\XML\Exception\MissingAttributeException;
+use SimpleSAML\XML\Utils as XMLUtils;
+
+/**
+ * Class \SAML2\XML\mdrpi\PublicationTest
+ *
+ * @covers \SimpleSAML\SAML2\XML\mdrpi\Publication
+ * @covers \SimpleSAML\SAML2\XML\mdrpi\AbstractMdrpiElement
+ * @package simplesamlphp/saml2
+ */
+final class PublicationTest extends TestCase
+{
+    /** @var \DOMDocument */
+    protected DOMDocument $document;
+
+
+    /**
+     */
+    protected function setUp(): void
+    {
+        $this->document = DOMDocumentFactory::fromFile(
+            dirname(dirname(dirname(dirname(__FILE__)))) . '/resources/xml/mdrpi_Publication.xml'
+        );
+    }
+
+
+    /**
+     */
+    public function testMarshalling(): void
+    {
+        $publication = new Publication(
+            'SomePublisher',
+            1234567890,
+            'SomePublicationId'
+        );
+
+        $document = DOMDocumentFactory::fromString('<root />');
+        $xml = $publication->toXML($document->documentElement);
+
+        /** @var \DOMElement[] $publicationElements */
+        $publicationElements = XMLUtils::xpQuery(
+            $xml,
+            '/root/*[local-name()=\'Publication\' and namespace-uri()=\'urn:oasis:names:tc:SAML:metadata:rpi\']'
+        );
+        $this->assertCount(1, $publicationElements);
+        $publicationElement = $publicationElements[0];
+
+        $this->assertEquals('SomePublisher', $publicationElement->getAttribute("publisher"));
+        $this->assertEquals('2009-02-13T23:31:30Z', $publicationElement->getAttribute("creationInstant"));
+        $this->assertEquals('SomePublicationId', $publicationElement->getAttribute("publicationId"));
+    }
+
+
+    /**
+     */
+    public function testUnmarshalling(): void
+    {
+        $publication = Publication::fromXML($this->document->documentElement);
+
+        $this->assertEquals('SomePublisher', $publication->getPublisher());
+        $this->assertEquals(1293840000, $publication->getCreationInstant());
+        $this->assertEquals('SomePublicationId', $publication->getPublicationId());
+    }
+
+
+    /**
+     */
+    public function testCreationInstantTimezoneNotZuluThrowsException(): void
+    {
+        $document = $this->document->documentElement;
+        $document->setAttribute('creationInstant', '2011-01-01T00:00:00WT');
+
+        $this->expectException(ProtocolViolationException::class);
+        $this->expectExceptionMessage(
+            "Time values MUST be expressed in the UTC timezone using the 'Z' timezone identifier."
+        );
+        Publication::fromXML($document);
+    }
+
+
+    /**
+     */
+    public function testMissingPublisherThrowsException(): void
+    {
+        $document = DOMDocumentFactory::fromString(<<<XML
+<mdrpi:Publication xmlns:mdrpi="urn:oasis:names:tc:SAML:metadata:rpi"
+                       creationInstant="2011-01-01T00:00:00Z"
+                       publicationId="SomePublicationId">
+</mdrpi:Publication>
+XML
+        );
+
+        $this->expectException(MissingAttributeException::class);
+        $this->expectExceptionMessage("Missing 'publisher' attribute on mdrpi:Publication.");
+        Publication::fromXML($document->documentElement);
+    }
+
+
+    /**
+     * Test serialization / unserialization
+     */
+    public function testSerialization(): void
+    {
+        $this->assertEquals(
+            $this->document->saveXML($this->document->documentElement),
+            strval(unserialize(serialize(Publication::fromXML($this->document->documentElement))))
+        );
+    }
+}
