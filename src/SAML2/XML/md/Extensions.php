@@ -70,6 +70,7 @@ final class Extensions extends AbstractMdElement
             MDRPI::NS => [
                 'RegistrationInfo' => RegistrationInfo::class,
                 'PublicationInfo' => PublicationInfo::class,
+                'PublicationPath' => PublicationPath::class,
             ],
             MDUI::NS => [
                 'UIInfo' => UIInfo::class,
