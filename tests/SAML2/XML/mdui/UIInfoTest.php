@@ -6,6 +6,7 @@ namespace SimpleSAML\Test\SAML2\XML\mdui;
 
 use DOMDocument;
 use PHPUnit\Framework\TestCase;
+use SimpleSAML\SAML2\Exception\ProtocolViolationException;
 use SimpleSAML\SAML2\XML\mdui\Description;
 use SimpleSAML\SAML2\XML\mdui\DiscoHints;
 use SimpleSAML\SAML2\XML\mdui\DisplayName;
@@ -257,6 +258,101 @@ final class UIInfoTest extends TestCase
         $this->assertEquals('child1', $uiinfo->getChildren()[0]->getLocalName());
         $this->assertEquals('child2', $uiinfo->getChildren()[1]->getLocalName());
         $this->assertEquals('child3', $uiinfo->getChildren()[2]->getLocalName());
+    }
+
+
+    /**
+     */
+    public function testMultipleDescriptionWithSameLanguageThrowsException(): void
+    {
+        $document = $this->document;
+
+        // Append another 'en' mdui:Description to the document
+        $x = new Description('en', 'Something');
+        $x->toXML($document->documentElement);
+
+        $this->expectException(ProtocolViolationException::class);
+        $this->expectExceptionMessage(
+            'There MUST NOT be more than one <mdui:Description>,'
+            . ' within a given <mdui:UIInfo>, for a given language'
+        );
+        UIInfo::fromXML($document->documentElement);
+    }
+
+
+    /**
+     */
+    public function testMultipleDisplayNameWithSameLanguageThrowsException(): void
+    {
+        $document = $this->document;
+
+        // Append another 'en' mdui:DisplayName to the document
+        $x = new DisplayName('en', 'Something');
+        $x->toXML($document->documentElement);
+
+        $this->expectException(ProtocolViolationException::class);
+        $this->expectExceptionMessage(
+            'There MUST NOT be more than one <mdui:DisplayName>,'
+            . ' within a given <mdui:UIInfo>, for a given language'
+        );
+        UIInfo::fromXML($document->documentElement);
+    }
+
+
+    /**
+     */
+    public function testMultipleKeywordsWithSameLanguageThrowsException(): void
+    {
+        $document = $this->document;
+
+        // Append another 'en' mdui:Keywords to the document
+        $x = new Keywords('en', ['Something', 'else']);
+        $x->toXML($document->documentElement);
+
+        $this->expectException(ProtocolViolationException::class);
+        $this->expectExceptionMessage(
+            'There MUST NOT be more than one <mdui:Keywords>,'
+            . ' within a given <mdui:UIInfo>, for a given language'
+        );
+        UIInfo::fromXML($document->documentElement);
+    }
+
+
+    /**
+     */
+    public function testMultipleInformationURLWithSameLanguageThrowsException(): void
+    {
+        $document = $this->document;
+
+        // Append another 'en' mdui:InformationURL to the document
+        $x = new InformationURL('en', 'https://example.org');
+        $x->toXML($document->documentElement);
+
+        $this->expectException(ProtocolViolationException::class);
+        $this->expectExceptionMessage(
+            'There MUST NOT be more than one <mdui:InformationURL>,'
+            . ' within a given <mdui:UIInfo>, for a given language'
+        );
+        UIInfo::fromXML($document->documentElement);
+    }
+
+
+    /**
+     */
+    public function testMultiplePrivacyStatementURLWithSameLanguageThrowsException(): void
+    {
+        $document = $this->document;
+
+        // Append another 'en' mdui:PrivacyStatementURL to the document
+        $x = new PrivacyStatementURL('en', 'https://example.org');
+        $x->toXML($document->documentElement);
+
+        $this->expectException(ProtocolViolationException::class);
+        $this->expectExceptionMessage(
+            'There MUST NOT be more than one <mdui:PrivacyStatementURL>,'
+            . ' within a given <mdui:UIInfo>, for a given language'
+        );
+        UIInfo::fromXML($document->documentElement);
     }
 
 

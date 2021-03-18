@@ -6,6 +6,7 @@ namespace SimpleSAML\SAML2\XML\mdui;
 
 use DOMElement;
 use SimpleSAML\Assert\Assert;
+use SimpleSAML\SAML2\Exception\ProtocolViolationException;
 use SimpleSAML\XML\Chunk;
 use SimpleSAML\XML\Exception\InvalidDOMElementException;
 use SimpleSAML\XML\Utils as XMLUtils;
@@ -122,6 +123,12 @@ final class UIInfo extends AbstractMduiElement
     {
         Assert::allIsInstanceOf($keywords, Keywords::class);
 
+        /**
+         * 2.1.4:  There MUST NOT be more than one <mdui:Keywords>,
+         *         within a given <mdui:UIInfo>, for a given language
+         */
+        $this->testLocalizedElements($keywords);
+
         $this->Keywords = $keywords;
     }
 
@@ -133,7 +140,7 @@ final class UIInfo extends AbstractMduiElement
      */
     public function addKeyword(Keywords $keyword): void
     {
-        $this->Keywords[] = $keyword;
+        $this->setKeywords(array_merge($this->Keywords, [$keyword]));
     }
 
 
@@ -156,6 +163,12 @@ final class UIInfo extends AbstractMduiElement
     private function setDisplayName(array $displayName): void
     {
         Assert::allIsInstanceOf($displayName, DisplayName::class);
+
+        /**
+         * 2.1.2:  There MUST NOT be more than one <mdui:DisplayName>,
+         *         within a given <mdui:UIInfo>, for a given language
+         */
+        $this->testLocalizedElements($displayName);
 
         $this->DisplayName = $displayName;
     }
@@ -181,6 +194,12 @@ final class UIInfo extends AbstractMduiElement
     {
         Assert::allIsInstanceOf($description, Description::class);
 
+        /**
+         * 2.1.3:  There MUST NOT be more than one <mdui:Description>,
+         *         within a given <mdui:UIInfo>, for a given language
+         */
+        $this->testLocalizedElements($description);
+
         $this->Description = $description;
     }
 
@@ -203,6 +222,12 @@ final class UIInfo extends AbstractMduiElement
     private function setInformationURL(array $informationURL): void
     {
         Assert::allIsInstanceOf($informationURL, InformationURL::class);
+
+        /**
+         * 2.1.6:  There MUST NOT be more than one <mdui:InformationURL>,
+         *         within a given <mdui:UIInfo>, for a given language
+         */
+        $this->testLocalizedElements($informationURL);
 
         $this->InformationURL = $informationURL;
     }
@@ -227,6 +252,12 @@ final class UIInfo extends AbstractMduiElement
     private function setPrivacyStatementURL(array $privacyStatementURL): void
     {
         Assert::allIsInstanceOf($privacyStatementURL, PrivacyStatementURL::class);
+
+        /**
+         * 2.1.7:  There MUST NOT be more than one <mdui:PrivacyStatementURL>,
+         *         within a given <mdui:UIInfo>, for a given language
+         */
+        $this->testLocalizedElements($privacyStatementURL);
 
         $this->PrivacyStatementURL = $privacyStatementURL;
     }
@@ -318,6 +349,35 @@ final class UIInfo extends AbstractMduiElement
             && empty($this->Logo)
             && empty($this->children)
         );
+    }
+
+
+    /**
+     * Test localized elements for multiple items with the same language
+     *
+     * @param (\SimpleSAML\SAML2\XML\md\AbstractLocalizedURL|
+     *         \SimpleSAML\SAML2\XML\md\AbstractLocalizedName|
+     *         \SimpleSAML\XML\SAML2\mdui\Keywords)[] $items
+     * @return void
+     */
+    private function testLocalizedElements(array $elements) {
+        if (!empty($elements)) {
+            $types = array_map('get_class', $elements);
+            Assert::maxCount(array_unique($types), 1, 'Multiple class types cannot be used.');
+
+            $languages = array_map(
+                function ($elt) {
+                    return $elt->getLanguage();
+                },
+                $elements
+            );
+            Assert::uniqueValues(
+                $languages,
+                'There MUST NOT be more than one <' . $elements[0]->getQualifiedName() . '>,'
+                . ' within a given <mdui:UIInfo>, for a given language',
+                ProtocolViolationException::class
+            );
+        }
     }
 
 
