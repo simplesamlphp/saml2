@@ -9,6 +9,7 @@ use PHPUnit\Framework\TestCase;
 use SimpleSAML\SAML2\Exception\ProtocolViolationException;
 use SimpleSAML\SAML2\XML\mdrpi\PublicationPath;
 use SimpleSAML\SAML2\XML\mdrpi\Publication;
+use SimpleSAML\Test\XML\ArrayizableXMLTestTrait;
 use SimpleSAML\Test\XML\SerializableXMLTestTrait;
 use SimpleSAML\XML\DOMDocumentFactory;
 use SimpleSAML\XML\Exception\MissingAttributeException;
@@ -23,6 +24,7 @@ use SimpleSAML\XML\Utils as XMLUtils;
  */
 final class PublicationPathTest extends TestCase
 {
+    use ArrayizableXMLTestTrait;
     use SerializableXMLTestTrait;
 
 
@@ -35,6 +37,11 @@ final class PublicationPathTest extends TestCase
         $this->xmlRepresentation = DOMDocumentFactory::fromFile(
             dirname(dirname(dirname(dirname(__FILE__)))) . '/resources/xml/mdrpi_PublicationPath.xml'
         );
+
+        $this->arrayRepresentation = [
+            ['publisher' => 'SomePublisher', 'creationInstant' => 1234567890, 'publicationId' => 'SomePublicationId'],
+            ['publisher' => 'SomeOtherPublisher', 'creationInstant' => 1234567890, 'publicationId' => 'SomeOtherPublicationId'],
+        ];
     }
 
 

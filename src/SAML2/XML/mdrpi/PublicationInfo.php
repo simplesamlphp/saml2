@@ -240,4 +240,63 @@ final class PublicationInfo extends AbstractMdrpiElement
 
         return $e;
     }
+
+
+    /**
+     * Create a class from an array
+     *
+     * @param array $data
+     * @return self
+     */
+    public static function fromArray(array $data): object
+    {
+        Assert::keyExists($data, 'publisher');
+
+        $publisher = $data['publisher'];
+        Assert::string($publisher);
+
+        $creationInstant = $data['creationInstant'] ?? null;
+        Assert::nullOrInteger($creationInstant);
+
+        $publicationId = $data['publicationId'] ?? null;
+        Assert::nullOrString($publicationId);
+
+        $up = $data['usagePolicy'] ?? [];
+        Assert::isArray($up);
+
+        $usagePolicy = [];
+        foreach ($up as $k => $v) {
+            $usagePolicy[] = UsagePolicy::fromArray([$k => $v]);
+        }
+
+        return new self($publisher, $creationInstant, $publicationId, $usagePolicy);
+    }
+
+
+    /**
+     * Create an array from this class
+     *
+     * @return array
+     */
+    public function toArray(): array
+    {
+        $data = [];
+        $data['publisher'] = $this->publisher;
+
+        if ($this->creationInstant !== null) {
+            $data['creationInstant'] = $this->creationInstant;
+        }
+
+        if ($this->publicationId !== null) {
+            $data['publicationId'] = $this->publicationId;
+        }
+
+        if (!empty($this->UsagePolicy)) {
+            $data['usagePolicy'] = [];
+            foreach ($this->UsagePolicy as $up) {
+                $data['usagePolicy'] = array_merge($data['usagePolicy'], $up->toArray());
+            }
+        }
+        return $data;
+    }
 }

@@ -182,4 +182,49 @@ final class Publication extends AbstractMdrpiElement
 
         return $e;
     }
+
+
+    /**
+     * Create a class from an array
+     *
+     * @param array $data
+     * @return self
+     */
+    public static function fromArray(array $data): object
+    {
+        Assert::keyExists($data, 'publisher');
+
+        $publisher = $data['publisher'];
+        Assert::string($publisher);
+
+        $creationInstant = $data['creationInstant'] ?? null;
+        Assert::nullOrInteger($creationInstant);
+
+        $publicationId = $data['publicationId'] ?? null;
+        Assert::nullOrString($publicationId);
+
+        return new self($publisher, $creationInstant, $publicationId);
+    }
+
+
+    /**
+     * Create an array from this class
+     *
+     * @return array
+     */
+    public function toArray(): array
+    {
+        $data = [];
+        $data['publisher'] = $this->publisher;
+
+        if ($this->creationInstant !== null) {
+            $data['creationInstant'] = $this->creationInstant;
+        }
+
+        if ($this->publicationId !== null) {
+            $data['publicationId'] = $this->publicationId;
+        }
+
+        return $data;
+    }
 }

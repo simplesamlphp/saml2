@@ -10,6 +10,7 @@ use SimpleSAML\SAML2\Exception\ProtocolViolationException;
 use SimpleSAML\SAML2\XML\mdrpi\PublicationInfo;
 use SimpleSAML\SAML2\XML\mdrpi\UsagePolicy;
 use SimpleSAML\Test\XML\SerializableXMLTestTrait;
+use SimpleSAML\Test\XML\ArrayizableXMLTestTrait;
 use SimpleSAML\XML\DOMDocumentFactory;
 use SimpleSAML\XML\Exception\MissingAttributeException;
 use SimpleSAML\XML\Utils as XMLUtils;
@@ -23,6 +24,7 @@ use SimpleSAML\XML\Utils as XMLUtils;
  */
 final class PublicationInfoTest extends TestCase
 {
+    use ArrayizableXMLTestTrait;
     use SerializableXMLTestTrait;
 
 
@@ -35,6 +37,13 @@ final class PublicationInfoTest extends TestCase
         $this->xmlRepresentation = DOMDocumentFactory::fromFile(
             dirname(dirname(dirname(dirname(__FILE__)))) . '/resources/xml/mdrpi_PublicationInfo.xml'
         );
+
+        $this->arrayRepresentation = [
+            'publisher' => 'TestPublisher',
+            'creationInstant' => 12345678990,
+            'publicationId' => 'PublicationIdValue',
+            'usagePolicy' => ['en' => 'http://EnglishUsagePolicy', 'no' => 'http://NorwegianUsagePolicy'],
+        ];
     }
 
 
