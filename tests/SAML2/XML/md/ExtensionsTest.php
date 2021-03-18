@@ -13,6 +13,8 @@ use SimpleSAML\SAML2\XML\alg\SigningMethod;
 use SimpleSAML\SAML2\XML\md\Extensions;
 use SimpleSAML\SAML2\XML\mdattr\EntityAttributes;
 use SimpleSAML\SAML2\XML\mdrpi\PublicationInfo;
+use SimpleSAML\SAML2\XML\mdrpi\Publication;
+use SimpleSAML\SAML2\XML\mdrpi\PublicationPath;
 use SimpleSAML\SAML2\XML\mdrpi\RegistrationInfo;
 use SimpleSAML\SAML2\XML\mdui\DiscoHints;
 use SimpleSAML\SAML2\XML\mdui\DisplayName;
@@ -58,6 +60,11 @@ final class ExtensionsTest extends TestCase
         $scope = new Scope('SomeScope');
         $ra = new RegistrationInfo('SomeAuthority');
         $pubInfo = new PublicationInfo('SomePublisher');
+        $pubPath = new PublicationPath(
+            [
+                new Publication('SomePublisher')
+            ]
+        );
         $uiinfo = new UIInfo([new DisplayName('en', 'Example')]);
         $discoHints = new DiscoHints([], ['127.0.0.1']);
         $digestMethod = new DigestMethod('SomeAlgorithm');
@@ -67,6 +74,7 @@ final class ExtensionsTest extends TestCase
             $scope,
             $ra,
             $pubInfo,
+            $pubPath,
             $uiinfo,
             $discoHints,
             $digestMethod,
@@ -116,6 +124,9 @@ final class ExtensionsTest extends TestCase
   <mdattr:EntityAttributes>SomeAttribute</mdattr:EntityAttributes>
   <mdrpi:RegistrationInfo registrationAuthority="SomeAuthority"/>
   <mdrpi:PublicationInfo publisher="SomePublisher"/>
+  <mdrpi:PublicationPath>
+    <mdrpi:Publication publisher="SomePublisher" />
+  </mdrpi:PublicationPath>
   <mdui:UIInfo>
     <mdui:DisplayName xml:lang="en">Example</mdui:DisplayName>
   </mdui:UIInfo>
@@ -130,16 +141,17 @@ XML
         );
         $extensions = Extensions::fromXML($document->documentElement);
         $list = $extensions->getList();
-        $this->assertCount(9, $list);
+        $this->assertCount(10, $list);
         $this->assertInstanceOf(Scope::class, $list[0]);
         $this->assertInstanceOf(EntityAttributes::class, $list[1]);
         $this->assertInstanceOf(RegistrationInfo::class, $list[2]);
         $this->assertInstanceOf(PublicationInfo::class, $list[3]);
-        $this->assertInstanceOf(UIInfo::class, $list[4]);
-        $this->assertInstanceOf(DiscoHints::class, $list[5]);
-        $this->assertInstanceOf(DigestMethod::class, $list[6]);
-        $this->assertInstanceOf(SigningMethod::class, $list[7]);
-        $this->assertInstanceOf(Chunk::class, $list[8]);
+        $this->assertInstanceOf(PublicationPath::class, $list[4]);
+        $this->assertInstanceOf(UIInfo::class, $list[5]);
+        $this->assertInstanceOf(DiscoHints::class, $list[6]);
+        $this->assertInstanceOf(DigestMethod::class, $list[7]);
+        $this->assertInstanceOf(SigningMethod::class, $list[8]);
+        $this->assertInstanceOf(Chunk::class, $list[9]);
         $this->assertFalse($extensions->isEmptyElement());
     }
 
