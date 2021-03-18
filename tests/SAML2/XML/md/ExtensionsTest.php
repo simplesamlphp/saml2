@@ -81,42 +81,6 @@ final class ExtensionsTest extends TestCase
 
 
     /**
-     * Adding multiple RegistrationInfo extensions should throw an exception.
-     */
-    public function testMarshallingWithMultipleRegistrationInfoExtensions(): void
-    {
-        $regInfo1 = new RegistrationInfo('SomeAuthority');
-        $regInfo2 = new RegistrationInfo('SomeOtherAuthority');
-
-        $this->expectException(ProtocolViolationException::class);
-        $this->expectExceptionMessage(
-            'The <mdrpi:RegistrationInfo> element MUST NOT appear more than once within the <md:Extensions> element'
-            . ' of a given <md:EntitiesDescriptor> or <md:EntityDescriptor> element.'
-        );
-        $extensions = new Extensions([$regInfo1, $regInfo2]);
-        Extensions::fromXML($extensions->toXML());
-    }
-
-
-    /**
-     * Adding multiple PublicationInfo extensions should throw an exception.
-     */
-    public function testMarshallingWithMultiplePublicationInfoExtensions(): void
-    {
-        $pubInfo1 = new PublicationInfo('SomePublisher');
-        $pubInfo2 = new PublicationInfo('SomeOtherPublisher');
-
-        $this->expectException(ProtocolViolationException::class);
-        $this->expectExceptionMessage(
-            'The <mdrpi:PublicationInfo> element MUST NOT appear more than once within the <md:Extensions> element'
-            . ' of a given <md:EntitiesDescriptor> or <md:EntityDescriptor> element.'
-        );
-        $extensions = new Extensions([$pubInfo1, $pubInfo2]);
-        Extensions::fromXML($extensions->toXML());
-    }
-
-
-    /**
      * Adding an empty list to an Extensions element should yield an empty element. If there were contents already
      * there, those should be left untouched.
      */
