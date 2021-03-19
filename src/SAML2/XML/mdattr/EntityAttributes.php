@@ -102,7 +102,7 @@ final class EntityAttributes extends AbstractMdattrElement
     /**
      * Add the value to the children-property
      *
-     * @param \SimpleSAML\SAML2\XML\saml\Assertion|\SAML2\XML\saml\Attribute $child
+     * @param \SimpleSAML\SAML2\XML\saml\Assertion|\SimpleSAML\SAML2\XML\saml\Attribute $child
      * @return void
      * @throws \SimpleSAML\Assert\AssertionFailedException
      */
