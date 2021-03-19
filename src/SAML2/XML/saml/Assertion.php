@@ -427,6 +427,7 @@ class Assertion extends AbstractSamlElement implements SignableElementInterface,
         $conditions = Conditions::getChildrenOfClass($xml);
         Assert::maxCount($conditions, 1, 'More than one <saml:Conditions> in <saml:Assertion>.', TooManyElementsException::class);
 
+//        $dup = clone $xml;
         $signature = Signature::getChildrenOfClass($xml);
         Assert::maxCount($signature, 1, 'Only one <ds:Signature> element is allowed.', TooManyElementsException::class);
 
