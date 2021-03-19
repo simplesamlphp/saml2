@@ -12,7 +12,7 @@ use SimpleSAML\SAML2\Utils;
 /**
  * Class which represents the Scope element found in Shibboleth metadata.
  *
- * @link https://wiki.shibboleth.net/confluence/display/SHIB/ShibbolethMetadataProfile
+ * @link https://wiki.shibboleth.net/confluence/display/SC/ShibMetaExt+V1.0
  * @package simplesamlphp/saml2
  */
 final class Scope extends AbstractShibmdElement
@@ -90,7 +90,7 @@ final class Scope extends AbstractShibmdElement
 
 
     /**
-     * Convert XML into a NameIDPolicy
+     * Convert XML into a Scope
      *
      * @param \DOMElement $xml The XML element we should load
      * @return self

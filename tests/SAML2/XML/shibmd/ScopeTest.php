@@ -11,7 +11,7 @@ use SimpleSAML\XML\DOMDocumentFactory;
 use SimpleSAML\XML\Utils as XMLUtils;
 
 /**
- * Class \SAML2\XML\shibmd\Scope
+ * Class \SimpleSAML\SAML2\XML\shibmd\Scope
  *
  * @covers \SimpleSAML\SAML2\XML\shibmd\Scope
  * @covers \SimpleSAML\SAML2\XML\shibmd\AbstractShibmdElement
