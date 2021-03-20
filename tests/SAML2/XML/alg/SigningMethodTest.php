@@ -6,6 +6,7 @@ namespace SimpleSAML\Test\SAML2\XML\alg;
 
 use DOMDocument;
 use PHPUnit\Framework\TestCase;
+use SimpleSAML\Test\XML\SerializableXMLTestTrait;
 use SimpleSAML\XML\DOMDocumentFactory;
 use SimpleSAML\XML\Exception\MissingAttributeException;
 use SimpleSAML\SAML2\XML\alg\SigningMethod;
@@ -21,15 +22,16 @@ use SimpleSAML\SAML2\Utils;
  */
 final class SigningMethodTest extends TestCase
 {
-    /** @var \DOMDocument */
-    private DOMDocument $document;
+    use SerializableXMLTestTrait;
 
 
     /**
      */
     protected function setUp(): void
     {
-        $this->document = DOMDocumentFactory::fromFile(
+        $this->testedClass = SigningMethod::class;
+
+        $this->xmlRepresentation = DOMDocumentFactory::fromFile(
             dirname(dirname(dirname(dirname(__FILE__)))) . '/resources/xml/alg_SigningMethod.xml'
         );
     }
@@ -45,7 +47,7 @@ final class SigningMethodTest extends TestCase
         $this->assertEquals(1024, $signingMethod->getMinKeySize());
         $this->assertEquals(4096, $signingMethod->getMaxKeySize());
 
-        $this->assertEquals($this->document->saveXML($this->document->documentElement), strval($signingMethod));
+        $this->assertEquals($this->xmlRepresentation->saveXML($this->xmlRepresentation->documentElement), strval($signingMethod));
     }
 
 
@@ -53,7 +55,7 @@ final class SigningMethodTest extends TestCase
      */
     public function testUnmarshalling(): void
     {
-        $signingMethod = SigningMethod::fromXML($this->document->documentElement);
+        $signingMethod = SigningMethod::fromXML($this->xmlRepresentation->documentElement);
 
         $this->assertEquals('http://exampleAlgorithm', $signingMethod->getAlgorithm());
         $this->assertEquals(1024, $signingMethod->getMinKeySize());
@@ -65,24 +67,12 @@ final class SigningMethodTest extends TestCase
      */
     public function testMissingAlgorithmThrowsException(): void
     {
-        $document = $this->document->documentElement;
+        $document = $this->xmlRepresentation->documentElement;
         $document->removeAttribute('Algorithm');
 
         $this->expectException(MissingAttributeException::class);
         $this->expectExceptionMessage("Missing 'Algorithm' attribute on alg:SigningMethod.");
 
         SigningMethod::fromXML($document);
-    }
-
-
-    /**
-     * Test serialization / unserialization
-     */
-    public function testSerialization(): void
-    {
-        $this->assertEquals(
-            $this->document->saveXML($this->document->documentElement),
-            strval(unserialize(serialize(SigningMethod::fromXML($this->document->documentElement))))
-        );
     }
 }
