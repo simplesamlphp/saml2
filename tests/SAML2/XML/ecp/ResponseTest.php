@@ -8,6 +8,7 @@ use DOMDocument;
 use DOMElement;
 use InvalidArgumentException;
 use PHPUnit\Framework\TestCase;
+use SimpleSAML\Test\XML\SerializableXMLTestTrait;
 use SimpleSAML\SAML2\Constants;
 use SimpleSAML\SAML2\XML\ecp\Response;
 use SimpleSAML\XML\DOMDocumentFactory;
@@ -20,15 +21,16 @@ use SimpleSAML\XML\Exception\MissingAttributeException;
  */
 final class ResponseTest extends TestCase
 {
-    /** @var \DOMDocument */
-    private DOMDocument $document;
+    use SerializableXMLTestTrait;
 
 
     /**
      */
     public function setUp(): void
     {
-        $this->document = DOMDocumentFactory::fromFile(
+        $this->testedClass = Response::class;
+
+        $this->xmlRepresentation = DOMDocumentFactory::fromFile(
             dirname(dirname(dirname(dirname(__FILE__)))) . '/resources/xml/ecp_Response.xml'
         );
     }
@@ -42,7 +44,7 @@ final class ResponseTest extends TestCase
 
         $this->assertEquals('https://example.com/ACS', $response->getAssertionConsumerServiceURL());
 
-        $this->assertEquals($this->document->saveXML($this->document->documentElement), strval($response));
+        $this->assertEquals($this->xmlRepresentation->saveXML($this->xmlRepresentation->documentElement), strval($response));
     }
 
 
@@ -78,11 +80,11 @@ final class ResponseTest extends TestCase
      */
     public function testUnmarshalling(): void
     {
-        $response = Response::fromXML($this->document->documentElement);
+        $response = Response::fromXML($this->xmlRepresentation->documentElement);
 
         $this->assertEquals('https://example.com/ACS', $response->getAssertionConsumerServiceURL());
 
-        $this->assertEquals($this->document->saveXML($this->document->documentElement), strval($response));
+        $this->assertEquals($this->xmlRepresentation->saveXML($this->xmlRepresentation->documentElement), strval($response));
     }
 
 
@@ -90,7 +92,7 @@ final class ResponseTest extends TestCase
      */
     public function testUnmarshallingWithMissingMustUnderstandThrowsException(): void
     {
-        $document = $this->document->documentElement;
+        $document = $this->xmlRepresentation->documentElement;
         $document->removeAttributeNS(Constants::NS_SOAP, 'mustUnderstand');
 
         $this->expectException(MissingAttributeException::class);
@@ -104,7 +106,7 @@ final class ResponseTest extends TestCase
      */
     public function testUnmarshallingWithMissingActorThrowsException(): void
     {
-        $document = $this->document->documentElement;
+        $document = $this->xmlRepresentation->documentElement;
         $document->removeAttributeNS(Constants::NS_SOAP, 'actor');
 
         $this->expectException(MissingAttributeException::class);
@@ -118,24 +120,12 @@ final class ResponseTest extends TestCase
      */
     public function testUnmarshallingWithMissingACSThrowsException(): void
     {
-        $document = $this->document->documentElement;
+        $document = $this->xmlRepresentation->documentElement;
         $document->removeAttribute('AssertionConsumerServiceURL');
 
         $this->expectException(MissingAttributeException::class);
         $this->expectExceptionMessage('Missing AssertionConsumerServiceURL attribute in <ecp:Response>.');
 
         Response::fromXML($document);
-    }
-
-
-    /**
-     * Test serialization / unserialization
-     */
-    public function testSerialization(): void
-    {
-        $this->assertEquals(
-            $this->document->saveXML($this->document->documentElement),
-            strval(unserialize(serialize(Response::fromXML($this->document->documentElement))))
-        );
     }
 }
