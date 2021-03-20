@@ -16,6 +16,7 @@ use SimpleSAML\SAML2\XML\init\RequestInitiator;
 use SimpleSAML\SAML2\XML\mdattr\EntityAttributes;
 use SimpleSAML\SAML2\XML\mdrpi\AbstractMdrpiElement as MDRPI;
 use SimpleSAML\SAML2\XML\mdrpi\PublicationInfo;
+use SimpleSAML\SAML2\XML\mdrpi\PublicationPath;
 use SimpleSAML\SAML2\XML\mdrpi\RegistrationInfo;
 use SimpleSAML\SAML2\XML\mdui\AbstractMduiElement as MDUI;
 use SimpleSAML\SAML2\XML\mdui\DiscoHints;
@@ -70,6 +71,7 @@ final class Extensions extends AbstractMdElement
             MDRPI::NS => [
                 'RegistrationInfo' => RegistrationInfo::class,
                 'PublicationInfo' => PublicationInfo::class,
+                'PublicationPath' => PublicationPath::class,
             ],
             MDUI::NS => [
                 'UIInfo' => UIInfo::class,
