@@ -29,6 +29,7 @@ use SimpleSAML\SAML2\XML\md\UnknownRoleDescriptor;
 use SimpleSAML\SAML2\XML\mdrpi\PublicationInfo;
 use SimpleSAML\SAML2\XML\mdrpi\UsagePolicy;
 use SimpleSAML\Test\SAML2\SignedElementTestTrait;
+use SimpleSAML\Test\XML\SerializableXMLTestTrait;
 use SimpleSAML\XML\DOMDocumentFactory;
 use SimpleSAML\XML\Exception\MissingAttributeException;
 use SimpleSAML\XML\Exception\TooManyElementsException;
@@ -45,6 +46,7 @@ use SimpleSAML\XML\Utils as XMLUtils;
  */
 final class EntityDescriptorTest extends TestCase
 {
+    use SerializableXMLTestTrait;
     use SignedElementTestTrait;
 
 
@@ -52,10 +54,11 @@ final class EntityDescriptorTest extends TestCase
      */
     protected function setUp(): void
     {
-        $this->document = DOMDocumentFactory::fromFile(
+        $this->testedClass = EntityDescriptor::class;
+
+        $this->xmlRepresentation = DOMDocumentFactory::fromFile(
             dirname(dirname(dirname(dirname(__FILE__)))) . '/resources/xml/md_EntityDescriptor.xml'
         );
-        $this->testedClass = EntityDescriptor::class;
     }
 
 
@@ -160,7 +163,7 @@ final class EntityDescriptorTest extends TestCase
         $this->assertNull($ed->getAffiliationDescriptor());
 
         $this->assertEquals(
-            $this->document->saveXML($this->document->documentElement),
+            $this->xmlRepresentation->saveXML($this->xmlRepresentation->documentElement),
             strval($ed)
         );
     }
@@ -277,12 +280,12 @@ XML
      */
     public function testMarshallingWithAffiliationAndRoleDescriptors(): void
     {
-        (new AffiliationDescriptor('asdf', ['test']))->toXML($this->document->documentElement);
+        (new AffiliationDescriptor('asdf', ['test']))->toXML($this->xmlRepresentation->documentElement);
         $this->expectException(InvalidArgumentException::class);
         $this->expectExceptionMessage(
             'AffiliationDescriptor cannot be combined with other RoleDescriptor elements in EntityDescriptor.'
         );
-        EntityDescriptor::fromXML($this->document->documentElement);
+        EntityDescriptor::fromXML($this->xmlRepresentation->documentElement);
     }
 
 
@@ -324,8 +327,8 @@ XML
      */
     public function testUnmarshalling(): void
     {
-        $pdpd = $this->document->getElementsByTagNameNS(Constants::NS_MD, 'PDPDescriptor')->item(0);
-        $customd = $this->document->createElementNS(Constants::NS_MD, 'md:CustomRoleDescriptor');
+        $pdpd = $this->xmlRepresentation->getElementsByTagNameNS(Constants::NS_MD, 'PDPDescriptor')->item(0);
+        $customd = $this->xmlRepresentation->createElementNS(Constants::NS_MD, 'md:CustomRoleDescriptor');
         $customd->setAttribute('protocolSupportEnumeration', 'urn:oasis:names:tc:SAML:2.0:protocol');
         $newline = new \DOMText("\n  ");
         /**
@@ -334,7 +337,7 @@ XML
          */
         $pdpd->parentNode->insertBefore($customd, $pdpd->nextSibling);
         $pdpd->parentNode->insertBefore($newline, $customd);
-        $entityDescriptor = EntityDescriptor::fromXML($this->document->documentElement);
+        $entityDescriptor = EntityDescriptor::fromXML($this->xmlRepresentation->documentElement);
 
         $this->assertEquals('urn:example:entity', $entityDescriptor->getEntityID());
         $this->assertEquals('_5A3CHB081', $entityDescriptor->getID());
@@ -370,7 +373,7 @@ XML
         );
 
         $this->assertEquals(
-            $this->document->saveXML($this->document->documentElement),
+            $this->xmlRepresentation->saveXML($this->xmlRepresentation->documentElement),
             strval($entityDescriptor)
         );
     }
@@ -537,17 +540,5 @@ XML
             'AffiliationDescriptor cannot be combined with other RoleDescriptor elements in EntityDescriptor.'
         );
         EntityDescriptor::fromXML($document->documentElement);
-    }
-
-
-    /**
-     * Test serialization / unserialization
-     */
-    public function testSerialization(): void
-    {
-        $this->assertEquals(
-            $this->document->saveXML($this->document->documentElement),
-            strval(unserialize(serialize(EntityDescriptor::fromXML($this->document->documentElement))))
-        );
     }
 }

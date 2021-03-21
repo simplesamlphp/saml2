@@ -11,6 +11,7 @@ use SimpleSAML\SAML2\Constants;
 use SimpleSAML\SAML2\XML\md\AssertionIDRequestService;
 use SimpleSAML\SAML2\XML\md\AuthzService;
 use SimpleSAML\SAML2\XML\md\PDPDescriptor;
+use SimpleSAML\Test\XML\SerializableXMLTestTrait;
 use SimpleSAML\XML\DOMDocumentFactory;
 
 /**
@@ -24,8 +25,8 @@ use SimpleSAML\XML\DOMDocumentFactory;
  */
 final class PDPDescriptorTest extends TestCase
 {
-    /** @var \DOMDocument */
-    protected DOMDocument $document;
+    use SerializableXMLTestTrait;
+
 
     /** @var \SimpleSAML\SAML2\XML\md\AuthzService */
     protected AuthzService $authzService;
@@ -38,7 +39,9 @@ final class PDPDescriptorTest extends TestCase
      */
     protected function setUp(): void
     {
-        $this->document = DOMDocumentFactory::fromFile(
+        $this->testedClass = PDPDescriptor::class;
+
+        $this->xmlRepresentation = DOMDocumentFactory::fromFile(
             dirname(dirname(dirname(dirname(__FILE__)))) . '/resources/xml/md_PDPDescriptor.xml'
         );
 
@@ -85,7 +88,7 @@ final class PDPDescriptorTest extends TestCase
         );
 
         $this->assertEquals(
-            $this->document->saveXML($this->document->documentElement),
+            $this->xmlRepresentation->saveXML($this->xmlRepresentation->documentElement),
             strval($pdpd)
         );
     }
@@ -166,7 +169,7 @@ final class PDPDescriptorTest extends TestCase
      */
     public function testUnmarshalling(): void
     {
-        $pdpd = PDPDescriptor::fromXML($this->document->documentElement);
+        $pdpd = PDPDescriptor::fromXML($this->xmlRepresentation->documentElement);
         $this->assertCount(1, $pdpd->getAuthzServiceEndpoints());
         $this->assertCount(1, $pdpd->getAssertionIDRequestServices());
         $this->assertCount(3, $pdpd->getNameIDFormats());
@@ -190,12 +193,12 @@ final class PDPDescriptorTest extends TestCase
          * @psalm-suppress PossiblyNullArgument
          * @psalm-suppress PossiblyNullPropertyFetch
          */
-        $this->document->documentElement->removeChild($this->document->documentElement->firstChild->nextSibling);
+        $this->xmlRepresentation->documentElement->removeChild($this->xmlRepresentation->documentElement->firstChild->nextSibling);
 
         $this->expectException(AssertionFailedException::class);
 
         $this->expectExceptionMessage('At least one md:AuthzService endpoint must be present.');
-        PDPDescriptor::fromXML($this->document->documentElement);
+        PDPDescriptor::fromXML($this->xmlRepresentation->documentElement);
     }
 
 
@@ -215,17 +218,5 @@ XML
         $pdpd = PDPDescriptor::fromXML($document->documentElement);
         $this->assertEmpty($pdpd->getAssertionIDRequestServices());
         $this->assertEmpty($pdpd->getNameIDFormats());
-    }
-
-
-    /**
-     * Test serialization / unserialization
-     */
-    public function testSerialization(): void
-    {
-        $this->assertEquals(
-            $this->document->saveXML($this->document->documentElement),
-            strval(unserialize(serialize(PDPDescriptor::fromXML($this->document->documentElement))))
-        );
     }
 }

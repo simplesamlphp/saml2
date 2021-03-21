@@ -9,6 +9,7 @@ use PHPUnit\Framework\TestCase;
 use SimpleSAML\Assert\AssertionFailedException;
 use SimpleSAML\SAML2\XML\md\EncryptionMethod;
 use SimpleSAML\SAML2\XML\md\KeyDescriptor;
+use SimpleSAML\Test\XML\SerializableXMLTestTrait;
 use SimpleSAML\XML\DOMDocumentFactory;
 use SimpleSAML\XMLSecurity\XML\ds\AbstractDsElement;
 use SimpleSAML\XMLSecurity\XML\ds\KeyInfo;
@@ -23,15 +24,16 @@ use SimpleSAML\XMLSecurity\XML\ds\KeyName;
  */
 final class KeyDescriptorTest extends TestCase
 {
-    /** @var \DOMDocument */
-    protected DOMDocument $document;
+    use SerializableXMLTestTrait;
 
 
     /**
      */
     protected function setUp(): void
     {
-        $this->document = DOMDocumentFactory::fromFile(
+        $this->testedClass = KeyDescriptor::class;
+
+        $this->xmlRepresentation = DOMDocumentFactory::fromFile(
             dirname(dirname(dirname(dirname(__FILE__)))) . '/resources/xml/md_KeyDescriptor.xml'
         );
     }
@@ -60,7 +62,7 @@ final class KeyDescriptorTest extends TestCase
         $this->assertEquals('http://www.w3.org/2001/04/xmlenc#rsa-1_5', $kd->getEncryptionMethods()[0]->getAlgorithm());
 
         $this->assertEquals(
-            $this->document->saveXML($this->document->documentElement),
+            $this->xmlRepresentation->saveXML($this->xmlRepresentation->documentElement),
             strval($kd)
         );
     }
@@ -113,7 +115,7 @@ XML
      */
     public function testUnmarshalling(): void
     {
-        $kd = KeyDescriptor::fromXML($this->document->documentElement);
+        $kd = KeyDescriptor::fromXML($this->xmlRepresentation->documentElement);
         $this->assertEquals('signing', $kd->getUse());
 
         $knfo = $kd->getKeyInfo();
@@ -131,12 +133,12 @@ XML
      */
     public function testUnmarshallingWithWrongUse(): void
     {
-        $this->document->documentElement->setAttribute('use', 'wrong');
+        $this->xmlRepresentation->documentElement->setAttribute('use', 'wrong');
 
         $this->expectException(AssertionFailedException::class);
         $this->expectExceptionMessage('The "use" attribute of a KeyDescriptor can only be "encryption" or "signing".');
 
-        KeyDescriptor::fromXML($this->document->documentElement);
+        KeyDescriptor::fromXML($this->xmlRepresentation->documentElement);
     }
 
 
@@ -157,17 +159,5 @@ XML
         $kd = KeyDescriptor::fromXML($document->documentElement);
         $this->assertNull($kd->getUse());
         $this->assertEmpty($kd->getEncryptionMethods());
-    }
-
-
-    /**
-     * Test serialization / unserialization
-     */
-    public function testSerialization(): void
-    {
-        $this->assertEquals(
-            $this->document->saveXML($this->document->documentElement),
-            strval(unserialize(serialize(KeyDescriptor::fromXML($this->document->documentElement))))
-        );
     }
 }

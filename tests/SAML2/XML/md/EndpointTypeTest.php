@@ -10,6 +10,7 @@ use SimpleSAML\Assert\AssertionFailedException;
 use SimpleSAML\SAML2\Constants;
 use SimpleSAML\SAML2\XML\md\AssertionIDRequestService;
 use SimpleSAML\SAML2\XML\md\AttributeService;
+use SimpleSAML\Test\XML\SerializableXMLTestTrait;
 use SimpleSAML\XML\DOMDocumentFactory;
 use SimpleSAML\XML\Exception\InvalidDOMElementException;
 use SimpleSAML\XML\Exception\MissingAttributeException;
@@ -23,15 +24,16 @@ use SimpleSAML\XML\Exception\MissingAttributeException;
  */
 final class EndpointTypeTest extends TestCase
 {
-    /** @var \DOMDocument */
-    protected DOMDocument $document;
+    use SerializableXMLTestTrait;
 
 
     /**
      */
     protected function setUp(): void
     {
-        $this->document = DOMDocumentFactory::fromFile(
+        $this->testedClass = AttributeService::class;
+
+        $this->xmlRepresentation = DOMDocumentFactory::fromFile(
             dirname(dirname(dirname(dirname(__FILE__)))) . '/resources/xml/md_AttributeService.xml'
         );
     }
@@ -45,7 +47,7 @@ final class EndpointTypeTest extends TestCase
      */
     public function testMarshalling(): void
     {
-        $attr = $this->document->createAttributeNS('urn:test', 'test:attr');
+        $attr = $this->xmlRepresentation->createAttributeNS('urn:test', 'test:attr');
         $attr->value = 'value';
         $endpointType = new AttributeService('urn:something', 'https://whatever/', 'https://foo.bar/', [$attr]);
 
@@ -57,7 +59,7 @@ final class EndpointTypeTest extends TestCase
         $this->assertFalse($endpointType->hasAttributeNS('urn:test', 'invalid'));
         $this->assertNull($endpointType->getAttributeNS('urn:test', 'invalid'));
 
-        $this->assertEquals($this->document->saveXML($this->document->documentElement), strval($endpointType));
+        $this->assertEquals($this->xmlRepresentation->saveXML($this->xmlRepresentation->documentElement), strval($endpointType));
     }
 
 
@@ -102,12 +104,12 @@ final class EndpointTypeTest extends TestCase
      */
     public function testUnmarshalling(): void
     {
-        $endpointType = AttributeService::fromXML($this->document->documentElement);
+        $endpointType = AttributeService::fromXML($this->xmlRepresentation->documentElement);
         $this->assertTrue($endpointType->hasAttributeNS('urn:test', 'attr'));
         $this->assertEquals('value', $endpointType->getAttributeNS('urn:test', 'attr'));
         $this->assertFalse($endpointType->hasAttributeNS('urn:test', 'invalid'));
         $this->assertNull($endpointType->getAttributeNS('urn:test', 'invalid'));
-        $this->assertEquals($this->document->saveXML($this->document->documentElement), strval($endpointType));
+        $this->assertEquals($this->xmlRepresentation->saveXML($this->xmlRepresentation->documentElement), strval($endpointType));
     }
 
 
@@ -120,7 +122,7 @@ final class EndpointTypeTest extends TestCase
         $this->expectExceptionMessage(
             'Unexpected name for endpoint: AttributeService. Expected: AssertionIDRequestService.'
         );
-        AssertionIDRequestService::fromXML($this->document->documentElement);
+        AssertionIDRequestService::fromXML($this->xmlRepresentation->documentElement);
     }
 
 
@@ -129,10 +131,10 @@ final class EndpointTypeTest extends TestCase
      */
     public function testUnmarshallingWithoutBinding(): void
     {
-        $this->document->documentElement->removeAttribute('Binding');
+        $this->xmlRepresentation->documentElement->removeAttribute('Binding');
         $this->expectException(MissingAttributeException::class);
         $this->expectExceptionMessage('Missing \'Binding\' attribute on md:AttributeService.');
-        AttributeService::fromXML($this->document->documentElement);
+        AttributeService::fromXML($this->xmlRepresentation->documentElement);
     }
 
 
@@ -141,10 +143,10 @@ final class EndpointTypeTest extends TestCase
      */
     public function testUnmarshallingWithEmptyBinding(): void
     {
-        $this->document->documentElement->setAttribute('Binding', '');
+        $this->xmlRepresentation->documentElement->setAttribute('Binding', '');
         $this->expectException(AssertionFailedException::class);
         $this->expectExceptionMessage('The Binding of an endpoint cannot be empty.');
-        AttributeService::fromXML($this->document->documentElement);
+        AttributeService::fromXML($this->xmlRepresentation->documentElement);
     }
 
 
@@ -153,10 +155,10 @@ final class EndpointTypeTest extends TestCase
      */
     public function testUnmarshallingWithoutLocation(): void
     {
-        $this->document->documentElement->removeAttribute('Location');
+        $this->xmlRepresentation->documentElement->removeAttribute('Location');
         $this->expectException(MissingAttributeException::class);
         $this->expectExceptionMessage('Missing \'Location\' attribute on md:AttributeService.');
-        AttributeService::fromXML($this->document->documentElement);
+        AttributeService::fromXML($this->xmlRepresentation->documentElement);
     }
 
 
@@ -165,10 +167,10 @@ final class EndpointTypeTest extends TestCase
      */
     public function testUnmarshallingWithEmptyLocation(): void
     {
-        $this->document->documentElement->setAttribute('Location', '');
+        $this->xmlRepresentation->documentElement->setAttribute('Location', '');
         $this->expectException(AssertionFailedException::class);
         $this->expectExceptionMessage('The Location of an endpoint cannot be empty.');
-        AttributeService::fromXML($this->document->documentElement);
+        AttributeService::fromXML($this->xmlRepresentation->documentElement);
     }
 
 
@@ -183,18 +185,5 @@ final class EndpointTypeTest extends TestCase
         $as = AttributeService::fromXML($document->documentElement);
         $this->assertNull($as->getResponseLocation());
         $this->assertEmpty($as->getAttributesNS());
-    }
-
-
-    /**
-     * Test that serialization / unserialization works.
-     */
-    public function testSerialization(): void
-    {
-        $ep = AttributeService::fromXML($this->document->documentElement);
-        $this->assertEquals(
-            $this->document->saveXML($this->document->documentElement),
-            strval(unserialize(serialize($ep)))
-        );
     }
 }
