@@ -23,14 +23,14 @@ trait SignedElementTestTrait
      *
      * @var \DOMDocument
      */
-    protected DOMDocument $document;
+    protected DOMDocument $xmlRepresentation;
 
     /**
      * The name of the class we are testing.
      *
-     * @var string
+     * @var class-string
      */
-    protected string $testedClass = '';
+    protected string $testedClass;
 
 
     /**
@@ -38,7 +38,7 @@ trait SignedElementTestTrait
      */
     public function testSignatures(): void
     {
-        $this->assertNotNull($this->document);
+        $this->assertNotNull($this->xmlRepresentation);
         $this->assertNotEmpty($this->testedClass);
 
         $algorithms = [
@@ -52,7 +52,7 @@ trait SignedElementTestTrait
             // sign with two certificates
             $key = new XMLSecurityKey($algorithm, ['type' => 'private']);
             $key->loadKey(PEMCertificatesMock::getPlainPrivateKey(PEMCertificatesMock::PRIVATE_KEY));
-            $pre = $this->testedClass::fromXML($this->document->documentElement);
+            $pre = $this->testedClass::fromXML($this->xmlRepresentation->documentElement);
             $pre->setSigningKey($key);
             $pre->setCertificates(
                 [
@@ -81,7 +81,7 @@ trait SignedElementTestTrait
             $this->assertEquals($algorithm, $post->getSignature()->getAlgorithm());
 
             // sign without certificates
-            $pre = $this->testedClass::fromXML($this->document->documentElement);
+            $pre = $this->testedClass::fromXML($this->xmlRepresentation->documentElement);
             $pre->setSigningKey($key);
 
             // verify signature

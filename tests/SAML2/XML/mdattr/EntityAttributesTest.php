@@ -10,6 +10,7 @@ use SimpleSAML\SAML2\Constants;
 use SimpleSAML\SAML2\XML\saml\Attribute;
 use SimpleSAML\SAML2\XML\saml\AttributeValue;
 use SimpleSAML\SAML2\XML\mdattr\EntityAttributes;
+use SimpleSAML\Test\XML\SerializableXMLTestTrait;
 use SimpleSAML\XML\Chunk;
 use SimpleSAML\XML\DOMDocumentFactory;
 use SimpleSAML\XML\Utils as XMLUtils;
@@ -23,15 +24,16 @@ use SimpleSAML\XML\Utils as XMLUtils;
  */
 final class EntityAttributesTest extends TestCase
 {
-    /** @var \DOMDocument */
-    private DOMDocument $document;
+    use SerializableXMLTestTrait;
 
 
     /**
      */
     public function setUp(): void
     {
-        $this->document = DOMDocumentFactory::fromFile(
+        $this->testedClass = EntityAttributes::class;
+
+        $this->xmlRepresentation = DOMDocumentFactory::fromFile(
             dirname(dirname(dirname(dirname(__FILE__)))) . '/resources/xml/mdattr_EntityAttributes.xml'
         );
     }
@@ -63,7 +65,7 @@ final class EntityAttributesTest extends TestCase
         $entityAttributes->addChild($attribute2);
 
         $document = DOMDocumentFactory::fromString('<root />');
-        $xml = $entityAttributes->toXML($document->firstChild);
+        $xml = $entityAttributes->toXML($document->documentElement);
 
         $entityAttributesElements = XMLUtils::xpQuery(
             $xml,
@@ -84,7 +86,7 @@ final class EntityAttributesTest extends TestCase
      */
     public function testUnmarshalling(): void
     {
-        $entityAttributes = EntityAttributes::fromXML($this->document->firstChild);
+        $entityAttributes = EntityAttributes::fromXML($this->xmlRepresentation->documentElement);
         $this->assertCount(4, $entityAttributes->getChildren());
 
         $this->assertInstanceOf(Chunk::class, $entityAttributes->getChildren()[0]);
@@ -102,18 +104,5 @@ final class EntityAttributesTest extends TestCase
         $this->assertEquals('urn:simplesamlphp:v1:simplesamlphp', $entityAttributes->getChildren()[3]->getName());
         $this->assertEquals('urn:oasis:names:tc:SAML:2.0:attrname-format:uri', $entityAttributes->getChildren()[3]->getNameFormat());
         $this->assertCount(3, $entityAttributes->getChildren()[3]->getAttributeValues());
-    }
-
-
-    /**
-     * Test serialization and unserialization of EntityAttributes elements.
-     */
-    public function testSerialization(): void
-    {
-        $ea = EntityAttributes::fromXML($this->document->documentElement);
-        $this->assertEquals(
-            $this->document->saveXML($this->document->documentElement),
-            strval(unserialize(serialize($ea)))
-        );
     }
 }
