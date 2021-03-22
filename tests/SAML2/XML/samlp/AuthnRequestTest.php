@@ -221,8 +221,8 @@ AUTHNREQUEST;
 <samlp:AuthnRequest
   xmlns:samlp="urn:oasis:names:tc:SAML:2.0:protocol"
   xmlns:saml="urn:oasis:names:tc:SAML:2.0:assertion"
-  ID="_306f8ec5b618f361c70b6ffb1480eade"
   Version="2.0"
+  ID="_306f8ec5b618f361c70b6ffb1480eade"
   IssueInstant="2004-12-05T09:21:59Z"
   Destination="https://idp.example.org/SAML2/SSO/Artifact"
   ProtocolBinding="urn:oasis:names:tc:SAML:2.0:bindings:HTTP-Artifact"
@@ -259,9 +259,9 @@ AUTHNREQUEST;
     xmlns:saml="urn:oasis:names:tc:SAML:2.0:assertion"
     AssertionConsumerServiceIndex="1"
     Destination="https://tiqr.example.org/idp/profile/saml2/Redirect/SSO"
+    Version="2.0"
     ID="_2b0226190ca1c22de6f66e85f5c95158"
-    IssueInstant="2014-09-22T13:42:00Z"
-    Version="2.0">
+    IssueInstant="2014-09-22T13:42:00Z">
   <saml:Issuer>https://gateway.example.org/saml20/sp/metadata</saml:Issuer>
   <saml:Subject>
     <saml:NameID Format="urn:oasis:names:tc:SAML:1.1:nameid-format:unspecified">user@example.org</saml:NameID>
@@ -287,8 +287,8 @@ AUTHNREQUEST;
 <samlp:AuthnRequest
     xmlns:samlp="urn:oasis:names:tc:SAML:2.0:protocol"
     xmlns:saml="urn:oasis:names:tc:SAML:2.0:assertion"
-    ID="123"
     Version="2.0"
+    ID="123"
     IssueInstant="2020-08-15T16:09:56Z"
     Destination="https://tiqr.example.org/idp/profile/saml2/Redirect/SSO">
   <saml:Issuer>https://gateway.example.org/saml20/sp/metadata</saml:Issuer>
@@ -378,8 +378,8 @@ AUTHNREQUEST;
 <samlp:AuthnRequest
     xmlns:samlp="urn:oasis:names:tc:SAML:2.0:protocol"
     xmlns:saml="urn:oasis:names:tc:SAML:2.0:assertion"
-    ID=""
     Version=""
+    ID=""
     IssueInstant=""
     Destination="">
   <saml:Issuer></saml:Issuer>
@@ -461,8 +461,8 @@ AUTHNREQUEST;
 <samlp:AuthnRequest
     xmlns:samlp="urn:oasis:names:tc:SAML:2.0:protocol"
     xmlns:saml="urn:oasis:names:tc:SAML:2.0:assertion"
-    ID=""
     Version=""
+    ID=""
     IssueInstant=""
     Destination="">
     <saml:Issuer></saml:Issuer>
@@ -490,8 +490,8 @@ AUTHNREQUEST;
 <samlp:AuthnRequest
   xmlns:samlp="urn:oasis:names:tc:SAML:2.0:protocol"
   xmlns:saml="urn:oasis:names:tc:SAML:2.0:assertion"
-  ID="_306f8ec5b618f361c70b6ffb1480eade"
   Version="2.0"
+  ID="_306f8ec5b618f361c70b6ffb1480eade"
   IssueInstant="2004-12-05T09:21:59Z"
   Destination="https://idp.example.org/SAML2/SSO/Artifact"
   ProtocolBinding="urn:oasis:names:tc:SAML:2.0:bindings:HTTP-Artifact"
@@ -534,8 +534,8 @@ AUTHNREQUEST;
 <samlp:AuthnRequest
   xmlns:samlp="urn:oasis:names:tc:SAML:2.0:protocol"
   xmlns:saml="urn:oasis:names:tc:SAML:2.0:assertion"
-  ID="_306f8ec5b618f361c70b6ffb1480eadf"
   Version="2.0"
+  ID="_306f8ec5b618f361c70b6ffb1480eadf"
   IssueInstant="2004-12-05T09:21:59Z"
   Destination="https://idp.example.org/SAML2/SSO/Artifact"
   ProtocolBinding="urn:oasis:names:tc:SAML:2.0:bindings:HTTP-Artifact"
@@ -562,8 +562,8 @@ AUTHNREQUEST;
 <samlp:AuthnRequest
   xmlns:samlp="urn:oasis:names:tc:SAML:2.0:protocol"
   xmlns:saml="urn:oasis:names:tc:SAML:2.0:assertion"
-  ID="_306f8ec5b618f361c70b6ffb1480eade"
   Version="2.0"
+  ID="_306f8ec5b618f361c70b6ffb1480eade"
   IssueInstant="2004-12-05T09:21:59Z"
   Destination="https://idp.example.org/SAML2/SSO/Artifact"
   ProtocolBinding="urn:oasis:names:tc:SAML:2.0:bindings:HTTP-Artifact"
@@ -627,8 +627,8 @@ AUTHNREQUEST;
 <samlp:AuthnRequest
     xmlns:samlp="urn:oasis:names:tc:SAML:2.0:protocol"
     xmlns:saml="urn:oasis:names:tc:SAML:2.0:assertion"
-    ID="123"
     Version="2.0"
+    ID="123"
     IssueInstant="2004-12-05T09:21:59Z"
     Destination="https://tiqr.example.org/idp/profile/saml2/Redirect/SSO">
     <saml:Issuer>https://gateway.example.org/saml20/sp/metadata</saml:Issuer>
@@ -687,8 +687,8 @@ AUTHNREQUEST;
 <samlp:AuthnRequest
     xmlns:samlp="urn:oasis:names:tc:SAML:2.0:protocol"
     xmlns:saml="urn:oasis:names:tc:SAML:2.0:assertion"
-    ID="123"
     Version="2.0"
+    ID="123"
     IssueInstant="2004-12-05T09:21:59Z"
     Destination="https://tiqr.example.org/idp/profile/saml2/Redirect/SSO">
     <saml:Issuer>https://gateway.example.org/saml20/sp/metadata</saml:Issuer>
@@ -719,8 +719,8 @@ AUTHNREQUEST;
 <samlp:AuthnRequest
   xmlns:samlp="urn:oasis:names:tc:SAML:2.0:protocol"
   xmlns:saml="urn:oasis:names:tc:SAML:2.0:assertion"
-  ID="_306f8ec5b618f361c70b6ffb1480eade"
   Version="2.0"
+  ID="_306f8ec5b618f361c70b6ffb1480eade"
   IssueInstant="2004-12-05T09:21:59Z"
   Destination="https://idp.example.org/SAML2/SSO/Artifact"
   ProtocolBinding="urn:oasis:names:tc:SAML:2.0:bindings:HTTP-Artifact"
@@ -738,8 +738,8 @@ AUTHNREQUEST;
 <samlp:AuthnRequest
   xmlns:samlp="urn:oasis:names:tc:SAML:2.0:protocol"
   xmlns:saml="urn:oasis:names:tc:SAML:2.0:assertion"
-  ID="_306f8ec5b618f361c70b6ffb1480eade"
   Version="2.0"
+  ID="_306f8ec5b618f361c70b6ffb1480eade"
   ForceAuthn="true"
   IssueInstant="2004-12-05T09:21:59Z"
   Destination="https://idp.example.org/SAML2/SSO/Artifact"
@@ -789,8 +789,8 @@ AUTHNREQUEST;
 <samlp:AuthnRequest
     xmlns:samlp="urn:oasis:names:tc:SAML:2.0:protocol"
     xmlns:saml="urn:oasis:names:tc:SAML:2.0:assertion"
-    ID="123"
     Version="2.0"
+    ID="123"
     ForceAuthn="true"
     IssueInstant="2004-12-05T09:21:59Z"
     Destination="https://tiqr.example.org/idp/profile/saml2/Redirect/SSO">
@@ -821,8 +821,8 @@ AUTHNREQUEST;
 <samlp:AuthnRequest
   xmlns:samlp="urn:oasis:names:tc:SAML:2.0:protocol"
   xmlns:saml="urn:oasis:names:tc:SAML:2.0:assertion"
-  ID="_306f8ec5b618f361c70b6ffb1480eade"
   Version="2.0"
+  ID="_306f8ec5b618f361c70b6ffb1480eade"
   IssueInstant="2004-12-05T09:21:59Z"
   Destination="https://idp.example.org/SAML2/SSO/Artifact"
   ProtocolBinding="urn:oasis:names:tc:SAML:2.0:bindings:HTTP-Artifact"
@@ -840,8 +840,8 @@ AUTHNREQUEST;
 <samlp:AuthnRequest IsPassive="false"
   xmlns:samlp="urn:oasis:names:tc:SAML:2.0:protocol"
   xmlns:saml="urn:oasis:names:tc:SAML:2.0:assertion"
-  ID="_306f8ec5b618f361c70b6ffb1480eade"
   Version="2.0"
+  ID="_306f8ec5b618f361c70b6ffb1480eade"
   IssueInstant="2004-12-05T09:21:59Z"
   Destination="https://idp.example.org/SAML2/SSO/Artifact"
   ProtocolBinding="urn:oasis:names:tc:SAML:2.0:bindings:HTTP-Artifact"
@@ -858,8 +858,8 @@ AUTHNREQUEST;
 <samlp:AuthnRequest IsPassive="true"
   xmlns:samlp="urn:oasis:names:tc:SAML:2.0:protocol"
   xmlns:saml="urn:oasis:names:tc:SAML:2.0:assertion"
-  ID="_306f8ec5b618f361c70b6ffb1480eade"
   Version="2.0"
+  ID="_306f8ec5b618f361c70b6ffb1480eade"
   IssueInstant="2004-12-05T09:21:59Z"
   Destination="https://idp.example.org/SAML2/SSO/Artifact"
   ProtocolBinding="urn:oasis:names:tc:SAML:2.0:bindings:HTTP-Artifact"
@@ -908,8 +908,8 @@ AUTHNREQUEST;
 <samlp:AuthnRequest
     xmlns:samlp="urn:oasis:names:tc:SAML:2.0:protocol"
     xmlns:saml="urn:oasis:names:tc:SAML:2.0:assertion"
-    ID="123"
     Version="2.0"
+    ID="123"
     IsPassive="true"
     IssueInstant="2004-12-05T09:21:59Z"
     Destination="https://tiqr.example.org/idp/profile/saml2/Redirect/SSO">
@@ -965,9 +965,9 @@ AUTHNREQUEST;
 <samlp:AuthnRequest
     xmlns:samlp="urn:oasis:names:tc:SAML:2.0:protocol"
     xmlns:saml="urn:oasis:names:tc:SAML:2.0:assertion"
+    Version="2.0"
     ID="123"
     ProviderName="My Example SP"
-    Version="2.0"
     IssueInstant="2004-12-05T09:21:59Z"
     Destination="https://tiqr.example.org/idp/profile/saml2/Redirect/SSO">
     <saml:Issuer>https://gateway.example.org/saml20/sp/metadata</saml:Issuer>
@@ -997,8 +997,8 @@ AUTHNREQUEST;
 <samlp:AuthnRequest
   xmlns:samlp="urn:oasis:names:tc:SAML:2.0:protocol"
   xmlns:saml="urn:oasis:names:tc:SAML:2.0:assertion"
-  ID="_306f8ec5b618f361c70b6ffb1480eade"
   Version="2.0"
+  ID="_306f8ec5b618f361c70b6ffb1480eade"
   IssueInstant="2004-12-05T09:21:59Z"
   Destination="https://idp.example.org/SAML2/SSO/Artifact"
   ProviderName="Example SP"
@@ -1050,8 +1050,8 @@ AUTHNREQUEST;
 <samlp:AuthnRequest
     xmlns:samlp="urn:oasis:names:tc:SAML:2.0:protocol"
     xmlns:saml="urn:oasis:names:tc:SAML:2.0:assertion"
-    ID="123"
     Version="2.0"
+    ID="123"
     IssueInstant="2004-12-05T09:21:59Z"
     Destination="https://idp.example.org/idp/profile/saml2/Redirect/SSO"
     AssertionConsumerServiceURL="https://sp.example.org/authentication/sp/consume-assertion"
@@ -1084,11 +1084,11 @@ AUTHNREQUEST;
 <samlp:AuthnRequest
     xmlns:samlp="urn:oasis:names:tc:SAML:2.0:protocol"
     xmlns:saml="urn:oasis:names:tc:SAML:2.0:assertion"
-    AssertionConsumerServiceIndex="1"
-    Destination="https://idp.example.org/idp/profile/saml2/Redirect/SSO"
+    Version="2.0"
     ID="_2b0226190ca1c22de6f66e85f5c95158"
     IssueInstant="2014-09-22T13:42:00Z"
-    Version="2.0">
+    AssertionConsumerServiceIndex="1"
+    Destination="https://idp.example.org/idp/profile/saml2/Redirect/SSO">
   <saml:Issuer>https://gateway.example.org/saml20/sp/metadata</saml:Issuer>
   <saml:Subject>
         <saml:NameID Format="urn:oasis:names:tc:SAML:1.1:nameid-format:unspecified">user@example.org</saml:NameID>
@@ -1114,11 +1114,11 @@ AUTHNREQUEST;
 <samlp:AuthnRequest
     xmlns:samlp="urn:oasis:names:tc:SAML:2.0:protocol"
     xmlns:saml="urn:oasis:names:tc:SAML:2.0:assertion"
-    AssertionConsumerServiceIndex="1"
-    Destination="https://idp.example.org/idp/profile/saml2/Redirect/SSO"
+    Version="2.0"
     ID="_2b0226190ca1c22de6f66e85f5c95158"
     IssueInstant="2014-09-22T13:42:00Z"
-    Version="2.0">
+    AssertionConsumerServiceIndex="1"
+    Destination="https://idp.example.org/idp/profile/saml2/Redirect/SSO">
   <saml:Issuer>https://gateway.example.org/saml20/sp/metadata</saml:Issuer>
   <saml:Subject>
         <saml:NameID Format="urn:oasis:names:tc:SAML:1.1:nameid-format:unspecified">user@example.org</saml:NameID>
@@ -1142,11 +1142,11 @@ AUTHNREQUEST;
 <samlp:AuthnRequest
     xmlns:samlp="urn:oasis:names:tc:SAML:2.0:protocol"
     xmlns:saml="urn:oasis:names:tc:SAML:2.0:assertion"
-    AssertionConsumerServiceIndex="1"
-    Destination="https://idp.example.org/idp/profile/saml2/Redirect/SSO"
+    Version="2.0"
     ID="_2b0226190ca1c22de6f66e85f5c95158"
     IssueInstant="2014-09-22T13:42:00Z"
-    Version="2.0">
+    AssertionConsumerServiceIndex="1"
+    Destination="https://idp.example.org/idp/profile/saml2/Redirect/SSO">
   <saml:Issuer>https://gateway.example.org/saml20/sp/metadata</saml:Issuer>
   <saml:Subject>
   </saml:Subject>
@@ -1205,8 +1205,8 @@ AUTHNREQUEST;
 <samlp:AuthnRequest
     xmlns:samlp="urn:oasis:names:tc:SAML:2.0:protocol"
     xmlns:saml="urn:oasis:names:tc:SAML:2.0:assertion"
-    ID=""
     Version=""
+    ID=""
     IssueInstant=""
     Destination="https://tiqr.example.org/idp/profile/saml2/Redirect/SSO">
     <saml:Issuer>https://gateway.example.org/saml20/sp/metadata</saml:Issuer>

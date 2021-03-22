@@ -204,8 +204,8 @@ final class AttributeQueryTest extends TestCase
 <samlp:AttributeQuery
     xmlns:saml="urn:oasis:names:tc:SAML:2.0:assertion"
     xmlns:samlp="urn:oasis:names:tc:SAML:2.0:protocol"
-    ID="aaf23196-1773-2113-474a-fe114412ab72"
     Version="2.0"
+    ID="aaf23196-1773-2113-474a-fe114412ab72"
     IssueInstant="2017-09-06T11:49:27Z">
   <saml:Issuer Format="urn:oasis:names:tc:SAML:2.0:nameid-format:entity">https://example.org/</saml:Issuer>
   <saml:Subject>
@@ -230,8 +230,8 @@ XML;
 <samlp:AttributeQuery
     xmlns:saml="urn:oasis:names:tc:SAML:2.0:assertion"
     xmlns:samlp="urn:oasis:names:tc:SAML:2.0:protocol"
-    ID="aaf23196-1773-2113-474a-fe114412ab72"
     Version="2.0"
+    ID="aaf23196-1773-2113-474a-fe114412ab72"
     IssueInstant="2017-09-06T11:49:27Z">
   <saml:Issuer Format="urn:oasis:names:tc:SAML:2.0:nameid-format:entity">https://example.org/</saml:Issuer>
   <saml:Subject>
@@ -274,8 +274,8 @@ XML;
 <samlp:AttributeQuery
     xmlns:saml="urn:oasis:names:tc:SAML:2.0:assertion"
     xmlns:samlp="urn:oasis:names:tc:SAML:2.0:protocol"
-    ID="aaf23196-1773-2113-474a-fe114412ab72"
     Version="2.0"
+    ID="aaf23196-1773-2113-474a-fe114412ab72"
     IssueInstant="2017-09-06T11:49:27Z">
   <saml:Issuer Format="urn:oasis:names:tc:SAML:2.0:nameid-format:entity">https://example.org/</saml:Issuer>
   <saml:Subject>
@@ -311,8 +311,8 @@ XML;
 <samlp:AttributeQuery
     xmlns:saml="urn:oasis:names:tc:SAML:2.0:assertion"
     xmlns:samlp="urn:oasis:names:tc:SAML:2.0:protocol"
-    ID="aaf23196-1773-2113-474a-fe114412ab72"
     Version="2.0"
+    ID="aaf23196-1773-2113-474a-fe114412ab72"
     IssueInstant="2017-09-06T11:49:27Z">
   <saml:Issuer Format="urn:oasis:names:tc:SAML:2.0:nameid-format:entity">https://example.org/</saml:Issuer>
   <saml:Attribute
@@ -335,8 +335,8 @@ XML;
 <samlp:AttributeQuery
     xmlns:saml="urn:oasis:names:tc:SAML:2.0:assertion"
     xmlns:samlp="urn:oasis:names:tc:SAML:2.0:protocol"
-    ID="aaf23196-1773-2113-474a-fe114412ab72"
     Version="2.0"
+    ID="aaf23196-1773-2113-474a-fe114412ab72"
     IssueInstant="2017-09-06T11:49:27Z">
   <saml:Issuer Format="urn:oasis:names:tc:SAML:2.0:nameid-format:entity">https://example.org/</saml:Issuer>
   <saml:Subject>
@@ -365,8 +365,8 @@ XML;
 <samlp:AttributeQuery
     xmlns:saml="urn:oasis:names:tc:SAML:2.0:assertion"
     xmlns:samlp="urn:oasis:names:tc:SAML:2.0:protocol"
-    ID="aaf23196-1773-2113-474a-fe114412ab72"
     Version="2.0"
+    ID="aaf23196-1773-2113-474a-fe114412ab72"
     IssueInstant="2017-09-06T11:49:27Z">
   <saml:Issuer Format="urn:oasis:names:tc:SAML:2.0:nameid-format:entity">https://example.org/</saml:Issuer>
   <saml:Subject>
@@ -395,8 +395,8 @@ XML;
 <samlp:AttributeQuery
     xmlns:saml="urn:oasis:names:tc:SAML:2.0:assertion"
     xmlns:samlp="urn:oasis:names:tc:SAML:2.0:protocol"
-    ID="aaf23196-1773-2113-474a-fe114412ab72"
     Version="2.0"
+    ID="aaf23196-1773-2113-474a-fe114412ab72"
     IssueInstant="2017-09-06T11:49:27Z">
   <saml:Issuer Format="urn:oasis:names:tc:SAML:2.0:nameid-format:entity">https://example.org/</saml:Issuer>
   <saml:Subject>

@@ -392,8 +392,8 @@ abstract class AbstractMessage extends AbstractSamlpElement implements SignedEle
         $root->setAttributeNS(Constants::NS_SAML, 'saml:tmp', 'tmp');
         $root->removeAttributeNS(Constants::NS_SAML, 'tmp');
 
-        $root->setAttribute('ID', $this->id);
         $root->setAttribute('Version', $this->version);
+        $root->setAttribute('ID', $this->id);
         $root->setAttribute('IssueInstant', gmdate('Y-m-d\TH:i:s\Z', $this->issueInstant));
 
         if ($this->destination !== null) {

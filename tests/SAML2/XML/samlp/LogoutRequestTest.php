@@ -224,8 +224,8 @@ XML;
 <samlp:LogoutRequest
     xmlns:samlp="urn:oasis:names:tc:SAML:2.0:protocol"
     xmlns:saml="urn:oasis:names:tc:SAML:2.0:assertion"
-    ID="SomeIDValue"
     Version="2.0"
+    ID="SomeIDValue"
     IssueInstant="2010-07-22T11:30:19Z">
   <saml:Issuer>TheIssuer</saml:Issuer>
 </samlp:LogoutRequest>
@@ -249,8 +249,8 @@ XML;
 <samlp:LogoutRequest
     xmlns:samlp="urn:oasis:names:tc:SAML:2.0:protocol"
     xmlns:saml="urn:oasis:names:tc:SAML:2.0:assertion"
-    ID="SomeIDValue"
     Version="2.0"
+    ID="SomeIDValue"
     IssueInstant="2010-07-22T11:30:19Z">
   <saml:Issuer>TheIssuer</saml:Issuer>
   <saml:NameID Format="urn:oasis:names:tc:SAML:2.0:nameid-format:unspecified">frits</saml:NameID>
@@ -274,8 +274,8 @@ XML;
 <samlp:LogoutRequest
     xmlns:samlp="urn:oasis:names:tc:SAML:2.0:protocol"
     xmlns:saml="urn:oasis:names:tc:SAML:2.0:assertion"
-    ID="SomeIDValue"
     Version="2.0"
+    ID="SomeIDValue"
     IssueInstant="2010-07-22T11:30:19Z"
     NotOnOrAfter="2018-11-28T19:33:12Z">
   <saml:Issuer>TheIssuer</saml:Issuer>
@@ -313,8 +313,8 @@ XML;
 <samlp:LogoutRequest
     xmlns:samlp="urn:oasis:names:tc:SAML:2.0:protocol"
     xmlns:saml="urn:oasis:names:tc:SAML:2.0:assertion"
-    ID="SomeIDValue"
     Version="2.0"
+    ID="SomeIDValue"
     IssueInstant="2010-07-22T11:30:19Z"
     NotOnOrAfter="2018-11-28T19:33:12Z"
     Reason="$reason">
@@ -354,8 +354,8 @@ XML;
 <samlp:LogoutRequest
     xmlns:samlp="urn:oasis:names:tc:SAML:2.0:protocol"
     xmlns:saml="urn:oasis:names:tc:SAML:2.0:assertion"
-    ID="SomeIDValue"
     Version="2.0"
+    ID="SomeIDValue"
     IssueInstant="2010-07-22T11:30:19Z">
   <saml:Issuer>TheIssuer</saml:Issuer>
   <saml:NameID Format="urn:oasis:names:tc:SAML:2.0:nameid-format:unspecified">frits</saml:NameID>

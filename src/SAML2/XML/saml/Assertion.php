@@ -44,7 +44,7 @@ class Assertion extends AbstractSamlElement implements SignedElementInterface
      *
      * @var int
      */
-    private int $issueInstant;
+    protected int $issueInstant;
 
     /**
      * The issuer of this assertion.
@@ -419,8 +419,8 @@ class Assertion extends AbstractSamlElement implements SignedElementInterface
     {
         $e = $this->instantiateParentElement($parentElement);
 
-        $e->setAttribute('ID', $this->id);
         $e->setAttribute('Version', '2.0');
+        $e->setAttribute('ID', $this->id);
         $e->setAttribute('IssueInstant', gmdate('Y-m-d\TH:i:s\Z', $this->issueInstant));
 
         $issuer = $this->issuer->toXML($e);
