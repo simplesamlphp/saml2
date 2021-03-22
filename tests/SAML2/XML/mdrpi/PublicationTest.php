@@ -8,6 +8,7 @@ use DOMDocument;
 use PHPUnit\Framework\TestCase;
 use SimpleSAML\SAML2\Exception\ProtocolViolationException;
 use SimpleSAML\SAML2\XML\mdrpi\Publication;
+use SimpleSAML\Test\XML\SerializableXMLTestTrait;
 use SimpleSAML\XML\DOMDocumentFactory;
 use SimpleSAML\XML\Exception\MissingAttributeException;
 use SimpleSAML\XML\Utils as XMLUtils;
@@ -21,15 +22,16 @@ use SimpleSAML\XML\Utils as XMLUtils;
  */
 final class PublicationTest extends TestCase
 {
-    /** @var \DOMDocument */
-    protected DOMDocument $document;
+    use SerializableXMLTestTrait;
 
 
     /**
      */
     protected function setUp(): void
     {
-        $this->document = DOMDocumentFactory::fromFile(
+        $this->testedClass = Publication::class;
+
+        $this->xmlRepresentation = DOMDocumentFactory::fromFile(
             dirname(dirname(dirname(dirname(__FILE__)))) . '/resources/xml/mdrpi_Publication.xml'
         );
     }
@@ -66,7 +68,7 @@ final class PublicationTest extends TestCase
      */
     public function testUnmarshalling(): void
     {
-        $publication = Publication::fromXML($this->document->documentElement);
+        $publication = Publication::fromXML($this->xmlRepresentation->documentElement);
 
         $this->assertEquals('SomePublisher', $publication->getPublisher());
         $this->assertEquals(1293840000, $publication->getCreationInstant());
@@ -78,7 +80,7 @@ final class PublicationTest extends TestCase
      */
     public function testCreationInstantTimezoneNotZuluThrowsException(): void
     {
-        $document = $this->document->documentElement;
+        $document = $this->xmlRepresentation->documentElement;
         $document->setAttribute('creationInstant', '2011-01-01T00:00:00WT');
 
         $this->expectException(ProtocolViolationException::class);
@@ -104,17 +106,5 @@ XML
         $this->expectException(MissingAttributeException::class);
         $this->expectExceptionMessage("Missing 'publisher' attribute on mdrpi:Publication.");
         Publication::fromXML($document->documentElement);
-    }
-
-
-    /**
-     * Test serialization / unserialization
-     */
-    public function testSerialization(): void
-    {
-        $this->assertEquals(
-            $this->document->saveXML($this->document->documentElement),
-            strval(unserialize(serialize(Publication::fromXML($this->document->documentElement))))
-        );
     }
 }

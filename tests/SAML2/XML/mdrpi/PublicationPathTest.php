@@ -9,6 +9,7 @@ use PHPUnit\Framework\TestCase;
 use SimpleSAML\SAML2\Exception\ProtocolViolationException;
 use SimpleSAML\SAML2\XML\mdrpi\PublicationPath;
 use SimpleSAML\SAML2\XML\mdrpi\Publication;
+use SimpleSAML\Test\XML\SerializableXMLTestTrait;
 use SimpleSAML\XML\DOMDocumentFactory;
 use SimpleSAML\XML\Exception\MissingAttributeException;
 use SimpleSAML\XML\Utils as XMLUtils;
@@ -22,15 +23,16 @@ use SimpleSAML\XML\Utils as XMLUtils;
  */
 final class PublicationPathTest extends TestCase
 {
-    /** @var \DOMDocument */
-    protected DOMDocument $document;
+    use SerializableXMLTestTrait;
 
 
     /**
      */
     protected function setUp(): void
     {
-        $this->document = DOMDocumentFactory::fromFile(
+        $this->testedClass = PublicationPath::class;
+
+        $this->xmlRepresentation = DOMDocumentFactory::fromFile(
             dirname(dirname(dirname(dirname(__FILE__)))) . '/resources/xml/mdrpi_PublicationPath.xml'
         );
     }
@@ -78,7 +80,7 @@ final class PublicationPathTest extends TestCase
      */
     public function testUnmarshalling(): void
     {
-        $publicationPath = PublicationPath::fromXML($this->document->documentElement);
+        $publicationPath = PublicationPath::fromXML($this->xmlRepresentation->documentElement);
 
         $publication = $publicationPath->getPublication();
         $this->assertCount(2, $publication);
@@ -89,17 +91,5 @@ final class PublicationPathTest extends TestCase
         $this->assertEquals('SomeOtherPublisher', $publication[1]->getPublisher());
         $this->assertEquals(1293840000, $publication[1]->getCreationInstant());
         $this->assertEquals('SomeOtherPublicationId', $publication[1]->getPublicationId());
-    }
-
-
-    /**
-     * Test serialization / unserialization
-     */
-    public function testSerialization(): void
-    {
-        $this->assertEquals(
-            $this->document->saveXML($this->document->documentElement),
-            strval(unserialize(serialize(PublicationPath::fromXML($this->document->documentElement))))
-        );
     }
 }
