@@ -7,6 +7,7 @@ namespace SimpleSAML\Test\SAML2\XML\shibmd;
 use DOMDocument;
 use PHPUnit\Framework\TestCase;
 use SimpleSAML\SAML2\XML\shibmd\Scope;
+use SimpleSAML\Test\XML\SerializableXMLTestTrait;
 use SimpleSAML\XML\DOMDocumentFactory;
 use SimpleSAML\XML\Utils as XMLUtils;
 
@@ -19,15 +20,16 @@ use SimpleSAML\XML\Utils as XMLUtils;
  */
 final class ScopeTest extends TestCase
 {
-    /** @var \DOMDocument */
-    private DOMDocument $document;
+    use SerializableXMLTestTrait;
 
 
     /**
      */
     public function setUp(): void
     {
-        $this->document = DOMDocumentFactory::fromFile(
+        $this->testedClass = Scope::class;
+
+        $this->xmlRepresentation = DOMDocumentFactory::fromFile(
             dirname(dirname(dirname(dirname(__FILE__)))) . '/resources/xml/shibmd_Scope.xml'
         );
     }
@@ -102,7 +104,7 @@ final class ScopeTest extends TestCase
      */
     public function testUnmarshallingLiteral(): void
     {
-        $scope = Scope::fromXML($this->document->documentElement);
+        $scope = Scope::fromXML($this->xmlRepresentation->documentElement);
 
         $this->assertEquals('example.org', $scope->getScope());
         $this->assertFalse($scope->isRegexpScope());
@@ -115,7 +117,7 @@ final class ScopeTest extends TestCase
      */
     public function testUnmarshallingWithoutRegexpValue(): void
     {
-        $scope = Scope::fromXML($this->document->documentElement);
+        $scope = Scope::fromXML($this->xmlRepresentation->documentElement);
 
         $this->assertEquals('example.org', $scope->getScope());
         $this->assertFalse($scope->isRegexpScope());
@@ -127,25 +129,12 @@ final class ScopeTest extends TestCase
      */
     public function testUnmarshallingRegexp(): void
     {
-        $document = $this->document;
+        $document = $this->xmlRepresentation;
         $document->documentElement->setAttribute('regexp', 'true');
         $document->documentElement->textContent = '^(.*|)example.edu$';
 
         $scope = Scope::fromXML($document->documentElement);
         $this->assertEquals('^(.*|)example.edu$', $scope->getScope());
         $this->assertTrue($scope->isRegexpScope());
-    }
-
-
-    /**
-     * Test serialization and unserialization of Scope elements.
-     */
-    public function testSerialization(): void
-    {
-        $scope = Scope::fromXML($this->document->documentElement);
-        $this->assertEquals(
-            $this->document->saveXML($this->document->documentElement),
-            strval(unserialize(serialize($scope)))
-        );
     }
 }

@@ -7,6 +7,7 @@ namespace SimpleSAML\Test\SAML2\XML\shibmd;
 use DOMDocument;
 use PHPUnit\Framework\TestCase;
 use SimpleSAML\SAML2\XML\shibmd\KeyAuthority;
+use SimpleSAML\Test\XML\SerializableXMLTestTrait;
 use SimpleSAML\XML\DOMDocumentFactory;
 use SimpleSAML\XML\Utils as XMLUtils;
 use SimpleSAML\XMLSecurity\XML\ds\KeyInfo;
@@ -22,15 +23,16 @@ use SimpleSAML\XMLSecurity\XML\ds\X509Data;
  */
 final class KeyAuthorityTest extends TestCase
 {
-    /** @var \DOMDocument */
-    private DOMDocument $document;
+    use SerializableXMLTestTrait;
 
 
     /**
      */
     public function setUp(): void
     {
-        $this->document = DOMDocumentFactory::fromFile(
+        $this->testedClass = KeyAuthority::class;
+
+        $this->xmlRepresentation = DOMDocumentFactory::fromFile(
             dirname(dirname(dirname(dirname(__FILE__)))) . '/resources/xml/shibmd_KeyAuthority.xml'
         );
     }
@@ -63,7 +65,7 @@ final class KeyAuthorityTest extends TestCase
                 'def456'
             ),
         ];
-        $attr1 = $this->document->createAttributeNS('urn:test', 'test:attr1');
+        $attr1 = $this->xmlRepresentation->createAttributeNS('urn:test', 'test:attr1');
         $attr1->value = 'testval1';
         $keyAuthority = new KeyAuthority($keys, 2, [$attr1]);
 
@@ -87,7 +89,7 @@ final class KeyAuthorityTest extends TestCase
      */
     public function testUnmarshalling(): void
     {
-        $keyAuthority = KeyAuthority::fromXML($this->document->documentElement);
+        $keyAuthority = KeyAuthority::fromXML($this->xmlRepresentation->documentElement);
         $this->assertEquals(2, $keyAuthority->getVerifyDepth());
 
         $keys = $keyAuthority->getKeys();
@@ -105,19 +107,6 @@ final class KeyAuthorityTest extends TestCase
                 ],
             ],
             $keyAuthority->getAttributesNS()
-        );
-    }
-
-
-    /**
-     * Test serialization and unserialization of Scope elements.
-     */
-    public function testSerialization(): void
-    {
-        $keyAuthority = KeyAuthority::fromXML($this->document->documentElement);
-        $this->assertEquals(
-            $this->document->saveXML($this->document->documentElement),
-            strval(unserialize(serialize($keyAuthority)))
         );
     }
 }
