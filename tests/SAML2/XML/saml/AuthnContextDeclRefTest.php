@@ -45,7 +45,10 @@ final class AuthnContextDeclRefTest extends TestCase
     {
         $authnContextDeclRef = new AuthnContextDeclRef('/relative/path/to/document.xml');
         $this->assertEquals('/relative/path/to/document.xml', $authnContextDeclRef->getDeclRef());
-        $this->assertEquals($this->xmlRepresentation->saveXML($this->xmlRepresentation->documentElement), strval($authnContextDeclRef));
+        $this->assertEquals(
+            $this->xmlRepresentation->saveXML($this->xmlRepresentation->documentElement),
+            strval($authnContextDeclRef)
+        );
     }
 
 

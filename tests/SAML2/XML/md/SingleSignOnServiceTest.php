@@ -49,7 +49,10 @@ final class SingleSignOnServiceTest extends TestCase
         $this->assertEquals('urn:something', $ssoep->getBinding());
         $this->assertEquals('https://whatever/', $ssoep->getLocation());
 
-        $this->assertEquals($this->xmlRepresentation->saveXML($this->xmlRepresentation->documentElement), strval($ssoep));
+        $this->assertEquals(
+            $this->xmlRepresentation->saveXML($this->xmlRepresentation->documentElement),
+            strval($ssoep)
+        );
     }
 
 
@@ -59,7 +62,9 @@ final class SingleSignOnServiceTest extends TestCase
     public function testMarshallingWithResponseLocation(): void
     {
         $this->expectException(AssertionFailedException::class);
-        $this->expectExceptionMessage('The \'ResponseLocation\' attribute must be omitted for md:SingleSignOnService.');
+        $this->expectExceptionMessage(
+            'The \'ResponseLocation\' attribute must be omitted for md:SingleSignOnService.'
+        );
 
         new SingleSignOnService('urn:something', 'https://whatever/', 'https://response.location/');
     }
@@ -77,7 +82,10 @@ final class SingleSignOnServiceTest extends TestCase
 
         $this->assertEquals('urn:something', $ssoep->getBinding());
         $this->assertEquals('https://whatever/', $ssoep->getLocation());
-        $this->assertEquals($this->xmlRepresentation->saveXML($this->xmlRepresentation->documentElement), strval($ssoep));
+        $this->assertEquals(
+            $this->xmlRepresentation->saveXML($this->xmlRepresentation->documentElement),
+            strval($ssoep)
+        );
     }
 
 
@@ -89,7 +97,9 @@ final class SingleSignOnServiceTest extends TestCase
         $this->xmlRepresentation->documentElement->setAttribute('ResponseLocation', 'https://response.location/');
 
         $this->expectException(AssertionFailedException::class);
-        $this->expectExceptionMessage('The \'ResponseLocation\' attribute must be omitted for md:SingleSignOnService.');
+        $this->expectExceptionMessage(
+            'The \'ResponseLocation\' attribute must be omitted for md:SingleSignOnService.'
+        );
 
         SingleSignOnService::fromXML($this->xmlRepresentation->documentElement);
     }

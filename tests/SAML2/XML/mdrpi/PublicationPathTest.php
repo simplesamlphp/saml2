@@ -44,8 +44,8 @@ final class PublicationPathTest extends TestCase
     {
         $publicationPath = new PublicationPath(
             [
-                New Publication('SomePublisher', 1234567890, 'SomePublicationId'),
-                New Publication('SomeOtherPublisher', 1234567890, 'SomeOtherPublicationId'),
+                new Publication('SomePublisher', 1234567890, 'SomePublicationId'),
+                new Publication('SomeOtherPublisher', 1234567890, 'SomeOtherPublicationId'),
             ]
         );
 

@@ -213,7 +213,9 @@ final class AttributeAuthorityDescriptorTest extends TestCase
     public function testMarshallingWithWrongAssertionIDRequestService(): void
     {
         $this->expectException(AssertionFailedException::class);
-        $this->expectExceptionMessage('Expected an instance of SimpleSAML\SAML2\XML\md\AssertionIDRequestService. Got: string');
+        $this->expectExceptionMessage(
+            'Expected an instance of SimpleSAML\SAML2\XML\md\AssertionIDRequestService. Got: string'
+        );
 
         /** @psalm-suppress InvalidArgument */
         new AttributeAuthorityDescriptor([$this->as], ['x'], ['x']);
@@ -248,7 +250,9 @@ final class AttributeAuthorityDescriptorTest extends TestCase
     public function testMarshallingWithWrongAttribute(): void
     {
         $this->expectException(AssertionFailedException::class);
-        $this->expectExceptionMessage('Expected an instance of SimpleSAML\SAML2\XML\saml\Attribute. Got: string');
+        $this->expectExceptionMessage(
+            'Expected an instance of SimpleSAML\SAML2\XML\saml\Attribute. Got: string'
+        );
 
         /** @psalm-suppress InvalidArgument */
         new AttributeAuthorityDescriptor([$this->as], ['x'], [$this->aidrs], ['x'], ['x'], ['x']);

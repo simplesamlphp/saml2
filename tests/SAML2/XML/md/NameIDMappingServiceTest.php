@@ -49,7 +49,10 @@ final class NameIDMappingServiceTest extends TestCase
         $this->assertEquals('urn:something', $nidmsep->getBinding());
         $this->assertEquals('https://whatever/', $nidmsep->getLocation());
 
-        $this->assertEquals($this->xmlRepresentation->saveXML($this->xmlRepresentation->documentElement), strval($nidmsep));
+        $this->assertEquals(
+            $this->xmlRepresentation->saveXML($this->xmlRepresentation->documentElement),
+            strval($nidmsep)
+        );
     }
 
 
@@ -78,7 +81,10 @@ final class NameIDMappingServiceTest extends TestCase
 
         $this->assertEquals('urn:something', $nidmsep->getBinding());
         $this->assertEquals('https://whatever/', $nidmsep->getLocation());
-        $this->assertEquals($this->xmlRepresentation->saveXML($this->xmlRepresentation->documentElement), strval($nidmsep));
+        $this->assertEquals($this->xmlRepresentation->saveXML(
+            $this->xmlRepresentation->documentElement),
+            strval($nidmsep)
+        );
     }
 
 

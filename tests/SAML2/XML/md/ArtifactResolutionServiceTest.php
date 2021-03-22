@@ -49,7 +49,10 @@ final class ArtifactResolutionServiceTest extends TestCase
         $this->assertEquals('urn:something', $arsep->getBinding());
         $this->assertEquals('https://whatever/', $arsep->getLocation());
 
-        $this->assertEquals($this->xmlRepresentation->saveXML($this->xmlRepresentation->documentElement), strval($arsep));
+        $this->assertEquals(
+            $this->xmlRepresentation->saveXML($this->xmlRepresentation->documentElement),
+            strval($arsep)
+        );
     }
 
 
@@ -78,7 +81,10 @@ final class ArtifactResolutionServiceTest extends TestCase
         $this->assertEquals('urn:something', $arsep->getBinding());
         $this->assertEquals('https://whatever/', $arsep->getLocation());
 
-        $this->assertEquals($this->xmlRepresentation->saveXML($this->xmlRepresentation->documentElement), strval($arsep));
+        $this->assertEquals(
+            $this->xmlRepresentation->saveXML($this->xmlRepresentation->documentElement),
+            strval($arsep)
+        );
     }
 
 

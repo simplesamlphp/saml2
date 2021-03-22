@@ -59,7 +59,10 @@ final class RequestInitiatorTest extends TestCase
         $this->assertFalse($requestInitiator->hasAttributeNS('urn:test', 'invalid'));
         $this->assertNull($requestInitiator->getAttributeNS('urn:test', 'invalid'));
 
-        $this->assertEquals($this->xmlRepresentation->saveXML($this->xmlRepresentation->documentElement), strval($requestInitiator));
+        $this->assertEquals(
+            $this->xmlRepresentation->saveXML($this->xmlRepresentation->documentElement),
+            strval($requestInitiator)
+        );
     }
 
 

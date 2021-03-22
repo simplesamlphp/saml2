@@ -51,7 +51,10 @@ final class OrganizationDisplayNameTest extends TestCase
         $this->assertEquals('en', $name->getLanguage());
         $this->assertEquals('Identity Providers R US, a Division of Lerxst Corp.', $name->getValue());
 
-        $this->assertEquals($this->xmlRepresentation->saveXML($this->xmlRepresentation->documentElement), strval($name));
+        $this->assertEquals(
+            $this->xmlRepresentation->saveXML($this->xmlRepresentation->documentElement),
+            strval($name)
+        );
     }
 
 
@@ -76,7 +79,10 @@ final class OrganizationDisplayNameTest extends TestCase
 
         $this->xmlRepresentation->documentElement->textContent = '';
 
-        $this->assertEquals($this->xmlRepresentation->saveXML($this->xmlRepresentation->documentElement), strval($name));
+        $this->assertEquals(
+            $this->xmlRepresentation->saveXML($this->xmlRepresentation->documentElement),
+            strval($name)
+        );
     }
 
 
@@ -89,7 +95,10 @@ final class OrganizationDisplayNameTest extends TestCase
     public function testUnmarshalling(): void
     {
         $name = OrganizationDisplayName::fromXML($this->xmlRepresentation->documentElement);
-        $this->assertEquals($this->xmlRepresentation->saveXML($this->xmlRepresentation->documentElement), strval($name));
+        $this->assertEquals(
+            $this->xmlRepresentation->saveXML($this->xmlRepresentation->documentElement),
+            strval($name)
+        );
     }
 
 
@@ -131,6 +140,9 @@ final class OrganizationDisplayNameTest extends TestCase
 
         $this->assertEquals('en', $name->getLanguage());
         $this->assertEquals('', $name->getValue());
-        $this->assertEquals($this->xmlRepresentation->saveXML($this->xmlRepresentation->documentElement), strval($name));
+        $this->assertEquals(
+            $this->xmlRepresentation->saveXML($this->xmlRepresentation->documentElement),
+            strval($name)
+        );
     }
 }

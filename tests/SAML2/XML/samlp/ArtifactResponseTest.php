@@ -92,7 +92,10 @@ final class ArtifactResponseTest extends TestCase
         $this->assertCount(1, $artifactIssuer);
         $this->assertEquals($issuer1->getValue(), $artifactIssuer[0]->textContent);
 
-        $authnelement = XMLUtils::xpQuery($artifactResponseElement, './saml_protocol:AuthnRequest/saml_assertion:Issuer');
+        $authnelement = XMLUtils::xpQuery(
+            $artifactResponseElement,
+            './saml_protocol:AuthnRequest/saml_assertion:Issuer'
+        );
         $this->assertCount(1, $authnelement);
         $this->assertEquals($issuer2->getValue(), $authnelement[0]->textContent);
 

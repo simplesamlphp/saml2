@@ -196,7 +196,10 @@ final class EntitiesDescriptorTest extends TestCase
      */
     public function testUnmarshallingWithoutEntities(): void
     {
-        $entities = $this->xmlRepresentation->documentElement->getElementsByTagNameNS(Constants::NS_MD, 'EntitiesDescriptor');
+        $entities = $this->xmlRepresentation->documentElement->getElementsByTagNameNS(
+            Constants::NS_MD,
+            'EntitiesDescriptor'
+        );
         /** @psalm-suppress PossiblyNullArgument */
         $this->xmlRepresentation->documentElement->removeChild($entities->item(0));
         $entitiesd = EntitiesDescriptor::fromXML($this->xmlRepresentation->documentElement);
@@ -210,10 +213,13 @@ final class EntitiesDescriptorTest extends TestCase
      */
     public function testUnmarshallingWithoutEntity(): void
     {
-        $entity = $this->xmlRepresentation->documentElement->getElementsByTagNameNS(Constants::NS_MD, 'EntityDescriptor');
+        $entity = $this->xmlRepresentation->documentElement->getElementsByTagNameNS(
+            Constants::NS_MD,
+            'EntityDescriptor'
+        );
         /*
          *  getElementsByTagNameNS() searches recursively. Therefore, it finds first the EntityDescriptor that's
-         * inside the nested EntitiesDescriptor. We then need to fetch the second result of the search, which will be
+         *  inside the nested EntitiesDescriptor. We then need to fetch the second result of the search, which will be
          *  the child of the parent EntitiesDescriptor.
          */
 
@@ -231,12 +237,18 @@ final class EntitiesDescriptorTest extends TestCase
     public function testUnmarshallingEmpty(): void
     {
         // remove child EntitiesDescriptor
-        $entities = $this->xmlRepresentation->documentElement->getElementsByTagNameNS(Constants::NS_MD, 'EntitiesDescriptor');
+        $entities = $this->xmlRepresentation->documentElement->getElementsByTagNameNS(
+            Constants::NS_MD,
+            'EntitiesDescriptor'
+        );
         /** @psalm-suppress PossiblyNullArgument */
         $this->xmlRepresentation->documentElement->removeChild($entities->item(0));
 
         // remove child EntityDescriptor
-        $entity = $this->xmlRepresentation->documentElement->getElementsByTagNameNS(Constants::NS_MD, 'EntityDescriptor');
+        $entity = $this->xmlRepresentation->documentElement->getElementsByTagNameNS(
+            Constants::NS_MD,
+            'EntityDescriptor'
+        );
         /** @psalm-suppress PossiblyNullArgument */
         $this->xmlRepresentation->documentElement->removeChild($entity->item(0));
 

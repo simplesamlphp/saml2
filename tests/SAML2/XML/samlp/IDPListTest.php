@@ -60,7 +60,10 @@ final class IDPListTest extends TestCase
 
         $this->assertEquals('https://some/location', $list->getGetComplete());
 
-        $this->assertEquals($this->xmlRepresentation->saveXML($this->xmlRepresentation->documentElement), strval($list));
+        $this->assertEquals(
+            $this->xmlRepresentation->saveXML($this->xmlRepresentation->documentElement),
+            strval($list)
+        );
     }
 
 

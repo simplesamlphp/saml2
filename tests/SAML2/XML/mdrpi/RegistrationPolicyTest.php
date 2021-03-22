@@ -52,7 +52,10 @@ final class RegistrationPolicyTest extends TestCase
         $this->assertEquals('en', $name->getLanguage());
         $this->assertEquals('http://www.example.edu/en/', $name->getValue());
 
-        $this->assertEquals($this->xmlRepresentation->saveXML($this->xmlRepresentation->documentElement), strval($name));
+        $this->assertEquals(
+            $this->xmlRepresentation->saveXML($this->xmlRepresentation->documentElement),
+            strval($name)
+        );
     }
 
 
@@ -77,7 +80,10 @@ final class RegistrationPolicyTest extends TestCase
 
         $this->xmlRepresentation->documentElement->textContent = '';
 
-        $this->assertEquals($this->xmlRepresentation->saveXML($this->xmlRepresentation->documentElement), strval($name));
+        $this->assertEquals(
+            $this->xmlRepresentation->saveXML($this->xmlRepresentation->documentElement),
+            strval($name)
+        );
     }
 
 
@@ -90,7 +96,10 @@ final class RegistrationPolicyTest extends TestCase
     public function testUnmarshalling(): void
     {
         $name = RegistrationPolicy::fromXML($this->xmlRepresentation->documentElement);
-        $this->assertEquals($this->xmlRepresentation->saveXML($this->xmlRepresentation->documentElement), strval($name));
+        $this->assertEquals(
+            $this->xmlRepresentation->saveXML($this->xmlRepresentation->documentElement),
+            strval($name)
+        );
     }
 
 
@@ -132,7 +141,10 @@ final class RegistrationPolicyTest extends TestCase
 
         $this->assertEquals('en', $name->getLanguage());
         $this->assertEquals('', $name->getValue());
-        $this->assertEquals($this->xmlRepresentation->saveXML($this->xmlRepresentation->documentElement), strval($name));
+        $this->assertEquals(
+            $this->xmlRepresentation->saveXML($this->xmlRepresentation->documentElement),
+            strval($name)
+        );
     }
 
 

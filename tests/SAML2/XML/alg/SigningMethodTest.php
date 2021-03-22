@@ -47,7 +47,10 @@ final class SigningMethodTest extends TestCase
         $this->assertEquals(1024, $signingMethod->getMinKeySize());
         $this->assertEquals(4096, $signingMethod->getMaxKeySize());
 
-        $this->assertEquals($this->xmlRepresentation->saveXML($this->xmlRepresentation->documentElement), strval($signingMethod));
+        $this->assertEquals(
+            $this->xmlRepresentation->saveXML($this->xmlRepresentation->documentElement),
+            strval($signingMethod)
+        );
     }
 
 

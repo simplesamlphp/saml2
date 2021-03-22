@@ -52,7 +52,10 @@ final class IndexedEndpointTypeTest extends TestCase
         $this->assertEquals(42, $idxep->getIndex());
         $this->assertFalse($idxep->getIsDefault());
 
-        $this->assertEquals($this->xmlRepresentation->saveXML($this->xmlRepresentation->documentElement), strval($idxep));
+        $this->assertEquals(
+            $this->xmlRepresentation->saveXML($this->xmlRepresentation->documentElement),
+            strval($idxep)
+        );
     }
 
 
@@ -63,7 +66,10 @@ final class IndexedEndpointTypeTest extends TestCase
     {
         $idxep = new AssertionConsumerService(42, 'urn:something', 'https://whatever/');
         $this->xmlRepresentation->documentElement->removeAttribute('isDefault');
-        $this->assertEquals($this->xmlRepresentation->saveXML($this->xmlRepresentation->documentElement), strval($idxep));
+        $this->assertEquals($this->xmlRepresentation->saveXML(
+            $this->xmlRepresentation->documentElement),
+            strval($idxep)
+        );
         $this->assertNull($idxep->getIsDefault());
     }
 
@@ -79,7 +85,10 @@ final class IndexedEndpointTypeTest extends TestCase
         $idxep = AssertionConsumerService::fromXML($this->xmlRepresentation->documentElement);
         $this->assertEquals(42, $idxep->getIndex());
         $this->assertFalse($idxep->getIsDefault());
-        $this->assertEquals($this->xmlRepresentation->saveXML($this->xmlRepresentation->documentElement), strval($idxep));
+        $this->assertEquals(
+            $this->xmlRepresentation->saveXML($this->xmlRepresentation->documentElement),
+            strval($idxep)
+        );
     }
 
 

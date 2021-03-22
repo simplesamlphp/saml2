@@ -45,7 +45,10 @@ final class DigestMethodTest extends TestCase
 
         $this->assertEquals('http://exampleAlgorithm', $digestMethod->getAlgorithm());
 
-        $this->assertEquals($this->xmlRepresentation->saveXML($this->xmlRepresentation->documentElement), strval($digestMethod));
+        $this->assertEquals(
+            $this->xmlRepresentation->saveXML($this->xmlRepresentation->documentElement),
+            strval($digestMethod)
+        );
     }
 
 

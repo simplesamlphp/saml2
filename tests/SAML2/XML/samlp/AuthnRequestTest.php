@@ -171,7 +171,10 @@ final class AuthnRequestTest extends TestCase
 
         // Test ordering of AuthnRequest contents
         /** @psalm-var \DOMElement[] $authnRequestElements */
-        $authnRequestElements = XMLUtils::xpQuery($authnRequestElement, './saml_assertion:Subject/following-sibling::*');
+        $authnRequestElements = XMLUtils::xpQuery(
+            $authnRequestElement,
+            './saml_assertion:Subject/following-sibling::*'
+        );
         $this->assertCount(4, $authnRequestElements);
         $this->assertEquals('samlp:NameIDPolicy', $authnRequestElements[0]->tagName);
         $this->assertEquals('saml:Conditions', $authnRequestElements[1]->tagName);

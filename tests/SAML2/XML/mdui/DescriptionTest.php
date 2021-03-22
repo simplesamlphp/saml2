@@ -51,7 +51,10 @@ final class DescriptionTest extends TestCase
         $this->assertEquals('en', $name->getLanguage());
         $this->assertEquals('Just an example', $name->getValue());
 
-        $this->assertEquals($this->xmlRepresentation->saveXML($this->xmlRepresentation->documentElement), strval($name));
+        $this->assertEquals(
+            $this->xmlRepresentation->saveXML($this->xmlRepresentation->documentElement),
+            strval($name)
+        );
     }
 
 
@@ -76,7 +79,10 @@ final class DescriptionTest extends TestCase
 
         $this->xmlRepresentation->documentElement->textContent = '';
 
-        $this->assertEquals($this->xmlRepresentation->saveXML($this->xmlRepresentation->documentElement), strval($name));
+        $this->assertEquals(
+            $this->xmlRepresentation->saveXML($this->xmlRepresentation->documentElement),
+            strval($name)
+        );
     }
 
 
@@ -89,7 +95,10 @@ final class DescriptionTest extends TestCase
     public function testUnmarshalling(): void
     {
         $name = Description::fromXML($this->xmlRepresentation->documentElement);
-        $this->assertEquals($this->xmlRepresentation->saveXML($this->xmlRepresentation->documentElement), strval($name));
+        $this->assertEquals(
+            $this->xmlRepresentation->saveXML($this->xmlRepresentation->documentElement),
+            strval($name)
+        );
     }
 
 
@@ -131,6 +140,9 @@ final class DescriptionTest extends TestCase
 
         $this->assertEquals('en', $name->getLanguage());
         $this->assertEquals('', $name->getValue());
-        $this->assertEquals($this->xmlRepresentation->saveXML($this->xmlRepresentation->documentElement), strval($name));
+        $this->assertEquals(
+            $this->xmlRepresentation->saveXML($this->xmlRepresentation->documentElement),
+            strval($name)
+        );
     }
 }

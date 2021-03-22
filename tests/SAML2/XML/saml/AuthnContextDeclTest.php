@@ -47,7 +47,10 @@ final class AuthnContextDeclTest extends TestCase
 
         $this->assertEquals($this->xmlRepresentation->documentElement->childNodes, $authnContextDecl->getDecl());
 
-        $this->assertEquals($this->xmlRepresentation->saveXML($this->xmlRepresentation->documentElement), strval($authnContextDecl));
+        $this->assertEquals(
+            $this->xmlRepresentation->saveXML($this->xmlRepresentation->documentElement),
+            strval($authnContextDecl)
+        );
     }
 
 

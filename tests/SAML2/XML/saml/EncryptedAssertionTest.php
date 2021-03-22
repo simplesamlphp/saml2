@@ -60,7 +60,9 @@ final class EncryptedAssertionTest extends TestCase
             null,
             null,
             new EncryptionMethod('http://www.w3.org/2001/04/xmlenc#aes128-cbc'),
-            new KeyInfo([new Chunk(DOMDocumentFactory::fromFile(dirname(dirname(dirname(dirname(dirname(__FILE__))))) . '/vendor/simplesamlphp/xml-security/tests/resources/xml/ds_RetrievalMethod.xml')->documentElement)])
+            new KeyInfo(
+                [new Chunk(DOMDocumentFactory::fromFile(dirname(dirname(dirname(dirname(dirname(__FILE__))))) . '/vendor/simplesamlphp/xml-security/tests/resources/xml/ds_RetrievalMethod.xml')->documentElement)]
+            )
         );
         $encryptedAssertion = new EncryptedAssertion($ed, []);
 

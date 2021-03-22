@@ -95,14 +95,26 @@ final class EntityAttributesTest extends TestCase
         $this->assertInstanceOf(Attribute::class, $entityAttributes->getChildren()[3]);
 
         $this->assertEquals('Assertion', $entityAttributes->getChildren()[0]->getLocalName());
-        $this->assertEquals('1984-08-26T10:01:30.000Z', $entityAttributes->getChildren()[0]->getXML()->getAttribute('IssueInstant'));
+        $this->assertEquals(
+            '1984-08-26T10:01:30.000Z',
+            $entityAttributes->getChildren()[0]->getXML()->getAttribute('IssueInstant')
+        );
         $this->assertEquals('attrib1', $entityAttributes->getChildren()[1]->getName());
-        $this->assertEquals('urn:oasis:names:tc:SAML:2.0:attrname-format:uri', $entityAttributes->getChildren()[1]->getNameFormat());
+        $this->assertEquals(
+            'urn:oasis:names:tc:SAML:2.0:attrname-format:uri',
+            $entityAttributes->getChildren()[1]->getNameFormat()
+        );
         $this->assertCount(0, $entityAttributes->getChildren()[1]->getAttributeValues());
         $this->assertEquals('Assertion', $entityAttributes->getChildren()[2]->getLocalName());
-        $this->assertEquals('1984-08-26T10:01:30.000Z', $entityAttributes->getChildren()[2]->getXML()->getAttribute('IssueInstant'));
+        $this->assertEquals(
+            '1984-08-26T10:01:30.000Z',
+            $entityAttributes->getChildren()[2]->getXML()->getAttribute('IssueInstant')
+        );
         $this->assertEquals('urn:simplesamlphp:v1:simplesamlphp', $entityAttributes->getChildren()[3]->getName());
-        $this->assertEquals('urn:oasis:names:tc:SAML:2.0:attrname-format:uri', $entityAttributes->getChildren()[3]->getNameFormat());
+        $this->assertEquals(
+            'urn:oasis:names:tc:SAML:2.0:attrname-format:uri',
+            $entityAttributes->getChildren()[3]->getNameFormat()
+        );
         $this->assertCount(3, $entityAttributes->getChildren()[3]->getAttributeValues());
     }
 }

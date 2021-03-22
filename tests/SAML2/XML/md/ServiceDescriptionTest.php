@@ -57,7 +57,10 @@ final class ServiceDescriptionTest extends TestCase
         $this->assertEquals('en', $name->getLanguage());
         $this->assertEquals('Academic Journals R US and only us', $name->getValue());
 
-        $this->assertEquals($this->xmlRepresentation->saveXML($this->xmlRepresentation->documentElement), strval($name));
+        $this->assertEquals(
+            $this->xmlRepresentation->saveXML($this->xmlRepresentation->documentElement),
+            strval($name)
+        );
     }
 
 
@@ -82,7 +85,10 @@ final class ServiceDescriptionTest extends TestCase
 
         $this->xmlRepresentation->documentElement->textContent = '';
 
-        $this->assertEquals($this->xmlRepresentation->saveXML($this->xmlRepresentation->documentElement), strval($name));
+        $this->assertEquals(
+            $this->xmlRepresentation->saveXML($this->xmlRepresentation->documentElement),
+            strval($name)
+        );
     }
 
 
@@ -95,7 +101,10 @@ final class ServiceDescriptionTest extends TestCase
     public function testUnmarshalling(): void
     {
         $name = ServiceDescription::fromXML($this->xmlRepresentation->documentElement);
-        $this->assertEquals($this->xmlRepresentation->saveXML($this->xmlRepresentation->documentElement), strval($name));
+        $this->assertEquals(
+            $this->xmlRepresentation->saveXML($this->xmlRepresentation->documentElement),
+            strval($name)
+        );
     }
 
 
@@ -137,6 +146,9 @@ final class ServiceDescriptionTest extends TestCase
 
         $this->assertEquals('en', $name->getLanguage());
         $this->assertEquals('', $name->getValue());
-        $this->assertEquals($this->xmlRepresentation->saveXML($this->xmlRepresentation->documentElement), strval($name));
+        $this->assertEquals(
+            $this->xmlRepresentation->saveXML($this->xmlRepresentation->documentElement),
+            strval($name)
+        );
     }
 }

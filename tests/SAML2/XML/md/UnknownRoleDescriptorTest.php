@@ -87,7 +87,10 @@ final class UnknownRoleDescriptorTest extends TestCase
         $this->assertEquals(Constants::NS_MD, $extensions[0]->getNamespaceURI());
         $this->assertEquals('SomeUnknownExtension', $extensions[0]->getLocalName());
 
-        $this->assertEquals($this->xmlRepresentation->saveXML($this->xmlRepresentation->documentElement), strval($descriptor));
+        $this->assertEquals($this->xmlRepresentation->saveXML(
+            $this->xmlRepresentation->documentElement),
+            strval($descriptor)
+        );
     }
 
 

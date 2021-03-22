@@ -58,7 +58,8 @@ final class EncryptedIDTest extends TestCase
         );
 
         $this->retrievalMethod = DOMDocumentFactory::fromFile(
-            dirname(dirname(dirname(dirname(dirname(__FILE__))))) . '/vendor/simplesamlphp/xml-security/tests/resources/xml/ds_RetrievalMethod.xml'
+            dirname(dirname(dirname(dirname(dirname(__FILE__)))))
+            . '/vendor/simplesamlphp/xml-security/tests/resources/xml/ds_RetrievalMethod.xml'
         );
     }
 

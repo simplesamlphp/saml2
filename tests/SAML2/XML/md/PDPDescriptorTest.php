@@ -193,7 +193,9 @@ final class PDPDescriptorTest extends TestCase
          * @psalm-suppress PossiblyNullArgument
          * @psalm-suppress PossiblyNullPropertyFetch
          */
-        $this->xmlRepresentation->documentElement->removeChild($this->xmlRepresentation->documentElement->firstChild->nextSibling);
+        $this->xmlRepresentation->documentElement->removeChild(
+            $this->xmlRepresentation->documentElement->firstChild->nextSibling
+        );
 
         $this->expectException(AssertionFailedException::class);
 

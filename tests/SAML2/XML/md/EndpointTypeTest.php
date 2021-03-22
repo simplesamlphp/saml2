@@ -59,7 +59,10 @@ final class EndpointTypeTest extends TestCase
         $this->assertFalse($endpointType->hasAttributeNS('urn:test', 'invalid'));
         $this->assertNull($endpointType->getAttributeNS('urn:test', 'invalid'));
 
-        $this->assertEquals($this->xmlRepresentation->saveXML($this->xmlRepresentation->documentElement), strval($endpointType));
+        $this->assertEquals(
+            $this->xmlRepresentation->saveXML($this->xmlRepresentation->documentElement),
+            strval($endpointType)
+        );
     }
 
 
@@ -109,7 +112,10 @@ final class EndpointTypeTest extends TestCase
         $this->assertEquals('value', $endpointType->getAttributeNS('urn:test', 'attr'));
         $this->assertFalse($endpointType->hasAttributeNS('urn:test', 'invalid'));
         $this->assertNull($endpointType->getAttributeNS('urn:test', 'invalid'));
-        $this->assertEquals($this->xmlRepresentation->saveXML($this->xmlRepresentation->documentElement), strval($endpointType));
+        $this->assertEquals(
+            $this->xmlRepresentation->saveXML($this->xmlRepresentation->documentElement),
+            strval($endpointType)
+        );
     }
 
 

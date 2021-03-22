@@ -45,7 +45,10 @@ final class IDPEntryTest extends TestCase
         $this->assertEquals('testName', $entry->getName());
         $this->assertEquals('testLoc', $entry->getLoc());
 
-        $this->assertEquals($this->xmlRepresentation->saveXML($this->xmlRepresentation->documentElement), strval($entry));
+        $this->assertEquals(
+            $this->xmlRepresentation->saveXML($this->xmlRepresentation->documentElement),
+            strval($entry)
+        );
     }
 
     /**

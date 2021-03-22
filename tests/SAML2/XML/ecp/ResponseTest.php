@@ -44,7 +44,10 @@ final class ResponseTest extends TestCase
 
         $this->assertEquals('https://example.com/ACS', $response->getAssertionConsumerServiceURL());
 
-        $this->assertEquals($this->xmlRepresentation->saveXML($this->xmlRepresentation->documentElement), strval($response));
+        $this->assertEquals(
+            $this->xmlRepresentation->saveXML($this->xmlRepresentation->documentElement),
+            strval($response)
+        );
     }
 
 
@@ -84,7 +87,10 @@ final class ResponseTest extends TestCase
 
         $this->assertEquals('https://example.com/ACS', $response->getAssertionConsumerServiceURL());
 
-        $this->assertEquals($this->xmlRepresentation->saveXML($this->xmlRepresentation->documentElement), strval($response));
+        $this->assertEquals(
+            $this->xmlRepresentation->saveXML($this->xmlRepresentation->documentElement),
+            strval($response)
+        );
     }
 
 

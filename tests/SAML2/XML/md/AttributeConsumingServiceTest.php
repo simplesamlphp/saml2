@@ -82,7 +82,10 @@ final class AttributeConsumingServiceTest extends TestCase
             $acs->getServiceDescriptions()
         );
 
-        $this->assertEquals($this->xmlRepresentation->saveXML($this->xmlRepresentation->documentElement), strval($acs));
+        $this->assertEquals(
+            $this->xmlRepresentation->saveXML($this->xmlRepresentation->documentElement),
+            strval($acs)
+        );
     }
 
 
@@ -98,7 +101,10 @@ final class AttributeConsumingServiceTest extends TestCase
             false
         );
 
-        $descr = $this->xmlRepresentation->documentElement->getElementsByTagNameNS(Constants::NS_MD, 'ServiceDescription');
+        $descr = $this->xmlRepresentation->documentElement->getElementsByTagNameNS(
+            Constants::NS_MD,
+            'ServiceDescription'
+        );
 
         /**
          * @psalm-suppress PossiblyNullPropertyFetch
@@ -110,7 +116,10 @@ final class AttributeConsumingServiceTest extends TestCase
         $this->xmlRepresentation->documentElement->removeChild($descr->item(0));
         $this->xmlRepresentation->documentElement->removeChild($space);
         $this->xmlRepresentation->documentElement->setAttribute('isDefault', 'false');
-        $this->assertEquals($this->xmlRepresentation->saveXML($this->xmlRepresentation->documentElement), strval($acs));
+        $this->assertEquals(
+            $this->xmlRepresentation->saveXML($this->xmlRepresentation->documentElement),
+            strval($acs)
+        );
     }
 
 
@@ -146,7 +155,10 @@ final class AttributeConsumingServiceTest extends TestCase
             [new ServiceDescription('en', 'Academic Journals R US and only us')]
         );
         $this->xmlRepresentation->documentElement->removeAttribute('isDefault');
-        $this->assertEquals($this->xmlRepresentation->saveXML($this->xmlRepresentation->documentElement), strval($acs));
+        $this->assertEquals(
+            $this->xmlRepresentation->saveXML($this->xmlRepresentation->documentElement),
+            strval($acs)
+        );
     }
 
 
@@ -205,7 +217,10 @@ final class AttributeConsumingServiceTest extends TestCase
      */
     public function testUnmarshallingWithoutDescription(): void
     {
-        $descr = $this->xmlRepresentation->documentElement->getElementsByTagNameNS(Constants::NS_MD, 'ServiceDescription');
+        $descr = $this->xmlRepresentation->documentElement->getElementsByTagNameNS(
+            Constants::NS_MD,
+            'ServiceDescription'
+        );
         /** @psalm-suppress PossiblyNullArgument */
         $this->xmlRepresentation->documentElement->removeChild($descr->item(0));
         $acs = AttributeConsumingService::fromXML($this->xmlRepresentation->documentElement);
@@ -218,7 +233,10 @@ final class AttributeConsumingServiceTest extends TestCase
      */
     public function testUnmarshallingWithEmptyDescription(): void
     {
-        $descr = $this->xmlRepresentation->documentElement->getElementsByTagNameNS(Constants::NS_MD, 'ServiceDescription');
+        $descr = $this->xmlRepresentation->documentElement->getElementsByTagNameNS(
+            Constants::NS_MD,
+            'ServiceDescription'
+        );
         /** @psalm-suppress PossiblyNullPropertyAssignment */
         $descr->item(0)->textContent = '';
         $acs = AttributeConsumingService::fromXML($this->xmlRepresentation->documentElement);
@@ -294,7 +312,10 @@ final class AttributeConsumingServiceTest extends TestCase
      */
     public function testUnmarshallingWithoutRequestedAttributes(): void
     {
-        $reqAttr = $this->xmlRepresentation->documentElement->getElementsByTagNameNS(Constants::NS_MD, 'RequestedAttribute');
+        $reqAttr = $this->xmlRepresentation->documentElement->getElementsByTagNameNS(
+            Constants::NS_MD,
+            'RequestedAttribute'
+        );
         /** @psalm-suppress PossiblyNullArgument */
         $this->xmlRepresentation->documentElement->removeChild($reqAttr->item(0));
         $this->expectException(MissingElementException::class);
