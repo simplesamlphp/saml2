@@ -12,6 +12,7 @@ use SimpleSAML\SAML2\XML\saml\EncryptedID;
 use SimpleSAML\SAML2\XML\saml\Issuer;
 use SimpleSAML\SAML2\XML\saml\NameID;
 use SimpleSAML\SAML2\XML\samlp\LogoutRequest;
+use SimpleSAML\Test\XML\SerializableXMLTestTrait;
 use SimpleSAML\XML\Chunk;
 use SimpleSAML\XML\DOMDocumentFactory;
 use SimpleSAML\XML\Exception\MissingElementException;
@@ -38,8 +39,8 @@ use SimpleSAML\XMLSecurity\XMLSecurityKey;
  */
 final class LogoutRequestTest extends MockeryTestCase
 {
-    /** @var \DOMDocument $document */
-    private DOMDocument $document;
+    use SerializableXMLTestTrait;
+
 
     /** @var \DOMElement */
     private DOMElement $logoutRequestElement;
@@ -53,7 +54,9 @@ final class LogoutRequestTest extends MockeryTestCase
      */
     public function setUp(): void
     {
-        $this->document = DOMDocumentFactory::fromFile(
+        $this->testedClass = LogoutRequest::class;
+
+        $this->xmlRepresentation = DOMDocumentFactory::fromFile(
             dirname(dirname(dirname(dirname(__FILE__)))) . '/resources/xml/samlp_LogoutRequest.xml'
         );
 
@@ -128,7 +131,7 @@ final class LogoutRequestTest extends MockeryTestCase
      */
     public function testUnmarshalling(): void
     {
-        $logoutRequest = LogoutRequest::fromXML($this->document->documentElement);
+        $logoutRequest = LogoutRequest::fromXML($this->xmlRepresentation->documentElement);
         $issuer = $logoutRequest->getIssuer();
 
         $this->assertInstanceOf(Issuer::class, $issuer);
@@ -384,17 +387,5 @@ XML;
         $this->assertCount(2, $logoutRequest->getSessionIndexes());
         $this->assertEquals('SessionIndexValue1', $logoutRequest->getSessionIndexes()[0]);
         $this->assertEquals('SessionIndexValue2', $logoutRequest->getSessionIndexes()[1]);
-    }
-
-
-    /**
-     * Test serialization / unserialization
-     */
-    public function testSerialization(): void
-    {
-        $this->assertEquals(
-            $this->document->saveXML($this->document->documentElement),
-            strval(unserialize(serialize(LogoutRequest::fromXML($this->document->documentElement))))
-        );
     }
 }

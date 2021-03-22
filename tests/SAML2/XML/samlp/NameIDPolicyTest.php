@@ -8,6 +8,7 @@ use DOMDocument;
 use PHPUnit\Framework\TestCase;
 use SimpleSAML\SAML2\Constants;
 use SimpleSAML\SAML2\XML\samlp\NameIDPolicy;
+use SimpleSAML\Test\XML\SerializableXMLTestTrait;
 use SimpleSAML\XML\DOMDocumentFactory;
 
 /**
@@ -20,15 +21,16 @@ use SimpleSAML\XML\DOMDocumentFactory;
  */
 final class NameIDPolicyTest extends TestCase
 {
-    /** @var \DOMDocument */
-    private DOMDocument $document;
+    use SerializableXMLTestTrait;
 
 
     /**
      */
     public function setUp(): void
     {
-        $this->document = DOMDocumentFactory::fromFile(
+        $this->testedClass = NameIDPolicy::class;
+
+        $this->xmlRepresentation = DOMDocumentFactory::fromFile(
             dirname(dirname(dirname(dirname(__FILE__)))) . '/resources/xml/samlp_NameIDPolicy.xml'
         );
     }
@@ -49,7 +51,7 @@ final class NameIDPolicyTest extends TestCase
         $this->assertFalse($nameIdPolicy->isEmptyElement());
 
         $this->assertEquals(
-            $this->document->saveXML($this->document->documentElement),
+            $this->xmlRepresentation->saveXML($this->xmlRepresentation->documentElement),
             strval($nameIdPolicy)
         );
     }
@@ -74,23 +76,11 @@ final class NameIDPolicyTest extends TestCase
      */
     public function testUnmarshalling(): void
     {
-        $nameIdPolicy = NameIDPolicy::fromXML($this->document->documentElement);
+        $nameIdPolicy = NameIDPolicy::fromXML($this->xmlRepresentation->documentElement);
 
         $this->assertEquals('TheSPNameQualifier', $nameIdPolicy->getSPNameQualifier());
         $this->assertEquals('TheFormat', $nameIdPolicy->getFormat());
         $this->assertEquals(true, $nameIdPolicy->getAllowCreate());
         $this->assertFalse($nameIdPolicy->isEmptyElement());
-    }
-
-
-    /**
-     * Test serialization / unserialization
-     */
-    public function testSerialization(): void
-    {
-        $this->assertEquals(
-            $this->document->saveXML($this->document->documentElement),
-            strval(unserialize(serialize(NameIDPolicy::fromXML($this->document->documentElement))))
-        );
     }
 }

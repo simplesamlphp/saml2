@@ -8,6 +8,7 @@ use DOMDocument;
 use PHPUnit\Framework\TestCase;
 use SimpleSAML\SAML2\Constants;
 use SimpleSAML\SAML2\XML\samlp\StatusDetail;
+use SimpleSAML\Test\XML\SerializableXMLTestTrait;
 use SimpleSAML\XML\DOMDocumentFactory;
 use SimpleSAML\XML\Chunk;
 
@@ -21,15 +22,16 @@ use SimpleSAML\XML\Chunk;
  */
 final class StatusDetailTest extends TestCase
 {
-    /** @var \DOMDocument */
-    private DOMDocument $document;
+    use SerializableXMLTestTrait;
 
 
     /**
      */
     public function setUp(): void
     {
-        $this->document = DOMDocumentFactory::fromFile(
+        $this->testedClass = StatusDetail::class;
+
+        $this->xmlRepresentation = DOMDocumentFactory::fromFile(
             dirname(dirname(dirname(dirname(__FILE__)))) . '/resources/xml/samlp_StatusDetail.xml'
         );
     }
@@ -46,7 +48,7 @@ final class StatusDetailTest extends TestCase
         $statusDetail = new StatusDetail([new Chunk($document->documentElement)]);
         $this->assertFalse($statusDetail->isEmptyElement());
         $this->assertEquals(
-            $this->document->saveXML($this->document->documentElement),
+            $this->xmlRepresentation->saveXML($this->xmlRepresentation->documentElement),
             strval($statusDetail)
         );
     }
@@ -71,7 +73,7 @@ final class StatusDetailTest extends TestCase
      */
     public function testUnmarshalling(): void
     {
-        $statusDetail = StatusDetail::fromXML($this->document->documentElement);
+        $statusDetail = StatusDetail::fromXML($this->xmlRepresentation->documentElement);
 
         $statusDetailElement = $statusDetail->getDetails();
         $statusDetailElement = $statusDetailElement[0]->getXML();
@@ -82,17 +84,5 @@ final class StatusDetailTest extends TestCase
             $statusDetailElement->textContent
         );
         $this->assertFalse($statusDetail->isEmptyElement());
-   }
-
-
-    /**
-     * Test serialization / unserialization
-     */
-    public function testSerialization(): void
-    {
-        $this->assertEquals(
-            $this->document->saveXML($this->document->documentElement),
-            strval(unserialize(serialize(StatusDetail::fromXML($this->document->documentElement))))
-        );
     }
 }

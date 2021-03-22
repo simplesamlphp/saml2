@@ -11,6 +11,7 @@ use SimpleSAML\SAML2\Constants;
 use SimpleSAML\SAML2\XML\saml\AuthnContextClassRef;
 use SimpleSAML\SAML2\XML\saml\AuthnContextDeclRef;
 use SimpleSAML\SAML2\XML\samlp\RequestedAuthnContext;
+use SimpleSAML\Test\XML\SerializableXMLTestTrait;
 use SimpleSAML\XML\DOMDocumentFactory;
 
 /**
@@ -22,15 +23,16 @@ use SimpleSAML\XML\DOMDocumentFactory;
  */
 final class RequestedAuthnContextTest extends TestCase
 {
-    /** @var \DOMDocument */
-    private DOMDocument $document;
+    use SerializableXMLTestTrait;
 
 
     /**
      */
     public function setUp(): void
     {
-        $this->document = DOMDocumentFactory::fromFile(
+        $this->testedClass = RequestedAuthnContext::class;
+
+        $this->xmlRepresentation = DOMDocumentFactory::fromFile(
             dirname(dirname(dirname(dirname(__FILE__)))) . '/resources/xml/samlp_RequestedAuthnContext.xml'
         );
     }
@@ -44,7 +46,7 @@ final class RequestedAuthnContextTest extends TestCase
         $requestedAuthnContext = new RequestedAuthnContext([$authnContextDeclRef], 'exact');
 
         $this->assertEquals(
-            $this->document->saveXML($this->document->documentElement),
+            $this->xmlRepresentation->saveXML($this->xmlRepresentation->documentElement),
             strval($requestedAuthnContext)
         );
     }
@@ -91,7 +93,7 @@ final class RequestedAuthnContextTest extends TestCase
      */
     public function testUnmarshalling(): void
     {
-        $requestedAuthnContext = RequestedAuthnContext::fromXML($this->document->documentElement);
+        $requestedAuthnContext = RequestedAuthnContext::fromXML($this->xmlRepresentation->documentElement);
         $this->assertEquals('exact', $requestedAuthnContext->getComparison());
 
         $contexts = $requestedAuthnContext->getRequestedAuthnContexts();
@@ -123,17 +125,5 @@ XML
         $this->expectException(AssertionFailedException::class);
         $this->expectExceptionMessage('You need either AuthnContextClassRef or AuthnContextDeclRef, not both.');
         RequestedAuthnContext::fromXML($document->documentElement);
-    }
-
-
-    /**
-     * Test serialization / unserialization
-     */
-    public function testSerialization(): void
-    {
-        $this->assertEquals(
-            $this->document->saveXML($this->document->documentElement),
-            strval(unserialize(serialize(RequestedAuthnContext::fromXML($this->document->documentElement))))
-        );
     }
 }

@@ -8,6 +8,7 @@ use DOMDocument;
 use PHPUnit\Framework\TestCase;
 use SimpleSAML\SAML2\XML\samlp\IDPEntry;
 use SimpleSAML\SAML2\XML\samlp\IDPList;
+use SimpleSAML\Test\XML\SerializableXMLTestTrait;
 use SimpleSAML\XML\DOMDocumentFactory;
 use SimpleSAML\XML\Exception\MissingElementException;
 use SimpleSAML\XML\Utils as XMLUtils;
@@ -22,15 +23,16 @@ use SimpleSAML\XML\Utils as XMLUtils;
  */
 final class IDPListTest extends TestCase
 {
-    /** @var \DOMDocument */
-    private DOMDocument $document;
+    use SerializableXMLTestTrait;
 
 
     /**
      */
     protected function setUp(): void
     {
-        $this->document = DOMDocumentFactory::fromFile(
+        $this->testedClass = IDPList::class;
+
+        $this->xmlRepresentation = DOMDocumentFactory::fromFile(
             dirname(dirname(dirname(dirname(__FILE__)))) . '/resources/xml/samlp_IDPList.xml'
         );
     }
@@ -58,7 +60,7 @@ final class IDPListTest extends TestCase
 
         $this->assertEquals('https://some/location', $list->getGetComplete());
 
-        $this->assertEquals($this->document->saveXML($this->document->documentElement), strval($list));
+        $this->assertEquals($this->xmlRepresentation->saveXML($this->xmlRepresentation->documentElement), strval($list));
     }
 
 
@@ -118,7 +120,7 @@ XML
      */
     public function testUnmarshalling(): void
     {
-        $list = IDPList::fromXML($this->document->documentElement);
+        $list = IDPList::fromXML($this->xmlRepresentation->documentElement);
 
         $entries = $list->getIdpEntry();
         $this->assertCount(2, $entries);
@@ -141,7 +143,7 @@ XML
     {
         $ns = IDPList::NS;
 
-        $this->document = DOMDocumentFactory::fromString(<<<XML
+        $this->xmlRepresentation = DOMDocumentFactory::fromString(<<<XML
 <samlp:IDPList xmlns:samlp="{$ns}">
   <samlp:GetComplete>https://some/location</samlp:GetComplete>
 </samlp:IDPList>
@@ -151,18 +153,6 @@ XML
         $this->expectException(MissingElementException::class);
         $this->expectExceptionMessage('At least one <samlp:IDPEntry> must be specified.');
 
-        IDPList::fromXML($this->document->documentElement);
-    }
-
-
-    /**
-     * Test serialization / unserialization
-     */
-    public function testSerialization(): void
-    {
-        $this->assertEquals(
-            $this->document->saveXML($this->document->documentElement),
-            strval(unserialize(serialize(IDPList::fromXML($this->document->documentElement))))
-        );
+        IDPList::fromXML($this->xmlRepresentation->documentElement);
     }
 }
