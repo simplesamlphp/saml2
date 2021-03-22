@@ -12,6 +12,7 @@ use SimpleSAML\SAML2\XML\saml\AuthnContext;
 use SimpleSAML\SAML2\XML\saml\AuthnContextDecl;
 use SimpleSAML\SAML2\XML\saml\AuthnContextDeclRef;
 use SimpleSAML\SAML2\XML\saml\AuthnContextClassRef;
+use SimpleSAML\Test\XML\SerializableXMLTestTrait;
 use SimpleSAML\XML\DOMDocumentFactory;
 use SimpleSAML\XML\Exception\TooManyElementsException;
 use SimpleSAML\XML\Utils as XMLUtils;
@@ -25,8 +26,8 @@ use SimpleSAML\XML\Utils as XMLUtils;
  */
 final class AuthnContextTest extends TestCase
 {
-    /** @var \DOMDocument */
-    private DOMDocument $document;
+    use SerializableXMLTestTrait;
+
 
     /** @var \DOMDocument */
     private DOMDocument $classRef;
@@ -45,7 +46,9 @@ final class AuthnContextTest extends TestCase
      */
     protected function setUp(): void
     {
-        $this->document = DOMDocumentFactory::fromFile(
+        $this->testedClass = AuthnContext::class;
+
+        $this->xmlRepresentation = DOMDocumentFactory::fromFile(
             dirname(dirname(dirname(dirname(__FILE__)))) . '/resources/xml/saml_AuthnContext.xml'
         );
 
@@ -94,7 +97,7 @@ final class AuthnContextTest extends TestCase
         );
         $this->assertEquals(['https://idp.example.com/SAML2'], $authnContext->getAuthenticatingAuthorities());
 
-        $document = $this->document;
+        $document = $this->xmlRepresentation;
         $document->documentElement->appendChild($document->importNode($this->classRef->documentElement, true));
         $document->documentElement->appendChild($document->importNode($this->declRef->documentElement, true));
         $document->documentElement->appendChild($document->importNode($this->authority->documentElement, true));
@@ -122,7 +125,7 @@ final class AuthnContextTest extends TestCase
         $this->assertNull($authnContext->getAuthnContextDeclRef());
         $this->assertEquals(['https://idp.example.com/SAML2'], $authnContext->getAuthenticatingAuthorities());
 
-        $document = $this->document;
+        $document = $this->xmlRepresentation;
         $document->documentElement->appendChild($document->importNode($this->decl->documentElement, true));
         $document->documentElement->appendChild($document->importNode($this->authority->documentElement, true));
 
@@ -300,7 +303,7 @@ final class AuthnContextTest extends TestCase
      */
     public function testUnmarshallingWithClassRef(): void
     {
-        $document = $this->document;
+        $document = $this->xmlRepresentation;
         $document->documentElement->appendChild($document->importNode($this->classRef->documentElement, true));
         $document->documentElement->appendChild($document->importNode($this->declRef->documentElement, true));
         $document->documentElement->appendChild($document->importNode($this->authority->documentElement, true));
@@ -324,7 +327,7 @@ final class AuthnContextTest extends TestCase
      */
     public function testUnmarshallingWithoutClassRef(): void
     {
-        $document = $this->document;
+        $document = $this->xmlRepresentation;
         $document->documentElement->appendChild($document->importNode($this->decl->documentElement, true));
         $document->documentElement->appendChild($document->importNode($this->authority->documentElement, true));
 
@@ -344,7 +347,7 @@ final class AuthnContextTest extends TestCase
      */
     public function testUnmarshallingIllegalCombination(): void
     {
-        $document = $this->document;
+        $document = $this->xmlRepresentation;
         $document->documentElement->appendChild($document->importNode($this->classRef->documentElement, true));
         $document->documentElement->appendChild($document->importNode($this->decl->documentElement, true));
         $document->documentElement->appendChild($document->importNode($this->declRef->documentElement, true));
@@ -362,7 +365,7 @@ final class AuthnContextTest extends TestCase
      */
     public function testMoreThanOneAuthnContextClassRefThrowsException(): void
     {
-        $document = $this->document;
+        $document = $this->xmlRepresentation;
         $document->documentElement->appendChild($document->importNode($this->classRef->documentElement, true));
         $document->documentElement->appendChild($document->importNode($this->classRef->documentElement, true));
 
@@ -378,7 +381,7 @@ final class AuthnContextTest extends TestCase
      */
     public function testMoreThanOneAuthnContextDeclRefThrowsException(): void
     {
-        $document = $this->document;
+        $document = $this->xmlRepresentation;
         $document->documentElement->appendChild($document->importNode($this->declRef->documentElement, true));
         $document->documentElement->appendChild($document->importNode($this->declRef->documentElement, true));
 
@@ -394,7 +397,7 @@ final class AuthnContextTest extends TestCase
      */
     public function testMoreThanOneAuthnContextDeclThrowsException(): void
     {
-        $document = $this->document;
+        $document = $this->xmlRepresentation;
         $document->documentElement->appendChild($document->importNode($this->decl->documentElement, true));
         $document->documentElement->appendChild($document->importNode($this->decl->documentElement, true));
 
@@ -409,7 +412,7 @@ final class AuthnContextTest extends TestCase
      */
     public function testUnmarshallingEmpty(): void
     {
-        $document = $this->document;
+        $document = $this->xmlRepresentation;
 
         $this->expectException(AssertionFailedException::class);
         $this->expectExceptionMessage('You need either an AuthnContextDecl or an AuthnContextDeclRef');
@@ -423,13 +426,13 @@ final class AuthnContextTest extends TestCase
      */
     public function testSerialization(): void
     {
-        $document = $this->document;
+        $document = $this->xmlRepresentation;
         $document->documentElement->appendChild($document->importNode($this->classRef->documentElement, true));
         $document->documentElement->appendChild($document->importNode($this->declRef->documentElement, true));
         $document->documentElement->appendChild($document->importNode($this->authority->documentElement, true));
 
         $this->assertXmlStringEqualsXmlString(
-            $this->document->saveXML($document->documentElement),
+            $this->xmlRepresentation->saveXML($document->documentElement),
             strval(unserialize(serialize(AuthnContext::fromXML($document->documentElement))))
         );
     }

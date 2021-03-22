@@ -9,6 +9,7 @@ use PHPUnit\Framework\TestCase;
 use SimpleSAML\SAML2\XML\saml\Assertion;
 use SimpleSAML\SAML2\XML\saml\EncryptedAssertion;
 use SimpleSAML\SAML2\XML\saml\Issuer;
+use SimpleSAML\Test\XML\SerializableXMLTestTrait;
 use SimpleSAML\XML\DOMDocumentFactory;
 use SimpleSAML\XML\Chunk;
 use SimpleSAML\XMLSecurity\TestUtils\PEMCertificatesMock;
@@ -30,15 +31,16 @@ use SimpleSAML\XMLSecurity\XMLSecurityKey;
  */
 final class EncryptedAssertionTest extends TestCase
 {
-    /** @var \DOMDocument */
-    private DOMDocument $document;
+    use SerializableXMLTestTrait;
 
 
     /**
      */
     public function setUp(): void
     {
-        $this->document = DOMDocumentFactory::fromFile(
+        $this->testedClass = EncryptedAssertion::class;
+
+        $this->xmlRepresentation = DOMDocumentFactory::fromFile(
             dirname(dirname(dirname(dirname(__FILE__)))) . '/resources/xml/saml_EncryptedAssertion.xml'
         );
     }
@@ -71,7 +73,7 @@ final class EncryptedAssertionTest extends TestCase
         $this->assertInstanceOf(KeyInfo::class, $ed->getKeyInfo());
 
         $this->assertEquals(
-            $this->document->saveXML($this->document->documentElement),
+            $this->xmlRepresentation->saveXML($this->xmlRepresentation->documentElement),
             strval($encryptedAssertion)
         );
     }
@@ -98,17 +100,5 @@ final class EncryptedAssertionTest extends TestCase
         $privkey->loadKey(PEMCertificatesMock::getPlainPrivateKey(PEMCertificatesMock::PRIVATE_KEY));
 
         $this->assertEquals(strval($assertion), strval($encAssertion->decrypt($privkey)));
-    }
-
-
-    /**
-     * Test serialization / unserialization
-     */
-    public function testSerialization(): void
-    {
-        $this->assertEquals(
-            $this->document->saveXML($this->document->documentElement),
-            strval(unserialize(serialize(EncryptedAssertion::fromXML($this->document->documentElement))))
-        );
     }
 }

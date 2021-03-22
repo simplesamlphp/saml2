@@ -10,6 +10,7 @@ use SimpleSAML\SAML2\Constants;
 use SimpleSAML\SAML2\XML\saml\Attribute;
 use SimpleSAML\SAML2\XML\saml\AttributeValue;
 use SimpleSAML\SAML2\XML\saml\EncryptedAttribute;
+use SimpleSAML\Test\XML\SerializableXMLTestTrait;
 use SimpleSAML\XML\DOMDocumentFactory;
 use SimpleSAML\XML\Exception\MissingAttributeException;
 use SimpleSAML\XMLSecurity\TestUtils\PEMCertificatesMock;
@@ -24,15 +25,16 @@ use SimpleSAML\XMLSecurity\XMLSecurityKey;
  */
 final class AttributeTest extends TestCase
 {
-    /** @var \DOMDocument */
-    protected DOMDocument $document;
+    use SerializableXMLTestTrait;
 
 
     /**
      */
     protected function setUp(): void
     {
-        $this->document = DOMDocumentFactory::fromFile(
+        $this->testedClass = Attribute::class;
+
+        $this->xmlRepresentation = DOMDocumentFactory::fromFile(
             dirname(dirname(dirname(dirname(__FILE__)))) . '/resources/xml/saml_Attribute.xml'
         );
     }
@@ -46,9 +48,9 @@ final class AttributeTest extends TestCase
      */
     public function testMarshalling(): void
     {
-        $attr1 = $this->document->createAttributeNS('urn:test', 'test:attr1');
+        $attr1 = $this->xmlRepresentation->createAttributeNS('urn:test', 'test:attr1');
         $attr1->value = 'testval1';
-        $attr2 = $this->document->createAttributeNS('urn:test', 'test:attr2');
+        $attr2 = $this->xmlRepresentation->createAttributeNS('urn:test', 'test:attr2');
         $attr2->value = 'testval2';
 
         $attribute = new Attribute(
@@ -75,7 +77,7 @@ final class AttributeTest extends TestCase
         $this->assertEquals('SecondValue', $values[1]->getValue());
 
         $this->assertEquals(
-            $this->document->saveXML($this->document->documentElement),
+            $this->xmlRepresentation->saveXML($this->xmlRepresentation->documentElement),
             strval($attribute)
         );
     }
@@ -89,7 +91,7 @@ final class AttributeTest extends TestCase
      */
     public function testUnmarshalling(): void
     {
-        $attribute = Attribute::fromXML($this->document->documentElement);
+        $attribute = Attribute::fromXML($this->xmlRepresentation->documentElement);
 
         $this->assertEquals('TheName', $attribute->getName());
         $this->assertEquals('TheNameFormat', $attribute->getNameFormat());
@@ -123,7 +125,7 @@ final class AttributeTest extends TestCase
      */
     public function testUnmarshallingWithoutName(): void
     {
-        $document = $this->document;
+        $document = $this->xmlRepresentation;
         $document->documentElement->removeAttribute('Name');
 
         $this->expectException(MissingAttributeException::class);
@@ -137,7 +139,7 @@ final class AttributeTest extends TestCase
      */
     public function testEncryption(): void
     {
-        $attribute = Attribute::fromXML($this->document->documentElement);
+        $attribute = Attribute::fromXML($this->xmlRepresentation->documentElement);
         $pubkey = new XMLSecurityKey(XMLSecurityKey::RSA_SHA256, ['type' => 'public']);
         $pubkey->loadKey(PEMCertificatesMock::getPlainPublicKey(PEMCertificatesMock::PUBLIC_KEY));
         /** @psalm-var \SimpleSAML\SAML2\XML\saml\EncryptedAttribute $encattr */
@@ -149,17 +151,5 @@ final class AttributeTest extends TestCase
         $privkey->loadKey(PEMCertificatesMock::getPlainPrivateKey(PEMCertificatesMock::PRIVATE_KEY));
         $attr = $encattr->decrypt($privkey);
         $this->assertEquals(strval($attribute), strval($attr));
-    }
-
-
-    /**
-     * Test serialization / unserialization
-     */
-    public function testSerialization(): void
-    {
-        $this->assertEquals(
-            $this->document->saveXML($this->document->documentElement),
-            strval(unserialize(serialize(Attribute::fromXML($this->document->documentElement))))
-        );
     }
 }

@@ -9,6 +9,7 @@ use PHPUnit\Framework\TestCase;
 use SimpleSAML\SAML2\Constants;
 use SimpleSAML\SAML2\XML\saml\Condition;
 use SimpleSAML\Test\SAML2\CustomCondition;
+use SimpleSAML\Test\XML\SerializableXMLTestTrait;
 use SimpleSAML\XML\DOMDocumentFactory;
 
 /**
@@ -22,15 +23,16 @@ use SimpleSAML\XML\DOMDocumentFactory;
  */
 final class ConditionTest extends TestCase
 {
-    /** @var \DOMDocument $document */
-    private DOMDocument $document;
+    use SerializableXMLTestTrait;
 
 
     /**
      */
     public function setup(): void
     {
-        $this->document = DOMDocumentFactory::fromFile(
+        $this->testedClass = Condition::class;
+
+        $this->xmlRepresentation = DOMDocumentFactory::fromFile(
             dirname(dirname(dirname(dirname(__FILE__)))) . '/resources/xml/saml_Condition.xml'
         );
     }
@@ -51,7 +53,7 @@ final class ConditionTest extends TestCase
         $this->assertEquals('SomeCondition', $condition->getValue());
 
         $this->assertEquals(
-            $this->document->saveXML($this->document->documentElement),
+            $this->xmlRepresentation->saveXML($this->xmlRepresentation->documentElement),
             strval($condition)
         );
     }
@@ -64,13 +66,13 @@ final class ConditionTest extends TestCase
      */
     public function testUnmarshalling(): void
     {
-        $condition = Condition::fromXML($this->document->documentElement);
+        $condition = Condition::fromXML($this->xmlRepresentation->documentElement);
 
         $this->assertEquals('CustomCondition', $condition->getType());
         $this->assertEquals('SomeCondition', $condition->getValue());
 
         $this->assertEquals(
-            $this->document->saveXML($this->document->documentElement),
+            $this->xmlRepresentation->saveXML($this->xmlRepresentation->documentElement),
             strval($condition)
         );
     }
@@ -81,13 +83,13 @@ final class ConditionTest extends TestCase
     public function testUnmarshallingCustomClass(): void
     {
         /** @var \SimpleSAML\Test\SAML2\CustomCondition $condition */
-        $condition = CustomCondition::fromXML($this->document->documentElement);
+        $condition = CustomCondition::fromXML($this->xmlRepresentation->documentElement);
 
         $this->assertEquals('CustomCondition', $condition->getType());
         $this->assertEquals('SomeCondition', $condition->getValue());
 
         $this->assertEquals(
-            $this->document->saveXML($this->document->documentElement),
+            $this->xmlRepresentation->saveXML($this->xmlRepresentation->documentElement),
             strval($condition)
         );
     }
@@ -99,12 +101,12 @@ final class ConditionTest extends TestCase
     public function testSerialization(): void
     {
         $this->assertEquals(
-            $this->document->saveXML($this->document->documentElement),
-            strval(unserialize(serialize(Condition::fromXML($this->document->documentElement))))
+            $this->xmlRepresentation->saveXML($this->xmlRepresentation->documentElement),
+            strval(unserialize(serialize(Condition::fromXML($this->xmlRepresentation->documentElement))))
         );
         $this->assertEquals(
-            $this->document->saveXML($this->document->documentElement),
-            strval(unserialize(serialize(CustomCondition::fromXML($this->document->documentElement))))
+            $this->xmlRepresentation->saveXML($this->xmlRepresentation->documentElement),
+            strval(unserialize(serialize(CustomCondition::fromXML($this->xmlRepresentation->documentElement))))
         );
     }
 }

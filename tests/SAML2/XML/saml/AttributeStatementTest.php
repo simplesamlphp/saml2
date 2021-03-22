@@ -11,6 +11,7 @@ use SimpleSAML\SAML2\Constants;
 use SimpleSAML\SAML2\XML\saml\Attribute;
 use SimpleSAML\SAML2\XML\saml\AttributeStatement;
 use SimpleSAML\SAML2\XML\saml\AttributeValue;
+use SimpleSAML\Test\XML\SerializableXMLTestTrait;
 use SimpleSAML\XML\DOMDocumentFactory;
 use SimpleSAML\XMLSecurity\PEMCertificatesMock;
 use SimpleSAML\XMLSecurity\XMLSecurityKey;
@@ -24,15 +25,16 @@ use SimpleSAML\XMLSecurity\XMLSecurityKey;
  */
 final class AttributeStatementTest extends TestCase
 {
-    /** @var \DOMDocument */
-    private DOMDocument $document;
+    use SerializableXMLTestTrait;
 
 
     /**
      */
     protected function setUp(): void
     {
-        $this->document = DOMDocumentFactory::fromFile(
+        $this->testedClass = AttributeStatement::class;
+
+        $this->xmlRepresentation = DOMDocumentFactory::fromFile(
             dirname(dirname(dirname(dirname(__FILE__)))) . '/resources/xml/saml_AttributeStatement.xml'
         );
     }
@@ -78,7 +80,7 @@ final class AttributeStatementTest extends TestCase
      */
     public function testUnmarshalling(): void
     {
-        $attrStatement = AttributeStatement::fromXML($this->document->documentElement);
+        $attrStatement = AttributeStatement::fromXML($this->xmlRepresentation->documentElement);
 
         $attributes = $attrStatement->getAttributes();
         $this->assertCount(3, $attributes);
@@ -103,17 +105,5 @@ XML
 
         $this->expectException(AssertionFailedException::class);
         AttributeStatement::fromXML($document->documentElement);
-    }
-
-
-    /**
-     * Test serialization / unserialization
-     */
-    public function testSerialization(): void
-    {
-        $this->assertEquals(
-            $this->document->saveXML($this->document->documentElement),
-            strval(unserialize(serialize(AttributeStatement::fromXML($this->document->documentElement))))
-        );
     }
 }

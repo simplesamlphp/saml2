@@ -10,6 +10,7 @@ use SimpleSAML\SAML2\Constants;
 use SimpleSAML\SAML2\XML\saml\AudienceRestriction;
 use SimpleSAML\SAML2\XML\saml\Conditions;
 use SimpleSAML\SAML2\XML\saml\ProxyRestriction;
+use SimpleSAML\Test\XML\SerializableXMLTestTrait;
 use SimpleSAML\XML\DOMDocumentFactory;
 
 /**
@@ -22,15 +23,16 @@ use SimpleSAML\XML\DOMDocumentFactory;
  */
 final class ConditionsTest extends TestCase
 {
-    /** @var \DOMDocument $document */
-    private DOMDocument $document;
+    use SerializableXMLTestTrait;
 
 
     /**
      */
     public function setup(): void
     {
-        $this->document = DOMDocumentFactory::fromFile(
+        $this->testedClass = Conditions::class;
+
+        $this->xmlRepresentation = DOMDocumentFactory::fromFile(
             dirname(dirname(dirname(dirname(__FILE__)))) . '/resources/xml/saml_Conditions.xml'
         );
     }
@@ -84,7 +86,7 @@ final class ConditionsTest extends TestCase
         $this->assertEquals('http://sp.example.com/demo2/metadata.php', $audiences[0]);
 
         $this->assertEquals(
-            $this->document->saveXML($this->document->documentElement),
+            $this->xmlRepresentation->saveXML($this->xmlRepresentation->documentElement),
             strval($conditions)
         );
     }
@@ -113,7 +115,7 @@ final class ConditionsTest extends TestCase
      */
     public function testUnmarshalling(): void
     {
-        $conditions = Conditions::fromXML($this->document->documentElement);
+        $conditions = Conditions::fromXML($this->xmlRepresentation->documentElement);
 
         $this->assertEquals(1405558878, $conditions->getNotBefore());
         $this->assertEquals(1705558908, $conditions->getNotOnOrAfter());
@@ -136,20 +138,8 @@ final class ConditionsTest extends TestCase
         $this->assertEquals('http://sp.example.com/demo2/metadata.php', $audiences[0]);
 
         $this->assertEquals(
-            $this->document->saveXML($this->document->documentElement),
+            $this->xmlRepresentation->saveXML($this->xmlRepresentation->documentElement),
             strval($conditions)
-        );
-    }
-
-
-    /**
-     * Test serialization / unserialization
-     */
-    public function testSerialization(): void
-    {
-        $this->assertEquals(
-            $this->document->saveXML($this->document->documentElement),
-            strval(unserialize(serialize(Conditions::fromXML($this->document->documentElement))))
         );
     }
 }

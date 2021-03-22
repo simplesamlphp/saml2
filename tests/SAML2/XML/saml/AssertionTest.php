@@ -25,6 +25,7 @@ use SimpleSAML\SAML2\XML\saml\Issuer;
 use SimpleSAML\SAML2\XML\saml\NameID;
 use SimpleSAML\SAML2\XML\saml\Subject;
 use SimpleSAML\SAML2\XML\saml\SubjectLocality;
+use SimpleSAML\Test\XML\SerializableXMLTestTrait;
 use SimpleSAML\XML\Chunk;
 use SimpleSAML\XML\DOMDocumentFactory;
 use SimpleSAML\XML\Exception\MissingElementException;
@@ -42,15 +43,16 @@ use SimpleSAML\XMLSecurity\XMLSecurityKey;
  */
 final class AssertionTest extends MockeryTestCase
 {
-    /** @var \DOMDocument */
-    private DOMDocument $document;
+    use SerializableXMLTestTrait;
 
 
     /**
      */
     public function setUp(): void
     {
-        $this->document = DOMDocumentFactory::fromFile(
+        $this->testedClass = Assertion::class;
+
+        $this->xmlRepresentation = DOMDocumentFactory::fromFile(
             dirname(dirname(dirname(dirname(__FILE__)))) . '/resources/xml/saml_Assertion.xml'
         );
     }

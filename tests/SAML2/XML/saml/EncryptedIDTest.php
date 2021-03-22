@@ -17,6 +17,7 @@ use SimpleSAML\SAML2\XML\saml\EncryptedID;
 use SimpleSAML\SAML2\XML\saml\Issuer;
 use SimpleSAML\SAML2\XML\saml\NameID;
 use SimpleSAML\Test\SAML2\CustomBaseID;
+use SimpleSAML\Test\XML\SerializableXMLTestTrait;
 use SimpleSAML\XML\Chunk;
 use SimpleSAML\XML\DOMDocumentFactory;
 use SimpleSAML\XML\Utils as XMLUtils;
@@ -39,8 +40,8 @@ use SimpleSAML\XMLSecurity\XMLSecurityKey;
  */
 final class EncryptedIDTest extends TestCase
 {
-    /** @var \DOMDocument $document */
-    private DOMDocument $document;
+    use SerializableXMLTestTrait;
+
 
     /** @var \DOMDocument $retrievalMethod */
     private DOMDocument $retrievalMethod;
@@ -50,7 +51,9 @@ final class EncryptedIDTest extends TestCase
      */
     public function setup(): void
     {
-        $this->document = DOMDocumentFactory::fromFile(
+        $this->testedClass = EncryptedID::class;
+
+        $this->xmlRepresentation = DOMDocumentFactory::fromFile(
             dirname(dirname(dirname(dirname(__FILE__)))) . '/resources/xml/saml_EncryptedID.xml'
         );
 
@@ -132,7 +135,7 @@ final class EncryptedIDTest extends TestCase
         $this->assertEquals('#Encrypted_DATA_ID', $rl->getDataReferences()[0]->getURI());
 
         $this->assertEquals(
-            $this->document->saveXML($this->document->documentElement),
+            $this->xmlRepresentation->saveXML($this->xmlRepresentation->documentElement),
             strval($eid)
         );
     }
@@ -233,17 +236,5 @@ final class EncryptedIDTest extends TestCase
         $this->expectException(InvalidArgumentException::class);
         $this->expectExceptionMessage('Unknown or unsupported encrypted identifier.');
         $encid->decrypt($privkey);
-    }
-
-
-    /**
-     * Test serialization / unserialization
-     */
-    public function testSerialization(): void
-    {
-        $this->assertEquals(
-            $this->document->saveXML($this->document->documentElement),
-            strval(unserialize(serialize(EncryptedID::fromXML($this->document->documentElement))))
-        );
     }
 }
