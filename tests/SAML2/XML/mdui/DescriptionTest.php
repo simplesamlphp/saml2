@@ -10,6 +10,7 @@ use SimpleSAML\Assert\AssertionFailedException;
 use SimpleSAML\SAML2\Constants;
 use SimpleSAML\SAML2\XML\md\AbstractLocalizedName;
 use SimpleSAML\SAML2\XML\mdui\Description;
+use SimpleSAML\Test\XML\SerializableXMLTestTrait;
 use SimpleSAML\XML\DOMDocumentFactory;
 
 /**
@@ -22,15 +23,16 @@ use SimpleSAML\XML\DOMDocumentFactory;
  */
 final class DescriptionTest extends TestCase
 {
-    /** @var \DOMDocument */
-    protected DOMDocument $document;
+    use SerializableXMLTestTrait;
 
 
     /**
      */
     protected function setUp(): void
     {
-        $this->document = DOMDocumentFactory::fromFile(
+        $this->testedClass = Description::class;
+
+        $this->xmlRepresentation = DOMDocumentFactory::fromFile(
             dirname(dirname(dirname(dirname(__FILE__)))) . '/resources/xml/mdui_Description.xml'
         );
     }
@@ -49,7 +51,7 @@ final class DescriptionTest extends TestCase
         $this->assertEquals('en', $name->getLanguage());
         $this->assertEquals('Just an example', $name->getValue());
 
-        $this->assertEquals($this->document->saveXML($this->document->documentElement), strval($name));
+        $this->assertEquals($this->xmlRepresentation->saveXML($this->xmlRepresentation->documentElement), strval($name));
     }
 
 
@@ -72,9 +74,9 @@ final class DescriptionTest extends TestCase
     {
         $name = new Description('en', '');
 
-        $this->document->documentElement->textContent = '';
+        $this->xmlRepresentation->documentElement->textContent = '';
 
-        $this->assertEquals($this->document->saveXML($this->document->documentElement), strval($name));
+        $this->assertEquals($this->xmlRepresentation->saveXML($this->xmlRepresentation->documentElement), strval($name));
     }
 
 
@@ -86,8 +88,8 @@ final class DescriptionTest extends TestCase
      */
     public function testUnmarshalling(): void
     {
-        $name = Description::fromXML($this->document->documentElement);
-        $this->assertEquals($this->document->saveXML($this->document->documentElement), strval($name));
+        $name = Description::fromXML($this->xmlRepresentation->documentElement);
+        $this->assertEquals($this->xmlRepresentation->saveXML($this->xmlRepresentation->documentElement), strval($name));
     }
 
 
@@ -96,12 +98,12 @@ final class DescriptionTest extends TestCase
      */
     public function testUnmarshallingWithoutLang(): void
     {
-        $this->document->documentElement->removeAttributeNS(Description::XML_NS, 'lang');
+        $this->xmlRepresentation->documentElement->removeAttributeNS(Description::XML_NS, 'lang');
 
         $this->expectException(AssertionFailedException::class);
         $this->expectExceptionMessage('Missing xml:lang from Description');
 
-        Description::fromXML($this->document->documentElement);
+        Description::fromXML($this->xmlRepresentation->documentElement);
     }
 
 
@@ -110,12 +112,12 @@ final class DescriptionTest extends TestCase
      */
     public function testUnmarshallingWithEmptyLang(): void
     {
-        $this->document->documentElement->setAttributeNS(Description::XML_NS, 'lang', '');
+        $this->xmlRepresentation->documentElement->setAttributeNS(Description::XML_NS, 'lang', '');
 
         $this->expectException(AssertionFailedException::class);
         $this->expectExceptionMessage('xml:lang cannot be empty.');
 
-        Description::fromXML($this->document->documentElement);
+        Description::fromXML($this->xmlRepresentation->documentElement);
     }
 
 
@@ -124,23 +126,11 @@ final class DescriptionTest extends TestCase
      */
     public function testUnmarshallingWithEmptyValue(): void
     {
-        $this->document->documentElement->textContent = '';
-        $name = Description::fromXML($this->document->documentElement);
+        $this->xmlRepresentation->documentElement->textContent = '';
+        $name = Description::fromXML($this->xmlRepresentation->documentElement);
 
         $this->assertEquals('en', $name->getLanguage());
         $this->assertEquals('', $name->getValue());
-        $this->assertEquals($this->document->saveXML($this->document->documentElement), strval($name));
-    }
-
-
-    /**
-     * Test serialization / unserialization.
-     */
-    public function testSerialization(): void
-    {
-        $this->assertEquals(
-            $this->document->saveXML($this->document->documentElement),
-            strval(unserialize(serialize(Description::fromXML($this->document->documentElement))))
-        );
+        $this->assertEquals($this->xmlRepresentation->saveXML($this->xmlRepresentation->documentElement), strval($name));
     }
 }

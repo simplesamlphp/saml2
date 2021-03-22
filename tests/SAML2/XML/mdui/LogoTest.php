@@ -11,6 +11,7 @@ use SimpleSAML\Assert\AssertionFailedException;
 use SimpleSAML\SAML2\XML\mdui\Logo;
 use SimpleSAML\XML\DOMDocumentFactory;
 use SimpleSAML\XML\Exception\MissingAttributeException;
+use SimpleSAML\Test\XML\SerializableXMLTestTrait;
 use SimpleSAML\XML\Utils as XMLUtils;
 
 /**
@@ -22,8 +23,8 @@ use SimpleSAML\XML\Utils as XMLUtils;
  */
 final class LogoTest extends TestCase
 {
-    /** @var \DOMDocument */
-    private DOMDocument $document;
+    use SerializableXMLTestTrait;
+
 
     /** @var string */
     private string $data = <<<IMG
@@ -38,7 +39,9 @@ IMG;
      */
     public function setUp(): void
     {
-        $this->document = DOMDocumentFactory::fromFile(
+        $this->testedClass = Logo::class;
+
+        $this->xmlRepresentation = DOMDocumentFactory::fromFile(
             dirname(dirname(dirname(dirname(__FILE__)))) . '/resources/xml/mdui_Logo.xml'
         );
     }
@@ -73,7 +76,7 @@ IMG;
      */
     public function testUnmarshalling(): void
     {
-        $logo = Logo::fromXML($this->document->documentElement);
+        $logo = Logo::fromXML($this->xmlRepresentation->documentElement);
         $this->assertEquals("nl", $logo->getLanguage());
         $this->assertEquals(200, $logo->getHeight());
         $this->assertEquals(300, $logo->getWidth());
@@ -86,7 +89,7 @@ IMG;
      */
     public function testUnmarshallingDataURL(): void
     {
-        $document = $this->document;
+        $document = $this->xmlRepresentation;
         $document->documentElement->textContent = $this->data;
         $document->documentElement->setAttribute('height', '1');
         $document->documentElement->setAttribute('width', '1');
@@ -106,7 +109,7 @@ IMG;
      */
     public function testUnmarshallingFailsEmptyURL(): void
     {
-        $document = $this->document;
+        $document = $this->xmlRepresentation;
         $document->documentElement->textContent = '';
 
         $this->expectException(AssertionFailedException::class);
@@ -120,7 +123,7 @@ IMG;
      */
     public function testUnmarshallingFailsInvalidURL(): void
     {
-        $document = $this->document;
+        $document = $this->xmlRepresentation;
         $document->documentElement->textContent = 'this is no url';
 
         $this->expectException(InvalidArgumentException::class);
@@ -134,7 +137,7 @@ IMG;
      */
     public function testUnmarshallingFailsMissingWidth(): void
     {
-        $document = $this->document;
+        $document = $this->xmlRepresentation;
         $document->documentElement->removeAttribute('width');
 
         $this->expectException(MissingAttributeException::class);
@@ -148,23 +151,11 @@ IMG;
      */
     public function testUnmarshallingFailsMissingHeight(): void
     {
-        $document = $this->document;
+        $document = $this->xmlRepresentation;
         $document->documentElement->removeAttribute('height');
 
         $this->expectException(MissingAttributeException::class);
         $this->expectExceptionMessage("Missing 'height' attribute on mdui:Logo.");
         Logo::fromXML($document->documentElement);
-    }
-
-
-    /**
-     * Test serialization / unserialization
-     */
-    public function testSerialization(): void
-    {
-        $this->assertEquals(
-            $this->document->saveXML($this->document->documentElement),
-            strval(unserialize(serialize(Logo::fromXML($this->document->documentElement))))
-        );
     }
 }

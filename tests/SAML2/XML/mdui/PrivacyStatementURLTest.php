@@ -11,6 +11,7 @@ use SimpleSAML\Assert\AssertionFailedException;
 use SimpleSAML\SAML2\Constants;
 use SimpleSAML\SAML2\XML\md\AbstractLocalizedName;
 use SimpleSAML\SAML2\XML\mdui\PrivacyStatementURL;
+use SimpleSAML\Test\XML\SerializableXMLTestTrait;
 use SimpleSAML\XML\DOMDocumentFactory;
 
 /**
@@ -23,15 +24,16 @@ use SimpleSAML\XML\DOMDocumentFactory;
  */
 final class PrivacyStatementURLTest extends TestCase
 {
-    /** @var \DOMDocument */
-    protected DOMDocument $document;
+    use SerializableXMLTestTrait;
 
 
     /**
      */
     protected function setUp(): void
     {
-        $this->document = DOMDocumentFactory::fromFile(
+        $this->testedClass = PrivacyStatementURL::class;
+
+        $this->xmlRepresentation = DOMDocumentFactory::fromFile(
             dirname(dirname(dirname(dirname(__FILE__)))) . '/resources/xml/mdui_PrivacyStatementURL.xml'
         );
     }
@@ -50,7 +52,7 @@ final class PrivacyStatementURLTest extends TestCase
         $this->assertEquals('en', $name->getLanguage());
         $this->assertEquals('https://example.org/privacy', $name->getValue());
 
-        $this->assertEquals($this->document->saveXML($this->document->documentElement), strval($name));
+        $this->assertEquals($this->xmlRepresentation->saveXML($this->xmlRepresentation->documentElement), strval($name));
     }
 
 
@@ -73,9 +75,9 @@ final class PrivacyStatementURLTest extends TestCase
     {
         $name = new PrivacyStatementURL('en', '');
 
-        $this->document->documentElement->textContent = '';
+        $this->xmlRepresentation->documentElement->textContent = '';
 
-        $this->assertEquals($this->document->saveXML($this->document->documentElement), strval($name));
+        $this->assertEquals($this->xmlRepresentation->saveXML($this->xmlRepresentation->documentElement), strval($name));
     }
 
 
@@ -87,8 +89,8 @@ final class PrivacyStatementURLTest extends TestCase
      */
     public function testUnmarshalling(): void
     {
-        $name = PrivacyStatementURL::fromXML($this->document->documentElement);
-        $this->assertEquals($this->document->saveXML($this->document->documentElement), strval($name));
+        $name = PrivacyStatementURL::fromXML($this->xmlRepresentation->documentElement);
+        $this->assertEquals($this->xmlRepresentation->saveXML($this->xmlRepresentation->documentElement), strval($name));
     }
 
 
@@ -97,12 +99,12 @@ final class PrivacyStatementURLTest extends TestCase
      */
     public function testUnmarshallingWithoutLang(): void
     {
-        $this->document->documentElement->removeAttributeNS(PrivacyStatementURL::XML_NS, 'lang');
+        $this->xmlRepresentation->documentElement->removeAttributeNS(PrivacyStatementURL::XML_NS, 'lang');
 
         $this->expectException(AssertionFailedException::class);
         $this->expectExceptionMessage('Missing xml:lang from PrivacyStatementURL');
 
-        PrivacyStatementURL::fromXML($this->document->documentElement);
+        PrivacyStatementURL::fromXML($this->xmlRepresentation->documentElement);
     }
 
 
@@ -111,12 +113,12 @@ final class PrivacyStatementURLTest extends TestCase
      */
     public function testUnmarshallingWithEmptyLang(): void
     {
-        $this->document->documentElement->setAttributeNS(PrivacyStatementURL::XML_NS, 'lang', '');
+        $this->xmlRepresentation->documentElement->setAttributeNS(PrivacyStatementURL::XML_NS, 'lang', '');
 
         $this->expectException(AssertionFailedException::class);
         $this->expectExceptionMessage('xml:lang cannot be empty.');
 
-        PrivacyStatementURL::fromXML($this->document->documentElement);
+        PrivacyStatementURL::fromXML($this->xmlRepresentation->documentElement);
     }
 
 
@@ -125,12 +127,12 @@ final class PrivacyStatementURLTest extends TestCase
      */
     public function testUnmarshallingWithEmptyValue(): void
     {
-        $this->document->documentElement->textContent = '';
-        $name = PrivacyStatementURL::fromXML($this->document->documentElement);
+        $this->xmlRepresentation->documentElement->textContent = '';
+        $name = PrivacyStatementURL::fromXML($this->xmlRepresentation->documentElement);
 
         $this->assertEquals('en', $name->getLanguage());
         $this->assertEquals('', $name->getValue());
-        $this->assertEquals($this->document->saveXML($this->document->documentElement), strval($name));
+        $this->assertEquals($this->xmlRepresentation->saveXML($this->xmlRepresentation->documentElement), strval($name));
     }
 
 
@@ -139,23 +141,11 @@ final class PrivacyStatementURLTest extends TestCase
      */
     public function testUnmarshallingFailsInvalidURL(): void
     {
-        $document = $this->document;
+        $document = $this->xmlRepresentation;
         $document->documentElement->textContent = 'this is no url';
 
         $this->expectException(InvalidArgumentException::class);
         $this->expectExceptionMessage('mdui:PrivacyStatementURL is not a valid URL.');
         PrivacyStatementURL::fromXML($document->documentElement);
-    }
-
-
-    /**
-     * Test serialization / unserialization.
-     */
-    public function testSerialization(): void
-    {
-        $this->assertEquals(
-            $this->document->saveXML($this->document->documentElement),
-            strval(unserialize(serialize(PrivacyStatementURL::fromXML($this->document->documentElement))))
-        );
     }
 }
