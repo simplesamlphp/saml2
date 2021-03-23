@@ -9,6 +9,7 @@ use PHPUnit\Framework\TestCase;
 use SimpleSAML\SAML2\Constants;
 use SimpleSAML\SAML2\Utils;
 use SimpleSAML\SAML2\XML\saml\AuthnContextDecl;
+use SimpleSAML\Test\XML\SerializableXMLTestTrait;
 use SimpleSAML\XML\DOMDocumentFactory;
 
 /**
@@ -20,15 +21,16 @@ use SimpleSAML\XML\DOMDocumentFactory;
  */
 final class AuthnContextDeclTest extends TestCase
 {
-    /** @var \DOMDocument */
-    private DOMDocument $document;
+    use SerializableXMLTestTrait;
 
 
     /**
      */
     protected function setUp(): void
     {
-        $this->document = DOMDocumentFactory::fromFile(
+        $this->testedClass = AuthnContextDecl::class;
+
+        $this->xmlRepresentation = DOMDocumentFactory::fromFile(
             dirname(dirname(dirname(dirname(__FILE__)))) . '/resources/xml/saml_AuthnContextDecl.xml'
         );
     }
@@ -41,11 +43,14 @@ final class AuthnContextDeclTest extends TestCase
      */
     public function testMarshalling(): void
     {
-        $authnContextDecl = new AuthnContextDecl($this->document->documentElement->childNodes);
+        $authnContextDecl = new AuthnContextDecl($this->xmlRepresentation->documentElement->childNodes);
 
-        $this->assertEquals($this->document->documentElement->childNodes, $authnContextDecl->getDecl());
+        $this->assertEquals($this->xmlRepresentation->documentElement->childNodes, $authnContextDecl->getDecl());
 
-        $this->assertEquals($this->document->saveXML($this->document->documentElement), strval($authnContextDecl));
+        $this->assertEquals(
+            $this->xmlRepresentation->saveXML($this->xmlRepresentation->documentElement),
+            strval($authnContextDecl)
+        );
     }
 
 
@@ -57,19 +62,7 @@ final class AuthnContextDeclTest extends TestCase
     public function testUnmarshalling(): void
     {
         /** @psalm-var \DOMNode $authnContextDecl[1] */
-        $authnContextDecl = AuthnContextDecl::fromXML($this->document->documentElement)->getDecl();
+        $authnContextDecl = AuthnContextDecl::fromXML($this->xmlRepresentation->documentElement)->getDecl();
         $this->assertEquals('samlacpass:AuthenticationContextDeclaration', $authnContextDecl[1]->localName);
-    }
-
-
-    /**
-     * Test serialization / unserialization
-     */
-    public function testSerialization(): void
-    {
-        $this->assertEquals(
-            $this->document->saveXML($this->document->documentElement),
-            strval(unserialize(serialize(AuthnContextDecl::fromXML($this->document->documentElement))))
-        );
     }
 }

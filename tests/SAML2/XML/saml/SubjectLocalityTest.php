@@ -10,6 +10,7 @@ use PHPUnit\Framework\TestCase;
 use SimpleSAML\SAML2\Constants;
 use SimpleSAML\SAML2\Utils;
 use SimpleSAML\SAML2\XML\saml\SubjectLocality;
+use SimpleSAML\Test\XML\SerializableXMLTestTrait;
 use SimpleSAML\XML\DOMDocumentFactory;
 
 /**
@@ -21,15 +22,16 @@ use SimpleSAML\XML\DOMDocumentFactory;
  */
 final class SubjectLocalityTest extends TestCase
 {
-    /** @var \DOMDocument */
-    private DOMDocument $document;
+    use SerializableXMLTestTrait;
 
 
     /**
      */
     protected function setUp(): void
     {
-        $this->document = DOMDocumentFactory::fromFile(
+        $this->testedClass = SubjectLocality::class;
+
+        $this->xmlRepresentation = DOMDocumentFactory::fromFile(
             dirname(dirname(dirname(dirname(__FILE__)))) . '/resources/xml/saml_SubjectLocality.xml'
         );
     }
@@ -51,7 +53,7 @@ final class SubjectLocalityTest extends TestCase
         $this->assertEquals('idp.example.org', $subjectLocality->getDnsName());
 
         $this->assertEquals(
-            $this->document->saveXML($this->document->documentElement),
+            $this->xmlRepresentation->saveXML($this->xmlRepresentation->documentElement),
             strval($subjectLocality)
         );
     }
@@ -80,21 +82,9 @@ final class SubjectLocalityTest extends TestCase
      */
     public function testUnmarshalling(): void
     {
-        $subjectLocality = SubjectLocality::fromXML($this->document->documentElement);
+        $subjectLocality = SubjectLocality::fromXML($this->xmlRepresentation->documentElement);
 
         $this->assertEquals('1.1.1.1', $subjectLocality->getAddress());
         $this->assertEquals('idp.example.org', $subjectLocality->getDnsName());
-    }
-
-
-    /**
-     * Test serialization / unserialization
-     */
-    public function testSerialization(): void
-    {
-        $this->assertEquals(
-            $this->document->saveXML($this->document->documentElement),
-            strval(unserialize(serialize(SubjectLocality::fromXML($this->document->documentElement))))
-        );
     }
 }

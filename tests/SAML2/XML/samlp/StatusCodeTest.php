@@ -9,6 +9,7 @@ use PHPUnit\Framework\TestCase;
 use SimpleSAML\SAML2\Constants;
 use SimpleSAML\SAML2\Utils;
 use SimpleSAML\SAML2\XML\samlp\StatusCode;
+use SimpleSAML\Test\XML\SerializableXMLTestTrait;
 use SimpleSAML\XML\DOMDocumentFactory;
 
 /**
@@ -21,15 +22,16 @@ use SimpleSAML\XML\DOMDocumentFactory;
  */
 final class StatusCodeTest extends TestCase
 {
-    /** @var \DOMDocument */
-    private DOMDocument $document;
+    use SerializableXMLTestTrait;
 
 
     /**
      */
     public function setUp(): void
     {
-        $this->document = DOMDocumentFactory::fromFile(
+        $this->testedClass = StatusCode::class;
+
+        $this->xmlRepresentation = DOMDocumentFactory::fromFile(
             dirname(dirname(dirname(dirname(__FILE__)))) . '/resources/xml/samlp_StatusCode.xml'
         );
     }
@@ -48,7 +50,7 @@ final class StatusCodeTest extends TestCase
         );
 
         $this->assertEquals(
-            $this->document->saveXML($this->document->documentElement),
+            $this->xmlRepresentation->saveXML($this->xmlRepresentation->documentElement),
             strval($statusCode)
         );
     }
@@ -58,24 +60,12 @@ final class StatusCodeTest extends TestCase
      */
     public function testUnmarshalling(): void
     {
-        $statusCode = StatusCode::fromXML($this->document->documentElement);
+        $statusCode = StatusCode::fromXML($this->xmlRepresentation->documentElement);
         $this->assertEquals(Constants::STATUS_RESPONDER, $statusCode->getValue());
 
         $subCodes = $statusCode->getSubCodes();
         $this->assertCount(1, $subCodes);
 
         $this->assertEquals(Constants::STATUS_REQUEST_DENIED, $subCodes[0]->getValue());
-    }
-
-
-    /**
-     * Test serialization / unserialization
-     */
-    public function testSerialization(): void
-    {
-        $this->assertEquals(
-            $this->document->saveXML($this->document->documentElement),
-            strval(unserialize(serialize(StatusCode::fromXML($this->document->documentElement))))
-        );
     }
 }

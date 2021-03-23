@@ -15,6 +15,7 @@ use SimpleSAML\SAML2\XML\mdui\Keywords;
 use SimpleSAML\SAML2\XML\mdui\Logo;
 use SimpleSAML\SAML2\XML\mdui\PrivacyStatementURL;
 use SimpleSAML\SAML2\XML\mdui\UIInfo;
+use SimpleSAML\Test\XML\SerializableXMLTestTrait;
 use SimpleSAML\XML\Chunk;
 use SimpleSAML\XML\DOMDocumentFactory;
 use SimpleSAML\XML\Utils as XMLUtils;
@@ -28,15 +29,16 @@ use SimpleSAML\XML\Utils as XMLUtils;
  */
 final class UIInfoTest extends TestCase
 {
-    /** @var \DOMDocument */
-    private DOMDocument $document;
+    use SerializableXMLTestTrait;
 
 
     /**
      */
     public function setUp(): void
     {
-        $this->document = DOMDocumentFactory::fromFile(
+        $this->testedClass = UIInfo::class;
+
+        $this->xmlRepresentation = DOMDocumentFactory::fromFile(
             dirname(dirname(dirname(dirname(__FILE__)))) . '/resources/xml/mdui_UIInfo.xml'
         );
     }
@@ -226,7 +228,7 @@ final class UIInfoTest extends TestCase
      */
     public function testUnmarshalling(): void
     {
-        $uiinfo = UIInfo::fromXML($this->document->documentElement);
+        $uiinfo = UIInfo::fromXML($this->xmlRepresentation->documentElement);
         $uiinfo->addChild(
             new Chunk(DOMDocumentFactory::fromString('<child3 />')->documentElement)
         );
@@ -265,7 +267,7 @@ final class UIInfoTest extends TestCase
      */
     public function testMultipleDescriptionWithSameLanguageThrowsException(): void
     {
-        $document = $this->document;
+        $document = $this->xmlRepresentation;
 
         // Append another 'en' mdui:Description to the document
         $x = new Description('en', 'Something');
@@ -284,7 +286,7 @@ final class UIInfoTest extends TestCase
      */
     public function testMultipleDisplayNameWithSameLanguageThrowsException(): void
     {
-        $document = $this->document;
+        $document = $this->xmlRepresentation;
 
         // Append another 'en' mdui:DisplayName to the document
         $x = new DisplayName('en', 'Something');
@@ -303,7 +305,7 @@ final class UIInfoTest extends TestCase
      */
     public function testMultipleKeywordsWithSameLanguageThrowsException(): void
     {
-        $document = $this->document;
+        $document = $this->xmlRepresentation;
 
         // Append another 'en' mdui:Keywords to the document
         $x = new Keywords('en', ['Something', 'else']);
@@ -322,7 +324,7 @@ final class UIInfoTest extends TestCase
      */
     public function testMultipleInformationURLWithSameLanguageThrowsException(): void
     {
-        $document = $this->document;
+        $document = $this->xmlRepresentation;
 
         // Append another 'en' mdui:InformationURL to the document
         $x = new InformationURL('en', 'https://example.org');
@@ -341,7 +343,7 @@ final class UIInfoTest extends TestCase
      */
     public function testMultiplePrivacyStatementURLWithSameLanguageThrowsException(): void
     {
-        $document = $this->document;
+        $document = $this->xmlRepresentation;
 
         // Append another 'en' mdui:PrivacyStatementURL to the document
         $x = new PrivacyStatementURL('en', 'https://example.org');
@@ -353,17 +355,5 @@ final class UIInfoTest extends TestCase
             . ' within a given <mdui:UIInfo>, for a given language'
         );
         UIInfo::fromXML($document->documentElement);
-    }
-
-
-    /**
-     * Test serialization / unserialization
-     */
-    public function testSerialization(): void
-    {
-        $this->assertEquals(
-            $this->document->saveXML($this->document->documentElement),
-            strval(unserialize(serialize(UIInfo::fromXML($this->document->documentElement))))
-        );
     }
 }

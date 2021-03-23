@@ -6,6 +6,7 @@ namespace SimpleSAML\Test\SAML2\XML\alg;
 
 use DOMDocument;
 use PHPUnit\Framework\TestCase;
+use SimpleSAML\Test\XML\SerializableXMLTestTrait;
 use SimpleSAML\XML\DOMDocumentFactory;
 use SimpleSAML\XML\Exception\MissingAttributeException;
 use SimpleSAML\SAML2\XML\alg\DigestMethod;
@@ -21,15 +22,16 @@ use SimpleSAML\SAML2\Utils;
  */
 final class DigestMethodTest extends TestCase
 {
-    /** @var \DOMDocument */
-    private DOMDocument $document;
+    use SerializableXMLTestTrait;
 
 
     /**
      */
     protected function setUp(): void
     {
-        $this->document = DOMDocumentFactory::fromFile(
+        $this->testedClass = DigestMethod::class;
+
+        $this->xmlRepresentation = DOMDocumentFactory::fromFile(
             dirname(dirname(dirname(dirname(__FILE__)))) . '/resources/xml/alg_DigestMethod.xml'
         );
     }
@@ -43,7 +45,10 @@ final class DigestMethodTest extends TestCase
 
         $this->assertEquals('http://exampleAlgorithm', $digestMethod->getAlgorithm());
 
-        $this->assertEquals($this->document->saveXML($this->document->documentElement), strval($digestMethod));
+        $this->assertEquals(
+            $this->xmlRepresentation->saveXML($this->xmlRepresentation->documentElement),
+            strval($digestMethod)
+        );
     }
 
 
@@ -51,7 +56,7 @@ final class DigestMethodTest extends TestCase
      */
     public function testUnmarshalling(): void
     {
-        $digestMethod = DigestMethod::fromXML($this->document->documentElement);
+        $digestMethod = DigestMethod::fromXML($this->xmlRepresentation->documentElement);
 
         $this->assertEquals('http://exampleAlgorithm', $digestMethod->getAlgorithm());
     }
@@ -61,23 +66,12 @@ final class DigestMethodTest extends TestCase
      */
     public function testUnmarshallingMissingAlgorithmThrowsException(): void
     {
-        $document = $this->document->documentElement;
+        $document = $this->xmlRepresentation->documentElement;
         $document->removeAttribute('Algorithm');
 
         $this->expectException(MissingAttributeException::class);
         $this->expectExceptionMessage("Missing 'Algorithm' attribute on alg:DigestMethod.");
 
         DigestMethod::fromXML($document);
-    }
-
-    /**
-     * Test serialization / unserialization
-     */
-    public function testSerialization(): void
-    {
-        $this->assertEquals(
-            $this->document->saveXML($this->document->documentElement),
-            strval(unserialize(serialize(DigestMethod::fromXML($this->document->documentElement))))
-        );
     }
 }

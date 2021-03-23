@@ -10,6 +10,7 @@ use SimpleSAML\Assert\AssertionFailedException;
 use SimpleSAML\SAML2\Constants;
 use SimpleSAML\SAML2\XML\md\AbstractLocalizedName;
 use SimpleSAML\SAML2\XML\mdui\DisplayName;
+use SimpleSAML\Test\XML\SerializableXMLTestTrait;
 use SimpleSAML\XML\DOMDocumentFactory;
 
 /**
@@ -22,15 +23,16 @@ use SimpleSAML\XML\DOMDocumentFactory;
  */
 final class DisplayNameTest extends TestCase
 {
-    /** @var \DOMDocument */
-    protected DOMDocument $document;
+    use SerializableXMLTestTrait;
 
 
     /**
      */
     protected function setUp(): void
     {
-        $this->document = DOMDocumentFactory::fromFile(
+        $this->testedClass = DisplayName::class;
+
+        $this->xmlRepresentation = DOMDocumentFactory::fromFile(
             dirname(dirname(dirname(dirname(__FILE__)))) . '/resources/xml/mdui_DisplayName.xml'
         );
     }
@@ -49,7 +51,10 @@ final class DisplayNameTest extends TestCase
         $this->assertEquals('en', $name->getLanguage());
         $this->assertEquals('University of Examples', $name->getValue());
 
-        $this->assertEquals($this->document->saveXML($this->document->documentElement), strval($name));
+        $this->assertEquals(
+            $this->xmlRepresentation->saveXML($this->xmlRepresentation->documentElement),
+            strval($name)
+        );
     }
 
 
@@ -72,9 +77,12 @@ final class DisplayNameTest extends TestCase
     {
         $name = new DisplayName('en', '');
 
-        $this->document->documentElement->textContent = '';
+        $this->xmlRepresentation->documentElement->textContent = '';
 
-        $this->assertEquals($this->document->saveXML($this->document->documentElement), strval($name));
+        $this->assertEquals(
+            $this->xmlRepresentation->saveXML($this->xmlRepresentation->documentElement),
+            strval($name)
+        );
     }
 
 
@@ -86,8 +94,11 @@ final class DisplayNameTest extends TestCase
      */
     public function testUnmarshalling(): void
     {
-        $name = DisplayName::fromXML($this->document->documentElement);
-        $this->assertEquals($this->document->saveXML($this->document->documentElement), strval($name));
+        $name = DisplayName::fromXML($this->xmlRepresentation->documentElement);
+        $this->assertEquals(
+            $this->xmlRepresentation->saveXML($this->xmlRepresentation->documentElement),
+            strval($name)
+        );
     }
 
 
@@ -96,12 +107,12 @@ final class DisplayNameTest extends TestCase
      */
     public function testUnmarshallingWithoutLang(): void
     {
-        $this->document->documentElement->removeAttributeNS(DisplayName::XML_NS, 'lang');
+        $this->xmlRepresentation->documentElement->removeAttributeNS(DisplayName::XML_NS, 'lang');
 
         $this->expectException(AssertionFailedException::class);
         $this->expectExceptionMessage('Missing xml:lang from DisplayName');
 
-        DisplayName::fromXML($this->document->documentElement);
+        DisplayName::fromXML($this->xmlRepresentation->documentElement);
     }
 
 
@@ -110,12 +121,12 @@ final class DisplayNameTest extends TestCase
      */
     public function testUnmarshallingWithEmptyLang(): void
     {
-        $this->document->documentElement->setAttributeNS(DisplayName::XML_NS, 'lang', '');
+        $this->xmlRepresentation->documentElement->setAttributeNS(DisplayName::XML_NS, 'lang', '');
 
         $this->expectException(AssertionFailedException::class);
         $this->expectExceptionMessage('xml:lang cannot be empty.');
 
-        DisplayName::fromXML($this->document->documentElement);
+        DisplayName::fromXML($this->xmlRepresentation->documentElement);
     }
 
 
@@ -124,23 +135,14 @@ final class DisplayNameTest extends TestCase
      */
     public function testUnmarshallingWithEmptyValue(): void
     {
-        $this->document->documentElement->textContent = '';
-        $name = DisplayName::fromXML($this->document->documentElement);
+        $this->xmlRepresentation->documentElement->textContent = '';
+        $name = DisplayName::fromXML($this->xmlRepresentation->documentElement);
 
         $this->assertEquals('en', $name->getLanguage());
         $this->assertEquals('', $name->getValue());
-        $this->assertEquals($this->document->saveXML($this->document->documentElement), strval($name));
-    }
-
-
-    /**
-     * Test serialization / unserialization.
-     */
-    public function testSerialization(): void
-    {
         $this->assertEquals(
-            $this->document->saveXML($this->document->documentElement),
-            strval(unserialize(serialize(DisplayName::fromXML($this->document->documentElement))))
+            $this->xmlRepresentation->saveXML($this->xmlRepresentation->documentElement),
+            strval($name)
         );
     }
 }

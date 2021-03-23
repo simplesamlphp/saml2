@@ -6,8 +6,9 @@ namespace SimpleSAML\Test\SAML2\XML\md;
 
 use DOMDocument;
 use PHPUnit\Framework\TestCase;
-use SimpleSAML\SAML2\XML\md\ArtifactResolutionService;
 use SimpleSAML\Assert\AssertionFailedException;
+use SimpleSAML\SAML2\XML\md\ArtifactResolutionService;
+use SimpleSAML\Test\XML\SerializableXMLTestTrait;
 use SimpleSAML\XML\DOMDocumentFactory;
 
 /**
@@ -19,15 +20,16 @@ use SimpleSAML\XML\DOMDocumentFactory;
  */
 final class ArtifactResolutionServiceTest extends TestCase
 {
-    /** @var \DOMDocument */
-    protected DOMDocument $document;
+    use SerializableXMLTestTrait;
 
 
     /**
      */
     protected function setUp(): void
     {
-        $this->document = DOMDocumentFactory::fromFile(
+        $this->testedClass = ArtifactResolutionService::class;
+
+        $this->xmlRepresentation = DOMDocumentFactory::fromFile(
             dirname(dirname(dirname(dirname(__FILE__)))) . '/resources/xml/md_ArtifactResolutionService.xml'
         );
     }
@@ -47,7 +49,10 @@ final class ArtifactResolutionServiceTest extends TestCase
         $this->assertEquals('urn:something', $arsep->getBinding());
         $this->assertEquals('https://whatever/', $arsep->getLocation());
 
-        $this->assertEquals($this->document->saveXML($this->document->documentElement), strval($arsep));
+        $this->assertEquals(
+            $this->xmlRepresentation->saveXML($this->xmlRepresentation->documentElement),
+            strval($arsep)
+        );
     }
 
 
@@ -72,11 +77,14 @@ final class ArtifactResolutionServiceTest extends TestCase
      */
     public function testUnmarshalling(): void
     {
-        $arsep = ArtifactResolutionService::fromXML($this->document->documentElement);
+        $arsep = ArtifactResolutionService::fromXML($this->xmlRepresentation->documentElement);
         $this->assertEquals('urn:something', $arsep->getBinding());
         $this->assertEquals('https://whatever/', $arsep->getLocation());
 
-        $this->assertEquals($this->document->saveXML($this->document->documentElement), strval($arsep));
+        $this->assertEquals(
+            $this->xmlRepresentation->saveXML($this->xmlRepresentation->documentElement),
+            strval($arsep)
+        );
     }
 
 
@@ -89,20 +97,7 @@ final class ArtifactResolutionServiceTest extends TestCase
         $this->expectExceptionMessage(
             'The \'ResponseLocation\' attribute must be omitted for md:ArtifactResolutionService.'
         );
-        $this->document->documentElement->setAttribute('ResponseLocation', 'https://response.location/');
-        ArtifactResolutionService::fromXML($this->document->documentElement);
-    }
-
-
-    /**
-     * Test that serialization / unserialization works.
-     */
-    public function testSerialization(): void
-    {
-        $ep = ArtifactResolutionService::fromXML($this->document->documentElement);
-        $this->assertEquals(
-            $this->document->saveXML($this->document->documentElement),
-            strval(unserialize(serialize($ep)))
-        );
+        $this->xmlRepresentation->documentElement->setAttribute('ResponseLocation', 'https://response.location/');
+        ArtifactResolutionService::fromXML($this->xmlRepresentation->documentElement);
     }
 }

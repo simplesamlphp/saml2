@@ -6,6 +6,7 @@ namespace SimpleSAML\Test\SAML2\XML\ecp;
 
 use DOMDocument;
 use PHPUnit\Framework\TestCase;
+use SimpleSAML\Test\XML\SerializableXMLTestTrait;
 use SimpleSAML\SAML2\Constants;
 use SimpleSAML\SAML2\XML\ecp\RequestAuthenticated;
 use SimpleSAML\XML\DOMDocumentFactory;
@@ -18,15 +19,16 @@ use SimpleSAML\XML\Exception\MissingAttributeException;
  */
 final class RequestAuthenticatedTest extends TestCase
 {
-    /** @var \DOMDocument */
-    private $document;
+    use SerializableXMLTestTrait;
 
 
     /**
      */
     public function setUp(): void
     {
-        $this->document = DOMDocumentFactory::fromFile(
+        $this->testedClass = RequestAuthenticated::class;
+
+        $this->xmlRepresentation = DOMDocumentFactory::fromFile(
             dirname(dirname(dirname(dirname(__FILE__)))) . '/resources/xml/ecp_RequestAuthenticated.xml'
         );
     }
@@ -38,7 +40,7 @@ final class RequestAuthenticatedTest extends TestCase
     {
         $ra = new RequestAuthenticated(0);
 
-        $this->assertEquals($this->document->saveXML($this->document->documentElement), strval($ra));
+        $this->assertEquals($this->xmlRepresentation->saveXML($this->xmlRepresentation->documentElement), strval($ra));
     }
 
 
@@ -46,9 +48,9 @@ final class RequestAuthenticatedTest extends TestCase
      */
     public function testUnmarshalling(): void
     {
-        $ra = RequestAuthenticated::fromXML($this->document->documentElement);
+        $ra = RequestAuthenticated::fromXML($this->xmlRepresentation->documentElement);
 
-        $this->assertEquals($this->document->saveXML($this->document->documentElement), strval($ra));
+        $this->assertEquals($this->xmlRepresentation->saveXML($this->xmlRepresentation->documentElement), strval($ra));
     }
 
 
@@ -56,24 +58,12 @@ final class RequestAuthenticatedTest extends TestCase
      */
     public function testUnmarshallingWithMissingActorThrowsException(): void
     {
-        $document = $this->document->documentElement;
+        $document = $this->xmlRepresentation->documentElement;
         $document->removeAttributeNS(Constants::NS_SOAP, 'actor');
 
         $this->expectException(MissingAttributeException::class);
         $this->expectExceptionMessage('Missing SOAP-ENV:actor attribute in <ecp:RequestAuthenticated>.');
 
         RequestAuthenticated::fromXML($document);
-    }
-
-
-    /**
-     * Test serialization / unserialization
-     */
-    public function testSerialization(): void
-    {
-        $this->assertEquals(
-            $this->document->saveXML($this->document->documentElement),
-            strval(unserialize(serialize(RequestAuthenticated::fromXML($this->document->documentElement))))
-        );
     }
 }

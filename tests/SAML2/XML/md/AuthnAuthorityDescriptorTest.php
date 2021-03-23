@@ -11,6 +11,7 @@ use SimpleSAML\SAML2\XML\md\AssertionIDRequestService;
 use SimpleSAML\SAML2\XML\md\AuthnAuthorityDescriptor;
 use SimpleSAML\SAML2\XML\md\AuthnQueryService;
 use SimpleSAML\Test\SAML2\SignedElementTestTrait;
+use SimpleSAML\Test\XML\SerializableXMLTestTrait;
 use SimpleSAML\XML\DOMDocumentFactory;
 
 /**
@@ -22,7 +23,9 @@ use SimpleSAML\XML\DOMDocumentFactory;
  */
 final class AuthnAuthorityDescriptorTest extends TestCase
 {
+    use SerializableXMLTestTrait;
     use SignedElementTestTrait;
+
 
     /** @var \SimpleSAML\SAML2\XML\md\AssertionIDRequestService */
     protected AssertionIDRequestService $aidrs;
@@ -35,13 +38,14 @@ final class AuthnAuthorityDescriptorTest extends TestCase
      */
     protected function setUp(): void
     {
-        $this->document = DOMDocumentFactory::fromFile(
+        $this->testedClass = AuthnAuthorityDescriptor::class;
+
+        $this->xmlRepresentation = DOMDocumentFactory::fromFile(
             dirname(dirname(dirname(dirname(__FILE__)))) . '/resources/xml/md_AuthnAuthorityDescriptor.xml'
         );
 
         $this->aqs = new AuthnQueryService('uri:binding:aqs', 'http://www.example.com/aqs');
         $this->aidrs = new AssertionIDRequestService('uri:binding:aidrs', 'http://www.example.com/aidrs');
-        $this->testedClass = AuthnAuthorityDescriptor::class;
     }
 
 
@@ -66,7 +70,7 @@ final class AuthnAuthorityDescriptorTest extends TestCase
         $this->assertEquals(['http://www.example1.com/', 'http://www.example2.com/'], $aad->getNameIDFormats());
 
         $this->assertEquals(
-            $this->document->saveXML($this->document->documentElement),
+            $this->xmlRepresentation->saveXML($this->xmlRepresentation->documentElement),
             strval($aad)
         );
     }
@@ -158,7 +162,7 @@ final class AuthnAuthorityDescriptorTest extends TestCase
      */
     public function testUnmarshalling(): void
     {
-        $aad = AuthnAuthorityDescriptor::fromXML($this->document->documentElement);
+        $aad = AuthnAuthorityDescriptor::fromXML($this->xmlRepresentation->documentElement);
         $this->assertCount(1, $aad->getAuthnQueryServices());
         $this->assertEquals($this->aqs->getBinding(), $aad->getAuthnQueryServices()[0]->getBinding());
         $this->assertEquals($this->aqs->getLocation(), $aad->getAuthnQueryServices()[0]->getLocation());
@@ -174,12 +178,12 @@ final class AuthnAuthorityDescriptorTest extends TestCase
      */
     public function testUnmarshallingWithoutAuthnQueryService(): void
     {
-        $aqs = $this->document->getElementsByTagNameNS(Constants::NS_MD, 'AuthnQueryService');
+        $aqs = $this->xmlRepresentation->getElementsByTagNameNS(Constants::NS_MD, 'AuthnQueryService');
         /** @psalm-suppress PossiblyNullArgument */
-        $this->document->documentElement->removeChild($aqs->item(0));
+        $this->xmlRepresentation->documentElement->removeChild($aqs->item(0));
         $this->expectException(AssertionFailedException::class);
         $this->expectExceptionMessage('Missing at least one AuthnQueryService in AuthnAuthorityDescriptor.');
-        AuthnAuthorityDescriptor::fromXML($this->document->documentElement);
+        AuthnAuthorityDescriptor::fromXML($this->xmlRepresentation->documentElement);
     }
 
 
@@ -188,12 +192,12 @@ final class AuthnAuthorityDescriptorTest extends TestCase
      */
     public function testUnmarshallingWithEmptyNameIDFormat(): void
     {
-        $nidf = $this->document->getElementsByTagNameNS(Constants::NS_MD, 'NameIDFormat');
+        $nidf = $this->xmlRepresentation->getElementsByTagNameNS(Constants::NS_MD, 'NameIDFormat');
         /** @psalm-suppress PossiblyNullPropertyAssignment */
         $nidf->item(0)->textContent = '';
         $this->expectException(AssertionFailedException::class);
         $this->expectExceptionMessage('NameIDFormat cannot be an empty string.');
-        AuthnAuthorityDescriptor::fromXML($this->document->documentElement);
+        AuthnAuthorityDescriptor::fromXML($this->xmlRepresentation->documentElement);
     }
 
 
@@ -202,10 +206,10 @@ final class AuthnAuthorityDescriptorTest extends TestCase
      */
     public function testUnmarshallingWithoutAssertionIDRequestServices(): void
     {
-        $aidrs = $this->document->getElementsByTagNameNS(Constants::NS_MD, 'AssertionIDRequestService');
+        $aidrs = $this->xmlRepresentation->getElementsByTagNameNS(Constants::NS_MD, 'AssertionIDRequestService');
         /** @psalm-suppress PossiblyNullArgument */
-        $this->document->documentElement->removeChild($aidrs->item(0));
-        AuthnAuthorityDescriptor::fromXML($this->document->documentElement);
+        $this->xmlRepresentation->documentElement->removeChild($aidrs->item(0));
+        AuthnAuthorityDescriptor::fromXML($this->xmlRepresentation->documentElement);
         $this->assertTrue(true);
     }
 
@@ -215,24 +219,12 @@ final class AuthnAuthorityDescriptorTest extends TestCase
      */
     public function testUnmarshallingWithoutNameIDFormats(): void
     {
-        $nidf = $this->document->getElementsByTagNameNS(Constants::NS_MD, 'NameIDFormat');
+        $nidf = $this->xmlRepresentation->getElementsByTagNameNS(Constants::NS_MD, 'NameIDFormat');
         /** @psalm-suppress PossiblyNullArgument */
-        $this->document->documentElement->removeChild($nidf->item(1));
+        $this->xmlRepresentation->documentElement->removeChild($nidf->item(1));
         /** @psalm-suppress PossiblyNullArgument */
-        $this->document->documentElement->removeChild($nidf->item(0));
-        AuthnAuthorityDescriptor::fromXML($this->document->documentElement);
+        $this->xmlRepresentation->documentElement->removeChild($nidf->item(0));
+        AuthnAuthorityDescriptor::fromXML($this->xmlRepresentation->documentElement);
         $this->assertTrue(true);
-    }
-
-
-    /**
-     * Test that serialization works.
-     */
-    public function testSerialization(): void
-    {
-        $this->assertEquals(
-            $this->document->saveXML($this->document->documentElement),
-            strval(unserialize(serialize(AuthnAuthorityDescriptor::fromXML($this->document->documentElement))))
-        );
     }
 }

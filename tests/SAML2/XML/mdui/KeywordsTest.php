@@ -10,6 +10,7 @@ use SimpleSAML\Assert\AssertionFailedException;
 use SimpleSAML\SAML2\XML\mdui\Keywords;
 use SimpleSAML\XML\DOMDocumentFactory;
 use SimpleSAML\XML\Exception\MissingAttributeException;
+use SimpleSAML\Test\XML\SerializableXMLTestTrait;
 use SimpleSAML\XML\Utils as XMLUtils;
 
 /**
@@ -21,15 +22,16 @@ use SimpleSAML\XML\Utils as XMLUtils;
  */
 final class KeywordsTest extends TestCase
 {
-    /** @var \DOMDocument */
-    private DOMDocument $document;
+    use SerializableXMLTestTrait;
 
 
     /**
      */
     public function setUp(): void
     {
-        $this->document = DOMDocumentFactory::fromFile(
+        $this->testedClass = Keywords::class;
+
+        $this->xmlRepresentation = DOMDocumentFactory::fromFile(
             dirname(dirname(dirname(dirname(__FILE__)))) . '/resources/xml/mdui_Keywords.xml'
         );
     }
@@ -75,7 +77,7 @@ final class KeywordsTest extends TestCase
      */
     public function testUnmarshalling(): void
     {
-        $keywords = Keywords::fromXML($this->document->documentElement);
+        $keywords = Keywords::fromXML($this->xmlRepresentation->documentElement);
         $this->assertEquals("nl", $keywords->getLanguage());
         $this->assertCount(3, $keywords->getKeywords());
         $this->assertEquals("KLM", $keywords->getKeywords()[0]);
@@ -89,7 +91,7 @@ final class KeywordsTest extends TestCase
      */
     public function testUnmarshallingFailsMissingLanguage(): void
     {
-        $document = $this->document;
+        $document = $this->xmlRepresentation;
         $document->documentElement->removeAttribute('xml:lang');
 
         $this->expectException(MissingAttributeException::class);
@@ -103,23 +105,11 @@ final class KeywordsTest extends TestCase
      */
     public function testUnmarshallingFailsMissingKeywords(): void
     {
-        $document = $this->document;
+        $document = $this->xmlRepresentation;
         $document->documentElement->textContent = '';
 
         $this->expectException(AssertionFailedException::class);
         $this->expectExceptionMessage('Missing value for Keywords');
         Keywords::fromXML($document->documentElement);
-    }
-
-
-    /**
-     * Test serialization / unserialization
-     */
-    public function testSerialization(): void
-    {
-        $this->assertEquals(
-            $this->document->saveXML($this->document->documentElement),
-            strval(unserialize(serialize(Keywords::fromXML($this->document->documentElement))))
-        );
     }
 }

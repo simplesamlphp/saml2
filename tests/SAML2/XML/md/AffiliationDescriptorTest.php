@@ -10,6 +10,7 @@ use SimpleSAML\SAML2\Utils;
 use SimpleSAML\SAML2\XML\md\AffiliationDescriptor;
 use SimpleSAML\SAML2\XML\md\KeyDescriptor;
 use SimpleSAML\Test\SAML2\SignedElementTestTrait;
+use SimpleSAML\Test\XML\SerializableXMLTestTrait;
 use SimpleSAML\XML\DOMDocumentFactory;
 use SimpleSAML\XML\Exception\MissingAttributeException;
 use SimpleSAML\XMLSecurity\XML\ds\KeyInfo;
@@ -25,6 +26,7 @@ use SimpleSAML\XMLSecurity\XML\ds\KeyName;
  */
 final class AffiliationDescriptorTest extends TestCase
 {
+    use SerializableXMLTestTrait;
     use SignedElementTestTrait;
 
 
@@ -32,10 +34,11 @@ final class AffiliationDescriptorTest extends TestCase
      */
     protected function setUp(): void
     {
-        $this->document = DOMDocumentFactory::fromFile(
+        $this->testedClass = AffiliationDescriptor::class;
+
+        $this->xmlRepresentation = DOMDocumentFactory::fromFile(
             dirname(dirname(dirname(dirname(__FILE__)))) . '/resources/xml/md_AffiliationDescriptor.xml'
         );
-        $this->testedClass = AffiliationDescriptor::class;
     }
 
 
@@ -83,7 +86,7 @@ final class AffiliationDescriptorTest extends TestCase
         $keyDescriptors = $ad->getKeyDescriptors();
         $this->assertCount(1, $keyDescriptors);
 
-        $this->assertEquals($this->document->saveXML($this->document->documentElement), strval($ad));
+        $this->assertEquals($this->xmlRepresentation->saveXML($this->xmlRepresentation->documentElement), strval($ad));
     }
 
 
@@ -152,7 +155,7 @@ final class AffiliationDescriptorTest extends TestCase
      */
     public function testUnmarshalling(): void
     {
-        $affiliateDescriptor = AffiliationDescriptor::fromXML($this->document->documentElement);
+        $affiliateDescriptor = AffiliationDescriptor::fromXML($this->xmlRepresentation->documentElement);
 
         $this->assertEquals('TheOwner', $affiliateDescriptor->getAffiliationOwnerID());
         $this->assertEquals('TheID', $affiliateDescriptor->getID());
@@ -225,18 +228,5 @@ XML
         $this->expectException(MissingAttributeException::class);
         $this->expectExceptionMessage("Missing 'affiliationOwnerID' attribute on md:AffiliationDescriptor.");
         AffiliationDescriptor::fromXML($document->documentElement);
-    }
-
-
-    /**
-     * Test serialization and unserialization of AffiliationDescriptor elements.
-     */
-    public function testSerialization(): void
-    {
-        $ad = AffiliationDescriptor::fromXML($this->document->documentElement);
-        $this->assertEquals(
-            $this->document->saveXML($this->document->documentElement),
-            strval(unserialize(serialize($ad)))
-        );
     }
 }

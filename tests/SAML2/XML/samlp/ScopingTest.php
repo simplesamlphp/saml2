@@ -10,6 +10,7 @@ use SimpleSAML\SAML2\Constants;
 use SimpleSAML\SAML2\XML\samlp\IDPEntry;
 use SimpleSAML\SAML2\XML\samlp\IDPList;
 use SimpleSAML\SAML2\XML\samlp\Scoping;
+use SimpleSAML\Test\XML\SerializableXMLTestTrait;
 use SimpleSAML\XML\DOMDocumentFactory;
 use SimpleSAML\XML\Utils as XMLUtils;
 
@@ -23,15 +24,16 @@ use SimpleSAML\XML\Utils as XMLUtils;
  */
 final class ScopingTest extends TestCase
 {
-    /** @var \DOMDocument */
-    private DOMDocument $document;
+    use SerializableXMLTestTrait;
 
 
     /**
      */
     protected function setUp(): void
     {
-        $this->document = DOMDocumentFactory::fromFile(
+        $this->testedClass = Scoping::class;
+
+        $this->xmlRepresentation = DOMDocumentFactory::fromFile(
             dirname(dirname(dirname(dirname(__FILE__)))) . '/resources/xml/samlp_Scoping.xml'
         );
     }
@@ -65,7 +67,7 @@ final class ScopingTest extends TestCase
         $this->assertCount(1, $requesterId);
         $this->assertEquals('urn:some:requester', $requesterId[0]);
 
-        $this->assertEquals($this->document->saveXML($this->document->documentElement), strval($scoping));
+        $this->assertEquals($this->xmlRepresentation->saveXML($this->xmlRepresentation->documentElement), strval($scoping));
     }
 
 
@@ -114,7 +116,7 @@ final class ScopingTest extends TestCase
      */
     public function testUnmarshalling(): void
     {
-        $scoping = Scoping::fromXML($this->document->documentElement);
+        $scoping = Scoping::fromXML($this->xmlRepresentation->documentElement);
         $this->assertEquals(2, $scoping->getProxyCount());
 
         $list = $scoping->getIDPList();
@@ -132,17 +134,5 @@ final class ScopingTest extends TestCase
         $requesterId = $scoping->getRequesterId();
         $this->assertCount(1, $requesterId);
         $this->assertEquals('urn:some:requester', $requesterId[0]);
-    }
-
-
-    /**
-     * Test serialization / unserialization
-     */
-    public function testSerialization(): void
-    {
-        $this->assertEquals(
-            $this->document->saveXML($this->document->documentElement),
-            strval(unserialize(serialize(Scoping::fromXML($this->document->documentElement))))
-        );
     }
 }

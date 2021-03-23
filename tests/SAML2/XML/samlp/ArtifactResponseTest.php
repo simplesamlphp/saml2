@@ -14,6 +14,7 @@ use SimpleSAML\SAML2\XML\samlp\ArtifactResponse;
 use SimpleSAML\SAML2\XML\samlp\NameIDPolicy;
 use SimpleSAML\SAML2\XML\samlp\Status;
 use SimpleSAML\SAML2\XML\samlp\StatusCode;
+use SimpleSAML\Test\XML\SerializableXMLTestTrait;
 use SimpleSAML\XML\DOMDocumentFactory;
 use SimpleSAML\XML\Utils as XMLUtils;
 
@@ -26,15 +27,16 @@ use SimpleSAML\XML\Utils as XMLUtils;
  */
 final class ArtifactResponseTest extends TestCase
 {
-    /** @var \DOMDocument */
-    private DOMDocument $document;
+    use SerializableXMLTestTrait;
 
 
     /**
      */
     public function setUp(): void
     {
-        $this->document = DOMDocumentFactory::fromFile(
+        $this->testedClass = ArtifactResponse::class;
+
+        $this->xmlRepresentation = DOMDocumentFactory::fromFile(
             dirname(dirname(dirname(dirname(__FILE__)))) . '/resources/xml/samlp_ArtifactResponse.xml'
         );
     }
@@ -90,12 +92,15 @@ final class ArtifactResponseTest extends TestCase
         $this->assertCount(1, $artifactIssuer);
         $this->assertEquals($issuer1->getValue(), $artifactIssuer[0]->textContent);
 
-        $authnelement = XMLUtils::xpQuery($artifactResponseElement, './saml_protocol:AuthnRequest/saml_assertion:Issuer');
+        $authnelement = XMLUtils::xpQuery(
+            $artifactResponseElement,
+            './saml_protocol:AuthnRequest/saml_assertion:Issuer'
+        );
         $this->assertCount(1, $authnelement);
         $this->assertEquals($issuer2->getValue(), $authnelement[0]->textContent);
 
         $this->assertEquals(
-            $this->document->saveXML($this->document->documentElement),
+            $this->xmlRepresentation->saveXML($this->xmlRepresentation->documentElement),
             strval($artifactResponse)
         );
     }
@@ -105,7 +110,7 @@ final class ArtifactResponseTest extends TestCase
      */
     public function testUnmarshalling(): void
     {
-        $ar = ArtifactResponse::fromXML($this->document->documentElement);
+        $ar = ArtifactResponse::fromXML($this->xmlRepresentation->documentElement);
 
         $this->assertEquals(true, $ar->isSuccess());
         $this->assertEquals("_d84a49e5958803dedcff4c984c2b0d95", $ar->getId());
@@ -116,18 +121,6 @@ final class ArtifactResponseTest extends TestCase
         $this->assertEquals(
             'https://sp.example.com/SAML2/SSO/Artifact',
             $message->getAssertionConsumerServiceURL()
-        );
-    }
-
-
-    /**
-     * Test serialization / unserialization
-     */
-    public function testSerialization(): void
-    {
-        $this->assertEquals(
-            $this->document->saveXML($this->document->documentElement),
-            strval(unserialize(serialize(ArtifactResponse::fromXML($this->document->documentElement))))
         );
     }
 }

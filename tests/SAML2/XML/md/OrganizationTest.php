@@ -12,6 +12,7 @@ use SimpleSAML\SAML2\XML\md\Organization;
 use SimpleSAML\SAML2\XML\md\OrganizationDisplayName;
 use SimpleSAML\SAML2\XML\md\OrganizationName;
 use SimpleSAML\SAML2\XML\md\OrganizationURL;
+use SimpleSAML\Test\XML\SerializableXMLTestTrait;
 use SimpleSAML\XML\DOMDocumentFactory;
 use SimpleSAML\XML\Exception\MissingElementException;
 use SimpleSAML\XML\Chunk;
@@ -25,15 +26,16 @@ use SimpleSAML\XML\Chunk;
  */
 final class OrganizationTest extends TestCase
 {
-    /** @var \DOMDocument */
-    protected DOMDocument $document;
+    use SerializableXMLTestTrait;
 
 
     /**
      */
     protected function setUp(): void
     {
-        $this->document = DOMDocumentFactory::fromFile(
+        $this->testedClass = Organization::class;
+
+        $this->xmlRepresentation = DOMDocumentFactory::fromFile(
             dirname(dirname(dirname(dirname(__FILE__)))) . '/resources/xml/md_Organization.xml'
         );
     }
@@ -65,7 +67,7 @@ final class OrganizationTest extends TestCase
         $root->formatOutput = true;
 
         $this->assertEquals(
-            $this->document->saveXML($this->document->documentElement),
+            $this->xmlRepresentation->saveXML($this->xmlRepresentation->documentElement),
             strval($org)
         );
     }
@@ -79,7 +81,7 @@ final class OrganizationTest extends TestCase
      */
     public function testUnmarshalling(): void
     {
-        $org = Organization::fromXML($this->document->documentElement);
+        $org = Organization::fromXML($this->xmlRepresentation->documentElement);
         $this->assertCount(1, $org->getOrganizationName());
         $this->assertEquals(
             strval(new OrganizationName('en', 'Identity Providers R US')),
@@ -92,19 +94,6 @@ final class OrganizationTest extends TestCase
         $this->assertEquals(
             strval(new OrganizationURL('en', 'https://IdentityProvider.com')),
             strval($org->getOrganizationURL()[0])
-        );
-    }
-
-
-    /**
-     * Test serialization and unserialization of Organization elements.
-     */
-    public function testSerialization(): void
-    {
-        $org = Organization::fromXML($this->document->documentElement);
-        $this->assertEquals(
-            $this->document->saveXML($this->document->documentElement),
-            strval(unserialize(serialize($org)))
         );
     }
 }

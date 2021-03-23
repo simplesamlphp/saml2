@@ -7,6 +7,7 @@ namespace SimpleSAML\Test\SAML2\XML\saml;
 use DOMDocument;
 use PHPUnit\Framework\TestCase;
 use SimpleSAML\SAML2\XML\saml\NameID;
+use SimpleSAML\Test\XML\SerializableXMLTestTrait;
 use SimpleSAML\XML\DOMDocumentFactory;
 
 /**
@@ -20,14 +21,16 @@ use SimpleSAML\XML\DOMDocumentFactory;
  */
 final class NameIDTest extends TestCase
 {
-    /** @var \DOMDocument $document */
-    private DOMDocument $document;
+    use SerializableXMLTestTrait;
+
 
     /**
      */
     public function setup(): void
     {
-        $this->document = DOMDocumentFactory::fromFile(
+        $this->testedClass = NameID::class;
+
+        $this->xmlRepresentation = DOMDocumentFactory::fromFile(
             dirname(dirname(dirname(dirname(__FILE__)))) . '/resources/xml/saml_NameID.xml'
         );
     }
@@ -55,7 +58,7 @@ final class NameIDTest extends TestCase
         $this->assertEquals('TheSPNameQualifier', $nameId->getSPNameQualifier());
 
         $this->assertEquals(
-            $this->document->saveXML($this->document->documentElement),
+            $this->xmlRepresentation->saveXML($this->xmlRepresentation->documentElement),
             strval($nameId)
         );
     }
@@ -68,7 +71,7 @@ final class NameIDTest extends TestCase
      */
     public function testUnmarshalling(): void
     {
-        $nameId = NameID::fromXML($this->document->documentElement);
+        $nameId = NameID::fromXML($this->xmlRepresentation->documentElement);
 
         $this->assertEquals('TheNameIDValue', $nameId->getValue());
         $this->assertEquals('TheNameQualifier', $nameId->getNameQualifier());
@@ -77,20 +80,8 @@ final class NameIDTest extends TestCase
         $this->assertEquals('TheSPProvidedID', $nameId->getSPProvidedID());
 
         $this->assertEquals(
-            $this->document->saveXML($this->document->documentElement),
+            $this->xmlRepresentation->saveXML($this->xmlRepresentation->documentElement),
             strval($nameId)
-        );
-    }
-
-
-    /**
-     * Test serialization / unserialization
-     */
-    public function testSerialization(): void
-    {
-        $this->assertEquals(
-            $this->document->saveXML($this->document->documentElement),
-            strval(unserialize(serialize(NameID::fromXML($this->document->documentElement))))
         );
     }
 }

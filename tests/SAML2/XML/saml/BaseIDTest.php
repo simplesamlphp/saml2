@@ -9,6 +9,7 @@ use PHPUnit\Framework\TestCase;
 use SimpleSAML\SAML2\Constants;
 use SimpleSAML\SAML2\XML\saml\BaseID;
 use SimpleSAML\Test\SAML2\CustomBaseID;
+use SimpleSAML\Test\XML\SerializableXMLTestTrait;
 use SimpleSAML\XML\DOMDocumentFactory;
 
 /**
@@ -21,15 +22,16 @@ use SimpleSAML\XML\DOMDocumentFactory;
  */
 final class BaseIDTest extends TestCase
 {
-    /** @var \DOMDocument $document */
-    private DOMDocument $document;
+    use SerializableXMLTestTrait;
 
 
     /**
      */
     public function setup(): void
     {
-        $this->document = DOMDocumentFactory::fromFile(
+        $this->testedClass = BaseID::class;
+
+        $this->xmlRepresentation = DOMDocumentFactory::fromFile(
             dirname(dirname(dirname(dirname(__FILE__)))) . '/resources/xml/saml_BaseID.xml'
         );
     }
@@ -54,7 +56,7 @@ final class BaseIDTest extends TestCase
         $this->assertEquals('CustomBaseID', $baseId->getType());
 
         $this->assertEquals(
-            $this->document->saveXML($this->document->documentElement),
+            $this->xmlRepresentation->saveXML($this->xmlRepresentation->documentElement),
             strval($baseId)
         );
     }
@@ -67,7 +69,7 @@ final class BaseIDTest extends TestCase
      */
     public function testUnmarshalling(): void
     {
-        $baseId = BaseID::fromXML($this->document->documentElement);
+        $baseId = BaseID::fromXML($this->xmlRepresentation->documentElement);
 
         $this->assertEquals('123.456', $baseId->getValue());
         $this->assertEquals('TheNameQualifier', $baseId->getNameQualifier());
@@ -75,7 +77,7 @@ final class BaseIDTest extends TestCase
         $this->assertEquals('CustomBaseID', $baseId->getType());
 
         $this->assertEquals(
-            $this->document->saveXML($this->document->documentElement),
+            $this->xmlRepresentation->saveXML($this->xmlRepresentation->documentElement),
             strval($baseId)
         );
     }
@@ -86,31 +88,15 @@ final class BaseIDTest extends TestCase
     public function testUnmarshallingCustomClass(): void
     {
         /** @var \SimpleSAML\Test\SAML2\CustomBaseID $baseId */
-        $baseId = CustomBaseID::fromXML($this->document->documentElement);
+        $baseId = CustomBaseID::fromXML($this->xmlRepresentation->documentElement);
 
         $this->assertEquals(123.456, $baseId->getValue());
         $this->assertEquals('TheNameQualifier', $baseId->getNameQualifier());
         $this->assertEquals('TheSPNameQualifier', $baseId->getSPNameQualifier());
 
         $this->assertEquals(
-            $this->document->saveXML($this->document->documentElement),
+            $this->xmlRepresentation->saveXML($this->xmlRepresentation->documentElement),
             strval($baseId)
-        );
-    }
-
-
-    /**
-     * Test serialization / unserialization
-     */
-    public function testSerialization(): void
-    {
-        $this->assertEquals(
-            $this->document->saveXML($this->document->documentElement),
-            strval(unserialize(serialize(BaseID::fromXML($this->document->documentElement))))
-        );
-        $this->assertEquals(
-            $this->document->saveXML($this->document->documentElement),
-            strval(unserialize(serialize(CustomBaseID::fromXML($this->document->documentElement))))
         );
     }
 }

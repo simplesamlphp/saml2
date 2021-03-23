@@ -9,6 +9,7 @@ use PHPUnit\Framework\TestCase;
 use SimpleSAML\SAML2\Exception\ProtocolViolationException;
 use SimpleSAML\SAML2\XML\mdrpi\RegistrationInfo;
 use SimpleSAML\SAML2\XML\mdrpi\RegistrationPolicy;
+use SimpleSAML\Test\XML\SerializableXMLTestTrait;
 use SimpleSAML\XML\DOMDocumentFactory;
 use SimpleSAML\XML\Exception\MissingAttributeException;
 use SimpleSAML\XML\Utils as XMLUtils;
@@ -22,15 +23,16 @@ use SimpleSAML\XML\Utils as XMLUtils;
  */
 final class RegistrationInfoTest extends TestCase
 {
-    /** @var \DOMDocument */
-    protected DOMDocument $document;
+    use SerializableXMLTestTrait;
 
 
     /**
      */
     protected function setUp(): void
     {
-        $this->document = DOMDocumentFactory::fromFile(
+        $this->testedClass = RegistrationInfo::class;
+
+        $this->xmlRepresentation = DOMDocumentFactory::fromFile(
             dirname(dirname(dirname(dirname(__FILE__)))) . '/resources/xml/mdrpi_RegistrationInfo.xml'
         );
     }
@@ -90,16 +92,22 @@ final class RegistrationInfoTest extends TestCase
      */
     public function testUnmarshalling(): void
     {
-        $registrationInfo = RegistrationInfo::fromXML($this->document->documentElement);
+        $registrationInfo = RegistrationInfo::fromXML($this->xmlRepresentation->documentElement);
 
         $this->assertEquals('urn:example:example.org', $registrationInfo->getRegistrationAuthority());
         $this->assertEquals(1148902467, $registrationInfo->getRegistrationInstant());
 
         $registrationPolicy = $registrationInfo->getRegistrationPolicy();
         $this->assertCount(2, $registrationPolicy);
-        $this->assertEquals('http://www.example.org/aai/metadata/en_registration.html', $registrationPolicy[0]->getValue());
+        $this->assertEquals(
+            'http://www.example.org/aai/metadata/en_registration.html',
+            $registrationPolicy[0]->getValue()
+        );
         $this->assertEquals('en', $registrationPolicy[0]->getLanguage());
-        $this->assertEquals('http://www.example.org/aai/metadata/de_registration.html', $registrationPolicy[1]->getValue());
+        $this->assertEquals(
+            'http://www.example.org/aai/metadata/de_registration.html',
+            $registrationPolicy[1]->getValue()
+        );
         $this->assertEquals('de', $registrationPolicy[1]->getLanguage());
     }
 
@@ -125,7 +133,7 @@ XML
      */
     public function testRegistrationInstantTimezoneNotZuluThrowsException(): void
     {
-        $document = $this->document->documentElement;
+        $document = $this->xmlRepresentation->documentElement;
         $document->setAttribute('registrationInstant', '2011-01-01T00:00:00WT');
 
         $this->expectException(ProtocolViolationException::class);
@@ -140,7 +148,7 @@ XML
      */
     public function testMultipleRegistrationPoliciesWithSameLanguageThrowsException(): void
     {
-        $document = $this->document;
+        $document = $this->xmlRepresentation;
 
         // Append another 'en' RegistrationPolicy to the document
         $x = new RegistrationPolicy('en', 'https://example.org');
@@ -152,17 +160,5 @@ XML
             . ' within a given <mdrpi:RegistrationInfo>, for a given language'
         );
         RegistrationInfo::fromXML($document->documentElement);
-    }
-
-
-    /**
-     * Test serialization / unserialization
-     */
-    public function testSerialization(): void
-    {
-        $this->assertEquals(
-            $this->document->saveXML($this->document->documentElement),
-            strval(unserialize(serialize(RegistrationInfo::fromXML($this->document->documentElement))))
-        );
     }
 }

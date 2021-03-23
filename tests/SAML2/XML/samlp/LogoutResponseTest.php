@@ -7,6 +7,7 @@ namespace SimpleSAML\Test\SAML2\XML\samlp;
 use DOMDocument;
 use PHPUnit\Framework\TestCase;
 use SimpleSAML\SAML2\XML\samlp\LogoutResponse;
+use SimpleSAML\Test\XML\SerializableXMLTestTrait;
 use SimpleSAML\XML\DOMDocumentFactory;
 
 /**
@@ -20,15 +21,16 @@ use SimpleSAML\XML\DOMDocumentFactory;
  */
 final class LogoutResponseTest extends TestCase
 {
-    /** @var \DOMDocument */
-    private DOMDocument $document;
+    use SerializableXMLTestTrait;
 
 
     /**
      */
     public function setUp(): void
     {
-        $this->document = DOMDocumentFactory::fromFile(
+        $this->testedClass = LogoutResponse::class;
+
+        $this->xmlRepresentation = DOMDocumentFactory::fromFile(
             dirname(dirname(dirname(dirname(__FILE__)))) . '/resources/xml/samlp_LogoutResponse.xml'
         );
     }
@@ -78,23 +80,12 @@ XML
      */
     public function testLogoutSuccess(): void
     {
-        $response = LogoutResponse::fromXML($this->document->documentElement);
+        $response = LogoutResponse::fromXML($this->xmlRepresentation->documentElement);
         $this->assertTrue($response->isSuccess());
 
         $status = $response->getStatus();
         $this->assertEquals("urn:oasis:names:tc:SAML:2.0:status:Success", $status->getStatusCode()->getValue());
         $this->assertEmpty($status->getStatusCode()->getSubCodes());
         $this->assertNull($status->getStatusMessage());
-    }
-
-    /**
-     * Test serialization / unserialization
-     */
-    public function testSerialization(): void
-    {
-        $this->assertEquals(
-            $this->document->saveXML($this->document->documentElement),
-            strval(unserialize(serialize(LogoutResponse::fromXML($this->document->documentElement))))
-        );
     }
 }

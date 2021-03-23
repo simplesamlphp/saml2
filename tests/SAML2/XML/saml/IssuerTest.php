@@ -10,6 +10,7 @@ use SimpleSAML\Assert\AssertionFailedException;
 use SimpleSAML\SAML2\Constants;
 use SimpleSAML\SAML2\Utils;
 use SimpleSAML\SAML2\XML\saml\Issuer;
+use SimpleSAML\Test\XML\SerializableXMLTestTrait;
 use SimpleSAML\XML\DOMDocumentFactory;
 
 /**
@@ -22,15 +23,16 @@ use SimpleSAML\XML\DOMDocumentFactory;
  */
 final class IssuerTest extends TestCase
 {
-    /** @var \DOMDocument $document */
-    private DOMDocument $document;
+    use SerializableXMLTestTrait;
 
 
     /**
      */
     public function setup(): void
     {
-        $this->document = DOMDocumentFactory::fromFile(
+        $this->testedClass = Issuer::class;
+
+        $this->xmlRepresentation = DOMDocumentFactory::fromFile(
             dirname(dirname(dirname(dirname(__FILE__)))) . '/resources/xml/saml_Issuer.xml'
         );
     }
@@ -58,7 +60,7 @@ final class IssuerTest extends TestCase
         $this->assertEquals('TheFormat', $issuer->getFormat());
 
         $this->assertEquals(
-            $this->document->saveXML($this->document->documentElement),
+            $this->xmlRepresentation->saveXML($this->xmlRepresentation->documentElement),
             strval($issuer)
         );
     }
@@ -108,7 +110,7 @@ final class IssuerTest extends TestCase
      */
     public function testUnmarshalling(): void
     {
-        $issuer = Issuer::fromXML($this->document->documentElement);
+        $issuer = Issuer::fromXML($this->xmlRepresentation->documentElement);
 
         $this->assertEquals('TheIssuerValue', $issuer->getValue());
         $this->assertEquals('TheNameQualifier', $issuer->getNameQualifier());
@@ -123,12 +125,12 @@ final class IssuerTest extends TestCase
      */
     public function testUnmarshallingEntityFormat(): void
     {
-        $this->document->documentElement->setAttribute('Format', Constants::NAMEID_ENTITY);
+        $this->xmlRepresentation->documentElement->setAttribute('Format', Constants::NAMEID_ENTITY);
 
         $this->expectException(AssertionFailedException::class);
         $this->expectExceptionMessage('Illegal combination of attributes being used');
 
-        Issuer::fromXML($this->document->documentElement);
+        Issuer::fromXML($this->xmlRepresentation->documentElement);
     }
 
 
@@ -137,23 +139,11 @@ final class IssuerTest extends TestCase
      */
     public function testUnmarshallingNoFormat(): void
     {
-        $this->document->documentElement->removeAttribute('Format');
+        $this->xmlRepresentation->documentElement->removeAttribute('Format');
 
         $this->expectException(AssertionFailedException::class);
         $this->expectExceptionMessage('Illegal combination of attributes being used');
 
-        Issuer::fromXML($this->document->documentElement);
-    }
-
-
-    /**
-     * Test serialization / unserialization
-     */
-    public function testSerialization(): void
-    {
-        $this->assertEquals(
-            $this->document->saveXML($this->document->documentElement),
-            strval(unserialize(serialize(Issuer::fromXML($this->document->documentElement))))
-        );
+        Issuer::fromXML($this->xmlRepresentation->documentElement);
     }
 }

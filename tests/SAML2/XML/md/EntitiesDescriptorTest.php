@@ -13,6 +13,7 @@ use SimpleSAML\SAML2\XML\md\Extensions;
 use SimpleSAML\SAML2\XML\mdrpi\PublicationInfo;
 use SimpleSAML\SAML2\XML\mdrpi\UsagePolicy;
 use SimpleSAML\Test\SAML2\SignedElementTestTrait;
+use SimpleSAML\Test\XML\SerializableXMLTestTrait;
 use SimpleSAML\XML\DOMDocumentFactory;
 use SimpleSAML\XML\Utils as XMLUtils;
 use SimpleSAML\XMLSecurity\XMLSecurityDSig;
@@ -27,6 +28,7 @@ use SimpleSAML\XMLSecurity\XMLSecurityDSig;
  */
 final class EntitiesDescriptorTest extends TestCase
 {
+    use SerializableXMLTestTrait;
     use SignedElementTestTrait;
 
 
@@ -34,11 +36,11 @@ final class EntitiesDescriptorTest extends TestCase
      */
     protected function setUp(): void
     {
-        $this->document = DOMDocumentFactory::fromFile(
+        $this->testedClass = EntitiesDescriptor::class;
+
+        $this->xmlRepresentation = DOMDocumentFactory::fromFile(
             dirname(dirname(dirname(dirname(__FILE__)))) . '/resources/xml/md_EntitiesDescriptor.xml'
         );
-
-        $this->testedClass = EntitiesDescriptor::class;
     }
 
 
@@ -60,11 +62,11 @@ final class EntitiesDescriptorTest extends TestCase
                 )
             ]
         );
-        $entitiesdChildElement = $this->document->documentElement->getElementsByTagNameNS(
+        $entitiesdChildElement = $this->xmlRepresentation->documentElement->getElementsByTagNameNS(
             Constants::NS_MD,
             'EntitiesDescriptor'
         );
-        $entitydElement = $this->document->documentElement->getElementsByTagNameNS(
+        $entitydElement = $this->xmlRepresentation->documentElement->getElementsByTagNameNS(
             Constants::NS_MD,
             'EntityDescriptor'
         );
@@ -92,7 +94,7 @@ final class EntitiesDescriptorTest extends TestCase
         $this->assertInstanceOf(EntityDescriptor::class, $entitiesd->getEntityDescriptors()[0]);
 
         $this->assertEquals(
-            $this->document->saveXML($this->document->documentElement),
+            $this->xmlRepresentation->saveXML($this->xmlRepresentation->documentElement),
             strval($entitiesd)
         );
     }
@@ -103,7 +105,7 @@ final class EntitiesDescriptorTest extends TestCase
      */
     public function testMarshallingWithNoName(): void
     {
-        $entitydElement = $this->document->documentElement->getElementsByTagNameNS(
+        $entitydElement = $this->xmlRepresentation->documentElement->getElementsByTagNameNS(
             Constants::NS_MD,
             'EntityDescriptor'
         );
@@ -122,7 +124,7 @@ final class EntitiesDescriptorTest extends TestCase
      */
     public function testMarshallingWithOnlyEntitiesDescriptor(): void
     {
-        $entitiesdChildElement = $this->document->documentElement->getElementsByTagNameNS(
+        $entitiesdChildElement = $this->xmlRepresentation->documentElement->getElementsByTagNameNS(
             Constants::NS_MD,
             'EntitiesDescriptor'
         );
@@ -157,7 +159,7 @@ final class EntitiesDescriptorTest extends TestCase
      */
     public function testUnmarshalling(): void
     {
-        $entitiesd = EntitiesDescriptor::fromXML($this->document->documentElement);
+        $entitiesd = EntitiesDescriptor::fromXML($this->xmlRepresentation->documentElement);
         $this->assertEquals('Federation', $entitiesd->getName());
         $this->assertInstanceOf(Extensions::class, $entitiesd->getExtensions());
         $this->assertCount(1, $entitiesd->getEntitiesDescriptors());
@@ -172,8 +174,8 @@ final class EntitiesDescriptorTest extends TestCase
      */
     public function testUnmarshallingWithoutName(): void
     {
-        $this->document->documentElement->removeAttribute('Name');
-        $entitiesd = EntitiesDescriptor::fromXML($this->document->documentElement);
+        $this->xmlRepresentation->documentElement->removeAttribute('Name');
+        $entitiesd = EntitiesDescriptor::fromXML($this->xmlRepresentation->documentElement);
         $this->assertNull($entitiesd->getName());
     }
 
@@ -183,8 +185,8 @@ final class EntitiesDescriptorTest extends TestCase
      */
     public function testUnmarshallingWithEmptyName(): void
     {
-        $this->document->documentElement->setAttribute('Name', '');
-        $entitiesd = EntitiesDescriptor::fromXML($this->document->documentElement);
+        $this->xmlRepresentation->documentElement->setAttribute('Name', '');
+        $entitiesd = EntitiesDescriptor::fromXML($this->xmlRepresentation->documentElement);
         $this->assertEquals('', $entitiesd->getName());
     }
 
@@ -194,10 +196,13 @@ final class EntitiesDescriptorTest extends TestCase
      */
     public function testUnmarshallingWithoutEntities(): void
     {
-        $entities = $this->document->documentElement->getElementsByTagNameNS(Constants::NS_MD, 'EntitiesDescriptor');
+        $entities = $this->xmlRepresentation->documentElement->getElementsByTagNameNS(
+            Constants::NS_MD,
+            'EntitiesDescriptor'
+        );
         /** @psalm-suppress PossiblyNullArgument */
-        $this->document->documentElement->removeChild($entities->item(0));
-        $entitiesd = EntitiesDescriptor::fromXML($this->document->documentElement);
+        $this->xmlRepresentation->documentElement->removeChild($entities->item(0));
+        $entitiesd = EntitiesDescriptor::fromXML($this->xmlRepresentation->documentElement);
         $this->assertEquals([], $entitiesd->getEntitiesDescriptors());
         $this->assertCount(1, $entitiesd->getEntityDescriptors());
     }
@@ -208,16 +213,19 @@ final class EntitiesDescriptorTest extends TestCase
      */
     public function testUnmarshallingWithoutEntity(): void
     {
-        $entity = $this->document->documentElement->getElementsByTagNameNS(Constants::NS_MD, 'EntityDescriptor');
+        $entity = $this->xmlRepresentation->documentElement->getElementsByTagNameNS(
+            Constants::NS_MD,
+            'EntityDescriptor'
+        );
         /*
          *  getElementsByTagNameNS() searches recursively. Therefore, it finds first the EntityDescriptor that's
-         * inside the nested EntitiesDescriptor. We then need to fetch the second result of the search, which will be
+         *  inside the nested EntitiesDescriptor. We then need to fetch the second result of the search, which will be
          *  the child of the parent EntitiesDescriptor.
          */
 
         /** @psalm-suppress PossiblyNullArgument */
-        $this->document->documentElement->removeChild($entity->item(1));
-        $entitiesd = EntitiesDescriptor::fromXML($this->document->documentElement);
+        $this->xmlRepresentation->documentElement->removeChild($entity->item(1));
+        $entitiesd = EntitiesDescriptor::fromXML($this->xmlRepresentation->documentElement);
         $this->assertEquals([], $entitiesd->getEntityDescriptors());
         $this->assertCount(1, $entitiesd->getEntitiesDescriptors());
     }
@@ -229,31 +237,25 @@ final class EntitiesDescriptorTest extends TestCase
     public function testUnmarshallingEmpty(): void
     {
         // remove child EntitiesDescriptor
-        $entities = $this->document->documentElement->getElementsByTagNameNS(Constants::NS_MD, 'EntitiesDescriptor');
+        $entities = $this->xmlRepresentation->documentElement->getElementsByTagNameNS(
+            Constants::NS_MD,
+            'EntitiesDescriptor'
+        );
         /** @psalm-suppress PossiblyNullArgument */
-        $this->document->documentElement->removeChild($entities->item(0));
+        $this->xmlRepresentation->documentElement->removeChild($entities->item(0));
 
         // remove child EntityDescriptor
-        $entity = $this->document->documentElement->getElementsByTagNameNS(Constants::NS_MD, 'EntityDescriptor');
+        $entity = $this->xmlRepresentation->documentElement->getElementsByTagNameNS(
+            Constants::NS_MD,
+            'EntityDescriptor'
+        );
         /** @psalm-suppress PossiblyNullArgument */
-        $this->document->documentElement->removeChild($entity->item(0));
+        $this->xmlRepresentation->documentElement->removeChild($entity->item(0));
 
         $this->expectException(AssertionFailedException::class);
         $this->expectExceptionMessage(
             'At least one md:EntityDescriptor or md:EntitiesDescriptor element is required.'
         );
-        EntitiesDescriptor::fromXML($this->document->documentElement);
-    }
-
-
-    /**
-     * Test serialization / unserialization
-     */
-    public function testSerialization(): void
-    {
-        $this->assertEquals(
-            $this->document->saveXML($this->document->documentElement),
-            strval(unserialize(serialize(EntitiesDescriptor::fromXML($this->document->documentElement))))
-        );
+        EntitiesDescriptor::fromXML($this->xmlRepresentation->documentElement);
     }
 }

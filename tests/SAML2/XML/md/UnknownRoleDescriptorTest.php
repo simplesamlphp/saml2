@@ -14,6 +14,7 @@ use SimpleSAML\SAML2\XML\md\Extensions;
 use SimpleSAML\SAML2\XML\md\KeyDescriptor;
 use SimpleSAML\SAML2\XML\md\Organization;
 use SimpleSAML\SAML2\XML\md\UnknownRoleDescriptor;
+use SimpleSAML\Test\XML\SerializableXMLTestTrait;
 use SimpleSAML\XML\DOMDocumentFactory;
 use SimpleSAML\XML\Exception\MissingAttributeException;
 use SimpleSAML\XML\Chunk;
@@ -33,15 +34,16 @@ use SimpleSAML\XMLSecurity\XMLSecurityDSig;
  */
 final class UnknownRoleDescriptorTest extends TestCase
 {
-    /** @var \DOMDocument */
-    protected DOMDocument $document;
+    use SerializableXMLTestTrait;
 
 
     /**
      */
     public function setUp(): void
     {
-        $this->document = DOMDocumentFactory::fromFile(
+        $this->testedClass = UnknownRoleDescriptor::class;
+
+        $this->xmlRepresentation = DOMDocumentFactory::fromFile(
             dirname(dirname(dirname(dirname(__FILE__)))) . '/resources/xml/md_UnknownRoleDescriptor.xml'
         );
     }
@@ -55,7 +57,7 @@ final class UnknownRoleDescriptorTest extends TestCase
      */
     public function testUnmarshalling(): void
     {
-        $descriptor = UnknownRoleDescriptor::fromXML($this->document->documentElement);
+        $descriptor = UnknownRoleDescriptor::fromXML($this->xmlRepresentation->documentElement);
 
         $this->assertCount(2, $descriptor->getKeyDescriptors());
         $this->assertInstanceOf(KeyDescriptor::class, $descriptor->getKeyDescriptors()[0]);
@@ -85,7 +87,10 @@ final class UnknownRoleDescriptorTest extends TestCase
         $this->assertEquals(Constants::NS_MD, $extensions[0]->getNamespaceURI());
         $this->assertEquals('SomeUnknownExtension', $extensions[0]->getLocalName());
 
-        $this->assertEquals($this->document->saveXML($this->document->documentElement), strval($descriptor));
+        $this->assertEquals($this->xmlRepresentation->saveXML(
+            $this->xmlRepresentation->documentElement),
+            strval($descriptor)
+        );
     }
 
 
@@ -94,14 +99,14 @@ final class UnknownRoleDescriptorTest extends TestCase
      */
     public function testUnmarshallingWithoutSupportedProtocols(): void
     {
-        $this->document->documentElement->removeAttribute('protocolSupportEnumeration');
+        $this->xmlRepresentation->documentElement->removeAttribute('protocolSupportEnumeration');
 
         $this->expectException(MissingAttributeException::class);
         $this->expectExceptionMessage(
             'Missing \'protocolSupportEnumeration\' attribute on md:UnknownRoleDescriptor.'
         );
 
-        UnknownRoleDescriptor::fromXML($this->document->documentElement);
+        UnknownRoleDescriptor::fromXML($this->xmlRepresentation->documentElement);
     }
 
 
@@ -110,12 +115,12 @@ final class UnknownRoleDescriptorTest extends TestCase
      */
     public function testUnmarshallingWithEmptySupportedProtocols(): void
     {
-        $this->document->documentElement->setAttribute('protocolSupportEnumeration', '');
+        $this->xmlRepresentation->documentElement->setAttribute('protocolSupportEnumeration', '');
 
         $this->expectException(AssertionFailedException::class);
         $this->expectExceptionMessage('Cannot specify an empty string as a supported protocol.');
 
-        UnknownRoleDescriptor::fromXML($this->document->documentElement);
+        UnknownRoleDescriptor::fromXML($this->xmlRepresentation->documentElement);
     }
 
 
@@ -124,24 +129,11 @@ final class UnknownRoleDescriptorTest extends TestCase
      */
     public function testUnmarshallingWithInvalidErrorURL(): void
     {
-        $this->document->documentElement->setAttribute('errorURL', 'not a URL');
+        $this->xmlRepresentation->documentElement->setAttribute('errorURL', 'not a URL');
 
         $this->expectException(InvalidArgumentException::class);
         $this->expectExceptionMessage('RoleDescriptor errorURL is not a valid URL.');
 
-        UnknownRoleDescriptor::fromXML($this->document->documentElement);
-    }
-
-
-    /**
-     * Test serialization and unserialization of unknown role descriptors.
-     */
-    public function testSerialization(): void
-    {
-        $descriptor = UnknownRoleDescriptor::fromXML($this->document->documentElement);
-        $this->assertEquals(
-            $this->document->saveXML($this->document->documentElement),
-            strval(unserialize(serialize($descriptor)))
-        );
+        UnknownRoleDescriptor::fromXML($this->xmlRepresentation->documentElement);
     }
 }

@@ -7,6 +7,7 @@ namespace SimpleSAML\Test\SAML2\XML\samlp;
 use DOMDocument;
 use PHPUnit\Framework\TestCase;
 use SimpleSAML\SAML2\XML\samlp\IDPEntry;
+use SimpleSAML\Test\XML\SerializableXMLTestTrait;
 use SimpleSAML\XML\DOMDocumentFactory;
 
 /**
@@ -19,15 +20,16 @@ use SimpleSAML\XML\DOMDocumentFactory;
  */
 final class IDPEntryTest extends TestCase
 {
-    /** @var \DOMDocument */
-    private DOMDocument $document;
+    use SerializableXMLTestTrait;
 
 
     /**
      */
     protected function setUp(): void
     {
-        $this->document = DOMDocumentFactory::fromFile(
+        $this->testedClass = IDPentry::class;
+
+        $this->xmlRepresentation = DOMDocumentFactory::fromFile(
             dirname(dirname(dirname(dirname(__FILE__)))) . '/resources/xml/samlp_IDPEntry.xml'
         );
     }
@@ -43,14 +45,17 @@ final class IDPEntryTest extends TestCase
         $this->assertEquals('testName', $entry->getName());
         $this->assertEquals('testLoc', $entry->getLoc());
 
-        $this->assertEquals($this->document->saveXML($this->document->documentElement), strval($entry));
+        $this->assertEquals(
+            $this->xmlRepresentation->saveXML($this->xmlRepresentation->documentElement),
+            strval($entry)
+        );
     }
 
     /**
      */
     public function testMarshallingNullables(): void
     {
-        $document = $this->document;
+        $document = $this->xmlRepresentation;
         $document->documentElement->removeAttribute('Name');
         $document->documentElement->removeAttribute('Loc');
 
@@ -61,7 +66,7 @@ final class IDPEntryTest extends TestCase
         $this->assertNull($entry->getLoc());
 
         $this->assertEquals(
-            $this->document->saveXML($document->documentElement),
+            $this->xmlRepresentation->saveXML($document->documentElement),
             strval($entry)
         );
     }
@@ -71,22 +76,10 @@ final class IDPEntryTest extends TestCase
      */
     public function testUnmarshalling(): void
     {
-        $entry = IDPEntry::fromXML($this->document->documentElement);
+        $entry = IDPEntry::fromXML($this->xmlRepresentation->documentElement);
 
         $this->assertEquals('urn:some:requester', $entry->getProviderID());
         $this->assertEquals('testName', $entry->getName());
         $this->assertEquals('testLoc', $entry->getLoc());
-    }
-
-
-    /**
-     * Test serialization / unserialization
-     */
-    public function testSerialization(): void
-    {
-        $this->assertEquals(
-            $this->document->saveXML($this->document->documentElement),
-            strval(unserialize(serialize(IDPEntry::fromXML($this->document->documentElement))))
-        );
     }
 }

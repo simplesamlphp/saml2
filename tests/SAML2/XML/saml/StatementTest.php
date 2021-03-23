@@ -10,6 +10,7 @@ use PHPUnit\Framework\TestCase;
 use SimpleSAML\Assert\AssertionFailedException;
 use SimpleSAML\SAML2\Constants;
 use SimpleSAML\Test\SAML2\CustomStatement;
+use SimpleSAML\Test\XML\SerializableXMLTestTrait;
 use SimpleSAML\XML\DOMDocumentFactory;
 
 /**
@@ -21,15 +22,16 @@ use SimpleSAML\XML\DOMDocumentFactory;
  */
 final class StatementTest extends TestCase
 {
-    /** @var \DOMDocument */
-    private DOMDocument $document;
+    use SerializableXMLTestTrait;
 
 
     /**
      */
     protected function setUp(): void
     {
-        $this->document = DOMDocumentFactory::fromFile(
+        $this->testedClass = CustomStatement::class;
+
+        $this->xmlRepresentation = DOMDocumentFactory::fromFile(
             dirname(dirname(dirname(dirname(__FILE__)))) . '/resources/xml/saml_Statement.xml'
         );
     }
@@ -48,7 +50,7 @@ final class StatementTest extends TestCase
         $this->assertEquals('SomeStatement', $statement->getValue());
 
         $this->assertEquals(
-            $this->document->saveXML($this->document->documentElement),
+            $this->xmlRepresentation->saveXML($this->xmlRepresentation->documentElement),
             strval($statement)
         );
     }
@@ -61,26 +63,14 @@ final class StatementTest extends TestCase
      */
     public function testUnmarshallingCustomClass(): void
     {
-        $statement = CustomStatement::fromXML($this->document->documentElement);
+        $statement = CustomStatement::fromXML($this->xmlRepresentation->documentElement);
 
         $this->assertEquals('CustomStatement', $statement->getType());
         $this->assertEquals('SomeStatement', $statement->getValue());
 
         $this->assertEquals(
-            $this->document->saveXML($this->document->documentElement),
+            $this->xmlRepresentation->saveXML($this->xmlRepresentation->documentElement),
             strval($statement)
-        );
-    }
-
-
-    /**
-     * Test serialization / unserialization
-     */
-    public function testSerialization(): void
-    {
-        $this->assertEquals(
-            $this->document->saveXML($this->document->documentElement),
-            strval(unserialize(serialize(CustomStatement::fromXML($this->document->documentElement))))
         );
     }
 }

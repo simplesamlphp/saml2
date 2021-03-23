@@ -8,6 +8,7 @@ use DOMDocument;
 use PHPUnit\Framework\TestCase;
 use SimpleSAML\SAML2\Constants;
 use SimpleSAML\SAML2\XML\saml\SubjectConfirmationData;
+use SimpleSAML\Test\XML\SerializableXMLTestTrait;
 use SimpleSAML\XML\DOMDocumentFactory;
 use SimpleSAML\XML\Chunk;
 use SimpleSAML\XMLSecurity\XML\ds\KeyInfo;
@@ -22,15 +23,16 @@ use SimpleSAML\XMLSecurity\XML\ds\KeyName;
  */
 final class SubjectConfirmationDataTest extends TestCase
 {
-    /** @var \DOMDocument */
-    private DOMDocument $document;
+    use SerializableXMLTestTrait;
 
 
     /**
      */
     public function setup(): void
     {
-        $this->document = DOMDocumentFactory::fromFile(
+        $this->testedClass = SubjectConfirmationData::class;
+
+        $this->xmlRepresentation = DOMDocumentFactory::fromFile(
             dirname(dirname(dirname(dirname(__FILE__)))) . '/resources/xml/saml_SubjectConfirmationData.xml'
         );
     }
@@ -45,9 +47,9 @@ final class SubjectConfirmationDataTest extends TestCase
     {
         $arbitrary = DOMDocumentFactory::fromString('<some>Arbitrary Element</some>');
 
-        $attr1 = $this->document->createAttributeNS('urn:test', 'test:attr1');
+        $attr1 = $this->xmlRepresentation->createAttributeNS('urn:test', 'test:attr1');
         $attr1->value = 'testval1';
-        $attr2 = $this->document->createAttributeNS('urn:test', 'test:attr2');
+        $attr2 = $this->xmlRepresentation->createAttributeNS('urn:test', 'test:attr2');
         $attr2->value = 'testval2';
 
         $subjectConfirmationData = new SubjectConfirmationData(
@@ -73,7 +75,7 @@ final class SubjectConfirmationDataTest extends TestCase
         $this->assertEquals('testval2', $subjectConfirmationData->getAttributeNS('urn:test', 'attr2'));
 
         $this->assertEquals(
-            $this->document->saveXML($this->document->documentElement),
+            $this->xmlRepresentation->saveXML($this->xmlRepresentation->documentElement),
             strval($subjectConfirmationData)
         );
     }
@@ -85,9 +87,9 @@ final class SubjectConfirmationDataTest extends TestCase
     {
         $arbitrary = DOMDocumentFactory::fromString('<some>Arbitrary Element</some>');
 
-        $attr1 = $this->document->createAttributeNS('urn:test', 'test:attr1');
+        $attr1 = $this->xmlRepresentation->createAttributeNS('urn:test', 'test:attr1');
         $attr1->value = 'testval1';
-        $attr2 = $this->document->createAttributeNS('urn:test', 'test:attr2');
+        $attr2 = $this->xmlRepresentation->createAttributeNS('urn:test', 'test:attr2');
         $attr2->value = 'testval2';
 
         $subjectConfirmationData = new SubjectConfirmationData(
@@ -112,11 +114,11 @@ final class SubjectConfirmationDataTest extends TestCase
         $this->assertEquals('testval1', $subjectConfirmationData->getAttributeNS('urn:test', 'attr1'));
         $this->assertEquals('testval2', $subjectConfirmationData->getAttributeNS('urn:test', 'attr2'));
 
-        $document = $this->document->documentElement;
+        $document = $this->xmlRepresentation->documentElement;
         $document->setAttribute('Address', 'non-IP');
 
         $this->assertEquals(
-            $this->document->saveXML($document),
+            $this->xmlRepresentation->saveXML($document),
             strval($subjectConfirmationData)
         );
     }
@@ -129,7 +131,7 @@ final class SubjectConfirmationDataTest extends TestCase
      */
     public function testUnmarshalling(): void
     {
-        $subjectConfirmationData = SubjectConfirmationData::fromXML($this->document->documentElement);
+        $subjectConfirmationData = SubjectConfirmationData::fromXML($this->xmlRepresentation->documentElement);
         $this->assertEquals(987654321, $subjectConfirmationData->getNotBefore());
         $this->assertEquals(1234567890, $subjectConfirmationData->getNotOnOrAfter());
         $this->assertEquals('https://sp.example.org/asdf', $subjectConfirmationData->getRecipient());
@@ -179,17 +181,5 @@ XML
 
         $subjectConfirmationData = SubjectConfirmationData::fromXML($document->documentElement);
         $this->assertTrue($subjectConfirmationData->isEmptyElement());
-    }
-
-
-    /**
-     * Test serialization / unserialization
-     */
-    public function testSerialization(): void
-    {
-        $this->assertEquals(
-            $this->document->saveXML($this->document->documentElement),
-            strval(unserialize(serialize(SubjectConfirmationData::fromXML($this->document->documentElement))))
-        );
     }
 }

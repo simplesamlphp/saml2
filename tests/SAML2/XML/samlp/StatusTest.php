@@ -10,6 +10,7 @@ use SimpleSAML\SAML2\Constants;
 use SimpleSAML\SAML2\XML\samlp\Status;
 use SimpleSAML\SAML2\XML\samlp\StatusCode;
 use SimpleSAML\SAML2\XML\samlp\StatusDetail;
+use SimpleSAML\Test\XML\SerializableXMLTestTrait;
 use SimpleSAML\XML\DOMDocumentFactory;
 use SimpleSAML\XML\Chunk;
 use SimpleSAML\XML\Utils as XMLUtils;
@@ -24,18 +25,16 @@ use SimpleSAML\XML\Utils as XMLUtils;
  */
 final class StatusTest extends TestCase
 {
-    /** @var \DOMDocument */
-    private DOMDocument $document;
-
-    /** @var \DOMDocument */
-    private DOMDocument $detail;
+    use SerializableXMLTestTrait;
 
 
     /**
      */
     public function setUp(): void
     {
-        $this->document = DOMDocumentFactory::fromFile(
+        $this->testedClass = Status::class;
+
+        $this->xmlRepresentation = DOMDocumentFactory::fromFile(
             dirname(dirname(dirname(dirname(__FILE__)))) . '/resources/xml/samlp_Status.xml'
         );
 
@@ -95,7 +94,7 @@ final class StatusTest extends TestCase
         );
 
         $this->assertEquals(
-            $this->document->saveXML($this->document->documentElement),
+            $this->xmlRepresentation->saveXML($this->xmlRepresentation->documentElement),
             strval($status)
         );
     }
@@ -139,7 +138,7 @@ final class StatusTest extends TestCase
      */
     public function testUnmarshalling(): void
     {
-        $status = Status::fromXML($this->document->documentElement);
+        $status = Status::fromXML($this->xmlRepresentation->documentElement);
 
         $statusCode = $status->getStatusCode();
         $this->assertEquals(Constants::STATUS_RESPONDER, $statusCode->getValue());
@@ -160,17 +159,5 @@ final class StatusTest extends TestCase
 
         $this->assertEquals('Cause', $detailElement->tagName);
         $this->assertEquals('org.sourceid.websso.profiles.idp.FailedAuthnSsoException', $detailElement->textContent);
-    }
-
-
-    /**
-     * Test serialization / unserialization
-     */
-    public function testSerialization(): void
-    {
-        $this->assertEquals(
-            $this->document->saveXML($this->document->documentElement),
-            strval(unserialize(serialize(Status::fromXML($this->document->documentElement))))
-        );
     }
 }

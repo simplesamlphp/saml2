@@ -9,6 +9,7 @@ use PHPUnit\Framework\TestCase;
 use SimpleSAML\SAML2\Constants;
 use SimpleSAML\SAML2\Utils;
 use SimpleSAML\SAML2\XML\saml\AuthnContextDeclRef;
+use SimpleSAML\Test\XML\SerializableXMLTestTrait;
 use SimpleSAML\XML\DOMDocumentFactory;
 
 /**
@@ -20,15 +21,16 @@ use SimpleSAML\XML\DOMDocumentFactory;
  */
 final class AuthnContextDeclRefTest extends TestCase
 {
-    /** @var \DOMDocument */
-    private DOMDocument $document;
+    use SerializableXMLTestTrait;
 
 
     /**
      */
     protected function setUp(): void
     {
-        $this->document = DOMDocumentFactory::fromFile(
+        $this->testedClass = AuthnContextDeclRef::class;
+
+        $this->xmlRepresentation = DOMDocumentFactory::fromFile(
             dirname(dirname(dirname(dirname(__FILE__)))) . '/resources/xml/saml_AuthnContextDeclRef.xml'
         );
     }
@@ -43,7 +45,10 @@ final class AuthnContextDeclRefTest extends TestCase
     {
         $authnContextDeclRef = new AuthnContextDeclRef('/relative/path/to/document.xml');
         $this->assertEquals('/relative/path/to/document.xml', $authnContextDeclRef->getDeclRef());
-        $this->assertEquals($this->document->saveXML($this->document->documentElement), strval($authnContextDeclRef));
+        $this->assertEquals(
+            $this->xmlRepresentation->saveXML($this->xmlRepresentation->documentElement),
+            strval($authnContextDeclRef)
+        );
     }
 
 
@@ -54,19 +59,7 @@ final class AuthnContextDeclRefTest extends TestCase
      */
     public function testUnmarshalling(): void
     {
-        $authnContextDeclRef = AuthnContextDeclRef::fromXML($this->document->documentElement);
+        $authnContextDeclRef = AuthnContextDeclRef::fromXML($this->xmlRepresentation->documentElement);
         $this->assertEquals('/relative/path/to/document.xml', $authnContextDeclRef->getDeclRef());
-    }
-
-
-    /**
-     * Test serialization / unserialization
-     */
-    public function testSerialization(): void
-    {
-        $this->assertEquals(
-            $this->document->saveXML($this->document->documentElement),
-            strval(unserialize(serialize(AuthnContextDeclRef::fromXML($this->document->documentElement))))
-        );
     }
 }

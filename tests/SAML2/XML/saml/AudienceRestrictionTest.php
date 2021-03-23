@@ -8,6 +8,7 @@ use DOMDocument;
 use PHPUnit\Framework\TestCase;
 use SimpleSAML\SAML2\Constants;
 use SimpleSAML\SAML2\XML\saml\AudienceRestriction;
+use SimpleSAML\Test\XML\SerializableXMLTestTrait;
 use SimpleSAML\XML\DOMDocumentFactory;
 
 /**
@@ -21,15 +22,16 @@ use SimpleSAML\XML\DOMDocumentFactory;
  */
 final class AudienceRestrictionTest extends TestCase
 {
-    /** @var \DOMDocument $document */
-    private DOMDocument $document;
+    use SerializableXMLTestTrait;
 
 
     /**
      */
     public function setup(): void
     {
-        $this->document = DOMDocumentFactory::fromFile(
+        $this->testedClass = AudienceRestriction::class;
+
+        $this->xmlRepresentation = DOMDocumentFactory::fromFile(
             dirname(dirname(dirname(dirname(__FILE__)))) . '/resources/xml/saml_AudienceRestriction.xml'
         );
     }
@@ -55,7 +57,7 @@ final class AudienceRestrictionTest extends TestCase
         $this->assertEquals('urn:audience2', $audiences[1]);
 
         $this->assertEquals(
-            $this->document->saveXML($this->document->documentElement),
+            $this->xmlRepresentation->saveXML($this->xmlRepresentation->documentElement),
             strval($condition)
         );
     }
@@ -68,7 +70,7 @@ final class AudienceRestrictionTest extends TestCase
      */
     public function testUnmarshalling(): void
     {
-        $condition = AudienceRestriction::fromXML($this->document->documentElement);
+        $condition = AudienceRestriction::fromXML($this->xmlRepresentation->documentElement);
 
         $audiences = $condition->getAudience();
         $this->assertCount(2, $audiences);
@@ -76,20 +78,8 @@ final class AudienceRestrictionTest extends TestCase
         $this->assertEquals('urn:audience2', $audiences[1]);
 
         $this->assertEquals(
-            $this->document->saveXML($this->document->documentElement),
+            $this->xmlRepresentation->saveXML($this->xmlRepresentation->documentElement),
             strval($condition)
-        );
-    }
-
-
-    /**
-     * Test serialization / unserialization
-     */
-    public function testSerialization(): void
-    {
-        $this->assertEquals(
-            $this->document->saveXML($this->document->documentElement),
-            strval(unserialize(serialize(AudienceRestriction::fromXML($this->document->documentElement))))
         );
     }
 }

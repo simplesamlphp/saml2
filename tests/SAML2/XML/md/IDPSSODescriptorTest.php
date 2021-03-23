@@ -18,6 +18,7 @@ use SimpleSAML\SAML2\XML\md\SingleSignOnService;
 use SimpleSAML\SAML2\XML\saml\Attribute;
 use SimpleSAML\SAML2\XML\saml\AttributeValue;
 use SimpleSAML\Test\SAML2\SignedElementTestTrait;
+use SimpleSAML\Test\XML\SerializableXMLTestTrait;
 use SimpleSAML\XML\DOMDocumentFactory;
 use SimpleSAML\XMLSecurity\XML\ds\KeyInfo;
 use SimpleSAML\XMLSecurity\XML\ds\KeyName;
@@ -35,6 +36,7 @@ use SimpleSAML\XMLSecurity\XMLSecurityDSig;
  */
 final class IDPSSODescriptorTest extends TestCase
 {
+    use SerializableXMLTestTrait;
     use SignedElementTestTrait;
 
 
@@ -42,10 +44,11 @@ final class IDPSSODescriptorTest extends TestCase
      */
     protected function setUp(): void
     {
-        $this->document = DOMDocumentFactory::fromFile(
+        $this->testedClass = IDPSSODescriptor::class;
+
+        $this->xmlRepresentation = DOMDocumentFactory::fromFile(
             dirname(dirname(dirname(dirname(__FILE__)))) . '/resources/xml/md_IDPSSODescriptor.xml'
         );
-        $this->testedClass = IDPSSODescriptor::class;
     }
 
 
@@ -191,7 +194,7 @@ final class IDPSSODescriptorTest extends TestCase
         );
 
         $this->assertEquals(
-            $this->document->saveXML($this->document->documentElement),
+            $this->xmlRepresentation->saveXML($this->xmlRepresentation->documentElement),
             strval($idpssod)
         );
     }
@@ -336,7 +339,7 @@ final class IDPSSODescriptorTest extends TestCase
      */
     public function testUnmarshalling(): void
     {
-        $idpssod = IDPSSODescriptor::fromXML($this->document->documentElement);
+        $idpssod = IDPSSODescriptor::fromXML($this->xmlRepresentation->documentElement);
         $this->assertCount(2, $idpssod->getSingleSignOnServices());
         $this->assertInstanceOf(SingleSignOnService::class, $idpssod->getSingleSignOnServices()[0]);
         $this->assertInstanceOf(SingleSignOnService::class, $idpssod->getSingleSignOnServices()[1]);
@@ -368,12 +371,12 @@ final class IDPSSODescriptorTest extends TestCase
     {
         $this->expectException(AssertionFailedException::class);
         $this->expectExceptionMessage('At least one SingleSignOnService must be specified.');
-        $ssoServiceEps = $this->document->getElementsByTagNameNS(Constants::NS_MD, 'SingleSignOnService');
+        $ssoServiceEps = $this->xmlRepresentation->getElementsByTagNameNS(Constants::NS_MD, 'SingleSignOnService');
         /** @psalm-suppress PossiblyNullArgument */
-        $this->document->documentElement->removeChild($ssoServiceEps->item(1));
+        $this->xmlRepresentation->documentElement->removeChild($ssoServiceEps->item(1));
         /** @psalm-suppress PossiblyNullArgument */
-        $this->document->documentElement->removeChild($ssoServiceEps->item(0));
-        IDPSSODescriptor::fromXML($this->document->documentElement);
+        $this->xmlRepresentation->documentElement->removeChild($ssoServiceEps->item(0));
+        IDPSSODescriptor::fromXML($this->xmlRepresentation->documentElement);
     }
 
 
@@ -386,8 +389,8 @@ final class IDPSSODescriptorTest extends TestCase
         $this->expectExceptionMessage(
             'The \'WantAuthnRequestsSigned\' attribute of md:IDPSSODescriptor must be boolean.'
         );
-        $this->document->documentElement->setAttribute('WantAuthnRequestsSigned', 'not a boolean');
-        IDPSSODescriptor::fromXML($this->document->documentElement);
+        $this->xmlRepresentation->documentElement->setAttribute('WantAuthnRequestsSigned', 'not a boolean');
+        IDPSSODescriptor::fromXML($this->xmlRepresentation->documentElement);
     }
 
 
@@ -396,12 +399,12 @@ final class IDPSSODescriptorTest extends TestCase
      */
     public function testUnmarshallingWithEmptyAttributeProfile(): void
     {
-        $attrProfiles = $this->document->getElementsByTagNameNS(Constants::NS_MD, 'AttributeProfile');
+        $attrProfiles = $this->xmlRepresentation->getElementsByTagNameNS(Constants::NS_MD, 'AttributeProfile');
         /** @psalm-suppress PossiblyNullPropertyAssignment */
         $attrProfiles->item(0)->textContent = '';
         $this->expectException(AssertionFailedException::class);
         $this->expectExceptionMessage('All md:AttributeProfile elements must be a URI, not an empty string.');
-        IDPSSODescriptor::fromXML($this->document->documentElement);
+        IDPSSODescriptor::fromXML($this->xmlRepresentation->documentElement);
     }
 
 
@@ -426,18 +429,5 @@ XML
         $this->assertEquals([], $idpssod->getAssertionIDRequestServices());
         $this->assertEquals([], $idpssod->getAttributeProfiles());
         $this->assertEquals([], $idpssod->getSupportedAttributes());
-    }
-
-
-    /**
-     * Test serialization / unserialization.
-     *
-     */
-    public function testSerialize(): void
-    {
-        $this->assertEquals(
-            $this->document->saveXML($this->document->documentElement),
-            strval(unserialize(serialize(IDPSSODescriptor::fromXML($this->document->documentElement))))
-        );
     }
 }

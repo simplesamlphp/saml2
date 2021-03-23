@@ -8,6 +8,7 @@ use DOMDocument;
 use PHPUnit\Framework\TestCase;
 use SimpleSAML\Assert\AssertionFailedException;
 use SimpleSAML\SAML2\XML\md\AdditionalMetadataLocation;
+use SimpleSAML\Test\XML\SerializableXMLTestTrait;
 use SimpleSAML\XML\DOMDocumentFactory;
 use SimpleSAML\XML\Exception\MissingAttributeException;
 
@@ -20,15 +21,16 @@ use SimpleSAML\XML\Exception\MissingAttributeException;
  */
 final class AdditionalMetadataLocationTest extends TestCase
 {
-    /** @var \DOMDocument */
-    private DOMDocument $document;
+    use SerializableXMLTestTrait;
 
 
     /**
      */
     public function setUp(): void
     {
-        $this->document = DOMDocumentFactory::fromFile(
+        $this->testedClass = AdditionalMetadataLocation::class;
+
+        $this->xmlRepresentation = DOMDocumentFactory::fromFile(
             dirname(dirname(dirname(dirname(__FILE__)))) . '/resources/xml/md_AdditionalMetadataLocation.xml'
         );
     }
@@ -48,7 +50,7 @@ final class AdditionalMetadataLocationTest extends TestCase
         $this->assertEquals('LocationText', $additionalMetadataLocation->getLocation());
 
         $this->assertEquals(
-            $this->document->saveXML($this->document->documentElement),
+            $this->xmlRepresentation->saveXML($this->xmlRepresentation->documentElement),
             strval($additionalMetadataLocation)
         );
     }
@@ -84,7 +86,7 @@ final class AdditionalMetadataLocationTest extends TestCase
      */
     public function testUnmarshalling(): void
     {
-        $additionalMetadataLocation = AdditionalMetadataLocation::fromXML($this->document->documentElement);
+        $additionalMetadataLocation = AdditionalMetadataLocation::fromXML($this->xmlRepresentation->documentElement);
         $this->assertEquals('TheNamespaceAttribute', $additionalMetadataLocation->getNamespace());
         $this->assertEquals('LocationText', $additionalMetadataLocation->getLocation());
     }
@@ -95,7 +97,7 @@ final class AdditionalMetadataLocationTest extends TestCase
      */
     public function testUnmarshallingWithoutNamespace(): void
     {
-        $document = $this->document->documentElement;
+        $document = $this->xmlRepresentation->documentElement;
         $document->removeAttribute('namespace');
 
         $this->expectException(MissingAttributeException::class);
@@ -109,24 +111,11 @@ final class AdditionalMetadataLocationTest extends TestCase
      */
     public function testUnmarshallingWithEmptyLocation(): void
     {
-        $document = $this->document->documentElement;
+        $document = $this->xmlRepresentation->documentElement;
         $document->textContent = '';
 
         $this->expectException(AssertionFailedException::class);
         $this->expectExceptionMessage('AdditionalMetadataLocation must contain a URI.');
         AdditionalMetadataLocation::fromXML($document);
-    }
-
-
-    /**
-     * Test serialization and unserialization of AdditionalMetadataLocation elements.
-     */
-    public function testSerialization(): void
-    {
-        $aml = AdditionalMetadataLocation::fromXML($this->document->documentElement);
-        $this->assertEquals(
-            $this->document->saveXML($this->document->documentElement),
-            strval(unserialize(serialize($aml)))
-        );
     }
 }

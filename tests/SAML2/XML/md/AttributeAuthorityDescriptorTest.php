@@ -14,6 +14,7 @@ use SimpleSAML\SAML2\XML\md\AttributeService;
 use SimpleSAML\SAML2\XML\saml\Attribute;
 use SimpleSAML\SAML2\XML\saml\AttributeValue;
 use SimpleSAML\Test\SAML2\SignedElementTestTrait;
+use SimpleSAML\Test\XML\SerializableXMLTestTrait;
 use SimpleSAML\XML\DOMDocumentFactory;
 
 /**
@@ -27,7 +28,9 @@ use SimpleSAML\XML\DOMDocumentFactory;
  */
 final class AttributeAuthorityDescriptorTest extends TestCase
 {
+    use SerializableXMLTestTrait;
     use SignedElementTestTrait;
+
 
     /** @var \SimpleSAML\SAML2\XML\md\AttributeService */
     protected AttributeService $as;
@@ -40,7 +43,9 @@ final class AttributeAuthorityDescriptorTest extends TestCase
      */
     protected function setUp(): void
     {
-        $this->document = DOMDocumentFactory::fromFile(
+        $this->testedClass = AttributeAuthorityDescriptor::class;
+
+        $this->xmlRepresentation = DOMDocumentFactory::fromFile(
             dirname(dirname(dirname(dirname(__FILE__)))) . '/resources/xml/md_AttributeAuthorityDescriptor.xml'
         );
         $this->as = new AttributeService(
@@ -51,7 +56,6 @@ final class AttributeAuthorityDescriptorTest extends TestCase
             "urn:oasis:names:tc:SAML:2.0:bindings:URI",
             "https://IdentityProvider.com/SAML/AA/URI"
         );
-        $this->testedClass = AttributeAuthorityDescriptor::class;
     }
 
 
@@ -114,7 +118,7 @@ final class AttributeAuthorityDescriptorTest extends TestCase
         $this->assertEquals(['profile1', 'profile2'], $aad->getAttributeProfiles());
         $this->assertEquals([$attr1, $attr2], $aad->getAttributes());
 
-        $this->assertEqualXMLStructure($this->document->documentElement, $aad->toXML());
+        $this->assertEqualXMLStructure($this->xmlRepresentation->documentElement, $aad->toXML());
     }
 
     /**
@@ -209,7 +213,9 @@ final class AttributeAuthorityDescriptorTest extends TestCase
     public function testMarshallingWithWrongAssertionIDRequestService(): void
     {
         $this->expectException(AssertionFailedException::class);
-        $this->expectExceptionMessage('Expected an instance of SimpleSAML\SAML2\XML\md\AssertionIDRequestService. Got: string');
+        $this->expectExceptionMessage(
+            'Expected an instance of SimpleSAML\SAML2\XML\md\AssertionIDRequestService. Got: string'
+        );
 
         /** @psalm-suppress InvalidArgument */
         new AttributeAuthorityDescriptor([$this->as], ['x'], ['x']);
@@ -244,7 +250,9 @@ final class AttributeAuthorityDescriptorTest extends TestCase
     public function testMarshallingWithWrongAttribute(): void
     {
         $this->expectException(AssertionFailedException::class);
-        $this->expectExceptionMessage('Expected an instance of SimpleSAML\SAML2\XML\saml\Attribute. Got: string');
+        $this->expectExceptionMessage(
+            'Expected an instance of SimpleSAML\SAML2\XML\saml\Attribute. Got: string'
+        );
 
         /** @psalm-suppress InvalidArgument */
         new AttributeAuthorityDescriptor([$this->as], ['x'], [$this->aidrs], ['x'], ['x'], ['x']);
@@ -259,7 +267,7 @@ final class AttributeAuthorityDescriptorTest extends TestCase
      */
     public function testUnmarshalling(): void
     {
-        $aad = AttributeAuthorityDescriptor::fromXML($this->document->documentElement);
+        $aad = AttributeAuthorityDescriptor::fromXML($this->xmlRepresentation->documentElement);
 
         $as = $aad->getAttributeServices();
         $this->assertCount(1, $as, "Wrong number of AttributeService elements.");
@@ -355,18 +363,5 @@ XML
         $this->expectException(AssertionFailedException::class);
         $this->expectExceptionMessage('AttributeProfile cannot be an empty string.');
         AttributeAuthorityDescriptor::fromXML($document->documentElement);
-    }
-
-
-    /**
-     * Test serialization and unserialization of unknown role descriptors.
-     */
-    public function testSerialization(): void
-    {
-        $descriptor = AttributeAuthorityDescriptor::fromXML($this->document->documentElement);
-        $this->assertEquals(
-            $this->document->saveXML($this->document->documentElement),
-            strval(unserialize(serialize($descriptor)))
-        );
     }
 }

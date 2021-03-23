@@ -11,6 +11,7 @@ use SimpleSAML\Assert\AssertionFailedException;
 use SimpleSAML\SAML2\Constants;
 use SimpleSAML\SAML2\XML\md\AbstractLocalizedName;
 use SimpleSAML\SAML2\XML\mdrpi\UsagePolicy;
+use SimpleSAML\Test\XML\SerializableXMLTestTrait;
 use SimpleSAML\XML\DOMDocumentFactory;
 
 /**
@@ -23,15 +24,16 @@ use SimpleSAML\XML\DOMDocumentFactory;
  */
 final class UsagePolicyTest extends TestCase
 {
-    /** @var \DOMDocument */
-    protected DOMDocument $document;
+    use SerializableXMLTestTrait;
 
 
     /**
      */
     protected function setUp(): void
     {
-        $this->document = DOMDocumentFactory::fromFile(
+        $this->testedClass = UsagePolicy::class;
+
+        $this->xmlRepresentation = DOMDocumentFactory::fromFile(
             dirname(dirname(dirname(dirname(__FILE__)))) . '/resources/xml/mdrpi_UsagePolicy.xml'
         );
     }
@@ -50,7 +52,10 @@ final class UsagePolicyTest extends TestCase
         $this->assertEquals('en', $name->getLanguage());
         $this->assertEquals('http://www.example.edu/en/', $name->getValue());
 
-        $this->assertEquals($this->document->saveXML($this->document->documentElement), strval($name));
+        $this->assertEquals(
+            $this->xmlRepresentation->saveXML($this->xmlRepresentation->documentElement),
+            strval($name)
+        );
     }
 
 
@@ -73,9 +78,12 @@ final class UsagePolicyTest extends TestCase
     {
         $name = new UsagePolicy('en', '');
 
-        $this->document->documentElement->textContent = '';
+        $this->xmlRepresentation->documentElement->textContent = '';
 
-        $this->assertEquals($this->document->saveXML($this->document->documentElement), strval($name));
+        $this->assertEquals(
+            $this->xmlRepresentation->saveXML($this->xmlRepresentation->documentElement),
+            strval($name)
+        );
     }
 
 
@@ -87,8 +95,11 @@ final class UsagePolicyTest extends TestCase
      */
     public function testUnmarshalling(): void
     {
-        $name = UsagePolicy::fromXML($this->document->documentElement);
-        $this->assertEquals($this->document->saveXML($this->document->documentElement), strval($name));
+        $name = UsagePolicy::fromXML($this->xmlRepresentation->documentElement);
+        $this->assertEquals(
+            $this->xmlRepresentation->saveXML($this->xmlRepresentation->documentElement),
+            strval($name)
+        );
     }
 
 
@@ -97,12 +108,12 @@ final class UsagePolicyTest extends TestCase
      */
     public function testUnmarshallingWithoutLang(): void
     {
-        $this->document->documentElement->removeAttributeNS(UsagePolicy::XML_NS, 'lang');
+        $this->xmlRepresentation->documentElement->removeAttributeNS(UsagePolicy::XML_NS, 'lang');
 
         $this->expectException(AssertionFailedException::class);
         $this->expectExceptionMessage('Missing xml:lang from UsagePolicy');
 
-        UsagePolicy::fromXML($this->document->documentElement);
+        UsagePolicy::fromXML($this->xmlRepresentation->documentElement);
     }
 
 
@@ -111,12 +122,12 @@ final class UsagePolicyTest extends TestCase
      */
     public function testUnmarshallingWithEmptyLang(): void
     {
-        $this->document->documentElement->setAttributeNS(UsagePolicy::XML_NS, 'lang', '');
+        $this->xmlRepresentation->documentElement->setAttributeNS(UsagePolicy::XML_NS, 'lang', '');
 
         $this->expectException(AssertionFailedException::class);
         $this->expectExceptionMessage('xml:lang cannot be empty.');
 
-        UsagePolicy::fromXML($this->document->documentElement);
+        UsagePolicy::fromXML($this->xmlRepresentation->documentElement);
     }
 
 
@@ -125,12 +136,15 @@ final class UsagePolicyTest extends TestCase
      */
     public function testUnmarshallingWithEmptyValue(): void
     {
-        $this->document->documentElement->textContent = '';
-        $name = UsagePolicy::fromXML($this->document->documentElement);
+        $this->xmlRepresentation->documentElement->textContent = '';
+        $name = UsagePolicy::fromXML($this->xmlRepresentation->documentElement);
 
         $this->assertEquals('en', $name->getLanguage());
         $this->assertEquals('', $name->getValue());
-        $this->assertEquals($this->document->saveXML($this->document->documentElement), strval($name));
+        $this->assertEquals(
+            $this->xmlRepresentation->saveXML($this->xmlRepresentation->documentElement),
+            strval($name)
+        );
     }
 
 
@@ -139,23 +153,11 @@ final class UsagePolicyTest extends TestCase
      */
     public function testUnmarshallingFailsInvalidURL(): void
     {
-        $document = $this->document;
+        $document = $this->xmlRepresentation;
         $document->documentElement->textContent = 'this is no url';
 
         $this->expectException(InvalidArgumentException::class);
         $this->expectExceptionMessage('mdrpi:UsagePolicy is not a valid URL.');
         UsagePolicy::fromXML($document->documentElement);
-    }
-
-
-    /**
-     * Test serialization / unserialization.
-     */
-    public function testSerialization(): void
-    {
-        $this->assertEquals(
-            $this->document->saveXML($this->document->documentElement),
-            strval(unserialize(serialize(UsagePolicy::fromXML($this->document->documentElement))))
-        );
     }
 }

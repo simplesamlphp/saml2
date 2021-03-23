@@ -9,6 +9,7 @@ use PHPUnit\Framework\TestCase;
 use SimpleSAML\SAML2\Utils;
 use SimpleSAML\SAML2\XML\saml\Issuer;
 use SimpleSAML\SAML2\XML\samlp\ArtifactResolve;
+use SimpleSAML\Test\XML\SerializableXMLTestTrait;
 use SimpleSAML\XML\DOMDocumentFactory;
 
 /**
@@ -20,15 +21,16 @@ use SimpleSAML\XML\DOMDocumentFactory;
  */
 final class ArtifactResolveTest extends TestCase
 {
-    /** @var \DOMDocument $document */
-    private DOMDocument $document;
+    use SerializableXMLTestTrait;
 
 
     /**
      */
     public function setup(): void
     {
-        $this->document = DOMDocumentFactory::fromFile(
+        $this->testedClass = ArtifactResolve::class;
+
+        $this->xmlRepresentation = DOMDocumentFactory::fromFile(
             dirname(dirname(dirname(dirname(__FILE__)))) . '/resources/xml/samlp_ArtifactResolve.xml'
         );
     }
@@ -46,7 +48,7 @@ final class ArtifactResolveTest extends TestCase
         $this->assertEquals($artifact, $artifactResolve->getArtifact());
 
         $this->assertEquals(
-            $this->document->saveXML($this->document->documentElement),
+            $this->xmlRepresentation->saveXML($this->xmlRepresentation->documentElement),
             strval($artifactResolve)
         );
     }
@@ -60,22 +62,10 @@ final class ArtifactResolveTest extends TestCase
         $artifact = 'AAQAADWNEw5VT47wcO4zX/iEzMmFQvGknDfws2ZtqSGdkNSbsW1cmVR0bzU=';
         $issuer = new Issuer('https://ServiceProvider.com/SAML');
 
-        $ar = ArtifactResolve::fromXML($this->document->documentElement);
+        $ar = ArtifactResolve::fromXML($this->xmlRepresentation->documentElement);
         $this->assertEquals($artifact, $ar->getArtifact());
         $this->assertEquals($id, $ar->getId());
         $this->assertInstanceOf(Issuer::class, $issuer);
         $this->assertEquals($issuer->getValue(), $ar->getIssuer()->getValue());
-    }
-
-
-    /**
-     * Test serialization / unserialization
-     */
-    public function testSerialization(): void
-    {
-        $this->assertEquals(
-            $this->document->saveXML($this->document->documentElement),
-            strval(unserialize(serialize(ArtifactResolve::fromXML($this->document->documentElement))))
-        );
     }
 }

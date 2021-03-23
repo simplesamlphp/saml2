@@ -9,6 +9,7 @@ use PHPUnit\Framework\TestCase;
 use SimpleSAML\Assert\AssertionFailedException;
 use SimpleSAML\SAML2\Constants;
 use SimpleSAML\SAML2\XML\md\SingleSignOnService;
+use SimpleSAML\Test\XML\SerializableXMLTestTrait;
 use SimpleSAML\XML\DOMDocumentFactory;
 
 /**
@@ -20,15 +21,16 @@ use SimpleSAML\XML\DOMDocumentFactory;
  */
 final class SingleSignOnServiceTest extends TestCase
 {
-    /** @var \DOMDocument */
-    protected DOMDocument $document;
+    use SerializableXMLTestTrait;
 
 
     /**
      */
     protected function setUp(): void
     {
-        $this->document = DOMDocumentFactory::fromFile(
+        $this->testedClass = SingleSignOnService::class;
+
+        $this->xmlRepresentation = DOMDocumentFactory::fromFile(
             dirname(dirname(dirname(dirname(__FILE__)))) . '/resources/xml/md_SingleSignOnService.xml'
         );
     }
@@ -47,7 +49,10 @@ final class SingleSignOnServiceTest extends TestCase
         $this->assertEquals('urn:something', $ssoep->getBinding());
         $this->assertEquals('https://whatever/', $ssoep->getLocation());
 
-        $this->assertEquals($this->document->saveXML($this->document->documentElement), strval($ssoep));
+        $this->assertEquals(
+            $this->xmlRepresentation->saveXML($this->xmlRepresentation->documentElement),
+            strval($ssoep)
+        );
     }
 
 
@@ -57,7 +62,9 @@ final class SingleSignOnServiceTest extends TestCase
     public function testMarshallingWithResponseLocation(): void
     {
         $this->expectException(AssertionFailedException::class);
-        $this->expectExceptionMessage('The \'ResponseLocation\' attribute must be omitted for md:SingleSignOnService.');
+        $this->expectExceptionMessage(
+            'The \'ResponseLocation\' attribute must be omitted for md:SingleSignOnService.'
+        );
 
         new SingleSignOnService('urn:something', 'https://whatever/', 'https://response.location/');
     }
@@ -71,11 +78,14 @@ final class SingleSignOnServiceTest extends TestCase
      */
     public function testUnmarshalling(): void
     {
-        $ssoep = SingleSignOnService::fromXML($this->document->documentElement);
+        $ssoep = SingleSignOnService::fromXML($this->xmlRepresentation->documentElement);
 
         $this->assertEquals('urn:something', $ssoep->getBinding());
         $this->assertEquals('https://whatever/', $ssoep->getLocation());
-        $this->assertEquals($this->document->saveXML($this->document->documentElement), strval($ssoep));
+        $this->assertEquals(
+            $this->xmlRepresentation->saveXML($this->xmlRepresentation->documentElement),
+            strval($ssoep)
+        );
     }
 
 
@@ -84,24 +94,13 @@ final class SingleSignOnServiceTest extends TestCase
      */
     public function testUnmarshallingWithResponseLocation(): void
     {
-        $this->document->documentElement->setAttribute('ResponseLocation', 'https://response.location/');
+        $this->xmlRepresentation->documentElement->setAttribute('ResponseLocation', 'https://response.location/');
 
         $this->expectException(AssertionFailedException::class);
-        $this->expectExceptionMessage('The \'ResponseLocation\' attribute must be omitted for md:SingleSignOnService.');
-
-        SingleSignOnService::fromXML($this->document->documentElement);
-    }
-
-
-    /**
-     * Test that serialization / unserialization works.
-     */
-    public function testSerialization(): void
-    {
-        $ep = SingleSignOnService::fromXML($this->document->documentElement);
-        $this->assertEquals(
-            $this->document->saveXML($this->document->documentElement),
-            strval(unserialize(serialize($ep)))
+        $this->expectExceptionMessage(
+            'The \'ResponseLocation\' attribute must be omitted for md:SingleSignOnService.'
         );
+
+        SingleSignOnService::fromXML($this->xmlRepresentation->documentElement);
     }
 }

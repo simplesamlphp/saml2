@@ -9,6 +9,7 @@ use PHPUnit\Framework\TestCase;
 use SimpleSAML\SAML2\Constants;
 use SimpleSAML\SAML2\XML\saml\AttributeValue;
 use SimpleSAML\SAML2\XML\saml\NameID;
+use SimpleSAML\Test\XML\SerializableXMLTestTrait;
 use SimpleSAML\XML\DOMDocumentFactory;
 
 /**
@@ -20,15 +21,16 @@ use SimpleSAML\XML\DOMDocumentFactory;
  */
 final class AttributeValueTest extends TestCase
 {
-    /** @var \DOMDocument */
-    protected DOMDocument $document;
+    use SerializableXMLTestTrait;
 
 
     /**
      */
     protected function setUp(): void
     {
-        $this->document = DOMDocumentFactory::fromFile(
+        $this->testedClass = AttributeValue::class;
+
+        $this->xmlRepresentation = DOMDocumentFactory::fromFile(
             dirname(dirname(dirname(dirname(__FILE__)))) . '/resources/xml/saml_AttributeValue.xml'
         );
     }
@@ -61,7 +63,7 @@ final class AttributeValueTest extends TestCase
         $this->assertEquals(2, $av->getValue());
         $this->assertEquals('xs:integer', $av->getXsiType());
         $this->assertEquals(
-            $this->document->saveXML($this->document->documentElement),
+            $this->xmlRepresentation->saveXML($this->xmlRepresentation->documentElement),
             strval($av)
         );
     }
@@ -92,9 +94,9 @@ XML
     public function testEmptyStringAttribute(): void
     {
         $av = new AttributeValue('');
-        $this->document->documentElement->textContent = '';
+        $this->xmlRepresentation->documentElement->textContent = '';
         $this->assertEqualXMLStructure(
-            $this->document->documentElement,
+            $this->xmlRepresentation->documentElement,
             $av->toXML()
         );
         $this->assertEquals('', $av->getValue());
@@ -111,11 +113,11 @@ XML
      */
     public function testUnmarshalling(): void
     {
-        $av = AttributeValue::fromXML($this->document->documentElement);
+        $av = AttributeValue::fromXML($this->xmlRepresentation->documentElement);
         $this->assertIsInt($av->getValue());
         $this->assertEquals(2, $av->getValue());
         $this->assertEquals(
-            $this->document->saveXML($this->document->documentElement),
+            $this->xmlRepresentation->saveXML($this->xmlRepresentation->documentElement),
             strval($av)
         );
     }
@@ -146,18 +148,5 @@ XML
         $this->assertEquals('abcd-some-value-xyz', $value->getValue());
         $this->assertEquals('urn:oasis:names:tc:SAML:2.0:nameid-format:persistent', $value->getFormat());
         $this->assertXmlStringEqualsXmlString($document, $av->toXML()->ownerDocument->saveXML());
-    }
-
-
-    /**
-     * Serialize an AttributeValue and Unserialize that again.
-     *
-     */
-    public function testSerialize(): void
-    {
-        $this->assertEquals(
-            $this->document->saveXML($this->document->documentElement),
-            strval(unserialize(serialize(AttributeValue::fromXML($this->document->documentElement))))
-        );
     }
 }

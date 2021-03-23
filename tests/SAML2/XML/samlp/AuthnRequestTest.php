@@ -22,6 +22,7 @@ use SimpleSAML\SAML2\XML\samlp\IDPList;
 use SimpleSAML\SAML2\XML\samlp\NameIDPolicy;
 use SimpleSAML\SAML2\XML\samlp\RequestedAuthnContext;
 use SimpleSAML\SAML2\XML\samlp\Scoping;
+use SimpleSAML\Test\XML\SerializableXMLTestTrait;
 use SimpleSAML\XML\DOMDocumentFactory;
 use SimpleSAML\XML\Exception\MissingAttributeException;
 use SimpleSAML\XML\Exception\TooManyElementsException;
@@ -39,15 +40,16 @@ use SimpleSAML\XMLSecurity\XMLSecurityKey;
  */
 final class AuthnRequestTest extends TestCase
 {
-    /** @var \DOMDocument $document */
-    private DOMDocument $document;
+    use SerializableXMLTestTrait;
 
 
     /**
      */
     public function setUp(): void
     {
-        $this->document = DOMDocumentFactory::fromFile(
+        $this->testedClass = AuthnRequest::class;
+
+        $this->xmlRepresentation = DOMDocumentFactory::fromFile(
             dirname(dirname(dirname(dirname(__FILE__)))) . '/resources/xml/samlp_AuthnRequest.xml'
         );
     }
@@ -169,7 +171,10 @@ final class AuthnRequestTest extends TestCase
 
         // Test ordering of AuthnRequest contents
         /** @psalm-var \DOMElement[] $authnRequestElements */
-        $authnRequestElements = XMLUtils::xpQuery($authnRequestElement, './saml_assertion:Subject/following-sibling::*');
+        $authnRequestElements = XMLUtils::xpQuery(
+            $authnRequestElement,
+            './saml_assertion:Subject/following-sibling::*'
+        );
         $this->assertCount(4, $authnRequestElements);
         $this->assertEquals('samlp:NameIDPolicy', $authnRequestElements[0]->tagName);
         $this->assertEquals('saml:Conditions', $authnRequestElements[1]->tagName);
@@ -1225,17 +1230,5 @@ AUTHNREQUEST;
         $requestStructure = $request->toXML();
 
         $this->assertEqualXMLStructure($expectedStructure, $requestStructure);
-    }
-
-
-    /**
-     * Test serialization / unserialization
-     */
-    public function testSerialization(): void
-    {
-        $this->assertEquals(
-            $this->document->saveXML($this->document->documentElement),
-            strval(unserialize(serialize(AuthnRequest::fromXML($this->document->documentElement))))
-        );
     }
 }

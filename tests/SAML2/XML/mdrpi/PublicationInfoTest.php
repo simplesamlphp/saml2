@@ -9,6 +9,7 @@ use PHPUnit\Framework\TestCase;
 use SimpleSAML\SAML2\Exception\ProtocolViolationException;
 use SimpleSAML\SAML2\XML\mdrpi\PublicationInfo;
 use SimpleSAML\SAML2\XML\mdrpi\UsagePolicy;
+use SimpleSAML\Test\XML\SerializableXMLTestTrait;
 use SimpleSAML\XML\DOMDocumentFactory;
 use SimpleSAML\XML\Exception\MissingAttributeException;
 use SimpleSAML\XML\Utils as XMLUtils;
@@ -22,15 +23,16 @@ use SimpleSAML\XML\Utils as XMLUtils;
  */
 final class PublicationInfoTest extends TestCase
 {
-    /** @var \DOMDocument */
-    protected DOMDocument $document;
+    use SerializableXMLTestTrait;
 
 
     /**
      */
     protected function setUp(): void
     {
-        $this->document = DOMDocumentFactory::fromFile(
+        $this->testedClass = PublicationInfo::class;
+
+        $this->xmlRepresentation = DOMDocumentFactory::fromFile(
             dirname(dirname(dirname(dirname(__FILE__)))) . '/resources/xml/mdrpi_PublicationInfo.xml'
         );
     }
@@ -89,7 +91,7 @@ final class PublicationInfoTest extends TestCase
      */
     public function testUnmarshalling(): void
     {
-        $publicationInfo = PublicationInfo::fromXML($this->document->documentElement);
+        $publicationInfo = PublicationInfo::fromXML($this->xmlRepresentation->documentElement);
 
         $this->assertEquals('SomePublisher', $publicationInfo->getPublisher());
         $this->assertEquals(1293840000, $publicationInfo->getCreationInstant());
@@ -108,7 +110,7 @@ final class PublicationInfoTest extends TestCase
      */
     public function testCreationInstantTimezoneNotZuluThrowsException(): void
     {
-        $document = $this->document->documentElement;
+        $document = $this->xmlRepresentation->documentElement;
         $document->setAttribute('creationInstant', '2011-01-01T00:00:00WT');
 
         $this->expectException(ProtocolViolationException::class);
@@ -141,7 +143,7 @@ XML
      */
     public function testMultipleUsagePoliciesWithSameLanguageThrowsException(): void
     {
-        $document = $this->document;
+        $document = $this->xmlRepresentation;
 
         // Append another 'en' UsagePolicy to the document
         $x = new UsagePolicy('en', 'https://example.org');
@@ -153,17 +155,5 @@ XML
             . ' within a given <mdrpi:PublicationInfo>, for a given language'
         );
         PublicationInfo::fromXML($document->documentElement);
-    }
-
-
-    /**
-     * Test serialization / unserialization
-     */
-    public function testSerialization(): void
-    {
-        $this->assertEquals(
-            $this->document->saveXML($this->document->documentElement),
-            strval(unserialize(serialize(PublicationInfo::fromXML($this->document->documentElement))))
-        );
     }
 }

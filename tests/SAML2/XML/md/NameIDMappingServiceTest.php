@@ -9,6 +9,7 @@ use PHPUnit\Framework\TestCase;
 use SimpleSAML\Assert\AssertionFailedException;
 use SimpleSAML\SAML2\Constants;
 use SimpleSAML\SAML2\XML\md\NameIDMappingService;
+use SimpleSAML\Test\XML\SerializableXMLTestTrait;
 use SimpleSAML\XML\DOMDocumentFactory;
 
 /**
@@ -20,15 +21,16 @@ use SimpleSAML\XML\DOMDocumentFactory;
  */
 final class NameIDMappingServiceTest extends TestCase
 {
-    /** @var \DOMDocument */
-    protected DOMDocument $document;
+    use SerializableXMLTestTrait;
 
 
     /**
      */
     protected function setUp(): void
     {
-        $this->document = DOMDocumentFactory::fromFile(
+        $this->testedClass = NameIDMappingService::class;
+
+        $this->xmlRepresentation = DOMDocumentFactory::fromFile(
             dirname(dirname(dirname(dirname(__FILE__)))) . '/resources/xml/md_NameIDMappingService.xml'
         );
     }
@@ -47,7 +49,10 @@ final class NameIDMappingServiceTest extends TestCase
         $this->assertEquals('urn:something', $nidmsep->getBinding());
         $this->assertEquals('https://whatever/', $nidmsep->getLocation());
 
-        $this->assertEquals($this->document->saveXML($this->document->documentElement), strval($nidmsep));
+        $this->assertEquals(
+            $this->xmlRepresentation->saveXML($this->xmlRepresentation->documentElement),
+            strval($nidmsep)
+        );
     }
 
 
@@ -72,11 +77,14 @@ final class NameIDMappingServiceTest extends TestCase
      */
     public function testUnmarshalling(): void
     {
-        $nidmsep = NameIDMappingService::fromXML($this->document->documentElement);
+        $nidmsep = NameIDMappingService::fromXML($this->xmlRepresentation->documentElement);
 
         $this->assertEquals('urn:something', $nidmsep->getBinding());
         $this->assertEquals('https://whatever/', $nidmsep->getLocation());
-        $this->assertEquals($this->document->saveXML($this->document->documentElement), strval($nidmsep));
+        $this->assertEquals($this->xmlRepresentation->saveXML(
+            $this->xmlRepresentation->documentElement),
+            strval($nidmsep)
+        );
     }
 
 
@@ -90,20 +98,7 @@ final class NameIDMappingServiceTest extends TestCase
             'The \'ResponseLocation\' attribute must be omitted for md:NameIDMappingService.'
         );
 
-        $this->document->documentElement->setAttribute('ResponseLocation', 'https://response.location/');
-        NameIDMappingService::fromXML($this->document->documentElement);
-    }
-
-
-    /**
-     * Test that serialization / unserialization works.
-     */
-    public function testSerialization(): void
-    {
-        $ep = NameIDMappingService::fromXML($this->document->documentElement);
-        $this->assertEquals(
-            $this->document->saveXML($this->document->documentElement),
-            strval(unserialize(serialize($ep)))
-        );
+        $this->xmlRepresentation->documentElement->setAttribute('ResponseLocation', 'https://response.location/');
+        NameIDMappingService::fromXML($this->xmlRepresentation->documentElement);
     }
 }

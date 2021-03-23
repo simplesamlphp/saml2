@@ -9,6 +9,7 @@ use PHPUnit\Framework\TestCase;
 use SimpleSAML\SAML2\XML\saml\Attribute;
 use SimpleSAML\SAML2\XML\samlp\Extensions;
 use SimpleSAML\SAML2\XML\shibmd\Scope;
+use SimpleSAML\Test\XML\SerializableXMLTestTrait;
 use SimpleSAML\XML\DOMDocumentFactory;
 use SimpleSAML\XML\Chunk;
 
@@ -21,8 +22,7 @@ use SimpleSAML\XML\Chunk;
  */
 final class ExtensionsTest extends TestCase
 {
-    /** @var \DOMDocument */
-    private DOMDocument $document;
+    use SerializableXMLTestTrait;
 
 
     /**
@@ -30,7 +30,9 @@ final class ExtensionsTest extends TestCase
      */
     public function setUp(): void
     {
-        $this->document = DOMDocumentFactory::fromFile(
+        $this->testedClass = Extensions::class;
+
+        $this->xmlRepresentation = DOMDocumentFactory::fromFile(
             dirname(dirname(dirname(dirname(__FILE__)))) . '/resources/xml/samlp_Extensions.xml'
         );
     }
@@ -41,7 +43,7 @@ final class ExtensionsTest extends TestCase
      */
     public function testExtensionsGet(): void
     {
-        $extensions = Extensions::fromXML($this->document->documentElement);
+        $extensions = Extensions::fromXML($this->xmlRepresentation->documentElement);
         $list = $extensions->getList();
 
         $this->assertCount(2, $list);
@@ -57,7 +59,7 @@ final class ExtensionsTest extends TestCase
      */
     public function testExtensionsAddEmpty(): void
     {
-        $extensions = Extensions::fromXML($this->document->documentElement);
+        $extensions = Extensions::fromXML($this->xmlRepresentation->documentElement);
 
         $list = $extensions->getList();
 
@@ -88,17 +90,5 @@ final class ExtensionsTest extends TestCase
         $this->assertInstanceOf(Chunk::class, $list[1]);
         $this->assertEquals("Attribute", $list[0]->getLocalName());
         $this->assertEquals("urn:mace:shibboleth:metadata:1.0", $list[1]->getNamespaceURI());
-    }
-
-
-    /**
-     * Test that serialization / unserialization works.
-     */
-    public function testSerialization(): void
-    {
-        $this->assertEquals(
-            $this->document->saveXML($this->document->documentElement),
-            strval(unserialize(serialize(Extensions::fromXML($this->document->documentElement))))
-        );
     }
 }

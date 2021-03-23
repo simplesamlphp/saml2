@@ -12,6 +12,7 @@ use SimpleSAML\SAML2\XML\saml\AuthnContext;
 use SimpleSAML\SAML2\XML\saml\AuthnContextClassRef;
 use SimpleSAML\SAML2\XML\saml\AuthnStatement;
 use SimpleSAML\SAML2\XML\saml\SubjectLocality;
+use SimpleSAML\Test\XML\SerializableXMLTestTrait;
 use SimpleSAML\XML\DOMDocumentFactory;
 use SimpleSAML\XML\Exception\MissingAttributeException;
 use SimpleSAML\XML\Exception\MissingElementException;
@@ -27,15 +28,16 @@ use SimpleSAML\XML\Utils as XMLUtils;
  */
 final class AuthnStatementTest extends TestCase
 {
-    /** @var \DOMDocument */
-    private DOMDocument $document;
+    use SerializableXMLTestTrait;
 
 
     /**
      */
     protected function setUp(): void
     {
-        $this->document = DOMDocumentFactory::fromFile(
+        $this->testedClass = AuthnStatement::class;
+
+        $this->xmlRepresentation = DOMDocumentFactory::fromFile(
             dirname(dirname(dirname(dirname(__FILE__)))) . '/resources/xml/saml_AuthnStatement.xml'
         );
     }
@@ -72,7 +74,7 @@ final class AuthnStatementTest extends TestCase
         $this->assertInstanceOf(AuthnContext::class, $authnContext);
 
         $this->assertEquals(
-            $this->document->saveXML($this->document->documentElement),
+            $this->xmlRepresentation->saveXML($this->xmlRepresentation->documentElement),
             strval($authnStatement)
         );
     }
@@ -120,7 +122,7 @@ final class AuthnStatementTest extends TestCase
      */
     public function testUnmarshalling(): void
     {
-        $authnStatement = AuthnStatement::fromXML($this->document->documentElement);
+        $authnStatement = AuthnStatement::fromXML($this->xmlRepresentation->documentElement);
 
         $this->assertEquals(1585006644, $authnStatement->getAuthnInstant());
         $this->assertEquals(1585006644, $authnStatement->getSessionNotOnOrAfter());
@@ -160,7 +162,7 @@ XML
      */
     public function testUnmarshallingMissingAuthnInstantThrowsException(): void
     {
-        $document = $this->document->documentElement;
+        $document = $this->xmlRepresentation->documentElement;
         $document->removeAttribute('AuthnInstant');
 
         $this->expectException(MissingAttributeException::class);
@@ -213,17 +215,5 @@ XML;
         $this->expectExceptionMessage("Missing <saml:AuthnContext> in <saml:AuthnStatement>");
 
         AuthnStatement::fromXML($document->documentElement);
-    }
-
-
-    /**
-     * Test serialization / unserialization
-     */
-    public function testSerialization(): void
-    {
-        $this->assertEquals(
-            $this->document->saveXML($this->document->documentElement),
-            strval(unserialize(serialize(AuthnStatement::fromXML($this->document->documentElement))))
-        );
     }
 }

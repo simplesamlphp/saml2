@@ -16,6 +16,7 @@ use SimpleSAML\SAML2\XML\saml\Subject;
 use SimpleSAML\SAML2\XML\saml\SubjectConfirmation;
 use SimpleSAML\SAML2\XML\saml\SubjectConfirmationData;
 use SimpleSAML\Test\SAML2\CustomBaseID;
+use SimpleSAML\Test\XML\SerializableXMLTestTrait;
 use SimpleSAML\XML\DOMDocumentFactory;
 use SimpleSAML\XML\Exception\TooManyElementsException;
 use SimpleSAML\XML\Utils as XMLUtils;
@@ -30,8 +31,8 @@ use SimpleSAML\XML\Utils as XMLUtils;
  */
 final class SubjectTest extends TestCase
 {
-    /** @var \DOMDocument */
-    private DOMDocument $document;
+    use SerializableXMLTestTrait;
+
 
     /** @var \DOMDocument */
     private DOMDocument $subject;
@@ -48,7 +49,9 @@ final class SubjectTest extends TestCase
 
     public function setup(): void
     {
-        $this->document = DOMDocumentFactory::fromFile(
+        $this->testedClass = Subject::class;
+
+        $this->xmlRepresentation = DOMDocumentFactory::fromFile(
             dirname(dirname(dirname(dirname(__FILE__)))) . '/resources/xml/saml_Subject.xml'
         );
         $this->subject = DOMDocumentFactory::fromString(<<<XML
@@ -378,17 +381,5 @@ XML
         );
 
         ContainerSingleton::setContainer($container);
-    }
-
-
-    /**
-     * Test serialization / unserialization
-     */
-    public function testSerialization(): void
-    {
-        $this->assertEquals(
-            $this->document->saveXML($this->document->documentElement),
-            strval(unserialize(serialize(Subject::fromXML($this->document->documentElement))))
-        );
     }
 }

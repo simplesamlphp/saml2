@@ -13,6 +13,7 @@ use SimpleSAML\SAML2\XML\saml\Issuer;
 use SimpleSAML\SAML2\XML\saml\NameID;
 use SimpleSAML\SAML2\XML\saml\Subject;
 use SimpleSAML\SAML2\XML\samlp\AttributeQuery;
+use SimpleSAML\Test\XML\SerializableXMLTestTrait;
 use SimpleSAML\XML\DOMDocumentFactory;
 use SimpleSAML\XML\Exception\MissingElementException;
 use SimpleSAML\XML\Exception\MissingAttributeException;
@@ -31,15 +32,16 @@ use SimpleSAML\XML\Utils as XMLUtils;
  */
 final class AttributeQueryTest extends TestCase
 {
-    /** @var \DOMDocument $document */
-    private DOMDocument $document;
+    use SerializableXMLTestTrait;
 
 
     /**
      */
     public function setup(): void
     {
-        $this->document = DOMDocumentFactory::fromFile(
+        $this->testedClass = AttributeQuery::class;
+
+        $this->xmlRepresentation = DOMDocumentFactory::fromFile(
             dirname(dirname(dirname(dirname(__FILE__)))) . '/resources/xml/samlp_AttributeQuery.xml'
         );
     }
@@ -129,7 +131,7 @@ final class AttributeQueryTest extends TestCase
 
     public function testUnmarshalling(): void
     {
-        $aq = AttributeQuery::fromXML($this->document->documentElement);
+        $aq = AttributeQuery::fromXML($this->xmlRepresentation->documentElement);
         /** @psalm-var \SimpleSAML\SAML2\XML\saml\Issuer $issuer */
         $issuer = $aq->getIssuer();
 
@@ -414,17 +416,5 @@ XML;
         $this->expectException(TooManyElementsException::class);
         $this->expectExceptionMessage('More than one <saml:NameID> in <saml:Subject>');
         AttributeQuery::fromXML($document->documentElement);
-    }
-
-
-    /**
-     * Test serialization / unserialization
-     */
-    public function testSerialization(): void
-    {
-        $this->assertEquals(
-            $this->document->saveXML($this->document->documentElement),
-            strval(unserialize(serialize(AttributeQuery::fromXML($this->document->documentElement))))
-        );
     }
 }

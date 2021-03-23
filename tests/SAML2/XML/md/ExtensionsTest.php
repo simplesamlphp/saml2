@@ -20,6 +20,7 @@ use SimpleSAML\SAML2\XML\mdui\DiscoHints;
 use SimpleSAML\SAML2\XML\mdui\DisplayName;
 use SimpleSAML\SAML2\XML\mdui\UIInfo;
 use SimpleSAML\SAML2\XML\shibmd\Scope;
+use SimpleSAML\Test\XML\SerializableXMLTestTrait;
 use SimpleSAML\XML\Chunk;
 use SimpleSAML\XML\DOMDocumentFactory;
 
@@ -34,18 +35,19 @@ use SimpleSAML\XML\DOMDocumentFactory;
  */
 final class ExtensionsTest extends TestCase
 {
-    /** @var \DOMDocument */
-    protected DOMDocument $document;
+    use SerializableXMLTestTrait;
 
 
     /**
      */
     protected function setUp(): void
     {
-        $this->document = DOMDocumentFactory::fromFile(
+        $this->testedClass = Extensions::class;
+
+        $this->xmlRepresentation = DOMDocumentFactory::fromFile(
             dirname(dirname(dirname(dirname(__FILE__)))) . '/resources/xml/md_Extensions.xml'
         );
-        $this->document->normalizeDocument();
+        $this->xmlRepresentation->normalizeDocument();
     }
 
 
@@ -82,7 +84,7 @@ final class ExtensionsTest extends TestCase
         ]);
 
         $this->assertEquals(
-            $this->document->saveXML($this->document->documentElement),
+            $this->xmlRepresentation->saveXML($this->xmlRepresentation->documentElement),
             strval($extensions)
         );
     }
@@ -165,17 +167,5 @@ XML
         $document = DOMDocumentFactory::fromString("<md:Extensions xmlns:md=\"$mdns\"/>");
         $extensions = Extensions::fromXML($document->documentElement);
         $this->assertEmpty($extensions->getList());
-    }
-
-
-    /**
-     * Test that serialization / unserialization works.
-     */
-    public function testSerialization(): void
-    {
-        $this->assertEquals(
-            $this->document->saveXML($this->document->documentElement),
-            strval(unserialize(serialize(Extensions::fromXML($this->document->documentElement))))
-        );
     }
 }

@@ -14,6 +14,7 @@ use SimpleSAML\SAML2\XML\samlp\Extensions;
 use SimpleSAML\SAML2\XML\samlp\Response;
 use SimpleSAML\SAML2\XML\samlp\Status;
 use SimpleSAML\SAML2\XML\samlp\StatusCode;
+use SimpleSAML\Test\XML\SerializableXMLTestTrait;
 use SimpleSAML\XML\DOMDocumentFactory;
 use SimpleSAML\XML\Exception\MissingElementException;
 use SimpleSAML\XML\Utils as XMLUtils;

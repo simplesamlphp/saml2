@@ -10,6 +10,7 @@ use SimpleSAML\Assert\AssertionFailedException;
 use SimpleSAML\SAML2\Constants;
 use SimpleSAML\SAML2\XML\md\RequestedAttribute;
 use SimpleSAML\SAML2\XML\saml\AttributeValue;
+use SimpleSAML\Test\XML\SerializableXMLTestTrait;
 use SimpleSAML\XML\DOMDocumentFactory;
 
 /**
@@ -21,15 +22,16 @@ use SimpleSAML\XML\DOMDocumentFactory;
  */
 final class RequestedAttributeTest extends TestCase
 {
-    /** @var \DOMDocument */
-    protected DOMDocument $document;
+    use SerializableXMLTestTrait;
 
 
     /**
      */
     protected function setUp(): void
     {
-        $this->document = DOMDocumentFactory::fromFile(
+        $this->testedClass = RequestedAttribute::class;
+
+        $this->xmlRepresentation = DOMDocumentFactory::fromFile(
             dirname(dirname(dirname(dirname(__FILE__)))) . '/resources/xml/md_RequestedAttribute.xml'
         );
     }
@@ -58,7 +60,7 @@ final class RequestedAttributeTest extends TestCase
         $this->assertEquals([new AttributeValue('value1')], $ra->getAttributeValues());
 
         $this->assertEquals(
-            $this->document->saveXML($this->document->documentElement),
+            $this->xmlRepresentation->saveXML($this->xmlRepresentation->documentElement),
             strval($ra)
         );
     }
@@ -86,7 +88,7 @@ final class RequestedAttributeTest extends TestCase
      */
     public function testUnmarshalling(): void
     {
-        $ra = RequestedAttribute::fromXML($this->document->documentElement);
+        $ra = RequestedAttribute::fromXML($this->xmlRepresentation->documentElement);
 
         $this->assertEquals('attr', $ra->getName());
         $this->assertEquals('urn:format', $ra->getNameFormat());
@@ -101,8 +103,8 @@ final class RequestedAttributeTest extends TestCase
      */
     public function testUnmarshallingWithoutIsRequired(): void
     {
-        $this->document->documentElement->removeAttribute('isRequired');
-        $ra = RequestedAttribute::fromXML($this->document->documentElement);
+        $this->xmlRepresentation->documentElement->removeAttribute('isRequired');
+        $ra = RequestedAttribute::fromXML($this->xmlRepresentation->documentElement);
         $this->assertNull($ra->getIsRequired());
     }
 
@@ -114,19 +116,7 @@ final class RequestedAttributeTest extends TestCase
     {
         $this->expectException(AssertionFailedException::class);
         $this->expectExceptionMessage('The \'isRequired\' attribute of md:RequestedAttribute must be boolean.');
-        $this->document->documentElement->setAttribute('isRequired', 'wrong');
-        RequestedAttribute::fromXML($this->document->documentElement);
-    }
-
-
-    /**
-     * Test that serialization / unserialization works.
-     */
-    public function testSerialization(): void
-    {
-        $this->assertEquals(
-            $this->document->saveXML($this->document->documentElement),
-            strval(unserialize(serialize(RequestedAttribute::fromXML($this->document->documentElement))))
-        );
+        $this->xmlRepresentation->documentElement->setAttribute('isRequired', 'wrong');
+        RequestedAttribute::fromXML($this->xmlRepresentation->documentElement);
     }
 }
