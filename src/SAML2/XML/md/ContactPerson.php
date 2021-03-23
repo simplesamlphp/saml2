@@ -447,7 +447,7 @@ final class ContactPerson extends AbstractMdElement
         ];
 
         foreach ($this->getAttributesNS() as $a) {
-            $data[$a['namespaceURI']] =  [$a['qualifiedName'] => $a['value']];
+            $data[$a['namespaceURI']] = [$a['qualifiedName'] => $a['value']];
         }
 
         return $data;
