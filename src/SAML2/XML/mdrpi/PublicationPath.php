@@ -109,4 +109,37 @@ final class PublicationPath extends AbstractMdrpiElement
 
         return $e;
     }
+
+
+    /**
+     * Create a class from an array
+     *
+     * @param array $data
+     * @return self
+     */
+    public static function fromArray(array $data): object
+    {
+        $publication = [];
+        foreach ($data as $p) {
+            $publication[] = Publication::fromArray($p);
+        }
+
+        return new self($publication);
+    }
+
+
+    /**
+     * Create an array from this class
+     *
+     * @return array
+     */
+    public function toArray(): array
+    {
+        $data = [];
+        foreach ($this->Publication as $p) {
+            $data[] = $p->toArray();
+        }
+
+        return $data;
+    }
 }

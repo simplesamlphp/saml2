@@ -35,7 +35,7 @@ final class RegistrationInfo extends AbstractMdrpiElement
     /**
      * Link to registration policy for this metadata.
      *
-     * This is an associative array with language=>URL.
+     * This is an array with RegistrationPolicy objects.
      *
      * @var \SimpleSAML\SAML2\XML\mdrpi\RegistrationPolicy[]
      */
@@ -203,5 +203,57 @@ final class RegistrationInfo extends AbstractMdrpiElement
         }
 
         return $e;
+    }
+
+
+    /**
+     * Create a class from an array
+     *
+     * @param array $data
+     * @return self
+     */
+    public static function fromArray(array $data): object
+    {
+        Assert::keyExists($data, 'registrationAuthority');
+
+        $registrationAuthority = $data['registrationAuthority'];
+        Assert::string($registrationAuthority);
+
+        $registrationInstant = $data['registrationInstant'] ?? null;
+        Assert::nullOrInteger($registrationInstant);
+
+        $rp = $data['registrationPolicy'] ?? [];
+        Assert::isArray($rp);
+
+        $registrationPolicy = [];
+        foreach ($rp as $k => $v) {
+            $registrationPolicy[] = RegistrationPolicy::fromArray([$k => $v]);
+        }
+
+        return new self($registrationAuthority, $registrationInstant, $registrationPolicy);
+    }
+
+
+    /**
+     * Create an array from this class
+     *
+     * @return array
+     */
+    public function toArray(): array
+    {
+        $data = [];
+        $data['registrationAuthority'] = $this->registrationAuthority;
+
+        if ($this->registrationInstant !== null) {
+            $data['registrationInstant'] = $this->registrationInstant;
+        }
+
+        if (!empty($this->RegistrationPolicy)) {
+            $data['registrationPolicy'] = [];
+            foreach ($this->RegistrationPolicy as $rp) {
+                $data['registrationPolicy'] = array_merge($data['registrationPolicy'], $rp->toArray());
+            }
+        }
+        return $data;
     }
 }

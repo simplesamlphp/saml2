@@ -129,6 +129,33 @@ abstract class AbstractLocalizedName extends AbstractMdElement
         $e = $this->instantiateParentElement($parent);
         $e->setAttributeNS(self::XML_NS, 'xml:lang', $this->language);
         $e->textContent = $this->value;
+
         return $e;
+    }
+
+
+    /**
+     * Create a class from an array
+     *
+     * @param array $data
+     * @return self
+     */
+    public static function fromArray(array $data): object
+    {
+        $lang = array_key_first($data);
+        $value = $data[$lang];
+
+        return new static($lang, $value);
+    }
+
+
+    /**
+     * Create an array from this class
+     *
+     * @return array
+     */
+    public function toArray(): array
+    {
+        return [$this->language => $this->value];
     }
 }

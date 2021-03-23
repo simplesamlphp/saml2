@@ -461,4 +461,117 @@ final class UIInfo extends AbstractMduiElement
 
         return $e;
     }
+
+
+    /**
+     * Create a class from an array
+     *
+     * NOTE: this method does not support passing additional child-objects
+     *
+     * @param array $data
+     * @return self
+     */
+    public static function fromArray(array $data): object
+    {
+        $DisplayName = [];
+        if (!empty($data['DisplayName'])) {
+            foreach ($data['DisplayName'] as $l => $k) {
+                $DisplayName[] = DisplayName::fromArray([$l => $k]);
+            }
+        }
+
+        $Description = [];
+        if (!empty($data['Description'])) {
+            foreach ($data['Description'] as $l => $k) {
+                $Description[] = Description::fromArray([$l => $k]);
+            }
+        }
+
+        $InformationURL = [];
+        if (!empty($data['InformationURL'])) {
+            foreach ($data['InformationURL'] as $l => $k) {
+                $InformationURL[] = InformationURL::fromArray([$l => $k]);
+            }
+        }
+
+        $PrivacyStatementURL = [];
+        if (!empty($data['PrivacyStatementURL'])) {
+            foreach ($data['PrivacyStatementURL'] as $l => $k) {
+                $PrivacyStatementURL[] = PrivacyStatementURL::fromArray([$l => $k]);
+            }
+        }
+
+        $Keywords = [];
+        if (!empty($data['Keywords'])) {
+            foreach ($data['Keywords'] as $l => $k) {
+                $Keywords[] = Keywords::fromArray([$l => $k]);
+            }
+        }
+
+        $Logo = [];
+        if (!empty($data['Logo'])) {
+            foreach ($data['Logo'] as $l) {
+                $Logo[] = Logo::fromArray($l);
+            }
+        }
+
+        return new self(
+            $DisplayName,
+            $Description,
+            $InformationURL,
+            $PrivacyStatementURL,
+            $Keywords,
+            $Logo
+        );
+    }
+
+
+    /**
+     * Create an array from this class
+     *
+     * NOTE: this method does not support passing additional child-objects
+     *
+     * @return array
+     */
+    public function toArray(): array
+    {
+        $displayName = [];
+        foreach ($this->DisplayName as $child) {
+            $displayName = array_merge($displayName, $child->toArray());
+        }
+
+        $description = [];
+        foreach ($this->Description as $child) {
+            $description = array_merge($description, $child->toArray());
+        }
+
+        $infoUrl = [];
+        foreach ($this->InformationURL as $child) {
+            $infoUrl = array_merge($infoUrl, $child->toArray());
+        }
+
+        $privacyUrl = [];
+        foreach ($this->PrivacyStatementURL as $child) {
+            $privacyUrl = array_merge($privacyUrl, $child->toArray());
+        }
+
+        $keywords = [];
+        foreach ($this->Keywords as $child) {
+            $keywords = array_merge($keywords, $child->toArray());
+        }
+
+        $logo = [];
+        foreach ($this->Logo as $child) {
+            $logo[] = $child->toArray();
+        }
+
+        return [
+            'DisplayName' => $displayName,
+            'Description' => $description,
+            'InformationURL' => $infoUrl,
+            'PrivacyStatementURL' => $privacyUrl,
+            'Keywords' => $keywords,
+            'Logo' => $logo
+        ];
+    }
 }

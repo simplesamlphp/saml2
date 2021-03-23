@@ -9,6 +9,7 @@ use PHPUnit\Framework\TestCase;
 use SimpleSAML\SAML2\Exception\ProtocolViolationException;
 use SimpleSAML\SAML2\XML\mdrpi\RegistrationInfo;
 use SimpleSAML\SAML2\XML\mdrpi\RegistrationPolicy;
+use SimpleSAML\Test\XML\ArrayizableXMLTestTrait;
 use SimpleSAML\Test\XML\SerializableXMLTestTrait;
 use SimpleSAML\XML\DOMDocumentFactory;
 use SimpleSAML\XML\Exception\MissingAttributeException;
@@ -23,6 +24,7 @@ use SimpleSAML\XML\Utils as XMLUtils;
  */
 final class RegistrationInfoTest extends TestCase
 {
+    use ArrayizableXMLTestTrait;
     use SerializableXMLTestTrait;
 
 
@@ -35,6 +37,12 @@ final class RegistrationInfoTest extends TestCase
         $this->xmlRepresentation = DOMDocumentFactory::fromFile(
             dirname(dirname(dirname(dirname(__FILE__)))) . '/resources/xml/mdrpi_RegistrationInfo.xml'
         );
+
+        $this->arrayRepresentation = [
+            'registrationAuthority' => 'https://ExampleAuthority',
+            'registrationInstant' => 1234567890,
+            'registrationPolicy' => ['en' => 'http://EnglishRegistrationPolicy', 'nl' => 'https://DutchRegistratiebeleid'],
+        ];
     }
 
 

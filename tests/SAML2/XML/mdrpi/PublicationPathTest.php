@@ -6,9 +6,11 @@ namespace SimpleSAML\Test\SAML2\XML\mdrpi;
 
 use DOMDocument;
 use PHPUnit\Framework\TestCase;
+use SimpleSAML\SAML2\Constants;
 use SimpleSAML\SAML2\Exception\ProtocolViolationException;
 use SimpleSAML\SAML2\XML\mdrpi\PublicationPath;
 use SimpleSAML\SAML2\XML\mdrpi\Publication;
+use SimpleSAML\Test\XML\ArrayizableXMLTestTrait;
 use SimpleSAML\Test\XML\SerializableXMLTestTrait;
 use SimpleSAML\XML\DOMDocumentFactory;
 use SimpleSAML\XML\Exception\MissingAttributeException;
@@ -23,6 +25,7 @@ use SimpleSAML\XML\Utils as XMLUtils;
  */
 final class PublicationPathTest extends TestCase
 {
+    use ArrayizableXMLTestTrait;
     use SerializableXMLTestTrait;
 
 
@@ -35,6 +38,11 @@ final class PublicationPathTest extends TestCase
         $this->xmlRepresentation = DOMDocumentFactory::fromFile(
             dirname(dirname(dirname(dirname(__FILE__)))) . '/resources/xml/mdrpi_PublicationPath.xml'
         );
+
+        $this->arrayRepresentation = [
+            ['publisher' => 'SomePublisher', 'creationInstant' => 1234567890, 'publicationId' => 'SomePublicationId'],
+            ['publisher' => 'SomeOtherPublisher', 'creationInstant' => 1234567890, 'publicationId' => 'SomeOtherPublicationId'],
+        ];
     }
 
 
@@ -75,6 +83,21 @@ final class PublicationPathTest extends TestCase
         $this->assertEquals('SomeOtherPublicationId', $publicationElements[1]->getAttribute("publicationId"));
     }
 
+
+    /**
+     * Adding an empty list to an PublicationPath element should yield an empty element. If there were contents already
+     * there, those should be left untouched.
+     */
+    public function testMarshallingWithNoPublications(): void
+    {
+        $mdrpins = PublicationPath::NS;
+        $publicationPath = new PublicationPath([]);
+        $this->assertEquals(
+            "<mdrpi:PublicationPath xmlns:mdrpi=\"$mdrpins\"/>",
+            strval($publicationPath)
+        );
+        $this->assertTrue($publicationPath->isEmptyElement());
+    }
 
     /**
      */

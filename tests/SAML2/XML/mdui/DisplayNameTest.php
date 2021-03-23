@@ -10,19 +10,21 @@ use SimpleSAML\Assert\AssertionFailedException;
 use SimpleSAML\SAML2\Constants;
 use SimpleSAML\SAML2\XML\md\AbstractLocalizedName;
 use SimpleSAML\SAML2\XML\mdui\DisplayName;
+use SimpleSAML\Test\XML\ArrayizableXMLTestTrait;
 use SimpleSAML\Test\XML\SerializableXMLTestTrait;
 use SimpleSAML\XML\DOMDocumentFactory;
 
 /**
  * Tests for localized names.
  *
- * @covers \SimpleSAML\SAML2\XML\md\DisplayName
+ * @covers \SimpleSAML\SAML2\XML\mdui\DisplayName
  * @covers \SimpleSAML\SAML2\XML\md\AbstractLocalizedName
  * @covers \SimpleSAML\SAML2\XML\md\AbstractMdElement
  * @package simplesamlphp/saml2
  */
 final class DisplayNameTest extends TestCase
 {
+    use ArrayizableXMLTestTrait;
     use SerializableXMLTestTrait;
 
 
@@ -35,6 +37,8 @@ final class DisplayNameTest extends TestCase
         $this->xmlRepresentation = DOMDocumentFactory::fromFile(
             dirname(dirname(dirname(dirname(__FILE__)))) . '/resources/xml/mdui_DisplayName.xml'
         );
+
+        $this->arrayRepresentation = ['en' => 'University of Examples'];
     }
 
 

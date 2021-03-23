@@ -11,6 +11,7 @@ use SimpleSAML\Assert\AssertionFailedException;
 use SimpleSAML\SAML2\Constants;
 use SimpleSAML\SAML2\XML\md\AbstractLocalizedName;
 use SimpleSAML\SAML2\XML\md\OrganizationURL;
+use SimpleSAML\Test\XML\ArrayizableXMLTestTrait;
 use SimpleSAML\Test\XML\SerializableXMLTestTrait;
 use SimpleSAML\XML\DOMDocumentFactory;
 
@@ -18,12 +19,14 @@ use SimpleSAML\XML\DOMDocumentFactory;
  * Tests for localized names.
  *
  * @covers \SimpleSAML\SAML2\XML\md\OrganizationURL
+ * @covers \SimpleSAML\SAML2\XML\md\AbstractLocalizedURI
  * @covers \SimpleSAML\SAML2\XML\md\AbstractLocalizedName
  * @covers \SimpleSAML\SAML2\XML\md\AbstractMdElement
  * @package simplesamlphp/saml2
  */
 final class OrganizationURLTest extends TestCase
 {
+    use ArrayizableXMLTestTrait;
     use SerializableXMLTestTrait;
 
 
@@ -36,6 +39,8 @@ final class OrganizationURLTest extends TestCase
         $this->xmlRepresentation = DOMDocumentFactory::fromFile(
             dirname(dirname(dirname(dirname(__FILE__)))) . '/resources/xml/md_OrganizationURL.xml'
         );
+
+        $this->arrayRepresentation = ['en' => 'https://IdentityProvider.com'];
     }
 
 
