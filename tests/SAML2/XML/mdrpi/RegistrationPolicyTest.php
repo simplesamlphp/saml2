@@ -19,6 +19,7 @@ use SimpleSAML\XML\DOMDocumentFactory;
  * Tests for localized names.
  *
  * @covers \SimpleSAML\SAML2\XML\mdrpi\RegistrationPolicy
+ * @covers \SimpleSAML\SAML2\XML\md\AbstractLocalizedURI
  * @covers \SimpleSAML\SAML2\XML\md\AbstractLocalizedName
  * @covers \SimpleSAML\SAML2\XML\md\AbstractMdElement
  * @package simplesamlphp/saml2
