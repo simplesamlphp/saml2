@@ -28,4 +28,4 @@ $logoutRequest = new LogoutRequest(
 
 $logoutRequest = $logoutRequest->toXML();
 
-echo strval($logoutRequest->ownerDocument->saveXML());
+echo $logoutRequest->ownerDocument->saveXML();

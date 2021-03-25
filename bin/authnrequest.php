@@ -42,4 +42,4 @@ $authnRequest = new AuthnRequest(
 
 $authnRequest = $authnRequest->toXML();
 
-echo strval($authnRequest->ownerDocument->saveXML());
+echo $authnRequest->ownerDocument->saveXML();

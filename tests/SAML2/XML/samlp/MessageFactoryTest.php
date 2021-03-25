@@ -36,7 +36,7 @@ final class MessageFactoryTest extends TestCase
            [$base . 'samlp_AuthnRequest.xml', AuthnRequest::class],
            [$base . 'samlp_LogoutResponse.xml', LogoutResponse::class],
            [$base . 'samlp_LogoutRequest.xml', LogoutRequest::class],
-//           [$base . 'response/signedresponse.xml', Response::class],
+           [$base . 'samlp_Response.xml', Response::class],
            [$base . 'samlp_ArtifactResponse.xml', ArtifactResponse::class],
            [$base . 'samlp_ArtifactResolve.xml', ArtifactResolve::class],
         ];

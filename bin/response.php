@@ -37,4 +37,4 @@ $unsignedResponse->setSigningKey($privateKey);
 $unsignedResponse->setCertificates([PEMCertificatesMock::getPlainPublicKey(PEMCertificatesMock::SELFSIGNED_PUBLIC_KEY)]);
 
 $signedResponse = $unsignedResponse->toXML();
-echo strval($signedResponse->ownerDocument->saveXML());
+echo $signedResponse->ownerDocument->saveXML();

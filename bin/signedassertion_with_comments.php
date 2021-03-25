@@ -57,4 +57,4 @@ $unsignedAssertion->setCertificates([PEMCertificatesMock::getPlainPublicKey(PEMC
 $signedAssertion = $unsignedAssertion->toXML();
 
 
-echo strval($signedAssertion->ownerDocument->saveXML());
+echo $signedAssertion->ownerDocument->saveXML();
