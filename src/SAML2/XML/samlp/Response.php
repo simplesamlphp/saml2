@@ -111,6 +111,9 @@ class Response extends AbstractStatusResponse
         Assert::same($xml->namespaceURI, Response::NS, InvalidDOMElementException::class);
         Assert::same('2.0', self::getAttribute($xml, 'Version'));
 
+        $signature = Signature::getChildrenOfClass($xml);
+        Assert::maxCount($signature, 1, 'Only one ds:Signature element is allowed.', TooManyElementsException::class);
+
         $id = self::getAttribute($xml, 'ID');
         /** @psalm-suppress PossiblyNullArgument */
         $issueInstant = XMLUtils::xsDateTimeToTimestamp(self::getAttribute($xml, 'IssueInstant'));
@@ -142,9 +145,6 @@ class Response extends AbstractStatusResponse
                 $assertions[] = EncryptedAssertion::fromXML($node);
             }
         }
-
-        $signature = Signature::getChildrenOfClass($xml);
-        Assert::maxCount($signature, 1, 'Only one ds:Signature element is allowed.', TooManyElementsException::class);
 
         $response = new self(
             array_pop($status),
