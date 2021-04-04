@@ -6,6 +6,7 @@ namespace SimpleSAML\SAML2\XML\md;
 
 use DOMElement;
 use SimpleSAML\Assert\Assert;
+use SimpleSAML\XML\Chunk;
 use SimpleSAML\XML\Exception\InvalidDOMElementException;
 use SimpleSAML\XML\ExtendableAttributesTrait;
 
@@ -27,6 +28,13 @@ use SimpleSAML\XML\ExtendableAttributesTrait;
 abstract class AbstractEndpointType extends AbstractMdElement
 {
     use ExtendableAttributesTrait;
+
+    /**
+     * Array with child elements.
+     *
+     * @var \SimpleSAML\XML\Chunk[]
+     */
+    protected array $children = [];
 
     /**
      * The binding for this endpoint.
@@ -57,6 +65,7 @@ abstract class AbstractEndpointType extends AbstractMdElement
      * @param string      $location
      * @param string|null $responseLocation
      * @param array       $attributes
+     * @param array       $children
      *
      * @throws \InvalidArgumentException
      */
@@ -64,48 +73,14 @@ abstract class AbstractEndpointType extends AbstractMdElement
         string $binding,
         string $location,
         ?string $responseLocation = null,
-        array $attributes = []
+        array $attributes = [],
+        array $children = []
     ) {
         $this->setBinding($binding);
         $this->setLocation($location);
         $this->setResponseLocation($responseLocation);
         $this->setAttributesNS($attributes);
-    }
-
-
-    /**
-     * Initialize an EndpointType.
-     *
-     * Note: this method cannot be used when extending this class, if the constructor has a different signature.
-     *
-     * @param \DOMElement $xml The XML element we should load.
-     * @return static
-     *
-     * @throws \SimpleSAML\XML\Exception\InvalidDOMElementException if the qualified name of the supplied element is wrong
-     * @throws \SimpleSAML\XML\Exception\MissingAttributeException if the supplied element is missing any of the mandatory attributes
-     */
-    public static function fromXML(DOMElement $xml): object
-    {
-        $qualifiedName = static::getClassName(static::class);
-        Assert::eq(
-            $xml->localName,
-            $qualifiedName,
-            'Unexpected name for endpoint: ' . $xml->localName . '. Expected: ' . $qualifiedName . '.',
-            InvalidDOMElementException::class
-        );
-
-        /** @var string $binding */
-        $binding = self::getAttribute($xml, 'Binding');
-
-        /** @var string $location */
-        $location = self::getAttribute($xml, 'Location');
-
-        return new static(
-            $binding,
-            $location,
-            self::getAttribute($xml, 'ResponseLocation', null),
-            self::getAttributesNSFromXML($xml)
-        );
+        $this->setChildren($children);
     }
 
 
@@ -182,6 +157,76 @@ abstract class AbstractEndpointType extends AbstractMdElement
 
 
     /**
+     * Collect the value of the children-property
+     *
+     * @return \SimpleSAML\XML\Chunk[]
+     */
+    public function getChildren(): array
+    {
+        return $this->children;
+    }
+
+
+    /**
+     * Set the value of the childen-property
+     *
+     * @param array $children
+     */
+    private function setChildren(array $children): void
+    {
+        Assert::allIsInstanceOf($children, Chunk::class);
+
+        $this->children = $children;
+    }
+
+
+    /**
+     * Initialize an EndpointType.
+     *
+     * Note: this method cannot be used when extending this class, if the constructor has a different signature.
+     *
+     * @param \DOMElement $xml The XML element we should load.
+     * @return static
+     *
+     * @throws \SimpleSAML\XML\Exception\InvalidDOMElementException if the qualified name of the supplied element is wrong
+     * @throws \SimpleSAML\XML\Exception\MissingAttributeException if the supplied element is missing any of the mandatory attributes
+     */
+    public static function fromXML(DOMElement $xml): object
+    {
+        $qualifiedName = static::getClassName(static::class);
+        Assert::eq(
+            $xml->localName,
+            $qualifiedName,
+            'Unexpected name for endpoint: ' . $xml->localName . '. Expected: ' . $qualifiedName . '.',
+            InvalidDOMElementException::class
+        );
+
+        /** @var string $binding */
+        $binding = self::getAttribute($xml, 'Binding');
+
+        /** @var string $location */
+        $location = self::getAttribute($xml, 'Location');
+
+        $children = [];
+        foreach ($xml->childNodes as $child) {
+            if (!($child instanceof DOMElement)) {
+                continue;
+            }
+
+            $children[] = new Chunk($child);
+        }
+
+        return new static(
+            $binding,
+            $location,
+            self::getAttribute($xml, 'ResponseLocation', null),
+            self::getAttributesNSFromXML($xml),
+            $children
+        );
+    }
+
+
+    /**
      * Add this endpoint to an XML element.
      *
      * @param \DOMElement $parent The element we should append this endpoint to.
@@ -200,6 +245,10 @@ abstract class AbstractEndpointType extends AbstractMdElement
 
         foreach ($this->getAttributesNS() as $a) {
             $e->setAttributeNS($a['namespaceURI'], $a['qualifiedName'], $a['value']);
+        }
+
+        foreach ($this->getChildren() as $child) {
+            $e->appendChild($e->ownerDocument->importNode($child->getXML(), true));
         }
 
         return $e;

@@ -11,6 +11,7 @@ use SimpleSAML\SAML2\Constants;
 use SimpleSAML\SAML2\XML\md\AssertionIDRequestService;
 use SimpleSAML\SAML2\XML\md\AttributeService;
 use SimpleSAML\Test\XML\SerializableXMLTestTrait;
+use SimpleSAML\XML\Chunk;
 use SimpleSAML\XML\DOMDocumentFactory;
 use SimpleSAML\XML\Exception\InvalidDOMElementException;
 use SimpleSAML\XML\Exception\MissingAttributeException;
@@ -49,7 +50,16 @@ final class EndpointTypeTest extends TestCase
     {
         $attr = $this->xmlRepresentation->createAttributeNS('urn:test', 'test:attr');
         $attr->value = 'value';
-        $endpointType = new AttributeService(Constants::BINDING_HTTP_POST, 'https://whatever/', 'https://foo.bar/', [$attr]);
+
+        $child = new Chunk(DOMDocumentFactory::fromString('<child1 />')->documentElement);
+
+        $endpointType = new AttributeService(
+            Constants::BINDING_HTTP_POST,
+            'https://whatever/',
+            'https://foo.bar/',
+            [$attr],
+            [$child]
+        );
 
         $this->assertEquals(
             $this->xmlRepresentation->saveXML($this->xmlRepresentation->documentElement),
