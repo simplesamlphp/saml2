@@ -44,9 +44,10 @@ final class SigningMethodTest extends TestCase
     {
         $signingMethod = new SigningMethod(Constants::SIG_RSA_SHA256, 1024, 4096);
 
-        $this->assertEquals(Constants::SIG_RSA_SHA256, $signingMethod->getAlgorithm());
-        $this->assertEquals(1024, $signingMethod->getMinKeySize());
-        $this->assertEquals(4096, $signingMethod->getMaxKeySize());
+        $signingMethodElement = $signingMethod->toXML();
+        $this->assertEquals(Constants::SIG_RSA_SHA256, $signingMethodElement->getAttribute('Algorithm'));
+        $this->assertEquals(1024, $signingMethodElement->getAttribute('MinKeySize'));
+        $this->assertEquals(4096, $signingMethodElement->getAttribute('MaxKeySize'));
 
         $this->assertEquals(
             $this->xmlRepresentation->saveXML($this->xmlRepresentation->documentElement),
