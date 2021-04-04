@@ -88,9 +88,13 @@ final class Extensions extends AbstractMdElement
 
         /** @var \DOMElement $node */
         foreach (XMLUtils::xpQuery($xml, './*') as $node) {
+            Assert::notNull(
+                $node->namespaceURI,
+                'Extensions MUST NOT include global (non-namespace-qualified) elements.'
+            );
+
             if (
-                !is_null($node->namespaceURI)
-                && array_key_exists($node->namespaceURI, $supported)
+                array_key_exists($node->namespaceURI, $supported)
                 && array_key_exists($node->localName, $supported[$node->namespaceURI])
             ) {
                 $ret[] = $supported[$node->namespaceURI][$node->localName]::fromXML($node);
