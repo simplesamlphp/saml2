@@ -41,7 +41,10 @@ final class RegistrationInfoTest extends TestCase
         $this->arrayRepresentation = [
             'registrationAuthority' => 'https://ExampleAuthority',
             'registrationInstant' => 1234567890,
-            'registrationPolicy' => ['en' => 'http://EnglishRegistrationPolicy', 'nl' => 'https://DutchRegistratiebeleid'],
+            'registrationPolicy' => [
+                'en' => 'http://www.example.org/aai/metadata/en_registration.html',
+                'de' => 'http://www.example.org/aai/metadata/de_registration.html'
+            ],
         ];
     }
 
@@ -54,45 +57,15 @@ final class RegistrationInfoTest extends TestCase
             'https://ExampleAuthority',
             1234567890,
             [
-                new RegistrationPolicy('en', 'http://EnglishRegistrationPolicy'),
-                new RegistrationPolicy('nl', 'https://DutchRegistratiebeleid'),
+                new RegistrationPolicy('en', 'http://www.example.org/aai/metadata/en_registration.html'),
+                new RegistrationPolicy('de', 'http://www.example.org/aai/metadata/de_registration.html'),
             ]
         );
 
-        $document = DOMDocumentFactory::fromString('<root />');
-        $xml = $registrationInfo->toXML($document->documentElement);
-
-        /** @var \DOMElement[] $registrationInfoElements */
-        $registrationInfoElements = XMLUtils::xpQuery(
-            $xml,
-            '/root/*[local-name()=\'RegistrationInfo\' and namespace-uri()=\'urn:oasis:names:tc:SAML:metadata:rpi\']'
-        );
-        $this->assertCount(1, $registrationInfoElements);
-        $registrationInfoElement = $registrationInfoElements[0];
-
         $this->assertEquals(
-            'https://ExampleAuthority',
-            $registrationInfoElement->getAttribute("registrationAuthority")
+            $this->xmlRepresentation->saveXML($this->xmlRepresentation->documentElement),
+            strval($registrationInfo)
         );
-        $this->assertEquals('2009-02-13T23:31:30Z', $registrationInfoElement->getAttribute("registrationInstant"));
-
-        /** @var \DOMElement[] $usagePolicyElements */
-        $usagePolicyElements = XMLUtils::xpQuery(
-            $registrationInfoElement,
-            './*[local-name()=\'RegistrationPolicy\' and namespace-uri()=\'urn:oasis:names:tc:SAML:metadata:rpi\']'
-        );
-        $this->assertCount(2, $usagePolicyElements);
-
-        $this->assertEquals(
-            'en',
-            $usagePolicyElements[0]->getAttributeNS("http://www.w3.org/XML/1998/namespace", "lang")
-        );
-        $this->assertEquals('http://EnglishRegistrationPolicy', $usagePolicyElements[0]->textContent);
-        $this->assertEquals(
-            'nl',
-            $usagePolicyElements[1]->getAttributeNS("http://www.w3.org/XML/1998/namespace", "lang")
-        );
-        $this->assertEquals('https://DutchRegistratiebeleid', $usagePolicyElements[1]->textContent);
     }
 
 
@@ -102,8 +75,8 @@ final class RegistrationInfoTest extends TestCase
     {
         $registrationInfo = RegistrationInfo::fromXML($this->xmlRepresentation->documentElement);
 
-        $this->assertEquals('urn:example:example.org', $registrationInfo->getRegistrationAuthority());
-        $this->assertEquals(1148902467, $registrationInfo->getRegistrationInstant());
+        $this->assertEquals('https://ExampleAuthority', $registrationInfo->getRegistrationAuthority());
+        $this->assertEquals(1234567890, $registrationInfo->getRegistrationInstant());
 
         $registrationPolicy = $registrationInfo->getRegistrationPolicy();
         $this->assertCount(2, $registrationPolicy);

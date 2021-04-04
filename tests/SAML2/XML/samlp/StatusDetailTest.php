@@ -46,7 +46,7 @@ final class StatusDetailTest extends TestCase
         );
 
         $statusDetail = new StatusDetail([new Chunk($document->documentElement)]);
-        $this->assertFalse($statusDetail->isEmptyElement());
+
         $this->assertEquals(
             $this->xmlRepresentation->saveXML($this->xmlRepresentation->documentElement),
             strval($statusDetail)

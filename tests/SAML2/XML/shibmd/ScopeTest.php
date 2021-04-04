@@ -42,17 +42,10 @@ final class ScopeTest extends TestCase
     {
         $scope = new Scope("example.org", false);
 
-        $document = DOMDocumentFactory::fromString('<root />');
-        $scopeElement = $scope->toXML($document->documentElement);
-
-        /** @var \DOMElement[] $scopeElements */
-        $scopeElements = XMLUtils::xpQuery($scopeElement, '/root/shibmd:Scope');
-        $this->assertCount(1, $scopeElements);
-        $scopeElement = $scopeElements[0];
-
-        $this->assertEquals('example.org', $scopeElement->nodeValue);
-        $this->assertEquals('urn:mace:shibboleth:metadata:1.0', $scopeElement->namespaceURI);
-        $this->assertEquals('false', $scopeElement->getAttribute('regexp'));
+        $this->assertEquals(
+            $this->xmlRepresentation->saveXML($this->xmlRepresentation->documentElement),
+            strval($scope)
+        );
     }
 
 

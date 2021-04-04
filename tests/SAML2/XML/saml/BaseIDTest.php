@@ -50,11 +50,6 @@ final class BaseIDTest extends TestCase
             'TheSPNameQualifier'
         );
 
-        $this->assertEquals('123.456', $baseId->getValue());
-        $this->assertEquals('TheNameQualifier', $baseId->getNameQualifier());
-        $this->assertEquals('TheSPNameQualifier', $baseId->getSPNameQualifier());
-        $this->assertEquals('CustomBaseID', $baseId->getType());
-
         $this->assertEquals(
             $this->xmlRepresentation->saveXML($this->xmlRepresentation->documentElement),
             strval($baseId)

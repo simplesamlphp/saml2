@@ -104,60 +104,10 @@ final class AttributeAuthorityDescriptorTest extends TestCase
             [$attr1, $attr2]
         );
 
-        $aadElement = $aad->toXML();
-        $this->assertEquals(Constants::NS_SAMLP, $aadElement->getAttribute('protocolSupportEnumeration'));
-
-        $attributeServiceElements = XMLUtils::xpQuery($aadElement, './saml_metadata:AttributeService');
-        $this->assertCount(1, $attributeServiceElements);
-        $this->assertEquals(Constants::BINDING_SOAP, $attributeServiceElements[0]->getAttribute('Binding'));
         $this->assertEquals(
-            'https://IdentityProvider.com/SAML/AA/SOAP',
-            $attributeServiceElements[0]->getAttribute('Location')
+            $this->xmlRepresentation->saveXML($this->xmlRepresentation->documentElement),
+            strval($aad)
         );
-
-        $aidrsElements = XMLUtils::xpQuery($aadElement, './saml_metadata:AssertionIDRequestService');
-        $this->assertCount(1, $aidrsElements);
-        $this->assertEquals(Constants::BINDING_URI, $aidrsElements[0]->getAttribute('Binding'));
-        $this->assertEquals(
-            'https://IdentityProvider.com/SAML/AA/URI',
-            $aidrsElements[0]->getAttribute('Location')
-        );
-
-        $nameIdFormatElements = XMLUtils::xpQuery($aadElement, './saml_metadata:NameIDFormat');
-        $this->assertCount(3, $nameIdFormatElements);
-        $this->assertEquals(Constants::NAMEID_X509_SUBJECT_NAME, $nameIdFormatElements[0]->textContent);
-        $this->assertEquals(Constants::NAMEID_PERSISTENT, $nameIdFormatElements[1]->textContent);
-        $this->assertEquals(Constants::NAMEID_TRANSIENT, $nameIdFormatElements[2]->textContent);
-
-        $attributeProfileElements = XMLUtils::xpQuery($aadElement, './saml_metadata:AttributeProfile');
-        $this->assertCount(2, $attributeProfileElements);
-        $this->assertEquals('profile1', $attributeProfileElements[0]->textContent);
-        $this->assertEquals('profile2', $attributeProfileElements[1]->textContent);
-
-        $attributeElements = XMLUtils::xpQuery($aadElement, './saml_assertion:Attribute');
-        $this->assertCount(2, $attributeElements);
-
-        $this->assertEquals('', $attributeElements[0]->textContent);
-        $this->assertEquals('urn:oid:1.3.6.1.4.1.5923.1.1.1.6', $attributeElements[0]->getAttribute('Name'));
-        $this->assertEquals(Constants::NAMEFORMAT_URI, $attributeElements[0]->getAttribute('NameFormat'));
-        $this->assertEquals('eduPersonPrincipalName', $attributeElements[0]->getAttribute('FriendlyName'));
-
-        $attributeValueElements = XMLUtils::xpQuery($attributeElements[0], './saml_assertion:AttributeValue');
-        $this->assertCount(0, $attributeValueElements);
-
-        $this->assertEquals('urn:oid:1.3.6.1.4.1.5923.1.1.1.1', $attributeElements[1]->getAttribute('Name'));
-        $this->assertEquals(Constants::NAMEFORMAT_URI, $attributeElements[1]->getAttribute('NameFormat'));
-        $this->assertEquals('eduPersonAffiliation', $attributeElements[1]->getAttribute('FriendlyName'));
-
-        $attributeValueElements = XMLUtils::xpQuery($attributeElements[1], './saml_assertion:AttributeValue');
-        $this->assertCount(5, $attributeValueElements);
-        $this->assertEquals('member', $attributeValueElements[0]->textContent);
-        $this->assertEquals('student', $attributeValueElements[1]->textContent);
-        $this->assertEquals('faculty', $attributeValueElements[2]->textContent);
-        $this->assertEquals('employee', $attributeValueElements[3]->textContent);
-        $this->assertEquals('staff', $attributeValueElements[4]->textContent);
-
-        $this->assertEqualXMLStructure($this->xmlRepresentation->documentElement, $aad->toXML());
     }
 
     /**

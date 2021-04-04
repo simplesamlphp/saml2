@@ -49,17 +49,16 @@ final class AttributeStatementTest extends TestCase
     {
         $attrStatement = new AttributeStatement(
             [
-                new Attribute('urn:ServiceID', null, null, [new AttributeValue('1')])
+                new Attribute('urn:ServiceID', null, null, [new AttributeValue('1')]),
+                new Attribute('urn:EntityConcernedID', null, null, [new AttributeValue('1')]),
+                new Attribute('urn:EntityConcernedSubID', null, null, [new AttributeValue('1')])
             ]
         );
 
-        $attributes = $attrStatement->getAttributes();
-        $this->assertCount(1, $attributes);
-
-        $this->assertEquals('urn:ServiceID', $attributes[0]->getName());
-
-        $this->assertEmpty($attrStatement->getEncryptedAttributes());
-        $this->assertFalse($attrStatement->hasEncryptedAttributes());
+        $this->assertEquals(
+            $this->xmlRepresentation->saveXML($this->xmlRepresentation->documentElement),
+            strval($attrStatement)
+        );
     }
 
 

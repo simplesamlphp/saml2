@@ -53,14 +53,6 @@ final class KeyDescriptorTest extends TestCase
             [new EncryptionMethod('http://www.w3.org/2001/04/xmlenc#rsa-1_5')]
         );
 
-        $this->assertEquals('signing', $kd->getUse());
-
-        $knfo = $kd->getKeyInfo();
-        $this->assertCount(1, $knfo->getInfo());
-        $this->assertInstanceOf(KeyName::class, $knfo->getInfo()[0]);
-        $this->assertCount(1, $kd->getEncryptionMethods());
-        $this->assertEquals('http://www.w3.org/2001/04/xmlenc#rsa-1_5', $kd->getEncryptionMethods()[0]->getAlgorithm());
-
         $this->assertEquals(
             $this->xmlRepresentation->saveXML($this->xmlRepresentation->documentElement),
             strval($kd)

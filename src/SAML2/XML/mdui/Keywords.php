@@ -125,10 +125,7 @@ final class Keywords extends AbstractMduiElement
         /** @var string $lang */
         $lang = self::getAttribute($xml, 'xml:lang');
 
-        $Keywords = [];
-        foreach (explode(' ', $xml->textContent) as $keyword) {
-            $Keywords[] = str_replace('+', ' ', $keyword);
-        }
+        $Keywords = explode('+', $xml->textContent);
 
         return new self($lang, $Keywords);
     }
@@ -147,10 +144,7 @@ final class Keywords extends AbstractMduiElement
         $e = $this->instantiateParentElement($parent);
         $e->setAttribute('xml:lang', $this->lang);
 
-        $value = '';
-        foreach ($this->Keywords as $keyword) {
-            $value .= str_replace(' ', '+', $keyword) . ' ';
-        }
+        $value = implode('+', $this->Keywords);
 
         $e->appendChild($e->ownerDocument->createTextNode(rtrim($value)));
 

@@ -42,14 +42,6 @@ final class ResponseTest extends TestCase
     {
         $response = new Response('https://example.com/ACS');
 
-        $responseElement = $response->toXML();
-        $this->assertEquals('https://example.com/ACS', $responseElement->getAttribute('AssertionConsumerServiceURL'));
-        $this->assertEquals('1', $responseElement->getAttributeNS(Constants::NS_SOAP, 'mustUnderstand'));
-        $this->assertEquals(
-            'http://schemas.xmlsoap.org/soap/actor/next',
-            $responseElement->getAttributeNS(Constants::NS_SOAP, 'actor')
-        );
-
         $this->assertEquals(
             $this->xmlRepresentation->saveXML($this->xmlRepresentation->documentElement),
             strval($response)

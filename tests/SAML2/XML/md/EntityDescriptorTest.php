@@ -151,17 +151,6 @@ final class EntityDescriptorTest extends TestCase
             $mdloc
         );
 
-        $this->assertEquals($entityid, $ed->getEntityID());
-        $this->assertEquals($id, $ed->getID());
-        $this->assertEquals($now, $ed->getValidUntil());
-        $this->assertEquals($duration, $ed->getCacheDuration());
-        $this->assertCount(4, $ed->getRoleDescriptors());
-        $this->assertInstanceOf(IDPSSODescriptor::class, $ed->getRoleDescriptors()[0]);
-        $this->assertInstanceOf(AttributeAuthorityDescriptor::class, $ed->getRoleDescriptors()[1]);
-        $this->assertInstanceOf(AuthnAuthorityDescriptor::class, $ed->getRoleDescriptors()[2]);
-        $this->assertInstanceOf(PDPDescriptor::class, $ed->getRoleDescriptors()[3]);
-        $this->assertNull($ed->getAffiliationDescriptor());
-
         $this->assertEquals(
             $this->xmlRepresentation->saveXML($this->xmlRepresentation->documentElement),
             strval($ed)

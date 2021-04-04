@@ -54,9 +54,6 @@ final class InformationURLTest extends TestCase
     {
         $name = new InformationURL('en', 'http://www.example.edu/en/');
 
-        $this->assertEquals('en', $name->getLanguage());
-        $this->assertEquals('http://www.example.edu/en/', $name->getValue());
-
         $this->assertEquals(
             $this->xmlRepresentation->saveXML($this->xmlRepresentation->documentElement),
             strval($name)

@@ -153,15 +153,6 @@ final class SPSSODescriptorTest extends TestCase
             ['urn:oasis:names:tc:SAML:2.0:nameid-format:transient']
         );
 
-        $this->assertCount(2, $spssod->getAssertionConsumerService());
-        $this->assertInstanceOf(AssertionConsumerService::class, $spssod->getAssertionConsumerService()[0]);
-        $this->assertInstanceOf(AssertionConsumerService::class, $spssod->getAssertionConsumerService()[1]);
-        $this->assertTrue($spssod->getAuthnRequestsSigned());
-        $this->assertFalse($spssod->getWantAssertionsSigned());
-        $this->assertCount(2, $spssod->getAttributeConsumingService());
-        $this->assertInstanceOf(AttributeConsumingService::class, $spssod->getAttributeConsumingService()[0]);
-        $this->assertInstanceOf(AttributeConsumingService::class, $spssod->getAttributeConsumingService()[1]);
-
         $this->assertEquals(
             $this->xmlRepresentation->saveXML($this->xmlRepresentation->documentElement),
             strval($spssod)

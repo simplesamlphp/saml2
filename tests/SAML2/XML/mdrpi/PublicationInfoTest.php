@@ -39,10 +39,10 @@ final class PublicationInfoTest extends TestCase
         );
 
         $this->arrayRepresentation = [
-            'publisher' => 'TestPublisher',
-            'creationInstant' => 12345678990,
-            'publicationId' => 'PublicationIdValue',
-            'usagePolicy' => ['en' => 'http://EnglishUsagePolicy', 'no' => 'http://NorwegianUsagePolicy'],
+            'publisher' => 'SomePublisher',
+            'creationInstant' => 1293840000,
+            'publicationId' => 'SomePublicationId',
+            'usagePolicy' => ['en' => 'http://TheEnglishUsagePolicy', 'no' => 'http://TheNorwegianUsagePolicy'],
         ];
     }
 
@@ -52,47 +52,19 @@ final class PublicationInfoTest extends TestCase
     public function testMarshalling(): void
     {
         $publicationInfo = new PublicationInfo(
-            'TestPublisher',
-            1234567890,
-            'PublicationIdValue',
+            'SomePublisher',
+            1293840000,
+            'SomePublicationId',
             [
-                new UsagePolicy('en', 'http://EnglishUsagePolicy'),
-                new UsagePolicy('no', 'http://NorwegianUsagePolicy'),
+                new UsagePolicy('en', 'http://TheEnglishUsagePolicy'),
+                new UsagePolicy('no', 'http://TheNorwegianUsagePolicy'),
             ]
         );
 
-        $document = DOMDocumentFactory::fromString('<root />');
-        $xml = $publicationInfo->toXML($document->documentElement);
-
-        /** @var \DOMElement[] $publicationInfoElements */
-        $publicationInfoElements = XMLUtils::xpQuery(
-            $xml,
-            '/root/*[local-name()=\'PublicationInfo\' and namespace-uri()=\'urn:oasis:names:tc:SAML:metadata:rpi\']'
-        );
-        $this->assertCount(1, $publicationInfoElements);
-        $publicationInfoElement = $publicationInfoElements[0];
-
-        $this->assertEquals('TestPublisher', $publicationInfoElement->getAttribute("publisher"));
-        $this->assertEquals('2009-02-13T23:31:30Z', $publicationInfoElement->getAttribute("creationInstant"));
-        $this->assertEquals('PublicationIdValue', $publicationInfoElement->getAttribute("publicationId"));
-
-        /** @var \DOMElement[] $usagePolicyElements */
-        $usagePolicyElements = XMLUtils::xpQuery(
-            $publicationInfoElement,
-            './*[local-name()=\'UsagePolicy\' and namespace-uri()=\'urn:oasis:names:tc:SAML:metadata:rpi\']'
-        );
-        $this->assertCount(2, $usagePolicyElements);
-
         $this->assertEquals(
-            'en',
-            $usagePolicyElements[0]->getAttributeNS("http://www.w3.org/XML/1998/namespace", "lang")
+            $this->xmlRepresentation->saveXML($this->xmlRepresentation->documentElement),
+            strval($publicationInfo)
         );
-        $this->assertEquals('http://EnglishUsagePolicy', $usagePolicyElements[0]->textContent);
-        $this->assertEquals(
-            'no',
-            $usagePolicyElements[1]->getAttributeNS("http://www.w3.org/XML/1998/namespace", "lang")
-        );
-        $this->assertEquals('http://NorwegianUsagePolicy', $usagePolicyElements[1]->textContent);
     }
 
 

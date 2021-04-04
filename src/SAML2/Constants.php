@@ -9,7 +9,7 @@ namespace SimpleSAML\SAML2;
  *
  * @package simplesamlphp/saml2
  */
-class Constants extends \SimpleSAML\XML\Constants
+class Constants extends \SimpleSAML\XMLSecurity\Constants
 {
     /**
      * Password authentication context.

@@ -52,9 +52,6 @@ final class DescriptionTest extends TestCase
     {
         $name = new Description('en', 'Just an example');
 
-        $this->assertEquals('en', $name->getLanguage());
-        $this->assertEquals('Just an example', $name->getValue());
-
         $this->assertEquals(
             $this->xmlRepresentation->saveXML($this->xmlRepresentation->documentElement),
             strval($name)

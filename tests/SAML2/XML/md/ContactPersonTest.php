@@ -70,7 +70,7 @@ final class ContactPersonTest extends TestCase
         $attr1->value = 'testval1';
         $attr2 = $this->xmlRepresentation->createAttributeNS('urn:test', 'test:attr2');
         $attr2->value = 'testval2';
-        $cp = new ContactPerson(
+        $contactPerson = new ContactPerson(
             'other',
             'Test Company',
             'John',
@@ -85,33 +85,10 @@ final class ContactPersonTest extends TestCase
             [$attr1, $attr2]
         );
 
-        $cpElement = $cp->toXML();
-        $this->assertEquals('other', $cpElement->getAttribute('contactType'));
-        $this->assertEquals('testval1', $cpElement->getAttributeNS('urn:test', 'attr1'));
-        $this->assertEquals('testval2', $cpElement->getAttributeNS('urn:test', 'attr2'));
-
-        $companyElements = XMLUtils::xpQuery($cpElement, './saml_metadata:Company');
-        $this->assertCount(1, $companyElements);
-        $this->assertEquals('Test Company', $companyElements[0]->textContent);
-
-        $givenNameElements = XMLUtils::xpQuery($cpElement, './saml_metadata:GivenName');
-        $this->assertCount(1, $givenNameElements);
-        $this->assertEquals('John', $givenNameElements[0]->textContent);
-
-        $surNameElements = XMLUtils::xpQuery($cpElement, './saml_metadata:SurName');
-        $this->assertCount(1, $surNameElements);
-        $this->assertEquals('Doe', $surNameElements[0]->textContent);
-
-        $emailElements = XMLUtils::xpQuery($cpElement, './saml_metadata:EmailAddress');
-        $this->assertCount(2, $emailElements);
-        $this->assertEquals('mailto:jdoe@test.company', $emailElements[0]->textContent);
-        $this->assertEquals('mailto:john.doe@test.company', $emailElements[1]->textContent);
-
-        $phoneElements = XMLUtils::xpQuery($cpElement, './saml_metadata:TelephoneNumber');
-        $this->assertCount(1, $phoneElements);
-        $this->assertEquals('1-234-567-8901', $phoneElements[0]->textContent);
-
-        $this->assertEquals($this->xmlRepresentation->saveXML($this->xmlRepresentation->documentElement), strval($cp));
+        $this->assertEquals(
+            $this->xmlRepresentation->saveXML($this->xmlRepresentation->documentElement),
+            strval($contactPerson)
+        );
     }
 
 

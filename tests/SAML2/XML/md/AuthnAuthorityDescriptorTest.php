@@ -65,25 +65,6 @@ final class AuthnAuthorityDescriptorTest extends TestCase
             [Constants::NAMEID_PERSISTENT, Constants::NAMEID_TRANSIENT]
         );
 
-        $aadElement = $aad->toXML();
-        $this->assertEquals(Constants::NS_SAMLP, $aadElement->getAttribute('protocolSupportEnumeration'));
-
-        $aqsElements = XMLUtils::xpQuery($aadElement, './saml_metadata:AuthnQueryService');
-        $this->assertCount(1, $aqsElements);
-        $this->assertEquals(Constants::BINDING_HTTP_POST, $aqsElements[0]->getAttribute('Binding'));
-        $this->assertEquals('http://www.example.com/aqs', $aqsElements[0]->getAttribute('Location'));
-
-        $aidrsElements = XMLUtils::xpQuery($aadElement, './saml_metadata:AssertionIDRequestService');
-        $this->assertCount(1, $aidrsElements);
-        $this->assertEquals(Constants::BINDING_HTTP_POST, $aidrsElements[0]->getAttribute('Binding'));
-        $this->assertEquals('http://www.example.com/aidrs', $aidrsElements[0]->getAttribute('Location'));
-
-
-        $nameIdFormatElements = XMLUtils::xpQuery($aadElement, './saml_metadata:NameIDFormat');
-        $this->assertCount(2, $nameIdFormatElements);
-        $this->assertEquals(Constants::NAMEID_PERSISTENT, $nameIdFormatElements[0]->textContent);
-        $this->assertEquals(Constants::NAMEID_TRANSIENT, $nameIdFormatElements[1]->textContent);
-
         $this->assertEquals(
             $this->xmlRepresentation->saveXML($this->xmlRepresentation->documentElement),
             strval($aad)

@@ -160,39 +160,6 @@ final class IDPSSODescriptorTest extends TestCase
             ]
         );
 
-        $this->assertCount(2, $idpssod->getSingleSignOnServices());
-        $this->assertInstanceOf(SingleSignOnService::class, $idpssod->getSingleSignOnServices()[0]);
-        $this->assertInstanceOf(SingleSignOnService::class, $idpssod->getSingleSignOnServices()[1]);
-        $this->assertTrue($idpssod->wantAuthnRequestsSigned());
-        $this->assertCount(2, $idpssod->getNameIDMappingServices());
-        $this->assertInstanceOf(NameIDMappingService::class, $idpssod->getNameIDMappingServices()[0]);
-        $this->assertInstanceOf(NameIDMappingService::class, $idpssod->getNameIDMappingServices()[1]);
-        $this->assertCount(2, $idpssod->getAssertionIDRequestServices());
-        $this->assertInstanceOf(AssertionIDRequestService::class, $idpssod->getAssertionIDRequestServices()[0]);
-        $this->assertInstanceOf(AssertionIDRequestService::class, $idpssod->getAssertionIDRequestServices()[1]);
-        $this->assertEquals(
-            ['urn:attribute:profile1', 'urn:attribute:profile2'],
-            $idpssod->getAttributeProfiles()
-        );
-        $this->assertCount(2, $idpssod->getSupportedAttributes());
-        $this->assertInstanceOf(Attribute::class, $idpssod->getSupportedAttributes()[0]);
-        $this->assertInstanceOf(Attribute::class, $idpssod->getSupportedAttributes()[1]);
-        $this->assertCount(1, $idpssod->getArtifactResolutionServices());
-        $this->assertInstanceOf(ArtifactResolutionService::class, $idpssod->getArtifactResolutionServices()[0]);
-        $this->assertCount(1, $idpssod->getManageNameIDServices());
-        $this->assertInstanceOf(ManageNameIDService::class, $idpssod->getManageNameIDServices()[0]);
-        $this->assertCount(2, $idpssod->getSingleLogoutServices());
-        $this->assertInstanceOf(SingleLogoutService::class, $idpssod->getSingleLogoutServices()[0]);
-        $this->assertInstanceOf(SingleLogoutService::class, $idpssod->getSingleLogoutServices()[1]);
-        $this->assertEquals(
-            [
-                'urn:oasis:names:tc:SAML:1.1:nameid-format:X509SubjectName',
-                'urn:oasis:names:tc:SAML:2.0:nameid-format:persistent',
-                'urn:oasis:names:tc:SAML:2.0:nameid-format:transient'
-            ],
-            $idpssod->getNameIDFormats()
-        );
-
         $this->assertEquals(
             $this->xmlRepresentation->saveXML($this->xmlRepresentation->documentElement),
             strval($idpssod)

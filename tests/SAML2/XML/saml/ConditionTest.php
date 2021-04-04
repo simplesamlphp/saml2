@@ -49,9 +49,6 @@ final class ConditionTest extends TestCase
             'SomeCondition'
         );
 
-        $this->assertEquals('CustomCondition', $condition->getType());
-        $this->assertEquals('SomeCondition', $condition->getValue());
-
         $this->assertEquals(
             $this->xmlRepresentation->saveXML($this->xmlRepresentation->documentElement),
             strval($condition)

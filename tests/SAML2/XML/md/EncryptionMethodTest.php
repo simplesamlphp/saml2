@@ -48,20 +48,15 @@ final class EncryptionMethodTest extends TestCase
      */
     public function testMarshalling(): void
     {
-        $alg = 'http://www.w3.org/2001/04/xmlenc#rsa-oaep-mgf1p';
+        $alg = Constants::KEY_TRANSPORT_OAEP_MGF1P;
         $chunkXml = DOMDocumentFactory::fromString('<other:Element xmlns:other="urn:other">Value</other:Element>');
         $chunk = Chunk::fromXML($chunkXml->documentElement);
 
-        $em = new EncryptionMethod($alg, 10, '9lWu3Q==', [$chunk]);
-        $this->assertEquals($alg, $em->getAlgorithm());
-        $this->assertEquals(10, $em->getKeySize());
-        $this->assertEquals('9lWu3Q==', $em->getOAEPParams());
-        $this->assertCount(1, $em->getChildren());
-        $this->assertInstanceOf(Chunk::class, $em->getChildren()[0]);
+        $encryptionMethod = new EncryptionMethod($alg, 10, '9lWu3Q==', [$chunk]);
 
         $this->assertEquals(
             $this->xmlRepresentation->saveXML($this->xmlRepresentation->documentElement),
-            strval($em)
+            strval($encryptionMethod)
         );
     }
 
@@ -71,25 +66,22 @@ final class EncryptionMethodTest extends TestCase
      */
     public function testMarshallingWithoutOptionalParameters(): void
     {
-        $em = new EncryptionMethod('http://www.w3.org/2001/04/xmlenc#rsa-oaep-mgf1p');
+        $encryptionMethod = new EncryptionMethod(Constants::KEY_TRANSPORT_OAEP_MGF1P);
         $document = DOMDocumentFactory::fromString(
             '<md:EncryptionMethod xmlns:md="' . Constants::NS_MD .
             '" Algorithm="http://www.w3.org/2001/04/xmlenc#rsa-oaep-mgf1p"/>'
         );
 
-        $this->assertNull($em->getKeySize());
-        $this->assertNull($em->getOAEPParams());
-        $this->assertEmpty($em->getChildren());
         $this->assertEquals(
             $document->saveXML($document->documentElement),
-            strval($em)
+            strval($encryptionMethod)
         );
     }
 
 
     public function testMarshallingElementOrdering(): void
     {
-        $alg = 'http://www.w3.org/2001/04/xmlenc#rsa-oaep-mgf1p';
+        $alg = Constants::KEY_TRANSPORT_OAEP_MGF1P;
         $chunkXml = DOMDocumentFactory::fromString('<other:Element xmlns:other="urn:other">Value</other:Element>');
         $chunk = Chunk::fromXML($chunkXml->documentElement);
 

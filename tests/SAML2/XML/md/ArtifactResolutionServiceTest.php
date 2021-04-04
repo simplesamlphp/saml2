@@ -45,12 +45,6 @@ final class ArtifactResolutionServiceTest extends TestCase
     {
         $ars = new ArtifactResolutionService(42, 'urn:something', 'https://whatever/', false);
 
-        $arsElement = $ars->toXML();
-        $this->assertEquals(42, $arsElement->getAttribute('index'));
-        $this->assertEquals('false', $arsElement->getAttribute('isDefault'));
-        $this->assertEquals('urn:something', $arsElement->getAttribute('Binding'));
-        $this->assertEquals('https://whatever/', $arsElement->getAttribute('Location'));
-
         $this->assertEquals(
             $this->xmlRepresentation->saveXML($this->xmlRepresentation->documentElement),
             strval($ars)

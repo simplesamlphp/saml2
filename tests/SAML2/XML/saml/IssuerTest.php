@@ -53,12 +53,6 @@ final class IssuerTest extends TestCase
             'TheSPProvidedID'
         );
 
-        $this->assertEquals('TheIssuerValue', $issuer->getValue());
-        $this->assertEquals('TheNameQualifier', $issuer->getNameQualifier());
-        $this->assertEquals('TheSPNameQualifier', $issuer->getSPNameQualifier());
-        $this->assertEquals('TheSPProvidedID', $issuer->getSPProvidedID());
-        $this->assertEquals('TheFormat', $issuer->getFormat());
-
         $this->assertEquals(
             $this->xmlRepresentation->saveXML($this->xmlRepresentation->documentElement),
             strval($issuer)

@@ -60,34 +60,32 @@ final class AuthnRequestTest extends TestCase
 
     public function testMarshalling(): void
     {
-        $rac = new RequestedAuthnContext(
-            [
-                new AuthnContextClassRef('accr1'),
-                new AuthnContextClassRef('accr2')
-            ],
-            'better'
+        $subject = new Subject(
+            new NameID('user@example.org', null, null, Constants::NAMEID_UNSPECIFIED)
         );
-        $authnRequest = new AuthnRequest($rac);
 
-        $authnRequestElement = $authnRequest->toXML();
-
-        /** @psalm-var \DOMElement[] $requestedAuthnContextElements */
-        $requestedAuthnContextElements = XMLUtils::xpQuery(
-            $authnRequestElement,
-            './saml_protocol:RequestedAuthnContext'
+        $authnRequest = new AuthnRequest(
+            null,
+            $subject,
+            null,
+            null,
+            null,
+            null,
+            null,
+            null,
+            null,
+            null,
+            null,
+            new Issuer('https://gateway.stepup.org/saml20/sp/metadata'),
+            '_2b0226190ca1c22de6f66e85f5c95158',
+            1411393320,
+            'https://tiqr.stepup.org/idp/profile/saml2/Redirect/SSO'
         );
-        $this->assertCount(1, $requestedAuthnContextElements);
 
-        $requestedAuthnConextElement = $requestedAuthnContextElements[0];
-        $this->assertEquals('better', $requestedAuthnConextElement->getAttribute("Comparison"));
-
-        $authnContextClassRefElements = XMLUtils::xpQuery(
-            $requestedAuthnConextElement,
-            './saml_assertion:AuthnContextClassRef'
+        $this->assertEquals(
+            $this->xmlRepresentation->saveXML($this->xmlRepresentation->documentElement),
+            strval($authnRequest)
         );
-        $this->assertCount(2, $authnContextClassRefElements);
-        $this->assertEquals('accr1', $authnContextClassRefElements[0]->textContent);
-        $this->assertEquals('accr2', $authnContextClassRefElements[1]->textContent);
     }
 
 
@@ -154,7 +152,7 @@ final class AuthnRequestTest extends TestCase
             null,
             null,
             null,
-            null,
+            new Issuer('https://gateway.stepup.org/saml20/sp/metadata'),
             null,
             null,
             null,

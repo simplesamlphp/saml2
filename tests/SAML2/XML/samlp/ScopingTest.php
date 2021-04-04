@@ -49,25 +49,11 @@ final class ScopingTest extends TestCase
         $requesterId = 'urn:some:requester';
 
         $scoping = new Scoping(2, $list, [$requesterId]);
-        $this->assertEquals(2, $scoping->getProxyCount());
 
-        $list = $scoping->getIDPList();
-        $this->assertInstanceOf(IDPList::class, $list);
-
-        $entries = $list->getIdpEntry();
-        $this->assertCount(1, $entries);
-
-        $this->assertEquals('urn:some:requester1', $entries[0]->getProviderID());
-        $this->assertEquals('testName1', $entries[0]->getName());
-        $this->assertEquals('testLoc1', $entries[0]->getLoc());
-
-        $this->assertEquals('https://some/location', $list->getGetComplete());
-
-        $requesterId = $scoping->getRequesterId();
-        $this->assertCount(1, $requesterId);
-        $this->assertEquals('urn:some:requester', $requesterId[0]);
-
-        $this->assertEquals($this->xmlRepresentation->saveXML($this->xmlRepresentation->documentElement), strval($scoping));
+        $this->assertEquals(
+            $this->xmlRepresentation->saveXML($this->xmlRepresentation->documentElement),
+            strval($scoping)
+        );
     }
 
 

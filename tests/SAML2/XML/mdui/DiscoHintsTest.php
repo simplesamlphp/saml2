@@ -57,20 +57,6 @@ final class DiscoHintsTest extends TestCase
             ["geo:47.37328,8.531126", "geo:19.34343,12.342514"]
         );
 
-        $this->assertCount(0, $discoHints->getChildren());
-        $this->assertEquals(
-            ["130.59.0.0/16", "2001:620::0/96"],
-            $discoHints->getIPHint()
-        );
-        $this->assertEquals(
-            ["example.com", "www.example.com"],
-            $discoHints->getDomainHint()
-        );
-        $this->assertEquals(
-            ["geo:47.37328,8.531126", "geo:19.34343,12.342514"],
-            $discoHints->getGeolocationHint()
-        );
-        $this->assertFalse($discoHints->isEmptyElement());
         $this->assertEquals(
             $this->xmlRepresentation->saveXML($this->xmlRepresentation->documentElement),
             strval($discoHints)
@@ -134,7 +120,7 @@ final class DiscoHintsTest extends TestCase
         $discoElement = $discoElements[0]->firstChild;
 
         $this->assertEquals("mdui:Keywords", $discoElement->nodeName);
-        $this->assertEquals("voorbeeld specimen", $discoElement->textContent);
+        $this->assertEquals("voorbeeld+specimen", $discoElement->textContent);
     }
 
 

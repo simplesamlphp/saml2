@@ -51,7 +51,8 @@ final class AttributeQueryTest extends TestCase
      */
     public function testMarshalling(): void
     {
-        $nameId = new NameID('NameIDValue');
+        $nameId = new NameID('urn:example:subject', null, null, Constants::NAMEID_UNSPECIFIED);
+
         $attributeQuery = new AttributeQuery(
             new Subject($nameId),
             [
@@ -86,46 +87,16 @@ final class AttributeQueryTest extends TestCase
                         new AttributeValue(23)
                     ]
                 )
-            ]
+            ],
+            new Issuer('https://example.org/', null, null, Constants::NAMEID_ENTITY),
+            'aaf23196-1773-2113-474a-fe114412ab72',
+            1504698567
         );
-        $attributeQueryElement = $attributeQuery->toXML();
 
-        // Test Attribute Names
-        /** @psalm-var \DOMElement[] $attributes */
-        $attributes = XMLUtils::xpQuery($attributeQueryElement, './saml_assertion:Attribute');
-        $this->assertCount(4, $attributes);
-        $this->assertEquals('test1', $attributes[0]->getAttribute('Name'));
-        $this->assertEquals('test2', $attributes[1]->getAttribute('Name'));
-        $this->assertEquals('test3', $attributes[2]->getAttribute('Name'));
-
-        // Test Attribute Values for Attribute 1
-        /** @psalm-var \DOMElement[] $av1 */
-        $av1 = XMLUtils::xpQuery($attributes[0], './saml_assertion:AttributeValue');
-        $this->assertCount(2, $av1);
-        $this->assertEquals('test1_attrv1', $av1[0]->textContent);
-        $this->assertEquals('test1_attrv2', $av1[1]->textContent);
-
-        // Test Attribute Values for Attribute 2
-        /** @psalm-var \DOMElement[] $av2 */
-        $av2 = XMLUtils::xpQuery($attributes[1], './saml_assertion:AttributeValue');
-        $this->assertCount(3, $av2);
-        $this->assertEquals('test2_attrv1', $av2[0]->textContent);
-        $this->assertEquals('test2_attrv2', $av2[1]->textContent);
-        $this->assertEquals('test2_attrv3', $av2[2]->textContent);
-
-        // Test Attribute Values for Attribute 3
-        /** @psalm-var \DOMElement[] $av3 */
-        $av3 = XMLUtils::xpQuery($attributes[2], './saml_assertion:AttributeValue');
-        $this->assertCount(0, $av3);
-
-        // Test Attribute Values for Attribute 3
-        /** @psalm-var \DOMElement[] $av3 */
-        $av3 = XMLUtils::xpQuery($attributes[3], './saml_assertion:AttributeValue');
-        $this->assertCount(2, $av3);
-        $this->assertEquals('4', $av3[0]->textContent);
-        $this->assertEquals('xs:integer', $av3[0]->getAttribute('xsi:type'));
-        $this->assertEquals('23', $av3[1]->textContent);
-        $this->assertEquals('xs:integer', $av3[1]->getAttribute('xsi:type'));
+        $this->assertEquals(
+            $this->xmlRepresentation->saveXML($this->xmlRepresentation->documentElement),
+            strval($attributeQuery)
+        );
     }
 
 
@@ -144,10 +115,11 @@ final class AttributeQueryTest extends TestCase
         $this->assertEquals('urn:example:subject', $identifier->getValue());
 
         $attributes = $aq->getAttributes();
-        $this->assertCount(3, $attributes);
-        $this->assertEquals('urn:oid:1.3.6.1.4.1.5923.1.1.1.7', $attributes[0]->getName());
-        $this->assertEquals('urn:oid:2.5.4.4', $attributes[1]->getName());
-        $this->assertEquals('urn:oid:2.16.840.1.113730.3.1.39', $attributes[2]->getName());
+        $this->assertCount(4, $attributes);
+        $this->assertEquals('test1', $attributes[0]->getName());
+        $this->assertEquals('test2', $attributes[1]->getName());
+        $this->assertEquals('test3', $attributes[2]->getName());
+        $this->assertEquals('test4', $attributes[3]->getName());
     }
 
 

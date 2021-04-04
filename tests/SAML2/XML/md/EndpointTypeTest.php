@@ -51,14 +51,6 @@ final class EndpointTypeTest extends TestCase
         $attr->value = 'value';
         $endpointType = new AttributeService('urn:something', 'https://whatever/', 'https://foo.bar/', [$attr]);
 
-        $this->assertEquals('urn:something', $endpointType->getBinding());
-        $this->assertEquals('https://whatever/', $endpointType->getLocation());
-        $this->assertEquals('https://foo.bar/', $endpointType->getResponseLocation());
-        $this->assertTrue($endpointType->hasAttributeNS('urn:test', 'attr'));
-        $this->assertEquals('value', $endpointType->getAttributeNS('urn:test', 'attr'));
-        $this->assertFalse($endpointType->hasAttributeNS('urn:test', 'invalid'));
-        $this->assertNull($endpointType->getAttributeNS('urn:test', 'invalid'));
-
         $this->assertEquals(
             $this->xmlRepresentation->saveXML($this->xmlRepresentation->documentElement),
             strval($endpointType)

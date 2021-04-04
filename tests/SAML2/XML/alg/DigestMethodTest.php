@@ -44,9 +44,6 @@ final class DigestMethodTest extends TestCase
     {
         $digestMethod = new DigestMethod(Constants::DIGEST_SHA256);
 
-        $digestMethodElement = $digestMethod->toXML();
-        $this->assertEquals(Constants::DIGEST_SHA256, $digestMethodElement->getAttribute('Algorithm'));
-
         $this->assertEquals(
             $this->xmlRepresentation->saveXML($this->xmlRepresentation->documentElement),
             strval($digestMethod)

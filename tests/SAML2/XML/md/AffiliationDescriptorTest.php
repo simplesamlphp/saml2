@@ -70,28 +70,6 @@ final class AffiliationDescriptorTest extends TestCase
             ]
         );
 
-        $adElement = $affiliationDescriptor->toXML();
-        $this->assertEquals('TheOwner', $adElement->getAttribute('affiliationOwnerID'));
-        $this->assertEquals('TheID', $adElement->getAttribute('ID'));
-        $this->assertEquals('2009-02-13T23:31:30Z', $adElement->getAttribute('validUntil'));
-        $this->assertEquals('PT5000S', $adElement->getAttribute('cacheDuration'));
-
-        $affiliateMemberElements = XMLUtils::xpQuery($adElement, './saml_metadata:AffiliateMember');
-        $this->assertCount(2, $affiliateMemberElements);
-        $this->assertEquals('Member', $affiliateMemberElements[0]->textContent);
-        $this->assertEquals('OtherMember', $affiliateMemberElements[1]->textContent);
-
-        $keyDescriptorElements = XMLUtils::xpQuery($adElement, './saml_metadata:KeyDescriptor');
-        $this->assertCount(1, $keyDescriptorElements);
-        $this->assertEquals('signing', $keyDescriptorElements[0]->getAttribute('use'));
-
-        $keyInfoElements = XMLUtils::xpQuery($keyDescriptorElements[0], './ds:KeyInfo');
-        $this->assertCount(1, $keyInfoElements);
-
-        $keyNameElements = XMLUtils::xpQuery($keyInfoElements[0], './ds:KeyName');
-        $this->assertCount(1, $keyNameElements);
-        $this->assertEquals('IdentityProvider.com SSO Key', $keyNameElements[0]->textContent);
-
         $this->assertEquals(
             $this->xmlRepresentation->saveXML($this->xmlRepresentation->documentElement),
             strval($affiliationDescriptor)

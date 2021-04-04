@@ -50,12 +50,6 @@ final class RequestInitiatorTest extends TestCase
 
         $requestInitiator = new RequestInitiator('https://whatever/', 'https://foo.bar/', [$attr]);
 
-        $riElement = $requestInitiator->toXML();
-        $this->assertEquals(RequestInitiator::NS, $riElement->getAttribute('Binding'));
-        $this->assertEquals('https://whatever/', $riElement->getAttribute('Location'));
-        $this->assertEquals('https://foo.bar/', $riElement->getAttribute('ResponseLocation'));
-        $this->assertEquals('value', $riElement->getAttributeNS('urn:test', 'attr'));
-
         $this->assertEquals(
             $this->xmlRepresentation->saveXML($this->xmlRepresentation->documentElement),
             strval($requestInitiator)

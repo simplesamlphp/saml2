@@ -64,18 +64,6 @@ final class AttributeTest extends TestCase
             [$attr1, $attr2]
         );
 
-        $this->assertEquals('TheName', $attribute->getName());
-        $this->assertEquals('TheNameFormat', $attribute->getNameFormat());
-        $this->assertEquals('TheFriendlyName', $attribute->getFriendlyName());
-
-        $this->assertEquals('testval1', $attribute->getAttributeNS('urn:test', 'attr1'));
-        $this->assertEquals('testval2', $attribute->getAttributeNS('urn:test', 'attr2'));
-
-        $values = $attribute->getAttributeValues();
-        $this->assertCount(2, $values);
-        $this->assertEquals('FirstValue', $values[0]->getValue());
-        $this->assertEquals('SecondValue', $values[1]->getValue());
-
         $this->assertEquals(
             $this->xmlRepresentation->saveXML($this->xmlRepresentation->documentElement),
             strval($attribute)
