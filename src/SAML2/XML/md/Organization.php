@@ -54,17 +54,20 @@ final class Organization extends AbstractMdElement
      * @param \SimpleSAML\SAML2\XML\md\OrganizationDisplayName[] $organizationDisplayName
      * @param \SimpleSAML\SAML2\XML\md\OrganizationURL[] $organizationURL
      * @param \SimpleSAML\SAML2\XML\md\Extensions|null $extensions
+     * @param \DOMAttr[]                     $namespacedAttributes
      */
     public function __construct(
         array $organizationName,
         array $organizationDisplayName,
         array $organizationURL,
-        ?Extensions $extensions = null
+        ?Extensions $extensions = null,
+        array $namespacedAttributes = []
     ) {
         $this->setOrganizationName($organizationName);
         $this->setOrganizationDisplayName($organizationDisplayName);
         $this->setOrganizationURL($organizationURL);
         $this->setExtensions($extensions);
+        $this->setAttributesNS($namespacedAttributes);
     }
 
 
@@ -158,15 +161,31 @@ final class Organization extends AbstractMdElement
         Assert::minCount($names, 1, 'Missing at least one OrganizationName.', MissingElementException::class);
 
         $displayNames = OrganizationDisplayName::getChildrenOfClass($xml);
-        Assert::minCount($displayNames, 1, 'Missing at least one OrganizationDisplayName', MissingElementException::class);
+        Assert::minCount(
+            $displayNames,
+            1,
+            'Missing at least one OrganizationDisplayName',
+            MissingElementException::class
+        );
 
         $urls = OrganizationURL::getChildrenOfClass($xml);
         Assert::minCount($urls, 1, 'Missing at least one OrganizationURL', MissingElementException::class);
 
         $extensions = Extensions::getChildrenOfClass($xml);
-        Assert::maxCount($extensions, 1, 'Cannot process more than one md:Extensions element.', TooManyElementsException::class);
+        Assert::maxCount(
+            $extensions,
+            1,
+            'Cannot process more than one md:Extensions element.',
+            TooManyElementsException::class
+        );
 
-        return new self($names, $displayNames, $urls, !empty($extensions) ? $extensions[0] : null);
+        return new self(
+            $names,
+            $displayNames,
+            $urls,
+            !empty($extensions) ? $extensions[0] : null,
+            self::getAttributesNSFromXML($xml)
+        );
     }
 
 
@@ -179,6 +198,10 @@ final class Organization extends AbstractMdElement
     public function toXML(DOMElement $parent = null): DOMElement
     {
         $e = $this->instantiateParentElement($parent);
+
+        foreach ($this->getAttributesNS() as $attr) {
+            $e->setAttributeNS($attr['namespaceURI'], $attr['qualifiedName'], $attr['value']);
+        }
 
         if ($this->Extensions !== null) {
             $this->Extensions->toXML($e);
