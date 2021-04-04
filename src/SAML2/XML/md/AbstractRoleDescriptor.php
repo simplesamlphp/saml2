@@ -68,6 +68,7 @@ abstract class AbstractRoleDescriptor extends AbstractMetadataDocument
      * @param \SimpleSAML\SAML2\XML\md\KeyDescriptor[] $keyDescriptors An array of KeyDescriptor elements. Defaults to an empty array.
      * @param \SimpleSAML\SAML2\XML\md\Organization|null $organization The organization running this entity. Defaults to null.
      * @param \SimpleSAML\SAML2\XML\md\ContactPerson[] $contacts An array of contacts for this entity. Defaults to an empty array.
+     * @param \DOMAttr[] $namespacedAttributes
      */
     public function __construct(
         array $protocolSupportEnumeration,
@@ -78,9 +79,10 @@ abstract class AbstractRoleDescriptor extends AbstractMetadataDocument
         ?string $errorURL = null,
         array $keyDescriptors = [],
         ?Organization $organization = null,
-        array $contacts = []
+        array $contacts = [],
+        array $namespacedAttributes = []
     ) {
-        parent::__construct($ID, $validUntil, $cacheDuration, $extensions);
+        parent::__construct($ID, $validUntil, $cacheDuration, $extensions, $namespacedAttributes);
 
         $this->setProtocolSupportEnumeration($protocolSupportEnumeration);
         $this->setErrorURL($errorURL);

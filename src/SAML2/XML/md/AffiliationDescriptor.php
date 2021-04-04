@@ -56,6 +56,7 @@ final class AffiliationDescriptor extends AbstractMetadataDocument
      * @param string|null $cacheDuration Maximum time this document can be cached. Defaults to null.
      * @param \SimpleSAML\SAML2\XML\md\Extensions|null $extensions An array of extensions. Defaults to an empty array.
      * @param \SimpleSAML\SAML2\XML\md\KeyDescriptor[] $keyDescriptors An optional array of KeyDescriptors. Defaults to an empty array.
+     * @param \DOMAttr[] $namespacedAttributes
      */
     public function __construct(
         string $ownerID,
@@ -64,9 +65,10 @@ final class AffiliationDescriptor extends AbstractMetadataDocument
         ?int $validUntil = null,
         ?string $cacheDuration = null,
         ?Extensions $extensions = null,
-        array $keyDescriptors = []
+        array $keyDescriptors = [],
+        array $namespacedAttributes = []
     ) {
-        parent::__construct($ID, $validUntil, $cacheDuration, $extensions);
+        parent::__construct($ID, $validUntil, $cacheDuration, $extensions, $namespacedAttributes);
         $this->setAffiliationOwnerID($ownerID);
         $this->setAffiliateMembers($members);
         $this->setKeyDescriptors($keyDescriptors);
@@ -109,11 +111,14 @@ final class AffiliationDescriptor extends AbstractMetadataDocument
             $validUntil !== null ? XMLUtils::xsDateTimeToTimestamp($validUntil) : null,
             self::getAttribute($xml, 'cacheDuration', null),
             !empty($extensions) ? $extensions[0] : null,
-            $keyDescriptors
+            $keyDescriptors,
+            self::getAttributesNSFromXML($xml)
         );
+
         if (!empty($signature)) {
             $afd->setSignature($signature[0]);
         }
+
         return $afd;
     }
 

@@ -8,7 +8,6 @@ use DOMElement;
 use SimpleSAML\Assert\Assert;
 use SimpleSAML\XML\Exception\InvalidDOMElementException;
 use SimpleSAML\XML\Exception\TooManyElementsException;
-use SimpleSAML\XML\ExtendableAttributesTrait;
 use SimpleSAML\XML\Utils as XMLUtils;
 use SimpleSAML\XMLSecurity\XML\ds\Signature;
 
@@ -19,8 +18,6 @@ use SimpleSAML\XMLSecurity\XML\ds\Signature;
  */
 final class EntitiesDescriptor extends AbstractMetadataDocument
 {
-    use ExtendableAttributesTrait;
-
     /**
      * The name of this entity collection.
      *
@@ -62,12 +59,11 @@ final class EntitiesDescriptor extends AbstractMetadataDocument
             'At least one md:EntityDescriptor or md:EntitiesDescriptor element is required.'
         );
 
-        parent::__construct($ID, $validUntil, $cacheDuration, $extensions);
+        parent::__construct($ID, $validUntil, $cacheDuration, $extensions, $namespacedAttributes);
 
         $this->setName($name);
         $this->setEntityDescriptors($entityDescriptors);
         $this->setEntitiesDescriptors($entitiesDescriptors);
-        $this->setAttributesNS($namespacedAttributes);
     }
 
 

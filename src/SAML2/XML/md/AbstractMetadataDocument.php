@@ -47,17 +47,20 @@ abstract class AbstractMetadataDocument extends AbstractSignedMdElement
      * @param int|null    $validUntil Unix time of validity for this document. Defaults to null.
      * @param string|null $cacheDuration Maximum time this document can be cached. Defaults to null.
      * @param \SimpleSAML\SAML2\XML\md\Extensions|null $extensions An array of extensions. Defaults to null.
+     * @param \DOMAttr[] $namespacedAttributes
      */
     public function __construct(
         ?string $ID = null,
         ?int $validUntil = null,
         ?string $cacheDuration = null,
-        ?Extensions $extensions = null
+        ?Extensions $extensions = null,
+        $namespacedAttributes = []
     ) {
         $this->setID($ID);
         $this->setValidUntil($validUntil);
         $this->setCacheDuration($cacheDuration);
         $this->setExtensions($extensions);
+        $this->setAttributesNS($namespacedAttributes);
     }
 
 
@@ -135,6 +138,10 @@ abstract class AbstractMetadataDocument extends AbstractSignedMdElement
     public function toXML(DOMElement $parent = null): DOMElement
     {
         $e = $this->instantiateParentElement($parent);
+
+        foreach ($this->getAttributesNS() as $attr) {
+            $e->setAttributeNS($attr['namespaceURI'], $attr['qualifiedName'], $attr['value']);
+        }
 
         if ($this->ID !== null) {
             $e->setAttribute('ID', $this->ID);

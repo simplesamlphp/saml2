@@ -10,7 +10,6 @@ use SimpleSAML\Assert\Assert;
 use SimpleSAML\SAML2\Constants;
 use SimpleSAML\XML\Exception\InvalidDOMElementException;
 use SimpleSAML\XML\Exception\TooManyElementsException;
-use SimpleSAML\XML\ExtendableAttributesTrait;
 use SimpleSAML\XML\Utils as XMLUtils;
 use SimpleSAML\XMLSecurity\XML\ds\Signature;
 
@@ -21,8 +20,6 @@ use SimpleSAML\XMLSecurity\XML\ds\Signature;
  */
 final class EntityDescriptor extends AbstractMetadataDocument
 {
-    use ExtendableAttributesTrait;
-
     /**
      * The entityID this EntityDescriptor represents.
      *
@@ -106,7 +103,7 @@ final class EntityDescriptor extends AbstractMetadataDocument
             );
         }
 
-        parent::__construct($id, $validUntil, $cacheDuration, $extensions);
+        parent::__construct($id, $validUntil, $cacheDuration, $extensions, $namespacedAttributes);
 
         $this->setEntityID($entityID);
         $this->setRoleDescriptors($roleDescriptors);
@@ -114,7 +111,6 @@ final class EntityDescriptor extends AbstractMetadataDocument
         $this->setOrganization($organization);
         $this->setContactPersons($contacts);
         $this->setAdditionalMetadataLocations($additionalMdLocations);
-        $this->setAttributesNS($namespacedAttributes);
     }
 
 
