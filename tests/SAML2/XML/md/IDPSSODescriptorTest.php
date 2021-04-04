@@ -72,7 +72,7 @@ final class IDPSSODescriptorTest extends TestCase
                     'https://IdentityProvider.com/SAML/SSO/Browser'
                 )
             ],
-            ['urn:oasis:names:tc:SAML:2.0:protocol'],
+            [Constants::NS_SAMLP],
             true,
             [
                 new NameIDMappingService(
@@ -175,7 +175,7 @@ final class IDPSSODescriptorTest extends TestCase
     {
         $this->expectException(AssertionFailedException::class);
         $this->expectExceptionMessage('At least one SingleSignOnService must be specified.');
-        new IDPSSODescriptor([], ['protocol1']);
+        new IDPSSODescriptor([], [Constants::NS_SAMLP]);
     }
 
 
@@ -193,7 +193,24 @@ final class IDPSSODescriptorTest extends TestCase
         /** @psalm-suppress InvalidArgument */
         new IDPSSODescriptor(
             [new AssertionIDRequestService('binding1', 'location1')],
-            ['protocol1']
+            [Constants::NS_SAMLP]
+        );
+    }
+
+
+    /**
+     * Test that creating an IDPSSODescriptor from scratch fails if the SAML 2.0 protocol
+     * is not on of the supported protocols.
+     */
+    public function testMarshallingWithoutProtocolSupportThrowsException(): void
+    {
+        $this->expectException(AssertionFailedException::class);
+        $this->expectExceptionMessage('At least SAML 2.0 must be one of supported protocols.');
+
+        /** @psalm-suppress InvalidArgument */
+        new IDPSSODescriptor(
+            [new AssertionIDRequestService('binding1', 'location1')],
+            ['urn:saml:3.9']
         );
     }
 
@@ -212,7 +229,7 @@ final class IDPSSODescriptorTest extends TestCase
         /** @psalm-suppress InvalidArgument */
         new IDPSSODescriptor(
             [new SingleSignOnService('binding1', 'location1')],
-            ['protocol1'],
+            [Constants::NS_SAMLP],
             null,
             [new SingleSignOnService('binding1', 'location1')]
         );
@@ -233,7 +250,7 @@ final class IDPSSODescriptorTest extends TestCase
         /** @psalm-suppress InvalidArgument */
         new IDPSSODescriptor(
             [new SingleSignOnService('binding1', 'location1')],
-            ['protocol1'],
+            [Constants::NS_SAMLP],
             null,
             [],
             [new SingleSignOnService('binding1', 'location1')]
@@ -250,7 +267,7 @@ final class IDPSSODescriptorTest extends TestCase
         $this->expectExceptionMessage('All md:AttributeProfile elements must be a URI, not an empty string.');
         new IDPSSODescriptor(
             [new SingleSignOnService('binding1', 'location1')],
-            ['protocol1'],
+            [Constants::NS_SAMLP],
             null,
             [],
             [],
@@ -270,7 +287,7 @@ final class IDPSSODescriptorTest extends TestCase
         /** @psalm-suppress InvalidArgument */
         new IDPSSODescriptor(
             [new SingleSignOnService('binding1', 'location1')],
-            ['protocol1'],
+            [Constants::NS_SAMLP],
             null,
             [],
             [],
@@ -290,7 +307,7 @@ final class IDPSSODescriptorTest extends TestCase
                 new SingleSignOnService('binding1', 'location1'),
                 new SingleSignOnService('binding2', 'location2')
             ],
-            ['protocol1', 'protocol2']
+            [Constants::NS_SAMLP, 'protocol2']
         );
         $this->assertNull($idpssod->wantAuthnRequestsSigned());
         $this->assertEquals([], $idpssod->getNameIDMappingServices());

@@ -99,7 +99,7 @@ final class EntityDescriptorTest extends TestCase
                     'http://www.example.com/aqs'
                 )
             ],
-            ['protocol1']
+            [Constants::NS_SAMLP]
         );
         $pdpd = new PDPDescriptor(
             [
@@ -108,7 +108,7 @@ final class EntityDescriptorTest extends TestCase
                     'https://IdentityProvider.com/SAML/AA/SOAP'
                 )
             ],
-            ['urn:oasis:names:tc:SAML:2.0:protocol']
+            [Constants::NS_SAMLP]
         );
         $org = new Organization(
             [new OrganizationName('en', 'orgNameTest (en)')],

@@ -88,9 +88,7 @@ final class AttributeAuthorityDescriptorTest extends TestCase
         );
         $aad = new AttributeAuthorityDescriptor(
             [$this->as],
-            [
-                 Constants::NS_SAMLP
-            ],
+            [Constants::NS_SAMLP],
             [$this->aidrs],
             [
                 CONSTANTS::NAMEID_X509_SUBJECT_NAME,
@@ -141,7 +139,7 @@ final class AttributeAuthorityDescriptorTest extends TestCase
     {
         $this->expectException(AssertionFailedException::class);
         $this->expectExceptionMessage('AttributeAuthorityDescriptor must contain at least one AttributeService.');
-        new AttributeAuthorityDescriptor([], ['protocol1']);
+        new AttributeAuthorityDescriptor([], [Constants::NS_SAMLP]);
     }
 
 
@@ -154,7 +152,7 @@ final class AttributeAuthorityDescriptorTest extends TestCase
         $this->expectExceptionMessage('AttributeService is not an instance of EndpointType.');
 
         /** @psalm-suppress InvalidArgument */
-        new AttributeAuthorityDescriptor(['string'], ['protocol1']);
+        new AttributeAuthorityDescriptor(['string'], [Constants::NS_SAMLP]);
     }
 
 
@@ -163,7 +161,7 @@ final class AttributeAuthorityDescriptorTest extends TestCase
      */
     public function testMarshallingWithoutOptionalParameters(): void
     {
-        $aad = new AttributeAuthorityDescriptor([$this->as], ['x']);
+        $aad = new AttributeAuthorityDescriptor([$this->as], [Constants::NS_SAMLP]);
         $this->assertEmpty($aad->getAssertionIDRequestServices());
         $this->assertEmpty($aad->getNameIDFormats());
         $this->assertEmpty($aad->getID());
@@ -182,7 +180,7 @@ final class AttributeAuthorityDescriptorTest extends TestCase
      */
     public function testMarshallingWithEmptyAssertionIDRequestService(): void
     {
-        $aad = new AttributeAuthorityDescriptor([$this->as], ['x'], []);
+        $aad = new AttributeAuthorityDescriptor([$this->as], [Constants::NS_SAMLP], []);
         $this->assertEmpty($aad->getAssertionIDRequestServices());
         $this->assertEmpty($aad->getNameIDFormats());
         $this->assertEmpty($aad->getID());
@@ -207,7 +205,7 @@ final class AttributeAuthorityDescriptorTest extends TestCase
         );
 
         /** @psalm-suppress InvalidArgument */
-        new AttributeAuthorityDescriptor([$this->as], ['x'], ['x']);
+        new AttributeAuthorityDescriptor([$this->as], [Constants::NS_SAMLP], ['x']);
     }
 
 
@@ -218,7 +216,7 @@ final class AttributeAuthorityDescriptorTest extends TestCase
     {
         $this->expectException(AssertionFailedException::class);
         $this->expectExceptionMessage('NameIDFormat cannot be an empty string.');
-        new AttributeAuthorityDescriptor([$this->as], ['x'], [$this->aidrs], ['']);
+        new AttributeAuthorityDescriptor([$this->as], [Constants::NS_SAMLP], [$this->aidrs], ['']);
     }
 
 
@@ -229,7 +227,7 @@ final class AttributeAuthorityDescriptorTest extends TestCase
     {
         $this->expectException(AssertionFailedException::class);
         $this->expectExceptionMessage('AttributeProfile cannot be an empty string.');
-        new AttributeAuthorityDescriptor([$this->as], ['x'], [$this->aidrs], ['x'], ['']);
+        new AttributeAuthorityDescriptor([$this->as], [Constants::NS_SAMLP], [$this->aidrs], ['x'], ['']);
     }
 
 
@@ -244,7 +242,7 @@ final class AttributeAuthorityDescriptorTest extends TestCase
         );
 
         /** @psalm-suppress InvalidArgument */
-        new AttributeAuthorityDescriptor([$this->as], ['x'], [$this->aidrs], ['x'], ['x'], ['x']);
+        new AttributeAuthorityDescriptor([$this->as], [Constants::NS_SAMLP], [$this->aidrs], ['x'], ['x'], ['x']);
     }
 
 

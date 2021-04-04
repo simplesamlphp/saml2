@@ -170,7 +170,7 @@ final class SPSSODescriptorTest extends TestCase
 
         new SPSSODescriptor(
             [],
-            ['urn:oasis:names:tc:SAML:2.0:protocol']
+            [Constants::NS_SAMLP]
         );
     }
 
@@ -188,7 +188,7 @@ final class SPSSODescriptorTest extends TestCase
         /** @psalm-suppress InvalidArgument */
         new SPSSODescriptor(
             [new ArtifactResolutionService(0, 'x', 'x')],
-            ['x']
+            [Constants::NS_SAMLP]
         );
     }
 
@@ -206,7 +206,7 @@ final class SPSSODescriptorTest extends TestCase
         /** @psalm-suppress InvalidArgument */
         new SPSSODescriptor(
             [new AssertionConsumerService(0, 'x', 'x')],
-            ['x'],
+            [Constants::NS_SAMLP],
             true,
             null,
             [new AssertionConsumerService(0, 'x', 'x')]
@@ -221,7 +221,7 @@ final class SPSSODescriptorTest extends TestCase
     {
         $spssod = new SPSSODescriptor(
             [new AssertionConsumerService(0, 'x', 'x')],
-            ['x']
+            [Constants::NS_SAMLP]
         );
         $this->assertNull($spssod->getAuthnRequestsSigned());
         $this->assertNull($spssod->getWantAssertionsSigned());

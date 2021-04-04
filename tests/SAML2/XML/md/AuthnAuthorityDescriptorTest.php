@@ -60,7 +60,7 @@ final class AuthnAuthorityDescriptorTest extends TestCase
     {
         $aad = new AuthnAuthorityDescriptor(
             [$this->aqs],
-            [Constants::NS_SAMLP],
+            [Constants::NS_SAMLP, 'protocol2'],
             [$this->aidrs],
             [Constants::NAMEID_PERSISTENT, Constants::NAMEID_TRANSIENT]
         );
@@ -81,7 +81,7 @@ final class AuthnAuthorityDescriptorTest extends TestCase
         $this->expectExceptionMessage('Missing at least one AuthnQueryService in AuthnAuthorityDescriptor.');
         new AuthnAuthorityDescriptor(
             [],
-            [Constants::NS_SAMLP],
+            [Constants::NS_SAMLP, 'protocol2'],
             [$this->aidrs],
             [Constants::NAMEID_PERSISTENT, Constants::NAMEID_TRANSIENT]
         );
@@ -95,7 +95,7 @@ final class AuthnAuthorityDescriptorTest extends TestCase
     {
         new AuthnAuthorityDescriptor(
             [$this->aqs],
-            [Constants::NS_SAMLP]
+            [Constants::NS_SAMLP, 'protocol2']
         );
 
         $this->assertTrue(true);
@@ -111,7 +111,7 @@ final class AuthnAuthorityDescriptorTest extends TestCase
         $this->expectExceptionMessage('NameIDFormat cannot be an empty string.');
         new AuthnAuthorityDescriptor(
             [$this->aqs],
-            [Constants::NS_SAMLP],
+            [Constants::NS_SAMLP, 'protocol2'],
             [$this->aidrs],
             ['', Constants::NAMEID_TRANSIENT]
         );
@@ -127,7 +127,7 @@ final class AuthnAuthorityDescriptorTest extends TestCase
         $this->expectExceptionMessage('AuthnQueryService must be an instance of EndpointType');
         new AuthnAuthorityDescriptor(
             [$this->aqs, ''],
-            [Constants::NS_SAMLP],
+            [Constants::NS_SAMLP, 'protocol2'],
             [$this->aidrs],
             [Constants::NAMEID_PERSISTENT, Constants::NAMEID_TRANSIENT]
         );
@@ -143,7 +143,7 @@ final class AuthnAuthorityDescriptorTest extends TestCase
         $this->expectExceptionMessage('AssertionIDRequestServices must be an instance of EndpointType');
         new AuthnAuthorityDescriptor(
             [$this->aqs],
-            [Constants::NS_SAMLP],
+            [Constants::NS_SAMLP, 'protocol2'],
             [$this->aidrs, ''],
             [Constants::NAMEID_PERSISTENT, Constants::NAMEID_TRANSIENT]
         );

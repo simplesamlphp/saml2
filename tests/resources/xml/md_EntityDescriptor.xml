@@ -10,7 +10,7 @@
   <md:AttributeAuthorityDescriptor protocolSupportEnumeration="urn:oasis:names:tc:SAML:2.0:protocol">
     <md:AttributeService Binding="urn:oasis:names:tc:SAML:2.0:bindings:SOAP" Location="https://idp.example.org/AttributeService" />
   </md:AttributeAuthorityDescriptor>
-  <md:AuthnAuthorityDescriptor protocolSupportEnumeration="protocol1">
+  <md:AuthnAuthorityDescriptor protocolSupportEnumeration="urn:oasis:names:tc:SAML:2.0:protocol">
     <md:AuthnQueryService Binding="uri:binding:aqs" Location="http://www.example.com/aqs" />
   </md:AuthnAuthorityDescriptor>
   <md:PDPDescriptor protocolSupportEnumeration="urn:oasis:names:tc:SAML:2.0:protocol">

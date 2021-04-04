@@ -7,6 +7,7 @@ namespace SimpleSAML\SAML2\XML\md;
 use DOMElement;
 use InvalidArgumentException;
 use SimpleSAML\Assert\Assert;
+use SimpleSAML\SAML2\Constants;
 
 /**
  * Class representing SAML 2 RoleDescriptor element.
@@ -136,6 +137,8 @@ abstract class AbstractRoleDescriptor extends AbstractMetadataDocument
     {
         Assert::minCount($protocols, 1, 'At least one protocol must be supported by this ' . static::class . '.');
         Assert::allStringNotEmpty($protocols, 'Cannot specify an empty string as a supported protocol.');
+        Assert::oneOf(Constants::NS_SAMLP, $protocols, 'At least SAML 2.0 must be one of supported protocols.');
+
         $this->protocolSupportEnumeration = $protocols;
     }
 

@@ -63,7 +63,7 @@ final class UnknownRoleDescriptorTest extends TestCase
         $this->assertInstanceOf(KeyDescriptor::class, $descriptor->getKeyDescriptors()[0]);
         $this->assertInstanceOf(KeyDescriptor::class, $descriptor->getKeyDescriptors()[1]);
         $this->assertEquals(
-            ['protocol1', 'protocol2'],
+            [Constants::NS_SAMLP, 'protocol2'],
             $descriptor->getProtocolSupportEnumeration()
         );
         $this->assertInstanceOf(Organization::class, $descriptor->getOrganization());
