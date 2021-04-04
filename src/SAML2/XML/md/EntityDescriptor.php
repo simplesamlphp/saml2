@@ -10,6 +10,7 @@ use SimpleSAML\Assert\Assert;
 use SimpleSAML\SAML2\Constants;
 use SimpleSAML\XML\Exception\InvalidDOMElementException;
 use SimpleSAML\XML\Exception\TooManyElementsException;
+use SimpleSAML\XML\ExtendableAttributesTrait;
 use SimpleSAML\XML\Utils as XMLUtils;
 use SimpleSAML\XMLSecurity\XML\ds\Signature;
 
@@ -20,6 +21,8 @@ use SimpleSAML\XMLSecurity\XML\ds\Signature;
  */
 final class EntityDescriptor extends AbstractMetadataDocument
 {
+    use ExtendableAttributesTrait;
+
     /**
      * The entityID this EntityDescriptor represents.
      *
@@ -80,6 +83,7 @@ final class EntityDescriptor extends AbstractMetadataDocument
      * @param \SimpleSAML\SAML2\XML\md\ContactPerson[] $contacts A list of contact persons for this SAML entity.
      * @param \SimpleSAML\SAML2\XML\md\AdditionalMetadataLocation[] $additionalMdLocations A list of
      *   additional metadata locations.
+     * @param \DOMAttr[] $namespacedAttributes
      *
      * @throws \Exception
      */
@@ -93,7 +97,8 @@ final class EntityDescriptor extends AbstractMetadataDocument
         ?AffiliationDescriptor $affiliationDescriptor = null,
         ?Organization $organization = null,
         array $contacts = [],
-        array $additionalMdLocations = []
+        array $additionalMdLocations = [],
+        array $namespacedAttributes = []
     ) {
         if (empty($roleDescriptors) && $affiliationDescriptor === null) {
             throw new InvalidArgumentException(
@@ -109,6 +114,7 @@ final class EntityDescriptor extends AbstractMetadataDocument
         $this->setOrganization($organization);
         $this->setContactPersons($contacts);
         $this->setAdditionalMetadataLocations($additionalMdLocations);
+        $this->setAttributesNS($namespacedAttributes);
     }
 
 
@@ -209,11 +215,14 @@ final class EntityDescriptor extends AbstractMetadataDocument
             $affiliationDescriptor,
             $organization,
             $contactPersons,
-            $additionalMetadataLocation
+            $additionalMetadataLocation,
+            self::getAttributesNSFromXML($xml)
         );
+
         if (!empty($signature)) {
             $entity->setSignature($signature[0]);
         }
+
         return $entity;
     }
 
@@ -383,6 +392,10 @@ final class EntityDescriptor extends AbstractMetadataDocument
     {
         $e = parent::toXML($parent);
         $e->setAttribute('entityID', $this->entityID);
+
+        foreach ($this->getAttributesNS() as $attr) {
+            $e->setAttributeNS($attr['namespaceURI'], $attr['qualifiedName'], $attr['value']);
+        }
 
         foreach ($this->RoleDescriptor as $n) {
             $n->toXML($e);

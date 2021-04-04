@@ -8,6 +8,7 @@ use DOMElement;
 use SimpleSAML\Assert\Assert;
 use SimpleSAML\XML\Exception\InvalidDOMElementException;
 use SimpleSAML\XML\Exception\TooManyElementsException;
+use SimpleSAML\XML\ExtendableAttributesTrait;
 use SimpleSAML\XML\Utils as XMLUtils;
 use SimpleSAML\XMLSecurity\XML\ds\Signature;
 
@@ -18,6 +19,8 @@ use SimpleSAML\XMLSecurity\XML\ds\Signature;
  */
 final class EntitiesDescriptor extends AbstractMetadataDocument
 {
+    use ExtendableAttributesTrait;
+
     /**
      * The name of this entity collection.
      *
@@ -42,6 +45,7 @@ final class EntitiesDescriptor extends AbstractMetadataDocument
      * @param int|null $validUntil
      * @param string|null $cacheDuration
      * @param \SimpleSAML\SAML2\XML\md\Extensions|null $extensions
+     * @param \DOMAttr[] $namespacedAttributes
      */
     public function __construct(
         array $entityDescriptors = [],
@@ -50,7 +54,8 @@ final class EntitiesDescriptor extends AbstractMetadataDocument
         ?string $ID = null,
         ?int $validUntil = null,
         ?string $cacheDuration = null,
-        ?Extensions $extensions = null
+        ?Extensions $extensions = null,
+        array $namespacedAttributes = []
     ) {
         Assert::true(
             !empty($entitiesDescriptors) || !empty($entityDescriptors),
@@ -62,6 +67,7 @@ final class EntitiesDescriptor extends AbstractMetadataDocument
         $this->setName($name);
         $this->setEntityDescriptors($entityDescriptors);
         $this->setEntitiesDescriptors($entitiesDescriptors);
+        $this->setAttributesNS($namespacedAttributes);
     }
 
 
@@ -96,11 +102,14 @@ final class EntitiesDescriptor extends AbstractMetadataDocument
             self::getAttribute($xml, 'ID', null),
             $validUntil !== null ? XMLUtils::xsDateTimeToTimestamp($validUntil) : null,
             self::getAttribute($xml, 'cacheDuration', null),
-            !empty($extensions) ? $extensions[0] : null
+            !empty($extensions) ? $extensions[0] : null,
+            self::getAttributesNSFromXML($xml)
         );
+
         if (!empty($signature)) {
             $entities->setSignature($signature[0]);
         }
+
         return $entities;
     }
 
@@ -188,6 +197,10 @@ final class EntitiesDescriptor extends AbstractMetadataDocument
     public function toXML(DOMElement $parent = null): DOMElement
     {
         $e = parent::toXML($parent);
+
+        foreach ($this->getAttributesNS() as $attr) {
+            $e->setAttributeNS($attr['namespaceURI'], $attr['qualifiedName'], $attr['value']);
+        }
 
         if ($this->Name !== null) {
             $e->setAttribute('Name', $this->Name);

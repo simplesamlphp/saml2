@@ -5,6 +5,7 @@ namespace SimpleSAML\SAML2\XML\md;
 use DOMElement;
 use SimpleSAML\SAML2\XML\SignedElementTrait;
 use SimpleSAML\SAML2\XML\ExtendableElementTrait;
+use SimpleSAML\XML\ExtendableAttributesTrait;
 
 /**
  * Class to represent a metadata document
@@ -13,6 +14,7 @@ use SimpleSAML\SAML2\XML\ExtendableElementTrait;
  */
 abstract class AbstractMetadataDocument extends AbstractSignedMdElement
 {
+    use ExtendableAttributesTrait;
     use ExtendableElementTrait;
     use SignedElementTrait;
 

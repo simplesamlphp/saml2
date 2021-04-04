@@ -70,6 +70,9 @@ final class EntityDescriptorTest extends TestCase
      */
     public function testMarshalling(): void
     {
+        $attr1 = $this->xmlRepresentation->createAttributeNS('urn:test', 'test:attr1');
+        $attr1->value = 'testval1';
+
         $entityid = "urn:example:entity";
         $id = "_5A3CHB081";
         $now = 1580895565;
@@ -148,7 +151,8 @@ final class EntityDescriptorTest extends TestCase
             null,
             $org,
             $contacts,
-            $mdloc
+            $mdloc,
+            [$attr1]
         );
 
         $this->assertEquals(
@@ -328,6 +332,16 @@ XML
         $pdpd->parentNode->insertBefore($newline, $customd);
         $entityDescriptor = EntityDescriptor::fromXML($this->xmlRepresentation->documentElement);
 
+        $this->assertEquals(
+            [
+                '{urn:test}attr1' => [
+                    'qualifiedName' => 'test:attr1',
+                    'namespaceURI' => 'urn:test',
+                    'value' => 'testval1'
+                ]
+            ],
+            $entityDescriptor->getAttributesNS()
+        );
         $this->assertEquals('urn:example:entity', $entityDescriptor->getEntityID());
         $this->assertEquals('_5A3CHB081', $entityDescriptor->getID());
         $this->assertEquals(1580895565, $entityDescriptor->getValidUntil());
