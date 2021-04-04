@@ -67,6 +67,11 @@ class Constants extends \SimpleSAML\XML\Constants
     public const BINDING_SOAP = 'urn:oasis:names:tc:SAML:2.0:bindings:SOAP';
 
     /**
+     * The URN for the URI binding.
+     */
+    public const BINDING_URI = 'urn:oasis:names:tc:SAML:2.0:bindings:URI';
+
+    /**
      * Bearer subject confirmation method.
      */
     public const CM_BEARER = 'urn:oasis:names:tc:SAML:2.0:cm:bearer';

@@ -43,15 +43,17 @@ final class ArtifactResolutionServiceTest extends TestCase
      */
     public function testMarshalling(): void
     {
-        $arsep = new ArtifactResolutionService(42, 'urn:something', 'https://whatever/', false);
+        $ars = new ArtifactResolutionService(42, 'urn:something', 'https://whatever/', false);
 
-        $this->assertEquals(42, $arsep->getIndex());
-        $this->assertEquals('urn:something', $arsep->getBinding());
-        $this->assertEquals('https://whatever/', $arsep->getLocation());
+        $arsElement = $ars->toXML();
+        $this->assertEquals(42, $arsElement->getAttribute('index'));
+        $this->assertEquals('false', $arsElement->getAttribute('isDefault'));
+        $this->assertEquals('urn:something', $arsElement->getAttribute('Binding'));
+        $this->assertEquals('https://whatever/', $arsElement->getAttribute('Location'));
 
         $this->assertEquals(
             $this->xmlRepresentation->saveXML($this->xmlRepresentation->documentElement),
-            strval($arsep)
+            strval($ars)
         );
     }
 
@@ -77,13 +79,13 @@ final class ArtifactResolutionServiceTest extends TestCase
      */
     public function testUnmarshalling(): void
     {
-        $arsep = ArtifactResolutionService::fromXML($this->xmlRepresentation->documentElement);
-        $this->assertEquals('urn:something', $arsep->getBinding());
-        $this->assertEquals('https://whatever/', $arsep->getLocation());
+        $ars = ArtifactResolutionService::fromXML($this->xmlRepresentation->documentElement);
+        $this->assertEquals('urn:something', $ars->getBinding());
+        $this->assertEquals('https://whatever/', $ars->getLocation());
 
         $this->assertEquals(
             $this->xmlRepresentation->saveXML($this->xmlRepresentation->documentElement),
-            strval($arsep)
+            strval($ars)
         );
     }
 

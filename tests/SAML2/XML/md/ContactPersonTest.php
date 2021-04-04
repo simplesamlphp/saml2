@@ -13,9 +13,10 @@ use SimpleSAML\SAML2\XML\md\ContactPerson;
 use SimpleSAML\SAML2\XML\md\Extensions;
 use SimpleSAML\Test\XML\ArrayizableXMLTestTrait;
 use SimpleSAML\Test\XML\SerializableXMLTestTrait;
+use SimpleSAML\XML\Chunk;
 use SimpleSAML\XML\DOMDocumentFactory;
 use SimpleSAML\XML\Exception\MissingAttributeException;
-use SimpleSAML\XML\Chunk;
+use SimpleSAML\XML\Utils as XMLUtils;
 
 /**
  * Tests for the ContactPerson class.
@@ -84,29 +85,31 @@ final class ContactPersonTest extends TestCase
             [$attr1, $attr2]
         );
 
-        $this->assertEquals('other', $cp->getContactType());
-        $this->assertEquals('Test Company', $cp->getCompany());
-        $this->assertEquals('John', $cp->getGivenName());
-        $this->assertEquals('Doe', $cp->getSurName());
-        $this->assertEquals(['jdoe@test.company', 'john.doe@test.company'], $cp->getEmailAddresses());
-        $this->assertEquals(['1-234-567-8901'], $cp->getTelephoneNumbers());
-        $this->assertEquals(
-            [
-                '{urn:test}attr1' => [
-                    'qualifiedName' => 'test:attr1',
-                    'namespaceURI' => 'urn:test',
-                    'value' => 'testval1'
-                ],
-                '{urn:test}attr2' => [
-                    'qualifiedName' => 'test:attr2',
-                    'namespaceURI' => 'urn:test',
-                    'value' => 'testval2'
-                ]
-            ],
-            $cp->getAttributesNS()
-        );
-        $this->assertEquals('testval1', $cp->getAttributeNS('urn:test', 'attr1'));
-        $this->assertEquals('testval2', $cp->getAttributeNS('urn:test', 'attr2'));
+        $cpElement = $cp->toXML();
+        $this->assertEquals('other', $cpElement->getAttribute('contactType'));
+        $this->assertEquals('testval1', $cpElement->getAttributeNS('urn:test', 'attr1'));
+        $this->assertEquals('testval2', $cpElement->getAttributeNS('urn:test', 'attr2'));
+
+        $companyElements = XMLUtils::xpQuery($cpElement, './saml_metadata:Company');
+        $this->assertCount(1, $companyElements);
+        $this->assertEquals('Test Company', $companyElements[0]->textContent);
+
+        $givenNameElements = XMLUtils::xpQuery($cpElement, './saml_metadata:GivenName');
+        $this->assertCount(1, $givenNameElements);
+        $this->assertEquals('John', $givenNameElements[0]->textContent);
+
+        $surNameElements = XMLUtils::xpQuery($cpElement, './saml_metadata:SurName');
+        $this->assertCount(1, $surNameElements);
+        $this->assertEquals('Doe', $surNameElements[0]->textContent);
+
+        $emailElements = XMLUtils::xpQuery($cpElement, './saml_metadata:EmailAddress');
+        $this->assertCount(2, $emailElements);
+        $this->assertEquals('mailto:jdoe@test.company', $emailElements[0]->textContent);
+        $this->assertEquals('mailto:john.doe@test.company', $emailElements[1]->textContent);
+
+        $phoneElements = XMLUtils::xpQuery($cpElement, './saml_metadata:TelephoneNumber');
+        $this->assertCount(1, $phoneElements);
+        $this->assertEquals('1-234-567-8901', $phoneElements[0]->textContent);
 
         $this->assertEquals($this->xmlRepresentation->saveXML($this->xmlRepresentation->documentElement), strval($cp));
     }
@@ -140,27 +143,6 @@ final class ContactPersonTest extends TestCase
             null,
             ['this is wrong']
         );
-    }
-
-
-    /**
-     * Test that creating a ContactPerson from scratch without any optional arguments works.
-     */
-    public function testMarshallingWithoutOptionalProperties(): void
-    {
-        $mdNamespace = Constants::NS_MD;
-        $document = DOMDocumentFactory::fromString(<<<XML
-<md:ContactPerson contactType="other" xmlns:md="{$mdNamespace}"></md:ContactPerson>
-XML
-        );
-        $cp = new ContactPerson('other');
-        $this->assertEquals($document->saveXML($document->documentElement), strval($cp));
-        $this->assertNull($cp->getCompany());
-        $this->assertNull($cp->getGivenName());
-        $this->assertNull($cp->getSurName());
-        $this->assertEquals([], $cp->getEmailAddresses());
-        $this->assertEquals([], $cp->getTelephoneNumbers());
-        $this->assertEquals([], $cp->getAttributesNS());
     }
 
 

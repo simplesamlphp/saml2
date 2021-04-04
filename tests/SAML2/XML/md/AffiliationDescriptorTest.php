@@ -13,6 +13,7 @@ use SimpleSAML\Test\SAML2\SignedElementTestTrait;
 use SimpleSAML\Test\XML\SerializableXMLTestTrait;
 use SimpleSAML\XML\DOMDocumentFactory;
 use SimpleSAML\XML\Exception\MissingAttributeException;
+use SimpleSAML\XML\Utils as XMLUtils;
 use SimpleSAML\XMLSecurity\XML\ds\KeyInfo;
 use SimpleSAML\XMLSecurity\XML\ds\KeyName;
 
@@ -50,7 +51,7 @@ final class AffiliationDescriptorTest extends TestCase
      */
     public function testMarshalling(): void
     {
-        $ad = new AffiliationDescriptor(
+        $affiliationDescriptor = new AffiliationDescriptor(
             'TheOwner',
             ['Member', 'OtherMember'],
             'TheID',
@@ -69,24 +70,32 @@ final class AffiliationDescriptorTest extends TestCase
             ]
         );
 
-        $this->assertEquals('TheOwner', $ad->getAffiliationOwnerID());
-        $this->assertEquals('TheID', $ad->getID());
+        $adElement = $affiliationDescriptor->toXML();
+        $this->assertEquals('TheOwner', $adElement->getAttribute('affiliationOwnerID'));
+        $this->assertEquals('TheID', $adElement->getAttribute('ID'));
+        $this->assertEquals('2009-02-13T23:31:30Z', $adElement->getAttribute('validUntil'));
+        $this->assertEquals('PT5000S', $adElement->getAttribute('cacheDuration'));
 
-        /** @psalm-suppress PossiblyNullArgument */
-        $this->assertEquals('2009-02-13T23:31:30Z', gmdate('Y-m-d\TH:i:s\Z', $ad->getValidUntil()));
+        $affiliateMemberElements = XMLUtils::xpQuery($adElement, './saml_metadata:AffiliateMember');
+        $this->assertCount(2, $affiliateMemberElements);
+        $this->assertEquals('Member', $affiliateMemberElements[0]->textContent);
+        $this->assertEquals('OtherMember', $affiliateMemberElements[1]->textContent);
 
-        /** @psalm-suppress PossiblyNullArgument */
-        $this->assertEquals('PT5000S', $ad->getCacheDuration());
+        $keyDescriptorElements = XMLUtils::xpQuery($adElement, './saml_metadata:KeyDescriptor');
+        $this->assertCount(1, $keyDescriptorElements);
+        $this->assertEquals('signing', $keyDescriptorElements[0]->getAttribute('use'));
 
-        $affiliateMembers = $ad->getAffiliateMembers();
-        $this->assertCount(2, $affiliateMembers);
-        $this->assertEquals('Member', $affiliateMembers[0]);
-        $this->assertEquals('OtherMember', $affiliateMembers[1]);
+        $keyInfoElements = XMLUtils::xpQuery($keyDescriptorElements[0], './ds:KeyInfo');
+        $this->assertCount(1, $keyInfoElements);
 
-        $keyDescriptors = $ad->getKeyDescriptors();
-        $this->assertCount(1, $keyDescriptors);
+        $keyNameElements = XMLUtils::xpQuery($keyInfoElements[0], './ds:KeyName');
+        $this->assertCount(1, $keyNameElements);
+        $this->assertEquals('IdentityProvider.com SSO Key', $keyNameElements[0]->textContent);
 
-        $this->assertEquals($this->xmlRepresentation->saveXML($this->xmlRepresentation->documentElement), strval($ad));
+        $this->assertEquals(
+            $this->xmlRepresentation->saveXML($this->xmlRepresentation->documentElement),
+            strval($affiliationDescriptor)
+        );
     }
 
 

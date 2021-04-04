@@ -13,6 +13,7 @@ use SimpleSAML\SAML2\XML\md\AuthnQueryService;
 use SimpleSAML\Test\SAML2\SignedElementTestTrait;
 use SimpleSAML\Test\XML\SerializableXMLTestTrait;
 use SimpleSAML\XML\DOMDocumentFactory;
+use SimpleSAML\XML\Utils as XMLUtils;
 
 /**
  * @covers \SimpleSAML\SAML2\XML\md\AbstractMdElement
@@ -44,8 +45,8 @@ final class AuthnAuthorityDescriptorTest extends TestCase
             dirname(dirname(dirname(dirname(__FILE__)))) . '/resources/xml/md_AuthnAuthorityDescriptor.xml'
         );
 
-        $this->aqs = new AuthnQueryService('uri:binding:aqs', 'http://www.example.com/aqs');
-        $this->aidrs = new AssertionIDRequestService('uri:binding:aidrs', 'http://www.example.com/aidrs');
+        $this->aqs = new AuthnQueryService(Constants::BINDING_HTTP_POST, 'http://www.example.com/aqs');
+        $this->aidrs = new AssertionIDRequestService(Constants::BINDING_HTTP_POST, 'http://www.example.com/aidrs');
     }
 
 
@@ -59,15 +60,29 @@ final class AuthnAuthorityDescriptorTest extends TestCase
     {
         $aad = new AuthnAuthorityDescriptor(
             [$this->aqs],
-            ['protocol1', 'protocol2'],
+            [Constants::NS_SAMLP],
             [$this->aidrs],
-            ['http://www.example1.com/', 'http://www.example2.com/']
+            [Constants::NAMEID_PERSISTENT, Constants::NAMEID_TRANSIENT]
         );
 
-        $this->assertEquals([$this->aqs], $aad->getAuthnQueryServices());
-        $this->assertEquals(['protocol1', 'protocol2'], $aad->getProtocolSupportEnumeration());
-        $this->assertEquals([$this->aidrs], $aad->getAssertionIDRequestServices());
-        $this->assertEquals(['http://www.example1.com/', 'http://www.example2.com/'], $aad->getNameIDFormats());
+        $aadElement = $aad->toXML();
+        $this->assertEquals(Constants::NS_SAMLP, $aadElement->getAttribute('protocolSupportEnumeration'));
+
+        $aqsElements = XMLUtils::xpQuery($aadElement, './saml_metadata:AuthnQueryService');
+        $this->assertCount(1, $aqsElements);
+        $this->assertEquals(Constants::BINDING_HTTP_POST, $aqsElements[0]->getAttribute('Binding'));
+        $this->assertEquals('http://www.example.com/aqs', $aqsElements[0]->getAttribute('Location'));
+
+        $aidrsElements = XMLUtils::xpQuery($aadElement, './saml_metadata:AssertionIDRequestService');
+        $this->assertCount(1, $aidrsElements);
+        $this->assertEquals(Constants::BINDING_HTTP_POST, $aidrsElements[0]->getAttribute('Binding'));
+        $this->assertEquals('http://www.example.com/aidrs', $aidrsElements[0]->getAttribute('Location'));
+
+
+        $nameIdFormatElements = XMLUtils::xpQuery($aadElement, './saml_metadata:NameIDFormat');
+        $this->assertCount(2, $nameIdFormatElements);
+        $this->assertEquals(Constants::NAMEID_PERSISTENT, $nameIdFormatElements[0]->textContent);
+        $this->assertEquals(Constants::NAMEID_TRANSIENT, $nameIdFormatElements[1]->textContent);
 
         $this->assertEquals(
             $this->xmlRepresentation->saveXML($this->xmlRepresentation->documentElement),
@@ -85,9 +100,9 @@ final class AuthnAuthorityDescriptorTest extends TestCase
         $this->expectExceptionMessage('Missing at least one AuthnQueryService in AuthnAuthorityDescriptor.');
         new AuthnAuthorityDescriptor(
             [],
-            ['protocol1', 'protocol2'],
+            [Constants::NS_SAMLP],
             [$this->aidrs],
-            ['http://www.example1.com/', 'http://www.example2.com/']
+            [Constants::NAMEID_PERSISTENT, Constants::NAMEID_TRANSIENT]
         );
     }
 
@@ -99,7 +114,7 @@ final class AuthnAuthorityDescriptorTest extends TestCase
     {
         new AuthnAuthorityDescriptor(
             [$this->aqs],
-            ['protocol1', 'protocol2']
+            [Constants::NS_SAMLP]
         );
 
         $this->assertTrue(true);
@@ -115,9 +130,9 @@ final class AuthnAuthorityDescriptorTest extends TestCase
         $this->expectExceptionMessage('NameIDFormat cannot be an empty string.');
         new AuthnAuthorityDescriptor(
             [$this->aqs],
-            ['protocol1', 'protocol2'],
+            [Constants::NS_SAMLP],
             [$this->aidrs],
-            ['', 'http://www.example2.com/']
+            ['', Constants::NAMEID_TRANSIENT]
         );
     }
 
@@ -131,9 +146,9 @@ final class AuthnAuthorityDescriptorTest extends TestCase
         $this->expectExceptionMessage('AuthnQueryService must be an instance of EndpointType');
         new AuthnAuthorityDescriptor(
             [$this->aqs, ''],
-            ['protocol1', 'protocol2'],
+            [Constants::NS_SAMLP],
             [$this->aidrs],
-            ['http://www.example1.com/', 'http://www.example2.com/']
+            [Constants::NAMEID_PERSISTENT, Constants::NAMEID_TRANSIENT]
         );
     }
 
@@ -147,9 +162,9 @@ final class AuthnAuthorityDescriptorTest extends TestCase
         $this->expectExceptionMessage('AssertionIDRequestServices must be an instance of EndpointType');
         new AuthnAuthorityDescriptor(
             [$this->aqs],
-            ['protocol1', 'protocol2'],
+            [Constants::NS_SAMLP],
             [$this->aidrs, ''],
-            ['http://www.example1.com/', 'http://www.example2.com/']
+            [Constants::NAMEID_PERSISTENT, Constants::NAMEID_TRANSIENT]
         );
     }
 
@@ -169,7 +184,7 @@ final class AuthnAuthorityDescriptorTest extends TestCase
         $this->assertCount(1, $aad->getAssertionIDRequestServices());
         $this->assertEquals($this->aidrs->getBinding(), $aad->getAssertionIDRequestServices()[0]->getBinding());
         $this->assertEquals($this->aidrs->getLocation(), $aad->getAssertionIDRequestServices()[0]->getLocation());
-        $this->assertEquals(['http://www.example1.com/', 'http://www.example2.com/'], $aad->getNameIDFormats());
+        $this->assertEquals([Constants::NAMEID_PERSISTENT, Constants::NAMEID_TRANSIENT], $aad->getNameIDFormats());
     }
 
 

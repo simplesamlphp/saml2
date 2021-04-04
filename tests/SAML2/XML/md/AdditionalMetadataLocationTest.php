@@ -46,8 +46,9 @@ final class AdditionalMetadataLocationTest extends TestCase
     {
         $additionalMetadataLocation = new AdditionalMetadataLocation('TheNamespaceAttribute', 'LocationText');
 
-        $this->assertEquals('TheNamespaceAttribute', $additionalMetadataLocation->getNamespace());
-        $this->assertEquals('LocationText', $additionalMetadataLocation->getLocation());
+        $amlElement = $additionalMetadataLocation->toXML();
+        $this->assertEquals('TheNamespaceAttribute', $amlElement->getAttribute('namespace'));
+        $this->assertEquals('LocationText', $amlElement->textContent);
 
         $this->assertEquals(
             $this->xmlRepresentation->saveXML($this->xmlRepresentation->documentElement),

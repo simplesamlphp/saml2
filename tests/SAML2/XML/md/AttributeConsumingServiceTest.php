@@ -17,6 +17,7 @@ use SimpleSAML\Test\XML\SerializableXMLTestTrait;
 use SimpleSAML\XML\DOMDocumentFactory;
 use SimpleSAML\XML\Exception\MissingAttributeException;
 use SimpleSAML\XML\Exception\MissingElementException;
+use SimpleSAML\XML\Utils as XMLUtils;
 
 /**
  * Tests for the AttributeConsumingService class.
@@ -73,14 +74,29 @@ final class AttributeConsumingServiceTest extends TestCase
             [new ServiceDescription('en', 'Academic Journals R US and only us')]
         );
 
-        $this->assertEquals(2, $acs->getIndex());
-        $this->assertEquals([new ServiceName('en', 'Academic Journals R US')], $acs->getServiceNames());
-        $this->assertEquals([$this->getRequestedAttribute()], $acs->getRequestedAttributes());
-        $this->assertTrue($acs->getIsDefault());
-        $this->assertEquals(
-            [new ServiceDescription('en', 'Academic Journals R US and only us')],
-            $acs->getServiceDescriptions()
-        );
+        $acsElement = $acs->toXML();
+        $this->assertEquals('2', $acsElement->getAttribute('index'));
+        $this->assertEquals('true', $acsElement->getAttribute('isDefault'));
+
+        $serviceNameElements = XMLUtils::xpQuery($acsElement, './saml_metadata:ServiceName');
+        $this->assertCount(1, $serviceNameElements);
+        $this->assertEquals('Academic Journals R US', $serviceNameElements[0]->textContent);
+        $this->assertEquals('en', $serviceNameElements[0]->getAttributeNS(Constants::NS_XML, 'lang'));
+
+        $serviceDescriptionElements = XMLUtils::xpQuery($acsElement, './saml_metadata:ServiceDescription');
+        $this->assertCount(1, $serviceDescriptionElements);
+        $this->assertEquals('Academic Journals R US and only us', $serviceDescriptionElements[0]->textContent);
+        $this->assertEquals('en', $serviceDescriptionElements[0]->getAttributeNS(Constants::NS_XML, 'lang'));
+
+        $requestedAttributeElements = XMLUtils::xpQuery($acsElement, './saml_metadata:RequestedAttribute');
+        $this->assertCount(1, $requestedAttributeElements);
+        $this->assertEquals('urn:oid:1.3.6.1.4.1.5923.1.1.1.7', $requestedAttributeElements[0]->getAttribute('Name'));
+        $this->assertEquals(Constants::NAMEFORMAT_URI, $requestedAttributeElements[0]->getAttribute('NameFormat'));
+        $this->assertEquals('eduPersonEntitlement', $requestedAttributeElements[0]->getAttribute('FriendlyName'));
+
+        $attributeValueElements = XMLUtils::xpQuery($requestedAttributeElements[0], './saml_assertion:AttributeValue');
+        $this->assertCount(1, $attributeValueElements);
+        $this->assertEquals('https://ServiceProvider.com/entitlements/123456789', $attributeValueElements[0]->textContent);
 
         $this->assertEquals(
             $this->xmlRepresentation->saveXML($this->xmlRepresentation->documentElement),
