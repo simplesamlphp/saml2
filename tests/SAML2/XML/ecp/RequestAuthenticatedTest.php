@@ -40,6 +40,13 @@ final class RequestAuthenticatedTest extends TestCase
     {
         $ra = new RequestAuthenticated(0);
 
+        $raElement = $ra->toXML();
+        $this->assertEquals('0', $raElement->getAttributeNS(Constants::NS_SOAP, 'mustUnderstand'));
+        $this->assertEquals(
+            'http://schemas.xmlsoap.org/soap/actor/next',
+            $raElement->getAttributeNS(Constants::NS_SOAP, 'actor')
+        );
+
         $this->assertEquals($this->xmlRepresentation->saveXML($this->xmlRepresentation->documentElement), strval($ra));
     }
 
