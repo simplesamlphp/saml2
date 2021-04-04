@@ -50,14 +50,11 @@ final class RequestInitiatorTest extends TestCase
 
         $requestInitiator = new RequestInitiator('https://whatever/', 'https://foo.bar/', [$attr]);
 
-        $this->assertEquals('urn:oasis:names:tc:SAML:profiles:SSO:request-init', $requestInitiator->getBinding());
-        $this->assertEquals('https://whatever/', $requestInitiator->getLocation());
-        $this->assertEquals('https://foo.bar/', $requestInitiator->getResponseLocation());
-
-        $this->assertTrue($requestInitiator->hasAttributeNS('urn:test', 'attr'));
-        $this->assertEquals('value', $requestInitiator->getAttributeNS('urn:test', 'attr'));
-        $this->assertFalse($requestInitiator->hasAttributeNS('urn:test', 'invalid'));
-        $this->assertNull($requestInitiator->getAttributeNS('urn:test', 'invalid'));
+        $riElement = $requestInitiator->toXML();
+        $this->assertEquals(RequestInitiator::NS, $riElement->getAttribute('Binding'));
+        $this->assertEquals('https://whatever/', $riElement->getAttribute('Location'));
+        $this->assertEquals('https://foo.bar/', $riElement->getAttribute('ResponseLocation'));
+        $this->assertEquals('value', $riElement->getAttributeNS('urn:test', 'attr'));
 
         $this->assertEquals(
             $this->xmlRepresentation->saveXML($this->xmlRepresentation->documentElement),
@@ -76,7 +73,7 @@ final class RequestInitiatorTest extends TestCase
     {
         $requestInitiator = RequestInitiator::fromXML($this->xmlRepresentation->documentElement);
 
-        $this->assertEquals($requestInitiator->getBinding(), 'urn:oasis:names:tc:SAML:profiles:SSO:request-init');
+        $this->assertEquals($requestInitiator->getBinding(), RequestInitiator::NS);
         $this->assertEquals($requestInitiator->getLocation(), 'https://whatever/');
         $this->assertEquals($requestInitiator->getResponseLocation(), 'https://foo.bar/');
 
@@ -85,7 +82,10 @@ final class RequestInitiatorTest extends TestCase
         $this->assertFalse($requestInitiator->hasAttributeNS('urn:test', 'invalid'));
         $this->assertNull($requestInitiator->getAttributeNS('urn:test', 'invalid'));
 
-        $this->assertEquals($this->xmlRepresentation->saveXML($this->xmlRepresentation->documentElement), strval($requestInitiator));
+        $this->assertEquals(
+            $this->xmlRepresentation->saveXML($this->xmlRepresentation->documentElement),
+            strval($requestInitiator)
+        );
     }
 
 
