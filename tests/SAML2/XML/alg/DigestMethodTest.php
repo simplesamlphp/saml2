@@ -6,11 +6,12 @@ namespace SimpleSAML\Test\SAML2\XML\alg;
 
 use DOMDocument;
 use PHPUnit\Framework\TestCase;
+use SimpleSAML\SAML2\XML\alg\DigestMethod;
+use SimpleSAML\SAML2\Utils;
 use SimpleSAML\Test\XML\SerializableXMLTestTrait;
 use SimpleSAML\XML\DOMDocumentFactory;
 use SimpleSAML\XML\Exception\MissingAttributeException;
-use SimpleSAML\SAML2\XML\alg\DigestMethod;
-use SimpleSAML\SAML2\Utils;
+use SimpleSAML\XMLSecurity\Constants;
 
 /**
  * Class \SAML2\XML\alg\DigestMethodTest
@@ -41,9 +42,9 @@ final class DigestMethodTest extends TestCase
      */
     public function testMarshalling(): void
     {
-        $digestMethod = new DigestMethod('http://exampleAlgorithm');
+        $digestMethod = new DigestMethod(Constants::DIGEST_SHA256);
 
-        $this->assertEquals('http://exampleAlgorithm', $digestMethod->getAlgorithm());
+        $this->assertEquals(Constants::DIGEST_SHA256, $digestMethod->getAlgorithm());
 
         $this->assertEquals(
             $this->xmlRepresentation->saveXML($this->xmlRepresentation->documentElement),
@@ -58,7 +59,7 @@ final class DigestMethodTest extends TestCase
     {
         $digestMethod = DigestMethod::fromXML($this->xmlRepresentation->documentElement);
 
-        $this->assertEquals('http://exampleAlgorithm', $digestMethod->getAlgorithm());
+        $this->assertEquals(Constants::DIGEST_SHA256, $digestMethod->getAlgorithm());
     }
 
 

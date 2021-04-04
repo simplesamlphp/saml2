@@ -6,7 +6,6 @@ namespace SimpleSAML\Test\SAML2\XML\md;
 
 use DOMDocument;
 use PHPUnit\Framework\TestCase;
-use SimpleSAML\SAML2\Constants;
 use SimpleSAML\SAML2\Exception\ProtocolViolationException;
 use SimpleSAML\SAML2\XML\alg\DigestMethod;
 use SimpleSAML\SAML2\XML\alg\SigningMethod;
@@ -23,6 +22,7 @@ use SimpleSAML\SAML2\XML\shibmd\Scope;
 use SimpleSAML\Test\XML\SerializableXMLTestTrait;
 use SimpleSAML\XML\Chunk;
 use SimpleSAML\XML\DOMDocumentFactory;
+use SimpleSAML\XMLSecurity\Constants;
 
 /**
  * Class \SAML2\XML\md\ExtensionsTest.
@@ -69,8 +69,8 @@ final class ExtensionsTest extends TestCase
         );
         $uiinfo = new UIInfo([new DisplayName('en', 'Example')]);
         $discoHints = new DiscoHints([], ['127.0.0.1']);
-        $digestMethod = new DigestMethod('SomeAlgorithm');
-        $signingMethod = new SigningMethod('SomeOtherAlgorithm', 1024, 4096);
+        $digestMethod = new DigestMethod(Constants::DIGEST_SHA256);
+        $signingMethod = new SigningMethod(Constants::SIG_RSA_SHA256, 1024, 4096);
 
         $extensions = new Extensions([
             $scope,
@@ -96,10 +96,9 @@ final class ExtensionsTest extends TestCase
      */
     public function testMarshallingWithNoExtensions(): void
     {
-        $mdns = Constants::NS_MD;
         $extensions = new Extensions([]);
         $this->assertEquals(
-            "<md:Extensions xmlns:md=\"$mdns\"/>",
+            '<md:Extensions xmlns:md="urn:oasis:names:tc:SAML:2.0:metadata"/>',
             strval($extensions)
         );
         $this->assertTrue($extensions->isEmptyElement());
@@ -135,7 +134,7 @@ final class ExtensionsTest extends TestCase
   <mdui:DiscoHints>
     <mdui:IPHint>127.0.0.1</mdui:IPHint>
   </mdui:DiscoHints>
-  <alg:DigestMethod Algorithm="SomeAlgorithm"/>
+  <alg:DigestMethod Algorithm="http://www.w3.org/2001/04/xmlenc#sha256"/>
   <alg:SigningMethod Algorithm="SomeOtherAlgorithm" MinKeySize="1024" MaxKeySize="4096"/>
   <ns:SomeChunk foo="bar">SomeText</ns:SomeChunk>
 </md:Extensions>
@@ -163,8 +162,7 @@ XML
      */
     public function testUnmarshallingWithNoExtensions(): void
     {
-        $mdns = Constants::NS_MD;
-        $document = DOMDocumentFactory::fromString("<md:Extensions xmlns:md=\"$mdns\"/>");
+        $document = DOMDocumentFactory::fromString('<md:Extensions xmlns:md="urn:oasis:names:tc:SAML:2.0:metadata"/>');
         $extensions = Extensions::fromXML($document->documentElement);
         $this->assertEmpty($extensions->getList());
     }
