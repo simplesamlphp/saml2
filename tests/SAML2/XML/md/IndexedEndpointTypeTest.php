@@ -49,9 +49,6 @@ final class IndexedEndpointTypeTest extends TestCase
     {
         $idxep = new AssertionConsumerService(42, 'urn:something', 'https://whatever/', false);
 
-        $this->assertEquals(42, $idxep->getIndex());
-        $this->assertFalse($idxep->getIsDefault());
-
         $this->assertEquals(
             $this->xmlRepresentation->saveXML($this->xmlRepresentation->documentElement),
             strval($idxep)

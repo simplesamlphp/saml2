@@ -49,15 +49,7 @@ final class EndpointTypeTest extends TestCase
     {
         $attr = $this->xmlRepresentation->createAttributeNS('urn:test', 'test:attr');
         $attr->value = 'value';
-        $endpointType = new AttributeService('urn:something', 'https://whatever/', 'https://foo.bar/', [$attr]);
-
-        $this->assertEquals('urn:something', $endpointType->getBinding());
-        $this->assertEquals('https://whatever/', $endpointType->getLocation());
-        $this->assertEquals('https://foo.bar/', $endpointType->getResponseLocation());
-        $this->assertTrue($endpointType->hasAttributeNS('urn:test', 'attr'));
-        $this->assertEquals('value', $endpointType->getAttributeNS('urn:test', 'attr'));
-        $this->assertFalse($endpointType->hasAttributeNS('urn:test', 'invalid'));
-        $this->assertNull($endpointType->getAttributeNS('urn:test', 'invalid'));
+        $endpointType = new AttributeService(Constants::BINDING_HTTP_POST, 'https://whatever/', 'https://foo.bar/', [$attr]);
 
         $this->assertEquals(
             $this->xmlRepresentation->saveXML($this->xmlRepresentation->documentElement),
@@ -108,10 +100,15 @@ final class EndpointTypeTest extends TestCase
     public function testUnmarshalling(): void
     {
         $endpointType = AttributeService::fromXML($this->xmlRepresentation->documentElement);
+        $this->assertEquals('https://whatever/', $endpointType->getLocation());
+        $this->assertEquals('https://foo.bar/', $endpointType->getResponseLocation());
+        $this->assertEquals(Constants::BINDING_HTTP_POST, $endpointType->getBinding());
+
         $this->assertTrue($endpointType->hasAttributeNS('urn:test', 'attr'));
         $this->assertEquals('value', $endpointType->getAttributeNS('urn:test', 'attr'));
         $this->assertFalse($endpointType->hasAttributeNS('urn:test', 'invalid'));
         $this->assertNull($endpointType->getAttributeNS('urn:test', 'invalid'));
+
         $this->assertEquals(
             $this->xmlRepresentation->saveXML($this->xmlRepresentation->documentElement),
             strval($endpointType)

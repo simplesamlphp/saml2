@@ -54,9 +54,6 @@ final class OrganizationURLTest extends TestCase
     {
         $name = new OrganizationURL('en', 'https://IdentityProvider.com');
 
-        $this->assertEquals('en', $name->getLanguage());
-        $this->assertEquals('https://IdentityProvider.com', $name->getValue());
-
         $this->assertEquals(
             $this->xmlRepresentation->saveXML($this->xmlRepresentation->documentElement),
             strval($name)

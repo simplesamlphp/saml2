@@ -48,21 +48,13 @@ final class KeywordsTest extends TestCase
      */
     public function testMarshalling(): void
     {
-        $keywords = new Keywords("en", ["KLM", "royal", "Dutch"]);
-        $keywords->addKeyword("air lines");
+        $keywords = new Keywords("nl", ["KLM", "koninklijke luchtvaart"]);
+        $keywords->addKeyword("maatschappij");
 
-        $xml = $keywords->toXML();
-
-        $keywordElements = XMLUtils::xpQuery(
-            $xml,
-            '/*[local-name()=\'Keywords\' and namespace-uri()=\'urn:oasis:names:tc:SAML:metadata:ui\']'
+        $this->assertEquals(
+            $this->xmlRepresentation->saveXML($this->xmlRepresentation->documentElement),
+            strval($keywords)
         );
-        $this->assertCount(1, $keywordElements);
-
-        /** @var \DOMElement $keywordElement */
-        $keywordElement = $keywordElements[0];
-        $this->assertEquals("KLM royal Dutch air+lines", $keywordElement->textContent);
-        $this->assertEquals("en", $keywordElement->getAttribute('xml:lang'));
     }
 
 
@@ -87,8 +79,8 @@ final class KeywordsTest extends TestCase
         $this->assertEquals("nl", $keywords->getLanguage());
         $this->assertCount(3, $keywords->getKeywords());
         $this->assertEquals("KLM", $keywords->getKeywords()[0]);
-        $this->assertEquals("koninklijke", $keywords->getKeywords()[1]);
-        $this->assertEquals("luchtvaart maatschappij", $keywords->getKeywords()[2]);
+        $this->assertEquals("koninklijke luchtvaart", $keywords->getKeywords()[1]);
+        $this->assertEquals("maatschappij", $keywords->getKeywords()[2]);
     }
 
 

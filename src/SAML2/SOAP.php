@@ -82,7 +82,6 @@ SOAP;
         $xml = $this->getOutputToSend($message);
         if ($xml !== false) {
             Utils::getContainer()->debugMessage($xml, 'out');
-            echo $xml;
         }
 
         // DOMDocument::saveXML() returned false. Something is seriously wrong here. Not much we can do.

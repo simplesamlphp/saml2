@@ -1,6 +1,6 @@
-<md:AuthnAuthorityDescriptor xmlns:md="urn:oasis:names:tc:SAML:2.0:metadata" protocolSupportEnumeration="protocol1 protocol2">
-  <md:AuthnQueryService Binding="uri:binding:aqs" Location="http://www.example.com/aqs" />
-  <md:AssertionIDRequestService Binding="uri:binding:aidrs" Location="http://www.example.com/aidrs" />
-  <md:NameIDFormat>http://www.example1.com/</md:NameIDFormat>
-  <md:NameIDFormat>http://www.example2.com/</md:NameIDFormat>
+<md:AuthnAuthorityDescriptor xmlns:md="urn:oasis:names:tc:SAML:2.0:metadata" protocolSupportEnumeration="urn:oasis:names:tc:SAML:2.0:protocol">
+  <md:AuthnQueryService Binding="urn:oasis:names:tc:SAML:2.0:bindings:HTTP-POST" Location="http://www.example.com/aqs" />
+  <md:AssertionIDRequestService Binding="urn:oasis:names:tc:SAML:2.0:bindings:HTTP-POST" Location="http://www.example.com/aidrs" />
+  <md:NameIDFormat>urn:oasis:names:tc:SAML:2.0:nameid-format:persistent</md:NameIDFormat>
+  <md:NameIDFormat>urn:oasis:names:tc:SAML:2.0:nameid-format:transient</md:NameIDFormat>
 </md:AuthnAuthorityDescriptor>

@@ -45,8 +45,6 @@ final class ArtifactResolveTest extends TestCase
 
         $artifactResolve = new ArtifactResolve($artifact, $issuer, '_6c3a4f8b9c2d', 1074711649);
 
-        $this->assertEquals($artifact, $artifactResolve->getArtifact());
-
         $this->assertEquals(
             $this->xmlRepresentation->saveXML($this->xmlRepresentation->documentElement),
             strval($artifactResolve)

@@ -46,9 +46,6 @@ final class StatementTest extends TestCase
     {
         $statement = new CustomStatement('SomeStatement');
 
-        $this->assertEquals('CustomStatement', $statement->getType());
-        $this->assertEquals('SomeStatement', $statement->getValue());
-
         $this->assertEquals(
             $this->xmlRepresentation->saveXML($this->xmlRepresentation->documentElement),
             strval($statement)

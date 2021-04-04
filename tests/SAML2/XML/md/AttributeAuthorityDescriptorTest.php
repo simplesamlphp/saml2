@@ -16,6 +16,7 @@ use SimpleSAML\SAML2\XML\saml\AttributeValue;
 use SimpleSAML\Test\SAML2\SignedElementTestTrait;
 use SimpleSAML\Test\XML\SerializableXMLTestTrait;
 use SimpleSAML\XML\DOMDocumentFactory;
+use SimpleSAML\XML\Utils as XMLUtils;
 
 /**
  * Tests for the AttributeAuthorityDescriptor class.
@@ -88,15 +89,13 @@ final class AttributeAuthorityDescriptorTest extends TestCase
         $aad = new AttributeAuthorityDescriptor(
             [$this->as],
             [
-                'urn:oasis:names:tc:SAML:1.1:nameid-format:X509SubjectName',
-                'urn:oasis:names:tc:SAML:2.0:nameid-format:persistent',
-                'urn:oasis:names:tc:SAML:2.0:nameid-format:transient',
+                 Constants::NS_SAMLP
             ],
             [$this->aidrs],
             [
-                'urn:oasis:names:tc:SAML:1.1:nameid-format:X509SubjectName',
-                'urn:oasis:names:tc:SAML:2.0:nameid-format:persistent',
-                'urn:oasis:names:tc:SAML:2.0:nameid-format:transient',
+                CONSTANTS::NAMEID_X509_SUBJECT_NAME,
+                CONSTANTS::NAMEID_PERSISTENT,
+                CONSTANTS::NAMEID_TRANSIENT,
             ],
             [
                 'profile1',
@@ -105,20 +104,10 @@ final class AttributeAuthorityDescriptorTest extends TestCase
             [$attr1, $attr2]
         );
 
-        $this->assertEquals([$this->as], $aad->getAttributeServices());
         $this->assertEquals(
-            [
-                'urn:oasis:names:tc:SAML:1.1:nameid-format:X509SubjectName',
-                'urn:oasis:names:tc:SAML:2.0:nameid-format:persistent',
-                'urn:oasis:names:tc:SAML:2.0:nameid-format:transient',
-            ],
-            $aad->getNameIDFormats()
+            $this->xmlRepresentation->saveXML($this->xmlRepresentation->documentElement),
+            strval($aad)
         );
-        $this->assertEquals([$this->aidrs], $aad->getAssertionIDRequestServices());
-        $this->assertEquals(['profile1', 'profile2'], $aad->getAttributeProfiles());
-        $this->assertEquals([$attr1, $attr2], $aad->getAttributes());
-
-        $this->assertEqualXMLStructure($this->xmlRepresentation->documentElement, $aad->toXML());
     }
 
     /**

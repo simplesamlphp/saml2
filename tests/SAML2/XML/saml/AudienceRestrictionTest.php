@@ -51,11 +51,6 @@ final class AudienceRestrictionTest extends TestCase
             ]
         );
 
-        $audiences = $condition->getAudience();
-        $this->assertCount(2, $audiences);
-        $this->assertEquals('urn:audience1', $audiences[0]);
-        $this->assertEquals('urn:audience2', $audiences[1]);
-
         $this->assertEquals(
             $this->xmlRepresentation->saveXML($this->xmlRepresentation->documentElement),
             strval($condition)

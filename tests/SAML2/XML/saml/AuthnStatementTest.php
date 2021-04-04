@@ -63,16 +63,6 @@ final class AuthnStatementTest extends TestCase
             new SubjectLocality('1.1.1.1', 'idp.example.org')
         );
 
-        $this->assertEquals(1585006644, $authnStatement->getAuthnInstant());
-        $this->assertEquals(1585006644, $authnStatement->getSessionNotOnOrAfter());
-        $this->assertEquals(123, $authnStatement->getSessionIndex());
-
-        $subjLocality = $authnStatement->getSubjectLocality();
-        $this->assertInstanceOf(SubjectLocality::class, $subjLocality);
-
-        $authnContext = $authnStatement->getAuthnContext();
-        $this->assertInstanceOf(AuthnContext::class, $authnContext);
-
         $this->assertEquals(
             $this->xmlRepresentation->saveXML($this->xmlRepresentation->documentElement),
             strval($authnStatement)

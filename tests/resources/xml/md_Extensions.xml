@@ -11,6 +11,6 @@
   <mdui:DiscoHints xmlns:mdui="urn:oasis:names:tc:SAML:metadata:ui">
     <mdui:IPHint>127.0.0.1</mdui:IPHint>
   </mdui:DiscoHints>
-  <alg:DigestMethod Algorithm="SomeAlgorithm" xmlns:alg="urn:oasis:names:tc:SAML:metadata:algsupport"></alg:DigestMethod>
-  <alg:SigningMethod xmlns:alg="urn:oasis:names:tc:SAML:metadata:algsupport" Algorithm="SomeOtherAlgorithm" MinKeySize="1024" MaxKeySize="4096"></alg:SigningMethod>
+  <alg:DigestMethod Algorithm="http://www.w3.org/2001/04/xmlenc#sha256" xmlns:alg="urn:oasis:names:tc:SAML:metadata:algsupport"></alg:DigestMethod>
+  <alg:SigningMethod xmlns:alg="urn:oasis:names:tc:SAML:metadata:algsupport" Algorithm="http://www.w3.org/2001/04/xmldsig-more#rsa-sha256" MinKeySize="1024" MaxKeySize="4096"></alg:SigningMethod>
 </md:Extensions>

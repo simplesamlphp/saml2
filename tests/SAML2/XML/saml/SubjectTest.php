@@ -111,19 +111,10 @@ XML
             ]
         );
 
-        $this->assertNotNull($subject->getIdentifier());
-        $this->assertInstanceOf(NameID::class, $subject->getIdentifier());
-
-        $subjectConfirmation = $subject->getSubjectConfirmation();
-        $this->assertNotEmpty($subjectConfirmation);
-
-        $document = $this->subject;
-        $document->documentElement->appendChild($document->importNode($this->nameId->documentElement, true));
-        $document->documentElement->appendChild(
-            $document->importNode($this->subjectConfirmation->documentElement, true)
+        $this->assertEquals(
+            $this->xmlRepresentation->saveXML($this->xmlRepresentation->documentElement),
+            strval($subject)
         );
-
-        $this->assertEqualXMLStructure($document->documentElement, $subject->toXML());
     }
 
 

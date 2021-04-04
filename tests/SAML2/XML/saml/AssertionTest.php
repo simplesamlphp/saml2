@@ -24,6 +24,8 @@ use SimpleSAML\SAML2\XML\saml\EncryptedID;
 use SimpleSAML\SAML2\XML\saml\Issuer;
 use SimpleSAML\SAML2\XML\saml\NameID;
 use SimpleSAML\SAML2\XML\saml\Subject;
+use SimpleSAML\SAML2\XML\saml\SubjectConfirmation;
+use SimpleSAML\SAML2\XML\saml\SubjectConfirmationData;
 use SimpleSAML\SAML2\XML\saml\SubjectLocality;
 use SimpleSAML\Test\XML\SerializableXMLTestTrait;
 use SimpleSAML\XML\Chunk;
@@ -64,53 +66,81 @@ final class AssertionTest extends MockeryTestCase
     public function testMarshalling(): void
     {
         // Create an Issuer
-        $issuer = new Issuer('testIssuer');
+        $issuer = new Issuer('Provider');
 
         // Create the conditions
         $conditions = new Conditions(
-            null,
-            null,
+            1314780665,
+            1314780665,
             [],
-            [new AudienceRestriction(['audience1', 'audience2'])]
+            [new AudienceRestriction(['ServiceProvider'])]
         );
 
-        // Create the statements
+        // Create the AuthnStatement
         $authnStatement = new AuthnStatement(
             new AuthnContext(
-                new AuthnContextClassRef('someAuthnContext'),
+                new AuthnContextClassRef(Constants::AC_PASSWORD_PROTECTED_TRANSPORT),
                 null,
                 null
             ),
-            time()
+            1314780665,
+            null,
+            '_93af655219464fb403b34436cfb0c5cb1d9a5502',
+            new SubjectLocality('127.0.0.1')
+        );
+
+        // Create the AttributeStatement
+        $attrStatement = new AttributeStatement(
+            [
+                new Attribute('urn:ServiceID', null, null, [new AttributeValue('1')]),
+                new Attribute('urn:EntityConcernedID', null, null, [new AttributeValue('1')]),
+                new Attribute('urn:EntityConcernedSubID', null, null, [new AttributeValue('1')])
+            ]
+        );
+
+        // Create the Subject
+        $subject = new Subject(
+            new NameID(
+                'SomeNameIDValue',
+                null,
+                'https://sp.example.org/authentication/sp/metadata',
+                Constants::NAMEID_TRANSIENT,
+                null
+            ),
+            [
+                new SubjectConfirmation(
+                    'urn:oasis:names:tc:SAML:2.0:cm:bearer',
+                    new NameID(
+                        'SomeOtherNameIDValue',
+                        null,
+                        'https://sp.example.org/authentication/sp/metadata',
+                        Constants::NAMEID_TRANSIENT,
+                        null
+                    ),
+                    new SubjectConfirmationData(
+                        null,
+                        1314780665,
+                        'https://sp.example.org/authentication/sp/consume-assertion',
+                        '_13603a6565a69297e9809175b052d115965121c8'
+                    )
+                )
+            ]
         );
 
         // Create an assertion
-        $assertion = new Assertion($issuer, null, null, null, $conditions, [$authnStatement]);
-
-        // Marshall it to a \DOMElement
-        $assertionElement = $assertion->toXML();
-
-        // Test for an Issuer
-        $issuerElements = XMLUtils::xpQuery($assertionElement, './saml_assertion:Issuer');
-        $this->assertCount(1, $issuerElements);
-        $this->assertEquals('testIssuer', $issuerElements[0]->textContent);
-
-        // Test for an AudienceRestriction
-        $audienceElements = XMLUtils::xpQuery(
-            $assertionElement,
-            './saml_assertion:Conditions/saml_assertion:AudienceRestriction/saml_assertion:Audience'
+        $assertion = new Assertion(
+            $issuer,
+            '_93af655219464fb403b34436cfb0c5cb1d9a5502',
+            5611,
+            $subject,
+            $conditions,
+            [$authnStatement, $attrStatement]
         );
-        $this->assertCount(2, $audienceElements);
-        $this->assertEquals('audience1', $audienceElements[0]->textContent);
-        $this->assertEquals('audience2', $audienceElements[1]->textContent);
 
-        // Test for an Authentication Context
-        $authnContextElements = XMLUtils::xpQuery(
-            $assertionElement,
-            './saml_assertion:AuthnStatement/saml_assertion:AuthnContext/saml_assertion:AuthnContextClassRef'
+        $this->assertEquals(
+            $this->xmlRepresentation->saveXML($this->xmlRepresentation->documentElement),
+            strval($assertion)
         );
-        $this->assertCount(1, $authnContextElements);
-        $this->assertEquals('someAuthnContext', $authnContextElements[0]->textContent);
     }
 
 

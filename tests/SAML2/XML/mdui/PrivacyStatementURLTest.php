@@ -54,9 +54,6 @@ final class PrivacyStatementURLTest extends TestCase
     {
         $name = new PrivacyStatementURL('en', 'https://example.org/privacy');
 
-        $this->assertEquals('en', $name->getLanguage());
-        $this->assertEquals('https://example.org/privacy', $name->getValue());
-
         $this->assertEquals(
             $this->xmlRepresentation->saveXML($this->xmlRepresentation->documentElement),
             strval($name)

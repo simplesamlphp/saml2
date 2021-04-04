@@ -65,15 +65,6 @@ final class SubjectConfirmationDataTest extends TestCase
             [$attr1, $attr2]
         );
 
-        $this->assertEquals(987654321, $subjectConfirmationData->getNotBefore());
-        $this->assertEquals(1234567890, $subjectConfirmationData->getNotOnOrAfter());
-        $this->assertEquals('https://sp.example.org/asdf', $subjectConfirmationData->getRecipient());
-        $this->assertEquals('SomeRequestID', $subjectConfirmationData->getInResponseTo());
-        $this->assertEquals('127.0.0.1', $subjectConfirmationData->getAddress());
-
-        $this->assertEquals('testval1', $subjectConfirmationData->getAttributeNS('urn:test', 'attr1'));
-        $this->assertEquals('testval2', $subjectConfirmationData->getAttributeNS('urn:test', 'attr2'));
-
         $this->assertEquals(
             $this->xmlRepresentation->saveXML($this->xmlRepresentation->documentElement),
             strval($subjectConfirmationData)

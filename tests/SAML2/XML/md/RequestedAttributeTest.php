@@ -53,12 +53,6 @@ final class RequestedAttributeTest extends TestCase
             [new AttributeValue('value1')]
         );
 
-        $this->assertEquals('attr', $ra->getName());
-        $this->assertTrue($ra->getIsRequired());
-        $this->assertEquals('urn:format', $ra->getNameFormat());
-        $this->assertEquals('Attribute', $ra->getFriendlyName());
-        $this->assertEquals([new AttributeValue('value1')], $ra->getAttributeValues());
-
         $this->assertEquals(
             $this->xmlRepresentation->saveXML($this->xmlRepresentation->documentElement),
             strval($ra)

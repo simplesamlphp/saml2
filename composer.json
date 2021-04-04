@@ -23,8 +23,8 @@
         "ext-zlib": "*",
 
         "psr/log": "~1.1",
-        "simplesamlphp/xml-security": "~0.2.1",
-        "simplesamlphp/assert": "~0.1.0"
+        "simplesamlphp/xml-security": "~0.2.2",
+        "simplesamlphp/assert": "~0.2.2"
     },
     "require-dev": {
         "mockery/mockery": "~1.3",

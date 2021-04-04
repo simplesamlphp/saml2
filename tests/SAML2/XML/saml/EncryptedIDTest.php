@@ -104,37 +104,6 @@ final class EncryptedIDTest extends TestCase
         );
         $eid = new EncryptedID($ed, [$ek]);
 
-        $ed = $eid->getEncryptedData();
-        $this->assertEquals('Encrypted_DATA_ID', $ed->getID());
-        $this->assertEquals('Nk4W4mx...', $ed->getCipherData()->getCipherValue());
-        $this->assertEquals('http://www.w3.org/2001/04/xmlenc#Element', $ed->getType());
-        $this->assertEquals('key-type', $ed->getMimeType());
-        $this->assertEquals('base64-encoded', $ed->getEncoding());
-        $encMethod = $ed->getEncryptionMethod();
-        $this->assertInstanceOf(EncryptionMethod::class, $encMethod);
-        $this->assertEquals('http://www.w3.org/2001/04/xmlenc#aes128-cbc', $encMethod->getAlgorithm());
-        $this->assertInstanceOf(KeyInfo::class, $ed->getKeyInfo());
-
-        $eks = $eid->getEncryptedKeys();
-        $this->assertCount(1, $eks);
-        $ek = $eks[0];
-        $this->assertEquals('PzA5X...', $ek->getCipherData()->getCipherValue());
-        $this->assertEquals('Encrypted_KEY_ID', $ek->getID());
-        $this->assertNull($ek->getType());
-        $this->assertNull($ek->getMimeType());
-        $this->assertNull($ek->getEncoding());
-        $this->assertEquals('some_ENTITY_ID', $ek->getRecipient());
-        $this->assertEquals('Name of the key', $ek->getCarriedKeyName());
-        $encMethod = $ek->getEncryptionMethod();
-        $this->assertInstanceOf(EncryptionMethod::class, $encMethod);
-        $this->assertEquals('http://www.w3.org/2001/04/xmlenc#rsa-1_5', $encMethod->getAlgorithm());
-        $this->assertNull($ek->getKeyInfo());
-        $rl = $ek->getReferenceList();
-        $this->assertInstanceOf(ReferenceList::class, $rl);
-        $this->assertCount(1, $rl->getDataReferences());
-        $this->assertEmpty($rl->getKeyReferences());
-        $this->assertEquals('#Encrypted_DATA_ID', $rl->getDataReferences()[0]->getURI());
-
         $this->assertEquals(
             $this->xmlRepresentation->saveXML($this->xmlRepresentation->documentElement),
             strval($eid)

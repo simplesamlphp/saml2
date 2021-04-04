@@ -52,9 +52,6 @@ final class OrganizationNameTest extends TestCase
     {
         $name = new OrganizationName('en', 'Identity Providers R US');
 
-        $this->assertEquals('en', $name->getLanguage());
-        $this->assertEquals('Identity Providers R US', $name->getValue());
-
         $this->assertEquals(
             $this->xmlRepresentation->saveXML($this->xmlRepresentation->documentElement),
             strval($name)

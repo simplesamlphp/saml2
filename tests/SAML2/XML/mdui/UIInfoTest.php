@@ -60,83 +60,43 @@ final class UIInfoTest extends TestCase
      */
     public function testMarshalling(): void
     {
-        $logo = new Logo("https://example.edu/logo.png", 30, 20, "nl");
-        $keyword = new Keywords('en', ['keyword']);
+        $logo = new Logo("https://example.org/idp/images/logo_87x88.png", 88, 87, "fy");
 
         $uiinfo = new UIInfo(
             [
-                new DisplayName("nl", "Voorbeeld"),
-                new DisplayName("en", "Example")
+                new DisplayName("en", "University of Examples"),
+                new DisplayName("el", "Univërsitä øf Exåmpleß")
             ],
             [
-                new Description("nl", "Omschrijving"),
-                new Description("en", "Description")
+                new Description("en", "Just an example"),
             ],
             [
-                new InformationURL("nl", "https://voorbeeld.nl/"),
-                new InformationURL("en", "https://example.org")
+                new InformationURL("en", "http://www.example.edu/en/"),
+                new InformationURL("el", "http://www.example.edu/")
             ],
             [
-                new PrivacyStatementURL("nl", "https://voorbeeld.nl/privacy"),
                 new PrivacyStatementURL("en", "https://example.org/privacy")
+            ],
+            [],
+            [],
+            [
+                new Chunk(DOMDocumentFactory::fromString('<child1/>')->documentElement),
+                new Chunk(DOMDocumentFactory::fromString('<child2/>')->documentElement)
             ]
         );
+
+        $keyword = new Keywords('en', ['University Fictional']);
         $uiinfo->addKeyword($keyword);
+
+        $keyword = new Keywords('fr', ['Université Fictif']);
+        $uiinfo->addKeyword($keyword);
+
         $uiinfo->addLogo($logo);
 
-        $document = DOMDocumentFactory::fromString('<root />');
-        $xml = $uiinfo->toXML($document->documentElement);
-
-        $infoElements = XMLUtils::xpQuery(
-            $xml,
-            '/root/*[local-name()=\'UIInfo\' and namespace-uri()=\'urn:oasis:names:tc:SAML:metadata:ui\']'
+        $this->assertEquals(
+            $this->xmlRepresentation->saveXML($this->xmlRepresentation->documentElement),
+            strval($uiinfo)
         );
-        $this->assertCount(1, $infoElements);
-        $infoElement = $infoElements[0];
-
-        /** @var \DOMElement[] $displaynameElements */
-        $displaynameElements = XMLUtils::xpQuery(
-            $infoElement,
-            './*[local-name()=\'DisplayName\' and namespace-uri()=\'urn:oasis:names:tc:SAML:metadata:ui\']'
-        );
-        $this->assertCount(2, $displaynameElements);
-        $this->assertEquals("Voorbeeld", $displaynameElements[0]->textContent);
-        $this->assertEquals("Example", $displaynameElements[1]->textContent);
-        $this->assertEquals("nl", $displaynameElements[0]->getAttribute("xml:lang"));
-        $this->assertEquals("en", $displaynameElements[1]->getAttribute("xml:lang"));
-
-        /** @var \DOMElement[] $descriptionElements */
-        $descriptionElements = XMLUtils::xpQuery(
-            $infoElement,
-            './*[local-name()=\'Description\' and namespace-uri()=\'urn:oasis:names:tc:SAML:metadata:ui\']'
-        );
-        $this->assertCount(2, $descriptionElements);
-        $this->assertEquals("Omschrijving", $descriptionElements[0]->textContent);
-        $this->assertEquals("Description", $descriptionElements[1]->textContent);
-        $this->assertEquals("nl", $descriptionElements[0]->getAttribute("xml:lang"));
-        $this->assertEquals("en", $descriptionElements[1]->getAttribute("xml:lang"));
-
-        /** @var \DOMElement[] $infourlElements */
-        $infourlElements = XMLUtils::xpQuery(
-            $infoElement,
-            './*[local-name()=\'InformationURL\' and namespace-uri()=\'urn:oasis:names:tc:SAML:metadata:ui\']'
-        );
-        $this->assertCount(2, $infourlElements);
-        $this->assertEquals("https://voorbeeld.nl/", $infourlElements[0]->textContent);
-        $this->assertEquals("https://example.org", $infourlElements[1]->textContent);
-        $this->assertEquals("nl", $infourlElements[0]->getAttribute("xml:lang"));
-        $this->assertEquals("en", $infourlElements[1]->getAttribute("xml:lang"));
-
-        /** @var \DOMElement[] $privurlElements */
-        $privurlElements = XMLUtils::xpQuery(
-            $infoElement,
-            './*[local-name()=\'PrivacyStatementURL\' and namespace-uri()=\'urn:oasis:names:tc:SAML:metadata:ui\']'
-        );
-        $this->assertCount(2, $privurlElements);
-        $this->assertEquals("https://voorbeeld.nl/privacy", $privurlElements[0]->textContent);
-        $this->assertEquals("https://example.org/privacy", $privurlElements[1]->textContent);
-        $this->assertEquals("nl", $privurlElements[0]->getAttribute("xml:lang"));
-        $this->assertEquals("en", $privurlElements[1]->getAttribute("xml:lang"));
     }
 
 
@@ -190,7 +150,7 @@ final class UIInfoTest extends TestCase
             './*[local-name()=\'Keywords\' and namespace-uri()=\'urn:oasis:names:tc:SAML:metadata:ui\']'
         );
         $this->assertCount(1, $keywordElements);
-        $this->assertEquals("voorbeeld specimen", $keywordElements[0]->textContent);
+        $this->assertEquals("voorbeeld+specimen", $keywordElements[0]->textContent);
         $this->assertEquals("nl", $keywordElements[0]->getAttribute("xml:lang"));
 
         $discoElements = XMLUtils::xpQuery(
@@ -214,7 +174,7 @@ final class UIInfoTest extends TestCase
             './*[local-name()=\'Keywords\' and namespace-uri()=\'urn:oasis:names:tc:SAML:metadata:ui\']'
         );
         $this->assertCount(1, $keywordElements);
-        $this->assertEquals("voorbeeld specimen", $keywordElements[0]->textContent);
+        $this->assertEquals("voorbeeld+specimen", $keywordElements[0]->textContent);
         $this->assertEquals("nl", $keywordElements[0]->getAttribute("xml:lang"));
     }
 
@@ -265,7 +225,7 @@ final class UIInfoTest extends TestCase
         $this->assertEquals(88, $uiinfo->getLogo()[0]->getHeight());
         $this->assertEquals("fy", $uiinfo->getLogo()[0]->getLanguage());
         $this->assertCount(2, $uiinfo->getKeywords());
-        $this->assertEquals('Fictional', $uiinfo->getKeywords()[0]->getKeywords()[1]);
+        $this->assertEquals('University Fictional', $uiinfo->getKeywords()[0]->getKeywords()[0]);
         $this->assertEquals('fr', $uiinfo->getKeywords()[1]->getLanguage());
         $this->assertCount(3, $uiinfo->getChildren());
         $this->assertEquals('child1', $uiinfo->getChildren()[0]->getLocalName());

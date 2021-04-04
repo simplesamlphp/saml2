@@ -65,34 +65,6 @@ final class StatusTest extends TestCase
             ]
         );
 
-        $document = DOMDocumentFactory::fromString('<root />');
-        /** @psalm-var \DOMElement $document->firstChild */
-        $statusElement = $status->toXML($document->firstChild);
-
-        /** @psalm-var \DOMElement[] $statusCodeElements */
-        $statusCodeElements = XMLUtils::xpQuery($statusElement, './saml_protocol:StatusCode');
-        $this->assertCount(1, $statusCodeElements);
-        $this->assertEquals(Constants::STATUS_RESPONDER, $statusCodeElements[0]->getAttribute('Value'));
-
-        /** @psalm-var \DOMElement[] $statusSubCodeElements */
-        $statusSubCodeElements = XMLUtils::xpQuery($statusCodeElements[0], './saml_protocol:StatusCode');
-        $this->assertCount(1, $statusSubCodeElements);
-        $this->assertEquals(Constants::STATUS_REQUEST_DENIED, $statusSubCodeElements[0]->getAttribute('Value'));
-
-        /** @psalm-var \DOMElement[] $statusMessageElements */
-        $statusMessageElements = XMLUtils::xpQuery($statusElement, './saml_protocol:StatusMessage');
-        $this->assertCount(1, $statusMessageElements);
-        $this->assertEquals('Something went wrong', $statusMessageElements[0]->textContent);
-
-        /** @psalm-var \DOMElement $statusDetailElements[0]->childNodes[0] */
-        $statusDetailElements = XMLUtils::xpQuery($statusElement, './saml_protocol:StatusDetail');
-        $this->assertCount(1, $statusDetailElements);
-        $this->assertEquals('Cause', $statusDetailElements[0]->childNodes[0]->tagName);
-        $this->assertEquals(
-            'org.sourceid.websso.profiles.idp.FailedAuthnSsoException',
-            $statusDetailElements[0]->childNodes[0]->textContent
-        );
-
         $this->assertEquals(
             $this->xmlRepresentation->saveXML($this->xmlRepresentation->documentElement),
             strval($status)

@@ -54,9 +54,6 @@ final class ServiceDescriptionTest extends TestCase
     {
         $name = new ServiceDescription('en', 'Academic Journals R US and only us');
 
-        $this->assertEquals('en', $name->getLanguage());
-        $this->assertEquals('Academic Journals R US and only us', $name->getValue());
-
         $this->assertEquals(
             $this->xmlRepresentation->saveXML($this->xmlRepresentation->documentElement),
             strval($name)

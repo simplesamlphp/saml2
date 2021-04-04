@@ -69,18 +69,10 @@ final class KeyAuthorityTest extends TestCase
         $attr1->value = 'testval1';
         $keyAuthority = new KeyAuthority($keys, 2, [$attr1]);
 
-        $document = DOMDocumentFactory::fromString('<root />');
-        $keyAuthorityElement = $keyAuthority->toXML($document->documentElement);
-        $this->assertEquals('2', $keyAuthorityElement->getAttribute('VerifyDepth'));
-
-        /** @var \DOMElement[] $keyInfoElements */
-        $keyInfoElements = XMLUtils::xpQuery($keyAuthorityElement, '/root/shibmd:KeyAuthority/ds:KeyInfo');
-        $this->assertCount(2, $keyInfoElements);
-
-        $this->assertEquals('abc123', $keyInfoElements[0]->getAttribute('Id'));
-        $this->assertEquals('def456', $keyInfoElements[1]->getAttribute('Id'));
-
-        $this->assertEquals('testval1', $keyAuthorityElement->getAttributeNS('urn:test', 'attr1'));
+        $this->assertEquals(
+            $this->xmlRepresentation->saveXML($this->xmlRepresentation->documentElement),
+            strval($keyAuthority)
+        );
     }
 
 

@@ -13,9 +13,10 @@ use SimpleSAML\SAML2\XML\md\ContactPerson;
 use SimpleSAML\SAML2\XML\md\Extensions;
 use SimpleSAML\Test\XML\ArrayizableXMLTestTrait;
 use SimpleSAML\Test\XML\SerializableXMLTestTrait;
+use SimpleSAML\XML\Chunk;
 use SimpleSAML\XML\DOMDocumentFactory;
 use SimpleSAML\XML\Exception\MissingAttributeException;
-use SimpleSAML\XML\Chunk;
+use SimpleSAML\XML\Utils as XMLUtils;
 
 /**
  * Tests for the ContactPerson class.
@@ -69,7 +70,7 @@ final class ContactPersonTest extends TestCase
         $attr1->value = 'testval1';
         $attr2 = $this->xmlRepresentation->createAttributeNS('urn:test', 'test:attr2');
         $attr2->value = 'testval2';
-        $cp = new ContactPerson(
+        $contactPerson = new ContactPerson(
             'other',
             'Test Company',
             'John',
@@ -84,31 +85,10 @@ final class ContactPersonTest extends TestCase
             [$attr1, $attr2]
         );
 
-        $this->assertEquals('other', $cp->getContactType());
-        $this->assertEquals('Test Company', $cp->getCompany());
-        $this->assertEquals('John', $cp->getGivenName());
-        $this->assertEquals('Doe', $cp->getSurName());
-        $this->assertEquals(['jdoe@test.company', 'john.doe@test.company'], $cp->getEmailAddresses());
-        $this->assertEquals(['1-234-567-8901'], $cp->getTelephoneNumbers());
         $this->assertEquals(
-            [
-                '{urn:test}attr1' => [
-                    'qualifiedName' => 'test:attr1',
-                    'namespaceURI' => 'urn:test',
-                    'value' => 'testval1'
-                ],
-                '{urn:test}attr2' => [
-                    'qualifiedName' => 'test:attr2',
-                    'namespaceURI' => 'urn:test',
-                    'value' => 'testval2'
-                ]
-            ],
-            $cp->getAttributesNS()
+            $this->xmlRepresentation->saveXML($this->xmlRepresentation->documentElement),
+            strval($contactPerson)
         );
-        $this->assertEquals('testval1', $cp->getAttributeNS('urn:test', 'attr1'));
-        $this->assertEquals('testval2', $cp->getAttributeNS('urn:test', 'attr2'));
-
-        $this->assertEquals($this->xmlRepresentation->saveXML($this->xmlRepresentation->documentElement), strval($cp));
     }
 
 
@@ -140,27 +120,6 @@ final class ContactPersonTest extends TestCase
             null,
             ['this is wrong']
         );
-    }
-
-
-    /**
-     * Test that creating a ContactPerson from scratch without any optional arguments works.
-     */
-    public function testMarshallingWithoutOptionalProperties(): void
-    {
-        $mdNamespace = Constants::NS_MD;
-        $document = DOMDocumentFactory::fromString(<<<XML
-<md:ContactPerson contactType="other" xmlns:md="{$mdNamespace}"></md:ContactPerson>
-XML
-        );
-        $cp = new ContactPerson('other');
-        $this->assertEquals($document->saveXML($document->documentElement), strval($cp));
-        $this->assertNull($cp->getCompany());
-        $this->assertNull($cp->getGivenName());
-        $this->assertNull($cp->getSurName());
-        $this->assertEquals([], $cp->getEmailAddresses());
-        $this->assertEquals([], $cp->getTelephoneNumbers());
-        $this->assertEquals([], $cp->getAttributesNS());
     }
 
 

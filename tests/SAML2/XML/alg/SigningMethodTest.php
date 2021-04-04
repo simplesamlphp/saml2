@@ -6,11 +6,12 @@ namespace SimpleSAML\Test\SAML2\XML\alg;
 
 use DOMDocument;
 use PHPUnit\Framework\TestCase;
+use SimpleSAML\SAML2\XML\alg\SigningMethod;
+use SimpleSAML\SAML2\Utils;
 use SimpleSAML\Test\XML\SerializableXMLTestTrait;
 use SimpleSAML\XML\DOMDocumentFactory;
 use SimpleSAML\XML\Exception\MissingAttributeException;
-use SimpleSAML\SAML2\XML\alg\SigningMethod;
-use SimpleSAML\SAML2\Utils;
+use SimpleSAML\XMLSecurity\Constants;
 
 /**
  * Class \SAML2\XML\alg\SigningMethodTest
@@ -41,11 +42,7 @@ final class SigningMethodTest extends TestCase
      */
     public function testMarshalling(): void
     {
-        $signingMethod = new SigningMethod('http://exampleAlgorithm', 1024, 4096);
-
-        $this->assertEquals('http://exampleAlgorithm', $signingMethod->getAlgorithm());
-        $this->assertEquals(1024, $signingMethod->getMinKeySize());
-        $this->assertEquals(4096, $signingMethod->getMaxKeySize());
+        $signingMethod = new SigningMethod(Constants::SIG_RSA_SHA256, 1024, 4096);
 
         $this->assertEquals(
             $this->xmlRepresentation->saveXML($this->xmlRepresentation->documentElement),
@@ -60,7 +57,7 @@ final class SigningMethodTest extends TestCase
     {
         $signingMethod = SigningMethod::fromXML($this->xmlRepresentation->documentElement);
 
-        $this->assertEquals('http://exampleAlgorithm', $signingMethod->getAlgorithm());
+        $this->assertEquals(Constants::SIG_RSA_SHA256, $signingMethod->getAlgorithm());
         $this->assertEquals(1024, $signingMethod->getMinKeySize());
         $this->assertEquals(4096, $signingMethod->getMaxKeySize());
     }

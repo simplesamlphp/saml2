@@ -63,20 +63,10 @@ IMG;
     {
         $logo = new Logo($this->url, 200, 300, "nl");
 
-        $xml = $logo->toXML();
-
-        $logoElements = XMLUtils::xpQuery(
-            $xml,
-            '/*[local-name()=\'Logo\' and namespace-uri()=\'urn:oasis:names:tc:SAML:metadata:ui\']'
+        $this->assertEquals(
+            $this->xmlRepresentation->saveXML($this->xmlRepresentation->documentElement),
+            strval($logo)
         );
-        $this->assertCount(1, $logoElements);
-
-        /** @var \DOMElement $logoElement */
-        $logoElement = $logoElements[0];
-        $this->assertEquals($this->url, $logoElement->textContent);
-        $this->assertEquals("nl", $logoElement->getAttribute("xml:lang"));
-        $this->assertEquals('200', $logoElement->getAttribute("height"));
-        $this->assertEquals('300', $logoElement->getAttribute("width"));
     }
 
 

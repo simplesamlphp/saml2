@@ -13,6 +13,7 @@ use SimpleSAML\Test\SAML2\SignedElementTestTrait;
 use SimpleSAML\Test\XML\SerializableXMLTestTrait;
 use SimpleSAML\XML\DOMDocumentFactory;
 use SimpleSAML\XML\Exception\MissingAttributeException;
+use SimpleSAML\XML\Utils as XMLUtils;
 use SimpleSAML\XMLSecurity\XML\ds\KeyInfo;
 use SimpleSAML\XMLSecurity\XML\ds\KeyName;
 
@@ -50,7 +51,7 @@ final class AffiliationDescriptorTest extends TestCase
      */
     public function testMarshalling(): void
     {
-        $ad = new AffiliationDescriptor(
+        $affiliationDescriptor = new AffiliationDescriptor(
             'TheOwner',
             ['Member', 'OtherMember'],
             'TheID',
@@ -69,24 +70,10 @@ final class AffiliationDescriptorTest extends TestCase
             ]
         );
 
-        $this->assertEquals('TheOwner', $ad->getAffiliationOwnerID());
-        $this->assertEquals('TheID', $ad->getID());
-
-        /** @psalm-suppress PossiblyNullArgument */
-        $this->assertEquals('2009-02-13T23:31:30Z', gmdate('Y-m-d\TH:i:s\Z', $ad->getValidUntil()));
-
-        /** @psalm-suppress PossiblyNullArgument */
-        $this->assertEquals('PT5000S', $ad->getCacheDuration());
-
-        $affiliateMembers = $ad->getAffiliateMembers();
-        $this->assertCount(2, $affiliateMembers);
-        $this->assertEquals('Member', $affiliateMembers[0]);
-        $this->assertEquals('OtherMember', $affiliateMembers[1]);
-
-        $keyDescriptors = $ad->getKeyDescriptors();
-        $this->assertCount(1, $keyDescriptors);
-
-        $this->assertEquals($this->xmlRepresentation->saveXML($this->xmlRepresentation->documentElement), strval($ad));
+        $this->assertEquals(
+            $this->xmlRepresentation->saveXML($this->xmlRepresentation->documentElement),
+            strval($affiliationDescriptor)
+        );
     }
 
 

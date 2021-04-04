@@ -40,8 +40,8 @@ final class PublicationPathTest extends TestCase
         );
 
         $this->arrayRepresentation = [
-            ['publisher' => 'SomePublisher', 'creationInstant' => 1234567890, 'publicationId' => 'SomePublicationId'],
-            ['publisher' => 'SomeOtherPublisher', 'creationInstant' => 1234567890, 'publicationId' => 'SomeOtherPublicationId'],
+            ['publisher' => 'SomePublisher', 'creationInstant' => 1293840000, 'publicationId' => 'SomePublicationId'],
+            ['publisher' => 'SomeOtherPublisher', 'creationInstant' => 1293840000, 'publicationId' => 'SomeOtherPublicationId'],
         ];
     }
 
@@ -52,35 +52,15 @@ final class PublicationPathTest extends TestCase
     {
         $publicationPath = new PublicationPath(
             [
-                new Publication('SomePublisher', 1234567890, 'SomePublicationId'),
-                new Publication('SomeOtherPublisher', 1234567890, 'SomeOtherPublicationId'),
+                new Publication('SomePublisher', 1293840000, 'SomePublicationId'),
+                new Publication('SomeOtherPublisher', 1293840000, 'SomeOtherPublicationId'),
             ]
         );
 
-        $document = DOMDocumentFactory::fromString('<root />');
-        $xml = $publicationPath->toXML($document->documentElement);
-
-        /** @var \DOMElement[] $publicationInfoElements */
-        $publicationPathElements = XMLUtils::xpQuery(
-            $xml,
-            '/root/*[local-name()=\'PublicationPath\' and namespace-uri()=\'urn:oasis:names:tc:SAML:metadata:rpi\']'
+        $this->assertEquals(
+            $this->xmlRepresentation->saveXML($this->xmlRepresentation->documentElement),
+            strval($publicationPath)
         );
-        $this->assertCount(1, $publicationPathElements);
-        $publicationPathElement = $publicationPathElements[0];
-
-        /** @var \DOMElement[] $publicationElements */
-        $publicationElements = XMLUtils::xpQuery(
-            $publicationPathElement,
-            './*[local-name()=\'Publication\' and namespace-uri()=\'urn:oasis:names:tc:SAML:metadata:rpi\']'
-        );
-        $this->assertCount(2, $publicationElements);
-
-        $this->assertEquals('SomePublisher', $publicationElements[0]->getAttribute("publisher"));
-        $this->assertEquals('2009-02-13T23:31:30Z', $publicationElements[0]->getAttribute("creationInstant"));
-        $this->assertEquals('SomePublicationId', $publicationElements[0]->getAttribute("publicationId"));
-        $this->assertEquals('SomeOtherPublisher', $publicationElements[1]->getAttribute("publisher"));
-        $this->assertEquals('2009-02-13T23:31:30Z', $publicationElements[1]->getAttribute("creationInstant"));
-        $this->assertEquals('SomeOtherPublicationId', $publicationElements[1]->getAttribute("publicationId"));
     }
 
 

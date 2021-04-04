@@ -66,14 +66,6 @@ final class EncryptedAssertionTest extends TestCase
         );
         $encryptedAssertion = new EncryptedAssertion($ed, []);
 
-        $ed = $encryptedAssertion->getEncryptedData();
-        $this->assertEquals('GaYev...', $ed->getCipherData()->getCipherValue());
-        $this->assertEquals('http://www.w3.org/2001/04/xmlenc#Element', $ed->getType());
-        $encMethod = $ed->getEncryptionMethod();
-        $this->assertInstanceOf(EncryptionMethod::class, $encMethod);
-        $this->assertEquals('http://www.w3.org/2001/04/xmlenc#aes128-cbc', $encMethod->getAlgorithm());
-        $this->assertInstanceOf(KeyInfo::class, $ed->getKeyInfo());
-
         $this->assertEquals(
             $this->xmlRepresentation->saveXML($this->xmlRepresentation->documentElement),
             strval($encryptedAssertion)

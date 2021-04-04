@@ -54,9 +54,6 @@ final class ServiceNameTest extends TestCase
     {
         $name = new ServiceName('en', 'Academic Journals R US');
 
-        $this->assertEquals('en', $name->getLanguage());
-        $this->assertEquals('Academic Journals R US', $name->getValue());
-
         $this->assertEquals(
             $this->xmlRepresentation->saveXML($this->xmlRepresentation->documentElement),
             strval($name)

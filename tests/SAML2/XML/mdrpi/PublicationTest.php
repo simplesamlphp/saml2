@@ -47,24 +47,14 @@ final class PublicationTest extends TestCase
     {
         $publication = new Publication(
             'SomePublisher',
-            1234567890,
+            1293840000,
             'SomePublicationId'
         );
 
-        $document = DOMDocumentFactory::fromString('<root />');
-        $xml = $publication->toXML($document->documentElement);
-
-        /** @var \DOMElement[] $publicationElements */
-        $publicationElements = XMLUtils::xpQuery(
-            $xml,
-            '/root/*[local-name()=\'Publication\' and namespace-uri()=\'urn:oasis:names:tc:SAML:metadata:rpi\']'
+        $this->assertEquals(
+            $this->xmlRepresentation->saveXML($this->xmlRepresentation->documentElement),
+            strval($publication)
         );
-        $this->assertCount(1, $publicationElements);
-        $publicationElement = $publicationElements[0];
-
-        $this->assertEquals('SomePublisher', $publicationElement->getAttribute("publisher"));
-        $this->assertEquals('2009-02-13T23:31:30Z', $publicationElement->getAttribute("creationInstant"));
-        $this->assertEquals('SomePublicationId', $publicationElement->getAttribute("publicationId"));
     }
 
 

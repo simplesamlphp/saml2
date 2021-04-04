@@ -62,11 +62,6 @@ final class SubjectConfirmationTest extends TestCase
             new SubjectConfirmationData()
         );
 
-        $this->assertEquals('SomeMethod', $subjectConfirmation->getMethod());
-        $this->assertNotNull($subjectConfirmation->getIdentifier());
-        $this->assertInstanceOf(NameID::class, $subjectConfirmation->getIdentifier());
-        $this->assertNotNull($subjectConfirmation->getSubjectConfirmationData());
-
         $this->assertEquals(
             $this->xmlRepresentation->saveXML($this->xmlRepresentation->documentElement),
             strval($subjectConfirmation)

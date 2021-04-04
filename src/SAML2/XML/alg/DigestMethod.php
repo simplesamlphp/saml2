@@ -8,6 +8,8 @@ use DOMElement;
 use SimpleSAML\Assert\Assert;
 use SimpleSAML\XML\DOMDocumentFactory;
 use SimpleSAML\XML\Exception\InvalidDOMElementException;
+use SimpleSAML\XMLSecurity\Constants;
+use SimpleSAML\XMLSecurity\Exception\InvalidArgumentException;
 
 /**
  * Class for handling the alg:DigestMethod element.
@@ -54,6 +56,20 @@ final class DigestMethod extends AbstractAlgElement
      */
     private function setAlgorithm(string $algorithm): void
     {
+        Assert::oneOf(
+            $algorithm,
+            [
+                Constants::DIGEST_SHA1,
+                Constants::DIGEST_SHA224,
+                Constants::DIGEST_SHA256,
+                Constants::DIGEST_SHA384,
+                Constants::DIGEST_SHA512,
+                Constants::DIGEST_RIPEMD160,
+            ],
+            'Invalid digest method',
+            InvalidArgumentException::class
+        );
+
         $this->Algorithm = $algorithm;
     }
 

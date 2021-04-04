@@ -51,12 +51,6 @@ final class NameIDTest extends TestCase
             'TheSPProvidedID'
         );
 
-        $this->assertEquals('TheNameIDValue', $nameId->getValue());
-        $this->assertEquals('TheNameQualifier', $nameId->getNameQualifier());
-        $this->assertEquals('TheSPProvidedID', $nameId->getSPProvidedID());
-        $this->assertEquals('TheFormat', $nameId->getFormat());
-        $this->assertEquals('TheSPNameQualifier', $nameId->getSPNameQualifier());
-
         $this->assertEquals(
             $this->xmlRepresentation->saveXML($this->xmlRepresentation->documentElement),
             strval($nameId)

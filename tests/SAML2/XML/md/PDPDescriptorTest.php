@@ -75,18 +75,6 @@ final class PDPDescriptorTest extends TestCase
             ]
         );
 
-        $this->assertCount(1, $pdpd->getAuthzServiceEndpoints());
-        $this->assertCount(1, $pdpd->getAssertionIDRequestServices());
-        $this->assertCount(3, $pdpd->getNameIDFormats());
-        $this->assertEquals(
-            [
-                'urn:oasis:names:tc:SAML:1.1:nameid-format:X509SubjectName',
-                'urn:oasis:names:tc:SAML:2.0:nameid-format:persistent',
-                'urn:oasis:names:tc:SAML:2.0:nameid-format:transient',
-            ],
-            $pdpd->getNameIDFormats()
-        );
-
         $this->assertEquals(
             $this->xmlRepresentation->saveXML($this->xmlRepresentation->documentElement),
             strval($pdpd)

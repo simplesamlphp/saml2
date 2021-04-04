@@ -9,7 +9,7 @@ namespace SimpleSAML\SAML2;
  *
  * @package simplesamlphp/saml2
  */
-class Constants extends \SimpleSAML\XML\Constants
+class Constants extends \SimpleSAML\XMLSecurity\Constants
 {
     /**
      * Password authentication context.
@@ -65,6 +65,11 @@ class Constants extends \SimpleSAML\XML\Constants
      * The URN for the SOAP binding.
      */
     public const BINDING_SOAP = 'urn:oasis:names:tc:SAML:2.0:bindings:SOAP';
+
+    /**
+     * The URN for the URI binding.
+     */
+    public const BINDING_URI = 'urn:oasis:names:tc:SAML:2.0:bindings:URI';
 
     /**
      * Bearer subject confirmation method.

@@ -52,9 +52,6 @@ final class DisplayNameTest extends TestCase
     {
         $name = new DisplayName('en', 'University of Examples');
 
-        $this->assertEquals('en', $name->getLanguage());
-        $this->assertEquals('University of Examples', $name->getValue());
-
         $this->assertEquals(
             $this->xmlRepresentation->saveXML($this->xmlRepresentation->documentElement),
             strval($name)

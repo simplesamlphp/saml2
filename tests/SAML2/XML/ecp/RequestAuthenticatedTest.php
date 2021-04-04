@@ -40,7 +40,10 @@ final class RequestAuthenticatedTest extends TestCase
     {
         $ra = new RequestAuthenticated(0);
 
-        $this->assertEquals($this->xmlRepresentation->saveXML($this->xmlRepresentation->documentElement), strval($ra));
+        $this->assertEquals(
+            $this->xmlRepresentation->saveXML($this->xmlRepresentation->documentElement),
+            strval($ra)
+        );
     }
 
 

@@ -47,19 +47,6 @@ final class IDPListTest extends TestCase
         $getComplete = 'https://some/location';
         $list = new IDPList([$entry1, $entry2], $getComplete);
 
-        $entries = $list->getIdpEntry();
-        $this->assertCount(2, $entries);
-
-        $this->assertEquals('urn:some:requester1', $entries[0]->getProviderID());
-        $this->assertEquals('testName1', $entries[0]->getName());
-        $this->assertEquals('testLoc1', $entries[0]->getLoc());
-
-        $this->assertEquals('urn:some:requester2', $entries[1]->getProviderID());
-        $this->assertEquals('testName2', $entries[1]->getName());
-        $this->assertEquals('testLoc2', $entries[1]->getLoc());
-
-        $this->assertEquals('https://some/location', $list->getGetComplete());
-
         $this->assertEquals(
             $this->xmlRepresentation->saveXML($this->xmlRepresentation->documentElement),
             strval($list)

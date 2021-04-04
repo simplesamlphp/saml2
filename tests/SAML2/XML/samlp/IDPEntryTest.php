@@ -41,10 +41,6 @@ final class IDPEntryTest extends TestCase
     {
         $entry = new IDPEntry('urn:some:requester', 'testName', 'testLoc');
 
-        $this->assertEquals('urn:some:requester', $entry->getProviderID());
-        $this->assertEquals('testName', $entry->getName());
-        $this->assertEquals('testLoc', $entry->getLoc());
-
         $this->assertEquals(
             $this->xmlRepresentation->saveXML($this->xmlRepresentation->documentElement),
             strval($entry)

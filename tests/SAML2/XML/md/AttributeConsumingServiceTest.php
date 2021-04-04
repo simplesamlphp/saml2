@@ -17,6 +17,7 @@ use SimpleSAML\Test\XML\SerializableXMLTestTrait;
 use SimpleSAML\XML\DOMDocumentFactory;
 use SimpleSAML\XML\Exception\MissingAttributeException;
 use SimpleSAML\XML\Exception\MissingElementException;
+use SimpleSAML\XML\Utils as XMLUtils;
 
 /**
  * Tests for the AttributeConsumingService class.
@@ -71,15 +72,6 @@ final class AttributeConsumingServiceTest extends TestCase
             [$this->getRequestedAttribute()],
             true,
             [new ServiceDescription('en', 'Academic Journals R US and only us')]
-        );
-
-        $this->assertEquals(2, $acs->getIndex());
-        $this->assertEquals([new ServiceName('en', 'Academic Journals R US')], $acs->getServiceNames());
-        $this->assertEquals([$this->getRequestedAttribute()], $acs->getRequestedAttributes());
-        $this->assertTrue($acs->getIsDefault());
-        $this->assertEquals(
-            [new ServiceDescription('en', 'Academic Journals R US and only us')],
-            $acs->getServiceDescriptions()
         );
 
         $this->assertEquals(

@@ -46,9 +46,6 @@ final class NameIDMappingServiceTest extends TestCase
     {
         $nidmsep = new NameIDMappingService('urn:something', 'https://whatever/');
 
-        $this->assertEquals('urn:something', $nidmsep->getBinding());
-        $this->assertEquals('https://whatever/', $nidmsep->getLocation());
-
         $this->assertEquals(
             $this->xmlRepresentation->saveXML($this->xmlRepresentation->documentElement),
             strval($nidmsep)
