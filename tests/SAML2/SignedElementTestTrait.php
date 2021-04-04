@@ -70,7 +70,6 @@ trait SignedElementTestTrait
             try {
                 $this->assertTrue($post->validate($cert));
             } catch (\Exception $e) {
-                echo strval($pre);
                 $this->fail('Signature validation failed with algorithm: ' . $algorithm);
             }
             $this->assertEquals(
