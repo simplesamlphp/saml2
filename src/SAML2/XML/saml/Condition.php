@@ -16,7 +16,7 @@ use function trim;
  *
  * @package simplesamlphp/saml2
  */
-class Condition extends AbstractConditionType
+abstract class Condition extends AbstractConditionType
 {
     /** @var string */
     public const LOCALNAME = 'Condition';
@@ -72,7 +72,6 @@ class Condition extends AbstractConditionType
      */
     public function toXML(DOMElement $parent = null): DOMElement
     {
-        $element = parent::toXML($parent);
         $element->setAttributeNS(Constants::NS_XSI, 'xsi:type', $this->type);
 
         return $element;
@@ -100,9 +99,6 @@ class Condition extends AbstractConditionType
 
         $type = $xml->getAttributeNS(Constants::NS_XSI, 'type');
 
-        return new self(
-            trim($xml->textContent),
-            $type
-        );
+        return new self($type);
     }
 }
