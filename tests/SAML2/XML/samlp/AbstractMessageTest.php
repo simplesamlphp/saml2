@@ -210,8 +210,8 @@ AUTHNREQUEST
         https://gateway.stepup.org/saml20/sp/metadata
   </saml:Issuer>
   <samlp:Extensions>
-    <myextElt att="value3">example1</myextElt>
-    <myextElt att="value5" />
+    <myns:myextElt xmlns:myns="urn:mynamespace"  att="value3">example1</myns:myextElt>
+    <myns:myextElt xmlns:myns="urn:mynamespace" att="value5" />
   </samlp:Extensions>
   <saml:Subject>
         <saml:NameID Format="urn:oasis:names:tc:SAML:1.1:nameid-format:unspecified">user@example.org</saml:NameID>

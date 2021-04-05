@@ -2,5 +2,5 @@
   <myns:AttributeList xmlns:myns="urn:mynamespace">
     <myns:Attribute name="UserName" value=""/>
   </myns:AttributeList>
-  <ExampleElement name="AnotherExtension" />
+  <myns:ExampleElement xmlns:myns="urn:mynamespace" name="AnotherExtension" />
 </samlp:Extensions>

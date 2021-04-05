@@ -89,11 +89,9 @@ final class AbstractStatusResponseTest extends TestCase
 
         $issuer = new Issuer('some issuer');
 
-        $attribute = new Attribute('TheName');
         $scope = new Scope("scope");
 
         $extensions = new Extensions([
-            new Chunk($attribute->toXML()),
             new Chunk($scope->toXML()),
         ]);
 

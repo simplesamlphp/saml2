@@ -6,7 +6,8 @@ namespace SimpleSAML\Test\SAML2\XML\samlp;
 
 use DOMDocument;
 use PHPUnit\Framework\TestCase;
-use SimpleSAML\SAML2\XML\saml\Attribute;
+use SimpleSAML\SAML2\Exception\ProtocolViolationException;
+use SimpleSAML\SAML2\XML\saml\AttributeValue;
 use SimpleSAML\SAML2\XML\samlp\Extensions;
 use SimpleSAML\SAML2\XML\shibmd\Scope;
 use SimpleSAML\Test\XML\SerializableXMLTestTrait;
@@ -76,19 +77,40 @@ final class ExtensionsTest extends TestCase
      */
     public function testExtensionsAddSome(): void
     {
-        $attribute = new Attribute('TheName');
         $scope = new Scope("scope");
 
         $extensions = new Extensions([
-            new Chunk($attribute->toXML()),
             new Chunk($scope->toXML()),
         ]);
         $list = $extensions->getList();
 
-        $this->assertCount(2, $list);
+        $this->assertCount(1, $list);
         $this->assertInstanceOf(Chunk::class, $list[0]);
-        $this->assertInstanceOf(Chunk::class, $list[1]);
-        $this->assertEquals("Attribute", $list[0]->getLocalName());
-        $this->assertEquals("urn:mace:shibboleth:metadata:1.0", $list[1]->getNamespaceURI());
+        $this->assertEquals("urn:mace:shibboleth:metadata:1.0", $list[0]->getNamespaceURI());
     }
+
+
+    /**
+     * Adding a non-namespaced element to an md:Extensions element should throw an exception
+     */
+    public function testMarshallingWithNonNamespacedExtensions(): void
+    {
+        $this->expectException(ProtocolViolationException::class);
+        $this->expectExceptionMessage('Extensions MUST NOT include global (non-namespace-qualified) elements.');
+
+        new Extensions([new Chunk(DOMDocumentFactory::fromString('<child/>')->documentElement)]);
+    }
+
+
+    /**
+     * Adding an element from SAML-defined namespaces element should throw an exception
+     */
+    public function testMarshallingWithSamlDefinedNamespacedExtensions(): void
+    {
+        $this->expectException(ProtocolViolationException::class);
+        $this->expectExceptionMessage('Extensions MUST NOT include any SAML-defined namespace elements.');
+
+        new Extensions([new AttributeValue('something')]);
+    }
+
 }

@@ -18,6 +18,7 @@ use SimpleSAML\SAML2\XML\mdrpi\RegistrationInfo;
 use SimpleSAML\SAML2\XML\mdui\DiscoHints;
 use SimpleSAML\SAML2\XML\mdui\DisplayName;
 use SimpleSAML\SAML2\XML\mdui\UIInfo;
+use SimpleSAML\SAML2\XML\saml\AttributeValue;
 use SimpleSAML\SAML2\XML\shibmd\Scope;
 use SimpleSAML\Test\XML\SerializableXMLTestTrait;
 use SimpleSAML\XML\Chunk;
@@ -102,6 +103,30 @@ final class ExtensionsTest extends TestCase
             strval($extensions)
         );
         $this->assertTrue($extensions->isEmptyElement());
+    }
+
+
+    /**
+     * Adding a non-namespaced element to an md:Extensions element should throw an exception
+     */
+    public function testMarshallingWithNonNamespacedExtensions(): void
+    {
+        $this->expectException(ProtocolViolationException::class);
+        $this->expectExceptionMessage('Extensions MUST NOT include global (non-namespace-qualified) elements.');
+
+        new Extensions([new Chunk(DOMDocumentFactory::fromString('<child/>')->documentElement)]);
+    }
+
+
+    /**
+     * Adding an element from SAML-defined namespaces element should throw an exception
+     */
+    public function testMarshallingWithSamlDefinedNamespacedExtensions(): void
+    {
+        $this->expectException(ProtocolViolationException::class);
+        $this->expectExceptionMessage('Extensions MUST NOT include any SAML-defined namespace elements.');
+
+        new Extensions([new AttributeValue('something')]);
     }
 
 

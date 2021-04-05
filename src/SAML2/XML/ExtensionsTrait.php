@@ -6,6 +6,8 @@ namespace SimpleSAML\SAML2\XML;
 
 use DOMElement;
 use SimpleSAML\Assert\Assert;
+use SimpleSAML\SAML2\Constants;
+use SimpleSAML\SAML2\Exception\ProtocolViolationException;
 use SimpleSAML\XML\XMLElementInterface;
 
 /**
@@ -26,7 +28,34 @@ trait ExtensionsTrait
      */
     public function __construct(array $extensions)
     {
+        $this->setList($extensions);
+    }
+
+
+    /**
+     * Set an array with all extensions present.
+     *
+     * @param array \SimpleSAML\XML\XMLElementInterface[]
+     */
+    public function setList(array $extensions): void
+    {
         Assert::allIsInstanceOf($extensions, XMLElementInterface::class);
+
+        foreach ($extensions as $extension) {
+            $namespace = $extension->getNamespaceURI();
+
+            Assert::notNull(
+                $namespace,
+                'Extensions MUST NOT include global (non-namespace-qualified) elements.',
+                ProtocolViolationException::class
+            );
+            Assert::true(
+                !in_array($namespace, [Constants::NS_SAML, Constants::NS_SAMLP], true),
+                'Extensions MUST NOT include any SAML-defined namespace elements.',
+                ProtocolViolationException::class
+            );
+        }
+
         $this->extensions = $extensions;
     }
 
