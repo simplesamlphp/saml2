@@ -7,6 +7,8 @@ namespace SimpleSAML\SAML2\XML\saml;
 use DOMElement;
 use SimpleSAML\Assert\Assert;
 use SimpleSAML\SAML2\Constants;
+use SimpleSAML\SAML2\Utils;
+use SimpleSAML\SAML2\XML\saml\Condition;
 use SimpleSAML\XML\Exception\InvalidDOMElementException;
 
 /**
@@ -32,8 +34,6 @@ abstract class Condition extends AbstractConditionType
     protected function __construct(
         string $type
     ) {
-        parent::__construct($value);
-
         $this->setType($type);
     }
 
@@ -57,6 +57,7 @@ abstract class Condition extends AbstractConditionType
     protected function setType(string $type): void
     {
         Assert::notWhitespaceOnly($type, 'The "xsi:type" attribute of an identifier cannot be empty.');
+        Assert::contains($type, ':');
 
         $this->type = $type;
     }
@@ -96,7 +97,30 @@ abstract class Condition extends AbstractConditionType
         );
 
         $type = $xml->getAttributeNS(Constants::NS_XSI, 'type');
+        list($prefix, $element) = explode($type);
 
-        return new self($type);
+        $ns = $xml->lookupNamespaceUri($prefix);
+        $handler = Utils::getContainer()->getElementHandler($ns, $element);
+
+        Assert::notNull($handler, 'Unknown Condition type `' . $type . '`.');
+        Assert::isInstanceOf($handler, Condition::class);
+
+        return new $handler($xml->childNodes);
+    }
+
+
+    /**
+     * Convert this Condition to XML.
+     *
+     * @param \DOMElement $parent The element we are converting to XML.
+     * @return \DOMElement The XML element after adding the data corresponding to this Condition.
+     */
+    public function toXML(DOMElement $parent = null): DOMElement
+    {
+        $e = $this->instantiateParentElement($parent);
+
+        $e->setAttributeNS(Constants::NS_XSI, 'xsi:type', $this->type);
+
+        return $e;
     }
 }
