@@ -8,7 +8,6 @@ use DOMElement;
 use SimpleSAML\Assert\Assert;
 use SimpleSAML\SAML2\Constants;
 use SimpleSAML\SAML2\Utils;
-use SimpleSAML\SAML2\XML\saml\Condition;
 use SimpleSAML\XML\Exception\InvalidDOMElementException;
 
 /**
@@ -97,7 +96,7 @@ abstract class Condition extends AbstractConditionType
         );
 
         $type = $xml->getAttributeNS(Constants::NS_XSI, 'type');
-        list($prefix, $element) = explode($type);
+        list($prefix, $element) = explode($type, ':');
 
         $ns = $xml->lookupNamespaceUri($prefix);
         $handler = Utils::getContainer()->getElementHandler($ns, $element);
@@ -115,7 +114,7 @@ abstract class Condition extends AbstractConditionType
      * @param \DOMElement $parent The element we are converting to XML.
      * @return \DOMElement The XML element after adding the data corresponding to this Condition.
      */
-    public function toXML(DOMElement $parent = null): DOMElement
+    protected function toXML(DOMElement $parent = null): DOMElement
     {
         $e = $this->instantiateParentElement($parent);
 
