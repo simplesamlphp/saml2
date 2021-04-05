@@ -1,3 +1,3 @@
-<saml:Condition xmlns:saml="urn:oasis:names:tc:SAML:2.0:assertion" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:type="ssp:CustomCondition" xmlns:ssp="urn:custom:ssp">
+<saml:Condition xmlns:saml="urn:oasis:names:tc:SAML:2.0:assertion" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:ssp="urn:custom:ssp" xsi:type="ssp:CustomCondition">
   <saml:Audience>urn:some:audience</saml:Audience>
 </saml:Condition>

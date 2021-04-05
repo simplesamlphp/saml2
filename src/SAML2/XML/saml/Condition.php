@@ -85,8 +85,8 @@ abstract class Condition extends AbstractConditionType
     {
         $e = $this->instantiateParentElement($parent);
 
+        $e->setAttribute('xmlns:' . static::XSI_TYPE_PREFIX, static::XSI_TYPE_NS);
         $e->setAttributeNS(Constants::NS_XSI, 'xsi:type', $this->type);
-        $e->setAttributeNS(Constants::NS_XS, 'xmlns:' . static::XSI_TYPE_PREFIX, static::XSI_TYPE);
 
         return $e;
     }
