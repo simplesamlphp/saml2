@@ -13,8 +13,12 @@ use SimpleSAML\XML\Exception\InvalidDOMElementException;
  *
  * @package simplesaml/saml2
  */
-final class Audience extends AbstractConditionType
+final class Audience extends AbstractSamlElement
 {
+    /** @var string */
+    protected string $value;
+
+
     /**
      * @param string $content
      */
@@ -39,6 +43,21 @@ final class Audience extends AbstractConditionType
         Assert::same($xml->namespaceURI, Audience::NS, InvalidDOMElementException::class);
 
         return new self($xml->textContent);
+    }
+
+
+    /**
+     * Convert this Audience to XML.
+     *
+     * @param \DOMElement $parent The element we are converting to XML.
+     * @return \DOMElement The XML element after adding the data corresponding to this Condition.
+     */
+    public function toXML(DOMElement $parent = null): DOMElement
+    {
+        $element = $this->instantiateParentElement($parent);
+        $element->textContent = $this->value;
+
+        return $element;
     }
 }
 
