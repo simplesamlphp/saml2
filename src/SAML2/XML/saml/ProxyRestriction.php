@@ -13,7 +13,7 @@ use function strval;
 /**
  * @package simplesamlphp/saml2
  */
-final class ProxyRestriction extends AbstractSamlElement
+final class ProxyRestriction extends AbstractConditionType
 {
     /**
      * @param \SimpleSAML\SAML2\XML\saml\Audience[]
