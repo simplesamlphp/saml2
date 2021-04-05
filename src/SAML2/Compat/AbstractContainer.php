@@ -97,8 +97,6 @@ abstract class AbstractContainer
         Assert::subclassOf($class, AbstractXMLElement::class);
         if (is_subclass_of($class, CustomIdentifierInterface::class, true)) {
             $key = $class::getXsiType() . ':BaseID';
-        } elseif (is_subclass_of($class, Condition::class, true)) {
-            $key = $class::getXsiType();
         } else {
             $key = join(':', [urlencode($class::NS), AbstractXMLElement::getClassName($class)]);
         }
