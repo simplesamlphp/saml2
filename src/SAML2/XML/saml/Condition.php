@@ -59,7 +59,7 @@ abstract class Condition extends AbstractConditionType
      */
     protected function setType(string $type): void
     {
-        Assert::notWhitespaceOnly($type, 'The "xsi:type" attribute of an identifier cannot be empty.');
+        Assert::notWhitespaceOnly($type, 'The "xsi:type" attribute of a Condition cannot be empty.');
         Assert::contains($type, ':');
 
         $this->type = $type;
@@ -74,54 +74,9 @@ abstract class Condition extends AbstractConditionType
      */
     public function toXML(DOMElement $parent = null): DOMElement
     {
-        $element->setAttributeNS(Constants::NS_XSI, 'xsi:type', $this->type);
-
-        return $element;
-    }
-
-
-    /**
-     * Convert XML into an Condition
-     *
-     * @param \DOMElement $xml The XML element we should load
-     * @return \SimpleSAML\SAML2\XML\saml\Condition
-     *
-     * @throws \SimpleSAML\XML\Exception\InvalidDOMElementException if the qualified name of the supplied element is wrong
-     */
-    public static function fromXML(DOMElement $xml): object
-    {
-        Assert::same($xml->localName, 'Condition', InvalidDOMElementException::class);
-        Assert::notNull($xml->namespaceURI, InvalidDOMElementException::class);
-        Assert::same($xml->namespaceURI, Condition::NS, InvalidDOMElementException::class);
-        Assert::true(
-            $xml->hasAttributeNS(Constants::NS_XSI, 'type'),
-            'Missing required xsi:type in <saml:Condition> element.',
-            InvalidDOMElementException::class
-        );
-
-        $type = $xml->getAttributeNS(Constants::NS_XSI, 'type');
-        list($prefix, $element) = explode($type, ':');
-
-        $ns = $xml->lookupNamespaceUri($prefix);
-        $handler = Utils::getContainer()->getElementHandler($ns, $element);
-
-        Assert::notNull($handler, 'Unknown Condition type `' . $type . '`.');
-        Assert::isInstanceOf($handler, Condition::class);
-
-        return new $handler($xml->childNodes);
-    }
-
-
-    /**
-     * Convert this Condition to XML.
-     *
-     * @param \DOMElement $parent The element we are converting to XML.
-     * @return \DOMElement The XML element after adding the data corresponding to this Condition.
-     */
-    protected function toXML(DOMElement $parent = null): DOMElement
-    {
         $e = $this->instantiateParentElement($parent);
 
+        $e->setAttribute('xmlns:' . static::XSI_TYPE_PREFIX, static::XSI_TYPE_NS);
         $e->setAttributeNS(Constants::NS_XSI, 'xsi:type', $this->type);
 
         return $e;

@@ -110,7 +110,7 @@ final class ConditionsTest extends TestCase
 
         $audiences = $audienceRestriction[0]->getAudience();
         $this->assertCount(1, $audiences);
-        $this->assertEquals('http://sp.example.com/demo1/metadata.php', $audiences[0]->getContent());
+        $this->assertEquals('http://sp.example.com/demo1/metadata.php', $audiences[0]->getValue());
 
         $this->assertTrue($conditions->getOneTimeUse());
 
@@ -119,7 +119,7 @@ final class ConditionsTest extends TestCase
 
         $audiences = $proxyRestriction->getAudience();
         $this->assertCount(1, $audiences);
-        $this->assertEquals('http://sp.example.com/demo2/metadata.php', $audiences[0]->getContent());
+        $this->assertEquals('http://sp.example.com/demo2/metadata.php', $audiences[0]->getValue());
 
         $this->assertEquals(
             $this->xmlRepresentation->saveXML($this->xmlRepresentation->documentElement),
