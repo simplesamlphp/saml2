@@ -15,7 +15,7 @@ use SimpleSAML\Assert\Assert;
  */
 final class CustomCondition extends Condition
 {
-    protected const XSI_TYPE = 'CustomCondition';
+    protected const XSI_TYPE = 'ssp:CustomCondition';
 
 
     /**

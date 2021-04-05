@@ -66,7 +66,7 @@ final class ConditionTest extends TestCase
      */
     public function testUnmarshalling(): void
     {
-        $condition = Condition::fromXML($this->xmlRepresentation->documentElement);
+        $condition = CustomCondition::fromXML($this->xmlRepresentation->documentElement);
 
         $this->assertEquals('CustomCondition', $condition->getType());
         $this->assertEquals('SomeCondition', $condition->getContent());
