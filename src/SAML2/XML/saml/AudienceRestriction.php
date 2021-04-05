@@ -16,7 +16,7 @@ use SimpleSAML\XML\Utils as XMLUtils;
  *
  * @package simplesamlphp/saml2
  */
-final class AudienceRestriction extends AbstractSamlElement
+final class AudienceRestriction extends AbstractConditionType
 {
     /** @var \SimpleSAML\SAML2\XML\saml\Audience[] */
     protected array $audience = [];
