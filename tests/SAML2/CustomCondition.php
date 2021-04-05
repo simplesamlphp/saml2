@@ -6,6 +6,7 @@ namespace SimpleSAML\Test\SAML2;
 
 use DOMElement;
 use SimpleSAML\SAML2\Constants;
+use SimpleSAML\SAML2\Utils;
 use SimpleSAML\SAML2\XML\saml\Audience;
 use SimpleSAML\SAML2\XML\saml\Condition;
 use SimpleSAML\Assert\Assert;
@@ -16,7 +17,14 @@ use SimpleSAML\Assert\Assert;
  */
 final class CustomCondition extends Condition
 {
+    /** @var string */
     protected const XSI_TYPE = 'ssp:CustomCondition';
+
+    /** @var string */
+    protected const XSI_TYPE_NS = 'urn:custom:ssp';
+
+    /** @var string */
+    protected const XSI_TYPE_PREFIX = 'ssp';
 
     /** @var \SimpleSAML\SAML2\XML\saml\Audience[] */
     protected $audience = [];
@@ -61,21 +69,44 @@ final class CustomCondition extends Condition
 
     /**
      * @inheritDoc
-    public static function fromXML(DOMElement $xml): object
-    {
-        Assert::same($xml->getAttributeNS(Constants::NS_XSI, 'type'), self::XSI_TYPE);
-
-        return new self($xml->textContent);
-    }
-     */
-
-
-    /**
-     * @inheritDoc
      */
     public static function getXsiType(): string
     {
         return self::XSI_TYPE;
+    }
+
+
+    /**
+     * Convert XML into an Condition
+     *
+     * @param \DOMElement $xml The XML element we should load
+     * @return \SimpleSAML\SAML2\XML\saml\Condition
+     *
+     * @throws \SimpleSAML\XML\Exception\InvalidDOMElementException if the qualified name of the supplied element is wrong
+     */
+    public static function fromXML(DOMElement $xml): object
+    {
+        Assert::same($xml->localName, 'Condition', InvalidDOMElementException::class);
+        Assert::notNull($xml->namespaceURI, InvalidDOMElementException::class);
+        Assert::same($xml->namespaceURI, Condition::NS, InvalidDOMElementException::class);
+        Assert::true(
+            $xml->hasAttributeNS(Constants::NS_XSI, 'type'),
+            'Missing required xsi:type in <saml:Condition> element.',
+            InvalidDOMElementException::class
+        );
+
+        $type = $xml->getAttributeNS(Constants::NS_XSI, 'type');
+        list($prefix, $element) = explode(':', $type, 2);
+
+        $ns = $xml->lookupNamespaceUri($prefix);
+        $handler = Utils::getContainer()->getElementHandler($ns, $element);
+
+        Assert::notNull($handler, 'Unknown Condition type `' . $type . '`.');
+        Assert::isAOf($handler, Condition::class);
+
+        $audience = Audience::getChildrenOfClass($xml);
+
+        return new $handler($audience);
     }
 
 

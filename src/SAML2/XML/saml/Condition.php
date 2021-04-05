@@ -27,7 +27,6 @@ abstract class Condition extends AbstractConditionType
     /**
      * Initialize a saml:Condition from scratch
      *
-     * @param string $value
      * @param string $type
      */
     protected function __construct(
@@ -55,7 +54,7 @@ abstract class Condition extends AbstractConditionType
      */
     protected function setType(string $type): void
     {
-        Assert::notWhitespaceOnly($type, 'The "xsi:type" attribute of an identifier cannot be empty.');
+        Assert::notWhitespaceOnly($type, 'The "xsi:type" attribute of a Condition cannot be empty.');
         Assert::contains($type, ':');
 
         $this->type = $type;
@@ -77,38 +76,6 @@ abstract class Condition extends AbstractConditionType
 
 
     /**
-     * Convert XML into an Condition
-     *
-     * @param \DOMElement $xml The XML element we should load
-     * @return \SimpleSAML\SAML2\XML\saml\Condition
-     *
-     * @throws \SimpleSAML\XML\Exception\InvalidDOMElementException if the qualified name of the supplied element is wrong
-     */
-    public static function fromXML(DOMElement $xml): object
-    {
-        Assert::same($xml->localName, 'Condition', InvalidDOMElementException::class);
-        Assert::notNull($xml->namespaceURI, InvalidDOMElementException::class);
-        Assert::same($xml->namespaceURI, Condition::NS, InvalidDOMElementException::class);
-        Assert::true(
-            $xml->hasAttributeNS(Constants::NS_XSI, 'type'),
-            'Missing required xsi:type in <saml:Condition> element.',
-            InvalidDOMElementException::class
-        );
-
-        $type = $xml->getAttributeNS(Constants::NS_XSI, 'type');
-        list($prefix, $element) = explode(':', $type, 2);
-
-        $ns = $xml->lookupNamespaceUri($prefix);
-        $handler = Utils::getContainer()->getElementHandler($ns, $element);
-
-        Assert::notNull($handler, 'Unknown Condition type `' . $type . '`.');
-        Assert::isInstanceOf($handler, Condition::class);
-
-        return new $handler($xml->childNodes);
-    }
-
-
-    /**
      * Convert this Condition to XML.
      *
      * @param \DOMElement $parent The element we are converting to XML.
@@ -119,6 +86,7 @@ abstract class Condition extends AbstractConditionType
         $e = $this->instantiateParentElement($parent);
 
         $e->setAttributeNS(Constants::NS_XSI, 'xsi:type', $this->type);
+        $e->setAttributeNS(Constants::NS_XS, 'xmlns:' . static::XSI_TYPE_PREFIX, static::XSI_TYPE);
 
         return $e;
     }
