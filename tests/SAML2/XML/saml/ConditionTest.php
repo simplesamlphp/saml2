@@ -7,6 +7,8 @@ namespace SimpleSAML\Test\SAML2\XML\saml;
 use DOMDocument;
 use PHPUnit\Framework\TestCase;
 use SimpleSAML\SAML2\Constants;
+use SimpleSAML\SAML2\Utils;
+use SimpleSAML\SAML2\XML\saml\Audience;
 use SimpleSAML\SAML2\XML\saml\Condition;
 use SimpleSAML\Test\SAML2\CustomCondition;
 use SimpleSAML\Test\XML\SerializableXMLTestTrait;
@@ -46,7 +48,7 @@ final class ConditionTest extends TestCase
     public function testMarshalling(): void
     {
         $condition = new CustomCondition(
-            'SomeCondition'
+            [new Audience('urn:some:audience')]
         );
 
         $this->assertEquals(
@@ -65,30 +67,7 @@ final class ConditionTest extends TestCase
     {
         $condition = CustomCondition::fromXML($this->xmlRepresentation->documentElement);
 
-        $this->assertEquals('CustomCondition', $condition->getType());
-        $this->assertEquals('SomeCondition', $condition->getContent());
-
-        $this->assertEquals(
-            $this->xmlRepresentation->saveXML($this->xmlRepresentation->documentElement),
-            strval($condition)
-        );
-    }
-
-
-    /**
-     */
-    public function testUnmarshallingCustomClass(): void
-    {
-        /** @var \SimpleSAML\Test\SAML2\CustomCondition $condition */
-        $condition = CustomCondition::fromXML($this->xmlRepresentation->documentElement);
-
-        $this->assertEquals('CustomCondition', $condition->getType());
-        $this->assertEquals('SomeCondition', $condition->getContent());
-
-        $this->assertEquals(
-            $this->xmlRepresentation->saveXML($this->xmlRepresentation->documentElement),
-            strval($condition)
-        );
+        $this->assertEquals('ssp:CustomCondition', $condition->getType());
     }
 
 
@@ -97,10 +76,6 @@ final class ConditionTest extends TestCase
      */
     public function testSerialization(): void
     {
-        $this->assertEquals(
-            $this->xmlRepresentation->saveXML($this->xmlRepresentation->documentElement),
-            strval(unserialize(serialize(Condition::fromXML($this->xmlRepresentation->documentElement))))
-        );
         $this->assertEquals(
             $this->xmlRepresentation->saveXML($this->xmlRepresentation->documentElement),
             strval(unserialize(serialize(CustomCondition::fromXML($this->xmlRepresentation->documentElement))))

@@ -7,10 +7,15 @@ namespace SimpleSAML\SAML2\Compat;
 use Psr\Log\LoggerInterface;
 use SimpleSAML\Assert\Assert;
 use SimpleSAML\XML\AbstractXMLElement;
+use SimpleSAML\XML\saml\Condition;
 use SimpleSAML\XML\saml\CustomIdentifierInterface;
 
 abstract class AbstractContainer
 {
+    /** @var array */
+    protected array $registry;
+
+
     /**
      * Get a PSR-3 compatible logger.
      * @return \Psr\Log\LoggerInterface
@@ -92,6 +97,8 @@ abstract class AbstractContainer
         Assert::subclassOf($class, AbstractXMLElement::class);
         if (is_subclass_of($class, CustomIdentifierInterface::class, true)) {
             $key = $class::getXsiType() . ':BaseID';
+        } elseif (is_subclass_of($class, Condition::class, true)) {
+            $key = $class::getXsiType();
         } else {
             $key = join(':', [urlencode($class::NS), AbstractXMLElement::getClassName($class)]);
         }

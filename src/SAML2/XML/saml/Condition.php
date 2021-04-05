@@ -96,7 +96,7 @@ abstract class Condition extends AbstractConditionType
         );
 
         $type = $xml->getAttributeNS(Constants::NS_XSI, 'type');
-        list($prefix, $element) = explode($type, ':');
+        list($prefix, $element) = explode(':', $type, 2);
 
         $ns = $xml->lookupNamespaceUri($prefix);
         $handler = Utils::getContainer()->getElementHandler($ns, $element);
@@ -114,7 +114,7 @@ abstract class Condition extends AbstractConditionType
      * @param \DOMElement $parent The element we are converting to XML.
      * @return \DOMElement The XML element after adding the data corresponding to this Condition.
      */
-    protected function toXML(DOMElement $parent = null): DOMElement
+    public function toXML(DOMElement $parent = null): DOMElement
     {
         $e = $this->instantiateParentElement($parent);
 
