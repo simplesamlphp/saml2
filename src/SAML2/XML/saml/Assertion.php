@@ -263,6 +263,8 @@ class Assertion extends AbstractSamlElement implements SignedElementInterface
      */
     public function setId(?string $id): void
     {
+        Assert::nullOrNotWhitespaceOnly($id);
+
         if ($id === null) {
             $id = Utils::getContainer()->generateId();
         }
@@ -370,7 +372,14 @@ class Assertion extends AbstractSamlElement implements SignedElementInterface
         Assert::same($xml->namespaceURI, Assertion::NS, InvalidDOMElementException::class);
         Assert::same(self::getAttribute($xml, 'Version'), '2.0', 'Unsupported version: %s');
 
-        $issueInstant = XMLUtils::xsDateTimeToTimestamp(self::getAttribute($xml, 'IssueInstant'));
+        $issueInstant = self::getAttribute($xml, 'IssueInstant');
+        Assert::same(
+            substr($issueInstant, -1),
+            'Z',
+            "Time values MUST be expressed in the UTC timezone using the 'Z' timezone identifier.",
+            ProtocolViolationException::class
+        );
+        $issueInstant = XMLUtils::xsDateTimeToTimestamp($issueInstant);
 
         $issuer = Issuer::getChildrenOfClass($xml);
         Assert::minCount($issuer, 1, 'Missing <saml:Issuer> in assertion.', MissingElementException::class);

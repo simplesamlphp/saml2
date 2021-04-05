@@ -6,6 +6,8 @@ namespace SimpleSAML\SAML2\XML\samlp;
 
 use DOMElement;
 use SimpleSAML\Assert\Assert;
+use SimpleSAML\SAML2\Constants;
+use SimpleSAML\SAML2\Exception\ProtocolViolationException;
 use SimpleSAML\XML\Exception\InvalidDOMElementException;
 use SimpleSAML\XML\Exception\MissingElementException;
 use SimpleSAML\XML\Exception\TooManyElementsException;
@@ -61,6 +63,18 @@ final class Status extends AbstractSamlpElement
      */
     private function setStatusCode(StatusCode $statusCode): void
     {
+        Assert::oneOf(
+            $statusCode->getValue(),
+            [
+                Constants::STATUS_SUCCESS,
+                Constants::STATUS_REQUESTER,
+                Constants::STATUS_RESPONDER,
+                Constants::STATUS_VERSION_MISMATCH,
+            ],
+            'Invalid top-level status code',
+            ProtocolViolationException::class
+        );
+
         $this->statusCode = $statusCode;
     }
 
@@ -83,6 +97,8 @@ final class Status extends AbstractSamlpElement
      */
     private function setStatusMessage(?string $statusMessage): void
     {
+        Assert::nullOrNotWhitespaceOnly($statusMessage);
+
         $this->statusMessage = $statusMessage;
     }
 

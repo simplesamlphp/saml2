@@ -279,6 +279,7 @@ class AuthnRequest extends AbstractRequest
      */
     private function setProviderName(?string $ProviderName): void
     {
+        Assert::nullOrNotWhitespaceOnly($ProviderName);
         $this->ProviderName = $ProviderName;
     }
 
@@ -323,6 +324,10 @@ class AuthnRequest extends AbstractRequest
      */
     private function setAssertionConsumerServiceURL(string $assertionConsumerServiceURL = null): void
     {
+        if (!is_null($assertionConsumerServiceURL) && !filter_var($assertionConsumerServiceURL, FILTER_VALIDATE_URL)) {
+            throw new InvalidArgumentException('AuthnRequest AssertionConsumerServiceURL is not a valid URL.');
+        }
+
         $this->assertionConsumerServiceURL = $assertionConsumerServiceURL;
     }
 
@@ -341,10 +346,12 @@ class AuthnRequest extends AbstractRequest
     /**
      * Set the value of the ProtocolBinding attribute.
      *
-     * @param string $protocolBinding The ProtocolBinding attribute.
+     * @param string|null $protocolBinding The ProtocolBinding attribute.
      */
-    private function setProtocolBinding(string $protocolBinding = null): void
+    private function setProtocolBinding(?string $protocolBinding): void
     {
+        Assert::nullOrNotWhitespaceOnly($protocolBinding);
+
         $this->protocolBinding = $protocolBinding;
     }
 
@@ -365,8 +372,9 @@ class AuthnRequest extends AbstractRequest
      *
      * @param int|null $attributeConsumingServiceIndex The AttributeConsumingServiceIndex attribute.
      */
-    private function setAttributeConsumingServiceIndex(int $attributeConsumingServiceIndex = null): void
+    private function setAttributeConsumingServiceIndex(?int $attributeConsumingServiceIndex): void
     {
+        Assert::nullOrRange($attributeConsumingServiceIndex, 0, 65535);
         $this->attributeConsumingServiceIndex = $attributeConsumingServiceIndex;
     }
 
@@ -387,8 +395,9 @@ class AuthnRequest extends AbstractRequest
      *
      * @param int|null $assertionConsumerServiceIndex The AssertionConsumerServiceIndex attribute.
      */
-    private function setAssertionConsumerServiceIndex(int $assertionConsumerServiceIndex = null): void
+    private function setAssertionConsumerServiceIndex(?int $assertionConsumerServiceIndex): void
     {
+        Assert::nullOrRange($assertionConsumerServiceIndex, 0, 65535);
         $this->assertionConsumerServiceIndex = $assertionConsumerServiceIndex;
     }
 
@@ -431,7 +440,14 @@ class AuthnRequest extends AbstractRequest
         Assert::same($xml->namespaceURI, AuthnRequest::NS, InvalidDOMElementException::class);
         Assert::same('2.0', self::getAttribute($xml, 'Version'));
 
-        $issueInstant = XMLUtils::xsDateTimeToTimestamp(self::getAttribute($xml, 'IssueInstant'));
+        $issueInstant = self::getAttribute($xml, 'IssueInstant');
+        Assert::same(
+            substr($issueInstant, -1),
+            'Z',
+            "Time values MUST be expressed in the UTC timezone using the 'Z' timezone identifier.",
+            ProtocolViolationException::class
+        );
+        $issueInstant = XMLUtils::xsDateTimeToTimestamp($issueInstant);
 
         $attributeConsumingServiceIndex = self::getIntegerAttribute($xml, 'AttributeConsumingServiceIndex', null);
         $assertionConsumerServiceIndex = self::getIntegerAttribute($xml, 'AssertionConsumerServiceIndex', null);

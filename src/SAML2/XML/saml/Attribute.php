@@ -93,7 +93,7 @@ class Attribute extends AbstractSamlElement
      */
     protected function setName(string $name): void
     {
-        Assert::notEmpty($name, 'Cannot specify an empty name for an Attribute.');
+        Assert::notWhitespaceOnly($name, 'Cannot specify an empty name for an Attribute.');
         $this->Name = $name;
     }
 
@@ -117,7 +117,7 @@ class Attribute extends AbstractSamlElement
      */
     protected function setNameFormat(?string $NameFormat): void
     {
-        Assert::nullOrNotEmpty($NameFormat, 'Cannot specify an empty NameFormat for an Attribute.');
+        Assert::nullOrNotWhitespaceOnly($NameFormat, 'Cannot specify an empty NameFormat for an Attribute.');
         $this->NameFormat = $NameFormat;
     }
 
@@ -141,7 +141,7 @@ class Attribute extends AbstractSamlElement
      */
     private function setFriendlyName(?string $friendlyName): void
     {
-        Assert::nullOrNotEmpty($friendlyName, 'FriendlyName cannot be an empty string.');
+        Assert::nullOrNotWhitespaceOnly($friendlyName, 'FriendlyName cannot be an empty string.');
         $this->FriendlyName = $friendlyName;
     }
 

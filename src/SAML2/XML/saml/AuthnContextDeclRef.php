@@ -50,7 +50,8 @@ final class AuthnContextDeclRef extends AbstractSamlElement
      */
     private function setDeclRef(string $declRef): void
     {
-        $this->declRef = trim($declRef);
+        Assert::notWhitespaceOnly($declRef);
+        $this->declRef = $declRef;
     }
 
 

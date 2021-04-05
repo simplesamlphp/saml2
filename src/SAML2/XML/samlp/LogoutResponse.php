@@ -63,7 +63,14 @@ class LogoutResponse extends AbstractStatusResponse
         Assert::same($xml->namespaceURI, LogoutResponse::NS, InvalidDOMElementException::class);
         Assert::same('2.0', self::getAttribute($xml, 'Version'));
 
-        $issueInstant = XMLUtils::xsDateTimeToTimestamp(self::getAttribute($xml, 'IssueInstant'));
+        $issueInstant = self::getAttribute($xml, 'IssueInstant');
+        Assert::same(
+            substr($issueInstant, -1),
+            'Z',
+            "Time values MUST be expressed in the UTC timezone using the 'Z' timezone identifier.",
+            ProtocolViolationException::class
+        );
+        $issueInstant = XMLUtils::xsDateTimeToTimestamp($issueInstant);
 
         $issuer = Issuer::getChildrenOfClass($xml);
         Assert::countBetween($issuer, 0, 1);

@@ -5,6 +5,7 @@ declare(strict_types=1);
 namespace SimpleSAML\SAML2\XML\samlp;
 
 use DOMElement;
+use SimpleSAML\Assert\Assert;
 use SimpleSAML\SAML2\Constants;
 use SimpleSAML\SAML2\XML\ExtensionsTrait;
 use SimpleSAML\SAML2\XML\saml\Issuer;
@@ -101,6 +102,8 @@ abstract class AbstractStatusResponse extends AbstractMessage
      */
     protected function setInResponseTo(?string $inResponseTo): void
     {
+        Assert::nullOrNotWhitespaceOnly($inResponseTo);
+
         $this->inResponseTo = $inResponseTo;
     }
 

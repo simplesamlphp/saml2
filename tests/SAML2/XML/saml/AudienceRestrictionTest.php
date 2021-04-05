@@ -7,6 +7,7 @@ namespace SimpleSAML\Test\SAML2\XML\saml;
 use DOMDocument;
 use PHPUnit\Framework\TestCase;
 use SimpleSAML\SAML2\Constants;
+use SimpleSAML\SAML2\XML\saml\Audience;
 use SimpleSAML\SAML2\XML\saml\AudienceRestriction;
 use SimpleSAML\Test\XML\SerializableXMLTestTrait;
 use SimpleSAML\XML\DOMDocumentFactory;
@@ -46,8 +47,8 @@ final class AudienceRestrictionTest extends TestCase
     {
         $condition = new AudienceRestriction(
             [
-                'urn:audience1',
-                'urn:audience2'
+                new Audience('urn:audience1'),
+                new Audience('urn:audience2')
             ]
         );
 
@@ -69,8 +70,8 @@ final class AudienceRestrictionTest extends TestCase
 
         $audiences = $condition->getAudience();
         $this->assertCount(2, $audiences);
-        $this->assertEquals('urn:audience1', $audiences[0]);
-        $this->assertEquals('urn:audience2', $audiences[1]);
+        $this->assertEquals('urn:audience1', $audiences[0]->getValue());
+        $this->assertEquals('urn:audience2', $audiences[1]->getValue());
 
         $this->assertEquals(
             $this->xmlRepresentation->saveXML($this->xmlRepresentation->documentElement),

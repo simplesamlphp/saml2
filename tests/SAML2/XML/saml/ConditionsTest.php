@@ -7,6 +7,7 @@ namespace SimpleSAML\Test\SAML2\XML\saml;
 use DOMDocument;
 use PHPUnit\Framework\TestCase;
 use SimpleSAML\SAML2\Constants;
+use SimpleSAML\SAML2\XML\saml\Audience;
 use SimpleSAML\SAML2\XML\saml\AudienceRestriction;
 use SimpleSAML\SAML2\XML\saml\Conditions;
 use SimpleSAML\SAML2\XML\saml\ProxyRestriction;
@@ -52,14 +53,14 @@ final class ConditionsTest extends TestCase
             [
                 new AudienceRestriction(
                     [
-                        'http://sp.example.com/demo1/metadata.php'
+                        new Audience('http://sp.example.com/demo1/metadata.php')
                     ]
                 ),
             ],
             true,
             new ProxyRestriction(
                 [
-                    'http://sp.example.com/demo2/metadata.php'
+                    new Audience('http://sp.example.com/demo2/metadata.php')
                 ],
                 2
             )
@@ -106,7 +107,7 @@ final class ConditionsTest extends TestCase
 
         $audiences = $audienceRestriction[0]->getAudience();
         $this->assertCount(1, $audiences);
-        $this->assertEquals('http://sp.example.com/demo1/metadata.php', $audiences[0]);
+        $this->assertEquals('http://sp.example.com/demo1/metadata.php', $audiences[0]->getValue());
 
         $this->assertTrue($conditions->getOneTimeUse());
 
@@ -115,7 +116,7 @@ final class ConditionsTest extends TestCase
 
         $audiences = $proxyRestriction->getAudience();
         $this->assertCount(1, $audiences);
-        $this->assertEquals('http://sp.example.com/demo2/metadata.php', $audiences[0]);
+        $this->assertEquals('http://sp.example.com/demo2/metadata.php', $audiences[0]->getValue());
 
         $this->assertEquals(
             $this->xmlRepresentation->saveXML($this->xmlRepresentation->documentElement),

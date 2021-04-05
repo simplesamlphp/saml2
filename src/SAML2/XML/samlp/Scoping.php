@@ -74,6 +74,7 @@ final class Scoping extends AbstractSamlpElement
     private function setRequesterId(array $requesterId): void
     {
         Assert::allStringNotEmpty($requesterId);
+        Assert::allNotWhitespaceOnly($requesterId);
 
         $this->requesterId = $requesterId;
     }
@@ -93,6 +94,7 @@ final class Scoping extends AbstractSamlpElement
      */
     private function setProxyCount(?int $proxyCount): void
     {
+        Assert::nullOrNatural($proxyCount);
         $this->proxyCount = $proxyCount;
     }
 

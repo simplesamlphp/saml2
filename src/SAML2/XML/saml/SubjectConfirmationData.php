@@ -162,6 +162,7 @@ final class SubjectConfirmationData extends AbstractSamlElement
      */
     private function setRecipient(?string $recipient): void
     {
+        Assert::nullOrNotWhitespaceOnly($recipient);
         $this->Recipient = $recipient;
     }
 
@@ -184,6 +185,9 @@ final class SubjectConfirmationData extends AbstractSamlElement
      */
     private function setInResponseTo(?string $inResponseTo): void
     {
+        Assert::nullOrNotWhitespaceOnly($inResponseTo);
+        Assert::nullOrNotContains($inResponseTo, ':');
+
         $this->InResponseTo = $inResponseTo;
     }
 
@@ -278,11 +282,23 @@ final class SubjectConfirmationData extends AbstractSamlElement
 
         $NotBefore = self::getAttribute($xml, 'NotBefore', null);
         if ($NotBefore !== null) {
+            Assert::same(
+                substr($NotBefore, -1),
+                'Z',
+                "Time values MUST be expressed in the UTC timezone using the 'Z' timezone identifier.",
+                ProtocolViolationException::class
+            );
             $NotBefore = XMLUtils::xsDateTimeToTimestamp($NotBefore);
         }
 
         $NotOnOrAfter = self::getAttribute($xml, 'NotOnOrAfter', null);
         if ($NotOnOrAfter !== null) {
+            Assert::same(
+                substr($NotOnOrAfter, -1),
+                'Z',
+                "Time values MUST be expressed in the UTC timezone using the 'Z' timezone identifier.",
+                ProtocolViolationException::class
+            );
             $NotOnOrAfter = XMLUtils::xsDateTimeToTimestamp($NotOnOrAfter);
         }
 

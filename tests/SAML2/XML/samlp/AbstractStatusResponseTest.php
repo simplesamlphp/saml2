@@ -38,7 +38,7 @@ final class AbstractStatusResponseTest extends TestCase
     {
         $status = new Status(
             new StatusCode(
-                'OurStatusCode',
+                Constants::STATUS_SUCCESS,
                 [
                     new StatusCode(
                         'OurSubStatusCode'
@@ -58,7 +58,7 @@ final class AbstractStatusResponseTest extends TestCase
         /** @psalm-var \DOMElement[] $statusCodeElements */
         $statusCodeElements = XMLUtils::xpQuery($statusElements[0], './saml_protocol:StatusCode');
         $this->assertCount(1, $statusCodeElements);
-        $this->assertEquals('OurStatusCode', $statusCodeElements[0]->getAttribute("Value"));
+        $this->assertEquals(Constants::STATUS_SUCCESS, $statusCodeElements[0]->getAttribute("Value"));
 
         /** @psalm-var \DOMElement[] $nestedStatusCodeElements */
         $nestedStatusCodeElements = XMLUtils::xpQuery($statusCodeElements[0], './saml_protocol:StatusCode');
@@ -77,7 +77,7 @@ final class AbstractStatusResponseTest extends TestCase
     {
         $status = new Status(
             new StatusCode(
-                'OurStatusCode',
+                Constants::STATUS_SUCCESS,
                 [
                     new StatusCode(
                         'OurSubStatusCode'
@@ -222,7 +222,7 @@ XML;
     public function testResponseTo(): void
     {
         $status = new Status(
-            new StatusCode('OurStatusCode')
+            new StatusCode(Constants::STATUS_REQUESTER)
         );
 
         $response = new Response($status, null, null, 1453323439, 'aabb12234');
@@ -238,7 +238,7 @@ XML;
                 IssueInstant="2016-01-20T20:57:19Z"
                 InResponseTo="aabb12234">
   <samlp:Status>
-    <samlp:StatusCode Value="OurStatusCode"/>
+    <samlp:StatusCode Value="urn:oasis:names:tc:SAML:2.0:status:Requester"/>
   </samlp:Status>
 </samlp:Response>
 STATUSXML

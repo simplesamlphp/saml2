@@ -93,7 +93,6 @@ final class DecodeBase64TransformerTest extends TestCase
                     IssueInstant="2020-02-26T12:04:42Z"
                     >
         <saml:Issuer>urn:thki:sid:idp2</saml:Issuer>
-        <saml:Conditions/>
         <saml:AuthnStatement AuthnInstant="2010-03-05T13:34:28Z">
           <saml:AuthnContext>
             <saml:AuthnContextClassRef>someAuthnContext</saml:AuthnContextClassRef>

@@ -11,6 +11,7 @@ use SimpleSAML\SAML2\Assertion\Validation\ConstraintValidator\SpIsValidAudience;
 use SimpleSAML\SAML2\Assertion\Validation\Result;
 use SimpleSAML\SAML2\Configuration\ServiceProvider;
 use SimpleSAML\SAML2\XML\saml\Assertion;
+use SimpleSAML\SAML2\XML\saml\Audience;
 use SimpleSAML\SAML2\XML\saml\AudienceRestriction;
 use SimpleSAML\SAML2\XML\saml\AuthnContext;
 use SimpleSAML\SAML2\XML\saml\AuthnContextClassRef;
@@ -60,7 +61,7 @@ final class SpIsValidAudienceTest extends MockeryTestCase
             null,
             null,
             [],
-            [new AudienceRestriction(['audience1', 'audience2'])]
+            [new AudienceRestriction([new Audience('audience1'), new Audience('audience2')])]
         );
 
         // Create the statements

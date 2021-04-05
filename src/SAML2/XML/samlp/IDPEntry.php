@@ -53,6 +53,7 @@ final class IDPEntry extends AbstractSamlpElement
      */
     private function setProviderId(string $providerId): void
     {
+        Assert::notWhitespaceOnly($providerId);
         $this->providerId = $providerId;
     }
 
@@ -71,6 +72,7 @@ final class IDPEntry extends AbstractSamlpElement
      */
     private function setName(?string $name): void
     {
+        Assert::nullOrNotWhitespaceOnly($name);
         $this->name = $name;
     }
 
@@ -89,6 +91,7 @@ final class IDPEntry extends AbstractSamlpElement
      */
     private function setLoc(?string $loc): void
     {
+        Assert::nullOrNotWhitespaceOnly($loc);
         $this->loc = $loc;
     }
 

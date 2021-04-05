@@ -4,6 +4,8 @@ declare(strict_types=1);
 
 namespace SimpleSAML\SAML2\XML;
 
+use SimpleSAML\Assert\Assert;
+
 /**
  * Trait grouping common functionality for elements implementing BaseIDAbstractType and NameIDType.
  *
@@ -50,6 +52,7 @@ trait IDNameQualifiersTrait
      */
     private function setNameQualifier(?string $nameQualifier): void
     {
+        Assert::nullOrNotWhitespaceOnly($nameQualifier);
         $this->NameQualifier = $nameQualifier;
     }
 
@@ -71,6 +74,7 @@ trait IDNameQualifiersTrait
      */
     private function setSPNameQualifier(?string $spNameQualifier): void
     {
+        Assert::nullOrNotWhitespaceOnly($spNameQualifier);
         $this->SPNameQualifier = $spNameQualifier;
     }
 }

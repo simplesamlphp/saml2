@@ -121,6 +121,7 @@ abstract class NameIDType extends AbstractSamlElement implements IdentifierInter
      */
     public function setSPProvidedID(?string $spProvidedID): void
     {
+        Assert::nullOrNotWhitespaceOnly($spProvidedID);
         $this->SPProvidedID = $spProvidedID;
     }
 

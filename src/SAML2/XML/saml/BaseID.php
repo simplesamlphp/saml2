@@ -75,7 +75,7 @@ class BaseID extends AbstractSamlElement implements BaseIdentifierInterface
      */
     protected function setType(string $type): void
     {
-        Assert::notEmpty($type, 'The "xsi:type" attribute of an identifier cannot be empty.');
+        Assert::notWhitespaceOnly($type, 'The "xsi:type" attribute of an identifier cannot be empty.');
 
         $this->type = $type;
     }
@@ -99,6 +99,8 @@ class BaseID extends AbstractSamlElement implements BaseIdentifierInterface
      */
     protected function setValue(string $value): void
     {
+        Assert::notWhitespaceOnly($value);
+
         $this->value = $value;
     }
 

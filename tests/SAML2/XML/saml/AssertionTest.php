@@ -17,6 +17,7 @@ use SimpleSAML\SAML2\XML\saml\AuthnContext;
 use SimpleSAML\SAML2\XML\saml\AuthnContextClassRef;
 use SimpleSAML\SAML2\XML\saml\AuthnContextDeclRef;
 use SimpleSAML\SAML2\XML\saml\AuthnStatement;
+use SimpleSAML\SAML2\XML\saml\Audience;
 use SimpleSAML\SAML2\XML\saml\AudienceRestriction;
 use SimpleSAML\SAML2\XML\saml\Conditions;
 use SimpleSAML\SAML2\XML\saml\EncryptedAssertion;
@@ -73,7 +74,7 @@ final class AssertionTest extends MockeryTestCase
             1314780665,
             1314780665,
             [],
-            [new AudienceRestriction(['ServiceProvider'])]
+            [new AudienceRestriction([new Audience('ServiceProvider')])]
         );
 
         // Create the AuthnStatement
@@ -187,7 +188,10 @@ XML;
 
         $restriction1 = array_pop($audienceRestriction);
         $this->assertCount(2, $restriction1->getAudience());
-        $this->assertEquals(['audience1', 'audience2'], $restriction1->getAudience());
+
+        $audience = $restriction1->getAudience();
+        $this->assertEquals('audience1', $audience[0]->getValue());
+        $this->assertEquals('audience2', $audience[1]->getValue());
 
         // Test for Authenticating Authorities
         $assertionAuthenticatingAuthorities = $assertion->getAuthnStatements()[0]->getAuthnContext()->getAuthenticatingAuthorities();
@@ -212,7 +216,7 @@ XML;
             [],
             [
                 new AudienceRestriction(
-                    ['audience1', 'audience2']
+                    [new Audience('audience1'), new Audience('audience2')]
                 )
             ]
         );
@@ -1012,12 +1016,15 @@ XML;
         $this->assertCount(2, $audienceRestrictions);
 
         $restriction1 = $audienceRestrictions[0];
-        $this->assertCount(1, $restriction1->getAudience());
-        $this->assertEquals(['audience1'], $restriction1->getAudience());
+        $audience = $restriction1->getAudience();
+        $this->assertCount(1, $audience);
+        $this->assertEquals('audience1', $audience[0]->getValue());
 
         $restriction2 = $audienceRestrictions[1];
-        $this->assertCount(2, $restriction2->getAudience());
-        $this->assertEquals(['audience2', 'audience1'], $restriction2->getAudience());
+        $audience = $restriction2->getAudience();
+        $this->assertCount(2, $audience);
+        $this->assertEquals('audience2', $audience[0]->getValue());
+        $this->assertEquals('audience1', $audience[1]->getValue());
     }
 
 
@@ -1036,7 +1043,7 @@ XML;
             [],
             [
                 new AudienceRestriction(
-                    ['audience1', 'audience2']
+                    [new Audience('audience1'), new Audience('audience2')]
                 )
             ]
         );
@@ -1098,7 +1105,7 @@ XML;
             null,
             null,
             [],
-            [new AudienceRestriction(['audience1', 'audience2'])]
+            [new AudienceRestriction([new Audience('audience1'), new Audience('audience2')])]
         );
 
         // Create AttributeStatement

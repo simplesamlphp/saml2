@@ -55,10 +55,12 @@ class SpIsValidAudience implements
         $all = [];
         foreach ($audienceRestrictions as $audienceRestriction) {
             $audiences = $audienceRestriction->getAudience();
-            if (in_array($entityId, $audiences, true)) {
-                return;
+            foreach ($audiences as $audience) {
+                if ($entityId === $audience->getValue()) {
+                    return;
+                }
+                $all[] = $audience->getValue();
             }
-            $all = array_merge($all, $audiences);
         }
 
         $result->addError(sprintf(

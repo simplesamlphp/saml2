@@ -214,6 +214,8 @@ abstract class AbstractMessage extends AbstractSamlpElement implements SignedEle
      */
     private function setId(?string $id): void
     {
+        Assert::nullOrNotWhitespaceOnly($id);
+
         if ($id === null) {
             $id = Utils::getContainer()->generateId();
         }
@@ -277,6 +279,8 @@ abstract class AbstractMessage extends AbstractSamlpElement implements SignedEle
      */
     private function setDestination(string $destination = null): void
     {
+        Assert::nullOrNotWhitespaceOnly($destination);
+
         $this->destination = $destination;
     }
 
@@ -303,6 +307,8 @@ abstract class AbstractMessage extends AbstractSamlpElement implements SignedEle
      */
     private function setConsent(?string $consent): void
     {
+        Assert::nullOrNotWhitespaceOnly($consent);
+
         $this->consent = $consent;
     }
 
@@ -358,6 +364,8 @@ abstract class AbstractMessage extends AbstractSamlpElement implements SignedEle
      */
     public function setRelayState(string $relayState = null): void
     {
+        Assert::nullOrNotWhitespaceOnly($relayState);
+
         $this->relayState = $relayState;
     }
 

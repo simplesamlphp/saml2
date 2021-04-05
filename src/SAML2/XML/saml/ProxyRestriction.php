@@ -11,12 +11,10 @@ use SimpleSAML\XML\Utils as XMLUtils;
 /**
  * @package simplesamlphp/saml2
  */
-final class ProxyRestriction extends AbstractConditionType
+final class ProxyRestriction extends AbstractSamlElement
 {
-    protected const XSI_TYPE = 'ProxyRestriction';
-
     /**
-     * @param string[]
+     * @param \SimpleSAML\SAML2\XML\saml\Audience[]
      */
     protected array $audience = [];
 
@@ -29,13 +27,11 @@ final class ProxyRestriction extends AbstractConditionType
     /**
      * ProxyRestriction constructor.
      *
-     * @param string[] $audience
+     * @param \SimpleSAML\SAML2\XML\saml\Audience[] $audience
      * @param int|null $count
      */
     public function __construct(array $audience = [], ?int $count = null)
     {
-        parent::__construct('');
-
         $this->setCount($count);
         $this->setAudience($audience);
     }
@@ -67,7 +63,7 @@ final class ProxyRestriction extends AbstractConditionType
     /**
      * Get the value of the audience-attribute.
      *
-     * @return string[]
+     * @return \SimpleSAML\SAML2\XML\saml\Audience[]
      */
     public function getAudience(): array
     {
@@ -78,11 +74,11 @@ final class ProxyRestriction extends AbstractConditionType
     /**
      * Set the value of the audience-attribute
      *
-     * @param string[] $audience
+     * @param \SimpleSAML\SAML2\XML\saml\Audience[] $audience
      */
     protected function setAudience(array $audience): void
     {
-        Assert::allStringNotEmpty($audience);
+        Assert::allIsInstanceOf($audience, Audience::class);
 
         $this->audience = $audience;
     }
@@ -100,7 +96,7 @@ final class ProxyRestriction extends AbstractConditionType
         Assert::same($xml->namespaceURI, ProxyRestriction::NS, InvalidDOMElementException::class);
 
         $count = self::getIntegerAttribute($xml, 'Count', null);
-        $audience = XMLUtils::extractStrings($xml, AbstractSamlElement::NS, 'Audience');
+        $audience = Audience::getChildrenOfClass($xml);
 
         return new self($audience, $count);
     }
@@ -114,13 +110,15 @@ final class ProxyRestriction extends AbstractConditionType
      */
     public function toXML(DOMElement $parent = null): DOMElement
     {
-        $e = parent::toXML($parent);
+        $e = $this->instantiateParentElement($parent);
 
         if ($this->count !== null) {
             $e->setAttribute('Count', strval($this->count));
         }
 
-        XMLUtils::addStrings($e, AbstractSamlElement::NS, 'saml:Audience', false, $this->audience);
+        foreach ($this->audience as $audience) {
+            $audience->toXML($e);
+        }
 
         return $e;
     }

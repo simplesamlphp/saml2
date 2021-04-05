@@ -50,7 +50,8 @@ final class AuthnContextClassRef extends AbstractSamlElement
      */
     private function setClassRef(string $classRef): void
     {
-        $this->classRef = trim($classRef);
+        Assert::notWhitespaceOnly($classRef);
+        $this->classRef = $classRef;
     }
 
 

@@ -100,6 +100,7 @@ final class RequestedAuthnContext extends AbstractSamlpElement
      */
     private function setComparison(?string $comparison): void
     {
+        Assert::nullOrOneOf($comparison, ['exact', 'minimum', 'maximum', 'better']);
         $this->Comparison = $comparison;
     }
 
@@ -142,8 +143,7 @@ final class RequestedAuthnContext extends AbstractSamlpElement
             $e->appendChild($e->ownerDocument->importNode($context->toXML(), true));
         }
 
-        if (isset($this->Comparison)) {
-            Assert::oneOf($this->Comparison, ['exact', 'minimum', 'maximum', 'better']);
+        if ($this->Comparison !== null) {
             $e->setAttribute('Comparison', $this->Comparison);
         }
 

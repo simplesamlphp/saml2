@@ -95,9 +95,9 @@ final class SigningMethod extends AbstractAlgElement
      *
      * @param int|null $minKeySize
      */
-    private function setMinKeySize(int $minKeySize = null): void
+    private function setMinKeySize(?int $minKeySize): void
     {
-        Assert::nullOrNatural($minKeySize);
+        Assert::nullOrPositiveInteger($minKeySize);
         $this->MinKeySize = $minKeySize;
     }
 
@@ -118,8 +118,9 @@ final class SigningMethod extends AbstractAlgElement
      *
      * @param int|null $maxKeySize
      */
-    private function setMaxKeySize(int $maxKeySize = null): void
+    private function setMaxKeySize(?int $maxKeySize): void
     {
+        Assert::nullOrPositiveInteger($maxKeySize);
         $this->MaxKeySize = $maxKeySize;
     }
 

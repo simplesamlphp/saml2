@@ -73,6 +73,7 @@ final class SubjectConfirmation extends AbstractSamlElement
      */
     private function setMethod(string $method): void
     {
+        Assert::notWhitespaceOnly($method);
         $this->Method = $method;
     }
 

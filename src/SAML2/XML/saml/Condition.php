@@ -54,7 +54,7 @@ class Condition extends AbstractConditionType
      */
     protected function setType(string $type): void
     {
-        Assert::notEmpty($type, 'The "xsi:type" attribute of an identifier cannot be empty.');
+        Assert::notWhitespaceOnly($type, 'The "xsi:type" attribute of an identifier cannot be empty.');
 
         $this->type = $type;
     }

@@ -58,7 +58,7 @@ final class IsSuccessfulTest extends MockeryTestCase
     {
         $responseStatus = new Status(
             new StatusCode(
-                'foo',
+                Constants::STATUS_SUCCESS,
                 [
                     new StatusCode(
                         Constants::STATUS_PREFIX . 'bar'
@@ -79,6 +79,6 @@ final class IsSuccessfulTest extends MockeryTestCase
 
         $this->assertFalse($result->isValid());
         $this->assertCount(1, $errors);
-        $this->assertEquals('foo/bar this is a test message', $errors[0]);
+        $this->assertEquals('Success/bar this is a test message', $errors[0]);
     }
 }

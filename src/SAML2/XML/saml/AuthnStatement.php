@@ -142,6 +142,8 @@ final class AuthnStatement extends AbstractStatement
      */
     private function setSessionIndex(?string $sessionIndex): void
     {
+        Assert::nullOrNotWhitespaceOnly($sessionIndex);
+
         $this->sessionIndex = $sessionIndex;
     }
 
@@ -197,14 +199,33 @@ final class AuthnStatement extends AbstractStatement
             TooManyElementsException::class
         );
 
-        $authnInstant = XMLUtils::xsDateTimeToTimestamp(self::getAttribute($xml, 'AuthnInstant'));
+        $authnInstant = self::getAttribute($xml, 'AuthnInstant');
+        Assert::same(
+            substr($authnInstant, -1),
+            'Z',
+            "Time values MUST be expressed in the UTC timezone using the 'Z' timezone identifier.",
+            ProtocolViolationException::class
+        );
+        $authnInstant = XMLUtils::xsDateTimeToTimestamp($authnInstant);
+
         $sessionNotOnOrAfter = self::getAttribute($xml, 'SessionNotOnOrAfter', null);
+        if ($sessionNotOnOrAfter !== null) {
+            Assert::same(
+                substr($sessionNotOnOrAfter, -1),
+                'Z',
+                "Time values MUST be expressed in the UTC timezone using the 'Z' timezone identifier.",
+                ProtocolViolationException::class
+            );
+
+            $sessionNotOnOrAfter = XMLUtils::xsDateTimeToTimestamp($sessionNotOnOrAfter);
+        }
+
         $subjectLocality = SubjectLocality::getChildrenOfClass($xml);
 
         return new self(
             array_pop($authnContext),
             $authnInstant,
-            is_null($sessionNotOnOrAfter) ? $sessionNotOnOrAfter : XMLUtils::xsDateTimeToTimestamp($sessionNotOnOrAfter),
+            $sessionNotOnOrAfter,
             self::getAttribute($xml, 'SessionIndex', null),
             array_pop($subjectLocality)
         );

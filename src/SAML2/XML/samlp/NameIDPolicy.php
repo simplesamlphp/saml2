@@ -54,6 +54,7 @@ final class NameIDPolicy extends AbstractSamlpElement
      */
     private function setFormat(?string $Format): void
     {
+        Assert::nullOrNotWhitespaceOnly($Format);
         $this->Format = $Format;
     }
 
@@ -72,6 +73,7 @@ final class NameIDPolicy extends AbstractSamlpElement
      */
     private function setSPNameQualifier(?string $SPNameQualifier): void
     {
+        Assert::nullOrNotWhitespaceOnly($SPNameQualifier);
         $this->SPNameQualifier = $SPNameQualifier;
     }
 

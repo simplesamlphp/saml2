@@ -65,6 +65,7 @@ final class KeyAuthority extends AbstractShibmdElement
      */
     private function setVerifyDepth(?int $verifyDepth): void
     {
+        Assert::nullOrRange($verifyDepth, 0, 255);
         $this->VerifyDepth = $verifyDepth;
     }
 

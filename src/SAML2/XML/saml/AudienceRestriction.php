@@ -16,21 +16,19 @@ use SimpleSAML\XML\Utils as XMLUtils;
  *
  * @package simplesamlphp/saml2
  */
-final class AudienceRestriction extends AbstractConditionType
+final class AudienceRestriction extends AbstractSamlElement
 {
-    /** @var string[] */
+    /** @var \SimpleSAML\SAML2\XML\saml\Audience[] */
     protected array $audience = [];
 
 
     /**
      * Initialize a saml:AudienceRestriction
      *
-     * @param string[] $audience
+     * @param \SimpleSAML\SAML2\XML\saml\Audience[] $audience
      */
     public function __construct(array $audience)
     {
-        parent::__construct('');
-
         $this->setAudience($audience);
     }
 
@@ -38,7 +36,7 @@ final class AudienceRestriction extends AbstractConditionType
     /**
      * Collect the audience
      *
-     * @return string[]
+     * @return \SimpleSAML\SAML2\XML\saml\Audience[]
      */
     public function getAudience(): array
     {
@@ -49,11 +47,11 @@ final class AudienceRestriction extends AbstractConditionType
     /**
      * Set the value of the Audience-property
      *
-     * @param string[] $audience
+     * @param \SimpleSAML\SAML2\XML\saml\Audience[] $audience
      */
     private function setAudience(array $audience): void
     {
-        Assert::allStringNotEmpty($audience);
+        Assert::allIsInstanceOf($audience, Audience::class);
 
         $this->audience = $audience;
     }
@@ -72,7 +70,7 @@ final class AudienceRestriction extends AbstractConditionType
         Assert::same($xml->localName, 'AudienceRestriction', InvalidDOMElementException::class);
         Assert::same($xml->namespaceURI, AudienceRestriction::NS, InvalidDOMElementException::class);
 
-        $audience = XMLUtils::extractStrings($xml, AbstractSamlElement::NS, 'Audience');
+        $audience = Audience::getChildrenOfClass($xml);
 
         return new self($audience);
     }
@@ -86,9 +84,11 @@ final class AudienceRestriction extends AbstractConditionType
      */
     public function toXML(DOMElement $parent = null): DOMElement
     {
-        $e = parent::toXML($parent);
+        $e = $this->instantiateParentElement($parent);
 
-        XMLUtils::addStrings($e, AbstractSamlElement::NS, 'saml:Audience', false, $this->audience);
+        foreach ($this->audience as $audience) {
+            $audience->toXML($e);
+        }
 
         return $e;
     }

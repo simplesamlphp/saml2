@@ -6,6 +6,7 @@ namespace SimpleSAML\SAML2\XML\samlp;
 
 use DOMElement;
 use SimpleSAML\Assert\Assert;
+use SimpleSAML\SAML2\Exception\ProtocolViolationException;
 use SimpleSAML\SAML2\XML\saml\Attribute;
 use SimpleSAML\SAML2\XML\saml\Issuer;
 use SimpleSAML\SAML2\XML\saml\Subject;
@@ -88,6 +89,22 @@ class AttributeQuery extends AbstractSubjectQuery
     {
         Assert::allIsInstanceOf($attributes, Attribute::class);
 
+        $cache = [];
+        foreach ($attributes as $attribute) {
+            $name = $attribute->getName();
+            $nameFormat = $attribute->getNameFormat();
+
+            if (isset($cache[$nameFormat])) {
+                Assert::true(
+                    !in_array($name, $cache[$nameFormat], true),
+                    'A single query MUST NOT contain two <saml:Attribute> elements with the same Name and NameFormat.',
+                    ProtocolViolationException::class
+                );
+            }
+            $cache[$nameFormat][] = $name;
+        }
+        unset($cache);
+
         $this->attributes = $attributes;
     }
 
@@ -110,7 +127,14 @@ class AttributeQuery extends AbstractSubjectQuery
         Assert::same('2.0', self::getAttribute($xml, 'Version'));
 
         $id = self::getAttribute($xml, 'ID');
-        $issueInstant = XMLUtils::xsDateTimeToTimestamp(self::getAttribute($xml, 'IssueInstant'));
+        $issueInstant = self::getAttribute($xml, 'IssueInstant');
+        Assert::same(
+            substr($issueInstant, -1),
+            'Z',
+            "Time values MUST be expressed in the UTC timezone using the 'Z' timezone identifier.",
+            ProtocolViolationException::class
+        );
+        $issueInstant = XMLUtils::xsDateTimeToTimestamp($issueInstant);
         $destination = self::getAttribute($xml, 'Destination', null);
         $consent = self::getAttribute($xml, 'Consent', null);
 

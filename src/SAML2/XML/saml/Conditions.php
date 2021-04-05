@@ -233,12 +233,42 @@ final class Conditions extends AbstractSamlElement
         Assert::same($xml->namespaceURI, Conditions::NS, InvalidDOMElementException::class);
 
         $notBefore = self::getAttribute($xml, 'NotBefore', null);
+        if ($notBefore !== null) {
+            Assert::same(
+                substr($notBefore, -1),
+                'Z',
+                "Time values MUST be expressed in the UTC timezone using the 'Z' timezone identifier.",
+                ProtocolViolationException::class
+            );
+        }
+
         $notOnOrAfter = self::getAttribute($xml, 'NotOnOrAfter', null);
+        if ($notOnOrAfter !== null) {
+            Assert::same(
+                substr($notOnOrAfter, -1),
+                'Z',
+                "Time values MUST be expressed in the UTC timezone using the 'Z' timezone identifier.",
+                ProtocolViolationException::class
+            );
+        }
 
         $condition = Condition::getChildrenOfClass($xml);
         $audienceRestriction = AudienceRestriction::getChildrenOfClass($xml);
         $oneTimeUse = XMLUtils::extractStrings($xml, AbstractSamlElement::NS, 'OneTimeUse');
         $proxyRestriction = ProxyRestriction::getChildrenOfClass($xml);
+
+        Assert::maxCount(
+            $oneTimeUse,
+            1,
+            'There MUST occur at most one <saml:OneTimeUse> element inside a <saml:Conditions>',
+            ProtocolViolationException::class
+        );
+        Assert::maxCount(
+            $proxyRestriction,
+            1,
+            'There MUST occur at most one <saml:ProxyRestriction> element inside a <saml:Conditions>',
+            ProtocolViolationException::class
+        );
 
         return new self(
             $notBefore !== null ? XMLUtils::xsDateTimeToTimestamp($notBefore) : null,

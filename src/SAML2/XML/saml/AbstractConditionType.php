@@ -48,6 +48,7 @@ abstract class AbstractConditionType extends AbstractSamlElement
      */
     protected function setValue(string $value): void
     {
+        Assert::notWhitespaceOnly($value);
         $this->value = $value;
     }
 

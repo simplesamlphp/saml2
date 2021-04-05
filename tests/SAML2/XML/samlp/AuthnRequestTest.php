@@ -8,6 +8,7 @@ use DOMDocument;
 use PHPUnit\Framework\TestCase;
 use SimpleSAML\Assert\AssertionFailedException;
 use SimpleSAML\SAML2\Constants;
+use SimpleSAML\SAML2\XML\saml\Audience;
 use SimpleSAML\SAML2\XML\saml\AudienceRestriction;
 use SimpleSAML\SAML2\XML\saml\AuthnContextClassRef;
 use SimpleSAML\SAML2\XML\saml\Conditions;
@@ -120,14 +121,14 @@ final class AuthnRequestTest extends TestCase
             [
                 new AudienceRestriction(
                     [
-                        'http://sp.example.com/demo1/metadata.php'
+                        new Audience('http://sp.example.com/demo1/metadata.php')
                     ]
                 ),
             ],
             true,
             new ProxyRestriction(
                 [
-                    'http://sp.example.com/demo2/metadata.php'
+                    new Audience('http://sp.example.com/demo2/metadata.php')
                 ],
                 2
             )
@@ -1178,8 +1179,8 @@ AUTHNREQUEST;
             [
                 new AudienceRestriction(
                     [
-                        'https://sp1.example.org',
-                        'https://sp2.example.org'
+                        new Audience('https://sp1.example.org'),
+                        new Audience('https://sp2.example.org')
                     ]
                 )
             ]
