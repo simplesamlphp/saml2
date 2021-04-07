@@ -80,12 +80,15 @@ trait ExtensionsTrait
             return true;
         }
 
-        $empty = false;
+        $empty = true;
         foreach ($this->extensions as $extension) {
-            $empty &= $extension->isEmptyElement();
+            if ($empty === false) {
+                break;
+            }
+            $empty = $empty && $extension->isEmptyElement();
         }
 
-        return boolval($empty);
+        return $empty;
     }
 
 
