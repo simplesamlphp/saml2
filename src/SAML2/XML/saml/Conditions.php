@@ -7,6 +7,7 @@ namespace SimpleSAML\SAML2\XML\saml;
 use DOMElement;
 use SimpleSAML\Assert\Assert;
 use SimpleSAML\SAML2\Constants;
+use SimpleSAML\SAML2\Exception\ProtocolViolationException;
 use SimpleSAML\XML\Exception\InvalidDOMElementException;
 use SimpleSAML\XML\Utils as XMLUtils;
 
@@ -234,22 +235,12 @@ final class Conditions extends AbstractSamlElement
 
         $notBefore = self::getAttribute($xml, 'NotBefore', null);
         if ($notBefore !== null) {
-            Assert::same(
-                substr($notBefore, -1),
-                'Z',
-                "Time values MUST be expressed in the UTC timezone using the 'Z' timezone identifier.",
-                ProtocolViolationException::class
-            );
+            Assert::validDateTimeZulu($notBefore, ProtocolViolationException::class);
         }
 
         $notOnOrAfter = self::getAttribute($xml, 'NotOnOrAfter', null);
         if ($notOnOrAfter !== null) {
-            Assert::same(
-                substr($notOnOrAfter, -1),
-                'Z',
-                "Time values MUST be expressed in the UTC timezone using the 'Z' timezone identifier.",
-                ProtocolViolationException::class
-            );
+            Assert::validDateTimeZulu($notOnOrAfter, ProtocolViolationException::class);
         }
 
         $condition = Condition::getChildrenOfClass($xml);

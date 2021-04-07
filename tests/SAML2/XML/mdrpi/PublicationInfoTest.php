@@ -95,9 +95,7 @@ final class PublicationInfoTest extends TestCase
         $document->setAttribute('creationInstant', '2011-01-01T00:00:00WT');
 
         $this->expectException(ProtocolViolationException::class);
-        $this->expectExceptionMessage(
-            "Time values MUST be expressed in the UTC timezone using the 'Z' timezone identifier."
-        );
+        $this->expectExceptionMessage("'2011-01-01T00:00:00WT' is not a valid DateTime");
         PublicationInfo::fromXML($document);
     }
 

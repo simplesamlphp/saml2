@@ -166,15 +166,7 @@ final class RegistrationInfo extends AbstractMdrpiElement
 
         // 2.1.1:  Time values MUST be expressed in the UTC timezone using the 'Z' timezone identifier
         if ($registrationInstant !== null) {
-            Assert::same(
-                substr($registrationInstant, -1),
-                'Z',
-                "Time values MUST be expressed in the UTC timezone using the 'Z' timezone identifier.",
-                ProtocolViolationException::class
-            );
-        }
-
-        if ($registrationInstant !== null) {
+            Assert::validDateTimeZulu($registrationInstant, ProtocolViolationException::class);
             $registrationInstant = XMLUtils::xsDateTimeToTimestamp($registrationInstant);
         }
         $RegistrationPolicy = RegistrationPolicy::getChildrenOfClass($xml);

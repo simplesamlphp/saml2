@@ -6,6 +6,7 @@ namespace SimpleSAML\SAML2\XML\saml;
 
 use DOMElement;
 use SimpleSAML\Assert\Assert;
+use SimpleSAML\SAML2\Exception\ProtocolViolationException;
 use SimpleSAML\XML\Exception\InvalidDOMElementException;
 use SimpleSAML\XML\Exception\MissingElementException;
 use SimpleSAML\XML\Exception\TooManyElementsException;
@@ -200,23 +201,12 @@ final class AuthnStatement extends AbstractStatement
         );
 
         $authnInstant = self::getAttribute($xml, 'AuthnInstant');
-        Assert::same(
-            substr($authnInstant, -1),
-            'Z',
-            "Time values MUST be expressed in the UTC timezone using the 'Z' timezone identifier.",
-            ProtocolViolationException::class
-        );
+        Assert::validDateTimeZulu($authnInstant, ProtocolViolationException::class);
         $authnInstant = XMLUtils::xsDateTimeToTimestamp($authnInstant);
 
         $sessionNotOnOrAfter = self::getAttribute($xml, 'SessionNotOnOrAfter', null);
         if ($sessionNotOnOrAfter !== null) {
-            Assert::same(
-                substr($sessionNotOnOrAfter, -1),
-                'Z',
-                "Time values MUST be expressed in the UTC timezone using the 'Z' timezone identifier.",
-                ProtocolViolationException::class
-            );
-
+            Assert::validDateTimeZulu($sessionNotOnOrAfter, ProtocolViolationException::class);
             $sessionNotOnOrAfter = XMLUtils::xsDateTimeToTimestamp($sessionNotOnOrAfter);
         }
 

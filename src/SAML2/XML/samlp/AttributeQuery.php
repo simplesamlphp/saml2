@@ -127,16 +127,12 @@ class AttributeQuery extends AbstractSubjectQuery
         Assert::same('2.0', self::getAttribute($xml, 'Version'));
 
         $id = self::getAttribute($xml, 'ID');
-        $issueInstant = self::getAttribute($xml, 'IssueInstant');
-        Assert::same(
-            substr($issueInstant, -1),
-            'Z',
-            "Time values MUST be expressed in the UTC timezone using the 'Z' timezone identifier.",
-            ProtocolViolationException::class
-        );
-        $issueInstant = XMLUtils::xsDateTimeToTimestamp($issueInstant);
         $destination = self::getAttribute($xml, 'Destination', null);
         $consent = self::getAttribute($xml, 'Consent', null);
+
+        $issueInstant = self::getAttribute($xml, 'IssueInstant');
+        Assert::validDateTimeZulu($issueInstant, ProtocolViolationException::class);
+        $issueInstant = XMLUtils::xsDateTimeToTimestamp($issueInstant);
 
         $issuer = Issuer::getChildrenOfClass($xml);
         Assert::countBetween($issuer, 0, 1);

@@ -7,6 +7,7 @@ namespace SimpleSAML\SAML2\XML\samlp;
 use DOMElement;
 use SimpleSAML\Assert\Assert;
 use SimpleSAML\SAML2\Constants;
+use SimpleSAML\SAML2\Exception\ProtocolViolationException;
 use SimpleSAML\SAML2\XML\saml\Issuer;
 use SimpleSAML\XML\Exception\InvalidDOMElementException;
 use SimpleSAML\XML\Exception\TooManyElementsException;
@@ -97,12 +98,7 @@ class ArtifactResolve extends AbstractRequest
         Assert::same('2.0', self::getAttribute($xml, 'Version'));
 
         $issueInstant = self::getAttribute($xml, 'IssueInstant');
-        Assert::same(
-            substr($issueInstant, -1),
-            'Z',
-            "Time values MUST be expressed in the UTC timezone using the 'Z' timezone identifier.",
-            ProtocolViolationException::class
-        );
+        Assert::validDateTimeZulu($issueInstant, ProtocolViolationException::class);
         $issueInstant = XMLUtils::xsDateTimeToTimestamp($issueInstant);
 
         $issuer = Issuer::getChildrenOfClass($xml);

@@ -143,15 +143,7 @@ final class Publication extends AbstractMdrpiElement
 
         // 2.2.1:  Time values MUST be expressed in the UTC timezone using the 'Z' timezone identifier
         if ($creationInstant !== null) {
-            Assert::same(
-                substr($creationInstant, -1),
-                'Z',
-                "Time values MUST be expressed in the UTC timezone using the 'Z' timezone identifier.",
-                ProtocolViolationException::class
-            );
-        }
-
-        if ($creationInstant !== null) {
+            Assert::validDateTimeZulu($creationInstant, ProtocolViolationException::class);
             $creationInstant = XMLUtils::xsDateTimeToTimestamp($creationInstant);
         }
 

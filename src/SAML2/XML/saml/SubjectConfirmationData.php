@@ -7,6 +7,7 @@ namespace SimpleSAML\SAML2\XML\saml;
 use DOMElement;
 use SimpleSAML\Assert\Assert;
 use SimpleSAML\SAML2\Constants;
+use SimpleSAML\SAML2\Exception\ProtocolViolationException;
 use SimpleSAML\SAML2\Utils;
 use SimpleSAML\XML\Chunk;
 use SimpleSAML\XML\Exception\InvalidDOMElementException;
@@ -282,23 +283,13 @@ final class SubjectConfirmationData extends AbstractSamlElement
 
         $NotBefore = self::getAttribute($xml, 'NotBefore', null);
         if ($NotBefore !== null) {
-            Assert::same(
-                substr($NotBefore, -1),
-                'Z',
-                "Time values MUST be expressed in the UTC timezone using the 'Z' timezone identifier.",
-                ProtocolViolationException::class
-            );
+            Assert::validDateTimeZulu($NotBefore, ProtocolViolationException::class);
             $NotBefore = XMLUtils::xsDateTimeToTimestamp($NotBefore);
         }
 
         $NotOnOrAfter = self::getAttribute($xml, 'NotOnOrAfter', null);
         if ($NotOnOrAfter !== null) {
-            Assert::same(
-                substr($NotOnOrAfter, -1),
-                'Z',
-                "Time values MUST be expressed in the UTC timezone using the 'Z' timezone identifier.",
-                ProtocolViolationException::class
-            );
+            Assert::validDateTimeZulu($NotOnOrAfter, ProtocolViolationException::class);
             $NotOnOrAfter = XMLUtils::xsDateTimeToTimestamp($NotOnOrAfter);
         }
 

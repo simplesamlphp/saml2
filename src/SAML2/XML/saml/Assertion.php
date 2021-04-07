@@ -8,6 +8,7 @@ use DOMElement;
 use Exception;
 use SimpleSAML\Assert\Assert;
 use SimpleSAML\SAML2\Constants;
+use SimpleSAML\SAML2\Exception\ProtocolViolationException;
 use SimpleSAML\SAML2\Utilities\Temporal;
 use SimpleSAML\SAML2\Utils;
 use SimpleSAML\SAML2\XML\SignedElementInterface;
@@ -373,12 +374,7 @@ class Assertion extends AbstractSamlElement implements SignedElementInterface
         Assert::same(self::getAttribute($xml, 'Version'), '2.0', 'Unsupported version: %s');
 
         $issueInstant = self::getAttribute($xml, 'IssueInstant');
-        Assert::same(
-            substr($issueInstant, -1),
-            'Z',
-            "Time values MUST be expressed in the UTC timezone using the 'Z' timezone identifier.",
-            ProtocolViolationException::class
-        );
+        Assert::validDateTimeZulu($issueInstant, ProtocolViolationException::class);
         $issueInstant = XMLUtils::xsDateTimeToTimestamp($issueInstant);
 
         $issuer = Issuer::getChildrenOfClass($xml);
