@@ -23,9 +23,10 @@ abstract class AbstractLocalizedURI extends AbstractLocalizedName
      * @throws \Exception on failure
      * @return void
      */
-    protected function validateContent(/** @scrutinizer ignore-unused */ string $content): void
+    protected function validateContent(string $content): void
     {
-        Assert::notEmpty($content);
+        parent::validateContent($content);
+
         Assert::false(
             !empty($content) && !filter_var($content, FILTER_VALIDATE_URL),
             static::getQualifiedName() . ' is not a valid URL.',
