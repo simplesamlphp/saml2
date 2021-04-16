@@ -48,11 +48,11 @@ final class AffiliateMemberTest extends TestCase
      */
     public function testMarshalling(): void
     {
-        $am = new AffiliateMember('urn:some:entity');
+        $affiliateMember = new AffiliateMember('https://some.entity.org/id');
 
         $this->assertEquals(
             $this->xmlRepresentation->saveXML($this->xmlRepresentation->documentElement),
-            strval($am)
+            strval($affiliateMember)
         );
     }
 
@@ -77,7 +77,7 @@ final class AffiliateMemberTest extends TestCase
             sprintf('The AffiliateMember cannot be longer than %d characters.', C::ENTITYID_MAX_LENGTH)
         );
 
-        new AffiliateMember(str_pad('urn:entityid:', C::ENTITYID_MAX_LENGTH + 1, 'a'));
+        new AffiliateMember(str_pad('https://some.entity.org/id', C::ENTITYID_MAX_LENGTH + 1, 'a'));
     }
 
 
@@ -89,10 +89,7 @@ final class AffiliateMemberTest extends TestCase
      */
     public function testUnmarshalling(): void
     {
-        $am = AffiliateMember::fromXML($this->xmlRepresentation->documentElement);
-        $this->assertEquals(
-            $this->xmlRepresentation->saveXML($this->xmlRepresentation->documentElement),
-            strval($am)
-        );
+        $affiliateMember = AffiliateMember::fromXML($this->xmlRepresentation->documentElement);
+        $this->assertEquals('https://some.entity.org/id', $affiliateMember->getContent());
     }
 }

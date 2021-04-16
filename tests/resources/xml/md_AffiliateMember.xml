@@ -1,2 +1,1 @@
-<md:AffiliateMember xmlns:md="urn:oasis:names:tc:SAML:2.0:metadata">urn:some:entity</md:AffiliateMember>
-
+<md:AffiliateMember xmlns:md="urn:oasis:names:tc:SAML:2.0:metadata">https://some.entity.org/id</md:AffiliateMember>

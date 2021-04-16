@@ -30,7 +30,7 @@ final class AffiliationDescriptor extends AbstractMetadataDocument
     /**
      * The AffiliateMember(s).
      *
-     * Array of entity ID strings.
+     * Array of \SimpleSAML\SAML2\XML\md\AffiliateMember elements.
      *
      * @var \SimpleSAML\SAML2\XML\md\AffiliateMember[]
      */
@@ -220,7 +220,6 @@ final class AffiliationDescriptor extends AbstractMetadataDocument
     public function toXML(?DOMElement $parent = null): DOMElement
     {
         $e = parent::toXML($parent);
-
         $e->setAttribute('affiliationOwnerID', $this->affiliationOwnerID);
 
         foreach ($this->AffiliateMembers as $am) {
