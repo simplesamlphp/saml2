@@ -14,6 +14,7 @@ use SimpleSAML\SAML2\XML\samlp\Extensions;
 use SimpleSAML\SAML2\XML\samlp\Response;
 use SimpleSAML\SAML2\XML\samlp\Status;
 use SimpleSAML\SAML2\XML\samlp\StatusCode;
+use SimpleSAML\SAML2\XML\samlp\StatusMessage;
 use SimpleSAML\Test\XML\SerializableXMLTestTrait;
 use SimpleSAML\XML\DOMDocumentFactory;
 use SimpleSAML\XML\Exception\MissingElementException;
@@ -45,7 +46,7 @@ final class AbstractStatusResponseTest extends TestCase
                     )
                 ]
             ),
-            'OurMessageText'
+            new StatusMessage('OurMessageText')
         );
 
         $response = new Response($status);
@@ -84,7 +85,7 @@ final class AbstractStatusResponseTest extends TestCase
                     )
                 ]
             ),
-            'OurMessageText'
+            new StatusMessage('OurMessageText')
         );
 
         $issuer = new Issuer('some issuer');
@@ -143,7 +144,7 @@ XML;
         $status = $response->getStatus();
         $this->assertEquals("urn:oasis:names:tc:SAML:2.0:status:Responder", $status->getStatusCode()->getValue());
         $this->assertEmpty($status->getStatusCode()->getSubCodes());
-        $this->assertEquals("Something is wrong...", $status->getStatusMessage());
+        $this->assertEquals("Something is wrong...", $status->getStatusMessage()->getContent());
 
         $this->assertEquals("_bec424fa5103428909a30ff1e31168327f79474984", $response->getInResponseTo());
     }
@@ -212,7 +213,7 @@ XML;
         $status = $response->getStatus();
         $this->assertEquals(Constants::STATUS_REQUESTER, $status->getStatusCode()->getValue());
         $this->assertEquals(Constants::STATUS_REQUEST_DENIED, $status->getStatusCode()->getSubCodes()[0]->getValue());
-        $this->assertEquals("The AuthnRequest could not be validated", $status->getStatusMessage());
+        $this->assertEquals("The AuthnRequest could not be validated", $status->getStatusMessage()->getContent());
     }
 
 
