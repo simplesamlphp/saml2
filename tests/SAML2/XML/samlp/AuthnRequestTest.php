@@ -22,6 +22,7 @@ use SimpleSAML\SAML2\XML\samlp\IDPEntry;
 use SimpleSAML\SAML2\XML\samlp\IDPList;
 use SimpleSAML\SAML2\XML\samlp\NameIDPolicy;
 use SimpleSAML\SAML2\XML\samlp\RequestedAuthnContext;
+use SimpleSAML\SAML2\XML\samlp\RequesterID;
 use SimpleSAML\SAML2\XML\samlp\Scoping;
 use SimpleSAML\Test\XML\SerializableXMLTestTrait;
 use SimpleSAML\XML\DOMDocumentFactory;
@@ -138,7 +139,7 @@ final class AuthnRequestTest extends TestCase
         $entry1 = new IDPEntry('urn:some:requester1', 'testName1', 'testLoc1');
         $getComplete = 'https://some/location';
         $list = new IDPList([$entry1], $getComplete);
-        $requesterId = 'urn:some:requester';
+        $requesterId = new RequesterID('urn:some:requester');
         $scoping = new Scoping(2, $list, [$requesterId]);
 
         $authnRequest = new AuthnRequest(

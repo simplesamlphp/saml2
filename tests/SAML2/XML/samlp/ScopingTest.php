@@ -9,6 +9,7 @@ use PHPUnit\Framework\TestCase;
 use SimpleSAML\SAML2\Constants;
 use SimpleSAML\SAML2\XML\samlp\IDPEntry;
 use SimpleSAML\SAML2\XML\samlp\IDPList;
+use SimpleSAML\SAML2\XML\samlp\RequesterID;
 use SimpleSAML\SAML2\XML\samlp\Scoping;
 use SimpleSAML\Test\XML\SerializableXMLTestTrait;
 use SimpleSAML\XML\DOMDocumentFactory;
@@ -48,7 +49,7 @@ final class ScopingTest extends TestCase
         $list = new IDPList([$entry1], $getComplete);
         $requesterId = 'urn:some:requester';
 
-        $scoping = new Scoping(2, $list, [$requesterId]);
+        $scoping = new Scoping(2, $list, [new RequesterID($requesterId)]);
 
         $this->assertEquals(
             $this->xmlRepresentation->saveXML($this->xmlRepresentation->documentElement),
@@ -66,7 +67,7 @@ final class ScopingTest extends TestCase
         $list = new IDPList([$entry1], $getComplete);
         $requesterId = 'urn:some:requester';
 
-        $scoping = new Scoping(2, $list, [$requesterId]);
+        $scoping = new Scoping(2, $list, [new RequesterID($requesterId)]);
 
         $scopingElement = $scoping->toXML();
 
@@ -119,6 +120,6 @@ final class ScopingTest extends TestCase
 
         $requesterId = $scoping->getRequesterId();
         $this->assertCount(1, $requesterId);
-        $this->assertEquals('urn:some:requester', $requesterId[0]);
+        $this->assertEquals('urn:some:requester', $requesterId[0]->getContent());
     }
 }
