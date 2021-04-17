@@ -6,6 +6,7 @@ namespace SimpleSAML\Test\SAML2\XML\samlp;
 
 use DOMDocument;
 use PHPUnit\Framework\TestCase;
+use SimpleSAML\SAML2\XML\samlp\GetComplete;
 use SimpleSAML\SAML2\XML\samlp\IDPEntry;
 use SimpleSAML\SAML2\XML\samlp\IDPList;
 use SimpleSAML\Test\XML\SerializableXMLTestTrait;
@@ -44,7 +45,7 @@ final class IDPListTest extends TestCase
     {
         $entry1 = new IDPEntry('urn:some:requester1', 'testName1', 'testLoc1');
         $entry2 = new IDPEntry('urn:some:requester2', 'testName2', 'testLoc2');
-        $getComplete = 'https://some/location';
+        $getComplete = new GetComplete('https://some/location');
         $list = new IDPList([$entry1, $entry2], $getComplete);
 
         $this->assertEquals(
@@ -60,7 +61,7 @@ final class IDPListTest extends TestCase
     {
         $entry1 = new IDPEntry('urn:some:requester1', 'testName1', 'testLoc1');
         $entry2 = new IDPEntry('urn:some:requester2', 'testName2', 'testLoc2');
-        $getComplete = 'https://some/location';
+        $getComplete = new GetComplete('https://some/location');
         $list = new IDPList([$entry1, $entry2], $getComplete);
 
         $listElement = $list->toXML();
@@ -123,7 +124,7 @@ XML
         $this->assertEquals('testName2', $entries[1]->getName());
         $this->assertEquals('testLoc2', $entries[1]->getLoc());
 
-        $this->assertEquals('https://some/location', $list->getGetComplete());
+        $this->assertEquals('https://some/location', $list->getGetComplete()->getContent());
     }
 
 
