@@ -7,8 +7,9 @@ namespace SimpleSAML\SAML2\XML\saml;
 use DOMElement;
 use SimpleSAML\Assert\Assert;
 use SimpleSAML\SAML2\Constants;
-use SimpleSAML\XML\Exception\InvalidDOMElementException;
 use SimpleSAML\SAML2\XML\IDNameQualifiersTrait;
+use SimpleSAML\XML\Exception\InvalidDOMElementException;
+use SimpleSAML\XML\XMLStringElementTrait;
 
 use function trim;
 
@@ -20,12 +21,10 @@ use function trim;
 class BaseID extends AbstractSamlElement implements BaseIdentifierInterface
 {
     use IDNameQualifiersTrait;
+    use XMLStringElementTrait;
 
     /** @var string */
     public const LOCALNAME = 'BaseID';
-
-    /** @var string */
-    protected string $value;
 
     /** @var string */
     protected string $type;
@@ -46,7 +45,7 @@ class BaseID extends AbstractSamlElement implements BaseIdentifierInterface
         ?string $SPNameQualifier = null
     ) {
         $this->setType($type);
-        $this->setValue($value);
+        $this->setContent($value);
         $this->setNameQualifier($NameQualifier);
         $this->setSPNameQualifier($SPNameQualifier);
     }
@@ -77,26 +76,15 @@ class BaseID extends AbstractSamlElement implements BaseIdentifierInterface
 
 
     /**
-     * Get the string value of this BaseID.
+     * Validate the content of the element.
      *
-     * @return string
+     * @param string $content  The value to go in the XML textContent
+     * @throws \Exception on failure
+     * @return void
      */
-    public function getValue(): string
+    protected function validateContent(string $content): void
     {
-        return $this->value;
-    }
-
-
-    /**
-     * Set the string value of this BaseID.
-     *
-     * @param string $value
-     */
-    protected function setValue(string $value): void
-    {
-        Assert::notWhitespaceOnly($value);
-
-        $this->value = $value;
+        Assert::notWhitespaceOnly($content);
     }
 
 
@@ -149,7 +137,7 @@ class BaseID extends AbstractSamlElement implements BaseIdentifierInterface
             $element->setAttribute('SPNameQualifier', $this->SPNameQualifier);
         }
 
-        $element->textContent = $this->value;
+        $element->textContent = $this->content;
 
         $element->setAttributeNS(Constants::NS_XSI, 'xsi:type', $this->type);
 

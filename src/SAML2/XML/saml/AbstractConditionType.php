@@ -20,24 +20,13 @@ abstract class AbstractConditionType extends AbstractSamlElement
 
 
     /**
-     * Initialize a saml:Condition from scratch
-     *
-     * @param string $value
-     */
-    protected function __construct(string $value)
-    {
-        $this->setContent($value);
-    }
-
-
-    /**
      * Validate the content of the element.
      *
      * @param string $content  The value to go in the XML textContent
      * @throws \Exception on failure
      * @return void
      */
-    protected function validateContent(/** @scrutinizer ignore-unused */ string $content): void
+    protected function validateContent(string $content): void
     {
         Assert::notWhitespaceOnly($content);
     }

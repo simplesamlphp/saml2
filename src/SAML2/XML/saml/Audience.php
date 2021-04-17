@@ -16,17 +16,6 @@ use SimpleSAML\XML\Exception\InvalidDOMElementException;
 final class Audience extends AbstractConditionType
 {
     /**
-     * Initialize an Audience element.
-     *
-     * @param string $audience
-     */
-    public function __construct(string $audience)
-    {
-        parent::__construct($audience);
-    }
-
-
-    /**
      * Convert XML into an Audience
      *
      * @param \DOMElement $xml The XML element we should load
