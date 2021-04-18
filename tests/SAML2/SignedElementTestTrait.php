@@ -21,16 +21,16 @@ trait SignedElementTestTrait
     /**
      * A base document that we can reuse in our tests.
      *
-     * @var \DOMDocument
+     * @var \DOMDocument|null
      */
-    protected DOMDocument $xmlRepresentation;
+    protected ?DOMDocument $xmlRepresentation = null;
 
     /**
      * The name of the class we are testing.
      *
-     * @var class-string
+     * @var class-string|null
      */
-    protected string $testedClass;
+    protected ?string $testedClass = null;
 
 
     /**
