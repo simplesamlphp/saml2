@@ -35,9 +35,9 @@ final class PDPDescriptor extends AbstractRoleDescriptor
     /**
      * List of supported NameID formats.
      *
-     * @var string[]
+     * @var \SimpleSAML\SAML2\XML\md\NameIDFormat[]
      */
-    protected array $nameIDFormats = [];
+    protected array $NameIDFormats = [];
 
 
     /**
@@ -46,7 +46,7 @@ final class PDPDescriptor extends AbstractRoleDescriptor
      * @param \SimpleSAML\SAML2\XML\md\AuthzService[] $authServiceEndpoints
      * @param string[] $protocolSupportEnumeration
      * @param \SimpleSAML\SAML2\XML\md\AssertionIDRequestService[] $assertionIDRequestService
-     * @param string[] $nameIDFormats
+     * @param \SimpleSAML\SAML2\XML\md\NameIDFormat[] $nameIDFormats
      * @param string|null $ID
      * @param int|null $validUntil
      * @param string|null $cacheDuration
@@ -114,7 +114,7 @@ final class PDPDescriptor extends AbstractRoleDescriptor
             AuthzService::getChildrenOfClass($xml),
             preg_split('/[\s]+/', trim($protocols)),
             AssertionIDRequestService::getChildrenOfClass($xml),
-            XMLUtils::extractStrings($xml, Constants::NS_MD, 'NameIDFormat'),
+            NameIDFormat::getChildrenOfClass($xml),
             self::getAttribute($xml, 'ID', null),
             $validUntil !== null ? XMLUtils::xsDateTimeToTimestamp($validUntil) : null,
             self::getAttribute($xml, 'cacheDuration', null),
@@ -187,23 +187,23 @@ final class PDPDescriptor extends AbstractRoleDescriptor
     /**
      * Get the NameIDFormats supported by this PDPDescriptor
      *
-     * @return string[]
+     * @return \SimpleSAML\SAML2\XML\md\NameIDFormat[]
      */
     public function getNameIDFormats(): array
     {
-        return $this->nameIDFormats;
+        return $this->NameIDFormats;
     }
 
 
     /**
      * Set the NameIDFormats supported by this PDPDescriptor
      *
-     * @param string[] $nameIDFormats
+     * @param \SimpleSAML\SAML2\XML\md\NameIDFormat[] $nameIDFormats
      */
     public function setNameIDFormats(array $nameIDFormats): void
     {
-        Assert::allStringNotEmpty($nameIDFormats, 'All NameIDFormat must be a non-empty string.');
-        $this->nameIDFormats = $nameIDFormats;
+        Assert::allIsInstanceOf($nameIDFormats, NameIDFormat::class);
+        $this->NameIDFormats = $nameIDFormats;
     }
 
 
@@ -226,7 +226,9 @@ final class PDPDescriptor extends AbstractRoleDescriptor
             $ep->toXML($e);
         }
 
-        XMLUtils::addStrings($e, Constants::NS_MD, 'md:NameIDFormat', false, $this->nameIDFormats);
+        foreach ($this->NameIDFormats as $nidFormat) {
+            $nidFormat->toXML($e);
+        }
 
         return $this->signElement($e);
     }

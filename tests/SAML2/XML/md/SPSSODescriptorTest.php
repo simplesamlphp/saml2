@@ -15,6 +15,7 @@ use SimpleSAML\SAML2\XML\md\ContactPerson;
 use SimpleSAML\SAML2\XML\md\Extensions;
 use SimpleSAML\SAML2\XML\md\KeyDescriptor;
 use SimpleSAML\SAML2\XML\md\ManageNameIDService;
+use SimpleSAML\SAML2\XML\md\NameIDFormat;
 use SimpleSAML\SAML2\XML\md\Organization;
 use SimpleSAML\SAML2\XML\md\OrganizationDisplayName;
 use SimpleSAML\SAML2\XML\md\OrganizationName;
@@ -150,7 +151,7 @@ final class SPSSODescriptorTest extends TestCase
             [$ars],
             [$slo1, $slo2],
             [$mnids],
-            ['urn:oasis:names:tc:SAML:2.0:nameid-format:transient']
+            [new NameIDFormat('urn:oasis:names:tc:SAML:2.0:nameid-format:transient')]
         );
 
         $this->assertEquals(

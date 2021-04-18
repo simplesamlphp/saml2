@@ -42,7 +42,7 @@ abstract class AbstractSSODescriptor extends AbstractRoleDescriptor
      *
      * Array of strings.
      *
-     * @var string[]
+     * @var \SimpleSAML\SAML2\XML\md\NameIDFormat[]
      */
     protected array $nameIDFormats = [];
 
@@ -67,7 +67,8 @@ abstract class AbstractSSODescriptor extends AbstractRoleDescriptor
      *   Defaults to an empty array.
      * @param \SimpleSAML\SAML2\XML\md\AbstractEndpointType[] $manageNameIDService An array of ManageNameIDService.
      *   Defaults to an empty array.
-     * @param string[] $nameIDFormat An array of supported NameID formats. Defaults to an empty array.
+     * @param \SimpleSAML\SAML2\XML\md\NameIDFormat[] $nameIDFormat An array of supported NameID formats.
+     *   Defaults to an empty array.
      */
     public function __construct(
         array $protocolSupportEnumeration,
@@ -190,7 +191,7 @@ abstract class AbstractSSODescriptor extends AbstractRoleDescriptor
     /**
      * Collect the value of the NameIDFormat-property
      *
-     * @return string[]
+     * @return \SimpleSAML\SAML2\XML\md\NameIDFormat[]
      */
     public function getNameIDFormats(): array
     {
@@ -201,11 +202,11 @@ abstract class AbstractSSODescriptor extends AbstractRoleDescriptor
     /**
      * Set the value of the NameIDFormat-property
      *
-     * @param string[] $nameIDFormats
+     * @param \SimpleSAML\SAML2\XML\md\NameIDFormat[] $nameIDFormats
      */
     protected function setNameIDFormats(array $nameIDFormats): void
     {
-        Assert::allStringNotEmpty($nameIDFormats, 'All NameIDFormat must be a non-empty string.');
+        Assert::allIsInstanceOf($nameIDFormats, NameIDFormat::class);
         $this->nameIDFormats = $nameIDFormats;
     }
 
@@ -232,7 +233,9 @@ abstract class AbstractSSODescriptor extends AbstractRoleDescriptor
             $ep->toXML($e);
         }
 
-        XMLUtils::addStrings($e, Constants::NS_MD, 'md:NameIDFormat', false, $this->nameIDFormats);
+        foreach ($this->nameIDFormats as $nidFormat) {
+            $nidFormat->toXML($e);
+        }
 
         return $e;
     }

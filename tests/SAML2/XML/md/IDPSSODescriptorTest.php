@@ -155,9 +155,9 @@ final class IDPSSODescriptorTest extends TestCase
                 )
             ],
             [
-                'urn:oasis:names:tc:SAML:1.1:nameid-format:X509SubjectName',
-                'urn:oasis:names:tc:SAML:2.0:nameid-format:persistent',
-                'urn:oasis:names:tc:SAML:2.0:nameid-format:transient'
+                new NameIDFormat('urn:oasis:names:tc:SAML:1.1:nameid-format:X509SubjectName'),
+                new NameIDFormat('urn:oasis:names:tc:SAML:2.0:nameid-format:persistent'),
+                new NameIDFormat('urn:oasis:names:tc:SAML:2.0:nameid-format:transient')
             ]
         );
 
@@ -336,9 +336,9 @@ final class IDPSSODescriptorTest extends TestCase
         $this->assertInstanceOf(NameIDMappingService::class, $idpssod->getNameIDMappingServices()[0]);
         $this->assertInstanceOf(NameIDMappingService::class, $idpssod->getNameIDMappingServices()[1]);
         $this->assertCount(3, $idpssod->getNameIDFormats());
-        $this->assertEquals(Constants::NAMEID_X509_SUBJECT_NAME, $idpssod->getNameIDFormats()[0]);
-        $this->assertEquals(Constants::NAMEID_PERSISTENT, $idpssod->getNameIDFormats()[1]);
-        $this->assertEquals(Constants::NAMEID_TRANSIENT, $idpssod->getNameIDFormats()[2]);
+        $this->assertEquals(Constants::NAMEID_X509_SUBJECT_NAME, $idpssod->getNameIDFormats()[0]->getContent());
+        $this->assertEquals(Constants::NAMEID_PERSISTENT, $idpssod->getNameIDFormats()[1]->getContent());
+        $this->assertEquals(Constants::NAMEID_TRANSIENT, $idpssod->getNameIDFormats()[2]->getContent());
         $this->assertCount(2, $idpssod->getAssertionIDRequestServices());
         $this->assertInstanceOf(AssertionIDRequestService::class, $idpssod->getAssertionIDRequestServices()[0]);
         $this->assertInstanceOf(AssertionIDRequestService::class, $idpssod->getAssertionIDRequestServices()[1]);

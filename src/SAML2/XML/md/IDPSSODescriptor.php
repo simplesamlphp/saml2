@@ -84,7 +84,7 @@ final class IDPSSODescriptor extends AbstractSSODescriptor
      * @param \SimpleSAML\SAML2\XML\md\ArtifactResolutionService[] $artifactResolutionService
      * @param \SimpleSAML\SAML2\XML\md\SingleLogoutService[] $singleLogoutService
      * @param \SimpleSAML\SAML2\XML\md\ManageNameIDService[] $manageNameIDService
-     * @param string[] $nameIDFormat
+     * @param \SimpleSAML\SAML2\XML\md\NameIDFormat[] $nameIDFormat
      */
     public function __construct(
         array $ssoServiceEndpoints,
@@ -176,7 +176,7 @@ final class IDPSSODescriptor extends AbstractSSODescriptor
             ArtifactResolutionService::getChildrenOfClass($xml),
             SingleLogoutService::getChildrenOfClass($xml),
             ManageNameIDService::getChildrenOfClass($xml),
-            XMLUtils::extractStrings($xml, Constants::NS_MD, 'NameIDFormat')
+            NameIDFormat::getChildrenOfClass($xml)
         );
         if (!empty($signature)) {
             $idpssod->setSignature($signature[0]);
