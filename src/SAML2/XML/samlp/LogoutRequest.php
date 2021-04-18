@@ -38,7 +38,7 @@ class LogoutRequest extends AbstractRequest
     /**
      * The SessionIndexes of the sessions that should be terminated.
      *
-     * @var string[]
+     * @var \SimpleSAML\SAML2\XML\samlp\SessionIndex[]
      */
     protected array $sessionIndexes = [];
 
@@ -58,7 +58,7 @@ class LogoutRequest extends AbstractRequest
      * @param \SimpleSAML\SAML2\XML\saml\IdentifierInterface $identifier
      * @param int|null $notOnOrAfter
      * @param string|null $reason
-     * @param string[] $sessionIndexes
+     * @param \SimpleSAML\SAML2\XML\samlp\SessionIndex[] $sessionIndexes
      * @param \SimpleSAML\SAML2\XML\saml\Issuer|null $issuer
      * @param string|null $id
      * @param int|null $issueInstant
@@ -134,7 +134,7 @@ class LogoutRequest extends AbstractRequest
     /**
      * Retrieve the SessionIndexes of the sessions that should be terminated.
      *
-     * @return string[] The SessionIndexes, or an empty array if all sessions should be terminated.
+     * @return \SimpleSAML\SAML2\XML\samlp\SessionIndex[] The SessionIndexes, or an empty array if all sessions should be terminated.
      */
     public function getSessionIndexes(): array
     {
@@ -145,11 +145,11 @@ class LogoutRequest extends AbstractRequest
     /**
      * Set the SessionIndexes of the sessions that should be terminated.
      *
-     * @param string[] $sessionIndexes The SessionIndexes, or an empty array if all sessions should be terminated.
+     * @param \SimpleSAML\SAML2\XML\samlp\SessionIndex[] $sessionIndexes The SessionIndexes, or an empty array if all sessions should be terminated.
      */
     public function setSessionIndexes(array $sessionIndexes): void
     {
-        Assert::allStringNotEmpty($sessionIndexes);
+        Assert::allIsInstanceOf($sessionIndexes, SessionIndex::class);
         $this->sessionIndexes = $sessionIndexes;
     }
 
@@ -198,11 +198,13 @@ class LogoutRequest extends AbstractRequest
         $signature = Signature::getChildrenOfClass($xml);
         Assert::maxCount($signature, 1, 'Only one ds:Signature element is allowed.');
 
+        $sessionIndex = SessionIndex::getChildrenOfClass($xml);
+
         $request = new self(
             $identifier,
             $notOnOrAfter,
             self::getAttribute($xml, 'Reason', null),
-            XMLUtils::extractStrings($xml, AbstractSamlpElement::NS, 'SessionIndex'),
+            $sessionIndex,
             array_pop($issuer),
             self::getAttribute($xml, 'ID'),
             $issueInstant,
@@ -241,9 +243,7 @@ class LogoutRequest extends AbstractRequest
         $this->identifier->toXML($e);
 
         foreach ($this->sessionIndexes as $sessionIndex) {
-            $e->appendChild(
-                $e->ownerDocument->createElementNS(AbstractSamlpElement::NS, 'samlp:SessionIndex', $sessionIndex)
-            );
+            $sessionIndex->toXML($e);
         }
 
         return $this->signElement($e);
