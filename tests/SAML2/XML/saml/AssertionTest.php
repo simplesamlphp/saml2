@@ -13,6 +13,7 @@ use SimpleSAML\SAML2\XML\saml\Assertion;
 use SimpleSAML\SAML2\XML\saml\Attribute;
 use SimpleSAML\SAML2\XML\saml\AttributeStatement;
 use SimpleSAML\SAML2\XML\saml\AttributeValue;
+use SimpleSAML\SAML2\XML\saml\AuthenticatingAuthority;
 use SimpleSAML\SAML2\XML\saml\AuthnContext;
 use SimpleSAML\SAML2\XML\saml\AuthnContextClassRef;
 use SimpleSAML\SAML2\XML\saml\AuthnContextDeclRef;
@@ -196,8 +197,8 @@ XML;
         // Test for Authenticating Authorities
         $assertionAuthenticatingAuthorities = $assertion->getAuthnStatements()[0]->getAuthnContext()->getAuthenticatingAuthorities();
         $this->assertCount(2, $assertionAuthenticatingAuthorities);
-        $this->assertEquals('someIdP1', $assertionAuthenticatingAuthorities[0]);
-        $this->assertEquals('someIdP2', $assertionAuthenticatingAuthorities[1]);
+        $this->assertEquals('someIdP1', $assertionAuthenticatingAuthorities[0]->getContent());
+        $this->assertEquals('someIdP2', $assertionAuthenticatingAuthorities[1]->getContent());
     }
 
 
@@ -227,7 +228,7 @@ XML;
                 new AuthnContextClassRef('someAuthnContext'),
                 null,
                 new AuthnContextDeclRef('/relative/path/to/document.xml'),
-                ["idp1", "idp2"]
+                [new AuthenticatingAuthority("idp1"), new AuthenticatingAuthority("idp2")]
             ),
             1234567890 - 1,
             1234568890 + 200,
@@ -277,7 +278,7 @@ XML;
 
         $authauth = $authnStatement->getAuthnContext()->getAuthenticatingAuthorities();
         $this->assertCount(2, $authauth);
-        $this->assertEquals("idp2", $authauth[1]);
+        $this->assertEquals("idp2", $authauth[1]->getContent());
 
         $attributeStatements = $assertionToVerify->getAttributeStatements();
         $this->assertCount(1, $attributeStatements);

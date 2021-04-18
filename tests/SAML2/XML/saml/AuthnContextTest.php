@@ -8,6 +8,7 @@ use DOMDocument;
 use PHPUnit\Framework\TestCase;
 use SimpleSAML\Assert\AssertionFailedException;
 use SimpleSAML\SAML2\Constants;
+use SimpleSAML\SAML2\XML\saml\AuthenticatingAuthority;
 use SimpleSAML\SAML2\XML\saml\AuthnContext;
 use SimpleSAML\SAML2\XML\saml\AuthnContextDecl;
 use SimpleSAML\SAML2\XML\saml\AuthnContextDeclRef;
@@ -81,7 +82,7 @@ final class AuthnContextTest extends TestCase
             new AuthnContextClassRef(Constants::AC_PASSWORD_PROTECTED_TRANSPORT),
             null,
             new AuthnContextDeclRef('/relative/path/to/document.xml'),
-            ['https://idp.example.com/SAML2']
+            [new AuthenticatingAuthority('https://idp.example.com/SAML2')]
         );
 
         $this->assertEquals(
@@ -95,7 +96,9 @@ final class AuthnContextTest extends TestCase
             new AuthnContextDeclRef('/relative/path/to/document.xml'),
             $authnContext->getAuthnContextDeclRef()
         );
-        $this->assertEquals(['https://idp.example.com/SAML2'], $authnContext->getAuthenticatingAuthorities());
+        $authorities = $authnContext->getAuthenticatingAuthorities();
+        $this->assertCount(1, $authorities);
+        $this->assertEquals('https://idp.example.com/SAML2', $authorities[0]->getContent());
 
         $document = $this->xmlRepresentation;
         $document->documentElement->appendChild($document->importNode($this->classRef->documentElement, true));
@@ -111,7 +114,7 @@ final class AuthnContextTest extends TestCase
     public function testMarshallingWithoutClassRef(): void
     {
         $authnContextDecl = AuthnContextDecl::fromXML($this->decl->documentElement);
-        $authenticatingAuthority = 'https://idp.example.com/SAML2';
+        $authenticatingAuthority = AuthenticatingAuthority::fromXML($this->authority->documentElement);
 
         $authnContext = new AuthnContext(
             null,
@@ -123,7 +126,10 @@ final class AuthnContextTest extends TestCase
         $this->assertNull($authnContext->getAuthnContextClassRef());
         $this->assertEquals($authnContextDecl, $authnContext->getAuthnContextDecl());
         $this->assertNull($authnContext->getAuthnContextDeclRef());
-        $this->assertEquals(['https://idp.example.com/SAML2'], $authnContext->getAuthenticatingAuthorities());
+
+        $authorities = $authnContext->getAuthenticatingAuthorities();
+        $this->assertCount(1, $authorities);
+        $this->assertEquals('https://idp.example.com/SAML2', $authorities[0]->getContent());
 
         $document = $this->xmlRepresentation;
         $document->documentElement->appendChild($document->importNode($this->decl->documentElement, true));
@@ -138,7 +144,7 @@ final class AuthnContextTest extends TestCase
     public function testMarshallingWithClassRefAndClassDeclElementOrdering(): void
     {
         $authnContextDecl = AuthnContextDecl::fromXML($this->decl->documentElement);
-        $authenticatingAuthority = 'https://idp.example.com/SAML2';
+        $authenticatingAuthority = new AuthenticatingAuthority('https://idp.example.com/SAML2');
 
         $authnContext = new AuthnContext(
             new AuthnContextClassRef(Constants::AC_PASSWORD_PROTECTED_TRANSPORT),
@@ -171,7 +177,7 @@ final class AuthnContextTest extends TestCase
     public function testMarshallingWithoutClassRefAndClassDeclElementOrdering(): void
     {
         $authnContextDecl = AuthnContextDecl::fromXML($this->decl->documentElement);
-        $authenticatingAuthority = 'https://idp.example.com/SAML2';
+        $authenticatingAuthority = AuthenticatingAuthority::fromXML($this->authority->documentElement);
 
         $authnContext = new AuthnContext(
             null,
@@ -203,7 +209,7 @@ final class AuthnContextTest extends TestCase
     public function testMarshallingWithClassRefAndDeclRefElementOrdering(): void
     {
         $authnContextDecl = AuthnContextDecl::fromXML($this->decl->documentElement);
-        $authenticatingAuthority = 'https://idp.example.com/SAML2';
+        $authenticatingAuthority = AuthenticatingAuthority::fromXML($this->authority->documentElement);
 
         $authnContext = new AuthnContext(
             new AuthnContextClassRef(Constants::AC_PASSWORD_PROTECTED_TRANSPORT),
@@ -236,7 +242,7 @@ final class AuthnContextTest extends TestCase
     public function testMarshallingWithoutClassRefAndDeclRefElementOrdering(): void
     {
         $authnContextDecl = AuthnContextDecl::fromXML($this->decl->documentElement);
-        $authenticatingAuthority = 'https://idp.example.com/SAML2';
+        $authenticatingAuthority = AuthenticatingAuthority::fromXML($this->authority->documentElement);
 
         $authnContext = new AuthnContext(
             null,
@@ -279,7 +285,7 @@ final class AuthnContextTest extends TestCase
             $authnContextDecl,
             $authnContextDeclRef,
             [
-                'https://idp.example.com/SAML2'
+                new AuthenticatingAuthority('https://idp.example.com/SAML2')
             ]
         );
     }
@@ -319,7 +325,7 @@ final class AuthnContextTest extends TestCase
         $this->assertEquals('/relative/path/to/document.xml', $declRef->getContent());
 
         $authorities = $authnContext->getAuthenticatingAuthorities();
-        $this->assertEquals('https://idp.example.com/SAML2', $authorities[0]);
+        $this->assertEquals('https://idp.example.com/SAML2', $authorities[0]->getContent());
     }
 
 

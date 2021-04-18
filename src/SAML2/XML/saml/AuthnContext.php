@@ -31,7 +31,7 @@ final class AuthnContext extends AbstractSamlElement
     /** @var \SimpleSAML\SAML2\XML\saml\AuthnContextDecl|null */
     protected ?AuthnContextDecl $authnContextDecl = null;
 
-    /** @var string[] */
+    /** @var \SimpleSAML\SAML2\XML\saml\AuthenticatingAuthority[] */
     protected array $authenticatingAuthorities = [];
 
 
@@ -41,7 +41,7 @@ final class AuthnContext extends AbstractSamlElement
      * @param \SimpleSAML\SAML2\XML\saml\AuthnContextClassRef|null $authnContextClassRef
      * @param \SimpleSAML\SAML2\XML\saml\AuthnContextDecl|null $authnContextDecl
      * @param \SimpleSAML\SAML2\XML\saml\AuthnContextDeclRef|null $authnContextDeclRef
-     * @param string[] $authenticatingAuthorities
+     * @param \SimpleSAML\SAML2\XML\saml\AuthenticatingAuthority[] $authenticatingAuthorities
      * @throws \SimpleSAML\Assert\AssertionFailedException
      */
     public function __construct(
@@ -139,7 +139,7 @@ final class AuthnContext extends AbstractSamlElement
     /**
      * Collect the value of the authenticatingAuthorities-property
      *
-     * @return string[]
+     * @return \SimpleSAML\SAML2\XML\saml\AuthenticatingAuthority[]
      */
     public function getAuthenticatingAuthorities(): array
     {
@@ -150,14 +150,12 @@ final class AuthnContext extends AbstractSamlElement
     /**
      * Set the value of the authenticatingAuthorities-property
      *
-     * @param string[] $authenticatingAuthorities
+     * @param \SimpleSAML\SAML2\XML\saml\AuthenticatingAuthority[] $authenticatingAuthorities
      * @throws \SimpleSAML\Assert\AssertionFailedException
      */
     private function setAuthenticatingAuthorities(array $authenticatingAuthorities): void
     {
-        Assert::allStringNotEmpty($authenticatingAuthorities);
-        Assert::allNotWhitespaceOnly($authenticatingAuthorities);
-
+        Assert::allIsInstanceOf($authenticatingAuthorities, AuthenticatingAuthority::class);
         $this->authenticatingAuthorities = $authenticatingAuthorities;
     }
 
@@ -199,7 +197,7 @@ final class AuthnContext extends AbstractSamlElement
             TooManyElementsException::class
         );
 
-        $authorities = XMLUtils::extractStrings($xml, AbstractSamlElement::NS, 'AuthenticatingAuthority');
+        $authorities = AuthenticatingAuthority::getChildrenOfClass($xml);
 
         return new self(
             array_pop($authnContextClassRef),
@@ -232,7 +230,9 @@ final class AuthnContext extends AbstractSamlElement
             $this->authnContextDeclRef->toXML($e);
         }
 
-        XMLUtils::addStrings($e, AbstractSamlElement::NS, 'saml:AuthenticatingAuthority', false, $this->authenticatingAuthorities);
+        foreach ($this->authenticatingAuthorities as $authority) {
+            $authority->toXML($e);
+        }
 
         return $e;
     }
