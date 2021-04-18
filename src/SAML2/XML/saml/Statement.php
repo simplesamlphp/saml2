@@ -17,6 +17,9 @@ use SimpleSAML\XML\Exception\InvalidDOMElementException;
 abstract class Statement extends AbstractStatement
 {
     /** @var string */
+    public const LOCALNAME = 'Statement';
+
+    /** @var string */
     protected string $type;
 
 
@@ -28,15 +31,6 @@ abstract class Statement extends AbstractStatement
     protected function __construct(string $type)
     {
         $this->setType($type);
-    }
-
-
-    /**
-     * @inheritDoc
-     */
-    final public function getLocalName(): string
-    {
-        return 'Statement';
     }
 
 

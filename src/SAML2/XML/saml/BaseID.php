@@ -20,6 +20,9 @@ class BaseID extends AbstractSamlElement implements BaseIdentifierInterface
     use IDNameQualifiersTrait;
 
     /** @var string */
+    public const LOCALNAME = 'BaseID';
+
+    /** @var string */
     protected string $value;
 
     /** @var string */
@@ -44,16 +47,6 @@ class BaseID extends AbstractSamlElement implements BaseIdentifierInterface
         $this->setValue($value);
         $this->setNameQualifier($NameQualifier);
         $this->setSPNameQualifier($SPNameQualifier);
-    }
-
-
-    /**
-     * @inheritDoc
-     */
-    final public function getLocalName(): string
-    {
-        // All descendants of this class are supposed to be <saml:BaseID /> elements and shouldn't define a new element
-        return 'BaseID';
     }
 
 

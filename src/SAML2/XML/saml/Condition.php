@@ -17,6 +17,9 @@ use SimpleSAML\XML\Exception\InvalidDOMElementException;
 class Condition extends AbstractConditionType
 {
     /** @var string */
+    public const LOCALNAME = 'Condition';
+
+    /** @var string */
     protected string $type;
 
 
@@ -57,16 +60,6 @@ class Condition extends AbstractConditionType
         Assert::notWhitespaceOnly($type, 'The "xsi:type" attribute of an identifier cannot be empty.');
 
         $this->type = $type;
-    }
-
-
-    /**
-     * @inheritDoc
-     */
-    final public function getLocalName(): string
-    {
-        // All descendants of this class are supposed to be <saml:Condition /> elements and shouldn't define a new element
-        return 'Condition';
     }
 
 
