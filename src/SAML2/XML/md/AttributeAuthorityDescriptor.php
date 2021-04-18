@@ -53,7 +53,7 @@ final class AttributeAuthorityDescriptor extends AbstractRoleDescriptor
      *
      * Array with strings.
      *
-     * @var array
+     * @var \SimpleSAML\SAML2\XML\md\AttributeProfile[]
      */
     protected array $AttributeProfiles = [];
 
@@ -74,7 +74,7 @@ final class AttributeAuthorityDescriptor extends AbstractRoleDescriptor
      * @param string[] $protocolSupportEnumeration
      * @param \SimpleSAML\SAML2\XML\md\AssertionIDRequestService[] $assertionIDRequestService
      * @param \SimpleSAML\SAML2\XML\md\NameIDFormat[] $nameIDFormats
-     * @param string[] $attributeProfiles
+     * @param \SimpleSAML\SAML2\XML\md\AttributeProfile[] $attributeProfiles
      * @param \SimpleSAML\SAML2\XML\saml\Attribute[] $attributes
      * @param string|null $ID
      * @param int|null $validUntil
@@ -201,7 +201,7 @@ final class AttributeAuthorityDescriptor extends AbstractRoleDescriptor
     /**
      * Collect the value of the AttributeProfile-property
      *
-     * @return string[]
+     * @return \SimpleSAML\SAML2\XML\md\AttributeProfile[]
      */
     public function getAttributeProfiles(): array
     {
@@ -212,11 +212,11 @@ final class AttributeAuthorityDescriptor extends AbstractRoleDescriptor
     /**
      * Set the value of the AttributeProfile-property
      *
-     * @param string[] $attributeProfiles
+     * @param \SimpleSAML\SAML2\XML\md\AttributeProfile[] $attributeProfiles
      */
     protected function setAttributeProfiles(array $attributeProfiles): void
     {
-        Assert::allStringNotEmpty($attributeProfiles, 'AttributeProfile cannot be an empty string.');
+        Assert::allIsInstanceOf($attributeProfiles, AttributeProfile::class);
         $this->AttributeProfiles = $attributeProfiles;
     }
 
@@ -261,6 +261,7 @@ final class AttributeAuthorityDescriptor extends AbstractRoleDescriptor
         Assert::same($xml->namespaceURI, AttributeAuthorityDescriptor::NS, InvalidDOMElementException::class);
 
         $protocols = self::getAttribute($xml, 'protocolSupportEnumeration');
+        $validUntil = self::getAttribute($xml, 'validUntil', null);
 
         $attrServices = AttributeService::getChildrenOfClass($xml);
         Assert::notEmpty(
@@ -271,10 +272,8 @@ final class AttributeAuthorityDescriptor extends AbstractRoleDescriptor
 
         $assertIDReqServices = AssertionIDRequestService::getChildrenOfClass($xml);
         $nameIDFormats = NameIDFormat::getChildrenOfClass($xml);
-        $attrProfiles = XMLUtils::extractStrings($xml, Constants::NS_MD, 'AttributeProfile');
-
+        $attrProfiles = AttributeProfile::getChildrenOfClass($xml);
         $attributes = Attribute::getChildrenOfClass($xml);
-        $validUntil = self::getAttribute($xml, 'validUntil', null);
 
         $orgs = Organization::getChildrenOfClass($xml);
         Assert::maxCount($orgs, 1, 'More than one Organization found in this descriptor', TooManyElementsException::class);
@@ -331,7 +330,9 @@ final class AttributeAuthorityDescriptor extends AbstractRoleDescriptor
             $nidFormat->toXML($e);
         }
 
-        XMLUtils::addStrings($e, Constants::NS_MD, 'md:AttributeProfile', false, $this->AttributeProfiles);
+        foreach ($this->AttributeProfiles as $ap) {
+            $ap->toXML($e);
+        }
 
         foreach ($this->Attributes as $a) {
             $a->toXML($e);

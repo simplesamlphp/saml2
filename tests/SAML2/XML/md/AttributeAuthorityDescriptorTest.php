@@ -10,6 +10,7 @@ use SimpleSAML\Assert\AssertionFailedException;
 use SimpleSAML\SAML2\Constants;
 use SimpleSAML\SAML2\XML\md\AssertionIDRequestService;
 use SimpleSAML\SAML2\XML\md\AttributeAuthorityDescriptor;
+use SimpleSAML\SAML2\XML\md\AttributeProfile;
 use SimpleSAML\SAML2\XML\md\AttributeService;
 use SimpleSAML\SAML2\XML\md\NameIDFormat;
 use SimpleSAML\SAML2\XML\saml\Attribute;
@@ -97,8 +98,8 @@ final class AttributeAuthorityDescriptorTest extends TestCase
                 new NameIDFormat(CONSTANTS::NAMEID_TRANSIENT),
             ],
             [
-                'profile1',
-                'profile2',
+                new AttributeProfile('profile1'),
+                new AttributeProfile('profile2'),
             ],
             [$attr1, $attr2]
         );
@@ -227,8 +228,8 @@ final class AttributeAuthorityDescriptorTest extends TestCase
     public function testMarshallingWithEmptyAttributeProfile(): void
     {
         $this->expectException(AssertionFailedException::class);
-        $this->expectExceptionMessage('AttributeProfile cannot be an empty string.');
-        new AttributeAuthorityDescriptor([$this->as], [Constants::NS_SAMLP], [$this->aidrs], [new NameIDFormat('x')], ['']);
+        $this->expectExceptionMessage('AttributeProfile cannot be empty');
+        new AttributeAuthorityDescriptor([$this->as], [Constants::NS_SAMLP], [$this->aidrs], [new NameIDFormat('x')], [new AttributeProfile('')]);
     }
 
 
@@ -243,7 +244,7 @@ final class AttributeAuthorityDescriptorTest extends TestCase
         );
 
         /** @psalm-suppress InvalidArgument */
-        new AttributeAuthorityDescriptor([$this->as], [Constants::NS_SAMLP], [$this->aidrs], [new NameIDFormat('x')], ['x'], ['x']);
+        new AttributeAuthorityDescriptor([$this->as], [Constants::NS_SAMLP], [$this->aidrs], [new NameIDFormat('x')], [new AttributeProfile('x')], ['x']);
     }
 
 
@@ -277,8 +278,8 @@ final class AttributeAuthorityDescriptorTest extends TestCase
         $this->assertCount(2, $attrs, "Wrong number of attributes.");
         $this->assertEquals(
             [
-                'profile1',
-                'profile2',
+                new AttributeProfile('profile1'),
+                new AttributeProfile('profile2'),
             ],
             $aad->getAttributeProfiles()
         );
@@ -348,7 +349,7 @@ XML
 XML
         );
         $this->expectException(AssertionFailedException::class);
-        $this->expectExceptionMessage('AttributeProfile cannot be an empty string.');
+        $this->expectExceptionMessage('AttributeProfile cannot be empty');
         AttributeAuthorityDescriptor::fromXML($document->documentElement);
     }
 }

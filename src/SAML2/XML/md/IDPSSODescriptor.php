@@ -51,7 +51,7 @@ final class IDPSSODescriptor extends AbstractSSODescriptor
     /**
      * List of supported attribute profiles.
      *
-     * @var string[]
+     * @var \SimpleSAML\SAML2\XML\md\AttributeProfile[]
      */
     protected array $attributeProfiles = [];
 
@@ -71,7 +71,7 @@ final class IDPSSODescriptor extends AbstractSSODescriptor
      * @param bool|null $wantAuthnRequestsSigned
      * @param \SimpleSAML\SAML2\XML\md\NameIDMappingService[] $nameIDMappingServiceEndpoints
      * @param \SimpleSAML\SAML2\XML\md\AssertionIDRequestService[] $assertionIDRequestServiceEndpoints
-     * @param string[] $attributeProfiles
+     * @param \SimpleSAML\SAML2\XML\md\AttributeProfile[] $attributeProfiles
      * @param \SimpleSAML\SAML2\XML\saml\Attribute[] $attributes
      * @param string|null $ID
      * @param int|null $validUntil
@@ -163,7 +163,7 @@ final class IDPSSODescriptor extends AbstractSSODescriptor
             self::getBooleanAttribute($xml, 'WantAuthnRequestsSigned', null),
             NameIDMappingService::getChildrenOfClass($xml),
             AssertionIDRequestService::getChildrenOfClass($xml),
-            XMLUtils::extractStrings($xml, Constants::NS_MD, 'AttributeProfile'),
+            AttributeProfile::getChildrenOfClass($xml),
             Attribute::getChildrenOfClass($xml),
             self::getAttribute($xml, 'ID', null),
             $validUntil !== null ? XMLUtils::xsDateTimeToTimestamp($validUntil) : null,
@@ -292,7 +292,7 @@ final class IDPSSODescriptor extends AbstractSSODescriptor
     /**
      * Get the attribute profiles supported
      *
-     * @return string[]
+     * @return \SimpleSAML\SAML2\XML\md\AttributeProfile[]
      */
     public function getAttributeProfiles(): array
     {
@@ -303,14 +303,11 @@ final class IDPSSODescriptor extends AbstractSSODescriptor
     /**
      * Set the attribute profiles supported
      *
-     * @param string[] $attributeProfiles
+     * @param \SimpleSAML\SAML2\XML\md\AttributeProfile[] $attributeProfiles
      */
     protected function setAttributeProfiles(array $attributeProfiles): void
     {
-        Assert::allStringNotEmpty(
-            $attributeProfiles,
-            'All md:AttributeProfile elements must be a URI, not an empty string.'
-        );
+        Assert::allIsInstanceOf($attributeProfiles, AttributeProfile::class);
         $this->attributeProfiles = $attributeProfiles;
     }
 
@@ -369,7 +366,9 @@ final class IDPSSODescriptor extends AbstractSSODescriptor
             $ep->toXML($e);
         }
 
-        XMLUtils::addStrings($e, Constants::NS_MD, 'md:AttributeProfile', false, $this->attributeProfiles);
+        foreach ($this->attributeProfiles as $ap) {
+            $ap->toXML($e);
+        }
 
         foreach ($this->attributes as $a) {
             $a->toXML($e);
