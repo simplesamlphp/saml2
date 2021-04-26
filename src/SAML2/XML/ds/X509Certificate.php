@@ -46,7 +46,7 @@ class X509Certificate
      */
     public function getCertificate() : string
     {
-        return $this->certificate;
+        return str_replace(["\r\n", "\r", "\n", "\t", ' '], '', $this->certificate);
     }
 
 
