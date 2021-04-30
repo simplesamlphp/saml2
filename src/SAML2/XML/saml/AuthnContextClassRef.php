@@ -9,6 +9,7 @@ use SimpleSAML\Assert\Assert;
 use SimpleSAML\SAML2\Constants;
 use SimpleSAML\XML\DOMDocumentFactory;
 use SimpleSAML\XML\Exception\InvalidDOMElementException;
+use SimpleSAML\XML\XMLStringElementTrait;
 
 /**
  * Class representing SAML2 AuthnContextClassRef
@@ -17,72 +18,18 @@ use SimpleSAML\XML\Exception\InvalidDOMElementException;
  */
 final class AuthnContextClassRef extends AbstractSamlElement
 {
-    /** @var string */
-    protected string $classRef;
+    use XMLStringElementTrait;
 
 
     /**
-     * Initialize an AuthnContextClassRef.
+     * Validate the content of the element.
      *
-     * @param string $classRef
+     * @param string $content  The value to go in the XML textContent
+     * @throws \Exception on failure
+     * @return void
      */
-    public function __construct(string $classRef)
+    protected function validateContent(/** @scrutinizer ignore-unused */ string $content): void
     {
-        $this->setClassRef($classRef);
-    }
-
-
-    /**
-     * Collect the value of the classRef-property
-     *
-     * @return string
-     */
-    public function getClassRef(): string
-    {
-        return $this->classRef;
-    }
-
-
-    /**
-     * Set the value of the classRef-property
-     *
-     * @param string $name
-     */
-    private function setClassRef(string $classRef): void
-    {
-        Assert::notWhitespaceOnly($classRef);
-        $this->classRef = $classRef;
-    }
-
-
-    /**
-     * Convert XML into a AuthnContextClassRef
-     *
-     * @param \DOMElement $xml The XML element we should load
-     * @return \SimpleSAML\SAML2\XML\saml\AuthnContextClassRef
-     *
-     * @throws \SimpleSAML\XML\Exception\InvalidDOMElementException if the qualified name of the supplied element is wrong
-     */
-    public static function fromXML(DOMElement $xml): object
-    {
-        Assert::same($xml->localName, 'AuthnContextClassRef', InvalidDOMElementException::class);
-        Assert::same($xml->namespaceURI, AuthnContextClassRef::NS, InvalidDOMElementException::class);
-
-        return new self($xml->textContent);
-    }
-
-
-    /**
-     * Convert this AuthContextClassRef to XML.
-     *
-     * @param \DOMElement|null $parent The element we should append this AuthnContextClassRef to.
-     * @return \DOMElement
-     */
-    public function toXML(DOMElement $parent = null): DOMElement
-    {
-        $e = $this->instantiateParentElement($parent);
-        $e->textContent = $this->classRef;
-
-        return $e;
+        Assert::notWhitespaceOnly($content);
     }
 }

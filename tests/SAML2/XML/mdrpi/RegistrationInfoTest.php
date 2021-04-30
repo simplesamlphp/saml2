@@ -82,12 +82,12 @@ final class RegistrationInfoTest extends TestCase
         $this->assertCount(2, $registrationPolicy);
         $this->assertEquals(
             'http://www.example.org/aai/metadata/en_registration.html',
-            $registrationPolicy[0]->getValue()
+            $registrationPolicy[0]->getContent()
         );
         $this->assertEquals('en', $registrationPolicy[0]->getLanguage());
         $this->assertEquals(
             'http://www.example.org/aai/metadata/de_registration.html',
-            $registrationPolicy[1]->getValue()
+            $registrationPolicy[1]->getContent()
         );
         $this->assertEquals('de', $registrationPolicy[1]->getLanguage());
     }

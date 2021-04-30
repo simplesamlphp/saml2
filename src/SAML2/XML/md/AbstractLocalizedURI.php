@@ -5,6 +5,7 @@ declare(strict_types=1);
 namespace SimpleSAML\SAML2\XML\md;
 
 use InvalidArgumentException;
+use SimpleSAML\Assert\Assert;
 
 /**
  * Abstract class implementing LocalizedURIType.
@@ -14,16 +15,18 @@ use InvalidArgumentException;
 abstract class AbstractLocalizedURI extends AbstractLocalizedName
 {
     /**
-     * Set the localized uri.
+     * Validate the content of the element.
      *
-     * @param string $value
+     * @param string $content  The value to go in the XML textContent
+     * @throws \Exception on failure
+     * @return void
      */
-    protected function setValue(string $value): void
+    protected function validateContent(/** @scrutinizer ignore-unused */ string $content): void
     {
-        if (!empty($value) && !filter_var($value, FILTER_VALIDATE_URL)) {
+        Assert::notEmpty($content);
+
+        if (!empty($content) && !filter_var($content, FILTER_VALIDATE_URL)) {
             throw new InvalidArgumentException(static::getQualifiedName() . ' is not a valid URL.');
         }
-
-        parent::setValue($value);
     }
 }

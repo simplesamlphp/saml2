@@ -64,17 +64,6 @@ final class AdditionalMetadataLocationTest extends TestCase
     }
 
 
-    /**
-     * Test that creating an AdditionalMetadataLocation from scratch with an empty location fails.
-     */
-    public function testMarshallingWithEmptyLocation(): void
-    {
-        $this->expectException(AssertionFailedException::class);
-        $this->expectExceptionMessage('AdditionalMetadataLocation must contain a URI.');
-        new AdditionalMetadataLocation('NamespaceAttribute', '');
-    }
-
-
     // test unmarshalling
 
 
@@ -85,7 +74,7 @@ final class AdditionalMetadataLocationTest extends TestCase
     {
         $additionalMetadataLocation = AdditionalMetadataLocation::fromXML($this->xmlRepresentation->documentElement);
         $this->assertEquals('TheNamespaceAttribute', $additionalMetadataLocation->getNamespace());
-        $this->assertEquals('LocationText', $additionalMetadataLocation->getLocation());
+        $this->assertEquals('LocationText', $additionalMetadataLocation->getContent());
     }
 
 
@@ -99,20 +88,6 @@ final class AdditionalMetadataLocationTest extends TestCase
 
         $this->expectException(MissingAttributeException::class);
         $this->expectExceptionMessage("Missing 'namespace' attribute on md:AdditionalMetadataLocation.");
-        AdditionalMetadataLocation::fromXML($document);
-    }
-
-
-    /**
-     * Test that creating an AdditionalMetadataLocation from XML fails if the location is empty.
-     */
-    public function testUnmarshallingWithEmptyLocation(): void
-    {
-        $document = $this->xmlRepresentation->documentElement;
-        $document->textContent = '';
-
-        $this->expectException(AssertionFailedException::class);
-        $this->expectExceptionMessage('AdditionalMetadataLocation must contain a URI.');
         AdditionalMetadataLocation::fromXML($document);
     }
 }

@@ -85,20 +85,6 @@ final class KeywordsTest extends TestCase
 
 
     /**
-     * Unmarshalling fails if lang attribute not present
-     */
-    public function testUnmarshallingFailsMissingLanguage(): void
-    {
-        $document = $this->xmlRepresentation;
-        $document->documentElement->removeAttribute('xml:lang');
-
-        $this->expectException(MissingAttributeException::class);
-        $this->expectExceptionMessage("Missing 'xml:lang' attribute on mdui:Keywords.");
-        Keywords::fromXML($document->documentElement);
-    }
-
-
-    /**
      * Unmarshalling fails if attribute is empty
      */
     public function testUnmarshallingFailsMissingKeywords(): void

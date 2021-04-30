@@ -212,7 +212,7 @@ AUTHNREQUEST;
             $authnRequest->getAssertionConsumerServiceURL()
         );
         $this->assertInstanceOf(Issuer::class, $issuer);
-        $this->assertEquals('https://sp.example.com/SAML2', $issuer->getValue());
+        $this->assertEquals('https://sp.example.com/SAML2', $issuer->getContent());
     }
 
 
@@ -280,7 +280,7 @@ AUTHNREQUEST;
 
         $nameId = $subject->getIdentifier();
         $this->assertInstanceOf(NameID::class, $nameId);
-        $this->assertEquals("user@example.org", $nameId->getValue());
+        $this->assertEquals("user@example.org", $nameId->getContent());
         $this->assertEquals(Constants::NAMEID_UNSPECIFIED, $nameId->getFormat());
     }
 
@@ -332,7 +332,7 @@ AUTHNREQUEST;
         $nameId = $identifier->decrypt($key);
         $this->assertInstanceOf(NameID::class, $nameId);
 
-        $this->assertEquals('very secret', $nameId->getValue());
+        $this->assertEquals('very secret', $nameId->getContent());
     }
 
 

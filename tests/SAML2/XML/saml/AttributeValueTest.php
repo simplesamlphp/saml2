@@ -145,7 +145,7 @@ XML
 
         $this->assertInstanceOf(NameID::class, $value);
 
-        $this->assertEquals('abcd-some-value-xyz', $value->getValue());
+        $this->assertEquals('abcd-some-value-xyz', $value->getContent());
         $this->assertEquals('urn:oasis:names:tc:SAML:2.0:nameid-format:persistent', $value->getFormat());
         $this->assertXmlStringEqualsXmlString($document, $av->toXML()->ownerDocument->saveXML());
     }

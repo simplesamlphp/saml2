@@ -42,7 +42,7 @@ final class StatusDetailTest extends TestCase
     public function testMarshalling(): void
     {
         $document = DOMDocumentFactory::fromString(
-            '<Cause>org.sourceid.websso.profiles.idp.FailedAuthnSsoException</Cause>'
+            '<ssp:Cause xmlns:ssp="urn:custom:ssp">org.sourceid.websso.profiles.idp.FailedAuthnSsoException</ssp:Cause>'
         );
 
         $statusDetail = new StatusDetail([new Chunk($document->documentElement)]);
@@ -75,10 +75,10 @@ final class StatusDetailTest extends TestCase
     {
         $statusDetail = StatusDetail::fromXML($this->xmlRepresentation->documentElement);
 
-        $statusDetailElement = $statusDetail->getDetails();
+        $statusDetailElement = $statusDetail->getElements();
         $statusDetailElement = $statusDetailElement[0]->getXML();
 
-        $this->assertEquals('Cause', $statusDetailElement->tagName);
+        $this->assertEquals('Cause', $statusDetailElement->localName);
         $this->assertEquals(
             'org.sourceid.websso.profiles.idp.FailedAuthnSsoException',
             $statusDetailElement->textContent

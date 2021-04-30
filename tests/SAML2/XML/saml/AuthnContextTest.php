@@ -312,11 +312,11 @@ final class AuthnContextTest extends TestCase
 
         /** @psalm-var \SimpleSAML\SAML2\XML\saml\AuthnContextClassRef $classRef */
         $classRef = $authnContext->getAuthnContextClassRef();
-        $this->assertEquals(Constants::AC_PASSWORD_PROTECTED_TRANSPORT, $classRef->getClassRef());
+        $this->assertEquals(Constants::AC_PASSWORD_PROTECTED_TRANSPORT, $classRef->getContent());
 
         /** @psalm-var \SimpleSAML\SAML2\XML\saml\AuthnContextDeclRef $declRef */
         $declRef = $authnContext->getAuthnContextDeclRef();
-        $this->assertEquals('/relative/path/to/document.xml', $declRef->getDeclRef());
+        $this->assertEquals('/relative/path/to/document.xml', $declRef->getContent());
 
         $authorities = $authnContext->getAuthenticatingAuthorities();
         $this->assertEquals('https://idp.example.com/SAML2', $authorities[0]);

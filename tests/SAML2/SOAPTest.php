@@ -59,7 +59,7 @@ SOAP
         $this->assertInstanceOf(ArtifactResolve::class, $message);
         $this->assertEquals($artifact, $message->getArtifact());
         $this->assertEquals($id, $message->getId());
-        $this->assertEquals($issuer, $message->getIssuer()->getValue());
+        $this->assertEquals($issuer, $message->getIssuer()->getContent());
 
         // TODO Validate XML signature is received?
     }

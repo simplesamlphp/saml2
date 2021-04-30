@@ -61,34 +61,6 @@ final class OrganizationURLTest extends TestCase
     }
 
 
-    /**
-     * Test that creating a OrganizationURL from scratch with an empty language fails.
-     */
-    public function testMarshallingWithEmptyLang(): void
-    {
-        $this->expectException(AssertionFailedException::class);
-        $this->expectExceptionMessage('xml:lang cannot be empty.');
-
-        new OrganizationURL('', 'https://IdentityProvider.com');
-    }
-
-
-    /**
-     * Test that creating a OrganizationURL from scratch with an empty value works.
-     */
-    public function testMarshallingWithEmptyValue(): void
-    {
-        $name = new OrganizationURL('en', '');
-
-        $this->xmlRepresentation->documentElement->textContent = '';
-
-        $this->assertEquals(
-            $this->xmlRepresentation->saveXML($this->xmlRepresentation->documentElement),
-            strval($name)
-        );
-    }
-
-
     // test unmarshalling
 
 
@@ -102,34 +74,6 @@ final class OrganizationURLTest extends TestCase
             $this->xmlRepresentation->saveXML($this->xmlRepresentation->documentElement),
             strval($name)
         );
-    }
-
-
-    /**
-     * Test that creating a OrganizationURL from XML fails when xml:lang is missing.
-     */
-    public function testUnmarshallingWithoutLang(): void
-    {
-        $this->xmlRepresentation->documentElement->removeAttributeNS(OrganizationURL::XML_NS, 'lang');
-
-        $this->expectException(AssertionFailedException::class);
-        $this->expectExceptionMessage('Missing xml:lang from OrganizationURL');
-
-        OrganizationURL::fromXML($this->xmlRepresentation->documentElement);
-    }
-
-
-    /**
-     * Test that creating a OrganizationURL from XML fails when xml:lang is empty.
-     */
-    public function testUnmarshallingWithEmptyLang(): void
-    {
-        $this->xmlRepresentation->documentElement->setAttributeNS(OrganizationURL::XML_NS, 'lang', '');
-
-        $this->expectException(AssertionFailedException::class);
-        $this->expectExceptionMessage('xml:lang cannot be empty.');
-
-        OrganizationURL::fromXML($this->xmlRepresentation->documentElement);
     }
 
 

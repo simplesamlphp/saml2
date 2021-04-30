@@ -57,7 +57,7 @@ final class AudienceTest extends TestCase
     {
         $audience = Audience::fromXML($this->xmlRepresentation->documentElement);
 
-        $this->assertEquals('urn:audience1', $audience->getValue());
+        $this->assertEquals('urn:audience1', $audience->getContent());
     }
 }
 

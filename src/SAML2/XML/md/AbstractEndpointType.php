@@ -7,8 +7,10 @@ namespace SimpleSAML\SAML2\XML\md;
 use DOMElement;
 use SimpleSAML\Assert\Assert;
 use SimpleSAML\XML\Chunk;
+use SimpleSAML\XML\Constants;
 use SimpleSAML\XML\Exception\InvalidDOMElementException;
 use SimpleSAML\XML\ExtendableAttributesTrait;
+use SimpleSAML\XML\ExtendableElementTrait;
 
 /**
  * Class representing SAML 2 EndpointType.
@@ -28,13 +30,11 @@ use SimpleSAML\XML\ExtendableAttributesTrait;
 abstract class AbstractEndpointType extends AbstractMdElement
 {
     use ExtendableAttributesTrait;
+    use ExtendableElementTrait;
 
-    /**
-     * Array with child elements.
-     *
-     * @var \SimpleSAML\XML\Chunk[]
-     */
-    protected array $children = [];
+    /** The namespace-attribute for the xs:any element */
+    public const NAMESPACE = Constants::XS_ANY_NS_OTHER;
+
 
     /**
      * The binding for this endpoint.
@@ -80,7 +80,7 @@ abstract class AbstractEndpointType extends AbstractMdElement
         $this->setLocation($location);
         $this->setResponseLocation($responseLocation);
         $this->setAttributesNS($attributes);
-        $this->setChildren($children);
+        $this->setElements($children);
     }
 
 
@@ -157,30 +157,6 @@ abstract class AbstractEndpointType extends AbstractMdElement
 
 
     /**
-     * Collect the value of the children-property
-     *
-     * @return \SimpleSAML\XML\Chunk[]
-     */
-    public function getChildren(): array
-    {
-        return $this->children;
-    }
-
-
-    /**
-     * Set the value of the childen-property
-     *
-     * @param array $children
-     */
-    private function setChildren(array $children): void
-    {
-        Assert::allIsInstanceOf($children, Chunk::class);
-
-        $this->children = $children;
-    }
-
-
-    /**
      * Initialize an EndpointType.
      *
      * Note: this method cannot be used when extending this class, if the constructor has a different signature.
@@ -247,7 +223,7 @@ abstract class AbstractEndpointType extends AbstractMdElement
             $e->setAttributeNS($a['namespaceURI'], $a['qualifiedName'], $a['value']);
         }
 
-        foreach ($this->getChildren() as $child) {
+        foreach ($this->getElements() as $child) {
             $e->appendChild($e->ownerDocument->importNode($child->getXML(), true));
         }
 

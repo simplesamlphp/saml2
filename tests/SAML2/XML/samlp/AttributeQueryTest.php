@@ -111,8 +111,8 @@ final class AttributeQueryTest extends TestCase
         $identifier = $subject->getIdentifier();
 
         // Sanity check
-        $this->assertEquals('https://example.org/', $issuer->getValue());
-        $this->assertEquals('urn:example:subject', $identifier->getValue());
+        $this->assertEquals('https://example.org/', $issuer->getContent());
+        $this->assertEquals('urn:example:subject', $identifier->getContent());
 
         $attributes = $aq->getAttributes();
         $this->assertCount(4, $attributes);
@@ -194,7 +194,7 @@ XML;
         $issuer = $aq->getIssuer();
 
         // Sanity check
-        $this->assertEquals('https://example.org/', $issuer->getValue());
+        $this->assertEquals('https://example.org/', $issuer->getContent());
     }
 
 
@@ -234,7 +234,7 @@ XML;
         $issuer = $aq->getIssuer();
 
         // Sanity check
-        $this->assertEquals('https://example.org/', $issuer->getValue());
+        $this->assertEquals('https://example.org/', $issuer->getContent());
     }
 
 

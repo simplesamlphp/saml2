@@ -109,7 +109,7 @@ final class SubjectConfirmationTest extends TestCase
 
         $this->assertEquals('SomeMethod', $subjectConfirmation->getMethod());
         $this->assertInstanceOf(NameID::class, $identifier);
-        $this->assertEquals('SomeNameIDValue', $identifier->getValue());
+        $this->assertEquals('SomeNameIDValue', $identifier->getContent());
         $this->assertInstanceOf(SubjectConfirmationData::class, $subjectConfirmation->getSubjectConfirmationData());
         $this->assertEquals(
             $this->xmlRepresentation->saveXML($this->xmlRepresentation->documentElement),

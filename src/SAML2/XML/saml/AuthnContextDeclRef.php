@@ -9,6 +9,7 @@ use SimpleSAML\Assert\Assert;
 use SimpleSAML\SAML2\Constants;
 use SimpleSAML\XML\DOMDocumentFactory;
 use SimpleSAML\XML\Exception\InvalidDOMElementException;
+use SimpleSAML\XML\XMLStringElementTrait;
 
 /**
  * Class representing SAML2 AuthnContextDeclRef
@@ -17,72 +18,18 @@ use SimpleSAML\XML\Exception\InvalidDOMElementException;
  */
 final class AuthnContextDeclRef extends AbstractSamlElement
 {
-    /** @var string */
-    protected string $declRef;
+    use XMLStringElementTrait;
 
 
     /**
-     * Initialize an AuthnContextDeclRef.
+     * Validate the content of the element.
      *
-     * @param string $declRef
+     * @param string $content  The value to go in the XML textContent
+     * @throws \Exception on failure
+     * @return void
      */
-    public function __construct(string $declRef)
+    protected function validateContent(/** @scrutinizer ignore-unused */ string $content): void
     {
-        $this->setDeclRef($declRef);
-    }
-
-
-    /**
-     * Collect the value of the declRef-property
-     *
-     * @return string
-     */
-    public function getDeclRef(): string
-    {
-        return $this->declRef;
-    }
-
-
-    /**
-     * Set the value of the declRef-property
-     *
-     * @param string $name
-     */
-    private function setDeclRef(string $declRef): void
-    {
-        Assert::notWhitespaceOnly($declRef);
-        $this->declRef = $declRef;
-    }
-
-
-    /**
-     * Convert XML into a AuthnContextDeclRef
-     *
-     * @param \DOMElement $xml The XML element we should load
-     * @return \SimpleSAML\SAML2\XML\saml\AuthnContextDeclRef
-     *
-     * @throws \SimpleSAML\XML\Exception\InvalidDOMElementException if the qualified name of the supplied element is wrong
-     */
-    public static function fromXML(DOMElement $xml): object
-    {
-        Assert::same($xml->localName, 'AuthnContextDeclRef', InvalidDOMElementException::class);
-        Assert::same($xml->namespaceURI, AuthnContextDeclRef::NS, InvalidDOMElementException::class);
-
-        return new self($xml->textContent);
-    }
-
-
-    /**
-     * Convert this AuthContextDeclRef to XML.
-     *
-     * @param \DOMElement|null $parent The element we should append this AuthnContextDeclRef to.
-     * @return \DOMElement
-     */
-    public function toXML(DOMElement $parent = null): DOMElement
-    {
-        $e = $this->instantiateParentElement($parent);
-        $e->textContent = $this->declRef;
-
-        return $e;
+        Assert::notWhitespaceOnly($content);
     }
 }

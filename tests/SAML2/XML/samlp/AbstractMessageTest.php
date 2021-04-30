@@ -94,9 +94,7 @@ AUTHNREQUEST
   <saml:Issuer NameQualifier="https://gateway.stepup.org/saml20/sp/metadata"
     SPNameQualifier="https://spnamequalifier.com"
     SPProvidedID="ProviderID"
-    Format="urn:oasis:names:tc:SAML:1.1:nameid-format:unspecified">
-        https://gateway.stepup.org/saml20/sp/metadata
-  </saml:Issuer>
+    Format="urn:oasis:names:tc:SAML:1.1:nameid-format:unspecified">https://gateway.stepup.org/saml20/sp/metadata</saml:Issuer>
   <saml:Subject>
         <saml:NameID Format="urn:oasis:names:tc:SAML:1.1:nameid-format:unspecified">user@example.org</saml:NameID>
   </saml:Subject>
@@ -111,7 +109,7 @@ AUTHNREQUEST
         $this->assertEquals('https://spnamequalifier.com', $issuer->getSPNameQualifier());
         $this->assertEquals('ProviderID', $issuer->getSPProvidedID());
         $this->assertEquals('urn:oasis:names:tc:SAML:1.1:nameid-format:unspecified', $issuer->getFormat());
-        $this->assertEquals('https://gateway.stepup.org/saml20/sp/metadata', $issuer->getValue());
+        $this->assertEquals('https://gateway.stepup.org/saml20/sp/metadata', $issuer->getContent());
     }
 
 
@@ -131,7 +129,7 @@ AUTHNREQUEST
         $xml_issuer = $xml_issuer[0];
 
         $this->assertFalse($xml_issuer->hasAttributes());
-        $this->assertEquals($issuer->getValue(), $xml_issuer->textContent);
+        $this->assertEquals($issuer->getContent(), $xml_issuer->textContent);
 
         // now, try an Issuer with another format and attributes
         $issuer = new Issuer(
@@ -148,7 +146,7 @@ AUTHNREQUEST
         $this->assertInstanceOf(DOMElement::class, $xml_issuer);
 
         $this->assertTrue($xml_issuer->hasAttributes());
-        $this->assertEquals($issuer->getValue(), $xml_issuer->textContent);
+        $this->assertEquals($issuer->getContent(), $xml_issuer->textContent);
         $this->assertEquals($issuer->getNameQualifier(), $xml_issuer->getAttribute('NameQualifier'));
         $this->assertEquals($issuer->getSPNameQualifier(), $xml_issuer->getAttribute('SPNameQualifier'));
         $this->assertEquals($issuer->getSPProvidedID(), $xml_issuer->getAttribute('SPProvidedID'));
@@ -335,7 +333,7 @@ XML;
         $issuer = $message->getIssuer();
 
         $this->assertInstanceOf(Issuer::class, $issuer);
-        $this->assertEquals('https://example.org/', $issuer->getValue());
+        $this->assertEquals('https://example.org/', $issuer->getContent());
         $this->assertEquals('aaf23196-1773-2113-474a-fe114412ab72', $message->getId());
 
         $document->documentElement->setAttribute('ID', 'somethingNEW');
@@ -343,7 +341,7 @@ XML;
         $issuer = $message->getIssuer();
 
         $this->assertInstanceOf(Issuer::class, $issuer);
-        $this->assertEquals('https://example.org/', $issuer->getValue());
+        $this->assertEquals('https://example.org/', $issuer->getContent());
         $this->assertEquals('somethingNEW', $message->getId());
         $this->assertEquals(Constants::CONSENT_PRIOR, $message->getConsent());
 

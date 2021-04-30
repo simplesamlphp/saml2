@@ -155,7 +155,7 @@ final class NameIdDecryptionTransformerTest extends TestCase
         $identifier = $processed->getSubject()->getIdentifier();
 
         $this->assertInstanceOf(NameID::class, $identifier);
-        $this->assertEquals('value', $identifier->getValue());
+        $this->assertEquals('value', $identifier->getContent());
         $this->assertEquals('name_qualifier', $identifier->getNameQualifier());
     }
 
@@ -177,7 +177,7 @@ final class NameIdDecryptionTransformerTest extends TestCase
         $identifier = $processed->getOnlyElement()->getSubject()->getIdentifier();
 
         $this->assertInstanceOf(NameID::class, $identifier);
-        $this->assertEquals('value', $identifier->getValue());
+        $this->assertEquals('value', $identifier->getContent());
         $this->assertEquals('name_qualifier', $identifier->getNameQualifier());
     }
 }

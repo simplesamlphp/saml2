@@ -132,7 +132,7 @@ final class DiscoHintsTest extends TestCase
         $document = DOMDocumentFactory::fromString(<<<XML
 <mdui:DiscoHints xmlns:mdui="urn:oasis:names:tc:SAML:metadata:ui">
   <mdui:GeolocationHint>geo:47.37328,8.531126</mdui:GeolocationHint>
-  <child1>content of tag</child1>
+  <ssp:child1 xmlns:ssp="urn:custom:ssp">content of tag</ssp:child1>
 </mdui:DiscoHints>
 XML
         );
@@ -141,7 +141,7 @@ XML
 
         $this->assertCount(1, $disco->getGeolocationHint());
         $this->assertEquals('geo:47.37328,8.531126', $disco->getGeolocationHint()[0]);
-        $this->assertCount(1, $disco->getChildren());
-        $this->assertEquals('content of tag', $disco->getChildren()[0]->getXML()->textContent);
+        $this->assertCount(1, $disco->getElements());
+        $this->assertEquals('content of tag', $disco->getElements()[0]->getXML()->textContent);
     }
 }

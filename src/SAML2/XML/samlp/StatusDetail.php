@@ -8,6 +8,8 @@ use DOMElement;
 use SimpleSAML\Assert\Assert;
 use SimpleSAML\XML\Exception\InvalidDOMElementException;
 use SimpleSAML\XML\Chunk;
+use SimpleSAML\XML\Constants;
+use SimpleSAML\XML\ExtendableElementTrait;
 
 /**
  * SAML StatusDetail data type.
@@ -16,8 +18,10 @@ use SimpleSAML\XML\Chunk;
  */
 final class StatusDetail extends AbstractSamlpElement
 {
-    /** @var \SimpleSAML\XML\Chunk[] */
-    protected array $details = [];
+    use ExtendableElementTrait;
+
+    /** The namespace-attribute for the xs:any element */
+    public const NAMESPACE = Constants::XS_ANY_NS_ANY;
 
 
     /**
@@ -27,32 +31,7 @@ final class StatusDetail extends AbstractSamlpElement
      */
     public function __construct(array $details = [])
     {
-        $this->setDetails($details);
-    }
-
-
-    /**
-     * Collect the details
-     *
-     * @return \SimpleSAML\XML\Chunk[]
-     */
-    public function getDetails(): array
-    {
-        return $this->details;
-    }
-
-
-    /**
-     * Set the value of the details-property
-     *
-     * @param \SimpleSAML\XML\Chunk[] $details
-     * @throws \SimpleSAML\Assert\AssertionFailedException if the supplied array contains anything other than Chunk objects
-     */
-    private function setDetails(array $details): void
-    {
-        Assert::allIsInstanceOf($details, Chunk::class);
-
-        $this->details = $details;
+        $this->setElements($details);
     }
 
 
@@ -63,7 +42,7 @@ final class StatusDetail extends AbstractSamlpElement
      */
     public function isEmptyElement(): bool
     {
-        return empty($this->details);
+        return empty($this->elements);
     }
 
 
@@ -104,7 +83,7 @@ final class StatusDetail extends AbstractSamlpElement
         /** @psalm-var \DOMDocument $e->ownerDocument */
         $e = $this->instantiateParentElement($parent);
 
-        foreach ($this->details as $detail) {
+        foreach ($this->elements as $detail) {
             $e->appendChild($e->ownerDocument->importNode($detail->getXML(), true));
         }
 

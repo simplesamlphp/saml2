@@ -4,6 +4,6 @@
   </samlp:StatusCode>
   <samlp:StatusMessage>Something went wrong</samlp:StatusMessage>
   <samlp:StatusDetail>
-    <Cause>org.sourceid.websso.profiles.idp.FailedAuthnSsoException</Cause>
+    <ssp:Cause xmlns:ssp="urn:custom:ssp">org.sourceid.websso.profiles.idp.FailedAuthnSsoException</ssp:Cause>
   </samlp:StatusDetail>
 </samlp:Status>

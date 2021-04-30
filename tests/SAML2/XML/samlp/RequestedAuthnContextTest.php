@@ -99,7 +99,7 @@ final class RequestedAuthnContextTest extends TestCase
         $contexts = $requestedAuthnContext->getRequestedAuthnContexts();
         $this->assertCount(1, $contexts);
         $this->assertInstanceOf(AuthnContextDeclRef::class, $contexts[0]);
-        $this->assertEquals('/relative/path/to/document.xml', $contexts[0]->getDeclRef());
+        $this->assertEquals('/relative/path/to/document.xml', $contexts[0]->getContent());
     }
 
 

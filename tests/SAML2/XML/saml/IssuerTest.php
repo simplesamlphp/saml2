@@ -106,7 +106,7 @@ final class IssuerTest extends TestCase
     {
         $issuer = Issuer::fromXML($this->xmlRepresentation->documentElement);
 
-        $this->assertEquals('TheIssuerValue', $issuer->getValue());
+        $this->assertEquals('TheIssuerValue', $issuer->getContent());
         $this->assertEquals('TheNameQualifier', $issuer->getNameQualifier());
         $this->assertEquals('TheSPNameQualifier', $issuer->getSPNameQualifier());
         $this->assertEquals('TheFormat', $issuer->getFormat());

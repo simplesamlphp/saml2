@@ -7,6 +7,7 @@ namespace SimpleSAML\SAML2\XML\saml;
 use DOMElement;
 use SimpleSAML\Assert\Assert;
 use SimpleSAML\SAML2\XML\IDNameQualifiersTrait;
+use SimpleSAML\XML\XMLStringElementTrait;
 
 /**
  * SAML NameIDType abstract data type.
@@ -17,6 +18,7 @@ use SimpleSAML\SAML2\XML\IDNameQualifiersTrait;
 abstract class NameIDType extends AbstractSamlElement implements IdentifierInterface
 {
     use IDNameQualifiersTrait;
+    use XMLStringElementTrait;
 
     /**
      * A URI reference representing the classification of string-based identifier information. See Section 8.3 for the
@@ -48,13 +50,6 @@ abstract class NameIDType extends AbstractSamlElement implements IdentifierInter
      */
     protected ?string $SPProvidedID = null;
 
-    /**
-     * The NameIDType complex type is used when an element serves to represent an entity by a string-valued name.
-     *
-     * @var string
-     */
-    protected string $value;
-
 
     /**
      * Initialize a saml:NameIDType from scratch
@@ -72,7 +67,7 @@ abstract class NameIDType extends AbstractSamlElement implements IdentifierInter
         ?string $Format = null,
         ?string $SPProvidedID = null
     ) {
-        $this->setValue($value);
+        $this->setContent($value);
         $this->setNameQualifier($NameQualifier);
         $this->setSPNameQualifier($SPNameQualifier);
         $this->setFormat($Format);
@@ -127,26 +122,15 @@ abstract class NameIDType extends AbstractSamlElement implements IdentifierInter
 
 
     /**
-     * Collect the value of the value-property
+     * Validate the content of the element.
      *
-     * @return string
+     * @param string $content  The value to go in the XML textContent
+     * @throws \Exception on failure
+     * @return void
      */
-    public function getValue(): string
+    protected function validateContent(/** @scrutinizer ignore-unused */ string $content): void
     {
-        return $this->value;
-    }
-
-
-    /**
-     * Set the value of the value-property
-     * @param string $value
-     *
-     * @throws \SimpleSAML\Assert\AssertionFailedException if assertions are false
-     */
-    private function setValue(string $value): void
-    {
-        Assert::notWhitespaceOnly($value);
-        $this->value = trim($value);
+        Assert::notWhitespaceOnly($content);
     }
 
 
@@ -177,7 +161,7 @@ abstract class NameIDType extends AbstractSamlElement implements IdentifierInter
             $element->setAttribute('SPProvidedID', $this->SPProvidedID);
         }
 
-        $value = $element->ownerDocument->createTextNode($this->value);
+        $value = $element->ownerDocument->createTextNode($this->content);
         $element->appendChild($value);
 
         return $element;

@@ -126,10 +126,10 @@ final class StatusTest extends TestCase
         $statusDetails = $status->getStatusDetails();
         $this->assertCount(1, $statusDetails);
 
-        $detailElement = $statusDetails[0]->getDetails();
+        $detailElement = $statusDetails[0]->getElements();
         $detailElement = $detailElement[0]->getXML();
 
-        $this->assertEquals('Cause', $detailElement->tagName);
+        $this->assertEquals('Cause', $detailElement->localName);
         $this->assertEquals('org.sourceid.websso.profiles.idp.FailedAuthnSsoException', $detailElement->textContent);
     }
 }

@@ -7,7 +7,9 @@ namespace SimpleSAML\SAML2\XML\mdui;
 use DOMElement;
 use SimpleSAML\Assert\Assert;
 use SimpleSAML\XML\Chunk;
+use SimpleSAML\XML\Constants;
 use SimpleSAML\XML\Exception\InvalidDOMElementException;
+use SimpleSAML\XML\ExtendableElementTrait;
 use SimpleSAML\XML\Utils as XMLUtils;
 
 /**
@@ -18,14 +20,10 @@ use SimpleSAML\XML\Utils as XMLUtils;
  */
 final class DiscoHints extends AbstractMduiElement
 {
-    /**
-     * Array with child elements.
-     *
-     * The elements can be any of the other \SAML2\XML\mdui\* elements.
-     *
-     * @var \SimpleSAML\XML\Chunk[]
-     */
-    protected array $children = [];
+    use ExtendableElementTrait;
+
+    /** The namespace-attribute for the xs:any element */
+    public const NAMESPACE = Constants::XS_ANY_NS_OTHER;
 
     /**
      * The IPHint, as an array of strings.
@@ -63,7 +61,7 @@ final class DiscoHints extends AbstractMduiElement
         array $DomainHint = [],
         array $GeolocationHint = []
     ) {
-        $this->setChildren($children);
+        $this->setElements($children);
         $this->setIPHint($IPHint);
         $this->setDomainHint($DomainHint);
         $this->setGeolocationHint($GeolocationHint);
@@ -141,37 +139,13 @@ final class DiscoHints extends AbstractMduiElement
 
 
     /**
-     * Collect the value of the children-property
-     *
-     * @return \SimpleSAML\XML\Chunk[]
-     */
-    public function getChildren(): array
-    {
-        return $this->children;
-    }
-
-
-    /**
-     * Set the value of the childen-property
-     *
-     * @param array $children
-     */
-    private function setChildren(array $children): void
-    {
-        Assert::allIsInstanceOf($children, Chunk::class);
-
-        $this->children = $children;
-    }
-
-
-    /**
-     * Add the value to the children-property
+     * Add the value to the elements-property
      *
      * @param \SimpleSAML\XML\Chunk $child
      */
     public function addChild(Chunk $child): void
     {
-        $this->children[] = $child;
+        $this->elements[] = $child;
     }
 
 
@@ -183,7 +157,7 @@ final class DiscoHints extends AbstractMduiElement
     public function isEmptyElement(): bool
     {
         return (
-            empty($this->children)
+            empty($this->elements)
             && empty($this->IPHint)
             && empty($this->DomainHint)
             && empty($this->GeolocationHint)
@@ -228,7 +202,7 @@ final class DiscoHints extends AbstractMduiElement
     {
         $e = $this->instantiateParentElement($parent);
 
-        foreach ($this->children as $child) {
+        foreach ($this->elements as $child) {
             $child->toXML($e);
         }
 

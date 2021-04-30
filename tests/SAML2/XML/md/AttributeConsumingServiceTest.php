@@ -116,25 +116,6 @@ final class AttributeConsumingServiceTest extends TestCase
 
 
     /**
-     * test that creating an AssertionConsumerService from scratch with an empty description fails.
-     */
-    public function testMarshallingWithEmptyDescription(): void
-    {
-        $this->expectException(AssertionFailedException::class);
-        $this->expectExceptionMessage('Service descriptions must be specified as ServiceDescription objects.');
-
-        /** @psalm-suppress InvalidArgument */
-        new AttributeConsumingService(
-            2,
-            [new ServiceName('en', 'Academic Journals R US')],
-            [$this->getRequestedAttribute()],
-            true,
-            ['']
-        );
-    }
-
-
-    /**
      * Test that creating an AssertionConsumerService from scratch with isDefault works.
      */
     public function testMarshallingWithoutIsDefault(): void
@@ -201,40 +182,6 @@ final class AttributeConsumingServiceTest extends TestCase
         $this->assertCount(1, $svcDescr);
         $reqAttr = $acs->getRequestedAttributes();
         $this->assertCount(1, $reqAttr);
-    }
-
-
-    /**
-     * Test that creating an AssertionConsumerService from XML does not require a description.
-     */
-    public function testUnmarshallingWithoutDescription(): void
-    {
-        $descr = $this->xmlRepresentation->documentElement->getElementsByTagNameNS(
-            Constants::NS_MD,
-            'ServiceDescription'
-        );
-        /** @psalm-suppress PossiblyNullArgument */
-        $this->xmlRepresentation->documentElement->removeChild($descr->item(0));
-        $acs = AttributeConsumingService::fromXML($this->xmlRepresentation->documentElement);
-        $this->assertEmpty($acs->getServiceDescriptions());
-    }
-
-
-    /**
-     * Test that creating an AssertionConsumerService from XML works if description is empty.
-     */
-    public function testUnmarshallingWithEmptyDescription(): void
-    {
-        $descr = $this->xmlRepresentation->documentElement->getElementsByTagNameNS(
-            Constants::NS_MD,
-            'ServiceDescription'
-        );
-        /** @psalm-suppress PossiblyNullPropertyAssignment */
-        $descr->item(0)->textContent = '';
-        $acs = AttributeConsumingService::fromXML($this->xmlRepresentation->documentElement);
-        $svcDescr = $acs->getServiceDescriptions();
-        $this->assertCount(1, $acs->getServiceDescriptions());
-        $this->assertEmpty($svcDescr[0]->getValue());
     }
 
 

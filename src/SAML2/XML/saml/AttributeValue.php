@@ -17,7 +17,6 @@ use SimpleSAML\Assert\Assert;
  */
 class AttributeValue extends AbstractSamlElement
 {
-
     /**
      * @var string|int|\SimpleSAML\XML\AbstractXMLElement|null
      */

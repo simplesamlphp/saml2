@@ -99,7 +99,7 @@ final class ScopeTest extends TestCase
     {
         $scope = Scope::fromXML($this->xmlRepresentation->documentElement);
 
-        $this->assertEquals('example.org', $scope->getScope());
+        $this->assertEquals('example.org', $scope->getContent());
         $this->assertFalse($scope->isRegexpScope());
     }
 
@@ -112,7 +112,7 @@ final class ScopeTest extends TestCase
     {
         $scope = Scope::fromXML($this->xmlRepresentation->documentElement);
 
-        $this->assertEquals('example.org', $scope->getScope());
+        $this->assertEquals('example.org', $scope->getContent());
         $this->assertFalse($scope->isRegexpScope());
     }
 
@@ -127,7 +127,7 @@ final class ScopeTest extends TestCase
         $document->documentElement->textContent = '^(.*|)example.edu$';
 
         $scope = Scope::fromXML($document->documentElement);
-        $this->assertEquals('^(.*|)example.edu$', $scope->getScope());
+        $this->assertEquals('^(.*|)example.edu$', $scope->getContent());
         $this->assertTrue($scope->isRegexpScope());
     }
 }

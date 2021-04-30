@@ -190,8 +190,8 @@ XML;
         $this->assertCount(2, $restriction1->getAudience());
 
         $audience = $restriction1->getAudience();
-        $this->assertEquals('audience1', $audience[0]->getValue());
-        $this->assertEquals('audience2', $audience[1]->getValue());
+        $this->assertEquals('audience1', $audience[0]->getContent());
+        $this->assertEquals('audience2', $audience[1]->getContent());
 
         // Test for Authenticating Authorities
         $assertionAuthenticatingAuthorities = $assertion->getAuthnStatements()[0]->getAuthnContext()->getAuthenticatingAuthorities();
@@ -263,7 +263,7 @@ XML;
         $authnStatement = $authnStatements[0];
         $this->assertEquals(
             '/relative/path/to/document.xml',
-            $authnStatement->getAuthnContext()->getAuthnContextDeclRef()->getDeclRef()
+            $authnStatement->getAuthnContext()->getAuthnContextDeclRef()->getContent()
         );
         $this->assertEquals('_123abc', $assertionToVerify->getId());
         $this->assertEquals(1234567890, $assertionToVerify->getIssueInstant());
@@ -488,8 +488,8 @@ XML;
         $this->assertInstanceOf(NameID::class, $mValue[0]);
         $this->assertInstanceOf(NameID::class, $oValue[0]);
 
-        $this->assertEquals('abcd-some-value-xyz', $mValue[0]->getValue());
-        $this->assertEquals('abcd-some-value-xyz', $oValue[0]->getValue());
+        $this->assertEquals('abcd-some-value-xyz', $mValue[0]->getContent());
+        $this->assertEquals('abcd-some-value-xyz', $oValue[0]->getContent());
         $this->assertEquals('urn:oasis:names:tc:SAML:2.0:nameid-format:persistent', $mValue[0]->getFormat());
         $this->assertEquals('urn:oasis:names:tc:SAML:2.0:nameid-format:persistent', $oValue[0]->getFormat());
         $this->assertXmlStringEqualsXmlString($xml, $assertion->toXML()->ownerDocument->saveXML());
@@ -582,8 +582,8 @@ XML;
         $this->assertInstanceOf(NameID::class, $firstValue[0]);
         $this->assertInstanceOf(NameID::class, $secondValue[0]);
 
-        $this->assertEquals('abcd-some-value-xyz', $firstValue[0]->getValue());
-        $this->assertEquals('xyz-some-value-abcd', $secondValue[0]->getValue());
+        $this->assertEquals('abcd-some-value-xyz', $firstValue[0]->getContent());
+        $this->assertEquals('xyz-some-value-abcd', $secondValue[0]->getContent());
         $this->assertEquals('urn:oasis:names:tc:SAML:2.0:nameid-format:persistent', $firstValue[0]->getFormat());
         $this->assertEquals('urn:oasis:names:tc:SAML:2.0:nameid-format:persistent', $secondValue[0]->getFormat());
 
@@ -609,7 +609,7 @@ XML;
         $this->assertEquals("_d908a49b8b63665738430d1c5b655f297b91331864", $assertion->getId());
         $this->assertEquals(
             "https://idp.example.org/simplesaml/saml2/idp/metadata.php",
-            $assertion->getIssuer()->getValue()
+            $assertion->getIssuer()->getContent()
         );
         $this->assertEquals("1457707995", $assertion->getIssueInstant());
 
@@ -638,7 +638,7 @@ XML;
 
         /** @psalm-var \SimpleSAML\SAML2\XML\saml\IdentifierInterface $identifier */
         $identifier = $subject->getIdentifier();
-        $this->assertEquals("_1bbcf227253269d19a689c53cdd542fe2384a9538b", $identifier->getValue());
+        $this->assertEquals("_1bbcf227253269d19a689c53cdd542fe2384a9538b", $identifier->getContent());
     }
 
 
@@ -1018,13 +1018,13 @@ XML;
         $restriction1 = $audienceRestrictions[0];
         $audience = $restriction1->getAudience();
         $this->assertCount(1, $audience);
-        $this->assertEquals('audience1', $audience[0]->getValue());
+        $this->assertEquals('audience1', $audience[0]->getContent());
 
         $restriction2 = $audienceRestrictions[1];
         $audience = $restriction2->getAudience();
         $this->assertCount(2, $audience);
-        $this->assertEquals('audience2', $audience[0]->getValue());
-        $this->assertEquals('audience1', $audience[1]->getValue());
+        $this->assertEquals('audience2', $audience[0]->getContent());
+        $this->assertEquals('audience1', $audience[1]->getContent());
     }
 
 
@@ -1090,7 +1090,7 @@ XML;
         $nameID = $identifier->decrypt($privateKey, []);
 
         $this->assertInstanceOf(NameID::class, $nameID);
-        $this->assertEquals('just_a_basic_identifier', $nameID->getValue());
+        $this->assertEquals('just_a_basic_identifier', $nameID->getContent());
         $this->assertEquals('urn:oasis:names:tc:SAML:2.0:nameid-format:transient', $nameID->getFormat());
     }
 

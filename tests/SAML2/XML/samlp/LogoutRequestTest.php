@@ -138,7 +138,7 @@ final class LogoutRequestTest extends MockeryTestCase
         $issuer = $logoutRequest->getIssuer();
 
         $this->assertInstanceOf(Issuer::class, $issuer);
-        $this->assertEquals('TheIssuer', $issuer->getValue());
+        $this->assertEquals('TheIssuer', $issuer->getContent());
 
         $encid = $logoutRequest->getIdentifier();
         $this->assertInstanceOf(EncryptedID::class, $encid);
@@ -152,7 +152,7 @@ final class LogoutRequestTest extends MockeryTestCase
             )
         );
         $this->assertInstanceOf(NameID::class, $identifier);
-        $this->assertEquals('very secret', $identifier->getValue());
+        $this->assertEquals('very secret', $identifier->getContent());
     }
 
 
@@ -217,7 +217,7 @@ XML;
         $identifier = $logoutRequest->getIdentifier();
 
         $this->assertInstanceOf(NameID::class, $identifier);
-        $this->assertEquals("frits", $identifier->getValue());
+        $this->assertEquals("frits", $identifier->getContent());
         $this->assertEquals('urn:oasis:names:tc:SAML:2.0:nameid-format:unspecified', $identifier->getFormat());
     }
 

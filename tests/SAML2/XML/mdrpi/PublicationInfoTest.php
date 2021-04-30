@@ -80,9 +80,9 @@ final class PublicationInfoTest extends TestCase
 
         $usagePolicy = $publicationInfo->getUsagePolicy();
         $this->assertCount(2, $usagePolicy);
-        $this->assertEquals('http://TheEnglishUsagePolicy', $usagePolicy[0]->getValue());
+        $this->assertEquals('http://TheEnglishUsagePolicy', $usagePolicy[0]->getContent());
         $this->assertEquals('en', $usagePolicy[0]->getLanguage());
-        $this->assertEquals('http://TheNorwegianUsagePolicy', $usagePolicy[1]->getValue());
+        $this->assertEquals('http://TheNorwegianUsagePolicy', $usagePolicy[1]->getContent());
         $this->assertEquals('no', $usagePolicy[1]->getLanguage());
     }
 

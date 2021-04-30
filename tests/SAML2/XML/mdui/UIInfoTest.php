@@ -80,8 +80,8 @@ final class UIInfoTest extends TestCase
             [],
             [],
             [
-                new Chunk(DOMDocumentFactory::fromString('<child1/>')->documentElement),
-                new Chunk(DOMDocumentFactory::fromString('<child2/>')->documentElement)
+                new Chunk(DOMDocumentFactory::fromString('<ssp:child1 xmlns:ssp="urn:custom:ssp" />')->documentElement),
+                new Chunk(DOMDocumentFactory::fromString('<myns:child2 xmlns:myns="urn:mynamespace" />')->documentElement)
             ]
         );
 
@@ -123,7 +123,7 @@ final class UIInfoTest extends TestCase
             [],
             [$keywords],
             [],
-            [new Chunk($discohints->toXML())]
+            [new Chunk(DOMDocumentFactory::fromString('<ssp:child1 xmlns:ssp="urn:custom:ssp" />')->documentElement)]
         );
         $uiinfo->addLogo($logo);
 
@@ -153,29 +153,11 @@ final class UIInfoTest extends TestCase
         $this->assertEquals("voorbeeld+specimen", $keywordElements[0]->textContent);
         $this->assertEquals("nl", $keywordElements[0]->getAttribute("xml:lang"));
 
-        $discoElements = XMLUtils::xpQuery(
+        $childElements = XMLUtils::xpQuery(
             $infoElement,
-            './*[local-name()=\'DiscoHints\' and namespace-uri()=\'urn:oasis:names:tc:SAML:metadata:ui\']'
+            './*[local-name()=\'child1\' and namespace-uri()=\'urn:custom:ssp\']'
         );
-        $this->assertCount(1, $discoElements);
-        $discoElement = $discoElements[0];
-
-        $iphintElements = XMLUtils::xpQuery(
-            $discoElement,
-            './*[local-name()=\'IPHint\' and namespace-uri()=\'urn:oasis:names:tc:SAML:metadata:ui\']'
-        );
-        $this->assertCount(2, $iphintElements);
-        $this->assertEquals("192.168.6.0/24", $iphintElements[0]->textContent);
-        $this->assertEquals("fd00:0123:aa:1001::/64", $iphintElements[1]->textContent);
-
-        /** @var \DOMElement[] $keywordElements */
-        $keywordElements = XMLUtils::xpQuery(
-            $discoElement,
-            './*[local-name()=\'Keywords\' and namespace-uri()=\'urn:oasis:names:tc:SAML:metadata:ui\']'
-        );
-        $this->assertCount(1, $keywordElements);
-        $this->assertEquals("voorbeeld+specimen", $keywordElements[0]->textContent);
-        $this->assertEquals("nl", $keywordElements[0]->getAttribute("xml:lang"));
+        $this->assertCount(1, $childElements);
     }
 
 
@@ -205,20 +187,20 @@ final class UIInfoTest extends TestCase
         );
 
         $this->assertCount(2, $uiinfo->getDisplayName());
-        $this->assertEquals('University of Examples', $uiinfo->getDisplayName()[0]->getValue());
+        $this->assertEquals('University of Examples', $uiinfo->getDisplayName()[0]->getContent());
         $this->assertEquals('en', $uiinfo->getDisplayName()[0]->getLanguage());
-        $this->assertEquals('Univërsitä øf Exåmpleß', $uiinfo->getDisplayName()[1]->getValue());
+        $this->assertEquals('Univërsitä øf Exåmpleß', $uiinfo->getDisplayName()[1]->getContent());
         $this->assertEquals('el', $uiinfo->getDisplayName()[1]->getLanguage());
         $this->assertCount(2, $uiinfo->getInformationURL());
-        $this->assertEquals('http://www.example.edu/en/', $uiinfo->getInformationURL()[0]->getValue());
+        $this->assertEquals('http://www.example.edu/en/', $uiinfo->getInformationURL()[0]->getContent());
         $this->assertEquals('en', $uiinfo->getInformationURL()[0]->getLanguage());
-        $this->assertEquals('http://www.example.edu/', $uiinfo->getInformationURL()[1]->getValue());
+        $this->assertEquals('http://www.example.edu/', $uiinfo->getInformationURL()[1]->getContent());
         $this->assertEquals('el', $uiinfo->getInformationURL()[1]->getLanguage());
         $this->assertCount(1, $uiinfo->getPrivacyStatementURL());
-        $this->assertEquals('https://example.org/privacy', $uiinfo->getPrivacyStatementURL()[0]->getValue());
+        $this->assertEquals('https://example.org/privacy', $uiinfo->getPrivacyStatementURL()[0]->getContent());
         $this->assertEquals('en', $uiinfo->getPrivacyStatementURL()[0]->getLanguage());
         $this->assertCount(1, $uiinfo->getDescription());
-        $this->assertEquals('Just an example', $uiinfo->getDescription()[0]->getValue());
+        $this->assertEquals('Just an example', $uiinfo->getDescription()[0]->getContent());
         $this->assertCount(1, $uiinfo->getLogo());
         $this->assertEquals('https://example.org/idp/images/logo_87x88.png', $uiinfo->getLogo()[0]->getUrl());
         $this->assertEquals(87, $uiinfo->getLogo()[0]->getWidth());
@@ -227,10 +209,10 @@ final class UIInfoTest extends TestCase
         $this->assertCount(2, $uiinfo->getKeywords());
         $this->assertEquals('University Fictional', $uiinfo->getKeywords()[0]->getKeywords()[0]);
         $this->assertEquals('fr', $uiinfo->getKeywords()[1]->getLanguage());
-        $this->assertCount(3, $uiinfo->getChildren());
-        $this->assertEquals('child1', $uiinfo->getChildren()[0]->getLocalName());
-        $this->assertEquals('child2', $uiinfo->getChildren()[1]->getLocalName());
-        $this->assertEquals('child3', $uiinfo->getChildren()[2]->getLocalName());
+        $this->assertCount(3, $uiinfo->getElements());
+        $this->assertEquals('child1', $uiinfo->getElements()[0]->getLocalName());
+        $this->assertEquals('child2', $uiinfo->getElements()[1]->getLocalName());
+        $this->assertEquals('child3', $uiinfo->getElements()[2]->getLocalName());
     }
 
 

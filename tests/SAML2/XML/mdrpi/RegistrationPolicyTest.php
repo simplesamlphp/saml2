@@ -61,34 +61,6 @@ final class RegistrationPolicyTest extends TestCase
     }
 
 
-    /**
-     * Test that creating a RegistrationPolicy from scratch with an empty language fails.
-     */
-    public function testMarshallingWithEmptyLang(): void
-    {
-        $this->expectException(AssertionFailedException::class);
-        $this->expectExceptionMessage('xml:lang cannot be empty.');
-
-        new RegistrationPolicy('', 'http://www.example.edu/en/');
-    }
-
-
-    /**
-     * Test that creating a RegistrationPolicy from scratch with an empty value works.
-     */
-    public function testMarshallingWithEmptyValue(): void
-    {
-        $name = new RegistrationPolicy('en', '');
-
-        $this->xmlRepresentation->documentElement->textContent = '';
-
-        $this->assertEquals(
-            $this->xmlRepresentation->saveXML($this->xmlRepresentation->documentElement),
-            strval($name)
-        );
-    }
-
-
     // test unmarshalling
 
 
@@ -98,51 +70,6 @@ final class RegistrationPolicyTest extends TestCase
     public function testUnmarshalling(): void
     {
         $name = RegistrationPolicy::fromXML($this->xmlRepresentation->documentElement);
-        $this->assertEquals(
-            $this->xmlRepresentation->saveXML($this->xmlRepresentation->documentElement),
-            strval($name)
-        );
-    }
-
-
-    /**
-     * Test that creating a RegistrationPolicy from XML fails when xml:lang is missing.
-     */
-    public function testUnmarshallingWithoutLang(): void
-    {
-        $this->xmlRepresentation->documentElement->removeAttributeNS(RegistrationPolicy::XML_NS, 'lang');
-
-        $this->expectException(AssertionFailedException::class);
-        $this->expectExceptionMessage('Missing xml:lang from RegistrationPolicy');
-
-        RegistrationPolicy::fromXML($this->xmlRepresentation->documentElement);
-    }
-
-
-    /**
-     * Test that creating a RegistrationPolicy from XML fails when xml:lang is empty.
-     */
-    public function testUnmarshallingWithEmptyLang(): void
-    {
-        $this->xmlRepresentation->documentElement->setAttributeNS(RegistrationPolicy::XML_NS, 'lang', '');
-
-        $this->expectException(AssertionFailedException::class);
-        $this->expectExceptionMessage('xml:lang cannot be empty.');
-
-        RegistrationPolicy::fromXML($this->xmlRepresentation->documentElement);
-    }
-
-
-    /**
-     * Test that creating a RegistrationPolicy from XML works for empty values.
-     */
-    public function testUnmarshallingWithEmptyValue(): void
-    {
-        $this->xmlRepresentation->documentElement->textContent = '';
-        $name = RegistrationPolicy::fromXML($this->xmlRepresentation->documentElement);
-
-        $this->assertEquals('en', $name->getLanguage());
-        $this->assertEquals('', $name->getValue());
         $this->assertEquals(
             $this->xmlRepresentation->saveXML($this->xmlRepresentation->documentElement),
             strval($name)

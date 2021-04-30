@@ -9,6 +9,7 @@ use Exception;
 use InvalidArgumentException;
 use SimpleSAML\Assert\Assert;
 use SimpleSAML\XML\Exception\InvalidDOMElementException;
+use SimpleSAML\XML\XMLStringElementTrait;
 
 /**
  * Class representing SAML 2 metadata AdditionalMetadataLocation element.
@@ -17,19 +18,14 @@ use SimpleSAML\XML\Exception\InvalidDOMElementException;
  */
 final class AdditionalMetadataLocation extends AbstractMdElement
 {
+    use XMLStringElementTrait;
+
     /**
      * The namespace of this metadata.
      *
      * @var string
      */
     protected string $namespace;
-
-    /**
-     * The URI where the metadata is located.
-     *
-     * @var string
-     */
-    protected string $location;
 
 
     /**
@@ -41,27 +37,20 @@ final class AdditionalMetadataLocation extends AbstractMdElement
     public function __construct(string $namespace, string $location)
     {
         $this->setNamespace($namespace);
-        $this->setLocation($location);
+        $this->setContent($location);
     }
 
 
     /**
-     * Initialize an AdditionalMetadataLocation element.
+     * Validate the content of the element.
      *
-     * @param \DOMElement $xml The XML element we should load.
-     * @return self
-     *
-     * @throws \SimpleSAML\XML\Exception\InvalidDOMElementException if the qualified name of the supplied element is wrong
-     * @throws \SimpleSAML\XML\Exception\MissingAttributeException if the supplied element is missing any of the mandatory attributes
+     * @param string $content  The value to go in the XML textContent
+     * @throws \Exception on failure
+     * @return void
      */
-    public static function fromXML(DOMElement $xml): object
+    protected function validateContent(/** @scrutinizer ignore-unused */ string $content): void
     {
-        Assert::same($xml->localName, 'AdditionalMetadataLocation', InvalidDOMElementException::class);
-        Assert::same($xml->namespaceURI, AdditionalMetadataLocation::NS, InvalidDOMElementException::class);
-
-        $namespace = self::getAttribute($xml, 'namespace');
-
-        return new self($namespace, trim($xml->textContent));
+        Assert::notEmpty($content);
     }
 
 
@@ -90,26 +79,22 @@ final class AdditionalMetadataLocation extends AbstractMdElement
 
 
     /**
-     * Collect the value of the location-property
+     * Initialize an AdditionalMetadataLocation element.
      *
-     * @return string
-     */
-    public function getLocation(): string
-    {
-        return $this->location;
-    }
-
-
-    /**
-     * Set the value of the location-property
+     * @param \DOMElement $xml The XML element we should load.
+     * @return self
      *
-     * @param string $location
-     * @throws \SimpleSAML\Assert\AssertionFailedException
+     * @throws \SimpleSAML\XML\Exception\InvalidDOMElementException if the qualified name of the supplied element is wrong
+     * @throws \SimpleSAML\XML\Exception\MissingAttributeException if the supplied element is missing any of the mandatory attributes
      */
-    protected function setLocation(string $location): void
+    public static function fromXML(DOMElement $xml): object
     {
-        Assert::notEmpty($location, 'AdditionalMetadataLocation must contain a URI.');
-        $this->location = $location;
+        Assert::same($xml->localName, 'AdditionalMetadataLocation', InvalidDOMElementException::class);
+        Assert::same($xml->namespaceURI, AdditionalMetadataLocation::NS, InvalidDOMElementException::class);
+
+        $namespace = self::getAttribute($xml, 'namespace');
+
+        return new self($namespace, trim($xml->textContent));
     }
 
 
@@ -122,7 +107,7 @@ final class AdditionalMetadataLocation extends AbstractMdElement
     public function toXML(DOMElement $parent = null): DOMElement
     {
         $e = $this->instantiateParentElement($parent);
-        $e->textContent = $this->location;
+        $e->textContent = $this->getContent();
         $e->setAttribute('namespace', $this->namespace);
         return $e;
     }

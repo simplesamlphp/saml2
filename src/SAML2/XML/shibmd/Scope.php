@@ -6,8 +6,9 @@ namespace SimpleSAML\SAML2\XML\shibmd;
 
 use DOMElement;
 use SimpleSAML\Assert\Assert;
-use SimpleSAML\XML\Exception\InvalidDOMElementException;
 use SimpleSAML\SAML2\Utils;
+use SimpleSAML\XML\Exception\InvalidDOMElementException;
+use SimpleSAML\XML\XMLStringElementTrait;
 
 /**
  * Class which represents the Scope element found in Shibboleth metadata.
@@ -17,12 +18,7 @@ use SimpleSAML\SAML2\Utils;
  */
 final class Scope extends AbstractShibmdElement
 {
-    /**
-     * The scope.
-     *
-     * @var string
-     */
-    protected string $scope;
+    use XMLStringElementTrait;
 
     /**
      * Whether this is a regexp scope.
@@ -40,30 +36,8 @@ final class Scope extends AbstractShibmdElement
      */
     public function __construct(string $scope, bool $regexp = false)
     {
-        $this->setScope($scope);
+        $this->setContent($scope);
         $this->setIsRegexpScope($regexp);
-    }
-
-
-    /**
-     * Collect the value of the scope-property
-     *
-     * @return string
-     */
-    public function getScope(): string
-    {
-        return $this->scope;
-    }
-
-
-    /**
-     * Set the value of the scope-property
-     *
-     * @param string $scope
-     */
-    private function setScope(string $scope): void
-    {
-        $this->scope = $scope;
     }
 
 
@@ -120,7 +94,7 @@ final class Scope extends AbstractShibmdElement
     {
         /** @psalm-var \DOMDocument $e->ownerDocument */
         $e = $this->instantiateParentElement($parent);
-        $e->appendChild($e->ownerDocument->createTextNode($this->scope));
+        $e->textContent = $this->content;
 
         if ($this->regexp === true) {
             $e->setAttribute('regexp', 'true');

@@ -8,7 +8,9 @@ use DOMElement;
 use SimpleSAML\Assert\Assert;
 use SimpleSAML\SAML2\Exception\ProtocolViolationException;
 use SimpleSAML\XML\Chunk;
+use SimpleSAML\XML\Constants;
 use SimpleSAML\XML\Exception\InvalidDOMElementException;
+use SimpleSAML\XML\ExtendableElementTrait;
 use SimpleSAML\XML\Utils as XMLUtils;
 
 /**
@@ -19,14 +21,10 @@ use SimpleSAML\XML\Utils as XMLUtils;
  */
 final class UIInfo extends AbstractMduiElement
 {
-    /**
-     * Array with child elements.
-     *
-     * The elements can be any other namespace.
-     *
-     * @var \SimpleSAML\XML\Chunk[]
-     */
-    protected array $children = [];
+    use ExtendableElementTrait;
+
+    /** The namespace-attribute for the xs:any element */
+    public const NAMESPACE = Constants::XS_ANY_NS_OTHER;
 
     /**
      * The DisplayName, as an array of DisplayName objects
@@ -97,7 +95,7 @@ final class UIInfo extends AbstractMduiElement
         $this->setPrivacyStatementURL($PrivacyStatementURL);
         $this->setKeywords($Keywords);
         $this->setLogo($Logo);
-        $this->setChildren($children);
+        $this->setElements($children);
     }
 
 
@@ -299,37 +297,13 @@ final class UIInfo extends AbstractMduiElement
 
 
     /**
-     * Collect the value of the children-property
-     *
-     * @return \SimpleSAML\XML\Chunk[]
-     */
-    public function getChildren(): array
-    {
-        return $this->children;
-    }
-
-
-    /**
-     * Set the value of the childen-property
-     *
-     * @param \SimpleSAML\XML\Chunk[] $children
-     */
-    private function setChildren(array $children): void
-    {
-        Assert::allIsInstanceOf($children, Chunk::class);
-
-        $this->children = $children;
-    }
-
-
-    /**
-     * Add the value to the children-property
+     * Add the value to the elements-property
      *
      * @param \SimpleSAML\XML\Chunk $child
      */
     public function addChild(Chunk $child): void
     {
-        $this->children[] = $child;
+        $this->elements[] = $child;
     }
 
 
@@ -347,7 +321,7 @@ final class UIInfo extends AbstractMduiElement
             && empty($this->PrivacyStatementURL)
             && empty($this->Keywords)
             && empty($this->Logo)
-            && empty($this->children)
+            && empty($this->elements)
         );
     }
 
@@ -455,7 +429,7 @@ final class UIInfo extends AbstractMduiElement
             $child->toXML($e);
         }
 
-        foreach ($this->children as $child) {
+        foreach ($this->elements as $child) {
             $child->toXML($e);
         }
 

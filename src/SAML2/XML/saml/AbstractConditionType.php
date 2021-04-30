@@ -7,6 +7,7 @@ namespace SimpleSAML\SAML2\XML\saml;
 use DOMElement;
 use SimpleSAML\Assert\Assert;
 use SimpleSAML\SAML2\Constants;
+use SimpleSAML\XML\XMLStringElementTrait;
 
 /**
  * Abstract class to be implemented by all the conditions in this namespace
@@ -15,8 +16,7 @@ use SimpleSAML\SAML2\Constants;
  */
 abstract class AbstractConditionType extends AbstractSamlElement
 {
-    /** @var string */
-    protected string $value;
+    use XMLStringElementTrait;
 
 
     /**
@@ -26,44 +26,19 @@ abstract class AbstractConditionType extends AbstractSamlElement
      */
     protected function __construct(string $value)
     {
-        $this->setValue($value);
+        $this->setContent($value);
     }
 
 
     /**
-     * Get the string value of this Condition.
+     * Validate the content of the element.
      *
-     * @return string
+     * @param string $content  The value to go in the XML textContent
+     * @throws \Exception on failure
+     * @return void
      */
-    public function getValue(): string
+    protected function validateContent(/** @scrutinizer ignore-unused */ string $content): void
     {
-        return $this->value;
-    }
-
-
-    /**
-     * Set the string value of this Condition.
-     *
-     * @param string $value
-     */
-    protected function setValue(string $value): void
-    {
-        Assert::notWhitespaceOnly($value);
-        $this->value = $value;
-    }
-
-
-    /**
-     * Convert this Condition to XML.
-     *
-     * @param \DOMElement $parent The element we are converting to XML.
-     * @return \DOMElement The XML element after adding the data corresponding to this Condition.
-     */
-    public function toXML(DOMElement $parent = null): DOMElement
-    {
-        $element = $this->instantiateParentElement($parent);
-        $element->textContent = $this->value;
-
-        return $element;
+        Assert::notWhitespaceOnly($content);
     }
 }

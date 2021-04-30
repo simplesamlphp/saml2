@@ -61,34 +61,6 @@ final class UsagePolicyTest extends TestCase
     }
 
 
-    /**
-     * Test that creating a UsagePolicy from scratch with an empty language fails.
-     */
-    public function testMarshallingWithEmptyLang(): void
-    {
-        $this->expectException(AssertionFailedException::class);
-        $this->expectExceptionMessage('xml:lang cannot be empty.');
-
-        new UsagePolicy('', 'http://www.example.edu/en/');
-    }
-
-
-    /**
-     * Test that creating a UsagePolicy from scratch with an empty value works.
-     */
-    public function testMarshallingWithEmptyValue(): void
-    {
-        $name = new UsagePolicy('en', '');
-
-        $this->xmlRepresentation->documentElement->textContent = '';
-
-        $this->assertEquals(
-            $this->xmlRepresentation->saveXML($this->xmlRepresentation->documentElement),
-            strval($name)
-        );
-    }
-
-
     // test unmarshalling
 
 
@@ -98,51 +70,6 @@ final class UsagePolicyTest extends TestCase
     public function testUnmarshalling(): void
     {
         $name = UsagePolicy::fromXML($this->xmlRepresentation->documentElement);
-        $this->assertEquals(
-            $this->xmlRepresentation->saveXML($this->xmlRepresentation->documentElement),
-            strval($name)
-        );
-    }
-
-
-    /**
-     * Test that creating a UsagePolicy from XML fails when xml:lang is missing.
-     */
-    public function testUnmarshallingWithoutLang(): void
-    {
-        $this->xmlRepresentation->documentElement->removeAttributeNS(UsagePolicy::XML_NS, 'lang');
-
-        $this->expectException(AssertionFailedException::class);
-        $this->expectExceptionMessage('Missing xml:lang from UsagePolicy');
-
-        UsagePolicy::fromXML($this->xmlRepresentation->documentElement);
-    }
-
-
-    /**
-     * Test that creating a UsagePolicy from XML fails when xml:lang is empty.
-     */
-    public function testUnmarshallingWithEmptyLang(): void
-    {
-        $this->xmlRepresentation->documentElement->setAttributeNS(UsagePolicy::XML_NS, 'lang', '');
-
-        $this->expectException(AssertionFailedException::class);
-        $this->expectExceptionMessage('xml:lang cannot be empty.');
-
-        UsagePolicy::fromXML($this->xmlRepresentation->documentElement);
-    }
-
-
-    /**
-     * Test that creating a UsagePolicy from XML works for empty values.
-     */
-    public function testUnmarshallingWithEmptyValue(): void
-    {
-        $this->xmlRepresentation->documentElement->textContent = '';
-        $name = UsagePolicy::fromXML($this->xmlRepresentation->documentElement);
-
-        $this->assertEquals('en', $name->getLanguage());
-        $this->assertEquals('', $name->getValue());
         $this->assertEquals(
             $this->xmlRepresentation->saveXML($this->xmlRepresentation->documentElement),
             strval($name)

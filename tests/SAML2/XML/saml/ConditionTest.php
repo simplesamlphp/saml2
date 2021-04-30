@@ -66,7 +66,7 @@ final class ConditionTest extends TestCase
         $condition = Condition::fromXML($this->xmlRepresentation->documentElement);
 
         $this->assertEquals('CustomCondition', $condition->getType());
-        $this->assertEquals('SomeCondition', $condition->getValue());
+        $this->assertEquals('SomeCondition', $condition->getContent());
 
         $this->assertEquals(
             $this->xmlRepresentation->saveXML($this->xmlRepresentation->documentElement),
@@ -83,7 +83,7 @@ final class ConditionTest extends TestCase
         $condition = CustomCondition::fromXML($this->xmlRepresentation->documentElement);
 
         $this->assertEquals('CustomCondition', $condition->getType());
-        $this->assertEquals('SomeCondition', $condition->getValue());
+        $this->assertEquals('SomeCondition', $condition->getContent());
 
         $this->assertEquals(
             $this->xmlRepresentation->saveXML($this->xmlRepresentation->documentElement),

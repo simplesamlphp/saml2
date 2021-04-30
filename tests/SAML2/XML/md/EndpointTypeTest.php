@@ -51,7 +51,7 @@ final class EndpointTypeTest extends TestCase
         $attr = $this->xmlRepresentation->createAttributeNS('urn:test', 'test:attr');
         $attr->value = 'value';
 
-        $child = new Chunk(DOMDocumentFactory::fromString('<child1 />')->documentElement);
+        $child = new Chunk(DOMDocumentFactory::fromString('<ssp:child1 xmlns:ssp="urn:custom:ssp" />')->documentElement);
 
         $endpointType = new AttributeService(
             Constants::BINDING_HTTP_POST,

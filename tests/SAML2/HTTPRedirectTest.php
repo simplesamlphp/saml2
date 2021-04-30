@@ -38,7 +38,7 @@ final class HTTPRedirectTest extends MockeryTestCase
         $this->assertInstanceOf(AbstractRequest::class, $request);
         $this->assertEquals(
             'https://profile.surfconext.nl/simplesaml/module.php/saml/sp/metadata.php/default-sp',
-            $request->getIssuer()->getValue()
+            $request->getIssuer()->getContent()
         );
     }
 
@@ -56,7 +56,7 @@ final class HTTPRedirectTest extends MockeryTestCase
         $request = $hr->receive();
         $this->assertInstanceOf(Response::class, $request);
         $issuer = $request->getIssuer();
-        $this->assertEquals('https://engine.test.surfconext.nl/authentication/idp/metadata', $issuer->getValue());
+        $this->assertEquals('https://engine.test.surfconext.nl/authentication/idp/metadata', $issuer->getContent());
     }
 
 

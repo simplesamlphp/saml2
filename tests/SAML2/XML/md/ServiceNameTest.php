@@ -73,22 +73,6 @@ final class ServiceNameTest extends TestCase
     }
 
 
-    /**
-     * Test that creating a ServiceName from scratch with an empty value works.
-     */
-    public function testMarshallingWithEmptyValue(): void
-    {
-        $name = new ServiceName('en', '');
-
-        $this->xmlRepresentation->documentElement->textContent = '';
-
-        $this->assertEquals(
-            $this->xmlRepresentation->saveXML($this->xmlRepresentation->documentElement),
-            strval($name)
-        );
-    }
-
-
     // test unmarshalling
 
 
@@ -130,22 +114,5 @@ final class ServiceNameTest extends TestCase
         $this->expectExceptionMessage('xml:lang cannot be empty.');
 
         ServiceName::fromXML($this->xmlRepresentation->documentElement);
-    }
-
-
-    /**
-     * Test that creating a ServiceName from XML works for empty values.
-     */
-    public function testUnmarshallingWithEmptyValue(): void
-    {
-        $this->xmlRepresentation->documentElement->textContent = '';
-        $name = ServiceName::fromXML($this->xmlRepresentation->documentElement);
-
-        $this->assertEquals('en', $name->getLanguage());
-        $this->assertEquals('', $name->getValue());
-        $this->assertEquals(
-            $this->xmlRepresentation->saveXML($this->xmlRepresentation->documentElement),
-            strval($name)
-        );
     }
 }
