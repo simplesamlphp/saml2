@@ -53,7 +53,7 @@ class HTTPArtifact extends Binding
         if ($issuer === null) {
             throw new Exception('Cannot get redirect URL, no Issuer set in the message.');
         }
-        $artifact = base64_encode("\x00\x04\x00\x00" . sha1($issuer->getValue(), true) . $generatedId);
+        $artifact = base64_encode("\x00\x04\x00\x00" . sha1($issuer->getContent(), true) . $generatedId);
         $artifactData = $message->toXML();
         $artifactDataString = $artifactData->ownerDocument->saveXML($artifactData);
 
