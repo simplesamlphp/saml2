@@ -10,7 +10,10 @@ use PHPUnit\Framework\TestCase;
 use SimpleSAML\Assert\AssertionFailedException;
 use SimpleSAML\SAML2\Constants;
 use SimpleSAML\SAML2\XML\md\ContactPerson;
+use SimpleSAML\SAML2\XML\md\Company;
 use SimpleSAML\SAML2\XML\md\Extensions;
+use SimpleSAML\SAML2\XML\md\GivenName;
+use SimpleSAML\SAML2\XML\md\SurName;
 use SimpleSAML\Test\XML\ArrayizableXMLTestTrait;
 use SimpleSAML\Test\XML\SerializableXMLTestTrait;
 use SimpleSAML\XML\Chunk;
@@ -72,9 +75,9 @@ final class ContactPersonTest extends TestCase
         $attr2->value = 'testval2';
         $contactPerson = new ContactPerson(
             'other',
-            'Test Company',
-            'John',
-            'Doe',
+            new Company('Test Company'),
+            new GivenName('John'),
+            new SurName('Doe'),
             new Extensions(
                 [
                     new Chunk($ext->documentElement)
@@ -114,9 +117,9 @@ final class ContactPersonTest extends TestCase
         $this->expectExceptionMessage('Invalid email address for ContactPerson: \'this is wrong\'');
         new ContactPerson(
             'other',
-            'Test Company',
-            'John',
-            'Doe',
+            new Company('Test Company'),
+            new GivenName('John'),
+            new SurName('Doe'),
             null,
             ['this is wrong']
         );
@@ -133,9 +136,9 @@ final class ContactPersonTest extends TestCase
     {
         $cp = ContactPerson::fromXML($this->xmlRepresentation->documentElement);
         $this->assertEquals('other', $cp->getContactType());
-        $this->assertEquals('Test Company', $cp->getCompany());
-        $this->assertEquals('John', $cp->getGivenName());
-        $this->assertEquals('Doe', $cp->getSurName());
+        $this->assertEquals('Test Company', $cp->getCompany()->getContent());
+        $this->assertEquals('John', $cp->getGivenName()->getContent());
+        $this->assertEquals('Doe', $cp->getSurName()->getContent());
         $this->assertEquals(['jdoe@test.company', 'john.doe@test.company'], $cp->getEmailAddresses());
         $this->assertEquals(['1-234-567-8901'], $cp->getTelephoneNumbers());
         $this->assertEquals(
