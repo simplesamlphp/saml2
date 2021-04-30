@@ -7,7 +7,7 @@ namespace SAML2\Assertion\Validation\ConstraintValidator;
 use SAML2\Assertion;
 use SAML2\Assertion\Validation\ConstraintValidator\NotBefore;
 use SAML2\Assertion\Validation\Result;
-use SAML2\ControlledTimeTest;
+use Test\SAML2\ControlledTimeTest;
 
 /**
  * Because we're mocking a static call, we have to run it in separate processes so as to no contaminate the other
