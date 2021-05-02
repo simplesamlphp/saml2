@@ -28,21 +28,21 @@ final class DiscoHints extends AbstractMduiElement
     /**
      * The IPHint, as an array of strings.
      *
-     * @var string[]
+     * @var \SimpleSAML\SAML2\XML\mdui\IPHint[]
      */
     protected array $IPHint = [];
 
     /**
      * The DomainHint, as an array of strings.
      *
-     * @var string[]
+     * @var \SimpleSAML\SAML2\XML\mdui\DomainHint[]
      */
     protected array $DomainHint = [];
 
     /**
      * The GeolocationHint, as an array of strings.
      *
-     * @var string[]
+     * @var \SimpleSAML\SAML2\XML\mdui\GeolocationHint[]
      */
     protected array $GeolocationHint = [];
 
@@ -51,9 +51,9 @@ final class DiscoHints extends AbstractMduiElement
      * Create a DiscoHints element.
      *
      * @param \SimpleSAML\XML\Chunk[] $children
-     * @param string[] $IPHint
-     * @param string[] $DomainHint
-     * @param string[] $GeolocationHint
+     * @param \SimpleSAML\SAML2\XML\mdui\IPHint[] $IPHint
+     * @param \SimpleSAML\SAML2\XML\mdui\DomainHint[] $DomainHint
+     * @param \SimpleSAML\SAML2\XML\mdui\GeolocationHint[] $GeolocationHint
      */
     public function __construct(
         array $children = [],
@@ -71,7 +71,7 @@ final class DiscoHints extends AbstractMduiElement
     /**
      * Collect the value of the IPHint-property
      *
-     * @return string[]
+     * @return \SimpleSAML\SAMLs\XML\mdui\IPHint[]
      */
     public function getIPHint(): array
     {
@@ -82,11 +82,11 @@ final class DiscoHints extends AbstractMduiElement
     /**
      * Set the value of the IPHint-property
      *
-     * @param string[] $hints
+     * @param \SimpleSAML\SAML2\XML\mdui\IPHint[] $hints
      */
     private function setIPHint(array $hints): void
     {
-        Assert::allStringNotEmpty($hints);
+        Assert::allIsInstanceOf($hints, IPHint::class);
 
         $this->IPHint = $hints;
     }
@@ -95,7 +95,7 @@ final class DiscoHints extends AbstractMduiElement
     /**
      * Collect the value of the DomainHint-property
      *
-     * @return string[]
+     * @return \SimpleSAML\SAML2\XML\mdui\DomainHint[]
      */
     public function getDomainHint(): array
     {
@@ -106,11 +106,11 @@ final class DiscoHints extends AbstractMduiElement
     /**
      * Set the value of the DomainHint-property
      *
-     * @param string[] $hints
+     * @param \SimpleSAML\SAML2\XML\mdui\DomainHint[] $hints
      */
     private function setDomainHint(array $hints): void
     {
-        Assert::allStringNotEmpty($hints);
+        Assert::allIsInstanceOf($hints, DomainHint::class);
 
         $this->DomainHint = $hints;
     }
@@ -119,7 +119,7 @@ final class DiscoHints extends AbstractMduiElement
     /**
      * Collect the value of the GeolocationHint-property
      *
-     * @return string[]
+     * @return \SimpleSAML\SAML2\XML\mdui\GeolocationHint[]
      */
     public function getGeolocationHint(): array
     {
@@ -130,10 +130,12 @@ final class DiscoHints extends AbstractMduiElement
     /**
      * Set the value of the GeolocationHint-property
      *
-     * @param string[] $hints
+     * @param \SimpleSAML\SAML2\XML\mdui\GeolocationHint[] $hints
      */
     private function setGeolocationHint(array $hints): void
     {
+        Assert::allIsInstanceOf($hints, GeolocationHint::class);
+
         $this->GeolocationHint = $hints;
     }
 
@@ -178,9 +180,9 @@ final class DiscoHints extends AbstractMduiElement
         Assert::same($xml->localName, 'DiscoHints', InvalidDOMElementException::class);
         Assert::same($xml->namespaceURI, DiscoHints::NS, InvalidDOMElementException::class);
 
-        $IPHint = XMLUtils::extractStrings($xml, DiscoHints::NS, 'IPHint');
-        $DomainHint = XMLUtils::extractStrings($xml, DiscoHints::NS, 'DomainHint');
-        $GeolocationHint = XMLUtils::extractStrings($xml, DiscoHints::NS, 'GeolocationHint');
+        $IPHint = IPHint::getChildrenOfClass($xml);
+        $DomainHint = DomainHint::getChildrenOfClass($xml);
+        $GeolocationHint = GeolocationHint::getChildrenOfClass($xml);
         $children = [];
 
         /** @var \DOMElement $node */
@@ -206,9 +208,17 @@ final class DiscoHints extends AbstractMduiElement
             $child->toXML($e);
         }
 
-        XMLUtils::addStrings($e, DiscoHints::NS, 'mdui:IPHint', false, $this->IPHint);
-        XMLUtils::addStrings($e, DiscoHints::NS, 'mdui:DomainHint', false, $this->DomainHint);
-        XMLUtils::addStrings($e, DiscoHints::NS, 'mdui:GeolocationHint', false, $this->GeolocationHint);
+        foreach ($this->IPHint as $hint) {
+            $hint->toXML($e);
+        }
+
+        foreach ($this->DomainHint as $hint) {
+            $hint->toXML($e);
+        }
+
+        foreach ($this->GeolocationHint as $hint) {
+            $hint->toXML($e);
+        }
 
         return $e;
     }
@@ -222,9 +232,20 @@ final class DiscoHints extends AbstractMduiElement
      */
     public static function fromArray(array $data): object
     {
-        $IPHint = $data['IPHint'] ?? [];
-        $DomainHint = $data['DomainHint'] ?? [];
-        $GeolocationHint = $data['GeolocationHint'] ?? [];
+        $IPHint = [];
+        foreach ($data['IPHint'] as $hint) {
+            $IPHint[] = new IPHint($hint);
+        }
+
+        $DomainHint = [];
+        foreach ($data['DomainHint'] as $hint) {
+            $DomainHint[] = new DomainHint($hint);
+        }
+
+        $GeolocationHint = [];
+        foreach ($data['GeolocationHint'] as $hint) {
+            $GeolocationHint[] = new GeolocationHint($hint);
+        }
 
         return new self([], $IPHint, $DomainHint, $GeolocationHint);
     }
@@ -237,10 +258,24 @@ final class DiscoHints extends AbstractMduiElement
      */
     public function toArray(): array
     {
-        return [
-            'IPHint' => $this->IPHint,
-            'DomainHint' => $this->DomainHint,
-            'GeolocationHint' => $this->GeolocationHint
+        $data = [
+            'IPHint' => [],
+            'DomainHint' => [],
+            'GeolocationHint' => [],
         ];
+
+        foreach ($this->IPHint as $hint) {
+            $data['IPHint'][] = $hint->getContent();
+        }
+
+        foreach ($this->DomainHint as $hint) {
+            $data['DomainHint'][] = $hint->getContent();
+        }
+
+        foreach ($this->GeolocationHint as $hint) {
+            $data['GeolocationHint'][] = $hint->getContent();
+        }
+
+        return $data;
     }
 }
