@@ -5,11 +5,11 @@ declare(strict_types=1);
 namespace SimpleSAML\Test\SAML2;
 
 use DOMElement;
+use SimpleSAML\Assert\Assert;
 use SimpleSAML\SAML2\Constants;
 use SimpleSAML\SAML2\Utils;
 use SimpleSAML\SAML2\XML\saml\Audience;
 use SimpleSAML\SAML2\XML\saml\Condition;
-use SimpleSAML\Assert\Assert;
 
 /**
  * @covers \SimpleSAML\Test\SAML2\CustomCondition

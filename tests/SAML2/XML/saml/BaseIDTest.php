@@ -5,7 +5,10 @@ declare(strict_types=1);
 namespace SimpleSAML\Test\SAML2\XML\saml;
 
 use DOMDocument;
+use Mockery;
 use PHPUnit\Framework\TestCase;
+use SimpleSAML\SAML2\Compat\AbstractContainer;
+use SimpleSAML\SAML2\Compat\ContainerSingleton;
 use SimpleSAML\SAML2\Constants;
 use SimpleSAML\SAML2\XML\saml\BaseID;
 use SimpleSAML\Test\SAML2\CustomBaseID;
@@ -34,6 +37,25 @@ final class BaseIDTest extends TestCase
         $this->xmlRepresentation = DOMDocumentFactory::fromFile(
             dirname(dirname(dirname(dirname(__FILE__)))) . '/resources/xml/saml_BaseID.xml'
         );
+
+        $container = ContainerSingleton::getInstance();
+        $mock = Mockery::mock(AbstractContainer::class);
+
+        /**
+         * @psalm-suppress InvalidArgument
+         * @psalm-suppress UndefinedMagicMethod
+         */
+
+        $mock->shouldReceive('getElementHandler')->andReturn(CustomBaseID::class);
+
+        /** @psalm-suppress InvalidArgument */
+        ContainerSingleton::setContainer($mock);
+    }
+
+
+    public function tearDown(): void
+    {
+        Mockery::close();
     }
 
 
@@ -69,7 +91,7 @@ final class BaseIDTest extends TestCase
         $this->assertEquals('123.456', $baseId->getValue());
         $this->assertEquals('TheNameQualifier', $baseId->getNameQualifier());
         $this->assertEquals('TheSPNameQualifier', $baseId->getSPNameQualifier());
-        $this->assertEquals('CustomBaseID', $baseId->getType());
+        $this->assertEquals('ssp:CustomBaseID', $baseId->getType());
 
         $this->assertEquals(
             $this->xmlRepresentation->saveXML($this->xmlRepresentation->documentElement),

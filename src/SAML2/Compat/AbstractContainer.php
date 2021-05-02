@@ -7,7 +7,6 @@ namespace SimpleSAML\SAML2\Compat;
 use Psr\Log\LoggerInterface;
 use SimpleSAML\Assert\Assert;
 use SimpleSAML\XML\AbstractXMLElement;
-use SimpleSAML\XML\saml\Condition;
 use SimpleSAML\XML\saml\CustomIdentifierInterface;
 
 abstract class AbstractContainer
@@ -95,11 +94,11 @@ abstract class AbstractContainer
     public function registerExtensionHandler(string $class): void
     {
         Assert::subclassOf($class, AbstractXMLElement::class);
-        if (is_subclass_of($class, CustomIdentifierInterface::class, true)) {
-            $key = $class::getXsiType() . ':BaseID';
-        } else {
+//        if (is_subclass_of($class, CustomIdentifierInterface::class, true)) {
+//            $key = $class::getXsiType() . ':BaseID';
+//        } else {
             $key = join(':', [urlencode($class::NS), AbstractXMLElement::getClassName($class)]);
-        }
+//        }
         $this->registry[$key] = $class;
     }
 

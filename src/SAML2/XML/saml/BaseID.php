@@ -15,7 +15,7 @@ use SimpleSAML\SAML2\XML\IDNameQualifiersTrait;
  *
  * @package simplesamlphp/saml2
  */
-class BaseID extends AbstractSamlElement implements BaseIdentifierInterface
+abstract class BaseID extends AbstractSamlElement implements BaseIdentifierInterface
 {
     use IDNameQualifiersTrait;
 
@@ -69,6 +69,7 @@ class BaseID extends AbstractSamlElement implements BaseIdentifierInterface
     protected function setType(string $type): void
     {
         Assert::notWhitespaceOnly($type, 'The "xsi:type" attribute of an identifier cannot be empty.');
+        Assert::contains($type, ':');
 
         $this->type = $type;
     }
@@ -120,7 +121,7 @@ class BaseID extends AbstractSamlElement implements BaseIdentifierInterface
 
         $type = $xml->getAttributeNS(Constants::NS_XSI, 'type');
 
-        return new self(
+        return new static(
             $type,
             trim($xml->textContent),
             self::getAttribute($xml, 'NameQualifier', null),
@@ -138,6 +139,8 @@ class BaseID extends AbstractSamlElement implements BaseIdentifierInterface
     public function toXML(DOMElement $parent = null): DOMElement
     {
         $element = $this->instantiateParentElement($parent);
+        $element->setAttribute('xmlns:' . static::XSI_TYPE_PREFIX, static::XSI_TYPE_NS);
+        $element->setAttributeNS(Constants::NS_XSI, 'xsi:type', $this->type);
 
         if ($this->NameQualifier !== null) {
             $element->setAttribute('NameQualifier', $this->NameQualifier);
@@ -148,8 +151,6 @@ class BaseID extends AbstractSamlElement implements BaseIdentifierInterface
         }
 
         $element->textContent = $this->value;
-
-        $element->setAttributeNS(Constants::NS_XSI, 'xsi:type', $this->type);
 
         return $element;
     }

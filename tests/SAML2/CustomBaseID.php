@@ -5,10 +5,11 @@ declare(strict_types=1);
 namespace SimpleSAML\Test\SAML2;
 
 use DOMElement;
+use SimpleSAML\Assert\Assert;
 use SimpleSAML\SAML2\Constants;
+use SimpleSAML\SAML2\Utils;
 use SimpleSAML\SAML2\XML\saml\BaseID;
 use SimpleSAML\SAML2\XML\saml\CustomIdentifierInterface;
-use SimpleSAML\Assert\Assert;
 
 /**
  * @covers \SimpleSAML\Test\SAML2\CustomBaseID
@@ -16,7 +17,14 @@ use SimpleSAML\Assert\Assert;
  */
 final class CustomBaseID extends BaseID implements CustomIdentifierInterface
 {
-    protected const XSI_TYPE = 'CustomBaseID';
+    /** @var string */
+    protected const XSI_TYPE = 'ssp:CustomBaseID';
+
+    /** @var string */
+    protected const XSI_TYPE_NS = 'urn:custom:ssp';
+
+    /** @var string */
+    protected const XSI_TYPE_PREFIX = 'ssp';
 
 
     /**
@@ -35,20 +43,37 @@ final class CustomBaseID extends BaseID implements CustomIdentifierInterface
     /**
      * @inheritDoc
      */
-    public static function fromXML(DOMElement $xml): object
+    public static function getXsiType(): string
     {
-        Assert::same($xml->getAttributeNS(Constants::NS_XSI, 'type'), 'CustomBaseID');
-
-        $baseID = BaseID::fromXML($xml);
-        return new self(floatval($xml->textContent), $baseID->getNameQualifier(), $baseID->getSPNameQualifier());
+        return self::XSI_TYPE;
     }
 
 
     /**
      * @inheritDoc
      */
-    public static function getXsiType(): string
+    public static function fromXML(DOMElement $xml): object
     {
-        return self::XSI_TYPE;
+        Assert::same($xml->localName, 'BaseID', InvalidDOMElementException::class);
+        Assert::notNull($xml->namespaceURI, InvalidDOMElementException::class);
+        Assert::same($xml->namespaceURI, BaseID::NS, InvalidDOMElementException::class);
+        Assert::true(
+            $xml->hasAttributeNS(Constants::NS_XSI, 'type'),
+            'Missing required xsi:type in <saml:BaseID> element.',
+            InvalidDOMElementException::class
+        );
+
+        $type = $xml->getAttributeNS(Constants::NS_XSI, 'type');
+        list($prefix, $element) = explode(':', $type, 2);
+
+        $ns = $xml->lookupNamespaceUri($prefix);
+        $handler = Utils::getContainer()->getElementHandler($ns, $element);
+
+        Assert::notNull($handler, 'Unknown BaseID type `' . $type . '`.');
+        Assert::isAOf($handler, BaseID::class);
+
+        $baseID = BaseID::getChildrenOfClass($xml);
+
+        return new $handler(floatval($xml->textContent), $baseID->getNameQualifier(), $baseID->getSPNameQualifier());
     }
 }
