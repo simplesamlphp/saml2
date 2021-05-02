@@ -19,6 +19,7 @@ use SimpleSAML\SAML2\XML\md\AuthnAuthorityDescriptor;
 use SimpleSAML\SAML2\XML\md\AuthnQueryService;
 use SimpleSAML\SAML2\XML\md\AuthzService;
 use SimpleSAML\SAML2\XML\md\ContactPerson;
+use SimpleSAML\SAML2\XML\md\EmailAddress;
 use SimpleSAML\SAML2\XML\md\EntityDescriptor;
 use SimpleSAML\SAML2\XML\md\Extensions;
 use SimpleSAML\SAML2\XML\md\IDPSSODescriptor;
@@ -127,9 +128,9 @@ final class EntityDescriptorTest extends TestCase
             [new OrganizationURL('en', 'https://IdentityProvider.com')]
         );
         $contacts = [
-            new ContactPerson('support', null, null, null, null, ['help@example.edu']),
-            new ContactPerson('technical', null, null, null, null, ['root@example.edu']),
-            new ContactPerson('administrative', null, null, null, null, ['info@example.edu']),
+            new ContactPerson('support', null, null, null, null, [new EmailAddress('help@example.edu')]),
+            new ContactPerson('technical', null, null, null, null, [new EmailAddress('root@example.edu')]),
+            new ContactPerson('administrative', null, null, null, null, [new EmailAddress('info@example.edu')]),
         ];
         $mdloc = [
             new AdditionalMetadataLocation('somemd', 'https://example.edu/some/metadata.xml'),
@@ -221,9 +222,9 @@ XML
             [new OrganizationURL('en', 'https://IdentityProvider.com')]
         );
         $contacts = [
-            new ContactPerson('support', null, null, null, null, ['help@example.edu']),
-            new ContactPerson('technical', null, null, null, null, ['root@example.edu']),
-            new ContactPerson('administrative', null, null, null, null, ['info@example.edu']),
+            new ContactPerson('support', null, null, null, null, [new EmailAddress('help@example.edu')]),
+            new ContactPerson('technical', null, null, null, null, [new EmailAddress('root@example.edu')]),
+            new ContactPerson('administrative', null, null, null, null, [new EmailAddress('info@example.edu')]),
         ];
         $mdloc = [
             new AdditionalMetadataLocation('somemd', 'https://example.edu/some/metadata.xml'),

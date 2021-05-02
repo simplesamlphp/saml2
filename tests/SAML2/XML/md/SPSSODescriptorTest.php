@@ -12,6 +12,7 @@ use SimpleSAML\SAML2\XML\md\ArtifactResolutionService;
 use SimpleSAML\SAML2\XML\md\AssertionConsumerService;
 use SimpleSAML\SAML2\XML\md\AttributeConsumingService;
 use SimpleSAML\SAML2\XML\md\ContactPerson;
+use SimpleSAML\SAML2\XML\md\EmailAddress;
 use SimpleSAML\SAML2\XML\md\Extensions;
 use SimpleSAML\SAML2\XML\md\KeyDescriptor;
 use SimpleSAML\SAML2\XML\md\ManageNameIDService;
@@ -132,7 +133,7 @@ final class SPSSODescriptorTest extends TestCase
             null,
             null,
             null,
-            ['john.doe@test.company']
+            [new EmailAddress('john.doe@test.company')]
         );
         $ars = new ArtifactResolutionService(0, 'binding1', 'location1');
         $mnids = new ManageNameIDService('binding1', 'location1');
