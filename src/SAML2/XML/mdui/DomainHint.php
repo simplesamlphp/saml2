@@ -6,6 +6,7 @@ namespace SimpleSAML\SAML2\XML\mdui;
 
 use DOMElement;
 use SimpleSAML\Assert\Assert;
+use SimpleSAML\SAML2\Exception\InvalidArgumentException;
 use SimpleSAML\XML\XMLStringElementTrait;
 
 /**
@@ -28,5 +29,9 @@ final class DomainHint extends AbstractMduiElement
     protected function validateContent(string $content): void
     {
         Assert::notEmpty($content, 'DomainHint cannot be empty');
+
+        if (!filter_var($content, FILTER_VALIDATE_DOMAIN)) {
+            throw new InvalidArgumentException('DomainHint is not a valid hostname.');
+        }
     }
 }

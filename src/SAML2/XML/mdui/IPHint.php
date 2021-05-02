@@ -6,6 +6,7 @@ namespace SimpleSAML\SAML2\XML\mdui;
 
 use DOMElement;
 use SimpleSAML\Assert\Assert;
+use SimpleSAML\SAML2\Utils;
 use SimpleSAML\XML\XMLStringElementTrait;
 
 /**
