@@ -69,20 +69,6 @@ abstract class Condition extends AbstractConditionType
      */
     public function toXML(DOMElement $parent = null): DOMElement
     {
-        $element->setAttributeNS(Constants::NS_XSI, 'xsi:type', $this->type);
-
-        return $element;
-    }
-
-
-    /**
-     * Convert this Condition to XML.
-     *
-     * @param \DOMElement $parent The element we are converting to XML.
-     * @return \DOMElement The XML element after adding the data corresponding to this Condition.
-     */
-    public function toXML(DOMElement $parent = null): DOMElement
-    {
         $e = $this->instantiateParentElement($parent);
 
         $e->setAttribute('xmlns:' . static::XSI_TYPE_PREFIX, static::XSI_TYPE_NS);
