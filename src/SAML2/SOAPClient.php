@@ -113,7 +113,7 @@ class SOAPClient
         $context = stream_context_create($ctxOpts);
 
         $options = [
-            'uri' => $issuer->getValue(),
+            'uri' => $issuer->getContent(),
             'location' => $msg->getDestination(),
             'stream_context' => $context,
         ];
