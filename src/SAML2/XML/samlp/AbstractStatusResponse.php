@@ -103,6 +103,7 @@ abstract class AbstractStatusResponse extends AbstractMessage
     protected function setInResponseTo(?string $inResponseTo): void
     {
         Assert::nullOrNotWhitespaceOnly($inResponseTo);
+        Assert::nullOrNotContains($inResponseTo, ':');
 
         $this->inResponseTo = $inResponseTo;
     }

@@ -142,7 +142,12 @@ final class AffiliationDescriptor extends AbstractMetadataDocument
      */
     protected function setAffiliationOwnerID(string $affiliationOwnerId): void
     {
-        Assert::notEmpty($affiliationOwnerId, 'AffiliationOwnerID must not be empty.');
+        Assert::notWhitespaceOnly($affiliationOwnerId, 'AffiliationOwnerID must not be empty.');
+        Assert::maxLength(
+            $affiliationOwnerId,
+            1024,
+            'The AffiliationOwnerID attribute cannot be longer than 1024 characters.'
+        );
         $this->affiliationOwnerID = $affiliationOwnerId;
     }
 
