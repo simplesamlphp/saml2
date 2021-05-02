@@ -13,12 +13,8 @@ use SimpleSAML\XML\Exception\InvalidDOMElementException;
  *
  * @package simplesaml/saml2
  */
-final class Audience extends AbstractSamlElement
+final class Audience extends AbstractConditionType
 {
-    /** @var string */
-    protected string $value;
-
-
     /**
      * @param string $content
      */

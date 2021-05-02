@@ -195,8 +195,8 @@ XML;
         $this->assertCount(2, $restriction1->getAudience());
 
         $audience = $restriction1->getAudience();
-        $this->assertEquals('audience1', $audience[0]->getValue());
-        $this->assertEquals('audience2', $audience[1]->getValue());
+        $this->assertEquals('audience1', $audience[0]->getContent());
+        $this->assertEquals('audience2', $audience[1]->getContent());
 
         // Test for Authenticating Authorities
         $assertionAuthenticatingAuthorities = $assertion->getAuthnStatements()[0]->getAuthnContext()->getAuthenticatingAuthorities();
@@ -1023,13 +1023,13 @@ XML;
         $restriction1 = $audienceRestrictions[0];
         $audience = $restriction1->getAudience();
         $this->assertCount(1, $audience);
-        $this->assertEquals('audience1', $audience[0]->getValue());
+        $this->assertEquals('audience1', $audience[0]->getContent());
 
         $restriction2 = $audienceRestrictions[1];
         $audience = $restriction2->getAudience();
         $this->assertCount(2, $audience);
-        $this->assertEquals('audience2', $audience[0]->getValue());
-        $this->assertEquals('audience1', $audience[1]->getValue());
+        $this->assertEquals('audience2', $audience[0]->getContent());
+        $this->assertEquals('audience1', $audience[1]->getContent());
     }
 
 

@@ -60,10 +60,10 @@ class SpIsValidAudience implements
         foreach ($audienceRestrictions as $audienceRestriction) {
             $audiences = $audienceRestriction->getAudience();
             foreach ($audiences as $audience) {
-                if ($entityId === $audience->getValue()) {
+                if ($entityId === $audience->getContent()) {
                     return;
                 }
-                $all[] = $audience->getValue();
+                $all[] = $audience->getContent();
             }
         }
 
