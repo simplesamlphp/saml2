@@ -56,7 +56,7 @@ final class CustomBaseID extends BaseID implements CustomIdentifierInterface
     {
         Assert::same($xml->localName, 'BaseID', InvalidDOMElementException::class);
         Assert::notNull($xml->namespaceURI, InvalidDOMElementException::class);
-        Assert::same($xml->namespaceURI, BaseID::NS, InvalidDOMElementException::class);
+        Assert::same($xml->namespaceURI, CustomBaseID::NS, InvalidDOMElementException::class);
         Assert::true(
             $xml->hasAttributeNS(Constants::NS_XSI, 'type'),
             'Missing required xsi:type in <saml:BaseID> element.',
@@ -73,7 +73,8 @@ final class CustomBaseID extends BaseID implements CustomIdentifierInterface
         Assert::isAOf($handler, BaseID::class);
 
         $baseID = BaseID::getChildrenOfClass($xml);
+        Assert::count($baseID, 1);
 
-        return new $handler(floatval($xml->textContent), $baseID->getNameQualifier(), $baseID->getSPNameQualifier());
+        return new $handler(floatval($xml->textContent), $baseID[0]->getNameQualifier(), $baseID[0]->getSPNameQualifier());
     }
 }

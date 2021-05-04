@@ -45,8 +45,8 @@ final class BaseIDTest extends TestCase
          * @psalm-suppress InvalidArgument
          * @psalm-suppress UndefinedMagicMethod
          */
-
         $mock->shouldReceive('getElementHandler')->andReturn(CustomBaseID::class);
+        $mock->shouldReceive('generateId')->andReturn('abc123');
 
         /** @psalm-suppress InvalidArgument */
         ContainerSingleton::setContainer($mock);

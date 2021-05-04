@@ -7,8 +7,9 @@ namespace SimpleSAML\SAML2\XML\saml;
 use DOMElement;
 use SimpleSAML\Assert\Assert;
 use SimpleSAML\SAML2\Constants;
-use SimpleSAML\XML\Exception\InvalidDOMElementException;
+use SimpleSAML\SAML2\Utils;
 use SimpleSAML\SAML2\XML\IDNameQualifiersTrait;
+use SimpleSAML\XML\Exception\InvalidDOMElementException;
 
 /**
  * SAML BaseID data type.
@@ -100,6 +101,36 @@ abstract class BaseID extends AbstractSamlElement implements BaseIdentifierInter
 
 
     /**
+     * @inheritDoc
+     */
+    public static function fromXML(DOMElement $xml): object
+    {
+        Assert::same($xml->localName, 'BaseID', InvalidDOMElementException::class);
+        Assert::notNull($xml->namespaceURI, InvalidDOMElementException::class);
+        Assert::same($xml->namespaceURI, BaseID::NS, InvalidDOMElementException::class);
+        Assert::true(
+            $xml->hasAttributeNS(Constants::NS_XSI, 'type'),
+            'Missing required xsi:type in <saml:BaseID> element.',
+            InvalidDOMElementException::class
+        );
+
+        $type = $xml->getAttributeNS(Constants::NS_XSI, 'type');
+        list($prefix, $element) = explode(':', $type, 2);
+
+        $ns = $xml->lookupNamespaceUri($prefix);
+        $handler = Utils::getContainer()->getElementHandler($ns, $element);
+
+        Assert::notNull($handler, 'Unknown BaseID type `' . $type . '`.');
+        Assert::isAOf($handler, BaseID::class);
+
+        $baseID = BaseID::getChildrenOfClass($xml);
+        Assert::count($baseID, 1);
+
+        return new $handler($type, trim($xml->textContent), $baseID[0]->getNameQualifier(), $baseID[0]->getSPNameQualifier());
+    }
+
+
+    /**
      * Convert XML into an BaseID
      *
      * @param \DOMElement $xml The XML element we should load
@@ -107,7 +138,6 @@ abstract class BaseID extends AbstractSamlElement implements BaseIdentifierInter
      * @return \SimpleSAML\SAML2\XML\saml\BaseID
      *
      * @throws \SimpleSAML\XML\Exception\InvalidDOMElementException if the qualified name of the supplied element is wrong
-     */
     public static function fromXML(DOMElement $xml): object
     {
         Assert::same($xml->localName, 'BaseID', InvalidDOMElementException::class);
@@ -128,6 +158,7 @@ abstract class BaseID extends AbstractSamlElement implements BaseIdentifierInter
             self::getAttribute($xml, 'SPNameQualifier', null)
         );
     }
+     */
 
 
     /**
