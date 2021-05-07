@@ -45,7 +45,7 @@ final class BaseIDTest extends TestCase
          * @psalm-suppress InvalidArgument
          * @psalm-suppress UndefinedMagicMethod
          */
-        $mock->shouldReceive('getElementHandler')->andReturn(CustomBaseID::class);
+        $mock->shouldReceive('getElementHandler')->with('ssp:CustomBaseID')->andReturn(CustomBaseID::class);
         $mock->shouldReceive('generateId')->andReturn('abc123');
 
         /** @psalm-suppress InvalidArgument */
@@ -56,6 +56,8 @@ final class BaseIDTest extends TestCase
     public function tearDown(): void
     {
         Mockery::close();
+
+        ContainerSingleton::setContainer(ContainerSingleton::getInstance());
     }
 
 

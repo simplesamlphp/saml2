@@ -59,6 +59,8 @@ final class ConditionTest extends TestCase
     public function tearDown(): void
     {
         Mockery::close();
+
+        ContainerSingleton::setContainer(ContainerSingleton::getInstance());
     }
 
 
@@ -66,6 +68,7 @@ final class ConditionTest extends TestCase
 
 
     /**
+     * @runInSeparateProcess
      */
     public function testMarshalling(): void
     {
@@ -84,6 +87,7 @@ final class ConditionTest extends TestCase
 
 
     /**
+     * @runInSeparateProcess
      */
     public function testUnmarshalling(): void
     {
