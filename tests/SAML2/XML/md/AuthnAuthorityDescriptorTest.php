@@ -10,6 +10,7 @@ use SimpleSAML\SAML2\Constants;
 use SimpleSAML\SAML2\XML\md\AssertionIDRequestService;
 use SimpleSAML\SAML2\XML\md\AuthnAuthorityDescriptor;
 use SimpleSAML\SAML2\XML\md\AuthnQueryService;
+use SimpleSAML\SAML2\XML\md\NameIDFormat;
 use SimpleSAML\Test\SAML2\SignedElementTestTrait;
 use SimpleSAML\Test\XML\SerializableXMLTestTrait;
 use SimpleSAML\XML\DOMDocumentFactory;
@@ -62,7 +63,7 @@ final class AuthnAuthorityDescriptorTest extends TestCase
             [$this->aqs],
             [Constants::NS_SAMLP, 'protocol2'],
             [$this->aidrs],
-            [Constants::NAMEID_PERSISTENT, Constants::NAMEID_TRANSIENT]
+            [new NameIDFormat(Constants::NAMEID_PERSISTENT), new NameIDFormat(Constants::NAMEID_TRANSIENT)]
         );
 
         $this->assertEquals(
@@ -83,7 +84,7 @@ final class AuthnAuthorityDescriptorTest extends TestCase
             [],
             [Constants::NS_SAMLP, 'protocol2'],
             [$this->aidrs],
-            [Constants::NAMEID_PERSISTENT, Constants::NAMEID_TRANSIENT]
+            [new NameIDFormat(Constants::NAMEID_PERSISTENT), new NameIDFormat(Constants::NAMEID_TRANSIENT)]
         );
     }
 
@@ -108,12 +109,12 @@ final class AuthnAuthorityDescriptorTest extends TestCase
     public function testMarshallWithEmptyNameIDFormat(): void
     {
         $this->expectException(AssertionFailedException::class);
-        $this->expectExceptionMessage('NameIDFormat cannot be an empty string.');
+        $this->expectExceptionMessage('Expected a non-whitespace string. Got: ""');
         new AuthnAuthorityDescriptor(
             [$this->aqs],
             [Constants::NS_SAMLP, 'protocol2'],
             [$this->aidrs],
-            ['', Constants::NAMEID_TRANSIENT]
+            [new NameIDFormat(''), new NameIDFormat(Constants::NAMEID_TRANSIENT)]
         );
     }
 
@@ -129,7 +130,7 @@ final class AuthnAuthorityDescriptorTest extends TestCase
             [$this->aqs, ''],
             [Constants::NS_SAMLP, 'protocol2'],
             [$this->aidrs],
-            [Constants::NAMEID_PERSISTENT, Constants::NAMEID_TRANSIENT]
+            [new NameIDFormat(Constants::NAMEID_PERSISTENT), new NameIDFormat(Constants::NAMEID_TRANSIENT)]
         );
     }
 
@@ -145,7 +146,7 @@ final class AuthnAuthorityDescriptorTest extends TestCase
             [$this->aqs],
             [Constants::NS_SAMLP, 'protocol2'],
             [$this->aidrs, ''],
-            [Constants::NAMEID_PERSISTENT, Constants::NAMEID_TRANSIENT]
+            [new NameIDFormat(Constants::NAMEID_PERSISTENT), new NameIDFormat(Constants::NAMEID_TRANSIENT)]
         );
     }
 
@@ -165,7 +166,11 @@ final class AuthnAuthorityDescriptorTest extends TestCase
         $this->assertCount(1, $aad->getAssertionIDRequestServices());
         $this->assertEquals($this->aidrs->getBinding(), $aad->getAssertionIDRequestServices()[0]->getBinding());
         $this->assertEquals($this->aidrs->getLocation(), $aad->getAssertionIDRequestServices()[0]->getLocation());
-        $this->assertEquals([Constants::NAMEID_PERSISTENT, Constants::NAMEID_TRANSIENT], $aad->getNameIDFormats());
+
+        $nameIdFormats = $aad->getNameIDFormats();
+        $this->assertCount(2, $nameIdFormats);
+        $this->assertEquals(Constants::NAMEID_PERSISTENT, $nameIdFormats[0]->getContent());
+        $this->assertEquals(Constants::NAMEID_TRANSIENT, $nameIdFormats[1]->getContent());
     }
 
 
@@ -192,7 +197,7 @@ final class AuthnAuthorityDescriptorTest extends TestCase
         /** @psalm-suppress PossiblyNullPropertyAssignment */
         $nidf->item(0)->textContent = '';
         $this->expectException(AssertionFailedException::class);
-        $this->expectExceptionMessage('NameIDFormat cannot be an empty string.');
+        $this->expectExceptionMessage('Expected a non-whitespace string. Got: ""');
         AuthnAuthorityDescriptor::fromXML($this->xmlRepresentation->documentElement);
     }
 

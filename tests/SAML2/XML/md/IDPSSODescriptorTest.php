@@ -64,11 +64,11 @@ final class IDPSSODescriptorTest extends TestCase
         $idpssod = new IDPSSODescriptor(
             [
                 new SingleSignOnService(
-                    'urn:oasis:names:tc:SAML:2.0:bindings:HTTP-Redirect',
+                    Constants::BINDING_HTTP_REDIRECT,
                     'https://IdentityProvider.com/SAML/SSO/Browser'
                 ),
                 new SingleSignOnService(
-                    'urn:oasis:names:tc:SAML:2.0:bindings:HTTP-POST',
+                    Constants::BINDING_HTTP_POST,
                     'https://IdentityProvider.com/SAML/SSO/Browser'
                 )
             ],
@@ -76,21 +76,21 @@ final class IDPSSODescriptorTest extends TestCase
             true,
             [
                 new NameIDMappingService(
-                    'urn:oasis:names:tc:SAML:2.0:bindings:HTTP-Redirect',
+                    Constants::BINDING_HTTP_REDIRECT,
                     'https://IdentityProvider.com/SAML/SSO/Browser'
                 ),
                 new NameIDMappingService(
-                    'urn:oasis:names:tc:SAML:2.0:bindings:HTTP-POST',
+                    Constants::BINDING_HTTP_POST,
                     'https://IdentityProvider.com/SAML/SSO/Browser'
                 )
             ],
             [
                 new AssertionIDRequestService(
-                    'urn:oasis:names:tc:SAML:2.0:bindings:HTTP-Redirect',
+                    Constants::BINDING_HTTP_REDIRECT,
                     'https://IdentityProvider.com/SAML/SSO/Browser'
                 ),
                 new AssertionIDRequestService(
-                    'urn:oasis:names:tc:SAML:2.0:bindings:HTTP-POST',
+                    Constants::BINDING_HTTP_POST,
                     'https://IdentityProvider.com/SAML/SSO/Browser'
                 )
             ],
@@ -98,12 +98,12 @@ final class IDPSSODescriptorTest extends TestCase
             [
                 new Attribute(
                     'urn:oid:1.3.6.1.4.1.5923.1.1.1.6',
-                    'urn:oasis:names:tc:SAML:2.0:attrname-format:uri',
+                    Constants::NAMEFORMAT_URI,
                     'eduPersonPrincipalName'
                 ),
                 new Attribute(
                     'urn:oid:1.3.6.1.4.1.5923.1.1.1.1',
-                    'urn:oasis:names:tc:SAML:2.0:attrname-format:uri',
+                    Constants::NAMEFORMAT_URI,
                     'eduPersonAffiliation',
                     [
                         new AttributeValue('member'),
@@ -132,32 +132,32 @@ final class IDPSSODescriptorTest extends TestCase
             [
                 new ArtifactResolutionService(
                     0,
-                    'urn:oasis:names:tc:SAML:2.0:bindings:SOAP',
+                    Constants::BINDING_SOAP,
                     'https://IdentityProvider.com/SAML/Artifact',
                     true
                 )
             ],
             [
                 new SingleLogoutService(
-                    'urn:oasis:names:tc:SAML:2.0:bindings:SOAP',
+                    Constants::BINDING_SOAP,
                     'https://IdentityProvider.com/SAML/SLO/SOAP'
                 ),
                 new SingleLogoutService(
-                    'urn:oasis:names:tc:SAML:2.0:bindings:HTTP-Redirect',
+                    Constants::BINDING_HTTP_REDIRECT,
                     'https://IdentityProvider.com/SAML/SLO/Browser',
                     'https://IdentityProvider.com/SAML/SLO/Response'
                 )
             ],
             [
                 new ManageNameIDService(
-                    'urn:oasis:names:tc:SAML:2.0:bindings:HTTP-POST',
+                    Constants::BINDING_HTTP_POST,
                     'https://IdentityProvider.com/SAML/SSO/Browser'
                 )
             ],
             [
-                'urn:oasis:names:tc:SAML:1.1:nameid-format:X509SubjectName',
-                'urn:oasis:names:tc:SAML:2.0:nameid-format:persistent',
-                'urn:oasis:names:tc:SAML:2.0:nameid-format:transient'
+                new NameIDFormat(Constants::NAMEID_X509_SUBJECT_NAME),
+                new NameIDFormat(Constants::NAMEID_PERSISTENT),
+                new NameIDFormat(Constants::NAMEID_TRANSIENT)
             ]
         );
 
@@ -336,9 +336,9 @@ final class IDPSSODescriptorTest extends TestCase
         $this->assertInstanceOf(NameIDMappingService::class, $idpssod->getNameIDMappingServices()[0]);
         $this->assertInstanceOf(NameIDMappingService::class, $idpssod->getNameIDMappingServices()[1]);
         $this->assertCount(3, $idpssod->getNameIDFormats());
-        $this->assertEquals(Constants::NAMEID_X509_SUBJECT_NAME, $idpssod->getNameIDFormats()[0]);
-        $this->assertEquals(Constants::NAMEID_PERSISTENT, $idpssod->getNameIDFormats()[1]);
-        $this->assertEquals(Constants::NAMEID_TRANSIENT, $idpssod->getNameIDFormats()[2]);
+        $this->assertEquals(Constants::NAMEID_X509_SUBJECT_NAME, $idpssod->getNameIDFormats()[0]->getContent());
+        $this->assertEquals(Constants::NAMEID_PERSISTENT, $idpssod->getNameIDFormats()[1]->getContent());
+        $this->assertEquals(Constants::NAMEID_TRANSIENT, $idpssod->getNameIDFormats()[2]->getContent());
         $this->assertCount(2, $idpssod->getAssertionIDRequestServices());
         $this->assertInstanceOf(AssertionIDRequestService::class, $idpssod->getAssertionIDRequestServices()[0]);
         $this->assertInstanceOf(AssertionIDRequestService::class, $idpssod->getAssertionIDRequestServices()[1]);
