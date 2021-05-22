@@ -44,7 +44,7 @@ final class AttributeAuthorityDescriptor extends AbstractRoleDescriptor
      *
      * Array of strings.
      *
-     * @var string[]
+     * @var \SimpleSAML\SAML2\XML\md\NameIDFormat[]
      */
     protected array $NameIDFormats = [];
 
@@ -53,7 +53,7 @@ final class AttributeAuthorityDescriptor extends AbstractRoleDescriptor
      *
      * Array with strings.
      *
-     * @var array
+     * @var \SimpleSAML\SAML2\XML\md\AttributeProfile[]
      */
     protected array $AttributeProfiles = [];
 
@@ -72,10 +72,10 @@ final class AttributeAuthorityDescriptor extends AbstractRoleDescriptor
      *
      * @param \SimpleSAML\SAML2\XML\md\AttributeService[] $attributeServices
      * @param string[] $protocolSupportEnumeration
-     * @param \SimpleSAML\SAML2\XML\md\AssertionIDRequestService[]|null $assertionIDRequestService
-     * @param string[]|null $nameIDFormats
-     * @param string[]|null $attributeProfiles
-     * @param \SimpleSAML\SAML2\XML\saml\Attribute[]|null $attributes
+     * @param \SimpleSAML\SAML2\XML\md\AssertionIDRequestService[] $assertionIDRequestService
+     * @param \SimpleSAML\SAML2\XML\md\NameIDFormat[] $nameIDFormats
+     * @param \SimpleSAML\SAML2\XML\md\AttributeProfile[] $attributeProfiles
+     * @param \SimpleSAML\SAML2\XML\saml\Attribute[] $attributes
      * @param string|null $ID
      * @param int|null $validUntil
      * @param string|null $cacheDuration
@@ -88,10 +88,10 @@ final class AttributeAuthorityDescriptor extends AbstractRoleDescriptor
     public function __construct(
         array $attributeServices,
         array $protocolSupportEnumeration,
-        ?array $assertionIDRequestService = [],
-        ?array $nameIDFormats = [],
-        ?array $attributeProfiles = [],
-        ?array $attributes = [],
+        array $assertionIDRequestService = [],
+        array $nameIDFormats = [],
+        array $attributeProfiles = [],
+        array $attributes = [],
         ?string $ID = null,
         ?int $validUntil = null,
         ?string $cacheDuration = null,
@@ -155,7 +155,7 @@ final class AttributeAuthorityDescriptor extends AbstractRoleDescriptor
     /**
      * Collect the value of the NameIDFormat-property
      *
-     * @return string[]
+     * @return \SimpleSAML\SAML2\XML\md\NameIDFormat[]
      */
     public function getNameIDFormats(): array
     {
@@ -166,14 +166,11 @@ final class AttributeAuthorityDescriptor extends AbstractRoleDescriptor
     /**
      * Set the value of the NameIDFormat-property
      *
-     * @param string[]|null $nameIDFormats
+     * @param \SimpleSAML\SAML2\XML\md\NameIDFormat[] $nameIDFormats
      */
-    protected function setNameIDFormats(?array $nameIDFormats): void
+    protected function setNameIDFormats(array $nameIDFormats): void
     {
-        if ($nameIDFormats === null) {
-            return;
-        }
-        Assert::allStringNotEmpty($nameIDFormats, 'NameIDFormat cannot be an empty string.');
+        Assert::allIsInstanceOf($nameIDFormats, NameIDFormat::class);
         $this->NameIDFormats = $nameIDFormats;
     }
 
@@ -194,12 +191,8 @@ final class AttributeAuthorityDescriptor extends AbstractRoleDescriptor
      *
      * @param \SimpleSAML\SAML2\XML\md\AssertionIDRequestService[] $assertionIDRequestServices
      */
-    protected function setAssertionIDRequestServices(?array $assertionIDRequestServices): void
+    protected function setAssertionIDRequestServices(array $assertionIDRequestServices): void
     {
-        if ($assertionIDRequestServices === null) {
-            return;
-        }
-
         Assert::allIsInstanceOf($assertionIDRequestServices, AssertionIDRequestService::class);
         $this->AssertionIDRequestServices = $assertionIDRequestServices;
     }
@@ -208,7 +201,7 @@ final class AttributeAuthorityDescriptor extends AbstractRoleDescriptor
     /**
      * Collect the value of the AttributeProfile-property
      *
-     * @return string[]
+     * @return \SimpleSAML\SAML2\XML\md\AttributeProfile[]
      */
     public function getAttributeProfiles(): array
     {
@@ -219,14 +212,11 @@ final class AttributeAuthorityDescriptor extends AbstractRoleDescriptor
     /**
      * Set the value of the AttributeProfile-property
      *
-     * @param string[]|null $attributeProfiles
+     * @param \SimpleSAML\SAML2\XML\md\AttributeProfile[] $attributeProfiles
      */
-    protected function setAttributeProfiles(?array $attributeProfiles): void
+    protected function setAttributeProfiles(array $attributeProfiles): void
     {
-        if ($attributeProfiles === null) {
-            return;
-        }
-        Assert::allStringNotEmpty($attributeProfiles, 'AttributeProfile cannot be an empty string.');
+        Assert::allIsInstanceOf($attributeProfiles, AttributeProfile::class);
         $this->AttributeProfiles = $attributeProfiles;
     }
 
@@ -245,13 +235,10 @@ final class AttributeAuthorityDescriptor extends AbstractRoleDescriptor
     /**
      * Set the value of the Attribute-property
      *
-     * @param \SimpleSAML\SAML2\XML\saml\Attribute[]|null $attributes
+     * @param \SimpleSAML\SAML2\XML\saml\Attribute[] $attributes
      */
     protected function setAttributes(?array $attributes): void
     {
-        if ($attributes === null) {
-            return;
-        }
         Assert::allIsInstanceOf($attributes, Attribute::class);
         $this->Attributes = $attributes;
     }
@@ -274,6 +261,7 @@ final class AttributeAuthorityDescriptor extends AbstractRoleDescriptor
         Assert::same($xml->namespaceURI, AttributeAuthorityDescriptor::NS, InvalidDOMElementException::class);
 
         $protocols = self::getAttribute($xml, 'protocolSupportEnumeration');
+        $validUntil = self::getAttribute($xml, 'validUntil', null);
 
         $attrServices = AttributeService::getChildrenOfClass($xml);
         Assert::notEmpty(
@@ -283,11 +271,9 @@ final class AttributeAuthorityDescriptor extends AbstractRoleDescriptor
         );
 
         $assertIDReqServices = AssertionIDRequestService::getChildrenOfClass($xml);
-        $nameIDFormats = XMLUtils::extractStrings($xml, Constants::NS_MD, 'NameIDFormat');
-        $attrProfiles = XMLUtils::extractStrings($xml, Constants::NS_MD, 'AttributeProfile');
-
+        $nameIDFormats = NameIDFormat::getChildrenOfClass($xml);
+        $attrProfiles = AttributeProfile::getChildrenOfClass($xml);
         $attributes = Attribute::getChildrenOfClass($xml);
-        $validUntil = self::getAttribute($xml, 'validUntil', null);
 
         $orgs = Organization::getChildrenOfClass($xml);
         Assert::maxCount($orgs, 1, 'More than one Organization found in this descriptor', TooManyElementsException::class);
@@ -340,8 +326,13 @@ final class AttributeAuthorityDescriptor extends AbstractRoleDescriptor
             $ep->toXML($e);
         }
 
-        XMLUtils::addStrings($e, Constants::NS_MD, 'md:NameIDFormat', false, $this->NameIDFormats);
-        XMLUtils::addStrings($e, Constants::NS_MD, 'md:AttributeProfile', false, $this->AttributeProfiles);
+        foreach ($this->NameIDFormats as $nidFormat) {
+            $nidFormat->toXML($e);
+        }
+
+        foreach ($this->AttributeProfiles as $ap) {
+            $ap->toXML($e);
+        }
 
         foreach ($this->Attributes as $a) {
             $a->toXML($e);

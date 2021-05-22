@@ -10,6 +10,7 @@ use SimpleSAML\Assert\AssertionFailedException;
 use SimpleSAML\SAML2\Constants;
 use SimpleSAML\SAML2\XML\md\AssertionIDRequestService;
 use SimpleSAML\SAML2\XML\md\AuthzService;
+use SimpleSAML\SAML2\XML\md\NameIDFormat;
 use SimpleSAML\SAML2\XML\md\PDPDescriptor;
 use SimpleSAML\Test\XML\SerializableXMLTestTrait;
 use SimpleSAML\XML\DOMDocumentFactory;
@@ -46,11 +47,11 @@ final class PDPDescriptorTest extends TestCase
         );
 
         $this->authzService = new AuthzService(
-            'urn:oasis:names:tc:SAML:2.0:bindings:SOAP',
+            Constants::BINDING_SOAP,
             'https://IdentityProvider.com/SAML/AA/SOAP'
         );
         $this->assertionIDRequestService = new AssertionIDRequestService(
-            'urn:oasis:names:tc:SAML:2.0:bindings:URI',
+            Constants::BINDING_URI,
             'https://IdentityProvider.com/SAML/AA/URI'
         );
     }
@@ -69,9 +70,9 @@ final class PDPDescriptorTest extends TestCase
             ["urn:oasis:names:tc:SAML:2.0:protocol"],
             [$this->assertionIDRequestService],
             [
-                'urn:oasis:names:tc:SAML:1.1:nameid-format:X509SubjectName',
-                'urn:oasis:names:tc:SAML:2.0:nameid-format:persistent',
-                'urn:oasis:names:tc:SAML:2.0:nameid-format:transient',
+                new NameIDFormat(Constants::NAMEID_X509_SUBJECT_NAME),
+                new NameIDFormat(Constants::NAMEID_PERSISTENT),
+                new NameIDFormat(Constants::NAMEID_TRANSIENT),
             ]
         );
 
@@ -118,24 +119,6 @@ final class PDPDescriptorTest extends TestCase
 
 
     /**
-     * Test that creating a PDPDescriptor from scratch fails when a non-string NameIDFormat is passed.
-     */
-    public function testMarshallingWithWrongNameIDFormat(): void
-    {
-        $this->expectException(AssertionFailedException::class);
-        $this->expectExceptionMessage('All NameIDFormat must be a non-empty string.');
-
-        /** @psalm-suppress InvalidScalarArgument */
-        new PDPDescriptor(
-            [$this->authzService],
-            ["urn:oasis:names:tc:SAML:2.0:protocol"],
-            [$this->assertionIDRequestService],
-            ['format1', 10]
-        );
-    }
-
-
-    /**
      * Test that creating a PDPDescriptor from scratch without any optional arguments works.
      */
     public function testMarshallingWithoutOptionalArguments(): void
@@ -163,9 +146,9 @@ final class PDPDescriptorTest extends TestCase
         $this->assertCount(3, $pdpd->getNameIDFormats());
         $this->assertEquals(
             [
-                'urn:oasis:names:tc:SAML:1.1:nameid-format:X509SubjectName',
-                'urn:oasis:names:tc:SAML:2.0:nameid-format:persistent',
-                'urn:oasis:names:tc:SAML:2.0:nameid-format:transient',
+                new NameIDFormat(Constants::NAMEID_X509_SUBJECT_NAME),
+                new NameIDFormat(Constants::NAMEID_PERSISTENT),
+                new NameIDFormat(Constants::NAMEID_TRANSIENT),
             ],
             $pdpd->getNameIDFormats()
         );

@@ -7,8 +7,10 @@ namespace SimpleSAML\Test\SAML2\XML\samlp;
 use DOMDocument;
 use PHPUnit\Framework\TestCase;
 use SimpleSAML\SAML2\Constants;
+use SimpleSAML\SAML2\XML\samlp\GetComplete;
 use SimpleSAML\SAML2\XML\samlp\IDPEntry;
 use SimpleSAML\SAML2\XML\samlp\IDPList;
+use SimpleSAML\SAML2\XML\samlp\RequesterID;
 use SimpleSAML\SAML2\XML\samlp\Scoping;
 use SimpleSAML\Test\XML\SerializableXMLTestTrait;
 use SimpleSAML\XML\DOMDocumentFactory;
@@ -44,11 +46,11 @@ final class ScopingTest extends TestCase
     public function testMarshalling(): void
     {
         $entry1 = new IDPEntry('urn:some:requester1', 'testName1', 'testLoc1');
-        $getComplete = 'https://some/location';
+        $getComplete = new GetComplete('https://some/location');
         $list = new IDPList([$entry1], $getComplete);
         $requesterId = 'urn:some:requester';
 
-        $scoping = new Scoping(2, $list, [$requesterId]);
+        $scoping = new Scoping(2, $list, [new RequesterID($requesterId)]);
 
         $this->assertEquals(
             $this->xmlRepresentation->saveXML($this->xmlRepresentation->documentElement),
@@ -62,11 +64,11 @@ final class ScopingTest extends TestCase
     public function testMarshallingElementOrdering(): void
     {
         $entry1 = new IDPEntry('urn:some:requester1', 'testName1', 'testLoc1');
-        $getComplete = 'https://some/location';
+        $getComplete = new GetComplete('https://some/location');
         $list = new IDPList([$entry1], $getComplete);
         $requesterId = 'urn:some:requester';
 
-        $scoping = new Scoping(2, $list, [$requesterId]);
+        $scoping = new Scoping(2, $list, [new RequesterID($requesterId)]);
 
         $scopingElement = $scoping->toXML();
 
@@ -115,10 +117,10 @@ final class ScopingTest extends TestCase
         $this->assertEquals('testName1', $entries[0]->getName());
         $this->assertEquals('testLoc1', $entries[0]->getLoc());
 
-        $this->assertEquals('https://some/location', $list->getGetComplete());
+        $this->assertEquals('https://some/location', $list->getGetComplete()->getContent());
 
         $requesterId = $scoping->getRequesterId();
         $this->assertCount(1, $requesterId);
-        $this->assertEquals('urn:some:requester', $requesterId[0]);
+        $this->assertEquals('urn:some:requester', $requesterId[0]->getContent());
     }
 }

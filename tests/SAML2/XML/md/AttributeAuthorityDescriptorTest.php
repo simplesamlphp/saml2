@@ -10,7 +10,9 @@ use SimpleSAML\Assert\AssertionFailedException;
 use SimpleSAML\SAML2\Constants;
 use SimpleSAML\SAML2\XML\md\AssertionIDRequestService;
 use SimpleSAML\SAML2\XML\md\AttributeAuthorityDescriptor;
+use SimpleSAML\SAML2\XML\md\AttributeProfile;
 use SimpleSAML\SAML2\XML\md\AttributeService;
+use SimpleSAML\SAML2\XML\md\NameIDFormat;
 use SimpleSAML\SAML2\XML\saml\Attribute;
 use SimpleSAML\SAML2\XML\saml\AttributeValue;
 use SimpleSAML\Test\SAML2\SignedElementTestTrait;
@@ -50,11 +52,11 @@ final class AttributeAuthorityDescriptorTest extends TestCase
             dirname(dirname(dirname(dirname(__FILE__)))) . '/resources/xml/md_AttributeAuthorityDescriptor.xml'
         );
         $this->as = new AttributeService(
-            "urn:oasis:names:tc:SAML:2.0:bindings:SOAP",
+            Constants::BINDING_SOAP,
             "https://IdentityProvider.com/SAML/AA/SOAP"
         );
         $this->aidrs = new AssertionIDRequestService(
-            "urn:oasis:names:tc:SAML:2.0:bindings:URI",
+            Constants::BINDING_URI,
             "https://IdentityProvider.com/SAML/AA/URI"
         );
     }
@@ -70,13 +72,13 @@ final class AttributeAuthorityDescriptorTest extends TestCase
     {
         $attr1 = new Attribute(
             "urn:oid:1.3.6.1.4.1.5923.1.1.1.6",
-            "urn:oasis:names:tc:SAML:2.0:attrname-format:uri",
+            Constants::NAMEFORMAT_URI,
             "eduPersonPrincipalName"
         );
 
         $attr2 = new Attribute(
             "urn:oid:1.3.6.1.4.1.5923.1.1.1.1",
-            "urn:oasis:names:tc:SAML:2.0:attrname-format:uri",
+            Constants::NAMEFORMAT_URI,
             'eduPersonAffiliation',
             [
                 new AttributeValue('member'),
@@ -91,13 +93,13 @@ final class AttributeAuthorityDescriptorTest extends TestCase
             [Constants::NS_SAMLP],
             [$this->aidrs],
             [
-                CONSTANTS::NAMEID_X509_SUBJECT_NAME,
-                CONSTANTS::NAMEID_PERSISTENT,
-                CONSTANTS::NAMEID_TRANSIENT,
+                new NameIDFormat(CONSTANTS::NAMEID_X509_SUBJECT_NAME),
+                new NameIDFormat(CONSTANTS::NAMEID_PERSISTENT),
+                new NameIDFormat(CONSTANTS::NAMEID_TRANSIENT),
             ],
             [
-                'profile1',
-                'profile2',
+                new AttributeProfile('profile1'),
+                new AttributeProfile('profile2'),
             ],
             [$attr1, $attr2]
         );
@@ -215,8 +217,8 @@ final class AttributeAuthorityDescriptorTest extends TestCase
     public function testMarshallingWithEmptyNameIDFormat(): void
     {
         $this->expectException(AssertionFailedException::class);
-        $this->expectExceptionMessage('NameIDFormat cannot be an empty string.');
-        new AttributeAuthorityDescriptor([$this->as], [Constants::NS_SAMLP], [$this->aidrs], ['']);
+        $this->expectExceptionMessage('Expected a non-whitespace string. Got: ""');
+        new AttributeAuthorityDescriptor([$this->as], [Constants::NS_SAMLP], [$this->aidrs], [new NameIDFormat('')]);
     }
 
 
@@ -226,8 +228,8 @@ final class AttributeAuthorityDescriptorTest extends TestCase
     public function testMarshallingWithEmptyAttributeProfile(): void
     {
         $this->expectException(AssertionFailedException::class);
-        $this->expectExceptionMessage('AttributeProfile cannot be an empty string.');
-        new AttributeAuthorityDescriptor([$this->as], [Constants::NS_SAMLP], [$this->aidrs], ['x'], ['']);
+        $this->expectExceptionMessage('AttributeProfile cannot be empty');
+        new AttributeAuthorityDescriptor([$this->as], [Constants::NS_SAMLP], [$this->aidrs], [new NameIDFormat('x')], [new AttributeProfile('')]);
     }
 
 
@@ -242,7 +244,7 @@ final class AttributeAuthorityDescriptorTest extends TestCase
         );
 
         /** @psalm-suppress InvalidArgument */
-        new AttributeAuthorityDescriptor([$this->as], [Constants::NS_SAMLP], [$this->aidrs], ['x'], ['x'], ['x']);
+        new AttributeAuthorityDescriptor([$this->as], [Constants::NS_SAMLP], [$this->aidrs], [new NameIDFormat('x')], [new AttributeProfile('x')], ['x']);
     }
 
 
@@ -258,27 +260,26 @@ final class AttributeAuthorityDescriptorTest extends TestCase
 
         $as = $aad->getAttributeServices();
         $this->assertCount(1, $as, "Wrong number of AttributeService elements.");
-        $this->assertEquals('urn:oasis:names:tc:SAML:2.0:bindings:SOAP', $as[0]->getBinding());
+        $this->assertEquals(Constants::BINDING_SOAP, $as[0]->getBinding());
         $this->assertEquals('https://IdentityProvider.com/SAML/AA/SOAP', $as[0]->getLocation());
 
         $aidrs = $aad->getAssertionIDRequestServices();
         $this->assertCount(1, $aidrs, "Wrong number of AssertionIDRequestService elements.");
-        $this->assertEquals('urn:oasis:names:tc:SAML:2.0:bindings:URI', $aidrs[0]->getBinding());
+        $this->assertEquals(constants::BINDING_URI, $aidrs[0]->getBinding());
         $this->assertEquals('https://IdentityProvider.com/SAML/AA/URI', $aidrs[0]->getLocation());
-        $this->assertEquals(
-            [
-                'urn:oasis:names:tc:SAML:1.1:nameid-format:X509SubjectName',
-                'urn:oasis:names:tc:SAML:2.0:nameid-format:persistent',
-                'urn:oasis:names:tc:SAML:2.0:nameid-format:transient',
-            ],
-            $aad->getNameIDFormats()
-        );
+
+        $nameIdFormats = $aad->getNameIDFormats();
+        $this->assertCount(3, $nameIdFormats);
+        $this->assertEquals(Constants::NAMEID_X509_SUBJECT_NAME, $nameIdFormats[0]->getContent());
+        $this->assertEquals(Constants::NAMEID_PERSISTENT, $nameIdFormats[1]->getContent());
+        $this->assertEquals(Constants::NAMEID_TRANSIENT, $nameIdFormats[2]->getContent());
+
         $attrs = $aad->getAttributes();
         $this->assertCount(2, $attrs, "Wrong number of attributes.");
         $this->assertEquals(
             [
-                'profile1',
-                'profile2',
+                new AttributeProfile('profile1'),
+                new AttributeProfile('profile2'),
             ],
             $aad->getAttributeProfiles()
         );
@@ -328,7 +329,7 @@ XML
 XML
         );
         $this->expectException(AssertionFailedException::class);
-        $this->expectExceptionMessage('NameIDFormat cannot be an empty string.');
+        $this->expectExceptionMessage('Expected a non-whitespace string. Got: ""');
         AttributeAuthorityDescriptor::fromXML($document->documentElement);
     }
 
@@ -348,7 +349,7 @@ XML
 XML
         );
         $this->expectException(AssertionFailedException::class);
-        $this->expectExceptionMessage('AttributeProfile cannot be an empty string.');
+        $this->expectExceptionMessage('AttributeProfile cannot be empty');
         AttributeAuthorityDescriptor::fromXML($document->documentElement);
     }
 }

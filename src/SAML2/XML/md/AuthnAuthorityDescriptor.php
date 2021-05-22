@@ -38,7 +38,7 @@ final class AuthnAuthorityDescriptor extends AbstractRoleDescriptor
      *
      * Array of strings.
      *
-     * @var string[]
+     * @var \SimpleSAML\SAML2\XML\md\NameIDFormat[]
      */
     protected array $NameIDFormats = [];
 
@@ -109,8 +109,7 @@ final class AuthnAuthorityDescriptor extends AbstractRoleDescriptor
 
         $authnQueryServices = AuthnQueryService::getChildrenOfClass($xml);
         $assertionIDRequestServices = AssertionIDRequestService::getChildrenOfClass($xml);
-
-        $nameIDFormats = XMLUtils::extractStrings($xml, Constants::NS_MD, 'NameIDFormat');
+        $nameIDFormats = NameIDFormat::getChildrenOfClass($xml);
 
         $validUntil = self::getAttribute($xml, 'validUntil', null);
 
@@ -190,7 +189,7 @@ final class AuthnAuthorityDescriptor extends AbstractRoleDescriptor
      * @param \SimpleSAML\SAML2\XML\md\AbstractEndpointType[] $assertionIDRequestServices
      * @throws \SimpleSAML\Assert\AssertionFailedException
      */
-    protected function setAssertionIDRequestService(?array $assertionIDRequestServices = []): void
+    protected function setAssertionIDRequestService(array $assertionIDRequestServices = []): void
     {
         Assert::allIsInstanceOf(
             $assertionIDRequestServices,
@@ -204,7 +203,7 @@ final class AuthnAuthorityDescriptor extends AbstractRoleDescriptor
     /**
      * Collect the values of the NameIDFormat
      *
-     * @return string[]
+     * @return \SimpleSAML\SAML2\XML\md\NameIDFormat[]
      */
     public function getNameIDFormats(): array
     {
@@ -215,15 +214,12 @@ final class AuthnAuthorityDescriptor extends AbstractRoleDescriptor
     /**
      * Set the values of the NameIDFormat
      *
-     * @param string[] $nameIDFormats
+     * @param \SimpleSAML\SAML2\XML\md\NameIDFormat[] $nameIDFormats
      * @throws \SimpleSAML\Assert\AssertionFailedException
      */
-    protected function setNameIDFormat(?array $nameIDFormats): void
+    protected function setNameIDFormat(array $nameIDFormats): void
     {
-        if ($nameIDFormats === null) {
-            return;
-        }
-        Assert::allStringNotEmpty($nameIDFormats, 'NameIDFormat cannot be an empty string.');
+        Assert::allIsInstanceOf($nameIDFormats, NameIDFormat::class);
         $this->NameIDFormats = $nameIDFormats;
     }
 
@@ -248,7 +244,9 @@ final class AuthnAuthorityDescriptor extends AbstractRoleDescriptor
             $ep->toXML($e);
         }
 
-        XMLUtils::addStrings($e, Constants::NS_MD, 'md:NameIDFormat', false, $this->NameIDFormats);
+        foreach ($this->NameIDFormats as $nidFormat) {
+            $nidFormat->toXML($e);
+        }
 
         return $this->signElement($e);
     }
