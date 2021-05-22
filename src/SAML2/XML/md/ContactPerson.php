@@ -36,23 +36,23 @@ final class ContactPerson extends AbstractMdElement
     /**
      * The Company of this contact.
      *
-     * @var string|null
+     * @var \SimpleSAML\SAML2\XML\md\Company|null
      */
-    protected ?string $Company = null;
+    protected ?Company $Company = null;
 
     /**
      * The GivenName of this contact.
      *
-     * @var string|null
+     * @var \SimpleSAML\SAML2\XML\md\GivenName|null
      */
-    protected ?string $GivenName = null;
+    protected ?GivenName $GivenName = null;
 
     /**
      * The SurName of this contact.
      *
-     * @var string|null
+     * @var \SimpleSAML\SAML2\XML\md\SurName|null
      */
-    protected ?string $SurName = null;
+    protected ?SurName $SurName = null;
 
     /**
      * The EmailAddresses of this contact.
@@ -72,20 +72,20 @@ final class ContactPerson extends AbstractMdElement
     /**
      * ContactPerson constructor.
      *
-     * @param string                         $contactType
-     * @param string|null                    $company
-     * @param string|null                    $givenName
-     * @param string|null                    $surName
+     * @param string                                    $contactType
+     * @param \SimpleSAML\SAML2\XML\md\Company|null     $company
+     * @param \SimpleSAML\SAML2\XML\md\GivenName|null   $givenName
+     * @param \SimpleSAML\SAML2\XML\md\SurName|null     $surName
      * @param \SimpleSAML\SAML2\XML\md\Extensions|null  $extensions
-     * @param string[]                       $email
-     * @param string[]                       $telephone
-     * @param \DOMAttr[]                     $namespacedAttributes
+     * @param string[]                                  $email
+     * @param string[]                                  $telephone
+     * @param \DOMAttr[]                                $namespacedAttributes
      */
     public function __construct(
         string $contactType,
-        ?string $company = null,
-        ?string $givenName = null,
-        ?string $surName = null,
+        ?Company $company = null,
+        ?GivenName $givenName = null,
+        ?SurName $surName = null,
         ?Extensions $extensions = null,
         array $email = [],
         array $telephone = [],
@@ -171,9 +171,9 @@ final class ContactPerson extends AbstractMdElement
     /**
      * Collect the value of the Company-property
      *
-     * @return string|null
+     * @return \SimpleSAML\SAML2\XML\md\Company|null
      */
-    public function getCompany(): ?string
+    public function getCompany(): ?Company
     {
         return $this->Company;
     }
@@ -182,9 +182,9 @@ final class ContactPerson extends AbstractMdElement
     /**
      * Set the value of the Company-property
      *
-     * @param string|null $company
+     * @param \SimpleSAML\SAML2\XML\md\Company|null $company
      */
-    protected function setCompany(?string $company): void
+    protected function setCompany(?Company $company): void
     {
         $this->Company = $company;
     }
@@ -193,9 +193,9 @@ final class ContactPerson extends AbstractMdElement
     /**
      * Collect the value of the GivenName-property
      *
-     * @return string|null
+     * @return \SimpleSAML\SAML2\XML\md\GivenName|null
      */
-    public function getGivenName(): ?string
+    public function getGivenName(): ?GivenName
     {
         return $this->GivenName;
     }
@@ -204,9 +204,9 @@ final class ContactPerson extends AbstractMdElement
     /**
      * Set the value of the GivenName-property
      *
-     * @param string|null $givenName
+     * @param \SimpleSAML\SAML2\XML\md\GivenName|null $givenName
      */
-    protected function setGivenName(?string $givenName): void
+    protected function setGivenName(?GivenName $givenName): void
     {
         $this->GivenName = $givenName;
     }
@@ -215,9 +215,9 @@ final class ContactPerson extends AbstractMdElement
     /**
      * Collect the value of the SurName-property
      *
-     * @return string|null
+     * @return \SimpleSAML\SAML2\XML\md\SurName|null
      */
-    public function getSurName(): ?string
+    public function getSurName(): ?SurName
     {
         return $this->SurName;
     }
@@ -226,9 +226,9 @@ final class ContactPerson extends AbstractMdElement
     /**
      * Set the value of the SurName-property
      *
-     * @param string|null $surName
+     * @param \SimpleSAML\SAML2\XML\md\SurName|null $surName
      */
-    protected function setSurName(?string $surName): void
+    protected function setSurName(?SurName $surName): void
     {
         $this->SurName = $surName;
     }
@@ -314,9 +314,16 @@ final class ContactPerson extends AbstractMdElement
         Assert::same($xml->namespaceURI, ContactPerson::NS, InvalidDOMElementException::class);
 
         $contactType = self::getAttribute($xml, 'contactType');
-        $company = self::getStringElement($xml, 'Company');
-        $givenName = self::getStringElement($xml, 'GivenName');
-        $surName = self::getStringElement($xml, 'SurName');
+
+        $company = Company::getChildrenOfClass($xml);
+        Assert::maxCount($company, 1, 'More than one Company in md:ContactPerson');
+
+        $givenName = GivenName::getChildrenOfClass($xml);
+        Assert::maxCount($givenName, 1, 'More than one GivenName in md:ContactPerson');
+
+        $surName = SurName::getChildrenOfClass($xml);
+        Assert::maxCount($surName, 1, 'More than one SurName in md:ContactPerson');
+
         $email = self::getStringElements($xml, 'EmailAddress');
         $telephone = self::getStringElements($xml, 'TelephoneNumber');
         $extensions = Extensions::getChildrenOfClass($xml);
@@ -324,9 +331,9 @@ final class ContactPerson extends AbstractMdElement
 
         return new self(
             $contactType,
-            $company,
-            $givenName,
-            $surName,
+            array_pop($company),
+            array_pop($givenName),
+            array_pop($surName),
             (count($extensions) === 1) ? $extensions[0] : null,
             $email,
             $telephone,
@@ -357,13 +364,14 @@ final class ContactPerson extends AbstractMdElement
         }
 
         if ($this->Company !== null) {
-            XMLUtils::addString($e, Constants::NS_MD, 'md:Company', $this->Company);
+            $this->Company->toXML($e);
         }
+
         if ($this->GivenName !== null) {
-            XMLUtils::addString($e, Constants::NS_MD, 'md:GivenName', $this->GivenName);
+            $this->GivenName->toXML($e);
         }
         if ($this->SurName !== null) {
-            XMLUtils::addString($e, Constants::NS_MD, 'md:SurName', $this->SurName);
+            $this->SurName->toXML($e);
         }
 
         $addresses = preg_filter('/^/', 'mailto:', $this->EmailAddresses);
@@ -386,9 +394,9 @@ final class ContactPerson extends AbstractMdElement
         Assert::keyExists($data, 'ContactType');
 
         $ContactType = $data['ContactType'];
-        $Company = $data['Company'] ?? null;
-        $GivenName = $data['GivenName'] ?? null;
-        $SurName = $data['SurName'] ?? null;
+        $Company = isset($data['Company']) ? new Company($data['Company']) : null;
+        $GivenName = isset($data['GivenName']) ? new GivenName($data['GivenName']) : null;
+        $SurName = isset($data['SurName']) ? new SurName($data['SurName']) : null;
         $Extensions = $data['Extensions'] ?? null;
         $EmailAddresses = $data['EmailAddresses'] ?? [];
         $TelephoneNumbers = $data['TelephoneNumbers'] ?? [];
@@ -438,9 +446,9 @@ final class ContactPerson extends AbstractMdElement
     {
         $data = [
             'ContactType' => $this->contactType,
-            'Company' => $this->Company,
-            'GivenName' => $this->GivenName,
-            'SurName' => $this->SurName,
+            'Company' => $this->Company->getContent(),
+            'GivenName' => $this->GivenName->getContent(),
+            'SurName' => $this->SurName->getContent(),
             'EmailAddresses' => $this->EmailAddresses,
             'TelephoneNumbers' => $this->TelephoneNumbers,
             'Extensions' => $this->Extensions,
