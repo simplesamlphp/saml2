@@ -19,7 +19,7 @@ final class Scoping extends AbstractSamlpElement
     /** @var \SimpleSAML\SAML2\XML\samlp\IDPList|null */
     protected ?IDPList $IDPList;
 
-    /** @var string[] */
+    /** @var \SimpleSAML\SAML2\XML\samlp\RequesterID[] */
     protected array $requesterId;
 
     /** @var int|null */
@@ -31,7 +31,7 @@ final class Scoping extends AbstractSamlpElement
      *
      * @param int|null $proxyCount
      * @param \SimpleSAML\SAML2\XML\samlp\IDPList|null $idpList
-     * @param string[] $requesterId
+     * @param \SimpleSAML\SAML2\XML\samlp\RequesterID[] $requesterId
      */
     public function __construct(?int $proxyCount = null, ?IDPList $idpList = null, array $requesterId = [])
     {
@@ -60,7 +60,7 @@ final class Scoping extends AbstractSamlpElement
 
 
     /**
-     * @return string[]
+     * @return \SimpleSAML\SAML2\XML\samlp\RequesterID[]
      */
     public function getRequesterId(): array
     {
@@ -69,12 +69,11 @@ final class Scoping extends AbstractSamlpElement
 
 
     /**
-     * @param string[] $requesterId
+     * @param \SimpleSAML\SAML2\XML\samlp\RequesterID[] $requesterId
      */
     private function setRequesterId(array $requesterId): void
     {
-        Assert::allStringNotEmpty($requesterId);
-        Assert::allNotWhitespaceOnly($requesterId);
+        Assert::allIsInstanceOf($requesterId, RequesterID::class);
 
         $this->requesterId = $requesterId;
     }
@@ -129,7 +128,7 @@ final class Scoping extends AbstractSamlpElement
 
         $proxyCount = self::getAttribute($xml, 'ProxyCount', null);
         $idpList = IDPList::getChildrenOfClass($xml);
-        $requesterId = XMLUtils::extractStrings($xml, AbstractSamlpElement::NS, 'RequesterID');
+        $requesterId = RequesterID::getChildrenOfClass($xml);
 
         return new self(
             is_null($proxyCount) ? null : intval($proxyCount),
@@ -157,8 +156,8 @@ final class Scoping extends AbstractSamlpElement
             $this->IDPList->toXML($e);
         }
 
-        if (!empty($this->requesterId)) {
-            XMLUtils::addStrings($e, AbstractSamlpElement::NS, 'samlp:RequesterID', false, $this->requesterId);
+        foreach ($this->requesterId as $rid) {
+            $rid->toXML($e);
         }
 
         return $e;
