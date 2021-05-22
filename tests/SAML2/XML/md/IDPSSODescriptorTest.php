@@ -8,6 +8,7 @@ use PHPUnit\Framework\TestCase;
 use SimpleSAML\Assert\AssertionFailedException;
 use SimpleSAML\SAML2\Constants;
 use SimpleSAML\SAML2\XML\md\AssertionIDRequestService;
+use SimpleSAML\SAML2\XML\md\AttributeProfile;
 use SimpleSAML\SAML2\XML\md\ArtifactResolutionService;
 use SimpleSAML\SAML2\XML\md\IDPSSODescriptor;
 use SimpleSAML\SAML2\XML\md\KeyDescriptor;
@@ -94,7 +95,7 @@ final class IDPSSODescriptorTest extends TestCase
                     'https://IdentityProvider.com/SAML/SSO/Browser'
                 )
             ],
-            ['urn:attribute:profile1', 'urn:attribute:profile2'],
+            [new AttributeProfile('urn:attribute:profile1'), new AttributeProfile('urn:attribute:profile2')],
             [
                 new Attribute(
                     'urn:oid:1.3.6.1.4.1.5923.1.1.1.6',
@@ -264,14 +265,14 @@ final class IDPSSODescriptorTest extends TestCase
     public function testMarshallingWithEmptyAttributeProfile(): void
     {
         $this->expectException(AssertionFailedException::class);
-        $this->expectExceptionMessage('All md:AttributeProfile elements must be a URI, not an empty string.');
+        $this->expectExceptionMessage('AttributeProfile cannot be empty');
         new IDPSSODescriptor(
             [new SingleSignOnService('binding1', 'location1')],
             [Constants::NS_SAMLP],
             null,
             [],
             [],
-            ['profile1', '']
+            [new AttributeProfile('profile1'), new AttributeProfile('')]
         );
     }
 
@@ -342,10 +343,12 @@ final class IDPSSODescriptorTest extends TestCase
         $this->assertCount(2, $idpssod->getAssertionIDRequestServices());
         $this->assertInstanceOf(AssertionIDRequestService::class, $idpssod->getAssertionIDRequestServices()[0]);
         $this->assertInstanceOf(AssertionIDRequestService::class, $idpssod->getAssertionIDRequestServices()[1]);
-        $this->assertEquals(
-            ['urn:attribute:profile1', 'urn:attribute:profile2'],
-            $idpssod->getAttributeProfiles()
-        );
+
+        $attributeProfiles = $idpssod->getAttributeProfiles();
+        $this->assertCount(2, $attributeProfiles);
+        $this->assertEquals('urn:attribute:profile1', $attributeProfiles[0]->getContent());
+        $this->assertEquals('urn:attribute:profile2', $attributeProfiles[1]->getContent());
+
         $this->assertCount(2, $idpssod->getSupportedAttributes());
         $this->assertInstanceOf(Attribute::class, $idpssod->getSupportedAttributes()[0]);
         $this->assertInstanceOf(Attribute::class, $idpssod->getSupportedAttributes()[1]);
@@ -395,7 +398,7 @@ final class IDPSSODescriptorTest extends TestCase
         /** @psalm-suppress PossiblyNullPropertyAssignment */
         $attrProfiles->item(0)->textContent = '';
         $this->expectException(AssertionFailedException::class);
-        $this->expectExceptionMessage('All md:AttributeProfile elements must be a URI, not an empty string.');
+        $this->expectExceptionMessage('AttributeProfile cannot be empty');
         IDPSSODescriptor::fromXML($this->xmlRepresentation->documentElement);
     }
 
