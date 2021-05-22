@@ -7,6 +7,7 @@ namespace SimpleSAML\Test\SAML2\XML\samlp;
 use DOMDocument;
 use PHPUnit\Framework\TestCase;
 use SimpleSAML\SAML2\Constants;
+use SimpleSAML\SAML2\XML\samlp\GetComplete;
 use SimpleSAML\SAML2\XML\samlp\IDPEntry;
 use SimpleSAML\SAML2\XML\samlp\IDPList;
 use SimpleSAML\SAML2\XML\samlp\RequesterID;
@@ -45,7 +46,7 @@ final class ScopingTest extends TestCase
     public function testMarshalling(): void
     {
         $entry1 = new IDPEntry('urn:some:requester1', 'testName1', 'testLoc1');
-        $getComplete = 'https://some/location';
+        $getComplete = new GetComplete('https://some/location');
         $list = new IDPList([$entry1], $getComplete);
         $requesterId = 'urn:some:requester';
 
@@ -63,7 +64,7 @@ final class ScopingTest extends TestCase
     public function testMarshallingElementOrdering(): void
     {
         $entry1 = new IDPEntry('urn:some:requester1', 'testName1', 'testLoc1');
-        $getComplete = 'https://some/location';
+        $getComplete = new GetComplete('https://some/location');
         $list = new IDPList([$entry1], $getComplete);
         $requesterId = 'urn:some:requester';
 
@@ -116,7 +117,7 @@ final class ScopingTest extends TestCase
         $this->assertEquals('testName1', $entries[0]->getName());
         $this->assertEquals('testLoc1', $entries[0]->getLoc());
 
-        $this->assertEquals('https://some/location', $list->getGetComplete());
+        $this->assertEquals('https://some/location', $list->getGetComplete()->getContent());
 
         $requesterId = $scoping->getRequesterId();
         $this->assertCount(1, $requesterId);

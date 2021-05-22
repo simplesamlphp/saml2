@@ -18,6 +18,7 @@ use SimpleSAML\SAML2\XML\saml\NameID;
 use SimpleSAML\SAML2\XML\saml\ProxyRestriction;
 use SimpleSAML\SAML2\XML\saml\Subject;
 use SimpleSAML\SAML2\XML\samlp\AuthnRequest;
+use SimpleSAML\SAML2\XML\samlp\GetComplete;
 use SimpleSAML\SAML2\XML\samlp\IDPEntry;
 use SimpleSAML\SAML2\XML\samlp\IDPList;
 use SimpleSAML\SAML2\XML\samlp\NameIDPolicy;
@@ -137,7 +138,7 @@ final class AuthnRequestTest extends TestCase
 
         // Create Scoping
         $entry1 = new IDPEntry('urn:some:requester1', 'testName1', 'testLoc1');
-        $getComplete = 'https://some/location';
+        $getComplete = new GetComplete('https://some/location');
         $list = new IDPList([$entry1], $getComplete);
         $requesterId = new RequesterID('urn:some:requester');
         $scoping = new Scoping(2, $list, [$requesterId]);

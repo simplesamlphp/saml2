@@ -21,17 +21,17 @@ final class IDPList extends AbstractSamlpElement
     /** @var \SimpleSAML\SAML2\XML\samlp\IDPEntry[] */
     protected array $IDPEntry;
 
-    /** @var string|null */
-    protected ?string $getComplete;
+    /** @var \SimpleSAML\SAML2\XML\samlp\GetComplete|null */
+    protected ?GetComplete $getComplete;
 
 
     /**
      * Initialize an IDPList element.
      *
      * @param \SimpleSAML\SAML2\XML\samlp\IDPEntry[] $idpEntry
-     * @param string|null $getComplete
+     * @param \SimpleSAML\SAML2\XML\samlp\GetComplete|null $getComplete
      */
-    public function __construct(array $idpEntry, ?string $getComplete = null)
+    public function __construct(array $idpEntry, ?GetComplete $getComplete = null)
     {
         $this->setIdpEntry($idpEntry);
         $this->setGetComplete($getComplete);
@@ -60,18 +60,18 @@ final class IDPList extends AbstractSamlpElement
 
 
     /**
-     * @return string|null
+     * @return \SimpleSAML\SAML2\XML\samlp\GetComplete|null
      */
-    public function getGetComplete(): ?string
+    public function getGetComplete(): ?GetComplete
     {
         return $this->getComplete;
     }
 
 
     /**
-     * @param string|null $getComplete
+     * @param \SimpleSAML\SAML2\XML\samlp\GetComplete|null $getComplete
      */
-    private function setGetComplete(?string $getComplete = null): void
+    private function setGetComplete(?GetComplete $getComplete): void
     {
         $this->getComplete = $getComplete;
     }
@@ -95,7 +95,7 @@ final class IDPList extends AbstractSamlpElement
         $idpEntry = IDPEntry::getChildrenOfClass($xml);
         Assert::minCount($idpEntry, 1, 'At least one <samlp:IDPEntry> must be specified.', MissingElementException::class);
 
-        $getComplete = XMLUtils::extractStrings($xml, AbstractSamlpElement::NS, 'GetComplete');
+        $getComplete = GetComplete::getChildrenOfClass($xml);
         Assert::maxCount($getComplete, 1, 'Only one <samlp:GetComplete> element is allowed.', TooManyElementsException::class);
 
         return new self(
@@ -120,7 +120,7 @@ final class IDPList extends AbstractSamlpElement
         }
 
         if (!is_null($this->getComplete)) {
-            XMLUtils::addString($e, AbstractSamlpElement::NS, 'samlp:GetComplete', $this->getComplete);
+            $this->getComplete->toXML($e);
         }
 
         return $e;
