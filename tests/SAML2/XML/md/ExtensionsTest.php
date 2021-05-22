@@ -17,6 +17,7 @@ use SimpleSAML\SAML2\XML\mdrpi\PublicationPath;
 use SimpleSAML\SAML2\XML\mdrpi\RegistrationInfo;
 use SimpleSAML\SAML2\XML\mdui\DiscoHints;
 use SimpleSAML\SAML2\XML\mdui\DisplayName;
+use SimpleSAML\SAML2\XML\mdui\IPHint;
 use SimpleSAML\SAML2\XML\mdui\UIInfo;
 use SimpleSAML\SAML2\XML\saml\AttributeValue;
 use SimpleSAML\SAML2\XML\shibmd\Scope;
@@ -69,7 +70,7 @@ final class ExtensionsTest extends TestCase
             ]
         );
         $uiinfo = new UIInfo([new DisplayName('en', 'Example')]);
-        $discoHints = new DiscoHints([], ['127.0.0.1']);
+        $discoHints = new DiscoHints([], [new IPHint('127.0.0.1')]);
         $digestMethod = new DigestMethod(Constants::DIGEST_SHA256);
         $signingMethod = new SigningMethod(Constants::SIG_RSA_SHA256, 1024, 4096);
 

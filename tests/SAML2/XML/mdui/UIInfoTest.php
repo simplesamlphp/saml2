@@ -11,6 +11,7 @@ use SimpleSAML\SAML2\XML\mdui\Description;
 use SimpleSAML\SAML2\XML\mdui\DiscoHints;
 use SimpleSAML\SAML2\XML\mdui\DisplayName;
 use SimpleSAML\SAML2\XML\mdui\InformationURL;
+use SimpleSAML\SAML2\XML\mdui\IPHint;
 use SimpleSAML\SAML2\XML\mdui\Keywords;
 use SimpleSAML\SAML2\XML\mdui\Logo;
 use SimpleSAML\SAML2\XML\mdui\PrivacyStatementURL;
@@ -110,7 +111,7 @@ final class UIInfoTest extends TestCase
 
         $discohints = new DiscoHints(
             [],
-            ["192.168.6.0/24", "fd00:0123:aa:1001::/64"]
+            [new IPHint("192.168.6.0/24"), new IPHint("fd00:0123:aa:1001::/64")]
         );
 
         // keywords appears twice, direcyly under UIinfo and as child of DiscoHints
