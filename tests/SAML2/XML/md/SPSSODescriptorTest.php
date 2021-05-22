@@ -72,29 +72,29 @@ final class SPSSODescriptorTest extends TestCase
     public function testMarshalling(): void
     {
         $slo1 = new SingleLogoutService(
-            'urn:oasis:names:tc:SAML:2.0:bindings:SOAP',
+            Constants::BINDING_SOAP,
             'https://ServiceProvider.com/SAML/SLO/SOAP'
         );
         $slo2 = new SingleLogoutService(
-            'urn:oasis:names:tc:SAML:2.0:bindings:HTTP-Redirect',
+            Constants::BINDING_HTTP_REDIRECT,
             'https://ServiceProvider.com/SAML/SLO/Browser',
             'https://ServiceProvider.com/SAML/SLO/Response'
         );
         $acs1 = new AssertionConsumerService(
             0,
-            'urn:oasis:names:tc:SAML:2.0:bindings:HTTP-Artifact',
+            Constants::BINDING_HTTP_ARTIFACT,
             'https://ServiceProvider.com/SAML/SSO/Artifact',
             true
         );
         $acs2 = new AssertionConsumerService(
             1,
-            'urn:oasis:names:tc:SAML:2.0:bindings:HTTP-POST',
+            Constants::BINDING_HTTP_POST,
             'https://ServiceProvider.com/SAML/SSO/POST'
         );
         $reqAttr = new RequestedAttribute(
             'urn:oid:1.3.6.1.4.1.5923.1.1.1.7',
             null,
-            'urn:oasis:names:tc:SAML:2.0:attrname-format:uri',
+            Constants::NAMEFORMAT_URI,
             'eduPersonEntitlement',
             [new AttributeValue('https://ServiceProvider.com/entitlements/123456789')]
         );
@@ -151,7 +151,7 @@ final class SPSSODescriptorTest extends TestCase
             [$ars],
             [$slo1, $slo2],
             [$mnids],
-            [new NameIDFormat('urn:oasis:names:tc:SAML:2.0:nameid-format:transient')]
+            [new NameIDFormat(Constants::NAMEID_TRANSIENT)]
         );
 
         $this->assertEquals(

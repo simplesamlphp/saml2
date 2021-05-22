@@ -51,11 +51,11 @@ final class AttributeAuthorityDescriptorTest extends TestCase
             dirname(dirname(dirname(dirname(__FILE__)))) . '/resources/xml/md_AttributeAuthorityDescriptor.xml'
         );
         $this->as = new AttributeService(
-            "urn:oasis:names:tc:SAML:2.0:bindings:SOAP",
+            Constants::BINDING_SOAP,
             "https://IdentityProvider.com/SAML/AA/SOAP"
         );
         $this->aidrs = new AssertionIDRequestService(
-            "urn:oasis:names:tc:SAML:2.0:bindings:URI",
+            Constants::BINDING_URI,
             "https://IdentityProvider.com/SAML/AA/URI"
         );
     }
@@ -71,13 +71,13 @@ final class AttributeAuthorityDescriptorTest extends TestCase
     {
         $attr1 = new Attribute(
             "urn:oid:1.3.6.1.4.1.5923.1.1.1.6",
-            "urn:oasis:names:tc:SAML:2.0:attrname-format:uri",
+            Constants::NAMEFORMAT_URI,
             "eduPersonPrincipalName"
         );
 
         $attr2 = new Attribute(
             "urn:oid:1.3.6.1.4.1.5923.1.1.1.1",
-            "urn:oasis:names:tc:SAML:2.0:attrname-format:uri",
+            Constants::NAMEFORMAT_URI,
             'eduPersonAffiliation',
             [
                 new AttributeValue('member'),
@@ -259,19 +259,19 @@ final class AttributeAuthorityDescriptorTest extends TestCase
 
         $as = $aad->getAttributeServices();
         $this->assertCount(1, $as, "Wrong number of AttributeService elements.");
-        $this->assertEquals('urn:oasis:names:tc:SAML:2.0:bindings:SOAP', $as[0]->getBinding());
+        $this->assertEquals(Constants::BINDING_SOAP, $as[0]->getBinding());
         $this->assertEquals('https://IdentityProvider.com/SAML/AA/SOAP', $as[0]->getLocation());
 
         $aidrs = $aad->getAssertionIDRequestServices();
         $this->assertCount(1, $aidrs, "Wrong number of AssertionIDRequestService elements.");
-        $this->assertEquals('urn:oasis:names:tc:SAML:2.0:bindings:URI', $aidrs[0]->getBinding());
+        $this->assertEquals(constants::BINDING_URI, $aidrs[0]->getBinding());
         $this->assertEquals('https://IdentityProvider.com/SAML/AA/URI', $aidrs[0]->getLocation());
 
         $nameIdFormats = $aad->getNameIDFormats();
         $this->assertCount(3, $nameIdFormats);
-        $this->assertEquals('urn:oasis:names:tc:SAML:1.1:nameid-format:X509SubjectName', $nameIdFormats[0]->getContent());
-        $this->assertEquals('urn:oasis:names:tc:SAML:2.0:nameid-format:persistent', $nameIdFormats[1]->getContent());
-        $this->assertEquals('urn:oasis:names:tc:SAML:2.0:nameid-format:transient', $nameIdFormats[2]->getContent());
+        $this->assertEquals(Constants::NAMEID_X509_SUBJECT_NAME, $nameIdFormats[0]->getContent());
+        $this->assertEquals(Constants::NAMEID_PERSISTENT, $nameIdFormats[1]->getContent());
+        $this->assertEquals(Constants::NAMEID_TRANSIENT, $nameIdFormats[2]->getContent());
 
         $attrs = $aad->getAttributes();
         $this->assertCount(2, $attrs, "Wrong number of attributes.");

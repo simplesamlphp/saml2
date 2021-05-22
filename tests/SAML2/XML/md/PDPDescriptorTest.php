@@ -47,11 +47,11 @@ final class PDPDescriptorTest extends TestCase
         );
 
         $this->authzService = new AuthzService(
-            'urn:oasis:names:tc:SAML:2.0:bindings:SOAP',
+            Constants::BINDING_SOAP,
             'https://IdentityProvider.com/SAML/AA/SOAP'
         );
         $this->assertionIDRequestService = new AssertionIDRequestService(
-            'urn:oasis:names:tc:SAML:2.0:bindings:URI',
+            Constants::BINDING_URI,
             'https://IdentityProvider.com/SAML/AA/URI'
         );
     }
@@ -70,9 +70,9 @@ final class PDPDescriptorTest extends TestCase
             ["urn:oasis:names:tc:SAML:2.0:protocol"],
             [$this->assertionIDRequestService],
             [
-                new NameIDFormat('urn:oasis:names:tc:SAML:1.1:nameid-format:X509SubjectName'),
-                new NameIDFormat('urn:oasis:names:tc:SAML:2.0:nameid-format:persistent'),
-                new NameIDFormat('urn:oasis:names:tc:SAML:2.0:nameid-format:transient'),
+                new NameIDFormat(Constants::NAMEID_X509_SUBJECT_NAME),
+                new NameIDFormat(Constants::NAMEID_PERSISTENT),
+                new NameIDFormat(Constants::NAMEID_TRANSIENT),
             ]
         );
 
@@ -146,9 +146,9 @@ final class PDPDescriptorTest extends TestCase
         $this->assertCount(3, $pdpd->getNameIDFormats());
         $this->assertEquals(
             [
-                new NameIDFormat('urn:oasis:names:tc:SAML:1.1:nameid-format:X509SubjectName'),
-                new NameIDFormat('urn:oasis:names:tc:SAML:2.0:nameid-format:persistent'),
-                new NameIDFormat('urn:oasis:names:tc:SAML:2.0:nameid-format:transient'),
+                new NameIDFormat(Constants::NAMEID_X509_SUBJECT_NAME),
+                new NameIDFormat(Constants::NAMEID_PERSISTENT),
+                new NameIDFormat(Constants::NAMEID_TRANSIENT),
             ],
             $pdpd->getNameIDFormats()
         );
