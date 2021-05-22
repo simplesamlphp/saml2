@@ -10,6 +10,7 @@ use SimpleSAML\SAML2\Constants;
 use SimpleSAML\SAML2\XML\samlp\Status;
 use SimpleSAML\SAML2\XML\samlp\StatusCode;
 use SimpleSAML\SAML2\XML\samlp\StatusDetail;
+use SimpleSAML\SAML2\XML\samlp\StatusMessage;
 use SimpleSAML\Test\XML\SerializableXMLTestTrait;
 use SimpleSAML\XML\DOMDocumentFactory;
 use SimpleSAML\XML\Chunk;
@@ -57,7 +58,7 @@ final class StatusTest extends TestCase
                     )
                 ]
             ),
-            'Something went wrong',
+            new StatusMessage('Something went wrong'),
             [
                 StatusDetail::fromXML(
                     DOMDocumentFactory::fromFile(dirname(dirname(dirname(dirname(__FILE__)))) . '/resources/xml/samlp_StatusDetail.xml')->documentElement
@@ -85,7 +86,7 @@ final class StatusTest extends TestCase
                     )
                 ]
             ),
-            'Something went wrong',
+            new StatusMessage('Something went wrong'),
             [
                 new StatusDetail([new Chunk($this->detail->documentElement)])
             ]
@@ -121,7 +122,7 @@ final class StatusTest extends TestCase
         $this->assertEquals(Constants::STATUS_REQUEST_DENIED, $subCodes[0]->getValue());
 
         $statusMessage = $status->getStatusMessage();
-        $this->assertEquals('Something went wrong', $statusMessage);
+        $this->assertEquals('Something went wrong', $statusMessage->getContent());
 
         $statusDetails = $status->getStatusDetails();
         $this->assertCount(1, $statusDetails);

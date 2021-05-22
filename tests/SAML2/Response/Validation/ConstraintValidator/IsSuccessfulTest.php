@@ -65,7 +65,7 @@ final class IsSuccessfulTest extends MockeryTestCase
                     )
                 ]
             ),
-            'this is a test message'
+            new StatusMessage('this is a test message')
         );
 
         $this->response->shouldReceive('isSuccess')->once()->andReturn(false);

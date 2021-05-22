@@ -28,7 +28,7 @@ final class StatusMessage extends AbstractSamlpElement
      */
     protected function validateContent(string $content): void
     {
-        Assert::notAllWhitespace($content);
+        Assert::notWhitespaceOnly($content);
     }
 
 

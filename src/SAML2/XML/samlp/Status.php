@@ -23,8 +23,8 @@ final class Status extends AbstractSamlpElement
     /** @var \SimpleSAML\SAML2\XML\samlp\StatusCode */
     protected StatusCode $statusCode;
 
-    /** @var string|null */
-    protected ?string $statusMessage;
+    /** @var \SimpleSAML\SAML2\XML\samlp\StatusMessage|null */
+    protected ?StatusMessage $statusMessage;
 
     /** @var \SimpleSAML\SAML2\XML\samlp\StatusDetail[] */
     protected array $statusDetails = [];
@@ -34,10 +34,10 @@ final class Status extends AbstractSamlpElement
      * Initialize a samlp:Status
      *
      * @param \SimpleSAML\SAML2\XML\samlp\StatusCode $statusCode
-     * @param string|null $statusMessage
+     * @param \SimpleSAML\SAML2\XML\samlp\StatusMessage|null $statusMessage
      * @param \SimpleSAML\SAML2\XML\samlp\StatusDetail[] $statusDetails
      */
-    public function __construct(StatusCode $statusCode, ?string $statusMessage = null, array $statusDetails = [])
+    public function __construct(StatusCode $statusCode, ?StatusMessage $statusMessage = null, array $statusDetails = [])
     {
         $this->setStatusCode($statusCode);
         $this->setStatusMessage($statusMessage);
@@ -82,9 +82,9 @@ final class Status extends AbstractSamlpElement
     /**
      * Collect the value of the statusMessage
      *
-     * @return string
+     * @return \SimpleSAML\SAML2\XML\samlp\StatusMessage|null
      */
-    public function getStatusMessage(): ?string
+    public function getStatusMessage(): ?StatusMessage
     {
         return $this->statusMessage;
     }
@@ -92,13 +92,11 @@ final class Status extends AbstractSamlpElement
 
     /**
      * Set the value of the statusMessage property
-     * @param string|null $statusMessage
+     * @param \SimpleSAML\SAML2\XML\samlp\StatusMessage|null $statusMessage
      *
      */
-    private function setStatusMessage(?string $statusMessage): void
+    private function setStatusMessage(?StatusMessage $statusMessage): void
     {
-        Assert::nullOrNotWhitespaceOnly($statusMessage);
-
         $this->statusMessage = $statusMessage;
     }
 
@@ -148,7 +146,7 @@ final class Status extends AbstractSamlpElement
         Assert::minCount($statusCode, 1, MissingElementException::class);
         Assert::count($statusCode, 1, TooManyElementsException::class);
 
-        $statusMessage = XMLUtils::extractStrings($xml, AbstractSamlpElement::NS, 'StatusMessage');
+        $statusMessage = StatusMessage::getChildrenOfClass($xml);
         Assert::maxCount($statusMessage, 1, TooManyElementsException::class);
 
         $statusDetails = StatusDetail::getChildrenOfClass($xml);
@@ -174,7 +172,7 @@ final class Status extends AbstractSamlpElement
         $this->statusCode->toXML($e);
 
         if (!is_null($this->statusMessage)) {
-            XMLUtils::addString($e, AbstractSamlpElement::NS, 'samlp:StatusMessage', $this->statusMessage);
+            $this->statusMessage->toXML($e);
         }
 
         foreach ($this->statusDetails as $sd) {
