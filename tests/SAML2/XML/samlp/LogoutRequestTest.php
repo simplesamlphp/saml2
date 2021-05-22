@@ -12,6 +12,7 @@ use SimpleSAML\SAML2\XML\saml\EncryptedID;
 use SimpleSAML\SAML2\XML\saml\Issuer;
 use SimpleSAML\SAML2\XML\saml\NameID;
 use SimpleSAML\SAML2\XML\samlp\LogoutRequest;
+use SimpleSAML\SAML2\XML\samlp\SessionIndex;
 use SimpleSAML\Test\XML\SerializableXMLTestTrait;
 use SimpleSAML\XML\Chunk;
 use SimpleSAML\XML\DOMDocumentFactory;
@@ -73,7 +74,7 @@ final class LogoutRequestTest extends MockeryTestCase
     {
         $nameId = new NameID('NameIDValue');
 
-        $logoutRequest = new LogoutRequest($nameId, null, null, ['SessionIndexValue']);
+        $logoutRequest = new LogoutRequest($nameId, null, null, [new SessionIndex('SessionIndexValue')]);
 
         $logoutRequestElement = $logoutRequest->toXML();
         $this->assertEquals('LogoutRequest', $logoutRequestElement->localName);
@@ -93,7 +94,7 @@ final class LogoutRequestTest extends MockeryTestCase
             $nameId,
             null,
             null,
-            ['SessionIndexValue1', 'SessionIndexValue2']
+            [new SessionIndex('SessionIndexValue1'), new SessionIndex('SessionIndexValue2')]
         );
         $logoutRequestElement = $logoutRequest->toXML();
 
@@ -110,7 +111,7 @@ final class LogoutRequestTest extends MockeryTestCase
     {
         $nameId = new NameID('NameIDValue');
 
-        $logoutRequest = new LogoutRequest($nameId, null, null, ['SessionIndexValue']);
+        $logoutRequest = new LogoutRequest($nameId, null, null, [new SessionIndex('SessionIndexValue')]);
 
         $logoutRequestElement = $logoutRequest->toXML();
 
@@ -143,7 +144,10 @@ final class LogoutRequestTest extends MockeryTestCase
         $encid = $logoutRequest->getIdentifier();
         $this->assertInstanceOf(EncryptedID::class, $encid);
 
-        $this->assertEquals(['SomeSessionIndex1', 'SomeSessionIndex2'], $logoutRequest->getSessionIndexes());
+        $sessionIndexes = $logoutRequest->getSessionIndexes();
+        $this->assertCount(2, $sessionIndexes);
+        $this->assertEquals('SomeSessionIndex1', $sessionIndexes[0]->getContent());
+        $this->assertEquals('SomeSessionIndex2', $sessionIndexes[1]->getContent());
 
         $identifier = $encid->decrypt(
             PEMCertificatesMock::getPrivateKey(
@@ -381,14 +385,15 @@ XML;
     {
         $nameId = new NameID('test');
         $sessionIndexes = [
-            'SessionIndexValue1',
-            'SessionIndexValue2'
+            new SessionIndex('SessionIndexValue1'),
+            new SessionIndex('SessionIndexValue2')
         ];
 
         $logoutRequest = new LogoutRequest($nameId, null, null, $sessionIndexes);
 
-        $this->assertCount(2, $logoutRequest->getSessionIndexes());
-        $this->assertEquals('SessionIndexValue1', $logoutRequest->getSessionIndexes()[0]);
-        $this->assertEquals('SessionIndexValue2', $logoutRequest->getSessionIndexes()[1]);
+        $sessionIndexes = $logoutRequest->getSessionIndexes();
+        $this->assertCount(2, $sessionIndexes);
+        $this->assertEquals('SessionIndexValue1', $sessionIndexes[0]->getContent());
+        $this->assertEquals('SessionIndexValue2', $sessionIndexes[1]->getContent());
     }
 }
