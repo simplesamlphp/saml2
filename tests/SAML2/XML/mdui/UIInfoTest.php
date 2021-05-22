@@ -203,7 +203,7 @@ final class UIInfoTest extends TestCase
         $this->assertCount(1, $uiinfo->getDescription());
         $this->assertEquals('Just an example', $uiinfo->getDescription()[0]->getContent());
         $this->assertCount(1, $uiinfo->getLogo());
-        $this->assertEquals('https://example.org/idp/images/logo_87x88.png', $uiinfo->getLogo()[0]->getUrl());
+        $this->assertEquals('https://example.org/idp/images/logo_87x88.png', $uiinfo->getLogo()[0]->getContent());
         $this->assertEquals(87, $uiinfo->getLogo()[0]->getWidth());
         $this->assertEquals(88, $uiinfo->getLogo()[0]->getHeight());
         $this->assertEquals("fy", $uiinfo->getLogo()[0]->getLanguage());

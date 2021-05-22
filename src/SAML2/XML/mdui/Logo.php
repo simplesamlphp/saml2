@@ -8,6 +8,7 @@ use DOMElement;
 use InvalidArgumentException;
 use SimpleSAML\Assert\Assert;
 use SimpleSAML\XML\Exception\InvalidDOMElementException;
+use SimpleSAML\XML\XMLStringElementTrait;
 
 /**
  * Class for handling the Logo metadata extensions for login and discovery user interface
@@ -17,12 +18,7 @@ use SimpleSAML\XML\Exception\InvalidDOMElementException;
  */
 final class Logo extends AbstractMduiElement
 {
-    /**
-     * The url of this logo.
-     *
-     * @var string
-     */
-    protected string $url;
+    use XMLStringElementTrait;
 
     /**
      * The width of this logo.
@@ -56,7 +52,7 @@ final class Logo extends AbstractMduiElement
      */
     public function __construct($url, $height, $width, $lang = null)
     {
-        $this->setUrl($url);
+        $this->setContent($url);
         $this->setHeight($height);
         $this->setWidth($width);
         $this->setLanguage($lang);
@@ -64,29 +60,17 @@ final class Logo extends AbstractMduiElement
 
 
     /**
-     * Collect the value of the url-property
+     * Validate the content of the element.
      *
-     * @return string
+     * @param string $content  The value to go in the XML textContent
+     * @throws \InvalidArgumentException on failure
+     * @return void
      */
-    public function getUrl(): string
+    protected function validateContent(string $content): void
     {
-        return $this->url;
-    }
-
-
-    /**
-     * Set the value of the url-property
-     *
-     * @param string $url
-     * @throws \InvalidArgumentException if the supplied value is not a valid URL
-     */
-    private function setUrl(string $url): void
-    {
-        if (!filter_var(trim($url), FILTER_VALIDATE_URL) && substr(trim($url), 0, 5) !== 'data:') {
+        if (!filter_var(trim($content), FILTER_VALIDATE_URL) && substr(trim($content), 0, 5) !== 'data:') {
             throw new InvalidArgumentException('mdui:Logo is not a valid URL.');
         }
-
-        $this->url = $url;
     }
 
 
@@ -192,7 +176,7 @@ final class Logo extends AbstractMduiElement
     {
         /** @psalm-var \DOMDocument $e->ownerDocument */
         $e = $this->instantiateParentElement($parent);
-        $e->appendChild($e->ownerDocument->createTextNode($this->url));
+        $e->textContent = $this->content;
         $e->setAttribute('height', strval($this->height));
         $e->setAttribute('width', strval($this->width));
 
@@ -230,6 +214,6 @@ final class Logo extends AbstractMduiElement
      */
     public function toArray(): array
     {
-        return ['url' => $this->url, 'width' => $this->width, 'height' => $this->height, 'lang' => $this->lang];
+        return ['url' => $this->content, 'width' => $this->width, 'height' => $this->height, 'lang' => $this->lang];
     }
 }

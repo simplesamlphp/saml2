@@ -79,7 +79,7 @@ IMG;
         $this->assertEquals("nl", $logo->getLanguage());
         $this->assertEquals(200, $logo->getHeight());
         $this->assertEquals(300, $logo->getWidth());
-        $this->assertEquals($this->url, $logo->getUrl());
+        $this->assertEquals($this->url, $logo->getContent());
     }
 
 
@@ -98,7 +98,7 @@ IMG;
         $this->assertEquals(1, $logo->getWidth());
         $this->assertEquals(
             $this->data,
-            $logo->getUrl()
+            $logo->getContent()
         );
     }
 
