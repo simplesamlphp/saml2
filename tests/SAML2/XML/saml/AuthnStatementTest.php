@@ -8,6 +8,7 @@ use DOMDocument;
 use InvalidArgumentException;
 use PHPUnit\Framework\TestCase;
 use SimpleSAML\SAML2\Constants;
+use SimpleSAML\SAML2\XML\saml\AuthenticatingAuthority;
 use SimpleSAML\SAML2\XML\saml\AuthnContext;
 use SimpleSAML\SAML2\XML\saml\AuthnContextClassRef;
 use SimpleSAML\SAML2\XML\saml\AuthnStatement;
@@ -55,7 +56,7 @@ final class AuthnStatementTest extends TestCase
                 new AuthnContextClassRef(Constants::AC_PASSWORD_PROTECTED_TRANSPORT),
                 null,
                 null,
-                ['https://idp.example.com/SAML2']
+                [new AuthenticatingAuthority('https://idp.example.com/SAML2')]
             ),
             XMLUtils::xsDateTimeToTimestamp('2020-03-23T23:37:24Z'),
             XMLUtils::xsDateTimeToTimestamp('2020-03-23T23:37:24Z'),
@@ -79,7 +80,7 @@ final class AuthnStatementTest extends TestCase
                 new AuthnContextClassRef(Constants::AC_PASSWORD_PROTECTED_TRANSPORT),
                 null,
                 null,
-                ['https://idp.example.com/SAML2']
+                [new AuthenticatingAuthority('https://idp.example.com/SAML2')]
             ),
             XMLUtils::xsDateTimeToTimestamp('2020-03-23T23:37:24Z'),
             XMLUtils::xsDateTimeToTimestamp('2020-03-23T23:37:24Z'),
