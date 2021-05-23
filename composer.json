@@ -23,7 +23,7 @@
         "ext-zlib": "*",
 
         "psr/log": "~1.1",
-        "simplesamlphp/xml-security": "~0.2.6",
+        "simplesamlphp/xml-security": "~0.2.7",
         "simplesamlphp/assert": "~0.2.6"
     },
     "require-dev": {

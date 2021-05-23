@@ -20,6 +20,15 @@ final class AttributeProfile extends AbstractMdElement
 
 
     /**
+     * @param string $content
+     */
+    public function __construct(string $content)
+    {
+        $this->setContent($content);
+    }
+
+
+    /**
      * Validate the content of the element.
      *
      * @param string $content  The value to go in the XML textContent
