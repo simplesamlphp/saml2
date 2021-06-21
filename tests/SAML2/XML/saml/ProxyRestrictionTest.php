@@ -19,7 +19,6 @@ use function strval;
  * Class \SAML2\XML\saml\ProxyRestrictionTest
  *
  * @covers \SimpleSAML\SAML2\XML\saml\ProxyRestriction
- * @covers \SimpleSAML\SAML2\XML\saml\AbstractConditionType
  * @covers \SimpleSAML\SAML2\XML\saml\AbstractSamlElement
  *
  * @package simplesamlphp/saml2

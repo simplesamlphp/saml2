@@ -28,15 +28,14 @@ class Condition extends AbstractConditionType
     /**
      * Initialize a saml:Condition from scratch
      *
-     * @param string $value
+     * @param string $content
      * @param string $type
      */
     protected function __construct(
-        string $value,
+        string $content,
         string $type
     ) {
-        parent::__construct($value);
-
+        $this->setContent($content);
         $this->setType($type);
     }
 
