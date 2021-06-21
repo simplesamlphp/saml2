@@ -128,7 +128,7 @@ abstract class NameIDType extends AbstractSamlElement implements IdentifierInter
      * @throws \Exception on failure
      * @return void
      */
-    protected function validateContent(/** @scrutinizer ignore-unused */ string $content): void
+    protected function validateContent(string $content): void
     {
         Assert::notWhitespaceOnly($content);
     }
@@ -161,9 +161,7 @@ abstract class NameIDType extends AbstractSamlElement implements IdentifierInter
             $element->setAttribute('SPProvidedID', $this->SPProvidedID);
         }
 
-        $value = $element->ownerDocument->createTextNode($this->content);
-        $element->appendChild($value);
-
+        $element->textContent = $this->content;
         return $element;
     }
 }

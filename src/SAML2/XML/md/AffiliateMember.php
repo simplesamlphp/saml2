@@ -2,21 +2,18 @@
 
 declare(strict_types=1);
 
-namespace SimpleSAML\SAML2\XML\saml;
+namespace SimpleSAML\SAML2\XML\md;
 
 use DOMElement;
 use SimpleSAML\Assert\Assert;
-use SimpleSAML\SAML2\Constants;
-use SimpleSAML\XML\DOMDocumentFactory;
-use SimpleSAML\XML\Exception\InvalidDOMElementException;
 use SimpleSAML\XML\XMLStringElementTrait;
 
 /**
- * Class representing SAML2 AuthnContextDeclRef
+ * Class implementing AffiliateMember.
  *
  * @package simplesamlphp/saml2
  */
-final class AuthnContextDeclRef extends AbstractSamlElement
+final class AffiliateMember extends AbstractMdElement
 {
     use XMLStringElementTrait;
 
@@ -39,6 +36,7 @@ final class AuthnContextDeclRef extends AbstractSamlElement
      */
     protected function validateContent(string $content): void
     {
-        Assert::notWhitespaceOnly($content);
+        Assert::notEmpty($content, 'AffiliateMember cannot be empty');
+        Assert::maxLength($content, 1024, 'The entityID attribute cannot be longer than 1024 characters.');
     }
 }

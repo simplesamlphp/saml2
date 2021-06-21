@@ -103,48 +103,6 @@ final class ContactPerson extends AbstractMdElement
 
 
     /**
-     * Retrieve the value of a child \DOMElements as an array of strings.
-     *
-     * @param \DOMElement $parent The parent element.
-     * @param string      $name The name of the child elements.
-     *
-     * @return string[]   The value of the child elements.
-     */
-    private static function getStringElements(DOMElement $parent, string $name): array
-    {
-        $e = XMLUtils::xpQuery($parent, './saml_metadata:' . $name);
-
-        $ret = [];
-        foreach ($e as $i) {
-            $ret[] = $i->textContent;
-        }
-
-        return $ret;
-    }
-
-
-    /**
-     * Retrieve the value of a child \DOMElement as a string.
-     *
-     * @param \DOMElement $parent The parent element.
-     * @param string      $name The name of the child element.
-     *
-     * @return string|null The value of the child element.
-     * @throws \SimpleSAML\Assert\AssertionFailedException
-     */
-    private static function getStringElement(DOMElement $parent, string $name): ?string
-    {
-        $e = self::getStringElements($parent, $name);
-        if (empty($e)) {
-            return null;
-        }
-
-        Assert::maxCount($e, 1, 'More than one ' . $name . ' in ' . $parent->tagName);
-        return $e[0];
-    }
-
-
-    /**
      * Collect the value of the contactType-property
      *
      * @return string
@@ -324,8 +282,8 @@ final class ContactPerson extends AbstractMdElement
         $surName = SurName::getChildrenOfClass($xml);
         Assert::maxCount($surName, 1, 'More than one SurName in md:ContactPerson');
 
-        $email = self::getStringElements($xml, 'EmailAddress');
-        $telephone = self::getStringElements($xml, 'TelephoneNumber');
+        $email = EmailAddress::getChildrenOfClass($xml);
+        $telephone = TelephoneNumber::getChildrenOfClass($xml);
         $extensions = Extensions::getChildrenOfClass($xml);
         Assert::maxCount($extensions, 1, 'Only one md:Extensions element is allowed.', TooManyElementsException::class);
 

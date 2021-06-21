@@ -30,9 +30,9 @@ final class AffiliationDescriptor extends AbstractMetadataDocument
     /**
      * The AffiliateMember(s).
      *
-     * Array of entity ID strings.
+     * Array of \SimpleSAML\SAML2\XML\md\AffiliateMember elements.
      *
-     * @var string[]
+     * @var \SimpleSAML\SAML2\XML\md\AffiliateMember[]
      */
     protected array $AffiliateMembers = [];
 
@@ -50,7 +50,7 @@ final class AffiliationDescriptor extends AbstractMetadataDocument
      * Generic constructor for SAML metadata documents.
      *
      * @param string $ownerID The ID of the owner of this affiliation.
-     * @param array $members A non-empty array of members of this affiliation.
+     * @param \SimpleSAML\SAML2\XML\md\AffiliateMember[] $members A non-empty array of members of this affiliation.
      * @param string|null $ID The ID for this document. Defaults to null.
      * @param int|null $validUntil Unix time of validity for this document. Defaults to null.
      * @param string|null $cacheDuration Maximum time this document can be cached. Defaults to null.
@@ -91,7 +91,7 @@ final class AffiliationDescriptor extends AbstractMetadataDocument
         Assert::same($xml->namespaceURI, AffiliationDescriptor::NS, InvalidDOMElementException::class);
 
         $owner = self::getAttribute($xml, 'affiliationOwnerID');
-        $members = XMLUtils::extractStrings($xml, Constants::NS_MD, 'AffiliateMember');
+        $members = AffiliateMember::getChildrenOfClass($xml);
         $keyDescriptors = KeyDescriptor::getChildrenOfClass($xml);
 
         $validUntil = self::getAttribute($xml, 'validUntil', null);
@@ -155,7 +155,7 @@ final class AffiliationDescriptor extends AbstractMetadataDocument
     /**
      * Collect the value of the AffiliateMember-property
      *
-     * @return array
+     * @return \SimpleSAML\SAML2\XML\md\AffiliateMember[]
      */
     public function getAffiliateMembers(): array
     {
@@ -166,16 +166,12 @@ final class AffiliationDescriptor extends AbstractMetadataDocument
     /**
      * Set the value of the AffiliateMember-property
      *
-     * @param string[] $affiliateMembers
+     * @param \SimpleSAML\SAML2\XML\md\AffiliateMember[] $affiliateMembers
      * @throws \SimpleSAML\Assert\AssertionFailedException
      */
     protected function setAffiliateMembers(array $affiliateMembers): void
     {
         Assert::notEmpty($affiliateMembers, 'List of affiliated members must not be empty.');
-        Assert::allStringNotEmpty(
-            $affiliateMembers,
-            'Cannot specify an empty string as an affiliation member entityID.'
-        );
         $this->AffiliateMembers = $affiliateMembers;
     }
 
@@ -213,9 +209,11 @@ final class AffiliationDescriptor extends AbstractMetadataDocument
     public function toXML(?DOMElement $parent = null): DOMElement
     {
         $e = parent::toXML($parent);
-
         $e->setAttribute('affiliationOwnerID', $this->affiliationOwnerID);
-        XMLUtils::addStrings($e, Constants::NS_MD, 'md:AffiliateMember', false, $this->AffiliateMembers);
+
+        foreach ($this->AffiliateMembers as $am) {
+            $am->toXML($e);
+        }
 
         foreach ($this->KeyDescriptors as $kd) {
             $kd->toXML($e);

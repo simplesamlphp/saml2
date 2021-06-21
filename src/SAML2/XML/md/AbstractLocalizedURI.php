@@ -21,12 +21,12 @@ abstract class AbstractLocalizedURI extends AbstractLocalizedName
      * @throws \Exception on failure
      * @return void
      */
-    protected function validateContent(/** @scrutinizer ignore-unused */ string $content): void
+    protected function validateContent(string $content): void
     {
-        Assert::notEmpty($content);
+        parent::validateContent($content);
 
-        if (!empty($content) && !filter_var($content, FILTER_VALIDATE_URL)) {
-            throw new InvalidArgumentException(static::getQualifiedName() . ' is not a valid URL.');
+        if (!filter_var($content, FILTER_VALIDATE_URL)) {
+            throw new InvalidArgumentException(static::getNamespacePrefix() . ':' . static::getLocalName() . ' is not a valid URL.');
         }
     }
 }

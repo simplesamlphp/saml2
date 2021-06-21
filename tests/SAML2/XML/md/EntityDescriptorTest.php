@@ -10,6 +10,7 @@ use SimpleSAML\Assert\AssertionFailedException;
 use SimpleSAML\SAML2\Constants;
 use SimpleSAML\SAML2\XML\md\AdditionalMetadataLocation;
 use SimpleSAML\SAML2\XML\md\AffiliationDescriptor;
+use SimpleSAML\SAML2\XML\md\AffiliateMember;
 use SimpleSAML\SAML2\XML\md\AttributeAuthorityDescriptor;
 use SimpleSAML\SAML2\XML\md\AttributeService;
 use SimpleSAML\SAML2\XML\md\AuthnAuthorityDescriptor;
@@ -206,7 +207,7 @@ XML
         $id = "_5A3CHB081";
         $now = 1580895565;
         $duration = "P2Y6M5DT12H35M30S";
-        $ad = new AffiliationDescriptor('asdf', ['test']);
+        $ad = new AffiliationDescriptor('asdf', [new AffiliateMember('test')]);
         $org = new Organization(
             [new OrganizationName('en', 'orgNameTest (en)')],
             [new OrganizationDisplayName('en', 'orgDispNameTest (en)')],
@@ -273,7 +274,8 @@ XML
      */
     public function testMarshallingWithAffiliationAndRoleDescriptors(): void
     {
-        (new AffiliationDescriptor('asdf', ['test']))->toXML($this->xmlRepresentation->documentElement);
+        $affiliateDescriptor = new AffiliationDescriptor('asdf', [new AffiliateMember('test')]);
+        $affiliateDescriptor->toXML($this->xmlRepresentation->documentElement);
         $this->expectException(InvalidArgumentException::class);
         $this->expectExceptionMessage(
             'AffiliationDescriptor cannot be combined with other RoleDescriptor elements in EntityDescriptor.'
