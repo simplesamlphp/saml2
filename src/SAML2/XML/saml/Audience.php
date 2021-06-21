@@ -18,29 +18,11 @@ final class Audience extends AbstractConditionType
     /**
      * Initialize an Audience element.
      *
-     * @param string $audience
+     * @param string $value
      */
-    public function __construct(string $audience)
+    public function __construct(string $value)
     {
-        parent::__construct($audience);
-    }
-
-
-    /**
-     * Convert XML into an Audience
-     *
-     * @param \DOMElement $xml The XML element we should load
-     * @return self
-     *
-     * @throws \SimpleSAML\XML\Exception\InvalidDOMElementException
-     *   If the qualified name of the supplied element is wrong
-     */
-    public static function fromXML(DOMElement $xml): object
-    {
-        Assert::same($xml->localName, 'Audience', InvalidDOMElementException::class);
-        Assert::same($xml->namespaceURI, Audience::NS, InvalidDOMElementException::class);
-
-        return new self($xml->textContent);
+        $this->setContent($value);
     }
 }
 

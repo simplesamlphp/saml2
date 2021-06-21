@@ -7,15 +7,16 @@ namespace SimpleSAML\SAML2\XML\saml;
 use DOMElement;
 use SimpleSAML\Assert\Assert;
 use SimpleSAML\SAML2\Constants;
-use SimpleSAML\XML\Exception\InvalidDOMElementException;
+use SimpleSAML\SAML2\Utils;
 use SimpleSAML\SAML2\XML\IDNameQualifiersTrait;
+use SimpleSAML\XML\Exception\InvalidDOMElementException;
 
 /**
  * SAML BaseID data type.
  *
  * @package simplesamlphp/saml2
  */
-class BaseID extends AbstractSamlElement implements BaseIdentifierInterface
+abstract class BaseID extends AbstractSamlElement implements BaseIdentifierInterface
 {
     use IDNameQualifiersTrait;
 
@@ -69,6 +70,7 @@ class BaseID extends AbstractSamlElement implements BaseIdentifierInterface
     protected function setType(string $type): void
     {
         Assert::notWhitespaceOnly($type, 'The "xsi:type" attribute of an identifier cannot be empty.');
+        Assert::contains($type, ':');
 
         $this->type = $type;
     }
@@ -99,13 +101,7 @@ class BaseID extends AbstractSamlElement implements BaseIdentifierInterface
 
 
     /**
-     * Convert XML into an BaseID
-     *
-     * @param \DOMElement $xml The XML element we should load
-     *
-     * @return \SimpleSAML\SAML2\XML\saml\BaseID
-     *
-     * @throws \SimpleSAML\XML\Exception\InvalidDOMElementException if the qualified name of the supplied element is wrong
+     * @inheritDoc
      */
     public static function fromXML(DOMElement $xml): object
     {
@@ -119,14 +115,50 @@ class BaseID extends AbstractSamlElement implements BaseIdentifierInterface
         );
 
         $type = $xml->getAttributeNS(Constants::NS_XSI, 'type');
+        list($prefix, $element) = explode(':', $type, 2);
 
-        return new self(
+        $ns = $xml->lookupNamespaceUri($prefix);
+        $handler = Utils::getContainer()->getElementHandler($ns, $element);
+
+        Assert::notNull($handler, 'Unknown BaseID type `' . $type . '`.');
+        Assert::isAOf($handler, BaseID::class);
+
+        $baseID = BaseID::getChildrenOfClass($xml);
+        Assert::count($baseID, 1);
+
+        return new $handler($type, trim($xml->textContent), $baseID[0]->getNameQualifier(), $baseID[0]->getSPNameQualifier());
+    }
+
+
+    /**
+     * Convert XML into an BaseID
+     *
+     * @param \DOMElement $xml The XML element we should load
+     *
+     * @return \SimpleSAML\SAML2\XML\saml\BaseID
+     *
+     * @throws \SimpleSAML\XML\Exception\InvalidDOMElementException if the qualified name of the supplied element is wrong
+    public static function fromXML(DOMElement $xml): object
+    {
+        Assert::same($xml->localName, 'BaseID', InvalidDOMElementException::class);
+        Assert::notNull($xml->namespaceURI, InvalidDOMElementException::class);
+        Assert::same($xml->namespaceURI, BaseID::NS, InvalidDOMElementException::class);
+        Assert::true(
+            $xml->hasAttributeNS(Constants::NS_XSI, 'type'),
+            'Missing required xsi:type in <saml:BaseID> element.',
+            InvalidDOMElementException::class
+        );
+
+        $type = $xml->getAttributeNS(Constants::NS_XSI, 'type');
+
+        return new static(
             $type,
             trim($xml->textContent),
             self::getAttribute($xml, 'NameQualifier', null),
             self::getAttribute($xml, 'SPNameQualifier', null)
         );
     }
+     */
 
 
     /**
@@ -138,6 +170,8 @@ class BaseID extends AbstractSamlElement implements BaseIdentifierInterface
     public function toXML(DOMElement $parent = null): DOMElement
     {
         $element = $this->instantiateParentElement($parent);
+        $element->setAttribute('xmlns:' . static::XSI_TYPE_PREFIX, static::XSI_TYPE_NS);
+        $element->setAttributeNS(Constants::NS_XSI, 'xsi:type', $this->type);
 
         if ($this->NameQualifier !== null) {
             $element->setAttribute('NameQualifier', $this->NameQualifier);
@@ -148,8 +182,6 @@ class BaseID extends AbstractSamlElement implements BaseIdentifierInterface
         }
 
         $element->textContent = $this->value;
-
-        $element->setAttributeNS(Constants::NS_XSI, 'xsi:type', $this->type);
 
         return $element;
     }

@@ -11,6 +11,10 @@ use SimpleSAML\XML\saml\CustomIdentifierInterface;
 
 abstract class AbstractContainer
 {
+    /** @var array */
+    protected array $registry;
+
+
     /**
      * Get a PSR-3 compatible logger.
      * @return \Psr\Log\LoggerInterface
@@ -90,11 +94,11 @@ abstract class AbstractContainer
     public function registerExtensionHandler(string $class): void
     {
         Assert::subclassOf($class, AbstractXMLElement::class);
-        if (is_subclass_of($class, CustomIdentifierInterface::class, true)) {
-            $key = $class::getXsiType() . ':BaseID';
-        } else {
+//        if (is_subclass_of($class, CustomIdentifierInterface::class, true)) {
+//            $key = $class::getXsiType() . ':BaseID';
+//        } else {
             $key = join(':', [urlencode($class::NS), AbstractXMLElement::getClassName($class)]);
-        }
+//        }
         $this->registry[$key] = $class;
     }
 

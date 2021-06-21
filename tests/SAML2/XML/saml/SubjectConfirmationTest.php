@@ -160,7 +160,7 @@ XML
         $samlNamespace = Constants::NS_SAML;
         $document = DOMDocumentFactory::fromString(<<<XML
 <saml:SubjectConfirmation xmlns:saml="{$samlNamespace}" Method="SomeMethod">
-  <saml:BaseID xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:type="someType">SomeNameIDValue</saml:BaseID>
+  <saml:BaseID xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:ssp="urn:custom:ssp" xsi:type="ssp:CustomBaseID">SomeNameIDValue</saml:BaseID>
   <saml:NameID>AnotherNameIDValue</saml:NameID>
   <saml:SubjectConfirmationData/>
 </saml:SubjectConfirmation>
@@ -205,7 +205,7 @@ XML
         $samlNamespace = Constants::NS_SAML;
         $document = DOMDocumentFactory::fromString(<<<XML
 <saml:SubjectConfirmation xmlns:saml="{$samlNamespace}" Method="SomeMethod">
-  <saml:BaseID xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:type="CustomBaseID">SomeIDValue</saml:BaseID>
+  <saml:BaseID xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:type="ssp:CustomBaseID">SomeIDValue</saml:BaseID>
   <saml:SubjectConfirmationData Recipient="Me" />
 </saml:SubjectConfirmation>
 XML
@@ -216,7 +216,7 @@ XML
         $identifier = $subjectConfirmation->getIdentifier();
         $this->assertEquals('SomeMethod', $subjectConfirmation->getMethod());
         $this->assertEquals(BaseID::class, get_class($identifier));
-        $this->assertEquals('CustomBaseID', $identifier->getType());
+        $this->assertEquals('ssp:CustomBaseID', $identifier->getType());
         $this->assertEquals('SomeIDValue', $identifier->getValue());
         $this->assertInstanceOf(SubjectConfirmationData::class, $subjectConfirmation->getSubjectConfirmationData());
         $this->assertEquals(
@@ -244,7 +244,7 @@ XML
         $samlNamespace = Constants::NS_SAML;
         $document = DOMDocumentFactory::fromString(<<<XML
 <saml:SubjectConfirmation xmlns:saml="{$samlNamespace}" Method="SomeMethod">
-  <saml:BaseID xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:type="CustomBaseID">123.456</saml:BaseID>
+  <saml:BaseID xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:type="ssp:CustomBaseID">123.456</saml:BaseID>
   <saml:SubjectConfirmationData Recipient="Me" />
 </saml:SubjectConfirmation>
 XML

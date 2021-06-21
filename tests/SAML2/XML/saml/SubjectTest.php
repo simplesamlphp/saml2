@@ -275,7 +275,7 @@ XML
 
         $document = DOMDocumentFactory::fromString(<<<XML
 <saml:Subject xmlns:saml="{$samlNamespace}">
-  <saml:BaseID xmlns:xsi="{$xsiNamespace}" xsi:type="CustomBaseID">SomeBaseID</saml:BaseID>
+  <saml:BaseID xmlns:xsi="{$xsiNamespace}" xmlns:ssp="urn:custom:ssp" xsi:type="ssp:CustomBaseID">SomeBaseID</saml:BaseID>
   <saml:NameID
       SPNameQualifier="https://sp.example.org/authentication/sp/metadata"
       Format="urn:oasis:names:tc:SAML:2.0:nameid-format:transient">SomeOtherNameIDValue</saml:NameID>
@@ -308,7 +308,7 @@ XML
 
         $document = DOMDocumentFactory::fromString(<<<XML
 <saml:Subject xmlns:saml="{$samlNamespace}">
-  <saml:BaseID xmlns:xsi="{$xsiNamespace}" xsi:type="CustomBaseID">SomeBaseID</saml:BaseID>
+  <saml:BaseID xmlns:xsi="{$xsiNamespace}" xmlns:ssp="urn:custom:ssp" xsi:type="ssp:CustomBaseID">SomeBaseID</saml:BaseID>
   <saml:SubjectConfirmation Method="urn:oasis:names:tc:SAML:2.0:cm:bearer">
     <saml:SubjectConfirmationData
         NotOnOrAfter="2020-02-27T11:26:36Z"
@@ -322,7 +322,7 @@ XML
         $subject = Subject::fromXML($document->documentElement);
         $identifier = $subject->getIdentifier();
         $this->assertInstanceOf(BaseID::class, $identifier);
-        $this->assertEquals('CustomBaseID', $identifier->getType());
+        $this->assertEquals('ssp:CustomBaseID', $identifier->getType());
         $this->assertEquals(
             $document->saveXML($document->documentElement),
             strval($subject)
@@ -351,7 +351,7 @@ XML
 
         $document = DOMDocumentFactory::fromString(<<<XML
 <saml:Subject xmlns:saml="{$samlNamespace}">
-  <saml:BaseID xmlns:xsi="{$xsiNamespace}" xsi:type="CustomBaseID">123.456</saml:BaseID>
+  <saml:BaseID xmlns:xsi="{$xsiNamespace}" xmlns:ssp="urn:custom:ssp" xsi:type="ssp:CustomBaseID">123.456</saml:BaseID>
   <saml:SubjectConfirmation Method="urn:oasis:names:tc:SAML:2.0:cm:bearer">
     <saml:SubjectConfirmationData
         NotOnOrAfter="2020-02-27T11:26:36Z"
