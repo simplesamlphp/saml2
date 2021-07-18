@@ -7,10 +7,15 @@ namespace SimpleSAML\SAML2\Compat;
 use Psr\Log\LoggerInterface;
 use SimpleSAML\Assert\Assert;
 use SimpleSAML\XML\AbstractXMLElement;
-use SimpleSAML\XML\saml\CustomIdentifierInterface;
+use SimpleSAML\SAML2\XML\saml\Condition;
+use SimpleSAML\SAML2\XML\saml\CustomIdentifierInterface;
 
 abstract class AbstractContainer
 {
+    /** @var array */
+    protected array $registry;
+
+
     /**
      * Get a PSR-3 compatible logger.
      * @return \Psr\Log\LoggerInterface
