@@ -15,6 +15,7 @@ use SimpleSAML\SAML2\XML\saml\AttributeValue;
 use SimpleSAML\SAML2\XML\saml\AuthnContext;
 use SimpleSAML\SAML2\XML\saml\AuthnContextClassRef;
 use SimpleSAML\SAML2\XML\saml\AuthnContextDeclRef;
+use SimpleSAML\SAML2\XML\saml\Audience;
 use SimpleSAML\SAML2\XML\saml\AudienceRestriction;
 use SimpleSAML\SAML2\XML\saml\Conditions;
 use SimpleSAML\SAML2\XML\saml\Issuer;
@@ -76,7 +77,7 @@ final class EntityAttributesTest extends TestCase
             null,
             null,
             [],
-            [new AudienceRestriction(['audience1', 'audience2'])]
+            [new AudienceRestriction([new Audience('audience1'), new Audience('audience2')])]
         );
 
         // Create the statements
@@ -144,7 +145,7 @@ final class EntityAttributesTest extends TestCase
         $entityAttributes->addChild($signedAssertion);
         $entityAttributes->addChild($attribute2);
 
-        $this->assertEquals($this->document->saveXML($this->document->documentElement), strval($entityAttributes));
+        $this->assertEquals($this->xmlRepresentation->saveXML($this->xmlRepresentation->documentElement), strval($entityAttributes));
     }
 
 
