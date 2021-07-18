@@ -7,6 +7,7 @@ namespace SimpleSAML\Test\SAML2;
 use DOMDocument;
 use InvalidArgumentException;
 use Mockery\Adapter\Phpunit\MockeryTestCase;
+use Nyholm\Psr7\ServerRequest;
 use SimpleSAML\Assert\AssertionFailedException;
 use SimpleSAML\SAML2\SOAP;
 use SimpleSAML\SAML2\XML\samlp\ArtifactResolve;
@@ -25,8 +26,9 @@ final class SOAPTest extends MockeryTestCase
         $this->expectException(AssertionFailedException::class);
         $this->expectExceptionMessage('Expected a different value than "".');
 
+        $request = new ServerRequest('', '');
         $stub = $this->getStubWithInput('');
-        $stub->receive();
+        $stub->receive($request);
     }
 
 
@@ -54,7 +56,8 @@ final class SOAPTest extends MockeryTestCase
 SOAP
         );
 
-        $message = $stub->receive();
+        $request = new ServerRequest('', '');
+        $message = $stub->receive($request);
 
         $this->assertInstanceOf(ArtifactResolve::class, $message);
         $this->assertEquals($artifact, $message->getArtifact());
