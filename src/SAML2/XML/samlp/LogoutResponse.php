@@ -102,6 +102,7 @@ class LogoutResponse extends AbstractStatusResponse
             $response->messageContainedSignatureUponConstruction = true;
         }
 
+        $response->setXML($xml);
         return $response;
     }
 }

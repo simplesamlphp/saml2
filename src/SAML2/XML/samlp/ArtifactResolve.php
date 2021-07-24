@@ -134,6 +134,7 @@ class ArtifactResolve extends AbstractRequest
             $resolve->setSignature($signature[0]);
         }
 
+        $resolve->setXML($xml);
         return $resolve;
     }
 

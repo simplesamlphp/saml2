@@ -21,7 +21,9 @@ use SimpleSAML\XML\Exception\MissingElementException;
 use SimpleSAML\XML\Exception\TooManyElementsException;
 use SimpleSAML\XMLSecurity\TestUtils\PEMCertificatesMock;
 use SimpleSAML\XMLSecurity\XML\ds\KeyInfo;
+use SimpleSAML\XMLSecurity\XML\xenc\CarriedKeyName;
 use SimpleSAML\XMLSecurity\XML\xenc\CipherData;
+use SimpleSAML\XMLSecurity\XML\xenc\CipherValue;
 use SimpleSAML\XMLSecurity\XML\xenc\DataReference;
 use SimpleSAML\XMLSecurity\XML\xenc\EncryptedData;
 use SimpleSAML\XMLSecurity\XML\xenc\EncryptedKey;
@@ -172,7 +174,7 @@ final class LogoutRequestTest extends MockeryTestCase
     public function testEncryptedNameId(): void
     {
         $ed = new EncryptedData(
-            new CipherData('Nk4W4mx...'),
+            new CipherData(new CipherValue('/CTj03d1DB5e2t7CTo9BEzCf5S9NRzwnBgZRlm32REI=')),
             'Encrypted_DATA_ID',
             'http://www.w3.org/2001/04/xmlenc#Element',
             "key-type",
@@ -182,13 +184,13 @@ final class LogoutRequestTest extends MockeryTestCase
         );
 
         $ek = new EncryptedKey(
-            new CipherData('PzA5X...'),
+            new CipherData(new CipherValue('/CTj03d1DB5e2t7CTo9BEzCf5S9NRzwnBgZRlm32REI=')),
             'Encrypted_KEY_ID',
             null,
             null,
             null,
             'some_ENTITY_ID',
-            'Name of the key',
+            new CarriedKeyName('Name of the key'),
             new EncryptionMethod('http://www.w3.org/2001/04/xmlenc#rsa-1_5'),
             null,
             new ReferenceList(

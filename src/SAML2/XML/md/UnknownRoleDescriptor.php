@@ -26,7 +26,7 @@ final class UnknownRoleDescriptor extends AbstractRoleDescriptor
      * @var \SimpleSAML\XML\Chunk
      * @psalm-suppress PropertyNotSetInConstructor
      */
-    protected Chunk $xml;
+    protected Chunk $elt;
 
 
     /**
@@ -61,7 +61,7 @@ final class UnknownRoleDescriptor extends AbstractRoleDescriptor
             !empty($orgs) ? $orgs[0] : null,
             ContactPerson::getChildrenOfClass($xml)
         );
-        $object->xml = new Chunk($xml);
+        $object->elt = new Chunk($xml);
         return $object;
     }
 
@@ -71,9 +71,9 @@ final class UnknownRoleDescriptor extends AbstractRoleDescriptor
      *
      * @return \SimpleSAML\XML\Chunk
      */
-    public function getXML(): Chunk
+    public function getElement(): Chunk
     {
-        return $this->xml;
+        return $this->elt;
     }
 
 
@@ -85,6 +85,6 @@ final class UnknownRoleDescriptor extends AbstractRoleDescriptor
      */
     public function toXML(DOMElement $parent = null): DOMElement
     {
-        return $this->xml->toXML($parent);
+        return $this->elt->toXML($parent);
     }
 }

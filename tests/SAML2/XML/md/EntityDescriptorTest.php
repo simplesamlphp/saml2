@@ -378,7 +378,7 @@ XML
         $this->assertInstanceOf(PDPDescriptor::class, $roleDescriptors[3]);
         $this->assertInstanceOf(UnknownRoleDescriptor::class, $roleDescriptors[4]);
 
-        $chunk = $roleDescriptors[4]->getXML();
+        $chunk = $roleDescriptors[4]->getElement();
         $this->assertEquals('CustomRoleDescriptor', $chunk->getLocalName());
 
         $this->assertInstanceOf(Organization::class, $entityDescriptor->getOrganization());

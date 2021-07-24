@@ -79,7 +79,7 @@ final class UnknownRoleDescriptorTest extends TestCase
         $this->assertEquals('PT5000S', $descriptor->getCacheDuration());
         $this->assertEquals('https://error.reporting/', $descriptor->getErrorURL());
 
-        $xml = $descriptor->getXML();
+        $xml = $descriptor->getElement();
         $this->assertEquals('SomeRoleDescriptor', $xml->getLocalName());
 
         $extElement = $descriptor->getExtensions();

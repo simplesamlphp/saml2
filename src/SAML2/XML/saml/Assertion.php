@@ -49,6 +49,9 @@ class Assertion extends AbstractSamlElement implements SignableElementInterface,
      */
     protected string $id;
 
+    /** @var \DOMElement $xml */
+    protected DOMElement $xml;
+
     /**
      * The issue timestamp of this assertion, as an UNIX timestamp.
      *
@@ -449,6 +452,7 @@ class Assertion extends AbstractSamlElement implements SignableElementInterface,
             $assertion->wasSignedAtConstruction = true;
         }
 
+        $assertion->setXML($xml);
         return $assertion;
     }
 

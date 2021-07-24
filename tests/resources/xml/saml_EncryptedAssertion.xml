@@ -5,7 +5,7 @@
       <ds:RetrievalMethod URI="#Encrypted_KEY_ID" Type="http://www.w3.org/2001/04/xmlenc#EncryptedKey"/>
     </ds:KeyInfo>
     <xenc:CipherData>
-      <xenc:CipherValue>GaYev...</xenc:CipherValue>
+      <xenc:CipherValue>/CTj03d1DB5e2t7CTo9BEzCf5S9NRzwnBgZRlm32REI=</xenc:CipherValue>
     </xenc:CipherData>
   </xenc:EncryptedData>
 </saml:EncryptedAssertion>

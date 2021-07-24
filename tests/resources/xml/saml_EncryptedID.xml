@@ -5,13 +5,13 @@
       <ds:RetrievalMethod URI="#Encrypted_KEY_ID" Type="http://www.w3.org/2001/04/xmlenc#EncryptedKey"/>
     </ds:KeyInfo>
     <xenc:CipherData>
-      <xenc:CipherValue>Nk4W4mx...</xenc:CipherValue>
+      <xenc:CipherValue>/CTj03d1DB5e2t7CTo9BEzCf5S9NRzwnBgZRlm32REI=</xenc:CipherValue>
     </xenc:CipherData>
   </xenc:EncryptedData>
   <xenc:EncryptedKey xmlns:xenc="http://www.w3.org/2001/04/xmlenc#" Id="Encrypted_KEY_ID" Recipient="some_ENTITY_ID">
     <xenc:EncryptionMethod Algorithm="http://www.w3.org/2001/04/xmlenc#rsa-1_5"/>
     <xenc:CipherData>
-      <xenc:CipherValue>PzA5X...</xenc:CipherValue>
+      <xenc:CipherValue>/CTj03d1DB5e2t7CTo9BEzCf5S9NRzwnBgZRlm32REI=</xenc:CipherValue>
     </xenc:CipherData>
     <xenc:ReferenceList>
       <xenc:DataReference URI="#Encrypted_DATA_ID"/>

@@ -15,6 +15,7 @@ use SimpleSAML\XML\Chunk;
 use SimpleSAML\XMLSecurity\TestUtils\PEMCertificatesMock;
 use SimpleSAML\XMLSecurity\XML\ds\KeyInfo;
 use SimpleSAML\XMLSecurity\XML\xenc\CipherData;
+use SimpleSAML\XMLSecurity\XML\xenc\CipherValue;
 use SimpleSAML\XMLSecurity\XML\xenc\DataReference;
 use SimpleSAML\XMLSecurity\XML\xenc\EncryptedData;
 use SimpleSAML\XMLSecurity\XML\xenc\EncryptedKey;
@@ -57,7 +58,7 @@ final class EncryptedAssertionTest extends TestCase
     public function testMarshalling(): void
     {
         $ed = new EncryptedData(
-            new CipherData('GaYev...'),
+            new CipherData(new CipherValue('/CTj03d1DB5e2t7CTo9BEzCf5S9NRzwnBgZRlm32REI=')),
             null,
             'http://www.w3.org/2001/04/xmlenc#Element',
             null,

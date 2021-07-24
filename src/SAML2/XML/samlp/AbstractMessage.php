@@ -46,6 +46,9 @@ abstract class AbstractMessage extends AbstractSamlpElement implements SignableE
      */
     protected string $id;
 
+    /** @var \DOMElement $xml */
+    protected DOMElement $xml;
+
     /**
      * The version of this message.
      *
@@ -416,6 +419,7 @@ abstract class AbstractMessage extends AbstractSamlpElement implements SignableE
 
 
     /**
+<<<<<<< HEAD
      * Create XML from this class
      *
      * @param \DOMElement|null $parent
