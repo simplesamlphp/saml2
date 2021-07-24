@@ -11,8 +11,6 @@ use SimpleSAML\SAML2\Constants;
 use SimpleSAML\SAML2\Exception\ProtocolViolationException;
 use SimpleSAML\SAML2\Utilities\Temporal;
 use SimpleSAML\SAML2\Utils;
-use SimpleSAML\SAML2\XML\SignedElementInterface;
-use SimpleSAML\SAML2\XML\SignedElementTrait;
 use SimpleSAML\XML\Chunk;
 use SimpleSAML\XML\DOMDocumentFactory;
 use SimpleSAML\XML\Exception\InvalidDOMElementException;
@@ -21,6 +19,10 @@ use SimpleSAML\XML\Exception\TooManyElementsException;
 use SimpleSAML\XML\Utils as XMLUtils;
 use SimpleSAML\XMLSecurity\Utils\Security as SecurityUtils;
 use SimpleSAML\XMLSecurity\XML\ds\Signature;
+use SimpleSAML\XMLSecurity\XML\SignableElementInterface;
+use SimpleSAML\XMLSecurity\XML\SignableElementTrait;
+use SimpleSAML\XMLSecurity\XML\SignedElementInterface;
+use SimpleSAML\XMLSecurity\XML\SignedElementTrait;
 use SimpleSAML\XMLSecurity\XMLSecEnc;
 use SimpleSAML\XMLSecurity\XMLSecurityKey;
 
@@ -34,8 +36,9 @@ use function array_values;
  *
  * @package simplesamlphp/saml2
  */
-class Assertion extends AbstractSamlElement implements SignedElementInterface
+class Assertion extends AbstractSamlElement implements SignableElementInterface, SignedElementInterface
 {
+    use SignableElementTrait;
     use SignedElementTrait;
 
     /**

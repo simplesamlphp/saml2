@@ -3,9 +3,8 @@
 namespace SimpleSAML\SAML2\XML\md;
 
 use DOMElement;
-use SimpleSAML\SAML2\XML\SignedElementTrait;
-use SimpleSAML\SAML2\XML\ExtendableElementTrait;
 use SimpleSAML\XML\ExtendableAttributesTrait;
+use SimpleSAML\SAML2\XML\ExtendableElementTrait;
 
 use function gmdate;
 
@@ -18,7 +17,6 @@ abstract class AbstractMetadataDocument extends AbstractSignedMdElement
 {
     use ExtendableAttributesTrait;
     use ExtendableElementTrait;
-    use SignedElementTrait;
 
     /**
      * The ID of this element.

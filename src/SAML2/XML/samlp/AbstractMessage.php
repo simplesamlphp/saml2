@@ -13,8 +13,10 @@ use SimpleSAML\SAML2\Utilities\Temporal;
 use SimpleSAML\SAML2\Utils;
 use SimpleSAML\SAML2\XML\ExtendableElementTrait;
 use SimpleSAML\SAML2\XML\saml\Issuer;
-use SimpleSAML\SAML2\XML\SignedElementInterface;
-use SimpleSAML\SAML2\XML\SignedElementTrait;
+use SimpleSAML\XMLSecurity\XML\SignableElementInterface;
+use SimpleSAML\XMLSecurity\XML\SignableElementTrait;
+use SimpleSAML\XMLSecurity\XML\SignedElementInterface;
+use SimpleSAML\XMLSecurity\XML\SignedElementTrait;
 use SimpleSAML\XMLSecurity\XMLSecurityKey;
 
 use function array_pop;
@@ -30,12 +32,11 @@ use function gmdate;
  *
  * @package simplesamlphp/saml2
  */
-abstract class AbstractMessage extends AbstractSamlpElement implements SignedElementInterface
+abstract class AbstractMessage extends AbstractSamlpElement implements SignableElementInterface, SignedElementInterface
 {
     use ExtendableElementTrait;
-    use SignedElementTrait {
-        SignedElementTrait::validate as validateEnvelopedXmlSignature;
-    }
+    use SignableElementTrait;
+    use SignedElementTrait;
 
     /**
      * The identifier of this message.
