@@ -523,7 +523,7 @@ class AuthnRequest extends AbstractRequest
     {
         $parent = parent::toXML($parent);
 
-        if ($this->forceAuthn == true) {
+        if ($this->forceAuthn === true) {
             $parent->setAttribute('ForceAuthn', 'true');
         }
 
