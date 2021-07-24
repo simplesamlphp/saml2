@@ -26,6 +26,9 @@ use SimpleSAML\XML\Chunk;
 use SimpleSAML\XML\DOMDocumentFactory;
 use SimpleSAML\XMLSecurity\Constants;
 
+use function dirname;
+use function strval;
+
 /**
  * Class \SAML2\XML\md\ExtensionsTest.
  *

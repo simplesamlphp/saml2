@@ -12,6 +12,9 @@ use SimpleSAML\SAML2\XML\samlp\StatusCode;
 use SimpleSAML\Test\XML\SerializableXMLTestTrait;
 use SimpleSAML\XML\DOMDocumentFactory;
 
+use function dirname;
+use function strval;
+
 /**
  * Class \SAML2\XML\samlp\StatusCodeTest
  *

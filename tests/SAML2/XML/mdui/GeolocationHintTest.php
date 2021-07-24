@@ -10,6 +10,9 @@ use SimpleSAML\SAML2\XML\mdui\GeolocationHint;
 use SimpleSAML\Test\XML\SerializableXMLTestTrait;
 use SimpleSAML\XML\DOMDocumentFactory;
 
+use function dirname;
+use function strval;
+
 /**
  * Tests for GeolocationHint.
  *

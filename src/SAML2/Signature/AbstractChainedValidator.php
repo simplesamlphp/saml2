@@ -11,6 +11,8 @@ use SimpleSAML\SAML2\Utilities\ArrayCollection;
 use SimpleSAML\XMLSecurity\Utils\Security;
 use SimpleSAML\XMLSecurity\XMLSecurityKey;
 
+use function sprintf;
+
 abstract class AbstractChainedValidator implements ChainedValidator
 {
     /**

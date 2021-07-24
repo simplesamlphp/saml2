@@ -4,6 +4,13 @@ declare(strict_types=1);
 
 namespace SimpleSAML\SAML2\Configuration;
 
+use RuntimeException;
+
+use function array_filter;
+use function array_pop;
+use function count;
+use function sprintf;
+
 /**
  * Basic configuration wrapper
  */
@@ -89,7 +96,7 @@ final class IdentityProvider extends ArrayAdapter implements CertificateProvider
 
         $keyCount = count($key);
         if ($keyCount !== 1 && $required) {
-            throw new \RuntimeException(sprintf(
+            throw new RuntimeException(sprintf(
                 'Attempted to get privateKey by name "%s", found "%d" keys, where only one was expected. Please '
                 . 'verify that your configuration is correct',
                 $name,

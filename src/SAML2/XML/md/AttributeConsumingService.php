@@ -10,6 +10,8 @@ use SimpleSAML\XML\Exception\InvalidDOMElementException;
 use SimpleSAML\XML\Exception\MissingElementException;
 use SimpleSAML\SAML2\Utils;
 
+use function strval;
+
 /**
  * Class representing SAML 2 Metadata AttributeConsumingService element.
  *

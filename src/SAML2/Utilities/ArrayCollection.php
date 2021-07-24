@@ -8,6 +8,14 @@ use ArrayIterator;
 use Closure;
 use SimpleSAML\SAML2\Exception\RuntimeException;
 
+use function array_filter;
+use function array_map;
+use function array_search;
+use function count;
+use function end;
+use function reset;
+use function sprintf;
+
 /**
  * Simple Array implementation of Collection.
  */

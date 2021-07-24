@@ -29,6 +29,9 @@ use SimpleSAML\XMLSecurity\XML\xenc\EncryptionMethod;
 use SimpleSAML\XMLSecurity\XML\xenc\ReferenceList;
 use SimpleSAML\XMLSecurity\XMLSecurityKey;
 
+use function dirname;
+use function strval;
+
 /**
  * Class \SAML2\XML\samlp\LogoutRequestTest
  *

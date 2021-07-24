@@ -12,6 +12,9 @@ use SimpleSAML\Test\XML\SerializableXMLTestTrait;
 use SimpleSAML\XML\DOMDocumentFactory;
 use SimpleSAML\XML\Exception\MissingAttributeException;
 
+use function dirname;
+use function strval;
+
 /**
  * Tests for the AdditionalMetadataLocation class
  *

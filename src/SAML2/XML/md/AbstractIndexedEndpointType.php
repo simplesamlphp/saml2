@@ -8,6 +8,8 @@ use DOMElement;
 use SimpleSAML\Assert\Assert;
 use SimpleSAML\XML\Exception\InvalidDOMElementException;
 
+use function strval;
+
 /**
  * Class representing a SAML2 IndexedEndpointType.
  *

@@ -13,6 +13,9 @@ use SimpleSAML\SAML2\XML\saml\AttributeValue;
 use SimpleSAML\Test\XML\SerializableXMLTestTrait;
 use SimpleSAML\XML\DOMDocumentFactory;
 
+use function dirname;
+use function strval;
+
 /**
  * Test for the RequestedAttribute metadata element.
  *

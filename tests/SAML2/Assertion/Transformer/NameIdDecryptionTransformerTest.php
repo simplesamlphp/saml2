@@ -30,6 +30,8 @@ use SimpleSAML\XML\DOMDocumentFactory;
 use SimpleSAML\XMLSecurity\XMLSecurityKey;
 use SimpleSAML\XMLSecurity\TestUtils\PEMCertificatesMock;
 
+use function getcwd;
+
 /**
  * Tests for decryption NameIDs.
  *

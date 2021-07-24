@@ -13,6 +13,10 @@ use SimpleSAML\XML\Exception\InvalidDOMElementException;
 use SimpleSAML\XML\ExtendableElementTrait;
 use SimpleSAML\XML\Utils as XMLUtils;
 
+use function array_map;
+use function array_merge;
+use function array_unique;
+
 /**
  * Class for handling the metadata extensions for login and discovery user interface
  *

@@ -11,6 +11,8 @@ use SimpleSAML\XML\Exception\InvalidDOMElementException;
 use SimpleSAML\XML\Exception\TooManyElementsException;
 use SimpleSAML\XML\Utils as XMLUtils;
 
+use function preg_split;
+
 /**
  * Class representing unknown RoleDescriptors.
  *

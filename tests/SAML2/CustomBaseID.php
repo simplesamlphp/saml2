@@ -10,6 +10,9 @@ use SimpleSAML\SAML2\XML\saml\BaseID;
 use SimpleSAML\SAML2\XML\saml\CustomIdentifierInterface;
 use SimpleSAML\Assert\Assert;
 
+use function floatval;
+use function strval;
+
 /**
  * @covers \SimpleSAML\Test\SAML2\CustomBaseID
  * @package simplesamlphp\saml2

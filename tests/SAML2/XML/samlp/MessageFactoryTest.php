@@ -18,6 +18,9 @@ use SimpleSAML\SAML2\XML\samlp\Status;
 use SimpleSAML\XML\DOMDocumentFactory;
 use SimpleSAML\XML\Exception\InvalidDOMElementException;
 
+use function dirname;
+use function strval;
+
 /**
  * @covers \SimpleSAML\SAML2\XML\samlp\MessageFactory
  * @package simplesamlphp/saml2

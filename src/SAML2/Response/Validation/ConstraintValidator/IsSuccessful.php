@@ -10,6 +10,12 @@ use SimpleSAML\SAML2\Response\Validation\Result;
 use SimpleSAML\SAML2\XML\samlp\Response;
 use SimpleSAML\SAML2\XML\samlp\Status;
 
+use function implode;
+use function sprintf;
+use function strlen;
+use function strpos;
+use function substr;
+
 class IsSuccessful implements ConstraintValidator
 {
     /**

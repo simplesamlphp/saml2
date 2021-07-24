@@ -13,6 +13,12 @@ use SimpleSAML\SAML2\XML\saml\Attribute;
 use SimpleSAML\SAML2\XML\saml\AttributeStatement;
 use SimpleSAML\SAML2\XML\saml\AttributeValue;
 
+use function array_walk;
+use function base64_decode;
+use function explode;
+use function is_string;
+use function sprintf;
+
 class DecodeBase64Transformer implements
     TransformerInterface,
     IdentityProviderAware

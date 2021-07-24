@@ -21,6 +21,9 @@ use SimpleSAML\XML\DOMDocumentFactory;
 use SimpleSAML\XML\Exception\MissingAttributeException;
 use SimpleSAML\XML\Utils as XMLUtils;
 
+use function dirname;
+use function strval;
+
 /**
  * Tests for the ContactPerson class.
  *

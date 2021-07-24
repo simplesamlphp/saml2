@@ -13,6 +13,9 @@ use SimpleSAML\XML\DOMDocumentFactory;
 use SimpleSAML\XML\Exception\MissingAttributeException;
 use SimpleSAML\XMLSecurity\Constants;
 
+use function dirname;
+use function strval;
+
 /**
  * Class \SAML2\XML\alg\SigningMethodTest
  *

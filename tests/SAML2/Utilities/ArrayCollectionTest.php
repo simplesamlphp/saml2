@@ -8,6 +8,8 @@ use PHPUnit\Framework\TestCase;
 use SimpleSAML\SAML2\Utilities\ArrayCollection;
 use SimpleSAML\SAML2\Exception\RuntimeException;
 
+use function ucfirst;
+
 /**
  * @covers \SimpleSAML\SAML2\Utilities\ArrayCollection
  * @package simplesamlphp/saml2

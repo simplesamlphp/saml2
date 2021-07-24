@@ -15,6 +15,9 @@ use SimpleSAML\XMLSecurity\XML\ds\AbstractDsElement;
 use SimpleSAML\XMLSecurity\XML\ds\KeyInfo;
 use SimpleSAML\XMLSecurity\XML\ds\KeyName;
 
+use function dirname;
+use function strval;
+
 /**
  * A set of tests for the md:KeyDescriptor element
  *

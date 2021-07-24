@@ -18,6 +18,9 @@ use SimpleSAML\Test\XML\SerializableXMLTestTrait;
 use SimpleSAML\XML\DOMDocumentFactory;
 use SimpleSAML\XML\Utils as XMLUtils;
 
+use function dirname;
+use function strval;
+
 /**
  * @covers \SimpleSAML\SAML2\XML\samlp\ArtifactResponse
  * @covers \SimpleSAML\SAML2\XML\samlp\AbstractStatusResponse

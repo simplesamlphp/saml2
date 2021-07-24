@@ -11,6 +11,9 @@ use SimpleSAML\SAML2\XML\samlp\NameIDPolicy;
 use SimpleSAML\Test\XML\SerializableXMLTestTrait;
 use SimpleSAML\XML\DOMDocumentFactory;
 
+use function dirname;
+use function strval;
+
 /**
  * Class \SAML2\XML\md\NameIDPolicyTest
  *

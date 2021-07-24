@@ -16,6 +16,10 @@ use SimpleSAML\SAML2\XML\saml\Assertion;
 use SimpleSAML\SAML2\XML\saml\EncryptedID;
 use SimpleSAML\SAML2\XML\saml\Subject;
 
+use function get_class;
+use function is_null;
+use function sprintf;
+
 final class NameIdDecryptionTransformer implements
     TransformerInterface,
     IdentityProviderAware,

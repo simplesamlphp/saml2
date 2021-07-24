@@ -12,6 +12,9 @@ use SimpleSAML\SAML2\XML\samlp\ArtifactResolve;
 use SimpleSAML\Test\XML\SerializableXMLTestTrait;
 use SimpleSAML\XML\DOMDocumentFactory;
 
+use function dirname;
+use function strval;
+
 /**
  * @covers \SimpleSAML\SAML2\XML\samlp\ArtifactResolve
  * @covers \SimpleSAML\SAML2\XML\samlp\AbstractRequest

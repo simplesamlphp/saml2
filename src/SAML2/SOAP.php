@@ -15,6 +15,10 @@ use SimpleSAML\SAML2\XML\samlp\Response;
 use SimpleSAML\XML\DOMDocumentFactory;
 use SimpleSAML\XML\Utils as XMLUtils;
 
+use function file_get_contents;
+use function header;
+use function sprintf;
+
 /**
  * Class which implements the SOAP binding.
  *

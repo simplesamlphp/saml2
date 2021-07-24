@@ -12,6 +12,9 @@ use SimpleSAML\SAML2\Constants;
 use SimpleSAML\SAML2\XML\saml\Audience;
 use SimpleSAML\SAML2\XML\saml\ProxyRestriction;
 
+use function dirname;
+use function strval;
+
 /**
  * Class \SAML2\XML\saml\ProxyRestrictionTest
  *

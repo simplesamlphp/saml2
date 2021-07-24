@@ -13,6 +13,8 @@ use SimpleSAML\XML\DOMDocumentFactory;
 use SimpleSAML\XMLSecurity\Utils\Certificate;
 use SimpleSAML\XMLSecurity\TestUtils\PEMCertificatesMock;
 
+use function preg_match;
+
 /**
  * @package simplesamlphp/saml2
  */

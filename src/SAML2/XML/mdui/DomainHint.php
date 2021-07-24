@@ -9,6 +9,8 @@ use SimpleSAML\Assert\Assert;
 use SimpleSAML\SAML2\Exception\InvalidArgumentException;
 use SimpleSAML\XML\XMLStringElementTrait;
 
+use function filter_var;
+
 /**
  * Class implementing DomainHint.
  *

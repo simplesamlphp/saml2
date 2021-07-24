@@ -15,6 +15,9 @@ use SimpleSAML\XML\Exception\InvalidDOMElementException;
 use SimpleSAML\XML\Exception\TooManyElementsException;
 use SimpleSAML\XML\Utils as XMLUtils;
 
+use function array_pop;
+use function is_null;
+
 /**
  * Class representing SAML2 AuthnContext
  *

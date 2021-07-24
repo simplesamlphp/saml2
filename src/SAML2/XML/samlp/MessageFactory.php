@@ -9,6 +9,8 @@ use SimpleSAML\Assert\Assert;
 use SimpleSAML\SAML2\Constants;
 use SimpleSAML\XML\Exception\InvalidDOMElementException;
 
+use function var_export;
+
 /**
  * Factory class for all SAML 2 messages.
  *

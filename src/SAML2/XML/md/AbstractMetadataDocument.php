@@ -7,6 +7,8 @@ use SimpleSAML\SAML2\XML\SignedElementTrait;
 use SimpleSAML\SAML2\XML\ExtendableElementTrait;
 use SimpleSAML\XML\ExtendableAttributesTrait;
 
+use function gmdate;
+
 /**
  * Class to represent a metadata document
  *

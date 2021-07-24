@@ -11,6 +11,8 @@ use SimpleSAML\XML\Exception\InvalidDOMElementException;
 use SimpleSAML\XML\ExtendableAttributesTrait;
 use SimpleSAML\XMLSecurity\XML\ds\KeyInfo;
 
+use function strval;
+
 /**
  * Class which represents the KeyAuthority element found in Shibboleth metadata.
  *

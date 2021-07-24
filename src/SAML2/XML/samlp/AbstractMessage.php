@@ -17,6 +17,11 @@ use SimpleSAML\SAML2\XML\SignedElementInterface;
 use SimpleSAML\SAML2\XML\SignedElementTrait;
 use SimpleSAML\XMLSecurity\XMLSecurityKey;
 
+use function array_pop;
+use function call_user_func;
+use function count;
+use function gmdate;
+
 /**
  * Base class for all SAML 2 messages.
  *

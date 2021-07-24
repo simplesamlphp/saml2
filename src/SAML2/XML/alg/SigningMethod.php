@@ -10,6 +10,8 @@ use SimpleSAML\XML\DOMDocumentFactory;
 use SimpleSAML\XML\Exception\InvalidDOMElementException;
 use SimpleSAML\XML\Exception\MissingAttributeException;
 
+use function strval;
+
 /**
  * Class for handling the alg:SigningMethod element.
  *

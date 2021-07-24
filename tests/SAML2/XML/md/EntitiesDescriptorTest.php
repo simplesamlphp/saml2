@@ -18,6 +18,9 @@ use SimpleSAML\XML\DOMDocumentFactory;
 use SimpleSAML\XML\Utils as XMLUtils;
 use SimpleSAML\XMLSecurity\XMLSecurityDSig;
 
+use function dirname;
+use function strval;
+
 /**
  * Tests for the md:EntitiesDescriptor element.
  *

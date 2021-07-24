@@ -13,6 +13,8 @@ use SimpleSAML\SAML2\XML\saml\EncryptedID;
 use SimpleSAML\SAML2\XML\saml\NameID;
 use SimpleSAML\SAML2\XML\saml\IdentifierInterface;
 
+use function array_pop;
+
 /**
  * Trait grouping common functionality for elements that can hold identifiers.
  *

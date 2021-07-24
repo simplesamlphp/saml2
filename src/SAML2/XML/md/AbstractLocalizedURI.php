@@ -7,6 +7,8 @@ namespace SimpleSAML\SAML2\XML\md;
 use InvalidArgumentException;
 use SimpleSAML\Assert\Assert;
 
+use function filter_var;
+
 /**
  * Abstract class implementing LocalizedURIType.
  *

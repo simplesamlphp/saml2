@@ -13,6 +13,8 @@ use SimpleSAML\XMLSecurity\XML\EncryptedElementInterface;
 use SimpleSAML\XMLSecurity\XML\EncryptedElementTrait;
 use SimpleSAML\XMLSecurity\XMLSecurityKey;
 
+use function implode;
+
 /**
  * Class representing an encrypted identifier.
  *

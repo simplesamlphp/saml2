@@ -21,6 +21,9 @@ use SimpleSAML\XML\DOMDocumentFactory;
 use SimpleSAML\XML\Exception\TooManyElementsException;
 use SimpleSAML\XML\Utils as XMLUtils;
 
+use function dirname;
+use function strval;
+
 /**
  * Class \SAML2\XML\saml\SubjectTest
  *

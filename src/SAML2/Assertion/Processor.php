@@ -17,6 +17,9 @@ use SimpleSAML\SAML2\Utilities\ArrayCollection;
 use SimpleSAML\SAML2\XML\saml\Assertion;
 use SimpleSAML\SAML2\XML\saml\EncryptedAssertion;
 
+use function implode;
+use function sprintf;
+
 class Processor
 {
     /**

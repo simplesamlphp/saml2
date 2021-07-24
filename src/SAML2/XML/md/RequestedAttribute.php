@@ -11,6 +11,8 @@ use SimpleSAML\XML\Exception\InvalidDOMElementException;
 use SimpleSAML\SAML2\XML\saml\Attribute;
 use SimpleSAML\SAML2\XML\saml\AttributeValue;
 
+use function is_bool;
+
 /**
  * Class representing SAML 2 metadata RequestedAttribute.
  *

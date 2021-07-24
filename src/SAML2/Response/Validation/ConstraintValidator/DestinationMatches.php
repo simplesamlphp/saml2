@@ -4,10 +4,14 @@ declare(strict_types=1);
 
 namespace SimpleSAML\SAML2\Response\Validation\ConstraintValidator;
 
+use Exception;
 use SimpleSAML\SAML2\Configuration\Destination;
 use SimpleSAML\SAML2\Response\Validation\ConstraintValidator;
 use SimpleSAML\SAML2\Response\Validation\Result;
 use SimpleSAML\SAML2\XML\samlp\Response;
+
+use function sprintf;
+use function strval;
 
 final class DestinationMatches implements ConstraintValidator
 {
@@ -35,7 +39,7 @@ final class DestinationMatches implements ConstraintValidator
     {
         $destination = $response->getDestination();
         if ($destination === null) {
-            throw new \Exception('No destination set in the response.');
+            throw new Exception('No destination set in the response.');
         }
         if (!$this->expectedDestination->equals(new Destination($destination))) {
             $result->addError(sprintf(

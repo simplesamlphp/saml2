@@ -12,6 +12,9 @@ use SimpleSAML\XML\Exception\MissingElementException;
 use SimpleSAML\XML\Exception\TooManyElementsException;
 use SimpleSAML\XML\Utils as XMLUtils;
 
+use function array_pop;
+use function gmdate;
+
 /**
  * Class representing a SAML2 AuthnStatement
  *

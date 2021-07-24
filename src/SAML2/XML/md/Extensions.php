@@ -24,6 +24,8 @@ use SimpleSAML\XML\Chunk;
 use SimpleSAML\XML\Exception\InvalidDOMElementException;
 use SimpleSAML\XML\Utils as XMLUtils;
 
+use function array_key_exists;
+
 /**
  * Class for handling SAML2 metadata extensions.
  *

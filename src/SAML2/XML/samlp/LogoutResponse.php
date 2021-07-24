@@ -12,6 +12,8 @@ use SimpleSAML\XML\Exception\InvalidDOMElementException;
 use SimpleSAML\XML\Utils as XMLUtils;
 use SimpleSAML\XMLSecurity\XML\ds\Signature;
 
+use function array_pop;
+
 /**
  * Class for SAML 2 LogoutResponse messages.
  *

@@ -17,6 +17,9 @@ use SimpleSAML\XML\DOMDocumentFactory;
 use SimpleSAML\XML\Exception\MissingElementException;
 use SimpleSAML\XML\Chunk;
 
+use function dirname;
+use function strval;
+
 /**
  * Test for the Organization metadata element.
  *

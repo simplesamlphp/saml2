@@ -10,6 +10,9 @@ use SimpleSAML\SAML2\XML\samlp\StatusMessage;
 use SimpleSAML\Test\XML\SerializableXMLTestTrait;
 use SimpleSAML\XML\DOMDocumentFactory;
 
+use function dirname;
+use function strval;
+
 /**
  * Class \SimpleSAML\SAML2\XML\samlp\StatusMessageTest
  *

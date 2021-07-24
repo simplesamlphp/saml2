@@ -7,6 +7,11 @@ namespace SimpleSAML\SAML2\Configuration;
 use RuntimeException;
 use SimpleSAML\XMLSecurity\XMLSecurityKey;
 
+use function array_filter;
+use function array_pop;
+use function count;
+use function sprintf;
+
 /**
  * Basic Configuration Wrapper
  */

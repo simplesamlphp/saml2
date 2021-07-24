@@ -10,6 +10,8 @@ use SimpleSAML\SAML2\Constants;
 use SimpleSAML\XML\Exception\InvalidDOMElementException;
 use SimpleSAML\SAML2\XML\IDNameQualifiersTrait;
 
+use function trim;
+
 /**
  * SAML BaseID data type.
  *

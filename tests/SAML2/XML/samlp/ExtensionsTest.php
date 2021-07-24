@@ -14,6 +14,9 @@ use SimpleSAML\Test\XML\SerializableXMLTestTrait;
 use SimpleSAML\XML\DOMDocumentFactory;
 use SimpleSAML\XML\Chunk;
 
+use function dirname;
+use function strval;
+
 /**
  * Class \SAML2\XML\samlp\ExtensionsTest
  *

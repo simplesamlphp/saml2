@@ -16,6 +16,13 @@ use SimpleSAML\XML\Exception\TooManyElementsException;
 use SimpleSAML\XML\ExtendableAttributesTrait;
 use SimpleSAML\XML\Utils as XMLUtils;
 
+use function array_map;
+use function array_pop;
+use function count;
+use function filter_var;
+use function preg_replace;
+use function var_export;
+
 /**
  * Class representing SAML 2 ContactPerson.
  *

@@ -10,6 +10,10 @@ use SimpleSAML\SAML2\Constants;
 use SimpleSAML\XML\Exception\InvalidDOMElementException;
 use SimpleSAML\XML\Exception\MissingAttributeException;
 
+use function is_null;
+use function is_numeric;
+use function strval;
+
 /**
  * Class representing the ECP RequestAuthenticated element.
  *

@@ -14,6 +14,9 @@ use SimpleSAML\XMLSecurity\XML\ds\KeyInfo;
 use SimpleSAML\XMLSecurity\XML\ds\X509Certificate;
 use SimpleSAML\XMLSecurity\XML\ds\X509Data;
 
+use function dirname;
+use function strval;
+
 /**
  * Class \SimpleSAML\SAML2\XML\shibmd\KeyAuthority
  *

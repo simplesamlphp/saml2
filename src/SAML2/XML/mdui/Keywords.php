@@ -8,6 +8,10 @@ use DOMElement;
 use SimpleSAML\Assert\Assert;
 use SimpleSAML\XML\Exception\InvalidDOMElementException;
 
+use function array_key_first;
+use function explode;
+use function implode;
+
 /**
  * Class for handling the Keywords metadata extensions for login and discovery user interface
  *

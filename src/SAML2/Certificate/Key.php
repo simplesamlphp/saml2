@@ -4,14 +4,19 @@ declare(strict_types=1);
 
 namespace SimpleSAML\SAML2\Certificate;
 
+use ArrayAccess;
 use SimpleSAML\SAML2\Certificate\Exception\InvalidKeyUsageException;
 use SimpleSAML\SAML2\Exception\InvalidArgumentException;
+
+use function array_key_exists;
+use function in_array;
+use function is_string;
 
 /**
  * Simple DTO wrapper for (X509) keys. Implements ArrayAccess
  * for easier backwards compatibility.
  */
-class Key implements \ArrayAccess
+class Key implements ArrayAccess
 {
     // Possible key usages
     public const USAGE_SIGNING = 'signing';

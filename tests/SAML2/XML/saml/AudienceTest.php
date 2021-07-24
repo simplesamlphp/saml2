@@ -10,6 +10,9 @@ use SimpleSAML\SAML2\XML\saml\Audience;
 use SimpleSAML\Test\XML\SerializableXMLTestTrait;
 use SimpleSAML\XML\DOMDocumentFactory;
 
+use function dirname;
+use function strval;
+
 /**
  * Class \SimpleSAML\SAML2\XML\saml\AudienceTest
  *

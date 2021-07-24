@@ -20,6 +20,9 @@ use SimpleSAML\XML\Exception\MissingAttributeException;
 use SimpleSAML\XML\Chunk;
 use SimpleSAML\XMLSecurity\XMLSecurityDSig;
 
+use function dirname;
+use function strval;
+
 /**
  * This is a test for the UnknownRoleDescriptor class.
  *

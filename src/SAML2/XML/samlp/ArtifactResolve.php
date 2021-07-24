@@ -14,6 +14,8 @@ use SimpleSAML\XML\Exception\TooManyElementsException;
 use SimpleSAML\XML\Utils as XMLUtils;
 use SimpleSAML\XMLSecurity\XML\ds\Signature;
 
+use function array_pop;
+
 /**
  * The Artifact is part of the SAML 2.0 IdP code, and it builds an artifact object.
  * I am using strings, because I find them easier to work with.

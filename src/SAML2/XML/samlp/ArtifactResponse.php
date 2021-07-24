@@ -13,6 +13,8 @@ use SimpleSAML\XML\Exception\TooManyElementsException;
 use SimpleSAML\XML\Utils as XMLUtils;
 use SimpleSAML\XMLSecurity\XML\ds\Signature;
 
+use function array_pop;
+
 /**
  * The \SimpleSAML\SAML2\XML\samlp\ArtifactResponse,
  *  is the response to the \SimpleSAML\SAML2\XML\samlp\ArtifactResolve.

@@ -16,6 +16,10 @@ use SimpleSAML\XML\Utils as XMLUtils;
 use SimpleSAML\XMLSecurity\XML\ds\KeyInfo;
 use SimpleSAML\XMLSecurity\XMLSecurityDSig;
 
+use function filter_var;
+use function gmdate;
+use function is_null;
+
 /**
  * Class representing SAML 2 SubjectConfirmationData element.
  *

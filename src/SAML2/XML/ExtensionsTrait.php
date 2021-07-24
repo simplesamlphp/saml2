@@ -10,6 +10,8 @@ use SimpleSAML\SAML2\Constants;
 use SimpleSAML\SAML2\Exception\ProtocolViolationException;
 use SimpleSAML\XML\XMLElementInterface;
 
+use function in_array;
+
 /**
  * Trait grouping common functionality for elements implementing ExtensionType.
  *

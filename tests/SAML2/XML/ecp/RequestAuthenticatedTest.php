@@ -12,6 +12,9 @@ use SimpleSAML\SAML2\XML\ecp\RequestAuthenticated;
 use SimpleSAML\XML\DOMDocumentFactory;
 use SimpleSAML\XML\Exception\MissingAttributeException;
 
+use function dirname;
+use function strval;
+
 /**
  * @package simplesamlphp/saml2
  * @covers \SimpleSAML\SAML2\XML\ecp\AbstractEcpElement

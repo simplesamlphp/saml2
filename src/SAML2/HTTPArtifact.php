@@ -18,6 +18,17 @@ use SimpleSAML\Store;
 use SimpleSAML\Utils\HTTP;
 use SimpleSAML\XMLSecurity\XMLSecurityKey;
 
+use function array_key_exists;
+use function base64_decode;
+use function base64_encode;
+use function bin2hex;
+use function hexdec;
+use function openssl_random_pseudo_bytes;
+use function pack;
+use function sha1;
+use function substr;
+use function var_export;
+
 /**
  * Class which implements the HTTP-Artifact binding.
  *

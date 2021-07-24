@@ -19,6 +19,9 @@ use SimpleSAML\XML\Exception\TooManyElementsException;
 use SimpleSAML\XML\Utils as XMLUtils;
 use SimpleSAML\XMLSecurity\XML\ds\Signature;
 
+use function array_pop;
+use function gmdate;
+
 /**
  * Class for SAML 2 logout request messages.
  *

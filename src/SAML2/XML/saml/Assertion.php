@@ -24,6 +24,11 @@ use SimpleSAML\XMLSecurity\XML\ds\Signature;
 use SimpleSAML\XMLSecurity\XMLSecEnc;
 use SimpleSAML\XMLSecurity\XMLSecurityKey;
 
+use function array_filter;
+use function array_merge;
+use function array_pop;
+use function array_values;
+
 /**
  * Class representing a SAML 2 assertion.
  *

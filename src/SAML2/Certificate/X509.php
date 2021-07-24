@@ -4,6 +4,9 @@ declare(strict_types=1);
 
 namespace SimpleSAML\SAML2\Certificate;
 
+use function chunk_split;
+use function preg_replace;
+
 /**
  * Specific Certificate Key.
  */

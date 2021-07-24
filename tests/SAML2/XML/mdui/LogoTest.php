@@ -15,6 +15,9 @@ use SimpleSAML\Test\XML\ArrayizableXMLTestTrait;
 use SimpleSAML\Test\XML\SerializableXMLTestTrait;
 use SimpleSAML\XML\Utils as XMLUtils;
 
+use function dirname;
+use function strval;
+
 /**
  * Class \SAML2\XML\mdui\LogoTest
  *

@@ -8,6 +8,9 @@ use InvalidArgumentException;
 use SimpleSAML\SAML2\Certificate\Key;
 use Throwable;
 
+use function implode;
+use function sprintf;
+
 /**
  * Named exception for when a non-existent key-usage is given
  */

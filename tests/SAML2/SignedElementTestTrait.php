@@ -9,6 +9,8 @@ use Exception;
 use SimpleSAML\XMLSecurity\TestUtils\PEMCertificatesMock;
 use SimpleSAML\XMLSecurity\XMLSecurityKey;
 
+use function trim;
+
 /**
  * A trait providing basic tests for signed elements.
  *

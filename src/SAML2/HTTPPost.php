@@ -12,6 +12,10 @@ use SimpleSAML\SAML2\XML\samlp\AbstractRequest;
 use SimpleSAML\SAML2\XML\samlp\MessageFactory;
 use SimpleSAML\XML\DOMDocumentFactory;
 
+use function array_key_exists;
+use function base64_decode;
+use function base64_encode;
+
 /**
  * Class which implements the HTTP-POST binding.
  *

@@ -7,6 +7,13 @@ namespace SimpleSAML\SAML2;
 use Exception;
 use SimpleSAML\SAML2\XML\samlp\AbstractMessage;
 
+use function array_key_exists;
+use function array_keys;
+use function array_map;
+use function explode;
+use function implode;
+use function var_export;
+
 /**
  * Base class for SAML 2 bindings.
  *

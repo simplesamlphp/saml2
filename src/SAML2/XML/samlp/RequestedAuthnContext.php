@@ -11,6 +11,8 @@ use SimpleSAML\SAML2\Utils;
 use SimpleSAML\SAML2\XML\saml\AuthnContextClassRef;
 use SimpleSAML\SAML2\XML\saml\AuthnContextDeclRef;
 
+use function array_merge;
+
 /**
  * Class representing SAML2 RequestedAuthnContext
  *

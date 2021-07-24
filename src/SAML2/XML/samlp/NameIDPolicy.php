@@ -8,6 +8,8 @@ use DOMElement;
 use SimpleSAML\Assert\Assert;
 use SimpleSAML\XML\Exception\InvalidDOMElementException;
 
+use function var_export;
+
 /**
  * Class for handling SAML2 NameIDPolicy.
  *

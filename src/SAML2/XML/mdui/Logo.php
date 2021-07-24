@@ -10,6 +10,11 @@ use SimpleSAML\Assert\Assert;
 use SimpleSAML\XML\Exception\InvalidDOMElementException;
 use SimpleSAML\XML\XMLStringElementTrait;
 
+use function filter_var;
+use function strval;
+use function substr;
+use function trim;
+
 /**
  * Class for handling the Logo metadata extensions for login and discovery user interface
  *

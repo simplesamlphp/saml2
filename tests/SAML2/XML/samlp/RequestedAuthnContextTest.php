@@ -14,6 +14,9 @@ use SimpleSAML\SAML2\XML\samlp\RequestedAuthnContext;
 use SimpleSAML\Test\XML\SerializableXMLTestTrait;
 use SimpleSAML\XML\DOMDocumentFactory;
 
+use function dirname;
+use function strval;
+
 /**
  * Class \SAML2\XML\samlp\RequestedAuthnContextTest
  *
@@ -82,7 +85,7 @@ final class RequestedAuthnContextTest extends TestCase
          new RequestedAuthnContext(
              [
                  DOMDocumentFactory::fromString('<root />'),
-                $authnContextDeclRef
+                 $authnContextDeclRef
              ],
              'exact'
          );

@@ -10,6 +10,13 @@ use SimpleSAML\XML\Exception\InvalidDOMElementException;
 use SimpleSAML\XML\AbstractXMLElement;
 use SimpleSAML\Assert\Assert;
 
+use function gettype;
+use function intval;
+use function is_array;
+use function is_int;
+use function is_null;
+use function is_string;
+
 /**
  * Serializable class representing an AttributeValue.
  *

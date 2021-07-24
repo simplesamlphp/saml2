@@ -15,6 +15,9 @@ use SimpleSAML\XML\Chunk;
 use SimpleSAML\XML\DOMDocumentFactory;
 use SimpleSAML\XML\Utils as XMLUtils;
 
+use function dirname;
+use function strval;
+
 /**
  * Class \SAML2\XML\mdattr\EntityAttributesTest
  *
@@ -101,7 +104,7 @@ final class EntityAttributesTest extends TestCase
         );
         $this->assertEquals('attrib1', $entityAttributes->getChildren()[1]->getName());
         $this->assertEquals(
-            'urn:oasis:names:tc:SAML:2.0:attrname-format:uri',
+            Constants::NAMEFORMAT_URI,
             $entityAttributes->getChildren()[1]->getNameFormat()
         );
         $this->assertCount(0, $entityAttributes->getChildren()[1]->getAttributeValues());
@@ -112,7 +115,7 @@ final class EntityAttributesTest extends TestCase
         );
         $this->assertEquals('urn:simplesamlphp:v1:simplesamlphp', $entityAttributes->getChildren()[3]->getName());
         $this->assertEquals(
-            'urn:oasis:names:tc:SAML:2.0:attrname-format:uri',
+            Constants::NAMEFORMAT_URI,
             $entityAttributes->getChildren()[3]->getNameFormat()
         );
         $this->assertCount(3, $entityAttributes->getChildren()[3]->getAttributeValues());

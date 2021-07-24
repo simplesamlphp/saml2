@@ -8,6 +8,9 @@ use Psr\Log\LoggerInterface;
 use SimpleSAML\SAML2\Configuration\CertificateProvider;
 use SimpleSAML\SAML2\XML\SignedElementInterface;
 
+use function get_class;
+use function sprintf;
+
 /**
  * Allows for validation of a signature trying different validators till a validator is found
  * that can validate the signature.

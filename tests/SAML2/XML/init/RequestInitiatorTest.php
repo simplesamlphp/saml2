@@ -13,6 +13,9 @@ use SimpleSAML\SAML2\Utils;
 use SimpleSAML\SAML2\XML\init\RequestInitiator;
 use SimpleSAML\XML\DOMDocumentFactory;
 
+use function dirname;
+use function strval;
+
 /**
  * Class \SAML2\XML\init\RequestInitiatorTest
  *

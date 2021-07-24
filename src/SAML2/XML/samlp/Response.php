@@ -18,6 +18,8 @@ use SimpleSAML\XML\Utils as XMLUtils;
 use SimpleSAML\XMLSecurity\Utils\Security;
 use SimpleSAML\XMLSecurity\XML\ds\Signature;
 
+use function array_pop;
+
 /**
  * Class for SAML 2 Response messages.
  *

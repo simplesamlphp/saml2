@@ -35,6 +35,10 @@ use SimpleSAML\XML\Exception\MissingAttributeException;
 use SimpleSAML\XML\Exception\TooManyElementsException;
 use SimpleSAML\XML\Utils as XMLUtils;
 
+use function dirname;
+use function str_repeat;
+use function strval;
+
 /**
  * Class \SAML2\XML\md\EntityDescriptorTest
  *

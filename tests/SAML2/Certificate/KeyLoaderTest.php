@@ -15,6 +15,11 @@ use SimpleSAML\SAML2\Certificate\X509;
 use SimpleSAML\SAML2\Configuration\CertificateProvider;
 use SimpleSAML\XMLSecurity\Utils\Certificate;
 
+use function dirname;
+use function file_get_contents;
+use function preg_match;
+use function preg_replace;
+
 /**
  * @covers \SimpleSAML\SAML2\Certificate\KeyLoader
  * @package simplesamlphp/saml2

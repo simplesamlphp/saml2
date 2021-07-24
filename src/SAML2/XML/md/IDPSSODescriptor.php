@@ -13,6 +13,8 @@ use SimpleSAML\XML\Exception\TooManyElementsException;
 use SimpleSAML\XML\Utils as XMLUtils;
 use SimpleSAML\XMLSecurity\XML\ds\Signature;
 
+use function preg_split;
+
 /**
  * Class representing SAML 2 IDPSSODescriptor.
  *

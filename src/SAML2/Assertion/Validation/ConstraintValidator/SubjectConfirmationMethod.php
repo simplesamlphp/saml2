@@ -9,6 +9,8 @@ use SimpleSAML\SAML2\Assertion\Validation\SubjectConfirmationConstraintValidator
 use SimpleSAML\SAML2\Constants;
 use SimpleSAML\SAML2\XML\saml\SubjectConfirmation;
 
+use function sprintf;
+
 final class SubjectConfirmationMethod implements SubjectConfirmationConstraintValidator
 {
     /**

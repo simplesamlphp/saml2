@@ -13,6 +13,9 @@ use SimpleSAML\SAML2\XML\md\NameIDFormat;
 use SimpleSAML\Test\XML\SerializableXMLTestTrait;
 use SimpleSAML\XML\DOMDocumentFactory;
 
+use function dirname;
+use function strval;
+
 /**
  * Class \SimpleSAML\SAML2\XML\md\NameIDFormatTest
  *

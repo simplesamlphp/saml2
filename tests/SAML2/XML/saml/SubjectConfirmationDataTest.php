@@ -14,6 +14,9 @@ use SimpleSAML\XML\Chunk;
 use SimpleSAML\XMLSecurity\XML\ds\KeyInfo;
 use SimpleSAML\XMLSecurity\XML\ds\KeyName;
 
+use function dirname;
+use function strval;
+
 /**
  * Class \SAML2\XML\saml\SubjectConfirmationDataTest
  *

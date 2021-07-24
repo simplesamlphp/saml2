@@ -35,6 +35,9 @@ use SimpleSAML\XMLSecurity\XML\ds\KeyInfo;
 use SimpleSAML\XMLSecurity\XML\ds\KeyName;
 use SimpleSAML\XMLSecurity\XMLSecurityDSig;
 
+use function dirname;
+use function strval;
+
 /**
  * Tests for the md:SPSSODescriptor element.
  *

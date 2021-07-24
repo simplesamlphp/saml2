@@ -15,6 +15,9 @@ use SimpleSAML\XML\DOMDocumentFactory;
 use SimpleSAML\XML\Exception\InvalidDOMElementException;
 use SimpleSAML\XML\Exception\MissingAttributeException;
 
+use function dirname;
+use function strval;
+
 /**
  * Class \SAML2\XML\md\IndexedEndpointTypeTest
  *

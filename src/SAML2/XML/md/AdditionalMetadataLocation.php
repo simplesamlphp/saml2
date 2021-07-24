@@ -11,6 +11,8 @@ use SimpleSAML\Assert\Assert;
 use SimpleSAML\XML\Exception\InvalidDOMElementException;
 use SimpleSAML\XML\XMLStringElementTrait;
 
+use function trim;
+
 /**
  * Class representing SAML 2 metadata AdditionalMetadataLocation element.
  *

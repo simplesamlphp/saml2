@@ -12,6 +12,10 @@ use SimpleSAML\SAML2\Exception\InvalidArgumentException;
 use SimpleSAML\SAML2\Utilities\File;
 use SimpleSAML\XMLSecurity\Utils\Certificate;
 
+use function count;
+use function preg_match;
+use function sprintf;
+
 /**
  * KeyLoader
  */

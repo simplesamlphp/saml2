@@ -6,6 +6,9 @@ namespace SimpleSAML\Test\SAML2;
 
 use Psr\Log\AbstractLogger;
 
+use function array_filter;
+use function count;
+
 /**
  * A very simple in-memory logger that allows querying the log for existence of messages
  *

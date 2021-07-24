@@ -4,6 +4,7 @@ declare(strict_types=1);
 
 namespace SimpleSAML\Test\SAML2\XML\samlp;
 
+use DOMDocument;
 use PHPUnit\Framework\TestCase;
 use SimpleSAML\SAML2\Constants;
 use SimpleSAML\SAML2\XML\saml\Attribute;
@@ -22,6 +23,9 @@ use SimpleSAML\XML\Utils as XMLUtils;
 use SimpleSAML\XML\Chunk;
 use SimpleSAML\XMLSecurity\TestUtils\PEMCertificatesMock;
 use SimpleSAML\XMLSecurity\XMLSecurityKey;
+
+use function dirname;
+use function strval;
 
 /**
  * Class \SimpleSAML\SAML2\XML\samlp\AbstractStatusResponseTest
@@ -230,7 +234,7 @@ XML;
 
         $responseElement = $response->toXML();
 
-        $expectedStructureDocument = new \DOMDocument();
+        $expectedStructureDocument = new DOMDocument();
         $expectedStructureDocument->loadXML(<<<STATUSXML
 <samlp:Response xmlns:samlp="urn:oasis:names:tc:SAML:2.0:protocol"
                 xmlns:saml="urn:oasis:names:tc:SAML:2.0:assertion"

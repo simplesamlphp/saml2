@@ -13,6 +13,11 @@ use SimpleSAML\SAML2\Configuration\ServiceProvider;
 use SimpleSAML\SAML2\XML\saml\Assertion;
 use SimpleSAML\SAML2\XML\saml\EncryptedAssertion;
 
+use function count;
+use function get_class;
+use function is_null;
+use function sprintf;
+
 class Decrypter
 {
     /**

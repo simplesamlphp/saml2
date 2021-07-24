@@ -14,6 +14,20 @@ use SimpleSAML\XML\DOMDocumentFactory;
 use SimpleSAML\XMLSecurity\Utils\Security;
 use SimpleSAML\XMLSecurity\XMLSecurityKey;
 
+use function array_key_exists;
+use function base64_decode;
+use function base64_encode;
+use function count;
+use function explode;
+use function get_class;
+use function gzdeflate;
+use function gzinflate;
+use function strlen;
+use function strpos;
+use function urlencode;
+use function urldecode;
+use function var_export;
+
 /**
  * Class which implements the HTTP-Redirect binding.
  *

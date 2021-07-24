@@ -14,6 +14,9 @@ use SimpleSAML\SAML2\XML\ecp\Response;
 use SimpleSAML\XML\DOMDocumentFactory;
 use SimpleSAML\XML\Exception\MissingAttributeException;
 
+use function dirname;
+use function strval;
+
 /**
  * @covers \SimpleSAML\SAML2\XML\ecp\AbstractEcpElement
  * @covers \SimpleSAML\SAML2\XML\ecp\Response

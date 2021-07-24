@@ -10,6 +10,8 @@ use SimpleSAML\Assert\Assert;
 use SimpleSAML\XML\Exception\InvalidDOMElementException;
 use SimpleSAML\XML\XMLStringElementTrait;
 
+use function array_key_first;
+
 /**
  * Abstract class implementing LocalizedNameType.
  *

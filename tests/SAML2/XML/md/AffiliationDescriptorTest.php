@@ -17,6 +17,9 @@ use SimpleSAML\XML\Utils as XMLUtils;
 use SimpleSAML\XMLSecurity\XML\ds\KeyInfo;
 use SimpleSAML\XMLSecurity\XML\ds\KeyName;
 
+use function dirname;
+use function strval;
+
 /**
  * Tests for the AffiliationDescriptor class.
  *

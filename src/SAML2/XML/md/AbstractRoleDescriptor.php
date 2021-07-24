@@ -9,6 +9,10 @@ use InvalidArgumentException;
 use SimpleSAML\Assert\Assert;
 use SimpleSAML\SAML2\Constants;
 
+use function filter_var;
+use function implode;
+use function is_null;
+
 /**
  * Class representing SAML 2 RoleDescriptor element.
  *

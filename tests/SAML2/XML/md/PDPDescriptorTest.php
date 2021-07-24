@@ -15,6 +15,9 @@ use SimpleSAML\SAML2\XML\md\PDPDescriptor;
 use SimpleSAML\Test\XML\SerializableXMLTestTrait;
 use SimpleSAML\XML\DOMDocumentFactory;
 
+use function dirname;
+use function strval;
+
 /**
  * Tests for md:PDPDescriptor
  *

@@ -16,6 +16,9 @@ use SimpleSAML\Test\XML\SerializableXMLTestTrait;
 use SimpleSAML\XML\DOMDocumentFactory;
 use SimpleSAML\XML\Utils as XMLUtils;
 
+use function dirname;
+use function strval;
+
 /**
  * @covers \SimpleSAML\SAML2\XML\md\AbstractMdElement
  * @covers \SimpleSAML\SAML2\XML\md\AuthnAuthorityDescriptor

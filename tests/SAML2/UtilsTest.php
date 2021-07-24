@@ -16,6 +16,8 @@ use SimpleSAML\XML\Utils as XMLUtils;
 use SimpleSAML\XMLSecurity\TestUtils\PEMCertificatesMock;
 use SimpleSAML\XMLSecurity\XML\ds\X509Data;
 
+use function count;
+
 /**
  * Class \SAML2\UtilsTest
  *
@@ -212,7 +214,7 @@ final class UtilsTest extends TestCase
             $ts = XMLUtils::xsDateTimeToTimestamp($time);
             $this->assertTrue($shouldPass);
             $this->assertEquals($expectedTs, $ts);
-        } catch (\Exception $e) {
+        } catch (Exception $e) {
             $this->assertFalse($shouldPass);
         }
     }

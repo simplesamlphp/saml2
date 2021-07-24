@@ -16,6 +16,9 @@ use SimpleSAML\XML\Exception\MissingAttributeException;
 use SimpleSAML\XMLSecurity\TestUtils\PEMCertificatesMock;
 use SimpleSAML\XMLSecurity\XMLSecurityKey;
 
+use function dirname;
+use function strval;
+
 /**
  * Class \SAML2\XML\saml\AttributeTest
  *

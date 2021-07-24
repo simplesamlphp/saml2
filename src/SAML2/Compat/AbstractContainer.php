@@ -9,6 +9,11 @@ use SimpleSAML\Assert\Assert;
 use SimpleSAML\XML\AbstractXMLElement;
 use SimpleSAML\XML\saml\CustomIdentifierInterface;
 
+use function array_key_exists;
+use function is_subclass_of;
+use function join;
+use function urlencode;
+
 abstract class AbstractContainer
 {
     /**

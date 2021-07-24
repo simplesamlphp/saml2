@@ -4,6 +4,7 @@ declare(strict_types=1);
 
 namespace SimpleSAML\Test\SAML2;
 
+use Mockery;
 use Mockery\Adapter\Phpunit\MockeryTestCase;
 
 /**
@@ -21,7 +22,7 @@ abstract class ControlledTimeTest extends MockeryTestCase
 
     public function setUp(): void
     {
-        $timing = \Mockery::mock('alias:SimpleSAML\SAML2\Utilities\Temporal');
+        $timing = Mockery::mock('alias:SimpleSAML\SAML2\Utilities\Temporal');
         $timing->shouldReceive('getTime')->andReturn($this->currentTime);
     }
 }

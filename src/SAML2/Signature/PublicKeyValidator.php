@@ -13,6 +13,9 @@ use SimpleSAML\SAML2\Certificate\X509;
 use SimpleSAML\SAML2\Configuration\CertificateProvider;
 use SimpleSAML\SAML2\XML\SignedElementInterface;
 
+use function count;
+use function sprintf;
+
 class PublicKeyValidator extends AbstractChainedValidator
 {
     /**

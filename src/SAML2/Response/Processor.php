@@ -18,6 +18,8 @@ use SimpleSAML\SAML2\Signature\Validator;
 use SimpleSAML\SAML2\Utilities\ArrayCollection;
 use SimpleSAML\SAML2\XML\samlp\Response;
 
+use function sprintf;
+
 class Processor
 {
     /**

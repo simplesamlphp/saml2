@@ -17,6 +17,11 @@ use SimpleSAML\XML\Exception\TooManyElementsException;
 use SimpleSAML\XML\Utils as XMLUtils;
 use SimpleSAML\XMLSecurity\XML\ds\Signature;
 
+use function array_pop;
+use function filter_var;
+use function is_null;
+use function strval;
+
 /**
  * Class for SAML 2 authentication request messages.
  *

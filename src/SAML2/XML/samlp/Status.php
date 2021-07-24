@@ -13,6 +13,9 @@ use SimpleSAML\XML\Exception\MissingElementException;
 use SimpleSAML\XML\Exception\TooManyElementsException;
 use SimpleSAML\XML\Utils as XMLUtils;
 
+use function array_pop;
+use function is_null;
+
 /**
  * SAML Status data type.
  *

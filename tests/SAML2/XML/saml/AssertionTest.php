@@ -38,6 +38,10 @@ use SimpleSAML\XML\Utils as XMLUtils;
 use SimpleSAML\XMLSecurity\TestUtils\PEMCertificatesMock;
 use SimpleSAML\XMLSecurity\XMLSecurityKey;
 
+use function dirname;
+use function strval;
+use function time;
+
 /**
  * Class \SimpleSAML\SAML2\AssertionTest
  *

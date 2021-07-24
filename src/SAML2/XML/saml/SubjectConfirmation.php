@@ -13,6 +13,8 @@ use SimpleSAML\XML\Exception\TooManyElementsException;
 use SimpleSAML\SAML2\Utils;
 use SimpleSAML\SAML2\XML\IdentifierTrait;
 
+use function array_pop;
+
 /**
  * Class representing SAML 2 SubjectConfirmation element.
  *

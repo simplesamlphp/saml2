@@ -19,6 +19,14 @@ use SimpleSAML\XMLSecurity\XMLSecurityKey;
 use SimpleSAML\XML\Utils as XMLUtils;
 use SoapClient as BUILTIN_SoapClient;
 
+use function chunk_split;
+use function file_exists;
+use function openssl_pkey_get_details;
+use function openssl_pkey_get_public;
+use function sha1;
+use function stream_context_create;
+use function stream_context_get_options;
+
 /**
  * Implementation of the SAML 2.0 SOAP binding.
  *

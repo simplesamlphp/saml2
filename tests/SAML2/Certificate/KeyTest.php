@@ -9,6 +9,8 @@ use SimpleSAML\SAML2\Certificate\Key;
 use SimpleSAML\SAML2\Certificate\Exception\InvalidKeyUsageException;
 use SimpleSAML\SAML2\Exception\InvalidArgumentException;
 
+use function call_user_func_array;
+
 /**
  * @covers \SimpleSAML\SAML2\Certificate\Key
  * @package simplesamlphp/saml2
