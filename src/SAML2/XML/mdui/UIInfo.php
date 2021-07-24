@@ -7,11 +7,11 @@ namespace SimpleSAML\SAML2\XML\mdui;
 use DOMElement;
 use SimpleSAML\Assert\Assert;
 use SimpleSAML\SAML2\Exception\ProtocolViolationException;
+use SimpleSAML\SAML2\Utils\XPath;
 use SimpleSAML\XML\Chunk;
 use SimpleSAML\XML\Constants;
 use SimpleSAML\XML\Exception\InvalidDOMElementException;
 use SimpleSAML\XML\ExtendableElementTrait;
-use SimpleSAML\XML\Utils as XMLUtils;
 
 use function array_map;
 use function array_merge;
@@ -381,7 +381,7 @@ final class UIInfo extends AbstractMduiElement
         $children = [];
 
         /** @var \DOMElement $node */
-        foreach (XMLUtils::xpQuery($xml, './*') as $node) {
+        foreach (XPath::xpQuery($xml, './*', XPath::getXPath($xml)) as $node) {
             if ($node->namespaceURI !== UIInfo::NS) {
                 $children[] = new Chunk($node);
             }

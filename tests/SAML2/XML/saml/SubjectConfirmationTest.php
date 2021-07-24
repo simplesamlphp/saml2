@@ -10,6 +10,7 @@ use PHPUnit\Framework\TestCase;
 use SimpleSAML\SAML2\Compat\AbstractContainer;
 use SimpleSAML\SAML2\Compat\ContainerSingleton;
 use SimpleSAML\SAML2\Constants;
+use SimpleSAML\SAML2\Utils\XPath;
 use SimpleSAML\SAML2\XML\saml\BaseID;
 use SimpleSAML\SAML2\XML\saml\NameID;
 use SimpleSAML\SAML2\XML\saml\SubjectConfirmation;
@@ -19,7 +20,6 @@ use SimpleSAML\Test\XML\SerializableXMLTestTrait;
 use SimpleSAML\XML\DOMDocumentFactory;
 use SimpleSAML\XML\Exception\MissingAttributeException;
 use SimpleSAML\XML\Exception\TooManyElementsException;
-use SimpleSAML\XML\Utils as XMLUtils;
 
 use function dirname;
 use function strval;
@@ -86,14 +86,16 @@ final class SubjectConfirmationTest extends TestCase
         $subjectConfirmationElement = $subjectConfirmation->toXML();
 
         // Test for a NameID
-        $subjectConfirmationElements = XMLUtils::xpQuery($subjectConfirmationElement, './saml_assertion:NameID');
+        $xpCache = XPath::getXPath($subjectConfirmationElement);
+        $subjectConfirmationElements = XPath::xpQuery($subjectConfirmationElement, './saml_assertion:NameID', $xpCache);
         $this->assertCount(1, $subjectConfirmationElements);
 
         // Test ordering of SubjectConfirmation contents
         /** @psalm-var \DOMElement[] $subjectConfirmationElements */
-        $subjectConfirmationElements = XMLUtils::xpQuery(
+        $subjectConfirmationElements = XPath::xpQuery(
             $subjectConfirmationElement,
-            './saml_assertion:NameID/following-sibling::*'
+            './saml_assertion:NameID/following-sibling::*',
+            $xpCache
         );
         $this->assertCount(1, $subjectConfirmationElements);
         $this->assertEquals('saml:SubjectConfirmationData', $subjectConfirmationElements[0]->tagName);

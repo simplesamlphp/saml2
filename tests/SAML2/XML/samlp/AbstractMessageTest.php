@@ -11,6 +11,7 @@ use Mockery\Adapter\Phpunit\MockeryTestCase;
 use SimpleSAML\Assert\AssertionFailedException;
 use SimpleSAML\SAML2\Constants;
 use SimpleSAML\SAML2\Exception\Protocol\RequestVersionTooHighException;
+use SimpleSAML\SAML2\Utils\XPath;
 use SimpleSAML\SAML2\XML\saml\Issuer;
 use SimpleSAML\SAML2\XML\samlp\AbstractMessage;
 use SimpleSAML\SAML2\XML\samlp\Extensions;
@@ -22,7 +23,6 @@ use SimpleSAML\Test\XML\SerializableXMLTestTrait;
 use SimpleSAML\XML\Chunk;
 use SimpleSAML\XML\DOMDocumentFactory;
 use SimpleSAML\XML\Exception\MissingElementException;
-use SimpleSAML\XML\Utils as XMLUtils;
 use SimpleSAML\XMLSecurity\TestUtils\PEMCertificatesMock;
 use SimpleSAML\XMLSecurity\XML\ds\Signature;
 use SimpleSAML\XMLSecurity\XMLSecurityKey;
@@ -129,7 +129,8 @@ AUTHNREQUEST
 
         $response = new Response($status, $issuer);
         $xml = $response->toXML();
-        $xml_issuer = XMLUtils::xpQuery($xml, './saml_assertion:Issuer');
+        $xpCache = XPath::getXPath($xml);
+        $xml_issuer = XPath::xpQuery($xml, './saml_assertion:Issuer', $xpCache);
         $xml_issuer = $xml_issuer[0];
 
         $this->assertFalse($xml_issuer->hasAttributes());
@@ -145,7 +146,8 @@ AUTHNREQUEST
         );
         $response = new Response($status, $issuer);
         $xml = $response->toXML();
-        $xml_issuer = XMLUtils::xpQuery($xml, './saml_assertion:Issuer');
+        $xpCache = XPath::getXPath($xml);
+        $xml_issuer = XPath::xpQuery($xml, './saml_assertion:Issuer', $xpCache);
         $xml_issuer = $xml_issuer[0];
         $this->assertInstanceOf(DOMElement::class, $xml_issuer);
 
@@ -159,7 +161,8 @@ AUTHNREQUEST
         $response = new Response($status);
         $xml = $response->toXML();
 
-        $this->assertEmpty(XMLUtils::xpQuery($xml, './saml_assertion:Issuer'));
+        $xpCache = XPath::getXPath($xml);
+        $this->assertEmpty(XPath::xpQuery($xml, './saml_assertion:Issuer', $xpCache));
     }
 
 
@@ -350,7 +353,7 @@ XML;
         $this->assertEquals(Constants::CONSENT_PRIOR, $message->getConsent());
 
         $messageElement = $message->toXML();
-        $xp = XMLUtils::xpQuery($messageElement, '.');
+        $xp = XPath::xpQuery($messageElement, '.', XPath::getXPath($messageElement));
 
         /** @psalm-var \DOMElement $query */
         $query = $xp[0];

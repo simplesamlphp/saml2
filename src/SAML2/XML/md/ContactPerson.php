@@ -9,6 +9,7 @@ use Exception;
 use SimpleSAML\Assert\Assert;
 use SimpleSAML\SAML2\Constants;
 use SimpleSAML\SAML2\Exception\ProtocolViolationException;
+use SimpleSAML\SAML2\Utils\XPath;
 use SimpleSAML\SAML2\XML\ExtendableElementTrait;
 use SimpleSAML\XML\DOMDocumentFactory;
 use SimpleSAML\XML\Exception\InvalidDOMElementException;
@@ -130,7 +131,7 @@ final class ContactPerson extends AbstractMdElement
      */
     private static function getStringElements(DOMElement $parent, string $name): array
     {
-        $e = XMLUtils::xpQuery($parent, './saml_metadata:' . $name);
+        $e = XPath::xpQuery($parent, './saml_metadata:' . $name, XPath::getXPath($parent));
 
         $ret = [];
         foreach ($e as $i) {

@@ -8,6 +8,7 @@ use DOMDocument;
 use InvalidArgumentException;
 use PHPUnit\Framework\TestCase;
 use SimpleSAML\SAML2\Constants;
+use SimpleSAML\SAML2\Utils\XPath;
 use SimpleSAML\SAML2\XML\saml\AuthenticatingAuthority;
 use SimpleSAML\SAML2\XML\saml\AuthnContext;
 use SimpleSAML\SAML2\XML\saml\AuthnContextClassRef;
@@ -95,14 +96,16 @@ final class AuthnStatementTest extends TestCase
         $authnStatementElement = $authnStatement->toXML();
 
         // Test for a SubjectLocality
-        $authnStatementElements = XMLUtils::xpQuery($authnStatementElement, './saml_assertion:SubjectLocality');
+        $xpCache = XPath::getXPath($authnStatementElement);
+        $authnStatementElements = XPath::xpQuery($authnStatementElement, './saml_assertion:SubjectLocality', $xpCache);
         $this->assertCount(1, $authnStatementElements);
 
         // Test ordering of AuthnStatement contents
         /** @psalm-var \DOMElement[] $authnStatementElements */
-        $authnStatementElements = XMLUtils::xpQuery(
+        $authnStatementElements = XPath::xpQuery(
             $authnStatementElement,
-            './saml_assertion:SubjectLocality/following-sibling::*'
+            './saml_assertion:SubjectLocality/following-sibling::*',
+            $xpCache
         );
         $this->assertCount(1, $authnStatementElements);
         $this->assertEquals('saml:AuthnContext', $authnStatementElements[0]->tagName);

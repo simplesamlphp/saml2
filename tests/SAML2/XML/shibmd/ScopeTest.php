@@ -6,10 +6,10 @@ namespace SimpleSAML\Test\SAML2\XML\shibmd;
 
 use DOMDocument;
 use PHPUnit\Framework\TestCase;
+use SimpleSAML\SAML2\Utils\XPath;
 use SimpleSAML\SAML2\XML\shibmd\Scope;
 use SimpleSAML\Test\XML\SerializableXMLTestTrait;
 use SimpleSAML\XML\DOMDocumentFactory;
-use SimpleSAML\XML\Utils as XMLUtils;
 
 use function dirname;
 use function strval;
@@ -64,7 +64,8 @@ final class ScopeTest extends TestCase
         $scopeElement = $scope->toXML($document->documentElement);
 
         /** @var \DOMElement[] $scopeElements */
-        $scopeElements = XMLUtils::xpQuery($scopeElement, '/root/shibmd:Scope');
+        $xpCache = XPath::getXPath($scopeElement);
+        $scopeElements = XPath::xpQuery($scopeElement, '/root/shibmd:Scope', $xpCache);
         $this->assertCount(1, $scopeElements);
         $scopeElement = $scopeElements[0];
 
@@ -85,7 +86,8 @@ final class ScopeTest extends TestCase
         $scopeElement = $scope->toXML($document->documentElement);
 
         /** @var \DOMElement[] $scopeElements */
-        $scopeElements = XMLUtils::xpQuery($scopeElement, '/root/shibmd:Scope');
+        $xpCache = XPath::getXPath($scopeElement);
+        $scopeElements = XPath::xpQuery($scopeElement, '/root/shibmd:Scope', $xpCache);
         $this->assertCount(1, $scopeElements);
         $scopeElement = $scopeElements[0];
 

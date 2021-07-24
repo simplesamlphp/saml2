@@ -9,6 +9,7 @@ use SimpleSAML\Assert\Assert;
 use SimpleSAML\SAML2\Exception\Protocol\RequestVersionTooHighException;
 use SimpleSAML\SAML2\Exception\Protocol\RequestVersionTooLowException;
 use SimpleSAML\SAML2\Exception\ProtocolViolationException;
+use SimpleSAML\SAML2\Utils\XPath;
 use SimpleSAML\SAML2\XML\saml\Issuer;
 use SimpleSAML\XML\Exception\InvalidDOMElementException;
 use SimpleSAML\XML\Exception\TooManyElementsException;
@@ -120,7 +121,7 @@ class ArtifactResponse extends AbstractStatusResponse
         Assert::countBetween($issuer, 0, 1);
 
         // find message; it should come last, after the Status-element
-        $status = XMLUtils::xpQuery($xml, './saml_protocol:Status');
+        $status = XPath::xpQuery($xml, './saml_protocol:Status', XPath::getXPath($xml));
         $status = $status[0];
         $message = null;
 

@@ -10,6 +10,7 @@ use SimpleSAML\SAML2\Constants;
 use SimpleSAML\SAML2\Exception\Protocol\RequestVersionTooHighException;
 use SimpleSAML\SAML2\Exception\Protocol\RequestVersionTooLowException;
 use SimpleSAML\SAML2\Exception\ProtocolViolationException;
+use SimpleSAML\SAML2\Utils\XPath;
 use SimpleSAML\SAML2\XML\saml\Issuer;
 use SimpleSAML\XML\Exception\InvalidDOMElementException;
 use SimpleSAML\XML\Exception\TooManyElementsException;
@@ -116,7 +117,7 @@ class ArtifactResolve extends AbstractRequest
         $signature = Signature::getChildrenOfClass($xml);
         Assert::maxCount($signature, 1, 'Only one ds:Signature element is allowed.', TooManyElementsException::class);
 
-        $results = XMLUtils::xpQuery($xml, './saml_protocol:Artifact');
+        $results = XPath::xpQuery($xml, './saml_protocol:Artifact', XPath::getXPath($xml));
         $artifact = $results[0]->textContent;
 
         $resolve = new self(

@@ -8,6 +8,7 @@ use DOMDocument;
 use PHPUnit\Framework\TestCase;
 use SimpleSAML\Assert\AssertionFailedException;
 use SimpleSAML\SAML2\Constants;
+use SimpleSAML\SAML2\Utils\XPath;
 use SimpleSAML\SAML2\XML\saml\Audience;
 use SimpleSAML\SAML2\XML\saml\AudienceRestriction;
 use SimpleSAML\SAML2\XML\saml\AuthnContextClassRef;
@@ -170,14 +171,16 @@ final class AuthnRequestTest extends TestCase
         $authnRequestElement = $authnRequest->toXML();
 
         // Test for a Subject
-        $authnRequestElements = XMLUtils::xpQuery($authnRequestElement, './saml_assertion:Subject');
+        $xpCache = XPath::getXPath($authnRequestElement);
+        $authnRequestElements = XPath::xpQuery($authnRequestElement, './saml_assertion:Subject', $xpCache);
         $this->assertCount(1, $authnRequestElements);
 
         // Test ordering of AuthnRequest contents
         /** @psalm-var \DOMElement[] $authnRequestElements */
-        $authnRequestElements = XMLUtils::xpQuery(
+        $authnRequestElements = XPath::xpQuery(
             $authnRequestElement,
-            './saml_assertion:Subject/following-sibling::*'
+            './saml_assertion:Subject/following-sibling::*',
+            $xpCache
         );
         $this->assertCount(4, $authnRequestElements);
         $this->assertEquals('samlp:NameIDPolicy', $authnRequestElements[0]->tagName);

@@ -11,6 +11,7 @@ use SimpleSAML\Configuration;
 use SimpleSAML\SAML2\Compat\ContainerSingleton;
 use SimpleSAML\SAML2\Compat\MockContainer;
 use SimpleSAML\SAML2\Constants;
+use SimpleSAML\SAML2\Utils\XPath;
 use SimpleSAML\SAML2\XML\saml\Attribute;
 use SimpleSAML\SAML2\XML\saml\BaseID;
 use SimpleSAML\SAML2\XML\saml\EncryptedID;
@@ -20,7 +21,6 @@ use SimpleSAML\Test\SAML2\CustomBaseID;
 use SimpleSAML\Test\XML\SerializableXMLTestTrait;
 use SimpleSAML\XML\Chunk;
 use SimpleSAML\XML\DOMDocumentFactory;
-use SimpleSAML\XML\Utils as XMLUtils;
 use SimpleSAML\XMLSecurity\TestUtils\PEMCertificatesMock;
 use SimpleSAML\XMLSecurity\XML\ds\KeyInfo;
 use SimpleSAML\XMLSecurity\XML\xenc\CipherData;
@@ -146,12 +146,13 @@ final class EncryptedIDTest extends TestCase
         $eidElement = $eid->toXML();
 
         // Test for an EncryptedID
-        $eidElements = XMLUtils::xpQuery($eidElement, './xenc:EncryptedData');
+        $xpCache = XPath::getXPath($eidElement);
+        $eidElements = XPath::xpQuery($eidElement, './xenc:EncryptedData', $xpCache);
         $this->assertCount(1, $eidElements);
 
         // Test ordering of EncryptedID contents
         /** @psalm-var \DOMElement[] $eidElements */
-        $eidElements = XMLUtils::xpQuery($eidElement, './xenc:EncryptedData/following-sibling::*');
+        $eidElements = XPath::xpQuery($eidElement, './xenc:EncryptedData/following-sibling::*', $xpCache);
         $this->assertCount(1, $eidElements);
         $this->assertEquals('xenc:EncryptedKey', $eidElements[0]->tagName);
     }

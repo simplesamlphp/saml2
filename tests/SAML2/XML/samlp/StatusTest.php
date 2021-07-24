@@ -7,6 +7,7 @@ namespace SimpleSAML\Test\SAML2\XML\samlp;
 use DOMDocument;
 use PHPUnit\Framework\TestCase;
 use SimpleSAML\SAML2\Constants;
+use SimpleSAML\SAML2\Utils\XPath;
 use SimpleSAML\SAML2\XML\samlp\Status;
 use SimpleSAML\SAML2\XML\samlp\StatusCode;
 use SimpleSAML\SAML2\XML\samlp\StatusDetail;
@@ -14,7 +15,6 @@ use SimpleSAML\SAML2\XML\samlp\StatusMessage;
 use SimpleSAML\Test\XML\SerializableXMLTestTrait;
 use SimpleSAML\XML\DOMDocumentFactory;
 use SimpleSAML\XML\Chunk;
-use SimpleSAML\XML\Utils as XMLUtils;
 
 use function dirname;
 use function strval;
@@ -98,12 +98,13 @@ final class StatusTest extends TestCase
         $statusElement = $status->toXML();
 
         // Test for a StatusCode
-        $statusElements = XMLUtils::xpQuery($statusElement, './saml_protocol:StatusCode');
+        $xpCache = XPath::getXPath($statusElement);
+        $statusElements = XPath::xpQuery($statusElement, './saml_protocol:StatusCode', $xpCache);
         $this->assertCount(1, $statusElements);
 
         // Test ordering of Status contents
         /** @psalm-var \DOMElement[] $statusElements */
-        $statusElements = XMLUtils::xpQuery($statusElement, './saml_protocol:StatusCode/following-sibling::*');
+        $statusElements = XPath::xpQuery($statusElement, './saml_protocol:StatusCode/following-sibling::*', $xpCache);
         $this->assertCount(2, $statusElements);
         $this->assertEquals('samlp:StatusMessage', $statusElements[0]->tagName);
         $this->assertEquals('samlp:StatusDetail', $statusElements[1]->tagName);

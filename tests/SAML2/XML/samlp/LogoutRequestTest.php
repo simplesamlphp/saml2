@@ -8,6 +8,7 @@ use DOMDocument;
 use DOMElement;
 use Mockery\Adapter\Phpunit\MockeryTestCase;
 use SimpleSAML\SAML2\Constants;
+use SimpleSAML\SAML2\Utils\XPath;
 use SimpleSAML\SAML2\XML\saml\EncryptedID;
 use SimpleSAML\SAML2\XML\saml\Issuer;
 use SimpleSAML\SAML2\XML\saml\NameID;
@@ -18,7 +19,6 @@ use SimpleSAML\XML\Chunk;
 use SimpleSAML\XML\DOMDocumentFactory;
 use SimpleSAML\XML\Exception\MissingElementException;
 use SimpleSAML\XML\Exception\TooManyElementsException;
-use SimpleSAML\XML\Utils as XMLUtils;
 use SimpleSAML\XMLSecurity\TestUtils\PEMCertificatesMock;
 use SimpleSAML\XMLSecurity\XML\ds\KeyInfo;
 use SimpleSAML\XMLSecurity\XML\xenc\CipherData;
@@ -83,12 +83,13 @@ final class LogoutRequestTest extends MockeryTestCase
         $this->assertEquals('LogoutRequest', $logoutRequestElement->localName);
         $this->assertEquals(Constants::NS_SAMLP, $logoutRequestElement->namespaceURI);
 
-        $nameIdElements = XMLUtils::xpQuery($logoutRequestElement, './saml_assertion:NameID');
+        $xpCache = XPath::getXPath($logoutRequestElement);
+        $nameIdElements = XPath::xpQuery($logoutRequestElement, './saml_assertion:NameID', $xpCache);
         $this->assertCount(1, $nameIdElements);
         $nameIdElements = $nameIdElements[0];
         $this->assertEquals('NameIDValue', $nameIdElements->textContent);
 
-        $sessionIndexElements = XMLUtils::xpQuery($logoutRequestElement, './saml_protocol:SessionIndex');
+        $sessionIndexElements = XPath::xpQuery($logoutRequestElement, './saml_protocol:SessionIndex', $xpCache);
         $this->assertCount(1, $sessionIndexElements);
         $this->assertEquals('SessionIndexValue', $sessionIndexElements[0]->textContent);
 
@@ -101,7 +102,8 @@ final class LogoutRequestTest extends MockeryTestCase
         );
         $logoutRequestElement = $logoutRequest->toXML();
 
-        $sessionIndexElements = XMLUtils::xpQuery($logoutRequestElement, './saml_protocol:SessionIndex');
+        $xpCache = XPath::getXPath($logoutRequestElement);
+        $sessionIndexElements = XPath::xpQuery($logoutRequestElement, './saml_protocol:SessionIndex', $xpCache);
         $this->assertCount(2, $sessionIndexElements);
         $this->assertEquals('SessionIndexValue1', $sessionIndexElements[0]->textContent);
         $this->assertEquals('SessionIndexValue2', $sessionIndexElements[1]->textContent);
@@ -119,14 +121,16 @@ final class LogoutRequestTest extends MockeryTestCase
         $logoutRequestElement = $logoutRequest->toXML();
 
         // Test for a NameID
-        $logoutRequestElements = XMLUtils::xpQuery($logoutRequestElement, './saml_assertion:NameID');
+        $xpCache = XPath::getXPath($logoutRequestElement);
+        $logoutRequestElements = XPath::xpQuery($logoutRequestElement, './saml_assertion:NameID', $xpCache);
         $this->assertCount(1, $logoutRequestElements);
 
         // Test ordering of LogoutRequest contents
         /** @psalm-var \DOMElement[] $logoutRequestElements */
-        $logoutRequestElements = XMLUtils::xpQuery(
+        $logoutRequestElements = XPath::xpQuery(
             $logoutRequestElement,
-            './saml_assertion:NameID/following-sibling::*'
+            './saml_assertion:NameID/following-sibling::*',
+            $xpCache
         );
 
         $this->assertCount(1, $logoutRequestElements);
@@ -197,7 +201,11 @@ final class LogoutRequestTest extends MockeryTestCase
         $logoutRequestElement = $logoutRequest->toXML();
         $this->assertCount(
             1,
-            XMLUtils::xpQuery($logoutRequestElement, './saml_assertion:EncryptedID/xenc:EncryptedData')
+            XPath::xpQuery(
+                $logoutRequestElement,
+                './saml_assertion:EncryptedID/xenc:EncryptedData',
+                XPath::getXPath($logoutRequestElement)
+            )
         );
     }
 

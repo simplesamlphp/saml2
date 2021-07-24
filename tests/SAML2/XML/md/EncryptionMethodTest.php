@@ -8,12 +8,12 @@ use DOMDocument;
 use PHPUnit\Framework\TestCase;
 use SimpleSAML\Assert\AssertionFailedException;
 use SimpleSAML\SAML2\Constants;
+use SimpleSAML\SAML2\Utils\XPath;
 use SimpleSAML\SAML2\XML\md\EncryptionMethod;
 use SimpleSAML\Test\XML\SerializableXMLTestTrait;
 use SimpleSAML\XML\Chunk;
 use SimpleSAML\XML\DOMDocumentFactory;
 use SimpleSAML\XML\Exception\MissingAttributeException;
-use SimpleSAML\XML\Utils as XMLUtils;
 
 use function dirname;
 use function strval;
@@ -94,13 +94,14 @@ final class EncryptionMethodTest extends TestCase
         $emElement = $em->toXML();
 
         // Test for a KeySize
-        $keySizeElements = XMLUtils::xpQuery($emElement, './xenc:KeySize');
+        $xpCache = XPath::getXPath($emElement);
+        $keySizeElements = XPath::xpQuery($emElement, './xenc:KeySize', $xpCache);
         $this->assertCount(1, $keySizeElements);
         $this->assertEquals('10', $keySizeElements[0]->textContent);
 
         // Test ordering of EncryptionMethod contents
         /** @psalm-var \DOMElement[] $emElements */
-        $emElements = XMLUtils::xpQuery($emElement, './xenc:KeySize/following-sibling::*');
+        $emElements = XPath::xpQuery($emElement, './xenc:KeySize/following-sibling::*', $xpCache);
 
         $this->assertCount(2, $emElements);
         $this->assertEquals('xenc:OAEPParams', $emElements[0]->tagName);

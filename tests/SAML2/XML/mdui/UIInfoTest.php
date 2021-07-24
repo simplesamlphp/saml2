@@ -7,6 +7,7 @@ namespace SimpleSAML\Test\SAML2\XML\mdui;
 use DOMDocument;
 use PHPUnit\Framework\TestCase;
 use SimpleSAML\SAML2\Exception\ProtocolViolationException;
+use SimpleSAML\SAML2\Utils\XPath;
 use SimpleSAML\SAML2\XML\mdui\Description;
 use SimpleSAML\SAML2\XML\mdui\DiscoHints;
 use SimpleSAML\SAML2\XML\mdui\DisplayName;
@@ -20,7 +21,6 @@ use SimpleSAML\Test\XML\ArrayizableXMLTestTrait;
 use SimpleSAML\Test\XML\SerializableXMLTestTrait;
 use SimpleSAML\XML\Chunk;
 use SimpleSAML\XML\DOMDocumentFactory;
-use SimpleSAML\XML\Utils as XMLUtils;
 
 use function dirname;
 use function strval;
@@ -134,32 +134,40 @@ final class UIInfoTest extends TestCase
         $document = DOMDocumentFactory::fromString('<root />');
         $xml = $uiinfo->toXML($document->documentElement);
 
-        $infoElements = XMLUtils::xpQuery(
+        $xpCache = XPath::getXPath($xml);
+        $infoElements = XPath::xpQuery(
             $xml,
-            '/root/*[local-name()=\'UIInfo\' and namespace-uri()=\'urn:oasis:names:tc:SAML:metadata:ui\']'
+            '/root/*[local-name()=\'UIInfo\' and namespace-uri()=\'urn:oasis:names:tc:SAML:metadata:ui\']',
+            $xpCache
         );
         $this->assertCount(1, $infoElements);
         $infoElement = $infoElements[0];
 
-        $logoElements = XMLUtils::xpQuery(
+        $xpCache = XPath::getXPath($infoElement);
+        $logoElements = XPath::xpQuery(
             $infoElement,
-            './*[local-name()=\'Logo\' and namespace-uri()=\'urn:oasis:names:tc:SAML:metadata:ui\']'
+            './*[local-name()=\'Logo\' and namespace-uri()=\'urn:oasis:names:tc:SAML:metadata:ui\']',
+            $xpCache
         );
         $this->assertCount(1, $logoElements);
         $this->assertEquals("https://example.edu/logo.png", $logoElements[0]->textContent);
 
+        $xpCache = XPath::getXPath($infoElement);
         /** @var \DOMElement[] $keywordElements */
-        $keywordElements = XMLUtils::xpQuery(
+        $keywordElements = XPath::xpQuery(
             $infoElement,
-            './*[local-name()=\'Keywords\' and namespace-uri()=\'urn:oasis:names:tc:SAML:metadata:ui\']'
+            './*[local-name()=\'Keywords\' and namespace-uri()=\'urn:oasis:names:tc:SAML:metadata:ui\']',
+            $xpCache
         );
         $this->assertCount(1, $keywordElements);
         $this->assertEquals("voorbeeld+specimen", $keywordElements[0]->textContent);
         $this->assertEquals("nl", $keywordElements[0]->getAttribute("xml:lang"));
 
-        $childElements = XMLUtils::xpQuery(
+        $xpCache = XPath::getXPath($infoElement);
+        $childElements = XPath::xpQuery(
             $infoElement,
-            './*[local-name()=\'child1\' and namespace-uri()=\'urn:custom:ssp\']'
+            './*[local-name()=\'child1\' and namespace-uri()=\'urn:custom:ssp\']',
+            $xpCache
         );
         $this->assertCount(1, $childElements);
     }

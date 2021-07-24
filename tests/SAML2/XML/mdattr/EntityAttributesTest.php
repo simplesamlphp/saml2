@@ -7,13 +7,13 @@ namespace SimpleSAML\Test\SAML2\XML\mdattr;
 use DOMDocument;
 use PHPUnit\Framework\TestCase;
 use SimpleSAML\SAML2\Constants;
+use SimpleSAML\SAML2\Utils\XPath;
 use SimpleSAML\SAML2\XML\saml\Attribute;
 use SimpleSAML\SAML2\XML\saml\AttributeValue;
 use SimpleSAML\SAML2\XML\mdattr\EntityAttributes;
 use SimpleSAML\Test\XML\SerializableXMLTestTrait;
 use SimpleSAML\XML\Chunk;
 use SimpleSAML\XML\DOMDocumentFactory;
-use SimpleSAML\XML\Utils as XMLUtils;
 
 use function dirname;
 use function strval;
@@ -70,16 +70,20 @@ final class EntityAttributesTest extends TestCase
         $document = DOMDocumentFactory::fromString('<root />');
         $xml = $entityAttributes->toXML($document->documentElement);
 
-        $entityAttributesElements = XMLUtils::xpQuery(
+        $xpCache = XPath::getXPath($xml);
+        $entityAttributesElements = XPath::xpQuery(
             $xml,
-            '/root/*[local-name()=\'EntityAttributes\' and namespace-uri()=\'urn:oasis:names:tc:SAML:metadata:attribute\']'
+            '/root/*[local-name()=\'EntityAttributes\' and namespace-uri()=\'urn:oasis:names:tc:SAML:metadata:attribute\']',
+            $xpCache
         );
         $this->assertCount(1, $entityAttributesElements);
         $entityAttributesElement = $entityAttributesElements[0];
 
-        $attributeElements = XMLUtils::xpQuery(
+        $xpCache = XPath::getXPath($entityAttributesElement);
+        $attributeElements = XPath::xpQuery(
             $entityAttributesElement,
-            './*[local-name()=\'Attribute\' and namespace-uri()=\'urn:oasis:names:tc:SAML:2.0:assertion\']'
+            './*[local-name()=\'Attribute\' and namespace-uri()=\'urn:oasis:names:tc:SAML:2.0:assertion\']',
+            $xpCache
         );
         $this->assertCount(2, $attributeElements);
     }

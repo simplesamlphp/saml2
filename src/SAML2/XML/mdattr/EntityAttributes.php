@@ -6,10 +6,10 @@ namespace SimpleSAML\SAML2\XML\mdattr;
 
 use DOMElement;
 use SimpleSAML\Assert\Assert;
+use SimpleSAML\SAML2\Utils\XPath;
 use SimpleSAML\SAML2\XML\saml\Attribute;
 use SimpleSAML\XML\Chunk;
 use SimpleSAML\XML\Exception\InvalidDOMElementException;
-use SimpleSAML\XML\Utils as XMLUtils;
 
 /**
  * Class for handling the EntityAttributes metadata extension.
@@ -93,9 +93,10 @@ final class EntityAttributes extends AbstractMdattrElement
         Assert::same($xml->namespaceURI, EntityAttributes::NS, InvalidDOMElementException::class);
 
         $children = [];
+        $xpCache = XPath::getXPath($xml);
 
         /** @var \DOMElement $node */
-        foreach (XMLUtils::xpQuery($xml, './saml_assertion:Attribute|./saml_assertion:Assertion') as $node) {
+        foreach (XPath::xpQuery($xml, './saml_assertion:Attribute|./saml_assertion:Assertion', $xpCache) as $node) {
             if ($node->localName === 'Attribute') {
                 $children[] = Attribute::fromXML($node);
             } else {

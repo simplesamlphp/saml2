@@ -17,6 +17,7 @@ use SimpleSAML\SAML2\Configuration\ServiceProvider;
 use SimpleSAML\SAML2\Constants;
 use SimpleSAML\SAML2\Signature\Validator;
 use SimpleSAML\SAML2\Utilities\ArrayCollection;
+use SimpleSAML\SAML2\Utils\XPath;
 use SimpleSAML\SAML2\XML\saml\Assertion;
 use SimpleSAML\SAML2\XML\saml\Attribute;
 use SimpleSAML\SAML2\XML\saml\AttributeValue;
@@ -24,7 +25,6 @@ use SimpleSAML\SAML2\XML\samlp\Response;
 use SimpleSAML\SAML2\XML\samlp\Status;
 use SimpleSAML\SAML2\XML\samlp\StatusCode;
 use SimpleSAML\XML\DOMDocumentFactory;
-use SimpleSAML\XML\Utils as XMLUtils;
 
 /**
  * Tests for decoding base64 encoded attributes.
@@ -200,7 +200,11 @@ XML
      */
     public function testInvalidBase64(): void
     {
-        $attributeStatement = XMLUtils::xpQuery($this->document->documentElement, './saml_assertion:AttributeStatement');
+        $attributeStatement = XPath::xpQuery(
+            $this->document->documentElement,
+            './saml_assertion:AttributeStatement',
+            XPath::getXPath($this->document->documentElement)
+        );
 
         $attribute = new Attribute('broken:encoding', Constants::NAMEFORMAT_URI, null, [new AttributeValue('SWVtYW5.IEFuZGVycw==')]);
         $attribute->toXML($attributeStatement[0]);

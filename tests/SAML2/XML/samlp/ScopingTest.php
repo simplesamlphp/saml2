@@ -7,6 +7,7 @@ namespace SimpleSAML\Test\SAML2\XML\samlp;
 use DOMDocument;
 use PHPUnit\Framework\TestCase;
 use SimpleSAML\SAML2\Constants;
+use SimpleSAML\SAML2\Utils\XPath;
 use SimpleSAML\SAML2\XML\samlp\GetComplete;
 use SimpleSAML\SAML2\XML\samlp\IDPEntry;
 use SimpleSAML\SAML2\XML\samlp\IDPList;
@@ -14,7 +15,6 @@ use SimpleSAML\SAML2\XML\samlp\RequesterID;
 use SimpleSAML\SAML2\XML\samlp\Scoping;
 use SimpleSAML\Test\XML\SerializableXMLTestTrait;
 use SimpleSAML\XML\DOMDocumentFactory;
-use SimpleSAML\XML\Utils as XMLUtils;
 
 use function dirname;
 use function strval;
@@ -76,12 +76,13 @@ final class ScopingTest extends TestCase
         $scopingElement = $scoping->toXML();
 
         // Test for an IDPList
-        $scopingElements = XMLUtils::xpQuery($scopingElement, './saml_protocol:IDPList');
+        $xpCache = XPath::getXPath($scopingElement);
+        $scopingElements = XPath::xpQuery($scopingElement, './saml_protocol:IDPList', $xpCache);
         $this->assertCount(1, $scopingElements);
 
         // Test ordering of Scoping contents
         /** @psalm-var \DOMElement[] $scopingElements */
-        $scopingElements = XMLUtils::xpQuery($scopingElement, './saml_protocol:IDPList/following-sibling::*');
+        $scopingElements = XPath::xpQuery($scopingElement, './saml_protocol:IDPList/following-sibling::*', $xpCache);
         $this->assertCount(1, $scopingElements);
         $this->assertEquals('samlp:RequesterID', $scopingElements[0]->tagName);
     }

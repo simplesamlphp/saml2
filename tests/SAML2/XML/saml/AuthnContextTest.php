@@ -8,6 +8,7 @@ use DOMDocument;
 use PHPUnit\Framework\TestCase;
 use SimpleSAML\Assert\AssertionFailedException;
 use SimpleSAML\SAML2\Constants;
+use SimpleSAML\SAML2\Utils\XPath;
 use SimpleSAML\SAML2\XML\saml\AuthenticatingAuthority;
 use SimpleSAML\SAML2\XML\saml\AuthnContext;
 use SimpleSAML\SAML2\XML\saml\AuthnContextDecl;
@@ -16,7 +17,6 @@ use SimpleSAML\SAML2\XML\saml\AuthnContextClassRef;
 use SimpleSAML\Test\XML\SerializableXMLTestTrait;
 use SimpleSAML\XML\DOMDocumentFactory;
 use SimpleSAML\XML\Exception\TooManyElementsException;
-use SimpleSAML\XML\Utils as XMLUtils;
 
 use function dirname;
 use function strval;
@@ -160,14 +160,16 @@ final class AuthnContextTest extends TestCase
         $authnContextElement = $authnContext->toXML();
 
         // Test for a AuthnContextClassRef
-        $authnContextElements = XMLUtils::xpQuery($authnContextElement, './saml_assertion:AuthnContextClassRef');
+        $xpCache = XPath::getXPath($authnContextElement);
+        $authnContextElements = XPath::xpQuery($authnContextElement, './saml_assertion:AuthnContextClassRef', $xpCache);
         $this->assertCount(1, $authnContextElements);
 
         // Test ordering of AuthnContext contents
         /** @psalm-var \DOMElement[] $authnContextElements */
-        $authnContextElements = XMLUtils::xpQuery(
+        $authnContextElements = XPath::xpQuery(
             $authnContextElement,
-            './saml_assertion:AuthnContextClassRef/following-sibling::*'
+            './saml_assertion:AuthnContextClassRef/following-sibling::*',
+            $xpCache
         );
         $this->assertCount(2, $authnContextElements);
         $this->assertEquals('saml:AuthnContextDecl', $authnContextElements[0]->tagName);
@@ -193,14 +195,16 @@ final class AuthnContextTest extends TestCase
         $authnContextElement = $authnContext->toXML();
 
         // Test for a AuthnContextClassRef
-        $authnContextElements = XMLUtils::xpQuery($authnContextElement, './saml_assertion:AuthnContextDecl');
+        $xpCache = XPath::getXPath($authnContextElement);
+        $authnContextElements = XPath::xpQuery($authnContextElement, './saml_assertion:AuthnContextDecl', $xpCache);
         $this->assertCount(1, $authnContextElements);
 
         // Test ordering of AuthnContext contents
         /** @psalm-var \DOMElement[] $authnContextElements */
-        $authnContextElements = XMLUtils::xpQuery(
+        $authnContextElements = XPath::xpQuery(
             $authnContextElement,
-            './saml_assertion:AuthnContextDecl/following-sibling::*'
+            './saml_assertion:AuthnContextDecl/following-sibling::*',
+            $xpCache
         );
         $this->assertCount(1, $authnContextElements);
         $this->assertEquals('saml:AuthenticatingAuthority', $authnContextElements[0]->tagName);
@@ -225,14 +229,16 @@ final class AuthnContextTest extends TestCase
         $authnContextElement = $authnContext->toXML();
 
         // Test for a AuthnContextClassRef
-        $authnContextElements = XMLUtils::xpQuery($authnContextElement, './saml_assertion:AuthnContextClassRef');
+        $xpCache = XPath::getXPath($authnContextElement);
+        $authnContextElements = XPath::xpQuery($authnContextElement, './saml_assertion:AuthnContextClassRef', $xpCache);
         $this->assertCount(1, $authnContextElements);
 
         // Test ordering of AuthnContext contents
         /** @psalm-var \DOMElement[] $authnContextElements */
-        $authnContextElements = XMLUtils::xpQuery(
+        $authnContextElements = XPath::xpQuery(
             $authnContextElement,
-            './saml_assertion:AuthnContextClassRef/following-sibling::*'
+            './saml_assertion:AuthnContextClassRef/following-sibling::*',
+            $xpCache
         );
         $this->assertCount(2, $authnContextElements);
         $this->assertEquals('saml:AuthnContextDeclRef', $authnContextElements[0]->tagName);
@@ -258,14 +264,16 @@ final class AuthnContextTest extends TestCase
         $authnContextElement = $authnContext->toXML();
 
         // Test for a AuthnContextClassRef
-        $authnContextElements = XMLUtils::xpQuery($authnContextElement, './saml_assertion:AuthnContextDeclRef');
+        $xpCache = XPath::getXPath($authnContextElement);
+        $authnContextElements = XPath::xpQuery($authnContextElement, './saml_assertion:AuthnContextDeclRef', $xpCache);
         $this->assertCount(1, $authnContextElements);
 
         // Test ordering of AuthnContext contents
         /** @psalm-var \DOMElement[] $authnContextElements */
-        $authnContextElements = XMLUtils::xpQuery(
+        $authnContextElements = XPath::xpQuery(
             $authnContextElement,
-            './saml_assertion:AuthnContextDeclRef/following-sibling::*'
+            './saml_assertion:AuthnContextDeclRef/following-sibling::*',
+            $xpCache
         );
         $this->assertCount(1, $authnContextElements);
         $this->assertEquals('saml:AuthenticatingAuthority', $authnContextElements[0]->tagName);

@@ -6,6 +6,7 @@ namespace SimpleSAML\Test\SAML2\XML\mdui;
 
 use DOMDocument;
 use PHPUnit\Framework\TestCase;
+use SimpleSAML\SAML2\Utils\XPath;
 use SimpleSAML\SAML2\XML\mdui\DiscoHints;
 use SimpleSAML\SAML2\XML\mdui\DomainHint;
 use SimpleSAML\SAML2\XML\mdui\GeolocationHint;
@@ -15,7 +16,6 @@ use SimpleSAML\Test\XML\ArrayizableXMLTestTrait;
 use SimpleSAML\Test\XML\SerializableXMLTestTrait;
 use SimpleSAML\XML\Chunk;
 use SimpleSAML\XML\DOMDocumentFactory;
-use SimpleSAML\XML\Utils as XMLUtils;
 
 use function dirname;
 use function strval;
@@ -117,9 +117,10 @@ final class DiscoHintsTest extends TestCase
         $xml = $discoHints->toXML($document->documentElement);
 
         /** @var \DOMElement[] $discoElements */
-        $discoElements = XMLUtils::xpQuery(
+        $discoElements = XPath::xpQuery(
             $xml,
-            '/root/*[local-name()=\'DiscoHints\' and namespace-uri()=\'urn:oasis:names:tc:SAML:metadata:ui\']'
+            '/root/*[local-name()=\'DiscoHints\' and namespace-uri()=\'urn:oasis:names:tc:SAML:metadata:ui\']',
+            XPath::getXPath($xml)
         );
         $this->assertCount(1, $discoElements);
         /** @var \DOMNode $discoElement */

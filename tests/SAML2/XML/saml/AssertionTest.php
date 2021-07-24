@@ -9,6 +9,7 @@ use DOMNodeList;
 use Exception;
 use Mockery\Adapter\Phpunit\MockeryTestCase;
 use SimpleSAML\SAML2\Constants;
+use SimpleSAML\SAML2\Utils\XPath;
 use SimpleSAML\SAML2\XML\saml\Assertion;
 use SimpleSAML\SAML2\XML\saml\Attribute;
 use SimpleSAML\SAML2\XML\saml\AttributeStatement;
@@ -34,7 +35,6 @@ use SimpleSAML\XML\Chunk;
 use SimpleSAML\XML\DOMDocumentFactory;
 use SimpleSAML\XML\Exception\MissingElementException;
 use SimpleSAML\XML\Exception\TooManyElementsException;
-use SimpleSAML\XML\Utils as XMLUtils;
 use SimpleSAML\XMLSecurity\TestUtils\PEMCertificatesMock;
 use SimpleSAML\XMLSecurity\XMLSecurityKey;
 
@@ -1156,13 +1156,18 @@ XML;
         $assertionElement = $assertion->toXML();
 
         // Test for an Issuer
-        $issuerElements = XMLUtils::xpQuery($assertionElement, './saml_assertion:Issuer');
+        $xpCache = XPath::getXPath($assertionElement);
+        $issuerElements = XPath::xpQuery($assertionElement, './saml_assertion:Issuer', $xpCache);
         $this->assertCount(1, $issuerElements);
         $this->assertEquals('testIssuer', $issuerElements[0]->textContent);
 
         // Test ordering of Assertion contents
         /** @psalm-var \DOMElement[] $assertionElements */
-        $assertionElements = XMLUtils::xpQuery($assertionElement, './saml_assertion:Issuer/following-sibling::*');
+        $assertionElements = XPath::xpQuery(
+            $assertionElement,
+            './saml_assertion:Issuer/following-sibling::*',
+            $xpCache
+        );
         $this->assertCount(5, $assertionElements);
         $this->assertEquals('ds:Signature', $assertionElements[0]->tagName);
         $this->assertEquals('saml:Subject', $assertionElements[1]->tagName);

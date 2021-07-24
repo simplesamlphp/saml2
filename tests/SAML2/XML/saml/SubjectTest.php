@@ -10,6 +10,7 @@ use PHPUnit\Framework\TestCase;
 use SimpleSAML\SAML2\Compat\AbstractContainer;
 use SimpleSAML\SAML2\Compat\ContainerSingleton;
 use SimpleSAML\SAML2\Constants;
+use SimpleSAML\SAML2\Utils\XPath;
 use SimpleSAML\SAML2\XML\saml\BaseID;
 use SimpleSAML\SAML2\XML\saml\NameID;
 use SimpleSAML\SAML2\XML\saml\Subject;
@@ -19,7 +20,6 @@ use SimpleSAML\Test\SAML2\CustomBaseID;
 use SimpleSAML\Test\XML\SerializableXMLTestTrait;
 use SimpleSAML\XML\DOMDocumentFactory;
 use SimpleSAML\XML\Exception\TooManyElementsException;
-use SimpleSAML\XML\Utils as XMLUtils;
 
 use function dirname;
 use function strval;
@@ -157,12 +157,13 @@ XML
         $subjectElement = $subject->toXML();
 
         // Test for a NameID
-        $subjectElements = XMLUtils::xpQuery($subjectElement, './saml_assertion:NameID');
+        $xpCache = XPath::getXPath($subjectElement);
+        $subjectElements = XPath::xpQuery($subjectElement, './saml_assertion:NameID', $xpCache);
         $this->assertCount(1, $subjectElements);
 
         // Test ordering of Subject contents
         /** @psalm-var \DOMElement[] $subjectElements */
-        $subjectElements = XMLUtils::xpQuery($subjectElement, './saml_assertion:NameID/following-sibling::*');
+        $subjectElements = XPath::xpQuery($subjectElement, './saml_assertion:NameID/following-sibling::*', $xpCache);
         $this->assertCount(1, $subjectElements);
         $this->assertEquals('saml:SubjectConfirmation', $subjectElements[0]->tagName);
     }

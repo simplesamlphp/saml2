@@ -7,6 +7,7 @@ namespace SimpleSAML\Test\SAML2\XML\samlp;
 use DOMDocument;
 use PHPUnit\Framework\TestCase;
 use SimpleSAML\SAML2\Constants;
+use SimpleSAML\SAML2\Utils\XPath;
 use SimpleSAML\SAML2\XML\saml\Attribute;
 use SimpleSAML\SAML2\XML\saml\AttributeValue;
 use SimpleSAML\SAML2\XML\saml\Issuer;
@@ -18,7 +19,6 @@ use SimpleSAML\XML\DOMDocumentFactory;
 use SimpleSAML\XML\Exception\MissingElementException;
 use SimpleSAML\XML\Exception\MissingAttributeException;
 use SimpleSAML\XML\Exception\TooManyElementsException;
-use SimpleSAML\XML\Utils as XMLUtils;
 
 use function dirname;
 use function strval;
@@ -158,7 +158,8 @@ final class AttributeQueryTest extends TestCase
 
         // Test Attribute Names
         /** @psalm-var \DOMElement[] $attributes */
-        $attributes = XMLUtils::xpQuery($attributeQueryElement, './saml_assertion:Attribute');
+        $xpCache = XPath::getXPath($attributeQueryElement);
+        $attributes = XPath::xpQuery($attributeQueryElement, './saml_assertion:Attribute', $xpCache);
         $this->assertCount(3, $attributes);
         $this->assertEquals('test1', $attributes[0]->getAttribute('Name'));
         $this->assertEquals(Constants::NAMEFORMAT_URI, $attributes[0]->getAttribute('NameFormat'));
@@ -168,7 +169,7 @@ final class AttributeQueryTest extends TestCase
         $this->assertEquals(Constants::NAMEFORMAT_URI, $attributes[2]->getAttribute('NameFormat'));
 
         // Sanity check: test if values are still ok
-        $av1 = XMLUtils::xpQuery($attributes[0], './saml_assertion:AttributeValue');
+        $av1 = XPath::xpQuery($attributes[0], './saml_assertion:AttributeValue', $xpCache);
         $this->assertCount(2, $av1);
         $this->assertEquals('test1_attrv1', $av1[0]->textContent);
         $this->assertEquals('test1_attrv2', $av1[1]->textContent);

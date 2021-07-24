@@ -8,6 +8,7 @@ use Exception;
 use PHPUnit\Framework\TestCase;
 use SimpleSAML\SAML2\Constants;
 use SimpleSAML\SAML2\Utils;
+use SimpleSAML\SAML2\Utils\XPath;
 use SimpleSAML\SAML2\XML\saml\NameID;
 use SimpleSAML\SAML2\XML\saml\Subject;
 use SimpleSAML\SAML2\XML\samlp\AttributeQuery;
@@ -43,7 +44,8 @@ final class UtilsTest extends TestCase
 
         $xml = $aq->toXML();
 
-        $nameId_after = XMLUtils::xpQuery($xml, './saml_assertion:Subject/saml_assertion:NameID');
+        $xpCache = XPath::getXPath($xml);
+        $nameId_after = XPath::xpQuery($xml, './saml_assertion:Subject/saml_assertion:NameID', $xpCache);
         $this->assertTrue(count($nameId_after) === 1);
         $this->assertEquals('NameIDValue', $nameId_after[0]->textContent);
         $this->assertEquals('SomeNameIDFormat', $nameId_after[0]->getAttribute("Format"));
