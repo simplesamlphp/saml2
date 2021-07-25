@@ -71,7 +71,7 @@ final class DiscoHints extends AbstractMduiElement
     /**
      * Collect the value of the IPHint-property
      *
-     * @return \SimpleSAML\SAMLs\XML\mdui\IPHint[]
+     * @return \SimpleSAML\SAML2\XML\mdui\IPHint[]
      */
     public function getIPHint(): array
     {
