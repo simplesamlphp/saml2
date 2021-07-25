@@ -310,20 +310,23 @@ final class AttributeAuthorityDescriptor extends AbstractRoleDescriptor
         if (!empty($signature)) {
             $authority->setSignature($signature[0]);
         }
+
+        $authority->setXML($xml);
+
         return $authority;
     }
 
 
     /**
-     * Add this AttributeAuthorityDescriptor to an EntityDescriptor.
+     * Convert this descriptor to an unsigned XML document.
+     * This method does not sign the resulting XML document.
      *
-     * @param \DOMElement|null $parent The EntityDescriptor we should append this IDPSSODescriptor to.
-     * @return \DOMElement
-     * @throws \Exception
+     * @param \DOMElement|null $parent
+     * @return \DOMElement The root element of the DOM tree
      */
-    public function toXML(DOMElement $parent = null): DOMElement
+    protected function toUnsignedXML(DOMElement $parent = null): DOMElement
     {
-        $e = parent::toXML($parent);
+        $e = parent::toUnsignedXML($parent);
 
         foreach ($this->AttributeServices as $ep) {
             $ep->toXML($e);
@@ -343,12 +346,6 @@ final class AttributeAuthorityDescriptor extends AbstractRoleDescriptor
 
         foreach ($this->Attributes as $a) {
             $a->toXML($e);
-        }
-
-        if ($this->signer !== null) {
-            $signedXML = $this->doSign($e);
-            $signedXML->insertBefore($this->signature->toXML($signedXML), $signedXML->firstChild);
-            return $signedXML;
         }
 
         return $e;

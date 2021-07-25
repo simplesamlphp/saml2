@@ -61,7 +61,10 @@ final class UnknownRoleDescriptor extends AbstractRoleDescriptor
             !empty($orgs) ? $orgs[0] : null,
             ContactPerson::getChildrenOfClass($xml)
         );
+
         $object->elt = new Chunk($xml);
+        $object->setXML($xml);
+
         return $object;
     }
 
@@ -78,12 +81,13 @@ final class UnknownRoleDescriptor extends AbstractRoleDescriptor
 
 
     /**
-     * Add this RoleDescriptor to an EntityDescriptor.
+     * Convert this descriptor to an unsigned XML document.
+     * This method does not sign the resulting XML document.
      *
-     * @param \DOMElement|null $parent The EntityDescriptor we should append this RoleDescriptor to.
-     * @return \DOMElement
+     * @param \DOMElement|null $parent
+     * @return \DOMElement The root element of the DOM tree
      */
-    public function toXML(DOMElement $parent = null): DOMElement
+    protected function toUnsignedXML(DOMElement $parent = null): DOMElement
     {
         return $this->elt->toXML($parent);
     }

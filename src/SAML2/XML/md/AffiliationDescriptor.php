@@ -120,6 +120,8 @@ final class AffiliationDescriptor extends AbstractMetadataDocument
             $afd->setSignature($signature[0]);
         }
 
+        $afd->setXML($xml);
+
         return $afd;
     }
 
@@ -211,15 +213,16 @@ final class AffiliationDescriptor extends AbstractMetadataDocument
 
 
     /**
-     * Add this AffiliationDescriptor to an EntityDescriptor.
+     * Convert this descriptor to an unsigned XML document.
+     * This method does not sign the resulting XML document.
      *
-     * @param \DOMElement|null $parent The EntityDescriptor we should append this endpoint to.
-     * @return \DOMElement
-     * @throws \Exception
+     * @param \DOMElement|null $parent
+     * @return \DOMElement The root element of the DOM tree
      */
-    public function toXML(?DOMElement $parent = null): DOMElement
+    protected function toUnsignedXML(?DOMElement $parent = null): DOMElement
     {
-        $e = parent::toXML($parent);
+        $e = parent::toUnsignedXML($parent);
+
         $e->setAttribute('affiliationOwnerID', $this->affiliationOwnerID);
 
         foreach ($this->AffiliateMembers as $am) {
@@ -228,12 +231,6 @@ final class AffiliationDescriptor extends AbstractMetadataDocument
 
         foreach ($this->KeyDescriptors as $kd) {
             $kd->toXML($e);
-        }
-
-        if ($this->signer !== null) {
-            $signedXML = $this->doSign($e);
-            $signedXML->insertBefore($this->signature->toXML($signedXML), $signedXML->firstChild);
-            return $signedXML;
         }
 
         return $e;

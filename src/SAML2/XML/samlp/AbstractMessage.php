@@ -435,7 +435,10 @@ abstract class AbstractMessage extends AbstractSamlpElement implements SignableE
             $messageElements = XPath::xpQuery($signedXML, './saml_assertion:Issuer', XPath::getXPath($signedXML));
             $issuer = array_pop($messageElements);
 
-            $signedXML->insertBefore($this->signature->toXML($signedXML), $issuer ? $issuer->nextSibling : $signedXML->firstChild);
+            $signedXML->insertBefore(
+                $this->signature->toXML($signedXML),
+                $issuer ? $issuer->nextSibling : $signedXML->firstChild
+            );
             return $signedXML;
         }
 
@@ -456,6 +459,7 @@ abstract class AbstractMessage extends AbstractSamlpElement implements SignableE
      * Convert this message to an unsigned XML document.
      * This method does not sign the resulting XML document.
      *
+     * @param \DOMElement|null $parent
      * @return \DOMElement The root element of the DOM tree
      */
     protected function toUnsignedXML(?DOMElement $parent = null): DOMElement

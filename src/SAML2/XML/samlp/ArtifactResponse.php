@@ -168,6 +168,7 @@ class ArtifactResponse extends AbstractStatusResponse
      * Convert this message to an unsigned XML document.
      * This method does not sign the resulting XML document.
      *
+     * @param \DOMElement|null $parent
      * @return \DOMElement The root element of the DOM tree
      */
     protected function toUnsignedXML(?DOMElement $parent = null): DOMElement

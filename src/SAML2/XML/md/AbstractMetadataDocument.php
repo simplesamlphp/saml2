@@ -160,7 +160,30 @@ abstract class AbstractMetadataDocument extends AbstractSignedMdElement
      */
     protected function getOriginalXML(): DOMElement
     {
-        return $this->xml ?? $this->toXML();
+        return $this->xml ?? $this->toUnsignedXML();
+    }
+
+
+    /**
+     * Create XML from this class
+     *
+     * @param \DOMElement|null $parent
+     * @return \DOMElement
+     */
+    public function toXML(?DOMElement $parent = null): DOMElement
+    {
+        $e = $this->toUnsignedXML($parent);
+
+        if ($this->signer !== null) {
+            $signedXML = $this->doSign($e);
+            $signedXML->insertBefore(
+                $this->signature->toXML($signedXML),
+                $signedXML->firstChild
+            );
+            return $signedXML;
+        }
+
+        return $e;
     }
 
 
@@ -169,7 +192,7 @@ abstract class AbstractMetadataDocument extends AbstractSignedMdElement
      *
      * @return \DOMElement
      */
-    public function toXML(DOMElement $parent = null): DOMElement
+    protected function toUnsignedXML(DOMElement $parent = null): DOMElement
     {
         $e = $this->instantiateParentElement($parent);
 

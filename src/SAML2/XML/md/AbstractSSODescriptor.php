@@ -215,14 +215,15 @@ abstract class AbstractSSODescriptor extends AbstractRoleDescriptor
 
 
     /**
-     * Add this SSODescriptorType to an EntityDescriptor.
+     * Convert this descriptor to an unsigned XML document.
+     * This method does not sign the resulting XML document.
      *
-     * @param  \DOMElement|null $parent The EntityDescriptor we should append this SSODescriptorType to.
-     * @return \DOMElement The generated SSODescriptor DOMElement.
+     * @param \DOMElement|null $parent
+     * @return \DOMElement The root element of the DOM tree
      */
-    public function toXML(DOMElement $parent = null): DOMElement
+    protected function toUnsignedXML(DOMElement $parent = null): DOMElement
     {
-        $e = parent::toXML($parent);
+        $e = parent::toUnsignedXML($parent);
 
         foreach ($this->artifactResolutionServiceEndpoints as $ep) {
             $ep->toXML($e);

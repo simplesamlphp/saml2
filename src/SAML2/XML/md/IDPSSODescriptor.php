@@ -180,9 +180,13 @@ final class IDPSSODescriptor extends AbstractSSODescriptor
             ManageNameIDService::getChildrenOfClass($xml),
             NameIDFormat::getChildrenOfClass($xml)
         );
+
         if (!empty($signature)) {
             $idpssod->setSignature($signature[0]);
         }
+
+        $idpssod->setXML($xml);
+
         return $idpssod;
     }
 
@@ -342,15 +346,15 @@ final class IDPSSODescriptor extends AbstractSSODescriptor
 
 
     /**
-     * Add this IDPSSODescriptor to an EntityDescriptor.
+     * Convert this descriptor to an unsigned XML document.
+     * This method does not sign the resulting XML document.
      *
-     * @param \DOMElement|null $parent The EntityDescriptor we should append this IDPSSODescriptor to.
-     * @return \DOMElement
-     * @throws \Exception
+     * @param \DOMElement|null $parent
+     * @return \DOMElement The root element of the DOM tree
      */
-    public function toXML(DOMElement $parent = null): DOMElement
+    protected function toUnsignedXML(DOMElement $parent = null): DOMElement
     {
-        $e = parent::toXML($parent);
+        $e = parent::toUnsignedXML($parent);
 
         if (is_bool($this->wantAuthnRequestsSigned)) {
             $e->setAttribute('WantAuthnRequestsSigned', $this->wantAuthnRequestsSigned ? 'true' : 'false');
@@ -374,12 +378,6 @@ final class IDPSSODescriptor extends AbstractSSODescriptor
 
         foreach ($this->attributes as $a) {
             $a->toXML($e);
-        }
-
-        if ($this->signer !== null) {
-            $signedXML = $this->doSign($e);
-            $signedXML->insertBefore($this->signature->toXML($signedXML), $signedXML->firstChild);
-            return $signedXML;
         }
 
         return $e;

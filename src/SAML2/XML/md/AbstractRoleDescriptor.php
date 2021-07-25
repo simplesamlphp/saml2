@@ -229,14 +229,15 @@ abstract class AbstractRoleDescriptor extends AbstractMetadataDocument
 
 
     /**
-     * Add this RoleDescriptor to an EntityDescriptor.
+     * Convert this descriptor to an unsigned XML document.
+     * This method does not sign the resulting XML document.
      *
-     * @param \DOMElement $parent The EntityDescriptor we should append this endpoint to.
-     * @return \DOMElement
+     * @param \DOMElement|null $parent
+     * @return \DOMElement The root element of the DOM tree
      */
-    public function toXML(?DOMElement $parent = null): DOMElement
+    protected function toUnsignedXML(?DOMElement $parent = null): DOMElement
     {
-        $e = parent::toXML($parent);
+        $e = parent::toUnsignedXML($parent);
 
         $e->setAttribute('protocolSupportEnumeration', implode(' ', $this->protocolSupportEnumeration));
 
