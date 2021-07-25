@@ -7,7 +7,6 @@ namespace SimpleSAML\SAML2\XML\samlp;
 use DOMElement;
 use SimpleSAML\Assert\Assert;
 use SimpleSAML\SAML2\Constants;
-use SimpleSAML\SAML2\XML\ExtensionsTrait;
 use SimpleSAML\SAML2\XML\saml\Issuer;
 
 /**
@@ -22,8 +21,6 @@ use SimpleSAML\SAML2\XML\saml\Issuer;
  */
 abstract class AbstractStatusResponse extends AbstractMessage
 {
-    use ExtensionsTrait;
-
     /**
      * The ID of the request this is a response to, or null if this is an unsolicited response.
      *
