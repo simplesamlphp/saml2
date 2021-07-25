@@ -104,4 +104,29 @@ class LogoutResponse extends AbstractStatusResponse
 
         return $response;
     }
+
+
+    /**
+     * Convert status response message to an XML element.
+     *
+     * @inheritDoc
+     * @return \DOMElement This status response.
+     */
+    public function toXML(?DOMElement $parent = null): DOMElement
+    {
+        $e = parent::toXML($parent);
+
+        if ($this->signer !== null) {
+            $signedXML = $this->doSign($e);
+
+            // Test for an Issuer
+            $responseElements = XPath::xpQuery($signedXML, './saml_assertion:Issuer', XPath::getXPath($signedXML));
+            $issuer = array_pop($responseElements);
+
+            $signedXML->insertBefore($this->signature->toXML($signedXML), $issuer->nextSibling);
+            return $signedXML;
+        }
+
+        return $e;
+    }
 }
