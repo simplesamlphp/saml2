@@ -231,6 +231,12 @@ final class AffiliationDescriptor extends AbstractMetadataDocument
             $kd->toXML($e);
         }
 
-        return $this->signElement($e);
+        if ($this->signer !== null) {
+            $signedXML = $this->doSign($e);
+            $signedXML->insertBefore($this->signature->toXML($signedXML), $signedXML->firstChild);
+            return $signedXML;
+        }
+
+        return $e;
     }
 }

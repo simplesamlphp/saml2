@@ -191,13 +191,17 @@ class Response extends AbstractStatusResponse
             $assertion->toXML($e);
         }
 
-        // Test for an Issuer
-        $responseElements = XPath::xpQuery($e, './saml_assertion:Issuer', XPath::getXPath($e));
-        $issuer = empty($responseElements) ? null : $responseElements[0];
+        if ($this->signer !== null) {
+            $signedXML = $this->doSign($e);
 
-        if ($this->signingKey !== null) {
-            Security::insertSignature($this->signingKey, $this->certificates, $e, $issuer->nextSibling);
+            // Test for an Issuer
+            $responseElements = XPath::xpQuery($signedXML, './saml_assertion:Issuer', XPath::getXPath($signedXML));
+            $issuer = array_pop($responseElements);
+
+            $signedXML->insertBefore($this->signature->toXML($signedXML), $issuer->nextSibling);
+            return $signedXML;
         }
+
         return $e;
     }
 }

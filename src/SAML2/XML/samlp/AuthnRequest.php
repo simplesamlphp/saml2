@@ -525,42 +525,42 @@ class AuthnRequest extends AbstractRequest
      */
     public function toXML(?DOMElement $parent = null): DOMElement
     {
-        $parent = parent::toXML($parent);
+        $e = parent::toXML($parent);
 
         if ($this->forceAuthn === true) {
-            $parent->setAttribute('ForceAuthn', 'true');
+            $e->setAttribute('ForceAuthn', 'true');
         }
 
         if (!empty($this->ProviderName)) {
-            $parent->setAttribute('ProviderName', $this->ProviderName);
+            $e->setAttribute('ProviderName', $this->ProviderName);
         }
 
         if ($this->isPassive === true) {
-            $parent->setAttribute('IsPassive', 'true');
+            $e->setAttribute('IsPassive', 'true');
         }
 
         if ($this->assertionConsumerServiceIndex !== null) {
-            $parent->setAttribute('AssertionConsumerServiceIndex', strval($this->assertionConsumerServiceIndex));
+            $e->setAttribute('AssertionConsumerServiceIndex', strval($this->assertionConsumerServiceIndex));
         } else {
             if ($this->assertionConsumerServiceURL !== null) {
-                $parent->setAttribute('AssertionConsumerServiceURL', $this->assertionConsumerServiceURL);
+                $e->setAttribute('AssertionConsumerServiceURL', $this->assertionConsumerServiceURL);
             }
             if ($this->protocolBinding !== null) {
-                $parent->setAttribute('ProtocolBinding', $this->protocolBinding);
+                $e->setAttribute('ProtocolBinding', $this->protocolBinding);
             }
         }
 
         if ($this->attributeConsumingServiceIndex !== null) {
-            $parent->setAttribute('AttributeConsumingServiceIndex', strval($this->attributeConsumingServiceIndex));
+            $e->setAttribute('AttributeConsumingServiceIndex', strval($this->attributeConsumingServiceIndex));
         }
 
         if ($this->subject !== null) {
-            $this->subject->toXML($parent);
+            $this->subject->toXML($e);
         }
 
         if ($this->nameIdPolicy !== null) {
             if (!$this->nameIdPolicy->isEmptyElement()) {
-                $this->nameIdPolicy->toXML($parent);
+                $this->nameIdPolicy->toXML($e);
             }
         }
 
@@ -569,13 +569,19 @@ class AuthnRequest extends AbstractRequest
         }
 
         if (!empty($this->requestedAuthnContext)) {
-            $this->requestedAuthnContext->toXML($parent);
+            $this->requestedAuthnContext->toXML($e);
         }
 
         if ($this->scoping !== null && !$this->scoping->isEmptyElement()) {
             $this->scoping->toXML($parent);
         }
 
-        return $this->signElement($parent);
+        if ($this->signer !== null) {
+            $signedXML = $this->doSign($e);
+            $signedXML->insertBefore($this->signature->toXML($signedXML), $signedXML->firstChild);
+            return $signedXML;
+        }
+
+        return $e;
     }
 }

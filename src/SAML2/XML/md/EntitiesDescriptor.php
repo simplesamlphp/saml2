@@ -211,6 +211,12 @@ final class EntitiesDescriptor extends AbstractMetadataDocument
             $entityDescriptor->toXML($e);
         }
 
-        return $this->signElement($e);
+        if ($this->signer !== null) {
+            $signedXML = $this->doSign($e);
+            $signedXML->insertBefore($this->signature->toXML($signedXML), $signedXML->firstChild);
+            return $signedXML;
+        }
+
+        return $e;
     }
 }

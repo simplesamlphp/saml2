@@ -154,6 +154,12 @@ class ArtifactResolve extends AbstractRequest
         $artifactelement = $e->ownerDocument->createElementNS(Constants::NS_SAMLP, 'Artifact', $this->artifact);
         $e->appendChild($artifactelement);
 
-        return $this->signElement($e);
+        if ($this->signer !== null) {
+            $signedXML = $this->doSign($e);
+            $signedXML->insertBefore($this->signature->toXML($signedXML), $signedXML->firstChild);
+            return $signedXML;
+        }
+
+        return $e;
     }
 }

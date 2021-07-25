@@ -180,12 +180,18 @@ class AttributeQuery extends AbstractSubjectQuery
      */
     public function toXML(?DOMElement $parent = null): DOMElement
     {
-        $parent = parent::toXML($parent);
+        $e = parent::toXML($parent);
 
         foreach ($this->attributes as $attribute) {
-            $attribute->toXML($parent);
+            $attribute->toXML($e);
         }
 
-        return $this->signElement($parent);
+        if ($this->signer !== null) {
+            $signedXML = $this->doSign($e);
+            $signedXML->insertBefore($this->signature->toXML($signedXML), $signedXML->firstChild);
+            return $signedXML;
+        }
+
+        return $e;
     }
 }
