@@ -419,7 +419,6 @@ abstract class AbstractMessage extends AbstractSamlpElement implements SignableE
 
 
     /**
-<<<<<<< HEAD
      * Create XML from this class
      *
      * @param \DOMElement|null $parent
