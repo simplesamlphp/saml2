@@ -393,6 +393,37 @@ abstract class AbstractMessage extends AbstractSamlpElement implements SignableE
 
 
     /**
+     * Get the XML element.
+     *
+     * @return \DOMElement
+     */
+    public function getXML(): DOMElement
+    {
+        return $this->xml;
+    }
+
+
+    /**
+     * Set the XML element.
+     *
+     * @param \DOMElement $xml
+     */
+    protected function setXML(DOMElement $xml): void
+    {
+        $this->xml = $xml;
+    }
+
+
+    /**
+     * @inheritDoc
+     */
+    protected function getOriginalXML(): DOMElement
+    {
+        return $this->xml ?? $this->toXML();
+    }
+
+
+    /**
      * Convert this message to an unsigned XML document.
      * This method does not sign the resulting XML document.
      *

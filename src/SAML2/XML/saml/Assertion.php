@@ -364,6 +364,37 @@ class Assertion extends AbstractSamlElement implements SignableElementInterface,
 
 
     /**
+     * Get the XML element.
+     *
+     * @return \DOMElement
+     */
+    public function getXML(): DOMElement
+    {
+        return $this->xml;
+    }
+
+
+    /**
+     * Set the XML element.
+     *
+     * @param \DOMElement $xml
+     */
+    private function setXML(DOMElement $xml): void
+    {
+        $this->xml = $xml;
+    }
+
+
+    /**
+     * @inheritDoc
+     */
+    protected function getOriginalXML(): DOMElement
+    {
+        return $this->xml ?? $this->toXML();
+    }
+
+
+    /**
      * Convert XML into an Assertion
      *
      * @param \DOMElement $xml The XML element we should load

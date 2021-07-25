@@ -131,6 +131,37 @@ abstract class AbstractMetadataDocument extends AbstractSignedMdElement
 
 
     /**
+     * Get the XML element.
+     *
+     * @return \DOMElement
+     */
+    public function getXML(): DOMElement
+    {
+        return $this->xml;
+    }
+
+
+    /**
+     * Set the XML element.
+     *
+     * @param \DOMElement $xml
+     */
+    protected function setXML(DOMElement $xml): void
+    {
+        $this->xml = $xml;
+    }
+
+
+    /**
+     * @inheritDoc
+     */
+    protected function getOriginalXML(): DOMElement
+    {
+        return $this->xml ?? $this->toXML();
+    }
+
+
+    /**
      * @param \DOMElement|null $parent
      *
      * @return \DOMElement

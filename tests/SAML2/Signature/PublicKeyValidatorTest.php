@@ -13,14 +13,16 @@ use SimpleSAML\SAML2\Certificate\KeyCollection;
 use SimpleSAML\SAML2\Certificate\KeyLoader;
 use SimpleSAML\SAML2\Configuration\IdentityProvider;
 use SimpleSAML\SAML2\Configuration\CertificateProvider;
+use SimpleSAML\SAML2\Constants;
 use SimpleSAML\SAML2\Signature\PublicKeyValidator;
 use SimpleSAML\SAML2\XML\samlp\AbstractMessage;
 use SimpleSAML\SAML2\XML\samlp\Response;
 use SimpleSAML\Test\SAML2\SimpleTestLogger;
 use SimpleSAML\XML\DOMDocumentFactory;
+use SimpleSAML\XMLSecurity\Alg\Signature\SignatureAlgorithmFactory;
+use SimpleSAML\XMLSecurity\Key\PrivateKey;
 use SimpleSAML\XMLSecurity\TestUtils\PEMCertificatesMock;
 use SimpleSAML\XMLSecurity\Utils\Certificate;
-use SimpleSAML\XMLSecurity\XMLSecurityKey;
 
 /**
  * @covers \SimpleSAML\SAML2\Signature\PublicKeyValidator
