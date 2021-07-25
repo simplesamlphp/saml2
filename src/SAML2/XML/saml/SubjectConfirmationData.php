@@ -14,7 +14,6 @@ use SimpleSAML\XML\Exception\InvalidDOMElementException;
 use SimpleSAML\XML\ExtendableAttributesTrait;
 use SimpleSAML\XML\Utils as XMLUtils;
 use SimpleSAML\XMLSecurity\XML\ds\KeyInfo;
-use SimpleSAML\XMLSecurity\XMLSecurityDSig;
 
 use function filter_var;
 use function gmdate;
@@ -305,7 +304,7 @@ final class SubjectConfirmationData extends AbstractSamlElement
         foreach ($xml->childNodes as $n) {
             if (!($n instanceof DOMElement)) {
                 continue;
-            } elseif ($n->namespaceURI === XMLSecurityDSig::XMLDSIGNS && $n->localName === 'KeyInfo') {
+            } elseif ($n->namespaceURI === Constants::NS_XDSIG && $n->localName === 'KeyInfo') {
                 $info[] = KeyInfo::fromXML($n);
                 continue;
             } else {
