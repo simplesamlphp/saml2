@@ -21,8 +21,9 @@ use SimpleSAML\Test\XML\SerializableXMLTestTrait;
 use SimpleSAML\XML\DOMDocumentFactory;
 use SimpleSAML\XML\Exception\MissingElementException;
 use SimpleSAML\XML\Chunk;
+use SimpleSAML\XMLSecurity\Alg\Signature\SignatureAlgorithmFactory;
 use SimpleSAML\XMLSecurity\TestUtils\PEMCertificatesMock;
-use SimpleSAML\XMLSecurity\XMLSecurityKey;
+use SimpleSAML\XMLSecurity\Key\PrivateKey;
 
 use function dirname;
 use function strval;
@@ -102,9 +103,16 @@ final class AbstractStatusResponseTest extends TestCase
         ]);
 
         $response = new Response($status, $issuer, null, null, null, null, null, $extensions);
-        $response->setSigningKey(
-            PEMCertificatesMock::getPrivateKey(XMLSecurityKey::RSA_SHA256, PEMCertificatesMock::PRIVATE_KEY)
+
+        // Sign the response
+        $key = new PrivateKey(
+            PEMCertificatesMock::getPlainPrivateKey(PEMCertificatesMock::PRIVATE_KEY)
         );
+        $factory = new SignatureAlgorithmFactory();
+        $signer = $factory->getAlgorithm(Constants::SIG_RSA_SHA256, $key);
+        $response->sign($signer);
+
+        // Get the signed XML
         $responseElement = $response->toXML();
 
         // Test for an Issuer

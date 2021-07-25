@@ -23,9 +23,10 @@ use SimpleSAML\Test\XML\SerializableXMLTestTrait;
 use SimpleSAML\XML\Chunk;
 use SimpleSAML\XML\DOMDocumentFactory;
 use SimpleSAML\XML\Exception\MissingElementException;
+use SimpleSAML\XMLSecurity\Alg\Signature\SignatureAlgorithmFactory;
 use SimpleSAML\XMLSecurity\TestUtils\PEMCertificatesMock;
 use SimpleSAML\XMLSecurity\XML\ds\Signature;
-use SimpleSAML\XMLSecurity\XMLSecurityKey;
+use SimpleSAML\XMLSecurity\Key\PrivateKey;
 
 use function dirname;
 use function strval;
@@ -60,23 +61,25 @@ final class AbstractMessageTest extends MockeryTestCase
 AUTHNREQUEST
         );
 
-        $privateKey = PEMCertificatesMock::getPrivateKey(
-            XMLSecurityKey::RSA_SHA256,
-            PEMCertificatesMock::SELFSIGNED_PRIVATE_KEY
+        $privateKey = new PrivateKey(
+            PEMCertificatesMock::getPlainPrivateKey(
+                PEMCertificatesMock::SELFSIGNED_PRIVATE_KEY
+            )
         );
 
+        $factory = new SignatureAlgorithmFactory();
+        $signer = $factory->getAlgorithm(Constants::SIG_RSA_SHA256, $privateKey);
+
         $unsignedMessage = MessageFactory::fromXML($authnRequest->documentElement);
+        $unsignedMessage->sign($signer);
+
         $this->assertEquals('2.0', $unsignedMessage->getVersion());
-        $unsignedMessage->setSigningKey($privateKey);
-        $unsignedMessage->setCertificates(
-            [PEMCertificatesMock::getPlainPublicKey(PEMCertificatesMock::SELFSIGNED_PUBLIC_KEY)]
-        );
 
         $signedMessage = MessageFactory::fromXML($unsignedMessage->toXML());
         $signature = $signedMessage->getSignature();
 
         $this->assertInstanceOf(Signature::class, $signature);
-        $this->assertEquals($privateKey->getAlgorithm(), $signature->getAlgorithm());
+        $this->assertEquals(Constants::SIG_RSA_SHA256, $signature->getSignedInfo()->getSignatureMethod()->getAlgorithm());
     }
 
 
@@ -174,22 +177,21 @@ AUTHNREQUEST
         $response = new DOMDocument();
         $response->load(__DIR__ . '../../../Response/response.xml');
 
-        $privateKey = PEMCertificatesMock::getPrivateKey(
-            XMLSecurityKey::RSA_SHA256,
-            PEMCertificatesMock::SELFSIGNED_PRIVATE_KEY
+        // Sign the response
+        $privateKey = new PrivateKey(
+            PEMCertificatesMock::getPlainPrivateKey(PEMCertificatesMock::SELFSIGNED_PRIVATE_KEY)
         );
+        $factory = new SignatureAlgorithmFactory();
+        $signer = $factory->getAlgorithm(Constants::SIG_RSA_SHA256, $privateKey);
 
         $unsignedMessage = MessageFactory::fromXML($response->documentElement);
-        $unsignedMessage->setSigningKey($privateKey);
-        $unsignedMessage->setCertificates(
-            [PEMCertificatesMock::getPlainPublicKey(PEMCertificatesMock::SELFSIGNED_PUBLIC_KEY)]
-        );
+        $unsignedMessage->sign($signer);
 
         $signedMessage = MessageFactory::fromXML($unsignedMessage->toXML());
 
         $signature = $signedMessage->getSignature();
         $this->assertInstanceOf(Signature::class, $signature);
-        $this->assertEquals($privateKey->getAlgorithm(), $signature->getAlgorithm());
+        $this->assertEquals(Constants::SIG_RSA_SHA256, $signature->getSignedInfo()->getSignatureMethod()->getAlgorithm());
     }
 
 

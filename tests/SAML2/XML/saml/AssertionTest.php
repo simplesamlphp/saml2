@@ -8,6 +8,7 @@ use DOMDocument;
 use DOMNodeList;
 use Exception;
 use Mockery\Adapter\Phpunit\MockeryTestCase;
+use RuntimeException;
 use SimpleSAML\SAML2\Constants;
 use SimpleSAML\SAML2\Utils\XPath;
 use SimpleSAML\SAML2\XML\saml\Assertion;
@@ -35,7 +36,11 @@ use SimpleSAML\XML\Chunk;
 use SimpleSAML\XML\DOMDocumentFactory;
 use SimpleSAML\XML\Exception\MissingElementException;
 use SimpleSAML\XML\Exception\TooManyElementsException;
+use SimpleSAML\XMLSecurity\Alg\Signature\SignatureAlgorithmFactory;
+use SimpleSAML\XMLSecurity\Key\PrivateKey;
+use SimpleSAML\XMLSecurity\Key\X509Certificate;
 use SimpleSAML\XMLSecurity\TestUtils\PEMCertificatesMock;
+use SimpleSAML\XMLSecurity\XML\ds\Signature;
 use SimpleSAML\XMLSecurity\XMLSecurityKey;
 
 use function dirname;
@@ -656,10 +661,25 @@ XML;
         $doc = new DOMDocument();
         $doc->load('tests/resources/xml/assertions/signedassertion_tampered.xml');
 
-        $this->expectException(Exception::class);
+        $assertion = Assertion::fromXML($doc->documentElement);
+
+        $this->assertTrue($assertion->isSigned());
+        $signature = $assertion->getSignature();
+        $this->assertInstanceOf(Signature::class, $signature);
+
+        $publicKey = PEMCertificatesMock::getPlainPublicKey(
+            PEMCertificatesMock::SELFSIGNED_PUBLIC_KEY
+        );
+
+        $factory = new SignatureAlgorithmFactory();
+        $certificate = new X509Certificate($publicKey);
+        $sigAlg = $signature->getSignedInfo()->getSignatureMethod()->getAlgorithm();
+        $verifier = $factory->getAlgorithm($sigAlg, $certificate);
+
+        $this->expectException(RuntimeException::class);
         $this->expectExceptionMessage('Reference validation failed');
 
-        Assertion::fromXML($doc->documentElement);
+        $assertion->verify($verifier);
     }
 
 
@@ -672,15 +692,24 @@ XML;
         $doc = new DOMDocument();
         $doc->load('tests/resources/xml/assertions/signedassertion.xml');
 
-        $publicKey = PEMCertificatesMock::getPublicKey(
-            XMLSecurityKey::RSA_SHA1,
+        $assertion = Assertion::fromXML($doc->documentElement);
+
+        $this->assertTrue($assertion->isSigned());
+        $signature = $assertion->getSignature();
+        $this->assertInstanceOf(Signature::class, $signature);
+
+        $publicKey = PEMCertificatesMock::getPlainPublicKey(
             PEMCertificatesMock::SELFSIGNED_PUBLIC_KEY
         );
 
-        $assertion = Assertion::fromXML($doc->documentElement);
-        $this->expectException(Exception::class);
+        $factory = new SignatureAlgorithmFactory();
+        $certificate = new X509Certificate($publicKey);
+        $sigAlg = $signature->getSignedInfo()->getSignatureMethod()->getAlgorithm();
+        $verifier = $factory->getAlgorithm($sigAlg, $certificate);
+
+        $this->expectException(RuntimeException::class);
         $this->expectExceptionMessage('Algorithm provided in key does not match algorithm used in signature.');
-        $assertion->validate($publicKey);
+        $assertion->verify($verifier);
     }
 
 
@@ -693,15 +722,24 @@ XML;
         $doc = new DOMDocument();
         $doc->load('tests/resources/xml/assertions/signedassertion.xml');
 
-        $publicKey = PEMCertificatesMock::getPublicKey(
-            XMLSecurityKey::RSA_SHA256,
+        $assertion = Assertion::fromXML($doc->documentElement);
+
+        $this->assertTrue($assertion->isSigned());
+        $signature = $assertion->getSignature();
+        $this->assertInstanceOf(Signature::class, $signature);
+
+        $publicKey = PEMCertificatesMock::getPlainPublicKey(
             PEMCertificatesMock::OTHER_PUBLIC_KEY
         );
 
-        $assertion = Assertion::fromXML($doc->documentElement);
-        $this->expectException(Exception::class);
-        $this->expectExceptionMessage('Unable to validate Signature');
-        $assertion->validate($publicKey);
+        $factory = new SignatureAlgorithmFactory();
+        $certificate = new X509Certificate($publicKey);
+        $sigAlg = $signature->getSignedInfo()->getSignatureMethod()->getAlgorithm();
+        $verifier = $factory->getAlgorithm($sigAlg, $certificate);
+
+        $this->expectException(RuntimeException::class);
+        $this->expectExceptionMessage('Failed to validate signature');
+        $assertion->verify($verifier);
     }
 
 
@@ -714,16 +752,25 @@ XML;
         $doc = new DOMDocument();
         $doc->load('tests/resources/xml/assertions/signedassertion.xml');
 
-        $publicKey = PEMCertificatesMock::getPublicKey(
-            XMLSecurityKey::RSA_SHA256,
+        $assertion = Assertion::fromXML($doc->documentElement);
+
+        $this->assertTrue($assertion->isSigned());
+        $signature = $assertion->getSignature();
+        $this->assertInstanceOf(Signature::class, $signature);
+
+        $publicKey = PEMCertificatesMock::getPlainPublicKey(
             PEMCertificatesMock::SELFSIGNED_PUBLIC_KEY,
             PEMCertificatesMock::ALG_SIG_DSA
         );
 
-        $assertion = Assertion::fromXML($doc->documentElement);
-        $this->expectException(Exception::class);
-        $this->expectExceptionMessage('Unable to validate Signature');
-        $assertion->validate($publicKey);
+        $factory = new SignatureAlgorithmFactory();
+        $certificate = new X509Certificate($publicKey);
+        $sigAlg = $signature->getSignedInfo()->getSignatureMethod()->getAlgorithm();
+        $verifier = $factory->getAlgorithm($sigAlg, $certificate);
+
+        $this->expectException(RuntimeException::class);
+        $this->expectExceptionMessage('Failed to validate signature');
+        $assertion->verify($verifier);
     }
 
 
@@ -1148,9 +1195,15 @@ XML;
 
         // Create an assertion
         $assertion = new Assertion($issuer, null, null, $subject, $conditions, $statements);
-        $assertion->setSigningKey(
-            PEMCertificatesMock::getPrivateKey(XMLSecurityKey::RSA_SHA256, PEMCertificatesMock::PRIVATE_KEY)
+
+        // Sign the response
+        $key = new PrivateKey(
+            PEMCertificatesMock::getPlainPrivateKey(PEMCertificatesMock::PRIVATE_KEY)
         );
+
+        $factory = new SignatureAlgorithmFactory();
+        $signer = $factory->getAlgorithm(Constants::SIG_RSA_SHA256, $key);
+        $assertion->sign($signer);
 
         // Marshall it to a \DOMElement
         $assertionElement = $assertion->toXML();
