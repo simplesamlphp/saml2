@@ -390,7 +390,7 @@ class Assertion extends AbstractSamlElement implements SignableElementInterface,
      */
     protected function getOriginalXML(): DOMElement
     {
-        return $this->xml ?? $this->toXML();
+        return $this->xml ?? $this->toUnsignedXML();
     }
 
 
@@ -480,17 +480,6 @@ class Assertion extends AbstractSamlElement implements SignableElementInterface,
 
         foreach ($this->statements as $statement) {
             $statement->toXML($e);
-        }
-
-        if ($this->signer !== null) {
-            $signedXML = $this->doSign($e);
-
-            // Test for an Issuer
-            $assertionElements = XPath::xpQuery($signedXML, './saml_assertion:Issuer', XPath::getXPath($signedXML));
-            $issuer = array_pop($assertionElements);
-
-            $signedXML->insertBefore($this->signature->toXML($signedXML), $issuer->nextSibling);
-            return $signedXML;
         }
 
         return $e;

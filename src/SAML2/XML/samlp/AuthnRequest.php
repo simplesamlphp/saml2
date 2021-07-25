@@ -518,14 +518,14 @@ class AuthnRequest extends AbstractRequest
 
 
     /**
-     * Convert this authentication request to an XML element.
+     * Convert this message to an unsigned XML document.
+     * This method does not sign the resulting XML document.
      *
-     * @return \DOMElement This authentication request.
-     * @throws \Exception
+     * @return \DOMElement The root element of the DOM tree
      */
-    public function toXML(?DOMElement $parent = null): DOMElement
+    protected function toUnsignedXML(?DOMElement $parent = null): DOMElement
     {
-        $e = parent::toXML($parent);
+        $e = parent::toUnsignedXML($parent);
 
         if ($this->forceAuthn === true) {
             $e->setAttribute('ForceAuthn', 'true');
@@ -574,12 +574,6 @@ class AuthnRequest extends AbstractRequest
 
         if ($this->scoping !== null && !$this->scoping->isEmptyElement()) {
             $this->scoping->toXML($parent);
-        }
-
-        if ($this->signer !== null) {
-            $signedXML = $this->doSign($e);
-            $signedXML->insertBefore($this->signature->toXML($signedXML), $signedXML->firstChild);
-            return $signedXML;
         }
 
         return $e;

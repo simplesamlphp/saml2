@@ -132,21 +132,21 @@ abstract class AbstractStatusResponse extends AbstractMessage
 
 
     /**
-     * Convert status response message to an XML element.
+     * Convert this message to an unsigned XML document.
+     * This method does not sign the resulting XML document.
      *
-     * @inheritDoc
-     * @return \DOMElement This status response.
+     * @return \DOMElement The root element of the DOM tree
      */
-    public function toXML(?DOMElement $parent = null): DOMElement
+    protected function toUnsignedXML(?DOMElement $parent = null): DOMElement
     {
-        $parent = parent::toXML($parent);
+        $e = parent::toUnsignedXML($parent);
 
         if ($this->inResponseTo !== null) {
-            $parent->setAttribute('InResponseTo', $this->inResponseTo);
+            $e->setAttribute('InResponseTo', $this->inResponseTo);
         }
 
-        $this->status->toXML($parent);
+        $this->status->toXML($e);
 
-        return $parent;
+        return $e;
     }
 }

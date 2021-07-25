@@ -75,17 +75,16 @@ abstract class AbstractSubjectQuery extends AbstractRequest
 
 
     /**
-     * Convert subject query message to an XML element.
+     * Convert this message to an unsigned XML document.
+     * This method does not sign the resulting XML document.
      *
-     * @return \DOMElement This subject query.
-     *
-     * @throws \SimpleSAML\Assert\AssertionFailedException if assertions are false
+     * @return \DOMElement The root element of the DOM tree
      */
-    public function toXML(?DOMElement $parent = null): DOMElement
+    protected function toUnsignedXML(?DOMElement $parent = null): DOMElement
     {
         Assert::notEmpty($this->subject, 'Cannot convert SubjectQuery to XML without a Subject set.');
 
-        $parent = parent::toXML($parent);
+        $parent = parent::toUnsignedXML($parent);
 
         $this->subject->toXML($parent);
 

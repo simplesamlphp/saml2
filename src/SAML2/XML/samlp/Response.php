@@ -183,23 +183,12 @@ class Response extends AbstractStatusResponse
      *
      * @return \DOMElement This response.
      */
-    public function toXML(?DOMElement $parent = null): DOMElement
+    protected function toUnsignedXML(?DOMElement $parent = null): DOMElement
     {
-        $e = parent::toXML($parent);
+        $e = parent::toUnsignedXML($parent);
 
         foreach ($this->assertions as $assertion) {
             $assertion->toXML($e);
-        }
-
-        if ($this->signer !== null) {
-            $signedXML = $this->doSign($e);
-
-            // Test for an Issuer
-            $responseElements = XPath::xpQuery($signedXML, './saml_assertion:Issuer', XPath::getXPath($signedXML));
-            $issuer = array_pop($responseElements);
-
-            $signedXML->insertBefore($this->signature->toXML($signedXML), $issuer->nextSibling);
-            return $signedXML;
         }
 
         return $e;

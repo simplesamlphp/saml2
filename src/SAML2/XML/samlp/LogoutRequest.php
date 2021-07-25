@@ -232,13 +232,15 @@ class LogoutRequest extends AbstractRequest
 
 
     /**
-     * @inheritDoc
-     * @throws \Exception
+     * Convert this message to an unsigned XML document.
+     * This method does not sign the resulting XML document.
+     *
+     * @return \DOMElement The root element of the DOM tree
      */
-    public function toXML(?DOMElement $parent = null): DOMElement
+    protected function toUnsignedXML(?DOMElement $parent = null): DOMElement
     {
         /** @psalm-var \DOMDocument $e->ownerDocument */
-        $e = parent::toXML($parent);
+        $e = parent::toUnsignedXML($parent);
 
         if ($this->notOnOrAfter !== null) {
             $e->setAttribute('NotOnOrAfter', gmdate('Y-m-d\TH:i:s\Z', $this->notOnOrAfter));
@@ -253,12 +255,6 @@ class LogoutRequest extends AbstractRequest
 
         foreach ($this->sessionIndexes as $sessionIndex) {
             $sessionIndex->toXML($e);
-        }
-
-        if ($this->signer !== null) {
-            $signedXML = $this->doSign($e);
-            $signedXML->insertBefore($this->signature->toXML($signedXML), $signedXML->firstChild);
-            return $signedXML;
         }
 
         return $e;

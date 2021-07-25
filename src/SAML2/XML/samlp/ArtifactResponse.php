@@ -164,22 +164,17 @@ class ArtifactResponse extends AbstractStatusResponse
 
 
     /**
-     * Convert the ArtifactResponse message to an XML element.
+     * Convert this message to an unsigned XML document.
+     * This method does not sign the resulting XML document.
      *
-     * @return \DOMElement This response.
+     * @return \DOMElement The root element of the DOM tree
      */
-    public function toXML(?DOMElement $parent = null): DOMElement
+    protected function toUnsignedXML(?DOMElement $parent = null): DOMElement
     {
-        $e = parent::toXML($parent);
+        $e = parent::toUnsignedXML($parent);
 
         if ($this->message !== null) {
             $this->message->toXML($e);
-        }
-
-        if ($this->signer !== null) {
-            $signedXML = $this->doSign($e);
-            $signedXML->insertBefore($this->signature->toXML($signedXML), $signedXML->firstChild);
-            return $signedXML;
         }
 
         return $e;

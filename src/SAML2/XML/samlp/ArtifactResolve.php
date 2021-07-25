@@ -139,26 +139,19 @@ class ArtifactResolve extends AbstractRequest
 
 
     /**
-     * Convert the response message to an XML element.
+     * Convert this message to an unsigned XML document.
+     * This method does not sign the resulting XML document.
      *
-     * @return \DOMElement This response.
-     *
-     * @throws \SimpleSAML\Assert\AssertionFailedException if assertions are false
+     * @return \DOMElement The root element of the DOM tree
      */
-    public function toXML(?DOMElement $parent = null): DOMElement
+    protected function toUnsignedXML(?DOMElement $parent = null): DOMElement
     {
         Assert::notEmpty($this->artifact, 'Cannot convert ArtifactResolve to XML without an Artifact set.');
 
         /** @psalm-var \DOMDocument $e->ownerDocument */
-        $e = parent::toXML($parent);
+        $e = parent::toUnsignedXML($parent);
         $artifactelement = $e->ownerDocument->createElementNS(Constants::NS_SAMLP, 'Artifact', $this->artifact);
         $e->appendChild($artifactelement);
-
-        if ($this->signer !== null) {
-            $signedXML = $this->doSign($e);
-            $signedXML->insertBefore($this->signature->toXML($signedXML), $signedXML->firstChild);
-            return $signedXML;
-        }
 
         return $e;
     }

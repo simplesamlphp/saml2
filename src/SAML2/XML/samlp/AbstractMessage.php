@@ -11,6 +11,7 @@ use SimpleSAML\Assert\Assert;
 use SimpleSAML\SAML2\Constants;
 use SimpleSAML\SAML2\Utilities\Temporal;
 use SimpleSAML\SAML2\Utils;
+use SimpleSAML\SAML2\Utils\XPath;
 use SimpleSAML\SAML2\XML\ExtendableElementTrait;
 use SimpleSAML\SAML2\XML\saml\Issuer;
 use SimpleSAML\XMLSecurity\XML\SignableElementInterface;
@@ -415,11 +416,36 @@ abstract class AbstractMessage extends AbstractSamlpElement implements SignableE
 
 
     /**
-     * @inheritDoc
+     * Create XML from this class
+     *
+     * @param \DOMElement|null $parent
+     * @return \DOMElement
+     */
+    public function toXML(?DOMElement $parent = null): DOMElement
+    {
+        $e = $this->toUnsignedXML($parent);
+
+        if ($this->signer !== null) {
+            $signedXML = $this->doSign($e);
+
+            // Test for an Issuer
+            $messageElements = XPath::xpQuery($signedXML, './saml_assertion:Issuer', XPath::getXPath($signedXML));
+            $issuer = array_pop($messageElements);
+
+            $signedXML->insertBefore($this->signature->toXML($signedXML), $issuer->nextSibling);
+            return $signedXML;
+        }
+
+        return $e;
+    }
+
+
+    /**
+     * @return \DOMElement
      */
     protected function getOriginalXML(): DOMElement
     {
-        return $this->xml ?? $this->toXML();
+        return $this->xml ?? $this->toUnsignedXML();
     }
 
 
@@ -429,7 +455,7 @@ abstract class AbstractMessage extends AbstractSamlpElement implements SignableE
      *
      * @return \DOMElement The root element of the DOM tree
      */
-    public function toXML(?DOMElement $parent = null): DOMElement
+    protected function toUnsignedXML(?DOMElement $parent = null): DOMElement
     {
         $root = $this->instantiateParentElement($parent);
 
@@ -444,6 +470,7 @@ abstract class AbstractMessage extends AbstractSamlpElement implements SignableE
         if ($this->destination !== null) {
             $root->setAttribute('Destination', $this->destination);
         }
+
         if ($this->consent !== null && $this->consent !== Constants::CONSENT_UNSPECIFIED) {
             $root->setAttribute('Consent', $this->consent);
         }
