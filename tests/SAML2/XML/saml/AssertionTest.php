@@ -398,7 +398,7 @@ XML;
 
     /**
      * @group Assertion
-     */
+c     */
     public function testCorrectSignatureMethodCanBeExtracted(): void
     {
         $document = new DOMDocument();
@@ -440,17 +440,20 @@ XML;
 XML
         );
 
-        $privateKey = PEMCertificatesMock::getPrivateKey(XMLSecurityKey::RSA_SHA256, PEMCertificatesMock::PRIVATE_KEY);
+        $assertion = Assertion::fromXML($document->documentElement);
+        $this->assertFalse($assertion->wasSignedAtConstruction());
 
-        $unsignedAssertion = Assertion::fromXML($document->documentElement);
-        $unsignedAssertion->setSigningKey($privateKey);
-        $unsignedAssertion->setCertificates([PEMCertificatesMock::getPlainPublicKey(PEMCertificatesMock::PUBLIC_KEY)]);
-        $this->assertFalse($unsignedAssertion->wasSignedAtConstruction());
-        $this->assertEquals($privateKey, $unsignedAssertion->getSigningKey());
+        // Sign the assertion
+        $key = new PrivateKey(
+            PEMCertificatesMock::getPlainPrivateKey(PEMCertificatesMock::PRIVATE_KEY)
+        );
+        $factory = new SignatureAlgorithmFactory();
+        $signer = $factory->getAlgorithm(Constants::SIG_RSA_SHA256, $key);
+        $assertion->sign($signer);
 
-        $signedAssertion = Assertion::fromXML($unsignedAssertion->toXML());
+        $signedAssertion = Assertion::fromXML($assertion->toXML());
 
-        $this->assertEquals($privateKey->getAlgorithm(), $signedAssertion->getSignature()->getAlgorithm());
+        $this->assertEquals(Constants::SIG_RSA_SHA256, $signedAssertion->getSignature()->getSignedInfo()->getSignatureMethod()->getAlgorithm());
         $this->assertTrue($signedAssertion->wasSignedAtConstruction());
     }
 
@@ -609,19 +612,28 @@ XML;
         $doc = new DOMDocument();
         $doc->load('tests/resources/xml/assertions/signedassertion.xml');
 
-        $publicKey = PEMCertificatesMock::getPublicKey(XMLSecurityKey::RSA_SHA256, PEMCertificatesMock::SELFSIGNED_PUBLIC_KEY);
+        $publicKey = PEMCertificatesMock::getPlainPublicKey(
+            PEMCertificatesMock::SELFSIGNED_PUBLIC_KEY
+        );
 
         $assertion = Assertion::fromXML($doc->documentElement);
-        $result = $assertion->validate($publicKey);
+        $signature = $assertion->getSignature();
 
-        $this->assertTrue($result);
+        $factory = new SignatureAlgorithmFactory();
+        $certificate = new X509Certificate($publicKey);
+        $sigAlg = $signature->getSignedInfo()->getSignatureMethod()->getAlgorithm();
+        $verifier = $factory->getAlgorithm($sigAlg, $certificate);
+
+        $result = $assertion->verify($verifier);
+
+        $this->assertInstanceOf(Assertion::class, $result);
         // Double-check that we can actually retrieve some basics.
-        $this->assertEquals("_d908a49b8b63665738430d1c5b655f297b91331864", $assertion->getId());
+        $this->assertEquals("_d908a49b8b63665738430d1c5b655f297b91331864", $result->getId());
         $this->assertEquals(
             "https://idp.example.org/simplesaml/saml2/idp/metadata.php",
-            $assertion->getIssuer()->getContent()
+            $result->getIssuer()->getContent()
         );
-        $this->assertEquals("1457707995", $assertion->getIssueInstant());
+        $this->assertEquals("1457707995", $result->getIssueInstant());
 
         // Was signed
         $this->assertTrue($assertion->wasSignedAtConstruction());
@@ -637,14 +649,22 @@ XML;
         $doc = new DOMDocument();
         $doc->load('tests/resources/xml/assertions/signedassertion_with_comments.xml');
 
-        $publicKey = PEMCertificatesMock::getPublicKey(XMLSecurityKey::RSA_SHA256, PEMCertificatesMock::SELFSIGNED_PUBLIC_KEY);
-
         $assertion = Assertion::fromXML($doc->documentElement);
-        $result = $assertion->validate($publicKey);
+        $signature = $assertion->getSignature();
 
-        $this->assertTrue($result);
+        $publicKey = PEMCertificatesMock::getPlainPublicKey(
+            PEMCertificatesMock::SELFSIGNED_PUBLIC_KEY
+        );
+
+        $factory = new SignatureAlgorithmFactory();
+        $certificate = new X509Certificate($publicKey);
+        $sigAlg = $signature->getSignedInfo()->getSignatureMethod()->getAlgorithm();
+        $verifier = $factory->getAlgorithm($sigAlg, $certificate);
+
+        $result = $assertion->verify($verifier);
+
         /** @psalm-var \SimpleSAML\SAML2\XML\saml\Subject $subject */
-        $subject = $assertion->getSubject();
+        $subject = $result->getSubject();
 
         /** @psalm-var \SimpleSAML\SAML2\XML\saml\IdentifierInterface $identifier */
         $identifier = $subject->getIdentifier();
@@ -808,9 +828,8 @@ XML;
         // Was not signed
         $this->assertFalse($assertion->wasSignedAtConstruction());
 
-        $publicKey = PEMCertificatesMock::getPublicKey(XMLSecurityKey::RSA_SHA256, PEMCertificatesMock::PUBLIC_KEY);
-        $result = $assertion->validate($publicKey);
-        $this->assertFalse($result);
+        $this->expectException(RuntimeException::class);
+        $assertion->verify();
     }
 
 

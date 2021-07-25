@@ -109,10 +109,14 @@ final class PublicKeyValidatorTest extends MockeryTestCase
 
         $doc = DOMDocumentFactory::fromFile(__DIR__ . '/response.xml');
         $response = Response::fromXML($doc->firstChild);
-        $response->setSigningKey(
-            PEMCertificatesMock::getPrivateKey(XMLSecurityKey::RSA_SHA256, PEMCertificatesMock::PRIVATE_KEY)
+
+        // Sign the response
+        $key = new PrivateKey(
+            PEMCertificatesMock::getPlainPrivateKey(PEMCertificatesMock::PRIVATE_KEY)
         );
-        $response->setCertificates([PEMCertificatesMock::getPlainPublicKey(PEMCertificatesMock::PUBLIC_KEY)]);
+        $factory = new SignatureAlgorithmFactory();
+        $signer = $factory->getAlgorithm(Constants::SIG_RSA_SHA256, $key);
+        $response->sign($signer);
 
         // convert to signed response
         $response = Response::fromXML($response->toXML());
