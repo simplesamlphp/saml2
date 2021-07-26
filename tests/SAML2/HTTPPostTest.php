@@ -8,6 +8,7 @@ use Exception;
 use Mockery\Adapter\Phpunit\MockeryTestCase;
 use Nyholm\Psr7\ServerRequest;
 use PHPUnit\Framework\Error\Warning;
+use SimpleSAML\SAML2\Constants as C;
 use SimpleSAML\SAML2\HTTPPost;
 use SimpleSAML\SAML2\XML\saml\Issuer;
 use SimpleSAML\SAML2\XML\samlp\AuthnRequest;
@@ -15,6 +16,8 @@ use SimpleSAML\SAML2\XML\samlp\Response;
 use SimpleSAML\SAML2\XML\samlp\Status;
 use SimpleSAML\SAML2\XML\samlp\StatusCode;
 use SimpleSAML\Utils\HTTP;
+use SimpleSAML\XMLSecurity\Alg\Signature\SignatureAlgorithmFactory;
+use SimpleSAML\XMLSecurity\Key\PrivateKey;
 use SimpleSAML\XMLSecurity\TestUtils\PEMCertificatesMock;
 use SimpleSAML\XMLSecurity\XMLSecurityKey;
 
@@ -161,7 +164,17 @@ final class HTTPPostTest extends MockeryTestCase
             []
         );
         $response->setRelayState('http://example.org');
-        $response->setSigningKey(PEMCertificatesMock::getPrivateKey(XMLSecurityKey::RSA_SHA256, PEMCertificatesMock::SELFSIGNED_PRIVATE_KEY));
+
+        // Sign the response
+        $key = new PrivateKey(
+            PEMCertificatesMock::getPlainPrivateKey(PEMCertificatesMock::PRIVATE_KEY)
+        );
+
+        $factory = new SignatureAlgorithmFactory();
+        $signer = $factory->getAlgorithm(C::SIG_RSA_SHA256, $key);
+        $response->sign($signer);
+
+//        $response->setSigningKey(PEMCertificatesMock::getPrivateKey(XMLSecurityKey::RSA_SHA256, PEMCertificatesMock::SELFSIGNED_PRIVATE_KEY));
 
         $hr = new HTTPPost();
         $hr->send($response);
