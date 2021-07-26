@@ -50,7 +50,7 @@ abstract class AbstractChainedValidator implements ChainedValidator
         foreach ($pemCandidates as $index => $candidateKey) {
             $key = new XMLSecurityKey(XMLSecurityKey::RSA_SHA256, ['type' => 'public']);
             $key->loadKey($candidateKey->getCertificate());
-            $key = Security::castKey($key, $element->getSignature()->getAlgorithm(), 'public');
+            $key = Security::castKey($key, $element->getSignature()->getSignedInfo()->getSignatureMethod()->getAlgorithm(), 'public');
 
             try {
                 /*
