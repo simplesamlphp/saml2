@@ -13,11 +13,14 @@ use SimpleSAML\SAML2\Assertion\Processor as AssertionProcessor;
 use SimpleSAML\SAML2\Configuration\Destination;
 use SimpleSAML\SAML2\Configuration\IdentityProvider;
 use SimpleSAML\SAML2\Configuration\ServiceProvider;
+use SimpleSAML\SAML2\Constants;
 use SimpleSAML\SAML2\Response\Exception\UnsignedResponseException;
 use SimpleSAML\SAML2\Response\Processor as ResponseProcessor;
 use SimpleSAML\SAML2\Utilities\ArrayCollection;
 use SimpleSAML\SAML2\XML\saml\Assertion;
 use SimpleSAML\SAML2\XML\samlp\Response;
+use SimpleSAML\XMLSecurity\Alg\Signature\SignatureAlgorithmFactory;
+use SimpleSAML\XMLSecurity\Key\PrivateKey;
 use SimpleSAML\XMLSecurity\TestUtils\PEMCertificatesMock;
 use SimpleSAML\XMLSecurity\Utils\Certificate;
 use SimpleSAML\XMLSecurity\XMLSecurityKey;
@@ -185,6 +188,17 @@ final class SignatureValidationTest extends MockeryTestCase
         $doc = new DOMDocument();
         $doc->load(__DIR__ . '/response.xml');
         $response = Response::fromXML($doc->documentElement);
+
+        // Sign the response
+        $key = new PrivateKey(
+            PEMCertificatesMock::getPlainPrivateKey(PEMCertificatesMock::PRIVATE_KEY)
+        );
+        $factory = new SignatureAlgorithmFactory();
+        $signer = $factory->getAlgorithm(Constants::SIG_RSA_SHA256, $key);
+
+        $response->sign($signer);
+        return $response;
+/*
         $response->setSigningKey(
             PEMCertificatesMock::getPrivateKey(XMLSecurityKey::RSA_SHA256, PEMCertificatesMock::PRIVATE_KEY)
         );
@@ -192,6 +206,7 @@ final class SignatureValidationTest extends MockeryTestCase
 
         // convert to signed response
         return Response::fromXML($response->toXML());
+*/
     }
 
 
