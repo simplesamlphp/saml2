@@ -560,20 +560,16 @@ class AuthnRequest extends AbstractRequest
             }
         }
 
-        if ($this->conditions !== null) {
-            if (!$this->conditions->isEmptyElement()) {
-                $this->conditions->toXML($parent);
-            }
+        if ($this->conditions !== null && !$this->conditions->isEmptyElement()) {
+            $this->conditions->toXML($parent);
         }
 
         if (!empty($this->requestedAuthnContext)) {
             $this->requestedAuthnContext->toXML($parent);
         }
 
-        if ($this->scoping !== null) {
-            if (!$this->scoping->isEmptyElement()) {
-                $this->scoping->toXML($parent);
-            }
+        if ($this->scoping !== null && !$this->scoping->isEmptyElement()) {
+            $this->scoping->toXML($parent);
         }
 
         return $this->signElement($parent);
