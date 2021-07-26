@@ -173,7 +173,6 @@ abstract class AbstractMessage extends AbstractSamlpElement implements SignableE
      * @param \SimpleSAML\XMLSecurity\XMLSecurityKey $key The key we should check against
      * @throws \Exception
      * @return bool true on success, false when we don't have a signature
-     */
     public function validate(XMLSecurityKey $key): bool
     {
         if (count($this->validators) === 0) {
@@ -188,7 +187,7 @@ abstract class AbstractMessage extends AbstractSamlpElement implements SignableE
 
             try {
                 call_user_func($function, $data, $key);
-                /* We were able to validate the message with this validator. */
+                // We were able to validate the message with this validator.
 
                 return true;
             } catch (Exception $e) {
@@ -198,12 +197,13 @@ abstract class AbstractMessage extends AbstractSamlpElement implements SignableE
 
         Assert::notEmpty($exceptions);
 
-        /**
-         * No validators were able to validate the message.
-         * @psalm-suppress InvalidThrow
-         */
+        //
+        //No validators were able to validate the message.
+        //@psalm-suppress InvalidThrow
+        //
         throw array_pop($exceptions);
     }
+     */
 
 
     /**
