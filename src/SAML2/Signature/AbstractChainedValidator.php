@@ -7,6 +7,9 @@ namespace SimpleSAML\SAML2\Signature;
 use Exception;
 use Psr\Log\LoggerInterface;
 use SimpleSAML\SAML2\Utilities\ArrayCollection;
+use SimpleSAML\XMLSecurity\Alg\Signature\SignatureAlgorithmFactory;
+use SimpleSAML\XMLSecurity\Key\PublicKey;
+use SimpleSAML\XMLSecurity\TestUtils\PEMCertificatesMock;
 use SimpleSAML\XMLSecurity\Utils\Security;
 use SimpleSAML\XMLSecurity\XML\SignedElementInterface;
 use SimpleSAML\XMLSecurity\XMLSecurityKey;
@@ -48,15 +51,29 @@ abstract class AbstractChainedValidator implements ChainedValidator
     ): bool {
         $lastException = null;
         foreach ($pemCandidates as $index => $candidateKey) {
-            $key = new XMLSecurityKey(XMLSecurityKey::RSA_SHA256, ['type' => 'public']);
-            $key->loadKey($candidateKey->getCertificate());
-            $key = Security::castKey($key, $element->getSignature()->getSignedInfo()->getSignatureMethod()->getAlgorithm(), 'public');
+            $publicKey = PEMCertificatesMock::getPlainPublicKeyContents(
+                PEMCertificatesMock::SELFSIGNED_PUBLIC_KEY
+            );
+
+            $signature = $element->getSignature();
+            $factory = new SignatureAlgorithmFactory();
+            $certificate = new PublicKey($publicKey);
+            $sigAlg = $signature->getSignedInfo()->getSignatureMethod()->getAlgorithm();
+            $verifier = $factory->getAlgorithm(
+                $sigAlg,
+                new PublicKey(PEMCertificatesMock::getPlainPublicKey(PEMCertificatesMock::PUBLIC_KEY))
+            );
+
+//            $key = new XMLSecurityKey(XMLSecurityKey::RSA_SHA256, ['type' => 'public']);
+//            $key->loadKey($candidateKey->getCertificate());
+//            $key = Security::castKey($key, $element->getSignature()->getSignedInfo()->getSignatureMethod()->getAlgorithm(), 'public');
 
             try {
                 /*
                  * Make sure that we have a valid signature on either the response or the assertion.
                  */
-                $result = $element->validate($key);
+//                $result = $element->validate($key);
+                $result = $element->verify($verifier);
                 if ($result) {
                     $this->logger->debug(sprintf('Validation with key "#%d" succeeded', $index));
                     return true;

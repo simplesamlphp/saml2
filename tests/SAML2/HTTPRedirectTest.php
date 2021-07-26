@@ -139,9 +139,19 @@ final class HTTPRedirectTest extends MockeryTestCase
         $this->assertTrue($result);
 
         // validate with another cert, should fail
+        $publicKey = PEMCertificatesMock::getPlainPublicKey(
+            PEMCertificatesMock::SELFSIGNED_PUBLIC_KEY
+        );
+
+        $factory = new SignatureAlgorithmFactory();
+        $certificate = new X509Certificate($publicKey);
+        $sigAlg = $signature->getSignedInfo()->getSignatureMethod()->getAlgorithm();
+        $verifier = $factory->getAlgorithm($sigAlg, $certificate);
+
         $this->expectException(Exception::class);
         $this->expectExceptionMessage('Unable to validate signature');
-        $samlrequest->validate(PEMCertificatesMock::getPublicKey(XMLSecurityKey::RSA_SHA256, PEMCertificatesMock::OTHER_PUBLIC_KEY));
+
+        $request->verify($verifier);
     }
 
 
