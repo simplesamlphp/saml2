@@ -9,7 +9,7 @@ use DOMNodeList;
 use Exception;
 use Mockery\Adapter\Phpunit\MockeryTestCase;
 use RuntimeException;
-use SimpleSAML\SAML2\Constants;
+use SimpleSAML\SAML2\Constants as C;
 use SimpleSAML\SAML2\Utils\XPath;
 use SimpleSAML\SAML2\XML\saml\Assertion;
 use SimpleSAML\SAML2\XML\saml\Attribute;
@@ -90,7 +90,7 @@ final class AssertionTest extends MockeryTestCase
         // Create the AuthnStatement
         $authnStatement = new AuthnStatement(
             new AuthnContext(
-                new AuthnContextClassRef(Constants::AC_PASSWORD_PROTECTED_TRANSPORT),
+                new AuthnContextClassRef(C::AC_PASSWORD_PROTECTED_TRANSPORT),
                 null,
                 null
             ),
@@ -115,7 +115,7 @@ final class AssertionTest extends MockeryTestCase
                 'SomeNameIDValue',
                 null,
                 'https://sp.example.org/authentication/sp/metadata',
-                Constants::NAMEID_TRANSIENT,
+                C::NAMEID_TRANSIENT,
                 null
             ),
             [
@@ -125,7 +125,7 @@ final class AssertionTest extends MockeryTestCase
                         'SomeOtherNameIDValue',
                         null,
                         'https://sp.example.org/authentication/sp/metadata',
-                        Constants::NAMEID_TRANSIENT,
+                        C::NAMEID_TRANSIENT,
                         null
                     ),
                     new SubjectConfirmationData(
@@ -250,8 +250,8 @@ XML;
             // Attribute
             [
                 new Attribute('name1', null, null, [new AttributeValue('value1'), new AttributeValue('value2')]),
-                new Attribute('name2', Constants::NAMEFORMAT_UNSPECIFIED, null, [new AttributeValue(2)]),
-                new Attribute('name3', Constants::NAMEFORMAT_BASIC, null, [new AttributeValue(null)])
+                new Attribute('name2', C::NAMEFORMAT_UNSPECIFIED, null, [new AttributeValue(2)]),
+                new Attribute('name3', C::NAMEFORMAT_BASIC, null, [new AttributeValue(null)])
             ],
             // EncryptedAttribute
             []
@@ -302,8 +302,8 @@ XML;
         $this->assertNull($attributes[2]->getAttributeValues()[0]->getValue());
 
         $this->assertNull($attributes[0]->getNameFormat());
-        $this->assertEquals(Constants::NAMEFORMAT_UNSPECIFIED, $attributes[1]->getNameFormat());
-        $this->assertEquals(Constants::NAMEFORMAT_BASIC, $attributes[2]->getNameFormat());
+        $this->assertEquals(C::NAMEFORMAT_UNSPECIFIED, $attributes[1]->getNameFormat());
+        $this->assertEquals(C::NAMEFORMAT_BASIC, $attributes[2]->getNameFormat());
     }
 
 
@@ -379,7 +379,7 @@ XML;
         $this->assertCount(2, $attributes['name3']);
         $this->assertEquals("1234", $attributes['name3'][0]);
         $this->assertEquals("+2345", $attributes['name3'][1]);
-        $this->assertEquals(Constants::NAMEFORMAT_UNSPECIFIED, $assertionToVerify->getAttributeNameFormat());
+        $this->assertEquals(C::NAMEFORMAT_UNSPECIFIED, $assertionToVerify->getAttributeNameFormat());
 
         $attributesValueTypes = $assertionToVerify->getAttributesValueTypes();
         $this->assertCount(3, $attributesValueTypes);
@@ -448,12 +448,12 @@ XML
             PEMCertificatesMock::getPlainPrivateKey(PEMCertificatesMock::PRIVATE_KEY)
         );
         $factory = new SignatureAlgorithmFactory();
-        $signer = $factory->getAlgorithm(Constants::SIG_RSA_SHA256, $key);
+        $signer = $factory->getAlgorithm(C::SIG_RSA_SHA256, $key);
         $assertion->sign($signer);
 
         $signedAssertion = Assertion::fromXML($assertion->toXML());
 
-        $this->assertEquals(Constants::SIG_RSA_SHA256, $signedAssertion->getSignature()->getSignedInfo()->getSignatureMethod()->getAlgorithm());
+        $this->assertEquals(C::SIG_RSA_SHA256, $signedAssertion->getSignature()->getSignedInfo()->getSignatureMethod()->getAlgorithm());
         $this->assertTrue($signedAssertion->wasSignedAtConstruction());
     }
 
@@ -724,8 +724,7 @@ XML;
 
         $factory = new SignatureAlgorithmFactory();
         $certificate = new X509Certificate($publicKey);
-        $sigAlg = $signature->getSignedInfo()->getSignatureMethod()->getAlgorithm();
-        $verifier = $factory->getAlgorithm($sigAlg, $certificate);
+        $verifier = $factory->getAlgorithm(C::SIG_RSA_RIPEMD160, $certificate);
 
         $this->expectException(RuntimeException::class);
         $this->expectExceptionMessage('Algorithm provided in key does not match algorithm used in signature.');
@@ -1120,7 +1119,7 @@ XML;
         );
 
         // Create a Subject
-        $nameId = new NameID("just_a_basic_identifier", null, null, Constants::NAMEID_TRANSIENT);
+        $nameId = new NameID("just_a_basic_identifier", null, null, C::NAMEID_TRANSIENT);
         $this->assertInstanceOf(NameID::class, $nameId);
 
         $publicKey = PEMCertificatesMock::getPublicKey(XMLSecurityKey::RSA_SHA256, PEMCertificatesMock::PUBLIC_KEY);
@@ -1185,11 +1184,11 @@ XML;
             [
                 new Attribute(
                     'name1',
-                    Constants::NAMEFORMAT_UNSPECIFIED,
+                    C::NAMEFORMAT_UNSPECIFIED,
                     null,
                     [new AttributeValue('value1'), new AttributeValue('value2')]
                 ),
-                new Attribute('name2', Constants::NAMEFORMAT_UNSPECIFIED, null, [new AttributeValue('value3')]),
+                new Attribute('name2', C::NAMEFORMAT_UNSPECIFIED, null, [new AttributeValue('value3')]),
             ],
             // EncryptedAttribute
             []
@@ -1207,7 +1206,7 @@ XML;
 
         // Create Subject
         $subject = new Subject(
-            new NameID("just_a_basic_identifier", Constants::NAMEID_TRANSIENT)
+            new NameID("just_a_basic_identifier", C::NAMEID_TRANSIENT)
         );
 
         $statements = [$authnStatement, $attributeStatement];
@@ -1221,7 +1220,7 @@ XML;
         );
 
         $factory = new SignatureAlgorithmFactory();
-        $signer = $factory->getAlgorithm(Constants::SIG_RSA_SHA256, $key);
+        $signer = $factory->getAlgorithm(C::SIG_RSA_SHA256, $key);
         $assertion->sign($signer);
 
         // Marshall it to a \DOMElement
