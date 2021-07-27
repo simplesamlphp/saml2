@@ -438,4 +438,9 @@ class Constants extends \SimpleSAML\XMLSecurity\Constants
      * Top-level status code.
      */
     public const STATUS_VERSION_MISMATCH = 'urn:oasis:names:tc:SAML:2.0:status:VersionMismatch';
+
+    /**
+     * The maximum size for any entityid as per specification
+     */
+    public const ENTITYID_MAX_LENGTH = 1024;
 }

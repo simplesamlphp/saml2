@@ -4,12 +4,14 @@ declare(strict_types=1);
 
 namespace SimpleSAML\Test\SAML2\XML\md;
 
+use DOMText;
 use InvalidArgumentException;
 use PHPUnit\Framework\TestCase;
 use SimpleSAML\Assert\AssertionFailedException;
-use SimpleSAML\SAML2\Constants;
+use SimpleSAML\SAML2\Constants as C;
 use SimpleSAML\SAML2\XML\md\AdditionalMetadataLocation;
 use SimpleSAML\SAML2\XML\md\AffiliationDescriptor;
+use SimpleSAML\SAML2\XML\md\AffiliateMember;
 use SimpleSAML\SAML2\XML\md\AttributeAuthorityDescriptor;
 use SimpleSAML\SAML2\XML\md\AttributeService;
 use SimpleSAML\SAML2\XML\md\AuthnAuthorityDescriptor;
@@ -106,7 +108,7 @@ final class EntityDescriptorTest extends TestCase
                     'http://www.example.com/aqs'
                 )
             ],
-            [Constants::NS_SAMLP]
+            [C::NS_SAMLP]
         );
         $pdpd = new PDPDescriptor(
             [
@@ -115,7 +117,7 @@ final class EntityDescriptorTest extends TestCase
                     'https://IdentityProvider.com/SAML/AA/SOAP'
                 )
             ],
-            [Constants::NS_SAMLP]
+            [C::NS_SAMLP]
         );
         $org = new Organization(
             [new OrganizationName('en', 'orgNameTest (en)')],
@@ -171,7 +173,7 @@ final class EntityDescriptorTest extends TestCase
      */
     public function testMarshallingWithAffiliationDescriptor(): void
     {
-        $mdns = Constants::NS_MD;
+        $mdns = C::NS_MD;
         $document = DOMDocumentFactory::fromString(<<<XML
 <md:EntityDescriptor xmlns:md="{$mdns}" ID="_5A3CHB081" validUntil="2020-02-05T09:39:25Z"
     cacheDuration="P2Y6M5DT12H35M30S" entityID="urn:example:entity">
@@ -210,7 +212,7 @@ XML
         $id = "_5A3CHB081";
         $now = 1580895565;
         $duration = "P2Y6M5DT12H35M30S";
-        $ad = new AffiliationDescriptor('asdf', ['test']);
+        $ad = new AffiliationDescriptor('asdf', [new AffiliateMember('test')]);
         $org = new Organization(
             [new OrganizationName('en', 'orgNameTest (en)')],
             [new OrganizationDisplayName('en', 'orgDispNameTest (en)')],
@@ -277,7 +279,7 @@ XML
      */
     public function testMarshallingWithAffiliationAndRoleDescriptors(): void
     {
-        (new AffiliationDescriptor('asdf', ['test']))->toXML($this->xmlRepresentation->documentElement);
+        (new AffiliationDescriptor('asdf', [new AffiliateMember('test')]))->toXML($this->xmlRepresentation->documentElement);
         $this->expectException(InvalidArgumentException::class);
         $this->expectExceptionMessage(
             'AffiliationDescriptor cannot be combined with other RoleDescriptor elements in EntityDescriptor.'
@@ -293,7 +295,15 @@ XML
     {
         $this->expectException(AssertionFailedException::class);
         $this->expectExceptionMessage('The entityID attribute cannot be empty.');
-        new EntityDescriptor('', null, null, null, null, [], new AffiliationDescriptor('asdf', ['test']));
+        new EntityDescriptor(
+            '',
+            null,
+            null,
+            null,
+            null,
+            [],
+            new AffiliationDescriptor('asdf', [new AffiliateMember('test')])
+        );
     }
 
 
@@ -303,15 +313,18 @@ XML
     public function testMarshallingWithLongEntityID(): void
     {
         $this->expectException(AssertionFailedException::class);
-        $this->expectExceptionMessage('The entityID attribute cannot be longer than 1024 characters.');
+        $this->expectExceptionMessage(
+            sprintf('The entityID attribute cannot be longer than %d characters.', C::ENTITYID_MAX_LENGTH)
+        );
+
         new EntityDescriptor(
-            str_repeat('x', 1025),
+            str_repeat('x', C::ENTITYID_MAX_LENGTH + 1),
             null,
             null,
             null,
             null,
             [],
-            new AffiliationDescriptor('asdf', ['test'])
+            new AffiliationDescriptor('asdf', [new AffiliateMember('test')])
         );
     }
 
@@ -324,10 +337,10 @@ XML
      */
     public function testUnmarshalling(): void
     {
-        $pdpd = $this->xmlRepresentation->getElementsByTagNameNS(Constants::NS_MD, 'PDPDescriptor')->item(0);
-        $customd = $this->xmlRepresentation->createElementNS(Constants::NS_MD, 'md:CustomRoleDescriptor');
+        $pdpd = $this->xmlRepresentation->getElementsByTagNameNS(C::NS_MD, 'PDPDescriptor')->item(0);
+        $customd = $this->xmlRepresentation->createElementNS(C::NS_MD, 'md:CustomRoleDescriptor');
         $customd->setAttribute('protocolSupportEnumeration', 'urn:oasis:names:tc:SAML:2.0:protocol');
-        $newline = new \DOMText("\n  ");
+        $newline = new DOMText("\n  ");
         /**
          * @psalm-suppress PossiblyNullPropertyFetch
          * @psalm-suppress PossiblyNullReference
