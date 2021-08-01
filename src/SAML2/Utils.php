@@ -496,7 +496,7 @@ class Utils
          */
         $xml = '<root xmlns:saml="urn:oasis:names:tc:SAML:2.0:assertion" '.
                         'xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">'.
-            $decrypted.
+            trim($decrypted).
             '</root>';
 
         try {
