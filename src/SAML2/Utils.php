@@ -20,6 +20,7 @@ use SAML2\Exception\RuntimeException;
 use SAML2\XML\ds\KeyInfo;
 use SAML2\XML\ds\X509Certificate;
 use SAML2\XML\ds\X509Data;
+use SAML2\XML\ds\KeyName;
 use SAML2\XML\md\KeyDescriptor;
 
 /**
@@ -649,23 +650,30 @@ class Utils
     /**
      * Create a KeyDescriptor with the given certificate.
      *
-     * @param string $x509Data The certificate, as a base64-encoded DER data.
+     * @param string|null $x509Data The certificate, as a base64-encoded DER data.
+     * @param string|null $keyName The name of the key as specified in the KeyInfo
      * @return \SAML2\XML\md\KeyDescriptor The keydescriptor.
      */
-    public static function createKeyDescriptor(string $x509Data) : KeyDescriptor
+    public static function createKeyDescriptor(string $x509Data = null, string $keyName = null) : KeyDescriptor
     {
-        $x509Certificate = new X509Certificate();
-        $x509Certificate->setCertificate($x509Data);
-
-        $x509Data = new X509Data();
-        $x509Data->addData($x509Certificate);
-
         $keyInfo = new KeyInfo();
-        $keyInfo->addInfo($x509Data);
+
+        if ($keyName !== null) {
+            $keynameEl = new KeyName();
+            $keynameEl->setName($keyName);
+            $keyInfo->addInfo($keynameEl);
+        }
+
+        if ($x509Data !== null) {
+            $x509Certificate = new X509Certificate();
+            $x509Certificate->setCertificate($x509Data);
+            $x509Data = new X509Data();
+            $x509Data->addData($x509Certificate);
+            $keyInfo->addInfo($x509Data);
+        }
 
         $keyDescriptor = new KeyDescriptor();
         $keyDescriptor->setKeyInfo($keyInfo);
-
         return $keyDescriptor;
     }
 
