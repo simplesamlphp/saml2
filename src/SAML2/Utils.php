@@ -654,8 +654,12 @@ class Utils
      * @param string|null $keyName The name of the key as specified in the KeyInfo
      * @return \SAML2\XML\md\KeyDescriptor The keydescriptor.
      */
-    public static function createKeyDescriptor(string $x509Data = null, string $keyName = null) : KeyDescriptor
+    public static function createKeyDescriptor(?string $x509Data = null, ?string $keyName = null) : KeyDescriptor
     {
+        if ($keyName === null && $x509Data === null) {
+            throw new \Exception('KeyDescriptor should contain either x509Data and/or keyName!');
+        }
+
         $keyInfo = new KeyInfo();
 
         if ($keyName !== null) {
