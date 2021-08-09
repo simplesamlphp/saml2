@@ -92,7 +92,7 @@ class Assertion extends AbstractSamlElement implements SignedElementInterface
      *
      * @var \SimpleSAML\SAML2\XML\saml\AbstractStatement[]
      */
-    protected $statements = [];
+    protected array $statements = [];
 
     /**
      * The attributes, as an associative array, indexed by attribute name
