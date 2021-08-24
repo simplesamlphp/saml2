@@ -66,8 +66,8 @@ class HTTPArtifact extends Binding
         if ($destination === null) {
             throw new \Exception('Cannot get redirect URL, no destination set in the message.');
         }
-        /** @psalm-suppress UndefinedClass */
-        return HTTP::addURLparameters($destination, $params);
+        $utilsHttp = new HTTP();
+        return $this->utilsHttp->addURLparameters($destination, $params);
     }
 
 
