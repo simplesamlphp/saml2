@@ -5,14 +5,13 @@ declare(strict_types=1);
 namespace SimpleSAML\SAML2\Exception;
 
 use InvalidArgumentException as BUILTIN_InvalidArgumentException;
-use Throwable;
 
 use function get_class;
 use function gettype;
 use function is_object;
 use function sprintf;
 
-class InvalidArgumentException extends BUILTIN_InvalidArgumentException implements Throwable
+class InvalidArgumentException extends BUILTIN_InvalidArgumentException
 {
     /**
      * @param string $expected description of expected type
