@@ -108,6 +108,6 @@ abstract class AbstractProtocolException extends RuntimeException
      */
     private function shortStatus(string $status): string
     {
-        return preg_filter('/^urn:oasis:names:tc:SAML:2.0:status:/', '', $status) ?? $status;
+        return preg_filter(sprintf('/^%s/', Constants::STATUS_PREFIX), '', $status) ?? $status;
     }
 }
