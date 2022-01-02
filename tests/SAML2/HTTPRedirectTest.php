@@ -21,6 +21,7 @@ use SimpleSAML\XMLSecurity\TestUtils\PEMCertificatesMock;
 use SimpleSAML\XMLSecurity\Alg\Signature\SignatureAlgorithmFactory;
 use SimpleSAML\XMLSecurity\Key\PrivateKey;
 use SimpleSAML\XMLSecurity\XMLSecurityKey;
+use SimpleSAML\XMLSecurity\Key\X509Certificate;
 
 /**
  * @covers \SimpleSAML\SAML2\HTTPRedirect
@@ -134,17 +135,26 @@ final class HTTPRedirectTest extends MockeryTestCase
         $hr = new HTTPRedirect();
         $samlrequest = $hr->receive($request);
 
+        // verify with the correct certificate, should succeed
+        $publicKey = PEMCertificatesMock::getPlainPublicKey(
+            PEMCertificatesMock::SELFSIGNED_PUBLIC_KEY
+        );
+        $certificate = new X509Certificate($publicKey);
+
+        $factory = new SignatureAlgorithmFactory();
+        $sigAlg = C::SIG_RSA_SHA256;
+        $verifier = $factory->getAlgorithm($sigAlg, $certificate);
+
         // validate with the correct certificate, should verify
-        $result = $samlrequest->validate(PEMCertificatesMock::getPublicKey(XMLSecurityKey::RSA_SHA256, PEMCertificatesMock::SELFSIGNED_PUBLIC_KEY));
+        $result = $request->verify($verifier);
         $this->assertTrue($result);
 
         // validate with another cert, should fail
         $publicKey = PEMCertificatesMock::getPlainPublicKey(
-            PEMCertificatesMock::SELFSIGNED_PUBLIC_KEY
+            PEMCertificatesMock::OTHER_PUBLIC_KEY
         );
-
-        $factory = new SignatureAlgorithmFactory();
         $certificate = new X509Certificate($publicKey);
+
         $sigAlg = $signature->getSignedInfo()->getSignatureMethod()->getAlgorithm();
         $verifier = $factory->getAlgorithm($sigAlg, $certificate);
 
@@ -172,10 +182,21 @@ final class HTTPRedirectTest extends MockeryTestCase
         $hr = new HTTPRedirect();
         $request = $hr->receive($request);
 
+        // validate with another cert, should fail
+        $publicKey = PEMCertificatesMock::getPlainPublicKey(
+            PEMCertificatesMock::SELFSIGNED_PUBLIC_KEY
+        );
+
+        $factory = new SignatureAlgorithmFactory();
+        $certificate = new X509Certificate($publicKey);
+        $sigAlg = C::SIG_RSA_RIPEMD160;
+        $verifier = $factory->getAlgorithm($sigAlg, $certificate);
+
         // validate with wrong type of cert
         $this->expectException(Exception::class);
         $this->expectExceptionMessage('Invalid key type for validating signature');
-        $request->validate(PEMCertificatesMock::getPublicKey(XMLSecurityKey::RSA_1_5, PEMCertificatesMock::SELFSIGNED_PUBLIC_KEY));
+
+        $request->verify($verifier);
     }
 
 
