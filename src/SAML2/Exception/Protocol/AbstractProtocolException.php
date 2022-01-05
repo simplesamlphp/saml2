@@ -5,6 +5,9 @@ declare(strict_types=1);
 namespace SimpleSAML\SAML2\Exception\Protocol;
 
 use RuntimeException;
+use SimpleSAML\Assert\Assert;
+use SimpleSAML\SAML2\Constants as C;
+use SimpleSAML\SAML2\Exception\ProtocolViolationException;
 
 /**
  * Class for representing a SAML 2 error.
@@ -49,6 +52,18 @@ abstract class AbstractProtocolException extends RuntimeException
         ?string $subStatus = null,
         ?string $statusMessage = null
     ) {
+        Assert::oneOf(
+            $status,
+            [
+                C::STATUS_SUCCESS,
+                C::STATUS_REQUESTER,
+                C::STATUS_RESPONDER,
+                C::STATUS_VERSION_MISMATCH,
+            ],
+            'Invalid top-level status code',
+            ProtocolViolationException::class
+        );
+
         $st = self::shortStatus($status);
         if ($subStatus !== null) {
             $st .= '/' . $this->shortStatus($subStatus);
