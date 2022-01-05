@@ -64,7 +64,7 @@ abstract class AbstractProtocolException extends RuntimeException
             ProtocolViolationException::class
         );
 
-        $st = self::shortStatus($status);
+        $st = $this->shortStatus($status);
         if ($subStatus !== null) {
             $st .= '/' . $this->shortStatus($subStatus);
         }
@@ -123,6 +123,6 @@ abstract class AbstractProtocolException extends RuntimeException
      */
     private function shortStatus(string $status): string
     {
-        return preg_filter(sprintf('/^%s/', Constants::STATUS_PREFIX), '', $status) ?? $status;
+        return preg_filter(sprintf('/^%s/', C::STATUS_PREFIX), '', $status) ?? $status;
     }
 }
