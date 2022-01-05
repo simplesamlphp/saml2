@@ -7,7 +7,7 @@ namespace SimpleSAML\SAML2\XML\md;
 use DOMElement;
 use InvalidArgumentException;
 use SimpleSAML\Assert\Assert;
-use SimpleSAML\SAML2\Constants;
+use SimpleSAML\SAML2\Constants as C;
 use SimpleSAML\XML\Exception\InvalidDOMElementException;
 use SimpleSAML\XML\Exception\TooManyElementsException;
 use SimpleSAML\XML\Utils as XMLUtils;
@@ -147,7 +147,7 @@ final class EntityDescriptor extends AbstractMetadataDocument
         foreach ($xml->childNodes as $node) {
             if (
                 !($node instanceof DOMElement)
-                || ($node->namespaceURI !== Constants::NS_MD)
+                || ($node->namespaceURI !== C::NS_MD)
             ) {
                 continue;
             }
@@ -246,7 +246,7 @@ final class EntityDescriptor extends AbstractMetadataDocument
     protected function setEntityID(string $entityId): void
     {
         Assert::notEmpty($entityId, 'The entityID attribute cannot be empty.');
-        Assert::maxLength($entityId, 1024, 'The entityID attribute cannot be longer than 1024 characters.');
+        Assert::maxLength($entityId, C::ENTITYID_MAX_LENGTH, 'The entityID attribute cannot be longer than 1024 characters.');
         $this->entityID = $entityId;
     }
 

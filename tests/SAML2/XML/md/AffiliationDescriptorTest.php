@@ -7,6 +7,7 @@ namespace SimpleSAML\Test\SAML2\XML\md;
 use Exception;
 use PHPUnit\Framework\TestCase;
 use SimpleSAML\SAML2\Utils;
+use SimpleSAML\SAML2\XML\md\AffiliateMember;
 use SimpleSAML\SAML2\XML\md\AffiliationDescriptor;
 use SimpleSAML\SAML2\XML\md\KeyDescriptor;
 use SimpleSAML\Test\SAML2\SignedElementTestTrait;
@@ -56,7 +57,7 @@ final class AffiliationDescriptorTest extends TestCase
     {
         $affiliationDescriptor = new AffiliationDescriptor(
             'TheOwner',
-            ['Member', 'OtherMember'],
+            [new AffiliateMember('Member'), new AffiliateMember('OtherMember')],
             'TheID',
             1234567890,
             'PT5000S',
@@ -89,7 +90,7 @@ final class AffiliationDescriptorTest extends TestCase
         $this->expectExceptionMessage('AffiliationOwnerID must not be empty.');
         new AffiliationDescriptor(
             '',
-            ['Member1', 'Member2'],
+            [new AffiliateMember('Member1'), new AffiliateMember('Member2')],
             'TheID',
             1234567890,
             'PT5000S',
@@ -118,25 +119,6 @@ final class AffiliationDescriptorTest extends TestCase
     }
 
 
-    /**
-     * Test that creating an AffiliationDescriptor with an empty ID for a member.
-     */
-    public function testMarshallingWithEmptyMemberID(): void
-    {
-        $this->expectException(Exception::class);
-        $this->expectExceptionMessage('Cannot specify an empty string as an affiliation member entityID.');
-        new AffiliationDescriptor(
-            'TheOwner',
-            ['Member1', ''],
-            'TheID',
-            1234567890,
-            'PT5000S',
-            null,
-            [Utils::createKeyDescriptor("testCert")]
-        );
-    }
-
-
     // test unmarshalling
 
 
@@ -154,8 +136,8 @@ final class AffiliationDescriptorTest extends TestCase
 
         $affiliateMember = $affiliateDescriptor->getAffiliateMembers();
         $this->assertCount(2, $affiliateMember);
-        $this->assertEquals('Member', $affiliateMember[0]);
-        $this->assertEquals('OtherMember', $affiliateMember[1]);
+        $this->assertEquals('Member', $affiliateMember[0]->getContent());
+        $this->assertEquals('OtherMember', $affiliateMember[1]->getContent());
 
         $keyDescriptors = $affiliateDescriptor->getKeyDescriptors();
         $this->assertCount(1, $keyDescriptors);
@@ -176,26 +158,6 @@ XML
         );
         $this->expectException(Exception::class);
         $this->expectExceptionMessage('List of affiliated members must not be empty.');
-        AffiliationDescriptor::fromXML($document->documentElement);
-    }
-
-
-    /**
-     * Test failure to create an AffiliationDescriptor from XML when there's an empty affiliation member.
-     */
-    public function testUnmarshallingWithEmptyMember(): void
-    {
-        $mdNamespace = AffiliationDescriptor::NS;
-        $document = DOMDocumentFactory::fromString(<<<XML
-<md:AffiliationDescriptor xmlns:md="{$mdNamespace}" affiliationOwnerID="TheOwner" ID="TheID"
-    validUntil="2009-02-13T23:31:30Z" cacheDuration="PT5000S">
-  <md:AffiliateMember></md:AffiliateMember>
-  <md:AffiliateMember>OtherMember</md:AffiliateMember>
-</md:AffiliationDescriptor>
-XML
-        );
-        $this->expectException(Exception::class);
-        $this->expectExceptionMessage('Cannot specify an empty string as an affiliation member entityID.');
         AffiliationDescriptor::fromXML($document->documentElement);
     }
 

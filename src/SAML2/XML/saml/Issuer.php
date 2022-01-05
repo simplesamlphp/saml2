@@ -6,7 +6,7 @@ namespace SimpleSAML\SAML2\XML\saml;
 
 use DOMElement;
 use SimpleSAML\Assert\Assert;
-use SimpleSAML\SAML2\Constants;
+use SimpleSAML\SAML2\Constants as C;
 use SimpleSAML\XML\DOMDocumentFactory;
 use SimpleSAML\XML\Exception\InvalidDOMElementException;
 
@@ -56,7 +56,7 @@ final class Issuer extends NameIDType
          *
          * @var string
          */
-        if ($Format === Constants::NAMEID_ENTITY || $Format === null) {
+        if ($Format === C::NAMEID_ENTITY || $Format === null) {
             Assert::allNull(
                 [$NameQualifier, $SPNameQualifier, $SPProvidedID],
                 'Illegal combination of attributes being used'
