@@ -34,6 +34,17 @@ final class ContactPerson extends AbstractMdElement
     use ExtendableAttributesTrait;
 
     /**
+     * The several different contact types as defined per specification
+     */
+    public const CONTACT_TYPES = [
+        'technical',
+        'support',
+        'administrative',
+        'billing',
+        'other',
+    ];
+
+    /**
      * The contact type.
      *
      * @var string
@@ -170,7 +181,7 @@ final class ContactPerson extends AbstractMdElement
      */
     protected function setContactType(string $contactType): void
     {
-        Assert::oneOf($contactType, ['technical', 'support', 'administrative', 'billing', 'other']);
+        Assert::oneOf($contactType, self::CONTACT_TYPES);
         $this->contactType = $contactType;
     }
 
