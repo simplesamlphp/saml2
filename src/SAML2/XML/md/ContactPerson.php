@@ -18,6 +18,17 @@ use SAML2\XML\Chunk;
 class ContactPerson
 {
     /**
+     * The several different contact types as defined per specification
+     */
+    public const CONTACT_TYPES = [
+        'technical',
+        'support',
+        'administrative',
+        'billing',
+        'other',
+    ];
+
+    /**
      * The contact type.
      *
      * @var string
