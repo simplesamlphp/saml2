@@ -47,11 +47,6 @@ abstract class BaseIDType implements Serializable
      */
     protected $nodeName;
 
-    /**
-     * @var \DOMElement
-     */
-    protected $element;
-
 
     /**
      * Initialize a saml:BaseID, either from scratch or from an existing \DOMElement.
@@ -63,8 +58,6 @@ abstract class BaseIDType implements Serializable
         if ($xml === null) {
             return;
         }
-
-        $this->element = $xml;
 
         if ($xml->hasAttribute('NameQualifier')) {
             $this->NameQualifier = $xml->getAttribute('NameQualifier');
