@@ -4,26 +4,14 @@ declare(strict_types=1);
 
 namespace SimpleSAML\SAML2\Exception\Protocol;
 
-use SimpleSAML\SAML2\Constants;
+use SimpleSAML\SAML2\Exception\ProtocolViolationException;
 
 /**
- * A SAML error indicating that the responding provider canno authenticate the principal
+ * A SAML error indicating that the responding provider cannot authenticate the principal
  *   and is not permitted to proxy the request further.
  *
  * @package simplesamlphp/saml2
  */
-class ProxyCountExceededException extends AbstractProtocolException
+class ProxyCountExceededException extends ProtocolViolationException
 {
-    /**
-     * ProxyCountExceededException constructor.
-     *
-     * @param string $responsible A string telling who is responsible for this error. Can be one of the following:
-     *   - \SimpleSAML\SAML2\Constants::STATUS_RESPONDER: in case the error is caused by this SAML responder.
-     *   - \SimpleSAML\SAML2\Constants::STATUS_REQUESTER: in case the error is caused by the SAML requester.
-     * @param string|null $message A short message explaining why this error happened.
-     */
-    public function __construct(string $responsible, string $message = null)
-    {
-        parent::__construct($responsible, Constants::STATUS_PROXY_COUNT_EXCEEDED, $message);
-    }
 }
