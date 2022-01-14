@@ -4,8 +4,8 @@ declare(strict_types=1);
 
 namespace SimpleSAML\SAML2\XML\md;
 
-use InvalidArgumentException;
 use SimpleSAML\Assert\Assert;
+use SimpleSAML\SAML2\Exception\ProtocolViolationException;
 
 use function filter_var;
 
@@ -26,9 +26,10 @@ abstract class AbstractLocalizedURI extends AbstractLocalizedName
     protected function validateContent(/** @scrutinizer ignore-unused */ string $content): void
     {
         Assert::notEmpty($content);
-
-        if (!empty($content) && !filter_var($content, FILTER_VALIDATE_URL)) {
-            throw new InvalidArgumentException(static::getQualifiedName() . ' is not a valid URL.');
-        }
+        Assert::false(
+            !empty($content) && !filter_var($content, FILTER_VALIDATE_URL),
+            static::getQualifiedName() . ' is not a valid URL.',
+            ProtocolViolationException::class,
+        );
     }
 }

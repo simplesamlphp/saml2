@@ -5,9 +5,9 @@ declare(strict_types=1);
 namespace SimpleSAML\Test\SAML2;
 
 use DOMDocument;
-use InvalidArgumentException;
 use Mockery\Adapter\Phpunit\MockeryTestCase;
 use SimpleSAML\Assert\AssertionFailedException;
+use SimpleSAML\SAML2\Exception\ProtocolViolationException;
 use SimpleSAML\SAML2\SOAP;
 use SimpleSAML\SAML2\XML\samlp\ArtifactResolve;
 use SimpleSAML\SAML2\XML\samlp\MessageFactory;

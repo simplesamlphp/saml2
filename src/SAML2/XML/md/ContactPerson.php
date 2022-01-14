@@ -6,9 +6,9 @@ namespace SimpleSAML\SAML2\XML\md;
 
 use DOMElement;
 use Exception;
-use InvalidArgumentException;
 use SimpleSAML\Assert\Assert;
 use SimpleSAML\SAML2\Constants;
+use SimpleSAML\SAML2\Exception\ProtocolViolationException;
 use SimpleSAML\SAML2\XML\ExtendableElementTrait;
 use SimpleSAML\XML\DOMDocumentFactory;
 use SimpleSAML\XML\Exception\InvalidDOMElementException;
@@ -261,9 +261,11 @@ final class ContactPerson extends AbstractMdElement
     private function validateEmailAddress(string $emailAddress): string
     {
         $address = preg_replace('/^mailto:/i', '', $emailAddress);
-        if (filter_var($address, FILTER_VALIDATE_EMAIL) === false) {
-            throw new InvalidArgumentException("Invalid email address for ContactPerson: " . var_export($address, true));
-        }
+        Assert::false(
+            filter_var($address, FILTER_VALIDATE_EMAIL) === false,
+            'Invalid email address for ContactPerson: ' . var_export($address, true),
+            ProtocolViolationException::class,
+        );
         return $address;
     }
 

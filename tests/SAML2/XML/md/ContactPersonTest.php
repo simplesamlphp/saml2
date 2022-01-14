@@ -5,10 +5,10 @@ declare(strict_types=1);
 namespace SimpleSAML\Test\SAML2\XML\md;
 
 use DOMDocument;
-use InvalidArgumentException;
 use PHPUnit\Framework\TestCase;
 use SimpleSAML\Assert\AssertionFailedException;
 use SimpleSAML\SAML2\Constants;
+use SimpleSAML\SAML2\Exception\ProtocolViolationException;
 use SimpleSAML\SAML2\XML\md\ContactPerson;
 use SimpleSAML\SAML2\XML\md\Company;
 use SimpleSAML\SAML2\XML\md\Extensions;
@@ -116,7 +116,7 @@ final class ContactPersonTest extends TestCase
      */
     public function testMarshallingWithWrongEmail(): void
     {
-        $this->expectException(InvalidArgumentException::class);
+        $this->expectException(ProtocolViolationException::class);
         $this->expectExceptionMessage('Invalid email address for ContactPerson: \'this is wrong\'');
         new ContactPerson(
             'other',
@@ -240,7 +240,7 @@ final class ContactPersonTest extends TestCase
      */
     public function testUnmarshallingWithInvalidEmail(): void
     {
-        $this->expectException(InvalidArgumentException::class);
+        $this->expectException(ProtocolViolationException::class);
         $this->expectExceptionMessage('Invalid email address for ContactPerson: \'this is not an email\'');
         $emails = $this->xmlRepresentation->getElementsByTagNameNS(Constants::NS_MD, 'EmailAddress');
         /** @psalm-suppress PossiblyNullPropertyAssignment */
@@ -274,7 +274,7 @@ XML
      */
     public function testInvalidEmailThrowsException(): void
     {
-        $this->expectException(InvalidArgumentException::class);
+        $this->expectException(ProtocolViolationException::class);
         $this->expectExceptionMessage('Invalid email address for');
         new ContactPerson('technical', null, null, null, null, ['not so valid']);
     }
@@ -284,7 +284,7 @@ XML
      */
     public function testInvalidEmailInSetThrowsException(): void
     {
-        $this->expectException(InvalidArgumentException::class);
+        $this->expectException(ProtocolViolationException::class);
         $this->expectExceptionMessage('Invalid email address for');
         new ContactPerson(
             'technical',

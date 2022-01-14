@@ -5,9 +5,9 @@ declare(strict_types=1);
 namespace SimpleSAML\SAML2\XML\md;
 
 use DOMElement;
-use InvalidArgumentException;
 use SimpleSAML\Assert\Assert;
 use SimpleSAML\SAML2\Constants;
+use SimpleSAML\SAML2\Exception\ProtocolViolationException;
 
 use function filter_var;
 use function implode;
@@ -111,13 +111,15 @@ abstract class AbstractRoleDescriptor extends AbstractMetadataDocument
      * Set the value of the errorURL property.
      *
      * @param string|null $errorURL
-     * @throws \InvalidArgumentException
+     * @throws \SimpleSAML\SAML2\Exception\ProtocolViolationException
      */
     protected function setErrorURL(?string $errorURL = null): void
     {
-        if (!is_null($errorURL) && !filter_var($errorURL, FILTER_VALIDATE_URL)) {
-            throw new InvalidArgumentException('RoleDescriptor errorURL is not a valid URL.');
-        }
+        Assert::false(
+            !is_null($errorURL) && !filter_var($errorURL, FILTER_VALIDATE_URL),
+            'RoleDescriptor errorURL is not a valid URL.',
+            ProtocolViolationException::class,
+        );
         $this->errorURL = $errorURL;
     }
 
@@ -141,9 +143,9 @@ abstract class AbstractRoleDescriptor extends AbstractMetadataDocument
      */
     protected function setProtocolSupportEnumeration(array $protocols): void
     {
-        Assert::minCount($protocols, 1, 'At least one protocol must be supported by this ' . static::class . '.');
-        Assert::allStringNotEmpty($protocols, 'Cannot specify an empty string as a supported protocol.');
-        Assert::oneOf(Constants::NS_SAMLP, $protocols, 'At least SAML 2.0 must be one of supported protocols.');
+        Assert::minCount($protocols, 1, 'At least one protocol must be supported by this ' . static::class . '.', ProtocolViolationException::class);
+        Assert::allStringNotEmpty($protocols, 'Cannot specify an empty string as a supported protocol.', ProtocolViolationException::class);
+        Assert::oneOf(Constants::NS_SAMLP, $protocols, 'At least SAML 2.0 must be one of supported protocols.', ProtocolViolationException::class);
 
         $this->protocolSupportEnumeration = $protocols;
     }

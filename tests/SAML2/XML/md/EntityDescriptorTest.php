@@ -9,6 +9,7 @@ use InvalidArgumentException;
 use PHPUnit\Framework\TestCase;
 use SimpleSAML\Assert\AssertionFailedException;
 use SimpleSAML\SAML2\Constants as C;
+use SimpleSAML\SAML2\Exception\ProtocolViolationException;
 use SimpleSAML\SAML2\XML\md\AdditionalMetadataLocation;
 use SimpleSAML\SAML2\XML\md\AffiliationDescriptor;
 use SimpleSAML\SAML2\XML\md\AffiliateMember;
@@ -48,6 +49,7 @@ use function strval;
  * @covers \SimpleSAML\SAML2\XML\md\EntityDescriptor
  * @covers \SimpleSAML\SAML2\XML\md\AbstractMetadataDocument
  * @covers \SimpleSAML\SAML2\XML\md\AbstractRoleDescriptor
+ *
  * @package simplesamlphp/saml2
  */
 final class EntityDescriptorTest extends TestCase
@@ -266,7 +268,7 @@ XML
      */
     public function testMarshallingWithoutDescriptors(): void
     {
-        $this->expectException(InvalidArgumentException::class);
+        $this->expectException(AssertionFailedException::class);
         $this->expectExceptionMessage(
             'Must have either one of the RoleDescriptors or an AffiliationDescriptor in EntityDescriptor.'
         );
@@ -280,7 +282,7 @@ XML
     public function testMarshallingWithAffiliationAndRoleDescriptors(): void
     {
         (new AffiliationDescriptor('asdf', [new AffiliateMember('test')]))->toXML($this->xmlRepresentation->documentElement);
-        $this->expectException(InvalidArgumentException::class);
+        $this->expectException(AssertionFailedException::class);
         $this->expectExceptionMessage(
             'AffiliationDescriptor cannot be combined with other RoleDescriptor elements in EntityDescriptor.'
         );
@@ -425,7 +427,7 @@ XML
         $document = DOMDocumentFactory::fromString(
             '<EntityDescriptor entityID="theEntityID" xmlns="urn:oasis:names:tc:SAML:2.0:metadata"></EntityDescriptor>'
         );
-        $this->expectException(InvalidArgumentException::class);
+        $this->expectException(AssertionFailedException::class);
         $this->expectExceptionMessage(
             'Must have either one of the RoleDescriptors or an AffiliationDescriptor in EntityDescriptor.'
         );
@@ -555,7 +557,7 @@ XML
 </EntityDescriptor>
 XML
         );
-        $this->expectException(InvalidArgumentException::class);
+        $this->expectException(AssertionFailedException::class);
         $this->expectExceptionMessage(
             'AffiliationDescriptor cannot be combined with other RoleDescriptor elements in EntityDescriptor.'
         );

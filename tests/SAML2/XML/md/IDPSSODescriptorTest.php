@@ -7,6 +7,7 @@ namespace SimpleSAML\Test\SAML2\XML\md;
 use PHPUnit\Framework\TestCase;
 use SimpleSAML\Assert\AssertionFailedException;
 use SimpleSAML\SAML2\Constants;
+use SimpleSAML\SAML2\Exception\ProtocolViolationException;
 use SimpleSAML\SAML2\XML\md\AssertionIDRequestService;
 use SimpleSAML\SAML2\XML\md\AttributeProfile;
 use SimpleSAML\SAML2\XML\md\ArtifactResolutionService;
@@ -208,7 +209,7 @@ final class IDPSSODescriptorTest extends TestCase
      */
     public function testMarshallingWithoutProtocolSupportThrowsException(): void
     {
-        $this->expectException(AssertionFailedException::class);
+        $this->expectException(ProtocolViolationException::class);
         $this->expectExceptionMessage('At least SAML 2.0 must be one of supported protocols.');
 
         /** @psalm-suppress InvalidArgument */

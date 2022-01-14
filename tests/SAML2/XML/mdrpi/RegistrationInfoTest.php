@@ -23,6 +23,7 @@ use function strval;
  *
  * @covers \SimpleSAML\SAML2\XML\mdrpi\RegistrationInfo
  * @covers \SimpleSAML\SAML2\XML\mdrpi\AbstractMdrpiElement
+ *
  * @package simplesamlphp/saml2
  */
 final class RegistrationInfoTest extends TestCase

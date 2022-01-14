@@ -6,10 +6,10 @@ namespace SimpleSAML\Test\SAML2\XML\ecp;
 
 use DOMDocument;
 use DOMElement;
-use InvalidArgumentException;
 use PHPUnit\Framework\TestCase;
 use SimpleSAML\Test\XML\SerializableXMLTestTrait;
 use SimpleSAML\SAML2\Constants;
+use SimpleSAML\SAML2\Exception\ProtocolViolationException;
 use SimpleSAML\SAML2\XML\ecp\Response;
 use SimpleSAML\XML\DOMDocumentFactory;
 use SimpleSAML\XML\Exception\MissingAttributeException;
@@ -73,7 +73,7 @@ final class ResponseTest extends TestCase
      */
     public function testInvalidACSThrowsException(): void
     {
-        $this->expectException(InvalidArgumentException::class);
+        $this->expectException(ProtocolViolationException::class);
         $this->expectExceptionMessage('AssertionConsumerServiceURL is not a valid URL.');
 
         new Response('some non-url');
