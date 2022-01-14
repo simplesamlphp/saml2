@@ -268,7 +268,7 @@ XML
      */
     public function testMarshallingWithoutDescriptors(): void
     {
-        $this->expectException(AssertionFailedException::class);
+        $this->expectException(ProtocolViolationException::class);
         $this->expectExceptionMessage(
             'Must have either one of the RoleDescriptors or an AffiliationDescriptor in EntityDescriptor.'
         );
@@ -282,7 +282,7 @@ XML
     public function testMarshallingWithAffiliationAndRoleDescriptors(): void
     {
         (new AffiliationDescriptor('asdf', [new AffiliateMember('test')]))->toXML($this->xmlRepresentation->documentElement);
-        $this->expectException(AssertionFailedException::class);
+        $this->expectException(ProtocolViolationException::class);
         $this->expectExceptionMessage(
             'AffiliationDescriptor cannot be combined with other RoleDescriptor elements in EntityDescriptor.'
         );
@@ -427,7 +427,7 @@ XML
         $document = DOMDocumentFactory::fromString(
             '<EntityDescriptor entityID="theEntityID" xmlns="urn:oasis:names:tc:SAML:2.0:metadata"></EntityDescriptor>'
         );
-        $this->expectException(AssertionFailedException::class);
+        $this->expectException(ProtocolViolationException::class);
         $this->expectExceptionMessage(
             'Must have either one of the RoleDescriptors or an AffiliationDescriptor in EntityDescriptor.'
         );
@@ -557,7 +557,7 @@ XML
 </EntityDescriptor>
 XML
         );
-        $this->expectException(AssertionFailedException::class);
+        $this->expectException(ProtocolViolationException::class);
         $this->expectExceptionMessage(
             'AffiliationDescriptor cannot be combined with other RoleDescriptor elements in EntityDescriptor.'
         );
