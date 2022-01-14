@@ -8,7 +8,7 @@ use Exception;
 use PHPUnit\Framework\TestCase;
 use SimpleSAML\SAML2\Binding;
 use SimpleSAML\SAML2\Constants;
-use SimpleSAML\SAML2\Exception\UnsupportedBindingException;
+use SimpleSAML\SAML2\Exception\Protocol\UnsupportedBindingException;
 use SimpleSAML\SAML2\HTTPArtifact;
 use SimpleSAML\SAML2\HTTPPost;
 use SimpleSAML\SAML2\HTTPRedirect;

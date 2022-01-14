@@ -6,7 +6,7 @@ namespace SimpleSAML\SAML2;
 
 use Exception;
 use SimpleSAML\SAML2\XML\samlp\AbstractMessage;
-use SimpleSAML\SAML2\Exception\UnsupportedBindingException;
+use SimpleSAML\SAML2\Exception\Protocol\UnsupportedBindingException;
 
 use function array_key_exists;
 use function array_keys;
@@ -37,7 +37,7 @@ abstract class Binding
      * Will throw an exception if it is unable to locate the binding.
      *
      * @param string $urn The URN of the binding.
-     * @throws \SimpleSAML\SAML2\Exception\UnsupportedBindingException
+     * @throws \SimpleSAML\SAML2\Exception\Protocol\UnsupportedBindingException
      * @return \SimpleSAML\SAML2\Binding The binding.
      */
     public static function getBinding(string $urn): Binding
@@ -69,7 +69,7 @@ abstract class Binding
      *
      * An exception will be thrown if it is unable to guess the binding.
      *
-     * @throws \SimpleSAML\SAML2\Exception\UnsupportedBindingException
+     * @throws \SimpleSAML\SAML2\Exception\Protocol\UnsupportedBindingException
      * @return \SimpleSAML\SAML2\Binding The binding.
      */
     public static function getCurrentBinding(): Binding
