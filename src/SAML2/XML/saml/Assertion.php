@@ -420,14 +420,14 @@ class Assertion extends AbstractSamlElement implements SignedElementInterface
     /**
      * Convert this assertion to an XML element.
      *
-     * @param \DOMElement|null $parentElement The DOM node the assertion should be created in.
+     * @param \DOMElement|null $parent The DOM node the assertion should be created in.
      *
      * @return \DOMElement This assertion.
      * @throws \Exception
      */
-    public function toXML(DOMElement $parentElement = null): DOMElement
+    public function toXML(DOMElement $parent = null): DOMElement
     {
-        $e = $this->instantiateParentElement($parentElement);
+        $e = $this->instantiateParentElement($parent);
 
         $e->setAttribute('Version', '2.0');
         $e->setAttribute('ID', $this->id);

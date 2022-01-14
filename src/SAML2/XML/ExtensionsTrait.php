@@ -26,7 +26,7 @@ trait ExtensionsTrait
     /**
      * Extensions constructor.
      *
-     * @var \SimpleSAML\XML\XMLElementInterface[]
+     * @param \SimpleSAML\XML\XMLElementInterface[] $extensions
      */
     public function __construct(array $extensions)
     {
@@ -37,7 +37,7 @@ trait ExtensionsTrait
     /**
      * Set an array with all extensions present.
      *
-     * @param array \SimpleSAML\XML\XMLElementInterface[]
+     * @param array \SimpleSAML\XML\XMLElementInterface[] $extensions
      */
     public function setList(array $extensions): void
     {
