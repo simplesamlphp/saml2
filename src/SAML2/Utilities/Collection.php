@@ -11,11 +11,11 @@ interface Collection extends \ArrayAccess, \Countable, \IteratorAggregate
     /**
      * Add an element to the collection
      *
-     * @param mixed $element
+     * @param mixed $key
      *
      * @return void
      */
-    public function add($element) : void;
+    public function add($key) : void;
 
 
     /**
@@ -77,7 +77,7 @@ interface Collection extends \ArrayAccess, \Countable, \IteratorAggregate
      * @param mixed $element
      * @return void
      */
-    public function remove($element) : void;
+    public function remove($key) : void;
 
 
     /**

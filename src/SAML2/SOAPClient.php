@@ -6,14 +6,14 @@ namespace SAML2;
 
 use DOMDocument;
 use RobRichards\XMLSecLibs\XMLSecurityKey;
+use SAML2\Compat\ContainerSingleton;
+use SAML2\Exception\RuntimeException;
 use SAML2\Exception\InvalidArgumentException;
 use SAML2\Exception\UnparseableXmlException;
 use SimpleSAML\Configuration;
 use SimpleSAML\Utils\Config;
 use SimpleSAML\Utils\Crypto;
-
-use SAML2\Compat\ContainerSingleton;
-use SAML2\Exception\RuntimeException;
+use SoapClient as BUILTIN_SoapClient;
 
 /**
  * Implementation of the SAML 2.0 SOAP binding.
@@ -131,7 +131,7 @@ class SOAPClient
         $container->debugMessage($request, 'out');
 
         $action = 'http://www.oasis-open.org/committees/security';
-        $version = SOAP_1_1;
+        $version = BUILTIN_SoapClient::SOAP_1_1;
         $destination = $msg->getDestination();
         if ($destination === null) {
             throw new \Exception('Cannot send SOAP message, no destination set.');

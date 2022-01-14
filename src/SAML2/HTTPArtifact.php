@@ -66,8 +66,8 @@ class HTTPArtifact extends Binding
         if ($destination === null) {
             throw new \Exception('Cannot get redirect URL, no destination set in the message.');
         }
-        $utilsHttp = new HTTP();
-        return $this->utilsHttp->addURLparameters($destination, $params);
+        $httpUtils = new HTTP();
+        return $httpUtils->addURLparameters($destination, $params);
     }
 
 

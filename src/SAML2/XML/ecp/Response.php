@@ -72,7 +72,7 @@ class Response
      * @param string $assertionConsumerServiceURL
      * @throws InvalidArgumentException
      * @return void
-     */
+-     */
     public function setAssertionConsumerServiceURL(string $assertionConsumerServiceURL) : void
     {
         if (!filter_var($assertionConsumerServiceURL, FILTER_VALIDATE_URL)) {
@@ -91,7 +91,8 @@ class Response
      */
     public function toXML(DOMElement $parent) : DOMElement
     {
-        if (!is_string($this->getAssertionConsumerServiceURL())) {
+        $acs = $this->getAssertionConsumerServiceURL();
+        if (!isset($acs)) {
             throw new InvalidArgumentException("AssertionConsumerServiceURL must be a string");
         }
 
@@ -102,7 +103,7 @@ class Response
 
         $response->setAttributeNS(Constants::NS_SOAP, 'SOAP-ENV:mustUnderstand', '1');
         $response->setAttributeNS(Constants::NS_SOAP, 'SOAP-ENV:actor', 'http://schemas.xmlsoap.org/soap/actor/next');
-        $response->setAttribute('AssertionConsumerServiceURL', $this->getAssertionConsumerServiceURL());
+        $response->setAttribute('AssertionConsumerServiceURL', $acs);
 
         return $response;
     }

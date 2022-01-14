@@ -32,13 +32,13 @@ class ArrayCollection implements Collection
 
 
     /**
-     * @param mixed $element
+     * @param mixed $key
      *
      * @return void
      */
-    public function add($element) : void
+    public function add($key) : void
     {
-        $this->elements[] = $element;
+        $this->elements[] = $key;
     }
 
 
@@ -58,9 +58,9 @@ class ArrayCollection implements Collection
      *
      * @return ArrayCollection
      */
-    public function filter(Closure $f) : Collection
+    public function filter(Closure $filterFunction) : Collection
     {
-        return new self(array_filter($this->elements, $f));
+        return new self(array_filter($this->elements, $filterFunction));
     }
 
 
@@ -76,17 +76,17 @@ class ArrayCollection implements Collection
 
 
     /**
-     * @param mixed $element
+     * @param mixed $key
      *
      * @return void
      */
-    public function remove($element) : void
+    public function remove($key) : void
     {
-        $key = array_search($element, $this->elements);
-        if ($key === false) {
+        $elt = array_search($key, $this->elements);
+        if ($elt === false) {
             return;
         }
-        unset($this->elements[$key]);
+        unset($this->elements[$elt]);
     }
 
 
