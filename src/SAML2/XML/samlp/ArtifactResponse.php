@@ -6,6 +6,8 @@ namespace SimpleSAML\SAML2\XML\samlp;
 
 use DOMElement;
 use SimpleSAML\Assert\Assert;
+use SimpleSAML\SAML2\Exception\Protocol\RequestVersionTooHighException;
+use SimpleSAML\SAML2\Exception\Protocol\RequestVersionTooLowException;
 use SimpleSAML\SAML2\Exception\ProtocolViolationException;
 use SimpleSAML\SAML2\XML\saml\Issuer;
 use SimpleSAML\XML\Exception\InvalidDOMElementException;
@@ -101,7 +103,9 @@ class ArtifactResponse extends AbstractStatusResponse
     {
         Assert::same($xml->localName, 'ArtifactResponse', InvalidDOMElementException::class);
         Assert::same($xml->namespaceURI, ArtifactResponse::NS, InvalidDOMElementException::class);
-        Assert::same('2.0', self::getAttribute($xml, 'Version'));
+
+        Assert::true(version_compare('2.0', self::getAttribute($xml, 'Version'), '<='), RequestVersionTooLowException::class);
+        Assert::true(version_compare('2.0', self::getAttribute($xml, 'Version'), '>='), RequestVersionTooHighException::class);
 
         $id = self::getAttribute($xml, 'ID');
         $inResponseTo = self::getAttribute($xml, 'InResponseTo', null);

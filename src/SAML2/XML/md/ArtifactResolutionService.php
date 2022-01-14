@@ -36,7 +36,7 @@ final class ArtifactResolutionService extends AbstractIndexedEndpointType
     ) {
         Assert::null(
             $unused,
-            'The \'ResponseLocation\' attribute must be omitted for md:ArtifactResolutionService.'
+            'The \'ResponseLocation\' attribute must be omitted for md:ArtifactResolutionService.',
         );
         parent::__construct($index, $binding, $location, $isDefault, null, $attributes);
     }

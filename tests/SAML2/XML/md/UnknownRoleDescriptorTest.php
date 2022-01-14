@@ -6,6 +6,7 @@ namespace SimpleSAML\Test\SAML2\XML\md;
 
 use DOMDocument;
 use PHPUnit\Framework\TestCase;
+use SimpleSAML\Assert\AssertionFailedException;
 use SimpleSAML\SAML2\Constants;
 use SimpleSAML\SAML2\Exception\ProtocolViolationException;
 use SimpleSAML\SAML2\XML\md\ContactPerson;
@@ -120,7 +121,7 @@ final class UnknownRoleDescriptorTest extends TestCase
     {
         $this->xmlRepresentation->documentElement->setAttribute('protocolSupportEnumeration', '');
 
-        $this->expectException(ProtocolViolationException::class);
+        $this->expectException(AssertionFailedException::class);
         $this->expectExceptionMessage('Cannot specify an empty string as a supported protocol.');
 
         UnknownRoleDescriptor::fromXML($this->xmlRepresentation->documentElement);
@@ -134,7 +135,7 @@ final class UnknownRoleDescriptorTest extends TestCase
     {
         $this->xmlRepresentation->documentElement->setAttribute('errorURL', 'not a URL');
 
-        $this->expectException(ProtocolViolationException::class);
+        $this->expectException(AssertionFailedException::class);
         $this->expectExceptionMessage('RoleDescriptor errorURL is not a valid URL.');
 
         UnknownRoleDescriptor::fromXML($this->xmlRepresentation->documentElement);

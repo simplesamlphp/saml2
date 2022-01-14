@@ -127,12 +127,12 @@ final class AttributeConsumingService extends AbstractMdElement
             $serviceNames,
             1,
             'Missing at least one ServiceName in AttributeConsumingService.',
-            MissingElementException::class
+            MissingElementException::class,
         );
         Assert::allIsInstanceOf(
             $serviceNames,
             ServiceName::class,
-            'Service names must be specified as ServiceName objects.'
+            'Service names must be specified as ServiceName objects.',
         );
         $this->serviceNames = $serviceNames;
     }

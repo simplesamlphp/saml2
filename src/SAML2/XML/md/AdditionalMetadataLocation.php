@@ -110,6 +110,7 @@ final class AdditionalMetadataLocation extends AbstractMdElement
         $e = $this->instantiateParentElement($parent);
         $e->textContent = $this->getContent();
         $e->setAttribute('namespace', $this->namespace);
+
         return $e;
     }
 }

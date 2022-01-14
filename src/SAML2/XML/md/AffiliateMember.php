@@ -7,6 +7,7 @@ namespace SimpleSAML\SAML2\XML\md;
 use DOMElement;
 use SimpleSAML\Assert\Assert;
 use SimpleSAML\SAML2\Constants as C;
+use SimpleSAML\SAML2\Exception\ProtocolViolationException;
 use SimpleSAML\XML\XMLStringElementTrait;
 
 /**
@@ -37,7 +38,16 @@ final class AffiliateMember extends AbstractMdElement
      */
     protected function validateContent(string $content): void
     {
-        Assert::notEmpty($content, 'Cannot specify an empty string as an affiliation member entityID.');
-        Assert::maxLength($content, C::ENTITYID_MAX_LENGTH, 'The AffiliateMember cannot be longer than 1024 characters.');
+        Assert::notEmpty(
+            $content,
+            'Cannot specify an empty string as an affiliation member entityID.',
+            ProtocolViolationException::class
+        );
+        Assert::maxLength(
+            $content,
+            C::ENTITYID_MAX_LENGTH,
+            'The AffiliateMember cannot be longer than 1024 characters.',
+            ProtocolViolationException::class
+        );
     }
 }

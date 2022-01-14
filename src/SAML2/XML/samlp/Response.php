@@ -7,6 +7,8 @@ namespace SimpleSAML\SAML2\XML\samlp;
 use DOMElement;
 use SimpleSAML\Assert\Assert;
 use SimpleSAML\SAML2\Constants;
+use SimpleSAML\SAML2\Exception\Protocol\RequestVersionTooHighException;
+use SimpleSAML\SAML2\Exception\Protocol\RequestVersionTooLowException;
 use SimpleSAML\SAML2\Exception\ProtocolViolationException;
 use SimpleSAML\SAML2\XML\saml\Assertion;
 use SimpleSAML\SAML2\XML\saml\EncryptedAssertion;
@@ -112,7 +114,9 @@ class Response extends AbstractStatusResponse
     {
         Assert::same($xml->localName, 'Response', InvalidDOMElementException::class);
         Assert::same($xml->namespaceURI, Response::NS, InvalidDOMElementException::class);
-        Assert::same('2.0', self::getAttribute($xml, 'Version'));
+
+        Assert::true(version_compare('2.0', self::getAttribute($xml, 'Version'), '<='), RequestVersionTooLowException::class);
+        Assert::true(version_compare('2.0', self::getAttribute($xml, 'Version'), '>='), RequestVersionTooHighException::class);
 
         $signature = Signature::getChildrenOfClass($xml);
         Assert::maxCount($signature, 1, 'Only one ds:Signature element is allowed.', TooManyElementsException::class);

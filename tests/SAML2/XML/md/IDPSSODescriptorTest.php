@@ -209,7 +209,7 @@ final class IDPSSODescriptorTest extends TestCase
      */
     public function testMarshallingWithoutProtocolSupportThrowsException(): void
     {
-        $this->expectException(ProtocolViolationException::class);
+        $this->expectException(AssertionFailedException::class);
         $this->expectExceptionMessage('At least SAML 2.0 must be one of supported protocols.');
 
         /** @psalm-suppress InvalidArgument */

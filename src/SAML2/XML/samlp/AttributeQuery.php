@@ -6,6 +6,8 @@ namespace SimpleSAML\SAML2\XML\samlp;
 
 use DOMElement;
 use SimpleSAML\Assert\Assert;
+use SimpleSAML\SAML2\Exception\Protocol\RequestVersionTooHighException;
+use SimpleSAML\SAML2\Exception\Protocol\RequestVersionTooLowException;
 use SimpleSAML\SAML2\Exception\ProtocolViolationException;
 use SimpleSAML\SAML2\XML\saml\Attribute;
 use SimpleSAML\SAML2\XML\saml\Issuer;
@@ -127,7 +129,9 @@ class AttributeQuery extends AbstractSubjectQuery
     {
         Assert::same($xml->localName, 'AttributeQuery', InvalidDOMElementException::class);
         Assert::same($xml->namespaceURI, AttributeQuery::NS, InvalidDOMElementException::class);
-        Assert::same('2.0', self::getAttribute($xml, 'Version'));
+
+        Assert::true(version_compare('2.0', self::getAttribute($xml, 'Version'), '<='), RequestVersionTooLowException::class);
+        Assert::true(version_compare('2.0', self::getAttribute($xml, 'Version'), '>='), RequestVersionTooHighException::class);
 
         $id = self::getAttribute($xml, 'ID');
         $destination = self::getAttribute($xml, 'Destination', null);
