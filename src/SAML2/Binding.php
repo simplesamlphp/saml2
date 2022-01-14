@@ -6,6 +6,7 @@ namespace SimpleSAML\SAML2;
 
 use Exception;
 use SimpleSAML\SAML2\XML\samlp\AbstractMessage;
+use SimpleSAML\SAML2\Exception\Protocol\UnsupportedBindingException;
 
 use function array_key_exists;
 use function array_keys;
@@ -36,7 +37,7 @@ abstract class Binding
      * Will throw an exception if it is unable to locate the binding.
      *
      * @param string $urn The URN of the binding.
-     * @throws \Exception
+     * @throws \SimpleSAML\SAML2\Exception\Protocol\UnsupportedBindingException
      * @return \SimpleSAML\SAML2\Binding The binding.
      */
     public static function getBinding(string $urn): Binding
@@ -55,7 +56,7 @@ abstract class Binding
             case Constants::BINDING_PAOS:
                 return new SOAP();
             default:
-                throw new Exception('Unsupported binding: ' . var_export($urn, true));
+                throw new UnsupportedBindingException('Unsupported binding: ' . var_export($urn, true));
         }
     }
 
@@ -68,7 +69,7 @@ abstract class Binding
      *
      * An exception will be thrown if it is unable to guess the binding.
      *
-     * @throws \Exception
+     * @throws \SimpleSAML\SAML2\Exception\Protocol\UnsupportedBindingException
      * @return \SimpleSAML\SAML2\Binding The binding.
      */
     public static function getCurrentBinding(): Binding
@@ -113,7 +114,7 @@ abstract class Binding
             $logger->warning('Content-Type: ' . var_export($_SERVER['CONTENT_TYPE'], true));
         }
 
-        throw new Exception('Unable to find the SAML 2 binding used for this request.');
+        throw new UnsupportedBindingException('Unable to find the SAML 2 binding used for this request.');
     }
 
 

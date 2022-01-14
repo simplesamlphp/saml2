@@ -8,6 +8,7 @@ use Exception;
 use PHPUnit\Framework\TestCase;
 use SimpleSAML\SAML2\Binding;
 use SimpleSAML\SAML2\Constants;
+use SimpleSAML\SAML2\Exception\Protocol\UnsupportedBindingException;
 use SimpleSAML\SAML2\HTTPArtifact;
 use SimpleSAML\SAML2\HTTPPost;
 use SimpleSAML\SAML2\HTTPRedirect;
@@ -35,7 +36,7 @@ final class BindingTest extends TestCase
         $bind = Binding::getBinding(Constants::BINDING_PAOS);
         $this->assertInstanceOf(SOAP::class, $bind);
 
-        $this->expectException(Exception::class);
+        $this->expectException(UnsupportedBindingException::class);
         $this->expectExceptionMessage('Unsupported binding:');
         $bind = Binding::getBinding('nonsense');
     }
@@ -60,7 +61,7 @@ final class BindingTest extends TestCase
         $this->assertInstanceOf(HTTPArtifact::class, $bind);
 
         $_GET = ['aap' => 'noot'];
-        $this->expectException(Exception::class);
+        $this->expectException(UnsupportedBindingException::class);
         $this->expectExceptionMessage('Unable to find the SAML 2 binding used for this request.');
         $bind = Binding::getCurrentBinding();
     }
@@ -91,7 +92,7 @@ final class BindingTest extends TestCase
 
         $_POST = ['AAP' => 'Noot'];
         unset($_SERVER['CONTENT_TYPE']);
-        $this->expectException(Exception::class);
+        $this->expectException(UnsupportedBindingException::class);
         $this->expectExceptionMessage('Unable to find the SAML 2 binding used for this request.');
         $bind = Binding::getCurrentBinding();
     }
@@ -104,7 +105,7 @@ final class BindingTest extends TestCase
     {
         $_SERVER['REQUEST_METHOD'] = 'PUT';
         $_SERVER['CONTENT_TYPE'] = 'text/xml';
-        $this->expectException(Exception::class);
+        $this->expectException(UnsupportedBindingException::class);
         $this->expectExceptionMessage('Unable to find the SAML 2 binding used for this request.');
         $bind = Binding::getCurrentBinding();
     }
