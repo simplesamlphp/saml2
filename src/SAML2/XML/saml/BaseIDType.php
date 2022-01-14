@@ -14,9 +14,8 @@ namespace SAML2\XML\saml;
 use DOMElement;
 use SAML2\Constants;
 use SAML2\DOMDocumentFactory;
-use Serializable;
 
-abstract class BaseIDType implements Serializable
+abstract class BaseIDType
 {
     /**
      * The security or administrative domain that qualifies the identifier.
@@ -145,47 +144,16 @@ abstract class BaseIDType implements Serializable
 
 
     /**
-     * Output the class as an XML-formatted string
+     * Get a string representation of this BaseIDType object.
      *
-     * @return string
+     * @return string The resulting XML, as a string.
      */
-    public function __toString(): string
+    public function __toString()
     {
-        $xml = $this->toXML();
-        /** @psalm-var \DOMDocument $xml->ownerDocument */
-        $xml->ownerDocument->formatOutput = true;
-        return $xml->ownerDocument->saveXML($xml);
-    }
+        $doc = DOMDocumentFactory::create();
+        $root = $doc->createElementNS(Constants::NS_SAML, 'root');
+        $ele = $this->toXML($root);
 
-
-    /**
-     * Serialize this XML chunk
-     *
-     * @return string The serialized chunk.
-     */
-    public function serialize(): string
-    {
-        $xml = $this->toXML();
-        /** @psalm-var \DOMDocument $xml->ownerDocument */
-        return $xml->ownerDocument->saveXML($xml);
-    }
-
-
-    /**
-     * Un-serialize this XML chunk.
-     *
-     * @param string $serialized The serialized chunk.
-     *
-     * Type hint not possible due to upstream method signature
-     */
-    public function unserialize($serialized): void
-    {
-        $doc = DOMDocumentFactory::fromString($serialized);
-        $obj = new static($doc->documentElement);
-
-        // For this to work, the properties have to be protected
-        foreach (get_object_vars($obj) as $property => $value) {
-            $this->{$property} = $value;
-        }
+        return $doc->saveXML($ele);
     }
 }
