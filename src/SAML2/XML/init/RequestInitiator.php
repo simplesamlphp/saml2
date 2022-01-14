@@ -8,6 +8,7 @@ use DOMElement;
 use SimpleSAML\Assert\Assert;
 use SimpleSAML\SAML2\Exception\ProtocolViolationException;
 use SimpleSAML\SAML2\XML\md\AbstractEndpointType;
+use SimpleSAML\XML\Exception\InvalidDOMElementException;
 
 /**
  * Class for handling the init:RequestInitiator element.
@@ -58,7 +59,8 @@ final class RequestInitiator extends AbstractEndpointType
         Assert::eq(
             $xml->localName,
             $qualifiedName,
-            'Unexpected name for endpoint: ' . $xml->localName . '. Expected: ' . $qualifiedName . '.'
+            'Unexpected name for endpoint: ' . $xml->localName . '. Expected: ' . $qualifiedName . '.',
+            InvalidDOMElementException::class,
         );
 
         Assert::eq(
@@ -66,7 +68,7 @@ final class RequestInitiator extends AbstractEndpointType
             self::getAttribute($xml, 'Binding'),
             self::NS,
             "The Binding of a RequestInitiator must be 'urn:oasis:names:tc:SAML:profiles:SSO:request-init'.",
-            ProtocolViolationException::class
+            ProtocolViolationException::class,
         );
 
         /** @var string $location */

@@ -1,0 +1,17 @@
+<?php
+
+declare(strict_types=1);
+
+namespace SimpleSAML\SAML2\Exception\Protocol;
+
+use SimpleSAML\SAML2\Exception\ProtocolViolationException;
+
+/**
+ * A SAML error used by a session authority to indicate to a session participant
+ *   that it was not able to propagate logout to all other session participants.
+ *
+ * @package simplesamlphp/saml2
+ */
+class PartialLogoutException extends ProtocolViolationException
+{
+}

@@ -5,9 +5,9 @@ declare(strict_types=1);
 namespace SimpleSAML\SAML2\XML\md;
 
 use DOMElement;
-use InvalidArgumentException;
 use SimpleSAML\Assert\Assert;
 use SimpleSAML\SAML2\Constants as C;
+use SimpleSAML\SAML2\Exception\ProtocolViolationException;
 use SimpleSAML\XML\Exception\InvalidDOMElementException;
 use SimpleSAML\XML\Exception\TooManyElementsException;
 use SimpleSAML\XML\Utils as XMLUtils;
@@ -99,11 +99,11 @@ final class EntityDescriptor extends AbstractMetadataDocument
         array $additionalMdLocations = [],
         array $namespacedAttributes = []
     ) {
-        if (empty($roleDescriptors) && $affiliationDescriptor === null) {
-            throw new InvalidArgumentException(
-                'Must have either one of the RoleDescriptors or an AffiliationDescriptor in EntityDescriptor.'
-            );
-        }
+        Assert::false(
+            (empty($roleDescriptors) && $affiliationDescriptor === null),
+            'Must have either one of the RoleDescriptors or an AffiliationDescriptor in EntityDescriptor.',
+            ProtocolViolationException::class,
+        );
 
         parent::__construct($id, $validUntil, $cacheDuration, $extensions, $namespacedAttributes);
 
@@ -193,15 +193,16 @@ final class EntityDescriptor extends AbstractMetadataDocument
             }
         }
 
-        if (empty($roleDescriptors) && is_null($affiliationDescriptor)) {
-            throw new InvalidArgumentException(
-                'Must have either one of the RoleDescriptors or an AffiliationDescriptor in EntityDescriptor.'
-            );
-        } elseif (!empty($roleDescriptors) && !is_null($affiliationDescriptor)) {
-            throw new InvalidArgumentException(
-                'AffiliationDescriptor cannot be combined with other RoleDescriptor elements in EntityDescriptor.'
-            );
-        }
+        Assert::false(
+            empty($roleDescriptors) && is_null($affiliationDescriptor),
+            'Must have either one of the RoleDescriptors or an AffiliationDescriptor in EntityDescriptor.',
+            ProtocolViolationException::class,
+        );
+        Assert::false(
+            !empty($roleDescriptors) && !is_null($affiliationDescriptor),
+            'AffiliationDescriptor cannot be combined with other RoleDescriptor elements in EntityDescriptor.',
+            ProtocolViolationException::class,
+        );
 
         $entity = new self(
             $entityID,

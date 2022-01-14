@@ -5,10 +5,10 @@ declare(strict_types=1);
 namespace SimpleSAML\Test\SAML2\XML\md;
 
 use DOMDocument;
-use InvalidArgumentException;
 use PHPUnit\Framework\TestCase;
 use SimpleSAML\Assert\AssertionFailedException;
 use SimpleSAML\SAML2\Constants;
+use SimpleSAML\SAML2\Exception\ProtocolViolationException;
 use SimpleSAML\SAML2\XML\md\ContactPerson;
 use SimpleSAML\SAML2\XML\md\Extensions;
 use SimpleSAML\SAML2\XML\md\KeyDescriptor;
@@ -33,6 +33,7 @@ use function strval;
  * @covers \SimpleSAML\SAML2\XML\md\AbstractMetadataDocument
  * @covers \SimpleSAML\SAML2\XML\md\AbstractRoleDescriptor
  * @covers \SimpleSAML\SAML2\XML\md\AbstractMdElement
+ *
  * @package simplesamlphp/saml2
  */
 final class UnknownRoleDescriptorTest extends TestCase
@@ -134,7 +135,7 @@ final class UnknownRoleDescriptorTest extends TestCase
     {
         $this->xmlRepresentation->documentElement->setAttribute('errorURL', 'not a URL');
 
-        $this->expectException(InvalidArgumentException::class);
+        $this->expectException(AssertionFailedException::class);
         $this->expectExceptionMessage('RoleDescriptor errorURL is not a valid URL.');
 
         UnknownRoleDescriptor::fromXML($this->xmlRepresentation->documentElement);

@@ -7,6 +7,7 @@ namespace SimpleSAML\SAML2\XML\ecp;
 use DOMElement;
 use SimpleSAML\Assert\Assert;
 use SimpleSAML\SAML2\Constants;
+use SimpleSAML\SAML2\Exception\ProtocolViolationException;
 use SimpleSAML\XML\Exception\InvalidDOMElementException;
 use SimpleSAML\XML\Exception\MissingAttributeException;
 
@@ -60,11 +61,17 @@ final class RequestAuthenticated extends AbstractEcpElement
         $mustUnderstand = $xml->getAttributeNS(Constants::NS_SOAP, 'mustUnderstand');
         $actor = $xml->getAttributeNS(Constants::NS_SOAP, 'actor');
 
-        Assert::oneOf($mustUnderstand, ['', '0', '1'], 'Invalid value of SOAP-ENV:mustUnderstand attribute in <ecp:Response>.');
+        Assert::oneOf(
+            $mustUnderstand,
+            ['', '0', '1'],
+            'Invalid value of SOAP-ENV:mustUnderstand attribute in <ecp:Response>.',
+            ProtocolViolationException::class,
+        );
         Assert::same(
             $actor,
             'http://schemas.xmlsoap.org/soap/actor/next',
-            'Invalid value of SOAP-ENV:actor attribute in <ecp:Response>.'
+            'Invalid value of SOAP-ENV:actor attribute in <ecp:Response>.',
+            ProtocolViolationException::class,
         );
 
         $mustUnderstand = is_numeric($mustUnderstand) ? intval($mustUnderstand) : null;

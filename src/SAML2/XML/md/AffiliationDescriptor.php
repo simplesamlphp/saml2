@@ -172,8 +172,14 @@ final class AffiliationDescriptor extends AbstractMetadataDocument
      */
     protected function setAffiliateMembers(array $affiliateMembers): void
     {
-        Assert::notEmpty($affiliateMembers, 'List of affiliated members must not be empty.');
-        Assert::allIsInstanceOf($affiliateMembers, AffiliateMember::class);
+        Assert::notEmpty(
+            $affiliateMembers,
+            'List of affiliated members must not be empty.',
+        );
+        Assert::allIsInstanceOf(
+            $affiliateMembers,
+            AffiliateMember::class,
+        );
         $this->AffiliateMembers = $affiliateMembers;
     }
 
@@ -196,7 +202,10 @@ final class AffiliationDescriptor extends AbstractMetadataDocument
      */
     protected function setKeyDescriptors(array $keyDescriptors): void
     {
-        Assert::allIsInstanceOf($keyDescriptors, KeyDescriptor::class);
+        Assert::allIsInstanceOf(
+            $keyDescriptors,
+            KeyDescriptor::class,
+        );
         $this->KeyDescriptors = $keyDescriptors;
     }
 

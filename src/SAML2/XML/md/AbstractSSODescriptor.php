@@ -156,6 +156,7 @@ abstract class AbstractSSODescriptor extends AbstractRoleDescriptor
             SingleLogoutService::class,
             'All md:SingleLogoutService endpoints must be an instance of SingleLogoutService.'
         );
+
         $this->sloServiceEndpoints = $singleLogoutServices;
     }
 
@@ -184,6 +185,7 @@ abstract class AbstractSSODescriptor extends AbstractRoleDescriptor
             ManageNameIDService::class,
             'All md:ManageNameIDService endpoints must be an instance of ManageNameIDService.'
         );
+
         $this->manageNameIDServiceEndpoints = $manageNameIDServices;
     }
 
@@ -206,7 +208,7 @@ abstract class AbstractSSODescriptor extends AbstractRoleDescriptor
      */
     protected function setNameIDFormats(array $nameIDFormats): void
     {
-        Assert::allIsInstanceOf($nameIDFormats, NameIDFormat::class);
+        Assert::allIsInstanceOf($nameIDFormats, NameIDFormat::class, ProtocolViolationException::class);
         $this->nameIDFormats = $nameIDFormats;
     }
 

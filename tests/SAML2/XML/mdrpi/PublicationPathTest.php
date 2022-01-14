@@ -24,6 +24,7 @@ use function strval;
  *
  * @covers \SimpleSAML\SAML2\XML\mdrpi\PublicationPath
  * @covers \SimpleSAML\SAML2\XML\mdrpi\AbstractMdrpiElement
+ *
  * @package simplesamlphp/saml2
  */
 final class PublicationPathTest extends TestCase

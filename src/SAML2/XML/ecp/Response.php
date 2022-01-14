@@ -5,9 +5,9 @@ declare(strict_types=1);
 namespace SimpleSAML\SAML2\XML\ecp;
 
 use DOMElement;
-use InvalidArgumentException;
 use SimpleSAML\Assert\Assert;
 use SimpleSAML\SAML2\Constants;
+use SimpleSAML\SAML2\Exception\ProtocolViolationException;
 use SimpleSAML\XML\Exception\InvalidDOMElementException;
 use SimpleSAML\XML\Exception\MissingAttributeException;
 
@@ -58,9 +58,11 @@ final class Response extends AbstractEcpElement
      */
     private function setAssertionConsumerServiceURL(string $assertionConsumerServiceURL): void
     {
-        if (!filter_var($assertionConsumerServiceURL, FILTER_VALIDATE_URL)) {
-            throw new InvalidArgumentException('AssertionConsumerServiceURL is not a valid URL.');
-        }
+        Assert::string(
+            filter_var($assertionConsumerServiceURL, FILTER_VALIDATE_URL),
+            'AssertionConsumerServiceURL is not a valid URL.',
+            ProtocolViolationException::class,
+        );
 
         $this->AssertionConsumerServiceURL = $assertionConsumerServiceURL;
     }
@@ -100,11 +102,17 @@ final class Response extends AbstractEcpElement
         $mustUnderstand = $xml->getAttributeNS(Constants::NS_SOAP, 'mustUnderstand');
         $actor = $xml->getAttributeNS(Constants::NS_SOAP, 'actor');
 
-        Assert::same($mustUnderstand, '1', 'Invalid value of SOAP-ENV:mustUnderstand attribute in <ecp:Response>.');
+        Assert::same(
+            $mustUnderstand,
+            '1',
+            'Invalid value of SOAP-ENV:mustUnderstand attribute in <ecp:Response>.',
+            ProtocolViolationException::class,
+        );
         Assert::same(
             $actor,
             'http://schemas.xmlsoap.org/soap/actor/next',
-            'Invalid value of SOAP-ENV:actor attribute in <ecp:Response>.'
+            'Invalid value of SOAP-ENV:actor attribute in <ecp:Response>.',
+            ProtocolViolationException::class,
         );
 
         return new self(self::getAttribute($xml, 'AssertionConsumerServiceURL'));

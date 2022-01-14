@@ -67,7 +67,7 @@ abstract class AbstractEndpointType extends AbstractMdElement
      * @param array       $attributes
      * @param array       $children
      *
-     * @throws \InvalidArgumentException
+     * @throws \SimpleSAML\Assert\AssertionFailedException
      */
     public function __construct(
         string $binding,

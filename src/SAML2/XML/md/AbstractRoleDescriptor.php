@@ -5,7 +5,6 @@ declare(strict_types=1);
 namespace SimpleSAML\SAML2\XML\md;
 
 use DOMElement;
-use InvalidArgumentException;
 use SimpleSAML\Assert\Assert;
 use SimpleSAML\SAML2\Constants;
 
@@ -111,13 +110,14 @@ abstract class AbstractRoleDescriptor extends AbstractMetadataDocument
      * Set the value of the errorURL property.
      *
      * @param string|null $errorURL
-     * @throws \InvalidArgumentException
+     * @throws \SimpleSAML\SAML2\Exception\ProtocolViolationException
      */
     protected function setErrorURL(?string $errorURL = null): void
     {
-        if (!is_null($errorURL) && !filter_var($errorURL, FILTER_VALIDATE_URL)) {
-            throw new InvalidArgumentException('RoleDescriptor errorURL is not a valid URL.');
-        }
+        Assert::false(
+            !is_null($errorURL) && !filter_var($errorURL, FILTER_VALIDATE_URL),
+            'RoleDescriptor errorURL is not a valid URL.',
+        );
         $this->errorURL = $errorURL;
     }
 
@@ -193,8 +193,9 @@ abstract class AbstractRoleDescriptor extends AbstractMetadataDocument
         Assert::allIsInstanceOf(
             $contactPersons,
             ContactPerson::class,
-            'All contacts must be an instance of md:ContactPerson'
+            'All contacts must be an instance of md:ContactPerson',
         );
+
         $this->ContactPersons = $contactPersons;
     }
 
@@ -220,8 +221,9 @@ abstract class AbstractRoleDescriptor extends AbstractMetadataDocument
         Assert::allIsInstanceOf(
             $keyDescriptor,
             KeyDescriptor::class,
-            'All key descriptors must be an instance of md:KeyDescriptor'
+            'All key descriptors must be an instance of md:KeyDescriptor',
         );
+
         $this->KeyDescriptors = $keyDescriptor;
     }
 

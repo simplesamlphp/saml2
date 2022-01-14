@@ -5,9 +5,9 @@ declare(strict_types=1);
 namespace SimpleSAML\SAML2\XML\md;
 
 use DOMElement;
-use InvalidArgumentException;
 use SimpleSAML\Assert\Assert;
 use SimpleSAML\XML\Exception\InvalidDOMElementException;
+use SimpleSAML\XML\Exception\MissingAttributeException;
 use SimpleSAML\XML\XMLStringElementTrait;
 
 use function array_key_first;
@@ -97,7 +97,8 @@ abstract class AbstractLocalizedName extends AbstractMdElement
         Assert::same($xml->namespaceURI, static::NS, InvalidDOMElementException::class);
         Assert::true(
             $xml->hasAttributeNS(self::XML_NS, 'lang'),
-            'Missing xml:lang from ' . static::getLocalName()
+            'Missing xml:lang from ' . static::getLocalName(),
+            MissingAttributeException::class,
         );
 
         return new static($xml->getAttributeNS(self::XML_NS, 'lang'), $xml->textContent);

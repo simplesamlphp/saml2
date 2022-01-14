@@ -8,6 +8,7 @@ use DOMDocument;
 use PHPUnit\Framework\TestCase;
 use SimpleSAML\Assert\AssertionFailedException;
 use SimpleSAML\SAML2\Constants as C;
+use SimpleSAML\SAML2\Exception\ProtocolViolationException;
 use SimpleSAML\SAML2\XML\md\AffiliateMember;
 use SimpleSAML\Test\XML\SerializableXMLTestTrait;
 use SimpleSAML\XML\DOMDocumentFactory;
@@ -60,7 +61,7 @@ final class AffiliateMemberTest extends TestCase
      */
     public function testMarshallingEmptyThrowsException(): void
     {
-        $this->expectException(AssertionFailedException::class);
+        $this->expectException(ProtocolViolationException::class);
         $this->expectExceptionMessage('Cannot specify an empty string as an affiliation member entityID.');
 
         new AffiliateMember('');
@@ -71,7 +72,7 @@ final class AffiliateMemberTest extends TestCase
      */
     public function testMarshallingTooLongContentThrowsException(): void
     {
-        $this->expectException(AssertionFailedException::class);
+        $this->expectException(ProtocolViolationException::class);
         $this->expectExceptionMessage(
             sprintf('The AffiliateMember cannot be longer than %d characters.', C::ENTITYID_MAX_LENGTH)
         );

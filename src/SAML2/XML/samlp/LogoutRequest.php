@@ -6,6 +6,8 @@ namespace SimpleSAML\SAML2\XML\samlp;
 
 use DOMElement;
 use SimpleSAML\Assert\Assert;
+use SimpleSAML\SAML2\Exception\Protocol\RequestVersionTooHighException;
+use SimpleSAML\SAML2\Exception\Protocol\RequestVersionTooLowException;
 use SimpleSAML\SAML2\Exception\ProtocolViolationException;
 use SimpleSAML\SAML2\XML\IdentifierTrait;
 use SimpleSAML\SAML2\XML\saml\IdentifierInterface;
@@ -172,7 +174,10 @@ class LogoutRequest extends AbstractRequest
     {
         Assert::same($xml->localName, 'LogoutRequest', InvalidDOMElementException::class);
         Assert::same($xml->namespaceURI, LogoutRequest::NS, InvalidDOMElementException::class);
-        Assert::same('2.0', self::getAttribute($xml, 'Version'));
+
+        $version = self::getAttribute($xml, 'Version');
+        Assert::true(version_compare('2.0', $version, '<='), RequestVersionTooLowException::class);
+        Assert::true(version_compare('2.0', $version, '>='), RequestVersionTooHighException::class);
 
         $issueInstant = self::getAttribute($xml, 'IssueInstant');
         Assert::validDateTimeZulu($issueInstant, ProtocolViolationException::class);

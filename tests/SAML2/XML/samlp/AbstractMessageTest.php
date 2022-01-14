@@ -10,6 +10,7 @@ use Exception;
 use Mockery\Adapter\Phpunit\MockeryTestCase;
 use SimpleSAML\Assert\AssertionFailedException;
 use SimpleSAML\SAML2\Constants;
+use SimpleSAML\SAML2\Exception\Protocol\RequestVersionTooHighException;
 use SimpleSAML\SAML2\XML\saml\Issuer;
 use SimpleSAML\SAML2\XML\samlp\AbstractMessage;
 use SimpleSAML\SAML2\XML\samlp\Extensions;
@@ -278,7 +279,7 @@ XML;
 XML;
 
         $document  = DOMDocumentFactory::fromString($xml);
-        $this->expectException(AssertionFailedException::class);
+        $this->expectException(RequestVersionTooHighException::class);
         MessageFactory::fromXML($document->documentElement);
     }
 

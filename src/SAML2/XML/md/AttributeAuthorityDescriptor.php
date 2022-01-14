@@ -114,6 +114,7 @@ final class AttributeAuthorityDescriptor extends AbstractRoleDescriptor
             $organization,
             $contacts
         );
+
         $this->setAttributeServices($attributeServices);
         $this->setAssertionIDRequestServices($assertionIDRequestService);
         $this->setNameIDFormats($nameIDFormats);
@@ -143,12 +144,14 @@ final class AttributeAuthorityDescriptor extends AbstractRoleDescriptor
         Assert::minCount(
             $attributeServices,
             1,
-            'AttributeAuthorityDescriptor must contain at least one AttributeService.'
+            'AttributeAuthorityDescriptor must contain at least one AttributeService.',
+            MissingElementException::class,
         );
         Assert::allIsInstanceOf(
             $attributeServices,
             AttributeService::class,
-            'AttributeService is not an instance of EndpointType.'
+            'AttributeService is not an instance of EndpointType.',
+            InvalidDOMElementException::class,
         );
         $this->AttributeServices = $attributeServices;
     }
@@ -196,6 +199,7 @@ final class AttributeAuthorityDescriptor extends AbstractRoleDescriptor
     protected function setAssertionIDRequestServices(array $assertionIDRequestServices): void
     {
         Assert::allIsInstanceOf($assertionIDRequestServices, AssertionIDRequestService::class);
+
         $this->AssertionIDRequestServices = $assertionIDRequestServices;
     }
 
@@ -302,6 +306,7 @@ final class AttributeAuthorityDescriptor extends AbstractRoleDescriptor
             KeyDescriptor::getChildrenOfClass($xml),
             ContactPerson::getChildrenOfClass($xml)
         );
+
         if (!empty($signature)) {
             $authority->setSignature($signature[0]);
         }

@@ -17,6 +17,7 @@ use SimpleSAML\SAML2\XML\saml\Attribute;
 use SimpleSAML\SAML2\XML\saml\AttributeValue;
 use SimpleSAML\Test\SAML2\SignedElementTestTrait;
 use SimpleSAML\Test\XML\SerializableXMLTestTrait;
+use SimpleSAML\XML\Exception\InvalidDOMElementException;
 use SimpleSAML\XML\DOMDocumentFactory;
 use SimpleSAML\XML\Utils as XMLUtils;
 
@@ -153,7 +154,7 @@ final class AttributeAuthorityDescriptorTest extends TestCase
      */
     public function testMarshallingWithWrongAttributeService(): void
     {
-        $this->expectException(AssertionFailedException::class);
+        $this->expectException(InvalidDOMElementException::class);
         $this->expectExceptionMessage('AttributeService is not an instance of EndpointType.');
 
         /** @psalm-suppress InvalidArgument */

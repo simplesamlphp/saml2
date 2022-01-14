@@ -5,10 +5,10 @@ declare(strict_types=1);
 namespace SimpleSAML\Test\SAML2\XML\mdrpi;
 
 use DOMDocument;
-use InvalidArgumentException;
 use PHPUnit\Framework\TestCase;
 use SimpleSAML\Assert\AssertionFailedException;
 use SimpleSAML\SAML2\Constants;
+use SimpleSAML\SAML2\Exception\ProtocolViolationException;
 use SimpleSAML\SAML2\XML\md\AbstractLocalizedName;
 use SimpleSAML\SAML2\XML\mdrpi\UsagePolicy;
 use SimpleSAML\Test\XML\ArrayizableXMLTestTrait;
@@ -25,6 +25,7 @@ use function strval;
  * @covers \SimpleSAML\SAML2\XML\md\AbstractLocalizedURI
  * @covers \SimpleSAML\SAML2\XML\md\AbstractLocalizedName
  * @covers \SimpleSAML\SAML2\XML\md\AbstractMdElement
+ *
  * @package simplesamlphp/saml2
  */
 final class UsagePolicyTest extends TestCase
@@ -88,7 +89,7 @@ final class UsagePolicyTest extends TestCase
         $document = $this->xmlRepresentation;
         $document->documentElement->textContent = 'this is no url';
 
-        $this->expectException(InvalidArgumentException::class);
+        $this->expectException(ProtocolViolationException::class);
         $this->expectExceptionMessage('mdrpi:UsagePolicy is not a valid URL.');
         UsagePolicy::fromXML($document->documentElement);
     }
