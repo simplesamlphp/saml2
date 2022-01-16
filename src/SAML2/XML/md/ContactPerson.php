@@ -76,14 +76,14 @@ final class ContactPerson extends AbstractMdElement
     /**
      * The EmailAddresses of this contact.
      *
-     * @var string[]
+     * @var \SimpleSAML\SAML2\XML\md\EmailAddress[]
      */
     protected array $EmailAddresses = [];
 
     /**
      * The TelephoneNumbers of this contact.
      *
-     * @var string[]
+     * @var \SimpleSAML\SAML2\XML\md\TelephoneNumber[]
      */
     protected array $TelephoneNumbers = [];
 
@@ -91,14 +91,14 @@ final class ContactPerson extends AbstractMdElement
     /**
      * ContactPerson constructor.
      *
-     * @param string                                    $contactType
-     * @param \SimpleSAML\SAML2\XML\md\Company|null     $company
-     * @param \SimpleSAML\SAML2\XML\md\GivenName|null   $givenName
-     * @param \SimpleSAML\SAML2\XML\md\SurName|null     $surName
-     * @param \SimpleSAML\SAML2\XML\md\Extensions|null  $extensions
-     * @param string[]                                  $email
-     * @param string[]                                  $telephone
-     * @param \DOMAttr[]                                $namespacedAttributes
+     * @param string                                      $contactType
+     * @param \SimpleSAML\SAML2\XML\md\Company|null       $company
+     * @param \SimpleSAML\SAML2\XML\md\GivenName|null     $givenName
+     * @param \SimpleSAML\SAML2\XML\md\SurName|null       $surName
+     * @param \SimpleSAML\SAML2\XML\md\Extensions|null    $extensions
+     * @param \SimpleSAML\SAML2\XML\md\EmailAddress[]     $email
+     * @param \SimpleSAML\SAML2\XML\md\TelephoneNumber[]  $telephone
+     * @param \DOMAttr[]                                  $namespacedAttributes
      */
     public function __construct(
         string $contactType,
@@ -252,53 +252,35 @@ final class ContactPerson extends AbstractMdElement
         $this->SurName = $surName;
     }
 
+
     /**
      * Collect the value of the EmailAddress-property.
      *
-     * @return string[]
+     * @return \SimpleSAML\SAML2\XML\md\EmailAddress[]
      */
     public function getEmailAddresses(): array
     {
         return $this->EmailAddresses;
     }
 
-    /**
-     * Remove a "mailto:" prefix on an email address, if present.
-     * Check the address for syntactical validity. If not, throw an exception.
-     *
-     * @param string $emailAddress
-     * @return string
-     * @throws \InvalidArgumentException if supplied email address is not valid
-     */
-    private function validateEmailAddress(string $emailAddress): string
-    {
-        $address = preg_replace('/^mailto:/i', '', $emailAddress);
-        Assert::false(
-            filter_var($address, FILTER_VALIDATE_EMAIL) === false,
-            'Invalid email address for ContactPerson: ' . var_export($address, true),
-            ProtocolViolationException::class,
-        );
-        return $address;
-    }
 
     /**
      * Set the value of the EmailAddress-property
      *
-     * @param string[] $emailAddresses
+     * @param \SimpleSAML\SAML2\XML\md\EmailAddress[] $emailAddresses
      * @throws \SimpleSAML\Assert\AssertionFailedException
      */
     protected function setEmailAddresses(array $emailAddresses): void
     {
-        $addresses = array_map([$this, 'validateEmailAddress'], $emailAddresses);
-        Assert::allEmail($addresses, 'Invalid email addresses found.');
-        $this->EmailAddresses = $addresses;
+        Assert::allIsInstanceOf($emailAddresses, EmailAddress::class);
+        $this->EmailAddresses = $emailAddresses;
     }
 
 
     /**
      * Collect the value of the TelephoneNumber property
      *
-     * @return string[]
+     * @return \SimpleSAML\SAML2\XML\md\TelephoneNumber[]
      */
     public function getTelephoneNumbers(): array
     {
@@ -309,12 +291,12 @@ final class ContactPerson extends AbstractMdElement
     /**
      * Set the value of the TelephoneNumber property
      *
-     * @param string[] $telephoneNumbers
+     * @param \SimpleSAML\SAML2\XML\md\TelephoneNumber[] $telephoneNumbers
      * @throws \SimpleSAML\Assert\AssertionFailedException
      */
     protected function setTelephoneNumbers(array $telephoneNumbers): void
     {
-        Assert::allString($telephoneNumbers, 'Incorrect type for telephone number.');
+        Assert::allIsInstanceOf($telephoneNumbers, TelephoneNumber::class);
         $this->TelephoneNumbers = $telephoneNumbers;
     }
 
@@ -345,8 +327,9 @@ final class ContactPerson extends AbstractMdElement
         $surName = SurName::getChildrenOfClass($xml);
         Assert::maxCount($surName, 1, 'More than one SurName in md:ContactPerson');
 
-        $email = self::getStringElements($xml, 'EmailAddress');
-        $telephone = self::getStringElements($xml, 'TelephoneNumber');
+        $email = EmailAddress::getChildrenOfClass($xml);
+        $telephone = TelephoneNumber::getChildrenOfClass($xml);
+
         $extensions = Extensions::getChildrenOfClass($xml);
         Assert::maxCount($extensions, 1, 'Only one md:Extensions element is allowed.', TooManyElementsException::class);
 
@@ -395,10 +378,13 @@ final class ContactPerson extends AbstractMdElement
             $this->SurName->toXML($e);
         }
 
-        $addresses = preg_filter('/^/', 'mailto:', $this->EmailAddresses);
-        XMLUtils::addStrings($e, Constants::NS_MD, 'md:EmailAddress', false, $addresses);
+        foreach ($this->EmailAddresses as $mail) {
+            $mail->toXML($e);
+        }
 
-        XMLUtils::addStrings($e, Constants::NS_MD, 'md:TelephoneNumber', false, $this->TelephoneNumbers);
+        foreach ($this->TelephoneNumbers as $telephone) {
+            $telephone->toXML($e);
+        }
 
         return $e;
     }
@@ -419,8 +405,16 @@ final class ContactPerson extends AbstractMdElement
         $GivenName = isset($data['GivenName']) ? new GivenName($data['GivenName']) : null;
         $SurName = isset($data['SurName']) ? new SurName($data['SurName']) : null;
         $Extensions = $data['Extensions'] ?? null;
-        $EmailAddresses = $data['EmailAddresses'] ?? [];
-        $TelephoneNumbers = $data['TelephoneNumbers'] ?? [];
+
+        $EmailAddresses = [];
+        foreach ($data['EmailAddresses'] as $mail) {
+            $EmailAddresses[] = new EmailAddress($mail);
+        }
+
+        $TelephoneNumbers = [];
+        foreach ($data['TelephoneNumbers'] as $telephone) {
+            $TelephoneNumbers[] = new TelephoneNumber($telephone);
+        }
 
         // Anything after this should be (namespaced) attributes
         unset(
@@ -472,8 +466,18 @@ final class ContactPerson extends AbstractMdElement
             'SurName' => $this->SurName->getContent(),
             'EmailAddresses' => $this->EmailAddresses,
             'TelephoneNumbers' => $this->TelephoneNumbers,
+            'EmailAddresses' => [],
+            'TelephoneNumbers' => [],
             'Extensions' => $this->Extensions,
         ];
+
+        foreach ($this->EmailAddresses as $mail) {
+            $data['EmailAddresses'] = array_merge($data['EmailAddresses'], $mail->toArray());
+        }
+
+        foreach ($this->TelephoneNumbers as $telephone) {
+            $data['TelephoneNumbers'] = array_merge($data['TelephoneNumbers'], $telephone->toArray());
+        }
 
         foreach ($this->getAttributesNS() as $a) {
             $data[$a['namespaceURI']] = [$a['qualifiedName'] => $a['value']];

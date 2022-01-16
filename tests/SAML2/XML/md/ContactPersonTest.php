@@ -11,9 +11,11 @@ use SimpleSAML\SAML2\Constants;
 use SimpleSAML\SAML2\Exception\ProtocolViolationException;
 use SimpleSAML\SAML2\XML\md\ContactPerson;
 use SimpleSAML\SAML2\XML\md\Company;
+use SimpleSAML\SAML2\XML\md\EmailAddress;
 use SimpleSAML\SAML2\XML\md\Extensions;
 use SimpleSAML\SAML2\XML\md\GivenName;
 use SimpleSAML\SAML2\XML\md\SurName;
+use SimpleSAML\SAML2\XML\md\TelephoneNumber;
 use SimpleSAML\Test\XML\ArrayizableXMLTestTrait;
 use SimpleSAML\Test\XML\SerializableXMLTestTrait;
 use SimpleSAML\XML\Chunk;
@@ -86,8 +88,8 @@ final class ContactPersonTest extends TestCase
                     new Chunk($ext->documentElement)
                 ]
             ),
-            ['jdoe@test.company', 'john.doe@test.company'],
-            ['1-234-567-8901'],
+            [new EmailAddress('jdoe@test.company'), new EmailAddress('john.doe@test.company')],
+            [new TelephoneNumber('1-234-567-8901')],
             [$attr1, $attr2]
         );
 
@@ -111,24 +113,6 @@ final class ContactPersonTest extends TestCase
     }
 
 
-    /**
-     * Test that creating a ContactPerson from scratch with an invalid email address fails.
-     */
-    public function testMarshallingWithWrongEmail(): void
-    {
-        $this->expectException(ProtocolViolationException::class);
-        $this->expectExceptionMessage('Invalid email address for ContactPerson: \'this is wrong\'');
-        new ContactPerson(
-            'other',
-            new Company('Test Company'),
-            new GivenName('John'),
-            new SurName('Doe'),
-            null,
-            ['this is wrong']
-        );
-    }
-
-
     // test unmarshalling
 
 
@@ -142,8 +126,8 @@ final class ContactPersonTest extends TestCase
         $this->assertEquals('Test Company', $cp->getCompany()->getContent());
         $this->assertEquals('John', $cp->getGivenName()->getContent());
         $this->assertEquals('Doe', $cp->getSurName()->getContent());
-        $this->assertEquals(['jdoe@test.company', 'john.doe@test.company'], $cp->getEmailAddresses());
-        $this->assertEquals(['1-234-567-8901'], $cp->getTelephoneNumbers());
+        $this->assertEquals('mailto:john.doe@test.company', $cp->getEmailAddresses()[1]->getContent());
+        $this->assertEquals('1-234-567-8901', $cp->getTelephoneNumbers()[0]->getContent());
         $this->assertEquals(
             [
                 '{urn:test}attr1' => [
@@ -217,6 +201,7 @@ final class ContactPersonTest extends TestCase
         $this->expectException(AssertionFailedException::class);
         $this->expectExceptionMessage('More than one GivenName in md:ContactPerson');
         ContactPerson::fromXML($this->xmlRepresentation->documentElement);
+
     }
 
 
@@ -231,20 +216,6 @@ final class ContactPersonTest extends TestCase
         $this->xmlRepresentation->documentElement->insertBefore($newName, $surName->item(0)->nextSibling);
         $this->expectException(AssertionFailedException::class);
         $this->expectExceptionMessage('More than one SurName in md:ContactPerson');
-        ContactPerson::fromXML($this->xmlRepresentation->documentElement);
-    }
-
-
-    /**
-     * Test that creating a ContactPerson from XML fails when an invalid email address is found.
-     */
-    public function testUnmarshallingWithInvalidEmail(): void
-    {
-        $this->expectException(ProtocolViolationException::class);
-        $this->expectExceptionMessage('Invalid email address for ContactPerson: \'this is not an email\'');
-        $emails = $this->xmlRepresentation->getElementsByTagNameNS(Constants::NS_MD, 'EmailAddress');
-        /** @psalm-suppress PossiblyNullPropertyAssignment */
-        $emails->item(1)->textContent = 'this is not an email';
         ContactPerson::fromXML($this->xmlRepresentation->documentElement);
     }
 
@@ -267,32 +238,5 @@ XML
         $this->assertEquals([], $cp->getEmailAddresses());
         $this->assertEquals([], $cp->getTelephoneNumbers());
         $this->assertEquals([], $cp->getAttributesNS());
-    }
-
-
-    /**
-     */
-    public function testInvalidEmailThrowsException(): void
-    {
-        $this->expectException(ProtocolViolationException::class);
-        $this->expectExceptionMessage('Invalid email address for');
-        new ContactPerson('technical', null, null, null, null, ['not so valid']);
-    }
-
-
-    /**
-     */
-    public function testInvalidEmailInSetThrowsException(): void
-    {
-        $this->expectException(ProtocolViolationException::class);
-        $this->expectExceptionMessage('Invalid email address for');
-        new ContactPerson(
-            'technical',
-            null,
-            null,
-            null,
-            null,
-            ['bob@alice.edu', 'user@example.org', 'not so valid', 'aap@noot.nl']
-        );
     }
 }
