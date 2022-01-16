@@ -8,12 +8,23 @@ use DOMDocument;
 use PHPUnit\Framework\TestCase;
 use SimpleSAML\SAML2\Constants;
 use SimpleSAML\SAML2\Utils\XPath;
+use SimpleSAML\SAML2\XML\saml\Assertion;
 use SimpleSAML\SAML2\XML\saml\Attribute;
+use SimpleSAML\SAML2\XML\saml\AttributeStatement;
 use SimpleSAML\SAML2\XML\saml\AttributeValue;
+use SimpleSAML\SAML2\XML\saml\AuthnContext;
+use SimpleSAML\SAML2\XML\saml\AuthnContextClassRef;
+use SimpleSAML\SAML2\XML\saml\AuthnContextDeclRef;
+use SimpleSAML\SAML2\XML\saml\Audience;
+use SimpleSAML\SAML2\XML\saml\AudienceRestriction;
+use SimpleSAML\SAML2\XML\saml\Conditions;
+use SimpleSAML\SAML2\XML\saml\Issuer;
 use SimpleSAML\SAML2\XML\mdattr\EntityAttributes;
 use SimpleSAML\Test\XML\SerializableXMLTestTrait;
 use SimpleSAML\XML\Chunk;
 use SimpleSAML\XML\DOMDocumentFactory;
+use SimpleSAML\XMLSecurity\TestUtils\PEMCertificatesMock;
+use SimpleSAML\XMLSecurity\XMLSecurityKey;
 
 use function dirname;
 use function strval;
@@ -25,6 +36,7 @@ use function strval;
  * @covers \SimpleSAML\SAML2\XML\mdattr\AbstractMdattrElement
  * @package simplesamlphp/saml2
  */
+
 final class EntityAttributesTest extends TestCase
 {
     use SerializableXMLTestTrait;
@@ -50,8 +62,73 @@ final class EntityAttributesTest extends TestCase
             'attrib1',
             Constants::NAMEFORMAT_URI,
             null,
-            []
+            [
+                new AttributeValue('is'),
+                new AttributeValue('really'),
+                new AttributeValue('cool'),
+            ]
         );
+
+        // Create an Issuer
+        $issuer = new Issuer('testIssuer');
+
+        // Create the conditions
+        $conditions = new Conditions(
+            null,
+            null,
+            [],
+            [new AudienceRestriction([new Audience('audience1'), new Audience('audience2')])]
+        );
+
+        // Create the statements
+        $attrStatement = new AttributeStatement(
+            [
+                new Attribute(
+                    'urn:mace:dir:attribute-def:uid',
+                    Constants::NAMEFORMAT_URI,
+                    null,
+                    [
+                        new AttributeValue('student2')
+                    ]
+                ),
+                new Attribute(
+                    'urn:mace:terena.org:attribute-def:schacHomeOrganization',
+                    Constants::NAMEFORMAT_URI,
+                    null,
+                    [
+                        new AttributeValue('university.example.org'),
+                        new AttributeValue('bbb.cc')
+                    ]
+                ),
+                new Attribute(
+                    'urn:schac:attribute-def:schacPersonalUniqueCode',
+                    Constants::NAMEFORMAT_URI,
+                    null,
+                    [
+                        new AttributeValue('urn:schac:personalUniqueCode:nl:local:uvt.nl:memberid:524020'),
+                        new AttributeValue('urn:schac:personalUniqueCode:nl:local:surfnet.nl:studentid:12345')
+                    ]
+                ),
+                new Attribute(
+                    'urn:mace:dir:attribute-def:eduPersonAffiliation',
+                    Constants::NAMEFORMAT_URI,
+                    null,
+                    [
+                        new AttributeValue('member'),
+                        new AttributeValue('student')
+                    ]
+                )
+            ]
+        );
+
+        // Create an assertion
+        $unsignedAssertion = new Assertion($issuer, null, 1610743797, null, $conditions, [$attrStatement]);
+
+        // Sign the assertion
+        $privateKey = PEMCertificatesMock::getPrivateKey(XMLSecurityKey::RSA_SHA256, PEMCertificatesMock::PRIVATE_KEY);
+        $unsignedAssertion->setSigningKey($privateKey);
+        $unsignedAssertion->setCertificates([PEMCertificatesMock::getPlainPublicKey(PEMCertificatesMock::PUBLIC_KEY)]);
+        $signedAssertion = Assertion::fromXML($unsignedAssertion->toXML());
 
         $attribute2 = new Attribute(
             'foo',
@@ -65,27 +142,10 @@ final class EntityAttributesTest extends TestCase
         );
 
         $entityAttributes = new EntityAttributes([$attribute1]);
+        $entityAttributes->addChild($signedAssertion);
         $entityAttributes->addChild($attribute2);
 
-        $document = DOMDocumentFactory::fromString('<root />');
-        $xml = $entityAttributes->toXML($document->documentElement);
-
-        $xpCache = XPath::getXPath($xml);
-        $entityAttributesElements = XPath::xpQuery(
-            $xml,
-            '/root/*[local-name()=\'EntityAttributes\' and namespace-uri()=\'urn:oasis:names:tc:SAML:metadata:attribute\']',
-            $xpCache
-        );
-        $this->assertCount(1, $entityAttributesElements);
-        $entityAttributesElement = $entityAttributesElements[0];
-
-        $xpCache = XPath::getXPath($entityAttributesElement);
-        $attributeElements = XPath::xpQuery(
-            $entityAttributesElement,
-            './*[local-name()=\'Attribute\' and namespace-uri()=\'urn:oasis:names:tc:SAML:2.0:assertion\']',
-            $xpCache
-        );
-        $this->assertCount(2, $attributeElements);
+        $this->assertEquals($this->xmlRepresentation->saveXML($this->xmlRepresentation->documentElement), strval($entityAttributes));
     }
 
 
@@ -96,9 +156,8 @@ final class EntityAttributesTest extends TestCase
         $entityAttributes = EntityAttributes::fromXML($this->xmlRepresentation->documentElement);
         $this->assertCount(4, $entityAttributes->getChildren());
 
-        $this->assertInstanceOf(Chunk::class, $entityAttributes->getChildren()[0]);
-        $this->assertInstanceOf(Attribute::class, $entityAttributes->getChildren()[1]);
-        $this->assertInstanceOf(Chunk::class, $entityAttributes->getChildren()[2]);
+        $this->assertInstanceOf(Attribute::class, $entityAttributes->getChildren()[0]);
+        $this->assertInstanceOf(Assertion::class, $entityAttributes->getChildren()[2]);
         $this->assertInstanceOf(Attribute::class, $entityAttributes->getChildren()[3]);
 
         $this->assertEquals('Assertion', $entityAttributes->getChildren()[0]->getLocalName());
@@ -122,6 +181,6 @@ final class EntityAttributesTest extends TestCase
             Constants::NAMEFORMAT_URI,
             $entityAttributes->getChildren()[3]->getNameFormat()
         );
-        $this->assertCount(3, $entityAttributes->getChildren()[3]->getAttributeValues());
     }
 }
+
