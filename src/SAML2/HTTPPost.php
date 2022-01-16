@@ -7,6 +7,7 @@ namespace SimpleSAML\SAML2;
 use DOMDocument;
 use DOMElement;
 use Exception;
+use Psr\Http\Message\ServerRequestInterface;
 use SimpleSAML\SAML2\XML\samlp\AbstractMessage;
 use SimpleSAML\SAML2\XML\samlp\AbstractRequest;
 use SimpleSAML\SAML2\XML\samlp\MessageFactory;
@@ -71,15 +72,17 @@ class HTTPPost extends Binding
      *
      * Throws an exception if it is unable receive the message.
      *
+     * @param \Psr\Http\Message\ServerRequestInterface $request
      * @return \SimpleSAML\SAML2\XML\samlp\AbstractMessage The received message.
      * @throws \Exception
      */
-    public function receive(): AbstractMessage
+    public function receive(ServerRequestInterface $request): AbstractMessage
     {
-        if (array_key_exists('SAMLRequest', $_POST)) {
-            $msgStr = $_POST['SAMLRequest'];
-        } elseif (array_key_exists('SAMLResponse', $_POST)) {
-            $msgStr = $_POST['SAMLResponse'];
+        $query = $request->getParsedBody();
+        if (array_key_exists('SAMLRequest', $query)) {
+            $msgStr = $query['SAMLRequest'];
+        } elseif (array_key_exists('SAMLResponse', $query)) {
+            $msgStr = $query['SAMLResponse'];
         } else {
             throw new Exception('Missing SAMLRequest or SAMLResponse parameter.');
         }
@@ -95,8 +98,8 @@ class HTTPPost extends Binding
 
         $msg = MessageFactory::fromXML($document->documentElement);
 
-        if (array_key_exists('RelayState', $_POST)) {
-            $msg->setRelayState($_POST['RelayState']);
+        if (array_key_exists('RelayState', $query)) {
+            $msg->setRelayState($query['RelayState']);
         }
 
         return $msg;

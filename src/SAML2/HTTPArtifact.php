@@ -5,6 +5,7 @@ declare(strict_types=1);
 namespace SimpleSAML\SAML2;
 
 use Exception;
+use Psr\Http\Message\ServerRequestInterface;
 use SimpleSAML\Assert\Assert;
 use SimpleSAML\Configuration;
 use SimpleSAML\Metadata\MetaDataStorageHandler;
@@ -107,15 +108,17 @@ class HTTPArtifact extends Binding
      *
      * Throws an exception if it is unable receive the message.
      *
-     * @throws \Exception
+     * @param \Psr\Http\Message\ServerRequestInterface $request
      * @return \SimpleSAML\SAML2\XML\samlp\AbstractMessage The received message.
      *
+     * @throws \Exception
      * @throws \SimpleSAML\Assert\AssertionFailedException if assertions are false
      */
-    public function receive(): AbstractMessage
+    public function receive(ServerRequestInterface $request): AbstractMessage
     {
-        if (array_key_exists('SAMLart', $_REQUEST)) {
-            $artifact = base64_decode($_REQUEST['SAMLart']);
+        $query = $request->getQueryParams();
+        if (array_key_exists('SAMLart', $query)) {
+            $artifact = base64_decode($query['SAMLart']);
             $endpointIndex = bin2hex(substr($artifact, 2, 2));
             $sourceId = bin2hex(substr($artifact, 4, 20));
         } else {
@@ -159,7 +162,7 @@ class HTTPArtifact extends Binding
         $issuer = new Issuer($this->spMetadata->getString('entityid'));
 
         // Construct the ArtifactResolve Request
-        $ar = new ArtifactResolve($_REQUEST['SAMLart'], $issuer, null, null, null, $endpoint['Location']);
+        $ar = new ArtifactResolve($query['SAMLart'], $issuer, null, null, null, $endpoint['Location']);
 
         // sign the request
         /** @psalm-suppress UndefinedClass */
@@ -184,8 +187,8 @@ class HTTPArtifact extends Binding
 
         $samlResponse->addValidator([get_class($this), 'validateSignature'], $artifactResponse);
 
-        if (isset($_REQUEST['RelayState'])) {
-            $samlResponse->setRelayState($_REQUEST['RelayState']);
+        if (isset($query['RelayState'])) {
+            $samlResponse->setRelayState($query['RelayState']);
         }
 
         return $samlResponse;
@@ -194,7 +197,6 @@ class HTTPArtifact extends Binding
 
     /**
      * @param \SimpleSAML\Configuration $sp
-     *
      *
      * @psalm-suppress UndefinedClass
      */
