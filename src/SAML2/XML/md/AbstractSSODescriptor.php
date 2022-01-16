@@ -7,6 +7,7 @@ namespace SimpleSAML\SAML2\XML\md;
 use DOMElement;
 use SimpleSAML\Assert\Assert;
 use SimpleSAML\SAML2\Constants;
+use SimpleSAML\SAML2\Exception\ProtocolViolationException;
 use SimpleSAML\XML\Utils as XMLUtils;
 
 /**
