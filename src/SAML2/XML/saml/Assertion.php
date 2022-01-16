@@ -458,7 +458,7 @@ class Assertion extends AbstractSamlElement implements SignableElementInterface,
 
 
     /**
-     * Convert this assertion to an XML element.
+     * Convert this assertion to a signed XML element.
      *
      * @param \DOMElement|null $parent The DOM node the assertion should be created in.
      *
@@ -466,6 +466,33 @@ class Assertion extends AbstractSamlElement implements SignableElementInterface,
      * @throws \Exception
      */
     public function toXML(DOMElement $parent = null): DOMElement
+    {
+        $e = $this->toUnsignedXML($parent);
+
+        if ($this->signer !== null) {
+            $signedXML = $this->doSign($e);
+
+            // Test for an Issuer
+            $assertionElements = XPath::xpQuery($signedXML, './saml_assertion:Issuer', XPath::getXPath($signedXML));
+            $issuer = array_pop($assertionElements);
+
+            $signedXML->insertBefore($this->signature->toXML($signedXML), $issuer->nextSibling);
+            return $signedXML;
+        }
+
+        return $e;
+    }
+
+
+    /**
+     * Convert this assertion to an unsigned XML element.
+     *
+     * @param \DOMElement|null $parent The DOM node the assertion should be created in.
+     *
+     * @return \DOMElement This assertion.
+     * @throws \Exception
+     */
+    public function toUnsignedXML(DOMElement $parent = null): DOMElement
     {
         $e = $this->instantiateParentElement($parent);
 
