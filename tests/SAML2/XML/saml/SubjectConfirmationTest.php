@@ -222,7 +222,7 @@ XML
         $this->assertEquals('SomeMethod', $subjectConfirmation->getMethod());
         $this->assertEquals(BaseID::class, get_class($identifier));
         $this->assertEquals('CustomBaseID', $identifier->getType());
-        $this->assertEquals('SomeIDValue', $identifier->getValue());
+        $this->assertEquals('SomeIDValue', $identifier->getContent());
         $this->assertInstanceOf(SubjectConfirmationData::class, $subjectConfirmation->getSubjectConfirmationData());
         $this->assertEquals(
             $document->saveXML($document->documentElement),
@@ -259,7 +259,7 @@ XML
         $identifier = $subjectConfirmation->getIdentifier();
         $this->assertEquals('SomeMethod', $subjectConfirmation->getMethod());
         $this->assertInstanceOf(CustomBaseID::class, $identifier);
-        $this->assertEquals('123.456', $identifier->getValue());
+        $this->assertEquals('123.456', $identifier->getContent());
         $this->assertInstanceOf(SubjectConfirmationData::class, $subjectConfirmation->getSubjectConfirmationData());
         $this->assertEquals(
             $document->saveXML($document->documentElement),

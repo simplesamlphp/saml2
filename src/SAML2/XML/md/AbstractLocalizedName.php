@@ -54,7 +54,7 @@ abstract class AbstractLocalizedName extends AbstractMdElement
      * @throws \Exception on failure
      * @return void
      */
-    protected function validateContent(/** @scrutinizer ignore-unused */ string $content): void
+    protected function validateContent(string $content): void
     {
         Assert::notEmpty($content);
     }
@@ -113,7 +113,7 @@ abstract class AbstractLocalizedName extends AbstractMdElement
     {
         $e = $this->instantiateParentElement($parent);
         $e->setAttributeNS(self::XML_NS, 'xml:lang', $this->language);
-        $e->textContent = $this->getContent();
+        $e->textContent = $this->content;
 
         return $e;
     }
@@ -141,6 +141,6 @@ abstract class AbstractLocalizedName extends AbstractMdElement
      */
     public function toArray(): array
     {
-        return [$this->language => $this->getContent()];
+        return [$this->language => $this->content];
     }
 }

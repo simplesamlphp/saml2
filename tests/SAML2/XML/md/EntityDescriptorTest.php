@@ -282,11 +282,14 @@ XML
      */
     public function testMarshallingWithAffiliationAndRoleDescriptors(): void
     {
-        (new AffiliationDescriptor('asdf', [new AffiliateMember('test')]))->toXML($this->xmlRepresentation->documentElement);
+        $affiliateDescriptor = new AffiliationDescriptor('asdf', [new AffiliateMember('test')]);
+        $affiliateDescriptor->toXML($this->xmlRepresentation->documentElement);
+
         $this->expectException(ProtocolViolationException::class);
         $this->expectExceptionMessage(
             'AffiliationDescriptor cannot be combined with other RoleDescriptor elements in EntityDescriptor.'
         );
+
         EntityDescriptor::fromXML($this->xmlRepresentation->documentElement);
     }
 

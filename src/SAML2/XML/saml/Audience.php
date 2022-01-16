@@ -16,13 +16,11 @@ use SimpleSAML\XML\Exception\InvalidDOMElementException;
 final class Audience extends AbstractConditionType
 {
     /**
-     * Initialize an Audience element.
-     *
-     * @param string $audience
+     * @param string $content
      */
-    public function __construct(string $audience)
+    public function __construct(string $content)
     {
-        parent::__construct($audience);
+        $this->setContent($content);
     }
 
 

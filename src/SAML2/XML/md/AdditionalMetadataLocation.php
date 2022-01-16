@@ -108,7 +108,7 @@ final class AdditionalMetadataLocation extends AbstractMdElement
     public function toXML(DOMElement $parent = null): DOMElement
     {
         $e = $this->instantiateParentElement($parent);
-        $e->textContent = $this->getContent();
+        $e->textContent = $this->content;
         $e->setAttribute('namespace', $this->namespace);
 
         return $e;

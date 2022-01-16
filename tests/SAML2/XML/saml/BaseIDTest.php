@@ -69,7 +69,7 @@ final class BaseIDTest extends TestCase
     {
         $baseId = BaseID::fromXML($this->xmlRepresentation->documentElement);
 
-        $this->assertEquals('123.456', $baseId->getValue());
+        $this->assertEquals('123.456', $baseId->getContent());
         $this->assertEquals('TheNameQualifier', $baseId->getNameQualifier());
         $this->assertEquals('TheSPNameQualifier', $baseId->getSPNameQualifier());
         $this->assertEquals('CustomBaseID', $baseId->getType());
@@ -88,7 +88,7 @@ final class BaseIDTest extends TestCase
         /** @var \SimpleSAML\Test\SAML2\CustomBaseID $baseId */
         $baseId = CustomBaseID::fromXML($this->xmlRepresentation->documentElement);
 
-        $this->assertEquals(123.456, $baseId->getValue());
+        $this->assertEquals(123.456, $baseId->getContent());
         $this->assertEquals('TheNameQualifier', $baseId->getNameQualifier());
         $this->assertEquals('TheSPNameQualifier', $baseId->getSPNameQualifier());
 
