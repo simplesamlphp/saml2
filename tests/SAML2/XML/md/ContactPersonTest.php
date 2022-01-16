@@ -126,7 +126,7 @@ final class ContactPersonTest extends TestCase
         $this->assertEquals('Test Company', $cp->getCompany()->getContent());
         $this->assertEquals('John', $cp->getGivenName()->getContent());
         $this->assertEquals('Doe', $cp->getSurName()->getContent());
-        $this->assertEquals('john.doe@test.company', $cp->getEmailAddresses()[1]->getRawContent());
+        $this->assertEquals('mailto:john.doe@test.company', $cp->getEmailAddresses()[1]->getContent());
         $this->assertEquals('1-234-567-8901', $cp->getTelephoneNumbers()[0]->getContent());
         $this->assertEquals(
             [

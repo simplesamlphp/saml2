@@ -63,6 +63,8 @@ final class EmailAddress extends AbstractMdElement
     {
         $sanitized = $this->sanitizeContent($content);
         $this->validateContent($sanitized);
+
+        // Store the email address without mailto: URI
         $this->content = $sanitized;
     }
 
@@ -75,17 +77,6 @@ final class EmailAddress extends AbstractMdElement
     public function getContent(): string
     {
         return preg_filter('/^/', 'mailto:', $this->content);
-    }
-
-
-    /**
-     * Get the raw and unsanitized content of the element.
-     *
-     * @return string
-     */
-    public function getRawContent(): string
-    {
-        return $this->content;
     }
 
 
