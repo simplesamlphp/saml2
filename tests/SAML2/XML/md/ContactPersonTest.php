@@ -221,23 +221,6 @@ final class ContactPersonTest extends TestCase
 
 
     /**
-<<<<<<< HEAD
-     * Test that creating a ContactPerson from XML fails when an invalid email address is found.
-     */
-    public function testUnmarshallingWithInvalidEmail(): void
-    {
-        $this->expectException(ProtocolViolationException::class);
-        $this->expectExceptionMessage('Invalid email address for ContactPerson: \'this is not an email\'');
-        $emails = $this->xmlRepresentation->getElementsByTagNameNS(Constants::NS_MD, 'EmailAddress');
-        /** @psalm-suppress PossiblyNullPropertyAssignment */
-        $emails->item(1)->textContent = 'this is not an email';
-        ContactPerson::fromXML($this->xmlRepresentation->documentElement);
-    }
-
-
-    /**
-=======
->>>>>>> 43601362... Add & implement md:EmailAddress & md:TelephoneNumber
      * Test that creating a ContactPerson from XML works when all optional elements are missing.
      */
     public function testUnmarshallingWithoutOptionalArguments(): void
@@ -256,34 +239,4 @@ XML
         $this->assertEquals([], $cp->getTelephoneNumbers());
         $this->assertEquals([], $cp->getAttributesNS());
     }
-<<<<<<< HEAD
-
-
-    /**
-     */
-    public function testInvalidEmailThrowsException(): void
-    {
-        $this->expectException(ProtocolViolationException::class);
-        $this->expectExceptionMessage('Invalid email address for');
-        new ContactPerson('technical', null, null, null, null, ['not so valid']);
-    }
-
-
-    /**
-     */
-    public function testInvalidEmailInSetThrowsException(): void
-    {
-        $this->expectException(ProtocolViolationException::class);
-        $this->expectExceptionMessage('Invalid email address for');
-        new ContactPerson(
-            'technical',
-            null,
-            null,
-            null,
-            null,
-            ['bob@alice.edu', 'user@example.org', 'not so valid', 'aap@noot.nl']
-        );
-    }
-=======
->>>>>>> 43601362... Add & implement md:EmailAddress & md:TelephoneNumber
 }
