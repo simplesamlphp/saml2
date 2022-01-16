@@ -449,7 +449,7 @@ abstract class AbstractMessage extends AbstractSamlpElement implements SignableE
     /**
      * @return \DOMElement
      */
-    protected function getOriginalXML(): DOMElement
+    public function getOriginalXML(): DOMElement
     {
         return $this->xml ?? $this->toUnsignedXML();
     }
