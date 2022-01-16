@@ -172,8 +172,8 @@ final class AuthnRequestTest extends TestCase
 
         // Test for a Subject
         $xpCache = XPath::getXPath($authnRequestElement);
-        $authnRequestElements = XPath::xpQuery($authnRequestElement, './saml_assertion:Subject', $xpCache);
-        $this->assertCount(1, $authnRequestElements);
+        $subject = XPath::xpQuery($authnRequestElement, './saml_assertion:Subject', $xpCache);
+        $this->assertCount(1, $subject);
 
         // Test ordering of AuthnRequest contents
         /** @psalm-var \DOMElement[] $authnRequestElements */

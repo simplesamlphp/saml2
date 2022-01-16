@@ -57,12 +57,8 @@ class HTTPRedirect extends Binding
 
         $relayState = $message->getRelayState();
 
-//  Old:  $key = XMLSecurityKey
-//        $key = $message->getSigningKey();
-//
-//  New:  No alternative?
-
-        $msgStr = $message->toXML();
+        $signature = $message->getSignature();
+        $msgStr = $message->getOriginalXML();
 
         Utils::getContainer()->debugMessage($msgStr, 'out');
         $msgStr = $msgStr->ownerDocument->saveXML($msgStr);
@@ -83,12 +79,10 @@ class HTTPRedirect extends Binding
             $msg .= '&RelayState=' . urlencode($relayState);
         }
 
-        if ($key !== null) { // add the signature
+        if ($signature !== null) { // add the signature
             /** @psalm-suppress PossiblyInvalidArgument */
-            $msg .= '&SigAlg=' . urlencode($key->type);
-
-            $signature = $key->signData($msg);
-            $msg .= '&Signature=' . urlencode(base64_encode($signature));
+            $msg .= '&SigAlg=' . urlencode($signature->getSignedInfo()->getSignatureMethod());
+            $msg .= '&Signature=' . urlencode(base64_encode($signature->getSignatureValue()));
         }
 
         if (strpos($destination, '?') === false) {
