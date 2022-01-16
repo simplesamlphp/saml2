@@ -14,4 +14,11 @@ use SAML2\Exception\ProtocolViolationException;
  */
 class TooManyResponsesException extends ProtocolViolationException
 {
+    /**
+     * @param string $message
+     */
+    public function __construct(string $message = 'Too many responses.')
+    {
+        parent::__construct($message);
+    }
 }

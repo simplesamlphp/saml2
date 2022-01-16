@@ -13,4 +13,11 @@ use SAML2\Exception\ProtocolViolationException;
  */
 class RequestUnsupportedException extends ProtocolViolationException
 {
+    /**
+     * @param string $message
+     */
+    public function __construct(string $message = 'Unsupported request.')
+    {
+        parent::__construct($message);
+    }
 }

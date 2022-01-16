@@ -14,4 +14,11 @@ use SAML2\Exception\ProtocolViolationException;
  */
 class NoPassiveException extends ProtocolViolationException
 {
+    /**
+     * @param string $message
+     */
+    public function __construct(string $message = 'Cannot perform passive authentication.')
+    {
+        parent::__construct($message);
+    }
 }

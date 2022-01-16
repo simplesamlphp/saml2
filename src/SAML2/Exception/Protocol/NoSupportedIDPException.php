@@ -14,4 +14,11 @@ use SAML2\Exception\ProtocolViolationException;
  */
 class NoSupportedIDPException extends ProtocolViolationException
 {
+    /**
+     * @param string $message
+     */
+    public function __construct(string $message = 'No supported IDP.')
+    {
+        parent::__construct($message);
+    }
 }

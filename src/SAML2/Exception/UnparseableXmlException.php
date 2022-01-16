@@ -4,7 +4,7 @@ declare(strict_types=1);
 
 namespace SAML2\Exception;
 
-use \LibXMLError;
+use LibXMLError;
 
 final class UnparseableXmlException extends RuntimeException
 {

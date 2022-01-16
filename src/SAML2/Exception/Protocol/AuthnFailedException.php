@@ -13,4 +13,11 @@ use SAML2\Exception\ProtocolViolationException;
  */
 class AuthnFailedException extends ProtocolViolationException
 {
+    /**
+     * @param string $message
+     */
+    public function __construct(string $message = 'Authentication failed.')
+    {
+        parent::__construct($message);
+    }
 }

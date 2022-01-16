@@ -13,4 +13,11 @@ use SAML2\Exception\ProtocolViolationException;
  */
 class InvalidNameIDPolicyException extends ProtocolViolationException
 {
+    /**
+     * @param string $message
+     */
+    public function __construct(string $message = 'Invalid NameID policy.')
+    {
+        parent::__construct($message);
+    }
 }
