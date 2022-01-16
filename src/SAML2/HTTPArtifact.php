@@ -109,9 +109,9 @@ class HTTPArtifact extends Binding
      * Throws an exception if it is unable receive the message.
      *
      * @param \Psr\Http\Message\ServerRequestInterface $request
-     * @throws \Exception
      * @return \SimpleSAML\SAML2\XML\samlp\AbstractMessage The received message.
      *
+     * @throws \Exception
      * @throws \SimpleSAML\Assert\AssertionFailedException if assertions are false
      */
     public function receive(ServerRequestInterface $request): AbstractMessage
