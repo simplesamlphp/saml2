@@ -14,4 +14,11 @@ use SimpleSAML\SAML2\Exception\ProtocolViolationException;
  */
 class ProxyCountExceededException extends ProtocolViolationException
 {
+    /**
+     * @param string $message
+     */
+    public function __construct(string $message = 'Proxy count exceeded.')
+    {
+        parent::__construct($message);
+    }
 }

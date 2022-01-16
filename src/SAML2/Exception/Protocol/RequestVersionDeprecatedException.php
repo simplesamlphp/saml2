@@ -14,4 +14,11 @@ use SimpleSAML\SAML2\Exception\ProtocolViolationException;
  */
 class RequestVersionDeprecatedException extends ProtocolViolationException
 {
+    /**
+     * @param string $message
+     */
+    public function __construct(string $message = 'Deprecated version used.')
+    {
+        parent::__construct($message);
+    }
 }

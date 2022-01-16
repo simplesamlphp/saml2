@@ -14,4 +14,11 @@ use SimpleSAML\SAML2\Exception\ProtocolViolationException;
  */
 class UnknownPrincipalException extends ProtocolViolationException
 {
+    /**
+     * @param string $message
+     */
+    public function __construct(string $message = 'Unknown principal.')
+    {
+        parent::__construct($message);
+    }
 }

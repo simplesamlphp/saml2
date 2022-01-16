@@ -13,4 +13,11 @@ use SimpleSAML\SAML2\Exception\ProtocolViolationException;
  */
 class NoAuthnContextException extends ProtocolViolationException
 {
+    /**
+     * @param string $message
+     */
+    public function __construct(string $message = 'None of the requested AuthnContext can be used.')
+    {
+        parent::__construct($message);
+    }
 }

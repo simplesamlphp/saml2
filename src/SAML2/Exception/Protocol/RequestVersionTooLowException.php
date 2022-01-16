@@ -14,4 +14,11 @@ use SimpleSAML\SAML2\Exception\ProtocolViolationException;
  */
 class RequestVersionTooLowException extends ProtocolViolationException
 {
+    /**
+     * @param string $message
+     */
+    public function __construct(string $message = 'Protocol version too low.')
+    {
+        parent::__construct($message);
+    }
 }

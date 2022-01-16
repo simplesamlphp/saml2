@@ -14,4 +14,11 @@ use SimpleSAML\SAML2\Exception\ProtocolViolationException;
  */
 class PartialLogoutException extends ProtocolViolationException
 {
+    /**
+     * @param string $message
+     */
+    public function __construct(string $message = 'Unable to propagate logout to all other session participants.')
+    {
+        parent::__construct($message);
+    }
 }

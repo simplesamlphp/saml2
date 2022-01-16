@@ -14,4 +14,11 @@ use SimpleSAML\SAML2\Exception\ProtocolViolationException;
  */
 class ResourceNotRecognizedException extends ProtocolViolationException
 {
+    /**
+     * @param string $message
+     */
+    public function __construct(string $message = 'Resource not recognized.')
+    {
+        parent::__construct($message);
+    }
 }
