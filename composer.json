@@ -23,14 +23,12 @@
         "ext-zlib": "*",
 
         "psr/log": "~1.1",
-        "simplesamlphp/xml-security": "~0.2.7",
-        "simplesamlphp/assert": "~0.2.6"
+        "simplesamlphp/xml-security": "^0.3.3",
+        "simplesamlphp/assert": "^0.2.11"
     },
     "require-dev": {
         "mockery/mockery": "~1.4",
-        "phpunit/phpunit": "^8.5 || ^9.5",
-        "simplesamlphp/simplesamlphp-test-framework": "^1.1.0",
-        "squizlabs/php_codesniffer": "~3.6"
+        "simplesamlphp/simplesamlphp-test-framework": "^1.1.5"
     },
     "autoload": {
         "psr-4": {
