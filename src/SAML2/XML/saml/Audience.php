@@ -40,5 +40,20 @@ final class Audience extends AbstractConditionType
 
         return new self($xml->textContent);
     }
+
+
+    /**
+     * Convert this Audience to XML.
+     *
+     * @param \DOMElement $parent The element we are converting to XML.
+     * @return \DOMElement The XML element after adding the data corresponding to this Condition.
+     */
+    public function toXML(DOMElement $parent = null): DOMElement
+    {
+        $element = $this->instantiateParentElement($parent);
+        $element->textContent = $this->value;
+
+        return $element;
+    }
 }
 
