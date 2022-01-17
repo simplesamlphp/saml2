@@ -23,7 +23,7 @@ abstract class AbstractMetadataDocument extends AbstractSignedMdElement
      *
      * @var string|null
      */
-    protected ?string $ID;
+    protected ?string $id;
 
     /**
      * How long this element is valid, as a unix timestamp.
@@ -43,20 +43,20 @@ abstract class AbstractMetadataDocument extends AbstractSignedMdElement
     /**
      * Generic constructor for SAML metadata documents.
      *
-     * @param string|null $ID The ID for this document. Defaults to null.
+     * @param string|null $id The ID for this document. Defaults to null.
      * @param int|null    $validUntil Unix time of validity for this document. Defaults to null.
      * @param string|null $cacheDuration Maximum time this document can be cached. Defaults to null.
      * @param \SimpleSAML\SAML2\XML\md\Extensions|null $extensions An array of extensions. Defaults to null.
      * @param \DOMAttr[] $namespacedAttributes
      */
     public function __construct(
-        ?string $ID = null,
+        ?string $id = null,
         ?int $validUntil = null,
         ?string $cacheDuration = null,
         ?Extensions $extensions = null,
         $namespacedAttributes = []
     ) {
-        $this->setID($ID);
+        $this->setId($id);
         $this->setValidUntil($validUntil);
         $this->setCacheDuration($cacheDuration);
         $this->setExtensions($extensions);
@@ -65,24 +65,24 @@ abstract class AbstractMetadataDocument extends AbstractSignedMdElement
 
 
     /**
-     * Collect the value of the ID property.
+     * Collect the value of the id property.
      *
      * @return string|null
      */
-    public function getID()
+    public function getId(): ?string
     {
-        return $this->ID;
+        return $this->id;
     }
 
 
     /**
-     * Set the value of the ID property.
+     * Set the value of the id property.
      *
      * @param string|null $id
      */
-    protected function setID(?string $id): void
+    protected function setId(?string $id): void
     {
-        $this->ID = $id;
+        $this->id = $id;
     }
 
 
@@ -174,8 +174,8 @@ abstract class AbstractMetadataDocument extends AbstractSignedMdElement
             $e->setAttributeNS($attr['namespaceURI'], $attr['qualifiedName'], $attr['value']);
         }
 
-        if ($this->ID !== null) {
-            $e->setAttribute('ID', $this->ID);
+        if ($this->id !== null) {
+            $e->setAttribute('ID', $this->id);
         }
 
         if ($this->validUntil !== null) {

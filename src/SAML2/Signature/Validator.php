@@ -7,7 +7,7 @@ namespace SimpleSAML\SAML2\Signature;
 use Psr\Log\LoggerInterface;
 use SimpleSAML\SAML2\Certificate\KeyLoader;
 use SimpleSAML\SAML2\Configuration\CertificateProvider;
-use SimpleSAML\SAML2\XML\SignedElementInterface;
+use SimpleSAML\XMLSecurity\XML\SignedElementInterface;
 
 /**
  * Signature Validator.
@@ -30,7 +30,7 @@ class Validator
 
 
     /**
-     * @param \SimpleSAML\SAML2\XML\SignedElementInterface $signedElement
+     * @param \SimpleSAML\XMLSecurity\XML\SignedElementInterface $signedElement
      * @param \SimpleSAML\SAML2\Configuration\CertificateProvider $configuration
      *
      * @return bool

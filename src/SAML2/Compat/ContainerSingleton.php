@@ -8,15 +8,16 @@ use SimpleSAML\Assert\Assert;
 
 class ContainerSingleton
 {
-    /** @var \SimpleSAML\SAML2\Compat\AbstractContainer|null */
-    protected static ?AbstractContainer $container = null;
+    /** @var \SimpleSAML\SAML2\Compat\AbstractContainer */
+    protected static AbstractContainer $container;
 
 
     /**
-     * @return \SimpleSAML\SAML2\Compat\AbstractContainer|null
+     * @return \SimpleSAML\SAML2\Compat\AbstractContainer
      */
-    public static function getInstance(): ?AbstractContainer
+    public static function getInstance(): AbstractContainer
     {
+        Assert::notNull(self::$container, 'No container set.');
         return self::$container;
     }
 

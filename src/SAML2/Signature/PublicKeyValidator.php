@@ -11,7 +11,7 @@ use SimpleSAML\SAML2\Certificate\KeyCollection;
 use SimpleSAML\SAML2\Certificate\KeyLoader;
 use SimpleSAML\SAML2\Certificate\X509;
 use SimpleSAML\SAML2\Configuration\CertificateProvider;
-use SimpleSAML\SAML2\XML\SignedElementInterface;
+use SimpleSAML\XMLSecurity\XML\SignedElementInterface;
 
 use function count;
 use function sprintf;
@@ -44,7 +44,7 @@ class PublicKeyValidator extends AbstractChainedValidator
 
 
     /**
-     * @param \SimpleSAML\SAML2\XML\SignedElementInterface $signedElement
+     * @param \SimpleSAML\XMLSecurity\XML\SignedElementInterface $signedElement
      * @param \SimpleSAML\SAML2\Configuration\CertificateProvider $configuration
      *
      * @return bool
@@ -60,7 +60,7 @@ class PublicKeyValidator extends AbstractChainedValidator
 
 
     /**
-     * @param \SimpleSAML\SAML2\XML\SignedElementInterface $signedElement
+     * @param \SimpleSAML\XMLSecurity\XML\SignedElementInterface $signedElement
      * @param \SimpleSAML\SAML2\Configuration\CertificateProvider $configuration
      *
      * @return bool

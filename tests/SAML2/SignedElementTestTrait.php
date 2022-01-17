@@ -74,7 +74,7 @@ trait SignedElementTestTrait
             $cert = new XMLSecurityKey($algorithm, ['type' => 'public']);
             $cert->loadKey(PEMCertificatesMock::getPlainPublicKey(PEMCertificatesMock::PUBLIC_KEY));
 
-            /** @var \SimpleSAML\SAML2\XML\SignedElementInterface $post */
+            /** @var \SimpleSAML\XMLSecurity\XML\SignedElementInterface $post */
             $post = $testedClass::fromXML($pre->toXML());
             try {
                 $this->assertTrue($post->validate($cert));

@@ -64,9 +64,9 @@ class ArrayCollection implements Collection
      *
      * @return ArrayCollection
      */
-    public function filter(Closure $f): Collection
+    public function filter(Closure $filterFunction): Collection
     {
-        return new self(array_filter($this->elements, $f));
+        return new self(array_filter($this->elements, $filterFunction));
     }
 
 

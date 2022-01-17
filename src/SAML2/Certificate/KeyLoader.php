@@ -162,6 +162,6 @@ class KeyLoader
      */
     public function hasKeys(): bool
     {
-        return count($this->loadedKeys) && true;
+        return !!count($this->loadedKeys);
     }
 }

@@ -6,7 +6,7 @@ namespace SimpleSAML\SAML2\Signature;
 
 use Psr\Log\LoggerInterface;
 use SimpleSAML\SAML2\Configuration\CertificateProvider;
-use SimpleSAML\SAML2\XML\SignedElementInterface;
+use SimpleSAML\XMLSecurity\XML\SignedElementInterface;
 
 use function get_class;
 use function sprintf;
@@ -51,7 +51,7 @@ class ValidatorChain implements ValidatorInterface
 
 
     /**
-     * @param \SimpleSAML\SAML2\XML\SignedElementInterface $signedElement
+     * @param \SimpleSAML\XMLSecurity\XML\SignedElementInterface $signedElement
      * @param \SimpleSAML\SAML2\Configuration\CertificateProvider $configuration
      *
      * @return bool

@@ -10,14 +10,14 @@ use SimpleSAML\Configuration;
 use SimpleSAML\SAML2\Compat\ContainerSingleton;
 use SimpleSAML\SAML2\Exception\InvalidArgumentException;
 use SimpleSAML\SAML2\Exception\RuntimeException;
-use SimpleSAML\SAML2\Exception\UnparseableXmlException;
 use SimpleSAML\SAML2\Utils\XPath;
 use SimpleSAML\SAML2\XML\samlp\AbstractMessage;
 use SimpleSAML\SAML2\XML\samlp\MessageFactory;
 use SimpleSAML\Utils\Config;
 use SimpleSAML\Utils\Crypto;
+use SimpleSAML\XML\Exception\UnparseableXMLException;
 use SimpleSAML\XMLSecurity\XMLSecurityKey;
-use SoapClient as BUILTIN_SoapClient;
+use SoapClient as BuiltinSoapClient;
 
 use function chunk_split;
 use function file_exists;
@@ -134,7 +134,7 @@ class SOAPClient
             $options['proxy_port'] = $srcMetadata->getValue('saml.SOAPClient.proxyport');
         }
 
-        $x = new BUILTIN_SoapClient(null, $options);
+        $x = new BuiltinSoapClient(null, $options);
 
         // Add soap-envelopes
         $request = $msg->toXML();
@@ -143,7 +143,7 @@ class SOAPClient
         $container->debugMessage($request, 'out');
 
         $action = 'http://www.oasis-open.org/committees/security';
-        $version = BUILTIN_SoapClient::SOAP_1_1;
+        $version = BuiltinSoapClient::SOAP_1_1;
         $destination = $msg->getDestination();
         if ($destination === null) {
             throw new Exception('Cannot send SOAP message, no destination set.');

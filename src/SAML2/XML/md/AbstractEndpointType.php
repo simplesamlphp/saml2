@@ -224,7 +224,7 @@ abstract class AbstractEndpointType extends AbstractMdElement
         }
 
         foreach ($this->getElements() as $child) {
-            $e->appendChild($e->ownerDocument->importNode($child->getXML(), true));
+            $e->appendChild($e->ownerDocument->importNode($child->toXML(), true));
         }
 
         return $e;

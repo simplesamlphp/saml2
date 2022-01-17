@@ -4,11 +4,11 @@ declare(strict_types=1);
 
 namespace SimpleSAML\SAML2\Exception;
 
-use RuntimeException as BUILTIN_RuntimeException;
+use RuntimeException as BuiltinRuntimeException;
 
 /**
  * Named exception
  */
-class RuntimeException extends BUILTIN_RuntimeException
+class RuntimeException extends BuiltinRuntimeException
 {
 }
