@@ -7,8 +7,8 @@ namespace SAML2;
 use SAML2\Message;
 use SAML2\ArtifactResolve;
 
-use Exception;
 use DOMDocument;
+use SAML2\Exception\Protocol\UnsupportedBindingException;
 
 class SOAPTest extends \Mockery\Adapter\Phpunit\MockeryTestCase
 {
@@ -17,7 +17,7 @@ class SOAPTest extends \Mockery\Adapter\Phpunit\MockeryTestCase
      */
     public function testRequestParsingEmptyMessage() : void
     {
-        $this->expectException(Exception::class, 'Invalid message received');
+        $this->expectException(UnsupportedBindingException::class, 'Invalid message received');
 
         $stub = $this->getStubWithInput('');
         $stub->receive();
