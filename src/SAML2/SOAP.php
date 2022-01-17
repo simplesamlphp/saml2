@@ -6,6 +6,7 @@ namespace SimpleSAML\SAML2;
 
 use DOMDocument;
 use Exception;
+use SimpleSAML\SAML2\Exception\Protocol\UnsupportedBindingException;
 use Psr\Http\Message\ServerRequestInterface;
 use SimpleSAML\SAML2\Utils;
 use SimpleSAML\SAML2\Utils\XPath;
@@ -106,7 +107,7 @@ SOAP;
         $postText = $this->getInputStream();
 
         if (empty($postText)) {
-            throw new Exception('Invalid message received to AssertionConsumerService endpoint.');
+            throw new UnsupportedBindingException('Invalid message received at AssertionConsumerService endpoint.');
         }
 
         $document = DOMDocumentFactory::fromString($postText);

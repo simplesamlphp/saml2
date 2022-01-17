@@ -9,6 +9,7 @@ use Mockery\Adapter\Phpunit\MockeryTestCase;
 use Nyholm\Psr7\ServerRequest;
 use SimpleSAML\Assert\AssertionFailedException;
 use SimpleSAML\SAML2\Exception\ProtocolViolationException;
+use SimpleSAML\SAML2\Exception\Protocol\UnsupportedBindingException;
 use SimpleSAML\SAML2\SOAP;
 use SimpleSAML\SAML2\XML\samlp\ArtifactResolve;
 use SimpleSAML\SAML2\XML\samlp\MessageFactory;
@@ -23,8 +24,8 @@ final class SOAPTest extends MockeryTestCase
      */
     public function testRequestParsingEmptyMessage(): void
     {
-        $this->expectException(AssertionFailedException::class);
-        $this->expectExceptionMessage('Expected a different value than "".');
+        $this->expectException(UnsupportedBindingException::class);
+        $this->expectExceptionMessage('Invalid message received');
 
         $request = new ServerRequest('', '');
         $stub = $this->getStubWithInput('');
