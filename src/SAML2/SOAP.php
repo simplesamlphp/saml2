@@ -105,7 +105,7 @@ SOAP;
     {
         $postText = $this->getInputStream();
 
-        if ($postText === false) {
+        if (empty($postText)) {
             throw new Exception('Invalid message received to AssertionConsumerService endpoint.');
         }
 
