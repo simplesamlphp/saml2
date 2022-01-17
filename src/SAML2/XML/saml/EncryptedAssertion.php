@@ -29,11 +29,8 @@ class EncryptedAssertion extends AbstractSamlElement implements EncryptedElement
      *
      * @return \SimpleSAML\SAML2\XML\saml\Assertion
      * @throws \Exception
-     *
-     * @psalm-suppress MismatchingDocblockReturnType
-     * @psalm-suppress ImplementedReturnTypeMismatch
      */
-    public function decrypt(XMLSecurityKey $key, array $blacklist = []): AbstractXMLElement
+    public function decrypt(XMLSecurityKey $key, array $blacklist = []): Assertion
     {
         $assertionXML = Security::decryptElement($this->encryptedData->toXML(), $key, $blacklist);
 

@@ -25,11 +25,8 @@ class EncryptedAttribute extends AbstractSamlElement implements EncryptedElement
      *
      * @return \SimpleSAML\SAML2\XML\saml\Attribute
      * @throws \Exception
-     *
-     * @psalm-suppress MismatchingDocblockReturnType
-     * @psalm-suppress ImplementedReturnTypeMismatch
      */
-    public function decrypt(XMLSecurityKey $key, array $blacklist = []): AbstractXMLElement
+    public function decrypt(XMLSecurityKey $key, array $blacklist = []): Attribute
     {
         $attrXML = Security::decryptElement($this->encryptedData->toXML(), $key, $blacklist);
 
