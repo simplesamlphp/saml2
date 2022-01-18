@@ -51,7 +51,7 @@ final class Audience extends AbstractConditionType
     public function toXML(DOMElement $parent = null): DOMElement
     {
         $element = $this->instantiateParentElement($parent);
-        $element->textContent = $this->value;
+        $element->textContent = $this->content;
 
         return $element;
     }
