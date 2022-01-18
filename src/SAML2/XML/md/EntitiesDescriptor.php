@@ -6,8 +6,8 @@ namespace SimpleSAML\SAML2\XML\md;
 
 use DOMElement;
 use SimpleSAML\Assert\Assert;
+use SimpleSAML\SAML2\Exception\ProtocolViolationException;
 use SimpleSAML\XML\Exception\InvalidDOMElementException;
-use SimpleSAML\XML\Exception\ProtocolViolationException;
 use SimpleSAML\XML\Exception\TooManyElementsException;
 use SimpleSAML\XML\Utils as XMLUtils;
 use SimpleSAML\XMLSecurity\XML\ds\Signature;
@@ -57,7 +57,8 @@ final class EntitiesDescriptor extends AbstractMetadataDocument
     ) {
         Assert::true(
             !empty($entitiesDescriptors) || !empty($entityDescriptors),
-            'At least one md:EntityDescriptor or md:EntitiesDescriptor element is required.'
+            'At least one md:EntityDescriptor or md:EntitiesDescriptor element is required.',
+            ProtocolViolationException::class,
         );
 
         parent::__construct($ID, $validUntil, $cacheDuration, $extensions, $namespacedAttributes);
