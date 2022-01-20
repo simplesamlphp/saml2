@@ -295,7 +295,7 @@ XML;
         $logoutRequest = new LogoutRequest();
         $logoutRequest->setNameID($nameId);
         $logoutRequest->setReason($reason);
-        $logoutRequestElement = $logoutRequest->toXML();
+        $logoutRequestElement = $logoutRequest->toUnsignedXML();
 
         $logoutRequest2 = new LogoutRequest($logoutRequestElement);
         $this->assertEquals($reason, $logoutRequest2->getReason());
