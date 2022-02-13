@@ -24,7 +24,7 @@ jobs:
           extensions: mbstring, xml
           tools: composer:v2
           ini-values: error_reporting=E_ALL
-          coverage: pcov
+          coverage: xdebug
 
       - name: Setup problem matchers for PHP
         run: echo "::add-matcher::${{ runner.tool_cache }}/php.json"
