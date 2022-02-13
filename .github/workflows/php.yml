@@ -23,6 +23,7 @@ jobs:
           php-version: ${{ matrix.php-versions }}
           extensions: mbstring, xml
           tools: composer:v2
+          ini-values: error_reporting=E_ALL
           coverage: pcov
 
       - name: Setup problem matchers for PHP
