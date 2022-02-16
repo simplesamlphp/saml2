@@ -8,8 +8,8 @@ use Mockery;
 use Mockery\Adapter\Phpunit\MockeryTestCase;
 
 /**
- * Because we're mocking a static call, we have to run it in separate processes so as to no contaminate the other
- * tests.
+ * Because we're mocking a static call, we have to run it in separate processes so as to not contaminate
+ * the other tests.
  *
  * @runTestsInSeparateProcesses
  * @package simplesamlphp\saml2
