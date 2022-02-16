@@ -175,6 +175,7 @@ class ArrayCollection implements Collection
      *
      * @return mixed
      */
+    #[\ReturnTypeWillChange]
     public function offsetGet($offset)
     {
         return $this->elements[$offset];
