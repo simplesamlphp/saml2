@@ -27,10 +27,10 @@ class EncryptedID extends AbstractSamlElement implements EncryptedElementInterfa
     /**
      * @inheritDoc
      *
-     * @return \SimpleSAML\SAML2\XML\saml\IdentifierInterface
+     * @return \SimpleSAML\XML\AbstractXMLElement
      * @throws \InvalidArgumentException
      */
-    public function decrypt(XMLSecurityKey $key, array $blacklist = []): IdentifierInterface
+    public function decrypt(XMLSecurityKey $key, array $blacklist = []): AbstractXMLElement
     {
         $xml = Security::decryptElement($this->encryptedData->toXML(), $key, $blacklist);
         $id = implode(':', [$xml->namespaceURI, $xml->localName]);

@@ -6,6 +6,7 @@ namespace SimpleSAML\SAML2\XML\md;
 
 use DOMElement;
 use SimpleSAML\Assert\Assert;
+use SimpleSAML\XML\AbstractXMLElement;
 use SimpleSAML\XML\Chunk;
 use SimpleSAML\XML\Exception\InvalidDOMElementException;
 use SimpleSAML\XML\Exception\TooManyElementsException;
@@ -74,7 +75,7 @@ final class UnknownRoleDescriptor extends AbstractRoleDescriptor
      *
      * @return \SimpleSAML\XML\Chunk
      */
-    public function getElement(): Chunk
+    public function getXML(): Chunk
     {
         return $this->elt;
     }
