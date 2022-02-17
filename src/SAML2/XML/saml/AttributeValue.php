@@ -10,13 +10,14 @@ use Webmozart\Assert\Assert;
 use SAML2\Constants;
 use SAML2\DOMDocumentFactory;
 use SAML2\Utils;
+use Serializable;
 
 /**
  * Serializable class representing an AttributeValue.
  *
  * @package SimpleSAMLphp
  */
-class AttributeValue implements \Serializable
+class AttributeValue implements Serializable
 {
     /**
      * The raw \DOMElement representing this value.
@@ -153,5 +154,40 @@ class AttributeValue implements \Serializable
     {
         $doc = DOMDocumentFactory::fromString(unserialize($serialized));
         $this->element = $doc->documentElement;
+    }
+
+
+
+    /**
+     * Serialize this XML chunk.
+     *
+     * This method will be invoked by any calls to serialize().
+     *
+     * @return array The serialized representation of this XML object.
+     */
+    public function __serialize(): array
+    {
+        return [$this->element->ownerDocument->saveXML($this->element)];
+    }
+
+
+    /**
+     * Unserialize an XML object and load it..
+     *
+     * This method will be invoked by any calls to unserialize(), allowing us to restore any data that might not
+     * be serializable in its original form (e.g.: DOM objects).
+     *
+     * @param array $vars The XML object that we want to restore.
+     */
+    public function __unserialize(array $serialized): void
+    {
+        $xml = new self(
+            DOMDocumentFactory::fromString(array_pop($serialized))->documentElement
+        );
+
+        $vars = get_object_vars($xml);
+        foreach ($vars as $k => $v) {
+            $this->$k = $v;
+        }
     }
 }

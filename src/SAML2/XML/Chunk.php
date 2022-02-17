@@ -8,13 +8,14 @@ use DOMElement;
 
 use SAML2\DOMDocumentFactory;
 use SAML2\Utils;
+use Serializable;
 
 /**
  * Serializable class used to hold an XML element.
  *
  * @package SimpleSAMLphp
  */
-class Chunk implements \Serializable
+class Chunk implements Serializable
 {
     /**
      * The localName of the element.
@@ -131,7 +132,7 @@ class Chunk implements \Serializable
         return serialize($this->xml->ownerDocument->saveXML($this->xml));
     }
 
-    
+
     /**
      * Un-serialize this XML chunk.
      *
@@ -146,5 +147,42 @@ class Chunk implements \Serializable
         $this->xml = $doc->documentElement;
         $this->setLocalName($this->xml->localName);
         $this->setNamespaceURI($this->xml->namespaceURI);
+    }
+
+
+
+    /**
+     * Serialize this XML chunk.
+     *
+     * This method will be invoked by any calls to serialize().
+     *
+     * @return array The serialized representation of this XML object.
+     */
+    public function __serialize(): array
+    {
+        $xml = $this->getXML();
+        /** @psalm-var \DOMDocument $xml->ownerDocument */
+        return [$xml->ownerDocument->saveXML($xml)];
+    }
+
+
+    /**
+     * Unserialize an XML object and load it..
+     *
+     * This method will be invoked by any calls to unserialize(), allowing us to restore any data that might not
+     * be serializable in its original form (e.g.: DOM objects).
+     *
+     * @param array $vars The XML object that we want to restore.
+     */
+    public function __unserialize(array $serialized): void
+    {
+        $xml = new self(
+            DOMDocumentFactory::fromString(array_pop($serialized))->documentElement
+        );
+
+        $vars = get_object_vars($xml);
+        foreach ($vars as $k => $v) {
+            $this->$k = $v;
+        }
     }
 }
