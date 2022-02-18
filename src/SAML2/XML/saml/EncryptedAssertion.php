@@ -6,6 +6,8 @@ namespace SimpleSAML\SAML2\XML\saml;
 
 use SimpleSAML\SAML2\Utils;
 use SimpleSAML\XML\AbstractXMLElement;
+use SimpleSAML\XMLSecurity\Alg\Encryption\EncryptionAlgorithmInterface;
+use SimpleSAML\XMLSecurity\Backend\EncryptionBackend;
 use SimpleSAML\XMLSecurity\Utils\Security;
 use SimpleSAML\XMLSecurity\XML\EncryptedElementInterface;
 use SimpleSAML\XMLSecurity\XML\EncryptedElementTrait;
@@ -24,19 +26,32 @@ class EncryptedAssertion extends AbstractSamlElement implements EncryptedElement
     protected bool $wasSignedAtConstruction = false;
 
 
+    public function getBlacklistedAlgorithms(): ?array
+    {
+        // return an array with the algorithms you don't want to allow to be used
+    }
+
+
+    public function getEncryptionBackend(): ?EncryptionBackend
+    {
+        // return the encryption backend you want to use,
+        // or null if you are fine with the default
+    }
+
+
     /**
      * @inheritDoc
      *
      * @return \SimpleSAML\SAML2\XML\saml\Assertion
      * @throws \Exception
      */
-    public function decrypt(XMLSecurityKey $key, array $blacklist = []): Assertion
+    public function decrypt(EncryptionAlgorithmInterface $decryptor): Assertion
     {
-        $assertionXML = Security::decryptElement($this->encryptedData->toXML(), $key, $blacklist);
+//        $assertionXML = Security::decryptElement($this->encryptedData->toXML(), $key, $blacklist);
 
-        Utils::getContainer()->debugMessage($assertionXML, 'decrypt');
+//        Utils::getContainer()->debugMessage($assertionXML, 'decrypt');
 
-        return Assertion::fromXML($assertionXML);
+//        return Assertion::fromXML($assertionXML);
     }
 
 

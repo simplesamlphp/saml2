@@ -22,15 +22,6 @@ use function preg_split;
 final class UnknownRoleDescriptor extends AbstractRoleDescriptor
 {
     /**
-     * This RoleDescriptor as XML
-     *
-     * @var \SimpleSAML\XML\Chunk
-     * @psalm-suppress PropertyNotSetInConstructor
-     */
-    protected Chunk $xml;
-
-
-    /**
      * Initialize an unknown RoleDescriptor.
      *
      * @param \DOMElement $xml The XML element we should load.
@@ -62,19 +53,10 @@ final class UnknownRoleDescriptor extends AbstractRoleDescriptor
             !empty($orgs) ? $orgs[0] : null,
             ContactPerson::getChildrenOfClass($xml)
         );
-        $object->xml = new Chunk($xml);
+
+        $object->setXML($xml);
+
         return $object;
-    }
-
-
-    /**
-     * Get the original XML of this descriptor as a Chunk object.
-     *
-     * @return \SimpleSAML\XML\AbstractXMLElement
-     */
-    public function getXML(): AbstractXMLElement
-    {
-        return $this->xml;
     }
 
 
@@ -86,6 +68,7 @@ final class UnknownRoleDescriptor extends AbstractRoleDescriptor
      */
     public function toXML(DOMElement $parent = null): DOMElement
     {
-        return $this->xml->toXML($parent);
+        $chunk = new Chunk($this->xml);
+        return $chunk->toXML($parent);
     }
 }

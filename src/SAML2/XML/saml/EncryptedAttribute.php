@@ -4,11 +4,11 @@ declare(strict_types=1);
 
 namespace SimpleSAML\SAML2\XML\saml;
 
-use SimpleSAML\XML\AbstractXMLElement;
+use SimpleSAML\XMLSecurity\Backend\EncryptionBackend;
 use SimpleSAML\XMLSecurity\Utils\Security;
 use SimpleSAML\XMLSecurity\XML\EncryptedElementInterface;
 use SimpleSAML\XMLSecurity\XML\EncryptedElementTrait;
-use SimpleSAML\XMLSecurity\XMLSecurityKey;
+use SimpleSAML\XMLSecurity\Alg\Encryption\EncryptionAlgorithmInterface;
 
 /**
  * Class handling encrypted attributes.
@@ -20,16 +20,29 @@ class EncryptedAttribute extends AbstractSamlElement implements EncryptedElement
     use EncryptedElementTrait;
 
 
+    public function getBlacklistedAlgorithms(): ?array
+    {
+        // return an array with the algorithms you don't want to allow to be used
+    }
+
+
+    public function getEncryptionBackend(): ?EncryptionBackend
+    {
+        // return the encryption backend you want to use,
+        // or null if you are fine with the default
+    }
+
+
     /**
      * @inheritDoc
      *
      * @return \SimpleSAML\SAML2\XML\saml\Attribute
      * @throws \Exception
      */
-    public function decrypt(XMLSecurityKey $key, array $blacklist = []): Attribute
+    public function decrypt(EncryptionAlgorithmInterface $decryptor): Attribute
     {
-        $attrXML = Security::decryptElement($this->encryptedData->toXML(), $key, $blacklist);
+//        $attrXML = Security::decryptElement($this->encryptedData->toXML(), $key, $blacklist);
 
-        return Attribute::fromXML($attrXML);
+//        return Attribute::fromXML($attrXML);
     }
 }
