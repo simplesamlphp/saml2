@@ -37,7 +37,7 @@ final class XmlSignatureWrappingTest extends MockeryTestCase
     {
         $this->signatureValidator = new Validator(new \Psr\Log\NullLogger());
 
-        $pattern = Certificate::CERTIFICATE_PATTERN;
+        $pattern = Certificate::PUBLIC_KEY_PATTERN;
         preg_match($pattern, PEMCertificatesMock::getPlainPublicKey(PEMCertificatesMock::PUBLIC_KEY), $matches);
 
         $this->identityProviderConfiguration = new IdentityProvider(

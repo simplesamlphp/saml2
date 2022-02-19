@@ -132,7 +132,7 @@ final class KeyLoaderTest extends MockeryTestCase
         $loadedKeys = $this->keyLoader->getKeys();
         $loadedKey = $loadedKeys->get(0);
         $fileContents = file_get_contents($file);
-        preg_match(Certificate::CERTIFICATE_PATTERN, $fileContents, $matches);
+        preg_match(Certificate::PUBLIC_KEY_PATTERN, $fileContents, $matches);
         $expected = preg_replace('~\s+~', '', $matches[1]);
 
         $this->assertTrue($this->keyLoader->hasKeys());

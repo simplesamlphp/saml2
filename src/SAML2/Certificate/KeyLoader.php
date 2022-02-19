@@ -143,7 +143,7 @@ class KeyLoader
         }
 
         // capture the certificate contents without the delimiters
-        preg_match(Certificate::CERTIFICATE_PATTERN, $certificate, $matches);
+        preg_match(Certificate::PUBLIC_KEY_PATTERN, $certificate, $matches);
         $this->loadedKeys->add(X509::createFromCertificateData($matches[1]));
     }
 

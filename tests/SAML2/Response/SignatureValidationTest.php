@@ -69,7 +69,7 @@ final class SignatureValidationTest extends MockeryTestCase
             ->once()
             ->andReturn($this->assertionProcessor);
 
-        $pattern = Certificate::CERTIFICATE_PATTERN;
+        $pattern = Certificate::PUBLIC_KEY_PATTERN;
         preg_match($pattern, PEMCertificatesMock::getPlainPublicKey(PEMCertificatesMock::PUBLIC_KEY), $matches);
 
         $this->identityProviderConfiguration
