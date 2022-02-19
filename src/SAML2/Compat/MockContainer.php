@@ -159,4 +159,12 @@ class MockContainer extends AbstractContainer
     {
         return null;
     }
+
+
+    /**
+     * @inheritDoc
+     */
+    public function setBlacklistedAlgorithms(?array $algos): void {
+        $this->blacklistedEncryptionAlgorithms = [];
+    }
 }

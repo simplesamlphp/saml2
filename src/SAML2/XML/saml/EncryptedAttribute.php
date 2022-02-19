@@ -22,7 +22,8 @@ class EncryptedAttribute extends AbstractSamlElement implements EncryptedElement
 
     public function getBlacklistedAlgorithms(): ?array
     {
-        // return an array with the algorithms you don't want to allow to be used
+        $container = ContainerSingleton::getInstance();
+        return $container->getBlacklistedEncryptionAlgorithms();
     }
 
 
