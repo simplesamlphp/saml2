@@ -29,7 +29,7 @@
     "require-dev": {
         "mockery/mockery": "~1.5",
         "nyholm/psr7": "^1.5",
-        "simplesamlphp/simplesamlphp-test-framework": "^1.1.6"
+        "simplesamlphp/simplesamlphp-test-framework": "^1.1.7"
     },
     "autoload": {
         "psr-4": {

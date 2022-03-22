@@ -143,14 +143,13 @@ class SOAPClient
         $container->debugMessage($request, 'out');
 
         $action = 'http://www.oasis-open.org/committees/security';
-        $version = BuiltinSoapClient::SOAP_1_1;
         $destination = $msg->getDestination();
         if ($destination === null) {
             throw new Exception('Cannot send SOAP message, no destination set.');
         }
 
         /* Perform SOAP Request over HTTP */
-        $soapresponsexml = $x->__doRequest($request, $destination, $action, $version);
+        $soapresponsexml = $x->__doRequest($request, $destination, $action, SOAP_1_1);
         if (empty($soapresponsexml)) {
             throw new Exception('Empty SOAP response, check peer certificate.');
         }

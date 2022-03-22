@@ -51,6 +51,9 @@
         <directory name="tests" />
       </errorLevel>
     </InternalMethod>
-
   </issueHandlers>
+
+  <stubs>
+    <file name="vendor/simplesamlphp/simplesamlphp-test-framework/stubs/soap.php" />
+  </stubs>
 </psalm>
