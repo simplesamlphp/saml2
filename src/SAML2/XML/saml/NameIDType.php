@@ -8,6 +8,7 @@ use DOMElement;
 use SimpleSAML\Assert\Assert;
 use SimpleSAML\SAML2\XML\IDNameQualifiersTrait;
 use SimpleSAML\XML\XMLStringElementTrait;
+use SimpleSAML\XMLSecurity\Backend\EncryptionBackend;
 use SimpleSAML\XMLSecurity\XML\EncryptableElementInterface;
 use SimpleSAML\XMLSecurity\XML\EncryptableElementTrait;
 
