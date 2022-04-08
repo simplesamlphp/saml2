@@ -22,6 +22,7 @@ use SimpleSAML\XML\Exception\TooManyElementsException;
 use SimpleSAML\XMLSecurity\TestUtils\PEMCertificatesMock;
 use SimpleSAML\XMLSecurity\XML\ds\KeyInfo;
 use SimpleSAML\XMLSecurity\XML\xenc\CipherData;
+use SimpleSAML\XMLSecurity\XML\xenc\CipherValue;
 use SimpleSAML\XMLSecurity\XML\xenc\DataReference;
 use SimpleSAML\XMLSecurity\XML\xenc\EncryptedData;
 use SimpleSAML\XMLSecurity\XML\xenc\EncryptedKey;
@@ -172,7 +173,7 @@ final class LogoutRequestTest extends MockeryTestCase
     public function testEncryptedNameId(): void
     {
         $ed = new EncryptedData(
-            new CipherData('Nk4W4mx...'),
+            new CipherData(new CipherValue('Nk4W4mx...')),
             'Encrypted_DATA_ID',
             'http://www.w3.org/2001/04/xmlenc#Element',
             "key-type",
