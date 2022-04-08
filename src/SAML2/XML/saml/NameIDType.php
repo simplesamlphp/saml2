@@ -8,6 +8,8 @@ use DOMElement;
 use SimpleSAML\Assert\Assert;
 use SimpleSAML\SAML2\XML\IDNameQualifiersTrait;
 use SimpleSAML\XML\XMLStringElementTrait;
+use SimpleSAML\XMLSecurity\XML\EncryptableElementInterface;
+use SimpleSAML\XMLSecurity\XML\EncryptableElementTrait;
 
 /**
  * SAML NameIDType abstract data type.
@@ -15,10 +17,11 @@ use SimpleSAML\XML\XMLStringElementTrait;
  * @package simplesamlphp/saml2
  */
 
-abstract class NameIDType extends AbstractSamlElement implements IdentifierInterface
+abstract class NameIDType extends AbstractSamlElement implements IdentifierInterface, EncryptableElementInterface
 {
     use IDNameQualifiersTrait;
     use XMLStringElementTrait;
+    use EncryptableElementTrait;
 
     /**
      * A URI reference representing the classification of string-based identifier information. See Section 8.3 for the
@@ -163,5 +166,20 @@ abstract class NameIDType extends AbstractSamlElement implements IdentifierInter
 
         $element->textContent = $this->content;
         return $element;
+    }
+
+
+    public function getBlacklistedAlgorithms(): ?array
+    {
+        // return an array with the algorithms you don't want to allow to be used
+        return [];
+    }
+
+
+    public function getEncryptionBackend(): ?EncryptionBackend
+    {
+        // return the encryption backend you want to use,
+        // or null if you are fine with the default
+        return null;
     }
 }

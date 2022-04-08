@@ -8,7 +8,7 @@ use PHPUnit\Framework\TestCase;
 use Psr\Log\NullLogger;
 use SimpleSAML\SAML2\Assertion\Exception\InvalidAssertionException;
 use SimpleSAML\SAML2\Assertion\ProcessorBuilder;
-use SimpleSAML\SAML2\Constants;
+use SimpleSAML\SAML2\Constants as C;
 use SimpleSAML\SAML2\Configuration\Destination;
 use SimpleSAML\SAML2\Configuration\IdentityProvider;
 use SimpleSAML\SAML2\Configuration\PrivateKey;
@@ -27,7 +27,8 @@ use SimpleSAML\SAML2\XML\samlp\Response;
 use SimpleSAML\SAML2\XML\samlp\Status;
 use SimpleSAML\SAML2\XML\samlp\StatusCode;
 use SimpleSAML\XML\DOMDocumentFactory;
-use SimpleSAML\XMLSecurity\XMLSecurityKey;
+use SimpleSAML\XMLSecurity\Alg\KeyTransport\KeyTransportAlgorithmFactory;
+use SimpleSAML\XMLSecurity\Key\PublicKey;
 use SimpleSAML\XMLSecurity\TestUtils\PEMCertificatesMock;
 
 use function getcwd;
@@ -103,10 +104,10 @@ final class NameIdDecryptionTransformerTest extends TestCase
                         getcwd() . self::FRAMEWORK . '/tests/resources/certificates/rsa-pem/signed.simplesamlphp.org.key',
                         'default',
                         '1234',
-                        true
-                    )
-                ]
-            ]
+                        true,
+                    ),
+                ],
+            ],
         );
 
         $this->assertionProcessor = ProcessorBuilder::build(
@@ -118,25 +119,31 @@ final class NameIdDecryptionTransformerTest extends TestCase
             $this->response
         );
 
-        $pubkey = new XMLSecurityKey(XMLSecurityKey::RSA_1_5, ['type' => 'public']);
-        $pubkey->loadKey(PEMCertificatesMock::getPlainPublicKey(PEMCertificatesMock::PUBLIC_KEY));
+        $encryptor = (new KeyTransportAlgorithmFactory([]))->getAlgorithm(
+            C::KEY_TRANSPORT_RSA_1_5,
+            PublicKey::fromFile(
+                getcwd() . self::FRAMEWORK . '/tests/resources/certificates/rsa-pem/' . PEMCertificatesMock::PUBLIC_KEY,
+            ),
+        );
+        $nameId = new NameID('value', 'name_qualifier');
+        $encryptedId = new EncryptedID($nameId->encrypt($encryptor));
 
         $assertion = new Assertion(
             new Issuer('urn:thki:sid:idp2'),
             '_45e42090d8cbbfa52d5a394b01049fc2221e274182',
             1582718682,
-            new Subject(EncryptedID::fromUnencryptedElement(new NameID('value', 'name_qualifier'), $pubkey)),
+            new Subject($encryptedId),
             null,
             [
                 new AuthnStatement(
                     new AuthnContext(
                         new AuthnContextClassRef('someAuthnContext'),
                         null,
-                        null
+                        null,
                     ),
-                    1583415268
-                )
-            ]
+                    1583415268,
+                ),
+            ],
         );
 
         $this->document = $assertion->toXML()->ownerDocument;
