@@ -28,7 +28,7 @@ abstract class AbstractLocalizedURI extends AbstractLocalizedName
         parent::validateContent($content);
 
         Assert::false(
-            !empty($content) && !filter_var($content, FILTER_VALIDATE_URL),
+            !filter_var($content, FILTER_VALIDATE_URL),
             $this->getQualifiedName() . ' is not a valid URL.',
             ProtocolViolationException::class,
         );
