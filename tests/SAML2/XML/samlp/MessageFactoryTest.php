@@ -35,13 +35,13 @@ final class MessageFactoryTest extends TestCase
         $base = dirname(dirname(dirname(dirname(__FILE__)))) . '/resources/xml/';
 
         return [
-           [$base . 'samlp_AttributeQuery.xml', AttributeQuery::class],
-           [$base . 'samlp_AuthnRequest.xml', AuthnRequest::class],
-           [$base . 'samlp_LogoutResponse.xml', LogoutResponse::class],
-           [$base . 'samlp_LogoutRequest.xml', LogoutRequest::class],
-           [$base . 'samlp_Response.xml', Response::class],
-           [$base . 'samlp_ArtifactResponse.xml', ArtifactResponse::class],
-           [$base . 'samlp_ArtifactResolve.xml', ArtifactResolve::class],
+            'AttributeQuery' => [$base . 'samlp_AttributeQuery.xml', AttributeQuery::class],
+            'AuthnRequest' => [$base . 'samlp_AuthnRequest.xml', AuthnRequest::class],
+            'LogoutResponse' => [$base . 'samlp_LogoutResponse.xml', LogoutResponse::class],
+            'LogoutRequest' => [$base . 'samlp_LogoutRequest.xml', LogoutRequest::class],
+            'Response' => [$base . 'samlp_Response.xml', Response::class],
+            'ArtifactResponse' => [$base . 'samlp_ArtifactResponse.xml', ArtifactResponse::class],
+            'ArtifactResolve' => [$base . 'samlp_ArtifactResolve.xml', ArtifactResolve::class],
         ];
     }
 
