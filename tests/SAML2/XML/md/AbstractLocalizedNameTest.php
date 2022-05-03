@@ -75,7 +75,7 @@ final class AbstractLocalizedNameTest extends TestCase
      */
     public function testUnmarshallingWithoutLang(): void
     {
-        $this->xmlRepresentation->documentElement->removeAttributeNS(ServiceDescription::XML_NS, 'lang');
+        $this->xmlRepresentation->documentElement->removeAttributeNS(Constants::NS_XML, 'lang');
 
         $this->expectException(AssertionFailedException::class);
         $this->expectExceptionMessage('Missing xml:lang from ServiceDescription');
@@ -89,7 +89,7 @@ final class AbstractLocalizedNameTest extends TestCase
      */
     public function testUnmarshallingWithEmptyLang(): void
     {
-        $this->xmlRepresentation->documentElement->setAttributeNS(ServiceDescription::XML_NS, 'lang', '');
+        $this->xmlRepresentation->documentElement->setAttributeNS(Constants::NS_XML, 'lang', '');
 
         $this->expectException(AssertionFailedException::class);
         $this->expectExceptionMessage('xml:lang cannot be empty.');
