@@ -6,8 +6,16 @@ namespace SimpleSAML\Test\SAML2;
 
 use DOMDocument;
 use Exception;
+use SimpleSAML\XMLSecurity\Alg\Signature\SignatureAlgorithmFactory;
+use SimpleSAML\XMLSecurity\Constants as C;
+use SimpleSAML\XMLSecurity\Key\PrivateKey;
+use SimpleSAML\XMLSecurity\Key\X509Certificate as X509;
+use SimpleSAML\XMLSecurity\XML\ds\KeyInfo;
+use SimpleSAML\XMLSecurity\XML\ds\X509Certificate;
+use SimpleSAML\XMLSecurity\XML\ds\X509Data;
 use SimpleSAML\XMLSecurity\TestUtils\PEMCertificatesMock;
-use SimpleSAML\XMLSecurity\XMLSecurityKey;
+use SimpleSAML\XMLSecurity\Utils\Certificate as CertificateUtils;
+//use SimpleSAML\XMLSecurity\XMLSecurityKey;
 
 use function trim;
 
@@ -50,37 +58,51 @@ trait SignedElementTestTrait
         $this->assertNotNull($xmlRepresentation);
         $this->assertNotEmpty($testedClass);
 
-        $algorithms = [
-            XMLSecurityKey::RSA_SHA1,
-            XMLSecurityKey::RSA_SHA256,
-            XMLSecurityKey::RSA_SHA384,
-            XMLSecurityKey::RSA_SHA512,
-        ];
+        $algorithms = array_keys(C::$RSA_DIGESTS);
 
         foreach ($algorithms as $algorithm) {
             // sign with two certificates
-            $key = new XMLSecurityKey($algorithm, ['type' => 'private']);
-            $key->loadKey(PEMCertificatesMock::getPlainPrivateKey(PEMCertificatesMock::PRIVATE_KEY));
-            $pre = $testedClass::fromXML($xmlRepresentation->documentElement);
-            $pre->setSigningKey($key);
-            $pre->setCertificates(
+            $key = PrivateKey::fromFile('vendor/simplesamlphp/xml-security' . PEMCertificatesMock::CERTIFICATE_DIR_RSA . '/' . PEMCertificatesMock::PRIVATE_KEY);
+            $signer = (new SignatureAlgorithmFactory([]))->getAlgorithm($algorithm, $key);
+
+            $cert = X509::fromFile('vendor/simplesamlphp/xml-security' . PEMCertificatesMock::CERTIFICATE_DIR_RSA . '/' . PEMCertificatesMock::PUBLIC_KEY);
+            $oldCert = X509::fromFile('vendor/simplesamlphp/xml-security' . PEMCertificatesMock::CERTIFICATE_DIR_RSA . '/' . PEMCertificatesMock::OTHER_PUBLIC_KEY);
+            $keyInfo = new KeyInfo(
                 [
-                    PEMCertificatesMock::getPlainPublicKey(PEMCertificatesMock::PUBLIC_KEY),
-                    PEMCertificatesMock::getPlainPublicKey(PEMCertificatesMock::OTHER_PUBLIC_KEY)
+                    new X509Data([new X509Certificate(
+                        CertificateUtils::stripHeaders($cert->getCertificate(), CertificateUtils::PUBLIC_KEY_PATTERN),
+                    )]),
+                    new X509Data([new X509Certificate(
+                        CertificateUtils::stripHeaders($oldCert->getCertificate(), CertificateUtils::PUBLIC_KEY_PATTERN),
+                    )]),
                 ]
             );
 
+            $pre = $testedClass::fromXML($xmlRepresentation->documentElement);
+            $pre->sign($signer, C::C14N_EXCLUSIVE_WITHOUT_COMMENTS, $keyInfo);
+            $signed = $this->testedClass::fromXML($pre->toXML());
+
             // verify signature
-            $cert = new XMLSecurityKey($algorithm, ['type' => 'public']);
-            $cert->loadKey(PEMCertificatesMock::getPlainPublicKey(PEMCertificatesMock::PUBLIC_KEY));
+            $cert = X509::fromFile('vendor/simplesamlphp/xml-security' . PEMCertificatesMock::CERTIFICATE_DIR_RSA . '/' . PEMCertificatesMock::PUBLIC_KEY);
+            $verifier = (new SignatureAlgorithmFactory([]))->getAlgorithm(
+                $signed->getSignature()->getSignedInfo()->getSignatureMethod()->getAlgorithm(),
+                $cert,
+            );
+// @TODO: take it from here
+//            try {
+                $post = $signed->verify($verifier);
+
+//            $cert = new XMLSecurityKey($algorithm, ['type' => 'public']);
+//            $cert->loadKey(PEMCertificatesMock::getPlainPublicKey(PEMCertificatesMock::PUBLIC_KEY));
 
             /** @var \SimpleSAML\XMLSecurity\XML\SignedElementInterface $post */
-            $post = $testedClass::fromXML($pre->toXML());
-            try {
-                $this->assertTrue($post->validate($cert));
-            } catch (Exception $e) {
-                $this->fail('Signature validation failed with algorithm: ' . $algorithm);
-            }
+//            $post = $testedClass::fromXML($pre->toXML());
+//            try {
+                $this->assertInstanceOf($this->testedClass, $post);
+//            } catch (Exception $e) {
+//                $this->fail('Signature validation failed with algorithm: ' . $algorithm);
+//            }
+/*
             $this->assertEquals(
                 [trim(PEMCertificatesMock::getPlainPublicKey(PEMCertificatesMock::PUBLIC_KEY))],
                 $post->getValidatingCertificates(),
@@ -123,6 +145,7 @@ trait SignedElementTestTrait
                     $e->getMessage()
                 );
             }
+*/
         }
     }
 }
