@@ -11,13 +11,13 @@
     blockDefault="substitution"
     version="2.0">
     <import namespace="http://www.w3.org/2000/09/xmldsig#"
-        schemaLocation="xmldsig-core-schema.xsd"/>
+        schemaLocation="../vendor/simplesamlphp/xml-security/schemas/xmldsig-core-schema.xsd"/>
     <import namespace="http://www.w3.org/2001/04/xmlenc#"
-        schemaLocation="xenc-schema.xsd"/>
+        schemaLocation="../vendor/simplesamlphp/xml-security/schemas/xenc-schema.xsd"/>
     <import namespace="urn:oasis:names:tc:SAML:2.0:assertion"
         schemaLocation="saml-schema-assertion-2.0.xsd"/>
     <import namespace="http://www.w3.org/XML/1998/namespace"
-        schemaLocation="xml.xsd"/>
+        schemaLocation="../vendor/simplesamlphp/xml-common/schemas/xml.xsd"/>
     <annotation>
         <documentation>
             Document identifier: saml-schema-metadata-2.0
