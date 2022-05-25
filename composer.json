@@ -22,7 +22,7 @@
         "ext-dom": "*",
         "ext-zlib": "*",
 
-        "psr/log": "~1.1",
+        "psr/log": "~1.1 || ^2.0 || ^3.0",
         "simplesamlphp/xml-security": "^0.4.3",
         "simplesamlphp/assert": "^0.2.13"
     },
