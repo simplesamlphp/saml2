@@ -763,7 +763,7 @@ class SoapHeader  {
  * </p>
  * @return bool the original value.
  */
-function use_soap_error_handler ($handler = true) {}
+//function use_soap_error_handler ($handler = true) {}
 
 /**
  * Checks if a SOAP call has failed
@@ -773,7 +773,7 @@ function use_soap_error_handler ($handler = true) {}
  * </p>
  * @return bool This will return <b>TRUE</b> on error, and <b>FALSE</b> otherwise.
  */
-function is_soap_fault ($object) {}
+//function is_soap_fault ($object) {}
 
 define ('SOAP_1_1', 1);
 define ('SOAP_1_2', 2);
