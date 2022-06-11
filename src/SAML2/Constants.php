@@ -442,4 +442,9 @@ class Constants
      * Second-level status code.
      */
     const STATUS_UNSUPPORTED_BINDING = 'urn:oasis:names:tc:SAML:2.0:status:UnsupportedBinding';
+
+    /**
+     * The maximum size for any entityid as per specification
+     */
+    public const ENTITYID_MAX_LENGTH = 1024;
 }
