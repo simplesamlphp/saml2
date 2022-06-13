@@ -46,7 +46,7 @@ final class AffiliateMember extends AbstractMdElement
         Assert::maxLength(
             $content,
             C::ENTITYID_MAX_LENGTH,
-            'The AffiliateMember cannot be longer than 1024 characters.',
+            sprintf('The AffiliateMember cannot be longer than %d characters.', C::ENTITYID_MAX_LENGTH),
             ProtocolViolationException::class
         );
     }
