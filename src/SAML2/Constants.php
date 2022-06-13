@@ -447,4 +447,9 @@ class Constants
      * The maximum size for any entityid as per specification
      */
     public const ENTITYID_MAX_LENGTH = 1024;
+
+    /**
+     * The maximum size for any entityid as per SAML2INT-specification
+     */
+    public const SAML2INT_ENTITYID_MAX_LENGTH = 256;
 }
