@@ -16,7 +16,9 @@ use SimpleSAML\SAML2\XML\samlp\Status;
 use SimpleSAML\SAML2\XML\samlp\StatusCode;
 use SimpleSAML\Utils\HTTP;
 use SimpleSAML\XMLSecurity\TestUtils\PEMCertificatesMock;
-use SimpleSAML\XMLSecurity\XMLSecurityKey;
+use SimpleSAML\XMLSecurity\Constants as C;
+use SimpleSAML\XMLSecurity\Alg\Signature\SignatureAlgorithmFactory;
+use SimpleSAML\XMLSecurity\Key\PrivateKey;
 
 /**
  * @covers \SimpleSAML\SAML2\HTTPPost
@@ -161,7 +163,17 @@ final class HTTPPostTest extends MockeryTestCase
             []
         );
         $response->setRelayState('http://example.org');
-        $response->setSigningKey(PEMCertificatesMock::getPrivateKey(XMLSecurityKey::RSA_SHA256, PEMCertificatesMock::SELFSIGNED_PRIVATE_KEY));
+        $key = PrivateKey::fromFile(
+            'vendor/simplesamlphp/xml-security'
+            . PEMCertificatesMock::CERTIFICATE_DIR_RSA
+            . '/'
+            . PEMCertificatesMock::SELFSIGNED_PRIVATE_KEY
+        );
+        $signer = (new SignatureAlgorithmFactory())->getAlgorithm(
+            C::SIG_RSA_SHA256,
+            $key
+        );
+        $response->sign($signer);
 
         $hr = new HTTPPost();
         $hr->send($response);
