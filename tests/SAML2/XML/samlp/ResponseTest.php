@@ -35,11 +35,14 @@ final class ResponseTest extends TestCase
         $status = new Status(new StatusCode());
         $issuer = new Issuer('SomeIssuer');
 
-        $response = new Response($status, $issuer, null, null, null, null, Constants::CONSENT_EXPLICIT);
+        $response = new Response($status, $issuer, null, null, null, 'urn:some:destination', Constants::CONSENT_EXPLICIT);
         $responseElement = $response->toXML();
 
         $this->assertTrue($responseElement->hasAttribute('Consent'));
         $this->assertEquals($responseElement->getAttribute('Consent'), Constants::CONSENT_EXPLICIT);
+
+        $this->assertTrue($responseElement->hasAttribute('Destination'));
+        $this->assertEquals($responseElement->getAttribute('Destination'), 'urn:some:destination');
 
         $issuerElements = XPath::xpQuery(
             $responseElement,

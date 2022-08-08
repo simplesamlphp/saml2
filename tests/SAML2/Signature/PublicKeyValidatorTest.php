@@ -107,7 +107,7 @@ final class PublicKeyValidatorTest extends MockeryTestCase
         $config = new IdentityProvider(['certificateData' => $matches[1]]);
         $validator = new PublicKeyValidator(new SimpleTestLogger(), new KeyLoader());
 
-        $doc = DOMDocumentFactory::fromFile(__DIR__ . '/response.xml');
+        $doc = DOMDocumentFactory::fromFile(__DIR__ . '/../../resources/xml/samlp_Response.xml');
         $response = Response::fromXML($doc->firstChild);
         $response->setSigningKey(
             PEMCertificatesMock::getPrivateKey(XMLSecurityKey::RSA_SHA256, PEMCertificatesMock::PRIVATE_KEY)

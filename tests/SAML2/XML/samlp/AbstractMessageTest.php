@@ -172,7 +172,7 @@ AUTHNREQUEST
     public function testCorrectSignatureMethodCanBeExtractedFromResponse(): void
     {
         $response = new DOMDocument();
-        $response->load(__DIR__ . '../../../Response/response.xml');
+        $response->load(__DIR__ . '../../../../resources/xml/samlp_Response.xml');
 
         $privateKey = PEMCertificatesMock::getPrivateKey(
             XMLSecurityKey::RSA_SHA256,

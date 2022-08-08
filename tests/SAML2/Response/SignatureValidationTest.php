@@ -53,7 +53,7 @@ final class SignatureValidationTest extends MockeryTestCase
     /**
      * @var string
      */
-    private string $currentDestination = 'http://moodle.bridge.feide.no/simplesaml/saml2/sp/AssertionConsumerService.php';
+    private string $currentDestination = 'urn:some:destination';
 
 
     /**
@@ -183,7 +183,7 @@ final class SignatureValidationTest extends MockeryTestCase
     private function getSignedResponseWithUnsignedAssertion(): Response
     {
         $doc = new DOMDocument();
-        $doc->load(__DIR__ . '/response.xml');
+        $doc->load(__DIR__ . '../../../resources/xml/samlp_Response.xml');
         $response = Response::fromXML($doc->documentElement);
         $response->setSigningKey(
             PEMCertificatesMock::getPrivateKey(XMLSecurityKey::RSA_SHA256, PEMCertificatesMock::PRIVATE_KEY)
@@ -202,6 +202,7 @@ final class SignatureValidationTest extends MockeryTestCase
     {
         $doc = new DOMDocument();
         $doc->load(__DIR__ . '/unsignedResponseWithSignedAssertion.xml');
+
         return Response::fromXML($doc->documentElement);
     }
 
@@ -229,7 +230,8 @@ final class SignatureValidationTest extends MockeryTestCase
     private function getUnsignedResponseWithUnsignedAssertion(): Response
     {
         $doc = new DOMDocument();
-        $doc->load(__DIR__ . '/response.xml');
+        $doc->load(__DIR__ . '../../../resources/xml/samlp_Response.xml');
+
         return Response::fromXML($doc->documentElement);
     }
 }
