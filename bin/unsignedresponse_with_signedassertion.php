@@ -33,7 +33,7 @@ $unsignedResponse = new Response(
     'abc123',
     null,
     '123456',
-    null,
+    'urn:some:destination',
     'urn:some:sp',
     null,
     [$unsignedAssertion]
