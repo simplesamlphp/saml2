@@ -188,7 +188,10 @@ class Response extends AbstractStatusResponse
         $e = parent::toUnsignedXML($parent);
 
         foreach ($this->assertions as $assertion) {
-            $assertion->toXML($e);
+            // $assertion->toXML($e); // Doesn't work for unknown reasons
+            $elt = $assertion->toXML();
+            $import = $e->ownerDocument->importNode($elt, true);
+            $e->appendChild($import);
         }
 
         return $e;

@@ -201,7 +201,7 @@ final class SignatureValidationTest extends MockeryTestCase
     private function getUnsignedResponseWithSignedAssertion(): Response
     {
         $doc = new DOMDocument();
-        $doc->load(__DIR__ . '/unsignedResponseWithSignedAssertion.xml');
+        $doc->load(__DIR__ . '../../../resources/xml/response/unsignedresponse_with_signedassertion.xml');
 
         return Response::fromXML($doc->documentElement);
     }
@@ -213,7 +213,7 @@ final class SignatureValidationTest extends MockeryTestCase
     private function getSignedResponseWithSignedAssertion(): Response
     {
         $doc = new DOMDocument();
-        $doc->load(__DIR__ . '/unsignedResponseWithSignedAssertion.xml');
+        $doc->load(__DIR__ . '../../../resources/xml/response/unsignedresponse_with_signedassertion.xml');
         $response = Response::fromXML($doc->documentElement);
         $response->setSigningKey(
             PEMCertificatesMock::getPrivateKey(XMLSecurityKey::RSA_SHA256, PEMCertificatesMock::PRIVATE_KEY)
