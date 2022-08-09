@@ -10,13 +10,23 @@ use SimpleSAML\SAML2\XML\saml\Issuer;
 use SimpleSAML\SAML2\XML\saml\NameID;
 use SimpleSAML\SAML2\XML\samlp\LogoutRequest;
 use SimpleSAML\XMLSecurity\TestUtils\PEMCertificatesMock;
-use SimpleSAML\XMLSecurity\XMLSecurityKey;
+use SimpleSAML\XMLSecurity\Constants as C;
+use SimpleSAML\XMLSecurity\Alg\KeyTransport\KeyTransportAlgorithmFactory;
+use SimpleSAML\XMLSecurity\Key\PublicKey;
 
 ContainerSingleton::setContainer(new MockContainer());
 
-$publicKey = PEMCertificatesMock::getPublicKey(XMLSecurityKey::RSA_OAEP_MGF1P, PEMCertificatesMock::SELFSIGNED_PUBLIC_KEY);
+$encryptor = (new KeyTransportAlgorithmFactory())->getAlgorithm(
+    C::KEY_TRANSPORT_OAEP,
+    PublicKey::fromFile(
+        '../vendor/simplesamlphp/xml-security'
+        . PEMCertificatesMock::CERTIFICATE_DIR_RSA
+        . '/'
+        . PEMCertificatesMock::SELFSIGNED_PUBLIC_KEY
+    )
+);
 $nid = new NameID('very secret');
-$eid = EncryptedID::fromUnencryptedElement($nid, $publicKey);
+$eid = $nid->encrypt($encryptor);
 
 $logoutRequest = new LogoutRequest(
     $eid,

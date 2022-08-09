@@ -11,13 +11,24 @@ use SimpleSAML\SAML2\XML\saml\NameID;
 use SimpleSAML\SAML2\XML\saml\Subject;
 use SimpleSAML\SAML2\XML\samlp\AuthnRequest;
 use SimpleSAML\XMLSecurity\TestUtils\PEMCertificatesMock;
-use SimpleSAML\XMLSecurity\XMLSecurityKey;
+use SimpleSAML\XMLSecurity\Constants as C;
+use SimpleSAML\XMLSecurity\Alg\KeyTransport\KeyTransportAlgorithmFactory;
+use SimpleSAML\XMLSecurity\Key\PublicKey;
 
 ContainerSingleton::setContainer(new MockContainer());
 
-$publicKey = PEMCertificatesMock::getPublicKey(XMLSecurityKey::RSA_SHA256, PEMCertificatesMock::SELFSIGNED_PUBLIC_KEY);
+$encryptor = (new KeyTransportAlgorithmFactory())->getAlgorithm(
+    C::KEY_TRANSPORT_OAEP,
+    PublicKey::fromFile(
+        '../vendor/simplesamlphp/xml-security'
+        . PEMCertificatesMock::CERTIFICATE_DIR_RSA
+        . '/'
+        . PEMCertificatesMock::SELFSIGNED_PUBLIC_KEY
+    )
+);
+
 $nid = new NameID('very secret');
-$eid = EncryptedID::fromUnencryptedElement($nid, $publicKey);
+$eid = $nid->encrypt($encryptor);
 
 $issuer = new Issuer('https://gateway.example.org/saml20/sp/metadata');
 $subject = new Subject($eid);

@@ -11,16 +11,19 @@ use SimpleSAML\SAML2\XML\samlp\Status;
 use SimpleSAML\SAML2\XML\samlp\StatusCode;
 use SimpleSAML\XML\DOMDocumentFactory;
 use SimpleSAML\XMLSecurity\TestUtils\PEMCertificatesMock;
-use SimpleSAML\XMLSecurity\XMLSecurityKey;
+use SimpleSAML\XMLSecurity\Constants as C;
+use SimpleSAML\XMLSecurity\Alg\Signature\SignatureAlgorithmFactory;
+use SimpleSAML\XMLSecurity\Key\PrivateKey;
+
+$key = PrivateKey::fromFile('../vendor/simplesamlphp/xml-security' . PEMCertificatesMock::CERTIFICATE_DIR_RSA . '/' . PEMCertificatesMock::SELFSIGNED_PRIVATE_KEY);
+$assertionSigner = (new SignatureAlgorithmFactory())->getAlgorithm(
+    C::SIG_RSA_SHA256,
+    $key
+);
 
 $document = DOMDocumentFactory::fromFile(dirname(dirname(__FILE__)) . '/tests/resources/xml/saml_Assertion.xml');
-$assertion = Assertion::fromXML($document->documentElement);
-
-$privateKey = PEMCertificatesMock::getPrivateKey(XMLSecurityKey::RSA_SHA256, PEMCertificatesMock::SELFSIGNED_PRIVATE_KEY);
-
 $unsignedAssertion = Assertion::fromXML($document->documentElement);
-$unsignedAssertion->setSigningKey($privateKey);
-$unsignedAssertion->setCertificates([PEMCertificatesMock::getPlainPublicKey(PEMCertificatesMock::SELFSIGNED_PUBLIC_KEY)]);
+$unsignedAssertion->sign($assertionSigner);
 
 $unsignedResponse = new Response(
     new Status(new StatusCode(Constants::STATUS_SUCCESS)),
@@ -33,8 +36,12 @@ $unsignedResponse = new Response(
     null,
     [$unsignedAssertion]
 );
-$unsignedResponse->setSigningKey($privateKey);
-$unsignedResponse->setCertificates([PEMCertificatesMock::getPlainPublicKey(PEMCertificatesMock::SELFSIGNED_PUBLIC_KEY)]);
 
-$signedResponse = $unsignedResponse->toXML();
-echo $signedResponse->ownerDocument->saveXML();
+$otherKey = PrivateKey::fromFile('../vendor/simplesamlphp/xml-security' . PEMCertificatesMock::CERTIFICATE_DIR_RSA . '/' . PEMCertificatesMock::OTHER_PRIVATE_KEY);
+$responseSigner = (new SignatureAlgorithmFactory())->getAlgorithm(
+    C::SIG_RSA_SHA512,
+    $otherKey
+);
+
+$unsignedResponse->sign($responseSigner);
+echo $unsignedResponse->toXML()->ownerDocument->saveXML();
