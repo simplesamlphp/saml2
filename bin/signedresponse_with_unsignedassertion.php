@@ -15,15 +15,8 @@ use SimpleSAML\XMLSecurity\Constants as C;
 use SimpleSAML\XMLSecurity\Alg\Signature\SignatureAlgorithmFactory;
 use SimpleSAML\XMLSecurity\Key\PrivateKey;
 
-$key = PrivateKey::fromFile('../vendor/simplesamlphp/xml-security' . PEMCertificatesMock::CERTIFICATE_DIR_RSA . '/' . PEMCertificatesMock::SELFSIGNED_PRIVATE_KEY);
-$assertionSigner = (new SignatureAlgorithmFactory())->getAlgorithm(
-    C::SIG_RSA_SHA256,
-    $key
-);
-
 $document = DOMDocumentFactory::fromFile(dirname(dirname(__FILE__)) . '/tests/resources/xml/saml_Assertion.xml');
 $unsignedAssertion = Assertion::fromXML($document->documentElement);
-$unsignedAssertion->sign($assertionSigner);
 
 $unsignedResponse = new Response(
     new Status(new StatusCode(Constants::STATUS_SUCCESS)),
