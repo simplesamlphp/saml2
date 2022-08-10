@@ -7,9 +7,10 @@ namespace SimpleSAML\SAML2\Signature;
 use Exception;
 use Psr\Log\LoggerInterface;
 use SimpleSAML\SAML2\Utilities\ArrayCollection;
+use SimpleSAML\XMLSecurity\Alg\Signature\SignatureAlgorithmFactory;
+use SimpleSAML\XMLSecurity\Key\X509Certificate as X509;
 use SimpleSAML\XMLSecurity\Utils\Security;
 use SimpleSAML\XMLSecurity\XML\SignedElementInterface;
-use SimpleSAML\XMLSecurity\XMLSecurityKey;
 
 use function sprintf;
 
@@ -48,15 +49,17 @@ abstract class AbstractChainedValidator implements ChainedValidator
     ): bool {
         $lastException = null;
         foreach ($pemCandidates as $index => $candidateKey) {
-            $key = new XMLSecurityKey(XMLSecurityKey::RSA_SHA256, ['type' => 'public']);
-            $key->loadKey($candidateKey->getCertificate());
-            $key = Security::castKey($key, $element->getSignature()->getAlgorithm(), 'public');
+            $cert = new X509($candidateKey->getCertificate());
+            $verifier = (new SignatureAlgorithmFactory([]))->getAlgorithm(
+                $element->getSignature()->getSignedInfo()->getSignatureMethod()->getAlgorithm(),
+                $cert,
+            );
 
             try {
                 /*
                  * Make sure that we have a valid signature on either the response or the assertion.
                  */
-                $result = $element->validate($key);
+                $result = $element->verify($verifier);
                 if ($result) {
                     $this->logger->debug(sprintf('Validation with key "#%d" succeeded', $index));
                     return true;

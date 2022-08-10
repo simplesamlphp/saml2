@@ -107,15 +107,10 @@ final class PublicKeyValidatorTest extends MockeryTestCase
         $config = new IdentityProvider(['certificateData' => $matches[1]]);
         $validator = new PublicKeyValidator(new SimpleTestLogger(), new KeyLoader());
 
-        $doc = DOMDocumentFactory::fromFile(__DIR__ . '/../../resources/xml/samlp_Response.xml');
-        $response = Response::fromXML($doc->firstChild);
-        $response->setSigningKey(
-            PEMCertificatesMock::getPrivateKey(XMLSecurityKey::RSA_SHA256, PEMCertificatesMock::PRIVATE_KEY)
-        );
-        $response->setCertificates([PEMCertificatesMock::getPlainPublicKey(PEMCertificatesMock::PUBLIC_KEY)]);
+        $doc = DOMDocumentFactory::fromFile(__DIR__ . '/../../resources/xml/response/signedresponse_with_unsignedassertion.xml');
 
         // convert to signed response
-        $response = Response::fromXML($response->toXML());
+        $response = Response::fromXML($doc->documentElement);
 
         $this->assertTrue($validator->canValidate($response, $config), 'Cannot validate the element');
         $this->assertTrue($validator->hasValidSignature($response, $config), 'The signature is not valid');
