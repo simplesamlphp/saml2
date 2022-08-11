@@ -23,8 +23,10 @@ use SimpleSAML\SAML2\XML\mdattr\EntityAttributes;
 use SimpleSAML\Test\XML\SerializableXMLTestTrait;
 use SimpleSAML\XML\Chunk;
 use SimpleSAML\XML\DOMDocumentFactory;
+use SimpleSAML\XMLSecurity\Constants as C;
+use SimpleSAML\XMLSecurity\Alg\Signature\SignatureAlgorithmFactory;
+use SimpleSAML\XMLSecurity\Key\PrivateKey;
 use SimpleSAML\XMLSecurity\TestUtils\PEMCertificatesMock;
-use SimpleSAML\XMLSecurity\XMLSecurityKey;
 
 use function dirname;
 use function strval;
@@ -125,9 +127,14 @@ final class EntityAttributesTest extends TestCase
         $unsignedAssertion = new Assertion($issuer, null, 1610743797, null, $conditions, [$attrStatement]);
 
         // Sign the assertion
-        $privateKey = PEMCertificatesMock::getPrivateKey(XMLSecurityKey::RSA_SHA256, PEMCertificatesMock::PRIVATE_KEY);
-        $unsignedAssertion->setSigningKey($privateKey);
-        $unsignedAssertion->setCertificates([PEMCertificatesMock::getPlainPublicKey(PEMCertificatesMock::PUBLIC_KEY)]);
+        $key = PrivateKey::fromFile(
+            PEMCertificatesMock::getPrivateKey(XMLSecurityKey::RSA_SHA256, PEMCertificatesMock::PRIVATE_KEY)
+        );
+        $signer = (new SignatureAlgorithmFactory())->getAlgorithm(
+            C::SIG_RSA_SHA256,
+            $key
+        );
+        $unsignedAssertion->sign($signer);
         $signedAssertion = Assertion::fromXML($unsignedAssertion->toXML());
 
         $attribute2 = new Attribute(
