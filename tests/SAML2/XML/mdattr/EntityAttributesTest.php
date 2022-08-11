@@ -128,7 +128,10 @@ final class EntityAttributesTest extends TestCase
 
         // Sign the assertion
         $key = PrivateKey::fromFile(
-            PEMCertificatesMock::getPrivateKey(XMLSecurityKey::RSA_SHA256, PEMCertificatesMock::PRIVATE_KEY)
+            'vendor/simplesamlphp/xml-security'
+            . PEMCertificatesMock::CERTIFICATE_DIR_RSA
+            . '/'
+            . PEMCertificatesMock::PRIVATE_KEY
         );
         $signer = (new SignatureAlgorithmFactory())->getAlgorithm(
             C::SIG_RSA_SHA256,
@@ -161,11 +164,11 @@ final class EntityAttributesTest extends TestCase
     public function testUnmarshalling(): void
     {
         $entityAttributes = EntityAttributes::fromXML($this->xmlRepresentation->documentElement);
-        $this->assertCount(4, $entityAttributes->getChildren());
+        $this->assertCount(3, $entityAttributes->getChildren());
 
         $this->assertInstanceOf(Attribute::class, $entityAttributes->getChildren()[0]);
-        $this->assertInstanceOf(Assertion::class, $entityAttributes->getChildren()[2]);
-        $this->assertInstanceOf(Attribute::class, $entityAttributes->getChildren()[3]);
+        $this->assertInstanceOf(Assertion::class, $entityAttributes->getChildren()[1]);
+        $this->assertInstanceOf(Attribute::class, $entityAttributes->getChildren()[2]);
 
         $this->assertEquals('Assertion', $entityAttributes->getChildren()[0]->getLocalName());
         $this->assertEquals(
