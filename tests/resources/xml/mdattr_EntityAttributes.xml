@@ -4,8 +4,7 @@
     <saml:AttributeValue>really</saml:AttributeValue>
     <saml:AttributeValue>cool</saml:AttributeValue>
   </saml:Attribute>
-  <saml:Assertion xmlns:saml="urn:oasis:names:tc:SAML:2.0:assertion" ID="123" Version="2.0" IssueInstant="2021-01-15T20:49:57Z">
-    <saml:Issuer>testIssuer</saml:Issuer>
+  <saml:Assertion xmlns:saml="urn:oasis:names:tc:SAML:2.0:assertion" ID="123" IssueInstant="2022-08-12T16:37:52Z" Version="2.0">
     <ds:Signature xmlns:ds="http://www.w3.org/2000/09/xmldsig#">
       <ds:SignedInfo>
         <ds:CanonicalizationMethod Algorithm="http://www.w3.org/2001/10/xml-exc-c14n#"/>
@@ -16,16 +15,15 @@
             <ds:Transform Algorithm="http://www.w3.org/2001/10/xml-exc-c14n#"/>
           </ds:Transforms>
           <ds:DigestMethod Algorithm="http://www.w3.org/2001/04/xmlenc#sha256"/>
-          <ds:DigestValue>SCbX0otQlMh1TcRXnqFoA2WLWC3sdWKGZW4ETJ0x+tw=</ds:DigestValue>
+          <ds:DigestValue>nakLanQT5v9Ed78eOI0/S/DjIdtlrmCKwGwHUMY91r8=</ds:DigestValue>
         </ds:Reference>
       </ds:SignedInfo>
-      <ds:SignatureValue>k44U9ZD3SKrbiVABLDA3Irj40vzZpUEXO+xMyODh5tacLjzn8OjMpxh94kHpquNvku4O/6VFQUQ56psdVnIPYqMoYNFEXYd0I79mL3J32j3kRpUCDLS6tfaHetkwfarY9NmbV/p02chc60s1RzbYCN1SBy30FbrlZ0VVELTGskU=</ds:SignatureValue>
-      <ds:KeyInfo>
-        <ds:X509Data>
-          <ds:X509Certificate>MIICejCCAeMCAQIwDQYJKoZIhvcNAQELBQAwgZkxKDAmBgkqhkiG9w0BCQEWGW5vcmVwbHlAc2ltcGxlc2FtbHBocC5vcmcxITAfBgNVBAMMGFNpbXBsZVNBTUxwaHAgVGVzdGluZyBDQTEZMBcGA1UECgwQU2ltcGxlU0FNTHBocCBIUTERMA8GA1UEBwwISG9ub2x1bHUxDzANBgNVBAgMBkhhd2FpaTELMAkGA1UEBhMCVVMwIBcNMjAwNjIzMjEwMTEyWhgPMjEyMDA1MzAyMTAxMTJaMG8xITAfBgNVBAMMGHNpZ25lZC5zaW1wbGVzYW1scGhwLm9yZzEZMBcGA1UECgwQU2ltcGxlU0FNTHBocCBIUTERMA8GA1UEBwwISG9ub2x1bHUxDzANBgNVBAgMBkhhd2FpaTELMAkGA1UEBhMCVVMwgZ8wDQYJKoZIhvcNAQEBBQADgY0AMIGJAoGBALuMVaNnAmDFntLVjy2r45LUk78YJkfON1pXPdIGJIH6A6rmTfOF4wylFq+OFm/C+WO5NOjr6R5u3o+H0yJwFwjHvNP00YOwIyV5fPdRfdPIXTORfXm3dsZrPa8DX7dgr1JoH38UAhznAsBHKopxvo6QH0y5lgUZJZtYYgdVJYDXAgMBAAEwDQYJKoZIhvcNAQELBQADgYEAcRiK8D3cCCOF6i8Z/WQnD0I3xvzOc/WK5NeNFh7Z+K/3V2/BtRttXlbrChsDFvGd82zQzrsBjNsPXte7aG3fx8D3oXZGbySC9e81d65HbLRa8F7dIQT4lTwqYWlLThRIBzKogchlqrxBuTSHkhRzA2YtaEHngwI6Stzd0EIGnm8=</ds:X509Certificate>
-        </ds:X509Data>
-      </ds:KeyInfo>
+      <ds:SignatureValue>HboZdmxO4I6z/K4PnXTH3H3NRbmwcAuhD7HUAWsTrlK8oG5asm3whZwDWEkc1lwgyqdOm6vmwLj6OKTWyYDCzzPWBAQ4m50LMjik5dIe/6IzSQDQPbv4Rhn3yXcuNG1/bDkoX4nsYR7Tek1SHRAVixDSsPdbzvPkYmmQujy1tkQ=</ds:SignatureValue>
     </ds:Signature>
+    <saml:Issuer>testIssuer</saml:Issuer>
+    <saml:Subject>
+      <saml:NameID Format="urn:oasis:names:tc:SAML:2.0:nameid-format:entity">some:entity</saml:NameID>
+    </saml:Subject>
     <saml:Conditions>
       <saml:AudienceRestriction>
         <saml:Audience>audience1</saml:Audience>

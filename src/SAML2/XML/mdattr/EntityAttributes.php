@@ -6,13 +6,20 @@ namespace SimpleSAML\SAML2\XML\mdattr;
 
 use DOMElement;
 use SimpleSAML\Assert\Assert;
-use SimpleSAML\SAML2\Utils\XPath;
 use SimpleSAML\SAML2\Exception\ProtocolViolationException;
+use SimpleSAML\SAML2\Constants as C;
+use SimpleSAML\SAML2\Utils\XPath;
 use SimpleSAML\SAML2\XML\saml\Assertion;
 use SimpleSAML\SAML2\XML\saml\Attribute;
 use SimpleSAML\SAML2\XML\saml\AttributeStatement;
+use SimpleSAML\SAML2\XML\saml\NameID;
+use SimpleSAML\SAML2\XML\saml\Subject;
+use SimpleSAML\SAML2\XML\saml\SubjectConfirmation;
 use SimpleSAML\XML\Exception\InvalidDOMElementException;
 
+use function array_filter;
+use function array_merge;
+use function sprintf;
 
 /**
  * Class for handling the EntityAttributes metadata extension.
@@ -90,7 +97,33 @@ final class EntityAttributes extends AbstractMdattrElement
             );
             Assert::notNull(
                 $assertion->getSignature(),
-                'Every <saml:Assertion> inside a <mdattr::EntityAttributes> must be individually signed',
+                'Every <saml:Assertion> inside a <mdattr:EntityAttributes> must be individually signed',
+                ProtocolViolationException::class
+            );
+
+            $subject = $assertion->getSubject();
+            Assert::notNull(
+                $subject,
+                'Every <saml:Assertion> inside a <mdattr:EntityAttributes> must contain a Subject',
+                ProtocolViolationException::class
+            );
+            Assert::isEmpty(
+                $subject->getSubjectConfirmation(),
+                'Every <saml:Assertion> inside a <mdattr:EntityAttributes> must NOT contain any SubjectConfirmation',
+                ProtocolViolationException::class
+            );
+
+            $nameId = $subject->getIdentifier();
+            Assert::isInstanceOf(
+                $nameId,
+                NameID::class,
+                'Every <saml:Assertion> inside a <mdattr:EntityAttributes> must contain a NameID',
+                ProtocolViolationException::class
+            );
+            Assert::same(
+                $nameId->getFormat(),
+                C::NAMEID_ENTITY,
+                sprintf('The NameID format must be %s', C::NAMEID_ENTITY),
                 ProtocolViolationException::class
             );
         }

@@ -6,7 +6,7 @@ namespace SimpleSAML\Test\SAML2\XML\mdattr;
 
 use DOMDocument;
 use PHPUnit\Framework\TestCase;
-use SimpleSAML\SAML2\Constants;
+use SimpleSAML\SAML2\Constants as C;
 use SimpleSAML\SAML2\Utils\XPath;
 use SimpleSAML\SAML2\XML\saml\Assertion;
 use SimpleSAML\SAML2\XML\saml\Attribute;
@@ -19,11 +19,12 @@ use SimpleSAML\SAML2\XML\saml\Audience;
 use SimpleSAML\SAML2\XML\saml\AudienceRestriction;
 use SimpleSAML\SAML2\XML\saml\Conditions;
 use SimpleSAML\SAML2\XML\saml\Issuer;
+use SimpleSAML\SAML2\XML\saml\NameID;
+use SimpleSAML\SAML2\XML\saml\Subject;
 use SimpleSAML\SAML2\XML\mdattr\EntityAttributes;
 use SimpleSAML\Test\XML\SerializableXMLTestTrait;
 use SimpleSAML\XML\Chunk;
 use SimpleSAML\XML\DOMDocumentFactory;
-use SimpleSAML\XMLSecurity\Constants as C;
 use SimpleSAML\XMLSecurity\Alg\Signature\SignatureAlgorithmFactory;
 use SimpleSAML\XMLSecurity\Key\PrivateKey;
 use SimpleSAML\XMLSecurity\TestUtils\PEMCertificatesMock;
@@ -62,7 +63,7 @@ final class EntityAttributesTest extends TestCase
     {
         $attribute1 = new Attribute(
             'attrib1',
-            Constants::NAMEFORMAT_URI,
+            C::NAMEFORMAT_URI,
             null,
             [
                 new AttributeValue('is'),
@@ -87,7 +88,7 @@ final class EntityAttributesTest extends TestCase
             [
                 new Attribute(
                     'urn:mace:dir:attribute-def:uid',
-                    Constants::NAMEFORMAT_URI,
+                    C::NAMEFORMAT_URI,
                     null,
                     [
                         new AttributeValue('student2')
@@ -95,7 +96,7 @@ final class EntityAttributesTest extends TestCase
                 ),
                 new Attribute(
                     'urn:mace:terena.org:attribute-def:schacHomeOrganization',
-                    Constants::NAMEFORMAT_URI,
+                    C::NAMEFORMAT_URI,
                     null,
                     [
                         new AttributeValue('university.example.org'),
@@ -104,7 +105,7 @@ final class EntityAttributesTest extends TestCase
                 ),
                 new Attribute(
                     'urn:schac:attribute-def:schacPersonalUniqueCode',
-                    Constants::NAMEFORMAT_URI,
+                    C::NAMEFORMAT_URI,
                     null,
                     [
                         new AttributeValue('urn:schac:personalUniqueCode:nl:local:uvt.nl:memberid:524020'),
@@ -113,7 +114,7 @@ final class EntityAttributesTest extends TestCase
                 ),
                 new Attribute(
                     'urn:mace:dir:attribute-def:eduPersonAffiliation',
-                    Constants::NAMEFORMAT_URI,
+                    C::NAMEFORMAT_URI,
                     null,
                     [
                         new AttributeValue('member'),
@@ -123,8 +124,10 @@ final class EntityAttributesTest extends TestCase
             ]
         );
 
+        $subject = new Subject(new NameID('some:entity', null, null, C::NAMEID_ENTITY));
+
         // Create an assertion
-        $unsignedAssertion = new Assertion($issuer, null, 1610743797, null, $conditions, [$attrStatement]);
+        $unsignedAssertion = new Assertion($issuer, null, 1610743797, $subject, $conditions, [$attrStatement]);
 
         // Sign the assertion
         $key = PrivateKey::fromFile(
@@ -170,26 +173,24 @@ final class EntityAttributesTest extends TestCase
         $this->assertInstanceOf(Assertion::class, $entityAttributes->getChildren()[1]);
         $this->assertInstanceOf(Attribute::class, $entityAttributes->getChildren()[2]);
 
-        $this->assertEquals('Assertion', $entityAttributes->getChildren()[0]->getLocalName());
+        $this->assertEquals('attrib1', $entityAttributes->getChildren()[0]->getName());
+        $this->assertEquals(
+            C::NAMEFORMAT_URI,
+            $entityAttributes->getChildren()[0]->getNameFormat()
+        );
+        $this->assertCount(3, $entityAttributes->getChildren()[0]->getAttributeValues());
+
+
+        $this->assertEquals('Assertion', $entityAttributes->getChildren()[1]->getLocalName());
         $this->assertEquals(
             '1984-08-26T10:01:30.000Z',
-            $entityAttributes->getChildren()[0]->getXML()->getAttribute('IssueInstant')
+            $entityAttributes->getChildren()[1]->getXML()->getAttribute('IssueInstant')
         );
-        $this->assertEquals('attrib1', $entityAttributes->getChildren()[1]->getName());
+
+        $this->assertEquals('urn:simplesamlphp:v1:simplesamlphp', $entityAttributes->getChildren()[2]->getName());
         $this->assertEquals(
-            Constants::NAMEFORMAT_URI,
-            $entityAttributes->getChildren()[1]->getNameFormat()
-        );
-        $this->assertCount(0, $entityAttributes->getChildren()[1]->getAttributeValues());
-        $this->assertEquals('Assertion', $entityAttributes->getChildren()[2]->getLocalName());
-        $this->assertEquals(
-            '1984-08-26T10:01:30.000Z',
-            $entityAttributes->getChildren()[2]->getXML()->getAttribute('IssueInstant')
-        );
-        $this->assertEquals('urn:simplesamlphp:v1:simplesamlphp', $entityAttributes->getChildren()[3]->getName());
-        $this->assertEquals(
-            Constants::NAMEFORMAT_URI,
-            $entityAttributes->getChildren()[3]->getNameFormat()
+            C::NAMEFORMAT_URI,
+            $entityAttributes->getChildren()[2]->getNameFormat()
         );
     }
 }
