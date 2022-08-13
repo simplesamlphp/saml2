@@ -50,9 +50,6 @@ final class LogoutRequestTest extends MockeryTestCase
     /** @var \DOMElement */
     private DOMElement $logoutRequestElement;
 
-    /** @var \DOMDocument $retrievalMethod */
-    private DOMDocument $retrievalMethod;
-
 
     /**
      * Load a fixture.
@@ -63,11 +60,6 @@ final class LogoutRequestTest extends MockeryTestCase
 
         $this->xmlRepresentation = DOMDocumentFactory::fromFile(
             dirname(dirname(dirname(dirname(__FILE__)))) . '/resources/xml/samlp_LogoutRequest.xml'
-        );
-
-        $this->retrievalMethod = DOMDocumentFactory::fromString(
-            '<ds:RetrievalMethod xmlns:ds="http://www.w3.org/2000/09/xmldsig#" URI="#Encrypted_KEY_ID" ' .
-            'Type="http://www.w3.org/2001/04/xmlenc#EncryptedKey"/>'
         );
     }
 
@@ -172,31 +164,9 @@ final class LogoutRequestTest extends MockeryTestCase
      */
     public function testEncryptedNameId(): void
     {
-        $ed = new EncryptedData(
-            new CipherData(new CipherValue('Nk4W4mx...')),
-            'Encrypted_DATA_ID',
-            'http://www.w3.org/2001/04/xmlenc#Element',
-            "key-type",
-            'base64-encoded',
-            new EncryptionMethod('http://www.w3.org/2001/04/xmlenc#aes128-cbc'),
-            new KeyInfo([new Chunk($this->retrievalMethod->documentElement)])
-        );
-
-        $ek = new EncryptedKey(
-            new CipherData('PzA5X...'),
-            'Encrypted_KEY_ID',
-            null,
-            null,
-            null,
-            'some_ENTITY_ID',
-            'Name of the key',
-            new EncryptionMethod('http://www.w3.org/2001/04/xmlenc#rsa-1_5'),
-            null,
-            new ReferenceList(
-                [new DataReference('#Encrypted_DATA_ID')]
-            )
-        );
-        $eid = new EncryptedID($ed, [$ek]);
+        $eid = EncryptedID::fromXML(DOMDocumentFactory::fromFile(
+            dirname(dirname(dirname(dirname(__FILE__)))) . '/resources/xml/saml_EncryptedID.xml'
+        )->documentElement);
 
         $logoutRequest = new LogoutRequest($eid);
         $logoutRequestElement = $logoutRequest->toXML();
