@@ -7,7 +7,7 @@ namespace SimpleSAML\Test\SAML2\XML\samlp;
 use DOMDocument;
 use PHPUnit\Framework\TestCase;
 use SimpleSAML\Assert\AssertionFailedException;
-use SimpleSAML\SAML2\Constants;
+use SimpleSAML\SAML2\Constants as C;
 use SimpleSAML\SAML2\Utils\XPath;
 use SimpleSAML\SAML2\XML\saml\Audience;
 use SimpleSAML\SAML2\XML\saml\AudienceRestriction;
@@ -31,6 +31,10 @@ use SimpleSAML\XML\DOMDocumentFactory;
 use SimpleSAML\XML\Exception\MissingAttributeException;
 use SimpleSAML\XML\Exception\TooManyElementsException;
 use SimpleSAML\XML\Utils as XMLUtils;
+use SimpleSAML\XMLSecurity\Alg\Encryption\EncryptionAlgorithmFactory;
+use SimpleSAML\XMLSecurity\Alg\KeyTransport\KeyTransportAlgorithmFactory;
+use SimpleSAML\XMLSecurity\Key\PrivateKey;
+use SimpleSAML\XMLSecurity\Key\PublicKey;
 use SimpleSAML\XMLSecurity\TestUtils\PEMCertificatesMock;
 use SimpleSAML\XMLSecurity\XMLSecurityKey;
 
@@ -68,7 +72,7 @@ final class AuthnRequestTest extends TestCase
     public function testMarshalling(): void
     {
         $subject = new Subject(
-            new NameID('user@example.org', null, null, Constants::NAMEID_UNSPECIFIED)
+            new NameID('user@example.org', null, null, C::NAMEID_UNSPECIFIED)
         );
 
         $authnRequest = new AuthnRequest(
@@ -214,7 +218,7 @@ AUTHNREQUEST;
         $expectedIssueInstant = XMLUtils::xsDateTimeToTimestamp('2004-12-05T09:21:59Z');
         $this->assertEquals($expectedIssueInstant, $authnRequest->getIssueInstant());
         $this->assertEquals('https://idp.example.org/SAML2/SSO/Artifact', $authnRequest->getDestination());
-        $this->assertEquals(Constants::BINDING_HTTP_ARTIFACT, $authnRequest->getProtocolBinding());
+        $this->assertEquals(C::BINDING_HTTP_ARTIFACT, $authnRequest->getProtocolBinding());
         $this->assertEquals(
             'https://sp.example.com/SAML2/SSO/Artifact',
             $authnRequest->getAssertionConsumerServiceURL()
@@ -289,7 +293,7 @@ AUTHNREQUEST;
         $nameId = $subject->getIdentifier();
         $this->assertInstanceOf(NameID::class, $nameId);
         $this->assertEquals("user@example.org", $nameId->getContent());
-        $this->assertEquals(Constants::NAMEID_UNSPECIFIED, $nameId->getFormat());
+        $this->assertEquals(C::NAMEID_UNSPECIFIED, $nameId->getFormat());
     }
 
 
@@ -327,17 +331,24 @@ AUTHNREQUEST;
 
         $authnRequest = AuthnRequest::fromXML(DOMDocumentFactory::fromString($xml)->documentElement);
 
-        $key = PEMCertificatesMock::getPrivateKey(
-            XMLSecurityKey::RSA_SHA256,
-            PEMCertificatesMock::SELFSIGNED_PRIVATE_KEY
-        );
         $subject = $authnRequest->getSubject();
         $this->assertInstanceOf(Subject::class, $subject);
 
         $identifier = $subject->getIdentifier();
         $this->assertInstanceOf(EncryptedID::class, $identifier);
 
-        $nameId = $identifier->decrypt($key);
+        $decryptor = (new EncryptionAlgorithmFactory())->getAlgorithm(
+            $identifier->getEncryptedKey()->getEncryptionMethod()->getAlgorithm(),
+            PrivateKey::fromFile(
+                dirname(dirname(dirname(dirname(dirname(__FILE__)))))
+                . '/vendor/simplesamlphp/xml-security'
+                . PEMCertificatesMock::CERTIFICATE_DIR_RSA
+                . '/'
+                . PEMCertificatesMock::SELFSIGNED_PRIVATE_KEY
+            )
+        );
+
+        $nameId = $identifier->decrypt($decryptor);
         $this->assertInstanceOf(NameID::class, $nameId);
 
         $this->assertEquals('very secret', $nameId->getContent());
@@ -351,17 +362,20 @@ AUTHNREQUEST;
      */
     public function testThatAnEncryptedNameIdResultsInTheCorrectXmlStructure(): void
     {
-        // create an encrypted NameID
-        $key = PEMCertificatesMock::getPublicKey(
-            XMLSecurityKey::RSA_SHA256,
-            PEMCertificatesMock::SELFSIGNED_PUBLIC_KEY
+        $encryptor = (new KeyTransportAlgorithmFactory())->getAlgorithm(
+            C::KEY_TRANSPORT_OAEP,
+            PublicKey::fromFile(
+                dirname(dirname(dirname(dirname(dirname(__FILE__)))))
+                . '/vendor/simplesamlphp/xml-security'
+                . PEMCertificatesMock::CERTIFICATE_DIR_RSA
+                . '/'
+                . PEMCertificatesMock::SELFSIGNED_PUBLIC_KEY
+            )
         );
 
-        /** @psalm-var \SimpleSAML\SAML2\XML\saml\IdentifierInterface $nameId */
-        $nameId = EncryptedID::fromUnencryptedElement(
-            new NameID(md5('Arthur Dent'), Constants::NAMEID_ENCRYPTED),
-            $key
-        );
+        // create an encrypted NameID
+        $nameId = new NameID(md5('Arthur Dent'));
+        $nameId = new EncryptedID($nameId->encrypt($encryptor));
 
         // the Issuer
         $issuer = new Issuer('https://gateway.example.org/saml20/sp/metadata');
@@ -596,7 +610,7 @@ AUTHNREQUEST;
         $this->assertInstanceOf(NameIDPolicy::class, $nameIdPolicy);
         $this->assertEquals(true, $nameIdPolicy->getAllowCreate());
         $this->assertEquals("https://sp.example.com/SAML2", $nameIdPolicy->getSPNameQualifier());
-        $this->assertEquals(Constants::NAMEID_TRANSIENT, $nameIdPolicy->getFormat());
+        $this->assertEquals(C::NAMEID_TRANSIENT, $nameIdPolicy->getFormat());
     }
 
 
@@ -611,7 +625,7 @@ AUTHNREQUEST;
         $issueInstant = XMLUtils::xsDateTimeToTimestamp('2004-12-05T09:21:59Z');
 
         $nameIdPolicy = new NameIDPolicy(
-            Constants::NAMEID_TRANSIENT,
+            C::NAMEID_TRANSIENT,
             "https://sp.example.com/SAML2",
             true
         );
@@ -674,7 +688,7 @@ AUTHNREQUEST;
         $issuer = new Issuer('https://gateway.example.org/saml20/sp/metadata');
         $destination = 'https://tiqr.example.org/idp/profile/saml2/Redirect/SSO';
         $issueInstant = XMLUtils::xsDateTimeToTimestamp('2004-12-05T09:21:59Z');
-        $nameIdPolicy = new NameIDPolicy(Constants::NAMEID_TRANSIENT);
+        $nameIdPolicy = new NameIDPolicy(C::NAMEID_TRANSIENT);
 
         // basic AuthnRequest
         $request = new AuthnRequest(
@@ -1036,7 +1050,7 @@ AUTHNREQUEST;
         $issuer = new Issuer('https://sp.example.org/saml20/sp/metadata');
         $issueInstant = XMLUtils::xsDateTimeToTimestamp('2004-12-05T09:21:59Z');
         $destination = 'https://idp.example.org/idp/profile/saml2/Redirect/SSO';
-        $protocolBinding = Constants::BINDING_HTTP_POST;
+        $protocolBinding = C::BINDING_HTTP_POST;
         $assertionConsumerServiceURL = "https://sp.example.org/authentication/sp/consume-assertion";
 
         // basic AuthnRequest
