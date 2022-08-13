@@ -19,6 +19,8 @@ use SimpleSAML\XML\Chunk;
 use SimpleSAML\XML\DOMDocumentFactory;
 use SimpleSAML\XML\Exception\MissingElementException;
 use SimpleSAML\XML\Exception\TooManyElementsException;
+use SimpleSAML\XMLSecurity\Alg\Encryption\EncryptionAlgorithmFactory;
+use SimpleSAML\XMLSecurity\Key\PrivateKey;
 use SimpleSAML\XMLSecurity\TestUtils\PEMCertificatesMock;
 use SimpleSAML\XMLSecurity\XML\ds\KeyInfo;
 use SimpleSAML\XMLSecurity\XML\xenc\CipherData;
@@ -28,7 +30,6 @@ use SimpleSAML\XMLSecurity\XML\xenc\EncryptedData;
 use SimpleSAML\XMLSecurity\XML\xenc\EncryptedKey;
 use SimpleSAML\XMLSecurity\XML\xenc\EncryptionMethod;
 use SimpleSAML\XMLSecurity\XML\xenc\ReferenceList;
-use SimpleSAML\XMLSecurity\XMLSecurityKey;
 
 use function dirname;
 use function strval;
@@ -149,12 +150,17 @@ final class LogoutRequestTest extends MockeryTestCase
         $this->assertEquals('SomeSessionIndex1', $sessionIndexes[0]->getContent());
         $this->assertEquals('SomeSessionIndex2', $sessionIndexes[1]->getContent());
 
-        $identifier = $encid->decrypt(
-            PEMCertificatesMock::getPrivateKey(
-                XMLSecurityKey::RSA_OAEP_MGF1P,
-                PEMCertificatesMock::SELFSIGNED_PRIVATE_KEY
+        $decryptor = (new EncryptionAlgorithmFactory())->getAlgorithm(
+            $encid->getEncryptedKey()->getEncryptionMethod()->getAlgorithm(),
+            PrivateKey::fromFile(
+                dirname(dirname(dirname(dirname(dirname(__FILE__)))))
+                . '/vendor/simplesamlphp/xml-security'
+                . PEMCertificatesMock::CERTIFICATE_DIR_RSA
+                . '/'
+                . PEMCertificatesMock::SELFSIGNED_PRIVATE_KEY
             )
         );
+        $identifier = $encid->decrypt($decryptor);
         $this->assertInstanceOf(NameID::class, $identifier);
         $this->assertEquals('very secret', $identifier->getContent());
     }
