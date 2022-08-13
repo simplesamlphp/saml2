@@ -23,7 +23,9 @@ use SimpleSAML\XML\Chunk;
 use SimpleSAML\XML\DOMDocumentFactory;
 use SimpleSAML\XMLSecurity\TestUtils\PEMCertificatesMock;
 use SimpleSAML\XMLSecurity\XML\ds\KeyInfo;
+use SimpleSAML\XMLSecurity\XML\xenc\CarriedKeyName;
 use SimpleSAML\XMLSecurity\XML\xenc\CipherData;
+use SimpleSAML\XMLSecurity\XML\xenc\CipherValue;
 use SimpleSAML\XMLSecurity\XML\xenc\DataReference;
 use SimpleSAML\XMLSecurity\XML\xenc\EncryptedData;
 use SimpleSAML\XMLSecurity\XML\xenc\EncryptedKey;
@@ -83,23 +85,34 @@ final class EncryptedIDTest extends TestCase
     public function testMarshalling(): void
     {
         $ed = new EncryptedData(
-            new CipherData('Nk4W4mx...'),
-            'Encrypted_DATA_ID',
-            'http://www.w3.org/2001/04/xmlenc#Element',
-            "key-type",
-            'base64-encoded',
-            new EncryptionMethod('http://www.w3.org/2001/04/xmlenc#aes128-cbc'),
-            new KeyInfo([new Chunk($this->retrievalMethod->documentElement)])
+            new CipherData(new CipherValue('iFz/8KASJCLCAHqaAKhZXWOG/TPZlgTxcQ25lTGxdSdEsGYz7cg5lfZAbcN3UITCP9MkJsyjMlRsQouIqBkoPCGZz8NXibDkQ8OUeE7JdkFgKvgUMXawp+uDL4gHR8L7l6SPAmWZU3Hx/Wg9pTJBOpTjwoS0')),
+            null,
+            null,
+            null,
+            null,
+            new EncryptionMethod('http://www.w3.org/2009xmlenc11#aes256-gcm'),
+            new KeyInfo([
+                new EncryptedKey(
+                    new CipherData(new CipherValue('GMhpk09X+quNC/SsnxcDglZU/DCLAu9bMJ5bPcgaBK4s3F1eXciU8hlOYNaskSwP86HmA704NbzSDOHAgN6ckR+iCssxA7XCBjz0hltsgfn5p9Rh8qKtKltiXvxo/xXTcSXXZXNcE0R2KTya0P4DjZvYYgbIls/AH8ZyDV07ntI=')),
+                    null,
+                    null,
+                    null,
+                    null,
+                    null,
+                    null,
+                    new EncryptionMethod('http://www.w3.org/2009/xmlenc11#rsa-oaep'),
+                )
+            ]),
         );
         $ek = new EncryptedKey(
-            new CipherData('PzA5X...'),
+            new CipherData(new CipherValue('GMhpk09X+quNC/SsnxcDglZU/DCLAu9bMJ5bPcgaBK4s3F1eXciU8hlOYNaskSwP86HmA704NbzSDOHAgN6ckR+iCssxA7XCBjz0hltsgfn5p9Rh8qKtKltiXvxo/xXTcSXXZXNcE0R2KTya0P4DjZvYYgbIls/AH8ZyDV07ntI=')),
             'Encrypted_KEY_ID',
             null,
             null,
             null,
             'some_ENTITY_ID',
-            'Name of the key',
-            new EncryptionMethod('http://www.w3.org/2001/04/xmlenc#rsa-1_5'),
+            new CarriedKeyName('Name of the key'),
+            new EncryptionMethod('http://www.w3.org/2009/xmlenc11#rsa-oaep'),
             null,
             new ReferenceList(
                 [new DataReference('#Encrypted_DATA_ID')]
