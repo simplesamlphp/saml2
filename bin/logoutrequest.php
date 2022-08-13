@@ -26,7 +26,7 @@ $encryptor = (new KeyTransportAlgorithmFactory())->getAlgorithm(
     )
 );
 $nid = new NameID('very secret');
-$eid = $nid->encrypt($encryptor);
+$eid = new EncryptedID($nid->encrypt($encryptor));
 
 $logoutRequest = new LogoutRequest(
     $eid,
