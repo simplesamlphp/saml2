@@ -6,7 +6,7 @@ namespace SimpleSAML\Test\SAML2\XML\samlp;
 
 use DOMDocument;
 use PHPUnit\Framework\TestCase;
-use SimpleSAML\SAML2\Constants;
+use SimpleSAML\SAML2\Constants as C;
 use SimpleSAML\SAML2\Utils\XPath;
 use SimpleSAML\SAML2\XML\saml\Attribute;
 use SimpleSAML\SAML2\XML\saml\Issuer;
@@ -21,8 +21,9 @@ use SimpleSAML\Test\XML\SerializableXMLTestTrait;
 use SimpleSAML\XML\DOMDocumentFactory;
 use SimpleSAML\XML\Exception\MissingElementException;
 use SimpleSAML\XML\Chunk;
+use SimpleSAML\XMLSecurity\Alg\Signature\SignatureAlgorithmFactory;
+use SimpleSAML\XMLSecurity\Key\PrivateKey;
 use SimpleSAML\XMLSecurity\TestUtils\PEMCertificatesMock;
-use SimpleSAML\XMLSecurity\XMLSecurityKey;
 
 use function dirname;
 use function strval;
@@ -43,7 +44,7 @@ final class AbstractStatusResponseTest extends TestCase
     {
         $status = new Status(
             new StatusCode(
-                Constants::STATUS_SUCCESS,
+                C::STATUS_SUCCESS,
                 [
                     new StatusCode(
                         'OurSubStatusCode'
@@ -64,7 +65,7 @@ final class AbstractStatusResponseTest extends TestCase
         /** @psalm-var \DOMElement[] $statusCodeElements */
         $statusCodeElements = XPath::xpQuery($statusElements[0], './saml_protocol:StatusCode', $xpCache);
         $this->assertCount(1, $statusCodeElements);
-        $this->assertEquals(Constants::STATUS_SUCCESS, $statusCodeElements[0]->getAttribute("Value"));
+        $this->assertEquals(C::STATUS_SUCCESS, $statusCodeElements[0]->getAttribute("Value"));
 
         /** @psalm-var \DOMElement[] $nestedStatusCodeElements */
         $nestedStatusCodeElements = XPath::xpQuery($statusCodeElements[0], './saml_protocol:StatusCode', $xpCache);
@@ -83,7 +84,7 @@ final class AbstractStatusResponseTest extends TestCase
     {
         $status = new Status(
             new StatusCode(
-                Constants::STATUS_SUCCESS,
+                C::STATUS_SUCCESS,
                 [
                     new StatusCode(
                         'OurSubStatusCode'
@@ -101,10 +102,18 @@ final class AbstractStatusResponseTest extends TestCase
             new Chunk($scope->toXML()),
         ]);
 
-        $response = new Response($status, $issuer, null, null, null, null, null, $extensions);
-        $response->setSigningKey(
-            PEMCertificatesMock::getPrivateKey(XMLSecurityKey::RSA_SHA256, PEMCertificatesMock::PRIVATE_KEY)
+        $key = PrivateKey::fromFile(
+            dirname(dirname(dirname(dirname(dirname(__FILE__)))))
+            . '/vendor/simplesamlphp/xml-security/tests/resources/certificates/rsa-pem/'
+            . PEMCertificatesMock::PRIVATE_KEY
         );
+        $signer = (new SignatureAlgorithmFactory())->getAlgorithm(
+            C::SIG_RSA_SHA256,
+            $key
+        );
+
+        $response = new Response($status, $issuer, null, null, null, null, null, $extensions);
+        $response->sign($signer);
         $responseElement = $response->toXML();
 
         // Test for an Issuer
@@ -182,7 +191,7 @@ XML;
         $this->assertTrue($response->isSuccess());
 
         $status = $response->getStatus();
-        $this->assertEquals(Constants::STATUS_SUCCESS, $status->getStatusCode()->getValue());
+        $this->assertEquals(C::STATUS_SUCCESS, $status->getStatusCode()->getValue());
         $this->assertEmpty($status->getStatusCode()->getSubCodes());
         $this->assertNull($status->getStatusMessage());
     }
@@ -217,8 +226,8 @@ XML;
         $this->assertFalse($response->isSuccess());
 
         $status = $response->getStatus();
-        $this->assertEquals(Constants::STATUS_REQUESTER, $status->getStatusCode()->getValue());
-        $this->assertEquals(Constants::STATUS_REQUEST_DENIED, $status->getStatusCode()->getSubCodes()[0]->getValue());
+        $this->assertEquals(C::STATUS_REQUESTER, $status->getStatusCode()->getValue());
+        $this->assertEquals(C::STATUS_REQUEST_DENIED, $status->getStatusCode()->getSubCodes()[0]->getValue());
         $this->assertEquals("The AuthnRequest could not be validated", $status->getStatusMessage()->getContent());
     }
 
@@ -229,7 +238,7 @@ XML;
     public function testResponseTo(): void
     {
         $status = new Status(
-            new StatusCode(Constants::STATUS_REQUESTER)
+            new StatusCode(C::STATUS_REQUESTER)
         );
 
         $response = new Response($status, null, null, 1453323439, 'aabb12234');
