@@ -453,14 +453,12 @@ class Assertion extends AbstractSamlElement implements SignableElementInterface,
 
 
     /**
-     * Convert this assertion to an XML element.
+     * Convert this assertion to an unsigned XML document.
+     * This method does not sign the resulting XML document.
      *
-     * @param \DOMElement|null $parent The DOM node the assertion should be created in.
-     *
-     * @return \DOMElement This assertion.
-     * @throws \Exception
+     * @return \DOMElement The root element of the DOM tree
      */
-    public function toXML(DOMElement $parent = null): DOMElement
+    protected function toUnsignedXML(?DOMElement $parent = null): DOMElement
     {
         $e = $this->instantiateParentElement($parent);
 
@@ -482,9 +480,30 @@ class Assertion extends AbstractSamlElement implements SignableElementInterface,
             $statement->toXML($e);
         }
 
+        return $e;
+    }
+
+
+    /**
+     * Convert this assertion to a signed XML element, if a signer was set.
+     *
+     * @param \DOMElement|null $parent The DOM node the assertion should be created in.
+     *
+     * @return \DOMElement This assertion.
+     * @throws \Exception
+     */
+    public function toXML(DOMElement $parent = null): DOMElement
+    {
+        $e = $this->toUnsignedXML($parent);
+
         if ($this->signer !== null) {
             $signedXML = $this->doSign($e);
-            $signedXML->insertBefore($this->signature->toXML($signedXML), $signedXML->firstChild);
+
+            // Test for an Issuer
+            $messageElements = XPath::xpQuery($signedXML, './saml_assertion:Issuer', XPath::getXPath($signedXML));
+            $issuer = array_pop($messageElements);
+
+            $signedXML->insertBefore($this->signature->toXML($signedXML), $issuer->nextSibling);
             return $signedXML;
         }
 
