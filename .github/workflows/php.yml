@@ -3,8 +3,12 @@ name: CI
 on:
   push:
     branches: [ '**' ]
+    paths-ignore:
+      - '**.md'
   pull_request:
     branches: [ master, release-* ]
+    paths-ignore:
+      - '**.md'
 
 jobs:
   basic-tests:
@@ -205,9 +209,3 @@ jobs:
       - name: Psalter
         continue-on-error: true
         run: php vendor/bin/psalter --issues=UnnecessaryVarAnnotation --dry-run
-
-      - name: Lint markdown files
-        uses: nosborn/github-action-markdown-cli@v3.0.1
-        with:
-          files: .
-          ignore_path: .markdownlintignore

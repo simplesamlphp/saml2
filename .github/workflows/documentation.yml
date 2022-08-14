@@ -1,0 +1,35 @@
+name: Documentation
+
+on:
+  push:
+    branches: [ master, release-* ]
+    paths:
+      - '**.md'
+  pull_request:
+    branches: [ master, release-* ]
+    paths:
+      - '**.md'
+
+jobs:
+  quality:
+    name: Quality checks
+    runs-on: [ubuntu-latest]
+
+    steps:
+      - name: Setup PHP, with composer and extensions
+        uses: shivammathur/setup-php@v2 #https://github.com/shivammathur/setup-php
+        with:
+          php-version: '8.0'
+          tools: composer:v2
+          extensions: intl, mbstring, xml
+
+      - name: Setup problem matchers for PHP
+        run: echo "::add-matcher::${{ runner.tool_cache }}/php.json"
+
+      - uses: actions/checkout@v3
+
+      - name: Lint markdown files
+        uses: nosborn/github-action-markdown-cli@v3.1.0
+        with:
+          files: .
+          ignore_path: .markdownlintignore
