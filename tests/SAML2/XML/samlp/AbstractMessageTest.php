@@ -9,7 +9,7 @@ use DOMElement;
 use Exception;
 use Mockery\Adapter\Phpunit\MockeryTestCase;
 use SimpleSAML\Assert\AssertionFailedException;
-use SimpleSAML\SAML2\Constants;
+use SimpleSAML\SAML2\Constants as C;
 use SimpleSAML\SAML2\Exception\Protocol\RequestVersionTooHighException;
 use SimpleSAML\SAML2\Utils\XPath;
 use SimpleSAML\SAML2\XML\saml\Issuer;
@@ -23,6 +23,8 @@ use SimpleSAML\Test\XML\SerializableXMLTestTrait;
 use SimpleSAML\XML\Chunk;
 use SimpleSAML\XML\DOMDocumentFactory;
 use SimpleSAML\XML\Exception\MissingElementException;
+use SimpleSAML\XMLSecurity\Alg\Signature\SignatureAlgorithmFactory;
+use SimpleSAML\XMLSecurity\Key\PrivateKey;
 use SimpleSAML\XMLSecurity\TestUtils\PEMCertificatesMock;
 use SimpleSAML\XMLSecurity\XML\ds\Signature;
 use SimpleSAML\XMLSecurity\XMLSecurityKey;
@@ -60,23 +62,28 @@ final class AbstractMessageTest extends MockeryTestCase
 AUTHNREQUEST
         );
 
-        $privateKey = PEMCertificatesMock::getPrivateKey(
-            XMLSecurityKey::RSA_SHA256,
-            PEMCertificatesMock::SELFSIGNED_PRIVATE_KEY
+        $key = PrivateKey::fromFile(
+            dirname(dirname(dirname(dirname(dirname(__FILE__)))))
+            . '/vendor/simplesamlphp/xml-security'
+            . PEMCertificatesMock::CERTIFICATE_DIR_RSA
+            . '/'
+            . PEMCertificatesMock::SELFSIGNED_PRIVATE_KEY
+        );
+        $signer = (new SignatureAlgorithmFactory())->getAlgorithm(
+            C::SIG_RSA_SHA256,
+            $key
         );
 
         $unsignedMessage = MessageFactory::fromXML($authnRequest->documentElement);
         $this->assertEquals('2.0', $unsignedMessage->getVersion());
-        $unsignedMessage->setSigningKey($privateKey);
-        $unsignedMessage->setCertificates(
-            [PEMCertificatesMock::getPlainPublicKey(PEMCertificatesMock::SELFSIGNED_PUBLIC_KEY)]
-        );
+
+        $unsignedMessage->sign($signer);
 
         $signedMessage = MessageFactory::fromXML($unsignedMessage->toXML());
         $signature = $signedMessage->getSignature();
 
         $this->assertInstanceOf(Signature::class, $signature);
-        $this->assertEquals($privateKey->getAlgorithm(), $signature->getAlgorithm());
+        $this->assertEquals($signer->getAlgorithmId(), $signature->getSignedInfo()->getSignatureMethod()->getAlgorithm());
     }
 
 
@@ -139,7 +146,7 @@ AUTHNREQUEST
         // now, try an Issuer with another format and attributes
         $issuer = new Issuer(
             'https://gateway.stepup.org/saml20/sp/metadata',
-            Constants::NAMEID_UNSPECIFIED,
+            C::NAMEID_UNSPECIFIED,
             'SomeSPProvidedID',
             'SomeNameQualifier',
             'SomeSPNameQualifier'
@@ -174,22 +181,26 @@ AUTHNREQUEST
         $response = new DOMDocument();
         $response->load(__DIR__ . '../../../../resources/xml/samlp_Response.xml');
 
-        $privateKey = PEMCertificatesMock::getPrivateKey(
-            XMLSecurityKey::RSA_SHA256,
-            PEMCertificatesMock::SELFSIGNED_PRIVATE_KEY
+        $key = PrivateKey::fromFile(
+            dirname(dirname(dirname(dirname(dirname(__FILE__)))))
+            . '/vendor/simplesamlphp/xml-security'
+            . PEMCertificatesMock::CERTIFICATE_DIR_RSA
+            . '/'
+            . PEMCertificatesMock::SELFSIGNED_PRIVATE_KEY
+        );
+        $signer = (new SignatureAlgorithmFactory())->getAlgorithm(
+            C::SIG_RSA_SHA256,
+            $key
         );
 
         $unsignedMessage = MessageFactory::fromXML($response->documentElement);
-        $unsignedMessage->setSigningKey($privateKey);
-        $unsignedMessage->setCertificates(
-            [PEMCertificatesMock::getPlainPublicKey(PEMCertificatesMock::SELFSIGNED_PUBLIC_KEY)]
-        );
+        $unsignedMessage->sign($signer);
 
         $signedMessage = MessageFactory::fromXML($unsignedMessage->toXML());
 
         $signature = $signedMessage->getSignature();
         $this->assertInstanceOf(Signature::class, $signature);
-        $this->assertEquals($privateKey->getAlgorithm(), $signature->getAlgorithm());
+        $this->assertEquals($signer->getAlgorithmId(), $signature->getSignedInfo()->getSignatureMethod()->getAlgorithm());
     }
 
 
@@ -350,7 +361,7 @@ XML;
         $this->assertInstanceOf(Issuer::class, $issuer);
         $this->assertEquals('https://example.org/', $issuer->getContent());
         $this->assertEquals('somethingNEW', $message->getId());
-        $this->assertEquals(Constants::CONSENT_PRIOR, $message->getConsent());
+        $this->assertEquals(C::CONSENT_PRIOR, $message->getConsent());
 
         $messageElement = $message->toXML();
         $xp = XPath::xpQuery($messageElement, '.', XPath::getXPath($messageElement));
