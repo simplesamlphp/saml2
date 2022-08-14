@@ -22,6 +22,7 @@ use SimpleSAML\XML\DOMDocumentFactory;
 use SimpleSAML\XML\Exception\MissingElementException;
 use SimpleSAML\XML\Exception\TooManyElementsException;
 use SimpleSAML\XMLSecurity\Alg\Encryption\EncryptionAlgorithmFactory;
+use SimpleSAML\XMLSecurity\Alg\KeyTransport\KeyTransportAlgorithmFactory;
 use SimpleSAML\XMLSecurity\Key\PrivateKey;
 use SimpleSAML\XMLSecurity\TestUtils\PEMCertificatesMock;
 use SimpleSAML\XMLSecurity\XML\ds\KeyInfo;
@@ -155,7 +156,7 @@ final class LogoutRequestTest extends MockeryTestCase
         $this->assertEquals('SomeSessionIndex1', $sessionIndexes[0]->getContent());
         $this->assertEquals('SomeSessionIndex2', $sessionIndexes[1]->getContent());
 
-        $decryptor = (new EncryptionAlgorithmFactory())->getAlgorithm(
+        $decryptor = (new KeyTransportAlgorithmFactory())->getAlgorithm(
             $encid->getEncryptedKey()->getEncryptionMethod()->getAlgorithm(),
             PrivateKey::fromFile(
                 dirname(dirname(dirname(dirname(dirname(__FILE__)))))
