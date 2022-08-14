@@ -7,6 +7,8 @@ namespace SimpleSAML\Test\SAML2\XML\samlp;
 use DOMDocument;
 use DOMElement;
 use Mockery\Adapter\Phpunit\MockeryTestCase;
+use SimpleSAML\SAML2\Compat\ContainerSingleton;
+use SimpleSAML\SAML2\Compat\MockContainer;
 use SimpleSAML\SAML2\Constants;
 use SimpleSAML\SAML2\Utils\XPath;
 use SimpleSAML\SAML2\XML\saml\EncryptedID;
@@ -136,6 +138,9 @@ final class LogoutRequestTest extends MockeryTestCase
      */
     public function testUnmarshalling(): void
     {
+        $container = ContainerSingleton::getInstance();
+        $container->setBlacklistedAlgorithms(null);
+
         $logoutRequest = LogoutRequest::fromXML($this->xmlRepresentation->documentElement);
         $issuer = $logoutRequest->getIssuer();
 
