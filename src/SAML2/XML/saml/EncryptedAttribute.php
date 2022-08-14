@@ -4,6 +4,7 @@ declare(strict_types=1);
 
 namespace SimpleSAML\SAML2\XML\saml;
 
+use SimpleSAML\SAML2\Compat\ContainerSingleton;
 use SimpleSAML\XMLSecurity\Backend\EncryptionBackend;
 use SimpleSAML\XMLSecurity\Utils\Security;
 use SimpleSAML\XMLSecurity\XML\EncryptedElementInterface;
@@ -22,7 +23,8 @@ class EncryptedAttribute extends AbstractSamlElement implements EncryptedElement
 
     public function getBlacklistedAlgorithms(): ?array
     {
-        // return an array with the algorithms you don't want to allow to be used
+        $container = ContainerSingleton::getInstance();
+        return $container->getBlacklistedEncryptionAlgorithms();
     }
 
 

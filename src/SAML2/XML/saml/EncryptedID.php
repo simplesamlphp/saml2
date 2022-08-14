@@ -29,8 +29,8 @@ class EncryptedID extends AbstractSamlElement implements EncryptedElementInterfa
 
     public function getBlacklistedAlgorithms(): ?array
     {
-        // return an array with the algorithms you don't want to allow to be used
-        return [];
+        $container = ContainerSingleton::getInstance();
+        return $container->getBlacklistedEncryptionAlgorithms();
     }
 
 

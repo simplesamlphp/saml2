@@ -7,6 +7,8 @@ namespace SimpleSAML\Test\SAML2\XML\samlp;
 use DOMDocument;
 use PHPUnit\Framework\TestCase;
 use SimpleSAML\Assert\AssertionFailedException;
+use SimpleSAML\SAML2\Compat\ContainerSingleton;
+use SimpleSAML\SAML2\Compat\MockContainer;
 use SimpleSAML\SAML2\Constants as C;
 use SimpleSAML\SAML2\Utils\XPath;
 use SimpleSAML\SAML2\XML\saml\Audience;
@@ -299,6 +301,9 @@ AUTHNREQUEST;
 
     public function testThatAnEncryptedNameIdCanBeDecrypted(): void
     {
+        $container = ContainerSingleton::getInstance();
+        $container->setBlacklistedAlgorithms(null);
+
         $xml = <<<AUTHNREQUEST
 <samlp:AuthnRequest
     xmlns:samlp="urn:oasis:names:tc:SAML:2.0:protocol"
@@ -310,18 +315,18 @@ AUTHNREQUEST;
   <saml:Issuer>https://gateway.example.org/saml20/sp/metadata</saml:Issuer>
   <saml:Subject>
     <saml:EncryptedID>
-      <xenc:EncryptedData xmlns:xenc="http://www.w3.org/2001/04/xmlenc#" Type="http://www.w3.org/2001/04/xmlenc#Element">
-        <xenc:EncryptionMethod Algorithm="http://www.w3.org/2001/04/xmlenc#aes128-cbc"/>
+      <xenc:EncryptedData xmlns:xenc="http://www.w3.org/2001/04/xmlenc#">
+        <xenc:EncryptionMethod Algorithm="http://www.w3.org/2009xmlenc11#aes256-gcm"/>
         <ds:KeyInfo xmlns:ds="http://www.w3.org/2000/09/xmldsig#">
-          <xenc:EncryptedKey xmlns:dsig="http://www.w3.org/2000/09/xmldsig#">
-            <xenc:EncryptionMethod Algorithm="http://www.w3.org/2001/04/xmldsig-more#rsa-sha256"/>
+          <xenc:EncryptedKey>
+            <xenc:EncryptionMethod Algorithm="http://www.w3.org/2009/xmlenc11#rsa-oaep"/>
             <xenc:CipherData>
-              <xenc:CipherValue>BMudTPa9zPoySAforWXaLyyYgPaOA5G/tKHwMboc/qoW3jAYM/4RJSt92l1sGGXt6okmhSse7eUONqdK7glFrbbrLa6g58YHi/JDbDMvTpLYmG8pTerLHQOnNUhnVrymAT0mK7jGdT7qL4wDLnJivEffk/zD1JVQpmzwCPmuDbk=</xenc:CipherValue>
+              <xenc:CipherValue>GMhpk09X+quNC/SsnxcDglZU/DCLAu9bMJ5bPcgaBK4s3F1eXciU8hlOYNaskSwP86HmA704NbzSDOHAgN6ckR+iCssxA7XCBjz0hltsgfn5p9Rh8qKtKltiXvxo/xXTcSXXZXNcE0R2KTya0P4DjZvYYgbIls/AH8ZyDV07ntI=</xenc:CipherValue>
             </xenc:CipherData>
           </xenc:EncryptedKey>
         </ds:KeyInfo>
         <xenc:CipherData>
-          <xenc:CipherValue>9E5+08evt8GDU+eOiYry+1Tue53umMKQPc0DEBac767kLB2rNJrfqeGqc2sbhr+j423ZD8OncdutwiTBefXSy8rWe64i5lwUtPOzlIbGprBsd6imfXLTILZL2rpfmUBADAuO+Ulww9lg12wcpYleng==</xenc:CipherValue>
+          <xenc:CipherValue>iFz/8KASJCLCAHqaAKhZXWOG/TPZlgTxcQ25lTGxdSdEsGYz7cg5lfZAbcN3UITCP9MkJsyjMlRsQouIqBkoPCGZz8NXibDkQ8OUeE7JdkFgKvgUMXawp+uDL4gHR8L7l6SPAmWZU3Hx/Wg9pTJBOpTjwoS0</xenc:CipherValue>
         </xenc:CipherData>
       </xenc:EncryptedData>
     </saml:EncryptedID>
@@ -337,7 +342,7 @@ AUTHNREQUEST;
         $identifier = $subject->getIdentifier();
         $this->assertInstanceOf(EncryptedID::class, $identifier);
 
-        $decryptor = (new EncryptionAlgorithmFactory())->getAlgorithm(
+        $decryptor = (new KeyTransportAlgorithmFactory())->getAlgorithm(
             $identifier->getEncryptedKey()->getEncryptionMethod()->getAlgorithm(),
             PrivateKey::fromFile(
                 dirname(dirname(dirname(dirname(dirname(__FILE__)))))
