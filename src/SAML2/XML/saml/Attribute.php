@@ -10,14 +10,17 @@ use SimpleSAML\Assert\Assert;
 use SimpleSAML\SAML2\Constants;
 use SimpleSAML\XML\Exception\InvalidDOMElementException;
 use SimpleSAML\XML\ExtendableAttributesTrait;
+use SimpleSAML\XMLSecurity\XML\EncryptableElementInterface;
+use SimpleSAML\XMLSecurity\XML\EncryptableElementTrait;
 
 /**
  * Class representing SAML 2 Attribute.
  *
  * @package simplesamlphp/saml2
  */
-class Attribute extends AbstractSamlElement
+class Attribute extends AbstractSamlElement implements IdentifierInterface, EncryptableElementInterface
 {
+    use EncryptableElementTrait;
     use ExtendableAttributesTrait;
 
     /**
@@ -166,6 +169,21 @@ class Attribute extends AbstractSamlElement
     {
         Assert::allIsInstanceOf($attributeValues, AttributeValue::class, 'Invalid AttributeValue.');
         $this->AttributeValues = $attributeValues;
+    }
+
+
+    public function getBlacklistedAlgorithms(): ?array
+    {
+        // return an array with the algorithms you don't want to allow to be used
+        return [];
+    }
+
+
+    public function getEncryptionBackend(): ?EncryptionBackend
+    {
+        // return the encryption backend you want to use,
+        // or null if you are fine with the default
+        return null;
     }
 
 
