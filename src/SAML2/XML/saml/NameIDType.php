@@ -6,6 +6,7 @@ namespace SimpleSAML\SAML2\XML\saml;
 
 use DOMElement;
 use SimpleSAML\Assert\Assert;
+use SimpleSAML\SAML2\Compat\ContainerSingleton;
 use SimpleSAML\SAML2\XML\IDNameQualifiersTrait;
 use SimpleSAML\XML\XMLStringElementTrait;
 use SimpleSAML\XMLSecurity\Backend\EncryptionBackend;
@@ -172,8 +173,8 @@ abstract class NameIDType extends AbstractSamlElement implements IdentifierInter
 
     public function getBlacklistedAlgorithms(): ?array
     {
-        // return an array with the algorithms you don't want to allow to be used
-        return [];
+        $container = ContainerSingleton::getInstance();
+        return $container->getBlacklistedEncryptionAlgorithms();
     }
 
 

@@ -20,6 +20,8 @@ use SimpleSAML\XML\Exception\TooManyElementsException;
 use SimpleSAML\XML\Utils as XMLUtils;
 use SimpleSAML\XMLSecurity\Utils\Security as SecurityUtils;
 use SimpleSAML\XMLSecurity\XML\ds\Signature;
+use SimpleSAML\XMLSecurity\XML\EncryptableElementInterface;
+use SimpleSAML\XMLSecurity\XML\EncryptableElementTrait;
 use SimpleSAML\XMLSecurity\XML\SignableElementInterface;
 use SimpleSAML\XMLSecurity\XML\SignableElementTrait;
 use SimpleSAML\XMLSecurity\XML\SignedElementInterface;
@@ -37,8 +39,12 @@ use function array_values;
  *
  * @package simplesamlphp/saml2
  */
-class Assertion extends AbstractSamlElement implements SignableElementInterface, SignedElementInterface
+class Assertion extends AbstractSamlElement implements
+    EncryptableElementInterface,
+    SignableElementInterface,
+    SignedElementInterface
 {
+    use EncryptableElementTrait;
     use SignableElementTrait;
     use SignedElementTrait;
 
@@ -394,6 +400,21 @@ class Assertion extends AbstractSamlElement implements SignableElementInterface,
     }
 
 
+    public function getBlacklistedAlgorithms(): ?array
+    {
+        $container = ContainerSingleton::getInstance();
+        return $container->getBlacklistedEncryptionAlgorithms();
+    }
+
+
+    public function getEncryptionBackend(): ?EncryptionBackend
+    {
+        // return the encryption backend you want to use,
+        // or null if you are fine with the default
+        return null;
+    }
+
+
     /**
      * Convert XML into an Assertion
      *
@@ -401,8 +422,10 @@ class Assertion extends AbstractSamlElement implements SignableElementInterface,
      * @return \SimpleSAML\SAML2\XML\saml\Assertion
      *
      * @throws \SimpleSAML\Assert\AssertionFailedException if assertions are false
-     * @throws \SimpleSAML\XML\Exception\InvalidDOMElementException if the qualified name of the supplied element is wrong
-     * @throws \SimpleSAML\XML\Exception\MissingAttributeException if the supplied element is missing one of the mandatory attributes
+     * @throws \SimpleSAML\XML\Exception\InvalidDOMElementException
+     *   if the qualified name of the supplied element is wrong
+     * @throws \SimpleSAML\XML\Exception\MissingAttributeException
+     *   if the supplied element is missing one of the mandatory attributes
      * @throws \SimpleSAML\XML\Exception\MissingElementException if one of the mandatory child-elements is missing
      * @throws \SimpleSAML\XML\Exception\TooManyElementsException if too many child-elements of a type are specified
      * @throws \Exception
@@ -422,10 +445,20 @@ class Assertion extends AbstractSamlElement implements SignableElementInterface,
         Assert::maxCount($issuer, 1, 'More than one <saml:Issuer> in assertion.', TooManyElementsException::class);
 
         $subject = Subject::getChildrenOfClass($xml);
-        Assert::maxCount($subject, 1, 'More than one <saml:Subject> in <saml:Assertion>', TooManyElementsException::class);
+        Assert::maxCount(
+            $subject,
+            1,
+            'More than one <saml:Subject> in <saml:Assertion>',
+            TooManyElementsException::class,
+        );
 
         $conditions = Conditions::getChildrenOfClass($xml);
-        Assert::maxCount($conditions, 1, 'More than one <saml:Conditions> in <saml:Assertion>.', TooManyElementsException::class);
+        Assert::maxCount(
+            $conditions,
+            1,
+            'More than one <saml:Conditions> in <saml:Assertion>.',
+            TooManyElementsException::class,
+        );
 
         $signature = Signature::getChildrenOfClass($xml);
         Assert::maxCount($signature, 1, 'Only one <ds:Signature> element is allowed.', TooManyElementsException::class);

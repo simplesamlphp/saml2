@@ -174,8 +174,8 @@ class Attribute extends AbstractSamlElement implements IdentifierInterface, Encr
 
     public function getBlacklistedAlgorithms(): ?array
     {
-        // return an array with the algorithms you don't want to allow to be used
-        return [];
+        $container = ContainerSingleton::getInstance();
+        return $container->getBlacklistedEncryptionAlgorithms();
     }
 
 
