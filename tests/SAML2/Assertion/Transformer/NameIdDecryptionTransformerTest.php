@@ -8,6 +8,7 @@ use PHPUnit\Framework\TestCase;
 use Psr\Log\NullLogger;
 use SimpleSAML\SAML2\Assertion\Exception\InvalidAssertionException;
 use SimpleSAML\SAML2\Assertion\ProcessorBuilder;
+use SimpleSAML\SAML2\Compat\ContainerSingleton;
 use SimpleSAML\SAML2\Constants as C;
 use SimpleSAML\SAML2\Configuration\Destination;
 use SimpleSAML\SAML2\Configuration\IdentityProvider;
@@ -87,6 +88,9 @@ final class NameIdDecryptionTransformerTest extends TestCase
      */
     protected function setUp(): void
     {
+        $container = ContainerSingleton::getInstance();
+        $container->setBlacklistedAlgorithms(null);
+
         $spentity = 'urn:mace:feide.no:services:no.feide.moodle';
 
         $this->logger = new NullLogger();
