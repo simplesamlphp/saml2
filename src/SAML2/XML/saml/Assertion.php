@@ -7,10 +7,10 @@ namespace SimpleSAML\SAML2\XML\saml;
 use DOMElement;
 use Exception;
 use SimpleSAML\Assert\Assert;
+use SimpleSAML\SAML2\Compat\ContainerSingleton;
 use SimpleSAML\SAML2\Constants;
 use SimpleSAML\SAML2\Exception\ProtocolViolationException;
 use SimpleSAML\SAML2\Utilities\Temporal;
-use SimpleSAML\SAML2\Utils;
 use SimpleSAML\SAML2\Utils\XPath;
 use SimpleSAML\XML\Chunk;
 use SimpleSAML\XML\DOMDocumentFactory;
@@ -26,6 +26,7 @@ use SimpleSAML\XMLSecurity\XML\SignableElementInterface;
 use SimpleSAML\XMLSecurity\XML\SignableElementTrait;
 use SimpleSAML\XMLSecurity\XML\SignedElementInterface;
 use SimpleSAML\XMLSecurity\XML\SignedElementTrait;
+use SimpleSAML\XMLSecurity\Backend\EncryptionBackend;
 use SimpleSAML\XMLSecurity\XMLSecEnc;
 use SimpleSAML\XMLSecurity\XMLSecurityKey;
 
@@ -282,7 +283,8 @@ class Assertion extends AbstractSamlElement implements
         Assert::nullOrNotWhitespaceOnly($id);
 
         if ($id === null) {
-            $id = Utils::getContainer()->generateId();
+            $container = ContainerSingleton::getInstance();
+            $id = $container->generateId();
         }
         $this->id = $id;
     }
