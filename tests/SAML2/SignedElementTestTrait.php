@@ -62,18 +62,20 @@ trait SignedElementTestTrait
 
         foreach ($algorithms as $algorithm) {
             // sign with two certificates
-            $key = PrivateKey::fromFile('vendor/simplesamlphp/xml-security' . PEMCertificatesMock::CERTIFICATE_DIR_RSA . '/' . PEMCertificatesMock::PRIVATE_KEY);
-            $signer = (new SignatureAlgorithmFactory([]))->getAlgorithm($algorithm, $key);
+            $signer = (new SignatureAlgorithmFactory([]))->getAlgorithm(
+                $algorithm,
+                PEMCertificatesMock::getPrivateKey(PEMCertificatesMock::PRIVATE_KEY)
+            );
 
-            $cert = X509::fromFile('vendor/simplesamlphp/xml-security' . PEMCertificatesMock::CERTIFICATE_DIR_RSA . '/' . PEMCertificatesMock::PUBLIC_KEY);
-            $oldCert = X509::fromFile('vendor/simplesamlphp/xml-security' . PEMCertificatesMock::CERTIFICATE_DIR_RSA . '/' . PEMCertificatesMock::OTHER_PUBLIC_KEY);
+            $cert = PEMCertificatesMock::getPublicKey(PEMCertificatesMock::PUBLIC_KEY);
+            $oldCert = PEMCertificatesMock::getPublicKey(PEMCertificatesMock::OTHER_PUBLIC_KEY);
             $keyInfo = new KeyInfo(
                 [
                     new X509Data([new X509Certificate(
-                        CertificateUtils::stripHeaders($cert->getCertificate(), CertificateUtils::PUBLIC_KEY_PATTERN),
+                        PEMCertificatesMock::getPlainPublicKeyContents(PEMCertificatesMock::PUBLIC_KEY),
                     )]),
                     new X509Data([new X509Certificate(
-                        CertificateUtils::stripHeaders($oldCert->getCertificate(), CertificateUtils::PUBLIC_KEY_PATTERN),
+                        PEMCertificatesMock::getPlainPublicKeyContents(PEMCertificatesMock::OTHER_PUBLIC_KEY),
                     )]),
                 ]
             );
@@ -83,10 +85,9 @@ trait SignedElementTestTrait
             $signed = $this->testedClass::fromXML($pre->toXML());
 
             // verify signature
-            $cert = X509::fromFile('vendor/simplesamlphp/xml-security' . PEMCertificatesMock::CERTIFICATE_DIR_RSA . '/' . PEMCertificatesMock::PUBLIC_KEY);
             $verifier = (new SignatureAlgorithmFactory([]))->getAlgorithm(
                 $signed->getSignature()->getSignedInfo()->getSignatureMethod()->getAlgorithm(),
-                $cert,
+                PEMCertificatesMock::getPublicKey(PEMCertificatesMock::PUBLIC_KEY)
             );
 // @TODO: take it from here
 //            try {

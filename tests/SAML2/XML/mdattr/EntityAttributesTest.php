@@ -130,15 +130,9 @@ final class EntityAttributesTest extends TestCase
         $unsignedAssertion = new Assertion($issuer, null, 1610743797, $subject, $conditions, [$attrStatement]);
 
         // Sign the assertion
-        $key = PrivateKey::fromFile(
-            'vendor/simplesamlphp/xml-security'
-            . PEMCertificatesMock::CERTIFICATE_DIR_RSA
-            . '/'
-            . PEMCertificatesMock::PRIVATE_KEY
-        );
         $signer = (new SignatureAlgorithmFactory())->getAlgorithm(
             C::SIG_RSA_SHA256,
-            $key
+            PEMCertificatesMock::getPrivateKey(PEMCertificatesMock::PRIVATE_KEY)
         );
         $unsignedAssertion->sign($signer);
         $signedAssertion = Assertion::fromXML($unsignedAssertion->toXML());

@@ -62,16 +62,9 @@ final class AbstractMessageTest extends MockeryTestCase
 AUTHNREQUEST
         );
 
-        $key = PrivateKey::fromFile(
-            dirname(dirname(dirname(dirname(dirname(__FILE__)))))
-            . '/vendor/simplesamlphp/xml-security'
-            . PEMCertificatesMock::CERTIFICATE_DIR_RSA
-            . '/'
-            . PEMCertificatesMock::SELFSIGNED_PRIVATE_KEY
-        );
         $signer = (new SignatureAlgorithmFactory())->getAlgorithm(
             C::SIG_RSA_SHA256,
-            $key
+            PEMCertificatesMock::getPrivateKey(PEMCertificatesMock::SELFSIGNED_PRIVATE_KEY)
         );
 
         $unsignedMessage = MessageFactory::fromXML($authnRequest->documentElement);
@@ -181,16 +174,9 @@ AUTHNREQUEST
         $response = new DOMDocument();
         $response->load(__DIR__ . '../../../../resources/xml/samlp_Response.xml');
 
-        $key = PrivateKey::fromFile(
-            dirname(dirname(dirname(dirname(dirname(__FILE__)))))
-            . '/vendor/simplesamlphp/xml-security'
-            . PEMCertificatesMock::CERTIFICATE_DIR_RSA
-            . '/'
-            . PEMCertificatesMock::SELFSIGNED_PRIVATE_KEY
-        );
         $signer = (new SignatureAlgorithmFactory())->getAlgorithm(
             C::SIG_RSA_SHA256,
-            $key
+            PEMCertificatesMock::getPrivateKey(PEMCertificatesMock::SELFSIGNED_PRIVATE_KEY)
         );
 
         $unsignedMessage = MessageFactory::fromXML($response->documentElement);

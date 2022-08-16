@@ -158,13 +158,7 @@ final class LogoutRequestTest extends MockeryTestCase
 
         $decryptor = (new KeyTransportAlgorithmFactory())->getAlgorithm(
             $encid->getEncryptedKey()->getEncryptionMethod()->getAlgorithm(),
-            PrivateKey::fromFile(
-                dirname(dirname(dirname(dirname(dirname(__FILE__)))))
-                . '/vendor/simplesamlphp/xml-security'
-                . PEMCertificatesMock::CERTIFICATE_DIR_RSA
-                . '/'
-                . PEMCertificatesMock::SELFSIGNED_PRIVATE_KEY
-            )
+            PEMCertificatesMock::getPrivateKey(PEMCertificatesMock::SELFSIGNED_PRIVATE_KEY)
         );
         $identifier = $encid->decrypt($decryptor);
         $this->assertInstanceOf(NameID::class, $identifier);

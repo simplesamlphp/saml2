@@ -186,21 +186,8 @@ final class EncryptedIDTest extends TestCase
         $container->setBlacklistedAlgorithms(null);
 
         // Create keys
-        $privKey = PrivateKey::fromFile(
-            dirname(dirname(dirname(dirname(dirname(__FILE__)))))
-            . '/vendor/simplesamlphp/xml-security'
-            . PEMCertificatesMock::CERTIFICATE_DIR_RSA
-            . '/'
-            . PEMCertificatesMock::SELFSIGNED_PRIVATE_KEY
-        );
-
-        $pubKey = PublicKey::fromFile(
-            dirname(dirname(dirname(dirname(dirname(__FILE__)))))
-            . '/vendor/simplesamlphp/xml-security'
-            . PEMCertificatesMock::CERTIFICATE_DIR_RSA
-            . '/'
-            . PEMCertificatesMock::SELFSIGNED_PUBLIC_KEY
-        );
+        $privKey = PEMCertificatesMock::getPrivateKey(PEMCertificatesMock::SELFSIGNED_PRIVATE_KEY);
+        $pubKey = PEMCertificatesMock::getPublicKey(PEMCertificatesMock::SELFSIGNED_PUBLIC_KEY);
 
         // Create encryptor
         $encryptor = (new KeyTransportAlgorithmFactory())->getAlgorithm(

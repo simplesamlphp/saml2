@@ -344,13 +344,7 @@ AUTHNREQUEST;
 
         $decryptor = (new KeyTransportAlgorithmFactory())->getAlgorithm(
             $identifier->getEncryptedKey()->getEncryptionMethod()->getAlgorithm(),
-            PrivateKey::fromFile(
-                dirname(dirname(dirname(dirname(dirname(__FILE__)))))
-                . '/vendor/simplesamlphp/xml-security'
-                . PEMCertificatesMock::CERTIFICATE_DIR_RSA
-                . '/'
-                . PEMCertificatesMock::SELFSIGNED_PRIVATE_KEY
-            )
+            PEMCertificatesMock::getPrivateKey(PEMCertificatesMock::SELFSIGNED_PRIVATE_KEY)
         );
 
         $nameId = $identifier->decrypt($decryptor);
@@ -369,13 +363,7 @@ AUTHNREQUEST;
     {
         $encryptor = (new KeyTransportAlgorithmFactory())->getAlgorithm(
             C::KEY_TRANSPORT_OAEP,
-            PublicKey::fromFile(
-                dirname(dirname(dirname(dirname(dirname(__FILE__)))))
-                . '/vendor/simplesamlphp/xml-security'
-                . PEMCertificatesMock::CERTIFICATE_DIR_RSA
-                . '/'
-                . PEMCertificatesMock::SELFSIGNED_PUBLIC_KEY
-            )
+            PEMCertificatesMock::getPublicKey(PEMCertificatesMock::SELFSIGNED_PUBLIC_KEY)
         );
 
         // create an encrypted NameID

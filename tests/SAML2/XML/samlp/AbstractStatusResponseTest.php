@@ -102,14 +102,9 @@ final class AbstractStatusResponseTest extends TestCase
             new Chunk($scope->toXML()),
         ]);
 
-        $key = PrivateKey::fromFile(
-            dirname(dirname(dirname(dirname(dirname(__FILE__)))))
-            . '/vendor/simplesamlphp/xml-security/tests/resources/certificates/rsa-pem/'
-            . PEMCertificatesMock::PRIVATE_KEY
-        );
         $signer = (new SignatureAlgorithmFactory())->getAlgorithm(
             C::SIG_RSA_SHA256,
-            $key
+            PEMCertificatesMock::getPrivateKey(PEMCertificatesMock::PRIVATE_KEY),
         );
 
         $response = new Response($status, $issuer, null, null, null, null, null, $extensions);

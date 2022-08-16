@@ -163,15 +163,9 @@ final class HTTPPostTest extends MockeryTestCase
             []
         );
         $response->setRelayState('http://example.org');
-        $key = PrivateKey::fromFile(
-            'vendor/simplesamlphp/xml-security'
-            . PEMCertificatesMock::CERTIFICATE_DIR_RSA
-            . '/'
-            . PEMCertificatesMock::SELFSIGNED_PRIVATE_KEY
-        );
         $signer = (new SignatureAlgorithmFactory())->getAlgorithm(
             C::SIG_RSA_SHA256,
-            $key
+            PEMCertificatesMock::getPrivateKey(PEMCertificatesMock::SELFSIGNED_PRIVATE_KEY)
         );
         $response->sign($signer);
 

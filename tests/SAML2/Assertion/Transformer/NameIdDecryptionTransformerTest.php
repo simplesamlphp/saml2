@@ -80,7 +80,7 @@ final class NameIdDecryptionTransformerTest extends TestCase
     protected $response;
 
     /** @var string */
-    private const FRAMEWORK = '/vendor/simplesamlphp/xml-security';
+    private const FRAMEWORK = 'vendor/simplesamlphp/xml-security';
 
 
     /**
@@ -99,15 +99,17 @@ final class NameIdDecryptionTransformerTest extends TestCase
         $this->response = new Response(new Status(new StatusCode()));
 
         $this->identityProviderConfiguration = new IdentityProvider(['assertionEncryptionEnabled' => true]);
+        $base = getcwd() . DIRECTORY_SEPARATOR . self::FRAMEWORK;
+        $certDir = 'tests' . DIRECTORY_SEPARATOR . PEMCertificatesMock::CERTIFICATE_DIR;
         $this->serviceProviderConfiguration = new ServiceProvider(
             [
                 'entityId' => $spentity,
                 'blacklistedEncryptionAlgorithms' => [],
                 'privateKeys' => [
                     new PrivateKey(
-                        getcwd() . self::FRAMEWORK . '/tests/resources/certificates/rsa-pem/signed.simplesamlphp.org.key',
+                        $base . DIRECTORY_SEPARATOR . $certDir . DIRECTORY_SEPARATOR . PEMCertificatesMock::PRIVATE_KEY,
                         'default',
-                        '1234',
+                        PEMCertificatesMock::PASSPHRASE,
                         true,
                     ),
                 ],
@@ -125,9 +127,7 @@ final class NameIdDecryptionTransformerTest extends TestCase
 
         $encryptor = (new KeyTransportAlgorithmFactory([]))->getAlgorithm(
             C::KEY_TRANSPORT_RSA_1_5,
-            PublicKey::fromFile(
-                getcwd() . self::FRAMEWORK . '/tests/resources/certificates/rsa-pem/' . PEMCertificatesMock::PUBLIC_KEY,
-            ),
+            PEMCertificatesMock::getPublicKey(PEMCertificatesMock::PUBLIC_KEY)
         );
         $nameId = new NameID('value', 'name_qualifier');
         $encryptedId = new EncryptedID($nameId->encrypt($encryptor));
