@@ -8,7 +8,7 @@ use DOMElement;
 use Exception;
 use SimpleSAML\Assert\Assert;
 use SimpleSAML\SAML2\Compat\ContainerSingleton;
-use SimpleSAML\SAML2\Constants;
+use SimpleSAML\SAML2\Constants as C;
 use SimpleSAML\SAML2\Exception\ProtocolViolationException;
 use SimpleSAML\SAML2\Utilities\Temporal;
 use SimpleSAML\SAML2\Utils\XPath;
@@ -159,6 +159,8 @@ class Assertion extends AbstractSamlElement implements
         ?Conditions $conditions = null,
         array $statements = []
     ) {
+        $this->dataType = C::XMLENC_ELEMENT;
+
         Assert::true(
             $subject || !empty($statements),
             "Either a <saml:Subject> or some statement must be present in a <saml:Assertion>"

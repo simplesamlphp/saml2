@@ -10,6 +10,7 @@ use SimpleSAML\SAML2\Compat\ContainerSingleton;
 use SimpleSAML\SAML2\XML\IDNameQualifiersTrait;
 use SimpleSAML\XML\XMLStringElementTrait;
 use SimpleSAML\XMLSecurity\Backend\EncryptionBackend;
+use SimpleSAML\XMLSecurity\Constants as C;
 use SimpleSAML\XMLSecurity\XML\EncryptableElementInterface;
 use SimpleSAML\XMLSecurity\XML\EncryptableElementTrait;
 
@@ -72,6 +73,8 @@ abstract class NameIDType extends AbstractSamlElement implements IdentifierInter
         ?string $Format = null,
         ?string $SPProvidedID = null
     ) {
+        $this->dataType = C::XMLENC_ELEMENT;
+
         $this->setContent($value);
         $this->setNameQualifier($NameQualifier);
         $this->setSPNameQualifier($SPNameQualifier);

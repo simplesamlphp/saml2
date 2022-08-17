@@ -8,7 +8,7 @@ use DOMElement;
 use Exception;
 use SimpleSAML\Assert\Assert;
 use SimpleSAML\SAML2\Compat\ContainerSingleton;
-use SimpleSAML\SAML2\Constants;
+use SimpleSAML\SAML2\Constants as C;
 use SimpleSAML\XML\Exception\InvalidDOMElementException;
 use SimpleSAML\XML\ExtendableAttributesTrait;
 use SimpleSAML\XMLSecurity\XML\EncryptableElementInterface;
@@ -23,6 +23,7 @@ class Attribute extends AbstractSamlElement implements IdentifierInterface, Encr
 {
     use EncryptableElementTrait;
     use ExtendableAttributesTrait;
+
 
     /**
      * The Name of this attribute.
@@ -71,6 +72,8 @@ class Attribute extends AbstractSamlElement implements IdentifierInterface, Encr
         array $AttributeValues = [],
         array $namespacedAttributes = []
     ) {
+        $this->dataType = C::XMLENC_ELEMENT;
+
         $this->setName($Name);
         $this->setNameFormat($NameFormat);
         $this->setFriendlyName($FriendlyName);
