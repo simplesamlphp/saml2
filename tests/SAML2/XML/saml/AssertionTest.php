@@ -8,7 +8,9 @@ use DOMDocument;
 use DOMNodeList;
 use Exception;
 use Mockery\Adapter\Phpunit\MockeryTestCase;
-use SimpleSAML\SAML2\Constants;
+use SimpleSAML\SAML2\Compat\ContainerSingleton;
+use SimpleSAML\SAML2\Compat\MockContainer;
+use SimpleSAML\SAML2\Constants as C;
 use SimpleSAML\SAML2\Utils\XPath;
 use SimpleSAML\SAML2\XML\saml\Assertion;
 use SimpleSAML\SAML2\XML\saml\Attribute;
@@ -35,8 +37,14 @@ use SimpleSAML\XML\Chunk;
 use SimpleSAML\XML\DOMDocumentFactory;
 use SimpleSAML\XML\Exception\MissingElementException;
 use SimpleSAML\XML\Exception\TooManyElementsException;
+use SimpleSAML\XMLSecurity\Alg\KeyTransport\KeyTransportAlgorithmFactory;
+use SimpleSAML\XMLSecurity\Alg\Signature\SignatureAlgorithmFactory;
+use SimpleSAML\XMLSecurity\Key\PublicKey;
+use SimpleSAML\XMLSecurity\Key\PrivateKey;
+use SimpleSAML\XMLSecurity\XML\ds\KeyInfo;
+use SimpleSAML\XMLSecurity\XML\ds\X509Certificate;
+use SimpleSAML\XMLSecurity\XML\ds\X509Data;
 use SimpleSAML\XMLSecurity\TestUtils\PEMCertificatesMock;
-use SimpleSAML\XMLSecurity\XMLSecurityKey;
 
 use function dirname;
 use function strval;
@@ -63,6 +71,10 @@ final class AssertionTest extends MockeryTestCase
         $this->xmlRepresentation = DOMDocumentFactory::fromFile(
             dirname(dirname(dirname(dirname(__FILE__)))) . '/resources/xml/saml_Assertion.xml'
         );
+
+        $container = new MockContainer();
+        $container->setBlacklistedAlgorithms(null);
+        ContainerSingleton::setContainer($container);
     }
 
 
@@ -85,7 +97,7 @@ final class AssertionTest extends MockeryTestCase
         // Create the AuthnStatement
         $authnStatement = new AuthnStatement(
             new AuthnContext(
-                new AuthnContextClassRef(Constants::AC_PASSWORD_PROTECTED_TRANSPORT),
+                new AuthnContextClassRef(C::AC_PASSWORD_PROTECTED_TRANSPORT),
                 null,
                 null
             ),
@@ -110,7 +122,7 @@ final class AssertionTest extends MockeryTestCase
                 'SomeNameIDValue',
                 null,
                 'https://sp.example.org/authentication/sp/metadata',
-                Constants::NAMEID_TRANSIENT,
+                C::NAMEID_TRANSIENT,
                 null
             ),
             [
@@ -120,7 +132,7 @@ final class AssertionTest extends MockeryTestCase
                         'SomeOtherNameIDValue',
                         null,
                         'https://sp.example.org/authentication/sp/metadata',
-                        Constants::NAMEID_TRANSIENT,
+                        C::NAMEID_TRANSIENT,
                         null
                     ),
                     new SubjectConfirmationData(
@@ -245,8 +257,8 @@ XML;
             // Attribute
             [
                 new Attribute('name1', null, null, [new AttributeValue('value1'), new AttributeValue('value2')]),
-                new Attribute('name2', Constants::NAMEFORMAT_UNSPECIFIED, null, [new AttributeValue(2)]),
-                new Attribute('name3', Constants::NAMEFORMAT_BASIC, null, [new AttributeValue(null)])
+                new Attribute('name2', C::NAMEFORMAT_UNSPECIFIED, null, [new AttributeValue(2)]),
+                new Attribute('name3', C::NAMEFORMAT_BASIC, null, [new AttributeValue(null)])
             ],
             // EncryptedAttribute
             []
@@ -297,8 +309,8 @@ XML;
         $this->assertNull($attributes[2]->getAttributeValues()[0]->getValue());
 
         $this->assertNull($attributes[0]->getNameFormat());
-        $this->assertEquals(Constants::NAMEFORMAT_UNSPECIFIED, $attributes[1]->getNameFormat());
-        $this->assertEquals(Constants::NAMEFORMAT_BASIC, $attributes[2]->getNameFormat());
+        $this->assertEquals(C::NAMEFORMAT_UNSPECIFIED, $attributes[1]->getNameFormat());
+        $this->assertEquals(C::NAMEFORMAT_BASIC, $attributes[2]->getNameFormat());
     }
 
 
@@ -374,7 +386,7 @@ XML;
         $this->assertCount(2, $attributes['name3']);
         $this->assertEquals("1234", $attributes['name3'][0]);
         $this->assertEquals("+2345", $attributes['name3'][1]);
-        $this->assertEquals(Constants::NAMEFORMAT_UNSPECIFIED, $assertionToVerify->getAttributeNameFormat());
+        $this->assertEquals(C::NAMEFORMAT_UNSPECIFIED, $assertionToVerify->getAttributeNameFormat());
 
         $attributesValueTypes = $assertionToVerify->getAttributesValueTypes();
         $this->assertCount(3, $attributesValueTypes);
@@ -396,8 +408,7 @@ XML;
      */
     public function testCorrectSignatureMethodCanBeExtracted(): void
     {
-        $document = new DOMDocument();
-        $document->loadXML(<<<XML
+        $document = DOMDocumentFactory::fromString(<<<XML
     <saml:Assertion xmlns:saml="urn:oasis:names:tc:SAML:2.0:assertion"
                     Version="2.0"
                     ID="_93af655219464fb403b34436cfb0c5cb1d9a5502"
@@ -435,17 +446,24 @@ XML;
 XML
         );
 
-        $privateKey = PEMCertificatesMock::getPrivateKey(XMLSecurityKey::RSA_SHA256, PEMCertificatesMock::PRIVATE_KEY);
+        $privateKey = PEMCertificatesMock::getPrivateKey(PEMCertificatesMock::PRIVATE_KEY);
+        $signer = (new SignatureAlgorithmFactory())->getAlgorithm(
+            C::SIG_RSA_SHA256,
+            $privateKey,
+        );
+        $keyInfo = new KeyInfo([
+            new X509Data([
+                new X509Certificate(PEMCertificatesMock::getPlainPublicKeyContents(PEMCertificatesMock::PUBLIC_KEY)),
+            ]),
+        ]);
 
         $unsignedAssertion = Assertion::fromXML($document->documentElement);
-        $unsignedAssertion->setSigningKey($privateKey);
-        $unsignedAssertion->setCertificates([PEMCertificatesMock::getPlainPublicKey(PEMCertificatesMock::PUBLIC_KEY)]);
         $this->assertFalse($unsignedAssertion->wasSignedAtConstruction());
-        $this->assertEquals($privateKey, $unsignedAssertion->getSigningKey());
 
+        $unsignedAssertion->sign($signer, C::C14N_EXCLUSIVE_WITHOUT_COMMENTS, $keyInfo);
         $signedAssertion = Assertion::fromXML($unsignedAssertion->toXML());
 
-        $this->assertEquals($privateKey->getAlgorithm(), $signedAssertion->getSignature()->getAlgorithm());
+        $this->assertEquals(C::SIG_RSA_SHA256, $signedAssertion->getSignature()->getSignedInfo()->getSignatureMethod()->getAlgorithm());
         $this->assertTrue($signedAssertion->wasSignedAtConstruction());
     }
 
@@ -601,25 +619,26 @@ XML;
      */
     public function testVerifySignedAssertion(): void
     {
-        $doc = new DOMDocument();
-        $doc->load('tests/resources/xml/assertions/signedassertion.xml');
-
-        $publicKey = PEMCertificatesMock::getPublicKey(XMLSecurityKey::RSA_SHA256, PEMCertificatesMock::SELFSIGNED_PUBLIC_KEY);
-
+        $doc = DOMDocumentFactory::fromFile('tests/resources/xml/assertions/signedassertion.xml');
         $assertion = Assertion::fromXML($doc->documentElement);
-        $result = $assertion->validate($publicKey);
 
-        $this->assertTrue($result);
+        $verifier = (new SignatureAlgorithmFactory())->getAlgorithm(
+            $assertion->getSignature()->getSignedInfo()->getSignatureMethod()->getAlgorithm(),
+            PEMCertificatesMock::getPublicKey(PEMCertificatesMock::SELFSIGNED_PUBLIC_KEY),
+        );
+
+        $verified = $assertion->verify($verifier);
+
         // Double-check that we can actually retrieve some basics.
-        $this->assertEquals("_d908a49b8b63665738430d1c5b655f297b91331864", $assertion->getId());
+        $this->assertEquals("_d908a49b8b63665738430d1c5b655f297b91331864", $verified->getId());
         $this->assertEquals(
             "https://idp.example.org/simplesaml/saml2/idp/metadata.php",
-            $assertion->getIssuer()->getContent()
+            $verified->getIssuer()->getContent()
         );
-        $this->assertEquals("1457707995", $assertion->getIssueInstant());
+        $this->assertEquals("1457707995", $verified->getIssueInstant());
 
         // Was signed
-        $this->assertTrue($assertion->wasSignedAtConstruction());
+        $this->assertTrue($verified->wasSignedAtConstruction());
     }
 
 
@@ -629,19 +648,18 @@ XML;
      */
     public function testCommentsInSignedAssertion(): void
     {
-        $doc = new DOMDocument();
-        $doc->load('tests/resources/xml/assertions/signedassertion_with_comments.xml');
-
-        $publicKey = PEMCertificatesMock::getPublicKey(XMLSecurityKey::RSA_SHA256, PEMCertificatesMock::SELFSIGNED_PUBLIC_KEY);
-
+        $doc = DOMDocumentFactory::fromFile('tests/resources/xml/assertions/signedassertion_with_comments.xml');
         $assertion = Assertion::fromXML($doc->documentElement);
-        $result = $assertion->validate($publicKey);
 
-        $this->assertTrue($result);
-        /** @psalm-var \SimpleSAML\SAML2\XML\saml\Subject $subject */
-        $subject = $assertion->getSubject();
+        $verifier = (new SignatureAlgorithmFactory())->getAlgorithm(
+            $assertion->getSignature()->getSignedInfo()->getSignatureMethod()->getAlgorithm(),
+            PEMCertificatesMock::getPublicKey(PEMCertificatesMock::SELFSIGNED_PUBLIC_KEY),
+        );
 
-        /** @psalm-var \SimpleSAML\SAML2\XML\saml\IdentifierInterface $identifier */
+        $verified = $assertion->verify($verifier);
+
+        $subject = $verified->getSubject();
+
         $identifier = $subject->getIdentifier();
         $this->assertEquals("_1bbcf227253269d19a689c53cdd542fe2384a9538b", $identifier->getContent());
     }
@@ -653,8 +671,7 @@ XML;
      */
     public function testVerifySignedAssertionChangedBody(): void
     {
-        $doc = new DOMDocument();
-        $doc->load('tests/resources/xml/assertions/signedassertion_tampered.xml');
+        $doc = DOMDocumentFactory::fromFile('tests/resources/xml/assertions/signedassertion_tampered.xml');
 
         $this->expectException(Exception::class);
         $this->expectExceptionMessage('Reference validation failed');
@@ -669,18 +686,18 @@ XML;
      */
     public function testVerifySignedAssertionWrongAlgorithm(): void
     {
-        $doc = new DOMDocument();
-        $doc->load('tests/resources/xml/assertions/signedassertion.xml');
+        $doc = DOMDocumentFactory::fromFile('tests/resources/xml/assertions/signedassertion.xml');
+        $assertion = Assertion::fromXML($doc->documentElement);
 
-        $publicKey = PEMCertificatesMock::getPublicKey(
-            XMLSecurityKey::RSA_SHA1,
-            PEMCertificatesMock::SELFSIGNED_PUBLIC_KEY
+        $verifier = (new SignatureAlgorithmFactory())->getAlgorithm(
+            C::SIG_RSA_SHA384,
+            PEMCertificatesMock::getPublicKey(PEMCertificatesMock::SELFSIGNED_PUBLIC_KEY),
         );
 
-        $assertion = Assertion::fromXML($doc->documentElement);
         $this->expectException(Exception::class);
         $this->expectExceptionMessage('Algorithm provided in key does not match algorithm used in signature.');
-        $assertion->validate($publicKey);
+
+        $assertion->verify($verifier);
     }
 
 
@@ -690,41 +707,40 @@ XML;
      */
     public function testVerifySignedAssertionWrongKey(): void
     {
-        $doc = new DOMDocument();
-        $doc->load('tests/resources/xml/assertions/signedassertion.xml');
+        $doc = DOMDocumentFactory::fromFile('tests/resources/xml/assertions/signedassertion.xml');
+        $assertion = Assertion::fromXML($doc->documentElement);
 
-        $publicKey = PEMCertificatesMock::getPublicKey(
-            XMLSecurityKey::RSA_SHA256,
-            PEMCertificatesMock::OTHER_PUBLIC_KEY
+        $verifier = (new SignatureAlgorithmFactory())->getAlgorithm(
+            $assertion->getSignature()->getSignedInfo()->getSignatureMethod()->getAlgorithm(),
+            PEMCertificatesMock::getPublicKey(PEMCertificatesMock::OTHER_PUBLIC_KEY),
         );
 
-        $assertion = Assertion::fromXML($doc->documentElement);
         $this->expectException(Exception::class);
         $this->expectExceptionMessage('Unable to validate Signature');
-        $assertion->validate($publicKey);
+
+        $assertion->verify($verifier);
     }
 
 
     /**
      * Try to verify an assertion signed with RSA with a DSA public key.
      * Must yield a signature validation exception.
-     */
     public function testVerifySignedAssertionWrongKeyDSA(): void
     {
-        $doc = new DOMDocument();
-        $doc->load('tests/resources/xml/assertions/signedassertion.xml');
+        $doc = DOMDocumentFactory::fromFile('tests/resources/xml/assertions/signedassertion.xml');
+        $assertion = Assertion::fromXML($doc->documentElement);
 
-        $publicKey = PEMCertificatesMock::getPublicKey(
-            XMLSecurityKey::RSA_SHA256,
-            PEMCertificatesMock::SELFSIGNED_PUBLIC_KEY,
-            PEMCertificatesMock::ALG_SIG_DSA
+        $verifier = (new SignatureAlgorithmFactory())->getAlgorithm(
+            $assertion->getSignature()->getSignedInfo()->getSignatureMethod()->getAlgorithm(),
+            PEMCertificatesMock::getPublicKey(PEMCertificatesMock::SELFSIGNED_PUBLIC_KEY),
         );
 
-        $assertion = Assertion::fromXML($doc->documentElement);
         $this->expectException(Exception::class);
         $this->expectExceptionMessage('Unable to validate Signature');
-        $assertion->validate($publicKey);
+
+        $assertion->verify($verifier);
     }
+     */
 
 
     /**
@@ -760,10 +776,7 @@ XML;
 
         // Was not signed
         $this->assertFalse($assertion->wasSignedAtConstruction());
-
-        $publicKey = PEMCertificatesMock::getPublicKey(XMLSecurityKey::RSA_SHA256, PEMCertificatesMock::PUBLIC_KEY);
-        $result = $assertion->validate($publicKey);
-        $this->assertFalse($result);
+        $this->assertNull($assertion->getSignature());
     }
 
 
@@ -1054,12 +1067,14 @@ XML;
         );
 
         // Create a Subject
-        $nameId = new NameID("just_a_basic_identifier", null, null, Constants::NAMEID_TRANSIENT);
+        $nameId = new NameID("just_a_basic_identifier", null, null, C::NAMEID_TRANSIENT);
         $this->assertInstanceOf(NameID::class, $nameId);
 
-        $publicKey = PEMCertificatesMock::getPublicKey(XMLSecurityKey::RSA_SHA256, PEMCertificatesMock::PUBLIC_KEY);
-        /** @psalm-var \SimpleSAML\SAML2\XML\saml\EncryptedID */
-        $encId = EncryptedID::fromUnencryptedElement($nameId, $publicKey);
+        $encryptor = (new KeyTransportAlgorithmFactory())->getAlgorithm(
+            C::KEY_TRANSPORT_OAEP,
+            PEMCertificatesMock::getPublicKey(PEMCertificatesMock::PUBLIC_KEY),
+        );
+        $encId = new EncryptedID($nameId->encrypt($encryptor));
 
         $subject = new Subject($encId);
 
@@ -1091,8 +1106,11 @@ XML;
         $identifier = $assertionToVerify->getSubject()->getIdentifier();
         $this->assertInstanceOf(EncryptedID::class, $identifier);
 
-        $privateKey = PEMCertificatesMock::getPrivateKey(XMLSecurityKey::RSA_SHA256, PEMCertificatesMock::PRIVATE_KEY);
-        $nameID = $identifier->decrypt($privateKey, []);
+        $decryptor = (new KeyTransportAlgorithmFactory())->getAlgorithm(
+            $identifier->getEncryptedKey()->getEncryptionMethod()->getAlgorithm(),
+            PEMCertificatesMock::getPrivateKey(PEMCertificatesMock::PRIVATE_KEY),
+        );
+        $nameID = $identifier->decrypt($decryptor);
 
         $this->assertInstanceOf(NameID::class, $nameID);
         $this->assertEquals('just_a_basic_identifier', $nameID->getContent());
@@ -1119,11 +1137,11 @@ XML;
             [
                 new Attribute(
                     'name1',
-                    Constants::NAMEFORMAT_UNSPECIFIED,
+                    C::NAMEFORMAT_UNSPECIFIED,
                     null,
                     [new AttributeValue('value1'), new AttributeValue('value2')]
                 ),
-                new Attribute('name2', Constants::NAMEFORMAT_UNSPECIFIED, null, [new AttributeValue('value3')]),
+                new Attribute('name2', C::NAMEFORMAT_UNSPECIFIED, null, [new AttributeValue('value3')]),
             ],
             // EncryptedAttribute
             []
@@ -1141,18 +1159,20 @@ XML;
 
         // Create Subject
         $subject = new Subject(
-            new NameID("just_a_basic_identifier", Constants::NAMEID_TRANSIENT)
+            new NameID("just_a_basic_identifier", C::NAMEID_TRANSIENT)
         );
 
         $statements = [$authnStatement, $attributeStatement];
 
-        // Create an assertion
+        // Create a signed assertion
         $assertion = new Assertion($issuer, null, null, $subject, $conditions, $statements);
-        $assertion->setSigningKey(
-            PEMCertificatesMock::getPrivateKey(XMLSecurityKey::RSA_SHA256, PEMCertificatesMock::PRIVATE_KEY)
+        $signer = (new SignatureAlgorithmFactory())->getAlgorithm(
+            C::SIG_RSA_SHA256,
+            PEMCertificatesMock::getPrivateKey(PEMCertificatesMock::PRIVATE_KEY),
         );
 
         // Marshall it to a \DOMElement
+        $assertion->sign($signer);
         $assertionElement = $assertion->toXML();
 
         // Test for an Issuer
@@ -1207,15 +1227,20 @@ XML;
         $document  = DOMDocumentFactory::fromString($xml);
         $assertion = Assertion::fromXML($document->documentElement);
 
-        $pubkey = new XMLSecurityKey(XMLSecurityKey::RSA_SHA256, ['type' => 'public']);
-        $pubkey->loadKey(PEMCertificatesMock::getPlainPublicKey(PEMCertificatesMock::PUBLIC_KEY));
+        $encryptor = (new KeyTransportAlgorithmFactory())->getAlgorithm(
+            C::KEY_TRANSPORT_OAEP,
+            PEMCertificatesMock::getPublicKey(PEMCertificatesMock::OTHER_PUBLIC_KEY),
+        );
 
-        $encass = EncryptedAssertion::fromUnencryptedElement($assertion, $pubkey);
+        $encass = new EncryptedAssertion($assertion->encrypt($encryptor));
         $doc = DOMDocumentFactory::fromString(strval($encass));
-        $encass = EncryptedAssertion::fromXML($doc->documentElement);
-        $privkey = new XMLSecurityKey(XMLSecurityKey::RSA_SHA256, ['type' => 'private']);
-        $privkey->loadKey(PEMCertificatesMock::getPlainPrivateKey(PEMCertificatesMock::PRIVATE_KEY));
-        $decrypted = $encass->decrypt($privkey);
+
+        $decryptor = (new KeyTransportAlgorithmFactory())->getAlgorithm(
+            $encass->getEncryptedKey()->getEncryptionMethod()->getAlgorithm(),
+            PEMCertificatesMock::getPrivateKey(PEMCertificatesMock::OTHER_PRIVATE_KEY)
+        );
+
+        $decrypted = $encass->decrypt($decryptor);
         $this->assertEquals(strval($assertion), strval($decrypted));
     }
 }

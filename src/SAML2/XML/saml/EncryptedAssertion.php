@@ -7,6 +7,7 @@ namespace SimpleSAML\SAML2\XML\saml;
 use SimpleSAML\SAML2\Compat\ContainerSingleton;
 use SimpleSAML\SAML2\Utils;
 use SimpleSAML\XML\AbstractXMLElement;
+use SimpleSAML\XML\DOMDocumentFactory;
 use SimpleSAML\XMLSecurity\Alg\Encryption\EncryptionAlgorithmInterface;
 use SimpleSAML\XMLSecurity\Backend\EncryptionBackend;
 use SimpleSAML\XMLSecurity\Utils\Security;
@@ -38,6 +39,7 @@ class EncryptedAssertion extends AbstractSamlElement implements EncryptedElement
     {
         // return the encryption backend you want to use,
         // or null if you are fine with the default
+        return null;
     }
 
 
@@ -49,11 +51,9 @@ class EncryptedAssertion extends AbstractSamlElement implements EncryptedElement
      */
     public function decrypt(EncryptionAlgorithmInterface $decryptor): Assertion
     {
-//        $assertionXML = Security::decryptElement($this->encryptedData->toXML(), $key, $blacklist);
-
-//        Utils::getContainer()->debugMessage($assertionXML, 'decrypt');
-
-//        return Assertion::fromXML($assertionXML);
+        return Assertion::fromXML(
+            DOMDocumentFactory::fromString($this->decryptData($decryptor))->documentElement
+        );
     }
 
 
