@@ -16,8 +16,8 @@ use SimpleSAML\SAML2\XML\samlp\AuthnRequest;
 use SimpleSAML\SAML2\XML\samlp\Response;
 use SimpleSAML\SAML2\XML\samlp\Status;
 use SimpleSAML\SAML2\XML\samlp\StatusCode;
+use SimpleSAML\XMLSecurity\Alg\Signature\SignatureAlgorithmFactory;
 use SimpleSAML\XMLSecurity\TestUtils\PEMCertificatesMock;
-use SimpleSAML\XMLSecurity\XMLSecurityKey;
 
 /**
  * @covers \SimpleSAML\SAML2\HTTPRedirect
@@ -132,13 +132,22 @@ final class HTTPRedirectTest extends MockeryTestCase
         $samlrequest = $hr->receive($request);
 
         // validate with the correct certificate, should verify
-        $result = $samlrequest->validate(PEMCertificatesMock::getPublicKey(XMLSecurityKey::RSA_SHA256, PEMCertificatesMock::SELFSIGNED_PUBLIC_KEY));
-        $this->assertTrue($result);
+        $verifier = (new SignatureAlgorithmFactory())->getAlgorithm(
+            $samlrequest->getSignature()->getSignedInfo()->getSignatureMethod()->getAlgorithm(),
+            PEMCertificatesMock::getPublicKey(PEMCertificatesMock::SELFSIGNED_PUBLIC_KEY),
+        );
+
+        $samlrequest->verify($verifier);
 
         // validate with another cert, should fail
         $this->expectException(Exception::class);
         $this->expectExceptionMessage('Unable to validate signature');
-        $samlrequest->validate(PEMCertificatesMock::getPublicKey(XMLSecurityKey::RSA_SHA256, PEMCertificatesMock::OTHER_PUBLIC_KEY));
+
+        $verifier = (new SignatureAlgorithmFactory())->getAlgorithm(
+            $myObject->getSignature()->getSignedInfo()->getSignatureMethod()->getAlgorithm(),
+            PEMCertificatesMock::getPublicKey(PEMCertificatesMock::OTHER_PUBLIC_KEY),
+        );
+        $samlrequest->verified(PEMCertificatesMock::getPublicKey(PEMCertificatesMock::OTHER_PUBLIC_KEY));
     }
 
 
@@ -275,7 +284,6 @@ final class HTTPRedirectTest extends MockeryTestCase
 
         $response = new Response($status, $issuer, null, null, null, 'http://example.org/login?success=yes');
         $response->setRelayState('http://example.org');
-        $response->setSigningKey(PEMCertificatesMock::getPrivateKey(XMLSecurityKey::RSA_SHA256, PEMCertificatesMock::SELFSIGNED_PRIVATE_KEY));
         $hr = new HTTPRedirect();
         $hr->send($response);
     }

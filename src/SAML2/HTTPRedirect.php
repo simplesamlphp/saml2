@@ -8,12 +8,13 @@ use DOMElement;
 use Exception;
 use Psr\Http\Message\ServerRequestInterface;
 use SimpleSAML\Assert\Assert;
+use SimpleSAML\SAML2\Constants as C;
 use SimpleSAML\SAML2\XML\samlp\AbstractMessage;
 use SimpleSAML\SAML2\XML\samlp\AbstractRequest;
 use SimpleSAML\SAML2\XML\samlp\MessageFactory;
 use SimpleSAML\XML\DOMDocumentFactory;
+use SimpleSAML\XMLSecurity\Key\AbstractKey;
 use SimpleSAML\XMLSecurity\Utils\Security;
-use SimpleSAML\XMLSecurity\XMLSecurityKey;
 
 use function array_key_exists;
 use function base64_decode;
@@ -36,8 +37,6 @@ use function var_export;
  */
 class HTTPRedirect extends Binding
 {
-    public const DEFLATE = 'urn:oasis:names:tc:SAML:2.0:bindings:URL-Encoding:DEFLATE';
-
     /**
      * Create the redirect URL for a message.
      *
@@ -56,9 +55,6 @@ class HTTPRedirect extends Binding
         }
 
         $relayState = $message->getRelayState();
-
-        $key = $message->getSigningKey();
-
         $msgStr = $message->toXML();
 
         Utils::getContainer()->debugMessage($msgStr, 'out');
@@ -80,12 +76,10 @@ class HTTPRedirect extends Binding
             $msg .= '&RelayState=' . urlencode($relayState);
         }
 
-        if ($key !== null) { // add the signature
-            /** @psalm-suppress PossiblyInvalidArgument */
-            $msg .= '&SigAlg=' . urlencode($key->type);
-
-            $signature = $key->signData($msg);
-            $msg .= '&Signature=' . urlencode(base64_encode($signature));
+        $signature = $message->getSignature();
+        if ($signature !== null) { // add the signature
+            $msg .= '&SigAlg=' . urlencode($signature->getSignedInfo()->getSignatureMethod()->getAlgorithm());
+            $msg .= '&Signature=' . urlencode($signature->getSignatureValue()->getContent());
         }
 
         if (strpos($destination, '?') === false) {
@@ -136,7 +130,7 @@ class HTTPRedirect extends Binding
             throw new Exception('Missing SAMLRequest or SAMLResponse parameter.');
         }
 
-        if (isset($query['SAMLEncoding']) && $query['SAMLEncoding'] !== self::DEFLATE) {
+        if (isset($query['SAMLEncoding']) && $query['SAMLEncoding'] !== C::BINDING_HTTP_REDIRECT_DEFLATE) {
             throw new Exception('Unknown SAMLEncoding: ' . var_export($query['SAMLEncoding'], true));
         }
 
@@ -186,17 +180,16 @@ class HTTPRedirect extends Binding
      * Throws an exception if we are unable to validate the signature.
      *
      * @param array $data The data we need to validate the query string.
-     * @param \SimpleSAML\XMLSecurity\XMLSecurityKey $key  The key we should validate the query against.
+     * @param \SimpleSAML\XMLSecurity\Key\AbstractKey $key  The key we should validate the query against.
      *
      * @throws \Exception
      * @throws \SimpleSAML\Assert\AssertionFailedException if assertions are false
      */
-    public static function validateSignature(array $data, XMLSecurityKey $key): void
+    public static function validateSignature(array $data, AbstractKey $key): void
     {
         Assert::keyExists($data, "Query");
         Assert::keyExists($data, "SigAlg");
         Assert::keyExists($data, "Signature");
-        Assert::same($key->type, XMLSecurityKey::RSA_SHA256, 'Invalid key type for validating signature on query string.');
 
         $query = $data['Query'];
         $sigAlg = $data['SigAlg'];

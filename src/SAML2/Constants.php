@@ -57,6 +57,11 @@ class Constants extends \SimpleSAML\XMLSecurity\Constants
     public const BINDING_HTTP_REDIRECT = 'urn:oasis:names:tc:SAML:2.0:bindings:HTTP-Redirect';
 
     /**
+     * The URN for the DEFLATE url encoding
+     */
+    public const BINDING_HTTP_REDIRECT_DEFLATE = 'urn:oasis:names:tc:SAML:2.0:bindings:URL-Encoding:DEFLATE';
+
+    /**
      * The URN for the PAOS binding.
      */
     public const BINDING_PAOS = 'urn:oasis:names:tc:SAML:2.0:bindings:PAOS';
