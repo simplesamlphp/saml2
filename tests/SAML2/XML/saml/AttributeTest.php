@@ -6,15 +6,19 @@ namespace SimpleSAML\Test\SAML2\XML\saml;
 
 use DOMDocument;
 use PHPUnit\Framework\TestCase;
-use SimpleSAML\SAML2\Constants;
+use SimpleSAML\SAML2\Compat\ContainerSingleton;
+use SimpleSAML\SAML2\Compat\MockContainer;
+use SimpleSAML\SAML2\Constants as C;
 use SimpleSAML\SAML2\XML\saml\Attribute;
 use SimpleSAML\SAML2\XML\saml\AttributeValue;
 use SimpleSAML\SAML2\XML\saml\EncryptedAttribute;
 use SimpleSAML\Test\XML\SerializableXMLTestTrait;
 use SimpleSAML\XML\DOMDocumentFactory;
 use SimpleSAML\XML\Exception\MissingAttributeException;
+use SimpleSAML\XMLSecurity\Alg\KeyTransport\KeyTransportAlgorithmFactory;
+use SimpleSAML\XMLSecurity\Key\PrivateKey;
+use SimpleSAML\XMLSecurity\Key\PublicKey;
 use SimpleSAML\XMLSecurity\TestUtils\PEMCertificatesMock;
-use SimpleSAML\XMLSecurity\XMLSecurityKey;
 
 use function dirname;
 use function strval;
@@ -40,6 +44,10 @@ final class AttributeTest extends TestCase
         $this->xmlRepresentation = DOMDocumentFactory::fromFile(
             dirname(dirname(dirname(dirname(__FILE__)))) . '/resources/xml/saml_Attribute.xml'
         );
+
+        $container = new MockContainer();
+        $container->setBlacklistedAlgorithms(null);
+        ContainerSingleton::setContainer($container);
     }
 
 
@@ -131,16 +139,23 @@ final class AttributeTest extends TestCase
     public function testEncryption(): void
     {
         $attribute = Attribute::fromXML($this->xmlRepresentation->documentElement);
-        $pubkey = new XMLSecurityKey(XMLSecurityKey::RSA_SHA256, ['type' => 'public']);
-        $pubkey->loadKey(PEMCertificatesMock::getPlainPublicKey(PEMCertificatesMock::PUBLIC_KEY));
-        /** @psalm-var \SimpleSAML\SAML2\XML\saml\EncryptedAttribute $encattr */
-        $encattr = EncryptedAttribute::fromUnencryptedElement($attribute, $pubkey);
+
+        $encryptor = (new KeyTransportAlgorithmFactory())->getAlgorithm(
+            C::KEY_TRANSPORT_OAEP,
+            PEMCertificatesMock::getPublicKey(PEMCertificatesMock::PUBLIC_KEY),
+        );
+
+        $encattr = new EncryptedAttribute($attribute->encrypt($encryptor));
         $str = strval($encattr);
         $doc = DOMDocumentFactory::fromString($str);
         $encattr = EncryptedAttribute::fromXML($doc->documentElement);
-        $privkey = new XMLSecurityKey(XMLSecurityKey::RSA_SHA256, ['type' => 'private']);
-        $privkey->loadKey(PEMCertificatesMock::getPlainPrivateKey(PEMCertificatesMock::PRIVATE_KEY));
-        $attr = $encattr->decrypt($privkey);
+
+        $decryptor = (new KeyTransportAlgorithmFactory())->getAlgorithm(
+            $encattr->getEncryptedKey()->getEncryptionMethod()->getAlgorithm(),
+            PEMCertificatesMock::getPrivateKey(PEMCertificatesMock::PRIVATE_KEY),
+        );
+
+        $attr = $encattr->decrypt($decryptor);
         $this->assertEquals(strval($attribute), strval($attr));
     }
 }
