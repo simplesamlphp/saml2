@@ -7,7 +7,7 @@ namespace SimpleSAML\SAML2\XML\saml;
 use DOMElement;
 use SimpleSAML\Assert\Assert;
 use SimpleSAML\XML\Exception\InvalidDOMElementException;
-use SimpleSAML\XMLSecurity\XMLSecurityKey;
+use SimpleSAML\XMLSecurity\Alg\Encryption\EncryptionAlgorithmInterface;
 
 /**
  * Class representing a SAML2 AttributeStatement
@@ -68,12 +68,12 @@ class AttributeStatement extends AbstractStatement
 
 
     /**
-     * @param \SimpleSAML\XMLSecurity\XMLSecurityKey $key
+     * @param \SimpleSAML\XMLSecurity\Alg\Encryption\EncryptionAlgorithmInterface
      * @param array $blacklist
      *
      * @throws \Exception
      */
-    public function decryptAttributes(XMLSecurityKey $key, array $blacklist = []): void
+    public function decryptAttributes(EncryptionAlgorithmInterface $decryptor, array $blacklist = []): void
     {
         Assert::allStringNotEmpty($blacklist);
 

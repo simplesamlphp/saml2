@@ -31,6 +31,9 @@ final class StatusTest extends TestCase
 {
     use SerializableXMLTestTrait;
 
+    /** @var \DOMDocument $detail */
+    private DOMDocument $detail;
+
 
     /**
      */

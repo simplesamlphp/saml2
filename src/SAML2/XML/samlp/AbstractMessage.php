@@ -14,11 +14,11 @@ use SimpleSAML\SAML2\Utils;
 use SimpleSAML\SAML2\Utils\XPath;
 use SimpleSAML\SAML2\XML\ExtendableElementTrait;
 use SimpleSAML\SAML2\XML\saml\Issuer;
+use SimpleSAML\XMLSecurity\Key\PublicKey;
 use SimpleSAML\XMLSecurity\XML\SignableElementInterface;
 use SimpleSAML\XMLSecurity\XML\SignableElementTrait;
 use SimpleSAML\XMLSecurity\XML\SignedElementInterface;
 use SimpleSAML\XMLSecurity\XML\SignedElementTrait;
-use SimpleSAML\XMLSecurity\XMLSecurityKey;
 
 use function array_pop;
 use function call_user_func;
@@ -167,11 +167,11 @@ abstract class AbstractMessage extends AbstractSamlpElement implements SignableE
      * signature we can validate. An exception is thrown if the signature
      * validation fails.
      *
-     * @param \SimpleSAML\XMLSecurity\XMLSecurityKey $key The key we should check against
+     * @param \SimpleSAML\XMLSecurity\Key\PublicKey $key The key we should check against
      * @throws \Exception
      * @return bool true on success, false when we don't have a signature
      */
-    public function validate(XMLSecurityKey $key): bool
+    public function validate(PublicKey $key): bool
     {
         if (count($this->validators) === 0) {
             return false;
@@ -381,11 +381,11 @@ abstract class AbstractMessage extends AbstractSamlpElement implements SignableE
      * Wrapper method over SignedElementTrait to use as a validator for enveloped XML signatures.
      *
      * @param array $_
-     * @param \SimpleSAML\XMLSecurity\XMLSecurityKey $key The key to use to verify the enveloped signature.
+     * @param \SimpleSAML\XMLSecurity\Key\PublicKey $key The key to use to verify the enveloped signature.
      *
      * @throws \Exception If there's no enveloped signature, or it fails to validate.
      */
-    protected function xmlSignatureValidatorWrapper(array $_, XMLSecurityKey $key): void
+    protected function xmlSignatureValidatorWrapper(array $_, PublicKey $key): void
     {
         if ($this->validateEnvelopedXmlSignature($key) === false) {
             throw new Exception('No enveloped signature found');

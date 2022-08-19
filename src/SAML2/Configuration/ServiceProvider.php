@@ -5,7 +5,7 @@ declare(strict_types=1);
 namespace SimpleSAML\SAML2\Configuration;
 
 use RuntimeException;
-use SimpleSAML\XMLSecurity\XMLSecurityKey;
+use SimpleSAML\XMLSecurity\Constants as C;
 
 use function array_filter;
 use function array_pop;
@@ -118,6 +118,6 @@ class ServiceProvider extends ArrayAdapter implements CertificateProvider, Decry
      */
     public function getBlacklistedAlgorithms(): array
     {
-        return $this->get('blacklistedEncryptionAlgorithms', [XMLSecurityKey::RSA_1_5]);
+        return $this->get('blacklistedEncryptionAlgorithms', [C::KEY_TRANSPORT_RSA_1_5]);
     }
 }

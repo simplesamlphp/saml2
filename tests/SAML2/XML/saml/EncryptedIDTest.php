@@ -59,14 +59,10 @@ final class EncryptedIDTest extends TestCase
         $this->xmlRepresentation = DOMDocumentFactory::fromFile(
             dirname(dirname(dirname(dirname(__FILE__)))) . '/resources/xml/saml_EncryptedID.xml'
         );
-    }
 
-
-    /**
-     */
-    public function tearDown(): void
-    {
-        ContainerSingleton::setContainer(new MockContainer());
+        $container = new MockContainer();
+        $container->setBlacklistedAlgorithms(null);
+        ContainerSingleton::setContainer($container);
     }
 
 
@@ -111,7 +107,7 @@ final class EncryptedIDTest extends TestCase
                 [new DataReference('#Encrypted_DATA_ID')]
             )
         );
-        $eid = new EncryptedID($ed, [$ek]);
+        $eid = new EncryptedID($ed);
 
         $this->assertEquals(
             $this->xmlRepresentation->saveXML($this->xmlRepresentation->documentElement),
@@ -158,7 +154,7 @@ final class EncryptedIDTest extends TestCase
                 [new DataReference('#Encrypted_DATA_ID')]
             )
         );
-        $eid = new EncryptedID($ed, [$ek]);
+        $eid = new EncryptedID($ed);
         $eidElement = $eid->toXML();
 
         // Test for an EncryptedID
@@ -182,9 +178,6 @@ final class EncryptedIDTest extends TestCase
      */
     public function testEncryption(): void
     {
-        $container = ContainerSingleton::getInstance(new MockContainer());
-        $container->setBlacklistedAlgorithms(null);
-
         // Create keys
         $privKey = PEMCertificatesMock::getPrivateKey(PEMCertificatesMock::SELFSIGNED_PRIVATE_KEY);
         $pubKey = PEMCertificatesMock::getPublicKey(PEMCertificatesMock::SELFSIGNED_PUBLIC_KEY);

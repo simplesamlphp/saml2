@@ -28,7 +28,6 @@ use SimpleSAML\XMLSecurity\XML\SignedElementInterface;
 use SimpleSAML\XMLSecurity\XML\SignedElementTrait;
 use SimpleSAML\XMLSecurity\Backend\EncryptionBackend;
 use SimpleSAML\XMLSecurity\XMLSecEnc;
-use SimpleSAML\XMLSecurity\XMLSecurityKey;
 
 use function array_filter;
 use function array_merge;

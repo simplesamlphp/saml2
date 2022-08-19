@@ -12,7 +12,9 @@ use SimpleSAML\SAML2\XML\saml\Issuer;
 use SimpleSAML\Test\XML\SerializableXMLTestTrait;
 use SimpleSAML\XML\DOMDocumentFactory;
 use SimpleSAML\XML\Chunk;
+use SimpleSAML\XMLSecurity\Alg\KeyTransport\KeyTransportAlgorithmFactory;
 use SimpleSAML\XMLSecurity\TestUtils\PEMCertificatesMock;
+use SimpleSAML\XMLSecurity\Constants as C;
 use SimpleSAML\XMLSecurity\XML\ds\KeyInfo;
 use SimpleSAML\XMLSecurity\XML\xenc\CipherData;
 use SimpleSAML\XMLSecurity\XML\xenc\DataReference;
@@ -20,7 +22,6 @@ use SimpleSAML\XMLSecurity\XML\xenc\EncryptedData;
 use SimpleSAML\XMLSecurity\XML\xenc\EncryptedKey;
 use SimpleSAML\XMLSecurity\XML\xenc\EncryptionMethod;
 use SimpleSAML\XMLSecurity\XML\xenc\ReferenceList;
-use SimpleSAML\XMLSecurity\XMLSecurityKey;
 
 use function dirname;
 use function strval;
@@ -67,7 +68,7 @@ final class EncryptedAssertionTest extends TestCase
                 [new Chunk(DOMDocumentFactory::fromFile(dirname(dirname(dirname(dirname(dirname(__FILE__))))) . '/vendor/simplesamlphp/xml-security/tests/resources/xml/ds_RetrievalMethod.xml')->documentElement)]
             )
         );
-        $encryptedAssertion = new EncryptedAssertion($ed, []);
+        $encryptedAssertion = new EncryptedAssertion($ed);
 
         $this->assertEquals(
             $this->xmlRepresentation->saveXML($this->xmlRepresentation->documentElement),
@@ -81,21 +82,25 @@ final class EncryptedAssertionTest extends TestCase
      */
     public function testEncryption(): void
     {
-        $this->markTestSkipped('This test can be enabled as soon as the rewrite-assertion branch has been merged');
-
-        $pubkey = new XMLSecurityKey(XMLSecurityKey::RSA_SHA256, ['type' => 'public']);
-        $pubkey->loadKey(PEMCertificatesMock::getPlainPublicKey(PEMCertificatesMock::PUBLIC_KEY));
-
         $assertion = new Assertion(new Issuer('Test'));
 
-        $encAssertion = EncryptedAssertion::fromUnencryptedElement($assertion, $pubkey);
+        $encryptor = (new KeyTransportAlgorithmFactory())->getAlgorithm(
+            C::KEY_TRANSPORT_OAEP,
+            PEMCertificatesMock::getPublicKey(PEMCertificatesMock::PUBLIC_KEY),
+        );
+
+        $encAssertion = new EncryptedAssertion($assertion->encrypt($encryptor));
         $doc = DOMDocumentFactory::fromString(strval($encAssertion));
 
-        /** @psalm-var \SimpleSAML\XMLSecurity\XML\EncryptedElementInterface $encAssertion */
-        $encAssertion = Assertion::fromXML($doc->documentElement);
-        $privkey = new XMLSecurityKey(XMLSecurityKey::RSA_SHA256, ['type' => 'private']);
-        $privkey->loadKey(PEMCertificatesMock::getPlainPrivateKey(PEMCertificatesMock::PRIVATE_KEY));
+        $encAssertion = EncryptedAssertion::fromXML($doc->documentElement);
+        $decryptor = (new KeyTransportAlgorithmFactory())->getAlgorithm(
+            $encAssertion->getEncryptedKey()->getEncryptionMethod()->getAlgorithm(),
+            PEMCertificatesMock::getPrivateKey(PEMCertificatesMock::PRIVATE_KEY),
+        );
 
-        $this->assertEquals(strval($assertion), strval($encAssertion->decrypt($privkey)));
+        $this->assertEquals(
+            strval($assertion),
+            strval($encAssertion->decrypt($decryptor))
+        );
     }
 }

@@ -13,7 +13,6 @@ use SimpleSAML\XMLSecurity\Backend\EncryptionBackend;
 use SimpleSAML\XMLSecurity\Utils\Security;
 use SimpleSAML\XMLSecurity\XML\EncryptedElementInterface;
 use SimpleSAML\XMLSecurity\XML\EncryptedElementTrait;
-use SimpleSAML\XMLSecurity\XMLSecurityKey;
 
 /**
  * Class handling encrypted assertions.

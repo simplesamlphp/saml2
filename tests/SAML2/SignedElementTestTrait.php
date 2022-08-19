@@ -15,7 +15,6 @@ use SimpleSAML\XMLSecurity\XML\ds\X509Certificate;
 use SimpleSAML\XMLSecurity\XML\ds\X509Data;
 use SimpleSAML\XMLSecurity\TestUtils\PEMCertificatesMock;
 use SimpleSAML\XMLSecurity\Utils\Certificate as CertificateUtils;
-//use SimpleSAML\XMLSecurity\XMLSecurityKey;
 
 use function trim;
 
