@@ -73,6 +73,7 @@ final class Logo extends AbstractMduiElement
      */
     protected function validateContent(string $content): void
     {
+        // Assert::validURI($content, SchemaViolationException::class);
         if (!filter_var(trim($content), FILTER_VALIDATE_URL) && substr(trim($content), 0, 5) !== 'data:') {
             throw new InvalidArgumentException('mdui:Logo is not a valid URL.');
         }

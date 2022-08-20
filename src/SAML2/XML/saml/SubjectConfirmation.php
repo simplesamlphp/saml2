@@ -9,6 +9,7 @@ use SimpleSAML\Assert\Assert;
 use SimpleSAML\SAML2\Compat\ContainerSingleton;
 use SimpleSAML\SAML2\Constants;
 use SimpleSAML\XML\Exception\InvalidDOMElementException;
+use SimpleSAML\XML\Exception\SchemaViolationException;
 use SimpleSAML\XML\Exception\TooManyElementsException;
 use SimpleSAML\SAML2\Utils;
 use SimpleSAML\SAML2\XML\IdentifierTrait;
@@ -75,7 +76,7 @@ final class SubjectConfirmation extends AbstractSamlElement
      */
     private function setMethod(string $method): void
     {
-        Assert::validURI($method); // Covers the empty string
+        Assert::validURI($method, SchemaViolationException::class); // Covers the empty string
         $this->Method = $method;
     }
 

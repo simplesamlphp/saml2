@@ -7,8 +7,8 @@ namespace SimpleSAML\Test\SAML2\XML\md;
 use DOMDocument;
 use PHPUnit\Framework\TestCase;
 use SimpleSAML\Assert\AssertionFailedException;
-use SimpleSAML\SAML2\Constants;
 use SimpleSAML\SAML2\XML\md\NameIDMappingService;
+use SimpleSAML\Test\SAML2\Constants as C;
 use SimpleSAML\Test\XML\SerializableXMLTestTrait;
 use SimpleSAML\XML\DOMDocumentFactory;
 
@@ -47,7 +47,7 @@ final class NameIDMappingServiceTest extends TestCase
      */
     public function testMarshalling(): void
     {
-        $nidmsep = new NameIDMappingService('urn:something', 'https://whatever/');
+        $nidmsep = new NameIDMappingService(C::BINDING_HTTP_POST, C::LOCATION_NIMS);
 
         $this->assertEquals(
             $this->xmlRepresentation->saveXML($this->xmlRepresentation->documentElement),
@@ -65,7 +65,7 @@ final class NameIDMappingServiceTest extends TestCase
         $this->expectExceptionMessage(
             'The \'ResponseLocation\' attribute must be omitted for md:NameIDMappingService.'
         );
-        new NameIDMappingService('urn:something', 'https://whatever/', 'https://response.location/');
+        new NameIDMappingService(C::BINDING_HTTP_POST, C::LOCATION_NIMS, 'https://response.location/');
     }
 
 
@@ -79,8 +79,8 @@ final class NameIDMappingServiceTest extends TestCase
     {
         $nidmsep = NameIDMappingService::fromXML($this->xmlRepresentation->documentElement);
 
-        $this->assertEquals('urn:something', $nidmsep->getBinding());
-        $this->assertEquals('https://whatever/', $nidmsep->getLocation());
+        $this->assertEquals(C::BINDING_HTTP_POST, $nidmsep->getBinding());
+        $this->assertEquals(C::LOCATION_NIMS, $nidmsep->getLocation());
         $this->assertEquals($this->xmlRepresentation->saveXML(
             $this->xmlRepresentation->documentElement),
             strval($nidmsep)

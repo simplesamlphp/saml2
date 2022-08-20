@@ -1,1 +1,1 @@
-<md:NameIDMappingService xmlns:md="urn:oasis:names:tc:SAML:2.0:metadata" Binding="urn:something" Location="https://whatever/" />
+<md:NameIDMappingService xmlns:md="urn:oasis:names:tc:SAML:2.0:metadata" Binding="urn:oasis:names:tc:SAML:2.0:bindings:HTTP-POST" Location="https://simplesamlphp.org/module.php/saml/idp/nameIDMappingService" />

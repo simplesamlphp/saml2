@@ -8,6 +8,7 @@ use DOMDocument;
 use PHPUnit\Framework\TestCase;
 use SimpleSAML\Assert\AssertionFailedException;
 use SimpleSAML\SAML2\XML\md\ArtifactResolutionService;
+use SimpleSAML\Test\SAML2\Constants as C;
 use SimpleSAML\Test\XML\SerializableXMLTestTrait;
 use SimpleSAML\XML\DOMDocumentFactory;
 
@@ -46,7 +47,7 @@ final class ArtifactResolutionServiceTest extends TestCase
      */
     public function testMarshalling(): void
     {
-        $ars = new ArtifactResolutionService(42, 'urn:something', 'https://whatever/', false);
+        $ars = new ArtifactResolutionService(42, C::BINDING_HTTP_ARTIFACT, C::LOCATION_ARS, false);
 
         $this->assertEquals(
             $this->xmlRepresentation->saveXML($this->xmlRepresentation->documentElement),
@@ -64,7 +65,7 @@ final class ArtifactResolutionServiceTest extends TestCase
         $this->expectExceptionMessage(
             'The \'ResponseLocation\' attribute must be omitted for md:ArtifactResolutionService.'
         );
-        new ArtifactResolutionService(42, 'urn:something', 'https://whatever/', false, 'https://response.location/');
+        new ArtifactResolutionService(42, C::BINDING_HTTP_ARTIFACT, C::LOCATION_ARS, false, 'https://response.location/');
     }
 
 
@@ -77,8 +78,8 @@ final class ArtifactResolutionServiceTest extends TestCase
     public function testUnmarshalling(): void
     {
         $ars = ArtifactResolutionService::fromXML($this->xmlRepresentation->documentElement);
-        $this->assertEquals('urn:something', $ars->getBinding());
-        $this->assertEquals('https://whatever/', $ars->getLocation());
+        $this->assertEquals(C::BINDING_HTTP_ARTIFACT, $ars->getBinding());
+        $this->assertEquals(C::LOCATION_ARS, $ars->getLocation());
 
         $this->assertEquals(
             $this->xmlRepresentation->saveXML($this->xmlRepresentation->documentElement),

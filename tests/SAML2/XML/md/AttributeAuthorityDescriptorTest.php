@@ -7,7 +7,6 @@ namespace SimpleSAML\Test\SAML2\XML\md;
 use Exception;
 use PHPUnit\Framework\TestCase;
 use SimpleSAML\Assert\AssertionFailedException;
-use SimpleSAML\SAML2\Constants;
 use SimpleSAML\SAML2\XML\md\AssertionIDRequestService;
 use SimpleSAML\SAML2\XML\md\AttributeAuthorityDescriptor;
 use SimpleSAML\SAML2\XML\md\AttributeProfile;
@@ -15,10 +14,12 @@ use SimpleSAML\SAML2\XML\md\AttributeService;
 use SimpleSAML\SAML2\XML\md\NameIDFormat;
 use SimpleSAML\SAML2\XML\saml\Attribute;
 use SimpleSAML\SAML2\XML\saml\AttributeValue;
+use SimpleSAML\Test\SAML2\Constants as C;
 use SimpleSAML\Test\SAML2\SignedElementTestTrait;
 use SimpleSAML\Test\XML\SerializableXMLTestTrait;
-use SimpleSAML\XML\Exception\InvalidDOMElementException;
 use SimpleSAML\XML\DOMDocumentFactory;
+use SimpleSAML\XML\Exception\InvalidDOMElementException;
+use SimpleSAML\XML\Exception\SchemaViolationException;
 use SimpleSAML\XML\Utils as XMLUtils;
 
 use function dirname;
@@ -56,11 +57,11 @@ final class AttributeAuthorityDescriptorTest extends TestCase
             dirname(dirname(dirname(dirname(__FILE__)))) . '/resources/xml/md_AttributeAuthorityDescriptor.xml'
         );
         $this->as = new AttributeService(
-            Constants::BINDING_SOAP,
+            C::BINDING_SOAP,
             "https://IdentityProvider.com/SAML/AA/SOAP"
         );
         $this->aidrs = new AssertionIDRequestService(
-            Constants::BINDING_URI,
+            C::BINDING_URI,
             "https://IdentityProvider.com/SAML/AA/URI"
         );
     }
@@ -76,13 +77,13 @@ final class AttributeAuthorityDescriptorTest extends TestCase
     {
         $attr1 = new Attribute(
             "urn:oid:1.3.6.1.4.1.5923.1.1.1.6",
-            Constants::NAMEFORMAT_URI,
+            C::NAMEFORMAT_URI,
             "eduPersonPrincipalName"
         );
 
         $attr2 = new Attribute(
             "urn:oid:1.3.6.1.4.1.5923.1.1.1.1",
-            Constants::NAMEFORMAT_URI,
+            C::NAMEFORMAT_URI,
             'eduPersonAffiliation',
             [
                 new AttributeValue('member'),
@@ -94,16 +95,16 @@ final class AttributeAuthorityDescriptorTest extends TestCase
         );
         $aad = new AttributeAuthorityDescriptor(
             [$this->as],
-            [Constants::NS_SAMLP],
+            [C::NS_SAMLP],
             [$this->aidrs],
             [
-                new NameIDFormat(CONSTANTS::NAMEID_X509_SUBJECT_NAME),
-                new NameIDFormat(CONSTANTS::NAMEID_PERSISTENT),
-                new NameIDFormat(CONSTANTS::NAMEID_TRANSIENT),
+                new NameIDFormat(C::NAMEID_X509_SUBJECT_NAME),
+                new NameIDFormat(C::NAMEID_PERSISTENT),
+                new NameIDFormat(C::NAMEID_TRANSIENT),
             ],
             [
-                new AttributeProfile('profile1'),
-                new AttributeProfile('profile2'),
+                new AttributeProfile(C::PROFILE_1),
+                new AttributeProfile(C::PROFILE_2),
             ],
             [$attr1, $attr2]
         );
@@ -132,8 +133,7 @@ final class AttributeAuthorityDescriptorTest extends TestCase
      */
     public function testMarshallingWithEmptySupportedProtocols(): void
     {
-        $this->expectException(Exception::class);
-        $this->expectExceptionMessage('Cannot specify an empty string as a supported protocol.');
+        $this->expectException(SchemaViolationException::class);
         new AttributeAuthorityDescriptor([$this->as], ['']);
     }
 
@@ -145,7 +145,7 @@ final class AttributeAuthorityDescriptorTest extends TestCase
     {
         $this->expectException(AssertionFailedException::class);
         $this->expectExceptionMessage('AttributeAuthorityDescriptor must contain at least one AttributeService.');
-        new AttributeAuthorityDescriptor([], [Constants::NS_SAMLP]);
+        new AttributeAuthorityDescriptor([], [C::NS_SAMLP]);
     }
 
 
@@ -158,7 +158,7 @@ final class AttributeAuthorityDescriptorTest extends TestCase
         $this->expectExceptionMessage('AttributeService is not an instance of EndpointType.');
 
         /** @psalm-suppress InvalidArgument */
-        new AttributeAuthorityDescriptor(['string'], [Constants::NS_SAMLP]);
+        new AttributeAuthorityDescriptor(['string'], [C::NS_SAMLP]);
     }
 
 
@@ -167,7 +167,7 @@ final class AttributeAuthorityDescriptorTest extends TestCase
      */
     public function testMarshallingWithoutOptionalParameters(): void
     {
-        $aad = new AttributeAuthorityDescriptor([$this->as], [Constants::NS_SAMLP]);
+        $aad = new AttributeAuthorityDescriptor([$this->as], [C::NS_SAMLP]);
         $this->assertEmpty($aad->getAssertionIDRequestServices());
         $this->assertEmpty($aad->getNameIDFormats());
         $this->assertEmpty($aad->getID());
@@ -186,7 +186,7 @@ final class AttributeAuthorityDescriptorTest extends TestCase
      */
     public function testMarshallingWithEmptyAssertionIDRequestService(): void
     {
-        $aad = new AttributeAuthorityDescriptor([$this->as], [Constants::NS_SAMLP], []);
+        $aad = new AttributeAuthorityDescriptor([$this->as], [C::NS_SAMLP], []);
         $this->assertEmpty($aad->getAssertionIDRequestServices());
         $this->assertEmpty($aad->getNameIDFormats());
         $this->assertEmpty($aad->getID());
@@ -211,7 +211,7 @@ final class AttributeAuthorityDescriptorTest extends TestCase
         );
 
         /** @psalm-suppress InvalidArgument */
-        new AttributeAuthorityDescriptor([$this->as], [Constants::NS_SAMLP], ['x']);
+        new AttributeAuthorityDescriptor([$this->as], [C::NS_SAMLP], ['x']);
     }
 
 
@@ -220,9 +220,8 @@ final class AttributeAuthorityDescriptorTest extends TestCase
      */
     public function testMarshallingWithEmptyNameIDFormat(): void
     {
-        $this->expectException(AssertionFailedException::class);
-        $this->expectExceptionMessage('Expected a non-whitespace string. Got: ""');
-        new AttributeAuthorityDescriptor([$this->as], [Constants::NS_SAMLP], [$this->aidrs], [new NameIDFormat('')]);
+        $this->expectException(SchemaViolationException::class);
+        new AttributeAuthorityDescriptor([$this->as], [C::NS_SAMLP], [$this->aidrs], [new NameIDFormat('')]);
     }
 
 
@@ -231,9 +230,14 @@ final class AttributeAuthorityDescriptorTest extends TestCase
      */
     public function testMarshallingWithEmptyAttributeProfile(): void
     {
-        $this->expectException(AssertionFailedException::class);
-        $this->expectExceptionMessage('AttributeProfile cannot be empty');
-        new AttributeAuthorityDescriptor([$this->as], [Constants::NS_SAMLP], [$this->aidrs], [new NameIDFormat('x')], [new AttributeProfile('')]);
+        $this->expectException(SchemaViolationException::class);
+        new AttributeAuthorityDescriptor(
+            [$this->as],
+            [C::NS_SAMLP],
+            [$this->aidrs],
+            [new NameIDFormat(C::NAMEID_TRANSIENT)],
+            [new AttributeProfile('')]
+        );
     }
 
 
@@ -248,7 +252,12 @@ final class AttributeAuthorityDescriptorTest extends TestCase
         );
 
         /** @psalm-suppress InvalidArgument */
-        new AttributeAuthorityDescriptor([$this->as], [Constants::NS_SAMLP], [$this->aidrs], [new NameIDFormat('x')], [new AttributeProfile('x')], ['x']);
+        new AttributeAuthorityDescriptor(
+            [$this->as],
+            [C::NS_SAMLP],
+            [$this->aidrs],
+            [new NameIDFormat(C::NAMEID_PERSISTENT)],
+            [new AttributeProfile(C::PROFILE_1)], ['x']);
     }
 
 
@@ -264,26 +273,26 @@ final class AttributeAuthorityDescriptorTest extends TestCase
 
         $as = $aad->getAttributeServices();
         $this->assertCount(1, $as, "Wrong number of AttributeService elements.");
-        $this->assertEquals(Constants::BINDING_SOAP, $as[0]->getBinding());
+        $this->assertEquals(C::BINDING_SOAP, $as[0]->getBinding());
         $this->assertEquals('https://IdentityProvider.com/SAML/AA/SOAP', $as[0]->getLocation());
 
         $aidrs = $aad->getAssertionIDRequestServices();
         $this->assertCount(1, $aidrs, "Wrong number of AssertionIDRequestService elements.");
-        $this->assertEquals(constants::BINDING_URI, $aidrs[0]->getBinding());
+        $this->assertEquals(C::BINDING_URI, $aidrs[0]->getBinding());
         $this->assertEquals('https://IdentityProvider.com/SAML/AA/URI', $aidrs[0]->getLocation());
 
         $nameIdFormats = $aad->getNameIDFormats();
         $this->assertCount(3, $nameIdFormats);
-        $this->assertEquals(Constants::NAMEID_X509_SUBJECT_NAME, $nameIdFormats[0]->getContent());
-        $this->assertEquals(Constants::NAMEID_PERSISTENT, $nameIdFormats[1]->getContent());
-        $this->assertEquals(Constants::NAMEID_TRANSIENT, $nameIdFormats[2]->getContent());
+        $this->assertEquals(C::NAMEID_X509_SUBJECT_NAME, $nameIdFormats[0]->getContent());
+        $this->assertEquals(C::NAMEID_PERSISTENT, $nameIdFormats[1]->getContent());
+        $this->assertEquals(C::NAMEID_TRANSIENT, $nameIdFormats[2]->getContent());
 
         $attrs = $aad->getAttributes();
         $this->assertCount(2, $attrs, "Wrong number of attributes.");
         $this->assertEquals(
             [
-                new AttributeProfile('profile1'),
-                new AttributeProfile('profile2'),
+                new AttributeProfile(C::PROFILE_1),
+                new AttributeProfile(C::PROFILE_2),
             ],
             $aad->getAttributeProfiles()
         );
@@ -295,7 +304,7 @@ final class AttributeAuthorityDescriptorTest extends TestCase
      */
     public function testUnmarshallingWithoutOptionalElements(): void
     {
-        $mdns = Constants::NS_MD;
+        $mdns = C::NS_MD;
         $document = DOMDocumentFactory::fromString(<<<XML
 <md:AttributeAuthorityDescriptor protocolSupportEnumeration="urn:oasis:names:tc:SAML:2.0:protocol" xmlns:md="{$mdns}">
   <md:AttributeService Binding="urn:oasis:names:tc:SAML:2.0:bindings:SOAP"
@@ -323,7 +332,7 @@ XML
      */
     public function testUnmarshallingWithEmptyNameIDFormat(): void
     {
-        $mdns = Constants::NS_MD;
+        $mdns = C::NS_MD;
         $document = DOMDocumentFactory::fromString(<<<XML
 <md:AttributeAuthorityDescriptor protocolSupportEnumeration="urn:oasis:names:tc:SAML:2.0:protocol" xmlns:md="{$mdns}">
   <md:AttributeService Binding="urn:oasis:names:tc:SAML:2.0:bindings:SOAP"
@@ -332,8 +341,7 @@ XML
 </md:AttributeAuthorityDescriptor>
 XML
         );
-        $this->expectException(AssertionFailedException::class);
-        $this->expectExceptionMessage('Expected a non-whitespace string. Got: ""');
+        $this->expectException(SchemaViolationException::class);
         AttributeAuthorityDescriptor::fromXML($document->documentElement);
     }
 
@@ -343,7 +351,7 @@ XML
      */
     public function testUnmarshallingWithEmptyAttributeProfile(): void
     {
-        $mdns = Constants::NS_MD;
+        $mdns = C::NS_MD;
         $document = DOMDocumentFactory::fromString(<<<XML
 <md:AttributeAuthorityDescriptor protocolSupportEnumeration="urn:oasis:names:tc:SAML:2.0:protocol" xmlns:md="{$mdns}">
   <md:AttributeService Binding="urn:oasis:names:tc:SAML:2.0:bindings:SOAP"
@@ -352,8 +360,7 @@ XML
 </md:AttributeAuthorityDescriptor>
 XML
         );
-        $this->expectException(AssertionFailedException::class);
-        $this->expectExceptionMessage('AttributeProfile cannot be empty');
+        $this->expectException(SchemaViolationException::class);
         AttributeAuthorityDescriptor::fromXML($document->documentElement);
     }
 }

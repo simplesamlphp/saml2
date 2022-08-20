@@ -9,6 +9,7 @@ use SimpleSAML\Assert\Assert;
 use SimpleSAML\SAML2\Constants as C;
 use SimpleSAML\SAML2\Exception\ProtocolViolationException;
 use SimpleSAML\XML\Exception\InvalidDOMElementException;
+use SimpleSAML\XML\Exception\SchemaViolationException;
 use SimpleSAML\XML\Exception\TooManyElementsException;
 use SimpleSAML\XML\Utils as XMLUtils;
 use SimpleSAML\XMLSecurity\XML\ds\Signature;
@@ -247,11 +248,12 @@ final class EntityDescriptor extends AbstractMetadataDocument
      */
     protected function setEntityID(string $entityId): void
     {
-        Assert::notEmpty($entityId, 'The entityID attribute cannot be empty.');
+        Assert::validURI($entityId, SchemaViolationException::class); // Covers the empty string
         Assert::maxLength(
             $entityId,
             C::ENTITYID_MAX_LENGTH,
-            sprintf('The entityID attribute cannot be longer than %d characters.', C::ENTITYID_MAX_LENGTH)
+            sprintf('The entityID attribute cannot be longer than %d characters.', C::ENTITYID_MAX_LENGTH),
+            ProtocolViolationException::class
         );
         $this->entityID = $entityId;
     }

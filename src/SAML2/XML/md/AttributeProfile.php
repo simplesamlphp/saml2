@@ -7,6 +7,7 @@ namespace SimpleSAML\SAML2\XML\md;
 use DOMElement;
 use SimpleSAML\Assert\Assert;
 use SimpleSAML\XML\Exception\InvalidDOMElementException;
+use SimpleSAML\XML\Exception\SchemaViolationException;
 use SimpleSAML\XML\XMLStringElementTrait;
 
 /**
@@ -37,7 +38,7 @@ final class AttributeProfile extends AbstractMdElement
      */
     protected function validateContent(string $content): void
     {
-        Assert::notEmpty($content, 'AttributeProfile cannot be empty');
+        Assert::validURI($content, SchemaViolationException::class); // Covers the empty string
     }
 
 

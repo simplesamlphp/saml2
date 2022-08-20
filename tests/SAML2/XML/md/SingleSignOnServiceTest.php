@@ -7,8 +7,8 @@ namespace SimpleSAML\Test\SAML2\XML\md;
 use DOMDocument;
 use PHPUnit\Framework\TestCase;
 use SimpleSAML\Assert\AssertionFailedException;
-use SimpleSAML\SAML2\Constants;
 use SimpleSAML\SAML2\XML\md\SingleSignOnService;
+use SimpleSAML\Test\SAML2\Constants as C;
 use SimpleSAML\Test\XML\SerializableXMLTestTrait;
 use SimpleSAML\XML\DOMDocumentFactory;
 
@@ -47,7 +47,7 @@ final class SingleSignOnServiceTest extends TestCase
      */
     public function testMarshalling(): void
     {
-        $ssoep = new SingleSignOnService('urn:something', 'https://whatever/');
+        $ssoep = new SingleSignOnService(C::BINDING_HTTP_POST, C::LOCATION_ACS);
 
         $this->assertEquals(
             $this->xmlRepresentation->saveXML($this->xmlRepresentation->documentElement),
@@ -66,7 +66,7 @@ final class SingleSignOnServiceTest extends TestCase
             'The \'ResponseLocation\' attribute must be omitted for md:SingleSignOnService.'
         );
 
-        new SingleSignOnService('urn:something', 'https://whatever/', 'https://response.location/');
+        new SingleSignOnService(C::BINDING_HTTP_POST, C::LOCATION_ACS, 'https://response.location/');
     }
 
 
@@ -80,8 +80,8 @@ final class SingleSignOnServiceTest extends TestCase
     {
         $ssoep = SingleSignOnService::fromXML($this->xmlRepresentation->documentElement);
 
-        $this->assertEquals('urn:something', $ssoep->getBinding());
-        $this->assertEquals('https://whatever/', $ssoep->getLocation());
+        $this->assertEquals(C::BINDING_HTTP_POST, $ssoep->getBinding());
+        $this->assertEquals(C::LOCATION_ACS, $ssoep->getLocation());
         $this->assertEquals(
             $this->xmlRepresentation->saveXML($this->xmlRepresentation->documentElement),
             strval($ssoep)

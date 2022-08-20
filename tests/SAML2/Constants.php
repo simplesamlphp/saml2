@@ -21,4 +21,17 @@ class Constants extends \SimpleSAML\SAML2\Constants
     public const AUTHNCONTEXT_CLASS_REF_URN = 'urn:x-simplesamlphp:phpunit:loa3';
 
     public const ATTR_URN = 'urn:x-simplesamlphp:phpunit:attribute';
+
+    public const LOCATION_ACS = 'https://simplesamlphp.org/module.php/saml/sp/assertionConsumerService/default-sp';
+    public const LOCATION_AIRS = 'https://simplesamlphp.org/module.php/saml/idp/assertionIDRequestService';
+    public const LOCATION_ARS = 'https://simplesamlphp.org/module.php/saml/idp/artifactResolutionService';
+    public const LOCATION_METADATA = 'https://simplesamlphp.org/module.php/saml/idp/metadata';
+    public const LOCATION_NIMS = 'https://simplesamlphp.org/module.php/saml/idp/nameIDMappingService';
+    public const LOCATION_SLO = 'https://simplesamlphp.org/module.php/saml/idp/singleLogout';
+    public const LOCATION_SSO = 'https://simplesamlphp.org/module.php/saml/idp/singleSignOnService';
+
+    public const NAMESPACE = 'urn:x-simplesamlphp:namespace';
+    public const PROFILE_1 = 'urn:x-simplesamlphp:profile:one';
+    public const PROFILE_2 = 'urn:x-simplesamlphp:profile:two';
+    public const PROTOCOL = 'urn:x-simplesamlphp:protocol';
 }

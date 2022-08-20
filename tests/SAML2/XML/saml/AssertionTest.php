@@ -828,7 +828,7 @@ XML;
     {
         $accr = C::AUTHNCONTEXT_CLASS_REF_LOA1;
         $nameid_transient = C::NAMEID_TRANSIENT;
-        $nameid_transient = C::NAMEID_PERSISTENT;
+        $nameid_persistent = C::NAMEID_PERSISTENT;
 
         $xml = <<<XML
 <saml:Assertion xmlns:saml="urn:oasis:names:tc:SAML:2.0:assertion"

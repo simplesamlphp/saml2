@@ -11,6 +11,7 @@ use SimpleSAML\SAML2\Exception\ProtocolViolationException;
 use SimpleSAML\SAML2\XML\md\AffiliateMember;
 use SimpleSAML\Test\XML\SerializableXMLTestTrait;
 use SimpleSAML\XML\DOMDocumentFactory;
+use SimpleSAML\XML\Exception\SchemaViolationException;
 
 use function dirname;
 use function strval;
@@ -60,8 +61,7 @@ final class AffiliateMemberTest extends TestCase
      */
     public function testMarshallingEmptyThrowsException(): void
     {
-        $this->expectException(ProtocolViolationException::class);
-        $this->expectExceptionMessage('Cannot specify an empty string as an affiliation member entityID.');
+        $this->expectException(SchemaViolationException::class);
 
         new AffiliateMember('');
     }

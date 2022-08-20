@@ -10,10 +10,12 @@ use SimpleSAML\SAML2\Utils;
 use SimpleSAML\SAML2\XML\md\AffiliateMember;
 use SimpleSAML\SAML2\XML\md\AffiliationDescriptor;
 use SimpleSAML\SAML2\XML\md\KeyDescriptor;
+use SimpleSAML\Test\SAML2\Constants as C;
 use SimpleSAML\Test\SAML2\SignedElementTestTrait;
 use SimpleSAML\Test\XML\SerializableXMLTestTrait;
 use SimpleSAML\XML\DOMDocumentFactory;
 use SimpleSAML\XML\Exception\MissingAttributeException;
+use SimpleSAML\XML\Exception\SchemaViolationException;
 use SimpleSAML\XML\Utils as XMLUtils;
 use SimpleSAML\XMLSecurity\XML\ds\KeyInfo;
 use SimpleSAML\XMLSecurity\XML\ds\KeyName;
@@ -56,8 +58,8 @@ final class AffiliationDescriptorTest extends TestCase
     public function testMarshalling(): void
     {
         $affiliationDescriptor = new AffiliationDescriptor(
-            'TheOwner',
-            [new AffiliateMember('Member'), new AffiliateMember('OtherMember')],
+            C::ENTITY_IDP,
+            [new AffiliateMember(C::ENTITY_SP), new AffiliateMember(C::ENTITY_OTHER)],
             'TheID',
             1234567890,
             'PT5000S',
@@ -86,11 +88,10 @@ final class AffiliationDescriptorTest extends TestCase
      */
     public function testMarhsallingWithEmptyOwnerID(): void
     {
-        $this->expectException(Exception::class);
-        $this->expectExceptionMessage('AffiliationOwnerID must not be empty.');
+        $this->expectException(SchemaViolationException::class);
         new AffiliationDescriptor(
             '',
-            [new AffiliateMember('Member1'), new AffiliateMember('Member2')],
+            [new AffiliateMember(C::ENTITY_SP), new AffiliateMember(C::ENTITY_OTHER)],
             'TheID',
             1234567890,
             'PT5000S',
@@ -108,7 +109,7 @@ final class AffiliationDescriptorTest extends TestCase
         $this->expectException(Exception::class);
         $this->expectExceptionMessage('List of affiliated members must not be empty.');
         new AffiliationDescriptor(
-            'TheOwner',
+            C::ENTITY_IDP,
             [],
             'TheID',
             1234567890,
@@ -129,15 +130,15 @@ final class AffiliationDescriptorTest extends TestCase
     {
         $affiliateDescriptor = AffiliationDescriptor::fromXML($this->xmlRepresentation->documentElement);
 
-        $this->assertEquals('TheOwner', $affiliateDescriptor->getAffiliationOwnerID());
+        $this->assertEquals(C::ENTITY_IDP, $affiliateDescriptor->getAffiliationOwnerID());
         $this->assertEquals('TheID', $affiliateDescriptor->getID());
         $this->assertEquals(1234567890, $affiliateDescriptor->getValidUntil());
         $this->assertEquals('PT5000S', $affiliateDescriptor->getCacheDuration());
 
         $affiliateMember = $affiliateDescriptor->getAffiliateMembers();
         $this->assertCount(2, $affiliateMember);
-        $this->assertEquals('Member', $affiliateMember[0]->getContent());
-        $this->assertEquals('OtherMember', $affiliateMember[1]->getContent());
+        $this->assertEquals(C::ENTITY_SP, $affiliateMember[0]->getContent());
+        $this->assertEquals(C::ENTITY_OTHER, $affiliateMember[1]->getContent());
 
         $keyDescriptors = $affiliateDescriptor->getKeyDescriptors();
         $this->assertCount(1, $keyDescriptors);
@@ -150,8 +151,10 @@ final class AffiliationDescriptorTest extends TestCase
     public function testUnmarshallingWithoutMembers(): void
     {
         $mdNamespace = AffiliationDescriptor::NS;
+        $entity_idp = C::ENTITY_IDP;
+
         $document = DOMDocumentFactory::fromString(<<<XML
-<md:AffiliationDescriptor xmlns:md="{$mdNamespace}" affiliationOwnerID="TheOwner" ID="TheID"
+<md:AffiliationDescriptor xmlns:md="{$mdNamespace}" affiliationOwnerID="{$entity_idp}" ID="TheID"
     validUntil="2009-02-13T23:31:30Z" cacheDuration="PT5000S">
 </md:AffiliationDescriptor>
 XML
@@ -168,11 +171,14 @@ XML
     public function testUnmarshallingWithoutOwner(): void
     {
         $mdNamespace = AffiliationDescriptor::NS;
+        $entity_other = C::ENTITY_OTHER;
+        $entity_sp = C::ENTITY_SP;
+
         $document = DOMDocumentFactory::fromString(<<<XML
 <md:AffiliationDescriptor xmlns:md="{$mdNamespace}" ID="TheID"
     validUntil="2009-02-13T23:31:30Z" cacheDuration="PT5000S">
-  <md:AffiliateMember>Member</md:AffiliateMember>
-  <md:AffiliateMember>OtherMember</md:AffiliateMember>
+  <md:AffiliateMember>{$entity_sp}</md:AffiliateMember>
+  <md:AffiliateMember>{$entity_other}</md:AffiliateMember>
 </md:AffiliationDescriptor>
 XML
         );

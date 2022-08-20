@@ -8,6 +8,7 @@ use DOMElement;
 use Exception;
 use SimpleSAML\Assert\Assert;
 use SimpleSAML\XML\Exception\InvalidDOMElementException;
+use SimpleSAML\XML\Exception\SchemaViolationException;
 use SimpleSAML\XML\XMLStringElementTrait;
 
 use function trim;
@@ -49,9 +50,9 @@ final class AdditionalMetadataLocation extends AbstractMdElement
      * @throws \Exception on failure
      * @return void
      */
-    protected function validateContent(/** @scrutinizer ignore-unused */ string $content): void
+    protected function validateContent(string $content): void
     {
-        Assert::notEmpty($content);
+        Assert::validURI($content, SchemaViolationException::class); // Covers the empty string
     }
 
 
@@ -74,7 +75,7 @@ final class AdditionalMetadataLocation extends AbstractMdElement
      */
     protected function setNamespace(string $namespace): void
     {
-        Assert::notEmpty($namespace, 'The namespace in AdditionalMetadataLocation must be a URI.');
+        Assert::validURI($namespace, SchemaViolationException::class); // Covers the empty string
         $this->namespace = $namespace;
     }
 

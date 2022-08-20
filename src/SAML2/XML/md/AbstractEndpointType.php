@@ -9,6 +9,7 @@ use SimpleSAML\Assert\Assert;
 use SimpleSAML\XML\Chunk;
 use SimpleSAML\XML\Constants;
 use SimpleSAML\XML\Exception\InvalidDOMElementException;
+use SimpleSAML\XML\Exception\SchemaViolationException;
 use SimpleSAML\XML\ExtendableAttributesTrait;
 use SimpleSAML\XML\ExtendableElementTrait;
 
@@ -103,7 +104,7 @@ abstract class AbstractEndpointType extends AbstractMdElement
      */
     protected function setBinding(string $binding): void
     {
-        Assert::notEmpty($binding, 'The Binding of an endpoint cannot be empty.');
+        Assert::validURI($binding, SchemaViolationException::class); // Covers the empty string
         $this->Binding = $binding;
     }
 
@@ -127,7 +128,7 @@ abstract class AbstractEndpointType extends AbstractMdElement
      */
     protected function setLocation(string $location): void
     {
-        Assert::notEmpty($location, 'The Location of an endpoint cannot be empty.');
+        Assert::validURI($location, SchemaViolationException::class); // Covers the empty string
         $this->Location = $location;
     }
 
@@ -151,7 +152,7 @@ abstract class AbstractEndpointType extends AbstractMdElement
      */
     protected function setResponseLocation(?string $responseLocation = null): void
     {
-        Assert::nullOrNotEmpty($responseLocation, 'The ResponseLocation of an endpoint cannot be empty.');
+        Assert::nullOrValidURI($responseLocation, SchemaViolationException::class); // Covers the empty string
         $this->ResponseLocation = $responseLocation;
     }
 

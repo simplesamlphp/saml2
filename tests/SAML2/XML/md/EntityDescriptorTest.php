@@ -8,7 +8,6 @@ use DOMText;
 use InvalidArgumentException;
 use PHPUnit\Framework\TestCase;
 use SimpleSAML\Assert\AssertionFailedException;
-use SimpleSAML\SAML2\Constants as C;
 use SimpleSAML\SAML2\Exception\ProtocolViolationException;
 use SimpleSAML\SAML2\XML\md\AdditionalMetadataLocation;
 use SimpleSAML\SAML2\XML\md\AffiliationDescriptor;
@@ -32,10 +31,12 @@ use SimpleSAML\SAML2\XML\md\SingleSignOnService;
 use SimpleSAML\SAML2\XML\md\UnknownRoleDescriptor;
 use SimpleSAML\SAML2\XML\mdrpi\PublicationInfo;
 use SimpleSAML\SAML2\XML\mdrpi\UsagePolicy;
+use SimpleSAML\Test\SAML2\Constants as C;
 use SimpleSAML\Test\SAML2\SignedElementTestTrait;
 use SimpleSAML\Test\XML\SerializableXMLTestTrait;
 use SimpleSAML\XML\DOMDocumentFactory;
 use SimpleSAML\XML\Exception\MissingAttributeException;
+use SimpleSAML\XML\Exception\SchemaViolationException;
 use SimpleSAML\XML\Exception\TooManyElementsException;
 use SimpleSAML\XML\Utils as XMLUtils;
 
@@ -82,32 +83,32 @@ final class EntityDescriptorTest extends TestCase
         $attr1 = $this->xmlRepresentation->createAttributeNS('urn:test:something', 'test:attr1');
         $attr1->value = 'testval1';
 
-        $entityid = "urn:example:entity";
+        $entityid = C::ENTITY_IDP;
         $id = "_5A3CHB081";
         $now = 1580895565;
         $duration = "P2Y6M5DT12H35M30S";
         $idpssod = new IDPSSODescriptor(
             [
                 new SingleSignOnService(
-                    'urn:oasis:names:tc:SAML:2.0:bindings:HTTP-Redirect',
+                    C::BINDING_HTTP_REDIRECT,
                     'https://engine.test.example.edu/authentication/idp/single-sign-on'
                 )
             ],
-            ['urn:oasis:names:tc:SAML:2.0:protocol']
+            [C::NS_SAMLP]
         );
         $attrad = new AttributeAuthorityDescriptor(
             [
                 new AttributeService(
-                    'urn:oasis:names:tc:SAML:2.0:bindings:SOAP',
+                    C::BINDING_SOAP,
                     'https://idp.example.org/AttributeService'
                 )
             ],
-            ['urn:oasis:names:tc:SAML:2.0:protocol']
+            [C::NS_SAMLP]
         );
         $authnad = new AuthnAuthorityDescriptor(
             [
                 new AuthnQueryService(
-                    'uri:binding:aqs',
+                    C::BINDING_HTTP_REDIRECT,
                     'http://www.example.com/aqs'
                 )
             ],
@@ -116,7 +117,7 @@ final class EntityDescriptorTest extends TestCase
         $pdpd = new PDPDescriptor(
             [
                 new AuthzService(
-                    'urn:oasis:names:tc:SAML:2.0:bindings:SOAP',
+                    C::BINDING_SOAP,
                     'https://IdentityProvider.com/SAML/AA/SOAP'
                 )
             ],
@@ -133,8 +134,8 @@ final class EntityDescriptorTest extends TestCase
             new ContactPerson('administrative', null, null, null, null, [new EmailAddress('info@example.edu')]),
         ];
         $mdloc = [
-            new AdditionalMetadataLocation('somemd', 'https://example.edu/some/metadata.xml'),
-            new AdditionalMetadataLocation('mymd', 'https://example.edu/more/metadata.xml'),
+            new AdditionalMetadataLocation(C::NAMESPACE, 'https://example.edu/some/metadata.xml'),
+            new AdditionalMetadataLocation(C::NAMESPACE, 'https://example.edu/more/metadata.xml'),
         ];
         $extensions = new Extensions([
             new PublicationInfo(
@@ -176,18 +177,21 @@ final class EntityDescriptorTest extends TestCase
      */
     public function testMarshallingWithAffiliationDescriptor(): void
     {
-        $mdns = C::NS_MD;
+        $ns_md = C::NS_MD;
+        $entity_idp = C::ENTITY_IDP;
+        $entity_other = C::ENTITY_OTHER;
+
         $document = DOMDocumentFactory::fromString(<<<XML
-<md:EntityDescriptor xmlns:md="{$mdns}" ID="_5A3CHB081" validUntil="2020-02-05T09:39:25Z"
-    cacheDuration="P2Y6M5DT12H35M30S" entityID="urn:example:entity">
+<md:EntityDescriptor xmlns:md="{$ns_md}" ID="_5A3CHB081" validUntil="2020-02-05T09:39:25Z"
+    cacheDuration="P2Y6M5DT12H35M30S" entityID="{$entity_idp}">
   <md:Extensions>
     <mdrpi:PublicationInfo xmlns:mdrpi="urn:oasis:names:tc:SAML:metadata:rpi"
         publisher="http://publisher.ra/" creationInstant="2020-02-03T13:46:24Z">
       <mdrpi:UsagePolicy xml:lang="en">http://publisher.ra/policy.txt</mdrpi:UsagePolicy>
     </mdrpi:PublicationInfo>
   </md:Extensions>
-  <md:AffiliationDescriptor affiliationOwnerID="asdf">
-    <md:AffiliateMember>test</md:AffiliateMember>
+  <md:AffiliationDescriptor affiliationOwnerID="{$entity_idp}">
+    <md:AffiliateMember>{$entity_other}</md:AffiliateMember>
   </md:AffiliationDescriptor>
   <md:Organization>
     <md:OrganizationName xml:lang="en">orgNameTest (en)</md:OrganizationName>
@@ -204,18 +208,18 @@ final class EntityDescriptorTest extends TestCase
     <md:EmailAddress>mailto:info@example.edu</md:EmailAddress>
   </md:ContactPerson>
   <md:AdditionalMetadataLocation
-      namespace="somemd">https://example.edu/some/metadata.xml</md:AdditionalMetadataLocation>
+      namespace="urn:x-simplesamlphp:namespace">https://example.edu/some/metadata.xml</md:AdditionalMetadataLocation>
   <md:AdditionalMetadataLocation
-      namespace="mymd">https://example.edu/more/metadata.xml</md:AdditionalMetadataLocation>
+      namespace="urn:x-simplesamlphp:namespace">https://example.edu/more/metadata.xml</md:AdditionalMetadataLocation>
 </md:EntityDescriptor>
 XML
         );
 
-        $entityid = "urn:example:entity";
+        $entityid = C::ENTITY_IDP;
         $id = "_5A3CHB081";
         $now = 1580895565;
         $duration = "P2Y6M5DT12H35M30S";
-        $ad = new AffiliationDescriptor('asdf', [new AffiliateMember('test')]);
+        $ad = new AffiliationDescriptor(C::ENTITY_IDP, [new AffiliateMember(C::ENTITY_OTHER)]);
         $org = new Organization(
             [new OrganizationName('en', 'orgNameTest (en)')],
             [new OrganizationDisplayName('en', 'orgDispNameTest (en)')],
@@ -227,8 +231,8 @@ XML
             new ContactPerson('administrative', null, null, null, null, [new EmailAddress('info@example.edu')]),
         ];
         $mdloc = [
-            new AdditionalMetadataLocation('somemd', 'https://example.edu/some/metadata.xml'),
-            new AdditionalMetadataLocation('mymd', 'https://example.edu/more/metadata.xml'),
+            new AdditionalMetadataLocation(C::NAMESPACE, 'https://example.edu/some/metadata.xml'),
+            new AdditionalMetadataLocation(C::NAMESPACE, 'https://example.edu/more/metadata.xml'),
         ];
         $extensions = new Extensions([
             new PublicationInfo(
@@ -273,7 +277,7 @@ XML
         $this->expectExceptionMessage(
             'Must have either one of the RoleDescriptors or an AffiliationDescriptor in EntityDescriptor.'
         );
-        new EntityDescriptor('entityID');
+        new EntityDescriptor(C::ENTITY_SP);
     }
 
 
@@ -282,7 +286,7 @@ XML
      */
     public function testMarshallingWithAffiliationAndRoleDescriptors(): void
     {
-        $affiliateDescriptor = new AffiliationDescriptor('asdf', [new AffiliateMember('test')]);
+        $affiliateDescriptor = new AffiliationDescriptor(C::ENTITY_IDP, [new AffiliateMember(C::ENTITY_SP)]);
         $affiliateDescriptor->toXML($this->xmlRepresentation->documentElement);
 
         $this->expectException(ProtocolViolationException::class);
@@ -299,8 +303,7 @@ XML
      */
     public function testMarshallingWithEmptyEntityID(): void
     {
-        $this->expectException(AssertionFailedException::class);
-        $this->expectExceptionMessage('The entityID attribute cannot be empty.');
+        $this->expectException(SchemaViolationException::class);
         new EntityDescriptor(
             '',
             null,
@@ -308,7 +311,7 @@ XML
             null,
             null,
             [],
-            new AffiliationDescriptor('asdf', [new AffiliateMember('test')])
+            new AffiliationDescriptor(C::ENTITY_IDP, [new AffiliateMember(C::ENTITY_SP)])
         );
     }
 
@@ -318,19 +321,19 @@ XML
      */
     public function testMarshallingWithLongEntityID(): void
     {
-        $this->expectException(AssertionFailedException::class);
+        $this->expectException(ProtocolViolationException::class);
         $this->expectExceptionMessage(
             sprintf('The entityID attribute cannot be longer than %d characters.', C::ENTITYID_MAX_LENGTH)
         );
 
         new EntityDescriptor(
-            str_repeat('x', C::ENTITYID_MAX_LENGTH + 1),
+            str_repeat('urn:x-simplesamlphp:', C::ENTITYID_MAX_LENGTH + 1),
             null,
             null,
             null,
             null,
             [],
-            new AffiliationDescriptor('asdf', [new AffiliateMember('test')])
+            new AffiliationDescriptor(C::ENTITY_IDP, [new AffiliateMember(C::ENTITY_OTHER)])
         );
     }
 
@@ -365,7 +368,7 @@ XML
             ],
             $entityDescriptor->getAttributesNS()
         );
-        $this->assertEquals('urn:example:entity', $entityDescriptor->getEntityID());
+        $this->assertEquals(C::ENTITY_IDP, $entityDescriptor->getEntityID());
         $this->assertEquals('_5A3CHB081', $entityDescriptor->getID());
         $this->assertEquals(1580895565, $entityDescriptor->getValidUntil());
         $this->assertEquals('P2Y6M5DT12H35M30S', $entityDescriptor->getCacheDuration());
@@ -409,10 +412,13 @@ XML
      */
     public function testUnmarshallingWithoutEntityId(): void
     {
+        $entity_idp = C::ENTITY_IDP;
+        $entity_sp = C::ENTITY_SP;
+
         $document = DOMDocumentFactory::fromString(<<<XML
 <EntityDescriptor xmlns="urn:oasis:names:tc:SAML:2.0:metadata">
-    <AffiliationDescriptor affiliationOwnerID="asdf">
-        <AffiliateMember>test</AffiliateMember>
+    <AffiliationDescriptor affiliationOwnerID="{$entity_idp}">
+        <AffiliateMember>{$entity_sp}</AffiliateMember>
     </AffiliationDescriptor>
 </EntityDescriptor>
 XML
@@ -428,8 +434,10 @@ XML
      */
     public function testUnmarshallingWithoutDescriptors(): void
     {
+        $entity_idp = C::ENTITY_IDP;
+
         $document = DOMDocumentFactory::fromString(
-            '<EntityDescriptor entityID="theEntityID" xmlns="urn:oasis:names:tc:SAML:2.0:metadata"></EntityDescriptor>'
+            '<EntityDescriptor entityID="{$entity_idp}" xmlns="urn:oasis:names:tc:SAML:2.0:metadata"></EntityDescriptor>'
         );
         $this->expectException(ProtocolViolationException::class);
         $this->expectExceptionMessage(
@@ -444,10 +452,13 @@ XML
      */
     public function testUnmarshallingWithInvalidValidUntil(): void
     {
+        $entity_idp = C::ENTITY_IDP;
+        $entity_sp = C::ENTITY_SP;
+
         $document = DOMDocumentFactory::fromString(<<<XML
-<EntityDescriptor validUntil="asdf" entityID="theEntityID" xmlns="urn:oasis:names:tc:SAML:2.0:metadata">
-    <AffiliationDescriptor affiliationOwnerID="asd">
-        <AffiliateMember>test</AffiliateMember>
+<EntityDescriptor validUntil="asdf" entityID="{$entity_idp}" xmlns="urn:oasis:names:tc:SAML:2.0:metadata">
+    <AffiliationDescriptor affiliationOwnerID="{$entity_idp}">
+        <AffiliateMember>{$entity_sp}</AffiliateMember>
     </AffiliationDescriptor>
 </EntityDescriptor>
 XML
@@ -463,13 +474,17 @@ XML
      */
     public function testUnmarshallingWithAffiliationDescriptor(): void
     {
+        $entity_idp = C::ENTITY_IDP;
+        $entity_sp = C::ENTITY_SP;
+        $entity_other = C::ENTITY_OTHER;
+
         $document = DOMDocumentFactory::fromString(<<<XML
-<EntityDescriptor entityID="theEntityID" xmlns="urn:oasis:names:tc:SAML:2.0:metadata"
+<EntityDescriptor entityID="{$entity_idp}" xmlns="urn:oasis:names:tc:SAML:2.0:metadata"
     validUntil="2010-02-01T12:34:56Z">
-  <AffiliationDescriptor affiliationOwnerID="asdf" ID="theAffiliationDescriptorID"
+  <AffiliationDescriptor affiliationOwnerID="{$entity_idp}" ID="theAffiliationDescriptorID"
       validUntil="2010-02-01T12:34:56Z" cacheDuration="PT9000S">
-    <AffiliateMember>test</AffiliateMember>
-    <AffiliateMember>test2</AffiliateMember>
+    <AffiliateMember>{$entity_sp}</AffiliateMember>
+    <AffiliateMember>{$entity_other}</AffiliateMember>
   </AffiliationDescriptor>
 </EntityDescriptor>
 XML
@@ -485,16 +500,20 @@ XML
      */
     public function testUnmarshallingWithSeveralAffiliationDescriptors(): void
     {
+        $entity_idp = C::ENTITY_IDP;
+        $entity_sp = C::ENTITY_SP;
+        $entity_other = C::ENTITY_OTHER;
+
         $document = DOMDocumentFactory::fromString(<<<XML
-<EntityDescriptor entityID="theEntityID" xmlns="urn:oasis:names:tc:SAML:2.0:metadata"
+<EntityDescriptor entityID="{$entity_idp}" xmlns="urn:oasis:names:tc:SAML:2.0:metadata"
     validUntil="2010-02-01T12:34:56Z">
-  <AffiliationDescriptor affiliationOwnerID="asdf" ID="theAffiliationDescriptorID1"
+  <AffiliationDescriptor affiliationOwnerID="{$entity_idp}" ID="theAffiliationDescriptorID1"
       validUntil="2010-02-01T12:34:56Z" cacheDuration="PT9000S" >
-    <AffiliateMember>test</AffiliateMember>
+    <AffiliateMember>{$entity_other}</AffiliateMember>
   </AffiliationDescriptor>
-  <AffiliationDescriptor affiliationOwnerID="asdf" ID="theAffiliationDescriptorID2"
+  <AffiliationDescriptor affiliationOwnerID="{$entity_idp}" ID="theAffiliationDescriptorID2"
       validUntil="2010-02-01T12:34:56Z" cacheDuration="PT9000S" >
-    <AffiliateMember>test2</AffiliateMember>
+    <AffiliateMember>{$entity_sp}</AffiliateMember>
   </AffiliationDescriptor>
 </EntityDescriptor>
 XML
@@ -510,8 +529,10 @@ XML
      */
     public function testUnmarshallingWithMultipleOrganizations(): void
     {
+        $entity_idp = C::ENTITY_IDP;
+
         $document = DOMDocumentFactory::fromString(<<<XML
-<EntityDescriptor entityID="theEntityID" ID="theID" validUntil="2010-01-01T12:34:56Z"
+<EntityDescriptor entityID="{$entity_idp}" ID="theID" validUntil="2010-01-01T12:34:56Z"
     cacheDuration="PT5000S" xmlns="urn:oasis:names:tc:SAML:2.0:metadata">
   <AttributeAuthorityDescriptor protocolSupportEnumeration="urn:oasis:names:tc:SAML:2.0:protocol">
     <AttributeService Binding="urn:oasis:names:tc:SAML:2.0:bindings:SOAP"
@@ -542,16 +563,19 @@ XML
      */
     public function testUnmarshallingWithRoleandAffiliationDescriptors(): void
     {
+        $entity_idp = C::ENTITY_IDP;
+        $entity_other = C::ENTITY_OTHER;
+
         $document = DOMDocumentFactory::fromString(<<<XML
-<EntityDescriptor entityID="theEntityID" ID="theID" validUntil="2010-01-01T12:34:56Z"
+<EntityDescriptor entityID="{$entity_idp}" ID="theID" validUntil="2010-01-01T12:34:56Z"
     cacheDuration="PT5000S" xmlns="urn:oasis:names:tc:SAML:2.0:metadata">
   <AttributeAuthorityDescriptor protocolSupportEnumeration="urn:oasis:names:tc:SAML:2.0:protocol">
     <AttributeService Binding="urn:oasis:names:tc:SAML:2.0:bindings:SOAP"
         Location="https://idp.example.org/AttributeService" />
   </AttributeAuthorityDescriptor>
-  <AffiliationDescriptor affiliationOwnerID="asdf" ID="theAffiliationDescriptorID"
+  <AffiliationDescriptor affiliationOwnerID="{$entity_idp}" ID="theAffiliationDescriptorID"
       validUntil="2010-02-01T12:34:56Z" cacheDuration="PT9000S" >
-    <AffiliateMember>test</AffiliateMember>
+    <AffiliateMember>{$entity_other}</AffiliateMember>
   </AffiliationDescriptor>
   <Organization>
     <OrganizationName xml:lang="en">orgNameTest (en)</OrganizationName>

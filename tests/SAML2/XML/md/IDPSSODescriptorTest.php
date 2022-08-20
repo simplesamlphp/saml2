@@ -6,7 +6,6 @@ namespace SimpleSAML\Test\SAML2\XML\md;
 
 use PHPUnit\Framework\TestCase;
 use SimpleSAML\Assert\AssertionFailedException;
-use SimpleSAML\SAML2\Constants;
 use SimpleSAML\SAML2\Exception\ProtocolViolationException;
 use SimpleSAML\SAML2\XML\md\AssertionIDRequestService;
 use SimpleSAML\SAML2\XML\md\AttributeProfile;
@@ -20,9 +19,11 @@ use SimpleSAML\SAML2\XML\md\SingleLogoutService;
 use SimpleSAML\SAML2\XML\md\SingleSignOnService;
 use SimpleSAML\SAML2\XML\saml\Attribute;
 use SimpleSAML\SAML2\XML\saml\AttributeValue;
+use SimpleSAML\Test\SAML2\Constants as C;
 use SimpleSAML\Test\SAML2\SignedElementTestTrait;
 use SimpleSAML\Test\XML\SerializableXMLTestTrait;
 use SimpleSAML\XML\DOMDocumentFactory;
+use SimpleSAML\XML\Exception\SchemaViolationException;
 use SimpleSAML\XMLSecurity\XML\ds\KeyInfo;
 use SimpleSAML\XMLSecurity\XML\ds\KeyName;
 use SimpleSAML\XMLSecurity\XMLSecurityDSig;
@@ -69,33 +70,33 @@ final class IDPSSODescriptorTest extends TestCase
         $idpssod = new IDPSSODescriptor(
             [
                 new SingleSignOnService(
-                    Constants::BINDING_HTTP_REDIRECT,
+                    C::BINDING_HTTP_REDIRECT,
                     'https://IdentityProvider.com/SAML/SSO/Browser'
                 ),
                 new SingleSignOnService(
-                    Constants::BINDING_HTTP_POST,
+                    C::BINDING_HTTP_POST,
                     'https://IdentityProvider.com/SAML/SSO/Browser'
                 )
             ],
-            [Constants::NS_SAMLP],
+            [C::NS_SAMLP],
             true,
             [
                 new NameIDMappingService(
-                    Constants::BINDING_HTTP_REDIRECT,
+                    C::BINDING_HTTP_REDIRECT,
                     'https://IdentityProvider.com/SAML/SSO/Browser'
                 ),
                 new NameIDMappingService(
-                    Constants::BINDING_HTTP_POST,
+                    C::BINDING_HTTP_POST,
                     'https://IdentityProvider.com/SAML/SSO/Browser'
                 )
             ],
             [
                 new AssertionIDRequestService(
-                    Constants::BINDING_HTTP_REDIRECT,
+                    C::BINDING_HTTP_REDIRECT,
                     'https://IdentityProvider.com/SAML/SSO/Browser'
                 ),
                 new AssertionIDRequestService(
-                    Constants::BINDING_HTTP_POST,
+                    C::BINDING_HTTP_POST,
                     'https://IdentityProvider.com/SAML/SSO/Browser'
                 )
             ],
@@ -103,12 +104,12 @@ final class IDPSSODescriptorTest extends TestCase
             [
                 new Attribute(
                     'urn:oid:1.3.6.1.4.1.5923.1.1.1.6',
-                    Constants::NAMEFORMAT_URI,
+                    C::NAMEFORMAT_URI,
                     'eduPersonPrincipalName'
                 ),
                 new Attribute(
                     'urn:oid:1.3.6.1.4.1.5923.1.1.1.1',
-                    Constants::NAMEFORMAT_URI,
+                    C::NAMEFORMAT_URI,
                     'eduPersonAffiliation',
                     [
                         new AttributeValue('member'),
@@ -137,32 +138,32 @@ final class IDPSSODescriptorTest extends TestCase
             [
                 new ArtifactResolutionService(
                     0,
-                    Constants::BINDING_SOAP,
+                    C::BINDING_SOAP,
                     'https://IdentityProvider.com/SAML/Artifact',
                     true
                 )
             ],
             [
                 new SingleLogoutService(
-                    Constants::BINDING_SOAP,
+                    C::BINDING_SOAP,
                     'https://IdentityProvider.com/SAML/SLO/SOAP'
                 ),
                 new SingleLogoutService(
-                    Constants::BINDING_HTTP_REDIRECT,
+                    C::BINDING_HTTP_REDIRECT,
                     'https://IdentityProvider.com/SAML/SLO/Browser',
                     'https://IdentityProvider.com/SAML/SLO/Response'
                 )
             ],
             [
                 new ManageNameIDService(
-                    Constants::BINDING_HTTP_POST,
+                    C::BINDING_HTTP_POST,
                     'https://IdentityProvider.com/SAML/SSO/Browser'
                 )
             ],
             [
-                new NameIDFormat(Constants::NAMEID_X509_SUBJECT_NAME),
-                new NameIDFormat(Constants::NAMEID_PERSISTENT),
-                new NameIDFormat(Constants::NAMEID_TRANSIENT)
+                new NameIDFormat(C::NAMEID_X509_SUBJECT_NAME),
+                new NameIDFormat(C::NAMEID_PERSISTENT),
+                new NameIDFormat(C::NAMEID_TRANSIENT)
             ]
         );
 
@@ -180,7 +181,7 @@ final class IDPSSODescriptorTest extends TestCase
     {
         $this->expectException(AssertionFailedException::class);
         $this->expectExceptionMessage('At least one SingleSignOnService must be specified.');
-        new IDPSSODescriptor([], [Constants::NS_SAMLP]);
+        new IDPSSODescriptor([], [C::NS_SAMLP]);
     }
 
 
@@ -197,8 +198,8 @@ final class IDPSSODescriptorTest extends TestCase
 
         /** @psalm-suppress InvalidArgument */
         new IDPSSODescriptor(
-            [new AssertionIDRequestService('binding1', 'location1')],
-            [Constants::NS_SAMLP]
+            [new AssertionIDRequestService(C::BINDING_HTTP_POST, C::LOCATION_AIRS)],
+            [C::NS_SAMLP]
         );
     }
 
@@ -214,7 +215,7 @@ final class IDPSSODescriptorTest extends TestCase
 
         /** @psalm-suppress InvalidArgument */
         new IDPSSODescriptor(
-            [new AssertionIDRequestService('binding1', 'location1')],
+            [new AssertionIDRequestService(C::BINDING_HTTP_POST, C::LOCATION_AIRS)],
             ['urn:saml:3.9']
         );
     }
@@ -233,10 +234,10 @@ final class IDPSSODescriptorTest extends TestCase
 
         /** @psalm-suppress InvalidArgument */
         new IDPSSODescriptor(
-            [new SingleSignOnService('binding1', 'location1')],
-            [Constants::NS_SAMLP],
+            [new SingleSignOnService(C::BINDING_HTTP_POST, C::LOCATION_SSO)],
+            [C::NS_SAMLP],
             null,
-            [new SingleSignOnService('binding1', 'location1')]
+            [new SingleSignOnService(C::BINDING_HTTP_REDIRECT, C::LOCATION_SSO)]
         );
     }
 
@@ -254,11 +255,11 @@ final class IDPSSODescriptorTest extends TestCase
 
         /** @psalm-suppress InvalidArgument */
         new IDPSSODescriptor(
-            [new SingleSignOnService('binding1', 'location1')],
-            [Constants::NS_SAMLP],
+            [new SingleSignOnService(C::BINDING_HTTP_POST, C::LOCATION_SSO)],
+            [C::NS_SAMLP],
             null,
             [],
-            [new SingleSignOnService('binding1', 'location1')]
+            [new SingleSignOnService(C::BINDING_HTTP_REDIRECT, C::LOCATION_SSO)]
         );
     }
 
@@ -268,11 +269,10 @@ final class IDPSSODescriptorTest extends TestCase
      */
     public function testMarshallingWithEmptyAttributeProfile(): void
     {
-        $this->expectException(AssertionFailedException::class);
-        $this->expectExceptionMessage('AttributeProfile cannot be empty');
+        $this->expectException(SchemaViolationException::class);
         new IDPSSODescriptor(
-            [new SingleSignOnService('binding1', 'location1')],
-            [Constants::NS_SAMLP],
+            [new SingleSignOnService(C::BINDING_HTTP_POST, C::LOCATION_SSO)],
+            [C::NS_SAMLP],
             null,
             [],
             [],
@@ -291,13 +291,13 @@ final class IDPSSODescriptorTest extends TestCase
 
         /** @psalm-suppress InvalidArgument */
         new IDPSSODescriptor(
-            [new SingleSignOnService('binding1', 'location1')],
-            [Constants::NS_SAMLP],
+            [new SingleSignOnService(C::BINDING_HTTP_POST, C::LOCATION_SSO)],
+            [C::NS_SAMLP],
             null,
             [],
             [],
             [],
-            [new SingleSignOnService('binding1', 'location1')]
+            [new SingleSignOnService(C::BINDING_HTTP_REDIRECT, C::LOCATION_SSO)]
         );
     }
 
@@ -309,10 +309,10 @@ final class IDPSSODescriptorTest extends TestCase
     {
         $idpssod = new IDPSSODescriptor(
             [
-                new SingleSignOnService('binding1', 'location1'),
-                new SingleSignOnService('binding2', 'location2')
+                new SingleSignOnService(C::BINDING_HTTP_POST, C::LOCATION_SSO),
+                new SingleSignOnService(C::BINDING_HTTP_REDIRECT, C::LOCATION_SSO)
             ],
-            [Constants::NS_SAMLP, 'protocol2']
+            [C::NS_SAMLP, C::PROTOCOL]
         );
         $this->assertNull($idpssod->wantAuthnRequestsSigned());
         $this->assertEquals([], $idpssod->getNameIDMappingServices());
@@ -341,9 +341,9 @@ final class IDPSSODescriptorTest extends TestCase
         $this->assertInstanceOf(NameIDMappingService::class, $idpssod->getNameIDMappingServices()[0]);
         $this->assertInstanceOf(NameIDMappingService::class, $idpssod->getNameIDMappingServices()[1]);
         $this->assertCount(3, $idpssod->getNameIDFormats());
-        $this->assertEquals(Constants::NAMEID_X509_SUBJECT_NAME, $idpssod->getNameIDFormats()[0]->getContent());
-        $this->assertEquals(Constants::NAMEID_PERSISTENT, $idpssod->getNameIDFormats()[1]->getContent());
-        $this->assertEquals(Constants::NAMEID_TRANSIENT, $idpssod->getNameIDFormats()[2]->getContent());
+        $this->assertEquals(C::NAMEID_X509_SUBJECT_NAME, $idpssod->getNameIDFormats()[0]->getContent());
+        $this->assertEquals(C::NAMEID_PERSISTENT, $idpssod->getNameIDFormats()[1]->getContent());
+        $this->assertEquals(C::NAMEID_TRANSIENT, $idpssod->getNameIDFormats()[2]->getContent());
         $this->assertCount(2, $idpssod->getAssertionIDRequestServices());
         $this->assertInstanceOf(AssertionIDRequestService::class, $idpssod->getAssertionIDRequestServices()[0]);
         $this->assertInstanceOf(AssertionIDRequestService::class, $idpssod->getAssertionIDRequestServices()[1]);
@@ -370,7 +370,7 @@ final class IDPSSODescriptorTest extends TestCase
     {
         $this->expectException(AssertionFailedException::class);
         $this->expectExceptionMessage('At least one SingleSignOnService must be specified.');
-        $ssoServiceEps = $this->xmlRepresentation->getElementsByTagNameNS(Constants::NS_MD, 'SingleSignOnService');
+        $ssoServiceEps = $this->xmlRepresentation->getElementsByTagNameNS(C::NS_MD, 'SingleSignOnService');
         /** @psalm-suppress PossiblyNullArgument */
         $this->xmlRepresentation->documentElement->removeChild($ssoServiceEps->item(1));
         /** @psalm-suppress PossiblyNullArgument */
@@ -398,11 +398,10 @@ final class IDPSSODescriptorTest extends TestCase
      */
     public function testUnmarshallingWithEmptyAttributeProfile(): void
     {
-        $attrProfiles = $this->xmlRepresentation->getElementsByTagNameNS(Constants::NS_MD, 'AttributeProfile');
+        $attrProfiles = $this->xmlRepresentation->getElementsByTagNameNS(C::NS_MD, 'AttributeProfile');
         /** @psalm-suppress PossiblyNullPropertyAssignment */
         $attrProfiles->item(0)->textContent = '';
-        $this->expectException(AssertionFailedException::class);
-        $this->expectExceptionMessage('AttributeProfile cannot be empty');
+        $this->expectException(SchemaViolationException::class);
         IDPSSODescriptor::fromXML($this->xmlRepresentation->documentElement);
     }
 
@@ -412,7 +411,7 @@ final class IDPSSODescriptorTest extends TestCase
      */
     public function testUnmarshallingWithoutOptionalArguments(): void
     {
-        $mdns = Constants::NS_MD;
+        $mdns = C::NS_MD;
         $document = DOMDocumentFactory::fromString(<<<XML
 <md:IDPSSODescriptor xmlns:md="{$mdns}" protocolSupportEnumeration="urn:oasis:names:tc:SAML:2.0:protocol">
   <md:SingleSignOnService Binding="urn:oasis:names:tc:SAML:2.0:bindings:HTTP-Redirect"

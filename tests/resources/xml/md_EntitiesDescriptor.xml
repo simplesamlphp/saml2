@@ -5,7 +5,7 @@
     </mdrpi:PublicationInfo>
   </md:Extensions>
   <md:EntitiesDescriptor Name="subfederation">
-    <md:EntityDescriptor entityID="https://ServiceProvider.com/SAML">
+    <md:EntityDescriptor entityID="https://simplesamlphp.org/idp/metadata">
       <md:SPSSODescriptor protocolSupportEnumeration="urn:oasis:names:tc:SAML:2.0:protocol" AuthnRequestsSigned="true">
         <md:AssertionConsumerService Binding="urn:oasis:names:tc:SAML:2.0:bindings:HTTP-Artifact" Location="https://ServiceProvider.com/SAML/SSO/Artifact" index="0" isDefault="true"/>
       </md:SPSSODescriptor>
@@ -16,7 +16,7 @@
       </md:Organization>
     </md:EntityDescriptor>
   </md:EntitiesDescriptor>
-  <md:EntityDescriptor entityID="https://IdentityProvider.com/SAML">
+  <md:EntityDescriptor entityID="https://simplesamlphp.org/sp/metadata">
     <md:IDPSSODescriptor protocolSupportEnumeration="urn:oasis:names:tc:SAML:2.0:protocol" WantAuthnRequestsSigned="true">
       <md:KeyDescriptor use="signing">
         <ds:KeyInfo xmlns:ds="http://www.w3.org/2000/09/xmldsig#">

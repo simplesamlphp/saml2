@@ -7,7 +7,6 @@ namespace SimpleSAML\Test\SAML2\XML\md;
 use DOMDocument;
 use PHPUnit\Framework\TestCase;
 use SimpleSAML\Assert\AssertionFailedException;
-use SimpleSAML\SAML2\Constants;
 use SimpleSAML\SAML2\XML\md\ArtifactResolutionService;
 use SimpleSAML\SAML2\XML\md\AssertionConsumerService;
 use SimpleSAML\SAML2\XML\md\AttributeConsumingService;
@@ -28,6 +27,7 @@ use SimpleSAML\SAML2\XML\md\SPSSODescriptor;
 use SimpleSAML\SAML2\XML\mdrpi\PublicationInfo;
 use SimpleSAML\SAML2\XML\mdrpi\UsagePolicy;
 use SimpleSAML\SAML2\XML\saml\AttributeValue;
+use SimpleSAML\Test\SAML2\Constants as C;
 use SimpleSAML\Test\SAML2\SignedElementTestTrait;
 use SimpleSAML\Test\XML\SerializableXMLTestTrait;
 use SimpleSAML\XML\DOMDocumentFactory;
@@ -76,29 +76,29 @@ final class SPSSODescriptorTest extends TestCase
     public function testMarshalling(): void
     {
         $slo1 = new SingleLogoutService(
-            Constants::BINDING_SOAP,
+            C::BINDING_SOAP,
             'https://ServiceProvider.com/SAML/SLO/SOAP'
         );
         $slo2 = new SingleLogoutService(
-            Constants::BINDING_HTTP_REDIRECT,
+            C::BINDING_HTTP_REDIRECT,
             'https://ServiceProvider.com/SAML/SLO/Browser',
             'https://ServiceProvider.com/SAML/SLO/Response'
         );
         $acs1 = new AssertionConsumerService(
             0,
-            Constants::BINDING_HTTP_ARTIFACT,
+            C::BINDING_HTTP_ARTIFACT,
             'https://ServiceProvider.com/SAML/SSO/Artifact',
             true
         );
         $acs2 = new AssertionConsumerService(
             1,
-            Constants::BINDING_HTTP_POST,
+            C::BINDING_HTTP_POST,
             'https://ServiceProvider.com/SAML/SSO/POST'
         );
         $reqAttr = new RequestedAttribute(
             'urn:oid:1.3.6.1.4.1.5923.1.1.1.7',
             null,
-            Constants::NAMEFORMAT_URI,
+            C::NAMEFORMAT_URI,
             'eduPersonEntitlement',
             [new AttributeValue('https://ServiceProvider.com/entitlements/123456789')]
         );
@@ -135,12 +135,12 @@ final class SPSSODescriptorTest extends TestCase
             null,
             [new EmailAddress('john.doe@test.company')]
         );
-        $ars = new ArtifactResolutionService(0, 'binding1', 'location1');
-        $mnids = new ManageNameIDService('binding1', 'location1');
+        $ars = new ArtifactResolutionService(0, C::BINDING_HTTP_ARTIFACT, C::LOCATION_ACS);
+        $mnids = new ManageNameIDService(C::BINDING_HTTP_POST, C::LOCATION_ACS);
 
         $spssod = new SPSSODescriptor(
             [$acs1, $acs2],
-            ['urn:oasis:names:tc:SAML:2.0:protocol'],
+            [C::NS_SAMLP],
             true,
             false,
             [$attrcs1, $attrcs2],
@@ -155,7 +155,7 @@ final class SPSSODescriptorTest extends TestCase
             [$ars],
             [$slo1, $slo2],
             [$mnids],
-            [new NameIDFormat(Constants::NAMEID_TRANSIENT)]
+            [new NameIDFormat(C::NAMEID_TRANSIENT)]
         );
 
         $this->assertEquals(
@@ -175,7 +175,7 @@ final class SPSSODescriptorTest extends TestCase
 
         new SPSSODescriptor(
             [],
-            [Constants::NS_SAMLP]
+            [C::NS_SAMLP]
         );
     }
 
@@ -192,8 +192,8 @@ final class SPSSODescriptorTest extends TestCase
 
         /** @psalm-suppress InvalidArgument */
         new SPSSODescriptor(
-            [new ArtifactResolutionService(0, 'x', 'x')],
-            [Constants::NS_SAMLP]
+            [new ArtifactResolutionService(0, C::BINDING_HTTP_POST, C::LOCATION_ACS)],
+            [C::NS_SAMLP]
         );
     }
 
@@ -210,11 +210,11 @@ final class SPSSODescriptorTest extends TestCase
 
         /** @psalm-suppress InvalidArgument */
         new SPSSODescriptor(
-            [new AssertionConsumerService(0, 'x', 'x')],
-            [Constants::NS_SAMLP],
+            [new AssertionConsumerService(0, C::BINDING_HTTP_POST, C::LOCATION_ACS)],
+            [C::NS_SAMLP],
             true,
             null,
-            [new AssertionConsumerService(0, 'x', 'x')]
+            [new AssertionConsumerService(0, C::BINDING_HTTP_POST, C::LOCATION_ACS)]
         );
     }
 
@@ -225,8 +225,8 @@ final class SPSSODescriptorTest extends TestCase
     public function testMarshallingWithoutOptionalArguments(): void
     {
         $spssod = new SPSSODescriptor(
-            [new AssertionConsumerService(0, 'x', 'x')],
-            [Constants::NS_SAMLP]
+            [new AssertionConsumerService(0, C::BINDING_HTTP_POST, C::LOCATION_ACS)],
+            [C::NS_SAMLP]
         );
         $this->assertNull($spssod->getAuthnRequestsSigned());
         $this->assertNull($spssod->getWantAssertionsSigned());
@@ -263,7 +263,7 @@ final class SPSSODescriptorTest extends TestCase
      */
     public function testUnmarshallingWithoutAssertionConsumerService(): void
     {
-        $acseps = $this->xmlRepresentation->getElementsByTagNameNS(Constants::NS_MD, 'AssertionConsumerService');
+        $acseps = $this->xmlRepresentation->getElementsByTagNameNS(C::NS_MD, 'AssertionConsumerService');
 
         /** @psalm-suppress PossiblyNullArgument */
         $this->xmlRepresentation->documentElement->removeChild($acseps->item(1));
@@ -311,7 +311,7 @@ final class SPSSODescriptorTest extends TestCase
      */
     public function testUnmarshallingWithoutOptionalArguments(): void
     {
-        $mdns = Constants::NS_MD;
+        $mdns = C::NS_MD;
         $document = DOMDocumentFactory::fromString(<<<XML
 <md:SPSSODescriptor xmlns:md="{$mdns}" protocolSupportEnumeration="urn:oasis:names:tc:SAML:2.0:protocol">
   <md:AssertionConsumerService Binding="urn:oasis:names:tc:SAML:2.0:bindings:HTTP-Artifact"
@@ -333,7 +333,7 @@ XML
      */
     public function testUnmarshallingTwoDefaultACS(): void
     {
-        $acs = $this->xmlRepresentation->getElementsByTagNameNS(Constants::NS_MD, 'AttributeConsumingService');
+        $acs = $this->xmlRepresentation->getElementsByTagNameNS(C::NS_MD, 'AttributeConsumingService');
         /** @psalm-suppress PossiblyNullReference */
         $acs->item(1)->setAttribute('isDefault', 'true');
 

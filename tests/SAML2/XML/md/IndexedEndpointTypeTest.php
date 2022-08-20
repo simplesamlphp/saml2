@@ -7,9 +7,9 @@ namespace SimpleSAML\Test\SAML2\XML\md;
 use DOMDocument;
 use PHPUnit\Framework\TestCase;
 use SimpleSAML\Assert\AssertionFailedException;
-use SimpleSAML\SAML2\Constants;
 use SimpleSAML\SAML2\XML\md\ArtifactResolutionService;
 use SimpleSAML\SAML2\XML\md\AssertionConsumerService;
+use SimpleSAML\Test\SAML2\Constants as C;
 use SimpleSAML\Test\XML\SerializableXMLTestTrait;
 use SimpleSAML\XML\DOMDocumentFactory;
 use SimpleSAML\XML\Exception\InvalidDOMElementException;
@@ -50,7 +50,7 @@ final class IndexedEndpointTypeTest extends TestCase
      */
     public function testMarshalling(): void
     {
-        $idxep = new AssertionConsumerService(42, 'urn:something', 'https://whatever/', false);
+        $idxep = new AssertionConsumerService(42, C::BINDING_HTTP_POST, C::LOCATION_ACS, false);
 
         $this->assertEquals(
             $this->xmlRepresentation->saveXML($this->xmlRepresentation->documentElement),
@@ -64,7 +64,7 @@ final class IndexedEndpointTypeTest extends TestCase
      */
     public function testMarshallingWithoutIsDefault(): void
     {
-        $idxep = new AssertionConsumerService(42, 'urn:something', 'https://whatever/');
+        $idxep = new AssertionConsumerService(42, C::BINDING_HTTP_POST, C::LOCATION_ACS);
         $this->xmlRepresentation->documentElement->removeAttribute('isDefault');
         $this->assertEquals($this->xmlRepresentation->saveXML(
             $this->xmlRepresentation->documentElement),

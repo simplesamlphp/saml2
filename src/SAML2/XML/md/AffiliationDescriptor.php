@@ -9,6 +9,7 @@ use Exception;
 use SimpleSAML\Assert\Assert;
 use SimpleSAML\SAML2\Constants as C;
 use SimpleSAML\XML\Exception\InvalidDOMElementException;
+use SimpleSAML\XML\Exception\SchemaViolationException;
 use SimpleSAML\XML\Exception\TooManyElementsException;
 use SimpleSAML\XML\Utils as XMLUtils;
 use SimpleSAML\XMLSecurity\XML\ds\Signature;
@@ -143,11 +144,12 @@ final class AffiliationDescriptor extends AbstractMetadataDocument
      */
     protected function setAffiliationOwnerID(string $affiliationOwnerId): void
     {
-        Assert::notWhitespaceOnly($affiliationOwnerId, 'AffiliationOwnerID must not be empty.');
+        Assert::validURI($affiliationOwnerId, SchemaViolationException::class); // Covers the empty string
         Assert::maxLength(
             $affiliationOwnerId,
             C::ENTITYID_MAX_LENGTH,
-            sprintf('The AffiliationOwnerID attribute cannot be longer than %d characters.', C::ENTITYID_MAX_LENGTH)
+            sprintf('The AffiliationOwnerID attribute cannot be longer than %d characters.', C::ENTITYID_MAX_LENGTH),
+            ProtocolViolationException::class
         );
         $this->affiliationOwnerID = $affiliationOwnerId;
     }

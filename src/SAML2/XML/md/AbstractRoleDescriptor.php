@@ -7,10 +7,9 @@ namespace SimpleSAML\SAML2\XML\md;
 use DOMElement;
 use SimpleSAML\Assert\Assert;
 use SimpleSAML\SAML2\Constants;
+use SimpleSAML\XML\Exception\SchemaViolationException;
 
-use function filter_var;
 use function implode;
-use function is_null;
 
 /**
  * Class representing SAML 2 RoleDescriptor element.
@@ -110,14 +109,11 @@ abstract class AbstractRoleDescriptor extends AbstractMetadataDocument
      * Set the value of the errorURL property.
      *
      * @param string|null $errorURL
-     * @throws \SimpleSAML\SAML2\Exception\ProtocolViolationException
+     * @throws \SimpleSAML\SAML2\Exception\SchemaViolationException
      */
     protected function setErrorURL(?string $errorURL = null): void
     {
-        Assert::false(
-            !is_null($errorURL) && !filter_var($errorURL, FILTER_VALIDATE_URL),
-            'RoleDescriptor errorURL is not a valid URL.',
-        );
+        Assert::nullOrValidURI($errorURL, SchemaViolationException::class); // Covers the empty string
         $this->errorURL = $errorURL;
     }
 
@@ -137,12 +133,16 @@ abstract class AbstractRoleDescriptor extends AbstractMetadataDocument
      * Set the value of the ProtocolSupportEnumeration property.
      *
      * @param string[] $protocols
-     * @throws \SimpleSAML\Assert\AssertionFailedException if the qualified name of the supplied element is wrong
+     * @throws \SimpleSAML\Assert\AssertionFailedException
+     * @throws \SimpleSAML\XML\Exception\SchemaViolationException
      */
     protected function setProtocolSupportEnumeration(array $protocols): void
     {
         Assert::minCount($protocols, 1, 'At least one protocol must be supported by this ' . static::class . '.');
-        Assert::allStringNotEmpty($protocols, 'Cannot specify an empty string as a supported protocol.');
+        // @TODO: create allValidURI in assert-library
+        foreach ($protocols as $protocol) {
+            Assert::validURI($protocol, SchemaViolationException::class);
+        }
         Assert::oneOf(Constants::NS_SAMLP, $protocols, 'At least SAML 2.0 must be one of supported protocols.');
 
         $this->protocolSupportEnumeration = $protocols;

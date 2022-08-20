@@ -8,9 +8,11 @@ use DOMDocument;
 use PHPUnit\Framework\TestCase;
 use SimpleSAML\Assert\AssertionFailedException;
 use SimpleSAML\SAML2\XML\md\AdditionalMetadataLocation;
+use SimpleSAML\Test\SAML2\Constants as C;
 use SimpleSAML\Test\XML\SerializableXMLTestTrait;
 use SimpleSAML\XML\DOMDocumentFactory;
 use SimpleSAML\XML\Exception\MissingAttributeException;
+use SimpleSAML\XML\Exception\SchemaViolationException;
 
 use function dirname;
 use function strval;
@@ -47,7 +49,7 @@ final class AdditionalMetadataLocationTest extends TestCase
      */
     public function testMarshalling(): void
     {
-        $additionalMetadataLocation = new AdditionalMetadataLocation('TheNamespaceAttribute', 'LocationText');
+        $additionalMetadataLocation = new AdditionalMetadataLocation(C::NAMESPACE, C::LOCATION_METADATA);
 
         $this->assertEquals(
             $this->xmlRepresentation->saveXML($this->xmlRepresentation->documentElement),
@@ -61,9 +63,8 @@ final class AdditionalMetadataLocationTest extends TestCase
      */
     public function testMarshallingWithEmptyNamespace(): void
     {
-        $this->expectException(AssertionFailedException::class);
-        $this->expectExceptionMessage('The namespace in AdditionalMetadataLocation must be a URI.');
-        new AdditionalMetadataLocation('', 'TheLocation');
+        $this->expectException(SchemaViolationException::class);
+        new AdditionalMetadataLocation('', C::LOCATION_METADATA);
     }
 
 
@@ -76,8 +77,8 @@ final class AdditionalMetadataLocationTest extends TestCase
     public function testUnmarshalling(): void
     {
         $additionalMetadataLocation = AdditionalMetadataLocation::fromXML($this->xmlRepresentation->documentElement);
-        $this->assertEquals('TheNamespaceAttribute', $additionalMetadataLocation->getNamespace());
-        $this->assertEquals('LocationText', $additionalMetadataLocation->getContent());
+        $this->assertEquals(C::NAMESPACE, $additionalMetadataLocation->getNamespace());
+        $this->assertEquals(C::LOCATION_METADATA, $additionalMetadataLocation->getContent());
     }
 
 

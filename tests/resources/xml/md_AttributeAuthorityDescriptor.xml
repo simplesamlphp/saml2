@@ -4,8 +4,8 @@
   <md:NameIDFormat>urn:oasis:names:tc:SAML:1.1:nameid-format:X509SubjectName</md:NameIDFormat>
   <md:NameIDFormat>urn:oasis:names:tc:SAML:2.0:nameid-format:persistent</md:NameIDFormat>
   <md:NameIDFormat>urn:oasis:names:tc:SAML:2.0:nameid-format:transient</md:NameIDFormat>
-  <md:AttributeProfile>profile1</md:AttributeProfile>
-  <md:AttributeProfile>profile2</md:AttributeProfile>
+  <md:AttributeProfile>urn:x-simplesamlphp:profile:one</md:AttributeProfile>
+  <md:AttributeProfile>urn:x-simplesamlphp:profile:two</md:AttributeProfile>
   <saml:Attribute xmlns:saml="urn:oasis:names:tc:SAML:2.0:assertion" Name="urn:oid:1.3.6.1.4.1.5923.1.1.1.6" NameFormat="urn:oasis:names:tc:SAML:2.0:attrname-format:uri" FriendlyName="eduPersonPrincipalName"></saml:Attribute>
   <saml:Attribute xmlns:saml="urn:oasis:names:tc:SAML:2.0:assertion" Name="urn:oid:1.3.6.1.4.1.5923.1.1.1.1" NameFormat="urn:oasis:names:tc:SAML:2.0:attrname-format:uri" FriendlyName="eduPersonAffiliation">
     <saml:AttributeValue>member</saml:AttributeValue>

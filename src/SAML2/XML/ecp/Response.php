@@ -10,6 +10,7 @@ use SimpleSAML\SAML2\Constants;
 use SimpleSAML\SAML2\Exception\ProtocolViolationException;
 use SimpleSAML\XML\Exception\InvalidDOMElementException;
 use SimpleSAML\XML\Exception\MissingAttributeException;
+use SimpleSAML\XML\Exception\SchemaViolationException;
 
 use function filter_var;
 
@@ -58,11 +59,7 @@ final class Response extends AbstractEcpElement
      */
     private function setAssertionConsumerServiceURL(string $assertionConsumerServiceURL): void
     {
-        Assert::string(
-            filter_var($assertionConsumerServiceURL, FILTER_VALIDATE_URL),
-            'AssertionConsumerServiceURL is not a valid URL.',
-            ProtocolViolationException::class,
-        );
+        Assert::validURI($assertionConsumerServiceURL, SchemaViolationException::class); // Covers the empty string
 
         $this->AssertionConsumerServiceURL = $assertionConsumerServiceURL;
     }

@@ -1,1 +1,1 @@
-<md:AdditionalMetadataLocation xmlns:md="urn:oasis:names:tc:SAML:2.0:metadata" namespace="TheNamespaceAttribute">LocationText</md:AdditionalMetadataLocation>
+<md:AdditionalMetadataLocation xmlns:md="urn:oasis:names:tc:SAML:2.0:metadata" namespace="urn:x-simplesamlphp:namespace">https://simplesamlphp.org/module.php/saml/idp/metadata</md:AdditionalMetadataLocation>

@@ -7,13 +7,13 @@ namespace SimpleSAML\Test\SAML2\XML\md;
 use DOMDocument;
 use PHPUnit\Framework\TestCase;
 use SimpleSAML\Assert\AssertionFailedException;
-use SimpleSAML\SAML2\Constants;
 use SimpleSAML\SAML2\Exception\ProtocolViolationException;
 use SimpleSAML\SAML2\XML\md\ContactPerson;
 use SimpleSAML\SAML2\XML\md\Extensions;
 use SimpleSAML\SAML2\XML\md\KeyDescriptor;
 use SimpleSAML\SAML2\XML\md\Organization;
 use SimpleSAML\SAML2\XML\md\UnknownRoleDescriptor;
+use SimpleSAML\Test\SAML2\Constants as C;
 use SimpleSAML\Test\XML\SerializableXMLTestTrait;
 use SimpleSAML\XML\DOMDocumentFactory;
 use SimpleSAML\XML\Exception\MissingAttributeException;
@@ -68,7 +68,7 @@ final class UnknownRoleDescriptorTest extends TestCase
         $this->assertInstanceOf(KeyDescriptor::class, $descriptor->getKeyDescriptors()[0]);
         $this->assertInstanceOf(KeyDescriptor::class, $descriptor->getKeyDescriptors()[1]);
         $this->assertEquals(
-            [Constants::NS_SAMLP, 'protocol2'],
+            [C::NS_SAMLP, C::PROTOCOL],
             $descriptor->getProtocolSupportEnumeration()
         );
         $this->assertInstanceOf(Organization::class, $descriptor->getOrganization());
@@ -89,7 +89,7 @@ final class UnknownRoleDescriptorTest extends TestCase
         $extensions = $extElement->getList();
         $this->assertCount(1, $extensions);
         $this->assertInstanceOf(Chunk::class, $extensions[0]);
-        $this->assertEquals(Constants::NS_MD, $extensions[0]->getNamespaceURI());
+        $this->assertEquals(C::NS_MD, $extensions[0]->getNamespaceURI());
         $this->assertEquals('SomeUnknownExtension', $extensions[0]->getLocalName());
 
         $this->assertEquals($this->xmlRepresentation->saveXML(
@@ -122,7 +122,7 @@ final class UnknownRoleDescriptorTest extends TestCase
     {
         $this->xmlRepresentation->documentElement->setAttribute('protocolSupportEnumeration', '');
 
-        $this->expectException(AssertionFailedException::class);
+        $this->expectException(SchemaViolationException::class);
 
         UnknownRoleDescriptor::fromXML($this->xmlRepresentation->documentElement);
     }
@@ -135,8 +135,7 @@ final class UnknownRoleDescriptorTest extends TestCase
     {
         $this->xmlRepresentation->documentElement->setAttribute('errorURL', 'not a URL');
 
-        $this->expectException(AssertionFailedException::class);
-        $this->expectExceptionMessage('RoleDescriptor errorURL is not a valid URL.');
+        $this->expectException(SchemaViolationException::class);
 
         UnknownRoleDescriptor::fromXML($this->xmlRepresentation->documentElement);
     }

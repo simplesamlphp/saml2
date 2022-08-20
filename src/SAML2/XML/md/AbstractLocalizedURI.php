@@ -5,7 +5,7 @@ declare(strict_types=1);
 namespace SimpleSAML\SAML2\XML\md;
 
 use SimpleSAML\Assert\Assert;
-use SimpleSAML\SAML2\Exception\ProtocolViolationException;
+use SimpleSAML\XML\Exception\SchemaViolationException;
 
 use function filter_var;
 
@@ -27,10 +27,6 @@ abstract class AbstractLocalizedURI extends AbstractLocalizedName
     {
         parent::validateContent($content);
 
-        Assert::false(
-            !filter_var($content, FILTER_VALIDATE_URL),
-            $this->getQualifiedName() . ' is not a valid URL.',
-            ProtocolViolationException::class,
-        );
+        Assert::validURI($content, SchemaViolationException::class); // Covers the empty string
     }
 }

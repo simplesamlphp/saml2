@@ -8,8 +8,8 @@ use DOMDocument;
 use InvalidArgumentException;
 use PHPUnit\Framework\TestCase;
 use SimpleSAML\Assert\AssertionFailedException;
-use SimpleSAML\SAML2\Constants;
 use SimpleSAML\SAML2\XML\md\AttributeProfile;
+use SimpleSAML\Test\SAML2\Constants as C;
 use SimpleSAML\Test\XML\SerializableXMLTestTrait;
 use SimpleSAML\XML\DOMDocumentFactory;
 
@@ -47,7 +47,7 @@ final class AttributeProfileTest extends TestCase
      */
     public function testMarshalling(): void
     {
-        $attributeProfile = new AttributeProfile('profile1');
+        $attributeProfile = new AttributeProfile(C::PROFILE_1);
 
         $this->assertEquals(
             $this->xmlRepresentation->saveXML($this->xmlRepresentation->documentElement),
@@ -65,6 +65,6 @@ final class AttributeProfileTest extends TestCase
     {
         $attributeProfile = AttributeProfile::fromXML($this->xmlRepresentation->documentElement);
 
-        $this->assertEquals('profile1', $attributeProfile->getContent());
+        $this->assertEquals(C::PROFILE_1, $attributeProfile->getContent());
     }
 }

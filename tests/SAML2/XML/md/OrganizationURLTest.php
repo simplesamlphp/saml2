@@ -8,12 +8,12 @@ use DOMDocument;
 use PHPUnit\Framework\TestCase;
 use SimpleSAML\Assert\AssertionFailedException;
 use SimpleSAML\SAML2\Constants;
-use SimpleSAML\SAML2\Exception\ProtocolViolationException;
 use SimpleSAML\SAML2\XML\md\AbstractLocalizedName;
 use SimpleSAML\SAML2\XML\md\OrganizationURL;
 use SimpleSAML\Test\XML\ArrayizableXMLTestTrait;
 use SimpleSAML\Test\XML\SerializableXMLTestTrait;
 use SimpleSAML\XML\DOMDocumentFactory;
+use SimpleSAML\XML\Exception\SchemaViolationException;
 
 use function dirname;
 use function strval;
@@ -89,8 +89,7 @@ final class OrganizationURLTest extends TestCase
         $document = $this->xmlRepresentation;
         $document->documentElement->textContent = 'this is no url';
 
-        $this->expectException(ProtocolViolationException::class);
-        $this->expectExceptionMessage('md:OrganizationURL is not a valid URL.');
+        $this->expectException(SchemaViolationException::class);
         OrganizationURL::fromXML($document->documentElement);
     }
 }

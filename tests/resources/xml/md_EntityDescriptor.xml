@@ -1,4 +1,4 @@
-<md:EntityDescriptor xmlns:md="urn:oasis:names:tc:SAML:2.0:metadata" test:attr1="testval1" ID="_5A3CHB081" validUntil="2020-02-05T09:39:25Z" cacheDuration="P2Y6M5DT12H35M30S" entityID="urn:example:entity" xmlns:test="urn:test:something">
+<md:EntityDescriptor xmlns:md="urn:oasis:names:tc:SAML:2.0:metadata" test:attr1="testval1" ID="_5A3CHB081" validUntil="2020-02-05T09:39:25Z" cacheDuration="P2Y6M5DT12H35M30S" entityID="https://simplesamlphp.org/idp/metadata" xmlns:test="urn:test:something">
   <md:Extensions>
     <mdrpi:PublicationInfo xmlns:mdrpi="urn:oasis:names:tc:SAML:metadata:rpi" publisher="http://publisher.ra/" creationInstant="2020-02-03T13:46:24Z">
       <mdrpi:UsagePolicy xml:lang="en">http://publisher.ra/policy.txt</mdrpi:UsagePolicy>
@@ -11,7 +11,7 @@
     <md:AttributeService Binding="urn:oasis:names:tc:SAML:2.0:bindings:SOAP" Location="https://idp.example.org/AttributeService" />
   </md:AttributeAuthorityDescriptor>
   <md:AuthnAuthorityDescriptor protocolSupportEnumeration="urn:oasis:names:tc:SAML:2.0:protocol">
-    <md:AuthnQueryService Binding="uri:binding:aqs" Location="http://www.example.com/aqs" />
+    <md:AuthnQueryService Binding="urn:oasis:names:tc:SAML:2.0:bindings:HTTP-Redirect" Location="http://www.example.com/aqs" />
   </md:AuthnAuthorityDescriptor>
   <md:PDPDescriptor protocolSupportEnumeration="urn:oasis:names:tc:SAML:2.0:protocol">
     <md:AuthzService Binding="urn:oasis:names:tc:SAML:2.0:bindings:SOAP" Location="https://IdentityProvider.com/SAML/AA/SOAP"/>
@@ -31,7 +31,7 @@
     <md:EmailAddress>mailto:info@example.edu</md:EmailAddress>
   </md:ContactPerson>
   <md:AdditionalMetadataLocation
-      namespace="somemd">https://example.edu/some/metadata.xml</md:AdditionalMetadataLocation>
+      namespace="urn:x-simplesamlphp:namespace">https://example.edu/some/metadata.xml</md:AdditionalMetadataLocation>
   <md:AdditionalMetadataLocation
-      namespace="mymd">https://example.edu/more/metadata.xml</md:AdditionalMetadataLocation>
+      namespace="urn:x-simplesamlphp:namespace">https://example.edu/more/metadata.xml</md:AdditionalMetadataLocation>
 </md:EntityDescriptor>

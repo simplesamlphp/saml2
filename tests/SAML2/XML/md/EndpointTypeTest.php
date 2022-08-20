@@ -7,14 +7,15 @@ namespace SimpleSAML\Test\SAML2\XML\md;
 use DOMDocument;
 use PHPUnit\Framework\TestCase;
 use SimpleSAML\Assert\AssertionFailedException;
-use SimpleSAML\SAML2\Constants;
 use SimpleSAML\SAML2\XML\md\AssertionIDRequestService;
 use SimpleSAML\SAML2\XML\md\AttributeService;
+use SimpleSAML\Test\SAML2\Constants as C;
 use SimpleSAML\Test\XML\SerializableXMLTestTrait;
 use SimpleSAML\XML\Chunk;
 use SimpleSAML\XML\DOMDocumentFactory;
 use SimpleSAML\XML\Exception\InvalidDOMElementException;
 use SimpleSAML\XML\Exception\MissingAttributeException;
+use SimpleSAML\XML\Exception\SchemaViolationException;
 
 use function dirname;
 use function strval;
@@ -51,13 +52,13 @@ final class EndpointTypeTest extends TestCase
      */
     public function testMarshalling(): void
     {
-        $attr = $this->xmlRepresentation->createAttributeNS('urn:test:something', 'test:attr');
+        $attr = $this->xmlRepresentation->createAttributeNS(C::NAMESPACE, 'test:attr');
         $attr->value = 'value';
 
-        $child = new Chunk(DOMDocumentFactory::fromString('<ssp:child1 xmlns:ssp="urn:custom:ssp" />')->documentElement);
+        $child = new Chunk(DOMDocumentFactory::fromString('<ssp:child1 xmlns:ssp="urn:x-simplesamlphp:namespace" />')->documentElement);
 
         $endpointType = new AttributeService(
-            Constants::BINDING_HTTP_POST,
+            C::BINDING_HTTP_POST,
             'https://whatever/',
             'https://foo.bar/',
             [$attr],
@@ -76,9 +77,8 @@ final class EndpointTypeTest extends TestCase
      */
     public function testMarshallingWithEmptyBinding(): void
     {
-        $this->expectException(AssertionFailedException::class);
-        $this->expectExceptionMessage('The Binding of an endpoint cannot be empty.');
-        new AttributeService('', 'foo');
+        $this->expectException(SchemaViolationException::class);
+        new AttributeService('', C::LOCATION_ACS);
     }
 
 
@@ -87,9 +87,8 @@ final class EndpointTypeTest extends TestCase
      */
     public function testMarshallingWithEmptyLocation(): void
     {
-        $this->expectException(AssertionFailedException::class);
-        $this->expectExceptionMessage('The Location of an endpoint cannot be empty.');
-        new AttributeService('foo', '');
+        $this->expectException(SchemaViolationException::class);
+        new AttributeService(C::BINDING_HTTP_POST, '');
     }
 
 
@@ -98,7 +97,7 @@ final class EndpointTypeTest extends TestCase
      */
     public function testMarshallingWithoutOptionalAttributes(): void
     {
-        $endpointType = new AttributeService('foo', 'bar');
+        $endpointType = new AttributeService(C::BINDING_HTTP_POST, C::LOCATION_ACS);
         $this->assertNull($endpointType->getResponseLocation());
         $this->assertEmpty($endpointType->getAttributesNS());
     }
@@ -115,12 +114,12 @@ final class EndpointTypeTest extends TestCase
         $endpointType = AttributeService::fromXML($this->xmlRepresentation->documentElement);
         $this->assertEquals('https://whatever/', $endpointType->getLocation());
         $this->assertEquals('https://foo.bar/', $endpointType->getResponseLocation());
-        $this->assertEquals(Constants::BINDING_HTTP_POST, $endpointType->getBinding());
+        $this->assertEquals(C::BINDING_HTTP_POST, $endpointType->getBinding());
 
-        $this->assertTrue($endpointType->hasAttributeNS('urn:test:something', 'attr'));
-        $this->assertEquals('value', $endpointType->getAttributeNS('urn:test', 'attr'));
-        $this->assertFalse($endpointType->hasAttributeNS('urn:test:something', 'invalid'));
-        $this->assertNull($endpointType->getAttributeNS('urn:test:something', 'invalid'));
+        $this->assertTrue($endpointType->hasAttributeNS(C::NAMESPACE, 'attr'));
+        $this->assertEquals('value', $endpointType->getAttributeNS(C::NAMESPACE, 'attr'));
+        $this->assertFalse($endpointType->hasAttributeNS(C::NAMESPACE, 'invalid'));
+        $this->assertNull($endpointType->getAttributeNS(C::NAMESPACE, 'invalid'));
 
         $this->assertEquals(
             $this->xmlRepresentation->saveXML($this->xmlRepresentation->documentElement),
@@ -160,8 +159,7 @@ final class EndpointTypeTest extends TestCase
     public function testUnmarshallingWithEmptyBinding(): void
     {
         $this->xmlRepresentation->documentElement->setAttribute('Binding', '');
-        $this->expectException(AssertionFailedException::class);
-        $this->expectExceptionMessage('The Binding of an endpoint cannot be empty.');
+        $this->expectException(SchemaViolationException::class);
         AttributeService::fromXML($this->xmlRepresentation->documentElement);
     }
 
@@ -184,8 +182,7 @@ final class EndpointTypeTest extends TestCase
     public function testUnmarshallingWithEmptyLocation(): void
     {
         $this->xmlRepresentation->documentElement->setAttribute('Location', '');
-        $this->expectException(AssertionFailedException::class);
-        $this->expectExceptionMessage('The Location of an endpoint cannot be empty.');
+        $this->expectException(SchemaViolationException::class);
         AttributeService::fromXML($this->xmlRepresentation->documentElement);
     }
 
@@ -196,7 +193,7 @@ final class EndpointTypeTest extends TestCase
     public function testUnmarshallingWithoutOptionalAttributes(): void
     {
         $document = DOMDocumentFactory::fromString(
-            '<md:AttributeService xmlns:md="{$mdNamespace}" Binding="urn:something" Location="https://whatever/" />'
+            '<md:AttributeService xmlns:md="{$mdNamespace}" Binding="urn:x-simplesamlphp:namespace" Location="https://whatever/" />'
         );
         $as = AttributeService::fromXML($document->documentElement);
         $this->assertNull($as->getResponseLocation());

@@ -13,6 +13,7 @@ use SimpleSAML\SAML2\Exception\ProtocolViolationException;
 use SimpleSAML\SAML2\XML\ecp\Response;
 use SimpleSAML\XML\DOMDocumentFactory;
 use SimpleSAML\XML\Exception\MissingAttributeException;
+use SimpleSAML\XML\Exception\SchemaViolationException;
 
 use function dirname;
 use function strval;
@@ -73,8 +74,7 @@ final class ResponseTest extends TestCase
      */
     public function testInvalidACSThrowsException(): void
     {
-        $this->expectException(ProtocolViolationException::class);
-        $this->expectExceptionMessage('AssertionConsumerServiceURL is not a valid URL.');
+        $this->expectException(SchemaViolationException::class);
 
         new Response('some non-url');
     }

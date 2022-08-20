@@ -8,6 +8,7 @@ use DOMElement;
 use SimpleSAML\Assert\Assert;
 use SimpleSAML\SAML2\Constants;
 use SimpleSAML\XML\Exception\InvalidDOMElementException;
+use SimpleSAML\XML\Exception\SchemaViolationException;
 
 /**
  * SAML StatusCode data type.
@@ -55,7 +56,7 @@ final class StatusCode extends AbstractSamlpElement
      */
     private function setValue(string $Value): void
     {
-        Assert::validURI($Value); // Covers the empty string
+        Assert::validURI($Value, SchemaViolationException::class); // Covers the empty string
         $this->Value = $Value;
     }
 

@@ -2,18 +2,18 @@
 
 declare(strict_types=1);
 
-namespace SimpleSAML\Test\SAML2\XML\md;
+namespace SimpleSAML\Test\SAML2\XML\mdui;
 
 use DOMDocument;
 use PHPUnit\Framework\TestCase;
 use SimpleSAML\Assert\AssertionFailedException;
 use SimpleSAML\SAML2\Constants;
-use SimpleSAML\SAML2\Exception\ProtocolViolationException;
 use SimpleSAML\SAML2\XML\md\AbstractLocalizedName;
 use SimpleSAML\SAML2\XML\mdui\PrivacyStatementURL;
 use SimpleSAML\Test\XML\ArrayizableXMLTestTrait;
 use SimpleSAML\Test\XML\SerializableXMLTestTrait;
 use SimpleSAML\XML\DOMDocumentFactory;
+use SimpleSAML\XML\Exception\SchemaViolationException;
 
 use function dirname;
 use function strval;
@@ -88,8 +88,7 @@ final class PrivacyStatementURLTest extends TestCase
         $document = $this->xmlRepresentation;
         $document->documentElement->textContent = 'this is no url';
 
-        $this->expectException(ProtocolViolationException::class);
-        $this->expectExceptionMessage('mdui:PrivacyStatementURL is not a valid URL.');
+        $this->expectException(SchemaViolationException::class);
         PrivacyStatementURL::fromXML($document->documentElement);
     }
 }

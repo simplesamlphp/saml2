@@ -9,6 +9,7 @@ use SimpleSAML\Assert\Assert;
 use SimpleSAML\SAML2\Constants;
 use SimpleSAML\XML\DOMDocumentFactory;
 use SimpleSAML\XML\Exception\InvalidDOMElementException;
+use SimpleSAML\XML\Exception\SchemaViolationException;
 use SimpleSAML\XML\XMLStringElementTrait;
 
 /**
@@ -39,6 +40,6 @@ final class AuthnContextClassRef extends AbstractSamlElement
      */
     protected function validateContent(string $content): void
     {
-        Assert::validURI($content); // Covers the empty string
+        Assert::validURI($content, SchemaViolationException::class); // Covers the empty string
     }
 }
