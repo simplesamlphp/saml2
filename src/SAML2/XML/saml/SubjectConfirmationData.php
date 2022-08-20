@@ -189,9 +189,7 @@ final class SubjectConfirmationData extends AbstractSamlElement
      */
     private function setInResponseTo(?string $inResponseTo): void
     {
-        Assert::nullOrNotWhitespaceOnly($inResponseTo);
-        Assert::nullOrNotContains($inResponseTo, ':');
-
+        Assert::nullOrValidNCName($inResponseTo); // Covers the empty string
         $this->InResponseTo = $inResponseTo;
     }
 

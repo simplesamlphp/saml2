@@ -46,8 +46,8 @@ final class IDPListTest extends TestCase
      */
     public function testMarshalling(): void
     {
-        $entry1 = new IDPEntry('urn:some:requester1', 'testName1', 'testLoc1');
-        $entry2 = new IDPEntry('urn:some:requester2', 'testName2', 'testLoc2');
+        $entry1 = new IDPEntry('urn:some:requester1', 'testName1', 'urn:test:testLoc1');
+        $entry2 = new IDPEntry('urn:some:requester2', 'testName2', 'urn:test:testLoc2');
         $getComplete = new GetComplete('https://some/location');
         $list = new IDPList([$entry1, $entry2], $getComplete);
 
@@ -62,8 +62,8 @@ final class IDPListTest extends TestCase
      */
     public function testMarshallingElementOrdering(): void
     {
-        $entry1 = new IDPEntry('urn:some:requester1', 'testName1', 'testLoc1');
-        $entry2 = new IDPEntry('urn:some:requester2', 'testName2', 'testLoc2');
+        $entry1 = new IDPEntry('urn:some:requester1', 'testName1', 'urn:test:testLoc1');
+        $entry2 = new IDPEntry('urn:some:requester2', 'testName2', 'urn:test:testLoc2');
         $getComplete = new GetComplete('https://some/location');
         $list = new IDPList([$entry1, $entry2], $getComplete);
 
@@ -90,12 +90,12 @@ final class IDPListTest extends TestCase
         $ns = IDPList::NS;
         $document = <<<XML
 <samlp:IDPList xmlns:samlp="{$ns}">
-  <samlp:IDPEntry ProviderID="urn:some:requester1" Name="testName1" Loc="testLoc1"/>
+  <samlp:IDPEntry ProviderID="urn:some:requester1" Name="testName1" Loc="urn:test:testLoc1"/>
 </samlp:IDPList>
 XML
         ;
 
-        $entry1 = new IDPEntry('urn:some:requester1', 'testName1', 'testLoc1');
+        $entry1 = new IDPEntry('urn:some:requester1', 'testName1', 'urn:test:testLoc1');
         $list = new IDPList([$entry1], null);
 
         $entries = $list->getIdpEntry();
@@ -103,7 +103,7 @@ XML
 
         $this->assertEquals('urn:some:requester1', $entries[0]->getProviderID());
         $this->assertEquals('testName1', $entries[0]->getName());
-        $this->assertEquals('testLoc1', $entries[0]->getLoc());
+        $this->assertEquals('urn:test:testLoc1', $entries[0]->getLoc());
 
         $this->assertNull($list->getGetComplete());
 
@@ -122,11 +122,11 @@ XML
 
         $this->assertEquals('urn:some:requester1', $entries[0]->getProviderID());
         $this->assertEquals('testName1', $entries[0]->getName());
-        $this->assertEquals('testLoc1', $entries[0]->getLoc());
+        $this->assertEquals('urn:test:testLoc1', $entries[0]->getLoc());
 
         $this->assertEquals('urn:some:requester2', $entries[1]->getProviderID());
         $this->assertEquals('testName2', $entries[1]->getName());
-        $this->assertEquals('testLoc2', $entries[1]->getLoc());
+        $this->assertEquals('urn:test:testLoc2', $entries[1]->getLoc());
 
         $this->assertEquals('https://some/location', $list->getGetComplete()->getContent());
     }

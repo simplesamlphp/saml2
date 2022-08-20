@@ -57,7 +57,7 @@ final class ContactPersonTest extends TestCase
             'Extensions' => null,
             'EmailAddresses' => ['lead.developer@example.org'],
             'TelephoneNumbers' => ['+1234567890'],
-            'urn:test' => ['test:attr' => 'value'],
+            'urn:test:something' => ['test:attr' => 'value'],
         ];
     }
 
@@ -74,9 +74,9 @@ final class ContactPersonTest extends TestCase
             '<some:Ext xmlns:some="urn:mace:some:metadata:1.0">SomeExtension</some:Ext>'
         );
 
-        $attr1 = $this->xmlRepresentation->createAttributeNS('urn:test', 'test:attr1');
+        $attr1 = $this->xmlRepresentation->createAttributeNS('urn:test:something', 'test:attr1');
         $attr1->value = 'testval1';
-        $attr2 = $this->xmlRepresentation->createAttributeNS('urn:test', 'test:attr2');
+        $attr2 = $this->xmlRepresentation->createAttributeNS('urn:test:something', 'test:attr2');
         $attr2->value = 'testval2';
         $contactPerson = new ContactPerson(
             'other',
@@ -130,21 +130,21 @@ final class ContactPersonTest extends TestCase
         $this->assertEquals('1-234-567-8901', $cp->getTelephoneNumbers()[0]->getContent());
         $this->assertEquals(
             [
-                '{urn:test}attr1' => [
+                '{urn:test:something}attr1' => [
                     'qualifiedName' => 'test:attr1',
-                    'namespaceURI' => 'urn:test',
+                    'namespaceURI' => 'urn:test:something',
                     'value' => 'testval1'
                 ],
-                '{urn:test}attr2' => [
+                '{urn:test:something}attr2' => [
                     'qualifiedName' => 'test:attr2',
-                    'namespaceURI' => 'urn:test',
+                    'namespaceURI' => 'urn:test:something',
                     'value' => 'testval2'
                 ]
             ],
             $cp->getAttributesNS()
         );
-        $this->assertEquals('testval1', $cp->getAttributeNS('urn:test', 'attr1'));
-        $this->assertEquals('testval2', $cp->getAttributeNS('urn:test', 'attr2'));
+        $this->assertEquals('testval1', $cp->getAttributeNS('urn:test:something', 'attr1'));
+        $this->assertEquals('testval2', $cp->getAttributeNS('urn:test:something', 'attr2'));
     }
 
 

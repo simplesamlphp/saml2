@@ -5,8 +5,8 @@ declare(strict_types=1);
 namespace SimpleSAML\Test\SAML2\XML\md;
 
 use PHPUnit\Framework\TestCase;
-use SimpleSAML\Assert\AssertionFailedException;
 use SimpleSAML\SAML2\Constants;
+use SimpleSAML\SAML2\Exception\ProtocolViolationException;
 use SimpleSAML\SAML2\XML\md\EntityDescriptor;
 use SimpleSAML\SAML2\XML\md\EntitiesDescriptor;
 use SimpleSAML\SAML2\XML\md\Extensions;
@@ -140,7 +140,7 @@ final class EntitiesDescriptorTest extends TestCase
      */
     public function testMarshallingEmpty(): void
     {
-        $this->expectException(AssertionFailedException::class);
+        $this->expectException(ProtocolViolationException::class);
         $this->expectExceptionMessage(
             'At least one md:EntityDescriptor or md:EntitiesDescriptor element is required.'
         );
@@ -249,7 +249,7 @@ final class EntitiesDescriptorTest extends TestCase
         /** @psalm-suppress PossiblyNullArgument */
         $this->xmlRepresentation->documentElement->removeChild($entity->item(0));
 
-        $this->expectException(AssertionFailedException::class);
+        $this->expectException(ProtocolViolationException::class);
         $this->expectExceptionMessage(
             'At least one md:EntityDescriptor or md:EntitiesDescriptor element is required.'
         );

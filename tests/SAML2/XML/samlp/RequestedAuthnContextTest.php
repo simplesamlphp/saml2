@@ -44,7 +44,7 @@ final class RequestedAuthnContextTest extends TestCase
      */
     public function testMarshalling(): void
     {
-        $authnContextDeclRef = new AuthnContextDeclRef('/relative/path/to/document.xml');
+        $authnContextDeclRef = new AuthnContextDeclRef('https://example.org/relative/path/to/document.xml');
 
         $requestedAuthnContext = new RequestedAuthnContext([$authnContextDeclRef], 'exact');
 
@@ -59,7 +59,7 @@ final class RequestedAuthnContextTest extends TestCase
      */
     public function testMarshallingWithMixedContextsFails(): void
     {
-        $authnContextDeclRef = new AuthnContextDeclRef('/relative/path/to/document.xml');
+        $authnContextDeclRef = new AuthnContextDeclRef('https://example.org/relative/path/to/document.xml');
         $authnContextClassRef = new AuthnContextClassRef(Constants::AC_PASSWORD_PROTECTED_TRANSPORT);
 
         $this->expectException(AssertionFailedException::class);
@@ -73,7 +73,7 @@ final class RequestedAuthnContextTest extends TestCase
      */
     public function testMarshallingWithInvalidContentFails(): void
     {
-        $authnContextDeclRef = new AuthnContextDeclRef('/relative/path/to/document.xml');
+        $authnContextDeclRef = new AuthnContextDeclRef('https://example.org/relative/path/to/document.xml');
 
         $this->expectException(AssertionFailedException::class);
         $this->expectExceptionMessage(
@@ -102,7 +102,7 @@ final class RequestedAuthnContextTest extends TestCase
         $contexts = $requestedAuthnContext->getRequestedAuthnContexts();
         $this->assertCount(1, $contexts);
         $this->assertInstanceOf(AuthnContextDeclRef::class, $contexts[0]);
-        $this->assertEquals('/relative/path/to/document.xml', $contexts[0]->getContent());
+        $this->assertEquals('https://example.org/relative/path/to/document.xml', $contexts[0]->getContent());
     }
 
 
@@ -115,12 +115,8 @@ final class RequestedAuthnContextTest extends TestCase
 
         $document = DOMDocumentFactory::fromString(<<<XML
 <samlp:RequestedAuthnContext xmlns:samlp="{$samlpNamespace}" Comparison="minimum">
-  <saml:AuthnContextClassRef xmlns:saml="{$samlNamespace}">
-    urn:oasis:names:tc:SAML:2.0:ac:classes:PasswordProtectedTransport
-  </saml:AuthnContextClassRef>
-  <saml:AuthnContextDeclRef xmlns:saml="{$samlNamespace}">
-    /relative/path/to/document.xml
-  </saml:AuthnContextDeclRef>
+  <saml:AuthnContextClassRef xmlns:saml="{$samlNamespace}">urn:oasis:names:tc:SAML:2.0:ac:classes:PasswordProtectedTransport</saml:AuthnContextClassRef>
+  <saml:AuthnContextDeclRef xmlns:saml="{$samlNamespace}">https://example.org/relative/path/to/document.xml</saml:AuthnContextDeclRef>
 </samlp:RequestedAuthnContext>
 XML
         );

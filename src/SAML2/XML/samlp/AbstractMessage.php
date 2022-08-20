@@ -286,8 +286,7 @@ abstract class AbstractMessage extends AbstractSamlpElement implements SignableE
      */
     private function setDestination(string $destination = null): void
     {
-        Assert::nullOrNotWhitespaceOnly($destination);
-
+        Assert::nullOrValidURI($destination); // Covers the empty string
         $this->destination = $destination;
     }
 
@@ -314,8 +313,7 @@ abstract class AbstractMessage extends AbstractSamlpElement implements SignableE
      */
     private function setConsent(?string $consent): void
     {
-        Assert::nullOrNotWhitespaceOnly($consent);
-
+        Assert::nullOrValidURI($consent); // Covers the empty string
         $this->consent = $consent;
     }
 

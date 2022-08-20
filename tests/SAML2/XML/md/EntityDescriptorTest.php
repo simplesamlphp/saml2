@@ -79,7 +79,7 @@ final class EntityDescriptorTest extends TestCase
      */
     public function testMarshalling(): void
     {
-        $attr1 = $this->xmlRepresentation->createAttributeNS('urn:test', 'test:attr1');
+        $attr1 = $this->xmlRepresentation->createAttributeNS('urn:test:something', 'test:attr1');
         $attr1->value = 'testval1';
 
         $entityid = "urn:example:entity";
@@ -357,9 +357,9 @@ XML
 
         $this->assertEquals(
             [
-                '{urn:test}attr1' => [
+                '{urn:test:something}attr1' => [
                     'qualifiedName' => 'test:attr1',
-                    'namespaceURI' => 'urn:test',
+                    'namespaceURI' => 'urn:test:something',
                     'value' => 'testval1'
                 ]
             ],

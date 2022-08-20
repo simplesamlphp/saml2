@@ -68,7 +68,7 @@ final class KeyAuthorityTest extends TestCase
                 'def456'
             ),
         ];
-        $attr1 = $this->xmlRepresentation->createAttributeNS('urn:test', 'test:attr1');
+        $attr1 = $this->xmlRepresentation->createAttributeNS('urn:test:something', 'test:attr1');
         $attr1->value = 'testval1';
         $keyAuthority = new KeyAuthority($keys, 2, [$attr1]);
 
@@ -95,9 +95,9 @@ final class KeyAuthorityTest extends TestCase
 
         $this->assertEquals(
             [
-                '{urn:test}attr1' => [
+                '{urn:test:something}attr1' => [
                     'qualifiedName' => 'test:attr1',
-                    'namespaceURI' => 'urn:test',
+                    'namespaceURI' => 'urn:test:something',
                     'value' => 'testval1'
                 ],
             ],

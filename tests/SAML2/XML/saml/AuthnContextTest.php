@@ -84,7 +84,7 @@ final class AuthnContextTest extends TestCase
         $authnContext = new AuthnContext(
             new AuthnContextClassRef(Constants::AC_PASSWORD_PROTECTED_TRANSPORT),
             null,
-            new AuthnContextDeclRef('/relative/path/to/document.xml'),
+            new AuthnContextDeclRef('https://example.org/relative/path/to/document.xml'),
             [new AuthenticatingAuthority('https://idp.example.com/SAML2')]
         );
 
@@ -96,7 +96,7 @@ final class AuthnContextTest extends TestCase
         );
         $this->assertNull($authnContext->getAuthnContextDecl());
         $this->assertEquals(
-            new AuthnContextDeclRef('/relative/path/to/document.xml'),
+            new AuthnContextDeclRef('https://example.org/relative/path/to/document.xml'),
             $authnContext->getAuthnContextDeclRef()
         );
         $authorities = $authnContext->getAuthenticatingAuthorities();
@@ -221,7 +221,7 @@ final class AuthnContextTest extends TestCase
         $authnContext = new AuthnContext(
             new AuthnContextClassRef(Constants::AC_PASSWORD_PROTECTED_TRANSPORT),
             null,
-            new AuthnContextDeclRef('/relative/path/to/document.xml'),
+            new AuthnContextDeclRef('https://example.org/relative/path/to/document.xml'),
             [$authenticatingAuthority]
         );
 
@@ -256,7 +256,7 @@ final class AuthnContextTest extends TestCase
         $authnContext = new AuthnContext(
             null,
             null,
-            new AuthnContextDeclRef('/relative/path/to/document.xml'),
+            new AuthnContextDeclRef('https://example.org/relative/path/to/document.xml'),
             [$authenticatingAuthority]
         );
 
@@ -286,7 +286,7 @@ final class AuthnContextTest extends TestCase
     {
         $authnContextClassRef = new AuthnContextClassRef(Constants::AC_PASSWORD_PROTECTED_TRANSPORT);
         $authnContextDecl = AuthnContextDecl::fromXML($this->decl->documentElement);
-        $authnContextDeclRef = new AuthnContextDeclRef('/relative/path/to/document.xml');
+        $authnContextDeclRef = new AuthnContextDeclRef('https://example.org/relative/path/to/document.xml');
 
         $this->expectException(AssertionFailedException::class);
         $this->expectExceptionMessage('Can only have one of AuthnContextDecl/AuthnContextDeclRef');
@@ -333,7 +333,7 @@ final class AuthnContextTest extends TestCase
 
         /** @psalm-var \SimpleSAML\SAML2\XML\saml\AuthnContextDeclRef $declRef */
         $declRef = $authnContext->getAuthnContextDeclRef();
-        $this->assertEquals('/relative/path/to/document.xml', $declRef->getContent());
+        $this->assertEquals('https://example.org/relative/path/to/document.xml', $declRef->getContent());
 
         $authorities = $authnContext->getAuthenticatingAuthorities();
         $this->assertEquals('https://idp.example.com/SAML2', $authorities[0]->getContent());

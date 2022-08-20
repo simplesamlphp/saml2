@@ -331,12 +331,9 @@ class AuthnRequest extends AbstractRequest
      *
      * @param string|null $assertionConsumerServiceURL The AssertionConsumerServiceURL attribute.
      */
-    private function setAssertionConsumerServiceURL(string $assertionConsumerServiceURL = null): void
+    private function setAssertionConsumerServiceURL(?string $assertionConsumerServiceURL): void
     {
-        if (!is_null($assertionConsumerServiceURL) && !filter_var($assertionConsumerServiceURL, FILTER_VALIDATE_URL)) {
-            throw new InvalidArgumentException('AuthnRequest AssertionConsumerServiceURL is not a valid URL.');
-        }
-
+        Assert::nullOrValidURL($assertionConsumerServiceURL);
         $this->assertionConsumerServiceURL = $assertionConsumerServiceURL;
     }
 
@@ -359,7 +356,7 @@ class AuthnRequest extends AbstractRequest
      */
     private function setProtocolBinding(?string $protocolBinding): void
     {
-        Assert::nullOrNotWhitespaceOnly($protocolBinding);
+        Assert::nullOrValidURI($protocolBinding); // Covers the empty string
 
         $this->protocolBinding = $protocolBinding;
     }
@@ -511,6 +508,7 @@ class AuthnRequest extends AbstractRequest
         if (!empty($signature)) {
             $request->setSignature($signature[0]);
             $request->messageContainedSignatureUponConstruction = true;
+            $request->setXML($xml);
         }
 
         return $request;

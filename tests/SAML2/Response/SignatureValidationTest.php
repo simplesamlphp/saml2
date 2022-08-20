@@ -18,9 +18,9 @@ use SimpleSAML\SAML2\Response\Processor as ResponseProcessor;
 use SimpleSAML\SAML2\Utilities\ArrayCollection;
 use SimpleSAML\SAML2\XML\saml\Assertion;
 use SimpleSAML\SAML2\XML\samlp\Response;
+use SimpleSAML\Test\SAML2\Constants as C;
 use SimpleSAML\XMLSecurity\TestUtils\PEMCertificatesMock;
 use SimpleSAML\XMLSecurity\Utils\Certificate;
-use SimpleSAML\XMLSecurity\XMLSecurityKey;
 
 /**
  * Test that ensures that either the response or the assertion(s) or both must be signed.
@@ -53,7 +53,7 @@ final class SignatureValidationTest extends MockeryTestCase
     /**
      * @var string
      */
-    private string $currentDestination = 'urn:some:destination';
+    private string $currentDestination = C::ENTITY_OTHER;
 
 
     /**
@@ -75,7 +75,7 @@ final class SignatureValidationTest extends MockeryTestCase
         $this->identityProviderConfiguration
             = new IdentityProvider(['certificateData' => $matches[1]]);
         $this->serviceProviderConfiguration
-            = new ServiceProvider(['entityId' => 'urn:mace:feide.no:services:no.feide.moodle']);
+            = new ServiceProvider(['entityId' => C::ENTITY_URN]);
     }
 
 

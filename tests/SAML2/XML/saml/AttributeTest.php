@@ -59,14 +59,14 @@ final class AttributeTest extends TestCase
      */
     public function testMarshalling(): void
     {
-        $attr1 = $this->xmlRepresentation->createAttributeNS('urn:test', 'test:attr1');
+        $attr1 = $this->xmlRepresentation->createAttributeNS('urn:test:something', 'test:attr1');
         $attr1->value = 'testval1';
-        $attr2 = $this->xmlRepresentation->createAttributeNS('urn:test', 'test:attr2');
+        $attr2 = $this->xmlRepresentation->createAttributeNS('urn:test:something', 'test:attr2');
         $attr2->value = 'testval2';
 
         $attribute = new Attribute(
             'TheName',
-            'TheNameFormat',
+            C::NAMEFORMAT_URI,
             'TheFriendlyName',
             [
                 new AttributeValue('FirstValue'),
@@ -93,7 +93,7 @@ final class AttributeTest extends TestCase
         $attribute = Attribute::fromXML($this->xmlRepresentation->documentElement);
 
         $this->assertEquals('TheName', $attribute->getName());
-        $this->assertEquals('TheNameFormat', $attribute->getNameFormat());
+        $this->assertEquals(C::NAMEFORMAT_URI, $attribute->getNameFormat());
         $this->assertEquals('TheFriendlyName', $attribute->getFriendlyName());
         $this->assertCount(2, $attribute->getAttributeValues());
         $this->assertEquals('FirstValue', $attribute->getAttributeValues()[0]->getValue());
@@ -101,21 +101,21 @@ final class AttributeTest extends TestCase
 
         $this->assertEquals(
             [
-                '{urn:test}attr1' => [
+                '{urn:test:something}attr1' => [
                     'qualifiedName' => 'test:attr1',
-                    'namespaceURI' => 'urn:test',
+                    'namespaceURI' => 'urn:test:something',
                     'value' => 'testval1'
                 ],
-                '{urn:test}attr2' => [
+                '{urn:test:something}attr2' => [
                     'qualifiedName' => 'test:attr2',
-                    'namespaceURI' => 'urn:test',
+                    'namespaceURI' => 'urn:test:something',
                     'value' => 'testval2'
                 ]
             ],
             $attribute->getAttributesNS()
         );
-        $this->assertEquals('testval1', $attribute->getAttributeNS('urn:test', 'attr1'));
-        $this->assertEquals('testval2', $attribute->getAttributeNS('urn:test', 'attr2'));
+        $this->assertEquals('testval1', $attribute->getAttributeNS('urn:test:something', 'attr1'));
+        $this->assertEquals('testval2', $attribute->getAttributeNS('urn:test:something', 'attr2'));
     }
 
 

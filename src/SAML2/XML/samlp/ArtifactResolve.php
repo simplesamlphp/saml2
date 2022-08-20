@@ -132,6 +132,7 @@ class ArtifactResolve extends AbstractRequest
 
         if (!empty($signature)) {
             $resolve->setSignature($signature[0]);
+            $resolve->setXML($xml);
         }
 
         return $resolve;

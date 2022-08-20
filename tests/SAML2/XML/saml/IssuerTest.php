@@ -52,7 +52,7 @@ final class IssuerTest extends TestCase
             'TheIssuerValue',
             'TheNameQualifier',
             'TheSPNameQualifier',
-            'TheFormat',
+            'urn:the:format',
             'TheSPProvidedID'
         );
 
@@ -112,7 +112,7 @@ final class IssuerTest extends TestCase
         $this->assertEquals('TheIssuerValue', $issuer->getContent());
         $this->assertEquals('TheNameQualifier', $issuer->getNameQualifier());
         $this->assertEquals('TheSPNameQualifier', $issuer->getSPNameQualifier());
-        $this->assertEquals('TheFormat', $issuer->getFormat());
+        $this->assertEquals('urn:the:format', $issuer->getFormat());
         $this->assertEquals('TheSPProvidedID', $issuer->getSPProvidedID());
     }
 

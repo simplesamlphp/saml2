@@ -68,7 +68,7 @@ final class ResponseTest extends TestCase
     Destination="http://moodle.bridge.feide.no/simplesaml/saml2/sp/AssertionConsumerService.php">
   <saml:Issuer>max.feide.no</saml:Issuer>
   <samlp:Extensions>
-    <myns:AttributeList xmlns:myns="urn:mynamespace">
+    <myns:AttributeList xmlns:myns="urn:test:mynamespace">
       <myns:Attribute name="UserName" value=""/>
     </myns:AttributeList>
   </samlp:Extensions>

@@ -18,6 +18,7 @@ use SimpleSAML\SAML2\XML\saml\AuthnContextClassRef;
 use SimpleSAML\SAML2\XML\saml\AuthnStatement;
 use SimpleSAML\SAML2\XML\saml\Conditions;
 use SimpleSAML\SAML2\XML\saml\Issuer;
+use SimpleSAML\Test\SAML2\Constants as C;
 
 /**
  * Because we're mocking a static call, we have to run it in separate processes so as to no contaminate the other
@@ -54,20 +55,20 @@ final class SpIsValidAudienceTest extends MockeryTestCase
         parent::setUp();
 
         // Create an Issuer
-        $this->issuer = new Issuer('testIssuer');
+        $this->issuer = new Issuer(C::ENTITY_IDP);
 
         // Create the conditions
         $this->conditions = new Conditions(
             null,
             null,
             [],
-            [new AudienceRestriction([new Audience('audience1'), new Audience('audience2')])]
+            [new AudienceRestriction([new Audience(C::ENTITY_SP), new Audience(C::ENTITY_URN)])]
         );
 
         // Create the statements
         $this->authnStatement = new AuthnStatement(
             new AuthnContext(
-                new AuthnContextClassRef('someAuthnContext'),
+                new AuthnContextClassRef(C::AUTHNCONTEXT_CLASS_REF_LOA1),
                 null,
                 null
             ),
@@ -130,7 +131,7 @@ final class SpIsValidAudienceTest extends MockeryTestCase
         // Create an assertion
         $assertion = new Assertion($this->issuer, null, null, null, $this->conditions, [$this->authnStatement]);
 
-        $this->serviceProvider->shouldReceive('getEntityId')->andReturn('audience1');
+        $this->serviceProvider->shouldReceive('getEntityId')->andReturn(C::ENTITY_SP);
 
         $validator = new SpIsValidAudience();
         $validator->setServiceProvider($this->serviceProvider);

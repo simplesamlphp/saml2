@@ -42,10 +42,10 @@ final class AudienceTest extends TestCase
      */
     public function testMarshalling(): void
     {
-        $audience = new Audience('urn:audience1');
+        $audience = new Audience('urn:test:audience1');
 
         $audienceElement = $audience->toXML();
-        $this->assertEquals('urn:audience1', $audienceElement->textContent);
+        $this->assertEquals('urn:test:audience1', $audienceElement->textContent);
 
         $this->assertEquals(
             $this->xmlRepresentation->saveXML($this->xmlRepresentation->documentElement),
@@ -60,7 +60,7 @@ final class AudienceTest extends TestCase
     {
         $audience = Audience::fromXML($this->xmlRepresentation->documentElement);
 
-        $this->assertEquals('urn:audience1', $audience->getContent());
+        $this->assertEquals('urn:test:audience1', $audience->getContent());
     }
 }
 

@@ -10,7 +10,6 @@ use Exception;
 use Mockery\Adapter\Phpunit\MockeryTestCase;
 use SimpleSAML\SAML2\Compat\ContainerSingleton;
 use SimpleSAML\SAML2\Compat\MockContainer;
-use SimpleSAML\SAML2\Constants as C;
 use SimpleSAML\SAML2\Utils\XPath;
 use SimpleSAML\SAML2\XML\saml\Assertion;
 use SimpleSAML\SAML2\XML\saml\Attribute;
@@ -32,6 +31,7 @@ use SimpleSAML\SAML2\XML\saml\Subject;
 use SimpleSAML\SAML2\XML\saml\SubjectConfirmation;
 use SimpleSAML\SAML2\XML\saml\SubjectConfirmationData;
 use SimpleSAML\SAML2\XML\saml\SubjectLocality;
+use SimpleSAML\Test\SAML2\Constants as C;
 use SimpleSAML\Test\XML\SerializableXMLTestTrait;
 use SimpleSAML\XML\Chunk;
 use SimpleSAML\XML\DOMDocumentFactory;
@@ -39,6 +39,7 @@ use SimpleSAML\XML\Exception\MissingElementException;
 use SimpleSAML\XML\Exception\TooManyElementsException;
 use SimpleSAML\XMLSecurity\Alg\KeyTransport\KeyTransportAlgorithmFactory;
 use SimpleSAML\XMLSecurity\Alg\Signature\SignatureAlgorithmFactory;
+use SimpleSAML\XMLSecurity\Exception\SignatureVerificationFailedException;
 use SimpleSAML\XMLSecurity\Key\PublicKey;
 use SimpleSAML\XMLSecurity\Key\PrivateKey;
 use SimpleSAML\XMLSecurity\XML\ds\KeyInfo;
@@ -91,7 +92,7 @@ final class AssertionTest extends MockeryTestCase
             1314780665,
             1314780665,
             [],
-            [new AudienceRestriction([new Audience('ServiceProvider')])]
+            [new AudienceRestriction([new Audience(C::ENTITY_SP)])]
         );
 
         // Create the AuthnStatement
@@ -110,9 +111,9 @@ final class AssertionTest extends MockeryTestCase
         // Create the AttributeStatement
         $attrStatement = new AttributeStatement(
             [
-                new Attribute('urn:ServiceID', null, null, [new AttributeValue('1')]),
-                new Attribute('urn:EntityConcernedID', null, null, [new AttributeValue('1')]),
-                new Attribute('urn:EntityConcernedSubID', null, null, [new AttributeValue('1')])
+                new Attribute('urn:test:ServiceID', null, null, [new AttributeValue('1')]),
+                new Attribute('urn:test:EntityConcernedID', null, null, [new AttributeValue('1')]),
+                new Attribute('urn:test:EntityConcernedSubID', null, null, [new AttributeValue('1')])
             ]
         );
 
@@ -167,6 +168,11 @@ final class AssertionTest extends MockeryTestCase
      */
     public function testUnmarshalling(): void
     {
+        $accr = C::AUTHNCONTEXT_CLASS_REF_LOA1;
+        $entity_idp = C::ENTITY_IDP;
+        $entity_sp = C::ENTITY_SP;
+        $entity_other = C::ENTITY_OTHER;
+
         // Unmarshall an assertion
         $xml = <<<XML
 <saml:Assertion xmlns:saml="urn:oasis:names:tc:SAML:2.0:assertion"
@@ -177,15 +183,15 @@ final class AssertionTest extends MockeryTestCase
   <saml:Issuer>testIssuer</saml:Issuer>
   <saml:Conditions>
     <saml:AudienceRestriction>
-      <saml:Audience>audience1</saml:Audience>
-      <saml:Audience>audience2</saml:Audience>
+      <saml:Audience>{$entity_sp}</saml:Audience>
+      <saml:Audience>{$entity_other}</saml:Audience>
     </saml:AudienceRestriction>
   </saml:Conditions>
   <saml:AuthnStatement AuthnInstant="2010-03-05T13:34:28Z">
     <saml:AuthnContext>
-      <saml:AuthnContextClassRef>someAuthnContext</saml:AuthnContextClassRef>
-      <saml:AuthenticatingAuthority>someIdP1</saml:AuthenticatingAuthority>
-      <saml:AuthenticatingAuthority>someIdP2</saml:AuthenticatingAuthority>
+      <saml:AuthnContextClassRef>{$accr}</saml:AuthnContextClassRef>
+      <saml:AuthenticatingAuthority>{$entity_idp}</saml:AuthenticatingAuthority>
+      <saml:AuthenticatingAuthority>{$entity_other}</saml:AuthenticatingAuthority>
     </saml:AuthnContext>
   </saml:AuthnStatement>
 </saml:Assertion>
@@ -207,14 +213,14 @@ XML;
         $this->assertCount(2, $restriction1->getAudience());
 
         $audience = $restriction1->getAudience();
-        $this->assertEquals('audience1', $audience[0]->getContent());
-        $this->assertEquals('audience2', $audience[1]->getContent());
+        $this->assertEquals($entity_sp, $audience[0]->getContent());
+        $this->assertEquals($entity_other, $audience[1]->getContent());
 
         // Test for Authenticating Authorities
         $assertionAuthenticatingAuthorities = $assertion->getAuthnStatements()[0]->getAuthnContext()->getAuthenticatingAuthorities();
         $this->assertCount(2, $assertionAuthenticatingAuthorities);
-        $this->assertEquals('someIdP1', $assertionAuthenticatingAuthorities[0]->getContent());
-        $this->assertEquals('someIdP2', $assertionAuthenticatingAuthorities[1]->getContent());
+        $this->assertEquals($entity_idp, $assertionAuthenticatingAuthorities[0]->getContent());
+        $this->assertEquals($entity_other, $assertionAuthenticatingAuthorities[1]->getContent());
     }
 
 
@@ -233,7 +239,7 @@ XML;
             [],
             [
                 new AudienceRestriction(
-                    [new Audience('audience1'), new Audience('audience2')]
+                    [new Audience(C::ENTITY_SP), new Audience(C::ENTITY_OTHER)]
                 )
             ]
         );
@@ -241,10 +247,10 @@ XML;
         // Create AuthnStatement
         $authnStatement = new AuthnStatement(
             new AuthnContext(
-                new AuthnContextClassRef('someAuthnContext'),
+                new AuthnContextClassRef(C::AUTHNCONTEXT_CLASS_REF_LOA1),
                 null,
-                new AuthnContextDeclRef('/relative/path/to/document.xml'),
-                [new AuthenticatingAuthority("idp1"), new AuthenticatingAuthority("idp2")]
+                new AuthnContextDeclRef('https://example.org/relative/path/to/document.xml'),
+                [new AuthenticatingAuthority(C::ENTITY_IDP), new AuthenticatingAuthority(C::ENTITY_OTHER)]
             ),
             1234567890 - 1,
             1234568890 + 200,
@@ -279,7 +285,7 @@ XML;
 
         $authnStatement = $authnStatements[0];
         $this->assertEquals(
-            '/relative/path/to/document.xml',
+            'https://example.org/relative/path/to/document.xml',
             $authnStatement->getAuthnContext()->getAuthnContextDeclRef()->getContent()
         );
         $this->assertEquals('_123abc', $assertionToVerify->getId());
@@ -294,7 +300,8 @@ XML;
 
         $authauth = $authnStatement->getAuthnContext()->getAuthenticatingAuthorities();
         $this->assertCount(2, $authauth);
-        $this->assertEquals("idp2", $authauth[1]->getContent());
+        $this->assertEquals(C::ENTITY_IDP, $authauth[0]->getContent());
+        $this->assertEquals(C::ENTITY_OTHER, $authauth[1]->getContent());
 
         $attributeStatements = $assertionToVerify->getAttributeStatements();
         $this->assertCount(1, $attributeStatements);
@@ -329,7 +336,7 @@ XML;
             [],
             [
                 new AudienceRestriction(
-                    ['audience1', 'audience2']
+                    [C::ENTITY_SP, C::ENTITY_OTHER]
                 )
             ]
         );
@@ -337,10 +344,10 @@ XML;
         // Create AuthnStatement
         $authnStatement = new AuthnStatement(
             new AuthnContext(
-                new AuthnContextClassRef('someAuthnContext'),
+                new AuthnContextClassRef(C::AUTHNCONTEXT_CLASS_REF_LOA1),
                 null,
                 null,
-                ["idp1", "idp2"]
+                [C::ENTITY_IDP, C::ENTITY_OTHER]
             ),
             time()
         );
@@ -374,7 +381,8 @@ XML;
 
         $authauth = $assertionToVerify->getAuthenticatingAuthority();
         $this->assertCount(2, $authauth);
-        $this->assertEquals("idp2", $authauth[1]);
+        $this->assertEquals(C::ENTITY_IDP, $authauth[0]);
+        $this->assertEquals(C::ENTITY_OTHER, $authauth[1]);
 
         $attributes = $assertionToVerify->getAttributes();
         $this->assertCount(3, $attributes);
@@ -422,7 +430,7 @@ XML;
       </saml:Subject>
       <saml:Conditions NotOnOrAfter="2011-08-31T08:51:05Z" NotBefore="2011-08-31T08:51:05Z">
         <saml:AudienceRestriction>
-          <saml:Audience>ServiceProvider</saml:Audience>
+          <saml:Audience>urn:test:ServiceProvider</saml:Audience>
         </saml:AudienceRestriction>
       </saml:Conditions>
       <saml:AuthnStatement AuthnInstant="2011-08-31T08:51:05Z" SessionIndex="_93af655219464fb403b34436cfb0c5cb1d9a5502">
@@ -432,13 +440,13 @@ XML;
         <saml:SubjectLocality Address="127.0.0.1"/>
       </saml:AuthnStatement>
       <saml:AttributeStatement>
-        <saml:Attribute Name="urn:ServiceID">
+        <saml:Attribute Name="urn:test:ServiceID">
           <saml:AttributeValue xmlns:xs="http://www.w3.org/2001/XMLSchema" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:type="xs:string">1</saml:AttributeValue>
         </saml:Attribute>
-        <saml:Attribute Name="urn:EntityConcernedID">
+        <saml:Attribute Name="urn:test:EntityConcernedID">
           <saml:AttributeValue xmlns:xs="http://www.w3.org/2001/XMLSchema" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:type="xs:string">1</saml:AttributeValue>
         </saml:Attribute>
-        <saml:Attribute Name="urn:EntityConcernedSubID">
+        <saml:Attribute Name="urn:test:EntityConcernedSubID">
           <saml:AttributeValue xmlns:xs="http://www.w3.org/2001/XMLSchema" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:type="xs:string">1</saml:AttributeValue>
         </saml:Attribute>
       </saml:AttributeStatement>
@@ -488,7 +496,7 @@ XML
                 <saml:NameID Format="urn:oasis:names:tc:SAML:2.0:nameid-format:persistent">abcd-some-value-xyz</saml:NameID>
             </saml:AttributeValue>
         </saml:Attribute>
-        <saml:Attribute Name="urn:EntityConcernedSubID" NameFormat="urn:oasis:names:tc:SAML:2.0:attrname-format:uri">
+        <saml:Attribute Name="urn:test:EntityConcernedSubID" NameFormat="urn:oasis:names:tc:SAML:2.0:attrname-format:uri">
             <saml:AttributeValue>string</saml:AttributeValue>
         </saml:Attribute>
       </saml:AttributeStatement>
@@ -539,7 +547,7 @@ XML;
         <saml:Attribute Name="urn:mace:dir:attribute-def:eduPersonTargetedID" NameFormat="urn:oasis:names:tc:SAML:2.0:attrname-format:uri">
           <saml:AttributeValue xsi:type="xs:string">string-23</saml:AttributeValue>
         </saml:Attribute>
-        <saml:Attribute Name="urn:EntityConcernedSubID" NameFormat="urn:oasis:names:tc:SAML:2.0:attrname-format:uri">
+        <saml:Attribute Name="urn:test:EntityConcernedSubID" NameFormat="urn:oasis:names:tc:SAML:2.0:attrname-format:uri">
             <saml:AttributeValue xsi:type="xs:string">string</saml:AttributeValue>
         </saml:Attribute>
       </saml:AttributeStatement>
@@ -580,7 +588,7 @@ XML;
                 <saml:NameID Format="urn:oasis:names:tc:SAML:2.0:nameid-format:persistent">xyz-some-value-abcd</saml:NameID>
             </saml:AttributeValue>
         </saml:Attribute>
-        <saml:Attribute Name="urn:EntityConcernedSubID" NameFormat="urn:oasis:names:tc:SAML:2.0:attrname-format:uri">
+        <saml:Attribute Name="urn:test:EntityConcernedSubID" NameFormat="urn:oasis:names:tc:SAML:2.0:attrname-format:uri">
             <saml:AttributeValue>string</saml:AttributeValue>
         </saml:Attribute>
       </saml:AttributeStatement>
@@ -627,18 +635,15 @@ XML;
             PEMCertificatesMock::getPublicKey(PEMCertificatesMock::SELFSIGNED_PUBLIC_KEY),
         );
 
+        // Was signed
+        $this->assertTrue($assertion->wasSignedAtConstruction());
+
         $verified = $assertion->verify($verifier);
 
         // Double-check that we can actually retrieve some basics.
-        $this->assertEquals("_d908a49b8b63665738430d1c5b655f297b91331864", $verified->getId());
-        $this->assertEquals(
-            "https://idp.example.org/simplesaml/saml2/idp/metadata.php",
-            $verified->getIssuer()->getContent()
-        );
-        $this->assertEquals("1457707995", $verified->getIssueInstant());
-
-        // Was signed
-        $this->assertTrue($verified->wasSignedAtConstruction());
+        $this->assertEquals("_93af655219464fb403b34436cfb0c5cb1d9a5502", $verified->getId());
+        $this->assertEquals("Provider", $verified->getIssuer()->getContent());
+        $this->assertEquals("5611", $verified->getIssueInstant());
     }
 
 
@@ -661,7 +666,7 @@ XML;
         $subject = $verified->getSubject();
 
         $identifier = $subject->getIdentifier();
-        $this->assertEquals("_1bbcf227253269d19a689c53cdd542fe2384a9538b", $identifier->getContent());
+        $this->assertEquals("SomeNameIDValue", $identifier->getContent());
     }
 
 
@@ -672,11 +677,17 @@ XML;
     public function testVerifySignedAssertionChangedBody(): void
     {
         $doc = DOMDocumentFactory::fromFile('tests/resources/xml/assertions/signedassertion_tampered.xml');
+        $assertion = Assertion::fromXML($doc->documentElement);
 
-        $this->expectException(Exception::class);
-        $this->expectExceptionMessage('Reference validation failed');
+        $verifier = (new SignatureAlgorithmFactory())->getAlgorithm(
+            $assertion->getSignature()->getSignedInfo()->getSignatureMethod()->getAlgorithm(),
+            PEMCertificatesMock::getPublicKey(PEMCertificatesMock::SELFSIGNED_PUBLIC_KEY),
+        );
 
-        Assertion::fromXML($doc->documentElement);
+        $this->expectException(SignatureVerificationFailedException::class);
+        $this->expectExceptionMessage('Failed to verify signature.');
+
+        $assertion->verify($verifier);
     }
 
 
@@ -715,32 +726,11 @@ XML;
             PEMCertificatesMock::getPublicKey(PEMCertificatesMock::OTHER_PUBLIC_KEY),
         );
 
-        $this->expectException(Exception::class);
-        $this->expectExceptionMessage('Unable to validate Signature');
+        $this->expectException(SignatureVerificationFailedException::class);
+        $this->expectExceptionMessage('Failed to verify signature.');
 
         $assertion->verify($verifier);
     }
-
-
-    /**
-     * Try to verify an assertion signed with RSA with a DSA public key.
-     * Must yield a signature validation exception.
-    public function testVerifySignedAssertionWrongKeyDSA(): void
-    {
-        $doc = DOMDocumentFactory::fromFile('tests/resources/xml/assertions/signedassertion.xml');
-        $assertion = Assertion::fromXML($doc->documentElement);
-
-        $verifier = (new SignatureAlgorithmFactory())->getAlgorithm(
-            $assertion->getSignature()->getSignedInfo()->getSignatureMethod()->getAlgorithm(),
-            PEMCertificatesMock::getPublicKey(PEMCertificatesMock::SELFSIGNED_PUBLIC_KEY),
-        );
-
-        $this->expectException(Exception::class);
-        $this->expectExceptionMessage('Unable to validate Signature');
-
-        $assertion->verify($verifier);
-    }
-     */
 
 
     /**
@@ -749,6 +739,11 @@ XML;
      */
     public function testVerifyUnsignedAssertion(): void
     {
+        $accr = C::AUTHNCONTEXT_CLASS_REF_LOA1;
+        $entity_idp = C::ENTITY_IDP;
+        $entity_sp = C::ENTITY_SP;
+        $entity_other = C::ENTITY_OTHER;
+
         $xml = <<<XML
 <saml:Assertion xmlns:saml="urn:oasis:names:tc:SAML:2.0:assertion"
                 ID="_593e33ddf86449ce4d4c22b60ac48e067d98a0b2bf"
@@ -758,15 +753,15 @@ XML;
   <saml:Issuer>testIssuer</saml:Issuer>
   <saml:Conditions>
     <saml:AudienceRestriction>
-      <saml:Audience>audience1</saml:Audience>
-      <saml:Audience>audience2</saml:Audience>
+      <saml:Audience>{$entity_sp}</saml:Audience>
+      <saml:Audience>{$entity_other}</saml:Audience>
     </saml:AudienceRestriction>
   </saml:Conditions>
   <saml:AuthnStatement AuthnInstant="2010-03-05T13:34:28Z">
     <saml:AuthnContext>
-      <saml:AuthnContextClassRef>someAuthnContext</saml:AuthnContextClassRef>
-      <saml:AuthenticatingAuthority>someIdP1</saml:AuthenticatingAuthority>
-      <saml:AuthenticatingAuthority>someIdP2</saml:AuthenticatingAuthority>
+      <saml:AuthnContextClassRef>{$accr}</saml:AuthnContextClassRef>
+      <saml:AuthenticatingAuthority>{$entity_idp}</saml:AuthenticatingAuthority>
+      <saml:AuthenticatingAuthority>{$entity_sp}</saml:AuthenticatingAuthority>
     </saml:AuthnContext>
   </saml:AuthnStatement>
 </saml:Assertion>
@@ -785,31 +780,12 @@ XML;
      */
     public function testAssertionVersionOtherThan20ThrowsException(): void
     {
-        $xml = <<<XML
-<saml:Assertion xmlns:saml="urn:oasis:names:tc:SAML:2.0:assertion"
-                ID="_593e33ddf86449ce4d4c22b60ac48e067d98a0b2bf"
-                Version="1.3"
-                IssueInstant="2010-03-05T13:34:28Z"
->
-  <saml:Issuer>testIssuer</saml:Issuer>
-  <saml:Conditions>
-    <saml:AudienceRestriction>
-      <saml:Audience>audience1</saml:Audience>
-      <saml:Audience>audience2</saml:Audience>
-    </saml:AudienceRestriction>
-  </saml:Conditions>
-  <saml:AuthnStatement AuthnInstant="2010-03-05T13:34:28Z">
-    <saml:AuthnContext>
-      <saml:AuthnContextClassRef>someAuthnContext</saml:AuthnContextClassRef>
-      <saml:AuthenticatingAuthority>someIdP1</saml:AuthenticatingAuthority>
-      <saml:AuthenticatingAuthority>someIdP2</saml:AuthenticatingAuthority>
-    </saml:AuthnContext>
-  </saml:AuthnStatement>
-</saml:Assertion>
-XML;
-        $document  = DOMDocumentFactory::fromString($xml);
+        $document = $this->xmlRepresentation;
+        $document->documentElement->setAttribute('Version', '1.3');
+
         $this->expectException(Exception::class);
         $this->expectExceptionMessage('Unsupported version: "1.3"');
+
         Assertion::fromXML($document->documentElement);
     }
 
@@ -819,30 +795,12 @@ XML;
      */
     public function testAssertionWithoutIDthrowsException(): void
     {
-        $xml = <<<XML
-<saml:Assertion xmlns:saml="urn:oasis:names:tc:SAML:2.0:assertion"
-                Version="2.0"
-                IssueInstant="2010-03-05T13:34:28Z"
->
-  <saml:Issuer>testIssuer</saml:Issuer>
-  <saml:Conditions>
-    <saml:AudienceRestriction>
-      <saml:Audience>audience1</saml:Audience>
-      <saml:Audience>audience2</saml:Audience>
-    </saml:AudienceRestriction>
-  </saml:Conditions>
-  <saml:AuthnStatement AuthnInstant="2010-03-05T13:34:28Z">
-    <saml:AuthnContext>
-      <saml:AuthnContextClassRef>someAuthnContext</saml:AuthnContextClassRef>
-      <saml:AuthenticatingAuthority>someIdP1</saml:AuthenticatingAuthority>
-      <saml:AuthenticatingAuthority>someIdP2</saml:AuthenticatingAuthority>
-    </saml:AuthnContext>
-  </saml:AuthnStatement>
-</saml:Assertion>
-XML;
-        $document  = DOMDocumentFactory::fromString($xml);
+        $document = $this->xmlRepresentation;
+        $document->documentElement->removeAttribute('ID');
+
         $this->expectException(Exception::class);
         $this->expectExceptionMessage('Missing \'ID\' attribute on saml:Assertion');
+
         Assertion::fromXML($document->documentElement);
     }
 
@@ -852,30 +810,13 @@ XML;
      */
     public function testAssertionWithoutIssuerThrowsException(): void
     {
-        $xml = <<<XML
-<saml:Assertion xmlns:saml="urn:oasis:names:tc:SAML:2.0:assertion"
-                ID="_593e33ddf86449ce4d4c22b60ac48e067d98a0b2bf"
-                Version="2.0"
-                IssueInstant="2010-03-05T13:34:28Z"
->
-  <saml:Conditions>
-    <saml:AudienceRestriction>
-      <saml:Audience>audience1</saml:Audience>
-      <saml:Audience>audience2</saml:Audience>
-    </saml:AudienceRestriction>
-  </saml:Conditions>
-  <saml:AuthnStatement AuthnInstant="2010-03-05T13:34:28Z">
-    <saml:AuthnContext>
-      <saml:AuthnContextClassRef>someAuthnContext</saml:AuthnContextClassRef>
-      <saml:AuthenticatingAuthority>someIdP1</saml:AuthenticatingAuthority>
-      <saml:AuthenticatingAuthority>someIdP2</saml:AuthenticatingAuthority>
-    </saml:AuthnContext>
-  </saml:AuthnStatement>
-</saml:Assertion>
-XML;
-        $document  = DOMDocumentFactory::fromString($xml);
+        $document = $this->xmlRepresentation;
+        $issuer = $document->documentElement->getElementsByTagNameNS(C::NS_SAML, 'Issuer')->item(0);
+        $document->documentElement->removeChild($issuer);
+
         $this->expectException(MissingElementException::class);
         $this->expectExceptionMessage('Missing <saml:Issuer> in assertion.');
+
         Assertion::fromXML($document->documentElement);
     }
 
@@ -885,6 +826,10 @@ XML;
      */
     public function testMoreThanOneSubjectThrowsException(): void
     {
+        $accr = C::AUTHNCONTEXT_CLASS_REF_LOA1;
+        $nameid_transient = C::NAMEID_TRANSIENT;
+        $nameid_transient = C::NAMEID_PERSISTENT;
+
         $xml = <<<XML
 <saml:Assertion xmlns:saml="urn:oasis:names:tc:SAML:2.0:assertion"
                 xmlns:samlp="urn:oasis:names:tc:SAML:2.0:protocol"
@@ -894,16 +839,16 @@ XML;
 >
   <saml:Issuer>testIssuer</saml:Issuer>
   <saml:Subject>
-    <saml:NameID Format="urn:oasis:names:tc:SAML:2.0:nameid-format:transient">5</saml:NameID>
+    <saml:NameID Format="{$nameid_transient}">5</saml:NameID>
   </saml:Subject>
   <saml:AuthnStatement AuthnInstant="2010-03-05T13:34:28Z">
     <saml:AuthnContext>
-      <saml:AuthnContextClassRef>someAuthnContext</saml:AuthnContextClassRef>
-      <saml:AuthnContextDeclRef>/relative/path/to/document.xml</saml:AuthnContextDeclRef>
+      <saml:AuthnContextClassRef>{$accr}</saml:AuthnContextClassRef>
+      <saml:AuthnContextDeclRef>https://example.org/relative/path/to/document.xml</saml:AuthnContextDeclRef>
     </saml:AuthnContext>
   </saml:AuthnStatement>
   <saml:Subject>
-    <saml:NameID Format="urn:oasis:names:tc:SAML:2.0:nameid-format:persistent">aap</saml:NameID>
+    <saml:NameID Format="{$nameid_persistent}">aap</saml:NameID>
   </saml:Subject>
 </saml:Assertion>
 XML;
@@ -921,6 +866,8 @@ XML;
      */
     public function testSubjectMustHaveNameIDorSubjectConfirmation(): void
     {
+        $accr = C::AUTHNCONTEXT_CLASS_REF_LOA1;
+
         $xml = <<<XML
 <saml:Assertion xmlns:saml="urn:oasis:names:tc:SAML:2.0:assertion"
                 xmlns:samlp="urn:oasis:names:tc:SAML:2.0:protocol"
@@ -934,8 +881,8 @@ XML;
   </saml:Subject>
   <saml:AuthnStatement AuthnInstant="2010-03-05T13:34:28Z">
     <saml:AuthnContext>
-      <saml:AuthnContextClassRef>someAuthnContext</saml:AuthnContextClassRef>
-      <saml:AuthnContextDeclRef>/relative/path/to/document.xml</saml:AuthnContextDeclRef>
+      <saml:AuthnContextClassRef>{$accr}</saml:AuthnContextClassRef>
+      <saml:AuthnContextDeclRef>https://example.org/relative/path/to/document.xml</saml:AuthnContextDeclRef>
     </saml:AuthnContext>
   </saml:AuthnStatement>
 </saml:Assertion>
@@ -954,6 +901,11 @@ XML;
      */
     public function testTooManyConditionsThrowsException(): void
     {
+        $accr = C::AUTHNCONTEXT_CLASS_REF_LOA1;
+        $entity_idp = C::ENTITY_IDP;
+        $entity_sp = C::ENTITY_SP;
+        $entity_other = C::ENTITY_OTHER;
+
         $xml = <<<XML
 <saml:Assertion xmlns:saml="urn:oasis:names:tc:SAML:2.0:assertion"
                 ID="_593e33ddf86449ce4d4c22b60ac48e067d98a0b2bf"
@@ -963,15 +915,15 @@ XML;
   <saml:Issuer>testIssuer</saml:Issuer>
   <saml:Conditions>
     <saml:AudienceRestriction>
-      <saml:Audience>audience1</saml:Audience>
-      <saml:Audience>audience2</saml:Audience>
+      <saml:Audience>{$entity_sp}</saml:Audience>
+      <saml:Audience>{$entity_other}</saml:Audience>
     </saml:AudienceRestriction>
   </saml:Conditions>
   <saml:AuthnStatement AuthnInstant="2010-03-05T13:34:28Z">
     <saml:AuthnContext>
-      <saml:AuthnContextClassRef>someAuthnContext</saml:AuthnContextClassRef>
-      <saml:AuthenticatingAuthority>someIdP1</saml:AuthenticatingAuthority>
-      <saml:AuthenticatingAuthority>someIdP2</saml:AuthenticatingAuthority>
+      <saml:AuthnContextClassRef>{$accr}</saml:AuthnContextClassRef>
+      <saml:AuthenticatingAuthority>{$entity_idp}</saml:AuthenticatingAuthority>
+      <saml:AuthenticatingAuthority>{$entity_other}</saml:AuthenticatingAuthority>
     </saml:AuthnContext>
   </saml:AuthnStatement>
   <saml:Conditions>
@@ -995,6 +947,11 @@ XML;
      */
     public function testConditionAllowedTypes(): void
     {
+        $accr = C::AUTHNCONTEXT_CLASS_REF_LOA1;
+        $entity_idp = C::ENTITY_IDP;
+        $entity_sp = C::ENTITY_SP;
+        $entity_other = C::ENTITY_OTHER;
+
         $xml = <<<XML
 <saml:Assertion xmlns:saml="urn:oasis:names:tc:SAML:2.0:assertion"
                 ID="_593e33ddf86449ce4d4c22b60ac48e067d98a0b2bf"
@@ -1004,11 +961,11 @@ XML;
   <saml:Issuer>testIssuer</saml:Issuer>
   <saml:Conditions>
     <saml:AudienceRestriction>
-      <saml:Audience>audience1</saml:Audience>
+      <saml:Audience>{$entity_sp}</saml:Audience>
     </saml:AudienceRestriction>
     <saml:AudienceRestriction>
-      <saml:Audience>audience2</saml:Audience>
-      <saml:Audience>audience1</saml:Audience>
+      <saml:Audience>{$entity_other}</saml:Audience>
+      <saml:Audience>{$entity_idp}</saml:Audience>
     </saml:AudienceRestriction>
     <saml:OneTimeUse>
     </saml:OneTimeUse>
@@ -1017,9 +974,9 @@ XML;
   </saml:Conditions>
   <saml:AuthnStatement AuthnInstant="2010-03-05T13:34:28Z">
     <saml:AuthnContext>
-      <saml:AuthnContextClassRef>someAuthnContext</saml:AuthnContextClassRef>
-      <saml:AuthenticatingAuthority>someIdP1</saml:AuthenticatingAuthority>
-      <saml:AuthenticatingAuthority>someIdP2</saml:AuthenticatingAuthority>
+      <saml:AuthnContextClassRef>{$accr}</saml:AuthnContextClassRef>
+      <saml:AuthenticatingAuthority>{$entity_idp}</saml:AuthenticatingAuthority>
+      <saml:AuthenticatingAuthority>{$entity_other}</saml:AuthenticatingAuthority>
     </saml:AuthnContext>
   </saml:AuthnStatement>
 </saml:Assertion>
@@ -1036,13 +993,13 @@ XML;
         $restriction1 = $audienceRestrictions[0];
         $audience = $restriction1->getAudience();
         $this->assertCount(1, $audience);
-        $this->assertEquals('audience1', $audience[0]->getContent());
+        $this->assertEquals(C::ENTITY_SP, $audience[0]->getContent());
 
         $restriction2 = $audienceRestrictions[1];
         $audience = $restriction2->getAudience();
         $this->assertCount(2, $audience);
-        $this->assertEquals('audience2', $audience[0]->getContent());
-        $this->assertEquals('audience1', $audience[1]->getContent());
+        $this->assertEquals(C::ENTITY_OTHER, $audience[0]->getContent());
+        $this->assertEquals(C::ENTITY_IDP, $audience[1]->getContent());
     }
 
 
@@ -1061,7 +1018,7 @@ XML;
             [],
             [
                 new AudienceRestriction(
-                    [new Audience('audience1'), new Audience('audience2')]
+                    [new Audience(C::ENTITY_SP), new Audience(C::ENTITY_OTHER)]
                 )
             ]
         );
@@ -1081,7 +1038,7 @@ XML;
         // Create the statements
         $authnStatement = new AuthnStatement(
             new AuthnContext(
-                new AuthnContextClassRef('someAuthnContext'),
+                new AuthnContextClassRef(C::AUTHNCONTEXT_CLASS_REF_LOA2),
                 null,
                 null
             ),
@@ -1114,7 +1071,7 @@ XML;
 
         $this->assertInstanceOf(NameID::class, $nameID);
         $this->assertEquals('just_a_basic_identifier', $nameID->getContent());
-        $this->assertEquals('urn:oasis:names:tc:SAML:2.0:nameid-format:transient', $nameID->getFormat());
+        $this->assertEquals(C::NAMEID_TRANSIENT, $nameID->getFormat());
     }
 
 
@@ -1128,7 +1085,7 @@ XML;
             null,
             null,
             [],
-            [new AudienceRestriction([new Audience('audience1'), new Audience('audience2')])]
+            [new AudienceRestriction([new Audience(C::ENTITY_SP), new Audience(C::ENTITY_OTHER)])]
         );
 
         // Create AttributeStatement
@@ -1150,7 +1107,7 @@ XML;
         // Create the statements
         $authnStatement = new AuthnStatement(
             new AuthnContext(
-                new AuthnContextClassRef('someAuthnContext'),
+                new AuthnContextClassRef(C::AUTHNCONTEXT_CLASS_REF_URN),
                 null,
                 null
             ),
@@ -1202,6 +1159,11 @@ XML;
      */
     public function testEncryption(): void
     {
+        $accr = C::AUTHNCONTEXT_CLASS_REF_LOA1;
+        $entity_idp = C::ENTITY_IDP;
+        $entity_sp = C::ENTITY_SP;
+        $entity_other = C::ENTITY_OTHER;
+
         $xml = <<<XML
 <saml:Assertion xmlns:saml="urn:oasis:names:tc:SAML:2.0:assertion"
                 ID="_593e33ddf86449ce4d4c22b60ac48e067d98a0b2bf"
@@ -1211,15 +1173,15 @@ XML;
   <saml:Issuer>testIssuer</saml:Issuer>
   <saml:Conditions>
     <saml:AudienceRestriction>
-      <saml:Audience>audience1</saml:Audience>
-      <saml:Audience>audience2</saml:Audience>
+      <saml:Audience>{$entity_sp}</saml:Audience>
+      <saml:Audience>{$entity_other}</saml:Audience>
     </saml:AudienceRestriction>
   </saml:Conditions>
   <saml:AuthnStatement AuthnInstant="2010-03-05T13:34:28Z">
     <saml:AuthnContext>
-      <saml:AuthnContextClassRef>someAuthnContext</saml:AuthnContextClassRef>
-      <saml:AuthenticatingAuthority>someIdP1</saml:AuthenticatingAuthority>
-      <saml:AuthenticatingAuthority>someIdP2</saml:AuthenticatingAuthority>
+      <saml:AuthnContextClassRef>{$accr}</saml:AuthnContextClassRef>
+      <saml:AuthenticatingAuthority>{$entity_idp}</saml:AuthenticatingAuthority>
+      <saml:AuthenticatingAuthority>{$entity_other}</saml:AuthenticatingAuthority>
     </saml:AuthnContext>
   </saml:AuthnStatement>
 </saml:Assertion>

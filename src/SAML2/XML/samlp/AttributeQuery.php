@@ -167,6 +167,7 @@ class AttributeQuery extends AbstractSubjectQuery
 
         if (!empty($signature)) {
             $request->setSignature($signature[0]);
+            $request->setXML($xml);
         }
 
         return $request;

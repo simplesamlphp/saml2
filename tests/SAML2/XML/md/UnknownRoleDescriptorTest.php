@@ -17,6 +17,7 @@ use SimpleSAML\SAML2\XML\md\UnknownRoleDescriptor;
 use SimpleSAML\Test\XML\SerializableXMLTestTrait;
 use SimpleSAML\XML\DOMDocumentFactory;
 use SimpleSAML\XML\Exception\MissingAttributeException;
+use SimpleSAML\XML\Exception\SchemaViolationException;
 use SimpleSAML\XML\Chunk;
 use SimpleSAML\XMLSecurity\XMLSecurityDSig;
 
@@ -122,7 +123,6 @@ final class UnknownRoleDescriptorTest extends TestCase
         $this->xmlRepresentation->documentElement->setAttribute('protocolSupportEnumeration', '');
 
         $this->expectException(AssertionFailedException::class);
-        $this->expectExceptionMessage('Cannot specify an empty string as a supported protocol.');
 
         UnknownRoleDescriptor::fromXML($this->xmlRepresentation->documentElement);
     }

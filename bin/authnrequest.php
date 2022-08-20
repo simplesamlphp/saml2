@@ -13,18 +13,12 @@ use SimpleSAML\SAML2\XML\samlp\AuthnRequest;
 use SimpleSAML\XMLSecurity\TestUtils\PEMCertificatesMock;
 use SimpleSAML\XMLSecurity\Constants as C;
 use SimpleSAML\XMLSecurity\Alg\KeyTransport\KeyTransportAlgorithmFactory;
-use SimpleSAML\XMLSecurity\Key\PublicKey;
 
 ContainerSingleton::setContainer(new MockContainer());
 
 $encryptor = (new KeyTransportAlgorithmFactory())->getAlgorithm(
     C::KEY_TRANSPORT_OAEP,
-    PublicKey::fromFile(
-        '../vendor/simplesamlphp/xml-security'
-        . PEMCertificatesMock::CERTIFICATE_DIR_RSA
-        . '/'
-        . PEMCertificatesMock::SELFSIGNED_PUBLIC_KEY
-    )
+    PEMCertificatesMock::getPublicKey(PEMCertificatesMock::SELFSIGNED_PUBLIC_KEY),
 );
 
 $nid = new NameID('very secret');

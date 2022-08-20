@@ -46,7 +46,7 @@ final class AuthnContextDeclRefTest extends TestCase
      */
     public function testMarshalling(): void
     {
-        $authnContextDeclRef = new AuthnContextDeclRef('/relative/path/to/document.xml');
+        $authnContextDeclRef = new AuthnContextDeclRef('https://example.org/relative/path/to/document.xml');
 
         $this->assertEquals(
             $this->xmlRepresentation->saveXML($this->xmlRepresentation->documentElement),
@@ -63,6 +63,6 @@ final class AuthnContextDeclRefTest extends TestCase
     public function testUnmarshalling(): void
     {
         $authnContextDeclRef = AuthnContextDeclRef::fromXML($this->xmlRepresentation->documentElement);
-        $this->assertEquals('/relative/path/to/document.xml', $authnContextDeclRef->getContent());
+        $this->assertEquals('https://example.org/relative/path/to/document.xml', $authnContextDeclRef->getContent());
     }
 }

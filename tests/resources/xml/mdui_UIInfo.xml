@@ -9,5 +9,5 @@
   <mdui:Keywords xml:lang="fr">Université Fictif</mdui:Keywords>
   <mdui:Logo height="88" width="87" xml:lang="fy">https://example.org/idp/images/logo_87x88.png</mdui:Logo>
   <ssp:child1 xmlns:ssp="urn:custom:ssp" />
-  <myns:child2 xmlns:myns="urn:mynamespace" />
+  <myns:child2 xmlns:myns="urn:test:mynamespace" />
 </mdui:UIInfo>

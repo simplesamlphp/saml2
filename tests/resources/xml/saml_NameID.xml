@@ -1,1 +1,1 @@
-<saml:NameID xmlns:saml="urn:oasis:names:tc:SAML:2.0:assertion" NameQualifier="TheNameQualifier" SPNameQualifier="TheSPNameQualifier" Format="TheFormat" SPProvidedID="TheSPProvidedID">TheNameIDValue</saml:NameID>
+<saml:NameID xmlns:saml="urn:oasis:names:tc:SAML:2.0:assertion" NameQualifier="TheNameQualifier" SPNameQualifier="TheSPNameQualifier" Format="urn:the:format" SPProvidedID="TheSPProvidedID">TheNameIDValue</saml:NameID>

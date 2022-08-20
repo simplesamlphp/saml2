@@ -11,6 +11,7 @@ use SimpleSAML\SAML2\XML\saml\AuthnContext;
 use SimpleSAML\SAML2\XML\saml\AuthnContextClassRef;
 use SimpleSAML\SAML2\XML\saml\AuthnStatement;
 use SimpleSAML\SAML2\XML\saml\Issuer;
+use SimpleSAML\Test\SAML2\Constants as C;
 use SimpleSAML\Test\SAML2\ControlledTimeTest;
 
 /**
@@ -50,7 +51,7 @@ final class SessionNotOnOrAfterTest extends ControlledTimeTest
         // Create the statements
         $authnStatement = new AuthnStatement(
             new AuthnContext(
-                new AuthnContextClassRef('someAuthnContext'),
+                new AuthnContextClassRef(C::AUTHNCONTEXT_CLASS_REF_LOA1),
                 null,
                 null
             ),
@@ -80,7 +81,7 @@ final class SessionNotOnOrAfterTest extends ControlledTimeTest
         // Create the statements
         $authnStatement = new AuthnStatement(
             new AuthnContext(
-                new AuthnContextClassRef('someAuthnContext'),
+                new AuthnContextClassRef(C::AUTHNCONTEXT_CLASS_REF_LOA1),
                 null,
                 null
             ),
@@ -109,7 +110,7 @@ final class SessionNotOnOrAfterTest extends ControlledTimeTest
         // Create the statements
         $authnStatement = new AuthnStatement(
             new AuthnContext(
-                new AuthnContextClassRef('someAuthnContext'),
+                new AuthnContextClassRef(C::AUTHNCONTEXT_CLASS_REF_LOA1),
                 null,
                 null
             ),

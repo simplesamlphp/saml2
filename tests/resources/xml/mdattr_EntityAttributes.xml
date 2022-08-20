@@ -26,8 +26,8 @@
     </saml:Subject>
     <saml:Conditions>
       <saml:AudienceRestriction>
-        <saml:Audience>audience1</saml:Audience>
-        <saml:Audience>audience2</saml:Audience>
+        <saml:Audience>https://simplesamlphp.org/idp/metadata</saml:Audience>
+        <saml:Audience>urn:x-simplesamlphp:phpunit:entity</saml:Audience>
       </saml:AudienceRestriction>
     </saml:Conditions>
     <saml:AttributeStatement>

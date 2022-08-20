@@ -24,6 +24,7 @@ use SimpleSAML\SAML2\XML\saml\AttributeValue;
 use SimpleSAML\SAML2\XML\samlp\Response;
 use SimpleSAML\SAML2\XML\samlp\Status;
 use SimpleSAML\SAML2\XML\samlp\StatusCode;
+use SimpleSAML\Test\SAML2\Constants as C;
 use SimpleSAML\XML\DOMDocumentFactory;
 
 /**
@@ -63,17 +64,15 @@ final class DecodeBase64TransformerTest extends TestCase
      */
     protected function setUp(): void
     {
-        $spentity = 'urn:mace:feide.no:services:no.feide.moodle';
-
         $this->logger = new NullLogger();
         $this->validator = new Validator($this->logger);
-        $this->destination = new Destination($spentity);
+        $this->destination = new Destination(C::ENTITY_SP);
         $this->response = new Response(new Status(new StatusCode()));
 
         $this->identityProviderConfiguration
             = new IdentityProvider(['base64EncodedAttributes' => true]);
         $this->serviceProviderConfiguration
-            = new ServiceProvider(['entityId' => $spentity]);
+            = new ServiceProvider(['entityId' => C::ENTITY_SP]);
 
         $this->assertionProcessor = ProcessorBuilder::build(
             $this->logger,
@@ -84,6 +83,10 @@ final class DecodeBase64TransformerTest extends TestCase
             $this->response
         );
 
+        $accr = C::AUTHNCONTEXT_CLASS_REF_LOA1;
+        $entity_idp = C::ENTITY_IDP;
+        $nameformat_uri = C::NAMEFORMAT_URI;
+
         $this->document = DOMDocumentFactory::fromString(<<<XML
     <saml:Assertion xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
                     xmlns:xs="http://www.w3.org/2001/XMLSchema"
@@ -92,31 +95,31 @@ final class DecodeBase64TransformerTest extends TestCase
                     Version="2.0"
                     IssueInstant="2020-02-26T12:04:42Z"
                     >
-        <saml:Issuer>urn:thki:sid:idp2</saml:Issuer>
+        <saml:Issuer>{$entity_idp}</saml:Issuer>
         <saml:AuthnStatement AuthnInstant="2010-03-05T13:34:28Z">
           <saml:AuthnContext>
-            <saml:AuthnContextClassRef>someAuthnContext</saml:AuthnContextClassRef>
+            <saml:AuthnContextClassRef>{$accr}</saml:AuthnContextClassRef>
           </saml:AuthnContext>
         </saml:AuthnStatement>
         <saml:AttributeStatement>
             <saml:Attribute Name="urn:mace:dir:attribute-def:eduPersonAffiliation"
-                            NameFormat="urn:oasis:names:tc:SAML:2.0:attrname-format:uri"
+                            NameFormat="{$nameformat_uri}"
                             >
                 <saml:AttributeValue xsi:type="xs:string">bWVtYmVy</saml:AttributeValue>
                 <saml:AttributeValue xsi:type="xs:string">YWZmaWxpYXRl</saml:AttributeValue>
             </saml:Attribute>
             <saml:Attribute Name="urn:mace:dir:attribute-def:eduPersonAffiliationAlternative"
-                            NameFormat="urn:oasis:names:tc:SAML:2.0:attrname-format:uri"
+                            NameFormat="{$nameformat_uri}"
                             >
                 <saml:AttributeValue xsi:type="xs:string">bWVtYmVy_YWZmaWxpYXRl</saml:AttributeValue>
             </saml:Attribute>
             <saml:Attribute Name="urn:mace:dir:attribute-def:eduPersonPrincipalName"
-                            NameFormat="urn:oasis:names:tc:SAML:2.0:attrname-format:uri"
+                            NameFormat="{$nameformat_uri}"
                             >
                 <saml:AttributeValue xsi:type="xs:string">YXNqZW1lbm91QGxvZWtpLnR2</saml:AttributeValue>
             </saml:Attribute>
             <saml:Attribute Name="urn:mace:dir:attribute-def:displayName"
-                            NameFormat="urn:oasis:names:tc:SAML:2.0:attrname-format:uri"
+                            NameFormat="{$nameformat_uri}"
                             >
                 <saml:AttributeValue xsi:type="xs:string">SWVtYW5kIEFuZGVycw==</saml:AttributeValue>
             </saml:Attribute>

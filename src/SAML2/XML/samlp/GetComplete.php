@@ -37,7 +37,7 @@ final class GetComplete extends AbstractSamlpElement
      */
     protected function validateContent(string $content): void
     {
-        Assert::notWhitespaceOnly($content);
+        Assert::validURI($content); // Covers the empty string
     }
 
 

@@ -49,8 +49,8 @@ final class ProxyRestrictionTest extends TestCase
     {
         $condition = new ProxyRestriction(
             [
-                new Audience('urn:audience1'),
-                new Audience('urn:audience2')
+                new Audience('urn:test:audience1'),
+                new Audience('urn:test:audience2')
             ],
             2
         );
@@ -75,8 +75,8 @@ final class ProxyRestrictionTest extends TestCase
 
         $audiences = $condition->getAudience();
         $this->assertCount(2, $audiences);
-        $this->assertEquals('urn:audience1', $audiences[0]->getContent());
-        $this->assertEquals('urn:audience2', $audiences[1]->getContent());
+        $this->assertEquals('urn:test:audience1', $audiences[0]->getContent());
+        $this->assertEquals('urn:test:audience2', $audiences[1]->getContent());
 
         $this->assertEquals(
             $this->xmlRepresentation->saveXML($this->xmlRepresentation->documentElement),

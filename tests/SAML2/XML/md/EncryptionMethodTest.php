@@ -52,7 +52,7 @@ final class EncryptionMethodTest extends TestCase
     public function testMarshalling(): void
     {
         $alg = Constants::KEY_TRANSPORT_OAEP_MGF1P;
-        $chunkXml = DOMDocumentFactory::fromString('<other:Element xmlns:other="urn:other">Value</other:Element>');
+        $chunkXml = DOMDocumentFactory::fromString('<other:Element xmlns:other="urn:other:elt">Value</other:Element>');
         $chunk = Chunk::fromXML($chunkXml->documentElement);
 
         $encryptionMethod = new EncryptionMethod($alg, 10, '9lWu3Q==', [$chunk]);
@@ -85,7 +85,7 @@ final class EncryptionMethodTest extends TestCase
     public function testMarshallingElementOrdering(): void
     {
         $alg = Constants::KEY_TRANSPORT_OAEP_MGF1P;
-        $chunkXml = DOMDocumentFactory::fromString('<other:Element xmlns:other="urn:other">Value</other:Element>');
+        $chunkXml = DOMDocumentFactory::fromString('<other:Element xmlns:other="urn:other:elt">Value</other:Element>');
         $chunk = Chunk::fromXML($chunkXml->documentElement);
 
         $em = new EncryptionMethod($alg, 10, '9lWu3Q==', [$chunk]);

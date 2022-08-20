@@ -55,7 +55,7 @@ final class StatusCode extends AbstractSamlpElement
      */
     private function setValue(string $Value): void
     {
-        Assert::notWhitespaceOnly($Value);
+        Assert::validURI($Value); // Covers the empty string
         $this->Value = $Value;
     }
 

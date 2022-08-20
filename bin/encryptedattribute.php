@@ -8,9 +8,9 @@ use SimpleSAML\SAML2\Compat\MockContainer;
 use SimpleSAML\SAML2\XML\saml\Attribute;
 use SimpleSAML\SAML2\XML\saml\AttributeValue;
 use SimpleSAML\SAML2\XML\saml\EncryptedAttribute;
-use SimpleSAML\XMLSecurity\TestUtils\PEMCertificatesMock;
-use SimpleSAML\XMLSecurity\Constants as C;
 use SimpleSAML\XMLSecurity\Alg\KeyTransport\KeyTransportAlgorithmFactory;
+use SimpleSAML\XMLSecurity\Constants as C;
+use SimpleSAML\XMLSecurity\TestUtils\PEMCertificatesMock;
 
 $container = new MockContainer();
 $container->setBlacklistedAlgorithms(null);

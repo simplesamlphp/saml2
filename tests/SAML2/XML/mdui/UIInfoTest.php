@@ -85,7 +85,7 @@ final class UIInfoTest extends TestCase
             [],
             [
                 new Chunk(DOMDocumentFactory::fromString('<ssp:child1 xmlns:ssp="urn:custom:ssp" />')->documentElement),
-                new Chunk(DOMDocumentFactory::fromString('<myns:child2 xmlns:myns="urn:mynamespace" />')->documentElement)
+                new Chunk(DOMDocumentFactory::fromString('<myns:child2 xmlns:myns="urn:test:mynamespace" />')->documentElement)
             ]
         );
 

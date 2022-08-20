@@ -12,6 +12,7 @@ use SimpleSAML\SAML2\XML\saml\AuthnContextClassRef;
 use SimpleSAML\SAML2\XML\saml\AuthnStatement;
 use SimpleSAML\SAML2\XML\saml\Conditions;
 use SimpleSAML\SAML2\XML\saml\Issuer;
+use SimpleSAML\Test\SAML2\Constants as C;
 use SimpleSAML\Test\SAML2\ControlledTimeTest;
 
 /**
@@ -48,7 +49,7 @@ final class NotOnOrAfterTest extends ControlledTimeTest
         // Create the statements
         $this->authnStatement = new AuthnStatement(
             new AuthnContext(
-                new AuthnContextClassRef('someAuthnContext'),
+                new AuthnContextClassRef(C::AUTHNCONTEXT_CLASS_REF_URN),
                 null,
                 null
             ),

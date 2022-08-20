@@ -102,7 +102,7 @@ final class PublicKeyValidatorTest extends MockeryTestCase
     public function signedMessageWithValidSignatureIsValidatedCorrectly(): void
     {
         $pattern = Certificate::PUBLIC_KEY_PATTERN;
-        preg_match($pattern, PEMCertificatesMock::getPlainPublicKey(PEMCertificatesMock::PUBLIC_KEY), $matches);
+        preg_match($pattern, PEMCertificatesMock::getPlainPublicKey(PEMCertificatesMock::OTHER_PUBLIC_KEY), $matches);
 
         $config = new IdentityProvider(['certificateData' => $matches[1]]);
         $validator = new PublicKeyValidator(new SimpleTestLogger(), new KeyLoader());

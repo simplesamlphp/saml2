@@ -139,10 +139,10 @@ AUTHNREQUEST
         // now, try an Issuer with another format and attributes
         $issuer = new Issuer(
             'https://gateway.stepup.org/saml20/sp/metadata',
+            'SomeNameQualifier',
+            'SomeSPNameQualifier',
             C::NAMEID_UNSPECIFIED,
             'SomeSPProvidedID',
-            'SomeNameQualifier',
-            'SomeSPNameQualifier'
         );
         $response = new Response($status, $issuer);
         $xml = $response->toXML();
@@ -212,8 +212,8 @@ AUTHNREQUEST
         https://gateway.stepup.org/saml20/sp/metadata
   </saml:Issuer>
   <samlp:Extensions>
-    <myns:myextElt xmlns:myns="urn:mynamespace"  att="value3">example1</myns:myextElt>
-    <myns:myextElt xmlns:myns="urn:mynamespace" att="value5" />
+    <myns:myextElt xmlns:myns="urn:test:mynamespace" att="value3">example1</myns:myextElt>
+    <myns:myextElt xmlns:myns="urn:test:mynamespace" att="value5" />
   </samlp:Extensions>
   <saml:Subject>
         <saml:NameID Format="urn:oasis:names:tc:SAML:1.1:nameid-format:unspecified">user@example.org</saml:NameID>

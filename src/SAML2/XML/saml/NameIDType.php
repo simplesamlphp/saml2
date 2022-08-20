@@ -101,7 +101,7 @@ abstract class NameIDType extends AbstractSamlElement implements IdentifierInter
      */
     private function setFormat(?string $format): void
     {
-        Assert::nullOrNotWhitespaceOnly($format);
+        Assert::nullOrValidURI($format); // Covers the empty string
         $this->Format = $format;
     }
 

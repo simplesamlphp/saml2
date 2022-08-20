@@ -7,7 +7,7 @@ namespace SimpleSAML\Test\SAML2\XML\md;
 use DOMDocument;
 use PHPUnit\Framework\TestCase;
 use SimpleSAML\Assert\AssertionFailedException;
-use SimpleSAML\SAML2\Constants;
+use SimpleSAML\SAML2\Constants as C;
 use SimpleSAML\SAML2\XML\md\RequestedAttribute;
 use SimpleSAML\SAML2\XML\saml\AttributeValue;
 use SimpleSAML\Test\XML\SerializableXMLTestTrait;
@@ -51,7 +51,7 @@ final class RequestedAttributeTest extends TestCase
         $ra = new RequestedAttribute(
             'attr',
             true,
-            'urn:format',
+            C::NAMEFORMAT_URI,
             'Attribute',
             [new AttributeValue('value1')]
         );
@@ -88,7 +88,7 @@ final class RequestedAttributeTest extends TestCase
         $ra = RequestedAttribute::fromXML($this->xmlRepresentation->documentElement);
 
         $this->assertEquals('attr', $ra->getName());
-        $this->assertEquals('urn:format', $ra->getNameFormat());
+        $this->assertEquals(C::NAMEFORMAT_URI, $ra->getNameFormat());
         $this->assertEquals('Attribute', $ra->getFriendlyName());
         $this->assertEquals('value1', $ra->getAttributeValues()[0]->getValue());
         $this->assertTrue($ra->getIsRequired());

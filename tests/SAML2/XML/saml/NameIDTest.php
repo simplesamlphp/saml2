@@ -50,7 +50,7 @@ final class NameIDTest extends TestCase
             'TheNameIDValue',
             'TheNameQualifier',
             'TheSPNameQualifier',
-            'TheFormat',
+            'urn:the:format',
             'TheSPProvidedID'
         );
 
@@ -73,7 +73,7 @@ final class NameIDTest extends TestCase
         $this->assertEquals('TheNameIDValue', $nameId->getContent());
         $this->assertEquals('TheNameQualifier', $nameId->getNameQualifier());
         $this->assertEquals('TheSPNameQualifier', $nameId->getSPNameQualifier());
-        $this->assertEquals('TheFormat', $nameId->getFormat());
+        $this->assertEquals('urn:the:format', $nameId->getFormat());
         $this->assertEquals('TheSPProvidedID', $nameId->getSPProvidedID());
 
         $this->assertEquals(

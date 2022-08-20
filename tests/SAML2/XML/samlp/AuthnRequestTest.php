@@ -107,8 +107,8 @@ final class AuthnRequestTest extends TestCase
         // Create RequestedAuthnContext
         $rac = new RequestedAuthnContext(
             [
-                new AuthnContextClassRef('accr1'),
-                new AuthnContextClassRef('accr2')
+                new AuthnContextClassRef('urn:test:accr1'),
+                new AuthnContextClassRef('urn:test:accr2')
             ],
             'better'
         );
@@ -120,7 +120,7 @@ final class AuthnRequestTest extends TestCase
 
         // Create NameIDPolicy
         $nameIdPolicy = new NameIDPolicy(
-            'TheFormat',
+            'urn:the:format',
             'TheSPNameQualifier',
             true
         );
@@ -147,7 +147,7 @@ final class AuthnRequestTest extends TestCase
         );
 
         // Create Scoping
-        $entry1 = new IDPEntry('urn:some:requester1', 'testName1', 'testLoc1');
+        $entry1 = new IDPEntry('urn:some:requester1', 'testName1', 'urn:test:testLoc1');
         $getComplete = new GetComplete('https://some/location');
         $list = new IDPList([$entry1], $getComplete);
         $requesterId = new RequesterID('urn:some:requester');
@@ -247,7 +247,7 @@ AUTHNREQUEST;
   AssertionConsumerServiceURL="https://sp.example.com/SAML2/SSO/Artifact">
   <saml:Issuer>https://sp.example.com/SAML2</saml:Issuer>
   <samlp:Extensions>
-      <myns:AttributeList xmlns:myns="urn:mynamespace">
+      <myns:AttributeList xmlns:myns="urn:test:mynamespace">
           <myns:Attribute name="UserName" value=""/>
       </myns:AttributeList>
   </samlp:Extensions>
@@ -447,9 +447,9 @@ AUTHNREQUEST;
             null,
             new IDPList(
                 [
-                    new IDPEntry('Legacy1'),
+                    new IDPEntry('urn:test:Legacy1'),
                     new IDPEntry('http://example.org/AAP', 'N00T', 'https://mies'),
-                    new IDPEntry('urn:example:1', 'Voorbeeld', 'Else')
+                    new IDPEntry('urn:example:1', 'Voorbeeld', 'urn:test:else')
                 ]
             )
         );
@@ -486,7 +486,7 @@ AUTHNREQUEST;
     Destination="">
     <saml:Issuer></saml:Issuer>
     <samlp:Scoping><samlp:IDPList>
-        <samlp:IDPEntry ProviderID="Legacy1"/>
+        <samlp:IDPEntry ProviderID="urn:test:Legacy1"/>
         <samlp:IDPEntry ProviderID="http://example.org/AAP" Name="N00T" Loc="https://mies"/>
         <samlp:IDPEntry ProviderID="urn:example:1" Name="Voorbeeld"/>
     </samlp:IDPList></samlp:Scoping>
@@ -517,7 +517,7 @@ AUTHNREQUEST;
   AssertionConsumerServiceURL="https://sp.example.com/SAML2/SSO/Artifact">
   <saml:Issuer>https://sp.example.com/SAML2</saml:Issuer>
     <samlp:Scoping><samlp:IDPList>
-        <samlp:IDPEntry ProviderID="Legacy1"/>
+        <samlp:IDPEntry ProviderID="urn:test:Legacy1"/>
         <samlp:IDPEntry ProviderID="http://example.org/AAP" Name="N00T" Loc="https://mies"/>
         <samlp:IDPEntry ProviderID="urn:example:1" Name="Voorbeeld"/>
     </samlp:IDPList></samlp:Scoping>
@@ -527,7 +527,7 @@ AUTHNREQUEST;
         $authnRequest = AuthnRequest::fromXML(DOMDocumentFactory::fromString($xmlRequest)->documentElement);
 
         $expectedList = [
-            new IDPEntry('Legacy1'),
+            new IDPEntry('urn:test:Legacy1'),
             new IDPEntry('http://example.org/AAP', 'N00T', 'https://mies'),
             new IDPEntry('urn:example:1', 'Voorbeeld')
         ];

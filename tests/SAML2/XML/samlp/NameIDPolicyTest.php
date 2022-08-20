@@ -43,7 +43,7 @@ final class NameIDPolicyTest extends TestCase
     public function testMarshalling(): void
     {
         $nameIdPolicy = new NameIDPolicy(
-            'TheFormat',
+            'urn:the:format',
             'TheSPNameQualifier',
             true
         );
@@ -77,7 +77,7 @@ final class NameIDPolicyTest extends TestCase
         $nameIdPolicy = NameIDPolicy::fromXML($this->xmlRepresentation->documentElement);
 
         $this->assertEquals('TheSPNameQualifier', $nameIdPolicy->getSPNameQualifier());
-        $this->assertEquals('TheFormat', $nameIdPolicy->getFormat());
+        $this->assertEquals('urn:the:format', $nameIdPolicy->getFormat());
         $this->assertEquals(true, $nameIdPolicy->getAllowCreate());
         $this->assertFalse($nameIdPolicy->isEmptyElement());
     }

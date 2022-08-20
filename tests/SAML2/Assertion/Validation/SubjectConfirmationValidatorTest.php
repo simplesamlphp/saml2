@@ -21,6 +21,7 @@ use SimpleSAML\SAML2\XML\saml\SubjectConfirmationData;
 use SimpleSAML\SAML2\XML\samlp\Response;
 use SimpleSAML\SAML2\XML\samlp\Status;
 use SimpleSAML\SAML2\XML\samlp\StatusCode;
+use SimpleSAML\Test\SAML2\Constants as C;
 use SimpleSAML\XML\DOMDocumentFactory;
 
 /**
@@ -60,19 +61,15 @@ final class SubjectConfirmationValidatorTest extends TestCase
      */
     protected function setUp(): void
     {
-        $idpentity = 'urn:thki:sid:idp2';
-        $spentity = 'urn:mace:feide.no:services:no.feide.moodle';
-        $destination = 'https://example.org/authentication/sp/consume-assertion';
-
         $this->logger = new NullLogger();
         $this->validator = new Validator($this->logger);
-        $this->destination = new Destination($destination);
+        $this->destination = new Destination(C::ENTITY_SP);
         $this->response = new Response(new Status(new StatusCode()));
 
         $this->identityProviderConfiguration
-            = new IdentityProvider(['entityId' => $idpentity]);
+            = new IdentityProvider(['entityId' => C::ENTITY_IDP]);
         $this->serviceProviderConfiguration
-            = new ServiceProvider(['entityId' => $spentity]);
+            = new ServiceProvider(['entityId' => C::ENTITY_SP]);
 
         $this->assertionProcessor = ProcessorBuilder::build(
             $this->logger,
@@ -83,30 +80,39 @@ final class SubjectConfirmationValidatorTest extends TestCase
             $this->response
         );
 
+        $ns_xsi = C::NS_XSI;
+        $ns_xs = C::NS_XS;
+        $ns_saml = C::NS_SAML;
+        $nameid_persistent = C::NAMEID_PERSISTENT;
+        $entity_idp = C::ENTITY_IDP;
+        $entity_sp = C::ENTITY_SP;
+        $entity_other = C::ENTITY_OTHER;
+        $accr = C::AUTHNCONTEXT_CLASS_REF_LOA2;
+
         $this->document = DOMDocumentFactory::fromString(<<<XML
-    <saml:Assertion xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
-                    xmlns:xs="http://www.w3.org/2001/XMLSchema"
-                    xmlns:saml="urn:oasis:names:tc:SAML:2.0:assertion"
+    <saml:Assertion xmlns:xsi="{$ns_xsi}"
+                    xmlns:xs="{$ns_xs}"
+                    xmlns:saml="{$ns_saml}"
                     ID="_45e42090d8cbbfa52d5a394b01049fc2221e274182"
                     Version="2.0"
                     IssueInstant="2020-02-26T12:04:42Z"
                     >
-        <saml:Issuer>$idpentity</saml:Issuer>
+        <saml:Issuer>{$entity_idp}</saml:Issuer>
         <saml:Conditions/>
         <saml:Subject>
-            <saml:NameID SPNameQualifier="$spentity"
-                         Format="urn:oasis:names:tc:SAML:2.0:nameid-format:persistent"
+            <saml:NameID SPNameQualifier="{$entity_sp}"
+                         Format="{$nameid_persistent}"
                          >e0f2ba563f02531ece353dc389edf769ce991190</saml:NameID>
             <saml:SubjectConfirmation Method="urn:oasis:names:tc:SAML:2.0:cm:bearer">
                 <saml:SubjectConfirmationData NotOnOrAfter="2080-02-26T15:26:40Z"
-                                              Recipient="$destination"
+                                              Recipient="{$entity_other}"
                                               InResponseTo="CORTO2278b437b23dfe5f13843c06dd47efc25f9e4574"
                                               />
             </saml:SubjectConfirmation>
         </saml:Subject>
         <saml:AuthnStatement AuthnInstant="2010-03-05T13:34:28Z">
             <saml:AuthnContext>
-                <saml:AuthnContextClassRef>someAuthnContext</saml:AuthnContextClassRef>
+                <saml:AuthnContextClassRef>{$accr}</saml:AuthnContextClassRef>
             </saml:AuthnContext>
         </saml:AuthnStatement>
     </saml:Assertion>
@@ -143,7 +149,7 @@ XML
         $newscd = new SubjectConfirmationData(
             $scd->getNotBefore(),
             $scd->getNotOnOrAfter(),
-            "https://elsewhere.example.edu",
+            'https://elsewhere.example.edu',
             $scd->getInResponseTo(),
             $scd->getAddress(),
             $scd->getInfo()
@@ -155,7 +161,7 @@ XML
         $this->expectExceptionMessage(
             'Invalid SubjectConfirmation in Assertion, errors: "Recipient in SubjectConfirmationData ' .
             '("https://elsewhere.example.edu") does not match the current destination ' .
-            '("https://example.org/authentication/sp/consume-assertion")'
+            '("https://simplesamlphp.org/sp/metadata")'
         );
         $this->assertionProcessor->validateAssertion($assertion);
     }

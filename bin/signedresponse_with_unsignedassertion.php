@@ -9,11 +9,10 @@ use SimpleSAML\SAML2\XML\saml\Issuer;
 use SimpleSAML\SAML2\XML\samlp\Response;
 use SimpleSAML\SAML2\XML\samlp\Status;
 use SimpleSAML\SAML2\XML\samlp\StatusCode;
+use SimpleSAML\Test\SAML2\Constants as C;
 use SimpleSAML\XML\DOMDocumentFactory;
-use SimpleSAML\XMLSecurity\TestUtils\PEMCertificatesMock;
-use SimpleSAML\XMLSecurity\Constants as C;
 use SimpleSAML\XMLSecurity\Alg\Signature\SignatureAlgorithmFactory;
-use SimpleSAML\XMLSecurity\Key\PrivateKey;
+use SimpleSAML\XMLSecurity\TestUtils\PEMCertificatesMock;
 
 $document = DOMDocumentFactory::fromFile(dirname(dirname(__FILE__)) . '/tests/resources/xml/saml_Assertion.xml');
 $unsignedAssertion = Assertion::fromXML($document->documentElement);
@@ -23,17 +22,16 @@ $unsignedResponse = new Response(
     new Issuer('https://IdentityProvider.com'),
     'abc123',
     null,
-    '123456',
-    'urn:some:destination',
-    'urn:some:sp',
+    'PHPUnit',
+    C::ENTITY_OTHER,
+    C::ENTITY_SP,
     null,
     [$unsignedAssertion]
 );
 
-$otherKey = PrivateKey::fromFile('../vendor/simplesamlphp/xml-security' . PEMCertificatesMock::CERTIFICATE_DIR_RSA . '/' . PEMCertificatesMock::OTHER_PRIVATE_KEY);
 $responseSigner = (new SignatureAlgorithmFactory())->getAlgorithm(
     C::SIG_RSA_SHA512,
-    $otherKey
+    PEMCertificatesMock::getPrivateKey(PEMCertificatesMock::OTHER_PRIVATE_KEY),
 );
 
 $unsignedResponse->sign($responseSigner);

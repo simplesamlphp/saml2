@@ -60,7 +60,7 @@ final class SubjectConfirmationTest extends TestCase
     public function testMarshalling(): void
     {
         $subjectConfirmation = new SubjectConfirmation(
-            'SomeMethod',
+            'urn:test:SomeMethod',
             new NameID('SomeNameIDValue'),
             new SubjectConfirmationData()
         );
@@ -77,7 +77,7 @@ final class SubjectConfirmationTest extends TestCase
     public function testMarshallingElementOrdering(): void
     {
         $subjectConfirmation = new SubjectConfirmation(
-            'SomeMethod',
+            'urn:test:SomeMethod',
             new NameID('SomeNameIDValue'),
             new SubjectConfirmationData()
         );
@@ -112,7 +112,7 @@ final class SubjectConfirmationTest extends TestCase
         $subjectConfirmation = SubjectConfirmation::fromXML($this->xmlRepresentation->documentElement);
         $identifier = $subjectConfirmation->getIdentifier();
 
-        $this->assertEquals('SomeMethod', $subjectConfirmation->getMethod());
+        $this->assertEquals('urn:test:SomeMethod', $subjectConfirmation->getMethod());
         $this->assertInstanceOf(NameID::class, $identifier);
         $this->assertEquals('SomeNameIDValue', $identifier->getContent());
         $this->assertInstanceOf(SubjectConfirmationData::class, $subjectConfirmation->getSubjectConfirmationData());
@@ -143,7 +143,7 @@ final class SubjectConfirmationTest extends TestCase
     {
         $samlNamespace = Constants::NS_SAML;
         $document = DOMDocumentFactory::fromString(<<<XML
-<saml:SubjectConfirmation xmlns:saml="{$samlNamespace}" Method="SomeMethod">
+<saml:SubjectConfirmation xmlns:saml="{$samlNamespace}" Method="urn:test:SomeMethod">
   <saml:NameID>SomeNameIDValue</saml:NameID>
   <saml:NameID>AnotherNameIDValue</saml:NameID>
   <saml:SubjectConfirmationData/>
@@ -164,7 +164,7 @@ XML
     {
         $samlNamespace = Constants::NS_SAML;
         $document = DOMDocumentFactory::fromString(<<<XML
-<saml:SubjectConfirmation xmlns:saml="{$samlNamespace}" Method="SomeMethod">
+<saml:SubjectConfirmation xmlns:saml="{$samlNamespace}" Method="urn:test:SomeMethod">
   <saml:BaseID xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:type="someType">SomeNameIDValue</saml:BaseID>
   <saml:NameID>AnotherNameIDValue</saml:NameID>
   <saml:SubjectConfirmationData/>
@@ -186,7 +186,7 @@ XML
     {
         $samlNamespace = Constants::NS_SAML;
         $document = DOMDocumentFactory::fromString(<<<XML
-<saml:SubjectConfirmation xmlns:saml="{$samlNamespace}" Method="SomeMethod">
+<saml:SubjectConfirmation xmlns:saml="{$samlNamespace}" Method="urn:test:SomeMethod">
   <saml:NameID>SomeNameIDValue</saml:NameID>
   <saml:SubjectConfirmationData Recipient="Me" />
   <saml:SubjectConfirmationData Recipient="Someone Else" />
@@ -209,7 +209,7 @@ XML
     {
         $samlNamespace = Constants::NS_SAML;
         $document = DOMDocumentFactory::fromString(<<<XML
-<saml:SubjectConfirmation xmlns:saml="{$samlNamespace}" Method="SomeMethod">
+<saml:SubjectConfirmation xmlns:saml="{$samlNamespace}" Method="urn:test:SomeMethod">
   <saml:BaseID xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:type="CustomBaseID">SomeIDValue</saml:BaseID>
   <saml:SubjectConfirmationData Recipient="Me" />
 </saml:SubjectConfirmation>
@@ -219,7 +219,7 @@ XML
         $subjectConfirmation = SubjectConfirmation::fromXML($document->documentElement);
         /** @psalm-var \SimpleSAML\SAML2\XML\saml\BaseID $identifier */
         $identifier = $subjectConfirmation->getIdentifier();
-        $this->assertEquals('SomeMethod', $subjectConfirmation->getMethod());
+        $this->assertEquals('urn:test:SomeMethod', $subjectConfirmation->getMethod());
         $this->assertEquals(BaseID::class, get_class($identifier));
         $this->assertEquals('CustomBaseID', $identifier->getType());
         $this->assertEquals('SomeIDValue', $identifier->getContent());
@@ -248,7 +248,7 @@ XML
 
         $samlNamespace = Constants::NS_SAML;
         $document = DOMDocumentFactory::fromString(<<<XML
-<saml:SubjectConfirmation xmlns:saml="{$samlNamespace}" Method="SomeMethod">
+<saml:SubjectConfirmation xmlns:saml="{$samlNamespace}" Method="urn:test:SomeMethod">
   <saml:BaseID xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:type="CustomBaseID">123.456</saml:BaseID>
   <saml:SubjectConfirmationData Recipient="Me" />
 </saml:SubjectConfirmation>
@@ -257,7 +257,7 @@ XML
 
         $subjectConfirmation = SubjectConfirmation::fromXML($document->documentElement);
         $identifier = $subjectConfirmation->getIdentifier();
-        $this->assertEquals('SomeMethod', $subjectConfirmation->getMethod());
+        $this->assertEquals('urn:test:SomeMethod', $subjectConfirmation->getMethod());
         $this->assertInstanceOf(CustomBaseID::class, $identifier);
         $this->assertEquals('123.456', $identifier->getContent());
         $this->assertInstanceOf(SubjectConfirmationData::class, $subjectConfirmation->getSubjectConfirmationData());

@@ -53,7 +53,7 @@ final class ExtensionsTest extends TestCase
         $this->assertCount(2, $list);
         $this->assertInstanceOf(Chunk::class, $list[0]);
         $this->assertInstanceOf(Chunk::class, $list[1]);
-        $this->assertEquals("urn:mynamespace", $list[0]->getNamespaceURI());
+        $this->assertEquals("urn:test:mynamespace", $list[0]->getNamespaceURI());
         $this->assertEquals("ExampleElement", $list[1]->getLocalName());
     }
 
@@ -70,7 +70,7 @@ final class ExtensionsTest extends TestCase
         $this->assertCount(2, $list);
         $this->assertInstanceOf(Chunk::class, $list[0]);
         $this->assertInstanceOf(Chunk::class, $list[1]);
-        $this->assertEquals("urn:mynamespace", $list[0]->getNamespaceURI());
+        $this->assertEquals("urn:test:mynamespace", $list[0]->getNamespaceURI());
         $this->assertEquals("ExampleElement", $list[1]->getLocalName());
     }
 

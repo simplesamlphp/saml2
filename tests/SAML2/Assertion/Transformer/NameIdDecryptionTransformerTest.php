@@ -9,7 +9,6 @@ use Psr\Log\NullLogger;
 use SimpleSAML\SAML2\Assertion\Exception\InvalidAssertionException;
 use SimpleSAML\SAML2\Assertion\ProcessorBuilder;
 use SimpleSAML\SAML2\Compat\ContainerSingleton;
-use SimpleSAML\SAML2\Constants as C;
 use SimpleSAML\SAML2\Configuration\Destination;
 use SimpleSAML\SAML2\Configuration\IdentityProvider;
 use SimpleSAML\SAML2\Configuration\PrivateKey;
@@ -27,6 +26,7 @@ use SimpleSAML\SAML2\XML\saml\Subject;
 use SimpleSAML\SAML2\XML\samlp\Response;
 use SimpleSAML\SAML2\XML\samlp\Status;
 use SimpleSAML\SAML2\XML\samlp\StatusCode;
+use SimpleSAML\Test\SAML2\Constants as C;
 use SimpleSAML\XML\DOMDocumentFactory;
 use SimpleSAML\XMLSecurity\Alg\KeyTransport\KeyTransportAlgorithmFactory;
 use SimpleSAML\XMLSecurity\Key\PublicKey;
@@ -91,11 +91,9 @@ final class NameIdDecryptionTransformerTest extends TestCase
         $container = ContainerSingleton::getInstance();
         $container->setBlacklistedAlgorithms(null);
 
-        $spentity = 'urn:mace:feide.no:services:no.feide.moodle';
-
         $this->logger = new NullLogger();
         $this->validator = new Validator($this->logger);
-        $this->destination = new Destination($spentity);
+        $this->destination = new Destination(C::ENTITY_SP);
         $this->response = new Response(new Status(new StatusCode()));
 
         $this->identityProviderConfiguration = new IdentityProvider(['assertionEncryptionEnabled' => true]);
@@ -103,7 +101,7 @@ final class NameIdDecryptionTransformerTest extends TestCase
         $certDir = 'tests' . DIRECTORY_SEPARATOR . PEMCertificatesMock::CERTIFICATE_DIR;
         $this->serviceProviderConfiguration = new ServiceProvider(
             [
-                'entityId' => $spentity,
+                'entityId' => C::ENTITY_SP,
                 'blacklistedEncryptionAlgorithms' => [],
                 'privateKeys' => [
                     new PrivateKey(
@@ -133,7 +131,7 @@ final class NameIdDecryptionTransformerTest extends TestCase
         $encryptedId = new EncryptedID($nameId->encrypt($encryptor));
 
         $assertion = new Assertion(
-            new Issuer('urn:thki:sid:idp2'),
+            new Issuer(C::ENTITY_IDP),
             '_45e42090d8cbbfa52d5a394b01049fc2221e274182',
             1582718682,
             new Subject($encryptedId),
@@ -141,7 +139,7 @@ final class NameIdDecryptionTransformerTest extends TestCase
             [
                 new AuthnStatement(
                     new AuthnContext(
-                        new AuthnContextClassRef('someAuthnContext'),
+                        new AuthnContextClassRef(C::AUTHNCONTEXT_CLASS_REF_LOA1),
                         null,
                         null,
                     ),

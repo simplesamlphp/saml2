@@ -19,6 +19,7 @@ use SimpleSAML\SAML2\XML\saml\Assertion;
 use SimpleSAML\SAML2\XML\samlp\Response;
 use SimpleSAML\SAML2\XML\samlp\Status;
 use SimpleSAML\SAML2\XML\samlp\StatusCode;
+use SimpleSAML\Test\SAML2\Constants as C;
 use SimpleSAML\XML\DOMDocumentFactory;
 
 /**
@@ -53,12 +54,13 @@ final class AssertionValidatorTest extends TestCase
     /** @var \SimpleSAML\SAML2\xml\samlp\Response */
     protected Response $response;
 
+
     /**
      */
     protected function setUp(): void
     {
-        $idpentity = 'urn:thki:sid:idp2';
-        $spentity = 'urn:mace:feide.no:services:no.feide.moodle';
+        $idpentity = C::ENTITY_IDP;
+        $spentity = C::ENTITY_IDP;
         $audience = $spentity;
         $destination = 'https://example.org/authentication/sp/consume-assertion';
 
@@ -81,6 +83,8 @@ final class AssertionValidatorTest extends TestCase
             $this->response
         );
 
+        $accr = C::AUTHNCONTEXT_CLASS_REF_LOA1;
+
         $this->document = DOMDocumentFactory::fromString(<<<XML
     <saml:Assertion xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
                     xmlns:xs="http://www.w3.org/2001/XMLSchema"
@@ -89,24 +93,25 @@ final class AssertionValidatorTest extends TestCase
                     Version="2.0"
                     IssueInstant="2020-02-26T12:04:42Z"
                     >
-        <saml:Issuer>$idpentity</saml:Issuer>
+        <saml:Issuer>{$idpentity}</saml:Issuer>
         <saml:Subject>
           <saml:NameID SPNameQualifier="https://sp.example.org/authentication/sp/metadata" Format="urn:oasis:names:tc:SAML:2.0:nameid-format:transient">SomeOtherNameIDValue</saml:NameID>
         </saml:Subject>
         <saml:Conditions>
           <saml:AudienceRestriction>
-            <saml:Audience>$audience</saml:Audience>
+            <saml:Audience>{$audience}</saml:Audience>
           </saml:AudienceRestriction>
         </saml:Conditions>
         <saml:AuthnStatement AuthnInstant="2010-03-05T13:34:28Z">
           <saml:AuthnContext>
-            <saml:AuthnContextClassRef>someAuthnContext</saml:AuthnContextClassRef>
+            <saml:AuthnContextClassRef>{$accr}</saml:AuthnContextClassRef>
           </saml:AuthnContext>
         </saml:AuthnStatement>
     </saml:Assertion>
 XML
         );
     }
+
 
     /**
      * Verifies that the assertion validator works
@@ -123,6 +128,7 @@ XML
     }
 
     /**
+
      * Verifies that violations are caught
      *
      * @runInSeparateProcess
@@ -130,6 +136,9 @@ XML
      */
     public function testAssertionNonValidation(): void
     {
+        $accr = C::AUTHNCONTEXT_CLASS_REF_LOA1;
+        $entity_idp = C::ENTITY_IDP;
+
         $document = DOMDocumentFactory::fromString(<<<XML
     <saml:Assertion xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
                     xmlns:xs="http://www.w3.org/2001/XMLSchema"
@@ -138,7 +147,7 @@ XML
                     Version="2.0"
                     IssueInstant="2020-02-26T12:04:42Z"
                     >
-        <saml:Issuer>urn:thki:sid:idp2</saml:Issuer>
+        <saml:Issuer>{$entity_idp}</saml:Issuer>
         <saml:Subject>
           <saml:NameID SPNameQualifier="https://sp.example.org/authentication/sp/metadata" Format="urn:oasis:names:tc:SAML:2.0:nameid-format:transient">SomeOtherNameIDValue</saml:NameID>
         </saml:Subject>
@@ -149,7 +158,7 @@ XML
         </saml:Conditions>
         <saml:AuthnStatement AuthnInstant="2010-03-05T13:34:28Z">
           <saml:AuthnContext>
-            <saml:AuthnContextClassRef>someAuthnContext</saml:AuthnContextClassRef>
+            <saml:AuthnContextClassRef>{$accr}</saml:AuthnContextClassRef>
           </saml:AuthnContext>
         </saml:AuthnStatement>
     </saml:Assertion>
@@ -160,7 +169,7 @@ XML
 
         $this->expectException(InvalidAssertionException::class);
         $this->expectExceptionMessage(
-            'The configured Service Provider [urn:mace:feide.no:services:no.feide.moodle] is not a valid audience for the assertion. Audiences: [https://example.edu/not-the-sp-entity-id]"'
+            'The configured Service Provider [https://simplesamlphp.org/idp/metadata] is not a valid audience for the assertion. Audiences: [https://example.edu/not-the-sp-entity-id]"'
         );
         $result = $this->assertionProcessor->validateAssertion($assertion);
     }

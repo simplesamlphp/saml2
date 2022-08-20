@@ -482,6 +482,7 @@ class Assertion extends AbstractSamlElement implements
         if (!empty($signature)) {
             $assertion->setSignature($signature[0]);
             $assertion->wasSignedAtConstruction = true;
+            $assertion->setXML($xml);
         }
 
         return $assertion;

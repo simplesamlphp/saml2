@@ -6,7 +6,7 @@ namespace SimpleSAML\Test\SAML2;
 
 use Exception;
 use PHPUnit\Framework\TestCase;
-use SimpleSAML\SAML2\Constants;
+use SimpleSAML\SAML2\Constants as C;
 use SimpleSAML\SAML2\Utils;
 use SimpleSAML\SAML2\Utils\XPath;
 use SimpleSAML\SAML2\XML\saml\NameID;
@@ -36,7 +36,7 @@ final class UtilsTest extends TestCase
             'NameIDValue',
             'OurNameQualifier',
             'TheSPNameQualifier',
-            'SomeNameIDFormat',
+            C::NAMEID_TRANSIENT,
             null
         );
 
@@ -48,7 +48,7 @@ final class UtilsTest extends TestCase
         $nameId_after = XPath::xpQuery($xml, './saml_assertion:Subject/saml_assertion:NameID', $xpCache);
         $this->assertTrue(count($nameId_after) === 1);
         $this->assertEquals('NameIDValue', $nameId_after[0]->textContent);
-        $this->assertEquals('SomeNameIDFormat', $nameId_after[0]->getAttribute("Format"));
+        $this->assertEquals(C::NAMEID_TRANSIENT, $nameId_after[0]->getAttribute("Format"));
         $this->assertEquals('OurNameQualifier', $nameId_after[0]->getAttribute("NameQualifier"));
         $this->assertEquals('TheSPNameQualifier', $nameId_after[0]->getAttribute("SPNameQualifier"));
     }
@@ -163,7 +163,7 @@ final class UtilsTest extends TestCase
     public function testExtractString(): void
     {
         $document = DOMDocumentFactory::fromString(
-            '<root xmlns="' . Constants::NS_MD . '">' .
+            '<root xmlns="' . C::NS_MD . '">' .
             '<somenode>value1</somenode>' .
             '<somenode>value2</somenode>' .
             '</root>'
@@ -171,7 +171,7 @@ final class UtilsTest extends TestCase
 
         $stringValues = XMLUtils::extractStrings(
             $document->firstChild,
-            Constants::NS_MD,
+            C::NS_MD,
             'somenode'
         );
 
@@ -187,7 +187,7 @@ final class UtilsTest extends TestCase
     public function testExtractLocalizedString(): void
     {
         $document = DOMDocumentFactory::fromString(
-            '<root xmlns="' . Constants::NS_MD . '">' .
+            '<root xmlns="' . C::NS_MD . '">' .
             '<somenode xml:lang="en">value (en)</somenode>' .
             '<somenode xml:lang="no">value (no)</somenode>' .
             '</root>'
@@ -195,7 +195,7 @@ final class UtilsTest extends TestCase
 
         $localizedStringValues = XMLUtils::extractLocalizedStrings(
             $document->firstChild,
-            Constants::NS_MD,
+            C::NS_MD,
             'somenode'
         );
 

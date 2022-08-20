@@ -6,7 +6,6 @@ namespace SimpleSAML\Test\SAML2\XML\mdattr;
 
 use DOMDocument;
 use PHPUnit\Framework\TestCase;
-use SimpleSAML\SAML2\Constants as C;
 use SimpleSAML\SAML2\Utils\XPath;
 use SimpleSAML\SAML2\XML\saml\Assertion;
 use SimpleSAML\SAML2\XML\saml\Attribute;
@@ -22,6 +21,7 @@ use SimpleSAML\SAML2\XML\saml\Issuer;
 use SimpleSAML\SAML2\XML\saml\NameID;
 use SimpleSAML\SAML2\XML\saml\Subject;
 use SimpleSAML\SAML2\XML\mdattr\EntityAttributes;
+use SimpleSAML\Test\SAML2\Constants as C;
 use SimpleSAML\Test\XML\SerializableXMLTestTrait;
 use SimpleSAML\XML\Chunk;
 use SimpleSAML\XML\DOMDocumentFactory;
@@ -80,7 +80,7 @@ final class EntityAttributesTest extends TestCase
             null,
             null,
             [],
-            [new AudienceRestriction([new Audience('audience1'), new Audience('audience2')])]
+            [new AudienceRestriction([new Audience(C::ENTITY_IDP), new Audience(C::ENTITY_URN)])]
         );
 
         // Create the statements
@@ -174,16 +174,15 @@ final class EntityAttributesTest extends TestCase
         );
         $this->assertCount(3, $entityAttributes->getChildren()[0]->getAttributeValues());
 
-
         $this->assertEquals('Assertion', $entityAttributes->getChildren()[1]->getLocalName());
         $this->assertEquals(
-            '1984-08-26T10:01:30.000Z',
+            '2022-08-12T16:37:52Z',
             $entityAttributes->getChildren()[1]->getXML()->getAttribute('IssueInstant')
         );
 
-        $this->assertEquals('urn:simplesamlphp:v1:simplesamlphp', $entityAttributes->getChildren()[2]->getName());
+        $this->assertEquals('foo', $entityAttributes->getChildren()[2]->getName());
         $this->assertEquals(
-            C::NAMEFORMAT_URI,
+            'urn:simplesamlphp:v1:simplesamlphp',
             $entityAttributes->getChildren()[2]->getNameFormat()
         );
     }

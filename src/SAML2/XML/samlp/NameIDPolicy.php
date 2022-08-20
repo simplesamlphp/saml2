@@ -56,7 +56,7 @@ final class NameIDPolicy extends AbstractSamlpElement
      */
     private function setFormat(?string $Format): void
     {
-        Assert::nullOrNotWhitespaceOnly($Format);
+        Assert::nullOrValidURI($Format); // Covers the empty string
         $this->Format = $Format;
     }
 

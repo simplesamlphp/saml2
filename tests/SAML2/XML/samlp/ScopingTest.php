@@ -48,7 +48,7 @@ final class ScopingTest extends TestCase
      */
     public function testMarshalling(): void
     {
-        $entry1 = new IDPEntry('urn:some:requester1', 'testName1', 'testLoc1');
+        $entry1 = new IDPEntry('urn:some:requester1', 'testName1', 'urn:test:testLoc1');
         $getComplete = new GetComplete('https://some/location');
         $list = new IDPList([$entry1], $getComplete);
         $requesterId = 'urn:some:requester';
@@ -66,7 +66,7 @@ final class ScopingTest extends TestCase
      */
     public function testMarshallingElementOrdering(): void
     {
-        $entry1 = new IDPEntry('urn:some:requester1', 'testName1', 'testLoc1');
+        $entry1 = new IDPEntry('urn:some:requester1', 'testName1', 'urn:test:testLoc1');
         $getComplete = new GetComplete('https://some/location');
         $list = new IDPList([$entry1], $getComplete);
         $requesterId = 'urn:some:requester';
@@ -119,7 +119,7 @@ final class ScopingTest extends TestCase
 
         $this->assertEquals('urn:some:requester1', $entries[0]->getProviderID());
         $this->assertEquals('testName1', $entries[0]->getName());
-        $this->assertEquals('testLoc1', $entries[0]->getLoc());
+        $this->assertEquals('urn:test:testLoc1', $entries[0]->getLoc());
 
         $this->assertEquals('https://some/location', $list->getGetComplete()->getContent());
 

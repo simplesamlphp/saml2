@@ -9,7 +9,7 @@
   </saml:Subject>
   <saml:Conditions NotBefore="2011-08-31T08:51:05Z" NotOnOrAfter="2011-08-31T08:51:05Z">
     <saml:AudienceRestriction>
-      <saml:Audience>ServiceProvider</saml:Audience>
+      <saml:Audience>https://simplesamlphp.org/sp/metadata</saml:Audience>
     </saml:AudienceRestriction>
   </saml:Conditions>
   <saml:AuthnStatement AuthnInstant="2011-08-31T08:51:05Z" SessionIndex="_93af655219464fb403b34436cfb0c5cb1d9a5502">
@@ -19,13 +19,13 @@
     </saml:AuthnContext>
   </saml:AuthnStatement>
   <saml:AttributeStatement>
-    <saml:Attribute Name="urn:ServiceID">
+    <saml:Attribute Name="urn:test:ServiceID">
       <saml:AttributeValue>1</saml:AttributeValue>
     </saml:Attribute>
-    <saml:Attribute Name="urn:EntityConcernedID">
+    <saml:Attribute Name="urn:test:EntityConcernedID">
       <saml:AttributeValue>1</saml:AttributeValue>
     </saml:Attribute>
-    <saml:Attribute Name="urn:EntityConcernedSubID">
+    <saml:Attribute Name="urn:test:EntityConcernedSubID">
       <saml:AttributeValue>1</saml:AttributeValue>
     </saml:Attribute>
   </saml:AttributeStatement>

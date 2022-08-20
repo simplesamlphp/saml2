@@ -1,1 +1,1 @@
-<saml:Audience xmlns:saml="urn:oasis:names:tc:SAML:2.0:assertion">urn:audience1</saml:Audience>
+<saml:Audience xmlns:saml="urn:oasis:names:tc:SAML:2.0:assertion">urn:test:audience1</saml:Audience>

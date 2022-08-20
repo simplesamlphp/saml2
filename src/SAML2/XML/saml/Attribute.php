@@ -34,7 +34,7 @@ class Attribute extends AbstractSamlElement implements IdentifierInterface, Encr
     protected string $Name;
 
     /**
-     * The NameFormat of this attribute.
+     * The NameFormat of this attribute (URI).
      *
      * @var string|null
      */
@@ -125,7 +125,7 @@ class Attribute extends AbstractSamlElement implements IdentifierInterface, Encr
      */
     protected function setNameFormat(?string $NameFormat): void
     {
-        Assert::nullOrNotWhitespaceOnly($NameFormat, 'Cannot specify an empty NameFormat for an Attribute.');
+        Assert::nullOrValidURI($NameFormat); // Covers the empty string
         $this->NameFormat = $NameFormat;
     }
 

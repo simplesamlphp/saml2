@@ -106,6 +106,7 @@ final class EntitiesDescriptor extends AbstractMetadataDocument
 
         if (!empty($signature)) {
             $entities->setSignature($signature[0]);
+            $entities->setXML($xml);
         }
 
         return $entities;

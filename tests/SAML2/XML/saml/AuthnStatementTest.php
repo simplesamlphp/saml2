@@ -178,12 +178,12 @@ XML
         $xml = <<<XML
 <saml:AuthnStatement xmlns:saml="{$samlNamespace}" AuthnInstant="2010-03-05T13:34:28Z">
   <saml:AuthnContext>
-    <saml:AuthnContextClassRef>someAuthnContext</saml:AuthnContextClassRef>
-    <saml:AuthenticatingAuthority>someIdP1</saml:AuthenticatingAuthority>
+    <saml:AuthnContextClassRef>urn:test:someAuthnContext</saml:AuthnContextClassRef>
+    <saml:AuthenticatingAuthority>urn:test:someIdP1</saml:AuthenticatingAuthority>
   </saml:AuthnContext>
   <saml:AuthnContext>
-    <saml:AuthnContextClassRef>someAuthnContext</saml:AuthnContextClassRef>
-    <saml:AuthenticatingAuthority>someIdP2</saml:AuthenticatingAuthority>
+    <saml:AuthnContextClassRef>urn:test:someAuthnContext</saml:AuthnContextClassRef>
+    <saml:AuthenticatingAuthority>urn:test:someIdP2</saml:AuthenticatingAuthority>
   </saml:AuthnContext>
 </saml:AuthnStatement>
 XML;

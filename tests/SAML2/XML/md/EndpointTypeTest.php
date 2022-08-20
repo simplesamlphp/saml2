@@ -51,7 +51,7 @@ final class EndpointTypeTest extends TestCase
      */
     public function testMarshalling(): void
     {
-        $attr = $this->xmlRepresentation->createAttributeNS('urn:test', 'test:attr');
+        $attr = $this->xmlRepresentation->createAttributeNS('urn:test:something', 'test:attr');
         $attr->value = 'value';
 
         $child = new Chunk(DOMDocumentFactory::fromString('<ssp:child1 xmlns:ssp="urn:custom:ssp" />')->documentElement);
@@ -117,10 +117,10 @@ final class EndpointTypeTest extends TestCase
         $this->assertEquals('https://foo.bar/', $endpointType->getResponseLocation());
         $this->assertEquals(Constants::BINDING_HTTP_POST, $endpointType->getBinding());
 
-        $this->assertTrue($endpointType->hasAttributeNS('urn:test', 'attr'));
+        $this->assertTrue($endpointType->hasAttributeNS('urn:test:something', 'attr'));
         $this->assertEquals('value', $endpointType->getAttributeNS('urn:test', 'attr'));
-        $this->assertFalse($endpointType->hasAttributeNS('urn:test', 'invalid'));
-        $this->assertNull($endpointType->getAttributeNS('urn:test', 'invalid'));
+        $this->assertFalse($endpointType->hasAttributeNS('urn:test:something', 'invalid'));
+        $this->assertNull($endpointType->getAttributeNS('urn:test:something', 'invalid'));
 
         $this->assertEquals(
             $this->xmlRepresentation->saveXML($this->xmlRepresentation->documentElement),

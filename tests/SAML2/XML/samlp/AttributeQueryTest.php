@@ -221,7 +221,7 @@ XML;
       FriendlyName="entitlements">
   </saml:Attribute>
   <saml:Attribute
-      NameFormat="urn:example"
+      NameFormat="urn:example:some"
       Name="urn:oid:2.5.4.4"
       FriendlyName="sn">
   </saml:Attribute>

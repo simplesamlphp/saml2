@@ -48,7 +48,7 @@ final class RequestInitiatorTest extends TestCase
      */
     public function testMarshalling(): void
     {
-        $attr = $this->xmlRepresentation->createAttributeNS('urn:test', 'test:attr');
+        $attr = $this->xmlRepresentation->createAttributeNS('urn:test:something', 'test:attr');
         $attr->value = 'value';
 
         $requestInitiator = new RequestInitiator('https://whatever/', 'https://foo.bar/', [$attr]);
@@ -74,10 +74,10 @@ final class RequestInitiatorTest extends TestCase
         $this->assertEquals($requestInitiator->getLocation(), 'https://whatever/');
         $this->assertEquals($requestInitiator->getResponseLocation(), 'https://foo.bar/');
 
-        $this->assertTrue($requestInitiator->hasAttributeNS('urn:test', 'attr'));
+        $this->assertTrue($requestInitiator->hasAttributeNS('urn:test:something', 'attr'));
         $this->assertEquals('value', $requestInitiator->getAttributeNS('urn:test', 'attr'));
-        $this->assertFalse($requestInitiator->hasAttributeNS('urn:test', 'invalid'));
-        $this->assertNull($requestInitiator->getAttributeNS('urn:test', 'invalid'));
+        $this->assertFalse($requestInitiator->hasAttributeNS('urn:test:something', 'invalid'));
+        $this->assertNull($requestInitiator->getAttributeNS('urn:test:something', 'invalid'));
 
         $this->assertEquals(
             $this->xmlRepresentation->saveXML($this->xmlRepresentation->documentElement),
@@ -91,7 +91,7 @@ final class RequestInitiatorTest extends TestCase
      */
     public function testUnmarshallingWithInvalidBinding(): void
     {
-        $this->xmlRepresentation->documentElement->setAttribute('Binding', 'urn:something');
+        $this->xmlRepresentation->documentElement->setAttribute('Binding', 'urn:test:something');
 
         $this->expectException(ProtocolViolationException::class);
         $this->expectExceptionMessage(

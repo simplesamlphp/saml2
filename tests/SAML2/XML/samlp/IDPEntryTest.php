@@ -42,7 +42,7 @@ final class IDPEntryTest extends TestCase
      */
     public function testMarshalling(): void
     {
-        $entry = new IDPEntry('urn:some:requester', 'testName', 'testLoc');
+        $entry = new IDPEntry('urn:some:requester', 'testName', 'urn:test:testLoc');
 
         $this->assertEquals(
             $this->xmlRepresentation->saveXML($this->xmlRepresentation->documentElement),
@@ -79,6 +79,6 @@ final class IDPEntryTest extends TestCase
 
         $this->assertEquals('urn:some:requester', $entry->getProviderID());
         $this->assertEquals('testName', $entry->getName());
-        $this->assertEquals('testLoc', $entry->getLoc());
+        $this->assertEquals('urn:test:testLoc', $entry->getLoc());
     }
 }

@@ -47,7 +47,7 @@ final class AbstractStatusResponseTest extends TestCase
                 C::STATUS_SUCCESS,
                 [
                     new StatusCode(
-                        'OurSubStatusCode'
+                        'urn:test:OurSubStatusCode'
                     )
                 ]
             ),
@@ -70,7 +70,7 @@ final class AbstractStatusResponseTest extends TestCase
         /** @psalm-var \DOMElement[] $nestedStatusCodeElements */
         $nestedStatusCodeElements = XPath::xpQuery($statusCodeElements[0], './saml_protocol:StatusCode', $xpCache);
         $this->assertCount(1, $nestedStatusCodeElements);
-        $this->assertEquals('OurSubStatusCode', $nestedStatusCodeElements[0]->getAttribute("Value"));
+        $this->assertEquals('urn:test:OurSubStatusCode', $nestedStatusCodeElements[0]->getAttribute("Value"));
 
         $statusMessageElements = XPath::xpQuery($statusElements[0], './saml_protocol:StatusMessage', $xpCache);
         $this->assertCount(1, $statusMessageElements);
@@ -86,9 +86,7 @@ final class AbstractStatusResponseTest extends TestCase
             new StatusCode(
                 C::STATUS_SUCCESS,
                 [
-                    new StatusCode(
-                        'OurSubStatusCode'
-                    )
+                    new StatusCode('urn:test:OurSubStatusCode'),
                 ]
             ),
             new StatusMessage('OurMessageText')

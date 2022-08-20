@@ -25,6 +25,19 @@ final class Audience extends AbstractConditionType
 
 
     /**
+     * Validate the content of the element.
+     *
+     * @param string $content  The value to go in the XML textContent
+     * @throws \Exception on failure
+     * @return void
+     */
+    protected function validateContent(string $content): void
+    {
+        Assert::validURI($content); // Covers the empty string
+    }
+
+
+    /**
      * Convert XML into an Audience
      *
      * @param \DOMElement $xml The XML element we should load
