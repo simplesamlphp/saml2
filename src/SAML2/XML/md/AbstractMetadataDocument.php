@@ -18,6 +18,14 @@ abstract class AbstractMetadataDocument extends AbstractSignedMdElement
     use ExtendableAttributesTrait;
     use ExtendableElementTrait;
 
+
+    /**
+     * The original signed XML
+     *
+     * @var \DOMElement
+     */
+    protected DOMElement $xml;
+
     /**
      * The ID of this element.
      *
@@ -169,6 +177,12 @@ abstract class AbstractMetadataDocument extends AbstractSignedMdElement
     public function toXML(DOMElement $parent = null): DOMElement
     {
         $e = $this->instantiateParentElement($parent);
+
+        if ($this->isSigned() === true && $this->signer === null) {
+            // We already have a signed document and no signer was set to re-sign it
+            $e->ownerDocument->importNode($this->xml, true);
+            return $e->appendChild($this->xml);
+        }
 
         foreach ($this->getAttributesNS() as $attr) {
             $e->setAttributeNS($attr['namespaceURI'], $attr['qualifiedName'], $attr['value']);

@@ -421,8 +421,14 @@ abstract class AbstractMessage extends AbstractSamlpElement implements SignableE
      */
     public function toXML(?DOMElement $parent = null): DOMElement
     {
-        $e = $this->toUnsignedXML($parent);
+        if ($this->isSigned() === true && $this->signer === null) {
+            $e = $this->instantiateParentElement($parent);
+            // We already have a signed document and no signer was set to re-sign it
+            $e->ownerDocument->importNode($this->xml, true);
+            return $e->appendChild($this->xml);
+        }
 
+        $e = $this->toUnsignedXML($parent);
         if ($this->signer !== null) {
             $signedXML = $this->doSign($e);
 
