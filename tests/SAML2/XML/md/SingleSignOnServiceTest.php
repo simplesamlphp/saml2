@@ -47,7 +47,7 @@ final class SingleSignOnServiceTest extends TestCase
      */
     public function testMarshalling(): void
     {
-        $ssoep = new SingleSignOnService(C::BINDING_HTTP_POST, C::LOCATION_ACS);
+        $ssoep = new SingleSignOnService(C::BINDING_HTTP_POST, C::LOCATION_A);
 
         $this->assertEquals(
             $this->xmlRepresentation->saveXML($this->xmlRepresentation->documentElement),
@@ -66,7 +66,7 @@ final class SingleSignOnServiceTest extends TestCase
             'The \'ResponseLocation\' attribute must be omitted for md:SingleSignOnService.'
         );
 
-        new SingleSignOnService(C::BINDING_HTTP_POST, C::LOCATION_ACS, 'https://response.location/');
+        new SingleSignOnService(C::BINDING_HTTP_POST, C::LOCATION_A, 'https://response.location/');
     }
 
 
@@ -81,7 +81,7 @@ final class SingleSignOnServiceTest extends TestCase
         $ssoep = SingleSignOnService::fromXML($this->xmlRepresentation->documentElement);
 
         $this->assertEquals(C::BINDING_HTTP_POST, $ssoep->getBinding());
-        $this->assertEquals(C::LOCATION_ACS, $ssoep->getLocation());
+        $this->assertEquals(C::LOCATION_A, $ssoep->getLocation());
         $this->assertEquals(
             $this->xmlRepresentation->saveXML($this->xmlRepresentation->documentElement),
             strval($ssoep)

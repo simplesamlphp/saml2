@@ -1,1 +1,1 @@
-<md:SingleSignOnService xmlns:md="urn:oasis:names:tc:SAML:2.0:metadata" Binding="urn:oasis:names:tc:SAML:2.0:bindings:HTTP-POST" Location="https://simplesamlphp.org/module.php/saml/sp/assertionConsumerService/default-sp" />
+<md:SingleSignOnService xmlns:md="urn:oasis:names:tc:SAML:2.0:metadata" Binding="urn:oasis:names:tc:SAML:2.0:bindings:HTTP-POST" Location="https://simplesamlphp.org/some/endpoint" />

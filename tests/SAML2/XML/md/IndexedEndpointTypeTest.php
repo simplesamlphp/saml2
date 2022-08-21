@@ -50,7 +50,7 @@ final class IndexedEndpointTypeTest extends TestCase
      */
     public function testMarshalling(): void
     {
-        $idxep = new AssertionConsumerService(42, C::BINDING_HTTP_POST, C::LOCATION_ACS, false);
+        $idxep = new AssertionConsumerService(42, C::BINDING_HTTP_POST, C::LOCATION_A, false);
 
         $this->assertEquals(
             $this->xmlRepresentation->saveXML($this->xmlRepresentation->documentElement),
@@ -64,7 +64,7 @@ final class IndexedEndpointTypeTest extends TestCase
      */
     public function testMarshallingWithoutIsDefault(): void
     {
-        $idxep = new AssertionConsumerService(42, C::BINDING_HTTP_POST, C::LOCATION_ACS);
+        $idxep = new AssertionConsumerService(42, C::BINDING_HTTP_POST, C::LOCATION_A);
         $this->xmlRepresentation->documentElement->removeAttribute('isDefault');
         $this->assertEquals($this->xmlRepresentation->saveXML(
             $this->xmlRepresentation->documentElement),

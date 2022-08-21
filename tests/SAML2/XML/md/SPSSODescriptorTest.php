@@ -135,8 +135,8 @@ final class SPSSODescriptorTest extends TestCase
             null,
             [new EmailAddress('john.doe@test.company')]
         );
-        $ars = new ArtifactResolutionService(0, C::BINDING_HTTP_ARTIFACT, C::LOCATION_ACS);
-        $mnids = new ManageNameIDService(C::BINDING_HTTP_POST, C::LOCATION_ACS);
+        $ars = new ArtifactResolutionService(0, C::BINDING_HTTP_ARTIFACT, C::LOCATION_A);
+        $mnids = new ManageNameIDService(C::BINDING_HTTP_POST, C::LOCATION_B);
 
         $spssod = new SPSSODescriptor(
             [$acs1, $acs2],
@@ -192,7 +192,7 @@ final class SPSSODescriptorTest extends TestCase
 
         /** @psalm-suppress InvalidArgument */
         new SPSSODescriptor(
-            [new ArtifactResolutionService(0, C::BINDING_HTTP_POST, C::LOCATION_ACS)],
+            [new ArtifactResolutionService(0, C::BINDING_HTTP_POST, C::LOCATION_A)],
             [C::NS_SAMLP]
         );
     }
@@ -210,11 +210,11 @@ final class SPSSODescriptorTest extends TestCase
 
         /** @psalm-suppress InvalidArgument */
         new SPSSODescriptor(
-            [new AssertionConsumerService(0, C::BINDING_HTTP_POST, C::LOCATION_ACS)],
+            [new AssertionConsumerService(0, C::BINDING_HTTP_POST, C::LOCATION_A)],
             [C::NS_SAMLP],
             true,
             null,
-            [new AssertionConsumerService(0, C::BINDING_HTTP_POST, C::LOCATION_ACS)]
+            [new AssertionConsumerService(0, C::BINDING_HTTP_POST, C::LOCATION_B)]
         );
     }
 
@@ -225,7 +225,7 @@ final class SPSSODescriptorTest extends TestCase
     public function testMarshallingWithoutOptionalArguments(): void
     {
         $spssod = new SPSSODescriptor(
-            [new AssertionConsumerService(0, C::BINDING_HTTP_POST, C::LOCATION_ACS)],
+            [new AssertionConsumerService(0, C::BINDING_HTTP_POST, C::LOCATION_A)],
             [C::NS_SAMLP]
         );
         $this->assertNull($spssod->getAuthnRequestsSigned());

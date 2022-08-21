@@ -47,7 +47,7 @@ final class NameIDMappingServiceTest extends TestCase
      */
     public function testMarshalling(): void
     {
-        $nidmsep = new NameIDMappingService(C::BINDING_HTTP_POST, C::LOCATION_NIMS);
+        $nidmsep = new NameIDMappingService(C::BINDING_HTTP_POST, C::LOCATION_A);
 
         $this->assertEquals(
             $this->xmlRepresentation->saveXML($this->xmlRepresentation->documentElement),
@@ -65,7 +65,7 @@ final class NameIDMappingServiceTest extends TestCase
         $this->expectExceptionMessage(
             'The \'ResponseLocation\' attribute must be omitted for md:NameIDMappingService.'
         );
-        new NameIDMappingService(C::BINDING_HTTP_POST, C::LOCATION_NIMS, 'https://response.location/');
+        new NameIDMappingService(C::BINDING_HTTP_POST, C::LOCATION_A, 'https://response.location/');
     }
 
 
@@ -80,7 +80,7 @@ final class NameIDMappingServiceTest extends TestCase
         $nidmsep = NameIDMappingService::fromXML($this->xmlRepresentation->documentElement);
 
         $this->assertEquals(C::BINDING_HTTP_POST, $nidmsep->getBinding());
-        $this->assertEquals(C::LOCATION_NIMS, $nidmsep->getLocation());
+        $this->assertEquals(C::LOCATION_A, $nidmsep->getLocation());
         $this->assertEquals($this->xmlRepresentation->saveXML(
             $this->xmlRepresentation->documentElement),
             strval($nidmsep)

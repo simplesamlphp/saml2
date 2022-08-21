@@ -17,10 +17,10 @@
   <md:ContactPerson contactType="other">
     <md:EmailAddress>mailto:john.doe@test.company</md:EmailAddress>
   </md:ContactPerson>
-  <md:ArtifactResolutionService Binding="urn:oasis:names:tc:SAML:2.0:bindings:HTTP-Artifact" Location="https://simplesamlphp.org/module.php/saml/sp/assertionConsumerService/default-sp" index="0"/>
+  <md:ArtifactResolutionService Binding="urn:oasis:names:tc:SAML:2.0:bindings:HTTP-Artifact" Location="https://simplesamlphp.org/some/endpoint" index="0"/>
   <md:SingleLogoutService Binding="urn:oasis:names:tc:SAML:2.0:bindings:SOAP" Location="https://ServiceProvider.com/SAML/SLO/SOAP"/>
   <md:SingleLogoutService Binding="urn:oasis:names:tc:SAML:2.0:bindings:HTTP-Redirect" Location="https://ServiceProvider.com/SAML/SLO/Browser" ResponseLocation="https://ServiceProvider.com/SAML/SLO/Response"/>
-  <md:ManageNameIDService Binding="urn:oasis:names:tc:SAML:2.0:bindings:HTTP-POST" Location="https://simplesamlphp.org/module.php/saml/sp/assertionConsumerService/default-sp"></md:ManageNameIDService>
+  <md:ManageNameIDService Binding="urn:oasis:names:tc:SAML:2.0:bindings:HTTP-POST" Location="https://simplesamlphp.org/other/endpoint"></md:ManageNameIDService>
   <md:NameIDFormat>urn:oasis:names:tc:SAML:2.0:nameid-format:transient</md:NameIDFormat>
   <md:AssertionConsumerService Binding="urn:oasis:names:tc:SAML:2.0:bindings:HTTP-Artifact" Location="https://ServiceProvider.com/SAML/SSO/Artifact" index="0" isDefault="true"/>
   <md:AssertionConsumerService Binding="urn:oasis:names:tc:SAML:2.0:bindings:HTTP-POST" Location="https://ServiceProvider.com/SAML/SSO/POST" index="1"/>

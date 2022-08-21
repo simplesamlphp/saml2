@@ -49,7 +49,7 @@ final class AdditionalMetadataLocationTest extends TestCase
      */
     public function testMarshalling(): void
     {
-        $additionalMetadataLocation = new AdditionalMetadataLocation(C::NAMESPACE, C::LOCATION_METADATA);
+        $additionalMetadataLocation = new AdditionalMetadataLocation(C::NAMESPACE, C::LOCATION_A);
 
         $this->assertEquals(
             $this->xmlRepresentation->saveXML($this->xmlRepresentation->documentElement),
@@ -64,7 +64,7 @@ final class AdditionalMetadataLocationTest extends TestCase
     public function testMarshallingWithEmptyNamespace(): void
     {
         $this->expectException(SchemaViolationException::class);
-        new AdditionalMetadataLocation('', C::LOCATION_METADATA);
+        new AdditionalMetadataLocation('', C::LOCATION_A);
     }
 
 
@@ -78,7 +78,7 @@ final class AdditionalMetadataLocationTest extends TestCase
     {
         $additionalMetadataLocation = AdditionalMetadataLocation::fromXML($this->xmlRepresentation->documentElement);
         $this->assertEquals(C::NAMESPACE, $additionalMetadataLocation->getNamespace());
-        $this->assertEquals(C::LOCATION_METADATA, $additionalMetadataLocation->getContent());
+        $this->assertEquals(C::LOCATION_A, $additionalMetadataLocation->getContent());
     }
 
 

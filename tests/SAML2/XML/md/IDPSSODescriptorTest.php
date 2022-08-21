@@ -198,7 +198,7 @@ final class IDPSSODescriptorTest extends TestCase
 
         /** @psalm-suppress InvalidArgument */
         new IDPSSODescriptor(
-            [new AssertionIDRequestService(C::BINDING_HTTP_POST, C::LOCATION_AIRS)],
+            [new AssertionIDRequestService(C::BINDING_HTTP_POST, C::LOCATION_A)],
             [C::NS_SAMLP]
         );
     }
@@ -215,7 +215,7 @@ final class IDPSSODescriptorTest extends TestCase
 
         /** @psalm-suppress InvalidArgument */
         new IDPSSODescriptor(
-            [new AssertionIDRequestService(C::BINDING_HTTP_POST, C::LOCATION_AIRS)],
+            [new AssertionIDRequestService(C::BINDING_HTTP_POST, C::LOCATION_A)],
             ['urn:saml:3.9']
         );
     }
@@ -234,10 +234,10 @@ final class IDPSSODescriptorTest extends TestCase
 
         /** @psalm-suppress InvalidArgument */
         new IDPSSODescriptor(
-            [new SingleSignOnService(C::BINDING_HTTP_POST, C::LOCATION_SSO)],
+            [new SingleSignOnService(C::BINDING_HTTP_POST, C::LOCATION_A)],
             [C::NS_SAMLP],
             null,
-            [new SingleSignOnService(C::BINDING_HTTP_REDIRECT, C::LOCATION_SSO)]
+            [new SingleSignOnService(C::BINDING_HTTP_REDIRECT, C::LOCATION_B)]
         );
     }
 
@@ -255,11 +255,11 @@ final class IDPSSODescriptorTest extends TestCase
 
         /** @psalm-suppress InvalidArgument */
         new IDPSSODescriptor(
-            [new SingleSignOnService(C::BINDING_HTTP_POST, C::LOCATION_SSO)],
+            [new SingleSignOnService(C::BINDING_HTTP_POST, C::LOCATION_A)],
             [C::NS_SAMLP],
             null,
             [],
-            [new SingleSignOnService(C::BINDING_HTTP_REDIRECT, C::LOCATION_SSO)]
+            [new SingleSignOnService(C::BINDING_HTTP_REDIRECT, C::LOCATION_B)]
         );
     }
 
@@ -271,7 +271,7 @@ final class IDPSSODescriptorTest extends TestCase
     {
         $this->expectException(SchemaViolationException::class);
         new IDPSSODescriptor(
-            [new SingleSignOnService(C::BINDING_HTTP_POST, C::LOCATION_SSO)],
+            [new SingleSignOnService(C::BINDING_HTTP_POST, C::LOCATION_A)],
             [C::NS_SAMLP],
             null,
             [],
@@ -291,13 +291,13 @@ final class IDPSSODescriptorTest extends TestCase
 
         /** @psalm-suppress InvalidArgument */
         new IDPSSODescriptor(
-            [new SingleSignOnService(C::BINDING_HTTP_POST, C::LOCATION_SSO)],
+            [new SingleSignOnService(C::BINDING_HTTP_POST, C::LOCATION_A)],
             [C::NS_SAMLP],
             null,
             [],
             [],
             [],
-            [new SingleSignOnService(C::BINDING_HTTP_REDIRECT, C::LOCATION_SSO)]
+            [new SingleSignOnService(C::BINDING_HTTP_REDIRECT, C::LOCATION_B)]
         );
     }
 
@@ -309,8 +309,8 @@ final class IDPSSODescriptorTest extends TestCase
     {
         $idpssod = new IDPSSODescriptor(
             [
-                new SingleSignOnService(C::BINDING_HTTP_POST, C::LOCATION_SSO),
-                new SingleSignOnService(C::BINDING_HTTP_REDIRECT, C::LOCATION_SSO)
+                new SingleSignOnService(C::BINDING_HTTP_POST, C::LOCATION_A),
+                new SingleSignOnService(C::BINDING_HTTP_REDIRECT, C::LOCATION_B)
             ],
             [C::NS_SAMLP, C::PROTOCOL]
         );

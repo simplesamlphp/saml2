@@ -78,7 +78,7 @@ final class EndpointTypeTest extends TestCase
     public function testMarshallingWithEmptyBinding(): void
     {
         $this->expectException(SchemaViolationException::class);
-        new AttributeService('', C::LOCATION_ACS);
+        new AttributeService('', C::LOCATION_A);
     }
 
 
@@ -97,7 +97,7 @@ final class EndpointTypeTest extends TestCase
      */
     public function testMarshallingWithoutOptionalAttributes(): void
     {
-        $endpointType = new AttributeService(C::BINDING_HTTP_POST, C::LOCATION_ACS);
+        $endpointType = new AttributeService(C::BINDING_HTTP_POST, C::LOCATION_A);
         $this->assertNull($endpointType->getResponseLocation());
         $this->assertEmpty($endpointType->getAttributesNS());
     }

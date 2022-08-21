@@ -1,1 +1,1 @@
-<md:ArtifactResolutionService xmlns:md="urn:oasis:names:tc:SAML:2.0:metadata" Binding="urn:oasis:names:tc:SAML:2.0:bindings:HTTP-Artifact" Location="https://simplesamlphp.org/module.php/saml/idp/artifactResolutionService" index="42" isDefault="false"/>
+<md:ArtifactResolutionService xmlns:md="urn:oasis:names:tc:SAML:2.0:metadata" Binding="urn:oasis:names:tc:SAML:2.0:bindings:HTTP-Artifact" Location="https://simplesamlphp.org/some/endpoint" index="42" isDefault="false"/>

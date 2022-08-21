@@ -47,7 +47,7 @@ final class ArtifactResolutionServiceTest extends TestCase
      */
     public function testMarshalling(): void
     {
-        $ars = new ArtifactResolutionService(42, C::BINDING_HTTP_ARTIFACT, C::LOCATION_ARS, false);
+        $ars = new ArtifactResolutionService(42, C::BINDING_HTTP_ARTIFACT, C::LOCATION_A, false);
 
         $this->assertEquals(
             $this->xmlRepresentation->saveXML($this->xmlRepresentation->documentElement),
@@ -65,7 +65,7 @@ final class ArtifactResolutionServiceTest extends TestCase
         $this->expectExceptionMessage(
             'The \'ResponseLocation\' attribute must be omitted for md:ArtifactResolutionService.'
         );
-        new ArtifactResolutionService(42, C::BINDING_HTTP_ARTIFACT, C::LOCATION_ARS, false, 'https://response.location/');
+        new ArtifactResolutionService(42, C::BINDING_HTTP_ARTIFACT, C::LOCATION_A, false, 'https://response.location/');
     }
 
 
@@ -79,7 +79,7 @@ final class ArtifactResolutionServiceTest extends TestCase
     {
         $ars = ArtifactResolutionService::fromXML($this->xmlRepresentation->documentElement);
         $this->assertEquals(C::BINDING_HTTP_ARTIFACT, $ars->getBinding());
-        $this->assertEquals(C::LOCATION_ARS, $ars->getLocation());
+        $this->assertEquals(C::LOCATION_A, $ars->getLocation());
 
         $this->assertEquals(
             $this->xmlRepresentation->saveXML($this->xmlRepresentation->documentElement),
