@@ -7,10 +7,11 @@ namespace SimpleSAML\Test\SAML2\XML\init;
 use DOMDocument;
 use Exception;
 use PHPUnit\Framework\TestCase;
-use SimpleSAML\Test\XML\SerializableXMLTestTrait;
 use SimpleSAML\SAML2\Exception\ProtocolViolationException;
 use SimpleSAML\SAML2\Utils;
 use SimpleSAML\SAML2\XML\init\RequestInitiator;
+use SimpleSAML\Test\SAML2\Constants as C;
+use SimpleSAML\Test\XML\SerializableXMLTestTrait;
 use SimpleSAML\XML\DOMDocumentFactory;
 
 use function dirname;
@@ -48,10 +49,10 @@ final class RequestInitiatorTest extends TestCase
      */
     public function testMarshalling(): void
     {
-        $attr = $this->xmlRepresentation->createAttributeNS('urn:test:something', 'test:attr');
+        $attr = $this->xmlRepresentation->createAttributeNS(C::NAMESPACE, 'test:attr');
         $attr->value = 'value';
 
-        $requestInitiator = new RequestInitiator('https://whatever/', 'https://foo.bar/', [$attr]);
+        $requestInitiator = new RequestInitiator(C::LOCATION_A, C::LOCATION_B, [$attr]);
 
         $this->assertEquals(
             $this->xmlRepresentation->saveXML($this->xmlRepresentation->documentElement),
@@ -71,13 +72,13 @@ final class RequestInitiatorTest extends TestCase
         $requestInitiator = RequestInitiator::fromXML($this->xmlRepresentation->documentElement);
 
         $this->assertEquals($requestInitiator->getBinding(), RequestInitiator::NS);
-        $this->assertEquals($requestInitiator->getLocation(), 'https://whatever/');
-        $this->assertEquals($requestInitiator->getResponseLocation(), 'https://foo.bar/');
+        $this->assertEquals($requestInitiator->getLocation(), C::LOCATION_A);
+        $this->assertEquals($requestInitiator->getResponseLocation(), C::LOCATION_B);
 
-        $this->assertTrue($requestInitiator->hasAttributeNS('urn:test:something', 'attr'));
-        $this->assertEquals('value', $requestInitiator->getAttributeNS('urn:test', 'attr'));
-        $this->assertFalse($requestInitiator->hasAttributeNS('urn:test:something', 'invalid'));
-        $this->assertNull($requestInitiator->getAttributeNS('urn:test:something', 'invalid'));
+        $this->assertTrue($requestInitiator->hasAttributeNS(C::NAMESPACE, 'attr'));
+        $this->assertEquals('value', $requestInitiator->getAttributeNS(C::NAMESPACE, 'attr'));
+        $this->assertFalse($requestInitiator->hasAttributeNS(C::NAMESPACE, 'invalid'));
+        $this->assertNull($requestInitiator->getAttributeNS(C::NAMESPACE, 'invalid'));
 
         $this->assertEquals(
             $this->xmlRepresentation->saveXML($this->xmlRepresentation->documentElement),
@@ -91,7 +92,7 @@ final class RequestInitiatorTest extends TestCase
      */
     public function testUnmarshallingWithInvalidBinding(): void
     {
-        $this->xmlRepresentation->documentElement->setAttribute('Binding', 'urn:test:something');
+        $this->xmlRepresentation->documentElement->setAttribute('Binding', C::BINDING_HTTP_POST);
 
         $this->expectException(ProtocolViolationException::class);
         $this->expectExceptionMessage(
