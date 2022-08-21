@@ -1242,7 +1242,6 @@ AUTHNREQUEST;
         $expectedStructure = DOMDocumentFactory::fromString($expectedStructureDocument)->documentElement;
         /** @psalm-var \DOMDocument $requestStructure->ownerDocument */
         $requestStructure = $request->toXML();
-
         $this->assertEqualXMLStructure($expectedStructure, $requestStructure);
     }
 }

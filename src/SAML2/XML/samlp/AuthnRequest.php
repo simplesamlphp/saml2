@@ -563,7 +563,7 @@ class AuthnRequest extends AbstractRequest
         }
 
         if ($this->conditions !== null && !$this->conditions->isEmptyElement()) {
-            $this->conditions->toXML($parent);
+            $this->conditions->toXML($e);
         }
 
         if (!empty($this->requestedAuthnContext)) {
@@ -571,7 +571,7 @@ class AuthnRequest extends AbstractRequest
         }
 
         if ($this->scoping !== null && !$this->scoping->isEmptyElement()) {
-            $this->scoping->toXML($parent);
+            $this->scoping->toXML($e);
         }
 
         return $e;
