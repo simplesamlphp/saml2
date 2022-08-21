@@ -9,6 +9,8 @@ use SimpleSAML\Assert\Assert;
 use SimpleSAML\XML\DOMDocumentFactory;
 use SimpleSAML\XML\Exception\InvalidDOMElementException;
 use SimpleSAML\XML\Exception\MissingAttributeException;
+use SimpleSAML\XML\Exception\SchemaViolationException;
+use SimpleSAML\XMLSecurity\Constants as C;
 
 use function strval;
 
@@ -77,6 +79,13 @@ final class SigningMethod extends AbstractAlgElement
      */
     private function setAlgorithm(string $algorithm): void
     {
+        Assert::validURI($algorithm, SchemaViolationException::class); // Covers the empty string
+        Assert::oneOf(
+            $algorithm,
+            array_merge(array_keys(C::$RSA_DIGESTS), array_keys(C::$HMAC_DIGESTS)),
+            'Invalid signature method',
+            InvalidArgumentException::class
+        );
         $this->Algorithm = $algorithm;
     }
 

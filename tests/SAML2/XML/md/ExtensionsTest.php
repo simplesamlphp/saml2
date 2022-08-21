@@ -24,7 +24,7 @@ use SimpleSAML\SAML2\XML\shibmd\Scope;
 use SimpleSAML\Test\XML\SerializableXMLTestTrait;
 use SimpleSAML\XML\Chunk;
 use SimpleSAML\XML\DOMDocumentFactory;
-use SimpleSAML\XMLSecurity\Constants;
+use SimpleSAML\XMLSecurity\Constants as C;
 
 use function dirname;
 use function strval;
@@ -74,8 +74,8 @@ final class ExtensionsTest extends TestCase
         );
         $uiinfo = new UIInfo([new DisplayName('en', 'Example')]);
         $discoHints = new DiscoHints([], [new IPHint('127.0.0.1')]);
-        $digestMethod = new DigestMethod(Constants::DIGEST_SHA256);
-        $signingMethod = new SigningMethod(Constants::SIG_RSA_SHA256, 1024, 4096);
+        $digestMethod = new DigestMethod(C::DIGEST_SHA256);
+        $signingMethod = new SigningMethod(C::SIG_RSA_SHA256, 1024, 4096);
 
         $extensions = new Extensions([
             $scope,
@@ -164,7 +164,7 @@ final class ExtensionsTest extends TestCase
     <mdui:IPHint>127.0.0.1</mdui:IPHint>
   </mdui:DiscoHints>
   <alg:DigestMethod Algorithm="http://www.w3.org/2001/04/xmlenc#sha256"/>
-  <alg:SigningMethod Algorithm="SomeOtherAlgorithm" MinKeySize="1024" MaxKeySize="4096"/>
+  <alg:SigningMethod Algorithm="http://www.w3.org/2001/04/xmldsig-more#rsa-sha224" MinKeySize="1024" MaxKeySize="4096"/>
   <ns:SomeChunk foo="bar">SomeText</ns:SomeChunk>
 </md:Extensions>
 XML
