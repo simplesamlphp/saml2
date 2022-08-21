@@ -6,10 +6,14 @@ namespace SimpleSAML\SAML2\XML\saml;
 
 use DOMElement;
 use SimpleSAML\Assert\Assert;
+use SimpleSAML\SAML2\Compat\ContainerSingleton;
 use SimpleSAML\SAML2\Constants;
 use SimpleSAML\SAML2\XML\IDNameQualifiersTrait;
 use SimpleSAML\XML\Exception\InvalidDOMElementException;
 use SimpleSAML\XML\XMLStringElementTrait;
+use SimpleSAML\XMLSecurity\Backend\EncryptionBackend;
+use SimpleSAML\XMLSecurity\XML\EncryptableElementInterface;
+use SimpleSAML\XMLSecurity\XML\EncryptableElementTrait;
 
 use function trim;
 
@@ -18,8 +22,9 @@ use function trim;
  *
  * @package simplesamlphp/saml2
  */
-class BaseID extends AbstractSamlElement implements BaseIdentifierInterface
+class BaseID extends AbstractSamlElement implements BaseIdentifierInterface, EncryptableElementInterface
 {
+    use EncryptableElementTrait;
     use IDNameQualifiersTrait;
     use XMLStringElementTrait;
 
@@ -85,6 +90,21 @@ class BaseID extends AbstractSamlElement implements BaseIdentifierInterface
     protected function validateContent(string $content): void
     {
         Assert::notWhitespaceOnly($content);
+    }
+
+
+    public function getBlacklistedAlgorithms(): ?array
+    {
+        $container = ContainerSingleton::getInstance();
+        return $container->getBlacklistedEncryptionAlgorithms();
+    }
+
+
+    public function getEncryptionBackend(): ?EncryptionBackend
+    {
+        // return the encryption backend you want to use,
+        // or null if you are fine with the default
+        return null;
     }
 
 
