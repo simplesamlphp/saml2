@@ -37,7 +37,7 @@ final class CustomCondition extends Condition
      */
     public function __construct(array $audience)
     {
-        parent::__construct(self::XSI_TYPE);
+        parent::__construct('dummy', self::XSI_TYPE);
 
         $this->setAudience($audience);
     }
