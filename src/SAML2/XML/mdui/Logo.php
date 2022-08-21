@@ -8,7 +8,7 @@ use DOMElement;
 use InvalidArgumentException;
 use SimpleSAML\Assert\Assert;
 use SimpleSAML\XML\Exception\InvalidDOMElementException;
-use SimpleSAML\XML\XMLURIElementTrait;
+use SimpleSAML\XML\XMLStringElementTrait;
 
 use function filter_var;
 use function strval;
@@ -23,7 +23,7 @@ use function trim;
  */
 final class Logo extends AbstractMduiElement
 {
-    use XMLURIElementTrait;
+    use XMLStringElementTrait;
 
     /**
      * The width of this logo.
@@ -74,6 +74,7 @@ final class Logo extends AbstractMduiElement
     protected function validateContent(string $content): void
     {
         // NOTE:  we override the validateContent from the trait to be able to be less restrictive
+        // Assert::validURI($content, SchemaViolationException::class); // Covers the empty string
         if (!filter_var(trim($content), FILTER_VALIDATE_URL) && substr(trim($content), 0, 5) !== 'data:') {
             throw new InvalidArgumentException('mdui:Logo is not a valid URL.');
         }

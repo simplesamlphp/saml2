@@ -9,7 +9,7 @@ use SimpleSAML\Assert\Assert;
 use SimpleSAML\SAML2\Constants as C;
 use SimpleSAML\SAML2\Exception\ProtocolViolationException;
 use SimpleSAML\XML\Exception\SchemaViolationException;
-use SimpleSAML\XML\XMLURIElementTrait;
+use SimpleSAML\XML\XMLStringElementTrait;
 
 /**
  * Class implementing AffiliateMember.
@@ -18,9 +18,7 @@ use SimpleSAML\XML\XMLURIElementTrait;
  */
 final class AffiliateMember extends AbstractMdElement
 {
-    use XMLURIElementTrait{
-        XMLURIElementTrait::validateContent as validateParent;
-    }
+    use XMLStringElementTrait;
 
 
     /**
@@ -41,7 +39,7 @@ final class AffiliateMember extends AbstractMdElement
      */
     protected function validateContent(string $content): void
     {
-        self::validateParent($content);
+        Assert::validURI($content, SchemaViolationException::class); // Covers the empty string
         Assert::maxLength(
             $content,
             C::ENTITYID_MAX_LENGTH,
