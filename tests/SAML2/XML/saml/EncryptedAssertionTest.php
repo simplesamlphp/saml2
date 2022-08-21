@@ -6,9 +6,13 @@ namespace SimpleSAML\Test\SAML2\XML\saml;
 
 use DOMDocument;
 use PHPUnit\Framework\TestCase;
+use SimpleSAML\SAML2\Compat\ContainerSingleton;
+use SimpleSAML\SAML2\Compat\MockContainer;
 use SimpleSAML\SAML2\XML\saml\Assertion;
 use SimpleSAML\SAML2\XML\saml\EncryptedAssertion;
 use SimpleSAML\SAML2\XML\saml\Issuer;
+use SimpleSAML\SAML2\XML\saml\NameID;
+use SimpleSAML\SAML2\XML\saml\Subject;
 use SimpleSAML\Test\XML\SerializableXMLTestTrait;
 use SimpleSAML\XML\DOMDocumentFactory;
 use SimpleSAML\XML\Chunk;
@@ -48,6 +52,10 @@ final class EncryptedAssertionTest extends TestCase
         $this->xmlRepresentation = DOMDocumentFactory::fromFile(
             dirname(dirname(dirname(dirname(__FILE__)))) . '/resources/xml/saml_EncryptedAssertion.xml'
         );
+
+        $container = new MockContainer();
+        $container->setBlacklistedAlgorithms(null);
+        ContainerSingleton::setContainer($container);
     }
 
 
@@ -93,7 +101,7 @@ final class EncryptedAssertionTest extends TestCase
      */
     public function testEncryption(): void
     {
-        $assertion = new Assertion(new Issuer('Test'));
+        $assertion = new Assertion(new Issuer('Test'), null, null, new Subject(new NameID('Someone')));
 
         $encryptor = (new KeyTransportAlgorithmFactory())->getAlgorithm(
             C::KEY_TRANSPORT_OAEP_MGF1P,
