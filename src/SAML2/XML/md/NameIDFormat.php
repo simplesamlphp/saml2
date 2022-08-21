@@ -8,7 +8,7 @@ use DOMElement;
 use SimpleSAML\Assert\Assert;
 use SimpleSAML\XML\Exception\InvalidDOMElementException;
 use SimpleSAML\XML\Exception\SchemaViolationException;
-use SimpleSAML\XML\XMLStringElementTrait;
+use SimpleSAML\XML\XMLURIElementTrait;
 
 /**
  * Class representing a md:NameIDFormat element.
@@ -17,7 +17,7 @@ use SimpleSAML\XML\XMLStringElementTrait;
  */
 final class NameIDFormat extends AbstractMdElement
 {
-    use XMLStringElementTrait;
+    use XMLURIElementTrait;
 
 
     /**
@@ -26,19 +26,6 @@ final class NameIDFormat extends AbstractMdElement
     public function __construct(string $content)
     {
         $this->setContent($content);
-    }
-
-
-    /**
-     * Validate the content of the element.
-     *
-     * @param string $content  The value to go in the XML textContent
-     * @throws \Exception on failure
-     * @return void
-     */
-    protected function validateContent(string $content): void
-    {
-        Assert::validURI($content, SchemaViolationException::class); // Covers the empty string
     }
 
 

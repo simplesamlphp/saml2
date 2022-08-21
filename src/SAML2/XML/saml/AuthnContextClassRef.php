@@ -10,7 +10,7 @@ use SimpleSAML\SAML2\Constants;
 use SimpleSAML\XML\DOMDocumentFactory;
 use SimpleSAML\XML\Exception\InvalidDOMElementException;
 use SimpleSAML\XML\Exception\SchemaViolationException;
-use SimpleSAML\XML\XMLStringElementTrait;
+use SimpleSAML\XML\XMLURIElementTrait;
 
 /**
  * Class representing SAML2 AuthnContextClassRef
@@ -19,7 +19,7 @@ use SimpleSAML\XML\XMLStringElementTrait;
  */
 final class AuthnContextClassRef extends AbstractSamlElement
 {
-    use XMLStringElementTrait;
+    use XMLURIElementTrait;
 
 
     /**
@@ -28,18 +28,5 @@ final class AuthnContextClassRef extends AbstractSamlElement
     public function __construct(string $content)
     {
         $this->setContent($content);
-    }
-
-
-    /**
-     * Validate the content of the element.
-     *
-     * @param string $content  The value to go in the XML textContent
-     * @throws \Exception on failure
-     * @return void
-     */
-    protected function validateContent(string $content): void
-    {
-        Assert::validURI($content, SchemaViolationException::class); // Covers the empty string
     }
 }
