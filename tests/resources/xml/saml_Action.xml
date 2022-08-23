@@ -1,0 +1,1 @@
+<saml:Action xmlns:saml="urn:oasis:names:tc:SAML:2.0:assertion" Namespace="urn:x-simplesamlphp:namespace">SomeAction</saml:Action>
