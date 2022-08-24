@@ -53,6 +53,8 @@ class LogoutRequest extends AbstractRequest
      * See \SimpleSAML\SAML2\Constants::LOGOUT_REASON_*
      * From the standard section 3.7.3: "other values MAY be agreed on between participants"
      *
+     * NOTE:  This attribute was marked anyURI in the 2012 SAML errata (E10).
+     *
      * @var string|null
      */
     protected ?string $reason = null;
@@ -129,10 +131,13 @@ class LogoutRequest extends AbstractRequest
     /**
      * Set the reason for this request.
      *
+     * NOTE:  This attribute was marked anyURI in the 2012 SAML errata (E10).
+     *
      * @param string|null $reason The optional reason for this request in URN format
      */
     public function setReason(?string $reason = null): void
     {
+        Assert::nullOrValidURI($reason, SchemaViolationException::class);
         $this->reason = $reason;
     }
 
