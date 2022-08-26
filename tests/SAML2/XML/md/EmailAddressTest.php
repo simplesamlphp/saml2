@@ -9,6 +9,7 @@ use PHPUnit\Framework\TestCase;
 use SimpleSAML\Assert\AssertionFailedException;
 use SimpleSAML\SAML2\Constants;
 use SimpleSAML\SAML2\XML\md\EmailAddress;
+use SimpleSAML\Test\XML\SchemaValidationTestTrait;
 use SimpleSAML\Test\XML\SerializableXMLTestTrait;
 use SimpleSAML\XML\DOMDocumentFactory;
 
@@ -21,6 +22,7 @@ use SimpleSAML\XML\DOMDocumentFactory;
  */
 final class EmailAddressTest extends TestCase
 {
+    use SchemaValidationTestTrait;
     use SerializableXMLTestTrait;
 
 
@@ -28,6 +30,8 @@ final class EmailAddressTest extends TestCase
      */
     protected function setUp(): void
     {
+        $this->schema = dirname(dirname(dirname(dirname(dirname(__FILE__))))) . '/schemas/saml-schema-metadata-2.0.xsd';
+
         $this->testedClass = EmailAddress::class;
 
         $this->xmlRepresentation = DOMDocumentFactory::fromFile(

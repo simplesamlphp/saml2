@@ -1,4 +1,7 @@
-<ns:SomeRoleDescriptor xmlns:ns="urn:namespace:uri" xmlns:md="urn:oasis:names:tc:SAML:2.0:metadata" xmlns:ds="http://www.w3.org/2000/09/xmldsig#" xmlns:test="urn:test:something" ID="TheID" validUntil="2009-02-13T23:31:30Z" cacheDuration="PT5000S" protocolSupportEnumeration="urn:oasis:names:tc:SAML:2.0:protocol urn:x-simplesamlphp:protocol" errorURL="https://error.reporting/">
+<ssp:SomeRoleDescriptor xmlns:ssp="urn:x-simplesamlphp:namespace" xmlns:md="urn:oasis:names:tc:SAML:2.0:metadata" xmlns:ds="http://www.w3.org/2000/09/xmldsig#" xmlns:test="urn:test:something" ID="TheID" validUntil="2009-02-13T23:31:30Z" cacheDuration="PT5000S" protocolSupportEnumeration="urn:oasis:names:tc:SAML:2.0:protocol urn:x-simplesamlphp:protocol" errorURL="https://error.reporting/">
+  <md:Extensions xmlns:md="urn:oasis:names:tc:SAML:2.0:metadata">
+    <ssp:Chunk>Some</ssp:Chunk>
+  </md:Extensions>
   <md:KeyDescriptor use="signing">
     <ds:KeyInfo xmlns:ds="http://www.w3.org/2000/09/xmldsig#">
       <ds:KeyName>IdentityProvider.com SSO Signing Key</ds:KeyName>
@@ -26,8 +29,5 @@
   <md:ContactPerson contactType="technical">
     <md:TelephoneNumber>1-234-567-8901</md:TelephoneNumber>
   </md:ContactPerson>
-  <md:Extensions xmlns:md="urn:oasis:names:tc:SAML:2.0:metadata">
-    <md:SomeUnknownExtension attr="attrval">value</md:SomeUnknownExtension>
-  </md:Extensions>
-  <ns:SomeElement>SomeValue</ns:SomeElement>
-</ns:SomeRoleDescriptor>
+  <ssp:Chunk>Other</ssp:Chunk>
+</ssp:SomeRoleDescriptor>

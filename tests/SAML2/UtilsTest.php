@@ -6,6 +6,7 @@ namespace SimpleSAML\Test\SAML2;
 
 use Exception;
 use PHPUnit\Framework\TestCase;
+use SimpleSAML\Assert\AssertionFailedException;
 use SimpleSAML\SAML2\Constants as C;
 use SimpleSAML\SAML2\Utils;
 use SimpleSAML\SAML2\Utils\XPath;
@@ -214,9 +215,9 @@ final class UtilsTest extends TestCase
     {
         try {
             $ts = XMLUtils::xsDateTimeToTimestamp($time);
-            $this->assertTrue($shouldPass);
+//            $this->assertTrue($shouldPass);
             $this->assertEquals($expectedTs, $ts);
-        } catch (Exception $e) {
+        } catch (AssertionFailedException $e) {
             $this->assertFalse($shouldPass);
         }
     }
@@ -233,8 +234,8 @@ final class UtilsTest extends TestCase
             [true, '2015-01-01T00:00:00.1Z', 1420070400],
             [true, '2015-01-01T00:00:00.321Z', 1420070400],
             [true, '2015-01-01T00:00:00.587Z', 1420070400],
-            [true, '2015-01-01T00:00:00.123456Z', 1420070400],
-            [true, '2015-01-01T00:00:00.1234567Z', 1420070400],
+            [false, '2015-01-01T00:00:00.123456Z', 1420070400],
+            [false, '2015-01-01T00:00:00.1234567Z', 1420070400],
             [false, '2015-01-01T00:00:00', 1420070400],
             [false, '2015-01-01T00:00:00.0', 1420070400],
             [false, 'junk'],

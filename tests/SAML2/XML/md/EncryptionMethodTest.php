@@ -10,6 +10,7 @@ use SimpleSAML\Assert\AssertionFailedException;
 use SimpleSAML\SAML2\Constants;
 use SimpleSAML\SAML2\Utils\XPath;
 use SimpleSAML\SAML2\XML\md\EncryptionMethod;
+use SimpleSAML\Test\XML\SchemaValidationTestTrait;
 use SimpleSAML\Test\XML\SerializableXMLTestTrait;
 use SimpleSAML\XML\Chunk;
 use SimpleSAML\XML\DOMDocumentFactory;
@@ -28,6 +29,7 @@ use function strval;
  */
 final class EncryptionMethodTest extends TestCase
 {
+    use SchemaValidationTestTrait;
     use SerializableXMLTestTrait;
 
 
@@ -35,6 +37,8 @@ final class EncryptionMethodTest extends TestCase
      */
     protected function setUp(): void
     {
+        $this->schema = dirname(dirname(dirname(dirname(__FILE__)))) . '/resources/schemas/simplesamlphp.xsd';
+
         $this->testedClass = EncryptionMethod::class;
 
         $this->xmlRepresentation = DOMDocumentFactory::fromFile(
@@ -52,7 +56,7 @@ final class EncryptionMethodTest extends TestCase
     public function testMarshalling(): void
     {
         $alg = Constants::KEY_TRANSPORT_OAEP_MGF1P;
-        $chunkXml = DOMDocumentFactory::fromString('<other:Element xmlns:other="urn:other:elt">Value</other:Element>');
+        $chunkXml = DOMDocumentFactory::fromString('<ssp:Chunk xmlns:ssp="urn:x-simplesamlphp:namespace">Value</ssp:Chunk>');
         $chunk = Chunk::fromXML($chunkXml->documentElement);
 
         $encryptionMethod = new EncryptionMethod($alg, 10, '9lWu3Q==', [$chunk]);
@@ -104,7 +108,7 @@ final class EncryptionMethodTest extends TestCase
         $emElements = XPath::xpQuery($emElement, './xenc:KeySize/following-sibling::*', $xpCache);
 
         $this->assertCount(2, $emElements);
-        $this->assertEquals('xenc:OAEPParams', $emElements[0]->tagName);
+        $this->assertEquals('xenc:OAEPparams', $emElements[0]->tagName);
         $this->assertEquals('other:Element', $emElements[1]->tagName);
     }
 

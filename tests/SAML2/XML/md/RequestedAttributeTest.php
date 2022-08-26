@@ -10,6 +10,7 @@ use SimpleSAML\Assert\AssertionFailedException;
 use SimpleSAML\SAML2\Constants as C;
 use SimpleSAML\SAML2\XML\md\RequestedAttribute;
 use SimpleSAML\SAML2\XML\saml\AttributeValue;
+use SimpleSAML\Test\XML\SchemaValidationTestTrait;
 use SimpleSAML\Test\XML\SerializableXMLTestTrait;
 use SimpleSAML\XML\DOMDocumentFactory;
 
@@ -25,6 +26,7 @@ use function strval;
  */
 final class RequestedAttributeTest extends TestCase
 {
+    use SchemaValidationTestTrait;
     use SerializableXMLTestTrait;
 
 
@@ -32,6 +34,8 @@ final class RequestedAttributeTest extends TestCase
      */
     protected function setUp(): void
     {
+        $this->schema = dirname(dirname(dirname(dirname(dirname(__FILE__))))) . '/schemas/saml-schema-metadata-2.0.xsd';
+
         $this->testedClass = RequestedAttribute::class;
 
         $this->xmlRepresentation = DOMDocumentFactory::fromFile(

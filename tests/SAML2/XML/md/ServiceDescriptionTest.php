@@ -10,6 +10,7 @@ use SimpleSAML\Assert\AssertionFailedException;
 use SimpleSAML\SAML2\Constants;
 use SimpleSAML\SAML2\XML\md\AbstractLocalizedName;
 use SimpleSAML\SAML2\XML\md\ServiceDescription;
+use SimpleSAML\Test\XML\SchemaValidationTestTrait;
 use SimpleSAML\Test\XML\SerializableXMLTestTrait;
 use SimpleSAML\XML\DOMDocumentFactory;
 
@@ -26,6 +27,7 @@ use function strval;
  */
 final class ServiceDescriptionTest extends TestCase
 {
+    use SchemaValidationTestTrait;
     use SerializableXMLTestTrait;
 
 
@@ -37,6 +39,8 @@ final class ServiceDescriptionTest extends TestCase
      */
     protected function setUp(): void
     {
+        $this->schema = dirname(dirname(dirname(dirname(dirname(__FILE__))))) . '/schemas/saml-schema-metadata-2.0.xsd';
+
         $this->testedClass = ServiceDescription::class;
 
         $this->xmlRepresentation = DOMDocumentFactory::fromFile(

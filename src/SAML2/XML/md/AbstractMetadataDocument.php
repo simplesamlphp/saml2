@@ -3,6 +3,8 @@
 namespace SimpleSAML\SAML2\XML\md;
 
 use DOMElement;
+use SimpleSAML\Assert\Assert;
+use SimpleSAML\XML\Exception\SchemaViolationException;
 use SimpleSAML\XML\ExtendableAttributesTrait;
 use SimpleSAML\SAML2\XML\ExtendableElementTrait;
 
@@ -90,6 +92,7 @@ abstract class AbstractMetadataDocument extends AbstractSignedMdElement
      */
     protected function setId(?string $id): void
     {
+        Assert::nullOrValidNCName($id, SchemaViolationException::class);
         $this->id = $id;
     }
 
@@ -134,6 +137,7 @@ abstract class AbstractMetadataDocument extends AbstractSignedMdElement
      */
     protected function setCacheDuration(?string $cacheDuration): void
     {
+        Assert::nullOrValidDuration($cacheDuration, SchemaViolationException::class);
         $this->cacheDuration = $cacheDuration;
     }
 

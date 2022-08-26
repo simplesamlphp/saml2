@@ -25,8 +25,6 @@ abstract class AbstractLocalizedURI extends AbstractLocalizedName
      */
     protected function validateContent(string $content): void
     {
-        parent::validateContent($content);
-
         Assert::validURI($content, SchemaViolationException::class); // Covers the empty string
     }
 }

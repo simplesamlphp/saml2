@@ -12,6 +12,7 @@ use SimpleSAML\SAML2\XML\md\AuthnQueryService;
 use SimpleSAML\SAML2\XML\md\NameIDFormat;
 use SimpleSAML\Test\SAML2\Constants as C;
 use SimpleSAML\Test\SAML2\SignedElementTestTrait;
+use SimpleSAML\Test\XML\SchemaValidationTestTrait;
 use SimpleSAML\Test\XML\SerializableXMLTestTrait;
 use SimpleSAML\XML\DOMDocumentFactory;
 use SimpleSAML\XML\Exception\SchemaViolationException;
@@ -29,6 +30,7 @@ use function strval;
  */
 final class AuthnAuthorityDescriptorTest extends TestCase
 {
+    use SchemaValidationTestTrait;
     use SerializableXMLTestTrait;
     use SignedElementTestTrait;
 
@@ -44,6 +46,8 @@ final class AuthnAuthorityDescriptorTest extends TestCase
      */
     protected function setUp(): void
     {
+        $this->schema = dirname(dirname(dirname(dirname(dirname(__FILE__))))) . '/schemas/saml-schema-metadata-2.0.xsd';
+
         $this->testedClass = AuthnAuthorityDescriptor::class;
 
         $this->xmlRepresentation = DOMDocumentFactory::fromFile(

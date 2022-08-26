@@ -1,0 +1,60 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!DOCTYPE schema
+  PUBLIC "-//W3C//DTD XMLSchema 200102//EN" "http://www.w3.org/2001/XMLSchema.dtd"
+ [
+   <!ATTLIST schema 
+     xmlns:ds CDATA #FIXED "urn:x-simplesamlphp:namespace">
+   <!ENTITY ssp 'urn:x-simplesamlphp:namespace'>
+   <!ENTITY % p ''>
+   <!ENTITY % s ''>
+  ]>
+
+<!-- Schema for SimpleSAMLphp dummy classes -->
+
+
+<schema xmlns="http://www.w3.org/2001/XMLSchema"
+        xmlns:ssp="urn:x-simplesamlphp:namespace"
+        xmlns:md="urn:oasis:names:tc:SAML:2.0:metadata"
+        targetNamespace="urn:x-simplesamlphp:namespace"
+        version="0.1" elementFormDefault="qualified"> 
+
+<import namespace='urn:oasis:names:tc:SAML:2.0:metadata'
+          schemaLocation='../../../schemas/saml-schema-metadata-2.0.xsd'/>
+
+<!-- Start ExtendableElement -->
+
+<element name="ExtendableElement" type="ssp:ExtendableElementType"/>
+<complexType name="ExtendableElementType">
+  <sequence> 
+    <element ref="ssp:Chunk"/> 
+    <any namespace="##other" processContents="lax"/>
+    <!-- (1,1) elements from (1,1) external namespace -->
+  </sequence>  
+</complexType>
+
+<!-- End ExtendableElement -->
+
+<!-- Start Chunk -->
+
+<element name="Chunk" type="string"/>
+
+<!-- End Chunk -->
+
+<!-- Start SomeRoleDescriptor -->
+
+<element name="SomeRoleDescriptor" type="ssp:SomeRoleDescriptorType"/>
+
+    <complexType name="SomeRoleDescriptorType">
+        <complexContent>
+            <extension base="md:RoleDescriptorType">
+                <sequence>
+                    <element ref="ssp:Chunk" maxOccurs="unbounded"/>
+                </sequence>
+            </extension>
+        </complexContent>
+    </complexType>
+
+<!-- End SomeRoleDescriptor -->
+
+</schema>
+

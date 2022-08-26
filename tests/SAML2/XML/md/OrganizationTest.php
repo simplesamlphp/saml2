@@ -12,6 +12,7 @@ use SimpleSAML\SAML2\XML\md\Organization;
 use SimpleSAML\SAML2\XML\md\OrganizationDisplayName;
 use SimpleSAML\SAML2\XML\md\OrganizationName;
 use SimpleSAML\SAML2\XML\md\OrganizationURL;
+use SimpleSAML\Test\XML\SchemaValidationTestTrait;
 use SimpleSAML\Test\XML\SerializableXMLTestTrait;
 use SimpleSAML\XML\DOMDocumentFactory;
 use SimpleSAML\XML\Exception\MissingElementException;
@@ -29,6 +30,7 @@ use function strval;
  */
 final class OrganizationTest extends TestCase
 {
+    use SchemaValidationTestTrait;
     use SerializableXMLTestTrait;
 
 
@@ -36,6 +38,8 @@ final class OrganizationTest extends TestCase
      */
     protected function setUp(): void
     {
+        $this->schema = dirname(dirname(dirname(dirname(dirname(__FILE__))))) . '/schemas/saml-schema-metadata-2.0.xsd';
+
         $this->testedClass = Organization::class;
 
         $this->xmlRepresentation = DOMDocumentFactory::fromFile(
