@@ -115,7 +115,6 @@ abstract class AbstractMetadataDocument extends AbstractSignedMdElement
      */
     protected function setValidUntil(?int $validUntil): void
     {
-        Assert::nullOrValidDateTimeZulu($validUntil);
         $this->validUntil = $validUntil;
     }
 
