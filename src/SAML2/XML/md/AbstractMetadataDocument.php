@@ -137,6 +137,7 @@ abstract class AbstractMetadataDocument extends AbstractSignedMdElement
      */
     protected function setCacheDuration(?string $cacheDuration): void
     {
+        Assert::nullOrValidDuration($cacheDuration, SchemaViolationException::class);
         $this->cacheDuration = $cacheDuration;
     }
 
