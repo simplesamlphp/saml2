@@ -236,8 +236,6 @@ final class EntityDescriptor extends AbstractMetadataDocument
      */
     public function getEntityID(): string
     {
-        Assert::notEmpty($this->entityID);
-
         return $this->entityID;
     }
 
