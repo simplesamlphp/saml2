@@ -14,6 +14,7 @@ use SimpleSAML\SAML2\XML\md\KeyDescriptor;
 use SimpleSAML\SAML2\XML\md\Organization;
 use SimpleSAML\SAML2\XML\md\UnknownRoleDescriptor;
 use SimpleSAML\Test\SAML2\Constants as C;
+use SimpleSAML\Test\XML\SchemaValidationTestTrait;
 use SimpleSAML\Test\XML\SerializableXMLTestTrait;
 use SimpleSAML\XML\DOMDocumentFactory;
 use SimpleSAML\XML\Exception\MissingAttributeException;
@@ -39,6 +40,7 @@ use function strval;
  */
 final class UnknownRoleDescriptorTest extends TestCase
 {
+    use SchemaValidationTestTrait;
     use SerializableXMLTestTrait;
 
 
@@ -46,6 +48,8 @@ final class UnknownRoleDescriptorTest extends TestCase
      */
     public function setUp(): void
     {
+        $this->schema = dirname(dirname(dirname(dirname(__FILE__)))) . '/resources/schemas/simplesamlphp.xsd';
+
         $this->testedClass = UnknownRoleDescriptor::class;
 
         $this->xmlRepresentation = DOMDocumentFactory::fromFile(
@@ -89,8 +93,8 @@ final class UnknownRoleDescriptorTest extends TestCase
         $extensions = $extElement->getList();
         $this->assertCount(1, $extensions);
         $this->assertInstanceOf(Chunk::class, $extensions[0]);
-        $this->assertEquals(C::NS_MD, $extensions[0]->getNamespaceURI());
-        $this->assertEquals('SomeUnknownExtension', $extensions[0]->getLocalName());
+        $this->assertEquals('urn:x-simplesamlphp:namespace', $extensions[0]->getNamespaceURI());
+        $this->assertEquals('Chunk', $extensions[0]->getLocalName());
 
         $this->assertEquals($this->xmlRepresentation->saveXML(
             $this->xmlRepresentation->documentElement),

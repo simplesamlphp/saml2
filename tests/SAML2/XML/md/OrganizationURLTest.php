@@ -11,6 +11,7 @@ use SimpleSAML\SAML2\Constants;
 use SimpleSAML\SAML2\XML\md\AbstractLocalizedName;
 use SimpleSAML\SAML2\XML\md\OrganizationURL;
 use SimpleSAML\Test\XML\ArrayizableXMLTestTrait;
+use SimpleSAML\Test\XML\SchemaValidationTestTrait;
 use SimpleSAML\Test\XML\SerializableXMLTestTrait;
 use SimpleSAML\XML\DOMDocumentFactory;
 use SimpleSAML\XML\Exception\SchemaViolationException;
@@ -31,6 +32,7 @@ use function strval;
 final class OrganizationURLTest extends TestCase
 {
     use ArrayizableXMLTestTrait;
+    use SchemaValidationTestTrait;
     use SerializableXMLTestTrait;
 
 
@@ -38,6 +40,8 @@ final class OrganizationURLTest extends TestCase
      */
     protected function setUp(): void
     {
+        $this->schema = dirname(dirname(dirname(dirname(dirname(__FILE__))))) . '/schemas/saml-schema-metadata-2.0.xsd';
+
         $this->testedClass = OrganizationURL::class;
 
         $this->xmlRepresentation = DOMDocumentFactory::fromFile(
