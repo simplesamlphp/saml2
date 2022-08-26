@@ -467,7 +467,7 @@ XML
 XML
         );
         $this->expectException(AssertionFailedException::class);
-        $this->expectExceptionMessage('Invalid SAML2 timestamp passed to xsDateTimeToTimestamp: asdf');
+        $this->expectExceptionMessage('\'asdf\' is not a valid DateTime');
         EntityDescriptor::fromXML($document->documentElement);
     }
 
