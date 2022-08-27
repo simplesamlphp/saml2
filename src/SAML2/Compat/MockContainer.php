@@ -138,32 +138,6 @@ class MockContainer extends AbstractContainer
     /**
      * @inheritDoc
      */
-    public function registerExtensionHandler(string $class): void
-    {
-    }
-
-
-    /**
-     * @inheritDoc
-     */
-    public function getElementHandler(string $namespace, string $element): ?string
-    {
-        return null;
-    }
-
-
-    /**
-     * @inheritDoc
-     */
-    public function getIdentifierHandler(string $type): ?string
-    {
-        return null;
-    }
-
-
-    /**
-     * @inheritDoc
-     */
     public function setBlacklistedAlgorithms(?array $algos): void {
         $this->blacklistedEncryptionAlgorithms = [];
     }
